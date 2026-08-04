@@ -1,0 +1,362 @@
+@prefix backlog: <http://example.org/backlog#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix prov:    <http://www.w3.org/ns/prov#> .
+
+<http://example.org/backlog-abox> a owl:Ontology ;
+    rdfs:label "Backlog & Roadmap Semantic Framework (Reference ABox)"@en ;
+    owl:versionIRI <http://example.org/backlog-abox/1.3.0> ;
+    owl:versionInfo "1.3.0" ;
+    owl:priorVersion <http://example.org/backlog-abox/1.2.1> ,
+                     <http://example.org/backlog-abox/1.2.0> ,
+                     <http://example.org/backlog-abox/1.1.0> ,
+                     <http://example.org/backlog-abox/1.0.0> ;
+    owl:imports <http://example.org/backlog> ;
+    dcterms:identifier "backlog-abox" ;
+    dcterms:created "2026-07-27T00:00:00"^^xsd:dateTime ;
+    dcterms:modified "2026-07-27T00:00:00"^^xsd:dateTime ;
+    dcterms:creator "Yusuf Altunel" ;
+    dcterms:publisher "İstanbul Kültür Üniversitesi, Department of Computer Engineering" ;
+    dcterms:rightsHolder "İstanbul Kültür Üniversitesi, Department of Computer Engineering" ;
+    dcterms:rights "Copyright (c) 2025-2026 İstanbul Kültür Üniversitesi & Yusuf Altunel. Licensed under CC BY 4.0."@en ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    prov:wasAttributedTo "Yusuf Altunel" ;
+    skos:definition "Framework-level instances only: the prioritisation methods this release ships and the reusable baseline Definition of Done. Contains NO project register data — an adopting development writes its work items, containers and evidence in its own namespace and merges this file for the shared vocabulary."@en ;
+    dcterms:source "SAFe 6.0 WSJF; Intercom RICE; MoSCoW (DSDM); Reinertsen cost-of-delay economics; BACKLOG_ROADMAP_STANDARD_v1_0_0 (adopted 2026-07-27) for report sections, release gates and methodology-rule records."@en .
+
+#################################################################
+#  Prioritisation methods
+#################################################################
+
+backlog:Method_WSJF a owl:NamedIndividual , backlog:PrioritizationMethod ;
+    rdfs:label "WSJF"@en ;
+    skos:definition "Weighted Shortest Job First: cost of delay divided by job size, where cost of delay sums user-business value, time criticality and risk-reduction/opportunity-enablement. Ranks by economic urgency per unit of effort."@en ;
+    dcterms:source "SAFe 6.0 WSJF; Reinertsen, The Principles of Product Development Flow."@en .
+
+backlog:Method_RICE a owl:NamedIndividual , backlog:PrioritizationMethod ;
+    rdfs:label "RICE"@en ;
+    skos:definition "Reach times impact times confidence, divided by effort. Differs from WSJF in making estimate quality (confidence) an explicit factor rather than an unstated caveat."@en ;
+    dcterms:source "Intercom RICE scoring model."@en .
+
+backlog:Method_RICE_DepFactor a owl:NamedIndividual , backlog:PrioritizationMethod ;
+    rdfs:label "RICE + DepFactor"@en ;
+    skos:definition "RICE multiplied by a dependency factor below one for items whose prerequisites are not yet Done, so blocked work is demoted rather than competing on nominal value with work that could start today."@en .
+
+backlog:Method_MoSCoW a owl:NamedIndividual , backlog:PrioritizationMethod ;
+    rdfs:label "MoSCoW"@en ;
+    skos:definition "Ordinal classification into must-have, should-have, could-have and will-not-have-this-time. Coarser than the numeric methods and non-comparable across bands, so the framework treats it as a band label rather than a ranking number."@en ;
+    dcterms:source "DSDM MoSCoW prioritisation."@en .
+
+backlog:Method_CostOfDelay a owl:NamedIndividual , backlog:PrioritizationMethod ;
+    rdfs:label "Cost of Delay"@en ;
+    skos:definition "The economic loss per unit time of not having the item, used without the job-size divisor where effort is roughly uniform across candidates."@en .
+
+backlog:Method_ValueEffort a owl:NamedIndividual , backlog:PrioritizationMethod ;
+    rdfs:label "Value / Effort"@en ;
+    skos:definition "The simplest ratio method: estimated value divided by estimated effort. Shipped because a lightweight adopter with no comparative economics is better served by an honest crude method than by a precise-looking one it cannot populate."@en .
+
+#################################################################
+#  Baseline Definition of Done (reusable template)
+#################################################################
+
+backlog:DoD_Baseline a owl:NamedIndividual , backlog:DefinitionOfDone ;
+    rdfs:label "Baseline Definition of Done"@en ;
+    skos:definition "The framework's reusable minimum: four falsifiable criteria every adopting development can run unchanged, extended rather than replaced by project-specific criteria."@en ;
+    backlog:hasDoDCriterion backlog:DoD_C1_EvidenceExists ,
+                            backlog:DoD_C2_EvidenceVerified ,
+                            backlog:DoD_C3_AcceptanceCriteriaPresent ,
+                            backlog:DoD_C4_DependenciesDone .
+
+backlog:DoD_C1_EvidenceExists a owl:NamedIndividual , backlog:DoDCriterion ;
+    rdfs:label "Every Done item carries at least one Evidence"@en ;
+    skos:definition "No item may hold the Done state on prose alone; at least one Evidence artifact must be attached."@en ;
+    backlog:hasCheckQuery "ASK { ?i backlog:hasState backlog:Done . FILTER NOT EXISTS { ?i backlog:hasEvidence ?e } }" ;
+    backlog:hasExpectedResult "false" ;
+    backlog:hasCriterionStatus backlog:Holds .
+
+backlog:DoD_C2_EvidenceVerified a owl:NamedIndividual , backlog:DoDCriterion ;
+    rdfs:label "Every Done item carries at least one bridge-verified Evidence"@en ;
+    skos:definition "Attached evidence is not enough: at least one attached artifact must have been confirmed to exist, and for a test to pass, outside the graph."@en ;
+    backlog:hasCheckQuery "ASK { ?i backlog:hasState backlog:Done . FILTER NOT EXISTS { ?i backlog:hasEvidence ?e . ?e backlog:evidenceVerified true } }" ;
+    backlog:hasExpectedResult "false" ;
+    backlog:hasCriterionStatus backlog:Holds .
+
+backlog:DoD_C3_AcceptanceCriteriaPresent a owl:NamedIndividual , backlog:DoDCriterion ;
+    rdfs:label "Every Done item states what it was accepted against"@en ;
+    skos:definition "An item completed without recorded acceptance criteria cannot be re-tested later, so the criterion requires at least one acceptance criterion on any Done item."@en ;
+    backlog:hasCheckQuery "ASK { ?i backlog:hasState backlog:Done . FILTER NOT EXISTS { ?i backlog:hasAcceptanceCriterion ?a } }" ;
+    backlog:hasExpectedResult "false" ;
+    backlog:hasCriterionStatus backlog:Holds .
+
+backlog:DoD_C4_DependenciesDone a owl:NamedIndividual , backlog:DoDCriterion ;
+    rdfs:label "No Done item depends on unfinished work"@en ;
+    skos:definition "An item cannot be complete while something it declares a dependency on is not; such a pair signals either a false Done or a wrong dependency, and both need resolving."@en ;
+    backlog:hasCheckQuery "ASK { ?i backlog:hasState backlog:Done ; backlog:dependsOn ?d . ?d backlog:hasState ?s . FILTER(?s != backlog:Done) }" ;
+    backlog:hasExpectedResult "false" ;
+    backlog:hasCriterionStatus backlog:Holds .
+
+#################################################################
+#  Report sections required of a compliant roadmap report (v1.1.0)
+#################################################################
+
+backlog:Section_NextThroughput a owl:NamedIndividual , backlog:ReportSection ;
+    rdfs:label "NEXT under the throughput model"@en ;
+    skos:definition "The highest-scoring startable item across the whole register under a named method."@en .
+
+backlog:Section_NextLaunchScoped a owl:NamedIndividual , backlog:ReportSection ;
+    rdfs:label "NEXT under the launch-scoped model"@en ;
+    skos:definition "The highest-scoring startable item within the active launch gate plus cross-cutting prerequisites. Printed alongside the throughput answer, never instead of it, so a disagreement between the two stays visible."@en .
+
+backlog:Section_RankedBacklog a owl:NamedIndividual , backlog:ReportSection ;
+    rdfs:label "Full ranked backlog"@en ;
+    skos:definition "Every scored item in rank order, so the two NEXT answers can be checked against the ordering that produced them."@en .
+
+backlog:Section_FlaggedItems a owl:NamedIndividual , backlog:ReportSection ;
+    rdfs:label "Flagged items"@en ;
+    skos:definition "Items explicitly declared not yet scoreable, with the reason recorded for each."@en .
+
+backlog:Section_SilentGapCheck a owl:NamedIndividual , backlog:ReportSection ;
+    rdfs:label "Silent-gap check"@en ;
+    skos:definition "The count of open items that are neither scored nor flagged. Must read zero; any other number is a defect in the register, not a note."@en .
+
+backlog:Section_LaunchReadiness a owl:NamedIndividual , backlog:ReportSection ;
+    rdfs:label "Launch readiness by package"@en ;
+    skos:definition "Each launch-gated container with its blocking items and its disclosed external dependency risk."@en .
+
+backlog:Section_PackageRanking a owl:NamedIndividual , backlog:ReportSection ;
+    rdfs:label "Package-level multi-factor ranking"@en ;
+    skos:definition "Containers ranked by their own judged scores, excluding those tagged as not business capabilities."@en .
+
+backlog:Section_OrphanCoverageCheck a owl:NamedIndividual , backlog:ReportSection ;
+    rdfs:label "Orphan and package-coverage check"@en ;
+    skos:definition "Items belonging to no container, and containers with no members, so nothing falls out of both the ranking and the roll-up unnoticed."@en .
+
+#################################################################
+#  Release gates (v1.1.0)
+#################################################################
+
+backlog:Gate0_ManifestSelfVerify a owl:NamedIndividual , backlog:ReleaseGate ;
+    rdfs:label "Gate 0 — manifest self-verify"@en ;
+    skos:definition "Every shipped file hashes as recorded in the manifest. Guards the inputs every later gate assumes."@en ;
+    backlog:hasGateCommand "backlog_gate_v1_1_6.sh (step: manifest self-verify)" ;
+    backlog:hasGateOrder 0 .
+
+backlog:GateP_TurtleParse a owl:NamedIndividual , backlog:ReleaseGate ;
+    rdfs:label "Gate P — Turtle parse"@en ;
+    skos:definition "Every shipped Turtle file parses. A file that does not parse cannot be validated, and a validator that silently skips it reports a pass it did not measure."@en ;
+    backlog:hasGateCommand "backlog_gate_v1_1_6.sh (step: parse)" ;
+    backlog:hasGateOrder 1 .
+
+backlog:GateK_VersionIdentity a owl:NamedIndividual , backlog:ReleaseGate ;
+    rdfs:label "Gate K — version identity"@en ;
+    skos:definition "For every ontology file, versionInfo equals the versionIRI token equals the filename token. Caught mechanically rather than by inspection, because the mismatch is invisible to a reader who trusts the filename."@en ;
+    backlog:hasGateCommand "backlog_validate_v1_2_0.py --gate-k" ;
+    backlog:hasGateOrder 2 .
+
+backlog:GateR_ShaclReconcile a owl:NamedIndividual , backlog:ReleaseGate ;
+    rdfs:label "Gate R — SHACL reconcile"@en ;
+    skos:definition "The register conforms: no item is Done without verified evidence, and no structural constraint is violated. Conformance is zero results at Violation severity, not an empty report."@en ;
+    backlog:hasGateCommand "backlog_validate_v1_2_0.py REGISTER.ttl" ;
+    backlog:hasGateOrder 3 .
+
+#################################################################
+#  Methodology rules, with the incident each closes (v1.1.0)
+#################################################################
+
+backlog:Rule_R1_ContainerStateDerivation a owl:NamedIndividual , backlog:MethodologyRule ;
+    rdfs:label "R1 — container state is derived from member states"@en ;
+    backlog:hasRuleLogic "A container is Done when every member is Done or Cancelled and at least one member exists; InProgress when at least one member is InProgress or Done while another is not yet terminal; Proposed when members exist and none has started. An asserted state that disagrees with the derived state is a violation." ;
+    backlog:closesDisagreement "Whether a container's reported completeness may be typed by hand alongside the members it summarises." ;
+    backlog:hasMotivatingIncident "A roll-up table marked superseded went 95 versions without mentioning three registered epics; it was not wrong when written, it went stale because nothing forced it to stay in sync with the register underneath. The fix had to be structural, not procedural." .
+
+backlog:Rule_R2_MilestoneStateDerivation a owl:NamedIndividual , backlog:MethodologyRule ;
+    rdfs:label "R2 — milestone state is derived from contributing items"@en ;
+    backlog:hasRuleLogic "A milestone is Done when every contributing item is Done, InProgress while any contributing item is not, and carries its own derived property rather than the container one because a milestone is a roadmap element, not a container." ;
+    backlog:closesDisagreement "Whether a milestone may be reported achieved on the strength of membership or intent rather than completed contributing work." ;
+    backlog:hasMotivatingIncident "Milestone reporting inherited from grouping rather than from contribution, allowing a date to read green while the work behind it was open." .
+
+backlog:Rule_R3_RankingArbitration a owl:NamedIndividual , backlog:MethodologyRule ;
+    rdfs:label "R3 — arbitration between the throughput and launch-readiness models"@en ;
+    backlog:hasRuleLogic "While any launch-gate container remains open, ranking is scoped to the active launch-priority container plus cross-cutting prerequisites; when every launch gate has cleared, the scoping collapses automatically to plain throughput ranking. Both the whole-register answer and the scoped answer are always printed together, and a disagreement between them is displayed rather than resolved." ;
+    backlog:closesDisagreement "Which of two prioritisation models answers 'what is next' when they point at different work — a recurring dispute that was re-litigated three separate times before being written down as a rule." ;
+    backlog:hasMotivatingIncident "A throughput-driven next pointed at a package the owner had not confirmed was in scope, while the owner's own declared launch priority pointed elsewhere; the owner raised the same disagreement twice before it was closed structurally." .
+
+backlog:Rule_R4_ExternalBlockerDerivation a owl:NamedIndividual , backlog:MethodologyRule ;
+    rdfs:label "R4 — full member completion is not deployability"@en ;
+    backlog:hasRuleLogic "For each container, derive an external blocker for every not-Done item outside the container that a member depends on. A container whose derived state is Done while an external blocker exists is a violation." ;
+    backlog:closesDisagreement "Whether a container reported 100% member-complete may be called ready to deploy." ;
+    backlog:hasMotivatingIncident "Two items recorded as Done formally depended on a still-open validation story, invisible until checked; a grouping of thirteen unrelated point fixes was simultaneously ranked as a complete, ready-to-deploy capability alongside real ones." .
+
+#################################################################
+#  Baseline Definition of Done — v1.1.0 additions
+#################################################################
+
+backlog:DoD_Baseline backlog:hasDoDCriterion backlog:DoD_C5_NoSilentGaps , backlog:DoD_C6_LaunchGatesOwnerDecided .
+
+backlog:DoD_C5_NoSilentGaps a owl:NamedIndividual , backlog:DoDCriterion ;
+    rdfs:label "No open item is both unscored and unflagged"@en ;
+    skos:definition "Gap discipline is binary: every open item is either scored or explicitly flagged not-yet-scoreable with a reason. The count of silent gaps must read zero."@en ;
+    backlog:hasCheckQuery "ASK { ?i backlog:hasState ?s . FILTER(?s IN (backlog:Proposed, backlog:Ready)) FILTER NOT EXISTS { ?i backlog:hasPriorityScore ?p } FILTER NOT EXISTS { ?i backlog:notYetScoreable true } }" ;
+    backlog:hasExpectedResult "false" ;
+    backlog:hasCriterionStatus backlog:Holds .
+
+backlog:DoD_C6_LaunchGatesOwnerDecided a owl:NamedIndividual , backlog:DoDCriterion ;
+    rdfs:label "Every launch gate is an owner decision with a written rationale"@en ;
+    skos:definition "Launch scope is a business call, never a value derived from a score, so each launch gate must name the Owner as its decider and carry the reasoning."@en ;
+    backlog:hasCheckQuery "ASK { ?x backlog:isLaunchGate true . FILTER NOT EXISTS { ?x backlog:decidedBy backlog:Owner . ?x backlog:hasDecisionRationale ?r } }" ;
+    backlog:hasExpectedResult "false" ;
+    backlog:hasCriterionStatus backlog:Holds .
+
+#################################################################
+#  Project-level Definition of Done (v1.2.0)
+#  Item-level criteria judge an item; these judge the effort.
+#################################################################
+
+backlog:DoD_ProjectBaseline a owl:NamedIndividual , backlog:DefinitionOfDone ;
+    rdfs:label "Baseline project Definition of Done"@en ;
+    skos:definition "The reusable minimum an implementation project must satisfy before it may be called finished. Every criterion is an executable query with a stated expected result, so 'the project is done' is a claim a gate can refuse."@en ;
+    backlog:hasDoDCriterion backlog:DoD_P1_LaunchGatesCleared , backlog:DoD_P2_NoSilentGaps ,
+                            backlog:DoD_P3_BlueprintSweepComplete , backlog:DoD_P4_DoneItemsEvidenced ,
+                            backlog:DoD_P5_ObjectivesMeasurable , backlog:DoD_P6_BenefitClaimsEvidenced ,
+                            backlog:DoD_P7_RisksTreatedOrAccepted , backlog:DoD_P8_CapacityPolicyComplete .
+
+backlog:DoD_P1_LaunchGatesCleared a owl:NamedIndividual , backlog:DoDCriterion ;
+    rdfs:label "Every launch gate has cleared"@en ;
+    skos:definition "No container declared a launch gate still has incomplete members."@en ;
+    backlog:hasCheckQuery "ASK { ?c backlog:isLaunchGate true . ?m backlog:memberOfContainer ?c ; backlog:hasState ?s . FILTER(?s NOT IN (backlog:Done, backlog:Cancelled)) }" ;
+    backlog:hasExpectedResult "false" ;
+    backlog:hasCriterionStatus backlog:Holds .
+
+backlog:DoD_P2_NoSilentGaps a owl:NamedIndividual , backlog:DoDCriterion ;
+    rdfs:label "The silent-gap count is zero"@en ;
+    skos:definition "Every open item is either scored or explicitly flagged not-yet-scoreable with a reason."@en ;
+    backlog:hasCheckQuery "ASK { ?i backlog:hasState ?s . FILTER(?s IN (backlog:Proposed, backlog:Ready)) FILTER NOT EXISTS { ?i backlog:hasPriorityScore ?p } FILTER NOT EXISTS { ?i backlog:notYetScoreable true } }" ;
+    backlog:hasExpectedResult "false" ;
+    backlog:hasCriterionStatus backlog:Holds .
+
+backlog:DoD_P3_BlueprintSweepComplete a owl:NamedIndividual , backlog:DoDCriterion ;
+    rdfs:label "Every entity life-cycle stage is covered or explicitly gapped"@en ;
+    skos:definition "No domain entity has a stage with neither backlog coverage nor a recorded blueprint gap."@en ;
+    backlog:hasCheckQuery "ASK { ?e a backlog:DomainEntity . ?st a backlog:EntityLifecycleStage . FILTER NOT EXISTS { ?i backlog:coversEntity ?e ; backlog:coversStage ?st } FILTER NOT EXISTS { ?g backlog:gapForEntity ?e ; backlog:gapForStage ?st } }" ;
+    backlog:hasExpectedResult "false" ;
+    backlog:hasCriterionStatus backlog:Holds .
+
+backlog:DoD_P4_DoneItemsEvidenced a owl:NamedIndividual , backlog:DoDCriterion ;
+    rdfs:label "Every Done item carries bridge-verified evidence"@en ;
+    skos:definition "No item holds the Done state on unverified or absent evidence."@en ;
+    backlog:hasCheckQuery "ASK { ?i backlog:hasState backlog:Done . FILTER NOT EXISTS { ?i backlog:hasEvidence ?e . ?e backlog:evidenceVerified true } }" ;
+    backlog:hasExpectedResult "false" ;
+    backlog:hasCriterionStatus backlog:Holds .
+
+backlog:DoD_P5_ObjectivesMeasurable a owl:NamedIndividual , backlog:DoDCriterion ;
+    rdfs:label "Every objective carries a metric, a baseline and a target"@en ;
+    skos:definition "No objective can be declared met or missed on opinion."@en ;
+    backlog:hasCheckQuery "ASK { ?o a backlog:Objective . FILTER NOT EXISTS { ?o backlog:hasSuccessMetric ?m . ?o backlog:hasBaselineValue ?b . ?o backlog:hasTargetValue ?t } }" ;
+    backlog:hasExpectedResult "false" ;
+    backlog:hasCriterionStatus backlog:Holds .
+
+backlog:DoD_P6_BenefitClaimsEvidenced a owl:NamedIndividual , backlog:DoDCriterion ;
+    rdfs:label "Every realised-benefit claim points at verified evidence"@en ;
+    skos:definition "A benefit is realised when it has been observed, not when the work shipped."@en ;
+    backlog:hasCheckQuery "ASK { ?b backlog:benefitRealized true . FILTER NOT EXISTS { ?b backlog:benefitRealizedBy ?e . ?e backlog:evidenceVerified true } }" ;
+    backlog:hasExpectedResult "false" ;
+    backlog:hasCriterionStatus backlog:Holds .
+
+backlog:DoD_P7_RisksTreatedOrAccepted a owl:NamedIndividual , backlog:DoDCriterion ;
+    rdfs:label "Every attached risk is mitigated or explicitly accepted"@en ;
+    skos:definition "No risk sits on the register untreated and unacknowledged."@en ;
+    backlog:hasCheckQuery "ASK { ?i backlog:hasRisk ?r . FILTER NOT EXISTS { ?r backlog:hasMitigation ?m } FILTER NOT EXISTS { ?r backlog:riskAcceptedBy ?role } }" ;
+    backlog:hasExpectedResult "false" ;
+    backlog:hasCriterionStatus backlog:Holds .
+
+backlog:DoD_P8_CapacityPolicyComplete a owl:NamedIndividual , backlog:DoDCriterion ;
+    rdfs:label "Where a capacity policy exists, its shares account for all capacity"@en ;
+    skos:definition "Declared investment shares sum to one, so no capacity is allocated by default."@en ;
+    backlog:hasCheckQuery "ASK { SELECT ?p (SUM(?s) AS ?total) WHERE { ?p a backlog:PortfolioPolicy ; backlog:hasAllocation ?a . ?a backlog:hasTargetShare ?s } GROUP BY ?p HAVING (ABS(?total - 1.0) > 0.001) }" ;
+    backlog:hasExpectedResult "false" ;
+    backlog:hasCriterionStatus backlog:Holds .
+
+#################################################################
+#  Default lifecycle workflow (v1.3.0)
+#  Eight transitions covering every state in the enumeration.
+#  Guards are executable text, because a precondition nobody can run
+#  is a precondition nobody enforces.
+#################################################################
+
+backlog:Workflow_Default a owl:NamedIndividual , backlog:Workflow ;
+    rdfs:label "Default work-item workflow"@en ;
+    skos:definition "The reusable baseline lifecycle: refine, start, complete, and withdraw, plus the two backward moves real delivery needs. Every state in the closed enumeration is reachable and both terminal states are entered only through a guarded transition."@en ;
+    backlog:hasTransition backlog:T_Refine , backlog:T_Start , backlog:T_Complete , backlog:T_Return ,
+                          backlog:T_Defer , backlog:T_WithdrawProposed , backlog:T_WithdrawReady , backlog:T_WithdrawInProgress .
+
+backlog:T_Refine a owl:NamedIndividual , backlog:StateTransition ;
+    rdfs:label "Refine: Proposed to Ready"@en ;
+    backlog:fromState backlog:Proposed ; backlog:toState backlog:Ready ;
+    backlog:hasTransitionName "refine" ;
+    backlog:hasTransitionGuard "ASK { ?i backlog:hasAcceptanceCriterion ?a . ?r backlog:refines ?i } # must return true for the item" .
+
+backlog:T_Start a owl:NamedIndividual , backlog:StateTransition ;
+    rdfs:label "Start: Ready to In Progress"@en ;
+    backlog:fromState backlog:Ready ; backlog:toState backlog:InProgress ;
+    backlog:hasTransitionName "start" ;
+    backlog:hasTransitionGuard "ASK { ?i backlog:dependsOn ?d . ?d backlog:hasState ?s . FILTER(?s != backlog:Done) } # must return false for the item" .
+
+backlog:T_Complete a owl:NamedIndividual , backlog:StateTransition ;
+    rdfs:label "Complete: In Progress to Done"@en ;
+    backlog:fromState backlog:InProgress ; backlog:toState backlog:Done ;
+    backlog:hasTransitionName "complete" ;
+    backlog:hasTransitionGuard "ASK { ?h backlog:harnessFor ?i ; backlog:harnessComplete true . ?i backlog:hasEvidence ?e . ?e backlog:evidenceVerified true } # must return true for the item" .
+
+backlog:T_Return a owl:NamedIndividual , backlog:StateTransition ;
+    rdfs:label "Return: In Progress to Ready"@en ;
+    backlog:fromState backlog:InProgress ; backlog:toState backlog:Ready ;
+    backlog:hasTransitionName "return" ;
+    backlog:hasTransitionGuard "ASK { } # unguarded: work may always be put back down, and pretending otherwise hides paused work as in-progress" .
+
+backlog:T_Defer a owl:NamedIndividual , backlog:StateTransition ;
+    rdfs:label "Defer: Ready to Proposed"@en ;
+    backlog:fromState backlog:Ready ; backlog:toState backlog:Proposed ;
+    backlog:hasTransitionName "defer" ;
+    backlog:hasTransitionGuard "ASK { } # unguarded: readiness decays when the item's assumptions change" .
+
+backlog:T_WithdrawProposed a owl:NamedIndividual , backlog:StateTransition ;
+    rdfs:label "Withdraw: Proposed to Cancelled"@en ;
+    backlog:fromState backlog:Proposed ; backlog:toState backlog:Cancelled ;
+    backlog:hasTransitionName "withdraw" ;
+    backlog:hasTransitionGuard "ASK { ?i backlog:hasRationale ?r } # must return true for the item" .
+
+backlog:T_WithdrawReady a owl:NamedIndividual , backlog:StateTransition ;
+    rdfs:label "Withdraw: Ready to Cancelled"@en ;
+    backlog:fromState backlog:Ready ; backlog:toState backlog:Cancelled ;
+    backlog:hasTransitionName "withdraw" ;
+    backlog:hasTransitionGuard "ASK { ?i backlog:hasRationale ?r } # must return true for the item" .
+
+backlog:T_WithdrawInProgress a owl:NamedIndividual , backlog:StateTransition ;
+    rdfs:label "Withdraw: In Progress to Cancelled"@en ;
+    backlog:fromState backlog:InProgress ; backlog:toState backlog:Cancelled ;
+    backlog:hasTransitionName "withdraw" ;
+    backlog:hasTransitionGuard "ASK { ?i backlog:hasRationale ?r } # must return true for the item" .
+
+#################################################################
+#  Ninth required report section (v1.3.0)
+#################################################################
+
+backlog:Section_LifecycleWorkflow a owl:NamedIndividual , backlog:ReportSection ;
+    rdfs:label "Lifecycle and workflow"@en ;
+    skos:definition "Current state counts across the register, the permitted transitions of the governing workflow, and any item whose state is not explained by its recorded transition history."@en .
+
+#################################################################
+#  Item-level Definition of Done — v1.3.0 addition
+#################################################################
+
+backlog:DoD_Baseline backlog:hasDoDCriterion backlog:DoD_C7_HarnessProvesCriteria .
+
+backlog:DoD_C7_HarnessProvesCriteria a owl:NamedIndividual , backlog:DoDCriterion ;
+    rdfs:label "Every acceptance criterion of a Done item is attested by verified evidence"@en ;
+    skos:definition "Completion is proved criterion by criterion, not suite by suite: a green test run that never touched the criterion everyone cared about does not close it."@en ;
+    backlog:hasCheckQuery "ASK { ?i backlog:hasState backlog:Done ; backlog:hasAcceptanceCriterion ?ac . FILTER NOT EXISTS { ?e backlog:attestsCriterion ?ac ; backlog:evidenceVerified true } }" ;
+    backlog:hasExpectedResult "false" ;
+    backlog:hasCriterionStatus backlog:Holds .

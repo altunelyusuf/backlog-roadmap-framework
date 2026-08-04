@@ -1,0 +1,86 @@
+@prefix backlog: <http://example.org/backlog#> .
+@prefix ex:      <http://example.org/fixture-tied#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+# Tied launch gates plus a recorded fork resolution — the two cases an adopting
+# project reported from real data. Three co-equal gates at priority 0: the earlier
+# single-gate tie-break picked whichever local name sorted first and under-covered
+# the real launch-blocking set. Also carries a recorded owner resolution of the
+# throughput/launch-scoped fork, which must print BESIDE the disagreement.
+
+ex:Profile a backlog:AdoptionProfile ;
+    backlog:profileAppliesTo "Tied-gate fixture" ;
+    backlog:governsBacklog ex:Backlog ;
+    backlog:hasConformanceLevel backlog:L1_Core ;
+    backlog:adoptsFacet backlog:CoreFacet , backlog:PrioritizationFacet , backlog:RoadmapFacet .
+
+ex:Backlog a backlog:Backlog ;
+    backlog:hasIdentifier "BL-TIED" ; backlog:hasState backlog:Proposed ;
+    backlog:hasRankingForkResolution backlog:LaunchScopedRanking ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:hasDecisionRationale "Owner call: nothing ships before the three foundation gates clear, so launch scope governs pickup until they do." .
+
+ex:Roadmap a backlog:Roadmap ; backlog:roadmapOf ex:Backlog .
+
+ex:GateAlpha a backlog:Package ;
+    backlog:hasIdentifier "PKG-ALPHA" ; backlog:hasState backlog:Proposed ;
+    backlog:isBusinessCapability true ; backlog:isLaunchGate true ;
+    backlog:hasLaunchPriority 0 ; backlog:decidedBy backlog:Owner ;
+    backlog:hasDecisionRationale "Co-equal launch precondition; no sequence against the other two." ;
+    backlog:rankedOnRoadmap ex:Roadmap ; backlog:hasRoadmapRank 1 .
+
+ex:GateBeta a backlog:Package ;
+    backlog:hasIdentifier "PKG-BETA" ; backlog:hasState backlog:Proposed ;
+    backlog:isBusinessCapability true ; backlog:isLaunchGate true ;
+    backlog:hasLaunchPriority 0 ; backlog:decidedBy backlog:Owner ;
+    backlog:hasDecisionRationale "Co-equal launch precondition." ;
+    backlog:rankedOnRoadmap ex:Roadmap ; backlog:hasRoadmapRank 2 .
+
+ex:GateZulu a backlog:Package ;
+    backlog:hasIdentifier "PKG-ZULU" ; backlog:hasState backlog:Proposed ;
+    backlog:isBusinessCapability true ; backlog:isLaunchGate true ;
+    backlog:hasLaunchPriority 0 ; backlog:decidedBy backlog:Owner ;
+    backlog:hasDecisionRationale "Co-equal launch precondition, alphabetically last — the case the old tie-break lost." ;
+    backlog:rankedOnRoadmap ex:Roadmap ; backlog:hasRoadmapRank 3 .
+
+# the highest-scoring startable work sits in the gate that sorts LAST by name
+ex:InZulu a backlog:Story ;
+    backlog:hasIdentifier "US-ZULU" ; backlog:hasTitle "Work inside the last-sorting gate" ;
+    backlog:hasState backlog:Ready ;
+    backlog:memberOfContainer ex:Backlog , ex:GateZulu ;
+    backlog:hasPriorityScore ex:ScoreZulu .
+ex:ScoreZulu a backlog:WSJFScore ;
+    backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 9.0 ;
+    backlog:hasUserBusinessValue 8.0 ; backlog:hasTimeCriticality 6.0 ;
+    backlog:hasRiskReductionValue 4.0 ; backlog:hasJobSize 2.0 .
+
+ex:InAlpha a backlog:Story ;
+    backlog:hasIdentifier "US-ALPHA" ; backlog:hasTitle "Work inside the first-sorting gate" ;
+    backlog:hasState backlog:Ready ;
+    backlog:memberOfContainer ex:Backlog , ex:GateAlpha ;
+    backlog:hasPriorityScore ex:ScoreAlpha .
+ex:ScoreAlpha a backlog:WSJFScore ;
+    backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 2.0 ;
+    backlog:hasUserBusinessValue 2.0 ; backlog:hasTimeCriticality 1.0 ;
+    backlog:hasRiskReductionValue 1.0 ; backlog:hasJobSize 2.0 .
+
+ex:InBeta a backlog:Task ;
+    backlog:hasIdentifier "US-BETA" ; backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer ex:Backlog , ex:GateBeta ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Not yet separated from the surrounding platform work." .
+
+# work outside every gate, scoring highest overall -> throughput and launch-scoped disagree
+ex:Outside a backlog:Story ;
+    backlog:hasIdentifier "US-OUT" ; backlog:hasTitle "Cheap high-value work outside every gate" ;
+    backlog:hasState backlog:Ready ;
+    backlog:memberOfContainer ex:Backlog , ex:PkgLater ;
+    backlog:hasPriorityScore ex:ScoreOut .
+ex:ScoreOut a backlog:WSJFScore ;
+    backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 12.0 ;
+    backlog:hasUserBusinessValue 9.0 ; backlog:hasTimeCriticality 9.0 ;
+    backlog:hasRiskReductionValue 6.0 ; backlog:hasJobSize 2.0 .
+ex:PkgLater a backlog:Package ;
+    backlog:hasIdentifier "PKG-LATER" ; backlog:hasState backlog:Proposed ;
+    backlog:isBusinessCapability true .

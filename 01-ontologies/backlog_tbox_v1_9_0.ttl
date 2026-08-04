@@ -1,0 +1,2615 @@
+@prefix backlog: <http://example.org/backlog#> .
+@prefix core:    <http://example.org/core#> .
+@prefix risk:    <http://example.org/risk#> .
+@prefix configuration: <http://example.org/configuration#> .
+@prefix testing: <http://example.org/testing#> .
+@prefix orh:     <http://example.org/oepack-release-history#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix prov:    <http://www.w3.org/ns/prov#> .
+
+#################################################################
+#  Ontology header (BP-D24: license + provenance on every ontology)
+#################################################################
+
+<http://example.org/backlog> a owl:Ontology ;
+    rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
+    owl:versionIRI <http://example.org/backlog/1.9.0> ;
+    owl:versionInfo "1.9.0" ;
+    owl:priorVersion <http://example.org/backlog/1.8.0> ,
+                     <http://example.org/backlog/1.7.0> ,
+                     <http://example.org/backlog/1.6.0> ,
+                     <http://example.org/backlog/1.5.0> ,
+                     <http://example.org/backlog/1.4.0> ,
+                     <http://example.org/backlog/1.3.0> ,
+                     <http://example.org/backlog/1.2.0> ,
+                     <http://example.org/backlog/1.1.0> ,
+                     <http://example.org/backlog/1.0.0> ;
+    owl:imports <http://example.org/core> ,
+                <http://example.org/testing> ,
+                <http://example.org/risk> ,
+                <http://example.org/configuration> ,
+                <http://example.org/oepack-release-history> ;
+    dcterms:identifier "backlog" ;
+    dcterms:created "2026-07-27T00:00:00"^^xsd:dateTime ;
+    dcterms:modified "2026-07-27T12:00:00"^^xsd:dateTime ;
+    dcterms:creator "Yusuf Altunel" ;
+    dcterms:publisher "İstanbul Kültür Üniversitesi, Department of Computer Engineering" ;
+    dcterms:rightsHolder "İstanbul Kültür Üniversitesi, Department of Computer Engineering" ;
+    dcterms:rights "Copyright (c) 2025-2026 İstanbul Kültür Üniversitesi & Yusuf Altunel. Licensed under CC BY 4.0."@en ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    prov:wasAttributedTo "Yusuf Altunel" ;
+    skos:definition "A domain-neutral, reusable schema for backlog-and-roadmap governance across independent developments. It standardises five concept groups that recur in every product/engineering effort: (1) work items and their containers, (2) a closed lifecycle whose Done state is a constrained fact rather than asserted prose, (3) completion Evidence anchored to real delivered artifacts (a named passing test, a release carrying its package SHA-256, a file hash, or a recorded review), (4) method-parameterised prioritisation scores, and (5) a roadmap modelled as a derived projection over the backlog rather than an independently maintained list. Adoption is declared by an AdoptionProfile carrying a ConformanceLevel (L1 Core / L2 Evidence-Bound / L3 Governed), which the paired SHACL suite reads to decide which constraints are enforced, so one framework serves developments at different governance maturity without forking the vocabulary. This TBox defines vocabulary only; the paired SHACL shapes supply enforcement, the SPARQL rules supply derivation (container status, next-item selection, milestone status), and an execution bridge asserts observed real-world verification facts back into the ABox."@en ;
+    dcterms:source "Scrum Guide 2020 (Product Backlog, Increment, Definition of Done); SAFe 6.0 (Epic/Feature/Story ladder, WSJF); Now-Next-Later roadmap practice; Intercom RICE prioritisation; W3C OWL 2, SHACL, SHACL-AF."@en ;
+    rdfs:comment "v1.0.0 — generalisation of an adopting project's product-backlog deposit (an OE Pack registrant deposit, http://example.org/product-backlog 1.3.0) into a project-independent subject. Per L-105 this is an extension of that implementation, not a parallel one: every pb: term has a declared alignment in backlog_alignment_productbacklog_v1_0_0.ttl. Per L-68 the hyphenated/abbreviated form (product-backlog / pb:) is replaced by a single full-word prefix (backlog:); per L-69 the retained terminology anchors to the Scrum Guide and SAFe rather than to project-internal names. The deposit files themselves are NOT modified by this release (L-X7 / B1: the owning session decides supersession)."@en ,
+    "v1.9.0 (MINOR, definition enrichment plus one clarification) — responds to an adopting project that registered a user-facing story whose Definition of Done named which files would change and which fields would be added, and which the suite accepted as complete because nothing distinguished describing a change from describing a behaviour. Per L-110 no UIScope flag or sibling term is minted on one producer's evidence: backlog:Story is ALREADY defined as the user-facing kind, so the flag exists, and backlog:AcceptanceCriterion is ALREADY defined in terms of observable behaviour, so the concept exists. What was missing was that neither said so forcefully enough to be actionable, and nothing surfaced the failure. Both definitions are enriched and an advisory is added. Also clarifies that hasSuccessMetric's range is nominal at L1."@en ,
+    "v1.8.0 (MINOR, additions only) — adds hasRankingForkResolution, so an owner records ONCE which model resolves pickup when throughput and launch-scoped ranking disagree. Raised by an adopting project carrying a legitimate, long-running disagreement that every session re-argued because the register had nowhere to say the owner had already decided. It does not weaken the rule that the fork stays visible: both models are still computed and the disagreement notice is unchanged; the recorded decision is printed beside it, never instead of it. This is the same pattern the framework already applies to scope changes, re-baselines and accepted risks — an unavoidable judgement gets a place to be recorded, or it is remade informally every time."@en ,
+    "v1.7.0 (MINOR, additions only) — closes an asymmetry found by audit: the framework constrained what a register must SAY and said nothing about what an adopting development must SHIP, so a register could be fully conformant in one working copy and unreproducible everywhere else. Adds RegisterPackage and RegisterArtifact with a closed five-role set, a package version, a mandatory manifest, and retention of roadmap report runs as files so progress has a trajectory rather than only a current state. Filename and version rules are NOT restated here: artifacts reference the configuration subject's existing NamingConvention individuals by IRI, and the package checker reads their filenamePattern from the pack at check time, so there is one source of truth for naming and it is the one that already owns it."@en ,
+    "v1.6.0 (MINOR, additions only) — completes the intent chain and closes the scope boundary. Adds Mission as the root above goals, so every value claim traces mission-goal-objective-observation and terminates in something falsifiable; binds scope to the objectives it realises and derives both scope completion and scope outcome, so a development can report that it delivered everything it promised and still failed; adds ScopeChange so scope may grow but never invisibly; adds ExternalDependency over a closed six-type taxonomy with EnhancementProposal, encoding the rule that a change needed from a party outside the development is proposed to them and never scheduled here; and adds RegisterSession for the provenance of register edits, deliberately scoped to who changed what after verifying what, not to meetings."@en ,
+    "v1.5.0 (MINOR, additions only) — closes a falsifiability gap demonstrated by an adversarial register that passed every gate at conformance level L3 while being arbitrary: a WSJF score of 9.9 over components computing to 0.3, evidence marked verified with the method 'asserted', an objective with a metric, baseline and target that was never observed and whose deadline had passed, a milestone months overdue with no outcome, acceptance criteria reading 'Given, When, Then.', and scores six months older than the last completion. Everything added here exists so a register can be WRONG: metric observations and target direction, derived objective and milestone outcomes including Missed, explicit owner-decided re-baselining, actual effort against estimate, and tool-named verification. A plan that cannot fail cannot succeed either."@en ,
+    "v1.4.0 (MINOR, additions only) — closes the gaps found by a fit-gap analysis against the agile literature and standards: the Scrum Guide 2020 artifact-commitment structure, OntoAgile (DYNA 86(209), 2019), Strode's dependency taxonomy (Information Systems Frontiers 18(1), 2016) and the Kanban flow measures. Adds decomposition (the epic-feature-story ladder had no part-whole relation at all), artifact commitments, typed dependencies, impediments as distinct from dependencies, flow start and finish points with a WIP-limit policy, team and open-ended team roles with capacity, and the canonical user-story clauses. Method-level concepts from OntoAgile — agile values, principles, practices, activities and agility assessment — are deliberately NOT adopted: they describe how a method is performed, which is a different subject from the register this framework governs."@en ,
+    "v1.3.0 (MINOR, additions only) — closes the linkage gaps found by a relational audit: containers had no dependency on other containers and no place on the roadmap, acceptance criteria had no link to the evidence that proves them, there was no test-harness concept tying a completion claim to the criteria it must satisfy, and the closed lifecycle enumeration had no workflow saying which moves between states are permitted or under what guard. Adds containerDependsOn with its derived counterpart, roadmap placement and declared rank for containers, attestsCriterion, TestHarness with derived completeness, effectiveDefinitionOfDone inherited from containers, and Workflow / StateTransition / TransitionEvent. Domains of scheduledInHorizon, contributesToMilestone, hasDependencyDisclosure and the range of disclosesDependencyOn are widened to containers, which is backwards-compatible."@en ,
+    "v1.2.0 (MINOR, additions only) — closes the concept-completeness gaps found by an audit against a twenty-concept industrial/academic checklist, which measured 10 of 20 present. Adds the intent layer (goal, objective with success metric, benefit with evidenced realisation, opportunity), explicit scope with owner-decided exclusions, refinement events that make the Ready state earned rather than assumed, unit-neutral cost estimates carrying their basis, investment categories and product lifecycle phase so that building and maintaining are arbitrated by policy rather than by a single score, portfolio capacity policy, and ImplementationProject as the container the project-level Definition of Done applies to. Risk is NOT minted here: the pack's risk subject already defines risk per ISO 31000:2018 as the effect of uncertainty on objectives, so this release delegates to risk:Risk and risk:Mitigation and adds only the binding properties and the constraint that an untreated risk must be explicitly accepted."@en ,
+    "v1.1.0 (MINOR, additions only) — closes the primary-source coverage gap. v1.0.0 was authored without access to the governing standard document (BACKLOG_ROADMAP_STANDARD_v1_0_0.md, adopted 2026-07-27, SHA-256 a58a6c8911b391c4…), which returned HTTP 404 at the time; when the document was supplied, the BP-D31 concept-coverage gate measured 22.2% (8 of 36 named concepts demonstrated). This version adds the blueprint layer, the launch-readiness prioritisation model and its arbitration with throughput ranking, binary scoreability/gap discipline, capability tagging, dependency disclosure, document supersession, the computed roadmap report with its required sections, methodology-rule provenance, release-gate vocabulary, and the owner/builder role split. No term from v1.0.0 was removed or renamed; the domain of hasPriorityScore is widened to include containers, which is backwards-compatible."@en .
+
+#################################################################
+#  Discipline umbrella (cross-subject *Concept pattern)
+#################################################################
+
+backlog:BacklogConcept a owl:Class ;
+    rdfs:subClassOf core:Concept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Backlog Concept"@en ;
+    skos:definition "Discipline-root umbrella for every concept this subject introduces about backlog and roadmap governance, placed under core:Concept so the framework participates in the pack's cross-subject concept taxonomy rather than standing apart from it."@en .
+
+#################################################################
+#  1. Work items
+#################################################################
+
+backlog:WorkItem a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Work Item"@en ;
+    skos:definition "A single tracked unit of intended, deliverable functionality or change, identified by an identifier unique across its register, carrying exactly one lifecycle state, at most one priority score per prioritisation method, optional container membership, optional dependencies, and — when Done under an evidence-bound profile — at least one verified Evidence artifact. The root of the framework: everything a development claims it will do, is doing, or has done is an instance of this class or one of its kinds."@en .
+
+backlog:Initiative a owl:Class ;
+    rdfs:subClassOf backlog:WorkItem ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Initiative"@en ;
+    skos:definition "A portfolio-granularity work item expressing a strategic outcome that spans multiple epics and usually multiple increments; its completion is always derived from constituent work, never asserted directly."@en .
+
+backlog:Epic a owl:Class ;
+    rdfs:subClassOf backlog:WorkItem ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Epic"@en ;
+    skos:definition "A large body of work decomposed into, or delivered across, multiple features or stories; its completion is typically derived from the completion of its constituent work rather than from a single test."@en .
+
+backlog:Feature a owl:Class ;
+    rdfs:subClassOf backlog:WorkItem ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Feature"@en ;
+    skos:definition "A work item that delivers a coherent, demonstrable capability to a user or system within a single increment, sized between an epic and a story."@en .
+
+backlog:Story a owl:Class ;
+    rdfs:subClassOf backlog:WorkItem ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Story"@en ;
+    skos:definition "A single, independently deliverable user-facing slice of functionality, small enough to be completed within one iteration and to be attested by a named test."@en .
+
+backlog:Task a owl:Class ;
+    rdfs:subClassOf backlog:WorkItem ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Task"@en ;
+    skos:definition "A unit of execution work that is not itself user-facing (build step, migration, configuration change) but must still be tracked, prioritised and evidenced like any other work item."@en .
+
+backlog:Defect a owl:Class ;
+    rdfs:subClassOf backlog:WorkItem ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Defect"@en ;
+    skos:definition "A work item recording observed behaviour that diverges from specified or expected behaviour; its Done evidence is normally a regression test that fails before the fix and passes after it."@en .
+
+backlog:Spike a owl:Class ;
+    rdfs:subClassOf backlog:WorkItem ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Spike"@en ;
+    skos:definition "A time-boxed investigation whose deliverable is knowledge (a decision, a measurement, a prototype discarded afterwards) rather than shipped functionality; its Evidence is a recorded finding artifact, not a passing feature test."@en .
+
+backlog:Enabler a owl:Class ;
+    rdfs:subClassOf backlog:WorkItem ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Enabler"@en ;
+    skos:definition "A work item that builds architectural, infrastructural or compliance capability required by other work items rather than by an end user directly; it is prioritised in the same register so that infrastructure work cannot become invisible untracked effort."@en .
+
+[] a owl:AllDisjointClasses ;
+   owl:members ( backlog:Initiative backlog:Epic backlog:Feature backlog:Story
+                 backlog:Task backlog:Defect backlog:Spike backlog:Enabler ) .
+
+#################################################################
+#  2. Containers
+#################################################################
+
+backlog:WorkItemContainer a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Work Item Container"@en ;
+    skos:definition "Any named grouping of work items whose lifecycle state is derived from its members rather than asserted independently. Introduced as a common superclass so the derivation rule is written once and applies to every grouping kind a development chooses to use."@en .
+
+backlog:Backlog a owl:Class ;
+    rdfs:subClassOf backlog:WorkItemContainer ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Backlog"@en ;
+    skos:definition "The single ordered register of all work items for one product or development. The framework's source of truth: scope, progress and next are read from it, never maintained separately in prose."@en .
+
+backlog:Package a owl:Class ;
+    rdfs:subClassOf backlog:WorkItemContainer ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Package"@en ;
+    skos:definition "A deployable business function: a coherent group of work items that together deliver meaningful, manually-testable functionality the business can release as a unit. Its state is derived (Done only when every member is Done), never asserted."@en .
+
+backlog:Increment a owl:Class ;
+    rdfs:subClassOf backlog:WorkItemContainer ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Increment"@en ;
+    skos:definition "The cumulative, releasable body of work completed by a stated point in time; the unit against which release evidence is anchored."@en .
+
+backlog:Iteration a owl:Class ;
+    rdfs:subClassOf backlog:WorkItemContainer ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Iteration"@en ;
+    skos:definition "A fixed-length time box within which a selected subset of work items is worked; used for cadence and forecasting, not for defining deliverable scope."@en .
+
+#################################################################
+#  3. Lifecycle
+#################################################################
+
+backlog:LifecycleState a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:Proposed backlog:Ready backlog:InProgress backlog:Done backlog:Cancelled ) ;
+    rdfs:label "Lifecycle State"@en ;
+    skos:definition "The state of a work item or container within its delivery lifecycle. A closed enumeration of exactly five individuals — Proposed, Ready, InProgress, Done, Cancelled — so that any other asserted state is a semantic error a reasoner detects rather than free-text a reader must interpret."@en .
+
+backlog:Proposed a owl:NamedIndividual , backlog:LifecycleState ;
+    rdfs:label "Proposed"@en ;
+    skos:definition "Recorded and prioritisable, but not yet refined to the point where work could start; acceptance criteria may still be absent."@en .
+
+backlog:Ready a owl:NamedIndividual , backlog:LifecycleState ;
+    rdfs:label "Ready"@en ;
+    skos:definition "Refined and unblocked: acceptance criteria exist and every dependency is Done, so work can start without further clarification. The state the next-item selection query draws from."@en .
+
+backlog:InProgress a owl:NamedIndividual , backlog:LifecycleState ;
+    rdfs:label "In Progress"@en ;
+    skos:definition "Being worked; partial delivery may exist but completion evidence is absent or not yet verified."@en .
+
+backlog:Done a owl:NamedIndividual , backlog:LifecycleState ;
+    rdfs:label "Done"@en ;
+    skos:definition "Complete AND backed by evidence. Under an evidence-bound profile (L2 or L3) the SHACL suite refuses this state to any item lacking at least one Evidence whose evidenceVerified flag is true, so 'done' can never be a prose claim."@en .
+
+backlog:Cancelled a owl:NamedIndividual , backlog:LifecycleState ;
+    rdfs:label "Cancelled"@en ;
+    skos:definition "Withdrawn without delivery. A terminal state that carries no evidence obligation but must record a rationale, so abandoned scope stays visible instead of silently disappearing from the register."@en .
+
+[] a owl:AllDifferent ; owl:distinctMembers ( backlog:Proposed backlog:Ready backlog:InProgress backlog:Done backlog:Cancelled ) .
+
+#################################################################
+#  4. Evidence
+#################################################################
+
+backlog:Evidence a owl:Class ;
+    rdfs:subClassOf core:Artifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Completion Evidence"@en ;
+    skos:definition "A real, durable artifact that proves a work item is Done. A subclass of core:Artifact because it is a thing that exists in the workspace, not a claim about one. Evidence becomes trustworthy only once its evidenceVerified flag has been set true by an execution bridge that confirmed the artifact actually exists — and, for a test, currently passes — outside the graph."@en .
+
+backlog:TestEvidence a owl:Class ;
+    rdfs:subClassOf backlog:Evidence ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Test Evidence"@en ;
+    skos:definition "Completion evidence that is a named, currently-passing automated test, connected to the testing subject via attestedByTest and recording the spec path and test identifier so the bridge verifies the exact test rather than the file as a whole."@en .
+
+backlog:ReleaseEvidence a owl:Class ;
+    rdfs:subClassOf backlog:Evidence ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Release Evidence"@en ;
+    skos:definition "Completion evidence that is a delivered, immutable release: a version whose delivered package carries a SHA-256 manifest hash, connected to the release-history subject via deliveredInRelease. The package hash is the anchor that makes 'what shipped' checkable, replacing the failed practice of hashing backlog prose."@en .
+
+backlog:ArtifactEvidence a owl:Class ;
+    rdfs:subClassOf backlog:Evidence ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Artifact Evidence"@en ;
+    skos:definition "Completion evidence that is a specific delivered file — a document, dataset, model or ontology — identified by path and content hash, for work whose deliverable is neither a test nor a release."@en .
+
+backlog:ReviewEvidence a owl:Class ;
+    rdfs:subClassOf backlog:Evidence ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Review Evidence"@en ;
+    skos:definition "Completion evidence that is a recorded human judgement (approval, sign-off, acceptance) identified by reviewer and durable record reference. The weakest evidence kind: admissible only where no executable check exists, and never sufficient on its own at conformance level L3."@en .
+
+#################################################################
+#  5. Definition of Done & acceptance
+#################################################################
+
+backlog:DefinitionOfDone a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Definition of Done"@en ;
+    skos:definition "The standing set of criteria every work item in a scope must satisfy before it may enter the Done state. Modelled as a first-class individual with executable criteria rather than as prose, because a Definition of Done is only enforceable when a meta-gate can make each criterion falsifiable."@en .
+
+backlog:DoDCriterion a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Definition-of-Done Criterion"@en ;
+    skos:definition "One falsifiable clause of a Definition of Done, carrying the query or command that decides it and the honest current result of running that check. A criterion with no check text is decorative and is rejected by the SHACL suite."@en .
+
+backlog:AcceptanceCriterion a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Acceptance Criterion"@en ;
+    skos:definition "A per-item condition, normally written in Given/When/Then form, that defines what observable behaviour the item must exhibit to be accepted. Carried on the item itself so acceptance text cannot drift away from the register into a separate document. Observable behaviour is the whole of it: an enumeration of the files that will change, the fields that will be added, or the tables that will be migrated describes the CHANGE and not the BEHAVIOUR, and is therefore not an acceptance criterion however precisely it is written. The test is whether someone who never sees the diff could tell, from this text alone, whether the item works — what a user does, what they then see, and what happens when it goes wrong. For an item with a user-facing surface that includes the surface's own behaviour: the states of a control, its default, whether a choice persists, what an empty result looks like, and who is permitted to see it. A criterion that only a reader of the implementation can evaluate has moved the acceptance decision inside the work it was supposed to judge."@en .
+
+#################################################################
+#  6. Prioritisation
+#################################################################
+
+backlog:PrioritizationMethod a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Prioritization Method"@en ;
+    skos:definition "A named, reproducible procedure for converting item attributes into a comparable priority number or rank. Left deliberately open (not an owl:oneOf enumeration) because developments legitimately adopt methods beyond the ones shipped; what the framework fixes is that every score must name its method, not which methods exist."@en .
+
+backlog:PriorityScore a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Priority Score"@en ;
+    skos:definition "A computed priority value attached to a work item, carrying the method that produced it and the time it was computed. Reified as its own individual — rather than a bare number on the item — so that scores from different methods coexist without collision and so a stale score is detectable by its timestamp."@en .
+
+backlog:WSJFScore a owl:Class ;
+    rdfs:subClassOf backlog:PriorityScore ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "WSJF Score"@en ;
+    skos:definition "A priority score computed as Cost of Delay divided by Job Size, where Cost of Delay is the sum of user-business value, time criticality, and risk-reduction/opportunity-enablement. Retains the component values so the number can be recomputed and challenged rather than merely trusted."@en .
+
+backlog:RICEScore a owl:Class ;
+    rdfs:subClassOf backlog:PriorityScore ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "RICE Score"@en ;
+    skos:definition "A priority score computed as Reach x Impact x Confidence divided by Effort, optionally multiplied by a dependency factor that demotes items whose prerequisites are not yet Done. Retains its components for the same recomputability reason as WSJF."@en .
+
+#################################################################
+#  7. Roadmap (a projection of the backlog, never an independent list)
+#################################################################
+
+backlog:RoadmapElement a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Roadmap Element"@en ;
+    skos:definition "Any concept belonging to the time-facing projection of a backlog. Grouped under one superclass to make the framework's central roadmap claim structural: roadmap elements reference work items that already exist in the register, and never introduce scope of their own."@en .
+
+backlog:Roadmap a owl:Class ;
+    rdfs:subClassOf backlog:RoadmapElement ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Roadmap"@en ;
+    skos:definition "A derived, time-ordered view over exactly one backlog, presenting its items by horizon and milestone. Because it is a projection, a roadmap cannot contain an item absent from its backlog; the SHACL suite treats such an item as a violation rather than as new scope."@en .
+
+backlog:RoadmapHorizon a owl:Class ;
+    rdfs:subClassOf backlog:RoadmapElement ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:Now backlog:Next backlog:Later ) ;
+    rdfs:label "Roadmap Horizon"@en ;
+    skos:definition "The commitment band a work item sits in on the roadmap. A closed enumeration of exactly three individuals — Now, Next, Later — chosen over date-pinned columns because horizon bands carry honest uncertainty, whereas dates on unstarted work carry false precision."@en .
+
+backlog:Now a owl:NamedIndividual , backlog:RoadmapHorizon ;
+    rdfs:label "Now"@en ;
+    skos:definition "Committed and actively worked in the current increment; items here are expected to be Ready or InProgress."@en .
+
+backlog:Next a owl:NamedIndividual , backlog:RoadmapHorizon ;
+    rdfs:label "Next"@en ;
+    skos:definition "Intended for the increment after the current one; refined enough to be estimated but not committed."@en .
+
+backlog:Later a owl:NamedIndividual , backlog:RoadmapHorizon ;
+    rdfs:label "Later"@en ;
+    skos:definition "Directional intent beyond the next increment; deliberately unrefined, and never to be reported to stakeholders as a schedule."@en .
+
+[] a owl:AllDifferent ; owl:distinctMembers ( backlog:Now backlog:Next backlog:Later ) .
+
+backlog:Milestone a owl:Class ;
+    rdfs:subClassOf backlog:RoadmapElement ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Milestone"@en ;
+    skos:definition "A named point of external significance — a launch, an audit, a contractual date — whose achievement is derived from the completion of the work items that contribute to it, so a milestone can never be reported green while its contributing work is not Done."@en .
+
+#################################################################
+#  8. Invariants & audit
+#################################################################
+
+backlog:CrossCuttingInvariant a owl:Class ;
+    rdfs:subClassOf core:Artifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Cross-Cutting Invariant"@en ;
+    skos:definition "A standing property that must hold across the system regardless of which work item is being worked, carried as an executable check with an honest status rather than as a paragraph of intent. Makes 'we always check X' an assertion a gate can run and fail."@en .
+
+backlog:InvariantStatus a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:Holds backlog:Violated backlog:NotYetEnforceable ) ;
+    rdfs:label "Invariant Status"@en ;
+    skos:definition "The honest current result of an invariant's check. Closed enumeration of three individuals; the third exists specifically so that an invariant whose enforcing work item is not yet Done is reported as unenforceable rather than silently as passing."@en .
+
+backlog:Holds a owl:NamedIndividual , backlog:InvariantStatus ;
+    rdfs:label "Holds"@en ;
+    skos:definition "The check was executed in this pass and returned the expected result."@en .
+
+backlog:Violated a owl:NamedIndividual , backlog:InvariantStatus ;
+    rdfs:label "Violated"@en ;
+    skos:definition "The check was executed in this pass and returned an unexpected result; the invariant is currently broken."@en .
+
+backlog:NotYetEnforceable a owl:NamedIndividual , backlog:InvariantStatus ;
+    rdfs:label "Not Yet Enforceable"@en ;
+    skos:definition "The check cannot yet be executed meaningfully because the work item that would enforce the invariant is not Done. Must never be reported as passing."@en .
+
+[] a owl:AllDifferent ; owl:distinctMembers ( backlog:Holds backlog:Violated backlog:NotYetEnforceable ) .
+
+#################################################################
+#  9. Adoption profile & conformance levels (the reuse mechanism)
+#################################################################
+
+backlog:AdoptionProfile a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Adoption Profile"@en ;
+    skos:definition "One development's declared adoption of this framework: which backlog it governs, which optional facets it uses, and which conformance level it claims. The profile is what makes a single vocabulary reusable across developments of different maturity — the SHACL suite reads the claimed level and enforces exactly the constraints that level promises, so a level-1 adopter is not failed by evidence rules it never claimed and a level-3 adopter cannot quietly skip them."@en .
+
+backlog:ConformanceLevel a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:L1_Core backlog:L2_EvidenceBound backlog:L3_Governed ) ;
+    rdfs:label "Conformance Level"@en ;
+    skos:definition "The graded strength of a development's claim on this framework. Closed enumeration of three individuals, each a strict superset of the previous, so 'conformant' is always a measured statement about which constraint set passed rather than an unqualified adjective."@en .
+
+backlog:L1_Core a owl:NamedIndividual , backlog:ConformanceLevel ;
+    rdfs:label "L1 Core"@en ;
+    skos:definition "Every work item carries a unique identifier, exactly one lifecycle state, and well-typed container and dependency references. Structural integrity only: nothing is claimed about how completion is proven."@en .
+
+backlog:L2_EvidenceBound a owl:NamedIndividual , backlog:ConformanceLevel ;
+    rdfs:label "L2 Evidence-Bound"@en ;
+    skos:definition "L1 plus: no item may hold the Done state without at least one Evidence whose evidenceVerified flag is true, every Definition-of-Done criterion carries executable check text, and container state is derived rather than asserted. This is the level at which 'done' stops being prose."@en .
+
+backlog:L3_Governed a owl:NamedIndividual , backlog:ConformanceLevel ;
+    rdfs:label "L3 Governed"@en ;
+    skos:definition "L2 plus: Done items are anchored to a release carrying a package SHA-256 or to a named passing test (review evidence alone is insufficient), each item records when it was last individually re-verified, cross-cutting invariants are executable with honest statuses, and the reconciliation gate runs as a mandatory release gate rather than as an available script."@en .
+
+[] a owl:AllDifferent ; owl:distinctMembers ( backlog:L1_Core backlog:L2_EvidenceBound backlog:L3_Governed ) .
+
+backlog:FrameworkFacet a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:CoreFacet backlog:EvidenceFacet backlog:PrioritizationFacet
+                backlog:RoadmapFacet backlog:InvariantFacet backlog:AuditFacet ) ;
+    rdfs:label "Framework Facet"@en ;
+    skos:definition "A separable part of the framework a development may adopt or omit. Closed enumeration of six individuals; declaring facets explicitly prevents the common failure where an unused part of a standard is assumed to be in force by one reader and ignored by another."@en .
+
+backlog:CoreFacet a owl:NamedIndividual , backlog:FrameworkFacet ;
+    rdfs:label "Core Facet"@en ;
+    skos:definition "Work items, containers and the lifecycle enumeration. Mandatory: every adoption includes it."@en .
+
+backlog:EvidenceFacet a owl:NamedIndividual , backlog:FrameworkFacet ;
+    rdfs:label "Evidence Facet"@en ;
+    skos:definition "Evidence classes, the verification flag, and the Definition-of-Done criteria. Required at conformance level L2 and above."@en .
+
+backlog:PrioritizationFacet a owl:NamedIndividual , backlog:FrameworkFacet ;
+    rdfs:label "Prioritization Facet"@en ;
+    skos:definition "Method-parameterised priority scores and the next-item selection rule."@en .
+
+backlog:RoadmapFacet a owl:NamedIndividual , backlog:FrameworkFacet ;
+    rdfs:label "Roadmap Facet"@en ;
+    skos:definition "Roadmaps, horizons and milestones as projections over the backlog."@en .
+
+backlog:InvariantFacet a owl:NamedIndividual , backlog:FrameworkFacet ;
+    rdfs:label "Invariant Facet"@en ;
+    skos:definition "Cross-cutting invariants with executable checks and honest statuses. Required at conformance level L3."@en .
+
+backlog:AuditFacet a owl:NamedIndividual , backlog:FrameworkFacet ;
+    rdfs:label "Audit Facet"@en ;
+    skos:definition "Per-item re-verification timestamps and audit notes, so coverage of a reconciliation pass is recorded item by item rather than implied. Required at conformance level L3."@en .
+
+[] a owl:AllDifferent ; owl:distinctMembers ( backlog:CoreFacet backlog:EvidenceFacet backlog:PrioritizationFacet
+                                              backlog:RoadmapFacet backlog:InvariantFacet backlog:AuditFacet ) .
+
+#################################################################
+#  Top-level disjointness
+#################################################################
+
+[] a owl:AllDisjointClasses ;
+   owl:members ( backlog:WorkItem backlog:WorkItemContainer backlog:LifecycleState
+                 backlog:Evidence backlog:PriorityScore backlog:PrioritizationMethod
+                 backlog:RoadmapElement backlog:CrossCuttingInvariant
+                 backlog:DefinitionOfDone backlog:DoDCriterion backlog:AcceptanceCriterion
+                 backlog:AdoptionProfile backlog:ConformanceLevel backlog:FrameworkFacet
+                 backlog:InvariantStatus ) .
+
+#################################################################
+#  Object properties
+#################################################################
+
+backlog:hasState a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:WorkItem backlog:WorkItemContainer ) ] ;
+    rdfs:range backlog:LifecycleState ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has state"@en ;
+    skos:definition "Relates a work item or container to its single lifecycle state. Functional, so two contradictory states on one subject are a reasoner-detected inconsistency rather than a reporting discrepancy someone must notice."@en .
+
+backlog:derivedState a owl:ObjectProperty ;
+    rdfs:domain backlog:WorkItemContainer ;
+    rdfs:range backlog:LifecycleState ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "derived state"@en ;
+    skos:definition "The container state computed by the derivation rules from member states. Written by the rule engine, never by hand; a container whose asserted state disagrees with its derived state is a SHACL violation."@en .
+
+backlog:derivedMilestoneState a owl:ObjectProperty ;
+    rdfs:domain backlog:Milestone ;
+    rdfs:range backlog:LifecycleState ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "derived milestone state"@en ;
+    skos:definition "The milestone state computed by the derivation rules from the states of its contributing work items. Held on a separate property from container state because a milestone is a roadmap element, not a container, and conflating the two would let a milestone be reported achieved by membership rather than by contribution."@en .
+
+backlog:hasEvidence a owl:ObjectProperty ;
+    rdfs:domain backlog:WorkItem ;
+    rdfs:range backlog:Evidence ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has evidence"@en ;
+    skos:definition "Relates a work item to the Evidence artifact or artifacts that prove its completion. At conformance level L2 and above at least one verified instance is required before the item may hold the Done state."@en .
+
+backlog:memberOfContainer a owl:ObjectProperty ;
+    rdfs:domain backlog:WorkItem ;
+    rdfs:range backlog:WorkItemContainer ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "member of container"@en ;
+    skos:definition "Relates a work item to a container it belongs to. The single relation the container-state derivation rule traverses, so membership is the only thing that has to be maintained for container reporting to stay correct."@en .
+
+backlog:hasMember a owl:ObjectProperty ;
+    owl:inverseOf backlog:memberOfContainer ;
+    rdfs:domain backlog:WorkItemContainer ;
+    rdfs:range backlog:WorkItem ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has member"@en ;
+    skos:definition "Inverse of memberOfContainer, declared once and in this direction only so no consumer has to reconcile two independently asserted inverse pairs."@en .
+
+backlog:dependsOn a owl:ObjectProperty , owl:TransitiveProperty ;
+    rdfs:domain backlog:WorkItem ;
+    rdfs:range backlog:WorkItem ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "depends on"@en ;
+    skos:definition "Relates a work item to another that must be Done before it can start. Transitive, so indirect blocking is visible to the next-item selection rule. Deliberately NOT declared irreflexive or asymmetric: OWL 2 DL forbids those characteristics on a non-simple (transitive) property, so dependency cycles are detected by a SHACL constraint instead of by the reasoner."@en .
+
+backlog:blocks a owl:ObjectProperty ;
+    owl:inverseOf backlog:dependsOn ;
+    rdfs:domain backlog:WorkItem ;
+    rdfs:range backlog:WorkItem ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "blocks"@en ;
+    skos:definition "Inverse of dependsOn, declared once and in this direction only; provided because roadmap and impact queries read more naturally forward than backward."@en .
+
+backlog:attestedByTest a owl:ObjectProperty ;
+    rdfs:domain backlog:TestEvidence ;
+    rdfs:range testing:Test ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "attested by test"@en ;
+    skos:definition "Connects test evidence to the test that attests completion, keeping the register bound to the testing subject's taxonomy instead of duplicating a local notion of test."@en .
+
+backlog:deliveredInRelease a owl:ObjectProperty ;
+    rdfs:domain backlog:ReleaseEvidence ;
+    rdfs:range orh:ReleaseEvent ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "delivered in release"@en ;
+    skos:definition "Connects release evidence to the release event in which the item shipped, keeping delivery provenance in the governed release record rather than in a per-item note."@en .
+
+backlog:hasPriorityScore a owl:ObjectProperty ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:WorkItem backlog:WorkItemContainer ) ] ;
+    rdfs:range backlog:PriorityScore ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has priority score"@en ;
+    skos:definition "Relates a work item to a computed priority score. Multiple scores are permitted only when they name different methods; two live scores from one method on one item is a violation."@en .
+
+backlog:scoredByMethod a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:PriorityScore ;
+    rdfs:range backlog:PrioritizationMethod ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "scored by method"@en ;
+    skos:definition "The method that produced this score. Functional and mandatory, because an unattributed priority number cannot be recomputed, compared or challenged."@en .
+
+backlog:hasAcceptanceCriterion a owl:ObjectProperty ;
+    rdfs:domain backlog:WorkItem ;
+    rdfs:range backlog:AcceptanceCriterion ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has acceptance criterion"@en ;
+    skos:definition "Relates a work item to the conditions under which it will be accepted, held on the item rather than in a separate specification document."@en .
+
+backlog:appliesDefinitionOfDone a owl:ObjectProperty ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:WorkItem backlog:WorkItemContainer ) ] ;
+    rdfs:range backlog:DefinitionOfDone ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "applies definition of done"@en ;
+    skos:definition "Declares which Definition of Done governs a work item or container, so the applicable criteria are resolvable from the register instead of assumed from team habit."@en .
+
+backlog:hasDoDCriterion a owl:ObjectProperty ;
+    rdfs:domain backlog:DefinitionOfDone ;
+    rdfs:range backlog:DoDCriterion ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has criterion"@en ;
+    skos:definition "Relates a Definition of Done to its individual falsifiable clauses."@en .
+
+backlog:hasCriterionStatus a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:DoDCriterion ;
+    rdfs:range backlog:InvariantStatus ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has criterion status"@en ;
+    skos:definition "The honest current result of running this criterion's check, drawn from the same three-value enumeration as invariants so a criterion whose enforcing work is incomplete is reported as unenforceable rather than as passing."@en .
+
+backlog:hasInvariantStatus a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:CrossCuttingInvariant ;
+    rdfs:range backlog:InvariantStatus ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has invariant status"@en ;
+    skos:definition "The honest current result of this invariant's check."@en .
+
+backlog:tracksItem a owl:ObjectProperty ;
+    rdfs:domain backlog:CrossCuttingInvariant ;
+    rdfs:range backlog:WorkItem ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "tracks item"@en ;
+    skos:definition "The work item whose completion would make this invariant enforceable, so an unenforceable invariant always points at the work that would fix that."@en .
+
+backlog:roadmapOf a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:Roadmap ;
+    rdfs:range backlog:Backlog ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "roadmap of"@en ;
+    skos:definition "The single backlog a roadmap projects. Functional: a roadmap spanning two registers would reintroduce exactly the untraceable scope this framework exists to prevent."@en .
+
+backlog:scheduledInHorizon a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:WorkItem backlog:WorkItemContainer ) ] ;
+    rdfs:range backlog:RoadmapHorizon ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "scheduled in horizon"@en ;
+    skos:definition "The commitment band this item occupies on the roadmap. Functional, so an item cannot be simultaneously advertised as Now to one audience and Later to another."@en .
+
+backlog:contributesToMilestone a owl:ObjectProperty ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:WorkItem backlog:WorkItemContainer ) ] ;
+    rdfs:range backlog:Milestone ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "contributes to milestone"@en ;
+    skos:definition "Relates a work item to a milestone whose achievement depends on it; the milestone-status rule traverses this relation and nothing else."@en .
+
+backlog:governsBacklog a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:AdoptionProfile ;
+    rdfs:range backlog:Backlog ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "governs backlog"@en ;
+    skos:definition "The backlog register this adoption profile applies to."@en .
+
+backlog:hasConformanceLevel a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:AdoptionProfile ;
+    rdfs:range backlog:ConformanceLevel ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has conformance level"@en ;
+    skos:definition "The single level this adoption claims. The SHACL suite reads this property to decide which constraint tier is in force, which is why it is functional and mandatory on every profile."@en .
+
+backlog:adoptsFacet a owl:ObjectProperty ;
+    rdfs:domain backlog:AdoptionProfile ;
+    rdfs:range backlog:FrameworkFacet ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "adopts facet"@en ;
+    skos:definition "A part of the framework this adoption puts in force. Facets required by the claimed conformance level must be present; omitting one is a violation rather than a silent downgrade."@en .
+
+#################################################################
+#  Datatype properties
+#################################################################
+
+backlog:hasIdentifier a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:WorkItem backlog:WorkItemContainer backlog:Milestone ) ] ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has identifier"@en ;
+    skos:definition "The unique human-facing identifier of a work item, container or milestone. Functional per subject; uniqueness across the whole register is enforced by SHACL, so identifier reuse after a deletion is structurally impossible rather than merely discouraged."@en .
+
+backlog:hasTitle a owl:DatatypeProperty ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:WorkItem backlog:WorkItemContainer backlog:Milestone backlog:Roadmap ) ] ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has title"@en ;
+    skos:definition "A short human-readable title or summary."@en .
+
+backlog:hasRationale a owl:DatatypeProperty ;
+    rdfs:domain backlog:WorkItem ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has rationale"@en ;
+    skos:definition "Why this item exists, or — for a cancelled item — why it was withdrawn. Required on cancellation so abandoned scope leaves a reason behind it."@en .
+
+backlog:hasGherkinText a owl:DatatypeProperty ;
+    rdfs:domain backlog:AcceptanceCriterion ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has Gherkin text"@en ;
+    skos:definition "The Given/When/Then text of an acceptance criterion, carried as a literal on the criterion individual."@en .
+
+backlog:hasCheckQuery a owl:DatatypeProperty ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:CrossCuttingInvariant backlog:DoDCriterion ) ] ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has check query"@en ;
+    skos:definition "The SPARQL query or shell command that executes this check. Its presence is what separates an enforceable criterion from a decorative one, which is why the SHACL suite requires it."@en .
+
+backlog:hasExpectedResult a owl:DatatypeProperty ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:CrossCuttingInvariant backlog:DoDCriterion ) ] ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has expected result"@en ;
+    skos:definition "The result the check must produce for the criterion to be considered satisfied. Recorded alongside the check because a query without a stated expectation cannot fail."@en .
+
+backlog:evidenceVerified a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:Evidence ;
+    rdfs:range xsd:boolean ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "evidence verified"@en ;
+    skos:definition "A world-check fact asserted by the execution bridge: true if and only if the evidence artifact was confirmed to exist — and, for a test, to pass — in the real workspace at reconciliation time. The ontology cannot read the filesystem, so this is the one fact that must come from outside the graph; absence must be read as unverified, never as probably-fine."@en .
+
+backlog:verifiedAt a owl:DatatypeProperty ;
+    rdfs:domain backlog:Evidence ;
+    rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "verified at"@en ;
+    skos:definition "When the execution bridge last confirmed this evidence, so a stale verification is detectable by age rather than assumed current."@en .
+
+backlog:hasVerificationMethod a owl:DatatypeProperty ;
+    rdfs:domain backlog:Evidence ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has verification method"@en ;
+    skos:definition "How the bridge checked this evidence — the command run, the hash compared, the endpoint queried — recorded in the same record as the result so a pass claim always carries its method."@en .
+
+backlog:hasTestSpec a owl:DatatypeProperty ;
+    rdfs:domain backlog:TestEvidence ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has test spec"@en ;
+    skos:definition "The test specification file path, machine-readable so the bridge can confirm the file exists and execute it."@en .
+
+backlog:hasTestId a owl:DatatypeProperty ;
+    rdfs:domain backlog:TestEvidence ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has test id"@en ;
+    skos:definition "The identifier of the specific test within the spec, so the bridge verifies the exact test rather than the file as a whole."@en .
+
+backlog:hasReleaseVersion a owl:DatatypeProperty ;
+    rdfs:domain backlog:ReleaseEvidence ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has release version"@en ;
+    skos:definition "The delivered version string this evidence refers to."@en .
+
+backlog:hasPackageSHA256 a owl:DatatypeProperty ;
+    rdfs:domain backlog:ReleaseEvidence ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has package SHA-256"@en ;
+    skos:definition "The SHA-256 manifest hash of the delivered package. The immutable anchor the bridge re-computes against the real delivered artifact; hashes belong here, on what shipped, never on backlog prose."@en .
+
+backlog:hasArtifactPath a owl:DatatypeProperty ;
+    rdfs:domain backlog:ArtifactEvidence ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has artifact path"@en ;
+    skos:definition "The path of the delivered file this evidence refers to."@en .
+
+backlog:hasArtifactSHA256 a owl:DatatypeProperty ;
+    rdfs:domain backlog:ArtifactEvidence ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has artifact SHA-256"@en ;
+    skos:definition "The SHA-256 hash of the delivered file, so the evidence remains valid only for the exact bytes that were reviewed."@en .
+
+backlog:hasReviewer a owl:DatatypeProperty ;
+    rdfs:domain backlog:ReviewEvidence ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has reviewer"@en ;
+    skos:definition "Who recorded the judgement this evidence rests on."@en .
+
+backlog:hasReviewRecordRef a owl:DatatypeProperty ;
+    rdfs:domain backlog:ReviewEvidence ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has review record reference"@en ;
+    skos:definition "A durable reference to where the judgement is recorded, so review evidence points at something retrievable rather than at a remembered conversation."@en .
+
+backlog:hasScoreValue a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:PriorityScore ;
+    rdfs:range xsd:decimal ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has score value"@en ;
+    skos:definition "The computed priority number; higher means more urgent under every method the framework ships."@en .
+
+backlog:scoredAt a owl:DatatypeProperty ;
+    rdfs:domain backlog:PriorityScore ;
+    rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "scored at"@en ;
+    skos:definition "When this score was computed. Present because rankings are snapshots: a score is evidence about the moment it was taken, not a standing property of the item."@en .
+
+backlog:hasScoreRationale a owl:DatatypeProperty ;
+    rdfs:domain backlog:PriorityScore ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has score rationale"@en ;
+    skos:definition "The reasoning behind the component values, so a score can be argued with rather than merely disputed."@en .
+
+backlog:hasUserBusinessValue a owl:DatatypeProperty ;
+    rdfs:domain backlog:WSJFScore ; rdfs:range xsd:decimal ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has user-business value"@en ;
+    skos:definition "The user and business value component of a WSJF cost of delay."@en .
+
+backlog:hasTimeCriticality a owl:DatatypeProperty ;
+    rdfs:domain backlog:WSJFScore ; rdfs:range xsd:decimal ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has time criticality"@en ;
+    skos:definition "The decay-of-value-over-time component of a WSJF cost of delay."@en .
+
+backlog:hasRiskReductionValue a owl:DatatypeProperty ;
+    rdfs:domain backlog:WSJFScore ; rdfs:range xsd:decimal ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has risk-reduction / opportunity-enablement value"@en ;
+    skos:definition "The risk-reduction and opportunity-enablement component of a WSJF cost of delay."@en .
+
+backlog:hasJobSize a owl:DatatypeProperty ;
+    rdfs:domain backlog:WSJFScore ; rdfs:range xsd:decimal ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has job size"@en ;
+    skos:definition "The WSJF divisor: relative effort to deliver the item."@en .
+
+backlog:hasReach a owl:DatatypeProperty ;
+    rdfs:domain backlog:RICEScore ; rdfs:range xsd:decimal ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has reach"@en ;
+    skos:definition "How many subjects the item affects in a stated period — the R of RICE."@en .
+
+backlog:hasImpact a owl:DatatypeProperty ;
+    rdfs:domain backlog:RICEScore ; rdfs:range xsd:decimal ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has impact"@en ;
+    skos:definition "How much the item moves the target outcome per affected subject — the I of RICE."@en .
+
+backlog:hasConfidence a owl:DatatypeProperty ;
+    rdfs:domain backlog:RICEScore ; rdfs:range xsd:decimal ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has confidence"@en ;
+    skos:definition "How well-evidenced the reach and impact estimates are, expressed as a fraction — the C of RICE."@en .
+
+backlog:hasEffort a owl:DatatypeProperty ;
+    rdfs:domain backlog:RICEScore ; rdfs:range xsd:decimal ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has effort"@en ;
+    skos:definition "Estimated total work to deliver — the E of RICE, and the divisor of the score."@en .
+
+backlog:hasDepFactor a owl:DatatypeProperty ;
+    rdfs:domain backlog:RICEScore ; rdfs:range xsd:decimal ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has dependency factor"@en ;
+    skos:definition "A multiplier below one that demotes an item whose prerequisites are not yet Done, so blocked work cannot outrank startable work purely on nominal value."@en .
+
+backlog:lastAuditedAt a owl:DatatypeProperty ;
+    rdfs:domain backlog:WorkItem ;
+    rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "last audited at"@en ;
+    skos:definition "When this specific item was last directly re-verified against live artifacts during an item-by-item reconciliation pass. Set only when the item itself was checked, never inferred from other items being checked, from the register conforming overall, or from elapsed time; absence means unchecked."@en .
+
+backlog:hasAuditNote a owl:DatatypeProperty ;
+    rdfs:domain backlog:WorkItem ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has audit note"@en ;
+    skos:definition "What the last reconciliation pass found for this item, including a claim it disproved."@en .
+
+backlog:hasTargetDate a owl:DatatypeProperty ;
+    rdfs:domain backlog:Milestone ;
+    rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has target date"@en ;
+    skos:definition "The externally significant date a milestone is aimed at. Carried on milestones only — never on individual items — because dates on unstarted work are false precision."@en .
+
+backlog:bindsNamespace a owl:DatatypeProperty ;
+    rdfs:domain backlog:AdoptionProfile ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "binds namespace"@en ;
+    skos:definition "The namespace in which the adopting development writes its own register instances, recorded so a consumer can tell whose data a merged graph contains."@en .
+
+backlog:profileAppliesTo a owl:DatatypeProperty ;
+    rdfs:domain backlog:AdoptionProfile ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "profile applies to"@en ;
+    skos:definition "The name of the development this adoption profile speaks for."@en .
+
+#################################################################
+#  10. Blueprint layer (v1.1.0)
+#     The layer the backlog is scoped AGAINST. Separated from the
+#     register because a blueprint describes what the domain is,
+#     while a backlog describes what will be built about it.
+#################################################################
+
+backlog:Blueprint a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Blueprint"@en ;
+    skos:definition "The model of what a product domain is — its first-class entities, their life cycles, and the compliance obligations they carry — against which a backlog is scoped. Kept distinct from the backlog because a blueprint describes the domain and a feature list describes intentions about it; conflating them lets scope be invented at item-writing time instead of derived from the domain. A backlog is meaningful only relative to the blueprint it claims to cover."@en .
+
+backlog:DomainEntity a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Domain Entity"@en ;
+    skos:definition "A first-class thing the product is about — a client, a practitioner, a service, an appointment, a financial record. Each carries the full set of life-cycle stages that must be swept when checking coverage, so that a stage nobody thought to build for is a detectable absence rather than an unasked question."@en .
+
+backlog:EntityLifecycleStage a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:Stage_Creation backlog:Stage_ActiveUse backlog:Stage_SuspensionException backlog:Stage_Termination ) ;
+    rdfs:label "Entity Lifecycle Stage"@en ;
+    skos:definition "A stage in the real life of a domain entity: creation, active use, suspension or exception handling, and termination or closure. Closed enumeration of four individuals. Named EntityLifecycleStage rather than LifecycleStage to keep it unmistakably distinct from backlog:LifecycleState, which is the delivery state of a work item; the two are unrelated and a reader who confuses them will mis-model both."@en .
+
+backlog:Stage_Creation a owl:NamedIndividual , backlog:EntityLifecycleStage ;
+    rdfs:label "Creation"@en ;
+    skos:definition "The entity comes into existence: registration, intake, provisioning."@en .
+
+backlog:Stage_ActiveUse a owl:NamedIndividual , backlog:EntityLifecycleStage ;
+    rdfs:label "Active use"@en ;
+    skos:definition "The entity is operated on in the normal course of business."@en .
+
+backlog:Stage_SuspensionException a owl:NamedIndividual , backlog:EntityLifecycleStage ;
+    rdfs:label "Suspension / exception"@en ;
+    skos:definition "The entity is paused, blocked, cancelled, disputed or otherwise handled outside the happy path. The stage most often absent from a backlog, because titles describe the happy path."@en .
+
+backlog:Stage_Termination a owl:NamedIndividual , backlog:EntityLifecycleStage ;
+    rdfs:label "Termination / closure"@en ;
+    skos:definition "The entity leaves the system: deletion, archival, closure, settlement."@en .
+
+[] a owl:AllDifferent ; owl:distinctMembers ( backlog:Stage_Creation backlog:Stage_ActiveUse
+                                              backlog:Stage_SuspensionException backlog:Stage_Termination ) .
+
+backlog:ComplianceObligation a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Compliance Obligation"@en ;
+    skos:definition "A duty the domain imposes independently of any feature request — retention, consent, auditability, professional certification. Modelled in the blueprint so that an obligation without backlog coverage is a recorded gap rather than a discovery made during an audit."@en .
+
+backlog:BlueprintGap a owl:Class ;
+    rdfs:subClassOf core:Artifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Blueprint Gap"@en ;
+    skos:definition "An explicitly recorded absence: a life-cycle stage or compliance obligation with no backlog coverage. Recorded as an individual because a gap is a defect in the register, not a silence in it; an unwritten gap is indistinguishable from a stage nobody ever considered."@en .
+
+backlog:CapabilityClass a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Capability Class"@en ;
+    skos:definition "A named, first-class grouping of capability that owns a distinct business concern — business continuity and support, access governance, data architecture. First-class because a concern scattered across three groupings with no owner is invisible to prioritisation; the classes a development uses are its own, so this class ships unpopulated by design and is populated in the adopting register."@en .
+
+backlog:EnforcementDomain a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Enforcement Domain"@en ;
+    skos:definition "How a capability's correctness is enforced — by an ontology and its constraints, by design review, or by code and tests — as distinct from what the capability does. Classifying by enforcement mode tells you which gate must pass before the capability can be believed. Left open and unpopulated here: the classification scheme belongs to the adopting development, which binds its own individuals rather than inheriting another project's vocabulary."@en .
+
+backlog:hasDomainEntity a owl:ObjectProperty ;
+    rdfs:domain backlog:Blueprint ; rdfs:range backlog:DomainEntity ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has domain entity"@en ;
+    skos:definition "The first-class entities a blueprint models."@en .
+
+backlog:hasObligation a owl:ObjectProperty ;
+    rdfs:domain backlog:Blueprint ; rdfs:range backlog:ComplianceObligation ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has obligation"@en ;
+    skos:definition "The compliance obligations a blueprint carries."@en .
+
+backlog:blueprintFor a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:Blueprint ; rdfs:range backlog:Backlog ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "blueprint for"@en ;
+    skos:definition "The backlog register this blueprint scopes, so coverage can be computed between exactly one pair."@en .
+
+backlog:coversEntity a owl:ObjectProperty ;
+    rdfs:domain backlog:WorkItem ; rdfs:range backlog:DomainEntity ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "covers entity"@en ;
+    skos:definition "The domain entity this work item builds capability for."@en .
+
+backlog:coversStage a owl:ObjectProperty ;
+    rdfs:domain backlog:WorkItem ; rdfs:range backlog:EntityLifecycleStage ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "covers stage"@en ;
+    skos:definition "The life-cycle stage this work item covers for the entity it names. The pair (coversEntity, coversStage) is what the blueprint sweep measures; an uncovered pair must appear as a BlueprintGap."@en .
+
+backlog:coversObligation a owl:ObjectProperty ;
+    rdfs:domain backlog:WorkItem ; rdfs:range backlog:ComplianceObligation ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "covers obligation"@en ;
+    skos:definition "The compliance obligation this work item discharges."@en .
+
+backlog:belongsToCapabilityClass a owl:ObjectProperty ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:WorkItem backlog:WorkItemContainer ) ] ;
+    rdfs:range backlog:CapabilityClass ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "belongs to capability class"@en ;
+    skos:definition "The first-class business concern this item or container serves."@en .
+
+backlog:hasEnforcementDomain a owl:ObjectProperty ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:WorkItem backlog:WorkItemContainer ) ] ;
+    rdfs:range backlog:EnforcementDomain ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has enforcement domain"@en ;
+    skos:definition "How this item's or container's correctness is enforced."@en .
+
+backlog:gapForEntity a owl:ObjectProperty ;
+    rdfs:domain backlog:BlueprintGap ; rdfs:range backlog:DomainEntity ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "gap for entity"@en ;
+    skos:definition "The entity whose coverage is missing."@en .
+
+backlog:gapForStage a owl:ObjectProperty ;
+    rdfs:domain backlog:BlueprintGap ; rdfs:range backlog:EntityLifecycleStage ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "gap for stage"@en ;
+    skos:definition "The life-cycle stage whose coverage is missing."@en .
+
+backlog:remediatedBy a owl:ObjectProperty ;
+    rdfs:domain backlog:BlueprintGap ; rdfs:range backlog:WorkItem ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "remediated by"@en ;
+    skos:definition "The work item created to close this gap, when one exists. Absence means the gap is recorded but unowned — which is a visible state, not a silent one."@en .
+
+backlog:hasGapReason a owl:DatatypeProperty ;
+    rdfs:domain backlog:BlueprintGap ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has gap reason"@en ;
+    skos:definition "Why the coverage is absent: out of scope, deferred, or simply not yet built. Required, because an unexplained gap cannot be triaged."@en .
+
+backlog:verifiedAgainstCode a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:WorkItem ; rdfs:range xsd:boolean ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "verified against code"@en ;
+    skos:definition "True when this item's claimed coverage was checked against running code rather than inferred from its own title. Titles lie by omission — they describe what someone intended to build, not what the running system does — so a coverage claim that has only been read is materially weaker than one that has been executed."@en .
+
+backlog:hasCodeVerificationNote a owl:DatatypeProperty ;
+    rdfs:domain backlog:WorkItem ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has code verification note"@en ;
+    skos:definition "What the check against running code actually found, including a divergence it disproved. Required whenever verifiedAgainstCode is asserted true, so the claim carries its method."@en .
+
+#################################################################
+#  11. Scoreability & gap discipline (v1.1.0)
+#################################################################
+
+backlog:notYetScoreable a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:WorkItem ; rdfs:range xsd:boolean ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "not yet scoreable"@en ;
+    skos:definition "An explicit declaration that this item cannot yet carry a priority score. Every open item must be either scored or flagged this way with a written reason; an item that is neither is a silent gap, which the suite treats as a defect in the register rather than as an acceptable blank. An honest 'not yet scoreable, and here is exactly why' outranks a fabricated number that makes a report look decisive."@en .
+
+backlog:hasScoreabilityReason a owl:DatatypeProperty ;
+    rdfs:domain backlog:WorkItem ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has scoreability reason"@en ;
+    skos:definition "Why an item is not yet scoreable — genuinely undeveloped scope, an owner decision pending, a dependency whose cost is unknown. Required alongside the flag, because the flag without a reason is the silent gap wearing a label."@en .
+
+#################################################################
+#  12. Capability tagging & dependency disclosure (v1.1.0)
+#################################################################
+
+backlog:isBusinessCapability a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:WorkItemContainer ; rdfs:range xsd:boolean ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "is business capability"@en ;
+    skos:definition "True when a container is a coherent, independently shippable business capability; false when it is a real but non-shippable grouping — a bag of unrelated point fixes, or generic mechanics with no business meaning of their own. Containers tagged false are excluded from capability-level ranking rather than allowed to dilute it: ranking a bag of point fixes as a deployable capability is the same category error as ranking an undecomposed epic against real stories, one level up."@en .
+
+backlog:DependencyDisclosure a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Dependency Disclosure"@en ;
+    skos:definition "A record that a dependency was stated in prose or in a judgement — 'this only matters once X exists', 'this reuses the existing Y' — together with the edge it must become. The moment a dependency is said out loud it is a dependsOn edge, not a sentence: an undisclosed-but-real dependency is worse than no dependency modelling at all, because the register looks resolved. The suite requires the corresponding edge to exist."@en .
+
+backlog:hasDependencyDisclosure a owl:ObjectProperty ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:WorkItem backlog:WorkItemContainer ) ] ; rdfs:range backlog:DependencyDisclosure ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has dependency disclosure"@en ;
+    skos:definition "A disclosure attached to the item whose dependency was stated."@en .
+
+backlog:disclosesDependencyOn a owl:ObjectProperty ;
+    rdfs:domain backlog:DependencyDisclosure ;
+    rdfs:range [ a owl:Class ; owl:unionOf ( backlog:WorkItem backlog:WorkItemContainer ) ] ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "discloses dependency on"@en ;
+    skos:definition "The item the disclosure says is depended upon; the suite requires a matching dependsOn edge from the disclosing item."@en .
+
+backlog:hasDisclosureSource a owl:DatatypeProperty ;
+    rdfs:domain backlog:DependencyDisclosure ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has disclosure source"@en ;
+    skos:definition "Where the dependency was stated — the sentence, the analysis, the conversation — so the edge can be traced back to the judgement that produced it."@en .
+
+backlog:hasExternalBlocker a owl:ObjectProperty ;
+    rdfs:domain backlog:WorkItemContainer ; rdfs:range backlog:WorkItem ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has external blocker"@en ;
+    skos:definition "A not-Done item outside this container that a member depends on, computed by rule. Its existence is why full member completion is not deployability: being 100% member-complete is one input to job size, never a substitute for checking real dependency edges before calling anything ready."@en .
+
+#################################################################
+#  13. Launch-readiness model and ranking arbitration (v1.1.0)
+#################################################################
+
+backlog:Role a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:Owner backlog:Builder ) ;
+    rdfs:label "Role"@en ;
+    skos:definition "Who is entitled to make a given decision. Closed enumeration of two individuals, because the framework's central governance split is between decisions that require business judgement and decisions that are computed or reasoned; blurring them is how a computed ranking ends up overriding a business call nobody delegated."@en .
+
+backlog:Owner a owl:NamedIndividual , backlog:Role ;
+    rdfs:label "Owner"@en ;
+    skos:definition "Makes the calls that genuinely require business judgement — what is in launch scope, which live defect blocks launch versus can be deferred, single-tenant versus multi-tenant. These are never computed, and silence is never approval of a scope decision that was not actually given."@en .
+
+backlog:Builder a owl:NamedIndividual , backlog:Role ;
+    rdfs:label "Builder"@en ;
+    skos:definition "Performs the multi-factor scoring judgements with written rationale, maintains the gates and tooling, and surfaces every disclosed dependency and recorded gap for the owner's visibility rather than resolving them quietly."@en .
+
+backlog:isLaunchGate a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:WorkItem backlog:WorkItemContainer ) ] ;
+    rdfs:range xsd:boolean ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "is launch gate"@en ;
+    skos:definition "True when this must be complete before first deployment. A launch gate answers a categorically different question from a throughput score — what must be done before launch, in what order — and is therefore an owner declaration, never a value derived from any ranking."@en .
+
+backlog:hasLaunchPriority a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:WorkItem backlog:WorkItemContainer ) ] ;
+    rdfs:range xsd:integer ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has launch priority"@en ;
+    skos:definition "The owner-declared order in which launch gates must clear, lowest first. An ordinal business decision, not a computed score, and never reconciled with a throughput score by arithmetic."@en .
+
+backlog:decidedBy a owl:ObjectProperty ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:WorkItem backlog:WorkItemContainer backlog:PriorityScore
+                                              backlog:Goal backlog:Objective backlog:ScopeExclusion backlog:Opportunity ) ] ;
+    rdfs:range backlog:Role ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "decided by"@en ;
+    skos:definition "Which role made this decision. The suite requires launch-gate declarations to be decided by the Owner and container-level scores to be decided by the Builder, so a computed number can never quietly occupy a slot reserved for business judgement."@en .
+
+backlog:hasDecisionRationale a owl:DatatypeProperty ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:WorkItem backlog:WorkItemContainer backlog:PriorityScore ) ] ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has decision rationale"@en ;
+    skos:definition "The written reasoning behind an owner declaration or a multi-factor judgement, kept with the decision so a later 'why is X ahead of Y' has a citable answer rather than a fresh opinion."@en .
+
+backlog:isAveragedFromMembers a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:PriorityScore ; rdfs:range xsd:boolean ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "is averaged from members"@en ;
+    skos:definition "True when a container-level score was produced by averaging member scores. The suite rejects it: averaging re-uses numbers computed for unrelated reasons on unrelated items and is not a business-value judgement about the capability as a whole. A container score must be a genuine multi-factor judgement carrying its own rationale."@en .
+
+backlog:RankingModel a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:ThroughputRanking backlog:LaunchScopedRanking ) ;
+    rdfs:label "Ranking Model"@en ;
+    skos:definition "Which question a ranking answers. Closed enumeration of two individuals, kept explicit because conflating them is the most expensive recurring error this framework guards against: the two models answer different questions and will disagree, and the disagreement must stay visible rather than being resolved silently in one direction."@en .
+
+backlog:ThroughputRanking a owl:NamedIndividual , backlog:RankingModel ;
+    rdfs:label "Throughput ranking"@en ;
+    skos:definition "Ranks the whole register by score under a named method, answering what the best next increment of capacity is for an already-live product. It divides value by cost, so a large essential capability can and will rank below a small cheap one — correct for this question, wrong for the launch question."@en .
+
+backlog:LaunchScopedRanking a owl:NamedIndividual , backlog:RankingModel ;
+    rdfs:label "Launch-scoped ranking"@en ;
+    skos:definition "Ranks only within the active launch-priority gate plus cross-cutting prerequisites, answering what must clear before first deployment. It collapses back to throughput ranking automatically once every launch gate is closed, so the scoping is a state of the register rather than a mode someone must remember to switch off."@en .
+
+[] a owl:AllDifferent ; owl:distinctMembers ( backlog:ThroughputRanking backlog:LaunchScopedRanking ) .
+
+#################################################################
+#  14. Governed documents & supersession (v1.1.0)
+#################################################################
+
+backlog:GovernedDocument a owl:Class ;
+    rdfs:subClassOf core:Artifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Governed Document"@en ;
+    skos:definition "A document whose currency is tracked — a standard, a report, a methodology note. Tracked because anyone following an old link must see why it is stale and where the live source is now, rather than a missing file or, worse, content that is silently wrong."@en .
+
+backlog:DocumentStatus a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:Live backlog:Superseded ) ;
+    rdfs:label "Document Status"@en ;
+    skos:definition "Whether a governed document is current or retired. Closed enumeration of two individuals; a retired document is marked in place, never deleted."@en .
+
+backlog:Live a owl:NamedIndividual , backlog:DocumentStatus ;
+    rdfs:label "Live"@en ;
+    skos:definition "Current and safe to act on."@en .
+
+backlog:Superseded a owl:NamedIndividual , backlog:DocumentStatus ;
+    rdfs:label "Superseded"@en ;
+    skos:definition "Retired but retained in place, carrying a pointer to what replaced it and the reason, so the trail from an old reference to the live source stays walkable."@en .
+
+[] a owl:AllDifferent ; owl:distinctMembers ( backlog:Live backlog:Superseded ) .
+
+backlog:hasDocumentStatus a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:GovernedDocument ; rdfs:range backlog:DocumentStatus ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has document status"@en ;
+    skos:definition "The single currency status of a governed document."@en .
+
+backlog:supersededBy a owl:ObjectProperty ;
+    rdfs:domain backlog:GovernedDocument ; rdfs:range backlog:GovernedDocument ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "superseded by"@en ;
+    skos:definition "What replaced this document. Required whenever the status is Superseded, because a retirement marker without a forward pointer sends the reader nowhere."@en .
+
+backlog:hasSupersessionReason a owl:DatatypeProperty ;
+    rdfs:domain backlog:GovernedDocument ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has supersession reason"@en ;
+    skos:definition "Why this document was retired, kept alongside the replacement rather than deleted with it."@en .
+
+#################################################################
+#  15. Computed roadmap report (v1.1.0)
+#################################################################
+
+backlog:RoadmapReport a owl:Class ;
+    rdfs:subClassOf backlog:RoadmapElement ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Roadmap Report"@en ;
+    skos:definition "One execution of the roadmap computation over a register, carrying its run timestamp and the sections it produced. A report is an event, not a document: the moment a computed value is copied into prose it begins decaying, and a report that is recalled rather than re-run is a memory of a decision, not a decision."@en .
+
+backlog:ReportSection a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Report Section"@en ;
+    skos:definition "A section a compliant roadmap report must contain. Enumerated as individuals rather than left to the reporting script, so a section quietly dropped from an implementation is a detectable omission rather than an absence nobody notices."@en .
+
+backlog:reportOf a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:RoadmapReport ; rdfs:range backlog:Backlog ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "report of"@en ;
+    skos:definition "The register this report was computed from."@en .
+
+backlog:hasSection a owl:ObjectProperty ;
+    rdfs:domain backlog:RoadmapReport ; rdfs:range backlog:ReportSection ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has section"@en ;
+    skos:definition "A section this run actually produced."@en .
+
+backlog:hasRunTimestamp a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:RoadmapReport ; rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has run timestamp"@en ;
+    skos:definition "When this report was computed. The property that makes a stale answer detectable: a recommendation is traceable to the run that produced it, and a run from an earlier turn is not evidence about the register now."@en .
+
+backlog:derivedInReport a owl:ObjectProperty ;
+    rdfs:domain backlog:WorkItem ; rdfs:range backlog:RoadmapReport ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "derived in report"@en ;
+    skos:definition "Records that this item was named as next by that report run. An answer to 'what should we do next' is only as good as the run behind it, so the recommendation points at its run rather than standing on its own."@en .
+
+backlog:underRankingModel a owl:ObjectProperty ;
+    rdfs:domain backlog:WorkItem ; rdfs:range backlog:RankingModel ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "under ranking model"@en ;
+    skos:definition "Which of the two models produced this recommendation, so the two answers stay distinguishable when they disagree."@en .
+
+#################################################################
+#  16. Methodology rules & release gates (v1.1.0)
+#################################################################
+
+backlog:MethodologyRule a owl:Class ;
+    rdfs:subClassOf core:Artifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Methodology Rule"@en ;
+    skos:definition "A governing rule of the method itself, carrying permanently the disagreement or defect it closes, its exact logic, and the concrete incident that surfaced it. A rule is never silently replaced: the reasoning for superseding an earlier rule is kept beside the new one, because a rule stripped of its incident becomes a convention nobody can argue with or retire."@en .
+
+backlog:hasRuleLogic a owl:DatatypeProperty ;
+    rdfs:domain backlog:MethodologyRule ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has rule logic"@en ;
+    skos:definition "The exact behaviour the rule mandates, stated precisely enough to implement or refute."@en .
+
+backlog:closesDisagreement a owl:DatatypeProperty ;
+    rdfs:domain backlog:MethodologyRule ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "closes disagreement"@en ;
+    skos:definition "The recurring dispute or defect this rule settles, so its purpose survives the people who remember the argument."@en .
+
+backlog:hasMotivatingIncident a owl:DatatypeProperty ;
+    rdfs:domain backlog:MethodologyRule ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has motivating incident"@en ;
+    skos:definition "The concrete failure that produced the rule. Required: a rule without an incident is theoretical best practice, and theoretical best practice is the first thing dropped under pressure."@en .
+
+backlog:supersedesRule a owl:ObjectProperty ;
+    rdfs:domain backlog:MethodologyRule ; rdfs:range backlog:MethodologyRule ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "supersedes rule"@en ;
+    skos:definition "The earlier rule this one replaces, retained rather than deleted."@en .
+
+backlog:ReleaseGate a owl:Class ;
+    rdfs:subClassOf core:Artifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Release Gate"@en ;
+    skos:definition "One check in the release sequence that must pass before any state is trusted. Modelled as individuals carrying their executable command so the gate set is itself inspectable, and a gate quietly skipped by a script is a detectable difference rather than an invisible one."@en .
+
+backlog:hasGateCommand a owl:DatatypeProperty ;
+    rdfs:domain backlog:ReleaseGate ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has gate command"@en ;
+    skos:definition "The command that executes this gate."@en .
+
+backlog:hasGateOrder a owl:DatatypeProperty ;
+    rdfs:domain backlog:ReleaseGate ; rdfs:range xsd:integer ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has gate order"@en ;
+    skos:definition "Where this gate sits in the sequence; earlier gates guard the inputs the later ones assume."@en .
+
+#################################################################
+#  Disjointness for the v1.1.0 additions
+#################################################################
+
+[] a owl:AllDisjointClasses ;
+   owl:members ( backlog:Blueprint backlog:DomainEntity backlog:EntityLifecycleStage
+                 backlog:ComplianceObligation backlog:BlueprintGap backlog:CapabilityClass
+                 backlog:EnforcementDomain backlog:DependencyDisclosure backlog:Role
+                 backlog:RankingModel backlog:GovernedDocument backlog:DocumentStatus
+                 backlog:ReportSection backlog:MethodologyRule backlog:ReleaseGate ) .
+
+#################################################################
+#  17. Intent layer: goals, objectives, benefits, opportunities (v1.2.0)
+#     Why the work exists, and what its completion is supposed to buy.
+#     Kept above the register because a backlog without stated intent
+#     can be delivered in full and still deliver nothing.
+#################################################################
+
+backlog:Goal a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Goal"@en ;
+    skos:definition "A durable outcome the product or programme exists to achieve, stated in terms of the change it makes for someone rather than the functionality that delivers it. Owner-decided and rarely revised; objectives are the measurable steps toward it. Modelled so that every priority argument can terminate in something other than opinion: an item's value claim is ultimately a claim about a goal."@en .
+
+backlog:Objective a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Objective"@en ;
+    skos:definition "A measurable, time-bounded target that advances a goal, carrying at least one success metric with a baseline and a target value. The suite refuses an objective without a metric: an objective that cannot be measured cannot be missed, and an objective that cannot be missed does not constrain any decision."@en .
+
+backlog:Benefit a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Benefit"@en ;
+    skos:definition "A specific improvement expected to follow from completing work, owned by a named stakeholder and attached to the objective it advances. Benefits are claimed before delivery and realised after it, and the framework treats a realisation claim exactly as it treats a Done claim: it must point at verified Evidence, because an unevidenced benefit is the most expensive kind of prose in a portfolio."@en .
+
+backlog:Opportunity a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Opportunity"@en ;
+    skos:definition "An identified upside uncertainty that is not yet committed work — the mirror of a risk in the ISO 31000 sense, where uncertainty may have positive as well as negative effect on objectives. Held separately from the register so that unfunded ideas are visible without inflating scope, and converted into a work item explicitly when someone decides to pursue it."@en .
+
+backlog:contributesToGoal a owl:ObjectProperty ;
+    rdfs:domain backlog:Objective ; rdfs:range backlog:Goal ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "contributes to goal"@en ;
+    skos:definition "The goal this objective advances."@en .
+
+backlog:pursuesObjective a owl:ObjectProperty ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:WorkItem backlog:WorkItemContainer ) ] ;
+    rdfs:range backlog:Objective ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "pursues objective"@en ;
+    skos:definition "The objective this work is meant to advance. The link that makes 'why are we building this' answerable from the register rather than from memory."@en .
+
+backlog:hasSuccessMetric a owl:ObjectProperty ;
+    rdfs:domain backlog:Objective ; rdfs:range core:Metric ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has success metric"@en ;
+    skos:definition "The metric by which this objective is judged, referenced in the pack's core metric vocabulary rather than re-declared locally, so measurement stays one subject's responsibility. The declared range is NOMINAL, not enforced: no shape at any conformance level applies sh:class to this property, deliberately, because core is a separately-adopted OE subject and an adopter that has not vendored it is not thereby out of conformance. An L1 adopter may point this property at a project-local metric class and remain fully conformant; an adopter that has vendored core should point it at core:Metric so that measurement semantics stay in the subject that owns them. Stated explicitly after an adopting project derived the same conclusion independently and disclosed its local substitution as a workaround — it was not a workaround, it was the intended latitude, and the intent had never been written down."@en .
+
+backlog:hasBaselineValue a owl:DatatypeProperty ;
+    rdfs:domain backlog:Objective ; rdfs:range xsd:decimal ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has baseline value"@en ;
+    skos:definition "Where the metric stood when the objective was set. Without it, a target is a number with no claim attached."@en .
+
+backlog:hasTargetValue a owl:DatatypeProperty ;
+    rdfs:domain backlog:Objective ; rdfs:range xsd:decimal ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has target value"@en ;
+    skos:definition "Where the metric must stand for the objective to be met."@en .
+
+backlog:hasObjectiveDeadline a owl:DatatypeProperty ;
+    rdfs:domain backlog:Objective ; rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has objective deadline"@en ;
+    skos:definition "When the target must be met by; an objective with no horizon cannot be missed on time."@en .
+
+backlog:expectsBenefit a owl:ObjectProperty ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:WorkItem backlog:WorkItemContainer ) ] ;
+    rdfs:range backlog:Benefit ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "expects benefit"@en ;
+    skos:definition "The benefit this work is expected to produce."@en .
+
+backlog:benefitFor a owl:ObjectProperty ;
+    rdfs:domain backlog:Benefit ; rdfs:range backlog:Objective ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "benefit for"@en ;
+    skos:definition "The objective this benefit advances; a benefit that advances no objective is a preference, not a benefit."@en .
+
+backlog:hasBenefitOwner a owl:ObjectProperty ;
+    rdfs:domain backlog:Benefit ; rdfs:range core:Stakeholder ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has benefit owner"@en ;
+    skos:definition "The stakeholder accountable for the benefit actually arriving, referenced in the pack's core stakeholder vocabulary. Unowned benefits are never chased."@en .
+
+backlog:hasBenefitStatement a owl:DatatypeProperty ;
+    rdfs:domain backlog:Benefit ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has benefit statement"@en ;
+    skos:definition "What improves, for whom, and how it will be observed."@en .
+
+backlog:benefitRealized a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:Benefit ; rdfs:range xsd:boolean ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "benefit realized"@en ;
+    skos:definition "Asserted true only when the improvement has been observed after delivery, not when the work shipped. Shipping is an input to a benefit, never the benefit itself."@en .
+
+backlog:benefitRealizedBy a owl:ObjectProperty ;
+    rdfs:domain backlog:Benefit ; rdfs:range backlog:Evidence ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "benefit realized by"@en ;
+    skos:definition "The verified Evidence supporting a realisation claim — a measurement, a report, a dated observation. The suite requires it before benefitRealized may be true, on the same principle that governs Done."@en .
+
+backlog:opportunityFor a owl:ObjectProperty ;
+    rdfs:domain backlog:Opportunity ;
+    rdfs:range [ a owl:Class ; owl:unionOf ( backlog:Goal backlog:Objective ) ] ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "opportunity for"@en ;
+    skos:definition "The goal or objective this opportunity would advance if pursued."@en .
+
+backlog:hasOpportunityStatement a owl:DatatypeProperty ;
+    rdfs:domain backlog:Opportunity ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has opportunity statement"@en ;
+    skos:definition "What the upside is, what would have to be true to capture it, and what it would cost to find out."@en .
+
+backlog:convertedToItem a owl:ObjectProperty ;
+    rdfs:domain backlog:Opportunity ; rdfs:range backlog:WorkItem ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "converted to item"@en ;
+    skos:definition "The work item created when someone decided to pursue this opportunity, so the decision to fund an idea is visible as an event rather than as an item appearing in the register with no history."@en .
+
+#################################################################
+#  18. Scope (v1.2.0)
+#################################################################
+
+backlog:ScopeStatement a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Scope Statement"@en ;
+    skos:definition "The declared boundary of a delivery effort: what it covers and, just as importantly, what it has been decided not to cover. Attached to a container so that 'in scope' is a checkable membership question rather than a recollection of a conversation."@en .
+
+backlog:ScopeExclusion a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Scope Exclusion"@en ;
+    skos:definition "An explicit, owner-decided record that a concern is out of scope, with the reasoning kept beside it. Exclusions are recorded rather than left implicit because the cheapest scope decision to re-litigate is the one nobody wrote down, and because an unrecorded exclusion is indistinguishable from an oversight."@en .
+
+backlog:hasScopeStatement a owl:ObjectProperty ;
+    rdfs:domain backlog:WorkItemContainer ; rdfs:range backlog:ScopeStatement ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has scope statement"@en ;
+    skos:definition "The declared boundary governing this container."@en .
+
+backlog:hasScopeExclusion a owl:ObjectProperty ;
+    rdfs:domain backlog:ScopeStatement ; rdfs:range backlog:ScopeExclusion ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has scope exclusion"@en ;
+    skos:definition "A concern this scope statement deliberately excludes."@en .
+
+backlog:hasScopeStatementText a owl:DatatypeProperty ;
+    rdfs:domain backlog:ScopeStatement ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has scope statement text"@en ;
+    skos:definition "The boundary in prose, for the reader; the machine-checkable part is membership and the exclusion list."@en .
+
+backlog:excludesConcern a owl:DatatypeProperty ;
+    rdfs:domain backlog:ScopeExclusion ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "excludes concern"@en ;
+    skos:definition "What is excluded, named precisely enough that someone can tell whether a later request falls inside it."@en .
+
+backlog:hasExclusionRationale a owl:DatatypeProperty ;
+    rdfs:domain backlog:ScopeExclusion ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has exclusion rationale"@en ;
+    skos:definition "Why it is excluded. Required: an exclusion without a reason cannot be reviewed when circumstances change, only reversed by whoever argues hardest."@en .
+
+#################################################################
+#  19. Refinement / grooming (v1.2.0)
+#################################################################
+
+backlog:RefinementEvent a owl:Class ;
+    rdfs:subClassOf core:Artifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Refinement Event"@en ;
+    skos:definition "A dated act of making an item ready: adding acceptance criteria, sizing it, resolving an ambiguity, splitting it. Recorded as an event because readiness is something that was done to an item at a moment, by someone, not a property it acquires by sitting in the register long enough. The suite refuses the Ready state to an item with no refinement on record."@en .
+
+backlog:refines a owl:ObjectProperty ;
+    rdfs:domain backlog:RefinementEvent ; rdfs:range backlog:WorkItem ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "refines"@en ;
+    skos:definition "The item this refinement acted on."@en .
+
+backlog:refinedAt a owl:DatatypeProperty ;
+    rdfs:domain backlog:RefinementEvent ; rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "refined at"@en ;
+    skos:definition "When the refinement happened, so staleness is detectable when the item has since changed."@en .
+
+backlog:hasRefinementOutcome a owl:DatatypeProperty ;
+    rdfs:domain backlog:RefinementEvent ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has refinement outcome"@en ;
+    skos:definition "What actually changed — criteria added, item split, estimate agreed, question raised. A refinement with no outcome was a meeting, not a refinement."@en .
+
+backlog:refinedBy a owl:ObjectProperty ;
+    rdfs:domain backlog:RefinementEvent ; rdfs:range backlog:Role ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "refined by"@en ;
+    skos:definition "Which role performed the refinement."@en .
+
+#################################################################
+#  20. Cost, risk and opportunity binding (v1.2.0)
+#################################################################
+
+backlog:CostEstimate a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Cost Estimate"@en ;
+    skos:definition "An estimate of what work will cost, carrying its basis and its confidence rather than a naked number. Deliberately unit-neutral — effort, money and elapsed time are all recorded through the same structure — because the discipline the framework enforces is that an estimate discloses how it was derived, not which currency it is in."@en .
+
+backlog:hasCostEstimate a owl:ObjectProperty ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:WorkItem backlog:WorkItemContainer ) ] ;
+    rdfs:range backlog:CostEstimate ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has cost estimate"@en ;
+    skos:definition "The cost estimate attached to this work."@en .
+
+backlog:hasEffortEstimate a owl:DatatypeProperty ;
+    rdfs:domain backlog:CostEstimate ; rdfs:range xsd:decimal ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has effort estimate"@en ;
+    skos:definition "The estimated quantity, in whatever unit the estimating basis names."@en .
+
+backlog:hasCostBasis a owl:DatatypeProperty ;
+    rdfs:domain backlog:CostEstimate ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has cost basis"@en ;
+    skos:definition "How the number was derived — analogous estimation from a named prior item, three-point, expert judgement, measured throughput — and in what unit. Required: an estimate whose basis is unstated cannot be challenged, improved, or reused."@en .
+
+backlog:hasEstimateConfidence a owl:DatatypeProperty ;
+    rdfs:domain backlog:CostEstimate ; rdfs:range xsd:decimal ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has estimate confidence"@en ;
+    skos:definition "How well-founded the estimate is, as a fraction, so that a guess and a measurement are not presented as the same kind of thing."@en .
+
+backlog:estimatedAt a owl:DatatypeProperty ;
+    rdfs:domain backlog:CostEstimate ; rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "estimated at"@en ;
+    skos:definition "When the estimate was made; estimates are snapshots of what was known then."@en .
+
+backlog:hasRisk a owl:ObjectProperty ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:WorkItem backlog:WorkItemContainer backlog:Objective ) ] ;
+    rdfs:range risk:Risk ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has risk"@en ;
+    skos:definition "A risk bearing on this work or objective, referenced in the pack's risk subject rather than re-declared here. That subject defines risk as the effect of uncertainty on objectives per ISO 31000:2018, which is exactly the notion delivery work needs, so this framework delegates to it instead of minting a parallel vocabulary."@en .
+
+backlog:hasMitigation a owl:ObjectProperty ;
+    rdfs:domain risk:Risk ; rdfs:range risk:Mitigation ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has mitigation"@en ;
+    skos:definition "The action taken to modify a referenced risk, again in the risk subject's own vocabulary. Declared here because this framework needs the link for its own constraint that an untreated risk must be explicitly accepted; the classes at both ends belong to the risk subject."@en .
+
+backlog:riskAcceptedBy a owl:ObjectProperty ;
+    rdfs:domain risk:Risk ; rdfs:range backlog:Role ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "risk accepted by"@en ;
+    skos:definition "The role that accepted a risk without treating it. Every referenced risk must either carry a mitigation or name its acceptor: silent acceptance is the failure mode this exists to prevent, and only the Owner may accept a risk affecting scope or launch."@en .
+
+#################################################################
+#  21. Investment mix: building versus maintaining (v1.2.0)
+#################################################################
+
+backlog:InvestmentCategory a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:Cat_NewCapability backlog:Cat_Maintenance backlog:Cat_TechnicalDebt backlog:Cat_Compliance ) ;
+    rdfs:label "Investment Category"@en ;
+    skos:definition "What kind of investment an item represents, as a closed set of four: new capability, maintenance, technical debt, and compliance. Priority scores compare items within a shared question; they cannot arbitrate between categories, because a maintenance backlog and a new-capability backlog compete for the same capacity while answering to different arguments. Categorising makes the mix visible and lets a policy govern it instead of the ranking silently starving one category."@en .
+
+backlog:Cat_NewCapability a owl:NamedIndividual , backlog:InvestmentCategory ;
+    rdfs:label "New capability"@en ;
+    skos:definition "Work that adds something the product could not do before. Dominates before first launch and competes for capacity afterwards."@en .
+
+backlog:Cat_Maintenance a owl:NamedIndividual , backlog:InvestmentCategory ;
+    rdfs:label "Maintenance"@en ;
+    skos:definition "Work that keeps what exists working: defect repair, dependency upkeep, operational support. Structurally disadvantaged by value-over-cost ranking, which is why it needs a policy share rather than a fair fight."@en .
+
+backlog:Cat_TechnicalDebt a owl:NamedIndividual , backlog:InvestmentCategory ;
+    rdfs:label "Technical debt"@en ;
+    skos:definition "Work that reduces the cost of future work rather than delivering user-visible value now. Its benefit is a change in someone else's job size, which no single item's score can express."@en .
+
+backlog:Cat_Compliance a owl:NamedIndividual , backlog:InvestmentCategory ;
+    rdfs:label "Compliance"@en ;
+    skos:definition "Work required by an obligation external to the product's own goals. Ranks by deadline and consequence, not by value per unit effort."@en .
+
+[] a owl:AllDifferent ; owl:distinctMembers ( backlog:Cat_NewCapability backlog:Cat_Maintenance
+                                              backlog:Cat_TechnicalDebt backlog:Cat_Compliance ) .
+
+backlog:hasInvestmentCategory a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:WorkItem ; rdfs:range backlog:InvestmentCategory ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has investment category"@en ;
+    skos:definition "The single category this item's investment belongs to."@en .
+
+backlog:ProductLifecyclePhase a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:Phase_PreLaunch backlog:Phase_Live backlog:Phase_Sunsetting ) ;
+    rdfs:label "Product Lifecycle Phase"@en ;
+    skos:definition "Where the product stands, as a closed set of three. The phase decides which prioritisation question is the governing one: before first deployment the launch-readiness model governs and throughput ranking is advisory; once live the throughput model governs and launch scoping no longer applies. Recording the phase makes that switch a fact about the product rather than a habit of whoever runs the report."@en .
+
+backlog:Phase_PreLaunch a owl:NamedIndividual , backlog:ProductLifecyclePhase ;
+    rdfs:label "Pre-launch"@en ;
+    skos:definition "Nothing has been deployed to real users yet; launch gates govern the order of work."@en .
+
+backlog:Phase_Live a owl:NamedIndividual , backlog:ProductLifecyclePhase ;
+    rdfs:label "Live"@en ;
+    skos:definition "The product is in real use; ongoing capacity is allocated by throughput ranking within the policy mix, and maintenance is no longer a residual category."@en .
+
+backlog:Phase_Sunsetting a owl:NamedIndividual , backlog:ProductLifecyclePhase ;
+    rdfs:label "Sunsetting"@en ;
+    skos:definition "The product is being withdrawn; new capability work requires an explicit owner decision, and compliance and migration work dominate."@en .
+
+[] a owl:AllDifferent ; owl:distinctMembers ( backlog:Phase_PreLaunch backlog:Phase_Live backlog:Phase_Sunsetting ) .
+
+backlog:hasLifecyclePhase a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:WorkItemContainer ; rdfs:range backlog:ProductLifecyclePhase ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has lifecycle phase"@en ;
+    skos:definition "The phase this register or project is in."@en .
+
+backlog:PortfolioPolicy a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Portfolio Policy"@en ;
+    skos:definition "A declared intent about how capacity is split across investment categories, so that the split is a decision someone made rather than an outcome nobody chose. The report compares declared shares against the register's actual mix and reports the difference; it does not adjust either."@en .
+
+backlog:CapacityAllocation a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Capacity Allocation"@en ;
+    skos:definition "One category's declared share of capacity within a portfolio policy."@en .
+
+backlog:policyFor a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:PortfolioPolicy ; rdfs:range backlog:WorkItemContainer ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "policy for"@en ;
+    skos:definition "The register or project this policy governs."@en .
+
+backlog:hasAllocation a owl:ObjectProperty ;
+    rdfs:domain backlog:PortfolioPolicy ; rdfs:range backlog:CapacityAllocation ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has allocation"@en ;
+    skos:definition "A per-category share declared by this policy."@en .
+
+backlog:allocatesToCategory a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:CapacityAllocation ; rdfs:range backlog:InvestmentCategory ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "allocates to category"@en ;
+    skos:definition "The category this allocation applies to."@en .
+
+backlog:hasTargetShare a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:CapacityAllocation ; rdfs:range xsd:decimal ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has target share"@en ;
+    skos:definition "The intended fraction of capacity for the category, between zero and one. Shares across a policy must sum to one: a policy that does not account for all capacity leaves the remainder to be allocated by whoever shouts."@en .
+
+#################################################################
+#  22. Implementation project (v1.2.0)
+#################################################################
+
+backlog:ImplementationProject a owl:Class ;
+    rdfs:subClassOf backlog:WorkItemContainer ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Implementation Project"@en ;
+    skos:definition "A funded, bounded delivery effort with a scope statement, a lifecycle phase, objectives it pursues and a Definition of Done it must satisfy before it can be called finished. Distinct from an Increment, which is a releasable body of work at a point in time: a project may ship many increments, and an increment may serve several projects. Introduced so that the framework's gates apply to the effort as a whole and not only to its individual items — the level at which most delivery claims are actually made and least often checked."@en .
+
+[] a owl:AllDisjointClasses ;
+   owl:members ( backlog:Goal backlog:Objective backlog:Benefit backlog:Opportunity
+                 backlog:ScopeStatement backlog:ScopeExclusion backlog:RefinementEvent
+                 backlog:CostEstimate backlog:InvestmentCategory backlog:ProductLifecyclePhase
+                 backlog:PortfolioPolicy backlog:CapacityAllocation ) .
+
+#################################################################
+#  23. Container-level dependency (v1.3.0)
+#################################################################
+
+backlog:containerDependsOn a owl:ObjectProperty , owl:TransitiveProperty ;
+    rdfs:domain backlog:WorkItemContainer ; rdfs:range backlog:WorkItemContainer ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "container depends on"@en ;
+    skos:definition "A declared dependency of one deployable unit on another: this package cannot ship until that one has. Distinct from the item-level dependsOn because a package may depend on another for reasons no single pair of items expresses — a shared migration, a contractual sequence, an integration window. Transitive, so indirect blocking is visible; cycles are caught by constraint rather than by reasoner, for the same OWL 2 DL profile reason as dependsOn."@en .
+
+backlog:derivedContainerDependency a owl:ObjectProperty ;
+    rdfs:domain backlog:WorkItemContainer ; rdfs:range backlog:WorkItemContainer ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "derived container dependency"@en ;
+    skos:definition "A container dependency computed by rule from member-level edges: some member of this container depends on a not-yet-Done member of that one. Kept separate from the declared property so that the two can disagree visibly — a declared dependency with no member-level basis is either a real constraint someone must justify or a phantom, and a member-level dependency never declared at container level is a surprise waiting for a release."@en .
+
+backlog:rankedOnRoadmap a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:WorkItemContainer ; rdfs:range backlog:Roadmap ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "ranked on roadmap"@en ;
+    skos:definition "The roadmap on which this container has been placed. A container without this link may still be scored, but it is not on anyone's plan."@en .
+
+backlog:hasRoadmapRank a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:WorkItemContainer ; rdfs:range xsd:integer ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has roadmap rank"@en ;
+    skos:definition "The container's declared position in the roadmap sequence, lowest first. A decision, not a computation: the report prints it beside the rank the scores imply, and where the two disagree it shows both rather than reconciling them, on the same principle that keeps the throughput and launch-scoped answers separate."@en .
+
+#################################################################
+#  24. Test harness — proving Done rather than declaring it (v1.3.0)
+#################################################################
+
+backlog:TestHarness a owl:Class ;
+    rdfs:subClassOf core:Artifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Test Harness"@en ;
+    skos:definition "The set of checks that together prove one work item satisfies both its acceptance criteria and the Definition of Done that governs it. A first-class artifact rather than an implicit relationship, because 'the tests pass' is the claim most often made and least often traced: a harness names which check proves which criterion, so a criterion nobody tested is a visible hole rather than an assumption. Its completeness is derived, never asserted."@en .
+
+backlog:harnessFor a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:TestHarness ; rdfs:range backlog:WorkItem ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "harness for"@en ;
+    skos:definition "The single work item this harness proves."@en .
+
+backlog:hasHarnessEvidence a owl:ObjectProperty ;
+    rdfs:domain backlog:TestHarness ; rdfs:range backlog:Evidence ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has harness evidence"@en ;
+    skos:definition "An evidence artifact belonging to this harness. Each must be bridge-verified before it counts toward completeness."@en .
+
+backlog:attestsCriterion a owl:ObjectProperty ;
+    rdfs:domain backlog:Evidence ; rdfs:range backlog:AcceptanceCriterion ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "attests criterion"@en ;
+    skos:definition "The acceptance criterion this evidence proves. The link that turns a passing test into an argument about the right thing: without it, a suite can be green while the criterion everyone cared about is untested."@en .
+
+backlog:attestsDoDCriterion a owl:ObjectProperty ;
+    rdfs:domain backlog:Evidence ; rdfs:range backlog:DoDCriterion ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "attests Definition-of-Done criterion"@en ;
+    skos:definition "The Definition-of-Done clause this evidence discharges for the item, where the clause is item-specific rather than checked register-wide by query."@en .
+
+backlog:harnessComplete a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:TestHarness ; rdfs:range xsd:boolean ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "harness complete"@en ;
+    skos:definition "Derived true only when every acceptance criterion of the harnessed item is attested by at least one bridge-verified evidence artifact. Written by the derivation rules, never by hand; at conformance level L3 an item cannot hold Done without it, which is what makes completion a proof rather than a statement."@en .
+
+backlog:effectiveDefinitionOfDone a owl:ObjectProperty ;
+    rdfs:domain backlog:WorkItem ; rdfs:range backlog:DefinitionOfDone ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "effective definition of done"@en ;
+    skos:definition "The Definition of Done that actually governs an item, derived from the item's own declaration or inherited from a container it belongs to. Derived rather than required item by item, because in practice a Definition of Done is a team-level agreement and restating it on every item is how the two drift apart."@en .
+
+#################################################################
+#  25. Lifecycle workflow: which transitions are permitted (v1.3.0)
+#################################################################
+
+backlog:Workflow a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Workflow"@en ;
+    skos:definition "The set of state transitions a register permits, making the lifecycle a graph someone can inspect rather than five words that appear in reports. A closed state enumeration says which states exist; a workflow says which moves between them are legal, under what guard, and by whom — the difference between a status field and a process."@en .
+
+backlog:StateTransition a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "State Transition"@en ;
+    skos:definition "One permitted move from a lifecycle state to another, carrying the guard that must hold for the move to be legitimate. Guards are executable text for the same reason Definition-of-Done criteria are: a precondition nobody can run is a precondition nobody enforces."@en .
+
+backlog:TransitionEvent a owl:Class ;
+    rdfs:subClassOf core:Artifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Transition Event"@en ;
+    skos:definition "A record that an item actually moved: which transition was used, when, and by which role. Recorded because a state with no history cannot be audited — it is indistinguishable from a value someone typed — and because the current state can then be checked against the last move rather than trusted."@en .
+
+backlog:workflowFor a owl:ObjectProperty ;
+    rdfs:domain backlog:Workflow ; rdfs:range backlog:WorkItemContainer ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "workflow for"@en ;
+    skos:definition "The register or project this workflow governs."@en .
+
+backlog:hasTransition a owl:ObjectProperty ;
+    rdfs:domain backlog:Workflow ; rdfs:range backlog:StateTransition ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has transition"@en ;
+    skos:definition "A move this workflow permits."@en .
+
+backlog:fromState a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:StateTransition ; rdfs:range backlog:LifecycleState ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "from state"@en ;
+    skos:definition "The state the transition leaves."@en .
+
+backlog:toState a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:StateTransition ; rdfs:range backlog:LifecycleState ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "to state"@en ;
+    skos:definition "The state the transition enters."@en .
+
+backlog:hasTransitionName a owl:DatatypeProperty ;
+    rdfs:domain backlog:StateTransition ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has transition name"@en ;
+    skos:definition "What the move is called in the team's own language — refine, start, complete, withdraw — so the workflow reads as a process rather than as a table of state pairs."@en .
+
+backlog:hasTransitionGuard a owl:DatatypeProperty ;
+    rdfs:domain backlog:StateTransition ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has transition guard"@en ;
+    skos:definition "The executable condition that must hold before the move is legitimate. Required on every transition: a guard stated in prose is a hope, and an unguarded transition into Done is how completion claims escape."@en .
+
+backlog:transitionedItem a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:TransitionEvent ; rdfs:range backlog:WorkItem ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "transitioned item"@en ;
+    skos:definition "The item that moved."@en .
+
+backlog:viaTransition a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:TransitionEvent ; rdfs:range backlog:StateTransition ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "via transition"@en ;
+    skos:definition "The permitted transition this move used. A recorded move that names no permitted transition is a state change outside the process, which the suite treats as a violation rather than as an exception."@en .
+
+backlog:transitionedAt a owl:DatatypeProperty ;
+    rdfs:domain backlog:TransitionEvent ; rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "transitioned at"@en ;
+    skos:definition "When the move happened; the ordering that lets the latest move be compared with the current state."@en .
+
+backlog:transitionedBy a owl:ObjectProperty ;
+    rdfs:domain backlog:TransitionEvent ; rdfs:range backlog:Role ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "transitioned by"@en ;
+    skos:definition "The role that made the move."@en .
+
+backlog:hasTransitionNote a owl:DatatypeProperty ;
+    rdfs:domain backlog:TransitionEvent ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has transition note"@en ;
+    skos:definition "What was true at the moment of the move — which check passed, what was decided — kept with the event rather than in a comment thread."@en .
+
+[] a owl:AllDisjointClasses ;
+   owl:members ( backlog:TestHarness backlog:Workflow backlog:StateTransition backlog:TransitionEvent ) .
+
+#################################################################
+#  26. Decomposition (v1.4.0)
+#     Every agile ladder — epic to feature to story — is a
+#     part-whole relation, and the framework had none: kinds were
+#     disjoint and only dependency connected items.
+#################################################################
+
+backlog:decomposesInto a owl:ObjectProperty ;
+    rdfs:domain backlog:WorkItem ; rdfs:range backlog:WorkItem ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "decomposes into"@en ;
+    skos:definition "Relates a larger work item to the smaller items it breaks down into: an initiative into epics, an epic into features, a feature into stories. Distinct from dependency, which orders independent work; decomposition says the child IS part of the parent, so the parent cannot be complete while a child is open and the parent's value is not additional to its children's. Deliberately not transitive: a story is part of its feature, and treating it as directly part of the initiative would make roll-up double-count at every level."@en .
+
+backlog:partOf a owl:ObjectProperty ;
+    owl:inverseOf backlog:decomposesInto ;
+    rdfs:domain backlog:WorkItem ; rdfs:range backlog:WorkItem ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "part of"@en ;
+    skos:definition "Inverse of decomposesInto, declared once and in this direction only."@en .
+
+backlog:decompositionState a owl:ObjectProperty ;
+    rdfs:domain backlog:WorkItem ; rdfs:range backlog:LifecycleState ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "decomposition state"@en ;
+    skos:definition "The state a decomposed item's children imply, computed by rule in the same way a container's state is. A parent whose asserted state disagrees with what its children support is the classic undecomposed-epic error: it inherits one shipped slice's optimism and misrepresents the remaining work."@en .
+
+#################################################################
+#  27. Artifact commitments (v1.4.0, Scrum Guide 2020)
+#################################################################
+
+backlog:Commitment a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Commitment"@en ;
+    skos:definition "The thing an artifact commits to, against which its progress can be measured: a backlog commits to a product goal, an iteration to an iteration goal, an increment to a Definition of Done. Modelled as a first-class link rather than left implicit because an artifact with no commitment is a list, and a list cannot be behind schedule — it can only be long."@en .
+
+backlog:hasCommitment a owl:ObjectProperty ;
+    rdfs:domain backlog:WorkItemContainer ; rdfs:range backlog:Commitment ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has commitment"@en ;
+    skos:definition "The commitment this artifact carries."@en .
+
+backlog:commitsToGoal a owl:ObjectProperty ;
+    rdfs:domain backlog:Commitment ; rdfs:range backlog:Goal ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "commits to goal"@en ;
+    skos:definition "The goal a backlog-level commitment names — the long-term objective the register exists to reach."@en .
+
+backlog:commitsToObjective a owl:ObjectProperty ;
+    rdfs:domain backlog:Commitment ; rdfs:range backlog:Objective ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "commits to objective"@en ;
+    skos:definition "The measurable objective an iteration-level commitment names: the single outcome the time box is for, as opposed to the list of items selected into it."@en .
+
+backlog:commitsToDefinitionOfDone a owl:ObjectProperty ;
+    rdfs:domain backlog:Commitment ; rdfs:range backlog:DefinitionOfDone ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "commits to Definition of Done"@en ;
+    skos:definition "The quality bar an increment-level commitment names. Work that does not meet it is not part of the increment, which is what makes the increment releasable by construction rather than by inspection."@en .
+
+#################################################################
+#  28. Dependency typing (v1.4.0, after Strode's dependency taxonomy)
+#################################################################
+
+backlog:DependencyKind a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:Dep_Knowledge backlog:Dep_Task backlog:Dep_Resource ) ;
+    rdfs:label "Dependency Kind"@en ;
+    skos:definition "What kind of constraint a dependency actually is, as a closed set of three: knowledge, task and resource. An untyped dependency tells you that something must wait, but not what would release it — and the three kinds are released by different actions, which is why treating them alike produces plans that cannot be unblocked."@en ;
+    dcterms:source "Strode, D.E., A dependency taxonomy for agile software development projects, Information Systems Frontiers 18(1), 23-46, 2016, DOI 10.1007/s10796-015-9574-1."@en .
+
+backlog:Dep_Knowledge a owl:NamedIndividual , backlog:DependencyKind ;
+    rdfs:label "Knowledge dependency"@en ;
+    skos:definition "Work waits on information someone holds or must produce — a decision, a specification, expertise. Released by a conversation or a spike, not by scheduling."@en .
+
+backlog:Dep_Task a owl:NamedIndividual , backlog:DependencyKind ;
+    rdfs:label "Task dependency"@en ;
+    skos:definition "Work waits on other work being finished first. The only kind an ordering constraint alone can express, and the kind most tools assume is the only one."@en .
+
+backlog:Dep_Resource a owl:NamedIndividual , backlog:DependencyKind ;
+    rdfs:label "Resource dependency"@en ;
+    skos:definition "Work waits on a person, environment, licence or component being available. Released by allocation, not by completing anything."@en .
+
+[] a owl:AllDifferent ; owl:distinctMembers ( backlog:Dep_Knowledge backlog:Dep_Task backlog:Dep_Resource ) .
+
+backlog:Dependency a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Dependency"@en ;
+    skos:definition "A reified dependency, used when the constraint needs its own kind, owner or expected release date. The plain dependsOn edge remains for the common case; this class exists so that a dependency someone must actively clear is a thing with a state rather than an arrow."@en .
+
+backlog:hasDependencyRecord a owl:ObjectProperty ;
+    rdfs:domain backlog:WorkItem ; rdfs:range backlog:Dependency ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has dependency record"@en ;
+    skos:definition "A reified dependency bearing on this item."@en .
+
+backlog:dependencyOn a owl:ObjectProperty ;
+    rdfs:domain backlog:Dependency ;
+    rdfs:range [ a owl:Class ; owl:unionOf ( backlog:WorkItem backlog:WorkItemContainer ) ] ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "dependency on"@en ;
+    skos:definition "What the dependency is on."@en .
+
+backlog:hasDependencyKind a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:Dependency ; rdfs:range backlog:DependencyKind ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has dependency kind"@en ;
+    skos:definition "Which of the three kinds this dependency is; required, because the kind determines what would release it."@en .
+
+#################################################################
+#  29. Impediments (v1.4.0)
+#################################################################
+
+backlog:Impediment a owl:Class ;
+    rdfs:subClassOf core:Artifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Impediment"@en ;
+    skos:definition "Anything slowing or stopping work that is not a dependency on other work: a missing environment, an unavailable decision-maker, a broken tool, an organisational constraint. Held separately because dependencies are cleared by finishing something and impediments are cleared by someone acting outside the register, and a plan that records only the first explains only half of why work is stuck."@en .
+
+backlog:impedes a owl:ObjectProperty ;
+    rdfs:domain backlog:Impediment ;
+    rdfs:range [ a owl:Class ; owl:unionOf ( backlog:WorkItem backlog:WorkItemContainer ) ] ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "impedes"@en ;
+    skos:definition "The work this impediment is blocking or slowing."@en .
+
+backlog:raisedAt a owl:DatatypeProperty ;
+    rdfs:domain backlog:Impediment ; rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "raised at"@en ;
+    skos:definition "When the impediment was raised; its age is the measure that matters, since an impediment nobody has cleared for weeks is an organisational fact, not a task."@en .
+
+backlog:resolvedAt a owl:DatatypeProperty ;
+    rdfs:domain backlog:Impediment ; rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "resolved at"@en ;
+    skos:definition "When it was cleared; absent while it still stands."@en .
+
+backlog:hasImpedimentOwner a owl:ObjectProperty ;
+    rdfs:domain backlog:Impediment ; rdfs:range backlog:Role ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has impediment owner"@en ;
+    skos:definition "The role accountable for clearing it. Required while unresolved: an impediment with no owner is a complaint."@en .
+
+backlog:hasImpedimentStatement a owl:DatatypeProperty ;
+    rdfs:domain backlog:Impediment ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has impediment statement"@en ;
+    skos:definition "What is blocked, by what, and what would clear it."@en .
+
+#################################################################
+#  30. Flow: started and finished points, WIP policy (v1.4.0)
+#################################################################
+
+backlog:startedAt a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:WorkItem ; rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "started at"@en ;
+    skos:definition "The moment work on this item began. Every flow measure is defined against a well-defined start and finish point, so recording them is what makes work-in-progress, item age, cycle time and throughput computable at all rather than estimated from status changes."@en ;
+    dcterms:source "The Kanban Pocket Guide, ch. 6 (basic metrics of flow); Kanban Guide for Scrum Teams."@en .
+
+backlog:finishedAt a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:WorkItem ; rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "finished at"@en ;
+    skos:definition "The moment it finished. Cycle time is the elapsed time between the two points; item age is the elapsed time from the start point to now for anything unfinished."@en .
+
+backlog:WipLimit a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "WIP Limit"@en ;
+    skos:definition "A policy constraining how many items may be in progress at once. A policy, not a measurement: work-in-progress is what is happening, the limit is what the team decided should happen, and conflating them is how a limit becomes a description of the overrun instead of a constraint on it."@en .
+
+backlog:wipLimitFor a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:WipLimit ; rdfs:range backlog:WorkItemContainer ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "WIP limit for"@en ;
+    skos:definition "The register or project the limit applies to."@en .
+
+backlog:hasWipLimitValue a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:WipLimit ; rdfs:range xsd:integer ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has WIP limit value"@en ;
+    skos:definition "The maximum number of items permitted in progress."@en .
+
+#################################################################
+#  31. Team, team roles, capacity (v1.4.0)
+#################################################################
+
+backlog:Team a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Team"@en ;
+    skos:definition "The group accountable for delivering from a register. Modelled because capacity, work-in-progress limits and throughput are all properties of a team rather than of a backlog, and a register worked by two teams behaves nothing like one worked by a single team."@en .
+
+backlog:TeamRole a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Team Role"@en ;
+    skos:definition "A method-specific role within a team — product owner, facilitator, developer, tester. Deliberately an open class, unlike backlog:Role, which stays closed at Owner and Builder: Role answers who may DECIDE what, which the framework constrains, while TeamRole answers how a team is organised, which is the adopting method's business and varies between Scrum, XP and Kanban."@en ;
+    dcterms:source "Role/artifact/event structure per the Scrum Guide 2020; role modelling per OntoAgile (Ortega-Ordoñez, Pardo-Calvache & Pino-Correa, DYNA 86(209), 2019)."@en .
+
+backlog:teamFor a owl:ObjectProperty ;
+    rdfs:domain backlog:Team ; rdfs:range backlog:WorkItemContainer ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "team for"@en ;
+    skos:definition "The register or project this team delivers from."@en .
+
+backlog:hasTeamRole a owl:ObjectProperty ;
+    rdfs:domain backlog:Team ; rdfs:range backlog:TeamRole ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has team role"@en ;
+    skos:definition "A role present in this team."@en .
+
+backlog:assignedToTeam a owl:ObjectProperty ;
+    rdfs:domain backlog:WorkItem ; rdfs:range backlog:Team ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "assigned to team"@en ;
+    skos:definition "The team carrying this item."@en .
+
+backlog:hasCapacity a owl:DatatypeProperty ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:Team backlog:Iteration ) ] ;
+    rdfs:range xsd:decimal ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has capacity"@en ;
+    skos:definition "Available capacity in the same unit the cost estimates use, so committed effort and available effort can be compared without a conversion nobody documented."@en .
+
+#################################################################
+#  32. Canonical user-story form (v1.4.0)
+#################################################################
+
+backlog:asRole a owl:DatatypeProperty ;
+    rdfs:domain backlog:Story ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "as role"@en ;
+    skos:definition "Who the story is for. Held as its own field rather than buried in the title so that stories can be grouped by audience and a story serving nobody nameable is visible as such."@en .
+
+backlog:wantsCapability a owl:DatatypeProperty ;
+    rdfs:domain backlog:Story ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "wants capability"@en ;
+    skos:definition "What they want to be able to do."@en .
+
+backlog:soThat a owl:DatatypeProperty ;
+    rdfs:domain backlog:Story ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "so that"@en ;
+    skos:definition "Why it matters to them. The clause most often dropped and the one that carries the value argument; without it a story states a feature request and nothing about the benefit it claims."@en .
+
+[] a owl:AllDisjointClasses ;
+   owl:members ( backlog:Commitment backlog:DependencyKind backlog:Dependency backlog:Impediment
+                 backlog:WipLimit backlog:Team backlog:TeamRole ) .
+
+#################################################################
+#  33. Falsifiability: observation, outcome, re-baselining (v1.5.0)
+#     Everything below exists so that a register can be WRONG.
+#     A plan that cannot be wrong cannot be right either, and a
+#     framework that only checks internal form admits exactly that.
+#################################################################
+
+backlog:MetricDirection a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:Dir_Increase backlog:Dir_Decrease ) ;
+    rdfs:label "Metric Direction"@en ;
+    skos:definition "Which way a metric must move for an objective to be met. Closed set of two. Without it a baseline and a target are two numbers with no claim between them, and no observation can contradict them — the precise sense in which an unfalsifiable objective is not an objective."@en .
+
+backlog:Dir_Increase a owl:NamedIndividual , backlog:MetricDirection ;
+    rdfs:label "Increase"@en ;
+    skos:definition "The objective is met when the observed value reaches or exceeds the target."@en .
+
+backlog:Dir_Decrease a owl:NamedIndividual , backlog:MetricDirection ;
+    rdfs:label "Decrease"@en ;
+    skos:definition "The objective is met when the observed value reaches or falls below the target."@en .
+
+[] a owl:AllDifferent ; owl:distinctMembers ( backlog:Dir_Increase backlog:Dir_Decrease ) .
+
+backlog:AchievementStatus a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:Ach_Met backlog:Ach_Missed backlog:Ach_Pending ) ;
+    rdfs:label "Achievement Status"@en ;
+    skos:definition "Whether a stated target was met, missed, or is still open. Closed set of three, derived from observation rather than asserted, so that failure is a computed outcome nobody has to volunteer."@en .
+
+backlog:Ach_Met a owl:NamedIndividual , backlog:AchievementStatus ;
+    rdfs:label "Met"@en ;
+    skos:definition "An observation exists on or after the deadline showing the target reached in the declared direction."@en .
+
+backlog:Ach_Missed a owl:NamedIndividual , backlog:AchievementStatus ;
+    rdfs:label "Missed"@en ;
+    skos:definition "The deadline has passed and the latest observation does not reach the target. A first-class outcome, because a framework in which nothing can be recorded as missed measures nothing."@en .
+
+backlog:Ach_Pending a owl:NamedIndividual , backlog:AchievementStatus ;
+    rdfs:label "Pending"@en ;
+    skos:definition "The deadline has not passed yet."@en .
+
+[] a owl:AllDifferent ; owl:distinctMembers ( backlog:Ach_Met backlog:Ach_Missed backlog:Ach_Pending ) .
+
+backlog:MetricObservation a owl:Class ;
+    rdfs:subClassOf core:Artifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Metric Observation"@en ;
+    skos:definition "A recorded measurement of a metric at a point in time, with the method that produced it. The missing half of an objective: a baseline and a target state an intention, and only an observation can settle whether the intention was realised. Without observations a register can declare any objective and never be shown to have failed one."@en .
+
+backlog:observesMetric a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:MetricObservation ; rdfs:range core:Metric ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "observes metric"@en ;
+    skos:definition "The metric measured."@en .
+
+backlog:hasObservedValue a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:MetricObservation ; rdfs:range xsd:decimal ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has observed value"@en ;
+    skos:definition "What the metric actually read."@en .
+
+backlog:observedAt a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:MetricObservation ; rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "observed at"@en ;
+    skos:definition "When it was read."@en .
+
+backlog:hasObservationMethod a owl:DatatypeProperty ;
+    rdfs:domain backlog:MetricObservation ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has observation method"@en ;
+    skos:definition "How the value was obtained — the query run, the report read, the instrument used. Required, so that an observation is reproducible rather than a number someone remembered."@en .
+
+backlog:observationFor a owl:ObjectProperty ;
+    rdfs:domain backlog:MetricObservation ; rdfs:range backlog:Objective ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "observation for"@en ;
+    skos:definition "The objective this observation bears on."@en .
+
+backlog:hasTargetDirection a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:Objective ; rdfs:range backlog:MetricDirection ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has target direction"@en ;
+    skos:definition "Which way the metric must move. Mandatory on every objective: it is what makes the target a claim rather than a decoration."@en .
+
+backlog:objectiveOutcome a owl:ObjectProperty ;
+    rdfs:domain backlog:Objective ; rdfs:range backlog:AchievementStatus ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "objective outcome"@en ;
+    skos:definition "Met, missed or pending, derived by rule from the latest observation against the target and direction. Never asserted by hand — the whole point is that the register computes its own failures."@en .
+
+backlog:achievedAt a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:Milestone ; rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "achieved at"@en ;
+    skos:definition "When the milestone was actually reached. Its absence after the target date is what makes a slipped date visible instead of quietly forgotten."@en .
+
+backlog:milestoneOutcome a owl:ObjectProperty ;
+    rdfs:domain backlog:Milestone ; rdfs:range backlog:AchievementStatus ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "milestone outcome"@en ;
+    skos:definition "Derived: met if achieved on or before the target date, missed once the target date has passed with no achievement, pending otherwise."@en .
+
+backlog:Rebaseline a owl:Class ;
+    rdfs:subClassOf core:Artifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Rebaseline"@en ;
+    skos:definition "An explicit, owner-decided record that a target or a date was moved, keeping the old value beside the new one and the reason with both. The control against the failure mode that makes every plan succeed: quietly editing the target until the outcome matches it. A register may move its goalposts; it may not do so invisibly."@en .
+
+backlog:rebaselines a owl:ObjectProperty ;
+    rdfs:domain backlog:Rebaseline ;
+    rdfs:range [ a owl:Class ; owl:unionOf ( backlog:Objective backlog:Milestone ) ] ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "rebaselines"@en ;
+    skos:definition "What was moved."@en .
+
+backlog:hasPreviousTarget a owl:DatatypeProperty ;
+    rdfs:domain backlog:Rebaseline ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has previous target"@en ;
+    skos:definition "The value or date as it stood before the move, retained so the size of the move is visible."@en .
+
+backlog:hasNewTarget a owl:DatatypeProperty ;
+    rdfs:domain backlog:Rebaseline ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has new target"@en ;
+    skos:definition "The value or date after the move."@en .
+
+backlog:hasRebaselineRationale a owl:DatatypeProperty ;
+    rdfs:domain backlog:Rebaseline ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has rebaseline rationale"@en ;
+    skos:definition "Why the target moved. Required, and required to be an owner decision: a re-baseline without a reason is indistinguishable from erasing a failure."@en .
+
+backlog:rebaselinedAt a owl:DatatypeProperty ;
+    rdfs:domain backlog:Rebaseline ; rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "rebaselined at"@en ;
+    skos:definition "When the move was made."@en .
+
+backlog:hasActualEffort a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:WorkItem ; rdfs:range xsd:decimal ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has actual effort"@en ;
+    skos:definition "What the item actually cost, in the unit its estimate used. Required on completed work at the governed level, because an estimate never compared with an actual cannot be shown to be bad, and a team whose estimates cannot be shown to be bad never improves them."@en .
+
+backlog:verifiedByTool a owl:DatatypeProperty ;
+    rdfs:domain backlog:Evidence ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "verified by tool"@en ;
+    skos:definition "The tool that performed the verification, named and versioned. Required at the governed level to close the loophole that lets a human write evidenceVerified true with the method 'asserted': verification must name something that could have failed."@en .
+
+#################################################################
+#  34. Mission and the measurable intent chain (v1.6.0)
+#     mission -> goal -> objective -> observation. Every link is
+#     required, so no work can claim value without a chain that
+#     terminates in something an observation can contradict.
+#################################################################
+
+backlog:Mission a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Mission"@en ;
+    skos:definition "Why the development exists at all: the standing purpose that outlives any particular release and against which scope is decided. The root of the intent chain — goals advance the mission, objectives make goals measurable, observations settle objectives — so that 'is this in scope' has an answer above the level of opinion. A mission is an owner declaration and is never derived."@en .
+
+backlog:hasMissionStatement a owl:DatatypeProperty ;
+    rdfs:domain backlog:Mission ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has mission statement"@en ;
+    skos:definition "The purpose in prose: who is served, what changes for them, and what the development will not attempt. Prose here is deliberate — the mission is the one layer that is argued rather than measured, which is precisely why everything below it must be measurable."@en .
+
+backlog:contributesToMission a owl:ObjectProperty ;
+    rdfs:domain backlog:Goal ; rdfs:range backlog:Mission ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "contributes to mission"@en ;
+    skos:definition "The mission this goal advances. A goal that advances no mission is a preference with a budget."@en .
+
+backlog:missionFor a owl:ObjectProperty ;
+    rdfs:domain backlog:Mission ; rdfs:range backlog:WorkItemContainer ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "mission for"@en ;
+    skos:definition "The register or project this mission governs."@en .
+
+#################################################################
+#  35. Scope as a measurable commitment (v1.6.0)
+#################################################################
+
+backlog:scopeRealizesObjective a owl:ObjectProperty ;
+    rdfs:domain backlog:ScopeStatement ; rdfs:range backlog:Objective ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "scope realizes objective"@en ;
+    skos:definition "The objective this scope exists to achieve. The link that makes scope completion a testable event rather than a checklist ending: when the scoped work is finished, the objectives named here are what decide whether it worked."@en .
+
+backlog:scopeCompletionState a owl:ObjectProperty ;
+    rdfs:domain backlog:ScopeStatement ; rdfs:range backlog:LifecycleState ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "scope completion state"@en ;
+    skos:definition "Whether the work inside this scope is finished, derived from the scoped container's members. Completion of scope is deliberately separate from success: finishing everything you said you would do is the precondition for asking whether it worked, not the answer."@en .
+
+backlog:scopeOutcome a owl:ObjectProperty ;
+    rdfs:domain backlog:ScopeStatement ; rdfs:range backlog:AchievementStatus ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "scope outcome"@en ;
+    skos:definition "Derived once the scope is complete: met when every objective it realizes was met, missed when any was missed, pending until then. This is where success and failure of a development become a computed fact — the register can report that it delivered everything it promised and still failed, which is the outcome most plans are structurally unable to express."@en .
+
+backlog:ScopeChange a owl:Class ;
+    rdfs:subClassOf core:Artifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Scope Change"@en ;
+    skos:definition "An explicit, owner-decided admission of work into a declared scope after the scope was set, carrying what was admitted and why. The framework does not forbid scope from growing — a rule that forbids it is bypassed rather than obeyed — it forbids scope growing INVISIBLY. Anything entering scope without one of these is an unrecorded change, which the suite treats as a defect."@en .
+
+backlog:admitsItem a owl:ObjectProperty ;
+    rdfs:domain backlog:ScopeChange ; rdfs:range backlog:WorkItem ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "admits item"@en ;
+    skos:definition "The work admitted into scope by this change."@en .
+
+backlog:changesScope a owl:ObjectProperty ;
+    rdfs:domain backlog:ScopeChange ; rdfs:range backlog:ScopeStatement ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "changes scope"@en ;
+    skos:definition "The scope statement being changed."@en .
+
+backlog:hasScopeChangeRationale a owl:DatatypeProperty ;
+    rdfs:domain backlog:ScopeChange ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has scope change rationale"@en ;
+    skos:definition "Why the boundary moved, and what was traded to pay for it. Required: scope that grows without a stated trade is how a plan silently becomes unachievable."@en .
+
+#################################################################
+#  36. External dependencies and the proposal rule (v1.6.0)
+#################################################################
+
+backlog:ExternalDependencyType a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:Ext_Vendor backlog:Ext_UpstreamComponent backlog:Ext_PeerTeam
+                backlog:Ext_Regulatory backlog:Ext_Infrastructure backlog:Ext_Customer ) ;
+    rdfs:label "External Dependency Type"@en ;
+    skos:definition "Who or what outside the development the dependency rests on, as a closed set of six. Orthogonal to DependencyKind, which says what would release a dependency (knowledge, task, resource): the type says who must act, and the two together determine whether waiting, asking, escalating or buying is the available move. Six types because each has a different escalation path and a different realistic response time, and treating them alike is how teams plan around a regulator as though it were a library upgrade."@en .
+
+backlog:Ext_Vendor a owl:NamedIndividual , backlog:ExternalDependencyType ;
+    rdfs:label "Vendor"@en ;
+    skos:definition "A commercial supplier or hosted service under contract. Changes are negotiated, priced and scheduled by someone else; the realistic lever is the contract, not the backlog."@en .
+
+backlog:Ext_UpstreamComponent a owl:NamedIndividual , backlog:ExternalDependencyType ;
+    rdfs:label "Upstream component"@en ;
+    skos:definition "A library, framework, dataset, standard or ontology the development consumes but does not own. Changes are proposed to the upstream maintainers; forking is the fallback and is a scope decision in its own right."@en .
+
+backlog:Ext_PeerTeam a owl:NamedIndividual , backlog:ExternalDependencyType ;
+    rdfs:label "Peer team"@en ;
+    skos:definition "Another team or product inside the same organisation. The most commonly mis-modelled type: organisational proximity tempts teams to write the other team's work into their own backlog, which is exactly the failure the proposal rule prevents."@en .
+
+backlog:Ext_Regulatory a owl:NamedIndividual , backlog:ExternalDependencyType ;
+    rdfs:label "Regulatory or standards body"@en ;
+    skos:definition "A regulator, certification authority or standards body. Its requirements are inputs, not negotiable scope, and its timelines are almost never responsive to a development's plan."@en .
+
+backlog:Ext_Infrastructure a owl:NamedIndividual , backlog:ExternalDependencyType ;
+    rdfs:label "Infrastructure or platform"@en ;
+    skos:definition "Hosting, network, identity, build or environment services the development runs on but does not control."@en .
+
+backlog:Ext_Customer a owl:NamedIndividual , backlog:ExternalDependencyType ;
+    rdfs:label "Customer or client"@en ;
+    skos:definition "Data, decisions, access or acceptance that only the client can supply. Frequently on the critical path and rarely on the plan."@en .
+
+[] a owl:AllDifferent ; owl:distinctMembers ( backlog:Ext_Vendor backlog:Ext_UpstreamComponent backlog:Ext_PeerTeam
+                                              backlog:Ext_Regulatory backlog:Ext_Infrastructure backlog:Ext_Customer ) .
+
+backlog:ExternalDependency a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "External Dependency"@en ;
+    skos:definition "Something the development depends on that it does not own and cannot change by deciding to. Distinct from an item-level dependency, which is work inside the register, and from an impediment, which is an obstacle someone inside the organisation can clear. Modelled as a first-class party with a type and a contact so that 'we are waiting on them' names a them."@en .
+
+backlog:hasExternalDependencyType a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:ExternalDependency ; rdfs:range backlog:ExternalDependencyType ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has external dependency type"@en ;
+    skos:definition "Which of the six types this dependency is."@en .
+
+backlog:hasExternalParty a owl:DatatypeProperty ;
+    rdfs:domain backlog:ExternalDependency ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has external party"@en ;
+    skos:definition "Who owns the thing depended on, named specifically enough to be contacted. Required: an unnamed external dependency cannot be chased and becomes a permanent excuse."@en .
+
+backlog:dependsOnExternal a owl:ObjectProperty ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:WorkItem backlog:WorkItemContainer ) ] ;
+    rdfs:range backlog:ExternalDependency ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "depends on external"@en ;
+    skos:definition "This work consumes something external as it stands today. Consuming an external dependency is normal; needing it to CHANGE is not, and is expressed by requiresExternalEnhancement instead."@en .
+
+backlog:requiresExternalEnhancement a owl:ObjectProperty ;
+    rdfs:domain backlog:WorkItem ; rdfs:range backlog:ExternalDependency ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "requires external enhancement"@en ;
+    skos:definition "This item cannot be delivered unless something outside the development changes. Declaring it is what triggers the framework's central scope rule: the change itself is never work in this register — a proposal is raised to the owning party, and the dependent item cannot be started until that proposal is accepted. This generalises the discipline the OE governance store applies to its own sessions, where a finding about another session's artifact is packaged as a proposal and never executed as an edit."@en .
+
+backlog:ProposalStatus a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:Prop_Submitted backlog:Prop_Accepted backlog:Prop_Rejected backlog:Prop_Withdrawn ) ;
+    rdfs:label "Proposal Status"@en ;
+    skos:definition "Where an enhancement request stands with the party that owns the thing. Closed set of four. Rejected is a first-class outcome and not a failure of the register: it is the signal to re-plan, and a framework with no way to record it quietly converts refusal into indefinite waiting."@en .
+
+backlog:Prop_Submitted a owl:NamedIndividual , backlog:ProposalStatus ;
+    rdfs:label "Submitted"@en ;
+    skos:definition "Raised with the owning party, no decision yet. Dependent work stays unstartable."@en .
+
+backlog:Prop_Accepted a owl:NamedIndividual , backlog:ProposalStatus ;
+    rdfs:label "Accepted"@en ;
+    skos:definition "The owning party has committed to the change. Dependent work becomes startable, and the external delivery becomes a tracked dependency rather than a hope."@en .
+
+backlog:Prop_Rejected a owl:NamedIndividual , backlog:ProposalStatus ;
+    rdfs:label "Rejected"@en ;
+    skos:definition "The owning party declined. The dependent item must be re-planned, cancelled, or brought into scope through an explicit owner-decided scope change — never left quietly waiting."@en .
+
+backlog:Prop_Withdrawn a owl:NamedIndividual , backlog:ProposalStatus ;
+    rdfs:label "Withdrawn"@en ;
+    skos:definition "The development withdrew the request, usually because the need disappeared or a workaround was chosen."@en .
+
+[] a owl:AllDifferent ; owl:distinctMembers ( backlog:Prop_Submitted backlog:Prop_Accepted backlog:Prop_Rejected backlog:Prop_Withdrawn ) .
+
+backlog:EnhancementProposal a owl:Class ;
+    rdfs:subClassOf core:Artifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Enhancement Proposal"@en ;
+    skos:definition "A request to a party outside the development to change something they own. The artifact that keeps external change out of the register: the proposal is tracked, the change is not scheduled, and the item that needs it waits until the proposal is accepted. Never a work item — a work item is something this development can decide to do."@en .
+
+backlog:proposalFor a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:EnhancementProposal ; rdfs:range backlog:ExternalDependency ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "proposal for"@en ;
+    skos:definition "The external dependency this proposal asks to change."@en .
+
+backlog:unblocksItem a owl:ObjectProperty ;
+    rdfs:domain backlog:EnhancementProposal ; rdfs:range backlog:WorkItem ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "unblocks item"@en ;
+    skos:definition "The item waiting on this proposal, so the cost of a rejection is visible at the moment of rejection."@en .
+
+backlog:hasRequestedChange a owl:DatatypeProperty ;
+    rdfs:domain backlog:EnhancementProposal ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has requested change"@en ;
+    skos:definition "What is being asked for, specifically enough that the other party can accept or refuse it."@en .
+
+backlog:submittedTo a owl:DatatypeProperty ;
+    rdfs:domain backlog:EnhancementProposal ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "submitted to"@en ;
+    skos:definition "Where the request went — the tracker, the contact, the forum — so that 'we asked' is checkable."@en .
+
+backlog:proposalRaisedAt a owl:DatatypeProperty ;
+    rdfs:domain backlog:EnhancementProposal ; rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "proposal raised at"@en ;
+    skos:definition "When it was raised; its age is the honest measure of how long the development has been blocked by someone else."@en .
+
+backlog:hasProposalStatus a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:EnhancementProposal ; rdfs:range backlog:ProposalStatus ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has proposal status"@en ;
+    skos:definition "Where the request stands."@en .
+
+#################################################################
+#  37. Register session hygiene (v1.6.0)
+#     Provenance of changes to the register — deliberately NOT
+#     ceremony or meeting modelling, which stays a non-goal.
+#################################################################
+
+backlog:RegisterSession a owl:Class ;
+    rdfs:subClassOf core:Artifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Register Session"@en ;
+    skos:definition "One working session in which the register was read and possibly changed, recording whether its state was verified before the changes were made and what was touched. Scoped narrowly to provenance of register edits: it does not model planning meetings, reviews or retrospectives, which remain outside this framework. It exists because a register nobody verified before editing is a register whose history cannot be trusted, and because 'someone changed the backlog' is otherwise unattributable."@en .
+
+backlog:sessionFor a owl:ObjectProperty ;
+    rdfs:domain backlog:RegisterSession ; rdfs:range backlog:WorkItemContainer ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "session for"@en ;
+    skos:definition "The register this session worked on."@en .
+
+backlog:sessionStartedAt a owl:DatatypeProperty ;
+    rdfs:domain backlog:RegisterSession ; rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "session started at"@en ;
+    skos:definition "When the session began."@en .
+
+backlog:sessionEndedAt a owl:DatatypeProperty ;
+    rdfs:domain backlog:RegisterSession ; rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "session ended at"@en ;
+    skos:definition "When it ended."@en .
+
+backlog:stateVerifiedAtStart a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:RegisterSession ; rdfs:range xsd:boolean ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "state verified at start"@en ;
+    skos:definition "True only when the register was validated before this session changed anything. A session that edits without verifying first cannot tell which defects it inherited from which it introduced, so the suite requires this of any session that changed an item."@en .
+
+backlog:changedItem a owl:ObjectProperty ;
+    rdfs:domain backlog:RegisterSession ; rdfs:range backlog:WorkItem ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "changed item"@en ;
+    skos:definition "An item this session altered."@en .
+
+backlog:hasSessionScopeNote a owl:DatatypeProperty ;
+    rdfs:domain backlog:RegisterSession ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has session scope note"@en ;
+    skos:definition "What this session set out to do and what it deliberately left alone. The out-of-scope half is the load-bearing one: an unstated boundary is the mechanism by which a session that meant to fix one item quietly reorganises a register."@en .
+
+backlog:sessionConductedBy a owl:ObjectProperty ;
+    rdfs:domain backlog:RegisterSession ; rdfs:range backlog:Role ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "session conducted by"@en ;
+    skos:definition "The role that worked the session."@en .
+
+[] a owl:AllDisjointClasses ;
+   owl:members ( backlog:Mission backlog:ScopeChange backlog:ExternalDependency backlog:ExternalDependencyType
+                 backlog:EnhancementProposal backlog:ProposalStatus backlog:RegisterSession ) .
+
+#################################################################
+#  38. Register packaging (v1.7.0)
+#     The framework governed what a register must SAY and never
+#     what an adopting development must SHIP. This layer closes
+#     that asymmetry by binding to the OE configuration subject's
+#     existing conventions rather than inventing a parallel set.
+#################################################################
+
+backlog:RegisterPackage a owl:Class ;
+    rdfs:subClassOf core:Artifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Register Package"@en ;
+    skos:definition "The shippable unit of an adopting development's governance data: the register itself, the retained roadmap report runs that evidence progress, and the manifest that makes the set verifiable. Introduced because a framework that constrains what a register must say, while saying nothing about what a development must ship, produces registers that are correct in one working copy and unreproducible everywhere else. Deliberately thin: it names roles and requires a manifest, and delegates every filename and version rule to the configuration subject that already owns them."@en .
+
+backlog:RegisterArtifact a owl:Class ;
+    rdfs:subClassOf core:Artifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Register Artifact"@en ;
+    skos:definition "One file inside a register package, carrying the role it plays and the naming convention it claims to follow. Roles are enumerated rather than inferred from filenames, so a package missing its progress evidence is a detectable absence instead of a directory someone has to read."@en .
+
+backlog:ArtifactRole a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:Role_RegisterData backlog:Role_ProgressReport backlog:Role_EvidenceIndex
+                backlog:Role_Manifest backlog:Role_ProfileDeclaration ) ;
+    rdfs:label "Artifact Role"@en ;
+    skos:definition "What a file in a register package is for. Closed set of five: the register data itself, a retained progress report run, an evidence index, the manifest, and the adoption profile declaration."@en .
+
+backlog:Role_RegisterData a owl:NamedIndividual , backlog:ArtifactRole ;
+    rdfs:label "Register data"@en ;
+    skos:definition "The backlog, roadmap and blueprint instances — the graph everything else is computed from."@en .
+
+backlog:Role_ProgressReport a owl:NamedIndividual , backlog:ArtifactRole ;
+    rdfs:label "Progress report run"@en ;
+    skos:definition "A retained roadmap report run, kept as a file rather than a screenful. Progress is a sequence of dated computations, and a package that retains none can show a state but never a trajectory."@en .
+
+backlog:Role_EvidenceIndex a owl:NamedIndividual , backlog:ArtifactRole ;
+    rdfs:label "Evidence index"@en ;
+    skos:definition "The record of what the execution bridge verified, when, and with which tool."@en .
+
+backlog:Role_Manifest a owl:NamedIndividual , backlog:ArtifactRole ;
+    rdfs:label "Manifest"@en ;
+    skos:definition "The SHA-256 listing that makes the package verifiable after transport. Exactly one per package."@en .
+
+backlog:Role_ProfileDeclaration a owl:NamedIndividual , backlog:ArtifactRole ;
+    rdfs:label "Adoption profile declaration"@en ;
+    skos:definition "The file carrying the AdoptionProfile, so a consumer can see which conformance level the package claims before validating it."@en .
+
+[] a owl:AllDifferent ; owl:distinctMembers ( backlog:Role_RegisterData backlog:Role_ProgressReport
+                                              backlog:Role_EvidenceIndex backlog:Role_Manifest
+                                              backlog:Role_ProfileDeclaration ) .
+
+backlog:packageFor a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:RegisterPackage ; rdfs:range backlog:WorkItemContainer ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "package for"@en ;
+    skos:definition "The register or project this package ships."@en .
+
+backlog:hasPackageArtifact a owl:ObjectProperty ;
+    rdfs:domain backlog:RegisterPackage ; rdfs:range backlog:RegisterArtifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has package artifact"@en ;
+    skos:definition "A file this package ships."@en .
+
+backlog:hasArtifactRole a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:RegisterArtifact ; rdfs:range backlog:ArtifactRole ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has artifact role"@en ;
+    skos:definition "The single role this file plays."@en .
+
+backlog:hasArtifactFileName a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:RegisterArtifact ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has artifact file name"@en ;
+    skos:definition "The file's name as shipped, checkable against the naming convention it claims."@en .
+
+backlog:conformsToNamingConvention a owl:ObjectProperty ;
+    rdfs:domain backlog:RegisterArtifact ; rdfs:range configuration:NamingConvention ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "conforms to naming convention"@en ;
+    skos:definition "The configuration-subject naming convention this file follows, referenced by IRI rather than restated. The governing filename patterns already exist and are versioned in that subject; duplicating them here would create a second source of truth that drifts, so the framework points at theirs and the package checker reads the pattern from the pack at check time."@en .
+
+backlog:hasPackageVersion a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:RegisterPackage ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has package version"@en ;
+    skos:definition "The package's own three-part version. A register is a released artifact like any other: a changed register that reuses its version is the same defect as a changed ontology that reuses its version."@en .
+
+backlog:hasManifestSHA256 a owl:DatatypeProperty ;
+    rdfs:domain backlog:RegisterArtifact ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has manifest SHA-256"@en ;
+    skos:definition "The digest of the manifest file itself, so the thing that verifies everything else is verifiable in turn."@en .
+
+backlog:reportRunRetainedAs a owl:ObjectProperty ;
+    rdfs:domain backlog:RoadmapReport ; rdfs:range backlog:RegisterArtifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "report run retained as"@en ;
+    skos:definition "The file a report run was written to. Without it a run is a screenful that disappears, and the framework's own rule — that a recommendation points at the run which produced it — becomes unauditable the moment the terminal closes."@en .
+
+[] a owl:AllDisjointClasses ;
+   owl:members ( backlog:RegisterPackage backlog:RegisterArtifact backlog:ArtifactRole ) .
+
+#################################################################
+#  39. Resolving the ranking fork, once and on the record (v1.8.0)
+#################################################################
+
+backlog:hasRankingForkResolution a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:Backlog ; rdfs:range backlog:RankingModel ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has ranking fork resolution"@en ;
+    skos:definition "The model an owner has decided governs pickup when throughput ranking and launch-scoped ranking disagree, recorded once on the register rather than re-argued each run. Functional: a register resolves the fork one way or not at all. Setting it does NOT resolve the disagreement silently — both models are still computed and the disagreement is still reported; what changes is that a reader also sees what the owner decided about it, with the reasoning attached through decidedBy and hasDecisionRationale, which the suite requires whenever this property is set. Absent means no standing decision has been taken, which is a legitimate state and the default: a fork nobody has ruled on should keep asking."@en ;
+    dcterms:source "Raised 2026-07-29 by an adopting project session whose register carried a genuine, repeatedly re-presented ranking disagreement with nowhere to record the owner's standing answer."@en .

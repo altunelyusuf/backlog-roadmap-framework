@@ -1,0 +1,66 @@
+@prefix backlog: <http://example.org/backlog#> .
+@prefix ex:      <http://example.org/fixture-r3#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+# R3 fixture: the two prioritisation models must DISAGREE here, and the report
+# must print both answers rather than reconciling them. A rule whose disagreement
+# branch has never been observed firing is a branch nobody has tested.
+#
+# Container states are asserted as Proposed, not InProgress: under rule R1 a
+# Ready member is refined but not started, so a container of Ready items derives
+# Proposed. Asserting otherwise is caught by the derived-vs-asserted constraint.
+#
+# ex:Fast scores higher and wins the throughput question; it sits outside the
+# open launch gate. ex:Gated scores lower but is inside the gate the owner
+# declared launch-blocking, so it wins the launch-scoped question.
+
+ex:Profile a backlog:AdoptionProfile ;
+    backlog:profileAppliesTo "R3 disagreement fixture" ;
+    backlog:governsBacklog ex:Backlog ;
+    backlog:hasConformanceLevel backlog:L1_Core ;
+    backlog:adoptsFacet backlog:CoreFacet , backlog:PrioritizationFacet .
+
+ex:Backlog a backlog:Backlog ;
+    backlog:hasIdentifier "BL-R3" ;
+    backlog:hasState backlog:Proposed .
+
+ex:PkgLaunch a backlog:Package ;
+    backlog:hasIdentifier "PKG-LAUNCH" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:isBusinessCapability true ;
+    backlog:isLaunchGate true ;
+    backlog:hasLaunchPriority 1 ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:hasDecisionRationale "Owner call: nothing ships before the booking core is complete." .
+
+ex:PkgLater a backlog:Package ;
+    backlog:hasIdentifier "PKG-LATER" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:isBusinessCapability true .
+
+ex:Gated a backlog:Story ;
+    backlog:hasIdentifier "US-GATED" ;
+    backlog:hasTitle "Booking conflict detection" ;
+    backlog:hasState backlog:Ready ;
+    backlog:memberOfContainer ex:Backlog , ex:PkgLaunch ;
+    backlog:hasPriorityScore ex:Gated_Score .
+
+ex:Gated_Score a backlog:WSJFScore ;
+    backlog:scoredByMethod backlog:Method_WSJF ;
+    backlog:hasScoreValue 4.0 ;
+    backlog:hasUserBusinessValue 6 ; backlog:hasTimeCriticality 4 ;
+    backlog:hasRiskReductionValue 2 ; backlog:hasJobSize 3 .
+
+ex:Fast a backlog:Task ;
+    backlog:hasIdentifier "US-FAST" ;
+    backlog:hasTitle "Cheap high-value tweak outside the launch gate" ;
+    backlog:hasState backlog:Ready ;
+    backlog:memberOfContainer ex:Backlog , ex:PkgLater ;
+    backlog:hasPriorityScore ex:Fast_Score .
+
+ex:Fast_Score a backlog:WSJFScore ;
+    backlog:scoredByMethod backlog:Method_WSJF ;
+    backlog:hasScoreValue 9.5 ;
+    backlog:hasUserBusinessValue 8 ; backlog:hasTimeCriticality 9 ;
+    backlog:hasRiskReductionValue 2 ; backlog:hasJobSize 2 .

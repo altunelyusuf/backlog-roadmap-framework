@@ -1,0 +1,637 @@
+@prefix backlog: <http://example.org/backlog#> .
+@prefix ex:      <http://example.org/fixture-negative#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+# Negative fixture: every block below plants ONE defect the suite must
+# report at sh:Violation severity. The gate fails if any planted defect
+# goes uncaught (L-95: a gate must be proven discriminating, and the
+# proof is a fixture it fails, not a claim that it would).
+
+ex:Profile a backlog:AdoptionProfile ;
+    backlog:profileAppliesTo "Negative fixture" ;
+    backlog:governsBacklog ex:Backlog ;
+    backlog:hasConformanceLevel backlog:L3_Governed ;
+    # DEFECT 1: claims L3 but adopts neither the Invariant nor the Audit facet
+    backlog:adoptsFacet backlog:CoreFacet , backlog:EvidenceFacet .
+
+ex:Backlog a backlog:Backlog ;
+    backlog:hasIdentifier "BL-N" ;
+    backlog:hasState backlog:InProgress .
+
+# DEFECT 2: container with no members
+ex:EmptyPackage a backlog:Package ;
+    backlog:hasIdentifier "PKG-EMPTY" ;
+    backlog:hasState backlog:Proposed .
+
+# DEFECT 15: container asserted Done while a member is InProgress. This
+# defect is only detectable if the R1 derivation rules actually executed,
+# so it doubles as the proof that advanced mode is on (L-97: the
+# discrimination mandate applies to the verifier's own checks too).
+ex:OptimisticPackage a backlog:Package ;
+    backlog:hasIdentifier "PKG-OPT" ;
+    backlog:hasState backlog:Done .
+
+ex:N011 a backlog:Task ;
+    backlog:hasIdentifier "N-011" ;
+    backlog:hasState backlog:InProgress ;
+    backlog:memberOfContainer ex:Backlog , ex:OptimisticPackage .
+
+# DEFECT 3: Done asserted with no evidence at all (L2)
+ex:N001 a backlog:Story ;
+    backlog:hasIdentifier "N-001" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer ex:Backlog ;
+    backlog:lastAuditedAt "2026-07-27T09:00:00"^^xsd:dateTime .
+
+# DEFECT 4: Done with evidence that the bridge has not verified (L2)
+ex:N002 a backlog:Story ;
+    backlog:hasIdentifier "N-002" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer ex:Backlog ;
+    backlog:hasEvidence ex:N002_Test ;
+    backlog:lastAuditedAt "2026-07-27T09:00:00"^^xsd:dateTime .
+
+ex:N002_Test a backlog:TestEvidence ;
+    backlog:hasTestSpec "e2e/tests/n002.spec.js" ;
+    backlog:hasTestId "N002-001" ;
+    backlog:evidenceVerified false .
+
+# DEFECT 5: Done at L3 on review evidence alone
+ex:N003 a backlog:Story ;
+    backlog:hasIdentifier "N-003" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer ex:Backlog ;
+    backlog:hasEvidence ex:N003_Review ;
+    backlog:lastAuditedAt "2026-07-27T09:00:00"^^xsd:dateTime .
+
+ex:N003_Review a backlog:ReviewEvidence ;
+    backlog:hasReviewer "product owner" ;
+    backlog:hasReviewRecordRef "review-log/2026-07-24#item-N003" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-07-24T00:00:00"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "sign-off recorded in the review log" .
+
+# DEFECT 6: identifier collision with N-001
+ex:N004 a backlog:Task ;
+    backlog:hasIdentifier "N-001" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer ex:Backlog .
+
+# DEFECT 7: dependency cycle
+ex:N005 a backlog:Task ;
+    backlog:hasIdentifier "N-005" ;
+    backlog:hasState backlog:Ready ;
+    backlog:memberOfContainer ex:Backlog ;
+    backlog:dependsOn ex:N006 .
+
+ex:N006 a backlog:Task ;
+    backlog:hasIdentifier "N-006" ;
+    backlog:hasState backlog:Ready ;
+    backlog:memberOfContainer ex:Backlog ;
+    backlog:dependsOn ex:N005 .
+
+# DEFECT 8: on the roadmap but absent from any backlog register
+ex:N007 a backlog:Feature ;
+    backlog:hasIdentifier "N-007" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:scheduledInHorizon backlog:Now .
+
+# DEFECT 9: cancelled with no rationale
+ex:N008 a backlog:Task ;
+    backlog:hasIdentifier "N-008" ;
+    backlog:hasState backlog:Cancelled ;
+    backlog:memberOfContainer ex:Backlog .
+
+# DEFECT 10: two live scores from the same method
+ex:N009 a backlog:Task ;
+    backlog:hasIdentifier "N-009" ;
+    backlog:hasState backlog:Ready ;
+    backlog:memberOfContainer ex:Backlog ;
+    backlog:hasPriorityScore ex:N009_S1 , ex:N009_S2 .
+
+ex:N009_S1 a backlog:WSJFScore ;
+    backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 3.0 .
+ex:N009_S2 a backlog:WSJFScore ;
+    backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 9.0 .
+
+# DEFECT 11: Definition-of-Done criterion with no executable check
+ex:N_DoD a backlog:DefinitionOfDone ;
+    rdfs:label "Local Definition of Done"@en ;
+    backlog:hasDoDCriterion ex:N_DoD_C1 .
+
+ex:N_DoD_C1 a backlog:DoDCriterion ;
+    rdfs:label "Code is clean and well tested"@en .
+
+# DEFECT 12: milestone with no contributing work and no target date
+ex:N_MS a backlog:Milestone ;
+    backlog:hasIdentifier "MS-N" ;
+    backlog:hasTitle "Launch" .
+
+# DEFECT 13: unenforceable invariant that names no tracking item
+ex:N_Inv a backlog:CrossCuttingInvariant ;
+    rdfs:label "All endpoints rate-limited"@en ;
+    backlog:hasCheckQuery "ASK { ?e ex:rateLimited false }" ;
+    backlog:hasExpectedResult "false" ;
+    backlog:hasInvariantStatus backlog:NotYetEnforceable .
+
+# DEFECT 14: release evidence with a malformed package hash
+ex:N010 a backlog:Story ;
+    backlog:hasIdentifier "N-010" ;
+    backlog:hasState backlog:InProgress ;
+    backlog:memberOfContainer ex:Backlog ;
+    backlog:hasEvidence ex:N010_Rel .
+
+ex:N010_Rel a backlog:ReleaseEvidence ;
+    backlog:hasReleaseVersion "0.1.0" ;
+    backlog:hasPackageSHA256 "not-a-hash" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-07-27T09:00:00"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "asserted" .
+
+#################################################################
+#  v1.1.0 planted defects (16-27)
+#################################################################
+
+# DEFECT 16: silent gap — open item, no score, no not-yet-scoreable flag
+ex:N012 a backlog:Story ;
+    backlog:hasIdentifier "N-012" ;
+    backlog:hasState backlog:Ready ;
+    backlog:memberOfContainer ex:Backlog .
+
+# DEFECT 17: not-yet-scoreable flag with no reason
+ex:N013 a backlog:Story ;
+    backlog:hasIdentifier "N-013" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer ex:Backlog ;
+    backlog:notYetScoreable true .
+
+# DEFECT 18: launch gate with no priority, no owner, no rationale
+ex:N_Gate a backlog:Package ;
+    backlog:hasIdentifier "PKG-GATE" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:isLaunchGate true .
+
+ex:N014 a backlog:Task ;
+    backlog:hasIdentifier "N-014" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "placeholder" ;
+    backlog:memberOfContainer ex:Backlog , ex:N_Gate .
+
+# DEFECT 19: non-capability grouping carrying a launch priority
+ex:N_Bag a backlog:Package ;
+    backlog:hasIdentifier "PKG-BAG" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:isBusinessCapability false ;
+    backlog:hasLaunchPriority 2 .
+
+ex:N015 a backlog:Task ;
+    backlog:hasIdentifier "N-015" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "placeholder" ;
+    backlog:memberOfContainer ex:Backlog , ex:N_Bag ;
+    backlog:hasPriorityScore ex:N015_Score .
+
+# DEFECT 20: container score averaged from members, and no rationale
+ex:N015_Score a backlog:PriorityScore ;
+    backlog:scoredByMethod backlog:Method_WSJF ;
+    backlog:hasScoreValue 4.0 ;
+    backlog:isAveragedFromMembers true .
+
+ex:N_Bag backlog:hasPriorityScore ex:N015_Score .
+
+# DEFECT 21: dependency disclosed in prose but never made an edge
+ex:N016 a backlog:Story ;
+    backlog:hasIdentifier "N-016" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer ex:Backlog ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "placeholder" ;
+    backlog:hasDependencyDisclosure ex:N_Disc .
+
+ex:N_Disc a backlog:DependencyDisclosure ;
+    backlog:disclosesDependencyOn ex:N012 ;
+    backlog:hasDisclosureSource "'this only matters once N-012 exists' — said in review, never modelled." .
+
+# DEFECT 22: superseded document with no forward pointer and no reason
+ex:N_Doc a backlog:GovernedDocument ;
+    rdfs:label "Old plan"@en ;
+    backlog:hasDocumentStatus backlog:Superseded .
+
+# DEFECT 23: report with no timestamp, no register, and missing sections
+ex:N_Report a backlog:RoadmapReport ;
+    backlog:hasSection backlog:Section_RankedBacklog .
+
+# DEFECT 24: blueprint entity with no coverage and no recorded gap
+ex:N_Entity a backlog:DomainEntity ;
+    rdfs:label "Invoice"@en .
+
+# DEFECT 25: code-verification claim with no note
+ex:N017 a backlog:Task ;
+    backlog:hasIdentifier "N-017" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer ex:Backlog ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "placeholder" ;
+    backlog:verifiedAgainstCode true .
+
+# DEFECT 26: blueprint gap with no reason and no entity
+ex:N_Gap a backlog:BlueprintGap ;
+    rdfs:label "something is missing"@en .
+
+# DEFECT 27: methodology rule with no motivating incident
+ex:N_Rule a backlog:MethodologyRule ;
+    rdfs:label "Always do the right thing"@en ;
+    backlog:hasRuleLogic "Do the right thing." ;
+    backlog:closesDisagreement "Whether to do the right thing." .
+
+# DEFECT 28: next-recommendation with no ranking model named
+ex:N018 a backlog:Story ;
+    backlog:hasIdentifier "N-018" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer ex:Backlog ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "placeholder" ;
+    backlog:derivedInReport ex:N_Report .
+
+#################################################################
+#  v1.2.0 planted defects (29-36)
+#################################################################
+@prefix core: <http://example.org/core#> .
+@prefix risk: <http://example.org/risk#> .
+
+# DEFECT 29: objective with no metric, baseline, target or goal
+ex:N_Obj a backlog:Objective ;
+    rdfs:label "Make things better"@en .
+
+# DEFECT 30: goal with no owner decision recorded
+ex:N_Goal a backlog:Goal ;
+    rdfs:label "Grow"@en .
+
+# DEFECT 31: benefit unowned, unattached, and claimed realized without evidence
+ex:N_Benefit a backlog:Benefit ;
+    rdfs:label "Everyone will be happier"@en ;
+    backlog:benefitRealized true .
+
+# DEFECT 32: scope exclusion with no rationale and no owner
+ex:N_Excl a backlog:ScopeExclusion ;
+    backlog:excludesConcern "Reporting" .
+
+# DEFECT 33: Ready item with no acceptance criterion and no refinement event
+ex:N019 a backlog:Story ;
+    backlog:hasIdentifier "N-019" ;
+    backlog:hasState backlog:Ready ;
+    backlog:memberOfContainer ex:Backlog ;
+    backlog:hasPriorityScore ex:N019_Score .
+ex:N019_Score a backlog:WSJFScore ;
+    backlog:scoredByMethod backlog:Method_RICE ; backlog:hasScoreValue 2.0 .
+
+# DEFECT 34: cost estimate with no basis
+ex:N020 a backlog:Task ;
+    backlog:hasIdentifier "N-020" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer ex:Backlog ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "placeholder" ;
+    backlog:hasCostEstimate ex:N_Est ;
+    backlog:hasRisk ex:N_Risk .
+ex:N_Est a backlog:CostEstimate ;
+    backlog:hasEffortEstimate 13.0 .
+
+# DEFECT 35: risk neither mitigated nor accepted
+ex:N_Risk a risk:Risk ;
+    rdfs:label "The vendor may withdraw the API"@en .
+
+# DEFECT 36: capacity policy whose shares do not sum to 1
+ex:N_Policy a backlog:PortfolioPolicy ;
+    backlog:policyFor ex:Backlog ;
+    backlog:hasAllocation ex:N_Alloc1 , ex:N_Alloc2 .
+ex:N_Alloc1 a backlog:CapacityAllocation ;
+    backlog:allocatesToCategory backlog:Cat_NewCapability ; backlog:hasTargetShare 0.5 .
+ex:N_Alloc2 a backlog:CapacityAllocation ;
+    backlog:allocatesToCategory backlog:Cat_Maintenance ; backlog:hasTargetShare 0.2 .
+
+# DEFECT 37: project with no scope, phase, objective or Definition of Done
+ex:N_Project a backlog:ImplementationProject ;
+    backlog:hasIdentifier "PRJ-N" ;
+    backlog:hasState backlog:Proposed .
+ex:N021 a backlog:Task ;
+    backlog:hasIdentifier "N-021" ; backlog:hasState backlog:Proposed ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "placeholder" ;
+    backlog:memberOfContainer ex:Backlog , ex:N_Project .
+
+#################################################################
+#  v1.3.0 planted defects (38-44)
+#################################################################
+
+# DEFECT 38: container dependency cycle
+ex:N_PkgA a backlog:Package ;
+    backlog:hasIdentifier "PKG-A" ; backlog:hasState backlog:Proposed ;
+    backlog:containerDependsOn ex:N_PkgB .
+ex:N_PkgB a backlog:Package ;
+    backlog:hasIdentifier "PKG-B" ; backlog:hasState backlog:Proposed ;
+    backlog:containerDependsOn ex:N_PkgA .
+ex:N022 a backlog:Task ;
+    backlog:hasIdentifier "N-022" ; backlog:hasState backlog:Proposed ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "placeholder" ;
+    backlog:memberOfContainer ex:Backlog , ex:N_PkgA .
+ex:N023 a backlog:Task ;
+    backlog:hasIdentifier "N-023" ; backlog:hasState backlog:Proposed ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "placeholder" ;
+    backlog:memberOfContainer ex:Backlog , ex:N_PkgB .
+
+# DEFECT 39: roadmap rank with no roadmap, and a duplicate rank
+ex:N_PkgC a backlog:Package ;
+    backlog:hasIdentifier "PKG-C" ; backlog:hasState backlog:Proposed ;
+    backlog:hasRoadmapRank 7 .
+ex:N024 a backlog:Task ;
+    backlog:hasIdentifier "N-024" ; backlog:hasState backlog:Proposed ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "placeholder" ;
+    backlog:memberOfContainer ex:Backlog , ex:N_PkgC .
+
+# DEFECT 40: transition event using a transition no workflow permits
+ex:N_Transition a backlog:StateTransition ;
+    rdfs:label "Skip straight to Done"@en ;
+    backlog:fromState backlog:Proposed ; backlog:toState backlog:Done ;
+    backlog:hasTransitionGuard "ASK { }" .
+ex:N_Event a backlog:TransitionEvent ;
+    backlog:transitionedItem ex:N012 ;
+    backlog:viaTransition ex:N_Transition ;
+    backlog:transitionedAt "2026-07-27T10:00:00"^^xsd:dateTime .
+
+# DEFECT 41: workflow leaving a state unreachable and unleavable
+ex:N_Workflow a backlog:Workflow ;
+    rdfs:label "Partial workflow"@en ;
+    backlog:workflowFor ex:Backlog ;
+    backlog:hasTransition ex:N_T1 .
+ex:N_T1 a backlog:StateTransition ;
+    backlog:fromState backlog:Proposed ; backlog:toState backlog:Ready ;
+    backlog:hasTransitionGuard "ASK { }" .
+
+# DEFECT 42: transition that leaves and enters the same state, and has no guard
+ex:N_T2 a backlog:StateTransition ;
+    backlog:fromState backlog:Ready ; backlog:toState backlog:Ready .
+
+# DEFECT 43: harness with no evidence
+ex:N_Harness a backlog:TestHarness ;
+    backlog:harnessFor ex:N012 .
+
+# DEFECT 44: current state contradicts the latest recorded move
+ex:N025 a backlog:Story ;
+    backlog:hasIdentifier "N-025" ; backlog:hasState backlog:Done ;
+    backlog:memberOfContainer ex:Backlog ;
+    backlog:hasAcceptanceCriterion ex:N025_AC ;
+    backlog:hasEvidence ex:N025_Ev ;
+    backlog:lastAuditedAt "2026-07-27T09:00:00"^^xsd:dateTime .
+ex:N025_AC a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given something, When something, Then something." .
+ex:N025_Ev a backlog:TestEvidence ;
+    backlog:hasTestSpec "e2e/n025.spec.js" ; backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-07-27T09:00:00"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "asserted for the fixture" .
+ex:N025_Move a backlog:TransitionEvent ;
+    backlog:transitionedItem ex:N025 ; backlog:viaTransition backlog:T_Refine ;
+    backlog:transitionedAt "2026-07-26T09:00:00"^^xsd:dateTime .
+
+#################################################################
+#  v1.4.0 planted defects (45-52)
+#################################################################
+
+# DEFECT 45: decomposition cycle
+ex:N026 a backlog:Epic ;
+    backlog:hasIdentifier "N-026" ; backlog:hasState backlog:Proposed ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "placeholder" ;
+    backlog:memberOfContainer ex:Backlog ;
+    backlog:decomposesInto ex:N027 .
+ex:N027 a backlog:Feature ;
+    backlog:hasIdentifier "N-027" ; backlog:hasState backlog:Proposed ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "placeholder" ;
+    backlog:memberOfContainer ex:Backlog ;
+    backlog:decomposesInto ex:N026 .
+
+# DEFECT 46: parent Done while a child is open, and parent+child both scored
+ex:N028 a backlog:Epic ;
+    backlog:hasIdentifier "N-028" ; backlog:hasState backlog:Done ;
+    backlog:memberOfContainer ex:Backlog ;
+    backlog:hasAcceptanceCriterion ex:N028_AC ;
+    backlog:decomposesInto ex:N029 ;
+    backlog:hasPriorityScore ex:N028_Score ;
+    backlog:lastAuditedAt "2026-07-27T09:00:00"^^xsd:dateTime .
+ex:N028_AC a backlog:AcceptanceCriterion ; backlog:hasGherkinText "Given, When, Then." .
+ex:N028_Score a backlog:WSJFScore ; backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 5.0 .
+ex:N029 a backlog:Story ;
+    backlog:hasIdentifier "N-029" ; backlog:hasState backlog:InProgress ;
+    backlog:memberOfContainer ex:Backlog ;
+    backlog:hasAcceptanceCriterion ex:N029_AC ;
+    backlog:hasPriorityScore ex:N029_Score .
+ex:N029_AC a backlog:AcceptanceCriterion ; backlog:hasGherkinText "Given, When, Then." .
+ex:N029_Score a backlog:WSJFScore ; backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 4.0 .
+
+# DEFECT 47: commitment that commits to nothing
+ex:N_Commitment a backlog:Commitment ; rdfs:label "We are committed"@en .
+
+# DEFECT 48: increment with no Definition of Done
+ex:N_Increment a backlog:Increment ;
+    backlog:hasIdentifier "INC-N" ; backlog:hasState backlog:Proposed .
+ex:N030 a backlog:Task ;
+    backlog:hasIdentifier "N-030" ; backlog:hasState backlog:Proposed ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "placeholder" ;
+    backlog:memberOfContainer ex:Backlog , ex:N_Increment .
+
+# DEFECT 49: dependency record with no kind
+ex:N_DepRecord a backlog:Dependency ;
+    backlog:dependencyOn ex:N012 .
+
+# DEFECT 50: unresolved impediment with no owner and no statement
+ex:N_Imp a backlog:Impediment ;
+    backlog:impedes ex:N012 ;
+    backlog:raisedAt "2026-07-20T09:00:00"^^xsd:dateTime .
+
+# DEFECT 51: finished before started
+ex:N031 a backlog:Task ;
+    backlog:hasIdentifier "N-031" ; backlog:hasState backlog:Proposed ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "placeholder" ;
+    backlog:memberOfContainer ex:Backlog ;
+    backlog:startedAt "2026-07-27T12:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-07-20T12:00:00"^^xsd:dateTime .
+
+# DEFECT 52: WIP limit with no target and no value; team with no register
+ex:N_Wip a backlog:WipLimit .
+ex:N_Team a backlog:Team ; rdfs:label "Some team"@en .
+
+#################################################################
+#  v1.6.0 planted defects (53-61)
+#################################################################
+
+# DEFECT 53: mission unstated, unowned, and advanced by no goal
+ex:N_Mission a backlog:Mission ; rdfs:label "Do good work"@en .
+
+# DEFECT 54: scope realizing no objective, stating no exclusion
+ex:N_Scope a backlog:ScopeStatement ;
+    backlog:hasScopeStatementText "Everything needed." .
+ex:N_ScopedPkg a backlog:Package ;
+    backlog:hasIdentifier "PKG-SCOPE" ; backlog:hasState backlog:Proposed ;
+    backlog:hasScopeStatement ex:N_Scope .
+ex:N032 a backlog:Task ;
+    backlog:hasIdentifier "N-032" ; backlog:hasState backlog:Proposed ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "placeholder" ;
+    backlog:memberOfContainer ex:Backlog , ex:N_ScopedPkg .
+
+# DEFECT 55: scope change with no rationale and no owner
+ex:N_ScopeChange a backlog:ScopeChange ;
+    backlog:changesScope ex:N_Scope ;
+    backlog:admitsItem ex:N032 .
+
+# DEFECT 56: external dependency with no type and no named party
+ex:N_Ext a backlog:ExternalDependency ; rdfs:label "That other system"@en .
+
+# DEFECT 57: item needs an external change with no proposal raised at all
+ex:N033 a backlog:Story ;
+    backlog:hasIdentifier "N-033" ; backlog:hasState backlog:Proposed ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "placeholder" ;
+    backlog:memberOfContainer ex:Backlog ;
+    backlog:requiresExternalEnhancement ex:N_Ext .
+
+# DEFECT 58: item started while its proposal is still merely submitted
+ex:N_Ext2 a backlog:ExternalDependency ;
+    rdfs:label "Peer platform team"@en ;
+    backlog:hasExternalDependencyType backlog:Ext_PeerTeam ;
+    backlog:hasExternalParty "Platform team" .
+ex:N034 a backlog:Story ;
+    backlog:hasIdentifier "N-034" ; backlog:hasState backlog:InProgress ;
+    backlog:memberOfContainer ex:Backlog ;
+    backlog:hasAcceptanceCriterion ex:N034_AC ;
+    backlog:requiresExternalEnhancement ex:N_Ext2 .
+ex:N034_AC a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the platform exposes the hook, When a booking is made, Then the downstream ledger is notified." .
+ex:N_Prop2 a backlog:EnhancementProposal ;
+    backlog:proposalFor ex:N_Ext2 ; backlog:unblocksItem ex:N034 ;
+    backlog:hasRequestedChange "Expose a booking webhook." ;
+    backlog:submittedTo "platform team board" ;
+    backlog:proposalRaisedAt "2026-07-10T09:00:00"^^xsd:dateTime ;
+    backlog:hasProposalStatus backlog:Prop_Submitted .
+
+# DEFECT 59: proposal rejected, item still open, no scope change admitting the work
+ex:N_Ext3 a backlog:ExternalDependency ;
+    rdfs:label "Upstream ontology"@en ;
+    backlog:hasExternalDependencyType backlog:Ext_UpstreamComponent ;
+    backlog:hasExternalParty "Upstream maintainers" .
+ex:N035 a backlog:Story ;
+    backlog:hasIdentifier "N-035" ; backlog:hasState backlog:Proposed ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "placeholder" ;
+    backlog:memberOfContainer ex:Backlog ;
+    backlog:requiresExternalEnhancement ex:N_Ext3 .
+ex:N_Prop3 a backlog:EnhancementProposal ;
+    backlog:proposalFor ex:N_Ext3 ; backlog:unblocksItem ex:N035 ;
+    backlog:hasRequestedChange "Add a property." ;
+    backlog:submittedTo "upstream tracker" ;
+    backlog:proposalRaisedAt "2026-06-01T09:00:00"^^xsd:dateTime ;
+    backlog:hasProposalStatus backlog:Prop_Rejected .
+
+# DEFECT 60: proposal missing everything a proposal needs
+ex:N_Prop4 a backlog:EnhancementProposal ; rdfs:label "Please help"@en .
+
+# DEFECT 61: session changed items without verifying first, and states no boundary
+ex:N_Session a backlog:RegisterSession ;
+    backlog:sessionFor ex:Backlog ;
+    backlog:sessionStartedAt "2026-07-27T08:00:00"^^xsd:dateTime ;
+    backlog:changedItem ex:N012 .
+
+#################################################################
+#  v1.7.0 planted defects (62-65)
+#################################################################
+
+# DEFECT 62: package with a two-part version, no manifest, no register data
+ex:N_Package a backlog:RegisterPackage ;
+    backlog:packageFor ex:Backlog ;
+    backlog:hasPackageVersion "1.3" ;
+    backlog:hasPackageArtifact ex:N_PA1 .
+
+# DEFECT 63: artifact with no role, no filename, no convention
+ex:N_PA1 a backlog:RegisterArtifact ;
+    rdfs:label "some file"@en .
+
+# DEFECT 64: two manifests in one package, one without its own digest
+ex:N_Package2 a backlog:RegisterPackage ;
+    backlog:packageFor ex:Backlog ;
+    backlog:hasPackageVersion "2.0.0" ;
+    backlog:hasPackageArtifact ex:N_PA2 , ex:N_PA3 , ex:N_PA4 .
+ex:N_PA2 a backlog:RegisterArtifact ;
+    backlog:hasArtifactRole backlog:Role_Manifest ;
+    backlog:hasArtifactFileName "MANIFEST_SHA256.txt" ;
+    backlog:hasManifestSHA256 "3f79bb7b435b05321651daefd374cdc681dc06faa65e374e38337b88ca046dea" .
+ex:N_PA3 a backlog:RegisterArtifact ;
+    backlog:hasArtifactRole backlog:Role_Manifest ;
+    backlog:hasArtifactFileName "MANIFEST.txt" .
+ex:N_PA4 a backlog:RegisterArtifact ;
+    backlog:hasArtifactRole backlog:Role_RegisterData ;
+    backlog:hasArtifactFileName "data.ttl" .
+
+#################################################################
+#  shapes v1.8.0 planted defects (65-66) — launch priority without
+#  a launch gate, in both capability polarities
+#################################################################
+
+# DEFECT 65: non-capability, NOT a launch gate, carrying a launch priority
+ex:N_PkgOrphanPriority a backlog:Package ;
+    backlog:hasIdentifier "PKG-ORPH" ; backlog:hasState backlog:Proposed ;
+    backlog:isBusinessCapability false ;
+    backlog:hasLaunchPriority 4 .
+ex:N036 a backlog:Task ;
+    backlog:hasIdentifier "N-036" ; backlog:hasState backlog:Proposed ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "placeholder" ;
+    backlog:memberOfContainer ex:Backlog , ex:N_PkgOrphanPriority .
+
+# DEFECT 66: business capability, NOT a launch gate, carrying a launch priority.
+# Nothing in shapes 1.7.0 caught this: the superseded constraint only looked at
+# containers tagged NOT a business capability.
+ex:N_PkgCapPriority a backlog:Package ;
+    backlog:hasIdentifier "PKG-CAPP" ; backlog:hasState backlog:Proposed ;
+    backlog:isBusinessCapability true ;
+    backlog:hasLaunchPriority 5 .
+ex:N037 a backlog:Task ;
+    backlog:hasIdentifier "N-037" ; backlog:hasState backlog:Proposed ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "placeholder" ;
+    backlog:memberOfContainer ex:Backlog , ex:N_PkgCapPriority .
+
+#################################################################
+#  shapes v1.11.0 planted defects (67-68) — the adopter's case
+#################################################################
+
+# DEFECT 67: Done fix for a still-NotYetEnforceable invariant, no evidence
+ex:N_InvBroken a backlog:CrossCuttingInvariant ;
+    rdfs:label "Transition dispatcher reaches every handler"@en ;
+    backlog:hasCheckQuery "ASK { ?t ex:dispatchedVia ex:Dispatcher }" ;
+    backlog:hasExpectedResult "true" ;
+    backlog:hasInvariantStatus backlog:NotYetEnforceable ;
+    backlog:tracksItem ex:N038 .
+ex:N038 a backlog:Story ;
+    backlog:hasIdentifier "N-038" ; backlog:hasState backlog:Done ;
+    backlog:memberOfContainer ex:Backlog ;
+    backlog:hasAcceptanceCriterion ex:N038_AC ;
+    backlog:lastAuditedAt "2026-08-04T09:00:00"^^xsd:dateTime .
+ex:N038_AC a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a broken dispatcher, When a transition is requested, Then every registered handler receives it." .
+
+# DEFECT 68: enabling work Done, invariant left NotYetEnforceable (stale status)
+ex:N_InvStale a backlog:CrossCuttingInvariant ;
+    rdfs:label "Token award reaches exactly one implementation"@en ;
+    backlog:hasCheckQuery "ASK { ?a ex:awardedBy ?impl }" ;
+    backlog:hasExpectedResult "true" ;
+    backlog:hasInvariantStatus backlog:NotYetEnforceable ;
+    backlog:tracksItem ex:N039 .
+ex:N039 a backlog:Task ;
+    backlog:hasIdentifier "N-039" ; backlog:hasState backlog:Done ;
+    backlog:memberOfContainer ex:Backlog ;
+    backlog:hasAcceptanceCriterion ex:N039_AC ;
+    backlog:hasEvidence ex:N039_Ev ;
+    backlog:lastAuditedAt "2026-08-04T09:00:00"^^xsd:dateTime .
+ex:N039_AC a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given three award paths, When a task completes, Then exactly one implementation awards tokens." .
+ex:N039_Ev a backlog:TestEvidence ;
+    backlog:hasTestSpec "e2e/tests/award-single-path.spec.js" ; backlog:hasTestId "AW-1" ;
+    backlog:evidenceVerified true ; backlog:verifiedAt "2026-08-04T09:00:00"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "playwright test --grep AW-1, exit 0" ;
+    backlog:verifiedByTool "playwright 1.45" .

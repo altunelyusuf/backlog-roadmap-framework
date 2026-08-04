@@ -1,0 +1,693 @@
+@prefix backlog: <http://example.org/backlog#> .
+@prefix ex:      <http://example.org/fixture-positive#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+
+# Positive fixture: a minimal register that claims conformance level L3
+# and must validate with ZERO sh:Violation results. Paired with
+# fixture_negative_v1_0_0.ttl, which the same suite must FAIL (L-95:
+# a gate that has never been shown to fail verifies nothing).
+
+ex:Profile a backlog:AdoptionProfile ;
+    rdfs:label "Reference adoption profile"@en ;
+    backlog:profileAppliesTo "Reference development" ;
+    backlog:bindsNamespace "http://example.org/fixture-positive#" ;
+    backlog:governsBacklog ex:Backlog ;
+    backlog:hasConformanceLevel backlog:L3_Governed ;
+    backlog:adoptsFacet backlog:CoreFacet , backlog:EvidenceFacet , backlog:PrioritizationFacet ,
+                        backlog:RoadmapFacet , backlog:InvariantFacet , backlog:AuditFacet .
+
+ex:Backlog a backlog:Backlog ;
+    backlog:hasIdentifier "BL-1" ;
+    backlog:hasTitle "Reference backlog" ;
+    backlog:hasState backlog:InProgress .
+
+ex:PkgAuth a backlog:Package ;
+    backlog:hasIdentifier "PKG-AUTH" ;
+    backlog:hasTitle "Authentication" ;
+    backlog:hasState backlog:InProgress .
+
+ex:Roadmap a backlog:Roadmap ;
+    backlog:hasTitle "Reference roadmap" ;
+    backlog:roadmapOf ex:Backlog .
+
+ex:MS1 a backlog:Milestone ;
+    backlog:hasIdentifier "MS-1" ;
+    backlog:hasTitle "Authentication live" ;
+    backlog:hasTargetDate "2026-09-30T00:00:00"^^xsd:dateTime .
+
+#################################################################
+#  Item 1 — Done, release-anchored, audited
+#################################################################
+
+ex:US001 a backlog:Story ;
+    backlog:hasIdentifier "US-001" ;
+    backlog:hasTitle "Sign in with email" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer ex:Backlog , ex:PkgAuth ;
+    backlog:scheduledInHorizon backlog:Now ;
+    backlog:contributesToMilestone ex:MS1 ;
+    backlog:hasAcceptanceCriterion ex:US001_AC1 ;
+    backlog:hasEvidence ex:US001_Test , ex:US001_Release ;
+    backlog:lastAuditedAt "2026-07-27T09:00:00"^^xsd:dateTime ;
+    backlog:hasAuditNote "Re-ran the named spec and re-computed the package hash this pass." ;
+    backlog:hasPriorityScore ex:US001_WSJF .
+
+ex:US001_AC1 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a registered address, When a valid password is submitted, Then a session is issued." .
+
+ex:US001_Test a backlog:TestEvidence ;
+    backlog:hasTestSpec "e2e/tests/us001-signin.spec.js" ;
+    backlog:hasTestId "US001-REAL-001" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-07-27T09:00:00"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "playwright test --grep US001-REAL-001, exit 0" ;
+    backlog:verifiedByTool "backlog_evidence_bridge_v1_0_0.py + playwright 1.45" .
+
+ex:US001_Release a backlog:ReleaseEvidence ;
+    backlog:hasReleaseVersion "0.63.0" ;
+    backlog:hasPackageSHA256 "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-07-27T09:00:00"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "sha256sum -c MANIFEST_SHA256.txt on the delivered bundle" ;
+    backlog:verifiedByTool "backlog_evidence_bridge_v1_0_0.py (hash scan)" .
+
+ex:US001_WSJF a backlog:WSJFScore ;
+    backlog:scoredByMethod backlog:Method_WSJF ;
+    backlog:hasScoreValue 8.5 ;
+    backlog:scoredAt "2026-07-27T10:00:00"^^xsd:dateTime ;
+    backlog:hasUserBusinessValue 8.0 ;
+    backlog:hasTimeCriticality 5.0 ;
+    backlog:hasRiskReductionValue 4.0 ;
+    backlog:hasJobSize 2.0 .
+
+#################################################################
+#  Item 2 — Ready, unblocked, scored
+#################################################################
+
+ex:US002 a backlog:Story ;
+    backlog:hasIdentifier "US-002" ;
+    backlog:hasTitle "Reset password" ;
+    backlog:hasState backlog:Ready ;
+    backlog:memberOfContainer ex:Backlog , ex:PkgAuth ;
+    backlog:scheduledInHorizon backlog:Next ;
+    backlog:contributesToMilestone ex:MS1 ;
+    backlog:dependsOn ex:US001 ;
+    backlog:hasAcceptanceCriterion ex:US002_AC1 ;
+    backlog:hasPriorityScore ex:US002_RICE .
+
+ex:US002_AC1 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a registered address, When a reset is requested, Then a single-use link is delivered." .
+
+ex:US002_RICE a backlog:RICEScore ;
+    backlog:scoredByMethod backlog:Method_RICE ;
+    backlog:hasScoreValue 6.4 ;
+    backlog:scoredAt "2026-07-27T10:00:00"^^xsd:dateTime ;
+    backlog:hasReach 400.0 ;
+    backlog:hasImpact 2.0 ;
+    backlog:hasConfidence 0.8 ;
+    backlog:hasEffort 100.0 .
+
+#################################################################
+#  Item 3 — cancelled with a recorded reason
+#################################################################
+
+ex:US003 a backlog:Story ;
+    backlog:hasIdentifier "US-003" ;
+    backlog:hasTitle "Sign in with SMS code" ;
+    backlog:hasState backlog:Cancelled ;
+    backlog:memberOfContainer ex:Backlog ;
+    backlog:hasRationale "Withdrawn 2026-07-24: carrier costs exceeded the value of the channel." .
+
+#################################################################
+#  Invariant and Definition of Done
+#################################################################
+
+ex:Inv1 a backlog:CrossCuttingInvariant ;
+    rdfs:label "No session survives a password reset"@en ;
+    backlog:hasCheckQuery "ASK { ?s ex:issuedBefore ?reset . ?s ex:stillValid true }" ;
+    backlog:hasExpectedResult "false" ;
+    backlog:hasInvariantStatus backlog:NotYetEnforceable ;
+    backlog:tracksItem ex:US002 .
+
+#################################################################
+#  v1.1.0 additions — blueprint, launch model, gap discipline,
+#  disclosure, supersession, computed report
+#################################################################
+
+ex:CapClass_BusinessContinuity a backlog:CapabilityClass ;
+    rdfs:label "Business continuity & support"@en .
+
+ex:Enf_CodeGoverned a backlog:EnforcementDomain ;
+    rdfs:label "Code-governed"@en ;
+    rdfs:comment "Correctness enforced by code and tests; this development's own classification individual."@en .
+
+# --- blueprint and its coverage sweep -------------------------------------
+ex:Blueprint a backlog:Blueprint ;
+    rdfs:label "Reference blueprint"@en ;
+    backlog:blueprintFor ex:Backlog ;
+    backlog:hasDomainEntity ex:Entity_Client .
+
+ex:Entity_Client a backlog:DomainEntity ;
+    rdfs:label "Client"@en .
+
+ex:Gap_ClientTermination a backlog:BlueprintGap ;
+    rdfs:label "No coverage for client closure/erasure"@en ;
+    backlog:gapForEntity ex:Entity_Client ;
+    backlog:gapForStage backlog:Stage_Termination ;
+    backlog:hasGapReason "Deferred: retention policy not yet agreed with the owner, so no item can be specified honestly." .
+
+# --- launch-gated capability ---------------------------------------------
+ex:PkgAuth backlog:isLaunchGate true ;
+    backlog:hasLaunchPriority 1 ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:hasDecisionRationale "Owner call 2026-07-25: no deployment without sign-in; multi-tenant explicitly out of launch scope." ;
+    backlog:isBusinessCapability true ;
+    backlog:belongsToCapabilityClass ex:CapClass_BusinessContinuity ;
+    backlog:hasEnforcementDomain ex:Enf_CodeGoverned ;
+    backlog:hasPriorityScore ex:PkgAuth_Score .
+
+ex:PkgAuth_Score a backlog:PriorityScore ;
+    backlog:scoredByMethod backlog:Method_WSJF ;
+    backlog:hasScoreValue 9.0 ;
+    backlog:scoredAt "2026-07-27T10:00:00"^^xsd:dateTime ;
+    backlog:isAveragedFromMembers false ;
+    backlog:decidedBy backlog:Builder ;
+    backlog:hasScoreRationale "Multi-factor judgement about the capability as a whole: launch-blocking, high time criticality, moderate remaining job size. Not an average of member scores." ;
+    backlog:hasDecisionRationale "Judged 2026-07-25 with the owner's launch scope in view." .
+
+# --- a real but non-shippable grouping, excluded from capability ranking ---
+ex:PkgPointFixes a backlog:Package ;
+    backlog:hasIdentifier "PKG-FIXES" ;
+    backlog:hasTitle "Assorted point fixes" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:isBusinessCapability false .
+
+# --- items closing the sweep and the gap discipline ----------------------
+ex:US001 backlog:hasActualEffort 6.5 ;
+    backlog:coversEntity ex:Entity_Client ;
+    backlog:coversStage backlog:Stage_Creation ;
+    backlog:verifiedAgainstCode true ;
+    backlog:hasCodeVerificationNote "Checked against the running sign-in route on 2026-07-27; the form's state options match the implemented state machine." .
+
+ex:US002 backlog:coversEntity ex:Entity_Client ;
+    backlog:coversStage backlog:Stage_ActiveUse ;
+    backlog:hasDependencyDisclosure ex:Disc_US002 ;
+    backlog:derivedInReport ex:Report_Run1 ;
+    backlog:underRankingModel backlog:ThroughputRanking , backlog:LaunchScopedRanking .
+
+ex:Disc_US002 a backlog:DependencyDisclosure ;
+    backlog:disclosesDependencyOn ex:US001 ;
+    backlog:hasDisclosureSource "Cost-benefit note 2026-07-22: 'reset only matters once sign-in exists' — recorded as an edge the same day." .
+
+ex:US004 a backlog:Story ;
+    backlog:hasIdentifier "US-004" ;
+    backlog:hasTitle "Suspend a client account" ;
+    backlog:hasState backlog:Ready ;
+    backlog:memberOfContainer ex:Backlog , ex:PkgAuth ;
+    backlog:coversEntity ex:Entity_Client ;
+    backlog:coversStage backlog:Stage_SuspensionException ;
+    backlog:hasAcceptanceCriterion ex:US004_AC1 ;
+    backlog:hasPriorityScore ex:US004_Score .
+
+ex:US004_AC1 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given an active client, When the account is suspended, Then bookings are blocked and existing ones flagged." .
+
+ex:US004_Score a backlog:WSJFScore ;
+    backlog:scoredByMethod backlog:Method_WSJF ;
+    backlog:hasScoreValue 5.0 ;
+    backlog:scoredAt "2026-07-27T10:00:00"^^xsd:dateTime ;
+    backlog:hasUserBusinessValue 5.0 ;
+    backlog:hasTimeCriticality 3.0 ;
+    backlog:hasRiskReductionValue 2.0 ;
+    backlog:hasJobSize 2.0 .
+
+ex:US005 a backlog:Task ;
+    backlog:hasIdentifier "US-005" ;
+    backlog:hasTitle "Assorted calendar and localization fixes" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer ex:Backlog , ex:PkgPointFixes ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Genuinely undeveloped scope: the fixes have not been separated, so no honest job size exists yet." .
+
+# --- governed documents: supersession marked in place ---------------------
+ex:Doc_RoadmapV1 a backlog:GovernedDocument ;
+    rdfs:label "Hand-maintained roadmap, part 6 table"@en ;
+    backlog:hasDocumentStatus backlog:Superseded ;
+    backlog:supersededBy ex:Doc_ComputedReport ;
+    backlog:hasSupersessionReason "Went stale because nothing forced it to track the register; replaced by the computed report." .
+
+ex:Doc_ComputedReport a backlog:GovernedDocument ;
+    rdfs:label "Computed roadmap report"@en ;
+    backlog:hasDocumentStatus backlog:Live .
+
+# --- one report run, with all eight required sections --------------------
+ex:Report_Run1 a backlog:RoadmapReport ;
+    backlog:reportOf ex:Backlog ;
+    backlog:hasRunTimestamp "2026-07-27T12:30:00"^^xsd:dateTime ;
+    backlog:hasSection backlog:Section_NextThroughput , backlog:Section_NextLaunchScoped ,
+                       backlog:Section_RankedBacklog , backlog:Section_FlaggedItems ,
+                       backlog:Section_SilentGapCheck , backlog:Section_LaunchReadiness ,
+                       backlog:Section_PackageRanking , backlog:Section_OrphanCoverageCheck .
+
+#################################################################
+#  v1.2.0 additions — intent, scope, refinement, cost, risk,
+#  investment mix and the project the whole thing sits in
+#################################################################
+
+@prefix core: <http://example.org/core#> .
+@prefix risk: <http://example.org/risk#> .
+
+ex:Goal_Retention a backlog:Goal ;
+    rdfs:label "Clients can rely on the studio without phoning it"@en ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:hasDecisionRationale "Owner call 2026-07-20: self-service is the difference between the studio scaling and the owner answering the phone." .
+
+ex:Metric_SelfServiceShare a core:Metric ;
+    rdfs:label "Share of bookings completed without staff intervention"@en .
+
+ex:Obj_SelfService a backlog:Objective ;
+    rdfs:label "Raise self-service booking share to 60% by Q4"@en ;
+    backlog:contributesToGoal ex:Goal_Retention ;
+    backlog:hasSuccessMetric ex:Metric_SelfServiceShare ;
+    backlog:hasTargetDirection backlog:Dir_Increase ;
+    backlog:hasBaselineValue 22.0 ;
+    backlog:hasTargetValue 60.0 ;
+    backlog:hasObjectiveDeadline "2026-12-31T00:00:00"^^xsd:dateTime ;
+    backlog:decidedBy backlog:Owner .
+
+ex:Stakeholder_StudioOwner a core:Stakeholder ;
+    rdfs:label "Studio owner"@en .
+
+ex:Benefit_FewerCalls a backlog:Benefit ;
+    rdfs:label "Fewer inbound booking calls"@en ;
+    backlog:benefitFor ex:Obj_SelfService ;
+    backlog:hasBenefitOwner ex:Stakeholder_StudioOwner ;
+    backlog:hasBenefitStatement "Reception handles fewer booking calls per week, observed in the call log four weeks after sign-in ships." ;
+    backlog:benefitRealized false .
+
+ex:Opp_Waitlist a backlog:Opportunity ;
+    rdfs:label "Automatic waitlist promotion"@en ;
+    backlog:opportunityFor ex:Obj_SelfService ;
+    backlog:hasOpportunityStatement "Cancellations currently go unfilled; automatic promotion could recover them. Cost to find out: one spike against the existing booking data." .
+
+ex:Scope_Launch a backlog:ScopeStatement ;
+    backlog:hasScopeStatementText "First deployment covers a single studio: sign-in, booking and client records." ;
+    backlog:hasScopeExclusion ex:Excl_MultiTenant .
+
+ex:Excl_MultiTenant a backlog:ScopeExclusion ;
+    backlog:excludesConcern "Multi-tenant operation across several studios, including per-tenant data isolation and billing." ;
+    backlog:hasExclusionRationale "Owner call 2026-07-20: the deployment is a single studio, so tenancy work would be built against a requirement that does not exist yet." ;
+    backlog:decidedBy backlog:Owner .
+
+ex:Project a backlog:ImplementationProject ;
+    backlog:hasIdentifier "PRJ-1" ;
+    backlog:hasTitle "First deployment" ;
+    backlog:hasState backlog:InProgress ;
+    backlog:hasScopeStatement ex:Scope_Launch ;
+    backlog:hasLifecyclePhase backlog:Phase_PreLaunch ;
+    backlog:pursuesObjective ex:Obj_SelfService ;
+    backlog:appliesDefinitionOfDone backlog:DoD_ProjectBaseline ;
+    backlog:isBusinessCapability true .
+
+ex:Policy a backlog:PortfolioPolicy ;
+    backlog:policyFor ex:Backlog ;
+    backlog:hasAllocation ex:Alloc_New , ex:Alloc_Maint , ex:Alloc_Debt , ex:Alloc_Comp .
+
+ex:Alloc_New a backlog:CapacityAllocation ;
+    backlog:allocatesToCategory backlog:Cat_NewCapability ; backlog:hasTargetShare 0.6 .
+ex:Alloc_Maint a backlog:CapacityAllocation ;
+    backlog:allocatesToCategory backlog:Cat_Maintenance ; backlog:hasTargetShare 0.2 .
+ex:Alloc_Debt a backlog:CapacityAllocation ;
+    backlog:allocatesToCategory backlog:Cat_TechnicalDebt ; backlog:hasTargetShare 0.15 .
+ex:Alloc_Comp a backlog:CapacityAllocation ;
+    backlog:allocatesToCategory backlog:Cat_Compliance ; backlog:hasTargetShare 0.05 .
+
+# items gain intent, category, refinement and estimates
+ex:US001 backlog:pursuesObjective ex:Obj_SelfService ;
+    backlog:expectsBenefit ex:Benefit_FewerCalls ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:memberOfContainer ex:Project ;
+    backlog:hasCostEstimate ex:Est_US001 .
+
+ex:Est_US001 a backlog:CostEstimate ;
+    backlog:hasEffortEstimate 5.0 ;
+    backlog:hasCostBasis "Three-point estimate in engineer-days, analogous to the earlier session-token work." ;
+    backlog:hasEstimateConfidence 0.7 ;
+    backlog:estimatedAt "2026-07-20T10:00:00"^^xsd:dateTime .
+
+ex:US002 backlog:pursuesObjective ex:Obj_SelfService ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:memberOfContainer ex:Project ;
+    backlog:hasRisk ex:Risk_ResetAbuse .
+
+ex:Risk_ResetAbuse a risk:Risk ;
+    rdfs:label "Reset links could be used to enumerate registered addresses"@en ;
+    backlog:hasMitigation ex:Mit_RateLimit .
+
+ex:Mit_RateLimit a risk:Mitigation ;
+    rdfs:label "Rate-limit reset requests per address and per source"@en .
+
+ex:US003 backlog:hasInvestmentCategory backlog:Cat_NewCapability .
+
+ex:US004 backlog:pursuesObjective ex:Obj_SelfService ;
+    backlog:hasInvestmentCategory backlog:Cat_Maintenance ;
+    backlog:memberOfContainer ex:Project .
+
+ex:US005 backlog:hasInvestmentCategory backlog:Cat_TechnicalDebt ;
+    backlog:memberOfContainer ex:Project .
+
+# readiness is earned: both Ready items carry a refinement event
+ex:Ref_US002 a backlog:RefinementEvent ;
+    backlog:refines ex:US002 ;
+    backlog:refinedAt "2026-07-22T09:30:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Acceptance criteria agreed; single-use link semantics clarified; sized at 3 days." ;
+    backlog:refinedBy backlog:Builder .
+
+ex:Ref_US004 a backlog:RefinementEvent ;
+    backlog:refines ex:US004 ;
+    backlog:refinedAt "2026-07-23T09:30:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Split from the original suspension epic; blocking behaviour for existing bookings agreed." ;
+    backlog:refinedBy backlog:Builder .
+
+# the register declares which item-level Definition of Done governs its items
+ex:Backlog backlog:appliesDefinitionOfDone backlog:DoD_Baseline .
+
+#################################################################
+#  v1.3.0 — container linkage, harness, workflow history
+#################################################################
+
+# the register and the project are governed by the default workflow
+ex:Workflow a backlog:Workflow ;
+    rdfs:label "Workflow governing this register"@en ;
+    backlog:workflowFor ex:Backlog ;
+    backlog:hasTransition backlog:T_Refine , backlog:T_Start , backlog:T_Complete , backlog:T_Return ,
+                          backlog:T_Defer , backlog:T_WithdrawProposed , backlog:T_WithdrawReady ,
+                          backlog:T_WithdrawInProgress .
+
+# packages are placed and ranked on the roadmap, and one depends on the other
+ex:PkgAuth backlog:rankedOnRoadmap ex:Roadmap ;
+    backlog:hasRoadmapRank 1 ;
+    backlog:scheduledInHorizon backlog:Now .
+
+ex:PkgFixesDep a backlog:DependencyDisclosure ;
+    backlog:disclosesDependencyOn ex:PkgAuth ;
+    backlog:hasDisclosureSource "Planning note 2026-07-24: the point-fix batch touches the same client records as sign-in, so it waits for it." .
+
+ex:PkgPointFixes backlog:rankedOnRoadmap ex:Roadmap ;
+    backlog:hasRoadmapRank 2 ;
+    backlog:scheduledInHorizon backlog:Later ;
+    backlog:containerDependsOn ex:PkgAuth ;
+    backlog:hasDependencyDisclosure ex:PkgFixesDep .
+
+# US-001 is Done, so its completion is proved criterion by criterion
+ex:Harness_US001 a backlog:TestHarness ;
+    rdfs:label "Harness proving US-001"@en ;
+    backlog:harnessFor ex:US001 ;
+    backlog:hasHarnessEvidence ex:US001_Test , ex:US001_Release .
+
+ex:US001_Test backlog:attestsCriterion ex:US001_AC1 .
+
+# the Done item's history explains its current state
+ex:Ev_US001_Refine a backlog:TransitionEvent ;
+    backlog:transitionedItem ex:US001 ; backlog:viaTransition backlog:T_Refine ;
+    backlog:transitionedAt "2026-07-18T09:00:00"^^xsd:dateTime ;
+    backlog:transitionedBy backlog:Builder ;
+    backlog:hasTransitionNote "Acceptance criterion agreed with the owner." .
+
+ex:Ev_US001_Start a backlog:TransitionEvent ;
+    backlog:transitionedItem ex:US001 ; backlog:viaTransition backlog:T_Start ;
+    backlog:transitionedAt "2026-07-19T09:00:00"^^xsd:dateTime ;
+    backlog:transitionedBy backlog:Builder .
+
+ex:Ev_US001_Complete a backlog:TransitionEvent ;
+    backlog:transitionedItem ex:US001 ; backlog:viaTransition backlog:T_Complete ;
+    backlog:transitionedAt "2026-07-27T09:05:00"^^xsd:dateTime ;
+    backlog:transitionedBy backlog:Builder ;
+    backlog:hasTransitionNote "Harness complete: the named spec attests the criterion and the package hash re-verified." .
+
+ex:Ev_US002_Refine a backlog:TransitionEvent ;
+    backlog:transitionedItem ex:US002 ; backlog:viaTransition backlog:T_Refine ;
+    backlog:transitionedAt "2026-07-22T09:35:00"^^xsd:dateTime ;
+    backlog:transitionedBy backlog:Builder .
+
+ex:Ev_US004_Refine a backlog:TransitionEvent ;
+    backlog:transitionedItem ex:US004 ; backlog:viaTransition backlog:T_Refine ;
+    backlog:transitionedAt "2026-07-23T09:35:00"^^xsd:dateTime ;
+    backlog:transitionedBy backlog:Builder .
+
+ex:Ev_US003_Withdraw a backlog:TransitionEvent ;
+    backlog:transitionedItem ex:US003 ; backlog:viaTransition backlog:T_WithdrawProposed ;
+    backlog:transitionedAt "2026-07-24T11:00:00"^^xsd:dateTime ;
+    backlog:transitionedBy backlog:Owner ;
+    backlog:hasTransitionNote "Carrier costs exceeded the value of the channel." .
+
+# criteria for the items that left Proposed
+ex:US005_AC1 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the fix batch, When each fix is separated, Then every one carries its own acceptance criterion." .
+
+# the report run now carries the ninth section
+ex:Report_Run1 backlog:hasSection backlog:Section_LifecycleWorkflow .
+
+#################################################################
+#  v1.4.0 — decomposition, commitments, typed dependency,
+#  impediment, flow points, WIP policy, team, story form
+#################################################################
+
+ex:EP001 a backlog:Epic ;
+    backlog:hasIdentifier "EP-001" ;
+    backlog:hasTitle "Account access" ;
+    backlog:hasState backlog:InProgress ;
+    backlog:memberOfContainer ex:Backlog , ex:PkgAuth ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:pursuesObjective ex:Obj_SelfService ;
+    backlog:decomposesInto ex:US001 , ex:US002 ;
+    backlog:hasAcceptanceCriterion ex:EP001_AC ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at slice level: the epic carries no score of its own so parent and children cannot double-count." .
+
+ex:EP001_AC a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the epic, When every slice is Done, Then a client can obtain and recover access unaided." .
+
+ex:Ev_EP001_Refine a backlog:TransitionEvent ;
+    backlog:transitionedItem ex:EP001 ; backlog:viaTransition backlog:T_Refine ;
+    backlog:transitionedAt "2026-07-17T09:00:00"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+ex:Ev_EP001_Start a backlog:TransitionEvent ;
+    backlog:transitionedItem ex:EP001 ; backlog:viaTransition backlog:T_Start ;
+    backlog:transitionedAt "2026-07-18T09:00:00"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+
+# the register commits to a goal; the increment commits to a Definition of Done
+ex:Commitment_Product a backlog:Commitment ;
+    rdfs:label "Product goal commitment"@en ;
+    backlog:commitsToGoal ex:Goal_Retention .
+ex:Backlog backlog:hasCommitment ex:Commitment_Product .
+
+ex:Increment1 a backlog:Increment ;
+    backlog:hasIdentifier "INC-1" ;
+    backlog:hasTitle "First releasable increment" ;
+    backlog:hasState backlog:InProgress ;
+    backlog:appliesDefinitionOfDone backlog:DoD_Baseline ;
+    backlog:hasCommitment ex:Commitment_Increment .
+ex:Commitment_Increment a backlog:Commitment ;
+    rdfs:label "Increment quality commitment"@en ;
+    backlog:commitsToDefinitionOfDone backlog:DoD_Baseline .
+ex:US001 backlog:memberOfContainer ex:Increment1 .
+ex:US002 backlog:memberOfContainer ex:Increment1 .
+
+# a typed dependency record: what would release it
+ex:Dep_US002_Knowledge a backlog:Dependency ;
+    rdfs:label "Reset-link policy undecided"@en ;
+    backlog:dependencyOn ex:US001 ;
+    backlog:hasDependencyKind backlog:Dep_Knowledge .
+ex:US002 backlog:hasDependencyRecord ex:Dep_US002_Knowledge .
+
+# an impediment that is not a dependency
+ex:Imp_MailSandbox a backlog:Impediment ;
+    rdfs:label "No transactional-mail sandbox"@en ;
+    backlog:impedes ex:US002 ;
+    backlog:hasImpedimentStatement "Reset e-mails cannot be exercised end to end: the provider sandbox is not provisioned. Cleared by the owner authorising the sandbox tier." ;
+    backlog:raisedAt "2026-07-24T09:00:00"^^xsd:dateTime ;
+    backlog:hasImpedimentOwner backlog:Owner .
+
+# flow points and a WIP policy
+ex:US001 backlog:startedAt "2026-07-19T09:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-07-27T09:05:00"^^xsd:dateTime .
+ex:EP001 backlog:startedAt "2026-07-18T09:00:00"^^xsd:dateTime .
+
+ex:Wip a backlog:WipLimit ;
+    backlog:wipLimitFor ex:Backlog ;
+    backlog:hasWipLimitValue 3 .
+
+# team, roles and capacity
+ex:Team a backlog:Team ;
+    rdfs:label "Studio delivery team"@en ;
+    backlog:teamFor ex:Backlog ;
+    backlog:hasTeamRole ex:TR_ProductOwner , ex:TR_Developer ;
+    backlog:hasCapacity 10.0 .
+ex:TR_ProductOwner a backlog:TeamRole ; rdfs:label "Product owner"@en .
+ex:TR_Developer a backlog:TeamRole ; rdfs:label "Developer"@en .
+ex:US001 backlog:assignedToTeam ex:Team .
+ex:US002 backlog:assignedToTeam ex:Team .
+
+# canonical story form
+ex:US002 backlog:asRole "registered client" ;
+    backlog:wantsCapability "reset my password without calling the studio" ;
+    backlog:soThat "I can rebook the same evening" .
+
+
+#################################################################
+#  v1.5.0 — the register can be shown to be failing
+#################################################################
+
+# an observation exists, so the objective is falsifiable; it currently reads
+# short of target, which the derivation rule will report once the deadline passes
+ex:Obs_Q3 a backlog:MetricObservation ;
+    rdfs:label "Self-service share, week 30"@en ;
+    backlog:observesMetric ex:Metric_SelfServiceShare ;
+    backlog:observationFor ex:Obj_SelfService ;
+    backlog:hasObservedValue 31.0 ;
+    backlog:observedAt "2026-07-26T00:00:00"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Count of bookings with no staff touch divided by all bookings, from the booking log, week 30." .
+
+# the launch milestone moved once, on the record, with the old date retained
+ex:Rebase_MS1 a backlog:Rebaseline ;
+    rdfs:label "Launch date moved from August to September"@en ;
+    backlog:rebaselines ex:MS1 ;
+    backlog:hasPreviousTarget "2026-08-31T00:00:00" ;
+    backlog:hasNewTarget "2026-09-30T00:00:00" ;
+    backlog:hasRebaselineRationale "Owner call 2026-07-25: the mail sandbox impediment pushed password reset out by four weeks; the date moved rather than the scope." ;
+    backlog:rebaselinedAt "2026-07-25T00:00:00"^^xsd:dateTime ;
+    backlog:decidedBy backlog:Owner .
+
+#################################################################
+#  v1.6.0 — mission, measurable scope, external dependency with a
+#  proposal, and one session's hygiene record
+#################################################################
+
+ex:Mission a backlog:Mission ;
+    rdfs:label "Studio mission"@en ;
+    backlog:hasMissionStatement "Let a single physiotherapy studio run its bookings and client records without the owner answering the phone. Not attempted: multi-studio operation, clinical record-keeping, or billing." ;
+    backlog:missionFor ex:Backlog ;
+    backlog:decidedBy backlog:Owner .
+
+ex:Goal_Retention backlog:contributesToMission ex:Mission .
+
+ex:Scope_Launch backlog:scopeRealizesObjective ex:Obj_SelfService .
+
+# an external dependency the development consumes, and one it needs changed
+ex:Ext_MailProvider a backlog:ExternalDependency ;
+    rdfs:label "Transactional mail provider"@en ;
+    backlog:hasExternalDependencyType backlog:Ext_Vendor ;
+    backlog:hasExternalParty "Postmark-style transactional mail vendor, account owner: studio owner" .
+
+ex:US002 backlog:dependsOnExternal ex:Ext_MailProvider ;
+    backlog:requiresExternalEnhancement ex:Ext_MailProvider .
+
+ex:Prop_MailSandbox a backlog:EnhancementProposal ;
+    rdfs:label "Request a sandbox tier with deliverability callbacks"@en ;
+    backlog:proposalFor ex:Ext_MailProvider ;
+    backlog:unblocksItem ex:US002 ;
+    backlog:hasRequestedChange "A sandbox sending tier that returns deliverability callbacks without charging per message, so reset e-mail can be exercised end to end before launch." ;
+    backlog:submittedTo "vendor support portal, ticket SUP-4471" ;
+    backlog:proposalRaisedAt "2026-07-24T10:00:00"^^xsd:dateTime ;
+    backlog:hasProposalStatus backlog:Prop_Accepted .
+
+# the register's own maintenance is on the record
+ex:Session_20260727 a backlog:RegisterSession ;
+    rdfs:label "Reconciliation session, 27 July"@en ;
+    backlog:sessionFor ex:Backlog ;
+    backlog:sessionStartedAt "2026-07-27T08:30:00"^^xsd:dateTime ;
+    backlog:sessionEndedAt "2026-07-27T10:30:00"^^xsd:dateTime ;
+    backlog:stateVerifiedAtStart true ;
+    backlog:sessionConductedBy backlog:Builder ;
+    backlog:changedItem ex:US001 , ex:US002 ;
+    backlog:hasSessionScopeNote "In scope: re-verify sign-in evidence, re-score the open items after the completion, record the mail-sandbox proposal. Deliberately untouched: the suspension slice, the point-fix batch, and the blueprint gap for client termination." .
+
+#################################################################
+#  v1.7.0 — the register ships as a versioned, manifested package
+#################################################################
+@prefix configuration: <http://example.org/configuration#> .
+
+ex:Package a backlog:RegisterPackage ;
+    rdfs:label "Studio register package"@en ;
+    backlog:packageFor ex:Backlog ;
+    backlog:hasPackageVersion "1.3.0" ;
+    backlog:hasPackageArtifact ex:PA_Data , ex:PA_Profile , ex:PA_Report , ex:PA_Evidence , ex:PA_Manifest .
+
+ex:PA_Data a backlog:RegisterArtifact ;
+    backlog:hasArtifactRole backlog:Role_RegisterData ;
+    backlog:hasArtifactFileName "studio_abox_v1_3_0.ttl" ;
+    backlog:conformsToNamingConvention configuration:ABoxFileConvention .
+
+ex:PA_Profile a backlog:RegisterArtifact ;
+    backlog:hasArtifactRole backlog:Role_ProfileDeclaration ;
+    backlog:hasArtifactFileName "studio_profile_abox_v1_0_0.ttl" ;
+    backlog:conformsToNamingConvention configuration:ABoxFileConvention .
+
+ex:PA_Report a backlog:RegisterArtifact ;
+    backlog:hasArtifactRole backlog:Role_ProgressReport ;
+    backlog:hasArtifactFileName "studio_report_abox_v1_0_0.ttl" ;
+    backlog:conformsToNamingConvention configuration:ABoxFileConvention .
+
+ex:PA_Evidence a backlog:RegisterArtifact ;
+    backlog:hasArtifactRole backlog:Role_EvidenceIndex ;
+    backlog:hasArtifactFileName "studio_evidence_abox_v1_0_0.ttl" ;
+    backlog:conformsToNamingConvention configuration:ABoxFileConvention .
+
+ex:PA_Manifest a backlog:RegisterArtifact ;
+    backlog:hasArtifactRole backlog:Role_Manifest ;
+    backlog:hasArtifactFileName "MANIFEST_SHA256.txt" ;
+    backlog:hasManifestSHA256 "3f79bb7b435b05321651daefd374cdc681dc06faa65e374e38337b88ca046dea" .
+
+ex:Report_Run1 backlog:reportRunRetainedAs ex:PA_Report .
+
+#################################################################
+#  shapes v1.8.0 — a cross-cutting launch gate that is NOT an
+#  independently shippable capability. Reported from real adopter
+#  data; under shapes 1.7.0 this combination was unsatisfiable.
+#################################################################
+
+ex:PkgPlatform a backlog:Package ;
+    backlog:hasIdentifier "PKG-PLATFORM" ;
+    backlog:hasTitle "Platform foundation" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:isBusinessCapability false ;
+    backlog:isLaunchGate true ;
+    backlog:hasLaunchPriority 0 ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:hasDecisionRationale "Owner call 2026-07-27: core mechanics no client asks for by name, but nothing ships before they exist." ;
+    backlog:rankedOnRoadmap ex:Roadmap ;
+    backlog:hasRoadmapRank 3 ;
+    backlog:scheduledInHorizon backlog:Now .
+
+ex:US006 a backlog:Enabler ;
+    backlog:hasIdentifier "US-006" ;
+    backlog:hasTitle "Session token store" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer ex:Backlog , ex:PkgPlatform ;
+    backlog:pursuesObjective ex:Obj_SelfService ;
+    backlog:hasInvestmentCategory backlog:Cat_TechnicalDebt ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Sequenced by the owner's launch ordering rather than by a value score; scoring it against client-facing work would compare different questions." .
+
+#################################################################
+#  shapes v1.11.0 — the adopter's case, done correctly
+#################################################################
+
+# the invariant is still unenforceable and its fix has NOT shipped: clean
+ex:Inv_Dispatcher a backlog:CrossCuttingInvariant ;
+    rdfs:label "Every reset path goes through the shared dispatcher"@en ;
+    backlog:hasCheckQuery "ASK { ?p ex:bypassesDispatcher true }" ;
+    backlog:hasExpectedResult "false" ;
+    backlog:hasInvariantStatus backlog:NotYetEnforceable ;
+    backlog:tracksItem ex:US004 .
+
+# the fix shipped WITH durable evidence, and the invariant was re-run: clean
+ex:Inv_SignIn a backlog:CrossCuttingInvariant ;
+    rdfs:label "Sign-in issues exactly one session token"@en ;
+    backlog:hasCheckQuery "ASK { ?s ex:tokenCount ?n . FILTER(?n != 1) }" ;
+    backlog:hasExpectedResult "false" ;
+    backlog:hasInvariantStatus backlog:Holds ;
+    backlog:tracksItem ex:US001 .

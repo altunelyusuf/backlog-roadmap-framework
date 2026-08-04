@@ -1,0 +1,396 @@
+@prefix backlog: <http://example.org/backlog#> .
+@prefix sh:      <http://www.w3.org/ns/shacl#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix prov:    <http://www.w3.org/ns/prov#> .
+
+<http://example.org/backlog-rules> a owl:Ontology ;
+    rdfs:label "Backlog & Roadmap Framework — Derivation Rules"@en ;
+    owl:versionIRI <http://example.org/backlog-rules/1.5.0> ;
+    owl:versionInfo "1.5.0" ;
+    owl:priorVersion <http://example.org/backlog-rules/1.4.0> ,
+                     <http://example.org/backlog-rules/1.3.0> ,
+                     <http://example.org/backlog-rules/1.2.0> ,
+                     <http://example.org/backlog-rules/1.1.0> ,
+                     <http://example.org/backlog-rules/1.0.0> ;
+    owl:imports <http://example.org/backlog> ;
+    dcterms:identifier "backlog-rules" ;
+    dcterms:created "2026-07-27T00:00:00"^^xsd:dateTime ;
+    dcterms:modified "2026-07-27T00:00:00"^^xsd:dateTime ;
+    dcterms:creator "Yusuf Altunel" ;
+    dcterms:publisher "İstanbul Kültür Üniversitesi, Department of Computer Engineering" ;
+    dcterms:rightsHolder "İstanbul Kültür Üniversitesi, Department of Computer Engineering" ;
+    dcterms:rights "Copyright (c) 2025-2026 İstanbul Kültür Üniversitesi & Yusuf Altunel. Licensed under CC BY 4.0."@en ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    prov:wasAttributedTo "Yusuf Altunel" ;
+    skos:definition "SHACL-AF rules that compute reporting facts instead of letting a human assert them: container state from member states, milestone state from contributing item states, and — as an executable query rather than a rule, since selection returns an ordering rather than a triple — the next item to work. Roll-up status and 'what is next' therefore follow from the register and cannot go stale independently of it."@en .
+
+#################################################################
+#  R1 — container state from member states
+#################################################################
+
+backlog:ContainerStateRule a sh:NodeShape ;
+    sh:targetClass backlog:WorkItemContainer ;
+    rdfs:label "R1: container state derivation"@en ;
+
+    # Done: every member is Done (and there is at least one member)
+    sh:rule [ a sh:SPARQLRule ;
+        rdfs:label "R1a: all members Done"@en ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:construct """
+            CONSTRUCT { $this backlog:derivedState backlog:Done }
+            WHERE {
+                FILTER EXISTS { ?m backlog:memberOfContainer $this }
+                FILTER NOT EXISTS {
+                    ?m backlog:memberOfContainer $this ; backlog:hasState ?s .
+                    FILTER (?s NOT IN (backlog:Done, backlog:Cancelled))
+                }
+            }""" ] ;
+
+    # InProgress: at least one member is InProgress or Done, but not all are Done/Cancelled
+    sh:rule [ a sh:SPARQLRule ;
+        rdfs:label "R1b: work started but not complete"@en ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:construct """
+            CONSTRUCT { $this backlog:derivedState backlog:InProgress }
+            WHERE {
+                ?m1 backlog:memberOfContainer $this ; backlog:hasState ?s1 .
+                FILTER (?s1 IN (backlog:InProgress, backlog:Done))
+                ?m2 backlog:memberOfContainer $this ; backlog:hasState ?s2 .
+                FILTER (?s2 NOT IN (backlog:Done, backlog:Cancelled))
+            }""" ] ;
+
+    # Proposed: members exist but none has started
+    sh:rule [ a sh:SPARQLRule ;
+        rdfs:label "R1c: nothing started"@en ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:construct """
+            CONSTRUCT { $this backlog:derivedState backlog:Proposed }
+            WHERE {
+                FILTER EXISTS { ?m backlog:memberOfContainer $this }
+                FILTER NOT EXISTS {
+                    ?m backlog:memberOfContainer $this ; backlog:hasState ?s .
+                    FILTER (?s IN (backlog:InProgress, backlog:Done))
+                }
+            }""" ] .
+
+#################################################################
+#  R2 — milestone state from contributing items
+#################################################################
+
+backlog:MilestoneStateRule a sh:NodeShape ;
+    sh:targetClass backlog:Milestone ;
+    rdfs:label "R2: milestone state derivation"@en ;
+
+    sh:rule [ a sh:SPARQLRule ;
+        rdfs:label "R2a: all contributing items Done"@en ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:construct """
+            CONSTRUCT { $this backlog:derivedMilestoneState backlog:Done }
+            WHERE {
+                FILTER EXISTS { ?i backlog:contributesToMilestone $this }
+                FILTER NOT EXISTS {
+                    ?i backlog:contributesToMilestone $this ; backlog:hasState ?s .
+                    FILTER (?s != backlog:Done)
+                }
+            }""" ] ;
+
+    sh:rule [ a sh:SPARQLRule ;
+        rdfs:label "R2b: contributing work outstanding"@en ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:construct """
+            CONSTRUCT { $this backlog:derivedMilestoneState backlog:InProgress }
+            WHERE {
+                ?i backlog:contributesToMilestone $this ; backlog:hasState ?s .
+                FILTER (?s != backlog:Done)
+            }""" ] .
+
+#################################################################
+#  R3 — next-item selection (executable query, not a rule)
+#
+#  Selection returns an ordering, not a triple, so it is shipped as
+#  the authoritative query text executed by 03-tooling/backlog_gate.
+#  Parameterised by prioritisation method: pass the method IRI so a
+#  register carrying scores from several methods ranks by exactly one.
+#
+#    SELECT ?item ?id ?value WHERE {
+#      ?item backlog:hasState backlog:Ready ;
+#            backlog:hasIdentifier ?id ;
+#            backlog:hasPriorityScore ?sc .
+#      ?sc backlog:scoredByMethod <METHOD> ; backlog:hasScoreValue ?value .
+#      FILTER NOT EXISTS {
+#        ?item backlog:dependsOn ?d . ?d backlog:hasState ?ds .
+#        FILTER(?ds != backlog:Done)
+#      }
+#    } ORDER BY DESC(?value) LIMIT 1
+#################################################################
+
+backlog:NextItemSelection a skos:Concept ;
+    rdfs:label "next-item selection query"@en ;
+    skos:definition "The authoritative definition of what to work on next: the highest-scoring Ready item, under one named prioritisation method, whose every declared dependency is Done. Derived on demand rather than hand-listed, so a 'what's next' section cannot drift from the register that decides it."@en ;
+    skos:example """SELECT ?item ?id ?value WHERE {
+  ?item backlog:hasState backlog:Ready ;
+        backlog:hasIdentifier ?id ;
+        backlog:hasPriorityScore ?sc .
+  ?sc backlog:scoredByMethod ?method ; backlog:hasScoreValue ?value .
+  FILTER NOT EXISTS { ?item backlog:dependsOn ?d . ?d backlog:hasState ?ds . FILTER(?ds != backlog:Done) }
+} ORDER BY DESC(?value) LIMIT 1""" ;
+    rdfs:comment "Expected result: exactly one row, or zero rows when nothing is startable. Carried as an annotation rather than via backlog:hasExpectedResult, whose domain would otherwise type this concept as a criterion or invariant."@en .
+
+#################################################################
+#  R4 — external blockers (v1.1.0): completion is not deployability
+#################################################################
+
+backlog:ExternalBlockerRule a sh:NodeShape ;
+    sh:targetClass backlog:WorkItemContainer ;
+    rdfs:label "R4: external blocker derivation"@en ;
+    sh:rule [ a sh:SPARQLRule ;
+        rdfs:label "R4: a member depends on unfinished work outside this container"@en ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:construct """
+            CONSTRUCT { $this backlog:hasExternalBlocker ?dep }
+            WHERE {
+                ?m backlog:memberOfContainer $this ; backlog:dependsOn ?dep .
+                ?dep backlog:hasState ?ds .
+                FILTER (?ds != backlog:Done)
+                FILTER NOT EXISTS { ?dep backlog:memberOfContainer $this }
+            }""" ] .
+
+#################################################################
+#  R3 — ranking arbitration (v1.1.0), executed by the report tool
+#
+#  While any launch-gate container is open, the scoped answer ranks
+#  only items in the active (lowest hasLaunchPriority) open gate plus
+#  cross-cutting prerequisites — items outside it that an item inside
+#  it depends on. When every gate has cleared the scope collapses to
+#  the whole register and the two answers coincide by construction.
+#  Both are always printed; a disagreement is displayed, not resolved.
+#################################################################
+
+backlog:RankingArbitration a skos:Concept ;
+    rdfs:label "R3 ranking arbitration"@en ;
+    skos:definition "The authoritative account of how the throughput and launch-scoped answers relate: they are computed independently over different candidate sets and reported side by side, so the register never silently picks one question's answer to a different question."@en ;
+    skos:example """SELECT ?id ?value WHERE {
+  ?gate a backlog:WorkItemContainer ; backlog:isLaunchGate true ; backlog:hasLaunchPriority ?lp .
+  FILTER NOT EXISTS { ?gate backlog:derivedState backlog:Done }
+  ?item backlog:memberOfContainer ?gate ; backlog:hasState backlog:Ready ;
+        backlog:hasIdentifier ?id ; backlog:hasPriorityScore ?sc .
+  ?sc backlog:scoredByMethod ?method ; backlog:hasScoreValue ?value .
+  FILTER NOT EXISTS { ?item backlog:dependsOn ?d . ?d backlog:hasState ?ds . FILTER(?ds != backlog:Done) }
+} ORDER BY ?lp DESC(?value) LIMIT 1""" ;
+    rdfs:comment "Cross-cutting prerequisites are added to the candidate set by the report tool: items outside the active gate that an item inside it depends on."@en .
+
+#################################################################
+#  R5 — container dependency derived from member edges (v1.2.0)
+#################################################################
+
+backlog:ContainerDependencyRule a sh:NodeShape ;
+    sh:targetClass backlog:WorkItemContainer ;
+    rdfs:label "R5: container dependency derivation"@en ;
+    sh:rule [ a sh:SPARQLRule ;
+        rdfs:label "R5: a member depends on a member of another container"@en ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:construct """
+            CONSTRUCT { $this backlog:derivedContainerDependency ?other }
+            WHERE {
+                ?m backlog:memberOfContainer $this ; backlog:dependsOn ?d .
+                ?d backlog:memberOfContainer ?other .
+                FILTER (?other != $this)
+                ?d backlog:hasState ?ds .
+                FILTER (?ds != backlog:Done)
+            }""" ] .
+
+#################################################################
+#  R6 — test-harness completeness (v1.2.0)
+#     True only when every acceptance criterion of the harnessed item
+#     is attested by at least one bridge-verified evidence artifact.
+#################################################################
+
+backlog:HarnessCompletenessRule a sh:NodeShape ;
+    sh:targetClass backlog:TestHarness ;
+    rdfs:label "R6: harness completeness derivation"@en ;
+    sh:rule [ a sh:SPARQLRule ;
+        rdfs:label "R6: every acceptance criterion attested by verified evidence"@en ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:construct """
+            CONSTRUCT { $this backlog:harnessComplete true }
+            WHERE {
+                $this backlog:harnessFor ?item .
+                FILTER EXISTS { ?item backlog:hasAcceptanceCriterion ?any }
+                FILTER NOT EXISTS {
+                    ?item backlog:hasAcceptanceCriterion ?ac .
+                    FILTER NOT EXISTS {
+                        $this backlog:hasHarnessEvidence ?e .
+                        ?e backlog:attestsCriterion ?ac ; backlog:evidenceVerified true .
+                    }
+                }
+            }""" ] .
+
+#################################################################
+#  R7 — effective Definition of Done, inherited from containers
+#################################################################
+
+backlog:EffectiveDoDRule a sh:NodeShape ;
+    sh:targetClass backlog:WorkItem ;
+    rdfs:label "R7: effective Definition of Done"@en ;
+    sh:rule [ a sh:SPARQLRule ;
+        rdfs:label "R7a: declared on the item"@en ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:construct """
+            CONSTRUCT { $this backlog:effectiveDefinitionOfDone ?dod }
+            WHERE { $this backlog:appliesDefinitionOfDone ?dod }""" ] ;
+    sh:rule [ a sh:SPARQLRule ;
+        rdfs:label "R7b: inherited from a container"@en ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:construct """
+            CONSTRUCT { $this backlog:effectiveDefinitionOfDone ?dod }
+            WHERE {
+                $this backlog:memberOfContainer ?c .
+                ?c backlog:appliesDefinitionOfDone ?dod .
+            }""" ] .
+
+#################################################################
+#  R8 — decomposition state (v1.3.0)
+#     A parent's state as its children support it, so an
+#     undecomposed epic cannot inherit one shipped slice's optimism.
+#################################################################
+
+backlog:DecompositionStateRule a sh:NodeShape ;
+    sh:targetClass backlog:WorkItem ;
+    rdfs:label "R8: decomposition state derivation"@en ;
+    sh:rule [ a sh:SPARQLRule ;
+        rdfs:label "R8a: all children terminal"@en ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:construct """
+            CONSTRUCT { $this backlog:decompositionState backlog:Done }
+            WHERE {
+                FILTER EXISTS { $this backlog:decomposesInto ?c }
+                FILTER NOT EXISTS {
+                    $this backlog:decomposesInto ?c . ?c backlog:hasState ?s .
+                    FILTER (?s NOT IN (backlog:Done, backlog:Cancelled))
+                }
+            }""" ] ;
+    sh:rule [ a sh:SPARQLRule ;
+        rdfs:label "R8b: some child outstanding"@en ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:construct """
+            CONSTRUCT { $this backlog:decompositionState backlog:InProgress }
+            WHERE {
+                $this backlog:decomposesInto ?c . ?c backlog:hasState ?s .
+                FILTER (?s NOT IN (backlog:Done, backlog:Cancelled))
+            }""" ] .
+
+#################################################################
+#  R9 — objective outcome derived from observation (v1.4.0)
+#################################################################
+
+backlog:ObjectiveOutcomeRule a sh:NodeShape ;
+    sh:targetClass backlog:Objective ;
+    rdfs:label "R9: objective outcome derivation"@en ;
+    sh:rule [ a sh:SPARQLRule ;
+        rdfs:label "R9a: target reached in the declared direction"@en ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:construct """
+            CONSTRUCT { $this backlog:objectiveOutcome backlog:Ach_Met }
+            WHERE {
+                $this backlog:hasTargetValue ?t ; backlog:hasTargetDirection ?dir .
+                ?o backlog:observationFor $this ; backlog:hasObservedValue ?v .
+                FILTER ( (?dir = backlog:Dir_Increase && ?v >= ?t)
+                      || (?dir = backlog:Dir_Decrease && ?v <= ?t) )
+            }""" ] ;
+    sh:rule [ a sh:SPARQLRule ;
+        rdfs:label "R9b: deadline passed, observed short of target"@en ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:construct """
+            CONSTRUCT { $this backlog:objectiveOutcome backlog:Ach_Missed }
+            WHERE {
+                $this backlog:hasTargetValue ?t ; backlog:hasTargetDirection ?dir ; backlog:hasObjectiveDeadline ?d .
+                FILTER (?d < NOW())
+                ?o backlog:observationFor $this ; backlog:hasObservedValue ?v .
+                FILTER ( (?dir = backlog:Dir_Increase && ?v < ?t)
+                      || (?dir = backlog:Dir_Decrease && ?v > ?t) )
+            }""" ] .
+
+#################################################################
+#  R10 — milestone outcome (v1.4.0)
+#################################################################
+
+backlog:MilestoneOutcomeRule a sh:NodeShape ;
+    sh:targetClass backlog:Milestone ;
+    rdfs:label "R10: milestone outcome derivation"@en ;
+    sh:rule [ a sh:SPARQLRule ;
+        rdfs:label "R10a: achieved on or before target"@en ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:construct """
+            CONSTRUCT { $this backlog:milestoneOutcome backlog:Ach_Met }
+            WHERE { $this backlog:hasTargetDate ?d ; backlog:achievedAt ?a . FILTER (?a <= ?d) }""" ] ;
+    sh:rule [ a sh:SPARQLRule ;
+        rdfs:label "R10b: target date passed unachieved"@en ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:construct """
+            CONSTRUCT { $this backlog:milestoneOutcome backlog:Ach_Missed }
+            WHERE {
+                $this backlog:hasTargetDate ?d .
+                FILTER (?d < NOW())
+                FILTER NOT EXISTS { $this backlog:achievedAt ?a }
+            }""" ] .
+
+#################################################################
+#  R11 / R12 — scope completion, then scope outcome (v1.5.0)
+#     Completion and success are derived separately and in that
+#     order: finishing everything promised is the precondition for
+#     asking whether it worked, never the answer.
+#################################################################
+
+backlog:ScopeCompletionRule a sh:NodeShape ;
+    sh:targetClass backlog:ScopeStatement ;
+    rdfs:label "R11/R12: scope completion and outcome"@en ;
+    sh:rule [ a sh:SPARQLRule ;
+        rdfs:label "R11: all scoped work terminal"@en ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:construct """
+            CONSTRUCT { $this backlog:scopeCompletionState backlog:Done }
+            WHERE {
+                ?c backlog:hasScopeStatement $this .
+                FILTER EXISTS { ?m backlog:memberOfContainer ?c }
+                FILTER NOT EXISTS {
+                    ?m backlog:memberOfContainer ?c ; backlog:hasState ?s .
+                    FILTER (?s NOT IN (backlog:Done, backlog:Cancelled))
+                }
+            }""" ] ;
+    sh:rule [ a sh:SPARQLRule ;
+        rdfs:label "R11b: scoped work outstanding"@en ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:construct """
+            CONSTRUCT { $this backlog:scopeCompletionState backlog:InProgress }
+            WHERE {
+                ?c backlog:hasScopeStatement $this .
+                ?m backlog:memberOfContainer ?c ; backlog:hasState ?s .
+                FILTER (?s NOT IN (backlog:Done, backlog:Cancelled))
+            }""" ] ;
+    sh:rule [ a sh:SPARQLRule ;
+        rdfs:label "R12a: complete and every realised objective met"@en ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:construct """
+            CONSTRUCT { $this backlog:scopeOutcome backlog:Ach_Met }
+            WHERE {
+                $this backlog:scopeCompletionState backlog:Done .
+                FILTER EXISTS { $this backlog:scopeRealizesObjective ?o }
+                FILTER NOT EXISTS {
+                    $this backlog:scopeRealizesObjective ?o2 .
+                    FILTER NOT EXISTS { ?o2 backlog:objectiveOutcome backlog:Ach_Met }
+                }
+            }""" ] ;
+    sh:rule [ a sh:SPARQLRule ;
+        rdfs:label "R12b: complete but an objective was missed — delivered in full and still failed"@en ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:construct """
+            CONSTRUCT { $this backlog:scopeOutcome backlog:Ach_Missed }
+            WHERE {
+                $this backlog:scopeCompletionState backlog:Done .
+                $this backlog:scopeRealizesObjective ?o .
+                ?o backlog:objectiveOutcome backlog:Ach_Missed .
+            }""" ] .

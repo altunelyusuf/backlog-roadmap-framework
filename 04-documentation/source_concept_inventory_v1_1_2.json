@@ -1,0 +1,318 @@
+{
+  "source_document": "BACKLOG_ROADMAP_STANDARD_v1_0_0.md",
+  "source_sha256": "a58a6c8911b391c4e3ac45b800013ed96de964ac89ae4133057a474a43389106",
+  "method": "Concepts enumerated per BP-D31 step 1 from headings, defined terms, enumerated rules and named flags. Each concept carries the source line range and one or more probes; a probe is a regex that must match in at least one framework artifact for the concept to count as DEMONSTRATED. A concept with no probes is NOT DEMONSTRATED by construction. Probes target artifact identity (ontology IRIs, vocabulary terms, executable code) rather than file paths, after a v1.1.1 finding that a path-shaped probe can pass for reasons unrelated to the concept.",
+  "concepts": [
+    {
+      "id": "C01",
+      "name": "Blueprint layer (ontology-grounded domain model)",
+      "lines": "20-22",
+      "probes": [
+        "backlog:Blueprint\\b"
+      ]
+    },
+    {
+      "id": "C02",
+      "name": "Product Backlog layer (machine-checkable register)",
+      "lines": "23",
+      "probes": [
+        "backlog:Backlog a owl:Class"
+      ]
+    },
+    {
+      "id": "C03",
+      "name": "Product Roadmap layer (live computed view)",
+      "lines": "24",
+      "probes": [
+        "backlog:Roadmap a owl:Class"
+      ]
+    },
+    {
+      "id": "C04",
+      "name": "Layer separation: roadmap must not be a maintained document",
+      "lines": "26-31",
+      "probes": [
+        "backlog:RoadmapReport\\b"
+      ]
+    },
+    {
+      "id": "C05",
+      "name": "Governance-domain classification of capability (how correctness is enforced)",
+      "lines": "37-40",
+      "probes": [
+        "backlog:EnforcementDomain\\b"
+      ]
+    },
+    {
+      "id": "C06",
+      "name": "Full life-cycle sweep per core entity",
+      "lines": "41-45",
+      "probes": [
+        "backlog:EntityLifecycleStage\\b",
+        "backlog:DomainEntity\\b"
+      ]
+    },
+    {
+      "id": "C07",
+      "name": "Check each stage against running code, not item titles",
+      "lines": "43-45",
+      "probes": [
+        "backlog:verifiedAgainstCode\\b"
+      ]
+    },
+    {
+      "id": "C08",
+      "name": "Business continuity/support is a first-class capability class",
+      "lines": "50-56",
+      "probes": [
+        "backlog:CapabilityClass\\b"
+      ]
+    },
+    {
+      "id": "C09",
+      "name": "A blueprint gap is a defect, written down explicitly",
+      "lines": "57-59",
+      "probes": [
+        "backlog:BlueprintGap\\b"
+      ]
+    },
+    {
+      "id": "C10",
+      "name": "TBox / ABox / Rules separation",
+      "lines": "65-68",
+      "probes": [
+        "<http://example\\.org/backlog> a owl:Ontology",
+        "<http://example\\.org/backlog-abox> a owl:Ontology",
+        "<http://example\\.org/backlog-rules> a owl:Ontology"
+      ],
+      "note": "Probes target the three distinct ontology IRIs, not filenames: the earlier filename probes passed only because the tooling pinned those paths, so removing the pins broke a probe that was never testing the concept."
+    },
+    {
+      "id": "C11",
+      "name": "PBI minimum fields: id, title, status",
+      "lines": "69-70",
+      "probes": [
+        "backlog:hasIdentifier\\b",
+        "backlog:hasTitle\\b",
+        "backlog:hasState\\b"
+      ]
+    },
+    {
+      "id": "C12",
+      "name": "Every item scoreable OR explicitly flagged not-yet-scoreable with a reason",
+      "lines": "69-71",
+      "probes": [
+        "backlog:notYetScoreable\\b",
+        "backlog:hasScoreabilityReason\\b"
+      ]
+    },
+    {
+      "id": "C13",
+      "name": "Done requires verifiable evidence (test id / version binding)",
+      "lines": "71-72",
+      "probes": [
+        "backlog:evidenceVerified\\b",
+        "L2: a Done item must carry at least one bridge-verified"
+      ]
+    },
+    {
+      "id": "C14",
+      "name": "Package is a deployable business capability, not a folder",
+      "lines": "73",
+      "probes": [
+        "backlog:Package a owl:Class"
+      ]
+    },
+    {
+      "id": "C15",
+      "name": "isBusinessCapability=false groupings excluded from capability ranking",
+      "lines": "73-79",
+      "probes": [
+        "backlog:isBusinessCapability\\b"
+      ]
+    },
+    {
+      "id": "C16",
+      "name": "Dependency disclosed the moment it is stated in prose or judgement",
+      "lines": "80-86",
+      "probes": [
+        "backlog:hasDependencyDisclosure\\b"
+      ]
+    },
+    {
+      "id": "C17",
+      "name": "Binary gap discipline: flagged vs silent gap, silent gaps driven to zero",
+      "lines": "87-91",
+      "probes": [
+        "silent gap"
+      ]
+    },
+    {
+      "id": "C18",
+      "name": "WSJF throughput model with its components",
+      "lines": "100-104",
+      "probes": [
+        "backlog:WSJFScore\\b",
+        "backlog:hasJobSize\\b"
+      ]
+    },
+    {
+      "id": "C19",
+      "name": "Launch Readiness / MVP gate model (isLaunchGate, hasLaunchPriority)",
+      "lines": "105-110",
+      "probes": [
+        "backlog:isLaunchGate\\b",
+        "backlog:hasLaunchPriority\\b"
+      ]
+    },
+    {
+      "id": "C20",
+      "name": "Launch priority is owner-declared, never computed from WSJF",
+      "lines": "106-110",
+      "probes": [
+        "backlog:decidedBy\\b",
+        "backlog:Owner\\b"
+      ]
+    },
+    {
+      "id": "C21",
+      "name": "Package-level score is multi-factor judgement, never an average of child scores",
+      "lines": "111-116",
+      "probes": [
+        "backlog:isAveragedFromMembers\\b"
+      ]
+    },
+    {
+      "id": "C22",
+      "name": "100% member-complete is not itself risk-free or deployable",
+      "lines": "117-119",
+      "probes": [
+        "backlog:hasExternalBlocker\\b"
+      ]
+    },
+    {
+      "id": "C23",
+      "name": "Rule R3 arbitration between the two prioritisation models, both answers printed",
+      "lines": "120-128",
+      "probes": [
+        "backlog:LaunchScopedRanking\\b",
+        "NEXT \\(launch-scoped model\\)"
+      ]
+    },
+    {
+      "id": "C24",
+      "name": "Roadmap is a script's output, computed every run",
+      "lines": "134-136",
+      "probes": [
+        "backlog_roadmap_report_v"
+      ]
+    },
+    {
+      "id": "C25",
+      "name": "Retired document marked SUPERSEDED in place, not deleted",
+      "lines": "137-139",
+      "probes": [
+        "backlog:Superseded\\b",
+        "backlog:supersededBy\\b"
+      ]
+    },
+    {
+      "id": "C26",
+      "name": "Report's eight required sections",
+      "lines": "140-144",
+      "probes": [
+        "backlog:ReportSection\\b",
+        "backlog:Section_OrphanCoverageCheck\\b"
+      ]
+    },
+    {
+      "id": "C27",
+      "name": "Every report run is a verification, never a reused prior output",
+      "lines": "145-147",
+      "probes": [
+        "backlog:hasRunTimestamp\\b"
+      ]
+    },
+    {
+      "id": "C28",
+      "name": "Version identity: versionInfo == versionIRI token == filename token (Gate K)",
+      "lines": "153-155",
+      "probes": [
+        "def gate_k"
+      ]
+    },
+    {
+      "id": "C29",
+      "name": "PATCH for fixes, MINOR for additions, priorVersion chain never squashed",
+      "lines": "156-157",
+      "probes": [
+        "owl:priorVersion",
+        "<http://example\\.org/backlog/1\\.1\\.0>",
+        "<http://example\\.org/backlog/1\\.0\\.0>"
+      ],
+      "note": "Probes the chain itself (the priorVersion predicate plus both prior version IRIs) rather than one literal line, after a v1.2.0 finding that reformatting a multi-value predicate broke a single-line probe."
+    },
+    {
+      "id": "C30",
+      "name": "Four-gate release check: Gate 0, Gate P, Gate K, Gate R",
+      "lines": "158-161",
+      "probes": [
+        "Gate 0",
+        "Gate P",
+        "Gate K",
+        "Gate R"
+      ]
+    },
+    {
+      "id": "C31",
+      "name": "A rule change documents the disagreement closed, the new logic, and the incident",
+      "lines": "162-165",
+      "probes": [
+        "backlog:MethodologyRule\\b",
+        "backlog:closesDisagreement\\b",
+        "backlog:hasMotivatingIncident\\b"
+      ]
+    },
+    {
+      "id": "C32",
+      "name": "Verify directly; never trust memory of a prior run",
+      "lines": "171-173",
+      "probes": [
+        "backlog_evidence_bridge_v"
+      ]
+    },
+    {
+      "id": "C33",
+      "name": "Flag undecided items explicitly; never guess a number",
+      "lines": "174-176",
+      "probes": [
+        "backlog:hasScoreabilityReason\\b"
+      ]
+    },
+    {
+      "id": "C34",
+      "name": "Every what's-next answer traceable to a run in the same turn",
+      "lines": "177-179",
+      "probes": [
+        "backlog:hasRunTimestamp\\b",
+        "backlog:derivedInReport\\b"
+      ]
+    },
+    {
+      "id": "C35",
+      "name": "Owner role: launch-gate business calls, never computed",
+      "lines": "185-187",
+      "probes": [
+        "backlog:Owner\\b"
+      ]
+    },
+    {
+      "id": "C36",
+      "name": "Builder role: multi-factor judgement with written rationale, maintains gates",
+      "lines": "188-191",
+      "probes": [
+        "backlog:Builder\\b"
+      ]
+    }
+  ]
+}

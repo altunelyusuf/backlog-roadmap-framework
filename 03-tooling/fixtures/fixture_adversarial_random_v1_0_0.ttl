@@ -1,0 +1,141 @@
+@prefix backlog: <http://example.org/backlog#> .
+@prefix core:    <http://example.org/core#> .
+@prefix ex:      <http://example.org/fixture-adversarial#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+# ADVERSARIAL FIXTURE — "the random register".
+#
+# Claim under investigation: a backlog and roadmap can be built that satisfy the
+# framework completely while being arbitrary, so that success cannot be told from
+# failure. This fixture is the test. Everything in it is deliberately meaningless
+# but formally well-formed:
+#
+#   * WSJF score value 9.9 with components that compute to 0.4 — the number is
+#     unrelated to its own inputs
+#   * acceptance criteria that are syntactically Gherkin-shaped noise
+#   * evidence marked verified with the method "asserted"
+#   * an objective with a metric, baseline and target that is never observed,
+#     and whose deadline has passed
+#   * a milestone whose target date has passed with no recorded outcome
+#   * a roadmap rank that contradicts the score order, with no rationale
+#   * a cost estimate never compared to anything actual
+#   * scores dated long before the last completion, never re-run
+#
+# If this register validates clean, the claim is TRUE.
+
+ex:Profile a backlog:AdoptionProfile ;
+    backlog:profileAppliesTo "Adversarial random register" ;
+    backlog:governsBacklog ex:Backlog ;
+    backlog:hasConformanceLevel backlog:L3_Governed ;
+    backlog:adoptsFacet backlog:CoreFacet , backlog:EvidenceFacet , backlog:PrioritizationFacet ,
+                        backlog:RoadmapFacet , backlog:InvariantFacet , backlog:AuditFacet .
+
+ex:Backlog a backlog:Backlog ;
+    backlog:hasIdentifier "BL-X" ; backlog:hasTitle "Register" ;
+    backlog:hasState backlog:InProgress ;
+    backlog:appliesDefinitionOfDone backlog:DoD_Baseline ;
+    backlog:hasCommitment ex:C1 .
+ex:C1 a backlog:Commitment ; backlog:commitsToGoal ex:Goal .
+
+ex:Goal a backlog:Goal ; rdfs:label "Be better"@en ; backlog:decidedBy backlog:Owner .
+
+ex:Metric a core:Metric ; rdfs:label "Some number"@en .
+
+ex:Obj a backlog:Objective ;
+    rdfs:label "Improve the number"@en ;
+    backlog:contributesToGoal ex:Goal ;
+    backlog:hasSuccessMetric ex:Metric ;
+    backlog:hasBaselineValue 10.0 ;
+    backlog:hasTargetValue 90.0 ;
+    backlog:hasObjectiveDeadline "2026-06-30T00:00:00"^^xsd:dateTime ;
+    backlog:decidedBy backlog:Owner .
+
+ex:Pkg a backlog:Package ;
+    backlog:hasIdentifier "PKG-X" ; backlog:hasState backlog:InProgress ;
+    backlog:isBusinessCapability true ;
+    backlog:rankedOnRoadmap ex:Roadmap ; backlog:hasRoadmapRank 1 ;
+    backlog:scheduledInHorizon backlog:Now .
+
+ex:Roadmap a backlog:Roadmap ; backlog:roadmapOf ex:Backlog .
+
+ex:MS a backlog:Milestone ;
+    backlog:hasIdentifier "MS-X" ; backlog:hasTitle "Launch" ;
+    backlog:hasTargetDate "2026-05-01T00:00:00"^^xsd:dateTime .
+
+ex:Workflow a backlog:Workflow ;
+    backlog:workflowFor ex:Backlog ;
+    backlog:hasTransition backlog:T_Refine , backlog:T_Start , backlog:T_Complete , backlog:T_Return ,
+                          backlog:T_Defer , backlog:T_WithdrawProposed , backlog:T_WithdrawReady ,
+                          backlog:T_WithdrawInProgress .
+
+ex:A a backlog:Story ;
+    backlog:hasIdentifier "X-1" ; backlog:hasTitle "Thing one" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer ex:Backlog , ex:Pkg ;
+    backlog:contributesToMilestone ex:MS ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasAcceptanceCriterion ex:A_AC ;
+    backlog:hasEvidence ex:A_Ev ;
+    backlog:hasCostEstimate ex:A_Est ;
+    backlog:lastAuditedAt "2026-07-27T09:00:00"^^xsd:dateTime ;
+    backlog:startedAt "2026-01-02T09:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-07-01T09:00:00"^^xsd:dateTime ;
+    backlog:hasPriorityScore ex:A_Score .
+
+ex:A_AC a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a thing, When something happens, Then it works." .
+
+ex:A_Ev a backlog:TestEvidence ;
+    backlog:hasTestSpec "tests/thing.spec.js" ; backlog:hasTestId "T-1" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-07-27T09:00:00"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "asserted" ;
+    backlog:attestsCriterion ex:A_AC .
+
+ex:A_H a backlog:TestHarness ;
+    backlog:harnessFor ex:A ; backlog:hasHarnessEvidence ex:A_Ev .
+
+ex:A_Est a backlog:CostEstimate ;
+    backlog:hasEffortEstimate 3.0 ;
+    backlog:hasCostBasis "gut feel" ;
+    backlog:estimatedAt "2026-01-01T09:00:00"^^xsd:dateTime .
+
+# the number and its own components disagree: (1+1+1)/10 = 0.3, not 9.9
+ex:A_Score a backlog:WSJFScore ;
+    backlog:scoredByMethod backlog:Method_WSJF ;
+    backlog:hasScoreValue 9.9 ;
+    backlog:scoredAt "2026-01-01T09:00:00"^^xsd:dateTime ;
+    backlog:hasUserBusinessValue 1 ; backlog:hasTimeCriticality 1 ;
+    backlog:hasRiskReductionValue 1 ; backlog:hasJobSize 10 .
+
+ex:A_T1 a backlog:TransitionEvent ;
+    backlog:transitionedItem ex:A ; backlog:viaTransition backlog:T_Refine ;
+    backlog:transitionedAt "2026-01-01T09:00:00"^^xsd:dateTime .
+ex:A_T2 a backlog:TransitionEvent ;
+    backlog:transitionedItem ex:A ; backlog:viaTransition backlog:T_Start ;
+    backlog:transitionedAt "2026-01-02T09:00:00"^^xsd:dateTime .
+ex:A_T3 a backlog:TransitionEvent ;
+    backlog:transitionedItem ex:A ; backlog:viaTransition backlog:T_Complete ;
+    backlog:transitionedAt "2026-07-01T09:00:00"^^xsd:dateTime .
+
+ex:B a backlog:Story ;
+    backlog:hasIdentifier "X-2" ; backlog:hasTitle "Thing two" ;
+    backlog:hasState backlog:Ready ;
+    backlog:memberOfContainer ex:Backlog , ex:Pkg ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasAcceptanceCriterion ex:B_AC ;
+    backlog:hasPriorityScore ex:B_Score .
+ex:B_AC a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given, When, Then." .
+ex:B_Score a backlog:RICEScore ;
+    backlog:scoredByMethod backlog:Method_RICE ;
+    backlog:hasScoreValue 0.1 ;
+    backlog:scoredAt "2026-01-01T09:00:00"^^xsd:dateTime ;
+    backlog:hasReach 1000 ; backlog:hasImpact 3 ; backlog:hasConfidence 1.0 ; backlog:hasEffort 1 .
+ex:B_R a backlog:RefinementEvent ;
+    backlog:refines ex:B ; backlog:refinedAt "2026-01-01T09:00:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "refined" .
+ex:B_T1 a backlog:TransitionEvent ;
+    backlog:transitionedItem ex:B ; backlog:viaTransition backlog:T_Refine ;
+    backlog:transitionedAt "2026-01-01T09:00:00"^^xsd:dateTime .

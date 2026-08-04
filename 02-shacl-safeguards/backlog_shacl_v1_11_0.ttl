@@ -1,0 +1,1773 @@
+@prefix backlog: <http://example.org/backlog#> .
+@prefix sh:      <http://www.w3.org/ns/shacl#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix prov:    <http://www.w3.org/ns/prov#> .
+
+<http://example.org/backlog-shapes> a owl:Ontology ;
+    rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.11.0> ;
+    owl:versionInfo "1.11.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.10.0> ,
+                     <http://example.org/backlog-shapes/1.9.0> ,
+                     <http://example.org/backlog-shapes/1.8.0> ,
+                     <http://example.org/backlog-shapes/1.7.0> ,
+                     <http://example.org/backlog-shapes/1.6.0> ,
+                     <http://example.org/backlog-shapes/1.5.0> ,
+                     <http://example.org/backlog-shapes/1.4.0> ,
+                     <http://example.org/backlog-shapes/1.3.0> ,
+                     <http://example.org/backlog-shapes/1.2.0> ,
+                     <http://example.org/backlog-shapes/1.1.0> ,
+                     <http://example.org/backlog-shapes/1.0.0> ;
+    owl:imports <http://example.org/backlog> ;
+    dcterms:identifier "backlog-shapes" ;
+    dcterms:created "2026-07-27T00:00:00"^^xsd:dateTime ;
+    dcterms:modified "2026-07-27T00:00:00"^^xsd:dateTime ;
+    dcterms:creator "Yusuf Altunel" ;
+    dcterms:publisher "İstanbul Kültür Üniversitesi, Department of Computer Engineering" ;
+    dcterms:rightsHolder "İstanbul Kültür Üniversitesi, Department of Computer Engineering" ;
+    dcterms:rights "Copyright (c) 2025-2026 İstanbul Kültür Üniversitesi & Yusuf Altunel. Licensed under CC BY 4.0."@en ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    prov:wasAttributedTo "Yusuf Altunel" ;
+    skos:definition "Behavioural enforcement for the framework, tiered by the conformance level the adoption profile in the data graph claims. L1 shapes always fire; L2 and L3 shapes fire only when a profile claims that level, so one shapes file serves adopters of different maturity without forking. Advisory checks are separated into their own node shapes carrying node-level sh:severity, because pyshacl ignores severity declared inside sh:sparql blank nodes. Conformance against this suite means zero results at sh:Violation severity, not an empty report."@en .
+
+#################################################################
+#  L1 — structural integrity (always in force)
+#################################################################
+
+backlog:WorkItemShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItem ;
+    sh:severity sh:Violation ;
+    rdfs:label "Work item core integrity (L1)"@en ;
+
+    sh:property [ sh:path backlog:hasIdentifier ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ;
+                  sh:message "L1: a work item must have exactly one string identifier." ] ;
+    sh:property [ sh:path backlog:hasState ; sh:minCount 1 ; sh:maxCount 1 ; sh:class backlog:LifecycleState ;
+                  sh:message "L1: a work item must have exactly one lifecycle state drawn from the closed enumeration." ] ;
+    sh:property [ sh:path backlog:dependsOn ; sh:class backlog:WorkItem ;
+                  sh:message "L1: dependsOn must point to a real work item." ] ;
+    sh:property [ sh:path backlog:memberOfContainer ; sh:class backlog:WorkItemContainer ;
+                  sh:message "L1: memberOfContainer must point to a real container." ] ;
+    sh:property [ sh:path backlog:hasEvidence ; sh:class backlog:Evidence ;
+                  sh:message "L1: hasEvidence must point to a real Evidence artifact." ] ;
+
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: work item identifier must be unique across the register." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasIdentifier ?id .
+            ?other backlog:hasIdentifier ?id .
+            FILTER (?other != $this)
+        }""" ] ;
+
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: dependency cycle — this item transitively depends on itself." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:dependsOn+ $this .
+        }""" ] ;
+
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: a cancelled item must record a rationale for withdrawal." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasState backlog:Cancelled .
+            FILTER NOT EXISTS { $this backlog:hasRationale ?r }
+        }""" ] ;
+
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: an item may not carry two live priority scores produced by the same method." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasPriorityScore ?s1 , ?s2 .
+            ?s1 backlog:scoredByMethod ?m .
+            ?s2 backlog:scoredByMethod ?m .
+            FILTER (?s1 != ?s2)
+        }""" ] .
+
+backlog:ContainerShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItemContainer ;
+    sh:severity sh:Violation ;
+    rdfs:label "Container integrity (L1)"@en ;
+    sh:property [ sh:path backlog:hasIdentifier ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ;
+                  sh:message "L1: a container must have exactly one string identifier." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: a container must have at least one member item, otherwise it reports on nothing." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            FILTER NOT EXISTS { ?m backlog:memberOfContainer $this }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: a container's asserted state disagrees with the state derived from its members." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasState ?asserted .
+            $this backlog:derivedState ?derived .
+            FILTER (?asserted != ?derived)
+        }""" ] .
+
+backlog:PriorityScoreShape a sh:NodeShape ;
+    sh:targetClass backlog:PriorityScore ;
+    sh:severity sh:Violation ;
+    rdfs:label "Priority score integrity (L1)"@en ;
+    sh:property [ sh:path backlog:scoredByMethod ; sh:minCount 1 ; sh:maxCount 1 ; sh:class backlog:PrioritizationMethod ;
+                  sh:message "L1: every priority score must name exactly one prioritisation method." ] ;
+    sh:property [ sh:path backlog:hasScoreValue ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:decimal ;
+                  sh:message "L1: every priority score must carry exactly one decimal value." ] .
+
+backlog:MilestoneShape a sh:NodeShape ;
+    sh:targetClass backlog:Milestone ;
+    sh:severity sh:Violation ;
+    rdfs:label "Milestone integrity (L1)"@en ;
+    sh:property [ sh:path backlog:hasIdentifier ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ;
+                  sh:message "L1: a milestone must have exactly one string identifier." ] ;
+    sh:property [ sh:path backlog:hasTargetDate ; sh:minCount 1 ; sh:datatype xsd:dateTime ;
+                  sh:message "L1: a milestone must carry the date it is aimed at." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: a milestone must have at least one contributing work item; a milestone with no work behind it is a claim, not a plan." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            FILTER NOT EXISTS { ?i backlog:contributesToMilestone $this }
+        }""" ] .
+
+backlog:RoadmapProjectionShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItem ;
+    sh:severity sh:Violation ;
+    rdfs:label "Roadmap is a projection of the backlog (L1)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: an item placed on the roadmap (horizon or milestone) must be a member of a Backlog register; the roadmap may not introduce scope of its own." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            { $this backlog:scheduledInHorizon ?h } UNION { $this backlog:contributesToMilestone ?m }
+            FILTER NOT EXISTS { $this backlog:memberOfContainer ?b . ?b a backlog:Backlog }
+        }""" ] .
+
+backlog:RoadmapShape a sh:NodeShape ;
+    sh:targetClass backlog:Roadmap ;
+    sh:severity sh:Violation ;
+    rdfs:label "Roadmap integrity (L1)"@en ;
+    sh:property [ sh:path backlog:roadmapOf ; sh:minCount 1 ; sh:maxCount 1 ; sh:class backlog:Backlog ;
+                  sh:message "L1: a roadmap must project exactly one backlog." ] .
+
+backlog:AdoptionProfileShape a sh:NodeShape ;
+    sh:targetClass backlog:AdoptionProfile ;
+    sh:severity sh:Violation ;
+    rdfs:label "Adoption profile integrity (L1)"@en ;
+    sh:property [ sh:path backlog:hasConformanceLevel ; sh:minCount 1 ; sh:maxCount 1 ; sh:class backlog:ConformanceLevel ;
+                  sh:message "L1: an adoption profile must claim exactly one conformance level." ] ;
+    sh:property [ sh:path backlog:governsBacklog ; sh:minCount 1 ; sh:maxCount 1 ; sh:class backlog:Backlog ;
+                  sh:message "L1: an adoption profile must name the backlog it governs." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: every adoption profile must adopt the Core facet." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            FILTER NOT EXISTS { $this backlog:adoptsFacet backlog:CoreFacet }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L2/L3 claim: a profile claiming evidence-bound or governed conformance must adopt the Evidence facet." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            FILTER NOT EXISTS { $this backlog:adoptsFacet backlog:EvidenceFacet }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3 claim: a profile claiming governed conformance must adopt the Invariant and Audit facets." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasConformanceLevel backlog:L3_Governed .
+            FILTER NOT EXISTS { $this backlog:adoptsFacet backlog:InvariantFacet }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3 claim: a profile claiming governed conformance must adopt the Audit facet." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasConformanceLevel backlog:L3_Governed .
+            FILTER NOT EXISTS { $this backlog:adoptsFacet backlog:AuditFacet }
+        }""" ] .
+
+#################################################################
+#  Evidence & Definition of Done — authoring integrity
+#################################################################
+
+backlog:TestEvidenceShape a sh:NodeShape ;
+    sh:targetClass backlog:TestEvidence ;
+    sh:severity sh:Violation ;
+    rdfs:label "Test evidence integrity"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Test evidence must record a test spec path or a test identifier, or the bridge cannot check it." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            FILTER NOT EXISTS { $this backlog:hasTestSpec ?s }
+            FILTER NOT EXISTS { $this backlog:hasTestId ?i }
+        }""" ] .
+
+backlog:ReleaseEvidenceShape a sh:NodeShape ;
+    sh:targetClass backlog:ReleaseEvidence ;
+    sh:severity sh:Violation ;
+    rdfs:label "Release evidence integrity"@en ;
+    sh:property [ sh:path backlog:hasReleaseVersion ; sh:minCount 1 ; sh:datatype xsd:string ;
+                  sh:message "Release evidence must record the delivered version." ] ;
+    sh:property [ sh:path backlog:hasPackageSHA256 ; sh:minCount 1 ; sh:datatype xsd:string ;
+                  sh:pattern "^[0-9a-f]{64}$" ;
+                  sh:message "Release evidence must record a well-formed lowercase SHA-256 package hash." ] .
+
+backlog:ArtifactEvidenceShape a sh:NodeShape ;
+    sh:targetClass backlog:ArtifactEvidence ;
+    sh:severity sh:Violation ;
+    rdfs:label "Artifact evidence integrity"@en ;
+    sh:property [ sh:path backlog:hasArtifactPath ; sh:minCount 1 ; sh:datatype xsd:string ;
+                  sh:message "Artifact evidence must record the delivered file path." ] ;
+    sh:property [ sh:path backlog:hasArtifactSHA256 ; sh:pattern "^[0-9a-f]{64}$" ;
+                  sh:message "Artifact evidence hash must be a well-formed lowercase SHA-256 digest." ] .
+
+backlog:ReviewEvidenceShape a sh:NodeShape ;
+    sh:targetClass backlog:ReviewEvidence ;
+    sh:severity sh:Violation ;
+    rdfs:label "Review evidence integrity"@en ;
+    sh:property [ sh:path backlog:hasReviewer ; sh:minCount 1 ; sh:datatype xsd:string ;
+                  sh:message "Review evidence must name who judged." ] ;
+    sh:property [ sh:path backlog:hasReviewRecordRef ; sh:minCount 1 ; sh:datatype xsd:string ;
+                  sh:message "Review evidence must point at a retrievable record, not a remembered conversation." ] .
+
+backlog:DoDCriterionShape a sh:NodeShape ;
+    sh:targetClass backlog:DoDCriterion ;
+    sh:severity sh:Violation ;
+    rdfs:label "Definition-of-Done criterion is falsifiable"@en ;
+    sh:property [ sh:path backlog:hasCheckQuery ; sh:minCount 1 ; sh:datatype xsd:string ;
+                  sh:message "A Definition-of-Done criterion without executable check text is decorative." ] ;
+    sh:property [ sh:path backlog:hasExpectedResult ; sh:minCount 1 ; sh:datatype xsd:string ;
+                  sh:message "A check with no stated expected result cannot fail." ] ;
+    sh:property [ sh:path backlog:hasCriterionStatus ; sh:minCount 1 ; sh:class backlog:InvariantStatus ;
+                  sh:message "A criterion must report an honest status from the three-value enumeration." ] .
+
+backlog:InvariantShape a sh:NodeShape ;
+    sh:targetClass backlog:CrossCuttingInvariant ;
+    sh:severity sh:Violation ;
+    rdfs:label "Cross-cutting invariant is executable"@en ;
+    sh:property [ sh:path backlog:hasCheckQuery ; sh:minCount 1 ; sh:datatype xsd:string ;
+                  sh:message "An invariant without executable check text is prose asserting itself." ] ;
+    sh:property [ sh:path backlog:hasInvariantStatus ; sh:minCount 1 ; sh:maxCount 1 ; sh:class backlog:InvariantStatus ;
+                  sh:message "An invariant must report exactly one honest status." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "An invariant reported as not-yet-enforceable must name the work item whose completion would make it enforceable." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasInvariantStatus backlog:NotYetEnforceable .
+            FILTER NOT EXISTS { $this backlog:tracksItem ?i }
+        }""" ] .
+
+#################################################################
+#  L2 — evidence-bound (fires only when a profile claims L2 or L3)
+#################################################################
+
+backlog:EvidenceBoundDoneShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItem ;
+    sh:severity sh:Violation ;
+    rdfs:label "Done implies verified evidence (L2)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L2: a Done item must carry at least one Evidence artifact." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            $this backlog:hasState backlog:Done .
+            FILTER NOT EXISTS { $this backlog:hasEvidence ?e }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L2: a Done item must carry at least one bridge-verified Evidence artifact (evidenceVerified true)." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            $this backlog:hasState backlog:Done .
+            FILTER NOT EXISTS { $this backlog:hasEvidence ?e . ?e backlog:evidenceVerified true }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L2: a Done item may not depend on work that is not Done." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            $this backlog:hasState backlog:Done ; backlog:dependsOn ?d .
+            ?d backlog:hasState ?ds .
+            FILTER (?ds != backlog:Done)
+        }""" ] .
+
+#################################################################
+#  L3 — governed (fires only when a profile claims L3)
+#################################################################
+
+backlog:GovernedDoneShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItem ;
+    sh:severity sh:Violation ;
+    rdfs:label "Governed completion (L3)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: a Done item must be anchored by verified test or release evidence; review evidence alone is insufficient." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel backlog:L3_Governed .
+            $this backlog:hasState backlog:Done .
+            FILTER NOT EXISTS {
+                $this backlog:hasEvidence ?e .
+                ?e backlog:evidenceVerified true .
+                { ?e a backlog:TestEvidence } UNION { ?e a backlog:ReleaseEvidence }
+            }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: a Done item must record when it was last individually re-verified (lastAuditedAt); absence means unchecked, not fine." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel backlog:L3_Governed .
+            $this backlog:hasState backlog:Done .
+            FILTER NOT EXISTS { $this backlog:lastAuditedAt ?t }
+        }""" ] .
+
+#################################################################
+#  Advisory tier — node-level severity (L-36: severity must not sit
+#  inside an sh:sparql blank node, where pyshacl ignores it)
+#################################################################
+
+backlog:UnscoredItemAdvisoryShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItem ;
+    sh:severity sh:Info ;
+    rdfs:label "Advisory: item has no priority score"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: this item carries no priority score and no not-yet-scoreable flag; under an L2 profile this is a silent gap and a violation." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasState ?s .
+            FILTER (?s IN (backlog:Proposed, backlog:Ready))
+            FILTER NOT EXISTS { $this backlog:hasPriorityScore ?p }
+            FILTER NOT EXISTS { $this backlog:notYetScoreable true }
+        }""" ] .
+
+backlog:HorizonCoherenceAdvisoryShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItem ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: roadmap horizon disagrees with lifecycle state"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: this item is advertised in the Now horizon but is neither Ready nor InProgress." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:scheduledInHorizon backlog:Now ; backlog:hasState ?s .
+            FILTER (?s NOT IN (backlog:Ready, backlog:InProgress, backlog:Done))
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: this item is Ready but its declared dependencies are not all Done, so it is not actually startable." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasState backlog:Ready ; backlog:dependsOn ?d .
+            ?d backlog:hasState ?ds .
+            FILTER (?ds != backlog:Done)
+        }""" ] .
+
+backlog:StaleVerificationAdvisoryShape a sh:NodeShape ;
+    sh:targetClass backlog:Evidence ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: evidence verified without a recorded method or time"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: this evidence is marked verified but records neither when nor how it was checked." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:evidenceVerified true .
+            FILTER NOT EXISTS { $this backlog:verifiedAt ?t }
+            FILTER NOT EXISTS { $this backlog:hasVerificationMethod ?m }
+        }""" ] .
+
+#################################################################
+#  v1.1.0 — scoreability and gap discipline
+#################################################################
+
+backlog:ScoreabilityShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItem ;
+    sh:severity sh:Violation ;
+    rdfs:label "Scoreability flag integrity (L1)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: an item flagged not-yet-scoreable must record the reason; the flag without a reason is a silent gap wearing a label." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:notYetScoreable true .
+            FILTER NOT EXISTS { $this backlog:hasScoreabilityReason ?r }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: an item cannot be both scored and declared not-yet-scoreable." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:notYetScoreable true ; backlog:hasPriorityScore ?p .
+        }""" ] .
+
+backlog:SilentGapShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItem ;
+    sh:severity sh:Violation ;
+    rdfs:label "Silent-gap discipline (L2)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L2: silent gap — this open item is neither scored nor flagged not-yet-scoreable. Gap discipline is binary and enforced here, not left to judgement." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            $this backlog:hasState ?s .
+            FILTER (?s IN (backlog:Proposed, backlog:Ready))
+            FILTER NOT EXISTS { $this backlog:hasPriorityScore ?sc }
+            FILTER NOT EXISTS { $this backlog:notYetScoreable true }
+        }""" ] .
+
+#################################################################
+#  v1.1.0 — launch-readiness model, roles, capability tagging
+#################################################################
+
+backlog:LaunchGateShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItemContainer ;
+    sh:severity sh:Violation ;
+    rdfs:label "Launch gates are owner decisions (L1)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: a launch gate must carry an owner-declared launch priority — it is a business decision, never a value computed from a score." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:isLaunchGate true .
+            FILTER NOT EXISTS { $this backlog:hasLaunchPriority ?p }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: a launch gate must name the Owner as its decider and carry a written rationale." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:isLaunchGate true .
+            FILTER NOT EXISTS { $this backlog:decidedBy backlog:Owner }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: a launch priority may only exist on a container declared a launch gate. Launch priority is the order in which launch gates clear; on anything that is not a gate it orders nothing." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasLaunchPriority ?p .
+            FILTER NOT EXISTS { $this backlog:isLaunchGate true }
+        }""" ] .
+
+# Superseded at shapes 1.8.0: a constraint reading "a container tagged as not a
+# business capability may not carry a launch priority". It was jointly
+# unsatisfiable with the first constraint above for any container that is both a
+# launch gate and not a business capability — a combination an adopting project
+# reported from real data (cross-cutting platform and continuity packages that the
+# owner named launch-blocking but that are not independently shippable
+# capabilities). Neither flag was wrong; the shape was.
+#
+# The diagnosis is narrower than "two rules never reconciled". The superseded
+# constraint's own message described protecting CAPABILITY-LEVEL RANKING, but it
+# constrained backlog:hasLaunchPriority, which the TBox defines as an owner-declared
+# launch ordinal that is never a computed ranking value. Capability-level ranking
+# runs on backlog:hasPriorityScore, and the report tool already excludes
+# non-capability containers from it. So the constraint guarded the wrong predicate.
+#
+# The replacement states the coherent rule — a launch priority only means something
+# on a launch gate — and is strictly stronger: it still catches the case the old
+# constraint caught (a non-capability, non-gate container carrying a priority) and
+# additionally catches one nothing caught before (a BUSINESS-CAPABILITY container
+# carrying a launch priority without being declared a gate).
+
+backlog:ContainerScoreShape a sh:NodeShape ;
+    sh:targetClass backlog:PriorityScore ;
+    sh:severity sh:Violation ;
+    rdfs:label "Container scores are judged, not averaged (L1)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: a container-level score may not be an average of member scores — averaging re-uses numbers computed for unrelated reasons on unrelated items." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE { $this backlog:isAveragedFromMembers true }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: a container-level score must be a Builder judgement carrying a written rationale." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?c a backlog:WorkItemContainer ; backlog:hasPriorityScore $this .
+            FILTER NOT EXISTS { $this backlog:hasScoreRationale ?r }
+        }""" ] .
+
+#################################################################
+#  v1.1.0 — dependency disclosure and deployability
+#################################################################
+
+backlog:DependencyDisclosureShape a sh:NodeShape ;
+    sh:targetClass backlog:DependencyDisclosure ;
+    sh:severity sh:Violation ;
+    rdfs:label "A disclosed dependency must become an edge"@en ;
+    sh:property [ sh:path backlog:hasDisclosureSource ; sh:minCount 1 ; sh:datatype xsd:string ;
+                  sh:message "A disclosure must record where the dependency was stated." ] ;
+    sh:property [ sh:path backlog:disclosesDependencyOn ; sh:minCount 1 ;
+                  sh:message "A disclosure must name what is depended upon." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "A dependency stated in prose or judgement must exist as an edge — dependsOn between items, containerDependsOn between containers. An undisclosed-but-real dependency is worse than none, because the register looks resolved." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?subject backlog:hasDependencyDisclosure $this .
+            $this backlog:disclosesDependencyOn ?dep .
+            FILTER NOT EXISTS { ?subject backlog:dependsOn ?dep }
+            FILTER NOT EXISTS { ?subject backlog:containerDependsOn ?dep }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "A disclosure must name a work item or a container, not something else." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:disclosesDependencyOn ?dep .
+            FILTER NOT EXISTS { ?dep a ?ci . ?ci rdfs:subClassOf* backlog:WorkItem }
+            FILTER NOT EXISTS { ?dep a ?cc . ?cc rdfs:subClassOf* backlog:WorkItemContainer }
+        }""" ] .
+
+backlog:DeployabilityShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItemContainer ;
+    sh:severity sh:Violation ;
+    rdfs:label "Member completion is not deployability"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "A fully member-complete container with an unresolved external blocker is not deployable; completeness is one input to job size, not a substitute for checking real dependency edges." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:derivedState backlog:Done ; backlog:hasExternalBlocker ?b .
+        }""" ] .
+
+#################################################################
+#  v1.1.0 — blueprint coverage
+#################################################################
+
+backlog:BlueprintGapShape a sh:NodeShape ;
+    sh:targetClass backlog:BlueprintGap ;
+    sh:severity sh:Violation ;
+    rdfs:label "A recorded gap must be triageable"@en ;
+    sh:property [ sh:path backlog:hasGapReason ; sh:minCount 1 ; sh:datatype xsd:string ;
+                  sh:message "A blueprint gap must record why the coverage is absent." ] ;
+    sh:property [ sh:path backlog:gapForEntity ; sh:minCount 1 ; sh:class backlog:DomainEntity ;
+                  sh:message "A blueprint gap must name the entity whose coverage is missing." ] .
+
+backlog:CodeVerificationShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItem ;
+    sh:severity sh:Violation ;
+    rdfs:label "A code-verification claim carries its method"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "An item claiming verification against running code must record what the check found; titles lie by omission and so does an unexplained tick." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:verifiedAgainstCode true .
+            FILTER NOT EXISTS { $this backlog:hasCodeVerificationNote ?n }
+        }""" ] .
+
+backlog:BlueprintSweepShape a sh:NodeShape ;
+    sh:targetClass backlog:DomainEntity ;
+    sh:severity sh:Violation ;
+    rdfs:label "Full life-cycle sweep per entity (L3)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: this entity has a life-cycle stage with neither backlog coverage nor a recorded blueprint gap. A gap is a defect to be written down, never a silence." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel backlog:L3_Governed .
+            ?stage a backlog:EntityLifecycleStage .
+            FILTER NOT EXISTS { ?i backlog:coversEntity $this ; backlog:coversStage ?stage }
+            FILTER NOT EXISTS { ?g backlog:gapForEntity $this ; backlog:gapForStage ?stage }
+        }""" ] .
+
+#################################################################
+#  v1.1.0 — governed documents, reports, rules, gates
+#################################################################
+
+backlog:GovernedDocumentShape a sh:NodeShape ;
+    sh:targetClass backlog:GovernedDocument ;
+    sh:severity sh:Violation ;
+    rdfs:label "Supersession is marked in place"@en ;
+    sh:property [ sh:path backlog:hasDocumentStatus ; sh:minCount 1 ; sh:maxCount 1 ; sh:class backlog:DocumentStatus ;
+                  sh:message "A governed document must carry exactly one currency status." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "A superseded document must point at what replaced it and say why; a retirement marker without a forward pointer sends the reader nowhere." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasDocumentStatus backlog:Superseded .
+            FILTER NOT EXISTS { $this backlog:supersededBy ?d . $this backlog:hasSupersessionReason ?r }
+        }""" ] .
+
+backlog:RoadmapReportShape a sh:NodeShape ;
+    sh:targetClass backlog:RoadmapReport ;
+    sh:severity sh:Violation ;
+    rdfs:label "A report is a run, and a complete one"@en ;
+    sh:property [ sh:path backlog:hasRunTimestamp ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:dateTime ;
+                  sh:message "A report must record when it was computed; a recalled report is a memory, not a measurement." ] ;
+    sh:property [ sh:path backlog:reportOf ; sh:minCount 1 ; sh:class backlog:Backlog ;
+                  sh:message "A report must name the register it was computed from." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "A compliant report must contain all eight required sections; a section quietly dropped is an omission, not a shorter report." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?section a backlog:ReportSection .
+            FILTER NOT EXISTS { $this backlog:hasSection ?section }
+        }""" ] .
+
+backlog:NextRecommendationShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItem ;
+    sh:severity sh:Violation ;
+    rdfs:label "A next-recommendation names its run and its model"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "An item recommended as next must name the ranking model that produced the recommendation, so the two models' answers stay distinguishable." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:derivedInReport ?r .
+            FILTER NOT EXISTS { $this backlog:underRankingModel ?m }
+        }""" ] .
+
+backlog:MethodologyRuleShape a sh:NodeShape ;
+    sh:targetClass backlog:MethodologyRule ;
+    sh:severity sh:Violation ;
+    rdfs:label "A rule keeps its reasoning"@en ;
+    sh:property [ sh:path backlog:hasRuleLogic ; sh:minCount 1 ; sh:datatype xsd:string ;
+                  sh:message "A methodology rule must state its exact logic." ] ;
+    sh:property [ sh:path backlog:closesDisagreement ; sh:minCount 1 ; sh:datatype xsd:string ;
+                  sh:message "A methodology rule must state the disagreement or defect it closes." ] ;
+    sh:property [ sh:path backlog:hasMotivatingIncident ; sh:minCount 1 ; sh:datatype xsd:string ;
+                  sh:message "A methodology rule must name the concrete incident that produced it; without one it is theoretical best practice." ] .
+
+backlog:ReleaseGateShape a sh:NodeShape ;
+    sh:targetClass backlog:ReleaseGate ;
+    sh:severity sh:Violation ;
+    rdfs:label "A gate is executable and ordered"@en ;
+    sh:property [ sh:path backlog:hasGateCommand ; sh:minCount 1 ; sh:datatype xsd:string ;
+                  sh:message "A release gate must carry the command that executes it." ] ;
+    sh:property [ sh:path backlog:hasGateOrder ; sh:minCount 1 ; sh:datatype xsd:integer ;
+                  sh:message "A release gate must state where it sits in the sequence." ] .
+
+#################################################################
+#  v1.2.0 — intent layer integrity
+#################################################################
+
+backlog:ObjectiveShape a sh:NodeShape ;
+    sh:targetClass backlog:Objective ;
+    sh:severity sh:Violation ;
+    rdfs:label "An objective is measurable or it is not an objective (L1)"@en ;
+    sh:property [ sh:path backlog:contributesToGoal ; sh:minCount 1 ; sh:class backlog:Goal ;
+                  sh:message "An objective must advance a stated goal." ] ;
+    sh:property [ sh:path backlog:hasSuccessMetric ; sh:minCount 1 ;
+                  sh:message "An objective must name at least one success metric; an objective that cannot be measured cannot be missed." ] ;
+    sh:property [ sh:path backlog:hasBaselineValue ; sh:minCount 1 ; sh:datatype xsd:decimal ;
+                  sh:message "An objective must record where the metric started." ] ;
+    sh:property [ sh:path backlog:hasTargetValue ; sh:minCount 1 ; sh:datatype xsd:decimal ;
+                  sh:message "An objective must record where the metric must reach." ] .
+
+backlog:BenefitShape a sh:NodeShape ;
+    sh:targetClass backlog:Benefit ;
+    sh:severity sh:Violation ;
+    rdfs:label "A benefit is owned, attached and evidenced (L1)"@en ;
+    sh:property [ sh:path backlog:benefitFor ; sh:minCount 1 ; sh:class backlog:Objective ;
+                  sh:message "A benefit must advance an objective; otherwise it is a preference." ] ;
+    sh:property [ sh:path backlog:hasBenefitOwner ; sh:minCount 1 ;
+                  sh:message "A benefit must name the stakeholder accountable for it arriving." ] ;
+    sh:property [ sh:path backlog:hasBenefitStatement ; sh:minCount 1 ; sh:datatype xsd:string ;
+                  sh:message "A benefit must state what improves, for whom, and how it will be observed." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "A benefit claimed realized must point at verified Evidence — shipping the work is an input to a benefit, never the benefit itself." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:benefitRealized true .
+            FILTER NOT EXISTS { $this backlog:benefitRealizedBy ?e . ?e backlog:evidenceVerified true }
+        }""" ] .
+
+backlog:OpportunityShape a sh:NodeShape ;
+    sh:targetClass backlog:Opportunity ;
+    sh:severity sh:Violation ;
+    rdfs:label "An opportunity is stated and aimed (L1)"@en ;
+    sh:property [ sh:path backlog:opportunityFor ; sh:minCount 1 ;
+                  sh:message "An opportunity must name the goal or objective it would advance." ] ;
+    sh:property [ sh:path backlog:hasOpportunityStatement ; sh:minCount 1 ; sh:datatype xsd:string ;
+                  sh:message "An opportunity must state the upside and what it would cost to find out." ] .
+
+backlog:GoalShape a sh:NodeShape ;
+    sh:targetClass backlog:Goal ;
+    sh:severity sh:Violation ;
+    rdfs:label "A goal is named and owned (L1)"@en ;
+    sh:property [ sh:path rdfs:label ; sh:minCount 1 ;
+                  sh:message "A goal must be stated." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "A goal is an owner decision and must name the Owner as its decider." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE { FILTER NOT EXISTS { $this backlog:decidedBy backlog:Owner } }""" ] .
+
+#################################################################
+#  v1.2.0 — scope, refinement, cost
+#################################################################
+
+backlog:ScopeExclusionShape a sh:NodeShape ;
+    sh:targetClass backlog:ScopeExclusion ;
+    sh:severity sh:Violation ;
+    rdfs:label "An exclusion is explicit, reasoned and owner-decided (L1)"@en ;
+    sh:property [ sh:path backlog:excludesConcern ; sh:minCount 1 ; sh:datatype xsd:string ;
+                  sh:message "An exclusion must name what is excluded, precisely enough to test a later request against it." ] ;
+    sh:property [ sh:path backlog:hasExclusionRationale ; sh:minCount 1 ; sh:datatype xsd:string ;
+                  sh:message "An exclusion must record why; an unreasoned exclusion can only be reversed by whoever argues hardest." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Scope exclusion is an owner decision and must name the Owner as its decider." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE { FILTER NOT EXISTS { $this backlog:decidedBy backlog:Owner } }""" ] .
+
+backlog:RefinementEventShape a sh:NodeShape ;
+    sh:targetClass backlog:RefinementEvent ;
+    sh:severity sh:Violation ;
+    rdfs:label "A refinement records what it changed (L1)"@en ;
+    sh:property [ sh:path backlog:refines ; sh:minCount 1 ; sh:class backlog:WorkItem ;
+                  sh:message "A refinement must name the item it acted on." ] ;
+    sh:property [ sh:path backlog:refinedAt ; sh:minCount 1 ; sh:datatype xsd:dateTime ;
+                  sh:message "A refinement must record when it happened." ] ;
+    sh:property [ sh:path backlog:hasRefinementOutcome ; sh:minCount 1 ; sh:datatype xsd:string ;
+                  sh:message "A refinement with no recorded outcome was a meeting, not a refinement." ] .
+
+backlog:ReadinessGateShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItem ;
+    sh:severity sh:Violation ;
+    rdfs:label "Ready is earned, not assumed (L2)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L2: an item in Ready must carry at least one acceptance criterion; readiness without stated acceptance is an estimate of someone's memory." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            $this backlog:hasState backlog:Ready .
+            FILTER NOT EXISTS { $this backlog:hasAcceptanceCriterion ?a }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L2: an item in Ready must have a recorded refinement event; readiness is something done to an item, not a state it drifts into." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            $this backlog:hasState backlog:Ready .
+            FILTER NOT EXISTS { ?r backlog:refines $this }
+        }""" ] .
+
+backlog:CostEstimateShape a sh:NodeShape ;
+    sh:targetClass backlog:CostEstimate ;
+    sh:severity sh:Violation ;
+    rdfs:label "An estimate discloses its basis (L1)"@en ;
+    sh:property [ sh:path backlog:hasEffortEstimate ; sh:minCount 1 ; sh:datatype xsd:decimal ;
+                  sh:message "A cost estimate must carry a quantity." ] ;
+    sh:property [ sh:path backlog:hasCostBasis ; sh:minCount 1 ; sh:datatype xsd:string ;
+                  sh:message "A cost estimate must state how it was derived and in what unit; an undisclosed basis cannot be challenged or reused." ] .
+
+#################################################################
+#  v1.2.0 — risk treatment, investment mix, project gates
+#################################################################
+
+backlog:RiskTreatmentShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItem ;
+    sh:severity sh:Violation ;
+    rdfs:label "A referenced risk is treated or explicitly accepted (L1)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "A risk attached to work must either carry a mitigation or name the role that accepted it; silent acceptance is the failure this prevents." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasRisk ?r .
+            FILTER NOT EXISTS { ?r backlog:hasMitigation ?m }
+            FILTER NOT EXISTS { ?r backlog:riskAcceptedBy ?role }
+        }""" ] .
+
+backlog:PortfolioPolicyShape a sh:NodeShape ;
+    sh:targetClass backlog:PortfolioPolicy ;
+    sh:severity sh:Violation ;
+    rdfs:label "A policy accounts for all capacity (L1)"@en ;
+    sh:property [ sh:path backlog:policyFor ; sh:minCount 1 ; sh:maxCount 1 ;
+                  sh:message "A portfolio policy must name the register it governs." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Declared capacity shares must sum to 1; a policy that leaves capacity unaccounted for leaves it to whoever shouts." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            { SELECT $this (SUM(?s) AS ?total) WHERE {
+                $this backlog:hasAllocation ?a . ?a backlog:hasTargetShare ?s .
+            } GROUP BY $this }
+            FILTER (ABS(?total - 1.0) > 0.001)
+        }""" ] .
+
+backlog:CapacityAllocationShape a sh:NodeShape ;
+    sh:targetClass backlog:CapacityAllocation ;
+    sh:severity sh:Violation ;
+    rdfs:label "An allocation names a category and a share (L1)"@en ;
+    sh:property [ sh:path backlog:allocatesToCategory ; sh:minCount 1 ; sh:class backlog:InvestmentCategory ;
+                  sh:message "An allocation must name its investment category." ] ;
+    sh:property [ sh:path backlog:hasTargetShare ; sh:minCount 1 ; sh:datatype xsd:decimal ;
+                  sh:message "An allocation must state its share." ] .
+
+backlog:ImplementationProjectShape a sh:NodeShape ;
+    sh:targetClass backlog:ImplementationProject ;
+    sh:severity sh:Violation ;
+    rdfs:label "A project declares scope, phase, intent and its Definition of Done (L1)"@en ;
+    sh:property [ sh:path backlog:hasScopeStatement ; sh:minCount 1 ; sh:class backlog:ScopeStatement ;
+                  sh:message "A project must declare its scope boundary." ] ;
+    sh:property [ sh:path backlog:hasLifecyclePhase ; sh:minCount 1 ; sh:class backlog:ProductLifecyclePhase ;
+                  sh:message "A project must declare its lifecycle phase; the phase decides which prioritisation question governs." ] ;
+    sh:property [ sh:path backlog:pursuesObjective ; sh:minCount 1 ; sh:class backlog:Objective ;
+                  sh:message "A project must pursue at least one stated objective." ] ;
+    sh:property [ sh:path backlog:appliesDefinitionOfDone ; sh:minCount 1 ; sh:class backlog:DefinitionOfDone ;
+                  sh:message "A project must declare the Definition of Done it will be judged against." ] .
+
+backlog:InvestmentCategoryShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItem ;
+    sh:severity sh:Violation ;
+    rdfs:label "Every item declares what kind of investment it is (L3)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: this item declares no investment category, so the register's build-versus-maintain mix cannot be computed and a starved category cannot be detected." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel backlog:L3_Governed .
+            FILTER NOT EXISTS { $this backlog:hasInvestmentCategory ?c }
+            FILTER NOT EXISTS { $this backlog:hasState backlog:Cancelled }
+        }""" ] .
+
+backlog:IntentTraceabilityAdvisoryShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItem ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: item pursues no stated objective"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: this item advances no recorded objective, so its value claim cannot be traced to anything the product is trying to achieve." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            FILTER EXISTS { ?o a backlog:Objective }
+            FILTER NOT EXISTS { $this backlog:pursuesObjective ?obj }
+            FILTER NOT EXISTS { $this backlog:memberOfContainer ?c . ?c backlog:pursuesObjective ?obj2 }
+            FILTER NOT EXISTS { $this backlog:hasState backlog:Cancelled }
+        }""" ] .
+
+#################################################################
+#  v1.3.0 — container linkage: dependency, roadmap placement, rank
+#################################################################
+
+backlog:ContainerLinkageShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItemContainer ;
+    sh:severity sh:Violation ;
+    rdfs:label "Container dependency and roadmap placement (L1)"@en ;
+    sh:property [ sh:path backlog:containerDependsOn ; sh:class backlog:WorkItemContainer ;
+                  sh:message "L1: containerDependsOn must point at a real container." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: container dependency cycle — this container transitively depends on itself." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE { $this backlog:containerDependsOn+ $this }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: a container carrying a roadmap rank must say which roadmap it is ranked on." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasRoadmapRank ?r .
+            FILTER NOT EXISTS { $this backlog:rankedOnRoadmap ?rm }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: two containers hold the same rank on one roadmap; a rank that does not order is not a rank." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:rankedOnRoadmap ?rm ; backlog:hasRoadmapRank ?r .
+            ?other backlog:rankedOnRoadmap ?rm ; backlog:hasRoadmapRank ?r .
+            FILTER (?other != $this)
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L2: a launch-gated container must be placed on a roadmap with a rank; work that blocks launch cannot be absent from the plan." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            $this backlog:isLaunchGate true .
+            FILTER NOT EXISTS { $this backlog:rankedOnRoadmap ?rm . $this backlog:hasRoadmapRank ?r }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L2: this container declares a dependency with no member-level basis and no disclosure explaining it — either an item edge is missing or the dependency is a phantom." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            $this backlog:containerDependsOn ?other .
+            FILTER NOT EXISTS { $this backlog:derivedContainerDependency ?other }
+            FILTER NOT EXISTS { $this backlog:hasDependencyDisclosure ?disc . ?disc backlog:disclosesDependencyOn ?other }
+        }""" ] .
+
+backlog:UndeclaredContainerDependencyAdvisoryShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItemContainer ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: member-level dependency not declared at container level"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: a member of this container depends on unfinished work in another container, but no container-level dependency is declared; the constraint is real and invisible on the plan." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:derivedContainerDependency ?other .
+            FILTER NOT EXISTS { $this backlog:containerDependsOn ?other }
+        }""" ] .
+
+#################################################################
+#  v1.3.0 — every item carries criteria, a Definition of Done, and
+#  a harness that proves both before it may be called complete
+#################################################################
+
+backlog:ItemCompletenessLinkageShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItem ;
+    sh:severity sh:Violation ;
+    rdfs:label "Criteria, Definition of Done and harness (L2/L3)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L2: an item that has left Proposed must carry at least one acceptance criterion." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            $this backlog:hasState ?s .
+            FILTER (?s IN (backlog:Ready, backlog:InProgress, backlog:Done))
+            FILTER NOT EXISTS { $this backlog:hasAcceptanceCriterion ?a }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L2: no Definition of Done governs this item — none declared on it and none inherited from any container it belongs to." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            $this backlog:hasState ?s .
+            FILTER (?s != backlog:Cancelled)
+            FILTER NOT EXISTS { $this backlog:effectiveDefinitionOfDone ?d }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: a Done item must have a test harness whose completeness was derived, not asserted." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel backlog:L3_Governed .
+            $this backlog:hasState backlog:Done .
+            FILTER NOT EXISTS { ?h backlog:harnessFor $this ; backlog:harnessComplete true }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: an acceptance criterion of this Done item is attested by no bridge-verified evidence; a green suite that never touched the criterion does not close it." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel backlog:L3_Governed .
+            $this backlog:hasState backlog:Done ; backlog:hasAcceptanceCriterion ?ac .
+            FILTER NOT EXISTS { ?e backlog:attestsCriterion ?ac ; backlog:evidenceVerified true }
+        }""" ] .
+
+backlog:TestHarnessShape a sh:NodeShape ;
+    sh:targetClass backlog:TestHarness ;
+    sh:severity sh:Violation ;
+    rdfs:label "A harness names its item and its checks (L1)"@en ;
+    sh:property [ sh:path backlog:harnessFor ; sh:minCount 1 ; sh:maxCount 1 ; sh:class backlog:WorkItem ;
+                  sh:message "A harness must prove exactly one item." ] ;
+    sh:property [ sh:path backlog:hasHarnessEvidence ; sh:minCount 1 ; sh:class backlog:Evidence ;
+                  sh:message "A harness with no evidence proves nothing." ] .
+
+#################################################################
+#  v1.3.0 — lifecycle workflow
+#################################################################
+
+backlog:StateTransitionShape a sh:NodeShape ;
+    sh:targetClass backlog:StateTransition ;
+    sh:severity sh:Violation ;
+    rdfs:label "A transition is typed, named and guarded (L1)"@en ;
+    sh:property [ sh:path backlog:fromState ; sh:minCount 1 ; sh:maxCount 1 ; sh:class backlog:LifecycleState ;
+                  sh:message "A transition must name the state it leaves." ] ;
+    sh:property [ sh:path backlog:toState ; sh:minCount 1 ; sh:maxCount 1 ; sh:class backlog:LifecycleState ;
+                  sh:message "A transition must name the state it enters." ] ;
+    sh:property [ sh:path backlog:hasTransitionGuard ; sh:minCount 1 ; sh:datatype xsd:string ;
+                  sh:message "A transition must carry an executable guard; an unguarded move into Done is how completion claims escape." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "A transition may not leave and enter the same state." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE { $this backlog:fromState ?s ; backlog:toState ?s }""" ] .
+
+backlog:WorkflowShape a sh:NodeShape ;
+    sh:targetClass backlog:Workflow ;
+    sh:severity sh:Violation ;
+    rdfs:label "A workflow reaches every state it governs (L1)"@en ;
+    sh:property [ sh:path backlog:hasTransition ; sh:minCount 1 ; sh:class backlog:StateTransition ;
+                  sh:message "A workflow must permit at least one transition." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "This workflow leaves a lifecycle state unreachable and unleavable: no transition enters or exits it, so the enumeration and the process disagree." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?state a backlog:LifecycleState .
+            FILTER NOT EXISTS { $this backlog:hasTransition ?t . ?t backlog:toState ?state }
+            FILTER NOT EXISTS { $this backlog:hasTransition ?t2 . ?t2 backlog:fromState ?state }
+        }""" ] .
+
+backlog:TransitionEventShape a sh:NodeShape ;
+    sh:targetClass backlog:TransitionEvent ;
+    sh:severity sh:Violation ;
+    rdfs:label "A recorded move used a permitted transition (L1)"@en ;
+    sh:property [ sh:path backlog:transitionedItem ; sh:minCount 1 ; sh:maxCount 1 ; sh:class backlog:WorkItem ;
+                  sh:message "A transition event must name the item that moved." ] ;
+    sh:property [ sh:path backlog:viaTransition ; sh:minCount 1 ; sh:maxCount 1 ; sh:class backlog:StateTransition ;
+                  sh:message "A transition event must name the transition it used." ] ;
+    sh:property [ sh:path backlog:transitionedAt ; sh:minCount 1 ; sh:datatype xsd:dateTime ;
+                  sh:message "A transition event must record when the move happened." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "This move used a transition that belongs to no workflow: a state change outside the process, not an exception to it." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:viaTransition ?t .
+            FILTER NOT EXISTS { ?w a backlog:Workflow ; backlog:hasTransition ?t }
+        }""" ] .
+
+backlog:StateHistoryShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItem ;
+    sh:severity sh:Violation ;
+    rdfs:label "Current state is explained by the last recorded move (L2)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L2: this item's current state is not the destination of its most recent recorded transition; either a move went unrecorded or the state was edited directly." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            ?ev backlog:transitionedItem $this ; backlog:transitionedAt ?t ; backlog:viaTransition ?tr .
+            FILTER NOT EXISTS { ?ev2 backlog:transitionedItem $this ; backlog:transitionedAt ?t2 . FILTER (?t2 > ?t) }
+            ?tr backlog:toState ?dest .
+            $this backlog:hasState ?actual .
+            FILTER (?actual != ?dest)
+        }""" ] .
+
+#################################################################
+#  v1.4.0 — decomposition, commitments, typed dependencies,
+#  impediments, flow policy, team, story form
+#################################################################
+
+backlog:DecompositionShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItem ;
+    sh:severity sh:Violation ;
+    rdfs:label "Decomposition is acyclic and honest (L1/L2)"@en ;
+    sh:property [ sh:path backlog:decomposesInto ; sh:class backlog:WorkItem ;
+                  sh:message "L1: decomposesInto must point at a real work item." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: decomposition cycle — this item is transitively part of itself." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE { $this backlog:decomposesInto+ $this }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: an item may not both decompose into another and depend on it; decomposition says the child is part of the parent, dependency says they are separate work." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE { $this backlog:decomposesInto ?c . $this backlog:dependsOn ?c }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L2: this item is Done while a child of its decomposition is not; a parent cannot be complete while part of it is outstanding." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            $this backlog:hasState backlog:Done ; backlog:decomposesInto ?child .
+            ?child backlog:hasState ?cs .
+            FILTER (?cs NOT IN (backlog:Done, backlog:Cancelled))
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L2: this decomposed item carries its own priority score as well as scored children; a parent's score computed alongside its children's double-counts the same value." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            $this backlog:decomposesInto ?child ; backlog:hasPriorityScore ?ps .
+            ?child backlog:hasPriorityScore ?cs .
+        }""" ] .
+
+backlog:CommitmentShape a sh:NodeShape ;
+    sh:targetClass backlog:Commitment ;
+    sh:severity sh:Violation ;
+    rdfs:label "A commitment names exactly what is committed to (L1)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "A commitment must name a goal, an objective or a Definition of Done — a commitment to nothing is a label." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            FILTER NOT EXISTS { $this backlog:commitsToGoal ?g }
+            FILTER NOT EXISTS { $this backlog:commitsToObjective ?o }
+            FILTER NOT EXISTS { $this backlog:commitsToDefinitionOfDone ?d }
+        }""" ] .
+
+backlog:ArtifactCommitmentShape a sh:NodeShape ;
+    sh:targetClass backlog:Backlog ;
+    sh:severity sh:Violation ;
+    rdfs:label "A register commits to a goal (L2)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L2: this register carries no commitment to a goal; a backlog without a goal is a list, and a list cannot be behind — only long." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            FILTER NOT EXISTS { $this backlog:hasCommitment ?c . ?c backlog:commitsToGoal ?g }
+        }""" ] .
+
+backlog:IncrementCommitmentShape a sh:NodeShape ;
+    sh:targetClass backlog:Increment ;
+    sh:severity sh:Violation ;
+    rdfs:label "An increment commits to a Definition of Done (L2)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L2: this increment names no Definition of Done, so 'releasable' is an opinion about it rather than a property of it." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            FILTER NOT EXISTS { $this backlog:hasCommitment ?c . ?c backlog:commitsToDefinitionOfDone ?d }
+            FILTER NOT EXISTS { $this backlog:appliesDefinitionOfDone ?d2 }
+        }""" ] .
+
+backlog:DependencyRecordShape a sh:NodeShape ;
+    sh:targetClass backlog:Dependency ;
+    sh:severity sh:Violation ;
+    rdfs:label "A dependency record names its kind and its target (L1)"@en ;
+    sh:property [ sh:path backlog:dependencyOn ; sh:minCount 1 ;
+                  sh:message "A dependency record must name what is depended on." ] ;
+    sh:property [ sh:path backlog:hasDependencyKind ; sh:minCount 1 ; sh:class backlog:DependencyKind ;
+                  sh:message "A dependency record must state its kind: knowledge, task or resource decide what would release it." ] .
+
+backlog:ImpedimentShape a sh:NodeShape ;
+    sh:targetClass backlog:Impediment ;
+    sh:severity sh:Violation ;
+    rdfs:label "An unresolved impediment is owned and stated (L1)"@en ;
+    sh:property [ sh:path backlog:impedes ; sh:minCount 1 ;
+                  sh:message "An impediment must name the work it blocks." ] ;
+    sh:property [ sh:path backlog:hasImpedimentStatement ; sh:minCount 1 ; sh:datatype xsd:string ;
+                  sh:message "An impediment must state what is blocked, by what, and what would clear it." ] ;
+    sh:property [ sh:path backlog:raisedAt ; sh:minCount 1 ; sh:datatype xsd:dateTime ;
+                  sh:message "An impediment must record when it was raised; its age is the measure that matters." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "An unresolved impediment must name the role accountable for clearing it; an unowned impediment is a complaint." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            FILTER NOT EXISTS { $this backlog:resolvedAt ?r }
+            FILTER NOT EXISTS { $this backlog:hasImpedimentOwner ?o }
+        }""" ] .
+
+backlog:FlowShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItem ;
+    sh:severity sh:Violation ;
+    rdfs:label "Flow points are well defined (L2/L3)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this item records a finish point but no start point, so its cycle time cannot be computed." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:finishedAt ?f .
+            FILTER NOT EXISTS { $this backlog:startedAt ?s }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this item finished before it started." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:startedAt ?s ; backlog:finishedAt ?f .
+            FILTER (?f < ?s)
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: this Done item records no finish point, so throughput and cycle time cannot be measured for it." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel backlog:L3_Governed .
+            $this backlog:hasState backlog:Done .
+            FILTER NOT EXISTS { $this backlog:finishedAt ?f }
+        }""" ] .
+
+backlog:WipLimitShape a sh:NodeShape ;
+    sh:targetClass backlog:WipLimit ;
+    sh:severity sh:Violation ;
+    rdfs:label "A WIP limit is a policy with a target and a value (L1)"@en ;
+    sh:property [ sh:path backlog:wipLimitFor ; sh:minCount 1 ; sh:class backlog:WorkItemContainer ;
+                  sh:message "A WIP limit must name what it constrains." ] ;
+    sh:property [ sh:path backlog:hasWipLimitValue ; sh:minCount 1 ; sh:datatype xsd:integer ;
+                  sh:message "A WIP limit must state its value." ] .
+
+backlog:WipBreachAdvisoryShape a sh:NodeShape ;
+    sh:targetClass backlog:WipLimit ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: work in progress exceeds the declared limit"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: more items are in progress in this container than the declared WIP limit permits; the limit is describing the overrun rather than constraining it." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            { SELECT $this ?limit (COUNT(?i) AS ?wip) WHERE {
+                $this backlog:wipLimitFor ?c ; backlog:hasWipLimitValue ?limit .
+                ?i backlog:memberOfContainer ?c ; backlog:hasState backlog:InProgress .
+            } GROUP BY $this ?limit }
+            FILTER (?wip > ?limit)
+        }""" ] .
+
+backlog:TeamShape a sh:NodeShape ;
+    sh:targetClass backlog:Team ;
+    sh:severity sh:Violation ;
+    rdfs:label "A team delivers from something (L1)"@en ;
+    sh:property [ sh:path backlog:teamFor ; sh:minCount 1 ; sh:class backlog:WorkItemContainer ;
+                  sh:message "A team must name the register or project it delivers from." ] .
+
+backlog:StoryFormAdvisoryShape a sh:NodeShape ;
+    sh:targetClass backlog:Story ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: story states no beneficiary or no reason"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: this story records no 'so that' clause, so it states a feature request and nothing about the benefit it claims." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            FILTER EXISTS { $this backlog:asRole ?r }
+            FILTER NOT EXISTS { $this backlog:soThat ?s }
+        }""" ] .
+
+#################################################################
+#  v1.5.0 — falsifiability pack
+#  Each shape below closes one route by which the adversarial
+#  register passed: arbitrary numbers, unobserved targets,
+#  self-asserted verification, vacuous criteria, stale scores.
+#################################################################
+
+backlog:ScoreArithmeticShape a sh:NodeShape ;
+    sh:targetClass backlog:WSJFScore ;
+    sh:severity sh:Violation ;
+    rdfs:label "A WSJF score equals its own components (L1)"@en ;
+    sh:property [ sh:path backlog:hasJobSize ; sh:minCount 1 ; sh:datatype xsd:decimal ;
+                  sh:message "A WSJF score must record its job size." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this WSJF value does not equal (user-business value + time criticality + risk reduction) / job size computed from its own components; the number is unrelated to its inputs and cannot be checked or challenged." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasScoreValue ?v ;
+                  backlog:hasUserBusinessValue ?ubv ; backlog:hasTimeCriticality ?tc ;
+                  backlog:hasRiskReductionValue ?rr ; backlog:hasJobSize ?js .
+            FILTER (?js > 0)
+            BIND ((?ubv + ?tc + ?rr) / ?js AS ?computed)
+            FILTER (ABS(?v - ?computed) > 0.05)
+        }""" ] .
+
+backlog:RiceArithmeticShape a sh:NodeShape ;
+    sh:targetClass backlog:RICEScore ;
+    sh:severity sh:Violation ;
+    rdfs:label "A RICE score equals its own components (L1)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this RICE value does not equal reach x impact x confidence / effort computed from its own components." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasScoreValue ?v ;
+                  backlog:hasReach ?r ; backlog:hasImpact ?i ; backlog:hasConfidence ?c ; backlog:hasEffort ?e .
+            FILTER (?e > 0)
+            BIND ((?r * ?i * ?c) / ?e AS ?computed)
+            FILTER (ABS(?v - ?computed) > 0.05)
+        }""" ] .
+
+backlog:ScoreAccountabilityShape a sh:NodeShape ;
+    sh:targetClass backlog:PriorityScore ;
+    sh:severity sh:Violation ;
+    rdfs:label "A number carries components or a rationale (L2)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L2: this score carries neither the components it was computed from nor a written rationale, so it is an unattributable number driving an ordering." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            FILTER NOT EXISTS { $this backlog:hasScoreRationale ?r }
+            FILTER NOT EXISTS { $this backlog:hasJobSize ?js }
+            FILTER NOT EXISTS { $this backlog:hasEffort ?e }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: this score predates the most recent completion in the register and was never re-run; a ranking is a snapshot of value per cost at one moment, not a committed order (BP-D11)." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel backlog:L3_Governed .
+            ?item backlog:hasPriorityScore $this ; backlog:hasState ?st .
+            FILTER (?st NOT IN (backlog:Done, backlog:Cancelled))
+            $this backlog:scoredAt ?sa .
+            ?other backlog:finishedAt ?f .
+            FILTER (?f > ?sa)
+        }""" ] .
+
+backlog:ObjectiveFalsifiabilityShape a sh:NodeShape ;
+    sh:targetClass backlog:Objective ;
+    sh:severity sh:Violation ;
+    rdfs:label "An objective can be missed (L1/L3)"@en ;
+    sh:property [ sh:path backlog:hasTargetDirection ; sh:minCount 1 ; sh:class backlog:MetricDirection ;
+                  sh:message "L1: an objective must state which way the metric has to move; a baseline and a target with no direction cannot be contradicted by any observation." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this objective's target equals its baseline, so it is met on the day it is written." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasBaselineValue ?b ; backlog:hasTargetValue ?t .
+            FILTER (?b = ?t)
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: this objective's deadline has passed with no observation of its metric and no recorded re-baseline; the target can therefore never be shown to have been missed." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel backlog:L3_Governed .
+            $this backlog:hasObjectiveDeadline ?d .
+            FILTER (?d < NOW())
+            FILTER NOT EXISTS { ?o backlog:observationFor $this }
+            FILTER NOT EXISTS { ?rb backlog:rebaselines $this }
+        }""" ] .
+
+backlog:MetricObservationShape a sh:NodeShape ;
+    sh:targetClass backlog:MetricObservation ;
+    sh:severity sh:Violation ;
+    rdfs:label "An observation is reproducible (L1)"@en ;
+    sh:property [ sh:path backlog:observesMetric ; sh:minCount 1 ;
+                  sh:message "An observation must name the metric it read." ] ;
+    sh:property [ sh:path backlog:hasObservedValue ; sh:minCount 1 ; sh:datatype xsd:decimal ;
+                  sh:message "An observation must carry the value read." ] ;
+    sh:property [ sh:path backlog:observedAt ; sh:minCount 1 ; sh:datatype xsd:dateTime ;
+                  sh:message "An observation must record when it was read." ] ;
+    sh:property [ sh:path backlog:hasObservationMethod ; sh:minCount 1 ; sh:datatype xsd:string ;
+                  sh:message "An observation must record how the value was obtained, or it is a number someone remembered." ] .
+
+backlog:MilestoneOutcomeShape a sh:NodeShape ;
+    sh:targetClass backlog:Milestone ;
+    sh:severity sh:Violation ;
+    rdfs:label "A slipped date is visible (L2)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L2: this milestone's target date has passed with no achievement recorded and no re-baseline; a date that quietly stops applying cannot be missed." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            $this backlog:hasTargetDate ?d .
+            FILTER (?d < NOW())
+            FILTER NOT EXISTS { $this backlog:achievedAt ?a }
+            FILTER NOT EXISTS { ?rb backlog:rebaselines $this }
+        }""" ] .
+
+backlog:RebaselineShape a sh:NodeShape ;
+    sh:targetClass backlog:Rebaseline ;
+    sh:severity sh:Violation ;
+    rdfs:label "Moving a goalpost is owned and reasoned (L1)"@en ;
+    sh:property [ sh:path backlog:rebaselines ; sh:minCount 1 ;
+                  sh:message "A re-baseline must name what it moved." ] ;
+    sh:property [ sh:path backlog:hasPreviousTarget ; sh:minCount 1 ; sh:datatype xsd:string ;
+                  sh:message "A re-baseline must retain the previous target, or the size of the move is invisible." ] ;
+    sh:property [ sh:path backlog:hasNewTarget ; sh:minCount 1 ; sh:datatype xsd:string ;
+                  sh:message "A re-baseline must state the new target." ] ;
+    sh:property [ sh:path backlog:hasRebaselineRationale ; sh:minCount 1 ; sh:datatype xsd:string ;
+                  sh:message "A re-baseline must record why; without a reason it is indistinguishable from erasing a failure." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Re-baselining is an owner decision and must name the Owner as its decider." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE { FILTER NOT EXISTS { $this backlog:decidedBy backlog:Owner } }""" ] .
+
+backlog:VerificationIntegrityShape a sh:NodeShape ;
+    sh:targetClass backlog:Evidence ;
+    sh:severity sh:Violation ;
+    rdfs:label "Verification names something that could have failed (L2/L3)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L2: this evidence is marked verified but its method is a bare assertion; verification must name a check that could have failed, not a statement that it did not." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            $this backlog:evidenceVerified true ; backlog:hasVerificationMethod ?m .
+            FILTER (REGEX(?m, "^(asserted|assumed|manual|by inspection|n/?a|trusted|ok|done|fixture)", "i")
+                    || STRLEN(?m) < 20)
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: this verified evidence names no tool that performed the check." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel backlog:L3_Governed .
+            $this backlog:evidenceVerified true .
+            FILTER NOT EXISTS { $this backlog:verifiedByTool ?t }
+        }""" ] .
+
+backlog:AcceptanceCriterionQualityShape a sh:NodeShape ;
+    sh:targetClass backlog:AcceptanceCriterion ;
+    sh:severity sh:Violation ;
+    rdfs:label "An acceptance criterion says something (L2)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L2: this acceptance criterion is Gherkin-shaped but empty — each of Given, When and Then must carry substantive text, or the criterion cannot be tested and cannot fail." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            $this backlog:hasGherkinText ?t .
+            FILTER (!REGEX(?t, "Given\\\\s+\\\\S+.{8,}When\\\\s+\\\\S+.{8,}Then\\\\s+\\\\S+.{8,}", "is"))
+        }""" ] .
+
+backlog:EstimateAccountabilityShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItem ;
+    sh:severity sh:Violation ;
+    rdfs:label "Estimates are compared with actuals (L3)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: this completed item carries a cost estimate but no actual effort, so the estimate can never be shown to have been wrong." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel backlog:L3_Governed .
+            $this backlog:hasState backlog:Done ; backlog:hasCostEstimate ?e .
+            FILTER NOT EXISTS { $this backlog:hasActualEffort ?a }
+        }""" ] .
+
+backlog:IntentTraceabilityShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItem ;
+    sh:severity sh:Violation ;
+    rdfs:label "Every item traces to a stated objective (L3)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: this item advances no recorded objective, directly or through a container; its value claim is unfalsifiable because it refers to nothing the product is trying to achieve." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel backlog:L3_Governed .
+            $this backlog:hasState ?s .
+            FILTER (?s != backlog:Cancelled)
+            FILTER NOT EXISTS { $this backlog:pursuesObjective ?o }
+            FILTER NOT EXISTS { $this backlog:memberOfContainer ?c . ?c backlog:pursuesObjective ?o2 }
+            FILTER NOT EXISTS { ?parent backlog:decomposesInto $this ; backlog:pursuesObjective ?o3 }
+        }""" ] .
+
+backlog:RoadmapOverrideShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItemContainer ;
+    sh:severity sh:Violation ;
+    rdfs:label "A rank that contradicts the scores is a declared override (L2)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L2: this container is ranked ahead of one with a higher score and records no rationale; a roadmap order that departs from the scores without saying why is indistinguishable from an arbitrary one." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            $this backlog:rankedOnRoadmap ?rm ; backlog:hasRoadmapRank ?r1 ; backlog:hasPriorityScore ?s1 .
+            ?other backlog:rankedOnRoadmap ?rm ; backlog:hasRoadmapRank ?r2 ; backlog:hasPriorityScore ?s2 .
+            ?s1 backlog:hasScoreValue ?v1 . ?s2 backlog:hasScoreValue ?v2 .
+            FILTER (?r1 < ?r2 && ?v1 < ?v2)
+            FILTER NOT EXISTS { $this backlog:hasDecisionRationale ?rat }
+        }""" ] .
+
+#################################################################
+#  v1.6.0 — intent chain, scope boundary, external dependencies
+#################################################################
+
+backlog:MissionShape a sh:NodeShape ;
+    sh:targetClass backlog:Mission ;
+    sh:severity sh:Violation ;
+    rdfs:label "A mission is stated, owned and served by goals (L1/L2)"@en ;
+    sh:property [ sh:path backlog:hasMissionStatement ; sh:minCount 1 ; sh:datatype xsd:string ;
+                  sh:message "L1: a mission must be stated." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: a mission is an owner declaration and must name the Owner as its decider." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE { FILTER NOT EXISTS { $this backlog:decidedBy backlog:Owner } }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L2: no goal advances this mission, so nothing in the register is accountable to it." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            FILTER NOT EXISTS { ?g backlog:contributesToMission $this }
+        }""" ] .
+
+backlog:GoalMeasurabilityShape a sh:NodeShape ;
+    sh:targetClass backlog:Goal ;
+    sh:severity sh:Violation ;
+    rdfs:label "Every goal is measurable through an objective (L2)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L2: this goal carries no objective, so it states an intention nothing can measure and no observation can contradict." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            FILTER NOT EXISTS { ?o backlog:contributesToGoal $this }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: this goal advances no mission; the intent chain does not reach a stated purpose." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel backlog:L3_Governed .
+            FILTER EXISTS { ?m a backlog:Mission }
+            FILTER NOT EXISTS { $this backlog:contributesToMission ?m2 }
+        }""" ] .
+
+backlog:ScopeMeasurabilityShape a sh:NodeShape ;
+    sh:targetClass backlog:ScopeStatement ;
+    sh:severity sh:Violation ;
+    rdfs:label "Scope names what it is for and what it is not (L2)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L2: this scope realises no objective, so completing it proves nothing and its success cannot be evaluated." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            FILTER NOT EXISTS { $this backlog:scopeRealizesObjective ?o }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L2: this scope states no exclusion; a boundary with only an inside has not been drawn." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            FILTER NOT EXISTS { $this backlog:hasScopeExclusion ?e }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L2: this scope's work is complete but its outcome has not been derived; completion was reported without asking whether it worked." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            $this backlog:scopeCompletionState backlog:Done .
+            FILTER NOT EXISTS { $this backlog:scopeOutcome ?o }
+        }""" ] .
+
+backlog:ScopeChangeShape a sh:NodeShape ;
+    sh:targetClass backlog:ScopeChange ;
+    sh:severity sh:Violation ;
+    rdfs:label "Scope may grow, but never invisibly (L1)"@en ;
+    sh:property [ sh:path backlog:changesScope ; sh:minCount 1 ; sh:class backlog:ScopeStatement ;
+                  sh:message "A scope change must name the scope it changes." ] ;
+    sh:property [ sh:path backlog:admitsItem ; sh:minCount 1 ; sh:class backlog:WorkItem ;
+                  sh:message "A scope change must name what it admits." ] ;
+    sh:property [ sh:path backlog:hasScopeChangeRationale ; sh:minCount 1 ; sh:datatype xsd:string ;
+                  sh:message "A scope change must state why the boundary moved and what was traded to pay for it." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Scope change is an owner decision and must name the Owner as its decider." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE { FILTER NOT EXISTS { $this backlog:decidedBy backlog:Owner } }""" ] .
+
+backlog:ExternalDependencyShape a sh:NodeShape ;
+    sh:targetClass backlog:ExternalDependency ;
+    sh:severity sh:Violation ;
+    rdfs:label "An external dependency names a type and a party (L1)"@en ;
+    sh:property [ sh:path backlog:hasExternalDependencyType ; sh:minCount 1 ; sh:class backlog:ExternalDependencyType ;
+                  sh:message "An external dependency must state its type; the type decides the escalation path." ] ;
+    sh:property [ sh:path backlog:hasExternalParty ; sh:minCount 1 ; sh:datatype xsd:string ;
+                  sh:message "An external dependency must name who owns it; an unnamed one cannot be chased and becomes a permanent excuse." ] .
+
+backlog:ExternalEnhancementShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItem ;
+    sh:severity sh:Violation ;
+    rdfs:label "External change is proposed, never scheduled here (L1/L2)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this item needs an external party to change something, but no enhancement proposal exists for that dependency. The change belongs to whoever owns it: raise a proposal, do not schedule their work in this register." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:requiresExternalEnhancement ?ext .
+            FILTER NOT EXISTS { ?prop backlog:proposalFor ?ext ; backlog:unblocksItem $this }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L2: this item depends on an external enhancement whose proposal has not been accepted, yet it is Ready or In Progress. Work that only another party can unblock is not startable, and treating it as startable is how a plan absorbs someone else's backlog." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            $this backlog:requiresExternalEnhancement ?ext ; backlog:hasState ?s .
+            FILTER (?s IN (backlog:Ready, backlog:InProgress))
+            ?prop backlog:proposalFor ?ext ; backlog:unblocksItem $this ; backlog:hasProposalStatus ?ps .
+            FILTER (?ps != backlog:Prop_Accepted)
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L2: the proposal this item waits on was rejected, and the item is still open with no scope change admitting the work locally. A refusal must be re-planned, cancelled, or brought into scope explicitly — never left as indefinite waiting." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            $this backlog:requiresExternalEnhancement ?ext ; backlog:hasState ?s .
+            FILTER (?s != backlog:Cancelled)
+            ?prop backlog:proposalFor ?ext ; backlog:unblocksItem $this ;
+                  backlog:hasProposalStatus backlog:Prop_Rejected .
+            FILTER NOT EXISTS { ?sc backlog:admitsItem $this }
+        }""" ] .
+
+backlog:EnhancementProposalShape a sh:NodeShape ;
+    sh:targetClass backlog:EnhancementProposal ;
+    sh:severity sh:Violation ;
+    rdfs:label "A proposal is specific, addressed and dated (L1)"@en ;
+    sh:property [ sh:path backlog:proposalFor ; sh:minCount 1 ; sh:class backlog:ExternalDependency ;
+                  sh:message "A proposal must name the external dependency it asks to change." ] ;
+    sh:property [ sh:path backlog:hasRequestedChange ; sh:minCount 1 ; sh:datatype xsd:string ;
+                  sh:message "A proposal must state what is being asked for, specifically enough to be accepted or refused." ] ;
+    sh:property [ sh:path backlog:submittedTo ; sh:minCount 1 ; sh:datatype xsd:string ;
+                  sh:message "A proposal must record where it was sent, so 'we asked' is checkable." ] ;
+    sh:property [ sh:path backlog:proposalRaisedAt ; sh:minCount 1 ; sh:datatype xsd:dateTime ;
+                  sh:message "A proposal must record when it was raised; its age measures how long this development has been blocked by someone else." ] ;
+    sh:property [ sh:path backlog:hasProposalStatus ; sh:minCount 1 ; sh:class backlog:ProposalStatus ;
+                  sh:message "A proposal must carry a status." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "An enhancement proposal may not also be a work item: a work item is something this development can decide to do, and this is not." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE { $this a ?c . ?c rdfs:subClassOf* backlog:WorkItem }""" ] .
+
+backlog:RegisterSessionShape a sh:NodeShape ;
+    sh:targetClass backlog:RegisterSession ;
+    sh:severity sh:Violation ;
+    rdfs:label "A session that changed the register verified it first (L1/L2)"@en ;
+    sh:property [ sh:path backlog:sessionStartedAt ; sh:minCount 1 ; sh:datatype xsd:dateTime ;
+                  sh:message "A session must record when it started." ] ;
+    sh:property [ sh:path backlog:hasSessionScopeNote ; sh:minCount 1 ; sh:datatype xsd:string ;
+                  sh:message "A session must state what it set out to do and what it deliberately left alone; the unstated boundary is how a one-item fix becomes a reorganisation." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this session changed items without verifying the register's state first, so it cannot tell the defects it inherited from the ones it introduced." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:changedItem ?i .
+            FILTER NOT EXISTS { $this backlog:stateVerifiedAtStart true }
+        }""" ] .
+
+#################################################################
+#  v1.7.0 — register packaging: what an adopter must ship
+#################################################################
+
+backlog:RegisterPackageShape a sh:NodeShape ;
+    sh:targetClass backlog:RegisterPackage ;
+    sh:severity sh:Violation ;
+    rdfs:label "A package is versioned, manifested and complete (L1/L2/L3)"@en ;
+    sh:property [ sh:path backlog:packageFor ; sh:minCount 1 ; sh:class backlog:WorkItemContainer ;
+                  sh:message "L1: a register package must name the register it ships." ] ;
+    sh:property [ sh:path backlog:hasPackageVersion ; sh:minCount 1 ; sh:datatype xsd:string ;
+                  sh:pattern "^[0-9]+[.][0-9]+[.][0-9]+$" ;
+                  sh:message "L1: a register package must carry a three-part version; a changed register that reuses its version is the same defect as a changed ontology that reuses its version." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: a register package must ship exactly one manifest artifact — the thing that makes everything else verifiable after transport." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            { SELECT $this (COUNT(?a) AS ?n) WHERE {
+                $this backlog:hasPackageArtifact ?a . ?a backlog:hasArtifactRole backlog:Role_Manifest .
+            } GROUP BY $this }
+            FILTER (?n != 1)
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: a register package must ship the register data itself." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            FILTER NOT EXISTS { $this backlog:hasPackageArtifact ?a . ?a backlog:hasArtifactRole backlog:Role_RegisterData }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L2: a register package must ship its adoption profile declaration, so a consumer can see which conformance level is claimed before validating anything." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            FILTER NOT EXISTS { $this backlog:hasPackageArtifact ?a . ?a backlog:hasArtifactRole backlog:Role_ProfileDeclaration }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: a register package must retain at least one roadmap report run as a file; a package that retains none can show a state but never a trajectory." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel backlog:L3_Governed .
+            FILTER NOT EXISTS { $this backlog:hasPackageArtifact ?a . ?a backlog:hasArtifactRole backlog:Role_ProgressReport }
+        }""" ] .
+
+backlog:RegisterArtifactShape a sh:NodeShape ;
+    sh:targetClass backlog:RegisterArtifact ;
+    sh:severity sh:Violation ;
+    rdfs:label "Every shipped file declares its role, name and convention (L1)"@en ;
+    sh:property [ sh:path backlog:hasArtifactRole ; sh:minCount 1 ; sh:class backlog:ArtifactRole ;
+                  sh:message "L1: a shipped file must declare its role; a role inferred from a filename is a role nobody checked." ] ;
+    sh:property [ sh:path backlog:hasArtifactFileName ; sh:minCount 1 ; sh:datatype xsd:string ;
+                  sh:message "L1: a shipped file must record the name it ships under." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: a shipped file other than the manifest must name the configuration-subject naming convention it follows, so its filename can be checked against the pattern that already governs that artifact type." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            FILTER NOT EXISTS { $this backlog:hasArtifactRole backlog:Role_Manifest }
+            FILTER NOT EXISTS { $this backlog:conformsToNamingConvention ?c }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: the manifest artifact must carry its own SHA-256, so the thing that verifies everything else is verifiable in turn." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasArtifactRole backlog:Role_Manifest .
+            FILTER NOT EXISTS { $this backlog:hasManifestSHA256 ?h }
+        }""" ] .
+
+backlog:ProgressFreshnessShape a sh:NodeShape ;
+    sh:targetClass backlog:RoadmapReport ;
+    sh:severity sh:Violation ;
+    rdfs:label "Retained progress is current with the register (L3)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: this retained report run predates the register's most recent recorded transition, so the shipped progress evidence describes a state the register has already left." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel backlog:L3_Governed .
+            $this backlog:reportRunRetainedAs ?file ; backlog:hasRunTimestamp ?run .
+            ?ev backlog:transitionedAt ?t .
+            FILTER (?t > ?run)
+            FILTER NOT EXISTS {
+                ?other backlog:reportRunRetainedAs ?f2 ; backlog:hasRunTimestamp ?r2 .
+                FILTER (?r2 >= ?t)
+            }
+        }""" ] .
+
+#################################################################
+#  v1.9.0 — a recorded ranking-fork resolution is an owner decision
+#################################################################
+
+backlog:RankingForkResolutionShape a sh:NodeShape ;
+    sh:targetClass backlog:Backlog ;
+    sh:severity sh:Violation ;
+    rdfs:label "A resolved ranking fork carries its decider and its reasoning (L1)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: a register that records which model resolves the ranking fork must name the Owner as its decider. Choosing between two legitimate answers is a business judgement, not a computation." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasRankingForkResolution ?m .
+            FILTER NOT EXISTS { $this backlog:decidedBy backlog:Owner }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: a recorded ranking-fork resolution must carry a written rationale; a standing answer with no reasoning cannot be reviewed when the situation changes." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasRankingForkResolution ?m .
+            FILTER NOT EXISTS { $this backlog:hasDecisionRationale ?r }
+        }""" ] .
+
+#################################################################
+#  v1.10.0 — acceptance criteria that describe the change rather
+#  than the behaviour. ADVISORY by construction: no regex can
+#  decide whether prose describes behaviour, and a heuristic that
+#  blocked a release would be a gate making a judgement it cannot
+#  support. The advisory digest makes it legible without that claim.
+#################################################################
+
+backlog:ArtifactEnumerationAdvisoryShape a sh:NodeShape ;
+    sh:targetClass backlog:Story ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: a user-facing item's criteria may describe the change, not the behaviour"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: every acceptance criterion on this user-facing story reads as an enumeration of files, fields, tables or endpoints. That describes the change, not the behaviour: could someone who never sees the diff tell from this text whether the item works — what a user does, what they then see, and what happens when it goes wrong?" ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasAcceptanceCriterion ?any .
+            FILTER NOT EXISTS {
+                $this backlog:hasAcceptanceCriterion ?ac .
+                ?ac backlog:hasGherkinText ?t .
+                FILTER (!REGEX(?t, "(\\\\.ttl|\\\\.py|\\\\.js|\\\\.ts|\\\\.sql|\\\\bfile|\\\\bfield|\\\\bcolumn|\\\\btable|\\\\bschema|\\\\bendpoint|\\\\bmodule)", "i"))
+            }
+        }""" ] .
+
+#################################################################
+#  v1.11.0 — fixing a disclosed-broken mechanism
+#
+#  Raised by an adopting project at L1 Core from four incidents in
+#  its own history, the last found the same day: a Story that fixed
+#  a mechanism previously disclosed as broken reached Done with the
+#  fix verified only in a throwaway directory. Nothing committed
+#  would have caught it silently regressing.
+#
+#  The proposal asked for a conformance-level-independent rule and
+#  offered a self-declared boolean flag as the trigger. Neither is
+#  adopted as offered, for two reasons.
+#
+#  First, no new vocabulary is minted (L-110, single-producer
+#  evidence). The relation already exists: a CrossCuttingInvariant
+#  whose status is NotYetEnforceable and whose tracksItem points at
+#  a work item IS, by its own shipped definition, "a mechanism
+#  disclosed broken, pointing at the work that would fix it". The
+#  trigger is therefore DERIVED from data the project already
+#  maintains rather than declared.
+#
+#  Second, a self-declared flag that creates an obligation is opt-in
+#  rigor: setting it costs an evidence requirement, so the projects
+#  that set it honestly are the ones already disclosing in prose —
+#  the ones that least need catching. The reporting project's own
+#  fourth incident proves the point: that Story's registration DID
+#  disclose the gap in prose and still reached Done.
+#
+#  These fire at L1 because they are ordinary well-formedness — "you
+#  asserted X, therefore carry Y" — the same shape as cancellation
+#  requiring a rationale or a launch gate requiring an owner. The
+#  proposal's ask for level-independence is granted without breaking
+#  the L1/L2 tiering principle, because it was never a coverage
+#  requirement to begin with.
+#################################################################
+
+backlog:DisclosedBrokenMechanismFixShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItem ;
+    sh:severity sh:Violation ;
+    rdfs:label "A fix to a disclosed-broken mechanism carries durable proof (L1)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this item is Done and is the tracked fix for an invariant still reported NotYetEnforceable, yet it carries no Evidence. Fixing a mechanism's internal correctness is not the same claim as proving it stays correct — without a durable artifact, a silent regression is indistinguishable from the original undetected breakage." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasState backlog:Done .
+            ?inv backlog:tracksItem $this ; backlog:hasInvariantStatus backlog:NotYetEnforceable .
+            FILTER NOT EXISTS { $this backlog:hasEvidence ?ev }
+        }""" ] .
+
+backlog:StaleInvariantStatusShape a sh:NodeShape ;
+    sh:targetClass backlog:CrossCuttingInvariant ;
+    sh:severity sh:Violation ;
+    rdfs:label "An invariant is re-checked once its enabling work is Done (L1)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: every work item this invariant tracks is Done, yet it is still reported NotYetEnforceable. The status is stale: the work that would make the check runnable has shipped, so the check must be run and the outcome recorded as Holds or Violated. An invariant left NotYetEnforceable after its enabling work completes is the reporting failure this status exists to prevent, arriving one step later." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasInvariantStatus backlog:NotYetEnforceable .
+            FILTER EXISTS { $this backlog:tracksItem ?any }
+            FILTER NOT EXISTS {
+                $this backlog:tracksItem ?i .
+                ?i backlog:hasState ?s .
+                FILTER (?s != backlog:Done)
+            }
+        }""" ] .
