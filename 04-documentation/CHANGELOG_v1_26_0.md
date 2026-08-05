@@ -1,5 +1,35 @@
 # Changelog
 
+## v1.26.0 — 2026-08-04 (MINOR: the public copy may not lag, and the gate now says so)
+
+Two turns before this release, this package wrote: *"two copies of the same vocabulary will drift.
+What does not exist yet is a check that fails when they diverge — that's the thing I'd build before
+the next release, not after."* Then it shipped v1.25.0 to the governed repository and left the
+public distribution at v1.24.0. The copy a stranger reads was missing exactly the constraints that
+release added.
+
+**A stated risk is not a control.** Same lesson OEE catalogued from this session's own
+scratch-directory finding, arriving from the other direction: a check that is not encoded does not
+run.
+
+**Added:** `backlog_distribution_drift_check_v1_0_0.py`, wired into the release gate. It fails when
+the public distribution's version lags the governed package, **and** when re-deriving the public
+copy right now produces different bytes from what is published. The second is the load-bearing
+half: a version check alone would pass a public copy someone edited in place, and an edit to a
+derived artifact has no upstream and disappears at the next derivation, silently.
+
+When no published URL is supplied it reports **NOT RUN**, never PASS — a check that degrades to
+success when it cannot run is the decorative gate this suite refuses.
+
+**Proven discriminating in both directions**, per L-95: PASS against the current public copy, FAIL
+against the `v1.24.0` tag, naming both the version lag and the byte divergence.
+
+**Found by the new check on its first run:** the derivation script was copying itself into its own
+output, while the publication step removed it — so the published copy could never match a fresh
+derivation. Fixed in the deriver, which now excludes itself and the drift check, rather than by
+adding an exception to the checker.
+
+
 ## v1.25.0 — 2026-08-04 (MINOR: the conformance declaration is itself governed)
 
 **Reported misuse:** teams lowering the declared conformance level so the gates pass. Confirmed by
@@ -148,7 +178,7 @@ moment another stage is inserted, so the decoupling is permanent instead.
 
 **Why every gate stayed green while this was live:** the three-fixture self-proof invokes the
 validator *directly*; only the register path formats its output, so a defect in the formatting layer
-was invisible to the proof. `backlog_gate_v1_1_6.sh` now runs the known-bad fixture through the
+was invisible to the proof. `backlog_gate_v1_1_7.sh` now runs the known-bad fixture through the
 **exact register path** and aborts if it does not fail. The self-proof covered the shapes; it had
 never covered its own plumbing.
 
@@ -1141,7 +1171,7 @@ executable and ordered.
 arbitration documented and implemented in the report tool.
 
 **Added — tooling:** `backlog_roadmap_report_v1_2_0.py` (eight sections, both NEXT answers, silent
--gap check), `backlog_coverage_gate_v1_1_1.py` (BP-D31), `backlog_gate_v1_1_6.sh` (Gate 0 / P / K /
+-gap check), `backlog_coverage_gate_v1_1_1.py` (BP-D31), `backlog_gate_v1_1_7.sh` (Gate 0 / P / K /
 R plus coverage), Gate K version-identity check in the validator.
 
 **Changed:** the v1.0.0 advisory "item carries no priority score" now excludes items correctly

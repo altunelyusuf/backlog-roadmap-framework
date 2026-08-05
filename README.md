@@ -27,7 +27,7 @@ doesn't count.**
 
 ```bash
 pip install rdflib pyshacl
-bash 03-tooling/backlog_gate_v1_1_6.sh          # full release gate
+bash 03-tooling/backlog_gate_v1_1_7.sh          # full release gate
 python3 03-tooling/backlog_validate_v1_3_0.py <your-register.ttl>
 ```
 

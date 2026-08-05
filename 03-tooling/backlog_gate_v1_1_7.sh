@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# backlog_gate v1.1.6 — four-gate release check for the Backlog & Roadmap
+# backlog_gate v1.1.7 — four-gate release check for the Backlog & Roadmap
 # Semantic Framework. Nothing about the package's state is trusted until all
 # four pass, and the SHACL gate refuses to certify anything until it has just
 # demonstrated, in this run, that it can fail a known-bad register.
@@ -11,7 +11,7 @@
 #   +       coverage gate          >= 80% of primary-source concepts (BP-D31)
 #   +       doc-coverage gate      every TBox class named in the standard document
 #
-# Usage: backlog_gate_v1_1_6.sh [REGISTER.ttl ...]
+# Usage: backlog_gate_v1_1_7.sh [REGISTER.ttl ...]
 
 set -u
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -104,6 +104,21 @@ if [ "$PROBE_STATUS" -eq 0 ]; then
   exit 3
 fi
 echo "  register path returns non-zero on known-bad input — the verdict survives formatting."
+
+echo
+echo "== Distribution-drift gate — is the public copy current? =="
+# Runs only when a published URL is supplied, and reports NOT RUN otherwise
+# rather than passing: a check that degrades to success when it cannot run is
+# the decorative gate this suite refuses. Set BACKLOG_PUBLIC_URL to enable.
+DRIFT="$(ls "$HERE"/backlog_distribution_drift_check_v*.py 2>/dev/null | sort -V | tail -1 || true)"
+if [ -n "$DRIFT" ] && [ -n "${BACKLOG_PUBLIC_URL:-}" ]; then
+  python3 "$DRIFT" "$PKG" "$BACKLOG_PUBLIC_URL" | grep -E '^governed|^published|^VERDICT|^  - '
+  python3 "$DRIFT" "$PKG" "$BACKLOG_PUBLIC_URL" >/dev/null 2>&1 || { echo "Distribution-drift gate FAILED"; FAILED=1; }
+else
+  echo "  NOT RUN — set BACKLOG_PUBLIC_URL to the published distribution to enable."
+  echo "  Not assumed to pass: an unchecked public copy is how v1.25.0 shipped with"
+  echo "  the public copy left at v1.24.0."
+fi
 
 echo
 echo "== Doc-coverage gate — does the standard still describe the subject? =="
