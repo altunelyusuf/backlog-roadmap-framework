@@ -1,5 +1,42 @@
 # Changelog
 
+## v1.27.0 — 2026-08-05 (MINOR: a register was SHACL-clean and logically inconsistent)
+
+A parallel session's handover document reported its fit-gap register validating at **0 sh:Violation**
+and described a tie at rank 6 as the framework "treating ties as real rather than forcing an
+artificial order". Both statements were true of what the suite did. Neither was true of what it
+should have done.
+
+**Re-derived here, not accepted.** Their register ranks **epics**. `rankedOnRoadmap` and
+`hasRoadmapRank` were domained on `WorkItemContainer` alone, and the rank-uniqueness constraint
+lives on a shape targeting `WorkItemContainer` — so it never examined a ranked work item. The tie
+was a gap in reach, not a designed tolerance.
+
+**And it is worse than a missed check.** `WorkItem` and `WorkItemContainer` are declared
+**disjoint**. An `rdfs:domain` is an inference rule, not a constraint: under OWL 2 DL, ranking an
+epic infers that epic to be a container, and the register becomes **logically inconsistent** while
+every SHACL gate still reports clean. This package has never carried a reasoner attestation and
+disclosed that at registration. This is the first time it cost an adopter a silently unsound
+register.
+
+**Also incoherent on its own terms:** `scheduledInHorizon` already unioned both classes, so an epic
+could be *placed* in a horizon but not *ranked* in it.
+
+**Fixed — TBox 1.10.0 → 1.11.0, domain widening, backwards compatible:** both properties now union
+`WorkItem` and `WorkItemContainer`, matching `scheduledInHorizon` and how roadmaps are actually used.
+
+**Fixed — shapes 1.12.0 → 1.13.0:**
+- `WorkItemRoadmapRankShape` — rank uniqueness now reaches ranked work items, and a rank without a
+  named roadmap is rejected.
+- `DisjointDomainMisuseShape` — a work item carrying any of the eight container-only properties is
+  rejected, because SHACL cannot see the inconsistency an OWL reasoner would derive.
+
+**Consequence the reporting session must know:** their register now **fails**. The rank-6 tie
+between FG-EP11 and FG-EP14 is a real violation. Launch *priority* may tie — co-equal preconditions
+that must all clear are a genuine situation — but a roadmap rank answers *what next*, and a tie
+there is the unanswered question the rank exists to answer.
+
+
 ## v1.26.0 — 2026-08-04 (MINOR: the public copy may not lag, and the gate now says so)
 
 Two turns before this release, this package wrote: *"two copies of the same vocabulary will drift.

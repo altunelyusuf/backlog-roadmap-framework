@@ -9,9 +9,10 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.12.0> ;
-    owl:versionInfo "1.12.0" ;
-    owl:priorVersion <http://example.org/backlog-shapes/1.11.0> ,
+    owl:versionIRI <http://example.org/backlog-shapes/1.13.0> ;
+    owl:versionInfo "1.13.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.12.0> ,
+                     <http://example.org/backlog-shapes/1.11.0> ,
                      <http://example.org/backlog-shapes/1.10.0> ,
                      <http://example.org/backlog-shapes/1.9.0> ,
                      <http://example.org/backlog-shapes/1.8.0> ,
@@ -1847,4 +1848,55 @@ backlog:StaleLevelReviewAdvisoryShape a sh:NodeShape ;
         sh:select """SELECT $this WHERE {
             $this backlog:hasLevelReviewDate ?d .
             FILTER (?d < NOW())
+        }""" ] .
+
+#################################################################
+#  v1.13.0 — rank uniqueness reaches ranked WORK ITEMS
+#
+#  The existing uniqueness check lives on ContainerLinkageShape and
+#  targets WorkItemContainer, so a register that ranks epics — which
+#  are WorkItems — was never checked at all. An adopting session did
+#  exactly that, saw zero violations, and reported the tie as a
+#  deliberate framework behaviour. It was a gap, not a feature.
+#
+#  Launch priority may tie, and deliberately: co-equal preconditions
+#  that must ALL clear are a real situation. A roadmap rank may not,
+#  and the difference is not arbitrary — a launch priority orders
+#  gates that all have to be passed, while a roadmap rank answers
+#  "what next". Two things at rank 6 is exactly the unanswered
+#  question the rank exists to answer.
+#################################################################
+
+backlog:WorkItemRoadmapRankShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItem ;
+    sh:severity sh:Violation ;
+    rdfs:label "A ranked work item is ranked uniquely, and is on a roadmap (L1)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: two ranked entries hold the same rank on one roadmap; a rank that does not order is not a rank. Launch priority may tie because co-equal preconditions must all clear; a roadmap rank answers what to do next, and a tie there is the question the rank exists to answer, left unanswered." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:rankedOnRoadmap ?rm ; backlog:hasRoadmapRank ?r .
+            ?other backlog:rankedOnRoadmap ?rm ; backlog:hasRoadmapRank ?r .
+            FILTER (?other != $this)
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this work item carries a roadmap rank without naming the roadmap it is ranked on. A rank is meaningless outside the ordering it belongs to." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasRoadmapRank ?r .
+            FILTER NOT EXISTS { $this backlog:rankedOnRoadmap ?rm }
+        }""" ] .
+
+backlog:DisjointDomainMisuseShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItem ;
+    sh:severity sh:Violation ;
+    rdfs:label "A work item does not carry container-only properties (L1)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this work item carries a property whose rdfs:domain is WorkItemContainer, and the two classes are declared disjoint. SHACL alone will not notice — an rdfs:domain is an inference rule, not a constraint — but an OWL 2 DL reasoner would infer this item to be a container as well, making the register logically inconsistent while every SHACL gate still reports clean. This check exists because that is precisely what happened to an adopting register, and because this package carries no reasoner attestation." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            { $this backlog:containerDependsOn ?x } UNION { $this backlog:hasMember ?x }
+            UNION { $this backlog:hasScopeStatement ?x } UNION { $this backlog:isBusinessCapability ?x }
+            UNION { $this backlog:hasCommitment ?x } UNION { $this backlog:hasLifecyclePhase ?x }
+            UNION { $this backlog:hasExternalBlocker ?x } UNION { $this backlog:derivedState ?x }
         }""" ] .

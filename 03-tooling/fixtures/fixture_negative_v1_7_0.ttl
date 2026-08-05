@@ -670,3 +670,27 @@ ex:N_ProfileDowngraded a backlog:AdoptionProfile ;
     backlog:decidedBy backlog:Owner ;
     backlog:hasDecisionRationale "Starting small." ;
     backlog:adoptsFacet backlog:CoreFacet .
+
+#################################################################
+#  shapes v1.13.0 planted defects (72-73) — the adopter's case
+#################################################################
+
+# DEFECT 72: two ranked WORK ITEMS at the same rank (never checked before v1.13.0)
+ex:N040 a backlog:Epic ;
+    backlog:hasIdentifier "N-040" ; backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer ex:Backlog ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "placeholder" ;
+    backlog:rankedOnRoadmap ex:Roadmap ; backlog:hasRoadmapRank 91 .
+ex:N041 a backlog:Epic ;
+    backlog:hasIdentifier "N-041" ; backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer ex:Backlog ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "placeholder" ;
+    backlog:rankedOnRoadmap ex:Roadmap ; backlog:hasRoadmapRank 91 .
+
+# DEFECT 73: a work item carrying a container-only property — OWL-inconsistent,
+# SHACL-invisible before v1.13.0
+ex:N042 a backlog:Story ;
+    backlog:hasIdentifier "N-042" ; backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer ex:Backlog ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "placeholder" ;
+    backlog:isBusinessCapability true .

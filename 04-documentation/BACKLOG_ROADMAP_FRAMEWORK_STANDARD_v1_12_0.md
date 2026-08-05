@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.11.0
+# Backlog & Roadmap Semantic Framework — Standard v1.12.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -104,6 +104,7 @@ a silent gap, and every launch gate is an owner decision with a rationale.
 | `PrioritizationMethod` (open) | Six shipped: WSJF, RICE, RICE+DepFactor, MoSCoW, Cost of Delay, Value/Effort |
 | `PriorityScore`, `WSJFScore`, `RICEScore` | Reified scores retaining their components |
 | `isAveragedFromMembers` | Rejected on container scores — averaging re-uses numbers computed for unrelated reasons |
+| `rankedOnRoadmap`, `hasRoadmapRank` | Placement and order on a roadmap, for **work items and containers alike** — an epic may be ranked, not only a package. Ranks are **unique per roadmap**: a rank that does not order is not a rank. Contrast the launch model below; the difference is that launch priority orders gates that must *all* clear, while a roadmap rank answers *what next*, and a tie there leaves unanswered the question the rank exists to answer |
 | `isLaunchGate`, `hasLaunchPriority` | The owner-declared launch model. Priorities may **tie**: co-equal mandatory preconditions are real, and every gate tied at the lowest open priority is unioned into the launch-scoped scope rather than one being chosen. Unlike `hasRoadmapRank`, ties are deliberately not forbidden — forcing an owner to invent a sequence that does not exist is the fabrication the framework refuses elsewhere |
 | `Role` (`Owner`, `Builder`), `decidedBy`, `hasDecisionRationale` | Who may decide what, and why they decided it |
 | `RankingModel` (`ThroughputRanking`, `LaunchScopedRanking`) | Which question a ranking answers |
