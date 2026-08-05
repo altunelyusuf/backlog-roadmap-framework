@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — `backlog-roadmap-framework` v1.24.0
+# Backlog & Roadmap Semantic Framework — `backlog-roadmap-framework` v1.25.0
 
 An ontology-based, project-independent framework for governing backlogs and roadmaps, so that
 scope, progress, completion evidence and "what's next" are machine-checkable facts rather than
@@ -9,7 +9,7 @@ prose that drifts. Generalised from an adopting project's product-backlog deposi
   backlog_shacl_v1_1_0.ttl                     constraints, tiered L1/L2/L3 + advisory
   backlog_rules_v1_1_0.ttl                     SHACL-AF derivations + R3/R4 + next-item query
 03-tooling/
-  backlog_validate_v1_2_0.py                   validator + Gate K (--gate-k), --next selection
+  backlog_validate_v1_3_0.py                   validator + Gate K (--gate-k), --next selection
   backlog_roadmap_report_v1_2_0.py             the computed roadmap: 8 sections, both NEXT answers
   backlog_coverage_gate_v1_1_1.py              BP-D31 primary-source concept coverage
   backlog_evidence_bridge_v1_0_0.py            the only component allowed to assert verification
@@ -30,9 +30,9 @@ prose that drifts. Generalised from an adopting project's product-backlog deposi
   backlog_framework_register_data_convention_proposal_v1_0_0.md  Phase-D proposal to OEE
   independent_package_naming_proposal_v1_0_0.ttl  proposed convention for OE-governed independent packages
 04-documentation/
-  BACKLOG_ROADMAP_FRAMEWORK_STANDARD_v1_10_0.md the standard: concepts, levels, adoption
+  BACKLOG_ROADMAP_FRAMEWORK_STANDARD_v1_11_0.md the standard: concepts, levels, adoption
   Coverage_Report_v1_1_0.md                    BP-D31 measurement: 22.2% at v1.0.0 -> 100% at v1.1.0
-  CHANGELOG_v1_24_0.md                          what changed and what incident triggered it
+  CHANGELOG_v1_25_0.md                          what changed and what incident triggered it
   Naming_Decision_Record_v1_0_1.md             why the package is named what it is, and the L-88 scrub record
   Concept_Completeness_Audit_v1_0_0.md         20 concepts x vocabulary/enforcement/demonstration
   Linkage_Audit_v1_0_0.md                      are the concepts connected, and is the connection enforced
@@ -61,7 +61,7 @@ bash 03-tooling/backlog_gate_v1_1_6.sh my_register.ttl      # ... plus a registe
 python3 03-tooling/backlog_roadmap_report_v1_2_0.py my_register.ttl
 ```
 
-Read `04-documentation/BACKLOG_ROADMAP_FRAMEWORK_STANDARD_v1_10_0.md` first; section 4 is the
+Read `04-documentation/BACKLOG_ROADMAP_FRAMEWORK_STANDARD_v1_11_0.md` first; section 4 is the
 adoption procedure and section 9 lists what this release does and does not claim.
 
 ## Provenance (BP-D13 / BP-D14 / BP-D15)

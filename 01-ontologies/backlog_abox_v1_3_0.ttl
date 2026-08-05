@@ -153,13 +153,13 @@ backlog:GateP_TurtleParse a owl:NamedIndividual , backlog:ReleaseGate ;
 backlog:GateK_VersionIdentity a owl:NamedIndividual , backlog:ReleaseGate ;
     rdfs:label "Gate K — version identity"@en ;
     skos:definition "For every ontology file, versionInfo equals the versionIRI token equals the filename token. Caught mechanically rather than by inspection, because the mismatch is invisible to a reader who trusts the filename."@en ;
-    backlog:hasGateCommand "backlog_validate_v1_2_0.py --gate-k" ;
+    backlog:hasGateCommand "backlog_validate_v1_3_0.py --gate-k" ;
     backlog:hasGateOrder 2 .
 
 backlog:GateR_ShaclReconcile a owl:NamedIndividual , backlog:ReleaseGate ;
     rdfs:label "Gate R — SHACL reconcile"@en ;
     skos:definition "The register conforms: no item is Done without verified evidence, and no structural constraint is violated. Conformance is zero results at Violation severity, not an empty report."@en ;
-    backlog:hasGateCommand "backlog_validate_v1_2_0.py REGISTER.ttl" ;
+    backlog:hasGateCommand "backlog_validate_v1_3_0.py REGISTER.ttl" ;
     backlog:hasGateOrder 3 .
 
 #################################################################

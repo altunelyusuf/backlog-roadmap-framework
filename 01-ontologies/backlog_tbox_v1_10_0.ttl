@@ -18,9 +18,10 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.9.0> ;
-    owl:versionInfo "1.9.0" ;
-    owl:priorVersion <http://example.org/backlog/1.8.0> ,
+    owl:versionIRI <http://example.org/backlog/1.10.0> ;
+    owl:versionInfo "1.10.0" ;
+    owl:priorVersion <http://example.org/backlog/1.9.0> ,
+                     <http://example.org/backlog/1.8.0> ,
                      <http://example.org/backlog/1.7.0> ,
                      <http://example.org/backlog/1.6.0> ,
                      <http://example.org/backlog/1.5.0> ,
@@ -46,6 +47,7 @@
     skos:definition "A domain-neutral, reusable schema for backlog-and-roadmap governance across independent developments. It standardises five concept groups that recur in every product/engineering effort: (1) work items and their containers, (2) a closed lifecycle whose Done state is a constrained fact rather than asserted prose, (3) completion Evidence anchored to real delivered artifacts (a named passing test, a release carrying its package SHA-256, a file hash, or a recorded review), (4) method-parameterised prioritisation scores, and (5) a roadmap modelled as a derived projection over the backlog rather than an independently maintained list. Adoption is declared by an AdoptionProfile carrying a ConformanceLevel (L1 Core / L2 Evidence-Bound / L3 Governed), which the paired SHACL suite reads to decide which constraints are enforced, so one framework serves developments at different governance maturity without forking the vocabulary. This TBox defines vocabulary only; the paired SHACL shapes supply enforcement, the SPARQL rules supply derivation (container status, next-item selection, milestone status), and an execution bridge asserts observed real-world verification facts back into the ABox."@en ;
     dcterms:source "Scrum Guide 2020 (Product Backlog, Increment, Definition of Done); SAFe 6.0 (Epic/Feature/Story ladder, WSJF); Now-Next-Later roadmap practice; Intercom RICE prioritisation; W3C OWL 2, SHACL, SHACL-AF."@en ;
     rdfs:comment "v1.0.0 — generalisation of an adopting project's product-backlog deposit (an OE Pack registrant deposit, http://example.org/product-backlog 1.3.0) into a project-independent subject. Per L-105 this is an extension of that implementation, not a parallel one: every pb: term has a declared alignment in backlog_alignment_productbacklog_v1_0_0.ttl. Per L-68 the hyphenated/abbreviated form (product-backlog / pb:) is replaced by a single full-word prefix (backlog:); per L-69 the retained terminology anchors to the Scrum Guide and SAFe rather than to project-internal names. The deposit files themselves are NOT modified by this release (L-X7 / B1: the owning session decides supersession)."@en ,
+    "v1.10.0 (MINOR, additions only) — closes the largest unguarded opt-out in the framework. Measured: declaring L1_Core suppresses 43 of 101 constraints, and on the shipped negative fixture changing that one token drops 306 violations to 101. Every other opt-out here — notYetScoreable, ScopeExclusion, Rebaseline, ScopeChange, accepted risk, ranking-fork resolution — requires a written rationale, and four of them require an owner decision. The conformance level, which suppresses more than all of them combined, required neither. The tier mechanism exists as an ADOPTION RAMP: a framework demanding everything on day one is adopted by nobody. Its misuse is as permanent shelter — a ramp used as a parking space. What is added therefore does not forbid a low level; it makes the choice owner-decided, reasoned, dated, and directional, so that standing still is visible rather than free."@en ,
     "v1.9.0 (MINOR, definition enrichment plus one clarification) — responds to an adopting project that registered a user-facing story whose Definition of Done named which files would change and which fields would be added, and which the suite accepted as complete because nothing distinguished describing a change from describing a behaviour. Per L-110 no UIScope flag or sibling term is minted on one producer's evidence: backlog:Story is ALREADY defined as the user-facing kind, so the flag exists, and backlog:AcceptanceCriterion is ALREADY defined in terms of observable behaviour, so the concept exists. What was missing was that neither said so forcefully enough to be actionable, and nothing surfaced the failure. Both definitions are enriched and an advisory is added. Also clarifies that hasSuccessMetric's range is nominal at L1."@en ,
     "v1.8.0 (MINOR, additions only) — adds hasRankingForkResolution, so an owner records ONCE which model resolves pickup when throughput and launch-scoped ranking disagree. Raised by an adopting project carrying a legitimate, long-running disagreement that every session re-argued because the register had nowhere to say the owner had already decided. It does not weaken the rule that the fork stays visible: both models are still computed and the disagreement notice is unchanged; the recorded decision is printed beside it, never instead of it. This is the same pattern the framework already applies to scope changes, re-baselines and accepted risks — an unavoidable judgement gets a place to be recorded, or it is remade informally every time."@en ,
     "v1.7.0 (MINOR, additions only) — closes an asymmetry found by audit: the framework constrained what a register must SAY and said nothing about what an adopting development must SHIP, so a register could be fully conformant in one working copy and unreproducible everywhere else. Adds RegisterPackage and RegisterArtifact with a closed five-role set, a package version, a mandatory manifest, and retention of roadmap report runs as files so progress has a trajectory rather than only a current state. Filename and version rules are NOT restated here: artifacts reference the configuration subject's existing NamingConvention individuals by IRI, and the package checker reads their filenamePattern from the pack at check time, so there is one source of truth for naming and it is the one that already owns it."@en ,
@@ -2613,3 +2615,31 @@ backlog:hasRankingForkResolution a owl:ObjectProperty , owl:FunctionalProperty ;
     rdfs:label "has ranking fork resolution"@en ;
     skos:definition "The model an owner has decided governs pickup when throughput ranking and launch-scoped ranking disagree, recorded once on the register rather than re-argued each run. Functional: a register resolves the fork one way or not at all. Setting it does NOT resolve the disagreement silently — both models are still computed and the disagreement is still reported; what changes is that a reader also sees what the owner decided about it, with the reasoning attached through decidedBy and hasDecisionRationale, which the suite requires whenever this property is set. Absent means no standing decision has been taken, which is a legitimate state and the default: a fork nobody has ruled on should keep asking."@en ;
     dcterms:source "Raised 2026-07-29 by an adopting project session whose register carried a genuine, repeatedly re-presented ranking disagreement with nowhere to record the owner's standing answer."@en .
+
+#################################################################
+#  40. The conformance level as a ramp, not a shelter (v1.10.0)
+#################################################################
+
+backlog:hasTargetConformanceLevel a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:AdoptionProfile ; rdfs:range backlog:ConformanceLevel ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has target conformance level"@en ;
+    skos:definition "The level this adoption is working toward. The tier mechanism is an adoption ramp — it exists so a team can start without meeting every constraint on day one — and a ramp with no destination is a parking space. Declaring a target does not commit anyone to a date they cannot meet; it commits them to saying which direction they are facing, which is the difference between adopting progressively and adopting selectively."@en .
+
+backlog:hasLevelReviewDate a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:AdoptionProfile ; rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has level review date"@en ;
+    skos:definition "When the adopted level is next revisited. Not a deadline to reach the target: a date on which someone must look again and either advance, or restate the reason for staying. A level with no review date is one nobody will ever reconsider, because nothing will ever ask them to."@en .
+
+backlog:hasPriorConformanceLevel a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:AdoptionProfile ; rdfs:range backlog:ConformanceLevel ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has prior conformance level"@en ;
+    skos:definition "The level this adoption previously declared, retained so that a DOWNGRADE is visible as a downgrade. Without it, lowering the level is indistinguishable from never having claimed the higher one — the register simply reports fewer violations and nothing says why. This is the same control Rebaseline applies to a moved target: the framework does not forbid the move, it forbids the move being invisible."@en .
+
+backlog:hasDowngradeRationale a owl:DatatypeProperty ;
+    rdfs:domain backlog:AdoptionProfile ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has downgrade rationale"@en ;
+    skos:definition "Why a previously-claimed higher conformance level was given up. Kept separate from the ordinary level rationale so that a downgrade cannot be satisfied by the sentence that justified the original choice: giving up a claim is a different decision from making one, and reusing the earlier reason would let the harder question be answered by the easier one."@en .

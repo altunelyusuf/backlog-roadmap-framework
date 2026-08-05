@@ -15,7 +15,7 @@ doesn't count.**
 
 ## Start here
 
-1. **`04-documentation/BACKLOG_ROADMAP_FRAMEWORK_STANDARD_v1_10_0.md`** — the framework itself. §2 is
+1. **`04-documentation/BACKLOG_ROADMAP_FRAMEWORK_STANDARD_v1_11_0.md`** — the framework itself. §2 is
    the vocabulary, §3 the conformance levels, §4 how to adopt it.
 2. **`03-tooling/fixtures/fixture_positive_v1_7_0.ttl`** — a small conformant register. Read it
    alongside §2 and the vocabulary stops being abstract.
@@ -28,7 +28,7 @@ doesn't count.**
 ```bash
 pip install rdflib pyshacl
 bash 03-tooling/backlog_gate_v1_1_6.sh          # full release gate
-python3 03-tooling/backlog_validate_v1_2_0.py <your-register.ttl>
+python3 03-tooling/backlog_validate_v1_3_0.py <your-register.ttl>
 ```
 
 The gate proves itself before it certifies anything: it must pass a known-good register, **fail** a

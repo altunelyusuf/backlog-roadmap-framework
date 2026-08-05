@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.10.0
+# Backlog & Roadmap Semantic Framework — Standard v1.11.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -258,7 +258,38 @@ would fail it against a promise it never made. The same reasoning places `GoalMe
 `IntentTraceabilityShape` and the mission-coverage constraint above L1, while `GoalShape`,
 `BenefitShape`, `ScopeExclusionShape`, `CostEstimateShape` and their siblings stay unconditional.
 
-L2 and L3 shapes fire only when an `AdoptionProfile` claims that level. Conformance means zero
+L2 and L3 shapes fire only when an `AdoptionProfile` claims that level.
+
+**The declaration is itself governed, and those constraints are never level-gated.** Declaring
+`L1_Core` suppresses every level-gated constraint at once — on the shipped negative fixture,
+changing that one token removes most of the violations without changing another byte. The figures
+are in `RELEASE_METRICS.txt` and on every validator run; they are not restated here, because a
+number in prose goes stale the moment the suite changes. Every other opt-out in this
+framework — `notYetScoreable`, `ScopeExclusion`, `Rebaseline`, `ScopeChange`, an accepted risk, a
+ranking-fork resolution — already requires a written rationale, and four require an owner decision.
+The conformance level suppressed more than all of them combined and required neither.
+
+The tier mechanism is an **adoption ramp**: a framework demanding everything on day one is adopted
+by nobody. Its misuse is as **permanent shelter** — a ramp used as a parking space. So the framework
+does not forbid a low level. It requires the choice to be:
+
+| | |
+|---|---|
+| **owner-decided** | `decidedBy backlog:Owner` — the largest opt-out cannot be made by nobody in particular |
+| **reasoned** | `hasDecisionRationale` — why this level and not a higher one |
+| **directional** | `hasTargetConformanceLevel` — a ramp with no destination is a parking space; a target equal to the current level is rejected as standstill encoded as ambition |
+| **dated** | `hasLevelReviewDate` — not a deadline to reach the target, a date on which someone must look again; an advisory fires once it passes |
+| **irreversible-in-the-open** | `hasPriorConformanceLevel` + `hasDowngradeRationale` — downgrading is permitted, downgrading silently is not |
+
+Every run also reports the **suppression cost** on its own `level:` line — how many level-gated
+constraints did not run, computed from the suite at run time rather than written down. A clean
+result at a low level and a clean result at a high level previously printed identically. They are
+not the same claim.
+
+**None of this stops a determined party**, and the framework does not pretend otherwise: the
+register is authored by the same people who declare its level. What these constraints do is make
+the choice attributable, reasoned and dated — which is the whole of what governance can do about a
+self-declaration, and considerably more than nothing. Conformance means zero
 results at `sh:Violation` severity; advisory results never constitute failure. Every verdict is
 printed with the shapes file, its hash, the tool versions and the mode.
 

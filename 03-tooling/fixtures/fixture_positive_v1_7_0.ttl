@@ -16,6 +16,8 @@ ex:Profile a backlog:AdoptionProfile ;
     backlog:bindsNamespace "http://example.org/fixture-positive#" ;
     backlog:governsBacklog ex:Backlog ;
     backlog:hasConformanceLevel backlog:L3_Governed ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:hasDecisionRationale "Owner call: the register carries client data under a retention obligation, so evidence binding and coverage sweeps are not optional here." ;
     backlog:adoptsFacet backlog:CoreFacet , backlog:EvidenceFacet , backlog:PrioritizationFacet ,
                         backlog:RoadmapFacet , backlog:InvariantFacet , backlog:AuditFacet .
 

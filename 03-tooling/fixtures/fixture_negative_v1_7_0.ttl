@@ -635,3 +635,38 @@ ex:N039_Ev a backlog:TestEvidence ;
     backlog:evidenceVerified true ; backlog:verifiedAt "2026-08-04T09:00:00"^^xsd:dateTime ;
     backlog:hasVerificationMethod "playwright test --grep AW-1, exit 0" ;
     backlog:verifiedByTool "playwright 1.45" .
+
+
+#################################################################
+#  shapes v1.12.0 planted defects (69-71) — misuse of the tier
+#################################################################
+
+# DEFECT 69: a low level declared by nobody, for no reason, going nowhere
+ex:N_ProfileSheltered a backlog:AdoptionProfile ;
+    backlog:profileAppliesTo "sheltered adoption" ;
+    backlog:governsBacklog ex:Backlog ;
+    backlog:hasConformanceLevel backlog:L1_Core ;
+    backlog:adoptsFacet backlog:CoreFacet .
+
+# DEFECT 70: a "target" that is the current level, and a review date long past
+ex:N_ProfileStandstill a backlog:AdoptionProfile ;
+    backlog:profileAppliesTo "standstill encoded as ambition" ;
+    backlog:governsBacklog ex:Backlog ;
+    backlog:hasConformanceLevel backlog:L1_Core ;
+    backlog:hasTargetConformanceLevel backlog:L1_Core ;
+    backlog:hasLevelReviewDate "2026-01-01T00:00:00"^^xsd:dateTime ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:hasDecisionRationale "Starting small." ;
+    backlog:adoptsFacet backlog:CoreFacet .
+
+# DEFECT 71: a silent downgrade from a previously claimed higher level
+ex:N_ProfileDowngraded a backlog:AdoptionProfile ;
+    backlog:profileAppliesTo "quietly lowered" ;
+    backlog:governsBacklog ex:Backlog ;
+    backlog:hasConformanceLevel backlog:L1_Core ;
+    backlog:hasPriorConformanceLevel backlog:L3_Governed ;
+    backlog:hasTargetConformanceLevel backlog:L3_Governed ;
+    backlog:hasLevelReviewDate "2027-01-01T00:00:00"^^xsd:dateTime ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:hasDecisionRationale "Starting small." ;
+    backlog:adoptsFacet backlog:CoreFacet .

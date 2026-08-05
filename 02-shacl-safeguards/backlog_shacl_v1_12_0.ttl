@@ -9,9 +9,10 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.11.0> ;
-    owl:versionInfo "1.11.0" ;
-    owl:priorVersion <http://example.org/backlog-shapes/1.10.0> ,
+    owl:versionIRI <http://example.org/backlog-shapes/1.12.0> ;
+    owl:versionInfo "1.12.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.11.0> ,
+                     <http://example.org/backlog-shapes/1.10.0> ,
                      <http://example.org/backlog-shapes/1.9.0> ,
                      <http://example.org/backlog-shapes/1.8.0> ,
                      <http://example.org/backlog-shapes/1.7.0> ,
@@ -1770,4 +1771,80 @@ backlog:StaleInvariantStatusShape a sh:NodeShape ;
                 ?i backlog:hasState ?s .
                 FILTER (?s != backlog:Done)
             }
+        }""" ] .
+
+#################################################################
+#  v1.12.0 — the conformance declaration is itself governed
+#
+#  These fire ALWAYS. They are deliberately not gated on the level,
+#  because a constraint on the level declaration that the level
+#  declaration could switch off would be the defect it exists to
+#  prevent, one turn later.
+#################################################################
+
+backlog:ConformanceDeclarationShape a sh:NodeShape ;
+    sh:targetClass backlog:AdoptionProfile ;
+    sh:severity sh:Violation ;
+    rdfs:label "Declaring a conformance level is an owner decision with a reason (always)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "The conformance level must name the Owner as its decider. It is the largest opt-out this framework offers — declaring L1_Core suppresses 43 of 101 constraints — and every smaller opt-out here already requires an owner decision. A choice this consequential made by nobody in particular is the one an audit cannot question." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE { FILTER NOT EXISTS { $this backlog:decidedBy backlog:Owner } }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "The conformance level must carry a written rationale saying why this level and not a higher one. notYetScoreable, ScopeExclusion, Rebaseline, ScopeChange, accepted risk and the ranking-fork resolution all require one; this suppresses more than all of them combined." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE { FILTER NOT EXISTS { $this backlog:hasDecisionRationale ?r } }""" ] .
+
+backlog:AdoptionRampShape a sh:NodeShape ;
+    sh:targetClass backlog:AdoptionProfile ;
+    sh:severity sh:Violation ;
+    rdfs:label "A level below the top is a ramp, and a ramp has a direction and a date (always)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "An adoption below L3_Governed must declare the level it is working toward. The tier mechanism exists so a team can start without meeting everything on day one; without a declared target it stops being progressive adoption and becomes selective adoption, which is the same graph reporting fewer violations for no stated reason." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl != backlog:L3_Governed)
+            FILTER NOT EXISTS { $this backlog:hasTargetConformanceLevel ?t }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "The declared target equals the current level, so it is not a target. If staying at this level is the settled decision, say so in the rationale and set the target to L3_Governed with a review date far enough out to be honest — do not encode standstill as ambition." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasConformanceLevel ?lvl ; backlog:hasTargetConformanceLevel ?t .
+            FILTER (?lvl = ?t && ?lvl != backlog:L3_Governed)
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "An adoption below L3_Governed must carry a review date. Not a deadline to reach the target — a date on which someone must look again and either advance or restate the reason. A level nothing ever asks about is one nobody ever reconsiders." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl != backlog:L3_Governed)
+            FILTER NOT EXISTS { $this backlog:hasLevelReviewDate ?d }
+        }""" ] .
+
+backlog:ConformanceDowngradeShape a sh:NodeShape ;
+    sh:targetClass backlog:AdoptionProfile ;
+    sh:severity sh:Violation ;
+    rdfs:label "Lowering the level is a move that must be visible (always)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "This adoption records a prior level higher than its current one. A downgrade is permitted — circumstances change — but it may not be silent: the rationale must say why the higher level was given up, because otherwise the register simply starts reporting fewer violations and nothing explains it. Same control Rebaseline applies to a moved target." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasConformanceLevel ?now ; backlog:hasPriorConformanceLevel ?was .
+            FILTER ( (?was = backlog:L3_Governed && ?now != backlog:L3_Governed)
+                  || (?was = backlog:L2_EvidenceBound && ?now = backlog:L1_Core) )
+            FILTER NOT EXISTS { $this backlog:hasDowngradeRationale ?r }
+        }""" ] .
+
+backlog:StaleLevelReviewAdvisoryShape a sh:NodeShape ;
+    sh:targetClass backlog:AdoptionProfile ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: the level review date has passed"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: this adoption's level review date has passed. The level was chosen as a stage, not a destination; nobody has looked again since the date they set for looking again." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasLevelReviewDate ?d .
+            FILTER (?d < NOW())
         }""" ] .

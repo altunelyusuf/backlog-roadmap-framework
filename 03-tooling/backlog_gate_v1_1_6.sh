@@ -16,7 +16,7 @@
 set -u
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PKG="$(dirname "$HERE")"
-VALIDATE="$HERE/backlog_validate_v1_2_0.py"
+VALIDATE="$HERE/backlog_validate_v1_3_0.py"
 COVERAGE="$HERE/backlog_coverage_gate_v1_1_1.py"
 DOCGATE="$(ls "$HERE"/backlog_doc_coverage_gate_v*.py | sort -V | tail -1)"
 # fixtures resolved by pattern, not pinned filename: a fixture version bump

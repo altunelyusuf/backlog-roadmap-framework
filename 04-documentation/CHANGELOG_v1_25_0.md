@@ -1,5 +1,48 @@
 # Changelog
 
+## v1.25.0 — 2026-08-04 (MINOR: the conformance declaration is itself governed)
+
+**Reported misuse:** teams lowering the declared conformance level so the gates pass. Confirmed by
+construction before anything was designed — the shipped negative fixture, unchanged except for the
+level token, drops from 308 violations to 105. One word, most of the suite silenced.
+
+**The real reason the mechanism exists, and the real reason it is abusable.** Tiering is an
+**adoption ramp**: a framework demanding everything on day one is adopted by nobody. That purpose is
+sound. What made it abusable is a design inconsistency that was ours: measured across the suite,
+every other opt-out — `notYetScoreable`, `ScopeExclusion`, `Rebaseline`, `ScopeChange`, an accepted
+risk, a ranking-fork resolution — already requires a written rationale, and four require an owner
+decision. **The conformance level suppressed more than all of them combined and required neither.**
+The ramp had no destination, no date, no author and no reason, so nothing distinguished a team
+starting from a team hiding.
+
+**Added — TBox 1.9.0 → 1.10.0:** `hasTargetConformanceLevel`, `hasLevelReviewDate`,
+`hasPriorConformanceLevel`, `hasDowngradeRationale`.
+
+**Added — shapes 1.11.0 → 1.12.0, and these fire ALWAYS.** They are deliberately not level-gated: a
+constraint on the level declaration that the level declaration could switch off would be the defect
+it exists to prevent, one turn later.
+
+- the level must be **owner-decided** and carry a **rationale**
+- below L3, a **target level** and a **review date** are required
+- a target equal to the current level is rejected — standstill encoded as ambition
+- a **downgrade** from a previously declared level needs its own rationale, separate from the
+  original one, because giving up a claim is a different decision from making it
+- advisory once the review date passes
+
+**Added — validator 1.2.0 → 1.3.0:** every run reports the **suppression cost** —
+`level: L1_Core — N of M level-gated constraint(s) did NOT run`. A clean result at a low level and a
+clean result at a high level previously printed identically. They are not the same claim.
+
+**What this does not do, stated rather than glossed:** it does not stop a determined party. The
+register is authored by the same people who declare its level. What it does is make the choice
+attributable, reasoned, dated and directional — the whole of what governance can do about a
+self-declaration.
+
+**Caught by our own gate during this work:** the standard initially restated the measured figures
+(32 constraints, 308→105). The doc-coverage gate rejected it under the restated-measurement rule
+added at v1.19.0. The numbers now live only where they are generated.
+
+
 ## v1.24.0 — 2026-08-04 (MINOR: fixing a disclosed-broken mechanism must leave durable proof)
 
 **Raised by an adopting project at L1 Core**, from four incidents in its own history — the last
@@ -163,7 +206,7 @@ reporter's phrasing was exact — "175 Warning" with no content is a number a hu
 past, and the advisory tier then protects nothing it was built to surface. One line per result is the
 opposite failure at that scale.
 
-`backlog_validate_v1_2_0.py` now prints a **grouped digest**: count per distinct message, the first
+`backlog_validate_v1_3_0.py` now prints a **grouped digest**: count per distinct message, the first
 few focus nodes for each, sorted by frequency, with individual advisory lines still printed while the
 total stays under twenty. Violations are unchanged — always listed individually, because each blocks
 a release. On the shipped negative fixture the difference is `39 Warning, 5 Info` becoming
