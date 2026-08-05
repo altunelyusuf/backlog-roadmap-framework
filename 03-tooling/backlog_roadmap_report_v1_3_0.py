@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_roadmap_report v1.2.0 — the roadmap, computed.
+"""backlog_roadmap_report v1.3.0 — the roadmap, computed.
 
 A roadmap is this script's output, never a maintained document. The moment a
 computed value is copied into prose it starts decaying, and a report that is
@@ -12,7 +12,7 @@ suite, not just this script):
 
   1. NEXT under the throughput model
   2. NEXT under the launch-scoped model      <- both printed, always
-  3. Full ranked backlog
+  3. Full ranked backlog (COMPUTED — see below)
   4. Flagged items (not-yet-scoreable, with reasons)
   5. Silent-gap check                        <- must read zero
   6. Launch readiness by package
@@ -28,7 +28,7 @@ the two answers coincide by construction. The two are never reconciled by
 arithmetic; a disagreement is displayed so a human resolves it knowingly.
 
 Usage:
-  backlog_roadmap_report_v1_2_0.py REGISTER.ttl [--method IRI] [--emit report.ttl]
+  backlog_roadmap_report_v1_3_0.py REGISTER.ttl [--method IRI] [--emit report.ttl]
 """
 
 import argparse
@@ -179,7 +179,7 @@ def main():
     print("roadmap report  : computed %s" % now.isoformat())
     print("register        : %s" % os.path.basename(args.register))
     print("method          : %s" % (args.method or "any"))
-    print("tooling         : rdflib %s, backlog_roadmap_report v1.2.0" % rdflib.__version__)
+    print("tooling         : rdflib %s, backlog_roadmap_report v1.3.0" % rdflib.__version__)
 
     gates = active_gates(g)
     all_rows = ranked(g, method)
@@ -226,7 +226,21 @@ def main():
             if why:
                 print("    because: %s" % str(why)[:100])
 
-    print("\n== 3. Full ranked backlog ==")
+    # A section ordered by score is a COMPUTED view, not an assertion. Every
+    # ordering this report prints is derived at run time from hasScoreValue; none
+    # of it is backlog:hasRoadmapRank, which is an owner-declared fact. The
+    # distinction is labelled because it has already been lost once: a downstream
+    # reader took a rank column out of a handover document, assumed it was
+    # asserted RDF, and drew a conclusion about a register that did not contain
+    # the property at all. A report that does not say which of its numbers are
+    # facts invites exactly that.
+    print("\n== 3. Full ranked backlog — COMPUTED ordering by score ==")
+    print("     Position here is derived from hasScoreValue at run time. It is NOT")
+    print("     backlog:hasRoadmapRank; nothing in this section is an assertion in the")
+    print("     register. Ties in this ordering are ties in the SCORE, and carry none of")
+    print("     the uniqueness obligation a declared roadmap rank does.")
+    declared = sorted(set(g.subjects(BL.hasRoadmapRank, None)))
+    print("     declared roadmap ranks in this register: %d" % len(declared))
     for v, item, state, ok in all_rows:
         print("  %-10s %-12s score %6.2f  %s" % (ident(g, item), str(state).rsplit("#", 1)[-1],
                                                  v, "startable" if ok else "blocked"))

@@ -308,7 +308,7 @@ python3 03-tooling/backlog_evidence_bridge_v1_0_0.py my_register.ttl \
         --workspace /path/to/repo --test-command 'npx playwright test {spec} --grep {id}'
 
 # 4. Compute the roadmap — never write one by hand
-python3 03-tooling/backlog_roadmap_report_v1_2_0.py my_register.ttl --emit report.ttl
+python3 03-tooling/backlog_roadmap_report_v1_3_0.py my_register.ttl --emit report.ttl
 
 # 5. Run the four-gate release check (self-proving)
 bash 03-tooling/backlog_gate_v1_1_7.sh my_register.ttl

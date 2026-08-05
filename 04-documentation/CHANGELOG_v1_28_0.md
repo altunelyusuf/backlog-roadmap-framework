@@ -1,5 +1,39 @@
 # Changelog
 
+## v1.28.0 — 2026-08-05 (MINOR: correcting my own claim, and the reporting defect that caused it)
+
+**The v1.27.0 entry below contains an unfounded claim and is left unedited.** It says *"their
+register now fails. The rank-6 tie between FG-EP11 and FG-EP14 is a real violation."* That was
+asserted about a file this session never read. Correcting a historical entry in place is the L-112
+failure this package's own tooling exists to prevent, so the correction is this entry.
+
+**What the adopting session established**, and this session accepts as their artifact to read:
+`rankedOnRoadmap` and `hasRoadmapRank` appear **zero times** in `fitgap_backlog_v1_4_0.ttl`. The
+"Rank" column in the handover document was a **report-time sort over `hasScoreValue`** — a table
+printed, never an RDF fact asserted. Their register validates **0 Violation, CONFORMANT** against
+the real v1.27.0 validator. This session cannot re-derive that independently, having no copy of the
+file, and says so rather than implying otherwise.
+
+**My error, named precisely.** I inferred an RDF assertion from a rendered table in a `.docx`. That
+is **B4** — trusting a presentation over parsed content — and because the inference grounded a
+disposition, **B3** as well. What I had was a column headed "Rank" with two rows reading 6; what I
+needed was the register, which I never asked for. The corroborating detail should have stopped me:
+their own prose says the tie is at **0.40**, a score, not a rank.
+
+**The defect underneath is mine, not theirs, and is fixed here.** `backlog_roadmap_report` printed
+`== 3. Full ranked backlog ==` with no indication that the ordering was computed. A reader — this
+one — took such a table for asserted data. Section 3 now states plainly that its position is derived
+from `hasScoreValue` at run time, is **not** `backlog:hasRoadmapRank`, and that ties in it are ties
+in the score carrying none of the uniqueness obligation a declared rank does. It also prints how
+many declared roadmap ranks the register actually contains, so the two can never again be confused
+by a reader of the output.
+
+**What stands from v1.27.0:** the constraints themselves. Rank uniqueness genuinely did not reach
+ranked work items, and a work item carrying a container-only property is genuinely OWL-inconsistent
+while SHACL reports clean. The adopting session independently reproduced both in a scratch copy and
+corroborated the fix. The fix was right; only my claim about who it applied to was wrong.
+
+
 ## v1.27.0 — 2026-08-05 (MINOR: a register was SHACL-clean and logically inconsistent)
 
 A parallel session's handover document reported its fit-gap register validating at **0 sh:Violation**
@@ -1207,7 +1241,7 @@ executable and ordered.
 **Added — derivation** (`backlog-rules` 1.0.0 → 1.1.0): R4 external-blocker derivation; R3
 arbitration documented and implemented in the report tool.
 
-**Added — tooling:** `backlog_roadmap_report_v1_2_0.py` (eight sections, both NEXT answers, silent
+**Added — tooling:** `backlog_roadmap_report_v1_3_0.py` (eight sections, both NEXT answers, silent
 -gap check), `backlog_coverage_gate_v1_1_1.py` (BP-D31), `backlog_gate_v1_1_7.sh` (Gate 0 / P / K /
 R plus coverage), Gate K version-identity check in the validator.
 
