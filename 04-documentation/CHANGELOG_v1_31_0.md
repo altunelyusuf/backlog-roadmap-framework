@@ -1,5 +1,52 @@
 # Changelog
 
+## v1.31.0 — 2026-08-05 (MINOR: two roadmap-rank rules cross-referenced; one advisory message corrected)
+
+A **coverage check** over the adopting project's whole proposals directory — ten artifacts, listed
+from their repository rather than recalled — found two this package had never processed and three it
+had processed without naming in its own records. Both gaps are closed here.
+
+### Accepted — `Proposal_RoadmapRankShapeCrossReference`
+
+Verified against bytes, and every claim reproduces. `WorkItemRoadmapRankShape` (targets `WorkItem`)
+never objects to an absent rank. The roadmap-placement clause in `ContainerLinkageShape` (targets
+`WorkItemContainer`) requires one on any launch-gated container at L2. Same vocabulary, **opposite
+default for absence**, and — measured — the two shapes sit **1035 lines apart**, against their
+estimate of "roughly a thousand".
+
+They read the item-level rule's philosophy, applied it to eight launch-gated `Package` containers,
+and left eight real L2 violations standing for a full register pass. Their correction matches this
+package's own `fixture_tied_gates_v1_0_0.ttl`: distinct roadmap ranks, co-equal launch priorities
+untouched.
+
+Each shape now carries an `rdfs:comment` naming the other, and the standard states the difference.
+No behaviour changed.
+
+### Ruled, not accepted as framed — `Proposal_IntentTraceabilityCommitmentGap`
+
+They ask whether the intent-traceability advisory should treat a container's
+`hasCommitment`/`commitsToGoal` as satisfying traceability, or whether the Warning is working as
+intended. **It is working as intended — and its message was wrong**, which is why it read as a false
+positive.
+
+The shape checks `pursuesObjective` three ways and deliberately does not accept a Goal, because a
+**Goal states what matters while an Objective states what would settle it**; an item reaching only a
+Goal has no measurable target, which is exactly what the advisory exists to surface. But the old
+message claimed the value claim "cannot be traced to anything the product is trying to achieve" — and
+for an item in a committed container that is **false**. It is traced; it is traced to something
+unmeasurable.
+
+The message now says that, and says which reading was overstated. **The check is unchanged.**
+
+### A defect in this package's own record-keeping, found by the coverage check
+
+Three processed proposals — `DevTimeObjectiveVsBusinessTimeBenefit`,
+`PreLaunchSyntheticLoadMethodology`, and this round's two — were handled without their **filenames**
+appearing in any round record. The work was done; the record said "two proposals from an adopting
+project". That makes a later coverage check impossible without re-reading every entry, which is how
+one unprocessed proposal sat unnoticed. Round records now name the artifact.
+
+
 ## v1.30.0 — 2026-08-05 (MINOR: the two-lineage framing, which is better than v1.29.0's)
 
 The v1.29.0 text treated this as **one** intent chain with a `Benefit` deferred off the end. The

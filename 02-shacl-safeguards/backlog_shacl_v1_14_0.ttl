@@ -9,9 +9,10 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.13.0> ;
-    owl:versionInfo "1.13.0" ;
-    owl:priorVersion <http://example.org/backlog-shapes/1.12.0> ,
+    owl:versionIRI <http://example.org/backlog-shapes/1.14.0> ;
+    owl:versionInfo "1.14.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.13.0> ,
+                     <http://example.org/backlog-shapes/1.12.0> ,
                      <http://example.org/backlog-shapes/1.11.0> ,
                      <http://example.org/backlog-shapes/1.10.0> ,
                      <http://example.org/backlog-shapes/1.9.0> ,
@@ -819,7 +820,7 @@ backlog:IntentTraceabilityAdvisoryShape a sh:NodeShape ;
     sh:severity sh:Warning ;
     rdfs:label "Advisory: item pursues no stated objective"@en ;
     sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "Advisory: this item advances no recorded objective, so its value claim cannot be traced to anything the product is trying to achieve." ;
+        sh:message "Advisory: this item advances no recorded objective, so its value claim reaches no MEASURABLE target. It may still be traced to intent — a container carrying hasCommitment/commitsToGoal reaches a Goal — and this advisory deliberately does not accept that, because a Goal states what matters while an Objective states what would settle it. Raised by an adopting session that read the old wording, which said the claim could not be traced to anything at all, as a false positive; the old wording overstated, the check did not." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             FILTER EXISTS { ?o a backlog:Objective }
@@ -836,6 +837,7 @@ backlog:ContainerLinkageShape a sh:NodeShape ;
     sh:targetClass backlog:WorkItemContainer ;
     sh:severity sh:Violation ;
     rdfs:label "Container dependency and roadmap placement (L1)"@en ;
+    rdfs:comment "SEE ALSO backlog:WorkItemRoadmapRankShape, which governs the same two properties on backlog:WorkItem — a DIFFERENT target class with the OPPOSITE default for absence. There, an unranked item is no violation at all; here, a launch-gated container without a rank IS one at L2. Do not infer either shape's behaviour from the other's message. An adopting session read the item-level rule's philosophy, applied it to eight launch-gated containers, and left eight real L2 violations standing for a full register pass."@en ;
     sh:property [ sh:path backlog:containerDependsOn ; sh:class backlog:WorkItemContainer ;
                   sh:message "L1: containerDependsOn must point at a real container." ] ;
     sh:sparql [ a sh:SPARQLConstraint ;
@@ -1871,6 +1873,7 @@ backlog:WorkItemRoadmapRankShape a sh:NodeShape ;
     sh:targetClass backlog:WorkItem ;
     sh:severity sh:Violation ;
     rdfs:label "A ranked work item is ranked uniquely, and is on a roadmap (L1)"@en ;
+    rdfs:comment "SEE ALSO the roadmap-placement clause in backlog:ContainerLinkageShape, roughly a thousand lines above and targeting backlog:WorkItemContainer. This shape never objects to an item having no rank; that one requires a rank on any launch-gated container at L2. Same vocabulary, different target class, opposite default for absence."@en ;
     sh:sparql [ a sh:SPARQLConstraint ;
         sh:message "L1: two ranked entries hold the same rank on one roadmap; a rank that does not order is not a rank. Launch priority may tie because co-equal preconditions must all clear; a roadmap rank answers what to do next, and a tie there is the question the rank exists to answer, left unanswered." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;

@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.14.0
+# Backlog & Roadmap Semantic Framework — Standard v1.15.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -105,6 +105,7 @@ a silent gap, and every launch gate is an owner decision with a rationale.
 | `PriorityScore`, `WSJFScore`, `RICEScore` | Reified scores retaining their components |
 | `isAveragedFromMembers` | Rejected on container scores — averaging re-uses numbers computed for unrelated reasons |
 | `rankedOnRoadmap`, `hasRoadmapRank` | Placement and order on a roadmap, for **work items and containers alike** — an epic may be ranked, not only a package. Ranks are **unique per roadmap**: a rank that does not order is not a rank. Contrast the launch model below; the difference is that launch priority orders gates that must *all* clear, while a roadmap rank answers *what next*, and a tie there leaves unanswered the question the rank exists to answer |
+| **two rank rules, different defaults** | `WorkItemRoadmapRankShape` (targets `WorkItem`) never objects to an item having **no** rank — a rank answers "what next", and an unanswered question is not itself a defect at item level. The roadmap-placement clause in `ContainerLinkageShape` (targets `WorkItemContainer`) **requires** a rank on any launch-gated container at L2. Same vocabulary, opposite default for absence, and the two shapes sit about a thousand lines apart. An adopting session read the first, applied it to eight launch-gated containers, and left eight real violations standing for a full register pass. Each shape now carries an `rdfs:comment` pointing at the other |
 | `isLaunchGate`, `hasLaunchPriority` | The owner-declared launch model. Priorities may **tie**: co-equal mandatory preconditions are real, and every gate tied at the lowest open priority is unioned into the launch-scoped scope rather than one being chosen. Unlike `hasRoadmapRank`, ties are deliberately not forbidden — forcing an owner to invent a sequence that does not exist is the fabrication the framework refuses elsewhere |
 | `Role` (`Owner`, `Builder`), `decidedBy`, `hasDecisionRationale` | Who may decide what, and why they decided it |
 | `RankingModel` (`ThroughputRanking`, `LaunchScopedRanking`) | Which question a ranking answers |
