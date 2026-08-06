@@ -1,5 +1,38 @@
 # Changelog
 
+## v1.30.0 — 2026-08-05 (MINOR: the two-lineage framing, which is better than v1.29.0's)
+
+The v1.29.0 text treated this as **one** intent chain with a `Benefit` deferred off the end. The
+owner's framing is two parallel lineages, and it is better in three specific ways this entry records
+rather than absorbing silently.
+
+**Undecidability, not inconvenience.** v1.29.0 said the single-lineage reading made the framework
+"unusable". The sharper statement: a lineage whose objectives require real operational data is
+**undecidable during development**, because the deciding fact cannot exist until the development it
+would govern has shipped. Unclosable by construction, and an unclosable register stops being
+consulted.
+
+**Two lineages, each closable in its own terms** — development and operational — rather than one
+chain permanently waiting. This matters structurally: the development lineage can *close*.
+
+**The bridge is an objective, not a note.** v1.29.0 mentioned measuring a collection-and-analysis
+capability as one option among several. It is the mechanism: where the operational lineage names a
+measure that does not exist, **that measure becomes a development objective** — build the instrument,
+test it, return its results — and satisfying it is what makes the operational lineage satisfiable
+later. The operational lineage is not parked; it is being constructed, one measure at a time.
+
+**Verified expressible today, so nothing is minted:** no shape limits a register to one `Mission`,
+and `contributesToMission`, `contributesToGoal` and `pursuesObjective` are all non-functional. Two
+parallel lineages are already writable.
+
+**Connected to existing vocabulary:** an operational objective awaiting its instrument is the same
+shape as a `CrossCuttingInvariant` declared with `hasCheckQuery`, reported `NotYetEnforceable`, and
+`tracksItem` naming the work that would make it runnable — measurement instead of enforcement.
+
+**Unchanged from v1.29.0:** the honest note that the synthetic/real line is a discipline the adopter
+keeps, not a constraint the suite applies.
+
+
 ## v1.29.0 — 2026-08-05 (MINOR: documentation — measuring before there is anything to measure)
 
 Two proposals from an adopting project, both fetched from their own repository and read in full,

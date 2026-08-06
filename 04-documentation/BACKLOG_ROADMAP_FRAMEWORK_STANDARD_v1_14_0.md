@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.13.0
+# Backlog & Roadmap Semantic Framework — Standard v1.14.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -174,44 +174,52 @@ Three structural umbrellas hold the vocabulary together: `BacklogConcept` (every
 introduces, under `core:Concept`), `WorkItemContainer` (any grouping whose state is derived from its
 members), and `RoadmapElement` (everything in the time-facing projection).
 
-### 2.5c-ii Measuring before there is anything to measure (worked example)
+### 2.5c-ii Two lineages: development and operational (worked example)
 
 Raised by an adopting project that carried six goals without an objective for weeks, each with a
-locally-reasonable rationale of the form *"no real number exists to set a target against yet"*. Read
-together those rationales shared one premise — that an `Objective`'s metric must be a live business
-fact — and that premise makes the framework unusable for exactly the work it exists to discipline:
-development that happens **before** the business it serves has users.
+locally-reasonable rationale of the form *"no real number exists to set a target against yet"*.
 
-**Nothing in the vocabulary requires it.** `Objective` asks for a metric, a baseline and a target. It
-does not ask where the number comes from. `Mission`'s own definition says *why the **development**
-exists* — the lineage is named for the development, not the business.
+**The failure is undecidability, not inconvenience.** A lineage whose objectives require real
+operational data cannot be decided during development, because the deciding fact cannot exist until
+the development it would govern has shipped and been used. The register is not merely awkward to
+fill in; it is unclosable by construction, and an unclosable register stops being consulted.
 
-**The split, stated plainly:**
+**The resolution is two lineages, not one deferred claim.** They run in parallel, each complete in
+its own terms, and the framework expresses both today — nothing limits a register to one `Mission`,
+and none of `contributesToMission`, `contributesToGoal` or `pursuesObjective` is functional.
 
-| | measures | provable | when |
-|---|---|---|---|
-| `Objective` | that the development did what it set out to do | by test, DoD completion, a count computed over the register's own structure | **before** launch |
-| `Benefit` | the business consequence that development was expected to produce | only by verified `Evidence` of real usage | **after** real usage exists |
+| | root | objectives measure | satisfied by | closable |
+|---|---|---|---|---|
+| **Development lineage** | the development's own mission — *why this is being built* | that the development did what it set out to do | test data driven through the real system, automated test suites, a count computed over the register's own structure | **before** launch |
+| **Operational lineage** | the operational mission — *what the running product must achieve* | the business consequence | real measurement of real usage | **after** real usage exists |
 
-A `Benefit` attached via `benefitFor`, with `benefitRealized` left `false` until verified evidence
-arrives, is the framework's designated home for the deferred claim. Recording a business figure that
-does not exist yet as an `Objective` baseline is fabrication; recording it as an unrealised `Benefit`
-is bookkeeping.
+**The bridge, which is the load-bearing part.** Where the operational lineage names a measure that
+does not yet exist, that measure becomes a **development objective**: build the instrument, test it,
+and return its results. The development lineage's own objectives therefore include *"the operational
+measure exists, is wired to the real path, and has been exercised"* — and satisfying them is
+precisely what makes the operational lineage satisfiable later. The operational lineage is not
+parked; it is being *constructed* by the development lineage, one measure at a time.
 
-**Where no register fact exists to recover**, an adopter is still not stuck between waiting and
-inventing. **Synthetic load against the real system produces real facts about the real system**:
-generated records driven through the real creation path — with authorisation, validation and audit
-all engaged rather than bypassed — measure real latency, real storage growth, real resource
-consumption. That is the same empirical standard any test already relies on, applied to volume
-instead of correctness. A second form: where the eventual truth is business-time, the `Objective` can
-measure whether the **collection-and-analysis capability** has been built and verified — itself
-testable with synthetic transactions, and later the very mechanism that supplies the `Benefit`'s
-realisation evidence.
+This is the same shape the framework already uses for `CrossCuttingInvariant`: a check declared with
+`hasCheckQuery`, reported `NotYetEnforceable`, and `tracksItem` naming the work that would make it
+runnable. An operational objective awaiting its instrument is that pattern applied to measurement
+rather than to enforcement.
 
-**The line, and an honest note about it.** A synthetic measurement may satisfy an `Objective`. It
-must never satisfy a `Benefit`'s `benefitRealized`, which is gated on real usage by definition.
-**The framework cannot currently enforce that line** — `Evidence` carries a verification method and a
-tool but nothing distinguishing synthetic input from real, so a suite that accepts a load-test
+**Where the development lineage gets its facts.** Test data driven through the **real** creation path
+— with authorisation, validation and audit engaged rather than bypassed — produces real facts about
+the real system even though its input is synthetic. That is the empirical standard any test already
+relies on, applied to volume and behaviour instead of correctness alone.
+
+**`Benefit` remains the place for the business claim itself**, attached via `benefitFor` with
+`benefitRealized` left `false` until verified `Evidence` of real usage arrives. Recording a business
+figure that does not exist yet as an `Objective` baseline is fabrication; recording it as an
+unrealised `Benefit`, with a development objective building the instrument that will eventually
+measure it, is a plan.
+
+**The line, and an honest note about it.** A synthetic measurement may satisfy a development
+objective. It must never satisfy a `Benefit`'s `benefitRealized`, which is gated on real usage by
+definition. **The framework cannot currently enforce that line** — `Evidence` carries a verification
+method and a tool but nothing distinguishing synthetic input from real, so a suite handed a load-test
 artifact as benefit-realisation evidence will not object. It is a discipline the adopter keeps, not a
 constraint the suite applies, and it is said here rather than left to be discovered.
 
