@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.15.0
+# Backlog & Roadmap Semantic Framework — Standard v1.16.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -331,6 +331,32 @@ does not forbid a low level. It requires the choice to be:
 | **directional** | `hasTargetConformanceLevel` — a ramp with no destination is a parking space; a target equal to the current level is rejected as standstill encoded as ambition |
 | **dated** | `hasLevelReviewDate` — not a deadline to reach the target, a date on which someone must look again; an advisory fires once it passes |
 | **irreversible-in-the-open** | `hasPriorConformanceLevel` + `hasDowngradeRationale` — downgrading is permitted, downgrading silently is not |
+
+**Wiring the ramp into the work — a recommended pattern, not a requirement.** `hasTargetConformanceLevel`
+names a direction; it does not by itself create any work that would get you there. An adopting project
+carried a declared L2 target for over a week while the work that would satisfy it proceeded as
+separately-motivated casework, with no goal anywhere in the register naming *"reach L2"* as what it
+was for — so advancing the level took a dedicated conversation rather than falling out of the
+register's own priority computation.
+
+The pattern that closed it uses vocabulary the framework already ships: a `Goal` for the governance
+maturity, an `Objective` whose metric is the target level's **own SHACL violation count measured by
+declaring it in a trial run** — falsifiable, re-runnable, and not a number anyone invented — and
+`WorkItem`s that `pursuesObjective` it, scored like everything else. The ramp then competes for
+capacity on the same terms as feature work instead of losing to it by default.
+
+**But note the framework's own answer to that competition**, which is stronger than scoring meta-work
+higher: `PortfolioPolicy` and `CapacityAllocation` exist precisely so categories that answer to
+different arguments are not arbitrated by one score. Governance maturity, technical debt and new
+capability compete badly on a single ranking; an allocated share is the instrument for that, and a
+declared target with no allocation behind it will lose whatever its score says.
+
+**The formal link does not exist, deliberately.** `hasTargetConformanceLevel` is on `AdoptionProfile`,
+which is a `BacklogConcept` and cannot carry `pursuesObjective` — so the connection between a declared
+target and the objective pursuing it is narrative, not a checked triple. A property closing that gap
+was flagged by the reporting project and **not requested by it**, on the grounds that one producer's
+evidence is not enough (L-110). That judgement is accepted and recorded here so a second adopter
+meeting the same wall finds the option already on the table.
 
 Every run also reports the **suppression cost** on its own `level:` line — how many level-gated
 constraints did not run, computed from the suite at run time rather than written down. A clean

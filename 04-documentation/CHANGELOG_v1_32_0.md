@@ -1,5 +1,37 @@
 # Changelog
 
+## v1.32.0 — 2026-08-05 (MINOR: wiring the conformance ramp into the work)
+
+**Coverage check first.** The adopting project's proposals directory was re-listed from their
+repository — **11 files now, 10 processed, 1 new**: `Proposal_ConformanceTargetInLineage_v1_0_0.md`.
+The check that made this a one-line answer is the record-naming fix from v1.31.0.
+
+**Accepted as documentation.** Verified against bytes: `hasTargetConformanceLevel`'s domain is
+`AdoptionProfile`; `pursuesObjective`'s domain is the `WorkItem`/`WorkItemContainer` union;
+`AdoptionProfile` is a `BacklogConcept` and therefore genuinely **cannot** carry `pursuesObjective`.
+Their quoted `skos:definition` reproduces exactly. Their diagnosis holds.
+
+**The gap is real:** `hasTargetConformanceLevel` names a direction and creates no work that would get
+you there. They carried a declared L2 target for over a week while the work satisfying it proceeded
+as separately-motivated casework, with no goal in the register naming *"reach L2"* as its purpose — so
+advancing took a dedicated conversation instead of falling out of the priority computation.
+
+**Their pattern is sound and needs nothing new:** a `Goal` for governance maturity, an `Objective`
+whose metric is the target level's **own SHACL violation count from a trial declaration** — a
+falsifiable, re-runnable number nobody invented — and scored `WorkItem`s pursuing it.
+
+**One correction to their framing, in their favour.** They argue meta-work loses to feature work
+unless given a competing WSJF score. True, and the framework already has a better instrument than
+scoring it higher: `PortfolioPolicy` + `CapacityAllocation` exist so categories answering to different
+arguments are not arbitrated by one score. A declared target with no allocation behind it will lose
+whatever its score says. Now stated alongside their pattern.
+
+**Their §5 restraint is accepted and recorded.** They identified that a property such as
+`targetLevelPursuedBy` would close the narrative-only link formally, and **declined to request it**
+under L-110's single-producer threshold. That judgement is right, and the option is now on the record
+so a second adopter hitting the same wall finds it already considered.
+
+
 ## v1.31.0 — 2026-08-05 (MINOR: two roadmap-rank rules cross-referenced; one advisory message corrected)
 
 A **coverage check** over the adopting project's whole proposals directory — ten artifacts, listed
