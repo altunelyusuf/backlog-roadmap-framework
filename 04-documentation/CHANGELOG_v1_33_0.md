@@ -1,5 +1,45 @@
 # Changelog
 
+## v1.33.0 — 2026-08-06 (PATCH-class: an open item closed by the adopting project, not by us)
+
+`Report_GoalMeasurabilityShapeDiscrepancyReconciled_v1_0_0.md` — twelfth artifact in their proposals
+directory, eleven already processed, found by the same one-command coverage check.
+
+**It answers a question this package recorded rather than corrected.** The v1.29.0 entry proved by
+construction that `GoalMeasurabilityShape` is L2-gated and noted their §2 claim of *"six goals with
+GoalMeasurabilityShape violations while declaring L1 Core"* could not reproduce, offering two
+readings — a run at their target level, or loose naming — and explicitly declining to pick, since
+their register was not readable from here.
+
+**The answer is both.** Their profile genuinely was `L1_Core` at the time; the six goals were found by
+**test-driving the target profile against a scratch copy**, per their own test-drive-before-declaring
+discipline, and §2 then named the shape that *would* flag the condition once that profile applied
+rather than reporting L1-gate output. **No register content was ever wrong**; the prose was imprecise
+about which profile the check ran against.
+
+**Re-verified here, because the earlier proof was against shapes 1.13.0 and the suite has moved.**
+Re-run at 1.14.0: a goal with no `Objective` under an L1 profile still yields no
+`GoalMeasurabilityShape` result. Flipping the same graph to `L3_Governed` yields **6 violations** —
+their number, from their scenario, reproduced independently.
+
+**A control added for another reason already prevents this recurring.** The `level:` line introduced
+at v1.25.0 prints which conformance level ran and how many constraints were suppressed. Had their §2
+quoted validator output rather than paraphrasing it, the level would have travelled with the claim and
+the ambiguity could not have arisen.
+
+**The symmetry is worth naming.** Two rounds ago this package read a rendered rank table as asserted
+RDF and drew a wrong conclusion about their register; here they described a test-driven result in
+language that reads as a measurement of the declared one. Same failure from opposite directions —
+prose that does not carry the conditions the number was produced under.
+
+**Their filing choice is noted with thanks:** they filed this as a distinct report rather than editing
+the original proposal *"so a coverage pass over this directory's filenames finds it"* — adapting to a
+mechanism this package only fixed at v1.31.0. That is the coverage check working as a shared
+instrument rather than a local one.
+
+**Nothing in the framework changed.** This entry closes the item.
+
+
 ## v1.32.0 — 2026-08-05 (MINOR: wiring the conformance ramp into the work)
 
 **Coverage check first.** The adopting project's proposals directory was re-listed from their
