@@ -1,5 +1,41 @@
 # Changelog
 
+## v1.29.0 — 2026-08-05 (MINOR: documentation — measuring before there is anything to measure)
+
+Two proposals from an adopting project, both fetched from their own repository and read in full,
+both asking for **documentation only** and both explicitly offering to be deferred under L-110's
+single-producer threshold. Accepted, because L-110 governs minting structure and they asked for
+none: every pattern they describe uses vocabulary the framework already ships.
+
+**Their evidence, verified against this package's bytes rather than accepted:** all three
+`skos:definition` quotations reproduce exactly; `benefitFor`, `benefitRealized`, `benefitRealizedBy`,
+`hasSuccessMetric`, `hasBaselineValue`, `hasTargetValue` all exist; and the `Objective` definition
+contains no clause requiring a production, revenue or business figure. Their reading is right.
+
+**The misreading was worth documenting.** Six goals sat blocked on a shared premise — that an
+Objective's metric must be a live business fact — which makes the framework unusable for precisely
+the work it exists to discipline, since development necessarily precedes the users it serves.
+
+**Added to the standard, §2.5c-ii:** the Objective/Benefit split as a table; synthetic load against
+the real system as a legitimate source of real facts; measuring a collection-and-analysis capability
+where the eventual truth is business-time; and the line that a synthetic measurement may satisfy an
+Objective but never a `benefitRealized`.
+
+**One thing they did not ask about, disclosed with their own line:** the framework **cannot enforce**
+that line. `Evidence` carries a verification method and a tool but nothing distinguishing synthetic
+input from real, so a suite handed a load-test artifact as benefit-realisation evidence will not
+object. It is a discipline the adopter keeps, not a constraint the suite applies, and the standard
+now says so rather than leaving an adopter to assume the gate is watching.
+
+**One claim of theirs that does not reproduce.** They report six goals with
+`GoalMeasurabilityShape` violations while declaring conformance level L1 Core.
+`GoalMeasurabilityShape` is **L2-gated** — proven here by constructing a goal with no objective under
+an L1 profile, which yields no such violation. Either the observation came from a run at their
+declared *target* level, or the shape was named loosely. Their register is not readable from here, so
+this is recorded as a discrepancy for them to reconcile, not as a correction. It does not affect the
+proposals: the misreading is real at L2, which is where they are heading.
+
+
 ## v1.28.0 — 2026-08-05 (MINOR: correcting my own claim, and the reporting defect that caused it)
 
 **The v1.27.0 entry below contains an unfounded claim and is left unedited.** It says *"their
