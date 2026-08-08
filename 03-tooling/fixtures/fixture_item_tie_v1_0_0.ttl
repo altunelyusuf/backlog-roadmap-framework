@@ -1,0 +1,75 @@
+# Six items scoring identically — the item-level NEXT tie.
+#
+# Reported by an adopting project as two different answers in three runs. Measured
+# here as FIVE different answers in five fresh runs, because Python randomises
+# string hashing per process, set iteration over URIRef therefore varies, and a
+# stable sort on score alone preserved that arbitrary order among equals.
+#
+# Job sizes are deliberately all different (1, 2, 4, 5, 8, 10) so the fixture
+# proves the secondary key is doing the work: US-004 carries the smallest job and
+# must be first in every run.
+
+@prefix backlog: <http://example.org/backlog#> .
+@prefix ex: <http://example.org/t2#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+ex:P a backlog:AdoptionProfile ; backlog:profileAppliesTo "item tie" ;
+    backlog:governsBacklog ex:BL ; backlog:hasConformanceLevel backlog:L1_Core ;
+    backlog:hasTargetConformanceLevel backlog:L2_EvidenceBound ;
+    backlog:hasLevelReviewDate "2026-12-01T00:00:00"^^xsd:dateTime ;
+    backlog:decidedBy backlog:Owner ; backlog:hasDecisionRationale "probe" ;
+    backlog:adoptsFacet backlog:CoreFacet , backlog:PrioritizationFacet .
+ex:BL a backlog:Backlog ; backlog:hasIdentifier "BL" ; backlog:hasState backlog:Proposed .
+
+ex:US001 a backlog:Story ;
+    backlog:hasIdentifier "US-001" ; backlog:hasState backlog:Ready ;
+    backlog:memberOfContainer ex:BL ;
+    backlog:hasPriorityScore ex:S001 .
+ex:S001 a backlog:WSJFScore ; backlog:scoredByMethod backlog:Method_WSJF ;
+    backlog:hasScoreValue 1.8 ;
+    backlog:hasUserBusinessValue 9.0 ; backlog:hasTimeCriticality 0.0 ;
+    backlog:hasRiskReductionValue 0.0 ; backlog:hasJobSize 5.0 .
+
+ex:US002 a backlog:Story ;
+    backlog:hasIdentifier "US-002" ; backlog:hasState backlog:Ready ;
+    backlog:memberOfContainer ex:BL ;
+    backlog:hasPriorityScore ex:S002 .
+ex:S002 a backlog:WSJFScore ; backlog:scoredByMethod backlog:Method_WSJF ;
+    backlog:hasScoreValue 1.8 ;
+    backlog:hasUserBusinessValue 3.6 ; backlog:hasTimeCriticality 0.0 ;
+    backlog:hasRiskReductionValue 0.0 ; backlog:hasJobSize 2.0 .
+
+ex:US003 a backlog:Story ;
+    backlog:hasIdentifier "US-003" ; backlog:hasState backlog:Ready ;
+    backlog:memberOfContainer ex:BL ;
+    backlog:hasPriorityScore ex:S003 .
+ex:S003 a backlog:WSJFScore ; backlog:scoredByMethod backlog:Method_WSJF ;
+    backlog:hasScoreValue 1.8 ;
+    backlog:hasUserBusinessValue 18.0 ; backlog:hasTimeCriticality 0.0 ;
+    backlog:hasRiskReductionValue 0.0 ; backlog:hasJobSize 10.0 .
+
+ex:US004 a backlog:Story ;
+    backlog:hasIdentifier "US-004" ; backlog:hasState backlog:Ready ;
+    backlog:memberOfContainer ex:BL ;
+    backlog:hasPriorityScore ex:S004 .
+ex:S004 a backlog:WSJFScore ; backlog:scoredByMethod backlog:Method_WSJF ;
+    backlog:hasScoreValue 1.8 ;
+    backlog:hasUserBusinessValue 1.8 ; backlog:hasTimeCriticality 0.0 ;
+    backlog:hasRiskReductionValue 0.0 ; backlog:hasJobSize 1.0 .
+
+ex:US005 a backlog:Story ;
+    backlog:hasIdentifier "US-005" ; backlog:hasState backlog:Ready ;
+    backlog:memberOfContainer ex:BL ;
+    backlog:hasPriorityScore ex:S005 .
+ex:S005 a backlog:WSJFScore ; backlog:scoredByMethod backlog:Method_WSJF ;
+    backlog:hasScoreValue 1.8 ;
+    backlog:hasUserBusinessValue 7.2 ; backlog:hasTimeCriticality 0.0 ;
+    backlog:hasRiskReductionValue 0.0 ; backlog:hasJobSize 4.0 .
+
+ex:US006 a backlog:Story ;
+    backlog:hasIdentifier "US-006" ; backlog:hasState backlog:Ready ;
+    backlog:memberOfContainer ex:BL ;
+    backlog:hasPriorityScore ex:S006 .
+ex:S006 a backlog:WSJFScore ; backlog:scoredByMethod backlog:Method_WSJF ;
+    backlog:hasScoreValue 1.8 ;
+    backlog:hasUserBusinessValue 14.4 ; backlog:hasTimeCriticality 0.0 ;
+    backlog:hasRiskReductionValue 0.0 ; backlog:hasJobSize 8.0 .

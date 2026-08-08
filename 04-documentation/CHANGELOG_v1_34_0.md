@@ -1,5 +1,46 @@
 # Changelog
 
+## v1.34.0 — 2026-08-06 (MINOR: NEXT was not reproducible — ruling on the item-level tie)
+
+`Proposal_ItemLevelNextTieBreak_v1_0_0.md`, fetched from the adopting project's own repository rather
+than worked from the handoff summary, as the handoff itself instructed.
+
+**The defect is worse than reported, measured not recalled.** They observed two different answers in
+three runs. Constructing six items at an identical score and running five fresh interpreters against
+an unchanged register: **five different answers.** Root cause confirmed in the source — `ranked()`
+iterated a Python `set` and sorted on score alone; `sort()` is stable, so it preserved the set's
+iteration order among equals, and that order depends on per-process string hash randomisation.
+
+**The ruling: none of A, B or C as framed — because the framing misses the actual defect.**
+
+The proposal treats this as a missing tie-break, and offers minting `hasDuration`/`hasComplexity`
+(A), using existing vocabulary only (B), or reporting the tied set (C). But **the defect is
+non-determinism, not the absence of a tie-break.** A report that answers the same question
+differently on identical input is unreproducible in exactly the sense this package refuses
+everywhere else — the same principle that governs `RELEASE_METRICS.txt`. Determinism is not a design
+option among three; it is the bug, and it must be fixed under any of them.
+
+**So: determinism unconditionally, and C for the tie.**
+
+- `ranked()` now imposes a **total** order: score descending, `hasJobSize` ascending, identifier.
+  Score because that is what ranking means; job size because among equally-valuable work the smaller
+  job finishes sooner, and it is an existing first-class WSJF input populated on every scored item;
+  identifier last, purely to close the order, carrying no meaning.
+- NEXT names one item **and prints the whole tied set**, with the tie explicitly unresolved. This is
+  the convention this framework already runs for R3, which prints both models' answers and resolves
+  neither.
+
+**Declined, with reasons rather than silence.** `hasDuration` and `hasComplexity` are not minted:
+L-110 forbids structure on one producer's evidence, and the requesting owner defined neither term —
+minting an undefined concept encodes the framework's guess as the adopter's meaning. "Launch-ready
+package containment" is declined for the sharper reason that the request itself said *"however you
+choose to operationalize it"*: inventing the metric would put a number in the owner's mouth.
+
+**Gated, so it cannot regress.** `fixture_item_tie_v1_0_0.ttl` ships six items at one score with six
+distinct job sizes, and the release gate runs the report through **five fresh interpreters** and
+aborts unless all five agree.
+
+
 ## v1.33.0 — 2026-08-06 (PATCH-class: an open item closed by the adopting project, not by us)
 
 `Report_GoalMeasurabilityShapeDiscrepancyReconciled_v1_0_0.md` — twelfth artifact in their proposals
@@ -437,7 +478,7 @@ moment another stage is inserted, so the decoupling is permanent instead.
 
 **Why every gate stayed green while this was live:** the three-fixture self-proof invokes the
 validator *directly*; only the register path formats its output, so a defect in the formatting layer
-was invisible to the proof. `backlog_gate_v1_1_7.sh` now runs the known-bad fixture through the
+was invisible to the proof. `backlog_gate_v1_1_8.sh` now runs the known-bad fixture through the
 **exact register path** and aborts if it does not fail. The self-proof covered the shapes; it had
 never covered its own plumbing.
 
@@ -1429,8 +1470,8 @@ executable and ordered.
 **Added — derivation** (`backlog-rules` 1.0.0 → 1.1.0): R4 external-blocker derivation; R3
 arbitration documented and implemented in the report tool.
 
-**Added — tooling:** `backlog_roadmap_report_v1_3_0.py` (eight sections, both NEXT answers, silent
--gap check), `backlog_coverage_gate_v1_1_1.py` (BP-D31), `backlog_gate_v1_1_7.sh` (Gate 0 / P / K /
+**Added — tooling:** `backlog_roadmap_report_v1_4_0.py` (eight sections, both NEXT answers, silent
+-gap check), `backlog_coverage_gate_v1_1_1.py` (BP-D31), `backlog_gate_v1_1_8.sh` (Gate 0 / P / K /
 R plus coverage), Gate K version-identity check in the validator.
 
 **Changed:** the v1.0.0 advisory "item carries no priority score" now excludes items correctly

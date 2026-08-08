@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.16.0
+# Backlog & Roadmap Semantic Framework — Standard v1.17.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -105,6 +105,7 @@ a silent gap, and every launch gate is an owner decision with a rationale.
 | `PriorityScore`, `WSJFScore`, `RICEScore` | Reified scores retaining their components |
 | `isAveragedFromMembers` | Rejected on container scores — averaging re-uses numbers computed for unrelated reasons |
 | `rankedOnRoadmap`, `hasRoadmapRank` | Placement and order on a roadmap, for **work items and containers alike** — an epic may be ranked, not only a package. Ranks are **unique per roadmap**: a rank that does not order is not a rank. Contrast the launch model below; the difference is that launch priority orders gates that must *all* clear, while a roadmap rank answers *what next*, and a tie there leaves unanswered the question the rank exists to answer |
+| **NEXT ties** | When startable items share the top score, NEXT names one **and prints the whole tied set**. The order is a total one — score, then `hasJobSize` ascending, then identifier — so the same register always yields the same answer; the tie itself is **not resolved**, because equal value per cost is a real answer and promoting one item by its sort position would present an accident of ordering as a decision. The same convention as R3, which prints both models' answers and resolves neither |
 | **two rank rules, different defaults** | `WorkItemRoadmapRankShape` (targets `WorkItem`) never objects to an item having **no** rank — a rank answers "what next", and an unanswered question is not itself a defect at item level. The roadmap-placement clause in `ContainerLinkageShape` (targets `WorkItemContainer`) **requires** a rank on any launch-gated container at L2. Same vocabulary, opposite default for absence, and the two shapes sit about a thousand lines apart. An adopting session read the first, applied it to eight launch-gated containers, and left eight real violations standing for a full register pass. Each shape now carries an `rdfs:comment` pointing at the other |
 | `isLaunchGate`, `hasLaunchPriority` | The owner-declared launch model. Priorities may **tie**: co-equal mandatory preconditions are real, and every gate tied at the lowest open priority is unioned into the launch-scoped scope rather than one being chosen. Unlike `hasRoadmapRank`, ties are deliberately not forbidden — forcing an owner to invent a sequence that does not exist is the fabrication the framework refuses elsewhere |
 | `Role` (`Owner`, `Builder`), `decidedBy`, `hasDecisionRationale` | Who may decide what, and why they decided it |
@@ -384,10 +385,10 @@ python3 03-tooling/backlog_evidence_bridge_v1_0_0.py my_register.ttl \
         --workspace /path/to/repo --test-command 'npx playwright test {spec} --grep {id}'
 
 # 4. Compute the roadmap — never write one by hand
-python3 03-tooling/backlog_roadmap_report_v1_3_0.py my_register.ttl --emit report.ttl
+python3 03-tooling/backlog_roadmap_report_v1_4_0.py my_register.ttl --emit report.ttl
 
 # 5. Run the four-gate release check (self-proving)
-bash 03-tooling/backlog_gate_v1_1_7.sh my_register.ttl
+bash 03-tooling/backlog_gate_v1_1_8.sh my_register.ttl
 ```
 
 Start at L1, move to L2 once a bridge exists, and to L3 when releases carry manifest hashes and the
@@ -397,7 +398,7 @@ blueprint sweep is real. Raising the level is a one-line edit to the profile.
 
 ## 5. What the gates prove, and what they do not
 
-`backlog_gate_v1_1_7.sh` runs Gate 0 (manifest self-verify), Gate P (every Turtle file parses),
+`backlog_gate_v1_1_8.sh` runs Gate 0 (manifest self-verify), Gate P (every Turtle file parses),
 Gate K (`versionInfo` == `versionIRI` token == filename token), Gate R (SHACL reconcile), and the
 BP-D31 coverage gate. Gate R first validates a positive fixture that must pass and a negative
 fixture that must fail, and aborts if either outcome inverts: a suite never shown to reject a

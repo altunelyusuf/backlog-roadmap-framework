@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_roadmap_report v1.3.0 — the roadmap, computed.
+"""backlog_roadmap_report v1.4.0 — the roadmap, computed.
 
 A roadmap is this script's output, never a maintained document. The moment a
 computed value is copied into prose it starts decaying, and a report that is
@@ -28,7 +28,7 @@ the two answers coincide by construction. The two are never reconciled by
 arithmetic; a disagreement is displayed so a human resolves it knowingly.
 
 Usage:
-  backlog_roadmap_report_v1_3_0.py REGISTER.ttl [--method IRI] [--emit report.ttl]
+  backlog_roadmap_report_v1_4_0.py REGISTER.ttl [--method IRI] [--emit report.ttl]
 """
 
 import argparse
@@ -107,8 +107,33 @@ def scored(g, item, method):
 
 
 def ranked(g, method, candidates=None):
+    """Rank by score, with a TOTAL order so the output is reproducible.
+
+    The previous form iterated a Python set and sorted on score alone. sorted()
+    is stable, so it preserved the set's iteration order among equal scores —
+    and set iteration order over URIRef depends on string hashing, which is
+    randomised per process. The consequence was measured, not theorised: six
+    items scoring identically, five fresh runs against an unchanged register,
+    FIVE different answers for "what is NEXT". An adopting project reported two
+    different answers in three runs; the real rate is worse.
+
+    A report that answers the same question differently on identical input is
+    unreproducible in exactly the sense this package refuses everywhere else.
+    Determinism here is therefore not a design option — it is the defect.
+
+    The total order is (score DESC, job size ASC, identifier ASC):
+      * score first, because that is what ranking means here;
+      * job size second, because among equally-valuable work the smaller job
+        finishes sooner and it is already a first-class WSJF input, populated on
+        every scored item — no new vocabulary, no invented metric;
+      * identifier last, purely to make the order total. It carries no meaning
+        and is not a judgement about which item matters more.
+
+    Items with no job size sort after those that have one, the same fallback
+    shape active_gates() uses for a missing launch priority.
+    """
     rows = []
-    for item in set(g.subjects(BL.hasState, None)):
+    for item in sorted(set(g.subjects(BL.hasState, None)), key=str):
         if is_container(g, item):
             continue
         if candidates is not None and item not in candidates:
@@ -117,8 +142,23 @@ def ranked(g, method, candidates=None):
         if v is None:
             continue
         rows.append((v, item, g.value(item, BL.hasState), startable(g, item)))
-    rows.sort(key=lambda r: -r[0])
+
+    def job_size(item):
+        for s in g.objects(item, BL.hasPriorityScore):
+            js = g.value(s, BL.hasJobSize)
+            if js is not None:
+                return float(js)
+        return float("inf")
+
+    rows.sort(key=lambda r: (-r[0], job_size(r[1]), ident(g, r[1]), str(r[1])))
     return rows
+
+
+def tied_with(rows, pick):
+    """Every row sharing the pick's score — the tie is reported, not hidden."""
+    if pick is None:
+        return []
+    return [r for r in rows if abs(r[0] - pick[0]) < 1e-9]
 
 
 def active_gates(g):
@@ -179,7 +219,7 @@ def main():
     print("roadmap report  : computed %s" % now.isoformat())
     print("register        : %s" % os.path.basename(args.register))
     print("method          : %s" % (args.method or "any"))
-    print("tooling         : rdflib %s, backlog_roadmap_report v1.3.0" % rdflib.__version__)
+    print("tooling         : rdflib %s, backlog_roadmap_report v1.4.0" % rdflib.__version__)
 
     gates = active_gates(g)
     all_rows = ranked(g, method)
@@ -201,9 +241,25 @@ def main():
         next_scoped = next_throughput
         scope_note = "no launch gate open — scope collapsed to the whole register (R3)"
 
+
+    def report_tie(rows, pick, label):
+        """A tie is information. Print it rather than let sort position pass for a decision."""
+        if pick is None:
+            return
+        tied = [r for r in rows if abs(r[0] - pick[0]) < 1e-9 and r[2] == BL.Ready and r[3]]
+        if len(tied) < 2:
+            return
+        print("  TIED — %d startable items share this score in the %s." % (len(tied), label))
+        print("  The order is deterministic (score, then job size, then identifier); the tie is")
+        print("  NOT resolved. Equal value per cost is a real answer, and promoting one item by")
+        print("  its sort position would present an accident of ordering as a considered pick.")
+        for r in tied:
+            print("    %-12s score %6.2f" % (ident(g, r[1]), r[0]))
+
     print("\n== 1. NEXT (throughput model) ==")
     print("  %s" % (("%s  score %.2f" % (ident(g, next_throughput[1]), next_throughput[0]))
                     if next_throughput else "nothing startable and scored"))
+    report_tie(all_rows, next_throughput, "throughput model")
 
     print("\n== 2. NEXT (launch-scoped model) ==")
     print("  %s" % scope_note)
@@ -225,6 +281,7 @@ def main():
             why = g.value(b, BL.hasDecisionRationale)
             if why:
                 print("    because: %s" % str(why)[:100])
+    report_tie(scoped_rows if gates else all_rows, next_scoped, "launch-scoped model")
 
     # A section ordered by score is a COMPUTED view, not an assertion. Every
     # ordering this report prints is derived at run time from hasScoreValue; none

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# backlog_gate v1.1.7 — four-gate release check for the Backlog & Roadmap
+# backlog_gate v1.1.8 — four-gate release check for the Backlog & Roadmap
 # Semantic Framework. Nothing about the package's state is trusted until all
 # four pass, and the SHACL gate refuses to certify anything until it has just
 # demonstrated, in this run, that it can fail a known-bad register.
@@ -11,7 +11,7 @@
 #   +       coverage gate          >= 80% of primary-source concepts (BP-D31)
 #   +       doc-coverage gate      every TBox class named in the standard document
 #
-# Usage: backlog_gate_v1_1_7.sh [REGISTER.ttl ...]
+# Usage: backlog_gate_v1_1_8.sh [REGISTER.ttl ...]
 
 set -u
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -104,6 +104,31 @@ if [ "$PROBE_STATUS" -eq 0 ]; then
   exit 3
 fi
 echo "  register path returns non-zero on known-bad input — the verdict survives formatting."
+
+echo
+echo "== Determinism gate — same register in, same answer out =="
+# A report that answers the same question differently on identical input is
+# unreproducible in the sense this package refuses everywhere else. Measured
+# before the fix: six equally-scored items, five fresh runs, five different
+# answers. Fresh interpreters, because the cause is per-process hash seeding.
+TIEFX="$(ls "$HERE"/fixtures/fixture_item_tie_v*.ttl 2>/dev/null | sort -V | tail -1 || true)"
+RPT="$(ls "$HERE"/backlog_roadmap_report_v*.py 2>/dev/null | sort -V | tail -1 || true)"
+if [ -n "$TIEFX" ] && [ -n "$RPT" ]; then
+  FIRST=""; STABLE=1
+  for _i in 1 2 3 4 5; do
+    OUT="$(python3 "$RPT" "$TIEFX" 2>/dev/null | sed -n '/== 1\. NEXT/,+1p' | tail -1)"
+    [ -z "$FIRST" ] && FIRST="$OUT"
+    [ "$OUT" = "$FIRST" ] || STABLE=0
+  done
+  if [ "$STABLE" -eq 1 ]; then
+    echo "  5 fresh runs over a 6-way score tie agree:$FIRST"
+  else
+    echo "  ABORT: the report gave different answers on identical input."
+    FAILED=1
+  fi
+else
+  echo "  NOT RUN — tie fixture or report tool not found. Not assumed to pass."
+fi
 
 echo
 echo "== Distribution-drift gate — is the public copy current? =="
