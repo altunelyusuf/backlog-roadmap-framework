@@ -1,0 +1,242 @@
+@prefix backlog: <http://example.org/backlog#> .
+@prefix core:    <http://example.org/core#> .
+@prefix fw:      <http://example.org/backlog-framework-register#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+<http://example.org/backlog-framework-register> a owl:Ontology ;
+    rdfs:label "The framework's own development register"@en ;
+    owl:versionIRI <http://example.org/backlog-framework-register/1.0.0> ;
+    owl:versionInfo "1.0.0" ;
+    dcterms:created "2026-08-06T00:00:00"^^xsd:dateTime ;
+    skos:definition "backlog-roadmap-framework's own maintenance-and-progress work, registered under the framework itself rather than sequenced by opinion. Written because the owner asked for the lineage approach instead of an ad hoc ordering, which is what the previous turn's numbered list actually was. The ordering below is COMPUTED from declared score components, not asserted; where it disagrees with intuition the register wins or the components must be argued with."@en .
+
+#################################################################
+#  ADOPTION PROFILE — owner-decided, reasoned, dated, directional
+#################################################################
+
+fw:Profile a backlog:AdoptionProfile ;
+    backlog:profileAppliesTo "backlog-roadmap-framework's own development register" ;
+    backlog:governsBacklog fw:Register ;
+    backlog:hasConformanceLevel backlog:L2_EvidenceBound ;
+    backlog:hasTargetConformanceLevel backlog:L3_Governed ;
+    backlog:hasLevelReviewDate "2026-11-06T00:00:00"^^xsd:dateTime ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:hasDecisionRationale "L2 now, not L3: L3 requires verified evidence and a complete test harness on every Done item, and nothing here is Done yet, so declaring L3 today would claim a discipline no completed work has yet been held to. L3 is the target and the review date is the honest interval." ;
+    backlog:adoptsFacet backlog:CoreFacet , backlog:EvidenceFacet , backlog:PrioritizationFacet ,
+                        backlog:RoadmapFacet , backlog:InvariantFacet , backlog:AuditFacet .
+
+fw:Register a backlog:Backlog ;
+    backlog:hasIdentifier "BRF-REG" ;
+    backlog:hasTitle "backlog-roadmap-framework development register" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:appliesDefinitionOfDone backlog:DoD_Baseline ;
+    backlog:hasCommitment fw:Commitment_Dev .
+
+fw:Commitment_Dev a backlog:Commitment ;
+    rdfs:label "Development commitment"@en ;
+    backlog:commitsToGoal fw:Goal_Measurable .
+
+#################################################################
+#  TWO LINEAGES — the pattern this framework documents at 2.5c-ii
+#################################################################
+
+fw:Mission_Dev a backlog:Mission ;
+    rdfs:label "Development mission"@en ;
+    backlog:hasMissionStatement "Extend the framework so that a register can report its own progress, cost and human involvement as computed facts rather than as claims. Not attempted: prescribing a delivery method, an estimation scale, or a unit of value." ;
+    backlog:missionFor fw:Register ;
+    backlog:decidedBy backlog:Owner .
+
+fw:Mission_Ops a backlog:Mission ;
+    rdfs:label "Operational mission"@en ;
+    backlog:hasMissionStatement "An adopting team can answer, from the register alone and without a spreadsheet beside it: what did this cost, how fast are we going, what will it take to finish, and where did a human decide." ;
+    backlog:missionFor fw:Register ;
+    backlog:decidedBy backlog:Owner .
+
+fw:Goal_Measurable a backlog:Goal ;
+    rdfs:label "Progress and cost are computed, not claimed"@en ;
+    backlog:contributesToMission fw:Mission_Dev ;
+    backlog:decidedBy backlog:Owner .
+
+fw:Goal_Adopter a backlog:Goal ;
+    rdfs:label "An adopter needs no spreadsheet beside the register"@en ;
+    backlog:contributesToMission fw:Mission_Ops ;
+    backlog:decidedBy backlog:Owner .
+
+fw:Metric_DerivedCoverage a core:Metric ; rdfs:label "Share of progress questions answerable from the register"@en .
+fw:Metric_SpreadsheetFree a core:Metric ; rdfs:label "Adopter questions needing an external tool"@en .
+
+fw:Obj_Derived a backlog:Objective ;
+    rdfs:label "Progress questions answerable without an external tool"@en ;
+    backlog:contributesToGoal fw:Goal_Measurable ;
+    backlog:hasSuccessMetric fw:Metric_DerivedCoverage ;
+    backlog:hasBaselineValue 0.0 ;
+    backlog:hasTargetValue 80.0 ;
+    backlog:hasTargetDirection backlog:Dir_Increase ;
+    backlog:hasObjectiveDeadline "2027-02-06T00:00:00"^^xsd:dateTime ;
+    backlog:decidedBy backlog:Owner .
+
+fw:Obj_Adopter a backlog:Objective ;
+    rdfs:label "Adopter questions requiring a spreadsheet"@en ;
+    backlog:contributesToGoal fw:Goal_Adopter ;
+    backlog:hasSuccessMetric fw:Metric_SpreadsheetFree ;
+    backlog:hasBaselineValue 4.0 ;
+    backlog:hasTargetValue 0.0 ;
+    backlog:hasTargetDirection backlog:Dir_Decrease ;
+    backlog:hasObjectiveDeadline "2027-02-06T00:00:00"^^xsd:dateTime ;
+    backlog:decidedBy backlog:Owner .
+
+#################################################################
+#  MEASURED INPUT — net-new term counts, actually counted
+#################################################################
+
+fw:Obs_TermCount a backlog:MetricObservation ;
+    rdfs:label "Net-new terms each subject must add"@en ;
+    backlog:observesMetric fw:Metric_DerivedCoverage ;
+    backlog:observationFor fw:Obj_Derived ;
+    backlog:hasObservedValue 47.0 ;
+    backlog:observedAt "2026-08-06T00:00:00"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Parsed backlog_tbox_v1_12_0.ttl with rdflib and tested each candidate term name for presence: S1 7 net-new, S2 11, S3 12, S4 17, total 47. A first probe was discarded as worthless because it tested only terms already known to exist and therefore returned 100% for every subject." .
+
+#################################################################
+#  THE FOUR SUBJECTS AS EPICS, each scored from declared components
+#
+#  WSJF = (user-business value + time criticality + risk reduction) / job size
+#  Job size is the measured net-new term count, scaled to a 1-10 band
+#  (7->2, 11->3, 12->4, 17->6) so the arithmetic shape stays readable while
+#  the ORDERING of job sizes is the measured one, not an invented one.
+#################################################################
+
+fw:Roadmap a backlog:Roadmap ; backlog:roadmapOf fw:Register .
+
+# ---------- S1 PBI / Task ----------
+fw:EP_PbiTask a backlog:Epic ;
+    backlog:hasIdentifier "BRF-EP1" ;
+    backlog:hasTitle "Distinguish product backlog items from execution tasks" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_Derived ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasAcceptanceCriterion fw:AC_PbiTask ;
+    backlog:hasPriorityScore fw:S_PbiTask ;
+    backlog:hasCostEstimate fw:E_PbiTask ;
+    backlog:rankedOnRoadmap fw:Roadmap ; backlog:hasRoadmapRank 1 ;
+    backlog:scheduledInHorizon backlog:Now .
+fw:AC_PbiTask a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a register holding both stories and their execution tasks, When the report is run, Then task-level work is identifiable as subordinate and does not carry independent value, and a planning event records the conversion." .
+fw:S_PbiTask a backlog:WSJFScore ;
+    backlog:scoredByMethod backlog:Method_WSJF ;
+    backlog:hasScoreValue 6.5 ;
+    backlog:hasUserBusinessValue 5.0 ;
+    backlog:hasTimeCriticality 4.0 ;
+    backlog:hasRiskReductionValue 4.0 ;
+    backlog:hasJobSize 2.0 ;
+    backlog:scoredAt "2026-08-06T00:00:00"^^xsd:dateTime ;
+    backlog:hasScoreRationale "Time criticality is high because every other subject measures things that are counted PER ITEM, and until PBI and task are distinguished those counts double-count subordinate work. Risk reduction is high for the same reason: getting this wrong contaminates flow, cost and human-involvement figures alike." ;
+    backlog:hasBasisKind backlog:Basis_Judged .
+fw:E_PbiTask a backlog:CostEstimate ;
+    backlog:hasEffortEstimate 7.0 ;
+    backlog:hasCostBasis "Net-new term count, measured" ;
+    backlog:estimatedAt "2026-08-06T00:00:00"^^xsd:dateTime ;
+    backlog:hasBasisKind backlog:Basis_Measured ;
+    backlog:basisObservation fw:Obs_TermCount .
+
+# ---------- S2 Flow & progress ----------
+fw:EP_Flow a backlog:Epic ;
+    backlog:hasIdentifier "BRF-EP2" ;
+    backlog:hasTitle "Derive flow, velocity and forecast from recorded points" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_Adopter ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasAcceptanceCriterion fw:AC_Flow ;
+    backlog:hasPriorityScore fw:S_Flow ;
+    backlog:hasCostEstimate fw:E_Flow ;
+    backlog:rankedOnRoadmap fw:Roadmap ; backlog:hasRoadmapRank 2 ;
+    backlog:scheduledInHorizon backlog:Next .
+fw:AC_Flow a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a register with started and finished points recorded, When the report is run, Then cycle time, item age and per-iteration velocity are computed, and any forecast states the assumptions it rests on." .
+fw:S_Flow a backlog:WSJFScore ;
+    backlog:scoredByMethod backlog:Method_WSJF ;
+    backlog:hasScoreValue 4.0 ;
+    backlog:hasUserBusinessValue 6.0 ;
+    backlog:hasTimeCriticality 3.0 ;
+    backlog:hasRiskReductionValue 3.0 ;
+    backlog:hasJobSize 3.0 ;
+    backlog:scoredAt "2026-08-06T00:00:00"^^xsd:dateTime ;
+    backlog:hasScoreRationale "Highest user-business value of the four: this is the subject an adopter asks for by name. Time criticality lower than EP1 because the inputs are already being recorded, so nothing is being lost while it waits." ;
+    backlog:hasBasisKind backlog:Basis_Judged .
+fw:E_Flow a backlog:CostEstimate ;
+    backlog:hasEffortEstimate 11.0 ;
+    backlog:hasCostBasis "Net-new term count, measured" ;
+    backlog:estimatedAt "2026-08-06T00:00:00"^^xsd:dateTime ;
+    backlog:hasBasisKind backlog:Basis_Measured ;
+    backlog:basisObservation fw:Obs_TermCount .
+
+# ---------- S3 Cost dimensions ----------
+fw:EP_Cost a backlog:Epic ;
+    backlog:hasIdentifier "BRF-EP3" ;
+    backlog:hasTitle "Multi-dimensional cost: tokens, environment, human time, complexity" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_Adopter ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasAcceptanceCriterion fw:AC_Cost ;
+    backlog:hasPriorityScore fw:S_Cost ;
+    backlog:hasCostEstimate fw:E_Cost ;
+    backlog:rankedOnRoadmap fw:Roadmap ; backlog:hasRoadmapRank 3 ;
+    backlog:scheduledInHorizon backlog:Next .
+fw:AC_Cost a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given an item worked by an automated agent under human review, When its costs are recorded, Then token spend, environment cost and human time are each carried as separate named dimensions with their own units, and a budget can be compared against their sum." .
+fw:S_Cost a backlog:WSJFScore ;
+    backlog:scoredByMethod backlog:Method_WSJF ;
+    backlog:hasScoreValue 2.75 ;
+    backlog:hasUserBusinessValue 5.0 ;
+    backlog:hasTimeCriticality 3.0 ;
+    backlog:hasRiskReductionValue 3.0 ;
+    backlog:hasJobSize 4.0 ;
+    backlog:scoredAt "2026-08-06T00:00:00"^^xsd:dateTime ;
+    backlog:hasScoreRationale "Wide value but no urgency: cost dimensions are additive to an existing unit-neutral estimate, so nothing currently recorded becomes wrong while this waits. Complexity lands here as a dimension rather than a new property, per the literature split between task complexity (Wood 1986) and code complexity (McCabe 1976)." ;
+    backlog:hasBasisKind backlog:Basis_Judged .
+fw:E_Cost a backlog:CostEstimate ;
+    backlog:hasEffortEstimate 12.0 ;
+    backlog:hasCostBasis "Net-new term count, measured" ;
+    backlog:estimatedAt "2026-08-06T00:00:00"^^xsd:dateTime ;
+    backlog:hasBasisKind backlog:Basis_Measured ;
+    backlog:basisObservation fw:Obs_TermCount .
+
+# ---------- S4 Human in / on the loop ----------
+fw:EP_Human a backlog:Epic ;
+    backlog:hasIdentifier "BRF-EP4" ;
+    backlog:hasTitle "Human in-the-loop and on-the-loop as first-class register facts" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_Adopter ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasAcceptanceCriterion fw:AC_Human ;
+    backlog:hasPriorityScore fw:S_Human ;
+    backlog:hasCostEstimate fw:E_Human ;
+    backlog:rankedOnRoadmap fw:Roadmap ; backlog:hasRoadmapRank 4 ;
+    backlog:scheduledInHorizon backlog:Later ;
+    backlog:dependsOn fw:EP_Cost .
+fw:AC_Human a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given work executed by an agent with a human confirming before it proceeds, When the register is read, Then the execution modality is stated, the interaction is recorded as an event carrying its own cost, and in-the-loop is distinguishable from on-the-loop by whether the transition is gated." .
+fw:S_Human a backlog:WSJFScore ;
+    backlog:scoredByMethod backlog:Method_WSJF ;
+    backlog:hasScoreValue 1.5 ;
+    backlog:hasUserBusinessValue 4.0 ;
+    backlog:hasTimeCriticality 2.0 ;
+    backlog:hasRiskReductionValue 3.0 ;
+    backlog:hasJobSize 6.0 ;
+    backlog:scoredAt "2026-08-06T00:00:00"^^xsd:dateTime ;
+    backlog:hasScoreRationale "Largest job by a clear margin (17 net-new terms against 7 for EP1) and it depends on EP3, since human time is a cost dimension. Real risk reduction: an automated development with no record of where a human decided cannot be audited later. But it cannot start first." ;
+    backlog:hasBasisKind backlog:Basis_Judged .
+fw:E_Human a backlog:CostEstimate ;
+    backlog:hasEffortEstimate 17.0 ;
+    backlog:hasCostBasis "Net-new term count, measured" ;
+    backlog:estimatedAt "2026-08-06T00:00:00"^^xsd:dateTime ;
+    backlog:hasBasisKind backlog:Basis_Measured ;
+    backlog:basisObservation fw:Obs_TermCount .

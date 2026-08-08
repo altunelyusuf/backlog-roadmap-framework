@@ -1,5 +1,43 @@
 # Changelog
 
+## v1.36.0 — 2026-08-06 (MINOR: the framework's own register — and a date bug it immediately found)
+
+The owner declined an ad hoc ordering of the maintenance-and-progress work and asked for the lineage
+approach instead. That was the right call: the previous turn's numbered list was an ad hoc decision
+wearing the clothes of a recommendation, and this framework exists to refuse exactly that.
+
+**`fixture_framework_register_v1_0_0.ttl`** registers the framework's own development under the
+framework: two missions (development and operational, per §2.5c-ii), two goals, two objectives with
+metrics, baselines, targets and directions, an owner-decided profile at **L2 targeting L3** — L3 was
+declined because nothing is Done yet and claiming it would assert a discipline no completed work has
+been held to — and the four candidate subjects as scored epics.
+
+**The job sizes are measured, not judged.** Each subject's estimate is the counted number of net-new
+terms it must add, recorded as a `MetricObservation` and referenced by `basisObservation` with
+`Basis_Measured` — the vocabulary shipped one release earlier, used in earnest. **The first probe was
+discarded as worthless**: it tested only terms already known to exist and returned 100% for every
+subject. Recorded in the observation's own method text, because a discarded measurement is part of
+how the kept one was obtained.
+
+**The order is computed, and it agrees with the intuition it was meant to check** — which is a weaker
+result than disagreement would have been, and is stated as such.
+
+**The dogfooding immediately found a real defect in the framework's own shapes.** A future review date
+of 2026-11-06 was reported as *passed*. Cause: comparing a timezone-**naive** stored `xsd:dateTime`
+against a timezone-**aware** `NOW()`, which rdflib evaluates as `true` for a future date. Verified in
+isolation — naive November `< NOW()` returns `true`, the same value with an explicit `+00:00` returns
+`false`.
+
+**Five comparisons across two files were affected**, and they are not cosmetic: they decide whether an
+objective is reported **Missed**, whether a milestone is overdue, and whether R9/R10 derive an outcome
+at all. Every one could fire on a deadline that has not arrived. Fixed by comparing lexical prefixes,
+which is timezone-independent and total for ISO-8601; shapes → **1.15.1**, rules → **1.5.1**, PATCH
+because no vocabulary changed.
+
+**This is what the register was for.** Four subjects were about to be built on shapes that
+misjudged every date they touched.
+
+
 ## v1.35.0 — 2026-08-06 (MINOR: measured versus judged — test-driving an estimate)
 
 The first increment of the maintenance-and-progress lineage, and the one the owner authorised

@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.15.0> ;
-    owl:versionInfo "1.15.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.15.1> ;
+    owl:versionInfo "1.15.1" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.15.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.14.0> ,
                      <http://example.org/backlog-shapes/1.13.0> ,
                      <http://example.org/backlog-shapes/1.12.0> ,
@@ -1277,7 +1278,7 @@ backlog:ObjectiveFalsifiabilityShape a sh:NodeShape ;
         sh:select """SELECT $this WHERE {
             ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel backlog:L3_Governed .
             $this backlog:hasObjectiveDeadline ?d .
-            FILTER (?d < NOW())
+            FILTER (STR(?d) < SUBSTR(STR(NOW()), 1, 19))
             FILTER NOT EXISTS { ?o backlog:observationFor $this }
             FILTER NOT EXISTS { ?rb backlog:rebaselines $this }
         }""" ] .
@@ -1306,7 +1307,7 @@ backlog:MilestoneOutcomeShape a sh:NodeShape ;
             ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
             FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
             $this backlog:hasTargetDate ?d .
-            FILTER (?d < NOW())
+            FILTER (STR(?d) < SUBSTR(STR(NOW()), 1, 19))
             FILTER NOT EXISTS { $this backlog:achievedAt ?a }
             FILTER NOT EXISTS { ?rb backlog:rebaselines $this }
         }""" ] .
@@ -1850,7 +1851,7 @@ backlog:StaleLevelReviewAdvisoryShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             $this backlog:hasLevelReviewDate ?d .
-            FILTER (?d < NOW())
+            FILTER (STR(?d) < SUBSTR(STR(NOW()), 1, 19))
         }""" ] .
 
 #################################################################
