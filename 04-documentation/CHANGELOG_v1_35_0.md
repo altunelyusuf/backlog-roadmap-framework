@@ -1,5 +1,36 @@
 # Changelog
 
+## v1.35.0 — 2026-08-06 (MINOR: measured versus judged — test-driving an estimate)
+
+The first increment of the maintenance-and-progress lineage, and the one the owner authorised
+directly: make it visible whether an estimate or a score was **executed** or **reasoned**.
+
+**The gap, verified before designing.** `hasCostBasis` already recorded *what* a figure rested on, in
+prose. Nothing recorded whether that basis was **run**. So a number produced by a timed spike and a
+number produced by a confident opinion were indistinguishable in the register, and the weaker
+evidence inherited the stronger one's authority.
+
+**Precedent, not invention.** An adopting project had already demonstrated the better practice
+without vocabulary to declare it — setting an objective's baseline by test-driving a trial
+conformance declaration against a scratch copy of its live register, and recording the figure as
+measured rather than estimated, before any planning discussion. This release names what they were
+already doing.
+
+**Added — TBox 1.11.0 → 1.12.0:** `EstimationBasisKind` closed at **Measured / Analogous / Judged**;
+`hasBasisKind` on both `CostEstimate` and `PriorityScore`, because a ranking whose inputs were
+test-driven is different evidence from one whose inputs were argued; `basisObservation` linking a
+measured figure to the `MetricObservation` that produced it; `analogousTo` naming the completed item
+a comparison was drawn from.
+
+**Added — shapes 1.14.0 → 1.15.0:** a Measured claim must name its observation; an Analogous claim
+must name its comparable; at L3 an estimate must declare a basis kind at all. Plus an **advisory**,
+not a violation, where measuring pays best — a judged estimate on an item inside a launch gate.
+
+**Judgement is not forbidden and is the majority case.** What is forbidden is a judgement that reads
+as a measurement once whoever made it is no longer in the room. The same distinction this framework
+draws between evidence marked verified and evidence marked verified by a named tool.
+
+
 ## v1.34.0 — 2026-08-06 (MINOR: NEXT was not reproducible — ruling on the item-level tie)
 
 `Proposal_ItemLevelNextTieBreak_v1_0_0.md`, fetched from the adopting project's own repository rather

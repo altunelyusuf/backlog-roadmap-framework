@@ -9,9 +9,10 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.14.0> ;
-    owl:versionInfo "1.14.0" ;
-    owl:priorVersion <http://example.org/backlog-shapes/1.13.0> ,
+    owl:versionIRI <http://example.org/backlog-shapes/1.15.0> ;
+    owl:versionInfo "1.15.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.14.0> ,
+                     <http://example.org/backlog-shapes/1.13.0> ,
                      <http://example.org/backlog-shapes/1.12.0> ,
                      <http://example.org/backlog-shapes/1.11.0> ,
                      <http://example.org/backlog-shapes/1.10.0> ,
@@ -1902,4 +1903,61 @@ backlog:DisjointDomainMisuseShape a sh:NodeShape ;
             UNION { $this backlog:hasScopeStatement ?x } UNION { $this backlog:isBusinessCapability ?x }
             UNION { $this backlog:hasCommitment ?x } UNION { $this backlog:hasLifecyclePhase ?x }
             UNION { $this backlog:hasExternalBlocker ?x } UNION { $this backlog:derivedState ?x }
+        }""" ] .
+
+#################################################################
+#  v1.15.0 — a measured claim names what measured it
+#################################################################
+
+backlog:EstimationBasisShape a sh:NodeShape ;
+    sh:targetClass backlog:CostEstimate ;
+    sh:severity sh:Violation ;
+    rdfs:label "A measured estimate is re-derivable (L1/L3)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this estimate declares its basis Measured but names no observation. Claiming a figure was measured without naming what produced it is the same defect as evidence marked verified with the method 'asserted' — the stronger word without the stronger evidence behind it." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasBasisKind backlog:Basis_Measured .
+            FILTER NOT EXISTS { $this backlog:basisObservation ?o }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this estimate declares its basis Analogous but names no completed item it was drawn from. An analogy nobody can inspect cannot be checked for fairness, and a systematically bad one stays invisible." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasBasisKind backlog:Basis_Analogous .
+            FILTER NOT EXISTS { $this backlog:analogousTo ?i }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: this estimate declares no basis kind, so a reader cannot tell whether the figure was executed, drawn from a comparable, or reasoned. hasCostBasis records what it was based on; this records whether that basis was RUN." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel backlog:L3_Governed .
+            FILTER NOT EXISTS { $this backlog:hasBasisKind ?k }
+        }""" ] .
+
+backlog:ScoreBasisShape a sh:NodeShape ;
+    sh:targetClass backlog:PriorityScore ;
+    sh:severity sh:Violation ;
+    rdfs:label "A measured score names what measured it (L1)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this score declares its basis Measured but names no observation. A ranking whose inputs are claimed to be measured carries more authority than one whose inputs were argued, and it must earn that by naming what produced them." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasBasisKind backlog:Basis_Measured .
+            FILTER NOT EXISTS { $this backlog:basisObservation ?o }
+        }""" ] .
+
+backlog:MeasuredBasisAdvisoryShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItem ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: a launch-blocking item resting on a judged estimate"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: this item is inside a declared launch gate and its cost estimate is a judgement with nothing executed behind it. Where a figure can be test-driven — a spike, a trial run, a query over the register itself — measuring it costs less than being wrong about it on the critical path. Judgement is a legitimate basis and this is not a violation; it is the place where measuring pays best." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:memberOfContainer ?c ; backlog:hasCostEstimate ?e .
+            ?c backlog:isLaunchGate true .
+            $this backlog:hasState ?s .
+            FILTER (?s NOT IN (backlog:Done, backlog:Cancelled))
+            ?e backlog:hasBasisKind backlog:Basis_Judged .
         }""" ] .

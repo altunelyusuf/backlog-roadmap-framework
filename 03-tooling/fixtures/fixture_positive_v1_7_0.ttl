@@ -335,6 +335,7 @@ ex:US001 backlog:pursuesObjective ex:Obj_SelfService ;
     backlog:hasCostEstimate ex:Est_US001 .
 
 ex:Est_US001 a backlog:CostEstimate ;
+    backlog:hasBasisKind backlog:Basis_Judged ;
     backlog:hasEffortEstimate 5.0 ;
     backlog:hasCostBasis "Three-point estimate in engineer-days, analogous to the earlier session-token work." ;
     backlog:hasEstimateConfidence 0.7 ;
@@ -693,3 +694,33 @@ ex:Inv_SignIn a backlog:CrossCuttingInvariant ;
     backlog:hasExpectedResult "false" ;
     backlog:hasInvariantStatus backlog:Holds ;
     backlog:tracksItem ex:US001 .
+
+
+#################################################################
+#  v1.15.0 — a test-driven estimate, and an honest judged one
+#################################################################
+
+# measured: the figure came from running something, and says what
+ex:Obs_ResetSpike a backlog:MetricObservation ;
+    rdfs:label "Spike: reset flow wired end to end against a scratch copy"@en ;
+    backlog:observesMetric ex:Metric_SelfServiceShare ;
+    backlog:hasObservedValue 6.5 ;
+    backlog:observedAt "2026-08-05T14:00:00"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Timed spike on branch spike/reset-flow: wired the reset path against a scratch copy of the register, measured 6.5 hours to first passing end-to-end test." .
+
+ex:US002_Est a backlog:CostEstimate ;
+    backlog:hasEffortEstimate 6.5 ;
+    backlog:hasCostBasis "Timed spike, not a judgement" ;
+    backlog:estimatedAt "2026-08-05T14:30:00"^^xsd:dateTime ;
+    backlog:hasBasisKind backlog:Basis_Measured ;
+    backlog:basisObservation ex:Obs_ResetSpike .
+ex:US002 backlog:hasCostEstimate ex:US002_Est .
+
+# analogous: names the completed item it was drawn from
+ex:US006_Est a backlog:CostEstimate ;
+    backlog:hasEffortEstimate 6.0 ;
+    backlog:hasCostBasis "Comparable to the sign-in slice, which recorded 6.5 actual" ;
+    backlog:estimatedAt "2026-08-05T14:30:00"^^xsd:dateTime ;
+    backlog:hasBasisKind backlog:Basis_Analogous ;
+    backlog:analogousTo ex:US001 .
+ex:US006 backlog:hasCostEstimate ex:US006_Est .

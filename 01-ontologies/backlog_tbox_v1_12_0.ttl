@@ -18,9 +18,10 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.11.0> ;
-    owl:versionInfo "1.11.0" ;
-    owl:priorVersion <http://example.org/backlog/1.10.0> ,
+    owl:versionIRI <http://example.org/backlog/1.12.0> ;
+    owl:versionInfo "1.12.0" ;
+    owl:priorVersion <http://example.org/backlog/1.11.0> ,
+                     <http://example.org/backlog/1.10.0> ,
                      <http://example.org/backlog/1.9.0> ,
                      <http://example.org/backlog/1.8.0> ,
                      <http://example.org/backlog/1.7.0> ,
@@ -48,6 +49,7 @@
     skos:definition "A domain-neutral, reusable schema for backlog-and-roadmap governance across independent developments. It standardises five concept groups that recur in every product/engineering effort: (1) work items and their containers, (2) a closed lifecycle whose Done state is a constrained fact rather than asserted prose, (3) completion Evidence anchored to real delivered artifacts (a named passing test, a release carrying its package SHA-256, a file hash, or a recorded review), (4) method-parameterised prioritisation scores, and (5) a roadmap modelled as a derived projection over the backlog rather than an independently maintained list. Adoption is declared by an AdoptionProfile carrying a ConformanceLevel (L1 Core / L2 Evidence-Bound / L3 Governed), which the paired SHACL suite reads to decide which constraints are enforced, so one framework serves developments at different governance maturity without forking the vocabulary. This TBox defines vocabulary only; the paired SHACL shapes supply enforcement, the SPARQL rules supply derivation (container status, next-item selection, milestone status), and an execution bridge asserts observed real-world verification facts back into the ABox."@en ;
     dcterms:source "Scrum Guide 2020 (Product Backlog, Increment, Definition of Done); SAFe 6.0 (Epic/Feature/Story ladder, WSJF); Now-Next-Later roadmap practice; Intercom RICE prioritisation; W3C OWL 2, SHACL, SHACL-AF."@en ;
     rdfs:comment "v1.0.0 — generalisation of an adopting project's product-backlog deposit (an OE Pack registrant deposit, http://example.org/product-backlog 1.3.0) into a project-independent subject. Per L-105 this is an extension of that implementation, not a parallel one: every pb: term has a declared alignment in backlog_alignment_productbacklog_v1_0_0.ttl. Per L-68 the hyphenated/abbreviated form (product-backlog / pb:) is replaced by a single full-word prefix (backlog:); per L-69 the retained terminology anchors to the Scrum Guide and SAFe rather than to project-internal names. The deposit files themselves are NOT modified by this release (L-X7 / B1: the owning session decides supersession)."@en ,
+    "v1.12.0 (MINOR, additions only) — makes the difference between a MEASURED estimate and a JUDGED one visible. hasCostBasis already recorded what an estimate was based on, in prose, and nothing distinguished a basis that was EXECUTED from one that was reasoned. An adopting project had already demonstrated the better practice without the vocabulary to declare it, setting an objective baseline by test-driving a trial declaration against a scratch copy of its live register and recording the resulting figure as measured rather than estimated. This release names that: a closed EstimationBasisKind, a link from a measured estimate or score to the MetricObservation that produced it, and constraints requiring a measured claim to name its observation. It does not forbid judgement — most estimates are judgements and saying so is honest — it forbids a judgement being indistinguishable from a measurement."@en ,
     "v1.11.0 (MINOR, domain widening — backwards compatible) — an adopting session ranked epics on a roadmap and the suite reported zero violations. It should not have. rankedOnRoadmap and hasRoadmapRank were domained on WorkItemContainer alone, while scheduledInHorizon already unioned WorkItem and WorkItemContainer, so an epic could legitimately be PLACED in a horizon but not RANKED in it. Worse, the two classes are declared disjoint, so under OWL 2 DL the domain would infer the epic to be a container and the register becomes logically INCONSISTENT — invisibly, because SHACL performs no such inference and an rdfs:domain is not a constraint. This package has never carried a reasoner attestation and disclosed that at registration; this is the first case where it cost an adopter a silently unsound register. Both properties now union the two classes, matching scheduledInHorizon and the way roadmaps are actually used."@en ,
     "v1.10.0 (MINOR, additions only) — closes the largest unguarded opt-out in the framework. Measured: declaring L1_Core suppresses 43 of 101 constraints, and on the shipped negative fixture changing that one token drops 306 violations to 101. Every other opt-out here — notYetScoreable, ScopeExclusion, Rebaseline, ScopeChange, accepted risk, ranking-fork resolution — requires a written rationale, and four of them require an owner decision. The conformance level, which suppresses more than all of them combined, required neither. The tier mechanism exists as an ADOPTION RAMP: a framework demanding everything on day one is adopted by nobody. Its misuse is as permanent shelter — a ramp used as a parking space. What is added therefore does not forbid a low level; it makes the choice owner-decided, reasoned, dated, and directional, so that standing still is visible rather than free."@en ,
     "v1.9.0 (MINOR, definition enrichment plus one clarification) — responds to an adopting project that registered a user-facing story whose Definition of Done named which files would change and which fields would be added, and which the suite accepted as complete because nothing distinguished describing a change from describing a behaviour. Per L-110 no UIScope flag or sibling term is minted on one producer's evidence: backlog:Story is ALREADY defined as the user-facing kind, so the flag exists, and backlog:AcceptanceCriterion is ALREADY defined in terms of observable behaviour, so the concept exists. What was missing was that neither said so forcefully enough to be actionable, and nothing surfaced the failure. Both definitions are enriched and an advisory is added. Also clarifies that hasSuccessMetric's range is nominal at L1."@en ,
@@ -2645,3 +2647,50 @@ backlog:hasDowngradeRationale a owl:DatatypeProperty ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "has downgrade rationale"@en ;
     skos:definition "Why a previously-claimed higher conformance level was given up. Kept separate from the ordinary level rationale so that a downgrade cannot be satisfied by the sentence that justified the original choice: giving up a claim is a different decision from making one, and reusing the earlier reason would let the harder question be answered by the easier one."@en .
+
+#################################################################
+#  41. Measured versus judged: test-driving an estimate (v1.12.0)
+#################################################################
+
+backlog:EstimationBasisKind a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:Basis_Measured backlog:Basis_Analogous backlog:Basis_Judged ) ;
+    rdfs:label "Estimation Basis Kind"@en ;
+    skos:definition "How an estimate or a score input was arrived at, as a closed set of three. The framework already recorded WHAT an estimate was based on through hasCostBasis, in prose; it could not tell whether that basis was EXECUTED or merely reasoned. The distinction is the same one the framework draws everywhere else between a claim and a check: a number produced by running something can be re-run and can be wrong in a detectable way, while a number produced by reasoning can only be disagreed with. Neither is forbidden — most estimates are judgements and saying so is honest — but a judgement that is indistinguishable from a measurement lets the weaker evidence inherit the stronger one's authority."@en ;
+    dcterms:source "Practice observed in an adopting project, which set an objective baseline by test-driving a trial conformance declaration against a scratch copy of its live register and recorded the figure as measured rather than estimated, before any planning discussion."@en .
+
+backlog:Basis_Measured a owl:NamedIndividual , backlog:EstimationBasisKind ;
+    rdfs:label "Measured"@en ;
+    skos:definition "Produced by executing something against real artifacts — a trial run, a test drive, a spike, a query over the register itself. Must name the MetricObservation that produced it, so the figure is re-derivable rather than merely asserted to have been measured."@en .
+
+backlog:Basis_Analogous a owl:NamedIndividual , backlog:EstimationBasisKind ;
+    rdfs:label "Analogous"@en ;
+    skos:definition "Derived from the recorded actuals of comparable completed work. Weaker than measurement because the comparison is a judgement, stronger than pure estimation because the reference figures are real. Should name the items it was drawn from."@en .
+
+backlog:Basis_Judged a owl:NamedIndividual , backlog:EstimationBasisKind ;
+    rdfs:label "Judged"@en ;
+    skos:definition "Arrived at by expertise and reasoning, with nothing executed. The honest default and the majority case. Recording it as such costs nothing and prevents a judgement being read as a measurement later, when whoever made it is no longer in the room."@en .
+
+[] a owl:AllDifferent ; owl:distinctMembers ( backlog:Basis_Measured backlog:Basis_Analogous backlog:Basis_Judged ) .
+
+backlog:hasBasisKind a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:CostEstimate backlog:PriorityScore ) ] ;
+    rdfs:range backlog:EstimationBasisKind ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has basis kind"@en ;
+    skos:definition "Whether this estimate or score was measured, drawn from analogy, or judged. Applies to prioritisation as well as estimation, because a score whose inputs were test-driven is different evidence from one whose inputs were argued, and the ordering it produces inherits whichever it was."@en .
+
+backlog:basisObservation a owl:ObjectProperty ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:CostEstimate backlog:PriorityScore ) ] ;
+    rdfs:range backlog:MetricObservation ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "basis observation"@en ;
+    skos:definition "The recorded observation a measured estimate or score rests on, carrying its own method and timestamp. Required whenever the basis kind is Measured: claiming a figure was measured without naming what produced it is the same defect as evidence marked verified with the method 'asserted'."@en .
+
+backlog:analogousTo a owl:ObjectProperty ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:CostEstimate backlog:PriorityScore ) ] ;
+    rdfs:range backlog:WorkItem ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "analogous to"@en ;
+    skos:definition "A completed work item whose recorded actual effort this estimate was drawn from. Names the comparison so a reader can check whether it was a fair one, and so a systematically bad analogy becomes visible once the new item's own actual is recorded."@en .

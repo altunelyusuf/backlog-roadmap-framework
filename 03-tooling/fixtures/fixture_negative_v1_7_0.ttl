@@ -694,3 +694,41 @@ ex:N042 a backlog:Story ;
     backlog:memberOfContainer ex:Backlog ;
     backlog:notYetScoreable true ; backlog:hasScoreabilityReason "placeholder" ;
     backlog:isBusinessCapability true .
+
+#################################################################
+#  shapes v1.15.0 planted defects (74-76) — measured vs judged
+#################################################################
+
+# DEFECT 74: claims Measured, names no observation
+ex:N043 a backlog:Task ;
+    backlog:hasIdentifier "N-043" ; backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer ex:Backlog ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "placeholder" ;
+    backlog:hasCostEstimate ex:N043_Est .
+ex:N043_Est a backlog:CostEstimate ;
+    backlog:hasEffortEstimate 8.0 ; backlog:hasCostBasis "test drive" ;
+    backlog:estimatedAt "2026-08-06T09:00:00"^^xsd:dateTime ;
+    backlog:hasBasisKind backlog:Basis_Measured .
+
+# DEFECT 75: claims Analogous, names no comparable
+ex:N044 a backlog:Task ;
+    backlog:hasIdentifier "N-044" ; backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer ex:Backlog ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "placeholder" ;
+    backlog:hasCostEstimate ex:N044_Est .
+ex:N044_Est a backlog:CostEstimate ;
+    backlog:hasEffortEstimate 5.0 ; backlog:hasCostBasis "like the last one" ;
+    backlog:estimatedAt "2026-08-06T09:00:00"^^xsd:dateTime ;
+    backlog:hasBasisKind backlog:Basis_Analogous .
+
+# DEFECT 76: a score claiming Measured with no observation
+ex:N045 a backlog:Story ;
+    backlog:hasIdentifier "N-045" ; backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer ex:Backlog ;
+    backlog:hasPriorityScore ex:N045_Score .
+ex:N045_Score a backlog:WSJFScore ;
+    backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 2.0 ;
+    backlog:hasUserBusinessValue 2.0 ; backlog:hasTimeCriticality 1.0 ;
+    backlog:hasRiskReductionValue 1.0 ; backlog:hasJobSize 2.0 ;
+    backlog:scoredAt "2026-08-06T09:00:00"^^xsd:dateTime ;
+    backlog:hasBasisKind backlog:Basis_Measured .

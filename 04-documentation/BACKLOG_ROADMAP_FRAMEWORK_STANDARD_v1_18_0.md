@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.17.0
+# Backlog & Roadmap Semantic Framework — Standard v1.18.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -166,6 +166,7 @@ delivered in full and deliver nothing.
 | `Opportunity` | Identified upside not yet committed as work, converted into an item explicitly when someone decides to pursue it |
 | `ScopeStatement` / `ScopeExclusion` | The declared boundary and the owner-decided things deliberately outside it, each with a rationale |
 | `RefinementEvent` | The dated act that makes an item Ready — readiness is done to an item, not drifted into |
+| `EstimationBasisKind` — `hasBasisKind`, `basisObservation`, `analogousTo` | Whether an estimate or score was **Measured**, **Analogous** or **Judged**. `hasCostBasis` records *what* a figure rested on; this records whether that basis was **run**. A Measured claim must name the `MetricObservation` that produced it, an Analogous one the completed item it was drawn from. Judgement is legitimate and is the majority case — what is refused is a judgement being indistinguishable from a measurement. An advisory fires where measuring pays best: a judged estimate on an item inside a launch gate |
 | `CostEstimate` | Unit-neutral estimate carrying its basis and confidence; a naked number fails |
 | `InvestmentCategory` | New capability / maintenance / technical debt / compliance — because a score cannot arbitrate between categories that answer to different arguments |
 | `ProductLifecyclePhase` | Pre-launch / live / sunsetting; the phase decides which prioritisation question governs |
