@@ -188,7 +188,8 @@ ex:PkgPointFixes a backlog:Package ;
     backlog:isBusinessCapability false .
 
 # --- items closing the sweep and the gap discipline ----------------------
-ex:US001 backlog:hasActualEffort 6.5 ;
+ex:US001 backlog:memberOfContainer ex:Sprint11 ;
+    backlog:hasActualEffort 6.5 ;
     backlog:coversEntity ex:Entity_Client ;
     backlog:coversStage backlog:Stage_Creation ;
     backlog:verifiedAgainstCode true ;
@@ -730,11 +731,33 @@ ex:US006 backlog:hasCostEstimate ex:US006_Est .
 #  into subordinate execution tasks that carry no value of their own
 #################################################################
 
+ex:Sprint11 a backlog:Iteration ;
+    backlog:hasIdentifier "IT-11" ;
+    backlog:hasTitle "Iteration 11" ;
+    backlog:hasState backlog:Done ;
+    backlog:iterationStart "2026-07-13T00:00:00"^^xsd:dateTime ;
+    backlog:iterationEnd "2026-07-27T23:59:59"^^xsd:dateTime ;
+    backlog:hasCapacity 10.0 .
+
 ex:Sprint12 a backlog:Iteration ;
     backlog:hasIdentifier "IT-12" ;
     backlog:hasTitle "Iteration 12" ;
     backlog:hasState backlog:InProgress ;
+    backlog:iterationStart "2026-07-28T00:00:00"^^xsd:dateTime ;
+    backlog:iterationEnd "2026-08-11T23:59:59"^^xsd:dateTime ;
     backlog:hasCapacity 10.0 .
+
+# a forecast is a CLAIM: it carries what would make it wrong
+ex:Fc_Launch a backlog:Forecast ;
+    rdfs:label "Remaining launch work"@en ;
+    backlog:forecastFor ex:Backlog ;
+    backlog:forecastMadeAt "2026-07-28T09:00:00"^^xsd:dateTime ;
+    backlog:forecastCompletion "2026-09-08T00:00:00"^^xsd:dateTime ;
+    backlog:forecastObservedVelocity 1.0 ;
+    backlog:forecastIterationsObserved 1 ;
+    backlog:forecastAssumption "Velocity holds at the single observed iteration's rate; one iteration is a data point, not a rate, so this is the weakest assumption here." ;
+    backlog:forecastAssumption "Scope does not grow: no ScopeChange admits further work into the launch package." ;
+    backlog:forecastAssumption "The mail-sandbox external dependency clears; its enhancement proposal is Accepted but not yet delivered." .
 
 ex:Plan_US002 a backlog:PlanningEvent ;
     rdfs:label "US-002 planned into iteration 12"@en ;

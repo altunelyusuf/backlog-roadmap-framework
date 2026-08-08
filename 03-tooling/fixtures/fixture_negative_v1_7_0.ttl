@@ -774,3 +774,18 @@ ex:N_Sprint a backlog:Iteration ;
 ex:N_TaskOpen a backlog:ExecutionTask ;
     backlog:hasIdentifier "T-N3" ; backlog:hasState backlog:InProgress ;
     backlog:memberOfContainer ex:Backlog .
+
+#################################################################
+#  BRF-EP2 planted defects (81-82)
+#################################################################
+
+# DEFECT 81: a forecast asking to be believed rather than checked
+ex:N_Forecast a backlog:Forecast ;
+    rdfs:label "It'll be done by then"@en ;
+    backlog:forecastCompletion "2026-12-01T00:00:00"^^xsd:dateTime .
+
+# DEFECT 82: an iteration that ends before it starts
+ex:N_Iteration a backlog:Iteration ;
+    backlog:hasIdentifier "IT-BAD" ; backlog:hasState backlog:Done ;
+    backlog:iterationStart "2026-08-01T00:00:00"^^xsd:dateTime ;
+    backlog:iterationEnd "2026-07-01T00:00:00"^^xsd:dateTime .

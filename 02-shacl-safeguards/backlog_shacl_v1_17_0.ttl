@@ -9,9 +9,10 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.16.0> ;
-    owl:versionInfo "1.16.0" ;
-    owl:priorVersion <http://example.org/backlog-shapes/1.15.1> ,
+    owl:versionIRI <http://example.org/backlog-shapes/1.17.0> ;
+    owl:versionInfo "1.17.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.16.0> ,
+                     <http://example.org/backlog-shapes/1.15.1> ,
                      <http://example.org/backlog-shapes/1.15.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.14.0> ,
                      <http://example.org/backlog-shapes/1.13.0> ,
@@ -2032,4 +2033,58 @@ backlog:PbiCompletionShape a sh:NodeShape ;
             ?e backlog:plansItem $this ; backlog:producesTask ?t .
             ?t backlog:hasState ?ts .
             FILTER (?ts NOT IN (backlog:Done, backlog:Cancelled))
+        }""" ] .
+
+#################################################################
+#  v1.17.0 — BRF-EP2: a forecast states what would make it wrong
+#################################################################
+
+backlog:ForecastShape a sh:NodeShape ;
+    sh:targetClass backlog:Forecast ;
+    sh:severity sh:Violation ;
+    rdfs:label "A forecast carries its assumptions and its arithmetic (L1)"@en ;
+    sh:property [ sh:path backlog:forecastFor ; sh:minCount 1 ; sh:class backlog:WorkItemContainer ;
+                  sh:message "L1: a forecast must name the register or project whose work it covers." ] ;
+    sh:property [ sh:path backlog:forecastMadeAt ; sh:minCount 1 ; sh:datatype xsd:dateTime ;
+                  sh:message "L1: a forecast must record when it was made; one re-dated after the fact cannot be assessed against what was known at the time." ] ;
+    sh:property [ sh:path backlog:forecastCompletion ; sh:minCount 1 ; sh:datatype xsd:dateTime ;
+                  sh:message "L1: a forecast must state the date it expects completion; a forecast with no date cannot be missed." ] ;
+    sh:property [ sh:path backlog:forecastAssumption ; sh:minCount 1 ; sh:datatype xsd:string ;
+                  sh:message "L1: a forecast must state at least one assumption. Presented without assumptions it asks to be believed rather than checked, and when it misses there is nothing to point at as the thing that failed." ] ;
+    sh:property [ sh:path backlog:forecastObservedVelocity ; sh:minCount 1 ; sh:datatype xsd:decimal ;
+                  sh:message "L1: a forecast must record the velocity it was computed from, so the arithmetic can be checked." ] ;
+    sh:property [ sh:path backlog:forecastIterationsObserved ; sh:minCount 1 ; sh:datatype xsd:integer ;
+                  sh:message "L1: a forecast must record how many closed iterations its velocity averaged over. Forecasting from one is permitted; hiding that it was one is not." ] .
+
+backlog:IterationPeriodShape a sh:NodeShape ;
+    sh:targetClass backlog:Iteration ;
+    sh:severity sh:Violation ;
+    rdfs:label "An iteration period is well formed (L1)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this iteration ends before it starts." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:iterationStart ?s ; backlog:iterationEnd ?e .
+            FILTER (STR(?e) < STR(?s))
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this iteration records an end but no start, so its period is open and velocity cannot be attributed to it." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:iterationEnd ?e .
+            FILTER NOT EXISTS { $this backlog:iterationStart ?s }
+        }""" ] .
+
+backlog:StaleForecastAdvisoryShape a sh:NodeShape ;
+    sh:targetClass backlog:Forecast ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: a forecast whose date has passed with work still open"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: this forecast's completion date has passed and the register still holds open work. The forecast was missed. Which assumption failed is written on the forecast itself; that is what the assumptions are for." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:forecastCompletion ?d ; backlog:forecastFor ?c .
+            FILTER (STR(?d) < SUBSTR(STR(NOW()), 1, 19))
+            ?i backlog:memberOfContainer ?c ; backlog:hasState ?st .
+            FILTER (?st NOT IN (backlog:Done, backlog:Cancelled))
         }""" ] .

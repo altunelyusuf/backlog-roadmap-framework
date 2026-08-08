@@ -1,5 +1,36 @@
 # Changelog
 
+## v1.38.0 — 2026-08-06 (MINOR: BRF-EP2 — flow, velocity and forecast)
+
+Second by the register's own ranking, at 4.00. Acceptance criterion: *cycle time, item age and
+per-iteration velocity are computed, and any forecast states the assumptions it rests on.*
+
+**Almost nothing was added, because almost nothing needed to be.** Cycle time, item age, throughput
+and velocity are **computed by the report** from `startedAt`, `finishedAt` and the iteration period.
+Storing them would duplicate a derivable fact that could then disagree with its own inputs — L-91 one
+level down. The estimate assumed 11 net-new terms; the actual was **9**, *under* because four of the
+five headline measures needed no vocabulary at all.
+
+**Two things genuinely could not be derived.** `iterationStart`/`iterationEnd`, because velocity is
+work per iteration and without a period there is no denominator. And `Forecast`, because a forecast is
+a **claim about the future**: at least one `forecastAssumption` is required, since a forecast
+presented without assumptions asks to be believed rather than checked, and when it misses there is
+nothing to point at as the thing that failed. The observed velocity and the iteration count are
+required too, so the arithmetic is checkable and a forecast built on **one** iteration is
+distinguishable from one built on a settled average.
+
+**The report says which is which.** It prints remaining-work arithmetic and states explicitly that
+*this is arithmetic, not a Forecast* — the projection is free, the claim carries obligations. Where
+velocity rests on a single iteration it says so unprompted: *one iteration is a data point, not a
+rate.*
+
+**Found while building:** a function-scope `from datetime import datetime` shadowed the module import
+and broke `main()` for every register, not just those with flow data. Caught by running the tool
+rather than by reading it.
+
+**Next by the register: BRF-EP3, cost dimensions, 2.75.**
+
+
 ## v1.37.0 — 2026-08-06 (MINOR: BRF-EP1 built — the register chose it, the register records it)
 
 The framework's own register ranked **BRF-EP1 first at 6.50**. Its acceptance criterion was the
@@ -1581,7 +1612,7 @@ executable and ordered.
 **Added — derivation** (`backlog-rules` 1.0.0 → 1.1.0): R4 external-blocker derivation; R3
 arbitration documented and implemented in the report tool.
 
-**Added — tooling:** `backlog_roadmap_report_v1_4_0.py` (eight sections, both NEXT answers, silent
+**Added — tooling:** `backlog_roadmap_report_v1_5_0.py` (eight sections, both NEXT answers, silent
 -gap check), `backlog_coverage_gate_v1_1_1.py` (BP-D31), `backlog_gate_v1_1_9.sh` (Gate 0 / P / K /
 R plus coverage), Gate K version-identity check in the validator.
 

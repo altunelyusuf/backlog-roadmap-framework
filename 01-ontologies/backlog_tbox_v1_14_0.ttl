@@ -18,9 +18,10 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.13.0> ;
-    owl:versionInfo "1.13.0" ;
-    owl:priorVersion <http://example.org/backlog/1.12.0> ,
+    owl:versionIRI <http://example.org/backlog/1.14.0> ;
+    owl:versionInfo "1.14.0" ;
+    owl:priorVersion <http://example.org/backlog/1.13.0> ,
+                     <http://example.org/backlog/1.12.0> ,
                      <http://example.org/backlog/1.11.0> ,
                      <http://example.org/backlog/1.10.0> ,
                      <http://example.org/backlog/1.9.0> ,
@@ -50,6 +51,7 @@
     skos:definition "A domain-neutral, reusable schema for backlog-and-roadmap governance across independent developments. It standardises five concept groups that recur in every product/engineering effort: (1) work items and their containers, (2) a closed lifecycle whose Done state is a constrained fact rather than asserted prose, (3) completion Evidence anchored to real delivered artifacts (a named passing test, a release carrying its package SHA-256, a file hash, or a recorded review), (4) method-parameterised prioritisation scores, and (5) a roadmap modelled as a derived projection over the backlog rather than an independently maintained list. Adoption is declared by an AdoptionProfile carrying a ConformanceLevel (L1 Core / L2 Evidence-Bound / L3 Governed), which the paired SHACL suite reads to decide which constraints are enforced, so one framework serves developments at different governance maturity without forking the vocabulary. This TBox defines vocabulary only; the paired SHACL shapes supply enforcement, the SPARQL rules supply derivation (container status, next-item selection, milestone status), and an execution bridge asserts observed real-world verification facts back into the ABox."@en ;
     dcterms:source "Scrum Guide 2020 (Product Backlog, Increment, Definition of Done); SAFe 6.0 (Epic/Feature/Story ladder, WSJF); Now-Next-Later roadmap practice; Intercom RICE prioritisation; W3C OWL 2, SHACL, SHACL-AF."@en ;
     rdfs:comment "v1.0.0 — generalisation of an adopting project's product-backlog deposit (an OE Pack registrant deposit, http://example.org/product-backlog 1.3.0) into a project-independent subject. Per L-105 this is an extension of that implementation, not a parallel one: every pb: term has a declared alignment in backlog_alignment_productbacklog_v1_0_0.ttl. Per L-68 the hyphenated/abbreviated form (product-backlog / pb:) is replaced by a single full-word prefix (backlog:); per L-69 the retained terminology anchors to the Scrum Guide and SAFe rather than to project-internal names. The deposit files themselves are NOT modified by this release (L-X7 / B1: the owning session decides supersession)."@en ,
+    "v1.14.0 (MINOR, additions only) — BRF-EP2 from the framework's own register, ranked second at 4.00. Adds only what CANNOT be derived. Cycle time, item age, throughput and velocity are computed by the report from startedAt, finishedAt and the iteration period; storing them would duplicate a derivable fact, which is the defect L-91 names one level down. What could not be derived was the iteration's own period, without which velocity has no denominator, and a Forecast — because a forecast is a CLAIM about the future and the framework's standing position is that a claim must state what would make it wrong."@en ,
     "v1.13.0 (MINOR, additions only) — BRF-EP1 from the framework's own register, which the computed ranking put first at 6.50. Distinguishes work that carries independent value and is prioritised on a product backlog from subordinate execution work produced when a backlog item is planned into an iteration. Deliberately does NOT repurpose backlog:Task: its own definition says a Task must be tracked, PRIORITISED and evidenced like any other work item, so it is a non-user-facing product backlog item, not a sprint task, and redefining it would silently change the meaning of every register already using it. ExecutionTask is therefore a new ninth kind rather than a re-reading of an existing one."@en ,
     "v1.12.0 (MINOR, additions only) — makes the difference between a MEASURED estimate and a JUDGED one visible. hasCostBasis already recorded what an estimate was based on, in prose, and nothing distinguished a basis that was EXECUTED from one that was reasoned. An adopting project had already demonstrated the better practice without the vocabulary to declare it, setting an objective baseline by test-driving a trial declaration against a scratch copy of its live register and recording the resulting figure as measured rather than estimated. This release names that: a closed EstimationBasisKind, a link from a measured estimate or score to the MetricObservation that produced it, and constraints requiring a measured claim to name its observation. It does not forbid judgement — most estimates are judgements and saying so is honest — it forbids a judgement being indistinguishable from a measurement."@en ,
     "v1.11.0 (MINOR, domain widening — backwards compatible) — an adopting session ranked epics on a roadmap and the suite reported zero violations. It should not have. rankedOnRoadmap and hasRoadmapRank were domained on WorkItemContainer alone, while scheduledInHorizon already unioned WorkItem and WorkItemContainer, so an epic could legitimately be PLACED in a horizon but not RANKED in it. Worse, the two classes are declared disjoint, so under OWL 2 DL the domain would infer the epic to be a container and the register becomes logically INCONSISTENT — invisibly, because SHACL performs no such inference and an rdfs:domain is not a constraint. This package has never carried a reasoner attestation and disclosed that at registration; this is the first case where it cost an adopter a silently unsound register. Both properties now union the two classes, matching scheduledInHorizon and the way roadmaps are actually used."@en ,
@@ -2765,3 +2767,67 @@ backlog:plannedBy a owl:ObjectProperty ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "planned by"@en ;
     skos:definition "The role that did the planning."@en .
+
+#################################################################
+#  43. Iteration period and forecasting (v1.14.0)
+#################################################################
+
+backlog:iterationStart a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:Iteration ; rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "iteration start"@en ;
+    skos:definition "When the time box opened. Velocity is work completed per iteration, so without a period there is no denominator and the measure cannot exist — the same reason startedAt and finishedAt were added for cycle time."@en .
+
+backlog:iterationEnd a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:Iteration ; rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "iteration end"@en ;
+    skos:definition "When the time box closed. An iteration whose end has passed is complete for velocity purposes whether or not its work was; that is precisely what makes velocity an honest measure rather than a summary of intentions."@en .
+
+backlog:Forecast a owl:Class ;
+    rdfs:subClassOf core:Artifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Forecast"@en ;
+    skos:definition "A dated statement of when remaining work is expected to complete, carrying the assumptions it rests on and the observed velocity it was computed from. Recorded as an artifact rather than printed and forgotten because a forecast is a CLAIM about the future: it can be wrong, and it can only be shown to have been wrong if what it assumed was written down beside it. A forecast without assumptions cannot be learned from — when it misses, nothing says which assumption failed."@en .
+
+backlog:forecastFor a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:Forecast ; rdfs:range backlog:WorkItemContainer ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "forecast for"@en ;
+    skos:definition "The register or project whose remaining work this forecast covers."@en .
+
+backlog:forecastMadeAt a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:Forecast ; rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "forecast made at"@en ;
+    skos:definition "When the forecast was made. Required, because a forecast is only assessable against what was known at the time it was made, and one re-dated after the fact is unfalsifiable."@en .
+
+backlog:forecastCompletion a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:Forecast ; rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "forecast completion"@en ;
+    skos:definition "The date the remaining work is expected to be finished."@en .
+
+backlog:forecastAssumption a owl:DatatypeProperty ;
+    rdfs:domain backlog:Forecast ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "forecast assumption"@en ;
+    skos:definition "One stated condition the forecast depends on — that velocity holds, that scope does not grow, that a named dependency clears. At least one is required. A forecast presented without assumptions asks to be believed rather than checked, and when it misses there is nothing to point at."@en .
+
+backlog:forecastObservedVelocity a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:Forecast ; rdfs:range xsd:decimal ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "forecast observed velocity"@en ;
+    skos:definition "The velocity figure the forecast was computed from, in items per iteration. Recorded so the arithmetic can be checked and so a forecast built on one good iteration is distinguishable from one built on a settled average."@en .
+
+backlog:forecastIterationsObserved a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:Forecast ; rdfs:range xsd:integer ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "forecast iterations observed"@en ;
+    skos:definition "How many completed iterations the velocity was averaged over. One is a data point, not a rate; the framework does not forbid forecasting from one, it requires the number to be visible so the reader can discount accordingly."@en .
+
+backlog:forecastOutcome a owl:ObjectProperty ;
+    rdfs:domain backlog:Forecast ; rdfs:range backlog:AchievementStatus ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "forecast outcome"@en ;
+    skos:definition "Met, missed or pending, derived by rule from whether the forecast completion date passed with work still open. Reuses the same closed status the framework already applies to objectives and milestones, so a missed forecast is a first-class computed outcome rather than a quietly superseded one."@en .

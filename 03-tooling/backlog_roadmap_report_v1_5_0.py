@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_roadmap_report v1.4.0 — the roadmap, computed.
+"""backlog_roadmap_report v1.5.0 — the roadmap, computed.
 
 A roadmap is this script's output, never a maintained document. The moment a
 computed value is copied into prose it starts decaying, and a report that is
@@ -13,6 +13,7 @@ suite, not just this script):
   1. NEXT under the throughput model
   2. NEXT under the launch-scoped model      <- both printed, always
   3. Full ranked backlog (COMPUTED — see below)
+ 10. Flow and forecast (COMPUTED — cycle time, item age, velocity)
   4. Flagged items (not-yet-scoreable, with reasons)
   5. Silent-gap check                        <- must read zero
   6. Launch readiness by package
@@ -28,7 +29,7 @@ the two answers coincide by construction. The two are never reconciled by
 arithmetic; a disagreement is displayed so a human resolves it knowingly.
 
 Usage:
-  backlog_roadmap_report_v1_4_0.py REGISTER.ttl [--method IRI] [--emit report.ttl]
+  backlog_roadmap_report_v1_5_0.py REGISTER.ttl [--method IRI] [--emit report.ttl]
 """
 
 import argparse
@@ -219,7 +220,7 @@ def main():
     print("roadmap report  : computed %s" % now.isoformat())
     print("register        : %s" % os.path.basename(args.register))
     print("method          : %s" % (args.method or "any"))
-    print("tooling         : rdflib %s, backlog_roadmap_report v1.4.0" % rdflib.__version__)
+    print("tooling         : rdflib %s, backlog_roadmap_report v1.5.0" % rdflib.__version__)
 
     gates = active_gates(g)
     all_rows = ranked(g, method)
@@ -302,12 +303,111 @@ def main():
         print("  %-10s %-12s score %6.2f  %s" % (ident(g, item), str(state).rsplit("#", 1)[-1],
                                                  v, "startable" if ok else "blocked"))
 
+    # ---- 10. Flow and forecast -------------------------------------------
+    # Everything here is DERIVED at run time from startedAt, finishedAt and the
+    # iteration period. None of it is stored: a cycle time recorded as a triple
+    # would duplicate a computable fact and could then disagree with its own
+    # inputs, which is the defect L-91 names one level down.
+    def _dt(v):
+        from datetime import datetime as _DT
+        if v is None:
+            return None
+        s = str(v).replace("Z", "+00:00")
+        try:
+            d = _DT.fromisoformat(s)
+        except ValueError:
+            return None
+        return d.replace(tzinfo=None) if d.tzinfo else d
+
+    def _flow_section():
+        print("\n== 10. Flow and forecast — COMPUTED, nothing here is stored ==")
+        from datetime import datetime as _DT, timezone as _TZ
+        now = _DT.now(_TZ.utc).replace(tzinfo=None)
+
+        cycles = []
+        for it in sorted(set(g.subjects(BL.finishedAt, None)), key=str):
+            a, b = _dt(g.value(it, BL.startedAt)), _dt(g.value(it, BL.finishedAt))
+            if a and b and b >= a:
+                cycles.append(((b - a).total_seconds() / 86400.0, it))
+        if cycles:
+            vals = sorted(c for c, _ in cycles)
+            mid = vals[len(vals) // 2] if len(vals) % 2 else (vals[len(vals)//2 - 1] + vals[len(vals)//2]) / 2
+            print("  cycle time    : %d finished item(s); median %.2f d, range %.2f-%.2f d"
+                  % (len(vals), mid, vals[0], vals[-1]))
+        else:
+            print("  cycle time    : no item records both a start and a finish point")
+
+        ages = []
+        for it in sorted(set(g.subjects(BL.startedAt, None)), key=str):
+            if g.value(it, BL.finishedAt) is not None:
+                continue
+            a = _dt(g.value(it, BL.startedAt))
+            if a:
+                ages.append(((now - a).total_seconds() / 86400.0, it))
+        ages.sort(reverse=True)
+        if ages:
+            print("  item age      : %d unfinished started item(s); oldest %s at %.1f d"
+                  % (len(ages), ident(g, ages[0][1]), ages[0][0]))
+            for age, it in ages[:3]:
+                print("      %-12s %.1f d" % (ident(g, it), age))
+        else:
+            print("  item age      : nothing started and unfinished")
+
+        iters = []
+        for i in sorted(set(g.subjects(RDF.type, BL.Iteration)), key=str):
+            s, e = _dt(g.value(i, BL.iterationStart)), _dt(g.value(i, BL.iterationEnd))
+            if s and e:
+                iters.append((s, e, i))
+        iters.sort()
+        closed = [(s, e, i) for s, e, i in iters if e <= now]
+        if not closed:
+            print("  velocity      : no closed iteration with a recorded period — not computable")
+            print("                  (an iteration needs iterationStart and iterationEnd)")
+            return
+        per = []
+        for s, e, i in closed:
+            n = 0
+            for it in set(g.subjects(BL.finishedAt, None)):
+                f = _dt(g.value(it, BL.finishedAt))
+                if f and s <= f <= e:
+                    n += 1
+            per.append((ident(g, i), n))
+        tot = sum(n for _, n in per)
+        vel = tot / len(per)
+        print("  velocity      : %.2f item(s) per iteration over %d closed iteration(s)"
+              % (vel, len(per)))
+        for nm, n in per:
+            print("      %-12s %d completed" % (nm, n))
+        if len(per) == 1:
+            print("      one iteration is a data point, not a rate — discount accordingly")
+
+        remaining = 0
+        for it in set(g.subjects(BL.hasState, None)):
+            if is_container(g, it):
+                continue
+            st = g.value(it, BL.hasState)
+            if st not in (BL.Done, BL.Cancelled):
+                remaining += 1
+        if vel > 0:
+            print("  remaining     : %d open item(s) -> %.1f iteration(s) at the observed rate"
+                  % (remaining, remaining / vel))
+            print("                  This is arithmetic, not a Forecast. A Forecast is an artifact")
+            print("                  that must carry its assumptions; see backlog:Forecast.")
+        for fc in sorted(set(g.subjects(RDF.type, BL.Forecast)), key=str):
+            print("  recorded forecast: completion %s, from velocity %s over %s iteration(s)"
+                  % (g.value(fc, BL.forecastCompletion), g.value(fc, BL.forecastObservedVelocity),
+                     g.value(fc, BL.forecastIterationsObserved)))
+            for a in g.objects(fc, BL.forecastAssumption):
+                print("      assumes: %s" % str(a)[:96])
+
     print("\n== 4. Flagged items (not yet scoreable) ==")
     flagged = [i for i in g.subjects(BL.notYetScoreable, Literal(True))]
     if not flagged:
         print("  none")
     for i in flagged:
         print("  %-10s %s" % (ident(g, i), g.value(i, BL.hasScoreabilityReason) or "(no reason recorded)"))
+
+    _flow_section()
 
     print("\n== 5. Silent-gap check ==")
     silent = []

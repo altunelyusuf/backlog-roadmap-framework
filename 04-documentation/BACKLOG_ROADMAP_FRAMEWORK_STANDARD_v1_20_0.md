@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.19.0
+# Backlog & Roadmap Semantic Framework — Standard v1.20.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -239,6 +239,24 @@ objective traceability, investment category, acceptance criteria on leaving Prop
 exclusion the suite is jointly unsatisfiable for any task: one constraint forbids a score, another
 requires one. A backlog item may not be `Done` while a task planned from it is still open.
 
+### 2.5c-iv Flow, velocity and forecast (subject v1.14.0)
+
+**Almost nothing here is stored.** Cycle time, item age, throughput and velocity are **computed by
+the report** from `startedAt`, `finishedAt` and the iteration period. Recording them as triples would
+duplicate a derivable fact, which could then disagree with its own inputs — the defect L-91 names,
+one level down.
+
+Only two things could not be derived:
+
+| Term | Why it must be stored |
+|---|---|
+| `iterationStart`, `iterationEnd` | Velocity is work completed **per iteration**; without a period there is no denominator and the measure cannot exist |
+| `Forecast` — `forecastFor`, `forecastMadeAt`, `forecastCompletion`, `forecastAssumption`, `forecastObservedVelocity`, `forecastIterationsObserved` | A forecast is a **claim about the future**. At least one assumption is required: a forecast presented without them asks to be believed rather than checked, and when it misses there is nothing to point at as the thing that failed. The velocity and the iteration count are required so the arithmetic is checkable and so a forecast built on one iteration is distinguishable from one built on a settled average |
+
+The report prints remaining-work arithmetic and says explicitly that **it is arithmetic, not a
+`Forecast`** — the projection is free, the claim carries obligations. An advisory fires when a
+forecast's date passes with work still open.
+
 ### 2.5d Decomposition, commitments, dependency kinds, impediments, flow, team (subject v1.4.0)
 
 | Term | Meaning |
@@ -399,7 +417,7 @@ python3 03-tooling/backlog_evidence_bridge_v1_0_0.py my_register.ttl \
         --workspace /path/to/repo --test-command 'npx playwright test {spec} --grep {id}'
 
 # 4. Compute the roadmap — never write one by hand
-python3 03-tooling/backlog_roadmap_report_v1_4_0.py my_register.ttl --emit report.ttl
+python3 03-tooling/backlog_roadmap_report_v1_5_0.py my_register.ttl --emit report.ttl
 
 # 5. Run the four-gate release check (self-proving)
 bash 03-tooling/backlog_gate_v1_1_9.sh my_register.ttl

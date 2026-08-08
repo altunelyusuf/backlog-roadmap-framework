@@ -153,7 +153,12 @@ fw:E_PbiTask a backlog:CostEstimate ;
 fw:EP_Flow a backlog:Epic ;
     backlog:hasIdentifier "BRF-EP2" ;
     backlog:hasTitle "Derive flow, velocity and forecast from recorded points" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-08-06T13:30:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-06T15:00:00"^^xsd:dateTime ;
+    backlog:hasActualEffort 9.0 ;
+    backlog:hasEvidence fw:Ev_Flow ;
+    backlog:lastAuditedAt "2026-08-06T15:00:00"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register ;
     backlog:pursuesObjective fw:Obj_Adopter ;
     backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
@@ -262,3 +267,20 @@ fw:Obs_EP1Actual a backlog:MetricObservation ;
     backlog:hasObservedValue 9.0 ;
     backlog:observedAt "2026-08-06T13:00:00"^^xsd:dateTime ;
     backlog:hasObservationMethod "Counted from backlog_tbox_v1_13_0.ttl: ProductBacklogItem, ExecutionTask, PlanningEvent, plansItem, plannedInto, producesTask, plannedAt, plannedBy, plus the AllDisjointClasses axiom. Estimate was 7; actual 9. The two extra were not new scope but the disjointness axiom and plannedBy, neither of which the estimate enumerated." .
+
+fw:Ev_Flow a backlog:TestEvidence ;
+    backlog:hasTestSpec "03-tooling/fixtures/fixture_positive_v1_7_0.ttl + fixture_negative_v1_7_0.ttl" ;
+    backlog:hasTestId "BRF-EP2" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-08-06T15:00:00"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "backlog_roadmap_report_v1_5_0.py section 10 computes cycle time, item age and per-iteration velocity from the positive fixture and prints a recorded forecast with its three assumptions; the negative fixture plants a forecast with no assumptions and an iteration ending before it starts, and both fire" ;
+    backlog:verifiedByTool "backlog_validate_v1_3_0.py + backlog_roadmap_report_v1_5_0.py" ;
+    backlog:attestsCriterion fw:AC_Flow .
+
+fw:Obs_EP2Actual a backlog:MetricObservation ;
+    rdfs:label "BRF-EP2 actual: net-new terms delivered"@en ;
+    backlog:observesMetric fw:Metric_SpreadsheetFree ;
+    backlog:observationFor fw:Obj_Adopter ;
+    backlog:hasObservedValue 9.0 ;
+    backlog:observedAt "2026-08-06T15:00:00"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Counted from backlog_tbox_v1_14_0.ttl: iterationStart, iterationEnd, Forecast, forecastFor, forecastMadeAt, forecastCompletion, forecastAssumption, forecastObservedVelocity, forecastIterationsObserved, forecastOutcome — 10 declared, of which forecastOutcome is not yet derived by a rule, so 9 are load-bearing. Estimate was 11; actual 9. Under, because cycle time, item age, throughput and velocity needed no vocabulary at all: they are computed in the report from points the framework already recorded." .
