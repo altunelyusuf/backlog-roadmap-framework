@@ -724,3 +724,37 @@ ex:US006_Est a backlog:CostEstimate ;
     backlog:hasBasisKind backlog:Basis_Analogous ;
     backlog:analogousTo ex:US001 .
 ex:US006 backlog:hasCostEstimate ex:US006_Est .
+
+#################################################################
+#  BRF-EP1 — a backlog item planned into an iteration, broken
+#  into subordinate execution tasks that carry no value of their own
+#################################################################
+
+ex:Sprint12 a backlog:Iteration ;
+    backlog:hasIdentifier "IT-12" ;
+    backlog:hasTitle "Iteration 12" ;
+    backlog:hasState backlog:InProgress ;
+    backlog:hasCapacity 10.0 .
+
+ex:Plan_US002 a backlog:PlanningEvent ;
+    rdfs:label "US-002 planned into iteration 12"@en ;
+    backlog:plansItem ex:US002 ;
+    backlog:plannedInto ex:Sprint12 ;
+    backlog:plannedAt "2026-07-27T09:00:00"^^xsd:dateTime ;
+    backlog:plannedBy backlog:Builder ;
+    backlog:producesTask ex:T_ResetToken , ex:T_ResetMail .
+
+ex:T_ResetToken a backlog:ExecutionTask ;
+    backlog:memberOfContainer ex:Sprint12 ;
+    backlog:hasIdentifier "T-1" ;
+    backlog:hasTitle "Issue and expire single-use reset tokens" ;
+    backlog:hasState backlog:InProgress ;
+    backlog:memberOfContainer ex:Backlog ;
+    backlog:startedAt "2026-07-27T10:00:00"^^xsd:dateTime .
+
+ex:T_ResetMail a backlog:ExecutionTask ;
+    backlog:memberOfContainer ex:Sprint12 ;
+    backlog:hasIdentifier "T-2" ;
+    backlog:hasTitle "Send the reset mail through the shared dispatcher" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer ex:Backlog .

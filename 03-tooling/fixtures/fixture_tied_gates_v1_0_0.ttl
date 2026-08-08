@@ -13,6 +13,10 @@ ex:Profile a backlog:AdoptionProfile ;
     backlog:profileAppliesTo "Tied-gate fixture" ;
     backlog:governsBacklog ex:Backlog ;
     backlog:hasConformanceLevel backlog:L1_Core ;
+    backlog:hasTargetConformanceLevel backlog:L2_EvidenceBound ;
+    backlog:hasLevelReviewDate "2027-01-01T00:00:00"^^xsd:dateTime ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:hasDecisionRationale "Fixture profile: this fixture exercises tied launch gates and the recorded ranking-fork resolution, neither of which depends on evidence binding." ;
     backlog:adoptsFacet backlog:CoreFacet , backlog:PrioritizationFacet , backlog:RoadmapFacet .
 
 ex:Backlog a backlog:Backlog ;

@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.18.0
+# Backlog & Roadmap Semantic Framework — Standard v1.19.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -226,6 +226,19 @@ method and a tool but nothing distinguishing synthetic input from real, so a sui
 artifact as benefit-realisation evidence will not object. It is a discipline the adopter keeps, not a
 constraint the suite applies, and it is said here rather than left to be discovered.
 
+### 2.5c-iii Product backlog items versus execution tasks (subject v1.13.0)
+
+| Term | Meaning |
+|---|---|
+| `ProductBacklogItem` | Work carrying value in its own right, ordered against other work. All eight original kinds are these — **including `Task`**, whose definition has always said it must be *tracked, prioritised and evidenced like any other work item*. `Task` is non-user-facing product work, **not** a sprint task, and was deliberately not repurposed |
+| `ExecutionTask` | A step produced by planning a backlog item into an iteration. Subordinate by construction: **not scored, not ranked**, existing only as part of its parent. Scoring it would double-count the parent's value — the error the framework already refuses for decomposed parents and children |
+| `PlanningEvent` — `plansItem`, `plannedInto`, `producesTask`, `plannedAt`, `plannedBy` | The dated act of taking an item into an iteration and breaking it into tasks. The boundary between ordering work and doing it |
+
+An `ExecutionTask` is **excluded from eight product-backlog constraints** — scoreability, silent-gap,
+objective traceability, investment category, acceptance criteria on leaving Proposed. Without that
+exclusion the suite is jointly unsatisfiable for any task: one constraint forbids a score, another
+requires one. A backlog item may not be `Done` while a task planned from it is still open.
+
 ### 2.5d Decomposition, commitments, dependency kinds, impediments, flow, team (subject v1.4.0)
 
 | Term | Meaning |
@@ -389,7 +402,7 @@ python3 03-tooling/backlog_evidence_bridge_v1_0_0.py my_register.ttl \
 python3 03-tooling/backlog_roadmap_report_v1_4_0.py my_register.ttl --emit report.ttl
 
 # 5. Run the four-gate release check (self-proving)
-bash 03-tooling/backlog_gate_v1_1_8.sh my_register.ttl
+bash 03-tooling/backlog_gate_v1_1_9.sh my_register.ttl
 ```
 
 Start at L1, move to L2 once a bridge exists, and to L3 when releases carry manifest hashes and the
@@ -399,7 +412,7 @@ blueprint sweep is real. Raising the level is a one-line edit to the profile.
 
 ## 5. What the gates prove, and what they do not
 
-`backlog_gate_v1_1_8.sh` runs Gate 0 (manifest self-verify), Gate P (every Turtle file parses),
+`backlog_gate_v1_1_9.sh` runs Gate 0 (manifest self-verify), Gate P (every Turtle file parses),
 Gate K (`versionInfo` == `versionIRI` token == filename token), Gate R (SHACL reconcile), and the
 BP-D31 coverage gate. Gate R first validates a positive fixture that must pass and a negative
 fixture that must fail, and aborts if either outcome inverts: a suite never shown to reject a

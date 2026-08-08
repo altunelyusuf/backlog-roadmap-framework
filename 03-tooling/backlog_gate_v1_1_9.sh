@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# backlog_gate v1.1.8 — four-gate release check for the Backlog & Roadmap
+# backlog_gate v1.1.9 — four-gate release check for the Backlog & Roadmap
 # Semantic Framework. Nothing about the package's state is trusted until all
 # four pass, and the SHACL gate refuses to certify anything until it has just
 # demonstrated, in this run, that it can fail a known-bad register.
@@ -11,7 +11,7 @@
 #   +       coverage gate          >= 80% of primary-source concepts (BP-D31)
 #   +       doc-coverage gate      every TBox class named in the standard document
 #
-# Usage: backlog_gate_v1_1_8.sh [REGISTER.ttl ...]
+# Usage: backlog_gate_v1_1_9.sh [REGISTER.ttl ...]
 
 set -u
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -104,6 +104,29 @@ if [ "$PROBE_STATUS" -eq 0 ]; then
   exit 3
 fi
 echo "  register path returns non-zero on known-bad input — the verdict survives formatting."
+
+echo
+echo "== Fixture-coverage gate — every shipped fixture is exercised =="
+# A fixture no gate runs drifts silently. The R3 disagreement fixture sat
+# shipped and unvalidated for several releases and accumulated six violations
+# from constraints added meanwhile; nothing noticed, because nothing ran it.
+UNRUN=0
+for FX in "$HERE"/fixtures/*.ttl; do
+  BASE="$(basename "$FX")"
+  case "$BASE" in
+    *negative*|*adversarial*) EXPECT=fail ;;
+    *) EXPECT=pass ;;
+  esac
+  if python3 "$VALIDATE" "$FX" >/dev/null 2>&1; then GOT=pass; else GOT=fail; fi
+  if [ "$GOT" != "$EXPECT" ]; then
+    echo "  $BASE: expected $EXPECT, got $GOT"; UNRUN=1
+  fi
+done
+if [ "$UNRUN" -eq 0 ]; then
+  echo "  every shipped fixture validates as its name declares it should."
+else
+  echo "  Fixture-coverage gate FAILED"; FAILED=1
+fi
 
 echo
 echo "== Determinism gate — same register in, same answer out =="

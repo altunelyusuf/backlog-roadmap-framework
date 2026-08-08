@@ -19,6 +19,10 @@ ex:Profile a backlog:AdoptionProfile ;
     backlog:profileAppliesTo "R3 disagreement fixture" ;
     backlog:governsBacklog ex:Backlog ;
     backlog:hasConformanceLevel backlog:L1_Core ;
+    backlog:hasTargetConformanceLevel backlog:L3_Governed ;
+    backlog:hasLevelReviewDate "2027-01-01T00:00:00"^^xsd:dateTime ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:hasDecisionRationale "Fixture profile: core structural checks are what this fixture exercises; the R3 disagreement it demonstrates does not depend on evidence binding." ;
     backlog:adoptsFacet backlog:CoreFacet , backlog:PrioritizationFacet .
 
 ex:Backlog a backlog:Backlog ;
@@ -49,8 +53,8 @@ ex:Gated a backlog:Story ;
 ex:Gated_Score a backlog:WSJFScore ;
     backlog:scoredByMethod backlog:Method_WSJF ;
     backlog:hasScoreValue 4.0 ;
-    backlog:hasUserBusinessValue 6 ; backlog:hasTimeCriticality 4 ;
-    backlog:hasRiskReductionValue 2 ; backlog:hasJobSize 3 .
+    backlog:hasUserBusinessValue 6.0 ; backlog:hasTimeCriticality 4.0 ;
+    backlog:hasRiskReductionValue 2.0 ; backlog:hasJobSize 3.0 .
 
 ex:Fast a backlog:Task ;
     backlog:hasIdentifier "US-FAST" ;
@@ -62,5 +66,5 @@ ex:Fast a backlog:Task ;
 ex:Fast_Score a backlog:WSJFScore ;
     backlog:scoredByMethod backlog:Method_WSJF ;
     backlog:hasScoreValue 9.5 ;
-    backlog:hasUserBusinessValue 8 ; backlog:hasTimeCriticality 9 ;
-    backlog:hasRiskReductionValue 2 ; backlog:hasJobSize 2 .
+    backlog:hasUserBusinessValue 8.0 ; backlog:hasTimeCriticality 9.0 ;
+    backlog:hasRiskReductionValue 2.0 ; backlog:hasJobSize 2.0 .

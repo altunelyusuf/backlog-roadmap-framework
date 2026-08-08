@@ -32,7 +32,7 @@ fw:Profile a backlog:AdoptionProfile ;
 fw:Register a backlog:Backlog ;
     backlog:hasIdentifier "BRF-REG" ;
     backlog:hasTitle "backlog-roadmap-framework development register" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:InProgress ;
     backlog:appliesDefinitionOfDone backlog:DoD_Baseline ;
     backlog:hasCommitment fw:Commitment_Dev .
 
@@ -116,7 +116,12 @@ fw:Roadmap a backlog:Roadmap ; backlog:roadmapOf fw:Register .
 fw:EP_PbiTask a backlog:Epic ;
     backlog:hasIdentifier "BRF-EP1" ;
     backlog:hasTitle "Distinguish product backlog items from execution tasks" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-08-06T11:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-06T13:00:00"^^xsd:dateTime ;
+    backlog:hasActualEffort 9.0 ;
+    backlog:hasEvidence fw:Ev_PbiTask ;
+    backlog:lastAuditedAt "2026-08-06T13:00:00"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register ;
     backlog:pursuesObjective fw:Obj_Derived ;
     backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
@@ -240,3 +245,20 @@ fw:E_Human a backlog:CostEstimate ;
     backlog:estimatedAt "2026-08-06T00:00:00"^^xsd:dateTime ;
     backlog:hasBasisKind backlog:Basis_Measured ;
     backlog:basisObservation fw:Obs_TermCount .
+
+fw:Ev_PbiTask a backlog:TestEvidence ;
+    backlog:hasTestSpec "03-tooling/fixtures/fixture_positive_v1_7_0.ttl + fixture_negative_v1_7_0.ttl" ;
+    backlog:hasTestId "BRF-EP1" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-08-06T13:00:00"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "backlog_gate_v1_1_9.sh: positive fixture carries a planned iteration with two subordinate execution tasks at 0 violations; negative fixture plants four EP1 defects (scored task, ranked task, empty planning event, parent Done over an open task) and all four fire" ;
+    backlog:verifiedByTool "backlog_validate_v1_3_0.py + pyshacl 0.40.0" ;
+    backlog:attestsCriterion fw:AC_PbiTask .
+
+fw:Obs_EP1Actual a backlog:MetricObservation ;
+    rdfs:label "BRF-EP1 actual: net-new terms delivered"@en ;
+    backlog:observesMetric fw:Metric_DerivedCoverage ;
+    backlog:observationFor fw:Obj_Derived ;
+    backlog:hasObservedValue 9.0 ;
+    backlog:observedAt "2026-08-06T13:00:00"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Counted from backlog_tbox_v1_13_0.ttl: ProductBacklogItem, ExecutionTask, PlanningEvent, plansItem, plannedInto, producesTask, plannedAt, plannedBy, plus the AllDisjointClasses axiom. Estimate was 7; actual 9. The two extra were not new scope but the disjointness axiom and plannedBy, neither of which the estimate enumerated." .

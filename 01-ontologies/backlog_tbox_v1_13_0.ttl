@@ -18,9 +18,10 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.12.0> ;
-    owl:versionInfo "1.12.0" ;
-    owl:priorVersion <http://example.org/backlog/1.11.0> ,
+    owl:versionIRI <http://example.org/backlog/1.13.0> ;
+    owl:versionInfo "1.13.0" ;
+    owl:priorVersion <http://example.org/backlog/1.12.0> ,
+                     <http://example.org/backlog/1.11.0> ,
                      <http://example.org/backlog/1.10.0> ,
                      <http://example.org/backlog/1.9.0> ,
                      <http://example.org/backlog/1.8.0> ,
@@ -49,6 +50,7 @@
     skos:definition "A domain-neutral, reusable schema for backlog-and-roadmap governance across independent developments. It standardises five concept groups that recur in every product/engineering effort: (1) work items and their containers, (2) a closed lifecycle whose Done state is a constrained fact rather than asserted prose, (3) completion Evidence anchored to real delivered artifacts (a named passing test, a release carrying its package SHA-256, a file hash, or a recorded review), (4) method-parameterised prioritisation scores, and (5) a roadmap modelled as a derived projection over the backlog rather than an independently maintained list. Adoption is declared by an AdoptionProfile carrying a ConformanceLevel (L1 Core / L2 Evidence-Bound / L3 Governed), which the paired SHACL suite reads to decide which constraints are enforced, so one framework serves developments at different governance maturity without forking the vocabulary. This TBox defines vocabulary only; the paired SHACL shapes supply enforcement, the SPARQL rules supply derivation (container status, next-item selection, milestone status), and an execution bridge asserts observed real-world verification facts back into the ABox."@en ;
     dcterms:source "Scrum Guide 2020 (Product Backlog, Increment, Definition of Done); SAFe 6.0 (Epic/Feature/Story ladder, WSJF); Now-Next-Later roadmap practice; Intercom RICE prioritisation; W3C OWL 2, SHACL, SHACL-AF."@en ;
     rdfs:comment "v1.0.0 — generalisation of an adopting project's product-backlog deposit (an OE Pack registrant deposit, http://example.org/product-backlog 1.3.0) into a project-independent subject. Per L-105 this is an extension of that implementation, not a parallel one: every pb: term has a declared alignment in backlog_alignment_productbacklog_v1_0_0.ttl. Per L-68 the hyphenated/abbreviated form (product-backlog / pb:) is replaced by a single full-word prefix (backlog:); per L-69 the retained terminology anchors to the Scrum Guide and SAFe rather than to project-internal names. The deposit files themselves are NOT modified by this release (L-X7 / B1: the owning session decides supersession)."@en ,
+    "v1.13.0 (MINOR, additions only) — BRF-EP1 from the framework's own register, which the computed ranking put first at 6.50. Distinguishes work that carries independent value and is prioritised on a product backlog from subordinate execution work produced when a backlog item is planned into an iteration. Deliberately does NOT repurpose backlog:Task: its own definition says a Task must be tracked, PRIORITISED and evidenced like any other work item, so it is a non-user-facing product backlog item, not a sprint task, and redefining it would silently change the meaning of every register already using it. ExecutionTask is therefore a new ninth kind rather than a re-reading of an existing one."@en ,
     "v1.12.0 (MINOR, additions only) — makes the difference between a MEASURED estimate and a JUDGED one visible. hasCostBasis already recorded what an estimate was based on, in prose, and nothing distinguished a basis that was EXECUTED from one that was reasoned. An adopting project had already demonstrated the better practice without the vocabulary to declare it, setting an objective baseline by test-driving a trial declaration against a scratch copy of its live register and recording the resulting figure as measured rather than estimated. This release names that: a closed EstimationBasisKind, a link from a measured estimate or score to the MetricObservation that produced it, and constraints requiring a measured claim to name its observation. It does not forbid judgement — most estimates are judgements and saying so is honest — it forbids a judgement being indistinguishable from a measurement."@en ,
     "v1.11.0 (MINOR, domain widening — backwards compatible) — an adopting session ranked epics on a roadmap and the suite reported zero violations. It should not have. rankedOnRoadmap and hasRoadmapRank were domained on WorkItemContainer alone, while scheduledInHorizon already unioned WorkItem and WorkItemContainer, so an epic could legitimately be PLACED in a horizon but not RANKED in it. Worse, the two classes are declared disjoint, so under OWL 2 DL the domain would infer the epic to be a container and the register becomes logically INCONSISTENT — invisibly, because SHACL performs no such inference and an rdfs:domain is not a constraint. This package has never carried a reasoner attestation and disclosed that at registration; this is the first case where it cost an adopter a silently unsound register. Both properties now union the two classes, matching scheduledInHorizon and the way roadmaps are actually used."@en ,
     "v1.10.0 (MINOR, additions only) — closes the largest unguarded opt-out in the framework. Measured: declaring L1_Core suppresses 43 of 101 constraints, and on the shipped negative fixture changing that one token drops 306 violations to 101. Every other opt-out here — notYetScoreable, ScopeExclusion, Rebaseline, ScopeChange, accepted risk, ranking-fork resolution — requires a written rationale, and four of them require an owner decision. The conformance level, which suppresses more than all of them combined, required neither. The tier mechanism exists as an ADOPTION RAMP: a framework demanding everything on day one is adopted by nobody. Its misuse is as permanent shelter — a ramp used as a parking space. What is added therefore does not forbid a low level; it makes the choice owner-decided, reasoned, dated, and directional, so that standing still is visible rather than free."@en ,
@@ -2694,3 +2696,72 @@ backlog:analogousTo a owl:ObjectProperty ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "analogous to"@en ;
     skos:definition "A completed work item whose recorded actual effort this estimate was drawn from. Names the comparison so a reader can check whether it was a fair one, and so a systematically bad analogy becomes visible once the new item's own actual is recorded."@en .
+
+#################################################################
+#  42. Product backlog items versus execution tasks (v1.13.0)
+#
+#  BRF-EP1. Acceptance criterion, from the framework's own register:
+#  "Given a register holding both stories and their execution tasks,
+#   When the report is run, Then task-level work is identifiable as
+#   subordinate and does not carry independent value, and a planning
+#   event records the conversion."
+#################################################################
+
+backlog:ProductBacklogItem a owl:Class ;
+    rdfs:subClassOf backlog:WorkItem ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Product Backlog Item"@en ;
+    skos:definition "Work that carries value in its own right and is therefore ordered against other work on a product backlog. Every kind this framework already shipped is one of these, including Task — whose definition has always said it must be tracked, prioritised and evidenced like any other item, making it non-user-facing product work rather than subordinate execution work. The grouping exists so its complement can be named: the thing a backlog item is broken into during planning, which is NOT ordered against the backlog because its value is the parent's."@en .
+
+backlog:ExecutionTask a owl:Class ;
+    rdfs:subClassOf backlog:WorkItem ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Execution Task"@en ;
+    skos:definition "A step produced by planning a product backlog item into an iteration: subordinate by construction, carrying no independent value, and existing only as part of the item it came from. It is not ranked, not scored, and not compared against backlog items — scoring it would double-count the parent's value, which is the same error the framework already refuses when a decomposed parent and its children both carry scores. Its purpose is execution tracking: who is doing what, and how far through. When the parent is Done the task has no separate life."@en .
+
+[] a owl:AllDisjointClasses ; owl:members ( backlog:ProductBacklogItem backlog:ExecutionTask ) .
+
+backlog:Initiative rdfs:subClassOf backlog:ProductBacklogItem .
+backlog:Epic       rdfs:subClassOf backlog:ProductBacklogItem .
+backlog:Feature    rdfs:subClassOf backlog:ProductBacklogItem .
+backlog:Story      rdfs:subClassOf backlog:ProductBacklogItem .
+backlog:Task       rdfs:subClassOf backlog:ProductBacklogItem .
+backlog:Defect     rdfs:subClassOf backlog:ProductBacklogItem .
+backlog:Enabler    rdfs:subClassOf backlog:ProductBacklogItem .
+backlog:Spike      rdfs:subClassOf backlog:ProductBacklogItem .
+
+backlog:PlanningEvent a owl:Class ;
+    rdfs:subClassOf core:Artifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Planning Event"@en ;
+    skos:definition "The dated act of taking a product backlog item into an iteration and breaking it into execution tasks. Recorded for the same reason RefinementEvent is: the conversion is something someone DID, at a time, with a result — and a register that shows tasks appearing without one cannot say who committed to them or when. It is the boundary between ordering work and doing it."@en .
+
+backlog:plansItem a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:PlanningEvent ; rdfs:range backlog:ProductBacklogItem ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "plans item"@en ;
+    skos:definition "The backlog item being taken into an iteration. Functional: one planning event plans one item, so that the tasks it produced are unambiguously the tasks of that item."@en .
+
+backlog:plannedInto a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:PlanningEvent ; rdfs:range backlog:Iteration ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "planned into"@en ;
+    skos:definition "The iteration the item was committed to."@en .
+
+backlog:producesTask a owl:ObjectProperty ;
+    rdfs:domain backlog:PlanningEvent ; rdfs:range backlog:ExecutionTask ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "produces task"@en ;
+    skos:definition "An execution task this planning event created. A planning event that produces none is a commitment with no plan behind it."@en .
+
+backlog:plannedAt a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:PlanningEvent ; rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "planned at"@en ;
+    skos:definition "When the planning happened, so that tasks appearing later than their own planning event are detectable."@en .
+
+backlog:plannedBy a owl:ObjectProperty ;
+    rdfs:domain backlog:PlanningEvent ; rdfs:range backlog:Role ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "planned by"@en ;
+    skos:definition "The role that did the planning."@en .

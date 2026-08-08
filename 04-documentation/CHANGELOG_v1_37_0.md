@@ -1,5 +1,47 @@
 # Changelog
 
+## v1.37.0 — 2026-08-06 (MINOR: BRF-EP1 built — the register chose it, the register records it)
+
+The framework's own register ranked **BRF-EP1 first at 6.50**. Its acceptance criterion was the
+specification; each clause below enforces one phrase of it.
+
+**A naming trap, avoided by reading the definition.** `Task` looks like a sprint task. Its shipped
+definition says a Task *"must still be tracked, **prioritised** and evidenced like any other work
+item"* — so it is non-user-facing **product** work, and repurposing it would have silently redefined
+every register already using it. The R3 fixture's legitimately-scored `ex:Fast` Task is exactly such a
+case. `ExecutionTask` is therefore a **new ninth kind**, not a re-reading of an existing one. L-75:
+the name misled, the definition corrected.
+
+**Added — TBox 1.12.0 → 1.13.0:** `ProductBacklogItem` over the eight original kinds; `ExecutionTask`,
+disjoint from it; `PlanningEvent` with `plansItem`, `plannedInto`, `producesTask`, `plannedAt`,
+`plannedBy`.
+
+**Added — shapes 1.15.1 → 1.16.0:** an execution task may carry no priority score and no roadmap rank,
+must belong to a backlog item, and at L2 must trace to a planning event; a planning event must name
+item, iteration, time and at least one task; a backlog item may not be Done while a task planned from
+it is open.
+
+**A contradiction I introduced and then fixed at the root.** With `ExecutionTask ⊑ WorkItem`, eight
+product-backlog constraints applied to tasks — including the silent-gap rule, which *requires* a
+score while the new rule *forbids* one. **Jointly unsatisfiable for every task.** The same defect class
+an adopting project reported to this package about `LaunchGateShape`, reproduced by its author within
+one release of ruling on it. Fixed by excluding execution tasks from all eight, not by relaxing
+either.
+
+**A new gate, from a defect the work exposed.** The R3 disagreement fixture had drifted through
+several releases and accumulated six violations, because **no gate ran it**. The fixture-coverage
+gate now validates every shipped fixture against the expectation its filename declares — and caught a
+**second** drifted fixture, `fixture_tied_gates`, on its first run.
+
+**Recorded in the register, per the framework's own rules.** BRF-EP1 is Done with verified evidence
+attesting its acceptance criterion, `startedAt`/`finishedAt`, and `hasActualEffort` **9.0 against an
+estimate of 7.0**. The overrun is recorded with its cause: the estimate enumerated seven terms and
+missed the disjointness axiom and `plannedBy`. That is the estimate being falsified by its own actual,
+which is what `hasActualEffort` exists for.
+
+**Next, by the register rather than by opinion: BRF-EP2, Flow & progress, 4.00.**
+
+
 ## v1.36.0 — 2026-08-06 (MINOR: the framework's own register — and a date bug it immediately found)
 
 The owner declined an ad hoc ordering of the maintenance-and-progress work and asked for the lineage
@@ -547,7 +589,7 @@ moment another stage is inserted, so the decoupling is permanent instead.
 
 **Why every gate stayed green while this was live:** the three-fixture self-proof invokes the
 validator *directly*; only the register path formats its output, so a defect in the formatting layer
-was invisible to the proof. `backlog_gate_v1_1_8.sh` now runs the known-bad fixture through the
+was invisible to the proof. `backlog_gate_v1_1_9.sh` now runs the known-bad fixture through the
 **exact register path** and aborts if it does not fail. The self-proof covered the shapes; it had
 never covered its own plumbing.
 
@@ -1540,7 +1582,7 @@ executable and ordered.
 arbitration documented and implemented in the report tool.
 
 **Added — tooling:** `backlog_roadmap_report_v1_4_0.py` (eight sections, both NEXT answers, silent
--gap check), `backlog_coverage_gate_v1_1_1.py` (BP-D31), `backlog_gate_v1_1_8.sh` (Gate 0 / P / K /
+-gap check), `backlog_coverage_gate_v1_1_1.py` (BP-D31), `backlog_gate_v1_1_9.sh` (Gate 0 / P / K /
 R plus coverage), Gate K version-identity check in the validator.
 
 **Changed:** the v1.0.0 advisory "item carries no priority score" now excludes items correctly

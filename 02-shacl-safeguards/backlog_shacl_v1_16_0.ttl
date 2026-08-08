@@ -9,9 +9,10 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.15.1> ;
-    owl:versionInfo "1.15.1" ;
-    owl:priorVersion <http://example.org/backlog-shapes/1.15.0> ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.16.0> ;
+    owl:versionInfo "1.16.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.15.1> ,
+                     <http://example.org/backlog-shapes/1.15.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.14.0> ,
                      <http://example.org/backlog-shapes/1.13.0> ,
                      <http://example.org/backlog-shapes/1.12.0> ,
@@ -348,6 +349,7 @@ backlog:UnscoredItemAdvisoryShape a sh:NodeShape ;
             FILTER (?s IN (backlog:Proposed, backlog:Ready))
             FILTER NOT EXISTS { $this backlog:hasPriorityScore ?p }
             FILTER NOT EXISTS { $this backlog:notYetScoreable true }
+            FILTER NOT EXISTS { $this a backlog:ExecutionTask }
         }""" ] .
 
 backlog:HorizonCoherenceAdvisoryShape a sh:NodeShape ;
@@ -397,6 +399,7 @@ backlog:ScoreabilityShape a sh:NodeShape ;
         sh:select """SELECT $this WHERE {
             $this backlog:notYetScoreable true .
             FILTER NOT EXISTS { $this backlog:hasScoreabilityReason ?r }
+            FILTER NOT EXISTS { $this a backlog:ExecutionTask }
         }""" ] ;
     sh:sparql [ a sh:SPARQLConstraint ;
         sh:message "L1: an item cannot be both scored and declared not-yet-scoreable." ;
@@ -419,6 +422,7 @@ backlog:SilentGapShape a sh:NodeShape ;
             FILTER (?s IN (backlog:Proposed, backlog:Ready))
             FILTER NOT EXISTS { $this backlog:hasPriorityScore ?sc }
             FILTER NOT EXISTS { $this backlog:notYetScoreable true }
+            FILTER NOT EXISTS { $this a backlog:ExecutionTask }
         }""" ] .
 
 #################################################################
@@ -729,6 +733,7 @@ backlog:ReadinessGateShape a sh:NodeShape ;
             FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
             $this backlog:hasState backlog:Ready .
             FILTER NOT EXISTS { $this backlog:hasAcceptanceCriterion ?a }
+            FILTER NOT EXISTS { $this a backlog:ExecutionTask }
         }""" ] ;
     sh:sparql [ a sh:SPARQLConstraint ;
         sh:message "L2: an item in Ready must have a recorded refinement event; readiness is something done to an item, not a state it drifts into." ;
@@ -815,6 +820,7 @@ backlog:InvestmentCategoryShape a sh:NodeShape ;
             ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel backlog:L3_Governed .
             FILTER NOT EXISTS { $this backlog:hasInvestmentCategory ?c }
             FILTER NOT EXISTS { $this backlog:hasState backlog:Cancelled }
+            FILTER NOT EXISTS { $this a backlog:ExecutionTask }
         }""" ] .
 
 backlog:IntentTraceabilityAdvisoryShape a sh:NodeShape ;
@@ -829,6 +835,7 @@ backlog:IntentTraceabilityAdvisoryShape a sh:NodeShape ;
             FILTER NOT EXISTS { $this backlog:pursuesObjective ?obj }
             FILTER NOT EXISTS { $this backlog:memberOfContainer ?c . ?c backlog:pursuesObjective ?obj2 }
             FILTER NOT EXISTS { $this backlog:hasState backlog:Cancelled }
+            FILTER NOT EXISTS { $this a backlog:ExecutionTask }
         }""" ] .
 
 #################################################################
@@ -911,6 +918,7 @@ backlog:ItemCompletenessLinkageShape a sh:NodeShape ;
             $this backlog:hasState ?s .
             FILTER (?s IN (backlog:Ready, backlog:InProgress, backlog:Done))
             FILTER NOT EXISTS { $this backlog:hasAcceptanceCriterion ?a }
+            FILTER NOT EXISTS { $this a backlog:ExecutionTask }
         }""" ] ;
     sh:sparql [ a sh:SPARQLConstraint ;
         sh:message "L2: no Definition of Done governs this item — none declared on it and none inherited from any container it belongs to." ;
@@ -1393,6 +1401,7 @@ backlog:IntentTraceabilityShape a sh:NodeShape ;
             FILTER NOT EXISTS { $this backlog:pursuesObjective ?o }
             FILTER NOT EXISTS { $this backlog:memberOfContainer ?c . ?c backlog:pursuesObjective ?o2 }
             FILTER NOT EXISTS { ?parent backlog:decomposesInto $this ; backlog:pursuesObjective ?o3 }
+            FILTER NOT EXISTS { $this a backlog:ExecutionTask }
         }""" ] .
 
 backlog:RoadmapOverrideShape a sh:NodeShape ;
@@ -1961,4 +1970,66 @@ backlog:MeasuredBasisAdvisoryShape a sh:NodeShape ;
             $this backlog:hasState ?s .
             FILTER (?s NOT IN (backlog:Done, backlog:Cancelled))
             ?e backlog:hasBasisKind backlog:Basis_Judged .
+        }""" ] .
+
+#################################################################
+#  v1.16.0 — BRF-EP1: execution tasks are subordinate
+#
+#  Each clause below enforces one phrase of the acceptance criterion
+#  the framework's own register set for this work.
+#################################################################
+
+backlog:ExecutionTaskShape a sh:NodeShape ;
+    sh:targetClass backlog:ExecutionTask ;
+    sh:severity sh:Violation ;
+    rdfs:label "An execution task is subordinate and carries no independent value (L1/L2)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this execution task carries a priority score. Its value is its parent's, so scoring it separately double-counts — the same error the framework already refuses when a decomposed parent and its children are both scored. If it deserves an independent score it is a product backlog item, not an execution task." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE { $this backlog:hasPriorityScore ?s }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this execution task is ranked on a roadmap. A roadmap orders what a product will deliver; execution steps are how one item gets delivered, and placing them there compares work of different kinds on one axis." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE { $this backlog:rankedOnRoadmap ?r }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this execution task is not part of any product backlog item. A task exists only as a step of the item it came from; one belonging to nothing has no value to inherit and no completion that means anything." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            FILTER NOT EXISTS { ?p backlog:decomposesInto $this . ?p a/rdfs:subClassOf* backlog:ProductBacklogItem }
+            FILTER NOT EXISTS { ?e backlog:producesTask $this }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L2: this execution task traces to no planning event, so the register cannot say who committed to it, when, or into which iteration. Tasks that appear without a planning event are work nobody is recorded as having planned." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            FILTER NOT EXISTS { ?e backlog:producesTask $this }
+        }""" ] .
+
+backlog:PlanningEventShape a sh:NodeShape ;
+    sh:targetClass backlog:PlanningEvent ;
+    sh:severity sh:Violation ;
+    rdfs:label "A planning event records a real conversion (L1)"@en ;
+    sh:property [ sh:path backlog:plansItem ; sh:minCount 1 ; sh:class backlog:ProductBacklogItem ;
+                  sh:message "L1: a planning event must name the backlog item it planned." ] ;
+    sh:property [ sh:path backlog:plannedInto ; sh:minCount 1 ; sh:class backlog:Iteration ;
+                  sh:message "L1: a planning event must name the iteration the item was committed to." ] ;
+    sh:property [ sh:path backlog:plannedAt ; sh:minCount 1 ; sh:datatype xsd:dateTime ;
+                  sh:message "L1: a planning event must record when it happened." ] ;
+    sh:property [ sh:path backlog:producesTask ; sh:minCount 1 ; sh:class backlog:ExecutionTask ;
+                  sh:message "L1: a planning event must produce at least one execution task; a commitment with no plan behind it records only the intention to have planned." ] .
+
+backlog:PbiCompletionShape a sh:NodeShape ;
+    sh:targetClass backlog:ProductBacklogItem ;
+    sh:severity sh:Violation ;
+    rdfs:label "A backlog item is not Done while its execution tasks are open (L1)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this backlog item is Done while an execution task planned from it is still open. The item's completion is the completion of its steps; declaring it Done first makes the remaining work invisible under an item nobody is looking at any more." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasState backlog:Done .
+            ?e backlog:plansItem $this ; backlog:producesTask ?t .
+            ?t backlog:hasState ?ts .
+            FILTER (?ts NOT IN (backlog:Done, backlog:Cancelled))
         }""" ] .

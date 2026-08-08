@@ -732,3 +732,45 @@ ex:N045_Score a backlog:WSJFScore ;
     backlog:hasRiskReductionValue 1.0 ; backlog:hasJobSize 2.0 ;
     backlog:scoredAt "2026-08-06T09:00:00"^^xsd:dateTime ;
     backlog:hasBasisKind backlog:Basis_Measured .
+
+#################################################################
+#  BRF-EP1 planted defects (77-80)
+#################################################################
+
+# DEFECT 77: an execution task carrying its own priority score
+ex:N_TaskScored a backlog:ExecutionTask ;
+    backlog:hasIdentifier "T-N1" ; backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer ex:Backlog ;
+    backlog:hasPriorityScore ex:N_TaskScore .
+ex:N_TaskScore a backlog:WSJFScore ;
+    backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 3.0 ;
+    backlog:hasUserBusinessValue 3.0 ; backlog:hasTimeCriticality 2.0 ;
+    backlog:hasRiskReductionValue 1.0 ; backlog:hasJobSize 2.0 .
+
+# DEFECT 78: an execution task ranked on a roadmap, and parented by nothing
+ex:N_TaskRanked a backlog:ExecutionTask ;
+    backlog:hasIdentifier "T-N2" ; backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer ex:Backlog ;
+    backlog:rankedOnRoadmap ex:Roadmap ; backlog:hasRoadmapRank 92 .
+
+# DEFECT 79: a planning event that plans nothing into nowhere
+ex:N_Plan a backlog:PlanningEvent ;
+    rdfs:label "planned, allegedly"@en .
+
+# DEFECT 80: a backlog item Done while its planned task is still open
+ex:N046 a backlog:Story ;
+    backlog:hasIdentifier "N-046" ; backlog:hasState backlog:Done ;
+    backlog:memberOfContainer ex:Backlog ;
+    backlog:hasAcceptanceCriterion ex:N046_AC ;
+    backlog:lastAuditedAt "2026-08-06T09:00:00"^^xsd:dateTime .
+ex:N046_AC a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the parent is claimed complete, When its tasks are inspected, Then none remains open." .
+ex:N_Plan2 a backlog:PlanningEvent ;
+    backlog:plansItem ex:N046 ; backlog:plannedInto ex:N_Sprint ;
+    backlog:plannedAt "2026-08-01T09:00:00"^^xsd:dateTime ;
+    backlog:producesTask ex:N_TaskOpen .
+ex:N_Sprint a backlog:Iteration ;
+    backlog:hasIdentifier "IT-N" ; backlog:hasState backlog:InProgress .
+ex:N_TaskOpen a backlog:ExecutionTask ;
+    backlog:hasIdentifier "T-N3" ; backlog:hasState backlog:InProgress ;
+    backlog:memberOfContainer ex:Backlog .
