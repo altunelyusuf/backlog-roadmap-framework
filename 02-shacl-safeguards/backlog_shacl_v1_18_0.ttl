@@ -9,9 +9,10 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.17.0> ;
-    owl:versionInfo "1.17.0" ;
-    owl:priorVersion <http://example.org/backlog-shapes/1.16.0> ,
+    owl:versionIRI <http://example.org/backlog-shapes/1.18.0> ;
+    owl:versionInfo "1.18.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.17.0> ,
+                     <http://example.org/backlog-shapes/1.16.0> ,
                      <http://example.org/backlog-shapes/1.15.1> ,
                      <http://example.org/backlog-shapes/1.15.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.14.0> ,
@@ -2087,4 +2088,100 @@ backlog:StaleForecastAdvisoryShape a sh:NodeShape ;
             FILTER (STR(?d) < SUBSTR(STR(NOW()), 1, 19))
             ?i backlog:memberOfContainer ?c ; backlog:hasState ?st .
             FILTER (?st NOT IN (backlog:Done, backlog:Cancelled))
+        }""" ] .
+
+#################################################################
+#  v1.18.0 — LINEAGE COMPLETENESS
+#
+#  Why this shape exists, and why it targets the register:
+#
+#  sh:targetClass CANNOT SEE ABSENCE. A shape guarding ScopeStatement
+#  has no target in a register with zero ScopeStatements, so a
+#  register that omits an entire layer produces no violation from
+#  the very constraints written to govern that layer. Measured on
+#  this suite: 1 shape guards ScopeStatement, 2 guard Objective, 2
+#  guard Goal, 1 guards Mission — all unreachable by omission.
+#
+#  This is not a slip; it is a structural property of SHACL, and it
+#  is how a register can declare L2 conformance, report zero
+#  violations, and contain no scope, no exclusions, no decomposition
+#  and no Definition of Done. That happened to this framework's own
+#  development register and, on the owner's report, to parallel
+#  sessions using the same approach.
+#
+#  The remedy is presence checked from a node that is ALWAYS there.
+#  The register itself is the only such node, so completeness is
+#  asserted here rather than distributed across the concepts whose
+#  absence is the failure.
+#################################################################
+
+backlog:LineageCompletenessShape a sh:NodeShape ;
+    sh:targetClass backlog:Backlog ;
+    sh:severity sh:Violation ;
+    rdfs:label "A register claiming L2 or above carries a complete lineage (L2/L3)"@en ;
+
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L2: this register declares no Mission. The intent chain has no root, so no goal in it can be said to advance anything. A shape guarding Mission cannot catch this — with zero Missions it has no target — which is why the check lives on the register." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            FILTER NOT EXISTS { ?m a backlog:Mission ; backlog:missionFor $this }
+        }""" ] ;
+
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L2: this register declares no Objective. Every goal it holds is unmeasurable and no observation can contradict any of it, which is the unfalsifiable-plan failure in its plainest form." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            FILTER NOT EXISTS { ?o a backlog:Objective }
+        }""" ] ;
+
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L2: this register declares no ScopeStatement anywhere. Nothing states what the development is for or what it will not attempt, so scope completion cannot be derived and scope growth cannot be detected — there is no boundary for a ScopeChange to change." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            FILTER NOT EXISTS { ?s a backlog:ScopeStatement }
+        }""" ] ;
+
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L2: this register names no Definition of Done. Completion is then whatever each claim says it is, and every Done in the register rests on an unstated bar." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            FILTER NOT EXISTS { $this backlog:appliesDefinitionOfDone ?d }
+        }""" ] ;
+
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: this register holds scored Epics that decompose into nothing. An epic is by definition a large body of work delivered across multiple features or stories; one with no children is an estimate with no plan behind it, and its completion can only ever be asserted." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel backlog:L3_Governed .
+            ?e a backlog:Epic ; backlog:memberOfContainer $this ; backlog:hasPriorityScore ?sc .
+            FILTER NOT EXISTS { ?e backlog:decomposesInto ?child }
+        }""" ] .
+
+backlog:LineageDepthAdvisoryShape a sh:NodeShape ;
+    sh:targetClass backlog:Backlog ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: a register with no work beneath its epics"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: this register holds Epics but no Story, Feature or ExecutionTask anywhere. A plan one level deep states intentions and schedules nothing; nothing in it can be picked up, and its Definition of Done has nothing concrete to be applied to." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?e a backlog:Epic ; backlog:memberOfContainer $this .
+            FILTER NOT EXISTS { ?s a backlog:Story }
+            FILTER NOT EXISTS { ?f a backlog:Feature }
+            FILTER NOT EXISTS { ?t a backlog:ExecutionTask }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: this register declares a ScopeStatement with no ScopeExclusion. A boundary with only an inside has not been drawn, and the questions that will later be argued about are exactly the ones an exclusion would have settled." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?s a backlog:ScopeStatement .
+            FILTER NOT EXISTS { ?x a backlog:ScopeExclusion }
         }""" ] .

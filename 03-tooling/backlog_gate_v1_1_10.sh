@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# backlog_gate v1.1.9 — four-gate release check for the Backlog & Roadmap
+# backlog_gate v1.1.10 — four-gate release check for the Backlog & Roadmap
 # Semantic Framework. Nothing about the package's state is trusted until all
 # four pass, and the SHACL gate refuses to certify anything until it has just
 # demonstrated, in this run, that it can fail a known-bad register.
@@ -11,7 +11,7 @@
 #   +       coverage gate          >= 80% of primary-source concepts (BP-D31)
 #   +       doc-coverage gate      every TBox class named in the standard document
 #
-# Usage: backlog_gate_v1_1_9.sh [REGISTER.ttl ...]
+# Usage: backlog_gate_v1_1_10.sh [REGISTER.ttl ...]
 
 set -u
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -104,6 +104,20 @@ if [ "$PROBE_STATUS" -eq 0 ]; then
   exit 3
 fi
 echo "  register path returns non-zero on known-bad input — the verdict survives formatting."
+
+echo
+echo "== Lineage-completeness gate — absence is reported, not assumed away =="
+# sh:targetClass cannot see absence: a shape guarding ScopeStatement has no
+# target in a register with zero of them. LineageCompletenessShape covers the
+# worst of that at L2+; this reports every layer at any level, because a register
+# improving toward a level needs to see the gap before it is failed on it.
+LIN="$(ls "$HERE"/backlog_lineage_completeness_v*.py 2>/dev/null | sort -V | tail -1 || true)"
+REG="$(ls "$PKG"/01-ontologies/backlog_framework_register_abox_v*.ttl 2>/dev/null | sort -V | tail -1 || true)"
+if [ -n "$LIN" ] && [ -n "$REG" ]; then
+  python3 "$LIN" "$REG" | grep -E "^level|^PRESENT|^ABSENT|^decomposition|^VERDICT"
+else
+  echo "  NOT RUN — reporter or register not found. Not assumed to pass."
+fi
 
 echo
 echo "== Fixture-coverage gate — every shipped fixture is exercised =="

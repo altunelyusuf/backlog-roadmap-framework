@@ -1,5 +1,43 @@
 # Changelog
 
+## v1.39.0 — 2026-08-08 (MINOR: lineage completeness — the drift, its cause, and the gate)
+
+**The owner asked whether a lineage had actually been built. It had not.** Measured from disk: the
+register sat in `03-tooling/fixtures/` as test data while declaring its own ontology IRI and version;
+it held 2 Missions, 2 Goals, 2 Objectives and 4 Epics, and **zero** ScopeStatements, ScopeExclusions,
+DefinitionOfDone, Stories, ExecutionTasks, PlanningEvents, Iterations, Milestones, Risks or
+CrossCuttingInvariants, with **zero decomposition edges**. Four epics that broke down into nothing.
+
+**Why nothing caught it, measured rather than supposed.** `sh:targetClass` cannot see absence. On
+this suite: 1 shape guards `Mission`, 1 guards `ScopeStatement`, 2 guard `Objective`, 2 guard `Goal`
+— every one unreachable when the concept has zero instances. So the register declared L2, reported 0
+violations, and omitted whole layers. The owner reports the same in parallel sessions, which is what
+makes this a framework defect rather than a lapse in one register.
+
+**The gate, as the owner asked — a feature of the lineage, not a note.**
+`LineageCompletenessShape` targets `Backlog`, the one node guaranteed present, and at L2 refuses a
+register with no Mission, no Objective, no ScopeStatement or no DefinitionOfDone; at L3 it refuses
+scored Epics that decompose into nothing. Advisories cover thinness: epics with nothing beneath them,
+a scope with no exclusion. **Verified against the defective register: it now fails.**
+
+**`backlog_lineage_completeness_v1_0_0.py`** reports every layer at any level and states what each
+omission costs, so a register can be improved before being failed. Wired into the release gate.
+
+**The register repaired** and promoted to `01-ontologies/backlog_framework_register_abox_v1_1_0.ttl`:
+scope with **five recorded exclusions**, a Definition of Done with **six executable criteria**, and
+the unbuilt epics decomposed into six stories with acceptance criteria.
+
+**The mid-build question is now answered by the scope, where it belonged.** `Ex_Complexity` records
+that no dedicated complexity property will be added — Wood's task complexity is largely derivable
+from dependencies and decomposition, McCabe's code complexity belongs to an artifact as a measured
+observation, and what remains is a named cost dimension. `Ex_Modality` settles human review as an
+event, not a work item. Both were asked of the owner mid-build; both should have been settled at
+scope-definition time, and now are.
+
+**Still absent and reported, not hidden:** PlanningEvent, Iteration, Milestone, ExecutionTask,
+CrossCuttingInvariant, Forecast. The reporter names them and says PlanningEvent is the one L2 wants.
+
+
 ## v1.38.0 — 2026-08-06 (MINOR: BRF-EP2 — flow, velocity and forecast)
 
 Second by the register's own ranking, at 4.00. Acceptance criterion: *cycle time, item age and
@@ -620,7 +658,7 @@ moment another stage is inserted, so the decoupling is permanent instead.
 
 **Why every gate stayed green while this was live:** the three-fixture self-proof invokes the
 validator *directly*; only the register path formats its output, so a defect in the formatting layer
-was invisible to the proof. `backlog_gate_v1_1_9.sh` now runs the known-bad fixture through the
+was invisible to the proof. `backlog_gate_v1_1_10.sh` now runs the known-bad fixture through the
 **exact register path** and aborts if it does not fail. The self-proof covered the shapes; it had
 never covered its own plumbing.
 
@@ -1613,7 +1651,7 @@ executable and ordered.
 arbitration documented and implemented in the report tool.
 
 **Added — tooling:** `backlog_roadmap_report_v1_5_0.py` (eight sections, both NEXT answers, silent
--gap check), `backlog_coverage_gate_v1_1_1.py` (BP-D31), `backlog_gate_v1_1_9.sh` (Gate 0 / P / K /
+-gap check), `backlog_coverage_gate_v1_1_1.py` (BP-D31), `backlog_gate_v1_1_10.sh` (Gate 0 / P / K /
 R plus coverage), Gate K version-identity check in the validator.
 
 **Changed:** the v1.0.0 advisory "item carries no priority score" now excludes items correctly

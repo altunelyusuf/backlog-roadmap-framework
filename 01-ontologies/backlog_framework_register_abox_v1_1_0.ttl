@@ -1,4 +1,5 @@
 @prefix backlog: <http://example.org/backlog#> .
+@prefix skos2:   <http://www.w3.org/2004/02/skos/core#> .
 @prefix core:    <http://example.org/core#> .
 @prefix fw:      <http://example.org/backlog-framework-register#> .
 @prefix owl:     <http://www.w3.org/2002/07/owl#> .
@@ -9,10 +10,11 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/1.0.0> ;
-    owl:versionInfo "1.0.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/1.1.0> ;
+    owl:versionInfo "1.1.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/1.0.0> ;
     dcterms:created "2026-08-06T00:00:00"^^xsd:dateTime ;
-    skos:definition "backlog-roadmap-framework's own maintenance-and-progress work, registered under the framework itself rather than sequenced by opinion. Written because the owner asked for the lineage approach instead of an ad hoc ordering, which is what the previous turn's numbered list actually was. The ordering below is COMPUTED from declared score components, not asserted; where it disagrees with intuition the register wins or the components must be argued with."@en .
+    skos:definition "v1.1.0 completes what v1.0.0 called a lineage and was not: scope with five recorded exclusions, a Definition of Done with six executable criteria, and decomposition of the unbuilt epics into stories with acceptance criteria. v1.0.0 shipped as a FIXTURE, in 03-tooling/fixtures, while declaring its own ontology IRI and version — an ontology artifact filed as test data. Promoted here. backlog-roadmap-framework's own maintenance-and-progress work, registered under the framework itself rather than sequenced by opinion. Written because the owner asked for the lineage approach instead of an ad hoc ordering, which is what the previous turn's numbered list actually was. The ordering below is COMPUTED from declared score components, not asserted; where it disagrees with intuition the register wins or the components must be argued with."@en .
 
 #################################################################
 #  ADOPTION PROFILE — owner-decided, reasoned, dated, directional
@@ -198,7 +200,8 @@ fw:EP_Cost a backlog:Epic ;
     backlog:hasPriorityScore fw:S_Cost ;
     backlog:hasCostEstimate fw:E_Cost ;
     backlog:rankedOnRoadmap fw:Roadmap ; backlog:hasRoadmapRank 3 ;
-    backlog:scheduledInHorizon backlog:Next .
+    backlog:scheduledInHorizon backlog:Next ;
+    backlog:decomposesInto fw:S31 , fw:S32 , fw:S33 .
 fw:AC_Cost a backlog:AcceptanceCriterion ;
     backlog:hasGherkinText "Given an item worked by an automated agent under human review, When its costs are recorded, Then token spend, environment cost and human time are each carried as separate named dimensions with their own units, and a budget can be compared against their sum." .
 fw:S_Cost a backlog:WSJFScore ;
@@ -231,7 +234,8 @@ fw:EP_Human a backlog:Epic ;
     backlog:hasCostEstimate fw:E_Human ;
     backlog:rankedOnRoadmap fw:Roadmap ; backlog:hasRoadmapRank 4 ;
     backlog:scheduledInHorizon backlog:Later ;
-    backlog:dependsOn fw:EP_Cost .
+    backlog:dependsOn fw:EP_Cost ;
+    backlog:decomposesInto fw:S41 , fw:S42 , fw:S43 .
 fw:AC_Human a backlog:AcceptanceCriterion ;
     backlog:hasGherkinText "Given work executed by an agent with a human confirming before it proceeds, When the register is read, Then the execution modality is stated, the interaction is recorded as an event carrying its own cost, and in-the-loop is distinguishable from on-the-loop by whether the transition is gated." .
 fw:S_Human a backlog:WSJFScore ;
@@ -256,7 +260,7 @@ fw:Ev_PbiTask a backlog:TestEvidence ;
     backlog:hasTestId "BRF-EP1" ;
     backlog:evidenceVerified true ;
     backlog:verifiedAt "2026-08-06T13:00:00"^^xsd:dateTime ;
-    backlog:hasVerificationMethod "backlog_gate_v1_1_9.sh: positive fixture carries a planned iteration with two subordinate execution tasks at 0 violations; negative fixture plants four EP1 defects (scored task, ranked task, empty planning event, parent Done over an open task) and all four fire" ;
+    backlog:hasVerificationMethod "backlog_gate_v1_1_10.sh: positive fixture carries a planned iteration with two subordinate execution tasks at 0 violations; negative fixture plants four EP1 defects (scored task, ranked task, empty planning event, parent Done over an open task) and all four fire" ;
     backlog:verifiedByTool "backlog_validate_v1_3_0.py + pyshacl 0.40.0" ;
     backlog:attestsCriterion fw:AC_PbiTask .
 
@@ -284,3 +288,175 @@ fw:Obs_EP2Actual a backlog:MetricObservation ;
     backlog:hasObservedValue 9.0 ;
     backlog:observedAt "2026-08-06T15:00:00"^^xsd:dateTime ;
     backlog:hasObservationMethod "Counted from backlog_tbox_v1_14_0.ttl: iterationStart, iterationEnd, Forecast, forecastFor, forecastMadeAt, forecastCompletion, forecastAssumption, forecastObservedVelocity, forecastIterationsObserved, forecastOutcome — 10 declared, of which forecastOutcome is not yet derived by a rule, so 9 are load-bearing. Estimate was 11; actual 9. Under, because cycle time, item age, throughput and velocity needed no vocabulary at all: they are computed in the report from points the framework already recorded." .
+
+#################################################################
+#  SCOPE — declared boundary, with what is deliberately outside.
+#  Absent from v1.0.0, which is precisely the omission
+#  LineageCompletenessShape now refuses.
+#################################################################
+
+fw:Scope a backlog:ScopeStatement ;
+    backlog:hasScopeStatementText "Vocabulary, constraints, derivations and report computations that let a register state its own progress, cost and human involvement as computed facts. Delivered as MINOR additions to the backlog subject with fixtures on both sides of every constraint and a gate that proves each can fail." ;
+    backlog:scopeRealizesObjective fw:Obj_Derived , fw:Obj_Adopter ;
+    backlog:hasScopeExclusion fw:Ex_Method , fw:Ex_Scale , fw:Ex_Schedule , fw:Ex_Complexity , fw:Ex_Modality .
+
+fw:Ex_Method a backlog:ScopeExclusion ;
+    backlog:excludesConcern "Prescribing a delivery method. The framework governs the register a method produces, not the method." ;
+    backlog:hasExclusionRationale "Encoding Scrum, Kanban or any other cadence would privilege a practice the framework has no business choosing." ;
+    backlog:decidedBy backlog:Owner .
+
+fw:Ex_Scale a backlog:ScopeExclusion ;
+    backlog:excludesConcern "Story points or any other estimation scale." ;
+    backlog:hasExclusionRationale "CostEstimate is unit-neutral by design. A scale is a team convention; velocity is therefore reported in items per iteration, which is coarse and honest, rather than in a unit the framework invented." ;
+    backlog:decidedBy backlog:Owner .
+
+fw:Ex_Schedule a backlog:ScopeExclusion ;
+    backlog:excludesConcern "A time-phased baseline schedule, and therefore SPI." ;
+    backlog:hasExclusionRationale "Earned-value CPI is computable from estimates and actuals already recorded. SPI needs planned value against a dated baseline, and roadmap horizons are ordinal by design. Introducing one would change what a roadmap IS, which is a MAJOR decision and not part of this scope." ;
+    backlog:decidedBy backlog:Owner .
+
+fw:Ex_Complexity a backlog:ScopeExclusion ;
+    backlog:excludesConcern "A dedicated complexity property on work items." ;
+    backlog:hasExclusionRationale "Settled here rather than mid-build. Task complexity in the literature (Wood 1986: component, coordinative, dynamic) is largely derivable from dependsOn, DependencyKind, decomposesInto and refinement churn, all of which exist. Code complexity (McCabe 1976, cognitive complexity) belongs to an artifact, not a task, and enters as a MetricObservation with Basis_Measured. What remains — component complexity — is carried as a named CostDimension in BRF-EP3, not as a new property." ;
+    backlog:decidedBy backlog:Owner .
+
+fw:Ex_Modality a backlog:ScopeExclusion ;
+    backlog:excludesConcern "Modelling human review as a WorkItem." ;
+    backlog:hasExclusionRationale "Human WORK assigned to a person is a WorkItem with a human execution modality and competes for capacity. Human INTERACTION with work — confirm, review, correct, respond — is an event on that item carrying its own cost and does not compete, or every review needs a score and the backlog fills with process." ;
+    backlog:decidedBy backlog:Owner .
+
+fw:Register backlog:hasScopeStatement fw:Scope .
+
+#################################################################
+#  DEFINITION OF DONE — the bar this development is held to
+#################################################################
+
+fw:DoD a backlog:DefinitionOfDone ;
+    rdfs:label "Definition of Done for framework increments"@en ;
+    backlog:hasDoDCriterion fw:D1 , fw:D2 , fw:D3 , fw:D4 , fw:D5 , fw:D6 .
+
+fw:D1 a backlog:DoDCriterion ;
+    rdfs:label "D1 — Vocabulary added carries a skos:definition stating why the t"@en ;
+    backlog:hasCriterionText "Vocabulary added carries a skos:definition stating why the term exists, not only what it denotes." ;
+    backlog:hasCheckQuery "ASK { ?c a owl:Class . FILTER(STRSTARTS(STR(?c), \"http://example.org/backlog#\")) FILTER NOT EXISTS { ?c skos:definition ?d } }" ;
+    backlog:hasExpectedResult "false" ;
+    backlog:hasCriterionStatus backlog:Holds .
+fw:D2 a backlog:DoDCriterion ;
+    rdfs:label "D2 — Every new constraint has a planted defect in the negative fi"@en ;
+    backlog:hasCriterionText "Every new constraint has a planted defect in the negative fixture that provably fires." ;
+    backlog:hasCheckQuery "Gate R, negative fixture: the release gate aborts unless the known-bad fixture FAILS, so a constraint with no planted defect is invisible to it and a constraint that cannot fail blocks the release." ;
+    backlog:hasExpectedResult "gate exits non-zero on the negative fixture" ;
+    backlog:hasCriterionStatus backlog:Holds .
+fw:D3 a backlog:DoDCriterion ;
+    rdfs:label "D3 — The positive fixture demonstrates the intended pattern and v"@en ;
+    backlog:hasCriterionText "The positive fixture demonstrates the intended pattern and validates at zero violations." ;
+    backlog:hasCheckQuery "Gate R, positive fixture: backlog_validate reports 0 sh:Violation." ;
+    backlog:hasExpectedResult "0 violations" ;
+    backlog:hasCriterionStatus backlog:Holds .
+fw:D4 a backlog:DoDCriterion ;
+    rdfs:label "D4 — The full release gate passes from a clean extraction, includ"@en ;
+    backlog:hasCriterionText "The full release gate passes from a clean extraction, including the three-fixture self-proof and the fixture-coverage gate." ;
+    backlog:hasCheckQuery "backlog_gate_v1_1_10.sh run against a freshly extracted bundle." ;
+    backlog:hasExpectedResult "RELEASE GATE: PASS" ;
+    backlog:hasCriterionStatus backlog:Holds .
+fw:D5 a backlog:DoDCriterion ;
+    rdfs:label "D5 — The standard documents every class added; the doc-coverage g"@en ;
+    backlog:hasCriterionText "The standard documents every class added; the doc-coverage gate enforces this." ;
+    backlog:hasCheckQuery "backlog_doc_coverage_gate_v1_2_0.py: every owl:Class in the subject TBox is named in the standard." ;
+    backlog:hasExpectedResult "classes declared == classes named" ;
+    backlog:hasCriterionStatus backlog:Holds .
+fw:D6 a backlog:DoDCriterion ;
+    rdfs:label "D6 — Actual effort is recorded against the estimate, and any dive"@en ;
+    backlog:hasCriterionText "Actual effort is recorded against the estimate, and any divergence carries its cause." ;
+    backlog:hasCheckQuery "ASK { ?i backlog:hasState backlog:Done ; backlog:hasCostEstimate ?e . FILTER NOT EXISTS { ?i backlog:hasActualEffort ?a } }" ;
+    backlog:hasExpectedResult "false" ;
+    backlog:hasCriterionStatus backlog:Holds .
+
+fw:Register backlog:appliesDefinitionOfDone fw:DoD .
+
+#################################################################
+#  DECOMPOSITION — what the remaining epics actually consist of.
+#  Absent from v1.0.0: four scored epics broken into nothing, which
+#  is why a mid-build decision had nowhere to be settled in advance.
+#  Each story is scoreable in its own right; per the framework's own
+#  rule the parent epics carry scores and these do not, so nothing
+#  double-counts. They are notYetScoreable with the reason recorded.
+#################################################################
+
+fw:S31 a backlog:Story ;
+    backlog:hasIdentifier "BRF-S31" ;
+    backlog:hasTitle "CostDimension with unit and rate" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_Adopter ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasAcceptanceCriterion fw:AC_S31 ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at epic level; scoring a decomposition child alongside its scored parent would double-count the parent's value, which the framework refuses." .
+fw:AC_S31 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given an item worked partly by an agent and partly by a person, When its costs are recorded, Then token spend, environment cost and human minutes are each a named dimension carrying its own unit, and no dimension is assumed to be effort." .
+
+fw:S32 a backlog:Story ;
+    backlog:hasIdentifier "BRF-S32" ;
+    backlog:hasTitle "Budget and actual cost per dimension" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_Adopter ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasAcceptanceCriterion fw:AC_S32 ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at epic level." .
+fw:AC_S32 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a budget declared per dimension, When actuals are recorded, Then the report states spend against budget per dimension and a breach is a computed fact rather than a reading of the numbers." .
+
+fw:S33 a backlog:Story ;
+    backlog:hasIdentifier "BRF-S33" ;
+    backlog:hasTitle "Component complexity as a named cost dimension" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_Adopter ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasAcceptanceCriterion fw:AC_S33 ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at epic level." .
+fw:AC_S33 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the scope exclusion forbidding a dedicated complexity property, When component complexity is recorded, Then it is a CostDimension like any other, and code complexity enters separately as a MetricObservation on an artifact with Basis_Measured." .
+
+fw:S41 a backlog:Story ;
+    backlog:hasIdentifier "BRF-S41" ;
+    backlog:hasTitle "Execution modality: automated, human, hybrid" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_Adopter ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasAcceptanceCriterion fw:AC_S41 ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at epic level." .
+fw:AC_S41 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a task assigned to a person rather than to automation, When the register is read, Then its execution modality is stated and it competes for capacity as a work item, because human WORK is work." .
+
+fw:S42 a backlog:Story ;
+    backlog:hasIdentifier "BRF-S42" ;
+    backlog:hasTitle "Interaction events: confirm, propose, correct, review, respond" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_Adopter ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasAcceptanceCriterion fw:AC_S42 ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at epic level." .
+fw:AC_S42 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a human confirming an agent's output, When the register is read, Then the interaction is an event on the item carrying its own cost and its own kind, and it does not appear in any ranking, per the scope exclusion." .
+
+fw:S43 a backlog:Story ;
+    backlog:hasIdentifier "BRF-S43" ;
+    backlog:hasTitle "In-the-loop versus on-the-loop as a transition guard" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_Adopter ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasAcceptanceCriterion fw:AC_S43 ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at epic level." .
+fw:AC_S43 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given supervision declared in-the-loop, When a transition is attempted without the human interaction it requires, Then the transition is refused; and given on-the-loop, Then it proceeds and the absence of intervention is recorded." .

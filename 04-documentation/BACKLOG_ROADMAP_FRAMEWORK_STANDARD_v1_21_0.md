@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.20.0
+# Backlog & Roadmap Semantic Framework — Standard v1.21.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -257,6 +257,32 @@ The report prints remaining-work arithmetic and says explicitly that **it is ari
 `Forecast`** — the projection is free, the claim carries obligations. An advisory fires when a
 forecast's date passes with work still open.
 
+### 2.5c-v Lineage completeness — why absence needs its own check
+
+**`sh:targetClass` cannot see absence.** A shape guarding `ScopeStatement` has no target in a
+register containing zero of them, so the constraints written to govern a layer are exactly the ones
+that go silent when the layer is omitted entirely. This is a structural property of SHACL, not a gap
+in any particular suite.
+
+The consequence is not hypothetical. This framework's own development register declared **L2**,
+reported **zero violations**, and contained no scope, no exclusions, no Definition of Done, no
+decomposition and nothing below epic level. It was called a lineage; it was four epics and a sentence
+each. The same pattern was reported independently in parallel sessions.
+
+**`LineageCompletenessShape` targets the register itself** — the one node guaranteed to exist — and at
+L2 refuses a register with no `Mission`, no `Objective`, no `ScopeStatement`, or no
+`DefinitionOfDone`. At L3 it refuses scored `Epic`s that decompose into nothing: an epic is by
+definition delivered across multiple features or stories, so one with no children is an estimate with
+no plan behind it. Advisories cover thinness rather than absence — epics with no work beneath them, a
+scope statement with no exclusion.
+
+**`backlog_lineage_completeness_v1_0_0.py`** complements the shape rather than duplicating it: it
+reports at **any** level, names every absent layer, and states what each omission costs — so a
+register can be improved before it is failed. It runs inside the release gate.
+
+The division is deliberate. The shape is the gate; the reporter is the map. A register climbing
+toward a level needs to see the gap before the gap fails it.
+
 ### 2.5d Decomposition, commitments, dependency kinds, impediments, flow, team (subject v1.4.0)
 
 | Term | Meaning |
@@ -420,7 +446,7 @@ python3 03-tooling/backlog_evidence_bridge_v1_0_0.py my_register.ttl \
 python3 03-tooling/backlog_roadmap_report_v1_5_0.py my_register.ttl --emit report.ttl
 
 # 5. Run the four-gate release check (self-proving)
-bash 03-tooling/backlog_gate_v1_1_9.sh my_register.ttl
+bash 03-tooling/backlog_gate_v1_1_10.sh my_register.ttl
 ```
 
 Start at L1, move to L2 once a bridge exists, and to L3 when releases carry manifest hashes and the
@@ -430,7 +456,7 @@ blueprint sweep is real. Raising the level is a one-line edit to the profile.
 
 ## 5. What the gates prove, and what they do not
 
-`backlog_gate_v1_1_9.sh` runs Gate 0 (manifest self-verify), Gate P (every Turtle file parses),
+`backlog_gate_v1_1_10.sh` runs Gate 0 (manifest self-verify), Gate P (every Turtle file parses),
 Gate K (`versionInfo` == `versionIRI` token == filename token), Gate R (SHACL reconcile), and the
 BP-D31 coverage gate. Gate R first validates a positive fixture that must pass and a negative
 fixture that must fail, and aborts if either outcome inverts: a suite never shown to reject a
