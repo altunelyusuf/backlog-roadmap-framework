@@ -1,5 +1,38 @@
 # Changelog
 
+## v1.40.0 — 2026-08-09 (MINOR: the register's absent layers filled; two overstatement defects corrected)
+
+**A state correction first.** The previous turn reported *"No, I did not build a lineage"* against a
+working tree that had since moved. **v1.39.0 already performed the relocation** — register out of
+`03-tooling/fixtures/` into `01-ontologies/`, with scope, five exclusions, a Definition of Done, six
+stories and six decomposition edges, plus `LineageCompletenessShape` and a completeness reporter. The
+governed remote was authoritative and the local tree stale; resynced from it rather than rebuilt.
+The diagnosis stands; the claim that nothing had been done about it did not.
+
+**Both questions asked mid-build are now settled in the scope statement, where they belonged.**
+`Ex_Complexity` rules that complexity is a cost dimension, not a property, citing Wood 1986's
+component/coordinative/dynamic decomposition. `Ex_Modality` rules that human *work* assigned to a
+person is a `WorkItem` competing for capacity, while human *interaction with* work is an event. Those
+are the two questions that interrupted development; a scope statement is where they stop being
+questions.
+
+**Defect in v1.39.0's own tool, found by running it.** The completeness reporter marked six layers
+`L2`/`L3` that `LineageCompletenessShape` does not reach — it enforces three. So the report asserted
+a consequence the suite would not deliver, which is the same defect as prose overstating a
+measurement, one level up. **v1.0.2** marks only what the shape enforces, and states the conditional
+case (a `PlanningEvent` is required at L2 **only where execution tasks exist**) in the consequence
+text rather than encoding it as an unconditional mark.
+
+**Register 1.1.0 → 1.2.0: the six absent layers filled**, because a report that names a gap and is
+then ignored is a decorative gate with an extra step. Two iterations with real periods, so velocity
+has a denominator. A planning event breaking EP3 into four execution tasks. A dated milestone that
+can be missed. Two cross-cutting invariants with executable check queries — one `Holds`, one
+`NotYetEnforceable` tracking EP3. A forecast carrying three assumptions, including that its velocity
+rests on a single closed iteration.
+
+**Completeness report: 0 layers absent.** Register validates 0 violations at L2.
+
+
 ## v1.39.0 — 2026-08-08 (MINOR: lineage completeness — the drift, its cause, and the gate)
 
 **The owner asked whether a lineage had actually been built. It had not.** Measured from disk: the
@@ -20,10 +53,10 @@ register with no Mission, no Objective, no ScopeStatement or no DefinitionOfDone
 scored Epics that decompose into nothing. Advisories cover thinness: epics with nothing beneath them,
 a scope with no exclusion. **Verified against the defective register: it now fails.**
 
-**`backlog_lineage_completeness_v1_0_0.py`** reports every layer at any level and states what each
+**`backlog_lineage_completeness_v1_0_2.py`** reports every layer at any level and states what each
 omission costs, so a register can be improved before being failed. Wired into the release gate.
 
-**The register repaired** and promoted to `01-ontologies/backlog_framework_register_abox_v1_1_0.ttl`:
+**The register repaired** and promoted to `01-ontologies/backlog_framework_register_abox_v1_2_0.ttl`:
 scope with **five recorded exclusions**, a Definition of Done with **six executable criteria**, and
 the unbuilt epics decomposed into six stories with acceptance criteria.
 

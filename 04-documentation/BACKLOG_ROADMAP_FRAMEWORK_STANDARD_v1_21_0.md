@@ -276,7 +276,7 @@ definition delivered across multiple features or stories, so one with no childre
 no plan behind it. Advisories cover thinness rather than absence — epics with no work beneath them, a
 scope statement with no exclusion.
 
-**`backlog_lineage_completeness_v1_0_0.py`** complements the shape rather than duplicating it: it
+**`backlog_lineage_completeness_v1_0_2.py`** complements the shape rather than duplicating it: it
 reports at **any** level, names every absent layer, and states what each omission costs — so a
 register can be improved before it is failed. It runs inside the release gate.
 

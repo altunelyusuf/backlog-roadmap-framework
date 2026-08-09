@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_lineage_completeness v1.0.0 — what your register does NOT contain.
+"""backlog_lineage_completeness v1.0.2 — what your register does NOT contain.
 
 Every other check in this package asks whether what is present is correct.
 This one asks what is missing, because that is the question SHACL structurally
@@ -29,6 +29,14 @@ each gap — so a register can be improved before it is failed.
 Exit 0 always unless --strict is given: this is a report, not a gate. The gate
 is the shape.
 
+A level mark here means LineageCompletenessShape actually rejects that omission
+at that level — nothing else. v1.0.0 marked six layers L2/L3 that the shape does
+not reach, which asserted a consequence the suite would not deliver; a report
+that overstates its own enforcement is the same defect as prose overstating a
+measurement. Corrected at v1.0.2 to the three the shape enforces, with the
+conditional case (PlanningEvent, required only where execution tasks exist)
+stated in the consequence text rather than encoded as an unconditional mark.
+
 Usage:
   backlog_lineage_completeness_v1_0_0.py REGISTER.ttl [--strict]
 """
@@ -46,7 +54,7 @@ LAYERS = [
     ("Mission", "Mission",
      "the intent chain has no root; nothing states why the development exists", "L2"),
     ("Goal", "Goal",
-     "nothing connects the work to the mission", "L2"),
+     "nothing connects the work to the mission", "-"),
     ("Objective", "Objective",
      "every goal is unmeasurable; no observation can contradict the plan", "L2"),
     ("MetricObservation", "MetricObservation",
@@ -54,9 +62,9 @@ LAYERS = [
     ("ScopeStatement", "ScopeStatement",
      "no boundary, so scope completion cannot be derived and scope growth cannot be detected", "L2"),
     ("ScopeExclusion", "ScopeExclusion",
-     "a boundary with only an inside; the questions later argued about are the ones an exclusion settles", "L2"),
+     "a boundary with only an inside; the questions later argued about are the ones an exclusion settles", "-"),
     ("DefinitionOfDone", "DefinitionOfDone",
-     "completion is whatever each claim says it is", "L2"),
+     "completion is whatever each claim says it is", "-"),
     ("Epic/Feature", "Epic",
      "no large-grain structure; the roadmap orders items with nothing beneath them", "-"),
     ("Story", "Story",
@@ -64,7 +72,7 @@ LAYERS = [
     ("ExecutionTask", "ExecutionTask",
      "no execution detail; progress can be claimed but not observed step by step", "-"),
     ("PlanningEvent", "PlanningEvent",
-     "tasks appear with nobody recorded as having planned them", "L2"),
+     "tasks appear with nobody recorded as having planned them; required at L2 only WHERE execution tasks exist, per ExecutionTaskShape", "-"),
     ("Iteration", "Iteration",
      "no cadence; velocity has no denominator and cannot be computed", "-"),
     ("Milestone", "Milestone",

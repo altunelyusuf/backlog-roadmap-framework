@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/1.1.0> ;
-    owl:versionInfo "1.1.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/1.2.0> ;
+    owl:versionInfo "1.2.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/1.1.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/1.0.0> ;
     dcterms:created "2026-08-06T00:00:00"^^xsd:dateTime ;
     skos:definition "v1.1.0 completes what v1.0.0 called a lineage and was not: scope with five recorded exclusions, a Definition of Done with six executable criteria, and decomposition of the unbuilt epics into stories with acceptance criteria. v1.0.0 shipped as a FIXTURE, in 03-tooling/fixtures, while declaring its own ontology IRI and version — an ontology artifact filed as test data. Promoted here. backlog-roadmap-framework's own maintenance-and-progress work, registered under the framework itself rather than sequenced by opinion. Written because the owner asked for the lineage approach instead of an ad hoc ordering, which is what the previous turn's numbered list actually was. The ordering below is COMPUTED from declared score components, not asserted; where it disagrees with intuition the register wins or the components must be argued with."@en .
@@ -460,3 +461,96 @@ fw:S43 a backlog:Story ;
     backlog:hasScoreabilityReason "Scored at epic level." .
 fw:AC_S43 a backlog:AcceptanceCriterion ;
     backlog:hasGherkinText "Given supervision declared in-the-loop, When a transition is attempted without the human interaction it requires, Then the transition is refused; and given on-the-loop, Then it proceeds and the absence of intervention is recorded." .
+
+#################################################################
+#  v1.2.0 — the six layers the completeness report named as absent.
+#  Added because a report that names a gap and is then ignored is
+#  the decorative-gate failure with an extra step.
+#################################################################
+
+# ---- cadence: velocity had no denominator without these ----
+fw:It1 a backlog:Iteration ;
+    backlog:hasIdentifier "BRF-IT1" ;
+    backlog:hasTitle "Register repair and the first two subjects" ;
+    backlog:hasState backlog:Done ;
+    backlog:iterationStart "2026-08-06T00:00:00"^^xsd:dateTime ;
+    backlog:iterationEnd "2026-08-08T23:59:59"^^xsd:dateTime ;
+    backlog:hasCapacity 20.0 .
+
+fw:EP_PbiTask backlog:memberOfContainer fw:It1 .
+fw:EP_Flow    backlog:memberOfContainer fw:It1 .
+
+fw:It2 a backlog:Iteration ;
+    backlog:hasIdentifier "BRF-IT2" ;
+    backlog:hasTitle "Cost dimensions" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:iterationStart "2026-08-09T00:00:00"^^xsd:dateTime ;
+    backlog:iterationEnd "2026-08-16T23:59:59"^^xsd:dateTime ;
+    backlog:hasCapacity 12.0 .
+
+# ---- planning: EP3 broken into execution steps, on the record ----
+fw:Plan_EP3 a backlog:PlanningEvent ;
+    rdfs:label "BRF-EP3 planned into iteration 2"@en ;
+    backlog:plansItem fw:EP_Cost ;
+    backlog:plannedInto fw:It2 ;
+    backlog:plannedAt "2026-08-09T00:00:00"^^xsd:dateTime ;
+    backlog:plannedBy backlog:Builder ;
+    backlog:producesTask fw:T_Dimension , fw:T_Budget , fw:T_Rollup , fw:T_Fixtures .
+
+fw:T_Dimension a backlog:ExecutionTask ;
+    backlog:hasIdentifier "BRF-T1" ;
+    backlog:hasTitle "CostDimension with unit and rate, per the Ex_Complexity exclusion" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register , fw:It2 .
+
+fw:T_Budget a backlog:ExecutionTask ;
+    backlog:hasIdentifier "BRF-T2" ;
+    backlog:hasTitle "Budget compared against the sum of recorded actuals" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register , fw:It2 .
+
+fw:T_Rollup a backlog:ExecutionTask ;
+    backlog:hasIdentifier "BRF-T3" ;
+    backlog:hasTitle "Cascading roll-up derived, never asserted, so parent and child cannot double-count" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register , fw:It2 .
+
+fw:T_Fixtures a backlog:ExecutionTask ;
+    backlog:hasIdentifier "BRF-T4" ;
+    backlog:hasTitle "Fixtures on both polarities and the shapes that reject the negative ones" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register , fw:It2 .
+
+# ---- a dated commitment that can be missed ----
+fw:MS_Cost a backlog:Milestone ;
+    backlog:hasIdentifier "BRF-MS1" ;
+    backlog:hasTitle "Cost dimensions available to adopters" ;
+    backlog:hasTargetDate "2026-08-16T23:59:59"^^xsd:dateTime .
+fw:EP_Cost backlog:contributesToMilestone fw:MS_Cost .
+
+# ---- standing properties, executable rather than prose ----
+fw:Inv_NoDerivedStorage a backlog:CrossCuttingInvariant ;
+    rdfs:label "Nothing derivable is stored"@en ;
+    backlog:hasCheckQuery "ASK { ?p a owl:DatatypeProperty . FILTER(REGEX(STR(?p),'cycleTime|itemAge|velocity|throughput')) }" ;
+    backlog:hasExpectedResult "false" ;
+    backlog:hasInvariantStatus backlog:Holds ;
+    backlog:tracksItem fw:EP_Flow .
+
+fw:Inv_NoModalityPredicate a backlog:CrossCuttingInvariant ;
+    rdfs:label "No modality-specific cost predicate"@en ;
+    backlog:hasCheckQuery "ASK { ?p a owl:DatatypeProperty . FILTER(REGEX(STR(?p),'tokenCost|gpuCost|humanHours')) }" ;
+    backlog:hasExpectedResult "false" ;
+    backlog:hasInvariantStatus backlog:NotYetEnforceable ;
+    backlog:tracksItem fw:EP_Cost .
+
+# ---- a dated expectation that can be shown to have been optimistic ----
+fw:Fc_Remaining a backlog:Forecast ;
+    rdfs:label "Remaining subjects"@en ;
+    backlog:forecastFor fw:Register ;
+    backlog:forecastMadeAt "2026-08-09T00:00:00"^^xsd:dateTime ;
+    backlog:forecastCompletion "2026-08-23T23:59:59"^^xsd:dateTime ;
+    backlog:forecastObservedVelocity 2.0 ;
+    backlog:forecastIterationsObserved 1 ;
+    backlog:forecastAssumption "Velocity holds at two subjects per iteration; one closed iteration is a data point, not a rate, and this is the weakest assumption here." ;
+    backlog:forecastAssumption "EP4 stays blocked on EP3 only, and the Ex_Modality exclusion continues to settle the human-review question without further scope work." ;
+    backlog:forecastAssumption "No ScopeChange admits further subjects; the four in the register are the whole of it." .
