@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.22.0
+# Backlog & Roadmap Semantic Framework — Standard v1.27.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -304,6 +304,63 @@ on schedule on the day it is read.
 **not deleted** — it records a decision that was true when taken. A `ScopeChange` supersedes it and
 both stay readable.
 
+### 2.5c-vi Multi-dimensional cost (subject v1.17.0)
+
+An increment worked by an automated agent under human supervision has a **token** cost *and* a
+**compute** cost *and* a **human** cost. Collapsing them into one effort figure loses the fact that
+they trade off against each other.
+
+| Term | Purpose |
+|---|---|
+| `CostDimension` — `hasDimensionUnit`, `hasDimensionRate`, `hasRateCurrency` | A named axis with its own unit. **Deliberately open**: tokens, compute, review time and assessed complexity are *instances*, not predicates. A property called `tokenCost` would privilege LLM-driven development the way a story-point property would privilege one estimation practice |
+| `DimensionalCost` — `costOfItem`, `alongDimension`, `hasQuantity`, `isEstimatedCost` | One quantity of one dimension for one item, reified so an item can carry several at once. `isEstimatedCost` keeps forecast and observed separable — a total mixing them without saying so reads as measurement |
+| `Budget` — `budgetFor`, `budgetDimension`, `hasBudgetCeiling` | Per-dimension, not per-project-total: an aggregate budget cannot say *which* thing overran, and unpriced dimensions have no aggregate to belong to |
+
+A rate is **optional**. An unpriced dimension is reported separately and contributes to no monetary
+total — a choice, not an omission, because some costs are constraints rather than bills.
+
+**Roll-up is derived, never asserted.** Recording a cost on a parent *and* its decomposition child
+along the same dimension is rejected: it double-counts, exactly as a parent and child both carrying
+priority scores would.
+
+### 2.5c-vii Human in the loop and on the loop (subject v1.18.0)
+
+A register of automated development that cannot say **where a person decided** is not auditable
+afterwards — every item looks the same.
+
+| Term | Purpose |
+|---|---|
+| `ExecutionModality` — `Human` / `Automated` / `Hybrid` | Who produced the output. `Human` work **competes for capacity**; hiding it over-commits the one resource that does not scale. `Hybrid` means a person materially changed the output, which is a different answer to *who is answerable* than automated-with-review |
+| `SupervisionMode` — `Sup_InTheLoop` / `Sup_OnTheLoop` / `Sup_None` | **A fact about gating, not attitude.** In-the-loop: the work *cannot advance* until a person acts. On-the-loop: it advances and a person may intervene. *"We review everything"* and *"nothing proceeds without review"* are different systems that sound identical in prose |
+| `HumanInteraction` — `interactsWith`, `hasInteractionKind`, `interactedAt`, `interactedBy`, `gatesTransition` | An **event**, deliberately not a work item: per the governing scope exclusion, human *interaction with* work does not compete for capacity, or every review needs a score and the backlog fills with process. Its cost rides the same dimensional machinery, so review time is **budgetable without being schedulable** |
+| `InteractionKind` — Confirm, Reject, Correct, Propose, Review, Respond | Confirm and Reject **gate**; the rest inform. A vocabulary with only *"review"* cannot distinguish a person who approved from one who merely looked |
+
+**Supervision claims are checkable, not declarative.** Claiming in-the-loop with nothing recorded as
+gating is rejected — the claim would describe an intention rather than a mechanism. Claiming no
+supervision while a person gated it is rejected. Correcting an output while claiming `Automated` is
+rejected.
+
+An **advisory** fires where gating confirmations exist and no rejection ever has: *a check never
+observed to fail has not been shown to be a check* — the same reasoning this framework applies to its
+own gates, turned on human ones.
+
+### 2.5c-viii Epics are decomposed before they are planned
+
+The type system says `Epic ⊑ ProductBacklogItem` and `plansItem` ranges on `ProductBacklogItem`, so a
+`PlanningEvent` **may be asserted** over an Epic. The **definitions** say otherwise:
+
+- an **Epic** is *"a large body of work decomposed into, or delivered across, **multiple** features or
+  stories; its completion **typically derived from the completion of its constituent work**"*
+- a **Story** is *"small enough to be **completed within one iteration**"*
+- an **Iteration** is *"a fixed-length time box"*
+
+An epic with no children committed to one time box can neither fit it nor derive a completion from
+anything. `EpicPlanningShape` rejects it at L2. **Decompose first, then plan the parts.**
+
+The gap is worth naming because a subclass relation answers *what may be asserted* and a definition
+answers *what the term means* — different questions, and reading only the first is how this
+arrangement came to be described as permitted.
+
 ### 2.5d Decomposition, commitments, dependency kinds, impediments, flow, team (subject v1.4.0)
 
 | Term | Meaning |
@@ -391,6 +448,47 @@ would fail it against a promise it never made. The same reasoning places `GoalMe
 
 L2 and L3 shapes fire only when an `AdoptionProfile` claims that level.
 
+**L4_LineageEnforced** is the fourth level, for a register that must **prove a mission was
+accomplished** rather than report that work was done — the difference being that completion is a fact
+about effort and accomplishment is a fact about the world, and only the second requires a
+measurement. At L4 the checks that are advisory below become **violations**:
+
+| L4 requires | Why |
+|---|---|
+| Every item traces to an objective | An item nothing can measure the value of has a completion but no accomplishment |
+| Every objective carries a `MetricObservation` | A target with no reading is an intention; a mission cannot be shown accomplished from intentions, however many are Done |
+| Every epic decomposes | Ungroomed it schedules nothing and can be picked up by no one |
+| **No epic in an Iteration** | An iteration is a time box; an epic is delivered *across* stories. Putting a theme in a sprint looks like planning and commits nothing anyone can finish |
+| **No epic in a `DeploymentUnit`** | A deployment answers *what users received*; an epic answers *why* |
+| Stories reaching execution passed through a `PlanningEvent` | Work that reached execution without planning has no recorded commitment behind it |
+| A closed iteration connects to a `DeploymentUnit` via `deploysFrom` | Otherwise an iteration closing and a release shipping are unrelated events, and a slipped iteration cannot be connected to a delayed release |
+| **Every deployed item is Done, carries bridge-verified Evidence, and has every acceptance criterion attested** | A release is the claim work reached users. Carrying unfinished or unproven work makes that claim false for part of what shipped, and nothing downstream can tell which part. The criterion check is **coverage at release time**: a suite can be green while the thing everyone cared about is untested |
+| **A deployment records who released it** | Shipping is an act someone performed; a release nobody authorised cannot be questioned afterwards |
+| No item pursues an objective the scope does not realise | Scope drift in its literal form: either record a `ScopeChange`, or the work does not belong here |
+
+**Test coverage is not new vocabulary.** `TestHarness.harnessComplete` is derived true only when
+**every** acceptance criterion of an item is attested by a bridge-verified evidence artifact — that
+*is* per-item coverage, and it existed long before L4. What was missing was consulting it at release
+time: a deployment could ship an item that was `InProgress`, carried no evidence and had no attested
+criterion, and nothing objected.
+
+`DeploymentUnit` is new and exists to separate three things this framework has repeatedly seen
+conflated: **what shipped** (deployment), **when it was worked** (iteration), and **why** (epic).
+
+**A companion discipline document ships with the package.**
+`04-documentation/LINEAGE_OPERATING_DISCIPLINE_v*.md` states the six boundaries the shapes cannot
+reach — granularity by momentum, advisory blindness, permitted-is-not-intended, completion-is-not-
+accomplishment, the why/when/what conflation, and drift as the default — each with the shape that
+catches it where one can. It governs building a lineage; the OE Operating Discipline governs building
+and releasing the ontology, and where both apply the OE ceremony runs first. **Its enforcement claims
+are themselves gated**: `backlog_lineage_discipline_check` fails the release if a shape the document
+names has been renamed, softened, or re-levelled, because a discipline document whose claims have
+drifted is believed.
+
+**L4 is a separate level, not a promotion inside L3.** Promoting checks inside an existing level
+would silently break every adopter who made a different claim, and a level is a claim an adopter
+makes rather than one imposed on them.
+
 **The declaration is itself governed, and those constraints are never level-gated.** Declaring
 `L1_Core` suppresses every level-gated constraint at once — on the shipped negative fixture,
 changing that one token removes most of the violations without changing another byte. The figures
@@ -467,7 +565,7 @@ python3 03-tooling/backlog_evidence_bridge_v1_0_0.py my_register.ttl \
 python3 03-tooling/backlog_roadmap_report_v1_5_0.py my_register.ttl --emit report.ttl
 
 # 5. Run the four-gate release check (self-proving)
-bash 03-tooling/backlog_gate_v1_1_10.sh my_register.ttl
+bash 03-tooling/backlog_gate_v1_1_12.sh my_register.ttl
 ```
 
 Start at L1, move to L2 once a bridge exists, and to L3 when releases carry manifest hashes and the
@@ -477,7 +575,7 @@ blueprint sweep is real. Raising the level is a one-line edit to the profile.
 
 ## 5. What the gates prove, and what they do not
 
-`backlog_gate_v1_1_10.sh` runs Gate 0 (manifest self-verify), Gate P (every Turtle file parses),
+`backlog_gate_v1_1_12.sh` runs Gate 0 (manifest self-verify), Gate P (every Turtle file parses),
 Gate K (`versionInfo` == `versionIRI` token == filename token), Gate R (SHACL reconcile), and the
 BP-D31 coverage gate. Gate R first validates a positive fixture that must pass and a negative
 fixture that must fail, and aborts if either outcome inverts: a suite never shown to reject a

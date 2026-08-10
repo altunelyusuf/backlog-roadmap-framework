@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-rules> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — Derivation Rules"@en ;
-    owl:versionIRI <http://example.org/backlog-rules/1.5.1> ;
-    owl:versionInfo "1.5.1" ;
+    owl:versionIRI <http://example.org/backlog-rules/1.6.0> ;
+    owl:versionInfo "1.6.0" ;
+    owl:priorVersion <http://example.org/backlog-rules/1.5.1> ;
     owl:priorVersion <http://example.org/backlog-rules/1.5.0> ;
     owl:priorVersion <http://example.org/backlog-rules/1.4.0> ,
                      <http://example.org/backlog-rules/1.3.0> ,
@@ -383,6 +384,30 @@ backlog:ScopeCompletionRule a sh:NodeShape ;
                 FILTER NOT EXISTS {
                     $this backlog:scopeRealizesObjective ?o2 .
                     FILTER NOT EXISTS { ?o2 backlog:objectiveOutcome backlog:Ach_Met }
+                }
+            }""" ] ;
+    sh:rule [ a sh:SPARQLRule ;
+        rdfs:label "R12c: complete, and too early to tell — the honest third state"@en ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:construct """
+            CONSTRUCT { $this backlog:scopeOutcome backlog:Ach_Pending }
+            WHERE {
+                $this backlog:scopeCompletionState backlog:Done .
+                FILTER EXISTS { $this backlog:scopeRealizesObjective ?o }
+                # Keyed on ABSENCE of a derived outcome, not on a Pending
+                # state: no rule derives objectiveOutcome Pending, so an
+                # objective whose deadline has not arrived and whose target is
+                # not yet reached carries no outcome at all. Without this the
+                # suite demanded a scope outcome that neither R12a nor R12b
+                # could produce — unsatisfiable unless someone fabricated one,
+                # which is what the constraint exists to prevent.
+                FILTER EXISTS {
+                    $this backlog:scopeRealizesObjective ?op .
+                    FILTER NOT EXISTS { ?op backlog:objectiveOutcome ?any }
+                }
+                FILTER NOT EXISTS {
+                    $this backlog:scopeRealizesObjective ?om .
+                    ?om backlog:objectiveOutcome backlog:Ach_Missed .
                 }
             }""" ] ;
     sh:rule [ a sh:SPARQLRule ;

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_views v1.0.0 — the classical project views, computed not stored.
+"""backlog_views v1.4.0 — the classical project views, computed not stored.
 
 Emits Mermaid and fixed-width tables from a register. Mermaid because it is
 plain text: it diffs, it reviews, it renders in GitHub and most editors without
@@ -13,6 +13,7 @@ WHAT IS DERIVED HERE, AND WHY NONE OF IT IS STORED
   Cumulative flow    TransitionEvent timestamps by state
   Network (AON)      dependsOn + hasDuration; longest path = critical path
   Earned value       PV/EV/AC from estimates, actuals and the baseline
+  Cost dimensions    per-dimension totals, budget comparison, derived roll-up
 
 Storing any of these would duplicate a computable fact that could then disagree
 with its own inputs. The framework's standing position is that a derived number
@@ -93,9 +94,17 @@ def is_container(g, n):
 
 def load(path):
     g = Graph()
-    tb = newest("01-ontologies/backlog_tbox_v*.ttl")
-    if tb:
-        g.parse(tb, format="turtle")
+    # TBox AND the framework ABox. The ABox declares the StateTransition
+    # individuals every TransitionEvent points at, so loading only the TBox
+    # left the second hop dangling and the cumulative flow unresolvable — a
+    # SECOND defect behind the first, and one the corrected diagnostic
+    # surfaced immediately by saying WHY it could not resolve rather than
+    # only that it could not.
+    for pat in ("01-ontologies/backlog_tbox_v*.ttl",
+                "01-ontologies/backlog_abox_v*.ttl"):
+        f = newest(pat)
+        if f:
+            g.parse(f, format="turtle")
     g.parse(path, format="turtle")
     return g
 
@@ -176,7 +185,12 @@ def gantt(g):
 def burn(g):
     print("\n== BURN-DOWN / BURN-UP — per iteration ==")
     its = []
-    for i in set(g.subjects(RDF.type, BL.Iteration)):
+    # Iterations AND Increments: both carry a period, and v1.1.0 looked only at
+    # the first, so a backfilled Increment holding twenty shipped releases was
+    # skipped in silence — a burn-down that omits a whole container without
+    # saying so is worse than one that refuses.
+    periodic = set(g.subjects(RDF.type, BL.Iteration)) | set(g.subjects(RDF.type, BL.Increment))
+    for i in periodic:
         s, e = dt(g.value(i, BL.iterationStart)), dt(g.value(i, BL.iterationEnd))
         if s and e:
             its.append((s, e, i))
@@ -186,11 +200,31 @@ def burn(g):
     its.sort()
     for s, e, i in its:
         members = [m for m in g.subjects(BL.memberOfContainer, i)]
-        total = sum(effort(g, m) for m in members) or float(len(members))
         if not members:
             continue
-        print("\n  %s  %s .. %s  (%d item(s), %.1f unit(s) committed)"
-              % (ident(g, i), s.date(), e.date(), len(members), total))
+        # Basis must be CONSISTENT between the total and the burned amount.
+        # v1.0.0 summed effort for the total but fell back to 1.0 per item when
+        # burning, so an item with no estimate contributed nothing to the total
+        # and one unit to the burn — and the chart reached zero while work was
+        # still open. A burn-down that hits zero with items unfinished is the
+        # "looks complete" failure this framework exists to refuse, produced by
+        # its own tool. Where any member lacks an estimate the whole iteration
+        # is counted in ITEMS, and the basis is printed.
+        missing = [m for m in members if effort(g, m) == 0.0]
+        if missing:
+            basis = "items"
+            weight = lambda m: 1.0
+        else:
+            basis = "effort units"
+            weight = lambda m: effort(g, m)
+        total = sum(weight(m) for m in members)
+        print("\n  %s  %s .. %s  (%d item(s), %.1f %s committed)"
+              % (ident(g, i), s.date(), e.date(), len(members), total, basis))
+        if missing:
+            print("    basis is ITEMS: %d member(s) carry no effort estimate, so an"
+                  % len(missing))
+            print("    effort burn-down would silently omit them: %s"
+                  % ", ".join(ident(g, m) for m in missing[:5]))
         days = max(1, (e - s).days)
         rem = total
         line = []
@@ -200,7 +234,7 @@ def burn(g):
             for m in members:
                 f = dt(g.value(m, BL.finishedAt))
                 if f and f <= day:
-                    done += effort(g, m) or 1.0
+                    done += weight(m)
             rem = total - done
             line.append((day, rem, done))
         width = 46
@@ -208,20 +242,46 @@ def burn(g):
             filled = int(width * (rem / total)) if total else 0
             print("    %s |%s%s| %.1f left" % (day.date(), "#" * filled,
                                                " " * (width - filled), rem))
+        open_now = [m for m in members
+                    if g.value(m, BL.hasState) not in (BL.Done, BL.Cancelled)]
+        if rem == 0 and open_now:
+            print("    WARNING: burned to zero with %d item(s) still open (%s)."
+                  % (len(open_now), ", ".join(ident(g, m) for m in open_now[:4])))
+            print("    A burn-down reaching zero over unfinished work is measuring")
+            print("    the wrong thing; check the basis above.")
 
 
 # -------------------------------------------------------- cumulative flow
 def cfd(g):
     print("\n== CUMULATIVE FLOW — items by state over time ==")
+    # The target state is TWO hops away: a TransitionEvent points at a
+    # StateTransition via viaTransition, and the StateTransition carries
+    # toState. v1.0.0 read a single-hop backlog:transitionedTo, which does not
+    # exist in the subject's TBox at any version — so this section could only
+    # ever print its refusal, and did, which is why the bug survived: a
+    # refusal that is correct for the WRONG reason looks exactly like one that
+    # is correct. Reported by a parallel session reading the declared model
+    # rather than the tool's output. The tool now also distinguishes the two
+    # causes it previously conflated.
     events = []
-    for t in g.subjects(RDF.type, BL.TransitionEvent):
-        when = dt(g.value(t, BL.transitionedAt))
-        to = g.value(t, BL.transitionedTo)
+    malformed = 0
+    for ev in g.subjects(RDF.type, BL.TransitionEvent):
+        when = dt(g.value(ev, BL.transitionedAt))
+        trans = g.value(ev, BL.viaTransition)
+        to = g.value(trans, BL.toState) if trans is not None else None
         if when and to:
             events.append((when, str(to).rsplit("#", 1)[-1]))
+        else:
+            malformed += 1
     if not events:
-        print("  no TransitionEvent carries a timestamp — a CFD needs the")
-        print("  state history, not the current state. Record transitions.")
+        n = len(list(g.subjects(RDF.type, BL.TransitionEvent)))
+        if n == 0:
+            print("  no TransitionEvent in this register — a CFD needs the state")
+            print("  HISTORY, not the current state. Record transitions.")
+        else:
+            print("  %d TransitionEvent(s) present but none resolves to a target state." % n)
+            print("  The path is two hops: ?e viaTransition ?t . ?t toState ?s .")
+            print("  %d event(s) are missing a timestamp or a StateTransition." % malformed)
         return
     events.sort()
     running = {}
@@ -334,6 +394,45 @@ def ev(g):
         print("  precisely so it can be computed.")
 
 
+# ------------------------------------------------------------ cost
+def cost(g):
+    print("\n== COST — per dimension, against budget ==")
+    dims = sorted(set(g.subjects(RDF.type, BL.CostDimension)), key=str)
+    if not dims:
+        print("  no CostDimension declared — nothing to total")
+        return
+    for d in dims:
+        unit = g.value(d, BL.hasDimensionUnit)
+        rate = g.value(d, BL.hasDimensionRate)
+        cur = g.value(d, BL.hasRateCurrency)
+        recs = [c for c in g.subjects(BL.alongDimension, d)]
+        obs = sum(float(g.value(c, BL.hasQuantity) or 0)
+                  for c in recs if g.value(c, BL.isEstimatedCost) == Literal(False))
+        est = sum(float(g.value(c, BL.hasQuantity) or 0)
+                  for c in recs if g.value(c, BL.isEstimatedCost) == Literal(True))
+        unk = sum(float(g.value(c, BL.hasQuantity) or 0)
+                  for c in recs if g.value(c, BL.isEstimatedCost) is None)
+        name = str(g.value(d, __import__("rdflib").RDFS.label) or str(d).rsplit("#", 1)[-1])
+        print("\n  %s  (%s)" % (name, unit or "NO UNIT"))
+        print("    observed %.1f | estimated %.1f | unstated %.1f  across %d record(s)"
+              % (obs, est, unk, len(recs)))
+        if unk:
+            print("    %.1f is neither marked observed nor estimated and is NOT folded into" % unk)
+            print("    either figure; a total mixing measured and forecast reads as measurement.")
+        if rate is not None:
+            print("    priced: %.4f %s per unit -> observed spend %.2f %s"
+                  % (float(rate), cur, obs * float(rate), cur))
+        else:
+            print("    UNPRICED — reported separately; it contributes to no monetary total,")
+            print("    which is a choice, not an omission: some costs are constraints, not bills.")
+        for b in g.subjects(BL.budgetDimension, d):
+            ceil = float(g.value(b, BL.hasBudgetCeiling) or 0)
+            used = obs + est
+            pct = (used / ceil * 100) if ceil else 0
+            flag = "OVER" if used > ceil else "within"
+            print("    budget %.1f %s -> %.1f used (%.0f%%) %s" % (ceil, unit, used, pct, flag))
+
+
 def main():
     if len(sys.argv) < 2:
         raise SystemExit(__doc__)
@@ -356,6 +455,8 @@ def main():
         network(g)
     if run_all or "--ev" in flags:
         ev(g)
+    if run_all or "--cost" in flags:
+        cost(g)
     return 0
 
 

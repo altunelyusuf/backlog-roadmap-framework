@@ -1,0 +1,181 @@
+# L4_LineageEnforced, ADVERSARIAL — every L4 clause violated on purpose.
+#
+# The whole chain, connected and measured: Mission -> Goal -> Objective (with a
+# real observation) -> Scope -> Epic -> Story -> PlanningEvent -> Iteration ->
+# DeploymentUnit. No epic in a sprint, no epic deployed, no story reaching
+# execution without a planning event, no work outside the declared scope.
+
+@prefix backlog: <http://example.org/backlog#> .
+@prefix core:    <http://example.org/core#> .
+@prefix ex:      <http://example.org/l4#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+ex:Profile a backlog:AdoptionProfile ;
+    backlog:profileAppliesTo "L4 conformant reference register" ;
+    backlog:governsBacklog ex:Backlog ;
+    backlog:hasConformanceLevel backlog:L4_LineageEnforced ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:hasDecisionRationale "Owner call: this register must prove a mission was accomplished, not report that work was done, so the lineage is enforced rather than advised." ;
+    backlog:adoptsFacet backlog:CoreFacet , backlog:EvidenceFacet , backlog:PrioritizationFacet ,
+                        backlog:RoadmapFacet , backlog:InvariantFacet , backlog:AuditFacet .
+
+ex:Backlog a backlog:Backlog ;
+    backlog:hasIdentifier "BL-L4" ; backlog:hasTitle "Reference L4 register" ;
+    backlog:hasState backlog:InProgress ;
+    backlog:appliesDefinitionOfDone backlog:DoD_Baseline ;
+    backlog:hasCommitment ex:Commit ;
+    backlog:hasScopeStatement ex:Scope .
+
+ex:Commit a backlog:Commitment ; rdfs:label "Delivery commitment"@en ;
+    backlog:commitsToGoal ex:Goal .
+
+ex:Mission a backlog:Mission ; rdfs:label "Mission"@en ;
+    backlog:hasMissionStatement "Practitioners recover an account without contacting support." ;
+    backlog:missionFor ex:Backlog ; backlog:decidedBy backlog:Owner .
+
+ex:Goal a backlog:Goal ; rdfs:label "Self-service recovery"@en ;
+    backlog:contributesToMission ex:Mission ; backlog:decidedBy backlog:Owner .
+
+ex:Metric a core:Metric ; rdfs:label "Share of recoveries completed without support"@en .
+
+ex:Objective a backlog:Objective ; rdfs:label "Recoveries need no support contact"@en ;
+    backlog:contributesToGoal ex:Goal ;
+    backlog:hasSuccessMetric ex:Metric ;
+    backlog:hasBaselineValue 12.0 ; backlog:hasTargetValue 80.0 ;
+    backlog:hasTargetDirection backlog:Dir_Increase ;
+    backlog:hasObjectiveDeadline "2027-01-31T00:00:00"^^xsd:dateTime ;
+    backlog:decidedBy backlog:Owner .
+
+# a measurement, not an intention — this is what L4 requires
+ex:Obs a backlog:MetricObservation ; rdfs:label "First reading, attached to nothing"@en ;
+    backlog:observesMetric ex:Metric ;
+    backlog:hasObservedValue 41.0 ;
+    backlog:observedAt "2026-08-09T12:00:00"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Counted support tickets tagged account-recovery against completed recovery flows over the two weeks after release 1." .
+
+ex:Scope a backlog:ScopeStatement ;
+    backlog:hasScopeStatementText "Self-service recovery for practitioner accounts: the reset flow and its notifications." ;
+    backlog:scopeRealizesObjective ex:Objective ;
+    backlog:hasScopeExclusion ex:Excl .
+ex:Excl a backlog:ScopeExclusion ;
+    backlog:excludesConcern "Recovery for administrator accounts, which carries a different identity check." ;
+    backlog:hasExclusionRationale "Different threat model; a separate objective would be needed and none is declared." ;
+    backlog:decidedBy backlog:Owner .
+
+# epic: groomed, never in a sprint, never deployed
+ex:EP a backlog:Epic ;
+    backlog:hasIdentifier "EP-1" ; backlog:hasTitle "Account recovery" ;
+    backlog:hasState backlog:InProgress ;
+    backlog:memberOfContainer ex:Backlog , ex:It1 ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at story level; scoring an epic alongside its scored children would double-count." .
+
+ex:US1 a backlog:Story ;
+    backlog:hasIdentifier "US-1" ; backlog:hasTitle "Request a reset link" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer ex:Backlog , ex:It1 ;
+    backlog:pursuesObjective ex:Objective ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:asRole "practitioner" ; backlog:wantsCapability "request a reset link" ;
+    backlog:soThat "I can get back in without calling the clinic" ;
+    backlog:hasAcceptanceCriterion ex:AC1 ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:startedAt "2026-07-28T09:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-04T17:00:00"^^xsd:dateTime ;
+    backlog:hasActualEffort 9.0 ;
+    backlog:hasEvidence ex:Ev1 ;
+    backlog:lastAuditedAt "2026-08-04T17:00:00"^^xsd:dateTime ;
+    backlog:hasPriorityScore ex:S1 .
+ex:AC1 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a practitioner who has forgotten their password, When they request a reset, Then a single-use link arrives within two minutes and expires after one hour." .
+ex:Ev1 a backlog:TestEvidence ;
+    backlog:hasTestSpec "e2e/recovery/request-link.spec.js" ; backlog:hasTestId "REC-1" ;
+    backlog:evidenceVerified true ; backlog:verifiedAt "2026-08-04T17:00:00"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "playwright test --grep REC-1, exit 0, run in CI on the release commit" ;
+    backlog:verifiedByTool "playwright 1.45" ;
+    backlog:attestsCriterion ex:AC1 ;
+    backlog:anchoredToRelease "sha256:8c1f0b2d9a" .
+ex:S1 a backlog:WSJFScore ;
+    backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 6.0 ;
+    backlog:hasUserBusinessValue 8.0 ; backlog:hasTimeCriticality 6.0 ;
+    backlog:hasRiskReductionValue 4.0 ; backlog:hasJobSize 3.0 ;
+    backlog:scoredAt "2026-07-27T09:00:00"^^xsd:dateTime ;
+    backlog:hasBasisKind backlog:Basis_Judged .
+
+ex:US2 a backlog:Story ;
+    backlog:hasIdentifier "US-2" ; backlog:hasTitle "Set a new password from the link" ;
+    backlog:hasState backlog:InProgress ;
+    backlog:memberOfContainer ex:Backlog , ex:It1 ;
+    backlog:pursuesObjective ex:Objective ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:asRole "practitioner" ; backlog:wantsCapability "set a new password" ;
+    backlog:soThat "I regain access without a support call" ;
+    backlog:hasAcceptanceCriterion ex:AC2 ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:startedAt "2026-08-05T09:00:00"^^xsd:dateTime ;
+    backlog:hasPriorityScore ex:S2 .
+ex:AC2 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a valid unexpired reset link, When the practitioner sets a password meeting the policy, Then the old password stops working and the link cannot be reused." .
+ex:S2 a backlog:WSJFScore ;
+    backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 4.0 ;
+    backlog:hasUserBusinessValue 7.0 ; backlog:hasTimeCriticality 3.0 ;
+    backlog:hasRiskReductionValue 2.0 ; backlog:hasJobSize 3.0 ;
+    backlog:scoredAt "2026-07-27T09:00:00"^^xsd:dateTime ;
+    backlog:hasBasisKind backlog:Basis_Judged .
+
+# planning: stories into the iteration, broken to tasks
+ex:It1 a backlog:Iteration ;
+    backlog:hasIdentifier "IT-1" ; backlog:hasTitle "Iteration 1" ;
+    backlog:hasState backlog:Done ;
+    backlog:iterationStart "2026-07-28T00:00:00"^^xsd:dateTime ;
+    backlog:iterationEnd "2026-08-08T23:59:59"^^xsd:dateTime ;
+    backlog:hasCapacity 12.0 .
+
+ex:Plan1 a backlog:PlanningEvent ;
+    backlog:plansItem ex:US1 ; backlog:plannedInto ex:It1 ;
+    backlog:plannedAt "2026-07-27T10:00:00"^^xsd:dateTime ;
+    backlog:plannedBy backlog:Builder ;
+    backlog:producesTask ex:T1 , ex:T2 .
+ex:Plan2 a backlog:PlanningEvent ;
+    backlog:plansItem ex:US1 ; backlog:plannedInto ex:It1 ;
+    backlog:plannedAt "2026-07-27T10:15:00"^^xsd:dateTime ;
+    backlog:plannedBy backlog:Builder ;
+    backlog:producesTask ex:T3 .
+
+ex:T1 a backlog:ExecutionTask ; backlog:hasIdentifier "T-1" ;
+    backlog:hasTitle "Issue single-use tokens with expiry" ;
+    backlog:hasState backlog:Done ; backlog:memberOfContainer ex:Backlog , ex:It1 ;
+    backlog:hasEvidence ex:Ev1 ; backlog:lastAuditedAt "2026-08-04T17:00:00"^^xsd:dateTime .
+ex:T2 a backlog:ExecutionTask ; backlog:hasIdentifier "T-2" ;
+    backlog:hasTitle "Send the link through the shared dispatcher" ;
+    backlog:hasState backlog:Done ; backlog:memberOfContainer ex:Backlog , ex:It1 ;
+    backlog:hasEvidence ex:Ev1 ; backlog:lastAuditedAt "2026-08-04T17:00:00"^^xsd:dateTime .
+ex:T3 a backlog:ExecutionTask ; backlog:hasIdentifier "T-3" ;
+    backlog:hasTitle "Enforce the password policy on reset" ;
+    backlog:hasState backlog:InProgress ; backlog:memberOfContainer ex:Backlog , ex:It1 .
+
+# deployment: what shipped, from which iteration, carrying which stories
+ex:Rel1 a backlog:DeploymentUnit ;
+    backlog:hasIdentifier "REL-1" ; backlog:hasTitle "Release 1" ;
+    backlog:hasState backlog:Done ;
+    backlog:hasDeploymentDate "2026-08-09T08:00:00"^^xsd:dateTime ;
+    backlog:deploysItem ex:US1 , ex:EP , ex:US2 .
+ex:US1 backlog:memberOfContainer ex:Rel1 .
+
+ex:Drift a backlog:Objective ; rdfs:label "Objective outside the declared scope"@en ;
+    backlog:contributesToGoal ex:Goal ;
+    backlog:hasSuccessMetric ex:Metric ;
+    backlog:hasBaselineValue 0.0 ; backlog:hasTargetValue 1.0 ;
+    backlog:hasTargetDirection backlog:Dir_Increase ;
+    backlog:hasObjectiveDeadline "2027-01-31T00:00:00"^^xsd:dateTime ;
+    backlog:decidedBy backlog:Owner .
+ex:US3 a backlog:Story ;
+    backlog:hasIdentifier "US-3" ; backlog:hasTitle "Work outside the boundary" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer ex:Backlog ;
+    backlog:pursuesObjective ex:Drift ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "drift probe" .

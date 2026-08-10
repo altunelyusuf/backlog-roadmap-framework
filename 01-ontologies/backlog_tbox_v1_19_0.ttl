@@ -18,9 +18,13 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.15.0> ;
-    owl:versionInfo "1.15.0" ;
-    owl:priorVersion <http://example.org/backlog/1.14.0> ,
+    owl:versionIRI <http://example.org/backlog/1.19.0> ;
+    owl:versionInfo "1.19.0" ;
+    owl:priorVersion <http://example.org/backlog/1.18.0> ,
+                     <http://example.org/backlog/1.17.0> ,
+                     <http://example.org/backlog/1.16.0> ,
+                     <http://example.org/backlog/1.15.0> ,
+                     <http://example.org/backlog/1.14.0> ,
                      <http://example.org/backlog/1.13.0> ,
                      <http://example.org/backlog/1.12.0> ,
                      <http://example.org/backlog/1.11.0> ,
@@ -52,6 +56,10 @@
     skos:definition "A domain-neutral, reusable schema for backlog-and-roadmap governance across independent developments. It standardises five concept groups that recur in every product/engineering effort: (1) work items and their containers, (2) a closed lifecycle whose Done state is a constrained fact rather than asserted prose, (3) completion Evidence anchored to real delivered artifacts (a named passing test, a release carrying its package SHA-256, a file hash, or a recorded review), (4) method-parameterised prioritisation scores, and (5) a roadmap modelled as a derived projection over the backlog rather than an independently maintained list. Adoption is declared by an AdoptionProfile carrying a ConformanceLevel (L1 Core / L2 Evidence-Bound / L3 Governed), which the paired SHACL suite reads to decide which constraints are enforced, so one framework serves developments at different governance maturity without forking the vocabulary. This TBox defines vocabulary only; the paired SHACL shapes supply enforcement, the SPARQL rules supply derivation (container status, next-item selection, milestone status), and an execution bridge asserts observed real-world verification facts back into the ABox."@en ;
     dcterms:source "Scrum Guide 2020 (Product Backlog, Increment, Definition of Done); SAFe 6.0 (Epic/Feature/Story ladder, WSJF); Now-Next-Later roadmap practice; Intercom RICE prioritisation; W3C OWL 2, SHACL, SHACL-AF."@en ;
     rdfs:comment "v1.0.0 — generalisation of an adopting project's product-backlog deposit (an OE Pack registrant deposit, http://example.org/product-backlog 1.3.0) into a project-independent subject. Per L-105 this is an extension of that implementation, not a parallel one: every pb: term has a declared alignment in backlog_alignment_productbacklog_v1_0_0.ttl. Per L-68 the hyphenated/abbreviated form (product-backlog / pb:) is replaced by a single full-word prefix (backlog:); per L-69 the retained terminology anchors to the Scrum Guide and SAFe rather than to project-internal names. The deposit files themselves are NOT modified by this release (L-X7 / B1: the owning session decides supersession)."@en ,
+    "v1.19.0 (MINOR, additions only) — adds a fourth conformance level, L4_LineageEnforced, in which the lineage checks that were advisory become violations and every objective must carry a measurement rather than an intention. Added as a NEW level rather than by promoting advisories inside L3, because promotion would silently break every existing L3 adopter and because the tiering principle this framework already documents says a level is a claim an adopter makes, not one imposed on them. Existing L1, L2 and L3 behaviour is byte-identical. Also adds DeploymentUnit, so an iteration can be connected to what actually ships, and the epic-as-deployment-unit misuse becomes stateable rather than merely discouraged."@en ,
+    "v1.18.0 (MINOR, additions only) — BRF-EP4, the last epic in the framework's own register. Makes human involvement in automated development a first-class register fact. The design question was settled before the build by the register's Ex_Modality exclusion: human WORK assigned to a person is a work item with a human modality and competes for capacity; human INTERACTION with work is an event on that item carrying its own cost and does not compete, because otherwise every review needs a score and the backlog fills with process. Reuse was checked first per L-110: Role, TeamRole, transitionedBy, decidedBy, ReviewEvidence, TransitionEvent and the cost dimensions all exist and are used rather than duplicated. What is new is the modality of execution, the kind of interaction, and the in-the-loop versus on-the-loop distinction, which is a fact about whether a transition is GATED — expressible only once something says so."@en ,
+    "v1.17.0 (MINOR, additions only) — BRF-EP3 from the register. Cost becomes multi-dimensional: an item worked by an automated agent under human review carries token spend, environment cost and human time as separate named dimensions with their own units, and a budget is compared against their sum. No modality-specific predicate is minted — no tokenCost, no gpuHours — per the register's Ex_Modality exclusion: LLM-driven development is one modality among several and a predicate named for it would privilege it. Complexity likewise enters as a dimension rather than a property, per Ex_Complexity. Both were settled in the scope statement before this build started, which is the point of having one."@en ,
+    "v1.16.0 (MINOR, domain widening — backwards compatible) — iterationStart and iterationEnd were domained on Iteration alone, so an Increment could not carry the period its own definition presupposes: a releasable body of work completed BY A STATED POINT has a period by construction. Found by backfilling shipped releases into an Increment and watching the burn-down skip it silently. Same shape as the roadmap-rank widening at subject v1.11.0 and caught the same way, by using the vocabulary rather than reading it."@en ,
     "v1.15.0 (MINOR, additions only) — the time-phased baseline the subject previously refused, admitted by an owner-decided ScopeChange rather than by deleting the exclusion that refused it. Ex_Schedule stays in the register as the record of the earlier decision; L-112 forbids editing a record of a past decision to match a later one. Adds a KickOff to anchor a plan to a real moment, planned start and finish so a baseline exists, a duration so a network can be traversed, and the widening of Rebaseline to reach the plan so that moving a baseline is a recorded move rather than a quiet edit. Note what this does NOT change: horizons remain ordinal, and hasRoadmapRank remains an ordering rather than a date. A plan and a roadmap now coexist and are deliberately different things."@en ,
     "v1.14.0 (MINOR, additions only) — BRF-EP2 from the framework's own register, ranked second at 4.00. Adds only what CANNOT be derived. Cycle time, item age, throughput and velocity are computed by the report from startedAt, finishedAt and the iteration period; storing them would duplicate a derivable fact, which is the defect L-91 names one level down. What could not be derived was the iteration's own period, without which velocity has no denominator, and a Forecast — because a forecast is a CLAIM about the future and the framework's standing position is that a claim must state what would make it wrong."@en ,
     "v1.13.0 (MINOR, additions only) — BRF-EP1 from the framework's own register, which the computed ranking put first at 6.50. Distinguishes work that carries independent value and is prioritised on a product backlog from subordinate execution work produced when a backlog item is planned into an iteration. Deliberately does NOT repurpose backlog:Task: its own definition says a Task must be tracked, PRIORITISED and evidenced like any other work item, so it is a non-user-facing product backlog item, not a sprint task, and redefining it would silently change the meaning of every register already using it. ExecutionTask is therefore a new ninth kind rather than a re-reading of an existing one."@en ,
@@ -378,9 +386,9 @@ backlog:AdoptionProfile a owl:Class ;
 backlog:ConformanceLevel a owl:Class ;
     rdfs:subClassOf backlog:BacklogConcept ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
-    owl:oneOf ( backlog:L1_Core backlog:L2_EvidenceBound backlog:L3_Governed ) ;
+    owl:oneOf ( backlog:L1_Core backlog:L2_EvidenceBound backlog:L3_Governed backlog:L4_LineageEnforced ) ;
     rdfs:label "Conformance Level"@en ;
-    skos:definition "The graded strength of a development's claim on this framework. Closed enumeration of three individuals, each a strict superset of the previous, so 'conformant' is always a measured statement about which constraint set passed rather than an unqualified adjective."@en .
+    skos:definition "The graded strength of a development's claim on this framework. Closed enumeration of four individuals, each a strict superset of the previous, so 'conformant' is always a measured statement about which constraint set passed rather than an unqualified adjective."@en .
 
 backlog:L1_Core a owl:NamedIndividual , backlog:ConformanceLevel ;
     rdfs:label "L1 Core"@en ;
@@ -2775,13 +2783,13 @@ backlog:plannedBy a owl:ObjectProperty ;
 #################################################################
 
 backlog:iterationStart a owl:DatatypeProperty , owl:FunctionalProperty ;
-    rdfs:domain backlog:Iteration ; rdfs:range xsd:dateTime ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:Iteration backlog:Increment ) ] ; rdfs:range xsd:dateTime ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "iteration start"@en ;
     skos:definition "When the time box opened. Velocity is work completed per iteration, so without a period there is no denominator and the measure cannot exist — the same reason startedAt and finishedAt were added for cycle time."@en .
 
 backlog:iterationEnd a owl:DatatypeProperty , owl:FunctionalProperty ;
-    rdfs:domain backlog:Iteration ; rdfs:range xsd:dateTime ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:Iteration backlog:Increment ) ] ; rdfs:range xsd:dateTime ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "iteration end"@en ;
     skos:definition "When the time box closed. An iteration whose end has passed is complete for velocity purposes whether or not its work was; that is precisely what makes velocity an honest measure rather than a summary of intentions."@en .
@@ -2923,3 +2931,226 @@ backlog:isCurrentBaseline a owl:DatatypeProperty , owl:FunctionalProperty ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "is current baseline"@en ;
     skos:definition "True for exactly one baseline per container. Superseded baselines are retained, not deleted, so schedule performance can be reported against the original as well as the current — the number a rebaselined project would rather not show."@en .
+
+#################################################################
+#  45. Multi-dimensional cost (v1.17.0) — BRF-EP3
+#################################################################
+
+backlog:CostDimension a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Cost Dimension"@en ;
+    skos:definition "A named axis along which work consumes something measurable, carrying its own unit and optionally a rate that converts it to money. Deliberately open: token spend, compute hours, environment cost, human review time and assessed complexity are all instances rather than predicates, so the framework can record what a modality actually costs without naming any modality in its vocabulary. A predicate called tokenCost would privilege LLM-driven development the way a story-point property would privilege one estimation practice."@en .
+
+backlog:hasDimensionUnit a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:CostDimension ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has dimension unit"@en ;
+    skos:definition "What one unit of this dimension is — a token, a GPU-hour, a person-hour. Required: a quantity without a unit cannot be summed, compared or budgeted against, and two dimensions with different units must never be added."@en .
+
+backlog:hasDimensionRate a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:CostDimension ; rdfs:range xsd:decimal ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has dimension rate"@en ;
+    skos:definition "Monetary cost per unit, where one is known. Optional, because a dimension worth tracking is not always worth pricing: review time may matter as a constraint rather than as a bill. Where absent, that dimension contributes to no monetary total and is reported separately rather than silently omitted."@en .
+
+backlog:hasRateCurrency a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:CostDimension ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has rate currency"@en ;
+    skos:definition "The currency a rate is denominated in. Required wherever a rate exists, because summing amounts in unstated currencies produces a number with no meaning."@en .
+
+backlog:DimensionalCost a owl:Class ;
+    rdfs:subClassOf core:Artifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Dimensional Cost"@en ;
+    skos:definition "One recorded quantity of one dimension for one work item — the reified triple of item, dimension and amount. Reified rather than expressed as a direct property so that an item can carry several costs at once, which is the whole point: an increment worked by an agent under human supervision has a token cost AND an environment cost AND a human cost, and collapsing them to a single effort figure loses the fact that they trade off against each other."@en .
+
+backlog:costOfItem a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:DimensionalCost ;
+    rdfs:range [ a owl:Class ; owl:unionOf ( backlog:WorkItem backlog:WorkItemContainer ) ] ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "cost of item"@en .
+
+backlog:alongDimension a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:DimensionalCost ; rdfs:range backlog:CostDimension ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "along dimension"@en .
+
+backlog:hasQuantity a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:DimensionalCost ; rdfs:range xsd:decimal ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has quantity"@en ;
+    skos:definition "How much of the dimension was consumed, in that dimension's own unit."@en .
+
+backlog:isEstimatedCost a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:DimensionalCost ; rdfs:range xsd:boolean ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "is estimated cost"@en ;
+    skos:definition "True where the quantity is forecast, false where it was observed. Kept explicit for the same reason hasBasisKind exists: a projected token spend and a metered one are different evidence, and a total that mixes them without saying so reads as measurement."@en .
+
+backlog:Budget a owl:Class ;
+    rdfs:subClassOf core:Artifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Budget"@en ;
+    skos:definition "A declared ceiling on one dimension for one container, against which recorded costs are compared. Per-dimension rather than per-project-total, because a budget that only exists in aggregate cannot say WHICH thing overran, and because dimensions with no rate have no aggregate to belong to."@en .
+
+backlog:budgetFor a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:Budget ; rdfs:range backlog:WorkItemContainer ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "budget for"@en .
+
+backlog:budgetDimension a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:Budget ; rdfs:range backlog:CostDimension ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "budget dimension"@en .
+
+backlog:hasBudgetCeiling a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:Budget ; rdfs:range xsd:decimal ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has budget ceiling"@en ;
+    skos:definition "The maximum quantity of the dimension this container is permitted, in the dimension's own unit."@en .
+
+#################################################################
+#  46. Human in the loop and on the loop (v1.18.0) — BRF-EP4
+#################################################################
+
+backlog:ExecutionModality a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:Mode_Human backlog:Mode_Automated backlog:Mode_Hybrid ) ;
+    rdfs:label "Execution Modality"@en ;
+    skos:definition "Who or what carries out a work item. Recorded because a register of automated development that does not say which work a person did cannot be audited afterwards: every item looks the same, and the question 'where did a human decide' has no answer in the data. Closed at three, because the interesting distinction is not the tool but whether a person was answerable for the output."@en .
+
+backlog:Mode_Human a owl:NamedIndividual , backlog:ExecutionModality ;
+    rdfs:label "Human"@en ;
+    skos:definition "Carried out by a person. Competes for capacity like any other work, which is the point of recording it: human time is finite and an automated backlog that hides it will over-commit the one resource it cannot scale."@en .
+
+backlog:Mode_Automated a owl:NamedIndividual , backlog:ExecutionModality ;
+    rdfs:label "Automated"@en ;
+    skos:definition "Carried out by an agent or a pipeline with no person in the execution path. Not a claim that nobody supervised it — supervision is recorded separately as an interaction, precisely so that unsupervised automation is distinguishable from supervised automation."@en .
+
+backlog:Mode_Hybrid a owl:NamedIndividual , backlog:ExecutionModality ;
+    rdfs:label "Hybrid"@en ;
+    skos:definition "An agent produced the output and a person materially changed it. Distinct from automated-with-review, where the person accepted or rejected but did not author: the two carry different answers to who is responsible for what shipped."@en .
+
+backlog:hasExecutionModality a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:WorkItem ; rdfs:range backlog:ExecutionModality ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has execution modality"@en .
+
+backlog:SupervisionMode a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:Sup_InTheLoop backlog:Sup_OnTheLoop backlog:Sup_None ) ;
+    rdfs:label "Supervision Mode"@en ;
+    skos:definition "How a person stands in relation to automated work. The distinction is not attitude but MECHANISM: in-the-loop means a transition cannot occur until a person acts, on-the-loop means it occurs and a person may intervene afterwards. Stated as a fact about gating rather than intent, because 'we review everything' and 'nothing proceeds without review' are different systems that sound identical in prose."@en .
+
+backlog:Sup_InTheLoop a owl:NamedIndividual , backlog:SupervisionMode ;
+    rdfs:label "In the loop"@en ;
+    skos:definition "The work cannot advance until a person acts. Must be evidenced by a gating interaction recorded before the transition it gates; a claim of in-the-loop supervision with no such interaction is a claim about intentions."@en .
+
+backlog:Sup_OnTheLoop a owl:NamedIndividual , backlog:SupervisionMode ;
+    rdfs:label "On the loop"@en ;
+    skos:definition "The work advances and a person may intervene afterwards. Weaker than in-the-loop and legitimately so — most automation should be on the loop — but recorded distinctly, because the two are indistinguishable in a register that only says a review happened."@en .
+
+backlog:Sup_None a owl:NamedIndividual , backlog:SupervisionMode ;
+    rdfs:label "None"@en ;
+    skos:definition "No person supervises this work. The honest option, and the one whose absence from a vocabulary would force unsupervised work to be recorded as though supervised."@en .
+
+backlog:hasSupervisionMode a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:WorkItem ; rdfs:range backlog:SupervisionMode ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has supervision mode"@en .
+
+backlog:InteractionKind a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:Int_Confirm backlog:Int_Reject backlog:Int_Correct
+                backlog:Int_Propose backlog:Int_Review backlog:Int_Respond ) ;
+    rdfs:label "Interaction Kind"@en ;
+    skos:definition "What a person did to a work item. Six, closed, and the split that matters is between the ones that GATE — confirm and reject, which decide whether work proceeds — and the ones that inform. A vocabulary with only 'review' cannot distinguish a person who approved from one who merely looked."@en .
+
+backlog:Int_Confirm a owl:NamedIndividual , backlog:InteractionKind ;
+    rdfs:label "Confirm"@en ;
+    skos:definition "A person permitted the work to proceed. Gating."@en .
+backlog:Int_Reject a owl:NamedIndividual , backlog:InteractionKind ;
+    rdfs:label "Reject"@en ;
+    skos:definition "A person refused the work. Gating, and the one whose complete absence over a long register suggests confirmation is a formality."@en .
+backlog:Int_Correct a owl:NamedIndividual , backlog:InteractionKind ;
+    rdfs:label "Correct"@en ;
+    skos:definition "A person materially changed the output. Implies the item's modality is Hybrid rather than Automated."@en .
+backlog:Int_Propose a owl:NamedIndividual , backlog:InteractionKind ;
+    rdfs:label "Propose"@en ;
+    skos:definition "A person supplied direction the agent did not have."@en .
+backlog:Int_Review a owl:NamedIndividual , backlog:InteractionKind ;
+    rdfs:label "Review"@en ;
+    skos:definition "A person examined the output without deciding or changing it. Not gating; recording it as such is what keeps 'reviewed' from being read as 'approved'."@en .
+backlog:Int_Respond a owl:NamedIndividual , backlog:InteractionKind ;
+    rdfs:label "Respond"@en ;
+    skos:definition "A person answered a question the agent raised."@en .
+
+backlog:HumanInteraction a owl:Class ;
+    rdfs:subClassOf core:Artifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Human Interaction"@en ;
+    skos:definition "One recorded act by a person upon a work item: what they did, to what, when, and at what cost. An EVENT and deliberately not a work item — per the governing scope exclusion, human work assigned to a person is a work item and competes for capacity, while human interaction with work is an event and does not, because otherwise every review needs a priority score and the backlog fills with process. Its cost is carried on the same dimensional machinery as any other cost, so review time is budgetable without being schedulable."@en .
+
+backlog:interactsWith a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:HumanInteraction ; rdfs:range backlog:WorkItem ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "interacts with"@en .
+
+backlog:hasInteractionKind a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:HumanInteraction ; rdfs:range backlog:InteractionKind ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has interaction kind"@en .
+
+backlog:interactedAt a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:HumanInteraction ; rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "interacted at"@en ;
+    skos:definition "When it happened. Required, because in-the-loop supervision is the claim that a person acted BEFORE a transition, and a claim about order needs times on both sides."@en .
+
+backlog:interactedBy a owl:ObjectProperty ;
+    rdfs:domain backlog:HumanInteraction ; rdfs:range backlog:Role ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "interacted by"@en ;
+    skos:definition "The role that acted. An interaction attributable to nobody cannot be audited, which is the whole reason for recording it."@en .
+
+backlog:gatesTransition a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:HumanInteraction ; rdfs:range xsd:boolean ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "gates transition"@en ;
+    skos:definition "True where the work could not have advanced without this act. The mechanical fact behind in-the-loop supervision: a register may claim in-the-loop, and this is what makes the claim checkable."@en .
+
+#################################################################
+#  47. L4 — the lineage enforced, not advised (v1.19.0)
+#################################################################
+
+backlog:L4_LineageEnforced a owl:NamedIndividual , backlog:ConformanceLevel ;
+    rdfs:label "L4 Lineage Enforced"@en ;
+    skos:definition "L3 plus: the intent chain is complete and connected end to end, every objective carries a measurement rather than an intention, work is groomed to the granularity that can actually be executed, and an iteration connects to what ships. The checks that are advisory at lower levels become violations here. Adopted where a register must PROVE a mission was accomplished rather than report that work was done — the difference being that completion is a fact about effort and accomplishment is a fact about the world, and only the second requires a measurement. Deliberately a separate level and not a promotion inside L3: a level is a claim an adopter makes, and promoting checks inside an existing one would break every adopter who made a different claim."@en .
+
+backlog:DeploymentUnit a owl:Class ;
+    rdfs:subClassOf backlog:WorkItemContainer ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Deployment Unit"@en ;
+    skos:definition "What actually ships: the grouping released to users, distinct from an Iteration, which is a time box, and from an Epic, which is a theme. Named because conflating the three is the commonest drift this framework has observed — an epic treated as a deployment subject looks like a plan, schedules nothing, and cannot be released, since nothing states what of it would go out. A deployment unit answers 'what did users receive', an iteration answers 'when was it worked', and an epic answers 'why'."@en .
+
+backlog:deploysFrom a owl:ObjectProperty ;
+    rdfs:domain backlog:DeploymentUnit ; rdfs:range backlog:Iteration ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "deploys from"@en ;
+    skos:definition "The iteration whose completed work this deployment carries. The link that makes cadence and release the same story rather than two: without it a register can show iterations closing and releases shipping with nothing connecting them, which is exactly the state in which a slipped iteration and a delayed release look unrelated."@en .
+
+backlog:deploysItem a owl:ObjectProperty ;
+    rdfs:domain backlog:DeploymentUnit ; rdfs:range backlog:ProductBacklogItem ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "deploys item"@en ;
+    skos:definition "A backlog item this deployment carries to users. Ranged on ProductBacklogItem rather than WorkItem because an ExecutionTask has no independent value to deliver, and an Epic — while formally a ProductBacklogItem — is rejected here by shape at L4: a theme is not a thing users receive."@en .
+
+backlog:hasDeploymentDate a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:DeploymentUnit ; rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has deployment date"@en .

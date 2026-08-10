@@ -1,5 +1,339 @@
 # Changelog
 
+## v1.51.0 — 2026-08-10 (MINOR: the Lineage Operating Discipline, under this package's own authorship)
+
+**An authorship correction, not a rejection.** `LINEAGE_OPERATING_DISCIPLINE_v1_0_0.md` was written by
+a parallel session and shipped inside this package. The owner has ruled that only the session owning
+the framework maintains it. v1.0.0's ceremony, its six boundaries and — most valuable — its
+self-checking mechanism were sound, and are carried forward substantially unchanged rather than
+rewritten for the sake of it.
+
+**Deleting it was considered and rejected.** Its enforcement claims *held*: the shipped checker
+reported every named shape present at the claimed severity. Removing it would have removed a passing
+check. Rewriting keeps the mechanism and puts the authorship right.
+
+**Three things it predated, now folded in:**
+
+- **Ceremony step 4** — decide how work reaches users (`PlanningEvent` → `Iteration` →
+  `DeploymentUnit`) **before the first story**, because at L4 a closed iteration with no deployment is
+  a violation and retrofitting a release history is fabrication.
+- **G7 — a tool that refuses is not thereby correct.** Three defects in this framework's own tooling
+  were plausible refusals or meaningless clean passes. **No shape catches this**; the check that does
+  is a fixture whose answer is known in advance.
+- **G8 — every rule naming a member of a closed set depends on that set's membership.** Adding
+  `L4_LineageEnforced` broke three *"below L3"* clauses that fired on a level above L3. **No shape
+  catches this either.** It was caught only because a fixture exercised the new member — G7 applied
+  to vocabulary.
+
+Both are recorded in the document precisely *because* they are unreachable by SHACL, which is what the
+document is for.
+
+**One correction to v1.0.0's content.** Its G1 note implied `LineageDepthAdvisoryShape` was missed
+because a session ran at L2. Measured: the shape is **not level-gated** and fires at L1. "We ran at
+L2" does not explain the silence — the shapes file was not run at all. Corrected in place, since
+v1.0.0 is superseded rather than a historical record.
+
+**The checker now verifies six shapes rather than four** — `EpicPlanningShape`,
+`LineageDepthAdvisoryShape`, and the four L4 shapes including `L4DeploymentVerifiedShape` — and passes
+without modification, because it resolves the discipline by pattern rather than by pinned name.
+
+
+## v1.50.0 — 2026-08-09 (MINOR: a deployment carries only proven work)
+
+**Written against origin after a collision.** A parallel session published v1.49.0 — the Lineage
+Operating Discipline and its enforcement checker — while this work was in progress locally under the
+same number. Origin is authoritative: this session discarded its local numbering, resynced, checked
+whether v1.49.0 had already covered this ground (it had not — that release governs *building* a
+lineage; this gates *shipping* from one), and re-applied on top as v1.50.0. B5's freshness clause is
+what made the collision visible rather than silently overwritten.
+
+**Asked whether test coverage and confirmation exist in the lineage. Measured before answering.**
+
+**Per item the framework was already strong:** `Evidence`/`TestEvidence` with `evidenceVerified`,
+`verifiedByTool`, `hasVerificationMethod`; `attestsCriterion` linking a passing test to the criterion
+it proves; and `TestHarness`, whose `harnessComplete` is derived true **only when every acceptance
+criterion of the item is attested by a bridge-verified artifact**. That is per-item test coverage and
+it long predates L4.
+
+**At release time none of it was consulted.** Proven by construction: a `DeploymentUnit` shipping a
+story that was `InProgress`, carried no Evidence and whose acceptance criterion nothing attested
+validated at **0 violations at L4**. Every existing deployment clause checked the *shape* of the
+release — a date, at least one item, no epic, an iteration link — and none checked whether what it
+carried had been proven.
+
+**Added at L4, four clauses on `DeploymentUnit`:** every deployed item is `Done`; carries
+bridge-verified Evidence; has **every** acceptance criterion attested; and the deployment records
+**who released it**. The third is coverage at release time — a suite can be green while the criterion
+everyone cared about is untested, which is what `attestsCriterion` exists to expose.
+
+**No coverage vocabulary was minted.** `harnessComplete` already carried the notion; the gap was
+never a missing concept, only a check that never ran.
+
+**Fixtures on both polarities:** the conformant L4 register carries a harness and a releasing
+decision and validates at 0 with 0 of 46 constraints suppressed; the adversarial one ships an
+unfinished, unevidenced, unattested story and fires all four clauses.
+
+
+## v1.49.0 — 2026-08-09 (MINOR: the Lineage Operating Discipline, and a gate on its own claims)
+
+A companion to the OE Operating Discipline, in its form and deliberately not a restatement of it:
+**that document governs building and releasing an ontology; this governs building a lineage inside
+one.** Where both apply the OE ceremony runs first, because a lineage grounded on unverified bytes is
+a lineage about nothing.
+
+**A lineage ceremony, executed before the FIRST work item rather than after the twentieth:** declare
+the level with its rationale, target and review date; build Mission→Goal→Objective→Scope and
+**validate it empty**; state the granularity chosen and why. A chain that does not validate empty will
+not validate full, and every item written before the chain exists must be revisited once it does.
+
+**Six boundaries the shapes cannot reach**, each a failure this ecosystem has actually observed:
+granularity by momentum · advisory blindness · permitted-is-not-intended · completion-is-not-
+accomplishment · the why/when/what conflation · drift as the default. Each names the shape that
+catches it, and says plainly where none can.
+
+**The document is honest about its own limits**, which is the point of the last section: it enforces
+nothing. SHACL enforces; the document makes boundaries visible at the moment several of them are
+still cheap to observe.
+
+**But its claims about enforcement are checked.** `backlog_lineage_discipline_check` reads the
+discipline and the shipped shapes and fails the release if a named shape is missing, has been softened
+from Violation to Warning, or is described as L4-gated while firing at every level. **A discipline
+document whose enforcement claims have drifted is worse than none, because it is believed.** Wired
+into the release gate; proven to fail by renaming one shape reference.
+
+**A defect in the checker, caught by cross-reading its own output.** v1.0.0 split shape blocks only on
+the next shape declaration, so a shape immediately followed by a section banner absorbed that banner's
+text — `EpicPlanningShape`, an L2 shape, was reported *"L4-gated"* because the banner announcing the L4
+section mentioned L4. Fixed at v1.0.1 by cutting each block at the banner. **A checker whose report is
+not itself checked is another decorative gate**, and this one was caught only because its output was
+compared against the shapes file rather than read.
+
+
+## v1.48.0 — 2026-08-09 (MINOR: L4_LineageEnforced — the lineage as violations, not advice)
+
+Requested by the framework owner: enforce the lineage with full measurement, so a register can
+**prove a mission was accomplished** rather than report that work was done. The distinction is the
+whole of this release — completion is a fact about effort, accomplishment is a fact about the world,
+and only the second requires a measurement.
+
+**A fourth conformance level, not a promotion inside L3.** Promoting the advisory checks inside an
+existing level would silently break every adopter who made a different claim, and this framework's
+own documented principle is that a level is a claim an adopter **makes**. L1, L2 and L3 behaviour is
+byte-identical; the positive fixture still validates at 0.
+
+**Eight clauses fire only at L4**, each proven to fail on an adversarial fixture built by mutating
+the conformant one:
+
+- every item traces to an objective; every objective carries a `MetricObservation`
+- every epic decomposes; **no epic in an Iteration**; **no epic in a DeploymentUnit**
+- a story reaching execution passed through a `PlanningEvent`
+- a closed iteration connects to what shipped via `deploysFrom`
+- no item pursues an objective the scope does not realise — **scope drift, stated literally**
+
+**`DeploymentUnit` is new** and exists to separate three things this framework has repeatedly seen
+conflated: **what shipped**, **when it was worked**, and **why**. The epic-as-deployment-subject
+misuse becomes stateable rather than merely discouraged.
+
+**A defect this release created and then caught.** Widening a closed enumeration broke three rules
+that had tested against its old top member by name: `AdoptionRampShape`'s *"an adoption below
+L3_Governed must declare a target"* fired on **L4**, which is above it. Found by the L4-conformant
+fixture failing on its first run. Repointed to `NOT IN (L3, L4)`.
+
+That is the cost of widening a closed enumeration, and it is worth stating plainly: **every rule that
+names a member of a closed set has an unstated dependency on the set's membership.** The suite caught
+it, but only because a fixture existed that exercised the new member.
+
+
+## v1.47.0 — 2026-08-09 (MINOR: epics are decomposed before they are planned — correcting this session's own advice)
+
+**This session told an adopting session something wrong and is correcting it here.** Reviewing their
+handover, this session read `Epic ⊑ ProductBacklogItem` and `plansItem range ProductBacklogItem`,
+concluded that planning an Epic into an Iteration was permitted, and told them their guidance to
+decompose first was unnecessary.
+
+**The definitions say the opposite**, and they were not read:
+
+- **Epic** — *"a large body of work decomposed into, or delivered across, **multiple** features or
+  stories; its completion **typically derived from the completion of its constituent work**"*
+- **Story** — *"small enough to be **completed within one iteration**"*
+- **Iteration** — *"a fixed-length time box"*
+
+An epic with no children committed to one time box can neither fit it nor derive a completion from
+anything. **The adopting session was right**; only their stated reason was imprecise, and this
+session corrected a conclusion that was sound using a hierarchy check that could not settle it.
+
+**BP-D4 in its plainest form:** a subclass relation answers *what may be asserted*; a definition
+answers *what the term means*. Reading only the first is how a forbidden arrangement came to be
+described as permitted.
+
+**`EpicPlanningShape`** rejects a `PlanningEvent` committing an undecomposed Epic to an Iteration at
+L2. Nothing had objected before — verified by construction first, so the gap was measured rather
+than assumed. Planted defect 95 covers it.
+
+
+## v1.46.0 — 2026-08-09 (PATCH-class: the cumulative flow never worked, and said so for the wrong reason)
+
+**A parallel session's finding, verified against the published TBox and upheld exactly.**
+`backlog_views` read a single-hop `backlog:transitionedTo`. That property **has never existed in this
+subject's TBox at any version**. The declared model is two hops: a `TransitionEvent` points at a
+`StateTransition` via `viaTransition`, and the `StateTransition` carries `toState`.
+
+**Why it survived a release and a public publication.** The section could only ever print its refusal
+— *"no TransitionEvent carries a timestamp"* — and that refusal was reported here as correct
+behaviour, twice. **A refusal that is correct for the wrong reason is indistinguishable from one that
+is correct.** The finding required reading the declared model against the code, which is what the
+reporting session did and what this session did not.
+
+**A second defect behind the first**, surfaced by the corrected diagnostic within a minute of writing
+it: the tool loaded the TBox but **not the framework ABox**, where every `StateTransition` individual
+lives. So even with the right path the second hop dangled. The new message says *why* resolution
+failed rather than only that it did, and that is what exposed it.
+
+**Both fixed.** The positive fixture has carried **8 TransitionEvents since v1.7.0** and now produces
+a real cumulative flow — Ready accumulating from 17 July, InProgress from the 18th, a cancellation on
+the 24th and the first Done on the 27th.
+
+**The gap underneath both:** no gate exercised the transition path, because the CFD's refusal was
+accepted as data-driven rather than checked against the model. A tool that refuses is not thereby
+correct, and this package had no check distinguishing the two.
+
+
+## v1.45.0 — 2026-08-09 (MINOR: BRF-EP4 — the register's last epic, and three defects it exposed)
+
+Ceremony under **v2.3.0**, pack v20.30.0 (197/197), freshness confirmed against origin before and
+after. The scope exclusion `Ex_Modality` had settled EP4's design before the build, so nothing was
+asked.
+
+**Human involvement is now a register fact.** `ExecutionModality` (Human/Automated/Hybrid),
+`SupervisionMode` (in-the-loop / on-the-loop / none), `HumanInteraction` as an **event** carrying its
+own cost on the existing dimensional machinery — so review time is **budgetable without being
+schedulable** — and six `InteractionKind`s of which Confirm and Reject **gate** and the rest inform.
+
+**In-the-loop is a fact about gating, not attitude.** *"We review everything"* and *"nothing proceeds
+without review"* sound identical in prose and are different systems. Claiming in-the-loop with nothing
+recorded as gating is rejected; so is claiming no supervision while a person gated it, and correcting
+an output while claiming `Automated`.
+
+**An advisory turns the framework's own reasoning on human gates:** where confirmations exist and no
+rejection ever has, *a check never observed to fail has not been shown to be a check.*
+
+### Three defects the build exposed, all mine
+
+**1. My own constraint caught me overstating supervision.** I marked five completed epics
+`Sup_InTheLoop`. Only EP4 had an explicit authorisation with a recorded confirmation; the rest ran
+under *"proceed as far as you need no response from me"* — which is **on-the-loop**. Corrected to
+match what happened rather than adding gates that never existed.
+
+**2. A category error in my own measurements.** Term counts were attached as observations of the
+*outcome* metrics. Terms delivered is **effort**, not questions answered. Replaced by measuring what
+the objectives actually name: ran every view and counted answers versus refusals — **6 of 8
+answerable, 75% against a target of 80**. The objective is **not met**, and is not recorded as met.
+Cumulative flow and per-dimension cost remain unanswerable for this register, so the adopter metric
+reads **2 against a target of 0** — improved, not achieved.
+
+**3. A jointly-unsatisfiable rule.** With the work complete and objective deadlines in 2027, neither
+R12a (all Met) nor R12b (any Missed) could derive a scope outcome — yet the suite demanded one.
+Unsatisfiable unless someone fabricated an outcome, which is what the constraint exists to prevent.
+**R12c** derives `Ach_Pending`, keyed on the **absence** of a derived outcome rather than on a Pending
+state no rule produces.
+
+**Estimate 17, actual 19.** The two extra are `Sup_None` and `Int_Reject` — the honest-negative
+members. Without them, unsupervised work would have to be recorded as supervised, and a gate would
+have no way to record a refusal.
+
+**The register is closed.** All six epics Done with verified evidence; scope outcome **Pending**,
+which is the truthful state.
+
+
+## v1.44.0 — 2026-08-09 (MINOR: BRF-EP3 built — multi-dimensional cost)
+
+**Ceremony under v2.3.0 from a fresh origin clone**, pack v20.30.0, 197/197. The container had been
+wiped — toolchain and working tree both gone, which is B5's stated scenario — so both were
+rehydrated from the governed store before anything was read.
+
+**The register chose the work and had already specified it.** EP3 at 2.75, its acceptance criterion
+written before the build, and four execution tasks planned into an iteration. Neither of the two
+design questions that once interrupted development came back: `Ex_Complexity` and `Ex_Modality` had
+settled them in the scope statement.
+
+**No modality-specific predicate was minted** — no `tokenCost`, no `gpuHours`. Tokens, compute,
+review time and complexity are **instances** of `CostDimension`, each with its own unit. A property
+named for one modality would privilege it the way a story-point property would privilege one
+estimation practice.
+
+**A rate is optional, and that is load-bearing.** Human review time ships unpriced in the fixture:
+the cost view reports it separately and says plainly that it contributes to no monetary total —
+*a choice, not an omission, because some costs are constraints rather than bills.*
+
+**Roll-up is derived, never asserted.** A cost on a parent *and* its decomposition child along the
+same dimension is rejected — the same double-count the framework already refuses for priority scores.
+
+**Four checks the suite made on its own author while recording completion:**
+
+1. `StaleInvariantStatusShape` refused to let `Inv_NoModalityPredicate` stay `NotYetEnforceable` once
+   EP3 shipped. The check query was **executed** — no `tokenCost`/`gpuCost`/`humanHours` predicate
+   exists — and the status moved to `Holds` on that result, not on assertion.
+2. EP3 could not be `Done` while three decomposition stories were still `Proposed`.
+3. Every completed execution task needed its own evidence at L2.
+4. One evidence method was rejected as **a bare assertion**; it now names the check that could have
+   failed — the negative fixture rising from 90 to 94 planted defects, each confirmed firing by
+   identifier.
+
+**Estimate 12, actual 13.** The extra term is `hasRateCurrency`, which the estimate folded into the
+rate and which summing two currencies shows must be separate.
+
+
+## v1.43.0 — 2026-08-09 (MINOR: the shipped history backfilled; period domain widened)
+
+**Ceremony run under OE Operating Discipline v2.3.0**, fetched from origin — the local pack was at
+v20.28.0 while origin held **v20.30.0**. v2.3.0's new clause is exactly about that: B5 previously
+prescribed only a manifest self-check, which proves a snapshot is undamaged and is equally true of one
+six months stale. The enriched boundary requires `git fetch` and zero-commits-behind before any
+governed action. It caught this session before this session read it.
+
+**Twenty shipped releases backfilled — from bytes, not recollection.** Every date is a git commit
+timestamp, every title a changelog headline, every evidence record a real commit SHA and tag. Emitted
+programmatically so no figure passes through memory.
+
+**`hasActualEffort` is deliberately absent from all twenty.** Elapsed time between releases is not
+effort; no effort was measured at the time, and inventing one would be the fabrication this framework
+exists to refuse. `hasDuration` carries the elapsed days, which is what was actually observed.
+
+**Twenty advisories stand, unresolved on purpose:** *"advances no recorded objective"*. True — those
+releases predate the objectives, and linking them would retrofit an intent nobody held. The advisory
+is the correct reading of a real fact.
+
+**A defect found by using the vocabulary rather than reading it.** `iterationStart`/`iterationEnd`
+were domained on `Iteration` alone, so an `Increment` — defined as *"the releasable body of work
+completed by a stated point in time"*, which has a period by construction — could not carry one. The
+burn-down skipped a container of twenty items **in silence**. Same shape as the roadmap-rank widening
+at subject v1.11.0, and caught the same way. TBox → **1.16.0**, domain widened to the union; views →
+**1.2.0**, which now reads both and would have said so rather than skipping.
+
+
+## v1.42.0 — 2026-08-09 (PATCH-class: the burn-down reached zero over open work)
+
+Found by rendering the views for a real register rather than for a fixture.
+
+`backlog_views` v1.0.0 summed **effort** for an iteration's total but fell back to
+**one unit per item** when burning. An item with no estimate therefore contributed nothing to the
+total and one unit to the burn — and the chart reached **0.0 left while four execution tasks were
+still Proposed**.
+
+A burn-down hitting zero over unfinished work is the *looks-complete* failure this framework exists
+to refuse, produced by the framework's own tool. The defect was an inconsistent basis, which is the
+same class as comparing a naive date against an aware one: two quantities that appear comparable and
+are not.
+
+**v1.1.0** picks one basis for the whole iteration and prints it. Where any member lacks an
+estimate the iteration is counted in **items**, and the members that forced that choice are named —
+because an effort burn-down would have omitted them silently, which is how the defect arose. A
+belt-and-braces warning fires if remaining ever reaches zero with members still open.
+
+Same register, after: `6.0 items committed`, **4.0 left** across the whole iteration, with the four
+unestimated tasks named.
+
+
 ## v1.41.0 — 2026-08-09 (MINOR: the plan alongside the roadmap — Gantt, SPI, and five views)
 
 **The scope exclusion is reversed on the record, not deleted.** `Ex_Schedule` refused a time-phased
@@ -22,7 +356,7 @@ and differ in duration, and a critical path is a chain of durations.
 plan, not only the current one. That is the number a rebaselined project would rather not show, and
 retaining it is the answer to the criticism earned-value practice most often attracts.
 
-**`backlog_views_v1_0_0.py` derives five views** — Gantt and network as Mermaid, burn-down as text
+**`backlog_views_v1_4_0.py` derives five views** — Gantt and network as Mermaid, burn-down as text
 bars, cumulative flow and earned value as tables. Mermaid because it diffs, reviews, and renders in
 GitHub with no toolchain and no new dependency. **Nothing is stored.**
 
@@ -95,7 +429,7 @@ a scope with no exclusion. **Verified against the defective register: it now fai
 **`backlog_lineage_completeness_v1_0_2.py`** reports every layer at any level and states what each
 omission costs, so a register can be improved before being failed. Wired into the release gate.
 
-**The register repaired** and promoted to `01-ontologies/backlog_framework_register_abox_v1_3_0.ttl`:
+**The register repaired** and promoted to `01-ontologies/backlog_framework_register_abox_v1_6_0.ttl`:
 scope with **five recorded exclusions**, a Definition of Done with **six executable criteria**, and
 the unbuilt epics decomposed into six stories with acceptance criteria.
 
@@ -730,7 +1064,7 @@ moment another stage is inserted, so the decoupling is permanent instead.
 
 **Why every gate stayed green while this was live:** the three-fixture self-proof invokes the
 validator *directly*; only the register path formats its output, so a defect in the formatting layer
-was invisible to the proof. `backlog_gate_v1_1_10.sh` now runs the known-bad fixture through the
+was invisible to the proof. `backlog_gate_v1_1_12.sh` now runs the known-bad fixture through the
 **exact register path** and aborts if it does not fail. The self-proof covered the shapes; it had
 never covered its own plumbing.
 
@@ -1723,7 +2057,7 @@ executable and ordered.
 arbitration documented and implemented in the report tool.
 
 **Added — tooling:** `backlog_roadmap_report_v1_5_0.py` (eight sections, both NEXT answers, silent
--gap check), `backlog_coverage_gate_v1_1_1.py` (BP-D31), `backlog_gate_v1_1_10.sh` (Gate 0 / P / K /
+-gap check), `backlog_coverage_gate_v1_1_1.py` (BP-D31), `backlog_gate_v1_1_12.sh` (Gate 0 / P / K /
 R plus coverage), Gate K version-identity check in the validator.
 
 **Changed:** the v1.0.0 advisory "item carries no priority score" now excludes items correctly

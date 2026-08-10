@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# backlog_gate v1.1.10 — four-gate release check for the Backlog & Roadmap
+# backlog_gate v1.1.12 — four-gate release check for the Backlog & Roadmap
 # Semantic Framework. Nothing about the package's state is trusted until all
 # four pass, and the SHACL gate refuses to certify anything until it has just
 # demonstrated, in this run, that it can fail a known-bad register.
@@ -11,7 +11,7 @@
 #   +       coverage gate          >= 80% of primary-source concepts (BP-D31)
 #   +       doc-coverage gate      every TBox class named in the standard document
 #
-# Usage: backlog_gate_v1_1_10.sh [REGISTER.ttl ...]
+# Usage: backlog_gate_v1_1_12.sh [REGISTER.ttl ...]
 
 set -u
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -128,7 +128,7 @@ UNRUN=0
 for FX in "$HERE"/fixtures/*.ttl; do
   BASE="$(basename "$FX")"
   case "$BASE" in
-    *negative*|*adversarial*) EXPECT=fail ;;
+    *negative*|*adversarial*|*l4_negative*) EXPECT=fail ;;
     *) EXPECT=pass ;;
   esac
   if python3 "$VALIDATE" "$FX" >/dev/null 2>&1; then GOT=pass; else GOT=fail; fi
@@ -140,6 +140,21 @@ if [ "$UNRUN" -eq 0 ]; then
   echo "  every shipped fixture validates as its name declares it should."
 else
   echo "  Fixture-coverage gate FAILED"; FAILED=1
+fi
+
+echo
+echo "== Lineage-discipline gate — the document's claims match the suite =="
+# A discipline document naming shapes as enforcing its boundaries makes
+# externally-verifiable claims. They drift silently: a rename, a softened
+# severity, a moved level gate, and the document goes on asserting enforcement
+# that no longer exists — which is worse than no document, because a document
+# is believed.
+DISCCHK="$(ls "$HERE"/backlog_lineage_discipline_check_v*.py 2>/dev/null | sort -V | tail -1 || true)"
+if [ -n "$DISCCHK" ]; then
+  python3 "$DISCCHK" | grep -E '^discipline|^claims|^VERDICT|^  - '
+  python3 "$DISCCHK" >/dev/null 2>&1 || { echo "Lineage-discipline gate FAILED"; FAILED=1; }
+else
+  echo "  NOT RUN — checker not found. Not assumed to pass."
 fi
 
 echo

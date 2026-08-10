@@ -822,3 +822,99 @@ ex:N_BL2 a backlog:PlanBaseline ;
     backlog:baselineFor ex:Backlog ;
     backlog:baselinedAt "2026-08-01T00:00:00"^^xsd:dateTime ;
     backlog:isCurrentBaseline true .
+
+#################################################################
+#  BRF-EP3 planted defects (87-90)
+#################################################################
+
+# DEFECT 87: a dimension with no unit, and a rate with no currency
+ex:N_Dim a backlog:CostDimension ;
+    rdfs:label "money, roughly"@en ;
+    backlog:hasDimensionRate 1.0 .
+
+# DEFECT 88: a cost that is a bare number
+ex:N_Cost a backlog:DimensionalCost ;
+    backlog:hasQuantity 100.0 .
+
+# DEFECT 89: negative consumption
+ex:N_Dim2 a backlog:CostDimension ;
+    rdfs:label "tokens"@en ; backlog:hasDimensionUnit "1000 tokens" .
+ex:N_Cost2 a backlog:DimensionalCost ;
+    backlog:costOfItem ex:N001 ; backlog:alongDimension ex:N_Dim2 ;
+    backlog:hasQuantity -50.0 .
+
+# DEFECT 90: parent and child both carrying cost on one dimension
+ex:N048 a backlog:Story ;
+    backlog:hasIdentifier "N-048" ; backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer ex:Backlog ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "placeholder" ;
+    backlog:decomposesInto ex:N049 .
+ex:N049 a backlog:Task ;
+    backlog:hasIdentifier "N-049" ; backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer ex:Backlog ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "placeholder" .
+ex:N_CostP a backlog:DimensionalCost ;
+    backlog:costOfItem ex:N048 ; backlog:alongDimension ex:N_Dim2 ; backlog:hasQuantity 10.0 .
+ex:N_CostC a backlog:DimensionalCost ;
+    backlog:costOfItem ex:N049 ; backlog:alongDimension ex:N_Dim2 ; backlog:hasQuantity 4.0 .
+
+#################################################################
+#  BRF-EP4 planted defects (91-94)
+#################################################################
+
+# DEFECT 91: an interaction attributable to nobody, with no time
+ex:N_Int a backlog:HumanInteraction ;
+    backlog:interactsWith ex:N001 .
+
+# DEFECT 92: claims in-the-loop with nothing gating
+ex:N050 a backlog:Story ;
+    backlog:hasIdentifier "N-050" ; backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer ex:Backlog ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "placeholder" ;
+    backlog:hasSupervisionMode backlog:Sup_InTheLoop .
+
+# DEFECT 93: claims no supervision while a person gated it
+ex:N051 a backlog:Story ;
+    backlog:hasIdentifier "N-051" ; backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer ex:Backlog ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "placeholder" ;
+    backlog:hasSupervisionMode backlog:Sup_None .
+ex:N_Int2 a backlog:HumanInteraction ;
+    backlog:interactsWith ex:N051 ; backlog:hasInteractionKind backlog:Int_Confirm ;
+    backlog:interactedAt "2026-08-09T10:00:00"^^xsd:dateTime ;
+    backlog:interactedBy backlog:Owner ; backlog:gatesTransition true .
+
+# DEFECT 94: a person corrected the output but the item claims Automated
+ex:N052 a backlog:Story ;
+    backlog:hasIdentifier "N-052" ; backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer ex:Backlog ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "placeholder" ;
+    backlog:hasExecutionModality backlog:Mode_Automated .
+ex:N_Int3 a backlog:HumanInteraction ;
+    backlog:interactsWith ex:N052 ; backlog:hasInteractionKind backlog:Int_Correct ;
+    backlog:interactedAt "2026-08-09T10:00:00"^^xsd:dateTime ;
+    backlog:interactedBy backlog:Builder ; backlog:gatesTransition false .
+
+#################################################################
+#  Planted defect 95 — an Epic planned straight into an Iteration
+#  with nothing under it. The type system permits it; the
+#  definitions do not.
+#################################################################
+
+ex:N_EpicBare a backlog:Epic ;
+    backlog:hasIdentifier "N-EP1" ; backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer ex:Backlog ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Planted: committed to a time box it is defined not to fit." .
+ex:N_ItPlan a backlog:Iteration ;
+    backlog:hasIdentifier "IT-N2" ; backlog:hasState backlog:InProgress ;
+    backlog:iterationStart "2026-08-01T00:00:00"^^xsd:dateTime ;
+    backlog:iterationEnd "2026-08-14T23:59:59"^^xsd:dateTime .
+ex:N_PlanEpic a backlog:PlanningEvent ;
+    backlog:plansItem ex:N_EpicBare ;
+    backlog:plannedInto ex:N_ItPlan ;
+    backlog:plannedAt "2026-08-01T09:00:00"^^xsd:dateTime ;
+    backlog:producesTask ex:N_TaskEpic .
+ex:N_TaskEpic a backlog:ExecutionTask ;
+    backlog:hasIdentifier "T-N4" ; backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer ex:Backlog , ex:N_ItPlan .

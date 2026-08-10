@@ -781,3 +781,74 @@ ex:T_ResetMail a backlog:ExecutionTask ;
     backlog:hasTitle "Send the reset mail through the shared dispatcher" ;
     backlog:hasState backlog:Proposed ;
     backlog:memberOfContainer ex:Backlog .
+
+#################################################################
+#  BRF-EP3 — an item worked by an agent under human review,
+#  carrying three dimensions at once, against a budget
+#################################################################
+
+ex:Dim_Token a backlog:CostDimension ;
+    rdfs:label "Model tokens"@en ;
+    backlog:hasDimensionUnit "1000 tokens" ;
+    backlog:hasDimensionRate 0.015 ;
+    backlog:hasRateCurrency "USD" .
+
+ex:Dim_Compute a backlog:CostDimension ;
+    rdfs:label "Container compute"@en ;
+    backlog:hasDimensionUnit "container-minute" ;
+    backlog:hasDimensionRate 0.004 ;
+    backlog:hasRateCurrency "USD" .
+
+# deliberately unpriced: review time matters as a constraint, not a bill
+ex:Dim_Review a backlog:CostDimension ;
+    rdfs:label "Human review time"@en ;
+    backlog:hasDimensionUnit "person-minute" .
+
+ex:C_US002_Token a backlog:DimensionalCost ;
+    backlog:costOfItem ex:US002 ; backlog:alongDimension ex:Dim_Token ;
+    backlog:hasQuantity 412.0 ; backlog:isEstimatedCost false .
+ex:C_US002_Compute a backlog:DimensionalCost ;
+    backlog:costOfItem ex:US002 ; backlog:alongDimension ex:Dim_Compute ;
+    backlog:hasQuantity 96.0 ; backlog:isEstimatedCost false .
+ex:C_US002_Review a backlog:DimensionalCost ;
+    backlog:costOfItem ex:US002 ; backlog:alongDimension ex:Dim_Review ;
+    backlog:hasQuantity 35.0 ; backlog:isEstimatedCost false .
+
+ex:Bud_Token a backlog:Budget ;
+    backlog:budgetFor ex:Backlog ; backlog:budgetDimension ex:Dim_Token ;
+    backlog:hasBudgetCeiling 5000.0 .
+ex:Bud_Review a backlog:Budget ;
+    backlog:budgetFor ex:Backlog ; backlog:budgetDimension ex:Dim_Review ;
+    backlog:hasBudgetCeiling 600.0 .
+
+#################################################################
+#  BRF-EP4 — an agent produced it, a person gated it
+#################################################################
+
+ex:US001 backlog:hasExecutionModality backlog:Mode_Automated ;
+    backlog:hasSupervisionMode backlog:Sup_InTheLoop .
+
+ex:Int_US001_Confirm a backlog:HumanInteraction ;
+    backlog:interactsWith ex:US001 ;
+    backlog:hasInteractionKind backlog:Int_Confirm ;
+    backlog:interactedAt "2026-07-20T16:30:00"^^xsd:dateTime ;
+    backlog:interactedBy backlog:Owner ;
+    backlog:gatesTransition true .
+
+# the gate has refused something, so it is a gate rather than a formality
+ex:Int_US004_Reject a backlog:HumanInteraction ;
+    backlog:interactsWith ex:US004 ;
+    backlog:hasInteractionKind backlog:Int_Reject ;
+    backlog:interactedAt "2026-07-26T11:00:00"^^xsd:dateTime ;
+    backlog:interactedBy backlog:Owner ;
+    backlog:gatesTransition true .
+
+# review time is a cost dimension, budgetable without being schedulable
+ex:C_US001_Review a backlog:DimensionalCost ;
+    backlog:costOfItem ex:US001 ; backlog:alongDimension ex:Dim_Review ;
+    backlog:hasQuantity 18.0 ; backlog:isEstimatedCost false .
+
+ex:US004 backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop .
+ex:US002 backlog:hasExecutionModality backlog:Mode_Automated ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop .

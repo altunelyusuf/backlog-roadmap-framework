@@ -1,0 +1,1450 @@
+@prefix backlog: <http://example.org/backlog#> .
+@prefix skos2:   <http://www.w3.org/2004/02/skos/core#> .
+@prefix core:    <http://example.org/core#> .
+@prefix fw:      <http://example.org/backlog-framework-register#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+<http://example.org/backlog-framework-register> a owl:Ontology ;
+    rdfs:label "The framework's own development register"@en ;
+    owl:versionIRI <http://example.org/backlog-framework-register/1.6.0> ;
+    owl:versionInfo "1.6.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/1.5.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/1.4.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/1.3.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/1.2.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/1.1.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/1.0.0> ;
+    dcterms:created "2026-08-06T00:00:00"^^xsd:dateTime ;
+    skos:definition "v1.1.0 completes what v1.0.0 called a lineage and was not: scope with five recorded exclusions, a Definition of Done with six executable criteria, and decomposition of the unbuilt epics into stories with acceptance criteria. v1.0.0 shipped as a FIXTURE, in 03-tooling/fixtures, while declaring its own ontology IRI and version — an ontology artifact filed as test data. Promoted here. backlog-roadmap-framework's own maintenance-and-progress work, registered under the framework itself rather than sequenced by opinion. Written because the owner asked for the lineage approach instead of an ad hoc ordering, which is what the previous turn's numbered list actually was. The ordering below is COMPUTED from declared score components, not asserted; where it disagrees with intuition the register wins or the components must be argued with."@en .
+
+#################################################################
+#  ADOPTION PROFILE — owner-decided, reasoned, dated, directional
+#################################################################
+
+fw:Profile a backlog:AdoptionProfile ;
+    backlog:profileAppliesTo "backlog-roadmap-framework's own development register" ;
+    backlog:governsBacklog fw:Register ;
+    backlog:hasConformanceLevel backlog:L2_EvidenceBound ;
+    backlog:hasTargetConformanceLevel backlog:L3_Governed ;
+    backlog:hasLevelReviewDate "2026-11-06T00:00:00"^^xsd:dateTime ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:hasDecisionRationale "L2 now, not L3: L3 requires verified evidence and a complete test harness on every Done item, and nothing here is Done yet, so declaring L3 today would claim a discipline no completed work has yet been held to. L3 is the target and the review date is the honest interval." ;
+    backlog:adoptsFacet backlog:CoreFacet , backlog:EvidenceFacet , backlog:PrioritizationFacet ,
+                        backlog:RoadmapFacet , backlog:InvariantFacet , backlog:AuditFacet .
+
+fw:Register a backlog:Backlog ;
+    backlog:hasIdentifier "BRF-REG" ;
+    backlog:hasTitle "backlog-roadmap-framework development register" ;
+    backlog:hasState backlog:Done ;
+    backlog:appliesDefinitionOfDone backlog:DoD_Baseline ;
+    backlog:hasCommitment fw:Commitment_Dev .
+
+fw:Commitment_Dev a backlog:Commitment ;
+    rdfs:label "Development commitment"@en ;
+    backlog:commitsToGoal fw:Goal_Measurable .
+
+#################################################################
+#  TWO LINEAGES — the pattern this framework documents at 2.5c-ii
+#################################################################
+
+fw:Mission_Dev a backlog:Mission ;
+    rdfs:label "Development mission"@en ;
+    backlog:hasMissionStatement "Extend the framework so that a register can report its own progress, cost and human involvement as computed facts rather than as claims. Not attempted: prescribing a delivery method, an estimation scale, or a unit of value." ;
+    backlog:missionFor fw:Register ;
+    backlog:decidedBy backlog:Owner .
+
+fw:Mission_Ops a backlog:Mission ;
+    rdfs:label "Operational mission"@en ;
+    backlog:hasMissionStatement "An adopting team can answer, from the register alone and without a spreadsheet beside it: what did this cost, how fast are we going, what will it take to finish, and where did a human decide." ;
+    backlog:missionFor fw:Register ;
+    backlog:decidedBy backlog:Owner .
+
+fw:Goal_Measurable a backlog:Goal ;
+    rdfs:label "Progress and cost are computed, not claimed"@en ;
+    backlog:contributesToMission fw:Mission_Dev ;
+    backlog:decidedBy backlog:Owner .
+
+fw:Goal_Adopter a backlog:Goal ;
+    rdfs:label "An adopter needs no spreadsheet beside the register"@en ;
+    backlog:contributesToMission fw:Mission_Ops ;
+    backlog:decidedBy backlog:Owner .
+
+fw:Metric_DerivedCoverage a core:Metric ; rdfs:label "Share of progress questions answerable from the register"@en .
+fw:Metric_SpreadsheetFree a core:Metric ; rdfs:label "Adopter questions needing an external tool"@en .
+
+fw:Obj_Derived a backlog:Objective ;
+    rdfs:label "Progress questions answerable without an external tool"@en ;
+    backlog:contributesToGoal fw:Goal_Measurable ;
+    backlog:hasSuccessMetric fw:Metric_DerivedCoverage ;
+    backlog:hasBaselineValue 0.0 ;
+    backlog:hasTargetValue 80.0 ;
+    backlog:hasTargetDirection backlog:Dir_Increase ;
+    backlog:hasObjectiveDeadline "2027-02-06T00:00:00"^^xsd:dateTime ;
+    backlog:decidedBy backlog:Owner .
+
+fw:Obj_Adopter a backlog:Objective ;
+    rdfs:label "Adopter questions requiring a spreadsheet"@en ;
+    backlog:contributesToGoal fw:Goal_Adopter ;
+    backlog:hasSuccessMetric fw:Metric_SpreadsheetFree ;
+    backlog:hasBaselineValue 4.0 ;
+    backlog:hasTargetValue 0.0 ;
+    backlog:hasTargetDirection backlog:Dir_Decrease ;
+    backlog:hasObjectiveDeadline "2027-02-06T00:00:00"^^xsd:dateTime ;
+    backlog:decidedBy backlog:Owner .
+
+#################################################################
+#  MEASURED INPUT — net-new term counts, actually counted
+#################################################################
+
+fw:Obs_TermCount a backlog:MetricObservation ;
+    rdfs:label "Net-new terms each subject must add"@en ;
+    backlog:observesMetric fw:Metric_DerivedCoverage ;
+    backlog:observationFor fw:Obj_Derived ;
+    backlog:hasObservedValue 47.0 ;
+    backlog:observedAt "2026-08-06T00:00:00"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Parsed backlog_tbox_v1_12_0.ttl with rdflib and tested each candidate term name for presence: S1 7 net-new, S2 11, S3 12, S4 17, total 47. A first probe was discarded as worthless because it tested only terms already known to exist and therefore returned 100% for every subject." .
+
+#################################################################
+#  THE FOUR SUBJECTS AS EPICS, each scored from declared components
+#
+#  WSJF = (user-business value + time criticality + risk reduction) / job size
+#  Job size is the measured net-new term count, scaled to a 1-10 band
+#  (7->2, 11->3, 12->4, 17->6) so the arithmetic shape stays readable while
+#  the ORDERING of job sizes is the measured one, not an invented one.
+#################################################################
+
+fw:Roadmap a backlog:Roadmap ; backlog:roadmapOf fw:Register .
+
+# ---------- S1 PBI / Task ----------
+fw:EP_PbiTask a backlog:Epic ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:hasIdentifier "BRF-EP1" ;
+    backlog:hasTitle "Distinguish product backlog items from execution tasks" ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-08-06T11:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-06T13:00:00"^^xsd:dateTime ;
+    backlog:hasActualEffort 9.0 ;
+    backlog:hasEvidence fw:Ev_PbiTask ;
+    backlog:lastAuditedAt "2026-08-06T13:00:00"^^xsd:dateTime ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_Derived ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasAcceptanceCriterion fw:AC_PbiTask ;
+    backlog:hasPriorityScore fw:S_PbiTask ;
+    backlog:hasCostEstimate fw:E_PbiTask ;
+    backlog:rankedOnRoadmap fw:Roadmap ; backlog:hasRoadmapRank 1 ;
+    backlog:scheduledInHorizon backlog:Now .
+fw:AC_PbiTask a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a register holding both stories and their execution tasks, When the report is run, Then task-level work is identifiable as subordinate and does not carry independent value, and a planning event records the conversion." .
+fw:S_PbiTask a backlog:WSJFScore ;
+    backlog:scoredByMethod backlog:Method_WSJF ;
+    backlog:hasScoreValue 6.5 ;
+    backlog:hasUserBusinessValue 5.0 ;
+    backlog:hasTimeCriticality 4.0 ;
+    backlog:hasRiskReductionValue 4.0 ;
+    backlog:hasJobSize 2.0 ;
+    backlog:scoredAt "2026-08-06T00:00:00"^^xsd:dateTime ;
+    backlog:hasScoreRationale "Time criticality is high because every other subject measures things that are counted PER ITEM, and until PBI and task are distinguished those counts double-count subordinate work. Risk reduction is high for the same reason: getting this wrong contaminates flow, cost and human-involvement figures alike." ;
+    backlog:hasBasisKind backlog:Basis_Judged .
+fw:E_PbiTask a backlog:CostEstimate ;
+    backlog:hasEffortEstimate 7.0 ;
+    backlog:hasCostBasis "Net-new term count, measured" ;
+    backlog:estimatedAt "2026-08-06T00:00:00"^^xsd:dateTime ;
+    backlog:hasBasisKind backlog:Basis_Measured ;
+    backlog:basisObservation fw:Obs_TermCount .
+
+# ---------- S2 Flow & progress ----------
+fw:EP_Flow a backlog:Epic ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:hasIdentifier "BRF-EP2" ;
+    backlog:hasTitle "Derive flow, velocity and forecast from recorded points" ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-08-06T13:30:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-06T15:00:00"^^xsd:dateTime ;
+    backlog:hasActualEffort 9.0 ;
+    backlog:hasEvidence fw:Ev_Flow ;
+    backlog:lastAuditedAt "2026-08-06T15:00:00"^^xsd:dateTime ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_Adopter ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasAcceptanceCriterion fw:AC_Flow ;
+    backlog:hasPriorityScore fw:S_Flow ;
+    backlog:hasCostEstimate fw:E_Flow ;
+    backlog:rankedOnRoadmap fw:Roadmap ; backlog:hasRoadmapRank 2 ;
+    backlog:scheduledInHorizon backlog:Next .
+fw:AC_Flow a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a register with started and finished points recorded, When the report is run, Then cycle time, item age and per-iteration velocity are computed, and any forecast states the assumptions it rests on." .
+fw:S_Flow a backlog:WSJFScore ;
+    backlog:scoredByMethod backlog:Method_WSJF ;
+    backlog:hasScoreValue 4.0 ;
+    backlog:hasUserBusinessValue 6.0 ;
+    backlog:hasTimeCriticality 3.0 ;
+    backlog:hasRiskReductionValue 3.0 ;
+    backlog:hasJobSize 3.0 ;
+    backlog:scoredAt "2026-08-06T00:00:00"^^xsd:dateTime ;
+    backlog:hasScoreRationale "Highest user-business value of the four: this is the subject an adopter asks for by name. Time criticality lower than EP1 because the inputs are already being recorded, so nothing is being lost while it waits." ;
+    backlog:hasBasisKind backlog:Basis_Judged .
+fw:E_Flow a backlog:CostEstimate ;
+    backlog:hasEffortEstimate 11.0 ;
+    backlog:hasCostBasis "Net-new term count, measured" ;
+    backlog:estimatedAt "2026-08-06T00:00:00"^^xsd:dateTime ;
+    backlog:hasBasisKind backlog:Basis_Measured ;
+    backlog:basisObservation fw:Obs_TermCount .
+
+# ---------- S3 Cost dimensions ----------
+fw:EP_Cost a backlog:Epic ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:hasIdentifier "BRF-EP3" ;
+    backlog:hasTitle "Multi-dimensional cost: tokens, environment, human time, complexity" ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-08-09T13:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-09T15:00:00"^^xsd:dateTime ;
+    backlog:hasActualEffort 13.0 ;
+    backlog:hasEvidence fw:Ev_Cost ;
+    backlog:lastAuditedAt "2026-08-09T15:00:00"^^xsd:dateTime ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_Adopter ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasAcceptanceCriterion fw:AC_Cost ;
+    backlog:hasPriorityScore fw:S_Cost ;
+    backlog:hasCostEstimate fw:E_Cost ;
+    backlog:rankedOnRoadmap fw:Roadmap ; backlog:hasRoadmapRank 3 ;
+    backlog:scheduledInHorizon backlog:Next ;
+    backlog:decomposesInto fw:S31 , fw:S32 , fw:S33 .
+fw:AC_Cost a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given an item worked by an automated agent under human review, When its costs are recorded, Then token spend, environment cost and human time are each carried as separate named dimensions with their own units, and a budget can be compared against their sum." .
+fw:S_Cost a backlog:WSJFScore ;
+    backlog:scoredByMethod backlog:Method_WSJF ;
+    backlog:hasScoreValue 2.75 ;
+    backlog:hasUserBusinessValue 5.0 ;
+    backlog:hasTimeCriticality 3.0 ;
+    backlog:hasRiskReductionValue 3.0 ;
+    backlog:hasJobSize 4.0 ;
+    backlog:scoredAt "2026-08-06T00:00:00"^^xsd:dateTime ;
+    backlog:hasScoreRationale "Wide value but no urgency: cost dimensions are additive to an existing unit-neutral estimate, so nothing currently recorded becomes wrong while this waits. Complexity lands here as a dimension rather than a new property, per the literature split between task complexity (Wood 1986) and code complexity (McCabe 1976)." ;
+    backlog:hasBasisKind backlog:Basis_Judged .
+fw:E_Cost a backlog:CostEstimate ;
+    backlog:hasEffortEstimate 12.0 ;
+    backlog:hasCostBasis "Net-new term count, measured" ;
+    backlog:estimatedAt "2026-08-06T00:00:00"^^xsd:dateTime ;
+    backlog:hasBasisKind backlog:Basis_Measured ;
+    backlog:basisObservation fw:Obs_TermCount .
+
+# ---------- S4 Human in / on the loop ----------
+fw:EP_Human a backlog:Epic ;
+    backlog:hasIdentifier "BRF-EP4" ;
+    backlog:hasTitle "Human in-the-loop and on-the-loop as first-class register facts" ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-08-09T15:30:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-09T17:00:00"^^xsd:dateTime ;
+    backlog:hasActualEffort 19.0 ;
+    backlog:hasEvidence fw:Ev_Human ;
+    backlog:lastAuditedAt "2026-08-09T17:00:00"^^xsd:dateTime ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_InTheLoop ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_Adopter ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasAcceptanceCriterion fw:AC_Human ;
+    backlog:hasPriorityScore fw:S_Human ;
+    backlog:hasCostEstimate fw:E_Human ;
+    backlog:rankedOnRoadmap fw:Roadmap ; backlog:hasRoadmapRank 4 ;
+    backlog:scheduledInHorizon backlog:Later ;
+    backlog:dependsOn fw:EP_Cost ;
+    backlog:decomposesInto fw:S41 , fw:S42 , fw:S43 .
+fw:AC_Human a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given work executed by an agent with a human confirming before it proceeds, When the register is read, Then the execution modality is stated, the interaction is recorded as an event carrying its own cost, and in-the-loop is distinguishable from on-the-loop by whether the transition is gated." .
+fw:S_Human a backlog:WSJFScore ;
+    backlog:scoredByMethod backlog:Method_WSJF ;
+    backlog:hasScoreValue 1.5 ;
+    backlog:hasUserBusinessValue 4.0 ;
+    backlog:hasTimeCriticality 2.0 ;
+    backlog:hasRiskReductionValue 3.0 ;
+    backlog:hasJobSize 6.0 ;
+    backlog:scoredAt "2026-08-06T00:00:00"^^xsd:dateTime ;
+    backlog:hasScoreRationale "Largest job by a clear margin (17 net-new terms against 7 for EP1) and it depends on EP3, since human time is a cost dimension. Real risk reduction: an automated development with no record of where a human decided cannot be audited later. But it cannot start first." ;
+    backlog:hasBasisKind backlog:Basis_Judged .
+fw:E_Human a backlog:CostEstimate ;
+    backlog:hasEffortEstimate 17.0 ;
+    backlog:hasCostBasis "Net-new term count, measured" ;
+    backlog:estimatedAt "2026-08-06T00:00:00"^^xsd:dateTime ;
+    backlog:hasBasisKind backlog:Basis_Measured ;
+    backlog:basisObservation fw:Obs_TermCount .
+
+fw:Ev_PbiTask a backlog:TestEvidence ;
+    backlog:hasTestSpec "03-tooling/fixtures/fixture_positive_v1_7_0.ttl + fixture_negative_v1_7_0.ttl" ;
+    backlog:hasTestId "BRF-EP1" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-08-06T13:00:00"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "backlog_gate_v1_1_12.sh: positive fixture carries a planned iteration with two subordinate execution tasks at 0 violations; negative fixture plants four EP1 defects (scored task, ranked task, empty planning event, parent Done over an open task) and all four fire" ;
+    backlog:verifiedByTool "backlog_validate_v1_3_0.py + pyshacl 0.40.0" ;
+    backlog:attestsCriterion fw:AC_PbiTask .
+
+fw:Obs_EP1Actual a backlog:MetricObservation ;
+    rdfs:label "BRF-EP1 actual: net-new terms delivered"@en ;
+    backlog:observesMetric fw:Metric_DerivedCoverage ;
+    backlog:observationFor fw:Obj_Derived ;
+    backlog:hasObservedValue 9.0 ;
+    backlog:observedAt "2026-08-06T13:00:00"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Counted from backlog_tbox_v1_13_0.ttl: ProductBacklogItem, ExecutionTask, PlanningEvent, plansItem, plannedInto, producesTask, plannedAt, plannedBy, plus the AllDisjointClasses axiom. Estimate was 7; actual 9. The two extra were not new scope but the disjointness axiom and plannedBy, neither of which the estimate enumerated." .
+
+fw:Ev_Flow a backlog:TestEvidence ;
+    backlog:hasTestSpec "03-tooling/fixtures/fixture_positive_v1_7_0.ttl + fixture_negative_v1_7_0.ttl" ;
+    backlog:hasTestId "BRF-EP2" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-08-06T15:00:00"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "backlog_roadmap_report_v1_5_0.py section 10 computes cycle time, item age and per-iteration velocity from the positive fixture and prints a recorded forecast with its three assumptions; the negative fixture plants a forecast with no assumptions and an iteration ending before it starts, and both fire" ;
+    backlog:verifiedByTool "backlog_validate_v1_3_0.py + backlog_roadmap_report_v1_5_0.py" ;
+    backlog:attestsCriterion fw:AC_Flow .
+
+fw:Obs_EP2Actual a backlog:MetricObservation ;
+    rdfs:label "BRF-EP2 actual: net-new terms delivered"@en ;
+    backlog:observesMetric fw:Metric_SpreadsheetFree ;
+    backlog:observationFor fw:Obj_Adopter ;
+    backlog:hasObservedValue 9.0 ;
+    backlog:observedAt "2026-08-06T15:00:00"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Counted from backlog_tbox_v1_14_0.ttl: iterationStart, iterationEnd, Forecast, forecastFor, forecastMadeAt, forecastCompletion, forecastAssumption, forecastObservedVelocity, forecastIterationsObserved, forecastOutcome — 10 declared, of which forecastOutcome is not yet derived by a rule, so 9 are load-bearing. Estimate was 11; actual 9. Under, because cycle time, item age, throughput and velocity needed no vocabulary at all: they are computed in the report from points the framework already recorded." .
+
+#################################################################
+#  SCOPE — declared boundary, with what is deliberately outside.
+#  Absent from v1.0.0, which is precisely the omission
+#  LineageCompletenessShape now refuses.
+#################################################################
+
+fw:Scope a backlog:ScopeStatement ;
+    backlog:hasScopeStatementText "Vocabulary, constraints, derivations and report computations that let a register state its own progress, cost and human involvement as computed facts. Delivered as MINOR additions to the backlog subject with fixtures on both sides of every constraint and a gate that proves each can fail." ;
+    backlog:scopeRealizesObjective fw:Obj_Derived , fw:Obj_Adopter ;
+    backlog:hasScopeExclusion fw:Ex_Method , fw:Ex_Scale , fw:Ex_Schedule , fw:Ex_Complexity , fw:Ex_Modality .
+
+fw:Ex_Method a backlog:ScopeExclusion ;
+    backlog:excludesConcern "Prescribing a delivery method. The framework governs the register a method produces, not the method." ;
+    backlog:hasExclusionRationale "Encoding Scrum, Kanban or any other cadence would privilege a practice the framework has no business choosing." ;
+    backlog:decidedBy backlog:Owner .
+
+fw:Ex_Scale a backlog:ScopeExclusion ;
+    backlog:excludesConcern "Story points or any other estimation scale." ;
+    backlog:hasExclusionRationale "CostEstimate is unit-neutral by design. A scale is a team convention; velocity is therefore reported in items per iteration, which is coarse and honest, rather than in a unit the framework invented." ;
+    backlog:decidedBy backlog:Owner .
+
+fw:Ex_Schedule a backlog:ScopeExclusion ;
+    backlog:excludesConcern "A time-phased baseline schedule, and therefore SPI." ;
+    backlog:hasExclusionRationale "Earned-value CPI is computable from estimates and actuals already recorded. SPI needs planned value against a dated baseline, and roadmap horizons are ordinal by design. Introducing one would change what a roadmap IS, which is a MAJOR decision and not part of this scope." ;
+    backlog:decidedBy backlog:Owner .
+
+fw:Ex_Complexity a backlog:ScopeExclusion ;
+    backlog:excludesConcern "A dedicated complexity property on work items." ;
+    backlog:hasExclusionRationale "Settled here rather than mid-build. Task complexity in the literature (Wood 1986: component, coordinative, dynamic) is largely derivable from dependsOn, DependencyKind, decomposesInto and refinement churn, all of which exist. Code complexity (McCabe 1976, cognitive complexity) belongs to an artifact, not a task, and enters as a MetricObservation with Basis_Measured. What remains — component complexity — is carried as a named CostDimension in BRF-EP3, not as a new property." ;
+    backlog:decidedBy backlog:Owner .
+
+fw:Ex_Modality a backlog:ScopeExclusion ;
+    backlog:excludesConcern "Modelling human review as a WorkItem." ;
+    backlog:hasExclusionRationale "Human WORK assigned to a person is a WorkItem with a human execution modality and competes for capacity. Human INTERACTION with work — confirm, review, correct, respond — is an event on that item carrying its own cost and does not compete, or every review needs a score and the backlog fills with process." ;
+    backlog:decidedBy backlog:Owner .
+
+fw:Register backlog:hasScopeStatement fw:Scope .
+
+#################################################################
+#  DEFINITION OF DONE — the bar this development is held to
+#################################################################
+
+fw:DoD a backlog:DefinitionOfDone ;
+    rdfs:label "Definition of Done for framework increments"@en ;
+    backlog:hasDoDCriterion fw:D1 , fw:D2 , fw:D3 , fw:D4 , fw:D5 , fw:D6 .
+
+fw:D1 a backlog:DoDCriterion ;
+    rdfs:label "D1 — Vocabulary added carries a skos:definition stating why the t"@en ;
+    backlog:hasCriterionText "Vocabulary added carries a skos:definition stating why the term exists, not only what it denotes." ;
+    backlog:hasCheckQuery "ASK { ?c a owl:Class . FILTER(STRSTARTS(STR(?c), \"http://example.org/backlog#\")) FILTER NOT EXISTS { ?c skos:definition ?d } }" ;
+    backlog:hasExpectedResult "false" ;
+    backlog:hasCriterionStatus backlog:Holds .
+fw:D2 a backlog:DoDCriterion ;
+    rdfs:label "D2 — Every new constraint has a planted defect in the negative fi"@en ;
+    backlog:hasCriterionText "Every new constraint has a planted defect in the negative fixture that provably fires." ;
+    backlog:hasCheckQuery "Gate R, negative fixture: the release gate aborts unless the known-bad fixture FAILS, so a constraint with no planted defect is invisible to it and a constraint that cannot fail blocks the release." ;
+    backlog:hasExpectedResult "gate exits non-zero on the negative fixture" ;
+    backlog:hasCriterionStatus backlog:Holds .
+fw:D3 a backlog:DoDCriterion ;
+    rdfs:label "D3 — The positive fixture demonstrates the intended pattern and v"@en ;
+    backlog:hasCriterionText "The positive fixture demonstrates the intended pattern and validates at zero violations." ;
+    backlog:hasCheckQuery "Gate R, positive fixture: backlog_validate reports 0 sh:Violation." ;
+    backlog:hasExpectedResult "0 violations" ;
+    backlog:hasCriterionStatus backlog:Holds .
+fw:D4 a backlog:DoDCriterion ;
+    rdfs:label "D4 — The full release gate passes from a clean extraction, includ"@en ;
+    backlog:hasCriterionText "The full release gate passes from a clean extraction, including the three-fixture self-proof and the fixture-coverage gate." ;
+    backlog:hasCheckQuery "backlog_gate_v1_1_12.sh run against a freshly extracted bundle." ;
+    backlog:hasExpectedResult "RELEASE GATE: PASS" ;
+    backlog:hasCriterionStatus backlog:Holds .
+fw:D5 a backlog:DoDCriterion ;
+    rdfs:label "D5 — The standard documents every class added; the doc-coverage g"@en ;
+    backlog:hasCriterionText "The standard documents every class added; the doc-coverage gate enforces this." ;
+    backlog:hasCheckQuery "backlog_doc_coverage_gate_v1_2_0.py: every owl:Class in the subject TBox is named in the standard." ;
+    backlog:hasExpectedResult "classes declared == classes named" ;
+    backlog:hasCriterionStatus backlog:Holds .
+fw:D6 a backlog:DoDCriterion ;
+    rdfs:label "D6 — Actual effort is recorded against the estimate, and any dive"@en ;
+    backlog:hasCriterionText "Actual effort is recorded against the estimate, and any divergence carries its cause." ;
+    backlog:hasCheckQuery "ASK { ?i backlog:hasState backlog:Done ; backlog:hasCostEstimate ?e . FILTER NOT EXISTS { ?i backlog:hasActualEffort ?a } }" ;
+    backlog:hasExpectedResult "false" ;
+    backlog:hasCriterionStatus backlog:Holds .
+
+fw:Register backlog:appliesDefinitionOfDone fw:DoD .
+
+#################################################################
+#  DECOMPOSITION — what the remaining epics actually consist of.
+#  Absent from v1.0.0: four scored epics broken into nothing, which
+#  is why a mid-build decision had nowhere to be settled in advance.
+#  Each story is scoreable in its own right; per the framework's own
+#  rule the parent epics carry scores and these do not, so nothing
+#  double-counts. They are notYetScoreable with the reason recorded.
+#################################################################
+
+fw:S31 a backlog:Story ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:hasIdentifier "BRF-S31" ;
+    backlog:hasTitle "CostDimension with unit and rate" ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-08-09T13:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-09T15:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_Cost ;
+    backlog:lastAuditedAt "2026-08-09T15:00:00"^^xsd:dateTime ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_Adopter ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasAcceptanceCriterion fw:AC_S31 ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at epic level; scoring a decomposition child alongside its scored parent would double-count the parent's value, which the framework refuses." .
+fw:AC_S31 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given an item worked partly by an agent and partly by a person, When its costs are recorded, Then token spend, environment cost and human minutes are each a named dimension carrying its own unit, and no dimension is assumed to be effort." .
+
+fw:S32 a backlog:Story ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:hasIdentifier "BRF-S32" ;
+    backlog:hasTitle "Budget and actual cost per dimension" ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-08-09T13:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-09T15:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_Cost ;
+    backlog:lastAuditedAt "2026-08-09T15:00:00"^^xsd:dateTime ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_Adopter ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasAcceptanceCriterion fw:AC_S32 ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at epic level." .
+fw:AC_S32 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a budget declared per dimension, When actuals are recorded, Then the report states spend against budget per dimension and a breach is a computed fact rather than a reading of the numbers." .
+
+fw:S33 a backlog:Story ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:hasIdentifier "BRF-S33" ;
+    backlog:hasTitle "Component complexity as a named cost dimension" ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-08-09T13:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-09T15:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_Cost ;
+    backlog:lastAuditedAt "2026-08-09T15:00:00"^^xsd:dateTime ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_Adopter ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasAcceptanceCriterion fw:AC_S33 ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at epic level." .
+fw:AC_S33 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the scope exclusion forbidding a dedicated complexity property, When component complexity is recorded, Then it is a CostDimension like any other, and code complexity enters separately as a MetricObservation on an artifact with Basis_Measured." .
+
+fw:S41 a backlog:Story ;
+    backlog:hasIdentifier "BRF-S41" ;
+    backlog:hasTitle "Execution modality: automated, human, hybrid" ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-08-09T15:30:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-09T17:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_Human ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:lastAuditedAt "2026-08-09T17:00:00"^^xsd:dateTime ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_Adopter ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasAcceptanceCriterion fw:AC_S41 ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at epic level." .
+fw:AC_S41 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a task assigned to a person rather than to automation, When the register is read, Then its execution modality is stated and it competes for capacity as a work item, because human WORK is work." .
+
+fw:S42 a backlog:Story ;
+    backlog:hasIdentifier "BRF-S42" ;
+    backlog:hasTitle "Interaction events: confirm, propose, correct, review, respond" ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-08-09T15:30:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-09T17:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_Human ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:lastAuditedAt "2026-08-09T17:00:00"^^xsd:dateTime ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_Adopter ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasAcceptanceCriterion fw:AC_S42 ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at epic level." .
+fw:AC_S42 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a human confirming an agent's output, When the register is read, Then the interaction is an event on the item carrying its own cost and its own kind, and it does not appear in any ranking, per the scope exclusion." .
+
+fw:S43 a backlog:Story ;
+    backlog:hasIdentifier "BRF-S43" ;
+    backlog:hasTitle "In-the-loop versus on-the-loop as a transition guard" ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-08-09T15:30:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-09T17:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_Human ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:lastAuditedAt "2026-08-09T17:00:00"^^xsd:dateTime ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_Adopter ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasAcceptanceCriterion fw:AC_S43 ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at epic level." .
+fw:AC_S43 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given supervision declared in-the-loop, When a transition is attempted without the human interaction it requires, Then the transition is refused; and given on-the-loop, Then it proceeds and the absence of intervention is recorded." .
+
+#################################################################
+#  v1.2.0 — the six layers the completeness report named as absent.
+#  Added because a report that names a gap and is then ignored is
+#  the decorative-gate failure with an extra step.
+#################################################################
+
+# ---- cadence: velocity had no denominator without these ----
+fw:It1 a backlog:Iteration ;
+    backlog:hasIdentifier "BRF-IT1" ;
+    backlog:hasTitle "Register repair and the first two subjects" ;
+    backlog:hasState backlog:Done ;
+    backlog:iterationStart "2026-08-06T00:00:00"^^xsd:dateTime ;
+    backlog:iterationEnd "2026-08-08T23:59:59"^^xsd:dateTime ;
+    backlog:hasCapacity 20.0 .
+
+fw:EP_PbiTask backlog:memberOfContainer fw:It1 .
+fw:EP_Flow    backlog:memberOfContainer fw:It1 .
+
+fw:It2 a backlog:Iteration ;
+    backlog:hasIdentifier "BRF-IT2" ;
+    backlog:hasTitle "Cost dimensions and plan-based views" ;
+    backlog:hasState backlog:Done ;
+    backlog:iterationEnd "2026-08-09T23:59:59"^^xsd:dateTime ;
+    backlog:iterationStart "2026-08-09T00:00:00"^^xsd:dateTime ;
+    backlog:hasCapacity 12.0 .
+
+# ---- planning: EP3 broken into execution steps, on the record ----
+fw:Plan_EP3 a backlog:PlanningEvent ;
+    rdfs:label "BRF-EP3 planned into iteration 2"@en ;
+    backlog:plansItem fw:EP_Cost ;
+    backlog:plannedInto fw:It2 ;
+    backlog:plannedAt "2026-08-09T00:00:00"^^xsd:dateTime ;
+    backlog:plannedBy backlog:Builder ;
+    backlog:producesTask fw:T_Dimension , fw:T_Budget , fw:T_Rollup , fw:T_Fixtures .
+
+fw:T_Dimension a backlog:ExecutionTask ;
+    backlog:hasEvidence fw:Ev_T_Dimension ;
+    backlog:lastAuditedAt "2026-08-09T15:00:00"^^xsd:dateTime ;
+    backlog:startedAt "2026-08-09T13:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-09T15:00:00"^^xsd:dateTime ;
+    backlog:hasIdentifier "BRF-T1" ;
+    backlog:hasTitle "CostDimension with unit and rate, per the Ex_Complexity exclusion" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register , fw:It2 .
+
+fw:T_Budget a backlog:ExecutionTask ;
+    backlog:hasEvidence fw:Ev_T_Budget ;
+    backlog:lastAuditedAt "2026-08-09T15:00:00"^^xsd:dateTime ;
+    backlog:startedAt "2026-08-09T13:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-09T15:00:00"^^xsd:dateTime ;
+    backlog:hasIdentifier "BRF-T2" ;
+    backlog:hasTitle "Budget compared against the sum of recorded actuals" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register , fw:It2 .
+
+fw:T_Rollup a backlog:ExecutionTask ;
+    backlog:hasEvidence fw:Ev_T_Rollup ;
+    backlog:lastAuditedAt "2026-08-09T15:00:00"^^xsd:dateTime ;
+    backlog:startedAt "2026-08-09T13:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-09T15:00:00"^^xsd:dateTime ;
+    backlog:hasIdentifier "BRF-T3" ;
+    backlog:hasTitle "Cascading roll-up derived, never asserted, so parent and child cannot double-count" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register , fw:It2 .
+
+fw:T_Fixtures a backlog:ExecutionTask ;
+    backlog:hasEvidence fw:Ev_T_Fixtures ;
+    backlog:lastAuditedAt "2026-08-09T15:00:00"^^xsd:dateTime ;
+    backlog:startedAt "2026-08-09T13:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-09T15:00:00"^^xsd:dateTime ;
+    backlog:hasIdentifier "BRF-T4" ;
+    backlog:hasTitle "Fixtures on both polarities and the shapes that reject the negative ones" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register , fw:It2 .
+
+# ---- a dated commitment that can be missed ----
+fw:MS_Cost a backlog:Milestone ;
+    backlog:hasIdentifier "BRF-MS1" ;
+    backlog:hasTitle "Cost dimensions available to adopters" ;
+    backlog:hasTargetDate "2026-08-16T23:59:59"^^xsd:dateTime .
+fw:EP_Cost backlog:contributesToMilestone fw:MS_Cost .
+
+# ---- standing properties, executable rather than prose ----
+fw:Inv_NoDerivedStorage a backlog:CrossCuttingInvariant ;
+    rdfs:label "Nothing derivable is stored"@en ;
+    backlog:hasCheckQuery "ASK { ?p a owl:DatatypeProperty . FILTER(REGEX(STR(?p),'cycleTime|itemAge|velocity|throughput')) }" ;
+    backlog:hasExpectedResult "false" ;
+    backlog:hasInvariantStatus backlog:Holds ;
+    backlog:tracksItem fw:EP_Flow .
+
+fw:Inv_NoModalityPredicate a backlog:CrossCuttingInvariant ;
+    rdfs:label "No modality-specific cost predicate"@en ;
+    backlog:hasCheckQuery "ASK { ?p a owl:DatatypeProperty . FILTER(REGEX(STR(?p),'tokenCost|gpuCost|humanHours')) }" ;
+    backlog:hasExpectedResult "false" ;
+    backlog:hasInvariantStatus backlog:Holds ;
+    backlog:tracksItem fw:EP_Cost .
+
+# ---- a dated expectation that can be shown to have been optimistic ----
+fw:Fc_Remaining a backlog:Forecast ;
+    rdfs:label "Remaining subjects"@en ;
+    backlog:forecastFor fw:Register ;
+    backlog:forecastMadeAt "2026-08-09T00:00:00"^^xsd:dateTime ;
+    backlog:forecastCompletion "2026-08-23T23:59:59"^^xsd:dateTime ;
+    backlog:forecastObservedVelocity 2.0 ;
+    backlog:forecastIterationsObserved 1 ;
+    backlog:forecastAssumption "Velocity holds at two subjects per iteration; one closed iteration is a data point, not a rate, and this is the weakest assumption here." ;
+    backlog:forecastAssumption "EP4 stays blocked on EP3 only, and the Ex_Modality exclusion continues to settle the human-review question without further scope work." ;
+    backlog:forecastAssumption "No ScopeChange admits further subjects; the four in the register are the whole of it." .
+
+#################################################################
+#  v1.3.0 — a third mission: the plan-based views.
+#
+#  Ex_Schedule refused a time-phased baseline. The owner has
+#  reversed that. The exclusion is NOT deleted: it records a
+#  decision that was true when taken, and L-112 forbids editing a
+#  record of the past to match the present. A ScopeChange supersedes
+#  it, and both remain readable.
+#################################################################
+
+fw:SC_Schedule a backlog:ScopeChange ;
+    rdfs:label "Admit a time-phased baseline, reversing Ex_Schedule"@en ;
+    backlog:changesScope fw:Scope ;
+    backlog:admitsItem fw:EP_Views , fw:EP_Schedule ;
+    backlog:hasScopeChangeRationale "Owner decision, 2026-08-09. Ex_Schedule refused planned dates on the grounds that horizons are ordinal and a baseline would change what a roadmap IS. That reasoning still holds for the ROADMAP and is unchanged: horizons stay ordinal and hasRoadmapRank stays an ordering. What is admitted is a PLAN alongside the roadmap, not instead of it — a separate artifact carrying dates, against which schedule performance is measured. The exclusion stands as the record of why this was refused; this change records why it no longer is." ;
+    backlog:decidedBy backlog:Owner .
+
+fw:Mission_Plan a backlog:Mission ;
+    rdfs:label "Plan-based visibility mission"@en ;
+    backlog:hasMissionStatement "A register can be read as a plan as well as a backlog: what was scheduled, what actually happened, and the difference — without exporting anything to a spreadsheet or a project tool." ;
+    backlog:missionFor fw:Register ;
+    backlog:decidedBy backlog:Owner .
+
+fw:Goal_Views a backlog:Goal ;
+    rdfs:label "The classical project views are computable from the register"@en ;
+    backlog:contributesToMission fw:Mission_Plan ;
+    backlog:decidedBy backlog:Owner .
+
+fw:Metric_Views a core:Metric ; rdfs:label "Classical views computable from the register alone"@en .
+
+fw:Obj_Views a backlog:Objective ;
+    rdfs:label "Views computable without an external tool"@en ;
+    backlog:contributesToGoal fw:Goal_Views ;
+    backlog:hasSuccessMetric fw:Metric_Views ;
+    backlog:hasBaselineValue 0.0 ;
+    backlog:hasTargetValue 5.0 ;
+    backlog:hasTargetDirection backlog:Dir_Increase ;
+    backlog:hasObjectiveDeadline "2026-09-30T00:00:00"^^xsd:dateTime ;
+    backlog:decidedBy backlog:Owner .
+
+fw:Obs_Views a backlog:MetricObservation ;
+    rdfs:label "Views delivered by backlog_views v1.0.0"@en ;
+    backlog:observesMetric fw:Metric_Views ;
+    backlog:observationFor fw:Obj_Views ;
+    backlog:hasObservedValue 5.0 ;
+    backlog:observedAt "2026-08-09T00:00:00"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Counted by running backlog_views_v1_4_0.py against this register: Gantt, burn-down, cumulative flow, network/AON and earned value all execute. Gantt and SPI correctly REFUSE rather than assume when no KickOff is present, which is the behaviour under test as much as the drawing is." .
+
+# ---- the two epics this mission admits ----
+
+fw:EP_Views a backlog:Epic ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:hasIdentifier "BRF-EP5" ;
+    backlog:hasTitle "Classical project views computed from the register" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register , fw:It2 ;
+    backlog:pursuesObjective fw:Obj_Views ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasAcceptanceCriterion fw:AC_Views ;
+    backlog:hasPriorityScore fw:S_Views ;
+    backlog:hasCostEstimate fw:E_Views ;
+    backlog:startedAt "2026-08-09T09:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-09T11:00:00"^^xsd:dateTime ;
+    backlog:hasActualEffort 6.0 ;
+    backlog:hasEvidence fw:Ev_Views ;
+    backlog:lastAuditedAt "2026-08-09T11:00:00"^^xsd:dateTime ;
+    backlog:plannedStart "2026-08-09T00:00:00"^^xsd:dateTime ;
+    backlog:plannedFinish "2026-08-10T23:59:59"^^xsd:dateTime ;
+    backlog:hasDuration 2.0 ;
+    backlog:rankedOnRoadmap fw:Roadmap ; backlog:hasRoadmapRank 5 ;
+    backlog:scheduledInHorizon backlog:Now .
+fw:AC_Views a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a register with planned dates, iteration periods and transitions, When the views tool is run, Then Gantt, burn-down, cumulative flow and network views are produced from recorded facts, and any view needing a day zero refuses rather than assumes one when no kick-off exists." .
+fw:S_Views a backlog:WSJFScore ;
+    backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 5.0 ;
+    backlog:hasUserBusinessValue 7.0 ; backlog:hasTimeCriticality 4.0 ;
+    backlog:hasRiskReductionValue 4.0 ; backlog:hasJobSize 3.0 ;
+    backlog:scoredAt "2026-08-09T00:00:00"^^xsd:dateTime ;
+    backlog:hasScoreRationale "Highest user-business value in the register: this is what makes everything already recorded legible to someone who is not reading Turtle. Job size small because every view is derived from facts the register already holds." ;
+    backlog:hasBasisKind backlog:Basis_Judged .
+fw:E_Views a backlog:CostEstimate ;
+    backlog:hasEffortEstimate 5.0 ; backlog:hasCostBasis "One tool, five views, no new stored vocabulary" ;
+    backlog:estimatedAt "2026-08-09T00:00:00"^^xsd:dateTime ;
+    backlog:hasBasisKind backlog:Basis_Judged .
+fw:Ev_Views a backlog:TestEvidence ;
+    backlog:hasTestSpec "03-tooling/backlog_views_v1_4_0.py against this register" ;
+    backlog:hasTestId "BRF-EP5" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-08-09T11:00:00"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "All five views execute; Gantt and SPI print an explicit refusal when no KickOff is present rather than defaulting day zero to today" ;
+    backlog:verifiedByTool "backlog_views_v1_4_0.py" ;
+    backlog:attestsCriterion fw:AC_Views .
+
+fw:EP_Schedule a backlog:Epic ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:hasIdentifier "BRF-EP6" ;
+    backlog:hasTitle "Kick-off, time-phased baseline and schedule performance" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register , fw:It2 ;
+    backlog:pursuesObjective fw:Obj_Views ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasAcceptanceCriterion fw:AC_Schedule ;
+    backlog:hasPriorityScore fw:S_Schedule ;
+    backlog:hasCostEstimate fw:E_Schedule ;
+    backlog:startedAt "2026-08-09T09:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-09T11:30:00"^^xsd:dateTime ;
+    backlog:hasActualEffort 14.0 ;
+    backlog:hasEvidence fw:Ev_Schedule ;
+    backlog:lastAuditedAt "2026-08-09T11:30:00"^^xsd:dateTime ;
+    backlog:plannedStart "2026-08-09T00:00:00"^^xsd:dateTime ;
+    backlog:plannedFinish "2026-08-12T23:59:59"^^xsd:dateTime ;
+    backlog:hasDuration 4.0 ;
+    backlog:dependsOn fw:EP_Views ;
+    backlog:rankedOnRoadmap fw:Roadmap ; backlog:hasRoadmapRank 6 ;
+    backlog:scheduledInHorizon backlog:Now .
+fw:AC_Schedule a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a register with a recorded kick-off and a current plan baseline, When earned value is computed, Then CPI and SPI are reported, superseded baselines are retained so performance against the original plan stays computable, and no schedule figure is printed where no kick-off anchors it." .
+fw:S_Schedule a backlog:WSJFScore ;
+    backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 2.5 ;
+    backlog:hasUserBusinessValue 6.0 ; backlog:hasTimeCriticality 2.0 ;
+    backlog:hasRiskReductionValue 2.0 ; backlog:hasJobSize 4.0 ;
+    backlog:scoredAt "2026-08-09T00:00:00"^^xsd:dateTime ;
+    backlog:hasScoreRationale "Lower time criticality than EP5: the views are useful immediately, while schedule performance only becomes meaningful once a plan has been in force long enough to slip. Larger job because it reverses a standing scope exclusion and must do so on the record." ;
+    backlog:hasBasisKind backlog:Basis_Judged .
+fw:E_Schedule a backlog:CostEstimate ;
+    backlog:hasEffortEstimate 12.0 ; backlog:hasCostBasis "KickOff, baseline, planned dates, duration, and the shapes for each" ;
+    backlog:estimatedAt "2026-08-09T00:00:00"^^xsd:dateTime ;
+    backlog:hasBasisKind backlog:Basis_Judged .
+fw:Ev_Schedule a backlog:TestEvidence ;
+    backlog:hasTestSpec "03-tooling/fixtures/fixture_positive_v1_7_0.ttl + fixture_negative_v1_7_0.ttl" ;
+    backlog:hasTestId "BRF-EP6" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-08-09T11:30:00"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "KickOffShape, PlannedDateShape and PlanBaselineShape reject a kick-off without a mode, a declared kick-off with no decider, a triggered one with no trigger, a finish before a start, planned dates with no kick-off at L2, and two baselines both claiming current" ;
+    backlog:verifiedByTool "backlog_validate_v1_3_0.py + pyshacl" ;
+    backlog:attestsCriterion fw:AC_Schedule .
+
+# ---- day zero, and the baseline it anchors ----
+
+fw:KO a backlog:KickOff ;
+    rdfs:label "Framework development kick-off"@en ;
+    backlog:kickOffFor fw:Register ;
+    backlog:kickedOffAt "2026-08-06T00:00:00"^^xsd:dateTime ;
+    backlog:hasKickOffMode backlog:KickOff_Declared ;
+    backlog:decidedBy backlog:Owner .
+
+fw:BL1 a backlog:PlanBaseline ;
+    rdfs:label "Baseline 1 — set at kick-off"@en ;
+    backlog:baselineFor fw:Register ;
+    backlog:baselinedAt "2026-08-06T00:00:00"^^xsd:dateTime ;
+    backlog:isCurrentBaseline true .
+
+#################################################################
+#  v1.4.0 — the releases this development actually shipped.
+#
+#  Backfilled from git and the shipped changelog, not from
+#  recollection: every date is a commit timestamp, every title a
+#  changelog headline, every evidence record a real commit SHA.
+#  L-112 governs the shape of these entries — they RECORD a past
+#  state and are written once, never repointed.
+#
+#  hasDuration carries ELAPSED days between consecutive releases.
+#  hasActualEffort is deliberately ABSENT: elapsed time is not
+#  effort, no effort was measured at the time, and inventing one
+#  would be the fabrication this framework exists to refuse.
+#################################################################
+
+fw:Rel_1_23_0 a backlog:Task ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:hasIdentifier "BRF-1.23.0" ;
+    backlog:hasTitle "MINOR: four adopter findings — enrich, reuse, answer, document" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register , fw:Shipped ;
+    backlog:startedAt "2026-08-03T14:06:16"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-03T14:06:16"^^xsd:dateTime ;
+    backlog:hasDuration 0.01 ;
+    backlog:hasEvidence fw:RelEv_1_23_0 ;
+    backlog:hasAcceptanceCriterion fw:RelAC_1_23_0 ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Shipped before this register existed; scoring completed work would be retrofitting a priority nobody used to decide anything." ;
+    backlog:lastAuditedAt "2026-08-03T14:06:16"^^xsd:dateTime .
+fw:RelAC_1_23_0 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the package at this version, When the release gate is run, Then every gate reports PASS and the published tree matches its own manifest." .
+fw:RelEv_1_23_0 a backlog:TestEvidence ;
+    backlog:hasTestSpec "git commit e598340, tag backlog-roadmap-framework-1.23.0" ;
+    backlog:hasTestId "BRF-1.23.0" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-08-03T14:06:16"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "oe_publish re-executed the ceremony and the package release gate before pushing; the publish record for this commit carries conforms=True with 0 violations" ;
+    backlog:verifiedByTool "oe_publish_v1_2_0.sh + backlog_gate" ;
+    backlog:attestsCriterion fw:RelAC_1_23_0 .
+
+fw:Rel_1_24_0 a backlog:Task ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:hasIdentifier "BRF-1.24.0" ;
+    backlog:hasTitle "MINOR: fixing a disclosed-broken mechanism must leave durable proof" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register , fw:Shipped ;
+    backlog:startedAt "2026-08-03T14:06:16"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-04T08:55:20"^^xsd:dateTime ;
+    backlog:hasDuration 0.78 ;
+    backlog:hasEvidence fw:RelEv_1_24_0 ;
+    backlog:hasAcceptanceCriterion fw:RelAC_1_24_0 ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Shipped before this register existed; scoring completed work would be retrofitting a priority nobody used to decide anything." ;
+    backlog:lastAuditedAt "2026-08-04T08:55:20"^^xsd:dateTime .
+fw:RelAC_1_24_0 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the package at this version, When the release gate is run, Then every gate reports PASS and the published tree matches its own manifest." .
+fw:RelEv_1_24_0 a backlog:TestEvidence ;
+    backlog:hasTestSpec "git commit 941cb05, tag backlog-roadmap-framework-1.24.0" ;
+    backlog:hasTestId "BRF-1.24.0" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-08-04T08:55:20"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "oe_publish re-executed the ceremony and the package release gate before pushing; the publish record for this commit carries conforms=True with 0 violations" ;
+    backlog:verifiedByTool "oe_publish_v1_2_0.sh + backlog_gate" ;
+    backlog:attestsCriterion fw:RelAC_1_24_0 .
+
+fw:Rel_1_25_0 a backlog:Task ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:hasIdentifier "BRF-1.25.0" ;
+    backlog:hasTitle "MINOR: the conformance declaration is itself governed" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register , fw:Shipped ;
+    backlog:startedAt "2026-08-04T08:55:20"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-05T13:57:13"^^xsd:dateTime ;
+    backlog:hasDuration 1.21 ;
+    backlog:hasEvidence fw:RelEv_1_25_0 ;
+    backlog:hasAcceptanceCriterion fw:RelAC_1_25_0 ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Shipped before this register existed; scoring completed work would be retrofitting a priority nobody used to decide anything." ;
+    backlog:lastAuditedAt "2026-08-05T13:57:13"^^xsd:dateTime .
+fw:RelAC_1_25_0 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the package at this version, When the release gate is run, Then every gate reports PASS and the published tree matches its own manifest." .
+fw:RelEv_1_25_0 a backlog:TestEvidence ;
+    backlog:hasTestSpec "git commit 7d32ab3, tag backlog-roadmap-framework-1.25.0" ;
+    backlog:hasTestId "BRF-1.25.0" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-08-05T13:57:13"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "oe_publish re-executed the ceremony and the package release gate before pushing; the publish record for this commit carries conforms=True with 0 violations" ;
+    backlog:verifiedByTool "oe_publish_v1_2_0.sh + backlog_gate" ;
+    backlog:attestsCriterion fw:RelAC_1_25_0 .
+
+fw:Rel_1_26_0 a backlog:Task ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:hasIdentifier "BRF-1.26.0" ;
+    backlog:hasTitle "MINOR: the public copy may not lag, and the gate now says so" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register , fw:Shipped ;
+    backlog:startedAt "2026-08-05T13:57:13"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-05T14:22:30"^^xsd:dateTime ;
+    backlog:hasDuration 0.02 ;
+    backlog:hasEvidence fw:RelEv_1_26_0 ;
+    backlog:hasAcceptanceCriterion fw:RelAC_1_26_0 ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Shipped before this register existed; scoring completed work would be retrofitting a priority nobody used to decide anything." ;
+    backlog:lastAuditedAt "2026-08-05T14:22:30"^^xsd:dateTime .
+fw:RelAC_1_26_0 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the package at this version, When the release gate is run, Then every gate reports PASS and the published tree matches its own manifest." .
+fw:RelEv_1_26_0 a backlog:TestEvidence ;
+    backlog:hasTestSpec "git commit 5e6aa5b, tag backlog-roadmap-framework-1.26.0" ;
+    backlog:hasTestId "BRF-1.26.0" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-08-05T14:22:30"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "oe_publish re-executed the ceremony and the package release gate before pushing; the publish record for this commit carries conforms=True with 0 violations" ;
+    backlog:verifiedByTool "oe_publish_v1_2_0.sh + backlog_gate" ;
+    backlog:attestsCriterion fw:RelAC_1_26_0 .
+
+fw:Rel_1_27_0 a backlog:Task ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:hasIdentifier "BRF-1.27.0" ;
+    backlog:hasTitle "MINOR: a register was SHACL-clean and logically inconsistent" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register , fw:Shipped ;
+    backlog:startedAt "2026-08-05T14:22:30"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-05T17:48:53"^^xsd:dateTime ;
+    backlog:hasDuration 0.14 ;
+    backlog:hasEvidence fw:RelEv_1_27_0 ;
+    backlog:hasAcceptanceCriterion fw:RelAC_1_27_0 ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Shipped before this register existed; scoring completed work would be retrofitting a priority nobody used to decide anything." ;
+    backlog:lastAuditedAt "2026-08-05T17:48:53"^^xsd:dateTime .
+fw:RelAC_1_27_0 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the package at this version, When the release gate is run, Then every gate reports PASS and the published tree matches its own manifest." .
+fw:RelEv_1_27_0 a backlog:TestEvidence ;
+    backlog:hasTestSpec "git commit 6385667, tag backlog-roadmap-framework-1.27.0" ;
+    backlog:hasTestId "BRF-1.27.0" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-08-05T17:48:53"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "oe_publish re-executed the ceremony and the package release gate before pushing; the publish record for this commit carries conforms=True with 0 violations" ;
+    backlog:verifiedByTool "oe_publish_v1_2_0.sh + backlog_gate" ;
+    backlog:attestsCriterion fw:RelAC_1_27_0 .
+
+fw:Rel_1_28_0 a backlog:Task ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:hasIdentifier "BRF-1.28.0" ;
+    backlog:hasTitle "MINOR: correcting my own claim, and the reporting defect that caused it" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register , fw:Shipped ;
+    backlog:startedAt "2026-08-05T17:48:53"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-05T18:08:25"^^xsd:dateTime ;
+    backlog:hasDuration 0.01 ;
+    backlog:hasEvidence fw:RelEv_1_28_0 ;
+    backlog:hasAcceptanceCriterion fw:RelAC_1_28_0 ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Shipped before this register existed; scoring completed work would be retrofitting a priority nobody used to decide anything." ;
+    backlog:lastAuditedAt "2026-08-05T18:08:25"^^xsd:dateTime .
+fw:RelAC_1_28_0 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the package at this version, When the release gate is run, Then every gate reports PASS and the published tree matches its own manifest." .
+fw:RelEv_1_28_0 a backlog:TestEvidence ;
+    backlog:hasTestSpec "git commit f11dcbd, tag backlog-roadmap-framework-1.28.0" ;
+    backlog:hasTestId "BRF-1.28.0" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-08-05T18:08:25"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "oe_publish re-executed the ceremony and the package release gate before pushing; the publish record for this commit carries conforms=True with 0 violations" ;
+    backlog:verifiedByTool "oe_publish_v1_2_0.sh + backlog_gate" ;
+    backlog:attestsCriterion fw:RelAC_1_28_0 .
+
+fw:Rel_1_29_0 a backlog:Task ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:hasIdentifier "BRF-1.29.0" ;
+    backlog:hasTitle "MINOR: documentation — measuring before there is anything to measure" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register , fw:Shipped ;
+    backlog:startedAt "2026-08-05T18:08:25"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-06T08:49:17"^^xsd:dateTime ;
+    backlog:hasDuration 0.61 ;
+    backlog:hasEvidence fw:RelEv_1_29_0 ;
+    backlog:hasAcceptanceCriterion fw:RelAC_1_29_0 ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Shipped before this register existed; scoring completed work would be retrofitting a priority nobody used to decide anything." ;
+    backlog:lastAuditedAt "2026-08-06T08:49:17"^^xsd:dateTime .
+fw:RelAC_1_29_0 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the package at this version, When the release gate is run, Then every gate reports PASS and the published tree matches its own manifest." .
+fw:RelEv_1_29_0 a backlog:TestEvidence ;
+    backlog:hasTestSpec "git commit 840c5f5, tag backlog-roadmap-framework-1.29.0" ;
+    backlog:hasTestId "BRF-1.29.0" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-08-06T08:49:17"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "oe_publish re-executed the ceremony and the package release gate before pushing; the publish record for this commit carries conforms=True with 0 violations" ;
+    backlog:verifiedByTool "oe_publish_v1_2_0.sh + backlog_gate" ;
+    backlog:attestsCriterion fw:RelAC_1_29_0 .
+
+fw:Rel_1_30_0 a backlog:Task ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:hasIdentifier "BRF-1.30.0" ;
+    backlog:hasTitle "MINOR: the two-lineage framing, which is better than v1.29.0's" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register , fw:Shipped ;
+    backlog:startedAt "2026-08-06T08:49:17"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-06T09:05:50"^^xsd:dateTime ;
+    backlog:hasDuration 0.01 ;
+    backlog:hasEvidence fw:RelEv_1_30_0 ;
+    backlog:hasAcceptanceCriterion fw:RelAC_1_30_0 ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Shipped before this register existed; scoring completed work would be retrofitting a priority nobody used to decide anything." ;
+    backlog:lastAuditedAt "2026-08-06T09:05:50"^^xsd:dateTime .
+fw:RelAC_1_30_0 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the package at this version, When the release gate is run, Then every gate reports PASS and the published tree matches its own manifest." .
+fw:RelEv_1_30_0 a backlog:TestEvidence ;
+    backlog:hasTestSpec "git commit 6832d86, tag backlog-roadmap-framework-1.30.0" ;
+    backlog:hasTestId "BRF-1.30.0" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-08-06T09:05:50"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "oe_publish re-executed the ceremony and the package release gate before pushing; the publish record for this commit carries conforms=True with 0 violations" ;
+    backlog:verifiedByTool "oe_publish_v1_2_0.sh + backlog_gate" ;
+    backlog:attestsCriterion fw:RelAC_1_30_0 .
+
+fw:Rel_1_31_0 a backlog:Task ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:hasIdentifier "BRF-1.31.0" ;
+    backlog:hasTitle "MINOR: two roadmap-rank rules cross-referenced; one advisory message corrected" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register , fw:Shipped ;
+    backlog:startedAt "2026-08-06T09:05:50"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-06T09:22:47"^^xsd:dateTime ;
+    backlog:hasDuration 0.01 ;
+    backlog:hasEvidence fw:RelEv_1_31_0 ;
+    backlog:hasAcceptanceCriterion fw:RelAC_1_31_0 ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Shipped before this register existed; scoring completed work would be retrofitting a priority nobody used to decide anything." ;
+    backlog:lastAuditedAt "2026-08-06T09:22:47"^^xsd:dateTime .
+fw:RelAC_1_31_0 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the package at this version, When the release gate is run, Then every gate reports PASS and the published tree matches its own manifest." .
+fw:RelEv_1_31_0 a backlog:TestEvidence ;
+    backlog:hasTestSpec "git commit b1b504d, tag backlog-roadmap-framework-1.31.0" ;
+    backlog:hasTestId "BRF-1.31.0" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-08-06T09:22:47"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "oe_publish re-executed the ceremony and the package release gate before pushing; the publish record for this commit carries conforms=True with 0 violations" ;
+    backlog:verifiedByTool "oe_publish_v1_2_0.sh + backlog_gate" ;
+    backlog:attestsCriterion fw:RelAC_1_31_0 .
+
+fw:Rel_1_32_0 a backlog:Task ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:hasIdentifier "BRF-1.32.0" ;
+    backlog:hasTitle "MINOR: wiring the conformance ramp into the work" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register , fw:Shipped ;
+    backlog:startedAt "2026-08-06T09:22:47"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-06T09:30:37"^^xsd:dateTime ;
+    backlog:hasDuration 0.01 ;
+    backlog:hasEvidence fw:RelEv_1_32_0 ;
+    backlog:hasAcceptanceCriterion fw:RelAC_1_32_0 ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Shipped before this register existed; scoring completed work would be retrofitting a priority nobody used to decide anything." ;
+    backlog:lastAuditedAt "2026-08-06T09:30:37"^^xsd:dateTime .
+fw:RelAC_1_32_0 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the package at this version, When the release gate is run, Then every gate reports PASS and the published tree matches its own manifest." .
+fw:RelEv_1_32_0 a backlog:TestEvidence ;
+    backlog:hasTestSpec "git commit 8def1dd, tag backlog-roadmap-framework-1.32.0" ;
+    backlog:hasTestId "BRF-1.32.0" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-08-06T09:30:37"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "oe_publish re-executed the ceremony and the package release gate before pushing; the publish record for this commit carries conforms=True with 0 violations" ;
+    backlog:verifiedByTool "oe_publish_v1_2_0.sh + backlog_gate" ;
+    backlog:attestsCriterion fw:RelAC_1_32_0 .
+
+fw:Rel_1_33_0 a backlog:Task ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:hasIdentifier "BRF-1.33.0" ;
+    backlog:hasTitle "PATCH-class: an open item closed by the adopting project, not by us" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register , fw:Shipped ;
+    backlog:startedAt "2026-08-06T09:30:37"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-06T10:44:02"^^xsd:dateTime ;
+    backlog:hasDuration 0.05 ;
+    backlog:hasEvidence fw:RelEv_1_33_0 ;
+    backlog:hasAcceptanceCriterion fw:RelAC_1_33_0 ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Shipped before this register existed; scoring completed work would be retrofitting a priority nobody used to decide anything." ;
+    backlog:lastAuditedAt "2026-08-06T10:44:02"^^xsd:dateTime .
+fw:RelAC_1_33_0 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the package at this version, When the release gate is run, Then every gate reports PASS and the published tree matches its own manifest." .
+fw:RelEv_1_33_0 a backlog:TestEvidence ;
+    backlog:hasTestSpec "git commit 30cbd2f, tag backlog-roadmap-framework-1.33.0" ;
+    backlog:hasTestId "BRF-1.33.0" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-08-06T10:44:02"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "oe_publish re-executed the ceremony and the package release gate before pushing; the publish record for this commit carries conforms=True with 0 violations" ;
+    backlog:verifiedByTool "oe_publish_v1_2_0.sh + backlog_gate" ;
+    backlog:attestsCriterion fw:RelAC_1_33_0 .
+
+fw:Rel_1_34_0 a backlog:Task ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:hasIdentifier "BRF-1.34.0" ;
+    backlog:hasTitle "MINOR: NEXT was not reproducible — ruling on the item-level tie" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register , fw:Shipped ;
+    backlog:startedAt "2026-08-06T10:44:02"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-08T07:27:12"^^xsd:dateTime ;
+    backlog:hasDuration 1.86 ;
+    backlog:hasEvidence fw:RelEv_1_34_0 ;
+    backlog:hasAcceptanceCriterion fw:RelAC_1_34_0 ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Shipped before this register existed; scoring completed work would be retrofitting a priority nobody used to decide anything." ;
+    backlog:lastAuditedAt "2026-08-08T07:27:12"^^xsd:dateTime .
+fw:RelAC_1_34_0 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the package at this version, When the release gate is run, Then every gate reports PASS and the published tree matches its own manifest." .
+fw:RelEv_1_34_0 a backlog:TestEvidence ;
+    backlog:hasTestSpec "git commit fb218ff, tag backlog-roadmap-framework-1.34.0" ;
+    backlog:hasTestId "BRF-1.34.0" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-08-08T07:27:12"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "oe_publish re-executed the ceremony and the package release gate before pushing; the publish record for this commit carries conforms=True with 0 violations" ;
+    backlog:verifiedByTool "oe_publish_v1_2_0.sh + backlog_gate" ;
+    backlog:attestsCriterion fw:RelAC_1_34_0 .
+
+fw:Rel_1_35_0 a backlog:Task ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:hasIdentifier "BRF-1.35.0" ;
+    backlog:hasTitle "MINOR: measured versus judged — test-driving an estimate" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register , fw:Shipped ;
+    backlog:startedAt "2026-08-08T07:27:12"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-08T09:56:31"^^xsd:dateTime ;
+    backlog:hasDuration 0.1 ;
+    backlog:hasEvidence fw:RelEv_1_35_0 ;
+    backlog:hasAcceptanceCriterion fw:RelAC_1_35_0 ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Shipped before this register existed; scoring completed work would be retrofitting a priority nobody used to decide anything." ;
+    backlog:lastAuditedAt "2026-08-08T09:56:31"^^xsd:dateTime .
+fw:RelAC_1_35_0 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the package at this version, When the release gate is run, Then every gate reports PASS and the published tree matches its own manifest." .
+fw:RelEv_1_35_0 a backlog:TestEvidence ;
+    backlog:hasTestSpec "git commit 3f5017d, tag backlog-roadmap-framework-1.35.0" ;
+    backlog:hasTestId "BRF-1.35.0" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-08-08T09:56:31"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "oe_publish re-executed the ceremony and the package release gate before pushing; the publish record for this commit carries conforms=True with 0 violations" ;
+    backlog:verifiedByTool "oe_publish_v1_2_0.sh + backlog_gate" ;
+    backlog:attestsCriterion fw:RelAC_1_35_0 .
+
+fw:Rel_1_36_0 a backlog:Task ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:hasIdentifier "BRF-1.36.0" ;
+    backlog:hasTitle "MINOR: the framework's own register — and a date bug it immediately found" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register , fw:Shipped ;
+    backlog:startedAt "2026-08-08T09:56:31"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-08T10:49:31"^^xsd:dateTime ;
+    backlog:hasDuration 0.04 ;
+    backlog:hasEvidence fw:RelEv_1_36_0 ;
+    backlog:hasAcceptanceCriterion fw:RelAC_1_36_0 ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Shipped before this register existed; scoring completed work would be retrofitting a priority nobody used to decide anything." ;
+    backlog:lastAuditedAt "2026-08-08T10:49:31"^^xsd:dateTime .
+fw:RelAC_1_36_0 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the package at this version, When the release gate is run, Then every gate reports PASS and the published tree matches its own manifest." .
+fw:RelEv_1_36_0 a backlog:TestEvidence ;
+    backlog:hasTestSpec "git commit 2035a8a, tag backlog-roadmap-framework-1.36.0" ;
+    backlog:hasTestId "BRF-1.36.0" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-08-08T10:49:31"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "oe_publish re-executed the ceremony and the package release gate before pushing; the publish record for this commit carries conforms=True with 0 violations" ;
+    backlog:verifiedByTool "oe_publish_v1_2_0.sh + backlog_gate" ;
+    backlog:attestsCriterion fw:RelAC_1_36_0 .
+
+fw:Rel_1_37_0 a backlog:Task ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:hasIdentifier "BRF-1.37.0" ;
+    backlog:hasTitle "MINOR: BRF-EP1 built — the register chose it, the register records it" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register , fw:Shipped ;
+    backlog:startedAt "2026-08-08T10:49:31"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-08T12:52:56"^^xsd:dateTime ;
+    backlog:hasDuration 0.09 ;
+    backlog:hasEvidence fw:RelEv_1_37_0 ;
+    backlog:hasAcceptanceCriterion fw:RelAC_1_37_0 ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Shipped before this register existed; scoring completed work would be retrofitting a priority nobody used to decide anything." ;
+    backlog:lastAuditedAt "2026-08-08T12:52:56"^^xsd:dateTime .
+fw:RelAC_1_37_0 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the package at this version, When the release gate is run, Then every gate reports PASS and the published tree matches its own manifest." .
+fw:RelEv_1_37_0 a backlog:TestEvidence ;
+    backlog:hasTestSpec "git commit fcaedb6, tag backlog-roadmap-framework-1.37.0" ;
+    backlog:hasTestId "BRF-1.37.0" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-08-08T12:52:56"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "oe_publish re-executed the ceremony and the package release gate before pushing; the publish record for this commit carries conforms=True with 0 violations" ;
+    backlog:verifiedByTool "oe_publish_v1_2_0.sh + backlog_gate" ;
+    backlog:attestsCriterion fw:RelAC_1_37_0 .
+
+fw:Rel_1_38_0 a backlog:Task ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:hasIdentifier "BRF-1.38.0" ;
+    backlog:hasTitle "MINOR: BRF-EP2 — flow, velocity and forecast" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register , fw:Shipped ;
+    backlog:startedAt "2026-08-08T12:52:56"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-08T13:28:56"^^xsd:dateTime ;
+    backlog:hasDuration 0.03 ;
+    backlog:hasEvidence fw:RelEv_1_38_0 ;
+    backlog:hasAcceptanceCriterion fw:RelAC_1_38_0 ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Shipped before this register existed; scoring completed work would be retrofitting a priority nobody used to decide anything." ;
+    backlog:lastAuditedAt "2026-08-08T13:28:56"^^xsd:dateTime .
+fw:RelAC_1_38_0 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the package at this version, When the release gate is run, Then every gate reports PASS and the published tree matches its own manifest." .
+fw:RelEv_1_38_0 a backlog:TestEvidence ;
+    backlog:hasTestSpec "git commit a95da09, tag backlog-roadmap-framework-1.38.0" ;
+    backlog:hasTestId "BRF-1.38.0" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-08-08T13:28:56"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "oe_publish re-executed the ceremony and the package release gate before pushing; the publish record for this commit carries conforms=True with 0 violations" ;
+    backlog:verifiedByTool "oe_publish_v1_2_0.sh + backlog_gate" ;
+    backlog:attestsCriterion fw:RelAC_1_38_0 .
+
+fw:Rel_1_39_0 a backlog:Task ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:hasIdentifier "BRF-1.39.0" ;
+    backlog:hasTitle "MINOR: lineage completeness — the drift, its cause, and the gate" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register , fw:Shipped ;
+    backlog:startedAt "2026-08-08T13:28:56"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-09T06:15:48"^^xsd:dateTime ;
+    backlog:hasDuration 0.7 ;
+    backlog:hasEvidence fw:RelEv_1_39_0 ;
+    backlog:hasAcceptanceCriterion fw:RelAC_1_39_0 ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Shipped before this register existed; scoring completed work would be retrofitting a priority nobody used to decide anything." ;
+    backlog:lastAuditedAt "2026-08-09T06:15:48"^^xsd:dateTime .
+fw:RelAC_1_39_0 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the package at this version, When the release gate is run, Then every gate reports PASS and the published tree matches its own manifest." .
+fw:RelEv_1_39_0 a backlog:TestEvidence ;
+    backlog:hasTestSpec "git commit a868009, tag backlog-roadmap-framework-1.39.0" ;
+    backlog:hasTestId "BRF-1.39.0" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-08-09T06:15:48"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "oe_publish re-executed the ceremony and the package release gate before pushing; the publish record for this commit carries conforms=True with 0 violations" ;
+    backlog:verifiedByTool "oe_publish_v1_2_0.sh + backlog_gate" ;
+    backlog:attestsCriterion fw:RelAC_1_39_0 .
+
+fw:Rel_1_40_0 a backlog:Task ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:hasIdentifier "BRF-1.40.0" ;
+    backlog:hasTitle "MINOR: the register's absent layers filled; two overstatement defects corrected" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register , fw:Shipped ;
+    backlog:startedAt "2026-08-09T06:15:48"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-09T06:36:05"^^xsd:dateTime ;
+    backlog:hasDuration 0.01 ;
+    backlog:hasEvidence fw:RelEv_1_40_0 ;
+    backlog:hasAcceptanceCriterion fw:RelAC_1_40_0 ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Shipped before this register existed; scoring completed work would be retrofitting a priority nobody used to decide anything." ;
+    backlog:lastAuditedAt "2026-08-09T06:36:05"^^xsd:dateTime .
+fw:RelAC_1_40_0 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the package at this version, When the release gate is run, Then every gate reports PASS and the published tree matches its own manifest." .
+fw:RelEv_1_40_0 a backlog:TestEvidence ;
+    backlog:hasTestSpec "git commit e5058f3, tag backlog-roadmap-framework-1.40.0" ;
+    backlog:hasTestId "BRF-1.40.0" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-08-09T06:36:05"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "oe_publish re-executed the ceremony and the package release gate before pushing; the publish record for this commit carries conforms=True with 0 violations" ;
+    backlog:verifiedByTool "oe_publish_v1_2_0.sh + backlog_gate" ;
+    backlog:attestsCriterion fw:RelAC_1_40_0 .
+
+fw:Rel_1_41_0 a backlog:Task ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:hasIdentifier "BRF-1.41.0" ;
+    backlog:hasTitle "MINOR: the plan alongside the roadmap — Gantt, SPI, and five views" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register , fw:Shipped ;
+    backlog:startedAt "2026-08-09T06:36:05"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-10T07:34:35"^^xsd:dateTime ;
+    backlog:hasDuration 1.04 ;
+    backlog:hasEvidence fw:RelEv_1_41_0 ;
+    backlog:hasAcceptanceCriterion fw:RelAC_1_41_0 ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Shipped before this register existed; scoring completed work would be retrofitting a priority nobody used to decide anything." ;
+    backlog:lastAuditedAt "2026-08-10T07:34:35"^^xsd:dateTime .
+fw:RelAC_1_41_0 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the package at this version, When the release gate is run, Then every gate reports PASS and the published tree matches its own manifest." .
+fw:RelEv_1_41_0 a backlog:TestEvidence ;
+    backlog:hasTestSpec "git commit b7cecd8, tag backlog-roadmap-framework-1.41.0" ;
+    backlog:hasTestId "BRF-1.41.0" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-08-10T07:34:35"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "oe_publish re-executed the ceremony and the package release gate before pushing; the publish record for this commit carries conforms=True with 0 violations" ;
+    backlog:verifiedByTool "oe_publish_v1_2_0.sh + backlog_gate" ;
+    backlog:attestsCriterion fw:RelAC_1_41_0 .
+
+fw:Rel_1_42_0 a backlog:Task ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:hasIdentifier "BRF-1.42.0" ;
+    backlog:hasTitle "PATCH-class: the burn-down reached zero over open work" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register , fw:Shipped ;
+    backlog:startedAt "2026-08-10T07:34:35"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-10T07:52:21"^^xsd:dateTime ;
+    backlog:hasDuration 0.01 ;
+    backlog:hasEvidence fw:RelEv_1_42_0 ;
+    backlog:hasAcceptanceCriterion fw:RelAC_1_42_0 ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Shipped before this register existed; scoring completed work would be retrofitting a priority nobody used to decide anything." ;
+    backlog:lastAuditedAt "2026-08-10T07:52:21"^^xsd:dateTime .
+fw:RelAC_1_42_0 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the package at this version, When the release gate is run, Then every gate reports PASS and the published tree matches its own manifest." .
+fw:RelEv_1_42_0 a backlog:TestEvidence ;
+    backlog:hasTestSpec "git commit b137dff, tag backlog-roadmap-framework-1.42.0" ;
+    backlog:hasTestId "BRF-1.42.0" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-08-10T07:52:21"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "oe_publish re-executed the ceremony and the package release gate before pushing; the publish record for this commit carries conforms=True with 0 violations" ;
+    backlog:verifiedByTool "oe_publish_v1_2_0.sh + backlog_gate" ;
+    backlog:attestsCriterion fw:RelAC_1_42_0 .
+
+fw:Shipped a backlog:Increment ;
+    backlog:hasIdentifier "BRF-SHIPPED" ;
+    backlog:hasTitle "Releases shipped to the governed repository" ;
+    backlog:hasState backlog:Done ;
+    backlog:appliesDefinitionOfDone fw:DoD ;
+    backlog:iterationStart "2026-08-03T14:06:16"^^xsd:dateTime ;
+    backlog:iterationEnd "2026-08-10T07:52:21"^^xsd:dateTime .
+
+fw:Ev_Cost a backlog:TestEvidence ;
+    backlog:hasTestSpec "03-tooling/fixtures/fixture_positive_v1_7_0.ttl + fixture_negative_v1_7_0.ttl" ;
+    backlog:hasTestId "BRF-EP3" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-08-09T15:00:00"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "Positive fixture carries one item with three dimensions at once — tokens, compute and unpriced review time — against two budgets, at 0 violations; the cost view reports each dimension separately and states plainly that the unpriced one contributes to no monetary total. Negative fixture plants a dimension with no unit, a rate with no currency, a bare cost, negative consumption, and a parent and child both costed on one dimension; all fire." ;
+    backlog:verifiedByTool "backlog_validate_v1_3_0.py + backlog_views_v1_4_0.py" ;
+    backlog:attestsCriterion fw:AC_Cost .
+
+fw:Obs_EP3Actual a backlog:MetricObservation ;
+    rdfs:label "BRF-EP3 actual: net-new terms delivered"@en ;
+    backlog:observesMetric fw:Metric_SpreadsheetFree ;
+    backlog:observationFor fw:Obj_Adopter ;
+    backlog:hasObservedValue 13.0 ;
+    backlog:observedAt "2026-08-09T15:00:00"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Counted from backlog_tbox_v1_17_0.ttl: CostDimension, hasDimensionUnit, hasDimensionRate, hasRateCurrency, DimensionalCost, costOfItem, alongDimension, hasQuantity, isEstimatedCost, Budget, budgetFor, budgetDimension, hasBudgetCeiling. Estimate was 12; actual 13. The extra is hasRateCurrency, which the estimate folded into the rate and which a moment's thought about summing two currencies shows must be separate." .
+
+fw:Ev_T_Dimension a backlog:TestEvidence ;
+    backlog:hasTestSpec "03-tooling/fixtures/fixture_positive_v1_7_0.ttl + fixture_negative_v1_7_0.ttl" ;
+    backlog:hasTestId "BRF-T1" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-08-09T15:00:00"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "CostDimension with unit, rate and currency exercised in the positive fixture at 0 violations and rejected in the negative fixture" ;
+    backlog:verifiedByTool "backlog_validate_v1_3_0.py + pyshacl" ;
+    backlog:attestsCriterion fw:AC_Cost .
+
+fw:Ev_T_Budget a backlog:TestEvidence ;
+    backlog:hasTestSpec "03-tooling/fixtures/fixture_positive_v1_7_0.ttl + fixture_negative_v1_7_0.ttl" ;
+    backlog:hasTestId "BRF-T2" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-08-09T15:00:00"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "Budget per dimension, compared in the cost view exercised in the positive fixture at 0 violations and rejected in the negative fixture" ;
+    backlog:verifiedByTool "backlog_validate_v1_3_0.py + pyshacl" ;
+    backlog:attestsCriterion fw:AC_Cost .
+
+fw:Ev_T_Rollup a backlog:TestEvidence ;
+    backlog:hasTestSpec "03-tooling/fixtures/fixture_positive_v1_7_0.ttl + fixture_negative_v1_7_0.ttl" ;
+    backlog:hasTestId "BRF-T3" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-08-09T15:00:00"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "DimensionalRollUpShape rejecting parent-and-child on one dimension exercised in the positive fixture at 0 violations and rejected in the negative fixture" ;
+    backlog:verifiedByTool "backlog_validate_v1_3_0.py + pyshacl" ;
+    backlog:attestsCriterion fw:AC_Cost .
+
+fw:Ev_T_Fixtures a backlog:TestEvidence ;
+    backlog:hasTestSpec "03-tooling/fixtures/fixture_positive_v1_7_0.ttl + fixture_negative_v1_7_0.ttl" ;
+    backlog:hasTestId "BRF-T4" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-08-09T15:00:00"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "backlog_gate fixture-coverage step ran every shipped fixture and required each to validate as its filename declares; the negative fixture rose from 90 to 94 planted defects with the four EP3 additions and each new one was confirmed firing by identifier before the release" ;
+    backlog:verifiedByTool "backlog_validate_v1_3_0.py + pyshacl" ;
+    backlog:attestsCriterion fw:AC_Cost .
+
+fw:Ev_Human a backlog:TestEvidence ;
+    backlog:hasTestSpec "03-tooling/fixtures/fixture_positive_v1_7_0.ttl + fixture_negative_v1_7_0.ttl" ;
+    backlog:hasTestId "BRF-EP4" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-08-09T17:00:00"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "Positive fixture carries an automated item gated by an owner confirmation, a hybrid item on the loop, a recorded rejection so the gate is shown to refuse, and review time as an unpriced cost dimension, at 0 violations. Negative fixture plants an unattributed interaction, an in-the-loop claim with nothing gating, a no-supervision claim with a gating confirmation, and a correction on an item claiming Automated; all four fire." ;
+    backlog:verifiedByTool "backlog_validate_v1_3_0.py + pyshacl" ;
+    backlog:attestsCriterion fw:AC_Human .
+
+fw:Int_EP4_Confirm a backlog:HumanInteraction ;
+    rdfs:label "Owner authorised BRF-EP4 to proceed"@en ;
+    backlog:interactsWith fw:EP_Human ;
+    backlog:hasInteractionKind backlog:Int_Confirm ;
+    backlog:interactedAt "2026-08-09T15:25:00"^^xsd:dateTime ;
+    backlog:interactedBy backlog:Owner ;
+    backlog:gatesTransition true .
+
+fw:Int_EP4_Correct a backlog:HumanInteraction ;
+    rdfs:label "Owner corrected the register from a sketch into a lineage"@en ;
+    backlog:interactsWith fw:EP_Human ;
+    backlog:hasInteractionKind backlog:Int_Correct ;
+    backlog:interactedAt "2026-08-08T00:00:00"^^xsd:dateTime ;
+    backlog:interactedBy backlog:Owner ;
+    backlog:gatesTransition false .
+
+fw:Int_EP4_Reject a backlog:HumanInteraction ;
+    rdfs:label "Owner refused an ad hoc ordering of the subjects"@en ;
+    backlog:interactsWith fw:EP_Human ;
+    backlog:hasInteractionKind backlog:Int_Reject ;
+    backlog:interactedAt "2026-08-07T00:00:00"^^xsd:dateTime ;
+    backlog:interactedBy backlog:Owner ;
+    backlog:gatesTransition true .
+
+fw:Obs_EP4Actual a backlog:MetricObservation ;
+    rdfs:label "BRF-EP4 actual: net-new terms delivered"@en ;
+    backlog:observesMetric fw:Metric_SpreadsheetFree ;
+    backlog:observationFor fw:Obj_Adopter ;
+    backlog:hasObservedValue 19.0 ;
+    backlog:observedAt "2026-08-09T17:00:00"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Counted from backlog_tbox_v1_18_0.ttl: ExecutionModality with three members, hasExecutionModality, SupervisionMode with three members, hasSupervisionMode, InteractionKind with six members, HumanInteraction, interactsWith, hasInteractionKind, interactedAt, interactedBy, gatesTransition. Estimate was 17; actual 19. The two extra are Sup_None and Int_Reject — the honest-negative members. Omitting them would have forced unsupervised work to be recorded as supervised and left a gate with no way to record a refusal." .
+
+fw:Scope backlog:scopeOutcomeDecidedBy backlog:Owner ;
+    backlog:hasScopeOutcomeStatement "All six epics admitted to this scope are Done with verified evidence: the product-backlog/execution-task split, derived flow and forecast, multi-dimensional cost, human in and on the loop, the classical views, and the time-phased baseline. The four exclusions held throughout — no estimation scale, no delivery method, no modality-specific predicate, and no baseline schedule until an owner-decided ScopeChange admitted one and recorded why." .
+
+#################################################################
+#  The objective metrics, MEASURED — not inferred from delivery.
+#
+#  The term-count observations above record how much VOCABULARY
+#  each epic added. They were wrongly attached as observations of
+#  the outcome metrics, which is a category error: terms delivered
+#  is effort, not questions answered. Corrected here by measuring
+#  the metric each objective actually names.
+#################################################################
+
+fw:Obs_CoverageMeasured a backlog:MetricObservation ;
+    rdfs:label "Progress questions answerable from the register alone"@en ;
+    backlog:observesMetric fw:Metric_DerivedCoverage ;
+    backlog:observationFor fw:Obj_Derived ;
+    backlog:hasObservedValue 75.0 ;
+    backlog:observedAt "2026-08-09T17:30:00"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Ran backlog_views and backlog_roadmap_report against this register and counted which questions returned an answer rather than a refusal. Answerable: Gantt, burn-down, network with critical path, earned value with CPI, cycle time, velocity, item age, forecast — 6 of 8 view families. Not answerable: cumulative flow, because no TransitionEvent carries a timestamp in this register; and per-dimension cost, because this register records no DimensionalCost of its own. 6/8 = 75%. Target is 80, so this objective is NOT met and is not recorded as met." .
+
+fw:Obs_SpreadsheetMeasured a backlog:MetricObservation ;
+    rdfs:label "Adopter questions still needing an external tool"@en ;
+    backlog:observesMetric fw:Metric_SpreadsheetFree ;
+    backlog:observationFor fw:Obj_Adopter ;
+    backlog:hasObservedValue 2.0 ;
+    backlog:observedAt "2026-08-09T17:30:00"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Counted the same run's refusals: a cumulative-flow diagram and a per-dimension cost report both require data this register does not carry, so an adopter wanting either must still assemble it elsewhere. Baseline was 4, target 0, observed 2 — improved, not achieved." .
