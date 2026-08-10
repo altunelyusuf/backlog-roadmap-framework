@@ -1,5 +1,50 @@
 # Changelog
 
+## v1.53.0 — 2026-08-10 (MINOR: L4 was not a superset — it was a replacement)
+
+**Found by test-driving a trial declaration**, which is what the lineage ceremony's step 1 is for.
+Driving one register through all three levels produced a result that could not be right: **L3 reported
+more violations than L4**. The `ConformanceLevel` definition says each level is *"a strict superset of
+the previous"*. It was not.
+
+Measured: **57 clauses excluded `L4_LineageEnforced` entirely** — 37 gated `IN (L2, L3)` and 20 gated
+on `L3_Governed` exactly. **Declaring the strictest level silently switched off every L2 and L3
+check**, including all evidence anchoring, harness completeness and release anchoring. The level that
+enforced the most enforced the least, and a register could have moved from L3 to L4 and lost ground
+without a single message saying so.
+
+**This is G8 of the Lineage Operating Discipline, committed one release after writing it down:**
+*every rule naming a member of a closed set has an unstated dependency on that set's membership.*
+Adding a fourth member to a three-member enumeration broke 57 rules. The fix at v1.48.0 caught the
+three that tested "below L3" and stopped there — it repaired the symptom it had tripped over rather
+than searching for the class.
+
+**Repointed, and monotonic now**, verified by driving one register through all three levels:
+
+```
+L2_EvidenceBound     0 violations
+L3_Governed         83 violations
+L4_LineageEnforced 120 violations
+```
+
+**The fix immediately failed the L4 conformant fixture**, correctly — it had been written when L4
+enforced nothing below itself, so it had never been held to L2 or L3. Brought up to standard: test
+harnesses with derived completeness, finish points on execution tasks, an acceptance criterion on the
+epic, and a score no longer predating the register's most recent completion. Both polarities verified:
+conformant 0, adversarial 24.
+
+**Published against origin after a third collision.** A parallel session shipped v1.52.0 — the drift
+gate no longer depending on an ambient environment variable — while this work was local. B5's
+freshness clause and BP-D7's already-published guard both fired; origin is authoritative, and this
+re-applied on top rather than overwriting.
+
+**Not in this release, and stated rather than implied:** a remediation of the framework's own register
+— epics lifted out of iterations, decomposed into the stories actually delivered, with planning events
+and deployment units — was completed and then **lost to a container reset between turns**. It was
+never published and is not claimed here. The register remains at L2 with the L4 gap now precisely
+measured.
+
+
 ## v1.52.0 — 2026-08-10 (MINOR: the drift gate stops depending on ambient state)
 
 **G7 of the Lineage Operating Discipline, walked into while writing the section about it.**
@@ -457,7 +502,7 @@ a scope with no exclusion. **Verified against the defective register: it now fai
 **`backlog_lineage_completeness_v1_0_2.py`** reports every layer at any level and states what each
 omission costs, so a register can be improved before being failed. Wired into the release gate.
 
-**The register repaired** and promoted to `01-ontologies/backlog_framework_register_abox_v1_6_0.ttl`:
+**The register repaired** and promoted to `01-ontologies/backlog_framework_register_abox_v1_7_0.ttl`:
 scope with **five recorded exclusions**, a Definition of Done with **six executable criteria**, and
 the unbuilt epics decomposed into six stories with acceptance criteria.
 

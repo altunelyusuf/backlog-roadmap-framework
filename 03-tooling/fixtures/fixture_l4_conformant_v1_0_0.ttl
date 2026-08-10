@@ -72,7 +72,10 @@ ex:EP a backlog:Epic ;
     backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
     backlog:decomposesInto ex:US1 , ex:US2 ;
     backlog:notYetScoreable true ;
-    backlog:hasScoreabilityReason "Scored at story level; scoring an epic alongside its scored children would double-count." .
+    backlog:hasScoreabilityReason "Scored at story level; scoring an epic alongside its scored children would double-count." ;
+    backlog:hasAcceptanceCriterion ex:AC_EP .
+ex:AC_EP a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the recovery stories are delivered, When a practitioner is locked out, Then they regain access end to end without contacting support." .
 
 ex:US1 a backlog:Story ;
     backlog:hasIdentifier "US-1" ; backlog:hasTitle "Request a reset link" ;
@@ -104,7 +107,7 @@ ex:S1 a backlog:WSJFScore ;
     backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 6.0 ;
     backlog:hasUserBusinessValue 8.0 ; backlog:hasTimeCriticality 6.0 ;
     backlog:hasRiskReductionValue 4.0 ; backlog:hasJobSize 3.0 ;
-    backlog:scoredAt "2026-07-27T09:00:00"^^xsd:dateTime ;
+    backlog:scoredAt "2026-08-05T09:00:00"^^xsd:dateTime ;
     backlog:hasBasisKind backlog:Basis_Judged .
 
 ex:US2 a backlog:Story ;
@@ -122,11 +125,14 @@ ex:US2 a backlog:Story ;
     backlog:hasPriorityScore ex:S2 .
 ex:AC2 a backlog:AcceptanceCriterion ;
     backlog:hasGherkinText "Given a valid unexpired reset link, When the practitioner sets a password meeting the policy, Then the old password stops working and the link cannot be reused." .
+ex:H_US1 a backlog:TestHarness ; backlog:harnessFor ex:US1 ;
+    backlog:hasHarnessEvidence ex:Ev1 ; backlog:harnessComplete true .
+
 ex:S2 a backlog:WSJFScore ;
     backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 4.0 ;
     backlog:hasUserBusinessValue 7.0 ; backlog:hasTimeCriticality 3.0 ;
     backlog:hasRiskReductionValue 2.0 ; backlog:hasJobSize 3.0 ;
-    backlog:scoredAt "2026-07-27T09:00:00"^^xsd:dateTime ;
+    backlog:scoredAt "2026-08-05T09:00:00"^^xsd:dateTime ;
     backlog:hasBasisKind backlog:Basis_Judged .
 
 # planning: stories into the iteration, broken to tasks
@@ -151,11 +157,19 @@ ex:Plan2 a backlog:PlanningEvent ;
 ex:T1 a backlog:ExecutionTask ; backlog:hasIdentifier "T-1" ;
     backlog:hasTitle "Issue single-use tokens with expiry" ;
     backlog:hasState backlog:Done ; backlog:memberOfContainer ex:Backlog , ex:It1 ;
+    backlog:startedAt "2026-07-28T09:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-03T17:00:00"^^xsd:dateTime ;
     backlog:hasEvidence ex:Ev1 ; backlog:lastAuditedAt "2026-08-04T17:00:00"^^xsd:dateTime .
+ex:H_T1 a backlog:TestHarness ; backlog:harnessFor ex:T1 ;
+    backlog:hasHarnessEvidence ex:Ev1 ; backlog:harnessComplete true .
 ex:T2 a backlog:ExecutionTask ; backlog:hasIdentifier "T-2" ;
     backlog:hasTitle "Send the link through the shared dispatcher" ;
     backlog:hasState backlog:Done ; backlog:memberOfContainer ex:Backlog , ex:It1 ;
+    backlog:startedAt "2026-07-30T09:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-04T12:00:00"^^xsd:dateTime ;
     backlog:hasEvidence ex:Ev1 ; backlog:lastAuditedAt "2026-08-04T17:00:00"^^xsd:dateTime .
+ex:H_T2 a backlog:TestHarness ; backlog:harnessFor ex:T2 ;
+    backlog:hasHarnessEvidence ex:Ev1 ; backlog:harnessComplete true .
 ex:T3 a backlog:ExecutionTask ; backlog:hasIdentifier "T-3" ;
     backlog:hasTitle "Enforce the password policy on reset" ;
     backlog:hasState backlog:InProgress ; backlog:memberOfContainer ex:Backlog , ex:It1 .

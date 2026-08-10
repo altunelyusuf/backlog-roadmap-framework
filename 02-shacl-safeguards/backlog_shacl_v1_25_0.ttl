@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.24.0> ;
-    owl:versionInfo "1.24.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.25.0> ;
+    owl:versionInfo "1.25.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.24.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.23.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.22.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.21.0> ;
@@ -185,7 +186,7 @@ backlog:AdoptionProfileShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             $this backlog:hasConformanceLevel ?lvl .
-            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed, backlog:L4_LineageEnforced))
             FILTER NOT EXISTS { $this backlog:adoptsFacet backlog:EvidenceFacet }
         }""" ] ;
     sh:sparql [ a sh:SPARQLConstraint ;
@@ -287,7 +288,7 @@ backlog:EvidenceBoundDoneShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
-            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed, backlog:L4_LineageEnforced))
             $this backlog:hasState backlog:Done .
             FILTER NOT EXISTS { $this backlog:hasEvidence ?e }
         }""" ] ;
@@ -296,7 +297,7 @@ backlog:EvidenceBoundDoneShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
-            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed, backlog:L4_LineageEnforced))
             $this backlog:hasState backlog:Done .
             FILTER NOT EXISTS { $this backlog:hasEvidence ?e . ?e backlog:evidenceVerified true }
         }""" ] ;
@@ -305,7 +306,7 @@ backlog:EvidenceBoundDoneShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
-            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed, backlog:L4_LineageEnforced))
             $this backlog:hasState backlog:Done ; backlog:dependsOn ?d .
             ?d backlog:hasState ?ds .
             FILTER (?ds != backlog:Done)
@@ -323,7 +324,8 @@ backlog:GovernedDoneShape a sh:NodeShape ;
         sh:message "L3: a Done item must be anchored by verified test or release evidence; review evidence alone is insufficient." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
-            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel backlog:L3_Governed .
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl3 .
+            FILTER (?lvl3 IN (backlog:L3_Governed, backlog:L4_LineageEnforced))
             $this backlog:hasState backlog:Done .
             FILTER NOT EXISTS {
                 $this backlog:hasEvidence ?e .
@@ -335,7 +337,8 @@ backlog:GovernedDoneShape a sh:NodeShape ;
         sh:message "L3: a Done item must record when it was last individually re-verified (lastAuditedAt); absence means unchecked, not fine." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
-            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel backlog:L3_Governed .
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl3 .
+            FILTER (?lvl3 IN (backlog:L3_Governed, backlog:L4_LineageEnforced))
             $this backlog:hasState backlog:Done .
             FILTER NOT EXISTS { $this backlog:lastAuditedAt ?t }
         }""" ] .
@@ -425,7 +428,7 @@ backlog:SilentGapShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
-            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed, backlog:L4_LineageEnforced))
             $this backlog:hasState ?s .
             FILTER (?s IN (backlog:Proposed, backlog:Ready))
             FILTER NOT EXISTS { $this backlog:hasPriorityScore ?sc }
@@ -574,7 +577,8 @@ backlog:BlueprintSweepShape a sh:NodeShape ;
         sh:message "L3: this entity has a life-cycle stage with neither backlog coverage nor a recorded blueprint gap. A gap is a defect to be written down, never a silence." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
-            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel backlog:L3_Governed .
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl3 .
+            FILTER (?lvl3 IN (backlog:L3_Governed, backlog:L4_LineageEnforced))
             ?stage a backlog:EntityLifecycleStage .
             FILTER NOT EXISTS { ?i backlog:coversEntity $this ; backlog:coversStage ?stage }
             FILTER NOT EXISTS { ?g backlog:gapForEntity $this ; backlog:gapForStage ?stage }
@@ -738,7 +742,7 @@ backlog:ReadinessGateShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
-            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed, backlog:L4_LineageEnforced))
             $this backlog:hasState backlog:Ready .
             FILTER NOT EXISTS { $this backlog:hasAcceptanceCriterion ?a }
             FILTER NOT EXISTS { $this a backlog:ExecutionTask }
@@ -748,7 +752,7 @@ backlog:ReadinessGateShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
-            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed, backlog:L4_LineageEnforced))
             $this backlog:hasState backlog:Ready .
             FILTER NOT EXISTS { ?r backlog:refines $this }
         }""" ] .
@@ -825,7 +829,8 @@ backlog:InvestmentCategoryShape a sh:NodeShape ;
         sh:message "L3: this item declares no investment category, so the register's build-versus-maintain mix cannot be computed and a starved category cannot be detected." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
-            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel backlog:L3_Governed .
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl3 .
+            FILTER (?lvl3 IN (backlog:L3_Governed, backlog:L4_LineageEnforced))
             FILTER NOT EXISTS { $this backlog:hasInvestmentCategory ?c }
             FILTER NOT EXISTS { $this backlog:hasState backlog:Cancelled }
             FILTER NOT EXISTS { $this a backlog:ExecutionTask }
@@ -881,7 +886,7 @@ backlog:ContainerLinkageShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
-            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed, backlog:L4_LineageEnforced))
             $this backlog:isLaunchGate true .
             FILTER NOT EXISTS { $this backlog:rankedOnRoadmap ?rm . $this backlog:hasRoadmapRank ?r }
         }""" ] ;
@@ -890,7 +895,7 @@ backlog:ContainerLinkageShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
-            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed, backlog:L4_LineageEnforced))
             $this backlog:containerDependsOn ?other .
             FILTER NOT EXISTS { $this backlog:derivedContainerDependency ?other }
             FILTER NOT EXISTS { $this backlog:hasDependencyDisclosure ?disc . ?disc backlog:disclosesDependencyOn ?other }
@@ -922,7 +927,7 @@ backlog:ItemCompletenessLinkageShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
-            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed, backlog:L4_LineageEnforced))
             $this backlog:hasState ?s .
             FILTER (?s IN (backlog:Ready, backlog:InProgress, backlog:Done))
             FILTER NOT EXISTS { $this backlog:hasAcceptanceCriterion ?a }
@@ -933,7 +938,7 @@ backlog:ItemCompletenessLinkageShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
-            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed, backlog:L4_LineageEnforced))
             $this backlog:hasState ?s .
             FILTER (?s != backlog:Cancelled)
             FILTER NOT EXISTS { $this backlog:effectiveDefinitionOfDone ?d }
@@ -942,7 +947,8 @@ backlog:ItemCompletenessLinkageShape a sh:NodeShape ;
         sh:message "L3: a Done item must have a test harness whose completeness was derived, not asserted." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
-            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel backlog:L3_Governed .
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl3 .
+            FILTER (?lvl3 IN (backlog:L3_Governed, backlog:L4_LineageEnforced))
             $this backlog:hasState backlog:Done .
             FILTER NOT EXISTS { ?h backlog:harnessFor $this ; backlog:harnessComplete true }
         }""" ] ;
@@ -950,7 +956,8 @@ backlog:ItemCompletenessLinkageShape a sh:NodeShape ;
         sh:message "L3: an acceptance criterion of this Done item is attested by no bridge-verified evidence; a green suite that never touched the criterion does not close it." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
-            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel backlog:L3_Governed .
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl3 .
+            FILTER (?lvl3 IN (backlog:L3_Governed, backlog:L4_LineageEnforced))
             $this backlog:hasState backlog:Done ; backlog:hasAcceptanceCriterion ?ac .
             FILTER NOT EXISTS { ?e backlog:attestsCriterion ?ac ; backlog:evidenceVerified true }
         }""" ] .
@@ -1025,7 +1032,7 @@ backlog:StateHistoryShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
-            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed, backlog:L4_LineageEnforced))
             ?ev backlog:transitionedItem $this ; backlog:transitionedAt ?t ; backlog:viaTransition ?tr .
             FILTER NOT EXISTS { ?ev2 backlog:transitionedItem $this ; backlog:transitionedAt ?t2 . FILTER (?t2 > ?t) }
             ?tr backlog:toState ?dest .
@@ -1057,7 +1064,7 @@ backlog:DecompositionShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
-            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed, backlog:L4_LineageEnforced))
             $this backlog:hasState backlog:Done ; backlog:decomposesInto ?child .
             ?child backlog:hasState ?cs .
             FILTER (?cs NOT IN (backlog:Done, backlog:Cancelled))
@@ -1067,7 +1074,7 @@ backlog:DecompositionShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
-            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed, backlog:L4_LineageEnforced))
             $this backlog:decomposesInto ?child ; backlog:hasPriorityScore ?ps .
             ?child backlog:hasPriorityScore ?cs .
         }""" ] .
@@ -1094,7 +1101,7 @@ backlog:ArtifactCommitmentShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
-            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed, backlog:L4_LineageEnforced))
             FILTER NOT EXISTS { $this backlog:hasCommitment ?c . ?c backlog:commitsToGoal ?g }
         }""" ] .
 
@@ -1107,7 +1114,7 @@ backlog:IncrementCommitmentShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
-            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed, backlog:L4_LineageEnforced))
             FILTER NOT EXISTS { $this backlog:hasCommitment ?c . ?c backlog:commitsToDefinitionOfDone ?d }
             FILTER NOT EXISTS { $this backlog:appliesDefinitionOfDone ?d2 }
         }""" ] .
@@ -1161,7 +1168,8 @@ backlog:FlowShape a sh:NodeShape ;
         sh:message "L3: this Done item records no finish point, so throughput and cycle time cannot be measured for it." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
-            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel backlog:L3_Governed .
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl3 .
+            FILTER (?lvl3 IN (backlog:L3_Governed, backlog:L4_LineageEnforced))
             $this backlog:hasState backlog:Done .
             FILTER NOT EXISTS { $this backlog:finishedAt ?f }
         }""" ] .
@@ -1258,7 +1266,7 @@ backlog:ScoreAccountabilityShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
-            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed, backlog:L4_LineageEnforced))
             FILTER NOT EXISTS { $this backlog:hasScoreRationale ?r }
             FILTER NOT EXISTS { $this backlog:hasJobSize ?js }
             FILTER NOT EXISTS { $this backlog:hasEffort ?e }
@@ -1267,7 +1275,8 @@ backlog:ScoreAccountabilityShape a sh:NodeShape ;
         sh:message "L3: this score predates the most recent completion in the register and was never re-run; a ranking is a snapshot of value per cost at one moment, not a committed order (BP-D11)." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
-            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel backlog:L3_Governed .
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl3 .
+            FILTER (?lvl3 IN (backlog:L3_Governed, backlog:L4_LineageEnforced))
             ?item backlog:hasPriorityScore $this ; backlog:hasState ?st .
             FILTER (?st NOT IN (backlog:Done, backlog:Cancelled))
             $this backlog:scoredAt ?sa .
@@ -1292,7 +1301,8 @@ backlog:ObjectiveFalsifiabilityShape a sh:NodeShape ;
         sh:message "L3: this objective's deadline has passed with no observation of its metric and no recorded re-baseline; the target can therefore never be shown to have been missed." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
-            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel backlog:L3_Governed .
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl3 .
+            FILTER (?lvl3 IN (backlog:L3_Governed, backlog:L4_LineageEnforced))
             $this backlog:hasObjectiveDeadline ?d .
             FILTER (STR(?d) < SUBSTR(STR(NOW()), 1, 19))
             FILTER NOT EXISTS { ?o backlog:observationFor $this }
@@ -1321,7 +1331,7 @@ backlog:MilestoneOutcomeShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
-            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed, backlog:L4_LineageEnforced))
             $this backlog:hasTargetDate ?d .
             FILTER (STR(?d) < SUBSTR(STR(NOW()), 1, 19))
             FILTER NOT EXISTS { $this backlog:achievedAt ?a }
@@ -1354,7 +1364,7 @@ backlog:VerificationIntegrityShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
-            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed, backlog:L4_LineageEnforced))
             $this backlog:evidenceVerified true ; backlog:hasVerificationMethod ?m .
             FILTER (REGEX(?m, "^(asserted|assumed|manual|by inspection|n/?a|trusted|ok|done|fixture)", "i")
                     || STRLEN(?m) < 20)
@@ -1363,7 +1373,8 @@ backlog:VerificationIntegrityShape a sh:NodeShape ;
         sh:message "L3: this verified evidence names no tool that performed the check." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
-            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel backlog:L3_Governed .
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl3 .
+            FILTER (?lvl3 IN (backlog:L3_Governed, backlog:L4_LineageEnforced))
             $this backlog:evidenceVerified true .
             FILTER NOT EXISTS { $this backlog:verifiedByTool ?t }
         }""" ] .
@@ -1377,7 +1388,7 @@ backlog:AcceptanceCriterionQualityShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
-            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed, backlog:L4_LineageEnforced))
             $this backlog:hasGherkinText ?t .
             FILTER (!REGEX(?t, "Given\\\\s+\\\\S+.{8,}When\\\\s+\\\\S+.{8,}Then\\\\s+\\\\S+.{8,}", "is"))
         }""" ] .
@@ -1390,7 +1401,8 @@ backlog:EstimateAccountabilityShape a sh:NodeShape ;
         sh:message "L3: this completed item carries a cost estimate but no actual effort, so the estimate can never be shown to have been wrong." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
-            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel backlog:L3_Governed .
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl3 .
+            FILTER (?lvl3 IN (backlog:L3_Governed, backlog:L4_LineageEnforced))
             $this backlog:hasState backlog:Done ; backlog:hasCostEstimate ?e .
             FILTER NOT EXISTS { $this backlog:hasActualEffort ?a }
         }""" ] .
@@ -1403,7 +1415,8 @@ backlog:IntentTraceabilityShape a sh:NodeShape ;
         sh:message "L3: this item advances no recorded objective, directly or through a container; its value claim is unfalsifiable because it refers to nothing the product is trying to achieve." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
-            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel backlog:L3_Governed .
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl3 .
+            FILTER (?lvl3 IN (backlog:L3_Governed, backlog:L4_LineageEnforced))
             $this backlog:hasState ?s .
             FILTER (?s != backlog:Cancelled)
             FILTER NOT EXISTS { $this backlog:pursuesObjective ?o }
@@ -1421,7 +1434,7 @@ backlog:RoadmapOverrideShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
-            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed, backlog:L4_LineageEnforced))
             $this backlog:rankedOnRoadmap ?rm ; backlog:hasRoadmapRank ?r1 ; backlog:hasPriorityScore ?s1 .
             ?other backlog:rankedOnRoadmap ?rm ; backlog:hasRoadmapRank ?r2 ; backlog:hasPriorityScore ?s2 .
             ?s1 backlog:hasScoreValue ?v1 . ?s2 backlog:hasScoreValue ?v2 .
@@ -1448,7 +1461,7 @@ backlog:MissionShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
-            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed, backlog:L4_LineageEnforced))
             FILTER NOT EXISTS { ?g backlog:contributesToMission $this }
         }""" ] .
 
@@ -1461,14 +1474,15 @@ backlog:GoalMeasurabilityShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
-            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed, backlog:L4_LineageEnforced))
             FILTER NOT EXISTS { ?o backlog:contributesToGoal $this }
         }""" ] ;
     sh:sparql [ a sh:SPARQLConstraint ;
         sh:message "L3: this goal advances no mission; the intent chain does not reach a stated purpose." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
-            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel backlog:L3_Governed .
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl3 .
+            FILTER (?lvl3 IN (backlog:L3_Governed, backlog:L4_LineageEnforced))
             FILTER EXISTS { ?m a backlog:Mission }
             FILTER NOT EXISTS { $this backlog:contributesToMission ?m2 }
         }""" ] .
@@ -1482,7 +1496,7 @@ backlog:ScopeMeasurabilityShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
-            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed, backlog:L4_LineageEnforced))
             FILTER NOT EXISTS { $this backlog:scopeRealizesObjective ?o }
         }""" ] ;
     sh:sparql [ a sh:SPARQLConstraint ;
@@ -1490,7 +1504,7 @@ backlog:ScopeMeasurabilityShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
-            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed, backlog:L4_LineageEnforced))
             FILTER NOT EXISTS { $this backlog:hasScopeExclusion ?e }
         }""" ] ;
     sh:sparql [ a sh:SPARQLConstraint ;
@@ -1498,7 +1512,7 @@ backlog:ScopeMeasurabilityShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
-            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed, backlog:L4_LineageEnforced))
             $this backlog:scopeCompletionState backlog:Done .
             FILTER NOT EXISTS { $this backlog:scopeOutcome ?o }
         }""" ] .
@@ -1543,7 +1557,7 @@ backlog:ExternalEnhancementShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
-            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed, backlog:L4_LineageEnforced))
             $this backlog:requiresExternalEnhancement ?ext ; backlog:hasState ?s .
             FILTER (?s IN (backlog:Ready, backlog:InProgress))
             ?prop backlog:proposalFor ?ext ; backlog:unblocksItem $this ; backlog:hasProposalStatus ?ps .
@@ -1554,7 +1568,7 @@ backlog:ExternalEnhancementShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
-            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed, backlog:L4_LineageEnforced))
             $this backlog:requiresExternalEnhancement ?ext ; backlog:hasState ?s .
             FILTER (?s != backlog:Cancelled)
             ?prop backlog:proposalFor ?ext ; backlog:unblocksItem $this ;
@@ -1630,14 +1644,15 @@ backlog:RegisterPackageShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
-            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed, backlog:L4_LineageEnforced))
             FILTER NOT EXISTS { $this backlog:hasPackageArtifact ?a . ?a backlog:hasArtifactRole backlog:Role_ProfileDeclaration }
         }""" ] ;
     sh:sparql [ a sh:SPARQLConstraint ;
         sh:message "L3: a register package must retain at least one roadmap report run as a file; a package that retains none can show a state but never a trajectory." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
-            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel backlog:L3_Governed .
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl3 .
+            FILTER (?lvl3 IN (backlog:L3_Governed, backlog:L4_LineageEnforced))
             FILTER NOT EXISTS { $this backlog:hasPackageArtifact ?a . ?a backlog:hasArtifactRole backlog:Role_ProgressReport }
         }""" ] .
 
@@ -1672,7 +1687,8 @@ backlog:ProgressFreshnessShape a sh:NodeShape ;
         sh:message "L3: this retained report run predates the register's most recent recorded transition, so the shipped progress evidence describes a state the register has already left." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
-            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel backlog:L3_Governed .
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl3 .
+            FILTER (?lvl3 IN (backlog:L3_Governed, backlog:L4_LineageEnforced))
             $this backlog:reportRunRetainedAs ?file ; backlog:hasRunTimestamp ?run .
             ?ev backlog:transitionedAt ?t .
             FILTER (?t > ?run)
@@ -1949,7 +1965,8 @@ backlog:EstimationBasisShape a sh:NodeShape ;
         sh:message "L3: this estimate declares no basis kind, so a reader cannot tell whether the figure was executed, drawn from a comparable, or reasoned. hasCostBasis records what it was based on; this records whether that basis was RUN." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
-            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel backlog:L3_Governed .
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl3 .
+            FILTER (?lvl3 IN (backlog:L3_Governed, backlog:L4_LineageEnforced))
             FILTER NOT EXISTS { $this backlog:hasBasisKind ?k }
         }""" ] .
 
@@ -2011,7 +2028,7 @@ backlog:ExecutionTaskShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
-            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed, backlog:L4_LineageEnforced))
             FILTER NOT EXISTS { ?e backlog:producesTask $this }
         }""" ] .
 
@@ -2131,7 +2148,7 @@ backlog:LineageCompletenessShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
-            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed, backlog:L4_LineageEnforced))
             FILTER NOT EXISTS { ?m a backlog:Mission ; backlog:missionFor $this }
         }""" ] ;
 
@@ -2140,7 +2157,7 @@ backlog:LineageCompletenessShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
-            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed, backlog:L4_LineageEnforced))
             FILTER NOT EXISTS { ?o a backlog:Objective }
         }""" ] ;
 
@@ -2149,7 +2166,7 @@ backlog:LineageCompletenessShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
-            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed, backlog:L4_LineageEnforced))
             FILTER NOT EXISTS { ?s a backlog:ScopeStatement }
         }""" ] ;
 
@@ -2158,7 +2175,7 @@ backlog:LineageCompletenessShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
-            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed, backlog:L4_LineageEnforced))
             FILTER NOT EXISTS { $this backlog:appliesDefinitionOfDone ?d }
         }""" ] ;
 
@@ -2166,7 +2183,8 @@ backlog:LineageCompletenessShape a sh:NodeShape ;
         sh:message "L3: this register holds scored Epics that decompose into nothing. An epic is by definition a large body of work delivered across multiple features or stories; one with no children is an estimate with no plan behind it, and its completion can only ever be asserted." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
-            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel backlog:L3_Governed .
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl3 .
+            FILTER (?lvl3 IN (backlog:L3_Governed, backlog:L4_LineageEnforced))
             ?e a backlog:Epic ; backlog:memberOfContainer $this ; backlog:hasPriorityScore ?sc .
             FILTER NOT EXISTS { ?e backlog:decomposesInto ?child }
         }""" ] .
@@ -2244,7 +2262,7 @@ backlog:PlannedDateShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
-            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed, backlog:L4_LineageEnforced))
             $this backlog:plannedStart ?s .
             FILTER NOT EXISTS { ?k a backlog:KickOff }
         }""" ] .
@@ -2302,7 +2320,8 @@ backlog:DimensionalCostShape a sh:NodeShape ;
         sh:message "L3: this cost does not say whether its quantity was estimated or observed. A projected token spend and a metered one are different evidence, and a total mixing them without saying so reads as measurement." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
-            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel backlog:L3_Governed .
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl3 .
+            FILTER (?lvl3 IN (backlog:L3_Governed, backlog:L4_LineageEnforced))
             FILTER NOT EXISTS { $this backlog:isEstimatedCost ?e }
         }""" ] .
 
@@ -2377,7 +2396,7 @@ backlog:SupervisionClaimShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
-            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed, backlog:L4_LineageEnforced))
             $this backlog:hasState backlog:Done .
             FILTER NOT EXISTS { $this a backlog:ExecutionTask }
             FILTER NOT EXISTS { $this backlog:hasExecutionModality ?m }
@@ -2427,7 +2446,7 @@ backlog:EpicPlanningShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
-            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed, backlog:L4_LineageEnforced))
             $this backlog:plansItem ?e ; backlog:plannedInto ?it .
             ?e a backlog:Epic .
             FILTER NOT EXISTS { ?e backlog:decomposesInto ?child }
