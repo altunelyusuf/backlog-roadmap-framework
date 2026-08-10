@@ -1,5 +1,33 @@
 # Changelog
 
+## v1.52.0 — 2026-08-10 (MINOR: the drift gate stops depending on ambient state)
+
+**G7 of the Lineage Operating Discipline, walked into while writing the section about it.**
+
+The public distribution was **ten releases behind** — v1.41.0 against a governed v1.51.0, with the
+Lineage Operating Discipline returning 404 to anyone reading the public copy. The drift check has
+existed since **v1.26.0** and works: run against the stale copy it reported the version gap and the
+byte divergence correctly, first try.
+
+It simply never ran. It was wired to `BACKLOG_PUBLIC_URL`, an environment variable set once and lost
+when the container was rebuilt, after which the gate printed `NOT RUN` for ten consecutive releases.
+*A check that does not run tells you nothing* — and a check depending on ambient state that does not
+travel with the package will eventually not run.
+
+**Fixed by recording the URL in the package.** `.public-distribution-url` ships alongside the
+manifest, so the gate resolves its target from the artifact rather than the environment. The
+environment variable still works as an override; what changed is that its absence no longer means
+silence.
+
+**Proven immediately.** With the URL recorded, the gate ran unprompted and **failed** — the gate
+rename in this very release had made the working tree diverge from what was published minutes
+earlier. That is the check catching its own author within one release of being fixed.
+
+**The public copy is current:** v1.51.0 pushed and verified by unauthenticated fetch, drift check
+PASS against a fresh derivation, and the Lineage Operating Discipline reachable publicly for the
+first time.
+
+
 ## v1.51.0 — 2026-08-10 (MINOR: the Lineage Operating Discipline, under this package's own authorship)
 
 **An authorship correction, not a rejection.** `LINEAGE_OPERATING_DISCIPLINE_v1_0_0.md` was written by
@@ -1064,7 +1092,7 @@ moment another stage is inserted, so the decoupling is permanent instead.
 
 **Why every gate stayed green while this was live:** the three-fixture self-proof invokes the
 validator *directly*; only the register path formats its output, so a defect in the formatting layer
-was invisible to the proof. `backlog_gate_v1_1_12.sh` now runs the known-bad fixture through the
+was invisible to the proof. `backlog_gate_v1_1_13.sh` now runs the known-bad fixture through the
 **exact register path** and aborts if it does not fail. The self-proof covered the shapes; it had
 never covered its own plumbing.
 
@@ -2057,7 +2085,7 @@ executable and ordered.
 arbitration documented and implemented in the report tool.
 
 **Added — tooling:** `backlog_roadmap_report_v1_5_0.py` (eight sections, both NEXT answers, silent
--gap check), `backlog_coverage_gate_v1_1_1.py` (BP-D31), `backlog_gate_v1_1_12.sh` (Gate 0 / P / K /
+-gap check), `backlog_coverage_gate_v1_1_1.py` (BP-D31), `backlog_gate_v1_1_13.sh` (Gate 0 / P / K /
 R plus coverage), Gate K version-identity check in the validator.
 
 **Changed:** the v1.0.0 advisory "item carries no priority score" now excludes items correctly

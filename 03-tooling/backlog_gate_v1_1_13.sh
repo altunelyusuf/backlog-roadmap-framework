@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# backlog_gate v1.1.12 — four-gate release check for the Backlog & Roadmap
+# backlog_gate v1.1.13 — four-gate release check for the Backlog & Roadmap
 # Semantic Framework. Nothing about the package's state is trusted until all
 # four pass, and the SHACL gate refuses to certify anything until it has just
 # demonstrated, in this run, that it can fail a known-bad register.
@@ -11,7 +11,7 @@
 #   +       coverage gate          >= 80% of primary-source concepts (BP-D31)
 #   +       doc-coverage gate      every TBox class named in the standard document
 #
-# Usage: backlog_gate_v1_1_12.sh [REGISTER.ttl ...]
+# Usage: backlog_gate_v1_1_13.sh [REGISTER.ttl ...]
 
 set -u
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -191,8 +191,19 @@ DRIFT="$(ls "$HERE"/backlog_distribution_drift_check_v*.py 2>/dev/null | sort -V
 if [ -n "$DRIFT" ] && [ -n "${BACKLOG_PUBLIC_URL:-}" ]; then
   python3 "$DRIFT" "$PKG" "$BACKLOG_PUBLIC_URL" | grep -E '^governed|^published|^VERDICT|^  - '
   python3 "$DRIFT" "$PKG" "$BACKLOG_PUBLIC_URL" >/dev/null 2>&1 || { echo "Distribution-drift gate FAILED"; FAILED=1; }
+elif [ -n "$DRIFT" ] && [ -f "$PKG/.public-distribution-url" ]; then
+  # The URL is recorded IN THE PACKAGE rather than left to an environment
+  # variable. v1.26.0 built this check and wired it to BACKLOG_PUBLIC_URL; the
+  # variable was set once, the container was rebuilt, and the gate then reported
+  # NOT RUN for ten consecutive releases while the public copy fell ten versions
+  # behind. That is G7 of the Lineage Operating Discipline — a check that does
+  # not run tells you nothing — and the fix is to stop depending on ambient
+  # state that does not travel with the package.
+  URL="$(tr -d '[:space:]' < "$PKG/.public-distribution-url")"
+  python3 "$DRIFT" "$PKG" "$URL" | grep -E '^governed|^published|^VERDICT|^  - '
+  python3 "$DRIFT" "$PKG" "$URL" >/dev/null 2>&1 || { echo "Distribution-drift gate FAILED"; FAILED=1; }
 else
-  echo "  NOT RUN — set BACKLOG_PUBLIC_URL to the published distribution to enable."
+  echo "  NOT RUN — no .public-distribution-url in the package and no BACKLOG_PUBLIC_URL set."
   echo "  Not assumed to pass: an unchecked public copy is how v1.25.0 shipped with"
   echo "  the public copy left at v1.24.0."
 fi
