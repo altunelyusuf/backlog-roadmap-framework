@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/1.2.0> ;
-    owl:versionInfo "1.2.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/1.3.0> ;
+    owl:versionInfo "1.3.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/1.2.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/1.1.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/1.0.0> ;
     dcterms:created "2026-08-06T00:00:00"^^xsd:dateTime ;
@@ -482,8 +483,8 @@ fw:EP_Flow    backlog:memberOfContainer fw:It1 .
 
 fw:It2 a backlog:Iteration ;
     backlog:hasIdentifier "BRF-IT2" ;
-    backlog:hasTitle "Cost dimensions" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasTitle "Cost dimensions and plan-based views" ;
+    backlog:hasState backlog:InProgress ;
     backlog:iterationStart "2026-08-09T00:00:00"^^xsd:dateTime ;
     backlog:iterationEnd "2026-08-16T23:59:59"^^xsd:dateTime ;
     backlog:hasCapacity 12.0 .
@@ -554,3 +555,153 @@ fw:Fc_Remaining a backlog:Forecast ;
     backlog:forecastAssumption "Velocity holds at two subjects per iteration; one closed iteration is a data point, not a rate, and this is the weakest assumption here." ;
     backlog:forecastAssumption "EP4 stays blocked on EP3 only, and the Ex_Modality exclusion continues to settle the human-review question without further scope work." ;
     backlog:forecastAssumption "No ScopeChange admits further subjects; the four in the register are the whole of it." .
+
+#################################################################
+#  v1.3.0 — a third mission: the plan-based views.
+#
+#  Ex_Schedule refused a time-phased baseline. The owner has
+#  reversed that. The exclusion is NOT deleted: it records a
+#  decision that was true when taken, and L-112 forbids editing a
+#  record of the past to match the present. A ScopeChange supersedes
+#  it, and both remain readable.
+#################################################################
+
+fw:SC_Schedule a backlog:ScopeChange ;
+    rdfs:label "Admit a time-phased baseline, reversing Ex_Schedule"@en ;
+    backlog:changesScope fw:Scope ;
+    backlog:admitsItem fw:EP_Views , fw:EP_Schedule ;
+    backlog:hasScopeChangeRationale "Owner decision, 2026-08-09. Ex_Schedule refused planned dates on the grounds that horizons are ordinal and a baseline would change what a roadmap IS. That reasoning still holds for the ROADMAP and is unchanged: horizons stay ordinal and hasRoadmapRank stays an ordering. What is admitted is a PLAN alongside the roadmap, not instead of it — a separate artifact carrying dates, against which schedule performance is measured. The exclusion stands as the record of why this was refused; this change records why it no longer is." ;
+    backlog:decidedBy backlog:Owner .
+
+fw:Mission_Plan a backlog:Mission ;
+    rdfs:label "Plan-based visibility mission"@en ;
+    backlog:hasMissionStatement "A register can be read as a plan as well as a backlog: what was scheduled, what actually happened, and the difference — without exporting anything to a spreadsheet or a project tool." ;
+    backlog:missionFor fw:Register ;
+    backlog:decidedBy backlog:Owner .
+
+fw:Goal_Views a backlog:Goal ;
+    rdfs:label "The classical project views are computable from the register"@en ;
+    backlog:contributesToMission fw:Mission_Plan ;
+    backlog:decidedBy backlog:Owner .
+
+fw:Metric_Views a core:Metric ; rdfs:label "Classical views computable from the register alone"@en .
+
+fw:Obj_Views a backlog:Objective ;
+    rdfs:label "Views computable without an external tool"@en ;
+    backlog:contributesToGoal fw:Goal_Views ;
+    backlog:hasSuccessMetric fw:Metric_Views ;
+    backlog:hasBaselineValue 0.0 ;
+    backlog:hasTargetValue 5.0 ;
+    backlog:hasTargetDirection backlog:Dir_Increase ;
+    backlog:hasObjectiveDeadline "2026-09-30T00:00:00"^^xsd:dateTime ;
+    backlog:decidedBy backlog:Owner .
+
+fw:Obs_Views a backlog:MetricObservation ;
+    rdfs:label "Views delivered by backlog_views v1.0.0"@en ;
+    backlog:observesMetric fw:Metric_Views ;
+    backlog:observationFor fw:Obj_Views ;
+    backlog:hasObservedValue 5.0 ;
+    backlog:observedAt "2026-08-09T00:00:00"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Counted by running backlog_views_v1_0_0.py against this register: Gantt, burn-down, cumulative flow, network/AON and earned value all execute. Gantt and SPI correctly REFUSE rather than assume when no KickOff is present, which is the behaviour under test as much as the drawing is." .
+
+# ---- the two epics this mission admits ----
+
+fw:EP_Views a backlog:Epic ;
+    backlog:hasIdentifier "BRF-EP5" ;
+    backlog:hasTitle "Classical project views computed from the register" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register , fw:It2 ;
+    backlog:pursuesObjective fw:Obj_Views ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasAcceptanceCriterion fw:AC_Views ;
+    backlog:hasPriorityScore fw:S_Views ;
+    backlog:hasCostEstimate fw:E_Views ;
+    backlog:startedAt "2026-08-09T09:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-09T11:00:00"^^xsd:dateTime ;
+    backlog:hasActualEffort 6.0 ;
+    backlog:hasEvidence fw:Ev_Views ;
+    backlog:lastAuditedAt "2026-08-09T11:00:00"^^xsd:dateTime ;
+    backlog:plannedStart "2026-08-09T00:00:00"^^xsd:dateTime ;
+    backlog:plannedFinish "2026-08-10T23:59:59"^^xsd:dateTime ;
+    backlog:hasDuration 2.0 ;
+    backlog:rankedOnRoadmap fw:Roadmap ; backlog:hasRoadmapRank 5 ;
+    backlog:scheduledInHorizon backlog:Now .
+fw:AC_Views a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a register with planned dates, iteration periods and transitions, When the views tool is run, Then Gantt, burn-down, cumulative flow and network views are produced from recorded facts, and any view needing a day zero refuses rather than assumes one when no kick-off exists." .
+fw:S_Views a backlog:WSJFScore ;
+    backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 5.0 ;
+    backlog:hasUserBusinessValue 7.0 ; backlog:hasTimeCriticality 4.0 ;
+    backlog:hasRiskReductionValue 4.0 ; backlog:hasJobSize 3.0 ;
+    backlog:scoredAt "2026-08-09T00:00:00"^^xsd:dateTime ;
+    backlog:hasScoreRationale "Highest user-business value in the register: this is what makes everything already recorded legible to someone who is not reading Turtle. Job size small because every view is derived from facts the register already holds." ;
+    backlog:hasBasisKind backlog:Basis_Judged .
+fw:E_Views a backlog:CostEstimate ;
+    backlog:hasEffortEstimate 5.0 ; backlog:hasCostBasis "One tool, five views, no new stored vocabulary" ;
+    backlog:estimatedAt "2026-08-09T00:00:00"^^xsd:dateTime ;
+    backlog:hasBasisKind backlog:Basis_Judged .
+fw:Ev_Views a backlog:TestEvidence ;
+    backlog:hasTestSpec "03-tooling/backlog_views_v1_0_0.py against this register" ;
+    backlog:hasTestId "BRF-EP5" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-08-09T11:00:00"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "All five views execute; Gantt and SPI print an explicit refusal when no KickOff is present rather than defaulting day zero to today" ;
+    backlog:verifiedByTool "backlog_views_v1_0_0.py" ;
+    backlog:attestsCriterion fw:AC_Views .
+
+fw:EP_Schedule a backlog:Epic ;
+    backlog:hasIdentifier "BRF-EP6" ;
+    backlog:hasTitle "Kick-off, time-phased baseline and schedule performance" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register , fw:It2 ;
+    backlog:pursuesObjective fw:Obj_Views ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasAcceptanceCriterion fw:AC_Schedule ;
+    backlog:hasPriorityScore fw:S_Schedule ;
+    backlog:hasCostEstimate fw:E_Schedule ;
+    backlog:startedAt "2026-08-09T09:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-09T11:30:00"^^xsd:dateTime ;
+    backlog:hasActualEffort 14.0 ;
+    backlog:hasEvidence fw:Ev_Schedule ;
+    backlog:lastAuditedAt "2026-08-09T11:30:00"^^xsd:dateTime ;
+    backlog:plannedStart "2026-08-09T00:00:00"^^xsd:dateTime ;
+    backlog:plannedFinish "2026-08-12T23:59:59"^^xsd:dateTime ;
+    backlog:hasDuration 4.0 ;
+    backlog:dependsOn fw:EP_Views ;
+    backlog:rankedOnRoadmap fw:Roadmap ; backlog:hasRoadmapRank 6 ;
+    backlog:scheduledInHorizon backlog:Now .
+fw:AC_Schedule a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a register with a recorded kick-off and a current plan baseline, When earned value is computed, Then CPI and SPI are reported, superseded baselines are retained so performance against the original plan stays computable, and no schedule figure is printed where no kick-off anchors it." .
+fw:S_Schedule a backlog:WSJFScore ;
+    backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 2.5 ;
+    backlog:hasUserBusinessValue 6.0 ; backlog:hasTimeCriticality 2.0 ;
+    backlog:hasRiskReductionValue 2.0 ; backlog:hasJobSize 4.0 ;
+    backlog:scoredAt "2026-08-09T00:00:00"^^xsd:dateTime ;
+    backlog:hasScoreRationale "Lower time criticality than EP5: the views are useful immediately, while schedule performance only becomes meaningful once a plan has been in force long enough to slip. Larger job because it reverses a standing scope exclusion and must do so on the record." ;
+    backlog:hasBasisKind backlog:Basis_Judged .
+fw:E_Schedule a backlog:CostEstimate ;
+    backlog:hasEffortEstimate 12.0 ; backlog:hasCostBasis "KickOff, baseline, planned dates, duration, and the shapes for each" ;
+    backlog:estimatedAt "2026-08-09T00:00:00"^^xsd:dateTime ;
+    backlog:hasBasisKind backlog:Basis_Judged .
+fw:Ev_Schedule a backlog:TestEvidence ;
+    backlog:hasTestSpec "03-tooling/fixtures/fixture_positive_v1_7_0.ttl + fixture_negative_v1_7_0.ttl" ;
+    backlog:hasTestId "BRF-EP6" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-08-09T11:30:00"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "KickOffShape, PlannedDateShape and PlanBaselineShape reject a kick-off without a mode, a declared kick-off with no decider, a triggered one with no trigger, a finish before a start, planned dates with no kick-off at L2, and two baselines both claiming current" ;
+    backlog:verifiedByTool "backlog_validate_v1_3_0.py + pyshacl" ;
+    backlog:attestsCriterion fw:AC_Schedule .
+
+# ---- day zero, and the baseline it anchors ----
+
+fw:KO a backlog:KickOff ;
+    rdfs:label "Framework development kick-off"@en ;
+    backlog:kickOffFor fw:Register ;
+    backlog:kickedOffAt "2026-08-06T00:00:00"^^xsd:dateTime ;
+    backlog:hasKickOffMode backlog:KickOff_Declared ;
+    backlog:decidedBy backlog:Owner .
+
+fw:BL1 a backlog:PlanBaseline ;
+    rdfs:label "Baseline 1 — set at kick-off"@en ;
+    backlog:baselineFor fw:Register ;
+    backlog:baselinedAt "2026-08-06T00:00:00"^^xsd:dateTime ;
+    backlog:isCurrentBaseline true .

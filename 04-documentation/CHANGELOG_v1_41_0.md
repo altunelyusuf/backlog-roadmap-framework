@@ -1,5 +1,44 @@
 # Changelog
 
+## v1.41.0 — 2026-08-09 (MINOR: the plan alongside the roadmap — Gantt, SPI, and five views)
+
+**The scope exclusion is reversed on the record, not deleted.** `Ex_Schedule` refused a time-phased
+baseline because horizons are ordinal by design. That reasoning still holds **for the roadmap** and is
+unchanged: horizons stay ordinal, `hasRoadmapRank` stays an ordering, neither gained a date. What is
+admitted is a **plan alongside** the roadmap. A `ScopeChange` supersedes the exclusion and both remain
+readable — L-112 forbids editing a record of a past decision to match a later one.
+
+**`KickOff` answers the start-time problem directly**, and carries a mode: **Declared** must name who
+declared it, **Triggered** must name the automated event, so a start that was *claimed* is
+distinguishable from one that was *recorded*. Until a kick-off exists a plan is a proposal — its dates
+compare with each other but not with reality.
+
+**`plannedStart`/`plannedFinish` are deliberately distinct from `startedAt`/`finishedAt`**: the gap
+between them is the whole of schedule variance, and collapsing them would make every plan appear met.
+`hasDuration` is elapsed days, not effort — two people for a day and one for two days share an effort
+and differ in duration, and a critical path is a chain of durations.
+
+**`PlanBaseline` retains superseded baselines** so performance stays computable against the original
+plan, not only the current one. That is the number a rebaselined project would rather not show, and
+retaining it is the answer to the criticism earned-value practice most often attracts.
+
+**`backlog_views_v1_0_0.py` derives five views** — Gantt and network as Mermaid, burn-down as text
+bars, cumulative flow and earned value as tables. Mermaid because it diffs, reviews, and renders in
+GitHub with no toolchain and no new dependency. **Nothing is stored.**
+
+**The refusal is the part under test as much as the drawing.** With no `KickOff`, Gantt prints *"NOT
+DRAWN — planned dates anchor to nothing"* and SPI prints *"NOT COMPUTED"*, because assuming today
+would make every plan appear on schedule on the day it is read. Verified in both states.
+
+**A stale non-goal corrected.** §8 still read *"not a project-management tool (no velocity, capacity
+or burndown)"* — velocity and capacity shipped at v1.38.0 and burndown ships here. The standard was
+describing a framework three releases out of date.
+
+**Registered as a third mission**, not appended to an existing one: `Mission_Plan` with its own goal,
+objective and metric, and two epics — BRF-EP5 (views, 5.00) and BRF-EP6 (kick-off and schedule, 2.50).
+Both Done with evidence; EP6 actual **14.0 against an estimate of 12.0**.
+
+
 ## v1.40.0 — 2026-08-09 (MINOR: the register's absent layers filled; two overstatement defects corrected)
 
 **A state correction first.** The previous turn reported *"No, I did not build a lineage"* against a
@@ -56,7 +95,7 @@ a scope with no exclusion. **Verified against the defective register: it now fai
 **`backlog_lineage_completeness_v1_0_2.py`** reports every layer at any level and states what each
 omission costs, so a register can be improved before being failed. Wired into the release gate.
 
-**The register repaired** and promoted to `01-ontologies/backlog_framework_register_abox_v1_2_0.ttl`:
+**The register repaired** and promoted to `01-ontologies/backlog_framework_register_abox_v1_3_0.ttl`:
 scope with **five recorded exclusions**, a Definition of Done with **six executable criteria**, and
 the unbuilt epics decomposed into six stories with acceptance criteria.
 

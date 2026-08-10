@@ -789,3 +789,36 @@ ex:N_Iteration a backlog:Iteration ;
     backlog:hasIdentifier "IT-BAD" ; backlog:hasState backlog:Done ;
     backlog:iterationStart "2026-08-01T00:00:00"^^xsd:dateTime ;
     backlog:iterationEnd "2026-07-01T00:00:00"^^xsd:dateTime .
+
+#################################################################
+#  BRF-EP6 planted defects (83-86)
+#################################################################
+
+# DEFECT 83: a kick-off with no mode and no moment
+ex:N_KO a backlog:KickOff ;
+    rdfs:label "we started at some point"@en ;
+    backlog:kickOffFor ex:Backlog .
+
+# DEFECT 84: a declared kick-off on nobody's word
+ex:N_KO2 a backlog:KickOff ;
+    backlog:kickOffFor ex:Backlog ;
+    backlog:kickedOffAt "2026-08-01T00:00:00"^^xsd:dateTime ;
+    backlog:hasKickOffMode backlog:KickOff_Declared .
+
+# DEFECT 85: planned to finish before it starts
+ex:N047 a backlog:Story ;
+    backlog:hasIdentifier "N-047" ; backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer ex:Backlog ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "placeholder" ;
+    backlog:plannedStart "2026-09-01T00:00:00"^^xsd:dateTime ;
+    backlog:plannedFinish "2026-08-01T00:00:00"^^xsd:dateTime .
+
+# DEFECT 86: two baselines both claiming to be current
+ex:N_BL1 a backlog:PlanBaseline ;
+    backlog:baselineFor ex:Backlog ;
+    backlog:baselinedAt "2026-07-01T00:00:00"^^xsd:dateTime ;
+    backlog:isCurrentBaseline true .
+ex:N_BL2 a backlog:PlanBaseline ;
+    backlog:baselineFor ex:Backlog ;
+    backlog:baselinedAt "2026-08-01T00:00:00"^^xsd:dateTime ;
+    backlog:isCurrentBaseline true .

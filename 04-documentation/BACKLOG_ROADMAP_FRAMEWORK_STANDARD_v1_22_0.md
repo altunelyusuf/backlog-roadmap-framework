@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.21.0
+# Backlog & Roadmap Semantic Framework — Standard v1.22.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -283,6 +283,27 @@ register can be improved before it is failed. It runs inside the release gate.
 The division is deliberate. The shape is the gate; the reporter is the map. A register climbing
 toward a level needs to see the gap before the gap fails it.
 
+### 2.5c-v The plan alongside the roadmap (subject v1.15.0)
+
+A **roadmap orders**; a **plan dates**. They now coexist and are deliberately different artifacts —
+horizons stay ordinal, `hasRoadmapRank` stays an ordering, and neither acquired a date.
+
+| Term | Purpose |
+|---|---|
+| `KickOff` — `kickedOffAt`, `hasKickOffMode` / `KickOffMode` (`Declared`/`Triggered`), `hasKickOffTrigger` | Day zero. A baseline of dates anchors to nothing without it. A declared kick-off must name who; a triggered one must name the trigger, so a start that was *claimed* is distinguishable from one that was *recorded* |
+| `plannedStart`, `plannedFinish` | The baseline. Kept distinct from `startedAt`/`finishedAt`: the gap between them **is** schedule variance, and collapsing them would make every plan appear met |
+| `hasDuration` | Elapsed days, **not** effort — two people for a day and one for two days share an effort and differ in duration. A critical path is the longest chain of durations |
+| `PlanBaseline` — `baselinedAt`, `isCurrentBaseline` | Moving a plan is a recorded `Rebaseline`, not an edit. Superseded baselines are **retained**, so performance stays computable against the original as well as the current — the figure a rebaselined project would rather not show |
+
+`backlog_views` derives **Gantt, burn-down, cumulative flow, network/AON and earned value** from these
+plus facts already recorded. **Nothing is stored.** Where a view needs day zero and no `KickOff`
+exists it **refuses and says so** rather than defaulting to today, which would make every plan appear
+on schedule on the day it is read.
+
+**This reverses a standing scope exclusion.** `Ex_Schedule` refused a time-phased baseline; it is
+**not deleted** — it records a decision that was true when taken. A `ScopeChange` supersedes it and
+both stay readable.
+
 ### 2.5d Decomposition, commitments, dependency kinds, impediments, flow, team (subject v1.4.0)
 
 | Term | Meaning |
@@ -510,7 +531,7 @@ delay; W3C OWL 2, SHACL and SHACL-AF; OE Pack subjects (`core:Artifact`, `core:C
 
 ## 8. Non-goals
 
-Not a project-management tool (no velocity, capacity or burndown), not an issue-tracker
+Not an issue-tracker
 replacement, not a workflow engine, and it carries no project data: the shipped ABox holds
 framework-level individuals only.
 

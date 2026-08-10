@@ -18,9 +18,10 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.14.0> ;
-    owl:versionInfo "1.14.0" ;
-    owl:priorVersion <http://example.org/backlog/1.13.0> ,
+    owl:versionIRI <http://example.org/backlog/1.15.0> ;
+    owl:versionInfo "1.15.0" ;
+    owl:priorVersion <http://example.org/backlog/1.14.0> ,
+                     <http://example.org/backlog/1.13.0> ,
                      <http://example.org/backlog/1.12.0> ,
                      <http://example.org/backlog/1.11.0> ,
                      <http://example.org/backlog/1.10.0> ,
@@ -51,6 +52,7 @@
     skos:definition "A domain-neutral, reusable schema for backlog-and-roadmap governance across independent developments. It standardises five concept groups that recur in every product/engineering effort: (1) work items and their containers, (2) a closed lifecycle whose Done state is a constrained fact rather than asserted prose, (3) completion Evidence anchored to real delivered artifacts (a named passing test, a release carrying its package SHA-256, a file hash, or a recorded review), (4) method-parameterised prioritisation scores, and (5) a roadmap modelled as a derived projection over the backlog rather than an independently maintained list. Adoption is declared by an AdoptionProfile carrying a ConformanceLevel (L1 Core / L2 Evidence-Bound / L3 Governed), which the paired SHACL suite reads to decide which constraints are enforced, so one framework serves developments at different governance maturity without forking the vocabulary. This TBox defines vocabulary only; the paired SHACL shapes supply enforcement, the SPARQL rules supply derivation (container status, next-item selection, milestone status), and an execution bridge asserts observed real-world verification facts back into the ABox."@en ;
     dcterms:source "Scrum Guide 2020 (Product Backlog, Increment, Definition of Done); SAFe 6.0 (Epic/Feature/Story ladder, WSJF); Now-Next-Later roadmap practice; Intercom RICE prioritisation; W3C OWL 2, SHACL, SHACL-AF."@en ;
     rdfs:comment "v1.0.0 — generalisation of an adopting project's product-backlog deposit (an OE Pack registrant deposit, http://example.org/product-backlog 1.3.0) into a project-independent subject. Per L-105 this is an extension of that implementation, not a parallel one: every pb: term has a declared alignment in backlog_alignment_productbacklog_v1_0_0.ttl. Per L-68 the hyphenated/abbreviated form (product-backlog / pb:) is replaced by a single full-word prefix (backlog:); per L-69 the retained terminology anchors to the Scrum Guide and SAFe rather than to project-internal names. The deposit files themselves are NOT modified by this release (L-X7 / B1: the owning session decides supersession)."@en ,
+    "v1.15.0 (MINOR, additions only) — the time-phased baseline the subject previously refused, admitted by an owner-decided ScopeChange rather than by deleting the exclusion that refused it. Ex_Schedule stays in the register as the record of the earlier decision; L-112 forbids editing a record of a past decision to match a later one. Adds a KickOff to anchor a plan to a real moment, planned start and finish so a baseline exists, a duration so a network can be traversed, and the widening of Rebaseline to reach the plan so that moving a baseline is a recorded move rather than a quiet edit. Note what this does NOT change: horizons remain ordinal, and hasRoadmapRank remains an ordering rather than a date. A plan and a roadmap now coexist and are deliberately different things."@en ,
     "v1.14.0 (MINOR, additions only) — BRF-EP2 from the framework's own register, ranked second at 4.00. Adds only what CANNOT be derived. Cycle time, item age, throughput and velocity are computed by the report from startedAt, finishedAt and the iteration period; storing them would duplicate a derivable fact, which is the defect L-91 names one level down. What could not be derived was the iteration's own period, without which velocity has no denominator, and a Forecast — because a forecast is a CLAIM about the future and the framework's standing position is that a claim must state what would make it wrong."@en ,
     "v1.13.0 (MINOR, additions only) — BRF-EP1 from the framework's own register, which the computed ranking put first at 6.50. Distinguishes work that carries independent value and is prioritised on a product backlog from subordinate execution work produced when a backlog item is planned into an iteration. Deliberately does NOT repurpose backlog:Task: its own definition says a Task must be tracked, PRIORITISED and evidenced like any other work item, so it is a non-user-facing product backlog item, not a sprint task, and redefining it would silently change the meaning of every register already using it. ExecutionTask is therefore a new ninth kind rather than a re-reading of an existing one."@en ,
     "v1.12.0 (MINOR, additions only) — makes the difference between a MEASURED estimate and a JUDGED one visible. hasCostBasis already recorded what an estimate was based on, in prose, and nothing distinguished a basis that was EXECUTED from one that was reasoned. An adopting project had already demonstrated the better practice without the vocabulary to declare it, setting an objective baseline by test-driving a trial declaration against a scratch copy of its live register and recording the resulting figure as measured rather than estimated. This release names that: a closed EstimationBasisKind, a link from a measured estimate or score to the MetricObservation that produced it, and constraints requiring a measured claim to name its observation. It does not forbid judgement — most estimates are judgements and saying so is honest — it forbids a judgement being indistinguishable from a measurement."@en ,
@@ -2831,3 +2833,93 @@ backlog:forecastOutcome a owl:ObjectProperty ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "forecast outcome"@en ;
     skos:definition "Met, missed or pending, derived by rule from whether the forecast completion date passed with work still open. Reuses the same closed status the framework already applies to objectives and milestones, so a missed forecast is a first-class computed outcome rather than a quietly superseded one."@en .
+
+#################################################################
+#  44. Kick-off, the time-phased baseline, and SPI (v1.15.0)
+#################################################################
+
+backlog:KickOff a owl:Class ;
+    rdfs:subClassOf core:Artifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Kick-Off"@en ;
+    skos:definition "The recorded act of activating a plan: the moment from which planned dates are measured and against which every subsequent slip is computed. Needed because a baseline of relative offsets anchors to nothing — 'day 4' is not a date until something says when day zero was. It may be entered by a person or emitted by an automated trigger; hasKickOffMode records which, so a plan whose start was assumed is distinguishable from one whose start was declared. Until a KickOff exists, a plan is a proposal: its dates can be compared with each other but not with reality, and no schedule variance is computable."@en .
+
+backlog:kickOffFor a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:KickOff ; rdfs:range backlog:WorkItemContainer ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "kick-off for"@en ;
+    skos:definition "The register or project this kick-off activates."@en .
+
+backlog:kickedOffAt a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:KickOff ; rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "kicked off at"@en ;
+    skos:definition "The actual moment work was activated — day zero of the baseline."@en .
+
+backlog:KickOffMode a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:KickOff_Declared backlog:KickOff_Triggered ) ;
+    rdfs:label "Kick-Off Mode"@en ;
+    skos:definition "Whether the start was declared by a person or emitted by an automated trigger. Recorded because the two carry different evidential weight: a triggered kick-off is a fact about a system, a declared one is a claim by someone, and a slip measured from a claim inherits that claim's reliability."@en .
+
+backlog:KickOff_Declared a owl:NamedIndividual , backlog:KickOffMode ;
+    rdfs:label "Declared"@en ;
+    skos:definition "A person recorded the start. Must name who, through decidedBy."@en .
+
+backlog:KickOff_Triggered a owl:NamedIndividual , backlog:KickOffMode ;
+    rdfs:label "Triggered"@en ;
+    skos:definition "An automated event recorded the start — a pipeline run, a branch creation, a first commit. Must name the trigger through hasKickOffTrigger so the moment is re-derivable."@en .
+
+backlog:hasKickOffMode a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:KickOff ; rdfs:range backlog:KickOffMode ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has kick-off mode"@en .
+
+backlog:hasKickOffTrigger a owl:DatatypeProperty ;
+    rdfs:domain backlog:KickOff ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has kick-off trigger"@en ;
+    skos:definition "The automated event that recorded the start, named precisely enough to be found again."@en .
+
+backlog:plannedStart a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:WorkItem backlog:WorkItemContainer ) ] ;
+    rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "planned start"@en ;
+    skos:definition "When this work was baselined to begin. Distinct from startedAt, which records when it actually began: the gap between them is the whole of schedule variance, and collapsing the two would make every plan appear to have been met."@en .
+
+backlog:plannedFinish a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:WorkItem backlog:WorkItemContainer ) ] ;
+    rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "planned finish"@en ;
+    skos:definition "When this work was baselined to complete. With plannedStart it gives a Gantt bar; with hasEffortEstimate it gives planned value at any date, which is what SPI requires and what the subject previously had no way to express."@en .
+
+backlog:hasDuration a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:WorkItem ; rdfs:range xsd:decimal ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has duration"@en ;
+    skos:definition "Elapsed working days this item is expected to occupy, which is NOT its effort: two people for one day and one person for two days share an effort and differ in duration. Required for network traversal, since a critical path is the longest chain of durations and cannot be computed from effort alone."@en .
+
+backlog:PlanBaseline a owl:Class ;
+    rdfs:subClassOf core:Artifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Plan Baseline"@en ;
+    skos:definition "A named, dated set of planned dates against which performance is measured. Held as an artifact so that moving the plan is a recorded Rebaseline rather than an edit: without it, schedule variance can be driven to zero by changing the dates, which is the failure earned-value practice is most often criticised for. Retaining the prior baseline is what lets performance be reported against BOTH the current plan and the original."@en .
+
+backlog:baselineFor a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:PlanBaseline ; rdfs:range backlog:WorkItemContainer ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "baseline for"@en .
+
+backlog:baselinedAt a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:PlanBaseline ; rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "baselined at"@en .
+
+backlog:isCurrentBaseline a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:PlanBaseline ; rdfs:range xsd:boolean ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "is current baseline"@en ;
+    skos:definition "True for exactly one baseline per container. Superseded baselines are retained, not deleted, so schedule performance can be reported against the original as well as the current — the number a rebaselined project would rather not show."@en .

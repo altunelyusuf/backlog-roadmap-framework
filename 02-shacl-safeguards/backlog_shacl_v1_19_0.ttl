@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.18.0> ;
-    owl:versionInfo "1.18.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.19.0> ;
+    owl:versionInfo "1.19.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.18.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.17.0> ,
                      <http://example.org/backlog-shapes/1.16.0> ,
                      <http://example.org/backlog-shapes/1.15.1> ,
@@ -2184,4 +2185,78 @@ backlog:LineageDepthAdvisoryShape a sh:NodeShape ;
         sh:select """SELECT $this WHERE {
             ?s a backlog:ScopeStatement .
             FILTER NOT EXISTS { ?x a backlog:ScopeExclusion }
+        }""" ] .
+
+#################################################################
+#  v1.19.0 — a plan anchored to a real moment, and honestly moved
+#################################################################
+
+backlog:KickOffShape a sh:NodeShape ;
+    sh:targetClass backlog:KickOff ;
+    sh:severity sh:Violation ;
+    rdfs:label "A kick-off says when, for what, and on whose word (L1)"@en ;
+    sh:property [ sh:path backlog:kickOffFor ; sh:minCount 1 ; sh:class backlog:WorkItemContainer ;
+                  sh:message "L1: a kick-off must name what it activates." ] ;
+    sh:property [ sh:path backlog:kickedOffAt ; sh:minCount 1 ; sh:datatype xsd:dateTime ;
+                  sh:message "L1: a kick-off must record the moment. Without it there is no day zero and every planned date anchors to nothing." ] ;
+    sh:property [ sh:path backlog:hasKickOffMode ; sh:minCount 1 ; sh:class backlog:KickOffMode ;
+                  sh:message "L1: a kick-off must say whether it was declared by a person or emitted by a trigger; a slip measured from a claim inherits that claim's reliability." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: a declared kick-off must name who declared it. A start date on nobody's word cannot be questioned later." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasKickOffMode backlog:KickOff_Declared .
+            FILTER NOT EXISTS { $this backlog:decidedBy ?w }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: a triggered kick-off must name the trigger, so the moment is re-derivable rather than asserted." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasKickOffMode backlog:KickOff_Triggered .
+            FILTER NOT EXISTS { $this backlog:hasKickOffTrigger ?t }
+        }""" ] .
+
+backlog:PlannedDateShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItem ;
+    sh:severity sh:Violation ;
+    rdfs:label "Planned dates are well formed and anchored (L1/L2)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this item is planned to finish before it starts." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:plannedStart ?s ; backlog:plannedFinish ?f .
+            FILTER (STR(?f) < STR(?s))
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this item carries a planned finish but no planned start, so it has a deadline and no bar — schedule variance is computable at one end only." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:plannedFinish ?f .
+            FILTER NOT EXISTS { $this backlog:plannedStart ?s }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L2: this item carries planned dates but its register records no KickOff, so the baseline anchors to nothing and no schedule variance is computable. Record a KickOff, declared or triggered, before treating these dates as a plan." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed))
+            $this backlog:plannedStart ?s .
+            FILTER NOT EXISTS { ?k a backlog:KickOff }
+        }""" ] .
+
+backlog:PlanBaselineShape a sh:NodeShape ;
+    sh:targetClass backlog:PlanBaseline ;
+    sh:severity sh:Violation ;
+    rdfs:label "Exactly one current baseline, and superseded ones are kept (L1)"@en ;
+    sh:property [ sh:path backlog:baselineFor ; sh:minCount 1 ; sh:class backlog:WorkItemContainer ;
+                  sh:message "L1: a baseline must name what it baselines." ] ;
+    sh:property [ sh:path backlog:baselinedAt ; sh:minCount 1 ; sh:datatype xsd:dateTime ;
+                  sh:message "L1: a baseline must record when it was set." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: two baselines for the same container both claim to be current. Performance would be reported against whichever the reader picked, which is not a measurement." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:baselineFor ?c ; backlog:isCurrentBaseline true .
+            ?other backlog:baselineFor ?c ; backlog:isCurrentBaseline true .
+            FILTER (?other != $this)
         }""" ] .
