@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.26.0> ;
-    owl:versionInfo "1.26.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.27.0> ;
+    owl:versionInfo "1.27.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.26.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.25.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.24.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.23.0> ;
@@ -2692,4 +2693,60 @@ backlog:OversizedStoryAdvisoryShape a sh:NodeShape ;
             $this backlog:hasCostEstimate ?est .
             ?est backlog:hasEffortEstimate ?eff .
             FILTER (?eff > ?cap)
+        }""" ] .
+
+#################################################################
+#  v1.27.0 — BRF-EP9: a deployment says how it chose
+#
+#  NOT a rule that a release must always take the top score. An
+#  ordering is a model and is sometimes wrong, and a rule with no
+#  exception path is bypassed the first time it is. What is
+#  enforced is that the departure is VISIBLE.
+#################################################################
+
+backlog:DeploymentSelectionShape a sh:NodeShape ;
+    sh:targetClass backlog:DeploymentUnit ;
+    sh:severity sh:Violation ;
+    rdfs:label "L4: a deployment records how its contents were chosen"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L4: this deployment does not say on what basis its contents were chosen. A release grouped by theme and a release of the most valuable available work are otherwise indistinguishable in the register, and only one of them is a prioritisation decision. Opportunistic is a legitimate answer; not answering is not." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel backlog:L4_LineageEnforced .
+            FILTER NOT EXISTS { $this backlog:hasSelectionBasis ?b }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L4: this deployment claims its contents were the highest scored, but a Done backlog item with a higher score was available and is neither carried nor named as passed over. Either it should have shipped, or the basis is not Highest scored, or it belongs in passedOver with a rationale. All three are honest; the current state claims something the scores contradict." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel backlog:L4_LineageEnforced .
+            $this backlog:hasSelectionBasis backlog:Sel_HighestScored .
+            $this backlog:deploysItem ?carried .
+            ?carried backlog:hasPriorityScore ?cs . ?cs backlog:hasScoreValue ?cv .
+            ?other backlog:hasPriorityScore ?os . ?os backlog:hasScoreValue ?ov .
+            ?other backlog:hasState backlog:Done .
+            FILTER (?ov > ?cv)
+            FILTER NOT EXISTS { $this backlog:deploysItem ?other }
+            FILTER NOT EXISTS { $this backlog:passedOver ?other }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L4: this deployment names work it passed over but gives no rationale. Naming what was skipped without saying why records the fact and loses the reason, which is the half that would let anyone disagree with it." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:passedOver ?o .
+            FILTER NOT EXISTS { $this backlog:hasSelectionRationale ?r }
+        }""" ] .
+
+backlog:ScoringIgnoredAdvisoryShape a sh:NodeShape ;
+    sh:targetClass backlog:Backlog ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: scoring that never changes a release"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: every deployment in this register was selected on a basis other than score. Scoring may still be informing planning upstream, but no release has yet been decided by it, and a register where that stays true indefinitely is one where prioritisation is recorded and not used." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?d a backlog:DeploymentUnit ; backlog:hasSelectionBasis ?b .
+            FILTER NOT EXISTS {
+                ?d2 a backlog:DeploymentUnit ; backlog:hasSelectionBasis backlog:Sel_HighestScored .
+            }
         }""" ] .

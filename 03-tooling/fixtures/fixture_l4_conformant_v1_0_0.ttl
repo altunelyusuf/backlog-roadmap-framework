@@ -188,7 +188,8 @@ ex:Rel1 a backlog:DeploymentUnit ;
     backlog:hasDeploymentDate "2026-08-09T08:00:00"^^xsd:dateTime ;
     backlog:deploysFrom ex:It1 ;
     backlog:deploysItem ex:US1 ;
-    backlog:decidedBy backlog:Owner .
+    backlog:decidedBy backlog:Owner ;
+    backlog:hasSelectionBasis backlog:Sel_HighestScored .
 ex:US1 backlog:memberOfContainer ex:Rel1 .
 
 # the harness: which check proves which criterion, and complete only when all are

@@ -1,5 +1,35 @@
 # Changelog
 
+## v1.60.0 — 2026-08-11 (MINOR: BRF-EP9 — a deployment says how it chose, and the fourth mission closes)
+
+The last epic of `Mission_Executable`, unblocked by EP8 exactly as the register predicted: selecting
+the most valuable stories was meaningless while a story could span iterations, because what is
+*available* at a release boundary was undefined until stories were made to fit.
+
+**`SelectionBasis`**, closed at four — `Sel_HighestScored`, `Sel_Dependency`, `Sel_Committed`,
+`Sel_Opportunistic` — plus `passedOver` and `hasSelectionRationale`. At L4 a `DeploymentUnit` must say
+on what basis its contents were chosen.
+
+**Deliberately NOT a rule that a release must always take the top score.** An ordering is a model and
+is sometimes wrong; a rule with no exception path is bypassed the first time it is. What is enforced
+is that the departure is **visible** — claim `Sel_HighestScored` while a higher-scored deliverable
+item waits, and it must be named in `passedOver` with a reason. This is the same shape as the
+ranking-fork resolution this subject already carried.
+
+`Sel_Opportunistic` exists for the honest case: **a release that was not a prioritisation decision.**
+Without it in the vocabulary, such a release would have to be recorded as though it had been.
+
+An **advisory** fires where every deployment in a register was selected on some basis other than
+score — *prioritisation recorded and not used*.
+
+**Three clauses, all proven firing:** no stated basis; a Highest-scored claim contradicted by a Done
+item scoring 99 that is neither carried nor named; a pass-over with no rationale.
+
+**The mission's objective is met, measured rather than inferred.**
+`Metric_UnfinishableCommitments`: baseline **3** → **0**, re-measured by re-running all three original
+as-is probes against the current suite, not concluded from the work being Done.
+
+
 ## v1.59.0 — 2026-08-11 (MINOR: BRF-EP8 — a story is consumed whole within one iteration)
 
 **G9 turned into a constraint.** The owner examined and rejected sizing the iteration to its longest

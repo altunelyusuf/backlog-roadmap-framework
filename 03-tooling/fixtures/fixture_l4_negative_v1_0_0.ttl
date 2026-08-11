@@ -207,3 +207,39 @@ ex:T_SpanA a backlog:ExecutionTask ; backlog:hasIdentifier "T-SA" ;
     backlog:hasState backlog:Done ; backlog:memberOfContainer ex:Backlog , ex:It0 .
 ex:T_SpanB a backlog:ExecutionTask ; backlog:hasIdentifier "T-SB" ;
     backlog:hasState backlog:InProgress ; backlog:memberOfContainer ex:Backlog , ex:It1 .
+
+#################################################################
+#  BRF-EP9 planted defects: a deployment claiming it took the
+#  highest score while a higher-scored Done item waited unnamed,
+#  and one naming a pass-over with no reason.
+#################################################################
+
+ex:US_HighValue a backlog:Story ;
+    backlog:hasIdentifier "US-HV" ; backlog:hasTitle "Higher-scored and deliverable" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer ex:Backlog ;
+    backlog:hasPriorityScore ex:S_HV .
+ex:S_HV a backlog:WSJFScore ;
+    backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 99.0 ;
+    backlog:hasUserBusinessValue 9.0 ; backlog:hasTimeCriticality 9.0 ;
+    backlog:hasRiskReductionValue 9.0 ; backlog:hasJobSize 1.0 ;
+    backlog:scoredAt "2026-08-11T09:00:00"^^xsd:dateTime .
+
+ex:Rel_Claim a backlog:DeploymentUnit ;
+    backlog:hasIdentifier "REL-N1" ; backlog:hasTitle "Claims the top score" ;
+    backlog:hasState backlog:Done ;
+    backlog:hasDeploymentDate "2026-08-11T09:00:00"^^xsd:dateTime ;
+    backlog:deploysFrom ex:It1 ;
+    backlog:deploysItem ex:US1 ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:hasSelectionBasis backlog:Sel_HighestScored .
+
+ex:Rel_NoReason a backlog:DeploymentUnit ;
+    backlog:hasIdentifier "REL-N2" ; backlog:hasTitle "Names a pass-over with no reason" ;
+    backlog:hasState backlog:Done ;
+    backlog:hasDeploymentDate "2026-08-11T09:00:00"^^xsd:dateTime ;
+    backlog:deploysFrom ex:It1 ;
+    backlog:deploysItem ex:US1 ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:hasSelectionBasis backlog:Sel_Committed ;
+    backlog:passedOver ex:US_HighValue .

@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.27.0
+# Backlog & Roadmap Semantic Framework — Standard v1.28.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -360,6 +360,25 @@ anything. `EpicPlanningShape` rejects it at L2. **Decompose first, then plan the
 The gap is worth naming because a subclass relation answers *what may be asserted* and a definition
 answers *what the term means* — different questions, and reading only the first is how this
 arrangement came to be described as permitted.
+
+### 2.5c-ix A story fits its iteration; a deployment says how it chose
+
+**`StoryIterationFitShape` (L4)** — a story planned into more than one iteration, or still open after
+its iteration closed, is rejected. Each message names **splitting** as the remedy and says not to
+widen the iteration: *a box sized by what it contains always fits, and its velocity can then never
+report a miss.* Splitting needs no new relation — `decomposesInto` already reads *"a feature into
+stories"*.
+
+**`SelectionBasis` — `Sel_HighestScored` / `Sel_Dependency` / `Sel_Committed` / `Sel_Opportunistic`**,
+with `passedOver` and `hasSelectionRationale`. At L4 a `DeploymentUnit` must say on what basis its
+contents were chosen; a release grouped by theme and a release of the most valuable available work are
+otherwise indistinguishable, and only one is a prioritisation decision.
+
+**This is not a rule that a release must always take the top score.** An ordering is a model and is
+sometimes wrong, and a rule with no exception path is bypassed the first time it is. What is enforced
+is that the departure is **visible**: claim `Sel_HighestScored` while a higher-scored deliverable item
+waits, and it must be named in `passedOver` with a reason. `Sel_Opportunistic` is a legitimate answer;
+not answering is not.
 
 ### 2.5d Decomposition, commitments, dependency kinds, impediments, flow, team (subject v1.4.0)
 
