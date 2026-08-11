@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/1.8.0> ;
-    owl:versionInfo "1.8.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/1.9.0> ;
+    owl:versionInfo "1.9.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/1.8.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/1.7.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/1.6.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/1.5.0> ;
@@ -677,7 +678,7 @@ fw:Obs_Views a backlog:MetricObservation ;
     backlog:observationFor fw:Obj_Views ;
     backlog:hasObservedValue 5.0 ;
     backlog:observedAt "2026-08-09T00:00:00"^^xsd:dateTime ;
-    backlog:hasObservationMethod "Counted by running backlog_views_v1_4_0.py against this register: Gantt, burn-down, cumulative flow, network/AON and earned value all execute. Gantt and SPI correctly REFUSE rather than assume when no KickOff is present, which is the behaviour under test as much as the drawing is." .
+    backlog:hasObservationMethod "Counted by running backlog_views_v1_5_0.py against this register: Gantt, burn-down, cumulative flow, network/AON and earned value all execute. Gantt and SPI correctly REFUSE rather than assume when no KickOff is present, which is the behaviour under test as much as the drawing is." .
 
 # ---- the two epics this mission admits ----
 
@@ -717,12 +718,12 @@ fw:E_Views a backlog:CostEstimate ;
     backlog:estimatedAt "2026-08-09T00:00:00"^^xsd:dateTime ;
     backlog:hasBasisKind backlog:Basis_Judged .
 fw:Ev_Views a backlog:TestEvidence ;
-    backlog:hasTestSpec "03-tooling/backlog_views_v1_4_0.py against this register" ;
+    backlog:hasTestSpec "03-tooling/backlog_views_v1_5_0.py against this register" ;
     backlog:hasTestId "BRF-EP5" ;
     backlog:evidenceVerified true ;
     backlog:verifiedAt "2026-08-09T11:00:00"^^xsd:dateTime ;
     backlog:hasVerificationMethod "All five views execute; Gantt and SPI print an explicit refusal when no KickOff is present rather than defaulting day zero to today" ;
-    backlog:verifiedByTool "backlog_views_v1_4_0.py" ;
+    backlog:verifiedByTool "backlog_views_v1_5_0.py" ;
     backlog:attestsCriterion fw:AC_Views .
 
 fw:EP_Schedule a backlog:Epic ;
@@ -1334,7 +1335,7 @@ fw:Ev_Cost a backlog:TestEvidence ;
     backlog:evidenceVerified true ;
     backlog:verifiedAt "2026-08-09T15:00:00"^^xsd:dateTime ;
     backlog:hasVerificationMethod "Positive fixture carries one item with three dimensions at once — tokens, compute and unpriced review time — against two budgets, at 0 violations; the cost view reports each dimension separately and states plainly that the unpriced one contributes to no monetary total. Negative fixture plants a dimension with no unit, a rate with no currency, a bare cost, negative consumption, and a parent and child both costed on one dimension; all fire." ;
-    backlog:verifiedByTool "backlog_validate_v1_4_0.py + backlog_views_v1_4_0.py" ;
+    backlog:verifiedByTool "backlog_validate_v1_4_0.py + backlog_views_v1_5_0.py" ;
     backlog:attestsCriterion fw:AC_Cost .
 
 fw:Obs_EP3Actual a backlog:MetricObservation ;
@@ -1530,7 +1531,14 @@ fw:Scope backlog:scopeRealizesObjective fw:Obj_ProgressInViews , fw:Obj_Finishab
 fw:EP_Progress a backlog:Epic ;
     backlog:hasIdentifier "BRF-EP7" ;
     backlog:hasTitle "Structural views carry completion, not only dependency" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-08-11T10:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-11T11:00:00"^^xsd:dateTime ;
+    backlog:hasActualEffort 3.0 ;
+    backlog:hasEvidence fw:Ev_Progress ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:lastAuditedAt "2026-08-11T11:00:00"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register ;
     backlog:pursuesObjective fw:Obj_ProgressInViews ;
     backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
@@ -1605,3 +1613,20 @@ fw:E_ValueRelease a backlog:CostEstimate ;
     backlog:hasEffortEstimate 6.0 ; backlog:hasCostBasis "Selection basis, a recorded exception with rationale, and a report of what was excluded" ;
     backlog:estimatedAt "2026-08-11T07:00:00"^^xsd:dateTime ;
     backlog:hasBasisKind backlog:Basis_Judged .
+
+fw:Ev_Progress a backlog:TestEvidence ;
+    backlog:hasTestSpec "03-tooling/fixtures/fixture_progress_v1_0_0.ttl" ;
+    backlog:hasTestId "BRF-EP7" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-08-11T11:00:00"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "Rendered the fixture through backlog_views --network and confirmed all five cases distinguishable: a 2-of-4 parent at 50%, a Done leaf full, a Proposed leaf empty, a Cancelled leaf full because work that will not be done is resolved rather than outstanding, and a started childless leaf reporting ? rather than 0" ;
+    backlog:verifiedByTool "backlog_views_v1_5_0.py" ;
+    backlog:attestsCriterion fw:AC_Progress .
+
+fw:Obs_ProgressDelivered a backlog:MetricObservation ;
+    rdfs:label "Structural views carrying progress"@en ;
+    backlog:observesMetric fw:Metric_ProgressLegible ;
+    backlog:observationFor fw:Obj_ProgressInViews ;
+    backlog:hasObservedValue 1.0 ;
+    backlog:observedAt "2026-08-11T11:00:00"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Counted by running backlog_views --network against the framework's own register: the emitted Mermaid now carries a filled bar and a percentage per node, and the text table lists a derived completion with its basis for every item. Baseline was 0. Nothing is stored — a percentage written into the register could disagree with the states it summarises." .

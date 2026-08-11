@@ -1,0 +1,40 @@
+# Progress-rendering fixture — every case the network view must distinguish.
+#
+#   E-1  a parent 2/4 resolved            -> half filled
+#   S-1  a finished leaf                  -> full
+#   S-3  an unstarted leaf                -> empty
+#   S-4  a CANCELLED leaf                 -> full: work that will not be done is
+#        resolved, not outstanding; counting it incomplete would leave the parent
+#        permanently short of full through no remaining effort
+#   S-2  a STARTED leaf with no children  -> "?" and not 0. It has nothing to
+#        measure against, and drawing it empty would claim no progress had been
+#        made when the register simply cannot say.
+#
+# The last is the case the acceptance criterion names explicitly, and the one a
+# percentage-shaped answer would quietly get wrong.
+
+@prefix backlog: <http://example.org/backlog#> .
+@prefix ex: <http://example.org/pg#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+ex:P a backlog:AdoptionProfile ; backlog:profileAppliesTo "progress probe" ;
+    backlog:governsBacklog ex:BL ; backlog:hasConformanceLevel backlog:L1_Core ;
+    backlog:hasTargetConformanceLevel backlog:L2_EvidenceBound ;
+    backlog:hasLevelReviewDate "2027-01-01T00:00:00"^^xsd:dateTime ;
+    backlog:decidedBy backlog:Owner ; backlog:hasDecisionRationale "probe" ;
+    backlog:adoptsFacet backlog:CoreFacet .
+ex:BL a backlog:Backlog ; backlog:hasIdentifier "BL" ; backlog:hasState backlog:InProgress .
+# a parent one-quarter through: 1 of 4 children resolved
+ex:EP a backlog:Epic ; backlog:hasIdentifier "E-1" ; backlog:hasState backlog:InProgress ;
+    backlog:memberOfContainer ex:BL ; backlog:notYetScoreable true ; backlog:hasScoreabilityReason "probe" ;
+    backlog:decomposesInto ex:S1 , ex:S2 , ex:S3 , ex:S4 .
+ex:S1 a backlog:Story ; backlog:hasIdentifier "S-1" ; backlog:hasState backlog:Done ;
+    backlog:memberOfContainer ex:BL ; backlog:notYetScoreable true ; backlog:hasScoreabilityReason "probe" .
+ex:S2 a backlog:Story ; backlog:hasIdentifier "S-2" ; backlog:hasState backlog:InProgress ;
+    backlog:memberOfContainer ex:BL ; backlog:notYetScoreable true ; backlog:hasScoreabilityReason "probe" ;
+    backlog:dependsOn ex:S1 .
+ex:S3 a backlog:Story ; backlog:hasIdentifier "S-3" ; backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer ex:BL ; backlog:notYetScoreable true ; backlog:hasScoreabilityReason "probe" ;
+    backlog:dependsOn ex:S2 .
+ex:S4 a backlog:Story ; backlog:hasIdentifier "S-4" ; backlog:hasState backlog:Cancelled ;
+    backlog:memberOfContainer ex:BL ; backlog:notYetScoreable true ; backlog:hasScoreabilityReason "probe" ;
+    backlog:hasRationale "Superseded by S-2, which covers the same capability; kept in the register so the parent's completion accounts for it as resolved rather than outstanding." .

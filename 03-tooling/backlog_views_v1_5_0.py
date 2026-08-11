@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_views v1.4.0 — the classical project views, computed not stored.
+"""backlog_views v1.5.0 — the classical project views, computed not stored.
 
 Emits Mermaid and fixed-width tables from a register. Mermaid because it is
 plain text: it diffs, it reviews, it renders in GitHub and most editors without
@@ -11,7 +11,8 @@ WHAT IS DERIVED HERE, AND WHY NONE OF IT IS STORED
   Gantt              plannedStart/plannedFinish against startedAt/finishedAt
   Burn-down/up       iteration period + finishedAt + hasEffortEstimate
   Cumulative flow    TransitionEvent timestamps by state
-  Network (AON)      dependsOn + hasDuration; longest path = critical path
+  Network (AON)      dependsOn + hasDuration; longest path = critical path,
+                     with each node filled to its derived completion
   Earned value       PV/EV/AC from estimates, actuals and the baseline
   Cost dimensions    per-dimension totals, budget comparison, derived roll-up
 
@@ -293,20 +294,89 @@ def cfd(g):
 
 
 # ------------------------------------------------------------- network
+def progress(g, item):
+    """Completion of an item as a fraction, DERIVED from its children.
+
+    Returns (fraction, basis) or (None, reason). Nothing is stored: a percentage
+    written into the register could disagree with the states it summarises, which
+    is the defect L-91 names one level down.
+
+    Order of preference, strongest first:
+      children  — the proportion of decomposition children that are Done or
+                  Cancelled. This is what "how far through" actually means for a
+                  parent: its completion IS its children's.
+      own state — a leaf has no children to average, so it is 0 or 1. Reported as
+                  such rather than dressed up as a proportion.
+
+    Cancelled counts as resolved, not as progress. It is work that will not be
+    done and does not remain outstanding; treating it as incomplete would leave a
+    node permanently short of full through no remaining effort.
+    """
+    kids = list(g.objects(item, BL.decomposesInto))
+    if kids:
+        resolved = sum(1 for k in kids
+                       if g.value(k, BL.hasState) in (BL.Done, BL.Cancelled))
+        return resolved / float(len(kids)), "%d/%d children" % (resolved, len(kids))
+    st = g.value(item, BL.hasState)
+    if st is None:
+        return None, "no state and no children"
+    if st in (BL.Done, BL.Cancelled):
+        return 1.0, "leaf, %s" % str(st).rsplit("#", 1)[-1]
+    if st == BL.InProgress:
+        return None, "started, no children to measure against"
+    return 0.0, "leaf, %s" % str(st).rsplit("#", 1)[-1]
+
+
+def bar(frac, width=10):
+    """A filled block proportional to completion; an unknown is never drawn as 0."""
+    if frac is None:
+        return "?" * width
+    filled = int(round(frac * width))
+    return "\u2588" * filled + "\u2591" * (width - filled)
+
+
 def network(g):
-    print("\n== NETWORK (AON) — dependencies, and the critical path ==")
+    print("\n== NETWORK (AON) — dependencies, progress, and the critical path ==")
     items = work_items(g)
     dep = {i: [d for d in g.objects(i, BL.dependsOn)] for i in items}
     if not any(dep.values()):
         print("  no dependsOn edges — the network is a set of isolated nodes")
         return
+    prog = {i: progress(g, i) for i in items}
     print("\n```mermaid")
     print("graph LR")
+    for i in items:
+        frac, basis = prog[i]
+        nid = ident(g, i).replace("-", "_")
+        if frac is None:
+            label = "%s<br/>? unknown" % ident(g, i)
+        else:
+            label = "%s<br/>%s %d%%" % (ident(g, i), bar(frac, 8), round(frac * 100))
+        print('    %s["%s"]' % (nid, label))
     for i in items:
         for d in dep[i]:
             print("    %s --> %s" % (ident(g, d).replace("-", "_"),
                                      ident(g, i).replace("-", "_")))
+    # An unstarted node and a finished one must not render alike.
+    for i in items:
+        frac, _ = prog[i]
+        nid = ident(g, i).replace("-", "_")
+        if frac is None:
+            print("    style %s stroke-dasharray: 4 3" % nid)
+        elif frac >= 1.0:
+            print("    style %s stroke-width:3px" % nid)
     print("```")
+    print("\n  completion, derived — nothing below is stored:")
+    for i in items:
+        frac, basis = prog[i]
+        print("    %-12s %s  %s  (%s)"
+              % (ident(g, i), bar(frac),
+                 "  ? " if frac is None else "%3d%%" % round(frac * 100), basis))
+    unknown = [i for i in items if prog[i][0] is None]
+    if unknown:
+        print("  %d node(s) report ? rather than 0: a started leaf with no children has"
+              % len(unknown))
+        print("  nothing to measure against, and drawing it empty would claim no progress.")
     dur = {i: float(g.value(i, BL.hasDuration) or 0) for i in items}
     if not any(dur.values()):
         print("\n  critical path NOT computed: no item carries hasDuration.")

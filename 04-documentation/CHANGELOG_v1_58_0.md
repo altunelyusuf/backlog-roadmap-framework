@@ -1,5 +1,43 @@
 # Changelog
 
+## v1.58.0 — 2026-08-11 (MINOR: BRF-EP7 — structural views carry progress)
+
+The register put EP7 first at 6.00 and its acceptance criterion, written before the build, was the
+specification. **No vocabulary was minted**: `decomposesInto` and `hasState` already carry everything
+progress needs, and a stored percentage could disagree with the states it summarises — the defect
+L-91 names, one level down.
+
+**Each node is now filled to its derived completion**, in the Mermaid graph and in a text table that
+names the basis for every figure:
+
+```
+E-1   █████░░░░░   50%  (2/4 children)
+S-1   ██████████  100%  (leaf, Done)
+S-2   ??????????    ?   (started, no children to measure against)
+S-3   ░░░░░░░░░░    0%  (leaf, Proposed)
+S-4   ██████████  100%  (leaf, Cancelled)
+```
+
+**Three judgements worth stating, because a percentage-shaped answer gets each of them quietly
+wrong:**
+
+- **A started leaf reports `?`, not `0`.** It has nothing to measure against, and drawing it empty
+  would claim no progress had been made when the register simply cannot say. The acceptance criterion
+  named this case explicitly.
+- **Cancelled counts as resolved, not as progress lost.** It is work that will not be done and does
+  not remain outstanding; counting it incomplete leaves a parent permanently short of full through no
+  remaining effort.
+- **An unstarted node and a finished one must not render alike** — unknowns get a dashed border,
+  complete nodes a heavy one, so the distinction survives even where a reader ignores the numbers.
+
+`fixture_progress_v1_0_0.ttl` ships all five cases and validates at 0. Building it caught a real slip:
+the cancelled story first used an invented `hasWithdrawalRationale`; the governed term is
+`hasRationale`, and the suite rejected the invention rather than accepting a plausible name.
+
+**Register 1.8.0 → 1.9.0**: EP7 Done with evidence attesting its criterion, and `Obs_ProgressDelivered`
+moving `Metric_ProgressLegible` from its measured baseline of 0 to 1.
+
+
 ## v1.57.0 — 2026-08-11 (PATCH-class: Gate 0 passed on an empty set)
 
 Prompted by an OEE advisory that `release_check` may report `0/0 OK` when it hard-codes an
@@ -603,7 +641,7 @@ and differ in duration, and a critical path is a chain of durations.
 plan, not only the current one. That is the number a rebaselined project would rather not show, and
 retaining it is the answer to the criticism earned-value practice most often attracts.
 
-**`backlog_views_v1_4_0.py` derives five views** — Gantt and network as Mermaid, burn-down as text
+**`backlog_views_v1_5_0.py` derives five views** — Gantt and network as Mermaid, burn-down as text
 bars, cumulative flow and earned value as tables. Mermaid because it diffs, reviews, and renders in
 GitHub with no toolchain and no new dependency. **Nothing is stored.**
 
