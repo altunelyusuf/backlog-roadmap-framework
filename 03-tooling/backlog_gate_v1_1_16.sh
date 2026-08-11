@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# backlog_gate v1.1.15 — four-gate release check for the Backlog & Roadmap
+# backlog_gate v1.1.16 — four-gate release check for the Backlog & Roadmap
 # Semantic Framework. Nothing about the package's state is trusted until all
 # four pass, and the SHACL gate refuses to certify anything until it has just
 # demonstrated, in this run, that it can fail a known-bad register.
@@ -11,7 +11,7 @@
 #   +       coverage gate          >= 80% of primary-source concepts (BP-D31)
 #   +       doc-coverage gate      every TBox class named in the standard document
 #
-# Usage: backlog_gate_v1_1_15.sh [REGISTER.ttl ...]
+# Usage: backlog_gate_v1_1_16.sh [REGISTER.ttl ...]
 
 set -u
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -32,19 +32,41 @@ python3 - "$PKG" <<'PY'
 import hashlib, os, re, sys
 root = sys.argv[1]
 ok = bad = miss = 0
-path = os.path.join(root, "MANIFEST_SHA256.txt")
-if not os.path.exists(path):
-    print("  no MANIFEST_SHA256.txt present (working tree, not a release bundle)"); sys.exit(0)
+# Resolve by highest-SemVer glob, and FAIL when the set is empty.
+# Two same-class defects were proven here by construction: with the manifest
+# absent Gate 0 exited 0, and a package following the pack's own recommended
+# MANIFEST_SHA256_v1_2_3.txt convention would never have been checked at all
+# — the hard-coded name matched nothing and the gate reported success on an
+# empty set. A gate that passes because it found nothing to check is the
+# decorative-gate failure in its purest form: it is indistinguishable from a
+# gate that checked everything and found it sound.
+import glob as _glob
+cands = sorted(_glob.glob(os.path.join(root, "MANIFEST_SHA256*.txt")))
+if not cands:
+    print("  ABORT: no MANIFEST_SHA256*.txt found. Gate 0 verifies what a manifest")
+    print("  lists; with no manifest it verifies nothing, and reporting a pass would")
+    print("  mean 'checked nothing' and 'checked everything' print the same line.")
+    sys.exit(1)
+path = sorted(cands, key=lambda p: [int(x) for x in re.findall(r"_v(\d+)_(\d+)_(\d+)\.", p)[0]]
+              if re.search(r"_v\d+_\d+_\d+\.", p) else [0, 0, 0])[-1]
+print("  manifest  : %s" % os.path.basename(path))
+_listed = 0
 for line in open(path):
     m = re.match(r'^([0-9a-f]{64})\s+(.+?)\s+\(\d+b\)$', line.strip())
     if not m: continue
+    _listed += 1
     h, rel = m.groups()
     full = os.path.join(root, rel)
     if not os.path.exists(full): miss += 1; print("  MISSING", rel); continue
     d = hashlib.sha256(open(full, "rb").read()).hexdigest()
     ok += d == h
     if d != h: bad += 1; print("  MISMATCH", rel)
-print("  %d OK, %d mismatched, %d missing" % (ok, bad, miss))
+if _listed == 0:
+    print("  ABORT: %s parsed to zero entries. A manifest whose lines do not match"
+          % os.path.basename(path))
+    print("  the expected form yields the same 0/0 OK as an empty package.")
+    sys.exit(1)
+print("  %d OK, %d mismatched, %d missing of %d listed" % (ok, bad, miss, _listed))
 sys.exit(1 if (bad or miss) else 0)
 PY
 [ $? -ne 0 ] && { echo "Gate 0 FAILED"; FAILED=1; }

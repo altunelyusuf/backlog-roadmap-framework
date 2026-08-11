@@ -1,5 +1,48 @@
 # Changelog
 
+## v1.57.0 — 2026-08-11 (PATCH-class: Gate 0 passed on an empty set)
+
+Prompted by an OEE advisory that `release_check` may report `0/0 OK` when it hard-codes an
+unversioned manifest name. **This package ships no `release_check`, so the advisory did not apply as
+written — and checking the same class in the gate it does ship found the defect twice.**
+
+**Proven by construction, not inferred:**
+
+```
+manifest present      -> Gate 0 exit 0
+manifest ABSENT       -> Gate 0 exit 0   <- passed on nothing
+manifest VERSIONED    -> Gate 0 exit 0   <- passed on nothing
+```
+
+The second is the worse one. A package following **the pack's own recommended
+`MANIFEST_SHA256_v1_2_3.txt` convention** would never have been checked at all: the hard-coded name
+matched nothing and the gate printed success. *A gate that passes because it found nothing to check
+is indistinguishable from one that checked everything and found it sound.*
+
+A third of the same class was fixed while there: the line regex `continue`d on any non-matching line,
+so a malformed manifest parsed to zero entries and still reported `0 OK`.
+
+**Fixed** — Gate 0 resolves by highest-SemVer glob over `MANIFEST_SHA256*.txt`, prints **which**
+manifest it used and **how many entries it parsed**, and aborts when either set is empty:
+
+```
+manifest  : MANIFEST_SHA256.txt
+63 OK, 0 mismatched, 0 missing of 63 listed
+
+absent -> ABORT: no MANIFEST_SHA256*.txt found ... Gate 0 FAILED
+```
+
+**Verified against the other two advisories rather than assumed.** Attribution: the publication gate
+returns 0 for this package and `PUBLISH_RECORD.ttl` carries `authoringSession "brsf-maintainer"`. Its
+first run reported `UNTAGGED` at v1.56.0 — a **local-clone artifact**, since `git fetch main` does not
+bring tags; after `--tags` it returned `VERDICT: PUBLISHED`. Reported here because the wrong reading
+would have looked like a missing release.
+
+**Gate P is not affected**: it globs `01-ontologies/`, which is this package's actual layout. The
+advisory notes it remains unfixed generally and is to be raised rather than worked around; this
+package has nothing to raise, because it happens to match.
+
+
 ## v1.56.0 — 2026-08-11 (MINOR: two rulings, and a gate too slow to publish)
 
 **Register v1.7.0 was this session's own**, not a parallel session's. Commit `e30fec0`,
@@ -1268,7 +1311,7 @@ moment another stage is inserted, so the decoupling is permanent instead.
 
 **Why every gate stayed green while this was live:** the three-fixture self-proof invokes the
 validator *directly*; only the register path formats its output, so a defect in the formatting layer
-was invisible to the proof. `backlog_gate_v1_1_15.sh` now runs the known-bad fixture through the
+was invisible to the proof. `backlog_gate_v1_1_16.sh` now runs the known-bad fixture through the
 **exact register path** and aborts if it does not fail. The self-proof covered the shapes; it had
 never covered its own plumbing.
 
@@ -2261,7 +2304,7 @@ executable and ordered.
 arbitration documented and implemented in the report tool.
 
 **Added — tooling:** `backlog_roadmap_report_v1_5_0.py` (eight sections, both NEXT answers, silent
--gap check), `backlog_coverage_gate_v1_1_1.py` (BP-D31), `backlog_gate_v1_1_15.sh` (Gate 0 / P / K /
+-gap check), `backlog_coverage_gate_v1_1_1.py` (BP-D31), `backlog_gate_v1_1_16.sh` (Gate 0 / P / K /
 R plus coverage), Gate K version-identity check in the validator.
 
 **Changed:** the v1.0.0 advisory "item carries no priority score" now excludes items correctly
