@@ -27,8 +27,8 @@ doesn't count.**
 
 ```bash
 pip install rdflib pyshacl
-bash 03-tooling/backlog_gate_v1_1_13.sh          # full release gate
-python3 03-tooling/backlog_validate_v1_3_0.py <your-register.ttl>
+bash 03-tooling/backlog_gate_v1_1_15.sh          # full release gate
+python3 03-tooling/backlog_validate_v1_4_0.py <your-register.ttl>
 ```
 
 The gate proves itself before it certifies anything: it must pass a known-good register, **fail** a

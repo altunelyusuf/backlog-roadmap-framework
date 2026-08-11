@@ -141,25 +141,25 @@ backlog:Section_OrphanCoverageCheck a owl:NamedIndividual , backlog:ReportSectio
 backlog:Gate0_ManifestSelfVerify a owl:NamedIndividual , backlog:ReleaseGate ;
     rdfs:label "Gate 0 — manifest self-verify"@en ;
     skos:definition "Every shipped file hashes as recorded in the manifest. Guards the inputs every later gate assumes."@en ;
-    backlog:hasGateCommand "backlog_gate_v1_1_14.sh (step: manifest self-verify)" ;
+    backlog:hasGateCommand "backlog_gate_v1_1_15.sh (step: manifest self-verify)" ;
     backlog:hasGateOrder 0 .
 
 backlog:GateP_TurtleParse a owl:NamedIndividual , backlog:ReleaseGate ;
     rdfs:label "Gate P — Turtle parse"@en ;
     skos:definition "Every shipped Turtle file parses. A file that does not parse cannot be validated, and a validator that silently skips it reports a pass it did not measure."@en ;
-    backlog:hasGateCommand "backlog_gate_v1_1_14.sh (step: parse)" ;
+    backlog:hasGateCommand "backlog_gate_v1_1_15.sh (step: parse)" ;
     backlog:hasGateOrder 1 .
 
 backlog:GateK_VersionIdentity a owl:NamedIndividual , backlog:ReleaseGate ;
     rdfs:label "Gate K — version identity"@en ;
     skos:definition "For every ontology file, versionInfo equals the versionIRI token equals the filename token. Caught mechanically rather than by inspection, because the mismatch is invisible to a reader who trusts the filename."@en ;
-    backlog:hasGateCommand "backlog_validate_v1_3_0.py --gate-k" ;
+    backlog:hasGateCommand "backlog_validate_v1_4_0.py --gate-k" ;
     backlog:hasGateOrder 2 .
 
 backlog:GateR_ShaclReconcile a owl:NamedIndividual , backlog:ReleaseGate ;
     rdfs:label "Gate R — SHACL reconcile"@en ;
     skos:definition "The register conforms: no item is Done without verified evidence, and no structural constraint is violated. Conformance is zero results at Violation severity, not an empty report."@en ;
-    backlog:hasGateCommand "backlog_validate_v1_3_0.py REGISTER.ttl" ;
+    backlog:hasGateCommand "backlog_validate_v1_4_0.py REGISTER.ttl" ;
     backlog:hasGateOrder 3 .
 
 #################################################################

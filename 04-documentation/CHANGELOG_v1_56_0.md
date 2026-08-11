@@ -1,5 +1,86 @@
 # Changelog
 
+## v1.56.0 — 2026-08-11 (MINOR: two rulings, and a gate too slow to publish)
+
+**Register v1.7.0 was this session's own**, not a parallel session's. Commit `e30fec0`,
+"backlog-roadmap-framework v1.53.0", transcript sha `43461c3b`. The previous turn asserted it was
+someone else's; the check was one `git log` and was not run. The file is a **renamed v1.6.0** —
+`remediation markers: 0` — which is why a version bump targeting 1.6.0 later matched nothing.
+
+Note what the record could and could not settle: that commit carries **no `Session:` trailer**, so
+git identity was useless as always. Only the transcript SHA identified it, and only because it could
+be matched to a publish this session made.
+
+**Ruling G9 — a constant iteration, stories split to fit.** The alternative — assess iteration length
+after story-writing and size it to the longest story — was examined and rejected: if the box is sized
+by what it contains, you always fit, and **velocity becomes a tautology that can never tell you that
+you did not**. It also fails one step later, when the next change produces a bigger story. Splitting
+is what the vocabulary already implies: a `Story` is *"small enough to be completed within one
+iteration"*, so splitting restores the term's meaning while resizing redefines it.
+
+**Ruling G10 — publish each increment, do not batch.** Two increments accumulated unpublished and
+cannot now be separated into the releases they should have been.
+
+**Its corollary, learned the hard way in this release: a gate that cannot finish blocks every
+release.** The publisher re-runs the package gate — correctly, so it never trusts the caller's claim
+— and this package's gate had grown to **eleven full validator invocations at ~11s each**, exceeding
+the publisher's runtime. Three publish attempts died mid-run, including one detached. A package that
+passed its own gate **could not be published at all**.
+
+`backlog_validate` **1.3.0 → 1.4.0** gains `--each`: validate several files independently inside one
+process. Nothing is skipped and no fixture shares a graph with another; only the repeated interpreter
+and load cost goes. The fixture-coverage gate now makes one call instead of eight.
+
+**Whole gate: 242s, down from beyond the publisher's limit.**
+
+
+## v1.55.0 — 2026-08-11 (MINOR: as-is measured, and a fourth mission registered before any work item)
+
+**Snapshot:** `the maintainer/Ontologies` HEAD after fast-forward, 0 behind, re-checked. Discipline
+`OE_Operating_Discipline_v2_3_0.md` sha `cf469352`; lineage discipline v2.0.0 sha `93026f28`;
+governance `knowledge_base_abox_v2_21_0.ttl`. Session `brsf-maintainer`.
+
+### As-is, each gap proven by construction rather than asserted
+
+**1. The network view shows structure and no progress.** Its function body contains no reference to
+`hasState`, `Done`, or any completion term — only `graph LR` and arrow edges. A started node and an
+untouched one render identically. Everything needed to derive progress already exists
+(`hasState`, `decomposesInto`, `decompositionState`); nothing consumes it.
+
+**2. A story may span iterations.** Constructed one planned into two iterations by two planning
+events: **22 violations at L4, none about the span.** `Story` is defined as *"small enough to be
+completed within one iteration"* — and nothing enforces it. **This is G3 again**: a definition says
+what the term means, and only a constraint says what may be asserted.
+
+**3. A deployment cannot say how its contents were chosen.** `deploysItem` ranges on
+`ProductBacklogItem` with no notion of selection: `spansIterations`, `fitsIteration`,
+`selectedByScore`, `hasSelectionBasis` are all absent. A release grouped by theme and a release of the
+highest-scoring available work are **indistinguishable in the record**.
+
+### Lineage registered before the first work item, per ceremony step 2
+
+`Mission_Executable` with two goals and two objectives whose baselines are the **measured** as-is —
+0 progress-bearing views, 3 permitted-but-forbidden commitment classes — not estimates. Admitted by
+`SC_Executable`, which reverses no existing exclusion: `Ex_Scale`, `Ex_Method`, `Ex_Modality` and
+`Ex_Complexity` are untouched. Value-based release selection constrains **what a deployment may claim
+about how its contents were chosen**, not how a team runs planning.
+
+**The order is computed, not chosen:**
+
+```
+BRF-EP7  progress in structural views   6.00  startable
+BRF-EP8  a story fits one iteration     4.00  startable
+BRF-EP9  value-selected deployments     2.40  blocked on EP8
+```
+
+EP9 is blocked because selecting the most valuable stories is meaningless while a story can span
+iterations — what is *available* at a release boundary is undefined until EP8 lands. The register
+worked that out from the declared dependency; it was not sequenced by opinion.
+
+**No implementation in this release.** The as-is is measured, the lineage is registered and validates
+at 0 violations, and the three epics are `Proposed`.
+
+
 ## v1.54.0 — 2026-08-11 (MINOR: what is unlisted was never verified either)
 
 **Snapshot:** `the maintainer/Ontologies` HEAD `3b62ca2`, 0 behind at time of work. Discipline
@@ -1187,7 +1268,7 @@ moment another stage is inserted, so the decoupling is permanent instead.
 
 **Why every gate stayed green while this was live:** the three-fixture self-proof invokes the
 validator *directly*; only the register path formats its output, so a defect in the formatting layer
-was invisible to the proof. `backlog_gate_v1_1_14.sh` now runs the known-bad fixture through the
+was invisible to the proof. `backlog_gate_v1_1_15.sh` now runs the known-bad fixture through the
 **exact register path** and aborts if it does not fail. The self-proof covered the shapes; it had
 never covered its own plumbing.
 
@@ -1245,7 +1326,7 @@ reporter's phrasing was exact — "175 Warning" with no content is a number a hu
 past, and the advisory tier then protects nothing it was built to surface. One line per result is the
 opposite failure at that scale.
 
-`backlog_validate_v1_3_0.py` now prints a **grouped digest**: count per distinct message, the first
+`backlog_validate_v1_4_0.py` now prints a **grouped digest**: count per distinct message, the first
 few focus nodes for each, sorted by frequency, with individual advisory lines still printed while the
 total stays under twenty. Violations are unchanged — always listed individually, because each blocks
 a release. On the shipped negative fixture the difference is `39 Warning, 5 Info` becoming
@@ -2180,7 +2261,7 @@ executable and ordered.
 arbitration documented and implemented in the report tool.
 
 **Added — tooling:** `backlog_roadmap_report_v1_5_0.py` (eight sections, both NEXT answers, silent
--gap check), `backlog_coverage_gate_v1_1_1.py` (BP-D31), `backlog_gate_v1_1_14.sh` (Gate 0 / P / K /
+-gap check), `backlog_coverage_gate_v1_1_1.py` (BP-D31), `backlog_gate_v1_1_15.sh` (Gate 0 / P / K /
 R plus coverage), Gate K version-identity check in the validator.
 
 **Changed:** the v1.0.0 advisory "item carries no priority score" now excludes items correctly

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_validate v1.3.0 — conformance validator for the Backlog & Roadmap
+"""backlog_validate v1.4.0 — conformance validator for the Backlog & Roadmap
 Semantic Framework (http://example.org/backlog 1.0.0).
 
 Design points that are not incidental:
@@ -38,9 +38,9 @@ Design points that are not incidental:
   filename, so it is never left to inspection.
 
 Usage:
-  backlog_validate_v1_3_0.py DATA.ttl [DATA2.ttl ...]
-  backlog_validate_v1_3_0.py --next DATA.ttl [--method IRI]
-  backlog_validate_v1_3_0.py --gate-k
+  backlog_validate_v1_4_0.py DATA.ttl [DATA2.ttl ...]
+  backlog_validate_v1_4_0.py --next DATA.ttl [--method IRI]
+  backlog_validate_v1_4_0.py --gate-k
 """
 
 import argparse
@@ -268,6 +268,13 @@ def main():
     ap = argparse.ArgumentParser(description="Validate a register against the backlog framework.")
     ap.add_argument("data", nargs="*", help="register Turtle file(s)")
     ap.add_argument("--gate-k", action="store_true", help="run Gate K version-identity check and exit")
+    ap.add_argument("--each", action="store_true",
+                    help="validate each file SEPARATELY in one process, printing a per-file "
+                         "verdict line. Exists because the TBox and shapes are re-parsed and "
+                         "re-inferred on every invocation, so validating eight fixtures cost "
+                         "eight full loads; the package's release gate grew slower than the "
+                         "publisher's runtime and the package became unpublishable. Nothing is "
+                         "skipped — each file still gets its own independent validation.")
     ap.add_argument("--next", action="store_true", help="print the next item to work instead of validating")
     ap.add_argument("--method", default="http://example.org/backlog#Method_WSJF",
                     help="prioritisation method IRI for --next")
@@ -279,6 +286,15 @@ def main():
         ap.error("no register file given")
     if args.next:
         sys.exit(next_item(args.data, args.method))
+    if args.each:
+        worst = 0
+        for f in args.data:
+            code, counts = validate([f])
+            print("EACH %s %s violations=%d"
+                  % (os.path.basename(f), "FAIL" if code else "PASS",
+                     counts.get("Violation", 0) if isinstance(counts, dict) else -1))
+            worst = max(worst, code)
+        sys.exit(worst)
     code, _ = validate(args.data)
     sys.exit(code)
 

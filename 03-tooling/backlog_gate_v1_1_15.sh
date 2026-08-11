@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# backlog_gate v1.1.14 — four-gate release check for the Backlog & Roadmap
+# backlog_gate v1.1.15 — four-gate release check for the Backlog & Roadmap
 # Semantic Framework. Nothing about the package's state is trusted until all
 # four pass, and the SHACL gate refuses to certify anything until it has just
 # demonstrated, in this run, that it can fail a known-bad register.
@@ -11,12 +11,12 @@
 #   +       coverage gate          >= 80% of primary-source concepts (BP-D31)
 #   +       doc-coverage gate      every TBox class named in the standard document
 #
-# Usage: backlog_gate_v1_1_14.sh [REGISTER.ttl ...]
+# Usage: backlog_gate_v1_1_15.sh [REGISTER.ttl ...]
 
 set -u
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PKG="$(dirname "$HERE")"
-VALIDATE="$HERE/backlog_validate_v1_3_0.py"
+VALIDATE="$HERE/backlog_validate_v1_4_0.py"
 COVERAGE="$HERE/backlog_coverage_gate_v1_1_1.py"
 DOCGATE="$(ls "$HERE"/backlog_doc_coverage_gate_v*.py | sort -V | tail -1)"
 # fixtures resolved by pattern, not pinned filename: a fixture version bump
@@ -139,13 +139,21 @@ echo "== Fixture-coverage gate — every shipped fixture is exercised =="
 # shipped and unvalidated for several releases and accumulated six violations
 # from constraints added meanwhile; nothing noticed, because nothing ran it.
 UNRUN=0
+# One process, one file at a time inside it. The TBox and shapes are re-parsed and
+# re-inferred per invocation, and this loop ran the validator once per fixture, so
+# the gate grew slower than the publisher's runtime and the package became
+# unpublishable — a release gate that cannot finish blocks every release.
+# --each validates each fixture independently and reports a verdict per file;
+# nothing is skipped and no fixture shares a graph with another.
+EACH_OUT="$(python3 "$VALIDATE" --each "$HERE"/fixtures/*.ttl 2>/dev/null | grep '^EACH ')"
 for FX in "$HERE"/fixtures/*.ttl; do
   BASE="$(basename "$FX")"
   case "$BASE" in
     *negative*|*adversarial*|*l4_negative*) EXPECT=fail ;;
     *) EXPECT=pass ;;
   esac
-  if python3 "$VALIDATE" "$FX" >/dev/null 2>&1; then GOT=pass; else GOT=fail; fi
+  GOT="$(printf '%s\n' "$EACH_OUT" | awk -v b="$BASE" '$2==b {print tolower($3)}')"
+  [ -z "$GOT" ] && GOT=missing
   if [ "$GOT" != "$EXPECT" ]; then
     echo "  $BASE: expected $EXPECT, got $GOT"; UNRUN=1
   fi

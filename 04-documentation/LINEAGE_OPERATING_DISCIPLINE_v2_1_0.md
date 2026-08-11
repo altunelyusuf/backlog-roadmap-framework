@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v2.0.0
+# Lineage Operating Discipline — v2.1.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -80,6 +80,28 @@ cumulative flow reading a property that never existed, a burn-down reaching zero
 date comparison reporting future deadlines as passed. Each *looked* like the tool working.
 *No shape catches this.* The check that does is a **fixture whose answer is known in advance**.
 
+### G9 — A constant iteration, and stories split to fit it
+An iteration is a **fixed** time box. Sizing it to the longest story inverts the control: if its
+length is set by the work it contains, you always fit, and velocity becomes a tautology that can
+never tell you that you did not. Assessing iteration length after story-writing fails for the same
+reason one step later — the next change produces a bigger story and the question reopens.
+
+**Set the iteration length once and split stories until they fit.** This is also what the vocabulary
+already says: a `Story` is *"small enough to be completed within one iteration"*, so splitting
+restores the term's meaning while resizing redefines it. A story outliving its iteration makes
+velocity meaningless, and velocity feeds the forecast, so the error propagates into a claim about
+the future.
+
+### G10 — Publish each increment, do not batch
+A release gate that passes and is not then published leaves the governed store behind the work, and
+two unpublished increments cannot be separated afterwards into the releases they should have been.
+**Publish immediately after each gate PASS, before starting the next increment.**
+
+Its corollary is easy to miss: **a release gate that cannot finish blocks every release.** This
+package's gate grew to eleven full validator invocations and exceeded the publisher's runtime, so a
+package that passed its own gate could not be published at all. A gate is part of the release path,
+and its cost is a release constraint rather than a detail.
+
 ### G8 — Every rule naming a member of a closed set depends on that set's membership
 Adding `L4_LineageEnforced` to a four-member enumeration broke three rules that had tested *"below
 L3"* by name — they fired on L4, which is above it. *No shape catches this either.* It was caught
@@ -120,6 +142,14 @@ exists in the shipped shapes file and carries the severity claimed. **A discipli
 enforcement claims have drifted from the suite is worse than none, because it is believed.**
 
 ---
+
+## v2.1.0 (2026-08-11)
+
+Two owner rulings recorded. **G9**: a constant iteration length with stories split to fit, rather
+than an iteration sized to its longest story — the second was proposed, examined, and rejected
+because it makes velocity unfalsifiable. **G10**: publish per increment, with the corollary that a
+gate too slow to finish is a release blocker; both were learned by this package failing at them in
+the same session.
 
 ## v2.0.0 (2026-08-10)
 

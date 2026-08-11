@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/1.7.0> ;
-    owl:versionInfo "1.7.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/1.8.0> ;
+    owl:versionInfo "1.8.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/1.7.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/1.6.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/1.5.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/1.4.0> ;
@@ -40,7 +41,7 @@ fw:Profile a backlog:AdoptionProfile ;
 fw:Register a backlog:Backlog ;
     backlog:hasIdentifier "BRF-REG" ;
     backlog:hasTitle "backlog-roadmap-framework development register" ;
-    backlog:hasState backlog:Done ;
+    backlog:hasState backlog:InProgress ;
     backlog:appliesDefinitionOfDone backlog:DoD_Baseline ;
     backlog:hasCommitment fw:Commitment_Dev .
 
@@ -284,8 +285,8 @@ fw:Ev_PbiTask a backlog:TestEvidence ;
     backlog:hasTestId "BRF-EP1" ;
     backlog:evidenceVerified true ;
     backlog:verifiedAt "2026-08-06T13:00:00"^^xsd:dateTime ;
-    backlog:hasVerificationMethod "backlog_gate_v1_1_14.sh: positive fixture carries a planned iteration with two subordinate execution tasks at 0 violations; negative fixture plants four EP1 defects (scored task, ranked task, empty planning event, parent Done over an open task) and all four fire" ;
-    backlog:verifiedByTool "backlog_validate_v1_3_0.py + pyshacl 0.40.0" ;
+    backlog:hasVerificationMethod "backlog_gate_v1_1_15.sh: positive fixture carries a planned iteration with two subordinate execution tasks at 0 violations; negative fixture plants four EP1 defects (scored task, ranked task, empty planning event, parent Done over an open task) and all four fire" ;
+    backlog:verifiedByTool "backlog_validate_v1_4_0.py + pyshacl 0.40.0" ;
     backlog:attestsCriterion fw:AC_PbiTask .
 
 fw:Obs_EP1Actual a backlog:MetricObservation ;
@@ -302,7 +303,7 @@ fw:Ev_Flow a backlog:TestEvidence ;
     backlog:evidenceVerified true ;
     backlog:verifiedAt "2026-08-06T15:00:00"^^xsd:dateTime ;
     backlog:hasVerificationMethod "backlog_roadmap_report_v1_5_0.py section 10 computes cycle time, item age and per-iteration velocity from the positive fixture and prints a recorded forecast with its three assumptions; the negative fixture plants a forecast with no assumptions and an iteration ending before it starts, and both fire" ;
-    backlog:verifiedByTool "backlog_validate_v1_3_0.py + backlog_roadmap_report_v1_5_0.py" ;
+    backlog:verifiedByTool "backlog_validate_v1_4_0.py + backlog_roadmap_report_v1_5_0.py" ;
     backlog:attestsCriterion fw:AC_Flow .
 
 fw:Obs_EP2Actual a backlog:MetricObservation ;
@@ -380,7 +381,7 @@ fw:D3 a backlog:DoDCriterion ;
 fw:D4 a backlog:DoDCriterion ;
     rdfs:label "D4 — The full release gate passes from a clean extraction, includ"@en ;
     backlog:hasCriterionText "The full release gate passes from a clean extraction, including the three-fixture self-proof and the fixture-coverage gate." ;
-    backlog:hasCheckQuery "backlog_gate_v1_1_14.sh run against a freshly extracted bundle." ;
+    backlog:hasCheckQuery "backlog_gate_v1_1_15.sh run against a freshly extracted bundle." ;
     backlog:hasExpectedResult "RELEASE GATE: PASS" ;
     backlog:hasCriterionStatus backlog:Holds .
 fw:D5 a backlog:DoDCriterion ;
@@ -766,7 +767,7 @@ fw:Ev_Schedule a backlog:TestEvidence ;
     backlog:evidenceVerified true ;
     backlog:verifiedAt "2026-08-09T11:30:00"^^xsd:dateTime ;
     backlog:hasVerificationMethod "KickOffShape, PlannedDateShape and PlanBaselineShape reject a kick-off without a mode, a declared kick-off with no decider, a triggered one with no trigger, a finish before a start, planned dates with no kick-off at L2, and two baselines both claiming current" ;
-    backlog:verifiedByTool "backlog_validate_v1_3_0.py + pyshacl" ;
+    backlog:verifiedByTool "backlog_validate_v1_4_0.py + pyshacl" ;
     backlog:attestsCriterion fw:AC_Schedule .
 
 # ---- day zero, and the baseline it anchors ----
@@ -1333,7 +1334,7 @@ fw:Ev_Cost a backlog:TestEvidence ;
     backlog:evidenceVerified true ;
     backlog:verifiedAt "2026-08-09T15:00:00"^^xsd:dateTime ;
     backlog:hasVerificationMethod "Positive fixture carries one item with three dimensions at once — tokens, compute and unpriced review time — against two budgets, at 0 violations; the cost view reports each dimension separately and states plainly that the unpriced one contributes to no monetary total. Negative fixture plants a dimension with no unit, a rate with no currency, a bare cost, negative consumption, and a parent and child both costed on one dimension; all fire." ;
-    backlog:verifiedByTool "backlog_validate_v1_3_0.py + backlog_views_v1_4_0.py" ;
+    backlog:verifiedByTool "backlog_validate_v1_4_0.py + backlog_views_v1_4_0.py" ;
     backlog:attestsCriterion fw:AC_Cost .
 
 fw:Obs_EP3Actual a backlog:MetricObservation ;
@@ -1350,7 +1351,7 @@ fw:Ev_T_Dimension a backlog:TestEvidence ;
     backlog:evidenceVerified true ;
     backlog:verifiedAt "2026-08-09T15:00:00"^^xsd:dateTime ;
     backlog:hasVerificationMethod "CostDimension with unit, rate and currency exercised in the positive fixture at 0 violations and rejected in the negative fixture" ;
-    backlog:verifiedByTool "backlog_validate_v1_3_0.py + pyshacl" ;
+    backlog:verifiedByTool "backlog_validate_v1_4_0.py + pyshacl" ;
     backlog:attestsCriterion fw:AC_Cost .
 
 fw:Ev_T_Budget a backlog:TestEvidence ;
@@ -1359,7 +1360,7 @@ fw:Ev_T_Budget a backlog:TestEvidence ;
     backlog:evidenceVerified true ;
     backlog:verifiedAt "2026-08-09T15:00:00"^^xsd:dateTime ;
     backlog:hasVerificationMethod "Budget per dimension, compared in the cost view exercised in the positive fixture at 0 violations and rejected in the negative fixture" ;
-    backlog:verifiedByTool "backlog_validate_v1_3_0.py + pyshacl" ;
+    backlog:verifiedByTool "backlog_validate_v1_4_0.py + pyshacl" ;
     backlog:attestsCriterion fw:AC_Cost .
 
 fw:Ev_T_Rollup a backlog:TestEvidence ;
@@ -1368,7 +1369,7 @@ fw:Ev_T_Rollup a backlog:TestEvidence ;
     backlog:evidenceVerified true ;
     backlog:verifiedAt "2026-08-09T15:00:00"^^xsd:dateTime ;
     backlog:hasVerificationMethod "DimensionalRollUpShape rejecting parent-and-child on one dimension exercised in the positive fixture at 0 violations and rejected in the negative fixture" ;
-    backlog:verifiedByTool "backlog_validate_v1_3_0.py + pyshacl" ;
+    backlog:verifiedByTool "backlog_validate_v1_4_0.py + pyshacl" ;
     backlog:attestsCriterion fw:AC_Cost .
 
 fw:Ev_T_Fixtures a backlog:TestEvidence ;
@@ -1377,7 +1378,7 @@ fw:Ev_T_Fixtures a backlog:TestEvidence ;
     backlog:evidenceVerified true ;
     backlog:verifiedAt "2026-08-09T15:00:00"^^xsd:dateTime ;
     backlog:hasVerificationMethod "backlog_gate fixture-coverage step ran every shipped fixture and required each to validate as its filename declares; the negative fixture rose from 90 to 94 planted defects with the four EP3 additions and each new one was confirmed firing by identifier before the release" ;
-    backlog:verifiedByTool "backlog_validate_v1_3_0.py + pyshacl" ;
+    backlog:verifiedByTool "backlog_validate_v1_4_0.py + pyshacl" ;
     backlog:attestsCriterion fw:AC_Cost .
 
 fw:Ev_Human a backlog:TestEvidence ;
@@ -1386,7 +1387,7 @@ fw:Ev_Human a backlog:TestEvidence ;
     backlog:evidenceVerified true ;
     backlog:verifiedAt "2026-08-09T17:00:00"^^xsd:dateTime ;
     backlog:hasVerificationMethod "Positive fixture carries an automated item gated by an owner confirmation, a hybrid item on the loop, a recorded rejection so the gate is shown to refuse, and review time as an unpriced cost dimension, at 0 violations. Negative fixture plants an unattributed interaction, an in-the-loop claim with nothing gating, a no-supervision claim with a gating confirmation, and a correction on an item claiming Automated; all four fire." ;
-    backlog:verifiedByTool "backlog_validate_v1_3_0.py + pyshacl" ;
+    backlog:verifiedByTool "backlog_validate_v1_4_0.py + pyshacl" ;
     backlog:attestsCriterion fw:AC_Human .
 
 fw:Int_EP4_Confirm a backlog:HumanInteraction ;
@@ -1449,3 +1450,158 @@ fw:Obs_SpreadsheetMeasured a backlog:MetricObservation ;
     backlog:hasObservedValue 2.0 ;
     backlog:observedAt "2026-08-09T17:30:00"^^xsd:dateTime ;
     backlog:hasObservationMethod "Counted the same run's refusals: a cumulative-flow diagram and a per-dimension cost report both require data this register does not carry, so an adopter wanting either must still assemble it elsewhere. Baseline was 4, target 0, observed 2 — improved, not achieved." .
+
+#################################################################
+#  v1.8.0 — a fourth mission: the roadmap as an executable plan.
+#
+#  Registered BEFORE any work item, per the lineage ceremony. The
+#  as-is was measured first and each gap proven by construction,
+#  so the objectives below have real baselines rather than
+#  estimated ones.
+#################################################################
+
+fw:Mission_Executable a backlog:Mission ;
+    rdfs:label "Executable roadmap mission"@en ;
+    backlog:hasMissionStatement "A reader of the roadmap can see how far started work has actually got, every story fits the iteration it was committed to, and each release carries the most valuable work available rather than whatever shared a theme." ;
+    backlog:missionFor fw:Register ;
+    backlog:decidedBy backlog:Owner .
+
+fw:Goal_Legible a backlog:Goal ;
+    rdfs:label "Structure and progress are readable together"@en ;
+    backlog:contributesToMission fw:Mission_Executable ;
+    backlog:decidedBy backlog:Owner .
+
+fw:Goal_Executable a backlog:Goal ;
+    rdfs:label "Commitments are sized to be finishable and selected by value"@en ;
+    backlog:contributesToMission fw:Mission_Executable ;
+    backlog:decidedBy backlog:Owner .
+
+fw:Metric_ProgressLegible a core:Metric ;
+    rdfs:label "Views showing structure that also show progress"@en .
+fw:Metric_UnfinishableCommitments a core:Metric ;
+    rdfs:label "Commitments the suite permits but the definitions forbid"@en .
+
+fw:Obj_ProgressInViews a backlog:Objective ;
+    rdfs:label "Structural views carry progress"@en ;
+    backlog:contributesToGoal fw:Goal_Legible ;
+    backlog:hasSuccessMetric fw:Metric_ProgressLegible ;
+    backlog:hasBaselineValue 0.0 ;
+    backlog:hasTargetValue 1.0 ;
+    backlog:hasTargetDirection backlog:Dir_Increase ;
+    backlog:hasObjectiveDeadline "2026-09-30T00:00:00"^^xsd:dateTime ;
+    backlog:decidedBy backlog:Owner .
+
+fw:Obj_Finishable a backlog:Objective ;
+    rdfs:label "Unfinishable or value-blind commitments are rejected"@en ;
+    backlog:contributesToGoal fw:Goal_Executable ;
+    backlog:hasSuccessMetric fw:Metric_UnfinishableCommitments ;
+    backlog:hasBaselineValue 3.0 ;
+    backlog:hasTargetValue 0.0 ;
+    backlog:hasTargetDirection backlog:Dir_Decrease ;
+    backlog:hasObjectiveDeadline "2026-09-30T00:00:00"^^xsd:dateTime ;
+    backlog:decidedBy backlog:Owner .
+
+fw:Obs_AsIs a backlog:MetricObservation ;
+    rdfs:label "As-is: three gaps, each proven by construction"@en ;
+    backlog:observesMetric fw:Metric_UnfinishableCommitments ;
+    backlog:observationFor fw:Obj_Finishable ;
+    backlog:hasObservedValue 3.0 ;
+    backlog:observedAt "2026-08-11T07:00:00"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Measured against the shipped suite at L4, not estimated. (1) The network view prints only dependsOn edges: grep of its function body for hasState, Done or any progress term returns nothing, so a started node and an untouched one render identically. (2) A story planned into two iterations by two planning events validated with 22 violations, none of which concerns the span — the one iteration message present is about an epic. Story's own definition says 'small enough to be completed within one iteration'; nothing enforces it, which is the assertion-versus-meaning gap G3 already names. (3) deploysItem ranges on ProductBacklogItem with no notion of selection: spansIterations, fitsIteration, selectedByScore and hasSelectionBasis are all absent, so a release grouped by theme and a release of the highest-scoring available work are indistinguishable in the record." .
+
+fw:Obs_ProgressAsIs a backlog:MetricObservation ;
+    rdfs:label "As-is: no structural view carries progress"@en ;
+    backlog:observesMetric fw:Metric_ProgressLegible ;
+    backlog:observationFor fw:Obj_ProgressInViews ;
+    backlog:hasObservedValue 0.0 ;
+    backlog:observedAt "2026-08-11T07:00:00"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Ran backlog_views network against the framework's own register: the emitted Mermaid contains only graph LR and arrow edges. No node carries state, completion or any derived fraction." .
+
+fw:SC_Executable a backlog:ScopeChange ;
+    rdfs:label "Admit progress-bearing views, iteration fit, and value-based release selection"@en ;
+    backlog:changesScope fw:Scope ;
+    backlog:admitsItem fw:EP_Progress , fw:EP_Fit , fw:EP_ValueRelease ;
+    backlog:hasScopeChangeRationale "Owner request, 2026-08-11. Three additions, none reversing an existing exclusion: Ex_Scale, Ex_Method, Ex_Modality and Ex_Complexity are untouched. Value-based release selection in particular does NOT prescribe a delivery method — it constrains what a DeploymentUnit may claim about how its contents were chosen, not how a team runs planning." ;
+    backlog:decidedBy backlog:Owner .
+fw:Scope backlog:scopeRealizesObjective fw:Obj_ProgressInViews , fw:Obj_Finishable .
+
+# ---------------- the three epics, scored from the measured as-is ----------------
+
+fw:EP_Progress a backlog:Epic ;
+    backlog:hasIdentifier "BRF-EP7" ;
+    backlog:hasTitle "Structural views carry completion, not only dependency" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_ProgressInViews ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasAcceptanceCriterion fw:AC_Progress ;
+    backlog:hasPriorityScore fw:S_Progress ;
+    backlog:hasCostEstimate fw:E_Progress ;
+    backlog:rankedOnRoadmap fw:Roadmap ; backlog:hasRoadmapRank 7 ;
+    backlog:scheduledInHorizon backlog:Now .
+fw:AC_Progress a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a register whose items are partly complete, When the network view is rendered, Then each node shows a completion proportion derived from its children's states, an unstarted node is visually distinct from a finished one, and a node whose progress cannot be derived says so rather than showing zero." .
+fw:S_Progress a backlog:WSJFScore ;
+    backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 6.0 ;
+    backlog:hasUserBusinessValue 8.0 ; backlog:hasTimeCriticality 5.0 ;
+    backlog:hasRiskReductionValue 5.0 ; backlog:hasJobSize 3.0 ;
+    backlog:scoredAt "2026-08-11T07:00:00"^^xsd:dateTime ;
+    backlog:hasScoreRationale "Highest business value of the three: it makes work already recorded legible to someone who is not reading Turtle, and every input exists — hasState on children, decompositionState, and the derived roll-up. Smallest job for the same reason: nothing is stored, the fraction is computed." ;
+    backlog:hasBasisKind backlog:Basis_Judged .
+fw:E_Progress a backlog:CostEstimate ;
+    backlog:hasEffortEstimate 3.0 ; backlog:hasCostBasis "One view function; no new stored vocabulary, since progress is derivable from children's states" ;
+    backlog:estimatedAt "2026-08-11T07:00:00"^^xsd:dateTime ;
+    backlog:hasBasisKind backlog:Basis_Judged .
+
+fw:EP_Fit a backlog:Epic ;
+    backlog:hasIdentifier "BRF-EP8" ;
+    backlog:hasTitle "A story is consumed whole within one iteration, or split until it is" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_Finishable ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasAcceptanceCriterion fw:AC_Fit ;
+    backlog:hasPriorityScore fw:S_Fit ;
+    backlog:hasCostEstimate fw:E_Fit ;
+    backlog:rankedOnRoadmap fw:Roadmap ; backlog:hasRoadmapRank 8 ;
+    backlog:scheduledInHorizon backlog:Next .
+fw:AC_Fit a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a story planned into an iteration, When the suite is run at L4, Then a story committed to more than one iteration is rejected, a story still open when its iteration closed is rejected, and the message names splitting as the remedy rather than extending the iteration." .
+fw:S_Fit a backlog:WSJFScore ;
+    backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 4.0 ;
+    backlog:hasUserBusinessValue 6.0 ; backlog:hasTimeCriticality 4.0 ;
+    backlog:hasRiskReductionValue 6.0 ; backlog:hasJobSize 4.0 ;
+    backlog:scoredAt "2026-08-11T07:00:00"^^xsd:dateTime ;
+    backlog:hasScoreRationale "Highest risk reduction: a story that outlives its iteration makes velocity meaningless, and velocity now feeds the forecast, so the error propagates into a claim about the future. Job size larger than EP7 because splitting must be expressible — a rule that rejects without a remedy gets bypassed." ;
+    backlog:hasBasisKind backlog:Basis_Judged .
+fw:E_Fit a backlog:CostEstimate ;
+    backlog:hasEffortEstimate 4.0 ; backlog:hasCostBasis "Two constraints plus a split relation; Story's definition already states the rule, so no term is redefined" ;
+    backlog:estimatedAt "2026-08-11T07:00:00"^^xsd:dateTime ;
+    backlog:hasBasisKind backlog:Basis_Judged .
+
+fw:EP_ValueRelease a backlog:Epic ;
+    backlog:hasIdentifier "BRF-EP9" ;
+    backlog:hasTitle "A deployment carries the most valuable available work, and records that it did" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_Finishable ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasAcceptanceCriterion fw:AC_ValueRelease ;
+    backlog:hasPriorityScore fw:S_ValueRelease ;
+    backlog:hasCostEstimate fw:E_ValueRelease ;
+    backlog:rankedOnRoadmap fw:Roadmap ; backlog:hasRoadmapRank 9 ;
+    backlog:scheduledInHorizon backlog:Next ;
+    backlog:dependsOn fw:EP_Fit .
+fw:AC_ValueRelease a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a deployment and a backlog of scored candidates, When the suite is run at L4, Then the deployment records the basis on which its contents were selected, a deployment carrying a lower-scored item while a higher-scored deliverable one was available is rejected unless the exception is recorded with a reason, and the report shows what was left out." .
+fw:S_ValueRelease a backlog:WSJFScore ;
+    backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 2.4 ;
+    backlog:hasUserBusinessValue 6.0 ; backlog:hasTimeCriticality 3.0 ;
+    backlog:hasRiskReductionValue 3.0 ; backlog:hasJobSize 5.0 ;
+    backlog:scoredAt "2026-08-11T07:00:00"^^xsd:dateTime ;
+    backlog:hasScoreRationale "Depends on EP8: selecting the most valuable stories is meaningless while a story can span iterations, because what is available at a release boundary is then undefined. Largest job of the three, and the one most at risk of over-reaching — the exception path matters as much as the rule, since a release that must always take the top score would be bypassed the first time an ordering was wrong." ;
+    backlog:hasBasisKind backlog:Basis_Judged .
+fw:E_ValueRelease a backlog:CostEstimate ;
+    backlog:hasEffortEstimate 6.0 ; backlog:hasCostBasis "Selection basis, a recorded exception with rationale, and a report of what was excluded" ;
+    backlog:estimatedAt "2026-08-11T07:00:00"^^xsd:dateTime ;
+    backlog:hasBasisKind backlog:Basis_Judged .
