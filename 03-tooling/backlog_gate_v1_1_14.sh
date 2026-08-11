@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# backlog_gate v1.1.13 — four-gate release check for the Backlog & Roadmap
+# backlog_gate v1.1.14 — four-gate release check for the Backlog & Roadmap
 # Semantic Framework. Nothing about the package's state is trusted until all
 # four pass, and the SHACL gate refuses to certify anything until it has just
 # demonstrated, in this run, that it can fail a known-bad register.
@@ -11,7 +11,7 @@
 #   +       coverage gate          >= 80% of primary-source concepts (BP-D31)
 #   +       doc-coverage gate      every TBox class named in the standard document
 #
-# Usage: backlog_gate_v1_1_13.sh [REGISTER.ttl ...]
+# Usage: backlog_gate_v1_1_14.sh [REGISTER.ttl ...]
 
 set -u
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -117,6 +117,20 @@ if [ -n "$LIN" ] && [ -n "$REG" ]; then
   python3 "$LIN" "$REG" | grep -E "^level|^PRESENT|^ABSENT|^decomposition|^VERDICT"
 else
   echo "  NOT RUN — reporter or register not found. Not assumed to pass."
+fi
+
+echo
+echo "== Manifest-coverage gate — nothing on disk is unexplained =="
+# Gate 0 verifies that what is LISTED matches. It cannot see the unlisted set at
+# all, so a file could sit in the package covered by nothing and Gate 0 would
+# still report clean. This package ran that way for several releases.
+COV="$(ls "$HERE"/backlog_manifest_coverage_v*.py 2>/dev/null | sort -V | tail -1 || true)"
+if [ -n "$COV" ]; then
+  COV_OUT="$(python3 "$COV" "$PKG")"; COV_STATUS=$?
+  printf '%s\n' "$COV_OUT" | grep -E '^coverage|^VERDICT|^ +UNCOVERED|^      '
+  [ "$COV_STATUS" -ne 0 ] && FAILED=1
+else
+  echo "  NOT RUN — coverage checker not found. Not assumed to pass."
 fi
 
 echo

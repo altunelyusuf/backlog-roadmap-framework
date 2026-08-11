@@ -1,5 +1,55 @@
 # Changelog
 
+## v1.54.0 — 2026-08-11 (MINOR: what is unlisted was never verified either)
+
+**Snapshot:** `the maintainer/Ontologies` HEAD `3b62ca2`, 0 behind at time of work. Discipline
+`OE_Operating_Discipline_v2_3_0.md` sha `cf469352`; governance `knowledge_base_abox_v2_21_0.ttl`;
+lineage discipline v2.0.0 sha `93026f28`. Session `brsf-maintainer`.
+
+**The open item, reproduced first:** this package's manifest self-check read **62 OK, 1 BAD** with
+`PUBLISH_RECORD.ttl` mismatching, and `RELEASE_METRICS.txt` present on disk in no manifest line.
+
+**Both are the self-reference class and both were deliberate — but only one was declared, and the
+declaration lived in a docstring.** A docstring is not the artifact anyone verifies.
+
+**`PUBLISH_RECORD.ttl` was listed and should not have been.** The publisher writes it *after* the
+manifest, so listing it guarantees a mismatch: the hash describes a file that no longer exists in
+that form by the time anyone checks. **A permanent, expected mismatch is worse than an exclusion,**
+because a reader cannot distinguish it from a real one — which is precisely what happened for several
+releases.
+
+**Exemptions are now declared in the artifact.** `build_manifest` **1.3.0 → 1.4.0** emits an
+`# EXEMPT <path> — <reason>` line for each of the three, so *"not listed"* and *"deliberately not
+listed"* are different facts a reader can tell apart.
+
+### The gap underneath, which is the real finding
+
+**Gate 0 verifies that what is LISTED matches. Nothing verified that what is UNLISTED was meant to
+be.** From Gate 0's side there is no difference between a file deliberately excluded and a file
+forgotten, so a package could carry an uncovered file and still report a clean pass.
+
+`backlog_manifest_coverage_v1_0_0.py` closes it: every file on disk is either hashed or exempted by
+name; every exemption names a file that exists; every exemption carries a reason. Wired into the
+release gate.
+
+**The reason clause matters most.** An exemption is the one way to remove a file from coverage
+without deleting it, which makes it the obvious place to hide something — and therefore the one place
+that must be a *visible line in a generated artifact* rather than a silence. An exemption added to
+conceal a file is then an edit someone can see and question.
+
+**Proven both ways per L-95, exit codes recorded directly rather than through a pipeline:**
+
+```
+clean tree                  -> exit 0
+uncovered file planted      -> exit 1
+exemption naming no file    -> exit 1
+restored                    -> exit 0
+```
+
+**Attribution:** this release is the first from this package to carry `rel:authoringSession`. Its 31
+prior commits read `UNDECLARED` and stay that way — an absent claim cannot be added later (L-112).
+
+
 ## v1.53.0 — 2026-08-10 (MINOR: L4 was not a superset — it was a replacement)
 
 **Found by test-driving a trial declaration**, which is what the lineage ceremony's step 1 is for.
@@ -1137,7 +1187,7 @@ moment another stage is inserted, so the decoupling is permanent instead.
 
 **Why every gate stayed green while this was live:** the three-fixture self-proof invokes the
 validator *directly*; only the register path formats its output, so a defect in the formatting layer
-was invisible to the proof. `backlog_gate_v1_1_13.sh` now runs the known-bad fixture through the
+was invisible to the proof. `backlog_gate_v1_1_14.sh` now runs the known-bad fixture through the
 **exact register path** and aborts if it does not fail. The self-proof covered the shapes; it had
 never covered its own plumbing.
 
@@ -1591,7 +1641,7 @@ pattern-conformance versus form-divergence — which is the part that survives t
    `v1_1_0`, each recording why the version moved.
 2. **Packaging hygiene.** A compiled `.pyc` — created when our *own* discrimination test imported the
    package checker as a module — was shipped and manifest-listed at line 19. Fixed in
-   `build_manifest_v1_3_0.py`, which now prunes `__pycache__` and skips `.pyc`/`.pyo`, rather than by
+   `build_manifest_v1_4_0.py`, which now prunes `__pycache__` and skips `.pyc`/`.pyo`, rather than by
    deleting the file: Gate 0 verifies that what is listed matches, and cannot know that something
    should never have been listed.
 
@@ -2130,7 +2180,7 @@ executable and ordered.
 arbitration documented and implemented in the report tool.
 
 **Added — tooling:** `backlog_roadmap_report_v1_5_0.py` (eight sections, both NEXT answers, silent
--gap check), `backlog_coverage_gate_v1_1_1.py` (BP-D31), `backlog_gate_v1_1_13.sh` (Gate 0 / P / K /
+-gap check), `backlog_coverage_gate_v1_1_1.py` (BP-D31), `backlog_gate_v1_1_14.sh` (Gate 0 / P / K /
 R plus coverage), Gate K version-identity check in the validator.
 
 **Changed:** the v1.0.0 advisory "item carries no priority score" now excludes items correctly
