@@ -1,5 +1,38 @@
 # Changelog
 
+## v1.59.0 — 2026-08-11 (MINOR: BRF-EP8 — a story is consumed whole within one iteration)
+
+**G9 turned into a constraint.** The owner examined and rejected sizing the iteration to its longest
+story: a box sized by what it contains always fits, so its velocity can never report a miss.
+
+**No vocabulary was minted.** Splitting *is* decomposition — `decomposesInto` already reads *"a
+feature into stories"*, and a story split into smaller stories is the same relation. The remedy each
+message names is therefore expressible the moment the message is read.
+
+**Two clauses at L4**, both proven firing on the negative fixture:
+
+- a story planned into **more than one iteration** — *"either too large when it was committed or
+  never finished and recommitted, and both read the same afterwards"*
+- a story **still open after its iteration closed** — *"the iteration measured something it did not
+  deliver, so its velocity overstates what the team can finish and the forecast inherits the error"*
+
+Each message names **splitting** as the remedy and says explicitly not to widen the iteration.
+
+An **advisory** fires earlier, where splitting is still cheap: a story whose estimate exceeds its
+iteration's capacity cannot be completed within one by arithmetic, though it has not failed yet.
+
+**The conformant fixture demonstrates the remedy rather than describing it** — a story too large for
+one iteration, split into two that each fit, validating at 0.
+
+**Adding the rule immediately failed the framework's own conformant fixture**, correctly: its
+in-progress story had outlived the iteration it was planned into. Fixed by moving the story to the
+open iteration, not by relaxing the rule.
+
+**Re-measured, not assumed:** `Metric_UnfinishableCommitments` moves from its baseline of **3** to
+**1**. Two of the three as-is gaps are closed; the remaining one is that a deployment still cannot say
+how its contents were chosen, which is BRF-EP9.
+
+
 ## v1.58.0 — 2026-08-11 (MINOR: BRF-EP7 — structural views carry progress)
 
 The register put EP7 first at 6.00 and its acceptance criterion, written before the build, was the

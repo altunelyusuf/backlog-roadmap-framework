@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/1.9.0> ;
-    owl:versionInfo "1.9.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/1.10.0> ;
+    owl:versionInfo "1.10.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/1.9.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/1.8.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/1.7.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/1.6.0> ;
@@ -1564,7 +1565,14 @@ fw:E_Progress a backlog:CostEstimate ;
 fw:EP_Fit a backlog:Epic ;
     backlog:hasIdentifier "BRF-EP8" ;
     backlog:hasTitle "A story is consumed whole within one iteration, or split until it is" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-08-11T12:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-11T13:00:00"^^xsd:dateTime ;
+    backlog:hasActualEffort 2.0 ;
+    backlog:hasEvidence fw:Ev_Fit ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:lastAuditedAt "2026-08-11T13:00:00"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register ;
     backlog:pursuesObjective fw:Obj_Finishable ;
     backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
@@ -1630,3 +1638,20 @@ fw:Obs_ProgressDelivered a backlog:MetricObservation ;
     backlog:hasObservedValue 1.0 ;
     backlog:observedAt "2026-08-11T11:00:00"^^xsd:dateTime ;
     backlog:hasObservationMethod "Counted by running backlog_views --network against the framework's own register: the emitted Mermaid now carries a filled bar and a percentage per node, and the text table lists a derived completion with its basis for every item. Baseline was 0. Nothing is stored — a percentage written into the register could disagree with the states it summarises." .
+
+fw:Ev_Fit a backlog:TestEvidence ;
+    backlog:hasTestSpec "03-tooling/fixtures/fixture_l4_conformant_v1_0_0.ttl + fixture_l4_negative_v1_0_0.ttl" ;
+    backlog:hasTestId "BRF-EP8" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-08-11T13:00:00"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "Negative fixture plants a story planned into two iterations and left open after the first closed; both clauses fire, three violations in total. Conformant fixture carries a story too large for one iteration SPLIT into two that each fit, using decomposesInto, and validates at 0 — so the remedy each message names is demonstrated working rather than only described." ;
+    backlog:verifiedByTool "backlog_validate + pyshacl" ;
+    backlog:attestsCriterion fw:AC_Fit .
+
+fw:Obs_FitDelivered a backlog:MetricObservation ;
+    rdfs:label "Commitments the suite permits but the definitions forbid"@en ;
+    backlog:observesMetric fw:Metric_UnfinishableCommitments ;
+    backlog:observationFor fw:Obj_Finishable ;
+    backlog:hasObservedValue 1.0 ;
+    backlog:observedAt "2026-08-11T13:00:00"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Re-ran the three as-is probes. A story spanning iterations and a story outliving its iteration are now both rejected at L4, measured by construction. One of the original three remains: a deployment still cannot say how its contents were chosen, which is BRF-EP9. Baseline was 3, target 0." .

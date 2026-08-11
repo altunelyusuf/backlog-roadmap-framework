@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.25.0> ;
-    owl:versionInfo "1.25.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.26.0> ;
+    owl:versionInfo "1.26.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.25.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.24.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.23.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.22.0> ;
@@ -2637,4 +2638,58 @@ backlog:HarnessCoverageAdvisoryShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             FILTER NOT EXISTS { $this backlog:harnessComplete true }
+        }""" ] .
+
+#################################################################
+#  v1.26.0 — BRF-EP8: a story is consumed whole within one iteration
+#
+#  G9 turned into a constraint. The owner examined and rejected the
+#  alternative — size the iteration to the longest story — because
+#  a box sized by what it contains always fits, and velocity then
+#  becomes a tautology that can never report a miss.
+#
+#  No vocabulary is minted. Splitting IS decomposition: the term
+#  already reads "a feature into stories", and a story split into
+#  smaller stories is the same relation. The remedy each message
+#  names is therefore expressible the moment the message is read.
+#################################################################
+
+backlog:StoryIterationFitShape a sh:NodeShape ;
+    sh:targetClass backlog:Story ;
+    sh:severity sh:Violation ;
+    rdfs:label "L4: a story fits the iteration it was committed to"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L4: this story is planned into more than one iteration. A story is defined as small enough to be completed within ONE iteration; one spanning two was either too large when it was committed or was never finished and got recommitted, and both read the same afterwards. Split it into stories that each fit, using decomposesInto — do not widen the iteration, because an iteration sized to its contents always fits and its velocity can then never report a miss." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel backlog:L4_LineageEnforced .
+            ?e1 backlog:plansItem $this ; backlog:plannedInto ?i1 .
+            ?e2 backlog:plansItem $this ; backlog:plannedInto ?i2 .
+            FILTER (?i1 != ?i2)
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L4: this story was committed to an iteration that has since closed, and it is still open. The iteration measured something it did not deliver, so its velocity overstates what the team can finish and the forecast built on that velocity inherits the error. Split the remainder into a story that fits the next iteration; carrying it forward whole hides the miss in both iterations at once." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel backlog:L4_LineageEnforced .
+            ?e backlog:plansItem $this ; backlog:plannedInto ?it .
+            ?it backlog:iterationEnd ?end .
+            FILTER (STR(?end) < SUBSTR(STR(NOW()), 1, 19))
+            $this backlog:hasState ?st .
+            FILTER (?st NOT IN (backlog:Done, backlog:Cancelled))
+        }""" ] .
+
+backlog:OversizedStoryAdvisoryShape a sh:NodeShape ;
+    sh:targetClass backlog:Story ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: a story estimated beyond its iteration's capacity"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: this story's effort estimate exceeds the capacity of the iteration it was planned into. It has not failed yet and may still land, but a single story consuming more than a whole iteration's capacity cannot be completed within one by arithmetic. This is the point at which splitting is cheap; after the iteration closes it is a recorded miss." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?e backlog:plansItem $this ; backlog:plannedInto ?it .
+            ?it backlog:hasCapacity ?cap .
+            $this backlog:hasCostEstimate ?est .
+            ?est backlog:hasEffortEstimate ?eff .
+            FILTER (?eff > ?cap)
         }""" ] .

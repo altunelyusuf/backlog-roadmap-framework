@@ -113,7 +113,7 @@ ex:S1 a backlog:WSJFScore ;
 ex:US2 a backlog:Story ;
     backlog:hasIdentifier "US-2" ; backlog:hasTitle "Set a new password from the link" ;
     backlog:hasState backlog:InProgress ;
-    backlog:memberOfContainer ex:Backlog , ex:It1 ;
+    backlog:memberOfContainer ex:Backlog , ex:It2 ;
     backlog:pursuesObjective ex:Objective ;
     backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
     backlog:asRole "practitioner" ; backlog:wantsCapability "set a new password" ;
@@ -138,7 +138,7 @@ ex:S2 a backlog:WSJFScore ;
 # planning: stories into the iteration, broken to tasks
 ex:It1 a backlog:Iteration ;
     backlog:hasIdentifier "IT-1" ; backlog:hasTitle "Iteration 1" ;
-    backlog:hasState backlog:InProgress ;
+    backlog:hasState backlog:Done ;
     backlog:iterationStart "2026-07-28T00:00:00"^^xsd:dateTime ;
     backlog:iterationEnd "2026-08-08T23:59:59"^^xsd:dateTime ;
     backlog:hasCapacity 12.0 .
@@ -148,8 +148,15 @@ ex:Plan1 a backlog:PlanningEvent ;
     backlog:plannedAt "2026-07-27T10:00:00"^^xsd:dateTime ;
     backlog:plannedBy backlog:Builder ;
     backlog:producesTask ex:T1 , ex:T2 .
+ex:It2 a backlog:Iteration ;
+    backlog:hasIdentifier "IT-2" ; backlog:hasTitle "Iteration 2" ;
+    backlog:hasState backlog:InProgress ;
+    backlog:iterationStart "2026-08-09T00:00:00"^^xsd:dateTime ;
+    backlog:iterationEnd "2027-01-31T23:59:59"^^xsd:dateTime ;
+    backlog:hasCapacity 12.0 .
+
 ex:Plan2 a backlog:PlanningEvent ;
-    backlog:plansItem ex:US2 ; backlog:plannedInto ex:It1 ;
+    backlog:plansItem ex:US2 ; backlog:plannedInto ex:It2 ;
     backlog:plannedAt "2026-07-27T10:15:00"^^xsd:dateTime ;
     backlog:plannedBy backlog:Builder ;
     backlog:producesTask ex:T3 .
@@ -172,7 +179,7 @@ ex:H_T2 a backlog:TestHarness ; backlog:harnessFor ex:T2 ;
     backlog:hasHarnessEvidence ex:Ev1 ; backlog:harnessComplete true .
 ex:T3 a backlog:ExecutionTask ; backlog:hasIdentifier "T-3" ;
     backlog:hasTitle "Enforce the password policy on reset" ;
-    backlog:hasState backlog:InProgress ; backlog:memberOfContainer ex:Backlog , ex:It1 .
+    backlog:hasState backlog:InProgress ; backlog:memberOfContainer ex:Backlog , ex:It2 .
 
 # deployment: what shipped, from which iteration, carrying which stories
 ex:Rel1 a backlog:DeploymentUnit ;
@@ -189,3 +196,56 @@ ex:H1 a backlog:TestHarness ;
     backlog:harnessFor ex:US1 ;
     backlog:hasHarnessEvidence ex:Ev1 ;
     backlog:harnessComplete true .
+
+#################################################################
+#  BRF-EP8 — a story too large for one iteration, SPLIT so each
+#  part fits. The remedy the fit messages name, shown working:
+#  splitting is decomposesInto, which already reads "a feature
+#  into stories" — no new relation was needed.
+#################################################################
+
+ex:US_Big a backlog:Story ;
+    backlog:hasIdentifier "US-BIG" ;
+    backlog:hasTitle "Recover an account by any supported factor" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer ex:Backlog ;
+    backlog:pursuesObjective ex:Objective ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:asRole "practitioner" ; backlog:wantsCapability "recover by any supported factor" ;
+    backlog:soThat "I am not locked out when one factor is unavailable" ;
+    backlog:hasAcceptanceCriterion ex:AC_Big ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Split before scoring; scoring a parent alongside its scored children would double-count." ;
+    backlog:decomposesInto ex:US_Split1 , ex:US_Split2 .
+ex:AC_Big a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a practitioner with more than one registered factor, When one is unavailable, Then recovery completes through another without a support contact." .
+
+ex:US_Split1 a backlog:Story ;
+    backlog:hasIdentifier "US-3" ;
+    backlog:hasTitle "Recover by email factor" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer ex:Backlog ;
+    backlog:pursuesObjective ex:Objective ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:asRole "practitioner" ; backlog:wantsCapability "recover by email" ;
+    backlog:soThat "I regain access using the factor I always have" ;
+    backlog:hasAcceptanceCriterion ex:AC_Split1 ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Not yet refined; scored at the next planning." .
+ex:AC_Split1 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a practitioner with a verified email, When they request recovery, Then a single-use link arrives and completes recovery within one iteration's work." .
+
+ex:US_Split2 a backlog:Story ;
+    backlog:hasIdentifier "US-4" ;
+    backlog:hasTitle "Recover by authenticator factor" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer ex:Backlog ;
+    backlog:pursuesObjective ex:Objective ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:asRole "practitioner" ; backlog:wantsCapability "recover by authenticator" ;
+    backlog:soThat "I regain access when email is unavailable" ;
+    backlog:hasAcceptanceCriterion ex:AC_Split2 ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Not yet refined; scored at the next planning." .
+ex:AC_Split2 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a practitioner with a registered authenticator, When they request recovery, Then a challenge completes recovery within one iteration's work." .

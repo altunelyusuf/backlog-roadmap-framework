@@ -179,3 +179,31 @@ ex:US3 a backlog:Story ;
     backlog:memberOfContainer ex:Backlog ;
     backlog:pursuesObjective ex:Drift ;
     backlog:notYetScoreable true ; backlog:hasScoreabilityReason "drift probe" .
+
+#################################################################
+#  BRF-EP8 planted defects: a story spanning two iterations, and
+#  a story still open after its iteration closed.
+#################################################################
+
+ex:It0 a backlog:Iteration ;
+    backlog:hasIdentifier "IT-0" ; backlog:hasState backlog:Done ;
+    backlog:iterationStart "2026-07-01T00:00:00"^^xsd:dateTime ;
+    backlog:iterationEnd "2026-07-14T23:59:59"^^xsd:dateTime ;
+    backlog:hasCapacity 10.0 .
+ex:US_Span a backlog:Story ;
+    backlog:hasIdentifier "US-SPAN" ; backlog:hasTitle "Carried forward whole" ;
+    backlog:hasState backlog:InProgress ;
+    backlog:memberOfContainer ex:Backlog , ex:It0 , ex:It1 ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "planted" .
+ex:PlanSpanA a backlog:PlanningEvent ;
+    backlog:plansItem ex:US_Span ; backlog:plannedInto ex:It0 ;
+    backlog:plannedAt "2026-07-01T09:00:00"^^xsd:dateTime ;
+    backlog:producesTask ex:T_SpanA .
+ex:PlanSpanB a backlog:PlanningEvent ;
+    backlog:plansItem ex:US_Span ; backlog:plannedInto ex:It1 ;
+    backlog:plannedAt "2026-07-28T09:00:00"^^xsd:dateTime ;
+    backlog:producesTask ex:T_SpanB .
+ex:T_SpanA a backlog:ExecutionTask ; backlog:hasIdentifier "T-SA" ;
+    backlog:hasState backlog:Done ; backlog:memberOfContainer ex:Backlog , ex:It0 .
+ex:T_SpanB a backlog:ExecutionTask ; backlog:hasIdentifier "T-SB" ;
+    backlog:hasState backlog:InProgress ; backlog:memberOfContainer ex:Backlog , ex:It1 .
