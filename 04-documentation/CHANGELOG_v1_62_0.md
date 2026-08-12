@@ -1,5 +1,41 @@
 # Changelog
 
+## v1.62.0 — 2026-08-11 (MINOR: impact of the scope-first ruling, measured; fifth mission registered)
+
+**Four impacts measured before anything was proposed.**
+
+1. **Nothing enforces the order, and nothing can.** Two shape clauses reference
+   `scopeRealizesObjective`; both check that the link *exists*, neither could check when either end
+   was written.
+2. **The order is unrecordable.** Every property domained on `Mission`, `Goal`, `Objective` and
+   `ScopeStatement` was enumerated — 2, 1, 7 and 5 respectively — and **none carries a date.** The
+   ceremony order therefore lives only in prose, and no reader can tell how a lineage was built
+   without asking the session that wrote it.
+3. **Two shipped artifacts still teach the retired order.** `backlog_lineage_completeness` lists its
+   layers as Mission → Goal → Objective → ScopeStatement, presented to everyone who runs it; the
+   standard's intent-chain section reads the same way. The changelog matches too but is a historical
+   record and is excluded under L-112.
+4. **The amendment pattern reproduced itself while registering this work.** Admitting it required a
+   **third** `ScopeChange` against the original scope — which is exactly the symptom that motivated
+   the reordering, occurring again in the act of fixing it.
+
+**A fifth mission, and the first in this register built scope-first.** `Scope_Order` and its three
+exclusions were written before any goal existed, so the goals had a boundary to be argued against.
+The exclusions refuse three things worth naming: **no re-deriving old scopes** (it would manufacture
+the self-confirming boundary v3.0.0 prevents), **no shape rejecting old-order lineages** (they are
+weaker in one respect, not wrong, and such a rule gets bypassed), and **no mandated timestamps** (a
+required date nobody can verify produces backfilled claims — optional and honest beats required and
+fabricated).
+
+**Two epics, computed not chosen:** BRF-EP10 *an intent element can record when it was fixed* (5.00),
+BRF-EP11 *shipped artifacts stop teaching the retired order* (4.00).
+
+**The suite caught the author twice while registering.** A WSJF value of 4.5 where (6+4+5)/3 = 5.0 —
+arithmetic asserted rather than computed. And `Scope_Order` realising no objective, which in a
+scope-first order is the honest transient state: the scope text and exclusions are fixed first, and
+the link to objectives is asserted last, once they exist.
+
+
 ## v1.61.0 — 2026-08-11 (MINOR: scope precedes goals — Lineage Operating Discipline v3.0.0)
 
 The owner reported scope problems in applied lineages and proposed reordering the ceremony: fix the

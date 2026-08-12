@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/1.11.0> ;
-    owl:versionInfo "1.11.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/1.12.0> ;
+    owl:versionInfo "1.12.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/1.11.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/1.10.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/1.9.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/1.8.0> ;
@@ -44,7 +45,7 @@ fw:Profile a backlog:AdoptionProfile ;
 fw:Register a backlog:Backlog ;
     backlog:hasIdentifier "BRF-REG" ;
     backlog:hasTitle "backlog-roadmap-framework development register" ;
-    backlog:hasState backlog:Done ;
+    backlog:hasState backlog:InProgress ;
     backlog:appliesDefinitionOfDone backlog:DoD_Baseline ;
     backlog:hasCommitment fw:Commitment_Dev .
 
@@ -1680,3 +1681,150 @@ fw:Obs_FitFinal a backlog:MetricObservation ;
     backlog:hasObservedValue 0.0 ;
     backlog:observedAt "2026-08-11T15:00:00"^^xsd:dateTime ;
     backlog:hasObservationMethod "Re-ran all three as-is probes against the current suite at L4. A story spanning iterations is rejected, a story outliving its iteration is rejected, and a deployment that cannot say how its contents were chosen is rejected. Baseline was 3, target 0, observed 0 — measured by construction on the negative fixture, not inferred from the work being Done." .
+
+#################################################################
+#  v1.12.0 — a fifth mission, and the FIRST built scope-first.
+#
+#  Per Lineage Operating Discipline v3.0.0: Mission -> Scope (with
+#  exclusions) -> Goal -> Objective. The scope below was written
+#  before any goal existed, so the goals had a boundary to be
+#  argued against rather than a boundary drawn around them.
+#
+#  The four impacts were MEASURED before this was registered, not
+#  inferred from the ruling.
+#################################################################
+
+fw:Mission_OrderRepair a backlog:Mission ;
+    rdfs:label "Recorded-order mission"@en ;
+    backlog:hasMissionStatement "A reader of any lineage in this store can tell whether its scope was fixed before its goals or drawn around them afterwards, without asking the session that wrote it." ;
+    backlog:missionFor fw:Register ;
+    backlog:decidedBy backlog:Owner .
+
+# --- SCOPE SECOND, before any goal exists ---
+
+fw:Scope_Order a backlog:ScopeStatement ;
+    backlog:hasScopeStatementText "Make the v3.0.0 ceremony order recordable and checkable: a way to state when each element of an intent chain was fixed, a check that reports the order a lineage was actually built in, and the shipped artifacts that still teach the retired order corrected." ;
+    backlog:scopeRealizesObjective fw:Obj_OrderRecordable , fw:Obj_NoStaleOrder ;
+    backlog:hasScopeExclusion fw:Ex_NoRewrite , fw:Ex_NoOrderShape , fw:Ex_NoTimestampMandate .
+
+fw:Ex_NoRewrite a backlog:ScopeExclusion ;
+    backlog:excludesConcern "Re-deriving the scopes of lineages already built under the old order." ;
+    backlog:hasExclusionRationale "Rewriting a scope from objectives that already exist produces exactly the self-confirming boundary v3.0.0 exists to prevent, and would destroy the record of a real past order. L-112: historical records are corrected by appending." ;
+    backlog:decidedBy backlog:Owner .
+
+fw:Ex_NoOrderShape a backlog:ScopeExclusion ;
+    backlog:excludesConcern "A SHACL constraint that rejects a lineage built in the old order." ;
+    backlog:hasExclusionRationale "Measured: both orders validate identically and drift fires in both, so a shape would have to key on declaration timestamps that do not exist. More importantly a lineage built old-order is not WRONG, only weaker in one respect; rejecting every existing register to make a point would be the kind of rule that gets bypassed." ;
+    backlog:decidedBy backlog:Owner .
+
+fw:Ex_NoTimestampMandate a backlog:ScopeExclusion ;
+    backlog:excludesConcern "Requiring a fixed-at date on every intent element at any conformance level." ;
+    backlog:hasExclusionRationale "A date nobody can verify is a claim, not a measurement, and mandating one would produce backfilled timestamps asserting an order that was never followed. Optional and honest beats required and fabricated." ;
+    backlog:decidedBy backlog:Owner .
+
+# --- GOALS AND OBJECTIVES, produced to FILL that scope ---
+
+fw:Goal_OrderVisible a backlog:Goal ;
+    rdfs:label "The order a lineage was built in is visible in the lineage"@en ;
+    backlog:contributesToMission fw:Mission_OrderRepair ;
+    backlog:decidedBy backlog:Owner .
+
+fw:Metric_OrderRecordable a core:Metric ;
+    rdfs:label "Intent elements able to state when they were fixed"@en .
+fw:Metric_StaleOrderArtifacts a core:Metric ;
+    rdfs:label "Shipped artifacts teaching the retired chain order"@en .
+
+fw:Obj_OrderRecordable a backlog:Objective ;
+    rdfs:label "An intent element can state when it was fixed"@en ;
+    backlog:contributesToGoal fw:Goal_OrderVisible ;
+    backlog:hasSuccessMetric fw:Metric_OrderRecordable ;
+    backlog:hasBaselineValue 0.0 ;
+    backlog:hasTargetValue 4.0 ;
+    backlog:hasTargetDirection backlog:Dir_Increase ;
+    backlog:hasObjectiveDeadline "2026-10-31T00:00:00"^^xsd:dateTime ;
+    backlog:decidedBy backlog:Owner .
+
+fw:Obj_NoStaleOrder a backlog:Objective ;
+    rdfs:label "No shipped artifact teaches the retired order"@en ;
+    backlog:contributesToGoal fw:Goal_OrderVisible ;
+    backlog:hasSuccessMetric fw:Metric_StaleOrderArtifacts ;
+    backlog:hasBaselineValue 2.0 ;
+    backlog:hasTargetValue 0.0 ;
+    backlog:hasTargetDirection backlog:Dir_Decrease ;
+    backlog:hasObjectiveDeadline "2026-10-31T00:00:00"^^xsd:dateTime ;
+    backlog:decidedBy backlog:Owner .
+
+fw:Obs_OrderAsIs a backlog:MetricObservation ;
+    rdfs:label "As-is: the order is unrecordable"@en ;
+    backlog:observesMetric fw:Metric_OrderRecordable ;
+    backlog:observationFor fw:Obj_OrderRecordable ;
+    backlog:hasObservedValue 0.0 ;
+    backlog:observedAt "2026-08-11T16:00:00"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Enumerated every property domained on Mission, Goal, Objective and ScopeStatement in backlog_tbox: 2, 1, 7 and 5 properties respectively, and NONE carries a date. The ceremony order therefore exists only in prose — a lineage cannot state whether its scope preceded its goals, and no reader can tell without asking the session that wrote it." .
+
+fw:Obs_StaleOrderAsIs a backlog:MetricObservation ;
+    rdfs:label "As-is: artifacts still teaching the retired order"@en ;
+    backlog:observesMetric fw:Metric_StaleOrderArtifacts ;
+    backlog:observationFor fw:Obj_NoStaleOrder ;
+    backlog:hasObservedValue 2.0 ;
+    backlog:observedAt "2026-08-11T16:00:00"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Grepped the shipped package. backlog_lineage_completeness lists its LAYERS as Mission, Goal, Objective, ScopeStatement, ScopeExclusion — the retired order, presented to every reader who runs it. The standard's section on the intent chain likewise describes goals and objectives before scope. The changelog also matches the old order but is a historical record and is excluded from this count under L-112." .
+
+fw:SC_OrderRepair a backlog:ScopeChange ;
+    rdfs:label "Admit the order-recording work"@en ;
+    backlog:changesScope fw:Scope ;
+    backlog:admitsItem fw:EP_OrderRecord , fw:EP_OrderCorrect ;
+    backlog:hasScopeChangeRationale "Owner request following the v3.0.0 ruling. Note the shape of this entry: the earlier scope fw:Scope had to be AMENDED to admit this work, which is the third such amendment and is precisely the pattern that motivated the reordering. The new work is scoped under fw:Scope_Order, written before its goals." ;
+    backlog:decidedBy backlog:Owner .
+
+fw:EP_OrderRecord a backlog:Epic ;
+    backlog:hasIdentifier "BRF-EP10" ;
+    backlog:hasTitle "An intent element can record when it was fixed" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_OrderRecordable ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasAcceptanceCriterion fw:AC_OrderRecord ;
+    backlog:hasPriorityScore fw:S_OrderRecord ;
+    backlog:hasCostEstimate fw:E_OrderRecord ;
+    backlog:rankedOnRoadmap fw:Roadmap ; backlog:hasRoadmapRank 10 ;
+    backlog:scheduledInHorizon backlog:Now .
+fw:AC_OrderRecord a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a lineage whose elements record when they were fixed, When the completeness report is run, Then it states whether the scope was fixed before the first goal, and a lineage that records no dates is reported as order-unknown rather than assumed to be either." .
+fw:S_OrderRecord a backlog:WSJFScore ;
+    backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 5.0 ;
+    backlog:hasUserBusinessValue 6.0 ; backlog:hasTimeCriticality 4.0 ;
+    backlog:hasRiskReductionValue 5.0 ; backlog:hasJobSize 3.0 ;
+    backlog:scoredAt "2026-08-11T16:00:00"^^xsd:dateTime ;
+    backlog:hasScoreRationale "Risk reduction is the largest component: a ruling that cannot be observed in the artifact decays into folklore, and this session has already seen a discipline claim drift from its suite. Job size small because the property is optional and the report derives the rest." ;
+    backlog:hasBasisKind backlog:Basis_Judged .
+fw:E_OrderRecord a backlog:CostEstimate ;
+    backlog:hasEffortEstimate 3.0 ; backlog:hasCostBasis "One optional datatype property on the intent classes, plus report logic" ;
+    backlog:estimatedAt "2026-08-11T16:00:00"^^xsd:dateTime ;
+    backlog:hasBasisKind backlog:Basis_Judged .
+
+fw:EP_OrderCorrect a backlog:Epic ;
+    backlog:hasIdentifier "BRF-EP11" ;
+    backlog:hasTitle "Shipped artifacts stop teaching the retired order" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_NoStaleOrder ;
+    backlog:hasInvestmentCategory backlog:Cat_Rework ;
+    backlog:hasAcceptanceCriterion fw:AC_OrderCorrect ;
+    backlog:hasPriorityScore fw:S_OrderCorrect ;
+    backlog:hasCostEstimate fw:E_OrderCorrect ;
+    backlog:rankedOnRoadmap fw:Roadmap ; backlog:hasRoadmapRank 11 ;
+    backlog:scheduledInHorizon backlog:Now .
+fw:AC_OrderCorrect a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the completeness report and the standard, When either is read, Then the intent chain is presented scope-first, and no current-state artifact describes goals or objectives as preceding scope while historical records remain unedited." .
+fw:S_OrderCorrect a backlog:WSJFScore ;
+    backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 4.0 ;
+    backlog:hasUserBusinessValue 5.0 ; backlog:hasTimeCriticality 5.0 ;
+    backlog:hasRiskReductionValue 2.0 ; backlog:hasJobSize 3.0 ;
+    backlog:scoredAt "2026-08-11T16:00:00"^^xsd:dateTime ;
+    backlog:hasScoreRationale "Highest time criticality of the two: every run of the completeness report between now and the fix teaches the retired order to whoever reads it, so the cost accrues per use rather than once." ;
+    backlog:hasBasisKind backlog:Basis_Judged .
+fw:E_OrderCorrect a backlog:CostEstimate ;
+    backlog:hasEffortEstimate 3.0 ; backlog:hasCostBasis "Reorder one table and one layer list; historical records untouched" ;
+    backlog:estimatedAt "2026-08-11T16:00:00"^^xsd:dateTime ;
+    backlog:hasBasisKind backlog:Basis_Judged .
