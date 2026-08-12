@@ -40,6 +40,7 @@ ex:Goal a backlog:Goal ; rdfs:label "Self-service recovery"@en ;
 ex:Metric a core:Metric ; rdfs:label "Share of recoveries completed without support"@en .
 
 ex:Objective a backlog:Objective ; rdfs:label "Recoveries need no support contact"@en ;
+    backlog:fillsScope ex:Scope ;
     backlog:contributesToGoal ex:Goal ;
     backlog:hasSuccessMetric ex:Metric ;
     backlog:hasBaselineValue 12.0 ; backlog:hasTargetValue 80.0 ;
@@ -56,7 +57,6 @@ ex:Obs a backlog:MetricObservation ; rdfs:label "First reading after release 1"@
 
 ex:Scope a backlog:ScopeStatement ;
     backlog:hasScopeStatementText "Self-service recovery for practitioner accounts: the reset flow and its notifications." ;
-    backlog:scopeRealizesObjective ex:Objective ;
     backlog:hasScopeExclusion ex:Excl .
 ex:Excl a backlog:ScopeExclusion ;
     backlog:excludesConcern "Recovery for administrator accounts, which carries a different identity check." ;

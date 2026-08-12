@@ -8,9 +8,13 @@
 # anything. Measured on this package's own register: five objectives declared,
 # five admitted, none refused, scope amended twice afterwards to catch up.
 #
-# The suite validates both orders identically — this fixture exists to show the
-# ORDER, which is a discipline for whoever writes the chain rather than a
-# constraint the shapes can express.
+# The order is recorded by the DIRECTION of one link, not by any date.
+# Every link in the chain points from the later-written element to the earlier:
+# Goal -> Mission, Objective -> Goal, and here Objective -> Scope via fillsScope.
+# An objective cannot name a boundary that does not yet exist, so this link is
+# only assertable in a lineage where the scope came first. The opposite property,
+# scopeRealizesObjective, points Scope -> Objective and records the other order.
+# Both are kept; which one a lineage uses IS the fact worth recording.
 @prefix backlog: <http://example.org/backlog#> .
 @prefix core:    <http://example.org/core#> .
 @prefix ex:      <http://example.org/ob#> .
@@ -18,9 +22,7 @@
 @prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
 
 ex:P a backlog:AdoptionProfile ; backlog:profileAppliesTo "order B probe" ;
-    backlog:governsBacklog ex:BL ; backlog:hasConformanceLevel backlog:L2_EvidenceBound ;
-    backlog:hasTargetConformanceLevel backlog:L4_LineageEnforced ;
-    backlog:hasLevelReviewDate "2027-01-01T00:00:00"^^xsd:dateTime ;
+    backlog:governsBacklog ex:BL ; backlog:hasConformanceLevel backlog:L4_LineageEnforced ;
     backlog:decidedBy backlog:Owner ; backlog:hasDecisionRationale "probe" ;
     backlog:adoptsFacet backlog:CoreFacet , backlog:EvidenceFacet .
 ex:BL a backlog:Backlog ; backlog:hasIdentifier "BL-B" ; backlog:hasState backlog:Proposed ;
@@ -46,6 +48,7 @@ ex:G a backlog:Goal ; rdfs:label "Self-service recovery"@en ;
     backlog:contributesToMission ex:M ; backlog:decidedBy backlog:Owner .
 ex:Met a core:Metric ; rdfs:label "Unaided recovery share"@en .
 ex:O a backlog:Objective ; rdfs:label "Recoveries need no support"@en ;
+    backlog:fillsScope ex:Scope ;
     backlog:contributesToGoal ex:G ; backlog:hasSuccessMetric ex:Met ;
     backlog:hasBaselineValue 12.0 ; backlog:hasTargetValue 80.0 ;
     backlog:hasTargetDirection backlog:Dir_Increase ;
@@ -59,7 +62,6 @@ ex:Obs a backlog:MetricObservation ; backlog:observesMetric ex:Met ;
 # scope written last, from the objective
 ex:Scope a backlog:ScopeStatement ;
     backlog:hasScopeStatementText "The reset flow and its notifications for practitioner accounts. Fixed before any goal was written." ;
-    backlog:scopeRealizesObjective ex:O ;
     backlog:hasScopeExclusion ex:X .
 ex:X a backlog:ScopeExclusion ;
     backlog:excludesConcern "Administrator recovery." ;

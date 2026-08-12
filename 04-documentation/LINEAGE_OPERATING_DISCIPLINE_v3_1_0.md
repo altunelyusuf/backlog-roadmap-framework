@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v3.0.0
+# Lineage Operating Discipline — v3.1.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -163,6 +163,14 @@ exists in the shipped shapes file and carries the severity claimed. **A discipli
 enforcement claims have drifted from the suite is worse than none, because it is believed.**
 
 ---
+
+## v3.1.0 (2026-08-11)
+
+Owner correction, and a straightforward one: **the order never needed timestamps.** v3.0.0 treated it
+as unrecordable because no intent element carries a date. But the chain's links already run from later
+to earlier, so the direction of a single link records the order — the vocabulary was simply missing
+the reverse of `scopeRealizesObjective`. `fillsScope` supplies it. An adaptation procedure ships for
+lineages built the other way; its first instruction is to change nothing that exists.
 
 ## v3.0.0 (2026-08-11)
 

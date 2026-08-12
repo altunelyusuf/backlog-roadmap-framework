@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.27.0> ;
-    owl:versionInfo "1.27.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.28.0> ;
+    owl:versionInfo "1.28.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.27.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.26.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.25.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.24.0> ;
@@ -1500,6 +1501,7 @@ backlog:ScopeMeasurabilityShape a sh:NodeShape ;
             ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
             FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed, backlog:L4_LineageEnforced))
             FILTER NOT EXISTS { $this backlog:scopeRealizesObjective ?o }
+            FILTER NOT EXISTS { ?o2 backlog:fillsScope $this }
         }""" ] ;
     sh:sparql [ a sh:SPARQLConstraint ;
         sh:message "L2: this scope states no exclusion; a boundary with only an inside has not been drawn." ;
@@ -2571,6 +2573,7 @@ backlog:L4DriftShape a sh:NodeShape ;
             $this backlog:hasScopeStatement ?sc .
             ?i backlog:memberOfContainer $this ; backlog:pursuesObjective ?o .
             FILTER NOT EXISTS { ?sc backlog:scopeRealizesObjective ?o }
+            FILTER NOT EXISTS { ?o backlog:fillsScope ?sc }
         }""" ] .
 
 #####
@@ -2749,4 +2752,44 @@ backlog:ScoringIgnoredAdvisoryShape a sh:NodeShape ;
             FILTER NOT EXISTS {
                 ?d2 a backlog:DeploymentUnit ; backlog:hasSelectionBasis backlog:Sel_HighestScored .
             }
+        }""" ] .
+
+#################################################################
+#  v1.28.0 — the chain declares which order it was built in
+#################################################################
+
+backlog:ScopeFirstOrderShape a sh:NodeShape ;
+    sh:targetClass backlog:Objective ;
+    sh:severity sh:Violation ;
+    rdfs:label "L4: an objective names the scope it fills"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L4: this objective names no scope it fills. An objective cannot reference a boundary that does not yet exist, so asserting fillsScope is only possible where the scope was fixed first — which is why the link, and not a date, is what records the order. A lineage built the other way round should say so by keeping scopeRealizesObjective and declaring a lower level, not by leaving the question open." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel backlog:L4_LineageEnforced .
+            FILTER NOT EXISTS { $this backlog:fillsScope ?sc }
+        }""" ] .
+
+backlog:MixedOrderShape a sh:NodeShape ;
+    sh:targetClass backlog:ScopeStatement ;
+    sh:severity sh:Violation ;
+    rdfs:label "A lineage is built in one order or the other, not both (L1)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this scope and one of its objectives point at each other — the scope realises the objective AND the objective fills the scope. Only one can be true of how the lineage was built: either the boundary existed and the objective was written to fill it, or the objectives existed and the boundary was drawn round them. Asserting both records no order at all, which is worse than recording the old one honestly." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:scopeRealizesObjective ?o .
+            ?o backlog:fillsScope $this .
+        }""" ] .
+
+backlog:LegacyOrderAdvisoryShape a sh:NodeShape ;
+    sh:targetClass backlog:ScopeStatement ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: a lineage built scope-last"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: this scope points at its objectives, so it was written after them and its boundary was drawn around work already decided. That is a real record of how this lineage was built and is not an error. It is reported because such a boundary has never refused anything: to change that, fix a scope for the NEXT increment before its goals and link it with fillsScope. Do not re-point the existing links — a boundary re-derived from objectives that already exist is exactly the self-confirming one this reports." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:scopeRealizesObjective ?o .
+            FILTER NOT EXISTS { ?o2 backlog:fillsScope $this }
         }""" ] .

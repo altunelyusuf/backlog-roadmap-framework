@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/1.12.0> ;
-    owl:versionInfo "1.12.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/1.13.0> ;
+    owl:versionInfo "1.13.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/1.12.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/1.11.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/1.10.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/1.9.0> ;
@@ -1779,8 +1780,15 @@ fw:SC_OrderRepair a backlog:ScopeChange ;
 
 fw:EP_OrderRecord a backlog:Epic ;
     backlog:hasIdentifier "BRF-EP10" ;
-    backlog:hasTitle "An intent element can record when it was fixed" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasTitle "The chain records its own order through link direction" ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-08-11T17:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-11T18:00:00"^^xsd:dateTime ;
+    backlog:hasActualEffort 2.0 ;
+    backlog:hasEvidence fw:Ev_OrderRecord ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_InTheLoop ;
+    backlog:lastAuditedAt "2026-08-11T18:00:00"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register ;
     backlog:pursuesObjective fw:Obj_OrderRecordable ;
     backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
@@ -1790,7 +1798,7 @@ fw:EP_OrderRecord a backlog:Epic ;
     backlog:rankedOnRoadmap fw:Roadmap ; backlog:hasRoadmapRank 10 ;
     backlog:scheduledInHorizon backlog:Now .
 fw:AC_OrderRecord a backlog:AcceptanceCriterion ;
-    backlog:hasGherkinText "Given a lineage whose elements record when they were fixed, When the completeness report is run, Then it states whether the scope was fixed before the first goal, and a lineage that records no dates is reported as order-unknown rather than assumed to be either." .
+    backlog:hasGherkinText "Given a lineage in which each objective names the scope it fills, When the suite is run, Then the order the lineage was built in is readable from the link direction alone, a lineage built the other way is reported as such rather than rejected, and a lineage asserting both directions is rejected because it records no order at all." .
 fw:S_OrderRecord a backlog:WSJFScore ;
     backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 5.0 ;
     backlog:hasUserBusinessValue 6.0 ; backlog:hasTimeCriticality 4.0 ;
@@ -1828,3 +1836,28 @@ fw:E_OrderCorrect a backlog:CostEstimate ;
     backlog:hasEffortEstimate 3.0 ; backlog:hasCostBasis "Reorder one table and one layer list; historical records untouched" ;
     backlog:estimatedAt "2026-08-11T16:00:00"^^xsd:dateTime ;
     backlog:hasBasisKind backlog:Basis_Judged .
+
+fw:Int_EP10_Correct a backlog:HumanInteraction ;
+    rdfs:label "Owner corrected the premise: order is recorded by direction, not dates"@en ;
+    backlog:interactsWith fw:EP_OrderRecord ;
+    backlog:hasInteractionKind backlog:Int_Correct ;
+    backlog:interactedAt "2026-08-11T16:45:00"^^xsd:dateTime ;
+    backlog:interactedBy backlog:Owner ;
+    backlog:gatesTransition true .
+
+fw:Ev_OrderRecord a backlog:TestEvidence ;
+    backlog:hasTestSpec "03-tooling/fixtures/fixture_scope_first_v1_0_0.ttl" ;
+    backlog:hasTestId "BRF-EP10" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-08-11T18:00:00"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "The scope-first fixture links each objective to its scope with fillsScope and validates at L4 with 0 of 49 constraints suppressed. This register, built scope-last, validates at 0 violations and raises the legacy-order advisory — so both orders are expressible and each records which one it used. Re-pointing an existing link in place is rejected by MixedOrderShape at L1." ;
+    backlog:verifiedByTool "backlog_validate + pyshacl" ;
+    backlog:attestsCriterion fw:AC_OrderRecord .
+
+fw:Obs_OrderRecordable a backlog:MetricObservation ;
+    rdfs:label "Intent elements able to state the order they were fixed in"@en ;
+    backlog:observesMetric fw:Metric_OrderRecordable ;
+    backlog:observationFor fw:Obj_OrderRecordable ;
+    backlog:hasObservedValue 4.0 ;
+    backlog:observedAt "2026-08-11T18:00:00"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Counted the links in the intent chain that point from the later-written element to the earlier one, which is what encodes order: Goal to Mission, Objective to Goal, WorkItem to Objective, and now Objective to Scope via fillsScope. Four. The baseline of 0 was recorded against the wrong premise — that order needed dates — and the correction is why this observation exists rather than a revision of the earlier one." .

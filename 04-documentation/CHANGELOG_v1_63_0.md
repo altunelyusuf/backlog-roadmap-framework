@@ -1,5 +1,42 @@
 # Changelog
 
+## v1.63.0 — 2026-08-11 (MINOR: the order was always recordable — by link direction)
+
+**An owner correction to this session's own analysis.** v1.62.0 reported that the ceremony order was
+unrecordable because no element of the intent chain carries a date. That was wrong, and the answer was
+already in the vocabulary.
+
+**Every link in the chain points from the later-written element to the earlier one.** A `Goal` points
+at its `Mission`. An `Objective` points at its `Goal`. Direction *is* order — no date required. And
+`scopeRealizesObjective` points a `ScopeStatement` at its `Objective`, which encodes
+scope-written-last: the retired order, baked into the vocabulary itself.
+
+**`fillsScope` is the missing reverse:** an `Objective` names the boundary it fills, and cannot name
+one that does not yet exist. Asserting it is only possible where the scope came first.
+
+**Deliberately not `owl:inverseOf`.** Declaring the two properties inverse would let a reasoner
+materialise either from the other, and every lineage would then appear to be built both ways at once —
+erasing exactly the signal the direction carries.
+
+**Three shapes.** At L4 an objective must name the scope it fills. At every level, a scope and an
+objective pointing at *each other* is rejected: that records no order at all, which is worse than
+recording the old one honestly — and it is what a re-pointing done in place looks like. An advisory
+reports a scope-last lineage without treating it as a defect.
+
+**Two existing clauses had assumed the old direction** and would have failed a scope-first lineage:
+the L2 "scope realises no objective" check and the L4 drift check. Both now accept either link.
+
+**`Scope_First_Adaptation_Procedure_v1_0_0.md`** ships for lineages already built scope-last. Its
+first instruction is to **change nothing that exists**: re-pointing the links would derive a boundary
+from objectives that already exist, producing the self-confirming scope this change prevents while
+labelling it as the fix. Adaptation happens at the next increment — let the old scope close, write the
+next boundary before its goals, and link forward with `fillsScope`. Two scopes recording two different
+orders in one register is history, not inconsistency.
+
+**BRF-EP10 was re-specified before it was built.** Its acceptance criterion had assumed dates; the
+owner's correction gated the change, and the interaction is recorded on the epic.
+
+
 ## v1.62.0 — 2026-08-11 (MINOR: impact of the scope-first ruling, measured; fifth mission registered)
 
 **Four impacts measured before anything was proposed.**
