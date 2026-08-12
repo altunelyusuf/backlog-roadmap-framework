@@ -1,0 +1,62 @@
+# ISO/IEC/IEEE 14764 classification — every way to mislabel work.
+#
+#   N1  Corrective, but its axes say proactive enhancement
+#   N2  Adaptive, with no environment change: nothing was reactive
+#   N3  Development carrying a maintenance category — an initiative
+#       doing both is two initiatives
+#   N4  Maintenance with no category at all: "maintenance" alone
+#       conflates fixing what is broken with improving what works
+#   N5  an investment category the vocabulary never declared
+#
+# N5 is the one that shipped for real. owl:oneOf closes the set for a
+# reasoner but is not a SHACL check, so an invented IRI passed
+# silently in this package's own register for several releases.
+
+@prefix backlog: <http://example.org/backlog#> .
+@prefix ex:      <http://example.org/tax-neg#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+ex:Profile a backlog:AdoptionProfile ;
+    backlog:profileAppliesTo "Taxonomy mislabelling fixture" ;
+    backlog:governsBacklog ex:Backlog ;
+    backlog:hasConformanceLevel backlog:L3_Governed ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:hasDecisionRationale "Governed: the category-required and request-required clauses are L3." ;
+    backlog:adoptsFacet backlog:CoreFacet , backlog:EvidenceFacet .
+
+ex:Backlog a backlog:Backlog ; backlog:hasIdentifier "BL-TN" ; backlog:hasState backlog:InProgress .
+
+ex:N1 a backlog:Epic ; backlog:hasIdentifier "N-T1" ; backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer ex:Backlog ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "planted" ;
+    backlog:hasInitiativeKind backlog:Kind_Maintenance ;
+    backlog:hasMaintenanceTiming backlog:Timing_Proactive ;
+    backlog:hasMaintenanceGoal backlog:Goal_Enhancement ;
+    backlog:hasMaintenanceCategory backlog:Maint_Corrective .
+
+ex:N2 a backlog:Epic ; backlog:hasIdentifier "N-T2" ; backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer ex:Backlog ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "planted" ;
+    backlog:hasInitiativeKind backlog:Kind_Maintenance ;
+    backlog:hasMaintenanceTiming backlog:Timing_Proactive ;
+    backlog:hasMaintenanceGoal backlog:Goal_Enhancement ;
+    backlog:hasMaintenanceCategory backlog:Maint_Adaptive .
+
+ex:N3 a backlog:Epic ; backlog:hasIdentifier "N-T3" ; backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer ex:Backlog ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "planted" ;
+    backlog:hasInitiativeKind backlog:Kind_Development ;
+    backlog:hasMaintenanceCategory backlog:Maint_Perfective .
+
+ex:N4 a backlog:Epic ; backlog:hasIdentifier "N-T4" ; backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer ex:Backlog ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "planted" ;
+    backlog:hasInitiativeKind backlog:Kind_Maintenance ;
+    backlog:hasMaintenanceTiming backlog:Timing_Reactive ;
+    backlog:hasMaintenanceGoal backlog:Goal_Correction .
+
+ex:N5 a backlog:Story ; backlog:hasIdentifier "N-T5" ; backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer ex:Backlog ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "planted" ;
+    backlog:hasInvestmentCategory backlog:Cat_Invented .

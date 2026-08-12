@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.29.0> ;
-    owl:versionInfo "1.29.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.30.0> ;
+    owl:versionInfo "1.30.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.29.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.28.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.27.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.26.0> ;
@@ -2889,3 +2890,86 @@ backlog:FitGapFindingShape a sh:NodeShape ;
                   sh:message "L1: a finding must name the work item it found outside the boundary. A count says a scope needs rewriting; a list says what it must now cover." ] ;
     sh:property [ sh:path backlog:hasRationale ; sh:minCount 1 ;
                   sh:message "L1: a finding must say why the boundary does not cover this item, or the rewritten scope has nothing to answer." ] .
+
+#################################################################
+#  v1.30.0 — the 14764 grid checks itself
+#################################################################
+
+backlog:MaintenanceClassificationShape a sh:NodeShape ;
+    sh:targetClass backlog:Epic ;
+    sh:severity sh:Violation ;
+    rdfs:label "A maintenance category agrees with its own axes (L1/L3)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this item is classified Corrective but its axes do not say reactive correction. ISO/IEC/IEEE 14764 derives the four categories from timing and goal; a name that disagrees with the axes it is derived from records a label somebody preferred over the classification the evidence supports." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasMaintenanceCategory backlog:Maint_Corrective .
+            OPTIONAL { $this backlog:hasMaintenanceTiming ?t }
+            OPTIONAL { $this backlog:hasMaintenanceGoal ?g }
+            FILTER (!BOUND(?t) || !BOUND(?g) || ?t != backlog:Timing_Reactive || ?g != backlog:Goal_Correction)
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this item is classified Preventive but its axes do not say proactive correction." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasMaintenanceCategory backlog:Maint_Preventive .
+            OPTIONAL { $this backlog:hasMaintenanceTiming ?t }
+            OPTIONAL { $this backlog:hasMaintenanceGoal ?g }
+            FILTER (!BOUND(?t) || !BOUND(?g) || ?t != backlog:Timing_Proactive || ?g != backlog:Goal_Correction)
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this item is classified Adaptive but its axes do not say reactive enhancement. Adaptive work answers an environment that has already moved; if nothing moved, the honest category is perfective." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasMaintenanceCategory backlog:Maint_Adaptive .
+            OPTIONAL { $this backlog:hasMaintenanceTiming ?t }
+            OPTIONAL { $this backlog:hasMaintenanceGoal ?g }
+            FILTER (!BOUND(?t) || !BOUND(?g) || ?t != backlog:Timing_Reactive || ?g != backlog:Goal_Enhancement)
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this item is classified Perfective or Additive but its axes do not say proactive enhancement." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasMaintenanceCategory ?c .
+            FILTER (?c IN (backlog:Maint_Perfective, backlog:Maint_Additive))
+            OPTIONAL { $this backlog:hasMaintenanceTiming ?t }
+            OPTIONAL { $this backlog:hasMaintenanceGoal ?g }
+            FILTER (!BOUND(?t) || !BOUND(?g) || ?t != backlog:Timing_Proactive || ?g != backlog:Goal_Enhancement)
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this item is classified as Development yet carries a maintenance category. Development creates capability that did not exist; maintenance sustains what was delivered. An initiative doing both is two initiatives." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasInitiativeKind backlog:Kind_Development ;
+                  backlog:hasMaintenanceCategory ?c .
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: this item is classified as Maintenance but states no category. 'Maintenance' alone conflates fixing what is broken with improving what works, and the two are budgeted, scheduled and argued about differently." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L3_Governed, backlog:L4_LineageEnforced))
+            $this backlog:hasInitiativeKind backlog:Kind_Maintenance .
+            FILTER NOT EXISTS { $this backlog:hasMaintenanceCategory ?c }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: this reactive maintenance names no modification request. Reactive work answers something that arrived; with nothing recorded, nobody can say who asked or what they asked for, and the scope of the work has no source." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L3_Governed, backlog:L4_LineageEnforced))
+            $this backlog:hasMaintenanceTiming backlog:Timing_Reactive .
+            FILTER NOT EXISTS { $this backlog:triggeredBy ?mr }
+        }""" ] .
+
+backlog:DeclaredCategoryShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItem ;
+    sh:severity sh:Violation ;
+    rdfs:label "A declared category is one the vocabulary declares (L1)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this item names an investment category that the vocabulary does not declare. owl:oneOf closes the enumeration for a reasoner but is not a SHACL check, so an invented IRI passes silently — which is how an undeclared category reached this package's own register and survived several releases." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasInvestmentCategory ?c .
+            FILTER NOT EXISTS { ?c a backlog:InvestmentCategory }
+        }""" ] .

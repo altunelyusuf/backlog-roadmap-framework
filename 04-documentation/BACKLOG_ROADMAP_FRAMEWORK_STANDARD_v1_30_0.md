@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.29.0
+# Backlog & Roadmap Semantic Framework — Standard v1.30.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -394,6 +394,33 @@ are the closed sets; `FitGapFinding` names each item found outside the boundary,
 | `Adapt_BoundaryRewritten` requires a **new** `ScopeStatement` and a `ScopeChange` | The old boundary records what was believed at the time; editing it erases the reason the adaptation was needed |
 | `Stage_Relink` requires a recorded outcome | Re-linking before the ruling **is** the in-place conversion the procedure exists to prevent |
 | A gate marked passed whose observed result contradicts its expectation is rejected | Otherwise the verdict is whatever the author wanted |
+
+### 2.5c-xi Initiative kind and the maintenance grid (ISO/IEC/IEEE 14764)
+
+`InitiativeKind` splits work the way **ISO/IEC/IEEE 12207** splits its life-cycle processes:
+**Development** creates capability that did not exist — including a new version built after an earlier
+one is complete — while **Maintenance** sustains capability already delivered.
+
+**ISO/IEC/IEEE 14764:2022 classifies maintenance on two axes, not as a flat list.** `MaintenanceTiming` and `MaintenanceGoal` are the axes; `MaintenanceCategory` is the derived cell. The framework
+records the axes and treats the category as derived:
+
+| | **Correction** | **Enhancement** |
+|---|---|---|
+| **Reactive** | `Maint_Corrective` | `Maint_Adaptive` |
+| **Proactive** | `Maint_Preventive` | `Maint_Perfective` |
+
+`Maint_Additive` is 14764:2022's optional fifth — a proactive enhancement that adds function to
+existing software — offered because the standard names it; the classic four are conformant.
+
+**Why the axes and not just the name.** A reader can disagree with *"this was proactive"* on the
+evidence; they cannot usefully disagree with *"this was perfective"*. Recording both and checking they
+agree means a convenient label cannot survive axes that contradict it — and *calling an enhancement a
+fix* is the commonest way unbudgeted scope enters a maintenance stream, which 14764 addresses head-on
+by stating that an enhancement is **not** a correction.
+
+`ModificationRequest` and its subclass `ProblemReport` are 14764's own terms for what arrives and
+triggers the work. At L3 reactive maintenance must name one: reactive work answers something that
+arrived, and with nothing recorded the scope of the work has no source.
 
 ### 2.5d Decomposition, commitments, dependency kinds, impediments, flow, team (subject v1.4.0)
 

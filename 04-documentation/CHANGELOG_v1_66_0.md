@@ -1,5 +1,49 @@
 # Changelog
 
+## v1.66.0 — 2026-08-11 (MINOR: initiative kind and the ISO 14764 maintenance grid)
+
+Taken from the literature, verified rather than recalled: **ISO/IEC/IEEE 12207** for the
+development/maintenance split, **ISO/IEC/IEEE 14764:2022** for the maintenance classification, back to
+**Lientz & Swanson (1980)** for the original three categories the standard formalised.
+
+**The standard's structure is a 2×2, not a list** — and that is the hierarchy the owner was reaching
+for. Maintenance is classified by the **timing** of the change (reactive or proactive) and its **goal**
+(correction or enhancement); the four familiar names are the cells. Corrective is reactive correction,
+preventive is proactive correction, adaptive is reactive enhancement, perfective is proactive
+enhancement. `Maint_Additive` is 14764:2022's optional fifth.
+
+**The framework records the axes and treats the category as derived**, and checks that the two agree.
+A reader can disagree with *"this was proactive"* on evidence; they cannot usefully disagree with
+*"this was perfective"*. And 14764 is explicit that an enhancement is **not** a correction — calling
+one a fix is how unbudgeted scope enters a maintenance stream.
+
+`ModificationRequest` and `ProblemReport` are the standard's own terms. At L3 reactive maintenance must
+name one, because reactive work answers something that arrived and its scope has no other source.
+
+### Test drive: all eleven epics classified
+
+**Eight are Development**, one is **Corrective**, one **Adaptive**, one **Preventive**:
+
+- **BRF-EP8** *(story fits one iteration)* — **Corrective**. The owner reported stories spanning
+  iterations in applied lineages: something had already happened, and the goal was restoring intended
+  behaviour.
+- **BRF-EP10** *(chain records its order)* — **Adaptive**. A new requirement arrived from outside; the
+  environment moved rather than something breaking.
+- **BRF-EP11** *(artifacts teaching the retired order)* — **Preventive**, not corrective. Nothing has
+  failed; the defect is latent and will mislead the next reader. Proactive correction.
+
+The EP10/EP11 pair is the case the grid earns its keep on: both are order-repair work, and a flat list
+would have collected them under one label. The axes separate them, because one answers an arriving
+request and the other anticipates a reader who has not yet been misled.
+
+### A defect the new check caught immediately
+
+`EP_OrderCorrect` carried `Cat_Rework` — **an investment category the vocabulary never declared**. It
+had survived several releases because `owl:oneOf` closes an enumeration for a reasoner but is **not a
+SHACL check**, so an invented IRI passes silently. Corrected to `Cat_TechnicalDebt`, and
+`DeclaredCategoryShape` now rejects the class of error.
+
+
 ## v1.65.0 — 2026-08-11 (MINOR: the adaptation completes — boundary rewritten, lineage re-linked)
 
 **The ruling did not need a decision.** This session asked the owner to confirm whether the views and

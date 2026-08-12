@@ -18,9 +18,10 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.22.0> ;
-    owl:versionInfo "1.22.0" ;
-    owl:priorVersion <http://example.org/backlog/1.21.0> ,
+    owl:versionIRI <http://example.org/backlog/1.23.0> ;
+    owl:versionInfo "1.23.0" ;
+    owl:priorVersion <http://example.org/backlog/1.22.0> ,
+                      <http://example.org/backlog/1.21.0> ,
                       <http://example.org/backlog/1.20.0> ,
                       <http://example.org/backlog/1.19.0> ,
                      <http://example.org/backlog/1.18.0> ,
@@ -59,6 +60,7 @@
     skos:definition "A domain-neutral, reusable schema for backlog-and-roadmap governance across independent developments. It standardises five concept groups that recur in every product/engineering effort: (1) work items and their containers, (2) a closed lifecycle whose Done state is a constrained fact rather than asserted prose, (3) completion Evidence anchored to real delivered artifacts (a named passing test, a release carrying its package SHA-256, a file hash, or a recorded review), (4) method-parameterised prioritisation scores, and (5) a roadmap modelled as a derived projection over the backlog rather than an independently maintained list. Adoption is declared by an AdoptionProfile carrying a ConformanceLevel (L1 Core / L2 Evidence-Bound / L3 Governed), which the paired SHACL suite reads to decide which constraints are enforced, so one framework serves developments at different governance maturity without forking the vocabulary. This TBox defines vocabulary only; the paired SHACL shapes supply enforcement, the SPARQL rules supply derivation (container status, next-item selection, milestone status), and an execution bridge asserts observed real-world verification facts back into the ABox."@en ;
     dcterms:source "Scrum Guide 2020 (Product Backlog, Increment, Definition of Done); SAFe 6.0 (Epic/Feature/Story ladder, WSJF); Now-Next-Later roadmap practice; Intercom RICE prioritisation; W3C OWL 2, SHACL, SHACL-AF."@en ;
     rdfs:comment "v1.0.0 — generalisation of an adopting project's product-backlog deposit (an OE Pack registrant deposit, http://example.org/product-backlog 1.3.0) into a project-independent subject. Per L-105 this is an extension of that implementation, not a parallel one: every pb: term has a declared alignment in backlog_alignment_productbacklog_v1_0_0.ttl. Per L-68 the hyphenated/abbreviated form (product-backlog / pb:) is replaced by a single full-word prefix (backlog:); per L-69 the retained terminology anchors to the Scrum Guide and SAFe rather than to project-internal names. The deposit files themselves are NOT modified by this release (L-X7 / B1: the owning session decides supersession)."@en ,
+    "v1.23.0 (MINOR, additions only) — an initiative-kind layer taken from ISO/IEC/IEEE 14764:2022 and 12207 rather than invented. The standard's own structure is a 2x2, not a list: maintenance work is classified by the TIMING of the change (reactive or proactive) and its GOAL (correction or enhancement), and the four familiar names are the cells. Corrective is reactive correction, preventive is proactive correction, adaptive is reactive enhancement, perfective is proactive enhancement. Recording the two axes and deriving the category, rather than picking a name from a list, is what makes the classification arguable: a reader can disagree with 'this was proactive' in a way they cannot disagree with 'this was perfective'. ModificationRequest and ProblemReport are 14764's own terms for what arrives and triggers the work."@en ,
     "v1.22.0 (MINOR, additions only) — makes the scope-first adaptation a governed procedure rather than a document someone follows carefully. Four ordered stages, each with a control point that must be recorded before the next may begin: assess the current order, run a fit-gap between the standing scope and the work actually underway, rule on whether the boundary is unchanged or must be rewritten, and only then re-link the lineage. The ruling is the branch the owner asked for: an unchanged boundary needs only re-linking, while a boundary with gaps needs rewriting and the goals and objectives beneath it revisited. Gates carry an executable check and an expected result, on the same pattern CrossCuttingInvariant already uses, so a stage cannot be declared passed on assertion alone."@en ,
     "v1.21.0 (MINOR, additions only) — records the ceremony order STRUCTURALLY instead of in prose. Every link in the intent chain already points from the later-written element to the earlier one: a Goal points at its Mission, an Objective at its Goal. The direction IS the order, and no date is needed to read it. scopeRealizesObjective points ScopeStatement at Objective, which encodes scope-written-last — the retired order, baked into the vocabulary. fillsScope is the reverse: an Objective names the scope it fills, so the scope must exist before the objective can be written. Deliberately NOT declared owl:inverseOf scopeRealizesObjective: making them inverses would let a reasoner materialise either from the other and destroy the very signal the direction carries."@en ,
     "v1.20.0 (MINOR, additions only) — BRF-EP9. A deployment must say on what basis its contents were chosen, and a release taking lower-scored work while higher-scored deliverable work waited must record why. Deliberately NOT a rule that a release must always take the top score: an ordering is a model and is sometimes wrong, and a rule with no exception path is bypassed the first time it is. What is enforced is that the exception is VISIBLE — the same shape as the ranking-fork resolution this subject already carries."@en ,
@@ -3328,3 +3330,137 @@ backlog:rewritesScopeAs a owl:ObjectProperty , owl:FunctionalProperty ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "rewrites scope as"@en ;
     skos:definition "The new boundary a rewriting adaptation produced. A NEW ScopeStatement, never an edit of the old one: the old boundary is the record of what was believed at the time, and editing it would erase the reason the adaptation was needed."@en .
+
+#################################################################
+#  51. Initiative kind: development or maintenance (v1.23.0)
+#
+#  Sources, read rather than recalled:
+#    ISO/IEC/IEEE 12207 — Development and Maintenance are distinct
+#      life-cycle processes; maintenance "sustains the capability of
+#      the system to provide a service".
+#    ISO/IEC/IEEE 14764:2022 — four maintenance types over two
+#      dimensions, timing x goal; also ModificationRequest and
+#      ProblemReport as the triggering artifacts.
+#    Lientz & Swanson (1980) — the original three categories that
+#      14764 formalised and extended.
+#################################################################
+
+backlog:InitiativeKind a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:Kind_Development backlog:Kind_Maintenance ) ;
+    rdfs:label "Initiative Kind"@en ;
+    skos:definition "Whether an initiative creates capability that did not exist, or sustains capability already delivered. The distinction is ISO/IEC/IEEE 12207's, where Development and Maintenance are separate life-cycle processes, and it matters here because the two are governed differently: development work is bounded by a scope written in advance, while maintenance work is triggered by something arriving from outside — a modification request or a problem report — and its scope is set by what arrived."@en .
+
+backlog:Kind_Development a owl:NamedIndividual , backlog:InitiativeKind ;
+    rdfs:label "Development"@en ;
+    skos:definition "Creates capability that did not exist before, including a new version built after an earlier one is complete. Bounded by a scope fixed in advance; a development initiative that cannot state its boundary before starting is not yet an initiative."@en .
+
+backlog:Kind_Maintenance a owl:NamedIndividual , backlog:InitiativeKind ;
+    rdfs:label "Maintenance"@en ;
+    skos:definition "Sustains capability already delivered, per ISO/IEC/IEEE 12207's maintenance process. Requires a maintenance category, because 'maintenance' alone conflates fixing what is broken with improving what works, and those are budgeted, scheduled and argued about differently."@en .
+
+backlog:hasInitiativeKind a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:WorkItemContainer backlog:WorkItem ) ] ;
+    rdfs:range backlog:InitiativeKind ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has initiative kind"@en .
+
+backlog:MaintenanceTiming a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:Timing_Reactive backlog:Timing_Proactive ) ;
+    rdfs:label "Maintenance Timing"@en ;
+    skos:definition "One of 14764's two classifying dimensions: whether the change answers something that has already happened, or anticipates something that has not. Recorded as an axis rather than folded into a category name so that a reader can disagree with the classification on its merits."@en .
+
+backlog:Timing_Reactive a owl:NamedIndividual , backlog:MaintenanceTiming ;
+    rdfs:label "Reactive"@en ;
+    skos:definition "The change answers something that has already occurred — a fault reported, an environment that has already moved."@en .
+backlog:Timing_Proactive a owl:NamedIndividual , backlog:MaintenanceTiming ;
+    rdfs:label "Proactive"@en ;
+    skos:definition "The change anticipates. Nothing has failed and nothing has forced it, which is why proactive work is the first cut when a budget tightens and the reason it must be argued rather than assumed."@en .
+
+backlog:MaintenanceGoal a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:Goal_Correction backlog:Goal_Enhancement ) ;
+    rdfs:label "Maintenance Goal"@en ;
+    skos:definition "14764's other dimension: whether the change restores intended behaviour or implements a new requirement. The standard is explicit that an enhancement is NOT a correction, and the line is where most classification disputes actually sit."@en .
+
+backlog:Goal_Correction a owl:NamedIndividual , backlog:MaintenanceGoal ;
+    rdfs:label "Correction"@en ;
+    skos:definition "Restores behaviour that was already intended. Nothing new is promised."@en .
+backlog:Goal_Enhancement a owl:NamedIndividual , backlog:MaintenanceGoal ;
+    rdfs:label "Enhancement"@en ;
+    skos:definition "Implements a new requirement. 14764: an enhancement is not a software correction — which is why calling an enhancement a fix is the commonest way unbudgeted scope enters a maintenance stream."@en .
+
+backlog:hasMaintenanceTiming a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:WorkItemContainer backlog:WorkItem ) ] ;
+    rdfs:range backlog:MaintenanceTiming ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has maintenance timing"@en .
+
+backlog:hasMaintenanceGoal a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:WorkItemContainer backlog:WorkItem ) ] ;
+    rdfs:range backlog:MaintenanceGoal ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has maintenance goal"@en .
+
+backlog:MaintenanceCategory a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:Maint_Corrective backlog:Maint_Preventive
+                backlog:Maint_Adaptive backlog:Maint_Perfective backlog:Maint_Additive ) ;
+    rdfs:label "Maintenance Category"@en ;
+    skos:definition "The 14764 category, DERIVED from timing and goal rather than chosen independently: reactive correction is corrective, proactive correction is preventive, reactive enhancement is adaptive, proactive enhancement is perfective. Additive is 14764:2022's fifth, a proactive enhancement that adds function to existing software; the standard notes it as optional and it is offered rather than required here."@en .
+
+backlog:Maint_Corrective a owl:NamedIndividual , backlog:MaintenanceCategory ;
+    rdfs:label "Corrective"@en ;
+    skos:definition "Reactive correction: modification after delivery to correct discovered problems (14764). Something is broken and has been noticed."@en .
+backlog:Maint_Preventive a owl:NamedIndividual , backlog:MaintenanceCategory ;
+    rdfs:label "Preventive"@en ;
+    skos:definition "Proactive correction: modification to correct latent faults before they manifest as failures (14764). Nothing has failed yet, which is why this work is chronically deferred."@en .
+backlog:Maint_Adaptive a owl:NamedIndividual , backlog:MaintenanceCategory ;
+    rdfs:label "Adaptive"@en ;
+    skos:definition "Reactive enhancement: modification to keep the product usable in a changed or changing environment (14764). The world moved; the software has to follow."@en .
+backlog:Maint_Perfective a owl:NamedIndividual , backlog:MaintenanceCategory ;
+    rdfs:label "Perfective"@en ;
+    skos:definition "Proactive enhancement: modification to provide enhancements for users, or to improve performance, maintainability or other attributes (14764). Nothing forced it."@en .
+backlog:Maint_Additive a owl:NamedIndividual , backlog:MaintenanceCategory ;
+    rdfs:label "Additive"@en ;
+    skos:definition "14764:2022's optional fifth type: an enhancement that adds function to existing software, distinguished from perfective by changing the existing product rather than improving its qualities. Offered because the standard names it; an adopter using only the classic four is conformant."@en .
+
+backlog:hasMaintenanceCategory a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:WorkItemContainer backlog:WorkItem ) ] ;
+    rdfs:range backlog:MaintenanceCategory ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has maintenance category"@en .
+
+backlog:ModificationRequest a owl:Class ;
+    rdfs:subClassOf core:Artifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Modification Request"@en ;
+    skos:definition "14764's term for what arrives from outside and triggers maintenance work: a request to change a delivered product. Modelled because maintenance scope is set by what arrived rather than by a boundary written in advance, so the arriving request is the only place that scope can be read from."@en .
+
+backlog:ProblemReport a owl:Class ;
+    rdfs:subClassOf backlog:ModificationRequest ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Problem Report"@en ;
+    skos:definition "A modification request denoting a fault (14764). A subclass rather than a sibling because 14764 is explicit that problem reports are either submitted directly or established after impact analysis on a modification request — the fault is discovered, not declared at arrival."@en .
+
+backlog:triggeredBy a owl:ObjectProperty ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:WorkItemContainer backlog:WorkItem ) ] ;
+    rdfs:range backlog:ModificationRequest ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "triggered by"@en ;
+    skos:definition "The request this maintenance work answers. Its absence on maintenance work is the state in which nobody can say who asked."@en .
+
+backlog:hasRequestText a owl:DatatypeProperty ;
+    rdfs:domain backlog:ModificationRequest ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has request text"@en .
+
+backlog:requestedAt a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:ModificationRequest ; rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "requested at"@en .
