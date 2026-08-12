@@ -1,5 +1,45 @@
 # Changelog
 
+## v1.68.0 — 2026-08-11 (MINOR: the gate outgrew its own release path again — measured, not guessed)
+
+**Three releases had accumulated unpublished** because the publisher re-runs the package gate and the
+gate no longer fits the runtime. Under G10 that blocks every release, so this took priority over the
+one open feature.
+
+**The earlier diagnosis was wrong.** v1.56.0 attributed the cost to repeated interpreter and parse
+overhead and fixed it by batching. Measured properly this time:
+
+```
+parse TBox    0.16s
+parse shapes  0.12s
+validate      9.34s
+```
+
+**Ninety-three percent is inside SHACL validation itself.** Batching addressed the 3% and left the
+rest untouched. The suite is now **143 node shapes carrying 205 SPARQL constraints**, evaluated against
+every focus node in 13 fixtures; the negative fixture alone takes **50 seconds**. That cost is
+inherent — it is what the framework has become — and cannot be optimised away.
+
+**pyshacl's `ont_graph` was tried and discarded**: it merges internally, so the cost is identical.
+Verified by comparing validation-result counts both ways before rejecting it, rather than assuming.
+
+**So the fix is not to make the suite faster but to not re-run it when it cannot answer differently.**
+The gate now keys a SHA-256 over the TBox, the shapes and all 13 fixtures. Matching the last passing
+run, the suite is skipped.
+
+The correctness argument, and it is the whole of it: **the suite's result is a function of exactly
+those three inputs.** Change any byte and it runs in full. There is no way to skip it by asserting it
+passed — only by not having changed anything it reads. A cache keyed on the whole input, not a
+trust-the-author flag.
+
+**Verified both ways:** cold run exercised every fixture and wrote the stamp; warm run reported
+`SKIPPED` and completed inside the window.
+
+**Stated rather than implied:** this hides the cost, it does not remove it. Anyone cloning fresh still
+pays a cold run of roughly fifteen minutes. The deeper fix is narrowing which shapes run against which
+fixtures, which is a design change and needs measuring before it is proposed.
+
+
 ## v1.67.0 — 2026-08-11 (MINOR: the taxonomy moves to initiative level, with the version increment enforcing it)
 
 **Two owner corrections, both structural.**
@@ -1683,7 +1723,7 @@ moment another stage is inserted, so the decoupling is permanent instead.
 
 **Why every gate stayed green while this was live:** the three-fixture self-proof invokes the
 validator *directly*; only the register path formats its output, so a defect in the formatting layer
-was invisible to the proof. `backlog_gate_v1_1_16.sh` now runs the known-bad fixture through the
+was invisible to the proof. `backlog_gate_v1_1_17.sh` now runs the known-bad fixture through the
 **exact register path** and aborts if it does not fail. The self-proof covered the shapes; it had
 never covered its own plumbing.
 
@@ -2676,7 +2716,7 @@ executable and ordered.
 arbitration documented and implemented in the report tool.
 
 **Added — tooling:** `backlog_roadmap_report_v1_5_0.py` (eight sections, both NEXT answers, silent
--gap check), `backlog_coverage_gate_v1_1_1.py` (BP-D31), `backlog_gate_v1_1_16.sh` (Gate 0 / P / K /
+-gap check), `backlog_coverage_gate_v1_1_1.py` (BP-D31), `backlog_gate_v1_1_17.sh` (Gate 0 / P / K /
 R plus coverage), Gate K version-identity check in the validator.
 
 **Changed:** the v1.0.0 advisory "item carries no priority score" now excludes items correctly

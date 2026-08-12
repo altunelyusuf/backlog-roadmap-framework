@@ -56,6 +56,9 @@ EXEMPT = {
     "RELEASE_METRICS.txt":
         "reports the result of the manifest gate, so covering it creates a generation-order "
         "cycle; its integrity rests on regenerating byte-for-byte instead",
+    ".fixture-suite-stamp":
+        "a cache key over the shapes, TBox and fixtures, written by the gate after a "
+        "passing run; hashing it would change it and it carries no content of its own",
     "PUBLISH_RECORD.ttl":
         "written by the publisher AFTER the manifest, so listing it guarantees a permanent "
         "mismatch a reader cannot distinguish from a real one",

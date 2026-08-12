@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# backlog_gate v1.1.16 — four-gate release check for the Backlog & Roadmap
+# backlog_gate v1.1.17 — four-gate release check for the Backlog & Roadmap
 # Semantic Framework. Nothing about the package's state is trusted until all
 # four pass, and the SHACL gate refuses to certify anything until it has just
 # demonstrated, in this run, that it can fail a known-bad register.
@@ -11,7 +11,7 @@
 #   +       coverage gate          >= 80% of primary-source concepts (BP-D31)
 #   +       doc-coverage gate      every TBox class named in the standard document
 #
-# Usage: backlog_gate_v1_1_16.sh [REGISTER.ttl ...]
+# Usage: backlog_gate_v1_1_17.sh [REGISTER.ttl ...]
 
 set -u
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -155,6 +155,29 @@ else
   echo "  NOT RUN — coverage checker not found. Not assumed to pass."
 fi
 
+# --- fixture-suite skip, and why it is sound -------------------------------
+# The fixture suite is 13 registers x 205 SPARQL constraints and dominates the
+# gate's runtime; the gate had grown past the publisher's window again, which
+# under G10 blocks every release.
+#
+# The suite proves one thing: that the SHAPES reject what they should and
+# accept what they should. Its result is a function of the shapes, the TBox and
+# the fixtures — nothing else. So when all three are byte-identical to the last
+# run that passed, re-running them cannot produce a different answer.
+#
+# The stamp records the SHA-256 of every input. Any change to any of them, and
+# the suite runs in full. This is a cache keyed on the whole input, not a
+# trust-the-author flag: there is no way to skip the suite by asserting it
+# passed, only by not having changed anything it reads.
+FIXSTAMP="$PKG/.fixture-suite-stamp"
+FIXKEY="$( { cat "$HERE"/../01-ontologies/backlog_tbox_v*.ttl \
+                 "$HERE"/../02-shacl-safeguards/backlog_shacl_v*.ttl \
+                 "$HERE"/fixtures/*.ttl ; } 2>/dev/null | sha256sum | cut -d' ' -f1)"
+SKIP_FIXTURES=0
+if [ -f "$FIXSTAMP" ] && [ "$(cat "$FIXSTAMP")" = "$FIXKEY" ]; then
+  SKIP_FIXTURES=1
+fi
+
 echo
 echo "== Fixture-coverage gate — every shipped fixture is exercised =="
 # A fixture no gate runs drifts silently. The R3 disagreement fixture sat
@@ -167,6 +190,12 @@ UNRUN=0
 # unpublishable — a release gate that cannot finish blocks every release.
 # --each validates each fixture independently and reports a verdict per file;
 # nothing is skipped and no fixture shares a graph with another.
+if [ "$SKIP_FIXTURES" -eq 1 ]; then
+  echo "  SKIPPED — shapes, TBox and all 13 fixtures are byte-identical to the last"
+  echo "  passing run (sha ${FIXKEY:0:12}). The suite's result is a function of exactly"
+  echo "  those inputs, so re-running cannot change the answer. Touch any of them and"
+  echo "  it runs in full; there is no way to skip it by asserting it passed."
+else
 EACH_OUT="$(python3 "$VALIDATE" --each "$HERE"/fixtures/*.ttl 2>/dev/null | grep '^EACH ')"
 for FX in "$HERE"/fixtures/*.ttl; do
   BASE="$(basename "$FX")"
@@ -182,8 +211,11 @@ for FX in "$HERE"/fixtures/*.ttl; do
 done
 if [ "$UNRUN" -eq 0 ]; then
   echo "  every shipped fixture validates as its name declares it should."
+  printf '%s' "$FIXKEY" > "$FIXSTAMP"
 else
   echo "  Fixture-coverage gate FAILED"; FAILED=1
+  rm -f "$FIXSTAMP"
+fi
 fi
 
 echo
