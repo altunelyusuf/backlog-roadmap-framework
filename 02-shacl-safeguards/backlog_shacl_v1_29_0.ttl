@@ -2573,8 +2573,13 @@ backlog:L4DriftShape a sh:NodeShape ;
             ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel backlog:L4_LineageEnforced .
             $this backlog:hasScopeStatement ?sc .
             ?i backlog:memberOfContainer $this ; backlog:pursuesObjective ?o .
-            FILTER NOT EXISTS { ?sc backlog:scopeRealizesObjective ?o }
-            FILTER NOT EXISTS { ?o backlog:fillsScope ?sc }
+            # Against EVERY declared boundary, not just one. A register may hold
+            # several scopes — one per mission — and comparing an item to a single
+            # one reports work correctly governed by another as drift. Found by
+            # running the fit-gap on this package's own register, where it flagged
+            # two epics that were exactly where they belonged.
+            FILTER NOT EXISTS { ?any backlog:scopeRealizesObjective ?o }
+            FILTER NOT EXISTS { ?o backlog:fillsScope ?any2 }
         }""" ] .
 
 #####

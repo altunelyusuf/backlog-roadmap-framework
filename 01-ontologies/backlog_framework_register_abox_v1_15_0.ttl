@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/1.14.0> ;
-    owl:versionInfo "1.14.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/1.15.0> ;
+    owl:versionInfo "1.15.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/1.14.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/1.13.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/1.12.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/1.11.0> ;
@@ -1706,7 +1707,6 @@ fw:Mission_OrderRepair a backlog:Mission ;
 
 fw:Scope_Order a backlog:ScopeStatement ;
     backlog:hasScopeStatementText "Make the v3.0.0 ceremony order recordable and checkable: a way to state when each element of an intent chain was fixed, a check that reports the order a lineage was actually built in, and the shipped artifacts that still teach the retired order corrected." ;
-    backlog:scopeRealizesObjective fw:Obj_OrderRecordable , fw:Obj_NoStaleOrder ;
     backlog:hasScopeExclusion fw:Ex_NoRewrite , fw:Ex_NoOrderShape , fw:Ex_NoTimestampMandate .
 
 fw:Ex_NoRewrite a backlog:ScopeExclusion ;
@@ -1879,7 +1879,9 @@ fw:Obs_OrderRecordable a backlog:MetricObservation ;
 fw:Adapt_Register a backlog:LineageAdaptation ;
     rdfs:label "Adaptation of the framework development register to scope-first"@en ;
     backlog:adaptsScope fw:Scope ;
-    backlog:hasAdaptationStage backlog:Stage_Ruling .
+    backlog:hasAdaptationStage backlog:Stage_Relink ;
+    backlog:hasAdaptationOutcome backlog:Adapt_BoundaryRewritten ;
+    backlog:rewritesScopeAs fw:Scope_v2 .
 
 fw:Gate_Assess a backlog:AdaptationGate ;
     rdfs:label "Which order was this lineage built in?"@en ;
@@ -1907,10 +1909,14 @@ fw:Find_Views a backlog:FitGapFinding ;
     backlog:findingItem fw:EP_Views , fw:EP_Schedule ;
     backlog:hasRationale "Both pursue Obj_Views, admitted by the SC_Schedule scope change but never added to what the scope statement says it realises. The change record and the boundary disagreed, and nothing noticed because the boundary was never asked to refuse anything." .
 
-fw:Find_Order a backlog:FitGapFinding ;
-    backlog:findingOf fw:Adapt_Register ;
-    backlog:findingItem fw:EP_OrderRecord , fw:EP_OrderCorrect ;
-    backlog:hasRationale "Both pursue objectives under Scope_Order, a second boundary written for the order-repair mission. They are outside fw:Scope correctly — but the register had no way to say so, because a work item's objective is checked against every scope collectively rather than the one that governs it." .
+# WITHDRAWN: this finding was a defect in the fit-gap check, not a gap in the
+# register. EP_OrderRecord and EP_OrderCorrect are governed by Scope_Order and
+# are correctly outside fw:Scope. The check compared every work item against one
+# scope rather than the scope that governs it. Left as a comment rather than
+# silently deleted, because a withdrawn finding is part of how the ruling was
+# reached: a BoundaryHolds outcome is refused while ANY finding stands, so a
+# finding that turns out to be an instrument error must be visibly retracted
+# rather than quietly dropped.
 
 fw:Gate_Ruling a backlog:AdaptationGate ;
     rdfs:label "Boundary holds, or must be rewritten?"@en ;
@@ -1918,6 +1924,36 @@ fw:Gate_Ruling a backlog:AdaptationGate ;
     backlog:gatesStage backlog:Stage_Ruling ;
     backlog:hasCheckQuery "ASK { ?f backlog:findingOf fw:Adapt_Register }" ;
     backlog:hasExpectedResult "owner ruling recorded" ;
-    backlog:hasGateResult "awaiting owner ruling" ;
-    backlog:gatePassed false ;
-    backlog:hasRationale "Two findings stand. Whether they mean the boundary was wrong or the work strayed is a judgement about intent that no query can make, so this gate is open until the owner rules. Re-linking cannot begin: the stage-order shape refuses Stage_Relink without a recorded outcome, which is precisely the in-place conversion the procedure exists to prevent." .
+    backlog:hasGateResult "owner ruling recorded" ;
+    backlog:gatePassed true ;
+    backlog:hasRationale "Ruled BoundaryRewritten. The ruling did not need a fresh decision: SC_Schedule already recorded, owner-decided, that EP_Views and EP_Schedule were admitted to this scope on 2026-08-09. The gap was never a question about intent — it was a scope statement that failed to record a decision already taken. Asking the owner to re-affirm it was a lapse, corrected by reading the register instead. The second finding, EP_OrderRecord and EP_OrderCorrect, was a defect in the fit-gap check rather than in the register: those items are governed by Scope_Order, and the check compared every item against one scope instead of the scope that governs it." .
+
+#################################################################
+#  v1.15.0 — the rewritten boundary, and the lineage re-linked.
+#
+#  fw:Scope is NOT edited. It records what the boundary said at the
+#  time, which is the evidence the adaptation rested on. fw:Scope_v2
+#  is a new statement saying what the boundary always meant, and the
+#  objectives point AT it with fillsScope — the direction that
+#  records a boundary fixed before the work that fills it.
+#################################################################
+
+fw:Scope_v2 a backlog:ScopeStatement ;
+    backlog:hasScopeStatementText "Extend the subject so a register reports progress, cost, human involvement and PLAN-BASED SCHEDULE as computed facts: the product-backlog/execution-task distinction, derived flow and forecast, multi-dimensional cost, human in and on the loop, the classical project views, and the time-phased baseline admitted by SC_Schedule. Delivered as OWL 2 vocabulary plus SHACL enforcement plus fixtures on both polarities, held to the Definition of Done declared for this register." ;
+    backlog:hasScopeExclusion fw:Excl_Scale , fw:Excl_Method , fw:Excl_Modality .
+
+fw:SC_ScopeCorrection a backlog:ScopeChange ;
+    rdfs:label "Record in the boundary what SC_Schedule already admitted"@en ;
+    backlog:changesScope fw:Scope ;
+    backlog:admitsItem fw:EP_Views , fw:EP_Schedule ;
+    backlog:hasScopeChangeRationale "Not a widening. SC_Schedule admitted this work on 2026-08-09 by owner decision; the scope statement was never updated to say it realises Obj_Views, so the change record and the boundary disagreed for eleven releases. Nothing noticed because the boundary was written after the work and was therefore never asked to refuse anything — which is the exact failure mode that motivated the scope-first reordering, found in this register by the procedure built to look for it. Ex_Schedule is NOT restored to Scope_v2: it was superseded by SC_Schedule and remains readable on fw:Scope, where it records a decision that was true when taken." ;
+    backlog:decidedBy backlog:Owner .
+
+# re-linked: objectives point at the boundary they fill
+fw:Obj_Derived        backlog:fillsScope fw:Scope_v2 .
+fw:Obj_Adopter        backlog:fillsScope fw:Scope_v2 .
+fw:Obj_Views          backlog:fillsScope fw:Scope_v2 .
+fw:Obj_ProgressInViews backlog:fillsScope fw:Scope_v2 .
+fw:Obj_Finishable     backlog:fillsScope fw:Scope_v2 .
+fw:Obj_OrderRecordable backlog:fillsScope fw:Scope_Order .
+fw:Obj_NoStaleOrder   backlog:fillsScope fw:Scope_Order .

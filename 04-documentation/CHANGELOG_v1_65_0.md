@@ -1,5 +1,41 @@
 # Changelog
 
+## v1.65.0 — 2026-08-11 (MINOR: the adaptation completes — boundary rewritten, lineage re-linked)
+
+**The ruling did not need a decision.** This session asked the owner to confirm whether the views and
+schedule work was in scope. It was already recorded: `SC_Schedule`, owner-decided, 2026-08-09,
+admitting `EP_Views` and `EP_Schedule` by name. **The answer was on disk and the question was a
+lapse** — L-78 exists for exactly this, and the correction was to read the register rather than ask
+again.
+
+So the gap was never a question about intent. It was **a scope statement that failed to record a
+decision already taken**, and the two disagreed for eleven releases because a boundary written after
+the work is never asked to refuse anything.
+
+**Outcome: `Adapt_BoundaryRewritten`.** `fw:Scope_v2` says what the boundary always meant; `fw:Scope`
+is **not edited** — it records what the boundary said at the time, which is the evidence the
+adaptation rested on. `SC_ScopeCorrection` records the correction and states plainly that it is not a
+widening. Seven objectives now point at their governing boundary with `fillsScope`.
+
+**A finding was withdrawn, visibly.** The second fit-gap finding — `EP_OrderRecord` and
+`EP_OrderCorrect` — was an **instrument error, not a gap**: those epics are governed by
+`Scope_Order`, and the drift check compared every item against one scope instead of the scope that
+governs it. The withdrawal is left in the register as a comment rather than deleted, because
+`Adapt_BoundaryHolds` is refused while any finding stands, so a finding that turns out to be wrong
+must be retracted where a reader can see it.
+
+**The check is fixed**, not just the record: the drift clause now compares an item against **every**
+declared boundary. A register may hold several scopes, one per mission, and the old form reported
+work that was exactly where it belonged.
+
+**`MixedOrderShape` fired during the re-link**, on `Scope_Order` — which briefly carried both link
+directions while the new ones were added. Precisely the case it was written for, catching its author
+mid-conversion.
+
+**Re-measured: 0 work items outside every boundary.** Scope_v2 covers 5 objectives, Scope_Order
+covers 2, and the retired Scope keeps its 4 as history.
+
+
 ## v1.64.0 — 2026-08-11 (MINOR: the adaptation becomes a gated procedure, and this register runs it)
 
 The adaptation was a document someone follows carefully. It is now a `LineageAdaptation` with four
