@@ -10,8 +10,10 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/1.16.0> ;
-    owl:versionInfo "1.16.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/1.18.0> ;
+    owl:versionInfo "1.18.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/1.17.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/1.16.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/1.15.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/1.14.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/1.13.0> ;
@@ -1959,62 +1961,139 @@ fw:Obj_Finishable     backlog:fillsScope fw:Scope_v2 .
 fw:Obj_OrderRecordable backlog:fillsScope fw:Scope_Order .
 fw:Obj_NoStaleOrder   backlog:fillsScope fw:Scope_Order .
 
+############################################################
+
 #################################################################
-#  v1.16.0 — every epic classified against ISO/IEC/IEEE 14764.
+#  v1.17.0 — the epic-level classification is WITHDRAWN.
 #
-#  The test drive the owner asked for. Each classification records
-#  the two AXES and lets the category follow; the suite then checks
-#  that the name agrees with the axes, so a convenient label cannot
-#  survive a disagreeing pair.
+#  v1.16.0 classified all eleven epics with hasInitiativeKind and
+#  the 14764 grid. That was the wrong granularity: the owner asked
+#  about INITIATIVES, and an epic is a PBI. An epic does not have a
+#  kind; the initiative it serves does.
 #
-#  Cat_Rework corrected to Cat_TechnicalDebt on EP_OrderCorrect: it
-#  was never a declared member of InvestmentCategory. owl:oneOf
-#  closes the set for a reasoner but is not a SHACL check, so the
-#  invented IRI passed silently for several releases.
+#  Withdrawn rather than left in place, because a classification at
+#  the wrong level is not a harmless extra — it teaches every reader
+#  that epics carry kinds, and the next session would extend it.
+#
+#  The Cat_Rework correction from v1.16.0 is KEPT: that was a real
+#  defect, an investment category the vocabulary never declared, and
+#  it is unrelated to the granularity error.
 #################################################################
 
-# --- DEVELOPMENT: capability that did not exist ---
-fw:EP_PbiTask   backlog:hasInitiativeKind backlog:Kind_Development .
-fw:EP_Flow      backlog:hasInitiativeKind backlog:Kind_Development .
-fw:EP_Cost      backlog:hasInitiativeKind backlog:Kind_Development .
-fw:EP_Human     backlog:hasInitiativeKind backlog:Kind_Development .
-fw:EP_Views     backlog:hasInitiativeKind backlog:Kind_Development .
-fw:EP_Schedule  backlog:hasInitiativeKind backlog:Kind_Development .
-fw:EP_Progress  backlog:hasInitiativeKind backlog:Kind_Development .
-fw:EP_ValueRelease backlog:hasInitiativeKind backlog:Kind_Development .
+#################################################################
+#  v1.18.0 — this development classified at INITIATIVE level.
+#
+#  Five initiatives, one per mission, each carrying the version
+#  increment that decides its scale. The increment is read from the
+#  shipped release history, not chosen to fit the label.
+#################################################################
 
-# --- MAINTENANCE: sustaining what was delivered ---
+fw:Init_Subject a backlog:Initiative ;
+    backlog:hasAcceptanceCriterion fw:AC_BRF_I1 ;
+    backlog:hasEvidence fw:Ev_PbiTask ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:lastAuditedAt "2026-08-11T18:00:00"^^xsd:dateTime ;
+    backlog:pursuesObjective fw:Obj_Derived ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasIdentifier "BRF-I1" ;
+    backlog:hasTitle "The backlog and roadmap subject itself" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:hasInitiativeKind backlog:Kind_InitialDevelopment ;
+    backlog:producesIncrement backlog:Ver_Major ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Portfolio granularity; scored through its constituent epics, which carry the scores." ;
+    backlog:hasRationale "The first build. No installed base, no compatibility to preserve, and the decisions were unconstrained in a way none since have been." .
 
-# EP_Fit answers a defect the owner reported in applied lineages:
-# stories were spanning iterations in real use. Something already
-# happened; the goal is to restore intended behaviour.
-fw:MR_StorySpan a backlog:ProblemReport ;
-    backlog:hasRequestText "Stories are spanning iterations in applied lineages, so velocity measures work that did not finish." ;
+fw:Init_Measure a backlog:Initiative ;
+    backlog:hasAcceptanceCriterion fw:AC_BRF_I2 ;
+    backlog:hasEvidence fw:Ev_Human ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:lastAuditedAt "2026-08-11T18:00:00"^^xsd:dateTime ;
+    backlog:pursuesObjective fw:Obj_Derived ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasIdentifier "BRF-I2" ;
+    backlog:hasTitle "Progress, cost and human involvement as computed facts" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:hasInitiativeKind backlog:Kind_EvolutionaryDevelopment ;
+    backlog:producesIncrement backlog:Ver_Major ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Portfolio granularity; scored through EP1 to EP4." ;
+    backlog:hasRationale "A new generation built on a complete product: PBI-versus-task, flow, cost dimensions, human in and on the loop. Project scale, and the kind of work most often called maintenance because it touched something that already existed." .
+
+fw:Init_Plan a backlog:Initiative ;
+    backlog:hasAcceptanceCriterion fw:AC_BRF_I3 ;
+    backlog:hasEvidence fw:Ev_Schedule ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:lastAuditedAt "2026-08-11T18:00:00"^^xsd:dateTime ;
+    backlog:pursuesObjective fw:Obj_Derived ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasIdentifier "BRF-I3" ;
+    backlog:hasTitle "The plan alongside the roadmap" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:hasInitiativeKind backlog:Kind_EvolutionaryDevelopment ;
+    backlog:producesIncrement backlog:Ver_Major ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Portfolio granularity; scored through EP5 and EP6." ;
+    backlog:hasRationale "Kick-off, time-phased baseline and the classical views. Evolutionary rather than maintenance because it reversed a standing scope exclusion — a boundary change is a generation change." .
+
+fw:Init_Executable a backlog:Initiative ;
+    backlog:hasAcceptanceCriterion fw:AC_BRF_I4 ;
+    backlog:hasEvidence fw:Ev_ValueRelease ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:lastAuditedAt "2026-08-11T18:00:00"^^xsd:dateTime ;
+    backlog:pursuesObjective fw:Obj_Derived ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasIdentifier "BRF-I4" ;
+    backlog:hasTitle "The roadmap as an executable plan" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:hasInitiativeKind backlog:Kind_EvolutionaryDevelopment ;
+    backlog:producesIncrement backlog:Ver_Major ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Portfolio granularity; scored through EP7 to EP9." ;
+    backlog:hasRationale "Progress in views, story-fits-iteration, value-selected deployment. Grouped as one generation because the three are interdependent: value selection was undefined until stories were made to fit." .
+
+# --- the only genuine maintenance initiative in this register ---
+fw:MR_OrderProblem a backlog:ModificationRequest ;
+    backlog:hasRequestText "We had a mistake in the order of the lineage. Scope should be set after the mission, and goals and objectives produced to fill it." ;
     backlog:requestedAt "2026-08-11T00:00:00"^^xsd:dateTime .
-fw:EP_Fit
-    backlog:hasInitiativeKind backlog:Kind_Maintenance ;
-    backlog:hasMaintenanceTiming backlog:Timing_Reactive ;
-    backlog:hasMaintenanceGoal backlog:Goal_Correction ;
-    backlog:hasMaintenanceCategory backlog:Maint_Corrective ;
-    backlog:triggeredBy fw:MR_StorySpan .
 
-# EP_OrderRecord answers the owner's correction that the chain
-# should record its order. A new requirement, arriving from outside.
-fw:MR_OrderDirection a backlog:ModificationRequest ;
-    backlog:hasRequestText "To record the order we do not need dates; add one-directional dependencies." ;
-    backlog:requestedAt "2026-08-11T00:00:00"^^xsd:dateTime .
-fw:EP_OrderRecord
+fw:Init_OrderRepair a backlog:Initiative ;
+    backlog:hasAcceptanceCriterion fw:AC_BRF_I5 ;
+    backlog:pursuesObjective fw:Obj_OrderRecordable ;
+    backlog:hasInvestmentCategory backlog:Cat_Maintenance ;
+    backlog:hasIdentifier "BRF-I5" ;
+    backlog:hasTitle "Scope-first lineage order" ;
+    backlog:hasState backlog:InProgress ;
+    backlog:memberOfContainer fw:Register ;
     backlog:hasInitiativeKind backlog:Kind_Maintenance ;
     backlog:hasMaintenanceTiming backlog:Timing_Reactive ;
     backlog:hasMaintenanceGoal backlog:Goal_Enhancement ;
     backlog:hasMaintenanceCategory backlog:Maint_Adaptive ;
-    backlog:triggeredBy fw:MR_OrderDirection .
+    backlog:triggeredBy fw:MR_OrderProblem ;
+    backlog:producesIncrement backlog:Ver_Minor ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Portfolio granularity; scored through EP10 and EP11." ;
+    backlog:hasRationale "Reactive: the owner reported scope problems in applied lineages. Enhancement rather than correction: nothing was broken, a new requirement arrived about how lineages should be built. Minor increment throughout — fillsScope was added, nothing was removed or redefined, so the discriminator agrees with the label." .
 
-# EP_OrderCorrect fixes artifacts still teaching the retired order.
-# Nothing has failed; the defect is latent and will mislead the next
-# reader. Proactive correction is preventive, not corrective.
-fw:EP_OrderCorrect
-    backlog:hasInitiativeKind backlog:Kind_Maintenance ;
-    backlog:hasMaintenanceTiming backlog:Timing_Proactive ;
-    backlog:hasMaintenanceGoal backlog:Goal_Correction ;
-    backlog:hasMaintenanceCategory backlog:Maint_Preventive .
+fw:AC_BRF_I1 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the first build is complete, When the package is released, Then a register can express a backlog and roadmap with evidence-bound completion." .
+
+fw:AC_BRF_I2 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a register of work, When the report is run, Then progress, cost and human involvement are reported as computed facts rather than claims." .
+
+fw:AC_BRF_I3 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a register with a kick-off and a baseline, When the views are run, Then Gantt, earned value and the classical project views are produced from recorded facts." .
+
+fw:AC_BRF_I4 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a register at L4, When the suite is run, Then structural views carry progress, stories fit their iterations, and deployments record how their contents were chosen." .
+
+fw:AC_BRF_I5 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a lineage built scope-last, When the adaptation runs, Then the order it was built in is readable from link direction and a gated procedure converts it." .

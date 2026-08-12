@@ -1,5 +1,42 @@
 # Changelog
 
+## v1.67.0 — 2026-08-11 (MINOR: the taxonomy moves to initiative level, with the version increment enforcing it)
+
+**Two owner corrections, both structural.**
+
+**Wrong level.** v1.66.0 attached `hasInitiativeKind` to `WorkItem ∪ WorkItemContainer`, so it landed
+on epics — PBIs. The question was about **initiatives**, which the framework already defines as
+portfolio granularity spanning multiple epics. **The eleven epic-level classifications are withdrawn**,
+not left in place: a classification at the wrong level is not a harmless extra, it teaches the next
+reader that epics carry kinds. The `Cat_Rework` correction from v1.66.0 is kept — that was a real
+defect and unrelated to the granularity error.
+
+**Missing discriminator.** The owner gave it twice before it was picked up: **projects move the major
+version, maintenance moves a sub-version.** That is better than any prose test, because *"does this
+create new capability"* is a judgement while *"did this force a major"* is a fact about what shipped —
+and the framework had no version vocabulary at all, despite applying exactly this discipline to itself
+under BP-D7.
+
+**Project scale, four kinds:** initial development, evolutionary development, migration, retirement.
+The first two are separated because a first build has no installed base, no migration to plan and no
+compatibility to break — unconstrained in a way no later build is. Migration and retirement are
+distinct processes in ISO 14764, not maintenance types.
+
+**Maintenance scale:** the 14764 grid, unchanged. The owner's four terms — expansion, correction,
+enhancement, adaptation — mapped exactly onto additive, corrective, perfective and adaptive. The one
+missing from that list was **preventive**, which is also the one that gets squeezed out of every
+budget because nothing has failed yet.
+
+**The increment is enforced, not recorded.** Maintenance producing a major is rejected; development
+producing less than a major is rejected; retirement producing a version is rejected; at L3 an
+initiative must state both kind and increment.
+
+**Test drive: five initiatives.** One initial development, three evolutionary, and exactly one genuine
+maintenance — the scope-first order repair, reactive adaptive, minor increment. The three evolutionary
+ones are the interesting result: each touched an existing product and could plausibly have been
+called maintenance, and each forced a major.
+
+
 ## v1.66.0 — 2026-08-11 (MINOR: initiative kind and the ISO 14764 maintenance grid)
 
 Taken from the literature, verified rather than recalled: **ISO/IEC/IEEE 12207** for the

@@ -1,0 +1,66 @@
+# Initiative classification — every way the version increment catches a mislabel.
+#
+#   N1  Maintenance producing a MAJOR — the commonest miscategorisation:
+#       an evolutionary development described as maintenance because it
+#       touched an existing product
+#   N2  Initial development producing only a PATCH — if the increment is
+#       right, the kind is wrong
+#   N3  Retirement producing a version — retirement ends a line, not advances it
+#   N4  an EPIC carrying an initiative kind (advisory) — the granularity
+#       error this package made and withdrew
+#   N5  Maintenance with no category
+#
+# N1 is the one the discriminator exists for. "Does this create new
+# capability" is a judgement; "did this force a major" is a fact.
+
+@prefix backlog: <http://example.org/backlog#> .
+@prefix ex:      <http://example.org/init-neg#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+ex:Profile a backlog:AdoptionProfile ;
+    backlog:profileAppliesTo "Initiative mislabelling fixture" ;
+    backlog:governsBacklog ex:Backlog ;
+    backlog:hasConformanceLevel backlog:L3_Governed ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:hasDecisionRationale "Governed: the kind-required and increment-required clauses are L3." ;
+    backlog:adoptsFacet backlog:CoreFacet , backlog:EvidenceFacet .
+
+ex:Backlog a backlog:Backlog ; backlog:hasIdentifier "BL-IN" ; backlog:hasState backlog:InProgress .
+
+ex:N1 a backlog:Initiative ; backlog:hasIdentifier "N-I1" ; backlog:hasState backlog:Proposed ;
+    backlog:hasTitle "Rewrote the storage layer, called it maintenance" ;
+    backlog:memberOfContainer ex:Backlog ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "planted" ;
+    backlog:hasInitiativeKind backlog:Kind_Maintenance ;
+    backlog:hasMaintenanceTiming backlog:Timing_Proactive ;
+    backlog:hasMaintenanceGoal backlog:Goal_Enhancement ;
+    backlog:hasMaintenanceCategory backlog:Maint_Perfective ;
+    backlog:producesIncrement backlog:Ver_Major .
+
+ex:N2 a backlog:Initiative ; backlog:hasIdentifier "N-I2" ; backlog:hasState backlog:Proposed ;
+    backlog:hasTitle "A first build that only patched" ;
+    backlog:memberOfContainer ex:Backlog ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "planted" ;
+    backlog:hasInitiativeKind backlog:Kind_InitialDevelopment ;
+    backlog:producesIncrement backlog:Ver_Patch .
+
+ex:N3 a backlog:Initiative ; backlog:hasIdentifier "N-I3" ; backlog:hasState backlog:Proposed ;
+    backlog:hasTitle "Retirement that shipped a minor" ;
+    backlog:memberOfContainer ex:Backlog ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "planted" ;
+    backlog:hasInitiativeKind backlog:Kind_Retirement ;
+    backlog:producesIncrement backlog:Ver_Minor .
+
+ex:N4 a backlog:Epic ; backlog:hasIdentifier "N-I4" ; backlog:hasState backlog:Proposed ;
+    backlog:hasTitle "An epic wearing an initiative kind" ;
+    backlog:memberOfContainer ex:Backlog ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "planted" ;
+    backlog:hasInitiativeKind backlog:Kind_Maintenance .
+
+ex:N5 a backlog:Initiative ; backlog:hasIdentifier "N-I5" ; backlog:hasState backlog:Proposed ;
+    backlog:hasTitle "Maintenance with no category" ;
+    backlog:memberOfContainer ex:Backlog ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "planted" ;
+    backlog:hasInitiativeKind backlog:Kind_Maintenance ;
+    backlog:producesIncrement backlog:Ver_Patch .

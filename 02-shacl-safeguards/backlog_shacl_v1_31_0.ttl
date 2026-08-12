@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.30.0> ;
-    owl:versionInfo "1.30.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.31.0> ;
+    owl:versionInfo "1.31.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.30.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.29.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.28.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.27.0> ;
@@ -2896,7 +2897,7 @@ backlog:FitGapFindingShape a sh:NodeShape ;
 #################################################################
 
 backlog:MaintenanceClassificationShape a sh:NodeShape ;
-    sh:targetClass backlog:Epic ;
+    sh:targetClass backlog:Initiative ;
     sh:severity sh:Violation ;
     rdfs:label "A maintenance category agrees with its own axes (L1/L3)"@en ;
     sh:sparql [ a sh:SPARQLConstraint ;
@@ -2973,3 +2974,59 @@ backlog:DeclaredCategoryShape a sh:NodeShape ;
             $this backlog:hasInvestmentCategory ?c .
             FILTER NOT EXISTS { ?c a backlog:InvestmentCategory }
         }""" ] .
+
+#################################################################
+#  v1.31.0 — the version increment is the discriminator, enforced
+#################################################################
+
+backlog:InitiativeScaleShape a sh:NodeShape ;
+    sh:targetClass backlog:Initiative ;
+    sh:severity sh:Violation ;
+    rdfs:label "The version increment decides project from maintenance (L1/L3)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this initiative claims Maintenance but produces a MAJOR version increment. Maintenance is smaller in granularity than a project and moves a minor or patch, never a major. A major means either a breaking change or a new product generation, and both are project scale — so this is an evolutionary development that was described as maintenance. The increment is a fact about what shipped; the label is a claim about how the work felt." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasInitiativeKind backlog:Kind_Maintenance ;
+                  backlog:producesIncrement backlog:Ver_Major .
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this initiative is initial or evolutionary development but produces no major increment. Both are project scale and both start a product generation; work that only moves a minor or patch is maintenance, whatever it was scoped as. If the increment is right, the kind is wrong." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasInitiativeKind ?k ; backlog:producesIncrement ?v .
+            FILTER (?k IN (backlog:Kind_InitialDevelopment, backlog:Kind_EvolutionaryDevelopment))
+            FILTER (?v != backlog:Ver_Major)
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this initiative is a Retirement producing a versioned increment. Retirement withdraws a product from service; it ends a version line rather than advancing it." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasInitiativeKind backlog:Kind_Retirement ; backlog:producesIncrement ?v .
+            FILTER (?v != backlog:Ver_None)
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: this initiative states no version increment, so nothing can check whether its declared kind is the one the work actually was. The increment is the only objective test this framework has for project versus maintenance." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L3_Governed, backlog:L4_LineageEnforced))
+            FILTER NOT EXISTS { $this backlog:producesIncrement ?v }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: this initiative states no kind. Initiatives are the level at which project and maintenance are distinguished; leaving it open means a portfolio cannot say how much of its effort is building versus sustaining." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L3_Governed, backlog:L4_LineageEnforced))
+            FILTER NOT EXISTS { $this backlog:hasInitiativeKind ?k }
+        }""" ] .
+
+backlog:PbiKindAdvisoryShape a sh:NodeShape ;
+    sh:targetClass backlog:Epic ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: an epic carrying an initiative kind"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: this epic carries an initiative kind. Kind belongs to the Initiative it serves, not to a product backlog item — an epic is a theme within an initiative and inherits its classification. This package made exactly this error and withdrew it; the advisory exists so the next register does not repeat it silently." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE { $this backlog:hasInitiativeKind ?k }""" ] .

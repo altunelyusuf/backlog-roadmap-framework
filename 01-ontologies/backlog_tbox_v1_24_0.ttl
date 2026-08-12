@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.23.0> ;
-    owl:versionInfo "1.23.0" ;
+    owl:versionIRI <http://example.org/backlog/1.24.0> ;
+    owl:versionInfo "1.24.0" ;
+    owl:priorVersion <http://example.org/backlog/1.23.0> ;
     owl:priorVersion <http://example.org/backlog/1.22.0> ,
                       <http://example.org/backlog/1.21.0> ,
                       <http://example.org/backlog/1.20.0> ,
@@ -3348,20 +3349,33 @@ backlog:rewritesScopeAs a owl:ObjectProperty , owl:FunctionalProperty ;
 backlog:InitiativeKind a owl:Class ;
     rdfs:subClassOf backlog:BacklogConcept ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
-    owl:oneOf ( backlog:Kind_Development backlog:Kind_Maintenance ) ;
+    owl:oneOf ( backlog:Kind_InitialDevelopment backlog:Kind_EvolutionaryDevelopment
+                backlog:Kind_Migration backlog:Kind_Retirement backlog:Kind_Maintenance ) ;
     rdfs:label "Initiative Kind"@en ;
     skos:definition "Whether an initiative creates capability that did not exist, or sustains capability already delivered. The distinction is ISO/IEC/IEEE 12207's, where Development and Maintenance are separate life-cycle processes, and it matters here because the two are governed differently: development work is bounded by a scope written in advance, while maintenance work is triggered by something arriving from outside — a modification request or a problem report — and its scope is set by what arrived."@en .
 
-backlog:Kind_Development a owl:NamedIndividual , backlog:InitiativeKind ;
-    rdfs:label "Development"@en ;
-    skos:definition "Creates capability that did not exist before, including a new version built after an earlier one is complete. Bounded by a scope fixed in advance; a development initiative that cannot state its boundary before starting is not yet an initiative."@en .
+backlog:Kind_InitialDevelopment a owl:NamedIndividual , backlog:InitiativeKind ;
+    rdfs:label "Initial development"@en ;
+    skos:definition "The first build of a product. Distinguished from every later one because there is no installed base to preserve, no migration to plan and no compatibility to break — the decisions are unconstrained in a way they will never be again. Project scale; produces the first major version."@en .
+
+backlog:Kind_EvolutionaryDevelopment a owl:NamedIndividual , backlog:InitiativeKind ;
+    rdfs:label "Evolutionary development"@en ;
+    skos:definition "A new version built after an earlier one is complete. Still project scale and still a major increment, but constrained where the first build was not: something already exists, is in use, and either has to keep working or has to be migrated deliberately. Calling this maintenance because it touches an existing product is the commonest miscategorisation, and the version increment is what settles it."@en .
+
+backlog:Kind_Migration a owl:NamedIndividual , backlog:InitiativeKind ;
+    rdfs:label "Migration"@en ;
+    skos:definition "Moving a product to a new environment or platform while preserving its capability. A distinct process in ISO/IEC/IEEE 14764 rather than a maintenance type, and project scale here because it usually forces a major increment: what users can do is unchanged, but what they must do to keep using it is not."@en .
+
+backlog:Kind_Retirement a owl:NamedIndividual , backlog:InitiativeKind ;
+    rdfs:label "Retirement"@en ;
+    skos:definition "Withdrawing a product from service. A 14764 process in its own right, and modelled because a register with no way to say a thing is being switched off records its last release as though it were still alive."@en .
 
 backlog:Kind_Maintenance a owl:NamedIndividual , backlog:InitiativeKind ;
     rdfs:label "Maintenance"@en ;
-    skos:definition "Sustains capability already delivered, per ISO/IEC/IEEE 12207's maintenance process. Requires a maintenance category, because 'maintenance' alone conflates fixing what is broken with improving what works, and those are budgeted, scheduled and argued about differently."@en .
+    skos:definition "Sustains capability already delivered, per ISO/IEC/IEEE 12207's maintenance process. Smaller in granularity than a project and moves a minor or patch version, never a major — that is the discriminator, and it is a fact about what shipped rather than a judgement about how the work felt. Requires a maintenance category, because 'maintenance' alone conflates fixing what is broken with improving what works."@en .
 
 backlog:hasInitiativeKind a owl:ObjectProperty , owl:FunctionalProperty ;
-    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:WorkItemContainer backlog:WorkItem ) ] ;
+    rdfs:domain backlog:Initiative ;
     rdfs:range backlog:InitiativeKind ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "has initiative kind"@en .
@@ -3395,13 +3409,13 @@ backlog:Goal_Enhancement a owl:NamedIndividual , backlog:MaintenanceGoal ;
     skos:definition "Implements a new requirement. 14764: an enhancement is not a software correction — which is why calling an enhancement a fix is the commonest way unbudgeted scope enters a maintenance stream."@en .
 
 backlog:hasMaintenanceTiming a owl:ObjectProperty , owl:FunctionalProperty ;
-    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:WorkItemContainer backlog:WorkItem ) ] ;
+    rdfs:domain backlog:Initiative ;
     rdfs:range backlog:MaintenanceTiming ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "has maintenance timing"@en .
 
 backlog:hasMaintenanceGoal a owl:ObjectProperty , owl:FunctionalProperty ;
-    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:WorkItemContainer backlog:WorkItem ) ] ;
+    rdfs:domain backlog:Initiative ;
     rdfs:range backlog:MaintenanceGoal ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "has maintenance goal"@en .
@@ -3431,7 +3445,7 @@ backlog:Maint_Additive a owl:NamedIndividual , backlog:MaintenanceCategory ;
     skos:definition "14764:2022's optional fifth type: an enhancement that adds function to existing software, distinguished from perfective by changing the existing product rather than improving its qualities. Offered because the standard names it; an adopter using only the classic four is conformant."@en .
 
 backlog:hasMaintenanceCategory a owl:ObjectProperty , owl:FunctionalProperty ;
-    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:WorkItemContainer backlog:WorkItem ) ] ;
+    rdfs:domain backlog:Initiative ;
     rdfs:range backlog:MaintenanceCategory ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "has maintenance category"@en .
@@ -3449,7 +3463,7 @@ backlog:ProblemReport a owl:Class ;
     skos:definition "A modification request denoting a fault (14764). A subclass rather than a sibling because 14764 is explicit that problem reports are either submitted directly or established after impact analysis on a modification request — the fault is discovered, not declared at arrival."@en .
 
 backlog:triggeredBy a owl:ObjectProperty ;
-    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:WorkItemContainer backlog:WorkItem ) ] ;
+    rdfs:domain backlog:Initiative ;
     rdfs:range backlog:ModificationRequest ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "triggered by"@en ;
@@ -3464,3 +3478,38 @@ backlog:requestedAt a owl:DatatypeProperty , owl:FunctionalProperty ;
     rdfs:domain backlog:ModificationRequest ; rdfs:range xsd:dateTime ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "requested at"@en .
+
+#################################################################
+#  52. The version increment an initiative produces
+#
+#  The owner's discriminator, and a better one than any prose test:
+#  a project moves the MAJOR version, maintenance moves a minor or
+#  patch. "Does this create new capability" is a judgement; "did
+#  this force a major" is a fact about what shipped.
+#################################################################
+
+backlog:VersionIncrement a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:Ver_Major backlog:Ver_Minor backlog:Ver_Patch backlog:Ver_None ) ;
+    rdfs:label "Version Increment"@en ;
+    skos:definition "The version movement an initiative produces, on the semantic-versioning reading this package already applies to itself. Recorded because it is the objective test of whether something was a project or maintenance: an initiative claiming maintenance while forcing a major is misclassified, whatever it was called at the time."@en .
+
+backlog:Ver_Major a owl:NamedIndividual , backlog:VersionIncrement ;
+    rdfs:label "Major"@en ;
+    skos:definition "Breaking change or a new product generation. Project scale by definition — if a piece of work forces one, calling it maintenance is wrong regardless of how small it looked."@en .
+backlog:Ver_Minor a owl:NamedIndividual , backlog:VersionIncrement ;
+    rdfs:label "Minor"@en ;
+    skos:definition "Backwards-compatible addition. The normal increment for additive and adaptive maintenance."@en .
+backlog:Ver_Patch a owl:NamedIndividual , backlog:VersionIncrement ;
+    rdfs:label "Patch"@en ;
+    skos:definition "Backwards-compatible fix, no vocabulary or interface change. The normal increment for corrective and preventive maintenance."@en .
+backlog:Ver_None a owl:NamedIndividual , backlog:VersionIncrement ;
+    rdfs:label "None"@en ;
+    skos:definition "Ships nothing versioned. The honest answer for an initiative that never reaches users — a spike, an investigation, a retirement of something already dark — and its absence from the vocabulary would force such work to claim an increment it did not produce."@en .
+
+backlog:producesIncrement a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:Initiative ; rdfs:range backlog:VersionIncrement ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "produces increment"@en ;
+    skos:definition "The version movement this initiative produces. Functional: an initiative producing two different increments is two initiatives."@en .

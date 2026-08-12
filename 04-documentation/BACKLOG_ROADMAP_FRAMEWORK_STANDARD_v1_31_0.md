@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.30.0
+# Backlog & Roadmap Semantic Framework — Standard v1.31.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -395,32 +395,41 @@ are the closed sets; `FitGapFinding` names each item found outside the boundary,
 | `Stage_Relink` requires a recorded outcome | Re-linking before the ruling **is** the in-place conversion the procedure exists to prevent |
 | A gate marked passed whose observed result contradicts its expectation is rejected | Otherwise the verdict is whatever the author wanted |
 
-### 2.5c-xi Initiative kind and the maintenance grid (ISO/IEC/IEEE 14764)
+### 2.5c-xi Initiative kind, and the version increment that decides it
 
-`InitiativeKind` splits work the way **ISO/IEC/IEEE 12207** splits its life-cycle processes:
-**Development** creates capability that did not exist — including a new version built after an earlier
-one is complete — while **Maintenance** sustains capability already delivered.
+`InitiativeKind` classifies the **Initiative** — portfolio granularity — never an epic or a story. An
+epic is a theme *within* an initiative and inherits its classification; an advisory fires if one
+carries a kind of its own.
 
-**ISO/IEC/IEEE 14764:2022 classifies maintenance on two axes, not as a flat list.** `MaintenanceTiming` and `MaintenanceGoal` are the axes; `MaintenanceCategory` is the derived cell. The framework
-records the axes and treats the category as derived:
+**Project scale — forces a MAJOR increment**
+
+| Kind | What it is |
+|---|---|
+| `Kind_InitialDevelopment` | The first build. No installed base, no compatibility to preserve — decisions are unconstrained in a way they never are again |
+| `Kind_EvolutionaryDevelopment` | A new version after an earlier one is complete. Still a project, still a major, but constrained: something exists and is in use |
+| `Kind_Migration` | Same capability, new environment or platform. A distinct ISO 14764 process |
+| `Kind_Retirement` | Withdrawal from service. Ends a version line rather than advancing it |
+
+**Maintenance scale — a MINOR or PATCH, never a major.** `VersionIncrement` carries that movement. Maintenance is classified on the ISO 14764 grid, whose axes are `MaintenanceTiming` and `MaintenanceGoal` and whose derived cell is `MaintenanceCategory`:
 
 | | **Correction** | **Enhancement** |
 |---|---|---|
 | **Reactive** | `Maint_Corrective` | `Maint_Adaptive` |
-| **Proactive** | `Maint_Preventive` | `Maint_Perfective` |
+| **Proactive** | `Maint_Preventive` | `Maint_Perfective` / `Maint_Additive` |
 
-`Maint_Additive` is 14764:2022's optional fifth — a proactive enhancement that adds function to
-existing software — offered because the standard names it; the classic four are conformant.
+**The version increment is the discriminator, and it is enforced.** *"Does this create new
+capability"* is a judgement; *"did this force a major"* is a fact about what shipped. So:
 
-**Why the axes and not just the name.** A reader can disagree with *"this was proactive"* on the
-evidence; they cannot usefully disagree with *"this was perfective"*. Recording both and checking they
-agree means a convenient label cannot survive axes that contradict it — and *calling an enhancement a
-fix* is the commonest way unbudgeted scope enters a maintenance stream, which 14764 addresses head-on
-by stating that an enhancement is **not** a correction.
+- maintenance producing a **major** is rejected — that is evolutionary development mislabelled,
+  which is the commonest miscategorisation and happens because the work touched an existing product
+- initial or evolutionary development producing anything **less than a major** is rejected — if the
+  increment is right, the kind is wrong
+- retirement producing a versioned increment is rejected
+- at L3 an initiative must state both its kind and its increment
 
-`ModificationRequest` and its subclass `ProblemReport` are 14764's own terms for what arrives and
-triggers the work. At L3 reactive maintenance must name one: reactive work answers something that
-arrived, and with nothing recorded the scope of the work has no source.
+`ModificationRequest` and `ProblemReport` are 14764's terms for what arrives and triggers maintenance;
+at L3 reactive maintenance must name one, because reactive work answers something that arrived and its
+scope has no other source.
 
 ### 2.5d Decomposition, commitments, dependency kinds, impediments, flow, team (subject v1.4.0)
 
