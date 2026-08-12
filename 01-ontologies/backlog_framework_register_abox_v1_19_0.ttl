@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/1.18.0> ;
-    owl:versionInfo "1.18.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/1.19.0> ;
+    owl:versionInfo "1.19.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/1.18.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/1.17.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/1.16.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/1.15.0> ;
@@ -51,7 +52,7 @@ fw:Profile a backlog:AdoptionProfile ;
 fw:Register a backlog:Backlog ;
     backlog:hasIdentifier "BRF-REG" ;
     backlog:hasTitle "backlog-roadmap-framework development register" ;
-    backlog:hasState backlog:InProgress ;
+    backlog:hasState backlog:Done ;
     backlog:appliesDefinitionOfDone backlog:DoD_Baseline ;
     backlog:hasCommitment fw:Commitment_Dev .
 
@@ -1818,7 +1819,14 @@ fw:E_OrderRecord a backlog:CostEstimate ;
 fw:EP_OrderCorrect a backlog:Epic ;
     backlog:hasIdentifier "BRF-EP11" ;
     backlog:hasTitle "Shipped artifacts stop teaching the retired order" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-08-11T19:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-11T20:00:00"^^xsd:dateTime ;
+    backlog:hasActualEffort 2.0 ;
+    backlog:hasEvidence fw:Ev_OrderCorrect ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:lastAuditedAt "2026-08-11T20:00:00"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register ;
     backlog:pursuesObjective fw:Obj_NoStaleOrder ;
     backlog:hasInvestmentCategory backlog:Cat_TechnicalDebt ;
@@ -2066,12 +2074,16 @@ fw:MR_OrderProblem a backlog:ModificationRequest ;
     backlog:requestedAt "2026-08-11T00:00:00"^^xsd:dateTime .
 
 fw:Init_OrderRepair a backlog:Initiative ;
+    backlog:hasEvidence fw:Ev_OrderCorrect ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:lastAuditedAt "2026-08-11T20:00:00"^^xsd:dateTime ;
     backlog:hasAcceptanceCriterion fw:AC_BRF_I5 ;
     backlog:pursuesObjective fw:Obj_OrderRecordable ;
     backlog:hasInvestmentCategory backlog:Cat_Maintenance ;
     backlog:hasIdentifier "BRF-I5" ;
     backlog:hasTitle "Scope-first lineage order" ;
-    backlog:hasState backlog:InProgress ;
+    backlog:hasState backlog:Done ;
     backlog:memberOfContainer fw:Register ;
     backlog:hasInitiativeKind backlog:Kind_Maintenance ;
     backlog:hasMaintenanceTiming backlog:Timing_Reactive ;
@@ -2097,3 +2109,20 @@ fw:AC_BRF_I4 a backlog:AcceptanceCriterion ;
 
 fw:AC_BRF_I5 a backlog:AcceptanceCriterion ;
     backlog:hasGherkinText "Given a lineage built scope-last, When the adaptation runs, Then the order it was built in is readable from link direction and a gated procedure converts it." .
+
+fw:Ev_OrderCorrect a backlog:TestEvidence ;
+    backlog:hasTestSpec "backlog_lineage_completeness_v1_1_0.py LAYERS order; the standard's intent-chain table" ;
+    backlog:hasTestId "BRF-EP11" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-08-11T20:00:00"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "Re-measured both artifacts by inspection of the shipped bytes rather than by asserting the edit landed: the completeness reporter now lists ScopeStatement and ScopeExclusion BEFORE Goal and Objective, checked by string position in the LAYERS table; the standard now names fillsScope alongside scopeRealizesObjective and states the build order Mission then Scope then Goal then Objective explicitly. The changelog still describes the retired order and is deliberately untouched — it records a past state, and L-112 forbids editing history to match the present." ;
+    backlog:verifiedByTool "backlog_lineage_completeness_v1_1_0.py + doc-coverage gate" ;
+    backlog:attestsCriterion fw:AC_OrderCorrect .
+
+fw:Obs_StaleOrderFinal a backlog:MetricObservation ;
+    rdfs:label "Shipped artifacts teaching the retired chain order — final"@en ;
+    backlog:observesMetric fw:Metric_StaleOrderArtifacts ;
+    backlog:observationFor fw:Obj_NoStaleOrder ;
+    backlog:hasObservedValue 0.0 ;
+    backlog:observedAt "2026-08-11T20:00:00"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Both artifacts named in the baseline re-checked in the shipped files. Reporter: ScopeStatement precedes Goal in LAYERS. Standard: fillsScope named, build order stated. Baseline was 2, target 0, observed 0. Historical records excluded from the count by design, not overlooked." .

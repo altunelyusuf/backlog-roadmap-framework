@@ -1,5 +1,32 @@
 # Changelog
 
+## v1.69.0 — 2026-08-11 (MINOR: BRF-EP11 — the artifacts stop teaching the retired order)
+
+The last open item in the register. Two shipped artifacts still presented the intent chain
+goals-first, and the cost accrued **per reading**: everyone who ran the completeness report learned
+the order the framework had already retired.
+
+**The completeness reporter** listed its layers Mission → Goal → Objective → ScopeStatement. That list
+is read as *the order to build a lineage in*, so putting scope last taught exactly the boundary that
+can never refuse anything. Reordered; the layers themselves are unchanged.
+
+**The standard** named only `scopeRealizesObjective` in its intent-chain table — the retired-order
+link — with no mention of `fillsScope`. Both are now named with their directions explained, and the
+build order is stated outright: **Mission → ScopeStatement with exclusions → Goal → Objective.**
+
+**Verified by inspecting the shipped bytes, not by asserting the edit landed:** the reporter's
+`ScopeStatement` entry now precedes `Goal` by string position in `LAYERS`; the standard contains
+`fillsScope` and the build-order sentence.
+
+**The changelog is deliberately untouched.** It describes the retired order throughout and should:
+it records a past state, and editing history to match the present is what L-112 forbids. That is why
+the objective's baseline counted two artifacts and not three.
+
+`Metric_StaleOrderArtifacts`: **2 → 0**, re-measured rather than inferred from the work being done.
+
+**BRF-I5 closes**, and with it every initiative in this register. All eleven epics are Done.
+
+
 ## v1.68.0 — 2026-08-11 (MINOR: the gate outgrew its own release path again — measured, not guessed)
 
 **Three releases had accumulated unpublished** because the publisher re-runs the package gate and the
@@ -1085,7 +1112,7 @@ register with no Mission, no Objective, no ScopeStatement or no DefinitionOfDone
 scored Epics that decompose into nothing. Advisories cover thinness: epics with nothing beneath them,
 a scope with no exclusion. **Verified against the defective register: it now fails.**
 
-**`backlog_lineage_completeness_v1_0_2.py`** reports every layer at any level and states what each
+**`backlog_lineage_completeness_v1_1_0.py`** reports every layer at any level and states what each
 omission costs, so a register can be improved before being failed. Wired into the release gate.
 
 **The register repaired** and promoted to `01-ontologies/backlog_framework_register_abox_v1_7_0.ttl`:

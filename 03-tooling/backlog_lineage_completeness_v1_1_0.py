@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_lineage_completeness v1.0.2 — what your register does NOT contain.
+"""backlog_lineage_completeness v1.1.0 — what your register does NOT contain.
 
 Every other check in this package asks whether what is present is correct.
 This one asks what is missing, because that is the question SHACL structurally
@@ -53,16 +53,21 @@ PKG = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 LAYERS = [
     ("Mission", "Mission",
      "the intent chain has no root; nothing states why the development exists", "L2"),
+    # Scope precedes goals and objectives, per Lineage Operating Discipline
+    # v3.0.0. This list is read as the order to build a lineage in, so listing
+    # scope last taught the retired order to everyone who ran the report — the
+    # boundary drawn around goals already fixed, which can never refuse
+    # anything. The layers are unchanged; only the order they are presented in.
+    ("ScopeStatement", "ScopeStatement",
+     "no boundary, so scope completion cannot be derived and scope growth cannot be detected", "L2"),
+    ("ScopeExclusion", "ScopeExclusion",
+     "a boundary with only an inside; the questions later argued about are the ones an exclusion settles", "-"),
     ("Goal", "Goal",
      "nothing connects the work to the mission", "-"),
     ("Objective", "Objective",
      "every goal is unmeasurable; no observation can contradict the plan", "L2"),
     ("MetricObservation", "MetricObservation",
      "objectives can be stated but never settled; success and failure are both unreachable", "L3"),
-    ("ScopeStatement", "ScopeStatement",
-     "no boundary, so scope completion cannot be derived and scope growth cannot be detected", "L2"),
-    ("ScopeExclusion", "ScopeExclusion",
-     "a boundary with only an inside; the questions later argued about are the ones an exclusion settles", "-"),
     ("DefinitionOfDone", "DefinitionOfDone",
      "completion is whatever each claim says it is", "-"),
     ("Epic/Feature", "Epic",

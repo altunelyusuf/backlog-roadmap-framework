@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.31.0
+# Backlog & Roadmap Semantic Framework — Standard v1.32.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -145,7 +145,8 @@ level multi-factor ranking, and the orphan/coverage check.
 |---|---|
 | `Mission` | Why the development exists; owner-declared root of the intent chain |
 | `contributesToMission` | Goal → mission; goals must in turn carry measurable objectives |
-| `scopeRealizesObjective` | What completing this scope is supposed to achieve |
+| `fillsScope` | **Objective → scope.** The link a scope-first lineage uses: an objective cannot name a boundary that does not yet exist, so asserting it is only possible where the scope was fixed first. Direction records the order — no date needed |
+| `scopeRealizesObjective` | **Scope → objective.** The reverse, and the record of a lineage whose boundary was drawn around objectives already decided. Kept, because which link a lineage uses *is* the fact worth recording; asserting both records no order at all and is rejected |
 | `scopeCompletionState` / `scopeOutcome` | Derived: is the scoped work finished, and did it work — computed separately, in that order |
 | `ScopeChange` | Owner-decided, rationale-bearing admission of work into a set scope |
 | `ExternalDependency` + `ExternalDependencyType` | Something outside the development, over six types: vendor, upstream component, peer team, regulatory, infrastructure, customer |
@@ -154,6 +155,11 @@ level multi-factor ranking, and the orphan/coverage check.
 | `RegisterSession` | Provenance of register edits: verified before changing, and what was left alone |
 
 ### 2.5c-i Intent, scope, refinement, cost and investment mix (subject v1.2.0)
+
+**Build order: `Mission` → `ScopeStatement` with its exclusions → `Goal` → `Objective`.** Scope
+precedes goals and objectives rather than summarising them. Written last, a boundary is drawn around
+objectives already fixed, so every objective is inside it by construction and it can never refuse
+anything — the step reads like a check while being structurally incapable of failing.
 
 The layer that explains *why* a register looks the way it does. Without it a backlog can be
 delivered in full and deliver nothing.
@@ -276,7 +282,7 @@ definition delivered across multiple features or stories, so one with no childre
 no plan behind it. Advisories cover thinness rather than absence — epics with no work beneath them, a
 scope statement with no exclusion.
 
-**`backlog_lineage_completeness_v1_0_2.py`** complements the shape rather than duplicating it: it
+**`backlog_lineage_completeness_v1_1_0.py`** complements the shape rather than duplicating it: it
 reports at **any** level, names every absent layer, and states what each omission costs — so a
 register can be improved before it is failed. It runs inside the release gate.
 
