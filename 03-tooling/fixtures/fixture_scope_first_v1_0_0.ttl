@@ -1,0 +1,67 @@
+# Scope-first lineage — the v3.0.0 ceremony order.
+#
+#   Mission -> ScopeStatement (with exclusions) -> Goal -> Objective
+#
+# The boundary is fixed BEFORE the goals that would test it. Written the other
+# way round a scope is drawn around objectives already decided, so every
+# objective is in scope by construction and the boundary can never refuse
+# anything. Measured on this package's own register: five objectives declared,
+# five admitted, none refused, scope amended twice afterwards to catch up.
+#
+# The suite validates both orders identically — this fixture exists to show the
+# ORDER, which is a discipline for whoever writes the chain rather than a
+# constraint the shapes can express.
+@prefix backlog: <http://example.org/backlog#> .
+@prefix core:    <http://example.org/core#> .
+@prefix ex:      <http://example.org/ob#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+ex:P a backlog:AdoptionProfile ; backlog:profileAppliesTo "order B probe" ;
+    backlog:governsBacklog ex:BL ; backlog:hasConformanceLevel backlog:L2_EvidenceBound ;
+    backlog:hasTargetConformanceLevel backlog:L4_LineageEnforced ;
+    backlog:hasLevelReviewDate "2027-01-01T00:00:00"^^xsd:dateTime ;
+    backlog:decidedBy backlog:Owner ; backlog:hasDecisionRationale "probe" ;
+    backlog:adoptsFacet backlog:CoreFacet , backlog:EvidenceFacet .
+ex:BL a backlog:Backlog ; backlog:hasIdentifier "BL-B" ; backlog:hasState backlog:Proposed ;
+    backlog:hasScopeStatement ex:Scope ; backlog:hasCommitment ex:C ;
+    backlog:appliesDefinitionOfDone backlog:DoD_Baseline .
+ex:W a backlog:Story ; backlog:hasIdentifier "US-B1" ; backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer ex:BL ; backlog:pursuesObjective ex:O ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:appliesDefinitionOfDone backlog:DoD_Baseline ;
+    backlog:asRole "practitioner" ; backlog:wantsCapability "reset my password" ;
+    backlog:soThat "I regain access unaided" ;
+    backlog:hasAcceptanceCriterion ex:AC ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at the next planning; this fixture demonstrates chain ORDER, not prioritisation." .
+ex:AC a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a locked-out practitioner, When they request a reset, Then recovery completes without a support contact." .
+ex:C a backlog:Commitment ; backlog:commitsToGoal ex:G .
+
+ex:M a backlog:Mission ; rdfs:label "Mission"@en ;
+    backlog:hasMissionStatement "Practitioners recover accounts unaided." ;
+    backlog:missionFor ex:BL ; backlog:decidedBy backlog:Owner .
+ex:G a backlog:Goal ; rdfs:label "Self-service recovery"@en ;
+    backlog:contributesToMission ex:M ; backlog:decidedBy backlog:Owner .
+ex:Met a core:Metric ; rdfs:label "Unaided recovery share"@en .
+ex:O a backlog:Objective ; rdfs:label "Recoveries need no support"@en ;
+    backlog:contributesToGoal ex:G ; backlog:hasSuccessMetric ex:Met ;
+    backlog:hasBaselineValue 12.0 ; backlog:hasTargetValue 80.0 ;
+    backlog:hasTargetDirection backlog:Dir_Increase ;
+    backlog:hasObjectiveDeadline "2027-01-31T00:00:00"^^xsd:dateTime ;
+    backlog:decidedBy backlog:Owner .
+ex:Obs a backlog:MetricObservation ; backlog:observesMetric ex:Met ;
+    backlog:observationFor ex:O ; backlog:hasObservedValue 12.0 ;
+    backlog:observedAt "2026-08-11T09:00:00"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Baseline reading from support tickets." .
+
+# scope written last, from the objective
+ex:Scope a backlog:ScopeStatement ;
+    backlog:hasScopeStatementText "The reset flow and its notifications for practitioner accounts. Fixed before any goal was written." ;
+    backlog:scopeRealizesObjective ex:O ;
+    backlog:hasScopeExclusion ex:X .
+ex:X a backlog:ScopeExclusion ;
+    backlog:excludesConcern "Administrator recovery." ;
+    backlog:hasExclusionRationale "Different threat model." ;
+    backlog:decidedBy backlog:Owner .

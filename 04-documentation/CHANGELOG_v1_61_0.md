@@ -1,5 +1,43 @@
 # Changelog
 
+## v1.61.0 — 2026-08-11 (MINOR: scope precedes goals — Lineage Operating Discipline v3.0.0)
+
+The owner reported scope problems in applied lineages and proposed reordering the ceremony: fix the
+mission, then the **scope**, and produce goals and objectives to fill it. **Both orders were
+test-driven as validatable constructions before ruling.**
+
+**The suite cannot tell them apart.** Order A (Mission→Goal→Objective→Scope) and order B
+(Mission→Scope→Goal→Objective) validate identically — 3 violations each, the same three. Inject an
+objective the scope does not realise and `L4DriftShape` fires in **both**. So this is not an
+enforcement gap and cannot be closed by a shape.
+
+**What the order changes is whether the boundary can ever refuse anything.** Written last, a scope is
+drawn around objectives already fixed: every objective is in scope *by construction*, and the step
+reads like a check while being structurally incapable of failing. Written second, the boundary exists
+before the work that would test it.
+
+**Measured on this package's own register rather than argued:** **five objectives declared, five
+admitted, none ever refused**, with the scope amended twice afterwards by `ScopeChange` to catch up.
+A boundary drawn after the fact always fits.
+
+### Why this matters more for a generative model, not less
+
+An LLM produces plausible continuations of what it has already written. Asked to write a scope
+**after** its own goals, it summarises itself — and **a self-summary cannot contradict its source**.
+Asked to write goals **against** a scope fixed earlier, each generated goal meets a constraint the
+generator did not author in the same breath, and a goal outside the boundary surfaces as a conflict
+instead of being absorbed as context.
+
+Ordering is one of the few controls that survives a probabilistic generator, because it changes what
+the model is conditioned on rather than asking it to be more careful.
+
+**Recorded as MAJOR on the discipline (v2.1.0 → v3.0.0)**: every lineage already built follows the old
+order, and re-deriving their scopes now would produce exactly the self-confirming boundary the
+reversal exists to prevent. **Existing lineages are not rewritten** — they record a real past order.
+
+`fixture_scope_first_v1_0_0.ttl` ships the new order as a reference chain, validating at 0.
+
+
 ## v1.60.0 — 2026-08-11 (MINOR: BRF-EP9 — a deployment says how it chose, and the fourth mission closes)
 
 The last epic of `Mission_Executable`, unblocked by EP8 exactly as the register predicted: selecting

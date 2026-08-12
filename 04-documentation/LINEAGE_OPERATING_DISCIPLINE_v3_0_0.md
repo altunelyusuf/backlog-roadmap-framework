@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v2.1.0
+# Lineage Operating Discipline — v3.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -22,10 +22,27 @@ remembered from a previous session; this document's own tooling references have 
    it as an owner decision carrying a **rationale**, a **target level** and a **review date**. Every
    validator run prints what the declaration *suppresses*; read that line. A clean result at a low
    level is a **narrower claim**, not a better one.
-2. **Build the chain top-down and validate it empty.** `Mission` → `Goal` → `Objective` (metric,
-   baseline, target, direction, deadline) → `ScopeStatement` with its **exclusions**. Run the
-   validator on this alone, before a single work item exists. A chain that does not validate empty
-   will not validate full, and every item added first must be revisited once it does.
+2. **Fix the mission, then the SCOPE, and only then goals and objectives.**
+   `Mission` → `ScopeStatement` **with its exclusions** → `Goal` → `Objective` (metric, baseline,
+   target, direction, deadline). Validate this chain empty, before a single work item exists. A chain
+   that does not validate empty will not validate full.
+
+   **Scope precedes goals; it does not summarise them.** Written last, a scope is drawn around
+   objectives already fixed, so every objective is in scope *by construction* and the boundary can
+   never refuse anything — it records a decision instead of constraining one. Written second, the
+   boundary exists before the work that would test it, and a new objective must be argued against it.
+
+   The measured evidence is in this package's own register: **five objectives declared, five
+   admitted, none ever refused**, with the scope amended twice afterwards to catch up. That is what a
+   boundary drawn after the fact does — it always fits.
+
+   **This matters more, not less, for a generative model.** An LLM produces plausible continuations
+   of what it has already written. Asked to write a scope *after* its own goals, it summarises itself,
+   and a self-summary cannot contradict its source: the step reads like a check and is structurally
+   incapable of failing. Asked to write goals *against* a scope fixed earlier, each generated goal
+   meets a constraint the generator did not author in the same breath, and a goal outside the
+   boundary becomes visible as a conflict rather than absorbed as context. The order is what turns
+   scope from something the model narrates into something it is measured against.
 3. **State the granularity you are choosing and why.** `Initiative`, `Epic`, `Feature`, `Story`,
    `Task`, `Defect`, `Spike`, `Enabler`. Epic is the **coarsest ordinary choice**, not the neutral
    one. A granularity nobody chose is one nobody can defend later.
@@ -70,6 +87,10 @@ planning and commits nothing anyone can finish; an epic in a release names somet
 ship. *Enforced by* `L4GroomingShape`.
 
 ### G6 — Drift is the default, not the exception
+**Corollary from v3.0.0:** drift is *detected* identically whichever order the chain was built in —
+`L4DriftShape` fires on an item pursuing an unrealised objective either way, verified by construction
+on both. What the order changes is **when a human notices**: scope-first surfaces the conflict while
+the objective is being written, scope-last surfaces it only once work exists to be rejected.
 Work migrates outside the declared boundary unless something objects. *Enforced by* `L4DriftShape`:
 an item pursuing an objective the scope does not realise is a violation. Reversing an exclusion is
 legitimate — record a `ScopeChange`; **the exclusion is superseded, never deleted.**
@@ -142,6 +163,16 @@ exists in the shipped shapes file and carries the severity claimed. **A discipli
 enforcement claims have drifted from the suite is worse than none, because it is believed.**
 
 ---
+
+## v3.0.0 (2026-08-11)
+
+**MAJOR: ceremony step 2 reorders.** Scope now precedes goals and objectives rather than following
+them. Ruled after test-driving both orders as validatable constructions: the suite cannot distinguish
+them — both validate identically, and drift fires in both — so this is not an enforcement change but a
+change to what a human, or a generative model, is asked to write against. Recorded as MAJOR because
+every lineage already built follows the old order, and re-deriving a scope from its objectives after
+the fact would produce exactly the self-confirming boundary this reversal exists to prevent. Existing
+lineages are NOT rewritten; they record a real past order.
 
 ## v2.1.0 (2026-08-11)
 
