@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.28.0> ;
-    owl:versionInfo "1.28.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.29.0> ;
+    owl:versionInfo "1.29.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.28.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.27.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.26.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.25.0> ;
@@ -2793,3 +2794,93 @@ backlog:LegacyOrderAdvisoryShape a sh:NodeShape ;
             $this backlog:scopeRealizesObjective ?o .
             FILTER NOT EXISTS { ?o2 backlog:fillsScope $this }
         }""" ] .
+
+#################################################################
+#  v1.29.0 — the adaptation's control points are gates, not notes
+#################################################################
+
+backlog:AdaptationGateShape a sh:NodeShape ;
+    sh:targetClass backlog:AdaptationGate ;
+    sh:severity sh:Violation ;
+    rdfs:label "A gate carries a check that could have failed (L1)"@en ;
+    sh:property [ sh:path backlog:gateFor ; sh:minCount 1 ; sh:class backlog:LineageAdaptation ;
+                  sh:message "L1: a gate must name the adaptation it controls." ] ;
+    sh:property [ sh:path backlog:gatesStage ; sh:minCount 1 ; sh:class backlog:AdaptationStage ;
+                  sh:message "L1: a gate must name the stage it controls." ] ;
+    sh:property [ sh:path backlog:hasCheckQuery ; sh:minCount 1 ;
+                  sh:message "L1: a gate must carry an executable check. A control point declared passed without something that could have failed verifies nothing — it records that someone looked." ] ;
+    sh:property [ sh:path backlog:hasExpectedResult ; sh:minCount 1 ;
+                  sh:message "L1: a gate must state what its check should return. Without an expectation any result can be read as success afterwards." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this gate is marked passed but its observed result differs from what it expected. A gate whose verdict disagrees with its own measurement is reporting the verdict someone wanted." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:gatePassed true ;
+                  backlog:hasExpectedResult ?exp ;
+                  backlog:hasGateResult ?got .
+            FILTER (STR(?exp) != STR(?got))
+        }""" ] .
+
+backlog:AdaptationStageOrderShape a sh:NodeShape ;
+    sh:targetClass backlog:LineageAdaptation ;
+    sh:severity sh:Violation ;
+    rdfs:label "Stages are reached in order, each through a passed gate (L1)"@en ;
+    sh:property [ sh:path backlog:adaptsScope ; sh:minCount 1 ; sh:class backlog:ScopeStatement ;
+                  sh:message "L1: an adaptation must name the boundary it converts." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this adaptation has reached Fit-gap without a passed Assess gate. A fit-gap measured before the current order is established compares the work against a baseline nobody has checked." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasAdaptationStage ?st .
+            FILTER (?st IN (backlog:Stage_FitGap, backlog:Stage_Ruling, backlog:Stage_Relink))
+            FILTER NOT EXISTS { ?g backlog:gateFor $this ; backlog:gatesStage backlog:Stage_Assess ; backlog:gatePassed true }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this adaptation has reached Ruling or Re-link without a passed Fit-gap gate. The ruling is a decision on evidence; taken without the measurement it is the inspection that always finds a boundary drawn around past work still fits." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasAdaptationStage ?st .
+            FILTER (?st IN (backlog:Stage_Ruling, backlog:Stage_Relink))
+            FILTER NOT EXISTS { ?g backlog:gateFor $this ; backlog:gatesStage backlog:Stage_FitGap ; backlog:gatePassed true }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this adaptation has reached Re-link with no recorded outcome. Re-linking before the ruling IS the in-place conversion the procedure exists to prevent: the links would assert an order nobody decided on." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasAdaptationStage backlog:Stage_Relink .
+            FILTER NOT EXISTS { $this backlog:hasAdaptationOutcome ?o }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this adaptation concluded the boundary holds, but a fit-gap finding names work outside it. The outcome contradicts the evidence the ruling was supposed to rest on; either the finding is wrong and should be withdrawn, or the boundary must be rewritten." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasAdaptationOutcome backlog:Adapt_BoundaryHolds .
+            ?f backlog:findingOf $this .
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this adaptation rewrote the boundary but names no new ScopeStatement, or reuses the old one. The old boundary records what was believed at the time; editing it in place erases the reason the adaptation was needed." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasAdaptationOutcome backlog:Adapt_BoundaryRewritten .
+            OPTIONAL { $this backlog:rewritesScopeAs ?new }
+            OPTIONAL { $this backlog:adaptsScope ?old }
+            FILTER (!BOUND(?new) || ?new = ?old)
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this adaptation rewrote the boundary but records no ScopeChange saying what was admitted and why. A rewritten scope with no change record is a boundary that moved with nobody accountable for moving it." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasAdaptationOutcome backlog:Adapt_BoundaryRewritten ; backlog:adaptsScope ?old .
+            FILTER NOT EXISTS { ?c a backlog:ScopeChange ; backlog:changesScope ?old }
+        }""" ] .
+
+backlog:FitGapFindingShape a sh:NodeShape ;
+    sh:targetClass backlog:FitGapFinding ;
+    sh:severity sh:Violation ;
+    rdfs:label "A finding names the work and why it falls outside (L1)"@en ;
+    sh:property [ sh:path backlog:findingOf ; sh:minCount 1 ; sh:class backlog:LineageAdaptation ;
+                  sh:message "L1: a finding must name the adaptation it belongs to." ] ;
+    sh:property [ sh:path backlog:findingItem ; sh:minCount 1 ; sh:class backlog:WorkItem ;
+                  sh:message "L1: a finding must name the work item it found outside the boundary. A count says a scope needs rewriting; a list says what it must now cover." ] ;
+    sh:property [ sh:path backlog:hasRationale ; sh:minCount 1 ;
+                  sh:message "L1: a finding must say why the boundary does not cover this item, or the rewritten scope has nothing to answer." ] .

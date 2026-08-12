@@ -1,0 +1,66 @@
+# Adaptation gates — every control point defeated on purpose.
+#
+#   A1  reaches Re-link with no gate passed at all and no outcome
+#   A2  claims the boundary holds while a finding says otherwise
+#   A3  rewrites the boundary but names no new scope and no ScopeChange
+#   G1  a gate marked passed whose observed result contradicts its expectation
+#
+# The last is the one that matters most: a gate reporting the verdict someone
+# wanted rather than the one its own measurement supports.
+
+@prefix backlog: <http://example.org/backlog#> .
+@prefix ex:      <http://example.org/adapt-neg#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+ex:Profile a backlog:AdoptionProfile ;
+    backlog:profileAppliesTo "Adaptation gate defeat fixture" ;
+    backlog:governsBacklog ex:Backlog ;
+    backlog:hasConformanceLevel backlog:L1_Core ;
+    backlog:hasTargetConformanceLevel backlog:L2_EvidenceBound ;
+    backlog:hasLevelReviewDate "2027-01-01T00:00:00"^^xsd:dateTime ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:hasDecisionRationale "Core: this fixture defeats adaptation gates, which are L1 checks." ;
+    backlog:adoptsFacet backlog:CoreFacet .
+
+ex:Backlog a backlog:Backlog ; backlog:hasIdentifier "BL-AN" ; backlog:hasState backlog:InProgress .
+ex:Scope a backlog:ScopeStatement ;
+    backlog:hasScopeStatementText "A boundary." ;
+    backlog:scopeRealizesObjective ex:O ;
+    backlog:hasScopeExclusion ex:X .
+ex:X a backlog:ScopeExclusion ; backlog:excludesConcern "Something." ;
+    backlog:hasExclusionRationale "Reason." ; backlog:decidedBy backlog:Owner .
+ex:O a backlog:Objective ; rdfs:label "An objective"@en .
+ex:W a backlog:Story ; backlog:hasIdentifier "US-AN" ; backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer ex:Backlog ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "planted" .
+
+# A1: straight to Re-link, no gates, no outcome
+ex:A1 a backlog:LineageAdaptation ;
+    backlog:adaptsScope ex:Scope ;
+    backlog:hasAdaptationStage backlog:Stage_Relink .
+
+# A2: claims the boundary holds while a finding contradicts it
+ex:A2 a backlog:LineageAdaptation ;
+    backlog:adaptsScope ex:Scope ;
+    backlog:hasAdaptationStage backlog:Stage_Ruling ;
+    backlog:hasAdaptationOutcome backlog:Adapt_BoundaryHolds .
+ex:F2 a backlog:FitGapFinding ;
+    backlog:findingOf ex:A2 ;
+    backlog:findingItem ex:W ;
+    backlog:hasRationale "This item falls outside the boundary." .
+
+# A3: rewrote the boundary, named no new scope, recorded no ScopeChange
+ex:A3 a backlog:LineageAdaptation ;
+    backlog:adaptsScope ex:Scope ;
+    backlog:hasAdaptationStage backlog:Stage_Ruling ;
+    backlog:hasAdaptationOutcome backlog:Adapt_BoundaryRewritten .
+
+# G1: passed, but the measurement says otherwise
+ex:G1 a backlog:AdaptationGate ;
+    backlog:gateFor ex:A1 ;
+    backlog:gatesStage backlog:Stage_Assess ;
+    backlog:hasCheckQuery "ASK { ?s ?p ?o }" ;
+    backlog:hasExpectedResult "clean" ;
+    backlog:hasGateResult "4 problems found" ;
+    backlog:gatePassed true .

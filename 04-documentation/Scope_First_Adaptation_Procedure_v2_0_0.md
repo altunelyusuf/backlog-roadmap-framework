@@ -1,4 +1,4 @@
-# Adapting a lineage built scope-last — v1.0.0
+# Adapting a lineage built scope-last — v2.0.0
 
 For a lineage whose `ScopeStatement` points at its objectives via `scopeRealizesObjective`. That
 direction records that the boundary was drawn **after** the objectives existed, and it is an accurate
@@ -38,6 +38,31 @@ A lineage that honestly records scope-last is more useful than one that falsely 
 The advisory that reports it is a description, not a defect to be silenced.
 
 ---
+
+## The procedure is governed, not advisory (v2.0.0)
+
+The steps below are modelled as a `LineageAdaptation` with four ordered stages, each carrying an
+`AdaptationGate` that must be **recorded and passed** before the next may begin. A gate holds an
+executable check, the result it expects, and the result it observed; a gate marked passed whose
+observation contradicts its expectation is rejected.
+
+| Stage | Gate asks | Cannot proceed until |
+|---|---|---|
+| **Assess** | which order was this lineage built in, from link directions | one direction only — a lineage asserting both records no order and must be resolved first |
+| **Fit-gap** | which work falls outside the standing boundary | the enumeration is recorded. **The gate passes on having measured, not on the boundary being intact** — a fit-gap that only passed when it found nothing would report its own preferred answer |
+| **Ruling** | boundary holds, or must be rewritten | the **owner** decides. A gap is a fact; whether it means the scope was wrong or the work strayed is a judgement no query can make |
+| **Re-link** | carry out what the ruling decided | an outcome is recorded. Re-linking before the ruling **is** the in-place conversion this procedure exists to prevent |
+
+**The branch the ruling sets:**
+
+- `Adapt_BoundaryHolds` — nothing outside the scope, so only the link direction changes. This is the
+  outcome an inspection reaches by default, because a boundary drawn around past work fits that work
+  by construction. It is therefore rejected if any fit-gap finding exists.
+- `Adapt_BoundaryRewritten` — the scope is rewritten as a **new** `ScopeStatement`, never an edit of
+  the old one, with a `ScopeChange` recording what was admitted and why, and the goals and objectives
+  beneath it revisited. A rewritten scope with the old goals still hanging under it is the
+  self-confirming boundary again.
+- `Adapt_NotRequired` — already scope-first. Recorded rather than left silent.
 
 ## What to do instead: adapt at the next increment boundary
 

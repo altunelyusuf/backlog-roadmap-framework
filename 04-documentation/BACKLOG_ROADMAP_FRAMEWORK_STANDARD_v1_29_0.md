@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.28.0
+# Backlog & Roadmap Semantic Framework — Standard v1.29.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -379,6 +379,21 @@ sometimes wrong, and a rule with no exception path is bypassed the first time it
 is that the departure is **visible**: claim `Sel_HighestScored` while a higher-scored deliverable item
 waits, and it must be named in `passedOver` with a reason. `Sel_Opportunistic` is a legitimate answer;
 not answering is not.
+
+### 2.5c-x Adapting a lineage to scope-first, under gates
+
+`LineageAdaptation` converts one scope-last boundary, through four ordered stages —
+**Assess → Fit-gap → Ruling → Re-link** — each controlled by an `AdaptationGate` carrying an
+executable check, an expected result and an observed one. `AdaptationStage` and `AdaptationOutcome`
+are the closed sets; `FitGapFinding` names each item found outside the boundary, with a reason.
+
+| Rule | Why |
+|---|---|
+| The fit-gap gate passes on having **measured**, not on the boundary being intact | A gate that only passed when it found nothing would report its own preferred answer |
+| `Adapt_BoundaryHolds` is rejected if any finding exists | It is the outcome an inspection reaches by default — a boundary drawn around past work fits that work by construction |
+| `Adapt_BoundaryRewritten` requires a **new** `ScopeStatement` and a `ScopeChange` | The old boundary records what was believed at the time; editing it erases the reason the adaptation was needed |
+| `Stage_Relink` requires a recorded outcome | Re-linking before the ruling **is** the in-place conversion the procedure exists to prevent |
+| A gate marked passed whose observed result contradicts its expectation is rejected | Otherwise the verdict is whatever the author wanted |
 
 ### 2.5d Decomposition, commitments, dependency kinds, impediments, flow, team (subject v1.4.0)
 

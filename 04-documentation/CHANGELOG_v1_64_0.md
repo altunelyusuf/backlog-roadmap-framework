@@ -1,5 +1,48 @@
 # Changelog
 
+## v1.64.0 — 2026-08-11 (MINOR: the adaptation becomes a gated procedure, and this register runs it)
+
+The adaptation was a document someone follows carefully. It is now a `LineageAdaptation` with four
+ordered stages — **Assess, Fit-gap, Ruling, Re-link** — each gated by an `AdaptationGate` carrying an
+executable check, an expected result and an observed one. Built mostly from reuse:
+`CrossCuttingInvariant` already had check-plus-expectation, and `ScopeChange`, `hasRationale` and
+`decidedBy` already existed.
+
+**Two design points worth stating.**
+
+The fit-gap gate **passes on having measured, not on the boundary being intact.** A gate that only
+passed when it found nothing would be an instrument reporting its own preferred answer.
+
+`Adapt_BoundaryHolds` is **rejected if any finding exists.** It is the outcome an inspection reaches
+by default — a boundary drawn around past work fits that work by construction — so it must rest on a
+recorded fit-gap rather than on looking.
+
+**This register ran the procedure on itself, and the boundary did not hold.**
+
+```
+Assess  : fillsScope 0, scopeRealizesObjective 6  -> scope-last, one direction, PASS
+Fit-gap : scope covers 4 objectives; 4 work items pursue objectives it does not  -> PASS
+Ruling  : OPEN — awaiting the owner
+```
+
+The findings are real and one is a genuine defect: `EP_Views` and `EP_Schedule` pursue `Obj_Views`,
+which `SC_Schedule` admitted but which was **never added to what the scope says it realises**. The
+change record and the boundary disagreed for eleven releases, and nothing noticed — because the
+boundary was never asked to refuse anything.
+
+**Stage 4 is deliberately not reached.** The stage-order shape refuses `Stage_Relink` without a
+recorded outcome, so the framework's own constraint is holding this session at the ruling gate rather
+than letting it re-link on its own judgement.
+
+**The gate shape caught its author immediately:** the fit-gap gate was written with expectation
+*"enumerated, whatever the count"* against observation *"4 items outside the boundary"* — marked
+passed while the two texts disagreed. Rejected, and rewritten so the comparison is meaningful.
+
+`fixture_adaptation_negative_v1_0_0.ttl` defeats every gate — a straight jump to Re-link, a
+boundary-holds claim contradicted by a finding, a rewrite naming no new scope and no `ScopeChange`,
+and a passed gate whose observation contradicts its expectation. All five clauses fire.
+
+
 ## v1.63.0 — 2026-08-11 (MINOR: the order was always recordable — by link direction)
 
 **An owner correction to this session's own analysis.** v1.62.0 reported that the ceremony order was
@@ -26,7 +69,7 @@ reports a scope-last lineage without treating it as a defect.
 **Two existing clauses had assumed the old direction** and would have failed a scope-first lineage:
 the L2 "scope realises no objective" check and the L4 drift check. Both now accept either link.
 
-**`Scope_First_Adaptation_Procedure_v1_0_0.md`** ships for lineages already built scope-last. Its
+**`Scope_First_Adaptation_Procedure_v2_0_0.md`** ships for lineages already built scope-last. Its
 first instruction is to **change nothing that exists**: re-pointing the links would derive a boundary
 from objectives that already exist, producing the self-confirming scope this change prevents while
 labelling it as the fix. Adaptation happens at the next increment — let the old scope close, write the

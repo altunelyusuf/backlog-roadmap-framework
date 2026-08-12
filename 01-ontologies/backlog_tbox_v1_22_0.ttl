@@ -18,9 +18,10 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.21.0> ;
-    owl:versionInfo "1.21.0" ;
-    owl:priorVersion <http://example.org/backlog/1.20.0> ,
+    owl:versionIRI <http://example.org/backlog/1.22.0> ;
+    owl:versionInfo "1.22.0" ;
+    owl:priorVersion <http://example.org/backlog/1.21.0> ,
+                      <http://example.org/backlog/1.20.0> ,
                       <http://example.org/backlog/1.19.0> ,
                      <http://example.org/backlog/1.18.0> ,
                      <http://example.org/backlog/1.17.0> ,
@@ -58,6 +59,7 @@
     skos:definition "A domain-neutral, reusable schema for backlog-and-roadmap governance across independent developments. It standardises five concept groups that recur in every product/engineering effort: (1) work items and their containers, (2) a closed lifecycle whose Done state is a constrained fact rather than asserted prose, (3) completion Evidence anchored to real delivered artifacts (a named passing test, a release carrying its package SHA-256, a file hash, or a recorded review), (4) method-parameterised prioritisation scores, and (5) a roadmap modelled as a derived projection over the backlog rather than an independently maintained list. Adoption is declared by an AdoptionProfile carrying a ConformanceLevel (L1 Core / L2 Evidence-Bound / L3 Governed), which the paired SHACL suite reads to decide which constraints are enforced, so one framework serves developments at different governance maturity without forking the vocabulary. This TBox defines vocabulary only; the paired SHACL shapes supply enforcement, the SPARQL rules supply derivation (container status, next-item selection, milestone status), and an execution bridge asserts observed real-world verification facts back into the ABox."@en ;
     dcterms:source "Scrum Guide 2020 (Product Backlog, Increment, Definition of Done); SAFe 6.0 (Epic/Feature/Story ladder, WSJF); Now-Next-Later roadmap practice; Intercom RICE prioritisation; W3C OWL 2, SHACL, SHACL-AF."@en ;
     rdfs:comment "v1.0.0 — generalisation of an adopting project's product-backlog deposit (an OE Pack registrant deposit, http://example.org/product-backlog 1.3.0) into a project-independent subject. Per L-105 this is an extension of that implementation, not a parallel one: every pb: term has a declared alignment in backlog_alignment_productbacklog_v1_0_0.ttl. Per L-68 the hyphenated/abbreviated form (product-backlog / pb:) is replaced by a single full-word prefix (backlog:); per L-69 the retained terminology anchors to the Scrum Guide and SAFe rather than to project-internal names. The deposit files themselves are NOT modified by this release (L-X7 / B1: the owning session decides supersession)."@en ,
+    "v1.22.0 (MINOR, additions only) — makes the scope-first adaptation a governed procedure rather than a document someone follows carefully. Four ordered stages, each with a control point that must be recorded before the next may begin: assess the current order, run a fit-gap between the standing scope and the work actually underway, rule on whether the boundary is unchanged or must be rewritten, and only then re-link the lineage. The ruling is the branch the owner asked for: an unchanged boundary needs only re-linking, while a boundary with gaps needs rewriting and the goals and objectives beneath it revisited. Gates carry an executable check and an expected result, on the same pattern CrossCuttingInvariant already uses, so a stage cannot be declared passed on assertion alone."@en ,
     "v1.21.0 (MINOR, additions only) — records the ceremony order STRUCTURALLY instead of in prose. Every link in the intent chain already points from the later-written element to the earlier one: a Goal points at its Mission, an Objective at its Goal. The direction IS the order, and no date is needed to read it. scopeRealizesObjective points ScopeStatement at Objective, which encodes scope-written-last — the retired order, baked into the vocabulary. fillsScope is the reverse: an Objective names the scope it fills, so the scope must exist before the objective can be written. Deliberately NOT declared owl:inverseOf scopeRealizesObjective: making them inverses would let a reasoner materialise either from the other and destroy the very signal the direction carries."@en ,
     "v1.20.0 (MINOR, additions only) — BRF-EP9. A deployment must say on what basis its contents were chosen, and a release taking lower-scored work while higher-scored deliverable work waited must record why. Deliberately NOT a rule that a release must always take the top score: an ordering is a model and is sometimes wrong, and a rule with no exception path is bypassed the first time it is. What is enforced is that the exception is VISIBLE — the same shape as the ranking-fork resolution this subject already carries."@en ,
     "v1.19.0 (MINOR, additions only) — adds a fourth conformance level, L4_LineageEnforced, in which the lineage checks that were advisory become violations and every objective must carry a measurement rather than an intention. Added as a NEW level rather than by promoting advisories inside L3, because promotion would silently break every existing L3 adopter and because the tiering principle this framework already documents says a level is a claim an adopter makes, not one imposed on them. Existing L1, L2 and L3 behaviour is byte-identical. Also adds DeploymentUnit, so an iteration can be connected to what actually ships, and the epic-as-deployment-unit misuse becomes stateable rather than merely discouraged."@en ,
@@ -3209,3 +3211,120 @@ backlog:fillsScope a owl:ObjectProperty ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "fills scope"@en ;
     skos:definition "The scope boundary this objective was written to fill. The direction is the whole point: an objective cannot name a scope that does not yet exist, so asserting this link is only possible in a lineage where the boundary was fixed first. Every other link in the intent chain already works this way — a Goal points at its Mission, an Objective at its Goal, each from the later-written element to the earlier — and the order is therefore readable from the graph without any element carrying a date. scopeRealizesObjective points the other way and encodes the opposite order; both are kept, because which one a lineage uses is exactly the fact worth recording. NOT declared owl:inverseOf scopeRealizesObjective: a reasoner materialising either from the other would erase the distinction and make every lineage look like both."@en .
+
+#################################################################
+#  50. Gated adaptation of a lineage to scope-first (v1.22.0)
+#################################################################
+
+backlog:LineageAdaptation a owl:Class ;
+    rdfs:subClassOf core:Artifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Lineage Adaptation"@en ;
+    skos:definition "The governed conversion of one lineage from scope-last to scope-first. An artifact rather than an activity because the conversion makes claims — that the boundary still holds, or that it does not — and a claim needs somewhere to live and someone to have made it. Adapting without one is the in-place re-pointing the procedure forbids: it produces links asserting an order that was never followed."@en .
+
+backlog:adaptsScope a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:LineageAdaptation ; rdfs:range backlog:ScopeStatement ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "adapts scope"@en ;
+    skos:definition "The scope-last boundary this adaptation converts. Functional: one adaptation converts one boundary, so a register with several scopes adapts them one at a time, at each one's own increment."@en .
+
+backlog:AdaptationStage a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:Stage_Assess backlog:Stage_FitGap backlog:Stage_Ruling backlog:Stage_Relink ) ;
+    rdfs:label "Adaptation Stage"@en ;
+    skos:definition "Where an adaptation has reached. Ordered and gated: each stage carries a control point that must be recorded and must have passed before the next may begin. The ordering is not ceremony — a fit-gap run before the current order is established measures against an unknown baseline, and a re-link performed before the ruling is the in-place conversion the whole procedure exists to prevent."@en .
+
+backlog:Stage_Assess a owl:NamedIndividual , backlog:AdaptationStage ;
+    rdfs:label "Assess"@en ;
+    skos:definition "Establish which order the lineage was actually built in, from the link directions rather than from anyone's account of it. A lineage already scope-first needs no adaptation; one asserting both directions must be resolved before anything else, because it currently records no order at all."@en .
+
+backlog:Stage_FitGap a owl:NamedIndividual , backlog:AdaptationStage ;
+    rdfs:label "Fit-gap"@en ;
+    skos:definition "Compare the standing boundary against the work actually underway and name every item that falls outside it. This is the measurement the ruling depends on, and it is the step a careful reader skips: a boundary drawn around past work usually LOOKS like it still fits, because it was built to."@en .
+
+backlog:Stage_Ruling a owl:NamedIndividual , backlog:AdaptationStage ;
+    rdfs:label "Ruling"@en ;
+    skos:definition "The owner decides, on the fit-gap evidence, whether the boundary is unchanged or must be rewritten. An owner decision and not a derivation: a gap is a fact, but whether it means the scope was wrong or the work was is a judgement about intent that no query can make."@en .
+
+backlog:Stage_Relink a owl:NamedIndividual , backlog:AdaptationStage ;
+    rdfs:label "Re-link"@en ;
+    skos:definition "Carry out what the ruling decided, and only then. Under an unchanged boundary the objectives are re-linked forward with fillsScope. Under a rewritten one the new boundary is written first and its goals and objectives are revisited beneath it, because a rewritten scope with the old goals hanging under it is the self-confirming boundary again."@en .
+
+backlog:hasAdaptationStage a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:LineageAdaptation ; rdfs:range backlog:AdaptationStage ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has adaptation stage"@en .
+
+backlog:AdaptationGate a owl:Class ;
+    rdfs:subClassOf core:Artifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Adaptation Gate"@en ;
+    skos:definition "The control point on one stage: an executable check, the result it must produce, and the observed result. Modelled on CrossCuttingInvariant, which already carries a check query and an expected result, because a gate declared passed without a check that could have failed verifies nothing."@en .
+
+backlog:gateFor a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:AdaptationGate ; rdfs:range backlog:LineageAdaptation ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "gate for"@en .
+
+backlog:gatesStage a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:AdaptationGate ; rdfs:range backlog:AdaptationStage ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "gates stage"@en .
+
+backlog:hasGateResult a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:AdaptationGate ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has gate result"@en ;
+    skos:definition "What the check actually returned, recorded verbatim. Compared against the expected result rather than summarised as pass or fail, so a reader can see what was measured and not only the verdict."@en .
+
+backlog:gatePassed a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:AdaptationGate ; rdfs:range xsd:boolean ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "gate passed"@en .
+
+backlog:FitGapFinding a owl:Class ;
+    rdfs:subClassOf core:Artifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Fit-Gap Finding"@en ;
+    skos:definition "One item of work found to fall outside the standing boundary, with what it pursues and why the boundary does not cover it. Individually named rather than counted, because a count says a scope needs rewriting and a list says what it must now say."@en .
+
+backlog:findingOf a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:FitGapFinding ; rdfs:range backlog:LineageAdaptation ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "finding of"@en .
+
+backlog:findingItem a owl:ObjectProperty ;
+    rdfs:domain backlog:FitGapFinding ; rdfs:range backlog:WorkItem ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "finding item"@en .
+
+backlog:AdaptationOutcome a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:Adapt_BoundaryHolds backlog:Adapt_BoundaryRewritten backlog:Adapt_NotRequired ) ;
+    rdfs:label "Adaptation Outcome"@en ;
+    skos:definition "What the ruling decided. The branch the whole procedure turns on: an unchanged boundary is cheap and needs only re-linking, a rewritten one obliges the goals and objectives beneath it to be revisited, and not-required is the honest answer for a lineage already scope-first."@en .
+
+backlog:Adapt_BoundaryHolds a owl:NamedIndividual , backlog:AdaptationOutcome ;
+    rdfs:label "Boundary holds"@en ;
+    skos:definition "The fit-gap found nothing outside the scope, so the boundary stands and only the link direction changes. Legitimate, and the outcome most likely to be claimed without the measurement: a scope drawn around past work fits that work by construction, so this outcome must rest on a recorded fit-gap and not on inspection."@en .
+
+backlog:Adapt_BoundaryRewritten a owl:NamedIndividual , backlog:AdaptationOutcome ;
+    rdfs:label "Boundary rewritten"@en ;
+    skos:definition "The fit-gap found work the boundary does not cover, so the scope is rewritten and the lineage beneath it revisited. Requires a ScopeChange recording what was admitted and why."@en .
+
+backlog:Adapt_NotRequired a owl:NamedIndividual , backlog:AdaptationOutcome ;
+    rdfs:label "Not required"@en ;
+    skos:definition "The lineage was already scope-first. Recorded rather than left silent, so a register can show that adaptation was considered and found unnecessary."@en .
+
+backlog:hasAdaptationOutcome a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:LineageAdaptation ; rdfs:range backlog:AdaptationOutcome ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has adaptation outcome"@en .
+
+backlog:rewritesScopeAs a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:LineageAdaptation ; rdfs:range backlog:ScopeStatement ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "rewrites scope as"@en ;
+    skos:definition "The new boundary a rewriting adaptation produced. A NEW ScopeStatement, never an edit of the old one: the old boundary is the record of what was believed at the time, and editing it would erase the reason the adaptation was needed."@en .
