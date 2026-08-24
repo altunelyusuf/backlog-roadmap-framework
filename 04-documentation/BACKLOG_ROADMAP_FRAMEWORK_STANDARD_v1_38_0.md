@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.37.0
+# Backlog & Roadmap Semantic Framework — Standard v1.38.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -569,6 +569,28 @@ manager (ISO/IEC/IEEE 29119-3).
 needing a role not listed adds it. `hasRoleSource` is checked on the **framework namespace only**:
 the framework must defend its own vocabulary, and cannot demand a citation for a role an adopter
 needs locally.
+
+### 2.5c-xvii Four mechanisms against intent drift
+
+**`IntentOrigin`** — `IOrigin_OwnerStated` / `IOrigin_SessionDrafted` / `IOrigin_Derived` — on
+`ScopeStatement`, `Goal` and `Objective`, alongside `MissionOrigin` on `Mission`. `decidedBy` records
+who is accountable; nothing recorded who authored. Applying the fix to the mission alone moved the
+blind spot one level down rather than closing it.
+
+**`derivesFromScope`** (Goal → ScopeStatement) — the chain is **Mission → Scope → Goals →
+Objectives**, and goals are derived from the scope so that the scope's fit to the mission is what gets
+tested. Without it, `Goal` carried only `contributesToMission` and the scope sat outside the path
+between a goal and its mission. At L4 a goal serving a mission its scope was not drawn for is rejected:
+the chain must read the same in both directions.
+
+**`metricMovableBy`** (Objective → WorkItem) — `pursuesObjective` records *intent*; this records
+*capability*. An epic can pursue an objective and be unable to shift its metric by construction, which
+is how a register reaches every epic Done with its objectives untouched. When the two disagree,
+**adjust the backlog, not the objective**.
+
+**Deployment coverage** — an advisory on any Done item in no `DeploymentUnit`. Work reaches users
+through regularly deployable packages; a register where completion and delivery are separate records
+measures the first and assumes the second.
 
 ### 2.5d Decomposition, commitments, dependency kinds, impediments, flow, team (subject v1.4.0)
 

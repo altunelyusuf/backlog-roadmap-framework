@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v3.2.0
+# Lineage Operating Discipline — v4.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -101,6 +101,38 @@ cumulative flow reading a property that never existed, a burn-down reaching zero
 date comparison reporting future deadlines as passed. Each *looked* like the tool working.
 *No shape catches this.* The check that does is a **fixture whose answer is known in advance**.
 
+### G13 — The chain is Mission → Scope → Goals → Objectives, and it reads the same both ways
+Goals are **derived from the scope**, not attached to the mission. The scope is built to satisfy the
+mission; goals are derived from the scope so that *the scope's fit to the mission is what gets tested*;
+objectives are set to measure the goals. Read downward or upward, the same answer must come out.
+
+The failure this prevents was structural and invisible for the whole life of this package: `Goal`
+carried exactly one property, `contributesToMission`, so **the scope sat outside the path between a
+goal and its mission**. A goal could serve a mission the scope never admitted and nothing objected.
+
+### G14 — Every intent element records who authored it, not only the mission
+`MissionOrigin` was added at v1.70.0 after a session wrote five missions and attributed them to the
+owner. It was applied to `Mission` **and nowhere else** — so the same failure moved one level down and
+recurred *in the release that corrected it*: the same session then wrote the scope, the goals and the
+objectives beneath the corrected mission, and attributed those to the owner too.
+
+**A fix applied to one node of a chain moves the blind spot rather than closing it.** When a mechanism
+catches a class of error, apply it to the whole class.
+
+### G15 — Pursuing an objective and being able to move it are different claims
+`pursuesObjective` records intent. `metricMovableBy` records capability. A register can reach every
+epic Done with every objective unmet and flag nothing, because no constraint ever asked whether the
+work beneath an objective could shift its metric.
+
+When they disagree, **adjust the backlog, not the objective**. Re-targeting an objective to meet the
+work is moving the goalpost to meet the shot.
+
+### G16 — Development is anchored on packages, not iterations
+Work reaches users through regularly deployable packages built from the highest-priority items. A
+register where completion and delivery are separate records measures the first and assumes the second.
+Measured here: **43 of 47 Done items sat in no package**, while the framework shipped 78 real releases
+its own register never recorded.
+
 ### G11 — Run at the level you enforce, or the rules are decoration
 A package that declares a conformance level below the one its own framework enforces exempts itself
 from the rules it publishes. Measured on this package: **16 of 57 level-gated constraints did not run
@@ -189,6 +221,18 @@ exists in the shipped shapes file and carries the severity claimed. **A discipli
 enforcement claims have drifted from the suite is worse than none, because it is believed.**
 
 ---
+
+## v4.0.0 (2026-08-24)
+
+**MAJOR: four drift mechanisms, from an owner review of a long session.** The owner observed that the
+same failure kept recurring and asked for mechanisms rather than another correction. Four root causes
+were found by measuring the register, and each now has a constraint rather than a paragraph:
+**G13** the chain must read the same both ways and goals derive from the scope; **G14** authorship is
+recorded on every intent element, not just the mission; **G15** pursuing an objective and being able to
+move it are different claims; **G16** development is anchored on packages.
+
+MAJOR because G13 changes the shape of the chain: `Goal` gains `derivesFromScope` and every existing
+lineage is missing it.
 
 ## v3.2.0 (2026-08-20)
 

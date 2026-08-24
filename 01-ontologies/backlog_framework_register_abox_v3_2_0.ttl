@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/3.1.0> ;
-    owl:versionInfo "3.1.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/3.2.0> ;
+    owl:versionInfo "3.2.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/3.1.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/3.0.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/2.5.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/2.4.0> ;
@@ -60,7 +61,7 @@ fw:Profile a backlog:AdoptionProfile ;
 fw:Register a backlog:Backlog ;
     backlog:hasIdentifier "BRF-REG" ;
     backlog:hasTitle "backlog-roadmap-framework development register" ;
-    backlog:hasState backlog:Done ;
+    backlog:hasState backlog:InProgress ;
     backlog:appliesDefinitionOfDone backlog:DoD_Baseline ;
     backlog:hasCommitment fw:Commitment_Dev .
 
@@ -4163,3 +4164,143 @@ fw:T_EP_TeamRoles_S1 a backlog:ExecutionTask ; backlog:hasIdentifier "BRF-TEP_Te
 fw:H_T_EP_TeamRoles_S1 a backlog:TestHarness ; backlog:harnessFor fw:T_EP_TeamRoles_S1 ;
     backlog:hasHarnessEvidence fw:Ev_Roles ; backlog:harnessComplete true ;
     backlog:hasRationale "As for the story it implements." .
+
+
+#################################################################
+#  v3.2.0 — the four drift mechanisms applied to this register.
+#
+#  RC1: every intent element now states its origin. All 21 are
+#  IOrigin_SessionDrafted, because that is what they are: this
+#  session wrote every scope, goal and objective in this register.
+#  Only Mission_BuildSoftware is owner-stated. Recording it does
+#  not make it better — it makes it VISIBLE, which is the whole
+#  mechanism.
+#
+#  RC2: every goal now names the scope it derives from.
+#  RC3: every objective names the work that can move its metric.
+#  RC4: the deployment gap is measured, not papered over.
+#################################################################
+fw:Scope backlog:hasIntentOrigin backlog:IOrigin_SessionDrafted .
+fw:Scope_Order backlog:hasIntentOrigin backlog:IOrigin_SessionDrafted .
+fw:Scope_v2 backlog:hasIntentOrigin backlog:IOrigin_SessionDrafted .
+fw:Scope_Build backlog:hasIntentOrigin backlog:IOrigin_SessionDrafted .
+fw:Goal_Measurable backlog:hasIntentOrigin backlog:IOrigin_SessionDrafted .
+fw:Goal_Adopter backlog:hasIntentOrigin backlog:IOrigin_SessionDrafted .
+fw:Goal_Views backlog:hasIntentOrigin backlog:IOrigin_SessionDrafted .
+fw:Goal_Legible backlog:hasIntentOrigin backlog:IOrigin_SessionDrafted .
+fw:Goal_Executable backlog:hasIntentOrigin backlog:IOrigin_SessionDrafted .
+fw:Goal_OrderVisible backlog:hasIntentOrigin backlog:IOrigin_SessionDrafted .
+fw:Goal_MissionToWork backlog:hasIntentOrigin backlog:IOrigin_SessionDrafted .
+fw:Goal_GroundedPractice backlog:hasIntentOrigin backlog:IOrigin_SessionDrafted .
+fw:Obj_Derived backlog:hasIntentOrigin backlog:IOrigin_SessionDrafted .
+fw:Obj_Adopter backlog:hasIntentOrigin backlog:IOrigin_SessionDrafted .
+fw:Obj_Views backlog:hasIntentOrigin backlog:IOrigin_SessionDrafted .
+fw:Obj_ProgressInViews backlog:hasIntentOrigin backlog:IOrigin_SessionDrafted .
+fw:Obj_Finishable backlog:hasIntentOrigin backlog:IOrigin_SessionDrafted .
+fw:Obj_OrderRecordable backlog:hasIntentOrigin backlog:IOrigin_SessionDrafted .
+fw:Obj_NoStaleOrder backlog:hasIntentOrigin backlog:IOrigin_SessionDrafted .
+fw:Obj_Grounded backlog:hasIntentOrigin backlog:IOrigin_SessionDrafted .
+fw:Obj_IntentToWork backlog:hasIntentOrigin backlog:IOrigin_SessionDrafted .
+fw:Goal_Measurable backlog:derivesFromScope fw:Scope_v2 .
+fw:Goal_OrderVisible backlog:derivesFromScope fw:Scope_Order .
+fw:Goal_MissionToWork backlog:derivesFromScope fw:Scope_Build .
+fw:Goal_GroundedPractice backlog:derivesFromScope fw:Scope_Build .
+fw:Obj_IntentToWork backlog:metricMovableBy fw:EP_Grooming , fw:EP_TaskTypes , fw:EP_IterationCapacity .
+fw:Obj_Grounded backlog:metricMovableBy fw:EP_TeamRoles .
+fw:Obj_Derived backlog:metricMovableBy fw:EP_PbiTask , fw:EP_Flow , fw:EP_Progress .
+fw:Obj_Adopter backlog:metricMovableBy fw:EP_Views .
+fw:Obj_Views backlog:metricMovableBy fw:EP_Views , fw:EP_Schedule .
+fw:Obj_ProgressInViews backlog:metricMovableBy fw:EP_Progress .
+fw:Obj_Finishable backlog:metricMovableBy fw:EP_Fit , fw:EP_ValueRelease .
+fw:Obj_OrderRecordable backlog:metricMovableBy fw:EP_OrderRecord .
+fw:Obj_NoStaleOrder backlog:metricMovableBy fw:EP_OrderCorrect .
+
+#  RC3 CORRECTED — the mismatch the owner identified.
+#
+#  Obj_Grounded measures "framework-required practices with no
+#  named external source", and the two ungrounded practices are the
+#  story-fits-one-iteration rule and the deployment selection
+#  basis. EP_TeamRoles cannot move that metric: it adds sourced
+#  ROLES, which is a different thing entirely.
+#
+#  The epic completed, the metric stayed at 2, and nothing noticed
+#  — which is precisely the mismatch MetricReachabilityShape now
+#  catches. The backlog is adjusted rather than the objective
+#  weakened: a new epic is registered for the work that WOULD move
+#  it, and EP_TeamRoles is withdrawn as a mover.
+
+fw:EP_GroundTwo a backlog:Epic ;
+    backlog:hasIdentifier "BRF-EP16" ;
+    backlog:hasTitle "The two ungrounded practices are sourced or declared framework-original" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_Grounded ;
+    backlog:hasInvestmentCategory backlog:Cat_TechnicalDebt ;
+    backlog:hasAcceptanceCriterion fw:AC_GroundTwo ;
+    backlog:hasPriorityScore fw:S_GroundTwo ;
+    backlog:hasCostEstimate fw:E_GroundTwo ;
+    backlog:rankedOnRoadmap fw:Roadmap ; backlog:hasRoadmapRank 16 ;
+    backlog:scheduledInHorizon backlog:Now ;
+    backlog:hasRationale "Registered because the objective's only mover could not move it. Adjusting the backlog is the correct response to a mismatch; re-targeting the objective would be moving the goalpost to meet the shot." .
+fw:AC_GroundTwo a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the story-fits-one-iteration rule and the deployment selection basis, When the framework is read, Then each names an external source, or is declared framework-original with a rationale and the objective's target is changed deliberately rather than quietly." .
+fw:S_GroundTwo a backlog:WSJFScore ;
+    backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 4.0 ;
+    backlog:hasUserBusinessValue 5.0 ; backlog:hasTimeCriticality 3.0 ;
+    backlog:hasRiskReductionValue 4.0 ; backlog:hasJobSize 3.0 ;
+    backlog:scoredAt "2026-08-24T20:00:00"^^xsd:dateTime ;
+    backlog:hasScoreRationale "Risk reduction is the real component: an objective that no work can move is an objective that will read as failed forever, and a register carrying one teaches the next reader that unmet objectives are normal." ;
+    backlog:hasBasisKind backlog:Basis_Judged .
+fw:E_GroundTwo a backlog:CostEstimate ;
+    backlog:hasEffortEstimate 3.0 ; backlog:hasCostBasis "Literature search for two rules, or two declared exceptions with rationale" ;
+    backlog:estimatedAt "2026-08-24T20:00:00"^^xsd:dateTime ;
+    backlog:hasBasisKind backlog:Basis_Judged .
+fw:Obj_Grounded backlog:metricMovableBy fw:EP_GroundTwo .
+
+fw:Inv_DeploymentAnchored a backlog:CrossCuttingInvariant ;
+    rdfs:label "RC4 — development is anchored on packages, not iterations"@en ;
+    backlog:hasCheckQuery "SELECT (COUNT(*) AS ?n) WHERE { ?i backlog:hasState backlog:Done . FILTER NOT EXISTS { ?d a backlog:DeploymentUnit ; backlog:deploysItem ?i } }" ;
+    backlog:hasExpectedResult "0" ;
+    backlog:hasInvariantStatus backlog:NotYetEnforceable ;
+    backlog:tracksItem fw:EP_GroundTwo ;
+    backlog:hasRationale "Measured: 49 of 53 Done items sit in no DeploymentUnit, while this package shipped 78 real releases through oe_publish that the register never recorded. Development was anchored on iterations and the packages were invisible to it. NotYetEnforceable rather than Fails, because closing it means reconstructing a delivery history from the git tags — real work, and work that must be done from the tags rather than from anyone's account of them." .
+
+#  Goals under superseded missions derive from Scope_v2, the
+#  boundary of the original development. Recorded rather than left
+#  blank: the derivation is real even though the mission it served
+#  has been superseded, and a blank would read as an unanswered
+#  question rather than a settled one.
+fw:Goal_Adopter backlog:derivesFromScope fw:Scope_v2 .
+fw:Goal_Views backlog:derivesFromScope fw:Scope_v2 .
+fw:Goal_Legible backlog:derivesFromScope fw:Scope_v2 .
+fw:Goal_Executable backlog:derivesFromScope fw:Scope_v2 .
+
+fw:EP_GroundTwo backlog:decomposesInto fw:S_GroundIteration , fw:S_GroundSelection .
+fw:S_GroundIteration a backlog:Story ;
+    backlog:hasIdentifier "BRF-S-GI" ;
+    backlog:hasTitle "The story-fits-one-iteration rule names a source or is declared framework-original" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_Grounded ;
+    backlog:hasInvestmentCategory backlog:Cat_TechnicalDebt ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at epic level." ;
+    backlog:hasApplicableConcern backlog:Concern_Data ;
+    backlog:hasAcceptanceCriterion fw:AC_S_GroundIteration .
+fw:AC_S_GroundIteration a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the story-fits-one-iteration rule, When the framework is read, Then it names an agile source or is declared framework-original with a rationale." .
+fw:S_GroundSelection a backlog:Story ;
+    backlog:hasIdentifier "BRF-S-GS" ;
+    backlog:hasTitle "The deployment selection basis names a source or is declared framework-original" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_Grounded ;
+    backlog:hasInvestmentCategory backlog:Cat_TechnicalDebt ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at epic level." ;
+    backlog:hasApplicableConcern backlog:Concern_Data ;
+    backlog:hasAcceptanceCriterion fw:AC_S_GroundSelection .
+fw:AC_S_GroundSelection a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the four selection-basis categories, When the framework is read, Then each names a portfolio-management source or the set is declared framework-original with a rationale." .
+fw:S_GroundIteration backlog:hasIntentOrigin backlog:IOrigin_SessionDrafted .
+fw:S_GroundSelection backlog:hasIntentOrigin backlog:IOrigin_SessionDrafted .

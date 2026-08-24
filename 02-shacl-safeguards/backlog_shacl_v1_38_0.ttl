@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.37.0> ;
-    owl:versionInfo "1.37.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.38.0> ;
+    owl:versionInfo "1.38.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.37.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.36.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.35.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.34.0> ;
@@ -3324,4 +3325,95 @@ backlog:ShippedRoleSourceShape a sh:NodeShape ;
         sh:select """SELECT $this WHERE {
             FILTER (STRSTARTS(STR($this), "http://example.org/backlog#"))
             FILTER NOT EXISTS { $this backlog:hasRoleSource ?s }
+        }""" ] .
+
+#################################################################
+#  v1.38.0 — the four drift mechanisms, enforced
+#################################################################
+
+backlog:IntentOriginShape a sh:NodeShape ;
+    sh:severity sh:Violation ;
+    rdfs:label "RC1: every intent element says who authored it (L2)"@en ;
+    sh:targetClass backlog:ScopeStatement , backlog:Goal , backlog:Objective ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L2: this intent element does not say where its words came from. decidedBy records who is ACCOUNTABLE; nothing recorded who AUTHORED, and the two diverge silently when a session drafts an element and attributes it to the owner. Recorded for Mission at v1.70.0 and nowhere else — so the same failure moved one level down and recurred in the release that corrected it." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed, backlog:L4_LineageEnforced))
+            FILTER NOT EXISTS { $this backlog:hasIntentOrigin ?o }
+        }""" ] .
+
+backlog:SessionDraftedIntentAdvisoryShape a sh:NodeShape ;
+    sh:targetClass backlog:ScopeStatement , backlog:Goal , backlog:Objective ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: intent a session wrote for itself"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: this intent element was drafted by a session rather than stated by the owner or derived from something outside the register. Legitimate as a working artifact, and reported because a session drafting intent for work it is already doing writes a summary of that work — and a summary cannot contradict its source, so the element stops being able to refuse anything." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE { $this backlog:hasIntentOrigin backlog:IOrigin_SessionDrafted }""" ] .
+
+backlog:GoalDerivationShape a sh:NodeShape ;
+    sh:targetClass backlog:Goal ;
+    sh:severity sh:Violation ;
+    rdfs:label "RC2: a goal is derived from a scope, not attached to a mission (L2/L4)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L2: this goal names no scope it derives from. The chain is Mission then Scope then Goals then Objectives: goals are derived from the boundary precisely so the boundary's fit to the mission is what gets tested. A goal reaching the mission without passing through a scope tests nothing." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed, backlog:L4_LineageEnforced))
+            FILTER NOT EXISTS { $this backlog:derivesFromScope ?sc }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L4: this goal serves a mission its scope was not drawn for. The two directions of the chain disagree: read downward the mission admits one boundary, read upward the goal claims another purpose. The owner's rule is that both directions must give the same answer." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel backlog:L4_LineageEnforced .
+            $this backlog:derivesFromScope ?sc ; backlog:contributesToMission ?m1 .
+            ?sc backlog:scopeForMission ?m2 .
+            FILTER (?m1 != ?m2)
+            FILTER NOT EXISTS { ?s backlog:supersedesMission ?m1 }
+        }""" ] .
+
+backlog:MetricReachabilityShape a sh:NodeShape ;
+    sh:targetClass backlog:Objective ;
+    sh:severity sh:Violation ;
+    rdfs:label "RC3: an objective's metric is movable by the work beneath it (L3)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: work pursues this objective but nothing is recorded as able to MOVE its metric. Pursuing an objective is a claim about intent; moving its metric is a claim about capability, and the two are not the same. An epic can pursue an objective and be incapable of shifting it by construction — which is how a register reaches every epic Done with its objectives untouched and nothing flagged." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L3_Governed, backlog:L4_LineageEnforced))
+            ?i backlog:pursuesObjective $this .
+            FILTER NOT EXISTS { $this backlog:metricMovableBy ?any }
+        }""" ] .
+
+backlog:ObjectiveStalledShape a sh:NodeShape ;
+    sh:targetClass backlog:Objective ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: every mover is Done and the metric has not moved"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: every work item recorded as able to move this objective's metric is Done, and the latest observation still sits at the baseline. Either the movability claim was wrong, or the work did not do what it was scoped to do. This is the mismatch that leaves a register showing every epic complete and every objective unmet — the backlog needs adjusting, not the objective." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:metricMovableBy ?i ; backlog:hasBaselineValue ?base .
+            FILTER NOT EXISTS { $this backlog:metricMovableBy ?j . ?j backlog:hasState ?st .
+                                FILTER (?st NOT IN (backlog:Done, backlog:Cancelled)) }
+            ?obs backlog:observationFor $this ; backlog:hasObservedValue ?v .
+            FILTER (?v = ?base)
+        }""" ] .
+
+backlog:DeploymentCoverageShape a sh:NodeShape ;
+    sh:targetClass backlog:ProductBacklogItem ;
+    sh:severity sh:Warning ;
+    rdfs:label "RC4: Done work reaches users through a package"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: this item is Done and sits in no DeploymentUnit, so the register can say it was finished and not that it was delivered. Development is meant to be anchored on regularly deployable packages built from the highest-priority items; a register where completion and delivery are separate records measures the first and assumes the second." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasState backlog:Done .
+            FILTER NOT EXISTS { ?d a backlog:DeploymentUnit ; backlog:deploysItem $this }
+            FILTER NOT EXISTS { $this a backlog:Initiative }
         }""" ] .

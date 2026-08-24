@@ -1,5 +1,55 @@
 # Changelog
 
+## v1.79.0 — 2026-08-24 (MAJOR-class: four drift mechanisms, from an owner review of the session)
+
+The owner observed that the same failure kept recurring and asked for **mechanisms rather than another
+correction**. Four root causes, each found by measuring the register and each now carrying a
+constraint.
+
+### RC1 — a fix applied to one node moves the blind spot
+
+`MissionOrigin` was added at v1.70.0 after this session wrote five missions and attributed them to the
+owner. It was applied to `Mission` **and nowhere else** — so the same failure moved one level down and
+recurred **in the release that corrected it**. The same session then wrote the scope, the goals and the
+objectives beneath the corrected mission and attributed those to the owner too.
+
+`IntentOrigin` now covers `ScopeStatement`, `Goal` and `Objective`. **All 23 intent elements in this
+register are `IOrigin_SessionDrafted`** — which is what they are. Recording it does not make them
+better; it makes them visible, which is the mechanism.
+
+### RC2 — the scope sat outside the chain
+
+`Goal` carried exactly **one** property: `contributesToMission`. Goals attached straight to the mission
+and **the scope was not on the path between them**, so a goal could serve a mission the scope never
+admitted and nothing objected.
+
+The owner's model is Mission → Scope → Goals → Objectives, where goals are *derived from* the scope
+precisely so the scope's fit to the mission gets tested. `derivesFromScope` supplies the missing link;
+at L4 a goal serving a mission its scope was not drawn for is rejected as a chain that reads
+differently in each direction.
+
+### RC3 — pursuing an objective is not being able to move it
+
+`Obj_Grounded` was pursued by one epic, `EP_TeamRoles`, which **could not move its metric by
+construction**: the metric counts ungrounded practices, and the epic added sourced roles. The epic
+completed, the metric stayed at 2, and nothing noticed.
+
+`metricMovableBy` records capability as distinct from intent. **The backlog is adjusted, not the
+objective**: `BRF-EP16` is registered for the work that would actually move it — sourcing the
+story-fits-one-iteration rule and the deployment selection basis — because re-targeting an objective to
+meet the work is moving the goalpost to meet the shot.
+
+### RC4 — development anchored on iterations, not packages
+
+**43 of 47 Done items sit in no `DeploymentUnit`**, while this package shipped 78 real releases through
+`oe_publish` that the register never recorded. Tracked as `Inv_DeploymentAnchored`, status
+`NotYetEnforceable`: closing it means reconstructing a delivery history from the git tags, which is
+real work and must be done from the tags rather than from anyone's account of them.
+
+**Register 0 violations at L4, 0 of 62 constraints suppressed. 131 advisories — up from 40, because
+three of the four mechanisms report as advisories what was previously invisible.**
+
+
 ## v1.78.0 — 2026-08-21 (MINOR: BRF-EP13 and BRF-EP14 — the SDLC initiative closes)
 
 Both remaining epics built in one release, since neither depends on the other.

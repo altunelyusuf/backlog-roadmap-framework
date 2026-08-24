@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.29.0> ;
-    owl:versionInfo "1.29.0" ;
+    owl:versionIRI <http://example.org/backlog/1.30.0> ;
+    owl:versionInfo "1.30.0" ;
+    owl:priorVersion <http://example.org/backlog/1.29.0> ;
     owl:priorVersion <http://example.org/backlog/1.28.0> ;
     owl:priorVersion <http://example.org/backlog/1.27.0> ;
     owl:priorVersion <http://example.org/backlog/1.26.0> ;
@@ -3792,3 +3793,69 @@ backlog:hasCommittedEffort a owl:DatatypeProperty , owl:FunctionalProperty ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "has committed effort"@en ;
     skos:definition "Effort committed at planning, recorded rather than derived. Derived would be the sum of what is planned in now, which changes as work is added — and the question the discipline asks is what was committed AT COMMITMENT, against the capacity known then. A number that moves cannot report an over-commitment."@en .
+
+#################################################################
+#  58. Drift mechanisms (v1.30.0)
+#
+#  Built after an owner review of a long session in which the same
+#  failure recurred four times. The failures were not careless: each
+#  was a fluent, plausible artifact that nothing could contradict.
+#  These are the four, and the mechanism for each.
+#
+#  RC1  A session authors an intent element and attributes it to
+#       the owner. Fixed for Mission at v1.70.0 and NOWHERE ELSE —
+#       ScopeStatement, Goal and Objective still carry no origin,
+#       so the same failure simply moved one level down and
+#       recurred in the very release that corrected it.
+#
+#  RC2  Goals connect to the Mission DIRECTLY, bypassing the Scope.
+#       The owner's model is Mission -> Scope -> Goals -> Objectives,
+#       where goals are DERIVED FROM the scope precisely so the
+#       scope's fit to the mission is tested. With goals attached
+#       straight to the mission, a goal can serve a mission the
+#       scope never admitted and nothing objects.
+#
+#  RC3  An objective's metric can be unreachable by the work beneath
+#       it. Obj_Grounded was pursued by one epic that could not move
+#       its metric by construction; the epic completed, the metric
+#       did not move, and no constraint noticed.
+#
+#  RC4  The backlog is anchored on iterations, not on packages. 49
+#       of 53 Done items sit in no DeploymentUnit, while the package
+#       shipped 78 real releases the register never recorded.
+#################################################################
+
+backlog:IntentOrigin a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:IOrigin_OwnerStated backlog:IOrigin_SessionDrafted backlog:IOrigin_Derived ) ;
+    rdfs:label "Intent Origin"@en ;
+    skos:definition "Where an intent element's words came from, generalised from MissionOrigin to every element in the chain. The v1.70.0 fix recorded this for Mission alone, and the same failure recurred one level down within the same release: a session wrote the scope, the goals and the objectives beneath a corrected mission and attributed all of them to the owner. Recording authorship on one node and not its children moves the blind spot rather than closing it."@en .
+
+backlog:IOrigin_OwnerStated a owl:NamedIndividual , backlog:IntentOrigin ;
+    rdfs:label "Owner stated"@en ;
+    skos:definition "The owner supplied the words. The only origin under which an intent element is evidence of intent rather than a record of what was built."@en .
+backlog:IOrigin_SessionDrafted a owl:NamedIndividual , backlog:IntentOrigin ;
+    rdfs:label "Session drafted"@en ;
+    skos:definition "A session wrote it, whoever it was attributed to. Legitimate as a working artifact and dangerous as a source: a session drafting intent for work it is already doing writes a summary of that work, and a summary cannot contradict its source."@en .
+backlog:IOrigin_Derived a owl:NamedIndividual , backlog:IntentOrigin ;
+    rdfs:label "Derived"@en ;
+    skos:definition "Restated from something outside the register — a charter, a standard, or the element above it in the chain. Traceable, which is what separates it from a session draft."@en .
+
+backlog:hasIntentOrigin a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:ScopeStatement backlog:Goal backlog:Objective ) ] ;
+    rdfs:range backlog:IntentOrigin ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has intent origin"@en .
+
+backlog:derivesFromScope a owl:ObjectProperty ;
+    rdfs:domain backlog:Goal ; rdfs:range backlog:ScopeStatement ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "derives from scope"@en ;
+    skos:definition "The boundary this goal was derived from. THE MISSING LINK: Goal previously carried exactly one property, contributesToMission, so goals attached straight to the mission and the scope sat outside the path between them. Goals are derived from the scope precisely so that the scope's fit to the mission is what gets tested — a goal reaching the mission without passing through a boundary tests nothing, and a goal serving a mission the scope never admitted raises no objection."@en .
+
+backlog:metricMovableBy a owl:ObjectProperty ;
+    rdfs:domain backlog:Objective ; rdfs:range backlog:WorkItem ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "metric movable by"@en ;
+    skos:definition "A work item that can actually shift this objective's measured value. Distinct from pursuesObjective, which records what work CLAIMS to serve an objective: an epic can pursue an objective and be incapable of moving its metric by construction, which is how a register reaches every epic Done with its objectives untouched and nothing flagged. Asserting movability is a claim someone can be wrong about, and being wrong about it is visible when the metric does not move."@en .
