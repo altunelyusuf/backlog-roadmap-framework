@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# backlog_gate v1.1.17 — four-gate release check for the Backlog & Roadmap
+# backlog_gate v1.1.19 — four-gate release check for the Backlog & Roadmap
 # Semantic Framework. Nothing about the package's state is trusted until all
 # four pass, and the SHACL gate refuses to certify anything until it has just
 # demonstrated, in this run, that it can fail a known-bad register.
@@ -11,7 +11,7 @@
 #   +       coverage gate          >= 80% of primary-source concepts (BP-D31)
 #   +       doc-coverage gate      every TBox class named in the standard document
 #
-# Usage: backlog_gate_v1_1_17.sh [REGISTER.ttl ...]
+# Usage: backlog_gate_v1_1_19.sh [REGISTER.ttl ...]
 
 set -u
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -141,20 +141,6 @@ else
   echo "  NOT RUN — reporter or register not found. Not assumed to pass."
 fi
 
-echo
-echo "== Manifest-coverage gate — nothing on disk is unexplained =="
-# Gate 0 verifies that what is LISTED matches. It cannot see the unlisted set at
-# all, so a file could sit in the package covered by nothing and Gate 0 would
-# still report clean. This package ran that way for several releases.
-COV="$(ls "$HERE"/backlog_manifest_coverage_v*.py 2>/dev/null | sort -V | tail -1 || true)"
-if [ -n "$COV" ]; then
-  COV_OUT="$(python3 "$COV" "$PKG")"; COV_STATUS=$?
-  printf '%s\n' "$COV_OUT" | grep -E '^coverage|^VERDICT|^ +UNCOVERED|^      '
-  [ "$COV_STATUS" -ne 0 ] && FAILED=1
-else
-  echo "  NOT RUN — coverage checker not found. Not assumed to pass."
-fi
-
 # --- fixture-suite skip, and why it is sound -------------------------------
 # The fixture suite is 13 registers x 205 SPARQL constraints and dominates the
 # gate's runtime; the gate had grown past the publisher's window again, which
@@ -217,6 +203,27 @@ else
   rm -f "$FIXSTAMP"
 fi
 fi
+
+# --- ordering note, learned by this gate failing on itself ------------------
+# Manifest-coverage runs AFTER the fixture gate, not before. Coverage counts
+# what is on disk; the fixture gate WRITES the cache stamp during the run. Run
+# in the other order, coverage counted 73 files and the 74th appeared moments
+# later — a race between two of this package's own gates, reported as an
+# unexplained file. The check was right and the ordering was wrong.
+echo
+echo "== Manifest-coverage gate — nothing on disk is unexplained =="
+# Gate 0 verifies that what is LISTED matches. It cannot see the unlisted set at
+# all, so a file could sit in the package covered by nothing and Gate 0 would
+# still report clean. This package ran that way for several releases.
+COV="$(ls "$HERE"/backlog_manifest_coverage_v*.py 2>/dev/null | sort -V | tail -1 || true)"
+if [ -n "$COV" ]; then
+  COV_OUT="$(python3 "$COV" "$PKG")"; COV_STATUS=$?
+  printf '%s\n' "$COV_OUT" | grep -E '^coverage|^VERDICT|^ +UNCOVERED|^      '
+  [ "$COV_STATUS" -ne 0 ] && FAILED=1
+else
+  echo "  NOT RUN — coverage checker not found. Not assumed to pass."
+fi
+
 
 echo
 echo "== Lineage-discipline gate — the document's claims match the suite =="

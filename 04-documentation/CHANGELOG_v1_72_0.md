@@ -1,5 +1,21 @@
 # Changelog
 
+## v1.72.0 — 2026-08-20 (PATCH-class: two of this package's own gates raced each other)
+
+The release gate failed with *"the package contains files coverage cannot account for"*. Run on its
+own immediately afterwards, the same check **passed**.
+
+**A race between two of this package's gates.** Manifest-coverage counts what is on disk. The
+fixture-coverage gate **writes** the cache stamp during the run, after a passing suite. Coverage ran
+first, counted 73 files, and the 74th appeared moments later.
+
+The check was right and the ordering was wrong: a gate that inspects the tree must not run before a
+gate that writes into it. Coverage now runs **after** the fixture suite.
+
+Worth stating because the failure looked like a content defect and was a sequencing one — and because
+the cache introduced at v1.68.0 created it. **A gate that writes into the package it is checking
+changes what every later check sees.**
+
 ## v1.71.0 — 2026-08-20 (MINOR: the intent chain closes — scope joins it, and so does the roadmap)
 
 **Position measured before anything was written.** `Mission → Goal → Objective → WorkItem` already
@@ -1859,7 +1875,7 @@ moment another stage is inserted, so the decoupling is permanent instead.
 
 **Why every gate stayed green while this was live:** the three-fixture self-proof invokes the
 validator *directly*; only the register path formats its output, so a defect in the formatting layer
-was invisible to the proof. `backlog_gate_v1_1_17.sh` now runs the known-bad fixture through the
+was invisible to the proof. `backlog_gate_v1_1_19.sh` now runs the known-bad fixture through the
 **exact register path** and aborts if it does not fail. The self-proof covered the shapes; it had
 never covered its own plumbing.
 
@@ -2852,7 +2868,7 @@ executable and ordered.
 arbitration documented and implemented in the report tool.
 
 **Added — tooling:** `backlog_roadmap_report_v1_5_0.py` (eight sections, both NEXT answers, silent
--gap check), `backlog_coverage_gate_v1_1_1.py` (BP-D31), `backlog_gate_v1_1_17.sh` (Gate 0 / P / K /
+-gap check), `backlog_coverage_gate_v1_1_1.py` (BP-D31), `backlog_gate_v1_1_19.sh` (Gate 0 / P / K /
 R plus coverage), Gate K version-identity check in the validator.
 
 **Changed:** the v1.0.0 advisory "item carries no priority score" now excludes items correctly
