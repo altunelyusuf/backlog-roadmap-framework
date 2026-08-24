@@ -1,5 +1,56 @@
 # Changelog
 
+## v1.73.0 — 2026-08-20 (MINOR: the lineage under the owner's mission, completed to work items)
+
+**Position first: there was no distinctive lineage.** Mission, scope, two goals and two objectives
+existed from the mission-drift correction, and beneath them **nothing** — no initiative, no epics, no
+work. Ceremony steps 1 and 2 had been run; **steps 3 and 4 had not**, and the discipline puts both
+before the first story.
+
+**Step 3, granularity chosen rather than defaulted:** Initiative → Epic → Story → ExecutionTask, with
+the reason recorded — the proposal's concerns are separable and each decomposes into stories that fit
+one iteration.
+
+**Step 4, how work reaches users, decided before any story exists:** PlanningEvent → Iteration →
+DeploymentUnit, one deployment per closed iteration, `Sel_HighestScored`. Decided now because at L4 a
+closed iteration with no deployment is a violation and retrofitting a release history is fabrication.
+
+**The initiative is classified by the increment, not by feel.** Every addition is backwards-compatible
+vocabulary and constraints, so it is a **MINOR** — and the taxonomy then says **maintenance**, however
+substantial the subject matter. Reactive, because a proposal arrived from outside; enhancement,
+because nothing is broken. **Adaptive** under 14764. The taxonomy built two releases ago classified
+its first real initiative and gave an answer this session would not have chosen unaided.
+
+**Three epics, computed order:** grooming against applicable design concerns (5.00), an iteration
+planned to finish its package content (3.75), named team roles as optional vocabulary (3.00). Each
+names its source, because `Ex_InventedPractice` requires one.
+
+### The scope refused something, for the first time
+
+A fourth candidate — **autonomy-graded evidence**, requiring work produced with `Mode_Automated` and
+`Sup_None` to carry stronger proof than work a person supervised — closes the third measured gap and
+this session believes it is right.
+
+**It is not built.** No named source relates execution autonomy to the evidence a work item must
+carry: 12207 and 14764 predate the question, ISO/IEC 42001 governs AI management systems rather than
+work-item evidence. `Ex_InventedPractice` refuses it, and the gap is **recorded** rather than filled
+with a rule this session reasoned out.
+
+That is the boundary doing what a boundary written before its goals is for, and it is the first time
+one in this register has refused anything. The decision is the owner's: find a source, change the
+exclusion deliberately, or let the gap stand.
+
+### Test drive
+
+```
+Mission_BuildSoftware  (Origin_OwnerStated)
+  Scope_Build -> Goal_GroundedPractice -> Obj_Grounded       1 work item
+  Scope_Build -> Goal_MissionToWork    -> Obj_IntentToWork   3 work items
+```
+
+Register 0 violations; lineage completeness reports 0 absent layers.
+
+
 ## v1.72.0 — 2026-08-20 (PATCH-class: two of this package's own gates raced each other)
 
 The release gate failed with *"the package contains files coverage cannot account for"*. Run on its

@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/2.1.0> ;
-    owl:versionInfo "2.1.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/2.2.0> ;
+    owl:versionInfo "2.2.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/2.1.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/2.0.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/1.19.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/1.18.0> ;
@@ -54,7 +55,7 @@ fw:Profile a backlog:AdoptionProfile ;
 fw:Register a backlog:Backlog ;
     backlog:hasIdentifier "BRF-REG" ;
     backlog:hasTitle "backlog-roadmap-framework development register" ;
-    backlog:hasState backlog:Done ;
+    backlog:hasState backlog:InProgress ;
     backlog:appliesDefinitionOfDone backlog:DoD_Baseline ;
     backlog:hasCommitment fw:Commitment_Dev .
 
@@ -2294,3 +2295,168 @@ fw:Roadmap backlog:roadmapRealises fw:Obj_Derived , fw:Obj_Adopter , fw:Obj_View
                                    fw:Obj_ProgressInViews , fw:Obj_Finishable ,
                                    fw:Obj_OrderRecordable , fw:Obj_NoStaleOrder ,
                                    fw:Obj_IntentToWork , fw:Obj_Grounded .
+
+#################################################################
+#  v2.2.0 — the lineage under the owner's mission, completed.
+#
+#  Steps 1 and 2 of the ceremony were done during the mission-drift
+#  correction: the level is declared, and Mission -> Scope -> Goal
+#  -> Objective validated empty before any work item existed.
+#
+#  Steps 3 and 4 were NOT done, and are recorded here BEFORE the
+#  first story, which is where the ceremony puts them.
+#################################################################
+
+fw:Granularity_Build a backlog:CrossCuttingInvariant ;
+    rdfs:label "Ceremony step 3 — granularity chosen, not defaulted"@en ;
+    backlog:hasCheckQuery "ASK { ?e a backlog:Epic . FILTER NOT EXISTS { ?e backlog:decomposesInto ?c } }" ;
+    backlog:hasExpectedResult "false" ;
+    backlog:hasInvariantStatus backlog:NotYetEnforceable ;
+    backlog:tracksItem fw:Init_SdlcConcepts ;
+    backlog:hasRationale "Initiative -> Epic -> Story -> ExecutionTask. Epic is the coarsest ordinary choice and is chosen here deliberately rather than reached for: the proposal's concerns are separable and each decomposes into stories that fit one iteration. Not Initiative-only, which would give one undecomposable lump; not Feature, which adds a level this work does not need." .
+
+fw:Delivery_Build a backlog:CrossCuttingInvariant ;
+    rdfs:label "Ceremony step 4 — how work reaches users, decided before the first story"@en ;
+    backlog:hasCheckQuery "ASK { ?it a backlog:Iteration ; backlog:hasState backlog:Done . FILTER NOT EXISTS { ?d backlog:deploysFrom ?it } }" ;
+    backlog:hasExpectedResult "false" ;
+    backlog:hasInvariantStatus backlog:NotYetEnforceable ;
+    backlog:tracksItem fw:Init_SdlcConcepts ;
+    backlog:hasRationale "PlanningEvent -> Iteration -> DeploymentUnit, one deployment per closed iteration, selected on Sel_HighestScored. Decided now because at L4 a closed iteration with no deployment is a violation and retrofitting a release history is fabrication." .
+
+#################################################################
+#  The initiative, classified by the taxonomy rather than by feel.
+#################################################################
+
+fw:MR_SdlcGap a backlog:ModificationRequest ;
+    backlog:hasRequestText "Software engineering, agile, UML and other development and modelling concepts are missing in the framework. Proposal attached: HANDOVER_lcw-principles-kb_to_backlog-roadmap-framework_v1_0_0.md, sha 6d72ce894d8226bd, manifest verified." ;
+    backlog:requestedAt "2026-08-20T00:00:00"^^xsd:dateTime .
+
+fw:Init_SdlcConcepts a backlog:Initiative ;
+    backlog:hasIdentifier "BRF-I6" ;
+    backlog:hasTitle "Carry a mission statement down to executable work" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_IntentToWork ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasAcceptanceCriterion fw:AC_BRF_I6 ;
+    backlog:hasInitiativeKind backlog:Kind_Maintenance ;
+    backlog:hasMaintenanceTiming backlog:Timing_Reactive ;
+    backlog:hasMaintenanceGoal backlog:Goal_Enhancement ;
+    backlog:hasMaintenanceCategory backlog:Maint_Adaptive ;
+    backlog:triggeredBy fw:MR_SdlcGap ;
+    backlog:producesIncrement backlog:Ver_Minor ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Portfolio granularity; scored through its epics." ;
+    backlog:hasRationale "Classified by the increment, not by how the work feels. Every addition is backwards-compatible vocabulary and constraints, so it is a MINOR — and the taxonomy then says maintenance, not development, however substantial the subject matter. Reactive because a proposal arrived from outside; enhancement because nothing is broken and a new requirement is being implemented. That is Adaptive under 14764." .
+fw:AC_BRF_I6 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a mission statement and a scope, When the lineage is groomed, Then a story reaching Ready has been analysed against each design concern that applies to it, an iteration is planned to finish its package content, and the evidence a Done item must carry reflects how autonomously it was produced." .
+
+#################################################################
+#  Epics, each tested against Ex_InventedPractice before scoring:
+#  no practice the framework REQUIRES may lack a named source.
+#################################################################
+
+fw:EP_Grooming a backlog:Epic ;
+    backlog:hasIdentifier "BRF-EP12" ;
+    backlog:hasTitle "A story reaching Ready has been analysed against the design concerns that apply to it" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_IntentToWork ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasAcceptanceCriterion fw:AC_Grooming ;
+    backlog:hasPriorityScore fw:S_Grooming ;
+    backlog:hasCostEstimate fw:E_Grooming ;
+    backlog:rankedOnRoadmap fw:Roadmap ; backlog:hasRoadmapRank 12 ;
+    backlog:scheduledInHorizon backlog:Now ;
+    backlog:hasRationale "Source named: Satzinger, Jackson & Burd, Systems Analysis and Design in a Changing World, ch.6 — five ordered design sub-activities, already modelled as c6:DesignActivity in the adopting package. The framework reuses that rather than minting a parallel taxonomy, so Ex_InventedPractice is satisfied by an existing citable class, not by a new invention." .
+fw:AC_Grooming a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a story whose work touches a persistent entity, an external interface or a user interaction, When it is moved to Ready, Then a refinement event exists for each concern that applies, and a story with no applicable concern says so rather than passing silently." .
+fw:S_Grooming a backlog:WSJFScore ;
+    backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 5.0 ;
+    backlog:hasUserBusinessValue 7.0 ; backlog:hasTimeCriticality 4.0 ;
+    backlog:hasRiskReductionValue 4.0 ; backlog:hasJobSize 3.0 ;
+    backlog:scoredAt "2026-08-20T00:00:00"^^xsd:dateTime ;
+    backlog:hasScoreRationale "Highest value of the three: this is the step the mission names first — granularisation from intent to work — and today one refinement event of any kind satisfies Ready, so a story reaches execution with no analysis of what it needs. Job size small because RefinementEvent already exists with an outcome and an actor; what is added is which concerns apply." ;
+    backlog:hasBasisKind backlog:Basis_Judged .
+fw:E_Grooming a backlog:CostEstimate ;
+    backlog:hasEffortEstimate 4.0 ; backlog:hasCostBasis "Design-concern vocabulary plus one L3 constraint over an existing event class" ;
+    backlog:estimatedAt "2026-08-20T00:00:00"^^xsd:dateTime ;
+    backlog:hasBasisKind backlog:Basis_Judged .
+
+fw:EP_IterationCapacity a backlog:Epic ;
+    backlog:hasIdentifier "BRF-EP13" ;
+    backlog:hasTitle "An iteration is planned to finish its package content" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_IntentToWork ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasAcceptanceCriterion fw:AC_IterationCapacity ;
+    backlog:hasPriorityScore fw:S_IterationCapacity ;
+    backlog:hasCostEstimate fw:E_IterationCapacity ;
+    backlog:rankedOnRoadmap fw:Roadmap ; backlog:hasRoadmapRank 13 ;
+    backlog:scheduledInHorizon backlog:Next ;
+    backlog:hasRationale "Source named: the Scrum Guide's sprint planning — the developers select what can be finished within the sprint, against known capacity. hasCapacity and hasEffortEstimate already exist; nothing compares them at commitment time, so an iteration can be committed to more than it can deliver with no objection." .
+fw:AC_IterationCapacity a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given an iteration with a declared capacity and stories planned into it, When the suite is run, Then committed effort exceeding capacity is rejected, and an iteration whose deployment carries work it did not plan is rejected." .
+fw:S_IterationCapacity a backlog:WSJFScore ;
+    backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 3.75 ;
+    backlog:hasUserBusinessValue 5.0 ; backlog:hasTimeCriticality 5.0 ;
+    backlog:hasRiskReductionValue 5.0 ; backlog:hasJobSize 4.0 ;
+    backlog:scoredAt "2026-08-20T00:00:00"^^xsd:dateTime ;
+    backlog:hasScoreRationale "Time criticality and risk reduction equal and high: an over-committed iteration makes velocity measure something that did not finish, and velocity feeds the forecast, so the error propagates into a claim about the future. Job size larger than grooming because capacity must be compared across a planning event rather than checked on one item." ;
+    backlog:hasBasisKind backlog:Basis_Judged .
+fw:E_IterationCapacity a backlog:CostEstimate ;
+    backlog:hasEffortEstimate 4.0 ; backlog:hasCostBasis "Two constraints over existing capacity and estimate properties" ;
+    backlog:estimatedAt "2026-08-20T00:00:00"^^xsd:dateTime ;
+    backlog:hasBasisKind backlog:Basis_Judged .
+
+fw:EP_TeamRoles a backlog:Epic ;
+    backlog:hasIdentifier "BRF-EP14" ;
+    backlog:hasTitle "Named team roles as optional vocabulary" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_Grounded ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasAcceptanceCriterion fw:AC_TeamRoles ;
+    backlog:hasPriorityScore fw:S_TeamRoles ;
+    backlog:hasCostEstimate fw:E_TeamRoles ;
+    backlog:rankedOnRoadmap fw:Roadmap ; backlog:hasRoadmapRank 14 ;
+    backlog:scheduledInHorizon backlog:Next ;
+    backlog:hasRationale "Source named: Satzinger et al. for analyst and design roles, ISO/IEC/IEEE 29119-3 for tester and test manager. TeamRole is deliberately open, so shipping named individuals prescribes nothing and an adopter using none stays conformant — which is why this clears Ex_SingleMethod as well." .
+fw:AC_TeamRoles a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the framework's role vocabulary, When a register names a team role, Then each shipped role carries the source it was taken from, and a register naming none remains conformant." .
+fw:S_TeamRoles a backlog:WSJFScore ;
+    backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 3.0 ;
+    backlog:hasUserBusinessValue 4.0 ; backlog:hasTimeCriticality 2.0 ;
+    backlog:hasRiskReductionValue 3.0 ; backlog:hasJobSize 3.0 ;
+    backlog:scoredAt "2026-08-20T00:00:00"^^xsd:dateTime ;
+    backlog:hasScoreRationale "Lowest of the three and honestly so: it adds vocabulary an adopter may ignore, and nothing downstream depends on it. Included because the mission requires grounding in standards and these roles are the citable ones the proposal researched." ;
+    backlog:hasBasisKind backlog:Basis_Judged .
+fw:E_TeamRoles a backlog:CostEstimate ;
+    backlog:hasEffortEstimate 2.0 ; backlog:hasCostBasis "Named individuals on an existing open class, each with a source" ;
+    backlog:estimatedAt "2026-08-20T00:00:00"^^xsd:dateTime ;
+    backlog:hasBasisKind backlog:Basis_Judged .
+
+#################################################################
+#  REFUSED BY THE SCOPE — recorded, not built.
+#
+#  Autonomy-graded evidence: require a Done item produced with
+#  Mode_Automated and Sup_None to carry stronger proof than one a
+#  person supervised. It closes the third measured gap and this
+#  session believes it is right.
+#
+#  It is not built because Ex_InventedPractice refuses it: no named
+#  source relates execution autonomy to the evidence a work item
+#  must carry. ISO/IEC/IEEE 12207 and 14764 predate the question;
+#  ISO/IEC 42001 governs AI management systems, not work-item
+#  evidence. Searching produced nothing citable.
+#
+#  Recorded as a gap rather than filled with a rule this session
+#  reasoned out — which is exactly what the exclusion is for, and
+#  the first time this boundary has refused anything.
+#################################################################
+
+fw:Gap_AutonomyEvidence a backlog:FitGapFinding ;
+    backlog:findingOf fw:Adapt_Register ;
+    backlog:findingItem fw:Init_SdlcConcepts ;
+    backlog:hasRationale "Third measured gap in Obj_IntentToWork: ExecutionModality records how autonomously work was produced and no constraint relates it to required evidence, so autonomous and non-autonomous work are held to identical proof. No named source exists for the rule, so Ex_InventedPractice refuses it. Raised to the owner as a decision rather than built: either a source is found, or the exclusion is changed deliberately, or the gap stands." .
