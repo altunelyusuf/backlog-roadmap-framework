@@ -1,5 +1,40 @@
 # Changelog
 
+## v1.74.0 — 2026-08-20 (MINOR: BRF-EP12 — grooming is analysis, not attendance)
+
+The register put EP12 first at 5.00. Source named before building, as `Ex_InventedPractice` requires:
+**Satzinger, Jackson & Burd ch.6**, adopted as *concerns* rather than activities — the framework
+governs the register a method produces, so it can check that a story was analysed against the
+dimensions that apply, never that a team performed a named activity in a named order.
+
+**Almost entirely reuse.** `RefinementEvent` already had an outcome, a time and an actor. The defect
+was that **one refinement of any kind satisfied Ready**, so a story with five applicable concerns and
+a single meeting looked identical to one fully analysed. What was added is *which concern an event
+addressed*.
+
+**`hasApplicableConcern` is declared, not derived.** Whether a story touches persistent state is a
+judgement about the work and no query can make it. The declaration is what makes grooming checkable at
+all — the framework cannot know which concerns apply, only that the ones claimed were addressed.
+
+**`hasNoApplicableConcern` requires a written reason.** A story never groomed and one genuinely needing
+no design analysis are otherwise identical in the data, and the first is the common case.
+
+**Five cases, each verified individually rather than in aggregate:**
+
+```
+A  two concerns declared, both addressed    -> silent
+B  two declared, one addressed              -> rejected
+C  neither concerns nor a statement         -> rejected
+D  none applies, with a reason              -> silent
+E  declares concerns AND says none applies  -> rejected twice
+```
+
+**Building it caught a real defect.** The first draft matched on `backlog:refinedItem`, which does not
+exist — the property is `backlog:refines`. The rule would have passed everything while appearing to
+work: a constraint that can never fire is worse than no constraint, because the gate reports green.
+Caught by reading the TBox rather than trusting the name.
+
+
 ## v1.73.0 — 2026-08-20 (MINOR: the lineage under the owner's mission, completed to work items)
 
 **Position first: there was no distinctive lineage.** Mission, scope, two goals and two objectives

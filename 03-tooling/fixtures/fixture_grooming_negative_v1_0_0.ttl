@@ -1,0 +1,62 @@
+# Grooming fixture — a story is analysed against the concerns that apply.
+#
+# BRF-EP12. Source: Satzinger, Jackson & Burd ch.6 design activities,
+# adopted as CONCERNS because the framework governs the register a
+# method produces, not whether a team held a meeting.
+#
+#   A  declares two concerns, both addressed          -> passes
+#   B  declares two, one addressed                    -> REJECTED
+#   C  silent: neither concerns nor a statement       -> REJECTED
+#   D  states that none applies, with a reason        -> passes
+#   E  declares concerns AND says none applies        -> REJECTED
+#
+# C and D are the pair that matters. Before this rule they were
+# identical in the data: a story that had never been groomed looked
+# exactly like one that genuinely needed no design analysis. Saying
+# so costs a sentence and makes the claim arguable.
+#
+# Adversarial: this fixture is deliberately minimal and fails other
+# L3 clauses. It is named negative so the suite expects that; the
+# grooming clauses are what it proves, and they fire on B, C and E
+# and stay silent on A and D.
+
+@prefix backlog: <http://example.org/backlog#> .
+@prefix ex: <http://example.org/gr#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+ex:P a backlog:AdoptionProfile ; backlog:profileAppliesTo "grooming probe" ;
+    backlog:governsBacklog ex:BL ; backlog:hasConformanceLevel backlog:L3_Governed ;
+    backlog:decidedBy backlog:Owner ; backlog:hasDecisionRationale "probe" ;
+    backlog:adoptsFacet backlog:CoreFacet , backlog:EvidenceFacet .
+ex:BL a backlog:Backlog ; backlog:hasIdentifier "BL" ; backlog:hasState backlog:InProgress .
+# A: declares concerns, all addressed -> must PASS
+ex:A a backlog:Story ; backlog:hasIdentifier "S-A" ; backlog:hasState backlog:Ready ;
+    backlog:memberOfContainer ex:BL ; backlog:notYetScoreable true ; backlog:hasScoreabilityReason "probe" ;
+    backlog:hasApplicableConcern backlog:Concern_Data , backlog:Concern_Security .
+ex:RA1 a backlog:RefinementEvent ; backlog:refines ex:A ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-08-20T09:00:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Schema extension agreed; no migration needed." ; backlog:refinedBy backlog:Builder .
+ex:RA2 a backlog:RefinementEvent ; backlog:refines ex:A ;
+    backlog:addressesConcern backlog:Concern_Security ;
+    backlog:refinedAt "2026-08-20T09:30:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Authorisation unchanged; no new exposure." ; backlog:refinedBy backlog:Builder .
+# B: declares a concern nobody addressed -> must FAIL
+ex:B a backlog:Story ; backlog:hasIdentifier "S-B" ; backlog:hasState backlog:Ready ;
+    backlog:memberOfContainer ex:BL ; backlog:notYetScoreable true ; backlog:hasScoreabilityReason "probe" ;
+    backlog:hasApplicableConcern backlog:Concern_Data , backlog:Concern_Interaction .
+ex:RB1 a backlog:RefinementEvent ; backlog:refines ex:B ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-08-20T09:00:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Schema agreed." ; backlog:refinedBy backlog:Builder .
+# C: silent -> must FAIL
+ex:C a backlog:Story ; backlog:hasIdentifier "S-C" ; backlog:hasState backlog:Ready ;
+    backlog:memberOfContainer ex:BL ; backlog:notYetScoreable true ; backlog:hasScoreabilityReason "probe" .
+# D: says none applies, with a reason -> must PASS
+ex:D a backlog:Story ; backlog:hasIdentifier "S-D" ; backlog:hasState backlog:Ready ;
+    backlog:memberOfContainer ex:BL ; backlog:notYetScoreable true ; backlog:hasScoreabilityReason "probe" ;
+    backlog:hasNoApplicableConcern "Copy-only change to an existing label; no stored state, interface, interaction, structure or authorisation is touched." .
+# E: contradicts itself -> must FAIL
+ex:E a backlog:Story ; backlog:hasIdentifier "S-E" ; backlog:hasState backlog:Ready ;
+    backlog:memberOfContainer ex:BL ; backlog:notYetScoreable true ; backlog:hasScoreabilityReason "probe" ;
+    backlog:hasApplicableConcern backlog:Concern_Data ;
+    backlog:hasNoApplicableConcern "None applies." .

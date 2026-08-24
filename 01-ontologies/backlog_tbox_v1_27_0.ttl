@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.26.0> ;
-    owl:versionInfo "1.26.0" ;
+    owl:versionIRI <http://example.org/backlog/1.27.0> ;
+    owl:versionInfo "1.27.0" ;
+    owl:priorVersion <http://example.org/backlog/1.26.0> ;
     owl:priorVersion <http://example.org/backlog/1.25.0> ;
     owl:priorVersion <http://example.org/backlog/1.24.0> ;
     owl:priorVersion <http://example.org/backlog/1.23.0> ;
@@ -3593,3 +3594,63 @@ backlog:roadmapRealises a owl:ObjectProperty ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "roadmap realises"@en ;
     skos:definition "An objective this roadmap orders work toward. Without it a roadmap connects only to its backlog and sits outside the intent chain entirely: the ordering can be read, and what the ordering is FOR cannot. A roadmap ranking work that advances objectives it does not name is ordering by something other than the intent it claims to serve."@en .
+
+#################################################################
+#  55. Grooming: what a story was analysed FOR (v1.27.0) — BRF-EP12
+#
+#  Source: Satzinger, Jackson & Burd, "Systems Analysis and Design
+#  in a Changing World", ch.6 — the design activities a piece of
+#  work is analysed against before it is built. Adopted as CONCERNS
+#  rather than as activities: the framework governs the register a
+#  method produces, so what it can check is whether a story was
+#  analysed against the concerns that apply to it, not whether a
+#  team performed a named activity in a named order.
+#
+#  RefinementEvent already exists with an outcome, a time and an
+#  actor. One event of ANY kind satisfied Ready, so a story could
+#  reach execution with no analysis of what it actually needed.
+#  What is added is which concern an event addressed.
+#################################################################
+
+backlog:DesignConcern a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:Concern_Data backlog:Concern_Interface backlog:Concern_Interaction
+                backlog:Concern_Architecture backlog:Concern_Security ) ;
+    rdfs:label "Design Concern"@en ;
+    skos:definition "A dimension a story must be analysed against before it can be built, taken from the design activities in Satzinger et al. ch.6. Closed at five because the source names five, not because five is a natural number of concerns; an adopter needing a sixth should say so rather than overload one of these. Concerns are what a story is analysed FOR — the framework cannot check that a team held a meeting, only that the analysis a story needed was recorded."@en ;
+    dcterms:source "Satzinger, Jackson & Burd, Systems Analysis and Design in a Changing World, ch.6"@en .
+
+backlog:Concern_Data a owl:NamedIndividual , backlog:DesignConcern ;
+    rdfs:label "Data"@en ;
+    skos:definition "What persists, and its structure. Applies wherever a story creates, changes or retires stored state — the concern whose omission is cheapest to skip and most expensive to correct, because a schema in use is difficult to change."@en .
+backlog:Concern_Interface a owl:NamedIndividual , backlog:DesignConcern ;
+    rdfs:label "Interface"@en ;
+    skos:definition "How the system is reached from outside: an API, a message contract, a file exchange. Applies wherever a story changes what another system may rely on."@en .
+backlog:Concern_Interaction a owl:NamedIndividual , backlog:DesignConcern ;
+    rdfs:label "Interaction"@en ;
+    skos:definition "How a person uses the capability. Applies wherever a story changes what a user does, as distinct from what the system stores or exposes."@en .
+backlog:Concern_Architecture a owl:NamedIndividual , backlog:DesignConcern ;
+    rdfs:label "Architecture"@en ;
+    skos:definition "Where the capability sits in the system's structure, and what it depends on. Applies wherever a story introduces a component, a dependency or a deployment boundary."@en .
+backlog:Concern_Security a owl:NamedIndividual , backlog:DesignConcern ;
+    rdfs:label "Security"@en ;
+    skos:definition "Who may do this, and what it exposes. Applies wherever a story touches identity, authorisation or data a policy governs."@en .
+
+backlog:addressesConcern a owl:ObjectProperty ;
+    rdfs:domain backlog:RefinementEvent ; rdfs:range backlog:DesignConcern ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "addresses concern"@en ;
+    skos:definition "The concern this refinement analysed. Without it a refinement records that someone looked at a story and not what they looked at, so a story with five applicable concerns and one meeting is indistinguishable from one that was fully analysed."@en .
+
+backlog:hasApplicableConcern a owl:ObjectProperty ;
+    rdfs:domain backlog:WorkItem ; rdfs:range backlog:DesignConcern ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has applicable concern"@en ;
+    skos:definition "A concern this story's work touches, and must therefore be analysed against. Declared per story rather than derived, because whether a story touches persistent state is a judgement about the work and no query can make it. The declaration is what makes the grooming check possible: a framework cannot know which concerns apply, only that the ones claimed to apply were addressed."@en .
+
+backlog:hasNoApplicableConcern a owl:DatatypeProperty ;
+    rdfs:domain backlog:WorkItem ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has no applicable concern"@en ;
+    skos:definition "A written statement that no design concern applies to this story, with the reason. Required rather than allowing silence, because a story that declares nothing and a story genuinely needing no design analysis are the same in the data — and the first is the common case. Saying so costs a sentence and makes the claim arguable."@en .

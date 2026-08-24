@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.34.0
+# Backlog & Roadmap Semantic Framework — Standard v1.35.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -488,6 +488,30 @@ nothing above: the ordering can be read, and what the ordering is *for* cannot.
 | L3 | An objective reaches a Mission through a Goal — an objective advancing no goal measures something nothing has a stated reason to want |
 | L4 | **No forked chain**: an objective filling a scope drawn for one mission while its goal advances another is rejected. The boundary that admitted the work and the purpose it serves must agree, or every downstream figure is computed over two different intents |
 | advisory | A roadmap naming no objective |
+
+### 2.5c-xiv Grooming: what a story was analysed for
+
+`DesignConcern` — `Concern_Data` / `Interface` / `Interaction` / `Architecture` / `Security` — from
+the design activities in **Satzinger, Jackson & Burd, ch.6**. Adopted as *concerns* rather than
+activities: the framework governs the register a method produces, so what it can check is whether a
+story was analysed against the dimensions that apply to it, never whether a team performed a named
+activity in a named order.
+
+`RefinementEvent` already carried an outcome, a time and an actor, and **one event of any kind
+satisfied Ready** — so a story with five applicable concerns and a single meeting was indistinguishable
+from one fully analysed. `addressesConcern` records what a refinement looked at.
+
+`hasApplicableConcern` is **declared per story, not derived**: whether a story touches persistent state
+is a judgement about the work, and no query can make it. The declaration is what makes grooming
+checkable at all.
+
+`hasNoApplicableConcern` requires a **written reason** rather than allowing silence, because a story
+that was never groomed and one that genuinely needs no design analysis are otherwise identical in the
+data — and the first is the common case.
+
+At L3: a story past Proposed must declare concerns or state that none apply; every declared concern
+must have a refinement addressing it. At L1, claiming both is rejected. An advisory reports a
+refinement naming no concern — it still counts as a refinement and can count toward nothing.
 
 ### 2.5d Decomposition, commitments, dependency kinds, impediments, flow, team (subject v1.4.0)
 

@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/2.2.0> ;
-    owl:versionInfo "2.2.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/2.3.0> ;
+    owl:versionInfo "2.3.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/2.2.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/2.1.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/2.0.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/1.19.0> ;
@@ -2359,7 +2360,14 @@ fw:AC_BRF_I6 a backlog:AcceptanceCriterion ;
 fw:EP_Grooming a backlog:Epic ;
     backlog:hasIdentifier "BRF-EP12" ;
     backlog:hasTitle "A story reaching Ready has been analysed against the design concerns that apply to it" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-08-20T10:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-20T11:00:00"^^xsd:dateTime ;
+    backlog:hasActualEffort 4.0 ;
+    backlog:hasEvidence fw:Ev_Grooming ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:lastAuditedAt "2026-08-20T11:00:00"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register ;
     backlog:pursuesObjective fw:Obj_IntentToWork ;
     backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
@@ -2460,3 +2468,12 @@ fw:Gap_AutonomyEvidence a backlog:FitGapFinding ;
     backlog:findingOf fw:Adapt_Register ;
     backlog:findingItem fw:Init_SdlcConcepts ;
     backlog:hasRationale "Third measured gap in Obj_IntentToWork: ExecutionModality records how autonomously work was produced and no constraint relates it to required evidence, so autonomous and non-autonomous work are held to identical proof. No named source exists for the rule, so Ex_InventedPractice refuses it. Raised to the owner as a decision rather than built: either a source is found, or the exclusion is changed deliberately, or the gap stands." .
+
+fw:Ev_Grooming a backlog:TestEvidence ;
+    backlog:hasTestSpec "03-tooling/fixtures/fixture_grooming_negative_v1_0_0.ttl" ;
+    backlog:hasTestId "BRF-EP12" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-08-20T11:00:00"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "Five cases exercised on one fixture and each verified individually, not in aggregate. A declares two concerns and addresses both: silent. B addresses one of two: rejected. C declares nothing at all: rejected. D states that none applies with a reason: silent. E declares concerns and simultaneously says none applies: rejected twice. Building it caught a real defect — the first draft matched on backlog:refinedItem, which does not exist; the property is backlog:refines, so the rule would have passed everything while appearing to work." ;
+    backlog:verifiedByTool "backlog_validate + pyshacl" ;
+    backlog:attestsCriterion fw:AC_Grooming .

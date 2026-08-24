@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.33.0> ;
-    owl:versionInfo "1.33.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.34.0> ;
+    owl:versionInfo "1.34.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.33.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.32.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.31.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.30.0> ;
@@ -3131,4 +3132,52 @@ backlog:RoadmapIntentShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             FILTER NOT EXISTS { $this backlog:roadmapRealises ?o }
+        }""" ] .
+
+#################################################################
+#  v1.34.0 — BRF-EP12: grooming is analysis, not attendance
+#################################################################
+
+backlog:GroomingShape a sh:NodeShape ;
+    sh:targetClass backlog:Story ;
+    sh:severity sh:Violation ;
+    rdfs:label "A story reaching Ready was analysed against the concerns that apply (L3)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: this story has left Proposed but declares neither an applicable design concern nor a statement that none applies. Silence and 'nothing applies' are the same in the data, and the first is the common case — so the framework requires the claim to be made. Declaring the concerns is what makes grooming checkable at all: no query can decide whether a story touches persistent state." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L3_Governed, backlog:L4_LineageEnforced))
+            $this backlog:hasState ?st .
+            FILTER (?st != backlog:Proposed)
+            FILTER NOT EXISTS { $this backlog:hasApplicableConcern ?c }
+            FILTER NOT EXISTS { $this backlog:hasNoApplicableConcern ?r }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: this story declares a design concern that no refinement event addressed. One refinement of any kind used to satisfy Ready, so a story with five applicable concerns and a single meeting was indistinguishable from one fully analysed. A concern named and not addressed is the analysis the story was known to need and did not get." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L3_Governed, backlog:L4_LineageEnforced))
+            $this backlog:hasState ?st .
+            FILTER (?st NOT IN (backlog:Proposed, backlog:Cancelled))
+            $this backlog:hasApplicableConcern ?c .
+            FILTER NOT EXISTS { ?r backlog:refines $this ; backlog:addressesConcern ?c }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this story both declares applicable concerns and states that none applies. The two claims contradict; one of them is wrong and the register cannot say which." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasApplicableConcern ?c ; backlog:hasNoApplicableConcern ?r .
+        }""" ] .
+
+backlog:UnaddressedRefinementShape a sh:NodeShape ;
+    sh:targetClass backlog:RefinementEvent ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: a refinement that names no concern"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: this refinement records that someone looked at a story but not what they looked at. It still counts as a refinement; it cannot count toward any concern, so a story relying on it will fail the grooming check. Naming the concern costs one triple." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            FILTER NOT EXISTS { $this backlog:addressesConcern ?c }
         }""" ] .
