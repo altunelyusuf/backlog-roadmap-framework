@@ -297,6 +297,7 @@ ex:Opp_Waitlist a backlog:Opportunity ;
     backlog:hasOpportunityStatement "Cancellations currently go unfilled; automatic promotion could recover them. Cost to find out: one spike against the existing booking data." .
 
 ex:Scope_Launch a backlog:ScopeStatement ;
+    backlog:scopeForMission ex:Mission ;
     backlog:hasScopeStatementText "First deployment covers a single studio: sign-in, booking and client records." ;
     backlog:hasScopeExclusion ex:Excl_MultiTenant .
 

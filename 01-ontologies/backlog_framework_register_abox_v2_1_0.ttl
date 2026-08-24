@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/2.0.0> ;
-    owl:versionInfo "2.0.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/2.1.0> ;
+    owl:versionInfo "2.1.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/2.0.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/1.19.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/1.18.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/1.17.0> ;
@@ -2266,3 +2267,30 @@ fw:Rebase_MSCost a backlog:Rebaseline ;
 
 fw:MS_Cost backlog:milestoneOutcome backlog:Ach_Missed ;
     backlog:hasRationale "Target date passed during the mission-drift correction. Recorded missed rather than re-dated: moving a target to meet it is the failure Rebaseline exists to prevent." .
+
+#################################################################
+#  v2.1.0 — each scope names the mission it serves.
+#
+#  Four scopes and six missions all hung off one container, so
+#  which served which was unanswerable. Asserted here from the
+#  record of why each scope was written, not by guessing:
+#
+#    Scope        the original development boundary, written under
+#                 Mission_Dev, the first session-drafted mission
+#    Scope_v2     its rewritten form from the adaptation ruling,
+#                 same mission, corrected wording
+#    Scope_Order  written for the order-repair mission
+#    Scope_Build  written for the owner's stated mission, and the
+#                 first boundary in this register drawn against a
+#                 mission that was not this session's own
+#################################################################
+
+fw:Scope       backlog:scopeForMission fw:Mission_Dev .
+fw:Scope_v2    backlog:scopeForMission fw:Mission_Dev .
+fw:Scope_Order backlog:scopeForMission fw:Mission_OrderRepair .
+fw:Scope_Build backlog:scopeForMission fw:Mission_BuildSoftware .
+
+fw:Roadmap backlog:roadmapRealises fw:Obj_Derived , fw:Obj_Adopter , fw:Obj_Views ,
+                                   fw:Obj_ProgressInViews , fw:Obj_Finishable ,
+                                   fw:Obj_OrderRecordable , fw:Obj_NoStaleOrder ,
+                                   fw:Obj_IntentToWork , fw:Obj_Grounded .

@@ -15,7 +15,7 @@ doesn't count.**
 
 ## Start here
 
-1. **`04-documentation/BACKLOG_ROADMAP_FRAMEWORK_STANDARD_v1_33_0.md`** — the framework itself. §2 is
+1. **`04-documentation/BACKLOG_ROADMAP_FRAMEWORK_STANDARD_v1_34_0.md`** — the framework itself. §2 is
    the vocabulary, §3 the conformance levels, §4 how to adopt it.
 2. **`03-tooling/fixtures/fixture_positive_v1_7_0.ttl`** — a small conformant register. Read it
    alongside §2 and the vocabulary stops being abstract.

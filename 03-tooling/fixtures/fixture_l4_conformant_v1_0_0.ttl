@@ -58,6 +58,7 @@ ex:Obs a backlog:MetricObservation ; rdfs:label "First reading after release 1"@
     backlog:hasObservationMethod "Counted support tickets tagged account-recovery against completed recovery flows over the two weeks after release 1." .
 
 ex:Scope a backlog:ScopeStatement ;
+    backlog:scopeForMission ex:Mission ;
     backlog:hasScopeStatementText "Self-service recovery for practitioner accounts: the reset flow and its notifications." ;
     backlog:hasScopeExclusion ex:Excl .
 ex:Excl a backlog:ScopeExclusion ;

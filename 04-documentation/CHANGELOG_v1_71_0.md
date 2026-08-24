@@ -1,5 +1,40 @@
 # Changelog
 
+## v1.71.0 — 2026-08-20 (MINOR: the intent chain closes — scope joins it, and so does the roadmap)
+
+**Position measured before anything was written.** `Mission → Goal → Objective → WorkItem` already
+traversed in one query, returning 22 items. **Scope was not on that path.** It hung off its container
+via `hasScopeStatement` while the mission hung off the same container via `missionFor`, so the two met
+only through a join on what they shared.
+
+In this package's own register that is **six missions and four scopes on one container**: which scope
+served which mission was unanswerable. The v3.1.0 ceremony puts Scope *second* in the build order, and
+it was the one step of four the vocabulary never recorded.
+
+**`scopeForMission`** — Scope → Mission, functional, pointing later-to-earlier like every other link.
+At L2 a scope must name its mission; all four of this register's scopes failed on the first run and
+were wired from the record of why each was written.
+
+**`roadmapRealises`** — Roadmap → Objective. Without it a roadmap connects to its backlog and nothing
+above: the ordering can be read, and what the ordering is *for* cannot.
+
+**The L4 rule is the one worth having.** An objective filling a scope drawn for one mission while its
+goal advances another is a **forked chain** — the boundary that admitted the work and the purpose it
+serves disagree, and scope completion and mission progress are then computed over two different
+intents. Nothing could express that before, because scope and mission were not connected.
+
+**Verified by traversal, not by assertion.** The full path now joins in one query:
+
+```
+Mission_Dev             5 work items
+Mission_OrderRepair     3 work items
+Mission_BuildSoftware   0 work items
+```
+
+The last line is correct and is the honest state: the owner's mission has goals and objectives but no
+work beneath it yet.
+
+
 ## v1.70.0 — 2026-08-20 (MAJOR-class correction: the mission was wrong, and it was this session's)
 
 **Register 1.19.0 → 2.0.0.** The root of the intent chain changes meaning, and everything beneath it

@@ -63,6 +63,7 @@ ex:Obs a backlog:MetricObservation ; backlog:observesMetric ex:Met ;
 
 # scope written last, from the objective
 ex:Scope a backlog:ScopeStatement ;
+    backlog:scopeForMission ex:M ;
     backlog:hasScopeStatementText "The reset flow and its notifications for practitioner accounts. Fixed before any goal was written." ;
     backlog:hasScopeExclusion ex:X .
 ex:X a backlog:ScopeExclusion ;

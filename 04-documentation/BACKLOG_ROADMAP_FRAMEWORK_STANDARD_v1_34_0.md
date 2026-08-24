@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.33.0
+# Backlog & Roadmap Semantic Framework — Standard v1.34.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -457,6 +457,37 @@ source, because *"the owner said so"* with no pointer to a dated instruction or 
 indistinguishable from a session's paraphrase. An advisory reports a session-drafted mission; another
 reports a mission no goal advances. Superseded missions are **retained**, since the distance between a
 drifted mission and its correction is the most useful record the drift leaves.
+
+### 2.5c-xiii The intent chain closes
+
+```
+Mission ← scopeForMission ← ScopeStatement ← fillsScope ← Objective
+   ↑                                                          ↑
+   └── contributesToMission ← Goal ← contributesToGoal ────────┘
+                                                               ↑
+                          WorkItem ── pursuesObjective ────────┘
+                          Roadmap  ── roadmapRealises ─────────┘
+```
+
+Every link points from the later-written element to the earlier, so the chain records its own build
+order and can be walked in one query.
+
+**`scopeForMission` closed the gap that mattered.** The ceremony order is Mission → Scope → Goal →
+Objective, and the step it puts *second* was the one the vocabulary never recorded: a scope hung off
+its container, the mission hung off the same container, and the two met only through a join on what
+they shared. With more than one mission on a container — this package's own register had **six
+missions and four scopes** — which scope served which was unanswerable, and no rule could check that
+work sat inside the right boundary.
+
+**`roadmapRealises`** puts the roadmap on the chain. Without it a roadmap connects to its backlog and
+nothing above: the ordering can be read, and what the ordering is *for* cannot.
+
+| Level | Rule |
+|---|---|
+| L2 | A scope names the mission it serves |
+| L3 | An objective reaches a Mission through a Goal — an objective advancing no goal measures something nothing has a stated reason to want |
+| L4 | **No forked chain**: an objective filling a scope drawn for one mission while its goal advances another is rejected. The boundary that admitted the work and the purpose it serves must agree, or every downstream figure is computed over two different intents |
+| advisory | A roadmap naming no objective |
 
 ### 2.5d Decomposition, commitments, dependency kinds, impediments, flow, team (subject v1.4.0)
 

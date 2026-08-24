@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.32.0> ;
-    owl:versionInfo "1.32.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.33.0> ;
+    owl:versionInfo "1.33.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.32.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.31.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.30.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.29.0> ;
@@ -3079,4 +3080,55 @@ backlog:MissionReachShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             FILTER NOT EXISTS { ?g backlog:contributesToMission $this }
+        }""" ] .
+
+#################################################################
+#  v1.33.0 — the chain closes, and objectives become processable
+#################################################################
+
+backlog:ChainClosureShape a sh:NodeShape ;
+    sh:targetClass backlog:ScopeStatement ;
+    sh:severity sh:Violation ;
+    rdfs:label "A scope names the mission it serves (L2)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L2: this scope names no mission. The ceremony order is Mission then Scope then Goal then Objective, and this is the one step the vocabulary did not record — a scope hangs off its container and so does the mission, so the two meet only through a join on the container they share. With more than one mission on a container, which scope serves which becomes unanswerable, and no rule can then check that work sits inside the right boundary." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed, backlog:L4_LineageEnforced))
+            FILTER NOT EXISTS { $this backlog:scopeForMission ?m }
+        }""" ] .
+
+backlog:ObjectiveChainShape a sh:NodeShape ;
+    sh:targetClass backlog:Objective ;
+    sh:severity sh:Violation ;
+    rdfs:label "An objective reaches its mission through the whole chain (L3/L4)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: this objective does not reach a Mission through Goal. An objective that advances no goal measures something the development has no stated reason to want — the chain is what makes an objective's value arguable rather than asserted." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L3_Governed, backlog:L4_LineageEnforced))
+            FILTER NOT EXISTS { $this backlog:contributesToGoal ?g . ?g backlog:contributesToMission ?m }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L4: this objective fills a scope drawn for one mission while its goal advances another. The chain forks: the boundary that admitted the work and the purpose the work serves disagree, and every downstream figure — scope completion, mission progress — is then computed over two different intents." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel backlog:L4_LineageEnforced .
+            $this backlog:fillsScope ?sc ; backlog:contributesToGoal ?g .
+            ?sc backlog:scopeForMission ?m1 .
+            ?g backlog:contributesToMission ?m2 .
+            FILTER (?m1 != ?m2)
+        }""" ] .
+
+backlog:RoadmapIntentShape a sh:NodeShape ;
+    sh:targetClass backlog:Roadmap ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: a roadmap outside the intent chain"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: this roadmap names no objective it realises, so it connects to its backlog and to nothing above it. The ordering can be read; what the ordering is FOR cannot. A roadmap ranking work that advances objectives it does not name is ordering by something other than the intent it claims to serve." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            FILTER NOT EXISTS { $this backlog:roadmapRealises ?o }
         }""" ] .

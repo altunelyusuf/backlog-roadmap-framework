@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.25.0> ;
-    owl:versionInfo "1.25.0" ;
+    owl:versionIRI <http://example.org/backlog/1.26.0> ;
+    owl:versionInfo "1.26.0" ;
+    owl:priorVersion <http://example.org/backlog/1.25.0> ;
     owl:priorVersion <http://example.org/backlog/1.24.0> ;
     owl:priorVersion <http://example.org/backlog/1.23.0> ;
     owl:priorVersion <http://example.org/backlog/1.22.0> ,
@@ -3564,3 +3565,31 @@ backlog:supersedesMission a owl:ObjectProperty ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "supersedes mission"@en ;
     skos:definition "A mission this one replaces. The superseded mission is retained, never deleted: it records what a development believed its purpose was, and the difference between that and the corrected statement is the most useful thing a drift leaves behind."@en .
+
+#################################################################
+#  54. The intent chain is traversable end to end (v1.26.0)
+#
+#  Measured before writing: Mission -> Goal -> Objective -> WorkItem
+#  traverses in one query. Scope does NOT sit on that path. It hangs
+#  off the container via hasScopeStatement, and the mission hangs off
+#  the same container via missionFor, so the two only meet through a
+#  join on the container they share. In this package's own register
+#  that is six missions and four scopes on one container: which scope
+#  belongs to which mission is unanswerable.
+#
+#  The v3.1.0 ceremony says Mission -> Scope -> Goal -> Objective.
+#  The vocabulary recorded three of those four steps. The step the
+#  ceremony puts SECOND was the one with no link at all.
+#################################################################
+
+backlog:scopeForMission a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:ScopeStatement ; rdfs:range backlog:Mission ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "scope for mission"@en ;
+    skos:definition "The mission this boundary was drawn to serve. Direction is Scope -> Mission, matching every other link in the intent chain: the later-written element points at the earlier, so asserting it is only possible once the mission exists. Functional, because a boundary serving two missions is two boundaries — and a register that cannot say which scope belongs to which mission cannot check that its work sits inside the right one."@en .
+
+backlog:roadmapRealises a owl:ObjectProperty ;
+    rdfs:domain backlog:Roadmap ; rdfs:range backlog:Objective ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "roadmap realises"@en ;
+    skos:definition "An objective this roadmap orders work toward. Without it a roadmap connects only to its backlog and sits outside the intent chain entirely: the ordering can be read, and what the ordering is FOR cannot. A roadmap ranking work that advances objectives it does not name is ordering by something other than the intent it claims to serve."@en .
