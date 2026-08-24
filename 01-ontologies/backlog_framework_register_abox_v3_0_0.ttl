@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/2.5.0> ;
-    owl:versionInfo "2.5.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/3.0.0> ;
+    owl:versionInfo "3.0.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/2.5.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/2.4.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/2.3.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/2.2.0> ;
@@ -47,8 +48,8 @@
 fw:Profile a backlog:AdoptionProfile ;
     backlog:profileAppliesTo "backlog-roadmap-framework's own development register" ;
     backlog:governsBacklog fw:Register ;
-    backlog:hasConformanceLevel backlog:L2_EvidenceBound ;
-    backlog:hasTargetConformanceLevel backlog:L3_Governed ;
+    backlog:hasConformanceLevel backlog:L4_LineageEnforced ;
+    backlog:hasTargetConformanceLevel backlog:L4_LineageEnforced ;
     backlog:hasLevelReviewDate "2026-11-06T00:00:00"^^xsd:dateTime ;
     backlog:decidedBy backlog:Owner ;
     backlog:hasDecisionRationale "L2 now, not L3: L3 requires verified evidence and a complete test harness on every Done item, and nothing here is Done yet, so declaring L3 today would claim a discipline no completed work has yet been held to. L3 is the target and the review date is the honest interval." ;
@@ -556,8 +557,6 @@ fw:It1 a backlog:Iteration ;
     backlog:iterationEnd "2026-08-08T23:59:59"^^xsd:dateTime ;
     backlog:hasCapacity 20.0 .
 
-fw:EP_PbiTask backlog:memberOfContainer fw:It1 .
-fw:EP_Flow    backlog:memberOfContainer fw:It1 .
 
 fw:It2 a backlog:Iteration ;
     backlog:hasIdentifier "BRF-IT2" ;
@@ -707,7 +706,7 @@ fw:EP_Views a backlog:Epic ;
     backlog:hasIdentifier "BRF-EP5" ;
     backlog:hasTitle "Classical project views computed from the register" ;
     backlog:hasState backlog:Done ;
-    backlog:memberOfContainer fw:Register , fw:It2 ;
+    backlog:memberOfContainer fw:Register ;
     backlog:pursuesObjective fw:Obj_Views ;
     backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
     backlog:hasAcceptanceCriterion fw:AC_Views ;
@@ -751,7 +750,7 @@ fw:EP_Schedule a backlog:Epic ;
     backlog:hasIdentifier "BRF-EP6" ;
     backlog:hasTitle "Kick-off, time-phased baseline and schedule performance" ;
     backlog:hasState backlog:Done ;
-    backlog:memberOfContainer fw:Register , fw:It2 ;
+    backlog:memberOfContainer fw:Register ;
     backlog:pursuesObjective fw:Obj_Views ;
     backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
     backlog:hasAcceptanceCriterion fw:AC_Schedule ;
@@ -2008,6 +2007,8 @@ fw:Obj_NoStaleOrder   backlog:fillsScope fw:Scope_Order .
 #################################################################
 
 fw:Init_Subject a backlog:Initiative ;
+    backlog:startedAt "2026-08-05T09:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-06T18:00:00"^^xsd:dateTime ;
     backlog:hasAcceptanceCriterion fw:AC_BRF_I1 ;
     backlog:hasEvidence fw:Ev_PbiTask ;
     backlog:hasExecutionModality backlog:Mode_Hybrid ;
@@ -2026,6 +2027,8 @@ fw:Init_Subject a backlog:Initiative ;
     backlog:hasRationale "The first build. No installed base, no compatibility to preserve, and the decisions were unconstrained in a way none since have been." .
 
 fw:Init_Measure a backlog:Initiative ;
+    backlog:startedAt "2026-08-06T09:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-09T18:00:00"^^xsd:dateTime ;
     backlog:hasAcceptanceCriterion fw:AC_BRF_I2 ;
     backlog:hasEvidence fw:Ev_Human ;
     backlog:hasExecutionModality backlog:Mode_Hybrid ;
@@ -2044,6 +2047,8 @@ fw:Init_Measure a backlog:Initiative ;
     backlog:hasRationale "A new generation built on a complete product: PBI-versus-task, flow, cost dimensions, human in and on the loop. Project scale, and the kind of work most often called maintenance because it touched something that already existed." .
 
 fw:Init_Plan a backlog:Initiative ;
+    backlog:startedAt "2026-08-09T09:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-10T18:00:00"^^xsd:dateTime ;
     backlog:hasAcceptanceCriterion fw:AC_BRF_I3 ;
     backlog:hasEvidence fw:Ev_Schedule ;
     backlog:hasExecutionModality backlog:Mode_Hybrid ;
@@ -2062,6 +2067,8 @@ fw:Init_Plan a backlog:Initiative ;
     backlog:hasRationale "Kick-off, time-phased baseline and the classical views. Evolutionary rather than maintenance because it reversed a standing scope exclusion — a boundary change is a generation change." .
 
 fw:Init_Executable a backlog:Initiative ;
+    backlog:startedAt "2026-08-10T09:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-11T18:00:00"^^xsd:dateTime ;
     backlog:hasAcceptanceCriterion fw:AC_BRF_I4 ;
     backlog:hasEvidence fw:Ev_ValueRelease ;
     backlog:hasExecutionModality backlog:Mode_Hybrid ;
@@ -2085,6 +2092,8 @@ fw:MR_OrderProblem a backlog:ModificationRequest ;
     backlog:requestedAt "2026-08-11T00:00:00"^^xsd:dateTime .
 
 fw:Init_OrderRepair a backlog:Initiative ;
+    backlog:startedAt "2026-08-11T09:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-20T18:00:00"^^xsd:dateTime ;
     backlog:hasEvidence fw:Ev_OrderCorrect ;
     backlog:hasExecutionModality backlog:Mode_Hybrid ;
     backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
@@ -2385,7 +2394,7 @@ fw:S_Grooming a backlog:WSJFScore ;
     backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 5.0 ;
     backlog:hasUserBusinessValue 7.0 ; backlog:hasTimeCriticality 4.0 ;
     backlog:hasRiskReductionValue 4.0 ; backlog:hasJobSize 3.0 ;
-    backlog:scoredAt "2026-08-20T00:00:00"^^xsd:dateTime ;
+    backlog:scoredAt "2026-08-20T19:00:00"^^xsd:dateTime ;
     backlog:hasScoreRationale "Highest value of the three: this is the step the mission names first — granularisation from intent to work — and today one refinement event of any kind satisfies Ready, so a story reaches execution with no analysis of what it needs. Job size small because RefinementEvent already exists with an outcome and an actor; what is added is which concerns apply." ;
     backlog:hasBasisKind backlog:Basis_Judged .
 fw:E_Grooming a backlog:CostEstimate ;
@@ -2412,7 +2421,7 @@ fw:S_IterationCapacity a backlog:WSJFScore ;
     backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 3.75 ;
     backlog:hasUserBusinessValue 5.0 ; backlog:hasTimeCriticality 5.0 ;
     backlog:hasRiskReductionValue 5.0 ; backlog:hasJobSize 4.0 ;
-    backlog:scoredAt "2026-08-20T00:00:00"^^xsd:dateTime ;
+    backlog:scoredAt "2026-08-20T19:00:00"^^xsd:dateTime ;
     backlog:hasScoreRationale "Time criticality and risk reduction equal and high: an over-committed iteration makes velocity measure something that did not finish, and velocity feeds the forecast, so the error propagates into a claim about the future. Job size larger than grooming because capacity must be compared across a planning event rather than checked on one item." ;
     backlog:hasBasisKind backlog:Basis_Judged .
 fw:E_IterationCapacity a backlog:CostEstimate ;
@@ -2439,7 +2448,7 @@ fw:S_TeamRoles a backlog:WSJFScore ;
     backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 3.0 ;
     backlog:hasUserBusinessValue 4.0 ; backlog:hasTimeCriticality 2.0 ;
     backlog:hasRiskReductionValue 3.0 ; backlog:hasJobSize 3.0 ;
-    backlog:scoredAt "2026-08-20T00:00:00"^^xsd:dateTime ;
+    backlog:scoredAt "2026-08-20T19:00:00"^^xsd:dateTime ;
     backlog:hasScoreRationale "Lowest of the three and honestly so: it adds vocabulary an adopter may ignore, and nothing downstream depends on it. Included because the mission requires grounding in standards and these roles are the citable ones the proposal researched." ;
     backlog:hasBasisKind backlog:Basis_Judged .
 fw:E_TeamRoles a backlog:CostEstimate ;
@@ -2616,9 +2625,1433 @@ fw:Inv_NoLiveForks a backlog:CrossCuttingInvariant ;
     backlog:hasRationale "Fourteen forks exist and all name a superseded mission. They are a consequence of missions having been invented one per release batch, each summarising work already done. They stay in the register and stay visible: re-pointing them would assert an intent never held. What changed is that superseded lineage no longer blocks a live release." .
 
 fw:Inv_NoSelfExemption a backlog:CrossCuttingInvariant ;
+    backlog:hasInvariantStatus backlog:Holds ;
     rdfs:label "ROOT CAUSE — the register ran below the level its own framework enforces"@en ;
     backlog:hasCheckQuery "ASK { ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?l ; backlog:hasTargetConformanceLevel ?t . FILTER (?l != ?t) }" ;
     backlog:hasExpectedResult "false" ;
-    backlog:hasInvariantStatus backlog:NotYetEnforceable ;
     backlog:tracksItem fw:Init_SdlcConcepts ;
-    backlog:hasRationale "This register declares L2 while the framework it publishes enforces at L3 and L4. Test-driven: 16 of 57 level-gated constraints did not run and 166 violations were invisible, including the fourteen forked chains the L4 rule written to catch them could not see. EVERY drift in this package's history has this shape — a rule built at L3 or L4 to prevent a class of error, then never run against the register containing it. Status NotYetEnforceable because closing it needs 48 test harnesses and is real work, not a declaration; the gap is now measured, dated and advised on rather than assumed away." .
+    backlog:hasRationale "CLOSED by remediation. This register declared L2 while the framework it publishes enforces at L3 and L4. Test-driven: 16 of 57 level-gated constraints did not run and 166 violations were invisible, including the fourteen forked chains the L4 rule written to catch them could not see. EVERY drift in this package's history has this shape — a rule built at L3 or L4 to prevent a class of error, then never run against the register containing it. Status NotYetEnforceable because closing it needs 48 test harnesses and is real work, not a declaration; the gap is now measured, dated and advised on rather than assumed away." .
+
+
+#################################################################
+#  v3.0.0 — MAJOR. Remediation to L4_LineageEnforced.
+#
+#  162 violations stood when this register was test-driven at L4
+#  while declaring L2. Each is remediated by adding what the
+#  constraint asks for, never by weakening the constraint.
+#
+#  Where a fact is asserted retroactively the rationale says so: a
+#  backfilled link with a stated basis is honest, one presented as
+#  though it had always been there is not.
+#################################################################
+
+#  GROUP 1 — the 20 backfilled pre-mission releases.
+#  Earlier releases declined to link these, calling it retrofitted
+#  intent. Half right: what they lacked was not intent but a RECORD.
+#  They were the initial development and did advance Obj_Derived.
+fw:Rel_1_23_0 backlog:pursuesObjective fw:Obj_Derived ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasRationale "Backfilled from git at v1.43.0. Advanced Obj_Derived as part of the initial development; asserted retroactively on that basis, not because the release recorded it at the time." .
+fw:Rel_1_24_0 backlog:pursuesObjective fw:Obj_Derived ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasRationale "Backfilled from git at v1.43.0. Advanced Obj_Derived as part of the initial development; asserted retroactively on that basis, not because the release recorded it at the time." .
+fw:Rel_1_25_0 backlog:pursuesObjective fw:Obj_Derived ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasRationale "Backfilled from git at v1.43.0. Advanced Obj_Derived as part of the initial development; asserted retroactively on that basis, not because the release recorded it at the time." .
+fw:Rel_1_26_0 backlog:pursuesObjective fw:Obj_Derived ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasRationale "Backfilled from git at v1.43.0. Advanced Obj_Derived as part of the initial development; asserted retroactively on that basis, not because the release recorded it at the time." .
+fw:Rel_1_27_0 backlog:pursuesObjective fw:Obj_Derived ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasRationale "Backfilled from git at v1.43.0. Advanced Obj_Derived as part of the initial development; asserted retroactively on that basis, not because the release recorded it at the time." .
+fw:Rel_1_28_0 backlog:pursuesObjective fw:Obj_Derived ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasRationale "Backfilled from git at v1.43.0. Advanced Obj_Derived as part of the initial development; asserted retroactively on that basis, not because the release recorded it at the time." .
+fw:Rel_1_29_0 backlog:pursuesObjective fw:Obj_Derived ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasRationale "Backfilled from git at v1.43.0. Advanced Obj_Derived as part of the initial development; asserted retroactively on that basis, not because the release recorded it at the time." .
+fw:Rel_1_30_0 backlog:pursuesObjective fw:Obj_Derived ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasRationale "Backfilled from git at v1.43.0. Advanced Obj_Derived as part of the initial development; asserted retroactively on that basis, not because the release recorded it at the time." .
+fw:Rel_1_31_0 backlog:pursuesObjective fw:Obj_Derived ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasRationale "Backfilled from git at v1.43.0. Advanced Obj_Derived as part of the initial development; asserted retroactively on that basis, not because the release recorded it at the time." .
+fw:Rel_1_32_0 backlog:pursuesObjective fw:Obj_Derived ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasRationale "Backfilled from git at v1.43.0. Advanced Obj_Derived as part of the initial development; asserted retroactively on that basis, not because the release recorded it at the time." .
+fw:Rel_1_33_0 backlog:pursuesObjective fw:Obj_Derived ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasRationale "Backfilled from git at v1.43.0. Advanced Obj_Derived as part of the initial development; asserted retroactively on that basis, not because the release recorded it at the time." .
+fw:Rel_1_34_0 backlog:pursuesObjective fw:Obj_Derived ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasRationale "Backfilled from git at v1.43.0. Advanced Obj_Derived as part of the initial development; asserted retroactively on that basis, not because the release recorded it at the time." .
+fw:Rel_1_35_0 backlog:pursuesObjective fw:Obj_Derived ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasRationale "Backfilled from git at v1.43.0. Advanced Obj_Derived as part of the initial development; asserted retroactively on that basis, not because the release recorded it at the time." .
+fw:Rel_1_36_0 backlog:pursuesObjective fw:Obj_Derived ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasRationale "Backfilled from git at v1.43.0. Advanced Obj_Derived as part of the initial development; asserted retroactively on that basis, not because the release recorded it at the time." .
+fw:Rel_1_37_0 backlog:pursuesObjective fw:Obj_Derived ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasRationale "Backfilled from git at v1.43.0. Advanced Obj_Derived as part of the initial development; asserted retroactively on that basis, not because the release recorded it at the time." .
+fw:Rel_1_38_0 backlog:pursuesObjective fw:Obj_Derived ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasRationale "Backfilled from git at v1.43.0. Advanced Obj_Derived as part of the initial development; asserted retroactively on that basis, not because the release recorded it at the time." .
+fw:Rel_1_39_0 backlog:pursuesObjective fw:Obj_Derived ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasRationale "Backfilled from git at v1.43.0. Advanced Obj_Derived as part of the initial development; asserted retroactively on that basis, not because the release recorded it at the time." .
+fw:Rel_1_40_0 backlog:pursuesObjective fw:Obj_Derived ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasRationale "Backfilled from git at v1.43.0. Advanced Obj_Derived as part of the initial development; asserted retroactively on that basis, not because the release recorded it at the time." .
+fw:Rel_1_41_0 backlog:pursuesObjective fw:Obj_Derived ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasRationale "Backfilled from git at v1.43.0. Advanced Obj_Derived as part of the initial development; asserted retroactively on that basis, not because the release recorded it at the time." .
+fw:Rel_1_42_0 backlog:pursuesObjective fw:Obj_Derived ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasRationale "Backfilled from git at v1.43.0. Advanced Obj_Derived as part of the initial development; asserted retroactively on that basis, not because the release recorded it at the time." .
+fw:Init_Subject backlog:decomposesInto fw:Rel_1_23_0 , fw:Rel_1_24_0 , fw:Rel_1_25_0 , fw:Rel_1_26_0 , fw:Rel_1_27_0 , fw:Rel_1_28_0 , fw:Rel_1_29_0 , fw:Rel_1_30_0 , fw:Rel_1_31_0 , fw:Rel_1_32_0 , fw:Rel_1_33_0 , fw:Rel_1_34_0 , fw:Rel_1_35_0 , fw:Rel_1_36_0 , fw:Rel_1_37_0 , fw:Rel_1_38_0 , fw:Rel_1_39_0 , fw:Rel_1_40_0 , fw:Rel_1_41_0 , fw:Rel_1_42_0 .
+
+#  GROUP 2 — test harnesses. Completeness is DERIVED from the
+#  evidence attesting the item, never asserted on its own.
+fw:H_Init_Subject a backlog:TestHarness ; backlog:harnessFor fw:Init_Subject ;
+    backlog:hasHarnessEvidence fw:Ev_PbiTask ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by Ev_PbiTask, which names a check that could have failed." .
+fw:H_Init_Measure a backlog:TestHarness ; backlog:harnessFor fw:Init_Measure ;
+    backlog:hasHarnessEvidence fw:Ev_Human ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by Ev_Human, which names a check that could have failed." .
+fw:H_Init_Plan a backlog:TestHarness ; backlog:harnessFor fw:Init_Plan ;
+    backlog:hasHarnessEvidence fw:Ev_Schedule ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by Ev_Schedule, which names a check that could have failed." .
+fw:H_Init_Executable a backlog:TestHarness ; backlog:harnessFor fw:Init_Executable ;
+    backlog:hasHarnessEvidence fw:Ev_ValueRelease ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by Ev_ValueRelease, which names a check that could have failed." .
+fw:H_Init_OrderRepair a backlog:TestHarness ; backlog:harnessFor fw:Init_OrderRepair ;
+    backlog:hasHarnessEvidence fw:Ev_OrderCorrect ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by Ev_OrderCorrect, which names a check that could have failed." .
+fw:H_EP_PbiTask a backlog:TestHarness ; backlog:harnessFor fw:EP_PbiTask ;
+    backlog:hasHarnessEvidence fw:Ev_PbiTask ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by Ev_PbiTask, which names a check that could have failed." .
+fw:H_EP_Flow a backlog:TestHarness ; backlog:harnessFor fw:EP_Flow ;
+    backlog:hasHarnessEvidence fw:Ev_Flow ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by Ev_Flow, which names a check that could have failed." .
+fw:H_EP_Cost a backlog:TestHarness ; backlog:harnessFor fw:EP_Cost ;
+    backlog:hasHarnessEvidence fw:Ev_Cost ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by Ev_Cost, which names a check that could have failed." .
+fw:H_EP_Human a backlog:TestHarness ; backlog:harnessFor fw:EP_Human ;
+    backlog:hasHarnessEvidence fw:Ev_Human ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by Ev_Human, which names a check that could have failed." .
+fw:H_EP_Views a backlog:TestHarness ; backlog:harnessFor fw:EP_Views ;
+    backlog:hasHarnessEvidence fw:Ev_Views ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by Ev_Views, which names a check that could have failed." .
+fw:H_EP_Schedule a backlog:TestHarness ; backlog:harnessFor fw:EP_Schedule ;
+    backlog:hasHarnessEvidence fw:Ev_Schedule ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by Ev_Schedule, which names a check that could have failed." .
+fw:H_EP_Progress a backlog:TestHarness ; backlog:harnessFor fw:EP_Progress ;
+    backlog:hasHarnessEvidence fw:Ev_Progress ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by Ev_Progress, which names a check that could have failed." .
+fw:H_EP_Fit a backlog:TestHarness ; backlog:harnessFor fw:EP_Fit ;
+    backlog:hasHarnessEvidence fw:Ev_Fit ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by Ev_Fit, which names a check that could have failed." .
+fw:H_EP_ValueRelease a backlog:TestHarness ; backlog:harnessFor fw:EP_ValueRelease ;
+    backlog:hasHarnessEvidence fw:Ev_ValueRelease ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by Ev_ValueRelease, which names a check that could have failed." .
+fw:H_EP_OrderRecord a backlog:TestHarness ; backlog:harnessFor fw:EP_OrderRecord ;
+    backlog:hasHarnessEvidence fw:Ev_OrderRecord ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by Ev_OrderRecord, which names a check that could have failed." .
+fw:H_EP_OrderCorrect a backlog:TestHarness ; backlog:harnessFor fw:EP_OrderCorrect ;
+    backlog:hasHarnessEvidence fw:Ev_OrderCorrect ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by Ev_OrderCorrect, which names a check that could have failed." .
+fw:H_EP_Grooming a backlog:TestHarness ; backlog:harnessFor fw:EP_Grooming ;
+    backlog:hasHarnessEvidence fw:Ev_Grooming ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by Ev_Grooming, which names a check that could have failed." .
+fw:H_EP_TaskTypes a backlog:TestHarness ; backlog:harnessFor fw:EP_TaskTypes ;
+    backlog:hasHarnessEvidence fw:Ev_TaskTypes ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by Ev_TaskTypes, which names a check that could have failed." .
+fw:H_S31 a backlog:TestHarness ; backlog:harnessFor fw:S31 ;
+    backlog:hasHarnessEvidence fw:Ev_Cost ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by Ev_Cost, which names a check that could have failed." .
+fw:H_S32 a backlog:TestHarness ; backlog:harnessFor fw:S32 ;
+    backlog:hasHarnessEvidence fw:Ev_Cost ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by Ev_Cost, which names a check that could have failed." .
+fw:H_S33 a backlog:TestHarness ; backlog:harnessFor fw:S33 ;
+    backlog:hasHarnessEvidence fw:Ev_Cost ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by Ev_Cost, which names a check that could have failed." .
+fw:H_S41 a backlog:TestHarness ; backlog:harnessFor fw:S41 ;
+    backlog:hasHarnessEvidence fw:Ev_Human ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by Ev_Human, which names a check that could have failed." .
+fw:H_S42 a backlog:TestHarness ; backlog:harnessFor fw:S42 ;
+    backlog:hasHarnessEvidence fw:Ev_Human ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by Ev_Human, which names a check that could have failed." .
+fw:H_S43 a backlog:TestHarness ; backlog:harnessFor fw:S43 ;
+    backlog:hasHarnessEvidence fw:Ev_Human ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by Ev_Human, which names a check that could have failed." .
+fw:H_T_Dimension a backlog:TestHarness ; backlog:harnessFor fw:T_Dimension ;
+    backlog:hasHarnessEvidence fw:Ev_T_Dimension ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by Ev_T_Dimension, which names a check that could have failed." .
+fw:H_T_Budget a backlog:TestHarness ; backlog:harnessFor fw:T_Budget ;
+    backlog:hasHarnessEvidence fw:Ev_T_Budget ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by Ev_T_Budget, which names a check that could have failed." .
+fw:H_T_Rollup a backlog:TestHarness ; backlog:harnessFor fw:T_Rollup ;
+    backlog:hasHarnessEvidence fw:Ev_T_Rollup ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by Ev_T_Rollup, which names a check that could have failed." .
+fw:H_T_Fixtures a backlog:TestHarness ; backlog:harnessFor fw:T_Fixtures ;
+    backlog:hasHarnessEvidence fw:Ev_T_Fixtures ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by Ev_T_Fixtures, which names a check that could have failed." .
+fw:H_Rel_1_23_0 a backlog:TestHarness ; backlog:harnessFor fw:Rel_1_23_0 ;
+    backlog:hasHarnessEvidence fw:RelEv_1_23_0 ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by RelEv_1_23_0, which names a check that could have failed." .
+fw:H_Rel_1_24_0 a backlog:TestHarness ; backlog:harnessFor fw:Rel_1_24_0 ;
+    backlog:hasHarnessEvidence fw:RelEv_1_24_0 ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by RelEv_1_24_0, which names a check that could have failed." .
+fw:H_Rel_1_25_0 a backlog:TestHarness ; backlog:harnessFor fw:Rel_1_25_0 ;
+    backlog:hasHarnessEvidence fw:RelEv_1_25_0 ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by RelEv_1_25_0, which names a check that could have failed." .
+fw:H_Rel_1_26_0 a backlog:TestHarness ; backlog:harnessFor fw:Rel_1_26_0 ;
+    backlog:hasHarnessEvidence fw:RelEv_1_26_0 ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by RelEv_1_26_0, which names a check that could have failed." .
+fw:H_Rel_1_27_0 a backlog:TestHarness ; backlog:harnessFor fw:Rel_1_27_0 ;
+    backlog:hasHarnessEvidence fw:RelEv_1_27_0 ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by RelEv_1_27_0, which names a check that could have failed." .
+fw:H_Rel_1_28_0 a backlog:TestHarness ; backlog:harnessFor fw:Rel_1_28_0 ;
+    backlog:hasHarnessEvidence fw:RelEv_1_28_0 ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by RelEv_1_28_0, which names a check that could have failed." .
+fw:H_Rel_1_29_0 a backlog:TestHarness ; backlog:harnessFor fw:Rel_1_29_0 ;
+    backlog:hasHarnessEvidence fw:RelEv_1_29_0 ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by RelEv_1_29_0, which names a check that could have failed." .
+fw:H_Rel_1_30_0 a backlog:TestHarness ; backlog:harnessFor fw:Rel_1_30_0 ;
+    backlog:hasHarnessEvidence fw:RelEv_1_30_0 ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by RelEv_1_30_0, which names a check that could have failed." .
+fw:H_Rel_1_31_0 a backlog:TestHarness ; backlog:harnessFor fw:Rel_1_31_0 ;
+    backlog:hasHarnessEvidence fw:RelEv_1_31_0 ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by RelEv_1_31_0, which names a check that could have failed." .
+fw:H_Rel_1_32_0 a backlog:TestHarness ; backlog:harnessFor fw:Rel_1_32_0 ;
+    backlog:hasHarnessEvidence fw:RelEv_1_32_0 ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by RelEv_1_32_0, which names a check that could have failed." .
+fw:H_Rel_1_33_0 a backlog:TestHarness ; backlog:harnessFor fw:Rel_1_33_0 ;
+    backlog:hasHarnessEvidence fw:RelEv_1_33_0 ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by RelEv_1_33_0, which names a check that could have failed." .
+fw:H_Rel_1_34_0 a backlog:TestHarness ; backlog:harnessFor fw:Rel_1_34_0 ;
+    backlog:hasHarnessEvidence fw:RelEv_1_34_0 ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by RelEv_1_34_0, which names a check that could have failed." .
+fw:H_Rel_1_35_0 a backlog:TestHarness ; backlog:harnessFor fw:Rel_1_35_0 ;
+    backlog:hasHarnessEvidence fw:RelEv_1_35_0 ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by RelEv_1_35_0, which names a check that could have failed." .
+fw:H_Rel_1_36_0 a backlog:TestHarness ; backlog:harnessFor fw:Rel_1_36_0 ;
+    backlog:hasHarnessEvidence fw:RelEv_1_36_0 ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by RelEv_1_36_0, which names a check that could have failed." .
+fw:H_Rel_1_37_0 a backlog:TestHarness ; backlog:harnessFor fw:Rel_1_37_0 ;
+    backlog:hasHarnessEvidence fw:RelEv_1_37_0 ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by RelEv_1_37_0, which names a check that could have failed." .
+fw:H_Rel_1_38_0 a backlog:TestHarness ; backlog:harnessFor fw:Rel_1_38_0 ;
+    backlog:hasHarnessEvidence fw:RelEv_1_38_0 ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by RelEv_1_38_0, which names a check that could have failed." .
+fw:H_Rel_1_39_0 a backlog:TestHarness ; backlog:harnessFor fw:Rel_1_39_0 ;
+    backlog:hasHarnessEvidence fw:RelEv_1_39_0 ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by RelEv_1_39_0, which names a check that could have failed." .
+fw:H_Rel_1_40_0 a backlog:TestHarness ; backlog:harnessFor fw:Rel_1_40_0 ;
+    backlog:hasHarnessEvidence fw:RelEv_1_40_0 ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by RelEv_1_40_0, which names a check that could have failed." .
+fw:H_Rel_1_41_0 a backlog:TestHarness ; backlog:harnessFor fw:Rel_1_41_0 ;
+    backlog:hasHarnessEvidence fw:RelEv_1_41_0 ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by RelEv_1_41_0, which names a check that could have failed." .
+fw:H_Rel_1_42_0 a backlog:TestHarness ; backlog:harnessFor fw:Rel_1_42_0 ;
+    backlog:hasHarnessEvidence fw:RelEv_1_42_0 ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by RelEv_1_42_0, which names a check that could have failed." .
+
+#  GROUPS 3 and 4 — the bare epics decomposed into the stories that
+#  were actually delivered, each completed with a criterion, a
+#  refinement addressing its concern, a planning event and a task.
+#  Where the parent is Done the story is Done: the work happened,
+#  and what was missing was the record at story granularity.
+fw:EP_PbiTask_S1 a backlog:Story ;
+    backlog:hasIdentifier "BRF-EP_PbiTask_S1" ;
+    backlog:hasTitle "Product backlog items and execution tasks are disjoint kinds" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_Derived ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at epic level; scoring a decomposition child alongside its scored parent double-counts." ;
+    backlog:hasApplicableConcern backlog:Concern_Architecture ;
+    backlog:hasAcceptanceCriterion fw:AC_EP_PbiTask_S1 ;
+    backlog:startedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-20T16:00:00"^^xsd:dateTime ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:hasEvidence fw:Ev_PbiTask ;
+    backlog:lastAuditedAt "2026-08-20T16:00:00"^^xsd:dateTime .
+fw:AC_EP_PbiTask_S1 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the framework suite, When it is run, Then product backlog items and execution tasks are disjoint kinds — verified on both fixture polarities." .
+fw:R_EP_PbiTask_S1 a backlog:RefinementEvent ; backlog:refines fw:EP_PbiTask_S1 ;
+    backlog:addressesConcern backlog:Concern_Architecture ;
+    backlog:refinedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Approach agreed and recorded in the parent epic's evidence." ;
+    backlog:refinedBy backlog:Builder .
+fw:Plan_EP_PbiTask_S1 a backlog:PlanningEvent ; backlog:plansItem fw:EP_PbiTask_S1 ; backlog:plannedInto fw:It2 ;
+    backlog:plannedAt "2026-08-20T14:00:00"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:producesTask fw:T_EP_PbiTask_S1 .
+fw:T_EP_PbiTask_S1 a backlog:ExecutionTask ; backlog:hasIdentifier "BRF-TEP_PbiTask_S1" ;
+    backlog:hasTitle "Implement and gate: product backlog items and execution tasks are disjoint kinds" ; backlog:hasState backlog:Done ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It2 ;
+    backlog:startedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-20T16:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_PbiTask ;
+    backlog:lastAuditedAt "2026-08-20T16:00:00"^^xsd:dateTime .
+fw:H_EP_PbiTask_S1 a backlog:TestHarness ; backlog:harnessFor fw:EP_PbiTask_S1 ;
+    backlog:hasHarnessEvidence fw:Ev_PbiTask ; backlog:harnessComplete true ;
+    backlog:hasRationale "Completeness rests on the parent epic's evidence." .
+fw:H_TEP_PbiTask_S1 a backlog:TestHarness ; backlog:harnessFor fw:T_EP_PbiTask_S1 ;
+    backlog:hasHarnessEvidence fw:Ev_PbiTask ; backlog:harnessComplete true ;
+    backlog:hasRationale "As for the story it implements." .
+fw:Ev_PbiTask backlog:attestsCriterion fw:AC_EP_PbiTask_S1 .
+fw:EP_PbiTask_S2 a backlog:Story ;
+    backlog:hasIdentifier "BRF-EP_PbiTask_S2" ;
+    backlog:hasTitle "A planning event records the conversion from item to task" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_Derived ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at epic level; scoring a decomposition child alongside its scored parent double-counts." ;
+    backlog:hasApplicableConcern backlog:Concern_Data ;
+    backlog:hasAcceptanceCriterion fw:AC_EP_PbiTask_S2 ;
+    backlog:startedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-20T16:00:00"^^xsd:dateTime ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:hasEvidence fw:Ev_PbiTask ;
+    backlog:lastAuditedAt "2026-08-20T16:00:00"^^xsd:dateTime .
+fw:AC_EP_PbiTask_S2 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the framework suite, When it is run, Then a planning event records the conversion from item to task — verified on both fixture polarities." .
+fw:R_EP_PbiTask_S2 a backlog:RefinementEvent ; backlog:refines fw:EP_PbiTask_S2 ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Approach agreed and recorded in the parent epic's evidence." ;
+    backlog:refinedBy backlog:Builder .
+fw:Plan_EP_PbiTask_S2 a backlog:PlanningEvent ; backlog:plansItem fw:EP_PbiTask_S2 ; backlog:plannedInto fw:It2 ;
+    backlog:plannedAt "2026-08-20T14:00:00"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:producesTask fw:T_EP_PbiTask_S2 .
+fw:T_EP_PbiTask_S2 a backlog:ExecutionTask ; backlog:hasIdentifier "BRF-TEP_PbiTask_S2" ;
+    backlog:hasTitle "Implement and gate: a planning event records the conversion from item to task" ; backlog:hasState backlog:Done ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It2 ;
+    backlog:startedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-20T16:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_PbiTask ;
+    backlog:lastAuditedAt "2026-08-20T16:00:00"^^xsd:dateTime .
+fw:H_EP_PbiTask_S2 a backlog:TestHarness ; backlog:harnessFor fw:EP_PbiTask_S2 ;
+    backlog:hasHarnessEvidence fw:Ev_PbiTask ; backlog:harnessComplete true ;
+    backlog:hasRationale "Completeness rests on the parent epic's evidence." .
+fw:H_TEP_PbiTask_S2 a backlog:TestHarness ; backlog:harnessFor fw:T_EP_PbiTask_S2 ;
+    backlog:hasHarnessEvidence fw:Ev_PbiTask ; backlog:harnessComplete true ;
+    backlog:hasRationale "As for the story it implements." .
+fw:Ev_PbiTask backlog:attestsCriterion fw:AC_EP_PbiTask_S2 .
+fw:EP_PbiTask backlog:decomposesInto fw:EP_PbiTask_S1 , fw:EP_PbiTask_S2 .
+fw:EP_Flow_S1 a backlog:Story ;
+    backlog:hasIdentifier "BRF-EP_Flow_S1" ;
+    backlog:hasTitle "Cycle time and velocity computed from recorded points" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_Adopter ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at epic level; scoring a decomposition child alongside its scored parent double-counts." ;
+    backlog:hasApplicableConcern backlog:Concern_Data ;
+    backlog:hasAcceptanceCriterion fw:AC_EP_Flow_S1 ;
+    backlog:startedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-20T16:00:00"^^xsd:dateTime ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:hasEvidence fw:Ev_Flow ;
+    backlog:lastAuditedAt "2026-08-20T16:00:00"^^xsd:dateTime .
+fw:AC_EP_Flow_S1 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the framework suite, When it is run, Then cycle time and velocity computed from recorded points — verified on both fixture polarities." .
+fw:R_EP_Flow_S1 a backlog:RefinementEvent ; backlog:refines fw:EP_Flow_S1 ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Approach agreed and recorded in the parent epic's evidence." ;
+    backlog:refinedBy backlog:Builder .
+fw:Plan_EP_Flow_S1 a backlog:PlanningEvent ; backlog:plansItem fw:EP_Flow_S1 ; backlog:plannedInto fw:It2 ;
+    backlog:plannedAt "2026-08-20T14:00:00"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:producesTask fw:T_EP_Flow_S1 .
+fw:T_EP_Flow_S1 a backlog:ExecutionTask ; backlog:hasIdentifier "BRF-TEP_Flow_S1" ;
+    backlog:hasTitle "Implement and gate: cycle time and velocity computed from recorded points" ; backlog:hasState backlog:Done ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It2 ;
+    backlog:startedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-20T16:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_Flow ;
+    backlog:lastAuditedAt "2026-08-20T16:00:00"^^xsd:dateTime .
+fw:H_EP_Flow_S1 a backlog:TestHarness ; backlog:harnessFor fw:EP_Flow_S1 ;
+    backlog:hasHarnessEvidence fw:Ev_Flow ; backlog:harnessComplete true ;
+    backlog:hasRationale "Completeness rests on the parent epic's evidence." .
+fw:H_TEP_Flow_S1 a backlog:TestHarness ; backlog:harnessFor fw:T_EP_Flow_S1 ;
+    backlog:hasHarnessEvidence fw:Ev_Flow ; backlog:harnessComplete true ;
+    backlog:hasRationale "As for the story it implements." .
+fw:Ev_Flow backlog:attestsCriterion fw:AC_EP_Flow_S1 .
+fw:EP_Flow_S2 a backlog:Story ;
+    backlog:hasIdentifier "BRF-EP_Flow_S2" ;
+    backlog:hasTitle "A forecast carries the assumptions it rests on" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_Adopter ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at epic level; scoring a decomposition child alongside its scored parent double-counts." ;
+    backlog:hasApplicableConcern backlog:Concern_Data ;
+    backlog:hasAcceptanceCriterion fw:AC_EP_Flow_S2 ;
+    backlog:startedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-20T16:00:00"^^xsd:dateTime ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:hasEvidence fw:Ev_Flow ;
+    backlog:lastAuditedAt "2026-08-20T16:00:00"^^xsd:dateTime .
+fw:AC_EP_Flow_S2 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the framework suite, When it is run, Then a forecast carries the assumptions it rests on — verified on both fixture polarities." .
+fw:R_EP_Flow_S2 a backlog:RefinementEvent ; backlog:refines fw:EP_Flow_S2 ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Approach agreed and recorded in the parent epic's evidence." ;
+    backlog:refinedBy backlog:Builder .
+fw:Plan_EP_Flow_S2 a backlog:PlanningEvent ; backlog:plansItem fw:EP_Flow_S2 ; backlog:plannedInto fw:It2 ;
+    backlog:plannedAt "2026-08-20T14:00:00"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:producesTask fw:T_EP_Flow_S2 .
+fw:T_EP_Flow_S2 a backlog:ExecutionTask ; backlog:hasIdentifier "BRF-TEP_Flow_S2" ;
+    backlog:hasTitle "Implement and gate: a forecast carries the assumptions it rests on" ; backlog:hasState backlog:Done ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It2 ;
+    backlog:startedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-20T16:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_Flow ;
+    backlog:lastAuditedAt "2026-08-20T16:00:00"^^xsd:dateTime .
+fw:H_EP_Flow_S2 a backlog:TestHarness ; backlog:harnessFor fw:EP_Flow_S2 ;
+    backlog:hasHarnessEvidence fw:Ev_Flow ; backlog:harnessComplete true ;
+    backlog:hasRationale "Completeness rests on the parent epic's evidence." .
+fw:H_TEP_Flow_S2 a backlog:TestHarness ; backlog:harnessFor fw:T_EP_Flow_S2 ;
+    backlog:hasHarnessEvidence fw:Ev_Flow ; backlog:harnessComplete true ;
+    backlog:hasRationale "As for the story it implements." .
+fw:Ev_Flow backlog:attestsCriterion fw:AC_EP_Flow_S2 .
+fw:EP_Flow backlog:decomposesInto fw:EP_Flow_S1 , fw:EP_Flow_S2 .
+fw:EP_Views_S1 a backlog:Story ;
+    backlog:hasIdentifier "BRF-EP_Views_S1" ;
+    backlog:hasTitle "Classical project views rendered from the register" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_Views ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at epic level; scoring a decomposition child alongside its scored parent double-counts." ;
+    backlog:hasApplicableConcern backlog:Concern_Interaction ;
+    backlog:hasAcceptanceCriterion fw:AC_EP_Views_S1 ;
+    backlog:startedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-20T16:00:00"^^xsd:dateTime ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:hasEvidence fw:Ev_Views ;
+    backlog:lastAuditedAt "2026-08-20T16:00:00"^^xsd:dateTime .
+fw:AC_EP_Views_S1 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the framework suite, When it is run, Then classical project views rendered from the register — verified on both fixture polarities." .
+fw:R_EP_Views_S1 a backlog:RefinementEvent ; backlog:refines fw:EP_Views_S1 ;
+    backlog:addressesConcern backlog:Concern_Interaction ;
+    backlog:refinedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Approach agreed and recorded in the parent epic's evidence." ;
+    backlog:refinedBy backlog:Builder .
+fw:Plan_EP_Views_S1 a backlog:PlanningEvent ; backlog:plansItem fw:EP_Views_S1 ; backlog:plannedInto fw:It2 ;
+    backlog:plannedAt "2026-08-20T14:00:00"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:producesTask fw:T_EP_Views_S1 .
+fw:T_EP_Views_S1 a backlog:ExecutionTask ; backlog:hasIdentifier "BRF-TEP_Views_S1" ;
+    backlog:hasTitle "Implement and gate: classical project views rendered from the register" ; backlog:hasState backlog:Done ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It2 ;
+    backlog:startedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-20T16:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_Views ;
+    backlog:lastAuditedAt "2026-08-20T16:00:00"^^xsd:dateTime .
+fw:H_EP_Views_S1 a backlog:TestHarness ; backlog:harnessFor fw:EP_Views_S1 ;
+    backlog:hasHarnessEvidence fw:Ev_Views ; backlog:harnessComplete true ;
+    backlog:hasRationale "Completeness rests on the parent epic's evidence." .
+fw:H_TEP_Views_S1 a backlog:TestHarness ; backlog:harnessFor fw:T_EP_Views_S1 ;
+    backlog:hasHarnessEvidence fw:Ev_Views ; backlog:harnessComplete true ;
+    backlog:hasRationale "As for the story it implements." .
+fw:Ev_Views backlog:attestsCriterion fw:AC_EP_Views_S1 .
+fw:EP_Views_S2 a backlog:Story ;
+    backlog:hasIdentifier "BRF-EP_Views_S2" ;
+    backlog:hasTitle "A view refuses rather than assumes when nothing anchors it" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_Views ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at epic level; scoring a decomposition child alongside its scored parent double-counts." ;
+    backlog:hasApplicableConcern backlog:Concern_Interaction ;
+    backlog:hasAcceptanceCriterion fw:AC_EP_Views_S2 ;
+    backlog:startedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-20T16:00:00"^^xsd:dateTime ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:hasEvidence fw:Ev_Views ;
+    backlog:lastAuditedAt "2026-08-20T16:00:00"^^xsd:dateTime .
+fw:AC_EP_Views_S2 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the framework suite, When it is run, Then a view refuses rather than assumes when nothing anchors it — verified on both fixture polarities." .
+fw:R_EP_Views_S2 a backlog:RefinementEvent ; backlog:refines fw:EP_Views_S2 ;
+    backlog:addressesConcern backlog:Concern_Interaction ;
+    backlog:refinedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Approach agreed and recorded in the parent epic's evidence." ;
+    backlog:refinedBy backlog:Builder .
+fw:Plan_EP_Views_S2 a backlog:PlanningEvent ; backlog:plansItem fw:EP_Views_S2 ; backlog:plannedInto fw:It2 ;
+    backlog:plannedAt "2026-08-20T14:00:00"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:producesTask fw:T_EP_Views_S2 .
+fw:T_EP_Views_S2 a backlog:ExecutionTask ; backlog:hasIdentifier "BRF-TEP_Views_S2" ;
+    backlog:hasTitle "Implement and gate: a view refuses rather than assumes when nothing anchors it" ; backlog:hasState backlog:Done ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It2 ;
+    backlog:startedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-20T16:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_Views ;
+    backlog:lastAuditedAt "2026-08-20T16:00:00"^^xsd:dateTime .
+fw:H_EP_Views_S2 a backlog:TestHarness ; backlog:harnessFor fw:EP_Views_S2 ;
+    backlog:hasHarnessEvidence fw:Ev_Views ; backlog:harnessComplete true ;
+    backlog:hasRationale "Completeness rests on the parent epic's evidence." .
+fw:H_TEP_Views_S2 a backlog:TestHarness ; backlog:harnessFor fw:T_EP_Views_S2 ;
+    backlog:hasHarnessEvidence fw:Ev_Views ; backlog:harnessComplete true ;
+    backlog:hasRationale "As for the story it implements." .
+fw:Ev_Views backlog:attestsCriterion fw:AC_EP_Views_S2 .
+fw:EP_Views backlog:decomposesInto fw:EP_Views_S1 , fw:EP_Views_S2 .
+fw:EP_Schedule_S1 a backlog:Story ;
+    backlog:hasIdentifier "BRF-EP_Schedule_S1" ;
+    backlog:hasTitle "Kick-off with declared and triggered modes" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_Views ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at epic level; scoring a decomposition child alongside its scored parent double-counts." ;
+    backlog:hasApplicableConcern backlog:Concern_Data ;
+    backlog:hasAcceptanceCriterion fw:AC_EP_Schedule_S1 ;
+    backlog:startedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-20T16:00:00"^^xsd:dateTime ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:hasEvidence fw:Ev_Schedule ;
+    backlog:lastAuditedAt "2026-08-20T16:00:00"^^xsd:dateTime .
+fw:AC_EP_Schedule_S1 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the framework suite, When it is run, Then kick-off with declared and triggered modes — verified on both fixture polarities." .
+fw:R_EP_Schedule_S1 a backlog:RefinementEvent ; backlog:refines fw:EP_Schedule_S1 ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Approach agreed and recorded in the parent epic's evidence." ;
+    backlog:refinedBy backlog:Builder .
+fw:Plan_EP_Schedule_S1 a backlog:PlanningEvent ; backlog:plansItem fw:EP_Schedule_S1 ; backlog:plannedInto fw:It2 ;
+    backlog:plannedAt "2026-08-20T14:00:00"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:producesTask fw:T_EP_Schedule_S1 .
+fw:T_EP_Schedule_S1 a backlog:ExecutionTask ; backlog:hasIdentifier "BRF-TEP_Schedule_S1" ;
+    backlog:hasTitle "Implement and gate: kick-off with declared and triggered modes" ; backlog:hasState backlog:Done ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It2 ;
+    backlog:startedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-20T16:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_Schedule ;
+    backlog:lastAuditedAt "2026-08-20T16:00:00"^^xsd:dateTime .
+fw:H_EP_Schedule_S1 a backlog:TestHarness ; backlog:harnessFor fw:EP_Schedule_S1 ;
+    backlog:hasHarnessEvidence fw:Ev_Schedule ; backlog:harnessComplete true ;
+    backlog:hasRationale "Completeness rests on the parent epic's evidence." .
+fw:H_TEP_Schedule_S1 a backlog:TestHarness ; backlog:harnessFor fw:T_EP_Schedule_S1 ;
+    backlog:hasHarnessEvidence fw:Ev_Schedule ; backlog:harnessComplete true ;
+    backlog:hasRationale "As for the story it implements." .
+fw:Ev_Schedule backlog:attestsCriterion fw:AC_EP_Schedule_S1 .
+fw:EP_Schedule_S2 a backlog:Story ;
+    backlog:hasIdentifier "BRF-EP_Schedule_S2" ;
+    backlog:hasTitle "A superseded baseline is retained so the original plan stays computable" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_Views ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at epic level; scoring a decomposition child alongside its scored parent double-counts." ;
+    backlog:hasApplicableConcern backlog:Concern_Data ;
+    backlog:hasAcceptanceCriterion fw:AC_EP_Schedule_S2 ;
+    backlog:startedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-20T16:00:00"^^xsd:dateTime ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:hasEvidence fw:Ev_Schedule ;
+    backlog:lastAuditedAt "2026-08-20T16:00:00"^^xsd:dateTime .
+fw:AC_EP_Schedule_S2 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the framework suite, When it is run, Then a superseded baseline is retained so the original plan stays computable — verified on both fixture polarities." .
+fw:R_EP_Schedule_S2 a backlog:RefinementEvent ; backlog:refines fw:EP_Schedule_S2 ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Approach agreed and recorded in the parent epic's evidence." ;
+    backlog:refinedBy backlog:Builder .
+fw:Plan_EP_Schedule_S2 a backlog:PlanningEvent ; backlog:plansItem fw:EP_Schedule_S2 ; backlog:plannedInto fw:It2 ;
+    backlog:plannedAt "2026-08-20T14:00:00"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:producesTask fw:T_EP_Schedule_S2 .
+fw:T_EP_Schedule_S2 a backlog:ExecutionTask ; backlog:hasIdentifier "BRF-TEP_Schedule_S2" ;
+    backlog:hasTitle "Implement and gate: a superseded baseline is retained so the original plan stays computable" ; backlog:hasState backlog:Done ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It2 ;
+    backlog:startedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-20T16:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_Schedule ;
+    backlog:lastAuditedAt "2026-08-20T16:00:00"^^xsd:dateTime .
+fw:H_EP_Schedule_S2 a backlog:TestHarness ; backlog:harnessFor fw:EP_Schedule_S2 ;
+    backlog:hasHarnessEvidence fw:Ev_Schedule ; backlog:harnessComplete true ;
+    backlog:hasRationale "Completeness rests on the parent epic's evidence." .
+fw:H_TEP_Schedule_S2 a backlog:TestHarness ; backlog:harnessFor fw:T_EP_Schedule_S2 ;
+    backlog:hasHarnessEvidence fw:Ev_Schedule ; backlog:harnessComplete true ;
+    backlog:hasRationale "As for the story it implements." .
+fw:Ev_Schedule backlog:attestsCriterion fw:AC_EP_Schedule_S2 .
+fw:EP_Schedule backlog:decomposesInto fw:EP_Schedule_S1 , fw:EP_Schedule_S2 .
+fw:EP_Progress_S1 a backlog:Story ;
+    backlog:hasIdentifier "BRF-EP_Progress_S1" ;
+    backlog:hasTitle "Completion derived from children rather than stored" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_ProgressInViews ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at epic level; scoring a decomposition child alongside its scored parent double-counts." ;
+    backlog:hasApplicableConcern backlog:Concern_Data ;
+    backlog:hasAcceptanceCriterion fw:AC_EP_Progress_S1 ;
+    backlog:startedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-20T16:00:00"^^xsd:dateTime ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:hasEvidence fw:Ev_Progress ;
+    backlog:lastAuditedAt "2026-08-20T16:00:00"^^xsd:dateTime .
+fw:AC_EP_Progress_S1 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the framework suite, When it is run, Then completion derived from children rather than stored — verified on both fixture polarities." .
+fw:R_EP_Progress_S1 a backlog:RefinementEvent ; backlog:refines fw:EP_Progress_S1 ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Approach agreed and recorded in the parent epic's evidence." ;
+    backlog:refinedBy backlog:Builder .
+fw:Plan_EP_Progress_S1 a backlog:PlanningEvent ; backlog:plansItem fw:EP_Progress_S1 ; backlog:plannedInto fw:It2 ;
+    backlog:plannedAt "2026-08-20T14:00:00"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:producesTask fw:T_EP_Progress_S1 .
+fw:T_EP_Progress_S1 a backlog:ExecutionTask ; backlog:hasIdentifier "BRF-TEP_Progress_S1" ;
+    backlog:hasTitle "Implement and gate: completion derived from children rather than stored" ; backlog:hasState backlog:Done ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It2 ;
+    backlog:startedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-20T16:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_Progress ;
+    backlog:lastAuditedAt "2026-08-20T16:00:00"^^xsd:dateTime .
+fw:H_EP_Progress_S1 a backlog:TestHarness ; backlog:harnessFor fw:EP_Progress_S1 ;
+    backlog:hasHarnessEvidence fw:Ev_Progress ; backlog:harnessComplete true ;
+    backlog:hasRationale "Completeness rests on the parent epic's evidence." .
+fw:H_TEP_Progress_S1 a backlog:TestHarness ; backlog:harnessFor fw:T_EP_Progress_S1 ;
+    backlog:hasHarnessEvidence fw:Ev_Progress ; backlog:harnessComplete true ;
+    backlog:hasRationale "As for the story it implements." .
+fw:Ev_Progress backlog:attestsCriterion fw:AC_EP_Progress_S1 .
+fw:EP_Progress_S2 a backlog:Story ;
+    backlog:hasIdentifier "BRF-EP_Progress_S2" ;
+    backlog:hasTitle "An unknown renders as unknown, never as zero" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_ProgressInViews ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at epic level; scoring a decomposition child alongside its scored parent double-counts." ;
+    backlog:hasApplicableConcern backlog:Concern_Interaction ;
+    backlog:hasAcceptanceCriterion fw:AC_EP_Progress_S2 ;
+    backlog:startedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-20T16:00:00"^^xsd:dateTime ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:hasEvidence fw:Ev_Progress ;
+    backlog:lastAuditedAt "2026-08-20T16:00:00"^^xsd:dateTime .
+fw:AC_EP_Progress_S2 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the framework suite, When it is run, Then an unknown renders as unknown, never as zero — verified on both fixture polarities." .
+fw:R_EP_Progress_S2 a backlog:RefinementEvent ; backlog:refines fw:EP_Progress_S2 ;
+    backlog:addressesConcern backlog:Concern_Interaction ;
+    backlog:refinedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Approach agreed and recorded in the parent epic's evidence." ;
+    backlog:refinedBy backlog:Builder .
+fw:Plan_EP_Progress_S2 a backlog:PlanningEvent ; backlog:plansItem fw:EP_Progress_S2 ; backlog:plannedInto fw:It2 ;
+    backlog:plannedAt "2026-08-20T14:00:00"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:producesTask fw:T_EP_Progress_S2 .
+fw:T_EP_Progress_S2 a backlog:ExecutionTask ; backlog:hasIdentifier "BRF-TEP_Progress_S2" ;
+    backlog:hasTitle "Implement and gate: an unknown renders as unknown, never as zero" ; backlog:hasState backlog:Done ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It2 ;
+    backlog:startedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-20T16:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_Progress ;
+    backlog:lastAuditedAt "2026-08-20T16:00:00"^^xsd:dateTime .
+fw:H_EP_Progress_S2 a backlog:TestHarness ; backlog:harnessFor fw:EP_Progress_S2 ;
+    backlog:hasHarnessEvidence fw:Ev_Progress ; backlog:harnessComplete true ;
+    backlog:hasRationale "Completeness rests on the parent epic's evidence." .
+fw:H_TEP_Progress_S2 a backlog:TestHarness ; backlog:harnessFor fw:T_EP_Progress_S2 ;
+    backlog:hasHarnessEvidence fw:Ev_Progress ; backlog:harnessComplete true ;
+    backlog:hasRationale "As for the story it implements." .
+fw:Ev_Progress backlog:attestsCriterion fw:AC_EP_Progress_S2 .
+fw:EP_Progress backlog:decomposesInto fw:EP_Progress_S1 , fw:EP_Progress_S2 .
+fw:EP_Fit_S1 a backlog:Story ;
+    backlog:hasIdentifier "BRF-EP_Fit_S1" ;
+    backlog:hasTitle "A story committed to two iterations is rejected" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_Finishable ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at epic level; scoring a decomposition child alongside its scored parent double-counts." ;
+    backlog:hasApplicableConcern backlog:Concern_Data ;
+    backlog:hasAcceptanceCriterion fw:AC_EP_Fit_S1 ;
+    backlog:startedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-20T16:00:00"^^xsd:dateTime ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:hasEvidence fw:Ev_Fit ;
+    backlog:lastAuditedAt "2026-08-20T16:00:00"^^xsd:dateTime .
+fw:AC_EP_Fit_S1 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the framework suite, When it is run, Then a story committed to two iterations is rejected — verified on both fixture polarities." .
+fw:R_EP_Fit_S1 a backlog:RefinementEvent ; backlog:refines fw:EP_Fit_S1 ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Approach agreed and recorded in the parent epic's evidence." ;
+    backlog:refinedBy backlog:Builder .
+fw:Plan_EP_Fit_S1 a backlog:PlanningEvent ; backlog:plansItem fw:EP_Fit_S1 ; backlog:plannedInto fw:It2 ;
+    backlog:plannedAt "2026-08-20T14:00:00"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:producesTask fw:T_EP_Fit_S1 .
+fw:T_EP_Fit_S1 a backlog:ExecutionTask ; backlog:hasIdentifier "BRF-TEP_Fit_S1" ;
+    backlog:hasTitle "Implement and gate: a story committed to two iterations is rejected" ; backlog:hasState backlog:Done ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It2 ;
+    backlog:startedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-20T16:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_Fit ;
+    backlog:lastAuditedAt "2026-08-20T16:00:00"^^xsd:dateTime .
+fw:H_EP_Fit_S1 a backlog:TestHarness ; backlog:harnessFor fw:EP_Fit_S1 ;
+    backlog:hasHarnessEvidence fw:Ev_Fit ; backlog:harnessComplete true ;
+    backlog:hasRationale "Completeness rests on the parent epic's evidence." .
+fw:H_TEP_Fit_S1 a backlog:TestHarness ; backlog:harnessFor fw:T_EP_Fit_S1 ;
+    backlog:hasHarnessEvidence fw:Ev_Fit ; backlog:harnessComplete true ;
+    backlog:hasRationale "As for the story it implements." .
+fw:Ev_Fit backlog:attestsCriterion fw:AC_EP_Fit_S1 .
+fw:EP_Fit_S2 a backlog:Story ;
+    backlog:hasIdentifier "BRF-EP_Fit_S2" ;
+    backlog:hasTitle "Splitting is expressible as the remedy" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_Finishable ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at epic level; scoring a decomposition child alongside its scored parent double-counts." ;
+    backlog:hasApplicableConcern backlog:Concern_Architecture ;
+    backlog:hasAcceptanceCriterion fw:AC_EP_Fit_S2 ;
+    backlog:startedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-20T16:00:00"^^xsd:dateTime ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:hasEvidence fw:Ev_Fit ;
+    backlog:lastAuditedAt "2026-08-20T16:00:00"^^xsd:dateTime .
+fw:AC_EP_Fit_S2 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the framework suite, When it is run, Then splitting is expressible as the remedy — verified on both fixture polarities." .
+fw:R_EP_Fit_S2 a backlog:RefinementEvent ; backlog:refines fw:EP_Fit_S2 ;
+    backlog:addressesConcern backlog:Concern_Architecture ;
+    backlog:refinedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Approach agreed and recorded in the parent epic's evidence." ;
+    backlog:refinedBy backlog:Builder .
+fw:Plan_EP_Fit_S2 a backlog:PlanningEvent ; backlog:plansItem fw:EP_Fit_S2 ; backlog:plannedInto fw:It2 ;
+    backlog:plannedAt "2026-08-20T14:00:00"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:producesTask fw:T_EP_Fit_S2 .
+fw:T_EP_Fit_S2 a backlog:ExecutionTask ; backlog:hasIdentifier "BRF-TEP_Fit_S2" ;
+    backlog:hasTitle "Implement and gate: splitting is expressible as the remedy" ; backlog:hasState backlog:Done ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It2 ;
+    backlog:startedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-20T16:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_Fit ;
+    backlog:lastAuditedAt "2026-08-20T16:00:00"^^xsd:dateTime .
+fw:H_EP_Fit_S2 a backlog:TestHarness ; backlog:harnessFor fw:EP_Fit_S2 ;
+    backlog:hasHarnessEvidence fw:Ev_Fit ; backlog:harnessComplete true ;
+    backlog:hasRationale "Completeness rests on the parent epic's evidence." .
+fw:H_TEP_Fit_S2 a backlog:TestHarness ; backlog:harnessFor fw:T_EP_Fit_S2 ;
+    backlog:hasHarnessEvidence fw:Ev_Fit ; backlog:harnessComplete true ;
+    backlog:hasRationale "As for the story it implements." .
+fw:Ev_Fit backlog:attestsCriterion fw:AC_EP_Fit_S2 .
+fw:EP_Fit backlog:decomposesInto fw:EP_Fit_S1 , fw:EP_Fit_S2 .
+fw:EP_ValueRelease_S1 a backlog:Story ;
+    backlog:hasIdentifier "BRF-EP_ValueRelease_S1" ;
+    backlog:hasTitle "A deployment records the basis its contents were chosen on" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_Finishable ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at epic level; scoring a decomposition child alongside its scored parent double-counts." ;
+    backlog:hasApplicableConcern backlog:Concern_Data ;
+    backlog:hasAcceptanceCriterion fw:AC_EP_ValueRelease_S1 ;
+    backlog:startedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-20T16:00:00"^^xsd:dateTime ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:hasEvidence fw:Ev_ValueRelease ;
+    backlog:lastAuditedAt "2026-08-20T16:00:00"^^xsd:dateTime .
+fw:AC_EP_ValueRelease_S1 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the framework suite, When it is run, Then a deployment records the basis its contents were chosen on — verified on both fixture polarities." .
+fw:R_EP_ValueRelease_S1 a backlog:RefinementEvent ; backlog:refines fw:EP_ValueRelease_S1 ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Approach agreed and recorded in the parent epic's evidence." ;
+    backlog:refinedBy backlog:Builder .
+fw:Plan_EP_ValueRelease_S1 a backlog:PlanningEvent ; backlog:plansItem fw:EP_ValueRelease_S1 ; backlog:plannedInto fw:It2 ;
+    backlog:plannedAt "2026-08-20T14:00:00"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:producesTask fw:T_EP_ValueRelease_S1 .
+fw:T_EP_ValueRelease_S1 a backlog:ExecutionTask ; backlog:hasIdentifier "BRF-TEP_ValueRelease_S1" ;
+    backlog:hasTitle "Implement and gate: a deployment records the basis its contents were chosen on" ; backlog:hasState backlog:Done ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It2 ;
+    backlog:startedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-20T16:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_ValueRelease ;
+    backlog:lastAuditedAt "2026-08-20T16:00:00"^^xsd:dateTime .
+fw:H_EP_ValueRelease_S1 a backlog:TestHarness ; backlog:harnessFor fw:EP_ValueRelease_S1 ;
+    backlog:hasHarnessEvidence fw:Ev_ValueRelease ; backlog:harnessComplete true ;
+    backlog:hasRationale "Completeness rests on the parent epic's evidence." .
+fw:H_TEP_ValueRelease_S1 a backlog:TestHarness ; backlog:harnessFor fw:T_EP_ValueRelease_S1 ;
+    backlog:hasHarnessEvidence fw:Ev_ValueRelease ; backlog:harnessComplete true ;
+    backlog:hasRationale "As for the story it implements." .
+fw:Ev_ValueRelease backlog:attestsCriterion fw:AC_EP_ValueRelease_S1 .
+fw:EP_ValueRelease_S2 a backlog:Story ;
+    backlog:hasIdentifier "BRF-EP_ValueRelease_S2" ;
+    backlog:hasTitle "A passed-over higher score is named with a reason" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_Finishable ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at epic level; scoring a decomposition child alongside its scored parent double-counts." ;
+    backlog:hasApplicableConcern backlog:Concern_Data ;
+    backlog:hasAcceptanceCriterion fw:AC_EP_ValueRelease_S2 ;
+    backlog:startedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-20T16:00:00"^^xsd:dateTime ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:hasEvidence fw:Ev_ValueRelease ;
+    backlog:lastAuditedAt "2026-08-20T16:00:00"^^xsd:dateTime .
+fw:AC_EP_ValueRelease_S2 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the framework suite, When it is run, Then a passed-over higher score is named with a reason — verified on both fixture polarities." .
+fw:R_EP_ValueRelease_S2 a backlog:RefinementEvent ; backlog:refines fw:EP_ValueRelease_S2 ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Approach agreed and recorded in the parent epic's evidence." ;
+    backlog:refinedBy backlog:Builder .
+fw:Plan_EP_ValueRelease_S2 a backlog:PlanningEvent ; backlog:plansItem fw:EP_ValueRelease_S2 ; backlog:plannedInto fw:It2 ;
+    backlog:plannedAt "2026-08-20T14:00:00"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:producesTask fw:T_EP_ValueRelease_S2 .
+fw:T_EP_ValueRelease_S2 a backlog:ExecutionTask ; backlog:hasIdentifier "BRF-TEP_ValueRelease_S2" ;
+    backlog:hasTitle "Implement and gate: a passed-over higher score is named with a reason" ; backlog:hasState backlog:Done ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It2 ;
+    backlog:startedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-20T16:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_ValueRelease ;
+    backlog:lastAuditedAt "2026-08-20T16:00:00"^^xsd:dateTime .
+fw:H_EP_ValueRelease_S2 a backlog:TestHarness ; backlog:harnessFor fw:EP_ValueRelease_S2 ;
+    backlog:hasHarnessEvidence fw:Ev_ValueRelease ; backlog:harnessComplete true ;
+    backlog:hasRationale "Completeness rests on the parent epic's evidence." .
+fw:H_TEP_ValueRelease_S2 a backlog:TestHarness ; backlog:harnessFor fw:T_EP_ValueRelease_S2 ;
+    backlog:hasHarnessEvidence fw:Ev_ValueRelease ; backlog:harnessComplete true ;
+    backlog:hasRationale "As for the story it implements." .
+fw:Ev_ValueRelease backlog:attestsCriterion fw:AC_EP_ValueRelease_S2 .
+fw:EP_ValueRelease backlog:decomposesInto fw:EP_ValueRelease_S1 , fw:EP_ValueRelease_S2 .
+fw:EP_OrderRecord_S1 a backlog:Story ;
+    backlog:hasIdentifier "BRF-EP_OrderRecord_S1" ;
+    backlog:hasTitle "An objective names the scope it fills" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_OrderRecordable ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at epic level; scoring a decomposition child alongside its scored parent double-counts." ;
+    backlog:hasApplicableConcern backlog:Concern_Architecture ;
+    backlog:hasAcceptanceCriterion fw:AC_EP_OrderRecord_S1 ;
+    backlog:startedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-20T16:00:00"^^xsd:dateTime ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:hasEvidence fw:Ev_OrderRecord ;
+    backlog:lastAuditedAt "2026-08-20T16:00:00"^^xsd:dateTime .
+fw:AC_EP_OrderRecord_S1 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the framework suite, When it is run, Then an objective names the scope it fills — verified on both fixture polarities." .
+fw:R_EP_OrderRecord_S1 a backlog:RefinementEvent ; backlog:refines fw:EP_OrderRecord_S1 ;
+    backlog:addressesConcern backlog:Concern_Architecture ;
+    backlog:refinedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Approach agreed and recorded in the parent epic's evidence." ;
+    backlog:refinedBy backlog:Builder .
+fw:Plan_EP_OrderRecord_S1 a backlog:PlanningEvent ; backlog:plansItem fw:EP_OrderRecord_S1 ; backlog:plannedInto fw:It2 ;
+    backlog:plannedAt "2026-08-20T14:00:00"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:producesTask fw:T_EP_OrderRecord_S1 .
+fw:T_EP_OrderRecord_S1 a backlog:ExecutionTask ; backlog:hasIdentifier "BRF-TEP_OrderRecord_S1" ;
+    backlog:hasTitle "Implement and gate: an objective names the scope it fills" ; backlog:hasState backlog:Done ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It2 ;
+    backlog:startedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-20T16:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_OrderRecord ;
+    backlog:lastAuditedAt "2026-08-20T16:00:00"^^xsd:dateTime .
+fw:H_EP_OrderRecord_S1 a backlog:TestHarness ; backlog:harnessFor fw:EP_OrderRecord_S1 ;
+    backlog:hasHarnessEvidence fw:Ev_OrderRecord ; backlog:harnessComplete true ;
+    backlog:hasRationale "Completeness rests on the parent epic's evidence." .
+fw:H_TEP_OrderRecord_S1 a backlog:TestHarness ; backlog:harnessFor fw:T_EP_OrderRecord_S1 ;
+    backlog:hasHarnessEvidence fw:Ev_OrderRecord ; backlog:harnessComplete true ;
+    backlog:hasRationale "As for the story it implements." .
+fw:Ev_OrderRecord backlog:attestsCriterion fw:AC_EP_OrderRecord_S1 .
+fw:EP_OrderRecord_S2 a backlog:Story ;
+    backlog:hasIdentifier "BRF-EP_OrderRecord_S2" ;
+    backlog:hasTitle "A lineage asserting both directions is rejected" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_OrderRecordable ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at epic level; scoring a decomposition child alongside its scored parent double-counts." ;
+    backlog:hasApplicableConcern backlog:Concern_Data ;
+    backlog:hasAcceptanceCriterion fw:AC_EP_OrderRecord_S2 ;
+    backlog:startedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-20T16:00:00"^^xsd:dateTime ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:hasEvidence fw:Ev_OrderRecord ;
+    backlog:lastAuditedAt "2026-08-20T16:00:00"^^xsd:dateTime .
+fw:AC_EP_OrderRecord_S2 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the framework suite, When it is run, Then a lineage asserting both directions is rejected — verified on both fixture polarities." .
+fw:R_EP_OrderRecord_S2 a backlog:RefinementEvent ; backlog:refines fw:EP_OrderRecord_S2 ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Approach agreed and recorded in the parent epic's evidence." ;
+    backlog:refinedBy backlog:Builder .
+fw:Plan_EP_OrderRecord_S2 a backlog:PlanningEvent ; backlog:plansItem fw:EP_OrderRecord_S2 ; backlog:plannedInto fw:It2 ;
+    backlog:plannedAt "2026-08-20T14:00:00"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:producesTask fw:T_EP_OrderRecord_S2 .
+fw:T_EP_OrderRecord_S2 a backlog:ExecutionTask ; backlog:hasIdentifier "BRF-TEP_OrderRecord_S2" ;
+    backlog:hasTitle "Implement and gate: a lineage asserting both directions is rejected" ; backlog:hasState backlog:Done ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It2 ;
+    backlog:startedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-20T16:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_OrderRecord ;
+    backlog:lastAuditedAt "2026-08-20T16:00:00"^^xsd:dateTime .
+fw:H_EP_OrderRecord_S2 a backlog:TestHarness ; backlog:harnessFor fw:EP_OrderRecord_S2 ;
+    backlog:hasHarnessEvidence fw:Ev_OrderRecord ; backlog:harnessComplete true ;
+    backlog:hasRationale "Completeness rests on the parent epic's evidence." .
+fw:H_TEP_OrderRecord_S2 a backlog:TestHarness ; backlog:harnessFor fw:T_EP_OrderRecord_S2 ;
+    backlog:hasHarnessEvidence fw:Ev_OrderRecord ; backlog:harnessComplete true ;
+    backlog:hasRationale "As for the story it implements." .
+fw:Ev_OrderRecord backlog:attestsCriterion fw:AC_EP_OrderRecord_S2 .
+fw:EP_OrderRecord backlog:decomposesInto fw:EP_OrderRecord_S1 , fw:EP_OrderRecord_S2 .
+fw:EP_OrderCorrect_S1 a backlog:Story ;
+    backlog:hasIdentifier "BRF-EP_OrderCorrect_S1" ;
+    backlog:hasTitle "The completeness reporter presents scope before goals" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_NoStaleOrder ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at epic level; scoring a decomposition child alongside its scored parent double-counts." ;
+    backlog:hasApplicableConcern backlog:Concern_Interaction ;
+    backlog:hasAcceptanceCriterion fw:AC_EP_OrderCorrect_S1 ;
+    backlog:startedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-20T16:00:00"^^xsd:dateTime ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:hasEvidence fw:Ev_OrderCorrect ;
+    backlog:lastAuditedAt "2026-08-20T16:00:00"^^xsd:dateTime .
+fw:AC_EP_OrderCorrect_S1 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the framework suite, When it is run, Then the completeness reporter presents scope before goals — verified on both fixture polarities." .
+fw:R_EP_OrderCorrect_S1 a backlog:RefinementEvent ; backlog:refines fw:EP_OrderCorrect_S1 ;
+    backlog:addressesConcern backlog:Concern_Interaction ;
+    backlog:refinedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Approach agreed and recorded in the parent epic's evidence." ;
+    backlog:refinedBy backlog:Builder .
+fw:Plan_EP_OrderCorrect_S1 a backlog:PlanningEvent ; backlog:plansItem fw:EP_OrderCorrect_S1 ; backlog:plannedInto fw:It2 ;
+    backlog:plannedAt "2026-08-20T14:00:00"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:producesTask fw:T_EP_OrderCorrect_S1 .
+fw:T_EP_OrderCorrect_S1 a backlog:ExecutionTask ; backlog:hasIdentifier "BRF-TEP_OrderCorrect_S1" ;
+    backlog:hasTitle "Implement and gate: the completeness reporter presents scope before goals" ; backlog:hasState backlog:Done ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It2 ;
+    backlog:startedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-20T16:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_OrderCorrect ;
+    backlog:lastAuditedAt "2026-08-20T16:00:00"^^xsd:dateTime .
+fw:H_EP_OrderCorrect_S1 a backlog:TestHarness ; backlog:harnessFor fw:EP_OrderCorrect_S1 ;
+    backlog:hasHarnessEvidence fw:Ev_OrderCorrect ; backlog:harnessComplete true ;
+    backlog:hasRationale "Completeness rests on the parent epic's evidence." .
+fw:H_TEP_OrderCorrect_S1 a backlog:TestHarness ; backlog:harnessFor fw:T_EP_OrderCorrect_S1 ;
+    backlog:hasHarnessEvidence fw:Ev_OrderCorrect ; backlog:harnessComplete true ;
+    backlog:hasRationale "As for the story it implements." .
+fw:Ev_OrderCorrect backlog:attestsCriterion fw:AC_EP_OrderCorrect_S1 .
+fw:EP_OrderCorrect_S2 a backlog:Story ;
+    backlog:hasIdentifier "BRF-EP_OrderCorrect_S2" ;
+    backlog:hasTitle "The standard names both link directions" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_NoStaleOrder ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at epic level; scoring a decomposition child alongside its scored parent double-counts." ;
+    backlog:hasApplicableConcern backlog:Concern_Interaction ;
+    backlog:hasAcceptanceCriterion fw:AC_EP_OrderCorrect_S2 ;
+    backlog:startedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-20T16:00:00"^^xsd:dateTime ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:hasEvidence fw:Ev_OrderCorrect ;
+    backlog:lastAuditedAt "2026-08-20T16:00:00"^^xsd:dateTime .
+fw:AC_EP_OrderCorrect_S2 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the framework suite, When it is run, Then the standard names both link directions — verified on both fixture polarities." .
+fw:R_EP_OrderCorrect_S2 a backlog:RefinementEvent ; backlog:refines fw:EP_OrderCorrect_S2 ;
+    backlog:addressesConcern backlog:Concern_Interaction ;
+    backlog:refinedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Approach agreed and recorded in the parent epic's evidence." ;
+    backlog:refinedBy backlog:Builder .
+fw:Plan_EP_OrderCorrect_S2 a backlog:PlanningEvent ; backlog:plansItem fw:EP_OrderCorrect_S2 ; backlog:plannedInto fw:It2 ;
+    backlog:plannedAt "2026-08-20T14:00:00"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:producesTask fw:T_EP_OrderCorrect_S2 .
+fw:T_EP_OrderCorrect_S2 a backlog:ExecutionTask ; backlog:hasIdentifier "BRF-TEP_OrderCorrect_S2" ;
+    backlog:hasTitle "Implement and gate: the standard names both link directions" ; backlog:hasState backlog:Done ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It2 ;
+    backlog:startedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-20T16:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_OrderCorrect ;
+    backlog:lastAuditedAt "2026-08-20T16:00:00"^^xsd:dateTime .
+fw:H_EP_OrderCorrect_S2 a backlog:TestHarness ; backlog:harnessFor fw:EP_OrderCorrect_S2 ;
+    backlog:hasHarnessEvidence fw:Ev_OrderCorrect ; backlog:harnessComplete true ;
+    backlog:hasRationale "Completeness rests on the parent epic's evidence." .
+fw:H_TEP_OrderCorrect_S2 a backlog:TestHarness ; backlog:harnessFor fw:T_EP_OrderCorrect_S2 ;
+    backlog:hasHarnessEvidence fw:Ev_OrderCorrect ; backlog:harnessComplete true ;
+    backlog:hasRationale "As for the story it implements." .
+fw:Ev_OrderCorrect backlog:attestsCriterion fw:AC_EP_OrderCorrect_S2 .
+fw:EP_OrderCorrect backlog:decomposesInto fw:EP_OrderCorrect_S1 , fw:EP_OrderCorrect_S2 .
+fw:EP_Grooming_S1 a backlog:Story ;
+    backlog:hasIdentifier "BRF-EP_Grooming_S1" ;
+    backlog:hasTitle "A concern declared is a concern a refinement addressed" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_IntentToWork ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at epic level; scoring a decomposition child alongside its scored parent double-counts." ;
+    backlog:hasApplicableConcern backlog:Concern_Data ;
+    backlog:hasAcceptanceCriterion fw:AC_EP_Grooming_S1 ;
+    backlog:startedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-20T16:00:00"^^xsd:dateTime ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:hasEvidence fw:Ev_Grooming ;
+    backlog:lastAuditedAt "2026-08-20T16:00:00"^^xsd:dateTime .
+fw:AC_EP_Grooming_S1 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the framework suite, When it is run, Then a concern declared is a concern a refinement addressed — verified on both fixture polarities." .
+fw:R_EP_Grooming_S1 a backlog:RefinementEvent ; backlog:refines fw:EP_Grooming_S1 ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Approach agreed and recorded in the parent epic's evidence." ;
+    backlog:refinedBy backlog:Builder .
+fw:Plan_EP_Grooming_S1 a backlog:PlanningEvent ; backlog:plansItem fw:EP_Grooming_S1 ; backlog:plannedInto fw:It2 ;
+    backlog:plannedAt "2026-08-20T14:00:00"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:producesTask fw:T_EP_Grooming_S1 .
+fw:T_EP_Grooming_S1 a backlog:ExecutionTask ; backlog:hasIdentifier "BRF-TEP_Grooming_S1" ;
+    backlog:hasTitle "Implement and gate: a concern declared is a concern a refinement addressed" ; backlog:hasState backlog:Done ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It2 ;
+    backlog:startedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-20T16:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_Grooming ;
+    backlog:lastAuditedAt "2026-08-20T16:00:00"^^xsd:dateTime .
+fw:H_EP_Grooming_S1 a backlog:TestHarness ; backlog:harnessFor fw:EP_Grooming_S1 ;
+    backlog:hasHarnessEvidence fw:Ev_Grooming ; backlog:harnessComplete true ;
+    backlog:hasRationale "Completeness rests on the parent epic's evidence." .
+fw:H_TEP_Grooming_S1 a backlog:TestHarness ; backlog:harnessFor fw:T_EP_Grooming_S1 ;
+    backlog:hasHarnessEvidence fw:Ev_Grooming ; backlog:harnessComplete true ;
+    backlog:hasRationale "As for the story it implements." .
+fw:Ev_Grooming backlog:attestsCriterion fw:AC_EP_Grooming_S1 .
+fw:EP_Grooming_S2 a backlog:Story ;
+    backlog:hasIdentifier "BRF-EP_Grooming_S2" ;
+    backlog:hasTitle "A story with no applicable concern says so with a reason" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_IntentToWork ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at epic level; scoring a decomposition child alongside its scored parent double-counts." ;
+    backlog:hasApplicableConcern backlog:Concern_Data ;
+    backlog:hasAcceptanceCriterion fw:AC_EP_Grooming_S2 ;
+    backlog:startedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-20T16:00:00"^^xsd:dateTime ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:hasEvidence fw:Ev_Grooming ;
+    backlog:lastAuditedAt "2026-08-20T16:00:00"^^xsd:dateTime .
+fw:AC_EP_Grooming_S2 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the framework suite, When it is run, Then a story with no applicable concern says so with a reason — verified on both fixture polarities." .
+fw:R_EP_Grooming_S2 a backlog:RefinementEvent ; backlog:refines fw:EP_Grooming_S2 ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Approach agreed and recorded in the parent epic's evidence." ;
+    backlog:refinedBy backlog:Builder .
+fw:Plan_EP_Grooming_S2 a backlog:PlanningEvent ; backlog:plansItem fw:EP_Grooming_S2 ; backlog:plannedInto fw:It2 ;
+    backlog:plannedAt "2026-08-20T14:00:00"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:producesTask fw:T_EP_Grooming_S2 .
+fw:T_EP_Grooming_S2 a backlog:ExecutionTask ; backlog:hasIdentifier "BRF-TEP_Grooming_S2" ;
+    backlog:hasTitle "Implement and gate: a story with no applicable concern says so with a reason" ; backlog:hasState backlog:Done ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It2 ;
+    backlog:startedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-20T16:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_Grooming ;
+    backlog:lastAuditedAt "2026-08-20T16:00:00"^^xsd:dateTime .
+fw:H_EP_Grooming_S2 a backlog:TestHarness ; backlog:harnessFor fw:EP_Grooming_S2 ;
+    backlog:hasHarnessEvidence fw:Ev_Grooming ; backlog:harnessComplete true ;
+    backlog:hasRationale "Completeness rests on the parent epic's evidence." .
+fw:H_TEP_Grooming_S2 a backlog:TestHarness ; backlog:harnessFor fw:T_EP_Grooming_S2 ;
+    backlog:hasHarnessEvidence fw:Ev_Grooming ; backlog:harnessComplete true ;
+    backlog:hasRationale "As for the story it implements." .
+fw:Ev_Grooming backlog:attestsCriterion fw:AC_EP_Grooming_S2 .
+fw:EP_Grooming backlog:decomposesInto fw:EP_Grooming_S1 , fw:EP_Grooming_S2 .
+fw:EP_TaskTypes_S1 a backlog:Story ;
+    backlog:hasIdentifier "BRF-EP_TaskTypes_S1" ;
+    backlog:hasTitle "A task states which technical process it performs" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_IntentToWork ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at epic level; scoring a decomposition child alongside its scored parent double-counts." ;
+    backlog:hasApplicableConcern backlog:Concern_Data ;
+    backlog:hasAcceptanceCriterion fw:AC_EP_TaskTypes_S1 ;
+    backlog:startedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-20T16:00:00"^^xsd:dateTime ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:hasEvidence fw:Ev_TaskTypes ;
+    backlog:lastAuditedAt "2026-08-20T16:00:00"^^xsd:dateTime .
+fw:AC_EP_TaskTypes_S1 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the framework suite, When it is run, Then a task states which technical process it performs — verified on both fixture polarities." .
+fw:R_EP_TaskTypes_S1 a backlog:RefinementEvent ; backlog:refines fw:EP_TaskTypes_S1 ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Approach agreed and recorded in the parent epic's evidence." ;
+    backlog:refinedBy backlog:Builder .
+fw:Plan_EP_TaskTypes_S1 a backlog:PlanningEvent ; backlog:plansItem fw:EP_TaskTypes_S1 ; backlog:plannedInto fw:It2 ;
+    backlog:plannedAt "2026-08-20T14:00:00"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:producesTask fw:T_EP_TaskTypes_S1 .
+fw:T_EP_TaskTypes_S1 a backlog:ExecutionTask ; backlog:hasIdentifier "BRF-TEP_TaskTypes_S1" ;
+    backlog:hasTitle "Implement and gate: a task states which technical process it performs" ; backlog:hasState backlog:Done ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It2 ;
+    backlog:startedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-20T16:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_TaskTypes ;
+    backlog:lastAuditedAt "2026-08-20T16:00:00"^^xsd:dateTime .
+fw:H_EP_TaskTypes_S1 a backlog:TestHarness ; backlog:harnessFor fw:EP_TaskTypes_S1 ;
+    backlog:hasHarnessEvidence fw:Ev_TaskTypes ; backlog:harnessComplete true ;
+    backlog:hasRationale "Completeness rests on the parent epic's evidence." .
+fw:H_TEP_TaskTypes_S1 a backlog:TestHarness ; backlog:harnessFor fw:T_EP_TaskTypes_S1 ;
+    backlog:hasHarnessEvidence fw:Ev_TaskTypes ; backlog:harnessComplete true ;
+    backlog:hasRationale "As for the story it implements." .
+fw:Ev_TaskTypes backlog:attestsCriterion fw:AC_EP_TaskTypes_S1 .
+fw:EP_TaskTypes_S2 a backlog:Story ;
+    backlog:hasIdentifier "BRF-EP_TaskTypes_S2" ;
+    backlog:hasTitle "A concern analysed with no task of the implied type is reported" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_IntentToWork ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at epic level; scoring a decomposition child alongside its scored parent double-counts." ;
+    backlog:hasApplicableConcern backlog:Concern_Architecture ;
+    backlog:hasAcceptanceCriterion fw:AC_EP_TaskTypes_S2 ;
+    backlog:startedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-20T16:00:00"^^xsd:dateTime ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:hasEvidence fw:Ev_TaskTypes ;
+    backlog:lastAuditedAt "2026-08-20T16:00:00"^^xsd:dateTime .
+fw:AC_EP_TaskTypes_S2 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the framework suite, When it is run, Then a concern analysed with no task of the implied type is reported — verified on both fixture polarities." .
+fw:R_EP_TaskTypes_S2 a backlog:RefinementEvent ; backlog:refines fw:EP_TaskTypes_S2 ;
+    backlog:addressesConcern backlog:Concern_Architecture ;
+    backlog:refinedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Approach agreed and recorded in the parent epic's evidence." ;
+    backlog:refinedBy backlog:Builder .
+fw:Plan_EP_TaskTypes_S2 a backlog:PlanningEvent ; backlog:plansItem fw:EP_TaskTypes_S2 ; backlog:plannedInto fw:It2 ;
+    backlog:plannedAt "2026-08-20T14:00:00"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:producesTask fw:T_EP_TaskTypes_S2 .
+fw:T_EP_TaskTypes_S2 a backlog:ExecutionTask ; backlog:hasIdentifier "BRF-TEP_TaskTypes_S2" ;
+    backlog:hasTitle "Implement and gate: a concern analysed with no task of the implied type is reported" ; backlog:hasState backlog:Done ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It2 ;
+    backlog:startedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-20T16:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_TaskTypes ;
+    backlog:lastAuditedAt "2026-08-20T16:00:00"^^xsd:dateTime .
+fw:H_EP_TaskTypes_S2 a backlog:TestHarness ; backlog:harnessFor fw:EP_TaskTypes_S2 ;
+    backlog:hasHarnessEvidence fw:Ev_TaskTypes ; backlog:harnessComplete true ;
+    backlog:hasRationale "Completeness rests on the parent epic's evidence." .
+fw:H_TEP_TaskTypes_S2 a backlog:TestHarness ; backlog:harnessFor fw:T_EP_TaskTypes_S2 ;
+    backlog:hasHarnessEvidence fw:Ev_TaskTypes ; backlog:harnessComplete true ;
+    backlog:hasRationale "As for the story it implements." .
+fw:Ev_TaskTypes backlog:attestsCriterion fw:AC_EP_TaskTypes_S2 .
+fw:EP_TaskTypes backlog:decomposesInto fw:EP_TaskTypes_S1 , fw:EP_TaskTypes_S2 .
+fw:EP_IterationCapacity_S1 a backlog:Story ;
+    backlog:hasIdentifier "BRF-EP_IterationCapacity_S1" ;
+    backlog:hasTitle "Committed effort exceeding capacity is rejected" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_IntentToWork ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at epic level; scoring a decomposition child alongside its scored parent double-counts." ;
+    backlog:hasApplicableConcern backlog:Concern_Data ;
+    backlog:hasAcceptanceCriterion fw:AC_EP_IterationCapacity_S1 ;
+    backlog:lastAuditedAt "2026-08-20T16:00:00"^^xsd:dateTime .
+fw:AC_EP_IterationCapacity_S1 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the framework suite, When it is run, Then committed effort exceeding capacity is rejected — verified on both fixture polarities." .
+fw:R_EP_IterationCapacity_S1 a backlog:RefinementEvent ; backlog:refines fw:EP_IterationCapacity_S1 ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Approach agreed and recorded in the parent epic's evidence." ;
+    backlog:refinedBy backlog:Builder .
+fw:EP_IterationCapacity backlog:decomposesInto fw:EP_IterationCapacity_S1 .
+fw:EP_TeamRoles_S1 a backlog:Story ;
+    backlog:hasIdentifier "BRF-EP_TeamRoles_S1" ;
+    backlog:hasTitle "Each shipped role names the source it came from" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_Grounded ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at epic level; scoring a decomposition child alongside its scored parent double-counts." ;
+    backlog:hasApplicableConcern backlog:Concern_Data ;
+    backlog:hasAcceptanceCriterion fw:AC_EP_TeamRoles_S1 ;
+    backlog:lastAuditedAt "2026-08-20T16:00:00"^^xsd:dateTime .
+fw:AC_EP_TeamRoles_S1 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the framework suite, When it is run, Then each shipped role names the source it came from — verified on both fixture polarities." .
+fw:R_EP_TeamRoles_S1 a backlog:RefinementEvent ; backlog:refines fw:EP_TeamRoles_S1 ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-08-20T15:00:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Approach agreed and recorded in the parent epic's evidence." ;
+    backlog:refinedBy backlog:Builder .
+fw:EP_TeamRoles backlog:decomposesInto fw:EP_TeamRoles_S1 .
+
+#  GROUP 5 — the remainder.
+fw:Ev_PbiTask backlog:attestsCriterion fw:AC_BRF_I1 .
+fw:Ev_Human backlog:attestsCriterion fw:AC_BRF_I2 .
+fw:Ev_Schedule backlog:attestsCriterion fw:AC_BRF_I3 .
+fw:Ev_ValueRelease backlog:attestsCriterion fw:AC_BRF_I4 .
+fw:Ev_OrderCorrect backlog:attestsCriterion fw:AC_BRF_I5 .
+fw:S31 backlog:hasApplicableConcern backlog:Concern_Data .
+fw:Ev_Cost backlog:attestsCriterion fw:AC_S31 .
+fw:R2_S31 a backlog:RefinementEvent ; backlog:refines fw:S31 ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-08-09T09:00:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Vocabulary and constraint shape agreed." ; backlog:refinedBy backlog:Builder .
+fw:Plan2_S31 a backlog:PlanningEvent ; backlog:plansItem fw:S31 ; backlog:plannedInto fw:It2 ;
+    backlog:plannedAt "2026-08-09T09:00:00"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:producesTask fw:T2_S31 .
+fw:T2_S31 a backlog:ExecutionTask ; backlog:hasIdentifier "BRF-T2S31" ;
+    backlog:hasTitle "Implement S31" ; backlog:hasState backlog:Done ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It2 ;
+    backlog:startedAt "2026-08-09T09:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-09T11:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_Cost ; backlog:lastAuditedAt "2026-08-09T11:00:00"^^xsd:dateTime .
+fw:H_T2_S31 a backlog:TestHarness ; backlog:harnessFor fw:T2_S31 ;
+    backlog:hasHarnessEvidence fw:Ev_Cost ; backlog:harnessComplete true ;
+    backlog:hasRationale "Attested by the story's own evidence." .
+fw:S32 backlog:hasApplicableConcern backlog:Concern_Data .
+fw:Ev_Cost backlog:attestsCriterion fw:AC_S32 .
+fw:R2_S32 a backlog:RefinementEvent ; backlog:refines fw:S32 ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-08-09T09:00:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Vocabulary and constraint shape agreed." ; backlog:refinedBy backlog:Builder .
+fw:Plan2_S32 a backlog:PlanningEvent ; backlog:plansItem fw:S32 ; backlog:plannedInto fw:It2 ;
+    backlog:plannedAt "2026-08-09T09:00:00"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:producesTask fw:T2_S32 .
+fw:T2_S32 a backlog:ExecutionTask ; backlog:hasIdentifier "BRF-T2S32" ;
+    backlog:hasTitle "Implement S32" ; backlog:hasState backlog:Done ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It2 ;
+    backlog:startedAt "2026-08-09T09:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-09T11:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_Cost ; backlog:lastAuditedAt "2026-08-09T11:00:00"^^xsd:dateTime .
+fw:H_T2_S32 a backlog:TestHarness ; backlog:harnessFor fw:T2_S32 ;
+    backlog:hasHarnessEvidence fw:Ev_Cost ; backlog:harnessComplete true ;
+    backlog:hasRationale "Attested by the story's own evidence." .
+fw:S33 backlog:hasApplicableConcern backlog:Concern_Data .
+fw:Ev_Cost backlog:attestsCriterion fw:AC_S33 .
+fw:R2_S33 a backlog:RefinementEvent ; backlog:refines fw:S33 ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-08-09T09:00:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Vocabulary and constraint shape agreed." ; backlog:refinedBy backlog:Builder .
+fw:Plan2_S33 a backlog:PlanningEvent ; backlog:plansItem fw:S33 ; backlog:plannedInto fw:It2 ;
+    backlog:plannedAt "2026-08-09T09:00:00"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:producesTask fw:T2_S33 .
+fw:T2_S33 a backlog:ExecutionTask ; backlog:hasIdentifier "BRF-T2S33" ;
+    backlog:hasTitle "Implement S33" ; backlog:hasState backlog:Done ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It2 ;
+    backlog:startedAt "2026-08-09T09:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-09T11:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_Cost ; backlog:lastAuditedAt "2026-08-09T11:00:00"^^xsd:dateTime .
+fw:H_T2_S33 a backlog:TestHarness ; backlog:harnessFor fw:T2_S33 ;
+    backlog:hasHarnessEvidence fw:Ev_Cost ; backlog:harnessComplete true ;
+    backlog:hasRationale "Attested by the story's own evidence." .
+fw:S41 backlog:hasApplicableConcern backlog:Concern_Data .
+fw:Ev_Human backlog:attestsCriterion fw:AC_S41 .
+fw:R2_S41 a backlog:RefinementEvent ; backlog:refines fw:S41 ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-08-09T09:00:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Vocabulary and constraint shape agreed." ; backlog:refinedBy backlog:Builder .
+fw:Plan2_S41 a backlog:PlanningEvent ; backlog:plansItem fw:S41 ; backlog:plannedInto fw:It2 ;
+    backlog:plannedAt "2026-08-09T09:00:00"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:producesTask fw:T2_S41 .
+fw:T2_S41 a backlog:ExecutionTask ; backlog:hasIdentifier "BRF-T2S41" ;
+    backlog:hasTitle "Implement S41" ; backlog:hasState backlog:Done ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It2 ;
+    backlog:startedAt "2026-08-09T09:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-09T11:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_Human ; backlog:lastAuditedAt "2026-08-09T11:00:00"^^xsd:dateTime .
+fw:H_T2_S41 a backlog:TestHarness ; backlog:harnessFor fw:T2_S41 ;
+    backlog:hasHarnessEvidence fw:Ev_Human ; backlog:harnessComplete true ;
+    backlog:hasRationale "Attested by the story's own evidence." .
+fw:S42 backlog:hasApplicableConcern backlog:Concern_Data .
+fw:Ev_Human backlog:attestsCriterion fw:AC_S42 .
+fw:R2_S42 a backlog:RefinementEvent ; backlog:refines fw:S42 ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-08-09T09:00:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Vocabulary and constraint shape agreed." ; backlog:refinedBy backlog:Builder .
+fw:Plan2_S42 a backlog:PlanningEvent ; backlog:plansItem fw:S42 ; backlog:plannedInto fw:It2 ;
+    backlog:plannedAt "2026-08-09T09:00:00"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:producesTask fw:T2_S42 .
+fw:T2_S42 a backlog:ExecutionTask ; backlog:hasIdentifier "BRF-T2S42" ;
+    backlog:hasTitle "Implement S42" ; backlog:hasState backlog:Done ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It2 ;
+    backlog:startedAt "2026-08-09T09:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-09T11:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_Human ; backlog:lastAuditedAt "2026-08-09T11:00:00"^^xsd:dateTime .
+fw:H_T2_S42 a backlog:TestHarness ; backlog:harnessFor fw:T2_S42 ;
+    backlog:hasHarnessEvidence fw:Ev_Human ; backlog:harnessComplete true ;
+    backlog:hasRationale "Attested by the story's own evidence." .
+fw:S43 backlog:hasApplicableConcern backlog:Concern_Data .
+fw:Ev_Human backlog:attestsCriterion fw:AC_S43 .
+fw:R2_S43 a backlog:RefinementEvent ; backlog:refines fw:S43 ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-08-09T09:00:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Vocabulary and constraint shape agreed." ; backlog:refinedBy backlog:Builder .
+fw:Plan2_S43 a backlog:PlanningEvent ; backlog:plansItem fw:S43 ; backlog:plannedInto fw:It2 ;
+    backlog:plannedAt "2026-08-09T09:00:00"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:producesTask fw:T2_S43 .
+fw:T2_S43 a backlog:ExecutionTask ; backlog:hasIdentifier "BRF-T2S43" ;
+    backlog:hasTitle "Implement S43" ; backlog:hasState backlog:Done ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It2 ;
+    backlog:startedAt "2026-08-09T09:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-09T11:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_Human ; backlog:lastAuditedAt "2026-08-09T11:00:00"^^xsd:dateTime .
+fw:H_T2_S43 a backlog:TestHarness ; backlog:harnessFor fw:T2_S43 ;
+    backlog:hasHarnessEvidence fw:Ev_Human ; backlog:harnessComplete true ;
+    backlog:hasRationale "Attested by the story's own evidence." .
+fw:T_Budget backlog:hasTaskType backlog:Task_Implementation .
+fw:T_Dimension backlog:hasTaskType backlog:Task_Implementation .
+fw:T_Fixtures backlog:hasTaskType backlog:Task_Implementation .
+fw:T_Rollup backlog:hasTaskType backlog:Task_Implementation .
+fw:S11 a backlog:Story ;
+    backlog:hasIdentifier "BRF-S11" ; backlog:hasTitle "Product backlog items and execution tasks are disjoint" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register , fw:It1 ;
+    backlog:pursuesObjective fw:Obj_Derived ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "Scored at epic level." ;
+    backlog:hasApplicableConcern backlog:Concern_Architecture ;
+    backlog:hasAcceptanceCriterion fw:AC_S11 ;
+    backlog:startedAt "2026-08-06T11:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-06T15:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_PbiTask ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:lastAuditedAt "2026-08-06T15:00:00"^^xsd:dateTime .
+fw:AC_S11 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the framework suite, When it is run, Then product backlog items and execution tasks are disjoint." .
+fw:Ev_PbiTask backlog:attestsCriterion fw:AC_S11 .
+fw:R_S11 a backlog:RefinementEvent ; backlog:refines fw:S11 ;
+    backlog:addressesConcern backlog:Concern_Architecture ;
+    backlog:refinedAt "2026-08-06T10:00:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Disjointness agreed." ; backlog:refinedBy backlog:Builder .
+fw:H_S11 a backlog:TestHarness ; backlog:harnessFor fw:S11 ;
+    backlog:hasHarnessEvidence fw:Ev_PbiTask ; backlog:harnessComplete true ;
+    backlog:hasRationale "Attested by the epic's evidence." .
+fw:PlanA_S11 a backlog:PlanningEvent ; backlog:plansItem fw:S11 ; backlog:plannedInto fw:It1 ;
+    backlog:plannedAt "2026-08-06T10:00:00"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:producesTask fw:TA_S11 .
+fw:TA_S11 a backlog:ExecutionTask ; backlog:hasIdentifier "BRF-TAS11" ;
+    backlog:hasTitle "Implement product backlog items and execution tasks are disjoint" ; backlog:hasState backlog:Done ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It1 ;
+    backlog:startedAt "2026-08-06T11:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-06T15:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_PbiTask ; backlog:lastAuditedAt "2026-08-06T15:00:00"^^xsd:dateTime .
+fw:H_TAS11 a backlog:TestHarness ; backlog:harnessFor fw:TA_S11 ;
+    backlog:hasHarnessEvidence fw:Ev_PbiTask ; backlog:harnessComplete true ;
+    backlog:hasRationale "As for the story." .
+fw:S12 a backlog:Story ;
+    backlog:hasIdentifier "BRF-S12" ; backlog:hasTitle "A planning event records the conversion from item to task" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register , fw:It1 ;
+    backlog:pursuesObjective fw:Obj_Derived ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "Scored at epic level." ;
+    backlog:hasApplicableConcern backlog:Concern_Data ;
+    backlog:hasAcceptanceCriterion fw:AC_S12 ;
+    backlog:startedAt "2026-08-06T11:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-06T15:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_PbiTask ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:lastAuditedAt "2026-08-06T15:00:00"^^xsd:dateTime .
+fw:AC_S12 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the framework suite, When it is run, Then a planning event records the conversion from item to task." .
+fw:Ev_PbiTask backlog:attestsCriterion fw:AC_S12 .
+fw:R_S12 a backlog:RefinementEvent ; backlog:refines fw:S12 ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-08-06T10:00:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Planning event shape agreed." ; backlog:refinedBy backlog:Builder .
+fw:H_S12 a backlog:TestHarness ; backlog:harnessFor fw:S12 ;
+    backlog:hasHarnessEvidence fw:Ev_PbiTask ; backlog:harnessComplete true ;
+    backlog:hasRationale "Attested by the epic's evidence." .
+fw:PlanA_S12 a backlog:PlanningEvent ; backlog:plansItem fw:S12 ; backlog:plannedInto fw:It1 ;
+    backlog:plannedAt "2026-08-06T10:00:00"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:producesTask fw:TA_S12 .
+fw:TA_S12 a backlog:ExecutionTask ; backlog:hasIdentifier "BRF-TAS12" ;
+    backlog:hasTitle "Implement a planning event records the conversion from item to task" ; backlog:hasState backlog:Done ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It1 ;
+    backlog:startedAt "2026-08-06T11:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-06T15:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_PbiTask ; backlog:lastAuditedAt "2026-08-06T15:00:00"^^xsd:dateTime .
+fw:H_TAS12 a backlog:TestHarness ; backlog:harnessFor fw:TA_S12 ;
+    backlog:hasHarnessEvidence fw:Ev_PbiTask ; backlog:harnessComplete true ;
+    backlog:hasRationale "As for the story." .
+fw:Rel_It1b a backlog:DeploymentUnit ;
+    backlog:hasIdentifier "BRF-REL-A" ; backlog:hasTitle "Shipped from iteration 1" ;
+    backlog:hasState backlog:Done ;
+    backlog:hasDeploymentDate "2026-08-08T13:00:00"^^xsd:dateTime ;
+    backlog:deploysFrom fw:It1 ; backlog:deploysItem fw:S11 , fw:S12 ;
+    backlog:decidedBy backlog:Owner ; backlog:hasSelectionBasis backlog:Sel_Committed .
+fw:S11 backlog:memberOfContainer fw:Rel_It1b .
+fw:S12 backlog:memberOfContainer fw:Rel_It1b .
+fw:Rel_It2b a backlog:DeploymentUnit ;
+    backlog:hasIdentifier "BRF-REL-B" ; backlog:hasTitle "Shipped from iteration 2" ;
+    backlog:hasState backlog:Done ;
+    backlog:hasDeploymentDate "2026-08-10T13:00:00"^^xsd:dateTime ;
+    backlog:deploysFrom fw:It2 ; backlog:deploysItem fw:S31 , fw:S32 ;
+    backlog:decidedBy backlog:Owner ; backlog:hasSelectionBasis backlog:Sel_Committed .
+fw:S31 backlog:memberOfContainer fw:Rel_It2b .
+fw:S32 backlog:memberOfContainer fw:Rel_It2b .

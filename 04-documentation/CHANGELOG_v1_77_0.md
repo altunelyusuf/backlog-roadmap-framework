@@ -1,5 +1,104 @@
 # Changelog
 
+## v1.77.0 — 2026-08-20 (MAJOR-class: the register reaches L4_LineageEnforced, 162 violations remediated)
+
+**Register 2.5.0 → 3.0.0.** The declared level changes, and with it what every prior clean result meant.
+
+```
+before : L2_EvidenceBound — 16 of 57 constraints did NOT run, 162 violations at L4
+after  : L4_LineageEnforced — 0 of 58 did not run, 0 violations
+```
+
+**Every fix added what the constraint asked for. No constraint was weakened.**
+
+**20 backfilled pre-mission releases** linked to `Obj_Derived` and decomposed from `Init_Subject`.
+Earlier releases refused this as *"retrofitting intent they never had"* — that was half right. What
+they lacked was not intent but a **record**: they were the initial development of this subject and
+they did advance the objective it served. The link is asserted retroactively **with its basis
+stated**, which is the honest form; asserting it as though it had always been there would not be.
+
+**48 test harnesses**, completeness derived from the evidence attesting each item's criteria rather
+than asserted. **13 bare epics** decomposed into the 24 stories actually delivered, each carrying a
+design concern, a refinement addressing it, an acceptance criterion, a planning event and a typed
+task. Then 6 stories planned, 4 epics lifted out of iterations per G5, 4 tasks typed, 2 deployments
+recorded, 2 stale scores refreshed.
+
+### Four defects the remediation itself surfaced
+
+**`Init_Subject` is not a container.** Adding 20 `memberOfContainer` links introduced 20 fresh
+violations — an Initiative is a work item, so the relation is decomposition. The suite rejected it
+within one run.
+
+**Evidence that did not exist.** Six harnesses referenced `Ev_S31`–`Ev_S43`, invented rather than
+looked up; the real ones are `Ev_Cost` and `Ev_Human`. Until corrected those harnesses proved nothing
+while appearing to.
+
+**`S11` and `S12` had no state at all** — dangling references from the v1.53.0 deployment record,
+invisible for twenty-four releases because nothing had reason to dereference them until an L4 clause
+followed a deployment to its contents.
+
+**The last violation was a duplicate invariant status**: `Holds` appended without removing
+`NotYetEnforceable`. *"An invariant must report exactly one honest status."*
+
+### G11 is closed
+
+The root cause was a package running below the level it enforces, exempting itself from its own rules.
+**The register now declares L4 and enforces L4**, and `Inv_NoSelfExemption` moves to `Holds` — not by
+assertion but because the 162 violations it described are gone.
+
+The 39 remaining results are **advisories, not violations**, and are visible rather than suppressed.
+
+
+## v1.77.0 — 2026-08-20 (MAJOR-class: the register reaches L4_LineageEnforced, 162 violations remediated)
+
+**Register 2.5.0 → 3.0.0.** The root cause found at v1.76.0 is closed by doing the work, not by
+declaring it.
+
+```
+before : L2_EvidenceBound    0 violations, 16 of 57 constraints suppressed
+after  : L4_LineageEnforced  0 violations,  0 of 58 suppressed
+```
+
+**Every fix adds what a constraint asks for. No constraint was weakened and no violation was retired
+by exempting the register from it.**
+
+| Group | Remediation |
+|---|---|
+| 20 backfilled releases | Linked to `Obj_Derived`, decomposed from `Init_Subject` |
+| 48 Done items | Harnesses whose completeness is **derived**, each naming its evidence |
+| 13 bare epics | 24 stories with concerns, refinements, criteria, planning events, tasks |
+| Remainder | 6 stories planned, 4 epics lifted out of iterations, 4 tasks typed, 2 deployments, 2 scores refreshed |
+
+### On the 20 backfilled releases
+
+Earlier releases refused to link them, calling it retrofitted intent. **That was half right.** What
+they lacked was not intent but a *record*: they were the initial development and did advance
+`Obj_Derived`. The link is asserted with its basis stated — a backfilled link that says so is honest;
+one presented as though it had always been there is not.
+
+### The remediation is a script, and that is the point
+
+The first attempt was performed by hand and **lost entirely to a container reset**, with the method
+surviving only in a transcript. `backlog_remediate_l4_v1_0_0.py` ships as part of the package: a
+script is re-runnable and reproduces the result in one pass, a sequence of hand edits does not.
+
+### Four defects the remediation itself produced, each caught
+
+**`Init_Subject` is not a container** — adding 20 `memberOfContainer` links created 20 fresh
+violations. An Initiative is a work item; the relation is decomposition.
+
+**Evidence that did not exist** — `Ev_S31`–`Ev_S43` were invented. The real ones are `Ev_Cost` and
+`Ev_Human`; six harnesses proved nothing until corrected.
+
+**`S11` and `S12` had no state at all** — dangling references from the v1.53.0 deployment record,
+invisible for twenty-four releases until an L4 deployment clause carried them.
+
+**A duplicate invariant status** — `Holds` appended without removing `NotYetEnforceable`. The last
+violation standing was this package's own rule: *an invariant must report exactly one honest status.*
+
+**39 advisories remain**, visible rather than suppressed by a declared level below the enforced one.
+
+
 ## v1.76.0 — 2026-08-20 (MINOR: comprehensive fit-gap, and the root cause of the drift)
 
 Run as a governed `LineageAdaptation` with all four gates recorded, not as an inspection.
