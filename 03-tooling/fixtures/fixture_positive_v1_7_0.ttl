@@ -268,6 +268,7 @@ ex:Report_Run1 a backlog:RoadmapReport ;
 @prefix risk: <http://example.org/risk#> .
 
 ex:Goal_Retention a backlog:Goal ;
+    backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ;
     rdfs:label "Clients can rely on the studio without phoning it"@en ;
     backlog:decidedBy backlog:Owner ;
     backlog:hasDecisionRationale "Owner call 2026-07-20: self-service is the difference between the studio scaling and the owner answering the phone." .
@@ -276,6 +277,7 @@ ex:Metric_SelfServiceShare a core:Metric ;
     rdfs:label "Share of bookings completed without staff intervention"@en .
 
 ex:Obj_SelfService a backlog:Objective ;
+    backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ;
     rdfs:label "Raise self-service booking share to 60% by Q4"@en ;
     backlog:contributesToGoal ex:Goal_Retention ;
     backlog:hasSuccessMetric ex:Metric_SelfServiceShare ;
@@ -301,6 +303,7 @@ ex:Opp_Waitlist a backlog:Opportunity ;
     backlog:hasOpportunityStatement "Cancellations currently go unfilled; automatic promotion could recover them. Cost to find out: one spike against the existing booking data." .
 
 ex:Scope_Launch a backlog:ScopeStatement ;
+    backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ;
     backlog:scopeForMission ex:Mission ;
     backlog:hasScopeStatementText "First deployment covers a single studio: sign-in, booking and client records." ;
     backlog:hasScopeExclusion ex:Excl_MultiTenant .
@@ -885,3 +888,7 @@ ex:R_US003_Interface a backlog:RefinementEvent ; backlog:refines ex:US003 ;
     backlog:refinedAt "2026-08-01T09:00:00"^^xsd:dateTime ;
     backlog:hasRefinementOutcome "Analysed for interface; approach agreed." ;
     backlog:refinedBy backlog:Builder .
+
+ex:Goal_Retention backlog:derivesFromScope ex:Scope_Launch .
+
+ex:Obj_SelfService backlog:metricMovableBy ex:Project , ex:US001 , ex:US002 .

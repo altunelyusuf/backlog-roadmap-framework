@@ -36,12 +36,14 @@ ex:Mission a backlog:Mission ;
     backlog:hasMissionStatement "Practitioners recover an account without contacting support." ;
     backlog:missionFor ex:Backlog ; backlog:decidedBy backlog:Owner .
 
-ex:Goal a backlog:Goal ; rdfs:label "Self-service recovery"@en ;
+ex:Goal a backlog:Goal ;
+    backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ; rdfs:label "Self-service recovery"@en ;
     backlog:contributesToMission ex:Mission ; backlog:decidedBy backlog:Owner .
 
 ex:Metric a core:Metric ; rdfs:label "Share of recoveries completed without support"@en .
 
-ex:Objective a backlog:Objective ; rdfs:label "Recoveries need no support contact"@en ;
+ex:Objective a backlog:Objective ;
+    backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ; rdfs:label "Recoveries need no support contact"@en ;
     backlog:fillsScope ex:Scope ;
     backlog:contributesToGoal ex:Goal ;
     backlog:hasSuccessMetric ex:Metric ;
@@ -58,6 +60,7 @@ ex:Obs a backlog:MetricObservation ; rdfs:label "First reading after release 1"@
     backlog:hasObservationMethod "Counted support tickets tagged account-recovery against completed recovery flows over the two weeks after release 1." .
 
 ex:Scope a backlog:ScopeStatement ;
+    backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ;
     backlog:scopeForMission ex:Mission ;
     backlog:hasScopeStatementText "Self-service recovery for practitioner accounts: the reset flow and its notifications." ;
     backlog:hasScopeExclusion ex:Excl .
@@ -276,3 +279,7 @@ ex:R_US2_Data a backlog:RefinementEvent ; backlog:refines ex:US2 ;
     backlog:refinedAt "2026-08-01T09:00:00"^^xsd:dateTime ;
     backlog:hasRefinementOutcome "Analysed for data; approach agreed." ;
     backlog:refinedBy backlog:Builder .
+
+ex:Goal backlog:derivesFromScope ex:Scope .
+
+ex:Objective backlog:metricMovableBy ex:EP , ex:US1 , ex:US2 .

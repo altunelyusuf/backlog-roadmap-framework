@@ -46,10 +46,12 @@ ex:M a backlog:Mission ;
     backlog:missionSource "Fixture: an illustrative mission stated by the fixture's owner. Recorded because a mission with no origin cannot be told apart from a session's summary of work already done." ; rdfs:label "Mission"@en ;
     backlog:hasMissionStatement "Practitioners recover accounts unaided." ;
     backlog:missionFor ex:BL ; backlog:decidedBy backlog:Owner .
-ex:G a backlog:Goal ; rdfs:label "Self-service recovery"@en ;
+ex:G a backlog:Goal ;
+    backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ; rdfs:label "Self-service recovery"@en ;
     backlog:contributesToMission ex:M ; backlog:decidedBy backlog:Owner .
 ex:Met a core:Metric ; rdfs:label "Unaided recovery share"@en .
-ex:O a backlog:Objective ; rdfs:label "Recoveries need no support"@en ;
+ex:O a backlog:Objective ;
+    backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ; rdfs:label "Recoveries need no support"@en ;
     backlog:fillsScope ex:Scope ;
     backlog:contributesToGoal ex:G ; backlog:hasSuccessMetric ex:Met ;
     backlog:hasBaselineValue 12.0 ; backlog:hasTargetValue 80.0 ;
@@ -63,6 +65,7 @@ ex:Obs a backlog:MetricObservation ; backlog:observesMetric ex:Met ;
 
 # scope written last, from the objective
 ex:Scope a backlog:ScopeStatement ;
+    backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ;
     backlog:scopeForMission ex:M ;
     backlog:hasScopeStatementText "The reset flow and its notifications for practitioner accounts. Fixed before any goal was written." ;
     backlog:hasScopeExclusion ex:X .
@@ -70,3 +73,7 @@ ex:X a backlog:ScopeExclusion ;
     backlog:excludesConcern "Administrator recovery." ;
     backlog:hasExclusionRationale "Different threat model." ;
     backlog:decidedBy backlog:Owner .
+
+ex:G backlog:derivesFromScope ex:Scope .
+
+ex:O backlog:metricMovableBy ex:W .
