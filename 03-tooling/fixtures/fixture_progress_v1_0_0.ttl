@@ -27,14 +27,17 @@ ex:BL a backlog:Backlog ; backlog:hasIdentifier "BL" ; backlog:hasState backlog:
 ex:EP a backlog:Epic ; backlog:hasIdentifier "E-1" ; backlog:hasState backlog:InProgress ;
     backlog:memberOfContainer ex:BL ; backlog:notYetScoreable true ; backlog:hasScoreabilityReason "probe" ;
     backlog:decomposesInto ex:S1 , ex:S2 , ex:S3 , ex:S4 .
-ex:S1 a backlog:Story ; backlog:hasIdentifier "S-1" ; backlog:hasState backlog:Done ;
+ex:S1 a backlog:Story ;
+    backlog:hasNoApplicableConcern "Fixture story: no stored state, interface, interaction, structure or authorisation is touched." ; backlog:hasIdentifier "S-1" ; backlog:hasState backlog:Done ;
     backlog:memberOfContainer ex:BL ; backlog:notYetScoreable true ; backlog:hasScoreabilityReason "probe" .
-ex:S2 a backlog:Story ; backlog:hasIdentifier "S-2" ; backlog:hasState backlog:InProgress ;
+ex:S2 a backlog:Story ;
+    backlog:hasNoApplicableConcern "Fixture story: no stored state, interface, interaction, structure or authorisation is touched." ; backlog:hasIdentifier "S-2" ; backlog:hasState backlog:InProgress ;
     backlog:memberOfContainer ex:BL ; backlog:notYetScoreable true ; backlog:hasScoreabilityReason "probe" ;
     backlog:dependsOn ex:S1 .
 ex:S3 a backlog:Story ; backlog:hasIdentifier "S-3" ; backlog:hasState backlog:Proposed ;
     backlog:memberOfContainer ex:BL ; backlog:notYetScoreable true ; backlog:hasScoreabilityReason "probe" ;
     backlog:dependsOn ex:S2 .
-ex:S4 a backlog:Story ; backlog:hasIdentifier "S-4" ; backlog:hasState backlog:Cancelled ;
+ex:S4 a backlog:Story ;
+    backlog:hasNoApplicableConcern "Fixture story: no stored state, interface, interaction, structure or authorisation is touched." ; backlog:hasIdentifier "S-4" ; backlog:hasState backlog:Cancelled ;
     backlog:memberOfContainer ex:BL ; backlog:notYetScoreable true ; backlog:hasScoreabilityReason "probe" ;
     backlog:hasRationale "Superseded by S-2, which covers the same capability; kept in the register so the parent's completion accounts for it as resolved rather than outstanding." .

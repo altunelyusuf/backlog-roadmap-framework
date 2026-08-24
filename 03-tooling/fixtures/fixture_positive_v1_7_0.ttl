@@ -45,6 +45,7 @@ ex:MS1 a backlog:Milestone ;
 #################################################################
 
 ex:US001 a backlog:Story ;
+    backlog:hasApplicableConcern backlog:Concern_Data , backlog:Concern_Security ;
     backlog:hasIdentifier "US-001" ;
     backlog:hasTitle "Sign in with email" ;
     backlog:hasState backlog:Done ;
@@ -90,6 +91,7 @@ ex:US001_WSJF a backlog:WSJFScore ;
 #################################################################
 
 ex:US002 a backlog:Story ;
+    backlog:hasApplicableConcern backlog:Concern_Interaction ;
     backlog:hasIdentifier "US-002" ;
     backlog:hasTitle "Reset password" ;
     backlog:hasState backlog:Ready ;
@@ -117,6 +119,7 @@ ex:US002_RICE a backlog:RICEScore ;
 #################################################################
 
 ex:US003 a backlog:Story ;
+    backlog:hasApplicableConcern backlog:Concern_Interface ;
     backlog:hasIdentifier "US-003" ;
     backlog:hasTitle "Sign in with SMS code" ;
     backlog:hasState backlog:Cancelled ;
@@ -206,6 +209,7 @@ ex:Disc_US002 a backlog:DependencyDisclosure ;
     backlog:hasDisclosureSource "Cost-benefit note 2026-07-22: 'reset only matters once sign-in exists' — recorded as an edge the same day." .
 
 ex:US004 a backlog:Story ;
+    backlog:hasNoApplicableConcern "Fixture story: no stored state, interface, interaction, structure or authorisation is touched." ;
     backlog:hasIdentifier "US-004" ;
     backlog:hasTitle "Suspend a client account" ;
     backlog:hasState backlog:Ready ;
@@ -771,6 +775,7 @@ ex:Plan_US002 a backlog:PlanningEvent ;
     backlog:producesTask ex:T_ResetToken , ex:T_ResetMail .
 
 ex:T_ResetToken a backlog:ExecutionTask ;
+    backlog:hasTaskType backlog:Task_Implementation ;
     backlog:memberOfContainer ex:Sprint12 ;
     backlog:hasIdentifier "T-1" ;
     backlog:hasTitle "Issue and expire single-use reset tokens" ;
@@ -779,6 +784,7 @@ ex:T_ResetToken a backlog:ExecutionTask ;
     backlog:startedAt "2026-07-27T10:00:00"^^xsd:dateTime .
 
 ex:T_ResetMail a backlog:ExecutionTask ;
+    backlog:hasTaskType backlog:Task_Implementation ;
     backlog:memberOfContainer ex:Sprint12 ;
     backlog:hasIdentifier "T-2" ;
     backlog:hasTitle "Send the reset mail through the shared dispatcher" ;
@@ -855,3 +861,27 @@ ex:US004 backlog:hasExecutionModality backlog:Mode_Hybrid ;
     backlog:hasSupervisionMode backlog:Sup_OnTheLoop .
 ex:US002 backlog:hasExecutionModality backlog:Mode_Automated ;
     backlog:hasSupervisionMode backlog:Sup_OnTheLoop .
+
+ex:R_US001_Data a backlog:RefinementEvent ; backlog:refines ex:US001 ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-08-01T09:00:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Analysed for data; approach agreed." ;
+    backlog:refinedBy backlog:Builder .
+
+ex:R_US001_Security a backlog:RefinementEvent ; backlog:refines ex:US001 ;
+    backlog:addressesConcern backlog:Concern_Security ;
+    backlog:refinedAt "2026-08-01T09:00:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Analysed for security; approach agreed." ;
+    backlog:refinedBy backlog:Builder .
+
+ex:R_US002_Interaction a backlog:RefinementEvent ; backlog:refines ex:US002 ;
+    backlog:addressesConcern backlog:Concern_Interaction ;
+    backlog:refinedAt "2026-08-01T09:00:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Analysed for interaction; approach agreed." ;
+    backlog:refinedBy backlog:Builder .
+
+ex:R_US003_Interface a backlog:RefinementEvent ; backlog:refines ex:US003 ;
+    backlog:addressesConcern backlog:Concern_Interface ;
+    backlog:refinedAt "2026-08-01T09:00:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Analysed for interface; approach agreed." ;
+    backlog:refinedBy backlog:Builder .

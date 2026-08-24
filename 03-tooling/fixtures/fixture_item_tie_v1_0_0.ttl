@@ -21,6 +21,7 @@ ex:P a backlog:AdoptionProfile ; backlog:profileAppliesTo "item tie" ;
 ex:BL a backlog:Backlog ; backlog:hasIdentifier "BL" ; backlog:hasState backlog:Proposed .
 
 ex:US001 a backlog:Story ;
+    backlog:hasApplicableConcern backlog:Concern_Data , backlog:Concern_Security ;
     backlog:hasIdentifier "US-001" ; backlog:hasState backlog:Ready ;
     backlog:memberOfContainer ex:BL ;
     backlog:hasPriorityScore ex:S001 .
@@ -30,6 +31,7 @@ ex:S001 a backlog:WSJFScore ; backlog:scoredByMethod backlog:Method_WSJF ;
     backlog:hasRiskReductionValue 0.0 ; backlog:hasJobSize 5.0 .
 
 ex:US002 a backlog:Story ;
+    backlog:hasApplicableConcern backlog:Concern_Interaction ;
     backlog:hasIdentifier "US-002" ; backlog:hasState backlog:Ready ;
     backlog:memberOfContainer ex:BL ;
     backlog:hasPriorityScore ex:S002 .
@@ -39,6 +41,7 @@ ex:S002 a backlog:WSJFScore ; backlog:scoredByMethod backlog:Method_WSJF ;
     backlog:hasRiskReductionValue 0.0 ; backlog:hasJobSize 2.0 .
 
 ex:US003 a backlog:Story ;
+    backlog:hasApplicableConcern backlog:Concern_Interface ;
     backlog:hasIdentifier "US-003" ; backlog:hasState backlog:Ready ;
     backlog:memberOfContainer ex:BL ;
     backlog:hasPriorityScore ex:S003 .
@@ -48,6 +51,7 @@ ex:S003 a backlog:WSJFScore ; backlog:scoredByMethod backlog:Method_WSJF ;
     backlog:hasRiskReductionValue 0.0 ; backlog:hasJobSize 10.0 .
 
 ex:US004 a backlog:Story ;
+    backlog:hasNoApplicableConcern "Fixture story: no stored state, interface, interaction, structure or authorisation is touched." ;
     backlog:hasIdentifier "US-004" ; backlog:hasState backlog:Ready ;
     backlog:memberOfContainer ex:BL ;
     backlog:hasPriorityScore ex:S004 .
@@ -57,6 +61,7 @@ ex:S004 a backlog:WSJFScore ; backlog:scoredByMethod backlog:Method_WSJF ;
     backlog:hasRiskReductionValue 0.0 ; backlog:hasJobSize 1.0 .
 
 ex:US005 a backlog:Story ;
+    backlog:hasNoApplicableConcern "Fixture story: no stored state, interface, interaction, structure or authorisation is touched." ;
     backlog:hasIdentifier "US-005" ; backlog:hasState backlog:Ready ;
     backlog:memberOfContainer ex:BL ;
     backlog:hasPriorityScore ex:S005 .
@@ -66,6 +71,7 @@ ex:S005 a backlog:WSJFScore ; backlog:scoredByMethod backlog:Method_WSJF ;
     backlog:hasRiskReductionValue 0.0 ; backlog:hasJobSize 4.0 .
 
 ex:US006 a backlog:Story ;
+    backlog:hasNoApplicableConcern "Fixture story: no stored state, interface, interaction, structure or authorisation is touched." ;
     backlog:hasIdentifier "US-006" ; backlog:hasState backlog:Ready ;
     backlog:memberOfContainer ex:BL ;
     backlog:hasPriorityScore ex:S006 .
@@ -73,3 +79,27 @@ ex:S006 a backlog:WSJFScore ; backlog:scoredByMethod backlog:Method_WSJF ;
     backlog:hasScoreValue 1.8 ;
     backlog:hasUserBusinessValue 14.4 ; backlog:hasTimeCriticality 0.0 ;
     backlog:hasRiskReductionValue 0.0 ; backlog:hasJobSize 8.0 .
+
+ex:R_US001_Data a backlog:RefinementEvent ; backlog:refines ex:US001 ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-08-01T09:00:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Analysed for data; approach agreed." ;
+    backlog:refinedBy backlog:Builder .
+
+ex:R_US001_Security a backlog:RefinementEvent ; backlog:refines ex:US001 ;
+    backlog:addressesConcern backlog:Concern_Security ;
+    backlog:refinedAt "2026-08-01T09:00:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Analysed for security; approach agreed." ;
+    backlog:refinedBy backlog:Builder .
+
+ex:R_US002_Interaction a backlog:RefinementEvent ; backlog:refines ex:US002 ;
+    backlog:addressesConcern backlog:Concern_Interaction ;
+    backlog:refinedAt "2026-08-01T09:00:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Analysed for interaction; approach agreed." ;
+    backlog:refinedBy backlog:Builder .
+
+ex:R_US003_Interface a backlog:RefinementEvent ; backlog:refines ex:US003 ;
+    backlog:addressesConcern backlog:Concern_Interface ;
+    backlog:refinedAt "2026-08-01T09:00:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Analysed for interface; approach agreed." ;
+    backlog:refinedBy backlog:Builder .

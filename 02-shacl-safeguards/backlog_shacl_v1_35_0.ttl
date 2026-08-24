@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.34.0> ;
-    owl:versionInfo "1.34.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.35.0> ;
+    owl:versionInfo "1.35.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.34.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.33.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.32.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.31.0> ;
@@ -3180,4 +3181,55 @@ backlog:UnaddressedRefinementShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             FILTER NOT EXISTS { $this backlog:addressesConcern ?c }
+        }""" ] .
+
+#################################################################
+#  v1.35.0 — task types, and the join from grooming to execution
+#################################################################
+
+backlog:TaskTypeShape a sh:NodeShape ;
+    sh:targetClass backlog:ExecutionTask ;
+    sh:severity sh:Violation ;
+    rdfs:label "A task says what kind of work it is (L3)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: this task states no task type. ExecutionTask carried no properties of its own, so a task could say what it was called and not what kind of work it was — and a register in which every task is implicitly implementation cannot show that it has no validation, no integration and no mission analysis. The type is what makes those absences visible." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L3_Governed, backlog:L4_LineageEnforced))
+            FILTER NOT EXISTS { $this backlog:hasTaskType ?tt }
+        }""" ] .
+
+backlog:GroomingToExecutionShape a sh:NodeShape ;
+    sh:targetClass backlog:Story ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: a concern analysed and then not acted on"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: this story was groomed for a design concern, but none of the tasks planned from it performs the kind of work that concern implies. The analysis happened and nothing downstream reflects it — which is the state in which grooming becomes a ceremony rather than a step. Either a task of that type is missing, or the concern did not really apply and the grooming record overstates what was needed." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasApplicableConcern ?c .
+            ?c backlog:coversTaskType ?tt .
+            FILTER EXISTS { ?pe backlog:plansItem $this ; backlog:producesTask ?any }
+            FILTER NOT EXISTS {
+                ?pe2 backlog:plansItem $this ; backlog:producesTask ?task .
+                ?task backlog:hasTaskType ?tt2 .
+                ?c backlog:coversTaskType ?tt2 .
+            }
+        }""" ] .
+
+backlog:ProcessCoverageAdvisoryShape a sh:NodeShape ;
+    sh:targetClass backlog:Backlog ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: a register that only builds"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: this register records implementation tasks and no verification or validation task anywhere. A backlog can look full while every process other than building is invisible, and the two the standard separates — was it built right, and was the right thing built — are the ones most often assumed rather than recorded." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?t a backlog:ExecutionTask ; backlog:hasTaskType backlog:Task_Implementation ;
+               backlog:memberOfContainer $this .
+            FILTER NOT EXISTS { ?v a backlog:ExecutionTask ; backlog:memberOfContainer $this ;
+                                   backlog:hasTaskType backlog:Task_Verification }
+            FILTER NOT EXISTS { ?w a backlog:ExecutionTask ; backlog:memberOfContainer $this ;
+                                   backlog:hasTaskType backlog:Task_Validation }
         }""" ] .

@@ -1,5 +1,37 @@
 # Changelog
 
+## v1.75.0 — 2026-08-20 (MINOR: BRF-EP15 — the technical processes reach the task level)
+
+**The answer to "are they part of the framework" was no, and it was measured before building.** Only
+Design existed, as five concerns. `DomainEngineering`, `BusinessAnalysis`, `TechnicalAnalysis`,
+`Testing`, `Deployment`, `TaskType` — all absent — and **`ExecutionTask` carried no properties at
+all**: a task could say what it was called and not what kind of work it was.
+
+**Source: ISO/IEC/IEEE 12207 clause 6.4, taken whole rather than sampled.** The standard's fourteen
+technical processes are a superset of the six named informally, and **the extras are the interesting
+part**: system analysis, integration and validation are exactly what a register loses when it records
+only the processes someone thought to ask for.
+
+Mapping the informal names to the standard's: domain engineering is mission analysis; business
+analysis spans stakeholder needs and requirements definition; technical analysis is system analysis;
+testing is **two** processes the standard keeps apart — verification asks whether it was built right,
+validation whether the right thing was built; deployment is transition.
+
+**`coversTaskType` is the join this was missing.** Grooming and execution were separate records: a
+story could be analysed for architecture and produce nothing but code, and both halves would look
+complete. A concern implies work of particular kinds, and a concern analysed with no task of the
+implied type was **analysed and then not acted on** — the state in which grooming becomes ceremony.
+
+A register-level advisory reports implementation tasks with no verification or validation anywhere. A
+backlog can look full while every process other than building is invisible.
+
+**Not a workflow.** The framework records what kind of work a task was, never that the processes were
+performed in a prescribed order — the register a method produces, not the method.
+
+Three cases verified individually: an untyped task rejected at L3; a story groomed for Architecture
+whose only task is Implementation advised; a story with tasks of both implied types silent.
+
+
 ## v1.74.0 — 2026-08-20 (MINOR: BRF-EP12 — grooming is analysis, not attendance)
 
 The register put EP12 first at 5.00. Source named before building, as `Ex_InventedPractice` requires:

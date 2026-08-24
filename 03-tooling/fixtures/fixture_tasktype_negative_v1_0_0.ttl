@@ -1,0 +1,66 @@
+# Task types and the grooming-to-execution join.
+#
+# Source: ISO/IEC/IEEE 12207 clause 6.4 technical processes.
+#
+#   S-OK   groomed for Data and Architecture; tasks of the implied
+#          types exist -> silent
+#   S-GAP  groomed for Architecture; only an implementation task
+#          planned -> ADVISORY: analysed and not acted on
+#   T-BARE a task with no type at all -> REJECTED at L3
+#   BL     implementation tasks, no verification or validation
+#          anywhere -> ADVISORY: a register that only builds
+#
+# S-GAP is the case the join exists for. Before it, grooming and
+# execution were separate records: a story could be analysed for
+# architecture and produce nothing but code, and both halves would
+# look complete.
+
+@prefix backlog: <http://example.org/backlog#> .
+@prefix ex:      <http://example.org/tt#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+ex:P a backlog:AdoptionProfile ; backlog:profileAppliesTo "task type fixture" ;
+    backlog:governsBacklog ex:BL ; backlog:hasConformanceLevel backlog:L3_Governed ;
+    backlog:decidedBy backlog:Owner ; backlog:hasDecisionRationale "L3: the task-type clause is L3." ;
+    backlog:adoptsFacet backlog:CoreFacet , backlog:EvidenceFacet .
+ex:BL a backlog:Backlog ; backlog:hasIdentifier "BL-TT" ; backlog:hasState backlog:InProgress .
+ex:It a backlog:Iteration ; backlog:hasIdentifier "IT-1" ; backlog:hasState backlog:InProgress ;
+    backlog:iterationStart "2026-08-01T00:00:00"^^xsd:dateTime ;
+    backlog:iterationEnd "2027-01-31T23:59:59"^^xsd:dateTime .
+
+ex:S_OK a backlog:Story ; backlog:hasIdentifier "S-OK" ; backlog:hasState backlog:InProgress ;
+    backlog:memberOfContainer ex:BL , ex:It ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "fixture" ;
+    backlog:hasApplicableConcern backlog:Concern_Data , backlog:Concern_Architecture .
+ex:R1 a backlog:RefinementEvent ; backlog:refines ex:S_OK ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-08-01T09:00:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Schema agreed." ; backlog:refinedBy backlog:Builder .
+ex:R2 a backlog:RefinementEvent ; backlog:refines ex:S_OK ;
+    backlog:addressesConcern backlog:Concern_Architecture ;
+    backlog:refinedAt "2026-08-01T09:30:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Component boundary agreed." ; backlog:refinedBy backlog:Builder .
+ex:PE1 a backlog:PlanningEvent ; backlog:plansItem ex:S_OK ; backlog:plannedInto ex:It ;
+    backlog:plannedAt "2026-08-01T10:00:00"^^xsd:dateTime ;
+    backlog:producesTask ex:T_D , ex:T_A .
+ex:T_D a backlog:ExecutionTask ; backlog:hasIdentifier "T-D" ; backlog:hasState backlog:InProgress ;
+    backlog:memberOfContainer ex:BL , ex:It ; backlog:hasTaskType backlog:Task_DesignDefinition .
+ex:T_A a backlog:ExecutionTask ; backlog:hasIdentifier "T-A" ; backlog:hasState backlog:InProgress ;
+    backlog:memberOfContainer ex:BL , ex:It ; backlog:hasTaskType backlog:Task_ArchitectureDefinition .
+
+ex:S_GAP a backlog:Story ; backlog:hasIdentifier "S-GAP" ; backlog:hasState backlog:InProgress ;
+    backlog:memberOfContainer ex:BL , ex:It ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "fixture" ;
+    backlog:hasApplicableConcern backlog:Concern_Architecture .
+ex:R3 a backlog:RefinementEvent ; backlog:refines ex:S_GAP ;
+    backlog:addressesConcern backlog:Concern_Architecture ;
+    backlog:refinedAt "2026-08-01T09:00:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Boundary discussed." ; backlog:refinedBy backlog:Builder .
+ex:PE2 a backlog:PlanningEvent ; backlog:plansItem ex:S_GAP ; backlog:plannedInto ex:It ;
+    backlog:plannedAt "2026-08-01T10:00:00"^^xsd:dateTime ;
+    backlog:producesTask ex:T_I .
+ex:T_I a backlog:ExecutionTask ; backlog:hasIdentifier "T-I" ; backlog:hasState backlog:InProgress ;
+    backlog:memberOfContainer ex:BL , ex:It ; backlog:hasTaskType backlog:Task_Implementation .
+
+ex:T_BARE a backlog:ExecutionTask ; backlog:hasIdentifier "T-BARE" ; backlog:hasState backlog:InProgress ;
+    backlog:memberOfContainer ex:BL , ex:It .

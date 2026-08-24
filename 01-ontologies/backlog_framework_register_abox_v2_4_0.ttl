@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/2.3.0> ;
-    owl:versionInfo "2.3.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/2.4.0> ;
+    owl:versionInfo "2.4.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/2.3.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/2.2.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/2.1.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/2.0.0> ;
@@ -2477,3 +2478,55 @@ fw:Ev_Grooming a backlog:TestEvidence ;
     backlog:hasVerificationMethod "Five cases exercised on one fixture and each verified individually, not in aggregate. A declares two concerns and addresses both: silent. B addresses one of two: rejected. C declares nothing at all: rejected. D states that none applies with a reason: silent. E declares concerns and simultaneously says none applies: rejected twice. Building it caught a real defect — the first draft matched on backlog:refinedItem, which does not exist; the property is backlog:refines, so the rule would have passed everything while appearing to work." ;
     backlog:verifiedByTool "backlog_validate + pyshacl" ;
     backlog:attestsCriterion fw:AC_Grooming .
+
+#################################################################
+#  v2.4.0 — BRF-EP15: the technical processes reach the task level.
+#
+#  The owner asked whether domain engineering, business analysis,
+#  technical analysis, design, testing and deployment were part of
+#  the framework. Measured: they were not. Only design existed, as
+#  five concerns; ExecutionTask carried no properties at all.
+#################################################################
+
+fw:EP_TaskTypes a backlog:Epic ;
+    backlog:hasIdentifier "BRF-EP15" ;
+    backlog:hasTitle "A task says which technical process it performs" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_IntentToWork ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasAcceptanceCriterion fw:AC_TaskTypes ;
+    backlog:hasPriorityScore fw:S_TaskTypes ;
+    backlog:hasCostEstimate fw:E_TaskTypes ;
+    backlog:rankedOnRoadmap fw:Roadmap ; backlog:hasRoadmapRank 15 ;
+    backlog:scheduledInHorizon backlog:Now ;
+    backlog:startedAt "2026-08-20T12:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-20T13:30:00"^^xsd:dateTime ;
+    backlog:hasActualEffort 5.0 ;
+    backlog:hasEvidence fw:Ev_TaskTypes ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:lastAuditedAt "2026-08-20T13:30:00"^^xsd:dateTime ;
+    backlog:hasRationale "Source named: ISO/IEC/IEEE 12207 clause 6.4, taken WHOLE rather than sampled. The standard's fourteen technical processes are a superset of the six the owner named, and the extras are the interesting part — system analysis, integration and validation are the ones a register loses when it records only what it was asked for." .
+fw:AC_TaskTypes a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a story groomed for design concerns and planned into an iteration, When the suite is run, Then every task states which technical process it performs, a concern analysed with no task of the implied type is reported, and a register recording only implementation work is told so." .
+fw:S_TaskTypes a backlog:WSJFScore ;
+    backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 6.0 ;
+    backlog:hasUserBusinessValue 8.0 ; backlog:hasTimeCriticality 5.0 ;
+    backlog:hasRiskReductionValue 5.0 ; backlog:hasJobSize 3.0 ;
+    backlog:scoredAt "2026-08-20T12:00:00"^^xsd:dateTime ;
+    backlog:hasScoreRationale "Highest value in the register: it is the layer at which the mission's granularisation actually lands, and without it grooming produced analysis that execution could not be checked against. Job size small because the standard supplies the taxonomy; nothing had to be invented." ;
+    backlog:hasBasisKind backlog:Basis_Judged .
+fw:E_TaskTypes a backlog:CostEstimate ;
+    backlog:hasEffortEstimate 4.0 ; backlog:hasCostBasis "Fourteen individuals from a standard, one property on ExecutionTask, a concern-to-type join, three constraints" ;
+    backlog:estimatedAt "2026-08-20T12:00:00"^^xsd:dateTime ;
+    backlog:hasBasisKind backlog:Basis_Judged .
+
+fw:Ev_TaskTypes a backlog:TestEvidence ;
+    backlog:hasTestSpec "03-tooling/fixtures/fixture_tasktype_negative_v1_0_0.ttl" ;
+    backlog:hasTestId "BRF-EP15" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-08-20T13:30:00"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "Three cases verified individually. A task with no type is rejected at L3. A story groomed for Architecture whose only planned task is Implementation raises the grooming-to-execution advisory. A story groomed for two concerns with tasks of both implied types stays silent. The register-level advisory fires on a backlog holding implementation tasks and neither verification nor validation." ;
+    backlog:verifiedByTool "backlog_validate + pyshacl" ;
+    backlog:attestsCriterion fw:AC_TaskTypes .

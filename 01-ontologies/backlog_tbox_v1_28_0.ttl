@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.27.0> ;
-    owl:versionInfo "1.27.0" ;
+    owl:versionIRI <http://example.org/backlog/1.28.0> ;
+    owl:versionInfo "1.28.0" ;
+    owl:priorVersion <http://example.org/backlog/1.27.0> ;
     owl:priorVersion <http://example.org/backlog/1.26.0> ;
     owl:priorVersion <http://example.org/backlog/1.25.0> ;
     owl:priorVersion <http://example.org/backlog/1.24.0> ;
@@ -3654,3 +3655,92 @@ backlog:hasNoApplicableConcern a owl:DatatypeProperty ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "has no applicable concern"@en ;
     skos:definition "A written statement that no design concern applies to this story, with the reason. Required rather than allowing silence, because a story that declares nothing and a story genuinely needing no design analysis are the same in the data — and the first is the common case. Saying so costs a sentence and makes the claim arguable."@en .
+
+#################################################################
+#  56. What kind of work a task is (v1.28.0)
+#
+#  Source: ISO/IEC/IEEE 12207 technical processes, clause 6.4.
+#  Taken whole rather than sampled, because the standard's list is
+#  a superset of the disciplines usually named informally and the
+#  omissions are the interesting part: a register that records only
+#  implementation looks full while mission analysis, system
+#  analysis, integration, validation and transition are invisible.
+#
+#  Attached to ExecutionTask, which until now carried NO properties
+#  of its own — a task could say what it was called and not what
+#  kind of work it was. PBI vs task was distinguished at BRF-EP1;
+#  what a task DOES was never modelled.
+#
+#  Deliberately NOT a workflow. The framework governs the register
+#  a method produces, so it records what kind of work a task was,
+#  never that the processes were performed in a prescribed order.
+#################################################################
+
+backlog:TaskType a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:Task_MissionAnalysis backlog:Task_StakeholderNeeds backlog:Task_RequirementsDefinition backlog:Task_ArchitectureDefinition backlog:Task_DesignDefinition backlog:Task_SystemAnalysis backlog:Task_Implementation backlog:Task_Integration backlog:Task_Verification backlog:Task_Validation backlog:Task_Transition backlog:Task_Operation backlog:Task_MaintenanceTask backlog:Task_Disposal ) ;
+    rdfs:label "Task Type"@en ;
+    skos:definition "The technical process a task belongs to, from ISO/IEC/IEEE 12207 clause 6.4. Closed at fourteen because the standard names fourteen; an adopter needing a fifteenth should say so rather than overload one. The value of the closed set is what it makes VISIBLE — a backlog with fifty implementation tasks and no validation task is stating something about itself that a free-text label would hide."@en ;
+    dcterms:source "ISO/IEC/IEEE 12207, clause 6.4 Technical processes"@en .
+
+backlog:Task_MissionAnalysis a owl:NamedIndividual , backlog:TaskType ;
+    rdfs:label "Mission analysis"@en ;
+    skos:definition "6.4.1 Business or mission analysis. Establishes what problem is being solved and why, before any solution is described. The process the owner called domain engineering: it defines the problem space, and a task here produces understanding rather than a component."@en .
+backlog:Task_StakeholderNeeds a owl:NamedIndividual , backlog:TaskType ;
+    rdfs:label "Stakeholder needs and requirements"@en ;
+    skos:definition "6.4.2. Turns what people need into stated stakeholder requirements. Distinct from the next process because a stakeholder requirement says what someone needs, and a system requirement says what the system must therefore do — conflating them is how solutions get written into problems."@en .
+backlog:Task_RequirementsDefinition a owl:NamedIndividual , backlog:TaskType ;
+    rdfs:label "System/software requirements definition"@en ;
+    skos:definition "6.4.3. States what the system must do to meet the stakeholder requirements. The owner's business analysis sits across this and the previous process."@en .
+backlog:Task_ArchitectureDefinition a owl:NamedIndividual , backlog:TaskType ;
+    rdfs:label "Architecture definition"@en ;
+    skos:definition "6.4.4. Establishes the structure: components, their responsibilities, and the boundaries between them. Separate from design definition because architecture fixes what may not change cheaply later."@en .
+backlog:Task_DesignDefinition a owl:NamedIndividual , backlog:TaskType ;
+    rdfs:label "Design definition"@en ;
+    skos:definition "6.4.5. Provides detail sufficient to implement, within the architecture. Where the five DesignConcerns are analysed."@en .
+backlog:Task_SystemAnalysis a owl:NamedIndividual , backlog:TaskType ;
+    rdfs:label "System analysis"@en ;
+    skos:definition "6.4.6. Analytical work supporting a decision — trade studies, feasibility, performance modelling. The owner's technical analysis. Named separately because it produces a decision and its rationale, not a component, and is otherwise recorded as design or lost."@en .
+backlog:Task_Implementation a owl:NamedIndividual , backlog:TaskType ;
+    rdfs:label "Implementation"@en ;
+    skos:definition "6.4.7. Builds the element. The task type most registers record and often the only one, which is why a backlog can look full while every other process is invisible."@en .
+backlog:Task_Integration a owl:NamedIndividual , backlog:TaskType ;
+    rdfs:label "Integration"@en ;
+    skos:definition "6.4.8. Assembles elements into a working whole. Distinct from implementation: a set of correct parts that do not compose is the failure this process exists to catch."@en .
+backlog:Task_Verification a owl:NamedIndividual , backlog:TaskType ;
+    rdfs:label "Verification"@en ;
+    skos:definition "6.4.9. Confirms the element meets its specified requirements — was it built right. Half of the owner's testing."@en .
+backlog:Task_Validation a owl:NamedIndividual , backlog:TaskType ;
+    rdfs:label "Validation"@en ;
+    skos:definition "6.4.11. Confirms the element serves its intended use in its intended environment — was the right thing built. The other half of testing, and the one skipped when verification passes and nobody asks whether the requirement was correct."@en .
+backlog:Task_Transition a owl:NamedIndividual , backlog:TaskType ;
+    rdfs:label "Transition"@en ;
+    skos:definition "6.4.10. Moves the element into operation: deployment, migration, cutover, training. The owner's deployment."@en .
+backlog:Task_Operation a owl:NamedIndividual , backlog:TaskType ;
+    rdfs:label "Operation"@en ;
+    skos:definition "6.4.12. Runs the system in service."@en .
+backlog:Task_MaintenanceTask a owl:NamedIndividual , backlog:TaskType ;
+    rdfs:label "Maintenance"@en ;
+    skos:definition "6.4.13. Sustains the delivered capability. The task-level counterpart of Kind_Maintenance at initiative level."@en .
+backlog:Task_Disposal a owl:NamedIndividual , backlog:TaskType ;
+    rdfs:label "Disposal"@en ;
+    skos:definition "6.4.14. Retires the element and deals with what it leaves behind."@en .
+
+backlog:hasTaskType a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:ExecutionTask ; rdfs:range backlog:TaskType ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has task type"@en ;
+    skos:definition "Which technical process this task performs. Functional: a task spanning two processes is two tasks, and splitting it is what makes either one estimable."@en .
+
+backlog:coversTaskType a owl:ObjectProperty ;
+    rdfs:domain backlog:DesignConcern ; rdfs:range backlog:TaskType ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "covers task type"@en ;
+    skos:definition "The task type a design concern implies work in. This is the join between grooming and execution: analysing a story for the Data concern implies design-definition work, and a story groomed for a concern whose task type never appears among its tasks was analysed and then not acted on."@en .
+
+backlog:Concern_Data          backlog:coversTaskType backlog:Task_DesignDefinition .
+backlog:Concern_Interface     backlog:coversTaskType backlog:Task_DesignDefinition , backlog:Task_Integration .
+backlog:Concern_Interaction   backlog:coversTaskType backlog:Task_DesignDefinition , backlog:Task_Validation .
+backlog:Concern_Architecture  backlog:coversTaskType backlog:Task_ArchitectureDefinition .
+backlog:Concern_Security      backlog:coversTaskType backlog:Task_DesignDefinition , backlog:Task_Verification .

@@ -50,6 +50,7 @@ ex:GateZulu a backlog:Package ;
 
 # the highest-scoring startable work sits in the gate that sorts LAST by name
 ex:InZulu a backlog:Story ;
+    backlog:hasNoApplicableConcern "Fixture story: no stored state, interface, interaction, structure or authorisation is touched." ;
     backlog:hasIdentifier "US-ZULU" ; backlog:hasTitle "Work inside the last-sorting gate" ;
     backlog:hasState backlog:Ready ;
     backlog:memberOfContainer ex:Backlog , ex:GateZulu ;
@@ -60,6 +61,7 @@ ex:ScoreZulu a backlog:WSJFScore ;
     backlog:hasRiskReductionValue 4.0 ; backlog:hasJobSize 2.0 .
 
 ex:InAlpha a backlog:Story ;
+    backlog:hasNoApplicableConcern "Fixture story: no stored state, interface, interaction, structure or authorisation is touched." ;
     backlog:hasIdentifier "US-ALPHA" ; backlog:hasTitle "Work inside the first-sorting gate" ;
     backlog:hasState backlog:Ready ;
     backlog:memberOfContainer ex:Backlog , ex:GateAlpha ;
@@ -77,6 +79,7 @@ ex:InBeta a backlog:Task ;
 
 # work outside every gate, scoring highest overall -> throughput and launch-scoped disagree
 ex:Outside a backlog:Story ;
+    backlog:hasNoApplicableConcern "Fixture story: no stored state, interface, interaction, structure or authorisation is touched." ;
     backlog:hasIdentifier "US-OUT" ; backlog:hasTitle "Cheap high-value work outside every gate" ;
     backlog:hasState backlog:Ready ;
     backlog:memberOfContainer ex:Backlog , ex:PkgLater ;

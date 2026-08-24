@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.35.0
+# Backlog & Roadmap Semantic Framework — Standard v1.36.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -512,6 +512,41 @@ data — and the first is the common case.
 At L3: a story past Proposed must declare concerns or state that none apply; every declared concern
 must have a refinement addressing it. At L1, claiming both is rejected. An advisory reports a
 refinement naming no concern — it still counts as a refinement and can count toward nothing.
+
+### 2.5c-xv Task types: which technical process a task performs
+
+`TaskType`, from **ISO/IEC/IEEE 12207 clause 6.4**, taken whole rather than sampled:
+
+| | |
+|---|---|
+| `Task_MissionAnalysis` | 6.4.1 — what problem, and why. Domain engineering |
+| `Task_StakeholderNeeds` | 6.4.2 — what people need, as stated requirements |
+| `Task_RequirementsDefinition` | 6.4.3 — what the system must therefore do |
+| `Task_ArchitectureDefinition` | 6.4.4 — structure, and what cannot change cheaply later |
+| `Task_DesignDefinition` | 6.4.5 — detail sufficient to implement |
+| `Task_SystemAnalysis` | 6.4.6 — trade studies and feasibility. Technical analysis |
+| `Task_Implementation` | 6.4.7 — builds the element |
+| `Task_Integration` | 6.4.8 — correct parts that do not compose |
+| `Task_Verification` | 6.4.9 — was it built right |
+| `Task_Validation` | 6.4.11 — was the right thing built |
+| `Task_Transition` | 6.4.10 — into operation. Deployment |
+| `Task_Operation` · `Task_MaintenanceTask` · `Task_Disposal` | 6.4.12–14 |
+
+`ExecutionTask` previously carried **no properties of its own** — a task could say what it was called
+and not what kind of work it was. `hasTaskType` is functional: a task spanning two processes is two
+tasks, and splitting it is what makes either estimable.
+
+**`coversTaskType` is the join between grooming and execution.** A design concern implies work of
+particular kinds — Data implies design definition, Architecture implies architecture definition,
+Interaction implies validation. A story groomed for a concern whose implied task type never appears
+among its tasks was **analysed and then not acted on**, which is the state where grooming becomes
+ceremony. Reported as an advisory.
+
+A second advisory fires on a register holding implementation tasks and neither verification nor
+validation: a backlog can look full while every process other than building is invisible.
+
+**Not a workflow.** The framework records what kind of work a task was, never that the processes were
+performed in a prescribed order.
 
 ### 2.5d Decomposition, commitments, dependency kinds, impediments, flow, team (subject v1.4.0)
 

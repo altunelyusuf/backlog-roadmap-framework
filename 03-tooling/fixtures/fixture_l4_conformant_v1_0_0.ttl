@@ -81,6 +81,7 @@ ex:AC_EP a backlog:AcceptanceCriterion ;
     backlog:hasGherkinText "Given the recovery stories are delivered, When a practitioner is locked out, Then they regain access end to end without contacting support." .
 
 ex:US1 a backlog:Story ;
+    backlog:hasApplicableConcern backlog:Concern_Data , backlog:Concern_Security ;
     backlog:hasIdentifier "US-1" ; backlog:hasTitle "Request a reset link" ;
     backlog:hasState backlog:Done ;
     backlog:memberOfContainer ex:Backlog , ex:It1 ;
@@ -114,6 +115,7 @@ ex:S1 a backlog:WSJFScore ;
     backlog:hasBasisKind backlog:Basis_Judged .
 
 ex:US2 a backlog:Story ;
+    backlog:hasApplicableConcern backlog:Concern_Data ;
     backlog:hasIdentifier "US-2" ; backlog:hasTitle "Set a new password from the link" ;
     backlog:hasState backlog:InProgress ;
     backlog:memberOfContainer ex:Backlog , ex:It2 ;
@@ -164,7 +166,8 @@ ex:Plan2 a backlog:PlanningEvent ;
     backlog:plannedBy backlog:Builder ;
     backlog:producesTask ex:T3 .
 
-ex:T1 a backlog:ExecutionTask ; backlog:hasIdentifier "T-1" ;
+ex:T1 a backlog:ExecutionTask ;
+    backlog:hasTaskType backlog:Task_Implementation ; backlog:hasIdentifier "T-1" ;
     backlog:hasTitle "Issue single-use tokens with expiry" ;
     backlog:hasState backlog:Done ; backlog:memberOfContainer ex:Backlog , ex:It1 ;
     backlog:startedAt "2026-07-28T09:00:00"^^xsd:dateTime ;
@@ -172,7 +175,8 @@ ex:T1 a backlog:ExecutionTask ; backlog:hasIdentifier "T-1" ;
     backlog:hasEvidence ex:Ev1 ; backlog:lastAuditedAt "2026-08-04T17:00:00"^^xsd:dateTime .
 ex:H_T1 a backlog:TestHarness ; backlog:harnessFor ex:T1 ;
     backlog:hasHarnessEvidence ex:Ev1 ; backlog:harnessComplete true .
-ex:T2 a backlog:ExecutionTask ; backlog:hasIdentifier "T-2" ;
+ex:T2 a backlog:ExecutionTask ;
+    backlog:hasTaskType backlog:Task_Implementation ; backlog:hasIdentifier "T-2" ;
     backlog:hasTitle "Send the link through the shared dispatcher" ;
     backlog:hasState backlog:Done ; backlog:memberOfContainer ex:Backlog , ex:It1 ;
     backlog:startedAt "2026-07-30T09:00:00"^^xsd:dateTime ;
@@ -180,7 +184,8 @@ ex:T2 a backlog:ExecutionTask ; backlog:hasIdentifier "T-2" ;
     backlog:hasEvidence ex:Ev1 ; backlog:lastAuditedAt "2026-08-04T17:00:00"^^xsd:dateTime .
 ex:H_T2 a backlog:TestHarness ; backlog:harnessFor ex:T2 ;
     backlog:hasHarnessEvidence ex:Ev1 ; backlog:harnessComplete true .
-ex:T3 a backlog:ExecutionTask ; backlog:hasIdentifier "T-3" ;
+ex:T3 a backlog:ExecutionTask ;
+    backlog:hasTaskType backlog:Task_Implementation ; backlog:hasIdentifier "T-3" ;
     backlog:hasTitle "Enforce the password policy on reset" ;
     backlog:hasState backlog:InProgress ; backlog:memberOfContainer ex:Backlog , ex:It2 .
 
@@ -253,3 +258,21 @@ ex:US_Split2 a backlog:Story ;
     backlog:hasScoreabilityReason "Not yet refined; scored at the next planning." .
 ex:AC_Split2 a backlog:AcceptanceCriterion ;
     backlog:hasGherkinText "Given a practitioner with a registered authenticator, When they request recovery, Then a challenge completes recovery within one iteration's work." .
+
+ex:R_US1_Data a backlog:RefinementEvent ; backlog:refines ex:US1 ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-08-01T09:00:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Analysed for data; approach agreed." ;
+    backlog:refinedBy backlog:Builder .
+
+ex:R_US1_Security a backlog:RefinementEvent ; backlog:refines ex:US1 ;
+    backlog:addressesConcern backlog:Concern_Security ;
+    backlog:refinedAt "2026-08-01T09:00:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Analysed for security; approach agreed." ;
+    backlog:refinedBy backlog:Builder .
+
+ex:R_US2_Data a backlog:RefinementEvent ; backlog:refines ex:US2 ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-08-01T09:00:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Analysed for data; approach agreed." ;
+    backlog:refinedBy backlog:Builder .
