@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.31.0> ;
-    owl:versionInfo "1.31.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.32.0> ;
+    owl:versionInfo "1.32.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.31.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.30.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.29.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.28.0> ;
@@ -3030,3 +3031,52 @@ backlog:PbiKindAdvisoryShape a sh:NodeShape ;
         sh:message "Advisory: this epic carries an initiative kind. Kind belongs to the Initiative it serves, not to a product backlog item — an epic is a theme within an initiative and inherits its classification. This package made exactly this error and withdrew it; the advisory exists so the next register does not repeat it silently." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE { $this backlog:hasInitiativeKind ?k }""" ] .
+
+#################################################################
+#  v1.32.0 — the mission stops being the one unchecked claim
+#################################################################
+
+backlog:MissionProvenanceShape a sh:NodeShape ;
+    sh:targetClass backlog:Mission ;
+    sh:severity sh:Violation ;
+    rdfs:label "A mission says where its words came from (L2/L3)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L2: this mission does not say where its words came from. decidedBy records who is accountable, not who authored — and the two diverge silently when a session drafts a statement and attributes it to the owner. A mission is the root of the intent chain and the only node nothing else checks; without an origin, a register cannot distinguish an owner's intent from a summary of work already done." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed, backlog:L4_LineageEnforced))
+            FILTER NOT EXISTS { $this backlog:hasMissionOrigin ?o }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: this mission claims an owner-stated or derived origin but names no source. 'The owner said so' with no pointer to a dated instruction or a document is indistinguishable from a session's paraphrase of what it believed the owner meant." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L3_Governed, backlog:L4_LineageEnforced))
+            $this backlog:hasMissionOrigin ?o .
+            FILTER (?o IN (backlog:Origin_OwnerStated, backlog:Origin_Derived))
+            FILTER NOT EXISTS { $this backlog:missionSource ?src }
+        }""" ] .
+
+backlog:SessionDraftedMissionAdvisoryShape a sh:NodeShape ;
+    sh:targetClass backlog:Mission ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: a mission a session wrote for itself"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: this mission was drafted by a session rather than stated by the owner. That is a legitimate working artifact and not an error. It is reported because a session drafting a mission for work it is already doing writes a SUMMARY of that work, and a summary cannot contradict its source — so the mission stops being able to refuse anything, which is the same failure a scope written after its goals has. Have the owner state it, or record what document it was derived from." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasMissionOrigin backlog:Origin_SessionDrafted .
+        }""" ] .
+
+backlog:MissionReachShape a sh:NodeShape ;
+    sh:targetClass backlog:Mission ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: a mission nothing advances"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: no goal contributes to this mission, so nothing in the register works toward it and no observation can ever bear on it. A mission with no goals beneath it is a statement of intent the development is not acting on — which may be honest, and is worth seeing." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            FILTER NOT EXISTS { ?g backlog:contributesToMission $this }
+        }""" ] .

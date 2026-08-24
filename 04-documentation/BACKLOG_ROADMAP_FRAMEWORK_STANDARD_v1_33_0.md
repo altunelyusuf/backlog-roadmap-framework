@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.32.0
+# Backlog & Roadmap Semantic Framework — Standard v1.33.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -436,6 +436,27 @@ capability"* is a judgement; *"did this force a major"* is a fact about what shi
 `ModificationRequest` and `ProblemReport` are 14764's terms for what arrives and triggers maintenance;
 at L3 reactive maintenance must name one, because reactive work answers something that arrived and its
 scope has no other source.
+
+### 2.5c-xii A mission says where its words came from
+
+`MissionOrigin` — `Origin_OwnerStated` / `Origin_SessionDrafted` / `Origin_Derived` — with
+`missionSource` and `supersedesMission`.
+
+`decidedBy` records who is **accountable** for a mission. Nothing recorded who **authored** it, and
+the two diverge silently when a session drafts a statement and attributes it to the owner. That
+divergence is not hypothetical: this package's own register carried five missions marked
+`decidedBy Owner` that a session had written, each after the work it described, each narrower than
+the last.
+
+**It is the scope-first failure one level higher.** A mission written after the work summarises that
+work, and a summary cannot contradict its source — so the mission stops being able to refuse anything,
+exactly as a scope drawn around fixed objectives does.
+
+At **L2** a mission must state its origin. At **L3** an owner-stated or derived mission must name its
+source, because *"the owner said so"* with no pointer to a dated instruction or document is
+indistinguishable from a session's paraphrase. An advisory reports a session-drafted mission; another
+reports a mission no goal advances. Superseded missions are **retained**, since the distance between a
+drifted mission and its correction is the most useful record the drift leaves.
 
 ### 2.5d Decomposition, commitments, dependency kinds, impediments, flow, team (subject v1.4.0)
 

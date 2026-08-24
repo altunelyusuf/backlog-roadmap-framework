@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/1.19.0> ;
-    owl:versionInfo "1.19.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/2.0.0> ;
+    owl:versionInfo "2.0.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/1.19.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/1.18.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/1.17.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/1.16.0> ;
@@ -65,12 +66,14 @@ fw:Commitment_Dev a backlog:Commitment ;
 #################################################################
 
 fw:Mission_Dev a backlog:Mission ;
+    backlog:hasMissionOrigin backlog:Origin_SessionDrafted ;
     rdfs:label "Development mission"@en ;
     backlog:hasMissionStatement "Extend the framework so that a register can report its own progress, cost and human involvement as computed facts rather than as claims. Not attempted: prescribing a delivery method, an estimation scale, or a unit of value." ;
     backlog:missionFor fw:Register ;
     backlog:decidedBy backlog:Owner .
 
 fw:Mission_Ops a backlog:Mission ;
+    backlog:hasMissionOrigin backlog:Origin_SessionDrafted ;
     rdfs:label "Operational mission"@en ;
     backlog:hasMissionStatement "An adopting team can answer, from the register alone and without a spreadsheet beside it: what did this cost, how fast are we going, what will it take to finish, and where did a human decide." ;
     backlog:missionFor fw:Register ;
@@ -660,6 +663,7 @@ fw:SC_Schedule a backlog:ScopeChange ;
     backlog:decidedBy backlog:Owner .
 
 fw:Mission_Plan a backlog:Mission ;
+    backlog:hasMissionOrigin backlog:Origin_SessionDrafted ;
     rdfs:label "Plan-based visibility mission"@en ;
     backlog:hasMissionStatement "A register can be read as a plan as well as a backlog: what was scheduled, what actually happened, and the difference — without exporting anything to a spreadsheet or a project tool." ;
     backlog:missionFor fw:Register ;
@@ -1472,6 +1476,7 @@ fw:Obs_SpreadsheetMeasured a backlog:MetricObservation ;
 #################################################################
 
 fw:Mission_Executable a backlog:Mission ;
+    backlog:hasMissionOrigin backlog:Origin_SessionDrafted ;
     rdfs:label "Executable roadmap mission"@en ;
     backlog:hasMissionStatement "A reader of the roadmap can see how far started work has actually got, every story fits the iteration it was committed to, and each release carries the most valuable work available rather than whatever shared a theme." ;
     backlog:missionFor fw:Register ;
@@ -1702,6 +1707,7 @@ fw:Obs_FitFinal a backlog:MetricObservation ;
 #################################################################
 
 fw:Mission_OrderRepair a backlog:Mission ;
+    backlog:hasMissionOrigin backlog:Origin_SessionDrafted ;
     rdfs:label "Recorded-order mission"@en ;
     backlog:hasMissionStatement "A reader of any lineage in this store can tell whether its scope was fixed before its goals or drawn around them afterwards, without asking the session that wrote it." ;
     backlog:missionFor fw:Register ;
@@ -2126,3 +2132,137 @@ fw:Obs_StaleOrderFinal a backlog:MetricObservation ;
     backlog:hasObservedValue 0.0 ;
     backlog:observedAt "2026-08-11T20:00:00"^^xsd:dateTime ;
     backlog:hasObservationMethod "Both artifacts named in the baseline re-checked in the shipped files. Reporter: ScopeStatement precedes Goal in LAYERS. Standard: fillsScope named, build order stated. Baseline was 2, target 0, observed 0. Historical records excluded from the count by design, not overlooked." .
+
+#################################################################
+#  v2.0.0 — MAJOR. The mission was wrong, and it was mine.
+#
+#  All five missions above are now marked Origin_SessionDrafted,
+#  which is what they always were. Each carries decidedBy Owner
+#  and was written by this session over four days, after the work
+#  it describes. None was deleted: they record what the framework
+#  believed its purpose was, and the distance between them and the
+#  statement below is the most useful thing the drift left behind.
+#
+#  Read them together and the direction is unmistakable. Every one
+#  is about the register describing ITSELF — reporting progress,
+#  answering without a spreadsheet, showing which order a lineage
+#  was built in. Not one is about PRODUCING SOFTWARE. A framework
+#  for building things was narrowed, one self-authored mission at
+#  a time, into a framework for auditing its own bookkeeping. Then
+#  that narrowed reading was used to argue that software
+#  engineering practice belonged to some other framework.
+#
+#  MAJOR because the root of the intent chain changes meaning, and
+#  everything beneath it — goals, scope, exclusions, and above all
+#  Ex_Method — is downstream of a purpose that was never the
+#  owner's.
+#################################################################
+
+fw:Mission_BuildSoftware a backlog:Mission ;
+    rdfs:label "Build software from mission statements"@en ;
+    backlog:hasMissionStatement "Software is built from mission statements: an intent chain is groomed and granularised down to executable work, delivered in regularly deployable packages, through time-boxed iterations planned to finish their package content, under autonomous, semi-autonomous or non-autonomous execution. The practices are grounded in software engineering standards rather than invented, and every step is machine-confirmable through ontologies." ;
+    backlog:missionFor fw:Register ;
+    backlog:hasMissionOrigin backlog:Origin_OwnerStated ;
+    backlog:missionSource "Owner instruction, 2026-08-20, correcting this session's reading of the framework's purpose: 'We have a backlog-roadmap framework because we want to build software from the mission statements. The methodology should be supporting autonomous, semi-autonomous, and non-autonomous development using iterative/sprint based approach ... All should be machine-confirmable especially using ontologies.'" ;
+    backlog:supersedesMission fw:Mission_Dev , fw:Mission_Ops , fw:Mission_Plan ,
+                              fw:Mission_Executable , fw:Mission_OrderRepair ;
+    backlog:decidedBy backlog:Owner .
+
+fw:MR_MissionDrift a backlog:ProblemReport ;
+    backlog:hasRequestText "You are totally wrong about the mission. Why is there a drift here?" ;
+    backlog:requestedAt "2026-08-20T00:00:00"^^xsd:dateTime .
+
+#################################################################
+#  The scope, written BEFORE its goals per the v3.1.0 ceremony.
+#
+#  This is the first boundary in this register drawn against a
+#  mission the owner stated rather than around work already done.
+#  Its exclusions are what it refuses; the goals below had to get
+#  past them.
+#################################################################
+
+fw:Scope_Build a backlog:ScopeStatement ;
+    backlog:hasScopeStatementText "Carry a mission statement down to executable, deployable work: grooming and granularisation from intent to stories that fit an iteration, packages that ship regularly, iterations time-boxed and planned to finish their package content, execution recorded as autonomous, semi-autonomous or non-autonomous, and the practices at each step grounded in a named software engineering standard rather than invented. Machine-confirmable throughout: every step above is a constraint the suite can check, not a convention a reader is asked to follow." ;
+    backlog:hasScopeExclusion fw:Ex_SingleMethod , fw:Ex_ToolChain , fw:Ex_InventedPractice .
+
+fw:Ex_SingleMethod a backlog:ScopeExclusion ;
+    backlog:excludesConcern "Mandating one delivery method's ceremonies as the only conformant way to work." ;
+    backlog:hasExclusionRationale "This REPLACES Ex_Method, which excluded prescribing a delivery method at all and was written under a mission this session invented. That exclusion was too wide: a framework whose purpose is building software from mission statements cannot refuse grooming, sprints and deployable packages, because those ARE the mechanism. What stays excluded is narrower and still worth refusing — requiring one named method's ceremony set, which would make a register produced by a team working differently non-conformant even when its claims are entirely honest." ;
+    backlog:decidedBy backlog:Owner .
+
+fw:Ex_ToolChain a backlog:ScopeExclusion ;
+    backlog:excludesConcern "Prescribing tools, trackers, repository layouts or CI systems." ;
+    backlog:hasExclusionRationale "The framework governs what a development must be able to SHOW, never what it must run to show it. A tool named in a constraint is a dependency every adopter inherits." ;
+    backlog:decidedBy backlog:Owner .
+
+fw:Ex_InventedPractice a backlog:ScopeExclusion ;
+    backlog:excludesConcern "Adding a practice, role or activity that no software engineering standard or established source names." ;
+    backlog:hasExclusionRationale "The owner's mission requires grounding in standards and best practice. An invented practice cannot be argued with, cannot be looked up, and encodes one session's guess as the framework's position — which is precisely how the drift this scope corrects began. Where a real name exists it is used; where none does, the gap is recorded rather than filled." ;
+    backlog:decidedBy backlog:Owner .
+
+# --- goals produced to FILL that scope, linked with fillsScope ---
+
+fw:Goal_MissionToWork a backlog:Goal ;
+    rdfs:label "A mission statement reaches executable work by construction"@en ;
+    backlog:contributesToMission fw:Mission_BuildSoftware ;
+    backlog:decidedBy backlog:Owner .
+
+fw:Goal_GroundedPractice a backlog:Goal ;
+    rdfs:label "Every practice the framework requires is traceable to a standard"@en ;
+    backlog:contributesToMission fw:Mission_BuildSoftware ;
+    backlog:decidedBy backlog:Owner .
+
+fw:Metric_UngroundedPractices a core:Metric ;
+    rdfs:label "Framework-required practices with no named external source"@en .
+fw:Metric_IntentToWorkGaps a core:Metric ;
+    rdfs:label "Steps from mission to executable work the suite cannot check"@en .
+
+fw:Obj_Grounded a backlog:Objective ;
+    rdfs:label "No required practice is invented"@en ;
+    backlog:fillsScope fw:Scope_Build ;
+    backlog:contributesToGoal fw:Goal_GroundedPractice ;
+    backlog:hasSuccessMetric fw:Metric_UngroundedPractices ;
+    backlog:hasBaselineValue 2.0 ;
+    backlog:hasTargetValue 0.0 ;
+    backlog:hasTargetDirection backlog:Dir_Decrease ;
+    backlog:hasObjectiveDeadline "2026-12-31T00:00:00"^^xsd:dateTime ;
+    backlog:decidedBy backlog:Owner .
+
+fw:Obj_IntentToWork a backlog:Objective ;
+    rdfs:label "The path from mission to executable work is machine-checkable end to end"@en ;
+    backlog:fillsScope fw:Scope_Build ;
+    backlog:contributesToGoal fw:Goal_MissionToWork ;
+    backlog:hasSuccessMetric fw:Metric_IntentToWorkGaps ;
+    backlog:hasBaselineValue 3.0 ;
+    backlog:hasTargetValue 0.0 ;
+    backlog:hasTargetDirection backlog:Dir_Decrease ;
+    backlog:hasObjectiveDeadline "2026-12-31T00:00:00"^^xsd:dateTime ;
+    backlog:decidedBy backlog:Owner .
+
+fw:Obs_IntentGapsAsIs a backlog:MetricObservation ;
+    rdfs:label "As-is: steps the suite cannot check"@en ;
+    backlog:observesMetric fw:Metric_IntentToWorkGaps ;
+    backlog:observationFor fw:Obj_IntentToWork ;
+    backlog:hasObservedValue 3.0 ;
+    backlog:observedAt "2026-08-20T00:00:00"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Measured against the shipped TBox and shapes. (1) Grooming: RefinementEvent exists and one event of any kind satisfies Ready, so a story can reach Ready without any analysis of what it actually needs. (2) Execution autonomy: ExecutionModality records Human, Automated or Hybrid but no constraint relates modality to the evidence a register must carry, so autonomous and non-autonomous work are held to identical proof. (3) Package-to-iteration sizing: DeploymentUnit and Iteration both exist and nothing checks that an iteration was planned to finish its package content, so a time-boxed iteration can be committed to more than it can deliver with no objection." .
+
+fw:Obs_UngroundedAsIs a backlog:MetricObservation ;
+    rdfs:label "As-is: framework-required practices with no named source"@en ;
+    backlog:observesMetric fw:Metric_UngroundedPractices ;
+    backlog:observationFor fw:Obj_Grounded ;
+    backlog:hasObservedValue 2.0 ;
+    backlog:observedAt "2026-08-20T00:00:00"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Counted the practices the suite REQUIRES that name no external source in their definition. Two: the story-fits-one-iteration rule, argued from the framework's own Story definition rather than from a named agile source; and the deployment selection basis, whose four categories were reasoned out here rather than drawn from a portfolio-management standard. Both are defensible and neither is traceable, which is the distinction this objective measures. The 14764 grid, the 12207 split, Wood 1986 complexity and ISO 29119-3 are all correctly grounded and are not counted." .
+
+fw:Rebase_MSCost a backlog:Rebaseline ;
+    rdfs:label "BRF-MS1 target passed during the mission-drift correction"@en ;
+    backlog:rebaselines fw:MS_Cost ;
+    backlog:hasPreviousTarget "2026-08-16T23:59:59" ;
+    backlog:hasNewTarget "2026-12-31T00:00:00" ;
+    backlog:hasRebaselineRationale "The date passed while the framework's own mission was being corrected. Recorded as a rebaseline with the ORIGINAL target retained rather than edited: the point of keeping it is that performance stays computable against the date first committed to, which is the number a re-dated plan would hide." ;
+    backlog:rebaselinedAt "2026-08-20T00:00:00"^^xsd:dateTime ;
+    backlog:decidedBy backlog:Owner .
+
+fw:MS_Cost backlog:milestoneOutcome backlog:Ach_Missed ;
+    backlog:hasRationale "Target date passed during the mission-drift correction. Recorded missed rather than re-dated: moving a target to meet it is the failure Rebaseline exists to prevent." .

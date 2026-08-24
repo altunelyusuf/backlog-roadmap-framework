@@ -1,5 +1,79 @@
 # Changelog
 
+## v1.70.0 — 2026-08-20 (MAJOR-class correction: the mission was wrong, and it was this session's)
+
+**Register 1.19.0 → 2.0.0.** The root of the intent chain changes meaning, and everything beneath it
+is downstream of a purpose that was never the owner's.
+
+### What was found
+
+The register held five missions, every one marked `decidedBy Owner`. **All five were written by this
+session**, over four days, after the work each describes. Traced by `git log -S`, not recalled. Asked
+what the framework's mission was, this session read them back as authoritative — self-authored text
+wearing the owner's name, presented as grounded evidence.
+
+The direction is unmistakable when they are read together: *"report its own progress as computed
+facts"*, *"answer from the register alone without a spreadsheet"*, *"tell whether scope was fixed
+before goals"*. **Every one is about the register describing itself. Not one is about producing
+software.** A framework for building things was narrowed, one self-authored mission at a time, into a
+framework for auditing its own bookkeeping — and then that narrowed reading was used, one turn later,
+to argue that software engineering practice belonged to a different framework.
+
+### Why nothing caught it
+
+`Mission` carried two properties: free text and a container pointer. Objectives are measured, scope is
+fit-gapped, goals connect upward. **The mission answered to nothing** — the one node in the intent
+chain with no falsifiability, in a framework whose entire argument is that unfalsifiable claims drift.
+
+It is also the scope-first failure one level higher. A mission written after the work summarises that
+work, and a summary cannot contradict its source. The rule was applied to scope in v3.0.0 and the
+mission above it was left alone.
+
+### The correction
+
+**`MissionOrigin`** — `Origin_OwnerStated`, `Origin_SessionDrafted`, `Origin_Derived` — plus
+`missionSource` and `supersedesMission`. `decidedBy` records who is **accountable**; nothing recorded
+who **authored**, and the two diverge silently in exactly this way. At L2 a mission must state its
+origin; at L3 an owner-stated or derived one must name its source, because *"the owner said so"* with
+no pointer is indistinguishable from a session's paraphrase of what it believed the owner meant.
+
+An advisory reports a session-drafted mission. A second reports a mission no goal advances — which
+fired immediately on the corrected mission, correctly, because nothing beneath it existed yet.
+
+**All five prior missions are retained, marked `Origin_SessionDrafted`**, superseded not deleted. The
+distance between them and the owner's statement is the most useful thing the drift left behind.
+
+**`Mission_BuildSoftware`**, owner-stated with the instruction quoted as its source: software is built
+from mission statements, groomed and granularised to executable work, delivered in regularly
+deployable packages, through time-boxed iterations planned to finish their package content, under
+autonomous, semi-autonomous or non-autonomous execution, grounded in software engineering standards,
+machine-confirmable throughout.
+
+**`Ex_Method` is replaced.** It excluded *prescribing a delivery method at all* and was written under
+the invented mission. A framework whose purpose is building software from mission statements cannot
+refuse grooming, sprints and deployable packages — **those are the mechanism**. `Ex_SingleMethod`
+replaces it and refuses something narrower and still worth refusing: mandating one method's ceremony
+set as the only conformant way to work.
+
+Two further exclusions, written before the goals beneath them: `Ex_ToolChain`, and
+`Ex_InventedPractice` — no practice the framework requires may lack a named external source, which is
+the owner's grounding requirement turned into a boundary.
+
+### Measured, not asserted
+
+`Metric_IntentToWorkGaps` baseline **3**: grooming accepts any single refinement event, so a story
+reaches Ready with no analysis of what it needs; execution modality is recorded but never related to
+the evidence required, so autonomous and non-autonomous work are held to identical proof; and nothing
+checks that an iteration was planned to finish its package content.
+
+`Metric_UngroundedPractices` baseline **2**: the story-fits-one-iteration rule and the deployment
+selection basis are both defensible and neither is traceable to a named source. The 14764 grid, the
+12207 split, Wood 1986 and ISO 29119-3 are correctly grounded and not counted.
+
+**`MS_Cost` recorded as missed with a proper `Rebaseline`** retaining the original target, rather than
+re-dated to a date it could meet.
+
+
 ## v1.69.0 — 2026-08-11 (MINOR: BRF-EP11 — the artifacts stop teaching the retired order)
 
 The last open item in the register. Two shipped artifacts still presented the intent chain

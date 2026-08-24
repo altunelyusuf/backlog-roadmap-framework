@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.24.0> ;
-    owl:versionInfo "1.24.0" ;
+    owl:versionIRI <http://example.org/backlog/1.25.0> ;
+    owl:versionInfo "1.25.0" ;
+    owl:priorVersion <http://example.org/backlog/1.24.0> ;
     owl:priorVersion <http://example.org/backlog/1.23.0> ;
     owl:priorVersion <http://example.org/backlog/1.22.0> ,
                       <http://example.org/backlog/1.21.0> ,
@@ -3513,3 +3514,53 @@ backlog:producesIncrement a owl:ObjectProperty , owl:FunctionalProperty ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "produces increment"@en ;
     skos:definition "The version movement this initiative produces. Functional: an initiative producing two different increments is two initiatives."@en .
+
+#################################################################
+#  53. A mission answers to something (v1.25.0)
+#
+#  Mission carried two properties: a free-text statement and a
+#  pointer to the container. Nothing checked it against anything.
+#  Objectives are measured, scope is fit-gapped, goals connect
+#  upward — the mission, alone in the intent chain, was
+#  unfalsifiable. In a framework whose entire argument is that
+#  unfalsifiable claims drift, that is the one place drift was
+#  guaranteed to go unnoticed, and it did: five missions were
+#  authored by a session over four days, each attributed to the
+#  owner, each summarising work already shipped, each narrower
+#  than the last. The register read back exactly what had been
+#  written into it, which is what a self-confirming claim does.
+#################################################################
+
+backlog:MissionOrigin a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:Origin_OwnerStated backlog:Origin_SessionDrafted backlog:Origin_Derived ) ;
+    rdfs:label "Mission Origin"@en ;
+    skos:definition "Where a mission statement's words came from. decidedBy already records who is ACCOUNTABLE for a mission; it does not record who AUTHORED it, and the two silently diverge when a session drafts a statement and attributes it to the owner. The distinction only matters in one direction, which is why it is worth the vocabulary: a mission the owner stated can correct a session's reading of it, and a mission a session drafted cannot correct anything, because it is downstream of the very understanding it appears to justify."@en .
+
+backlog:Origin_OwnerStated a owl:NamedIndividual , backlog:MissionOrigin ;
+    rdfs:label "Owner stated"@en ;
+    skos:definition "The owner supplied the words. The only origin under which a mission is evidence of intent rather than a record of what was built."@en .
+backlog:Origin_SessionDrafted a owl:NamedIndividual , backlog:MissionOrigin ;
+    rdfs:label "Session drafted"@en ;
+    skos:definition "A session wrote the statement, whoever it was attributed to. Legitimate as a working artifact and dangerous as a source: a session drafting a mission after the work exists writes a summary of that work, and a summary cannot contradict its source."@en .
+backlog:Origin_Derived a owl:NamedIndividual , backlog:MissionOrigin ;
+    rdfs:label "Derived"@en ;
+    skos:definition "Restated from a document outside the register — a charter, a contract, a standard. Traceable to something, which is what separates it from a session draft."@en .
+
+backlog:hasMissionOrigin a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:Mission ; rdfs:range backlog:MissionOrigin ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has mission origin"@en .
+
+backlog:missionSource a owl:DatatypeProperty ;
+    rdfs:domain backlog:Mission ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "mission source"@en ;
+    skos:definition "Where the words came from, named precisely enough to be found again: a dated instruction, a charter section, a standard clause. Required for a derived mission and for an owner-stated one, because 'the owner said so' with no pointer is indistinguishable from a session's paraphrase of what it believed the owner meant."@en .
+
+backlog:supersedesMission a owl:ObjectProperty ;
+    rdfs:domain backlog:Mission ; rdfs:range backlog:Mission ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "supersedes mission"@en ;
+    skos:definition "A mission this one replaces. The superseded mission is retained, never deleted: it records what a development believed its purpose was, and the difference between that and the corrected statement is the most useful thing a drift leaves behind."@en .
