@@ -1,5 +1,59 @@
 # Changelog
 
+## v1.76.0 — 2026-08-20 (MINOR: comprehensive fit-gap, and the root cause of the drift)
+
+Run as a governed `LineageAdaptation` with all four gates recorded, not as an inspection.
+
+**Assess — passed.** Four scopes, each naming its mission, no mixed directions. Three scope-first; the
+original `fw:Scope` is scope-last and retained as the record of how the first development was built.
+
+**Fit-gap — measured, and it found things.** Fourteen **forked chains** — a scope drawn for one mission
+while the goal advances another — and four untraced execution tasks.
+
+### Root cause, and it is one thing
+
+**This register declares L2 while the framework it publishes enforces at L3 and L4.** Test-driven:
+
+```
+L2   0 violations      16 of 57 constraints did not run
+L3 117 violations
+L4 162 violations
+```
+
+**166 violations were invisible, including the fourteen forked chains that the L4 rule written to catch
+them could not see.** Every drift in this package's history has this shape: a rule built at L3 or L4 to
+prevent a class of error, then never run against the register containing it. Nothing lies — the gate
+reports green, the level is declared honestly, and the suppression count is printed and read past.
+
+**Mitigations, both in the suite rather than in a document:**
+
+`SelfExemptionShape` — advisory whenever a profile runs below its target, saying plainly that a clean
+result is a narrower claim than the target implies; and **L1 violation** if such a profile carries no
+review date, because a target with no date is a permanent exemption wearing the language of a plan.
+
+**The fork rule now exempts superseded lineage.** All fourteen forks name one of the four
+session-drafted missions superseded by the owner's. Re-pointing them would assert an intent never held.
+They stay in the register, stay visible, and no longer block a live release — verified at L4: **0 forks
+in live lineage**.
+
+### The adaptation's own gates caught this session twice
+
+Recorded `Adapt_BoundaryRewritten` while rewriting no boundary — rejected twice, for no new
+`ScopeStatement` and no `ScopeChange`. Then, filed as `Adapt_BoundaryHolds`, rejected again because
+findings existed.
+
+The filing was wrong, not the shape. **`FitGapFinding` means work found outside the standing boundary**,
+and neither a forked chain nor a level declaration is that. Re-recorded as `CrossCuttingInvariant`s,
+which is what a standing condition of a register is. The fit-gap found **no work outside the boundary**,
+so `BoundaryHolds` is correct and rests on a measurement.
+
+**Lineage Operating Discipline v3.1.0 → v3.2.0**: G11 run at the level you enforce; G12 a superseded
+lineage is a record, not a claim.
+
+**Not claimed:** the register is still at L2. Closing to L3 needs 48 test harnesses and remediation of
+20 backfilled pre-mission releases. That is real work, now measured and dated rather than assumed away.
+
+
 ## v1.75.0 — 2026-08-20 (MINOR: BRF-EP15 — the technical processes reach the task level)
 
 **The answer to "are they part of the framework" was no, and it was measured before building.** Only

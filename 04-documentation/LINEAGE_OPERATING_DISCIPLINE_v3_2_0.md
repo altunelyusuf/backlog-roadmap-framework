@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v3.1.0
+# Lineage Operating Discipline — v3.2.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -101,6 +101,32 @@ cumulative flow reading a property that never existed, a burn-down reaching zero
 date comparison reporting future deadlines as passed. Each *looked* like the tool working.
 *No shape catches this.* The check that does is a **fixture whose answer is known in advance**.
 
+### G11 — Run at the level you enforce, or the rules are decoration
+A package that declares a conformance level below the one its own framework enforces exempts itself
+from the rules it publishes. Measured on this package: **16 of 57 level-gated constraints did not run
+and 166 violations were invisible**, including fourteen forked chains that the L4 rule *written to
+catch them* could not see.
+
+**This is the mechanism behind every drift in this package's history.** A rule is built at L3 or L4 to
+prevent a class of error, and then never runs against the register containing that error. Nothing
+lies: the gate reports green, the level is declared honestly, and the suppression count is printed —
+and read past.
+
+A declared level below the target is legitimate; that is how adoption works. What is not legitimate is
+leaving the distance unmeasured. **Test-drive the target level and record what it reports.** A target
+nobody has measured against is a wish, and a target with no review date is a permanent exemption
+wearing the language of a plan.
+
+### G12 — A superseded lineage is a record, not a claim
+When a mission is superseded, the chain beneath it stays. Re-pointing goals to remove an inconsistency
+would assert an intent never held — the fabrication L-112 forbids one level up. Constraints on chain
+integrity must therefore exempt superseded lineage: the defect is real, stays visible, and must not
+block a live release.
+
+The corollary is the warning: **fourteen forks arose because missions were invented one per release
+batch**, each summarising work already shipped. Scope-first fixes the boundary; nothing yet fixes a
+mission written the same way, which is why mission provenance became a constraint.
+
 ### G9 — A constant iteration, and stories split to fit it
 An iteration is a **fixed** time box. Sizing it to the longest story inverts the control: if its
 length is set by the work it contains, you always fit, and velocity becomes a tautology that can
@@ -163,6 +189,17 @@ exists in the shipped shapes file and carries the severity claimed. **A discipli
 enforcement claims have drifted from the suite is worse than none, because it is believed.**
 
 ---
+
+## v3.2.0 (2026-08-20)
+
+Two rulings from a comprehensive fit-gap run as a governed adaptation. **G11**: a package running below
+the level it enforces exempts itself from its own rules, which is the mechanism behind every drift this
+package has recorded. **G12**: superseded lineage is a record and constraints must exempt it, because
+re-pointing it would fabricate intent.
+
+The adaptation's own gates caught this session twice — claiming `BoundaryRewritten` while rewriting no
+boundary, and filing two findings as fit-gap findings when neither was work outside a boundary. Both
+rejections were correct.
 
 ## v3.1.0 (2026-08-11)
 

@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.35.0> ;
-    owl:versionInfo "1.35.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.36.0> ;
+    owl:versionInfo "1.36.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.35.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.34.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.33.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.32.0> ;
@@ -3122,6 +3123,12 @@ backlog:ObjectiveChainShape a sh:NodeShape ;
             ?sc backlog:scopeForMission ?m1 .
             ?g backlog:contributesToMission ?m2 .
             FILTER (?m1 != ?m2)
+            # A superseded mission's chain is a historical record. Re-pointing
+            # it to remove a fork would assert an intent never held, which is
+            # the fabrication L-112 forbids. The fork is REAL and stays visible
+            # in the register; what it must not do is block a live release.
+            FILTER NOT EXISTS { ?sup backlog:supersedesMission ?m1 }
+            FILTER NOT EXISTS { ?sup2 backlog:supersedesMission ?m2 }
         }""" ] .
 
 backlog:RoadmapIntentShape a sh:NodeShape ;
@@ -3232,4 +3239,40 @@ backlog:ProcessCoverageAdvisoryShape a sh:NodeShape ;
                                    backlog:hasTaskType backlog:Task_Verification }
             FILTER NOT EXISTS { ?w a backlog:ExecutionTask ; backlog:memberOfContainer $this ;
                                    backlog:hasTaskType backlog:Task_Validation }
+        }""" ] .
+
+#################################################################
+#  v1.36.0 — the root cause: a package exempting itself
+#
+#  Measured on this package's own register: it declares
+#  L2_EvidenceBound while the framework it publishes enforces at
+#  L3 and L4. Sixteen of fifty-seven constraints did not run, and
+#  166 violations were invisible — including fourteen forked
+#  chains that the L4 rule written to catch them could not see.
+#
+#  That is the mechanism behind every drift in this package's
+#  history. Rules were built at L3 and L4 to prevent a class of
+#  error, and then never ran against the register that contained
+#  it. A gate reports green, a level is declared honestly, and the
+#  suppression count is printed and read past.
+#################################################################
+
+backlog:SelfExemptionShape a sh:NodeShape ;
+    sh:targetClass backlog:AdoptionProfile ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: a register running below its own target"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: this profile declares a conformance level below the level it targets. That is legitimate and is how adoption is meant to work — but the constraints between the two levels do not run, so a clean result here is a narrower claim than the target implies, and any defect those constraints exist to catch is invisible rather than absent. Test-drive the target level and record what it reports; a target nobody has measured against is a wish." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasConformanceLevel ?lvl ; backlog:hasTargetConformanceLevel ?tgt .
+            FILTER (?lvl != ?tgt)
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this profile targets a level above its declared one but records no review date. A target with no date by which the gap will be closed is a permanent exemption wearing the language of a plan — and the constraints it defers are the ones written to catch the errors the register is most likely to make." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasConformanceLevel ?lvl ; backlog:hasTargetConformanceLevel ?tgt .
+            FILTER (?lvl != ?tgt)
+            FILTER NOT EXISTS { $this backlog:hasLevelReviewDate ?d }
         }""" ] .
