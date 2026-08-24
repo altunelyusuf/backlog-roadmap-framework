@@ -41,7 +41,9 @@ ex:AC a backlog:AcceptanceCriterion ;
     backlog:hasGherkinText "Given a locked-out practitioner, When they request a reset, Then recovery completes without a support contact." .
 ex:C a backlog:Commitment ; backlog:commitsToGoal ex:G .
 
-ex:M a backlog:Mission ; rdfs:label "Mission"@en ;
+ex:M a backlog:Mission ;
+    backlog:hasMissionOrigin backlog:Origin_OwnerStated ;
+    backlog:missionSource "Fixture: an illustrative mission stated by the fixture's owner. Recorded because a mission with no origin cannot be told apart from a session's summary of work already done." ; rdfs:label "Mission"@en ;
     backlog:hasMissionStatement "Practitioners recover accounts unaided." ;
     backlog:missionFor ex:BL ; backlog:decidedBy backlog:Owner .
 ex:G a backlog:Goal ; rdfs:label "Self-service recovery"@en ;

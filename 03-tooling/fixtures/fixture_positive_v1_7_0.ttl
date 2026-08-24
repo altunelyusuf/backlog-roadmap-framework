@@ -571,6 +571,8 @@ ex:Rebase_MS1 a backlog:Rebaseline ;
 #################################################################
 
 ex:Mission a backlog:Mission ;
+    backlog:hasMissionOrigin backlog:Origin_OwnerStated ;
+    backlog:missionSource "Fixture: an illustrative mission stated by the fixture's owner. Recorded because a mission with no origin cannot be told apart from a session's summary of work already done." ;
     rdfs:label "Studio mission"@en ;
     backlog:hasMissionStatement "Let a single physiotherapy studio run its bookings and client records without the owner answering the phone. Not attempted: multi-studio operation, clinical record-keeping, or billing." ;
     backlog:missionFor ex:Backlog ;

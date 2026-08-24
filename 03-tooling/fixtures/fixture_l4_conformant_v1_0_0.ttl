@@ -30,7 +30,9 @@ ex:Backlog a backlog:Backlog ;
 ex:Commit a backlog:Commitment ; rdfs:label "Delivery commitment"@en ;
     backlog:commitsToGoal ex:Goal .
 
-ex:Mission a backlog:Mission ; rdfs:label "Mission"@en ;
+ex:Mission a backlog:Mission ;
+    backlog:hasMissionOrigin backlog:Origin_OwnerStated ;
+    backlog:missionSource "Fixture: an illustrative mission stated by the fixture's owner. Recorded because a mission with no origin cannot be told apart from a session's summary of work already done." ; rdfs:label "Mission"@en ;
     backlog:hasMissionStatement "Practitioners recover an account without contacting support." ;
     backlog:missionFor ex:Backlog ; backlog:decidedBy backlog:Owner .
 
