@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.28.0> ;
-    owl:versionInfo "1.28.0" ;
+    owl:versionIRI <http://example.org/backlog/1.29.0> ;
+    owl:versionInfo "1.29.0" ;
+    owl:priorVersion <http://example.org/backlog/1.28.0> ;
     owl:priorVersion <http://example.org/backlog/1.27.0> ;
     owl:priorVersion <http://example.org/backlog/1.26.0> ;
     owl:priorVersion <http://example.org/backlog/1.25.0> ;
@@ -3744,3 +3745,50 @@ backlog:Concern_Interface     backlog:coversTaskType backlog:Task_DesignDefiniti
 backlog:Concern_Interaction   backlog:coversTaskType backlog:Task_DesignDefinition , backlog:Task_Validation .
 backlog:Concern_Architecture  backlog:coversTaskType backlog:Task_ArchitectureDefinition .
 backlog:Concern_Security      backlog:coversTaskType backlog:Task_DesignDefinition , backlog:Task_Verification .
+
+#################################################################
+#  57. Named team roles, and iteration capacity (v1.29.0)
+#
+#  BRF-EP14. TeamRole is deliberately OPEN, so shipping named
+#  individuals prescribes nothing: a register using none of them
+#  stays conformant, and one needing a role not listed adds it.
+#  What the framework requires is that a role it SHIPS names the
+#  source it came from — Ex_InventedPractice applied to itself.
+#################################################################
+
+backlog:hasRoleSource a owl:DatatypeProperty ;
+    rdfs:domain backlog:TeamRole ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has role source"@en ;
+    skos:definition "The standard or work a shipped role was taken from. Required on roles the framework ships and not on roles an adopter adds: the framework must be able to defend its own vocabulary, and cannot demand a citation for a role somebody needs locally."@en .
+
+backlog:Role_SystemsAnalyst a owl:NamedIndividual , backlog:TeamRole ;
+    rdfs:label "Systems analyst"@en ;
+    skos:definition "Elicits and states requirements, and carries the stakeholder-needs and requirements-definition work. Named because a register that records only builders cannot show who established what was to be built."@en ;
+    backlog:hasRoleSource "Satzinger, Jackson & Burd, Systems Analysis and Design in a Changing World" .
+backlog:Role_DesignAuthority a owl:NamedIndividual , backlog:TeamRole ;
+    rdfs:label "Design authority"@en ;
+    skos:definition "Holds the design decisions a story must not silently contradict. Distinct from an architect: the authority owns consistency across decisions already taken, not the structure itself."@en ;
+    backlog:hasRoleSource "Satzinger, Jackson & Burd, ch.6" .
+backlog:Role_Architect a owl:NamedIndividual , backlog:TeamRole ;
+    rdfs:label "Architect"@en ;
+    skos:definition "Owns the structure and the boundaries that cannot change cheaply later — the architecture-definition process."@en ;
+    backlog:hasRoleSource "ISO/IEC/IEEE 42010 architecture description" .
+backlog:Role_HCIResearcher a owl:NamedIndividual , backlog:TeamRole ;
+    rdfs:label "HCI researcher"@en ;
+    skos:definition "Establishes how a person will use the capability, and whether they can. The interaction concern's counterpart in people rather than artefacts."@en ;
+    backlog:hasRoleSource "ISO 9241-210 human-centred design for interactive systems" .
+backlog:Role_Tester a owl:NamedIndividual , backlog:TeamRole ;
+    rdfs:label "Tester"@en ;
+    skos:definition "Performs verification and validation. ISO/IEC/IEEE 29119-3 names this role plainly; the framework uses the standard's word rather than a house term, because a role named differently in every register cannot be compared across two."@en ;
+    backlog:hasRoleSource "ISO/IEC/IEEE 29119-3 test documentation" .
+backlog:Role_TestManager a owl:NamedIndividual , backlog:TeamRole ;
+    rdfs:label "Test manager"@en ;
+    skos:definition "Owns the test approach and its completion criteria, as distinct from performing tests."@en ;
+    backlog:hasRoleSource "ISO/IEC/IEEE 29119-3" .
+
+backlog:hasCommittedEffort a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:Iteration ; rdfs:range xsd:decimal ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has committed effort"@en ;
+    skos:definition "Effort committed at planning, recorded rather than derived. Derived would be the sum of what is planned in now, which changes as work is added — and the question the discipline asks is what was committed AT COMMITMENT, against the capacity known then. A number that moves cannot report an over-commitment."@en .

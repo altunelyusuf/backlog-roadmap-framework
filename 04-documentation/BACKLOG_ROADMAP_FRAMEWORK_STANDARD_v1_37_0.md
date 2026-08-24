@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.36.0
+# Backlog & Roadmap Semantic Framework — Standard v1.37.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -547,6 +547,28 @@ validation: a backlog can look full while every process other than building is i
 
 **Not a workflow.** The framework records what kind of work a task was, never that the processes were
 performed in a prescribed order.
+
+### 2.5c-xvi Iteration capacity, and the roles the framework ships
+
+**`hasCommittedEffort` is recorded, not derived.** Derived would be the sum of what is planned in
+*now*, which moves as work is added — and a number that moves cannot report an over-commitment. The
+question the discipline asks is what was committed **at commitment**, against the capacity known then.
+
+At L3 an iteration committing beyond its capacity is rejected: an iteration is a fixed time box, and
+committing beyond capacity means the box was sized by the work rather than the work by the box.
+
+At L4 **a deployment carrying an item its iteration never planned is rejected.** A package shipped
+from an iteration is what that iteration committed to and finished; work entering by another route
+makes the iteration's record of itself untrue and cadence stops being measurable.
+
+**Six `TeamRole` individuals ship**, each naming its source: systems analyst and design authority
+(Satzinger et al.), architect (ISO/IEC/IEEE 42010), HCI researcher (ISO 9241-210), tester and test
+manager (ISO/IEC/IEEE 29119-3).
+
+`TeamRole` is **open**, so this prescribes nothing — a register using none stays conformant, and one
+needing a role not listed adds it. `hasRoleSource` is checked on the **framework namespace only**:
+the framework must defend its own vocabulary, and cannot demand a citation for a role an adopter
+needs locally.
 
 ### 2.5d Decomposition, commitments, dependency kinds, impediments, flow, team (subject v1.4.0)
 

@@ -1,0 +1,49 @@
+# Iteration capacity and deployment membership — BRF-EP13.
+#
+#   IT-OVER  committed 20 against a capacity of 10   -> REJECTED at L3
+#   IT-OK    committed 8 against 10                  -> silent
+#   IT-SMUG  deployment carries an item the iteration
+#            never planned                           -> REJECTED at L4
+#   IT-BARE  no capacity declared                    -> ADVISORY
+#
+# IT-SMUG is the one worth having. A package shipped from an
+# iteration is what that iteration committed to and finished;
+# carrying work that entered by another route makes the iteration's
+# record of itself untrue and cadence stops being measurable.
+
+@prefix backlog: <http://example.org/backlog#> .
+@prefix ex:      <http://example.org/cap#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+ex:P a backlog:AdoptionProfile ; backlog:profileAppliesTo "capacity fixture" ;
+    backlog:governsBacklog ex:BL ; backlog:hasConformanceLevel backlog:L4_LineageEnforced ;
+    backlog:decidedBy backlog:Owner ; backlog:hasDecisionRationale "L4: the deployment clause is L4." ;
+    backlog:adoptsFacet backlog:CoreFacet , backlog:EvidenceFacet .
+ex:BL a backlog:Backlog ; backlog:hasIdentifier "BL-CAP" ; backlog:hasState backlog:InProgress .
+
+ex:It_Over a backlog:Iteration ; backlog:hasIdentifier "IT-OVER" ; backlog:hasState backlog:InProgress ;
+    backlog:iterationStart "2026-08-01T00:00:00"^^xsd:dateTime ;
+    backlog:iterationEnd "2027-01-31T23:59:59"^^xsd:dateTime ;
+    backlog:hasCapacity 10.0 ; backlog:hasCommittedEffort 20.0 .
+
+ex:It_Ok a backlog:Iteration ; backlog:hasIdentifier "IT-OK" ; backlog:hasState backlog:InProgress ;
+    backlog:iterationStart "2026-08-01T00:00:00"^^xsd:dateTime ;
+    backlog:iterationEnd "2027-01-31T23:59:59"^^xsd:dateTime ;
+    backlog:hasCapacity 10.0 ; backlog:hasCommittedEffort 8.0 .
+
+ex:It_Bare a backlog:Iteration ; backlog:hasIdentifier "IT-BARE" ; backlog:hasState backlog:InProgress ;
+    backlog:iterationStart "2026-08-01T00:00:00"^^xsd:dateTime ;
+    backlog:iterationEnd "2027-01-31T23:59:59"^^xsd:dateTime .
+
+ex:It_Smug a backlog:Iteration ; backlog:hasIdentifier "IT-SMUG" ; backlog:hasState backlog:Done ;
+    backlog:iterationStart "2026-07-01T00:00:00"^^xsd:dateTime ;
+    backlog:iterationEnd "2026-07-14T23:59:59"^^xsd:dateTime ;
+    backlog:hasCapacity 10.0 ; backlog:hasCommittedEffort 8.0 .
+ex:S_Smug a backlog:Story ; backlog:hasIdentifier "S-SMUG" ; backlog:hasState backlog:Done ;
+    backlog:memberOfContainer ex:BL ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "planted" .
+ex:Rel_Smug a backlog:DeploymentUnit ; backlog:hasIdentifier "REL-SMUG" ;
+    backlog:hasTitle "Carries what was never planned" ; backlog:hasState backlog:Done ;
+    backlog:hasDeploymentDate "2026-07-15T09:00:00"^^xsd:dateTime ;
+    backlog:deploysFrom ex:It_Smug ; backlog:deploysItem ex:S_Smug ;
+    backlog:decidedBy backlog:Owner ; backlog:hasSelectionBasis backlog:Sel_Opportunistic .

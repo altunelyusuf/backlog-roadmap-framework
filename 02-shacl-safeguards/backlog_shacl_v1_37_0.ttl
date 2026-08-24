@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.36.0> ;
-    owl:versionInfo "1.36.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.37.0> ;
+    owl:versionInfo "1.37.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.36.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.35.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.34.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.33.0> ;
@@ -3275,4 +3276,52 @@ backlog:SelfExemptionShape a sh:NodeShape ;
             $this backlog:hasConformanceLevel ?lvl ; backlog:hasTargetConformanceLevel ?tgt .
             FILTER (?lvl != ?tgt)
             FILTER NOT EXISTS { $this backlog:hasLevelReviewDate ?d }
+        }""" ] .
+
+#################################################################
+#  v1.37.0 — BRF-EP13 iteration capacity, BRF-EP14 role sources
+#################################################################
+
+backlog:IterationCapacityShape a sh:NodeShape ;
+    sh:targetClass backlog:Iteration ;
+    sh:severity sh:Violation ;
+    rdfs:label "An iteration is planned to finish its content (L3)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: this iteration committed more effort than its declared capacity. An iteration is a fixed time box; committing beyond capacity means the box was sized by the work rather than the work by the box, and its velocity then measures something that did not finish. Split the excess into a story that fits the next iteration — do not widen this one." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L3_Governed, backlog:L4_LineageEnforced))
+            $this backlog:hasCapacity ?cap ; backlog:hasCommittedEffort ?com .
+            FILTER (?com > ?cap)
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L4: this iteration's deployment carries an item the iteration never planned. A package shipped from an iteration is what that iteration committed to and finished; carrying work that entered by another route makes the iteration's record of itself untrue, and cadence stops being measurable." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel backlog:L4_LineageEnforced .
+            ?d backlog:deploysFrom $this ; backlog:deploysItem ?i .
+            FILTER NOT EXISTS { ?pe backlog:plansItem ?i ; backlog:plannedInto $this }
+            FILTER NOT EXISTS { ?i backlog:memberOfContainer $this }
+        }""" ] .
+
+backlog:CapacityDeclaredShape a sh:NodeShape ;
+    sh:targetClass backlog:Iteration ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: an iteration with no capacity"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: this iteration declares no capacity, so nothing can check that it was planned to finish what it committed to. Capacity is the only number against which over-commitment is visible before the iteration closes — afterwards it is a recorded miss." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE { FILTER NOT EXISTS { $this backlog:hasCapacity ?c } }""" ] .
+
+backlog:ShippedRoleSourceShape a sh:NodeShape ;
+    sh:targetClass backlog:TeamRole ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: a framework-shipped role with no source"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: this role is defined in the framework namespace but names no source. Ex_InventedPractice applies to the framework's own vocabulary: a role it ships must be defensible from a standard or a named work. A role an ADOPTER adds needs no citation, which is why this is scoped to the framework namespace and is an advisory rather than a violation." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            FILTER (STRSTARTS(STR($this), "http://example.org/backlog#"))
+            FILTER NOT EXISTS { $this backlog:hasRoleSource ?s }
         }""" ] .

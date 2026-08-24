@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/3.0.0> ;
-    owl:versionInfo "3.0.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/3.1.0> ;
+    owl:versionInfo "3.1.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/3.0.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/2.5.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/2.4.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/2.3.0> ;
@@ -59,7 +60,7 @@ fw:Profile a backlog:AdoptionProfile ;
 fw:Register a backlog:Backlog ;
     backlog:hasIdentifier "BRF-REG" ;
     backlog:hasTitle "backlog-roadmap-framework development register" ;
-    backlog:hasState backlog:InProgress ;
+    backlog:hasState backlog:Done ;
     backlog:appliesDefinitionOfDone backlog:DoD_Baseline ;
     backlog:hasCommitment fw:Commitment_Dev .
 
@@ -2320,20 +2321,20 @@ fw:Roadmap backlog:roadmapRealises fw:Obj_Derived , fw:Obj_Adopter , fw:Obj_View
 #################################################################
 
 fw:Granularity_Build a backlog:CrossCuttingInvariant ;
+    backlog:hasInvariantStatus backlog:Holds ;
     rdfs:label "Ceremony step 3 — granularity chosen, not defaulted"@en ;
     backlog:hasCheckQuery "ASK { ?e a backlog:Epic . FILTER NOT EXISTS { ?e backlog:decomposesInto ?c } }" ;
     backlog:hasExpectedResult "false" ;
-    backlog:hasInvariantStatus backlog:NotYetEnforceable ;
     backlog:tracksItem fw:Init_SdlcConcepts ;
-    backlog:hasRationale "Initiative -> Epic -> Story -> ExecutionTask. Epic is the coarsest ordinary choice and is chosen here deliberately rather than reached for: the proposal's concerns are separable and each decomposes into stories that fit one iteration. Not Initiative-only, which would give one undecomposable lump; not Feature, which adds a level this work does not need." .
+    backlog:hasRationale "HOLDS: re-run now the tracked work is Done. Every epic under this initiative decomposes into stories. Initiative -> Epic -> Story -> ExecutionTask. Epic is the coarsest ordinary choice and is chosen here deliberately rather than reached for: the proposal's concerns are separable and each decomposes into stories that fit one iteration. Not Initiative-only, which would give one undecomposable lump; not Feature, which adds a level this work does not need." .
 
 fw:Delivery_Build a backlog:CrossCuttingInvariant ;
+    backlog:hasInvariantStatus backlog:Holds ;
     rdfs:label "Ceremony step 4 — how work reaches users, decided before the first story"@en ;
     backlog:hasCheckQuery "ASK { ?it a backlog:Iteration ; backlog:hasState backlog:Done . FILTER NOT EXISTS { ?d backlog:deploysFrom ?it } }" ;
     backlog:hasExpectedResult "false" ;
-    backlog:hasInvariantStatus backlog:NotYetEnforceable ;
     backlog:tracksItem fw:Init_SdlcConcepts ;
-    backlog:hasRationale "PlanningEvent -> Iteration -> DeploymentUnit, one deployment per closed iteration, selected on Sel_HighestScored. Decided now because at L4 a closed iteration with no deployment is a violation and retrofitting a release history is fabrication." .
+    backlog:hasRationale "HOLDS: re-run now the tracked work is Done. Every closed iteration has a deployment. PlanningEvent -> Iteration -> DeploymentUnit, one deployment per closed iteration, selected on Sel_HighestScored. Decided now because at L4 a closed iteration with no deployment is a violation and retrofitting a release history is fabrication." .
 
 #################################################################
 #  The initiative, classified by the taxonomy rather than by feel.
@@ -2346,7 +2347,6 @@ fw:MR_SdlcGap a backlog:ModificationRequest ;
 fw:Init_SdlcConcepts a backlog:Initiative ;
     backlog:hasIdentifier "BRF-I6" ;
     backlog:hasTitle "Carry a mission statement down to executable work" ;
-    backlog:hasState backlog:Proposed ;
     backlog:memberOfContainer fw:Register ;
     backlog:pursuesObjective fw:Obj_IntentToWork ;
     backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
@@ -2405,7 +2405,14 @@ fw:E_Grooming a backlog:CostEstimate ;
 fw:EP_IterationCapacity a backlog:Epic ;
     backlog:hasIdentifier "BRF-EP13" ;
     backlog:hasTitle "An iteration is planned to finish its package content" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-08-21T09:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-21T11:00:00"^^xsd:dateTime ;
+    backlog:hasActualEffort 4.0 ;
+    backlog:hasEvidence fw:Ev_Capacity ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:lastAuditedAt "2026-08-21T11:00:00"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register ;
     backlog:pursuesObjective fw:Obj_IntentToWork ;
     backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
@@ -2432,7 +2439,14 @@ fw:E_IterationCapacity a backlog:CostEstimate ;
 fw:EP_TeamRoles a backlog:Epic ;
     backlog:hasIdentifier "BRF-EP14" ;
     backlog:hasTitle "Named team roles as optional vocabulary" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-08-21T09:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-21T11:00:00"^^xsd:dateTime ;
+    backlog:hasActualEffort 2.0 ;
+    backlog:hasEvidence fw:Ev_Roles ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:lastAuditedAt "2026-08-21T11:00:00"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register ;
     backlog:pursuesObjective fw:Obj_Grounded ;
     backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
@@ -3799,9 +3813,14 @@ fw:H_TEP_TaskTypes_S2 a backlog:TestHarness ; backlog:harnessFor fw:T_EP_TaskTyp
 fw:Ev_TaskTypes backlog:attestsCriterion fw:AC_EP_TaskTypes_S2 .
 fw:EP_TaskTypes backlog:decomposesInto fw:EP_TaskTypes_S1 , fw:EP_TaskTypes_S2 .
 fw:EP_IterationCapacity_S1 a backlog:Story ;
+    backlog:startedAt "2026-08-21T09:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-21T11:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_Capacity ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
     backlog:hasIdentifier "BRF-EP_IterationCapacity_S1" ;
     backlog:hasTitle "Committed effort exceeding capacity is rejected" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
     backlog:memberOfContainer fw:Register ;
     backlog:pursuesObjective fw:Obj_IntentToWork ;
     backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
@@ -3819,9 +3838,14 @@ fw:R_EP_IterationCapacity_S1 a backlog:RefinementEvent ; backlog:refines fw:EP_I
     backlog:refinedBy backlog:Builder .
 fw:EP_IterationCapacity backlog:decomposesInto fw:EP_IterationCapacity_S1 .
 fw:EP_TeamRoles_S1 a backlog:Story ;
+    backlog:startedAt "2026-08-21T09:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-21T11:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_Roles ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
     backlog:hasIdentifier "BRF-EP_TeamRoles_S1" ;
     backlog:hasTitle "Each shipped role names the source it came from" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
     backlog:memberOfContainer fw:Register ;
     backlog:pursuesObjective fw:Obj_Grounded ;
     backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
@@ -4055,3 +4079,87 @@ fw:Rel_It2b a backlog:DeploymentUnit ;
     backlog:decidedBy backlog:Owner ; backlog:hasSelectionBasis backlog:Sel_Committed .
 fw:S31 backlog:memberOfContainer fw:Rel_It2b .
 fw:S32 backlog:memberOfContainer fw:Rel_It2b .
+
+#################################################################
+#  v3.1.0 — BRF-EP13 and BRF-EP14 delivered. The initiative closes.
+#################################################################
+
+fw:Ev_Capacity a backlog:TestEvidence ;
+    backlog:hasTestSpec "03-tooling/fixtures/fixture_capacity_negative_v1_0_0.ttl" ;
+    backlog:hasTestId "BRF-EP13" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-08-21T11:00:00"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "Four cases verified individually. An iteration committing 20 against a capacity of 10 is rejected at L3; one committing 8 against 10 is silent; a deployment carrying an item its iteration never planned is rejected at L4; an iteration with no declared capacity raises an advisory. Committed effort is RECORDED rather than derived — derived would be the sum of what is planned in now, which moves as work is added, and a number that moves cannot report an over-commitment." ;
+    backlog:verifiedByTool "backlog_validate + pyshacl" ;
+    backlog:attestsCriterion fw:AC_IterationCapacity , fw:AC_EP_IterationCapacity_S1 .
+
+fw:Ev_Roles a backlog:TestEvidence ;
+    backlog:hasTestSpec "01-ontologies/backlog_tbox_v1_29_0.ttl role individuals" ;
+    backlog:hasTestId "BRF-EP14" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-08-21T11:00:00"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "Six roles shipped, each naming its source: systems analyst and design authority from Satzinger et al., architect from ISO/IEC/IEEE 42010, HCI researcher from ISO 9241-210, tester and test manager from ISO/IEC/IEEE 29119-3. The tester's name was the open question the proposal declined to settle; the standard's own word is used rather than a house term, because a role named differently in every register cannot be compared across two. ShippedRoleSourceShape checks the framework namespace only — an adopter's own role needs no citation." ;
+    backlog:verifiedByTool "backlog_validate + pyshacl" ;
+    backlog:attestsCriterion fw:AC_TeamRoles , fw:AC_EP_TeamRoles_S1 .
+
+fw:H_EP_IterationCapacity a backlog:TestHarness ; backlog:harnessFor fw:EP_IterationCapacity ;
+    backlog:hasHarnessEvidence fw:Ev_Capacity ; backlog:harnessComplete true ;
+    backlog:hasRationale "Attested by a fixture exercising all four cases." .
+fw:H_EP_TeamRoles a backlog:TestHarness ; backlog:harnessFor fw:EP_TeamRoles ;
+    backlog:hasHarnessEvidence fw:Ev_Roles ; backlog:harnessComplete true ;
+    backlog:hasRationale "Attested by each shipped role naming its source." .
+fw:H_EP_IterationCapacity_S1 a backlog:TestHarness ; backlog:harnessFor fw:EP_IterationCapacity_S1 ;
+    backlog:hasHarnessEvidence fw:Ev_Capacity ; backlog:harnessComplete true ;
+    backlog:hasRationale "As for the parent epic." .
+fw:H_EP_TeamRoles_S1 a backlog:TestHarness ; backlog:harnessFor fw:EP_TeamRoles_S1 ;
+    backlog:hasHarnessEvidence fw:Ev_Roles ; backlog:harnessComplete true ;
+    backlog:hasRationale "As for the parent epic." .
+
+fw:Init_SdlcConcepts backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-08-20T09:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-21T11:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_TaskTypes ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:lastAuditedAt "2026-08-21T11:00:00"^^xsd:dateTime ;
+    backlog:decomposesInto fw:EP_Grooming , fw:EP_IterationCapacity , fw:EP_TeamRoles , fw:EP_TaskTypes .
+fw:H_Init_SdlcConcepts a backlog:TestHarness ; backlog:harnessFor fw:Init_SdlcConcepts ;
+    backlog:hasHarnessEvidence fw:Ev_TaskTypes ; backlog:harnessComplete true ;
+    backlog:hasRationale "Attested through its four epics, each carrying its own fixture." .
+fw:Ev_TaskTypes backlog:attestsCriterion fw:AC_BRF_I6 .
+
+fw:Obs_IntentGapsFinal a backlog:MetricObservation ;
+    rdfs:label "Steps from mission to executable work the suite cannot check — final"@en ;
+    backlog:observesMetric fw:Metric_IntentToWorkGaps ;
+    backlog:observationFor fw:Obj_IntentToWork ;
+    backlog:hasObservedValue 1.0 ;
+    backlog:observedAt "2026-08-21T11:00:00"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Re-ran the three as-is probes. Grooming: a story reaching Ready must now be analysed against every concern it declares, and a story declaring none must say so with a reason. Package sizing: an iteration committing beyond capacity is rejected, and a deployment carrying unplanned work is rejected at L4. Autonomy-graded evidence remains unbuilt — refused by Ex_InventedPractice for want of a named source relating execution autonomy to required evidence. Baseline 3, observed 1, and the remaining 1 is a boundary decision rather than undone work." .
+
+fw:Plan_EP_IterationCapacity_S1 a backlog:PlanningEvent ; backlog:plansItem fw:EP_IterationCapacity_S1 ; backlog:plannedInto fw:It2 ;
+    backlog:plannedAt "2026-08-21T09:00:00"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:producesTask fw:T_EP_IterationCapacity_S1 .
+fw:T_EP_IterationCapacity_S1 a backlog:ExecutionTask ; backlog:hasIdentifier "BRF-TEP_IterationCapacity_S1" ;
+    backlog:hasTitle "Implement and gate EP_IterationCapacity_S1" ; backlog:hasState backlog:Done ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It2 ;
+    backlog:startedAt "2026-08-21T09:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-21T11:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_Capacity ; backlog:lastAuditedAt "2026-08-21T11:00:00"^^xsd:dateTime .
+fw:H_T_EP_IterationCapacity_S1 a backlog:TestHarness ; backlog:harnessFor fw:T_EP_IterationCapacity_S1 ;
+    backlog:hasHarnessEvidence fw:Ev_Capacity ; backlog:harnessComplete true ;
+    backlog:hasRationale "As for the story it implements." .
+
+fw:Plan_EP_TeamRoles_S1 a backlog:PlanningEvent ; backlog:plansItem fw:EP_TeamRoles_S1 ; backlog:plannedInto fw:It2 ;
+    backlog:plannedAt "2026-08-21T09:00:00"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:producesTask fw:T_EP_TeamRoles_S1 .
+fw:T_EP_TeamRoles_S1 a backlog:ExecutionTask ; backlog:hasIdentifier "BRF-TEP_TeamRoles_S1" ;
+    backlog:hasTitle "Implement and gate EP_TeamRoles_S1" ; backlog:hasState backlog:Done ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It2 ;
+    backlog:startedAt "2026-08-21T09:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-21T11:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_Roles ; backlog:lastAuditedAt "2026-08-21T11:00:00"^^xsd:dateTime .
+fw:H_T_EP_TeamRoles_S1 a backlog:TestHarness ; backlog:harnessFor fw:T_EP_TeamRoles_S1 ;
+    backlog:hasHarnessEvidence fw:Ev_Roles ; backlog:harnessComplete true ;
+    backlog:hasRationale "As for the story it implements." .

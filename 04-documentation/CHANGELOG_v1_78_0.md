@@ -1,5 +1,44 @@
 # Changelog
 
+## v1.78.0 — 2026-08-21 (MINOR: BRF-EP13 and BRF-EP14 — the SDLC initiative closes)
+
+Both remaining epics built in one release, since neither depends on the other.
+
+**BRF-EP13 — an iteration is planned to finish its package content.** Source: the Scrum Guide's sprint
+planning. `hasCommittedEffort` is **recorded rather than derived**: derived would be the sum of what is
+planned in now, which moves as work is added, and a number that moves cannot report an
+over-commitment. The question is what was committed *at commitment*, against the capacity known then.
+
+At L4, **a deployment carrying an item its iteration never planned is rejected** — a package shipped
+from an iteration is what that iteration committed to and finished, and work entering by another route
+makes the iteration's record of itself untrue.
+
+**BRF-EP14 — six team roles, each naming its source.** Systems analyst and design authority from
+Satzinger et al.; architect from ISO/IEC/IEEE 42010; HCI researcher from ISO 9241-210; tester and test
+manager from ISO/IEC/IEEE 29119-3. **The tester's name was the open question the proposal declined to
+settle** — the standard's own word is used rather than a house term, because a role named differently
+in every register cannot be compared across two.
+
+`TeamRole` stays open and `hasRoleSource` is checked on the **framework namespace only**: the framework
+must defend its own vocabulary and cannot demand a citation for a role an adopter needs locally.
+
+### Three defects caught while closing
+
+A **duplicate lifecycle state** on the initiative, from appending `Done` without removing `Proposed`.
+Two **stories reaching Done with no planning event**. And both **ceremony invariants still reporting
+`NotYetEnforceable`** after the work they tracked completed — *"every work item this invariant tracks
+is Done, yet it is still reported NotYetEnforceable"*. Re-run and now `Holds`.
+
+### The initiative's objective, re-measured
+
+`Metric_IntentToWorkGaps`: baseline **3**, observed **1**. Grooming and package sizing are closed.
+The remaining one — autonomy-graded evidence — is **not undone work but a boundary decision**: it stays
+refused by `Ex_InventedPractice` for want of a named source relating execution autonomy to required
+evidence.
+
+Register **0 violations at L4, 0 of 59 constraints suppressed.**
+
+
 ## v1.77.0 — 2026-08-20 (MAJOR-class: the register reaches L4_LineageEnforced, 162 violations remediated)
 
 **Register 2.5.0 → 3.0.0.** The declared level changes, and with it what every prior clean result meant.
