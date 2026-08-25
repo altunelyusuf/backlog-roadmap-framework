@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/3.8.0> ;
-    owl:versionInfo "3.8.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/3.9.0> ;
+    owl:versionInfo "3.9.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/3.8.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/3.7.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/3.6.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/3.5.0> ;
@@ -67,7 +68,7 @@ fw:Profile a backlog:AdoptionProfile ;
 fw:Register a backlog:Backlog ;
     backlog:hasIdentifier "BRF-REG" ;
     backlog:hasTitle "backlog-roadmap-framework development register" ;
-    backlog:hasState backlog:Done ;
+    backlog:hasState backlog:InProgress ;
     backlog:appliesDefinitionOfDone backlog:DoD_Baseline ;
     backlog:hasCommitment fw:Commitment_Dev .
 
@@ -4696,3 +4697,204 @@ fw:Obs_ScopeDeliveredAfterWidening a backlog:MetricObservation ;
     backlog:hasObservedValue 70.0 ;
     backlog:observedAt "2026-08-25T14:00:00"^^xsd:dateTime ;
     backlog:hasObservationMethod "7 of 10 deliverables satisfied. The figure FELL from 100 percent, and that is the point: three deliverables were added and nothing satisfies them yet. Under the old metric — which counted stories pursuing an objective and divided by the same set — this would still have read 100 percent, because the denominator was the backlog. A coverage figure that cannot fall is not measuring a boundary, and this one just did." .
+
+
+#################################################################
+#  v3.9.0 — BACKLOG STAGE. The scope closed at commit ceb950d.
+#
+#  Three epics, one per deliverable, written in a LATER commit than
+#  the boundary they answer to. That separation is the whole point
+#  of the v5.0.0 ceremony and this is its first real use: every
+#  earlier scope in this register had its deliverables arrive after
+#  its epics.
+#
+#  Each epic names the standard its work will be grounded in,
+#  before the work starts, because Ex_InventedPractice requires it.
+#################################################################
+
+fw:EP_Model a backlog:Epic ;
+    backlog:hasIdentifier "BRF-EP17" ;
+    backlog:hasTitle "Analysis and design work produces named model artefacts" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_Modelling ;
+    backlog:satisfiesDeliverable fw:Del_Model ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasAcceptanceCriterion fw:AC_EP_Model ;
+    backlog:hasPriorityScore fw:S_EP_Model ;
+    backlog:hasCostEstimate fw:E_EP_Model ;
+    backlog:rankedOnRoadmap fw:Roadmap ;
+    backlog:scheduledInHorizon backlog:Now ;
+    backlog:hasRationale "Source named before the work: UML 2.5 (OMG): 14 diagram kinds in two categories, structure and behaviour." .
+fw:AC_EP_Model a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a task performing design definition, When the register is read, Then the model artefacts it produced are named, each carries a kind from the UML taxonomy, and a design task producing no artefact is reported." .
+fw:S_EP_Model a backlog:WSJFScore ;
+    backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 7.0 ;
+    backlog:hasUserBusinessValue 9.0 ; backlog:hasTimeCriticality 6.0 ;
+    backlog:hasRiskReductionValue 6.0 ; backlog:hasJobSize 3.0 ;
+    backlog:scoredAt "2026-08-25T15:00:00"^^xsd:dateTime ;
+    backlog:hasScoreRationale "Highest value in the register: it is the deliverable the other two rest on. A specification is a model artefact and so is a test case's subject, so nothing downstream can be typed until the artefact concept exists. Job size small because UML 2.5 supplies the taxonomy whole — 14 diagrams in two kinds, structure and behaviour — and nothing has to be invented." ;
+    backlog:hasBasisKind backlog:Basis_Judged .
+fw:E_EP_Model a backlog:CostEstimate ;
+    backlog:hasEffortEstimate 3.0 ; backlog:hasCostBasis "Vocabulary from a named standard plus constraints over it" ;
+    backlog:estimatedAt "2026-08-25T15:00:00"^^xsd:dateTime ;
+    backlog:hasBasisKind backlog:Basis_Judged .
+
+fw:EP_Spec a backlog:Epic ;
+    backlog:hasIdentifier "BRF-EP18" ;
+    backlog:hasTitle "A story specifies its interaction steps and state changes" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_Modelling ;
+    backlog:satisfiesDeliverable fw:Del_Spec ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasAcceptanceCriterion fw:AC_EP_Spec ;
+    backlog:hasPriorityScore fw:S_EP_Spec ;
+    backlog:hasCostEstimate fw:E_EP_Spec ;
+    backlog:rankedOnRoadmap fw:Roadmap ;
+    backlog:scheduledInHorizon backlog:Now ;
+    backlog:hasRationale "Source named before the work: UML 2.5 behaviour diagrams: interaction (sequence) for steps, state machine for state changes." .
+fw:AC_EP_Spec a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a story that changes what a user does or what the system stores, When the suite is run, Then its interaction steps are ordered and its state changes name a from-state and a to-state, and a story claiming the Interaction concern with neither is reported." .
+fw:S_EP_Spec a backlog:WSJFScore ;
+    backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 5.0 ;
+    backlog:hasUserBusinessValue 7.0 ; backlog:hasTimeCriticality 5.0 ;
+    backlog:hasRiskReductionValue 3.0 ; backlog:hasJobSize 3.0 ;
+    backlog:scoredAt "2026-08-25T15:00:00"^^xsd:dateTime ;
+    backlog:hasScoreRationale "A story whose behaviour is prose cannot be checked against what was built, and acceptance criteria alone say whether it is done rather than what it does. Interaction steps and state changes are the two the standards separate: a step is what a person performs, a state change is what the system becomes." ;
+    backlog:hasBasisKind backlog:Basis_Judged .
+fw:E_EP_Spec a backlog:CostEstimate ;
+    backlog:hasEffortEstimate 3.0 ; backlog:hasCostBasis "Vocabulary from a named standard plus constraints over it" ;
+    backlog:estimatedAt "2026-08-25T15:00:00"^^xsd:dateTime ;
+    backlog:hasBasisKind backlog:Basis_Judged .
+
+fw:EP_TestSpec a backlog:Epic ;
+    backlog:hasIdentifier "BRF-EP19" ;
+    backlog:hasTitle "An acceptance criterion is exercised by named test cases with test data" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_Modelling ;
+    backlog:satisfiesDeliverable fw:Del_TestSpec ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasAcceptanceCriterion fw:AC_EP_TestSpec ;
+    backlog:hasPriorityScore fw:S_EP_TestSpec ;
+    backlog:hasCostEstimate fw:E_EP_TestSpec ;
+    backlog:rankedOnRoadmap fw:Roadmap ;
+    backlog:scheduledInHorizon backlog:Now ;
+    backlog:hasRationale "Source named before the work: ISO/IEC/IEEE 29119-3: test case specification and test data requirements." .
+fw:AC_EP_TestSpec a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a Done item whose acceptance criteria are attested, When the suite is run at L3, Then each criterion names at least one test case, each test case names its test data, and a case with no data is reported." .
+fw:S_EP_TestSpec a backlog:WSJFScore ;
+    backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 5.0 ;
+    backlog:hasUserBusinessValue 6.0 ; backlog:hasTimeCriticality 4.0 ;
+    backlog:hasRiskReductionValue 5.0 ; backlog:hasJobSize 3.0 ;
+    backlog:scoredAt "2026-08-25T15:00:00"^^xsd:dateTime ;
+    backlog:hasScoreRationale "Evidence currently points at a fixture path and a verdict. A test case names what was exercised and test data names what it was exercised with, so a reader can disagree with the check rather than only with the claim. Risk reduction is real: an acceptance criterion attested by evidence that names no case cannot be re-run." ;
+    backlog:hasBasisKind backlog:Basis_Judged .
+fw:E_EP_TestSpec a backlog:CostEstimate ;
+    backlog:hasEffortEstimate 3.0 ; backlog:hasCostBasis "Vocabulary from a named standard plus constraints over it" ;
+    backlog:estimatedAt "2026-08-25T15:00:00"^^xsd:dateTime ;
+    backlog:hasBasisKind backlog:Basis_Judged .
+
+fw:Obj_Modelling backlog:metricMovableBy fw:EP_Model , fw:EP_Spec , fw:EP_TestSpec .
+
+fw:EP_Model_S1 a backlog:Story ;
+    backlog:hasIdentifier "BRF-EP_Model_S1" ;
+    backlog:hasTitle "A model artefact names its UML kind" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_Modelling ;
+    backlog:satisfiesDeliverable fw:Del_Model ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasApplicableConcern backlog:Concern_Architecture ;
+    backlog:hasAcceptanceCriterion fw:AC_EP_Model_S1 ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at epic level; scoring a decomposition child alongside its scored parent double-counts." .
+fw:AC_EP_Model_S1 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the framework suite, When it is run, Then a model artefact names its UML kind." .
+
+fw:EP_Model_S2 a backlog:Story ;
+    backlog:hasIdentifier "BRF-EP_Model_S2" ;
+    backlog:hasTitle "A design-definition task that produced no artefact is reported" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_Modelling ;
+    backlog:satisfiesDeliverable fw:Del_Model ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasApplicableConcern backlog:Concern_Data ;
+    backlog:hasAcceptanceCriterion fw:AC_EP_Model_S2 ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at epic level; scoring a decomposition child alongside its scored parent double-counts." .
+fw:AC_EP_Model_S2 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the framework suite, When it is run, Then a design-definition task that produced no artefact is reported." .
+fw:EP_Model backlog:decomposesInto fw:EP_Model_S1 , fw:EP_Model_S2 .
+
+fw:EP_Spec_S1 a backlog:Story ;
+    backlog:hasIdentifier "BRF-EP_Spec_S1" ;
+    backlog:hasTitle "A story's interaction steps are ordered" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_Modelling ;
+    backlog:satisfiesDeliverable fw:Del_Spec ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasApplicableConcern backlog:Concern_Interaction ;
+    backlog:hasAcceptanceCriterion fw:AC_EP_Spec_S1 ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at epic level; scoring a decomposition child alongside its scored parent double-counts." .
+fw:AC_EP_Spec_S1 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the framework suite, When it is run, Then a story's interaction steps are ordered." .
+
+fw:EP_Spec_S2 a backlog:Story ;
+    backlog:hasIdentifier "BRF-EP_Spec_S2" ;
+    backlog:hasTitle "A state change names a from-state and a to-state" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_Modelling ;
+    backlog:satisfiesDeliverable fw:Del_Spec ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasApplicableConcern backlog:Concern_Data ;
+    backlog:hasAcceptanceCriterion fw:AC_EP_Spec_S2 ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at epic level; scoring a decomposition child alongside its scored parent double-counts." .
+fw:AC_EP_Spec_S2 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the framework suite, When it is run, Then a state change names a from-state and a to-state." .
+fw:EP_Spec backlog:decomposesInto fw:EP_Spec_S1 , fw:EP_Spec_S2 .
+
+fw:EP_TestSpec_S1 a backlog:Story ;
+    backlog:hasIdentifier "BRF-EP_TestSpec_S1" ;
+    backlog:hasTitle "An acceptance criterion names its test cases" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_Modelling ;
+    backlog:satisfiesDeliverable fw:Del_TestSpec ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasApplicableConcern backlog:Concern_Data ;
+    backlog:hasAcceptanceCriterion fw:AC_EP_TestSpec_S1 ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at epic level; scoring a decomposition child alongside its scored parent double-counts." .
+fw:AC_EP_TestSpec_S1 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the framework suite, When it is run, Then an acceptance criterion names its test cases." .
+
+fw:EP_TestSpec_S2 a backlog:Story ;
+    backlog:hasIdentifier "BRF-EP_TestSpec_S2" ;
+    backlog:hasTitle "A test case names the test data it runs on" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_Modelling ;
+    backlog:satisfiesDeliverable fw:Del_TestSpec ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasApplicableConcern backlog:Concern_Data ;
+    backlog:hasAcceptanceCriterion fw:AC_EP_TestSpec_S2 ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at epic level; scoring a decomposition child alongside its scored parent double-counts." .
+fw:AC_EP_TestSpec_S2 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the framework suite, When it is run, Then a test case names the test data it runs on." .
+fw:EP_TestSpec backlog:decomposesInto fw:EP_TestSpec_S1 , fw:EP_TestSpec_S2 .
+
+fw:Obs_ScopeDeliveredStrict a backlog:MetricObservation ;
+    rdfs:label "In-scope deliverables satisfied by DELIVERED work"@en ;
+    backlog:observesMetric fw:Metric_ScopeDelivered ;
+    backlog:observationFor fw:Obj_ScopeDelivered ;
+    backlog:hasObservedValue 70.0 ;
+    backlog:observedAt "2026-08-25T15:30:00"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Measured twice and the two disagree, which is the finding. Counting deliverables with ANY work satisfying them gives 10 of 10 — because three epics were just planned. Counting only those satisfied by DONE work gives 7 of 10. Planning three epics moved a figure that should move only when something ships. The strict reading is recorded: 70 percent, unchanged by this commit, and DeliverableIntentionShape now reports a deliverable whose satisfying work is all still open." .

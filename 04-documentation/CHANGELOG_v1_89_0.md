@@ -1,5 +1,40 @@
 # Changelog
 
+## v1.89.0 — 2026-08-25 (MINOR: BACKLOG STAGE — three epics answering to a boundary written first)
+
+The scope stage closed at commit `ceb950d`. **This commit is the backlog stage**, and the separation is
+the first real use of the v5.0.0 ceremony on this package's own work: every earlier scope here had its
+deliverables arrive *after* its epics.
+
+Three epics, one per deliverable, each naming its source **before** the work starts:
+
+| | | |
+|---|---|---|
+| **BRF-EP17** 7.00 | model artefacts named and typed | UML 2.5 (OMG) — 14 diagram kinds, structure and behaviour |
+| **BRF-EP18** 5.00 | interaction steps and state changes | UML 2.5 behaviour diagrams — sequence for steps, state machine for state changes |
+| **BRF-EP19** 5.00 | test cases with test data | ISO/IEC/IEEE 29119-3 test case specification |
+
+EP17 scores highest because the other two rest on it: a specification is a model artefact and so is a
+test case's subject, so nothing downstream can be typed until the artefact concept exists.
+
+### A defect found by measuring instead of assuming
+
+After planning the epics, deliverable coverage was measured **twice** and the two disagreed:
+
+```
+deliverables with ANY satisfying work    10 of 10   100%
+deliverables satisfied by DONE work       7 of 10    70%
+```
+
+**Planning three epics moved a figure that should only move when something ships.** A `Proposed` epic
+asserting `satisfiesDeliverable` makes a boundary look met by intention — the backlog measuring itself
+again, one level along from where that was last corrected at v1.83.0.
+
+`DeliverableIntentionShape` reports a deliverable whose satisfying work is all still open. It fires on
+exactly `Del_Model`, `Del_Spec` and `Del_TestSpec`, and the strict observation is recorded: **70%,
+unchanged by this commit.** Planning work is not delivery, and the register now says so.
+
+
 ## v1.88.0 — 2026-08-25 (MINOR: SCOPE STAGE ONLY — the analysis and design gap, bounded before it is built)
 
 **The owner's question answered by measurement: the phases are fixed, what they produce is absent.**

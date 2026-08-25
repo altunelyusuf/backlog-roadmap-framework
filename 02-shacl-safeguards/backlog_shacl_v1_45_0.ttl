@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.44.0> ;
-    owl:versionInfo "1.44.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.45.0> ;
+    owl:versionInfo "1.45.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.44.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.43.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.42.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.41.0> ;
@@ -3657,4 +3658,20 @@ backlog:ScopeContentLateShape a sh:NodeShape ;
             ?bo backlog:outputOfStage backlog:Stage_Backlog ; backlog:closedAtCommit ?cb .
             FILTER (?cs != ?cb)
             FILTER EXISTS { $this backlog:requiresDeliverable ?d }
+        }""" ] .
+
+#################################################################
+#  v1.45.0 — a deliverable is met by delivery, not by intention
+#################################################################
+
+backlog:DeliverableIntentionShape a sh:NodeShape ;
+    sh:targetClass backlog:ScopeDeliverable ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: a deliverable claimed only by unfinished work"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: every work item satisfying this deliverable is still open, so the boundary is met by INTENTION rather than by delivery. Found by measurement on this register: ten of ten deliverables read satisfied while only seven were satisfied by Done work — planning three epics moved a coverage figure that should only move when something ships. Coverage counted over claimed satisfaction is the backlog measuring itself again, one level along from where that was last corrected." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?w backlog:satisfiesDeliverable $this .
+            FILTER NOT EXISTS { ?w2 backlog:satisfiesDeliverable $this ; backlog:hasState backlog:Done }
         }""" ] .
