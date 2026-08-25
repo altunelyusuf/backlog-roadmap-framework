@@ -1,5 +1,49 @@
 # Changelog
 
+## v1.84.0 — 2026-08-25 (MINOR: can execution order be gated? Experiment, and the honest answer)
+
+**The experiment.** A lineage built entirely backwards — epic first, then an objective invented to
+justify it, a goal, a scope drawn round the goal, and a mission summarising the lot. Every link points
+the right way; nothing is missing; only authorship order is inverted.
+
+**Result: six violations, and not one named the order.** All six were missing Definition of Done,
+investment category or commitment. The only ordering signal anywhere was an advisory that four intent
+elements were session-drafted — which reports *who* wrote them, not *when* relative to the work.
+
+### A pure order gate is not possible, and this is why
+
+Nothing in the graph records **when** an element was written. The chain records order by **link
+direction** (G13), and a backwards-built lineage has every link correct because the author asserted
+them all at the end. Direction proves an element could not have been written before its target
+**existed**; it cannot prove the target was not **invented to receive it**.
+
+Requiring a fixed-at date was already rejected at v1.62.0 by `Ex_NoTimestampMandate`: a date nobody can
+verify produces backfilled timestamps asserting an order never followed. Adding one now would make the
+lineage *look* ordered and check nothing.
+
+### What can be gated is the shape of the result
+
+A boundary written round work already chosen has a signature: **it requires exactly what the work
+delivers and nothing more.** A boundary written first almost never does — it names things the work has
+not reached, which is why coverage below 100% is the normal healthy state and permanent 100% is the
+anomaly.
+
+Three checks, tested on both a backwards lineage and this register:
+
+- **`SingletonDeliverableShape` (L3, violation)** — a scope requiring one deliverable satisfied by one
+  item is that work restated as intent. **Fires on the backwards lineage.**
+- **`MirroredScopeShape` (advisory)** — boundary and backlog mirroring exactly. Deliberately an
+  advisory: it is also the expected end state of a completed scope, and the graph cannot tell the two
+  apart. What settles it is whether coverage was *ever* below 100%.
+- **`IntentEchoShape` (advisory)** — an objective whose movers and pursuers are the same set measures
+  the backlog and calls the result an outcome.
+
+**Zero false positives on this register**, which enumerates seven deliverables across five epics.
+
+The experiment ships as `fixture_backwards_lineage_negative_v1_0_0.ttl` so the limit stays visible: the
+suite catches the *signature*, not the *sequence*.
+
+
 ## v1.83.0 — 2026-08-25 (MINOR: the scope gets content of its own — G17)
 
 **The owner's finding was correct, and the mechanism was precise.**

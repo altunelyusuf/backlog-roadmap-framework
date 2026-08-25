@@ -897,3 +897,11 @@ ex:Del_Scope_Launch a backlog:ScopeDeliverable ;
     backlog:hasDeliverableText "A practitioner locked out of their account regains access without contacting support." .
 ex:Scope_Launch backlog:requiresDeliverable ex:Del_Scope_Launch .
 ex:EP001 backlog:satisfiesDeliverable ex:Del_Scope_Launch .
+
+# A scope requiring ONE deliverable met by ONE item is that work
+# restated as intent — SingletonDeliverableShape rejects it. A real
+# boundary names more than it has reached: the second deliverable
+# here is unsatisfied, which is the normal healthy state.
+ex:Del2_Scope_Launch a backlog:ScopeDeliverable ;
+    backlog:hasDeliverableText "Every recovery leaves an audit record." .
+ex:Scope_Launch backlog:requiresDeliverable ex:Del2_Scope_Launch .

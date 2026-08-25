@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.41.0> ;
-    owl:versionInfo "1.41.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.42.0> ;
+    owl:versionInfo "1.42.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.41.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.40.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.39.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.38.0> ;
@@ -3500,4 +3501,74 @@ backlog:UnrequestedWorkShape a sh:NodeShape ;
             $this backlog:pursuesObjective ?o . ?o backlog:fillsScope ?sc .
             FILTER EXISTS { ?sc backlog:requiresDeliverable ?any }
             FILTER NOT EXISTS { $this backlog:satisfiesDeliverable ?d }
+        }""" ] .
+
+#################################################################
+#  v1.42.0 — the SIGNATURE of a backwards-built lineage
+#
+#  Experiment: a lineage built entirely backwards — epic first,
+#  objective invented to justify it, goal, scope drawn round the
+#  goal, mission summarising the lot — produced six violations and
+#  NOT ONE named the order. All six were missing DoD or category.
+#
+#  A pure order gate is impossible. Nothing records WHEN an element
+#  was written; the chain records order by link direction, and a
+#  backwards lineage has every link pointing correctly because the
+#  author asserted them all at the end. Requiring dates was already
+#  rejected: a date nobody can verify produces backfilled
+#  timestamps asserting an order never followed.
+#
+#  What CAN be checked is the SHAPE of the result. A boundary
+#  written to fit work already chosen has a signature: it requires
+#  exactly what the work delivers and nothing more. A boundary
+#  written first almost never does — it names things the work has
+#  not reached yet, which is why coverage below 100% is the normal
+#  healthy state and 100% at every point in time is the anomaly.
+#################################################################
+
+backlog:MirroredScopeShape a sh:NodeShape ;
+    sh:targetClass backlog:ScopeStatement ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: a boundary that exactly mirrors its work"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: every deliverable this scope requires is satisfied, and every item under it satisfies one — the boundary and the backlog mirror each other exactly. That is the expected END state of a completed scope and also the signature of one written round work already chosen. Which it is cannot be decided from the graph: check whether any deliverable was ever unsatisfied. A scope whose coverage was never below 100 percent at any point was not constraining anything." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:requiresDeliverable ?d .
+            FILTER NOT EXISTS { $this backlog:requiresDeliverable ?d2 .
+                                FILTER NOT EXISTS { ?w backlog:satisfiesDeliverable ?d2 } }
+            FILTER NOT EXISTS { ?i backlog:pursuesObjective ?o . ?o backlog:fillsScope $this .
+                                FILTER NOT EXISTS { ?i backlog:satisfiesDeliverable ?any } }
+        }""" ] .
+
+backlog:SingletonDeliverableShape a sh:NodeShape ;
+    sh:targetClass backlog:ScopeStatement ;
+    sh:severity sh:Violation ;
+    rdfs:label "A scope requiring one deliverable is a restated backlog (L3)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: this scope requires exactly one deliverable satisfied by exactly one item. A boundary with a single requirement met by a single piece of work is not a boundary — it is that work restated as intent, which is what a scope written round an already-chosen epic looks like. A scope that admits one thing should say what it EXCLUDES instead, or be merged into the item it describes." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L3_Governed, backlog:L4_LineageEnforced))
+            $this backlog:requiresDeliverable ?d .
+            FILTER NOT EXISTS { $this backlog:requiresDeliverable ?d2 . FILTER (?d2 != ?d) }
+            ?w backlog:satisfiesDeliverable ?d .
+            FILTER NOT EXISTS { ?w2 backlog:satisfiesDeliverable ?d . FILTER (?w2 != ?w) }
+            FILTER NOT EXISTS { ?s backlog:supersedesMission ?m . $this backlog:scopeForMission ?m }
+        }""" ] .
+
+backlog:IntentEchoShape a sh:NodeShape ;
+    sh:targetClass backlog:Objective ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: an objective that measures its own work"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: every item that can move this objective's metric also pursues it, and no other work does. The objective and the work are the same set, so the measurement cannot fail while the work is done — it counts the backlog and calls the result an outcome. An objective written before the work usually measures something the work AFFECTS rather than something the work IS." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:metricMovableBy ?w .
+            FILTER NOT EXISTS { $this backlog:metricMovableBy ?w2 .
+                                FILTER NOT EXISTS { ?w2 backlog:pursuesObjective $this } }
+            FILTER NOT EXISTS { ?other backlog:pursuesObjective $this .
+                                FILTER NOT EXISTS { $this backlog:metricMovableBy ?other } }
         }""" ] .

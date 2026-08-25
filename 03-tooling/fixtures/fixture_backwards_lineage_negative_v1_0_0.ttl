@@ -1,0 +1,74 @@
+# EXPERIMENT, shipped as a fixture: a lineage built entirely BACKWARDS.
+#
+# Epic first. Then an objective invented to justify it, a goal, a
+# scope drawn round the goal, and a mission summarising the lot.
+# EVERY LINK POINTS THE RIGHT WAY. Nothing is missing. Only the
+# order of authorship is inverted.
+#
+# Before v1.84.0 this produced six violations and NOT ONE named the
+# order — all six were missing DoD or investment category. That is
+# the honest limit of link-direction: it proves an element could not
+# have been written before its target EXISTED, never that the target
+# was not invented to receive it.
+#
+# What the suite can catch is the SIGNATURE. This scope requires one
+# deliverable satisfied by one item — a boundary that is its own
+# backlog restated as intent. SingletonDeliverableShape rejects it.
+#
+# Deliberately named negative: it also fails on DoD and category,
+# which is what an unplanned register looks like.
+
+@prefix backlog: <http://example.org/backlog#> .
+@prefix core: <http://example.org/core#> .
+@prefix ex: <http://example.org/bw#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+ex:P a backlog:AdoptionProfile ; backlog:profileAppliesTo "backwards probe" ;
+    backlog:governsBacklog ex:BL ; backlog:hasConformanceLevel backlog:L4_LineageEnforced ;
+    backlog:decidedBy backlog:Owner ; backlog:hasDecisionRationale "probe" ;
+    backlog:adoptsFacet backlog:CoreFacet , backlog:EvidenceFacet .
+ex:BL a backlog:Backlog ; backlog:hasIdentifier "BL" ; backlog:hasState backlog:InProgress ;
+    backlog:hasScopeStatement ex:Scope .
+
+# written FIFTH — a mission summarising work already chosen
+ex:M a backlog:Mission ; backlog:hasMissionStatement "Whatever the epic below does." ;
+    backlog:missionFor ex:BL ; backlog:hasMissionOrigin backlog:Origin_SessionDrafted ;
+    backlog:decidedBy backlog:Owner .
+# written FOURTH — a boundary drawn round the goal
+ex:Scope a backlog:ScopeStatement ; backlog:hasScopeStatementText "Exactly what the epic delivers." ;
+    backlog:scopeForMission ex:M ; backlog:hasIntentOrigin backlog:IOrigin_SessionDrafted ;
+    backlog:requiresDeliverable ex:Del ;
+    backlog:hasScopeExclusion ex:X .
+ex:Del a backlog:ScopeDeliverable ;
+    backlog:hasDeliverableText "The epic below is complete." .
+ex:X a backlog:ScopeExclusion ; backlog:excludesConcern "Anything else." ;
+    backlog:hasExclusionRationale "Not needed." ; backlog:decidedBy backlog:Owner .
+# written THIRD
+ex:G a backlog:Goal ; rdfs:label "Do the epic"@en ;
+    backlog:contributesToMission ex:M ; backlog:derivesFromScope ex:Scope ;
+    backlog:hasIntentOrigin backlog:IOrigin_SessionDrafted ; backlog:decidedBy backlog:Owner .
+# written SECOND — an objective invented to justify the epic
+ex:Met a core:Metric ; rdfs:label "Epics done"@en .
+ex:O a backlog:Objective ; rdfs:label "The epic is done"@en ;
+    backlog:fillsScope ex:Scope ; backlog:contributesToGoal ex:G ;
+    backlog:hasSuccessMetric ex:Met ; backlog:hasIntentOrigin backlog:IOrigin_SessionDrafted ;
+    backlog:hasBaselineValue 0.0 ; backlog:hasTargetValue 1.0 ;
+    backlog:hasTargetDirection backlog:Dir_Increase ;
+    backlog:hasObjectiveDeadline "2027-01-01T00:00:00"^^xsd:dateTime ;
+    backlog:metricMovableBy ex:EP ; backlog:decidedBy backlog:Owner .
+ex:Obs a backlog:MetricObservation ; backlog:observesMetric ex:Met ;
+    backlog:observationFor ex:O ; backlog:hasObservedValue 1.0 ;
+    backlog:observedAt "2026-08-25T09:00:00"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Counted the epic." .
+# written FIRST — the actual driver
+ex:EP a backlog:Epic ; backlog:hasIdentifier "E-1" ; backlog:hasTitle "The thing we wanted to build" ;
+    backlog:hasState backlog:Proposed ; backlog:memberOfContainer ex:BL ;
+    backlog:pursuesObjective ex:O ; backlog:satisfiesDeliverable ex:Del ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "probe" ;
+    backlog:decomposesInto ex:S1 .
+ex:S1 a backlog:Story ; backlog:hasIdentifier "S-1" ; backlog:hasTitle "Do it" ;
+    backlog:hasState backlog:Proposed ; backlog:memberOfContainer ex:BL ;
+    backlog:pursuesObjective ex:O ; backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "probe" .
