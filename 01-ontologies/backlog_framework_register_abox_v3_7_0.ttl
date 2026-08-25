@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/3.6.0> ;
-    owl:versionInfo "3.6.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/3.7.0> ;
+    owl:versionInfo "3.7.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/3.6.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/3.5.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/3.4.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/3.3.0> ;
@@ -4571,3 +4572,62 @@ fw:Obs_ScopeDeliveredReal a backlog:MetricObservation ;
     backlog:hasObservedValue 100.0 ;
     backlog:observedAt "2026-08-25T12:00:00"^^xsd:dateTime ;
     backlog:hasObservationMethod "Denominator: the seven deliverables Scope_Build requires, read clause by clause from the owner's mission statement. Numerator: those satisfied by an epic whose stories are carried by a DeploymentUnit. Seven of seven. The previous observation counted stories pursuing an objective under the scope and divided by the same set — both sides were the backlog, so it would have read 100 percent with one story or with none. This figure can fall: adding a deliverable nothing satisfies lowers it immediately, which is what makes the boundary able to refuse." .
+
+#################################################################
+#  v3.7.0 — the live lineage staged, with its real history.
+#
+#  The commits below are read from git, not chosen. They record
+#  what actually happened and they are not flattering:
+#
+#    Mission   a20c9eb   24 Aug 10:53
+#    Goal      a20c9eb   24 Aug 10:53   SAME COMMIT as the mission
+#    Backlog   79b3a47   24 Aug 11:18
+#    Objective 02bc8af   25 Aug 06:28   AFTER the backlog
+#    Scope     90c433b   25 Aug 08:24   AFTER everything
+#
+#  Two findings the pipeline makes visible and nothing previously
+#  could:
+#
+#  1. Mission and Goal closed in the SAME commit, so their order is
+#     unwitnessed however it was actually built. The advisory says
+#     exactly this.
+#
+#  2. The scope stage closed LAST. Scope_Build's TEXT was written
+#     at a20c9eb, but its DELIVERABLES — the content that makes a
+#     boundary able to refuse — arrived at 90c433b, after the epics
+#     they were meant to constrain. That is the G17 defect with a
+#     commit attached to it.
+#
+#  Recorded rather than backdated. A stage output naming a commit
+#  the author cannot rewrite is worth having precisely when it
+#  reports something inconvenient.
+#################################################################
+
+fw:Out_Mission a backlog:StageOutput ;
+    backlog:outputOfStage backlog:Stage_Mission ;
+    backlog:hasStateDigest "6991178527975a2cb68786a1ae250f55c2e258811cfed0cbdd4e6c74c8955bcb" ;
+    backlog:closedAtCommit "a20c9eb" .
+
+fw:Out_Scope a backlog:StageOutput ;
+    backlog:outputOfStage backlog:Stage_Scope ;
+    backlog:hasStateDigest "1e1ffa04719f7cdb68dd66c07c85fc38b470b58b85f6e89e69739d0efe9f5e66" ;
+    backlog:closedAtCommit "90c433b" ;
+    backlog:consumesOutput fw:Out_Mission .
+
+fw:Out_Goal a backlog:StageOutput ;
+    backlog:outputOfStage backlog:Stage_Goal ;
+    backlog:hasStateDigest "4916fdbfddb2fcf4f7b511f40f5c4d3857af26f6b2b3d26835c7829e1beb4c21" ;
+    backlog:closedAtCommit "a20c9eb" ;
+    backlog:consumesOutput fw:Out_Scope .
+
+fw:Out_Objective a backlog:StageOutput ;
+    backlog:outputOfStage backlog:Stage_Objective ;
+    backlog:hasStateDigest "12883a89ad0527b7fa32600b77b298cebc8f9f06332cf56a2d99f9af1c5d45aa" ;
+    backlog:closedAtCommit "02bc8af" ;
+    backlog:consumesOutput fw:Out_Goal .
+
+fw:Out_Backlog a backlog:StageOutput ;
+    backlog:outputOfStage backlog:Stage_Backlog ;
+    backlog:hasStateDigest "c4c739d2a56f36e36beff6b4c0791a7573ef718b119b3fd5e5b3a62b806ed7ab" ;
+    backlog:closedAtCommit "79b3a47" ;
+    backlog:consumesOutput fw:Out_Objective .

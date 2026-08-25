@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.41.0
+# Backlog & Roadmap Semantic Framework — Standard v1.42.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -649,6 +649,21 @@ exist.
 
 `backlog_pipeline_verify` recomputes every digest and checks the chain is a line; the release gate runs
 it over both pipeline fixtures and requires each to verify as its name declares.
+
+### 2.5c-xxi What the commit witness reports on a real lineage
+
+Two advisories read the commits rather than the graph:
+
+`StageOrderWitnessShape` — a stage and the stage consuming it recording the **same** commit. The
+consuming stage was built from an output not yet closed, so the dependency is nominal: the artifact
+existed as an IRI before it existed as a completed state.
+
+`ScopeContentLateShape` — the scope stage recording a **later** commit than the backlog stage. A
+boundary's text may be written early while its **deliverables** — the content that lets it refuse
+anything — arrive after the work they were meant to constrain. This is G17 with a commit attached.
+
+Both fire on this package's own register, which is the point: a witness worth having is one that
+reports something inconvenient about the register carrying it.
 
 ### 2.5d Decomposition, commitments, dependency kinds, impediments, flow, team (subject v1.4.0)
 

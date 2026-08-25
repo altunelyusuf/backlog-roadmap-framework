@@ -1,5 +1,40 @@
 # Changelog
 
+## v1.86.0 — 2026-08-25 (MINOR: the live lineage staged against its real commits)
+
+Yes — the pipeline applies to the existing lineage, and applying it produced two findings nothing
+previously could see.
+
+**The commits are read from git, not chosen:**
+
+```
+Mission    a20c9eb   24 Aug 10:53
+Goal       a20c9eb   24 Aug 10:53   SAME COMMIT as the mission
+Backlog    79b3a47   24 Aug 11:18
+Objective  02bc8af   25 Aug 06:28   AFTER the backlog
+Scope      90c433b   25 Aug 08:24   AFTER everything
+```
+
+**Finding 1 — mission and goal are unordered.** They closed in the same commit, so their relative order
+is unwitnessed however it was actually built. `StageOrderWitnessShape` says so: the consuming stage was
+built from an output not yet closed, making the dependency nominal.
+
+**Finding 2 — the scope stage closed last.** `Scope_Build`'s *text* was written at `a20c9eb`, but its
+**deliverables** arrived at `90c433b` — after the epics they were meant to constrain. That is the G17
+defect with a commit attached, and `ScopeContentLateShape` reports it.
+
+**Both advisories fire on this package's own register.** A witness worth having is one that reports
+something inconvenient about the register carrying it. Neither is a violation: the history is real and
+cannot be rewritten, and backdating a stage output to make the advisory quiet would be exactly the
+fabrication the commit anchor exists to prevent.
+
+**The verifier passes**: all five digests reproduce and the chain is a line. What the digests cannot
+say — and the commits can — is that the order was not what a reader would assume.
+
+**How to proceed from here:** close each stage of the next lineage in its own commit. That is the only
+change needed, and it costs nothing but sequencing.
+
+
 ## v1.85.0 — 2026-08-25 (MINOR: the lineage becomes a pipeline — G18)
 
 **The owner was right on both counts, and v1.84.0 was wrong.**

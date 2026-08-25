@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.43.0> ;
-    owl:versionInfo "1.43.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.44.0> ;
+    owl:versionInfo "1.44.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.43.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.42.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.41.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.40.0> ;
@@ -3625,4 +3626,35 @@ backlog:SingleCommitLineageShape a sh:NodeShape ;
             $this backlog:closedAtCommit ?c ; backlog:outputOfStage ?s1 .
             ?other backlog:closedAtCommit ?c ; backlog:outputOfStage ?s2 .
             FILTER (?s1 != ?s2)
+        }""" ] .
+
+#################################################################
+#  v1.44.0 — a stage that closed after the one it feeds
+#################################################################
+
+backlog:StageOrderWitnessShape a sh:NodeShape ;
+    sh:targetClass backlog:StageOutput ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: a stage closed at a different commit than its successor implies"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: this stage and the one that consumes it record the same commit, or this stage's commit cannot be shown to precede it. The consuming stage was built from an output that was not yet closed, which means the dependency is nominal — the artifact existed as an IRI before it existed as a completed state. Close each stage in its own commit to make the sequence witnessed." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?next backlog:consumesOutput $this ; backlog:closedAtCommit ?cn .
+            $this backlog:closedAtCommit ?cp .
+            FILTER (?cp = ?cn)
+        }""" ] .
+
+backlog:ScopeContentLateShape a sh:NodeShape ;
+    sh:targetClass backlog:ScopeStatement ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: a boundary whose content arrived after the work"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: the scope stage records a later commit than the backlog stage. The boundary's TEXT may have been written early, but its DELIVERABLES — the content that lets it refuse anything — arrived after the work they were meant to constrain. This is the G17 defect with a commit attached: a scope whose content post-dates its backlog was, in the only witnessed sense, drawn around what already existed." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?so backlog:outputOfStage backlog:Stage_Scope ; backlog:closedAtCommit ?cs .
+            ?bo backlog:outputOfStage backlog:Stage_Backlog ; backlog:closedAtCommit ?cb .
+            FILTER (?cs != ?cb)
+            FILTER EXISTS { $this backlog:requiresDeliverable ?d }
         }""" ] .
