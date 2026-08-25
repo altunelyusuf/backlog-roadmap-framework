@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.43.0
+# Backlog & Roadmap Semantic Framework — Standard v1.44.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -687,6 +687,23 @@ refuse nothing.
 **Measured on a real staged drive** (five commits, digests taken at 1, 5, 6, 7 and 8 subjects): every
 digest reproduces, the chain is a line, and **zero order advisories fire at L4 with nothing
 suppressed**. The same checks on a lineage whose stages shared commits fire.
+
+### 2.5c-xxiii A boundary fails in both directions
+
+`derivesFromMissionClause` — each `ScopeDeliverable` **quotes** the words of the mission it was read
+from. Quoted, not referenced: a citation can point at a mission that has since changed, while a
+quotation can be compared against the current text.
+
+At L3 a deliverable quoting nothing is rejected. The scope then requires something the mission does not
+say, and **nothing downstream can notice** — work satisfying it traces cleanly to a scope, a goal and a
+mission while answering to none of them.
+
+This is the mirror of a scope with no content. **A boundary fails in both directions**: too narrow, and
+the backlog defines it; too wide, and it asks for what was never wanted. Only the first was checked
+before.
+
+The remedy when a deliverable has no clause is to **amend the mission**, recording the owner's words as
+its source — not to drop the deliverable, if the owner asked for it, and not to let the gap stand.
 
 ### 2.5d Decomposition, commitments, dependency kinds, impediments, flow, team (subject v1.4.0)
 

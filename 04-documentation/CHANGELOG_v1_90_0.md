@@ -1,5 +1,54 @@
 # Changelog
 
+## v1.90.0 — 2026-08-25 (MAJOR-class: the scope was wider than the mission)
+
+**Audit answer: no, they were not properly set.** Seven of ten deliverables quote a clause of the
+owner's mission statement. **Three did not** — `Del_Model`, `Del_Spec`, `Del_TestSpec` were added at
+the owner's request two releases ago and the mission text was never amended.
+
+So the boundary asked for things the mission does not say, and **nothing objected**. Work satisfying
+those deliverables would trace cleanly to a scope, a goal and a mission while answering to none of
+them.
+
+**This is the mirror of the v1.83.0 defect.** There the scope had no content and the backlog defined
+it. Here the scope has content the mission never asked for. A boundary fails in both directions and
+only one direction was ever checked.
+
+### Corrected by amending the mission, not by dropping the deliverables
+
+The owner asked for them, so they are intent; what was missing was the mission saying so.
+`Mission_BuildSoftware_v2` quotes the owner's instruction **verbatim** as its source and supersedes the
+v1.70.0 statement. This session did not author it.
+
+`derivesFromMissionClause` now requires every deliverable to quote its clause, checked at L3. All ten
+do.
+
+### Two of this package's own rules were pulling opposite ways
+
+Amending a mission for the first time exposed it. Re-pointing the goals to the new mission left the
+superseded one with no goals, and the L2 *"no goal advances this mission"* clause fired — while
+leaving both links would have tripped the L4 forked-chain rule. **A superseded mission should have no
+goals**; requiring one forces a goal to serve two missions at once. The rule now exempts superseded
+missions.
+
+### Verified
+
+```
+DOWN  Mission_BuildSoftware_v2 -> Scope_Build -> 2 goals -> 4 objectives
+UP    same objectives -> same goals -> same mission          AGREE
+
+deliverables quoting a mission clause   10 of 10
+Obj_Grounded        2 -> 0    at 0     MET
+Obj_IntentToWork    3 -> 0    at 0     MET
+Obj_Modelling       8 -> 0    at 8     not met — backlog filled, not built
+Obj_ScopeDelivered  0 -> 100  at 70    not met — three deliverables unshipped
+```
+
+The two unmet objectives are the modelling work just registered. **The backlog is filled to satisfy
+them and nothing has been built yet**, which is the honest state of a boundary that was widened one
+commit ago.
+
+
 ## v1.89.0 — 2026-08-25 (MINOR: BACKLOG STAGE — three epics answering to a boundary written first)
 
 The scope stage closed at commit `ceb950d`. **This commit is the backlog stage**, and the separation is

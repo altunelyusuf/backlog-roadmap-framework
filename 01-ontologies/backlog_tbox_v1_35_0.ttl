@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.34.0> ;
-    owl:versionInfo "1.34.0" ;
+    owl:versionIRI <http://example.org/backlog/1.35.0> ;
+    owl:versionInfo "1.35.0" ;
+    owl:priorVersion <http://example.org/backlog/1.34.0> ;
     owl:priorVersion <http://example.org/backlog/1.33.0> ;
     owl:priorVersion <http://example.org/backlog/1.32.0> ;
     owl:priorVersion <http://example.org/backlog/1.31.0> ;
@@ -4056,3 +4057,25 @@ backlog:producedByStage a owl:ObjectProperty , owl:FunctionalProperty ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "produced by stage"@en ;
     skos:definition "The stage output this element belongs to. An element cannot reference an output that does not exist, so asserting it requires the stage to have closed first."@en .
+
+#################################################################
+#  63. A deliverable names the mission clause it came from
+#     (v1.35.0)
+#
+#  Audit finding: seven of this register's ten deliverables quote a
+#  clause of the owner's mission statement, and three do not. Those
+#  three were added at the owner's request in a later session and
+#  the mission text was never amended — so the SCOPE became wider
+#  than the MISSION and nothing objected.
+#
+#  This is the mirror of the defect corrected at v1.83.0. There the
+#  scope had no content and the backlog defined it; here the scope
+#  has content the mission never asked for. A boundary can fail in
+#  both directions and only one was checked.
+#################################################################
+
+backlog:derivesFromMissionClause a owl:DatatypeProperty ;
+    rdfs:domain backlog:ScopeDeliverable ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "derives from mission clause"@en ;
+    skos:definition "The words of the mission this deliverable was read from, quoted. Quoted rather than referenced because a citation can point at a mission that has since changed, while a quotation can be compared against the current text. A deliverable that cannot quote a clause is asking for something the mission does not say — which may be right, and requires the mission to be amended rather than the gap ignored."@en .

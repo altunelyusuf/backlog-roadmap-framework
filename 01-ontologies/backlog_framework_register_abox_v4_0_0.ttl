@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/3.9.0> ;
-    owl:versionInfo "3.9.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/4.0.0> ;
+    owl:versionInfo "4.0.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/3.9.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/3.8.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/3.7.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/3.6.0> ;
@@ -2227,12 +2228,12 @@ fw:Ex_InventedPractice a backlog:ScopeExclusion ;
 
 fw:Goal_MissionToWork a backlog:Goal ;
     rdfs:label "A mission statement reaches executable work by construction"@en ;
-    backlog:contributesToMission fw:Mission_BuildSoftware ;
+
     backlog:decidedBy backlog:Owner .
 
 fw:Goal_GroundedPractice a backlog:Goal ;
     rdfs:label "Every practice the framework requires is traceable to a standard"@en ;
-    backlog:contributesToMission fw:Mission_BuildSoftware ;
+
     backlog:decidedBy backlog:Owner .
 
 fw:Metric_UngroundedPractices a core:Metric ;
@@ -2310,7 +2311,6 @@ fw:MS_Cost backlog:milestoneOutcome backlog:Ach_Missed ;
 fw:Scope       backlog:scopeForMission fw:Mission_Dev .
 fw:Scope_v2    backlog:scopeForMission fw:Mission_Dev .
 fw:Scope_Order backlog:scopeForMission fw:Mission_OrderRepair .
-fw:Scope_Build backlog:scopeForMission fw:Mission_BuildSoftware .
 
 fw:Roadmap backlog:roadmapRealises fw:Obj_Derived , fw:Obj_Adopter , fw:Obj_Views ,
                                    fw:Obj_ProgressInViews , fw:Obj_Finishable ,
@@ -4898,3 +4898,47 @@ fw:Obs_ScopeDeliveredStrict a backlog:MetricObservation ;
     backlog:hasObservedValue 70.0 ;
     backlog:observedAt "2026-08-25T15:30:00"^^xsd:dateTime ;
     backlog:hasObservationMethod "Measured twice and the two disagree, which is the finding. Counting deliverables with ANY work satisfying them gives 10 of 10 — because three epics were just planned. Counting only those satisfied by DONE work gives 7 of 10. Planning three epics moved a figure that should move only when something ships. The strict reading is recorded: 70 percent, unchanged by this commit, and DeliverableIntentionShape now reports a deliverable whose satisfying work is all still open." .
+
+
+#################################################################
+#  v4.0.0 — MAJOR. The scope was wider than the mission.
+#
+#  Audit finding: seven deliverables quote the owner's mission
+#  statement and three did not. Del_Model, Del_Spec and Del_TestSpec
+#  were added at the owner's request and the mission text was never
+#  amended, so the boundary asked for things the mission does not
+#  say and nothing objected.
+#
+#  This is the MIRROR of the v1.83.0 defect. There the scope had no
+#  content and the backlog defined it. Here the scope has content
+#  the mission never asked for. A boundary fails in both directions
+#  and only one direction was checked.
+#
+#  Corrected by AMENDING THE MISSION, not by dropping the
+#  deliverables — the owner asked for them, so they are intent, and
+#  what was missing was the mission saying so. The amendment quotes
+#  the owner's instruction verbatim as its source. This session did
+#  not author it.
+#################################################################
+
+fw:Mission_BuildSoftware_v2 a backlog:Mission ;
+    backlog:hasMissionStatement "Software is built from mission statements: an intent chain is groomed and granularised down to executable work, delivered in regularly deployable packages, through time-boxed iterations planned to finish their package content, under autonomous, semi-autonomous or non-autonomous execution. Analysis and design work produces named artefacts — traditional and UML models, diagrams and specifications — and a story carries its steps, interactions, state changes, test cases and test data. The practices are grounded in software engineering standards rather than invented, and every step is machine-confirmable through ontologies." ;
+    backlog:missionFor fw:Register ;
+    backlog:hasMissionOrigin backlog:Origin_OwnerStated ;
+    backlog:missionSource "Owner, 2026-08-25, verbatim: 'Do we have analysis and design activities using traditional and UML based methods, diagram development, specifications and all are part of user stories, definition of done, steps, interactions, state changes, test cases and test data. If not, let us build a lineage to fix the missing concepts in the framework.' Amends the v1.70.0 statement by naming what the analysis and design steps PRODUCE; the original said how work is groomed and delivered and not what it yields." ;
+    backlog:supersedesMission fw:Mission_BuildSoftware ;
+    backlog:decidedBy backlog:Owner .
+
+fw:Scope_Build backlog:scopeForMission fw:Mission_BuildSoftware_v2 .
+fw:Goal_MissionToWork backlog:contributesToMission fw:Mission_BuildSoftware_v2 .
+fw:Goal_GroundedPractice backlog:contributesToMission fw:Mission_BuildSoftware_v2 .
+fw:Del_Groom backlog:derivesFromMissionClause "an intent chain is groomed and granularised down to executable work" .
+fw:Del_Package backlog:derivesFromMissionClause "delivered in regularly deployable packages" .
+fw:Del_TimeBox backlog:derivesFromMissionClause "through time-boxed iterations planned to finish their package content" .
+fw:Del_Autonomy backlog:derivesFromMissionClause "under autonomous, semi-autonomous or non-autonomous execution" .
+fw:Del_Grounded backlog:derivesFromMissionClause "The practices are grounded in software engineering standards rather than invented" .
+fw:Del_Granular backlog:derivesFromMissionClause "granularised down to executable work" .
+fw:Del_Checkable backlog:derivesFromMissionClause "every step is machine-confirmable through ontologies" .
+fw:Del_Model backlog:derivesFromMissionClause "analysis and design activities using traditional and UML based methods, diagram development, specifications" .
+fw:Del_Spec backlog:derivesFromMissionClause "steps, interactions, state changes" .
+fw:Del_TestSpec backlog:derivesFromMissionClause "test cases and test data" .

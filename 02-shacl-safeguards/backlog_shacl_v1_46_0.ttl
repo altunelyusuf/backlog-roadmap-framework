@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.45.0> ;
-    owl:versionInfo "1.45.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.46.0> ;
+    owl:versionInfo "1.46.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.45.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.44.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.43.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.42.0> ;
@@ -1483,6 +1484,12 @@ backlog:MissionShape a sh:NodeShape ;
             ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
             FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed, backlog:L4_LineageEnforced))
             FILTER NOT EXISTS { ?g backlog:contributesToMission $this }
+            # A superseded mission SHOULD have no goals: they were re-pointed to
+            # the mission that replaced it. Requiring one would force a goal to
+            # serve two missions at once, which the forked-chain rule rejects —
+            # two of this package's own rules pulling opposite ways, found when
+            # a mission was amended for the first time.
+            FILTER NOT EXISTS { ?s backlog:supersedesMission $this }
         }""" ] .
 
 backlog:GoalMeasurabilityShape a sh:NodeShape ;
@@ -3674,4 +3681,21 @@ backlog:DeliverableIntentionShape a sh:NodeShape ;
         sh:select """SELECT $this WHERE {
             ?w backlog:satisfiesDeliverable $this .
             FILTER NOT EXISTS { ?w2 backlog:satisfiesDeliverable $this ; backlog:hasState backlog:Done }
+        }""" ] .
+
+#################################################################
+#  v1.46.0 — a scope wider than its mission
+#################################################################
+
+backlog:DeliverableProvenanceShape a sh:NodeShape ;
+    sh:targetClass backlog:ScopeDeliverable ;
+    sh:severity sh:Violation ;
+    rdfs:label "A deliverable quotes the mission clause it came from (L3)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: this deliverable quotes no mission clause, so the scope requires something the mission does not say. The boundary is WIDER than the intent it serves, and nothing downstream can notice: work satisfying it will trace cleanly to a scope, a goal and a mission while answering to none of them. This is the mirror of a scope with no content — a boundary fails in both directions, and only one direction was ever checked. Either quote the clause, or amend the mission and record the owner's words as its source." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L3_Governed, backlog:L4_LineageEnforced))
+            FILTER NOT EXISTS { $this backlog:derivesFromMissionClause ?c }
         }""" ] .
