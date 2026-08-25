@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v4.0.0
+# Lineage Operating Discipline — v4.1.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -100,6 +100,24 @@ Three defects in this framework's own tooling were plausible refusals or meaning
 cumulative flow reading a property that never existed, a burn-down reaching zero over open work, a
 date comparison reporting future deadlines as passed. Each *looked* like the tool working.
 *No shape catches this.* The check that does is a **fixture whose answer is known in advance**.
+
+### G17 — A scope must have content of its own, or the backlog defines it
+Writing the scope before the goals is not enough. A scope of prose has nothing to measure work
+against, so coverage is computed over **the work that happens to exist** — and both sides of the
+fraction become the backlog.
+
+Measured here: `Obj_ScopeDelivered` counted stories pursuing an objective under the scope and divided
+by the same set. It read **100% whether the scope was satisfied or merely emptied**, and would have
+read 100% with a single story or with none.
+
+That is the epic-driven lineage in its exact form. Not that epics are written first — they may
+correctly come after — but that **whatever the epics deliver becomes the definition of what the scope
+wanted.**
+
+`ScopeDeliverable` fixes it: enumerate what the scope requires when the scope is written, read from
+the mission clause by clause. A deliverable states **what must be true**, not what someone will do.
+The test of a real boundary is that its coverage figure **can fall** — add a deliverable nothing
+satisfies and it drops immediately. A figure that cannot fall is not measuring anything.
 
 ### G13 — The chain is Mission → Scope → Goals → Objectives, and it reads the same both ways
 Goals are **derived from the scope**, not attached to the mission. The scope is built to satisfy the
@@ -221,6 +239,13 @@ exists in the shipped shapes file and carries the severity claimed. **A discipli
 enforcement claims have drifted from the suite is worse than none, because it is believed.**
 
 ---
+
+## v4.1.0 (2026-08-25)
+
+**G17: a scope must enumerate what it requires.** Owner finding — the lineage was epic-based, with
+selected epics becoming the scope and mission subjects. Confirmed by measurement: the coverage metric
+divided the backlog by itself. `ScopeDeliverable` gives the boundary content of its own, and the
+coverage figure can now fall.
 
 ## v4.0.0 (2026-08-24)
 

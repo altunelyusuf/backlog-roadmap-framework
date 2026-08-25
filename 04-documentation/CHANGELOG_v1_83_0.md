@@ -1,5 +1,34 @@
 # Changelog
 
+## v1.83.0 — 2026-08-25 (MINOR: the scope gets content of its own — G17)
+
+**The owner's finding was correct, and the mechanism was precise.**
+
+`Obj_ScopeDelivered` counted stories pursuing an objective under `Scope_Build` and divided by **the
+same set**. Both sides of the fraction were the backlog, so it read **100% whether the scope was
+satisfied or merely emptied** — and would have read 100% with a single story or with none.
+
+That is the epic-driven lineage exactly. **Not** that epics were written first: for the live mission
+they were not — scope, goal and objective landed at v1.72.0, the first epic at v1.73.0. The defect was
+that **the scope had no content of its own**, so whatever the epics delivered became the definition of
+what the scope had wanted.
+
+**`ScopeDeliverable`** enumerates what the scope requires, written with the scope and before any goal
+or epic. A deliverable states **what must be true**, not what someone will do. `satisfiesDeliverable`
+points from work to requirement, so work cannot name a deliverable that does not yet exist.
+
+**Seven deliverables read clause by clause from the owner's mission statement**, not from the epics
+that exist: grooming to iteration-sized stories, regularly deployable packages, time-boxed iterations
+planned to finish their content, evidence proportionate to autonomy, practices grounded in a named
+standard, granularisation to task level, machine-confirmable throughout.
+
+**Re-measured: 7 of 7 satisfied.** Same number as before and a different claim — this one **can fall**.
+Add a deliverable nothing satisfies and it drops to 88% immediately. The old figure could not fall at
+all, which is why it measured nothing.
+
+Register 0 violations at L4, 0 of 64 constraints suppressed.
+
+
 ## v1.82.0 — 2026-08-25 (MINOR: the live lineage closes — every objective met, both directions agree)
 
 **A source was found.** Autonomy-graded evidence was refused for four releases by `Ex_InventedPractice`

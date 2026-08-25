@@ -892,3 +892,8 @@ ex:R_US003_Interface a backlog:RefinementEvent ; backlog:refines ex:US003 ;
 ex:Goal_Retention backlog:derivesFromScope ex:Scope_Launch .
 
 ex:Obj_SelfService backlog:metricMovableBy ex:Project , ex:US001 , ex:US002 .
+
+ex:Del_Scope_Launch a backlog:ScopeDeliverable ;
+    backlog:hasDeliverableText "A practitioner locked out of their account regains access without contacting support." .
+ex:Scope_Launch backlog:requiresDeliverable ex:Del_Scope_Launch .
+ex:EP001 backlog:satisfiesDeliverable ex:Del_Scope_Launch .

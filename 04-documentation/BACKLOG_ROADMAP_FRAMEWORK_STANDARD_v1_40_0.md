@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.39.0
+# Backlog & Roadmap Semantic Framework — Standard v1.40.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -608,6 +608,26 @@ dependency and commitment, and does not name a category for a release that was n
 decision at all.
 
 The point is not that every term has a citation. It is that **no term is silent about its provenance**.
+
+### 2.5c-xix A scope enumerates what it requires
+
+`ScopeDeliverable` with `requiresDeliverable` (Scope → Deliverable) and `satisfiesDeliverable`
+(WorkItem → Deliverable).
+
+**A scope of prose has nothing to measure work against.** Coverage then gets computed over the work
+that happens to exist, and both sides of the fraction are the backlog — so the figure reads complete
+whether the scope was satisfied or merely emptied. Whatever the epics deliver becomes the definition of
+what the scope wanted.
+
+A deliverable states **what must be true**, not what someone will do, and is enumerated when the scope
+is written — before any goal, epic or story. `satisfiesDeliverable` points from work to requirement, so
+work cannot name a deliverable that does not yet exist.
+
+At L3 a scope enumerating nothing is rejected. Advisories report a deliverable nothing satisfies, and
+an epic satisfying no deliverable — work the scope never asked for.
+
+**The test of a real boundary is that its coverage figure can fall.** Add a deliverable nothing
+satisfies and it drops immediately; a figure that cannot fall is not measuring anything.
 
 ### 2.5d Decomposition, commitments, dependency kinds, impediments, flow, team (subject v1.4.0)
 

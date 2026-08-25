@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.40.0> ;
-    owl:versionInfo "1.40.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.41.0> ;
+    owl:versionInfo "1.41.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.40.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.39.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.38.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.37.0> ;
@@ -3459,4 +3460,44 @@ backlog:AutonomyEvidenceShape a sh:NodeShape ;
                 $this backlog:hasAcceptanceCriterion ?ac .
                 ?ev backlog:attestsCriterion ?ac ; backlog:evidenceVerified true .
             }
+        }""" ] .
+
+#################################################################
+#  v1.41.0 — the scope has content of its own
+#################################################################
+
+backlog:ScopeContentShape a sh:NodeShape ;
+    sh:targetClass backlog:ScopeStatement ;
+    sh:severity sh:Violation ;
+    rdfs:label "A scope enumerates what it requires (L3)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: this scope enumerates no deliverable, so coverage can only be measured against the work that happens to exist. Both sides of any coverage figure are then the backlog, and the number reads complete whether the scope was satisfied or merely emptied. A boundary with no content of its own cannot refuse anything — the epics become the definition of what the scope wanted." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L3_Governed, backlog:L4_LineageEnforced))
+            FILTER NOT EXISTS { $this backlog:requiresDeliverable ?d }
+            FILTER NOT EXISTS { ?s backlog:supersedesMission ?m . $this backlog:scopeForMission ?m }
+        }""" ] .
+
+backlog:DeliverableCoverageShape a sh:NodeShape ;
+    sh:targetClass backlog:ScopeDeliverable ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: a deliverable nothing satisfies"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: no work item satisfies this deliverable. The scope requires it and nothing in the backlog makes it true — which is the gap a scope with content can state and a scope of prose cannot." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE { FILTER NOT EXISTS { ?i backlog:satisfiesDeliverable $this } }""" ] .
+
+backlog:UnrequestedWorkShape a sh:NodeShape ;
+    sh:targetClass backlog:Epic ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: an epic the scope never asked for"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: this epic satisfies no scope deliverable. It may still be right, and it is reported because an epic that answers to nothing in the scope is how a backlog quietly becomes the definition of what the development wanted — the epic-driven lineage rather than the mission-driven one." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:pursuesObjective ?o . ?o backlog:fillsScope ?sc .
+            FILTER EXISTS { ?sc backlog:requiresDeliverable ?any }
+            FILTER NOT EXISTS { $this backlog:satisfiesDeliverable ?d }
         }""" ] .

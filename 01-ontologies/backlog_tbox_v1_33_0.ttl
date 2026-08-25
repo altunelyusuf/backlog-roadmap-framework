@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.32.0> ;
-    owl:versionInfo "1.32.0" ;
+    owl:versionIRI <http://example.org/backlog/1.33.0> ;
+    owl:versionInfo "1.33.0" ;
+    owl:priorVersion <http://example.org/backlog/1.32.0> ;
     owl:priorVersion <http://example.org/backlog/1.31.0> ;
     owl:priorVersion <http://example.org/backlog/1.30.0> ;
     owl:priorVersion <http://example.org/backlog/1.29.0> ;
@@ -3911,3 +3912,50 @@ backlog:requiresIndependentEvidence a owl:DatatypeProperty ;
 backlog:Sup_None backlog:requiresIndependentEvidence true .
 backlog:Sup_InTheLoop backlog:requiresIndependentEvidence false .
 backlog:Sup_OnTheLoop backlog:requiresIndependentEvidence false .
+
+#################################################################
+#  61. What the scope REQUIRES, independent of what was built
+#     (v1.33.0)
+#
+#  A scope described capabilities in prose and nothing enumerated
+#  them, so coverage could only be measured against the work that
+#  existed. Obj_ScopeDelivered counted stories pursuing an
+#  objective under the scope and divided by the same set: both
+#  sides of the fraction were the backlog, and it read 100% whether
+#  the scope was satisfied or merely emptied.
+#
+#  That is the epic-driven lineage in its exact form. Not that
+#  epics were written first — for the live mission they were not —
+#  but that the SCOPE HAD NO CONTENT OF ITS OWN to be measured
+#  against, so whatever the epics delivered became the definition
+#  of what the scope wanted.
+#
+#  A ScopeDeliverable is what the scope requires, written when the
+#  scope is written, before any goal or epic exists. Work is then
+#  measured against it rather than against itself.
+#################################################################
+
+backlog:ScopeDeliverable a owl:Class ;
+    rdfs:subClassOf core:Artifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Scope Deliverable"@en ;
+    skos:definition "A capability the scope requires, enumerated when the scope is written and before any goal, epic or story exists. The thing that makes a boundary measurable: without it, coverage can only be computed over the work that happens to exist, so the backlog defines what the scope wanted and the scope can never refuse anything. Distinct from a work item — a deliverable says WHAT MUST BE TRUE, a story says what someone will do about it."@en ;
+    dcterms:source "PMBOK scope baseline: the scope statement plus its deliverables; ISO 21500 scope definition"@en .
+
+backlog:requiresDeliverable a owl:ObjectProperty ;
+    rdfs:domain backlog:ScopeStatement ; rdfs:range backlog:ScopeDeliverable ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "requires deliverable"@en ;
+    skos:definition "A capability this scope requires. Direction is Scope to Deliverable because the deliverables ARE the scope's content, written with it — unlike every other link in the chain, which points from later to earlier."@en .
+
+backlog:satisfiesDeliverable a owl:ObjectProperty ;
+    rdfs:domain backlog:WorkItem ; rdfs:range backlog:ScopeDeliverable ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "satisfies deliverable"@en ;
+    skos:definition "The scope deliverable this work item makes true. Points from the work to the requirement, so a work item cannot name a deliverable that does not yet exist — which is what forces the scope to be written first. A deliverable with no work satisfying it is a gap the register can state; work satisfying no deliverable is work the scope never asked for."@en .
+
+backlog:hasDeliverableText a owl:DatatypeProperty ;
+    rdfs:domain backlog:ScopeDeliverable ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has deliverable text"@en ;
+    skos:definition "What must be true for this deliverable to be met, stated so a reader can disagree. A deliverable phrased as an activity rather than a condition cannot be checked."@en .

@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/3.5.0> ;
-    owl:versionInfo "3.5.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/3.6.0> ;
+    owl:versionInfo "3.6.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/3.5.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/3.4.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/3.3.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/3.2.0> ;
@@ -4518,3 +4519,55 @@ fw:Obs_IntentToWorkFinal a backlog:MetricObservation ;
     backlog:hasObservedValue 0.0 ;
     backlog:observedAt "2026-08-25T10:00:00"^^xsd:dateTime ;
     backlog:hasObservationMethod "All three as-is gaps now checkable. Grooming: a story reaching Ready is analysed against every concern it declares. Package sizing: an iteration committing beyond capacity is rejected. Autonomy-graded evidence: work produced with no human in or on the loop must carry evidence attesting a criterion, sourced to ISO/IEC 42001's requirement that oversight be proportionate to autonomy and EU AI Act Art. 14. The source existed and was not looked for hard enough; Ex_InventedPractice correctly held the line for four releases until it was found." .
+
+
+#################################################################
+#  v3.6.0 — the scope gets content of its own.
+#
+#  The owner observed that the lineage was epic-based: selected
+#  epics became the scope and mission subjects. Confirmed, and the
+#  mechanism was precise. Obj_ScopeDelivered counted stories
+#  pursuing an objective under Scope_Build and divided by the SAME
+#  SET — so it read 100%% whether the scope was satisfied or merely
+#  emptied, and whatever the epics delivered defined what the scope
+#  had wanted.
+#
+#  The deliverables below are read CLAUSE BY CLAUSE from the
+#  owner's mission statement, not from the epics that exist. Each
+#  is what must be TRUE, not what someone will do. Work is now
+#  measured against them rather than against itself.
+#################################################################
+fw:Del_Groom a backlog:ScopeDeliverable ;
+    backlog:hasDeliverableText "Grooming and granularisation: a mission statement is carried down to stories small enough to fit one iteration, and a story reaching Ready has been analysed against every design concern its work touches." .
+fw:EP_Grooming backlog:satisfiesDeliverable fw:Del_Groom .
+fw:Del_Package a backlog:ScopeDeliverable ;
+    backlog:hasDeliverableText "Regularly deployable packages: completed work reaches users in a package, and a package records the basis on which its contents were chosen." .
+fw:EP_ValueRelease backlog:satisfiesDeliverable fw:Del_Package .
+fw:Del_TimeBox a backlog:ScopeDeliverable ;
+    backlog:hasDeliverableText "Time-boxed iterations planned to finish their package content: an iteration committing beyond its capacity is rejected, and a deployment carrying work its iteration never planned is rejected." .
+fw:EP_IterationCapacity backlog:satisfiesDeliverable fw:Del_TimeBox .
+fw:Del_Autonomy a backlog:ScopeDeliverable ;
+    backlog:hasDeliverableText "Execution recorded as autonomous, semi-autonomous or non-autonomous, with the evidence required proportionate to how autonomously the work was produced." .
+fw:EP_Human backlog:satisfiesDeliverable fw:Del_Autonomy .
+fw:Del_Grounded a backlog:ScopeDeliverable ;
+    backlog:hasDeliverableText "Practices at each step grounded in a named software engineering standard: no term the framework ships is silent about its provenance." .
+fw:EP_GroundTwo backlog:satisfiesDeliverable fw:Del_Grounded .
+fw:Del_Granular a backlog:ScopeDeliverable ;
+    backlog:hasDeliverableText "Work granularised to task level with each task naming which technical process it performs." .
+fw:EP_TaskTypes backlog:satisfiesDeliverable fw:Del_Granular .
+fw:Del_Checkable a backlog:ScopeDeliverable ;
+    backlog:hasDeliverableText "Machine-confirmable throughout: every step above is a constraint the suite can check, not a convention a reader is asked to follow." .
+fw:EP_TaskTypes backlog:satisfiesDeliverable fw:Del_Checkable .
+fw:Scope_Build backlog:requiresDeliverable fw:Del_Groom , fw:Del_Package , fw:Del_TimeBox , fw:Del_Autonomy , fw:Del_Grounded , fw:Del_Granular , fw:Del_Checkable .
+
+#  Obj_ScopeDelivered re-measured against the deliverables rather
+#  than against the backlog. The denominator is now what the scope
+#  REQUIRES; the earlier figure divided the backlog by itself.
+
+fw:Obs_ScopeDeliveredReal a backlog:MetricObservation ;
+    rdfs:label "In-scope deliverables satisfied by delivered work"@en ;
+    backlog:observesMetric fw:Metric_ScopeDelivered ;
+    backlog:observationFor fw:Obj_ScopeDelivered ;
+    backlog:hasObservedValue 100.0 ;
+    backlog:observedAt "2026-08-25T12:00:00"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Denominator: the seven deliverables Scope_Build requires, read clause by clause from the owner's mission statement. Numerator: those satisfied by an epic whose stories are carried by a DeploymentUnit. Seven of seven. The previous observation counted stories pursuing an objective under the scope and divided by the same set — both sides were the backlog, so it would have read 100 percent with one story or with none. This figure can fall: adding a deliverable nothing satisfies lowers it immediately, which is what makes the boundary able to refuse." .
