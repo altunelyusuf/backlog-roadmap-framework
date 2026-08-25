@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.42.0> ;
-    owl:versionInfo "1.42.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.43.0> ;
+    owl:versionInfo "1.43.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.42.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.41.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.40.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.39.0> ;
@@ -3571,4 +3572,57 @@ backlog:IntentEchoShape a sh:NodeShape ;
                                 FILTER NOT EXISTS { ?w2 backlog:pursuesObjective $this } }
             FILTER NOT EXISTS { ?other backlog:pursuesObjective $this .
                                 FILTER NOT EXISTS { $this backlog:metricMovableBy ?other } }
+        }""" ] .
+
+#################################################################
+#  v1.43.0 — the pipeline, and what it can honestly enforce
+#################################################################
+
+backlog:StageOutputShape a sh:NodeShape ;
+    sh:targetClass backlog:StageOutput ;
+    sh:severity sh:Violation ;
+    rdfs:label "A stage output names its stage, its digest and its commit (L2)"@en ;
+    sh:property [ sh:path backlog:outputOfStage ; sh:minCount 1 ; sh:class backlog:LineageStage ;
+        sh:message "L2: a stage output must name the stage it closed." ] ;
+    sh:property [ sh:path backlog:hasStateDigest ; sh:minCount 1 ;
+        sh:message "L2: a stage output must carry a digest of the state it closed on, so the claim can be recomputed rather than believed." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: this stage output records no commit. A digest over the register is computable from the final state and therefore proves nothing about ORDER — established by experiment, where an author building backwards and computing each digest from the finished graph passed every digest check. A commit is the only anchor the author does not control." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L3_Governed, backlog:L4_LineageEnforced))
+            FILTER NOT EXISTS { $this backlog:closedAtCommit ?c }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this stage output does not consume the output of the stage that precedes it. The pipeline must be a line: each stage consumes what the previous produced, which is what makes the dependency an artifact rather than a claim." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:outputOfStage ?st . ?st backlog:stagePredecessor ?pred .
+            FILTER NOT EXISTS { $this backlog:consumesOutput ?prev . ?prev backlog:outputOfStage ?pred }
+        }""" ] .
+
+backlog:StagedElementShape a sh:NodeShape ;
+    sh:targetClass backlog:Goal , backlog:Objective ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: an intent element outside the pipeline"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: this element names no stage output, so it sits outside the pipeline and its position in the order rests on nothing. Advisory rather than a violation because a register may legitimately not use staged construction — but one that does not cannot claim its lineage was built in order." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            FILTER EXISTS { ?any a backlog:StageOutput }
+            FILTER NOT EXISTS { $this backlog:producedByStage ?o }
+        }""" ] .
+
+backlog:SingleCommitLineageShape a sh:NodeShape ;
+    sh:targetClass backlog:StageOutput ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: stages sharing one commit"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: this stage closed at the same commit as another stage. Git witnesses order BETWEEN commits and says nothing about order WITHIN one, so these stages are unordered evidence however they were actually built. This is the measured limit of the pipeline, reported rather than hidden: to make the order witnessed, close each stage in its own commit." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:closedAtCommit ?c ; backlog:outputOfStage ?s1 .
+            ?other backlog:closedAtCommit ?c ; backlog:outputOfStage ?s2 .
+            FILTER (?s1 != ?s2)
         }""" ] .

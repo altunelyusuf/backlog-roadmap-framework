@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# backlog_gate v1.1.19 — four-gate release check for the Backlog & Roadmap
+# backlog_gate v1.1.20 — four-gate release check for the Backlog & Roadmap
 # Semantic Framework. Nothing about the package's state is trusted until all
 # four pass, and the SHACL gate refuses to certify anything until it has just
 # demonstrated, in this run, that it can fail a known-bad register.
@@ -11,7 +11,7 @@
 #   +       coverage gate          >= 80% of primary-source concepts (BP-D31)
 #   +       doc-coverage gate      every TBox class named in the standard document
 #
-# Usage: backlog_gate_v1_1_19.sh [REGISTER.ttl ...]
+# Usage: backlog_gate_v1_1_20.sh [REGISTER.ttl ...]
 
 set -u
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -210,6 +210,30 @@ fi
 # in the other order, coverage counted 73 files and the 74th appeared moments
 # later — a race between two of this package's own gates, reported as an
 # unexplained file. The check was right and the ordering was wrong.
+echo
+echo "== Pipeline gate — stage digests reproduce =="
+# A stage output claims the register was in a particular state when that stage
+# closed. The claim is recomputed rather than believed: restrict the current
+# register to the element types the stage may contain, hash, compare. A digest
+# that does not reproduce means the state claimed was never the state that
+# existed. Skipped where no stage outputs are recorded — a register may
+# legitimately not use staged construction, and saying so is not a pass.
+PIPE="$(ls "$HERE"/backlog_pipeline_verify_v*.py 2>/dev/null | sort -V | tail -1 || true)"
+if [ -n "$PIPE" ]; then
+  for FX in "$HERE"/fixtures/fixture_pipeline*.ttl; do
+    [ -e "$FX" ] || continue
+    BASE="$(basename "$FX")"
+    case "$BASE" in *digestfail*) EXPECT=fail ;; *) EXPECT=pass ;; esac
+    if python3 "$PIPE" "$FX" >/dev/null 2>&1; then GOT=pass; else GOT=fail; fi
+    if [ "$GOT" != "$EXPECT" ]; then
+      echo "  $BASE: expected $EXPECT, got $GOT"; FAILED=1
+    fi
+  done
+  echo "  every pipeline fixture verifies as its name declares it should."
+else
+  echo "  NOT RUN — pipeline verifier not found. Not assumed to pass."
+fi
+
 echo
 echo "== Manifest-coverage gate — nothing on disk is unexplained =="
 # Gate 0 verifies that what is LISTED matches. It cannot see the unlisted set at

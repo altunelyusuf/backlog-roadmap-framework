@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.40.0
+# Backlog & Roadmap Semantic Framework — Standard v1.41.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -629,6 +629,27 @@ an epic satisfying no deliverable — work the scope never asked for.
 **The test of a real boundary is that its coverage figure can fall.** Add a deliverable nothing
 satisfies and it drops immediately; a figure that cannot fall is not measuring anything.
 
+### 2.5c-xx The lineage as a pipeline
+
+`LineageStage` — Mission → Scope → Goal → Objective → Backlog, chained by `stagePredecessor`. Each
+stage closes with a `StageOutput` carrying `hasStateDigest` and `closedAtCommit`; the next stage's
+output `consumesOutput` the previous. Elements reference their stage via `producedByStage`.
+
+**The dependency is an artifact, not a claim.** An element cannot reference an output that does not
+exist.
+
+**What is enforceable, established by experiment rather than argument:**
+
+| | |
+|---|---|
+| Digests **catch fabrication** | A backwards lineage with invented digests fails recomputation on every stage |
+| Digests **do not catch careful backwards construction** | An author who computes each digest by restricting the *final* graph per stage passes every check — a digest over the register is computable at the end |
+| Order needs an **external witness** | `closedAtCommit` names a commit: append-only, held by a remote the author does not control |
+| The witness has a **measured limit** | Git orders *between* commits, not *within* one. A lineage authored in a single commit is unordered evidence however it was built — reported by advisory |
+
+`backlog_pipeline_verify` recomputes every digest and checks the chain is a line; the release gate runs
+it over both pipeline fixtures and requires each to verify as its name declares.
+
 ### 2.5d Decomposition, commitments, dependency kinds, impediments, flow, team (subject v1.4.0)
 
 | Term | Meaning |
@@ -833,7 +854,7 @@ python3 03-tooling/backlog_evidence_bridge_v1_0_0.py my_register.ttl \
 python3 03-tooling/backlog_roadmap_report_v1_5_0.py my_register.ttl --emit report.ttl
 
 # 5. Run the four-gate release check (self-proving)
-bash 03-tooling/backlog_gate_v1_1_19.sh my_register.ttl
+bash 03-tooling/backlog_gate_v1_1_20.sh my_register.ttl
 ```
 
 Start at L1, move to L2 once a bridge exists, and to L3 when releases carry manifest hashes and the
@@ -843,7 +864,7 @@ blueprint sweep is real. Raising the level is a one-line edit to the profile.
 
 ## 5. What the gates prove, and what they do not
 
-`backlog_gate_v1_1_19.sh` runs Gate 0 (manifest self-verify), Gate P (every Turtle file parses),
+`backlog_gate_v1_1_20.sh` runs Gate 0 (manifest self-verify), Gate P (every Turtle file parses),
 Gate K (`versionInfo` == `versionIRI` token == filename token), Gate R (SHACL reconcile), and the
 BP-D31 coverage gate. Gate R first validates a positive fixture that must pass and a negative
 fixture that must fail, and aborts if either outcome inverts: a suite never shown to reject a

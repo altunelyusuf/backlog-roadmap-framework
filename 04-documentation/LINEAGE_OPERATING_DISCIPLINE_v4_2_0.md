@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v4.1.0
+# Lineage Operating Discipline — v4.2.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -100,6 +100,32 @@ Three defects in this framework's own tooling were plausible refusals or meaning
 cumulative flow reading a property that never existed, a burn-down reaching zero over open work, a
 date comparison reporting future deadlines as passed. Each *looked* like the tool working.
 *No shape catches this.* The check that does is a **fixture whose answer is known in advance**.
+
+### G18 — The lineage is a pipeline; order is enforced by artifact, not by claim
+An earlier release concluded that execution order could not be gated. **That was wrong on two counts,
+and the owner named both.** The v1.62.0 exclusion forbids requiring a fixed-at *date* and says nothing
+about enforcing order; and an ontology has dependency relations, through which order can be enforced.
+
+The model is another registrant's: **each stage consumes the artifact the previous stage produced.** A `StageOutput`
+closes a stage; the next stage's elements reference it. An element cannot reference an output that does
+not exist, so the dependency is a thing rather than an assertion.
+
+**What the experiments established, in order:**
+
+| Experiment | Result |
+|---|---|
+| A — stages built in order, digests taken as each closed | every digest reproduces, **PASS** |
+| B — same elements, digests fabricated | every digest fails recomputation, **FAIL** |
+| C — built backwards, digests computed from the *final* graph per stage | **PASS** |
+
+**C is the finding that matters.** A digest over the register is computable from the finished state, so
+it proves nothing about order. Any check that reads only the register can be satisfied at the end.
+
+**Order therefore requires an externally witnessed anchor.** `closedAtCommit` names the governed-repo
+commit at which a stage closed — append-only, held by a remote the author does not control. Its limit
+is equally measured and equally stated: **git witnesses order between commits and says nothing about
+order within one**, so a lineage authored in a single commit is unordered evidence however it was
+actually built. An advisory reports exactly that case.
 
 ### G17 — A scope must have content of its own, or the backlog defines it
 Writing the scope before the goals is not enough. A scope of prose has nothing to measure work
@@ -239,6 +265,13 @@ exists in the shipped shapes file and carries the severity claimed. **A discipli
 enforcement claims have drifted from the suite is worse than none, because it is believed.**
 
 ---
+
+## v4.2.0 (2026-08-25)
+
+**G18: the lineage is a pipeline.** Owner correction of two errors in v1.84.0 — a misread exclusion and
+a failure to use dependency relations. Settled by three experiments rather than argument: digests catch
+fabrication but not careful backwards construction, so order requires a commit anchor, whose own limit
+is stated rather than hidden.
 
 ## v4.1.0 (2026-08-25)
 

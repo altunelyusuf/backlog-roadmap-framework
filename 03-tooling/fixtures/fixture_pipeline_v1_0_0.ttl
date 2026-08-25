@@ -1,0 +1,57 @@
+# Lineage pipeline — stages built in order, each consuming the last.
+#
+# Experiment A of the v1.85.0 investigation. Every digest reproduces
+# and the chain is a line. Shipped so the passing shape is on record
+# alongside the failing one.
+#
+@prefix backlog: <http://example.org/backlog#> .
+@prefix core: <http://example.org/core#> .
+@prefix ex: <http://example.org/pl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+ex:BL a backlog:Backlog ; backlog:hasIdentifier "BL-PL" ; backlog:hasState backlog:Proposed ;
+    backlog:hasScopeStatement ex:Scope .
+ex:P a backlog:AdoptionProfile ; backlog:profileAppliesTo "pipeline fixture" ;
+    backlog:governsBacklog ex:BL ; backlog:hasConformanceLevel backlog:L1_Core ;
+    backlog:hasTargetConformanceLevel backlog:L2_EvidenceBound ;
+    backlog:hasLevelReviewDate "2027-01-01T00:00:00"^^xsd:dateTime ;
+    backlog:decidedBy backlog:Owner ; backlog:hasDecisionRationale "Core: the pipeline clauses are L1/L2." ;
+    backlog:adoptsFacet backlog:CoreFacet .
+
+ex:M a backlog:Mission ; backlog:hasMissionStatement "Practitioners recover unaided." ;
+    backlog:missionFor ex:BL ; backlog:hasMissionOrigin backlog:Origin_OwnerStated ;
+    backlog:missionSource "Owner, 2026-08-25" ; backlog:decidedBy backlog:Owner .
+ex:Scope a backlog:ScopeStatement ; backlog:hasScopeStatementText "Self-service recovery." ;
+    backlog:scopeForMission ex:M ; backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ;
+    backlog:requiresDeliverable ex:D1 , ex:D2 ; backlog:hasScopeExclusion ex:X .
+ex:D1 a backlog:ScopeDeliverable ; backlog:hasDeliverableText "Recovery completes unaided." .
+ex:D2 a backlog:ScopeDeliverable ; backlog:hasDeliverableText "Every recovery is auditable." .
+ex:X a backlog:ScopeExclusion ; backlog:excludesConcern "Admin recovery." ;
+    backlog:hasExclusionRationale "Different threat model." ; backlog:decidedBy backlog:Owner .
+ex:G a backlog:Goal ; rdfs:label "Self-service recovery"@en ;
+    backlog:contributesToMission ex:M ; backlog:derivesFromScope ex:Scope ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ; backlog:decidedBy backlog:Owner .
+ex:Met a core:Metric ; rdfs:label "Unaided share"@en .
+ex:O a backlog:Objective ; rdfs:label "Recoveries need no support"@en ;
+    backlog:fillsScope ex:Scope ; backlog:contributesToGoal ex:G ;
+    backlog:hasSuccessMetric ex:Met ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:hasBaselineValue 12.0 ; backlog:hasTargetValue 80.0 ;
+    backlog:hasTargetDirection backlog:Dir_Increase ;
+    backlog:hasObjectiveDeadline "2027-01-31T00:00:00"^^xsd:dateTime ;
+    backlog:decidedBy backlog:Owner .
+ex:EP a backlog:Epic ; backlog:hasIdentifier "E-1" ; backlog:hasTitle "Recovery" ;
+    backlog:hasState backlog:Proposed ; backlog:memberOfContainer ex:BL ;
+    backlog:pursuesObjective ex:O ; backlog:satisfiesDeliverable ex:D1 ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "probe" .
+
+ex:Out_Mission a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Mission ;
+    backlog:hasStateDigest "0673ef35ece4a94fd7660a3d627ef227dc4ef0265984f26a8e619f9321271b12" .
+ex:Out_Scope a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Scope ;
+    backlog:hasStateDigest "4c4aa275c4b9233a1beaec7082590ccee071b0c558a4f7813229897919338aa0" ; backlog:consumesOutput ex:Out_Mission .
+ex:Out_Goal a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Goal ;
+    backlog:hasStateDigest "2338e14e2523cbeef7cde24e2231eafead99416d1948cb9065c31693a61addb2" ; backlog:consumesOutput ex:Out_Scope .
+ex:Out_Objective a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Objective ;
+    backlog:hasStateDigest "59ab60ab34b41fe7f6f9e4a7a2d64d77b1a8820aa5c3408b2e275728fdde7310" ; backlog:consumesOutput ex:Out_Goal .
+ex:Out_Backlog a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Backlog ;
+    backlog:hasStateDigest "86899232373fc5e86f0f00cdb4cd82a36e86e317caa1e076896be8b8a058fd6c" ; backlog:consumesOutput ex:Out_Objective .

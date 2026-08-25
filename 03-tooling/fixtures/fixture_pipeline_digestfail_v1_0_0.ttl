@@ -1,0 +1,70 @@
+# Lineage pipeline defeated — EXPERIMENT B.
+#
+# NOT named negative: it is SHACL-VALID by design. Every shape passes;
+# the defect is only visible to recomputation, which is precisely the
+# point being made. A fabricated digest is well-formed data — no
+# constraint over the graph can catch it, and only re-deriving the
+# value can. The gate runs the pipeline verifier over this file and
+# requires it to FAIL there.
+#
+# The same elements as the passing fixture, with fabricated stage
+# digests. Every digest fails recomputation.
+#
+# EXPERIMENT C, the honest limit, is NOT shipped as a fixture because
+# it PASSES: an author who builds backwards but computes each digest
+# by restricting the FINAL graph per stage satisfies every digest
+# check. That is why closedAtCommit exists — a digest over the
+# register is computable at the end and proves nothing about order;
+# a commit is witnessed by a remote the author does not control.
+#
+@prefix backlog: <http://example.org/backlog#> .
+@prefix core: <http://example.org/core#> .
+@prefix ex: <http://example.org/pl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+ex:BL a backlog:Backlog ; backlog:hasIdentifier "BL-PL" ; backlog:hasState backlog:Proposed ;
+    backlog:hasScopeStatement ex:Scope .
+ex:P a backlog:AdoptionProfile ; backlog:profileAppliesTo "pipeline fixture" ;
+    backlog:governsBacklog ex:BL ; backlog:hasConformanceLevel backlog:L1_Core ;
+    backlog:hasTargetConformanceLevel backlog:L2_EvidenceBound ;
+    backlog:hasLevelReviewDate "2027-01-01T00:00:00"^^xsd:dateTime ;
+    backlog:decidedBy backlog:Owner ; backlog:hasDecisionRationale "Core: the pipeline clauses are L1/L2." ;
+    backlog:adoptsFacet backlog:CoreFacet .
+
+ex:M a backlog:Mission ; backlog:hasMissionStatement "Practitioners recover unaided." ;
+    backlog:missionFor ex:BL ; backlog:hasMissionOrigin backlog:Origin_OwnerStated ;
+    backlog:missionSource "Owner, 2026-08-25" ; backlog:decidedBy backlog:Owner .
+ex:Scope a backlog:ScopeStatement ; backlog:hasScopeStatementText "Self-service recovery." ;
+    backlog:scopeForMission ex:M ; backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ;
+    backlog:requiresDeliverable ex:D1 , ex:D2 ; backlog:hasScopeExclusion ex:X .
+ex:D1 a backlog:ScopeDeliverable ; backlog:hasDeliverableText "Recovery completes unaided." .
+ex:D2 a backlog:ScopeDeliverable ; backlog:hasDeliverableText "Every recovery is auditable." .
+ex:X a backlog:ScopeExclusion ; backlog:excludesConcern "Admin recovery." ;
+    backlog:hasExclusionRationale "Different threat model." ; backlog:decidedBy backlog:Owner .
+ex:G a backlog:Goal ; rdfs:label "Self-service recovery"@en ;
+    backlog:contributesToMission ex:M ; backlog:derivesFromScope ex:Scope ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ; backlog:decidedBy backlog:Owner .
+ex:Met a core:Metric ; rdfs:label "Unaided share"@en .
+ex:O a backlog:Objective ; rdfs:label "Recoveries need no support"@en ;
+    backlog:fillsScope ex:Scope ; backlog:contributesToGoal ex:G ;
+    backlog:hasSuccessMetric ex:Met ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:hasBaselineValue 12.0 ; backlog:hasTargetValue 80.0 ;
+    backlog:hasTargetDirection backlog:Dir_Increase ;
+    backlog:hasObjectiveDeadline "2027-01-31T00:00:00"^^xsd:dateTime ;
+    backlog:decidedBy backlog:Owner .
+ex:EP a backlog:Epic ; backlog:hasIdentifier "E-1" ; backlog:hasTitle "Recovery" ;
+    backlog:hasState backlog:Proposed ; backlog:memberOfContainer ex:BL ;
+    backlog:pursuesObjective ex:O ; backlog:satisfiesDeliverable ex:D1 ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "probe" .
+
+ex:Out_Mission a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Mission ;
+    backlog:hasStateDigest "274dae35d96affcd53d66ce9febe00cf0f6c3e1b114d6af2f5c3516569bd19f7" .
+ex:Out_Scope a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Scope ;
+    backlog:hasStateDigest "0ffe1e6b658af308372fc1a1d288df2861e11ebcd92188fb7b4ae486163c60c0" ; backlog:consumesOutput ex:Out_Mission .
+ex:Out_Goal a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Goal ;
+    backlog:hasStateDigest "2ecb986f0549538ccbb3d14087184f54d8d89f83d190ff2423708f424de53d22" ; backlog:consumesOutput ex:Out_Scope .
+ex:Out_Objective a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Objective ;
+    backlog:hasStateDigest "e912557fcd615783a7ee47c34c8c3237531ac02e5be32069d627e63723f1be4a" ; backlog:consumesOutput ex:Out_Goal .
+ex:Out_Backlog a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Backlog ;
+    backlog:hasStateDigest "1ec20ddba17df30e1f8be10a1f595515a53f11cf10db39e3c41959d75fcc7a6f" ; backlog:consumesOutput ex:Out_Objective .

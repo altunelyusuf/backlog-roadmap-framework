@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.33.0> ;
-    owl:versionInfo "1.33.0" ;
+    owl:versionIRI <http://example.org/backlog/1.34.0> ;
+    owl:versionInfo "1.34.0" ;
+    owl:priorVersion <http://example.org/backlog/1.33.0> ;
     owl:priorVersion <http://example.org/backlog/1.32.0> ;
     owl:priorVersion <http://example.org/backlog/1.31.0> ;
     owl:priorVersion <http://example.org/backlog/1.30.0> ;
@@ -3959,3 +3960,99 @@ backlog:hasDeliverableText a owl:DatatypeProperty ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "has deliverable text"@en ;
     skos:definition "What must be true for this deliverable to be met, stated so a reader can disagree. A deliverable phrased as an activity rather than a condition cannot be checked."@en .
+
+#################################################################
+#  62. The lineage as a PIPELINE (v1.34.0)
+#
+#  Owner correction, and it was right twice over. First, the
+#  v1.62.0 exclusion forbids requiring a DATE — it says nothing
+#  about enforcing order, and this session had conflated the two.
+#  Second, an ontology has dependency relations and order can be
+#  enforced through them.
+#
+#  The model is another registrant's: a pipeline whose every stage CONSUMES the
+#  artifact the previous stage produced. The dependency is then an
+#  artifact, not a claim. A stage output carries a DIGEST of the
+#  graph as it stood at that stage, and the digest is recomputable
+#  — so the claim "the scope existed before any goal" is checked by
+#  reconstructing the scope-stage graph and hashing it, not by
+#  believing a timestamp.
+#
+#  What this buys over the signature checks at v1.84.0: a
+#  backwards-built lineage can fabricate stage outputs, but it
+#  cannot make a fabricated digest match a recomputation unless it
+#  actually constructs each stage's state — which is doing the work
+#  in order.
+#################################################################
+
+backlog:LineageStage a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:Stage_Mission backlog:Stage_Scope backlog:Stage_Goal
+                backlog:Stage_Objective backlog:Stage_Backlog ) ;
+    rdfs:label "Lineage Stage"@en ;
+    skos:definition "A stage of the lineage pipeline. Ordered and closed: each stage consumes the output of the one before, so a stage cannot be entered without the previous stage having produced something."@en ;
+    dcterms:source "another registrant domain-ontology pipeline: each stage consumes the artifact the previous stage produced"@en .
+
+backlog:Stage_Mission a owl:NamedIndividual , backlog:LineageStage ;
+    rdfs:label "Mission stage"@en ;
+    skos:definition "The mission is stated. Nothing below it exists yet."@en .
+backlog:Stage_Scope a owl:NamedIndividual , backlog:LineageStage ;
+    rdfs:label "Scope stage"@en ;
+    skos:definition "The boundary and its deliverables and exclusions are written, against a mission that already exists and no goal that does not."@en .
+backlog:Stage_Goal a owl:NamedIndividual , backlog:LineageStage ;
+    rdfs:label "Goal stage"@en ;
+    skos:definition "Goals are derived from the scope. Objectives do not exist yet."@en .
+backlog:Stage_Objective a owl:NamedIndividual , backlog:LineageStage ;
+    rdfs:label "Objective stage"@en ;
+    skos:definition "Objectives are set to measure the goals, with baselines taken before any work is chosen."@en .
+backlog:Stage_Backlog a owl:NamedIndividual , backlog:LineageStage ;
+    rdfs:label "Backlog stage"@en ;
+    skos:definition "Work items are chosen against deliverables that already exist."@en .
+
+backlog:stagePredecessor a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:LineageStage ; rdfs:range backlog:LineageStage ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "stage predecessor"@en ;
+    skos:definition "The stage that must have produced an output before this one may be entered. Functional and acyclic: the chain is a line, not a graph."@en .
+
+backlog:Stage_Scope     backlog:stagePredecessor backlog:Stage_Mission .
+backlog:Stage_Goal      backlog:stagePredecessor backlog:Stage_Scope .
+backlog:Stage_Objective backlog:stagePredecessor backlog:Stage_Goal .
+backlog:Stage_Backlog   backlog:stagePredecessor backlog:Stage_Objective .
+
+backlog:StageOutput a owl:Class ;
+    rdfs:subClassOf core:Artifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Stage Output"@en ;
+    skos:definition "What a lineage stage produced, carrying a digest of the graph as it stood when the stage closed. The digest is what makes the pipeline checkable rather than declarative: it is recomputed from the current register by restricting to the elements that stage may contain, so a fabricated output fails unless the state it claims was actually constructed."@en .
+
+backlog:outputOfStage a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:StageOutput ; rdfs:range backlog:LineageStage ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "output of stage"@en .
+
+backlog:consumesOutput a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:StageOutput ; rdfs:range backlog:StageOutput ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "consumes output"@en ;
+    skos:definition "The previous stage's output this one was built from. The dependency that makes the sequence real: a stage output that consumes nothing is a stage that began from no prior state, which is only true of the first."@en .
+
+backlog:closedAtCommit a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:StageOutput ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "closed at commit"@en ;
+    skos:definition "The governed-repository commit at which this stage closed. THE ONLY EXTERNALLY WITNESSED ANCHOR available: a commit is append-only and held by a remote the author does not control, so a stage claiming to have closed at a commit can be checked against a history nobody can rewrite. Established by experiment — a digest over the register alone is computable from the final state and therefore proves nothing about order, while a commit is not. Its limit is equally real: git witnesses order BETWEEN commits and says nothing about order WITHIN one, so a lineage authored in a single commit is unordered evidence however it was actually built."@en .
+
+backlog:hasStateDigest a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:StageOutput ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has state digest"@en ;
+    skos:definition "SHA-256 over the canonical serialisation of every element this stage may contain, taken when the stage closed. Recomputable: restrict the current register to that stage's element types, canonicalise, hash, compare. A digest that does not reproduce means the state claimed was never the state that existed."@en .
+
+backlog:producedByStage a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:Mission backlog:ScopeStatement backlog:Goal backlog:Objective backlog:WorkItem ) ] ;
+    rdfs:range backlog:StageOutput ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "produced by stage"@en ;
+    skos:definition "The stage output this element belongs to. An element cannot reference an output that does not exist, so asserting it requires the stage to have closed first."@en .

@@ -1,5 +1,45 @@
 # Changelog
 
+## v1.85.0 — 2026-08-25 (MINOR: the lineage becomes a pipeline — G18)
+
+**The owner was right on both counts, and v1.84.0 was wrong.**
+
+**The misreading.** `Ex_NoTimestampMandate` at v1.62.0 excludes *"requiring a fixed-at date on every
+intent element"*. It says nothing about enforcing order. This session cited it as grounds that order
+could not be enforced at all — conflating a ban on unverifiable dates with a ban on ordering.
+
+**The failure of imagination.** An ontology has dependency relations, and a dependency on an
+**artifact** is not a claim about the past: it either exists or it does not.
+
+### The pipeline, modelled on another registrant
+
+another registrant's pipeline was read from `13-pipeline/`: each stage consumes what the previous produced. Applied
+here — `LineageStage` chained by `stagePredecessor`, each closing with a `StageOutput` the next
+`consumesOutput`. An element cannot reference an output that does not exist.
+
+### Three experiments, and the one that decided it
+
+```
+A  stages built in order, digests taken as each closed     every digest reproduces   PASS
+B  same elements, digests fabricated                        every digest fails        FAIL
+C  built backwards, digests computed from the final graph   every digest reproduces   PASS
+```
+
+**C is the result that matters.** A digest over the register is computable from the finished state, so
+it proves nothing about order. **Any check reading only the register can be satisfied at the end.**
+
+That is why `closedAtCommit` exists: a commit is append-only and held by a remote the author does not
+control. Its limit is stated rather than hidden — **git orders between commits and says nothing about
+order within one.** Measured on this register: mission, scope, goal and objective all landed in commit
+`a20c9eb`, so their relative order is unwitnessed however it was actually built. An advisory reports
+exactly that.
+
+**Both pipeline fixtures ship** — the passing shape and the failing one — and the release gate runs the
+verifier over each. Experiment C is deliberately **not** shipped as a fixture, because it passes; the
+changelog records it instead, since a limit that only appears when someone reproduces it is not
+documented.
+
+
 ## v1.84.0 — 2026-08-25 (MINOR: can execution order be gated? Experiment, and the honest answer)
 
 **The experiment.** A lineage built entirely backwards — epic first, then an objective invented to
@@ -2402,7 +2442,7 @@ moment another stage is inserted, so the decoupling is permanent instead.
 
 **Why every gate stayed green while this was live:** the three-fixture self-proof invokes the
 validator *directly*; only the register path formats its output, so a defect in the formatting layer
-was invisible to the proof. `backlog_gate_v1_1_19.sh` now runs the known-bad fixture through the
+was invisible to the proof. `backlog_gate_v1_1_20.sh` now runs the known-bad fixture through the
 **exact register path** and aborts if it does not fail. The self-proof covered the shapes; it had
 never covered its own plumbing.
 
@@ -3395,7 +3435,7 @@ executable and ordered.
 arbitration documented and implemented in the report tool.
 
 **Added — tooling:** `backlog_roadmap_report_v1_5_0.py` (eight sections, both NEXT answers, silent
--gap check), `backlog_coverage_gate_v1_1_1.py` (BP-D31), `backlog_gate_v1_1_19.sh` (Gate 0 / P / K /
+-gap check), `backlog_coverage_gate_v1_1_1.py` (BP-D31), `backlog_gate_v1_1_20.sh` (Gate 0 / P / K /
 R plus coverage), Gate K version-identity check in the validator.
 
 **Changed:** the v1.0.0 advisory "item carries no priority score" now excludes items correctly
