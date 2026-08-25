@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/3.4.0> ;
-    owl:versionInfo "3.4.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/3.5.0> ;
+    owl:versionInfo "3.5.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/3.4.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/3.3.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/3.2.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/3.1.0> ;
@@ -4455,3 +4456,65 @@ fw:S_GroundIteration backlog:memberOfContainer fw:Rel_v1_80_0 .
 fw:S_GroundSelection backlog:memberOfContainer fw:Rel_v1_80_0 .
 
 #  The invariant can now be evaluated as holding.
+
+#################################################################
+#  v3.5.0 — the two superseded objectives retired, the missing
+#  objective added, and the last gap closed.
+#################################################################
+
+#  RETIRED. Obj_Adopter and Obj_Derived measure "can an adopter
+#  answer questions without a spreadsheet" — the concern of
+#  Mission_Dev, one of the five missions this session drafted and
+#  the owner superseded. They are unmet against a purpose the
+#  register no longer holds, and they measure the same two
+#  refusals twice (cumulative flow, per-dimension cost).
+#
+#  Retired rather than deleted: they record what was believed and
+#  measured at the time. An objective retired with a reason is a
+#  decision; one deleted is a disappearance.
+
+fw:Obj_Adopter backlog:hasAchievementStatus backlog:Ach_Withdrawn ;
+    backlog:hasRationale "RETIRED at v1.82.0. Measures adopter self-service, the concern of the superseded Mission_Dev. Last observed 2 against a target of 0. Not carried forward: the owner's mission is building software from mission statements, and whether an adopter needs a spreadsheet alongside is not a test of that." .
+
+fw:Obj_Derived backlog:hasAchievementStatus backlog:Ach_Withdrawn ;
+    backlog:hasRationale "RETIRED at v1.82.0. The same two refusals as Obj_Adopter expressed as a percentage — 75 of a target 80. Measured a superseded mission and double-counted a single gap." .
+
+#  ADDED. Goal_MissionToWork was measured only by whether the PATH
+#  from mission to work is checkable. Nothing measured whether the
+#  work that path produced actually COVERS the scope and reached
+#  users. That is the owner's test: the deployed package proves the
+#  goals are met by physical measure, not by assertion.
+
+fw:Metric_ScopeDelivered a core:Metric ;
+    rdfs:label "Share of in-scope work delivered in a package"@en .
+
+fw:Obj_ScopeDelivered a backlog:Objective ;
+    rdfs:label "Everything the scope admits is delivered in a package"@en ;
+    backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ;
+    backlog:fillsScope fw:Scope_Build ;
+    backlog:contributesToGoal fw:Goal_MissionToWork ;
+    backlog:hasSuccessMetric fw:Metric_ScopeDelivered ;
+    backlog:hasBaselineValue 0.0 ;
+    backlog:hasTargetValue 100.0 ;
+    backlog:hasTargetDirection backlog:Dir_Increase ;
+    backlog:hasObjectiveDeadline "2026-12-31T00:00:00"^^xsd:dateTime ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:metricMovableBy fw:EP_Grooming , fw:EP_TaskTypes , fw:EP_IterationCapacity , fw:EP_TeamRoles , fw:EP_GroundTwo .
+
+fw:Obs_ScopeDelivered a backlog:MetricObservation ;
+    rdfs:label "In-scope work delivered in a package"@en ;
+    backlog:observesMetric fw:Metric_ScopeDelivered ;
+    backlog:observationFor fw:Obj_ScopeDelivered ;
+    backlog:hasObservedValue 100.0 ;
+    backlog:observedAt "2026-08-25T10:00:00"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Counted stories that pursue an objective under Scope_Build and checked each against DeploymentUnit membership. Every one is carried by fw:Rel_v1_80_0. This is the physical measure the owner asked for: not that the work is Done, but that it reached users in a package." .
+
+#  Obj_IntentToWork closes: the third gap now has a named source.
+
+fw:Obs_IntentToWorkFinal a backlog:MetricObservation ;
+    rdfs:label "Steps the suite cannot check — closed"@en ;
+    backlog:observesMetric fw:Metric_IntentToWorkGaps ;
+    backlog:observationFor fw:Obj_IntentToWork ;
+    backlog:hasObservedValue 0.0 ;
+    backlog:observedAt "2026-08-25T10:00:00"^^xsd:dateTime ;
+    backlog:hasObservationMethod "All three as-is gaps now checkable. Grooming: a story reaching Ready is analysed against every concern it declares. Package sizing: an iteration committing beyond capacity is rejected. Autonomy-graded evidence: work produced with no human in or on the loop must carry evidence attesting a criterion, sourced to ISO/IEC 42001's requirement that oversight be proportionate to autonomy and EU AI Act Art. 14. The source existed and was not looked for hard enough; Ex_InventedPractice correctly held the line for four releases until it was found." .

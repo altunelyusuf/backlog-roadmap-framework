@@ -1,5 +1,43 @@
 # Changelog
 
+## v1.82.0 — 2026-08-25 (MINOR: the live lineage closes — every objective met, both directions agree)
+
+**A source was found.** Autonomy-graded evidence was refused for four releases by `Ex_InventedPractice`
+for want of one. **ISO/IEC 42001:2023** requires human oversight *proportionate to autonomy and risk*,
+and EU AI Act Art. 14 states the same for high-risk systems. Applied: work produced with no human in
+or on the loop must carry evidence attesting a criterion, because the supervision that would have
+caught an error did not happen. Supervised work is held to a lower bar — the supervision **is** the
+oversight.
+
+The exclusion held the line correctly. The source existed and was not looked for hard enough.
+
+**Two objectives retired, not deleted.** `Obj_Adopter` and `Obj_Derived` measure adopter self-service,
+the concern of the superseded `Mission_Dev` — and measure the same two refusals twice. Marked
+`Ach_Withdrawn` with reasons: an objective retired with a reason is a decision; one deleted is a
+disappearance.
+
+**A missing objective was found and added.** `Goal_MissionToWork` was measured only by whether the
+*path* from mission to work is checkable. **Nothing measured whether the work that path produced
+actually covers the scope and reached users.** `Obj_ScopeDelivered` closes it — and it is the physical
+measure rather than an assertion: 34 of 34 in-scope stories are carried by a `DeploymentUnit`.
+
+### The live lineage, verified in both directions
+
+```
+DOWN  Mission_BuildSoftware -> Scope_Build -> {Goal_GroundedPractice, Goal_MissionToWork}
+                            -> {Obj_Grounded, Obj_IntentToWork, Obj_ScopeDelivered}
+UP    same objectives -> same goals -> same mission
+AGREE yes
+
+Obj_Grounded        2 -> 0    at 0     MET
+Obj_IntentToWork    3 -> 0    at 0     MET
+Obj_ScopeDelivered  0 -> 100  at 100   MET
+```
+
+Register **0 violations at L4**, 0 of 63 constraints suppressed, 0 open work items, all invariants
+holding, all in-scope work deployed.
+
+
 ## v1.81.0 — 2026-08-25 (MINOR: the completed work is deployed; the last invariant closes)
 
 **46 stories** that were finished and never recorded as delivered are consolidated into one

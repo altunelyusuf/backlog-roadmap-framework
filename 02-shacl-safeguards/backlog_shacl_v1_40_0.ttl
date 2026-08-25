@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.39.0> ;
-    owl:versionInfo "1.39.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.40.0> ;
+    owl:versionInfo "1.40.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.39.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.38.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.37.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.36.0> ;
@@ -3436,4 +3437,26 @@ backlog:PracticeGroundingShape a sh:NodeShape ;
             FILTER (STRSTARTS(STR($this), "http://example.org/backlog#"))
             FILTER NOT EXISTS { $this dcterms:source ?s }
             FILTER NOT EXISTS { $this backlog:isFrameworkOriginal ?f }
+        }""" ] .
+
+#################################################################
+#  v1.40.0 — evidence proportionate to autonomy (ISO/IEC 42001)
+#################################################################
+
+backlog:AutonomyEvidenceShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItem ;
+    sh:severity sh:Violation ;
+    rdfs:label "Unsupervised work carries independent evidence (L3)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: this item was produced with no human in or on the loop and carries no verified evidence attesting an acceptance criterion. ISO/IEC 42001 requires oversight proportionate to autonomy: where nobody supervised, the check that would have caught an error did not happen, so the proof must come from something that could have failed rather than from an assertion. Supervised work is held to a lower bar because the supervision IS the oversight." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L3_Governed, backlog:L4_LineageEnforced))
+            $this backlog:hasState backlog:Done ; backlog:hasSupervisionMode ?sm .
+            ?sm backlog:requiresIndependentEvidence true .
+            FILTER NOT EXISTS {
+                $this backlog:hasAcceptanceCriterion ?ac .
+                ?ev backlog:attestsCriterion ?ac ; backlog:evidenceVerified true .
+            }
         }""" ] .

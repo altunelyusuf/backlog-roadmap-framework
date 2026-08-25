@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.31.0> ;
-    owl:versionInfo "1.31.0" ;
+    owl:versionIRI <http://example.org/backlog/1.32.0> ;
+    owl:versionInfo "1.32.0" ;
+    owl:priorVersion <http://example.org/backlog/1.31.0> ;
     owl:priorVersion <http://example.org/backlog/1.30.0> ;
     owl:priorVersion <http://example.org/backlog/1.29.0> ;
     owl:priorVersion <http://example.org/backlog/1.28.0> ;
@@ -3881,3 +3882,32 @@ backlog:isFrameworkOriginal a owl:DatatypeProperty ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "is framework original"@en ;
     skos:definition "A written statement that this practice has no external source and why it is kept anyway. Required rather than allowing silence, because a practice nobody sourced and a practice deliberately invented are identical in the data — and the first is the common case. Declaring it makes the decision arguable; leaving it blank makes it invisible."@en .
+
+#################################################################
+#  60. Evidence proportionate to autonomy (v1.32.0)
+#
+#  The last gap in Obj_IntentToWork, refused since it was found for
+#  want of a named source. Ex_InventedPractice held the line for
+#  four releases; the source exists and was simply not looked for
+#  hard enough.
+#
+#  ISO/IEC 42001:2023 requires human oversight PROPORTIONATE to a
+#  system's autonomy and risk: more autonomous operation demands
+#  more granular oversight, not the same amount. EU AI Act Art. 14
+#  states the same principle for high-risk systems.
+#
+#  Applied here: work produced with no human in or on the loop
+#  must carry stronger proof than work a person supervised, because
+#  the supervision that would have caught an error did not happen.
+#################################################################
+
+backlog:requiresIndependentEvidence a owl:DatatypeProperty ;
+    rdfs:domain backlog:SupervisionMode ; rdfs:range xsd:boolean ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "requires independent evidence"@en ;
+    dcterms:source "ISO/IEC 42001:2023 — human oversight proportionate to autonomy and risk; EU AI Act Art. 14"@en ;
+    skos:definition "Whether work produced under this supervision mode must be attested by evidence a person did not merely assert. True for Sup_None: with nobody in or on the loop, the supervision that would have caught an error did not happen, so the proof must come from a check that could have failed rather than from a claim. False where a human gated or watched the work — their judgement is itself the oversight the standard asks for."@en .
+
+backlog:Sup_None backlog:requiresIndependentEvidence true .
+backlog:Sup_InTheLoop backlog:requiresIndependentEvidence false .
+backlog:Sup_OnTheLoop backlog:requiresIndependentEvidence false .
