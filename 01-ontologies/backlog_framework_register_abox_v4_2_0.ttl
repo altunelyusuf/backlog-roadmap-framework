@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/4.1.0> ;
-    owl:versionInfo "4.1.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/4.2.0> ;
+    owl:versionInfo "4.2.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/4.1.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/4.0.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/3.9.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/3.8.0> ;
@@ -5090,3 +5091,100 @@ fw:Inv_PlannedToCapacity a backlog:CrossCuttingInvariant ;
     backlog:hasInvariantStatus backlog:Holds ;
     backlog:tracksItem fw:EP_Model ;
     backlog:hasRationale "It3 and It4 each hold 9 points against a declared capacity of 9. Eighteen points of work did not fit one box, so the work was split across two rather than the box stretched — G9. Capacity 9 is a judgement stepped down from the 12 declared by the last closed iteration, recorded as a judgement and not presented as a measurement." .
+
+#################################################################
+#  v4.2.0 — the packages IDENTIFIED. Not built.
+#
+#  Package has existed since early in this framework with zero
+#  instances. Last release, asked to identify packages, this
+#  session wrote DeploymentUnits instead and the L4 clauses
+#  rejected them — a delivery record cannot describe unfinished
+#  work. The conclusion drawn was that packages cannot exist until
+#  the work is done. Wrong: the concept existed, unused, because
+#  nothing in the vocabulary pointed at it.
+#
+#  A package is a deployable business function. Two are identified
+#  here, each a coherent capability the framework could release on
+#  its own — grouped by what they DELIVER, not by which iteration
+#  happens to hold them.
+#################################################################
+
+fw:Pkg_Modelling a backlog:Package ;
+    backlog:hasIdentifier "BRF-PKG-MODEL" ;
+    backlog:hasTitle "Analysis and design artefacts" ;
+    backlog:hasPackageVersion "1.92.0" ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:targetsIteration fw:It3 ;
+    backlog:pursuesObjective fw:Obj_Modelling ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "A package is a grouping; its members carry the scores." ;
+    backlog:hasRationale "A coherent business function on its own: an adopter gains the ability to name what a design task produced and to say which UML kind each artefact is. Releasable without the specification and test-case work, which is what makes it a package rather than a convenient half of one." .
+
+fw:Pkg_StoryDetail a backlog:Package ;
+    backlog:hasIdentifier "BRF-PKG-DETAIL" ;
+    backlog:hasTitle "Story detail: steps, state changes, test cases and data" ;
+    backlog:hasPackageVersion "1.93.0" ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:targetsIteration fw:It3 , fw:It4 ;
+    backlog:pursuesObjective fw:Obj_Modelling ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "A package is a grouping; its members carry the scores." ;
+    backlog:hasRationale "Specification and test specification ship together because neither is usable alone: interaction steps with no test cases cannot be verified, and test cases with nothing specified have no subject. Targets TWO iterations because its content does not fit one box — the package is split across iterations rather than the box stretched, which is what G9 looks like at package level." .
+
+#  Members: grouped by capability, not by time box.
+fw:EP_Model_S1 backlog:memberOfContainer fw:Pkg_Modelling .
+fw:EP_Model_S2 backlog:memberOfContainer fw:Pkg_Modelling .
+fw:EP_Spec_S1 backlog:memberOfContainer fw:Pkg_StoryDetail .
+fw:EP_Spec_S2 backlog:memberOfContainer fw:Pkg_StoryDetail .
+fw:EP_TestSpec_S1 backlog:memberOfContainer fw:Pkg_StoryDetail .
+fw:EP_TestSpec_S2 backlog:memberOfContainer fw:Pkg_StoryDetail .
+
+#  The three historical deployments now name the package they
+#  delivered, so the record reads package-first as the mission asks.
+fw:Pkg_Consolidated a backlog:Package ;
+    backlog:hasIdentifier "BRF-PKG-CONSOLIDATED" ;
+    backlog:hasTitle "All framework capability through v1.80.0" ;
+    backlog:hasPackageVersion "1.80.0" ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:targetsIteration fw:It2 ;
+    backlog:pursuesObjective fw:Obj_ScopeDelivered ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Retrospective grouping of work already scored individually." ;
+    backlog:hasRationale "Identified retroactively over work already shipped, and said to be so. The package existed as a released grouping and had no record; naming it now does not claim it was planned as one." .
+
+fw:Rel_v1_80_0 backlog:deliversPackage fw:Pkg_Consolidated .
+
+#  The consolidated package holds exactly what its deployment carried.
+fw:EP_Fit_S1 backlog:memberOfContainer fw:Pkg_Consolidated .
+fw:EP_Fit_S2 backlog:memberOfContainer fw:Pkg_Consolidated .
+fw:EP_Flow_S1 backlog:memberOfContainer fw:Pkg_Consolidated .
+fw:EP_Flow_S2 backlog:memberOfContainer fw:Pkg_Consolidated .
+fw:EP_Grooming_S1 backlog:memberOfContainer fw:Pkg_Consolidated .
+fw:EP_Grooming_S2 backlog:memberOfContainer fw:Pkg_Consolidated .
+fw:EP_IterationCapacity_S1 backlog:memberOfContainer fw:Pkg_Consolidated .
+fw:EP_OrderCorrect_S1 backlog:memberOfContainer fw:Pkg_Consolidated .
+fw:EP_OrderCorrect_S2 backlog:memberOfContainer fw:Pkg_Consolidated .
+fw:EP_OrderRecord_S1 backlog:memberOfContainer fw:Pkg_Consolidated .
+fw:EP_OrderRecord_S2 backlog:memberOfContainer fw:Pkg_Consolidated .
+fw:EP_PbiTask_S1 backlog:memberOfContainer fw:Pkg_Consolidated .
+fw:EP_PbiTask_S2 backlog:memberOfContainer fw:Pkg_Consolidated .
+fw:EP_Progress_S1 backlog:memberOfContainer fw:Pkg_Consolidated .
+fw:EP_Progress_S2 backlog:memberOfContainer fw:Pkg_Consolidated .
+fw:EP_Schedule_S1 backlog:memberOfContainer fw:Pkg_Consolidated .
+fw:EP_Schedule_S2 backlog:memberOfContainer fw:Pkg_Consolidated .
+fw:EP_TaskTypes_S1 backlog:memberOfContainer fw:Pkg_Consolidated .
+fw:EP_TaskTypes_S2 backlog:memberOfContainer fw:Pkg_Consolidated .
+fw:EP_TeamRoles_S1 backlog:memberOfContainer fw:Pkg_Consolidated .
+fw:EP_ValueRelease_S1 backlog:memberOfContainer fw:Pkg_Consolidated .
+fw:EP_ValueRelease_S2 backlog:memberOfContainer fw:Pkg_Consolidated .
+fw:EP_Views_S1 backlog:memberOfContainer fw:Pkg_Consolidated .
+fw:EP_Views_S2 backlog:memberOfContainer fw:Pkg_Consolidated .
+fw:S33 backlog:memberOfContainer fw:Pkg_Consolidated .
+fw:S41 backlog:memberOfContainer fw:Pkg_Consolidated .
+fw:S42 backlog:memberOfContainer fw:Pkg_Consolidated .
+fw:S43 backlog:memberOfContainer fw:Pkg_Consolidated .
+fw:S_GroundIteration backlog:memberOfContainer fw:Pkg_Consolidated .
+fw:S_GroundSelection backlog:memberOfContainer fw:Pkg_Consolidated .

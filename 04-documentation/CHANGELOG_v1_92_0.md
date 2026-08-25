@@ -1,5 +1,44 @@
 # Changelog
 
+## v1.92.0 — 2026-08-25 (MINOR: the packages IDENTIFIED — a class unused for 91 releases)
+
+**The owner was right and the previous release reasoned wrongly from a real constraint.**
+
+`Package` — *"a deployable business function: a coherent group of work items that together deliver
+meaningful, manually-testable functionality the business can release as a unit"* — has existed since
+early in this framework with **zero instances across 91 releases**, while three `DeploymentUnit`s were
+written.
+
+**Why it sat unused: nothing in the vocabulary pointed at it.** No property had `Package` as its range,
+so a package could be declared and never referred to. A class nothing can reference is a class nobody
+uses.
+
+The cost showed as a false conclusion. Asked last release to identify packages, this session wrote
+`DeploymentUnit`s describing what the iterations *would* ship; four L4 clauses rejected each, correctly,
+because a delivery record cannot describe unfinished work. The inference drawn was **"packages cannot
+exist until the work is done"**. The concept existed the whole time.
+
+### Three packages, identified
+
+```
+Pkg_Consolidated   v1.80.0   targets It2        30 members, 30 Done   delivered by Rel_v1_80_0
+Pkg_Modelling      v1.92.0   targets It3         2 members,  0 Done   NOT YET
+Pkg_StoryDetail    v1.93.0   targets It3+It4     4 members,  0 Done   NOT YET
+```
+
+**Grouped by what they deliver, not by which iteration holds them.** `Pkg_Modelling` is releasable on
+its own — an adopter gains the ability to name what a design task produced. `Pkg_StoryDetail` ships
+specification and test specification together because neither is usable alone: interaction steps with
+no test cases cannot be verified, and test cases with nothing specified have no subject.
+
+`targetsIteration` is **not functional**: `Pkg_StoryDetail` targets two, because its content does not
+fit one box. Splitting the package rather than stretching the box is G9 at package level.
+
+`deliversPackage` joins the delivery record to the package. `Pkg_Consolidated` is identified
+retroactively over work already shipped **and says so** — naming it now does not claim it was planned
+as one.
+
+
 ## v1.91.0 — 2026-08-25 (MINOR: sprint plans — two iterations sized to hold their content)
 
 **As-is answer: no.** Three packages existed and **every one was historical**. Both iterations were

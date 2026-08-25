@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.44.0
+# Backlog & Roadmap Semantic Framework — Standard v1.45.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -704,6 +704,29 @@ before.
 
 The remedy when a deliverable has no clause is to **amend the mission**, recording the owner's words as
 its source — not to drop the deliverable, if the owner asked for it, and not to let the gap stand.
+
+### 2.5c-xxiv A package is identified, then delivered
+
+`Package` is the deployable business function — a coherent capability releasable on its own.
+`DeploymentUnit` is the **record that it shipped**. They are different objects at different times, and
+`deliversPackage` joins them.
+
+**The class existed for 91 releases with zero instances**, because nothing in the vocabulary pointed at
+it: a `Package` could be declared and never referred to. The consequence showed up as a false
+conclusion — asked to identify packages, a session wrote `DeploymentUnit`s describing what iterations
+*would* ship, the L4 clauses correctly rejected them, and the inference drawn was that packages cannot
+exist before the work is done. The concept existed and was unused.
+
+`targetsIteration` is deliberately **not** functional. A package whose content does not fit one time box
+targets two — splitting the package across iterations rather than stretching the box is what G9 looks
+like at package level.
+
+`hasPackageVersion` is recorded at identification, so the increment is a decision taken with the content
+in view rather than a label applied afterwards.
+
+**Packages are grouped by what they deliver, not by which iteration holds them.** An iteration is a
+time box; a package is a capability; conflating them is how a release becomes "whatever finished this
+fortnight".
 
 ### 2.5d Decomposition, commitments, dependency kinds, impediments, flow, team (subject v1.4.0)
 
