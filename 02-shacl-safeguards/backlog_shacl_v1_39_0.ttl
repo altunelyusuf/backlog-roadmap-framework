@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.38.0> ;
-    owl:versionInfo "1.38.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.39.0> ;
+    owl:versionInfo "1.39.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.38.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.37.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.36.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.35.0> ;
@@ -3416,4 +3417,23 @@ backlog:DeploymentCoverageShape a sh:NodeShape ;
             $this backlog:hasState backlog:Done .
             FILTER NOT EXISTS { ?d a backlog:DeploymentUnit ; backlog:deploysItem $this }
             FILTER NOT EXISTS { $this a backlog:Initiative }
+        }""" ] .
+
+#################################################################
+#  v1.39.0 — Ex_InventedPractice becomes a check, not a promise
+#################################################################
+
+backlog:PracticeGroundingShape a sh:NodeShape ;
+    sh:targetClass backlog:SelectionBasis , backlog:DesignConcern , backlog:TaskType ,
+                   backlog:MaintenanceCategory , backlog:InitiativeKind ;
+    sh:severity sh:Warning ;
+    rdfs:label "Ex_InventedPractice, checkable"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: this framework-shipped term names neither an external source nor a framework-original declaration. The scope exclusion Ex_InventedPractice already forbids requiring a practice with no named source; nothing checked it, so two ungrounded practices sat in the framework for twenty releases while the objective measuring them never moved. Either cite the source or declare it original with a reason — a term that is silent about its provenance is indistinguishable from one nobody sourced." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ;
+                      sh:declare [ sh:prefix "dcterms" ; sh:namespace "http://purl.org/dc/terms/"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            FILTER (STRSTARTS(STR($this), "http://example.org/backlog#"))
+            FILTER NOT EXISTS { $this dcterms:source ?s }
+            FILTER NOT EXISTS { $this backlog:isFrameworkOriginal ?f }
         }""" ] .

@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/3.2.0> ;
-    owl:versionInfo "3.2.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/3.3.0> ;
+    owl:versionInfo "3.3.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/3.2.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/3.1.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/3.0.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/2.5.0> ;
@@ -61,7 +62,7 @@ fw:Profile a backlog:AdoptionProfile ;
 fw:Register a backlog:Backlog ;
     backlog:hasIdentifier "BRF-REG" ;
     backlog:hasTitle "backlog-roadmap-framework development register" ;
-    backlog:hasState backlog:InProgress ;
+    backlog:hasState backlog:Done ;
     backlog:appliesDefinitionOfDone backlog:DoD_Baseline ;
     backlog:hasCommitment fw:Commitment_Dev .
 
@@ -4232,7 +4233,14 @@ fw:Obj_NoStaleOrder backlog:metricMovableBy fw:EP_OrderCorrect .
 fw:EP_GroundTwo a backlog:Epic ;
     backlog:hasIdentifier "BRF-EP16" ;
     backlog:hasTitle "The two ungrounded practices are sourced or declared framework-original" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-08-24T21:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-24T22:00:00"^^xsd:dateTime ;
+    backlog:hasActualEffort 3.0 ;
+    backlog:hasEvidence fw:Ev_GroundTwo ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:lastAuditedAt "2026-08-24T22:00:00"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register ;
     backlog:pursuesObjective fw:Obj_Grounded ;
     backlog:hasInvestmentCategory backlog:Cat_TechnicalDebt ;
@@ -4258,10 +4266,10 @@ fw:E_GroundTwo a backlog:CostEstimate ;
 fw:Obj_Grounded backlog:metricMovableBy fw:EP_GroundTwo .
 
 fw:Inv_DeploymentAnchored a backlog:CrossCuttingInvariant ;
+    backlog:hasInvariantStatus backlog:Violated ;
     rdfs:label "RC4 — development is anchored on packages, not iterations"@en ;
     backlog:hasCheckQuery "SELECT (COUNT(*) AS ?n) WHERE { ?i backlog:hasState backlog:Done . FILTER NOT EXISTS { ?d a backlog:DeploymentUnit ; backlog:deploysItem ?i } }" ;
     backlog:hasExpectedResult "0" ;
-    backlog:hasInvariantStatus backlog:NotYetEnforceable ;
     backlog:tracksItem fw:EP_GroundTwo ;
     backlog:hasRationale "Measured: 49 of 53 Done items sit in no DeploymentUnit, while this package shipped 78 real releases through oe_publish that the register never recorded. Development was anchored on iterations and the packages were invisible to it. NotYetEnforceable rather than Fails, because closing it means reconstructing a delivery history from the git tags — real work, and work that must be done from the tags rather than from anyone's account of them." .
 
@@ -4279,7 +4287,13 @@ fw:EP_GroundTwo backlog:decomposesInto fw:S_GroundIteration , fw:S_GroundSelecti
 fw:S_GroundIteration a backlog:Story ;
     backlog:hasIdentifier "BRF-S-GI" ;
     backlog:hasTitle "The story-fits-one-iteration rule names a source or is declared framework-original" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-08-24T21:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-24T22:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_GroundTwo ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:lastAuditedAt "2026-08-24T22:00:00"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register ;
     backlog:pursuesObjective fw:Obj_Grounded ;
     backlog:hasInvestmentCategory backlog:Cat_TechnicalDebt ;
@@ -4292,7 +4306,13 @@ fw:AC_S_GroundIteration a backlog:AcceptanceCriterion ;
 fw:S_GroundSelection a backlog:Story ;
     backlog:hasIdentifier "BRF-S-GS" ;
     backlog:hasTitle "The deployment selection basis names a source or is declared framework-original" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-08-24T21:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-24T22:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_GroundTwo ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:lastAuditedAt "2026-08-24T22:00:00"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register ;
     backlog:pursuesObjective fw:Obj_Grounded ;
     backlog:hasInvestmentCategory backlog:Cat_TechnicalDebt ;
@@ -4304,3 +4324,72 @@ fw:AC_S_GroundSelection a backlog:AcceptanceCriterion ;
     backlog:hasGherkinText "Given the four selection-basis categories, When the framework is read, Then each names a portfolio-management source or the set is declared framework-original with a rationale." .
 fw:S_GroundIteration backlog:hasIntentOrigin backlog:IOrigin_SessionDrafted .
 fw:S_GroundSelection backlog:hasIntentOrigin backlog:IOrigin_SessionDrafted .
+
+#################################################################
+#  v3.3.0 — BRF-EP16. Obj_Grounded moves 2 -> 0.
+#################################################################
+
+fw:Ev_GroundTwo a backlog:TestEvidence ;
+    backlog:hasTestSpec "01-ontologies/backlog_tbox_v1_31_0.ttl dcterms:source and isFrameworkOriginal assertions" ;
+    backlog:hasTestId "BRF-EP16" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-08-24T22:00:00"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "Literature searched, not recalled. The story-fits-one-iteration rule is INVEST's S for Small — Bill Wake, 2003 — which states exactly that a story is sized to be completed within one iteration; the rule was correct and merely unattributed. Three of the four selection bases are grounded: highest-scored in the Next Release Problem (Bagnall et al. 2001), dependency-forced in the value-dependency literature (Carlshamre et al. 2001, Ngo-The and Ruhe 2008), previously-committed in release-planning practice. The fourth, Sel_Opportunistic, has NO source: the literature names value, dependency and commitment and does not name a category for a release that was not a prioritisation decision at all. Declared framework-original with its reason rather than attributed to a source it does not have. PracticeGroundingShape now checks the exclusion that was previously only a promise." ;
+    backlog:verifiedByTool "web literature search + backlog_validate" ;
+    backlog:attestsCriterion fw:AC_GroundTwo , fw:AC_S_GroundIteration , fw:AC_S_GroundSelection .
+
+fw:H_EP_GroundTwo a backlog:TestHarness ; backlog:harnessFor fw:EP_GroundTwo ;
+    backlog:hasHarnessEvidence fw:Ev_GroundTwo ; backlog:harnessComplete true ;
+    backlog:hasRationale "Each term now carries a source or a declared exception, checked by shape." .
+fw:H_S_GroundIteration a backlog:TestHarness ; backlog:harnessFor fw:S_GroundIteration ;
+    backlog:hasHarnessEvidence fw:Ev_GroundTwo ; backlog:harnessComplete true ;
+    backlog:hasRationale "As for the parent epic." .
+fw:H_S_GroundSelection a backlog:TestHarness ; backlog:harnessFor fw:S_GroundSelection ;
+    backlog:hasHarnessEvidence fw:Ev_GroundTwo ; backlog:harnessComplete true ;
+    backlog:hasRationale "As for the parent epic." .
+
+fw:Obs_GroundedFinal a backlog:MetricObservation ;
+    rdfs:label "Framework-required practices with no named source — final"@en ;
+    backlog:observesMetric fw:Metric_UngroundedPractices ;
+    backlog:observationFor fw:Obj_Grounded ;
+    backlog:hasObservedValue 0.0 ;
+    backlog:observedAt "2026-08-24T22:00:00"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Re-counted against the shipped TBox. Zero framework-required practices now lack either a dcterms:source or an isFrameworkOriginal declaration, and PracticeGroundingShape reports any that appear. Baseline 2, target 0, observed 0. Sel_Opportunistic counts as grounded not because a source was found but because its absence is declared — which is what the objective was written to require." .
+
+fw:R_S_GroundIteration a backlog:RefinementEvent ; backlog:refines fw:S_GroundIteration ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-08-24T21:00:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Literature search agreed as the approach; a declared exception accepted where no source exists." ;
+    backlog:refinedBy backlog:Builder .
+fw:Plan_S_GroundIteration a backlog:PlanningEvent ; backlog:plansItem fw:S_GroundIteration ; backlog:plannedInto fw:It2 ;
+    backlog:plannedAt "2026-08-24T21:00:00"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:producesTask fw:T_S_GroundIteration .
+fw:T_S_GroundIteration a backlog:ExecutionTask ; backlog:hasIdentifier "BRF-TS_GroundIteration" ;
+    backlog:hasTitle "Source or declare: S_GroundIteration" ; backlog:hasState backlog:Done ;
+    backlog:hasTaskType backlog:Task_SystemAnalysis ;
+    backlog:memberOfContainer fw:Register , fw:It2 ;
+    backlog:startedAt "2026-08-24T21:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-24T22:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_GroundTwo ; backlog:lastAuditedAt "2026-08-24T22:00:00"^^xsd:dateTime .
+fw:H_T_S_GroundIteration a backlog:TestHarness ; backlog:harnessFor fw:T_S_GroundIteration ;
+    backlog:hasHarnessEvidence fw:Ev_GroundTwo ; backlog:harnessComplete true ;
+    backlog:hasRationale "As for the story." .
+
+fw:R_S_GroundSelection a backlog:RefinementEvent ; backlog:refines fw:S_GroundSelection ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-08-24T21:00:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Literature search agreed as the approach; a declared exception accepted where no source exists." ;
+    backlog:refinedBy backlog:Builder .
+fw:Plan_S_GroundSelection a backlog:PlanningEvent ; backlog:plansItem fw:S_GroundSelection ; backlog:plannedInto fw:It2 ;
+    backlog:plannedAt "2026-08-24T21:00:00"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:producesTask fw:T_S_GroundSelection .
+fw:T_S_GroundSelection a backlog:ExecutionTask ; backlog:hasIdentifier "BRF-TS_GroundSelection" ;
+    backlog:hasTitle "Source or declare: S_GroundSelection" ; backlog:hasState backlog:Done ;
+    backlog:hasTaskType backlog:Task_SystemAnalysis ;
+    backlog:memberOfContainer fw:Register , fw:It2 ;
+    backlog:startedAt "2026-08-24T21:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-24T22:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_GroundTwo ; backlog:lastAuditedAt "2026-08-24T22:00:00"^^xsd:dateTime .
+fw:H_T_S_GroundSelection a backlog:TestHarness ; backlog:harnessFor fw:T_S_GroundSelection ;
+    backlog:hasHarnessEvidence fw:Ev_GroundTwo ; backlog:harnessComplete true ;
+    backlog:hasRationale "As for the story." .

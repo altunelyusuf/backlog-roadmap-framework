@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.38.0
+# Backlog & Roadmap Semantic Framework — Standard v1.39.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -591,6 +591,23 @@ is how a register reaches every epic Done with its objectives untouched. When th
 **Deployment coverage** — an advisory on any Done item in no `DeploymentUnit`. Work reaches users
 through regularly deployable packages; a register where completion and delivery are separate records
 measures the first and assumes the second.
+
+### 2.5c-xviii Every shipped term declares its provenance
+
+`Ex_InventedPractice` says no practice the framework **requires** may lack a named external source. It
+was a scope exclusion a reader had to honour, with **nothing checking it** — so two ungrounded
+practices sat in the framework for twenty releases while the objective measuring them never moved.
+
+`PracticeGroundingShape` makes it checkable: every term the framework ships in its own namespace must
+carry either a `dcterms:source` or an `isFrameworkOriginal` declaration.
+
+**`isFrameworkOriginal` requires a written reason**, not a flag. A practice nobody sourced and a
+practice deliberately invented are otherwise identical in the data — and the first is the common case.
+`Sel_Opportunistic` is the framework's one declared original: release-planning literature names value,
+dependency and commitment, and does not name a category for a release that was not a prioritisation
+decision at all.
+
+The point is not that every term has a citation. It is that **no term is silent about its provenance**.
 
 ### 2.5d Decomposition, commitments, dependency kinds, impediments, flow, team (subject v1.4.0)
 

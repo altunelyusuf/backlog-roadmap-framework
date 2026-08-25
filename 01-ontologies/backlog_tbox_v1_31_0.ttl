@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.30.0> ;
-    owl:versionInfo "1.30.0" ;
+    owl:versionIRI <http://example.org/backlog/1.31.0> ;
+    owl:versionInfo "1.31.0" ;
+    owl:priorVersion <http://example.org/backlog/1.30.0> ;
     owl:priorVersion <http://example.org/backlog/1.29.0> ;
     owl:priorVersion <http://example.org/backlog/1.28.0> ;
     owl:priorVersion <http://example.org/backlog/1.27.0> ;
@@ -133,6 +134,7 @@ backlog:Story a owl:Class ;
     rdfs:subClassOf backlog:WorkItem ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "Story"@en ;
+    dcterms:source "Bill Wake, INVEST in Good Stories (2003) — the S is Small: a story sized to be completed within one iteration"@en ;
     skos:definition "A single, independently deliverable user-facing slice of functionality, small enough to be completed within one iteration and to be attested by a named test."@en .
 
 backlog:Task a owl:Class ;
@@ -3182,15 +3184,19 @@ backlog:SelectionBasis a owl:Class ;
     skos:definition "How a deployment's contents were chosen. Recorded because a release grouped by theme and a release of the most valuable available work are otherwise indistinguishable in the register, and only one of them is a prioritisation decision. Closed at four, because the interesting question is not which method was used but whether value was consulted at all."@en .
 
 backlog:Sel_HighestScored a owl:NamedIndividual , backlog:SelectionBasis ;
+    dcterms:source "Bagnall, Rayward-Smith & Whittley, The Next Release Problem (2001) — select the subset of highest value subject to constraint"@en ;
     rdfs:label "Highest scored"@en ;
     skos:definition "The highest-scoring deliverable work available at the release boundary. The default a value-driven roadmap should be able to claim, and the only basis under which a passed-over higher score is a defect rather than a choice."@en .
 backlog:Sel_Dependency a owl:NamedIndividual , backlog:SelectionBasis ;
+    dcterms:source "Carlshamre et al. (2001) and Ngo-The & Ruhe (2008) — value dependencies constrain selection independently of value"@en ;
     rdfs:label "Dependency forced"@en ;
     skos:definition "Lower-scored work taken because higher-scored work depends on it. Value was consulted and overridden by structure, which is legitimate and different from not consulting it."@en .
 backlog:Sel_Committed a owl:NamedIndividual , backlog:SelectionBasis ;
+    dcterms:source "Release planning practice: a commitment already given is honoured independently of current ranking"@en ;
     rdfs:label "Previously committed"@en ;
     skos:definition "Work carried because it was promised, independently of its current score. Honest, and worth distinguishing: a register where every release reads this way is one where scoring changes nothing."@en .
 backlog:Sel_Opportunistic a owl:NamedIndividual , backlog:SelectionBasis ;
+    backlog:isFrameworkOriginal "No source found. Release-planning literature names value, dependency and commitment as selection criteria and does NOT name a category for a release that was not a prioritisation decision at all. Declared framework-original rather than attributed to a source it does not have: the category exists because without it such a release must be recorded as though it had been prioritised, and that is the misreport the vocabulary is meant to prevent."@en ;
     rdfs:label "Opportunistic"@en ;
     skos:definition "Whatever happened to be finished. The honest option for a release that was not a prioritisation decision, and the one whose absence from the vocabulary would force such a release to be recorded as though it had been."@en .
 
@@ -3859,3 +3865,19 @@ backlog:metricMovableBy a owl:ObjectProperty ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "metric movable by"@en ;
     skos:definition "A work item that can actually shift this objective's measured value. Distinct from pursuesObjective, which records what work CLAIMS to serve an objective: an epic can pursue an objective and be incapable of moving its metric by construction, which is how a register reaches every epic Done with its objectives untouched and nothing flagged. Asserting movability is a claim someone can be wrong about, and being wrong about it is visible when the metric does not move."@en .
+
+#################################################################
+#  59. Practice grounding, machine-checkable (v1.31.0) — BRF-EP16
+#
+#  Ex_InventedPractice says no practice the framework REQUIRES may
+#  lack a named external source. It was a scope exclusion a reader
+#  had to honour, with nothing checking it — so two ungrounded
+#  practices sat in the framework for twenty releases and the
+#  objective measuring them never moved.
+#################################################################
+
+backlog:isFrameworkOriginal a owl:DatatypeProperty ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "is framework original"@en ;
+    skos:definition "A written statement that this practice has no external source and why it is kept anyway. Required rather than allowing silence, because a practice nobody sourced and a practice deliberately invented are identical in the data — and the first is the common case. Declaring it makes the decision arguable; leaving it blank makes it invisible."@en .

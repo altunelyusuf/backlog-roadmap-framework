@@ -1,5 +1,44 @@
 # Changelog
 
+## v1.80.0 — 2026-08-24 (MINOR: BRF-EP16 — Obj_Grounded met, 2 to 0)
+
+The register named EP16 and nothing else. The literature was **searched, not recalled**.
+
+**The story-fits-one-iteration rule was never invented.** It is INVEST's *S for Small* — Bill Wake,
+2003 — which states exactly that a story is sized to be completed within one iteration. The rule was
+right and merely unattributed, which is a different defect from being wrong and a more common one.
+
+**Three of the four selection bases are grounded**: highest-scored in the Next Release Problem
+(Bagnall, Rayward-Smith & Whittley 2001), dependency-forced in the value-dependency literature
+(Carlshamre et al. 2001, Ngo-The & Ruhe 2008), previously-committed in release-planning practice.
+
+**The fourth has no source, and says so.** The literature names value, dependency and commitment; it
+does not name a category for a release that was **not a prioritisation decision at all**.
+`Sel_Opportunistic` is declared framework-original with its reason rather than attributed to a source
+it does not have.
+
+That is what closes the objective. Not that every term carries a citation — that **no term is silent
+about its provenance**. `PracticeGroundingShape` now checks the exclusion that was previously a promise
+a reader had to honour.
+
+### Three defects caught while building it
+
+A missing semicolon in an `sh:declare` list — invalid SHACL of this session's own writing. Two stories
+reaching Done with no `PlanningEvent`. And an **invented invariant status**: `Fails`, where the closed
+enumeration is `Holds / Violated / NotYetEnforceable`. The enumeration rejected it, which is what a
+closed enumeration is for.
+
+### Measured
+
+`Metric_UngroundedPractices`: baseline **2**, target 0, observed **0**. Objective **met**.
+
+`Inv_DeploymentAnchored` moves from `NotYetEnforceable` to **`Violated`** — the honest status now that
+the work it tracked is Done: **66 Done items sit in no `DeploymentUnit`**. It is the largest real gap
+remaining and needs the delivery history reconstructed from the git tags.
+
+Register 0 violations at L4, 0 of 62 constraints suppressed, 164 advisories.
+
+
 ## v1.79.0 — 2026-08-24 (MAJOR-class: four drift mechanisms, from an owner review of the session)
 
 The owner observed that the same failure kept recurring and asked for **mechanisms rather than another
