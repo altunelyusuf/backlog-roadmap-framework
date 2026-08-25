@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/3.3.0> ;
-    owl:versionInfo "3.3.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/3.4.0> ;
+    owl:versionInfo "3.4.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/3.3.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/3.2.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/3.1.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/3.0.0> ;
@@ -665,7 +666,7 @@ fw:Fc_Remaining a backlog:Forecast ;
 fw:SC_Schedule a backlog:ScopeChange ;
     rdfs:label "Admit a time-phased baseline, reversing Ex_Schedule"@en ;
     backlog:changesScope fw:Scope ;
-    backlog:admitsItem fw:EP_Views , fw:EP_Schedule ;
+    backlog:admitsItem  fw:EP_Schedule ;
     backlog:hasScopeChangeRationale "Owner decision, 2026-08-09. Ex_Schedule refused planned dates on the grounds that horizons are ordinal and a baseline would change what a roadmap IS. That reasoning still holds for the ROADMAP and is unchanged: horizons stay ordinal and hasRoadmapRank stays an ordering. What is admitted is a PLAN alongside the roadmap, not instead of it — a separate artifact carrying dates, against which schedule performance is measured. The exclusion stands as the record of why this was refused; this change records why it no longer is." ;
     backlog:decidedBy backlog:Owner .
 
@@ -1543,7 +1544,7 @@ fw:Obs_ProgressAsIs a backlog:MetricObservation ;
 fw:SC_Executable a backlog:ScopeChange ;
     rdfs:label "Admit progress-bearing views, iteration fit, and value-based release selection"@en ;
     backlog:changesScope fw:Scope ;
-    backlog:admitsItem fw:EP_Progress , fw:EP_Fit , fw:EP_ValueRelease ;
+    backlog:admitsItem   fw:EP_ValueRelease ;
     backlog:hasScopeChangeRationale "Owner request, 2026-08-11. Three additions, none reversing an existing exclusion: Ex_Scale, Ex_Method, Ex_Modality and Ex_Complexity are untouched. Value-based release selection in particular does NOT prescribe a delivery method — it constrains what a DeploymentUnit may claim about how its contents were chosen, not how a team runs planning." ;
     backlog:decidedBy backlog:Owner .
 fw:Scope backlog:scopeRealizesObjective fw:Obj_ProgressInViews , fw:Obj_Finishable .
@@ -1792,7 +1793,7 @@ fw:Obs_StaleOrderAsIs a backlog:MetricObservation ;
 fw:SC_OrderRepair a backlog:ScopeChange ;
     rdfs:label "Admit the order-recording work"@en ;
     backlog:changesScope fw:Scope ;
-    backlog:admitsItem fw:EP_OrderRecord , fw:EP_OrderCorrect ;
+    backlog:admitsItem  fw:EP_OrderCorrect ;
     backlog:hasScopeChangeRationale "Owner request following the v3.0.0 ruling. Note the shape of this entry: the earlier scope fw:Scope had to be AMENDED to admit this work, which is the third such amendment and is precisely the pattern that motivated the reordering. The new work is scoped under fw:Scope_Order, written before its goals." ;
     backlog:decidedBy backlog:Owner .
 
@@ -1930,7 +1931,7 @@ fw:Gate_FitGap a backlog:AdaptationGate ;
 
 fw:Find_Views a backlog:FitGapFinding ;
     backlog:findingOf fw:Adapt_Register ;
-    backlog:findingItem fw:EP_Views , fw:EP_Schedule ;
+    backlog:findingItem  fw:EP_Schedule ;
     backlog:hasRationale "Both pursue Obj_Views, admitted by the SC_Schedule scope change but never added to what the scope statement says it realises. The change record and the boundary disagreed, and nothing noticed because the boundary was never asked to refuse anything." .
 
 # WITHDRAWN: this finding was a defect in the fit-gap check, not a gap in the
@@ -1969,7 +1970,7 @@ fw:Scope_v2 a backlog:ScopeStatement ;
 fw:SC_ScopeCorrection a backlog:ScopeChange ;
     rdfs:label "Record in the boundary what SC_Schedule already admitted"@en ;
     backlog:changesScope fw:Scope ;
-    backlog:admitsItem fw:EP_Views , fw:EP_Schedule ;
+    backlog:admitsItem  fw:EP_Schedule ;
     backlog:hasScopeChangeRationale "Not a widening. SC_Schedule admitted this work on 2026-08-09 by owner decision; the scope statement was never updated to say it realises Obj_Views, so the change record and the boundary disagreed for eleven releases. Nothing noticed because the boundary was written after the work and was therefore never asked to refuse anything — which is the exact failure mode that motivated the scope-first reordering, found in this register by the procedure built to look for it. Ex_Schedule is NOT restored to Scope_v2: it was superseded by SC_Schedule and remains readable on fw:Scope, where it records a decision that was true when taken." ;
     backlog:decidedBy backlog:Owner .
 
@@ -4124,7 +4125,7 @@ fw:Init_SdlcConcepts backlog:hasState backlog:Done ;
     backlog:hasExecutionModality backlog:Mode_Hybrid ;
     backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
     backlog:lastAuditedAt "2026-08-21T11:00:00"^^xsd:dateTime ;
-    backlog:decomposesInto fw:EP_Grooming , fw:EP_IterationCapacity , fw:EP_TeamRoles , fw:EP_TaskTypes .
+    backlog:decomposesInto    fw:EP_TaskTypes .
 fw:H_Init_SdlcConcepts a backlog:TestHarness ; backlog:harnessFor fw:Init_SdlcConcepts ;
     backlog:hasHarnessEvidence fw:Ev_TaskTypes ; backlog:harnessComplete true ;
     backlog:hasRationale "Attested through its four epics, each carrying its own fixture." .
@@ -4206,13 +4207,13 @@ fw:Goal_Measurable backlog:derivesFromScope fw:Scope_v2 .
 fw:Goal_OrderVisible backlog:derivesFromScope fw:Scope_Order .
 fw:Goal_MissionToWork backlog:derivesFromScope fw:Scope_Build .
 fw:Goal_GroundedPractice backlog:derivesFromScope fw:Scope_Build .
-fw:Obj_IntentToWork backlog:metricMovableBy fw:EP_Grooming , fw:EP_TaskTypes , fw:EP_IterationCapacity .
+fw:Obj_IntentToWork backlog:metricMovableBy  fw:EP_TaskTypes  .
 fw:Obj_Grounded backlog:metricMovableBy fw:EP_TeamRoles .
-fw:Obj_Derived backlog:metricMovableBy fw:EP_PbiTask , fw:EP_Flow , fw:EP_Progress .
+fw:Obj_Derived backlog:metricMovableBy   fw:EP_Progress .
 fw:Obj_Adopter backlog:metricMovableBy fw:EP_Views .
-fw:Obj_Views backlog:metricMovableBy fw:EP_Views , fw:EP_Schedule .
+fw:Obj_Views backlog:metricMovableBy  fw:EP_Schedule .
 fw:Obj_ProgressInViews backlog:metricMovableBy fw:EP_Progress .
-fw:Obj_Finishable backlog:metricMovableBy fw:EP_Fit , fw:EP_ValueRelease .
+fw:Obj_Finishable backlog:metricMovableBy  fw:EP_ValueRelease .
 fw:Obj_OrderRecordable backlog:metricMovableBy fw:EP_OrderRecord .
 fw:Obj_NoStaleOrder backlog:metricMovableBy fw:EP_OrderCorrect .
 
@@ -4271,7 +4272,7 @@ fw:Inv_DeploymentAnchored a backlog:CrossCuttingInvariant ;
     backlog:hasCheckQuery "SELECT (COUNT(*) AS ?n) WHERE { ?i backlog:hasState backlog:Done . FILTER NOT EXISTS { ?d a backlog:DeploymentUnit ; backlog:deploysItem ?i } }" ;
     backlog:hasExpectedResult "0" ;
     backlog:tracksItem fw:EP_GroundTwo ;
-    backlog:hasRationale "Measured: 49 of 53 Done items sit in no DeploymentUnit, while this package shipped 78 real releases through oe_publish that the register never recorded. Development was anchored on iterations and the packages were invisible to it. NotYetEnforceable rather than Fails, because closing it means reconstructing a delivery history from the git tags — real work, and work that must be done from the tags rather than from anyone's account of them." .
+    backlog:hasRationale "CLOSED at v1.80.0 by consolidating all completed work into one package. Previously: 49 of 53 Done items sat in no DeploymentUnit, while this package shipped 78 real releases through oe_publish that the register never recorded. Development was anchored on iterations and the packages were invisible to it. NotYetEnforceable rather than Fails, because closing it means reconstructing a delivery history from the git tags — real work, and work that must be done from the tags rather than from anyone's account of them." .
 
 #  Goals under superseded missions derive from Scope_v2, the
 #  boundary of the original development. Recorded rather than left
@@ -4393,3 +4394,64 @@ fw:T_S_GroundSelection a backlog:ExecutionTask ; backlog:hasIdentifier "BRF-TS_G
 fw:H_T_S_GroundSelection a backlog:TestHarness ; backlog:harnessFor fw:T_S_GroundSelection ;
     backlog:hasHarnessEvidence fw:Ev_GroundTwo ; backlog:harnessComplete true ;
     backlog:hasRationale "As for the story." .
+
+#################################################################
+#  v3.4.0 — the Done work is deployed as one package.
+#
+#  Owner instruction: deploy the done items as a single package.
+#  46 items that were finished and never recorded as delivered.
+#
+#  Stories only: an epic is a theme delivered THROUGH its stories
+#  and is not itself deployable, which the L4 clause enforces.
+#
+#  Sel_Committed, not Sel_HighestScored: this package carries
+#  everything already complete rather than a value-selected subset,
+#  and claiming otherwise would misreport how its contents were
+#  chosen. That is exactly what SelectionBasis exists to prevent.
+#
+#  Closes Inv_DeploymentAnchored, the last invariant not holding.
+#################################################################
+
+fw:Rel_v1_80_0 a backlog:DeploymentUnit ;
+    backlog:hasIdentifier "BRF-REL-v1.80.0" ;
+    backlog:hasTitle "Consolidated package: all completed work through v1.80.0" ;
+    backlog:hasState backlog:Done ;
+    backlog:hasDeploymentDate "2026-08-25T09:00:00"^^xsd:dateTime ;
+    backlog:deploysFrom fw:It2 ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:hasSelectionBasis backlog:Sel_Committed ;
+    backlog:hasRationale "Consolidates work completed across the whole development and never recorded as delivered. Committed rather than highest-scored because the package carries everything already done, not a value-selected subset — the register must say how contents were chosen, and this was not a prioritisation decision." ;
+    backlog:deploysItem   fw:EP_Fit_S1 , fw:EP_Fit_S2 ,  fw:EP_Flow_S1 , fw:EP_Flow_S2 ,  fw:EP_Grooming_S1 , fw:EP_Grooming_S2 ,    fw:EP_IterationCapacity_S1 ,  fw:EP_OrderCorrect_S1 , fw:EP_OrderCorrect_S2 ,  fw:EP_OrderRecord_S1 , fw:EP_OrderRecord_S2 ,  fw:EP_PbiTask_S1 , fw:EP_PbiTask_S2 ,  fw:EP_Progress_S1 , fw:EP_Progress_S2 ,  fw:EP_Schedule_S1 , fw:EP_Schedule_S2 ,  fw:EP_TaskTypes_S1 , fw:EP_TaskTypes_S2 ,  fw:EP_TeamRoles_S1 ,  fw:EP_ValueRelease_S1 , fw:EP_ValueRelease_S2 ,  fw:EP_Views_S1 , fw:EP_Views_S2 , fw:S33 , fw:S41 , fw:S42 , fw:S43 , fw:S_GroundIteration , fw:S_GroundSelection .
+
+fw:EP_Fit_S1 backlog:memberOfContainer fw:Rel_v1_80_0 .
+fw:EP_Fit_S2 backlog:memberOfContainer fw:Rel_v1_80_0 .
+fw:EP_Flow_S1 backlog:memberOfContainer fw:Rel_v1_80_0 .
+fw:EP_Flow_S2 backlog:memberOfContainer fw:Rel_v1_80_0 .
+fw:EP_Grooming_S1 backlog:memberOfContainer fw:Rel_v1_80_0 .
+fw:EP_Grooming_S2 backlog:memberOfContainer fw:Rel_v1_80_0 .
+fw:EP_IterationCapacity_S1 backlog:memberOfContainer fw:Rel_v1_80_0 .
+fw:EP_OrderCorrect_S1 backlog:memberOfContainer fw:Rel_v1_80_0 .
+fw:EP_OrderCorrect_S2 backlog:memberOfContainer fw:Rel_v1_80_0 .
+fw:EP_OrderRecord_S1 backlog:memberOfContainer fw:Rel_v1_80_0 .
+fw:EP_OrderRecord_S2 backlog:memberOfContainer fw:Rel_v1_80_0 .
+fw:EP_PbiTask_S1 backlog:memberOfContainer fw:Rel_v1_80_0 .
+fw:EP_PbiTask_S2 backlog:memberOfContainer fw:Rel_v1_80_0 .
+fw:EP_Progress_S1 backlog:memberOfContainer fw:Rel_v1_80_0 .
+fw:EP_Progress_S2 backlog:memberOfContainer fw:Rel_v1_80_0 .
+fw:EP_Schedule_S1 backlog:memberOfContainer fw:Rel_v1_80_0 .
+fw:EP_Schedule_S2 backlog:memberOfContainer fw:Rel_v1_80_0 .
+fw:EP_TaskTypes_S1 backlog:memberOfContainer fw:Rel_v1_80_0 .
+fw:EP_TaskTypes_S2 backlog:memberOfContainer fw:Rel_v1_80_0 .
+fw:EP_TeamRoles_S1 backlog:memberOfContainer fw:Rel_v1_80_0 .
+fw:EP_ValueRelease_S1 backlog:memberOfContainer fw:Rel_v1_80_0 .
+fw:EP_ValueRelease_S2 backlog:memberOfContainer fw:Rel_v1_80_0 .
+fw:EP_Views_S1 backlog:memberOfContainer fw:Rel_v1_80_0 .
+fw:EP_Views_S2 backlog:memberOfContainer fw:Rel_v1_80_0 .
+fw:S33 backlog:memberOfContainer fw:Rel_v1_80_0 .
+fw:S41 backlog:memberOfContainer fw:Rel_v1_80_0 .
+fw:S42 backlog:memberOfContainer fw:Rel_v1_80_0 .
+fw:S43 backlog:memberOfContainer fw:Rel_v1_80_0 .
+fw:S_GroundIteration backlog:memberOfContainer fw:Rel_v1_80_0 .
+fw:S_GroundSelection backlog:memberOfContainer fw:Rel_v1_80_0 .
+
+#  The invariant can now be evaluated as holding.

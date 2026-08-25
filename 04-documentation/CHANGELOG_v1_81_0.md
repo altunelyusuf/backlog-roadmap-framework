@@ -1,5 +1,22 @@
 # Changelog
 
+## v1.81.0 — 2026-08-25 (MINOR: the completed work is deployed; the last invariant closes)
+
+**46 stories** that were finished and never recorded as delivered are consolidated into one
+`DeploymentUnit`. `Inv_DeploymentAnchored` — the only invariant not holding — now **Holds**.
+
+**`Sel_Committed`, not `Sel_HighestScored`.** The package carries everything already complete rather
+than a value-selected subset, and claiming otherwise would misreport how its contents were chosen.
+That is precisely what `SelectionBasis` exists to prevent, applied to the framework's own release.
+
+**Epics are excluded, by its own rule.** The first attempt deployed 46 items including epics and the
+L4 clause rejected it: an epic is a theme delivered *through* its stories and is not itself
+deployable. Corrected to stories only.
+
+Register **0 violations at L4**, 0 of 62 constraints suppressed, 0 open work items, all invariants
+holding.
+
+
 ## v1.80.0 — 2026-08-24 (MINOR: BRF-EP16 — Obj_Grounded met, 2 to 0)
 
 The register named EP16 and nothing else. The literature was **searched, not recalled**.
