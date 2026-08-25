@@ -1,5 +1,45 @@
 # Changelog
 
+## v1.88.0 — 2026-08-25 (MINOR: SCOPE STAGE ONLY — the analysis and design gap, bounded before it is built)
+
+**The owner's question answered by measurement: the phases are fixed, what they produce is absent.**
+
+Fixed and correct: `TaskType` with the **14 ISO/IEC/IEEE 12207 technical processes**, `DesignConcern`
+with the **5 Satzinger design activities**, `AcceptanceCriterion`, `DefinitionOfDone`, `TestEvidence`,
+`TestHarness`. So the SDLC taxonomy *is* fixed on both grooming and task-type creation.
+
+**Absent — eight concepts, enumerated by direct class lookup:** `ModelArtifact`, `Diagram`, `UseCase`,
+`Specification`, `TestCase`, `TestData`, `StateChange`, `InteractionStep`.
+
+The gap in one sentence: **a task can say it performed design definition and cannot say what design it
+produced.**
+
+### This commit closes the SCOPE stage and nothing else
+
+Under the v5.0.0 staged ceremony, the boundary is written before the work. Three deliverables added —
+model artefacts with a standard taxonomy, specification as interaction steps and state changes, test
+cases with test data — and **no epics**. Those come in a later commit, so the boundary provably
+precedes the work rather than being drawn around it.
+
+**This is the first time this package has separated those two commits.** Every previous scope had its
+deliverables arrive after the epics, which is the defect `ScopeContentLateShape` still reports on
+`Scope_Build`.
+
+### The boundary refused, and the number moved
+
+```
+Obj_ScopeDelivered   100%  ->  70%   (7 of 10 deliverables satisfied)
+```
+
+Three deliverables are unsatisfied because nothing has been built for them yet. **Under the old metric
+this would still read 100%**, because the denominator was the backlog dividing by itself. A coverage
+figure that cannot fall is not measuring a boundary — and this one just did.
+
+**Grounding for the work ahead, searched not recalled:** UML 2.5 defines 14 diagrams in two kinds,
+structure and behaviour, formalised by OMG. That taxonomy will be used rather than an invented one,
+per `Ex_InventedPractice`.
+
+
 ## v1.87.0 — 2026-08-25 (MAJOR-class: the staged ceremony becomes the standard)
 
 **Lineage Operating Discipline v4.2.0 → v5.0.0.** Ceremony step 2 was one instruction covering four

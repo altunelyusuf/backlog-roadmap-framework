@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/3.7.0> ;
-    owl:versionInfo "3.7.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/3.8.0> ;
+    owl:versionInfo "3.8.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/3.7.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/3.6.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/3.5.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/3.4.0> ;
@@ -4631,3 +4632,67 @@ fw:Out_Backlog a backlog:StageOutput ;
     backlog:hasStateDigest "c4c739d2a56f36e36beff6b4c0791a7573ef718b119b3fd5e5b3a62b806ed7ab" ;
     backlog:closedAtCommit "79b3a47" ;
     backlog:consumesOutput fw:Out_Objective .
+
+#################################################################
+#  v3.8.0 — SCOPE STAGE ONLY. No epics in this commit.
+#
+#  The owner asked whether analysis and design artefacts — UML and
+#  traditional models, diagrams, specifications, interaction steps,
+#  state changes, test cases and test data — are part of the
+#  framework. Measured: they are NOT. The phase taxonomy is fixed
+#  (14 ISO 12207 task types, 5 design concerns) and every modelling
+#  and test-specification concept is absent.
+#
+#  Under the v5.0.0 staged ceremony this commit closes the SCOPE
+#  stage and nothing else. The deliverables below say what must be
+#  true; the epics that satisfy them are written in a LATER commit,
+#  so the boundary provably precedes the work rather than being
+#  drawn around it.
+#
+#  This is the first time this package has separated those two
+#  commits. Every previous scope had its deliverables arrive after
+#  the epics — the defect ScopeContentLateShape reports on
+#  Scope_Build to this day.
+#################################################################
+
+fw:Del_Model a backlog:ScopeDeliverable ;
+    backlog:hasDeliverableText "A story's analysis and design work produces named model artefacts, and the framework can say which kind each is — structure or behaviour — using a taxonomy taken from a modelling standard rather than invented." .
+
+fw:Del_Spec a backlog:ScopeDeliverable ;
+    backlog:hasDeliverableText "A story carries a specification of what it does: the interaction steps a user performs, and the state changes those steps cause. A story whose behaviour is described only in prose cannot be checked against what was built." .
+
+fw:Del_TestSpec a backlog:ScopeDeliverable ;
+    backlog:hasDeliverableText "An acceptance criterion is exercised by named test cases with named test data, so evidence points at a specific check rather than at a claim that testing happened." .
+
+fw:Scope_Build backlog:requiresDeliverable fw:Del_Model , fw:Del_Spec , fw:Del_TestSpec .
+
+fw:Metric_ModellingGaps a core:Metric ;
+    rdfs:label "Analysis and design concepts the framework cannot express"@en .
+
+fw:Obj_Modelling a backlog:Objective ;
+    rdfs:label "Analysis, design and test specification are expressible"@en ;
+    backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ;
+    backlog:fillsScope fw:Scope_Build ;
+    backlog:contributesToGoal fw:Goal_MissionToWork ;
+    backlog:hasSuccessMetric fw:Metric_ModellingGaps ;
+    backlog:hasBaselineValue 8.0 ;
+    backlog:hasTargetValue 0.0 ;
+    backlog:hasTargetDirection backlog:Dir_Decrease ;
+    backlog:hasObjectiveDeadline "2026-12-31T00:00:00"^^xsd:dateTime ;
+    backlog:decidedBy backlog:Owner .
+
+fw:Obs_ModellingAsIs a backlog:MetricObservation ;
+    rdfs:label "As-is: modelling and test-specification concepts absent"@en ;
+    backlog:observesMetric fw:Metric_ModellingGaps ;
+    backlog:observationFor fw:Obj_Modelling ;
+    backlog:hasObservedValue 8.0 ;
+    backlog:observedAt "2026-08-25T14:00:00"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Enumerated against the shipped TBox by direct class lookup, not by recollection. ABSENT: ModelArtifact, Diagram, UseCase, Specification, TestCase, TestData, StateChange, InteractionStep — eight. PRESENT and correctly fixed: TaskType with 14 ISO/IEC/IEEE 12207 technical processes, DesignConcern with 5 Satzinger design activities, AcceptanceCriterion, DefinitionOfDone, TestEvidence, TestHarness. So the PHASES are fixed on both grooming and task-type creation, as the owner asked; what is missing is everything those phases PRODUCE. A task can say it performed design definition and cannot say what design it produced." .
+
+fw:Obs_ScopeDeliveredAfterWidening a backlog:MetricObservation ;
+    rdfs:label "In-scope deliverables satisfied — after the boundary widened"@en ;
+    backlog:observesMetric fw:Metric_ScopeDelivered ;
+    backlog:observationFor fw:Obj_ScopeDelivered ;
+    backlog:hasObservedValue 70.0 ;
+    backlog:observedAt "2026-08-25T14:00:00"^^xsd:dateTime ;
+    backlog:hasObservationMethod "7 of 10 deliverables satisfied. The figure FELL from 100 percent, and that is the point: three deliverables were added and nothing satisfies them yet. Under the old metric — which counted stories pursuing an objective and divided by the same set — this would still have read 100 percent, because the denominator was the backlog. A coverage figure that cannot fall is not measuring a boundary, and this one just did." .
