@@ -1,5 +1,43 @@
 # Changelog
 
+## v1.93.0 — 2026-08-25 (MINOR: the join the plan was missing — grooming to artefact)
+
+**Answer in two parts.** No artefacts exist: `ModelArtifact`, `Diagram`, `UseCase`, `Specification`,
+`TestCase`, `TestData`, `StateChange`, `InteractionStep` are all absent. A plan to build them exists —
+six stories, planned into two iterations, in two identified packages.
+
+**But the question said *for grooming*, and that half found a gap the first half hid.**
+
+`RefinementEvent` carries `refines`, `refinedAt`, `hasRefinementOutcome`, `refinedBy` and
+`addressesConcern`. **Not one of the six planned stories connects an artefact back to the refinement
+that produced it.** After all six ship, a refinement would still record that a concern was *addressed*
+and never what the addressing *produced*.
+
+That is grooming as attendance again — the defect BRF-EP12 was built to remove — returning one level
+up. The concern is now named; what it yielded still is not.
+
+### A third iteration, not a stretched one
+
+Both existing boxes were full at **9 of 9**. Adding a seventh story to either would stretch a box,
+which G9 forbids, so `It5` opens rather than `It3` or `It4` widening.
+
+```
+It3  01 Sep   9/9   EP_Model_S1, EP_Model_S2, EP_Spec_S1
+It4  15 Sep   9/9   EP_Spec_S2, EP_TestSpec_S1, EP_TestSpec_S2
+It5  29 Sep   3/9   EP_Model_S3        <- the join
+
+Pkg_Modelling    v1.92.0   3 stories, targets It3+It5
+Pkg_StoryDetail  v1.93.0   4 stories, targets It3+It4
+```
+
+`Pkg_Modelling` now spans It3 and It5, which is what a package does when its content does not fit
+consecutive boxes — the package is split across iterations rather than a box stretched to hold it.
+
+`Inv_GroomingProducesArtefact` is recorded as `NotYetEnforceable`: `producesArtifact` does not exist
+yet and BRF-EP_Model_S3 builds it. Recorded **before** the work so the gap is visible rather than
+discovered afterwards.
+
+
 ## v1.92.0 — 2026-08-25 (MINOR: the packages IDENTIFIED — a class unused for 91 releases)
 
 **The owner was right and the previous release reasoned wrongly from a real constraint.**

@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/4.2.0> ;
-    owl:versionInfo "4.2.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/4.3.0> ;
+    owl:versionInfo "4.3.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/4.2.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/4.1.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/4.0.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/3.9.0> ;
@@ -5188,3 +5189,75 @@ fw:S42 backlog:memberOfContainer fw:Pkg_Consolidated .
 fw:S43 backlog:memberOfContainer fw:Pkg_Consolidated .
 fw:S_GroundIteration backlog:memberOfContainer fw:Pkg_Consolidated .
 fw:S_GroundSelection backlog:memberOfContainer fw:Pkg_Consolidated .
+
+#################################################################
+#  v4.3.0 — the join the plan was missing.
+#
+#  Asked whether the artefacts exist OR a plan to build them FOR
+#  GROOMING, the second half of the question found a gap the first
+#  half hid.
+#
+#  Six stories were planned and every one builds an artefact
+#  vocabulary. NOT ONE connects an artefact back to the
+#  RefinementEvent that produced it. RefinementEvent carries
+#  refines, refinedAt, hasRefinementOutcome, refinedBy and
+#  addressesConcern — so after all six ship, a refinement would
+#  still record that a concern was ADDRESSED and never what the
+#  addressing PRODUCED.
+#
+#  That is grooming as attendance again, the defect BRF-EP12 was
+#  built to remove, returning one level up: the concern is now
+#  named, and what it yielded still is not.
+#
+#  Both existing boxes are full at 9 of 9. Adding a seventh story
+#  to either would stretch a box, which G9 forbids, so It5 is
+#  opened rather than It3 or It4 widened.
+#################################################################
+
+fw:EP_Model_S3 a backlog:Story ;
+    backlog:hasIdentifier "BRF-EP_Model_S3" ;
+    backlog:hasTitle "A refinement names the artefact it produced" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register , fw:It5 , fw:Pkg_Modelling ;
+    backlog:pursuesObjective fw:Obj_Modelling ;
+    backlog:satisfiesDeliverable fw:Del_Model ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasApplicableConcern backlog:Concern_Data ;
+    backlog:hasAcceptanceCriterion fw:AC_EP_Model_S3 ;
+    backlog:hasEffortEstimate 3.0 ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at epic level; scoring a decomposition child alongside its scored parent double-counts." .
+fw:AC_EP_Model_S3 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a story groomed for a design concern, When the refinement addressing that concern is read, Then the model artefact it produced is named, and a refinement claiming a concern while producing nothing is reported." .
+fw:EP_Model backlog:decomposesInto fw:EP_Model_S3 .
+
+fw:It5 a backlog:Iteration ;
+    backlog:hasIdentifier "It5" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:iterationStart "2026-09-29T00:00:00"^^xsd:dateTime ;
+    backlog:iterationEnd "2026-10-12T23:59:59"^^xsd:dateTime ;
+    backlog:hasCapacity 9.0 ;
+    backlog:hasCommittedEffort 3.0 ;
+    backlog:memberOfContainer fw:Register .
+
+fw:Plan_EP_Model_S3 a backlog:PlanningEvent ;
+    backlog:plansItem fw:EP_Model_S3 ; backlog:plannedInto fw:It5 ;
+    backlog:plannedAt "2026-09-29T09:00:00"^^xsd:dateTime ;
+    backlog:plannedBy backlog:Builder ;
+    backlog:producesTask fw:T_EP_Model_S3 .
+fw:T_EP_Model_S3 a backlog:ExecutionTask ;
+    backlog:hasIdentifier "BRF-T-EP_Model_S3" ;
+    backlog:hasTitle "Join RefinementEvent to the artefact it produced" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:hasTaskType backlog:Task_DesignDefinition ;
+    backlog:memberOfContainer fw:Register , fw:It5 .
+
+fw:Pkg_Modelling backlog:targetsIteration fw:It5 .
+
+fw:Inv_GroomingProducesArtefact a backlog:CrossCuttingInvariant ;
+    rdfs:label "A refinement names what it produced"@en ;
+    backlog:hasCheckQuery "ASK { ?r a backlog:RefinementEvent ; backlog:addressesConcern ?c . FILTER NOT EXISTS { ?r backlog:producesArtifact ?a } }" ;
+    backlog:hasExpectedResult "false" ;
+    backlog:hasInvariantStatus backlog:NotYetEnforceable ;
+    backlog:tracksItem fw:EP_Model_S3 ;
+    backlog:hasRationale "NotYetEnforceable because producesArtifact does not exist yet — BRF-EP_Model_S3 builds it. Recorded now so the gap is visible before the work rather than discovered after: six stories were planned to build artefact vocabulary and none of them connected an artefact to the grooming that produced it." .
