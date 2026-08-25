@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/4.0.0> ;
-    owl:versionInfo "4.0.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/4.1.0> ;
+    owl:versionInfo "4.1.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/4.0.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/3.9.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/3.8.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/3.7.0> ;
@@ -4942,3 +4943,150 @@ fw:Del_Checkable backlog:derivesFromMissionClause "every step is machine-confirm
 fw:Del_Model backlog:derivesFromMissionClause "analysis and design activities using traditional and UML based methods, diagram development, specifications" .
 fw:Del_Spec backlog:derivesFromMissionClause "steps, interactions, state changes" .
 fw:Del_TestSpec backlog:derivesFromMissionClause "test cases and test data" .
+
+
+#################################################################
+#  v4.1.0 — two iterations, sized to capacity, each shipping a
+#  package. The forward plan.
+#
+#  As-is: three packages existed and every one was historical, both
+#  iterations were closed, and six Proposed stories had no plan at
+#  all. The mission requires time-boxed iterations planned to
+#  finish their package content; nothing was planned to finish
+#  anything.
+#
+#  Stories are taken in SCORE ORDER — EP_Model at 7.00 before
+#  EP_Spec and EP_TestSpec at 5.00 — and split across two
+#  iterations because 18 points of work does not fit one 9-point
+#  box. G9: the iteration is constant and the work is split to fit
+#  it, never the reverse.
+#
+#  Capacity 9 is derived, not guessed: the two closed iterations
+#  declared 20 and 12, and the second is the more recent evidence.
+#  Nine is a deliberate step down for a smaller team-of-one cadence
+#  and is recorded as a judgement rather than a measurement.
+#################################################################
+
+fw:It3 a backlog:Iteration ;
+    backlog:hasIdentifier "It3" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:iterationStart "2026-09-01T00:00:00"^^xsd:dateTime ;
+    backlog:iterationEnd "2026-09-14T23:59:59"^^xsd:dateTime ;
+    backlog:hasCapacity 9.0 ;
+    backlog:hasCommittedEffort 9.0 ;
+    backlog:memberOfContainer fw:Register .
+fw:EP_Model_S1 backlog:hasEffortEstimate 3.0 ; backlog:memberOfContainer fw:It3 .
+fw:Plan_EP_Model_S1 a backlog:PlanningEvent ;
+    backlog:plansItem fw:EP_Model_S1 ; backlog:plannedInto fw:It3 ;
+    backlog:plannedAt "2026-09-01T09:00:00"^^xsd:dateTime ;
+    backlog:plannedBy backlog:Builder ;
+    backlog:producesTask fw:T_EP_Model_S1 .
+fw:T_EP_Model_S1 a backlog:ExecutionTask ;
+    backlog:hasIdentifier "BRF-T-EP_Model_S1" ;
+    backlog:hasTitle "Implement and gate EP_Model_S1" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:hasTaskType backlog:Task_DesignDefinition ;
+    backlog:memberOfContainer fw:Register , fw:It3 .
+fw:EP_Model_S2 backlog:hasEffortEstimate 3.0 ; backlog:memberOfContainer fw:It3 .
+fw:Plan_EP_Model_S2 a backlog:PlanningEvent ;
+    backlog:plansItem fw:EP_Model_S2 ; backlog:plannedInto fw:It3 ;
+    backlog:plannedAt "2026-09-01T09:00:00"^^xsd:dateTime ;
+    backlog:plannedBy backlog:Builder ;
+    backlog:producesTask fw:T_EP_Model_S2 .
+fw:T_EP_Model_S2 a backlog:ExecutionTask ;
+    backlog:hasIdentifier "BRF-T-EP_Model_S2" ;
+    backlog:hasTitle "Implement and gate EP_Model_S2" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:hasTaskType backlog:Task_DesignDefinition ;
+    backlog:memberOfContainer fw:Register , fw:It3 .
+fw:EP_Spec_S1 backlog:hasEffortEstimate 3.0 ; backlog:memberOfContainer fw:It3 .
+fw:Plan_EP_Spec_S1 a backlog:PlanningEvent ;
+    backlog:plansItem fw:EP_Spec_S1 ; backlog:plannedInto fw:It3 ;
+    backlog:plannedAt "2026-09-01T09:00:00"^^xsd:dateTime ;
+    backlog:plannedBy backlog:Builder ;
+    backlog:producesTask fw:T_EP_Spec_S1 .
+fw:T_EP_Spec_S1 a backlog:ExecutionTask ;
+    backlog:hasIdentifier "BRF-T-EP_Spec_S1" ;
+    backlog:hasTitle "Implement and gate EP_Spec_S1" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:hasTaskType backlog:Task_RequirementsDefinition ;
+    backlog:memberOfContainer fw:Register , fw:It3 .
+
+fw:It4 a backlog:Iteration ;
+    backlog:hasIdentifier "It4" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:iterationStart "2026-09-15T00:00:00"^^xsd:dateTime ;
+    backlog:iterationEnd "2026-09-28T23:59:59"^^xsd:dateTime ;
+    backlog:hasCapacity 9.0 ;
+    backlog:hasCommittedEffort 9.0 ;
+    backlog:memberOfContainer fw:Register .
+fw:EP_Spec_S2 backlog:hasEffortEstimate 3.0 ; backlog:memberOfContainer fw:It4 .
+fw:Plan_EP_Spec_S2 a backlog:PlanningEvent ;
+    backlog:plansItem fw:EP_Spec_S2 ; backlog:plannedInto fw:It4 ;
+    backlog:plannedAt "2026-09-15T09:00:00"^^xsd:dateTime ;
+    backlog:plannedBy backlog:Builder ;
+    backlog:producesTask fw:T_EP_Spec_S2 .
+fw:T_EP_Spec_S2 a backlog:ExecutionTask ;
+    backlog:hasIdentifier "BRF-T-EP_Spec_S2" ;
+    backlog:hasTitle "Implement and gate EP_Spec_S2" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:hasTaskType backlog:Task_RequirementsDefinition ;
+    backlog:memberOfContainer fw:Register , fw:It4 .
+fw:EP_TestSpec_S1 backlog:hasEffortEstimate 3.0 ; backlog:memberOfContainer fw:It4 .
+fw:Plan_EP_TestSpec_S1 a backlog:PlanningEvent ;
+    backlog:plansItem fw:EP_TestSpec_S1 ; backlog:plannedInto fw:It4 ;
+    backlog:plannedAt "2026-09-15T09:00:00"^^xsd:dateTime ;
+    backlog:plannedBy backlog:Builder ;
+    backlog:producesTask fw:T_EP_TestSpec_S1 .
+fw:T_EP_TestSpec_S1 a backlog:ExecutionTask ;
+    backlog:hasIdentifier "BRF-T-EP_TestSpec_S1" ;
+    backlog:hasTitle "Implement and gate EP_TestSpec_S1" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:hasTaskType backlog:Task_Verification ;
+    backlog:memberOfContainer fw:Register , fw:It4 .
+fw:EP_TestSpec_S2 backlog:hasEffortEstimate 3.0 ; backlog:memberOfContainer fw:It4 .
+fw:Plan_EP_TestSpec_S2 a backlog:PlanningEvent ;
+    backlog:plansItem fw:EP_TestSpec_S2 ; backlog:plannedInto fw:It4 ;
+    backlog:plannedAt "2026-09-15T09:00:00"^^xsd:dateTime ;
+    backlog:plannedBy backlog:Builder ;
+    backlog:producesTask fw:T_EP_TestSpec_S2 .
+fw:T_EP_TestSpec_S2 a backlog:ExecutionTask ;
+    backlog:hasIdentifier "BRF-T-EP_TestSpec_S2" ;
+    backlog:hasTitle "Implement and gate EP_TestSpec_S2" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:hasTaskType backlog:Task_Verification ;
+    backlog:memberOfContainer fw:Register , fw:It4 .
+
+#################################################################
+#  NO PRE-DECLARED PACKAGES — and the suite was right to refuse.
+#
+#  This session first wrote two DeploymentUnits describing what the
+#  iterations WOULD ship. Four L4 clauses rejected each: a
+#  deployment carrying work that is not Done, whose criteria are
+#  unattested, with no verified evidence.
+#
+#  The clauses are correct and the attempt was wrong. A
+#  DeploymentUnit is a RECORD OF WHAT SHIPPED, not a plan of what
+#  will. Pre-declaring one asserts that unfinished work was
+#  delivered, which is the single most consequential thing a
+#  register can lie about.
+#
+#  The plan is the ITERATION. Stories are planned into a time box
+#  sized to hold them, and the package is created when the box
+#  closes and its contents are Done — which the L4 clause
+#  "a deployment carrying an item its iteration never planned is
+#  rejected" then checks against this plan.
+#
+#  So the answer to "do we have packages filled with prioritised
+#  stories and sprint plans" is: the SPRINT PLANS now exist and the
+#  PACKAGES cannot, until the work is done. That is the framework
+#  refusing to let delivery be claimed in advance.
+#################################################################
+
+fw:Inv_PlannedToCapacity a backlog:CrossCuttingInvariant ;
+    rdfs:label "Every open iteration is planned to finish its content"@en ;
+    backlog:hasCheckQuery "SELECT (COUNT(*) AS ?n) WHERE { ?it a backlog:Iteration ; backlog:hasCapacity ?c ; backlog:hasCommittedEffort ?e . FILTER (?e > ?c) }" ;
+    backlog:hasExpectedResult "0" ;
+    backlog:hasInvariantStatus backlog:Holds ;
+    backlog:tracksItem fw:EP_Model ;
+    backlog:hasRationale "It3 and It4 each hold 9 points against a declared capacity of 9. Eighteen points of work did not fit one box, so the work was split across two rather than the box stretched — G9. Capacity 9 is a judgement stepped down from the 12 declared by the last closed iteration, recorded as a judgement and not presented as a measurement." .

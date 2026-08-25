@@ -1,5 +1,47 @@
 # Changelog
 
+## v1.91.0 — 2026-08-25 (MINOR: sprint plans — two iterations sized to hold their content)
+
+**As-is answer: no.** Three packages existed and **every one was historical**. Both iterations were
+closed. Six Proposed stories had **no plan at all** — the mission requires iterations planned to finish
+their package content, and nothing was planned to finish anything.
+
+### Two iterations, in score order, each sized to hold what it commits
+
+```
+It3  2026-09-01 to 09-14   capacity 9   committed 9
+     EP_Model_S1     effort 3   parent score 7.00
+     EP_Model_S2     effort 3   parent score 7.00
+     EP_Spec_S1      effort 3   parent score 5.00
+
+It4  2026-09-15 to 09-28   capacity 9   committed 9
+     EP_Spec_S2      effort 3   parent score 5.00
+     EP_TestSpec_S1  effort 3   parent score 5.00
+     EP_TestSpec_S2  effort 3   parent score 5.00
+```
+
+Eighteen points did not fit one nine-point box, so **the work was split across two rather than the box
+stretched** — G9. Capacity 9 is stepped down from the 12 declared by the last closed iteration and is
+recorded as a **judgement**, not presented as a measurement.
+
+Each planning event produces a typed execution task: design definition for the model stories,
+requirements definition for the specification stories, verification for the test-specification stories.
+
+### The suite refused to let the packages be planned, and it was right
+
+This session first wrote two `DeploymentUnit`s describing what the iterations *would* ship. **Four L4
+clauses rejected each**: carrying work that is not Done, with unattested criteria, with no verified
+evidence.
+
+**A `DeploymentUnit` is a record of what shipped, not a plan of what will.** Pre-declaring one asserts
+that unfinished work was delivered — the single most consequential thing a register can misstate.
+
+So the honest answer to the question: **the sprint plans now exist and the packages cannot, until the
+work is done.** The plan *is* the iteration; the package is created when the box closes with its
+contents Done, and the existing L4 clause — *a deployment carrying an item its iteration never planned
+is rejected* — then checks the package against this plan.
+
+
 ## v1.90.0 — 2026-08-25 (MAJOR-class: the scope was wider than the mission)
 
 **Audit answer: no, they were not properly set.** Seven of ten deliverables quote a clause of the
