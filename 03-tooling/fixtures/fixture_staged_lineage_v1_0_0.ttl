@@ -1,0 +1,86 @@
+# Staged lineage — the v5.0.0 ceremony, one commit per stage.
+#
+# TEST DRIVE, not a construction. Built in a real git repository:
+#   306a0e7  stage 1  mission
+#   d108cb1  stage 2  scope WITH deliverables
+#   0d3c867  stage 3  goal derived from scope
+#   1fc461e  stage 4  objective measuring the goal
+#   b8427f3  stage 5  backlog against deliverables that already existed
+#
+# Each digest was computed from the register AS IT STOOD AT THAT
+# COMMIT — 1, 5, 6, 7, 8 subjects — not by restricting the final
+# graph. That is the difference the experiments established: a
+# digest taken from the finished state is computable at the end and
+# proves nothing.
+#
+# Measured result: 0 order advisories at L4 with 0 of 66 constraints
+# suppressed. The live register, checked identically, fires 1.
+#
+@prefix backlog: <http://example.org/backlog#> .
+@prefix core: <http://example.org/core#> .
+@prefix ex: <http://example.org/td#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+ex:BL a backlog:Backlog ; backlog:hasIdentifier "BL-TD" ; backlog:hasState backlog:Proposed .
+ex:P a backlog:AdoptionProfile ; backlog:profileAppliesTo "staged test drive" ;
+    backlog:governsBacklog ex:BL ; backlog:hasConformanceLevel backlog:L1_Core ;
+    backlog:hasTargetConformanceLevel backlog:L2_EvidenceBound ;
+    backlog:hasLevelReviewDate "2027-01-01T00:00:00"^^xsd:dateTime ;
+    backlog:decidedBy backlog:Owner ; backlog:hasDecisionRationale "Core for the drive." ;
+    backlog:adoptsFacet backlog:CoreFacet .
+
+ex:M a backlog:Mission ; backlog:hasMissionStatement "Practitioners recover unaided." ;
+    backlog:missionFor ex:BL ; backlog:hasMissionOrigin backlog:Origin_OwnerStated ;
+    backlog:missionSource "Owner, staged drive" ; backlog:decidedBy backlog:Owner .
+
+ex:Scope a backlog:ScopeStatement ; backlog:hasScopeStatementText "Self-service recovery for practitioner accounts." ;
+    backlog:scopeForMission ex:M ; backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ;
+    backlog:requiresDeliverable ex:D1 , ex:D2 ; backlog:hasScopeExclusion ex:X .
+ex:D1 a backlog:ScopeDeliverable ; backlog:hasDeliverableText "Recovery completes without a support contact." .
+ex:D2 a backlog:ScopeDeliverable ; backlog:hasDeliverableText "Every recovery attempt leaves an audit record." .
+ex:X a backlog:ScopeExclusion ; backlog:excludesConcern "Administrator recovery." ;
+    backlog:hasExclusionRationale "Different threat model." ; backlog:decidedBy backlog:Owner .
+
+ex:G a backlog:Goal ; rdfs:label "Self-service recovery"@en ;
+    backlog:contributesToMission ex:M ; backlog:derivesFromScope ex:Scope ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ; backlog:decidedBy backlog:Owner .
+
+ex:Met a core:Metric ; rdfs:label "Unaided recovery share"@en .
+ex:O a backlog:Objective ; rdfs:label "Recoveries need no support"@en ;
+    backlog:fillsScope ex:Scope ; backlog:contributesToGoal ex:G ;
+    backlog:hasSuccessMetric ex:Met ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:hasBaselineValue 12.0 ; backlog:hasTargetValue 80.0 ;
+    backlog:hasTargetDirection backlog:Dir_Increase ;
+    backlog:hasObjectiveDeadline "2027-01-31T00:00:00"^^xsd:dateTime ;
+    backlog:decidedBy backlog:Owner .
+
+ex:EP a backlog:Epic ; backlog:hasIdentifier "E-1" ; backlog:hasTitle "Email-factor recovery" ;
+    backlog:hasState backlog:Proposed ; backlog:memberOfContainer ex:BL ;
+    backlog:pursuesObjective ex:O ; backlog:satisfiesDeliverable ex:D1 ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "Scored at next planning." .
+
+ex:Out_Mission a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Mission ;
+    backlog:hasStateDigest "cb79327781e5569a914f57972ce8f2bb2c60d472a0854f6f20d091708050efef" ;
+    backlog:closedAtCommit "306a0e7" .
+
+ex:Out_Scope a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Scope ;
+    backlog:hasStateDigest "5dbe99c82938cbf1ca168a00f6c48697a05da5998828f358f926b8d39dde5a8b" ;
+    backlog:closedAtCommit "d108cb1" ;
+    backlog:consumesOutput ex:Out_Mission .
+
+ex:Out_Goal a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Goal ;
+    backlog:hasStateDigest "d86a458f6249da5e1c5a2839dc79e6c351695281128bcb13cefe5754b865e301" ;
+    backlog:closedAtCommit "0d3c867" ;
+    backlog:consumesOutput ex:Out_Scope .
+
+ex:Out_Objective a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Objective ;
+    backlog:hasStateDigest "11963f89969ef0f19bf80e58e697cf21e3a1c4c0e43df57445813421448d2f68" ;
+    backlog:closedAtCommit "1fc461e" ;
+    backlog:consumesOutput ex:Out_Goal .
+
+ex:Out_Backlog a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Backlog ;
+    backlog:hasStateDigest "ffa5aa0e5fda43cef7c44251ae8df4f0d4b0be5c312f44e6a900c20f3041cff2" ;
+    backlog:closedAtCommit "b8427f3" ;
+    backlog:consumesOutput ex:Out_Objective .

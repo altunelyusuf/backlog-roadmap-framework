@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.42.0
+# Backlog & Roadmap Semantic Framework — Standard v1.43.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -664,6 +664,29 @@ anything — arrive after the work they were meant to constrain. This is G17 wit
 
 Both fire on this package's own register, which is the point: a witness worth having is one that
 reports something inconvenient about the register carrying it.
+
+### 2.5c-xxii The staged ceremony, one commit per stage
+
+The lineage is built as five stages, **each closing in its own commit**:
+
+```
+1 Mission   2 Scope (text, exclusions AND deliverables)   3 Goal   4 Objective   5 Backlog
+```
+
+Closing a stage means writing its elements, validating, committing, then recording a `StageOutput`
+naming the stage, the digest of the state it closed on, and the commit it closed at. The next stage's
+output `consumesOutput` that one.
+
+**The digest must be taken at the stage's commit, not from the finished register.** A digest computed
+by restricting the final graph is computable at the end and proves nothing about order — established
+by experiment. Taken per commit, it records a state that genuinely existed.
+
+**The scope stage is not closed until its deliverables exist.** Text alone is a boundary that can
+refuse nothing.
+
+**Measured on a real staged drive** (five commits, digests taken at 1, 5, 6, 7 and 8 subjects): every
+digest reproduces, the chain is a line, and **zero order advisories fire at L4 with nothing
+suppressed**. The same checks on a lineage whose stages shared commits fire.
 
 ### 2.5d Decomposition, commitments, dependency kinds, impediments, flow, team (subject v1.4.0)
 

@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v4.2.0
+# Lineage Operating Discipline — v5.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -22,27 +22,28 @@ remembered from a previous session; this document's own tooling references have 
    it as an owner decision carrying a **rationale**, a **target level** and a **review date**. Every
    validator run prints what the declaration *suppresses*; read that line. A clean result at a low
    level is a **narrower claim**, not a better one.
-2. **Fix the mission, then the SCOPE, and only then goals and objectives.**
-   `Mission` → `ScopeStatement` **with its exclusions** → `Goal` → `Objective` (metric, baseline,
-   target, direction, deadline). Validate this chain empty, before a single work item exists. A chain
-   that does not validate empty will not validate full.
+2. **Build the chain as a PIPELINE, one commit per stage.**
 
-   **Scope precedes goals; it does not summarise them.** Written last, a scope is drawn around
-   objectives already fixed, so every objective is in scope *by construction* and the boundary can
-   never refuse anything — it records a decision instead of constraining one. Written second, the
-   boundary exists before the work that would test it, and a new objective must be argued against it.
+   `Mission` → `ScopeStatement` (text, exclusions **and deliverables**) → `Goal` → `Objective` →
+   `Backlog`. Five stages, and **each closes in its own commit** before the next begins.
 
-   The measured evidence is in this package's own register: **five objectives declared, five
-   admitted, none ever refused**, with the scope amended twice afterwards to catch up. That is what a
-   boundary drawn after the fact does — it always fits.
+   Closing a stage means: write its elements, run the validator, commit, then record a `StageOutput`
+   naming the stage, the digest of the state it closed on, and **the commit it closed at**. The next
+   stage's output `consumesOutput` that one.
 
-   **This matters more, not less, for a generative model.** An LLM produces plausible continuations
-   of what it has already written. Asked to write a scope *after* its own goals, it summarises itself,
-   and a self-summary cannot contradict its source: the step reads like a check and is structurally
-   incapable of failing. Asked to write goals *against* a scope fixed earlier, each generated goal
-   meets a constraint the generator did not author in the same breath, and a goal outside the
-   boundary becomes visible as a conflict rather than absorbed as context. The order is what turns
-   scope from something the model narrates into something it is measured against.
+   **Why one commit per stage, and not merely one instruction.** A digest over the register is
+   computable from the finished state — proven by experiment, where an author building backwards and
+   computing each digest from the final graph passed every digest check. Only an external witness
+   orders the stages, and a commit is the only one available: append-only, held by a remote the author
+   does not control. Git orders **between** commits and says nothing **within** one, so two stages
+   sharing a commit are unordered evidence however they were built.
+
+   **The scope stage is not closed until its deliverables exist.** Text alone is a boundary that can
+   refuse nothing. Measured on this package: `Scope_Build`'s text was written at `a20c9eb` and its
+   deliverables arrived at `90c433b` — after the epics they were meant to constrain.
+
+   Validate the chain empty at each stage. A chain that does not validate empty will not validate full.
+
 3. **State the granularity you are choosing and why.** `Initiative`, `Epic`, `Feature`, `Story`,
    `Task`, `Defect`, `Spike`, `Enabler`. Epic is the **coarsest ordinary choice**, not the neutral
    one. A granularity nobody chose is one nobody can defend later.
@@ -265,6 +266,15 @@ exists in the shipped shapes file and carries the severity claimed. **A discipli
 enforcement claims have drifted from the suite is worse than none, because it is believed.**
 
 ---
+
+## v5.0.0 (2026-08-25)
+
+**MAJOR: ceremony step 2 becomes a five-stage pipeline, one commit per stage.** Owner ruling after the
+pipeline experiments. The previous step said *fix the mission, then the scope, then goals and
+objectives* — one instruction covering four stages, which is why all four could close in a single
+commit and their order be unwitnessed. MAJOR because every existing lineage was built under the old
+step and none carries stage outputs; they are not rewritten, and the advisories report what their
+history actually shows.
 
 ## v4.2.0 (2026-08-25)
 

@@ -1,5 +1,45 @@
 # Changelog
 
+## v1.87.0 — 2026-08-25 (MAJOR-class: the staged ceremony becomes the standard)
+
+**Lineage Operating Discipline v4.2.0 → v5.0.0.** Ceremony step 2 was one instruction covering four
+stages — *fix the mission, then the scope, then goals and objectives* — which is exactly why all four
+could close in a single commit and their order be unwitnessed. It is now **five stages, one commit
+each**.
+
+### Test-driven on a completed artefact, not asserted
+
+A real lineage was built in a real git repository, stage by stage:
+
+```
+306a0e7  stage 1  mission
+d108cb1  stage 2  scope WITH deliverables
+0d3c867  stage 3  goal derived from scope
+1fc461e  stage 4  objective measuring the goal
+b8427f3  stage 5  backlog against deliverables that already existed
+```
+
+Each digest was computed from the register **as it stood at that commit** — 1, 5, 6, 7, 8 subjects —
+not by restricting the finished graph. That is the difference the experiments established.
+
+**Result, measured at L4 with 0 of 66 constraints suppressed:**
+
+```
+staged drive     0 order advisories
+live register    1 order advisory
+```
+
+The seven remaining violations on the drive are ordinary L3/L4 completeness — no Definition of Done,
+no commitment, no recorded mover — and not one concerns order. The advisories go quiet **because the
+order became witnessed**, not because anything was silenced.
+
+The drive ships as `fixture_staged_lineage_v1_0_0.ttl`, with its five commits recorded in the header
+so the claim can be re-derived rather than believed.
+
+**Existing lineages are not rewritten.** They carry no stage outputs, their history is real, and
+backdating one to quiet an advisory would be the fabrication the commit anchor exists to prevent.
+
+
 ## v1.86.0 — 2026-08-25 (MINOR: the live lineage staged against its real commits)
 
 Yes — the pipeline applies to the existing lineage, and applying it produced two findings nothing
