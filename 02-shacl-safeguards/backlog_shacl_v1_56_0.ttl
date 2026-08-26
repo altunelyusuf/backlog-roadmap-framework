@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.55.0> ;
-    owl:versionInfo "1.55.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.56.0> ;
+    owl:versionInfo "1.56.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.55.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.54.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.53.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.52.0> ;
@@ -3989,6 +3990,10 @@ backlog:AreaWithoutGoalShape a sh:NodeShape ;
             ?sc backlog:coversArea $this .
             FILTER EXISTS { ?g backlog:derivesFromScope ?sc ; backlog:hasGoalFacing backlog:Facing_Scope }
             FILTER NOT EXISTS { ?g2 backlog:hasGoalFacing backlog:Facing_Scope ; backlog:goalCoversArea $this }
+            # A product view is the same subject as its work-layer area and
+            # is measured by that area's objective. Reporting it would ask
+            # for a second objective over one event.
+            FILTER NOT EXISTS { $this backlog:productViewOf ?src }
         }""" ] .
 
 #################################################################
@@ -4099,4 +4104,24 @@ backlog:CheckpointBreachShape a sh:NodeShape ;
             ?obs backlog:observationFor ?o ; backlog:observedAt ?od ; backlog:hasObservedValue ?v .
             FILTER (?od >= ?cd)
             FILTER ((?dir = backlog:Dir_Decrease && ?v > ?ev) || (?dir = backlog:Dir_Increase && ?v < ?ev))
+        }""" ] .
+
+#################################################################
+#  v1.56.0 — an area measured by nothing
+#################################################################
+
+backlog:AreaUnmeasuredShape a sh:NodeShape ;
+    sh:targetClass backlog:ScopeArea ;
+    sh:severity sh:Violation ;
+    rdfs:label "Every area is measured by an objective (L3)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: no objective measures this area, and it is not the product view of one that is. An area with a location and a measure but no objective states where work must go and gives no way to know when it got there — the scope can then be declared complete on judgement. Established by test drive: four of this register's five areas have an objective whose baseline equals the area's measure exactly, and the fifth turned out to be the same subject seen from the other layer." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L3_Governed, backlog:L4_LineageEnforced))
+            ?sc backlog:coversArea $this .
+            FILTER NOT EXISTS { $this backlog:productViewOf ?src }
+            FILTER NOT EXISTS { ?g backlog:goalCoversArea $this . ?o backlog:contributesToGoal ?g }
+            FILTER NOT EXISTS { ?s backlog:supersedesMission ?m . ?sc backlog:scopeForMission ?m }
         }""" ] .

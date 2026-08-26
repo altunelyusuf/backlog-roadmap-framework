@@ -1,5 +1,44 @@
 # Changelog
 
+## v1.106.0 — 2026-10-26 (MINOR: the fifth area ruled by test drive — a product view, not a gap)
+
+### The diagram was wrong and the suite was right
+
+Reading the knowledge graph, this session reported that `AreaWithoutGoalShape` had **failed to fire** on
+`Area_QueryableGovernance`. Test-driven: the clause fires on **four** areas and the suite had been
+reporting all four. The diagram showed one in red and the claim that followed was wrong on both counts.
+
+### What the test drive established
+
+Four of five areas have an objective whose **baseline equals the area's own measure exactly**:
+
+```
+Area_Governance      18 rulings   Obj_RulingsQueryable    baseline 18 → 0
+Area_CodeTables      23 tables    Obj_TablesExported      baseline 23 → 0
+Area_RuleExecution    3 checks    Obj_RulesDecidedInCode  baseline  3 → 0
+Area_StandardDoc    186 rows      Obj_RowsUnchecked       baseline 186 → 0
+Area_QueryableGovernance          NONE
+```
+
+The fifth is **not a missing objective**. `Area_QueryableGovernance` and `Area_Governance` are one
+subject seen twice — the work layer says 18 rulings sit in a document, the product layer says an adopter
+can query 0 of them. **The rulings becoming triples is the same event**, so `Obj_RulingsQueryable`
+measures both. Giving the fifth its own objective would count one piece of work twice and let the scope
+read half-done when it was finished.
+
+`productViewOf` states the pairing. `AreaUnmeasuredShape` (L3) now rejects an area measured by nothing
+and not a product view of one that is.
+
+### The three remaining advisories are accepted, not silenced
+
+Three areas have no *scope-facing* goal. For each, the objective counts exactly the area's contents and
+targets zero — **it cannot reach zero while the area is unfinished, and the area cannot finish while it
+is above zero.** A scope-facing goal would measure the same event a third time.
+
+The advisory is left firing because the pattern is worth reporting in general: a register whose
+objectives do not happen to count exactly what its areas contain would need one.
+
+
 ## v1.105.0 — 2026-10-26 (MINOR: STAGE 4 — seven objectives, monitorable not merely judgeable)
 
 The owner asked that objectives serve four purposes: progress, prediction, goal satisfaction, mission

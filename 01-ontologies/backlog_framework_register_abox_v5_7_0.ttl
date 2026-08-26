@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/5.6.0> ;
-    owl:versionInfo "5.6.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/5.7.0> ;
+    owl:versionInfo "5.7.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/5.6.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/5.5.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/5.4.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/5.3.0> ;
@@ -6746,3 +6747,16 @@ fw:Obj_BuildContained backlog:hasMeasurementKind backlog:Meas_Counted ;
 fw:CPR_Obj_BuildContained a backlog:ObjectiveCheckpoint ;
     backlog:checkpointDate "2026-10-26T00:00:00"^^xsd:dateTime ;
     backlog:expectedValue 0.0 .
+
+#  DECIDED BY TEST DRIVE at v1.106.0: the fifth area is the
+#  product-layer view of the first, not a distinct subject.
+fw:Area_QueryableGovernance backlog:productViewOf fw:Area_Governance .
+fw:Goal_GovernanceInOntology backlog:goalCoversArea fw:Area_QueryableGovernance .
+
+fw:Inv_AreaCoverageJudged a backlog:CrossCuttingInvariant ;
+    rdfs:label "Scope-facing coverage of areas — ruled by test drive"@en ;
+    backlog:hasCheckQuery "SELECT ?a WHERE { ?sc backlog:coversArea ?a FILTER NOT EXISTS { ?g backlog:hasGoalFacing backlog:Facing_Scope ; backlog:goalCoversArea ?a } }" ;
+    backlog:hasExpectedResult "3, and accepted" ;
+    backlog:hasInvariantStatus backlog:Holds ;
+    backlog:tracksItem fw:EP_Model ;
+    backlog:hasRationale "Three areas carry no scope-facing goal and the advisory reports them. Test-driven rather than argued: for each of the three, the objective's baseline EQUALS the area's own measure and its target is zero — 18 rulings and baseline 18, 3 checks and baseline 3, 186 rows and baseline 186. The objective cannot reach zero while the area is unfinished, and the area cannot finish while it is above zero. A scope-facing goal would measure the same event a third time. Accepted with the advisory left firing, because the pattern IS worth reporting in general — a register whose objectives do not happen to count exactly what its areas contain would need one." .

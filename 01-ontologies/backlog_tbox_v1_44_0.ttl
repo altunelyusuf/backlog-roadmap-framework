@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.43.0> ;
-    owl:versionInfo "1.43.0" ;
+    owl:versionIRI <http://example.org/backlog/1.44.0> ;
+    owl:versionInfo "1.44.0" ;
+    owl:priorVersion <http://example.org/backlog/1.43.0> ;
     owl:priorVersion <http://example.org/backlog/1.42.0> ;
     owl:priorVersion <http://example.org/backlog/1.41.0> ;
     owl:priorVersion <http://example.org/backlog/1.40.0> ;
@@ -4638,3 +4639,28 @@ backlog:hasMeasurementQuery a owl:DatatypeProperty ;
 backlog:Dir_Hold a owl:NamedIndividual , backlog:MetricDirection ;
     rdfs:label "Hold"@en ;
     skos:definition "The value must not move from its baseline. Used by an inverse goal, whose objective is a ceiling rather than a trajectory: the count of things that should not happen must stay where it is. Distinct from Dir_Decrease with a target already reached, which claims an improvement that never occurred."@en .
+
+#################################################################
+#  73. The same subject seen from both layers (v1.44.0)
+#
+#  Found by test drive, not by reading the diagram. Four areas have
+#  an objective whose baseline EQUALS the area's measure exactly —
+#  18 rulings and baseline 18, 23 tables and baseline 23, 186 rows
+#  and baseline 186, 3 checks and baseline 3. The fifth had none.
+#
+#  It is not a missing objective. Area_QueryableGovernance and
+#  Area_Governance are ONE subject seen twice: the work layer says
+#  18 rulings sit in a document, the product layer says an adopter
+#  can query 0 of them. Obj_RulingsQueryable 18 -> 0 measures both,
+#  because the rulings becoming triples is the same event.
+#
+#  Giving the fifth area its own objective would count the same
+#  work twice and let the scope read half-done when it was finished.
+#  What was missing is the RELATION saying the two are one subject.
+#################################################################
+
+backlog:productViewOf a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:ScopeArea ; rdfs:range backlog:ScopeArea ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "product view of"@en ;
+    skos:definition "This product-layer area is the same subject as that work-layer area, seen from what an adopter receives rather than from where the effort goes. Stated so the pair is not counted twice: an area that is a product view of another needs no objective of its own, because the objective on the work-layer area measures the same event. Without this relation the two look like separate subjects and the scope reads half-finished when it is done."@en .
