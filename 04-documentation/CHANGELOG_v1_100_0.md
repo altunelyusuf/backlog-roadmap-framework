@@ -1,5 +1,47 @@
 # Changelog
 
+## v1.100.0 — 2026-10-26 (MINOR: STAGE 2 — the scope, deliverables and exclusions only)
+
+The Mission stage closed at commit `f2f4e0f` and its digest is **backfilled from the real commit** —
+recorded as `pending-commit` in the release that created it, then written once the commit existed. That
+is the only honest order available when a stage output must name a commit the publish has not yet made.
+
+**This commit closes the Scope stage.** No goals, no objectives, no backlog.
+
+### Five deliverables, each quoting the mission clause it came from
+
+| Deliverable | From the mission |
+|---|---|
+| `Del_OntGovernance` | *the governance model should be based on the ontologies* |
+| `Del_OntRuleExec` | *execution of the rules be transferred to the ontology levels* |
+| `Del_OntExport` | *classes, relationships, properties, objects/instances* |
+| `Del_ProseExplains` | *what remains as prose explains* |
+| `Del_CodeExecutes` | *what remains as code executes standard engines* |
+
+### Three exclusions, because a boundary that admits everything refuses nothing
+
+**`Ex_NoNarrativeBan`** — prose that *explains* is not the problem; prose that *defines* is. A framework
+whose reasoning exists only as triples is unreadable, and unreadable governance is ignored governance.
+The test is whether removing the sentence would lose a rule.
+
+**`Ex_NoEngineRewrite`** — the mission says code should *execute* standard engines, not that the
+framework should own them. Writing a SHACL engine to reduce dependency on code would multiply the code
+that carries meaning.
+
+**`Ex_NoReasonerMandate`** — a register needing a reasoner to answer what it says has **moved** the
+dependency, not removed it: from a script an adopter can read to an engine they cannot.
+
+### The same conflict, a second time
+
+The L2 clause *"this scope realises no objective"* demanded an objective in the scope-only commit —
+exactly the conflict the Mission stage hit one release ago. **A clause written for a finished lineage,
+applied to one under construction.**
+
+The staged ceremony makes every intermediate state legal, and every clause that quietly assumed
+completeness now has to say so. Two found, both fixed the same way: a scope naming a `StageOutput` is
+mid-construction.
+
+
 ## v1.99.0 — 2026-10-26 (MAJOR-class: a new mission — STAGE 1 ONLY)
 
 **This commit closes the Mission stage and nothing else.** No scope, no deliverables, no goals, no

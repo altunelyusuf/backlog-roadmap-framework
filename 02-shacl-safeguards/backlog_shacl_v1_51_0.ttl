@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.50.0> ;
-    owl:versionInfo "1.50.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.51.0> ;
+    owl:versionInfo "1.51.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.50.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.49.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.48.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.47.0> ;
@@ -1538,6 +1539,13 @@ backlog:ScopeMeasurabilityShape a sh:NodeShape ;
             FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed, backlog:L4_LineageEnforced))
             FILTER NOT EXISTS { $this backlog:scopeRealizesObjective ?o }
             FILTER NOT EXISTS { ?o2 backlog:fillsScope $this }
+            # A scope whose lineage has not yet reached the Objective stage
+            # SHOULD have no objective. Second instance of the same conflict
+            # the Mission stage hit one release ago: a clause written for a
+            # finished lineage, applied to one under construction. The staged
+            # ceremony makes every intermediate state legal, and every clause
+            # that assumed completeness now has to say so.
+            FILTER NOT EXISTS { $this backlog:producedByStage ?sout }
         }""" ] ;
     sh:sparql [ a sh:SPARQLConstraint ;
         sh:message "L2: this scope states no exclusion; a boundary with only an inside has not been drawn." ;

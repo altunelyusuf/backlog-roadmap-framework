@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/5.0.0> ;
-    owl:versionInfo "5.0.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/5.1.0> ;
+    owl:versionInfo "5.1.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/5.0.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/4.8.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/4.7.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/4.6.0> ;
@@ -6037,6 +6038,67 @@ fw:Obs_ProseCodeAsIs a backlog:MetricObservation ;
 #  The Mission stage output, closing this stage.
 fw:Out2_Mission a backlog:StageOutput ;
     backlog:outputOfStage backlog:Stage_Mission ;
+    backlog:hasStateDigest "a5d24736308c8ad46fdd1b4230b941757cba52738bde4e5582317ad426b126fb" ;
+    backlog:closedAtCommit "f2f4e0f" ;
+    backlog:hasRationale "Digest and commit backfilled at v1.100.0, once the commit existed. Recorded as pending in the release that created the stage rather than fabricated, then written from the real commit — which is the only honest order available when a stage output must name a commit the publish has not yet made." .
+
+
+#################################################################
+#  v5.1.0 — STAGE 2: THE SCOPE. Deliverables and exclusions only.
+#
+#  The Mission stage closed at commit f2f4e0f and its digest is
+#  backfilled above from the real commit. This commit closes the
+#  Scope stage: what the boundary REQUIRES, read clause by clause
+#  from the owner's mission, with no goals, no objectives and no
+#  backlog. Those close in later commits.
+#
+#  Five deliverables, each quoting the mission clause it came from
+#  — the check added at v1.90.0 after the previous scope was found
+#  wider than its mission.
+#################################################################
+fw:Del_OntGovernance a backlog:ScopeDeliverable ;
+    backlog:hasDeliverableText "The governance model is expressed as ontology: every governance ruling the framework enforces exists as a machine-checkable statement, not only as a heading in a document." ;
+    backlog:derivesFromMissionClause "the governance model should be based on the ontologies" .
+fw:Del_OntRuleExec a backlog:ScopeDeliverable ;
+    backlog:hasDeliverableText "Rule execution happens at the ontology layer: a rule's meaning is carried by the ontology and code only runs a standard engine over it, so no rule can behave differently from what the ontology says." ;
+    backlog:derivesFromMissionClause "execution of the rules be transferred to the ontology levels from the prose and source codes" .
+fw:Del_OntExport a backlog:ScopeDeliverable ;
+    backlog:hasDeliverableText "Classes, relationships, properties and instances that live in prose or in source code are exported to the ontology, so that meaning is not defined by a table in a document or a map in a script." ;
+    backlog:derivesFromMissionClause "identify the possible exports from them to the ontology not just the rules but also the clasesses, relationships, properties, objects/instances" .
+fw:Del_ProseExplains a backlog:ScopeDeliverable ;
+    backlog:hasDeliverableText "What remains as prose explains and does not define. A document may describe what the ontology says; it may not be the only place something is said." ;
+    backlog:derivesFromMissionClause "What remains as prose explains" .
+fw:Del_CodeExecutes a backlog:ScopeDeliverable ;
+    backlog:hasDeliverableText "What remains as code executes standard engines and carries no meaning of its own. A script may run a validator; it may not decide what is valid." ;
+    backlog:derivesFromMissionClause "what remains as code executes standard engines" .
+
+fw:Scope_Ontology a backlog:ScopeStatement ;
+    backlog:hasScopeStatementText "Move meaning out of prose and code and into the ontology: governance as machine-checkable statement, rule execution at the ontology layer, and the classes, relationships, properties and instances currently defined by documents or scripts exported to where they can be reasoned over. Prose is left explaining; code is left running engines." ;
+    backlog:scopeForMission fw:Mission_OntologyDriven ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out2_Scope ;
+    backlog:requiresDeliverable fw:Del_OntGovernance , fw:Del_OntRuleExec , fw:Del_OntExport ,
+                                fw:Del_ProseExplains , fw:Del_CodeExecutes ;
+    backlog:hasScopeExclusion fw:Ex_NoNarrativeBan , fw:Ex_NoEngineRewrite , fw:Ex_NoReasonerMandate .
+
+fw:Ex_NoNarrativeBan a backlog:ScopeExclusion ;
+    backlog:excludesConcern "Removing explanatory prose, or requiring that every document sentence have an ontology counterpart." ;
+    backlog:hasExclusionRationale "Prose that EXPLAINS is not the problem; prose that DEFINES is. A framework whose reasoning exists only as triples is unreadable, and unreadable governance is ignored governance. The line is whether removing the sentence would lose a rule." ;
+    backlog:decidedBy backlog:Owner .
+
+fw:Ex_NoEngineRewrite a backlog:ScopeExclusion ;
+    backlog:excludesConcern "Replacing pyshacl, rdflib, git or any other standard engine with framework-owned implementations." ;
+    backlog:hasExclusionRationale "The mission says code should execute standard engines, not that the framework should own them. Writing a SHACL engine to reduce dependency on code would multiply the code that carries meaning, which is the opposite of the mission." ;
+    backlog:decidedBy backlog:Owner .
+
+fw:Ex_NoReasonerMandate a backlog:ScopeExclusion ;
+    backlog:excludesConcern "Requiring an OWL reasoner at any conformance level." ;
+    backlog:hasExclusionRationale "Moving meaning into the ontology does not mean requiring inference to read it. A register that needs a reasoner to answer what it says has moved the dependency rather than removed it — from a script an adopter can read to an engine they cannot." ;
+    backlog:decidedBy backlog:Owner .
+
+fw:Out2_Scope a backlog:StageOutput ;
+    backlog:outputOfStage backlog:Stage_Scope ;
+    backlog:consumesOutput fw:Out2_Mission ;
     backlog:hasStateDigest "pending-commit" ;
     backlog:closedAtCommit "pending-commit" ;
-    backlog:hasRationale "Digest and commit are written after this release is published, because a stage output records the state at its commit and the commit does not exist until the publish. Recorded as pending rather than fabricated." .
+    backlog:hasRationale "Backfilled from the real commit in the next release, as the Mission stage output was." .
