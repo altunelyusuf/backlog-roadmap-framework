@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.37.0> ;
-    owl:versionInfo "1.37.0" ;
+    owl:versionIRI <http://example.org/backlog/1.38.0> ;
+    owl:versionInfo "1.38.0" ;
+    owl:priorVersion <http://example.org/backlog/1.37.0> ;
     owl:priorVersion <http://example.org/backlog/1.36.0> ;
     owl:priorVersion <http://example.org/backlog/1.35.0> ;
     owl:priorVersion <http://example.org/backlog/1.34.0> ;
@@ -4240,3 +4241,126 @@ backlog:describesItem a owl:ObjectProperty ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "describes item"@en ;
     skos:definition "The work item this model is about. Distinct from the task that produced it: a sequence diagram made while designing one story may describe another."@en .
+
+#################################################################
+#  66. What a story carries (v1.38.0) — the mission's second half
+#
+#  The owner's mission: "a story carries its steps, interactions,
+#  state changes, test cases and test data." Six concepts, built
+#  here in one release because they are one sentence and splitting
+#  them would leave a story able to say what a user does and not
+#  what changes, or what to test and not what to test it with.
+#
+#  Built to the decisions the v1.94.0 grooming refinements
+#  recorded, not redesigned:
+#   - InteractionStep carries an ORDINAL, not a linked list: the
+#     common question is what step 3 is.
+#   - StateChange states are FREE TEXT, not an enumeration: the
+#     framework governs registers for any domain and cannot know a
+#     domain state machine.
+#   - TestData does NOT carry the data, only what fixture state it
+#     establishes; a register holding payloads becomes a data store.
+#   - TestCase gains exercisesCriterion AND is named as a range by
+#     coveredByCase, so it is reachable — the trap that lost
+#     Package for 91 releases.
+#
+#  Sources: UML 2.5 interaction and state machine diagrams;
+#  ISO/IEC/IEEE 29119-3 test case and test data specification.
+#################################################################
+
+backlog:Specification a owl:Class ;
+    rdfs:subClassOf core:Artifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Specification"@en ;
+    skos:definition "What a story does, stated so it can be checked against what was built. Distinct from an acceptance criterion: a criterion says whether the story is DONE, a specification says what it DOES. A story with criteria and no specification can be signed off without anyone able to say what was signed off."@en ;
+    dcterms:source "ISO/IEC/IEEE 29148 requirements specification"@en .
+
+backlog:hasSpecification a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:WorkItem ; rdfs:range backlog:Specification ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has specification"@en .
+
+backlog:InteractionStep a owl:Class ;
+    rdfs:subClassOf core:Artifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Interaction Step"@en ;
+    skos:definition "One thing a person does, in order. Carries an ordinal rather than a link to the next step: a linked list makes insertion cheap and querying expensive, and the question asked of a specification is what step three is, not what follows step two."@en ;
+    dcterms:source "UML 2.5 interaction diagrams (sequence, communication)"@en .
+
+backlog:hasInteractionStep a owl:ObjectProperty ;
+    rdfs:domain backlog:Specification ; rdfs:range backlog:InteractionStep ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has interaction step"@en .
+
+backlog:hasStepOrdinal a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:InteractionStep ; rdfs:range xsd:integer ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has step ordinal"@en .
+
+backlog:hasStepActor a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:InteractionStep ; rdfs:range backlog:TeamRole ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has step actor"@en ;
+    skos:definition "Who performs this step. Range is TeamRole, which is open, so an adopter names their own actors without the framework prescribing a cast."@en .
+
+backlog:hasStepAction a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:InteractionStep ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has step action"@en .
+
+backlog:StateChange a owl:Class ;
+    rdfs:subClassOf core:Artifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "State Change"@en ;
+    skos:definition "What the system becomes, as distinct from what a person did. States are free text rather than an enumeration: the framework governs registers for any domain and cannot know a domain state machine. What it CAN check is that a change actually changes something."@en ;
+    dcterms:source "UML 2.5 state machine diagrams"@en .
+
+backlog:hasStateChange a owl:ObjectProperty ;
+    rdfs:domain backlog:Specification ; rdfs:range backlog:StateChange ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has state change"@en .
+
+backlog:hasFromState a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:StateChange ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "has from state"@en .
+backlog:hasToState a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:StateChange ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "has to state"@en .
+backlog:hasTrigger a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:StateChange ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "has trigger"@en .
+
+backlog:TestCase a owl:Class ;
+    rdfs:subClassOf core:Artifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Test Case"@en ;
+    skos:definition "A named check that could fail. Evidence previously pointed at a fixture path and a verdict; a test case lets a reader disagree with the CHECK rather than only with the claim that checking happened."@en ;
+    dcterms:source "ISO/IEC/IEEE 29119-3 test case specification"@en .
+
+backlog:coveredByCase a owl:ObjectProperty ;
+    rdfs:domain backlog:AcceptanceCriterion ; rdfs:range backlog:TestCase ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "covered by case"@en ;
+    skos:definition "A test case exercising this criterion. Exists in this direction as well as exercisesCriterion so TestCase is NAMED AS A RANGE: a class no property points at is one nobody uses, which is how Package sat unused for 91 releases."@en .
+
+backlog:exercisesCriterion a owl:ObjectProperty ;
+    rdfs:domain backlog:TestCase ; rdfs:range backlog:AcceptanceCriterion ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "exercises criterion"@en .
+
+backlog:TestData a owl:Class ;
+    rdfs:subClassOf core:Artifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Test Data"@en ;
+    skos:definition "The fixture state a test case runs against, described rather than contained. The framework records that a case needs a particular starting state and what that state is; holding the data itself would make the register a data store rather than a record about work."@en ;
+    dcterms:source "ISO/IEC/IEEE 29119-3 test data requirements"@en .
+
+backlog:runsOnData a owl:ObjectProperty ;
+    rdfs:domain backlog:TestCase ; rdfs:range backlog:TestData ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "runs on data"@en .
+
+backlog:hasFixtureState a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:TestData ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has fixture state"@en .

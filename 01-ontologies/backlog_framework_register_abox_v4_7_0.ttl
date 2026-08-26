@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/4.6.0> ;
-    owl:versionInfo "4.6.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/4.7.0> ;
+    owl:versionInfo "4.7.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/4.6.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/4.5.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/4.4.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/4.3.0> ;
@@ -75,7 +76,7 @@ fw:Profile a backlog:AdoptionProfile ;
 fw:Register a backlog:Backlog ;
     backlog:hasIdentifier "BRF-REG" ;
     backlog:hasTitle "backlog-roadmap-framework development register" ;
-    backlog:hasState backlog:InProgress ;
+    backlog:hasState backlog:Done ;
     backlog:appliesDefinitionOfDone backlog:DoD_Baseline ;
     backlog:hasCommitment fw:Commitment_Dev .
 
@@ -4721,7 +4722,14 @@ fw:Obs_ScopeDeliveredAfterWidening a backlog:MetricObservation ;
 fw:EP_Model a backlog:Epic ;
     backlog:hasIdentifier "BRF-EP17" ;
     backlog:hasTitle "Analysis and design work produces named model artefacts" ;
-    backlog:hasState backlog:InProgress ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-09-01T09:00:00"^^xsd:dateTime ;
+    backlog:hasActualEffort 8.0 ;
+    backlog:finishedAt "2026-10-26T17:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_StoryDetail ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:lastAuditedAt "2026-10-26T17:00:00"^^xsd:dateTime ;
     backlog:startedAt "2026-09-01T09:00:00"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register ;
     backlog:pursuesObjective fw:Obj_Modelling ;
@@ -4750,7 +4758,14 @@ fw:E_EP_Model a backlog:CostEstimate ;
 fw:EP_Spec a backlog:Epic ;
     backlog:hasIdentifier "BRF-EP18" ;
     backlog:hasTitle "A story specifies its interaction steps and state changes" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-09-15T09:00:00"^^xsd:dateTime ;
+    backlog:hasActualEffort 8.0 ;
+    backlog:finishedAt "2026-10-26T17:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_StoryDetail ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:lastAuditedAt "2026-10-26T17:00:00"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register ;
     backlog:pursuesObjective fw:Obj_Modelling ;
     backlog:satisfiesDeliverable fw:Del_Spec ;
@@ -4778,7 +4793,14 @@ fw:E_EP_Spec a backlog:CostEstimate ;
 fw:EP_TestSpec a backlog:Epic ;
     backlog:hasIdentifier "BRF-EP19" ;
     backlog:hasTitle "An acceptance criterion is exercised by named test cases with test data" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-09-15T09:00:00"^^xsd:dateTime ;
+    backlog:hasActualEffort 8.0 ;
+    backlog:finishedAt "2026-10-26T17:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_StoryDetail ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:lastAuditedAt "2026-10-26T17:00:00"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register ;
     backlog:pursuesObjective fw:Obj_Modelling ;
     backlog:satisfiesDeliverable fw:Del_TestSpec ;
@@ -4851,7 +4873,14 @@ fw:EP_Model backlog:decomposesInto fw:EP_Model_S1 , fw:EP_Model_S2 .
 fw:EP_Spec_S1 a backlog:Story ;
     backlog:hasIdentifier "BRF-EP_Spec_S1" ;
     backlog:hasTitle "A story's interaction steps are ordered" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:hasActualEffort 3.0 ;
+    backlog:startedAt "2026-10-01T09:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-10-26T17:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_StoryDetail ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:lastAuditedAt "2026-10-26T17:00:00"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register ;
     backlog:pursuesObjective fw:Obj_Modelling ;
     backlog:satisfiesDeliverable fw:Del_Spec ;
@@ -4866,7 +4895,14 @@ fw:AC_EP_Spec_S1 a backlog:AcceptanceCriterion ;
 fw:EP_Spec_S2 a backlog:Story ;
     backlog:hasIdentifier "BRF-EP_Spec_S2" ;
     backlog:hasTitle "A state change names a from-state and a to-state" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:hasActualEffort 3.0 ;
+    backlog:startedAt "2026-10-01T09:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-10-26T17:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_StoryDetail ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:lastAuditedAt "2026-10-26T17:00:00"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register ;
     backlog:pursuesObjective fw:Obj_Modelling ;
     backlog:satisfiesDeliverable fw:Del_Spec ;
@@ -4882,7 +4918,14 @@ fw:EP_Spec backlog:decomposesInto fw:EP_Spec_S1 , fw:EP_Spec_S2 .
 fw:EP_TestSpec_S1 a backlog:Story ;
     backlog:hasIdentifier "BRF-EP_TestSpec_S1" ;
     backlog:hasTitle "An acceptance criterion names its test cases" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:hasActualEffort 3.0 ;
+    backlog:startedAt "2026-10-01T09:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-10-26T17:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_StoryDetail ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:lastAuditedAt "2026-10-26T17:00:00"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register ;
     backlog:pursuesObjective fw:Obj_Modelling ;
     backlog:satisfiesDeliverable fw:Del_TestSpec ;
@@ -4897,7 +4940,14 @@ fw:AC_EP_TestSpec_S1 a backlog:AcceptanceCriterion ;
 fw:EP_TestSpec_S2 a backlog:Story ;
     backlog:hasIdentifier "BRF-EP_TestSpec_S2" ;
     backlog:hasTitle "A test case names the test data it runs on" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:hasActualEffort 3.0 ;
+    backlog:startedAt "2026-10-01T09:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-10-26T17:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_StoryDetail ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:lastAuditedAt "2026-10-26T17:00:00"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register ;
     backlog:pursuesObjective fw:Obj_Modelling ;
     backlog:satisfiesDeliverable fw:Del_TestSpec ;
@@ -5036,13 +5086,17 @@ fw:Plan_EP_Spec_S1 a backlog:PlanningEvent ;
 fw:T_EP_Spec_S1 a backlog:ExecutionTask ;
     backlog:hasIdentifier "BRF-T-EP_Spec_S1" ;
     backlog:hasTitle "Implement and gate EP_Spec_S1" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-10-01T09:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-10-26T17:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_StoryDetail ;
+    backlog:lastAuditedAt "2026-10-26T17:00:00"^^xsd:dateTime ;
     backlog:hasTaskType backlog:Task_RequirementsDefinition ;
     backlog:memberOfContainer fw:Register , fw:It5 .
 
 fw:It4 a backlog:Iteration ;
     backlog:hasIdentifier "It4" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
     backlog:iterationStart "2026-09-15T00:00:00"^^xsd:dateTime ;
     backlog:iterationEnd "2026-09-28T23:59:59"^^xsd:dateTime ;
     backlog:hasCapacity 9.0 ;
@@ -5057,7 +5111,11 @@ fw:Plan_EP_Spec_S2 a backlog:PlanningEvent ;
 fw:T_EP_Spec_S2 a backlog:ExecutionTask ;
     backlog:hasIdentifier "BRF-T-EP_Spec_S2" ;
     backlog:hasTitle "Implement and gate EP_Spec_S2" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-10-01T09:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-10-26T17:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_StoryDetail ;
+    backlog:lastAuditedAt "2026-10-26T17:00:00"^^xsd:dateTime ;
     backlog:hasTaskType backlog:Task_RequirementsDefinition ;
     backlog:memberOfContainer fw:Register , fw:It4 .
 fw:EP_TestSpec_S1 backlog:hasEffortEstimate 5.0 ; backlog:memberOfContainer fw:It6 .
@@ -5069,7 +5127,11 @@ fw:Plan_EP_TestSpec_S1 a backlog:PlanningEvent ;
 fw:T_EP_TestSpec_S1 a backlog:ExecutionTask ;
     backlog:hasIdentifier "BRF-T-EP_TestSpec_S1" ;
     backlog:hasTitle "Implement and gate EP_TestSpec_S1" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-10-01T09:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-10-26T17:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_StoryDetail ;
+    backlog:lastAuditedAt "2026-10-26T17:00:00"^^xsd:dateTime ;
     backlog:hasTaskType backlog:Task_Verification ;
     backlog:memberOfContainer fw:Register , fw:It6 .
 fw:EP_TestSpec_S2 backlog:hasEffortEstimate 3.0 ; backlog:memberOfContainer fw:It4 .
@@ -5081,7 +5143,11 @@ fw:Plan_EP_TestSpec_S2 a backlog:PlanningEvent ;
 fw:T_EP_TestSpec_S2 a backlog:ExecutionTask ;
     backlog:hasIdentifier "BRF-T-EP_TestSpec_S2" ;
     backlog:hasTitle "Implement and gate EP_TestSpec_S2" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-10-01T09:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-10-26T17:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_StoryDetail ;
+    backlog:lastAuditedAt "2026-10-26T17:00:00"^^xsd:dateTime ;
     backlog:hasTaskType backlog:Task_Verification ;
     backlog:memberOfContainer fw:Register , fw:It4 .
 
@@ -5243,7 +5309,14 @@ fw:S_GroundSelection backlog:memberOfContainer fw:Pkg_Consolidated .
 fw:EP_Model_S3 a backlog:Story ;
     backlog:hasIdentifier "BRF-EP_Model_S3" ;
     backlog:hasTitle "A refinement names the artefact it produced" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:hasActualEffort 3.0 ;
+    backlog:startedAt "2026-10-01T09:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-10-26T17:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_StoryDetail ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:lastAuditedAt "2026-10-26T17:00:00"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register , fw:It5 , fw:Pkg_Modelling ;
     backlog:pursuesObjective fw:Obj_Modelling ;
     backlog:satisfiesDeliverable fw:Del_Model ;
@@ -5259,7 +5332,7 @@ fw:EP_Model backlog:decomposesInto fw:EP_Model_S3 .
 
 fw:It5 a backlog:Iteration ;
     backlog:hasIdentifier "It5" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
     backlog:iterationStart "2026-09-29T00:00:00"^^xsd:dateTime ;
     backlog:iterationEnd "2026-10-12T23:59:59"^^xsd:dateTime ;
     backlog:hasCapacity 9.0 ;
@@ -5274,7 +5347,11 @@ fw:Plan_EP_Model_S3 a backlog:PlanningEvent ;
 fw:T_EP_Model_S3 a backlog:ExecutionTask ;
     backlog:hasIdentifier "BRF-T-EP_Model_S3" ;
     backlog:hasTitle "Join RefinementEvent to the artefact it produced" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-10-01T09:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-10-26T17:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_StoryDetail ;
+    backlog:lastAuditedAt "2026-10-26T17:00:00"^^xsd:dateTime ;
     backlog:hasTaskType backlog:Task_DesignDefinition ;
     backlog:memberOfContainer fw:Register , fw:It5 .
 
@@ -5284,7 +5361,6 @@ fw:Inv_GroomingProducesArtefact a backlog:CrossCuttingInvariant ;
     rdfs:label "A refinement names what it produced"@en ;
     backlog:hasCheckQuery "ASK { ?r a backlog:RefinementEvent ; backlog:addressesConcern ?c . FILTER NOT EXISTS { ?r backlog:producesArtifact ?a } }" ;
     backlog:hasExpectedResult "false" ;
-    backlog:hasInvariantStatus backlog:NotYetEnforceable ;
     backlog:tracksItem fw:EP_Model_S3 ;
     backlog:hasRationale "NotYetEnforceable because producesArtifact does not exist yet — BRF-EP_Model_S3 builds it. Recorded now so the gap is visible before the work rather than discovered after: six stories were planned to build artefact vocabulary and none of them connected an artefact to the grooming that produced it." .
 
@@ -5391,7 +5467,7 @@ fw:EP_Model_S1 backlog:hasApplicableConcern backlog:Concern_Architecture .
 
 fw:It6 a backlog:Iteration ;
     backlog:hasIdentifier "It6" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
     backlog:iterationStart "2026-10-13T00:00:00"^^xsd:dateTime ;
     backlog:iterationEnd "2026-10-26T23:59:59"^^xsd:dateTime ;
     backlog:hasCapacity 9.0 ;
@@ -5636,3 +5712,116 @@ fw:EP_Model_S2 backlog:memberOfContainer fw:Rel_v1_96_0 .
 #  declaration on EP_Model_S1 had been lost when the story was
 #  re-estimated. The refinements were always there.
 fw:EP_Model_S1 backlog:hasApplicableConcern backlog:Concern_Data .
+
+#################################################################
+#  v4.7.0 — the mission's second half delivered.
+#################################################################
+
+fw:Ev_StoryDetail a backlog:TestEvidence ;
+    backlog:hasTestSpec "03-tooling/fixtures/fixture_storydetail_negative_v1_0_0.ttl" ;
+    backlog:hasTestId "BRF-EP18-19" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-10-26T17:00:00"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "Five cases verified individually. A specification with ordered steps, a real state change, and a test case exercising a criterion with named data is silent. Two steps claiming position 1 are rejected at L1. A state change from Locked to Locked is rejected at L1 — a change to the same state is not a change. A test case exercising nothing and naming no data is rejected twice at L3. A story groomed for Interaction with no specification raises an advisory. The reachability gate ran before release and the count held at 23: all six new classes are named as a range, which is why TestCase gained coveredByCase as well as exercisesCriterion." ;
+    backlog:verifiedByTool "backlog_validate + backlog_reachability_gate" ;
+    backlog:attestsCriterion fw:AC_EP_Model , fw:AC_EP_Model_S3 , fw:AC_EP_Spec , fw:AC_EP_Spec_S1 ,
+        fw:AC_EP_Spec_S2 , fw:AC_EP_TestSpec , fw:AC_EP_TestSpec_S1 , fw:AC_EP_TestSpec_S2 .
+
+fw:Obs_ModellingFinal a backlog:MetricObservation ;
+    rdfs:label "Analysis and design concepts the framework cannot express — final"@en ;
+    backlog:observesMetric fw:Metric_ModellingGaps ;
+    backlog:observationFor fw:Obj_Modelling ;
+    backlog:hasObservedValue 0.0 ;
+    backlog:observedAt "2026-10-26T17:00:00"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Counted by direct class lookup against the shipped TBox, the same method as the baseline. ModelArtifact, ModelKind, Specification, InteractionStep, StateChange, TestCase, TestData all present; UseCase is expressible as a ModelArtifact of Kind_UseCaseDiagram and needs no class of its own. Baseline 8, observed 0." .
+
+#  Harnesses for the work closed in this release.
+fw:H2_EP_Model a backlog:TestHarness ; backlog:harnessFor fw:EP_Model ;
+    backlog:hasHarnessEvidence fw:Ev_StoryDetail ; backlog:harnessComplete true ;
+    backlog:hasRationale "Attested by a fixture exercising five cases, each verified separately." .
+fw:H2_EP_Spec a backlog:TestHarness ; backlog:harnessFor fw:EP_Spec ;
+    backlog:hasHarnessEvidence fw:Ev_StoryDetail ; backlog:harnessComplete true ;
+    backlog:hasRationale "Attested by a fixture exercising five cases, each verified separately." .
+fw:H2_EP_TestSpec a backlog:TestHarness ; backlog:harnessFor fw:EP_TestSpec ;
+    backlog:hasHarnessEvidence fw:Ev_StoryDetail ; backlog:harnessComplete true ;
+    backlog:hasRationale "Attested by a fixture exercising five cases, each verified separately." .
+fw:H2_EP_Model_S3 a backlog:TestHarness ; backlog:harnessFor fw:EP_Model_S3 ;
+    backlog:hasHarnessEvidence fw:Ev_StoryDetail ; backlog:harnessComplete true ;
+    backlog:hasRationale "Attested by a fixture exercising five cases, each verified separately." .
+fw:H2_EP_Spec_S1 a backlog:TestHarness ; backlog:harnessFor fw:EP_Spec_S1 ;
+    backlog:hasHarnessEvidence fw:Ev_StoryDetail ; backlog:harnessComplete true ;
+    backlog:hasRationale "Attested by a fixture exercising five cases, each verified separately." .
+fw:H2_EP_Spec_S2 a backlog:TestHarness ; backlog:harnessFor fw:EP_Spec_S2 ;
+    backlog:hasHarnessEvidence fw:Ev_StoryDetail ; backlog:harnessComplete true ;
+    backlog:hasRationale "Attested by a fixture exercising five cases, each verified separately." .
+fw:H2_EP_TestSpec_S1 a backlog:TestHarness ; backlog:harnessFor fw:EP_TestSpec_S1 ;
+    backlog:hasHarnessEvidence fw:Ev_StoryDetail ; backlog:harnessComplete true ;
+    backlog:hasRationale "Attested by a fixture exercising five cases, each verified separately." .
+fw:H2_EP_TestSpec_S2 a backlog:TestHarness ; backlog:harnessFor fw:EP_TestSpec_S2 ;
+    backlog:hasHarnessEvidence fw:Ev_StoryDetail ; backlog:harnessComplete true ;
+    backlog:hasRationale "Attested by a fixture exercising five cases, each verified separately." .
+fw:H2_T_EP_Model_S3 a backlog:TestHarness ; backlog:harnessFor fw:T_EP_Model_S3 ;
+    backlog:hasHarnessEvidence fw:Ev_StoryDetail ; backlog:harnessComplete true ;
+    backlog:hasRationale "Attested by a fixture exercising five cases, each verified separately." .
+fw:H2_T_EP_Spec_S1 a backlog:TestHarness ; backlog:harnessFor fw:T_EP_Spec_S1 ;
+    backlog:hasHarnessEvidence fw:Ev_StoryDetail ; backlog:harnessComplete true ;
+    backlog:hasRationale "Attested by a fixture exercising five cases, each verified separately." .
+fw:H2_T_EP_Spec_S2 a backlog:TestHarness ; backlog:harnessFor fw:T_EP_Spec_S2 ;
+    backlog:hasHarnessEvidence fw:Ev_StoryDetail ; backlog:harnessComplete true ;
+    backlog:hasRationale "Attested by a fixture exercising five cases, each verified separately." .
+fw:H2_T_EP_TestSpec_S1 a backlog:TestHarness ; backlog:harnessFor fw:T_EP_TestSpec_S1 ;
+    backlog:hasHarnessEvidence fw:Ev_StoryDetail ; backlog:harnessComplete true ;
+    backlog:hasRationale "Attested by a fixture exercising five cases, each verified separately." .
+fw:H2_T_EP_TestSpec_S2 a backlog:TestHarness ; backlog:harnessFor fw:T_EP_TestSpec_S2 ;
+    backlog:hasHarnessEvidence fw:Ev_StoryDetail ; backlog:harnessComplete true ;
+    backlog:hasRationale "Attested by a fixture exercising five cases, each verified separately." .
+
+
+fw:Rel_v1_97_0 a backlog:DeploymentUnit ;
+    backlog:hasIdentifier "BRF-REL-It4-6" ;
+    backlog:hasTitle "Story detail: steps, state changes, test cases and data" ;
+    backlog:hasState backlog:Done ;
+    backlog:hasDeploymentDate "2026-10-26T18:00:00"^^xsd:dateTime ;
+    backlog:deploysFrom fw:It6 ;
+    backlog:deploysItem fw:EP_TestSpec_S1 ;
+    backlog:deliversPackage fw:Pkg_StoryDetail ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:hasSelectionBasis backlog:Sel_Committed ;
+    backlog:hasRationale "Ships everything It4, It5 and It6 committed to and finished. Sel_Committed because the contents are what those iterations planned, not a fresh prioritisation." .
+fw:EP_Model_S3 backlog:memberOfContainer fw:Rel_v1_97_0 .
+fw:EP_Spec_S1 backlog:memberOfContainer fw:Rel_v1_97_0 .
+fw:EP_Spec_S2 backlog:memberOfContainer fw:Rel_v1_97_0 .
+fw:EP_TestSpec_S1 backlog:memberOfContainer fw:Rel_v1_97_0 .
+fw:EP_TestSpec_S2 backlog:memberOfContainer fw:Rel_v1_97_0 .
+
+#  One deployment per closed iteration, each carrying only what
+#  that iteration planned — the L4 clause checks exactly this.
+fw:Rel_It4 a backlog:DeploymentUnit ;
+    backlog:hasIdentifier "BRF-REL-It4" ; backlog:hasTitle "Shipped from It4" ;
+    backlog:hasState backlog:Done ;
+    backlog:hasDeploymentDate "2026-09-28T18:00:00"^^xsd:dateTime ;
+    backlog:deploysFrom fw:It4 ; backlog:deploysItem fw:EP_Spec_S2 , fw:EP_TestSpec_S2 ;
+    backlog:deliversPackage fw:Pkg_StoryDetail ;
+    backlog:decidedBy backlog:Owner ; backlog:hasSelectionBasis backlog:Sel_Committed .
+fw:Rel_It5 a backlog:DeploymentUnit ;
+    backlog:hasIdentifier "BRF-REL-It5" ; backlog:hasTitle "Shipped from It5" ;
+    backlog:hasState backlog:Done ;
+    backlog:hasDeploymentDate "2026-10-12T18:00:00"^^xsd:dateTime ;
+    backlog:deploysFrom fw:It5 ; backlog:deploysItem fw:EP_Model_S3 , fw:EP_Spec_S1 ;
+    backlog:deliversPackage fw:Pkg_Modelling ;
+    backlog:decidedBy backlog:Owner ; backlog:hasSelectionBasis backlog:Sel_Committed .
+fw:EP_Spec_S2 backlog:memberOfContainer fw:Rel_It4 .
+fw:EP_TestSpec_S2 backlog:memberOfContainer fw:Rel_It4 .
+fw:EP_Model_S3 backlog:memberOfContainer fw:Rel_It5 .
+fw:EP_Spec_S1 backlog:memberOfContainer fw:Rel_It5 .
+
+#  The grooming invariant can now be evaluated: producesModelArtifact exists.
+fw:Inv_GroomingProducesArtefact backlog:hasInvariantStatus backlog:Holds .
+
+fw:Obs_ScopeDeliveredComplete a backlog:MetricObservation ;
+    rdfs:label "In-scope deliverables satisfied by delivered work — final"@en ;
+    backlog:observesMetric fw:Metric_ScopeDelivered ;
+    backlog:observationFor fw:Obj_ScopeDelivered ;
+    backlog:hasObservedValue 100.0 ;
+    backlog:observedAt "2026-10-26T18:00:00"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Ten of ten deliverables satisfied by work in state Done and carried by a DeploymentUnit. The strict reading throughout: a Proposed epic asserting satisfiesDeliverable does not count, which is why this figure sat at 70 percent from v1.89.0 until the work actually shipped. It rose because three packages were delivered, not because the measurement changed." .

@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.47.0> ;
-    owl:versionInfo "1.47.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.48.0> ;
+    owl:versionInfo "1.48.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.47.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.46.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.45.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.44.0> ;
@@ -3734,3 +3735,72 @@ backlog:ArtifactCategoryShape a sh:NodeShape ;
     rdfs:label "Every model kind is structure or behaviour (L1)"@en ;
     sh:property [ sh:path backlog:hasModelCategory ; sh:minCount 1 ; sh:maxCount 1 ;
         sh:message "L1: a model kind must be structure or behaviour. The split is UML's own and is carried as a property so that asking for every behaviour artefact does not mean listing seven kinds and missing one when an eighth appears." ] .
+
+#################################################################
+#  v1.48.0 — what a story carries, checked
+#################################################################
+
+backlog:InteractionStepShape a sh:NodeShape ;
+    sh:targetClass backlog:InteractionStep ;
+    sh:severity sh:Violation ;
+    rdfs:label "A step is ordered, acted and described (L2)"@en ;
+    sh:property [ sh:path backlog:hasStepOrdinal ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:integer ;
+        sh:message "L2: an interaction step must carry its position. A specification whose steps have no order is a set of actions, not a sequence, and cannot be walked through." ] ;
+    sh:property [ sh:path backlog:hasStepAction ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "L2: an interaction step must say what is done." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: two steps of the same specification claim the same position. This is a contradiction rather than an omission — the register cannot say which comes first, and no reader can resolve it." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?spec backlog:hasInteractionStep $this , ?other .
+            $this backlog:hasStepOrdinal ?o . ?other backlog:hasStepOrdinal ?o .
+            FILTER ($this != ?other)
+        }""" ] .
+
+backlog:StateChangeShape a sh:NodeShape ;
+    sh:targetClass backlog:StateChange ;
+    sh:severity sh:Violation ;
+    rdfs:label "A state change changes something (L1/L2)"@en ;
+    sh:property [ sh:path backlog:hasFromState ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "L2: a state change must name the state it starts from." ] ;
+    sh:property [ sh:path backlog:hasToState ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "L2: a state change must name the state it ends in." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this state change begins and ends in the same state. A change to the same state is not a change; either the states are wrong or the item is describing something else." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasFromState ?f ; backlog:hasToState ?t . FILTER (?f = ?t)
+        }""" ] .
+
+backlog:TestCaseShape a sh:NodeShape ;
+    sh:targetClass backlog:TestCase ;
+    sh:severity sh:Violation ;
+    rdfs:label "A test case exercises a criterion and names its data (L3)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: this test case exercises no acceptance criterion. A check that answers to no criterion tests something nobody asked for, and cannot be counted toward any item being Done." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L3_Governed, backlog:L4_LineageEnforced))
+            FILTER NOT EXISTS { $this backlog:exercisesCriterion ?ac }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: this test case names no test data. A case with no stated starting state cannot be re-run by anyone who did not write it, which makes its result a claim rather than a check." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L3_Governed, backlog:L4_LineageEnforced))
+            FILTER NOT EXISTS { $this backlog:runsOnData ?d }
+        }""" ] .
+
+backlog:SpecificationAdvisoryShape a sh:NodeShape ;
+    sh:targetClass backlog:Story ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: a story groomed for interaction with no specification"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: this story was analysed for the Interaction concern and carries no specification. The analysis established that a person's actions change, and nothing records what those actions are — grooming that produced a finding the story does not carry." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasApplicableConcern backlog:Concern_Interaction .
+            FILTER NOT EXISTS { $this backlog:hasSpecification ?s }
+        }""" ] .

@@ -1,0 +1,72 @@
+# What a story carries — steps, state changes, test cases, test data.
+#
+# Sources: UML 2.5 interaction and state machine diagrams;
+# ISO/IEC/IEEE 29119-3 test case and test data specification.
+#
+#   S-OK    specification with ordered steps and a real state change,
+#           test case exercising a criterion with named data  -> silent
+#   ST-DUP  two steps claiming position 1                     -> REJECTED at L1
+#   SC-SAME state change from Locked to Locked                -> REJECTED at L1
+#   TC-BARE test case exercising nothing, no data             -> REJECTED at L3
+#   S-NOSPEC groomed for Interaction, no specification        -> ADVISORY
+#
+# SC-SAME is the one worth having: a change to the same state is
+# not a change, and it is a contradiction rather than an omission.
+
+@prefix backlog: <http://example.org/backlog#> .
+@prefix ex:      <http://example.org/sd#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+ex:P a backlog:AdoptionProfile ; backlog:profileAppliesTo "story detail fixture" ;
+    backlog:governsBacklog ex:BL ; backlog:hasConformanceLevel backlog:L3_Governed ;
+    backlog:hasTargetConformanceLevel backlog:L3_Governed ;
+    backlog:decidedBy backlog:Owner ; backlog:hasDecisionRationale "L3: the test-case clauses are L3." ;
+    backlog:adoptsFacet backlog:CoreFacet , backlog:EvidenceFacet .
+ex:BL a backlog:Backlog ; backlog:hasIdentifier "BL-SD" ; backlog:hasState backlog:InProgress .
+
+ex:S_OK a backlog:Story ; backlog:hasIdentifier "S-OK" ; backlog:hasState backlog:InProgress ;
+    backlog:memberOfContainer ex:BL ; backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "fixture" ;
+    backlog:hasApplicableConcern backlog:Concern_Interaction ;
+    backlog:hasSpecification ex:Spec ;
+    backlog:hasAcceptanceCriterion ex:AC .
+ex:AC a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a locked account, When recovery completes, Then the account is active." ;
+    backlog:coveredByCase ex:TC_OK .
+ex:R_OK a backlog:RefinementEvent ; backlog:refines ex:S_OK ;
+    backlog:addressesConcern backlog:Concern_Interaction ;
+    backlog:refinedAt "2026-09-01T09:00:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Recovery flow agreed." ; backlog:refinedBy backlog:Builder .
+ex:Spec a backlog:Specification ;
+    backlog:hasInteractionStep ex:St1 , ex:St2 ;
+    backlog:hasStateChange ex:SC_OK .
+ex:St1 a backlog:InteractionStep ; backlog:hasStepOrdinal 1 ;
+    backlog:hasStepAction "Requests recovery from the sign-in page." .
+ex:St2 a backlog:InteractionStep ; backlog:hasStepOrdinal 2 ;
+    backlog:hasStepAction "Confirms identity via the second factor." .
+ex:SC_OK a backlog:StateChange ; backlog:hasFromState "Locked" ; backlog:hasToState "Active" ;
+    backlog:hasTrigger "Second factor confirmed" .
+ex:TC_OK a backlog:TestCase ; backlog:exercisesCriterion ex:AC ; backlog:runsOnData ex:TD .
+ex:TD a backlog:TestData ; backlog:hasFixtureState "One account in state Locked with a registered second factor." .
+
+# ST-DUP: two steps claiming the same position
+ex:Spec_Dup a backlog:Specification ; backlog:hasInteractionStep ex:D1 , ex:D2 .
+ex:D1 a backlog:InteractionStep ; backlog:hasStepOrdinal 1 ; backlog:hasStepAction "Opens the form." .
+ex:D2 a backlog:InteractionStep ; backlog:hasStepOrdinal 1 ; backlog:hasStepAction "Submits the form." .
+
+# SC-SAME: a change that changes nothing
+ex:SC_Same a backlog:StateChange ; backlog:hasFromState "Locked" ; backlog:hasToState "Locked" ;
+    backlog:hasTrigger "Nothing happens" .
+
+# TC-BARE: exercises nothing, runs on nothing
+ex:TC_Bare a backlog:TestCase .
+
+# S-NOSPEC: groomed for Interaction, carries no specification
+ex:S_NoSpec a backlog:Story ; backlog:hasIdentifier "S-NOSPEC" ; backlog:hasState backlog:InProgress ;
+    backlog:memberOfContainer ex:BL ; backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "fixture" ;
+    backlog:hasApplicableConcern backlog:Concern_Interaction .
+ex:R_NoSpec a backlog:RefinementEvent ; backlog:refines ex:S_NoSpec ;
+    backlog:addressesConcern backlog:Concern_Interaction ;
+    backlog:refinedAt "2026-09-01T09:00:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Flow discussed." ; backlog:refinedBy backlog:Builder .

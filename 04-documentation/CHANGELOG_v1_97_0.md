@@ -1,5 +1,55 @@
 # Changelog
 
+## v1.97.0 — 2026-10-26 (MINOR: the mission's second half delivered — mission accomplished)
+
+The six remaining items from the owner's mission, built in one release because they are one sentence:
+*"a story carries its steps, interactions, state changes, test cases and test data."*
+
+Built to the decisions the v1.94.0 grooming refinements recorded, not redesigned. `InteractionStep`
+carries an **ordinal**; `StateChange` states stay **free text**; `TestData` describes the fixture state
+rather than holding it; `TestCase` gained `coveredByCase` as well as `exercisesCriterion` so it is
+named as a range — the trap that lost `Package` for 91 releases.
+
+Five cases verified individually: two steps at one position rejected at L1; a change from Locked to
+Locked rejected at L1; a case exercising nothing and naming no data rejected twice at L3; a story
+groomed for Interaction with no specification advised. The reachability gate ran and the count held at
+**23, not 29**.
+
+### Measured, clause by clause
+
+```
+groomed and granularised   YES     specifications      YES
+down to executable work    YES     story steps         YES
+deployable packages        YES     interactions        YES
+time-boxed iterations      YES     state changes       YES
+autonomous execution       YES     test cases          YES
+UML models and diagrams    YES     test data           YES
+grounded in standards      YES     machine-confirmable YES
+
+14 of 14
+```
+
+### Objectives, goals, mission
+
+```
+Obj_Grounded        2 -> 0     at 0     MET
+Obj_IntentToWork    3 -> 0     at 0     MET
+Obj_Modelling       8 -> 0     at 0     MET
+Obj_ScopeDelivered  0 -> 100   at 100   MET
+
+GOAL Goal_GroundedPractice   REACHED
+GOAL Goal_MissionToWork      REACHED
+
+MISSION ACCOMPLISHED: YES
+```
+
+`Obj_ScopeDelivered` rose from 70% to 100% **because three packages shipped**, not because the
+measurement changed. It had sat at 70% since v1.89.0 under the strict reading — a `Proposed` epic
+asserting `satisfiesDeliverable` never counted.
+
+Register 0 violations at L4, 0 of 68 constraints suppressed.
+
+
 ## v1.96.0 — 2026-09-01 (MINOR: BRF-EP17 delivered; the reachability gate is actually wired in)
 
 **First: the gate shipped last release and was never wired into the release gate.** A checker nobody

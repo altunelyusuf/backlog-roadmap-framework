@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.46.0
+# Backlog & Roadmap Semantic Framework — Standard v1.47.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -747,6 +747,30 @@ grooming say what it *yielded* rather than only that it happened.
 At L2 an artefact must name its kind and the item it describes. An advisory reports a Done
 design-definition task producing nothing — a design task may legitimately conclude no model is needed,
 but a task that produced nothing and a task nobody recorded must not look identical.
+
+### 2.5c-xxvi What a story carries
+
+`Specification` — what a story **does**, distinct from an acceptance criterion, which says whether it
+is **done**. A story with criteria and no specification can be signed off without anyone able to say
+what was signed off.
+
+`InteractionStep` carries an **ordinal**, not a link to the next step: a linked list makes insertion
+cheap and querying expensive, and the question asked of a specification is what step three is.
+
+`StateChange` names a from-state, a to-state and a trigger. States are **free text**, not an
+enumeration — the framework governs registers for any domain and cannot know a domain state machine.
+What it can check is that a change actually changes something.
+
+`TestCase` and `TestData`: a case is a named check that could fail; data is the fixture state it runs
+against, **described rather than contained**. Evidence previously pointed at a fixture path and a
+verdict; a case lets a reader disagree with the check rather than only with the claim.
+
+`TestCase` carries both `exercisesCriterion` and `coveredByCase` so it is **named as a range** — a
+class no property points at is one nobody uses.
+
+At L1: two steps claiming one position, or a change from a state to itself. At L2: a step without its
+position or action, a change without its states. At L3: a case exercising no criterion or naming no
+data. An advisory reports a story groomed for Interaction that carries no specification.
 
 ### 2.5d Decomposition, commitments, dependency kinds, impediments, flow, team (subject v1.4.0)
 
