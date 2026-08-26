@@ -1,5 +1,43 @@
 # Changelog
 
+## v1.102.0 — 2026-10-26 (MINOR: STAGE 3 — three goals, each tested by what fails without it)
+
+The owner's requirement was **two obligations at once**: serve the mission *independently of the
+scope*, and guarantee the scope completes *without redundant work*. Those pull apart, and a goal set
+can satisfy one while failing the other silently.
+
+Each goal was tested by asking what fails if it is absent. A goal that survives that question is
+load-bearing; one that does not is a restatement.
+
+**`Goal_MeaningInOntology`** — mission-facing, deliberately not phrased in terms of the areas. If all
+four areas finish and this is unmet, **the scope was insufficient** — a failure no scope-facing measure
+can report, because the scope is the thing being measured.
+
+**`Goal_AreasExhausted`** — scope-facing, naming all four areas. Without it, the mission-facing goal
+reads met once the easy areas are done: 23 code tables are mechanical, 186 standard rows are not.
+
+**`Goal_NoWorkOutsideAreas`** — containment-facing, and the one this session most needs. Measured
+precedent: **at v1.95.0 this session built a reachability gate and shipped a release for it while the
+owner's mission waited.** That work was defensible, outside the boundary, and nothing in the register
+objected.
+
+### The sufficiency rule caught the previous lineage, not this one
+
+`Scope_Build` had two goals and **both were mission-facing**. It could not have reported either failure
+— and both happened: its deliverables arrived after its epics, and the reachability gate was built
+unasked.
+
+Two goals added to that lineage rather than exempting it, recorded as **retroactive**: they describe
+that development, they did not guide it. And `Obj_BuildContained` reads **NOT MET, 1 against 0** — the
+reachability gate. A containment measure that reported zero there would be measuring nothing.
+
+### The staging conflict, a third time
+
+Mission at v1.99.0, Scope at v1.100.0, Goal here. **Every clause written for a finished lineage assumes
+completeness**, and the staged ceremony makes every intermediate state legal. Three found by walking
+the stages; the Objective stage will find the fourth if there is one.
+
+
 ## v1.101.0 — 2026-10-26 (MINOR: the scope now says WHERE — and the cause was the framework)
 
 ### The owner's finding

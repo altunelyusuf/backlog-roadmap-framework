@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.49.0
+# Backlog & Roadmap Semantic Framework — Standard v1.50.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -819,6 +819,20 @@ At L3 a scope enumerating deliverables and naming no area is rejected.
 excluded was decided before anyone established what the mission needs. Narrowing a boundary before
 knowing what it must cover removes work nobody has shown to be unnecessary — and an exclusion, once
 written, reads as settled.
+
+### 2.5c-xxx Goals face two ways
+
+`GoalFacing` — `Facing_Mission`, `Facing_Scope`, `Facing_Containment`. A lineage needs **all three**,
+and they are not interchangeable. What is missing decides how the lineage fails:
+
+| Missing | Failure it cannot report |
+|---|---|
+| Mission-facing | Every area finishes and the mission is still unreached — **the boundary was insufficient**, and the boundary is what was being measured |
+| Scope-facing | The mission's condition holds while half the areas are untouched: a general condition does not notice which half was skipped |
+| Containment-facing | Both hold while effort went somewhere the scope never named — **no measure that counts what was required can see what was not** |
+
+At L3 a goal must declare its facing. At L4 a live scope must have goals covering all three.
+`goalCoversArea` is required of scope-facing goals so an area answerable to nothing is visible.
 
 ### 2.5d Decomposition, commitments, dependency kinds, impediments, flow, team (subject v1.4.0)
 

@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.52.0> ;
-    owl:versionInfo "1.52.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.53.0> ;
+    owl:versionInfo "1.53.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.52.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.51.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.50.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.49.0> ;
@@ -1517,6 +1518,14 @@ backlog:GoalMeasurabilityShape a sh:NodeShape ;
             ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
             FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed, backlog:L4_LineageEnforced))
             FILTER NOT EXISTS { ?o backlog:contributesToGoal $this }
+            # A goal whose lineage has not yet reached the Objective stage
+            # SHOULD have no objective. THIRD instance of the same conflict:
+            # Mission at v1.99.0, Scope at v1.100.0, Goal here. Every clause
+            # written for a finished lineage assumes completeness, and the
+            # staged ceremony makes every intermediate state legal. Three
+            # found by walking the stages; the Objective stage will find the
+            # fourth if there is one.
+            FILTER NOT EXISTS { $this backlog:producedByStage ?gout }
         }""" ] ;
     sh:sparql [ a sh:SPARQLConstraint ;
         sh:message "L3: this goal advances no mission; the intent chain does not reach a stated purpose." ;
@@ -3924,4 +3933,53 @@ backlog:PrematureExclusionShape a sh:NodeShape ;
         sh:select """SELECT $this WHERE {
             $this backlog:hasScopeExclusion ?e .
             FILTER NOT EXISTS { $this backlog:coversArea ?a }
+        }""" ] .
+
+#################################################################
+#  v1.53.0 — a goal set that binds mission to scope both ways
+#################################################################
+
+backlog:GoalFacingShape a sh:NodeShape ;
+    sh:targetClass backlog:Goal ;
+    sh:severity sh:Violation ;
+    rdfs:label "A goal says which obligation it carries (L3)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: this goal does not say whether it faces the mission, the scope, or containment. The three are not interchangeable — a mission-facing goal can be met with the scope half-untouched, a scope-facing goal with the mission unreached — and a goal that does not declare which it is cannot be counted toward either." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L3_Governed, backlog:L4_LineageEnforced))
+            FILTER NOT EXISTS { $this backlog:hasGoalFacing ?f }
+            FILTER NOT EXISTS { ?s backlog:supersedesMission ?m . $this backlog:contributesToMission ?m }
+        }""" ] .
+
+backlog:GoalSufficiencyShape a sh:NodeShape ;
+    sh:targetClass backlog:ScopeStatement ;
+    sh:severity sh:Violation ;
+    rdfs:label "A live scope carries all three goal facings (L4)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L4: the goals derived from this scope do not cover all three facings. What is missing decides how the lineage fails: with no mission-facing goal, every area can finish while the mission stays unreached and nothing reports it, because the boundary was insufficient and the boundary is what was being measured. With no scope-facing goal, the mission's condition can hold while half the areas are untouched. With no containment-facing goal, both can hold while effort went somewhere the scope never named — and no measure that counts only what was required can see redundant work." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel backlog:L4_LineageEnforced .
+            $this backlog:coversArea ?anyarea .
+            FILTER NOT EXISTS { ?s backlog:supersedesMission ?m . $this backlog:scopeForMission ?m }
+            FILTER (
+              NOT EXISTS { ?g1 backlog:derivesFromScope $this ; backlog:hasGoalFacing backlog:Facing_Mission } ||
+              NOT EXISTS { ?g2 backlog:derivesFromScope $this ; backlog:hasGoalFacing backlog:Facing_Scope } ||
+              NOT EXISTS { ?g3 backlog:derivesFromScope $this ; backlog:hasGoalFacing backlog:Facing_Containment }
+            )
+        }""" ] .
+
+backlog:AreaWithoutGoalShape a sh:NodeShape ;
+    sh:targetClass backlog:ScopeArea ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: an area no goal is answerable for"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: no scope-facing goal names this area. An area nothing is answerable for will be done last or not at all, and the scope-facing goal will still read met because it was never asked about this one." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?sc backlog:coversArea $this .
+            FILTER EXISTS { ?g backlog:derivesFromScope ?sc ; backlog:hasGoalFacing backlog:Facing_Scope }
+            FILTER NOT EXISTS { ?g2 backlog:hasGoalFacing backlog:Facing_Scope ; backlog:goalCoversArea $this }
         }""" ] .

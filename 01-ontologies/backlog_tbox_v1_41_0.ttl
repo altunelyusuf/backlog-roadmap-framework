@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.40.0> ;
-    owl:versionInfo "1.40.0" ;
+    owl:versionIRI <http://example.org/backlog/1.41.0> ;
+    owl:versionInfo "1.41.0" ;
+    owl:priorVersion <http://example.org/backlog/1.40.0> ;
     owl:priorVersion <http://example.org/backlog/1.39.0> ;
     owl:priorVersion <http://example.org/backlog/1.38.0> ;
     owl:priorVersion <http://example.org/backlog/1.37.0> ;
@@ -4452,3 +4453,53 @@ backlog:deliverableForArea a owl:ObjectProperty ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "deliverable for area"@en ;
     skos:definition "The area this deliverable states the finish condition for. A deliverable naming no area is a condition floating free of any place — which is how a scope comes to restate its mission."@en .
+
+#################################################################
+#  69. Goals face two ways (v1.41.0)
+#
+#  OWNER FINDING: goals must serve the mission INDEPENDENTLY of the
+#  scope, and must also guarantee the scope completes without
+#  redundant work. Those are different obligations and a goal set
+#  can satisfy one while failing the other, silently:
+#
+#    scope-facing only  — every area finishes, and the mission is
+#                         still unmet because the areas were the
+#                         wrong ones. The boundary was insufficient
+#                         and nothing said so.
+#    mission-facing only — the mission's condition holds and half
+#                         the scope was never touched, or work
+#                         happened somewhere the scope never named.
+#
+#  GoalFacing makes the obligation explicit and lets a shape ask
+#  whether both are present. It does not make a goal set correct;
+#  it makes an incomplete one visible, which is the most a
+#  constraint can do about sufficiency.
+#################################################################
+
+backlog:GoalFacing a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:Facing_Mission backlog:Facing_Scope backlog:Facing_Containment ) ;
+    rdfs:label "Goal Facing"@en ;
+    skos:definition "Which obligation a goal carries. A lineage needs all three and they are not interchangeable: a mission-facing goal can be met with the scope half-untouched, a scope-facing goal can be met with the mission unreached, and both can be met while work happened in places the scope never named."@en .
+
+backlog:Facing_Mission a owl:NamedIndividual , backlog:GoalFacing ;
+    rdfs:label "Mission-facing"@en ;
+    skos:definition "Holds when the mission's own condition is true, independently of how much of the scope was done. This is the goal that catches an insufficient boundary: if every area finishes and this goal is still unmet, the scope was wrong."@en .
+backlog:Facing_Scope a owl:NamedIndividual , backlog:GoalFacing ;
+    rdfs:label "Scope-facing"@en ;
+    skos:definition "Holds when every area the scope names has reached its finish condition. This is the goal that catches abandonment: a mission-facing goal can read met because the easy half was done."@en .
+backlog:Facing_Containment a owl:NamedIndividual , backlog:GoalFacing ;
+    rdfs:label "Containment-facing"@en ;
+    skos:definition "Holds when no work was done outside the areas the scope names. Without it a lineage can reach its mission and its scope while spending effort nobody asked for, and the register reports success — redundant work is invisible to any measure that only counts what was required."@en .
+
+backlog:hasGoalFacing a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:Goal ; rdfs:range backlog:GoalFacing ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has goal facing"@en .
+
+backlog:goalCoversArea a owl:ObjectProperty ;
+    rdfs:domain backlog:Goal ; rdfs:range backlog:ScopeArea ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "goal covers area"@en ;
+    skos:definition "An area this goal is answerable for. Required of a scope-facing goal so that an area belonging to no goal is visible: an area nothing is answerable for will be done last or not at all."@en .

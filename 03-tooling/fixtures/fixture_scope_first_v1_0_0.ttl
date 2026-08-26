@@ -99,3 +99,51 @@ ex:Area_Scope a backlog:ScopeArea ;
     backlog:areaLocation "The account recovery service and its identity store." ;
     backlog:areaMeasure "One sign-in flow, one credential store, two supported second factors." .
 ex:Scope backlog:coversArea ex:Area_Scope .
+
+ex:G backlog:hasGoalFacing backlog:Facing_Mission .
+
+ex:G_Areas_Scope a backlog:Goal ;
+    rdfs:label "Every area the scope names is finished"@en ; backlog:contributesToMission ex:M ;
+    backlog:derivesFromScope ex:Scope ; backlog:hasGoalFacing backlog:Facing_Scope ;
+    backlog:goalCoversArea ex:Area_Scope ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ; backlog:decidedBy backlog:Owner .
+ex:G_Contain_Scope a backlog:Goal ;
+    rdfs:label "No work outside the named areas"@en ; backlog:contributesToMission ex:M ;
+    backlog:derivesFromScope ex:Scope ; backlog:hasGoalFacing backlog:Facing_Containment ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ; backlog:decidedBy backlog:Owner .
+
+ex:Met_G_Areas_Scope a core:Metric ; rdfs:label "Every area the scope names is finished"@en .
+ex:Obj_G_Areas_Scope a backlog:Objective ; rdfs:label "Every area the scope names is finished"@en ;
+    backlog:contributesToGoal ex:G_Areas_Scope ;
+    backlog:hasSuccessMetric ex:Met_G_Areas_Scope ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:hasBaselineValue 2.0 ; backlog:hasTargetValue 0.0 ;
+    backlog:hasTargetDirection backlog:Dir_Decrease ;
+    backlog:hasObjectiveDeadline "2027-06-30T00:00:00"^^xsd:dateTime ;
+    backlog:decidedBy backlog:Owner .
+
+ex:Met_G_Contain_Scope a core:Metric ; rdfs:label "No work outside the named areas"@en .
+ex:Obj_G_Contain_Scope a backlog:Objective ; rdfs:label "No work outside the named areas"@en ;
+    backlog:contributesToGoal ex:G_Contain_Scope ;
+    backlog:hasSuccessMetric ex:Met_G_Contain_Scope ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:hasBaselineValue 2.0 ; backlog:hasTargetValue 0.0 ;
+    backlog:hasTargetDirection backlog:Dir_Decrease ;
+    backlog:hasObjectiveDeadline "2027-06-30T00:00:00"^^xsd:dateTime ;
+    backlog:decidedBy backlog:Owner .
+
+ex:Obj_G_Areas_Scope backlog:fillsScope ex:Scope .
+ex:Obs_Obj_G_Areas_Scope a backlog:MetricObservation ;
+    backlog:observesMetric ex:Met_G_Areas_Scope ;
+    backlog:observationFor ex:Obj_G_Areas_Scope ;
+    backlog:hasObservedValue 2.0 ;
+    backlog:observedAt "2026-08-01T09:00:00"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Baseline taken when the goal was set." .
+
+ex:Obj_G_Contain_Scope backlog:fillsScope ex:Scope .
+ex:Obs_Obj_G_Contain_Scope a backlog:MetricObservation ;
+    backlog:observesMetric ex:Met_G_Contain_Scope ;
+    backlog:observationFor ex:Obj_G_Contain_Scope ;
+    backlog:hasObservedValue 2.0 ;
+    backlog:observedAt "2026-08-01T09:00:00"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Baseline taken when the goal was set." .

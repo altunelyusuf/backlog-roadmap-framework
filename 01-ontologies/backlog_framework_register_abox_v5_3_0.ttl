@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/5.2.0> ;
-    owl:versionInfo "5.2.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/5.3.0> ;
+    owl:versionInfo "5.3.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/5.2.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/5.1.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/5.0.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/4.8.0> ;
@@ -6159,3 +6160,141 @@ fw:Area_BuildFramework a backlog:ScopeArea ;
     backlog:areaLocation "01-ontologies/backlog_tbox_v*.ttl and 02-shacl-safeguards/backlog_shacl_v*.ttl" ;
     backlog:areaMeasure "Recorded retroactively at v1.101.0: the TBox and shapes, where all ten of Scope_Build's deliverables were built. Retroactive because ScopeArea did not exist when that scope was drawn." .
 fw:Scope_Build backlog:coversArea fw:Area_BuildFramework .
+
+#################################################################
+#  v5.3.0 — STAGE 3: THE GOALS. Three, and each was tested.
+#
+#  The Scope stage closed at a52ccfe and was corrected at 986fdb7.
+#  This commit closes the Goal stage: goals only, no objectives, no
+#  backlog.
+#
+#  The owner's requirement was two obligations at once — serve the
+#  mission INDEPENDENTLY of the scope, and guarantee the scope
+#  completes without redundant work. Those pull apart, so each goal
+#  below was tested by asking what fails if it is absent. A goal
+#  that survives that question is load-bearing; one that does not
+#  is a restatement of another.
+#################################################################
+
+fw:Goal_MeaningInOntology a backlog:Goal ;
+    rdfs:label "No meaning is defined only by prose or by code"@en ;
+    backlog:contributesToMission fw:Mission_OntologyDriven ;
+    backlog:derivesFromScope fw:Scope_Ontology ;
+    backlog:hasGoalFacing backlog:Facing_Mission ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out2_Goal ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:hasRationale "MISSION-FACING, and deliberately not phrased in terms of the four areas. Test: if all four areas finish and this goal is unmet, the areas were the wrong ones and the SCOPE was insufficient — which is a failure no scope-facing measure can report, because the scope is the thing being measured. This goal is the only one that can fail in a way that indicts the boundary." .
+
+fw:Goal_AreasExhausted a backlog:Goal ;
+    rdfs:label "Every area the scope names reaches its finish condition"@en ;
+    backlog:contributesToMission fw:Mission_OntologyDriven ;
+    backlog:derivesFromScope fw:Scope_Ontology ;
+    backlog:hasGoalFacing backlog:Facing_Scope ;
+    backlog:goalCoversArea fw:Area_Governance , fw:Area_CodeTables , fw:Area_RuleExecution , fw:Area_StandardDoc ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out2_Goal ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:hasRationale "SCOPE-FACING. Test: without it, Goal_MeaningInOntology can read met once the easy areas are done — the 23 code tables are mechanical, the 186 standard rows are not — and a mission condition stated generally does not notice which half was skipped. Names all four areas explicitly so an area belonging to no goal is visible." .
+
+fw:Goal_NoWorkOutsideAreas a backlog:Goal ;
+    rdfs:label "No work is done outside the areas the scope names"@en ;
+    backlog:contributesToMission fw:Mission_OntologyDriven ;
+    backlog:derivesFromScope fw:Scope_Ontology ;
+    backlog:hasGoalFacing backlog:Facing_Containment ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out2_Goal ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:hasRationale "CONTAINMENT-FACING, and this is the one this session most needs. Test: with the other two met, effort can still go somewhere the scope never named and every measure reads success — no figure that counts what was REQUIRED can see what was not. Measured precedent: at v1.95.0 this session built a reachability gate and shipped a release for it while the owner's mission waited; that work was defensible and outside the boundary, and nothing in the register objected." .
+
+fw:Out2_Goal a backlog:StageOutput ;
+    backlog:outputOfStage backlog:Stage_Goal ;
+    backlog:consumesOutput fw:Out2_Scope ;
+    backlog:hasStateDigest "pending-commit" ;
+    backlog:closedAtCommit "pending-commit" ;
+    backlog:hasRationale "Backfilled from the real commit in the next release, as the Mission and Scope outputs were." .
+
+#  The previous lineage's goals, given facings retroactively. Both
+#  are mission-facing: they state conditions about the framework,
+#  not about areas — which is itself the finding, since that lineage
+#  had no scope-facing or containment-facing goal at all and could
+#  not have reported either failure.
+fw:Goal_GroundedPractice backlog:hasGoalFacing backlog:Facing_Mission .
+fw:Goal_MissionToWork backlog:hasGoalFacing backlog:Facing_Mission .
+
+#################################################################
+#  The sufficiency rule caught the PREVIOUS lineage, not this one.
+#
+#  Scope_Build had two goals and both were mission-facing. It could
+#  not have reported either of the failures the new rule names:
+#  areas untouched, or work outside the boundary. Both happened —
+#  the scope's deliverables arrived after its epics, and this
+#  session shipped a reachability gate the mission never asked for.
+#
+#  The two goals below are added to that lineage rather than
+#  exempting it. They are recorded as retroactive and their
+#  measurement is honest about what it can still say: the work is
+#  finished, so a containment goal added now reports what WAS done,
+#  not what it prevented.
+#################################################################
+
+fw:Goal_BuildAreasExhausted a backlog:Goal ;
+    rdfs:label "Every area Scope_Build named reached its finish condition"@en ;
+    backlog:contributesToMission fw:Mission_BuildSoftware_v2 ;
+    backlog:derivesFromScope fw:Scope_Build ;
+    backlog:hasGoalFacing backlog:Facing_Scope ;
+    backlog:goalCoversArea fw:Area_BuildFramework ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:hasRationale "Added retroactively at v1.102.0 when the sufficiency rule was written. Recorded as retroactive: this goal did not guide that development, it describes it. Its value is that the lineage can now be asked the question rather than that it was asked at the time." .
+
+fw:Goal_BuildContained a backlog:Goal ;
+    rdfs:label "No work was done outside what Scope_Build named"@en ;
+    backlog:contributesToMission fw:Mission_BuildSoftware_v2 ;
+    backlog:derivesFromScope fw:Scope_Build ;
+    backlog:hasGoalFacing backlog:Facing_Containment ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:hasRationale "Added retroactively, and it does not hold. BRF-EP20, the reachability gate, was built and shipped while the owner's mission waited; it satisfies Del_Checkable and was still work the owner had not asked for at that moment. Recorded rather than quietly satisfied — a containment goal that reports nothing is the state it exists to prevent." .
+
+#  Objectives for the two retroactive goals. Measured now, on a
+#  finished development, so they report rather than steer.
+fw:Metric_BuildAreasDone a core:Metric ;
+    rdfs:label "Areas of Scope_Build not finished"@en .
+fw:Obj_BuildAreasExhausted a backlog:Objective ;
+    rdfs:label "No area of Scope_Build is unfinished"@en ;
+    backlog:contributesToGoal fw:Goal_BuildAreasExhausted ;
+    backlog:fillsScope fw:Scope_Build ;
+    backlog:hasSuccessMetric fw:Metric_BuildAreasDone ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:hasBaselineValue 1.0 ; backlog:hasTargetValue 0.0 ;
+    backlog:hasTargetDirection backlog:Dir_Decrease ;
+    backlog:hasObjectiveDeadline "2026-12-31T00:00:00"^^xsd:dateTime ;
+    backlog:metricMovableBy fw:EP_Model , fw:EP_Spec , fw:EP_TestSpec ;
+    backlog:decidedBy backlog:Owner .
+fw:Obs_BuildAreasDone a backlog:MetricObservation ;
+    backlog:observesMetric fw:Metric_BuildAreasDone ;
+    backlog:observationFor fw:Obj_BuildAreasExhausted ;
+    backlog:hasObservedValue 0.0 ;
+    backlog:observedAt "2026-10-26T21:00:00"^^xsd:dateTime ;
+    backlog:hasObservationMethod "One area, Area_BuildFramework, and all ten of Scope_Build's deliverables are satisfied by work that is Done and shipped in a package. Measured on a finished development, so this reports rather than steers." .
+
+fw:Metric_BuildOutside a core:Metric ;
+    rdfs:label "Work items serving no Scope_Build deliverable"@en .
+fw:Obj_BuildContained a backlog:Objective ;
+    rdfs:label "No work outside what Scope_Build named"@en ;
+    backlog:contributesToGoal fw:Goal_BuildContained ;
+    backlog:fillsScope fw:Scope_Build ;
+    backlog:hasSuccessMetric fw:Metric_BuildOutside ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:hasBaselineValue 1.0 ; backlog:hasTargetValue 0.0 ;
+    backlog:hasTargetDirection backlog:Dir_Decrease ;
+    backlog:hasObjectiveDeadline "2026-12-31T00:00:00"^^xsd:dateTime ;
+    backlog:metricMovableBy fw:EP_Model , fw:EP_Spec , fw:EP_TestSpec ;
+    backlog:decidedBy backlog:Owner .
+fw:Obs_BuildOutside a backlog:MetricObservation ;
+    backlog:observesMetric fw:Metric_BuildOutside ;
+    backlog:observationFor fw:Obj_BuildContained ;
+    backlog:hasObservedValue 1.0 ;
+    backlog:observedAt "2026-10-26T21:00:00"^^xsd:dateTime ;
+    backlog:hasObservationMethod "One: BRF-EP20, the reachability gate. It satisfies Del_Checkable and was still built while the owner's mission waited — defensible work the owner had not asked for at that moment. Recorded as 1 against a target of 0, so the objective reads NOT MET on a finished development. That is the honest result: a containment measure that reported zero here would be measuring nothing." .
