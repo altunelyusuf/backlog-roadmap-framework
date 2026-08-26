@@ -1,5 +1,36 @@
 # Changelog
 
+## v1.111.0 — 2026-11-15 (MINOR: It7 delivered — governance is queryable)
+
+Built to the specifications the stories carried, one iteration only.
+
+### The 18 rulings, extracted not retyped
+
+Each identifier, title and statement was **read from the markdown by pattern**. Retyping would have
+created a second source of truth in the release whose whole purpose is removing them.
+
+Each ruling names the shape enforcing it — the link the document could only assert in prose, where a
+reader compared a heading against a suite by hand and nothing objected when a ruling lost its shape.
+
+### The first table exported
+
+`LAYERS` from the completeness reporter: 18 `LineageLayer` individuals with ordinals and absence costs.
+**The python literal is not deleted.** Deleting it before the script reads the ontology would leave the
+reporter unable to run — that is story 2, in It8.
+
+### Measured
+
+```
+Obj_RulingsQueryable   18 → 0    MET, ahead of the 30 Nov checkpoint which expected 12
+Obj_TablesExported     23 → 22   one declared; not counted exported until the script reads it
+```
+
+The second figure is the honest one. The ontology now carries `LAYERS` and the script does not read it,
+so **counting the table as exported would claim a migration that has not happened**.
+
+`Rel_It7` ships `Pkg_GovernanceQueryable` **partly** — `EP_CodeTables_S2` remains in It8.
+
+
 ## v1.110.0 — 2026-10-27 (MINOR: the owner's grooming model, made checkable)
 
 **Yes, that is the plan** — and testing it against what had been built found two deviations and a

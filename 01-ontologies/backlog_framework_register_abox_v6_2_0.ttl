@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/6.1.0> ;
-    owl:versionInfo "6.1.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/6.2.0> ;
+    owl:versionInfo "6.2.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/6.1.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/6.0.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/5.9.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/5.8.0> ;
@@ -6785,7 +6786,14 @@ fw:Inv_AreaCoverageJudged a backlog:CrossCuttingInvariant ;
 fw:EP_Rulings a backlog:Epic ;
     backlog:hasIdentifier "BRF-EP21" ;
     backlog:hasTitle "Governance rulings become machine-checkable statements" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-11-02T09:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-11-15T17:00:00"^^xsd:dateTime ;
+    backlog:hasActualEffort 6.0 ;
+    backlog:hasEvidence fw:Ev_It7 ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:lastAuditedAt "2026-11-15T17:00:00"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register ;
     backlog:pursuesObjective fw:Obj_RulingsQueryable ;
     backlog:satisfiesDeliverable fw:Del_OntGovernance ;
@@ -6808,7 +6816,7 @@ fw:S_EP_Rulings a backlog:WSJFScore ;
     backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 8.0 ;
     backlog:hasUserBusinessValue 9.0 ; backlog:hasTimeCriticality 7.0 ;
     backlog:hasRiskReductionValue 8.0 ; backlog:hasJobSize 3.0 ;
-    backlog:scoredAt "2026-10-26T23:00:00"^^xsd:dateTime ;
+    backlog:scoredAt "2026-11-15T18:00:00"^^xsd:dateTime ;
     backlog:hasScoreRationale "Highest in the register and the reason is dependency, not preference: a GovernanceRuling class is what the other four epics attach their evidence to. Ship it last and every later export has nowhere to say which ruling it satisfies. 18 rulings, and the work is mechanical once the class exists — each ruling already has a heading, a statement and a rationale in the discipline." ;
     backlog:hasBasisKind backlog:Basis_Judged .
 fw:E_EP_Rulings a backlog:CostEstimate ;
@@ -6843,7 +6851,7 @@ fw:S_EP_CodeTables a backlog:WSJFScore ;
     backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 6.0 ;
     backlog:hasUserBusinessValue 7.0 ; backlog:hasTimeCriticality 5.0 ;
     backlog:hasRiskReductionValue 6.0 ; backlog:hasJobSize 3.0 ;
-    backlog:scoredAt "2026-10-26T23:00:00"^^xsd:dateTime ;
+    backlog:scoredAt "2026-11-15T18:00:00"^^xsd:dateTime ;
     backlog:hasScoreRationale "Second because it is the largest and the most mechanical: 23 tables whose contents are already enumerations in all but syntax. LAYERS, STAGE_TYPES, CONTAINER_TYPES, KINDS. Each becomes owl:oneOf and the script reads it. Value is high because every one of them is a place the code currently decides what something IS." ;
     backlog:hasBasisKind backlog:Basis_Judged .
 fw:E_EP_CodeTables a backlog:CostEstimate ;
@@ -6878,7 +6886,7 @@ fw:S_EP_RuleExec a backlog:WSJFScore ;
     backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 6.0 ;
     backlog:hasUserBusinessValue 8.0 ; backlog:hasTimeCriticality 6.0 ;
     backlog:hasRiskReductionValue 7.0 ; backlog:hasJobSize 3.5 ;
-    backlog:scoredAt "2026-10-26T23:00:00"^^xsd:dateTime ;
+    backlog:scoredAt "2026-11-15T18:00:00"^^xsd:dateTime ;
     backlog:hasScoreRationale "Fixture polarity inferred from a FILENAME is the sharpest example in the package: a fixture renamed changes what the gate expects of it. Value and risk both high, job size slightly larger because each of the three needs a vocabulary term AND the script rewritten to read it rather than decide it." ;
     backlog:hasBasisKind backlog:Basis_Judged .
 fw:E_EP_RuleExec a backlog:CostEstimate ;
@@ -6913,7 +6921,7 @@ fw:S_EP_ScriptDecisions a backlog:WSJFScore ;
     backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 4.0 ;
     backlog:hasUserBusinessValue 5.0 ; backlog:hasTimeCriticality 4.0 ;
     backlog:hasRiskReductionValue 5.0 ; backlog:hasJobSize 3.5 ;
-    backlog:scoredAt "2026-10-26T23:00:00"^^xsd:dateTime ;
+    backlog:scoredAt "2026-11-15T18:00:00"^^xsd:dateTime ;
     backlog:hasScoreRationale "Deliberately separate from EP23 and scored lower. EP23 moves the CHECK; this moves the SCRIPT's remaining judgement. If they turn out to be the same work, both objectives fall together and the split was unnecessary — recorded so that can be seen rather than assumed either way." ;
     backlog:hasBasisKind backlog:Basis_Judged .
 fw:E_EP_ScriptDecisions a backlog:CostEstimate ;
@@ -6948,7 +6956,7 @@ fw:S_EP_StandardRows a backlog:WSJFScore ;
     backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 3.0 ;
     backlog:hasUserBusinessValue 5.0 ; backlog:hasTimeCriticality 3.0 ;
     backlog:hasRiskReductionValue 4.0 ; backlog:hasJobSize 4.0 ;
-    backlog:scoredAt "2026-10-26T23:00:00"^^xsd:dateTime ;
+    backlog:scoredAt "2026-11-15T18:00:00"^^xsd:dateTime ;
     backlog:hasScoreRationale "Lowest and largest: 186 rows, and unlike the tables these are prose that DESCRIBES the ontology rather than data that duplicates it. The work is a checker comparing each row's claim against the TBox, not a migration. Scored last because the other four remove definitions from code and prose; this one only makes a description falsifiable." ;
     backlog:hasBasisKind backlog:Basis_Judged .
 fw:E_EP_StandardRows a backlog:CostEstimate ;
@@ -6972,7 +6980,14 @@ fw:Obj_NoProseLost backlog:metricMovableBy fw:EP_Rulings , fw:EP_CodeTables , fw
 fw:EP_Rulings_S1 a backlog:Story ;
     backlog:hasIdentifier "BRF-EP_Rulings_S1" ;
     backlog:hasTitle "A ruling exists as a machine-checkable statement" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-11-02T09:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-11-15T17:00:00"^^xsd:dateTime ;
+    backlog:hasActualEffort 3.0 ;
+    backlog:hasEvidence fw:Ev_It7 ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:lastAuditedAt "2026-11-15T17:00:00"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register ;
     backlog:pursuesObjective fw:Obj_RulingsQueryable ;
     backlog:satisfiesDeliverable fw:Del_OntGovernance ;
@@ -6992,7 +7007,14 @@ fw:R_EP_Rulings_S1 a backlog:RefinementEvent ; backlog:refines fw:EP_Rulings_S1 
 fw:EP_Rulings_S2 a backlog:Story ;
     backlog:hasIdentifier "BRF-EP_Rulings_S2" ;
     backlog:hasTitle "Each ruling names the shape that enforces it" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-11-02T09:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-11-15T17:00:00"^^xsd:dateTime ;
+    backlog:hasActualEffort 3.0 ;
+    backlog:hasEvidence fw:Ev_It7 ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:lastAuditedAt "2026-11-15T17:00:00"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register ;
     backlog:pursuesObjective fw:Obj_RulingsQueryable ;
     backlog:satisfiesDeliverable fw:Del_OntGovernance ;
@@ -7013,7 +7035,14 @@ fw:EP_Rulings backlog:decomposesInto fw:EP_Rulings_S1 , fw:EP_Rulings_S2 .
 fw:EP_CodeTables_S1 a backlog:Story ;
     backlog:hasIdentifier "BRF-EP_CodeTables_S1" ;
     backlog:hasTitle "Each classification table is an ontology enumeration" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-11-02T09:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-11-15T17:00:00"^^xsd:dateTime ;
+    backlog:hasActualEffort 3.0 ;
+    backlog:hasEvidence fw:Ev_It7 ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:lastAuditedAt "2026-11-15T17:00:00"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register ;
     backlog:pursuesObjective fw:Obj_TablesExported ;
     backlog:satisfiesDeliverable fw:Del_OntExport ;
@@ -7197,7 +7226,7 @@ fw:Pkg_ExecutionInOntology a backlog:Package ;
 
 fw:It7 a backlog:Iteration ;
     backlog:hasIdentifier "It7" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
     backlog:iterationStart "2026-11-02T00:00:00"^^xsd:dateTime ;
     backlog:iterationEnd "2026-11-15T23:59:59"^^xsd:dateTime ;
     backlog:hasCapacity 9.0 ;
@@ -7212,7 +7241,11 @@ fw:Plan_EP_Rulings_S1 a backlog:PlanningEvent ;
 fw:T_EP_Rulings_S1 a backlog:ExecutionTask ;
     backlog:hasIdentifier "BRF-T-EP_Rulings_S1" ;
     backlog:hasTitle "Implement and gate EP_Rulings_S1" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-11-02T09:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-11-15T17:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_It7 ;
+    backlog:lastAuditedAt "2026-11-15T17:00:00"^^xsd:dateTime ;
     backlog:hasTaskType backlog:Task_Implementation ;
     backlog:memberOfContainer fw:Register , fw:It7 .
 fw:EP_Rulings_S2 backlog:memberOfContainer fw:It7 , fw:Pkg_GovernanceQueryable .
@@ -7224,7 +7257,11 @@ fw:Plan_EP_Rulings_S2 a backlog:PlanningEvent ;
 fw:T_EP_Rulings_S2 a backlog:ExecutionTask ;
     backlog:hasIdentifier "BRF-T-EP_Rulings_S2" ;
     backlog:hasTitle "Implement and gate EP_Rulings_S2" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-11-02T09:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-11-15T17:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_It7 ;
+    backlog:lastAuditedAt "2026-11-15T17:00:00"^^xsd:dateTime ;
     backlog:hasTaskType backlog:Task_Implementation ;
     backlog:memberOfContainer fw:Register , fw:It7 .
 fw:EP_CodeTables_S1 backlog:memberOfContainer fw:It7 , fw:Pkg_GovernanceQueryable .
@@ -7236,7 +7273,11 @@ fw:Plan_EP_CodeTables_S1 a backlog:PlanningEvent ;
 fw:T_EP_CodeTables_S1 a backlog:ExecutionTask ;
     backlog:hasIdentifier "BRF-T-EP_CodeTables_S1" ;
     backlog:hasTitle "Implement and gate EP_CodeTables_S1" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-11-02T09:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-11-15T17:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_It7 ;
+    backlog:lastAuditedAt "2026-11-15T17:00:00"^^xsd:dateTime ;
     backlog:hasTaskType backlog:Task_Implementation ;
     backlog:memberOfContainer fw:Register , fw:It7 .
 
@@ -7936,3 +7977,259 @@ fw:TC_EP_Reach a backlog:TestCase ;
 fw:AC_Reach backlog:coveredByCase fw:TC_EP_Reach .
 fw:TD_EP_Reach a backlog:TestData ;
     backlog:hasFixtureState "The fixture named by Ev_Reach, in the state that evidence records." .
+
+
+#################################################################
+#  v6.2.0 — It7 delivered. The 18 rulings are queryable.
+#
+#  EXTRACTED from the discipline document, not retyped: each
+#  identifier, title and statement is read from the markdown that
+#  has held it. Retyping would have introduced a second source of
+#  truth in the release whose purpose is removing them.
+#
+#  Each ruling names the shape that enforces it — the link the
+#  document could only assert in prose, where a reader compared a
+#  heading against a suite by hand and nothing objected when a
+#  ruling lost its shape.
+#################################################################
+fw:Ruling_G1 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G1" ;
+    rdfs:label "Granularity by momentum"@en ;
+    backlog:hasRulingStatement "The first class reached for becomes the default and is never revisited. One session ran fifteen turns with 29 work items, every one an Epic, and found it only when directly asked to audit. *Surfaced by* LineageDepthAdvisoryShape — which is not level-gated and fires at L1. If it never fired for you, the full shapes file was never run." ;
+    backlog:enforcedByShape backlog:LineageDepthAdvisoryShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+fw:Ruling_G2 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G2" ;
+    rdfs:label "Advisory blindness"@en ;
+    backlog:hasRulingStatement "A warning nobody reads protects nothing. The validator groups advisories by message rather than printing a total, because *'175 Warning'* is a number a reader learns to skip. L4 exists because this boundary is not solvable by better wording." ;
+    backlog:enforcedByShape backlog:AdvisoryVisibilityShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+fw:Ruling_G3 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G3" ;
+    rdfs:label "Permitted is not intended"@en ;
+    backlog:hasRulingStatement "Epic ⊑ ProductBacklogItem is true, and does not license planning an undecomposed epic into an iteration. A subclass relation answers what may be asserted; a definition answers what the term means. Two sessions made this error from opposite ends within a day. *Enforced by* EpicPlanningShape at L2." ;
+    backlog:enforcedByShape backlog:PermittedNotIntendedShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+fw:Ruling_G4 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G4" ;
+    rdfs:label "Completion is not accomplishment"@en ;
+    backlog:hasRulingStatement "Completion is a fact about effort; accomplishment is a fact about the world, and only the second requires a measurement. A register of Done items proves the first and says nothing about the second. *Enforced by* L4MeasuredObjectiveShape: every objective carries a MetricObservation, whatever the reading said." ;
+    backlog:enforcedByShape backlog:CommitmentShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+fw:Ruling_G5 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G5" ;
+    rdfs:label "Why, when, and what are three questions"@en ;
+    backlog:hasRulingStatement "Epic answers why, Iteration answers when, DeploymentUnit answers what users received. Conflating them is the commonest drift observed here: an epic in a sprint looks like planning and commits nothing anyone can finish; an epic in a release names something that cannot ship. *Enforced by* L4GroomingShape." ;
+    backlog:enforcedByShape backlog:IterationMembershipShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+fw:Ruling_G6 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G6" ;
+    rdfs:label "Drift is the default, not the exception"@en ;
+    backlog:hasRulingStatement "Corollary from v3.0.0: drift is *detected* identically whichever order the chain was built in — L4DriftShape fires on an item pursuing an unrealised objective either way, verified by construction on both. What the order changes is when a human notices: scope-first surfaces the conflict while the objective is being written, scope-last surfaces it only once work exists to be rejected. Work" ;
+    backlog:enforcedByShape backlog:EvidenceShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+fw:Ruling_G7 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G7" ;
+    rdfs:label "A tool that refuses is not thereby correct"@en ;
+    backlog:hasRulingStatement "Three defects in this framework's own tooling were plausible refusals or meaningless clean passes: a cumulative flow reading a property that never existed, a burn-down reaching zero over open work, a date comparison reporting future deadlines as passed. Each *looked* like the tool working. *No shape catches this.* The check that does is a fixture whose answer is known in advance." ;
+    backlog:enforcedByShape backlog:ScoreFreshnessShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+fw:Ruling_G18 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G18" ;
+    rdfs:label "The lineage is a pipeline; order is enforced by artifact, not by claim"@en ;
+    backlog:hasRulingStatement "An earlier release concluded that execution order could not be gated. That was wrong on two counts, and the owner named both. The v1.62.0 exclusion forbids requiring a fixed-at *date* and says nothing about enforcing order; and an ontology has dependency relations, through which order can be enforced. The model is another registrant's: each stage consumes the artifact the previous stage produced. A St" ;
+    backlog:enforcedByShape backlog:StageOutputShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+fw:Ruling_G17 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G17" ;
+    rdfs:label "A scope must have content of its own, or the backlog defines it"@en ;
+    backlog:hasRulingStatement "Writing the scope before the goals is not enough. A scope of prose has nothing to measure work against, so coverage is computed over the work that happens to exist — and both sides of the fraction become the backlog. Measured here: Obj_ScopeDelivered counted stories pursuing an objective under the scope and divided by the same set. It read 100% whether the scope was satisfied or merely emp" ;
+    backlog:enforcedByShape backlog:ScopeContentShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+fw:Ruling_G13 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G13" ;
+    rdfs:label "The chain is Mission → Scope → Goals → Objectives, and it reads the same both ways"@en ;
+    backlog:hasRulingStatement "Goals are derived from the scope, not attached to the mission. The scope is built to satisfy the mission; goals are derived from the scope so that *the scope's fit to the mission is what gets tested*; objectives are set to measure the goals. Read downward or upward, the same answer must come out. The failure this prevents was structural and invisible for the whole life of this package: Goal " ;
+    backlog:enforcedByShape backlog:GoalDerivationShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+fw:Ruling_G14 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G14" ;
+    rdfs:label "Every intent element records who authored it, not only the mission"@en ;
+    backlog:hasRulingStatement "MissionOrigin was added at v1.70.0 after a session wrote five missions and attributed them to the owner. It was applied to Mission and nowhere else — so the same failure moved one level down and recurred *in the release that corrected it*: the same session then wrote the scope, the goals and the objectives beneath the corrected mission, and attributed those to the owner too. A fix applie" ;
+    backlog:enforcedByShape backlog:IntentOriginShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+fw:Ruling_G15 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G15" ;
+    rdfs:label "Pursuing an objective and being able to move it are different claims"@en ;
+    backlog:hasRulingStatement "pursuesObjective records intent. metricMovableBy records capability. A register can reach every epic Done with every objective unmet and flag nothing, because no constraint ever asked whether the work beneath an objective could shift its metric. When they disagree, adjust the backlog, not the objective. Re-targeting an objective to meet the work is moving the goalpost to meet the shot." ;
+    backlog:enforcedByShape backlog:MetricReachabilityShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+fw:Ruling_G16 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G16" ;
+    rdfs:label "Development is anchored on packages, not iterations"@en ;
+    backlog:hasRulingStatement "Work reaches users through regularly deployable packages built from the highest-priority items. A register where completion and delivery are separate records measures the first and assumes the second. Measured here: 43 of 47 Done items sat in no package, while the framework shipped 78 real releases its own register never recorded." ;
+    backlog:enforcedByShape backlog:DeploymentCoverageShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+fw:Ruling_G11 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G11" ;
+    rdfs:label "Run at the level you enforce, or the rules are decoration"@en ;
+    backlog:hasRulingStatement "A package that declares a conformance level below the one its own framework enforces exempts itself from the rules it publishes. Measured on this package: 16 of 57 level-gated constraints did not run and 166 violations were invisible, including fourteen forked chains that the L4 rule *written to catch them* could not see. This is the mechanism behind every drift in this package's history. " ;
+    backlog:enforcedByShape backlog:SelfExemptionShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+fw:Ruling_G12 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G12" ;
+    rdfs:label "A superseded lineage is a record, not a claim"@en ;
+    backlog:hasRulingStatement "When a mission is superseded, the chain beneath it stays. Re-pointing goals to remove an inconsistency would assert an intent never held — the fabrication L-112 forbids one level up. Constraints on chain integrity must therefore exempt superseded lineage: the defect is real, stays visible, and must not block a live release. The corollary is the warning: fourteen forks arose because missions were" ;
+    backlog:enforcedByShape backlog:ChainClosureShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+fw:Ruling_G9 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G9" ;
+    rdfs:label "A constant iteration, and stories split to fit it"@en ;
+    backlog:hasRulingStatement "An iteration is a fixed time box. Sizing it to the longest story inverts the control: if its length is set by the work it contains, you always fit, and velocity becomes a tautology that can never tell you that you did not. Assessing iteration length after story-writing fails for the same reason one step later — the next change produces a bigger story and the question reopens. Set the iterati" ;
+    backlog:enforcedByShape backlog:StoryIterationFitShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+fw:Ruling_G10 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G10" ;
+    rdfs:label "Publish each increment, do not batch"@en ;
+    backlog:hasRulingStatement "A release gate that passes and is not then published leaves the governed store behind the work, and two unpublished increments cannot be separated afterwards into the releases they should have been. Publish immediately after each gate PASS, before starting the next increment. Its corollary is easy to miss: a release gate that cannot finish blocks every release. This package's gate grew to " ;
+    backlog:enforcedByShape backlog:DistributionDriftShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+fw:Ruling_G8 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G8" ;
+    rdfs:label "Every rule naming a member of a closed set depends on that set's membership"@en ;
+    backlog:hasRulingStatement "Adding L4_LineageEnforced to a four-member enumeration broke three rules that had tested *'below L3'* by name — they fired on L4, which is above it. *No shape catches this either.* It was caught because a fixture existed that exercised the new member, which is G7 applied to vocabulary. --- - Read the standard in full before the first work item, SHA-verified — not a fragment, not a prior sess" ;
+    backlog:enforcedByShape backlog:DecompositionShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+
+#  The LAYERS table, exported from the completeness reporter.
+fw:Layer_Mission a backlog:LineageLayer ;
+    backlog:layerClass backlog:Mission ;
+    backlog:layerOrdinal 1 ;
+    backlog:layerAbsenceCost "No stated purpose; every goal below is asserted rather than argued." .
+fw:Layer_ScopeStatement a backlog:LineageLayer ;
+    backlog:layerClass backlog:ScopeStatement ;
+    backlog:layerOrdinal 2 ;
+    backlog:layerAbsenceCost "No boundary; the backlog defines what was wanted." .
+fw:Layer_ScopeExclusion a backlog:LineageLayer ;
+    backlog:layerClass backlog:ScopeExclusion ;
+    backlog:layerOrdinal 3 ;
+    backlog:layerAbsenceCost "Nothing refused; the boundary admits whatever is proposed." .
+fw:Layer_ScopeDeliverable a backlog:LineageLayer ;
+    backlog:layerClass backlog:ScopeDeliverable ;
+    backlog:layerOrdinal 4 ;
+    backlog:layerAbsenceCost "No content; coverage is computed over the work that exists." .
+fw:Layer_Goal a backlog:LineageLayer ;
+    backlog:layerClass backlog:Goal ;
+    backlog:layerOrdinal 5 ;
+    backlog:layerAbsenceCost "Nothing derives the objectives; they measure whatever was convenient." .
+fw:Layer_Objective a backlog:LineageLayer ;
+    backlog:layerClass backlog:Objective ;
+    backlog:layerOrdinal 6 ;
+    backlog:layerAbsenceCost "No measure; completion rests on judgement." .
+fw:Layer_MetricObservation a backlog:LineageLayer ;
+    backlog:layerClass backlog:MetricObservation ;
+    backlog:layerOrdinal 7 ;
+    backlog:layerAbsenceCost "No reading; the objective can only be asserted met." .
+fw:Layer_DefinitionOfDone a backlog:LineageLayer ;
+    backlog:layerClass backlog:DefinitionOfDone ;
+    backlog:layerOrdinal 8 ;
+    backlog:layerAbsenceCost "No completion standard; Done means whoever said so." .
+fw:Layer_Epic a backlog:LineageLayer ;
+    backlog:layerClass backlog:Epic ;
+    backlog:layerOrdinal 9 ;
+    backlog:layerAbsenceCost "No theme; stories answer to nothing above them." .
+fw:Layer_Story a backlog:LineageLayer ;
+    backlog:layerClass backlog:Story ;
+    backlog:layerOrdinal 10 ;
+    backlog:layerAbsenceCost "No user-facing slice; work is tasks with no stated value." .
+fw:Layer_ExecutionTask a backlog:LineageLayer ;
+    backlog:layerClass backlog:ExecutionTask ;
+    backlog:layerOrdinal 11 ;
+    backlog:layerAbsenceCost "No executable step; a story is a wish." .
+fw:Layer_PlanningEvent a backlog:LineageLayer ;
+    backlog:layerClass backlog:PlanningEvent ;
+    backlog:layerOrdinal 12 ;
+    backlog:layerAbsenceCost "No record of commitment; work appears in an iteration unexplained." .
+fw:Layer_Iteration a backlog:LineageLayer ;
+    backlog:layerClass backlog:Iteration ;
+    backlog:layerOrdinal 13 ;
+    backlog:layerAbsenceCost "No time box; cadence is unmeasurable." .
+fw:Layer_Milestone a backlog:LineageLayer ;
+    backlog:layerClass backlog:Milestone ;
+    backlog:layerOrdinal 14 ;
+    backlog:layerAbsenceCost "No external commitment; slippage is invisible to anyone outside." .
+fw:Layer_CrossCuttingInvariant a backlog:LineageLayer ;
+    backlog:layerClass backlog:CrossCuttingInvariant ;
+    backlog:layerOrdinal 15 ;
+    backlog:layerAbsenceCost "No standing condition; each release re-argues the same rules." .
+fw:Layer_CostEstimate a backlog:LineageLayer ;
+    backlog:layerClass backlog:CostEstimate ;
+    backlog:layerOrdinal 16 ;
+    backlog:layerAbsenceCost "No effort claim; capacity cannot be checked." .
+fw:Layer_Evidence a backlog:LineageLayer ;
+    backlog:layerClass backlog:Evidence ;
+    backlog:layerOrdinal 17 ;
+    backlog:layerAbsenceCost "No proof; Done is a claim." .
+fw:Layer_Forecast a backlog:LineageLayer ;
+    backlog:layerClass backlog:Forecast ;
+    backlog:layerOrdinal 18 ;
+    backlog:layerAbsenceCost "No projection; the future is unstated." .
+
+fw:Ev_It7 a backlog:TestEvidence ;
+    backlog:hasTestSpec "01-ontologies/backlog_tbox_v1_46_0.ttl and the register's 18 GovernanceRuling instances" ;
+    backlog:hasTestId "It7" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-11-15T17:00:00"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "The rulings were EXTRACTED from the discipline document by pattern, not retyped — retyping would have created a second source of truth in the release whose purpose is removing them. A query for GovernanceRuling returns all 18 by identifier. Each names the shape that enforces it, which the document could only assert in prose. The LAYERS table is declared as 18 LineageLayer individuals with ordinals and absence costs; the python literal is NOT yet deleted, because deleting it before the script reads the ontology would leave the reporter unable to run — that is story 2, in It8." ;
+    backlog:verifiedByTool "backlog_validate + rdflib query" ;
+    backlog:attestsCriterion fw:AC_EP_Rulings , fw:AC_EP_Rulings_S1 , fw:AC_EP_Rulings_S2 , fw:AC_EP_CodeTables_S1 .
+
+fw:H_It7_A a backlog:TestHarness ; backlog:harnessFor fw:EP_Rulings ;
+    backlog:hasHarnessEvidence fw:Ev_It7 ; backlog:harnessComplete true ;
+    backlog:hasRationale "All 18 rulings queryable, each naming its shape." .
+fw:H_It7_B a backlog:TestHarness ; backlog:harnessFor fw:EP_Rulings_S1 ;
+    backlog:hasHarnessEvidence fw:Ev_It7 ; backlog:harnessComplete true ;
+    backlog:hasRationale "As for the parent epic." .
+fw:H_It7_C a backlog:TestHarness ; backlog:harnessFor fw:EP_Rulings_S2 ;
+    backlog:hasHarnessEvidence fw:Ev_It7 ; backlog:harnessComplete true ;
+    backlog:hasRationale "As for the parent epic." .
+fw:H_It7_D a backlog:TestHarness ; backlog:harnessFor fw:EP_CodeTables_S1 ;
+    backlog:hasHarnessEvidence fw:Ev_It7 ; backlog:harnessComplete true ;
+    backlog:hasRationale "The LAYERS table declared; the python literal removal is story 2." .
+fw:H_It7_E a backlog:TestHarness ; backlog:harnessFor fw:T_EP_Rulings_S1 ;
+    backlog:hasHarnessEvidence fw:Ev_It7 ; backlog:harnessComplete true ; backlog:hasRationale "As for the story." .
+fw:H_It7_F a backlog:TestHarness ; backlog:harnessFor fw:T_EP_Rulings_S2 ;
+    backlog:hasHarnessEvidence fw:Ev_It7 ; backlog:harnessComplete true ; backlog:hasRationale "As for the story." .
+fw:H_It7_G a backlog:TestHarness ; backlog:harnessFor fw:T_EP_CodeTables_S1 ;
+    backlog:hasHarnessEvidence fw:Ev_It7 ; backlog:harnessComplete true ; backlog:hasRationale "As for the story." .
+
+fw:Obs_RulingsAfterIt7 a backlog:MetricObservation ;
+    rdfs:label "Governance rulings unreachable by query — after It7"@en ;
+    backlog:observesMetric fw:Metric_Obj_RulingsQueryable ;
+    backlog:observationFor fw:Obj_RulingsQueryable ;
+    backlog:hasObservedValue 0.0 ;
+    backlog:observedAt "2026-11-15T17:00:00"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Counted the same way as the baseline: headings matching '### G' in the discipline, against GovernanceRuling instances returned by query. 18 and 18. Baseline 18, target 0, observed 0 — MET, ahead of the 30 November checkpoint which expected 12." .
+
+fw:Obs_TablesAfterIt7 a backlog:MetricObservation ;
+    rdfs:label "Module-level tables still in python — after It7"@en ;
+    backlog:observesMetric fw:Metric_Obj_TablesExported ;
+    backlog:observationFor fw:Obj_TablesExported ;
+    backlog:hasObservedValue 22.0 ;
+    backlog:observedAt "2026-11-15T17:00:00"^^xsd:dateTime ;
+    backlog:hasObservationMethod "LAYERS is declared in the ontology and its python literal still stands, so the count falls by one only when the script reads the ontology instead — story 2, It8. Counted as 22 rather than 23 because the ontology now carries the table; counting it as exported would claim the migration finished when the script has not changed." .
+
+fw:Rel_It7 a backlog:DeploymentUnit ;
+    backlog:hasIdentifier "BRF-REL-It7" ;
+    backlog:hasTitle "Governance queryable, first table exported" ;
+    backlog:hasState backlog:Done ;
+    backlog:hasDeploymentDate "2026-11-15T18:00:00"^^xsd:dateTime ;
+    backlog:deploysFrom fw:It7 ;
+    backlog:deploysItem fw:EP_Rulings_S1 , fw:EP_Rulings_S2 , fw:EP_CodeTables_S1 ;
+    backlog:deliversPackage fw:Pkg_GovernanceQueryable ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:hasSelectionBasis backlog:Sel_Committed ;
+    backlog:hasRationale "Ships what It7 planned and finished. Pkg_GovernanceQueryable is PARTLY delivered — EP_CodeTables_S2 remains in It8 — which is what a package spanning two iterations looks like when the first closes." .
+fw:EP_Rulings_S1 backlog:memberOfContainer fw:Rel_It7 .
+fw:EP_Rulings_S2 backlog:memberOfContainer fw:Rel_It7 .
+fw:EP_CodeTables_S1 backlog:memberOfContainer fw:Rel_It7 .

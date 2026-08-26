@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.52.0
+# Backlog & Roadmap Semantic Framework — Standard v1.53.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -868,6 +868,23 @@ clothes.
 `Dir_Hold` is for an **inverse goal**, whose objective is a *ceiling* rather than a trajectory: the
 count of things that should not happen must stay where it is. Distinct from `Dir_Decrease` with a
 target already reached, which claims an improvement that never occurred.
+
+### 2.5c-xxxiii Governance as ontology
+
+`GovernanceRuling` carries `hasRulingIdentifier`, `hasRulingStatement`, `hasRulingRationale`,
+`rulingSource` and `enforcedByShape`.
+
+Eighteen rulings existed as markdown headings: **enforceable**, in that shapes implemented them, and
+**unreachable**, in that no query could return one. A ruling nobody can retrieve cannot be checked
+against the shape that claims to enforce it — previously a reader compared a heading against a suite by
+hand, and nothing objected when a ruling lost its shape.
+
+The statement is separate from the rationale because **the decision has to be checkable against a shape
+and the reasoning must not be**.
+
+`LineageLayer` is the first exported code table: `layerClass`, `layerOrdinal`, `layerAbsenceCost`. The
+ordinal is an integer rather than list position, so the order survives being queried in any sequence — a
+list's meaning depends on nothing reordering it.
 
 ### 2.5d Decomposition, commitments, dependency kinds, impediments, flow, team (subject v1.4.0)
 

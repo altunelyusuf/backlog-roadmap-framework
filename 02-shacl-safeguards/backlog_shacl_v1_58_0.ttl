@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.57.0> ;
-    owl:versionInfo "1.57.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.58.0> ;
+    owl:versionInfo "1.58.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.57.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.56.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.55.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.54.0> ;
@@ -4187,4 +4188,41 @@ backlog:GroomedAheadShape a sh:NodeShape ;
             # zero on a 34-day gap. Tested both forms against the register
             # before choosing: subtraction 0, addition 3.
             FILTER (?is > (?ra + "P28D"^^xsd:dayTimeDuration))
+        }""" ] .
+
+#################################################################
+#  v1.58.0 — It7: rulings and layers carry weight
+#################################################################
+
+backlog:GovernanceRulingShape a sh:NodeShape ;
+    sh:targetClass backlog:GovernanceRuling ;
+    sh:severity sh:Violation ;
+    rdfs:label "A ruling is identified, stated and enforced (L2)"@en ;
+    sh:property [ sh:path backlog:hasRulingIdentifier ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "L2: a governance ruling must carry its identifier. G-numbers are how the discipline refers to itself; a ruling without one cannot be cited." ] ;
+    sh:property [ sh:path backlog:hasRulingStatement ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "L2: a governance ruling must state what it decides, in one sentence, separately from why. The decision has to be checkable against a shape and the reasoning must not be." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: this ruling names no shape that enforces it. Previously a reader compared a heading against a suite by hand and nothing objected when a ruling lost its shape — a decision nothing carries out is a decision in name only." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L3_Governed, backlog:L4_LineageEnforced))
+            FILTER NOT EXISTS { $this backlog:enforcedByShape ?sh }
+        }""" ] .
+
+backlog:LineageLayerShape a sh:NodeShape ;
+    sh:targetClass backlog:LineageLayer ;
+    sh:severity sh:Violation ;
+    rdfs:label "A layer names its class, position and cost (L2)"@en ;
+    sh:property [ sh:path backlog:layerClass ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "L2: a lineage layer must name the class it counts." ] ;
+    sh:property [ sh:path backlog:layerOrdinal ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:integer ;
+        sh:message "L2: a lineage layer must state its position. An integer rather than list position, so the order survives being queried in any sequence." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: two layers claim the same position. The chain cannot say which comes first, and a reporter reading them will order by whichever the store returns." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:layerOrdinal ?o . ?other a backlog:LineageLayer ; backlog:layerOrdinal ?o .
+            FILTER ($this != ?other)
         }""" ] .

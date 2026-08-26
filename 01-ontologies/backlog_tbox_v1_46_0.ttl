@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.45.0> ;
-    owl:versionInfo "1.45.0" ;
+    owl:versionIRI <http://example.org/backlog/1.46.0> ;
+    owl:versionInfo "1.46.0" ;
+    owl:priorVersion <http://example.org/backlog/1.45.0> ;
     owl:priorVersion <http://example.org/backlog/1.44.0> ;
     owl:priorVersion <http://example.org/backlog/1.43.0> ;
     owl:priorVersion <http://example.org/backlog/1.42.0> ;
@@ -4686,3 +4687,82 @@ backlog:groomsForIteration a owl:ObjectProperty , owl:FunctionalProperty ;
     rdfs:label "grooms for iteration"@en ;
     skos:definition "The iteration this refinement was preparing an item for. What makes just-in-time grooming checkable rather than merely intended: without it a register cannot distinguish a story groomed the sprint before it starts from nine stories detailed at once, and the second is how detail goes stale before anyone builds against it."@en ;
     dcterms:source "Scrum Guide: product backlog refinement as an ongoing activity preparing items for upcoming sprints"@en .
+
+#################################################################
+#  75. Governance as ontology (v1.46.0) — It7, BRF-EP21
+#
+#  Built to the specification the story carries: read a ruling
+#  heading, create a GovernanceRuling with its identifier,
+#  statement and rationale; then locate the shape whose message
+#  states it and link the two.
+#
+#  The 18 rulings move from markdown headings to triples. Nothing
+#  is invented — each already has an identifier, a statement and a
+#  rationale in the lineage discipline, and the class is the place
+#  they can be queried from.
+#################################################################
+
+backlog:GovernanceRuling a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Governance Ruling"@en ;
+    skos:definition "A decision about how the framework is governed, recorded so it can be queried rather than read. Eighteen existed as markdown headings in the lineage discipline: enforceable in the sense that shapes implemented them, and unreachable in the sense that no query could return one. A ruling nobody can retrieve cannot be checked against the shapes that claim to enforce it."@en ;
+    dcterms:source "LINEAGE_OPERATING_DISCIPLINE, rulings G1 through G18"@en .
+
+backlog:hasRulingIdentifier a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:GovernanceRuling ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "has ruling identifier"@en .
+backlog:hasRulingStatement a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:GovernanceRuling ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has ruling statement"@en ;
+    skos:definition "What the ruling decides, in one sentence. Separate from the rationale because the decision must be checkable against a shape and the reasoning must not be."@en .
+backlog:hasRulingRationale a owl:DatatypeProperty ;
+    rdfs:domain backlog:GovernanceRuling ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "has ruling rationale"@en .
+
+backlog:enforcedByShape a owl:ObjectProperty ;
+    rdfs:domain backlog:GovernanceRuling ; rdfs:range rdfs:Resource ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "enforced by shape"@en ;
+    skos:definition "The shape that implements this ruling. The link the discipline document could only assert in prose: previously a reader compared a heading against a suite by hand, and nothing objected when a ruling lost its shape. A ruling naming no shape is a decision nothing carries out."@en .
+
+backlog:rulingSource a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:GovernanceRuling ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "ruling source"@en ;
+    skos:definition "Where the ruling was written and by whom, quoted. Every one of the eighteen was ruled by the owner during a session; recording that keeps a ruling distinguishable from a convention a session adopted."@en .
+
+#################################################################
+#  76. The first exported table — It7, BRF-EP22 story 1
+#
+#  The completeness reporter's LAYERS list decided which classes
+#  count as lineage layers and in what order. It lived in python:
+#  changing what the framework considers a layer meant editing a
+#  script, and no query could ask what the layers are.
+#
+#  Declared here as an ordered class list. The script reads it in
+#  story 2; this story establishes the ontology side, because
+#  deleting the python literal before the ontology carries it would
+#  leave the reporter unable to run.
+#################################################################
+
+backlog:LineageLayer a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Lineage Layer"@en ;
+    skos:definition "A class the completeness reporter counts as a layer of the intent chain, with the position it occupies. Exported from a python list where the order was expressed by list position and the meaning by a variable name — neither queryable, and both changeable by editing a script."@en .
+
+backlog:layerClass a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:LineageLayer ; rdfs:range rdfs:Resource ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "layer class"@en .
+backlog:layerOrdinal a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:LineageLayer ; rdfs:range xsd:integer ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "layer ordinal"@en ;
+    skos:definition "Where the layer sits in the chain. An integer rather than list position, so the order survives being queried in any sequence — a list's meaning depends on nothing reordering it."@en .
+backlog:layerAbsenceCost a owl:DatatypeProperty ;
+    rdfs:domain backlog:LineageLayer ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "layer absence cost"@en ;
+    skos:definition "What is lost when this layer is missing. The reporter held these strings inline; they are the reason a layer matters and belong with the layer."@en .
