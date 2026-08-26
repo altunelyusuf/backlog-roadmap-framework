@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/5.9.0> ;
-    owl:versionInfo "5.9.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/6.0.0> ;
+    owl:versionInfo "6.0.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/5.9.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/5.8.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/5.7.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/5.6.0> ;
@@ -7335,3 +7336,275 @@ fw:KO_Ontology a backlog:KickOff ;
     backlog:kickOffFor fw:Register ;
     backlog:decidedBy backlog:Owner ;
     backlog:hasRationale "Declared, not triggered: the date is chosen rather than caused by an upstream event. Recorded BEFORE the first story starts, which is the whole point — a kick-off written afterwards is a start date backfilled to match what happened. Everything it needs already exists: five stages closed in five commits, two packages identified, three iterations planned to capacity, nine stories with tasks." .
+
+
+#################################################################
+#  v6.0.0 — MAJOR: the PBIs groomed with the techniques this
+#  framework built, and the stories made ready.
+#
+#  Four questions were asked and measured:
+#
+#  1. Package content covers every objective — YES. All seven
+#     objectives have every mover's stories inside a package.
+#  2. Direct links scope-goal-objective-PBI — YES, all five epics
+#     trace to a goal, an objective, the scope and a deliverable.
+#  3. Groomed with the SDLC techniques — NO. One concern each, no
+#     model artefacts, and no epic analysed for anything but Data.
+#  4. Stories ready for a sprint — NO. Nine stories: 0 with a
+#     specification, 0 interaction steps, 0 state changes, 0 test
+#     cases, 0 test data.
+#
+#  The framework built Specification, InteractionStep, StateChange,
+#  TestCase and TestData at v1.97.0 and this lineage used NONE of
+#  them. Capability delivered and not adopted, in the same package
+#  that delivered it.
+#################################################################
+fw:EP_Rulings backlog:hasApplicableConcern backlog:Concern_Architecture .
+fw:R2_EP_Rulings a backlog:RefinementEvent ; backlog:refines fw:EP_Rulings ;
+    backlog:addressesConcern backlog:Concern_Architecture ;
+    backlog:refinedAt "2026-10-27T09:00:00"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
+    backlog:producesModelArtifact fw:MA_EP_Rulings ;
+    backlog:hasRefinementOutcome "A GovernanceRuling class hangs off the discipline document as its source and is referenced by the shape that enforces it. Structural because every later export attaches to it." .
+fw:MA_EP_Rulings a backlog:ModelArtifact ;
+    backlog:hasModelKind backlog:Kind_ClassDiagram ;
+    backlog:describesItem fw:EP_Rulings .
+fw:EP_CodeTables backlog:hasApplicableConcern backlog:Concern_Interface .
+fw:R2_EP_CodeTables a backlog:RefinementEvent ; backlog:refines fw:EP_CodeTables ;
+    backlog:addressesConcern backlog:Concern_Interface ;
+    backlog:refinedAt "2026-10-27T09:00:00"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
+    backlog:producesModelArtifact fw:MA_EP_CodeTables ;
+    backlog:hasRefinementOutcome "Each exported table becomes an owl:oneOf the SCRIPT reads. That changes the contract between register and tooling: a script that previously held its own list now depends on the ontology shipping one." .
+fw:MA_EP_CodeTables a backlog:ModelArtifact ;
+    backlog:hasModelKind backlog:Kind_ComponentDiagram ;
+    backlog:describesItem fw:EP_CodeTables .
+fw:EP_RuleExec backlog:hasApplicableConcern backlog:Concern_Architecture .
+fw:R2_EP_RuleExec a backlog:RefinementEvent ; backlog:refines fw:EP_RuleExec ;
+    backlog:addressesConcern backlog:Concern_Architecture ;
+    backlog:refinedAt "2026-10-27T09:00:00"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
+    backlog:producesModelArtifact fw:MA_EP_RuleExec ;
+    backlog:hasRefinementOutcome "Fixture polarity moves from filename inference to a declared property. The gate becomes a consumer of the register rather than an interpreter of the filesystem." .
+fw:MA_EP_RuleExec a backlog:ModelArtifact ;
+    backlog:hasModelKind backlog:Kind_SequenceDiagram ;
+    backlog:describesItem fw:EP_RuleExec .
+fw:EP_ScriptDecisions backlog:hasApplicableConcern backlog:Concern_Interface .
+fw:R2_EP_ScriptDecisions a backlog:RefinementEvent ; backlog:refines fw:EP_ScriptDecisions ;
+    backlog:addressesConcern backlog:Concern_Interface ;
+    backlog:refinedAt "2026-10-27T09:00:00"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
+    backlog:producesModelArtifact fw:MA_EP_ScriptDecisions ;
+    backlog:hasRefinementOutcome "The remaining script judgement is replaced by a query. The interface between tooling and ontology becomes read-only in both directions of meaning." .
+fw:MA_EP_ScriptDecisions a backlog:ModelArtifact ;
+    backlog:hasModelKind backlog:Kind_ComponentDiagram ;
+    backlog:describesItem fw:EP_ScriptDecisions .
+fw:EP_StandardRows backlog:hasApplicableConcern backlog:Concern_Interaction .
+fw:R2_EP_StandardRows a backlog:RefinementEvent ; backlog:refines fw:EP_StandardRows ;
+    backlog:addressesConcern backlog:Concern_Interaction ;
+    backlog:refinedAt "2026-10-27T09:00:00"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
+    backlog:producesModelArtifact fw:MA_EP_StandardRows ;
+    backlog:hasRefinementOutcome "A reader compares a standard row against the TBox. This is the only story in the lineage where a PERSON is the actor, which is why it needs an interaction concern the others do not." .
+fw:MA_EP_StandardRows a backlog:ModelArtifact ;
+    backlog:hasModelKind backlog:Kind_ActivityDiagram ;
+    backlog:describesItem fw:EP_StandardRows .
+
+#  The nine stories made ready: specification, ordered steps, a
+#  state change, a test case and its data. Nothing here is new
+#  vocabulary — all of it shipped at v1.97.0 and went unused.
+
+fw:EP_Rulings_S1 backlog:hasSpecification fw:Spec_EP_Rulings_S1 ;
+    backlog:hasAcceptanceCriterion fw:AC_EP_Rulings_S1 .
+fw:Spec_EP_Rulings_S1 a backlog:Specification ;
+    backlog:hasInteractionStep fw:St_EP_Rulings_S1_1 , fw:St_EP_Rulings_S1_2 ;
+    backlog:hasStateChange fw:SC_EP_Rulings_S1 .
+fw:St_EP_Rulings_S1_1 a backlog:InteractionStep ;
+    backlog:hasStepOrdinal 1 ;
+    backlog:hasStepAction "Reads a ruling heading in the discipline document." .
+fw:St_EP_Rulings_S1_2 a backlog:InteractionStep ;
+    backlog:hasStepOrdinal 2 ;
+    backlog:hasStepAction "Creates a GovernanceRuling with its identifier, statement and rationale." .
+fw:SC_EP_Rulings_S1 a backlog:StateChange ;
+    backlog:hasFromState "Prose only" ; backlog:hasToState "Queryable" ; backlog:hasTrigger "The ruling is asserted as a triple" ;
+    backlog:declaredByArtifact fw:MA_MigrationStates .
+fw:TC_EP_Rulings_S1 a backlog:TestCase ;
+    backlog:exercisesCriterion fw:AC_EP_Rulings_S1 ;
+    backlog:runsOnData fw:TD_EP_Rulings_S1 .
+fw:AC_EP_Rulings_S1 backlog:coveredByCase fw:TC_EP_Rulings_S1 .
+fw:TD_EP_Rulings_S1 a backlog:TestData ;
+    backlog:hasFixtureState "One discipline document containing G1 through G18" .
+
+fw:EP_Rulings_S2 backlog:hasSpecification fw:Spec_EP_Rulings_S2 ;
+    backlog:hasAcceptanceCriterion fw:AC_EP_Rulings_S2 .
+fw:Spec_EP_Rulings_S2 a backlog:Specification ;
+    backlog:hasInteractionStep fw:St_EP_Rulings_S2_1 , fw:St_EP_Rulings_S2_2 ;
+    backlog:hasStateChange fw:SC_EP_Rulings_S2 .
+fw:St_EP_Rulings_S2_1 a backlog:InteractionStep ;
+    backlog:hasStepOrdinal 1 ;
+    backlog:hasStepAction "Locates the shape whose message states the ruling." .
+fw:St_EP_Rulings_S2_2 a backlog:InteractionStep ;
+    backlog:hasStepOrdinal 2 ;
+    backlog:hasStepAction "Links the ruling to that shape." .
+fw:SC_EP_Rulings_S2 a backlog:StateChange ;
+    backlog:hasFromState "Unlinked" ; backlog:hasToState "Linked" ; backlog:hasTrigger "The enforcing shape is named" ;
+    backlog:declaredByArtifact fw:MA_MigrationStates .
+fw:TC_EP_Rulings_S2 a backlog:TestCase ;
+    backlog:exercisesCriterion fw:AC_EP_Rulings_S2 ;
+    backlog:runsOnData fw:TD_EP_Rulings_S2 .
+fw:AC_EP_Rulings_S2 backlog:coveredByCase fw:TC_EP_Rulings_S2 .
+fw:TD_EP_Rulings_S2 a backlog:TestData ;
+    backlog:hasFixtureState "The 18 rulings and the shapes file" .
+
+fw:EP_CodeTables_S1 backlog:hasSpecification fw:Spec_EP_CodeTables_S1 ;
+    backlog:hasAcceptanceCriterion fw:AC_EP_CodeTables_S1 .
+fw:Spec_EP_CodeTables_S1 a backlog:Specification ;
+    backlog:hasInteractionStep fw:St_EP_CodeTables_S1_1 , fw:St_EP_CodeTables_S1_2 ;
+    backlog:hasStateChange fw:SC_EP_CodeTables_S1 .
+fw:St_EP_CodeTables_S1_1 a backlog:InteractionStep ;
+    backlog:hasStepOrdinal 1 ;
+    backlog:hasStepAction "Reads a module-level table in a python module." .
+fw:St_EP_CodeTables_S1_2 a backlog:InteractionStep ;
+    backlog:hasStepOrdinal 2 ;
+    backlog:hasStepAction "Declares its members as an owl:oneOf class." .
+fw:SC_EP_CodeTables_S1 a backlog:StateChange ;
+    backlog:hasFromState "In python" ; backlog:hasToState "In ontology" ; backlog:hasTrigger "The members are declared as individuals" ;
+    backlog:declaredByArtifact fw:MA_MigrationStates .
+fw:TC_EP_CodeTables_S1 a backlog:TestCase ;
+    backlog:exercisesCriterion fw:AC_EP_CodeTables_S1 ;
+    backlog:runsOnData fw:TD_EP_CodeTables_S1 .
+fw:AC_EP_CodeTables_S1 backlog:coveredByCase fw:TC_EP_CodeTables_S1 .
+fw:TD_EP_CodeTables_S1 a backlog:TestData ;
+    backlog:hasFixtureState "Twelve python modules holding 23 tables" .
+
+fw:EP_CodeTables_S2 backlog:hasSpecification fw:Spec_EP_CodeTables_S2 ;
+    backlog:hasAcceptanceCriterion fw:AC_EP_CodeTables_S2 .
+fw:Spec_EP_CodeTables_S2 a backlog:Specification ;
+    backlog:hasInteractionStep fw:St_EP_CodeTables_S2_1 , fw:St_EP_CodeTables_S2_2 ;
+    backlog:hasStateChange fw:SC_EP_CodeTables_S2 .
+fw:St_EP_CodeTables_S2_1 a backlog:InteractionStep ;
+    backlog:hasStepOrdinal 1 ;
+    backlog:hasStepAction "Removes the python literal." .
+fw:St_EP_CodeTables_S2_2 a backlog:InteractionStep ;
+    backlog:hasStepOrdinal 2 ;
+    backlog:hasStepAction "Queries the ontology for the members." .
+fw:SC_EP_CodeTables_S2 a backlog:StateChange ;
+    backlog:hasFromState "Script holds" ; backlog:hasToState "Script reads" ; backlog:hasTrigger "The literal is deleted" ;
+    backlog:declaredByArtifact fw:MA_MigrationStates .
+fw:TC_EP_CodeTables_S2 a backlog:TestCase ;
+    backlog:exercisesCriterion fw:AC_EP_CodeTables_S2 ;
+    backlog:runsOnData fw:TD_EP_CodeTables_S2 .
+fw:AC_EP_CodeTables_S2 backlog:coveredByCase fw:TC_EP_CodeTables_S2 .
+fw:TD_EP_CodeTables_S2 a backlog:TestData ;
+    backlog:hasFixtureState "The same twelve modules after S1" .
+
+fw:EP_RuleExec_S1 backlog:hasSpecification fw:Spec_EP_RuleExec_S1 ;
+    backlog:hasAcceptanceCriterion fw:AC_EP_RuleExec_S1 .
+fw:Spec_EP_RuleExec_S1 a backlog:Specification ;
+    backlog:hasInteractionStep fw:St_EP_RuleExec_S1_1 , fw:St_EP_RuleExec_S1_2 ;
+    backlog:hasStateChange fw:SC_EP_RuleExec_S1 .
+fw:St_EP_RuleExec_S1_1 a backlog:InteractionStep ;
+    backlog:hasStepOrdinal 1 ;
+    backlog:hasStepAction "Adds an expected-polarity property to each fixture's profile." .
+fw:St_EP_RuleExec_S1_2 a backlog:InteractionStep ;
+    backlog:hasStepOrdinal 2 ;
+    backlog:hasStepAction "Changes the gate to read it instead of the filename." .
+fw:SC_EP_RuleExec_S1 a backlog:StateChange ;
+    backlog:hasFromState "Inferred" ; backlog:hasToState "Declared" ; backlog:hasTrigger "Polarity is read from the register" ;
+    backlog:declaredByArtifact fw:MA_MigrationStates .
+fw:TC_EP_RuleExec_S1 a backlog:TestCase ;
+    backlog:exercisesCriterion fw:AC_EP_RuleExec_S1 ;
+    backlog:runsOnData fw:TD_EP_RuleExec_S1 .
+fw:AC_EP_RuleExec_S1 backlog:coveredByCase fw:TC_EP_RuleExec_S1 .
+fw:TD_EP_RuleExec_S1 a backlog:TestData ;
+    backlog:hasFixtureState "Twenty-two fixtures, currently named negative or not" .
+
+fw:EP_RuleExec_S2 backlog:hasSpecification fw:Spec_EP_RuleExec_S2 ;
+    backlog:hasAcceptanceCriterion fw:AC_EP_RuleExec_S2 .
+fw:Spec_EP_RuleExec_S2 a backlog:Specification ;
+    backlog:hasInteractionStep fw:St_EP_RuleExec_S2_1 , fw:St_EP_RuleExec_S2_2 ;
+    backlog:hasStateChange fw:SC_EP_RuleExec_S2 .
+fw:St_EP_RuleExec_S2_1 a backlog:InteractionStep ;
+    backlog:hasStepOrdinal 1 ;
+    backlog:hasStepAction "Moves the manifest exemption list into the register." .
+fw:St_EP_RuleExec_S2_2 a backlog:InteractionStep ;
+    backlog:hasStepOrdinal 2 ;
+    backlog:hasStepAction "Expresses reachability as a shape rather than a traversal." .
+fw:SC_EP_RuleExec_S2 a backlog:StateChange ;
+    backlog:hasFromState "In python" ; backlog:hasToState "In register" ; backlog:hasTrigger "Both are declared" ;
+    backlog:declaredByArtifact fw:MA_MigrationStates .
+fw:TC_EP_RuleExec_S2 a backlog:TestCase ;
+    backlog:exercisesCriterion fw:AC_EP_RuleExec_S2 ;
+    backlog:runsOnData fw:TD_EP_RuleExec_S2 .
+fw:AC_EP_RuleExec_S2 backlog:coveredByCase fw:TC_EP_RuleExec_S2 .
+fw:TD_EP_RuleExec_S2 a backlog:TestData ;
+    backlog:hasFixtureState "Four manifest exemptions and the reachability traversal" .
+
+fw:EP_ScriptDecisions_S1 backlog:hasSpecification fw:Spec_EP_ScriptDecisions_S1 ;
+    backlog:hasAcceptanceCriterion fw:AC_EP_ScriptDecisions_S1 .
+fw:Spec_EP_ScriptDecisions_S1 a backlog:Specification ;
+    backlog:hasInteractionStep fw:St_EP_ScriptDecisions_S1_1 , fw:St_EP_ScriptDecisions_S1_2 ;
+    backlog:hasStateChange fw:SC_EP_ScriptDecisions_S1 .
+fw:St_EP_ScriptDecisions_S1_1 a backlog:InteractionStep ;
+    backlog:hasStepOrdinal 1 ;
+    backlog:hasStepAction "Audits each script for a decision the ontology does not state." .
+fw:St_EP_ScriptDecisions_S1_2 a backlog:InteractionStep ;
+    backlog:hasStepOrdinal 2 ;
+    backlog:hasStepAction "Replaces it with a query or records it as an exception." .
+fw:SC_EP_ScriptDecisions_S1 a backlog:StateChange ;
+    backlog:hasFromState "Deciding" ; backlog:hasToState "Executing" ; backlog:hasTrigger "The script only runs an engine" ;
+    backlog:declaredByArtifact fw:MA_MigrationStates .
+fw:TC_EP_ScriptDecisions_S1 a backlog:TestCase ;
+    backlog:exercisesCriterion fw:AC_EP_ScriptDecisions_S1 ;
+    backlog:runsOnData fw:TD_EP_ScriptDecisions_S1 .
+fw:AC_EP_ScriptDecisions_S1 backlog:coveredByCase fw:TC_EP_ScriptDecisions_S1 .
+fw:TD_EP_ScriptDecisions_S1 a backlog:TestData ;
+    backlog:hasFixtureState "Twenty python modules" .
+
+fw:EP_StandardRows_S1 backlog:hasSpecification fw:Spec_EP_StandardRows_S1 ;
+    backlog:hasAcceptanceCriterion fw:AC_EP_StandardRows_S1 .
+fw:Spec_EP_StandardRows_S1 a backlog:Specification ;
+    backlog:hasInteractionStep fw:St_EP_StandardRows_S1_1 , fw:St_EP_StandardRows_S1_2 ;
+    backlog:hasStateChange fw:SC_EP_StandardRows_S1 .
+fw:St_EP_StandardRows_S1_1 a backlog:InteractionStep ;
+    backlog:hasStepOrdinal 1 ;
+    backlog:hasStepAction "Reads a table row in the standard." .
+fw:St_EP_StandardRows_S1_2 a backlog:InteractionStep ;
+    backlog:hasStepOrdinal 2 ;
+    backlog:hasStepAction "Annotates the row with the IRI it describes." .
+fw:SC_EP_StandardRows_S1 a backlog:StateChange ;
+    backlog:hasFromState "Unattributed" ; backlog:hasToState "Attributed" ; backlog:hasTrigger "The row names its term" ;
+    backlog:declaredByArtifact fw:MA_MigrationStates .
+fw:TC_EP_StandardRows_S1 a backlog:TestCase ;
+    backlog:exercisesCriterion fw:AC_EP_StandardRows_S1 ;
+    backlog:runsOnData fw:TD_EP_StandardRows_S1 .
+fw:AC_EP_StandardRows_S1 backlog:coveredByCase fw:TC_EP_StandardRows_S1 .
+fw:TD_EP_StandardRows_S1 a backlog:TestData ;
+    backlog:hasFixtureState "186 rows across the standard" .
+
+fw:EP_StandardRows_S2 backlog:hasSpecification fw:Spec_EP_StandardRows_S2 ;
+    backlog:hasAcceptanceCriterion fw:AC_EP_StandardRows_S2 .
+fw:Spec_EP_StandardRows_S2 a backlog:Specification ;
+    backlog:hasInteractionStep fw:St_EP_StandardRows_S2_1 , fw:St_EP_StandardRows_S2_2 ;
+    backlog:hasStateChange fw:SC_EP_StandardRows_S2 .
+fw:St_EP_StandardRows_S2_1 a backlog:InteractionStep ;
+    backlog:hasStepOrdinal 1 ;
+    backlog:hasStepAction "Compares each row's claim against the TBox." .
+fw:St_EP_StandardRows_S2_2 a backlog:InteractionStep ;
+    backlog:hasStepOrdinal 2 ;
+    backlog:hasStepAction "Reads the report of rows that disagree." .
+fw:SC_EP_StandardRows_S2 a backlog:StateChange ;
+    backlog:hasFromState "Unchecked" ; backlog:hasToState "Checked" ; backlog:hasTrigger "Disagreements are reported" ;
+    backlog:declaredByArtifact fw:MA_MigrationStates .
+fw:TC_EP_StandardRows_S2 a backlog:TestCase ;
+    backlog:exercisesCriterion fw:AC_EP_StandardRows_S2 ;
+    backlog:runsOnData fw:TD_EP_StandardRows_S2 .
+fw:AC_EP_StandardRows_S2 backlog:coveredByCase fw:TC_EP_StandardRows_S2 .
+fw:TD_EP_StandardRows_S2 a backlog:TestData ;
+    backlog:hasFixtureState "186 attributed rows after S1" .
+
+#  The state space, declared by analysis rather than invented per
+#  story — the v1.98.0 rule that a state name must come from an
+#  artefact some analysis task produced.
+fw:MA_MigrationStates a backlog:ModelArtifact ;
+    backlog:hasModelKind backlog:Kind_StateMachineDiagram ;
+    backlog:describesItem fw:EP_Rulings ;
+    backlog:declaresState "Prose only" , "Queryable" , "Unlinked" , "Linked" , "In python" ,
+        "In ontology" , "Script holds" , "Script reads" , "Inferred" , "Declared" ,
+        "In register" , "Deciding" , "Executing" , "Unattributed" , "Attributed" ,
+        "Unchecked" , "Checked" .

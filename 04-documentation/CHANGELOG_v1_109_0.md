@@ -1,5 +1,41 @@
 # Changelog
 
+## v1.109.0 — 2026-10-27 (MAJOR-class: the PBIs groomed with the framework's own techniques)
+
+Four questions, each measured before answering.
+
+| | Answer |
+|---|---|
+| Package content covers every objective? | **YES** — all seven objectives have every mover's stories inside a package |
+| Direct links scope → goal → objective → PBI? | **YES** — all five epics trace to a goal, an objective, the scope and a deliverable |
+| Groomed with the SDLC techniques? | **NO** — one concern each, zero model artefacts |
+| Stories ready for a sprint? | **NO** — 9 stories: 0 specifications, 0 steps, 0 state changes, 0 test cases, 0 test data |
+
+### The finding that matters
+
+**The framework built `Specification`, `InteractionStep`, `StateChange`, `TestCase` and `TestData` at
+v1.97.0, and this lineage used none of them.** Capability delivered and not adopted, by the package
+that delivered it.
+
+That is the same shape as the reachability gate shipped-but-unwired at v1.96.0, and as `Package` sitting
+unused for 91 releases. **Building a capability and using it are separate acts**, and nothing in the
+framework notices the gap between them.
+
+### Remedied
+
+Each epic groomed against a **second** concern, each producing a model artefact typed from UML 2.5:
+class diagram for the ruling structure, component diagrams for the two script-contract changes, a
+sequence diagram for the gate's read path, an activity diagram for the one story where a **person** is
+the actor.
+
+All nine stories now carry a specification with ordered interaction steps, a state change, a test case
+and its test data. **9 of 9 ready.**
+
+The state space is declared once by `MA_MigrationStates`, a state machine artefact — not invented per
+story. That is the v1.98.0 rule holding: a state name must come from an artefact some analysis task
+produced.
+
+
 ## v1.108.0 — 2026-10-26 (MINOR: packages, sprint plans and kick-off — before any work starts)
 
 **As-is answer: no.** Nine stories, no package covering them, no open iteration, nothing planned. The
