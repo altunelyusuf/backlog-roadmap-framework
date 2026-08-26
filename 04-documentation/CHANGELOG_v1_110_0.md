@@ -1,5 +1,48 @@
 # Changelog
 
+## v1.110.0 — 2026-10-27 (MINOR: the owner's grooming model, made checkable)
+
+**Yes, that is the plan** — and testing it against what had been built found two deviations and a
+framework gap.
+
+| | |
+|---|---|
+| Epic specified with DoD and test cases before converting to stories | **NO** — 5 epics, 5 acceptance criteria, **0 DoDs, 0 test cases** |
+| Stories detailed per sprint, before the sprint plan | **NO** — all nine detailed in one pass at v1.109.0 |
+| Framework can express "groomed for iteration N" | **NO** — a refinement recorded *when*, never *for what* |
+
+The third is why the second went unnoticed: **grooming could be performed just in time or three sprints
+ahead and the register could not tell the two apart.**
+
+### Applied
+
+Each epic now carries a Definition of Done with three criteria — its own completion, the objective it
+moves observed rather than assumed, and no inverse objective breached — plus a test case exercising its
+criterion. That is the target the stories are converted to satisfy.
+
+`groomsForIteration` attributes each refinement to the iteration it prepares for.
+
+**The attribution is honest and it reports against this session.** All nine refinements were written on
+27 October; It9 starts 30 November. Three of them are **34 days ahead** and the advisory says so. The
+detail for It9 was written five weeks early and the register states it rather than hiding it.
+
+### The previous lineage was not exempted
+
+`Mission_BuildSoftware_v2` is **live**. Its lineage is finished and its mission still stands, so the
+rule applies — 20 epics were genuinely missing a DoD. Each given one retroactively, with a test case
+naming the fixture that already attests it: the evidence existed, and what was missing was the
+epic-level statement of what the stories were converted to satisfy.
+
+### A clause that looked right and reported nothing
+
+`(?is - ?ra) > "P28D"` returns **nothing** in this engine — subtracting two `xsd:dateTime` values and
+comparing the result against a duration literal silently yields no rows. It reported zero on a 34-day
+gap. Both forms were tested against the register before choosing: subtraction **0**, addition **3**.
+
+Same class as the malformed FILTER at v1.105.0. **A clause that cannot fire is worse than no clause,
+because the gate reports green.**
+
+
 ## v1.109.0 — 2026-10-27 (MAJOR-class: the PBIs groomed with the framework's own techniques)
 
 Four questions, each measured before answering.

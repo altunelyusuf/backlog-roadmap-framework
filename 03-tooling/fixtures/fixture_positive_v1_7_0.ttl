@@ -995,3 +995,10 @@ ex:Obj_G_Contain_Scope_Launch backlog:hasMeasurementKind backlog:Meas_Counted ;
 ex:CP_Obj_G_Contain_Scope_Launch a backlog:ObjectiveCheckpoint ;
     backlog:checkpointDate "2026-12-01T00:00:00"^^xsd:dateTime ;
     backlog:expectedValue 0.0 .
+
+ex:DoD_EP001 a backlog:DefinitionOfDone ;
+    backlog:hasDoDCriterion "Every story decomposed from this epic is Done with verified evidence." .
+ex:EP001 backlog:appliesDefinitionOfDone ex:DoD_EP001 .
+ex:TC_EP001 a backlog:TestCase ; backlog:exercisesCriterion ex:EP001_AC ; backlog:runsOnData ex:TD_EP001 .
+ex:EP001_AC backlog:coveredByCase ex:TC_EP001 .
+ex:TD_EP001 a backlog:TestData ; backlog:hasFixtureState "One account in state Locked." .

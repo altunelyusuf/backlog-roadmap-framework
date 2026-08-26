@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.44.0> ;
-    owl:versionInfo "1.44.0" ;
+    owl:versionIRI <http://example.org/backlog/1.45.0> ;
+    owl:versionInfo "1.45.0" ;
+    owl:priorVersion <http://example.org/backlog/1.44.0> ;
     owl:priorVersion <http://example.org/backlog/1.43.0> ;
     owl:priorVersion <http://example.org/backlog/1.42.0> ;
     owl:priorVersion <http://example.org/backlog/1.41.0> ;
@@ -4664,3 +4665,24 @@ backlog:productViewOf a owl:ObjectProperty , owl:FunctionalProperty ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "product view of"@en ;
     skos:definition "This product-layer area is the same subject as that work-layer area, seen from what an adopter receives rather than from where the effort goes. Stated so the pair is not counted twice: an area that is a product view of another needs no objective of its own, because the objective on the work-layer area measures the same event. Without this relation the two look like separate subjects and the scope reads half-finished when it is done."@en .
+
+#################################################################
+#  74. Grooming happens FOR an iteration (v1.45.0)
+#
+#  OWNER MODEL, and the framework could not express the last part
+#  of it. A RefinementEvent records WHEN grooming happened and not
+#  WHICH iteration it was preparing for — so grooming-per-sprint
+#  could be performed and never checked.
+#
+#  The consequence was visible at v1.109.0: all nine stories were
+#  detailed in one pass, three sprints ahead. That is not wrong in
+#  itself, and it is not what the owner's model asks for, and
+#  nothing in the register could tell the two apart.
+#################################################################
+
+backlog:groomsForIteration a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:RefinementEvent ; rdfs:range backlog:Iteration ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "grooms for iteration"@en ;
+    skos:definition "The iteration this refinement was preparing an item for. What makes just-in-time grooming checkable rather than merely intended: without it a register cannot distinguish a story groomed the sprint before it starts from nine stories detailed at once, and the second is how detail goes stale before anyone builds against it."@en ;
+    dcterms:source "Scrum Guide: product backlog refinement as an ongoing activity preparing items for upcoming sprints"@en .

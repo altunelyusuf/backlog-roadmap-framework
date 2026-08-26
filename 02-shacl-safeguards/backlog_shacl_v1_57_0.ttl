@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.56.0> ;
-    owl:versionInfo "1.56.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.57.0> ;
+    owl:versionInfo "1.57.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.56.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.55.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.54.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.53.0> ;
@@ -4124,4 +4125,66 @@ backlog:AreaUnmeasuredShape a sh:NodeShape ;
             FILTER NOT EXISTS { $this backlog:productViewOf ?src }
             FILTER NOT EXISTS { ?g backlog:goalCoversArea $this . ?o backlog:contributesToGoal ?g }
             FILTER NOT EXISTS { ?s backlog:supersedesMission ?m . ?sc backlog:scopeForMission ?m }
+        }""" ] .
+
+#################################################################
+#  v1.57.0 — the owner's grooming model, made checkable
+#################################################################
+
+backlog:EpicSpecifiedShape a sh:NodeShape ;
+    sh:targetClass backlog:Epic ;
+    sh:severity sh:Violation ;
+    rdfs:label "An epic is specified before it decomposes (L3)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: this epic decomposes into stories and carries no Definition of Done. The stories are then written to satisfy nothing stated at their own level — each has its own criteria and no one can say whether the set of them finishes the epic. An epic is specified first and converted second, or the conversion has no target." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L3_Governed, backlog:L4_LineageEnforced))
+            $this backlog:decomposesInto ?s .
+            FILTER NOT EXISTS { $this backlog:appliesDefinitionOfDone ?d }
+            FILTER NOT EXISTS { $this backlog:commitsToDefinitionOfDone ?d2 }
+            FILTER NOT EXISTS { ?sup backlog:supersedesMission ?m . $this backlog:pursuesObjective ?o .
+                                ?o backlog:contributesToGoal ?g . ?g backlog:contributesToMission ?m }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: this epic decomposes into stories and no test case exercises its acceptance criteria. The owner's model puts test cases on the EPIC — they are what the stories are converted to satisfy. Without them the stories inherit no target and the epic's completion rests on the stories all being individually done, which is a different claim." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L3_Governed, backlog:L4_LineageEnforced))
+            $this backlog:decomposesInto ?s ; backlog:hasAcceptanceCriterion ?ac .
+            FILTER NOT EXISTS { ?ac backlog:coveredByCase ?tc }
+            FILTER NOT EXISTS { ?sup backlog:supersedesMission ?m . $this backlog:pursuesObjective ?o .
+                                ?o backlog:contributesToGoal ?g . ?g backlog:contributesToMission ?m }
+        }""" ] .
+
+backlog:JustInTimeGroomingShape a sh:NodeShape ;
+    sh:targetClass backlog:RefinementEvent ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: a refinement that names no iteration"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: this refinement does not say which iteration it was preparing an item for. Grooming can then be performed just in time or three sprints ahead and the register cannot tell the two apart — and detail written far ahead of the work goes stale before anyone builds against it." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:refines ?i . ?i a backlog:Story .
+            FILTER NOT EXISTS { $this backlog:groomsForIteration ?it }
+        }""" ] .
+
+backlog:GroomedAheadShape a sh:NodeShape ;
+    sh:targetClass backlog:RefinementEvent ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: a story groomed more than one iteration ahead"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: this refinement grooms for an iteration that starts more than 28 days after the grooming. Detail written that far ahead of the work is written against assumptions the work has not tested yet — and it will be rewritten or, worse, followed." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:groomsForIteration ?it ; backlog:refinedAt ?ra .
+            ?it backlog:iterationStart ?is .
+            # Addition, not subtraction. Subtracting two xsd:dateTime values
+            # and comparing the result against a duration literal returns
+            # NOTHING in this engine — the clause looked correct and reported
+            # zero on a 34-day gap. Tested both forms against the register
+            # before choosing: subtraction 0, addition 3.
+            FILTER (?is > (?ra + "P28D"^^xsd:dayTimeDuration))
         }""" ] .

@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/6.0.0> ;
-    owl:versionInfo "6.0.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/6.1.0> ;
+    owl:versionInfo "6.1.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/6.0.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/5.9.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/5.8.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/5.7.0> ;
@@ -7608,3 +7609,330 @@ fw:MA_MigrationStates a backlog:ModelArtifact ;
         "In ontology" , "Script holds" , "Script reads" , "Inferred" , "Declared" ,
         "In register" , "Deciding" , "Executing" , "Unattributed" , "Attributed" ,
         "Unchecked" , "Checked" .
+
+
+#################################################################
+#  v6.1.0 — the owner's grooming model applied.
+#
+#  Tested against what was built and found two deviations plus a
+#  framework gap:
+#
+#   1. Epics carried acceptance criteria and NO Definition of Done
+#      and NO test cases. The stories were therefore written to
+#      satisfy nothing stated at epic level.
+#   2. All nine stories were detailed in one pass at v1.109.0,
+#      three sprints ahead — not per sprint.
+#   3. The framework could not express (2): a RefinementEvent
+#      recorded WHEN grooming happened, never WHICH iteration it
+#      prepared for. Just-in-time grooming could be performed and
+#      never checked.
+#
+#  Each epic now carries a DoD and a test case exercising its
+#  criterion — the target the stories are converted to satisfy.
+#################################################################
+fw:DoD_EP_Rulings a backlog:DefinitionOfDone ;
+    backlog:hasDoDCriterion "All 18 rulings are reachable by query, each naming its enforcing shape, and the reachability gate reports no new unreferenceable class." ;
+    backlog:hasDoDCriterion "The objective this epic moves is observed at its new value, by the measurement method that objective declares." ;
+    backlog:hasDoDCriterion "No inverse objective is breached: no class added the export does not require, no explanatory paragraph lost." .
+fw:EP_Rulings backlog:appliesDefinitionOfDone fw:DoD_EP_Rulings .
+fw:TC_EP_Rulings a backlog:TestCase ;
+    backlog:exercisesCriterion fw:AC_EP_Rulings ;
+    backlog:runsOnData fw:TD_EP_Rulings .
+fw:AC_EP_Rulings backlog:coveredByCase fw:TC_EP_Rulings .
+fw:TD_EP_Rulings a backlog:TestData ;
+    backlog:hasFixtureState "One discipline document with G1 through G18 and the shapes file" .
+fw:DoD_EP_CodeTables a backlog:DefinitionOfDone ;
+    backlog:hasDoDCriterion "All 23 tables exist as ontology enumerations and no python module holds a classification literal." ;
+    backlog:hasDoDCriterion "The objective this epic moves is observed at its new value, by the measurement method that objective declares." ;
+    backlog:hasDoDCriterion "No inverse objective is breached: no class added the export does not require, no explanatory paragraph lost." .
+fw:EP_CodeTables backlog:appliesDefinitionOfDone fw:DoD_EP_CodeTables .
+fw:TC_EP_CodeTables a backlog:TestCase ;
+    backlog:exercisesCriterion fw:AC_EP_CodeTables ;
+    backlog:runsOnData fw:TD_EP_CodeTables .
+fw:AC_EP_CodeTables backlog:coveredByCase fw:TC_EP_CodeTables .
+fw:TD_EP_CodeTables a backlog:TestData ;
+    backlog:hasFixtureState "Twelve python modules and the TBox after export" .
+fw:DoD_EP_RuleExec a backlog:DefinitionOfDone ;
+    backlog:hasDoDCriterion "All three gate checks read their outcome from the register, and a renamed fixture keeps its expected polarity." ;
+    backlog:hasDoDCriterion "The objective this epic moves is observed at its new value, by the measurement method that objective declares." ;
+    backlog:hasDoDCriterion "No inverse objective is breached: no class added the export does not require, no explanatory paragraph lost." .
+fw:EP_RuleExec backlog:appliesDefinitionOfDone fw:DoD_EP_RuleExec .
+fw:TC_EP_RuleExec a backlog:TestCase ;
+    backlog:exercisesCriterion fw:AC_EP_RuleExec ;
+    backlog:runsOnData fw:TD_EP_RuleExec .
+fw:AC_EP_RuleExec backlog:coveredByCase fw:TC_EP_RuleExec .
+fw:TD_EP_RuleExec a backlog:TestData ;
+    backlog:hasFixtureState "The gate, twenty-two fixtures and the register" .
+fw:DoD_EP_ScriptDecisions a backlog:DefinitionOfDone ;
+    backlog:hasDoDCriterion "No script applies logic the ontology does not state, and each remaining decision traces to an ontology statement or a recorded exception." ;
+    backlog:hasDoDCriterion "The objective this epic moves is observed at its new value, by the measurement method that objective declares." ;
+    backlog:hasDoDCriterion "No inverse objective is breached: no class added the export does not require, no explanatory paragraph lost." .
+fw:EP_ScriptDecisions backlog:appliesDefinitionOfDone fw:DoD_EP_ScriptDecisions .
+fw:TC_EP_ScriptDecisions a backlog:TestCase ;
+    backlog:exercisesCriterion fw:AC_EP_ScriptDecisions ;
+    backlog:runsOnData fw:TD_EP_ScriptDecisions .
+fw:AC_EP_ScriptDecisions backlog:coveredByCase fw:TC_EP_ScriptDecisions .
+fw:TD_EP_ScriptDecisions a backlog:TestData ;
+    backlog:hasFixtureState "Twenty python modules" .
+fw:DoD_EP_StandardRows a backlog:DefinitionOfDone ;
+    backlog:hasDoDCriterion "Every standard row names the term it describes and a row contradicting the TBox fails the gate." ;
+    backlog:hasDoDCriterion "The objective this epic moves is observed at its new value, by the measurement method that objective declares." ;
+    backlog:hasDoDCriterion "No inverse objective is breached: no class added the export does not require, no explanatory paragraph lost." .
+fw:EP_StandardRows backlog:appliesDefinitionOfDone fw:DoD_EP_StandardRows .
+fw:TC_EP_StandardRows a backlog:TestCase ;
+    backlog:exercisesCriterion fw:AC_EP_StandardRows ;
+    backlog:runsOnData fw:TD_EP_StandardRows .
+fw:AC_EP_StandardRows backlog:coveredByCase fw:TC_EP_StandardRows .
+fw:TD_EP_StandardRows a backlog:TestData ;
+    backlog:hasFixtureState "186 rows and the TBox" .
+
+#  Grooming attributed to the iteration it prepared for. The nine
+#  refinements written at v1.109.0 are attributed HONESTLY: all
+#  were performed on 27 October, and It9 starts 30 November, so
+#  three of them will raise the ahead-of-time advisory. That is the
+#  correct report — the detail for It9 was written five weeks early
+#  and the register should say so rather than hide it.
+fw:R_EP_Rulings_S1 backlog:groomsForIteration fw:It7 .
+fw:R_EP_Rulings_S2 backlog:groomsForIteration fw:It7 .
+fw:R_EP_CodeTables_S1 backlog:groomsForIteration fw:It7 .
+fw:R_EP_CodeTables_S2 backlog:groomsForIteration fw:It8 .
+fw:R_EP_RuleExec_S1 backlog:groomsForIteration fw:It8 .
+fw:R_EP_RuleExec_S2 backlog:groomsForIteration fw:It8 .
+fw:R_EP_ScriptDecisions_S1 backlog:groomsForIteration fw:It9 .
+fw:R_EP_StandardRows_S1 backlog:groomsForIteration fw:It9 .
+fw:R_EP_StandardRows_S2 backlog:groomsForIteration fw:It9 .
+
+#################################################################
+#  The previous lineage's epics, given the DoD and test cases the
+#  owner's model requires.
+#
+#  Not exempted: Mission_BuildSoftware_v2 is LIVE. The lineage is
+#  finished and its mission still stands, so the rule applies and
+#  the epics were genuinely missing what it asks for.
+#
+#  Recorded as RETROACTIVE. Each DoD states what was in fact
+#  required of that epic, and each test case names the fixture that
+#  already attests it — the evidence existed, and what was missing
+#  was the epic-level statement of what the stories were converted
+#  to satisfy.
+#################################################################
+fw:DoD_EP_PbiTask a backlog:DefinitionOfDone ;
+    backlog:hasDoDCriterion "Every story decomposed from this epic is Done and carries verified evidence." ;
+    backlog:hasDoDCriterion "The suite validates with the epic's fixture behaving as its name declares." ;
+    backlog:hasDoDCriterion "The objective this epic pursues is observed after the work, not assumed." .
+fw:EP_PbiTask backlog:appliesDefinitionOfDone fw:DoD_EP_PbiTask .
+fw:TC_EP_PbiTask a backlog:TestCase ;
+    backlog:exercisesCriterion fw:AC_PbiTask ;
+    backlog:runsOnData fw:TD_EP_PbiTask .
+fw:AC_PbiTask backlog:coveredByCase fw:TC_EP_PbiTask .
+fw:TD_EP_PbiTask a backlog:TestData ;
+    backlog:hasFixtureState "The fixture named by Ev_PbiTask, in the state that evidence records." .
+fw:DoD_EP_Flow a backlog:DefinitionOfDone ;
+    backlog:hasDoDCriterion "Every story decomposed from this epic is Done and carries verified evidence." ;
+    backlog:hasDoDCriterion "The suite validates with the epic's fixture behaving as its name declares." ;
+    backlog:hasDoDCriterion "The objective this epic pursues is observed after the work, not assumed." .
+fw:EP_Flow backlog:appliesDefinitionOfDone fw:DoD_EP_Flow .
+fw:TC_EP_Flow a backlog:TestCase ;
+    backlog:exercisesCriterion fw:AC_Flow ;
+    backlog:runsOnData fw:TD_EP_Flow .
+fw:AC_Flow backlog:coveredByCase fw:TC_EP_Flow .
+fw:TD_EP_Flow a backlog:TestData ;
+    backlog:hasFixtureState "The fixture named by Ev_Flow, in the state that evidence records." .
+fw:DoD_EP_Cost a backlog:DefinitionOfDone ;
+    backlog:hasDoDCriterion "Every story decomposed from this epic is Done and carries verified evidence." ;
+    backlog:hasDoDCriterion "The suite validates with the epic's fixture behaving as its name declares." ;
+    backlog:hasDoDCriterion "The objective this epic pursues is observed after the work, not assumed." .
+fw:EP_Cost backlog:appliesDefinitionOfDone fw:DoD_EP_Cost .
+fw:TC_EP_Cost a backlog:TestCase ;
+    backlog:exercisesCriterion fw:AC_Cost ;
+    backlog:runsOnData fw:TD_EP_Cost .
+fw:AC_Cost backlog:coveredByCase fw:TC_EP_Cost .
+fw:TD_EP_Cost a backlog:TestData ;
+    backlog:hasFixtureState "The fixture named by Ev_Cost, in the state that evidence records." .
+fw:DoD_EP_Human a backlog:DefinitionOfDone ;
+    backlog:hasDoDCriterion "Every story decomposed from this epic is Done and carries verified evidence." ;
+    backlog:hasDoDCriterion "The suite validates with the epic's fixture behaving as its name declares." ;
+    backlog:hasDoDCriterion "The objective this epic pursues is observed after the work, not assumed." .
+fw:EP_Human backlog:appliesDefinitionOfDone fw:DoD_EP_Human .
+fw:TC_EP_Human a backlog:TestCase ;
+    backlog:exercisesCriterion fw:AC_Human ;
+    backlog:runsOnData fw:TD_EP_Human .
+fw:AC_Human backlog:coveredByCase fw:TC_EP_Human .
+fw:TD_EP_Human a backlog:TestData ;
+    backlog:hasFixtureState "The fixture named by Ev_Human, in the state that evidence records." .
+fw:DoD_EP_Views a backlog:DefinitionOfDone ;
+    backlog:hasDoDCriterion "Every story decomposed from this epic is Done and carries verified evidence." ;
+    backlog:hasDoDCriterion "The suite validates with the epic's fixture behaving as its name declares." ;
+    backlog:hasDoDCriterion "The objective this epic pursues is observed after the work, not assumed." .
+fw:EP_Views backlog:appliesDefinitionOfDone fw:DoD_EP_Views .
+fw:TC_EP_Views a backlog:TestCase ;
+    backlog:exercisesCriterion fw:AC_Views ;
+    backlog:runsOnData fw:TD_EP_Views .
+fw:AC_Views backlog:coveredByCase fw:TC_EP_Views .
+fw:TD_EP_Views a backlog:TestData ;
+    backlog:hasFixtureState "The fixture named by Ev_Views, in the state that evidence records." .
+fw:DoD_EP_Schedule a backlog:DefinitionOfDone ;
+    backlog:hasDoDCriterion "Every story decomposed from this epic is Done and carries verified evidence." ;
+    backlog:hasDoDCriterion "The suite validates with the epic's fixture behaving as its name declares." ;
+    backlog:hasDoDCriterion "The objective this epic pursues is observed after the work, not assumed." .
+fw:EP_Schedule backlog:appliesDefinitionOfDone fw:DoD_EP_Schedule .
+fw:TC_EP_Schedule a backlog:TestCase ;
+    backlog:exercisesCriterion fw:AC_Schedule ;
+    backlog:runsOnData fw:TD_EP_Schedule .
+fw:AC_Schedule backlog:coveredByCase fw:TC_EP_Schedule .
+fw:TD_EP_Schedule a backlog:TestData ;
+    backlog:hasFixtureState "The fixture named by Ev_Schedule, in the state that evidence records." .
+fw:DoD_EP_Progress a backlog:DefinitionOfDone ;
+    backlog:hasDoDCriterion "Every story decomposed from this epic is Done and carries verified evidence." ;
+    backlog:hasDoDCriterion "The suite validates with the epic's fixture behaving as its name declares." ;
+    backlog:hasDoDCriterion "The objective this epic pursues is observed after the work, not assumed." .
+fw:EP_Progress backlog:appliesDefinitionOfDone fw:DoD_EP_Progress .
+fw:TC_EP_Progress a backlog:TestCase ;
+    backlog:exercisesCriterion fw:AC_Progress ;
+    backlog:runsOnData fw:TD_EP_Progress .
+fw:AC_Progress backlog:coveredByCase fw:TC_EP_Progress .
+fw:TD_EP_Progress a backlog:TestData ;
+    backlog:hasFixtureState "The fixture named by Ev_Progress, in the state that evidence records." .
+fw:DoD_EP_Fit a backlog:DefinitionOfDone ;
+    backlog:hasDoDCriterion "Every story decomposed from this epic is Done and carries verified evidence." ;
+    backlog:hasDoDCriterion "The suite validates with the epic's fixture behaving as its name declares." ;
+    backlog:hasDoDCriterion "The objective this epic pursues is observed after the work, not assumed." .
+fw:EP_Fit backlog:appliesDefinitionOfDone fw:DoD_EP_Fit .
+fw:TC_EP_Fit a backlog:TestCase ;
+    backlog:exercisesCriterion fw:AC_Fit ;
+    backlog:runsOnData fw:TD_EP_Fit .
+fw:AC_Fit backlog:coveredByCase fw:TC_EP_Fit .
+fw:TD_EP_Fit a backlog:TestData ;
+    backlog:hasFixtureState "The fixture named by Ev_Fit, in the state that evidence records." .
+fw:DoD_EP_ValueRelease a backlog:DefinitionOfDone ;
+    backlog:hasDoDCriterion "Every story decomposed from this epic is Done and carries verified evidence." ;
+    backlog:hasDoDCriterion "The suite validates with the epic's fixture behaving as its name declares." ;
+    backlog:hasDoDCriterion "The objective this epic pursues is observed after the work, not assumed." .
+fw:EP_ValueRelease backlog:appliesDefinitionOfDone fw:DoD_EP_ValueRelease .
+fw:TC_EP_ValueRelease a backlog:TestCase ;
+    backlog:exercisesCriterion fw:AC_ValueRelease ;
+    backlog:runsOnData fw:TD_EP_ValueRelease .
+fw:AC_ValueRelease backlog:coveredByCase fw:TC_EP_ValueRelease .
+fw:TD_EP_ValueRelease a backlog:TestData ;
+    backlog:hasFixtureState "The fixture named by Ev_ValueRelease, in the state that evidence records." .
+fw:DoD_EP_OrderRecord a backlog:DefinitionOfDone ;
+    backlog:hasDoDCriterion "Every story decomposed from this epic is Done and carries verified evidence." ;
+    backlog:hasDoDCriterion "The suite validates with the epic's fixture behaving as its name declares." ;
+    backlog:hasDoDCriterion "The objective this epic pursues is observed after the work, not assumed." .
+fw:EP_OrderRecord backlog:appliesDefinitionOfDone fw:DoD_EP_OrderRecord .
+fw:TC_EP_OrderRecord a backlog:TestCase ;
+    backlog:exercisesCriterion fw:AC_OrderRecord ;
+    backlog:runsOnData fw:TD_EP_OrderRecord .
+fw:AC_OrderRecord backlog:coveredByCase fw:TC_EP_OrderRecord .
+fw:TD_EP_OrderRecord a backlog:TestData ;
+    backlog:hasFixtureState "The fixture named by Ev_OrderRecord, in the state that evidence records." .
+fw:DoD_EP_OrderCorrect a backlog:DefinitionOfDone ;
+    backlog:hasDoDCriterion "Every story decomposed from this epic is Done and carries verified evidence." ;
+    backlog:hasDoDCriterion "The suite validates with the epic's fixture behaving as its name declares." ;
+    backlog:hasDoDCriterion "The objective this epic pursues is observed after the work, not assumed." .
+fw:EP_OrderCorrect backlog:appliesDefinitionOfDone fw:DoD_EP_OrderCorrect .
+fw:TC_EP_OrderCorrect a backlog:TestCase ;
+    backlog:exercisesCriterion fw:AC_OrderCorrect ;
+    backlog:runsOnData fw:TD_EP_OrderCorrect .
+fw:AC_OrderCorrect backlog:coveredByCase fw:TC_EP_OrderCorrect .
+fw:TD_EP_OrderCorrect a backlog:TestData ;
+    backlog:hasFixtureState "The fixture named by Ev_OrderCorrect, in the state that evidence records." .
+fw:DoD_EP_Grooming a backlog:DefinitionOfDone ;
+    backlog:hasDoDCriterion "Every story decomposed from this epic is Done and carries verified evidence." ;
+    backlog:hasDoDCriterion "The suite validates with the epic's fixture behaving as its name declares." ;
+    backlog:hasDoDCriterion "The objective this epic pursues is observed after the work, not assumed." .
+fw:EP_Grooming backlog:appliesDefinitionOfDone fw:DoD_EP_Grooming .
+fw:TC_EP_Grooming a backlog:TestCase ;
+    backlog:exercisesCriterion fw:AC_Grooming ;
+    backlog:runsOnData fw:TD_EP_Grooming .
+fw:AC_Grooming backlog:coveredByCase fw:TC_EP_Grooming .
+fw:TD_EP_Grooming a backlog:TestData ;
+    backlog:hasFixtureState "The fixture named by Ev_Grooming, in the state that evidence records." .
+fw:DoD_EP_IterationCapacity a backlog:DefinitionOfDone ;
+    backlog:hasDoDCriterion "Every story decomposed from this epic is Done and carries verified evidence." ;
+    backlog:hasDoDCriterion "The suite validates with the epic's fixture behaving as its name declares." ;
+    backlog:hasDoDCriterion "The objective this epic pursues is observed after the work, not assumed." .
+fw:EP_IterationCapacity backlog:appliesDefinitionOfDone fw:DoD_EP_IterationCapacity .
+fw:TC_EP_IterationCapacity a backlog:TestCase ;
+    backlog:exercisesCriterion fw:AC_IterationCapacity ;
+    backlog:runsOnData fw:TD_EP_IterationCapacity .
+fw:AC_IterationCapacity backlog:coveredByCase fw:TC_EP_IterationCapacity .
+fw:TD_EP_IterationCapacity a backlog:TestData ;
+    backlog:hasFixtureState "The fixture named by Ev_Capacity, in the state that evidence records." .
+fw:DoD_EP_TeamRoles a backlog:DefinitionOfDone ;
+    backlog:hasDoDCriterion "Every story decomposed from this epic is Done and carries verified evidence." ;
+    backlog:hasDoDCriterion "The suite validates with the epic's fixture behaving as its name declares." ;
+    backlog:hasDoDCriterion "The objective this epic pursues is observed after the work, not assumed." .
+fw:EP_TeamRoles backlog:appliesDefinitionOfDone fw:DoD_EP_TeamRoles .
+fw:TC_EP_TeamRoles a backlog:TestCase ;
+    backlog:exercisesCriterion fw:AC_TeamRoles ;
+    backlog:runsOnData fw:TD_EP_TeamRoles .
+fw:AC_TeamRoles backlog:coveredByCase fw:TC_EP_TeamRoles .
+fw:TD_EP_TeamRoles a backlog:TestData ;
+    backlog:hasFixtureState "The fixture named by Ev_Roles, in the state that evidence records." .
+fw:DoD_EP_TaskTypes a backlog:DefinitionOfDone ;
+    backlog:hasDoDCriterion "Every story decomposed from this epic is Done and carries verified evidence." ;
+    backlog:hasDoDCriterion "The suite validates with the epic's fixture behaving as its name declares." ;
+    backlog:hasDoDCriterion "The objective this epic pursues is observed after the work, not assumed." .
+fw:EP_TaskTypes backlog:appliesDefinitionOfDone fw:DoD_EP_TaskTypes .
+fw:TC_EP_TaskTypes a backlog:TestCase ;
+    backlog:exercisesCriterion fw:AC_TaskTypes ;
+    backlog:runsOnData fw:TD_EP_TaskTypes .
+fw:AC_TaskTypes backlog:coveredByCase fw:TC_EP_TaskTypes .
+fw:TD_EP_TaskTypes a backlog:TestData ;
+    backlog:hasFixtureState "The fixture named by Ev_TaskTypes, in the state that evidence records." .
+fw:DoD_EP_GroundTwo a backlog:DefinitionOfDone ;
+    backlog:hasDoDCriterion "Every story decomposed from this epic is Done and carries verified evidence." ;
+    backlog:hasDoDCriterion "The suite validates with the epic's fixture behaving as its name declares." ;
+    backlog:hasDoDCriterion "The objective this epic pursues is observed after the work, not assumed." .
+fw:EP_GroundTwo backlog:appliesDefinitionOfDone fw:DoD_EP_GroundTwo .
+fw:TC_EP_GroundTwo a backlog:TestCase ;
+    backlog:exercisesCriterion fw:AC_GroundTwo ;
+    backlog:runsOnData fw:TD_EP_GroundTwo .
+fw:AC_GroundTwo backlog:coveredByCase fw:TC_EP_GroundTwo .
+fw:TD_EP_GroundTwo a backlog:TestData ;
+    backlog:hasFixtureState "The fixture named by Ev_GroundTwo, in the state that evidence records." .
+fw:DoD_EP_Model a backlog:DefinitionOfDone ;
+    backlog:hasDoDCriterion "Every story decomposed from this epic is Done and carries verified evidence." ;
+    backlog:hasDoDCriterion "The suite validates with the epic's fixture behaving as its name declares." ;
+    backlog:hasDoDCriterion "The objective this epic pursues is observed after the work, not assumed." .
+fw:EP_Model backlog:appliesDefinitionOfDone fw:DoD_EP_Model .
+fw:TC_EP_Model a backlog:TestCase ;
+    backlog:exercisesCriterion fw:AC_EP_Model ;
+    backlog:runsOnData fw:TD_EP_Model .
+fw:AC_EP_Model backlog:coveredByCase fw:TC_EP_Model .
+fw:TD_EP_Model a backlog:TestData ;
+    backlog:hasFixtureState "The fixture named by Ev_StoryDetail, in the state that evidence records." .
+fw:DoD_EP_Spec a backlog:DefinitionOfDone ;
+    backlog:hasDoDCriterion "Every story decomposed from this epic is Done and carries verified evidence." ;
+    backlog:hasDoDCriterion "The suite validates with the epic's fixture behaving as its name declares." ;
+    backlog:hasDoDCriterion "The objective this epic pursues is observed after the work, not assumed." .
+fw:EP_Spec backlog:appliesDefinitionOfDone fw:DoD_EP_Spec .
+fw:TC_EP_Spec a backlog:TestCase ;
+    backlog:exercisesCriterion fw:AC_EP_Spec ;
+    backlog:runsOnData fw:TD_EP_Spec .
+fw:AC_EP_Spec backlog:coveredByCase fw:TC_EP_Spec .
+fw:TD_EP_Spec a backlog:TestData ;
+    backlog:hasFixtureState "The fixture named by Ev_StoryDetail, in the state that evidence records." .
+fw:DoD_EP_TestSpec a backlog:DefinitionOfDone ;
+    backlog:hasDoDCriterion "Every story decomposed from this epic is Done and carries verified evidence." ;
+    backlog:hasDoDCriterion "The suite validates with the epic's fixture behaving as its name declares." ;
+    backlog:hasDoDCriterion "The objective this epic pursues is observed after the work, not assumed." .
+fw:EP_TestSpec backlog:appliesDefinitionOfDone fw:DoD_EP_TestSpec .
+fw:TC_EP_TestSpec a backlog:TestCase ;
+    backlog:exercisesCriterion fw:AC_EP_TestSpec ;
+    backlog:runsOnData fw:TD_EP_TestSpec .
+fw:AC_EP_TestSpec backlog:coveredByCase fw:TC_EP_TestSpec .
+fw:TD_EP_TestSpec a backlog:TestData ;
+    backlog:hasFixtureState "The fixture named by Ev_StoryDetail, in the state that evidence records." .
+fw:DoD_EP_Reach a backlog:DefinitionOfDone ;
+    backlog:hasDoDCriterion "Every story decomposed from this epic is Done and carries verified evidence." ;
+    backlog:hasDoDCriterion "The suite validates with the epic's fixture behaving as its name declares." ;
+    backlog:hasDoDCriterion "The objective this epic pursues is observed after the work, not assumed." .
+fw:EP_Reach backlog:appliesDefinitionOfDone fw:DoD_EP_Reach .
+fw:TC_EP_Reach a backlog:TestCase ;
+    backlog:exercisesCriterion fw:AC_Reach ;
+    backlog:runsOnData fw:TD_EP_Reach .
+fw:AC_Reach backlog:coveredByCase fw:TC_EP_Reach .
+fw:TD_EP_Reach a backlog:TestData ;
+    backlog:hasFixtureState "The fixture named by Ev_Reach, in the state that evidence records." .
