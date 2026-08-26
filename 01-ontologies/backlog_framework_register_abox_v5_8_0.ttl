@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/5.7.0> ;
-    owl:versionInfo "5.7.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/5.8.0> ;
+    owl:versionInfo "5.8.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/5.7.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/5.6.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/5.5.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/5.4.0> ;
@@ -85,7 +86,7 @@ fw:Profile a backlog:AdoptionProfile ;
 fw:Register a backlog:Backlog ;
     backlog:hasIdentifier "BRF-REG" ;
     backlog:hasTitle "backlog-roadmap-framework development register" ;
-    backlog:hasState backlog:Done ;
+    backlog:hasState backlog:InProgress ;
     backlog:appliesDefinitionOfDone backlog:DoD_Baseline ;
     backlog:hasCommitment fw:Commitment_Dev .
 
@@ -6760,3 +6761,392 @@ fw:Inv_AreaCoverageJudged a backlog:CrossCuttingInvariant ;
     backlog:hasInvariantStatus backlog:Holds ;
     backlog:tracksItem fw:EP_Model ;
     backlog:hasRationale "Three areas carry no scope-facing goal and the advisory reports them. Test-driven rather than argued: for each of the three, the objective's baseline EQUALS the area's own measure and its target is zero — 18 rulings and baseline 18, 3 checks and baseline 3, 186 rows and baseline 186. The objective cannot reach zero while the area is unfinished, and the area cannot finish while it is above zero. A scope-facing goal would measure the same event a third time. Accepted with the advisory left firing, because the pattern IS worth reporting in general — a register whose objectives do not happen to count exactly what its areas contain would need one." .
+
+
+#################################################################
+#  v5.8.0 — STAGE 5: THE BACKLOG.
+#
+#  Mission f2f4e0f, Scope a52ccfe, Goal e6a70d2, Objective 0b87c6a.
+#  This commit closes the Backlog stage and the lineage is complete.
+#
+#  Five epics, one per MOVABLE objective. The two inverse objectives
+#  get no epic: they are held at zero by not doing something, and an
+#  epic for "do not add capabilities" would be work created to
+#  satisfy a measure of restraint.
+#
+#  Every epic satisfies a deliverable that already existed and moves
+#  an objective that already had a baseline. Nothing here invents a
+#  subject.
+#################################################################
+
+fw:EP_Rulings a backlog:Epic ;
+    backlog:hasIdentifier "BRF-EP21" ;
+    backlog:hasTitle "Governance rulings become machine-checkable statements" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_RulingsQueryable ;
+    backlog:satisfiesDeliverable fw:Del_OntGovernance ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasAcceptanceCriterion fw:AC_EP_Rulings ;
+    backlog:hasPriorityScore fw:S_EP_Rulings ;
+    backlog:hasCostEstimate fw:E_EP_Rulings ;
+    backlog:rankedOnRoadmap fw:Roadmap ;
+    backlog:scheduledInHorizon backlog:Now ;
+    backlog:hasApplicableConcern backlog:Concern_Data ;
+    backlog:producedByStage fw:Out2_Backlog ;
+    backlog:hasRationale "Subject: The 18 rulings in LINEAGE_OPERATING_DISCIPLINE, already written and already sourced. Nothing is invented; they move." .
+fw:AC_EP_Rulings a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the framework suite, When it is run, Then governance rulings become machine-checkable statements, and the objective it moves is observed at its new value." .
+fw:R_EP_Rulings a backlog:RefinementEvent ; backlog:refines fw:EP_Rulings ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-10-26T23:00:00"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
+    backlog:hasRefinementOutcome "Highest in the register and the reason is dependency, not preference: a GovernanceRuling class is what the other four epics attach their evidence to. Ship it last and every later export has nowhere to say which ruling it satisfies. 18 rulings, and the work is mechanical once the class exists — each ruling already has a heading, a statement and a rationale in the discipline." .
+fw:S_EP_Rulings a backlog:WSJFScore ;
+    backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 8.0 ;
+    backlog:hasUserBusinessValue 9.0 ; backlog:hasTimeCriticality 7.0 ;
+    backlog:hasRiskReductionValue 8.0 ; backlog:hasJobSize 3.0 ;
+    backlog:scoredAt "2026-10-26T23:00:00"^^xsd:dateTime ;
+    backlog:hasScoreRationale "Highest in the register and the reason is dependency, not preference: a GovernanceRuling class is what the other four epics attach their evidence to. Ship it last and every later export has nowhere to say which ruling it satisfies. 18 rulings, and the work is mechanical once the class exists — each ruling already has a heading, a statement and a rationale in the discipline." ;
+    backlog:hasBasisKind backlog:Basis_Judged .
+fw:E_EP_Rulings a backlog:CostEstimate ;
+    backlog:hasEffortEstimate 3.0 ; backlog:hasCostBasis "Vocabulary plus constraints plus the script change to read rather than decide" ;
+    backlog:estimatedAt "2026-10-26T23:00:00"^^xsd:dateTime ;
+    backlog:hasBasisKind backlog:Basis_Judged .
+fw:Obj_RulingsQueryable backlog:metricMovableBy fw:EP_Rulings .
+
+fw:EP_CodeTables a backlog:Epic ;
+    backlog:hasIdentifier "BRF-EP22" ;
+    backlog:hasTitle "Classification tables move from python to the ontology" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_TablesExported ;
+    backlog:satisfiesDeliverable fw:Del_OntExport ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasAcceptanceCriterion fw:AC_EP_CodeTables ;
+    backlog:hasPriorityScore fw:S_EP_CodeTables ;
+    backlog:hasCostEstimate fw:E_EP_CodeTables ;
+    backlog:rankedOnRoadmap fw:Roadmap ;
+    backlog:scheduledInHorizon backlog:Now ;
+    backlog:hasApplicableConcern backlog:Concern_Data ;
+    backlog:producedByStage fw:Out2_Backlog ;
+    backlog:hasRationale "Subject: 23 module-level tables across 12 python modules, named individually in Area_CodeTables." .
+fw:AC_EP_CodeTables a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the framework suite, When it is run, Then classification tables move from python to the ontology, and the objective it moves is observed at its new value." .
+fw:R_EP_CodeTables a backlog:RefinementEvent ; backlog:refines fw:EP_CodeTables ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-10-26T23:00:00"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
+    backlog:hasRefinementOutcome "Second because it is the largest and the most mechanical: 23 tables whose contents are already enumerations in all but syntax. LAYERS, STAGE_TYPES, CONTAINER_TYPES, KINDS. Each becomes owl:oneOf and the script reads it. Value is high because every one of them is a place the code currently decides what something IS." .
+fw:S_EP_CodeTables a backlog:WSJFScore ;
+    backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 6.0 ;
+    backlog:hasUserBusinessValue 7.0 ; backlog:hasTimeCriticality 5.0 ;
+    backlog:hasRiskReductionValue 6.0 ; backlog:hasJobSize 3.0 ;
+    backlog:scoredAt "2026-10-26T23:00:00"^^xsd:dateTime ;
+    backlog:hasScoreRationale "Second because it is the largest and the most mechanical: 23 tables whose contents are already enumerations in all but syntax. LAYERS, STAGE_TYPES, CONTAINER_TYPES, KINDS. Each becomes owl:oneOf and the script reads it. Value is high because every one of them is a place the code currently decides what something IS." ;
+    backlog:hasBasisKind backlog:Basis_Judged .
+fw:E_EP_CodeTables a backlog:CostEstimate ;
+    backlog:hasEffortEstimate 3.0 ; backlog:hasCostBasis "Vocabulary plus constraints plus the script change to read rather than decide" ;
+    backlog:estimatedAt "2026-10-26T23:00:00"^^xsd:dateTime ;
+    backlog:hasBasisKind backlog:Basis_Judged .
+fw:Obj_TablesExported backlog:metricMovableBy fw:EP_CodeTables .
+
+fw:EP_RuleExec a backlog:Epic ;
+    backlog:hasIdentifier "BRF-EP23" ;
+    backlog:hasTitle "The three code-decided checks are decided by the ontology" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_RulesDecidedInCode ;
+    backlog:satisfiesDeliverable fw:Del_OntRuleExec ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasAcceptanceCriterion fw:AC_EP_RuleExec ;
+    backlog:hasPriorityScore fw:S_EP_RuleExec ;
+    backlog:hasCostEstimate fw:E_EP_RuleExec ;
+    backlog:rankedOnRoadmap fw:Roadmap ;
+    backlog:scheduledInHorizon backlog:Now ;
+    backlog:hasApplicableConcern backlog:Concern_Data ;
+    backlog:producedByStage fw:Out2_Backlog ;
+    backlog:hasRationale "Subject: Three of twelve gate checks: fixture polarity from a filename, manifest exemption from a python list, reachability from a python traversal." .
+fw:AC_EP_RuleExec a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the framework suite, When it is run, Then the three code-decided checks are decided by the ontology, and the objective it moves is observed at its new value." .
+fw:R_EP_RuleExec a backlog:RefinementEvent ; backlog:refines fw:EP_RuleExec ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-10-26T23:00:00"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
+    backlog:hasRefinementOutcome "Fixture polarity inferred from a FILENAME is the sharpest example in the package: a fixture renamed changes what the gate expects of it. Value and risk both high, job size slightly larger because each of the three needs a vocabulary term AND the script rewritten to read it rather than decide it." .
+fw:S_EP_RuleExec a backlog:WSJFScore ;
+    backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 6.0 ;
+    backlog:hasUserBusinessValue 8.0 ; backlog:hasTimeCriticality 6.0 ;
+    backlog:hasRiskReductionValue 7.0 ; backlog:hasJobSize 3.5 ;
+    backlog:scoredAt "2026-10-26T23:00:00"^^xsd:dateTime ;
+    backlog:hasScoreRationale "Fixture polarity inferred from a FILENAME is the sharpest example in the package: a fixture renamed changes what the gate expects of it. Value and risk both high, job size slightly larger because each of the three needs a vocabulary term AND the script rewritten to read it rather than decide it." ;
+    backlog:hasBasisKind backlog:Basis_Judged .
+fw:E_EP_RuleExec a backlog:CostEstimate ;
+    backlog:hasEffortEstimate 3.5 ; backlog:hasCostBasis "Vocabulary plus constraints plus the script change to read rather than decide" ;
+    backlog:estimatedAt "2026-10-26T23:00:00"^^xsd:dateTime ;
+    backlog:hasBasisKind backlog:Basis_Judged .
+fw:Obj_RulesDecidedInCode backlog:metricMovableBy fw:EP_RuleExec .
+
+fw:EP_ScriptDecisions a backlog:Epic ;
+    backlog:hasIdentifier "BRF-EP24" ;
+    backlog:hasTitle "Scripts stop deciding and start executing" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_CodeDecisions ;
+    backlog:satisfiesDeliverable fw:Del_CodeExecutes ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasAcceptanceCriterion fw:AC_EP_ScriptDecisions ;
+    backlog:hasPriorityScore fw:S_EP_ScriptDecisions ;
+    backlog:hasCostEstimate fw:E_EP_ScriptDecisions ;
+    backlog:rankedOnRoadmap fw:Roadmap ;
+    backlog:scheduledInHorizon backlog:Now ;
+    backlog:hasApplicableConcern backlog:Concern_Data ;
+    backlog:producedByStage fw:Out2_Backlog ;
+    backlog:hasRationale "Subject: The same three scripts, at the point where they apply their own logic rather than read the ontology's." .
+fw:AC_EP_ScriptDecisions a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the framework suite, When it is run, Then scripts stop deciding and start executing, and the objective it moves is observed at its new value." .
+fw:R_EP_ScriptDecisions a backlog:RefinementEvent ; backlog:refines fw:EP_ScriptDecisions ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-10-26T23:00:00"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
+    backlog:hasRefinementOutcome "Deliberately separate from EP23 and scored lower. EP23 moves the CHECK; this moves the SCRIPT's remaining judgement. If they turn out to be the same work, both objectives fall together and the split was unnecessary — recorded so that can be seen rather than assumed either way." .
+fw:S_EP_ScriptDecisions a backlog:WSJFScore ;
+    backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 4.0 ;
+    backlog:hasUserBusinessValue 5.0 ; backlog:hasTimeCriticality 4.0 ;
+    backlog:hasRiskReductionValue 5.0 ; backlog:hasJobSize 3.5 ;
+    backlog:scoredAt "2026-10-26T23:00:00"^^xsd:dateTime ;
+    backlog:hasScoreRationale "Deliberately separate from EP23 and scored lower. EP23 moves the CHECK; this moves the SCRIPT's remaining judgement. If they turn out to be the same work, both objectives fall together and the split was unnecessary — recorded so that can be seen rather than assumed either way." ;
+    backlog:hasBasisKind backlog:Basis_Judged .
+fw:E_EP_ScriptDecisions a backlog:CostEstimate ;
+    backlog:hasEffortEstimate 3.5 ; backlog:hasCostBasis "Vocabulary plus constraints plus the script change to read rather than decide" ;
+    backlog:estimatedAt "2026-10-26T23:00:00"^^xsd:dateTime ;
+    backlog:hasBasisKind backlog:Basis_Judged .
+fw:Obj_CodeDecisions backlog:metricMovableBy fw:EP_ScriptDecisions .
+
+fw:EP_StandardRows a backlog:Epic ;
+    backlog:hasIdentifier "BRF-EP25" ;
+    backlog:hasTitle "Standard table rows are checked against the TBox" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_RowsUnchecked ;
+    backlog:satisfiesDeliverable fw:Del_ProseExplains ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasAcceptanceCriterion fw:AC_EP_StandardRows ;
+    backlog:hasPriorityScore fw:S_EP_StandardRows ;
+    backlog:hasCostEstimate fw:E_EP_StandardRows ;
+    backlog:rankedOnRoadmap fw:Roadmap ;
+    backlog:scheduledInHorizon backlog:Now ;
+    backlog:hasApplicableConcern backlog:Concern_Data ;
+    backlog:producedByStage fw:Out2_Backlog ;
+    backlog:hasRationale "Subject: 186 table rows in the standard, currently checked for naming every class and never for agreeing with it." .
+fw:AC_EP_StandardRows a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the framework suite, When it is run, Then standard table rows are checked against the TBox, and the objective it moves is observed at its new value." .
+fw:R_EP_StandardRows a backlog:RefinementEvent ; backlog:refines fw:EP_StandardRows ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-10-26T23:00:00"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
+    backlog:hasRefinementOutcome "Lowest and largest: 186 rows, and unlike the tables these are prose that DESCRIBES the ontology rather than data that duplicates it. The work is a checker comparing each row's claim against the TBox, not a migration. Scored last because the other four remove definitions from code and prose; this one only makes a description falsifiable." .
+fw:S_EP_StandardRows a backlog:WSJFScore ;
+    backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 3.0 ;
+    backlog:hasUserBusinessValue 5.0 ; backlog:hasTimeCriticality 3.0 ;
+    backlog:hasRiskReductionValue 4.0 ; backlog:hasJobSize 4.0 ;
+    backlog:scoredAt "2026-10-26T23:00:00"^^xsd:dateTime ;
+    backlog:hasScoreRationale "Lowest and largest: 186 rows, and unlike the tables these are prose that DESCRIBES the ontology rather than data that duplicates it. The work is a checker comparing each row's claim against the TBox, not a migration. Scored last because the other four remove definitions from code and prose; this one only makes a description falsifiable." ;
+    backlog:hasBasisKind backlog:Basis_Judged .
+fw:E_EP_StandardRows a backlog:CostEstimate ;
+    backlog:hasEffortEstimate 4.0 ; backlog:hasCostBasis "Vocabulary plus constraints plus the script change to read rather than decide" ;
+    backlog:estimatedAt "2026-10-26T23:00:00"^^xsd:dateTime ;
+    backlog:hasBasisKind backlog:Basis_Judged .
+fw:Obj_RowsUnchecked backlog:metricMovableBy fw:EP_StandardRows .
+
+fw:Out2_Backlog a backlog:StageOutput ;
+    backlog:outputOfStage backlog:Stage_Backlog ;
+    backlog:consumesOutput fw:Out2_Objective ;
+    backlog:hasStateDigest "pending-commit" ;
+    backlog:closedAtCommit "pending-commit" ;
+    backlog:hasRationale "Backfilled from the real commit next release, as the four before it were." .
+
+#  The two inverse objectives are movable by every epic, because
+#  each one is a chance to breach them.
+fw:Obj_NoNewClasses backlog:metricMovableBy fw:EP_Rulings , fw:EP_CodeTables , fw:EP_RuleExec , fw:EP_ScriptDecisions , fw:EP_StandardRows .
+fw:Obj_NoProseLost backlog:metricMovableBy fw:EP_Rulings , fw:EP_CodeTables , fw:EP_RuleExec , fw:EP_ScriptDecisions , fw:EP_StandardRows .
+
+fw:EP_Rulings_S1 a backlog:Story ;
+    backlog:hasIdentifier "BRF-EP_Rulings_S1" ;
+    backlog:hasTitle "A ruling exists as a machine-checkable statement" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_RulingsQueryable ;
+    backlog:satisfiesDeliverable fw:Del_OntGovernance ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasApplicableConcern backlog:Concern_Data ;
+    backlog:hasAcceptanceCriterion fw:AC_EP_Rulings_S1 ;
+    backlog:hasEffortEstimate 3.0 ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at epic level; scoring a decomposition child alongside its scored parent double-counts." .
+fw:AC_EP_Rulings_S1 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the framework suite, When it is run, Then a ruling exists as a machine-checkable statement." .
+fw:R_EP_Rulings_S1 a backlog:RefinementEvent ; backlog:refines fw:EP_Rulings_S1 ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-10-26T23:00:00"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
+    backlog:hasRefinementOutcome "Analysed with the parent epic; the split is by artefact, not by phase." .
+
+fw:EP_Rulings_S2 a backlog:Story ;
+    backlog:hasIdentifier "BRF-EP_Rulings_S2" ;
+    backlog:hasTitle "Each ruling names the shape that enforces it" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_RulingsQueryable ;
+    backlog:satisfiesDeliverable fw:Del_OntGovernance ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasApplicableConcern backlog:Concern_Architecture ;
+    backlog:hasAcceptanceCriterion fw:AC_EP_Rulings_S2 ;
+    backlog:hasEffortEstimate 3.0 ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at epic level; scoring a decomposition child alongside its scored parent double-counts." .
+fw:AC_EP_Rulings_S2 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the framework suite, When it is run, Then each ruling names the shape that enforces it." .
+fw:R_EP_Rulings_S2 a backlog:RefinementEvent ; backlog:refines fw:EP_Rulings_S2 ;
+    backlog:addressesConcern backlog:Concern_Architecture ;
+    backlog:refinedAt "2026-10-26T23:00:00"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
+    backlog:hasRefinementOutcome "Analysed with the parent epic; the split is by artefact, not by phase." .
+fw:EP_Rulings backlog:decomposesInto fw:EP_Rulings_S1 , fw:EP_Rulings_S2 .
+
+fw:EP_CodeTables_S1 a backlog:Story ;
+    backlog:hasIdentifier "BRF-EP_CodeTables_S1" ;
+    backlog:hasTitle "Each classification table is an ontology enumeration" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_TablesExported ;
+    backlog:satisfiesDeliverable fw:Del_OntExport ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasApplicableConcern backlog:Concern_Data ;
+    backlog:hasAcceptanceCriterion fw:AC_EP_CodeTables_S1 ;
+    backlog:hasEffortEstimate 3.0 ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at epic level; scoring a decomposition child alongside its scored parent double-counts." .
+fw:AC_EP_CodeTables_S1 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the framework suite, When it is run, Then each classification table is an ontology enumeration." .
+fw:R_EP_CodeTables_S1 a backlog:RefinementEvent ; backlog:refines fw:EP_CodeTables_S1 ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-10-26T23:00:00"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
+    backlog:hasRefinementOutcome "Analysed with the parent epic; the split is by artefact, not by phase." .
+
+fw:EP_CodeTables_S2 a backlog:Story ;
+    backlog:hasIdentifier "BRF-EP_CodeTables_S2" ;
+    backlog:hasTitle "The script reads the enumeration instead of holding it" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_TablesExported ;
+    backlog:satisfiesDeliverable fw:Del_OntExport ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasApplicableConcern backlog:Concern_Architecture ;
+    backlog:hasAcceptanceCriterion fw:AC_EP_CodeTables_S2 ;
+    backlog:hasEffortEstimate 3.0 ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at epic level; scoring a decomposition child alongside its scored parent double-counts." .
+fw:AC_EP_CodeTables_S2 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the framework suite, When it is run, Then the script reads the enumeration instead of holding it." .
+fw:R_EP_CodeTables_S2 a backlog:RefinementEvent ; backlog:refines fw:EP_CodeTables_S2 ;
+    backlog:addressesConcern backlog:Concern_Architecture ;
+    backlog:refinedAt "2026-10-26T23:00:00"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
+    backlog:hasRefinementOutcome "Analysed with the parent epic; the split is by artefact, not by phase." .
+fw:EP_CodeTables backlog:decomposesInto fw:EP_CodeTables_S1 , fw:EP_CodeTables_S2 .
+
+fw:EP_RuleExec_S1 a backlog:Story ;
+    backlog:hasIdentifier "BRF-EP_RuleExec_S1" ;
+    backlog:hasTitle "Fixture polarity is declared, not inferred from a filename" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_RulesDecidedInCode ;
+    backlog:satisfiesDeliverable fw:Del_OntRuleExec ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasApplicableConcern backlog:Concern_Data ;
+    backlog:hasAcceptanceCriterion fw:AC_EP_RuleExec_S1 ;
+    backlog:hasEffortEstimate 3.0 ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at epic level; scoring a decomposition child alongside its scored parent double-counts." .
+fw:AC_EP_RuleExec_S1 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the framework suite, When it is run, Then fixture polarity is declared, not inferred from a filename." .
+fw:R_EP_RuleExec_S1 a backlog:RefinementEvent ; backlog:refines fw:EP_RuleExec_S1 ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-10-26T23:00:00"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
+    backlog:hasRefinementOutcome "Analysed with the parent epic; the split is by artefact, not by phase." .
+
+fw:EP_RuleExec_S2 a backlog:Story ;
+    backlog:hasIdentifier "BRF-EP_RuleExec_S2" ;
+    backlog:hasTitle "Manifest exemption and reachability are declared in the register" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_RulesDecidedInCode ;
+    backlog:satisfiesDeliverable fw:Del_OntRuleExec ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasApplicableConcern backlog:Concern_Data ;
+    backlog:hasAcceptanceCriterion fw:AC_EP_RuleExec_S2 ;
+    backlog:hasEffortEstimate 3.0 ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at epic level; scoring a decomposition child alongside its scored parent double-counts." .
+fw:AC_EP_RuleExec_S2 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the framework suite, When it is run, Then manifest exemption and reachability are declared in the register." .
+fw:R_EP_RuleExec_S2 a backlog:RefinementEvent ; backlog:refines fw:EP_RuleExec_S2 ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-10-26T23:00:00"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
+    backlog:hasRefinementOutcome "Analysed with the parent epic; the split is by artefact, not by phase." .
+fw:EP_RuleExec backlog:decomposesInto fw:EP_RuleExec_S1 , fw:EP_RuleExec_S2 .
+
+fw:EP_ScriptDecisions_S1 a backlog:Story ;
+    backlog:hasIdentifier "BRF-EP_ScriptDecisions_S1" ;
+    backlog:hasTitle "No script applies logic the ontology does not state" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_CodeDecisions ;
+    backlog:satisfiesDeliverable fw:Del_CodeExecutes ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasApplicableConcern backlog:Concern_Architecture ;
+    backlog:hasAcceptanceCriterion fw:AC_EP_ScriptDecisions_S1 ;
+    backlog:hasEffortEstimate 3.0 ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at epic level; scoring a decomposition child alongside its scored parent double-counts." .
+fw:AC_EP_ScriptDecisions_S1 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the framework suite, When it is run, Then no script applies logic the ontology does not state." .
+fw:R_EP_ScriptDecisions_S1 a backlog:RefinementEvent ; backlog:refines fw:EP_ScriptDecisions_S1 ;
+    backlog:addressesConcern backlog:Concern_Architecture ;
+    backlog:refinedAt "2026-10-26T23:00:00"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
+    backlog:hasRefinementOutcome "Analysed with the parent epic; the split is by artefact, not by phase." .
+fw:EP_ScriptDecisions backlog:decomposesInto fw:EP_ScriptDecisions_S1 .
+
+fw:EP_StandardRows_S1 a backlog:Story ;
+    backlog:hasIdentifier "BRF-EP_StandardRows_S1" ;
+    backlog:hasTitle "Each standard row names the term it describes" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_RowsUnchecked ;
+    backlog:satisfiesDeliverable fw:Del_ProseExplains ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasApplicableConcern backlog:Concern_Data ;
+    backlog:hasAcceptanceCriterion fw:AC_EP_StandardRows_S1 ;
+    backlog:hasEffortEstimate 3.0 ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at epic level; scoring a decomposition child alongside its scored parent double-counts." .
+fw:AC_EP_StandardRows_S1 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the framework suite, When it is run, Then each standard row names the term it describes." .
+fw:R_EP_StandardRows_S1 a backlog:RefinementEvent ; backlog:refines fw:EP_StandardRows_S1 ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-10-26T23:00:00"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
+    backlog:hasRefinementOutcome "Analysed with the parent epic; the split is by artefact, not by phase." .
+
+fw:EP_StandardRows_S2 a backlog:Story ;
+    backlog:hasIdentifier "BRF-EP_StandardRows_S2" ;
+    backlog:hasTitle "A row contradicting the TBox is reported" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_RowsUnchecked ;
+    backlog:satisfiesDeliverable fw:Del_ProseExplains ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasApplicableConcern backlog:Concern_Data ;
+    backlog:hasAcceptanceCriterion fw:AC_EP_StandardRows_S2 ;
+    backlog:hasEffortEstimate 3.0 ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at epic level; scoring a decomposition child alongside its scored parent double-counts." .
+fw:AC_EP_StandardRows_S2 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the framework suite, When it is run, Then a row contradicting the TBox is reported." .
+fw:R_EP_StandardRows_S2 a backlog:RefinementEvent ; backlog:refines fw:EP_StandardRows_S2 ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-10-26T23:00:00"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
+    backlog:hasRefinementOutcome "Analysed with the parent epic; the split is by artefact, not by phase." .
+fw:EP_StandardRows backlog:decomposesInto fw:EP_StandardRows_S1 , fw:EP_StandardRows_S2 .

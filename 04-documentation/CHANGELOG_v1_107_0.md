@@ -1,5 +1,51 @@
 # Changelog
 
+## v1.107.0 — 2026-10-26 (MINOR: STAGE 5 — the backlog; the ontology-driven lineage is complete)
+
+```
+Mission    f2f4e0f
+Scope      a52ccfe
+Goal       e6a70d2
+Objective  0b87c6a
+Backlog    this commit
+```
+
+Five stages, five commits, in order — the first lineage in this package built entirely under the v5.0.0
+ceremony.
+
+### Five epics, one per movable objective
+
+| | Score | Moves | Subject |
+|---|---|---|---|
+| **BRF-EP21** | 8.00 | `Obj_RulingsQueryable` 18 → 0 | The 18 rulings become machine-checkable statements |
+| **BRF-EP22** | 6.00 | `Obj_TablesExported` 23 → 0 | 23 classification tables move from python to the ontology |
+| **BRF-EP23** | 6.00 | `Obj_RulesDecidedInCode` 3 → 0 | The three code-decided checks are decided by the ontology |
+| **BRF-EP24** | 4.00 | `Obj_CodeDecisions` 3 → 0 | Scripts stop deciding and start executing |
+| **BRF-EP25** | 3.00 | `Obj_RowsUnchecked` 186 → 0 | 186 standard rows checked against the TBox |
+
+**EP21 leads on dependency, not preference.** A `GovernanceRuling` class is what the other four attach
+their evidence to; ship it last and every later export has nowhere to say which ruling it satisfies.
+
+**EP23 and EP24 are deliberately separate and scored differently.** EP23 moves the *check*; EP24 moves
+the *script's remaining judgement*. If they turn out to be the same work, both objectives fall together
+and the split was unnecessary — recorded so that can be seen rather than assumed either way.
+
+**EP25 is last and largest.** Unlike the tables, 186 rows are prose that *describes* the ontology rather
+than data that duplicates it. The work is a checker, not a migration, and it only makes a description
+falsifiable rather than removing a definition.
+
+### The two inverse objectives get no epic
+
+`Obj_NoNewClasses` and `Obj_NoProseLost` are held at zero by **not doing something**. An epic for "do
+not add capabilities" would be work created to satisfy a measure of restraint. Instead both are
+`metricMovableBy` all five epics — each one is a chance to breach them.
+
+### Caught while writing it
+
+All five WSJF values were wrong: written by hand rather than computed. `(9+7+8)/3` is 8.00, not the
+value first recorded. The L1 arithmetic clause caught every one.
+
+
 ## v1.106.0 — 2026-10-26 (MINOR: the fifth area ruled by test drive — a product view, not a gap)
 
 ### The diagram was wrong and the suite was right
