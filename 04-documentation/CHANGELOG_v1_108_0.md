@@ -1,5 +1,49 @@
 # Changelog
 
+## v1.108.0 — 2026-10-26 (MINOR: packages, sprint plans and kick-off — before any work starts)
+
+**As-is answer: no.** Nine stories, no package covering them, no open iteration, nothing planned. The
+lineage was complete and the delivery apparatus did not exist.
+
+### Sized before planned
+
+27 points against a capacity of 9 — the figure the last closed iteration declared. **Twenty-seven does
+not fit one box**, so the work splits across three. G9, and the same arithmetic that opened It6 last
+time.
+
+```
+It7  02–15 Nov   9/9   EP_Rulings_S1, EP_Rulings_S2, EP_CodeTables_S1
+It8  16–29 Nov   9/9   EP_CodeTables_S2, EP_RuleExec_S1, EP_RuleExec_S2
+It9  30 Nov–13 Dec 9/9 EP_ScriptDecisions_S1, EP_StandardRows_S1, EP_StandardRows_S2
+```
+
+Stories taken in **score order** — 8.00 before 6.00 before 4.00 before 3.00. The order falls out of the
+register rather than being chosen.
+
+### Two packages, grouped by capability
+
+**`Pkg_GovernanceQueryable`** v1.110.0, It7+It8 — an adopter gains the ability to *query* the 18 rulings
+and 23 classification tables rather than read them. The two ship together because a ruling that names
+no classification term is half an answer.
+
+**`Pkg_ExecutionInOntology`** v1.113.0, It8+It9 — a separate release because it changes **behaviour**
+rather than vocabulary. An adopter can take the first and not this one: queryable governance without
+their gate behaving differently. That is a real choice, and the reason these are not one package.
+
+### Kick-off recorded before the first story
+
+`KO_Ontology`, 2 November, **declared** rather than triggered — the date is chosen, not caused by an
+upstream event. Written now because **a kick-off recorded afterwards is a start date backfilled to
+match what happened.**
+
+### Three property names invented again
+
+`kickOffAt` for `kickedOffAt`, `kickOffMode` for `hasKickOffMode`, `Mode_Declared` for
+`KickOff_Declared`. The L1 clauses caught all three — the same class of error as `refinedItem`,
+`hasMeasurementSource` and `Fails`. Writing from memory instead of reading the TBox, four sessions
+running.
+
+
 ## v1.107.0 — 2026-10-26 (MINOR: STAGE 5 — the backlog; the ontology-driven lineage is complete)
 
 ```

@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/5.8.0> ;
-    owl:versionInfo "5.8.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/5.9.0> ;
+    owl:versionInfo "5.9.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/5.8.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/5.7.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/5.6.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/5.5.0> ;
@@ -7150,3 +7151,187 @@ fw:R_EP_StandardRows_S2 a backlog:RefinementEvent ; backlog:refines fw:EP_Standa
     backlog:refinedAt "2026-10-26T23:00:00"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
     backlog:hasRefinementOutcome "Analysed with the parent epic; the split is by artefact, not by phase." .
 fw:EP_StandardRows backlog:decomposesInto fw:EP_StandardRows_S1 , fw:EP_StandardRows_S2 .
+
+
+#################################################################
+#  v5.9.0 — packages, sprint plans and kick-off, before any work.
+#
+#  Measured first: 9 stories, 27 points, and the last closed
+#  iteration declared a capacity of 9. Twenty-seven does not fit
+#  one box, so the work is split across three — G9, and the same
+#  arithmetic that opened It6 last time.
+#
+#  Stories are taken in SCORE ORDER: EP21 at 8.00 before EP22 and
+#  EP23 at 6.00, before EP24 at 4.00 and EP25 at 3.00. The order
+#  falls out of the register rather than being chosen.
+#
+#  Two packages, grouped by capability rather than by time box:
+#  what an adopter can RECEIVE separately.
+#################################################################
+
+fw:Pkg_GovernanceQueryable a backlog:Package ;
+    backlog:hasIdentifier "BRF-PKG-GOV" ;
+    backlog:hasTitle "Governance and classification in the ontology" ;
+    backlog:hasPackageVersion "1.110.0" ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:targetsIteration fw:It7 , fw:It8 ;
+    backlog:pursuesObjective fw:Obj_RulingsQueryable ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "A package is a grouping; its members carry the scores." ;
+    backlog:hasRationale "Releasable on its own: an adopter gains the ability to QUERY the 18 rulings and the 23 classification tables rather than read them. The two ship together because a ruling that names no classification term is half an answer — asking which rulings govern task types requires both." .
+
+fw:Pkg_ExecutionInOntology a backlog:Package ;
+    backlog:hasIdentifier "BRF-PKG-EXEC" ;
+    backlog:hasTitle "Rule execution and description checking" ;
+    backlog:hasPackageVersion "1.113.0" ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:targetsIteration fw:It8 , fw:It9 ;
+    backlog:pursuesObjective fw:Obj_RulesDecidedInCode ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "A package is a grouping; its members carry the scores." ;
+    backlog:hasRationale "Separate release because it changes BEHAVIOUR rather than vocabulary: after it, a rule's outcome is decided by the ontology and a standard row that contradicts the TBox is reported. An adopter can take the first package and not this one — they gain queryable governance without their gate behaving differently, which is a real choice and the reason the two are not one package." .
+
+fw:It7 a backlog:Iteration ;
+    backlog:hasIdentifier "It7" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:iterationStart "2026-11-02T00:00:00"^^xsd:dateTime ;
+    backlog:iterationEnd "2026-11-15T23:59:59"^^xsd:dateTime ;
+    backlog:hasCapacity 9.0 ;
+    backlog:hasCommittedEffort 9.0 ;
+    backlog:memberOfContainer fw:Register .
+fw:EP_Rulings_S1 backlog:memberOfContainer fw:It7 , fw:Pkg_GovernanceQueryable .
+fw:Plan_EP_Rulings_S1 a backlog:PlanningEvent ;
+    backlog:plansItem fw:EP_Rulings_S1 ; backlog:plannedInto fw:It7 ;
+    backlog:plannedAt "2026-11-02T09:00:00"^^xsd:dateTime ;
+    backlog:plannedBy backlog:Builder ;
+    backlog:producesTask fw:T_EP_Rulings_S1 .
+fw:T_EP_Rulings_S1 a backlog:ExecutionTask ;
+    backlog:hasIdentifier "BRF-T-EP_Rulings_S1" ;
+    backlog:hasTitle "Implement and gate EP_Rulings_S1" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It7 .
+fw:EP_Rulings_S2 backlog:memberOfContainer fw:It7 , fw:Pkg_GovernanceQueryable .
+fw:Plan_EP_Rulings_S2 a backlog:PlanningEvent ;
+    backlog:plansItem fw:EP_Rulings_S2 ; backlog:plannedInto fw:It7 ;
+    backlog:plannedAt "2026-11-02T09:00:00"^^xsd:dateTime ;
+    backlog:plannedBy backlog:Builder ;
+    backlog:producesTask fw:T_EP_Rulings_S2 .
+fw:T_EP_Rulings_S2 a backlog:ExecutionTask ;
+    backlog:hasIdentifier "BRF-T-EP_Rulings_S2" ;
+    backlog:hasTitle "Implement and gate EP_Rulings_S2" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It7 .
+fw:EP_CodeTables_S1 backlog:memberOfContainer fw:It7 , fw:Pkg_GovernanceQueryable .
+fw:Plan_EP_CodeTables_S1 a backlog:PlanningEvent ;
+    backlog:plansItem fw:EP_CodeTables_S1 ; backlog:plannedInto fw:It7 ;
+    backlog:plannedAt "2026-11-02T09:00:00"^^xsd:dateTime ;
+    backlog:plannedBy backlog:Builder ;
+    backlog:producesTask fw:T_EP_CodeTables_S1 .
+fw:T_EP_CodeTables_S1 a backlog:ExecutionTask ;
+    backlog:hasIdentifier "BRF-T-EP_CodeTables_S1" ;
+    backlog:hasTitle "Implement and gate EP_CodeTables_S1" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It7 .
+
+fw:It8 a backlog:Iteration ;
+    backlog:hasIdentifier "It8" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:iterationStart "2026-11-16T00:00:00"^^xsd:dateTime ;
+    backlog:iterationEnd "2026-11-29T23:59:59"^^xsd:dateTime ;
+    backlog:hasCapacity 9.0 ;
+    backlog:hasCommittedEffort 9.0 ;
+    backlog:memberOfContainer fw:Register .
+fw:EP_CodeTables_S2 backlog:memberOfContainer fw:It8 , fw:Pkg_GovernanceQueryable .
+fw:Plan_EP_CodeTables_S2 a backlog:PlanningEvent ;
+    backlog:plansItem fw:EP_CodeTables_S2 ; backlog:plannedInto fw:It8 ;
+    backlog:plannedAt "2026-11-16T09:00:00"^^xsd:dateTime ;
+    backlog:plannedBy backlog:Builder ;
+    backlog:producesTask fw:T_EP_CodeTables_S2 .
+fw:T_EP_CodeTables_S2 a backlog:ExecutionTask ;
+    backlog:hasIdentifier "BRF-T-EP_CodeTables_S2" ;
+    backlog:hasTitle "Implement and gate EP_CodeTables_S2" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It8 .
+fw:EP_RuleExec_S1 backlog:memberOfContainer fw:It8 , fw:Pkg_ExecutionInOntology .
+fw:Plan_EP_RuleExec_S1 a backlog:PlanningEvent ;
+    backlog:plansItem fw:EP_RuleExec_S1 ; backlog:plannedInto fw:It8 ;
+    backlog:plannedAt "2026-11-16T09:00:00"^^xsd:dateTime ;
+    backlog:plannedBy backlog:Builder ;
+    backlog:producesTask fw:T_EP_RuleExec_S1 .
+fw:T_EP_RuleExec_S1 a backlog:ExecutionTask ;
+    backlog:hasIdentifier "BRF-T-EP_RuleExec_S1" ;
+    backlog:hasTitle "Implement and gate EP_RuleExec_S1" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It8 .
+fw:EP_RuleExec_S2 backlog:memberOfContainer fw:It8 , fw:Pkg_ExecutionInOntology .
+fw:Plan_EP_RuleExec_S2 a backlog:PlanningEvent ;
+    backlog:plansItem fw:EP_RuleExec_S2 ; backlog:plannedInto fw:It8 ;
+    backlog:plannedAt "2026-11-16T09:00:00"^^xsd:dateTime ;
+    backlog:plannedBy backlog:Builder ;
+    backlog:producesTask fw:T_EP_RuleExec_S2 .
+fw:T_EP_RuleExec_S2 a backlog:ExecutionTask ;
+    backlog:hasIdentifier "BRF-T-EP_RuleExec_S2" ;
+    backlog:hasTitle "Implement and gate EP_RuleExec_S2" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It8 .
+
+fw:It9 a backlog:Iteration ;
+    backlog:hasIdentifier "It9" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:iterationStart "2026-11-30T00:00:00"^^xsd:dateTime ;
+    backlog:iterationEnd "2026-12-13T23:59:59"^^xsd:dateTime ;
+    backlog:hasCapacity 9.0 ;
+    backlog:hasCommittedEffort 9.0 ;
+    backlog:memberOfContainer fw:Register .
+fw:EP_ScriptDecisions_S1 backlog:memberOfContainer fw:It9 , fw:Pkg_ExecutionInOntology .
+fw:Plan_EP_ScriptDecisions_S1 a backlog:PlanningEvent ;
+    backlog:plansItem fw:EP_ScriptDecisions_S1 ; backlog:plannedInto fw:It9 ;
+    backlog:plannedAt "2026-11-30T09:00:00"^^xsd:dateTime ;
+    backlog:plannedBy backlog:Builder ;
+    backlog:producesTask fw:T_EP_ScriptDecisions_S1 .
+fw:T_EP_ScriptDecisions_S1 a backlog:ExecutionTask ;
+    backlog:hasIdentifier "BRF-T-EP_ScriptDecisions_S1" ;
+    backlog:hasTitle "Implement and gate EP_ScriptDecisions_S1" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It9 .
+fw:EP_StandardRows_S1 backlog:memberOfContainer fw:It9 , fw:Pkg_ExecutionInOntology .
+fw:Plan_EP_StandardRows_S1 a backlog:PlanningEvent ;
+    backlog:plansItem fw:EP_StandardRows_S1 ; backlog:plannedInto fw:It9 ;
+    backlog:plannedAt "2026-11-30T09:00:00"^^xsd:dateTime ;
+    backlog:plannedBy backlog:Builder ;
+    backlog:producesTask fw:T_EP_StandardRows_S1 .
+fw:T_EP_StandardRows_S1 a backlog:ExecutionTask ;
+    backlog:hasIdentifier "BRF-T-EP_StandardRows_S1" ;
+    backlog:hasTitle "Implement and gate EP_StandardRows_S1" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:hasTaskType backlog:Task_Verification ;
+    backlog:memberOfContainer fw:Register , fw:It9 .
+fw:EP_StandardRows_S2 backlog:memberOfContainer fw:It9 , fw:Pkg_ExecutionInOntology .
+fw:Plan_EP_StandardRows_S2 a backlog:PlanningEvent ;
+    backlog:plansItem fw:EP_StandardRows_S2 ; backlog:plannedInto fw:It9 ;
+    backlog:plannedAt "2026-11-30T09:00:00"^^xsd:dateTime ;
+    backlog:plannedBy backlog:Builder ;
+    backlog:producesTask fw:T_EP_StandardRows_S2 .
+fw:T_EP_StandardRows_S2 a backlog:ExecutionTask ;
+    backlog:hasIdentifier "BRF-T-EP_StandardRows_S2" ;
+    backlog:hasTitle "Implement and gate EP_StandardRows_S2" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:hasTaskType backlog:Task_Verification ;
+    backlog:memberOfContainer fw:Register , fw:It9 .
+
+fw:KO_Ontology a backlog:KickOff ;
+    rdfs:label "Kick-off: the ontology-driven lineage"@en ;
+    backlog:kickedOffAt "2026-11-02T09:00:00"^^xsd:dateTime ;
+    backlog:hasKickOffMode backlog:KickOff_Declared ;
+    backlog:kickOffFor fw:Register ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:hasRationale "Declared, not triggered: the date is chosen rather than caused by an upstream event. Recorded BEFORE the first story starts, which is the whole point — a kick-off written afterwards is a start date backfilled to match what happened. Everything it needs already exists: five stages closed in five commits, two packages identified, three iterations planned to capacity, nine stories with tasks." .
