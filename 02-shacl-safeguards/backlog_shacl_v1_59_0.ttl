@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.58.0> ;
-    owl:versionInfo "1.58.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.59.0> ;
+    owl:versionInfo "1.59.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.58.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.57.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.56.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.55.0> ;
@@ -4226,3 +4227,43 @@ backlog:LineageLayerShape a sh:NodeShape ;
             $this backlog:layerOrdinal ?o . ?other a backlog:LineageLayer ; backlog:layerOrdinal ?o .
             FILTER ($this != ?other)
         }""" ] .
+
+#################################################################
+#  v1.59.0 — a batch reports partial progress
+#################################################################
+
+backlog:BatchShape a sh:NodeShape ;
+    sh:targetClass backlog:Story ;
+    sh:severity sh:Violation ;
+    rdfs:label "A batched story reports how much of it is done (L3)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: this story declares a batch size and no completed count. A story is Done or not while an objective counts units, so without a completed count a batch of eight with one unit blocked reports ZERO progress where one-per-story would have reported seven. The batch decouples the measure from the increment, and the register cannot tell a stalled story from an unstarted one." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L3_Governed, backlog:L4_LineageEnforced))
+            $this backlog:hasBatchSize ?b .
+            FILTER NOT EXISTS { $this backlog:hasBatchCompleted ?c }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this story reports more of its batch complete than the batch holds. The count is wrong in a way that inflates the objective it feeds." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasBatchSize ?b ; backlog:hasBatchCompleted ?c . FILTER (?c > ?b)
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this story is Done with part of its batch unfinished. Done means the whole batch; a partial batch is an in-progress story, and marking it Done reports units as delivered that were not." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasState backlog:Done ; backlog:hasBatchSize ?b ; backlog:hasBatchCompleted ?c .
+            FILTER (?c < ?b)
+        }""" ] .
+
+backlog:BatchConcealmentShape a sh:NodeShape ;
+    sh:targetClass backlog:Story ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: a batch large enough to hide a stall"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: this story batches more than five units under one acceptance criterion. One criterion then verifies many changes, and a single blocked unit stalls all of them. Measured on this package's own table migration: a blocked story hides 5 percent of the work at batch 1, 18 percent at 4, 36 percent at 8. Batching is legitimate and the concealment grows linearly with it." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE { $this backlog:hasBatchSize ?b . FILTER (?b > 5) }""" ] .

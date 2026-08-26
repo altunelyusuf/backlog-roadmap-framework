@@ -1,5 +1,54 @@
 # Changelog
 
+## v1.113.0 — 2026-11-29 (MINOR: the table migration re-planned as batches of four, baseline retained)
+
+**Risks found, so the plan changed.** Three, and the first is measurable.
+
+**1. Partial completion.** A story is Done or not; the objective counts *tables*. A batch of eight with
+one table blocked reports **zero** progress where one-per-story would have reported seven. The batch
+decouples the measure from the increment.
+
+**2. The fallback trap, once per reader.** It8 established that a reader must fail loudly. Eight
+readers changed under one acceptance criterion is eight chances for a silent fallback verified once.
+
+**3. Grooming depth.** One `RefinementEvent` cannot record eight per-table findings — the single
+`LAYERS` export produced one (two dropped tuple fields).
+
+### Concealment scales linearly, measured
+
+```
+batch  1   →   5% of the work hidden by one blocked story
+batch  4   →  18%
+batch  8   →  36%
+batch 11   →  50%
+```
+
+**Four is the knee.** It fits the deadline in three iterations and hides 18% rather than 36% or 50%.
+
+Risks 2 and 3 are mitigated rather than accepted: each batch story carries a criterion verified **per
+table**, and a refinement of its own.
+
+### The baseline is retained
+
+`Obs_BaselineOnePerStory` records the plan being replaced — 66 points, 7.3 iterations, ending late
+April against a 31 January deadline. **A re-plan whose predecessor is deleted cannot be shown to have
+helped.**
+
+New vocabulary: `hasBatchSize` and `hasBatchCompleted`, so a batched story reports partial progress
+without being Done. At L1, a Done story with an unfinished batch is rejected. An advisory reports any
+batch over five.
+
+### Two rejections while re-planning, both correct
+
+**`EP_CodeTables` was Done** and adding six stories would reopen it, making its completion retroactively
+untrue. `BRF-EP26` created instead — and scored honestly: time criticality **up** to 6 on checkpoint
+evidence, risk reduction **down** to 3, because batching *adds* concealment risk and a score should not
+credit a plan for a risk it creates.
+
+**It10 was committed to 12 points against a capacity of 9.** The capacity clause caught the re-plan
+overfilling a box — the same G9 arithmetic the batch was meant to respect. It11 opened.
+
+
 ## v1.112.0 — 2026-11-29 (MINOR: It8 — the reader reads the ontology)
 
 **Re-groomed before building, per the owner's model.** It7 taught something the original grooming did

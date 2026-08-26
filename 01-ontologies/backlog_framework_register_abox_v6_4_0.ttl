@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/6.3.0> ;
-    owl:versionInfo "6.3.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/6.4.0> ;
+    owl:versionInfo "6.4.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/6.3.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/6.2.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/6.1.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/6.0.0> ;
@@ -8404,3 +8405,262 @@ fw:Obs_RuleExecAfterIt8 a backlog:MetricObservation ;
     backlog:hasObservedValue 2.0 ;
     backlog:observedAt "2026-11-29T17:00:00"^^xsd:dateTime ;
     backlog:hasObservationMethod "Baseline 3, observed 2. Manifest exemption moved to the register. Fixture polarity and reachability remain: the re-grooming found that reachability CANNOT move — it is a query over the TBox and the register cannot hold a rule about classes that do not exist yet. Recorded as a scope finding, not attempted and not hidden." .
+
+
+#################################################################
+#  v6.4.0 — the table migration re-planned as batches of four.
+#
+#  TEST-DRIVEN, and the baseline is kept rather than overwritten.
+#
+#  BASELINE (recorded, not deleted): one table per story, 3 points
+#  each. 22 tables = 66 points = 7.3 iterations = 15 weeks, ending
+#  late April against a 31 January deadline. Not reachable, which
+#  is what the 30 November checkpoint reported.
+#
+#  RISK, measured rather than asserted. A story is Done or not; the
+#  objective counts tables. A blocked story hides:
+#      batch  1  ->  5%% of the work
+#      batch  4  -> 18%%
+#      batch  8  -> 36%%
+#      batch 11  -> 50%%
+#  Concealment scales linearly with batch size. Four is the knee:
+#  it fits the deadline in two iterations and hides 18 percent
+#  rather than 36 or 50.
+#
+#  Two further risks the probe surfaced, both mitigated rather than
+#  accepted: the It8 fallback trap recurs once per reader changed,
+#  and one RefinementEvent cannot record eight per-table findings
+#  when the LAYERS export produced one. Each batch story therefore
+#  carries a criterion PER TABLE and a refinement of its own.
+#################################################################
+
+fw:Obs_BaselineOnePerStory a backlog:MetricObservation ;
+    rdfs:label "Baseline plan: one table per story"@en ;
+    backlog:observesMetric fw:Metric_Obj_TablesExported ;
+    backlog:observationFor fw:Obj_TablesExported ;
+    backlog:hasObservedValue 22.0 ;
+    backlog:observedAt "2026-11-29T19:00:00"^^xsd:dateTime ;
+    backlog:hasObservationMethod "BASELINE RETAINED for comparison. One table per story at 3 points reaches zero in 7.3 iterations, about 15 weeks, ending late April against a 31 January deadline. Recorded so the batch plan can be measured against what it replaced rather than against nothing — a re-plan whose predecessor is deleted cannot be shown to have helped." .
+
+fw:S_Tables_B1 a backlog:Story ;
+    backlog:hasIdentifier "BRF-S_Tables_B1" ;
+    backlog:hasTitle "Export 4 classification tables" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register , fw:It9 , fw:Pkg_GovernanceQueryable ;
+    backlog:pursuesObjective fw:Obj_TablesExported ;
+    backlog:satisfiesDeliverable fw:Del_OntExport ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasApplicableConcern backlog:Concern_Data ;
+    backlog:hasAcceptanceCriterion fw:AC_S_Tables_B1 ;
+    backlog:hasEffortEstimate 3.0 ;
+    backlog:hasBatchSize 4 ;
+    backlog:hasBatchCompleted 0 ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at epic level." .
+fw:AC_S_Tables_B1 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given 4 python classification tables, When this story is Done, Then each of the 4 is an ontology enumeration, each literal is deleted, and each reader fails loudly rather than falling back — verified per table, not per story." .
+fw:R_S_Tables_B1 a backlog:RefinementEvent ; backlog:refines fw:S_Tables_B1 ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:groomsForIteration fw:It9 ;
+    backlog:refinedAt "2026-11-29T19:00:00"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
+    backlog:hasRefinementOutcome "Subject: Roadmap report: CONTAINER_TYPES, SECTIONS; pipeline verifier: STAGE_TYPES, ORDER. Batched at four because the concealment measurement puts the knee there. The acceptance criterion verifies PER TABLE — the It8 fallback trap recurs once per reader changed, and one criterion covering four readers would let three silent fallbacks pass." .
+fw:EP_TablesBatch backlog:decomposesInto fw:S_Tables_B1 .
+
+fw:S_Tables_B2 a backlog:Story ;
+    backlog:hasIdentifier "BRF-S_Tables_B2" ;
+    backlog:hasTitle "Export 4 classification tables" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register , fw:It9 , fw:Pkg_GovernanceQueryable ;
+    backlog:pursuesObjective fw:Obj_TablesExported ;
+    backlog:satisfiesDeliverable fw:Del_OntExport ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasApplicableConcern backlog:Concern_Data ;
+    backlog:hasAcceptanceCriterion fw:AC_S_Tables_B2 ;
+    backlog:hasEffortEstimate 3.0 ;
+    backlog:hasBatchSize 4 ;
+    backlog:hasBatchCompleted 0 ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at epic level." .
+fw:AC_S_Tables_B2 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given 4 python classification tables, When this story is Done, Then each of the 4 is an ontology enumeration, each literal is deleted, and each reader fails loudly rather than falling back — verified per table, not per story." .
+fw:R_S_Tables_B2 a backlog:RefinementEvent ; backlog:refines fw:S_Tables_B2 ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:groomsForIteration fw:It9 ;
+    backlog:refinedAt "2026-11-29T19:00:00"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
+    backlog:hasRefinementOutcome "Subject: Evidence bridge KINDS; registration readiness SUITES and FOREIGN; manifest EXEMPT. Batched at four because the concealment measurement puts the knee there. The acceptance criterion verifies PER TABLE — the It8 fallback trap recurs once per reader changed, and one criterion covering four readers would let three silent fallbacks pass." .
+fw:EP_TablesBatch backlog:decomposesInto fw:S_Tables_B2 .
+
+fw:S_Tables_B3 a backlog:Story ;
+    backlog:hasIdentifier "BRF-S_Tables_B3" ;
+    backlog:hasTitle "Export 4 classification tables" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register , fw:It10 , fw:Pkg_GovernanceQueryable ;
+    backlog:pursuesObjective fw:Obj_TablesExported ;
+    backlog:satisfiesDeliverable fw:Del_OntExport ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasApplicableConcern backlog:Concern_Data ;
+    backlog:hasAcceptanceCriterion fw:AC_S_Tables_B3 ;
+    backlog:hasEffortEstimate 3.0 ;
+    backlog:hasBatchSize 4 ;
+    backlog:hasBatchCompleted 0 ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at epic level." .
+fw:AC_S_Tables_B3 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given 4 python classification tables, When this story is Done, Then each of the 4 is an ontology enumeration, each literal is deleted, and each reader fails loudly rather than falling back — verified per table, not per story." .
+fw:R_S_Tables_B3 a backlog:RefinementEvent ; backlog:refines fw:S_Tables_B3 ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:groomsForIteration fw:It10 ;
+    backlog:refinedAt "2026-11-29T19:00:00"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
+    backlog:hasRefinementOutcome "Subject: Public distribution DROP_DIRS and SUBSTITUTIONS; doc-coverage LAYER_HINTS and RESTATED. Batched at four because the concealment measurement puts the knee there. The acceptance criterion verifies PER TABLE — the It8 fallback trap recurs once per reader changed, and one criterion covering four readers would let three silent fallbacks pass." .
+fw:EP_TablesBatch backlog:decomposesInto fw:S_Tables_B3 .
+
+fw:S_Tables_B4 a backlog:Story ;
+    backlog:hasIdentifier "BRF-S_Tables_B4" ;
+    backlog:hasTitle "Export 4 classification tables" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register , fw:It10 , fw:Pkg_GovernanceQueryable ;
+    backlog:pursuesObjective fw:Obj_TablesExported ;
+    backlog:satisfiesDeliverable fw:Del_OntExport ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasApplicableConcern backlog:Concern_Data ;
+    backlog:hasAcceptanceCriterion fw:AC_S_Tables_B4 ;
+    backlog:hasEffortEstimate 3.0 ;
+    backlog:hasBatchSize 4 ;
+    backlog:hasBatchCompleted 0 ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at epic level." .
+fw:AC_S_Tables_B4 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given 4 python classification tables, When this story is Done, Then each of the 4 is an ontology enumeration, each literal is deleted, and each reader fails loudly rather than falling back — verified per table, not per story." .
+fw:R_S_Tables_B4 a backlog:RefinementEvent ; backlog:refines fw:S_Tables_B4 ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:groomsForIteration fw:It10 ;
+    backlog:refinedAt "2026-11-29T19:00:00"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
+    backlog:hasRefinementOutcome "Subject: Validate FACETS and LEVELS; gate STEPS and ORDERING. Batched at four because the concealment measurement puts the knee there. The acceptance criterion verifies PER TABLE — the It8 fallback trap recurs once per reader changed, and one criterion covering four readers would let three silent fallbacks pass." .
+fw:EP_TablesBatch backlog:decomposesInto fw:S_Tables_B4 .
+
+fw:S_Tables_B5 a backlog:Story ;
+    backlog:hasIdentifier "BRF-S_Tables_B5" ;
+    backlog:hasTitle "Export 4 classification tables" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register , fw:It11 , fw:Pkg_GovernanceQueryable ;
+    backlog:pursuesObjective fw:Obj_TablesExported ;
+    backlog:satisfiesDeliverable fw:Del_OntExport ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasApplicableConcern backlog:Concern_Data ;
+    backlog:hasAcceptanceCriterion fw:AC_S_Tables_B5 ;
+    backlog:hasEffortEstimate 3.0 ;
+    backlog:hasBatchSize 4 ;
+    backlog:hasBatchCompleted 0 ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at epic level." .
+fw:AC_S_Tables_B5 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given 4 python classification tables, When this story is Done, Then each of the 4 is an ontology enumeration, each literal is deleted, and each reader fails loudly rather than falling back — verified per table, not per story." .
+fw:R_S_Tables_B5 a backlog:RefinementEvent ; backlog:refines fw:S_Tables_B5 ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:groomsForIteration fw:It11 ;
+    backlog:refinedAt "2026-11-29T19:00:00"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
+    backlog:hasRefinementOutcome "Subject: Reachability EXEMPT_KINDS; roadmap HORIZONS; report BASIS_KINDS; adaptation STAGE_ORDER. Batched at four because the concealment measurement puts the knee there. The acceptance criterion verifies PER TABLE — the It8 fallback trap recurs once per reader changed, and one criterion covering four readers would let three silent fallbacks pass." .
+fw:EP_TablesBatch backlog:decomposesInto fw:S_Tables_B5 .
+
+fw:S_Tables_B6 a backlog:Story ;
+    backlog:hasIdentifier "BRF-S_Tables_B6" ;
+    backlog:hasTitle "Export 2 classification tables" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register , fw:It11 , fw:Pkg_GovernanceQueryable ;
+    backlog:pursuesObjective fw:Obj_TablesExported ;
+    backlog:satisfiesDeliverable fw:Del_OntExport ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasApplicableConcern backlog:Concern_Data ;
+    backlog:hasAcceptanceCriterion fw:AC_S_Tables_B6 ;
+    backlog:hasEffortEstimate 3.0 ;
+    backlog:hasBatchSize 2 ;
+    backlog:hasBatchCompleted 0 ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at epic level." .
+fw:AC_S_Tables_B6 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given 2 python classification tables, When this story is Done, Then each of the 2 is an ontology enumeration, each literal is deleted, and each reader fails loudly rather than falling back — verified per table, not per story." .
+fw:R_S_Tables_B6 a backlog:RefinementEvent ; backlog:refines fw:S_Tables_B6 ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:groomsForIteration fw:It11 ;
+    backlog:refinedAt "2026-11-29T19:00:00"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
+    backlog:hasRefinementOutcome "Subject: The two remaining tables, whichever prove hardest — deliberately last and deliberately small. Batched at four because the concealment measurement puts the knee there. The acceptance criterion verifies PER TABLE — the It8 fallback trap recurs once per reader changed, and one criterion covering four readers would let three silent fallbacks pass." .
+fw:EP_TablesBatch backlog:decomposesInto fw:S_Tables_B6 .
+
+fw:It10 a backlog:Iteration ;
+    backlog:hasIdentifier "It10" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:iterationStart "2026-12-14T00:00:00"^^xsd:dateTime ;
+    backlog:iterationEnd "2026-12-27T23:59:59"^^xsd:dateTime ;
+    backlog:hasCapacity 9.0 ;
+    backlog:hasCommittedEffort 6.0 ;
+    backlog:memberOfContainer fw:Register .
+
+fw:Obs_BatchPlan a backlog:MetricObservation ;
+    rdfs:label "Batch plan: four tables per story"@en ;
+    backlog:observesMetric fw:Metric_Obj_TablesExported ;
+    backlog:observationFor fw:Obj_TablesExported ;
+    backlog:hasObservedValue 22.0 ;
+    backlog:observedAt "2026-11-29T19:30:00"^^xsd:dateTime ;
+    backlog:hasObservationMethod "RE-PLANNED. Six stories of four (the last of two), 18 points, reaching zero within It9 and It10 — inside the 31 January deadline where the baseline ended in late April. The count is unchanged at 22 because re-planning moves nothing; only delivery does. Both plans are recorded so the batch can be measured against what it replaced." .
+
+#################################################################
+#  A NEW EPIC, not a reopened one.
+#
+#  EP_CodeTables closed at It8 having delivered exactly what it
+#  said: the first table exported and its reader changed. Adding
+#  six stories to it would reopen a Done epic and make its
+#  completion retroactively untrue — the register rejected it, and
+#  the rejection is right. What was learned is that one epic could
+#  not hold 23 tables; that is a new epic, at a new estimate.
+#################################################################
+
+fw:EP_TablesBatch a backlog:Epic ;
+    backlog:hasIdentifier "BRF-EP26" ;
+    backlog:hasTitle "The remaining 22 classification tables, in batches" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_TablesExported ;
+    backlog:satisfiesDeliverable fw:Del_OntExport ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasApplicableConcern backlog:Concern_Data ;
+    backlog:hasAcceptanceCriterion fw:AC_EP_TablesBatch ;
+    backlog:hasPriorityScore fw:S_EP_TablesBatch ;
+    backlog:hasCostEstimate fw:E_EP_TablesBatch ;
+    backlog:appliesDefinitionOfDone fw:DoD_EP_TablesBatch ;
+    backlog:rankedOnRoadmap fw:Roadmap ;
+    backlog:scheduledInHorizon backlog:Now ;
+    backlog:hasRationale "Created because EP_CodeTables was Done and reopening it would make its completion untrue. Subject: the 22 tables the first epic did not reach." .
+fw:AC_EP_TablesBatch a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given 22 python classification tables, When this epic is Done, Then all 22 are ontology enumerations, all 22 literals are deleted, and Obj_TablesExported is observed at 0." ;
+    backlog:coveredByCase fw:TC_EP_TablesBatch .
+fw:TC_EP_TablesBatch a backlog:TestCase ;
+    backlog:exercisesCriterion fw:AC_EP_TablesBatch ;
+    backlog:runsOnData fw:TD_EP_TablesBatch .
+fw:TD_EP_TablesBatch a backlog:TestData ;
+    backlog:hasFixtureState "Twelve python modules holding the 22 tables that remain after It8." .
+fw:DoD_EP_TablesBatch a backlog:DefinitionOfDone ;
+    backlog:hasDoDCriterion "Every batch story is Done with hasBatchCompleted equal to hasBatchSize." ;
+    backlog:hasDoDCriterion "Every changed reader fails loudly without its ontology data, verified per table." ;
+    backlog:hasDoDCriterion "Obj_TablesExported is observed at 0 by the counting method it declares." .
+fw:S_EP_TablesBatch a backlog:WSJFScore ;
+    backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 5.0 ;
+    backlog:hasUserBusinessValue 6.0 ; backlog:hasTimeCriticality 6.0 ;
+    backlog:hasRiskReductionValue 3.0 ; backlog:hasJobSize 3.0 ;
+    backlog:scoredAt "2026-11-29T19:30:00"^^xsd:dateTime ;
+    backlog:hasScoreRationale "Time criticality raised to 6 from the original epic's 5: the checkpoint measurement showed the deadline unreachable on the old plan, which is evidence rather than pressure. Risk reduction lowered to 3 because batching ADDS concealment risk — an honest score does not credit a plan for a risk it creates." ;
+    backlog:hasBasisKind backlog:Basis_Judged .
+fw:E_EP_TablesBatch a backlog:CostEstimate ;
+    backlog:hasEffortEstimate 3.0 ; backlog:hasCostBasis "Six batch stories at 3 points, measured against the one table It8 actually took" ;
+    backlog:estimatedAt "2026-11-29T19:30:00"^^xsd:dateTime ;
+    backlog:hasBasisKind backlog:Basis_Measured ;
+    backlog:basisObservation fw:Obs_BaselineOnePerStory .
+
+fw:It11 a backlog:Iteration ;
+    backlog:hasIdentifier "It11" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:iterationStart "2026-12-28T00:00:00"^^xsd:dateTime ;
+    backlog:iterationEnd "2027-01-10T23:59:59"^^xsd:dateTime ;
+    backlog:hasCapacity 9.0 ;
+    backlog:hasCommittedEffort 6.0 ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:hasRationale "Opened because It10 was committed to 12 points against a capacity of 9 — the capacity clause caught the re-plan overfilling a box, which is the same G9 arithmetic the batch was meant to respect." .

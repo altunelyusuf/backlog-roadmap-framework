@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.46.0> ;
-    owl:versionInfo "1.46.0" ;
+    owl:versionIRI <http://example.org/backlog/1.47.0> ;
+    owl:versionInfo "1.47.0" ;
+    owl:priorVersion <http://example.org/backlog/1.46.0> ;
     owl:priorVersion <http://example.org/backlog/1.45.0> ;
     owl:priorVersion <http://example.org/backlog/1.44.0> ;
     owl:priorVersion <http://example.org/backlog/1.43.0> ;
@@ -4778,3 +4779,33 @@ backlog:layerTier a owl:DatatypeProperty , owl:FunctionalProperty ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "layer tier"@en ;
     skos:definition "The conformance level at which this layer's absence starts to matter. Held in the python table as a bare string and now queryable: which layers an L2 register may omit is a governance question, not a reporting detail."@en .
+
+#################################################################
+#  77. A story that carries a countable batch (v1.47.0)
+#
+#  Found by test drive when the table objective went behind its
+#  checkpoint. One table per story reaches zero in late April
+#  against a January deadline; batching fits, and batching hides.
+#
+#  The risk is specific and it scales linearly: a story is Done or
+#  not, while the objective counts tables. A batch of eight with
+#  one table blocked reports ZERO progress where one-per-story
+#  would have reported seven. Measured: a blocked story hides 5%
+#  of the work at batch 1, 18% at 4, 36% at 8, 50% at 11.
+#
+#  hasBatchSize and hasBatchCompleted let a story report partial
+#  progress without being Done, so the measure stops depending on
+#  the increment. The baseline stays recorded for comparison.
+#################################################################
+
+backlog:hasBatchSize a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:WorkItem ; rdfs:range xsd:integer ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has batch size"@en ;
+    skos:definition "How many countable units this story carries. Declared so a reader can see that a single Done or not-Done covers more than one thing — a story of eight is eight chances to be wrong verified by one acceptance criterion, and that must be visible rather than inferred from the title."@en .
+
+backlog:hasBatchCompleted a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:WorkItem ; rdfs:range xsd:integer ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has batch completed"@en ;
+    skos:definition "How many of the batch are finished. The point of the pair: an objective counting units can read partial progress from a story that is not Done. Without it a batch decouples the measure from the increment, and seven finished tables inside one blocked story report as none."@en .
