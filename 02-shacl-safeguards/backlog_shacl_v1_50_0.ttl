@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.49.0> ;
-    owl:versionInfo "1.49.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.50.0> ;
+    owl:versionInfo "1.50.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.49.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.48.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.47.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.46.0> ;
@@ -1487,6 +1488,14 @@ backlog:MissionShape a sh:NodeShape ;
             ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
             FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed, backlog:L4_LineageEnforced))
             FILTER NOT EXISTS { ?g backlog:contributesToMission $this }
+            # A mission whose lineage has not yet reached the Goal stage
+            # SHOULD have no goals. Found the first time the v5.0.0 staged
+            # ceremony was actually followed: it says the Mission stage closes
+            # in its own commit, and this clause demanded a goal in that same
+            # commit. Two of this package's own rules made the standard
+            # ceremony impossible to follow — the ceremony was published three
+            # releases before anyone tried to obey it.
+            FILTER NOT EXISTS { $this backlog:producedByStage ?mout }
             # A superseded mission SHOULD have no goals: they were re-pointed to
             # the mission that replaced it. Requiring one would force a goal to
             # serve two missions at once, which the forked-chain rule rejects —
@@ -3849,4 +3858,21 @@ backlog:AnalysisArtifactShape a sh:NodeShape ;
         sh:select """SELECT $this WHERE {
             $this backlog:hasModelKind backlog:Kind_StateMachineDiagram .
             FILTER NOT EXISTS { $this backlog:declaresState ?s }
+        }""" ] .
+
+#################################################################
+#  v1.50.0 — a mission may be alone while its lineage is being
+#  built, and must not stay alone once it is finished
+#################################################################
+
+backlog:UnfinishedLineageShape a sh:NodeShape ;
+    sh:targetClass backlog:Mission ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: a mission whose lineage stopped part-way"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: this mission has no goal and no Goal-stage output exists, so its lineage is mid-construction. That is legitimate under the staged ceremony and it is reported, because a lineage abandoned after the Mission stage looks exactly the same as one still being built — the difference is whether the next commit comes." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            FILTER NOT EXISTS { ?g backlog:contributesToMission $this }
+            FILTER NOT EXISTS { ?s backlog:supersedesMission $this }
         }""" ] .

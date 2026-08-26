@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/4.8.0> ;
-    owl:versionInfo "4.8.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/5.0.0> ;
+    owl:versionInfo "5.0.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/4.8.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/4.7.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/4.6.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/4.5.0> ;
@@ -5996,3 +5997,46 @@ fw:RG_Init_SdlcConcepts a backlog:RefinementEvent ; backlog:refines fw:Init_Sdlc
     backlog:refinedAt "2026-10-26T19:00:00"^^xsd:dateTime ;
     backlog:refinedBy backlog:Builder ;
     backlog:hasRefinementOutcome "Groomed retroactively at v1.98.0 when the rule was extended beyond Story. Recorded as a retroactive grooming and not presented as contemporaneous: the analysis behind this initiative was done, and the record of it at initiative level was not kept." .
+
+#################################################################
+#  v5.0.0 — STAGE 1 OF A NEW LINEAGE. THE MISSION, AND NOTHING ELSE.
+#
+#  Under the v5.0.0 ceremony this commit closes the Mission stage.
+#  No scope, no deliverables, no goals, no objectives, no backlog —
+#  those close in later commits, so the mission provably precedes
+#  the boundary drawn to serve it.
+#
+#  This session did NOT author the mission. The owner stated it and
+#  the source below quotes the instruction verbatim.
+#
+#  Measured before writing, so the mission is aimed at something
+#  real rather than at a suspicion:
+#    prose  : 18 files, 7197 lines, 19 governance rulings that exist
+#             only as markdown headings, 413 table rows carrying
+#             rules or mappings nothing validates
+#    code   : 20 python files, 3978 lines, 23 module-level tables
+#             holding classification and layer knowledge
+#################################################################
+
+fw:Mission_OntologyDriven a backlog:Mission ;
+    backlog:producedByStage fw:Out2_Mission ;
+    backlog:hasMissionStatement "The framework is ontology-driven: classes, relationships, properties and instances that today live in prose or in source code are exported to the ontology, the governance model is expressed as ontology rather than as documentation, and rule execution moves from prose and code to the ontology layer. What remains as prose explains; what remains as code executes standard engines. Neither carries meaning that only they define." ;
+    backlog:missionFor fw:Register ;
+    backlog:hasMissionOrigin backlog:Origin_OwnerStated ;
+    backlog:missionSource "Owner, 2026-10-26, verbatim: 'a new mission and a new lineage to reduce the dependency on the prose and source code. I want you to convert the current configuration to be ontology driven by analyzing the prose and source code and identify the possible exports from them to the ontology not just the rules but also the clasesses, relationships, properties, objects/instances, and other ontologic concpepts. Additionally, the governance model should be based on the ontologies and execution of the rules be transferred to the ontology levels from the prose and source codes.' Follows the owner's finding at v1.98.0 that prose is the largest and least verified layer: 7197 lines nothing checks against the ontology, and that every drift in this session occurred in prose nothing could contradict." ;
+    backlog:decidedBy backlog:Owner .
+
+fw:Obs_ProseCodeAsIs a backlog:MetricObservation ;
+    rdfs:label "As-is: meaning held outside the ontology"@en ;
+    backlog:observesMetric fw:Metric_UngroundedPractices ;
+    backlog:observationFor fw:Obj_Grounded ;
+    backlog:hasObservedValue 0.0 ;
+    backlog:observedAt "2026-10-26T20:00:00"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Counted directly, not estimated. Prose: 18 markdown files, 7197 lines, 19 governance rulings (G1 to G18) that exist only as headings, 413 table rows carrying rules or mappings nothing validates. Code: 20 python files, 3978 lines, 23 module-level tables holding classification and layer knowledge — the reporter's LAYERS list, the task-type guesses, the stage-type map. Zero hard-coded numeric thresholds, which is the one thing already clean. Obj_Grounded stays at 0: no framework-REQUIRED practice lacks a source. What this measures is different — meaning that lives where nothing can check it — and it needs its own objective, which the Objective stage will set." .
+
+#  The Mission stage output, closing this stage.
+fw:Out2_Mission a backlog:StageOutput ;
+    backlog:outputOfStage backlog:Stage_Mission ;
+    backlog:hasStateDigest "pending-commit" ;
+    backlog:closedAtCommit "pending-commit" ;
+    backlog:hasRationale "Digest and commit are written after this release is published, because a stage output records the state at its commit and the commit does not exist until the publish. Recorded as pending rather than fabricated." .

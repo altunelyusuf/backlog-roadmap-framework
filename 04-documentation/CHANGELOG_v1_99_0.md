@@ -1,5 +1,47 @@
 # Changelog
 
+## v1.99.0 — 2026-10-26 (MAJOR-class: a new mission — STAGE 1 ONLY)
+
+**This commit closes the Mission stage and nothing else.** No scope, no deliverables, no goals, no
+objectives, no backlog — those close in later commits, so the mission provably precedes the boundary
+drawn to serve it. Under the v5.0.0 ceremony this is how a lineage is built, and it is the first time
+one has been started that way from the mission.
+
+**The mission is owner-stated and quoted verbatim.** This session did not author it.
+
+> The framework is ontology-driven: classes, relationships, properties and instances that today live in
+> prose or in source code are exported to the ontology, the governance model is expressed as ontology
+> rather than as documentation, and rule execution moves from prose and code to the ontology layer.
+> What remains as prose explains; what remains as code executes standard engines. Neither carries
+> meaning that only they define.
+
+### Measured before writing, so the mission aims at something real
+
+```
+prose   18 files, 7,197 lines
+        19 governance rulings (G1–G18) existing only as markdown headings
+        413 table rows carrying rules or mappings nothing validates
+
+code    20 python files, 3,978 lines
+        23 module-level tables holding classification and layer knowledge
+        0 hard-coded numeric thresholds — the one thing already clean
+```
+
+### The staged ceremony could not be followed, and this is the first release to try
+
+The L2 clause *"no goal advances this mission"* demanded a goal **in the same commit** as the mission.
+The ceremony, published three releases ago as the standard, says the Mission stage closes alone. **Two
+of this package's own rules made its own standard ceremony impossible to obey** — and nobody found out
+until someone tried.
+
+Resolved per-mission: a mission that names a `StageOutput` is mid-construction and need not yet carry a
+goal. An advisory reports it, because a lineage abandoned after the Mission stage looks identical to
+one still being built — the difference is whether the next commit comes.
+
+The stage output records its digest and commit as `pending-commit`, because a commit does not exist
+until the publish. **Recorded as pending rather than fabricated.**
+
+
 ## v1.98.0 — 2026-10-26 (MINOR: states come from analysis; grooming at every PBI level)
 
 ### The owner's challenge was right
