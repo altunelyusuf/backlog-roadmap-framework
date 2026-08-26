@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.47.0
+# Backlog & Roadmap Semantic Framework — Standard v1.48.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -771,6 +771,32 @@ class no property points at is one nobody uses.
 At L1: two steps claiming one position, or a change from a state to itself. At L2: a step without its
 position or action, a change without its states. At L3: a case exercising no criterion or naming no
 data. An advisory reports a story groomed for Interaction that carries no specification.
+
+### 2.5c-xxvii States come from domain analysis
+
+`declaredByArtifact` (StateChange → ModelArtifact) and `declaresState` (ModelArtifact → literal).
+
+The framework does **not** need to know a domain's states. It needs to know **where they came from** —
+and the lineage already carries that: `Task_MissionAnalysis` is domain engineering,
+`Task_RequirementsDefinition` is business analysis, and `Kind_StateMachineDiagram` is the artefact they
+produce.
+
+A state name stays free text, because the name is a domain word. What is checked is that the name was
+**declared by an artefact some analysis task produced**. Without it, two stories can name the same
+state meaning different things and nothing notices.
+
+At L3 a state change must name its declaring artefact. At L4 a change using a state the artefact does
+not list is rejected — either the analysis is incomplete or the story invented a state, and the
+register reports that they disagree rather than guessing which.
+
+### 2.5c-xxviii Grooming applies at every PBI level
+
+`GroomingShape` targets `Story`, `Epic` **and** `Initiative`. It previously targeted `Story` alone, so
+a container could reach Done with no analysis at all — **the level where a boundary decision is most
+consequential was the level nothing checked**.
+
+An epic's analysis is not its stories' analysis summed: an epic decides what the theme requires, a
+story decides how a slice is built.
 
 ### 2.5d Decomposition, commitments, dependency kinds, impediments, flow, team (subject v1.4.0)
 

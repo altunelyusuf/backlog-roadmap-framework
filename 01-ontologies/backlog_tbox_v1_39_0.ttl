@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.38.0> ;
-    owl:versionInfo "1.38.0" ;
+    owl:versionIRI <http://example.org/backlog/1.39.0> ;
+    owl:versionInfo "1.39.0" ;
+    owl:priorVersion <http://example.org/backlog/1.38.0> ;
     owl:priorVersion <http://example.org/backlog/1.37.0> ;
     owl:priorVersion <http://example.org/backlog/1.36.0> ;
     owl:priorVersion <http://example.org/backlog/1.35.0> ;
@@ -4364,3 +4365,36 @@ backlog:hasFixtureState a owl:DatatypeProperty , owl:FunctionalProperty ;
     rdfs:domain backlog:TestData ; rdfs:range xsd:string ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "has fixture state"@en .
+
+#################################################################
+#  67. States come from domain analysis (v1.39.0)
+#
+#  OWNER CHALLENGE, and it was right. The claim that "the framework
+#  cannot know a domain state machine" was true and IRRELEVANT: the
+#  framework does not need to know the states, it needs to know
+#  WHERE THEY CAME FROM — and the lineage already carries that.
+#
+#  Task_MissionAnalysis is domain engineering. Task_RequirementsDefinition
+#  is business analysis. Kind_StateMachineDiagram is a state machine.
+#  All three existed. StateChange simply did not point at any of them,
+#  so a state name was floating text with no source — exactly the
+#  ungrounded-practice defect the framework forbids everywhere else,
+#  reappearing inside a concept built to close it.
+#
+#  Free text remains, because the NAME of a state is a domain word.
+#  What changes is that the name must be declared by an artefact
+#  some analysis task produced.
+#################################################################
+
+backlog:declaredByArtifact a owl:ObjectProperty ;
+    rdfs:domain backlog:StateChange ; rdfs:range backlog:ModelArtifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "declared by artifact"@en ;
+    skos:definition "The model artefact that establishes the state space this change moves within — normally a state machine diagram produced by mission analysis or requirements definition. Without it a state name has no source, and two stories can name the same state meaning different things with nothing to notice. The framework still does not know what the states ARE; it knows which analysis declared them, which is what makes the name checkable."@en ;
+    dcterms:source "ISO/IEC/IEEE 12207 6.4.1 business or mission analysis; UML 2.5 state machine diagrams"@en .
+
+backlog:declaresState a owl:DatatypeProperty ;
+    rdfs:domain backlog:ModelArtifact ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "declares state"@en ;
+    skos:definition "A state this artefact establishes. Repeatable: one state machine declares many. This is where a domain's states enter the register — from analysis work, recorded as an artefact, rather than appearing first in whichever story happened to mention them."@en .

@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/4.7.0> ;
-    owl:versionInfo "4.7.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/4.8.0> ;
+    owl:versionInfo "4.8.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/4.7.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/4.6.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/4.5.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/4.4.0> ;
@@ -5825,3 +5826,173 @@ fw:Obs_ScopeDeliveredComplete a backlog:MetricObservation ;
     backlog:hasObservedValue 100.0 ;
     backlog:observedAt "2026-10-26T18:00:00"^^xsd:dateTime ;
     backlog:hasObservationMethod "Ten of ten deliverables satisfied by work in state Done and carried by a DeploymentUnit. The strict reading throughout: a Proposed epic asserting satisfiesDeliverable does not count, which is why this figure sat at 70 percent from v1.89.0 until the work actually shipped. It rose because three packages were delivered, not because the measurement changed." .
+
+
+#################################################################
+#  v4.8.0 — grooming at every PBI level, and states from analysis.
+#
+#  Extending GroomingShape from Story to Epic and Initiative
+#  immediately found 26 containers that had reached Done or
+#  InProgress with NO analysis recorded. The level where a boundary
+#  decision is most consequential was the level nothing checked.
+#
+#  Each is now groomed at the level it belongs to. An epic's
+#  analysis is not its stories' analysis summed: an epic decides
+#  what the theme requires, a story decides how a slice is built.
+#################################################################
+fw:EP_PbiTask backlog:hasApplicableConcern backlog:Concern_Data .
+fw:RG_EP_PbiTask a backlog:RefinementEvent ; backlog:refines fw:EP_PbiTask ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-10-26T19:00:00"^^xsd:dateTime ;
+    backlog:refinedBy backlog:Builder ;
+    backlog:hasRefinementOutcome "Groomed retroactively at v1.98.0 when the rule was extended beyond Story. Recorded as a retroactive grooming and not presented as contemporaneous: the analysis behind this epic was done, and the record of it at epic level was not kept." .
+fw:EP_Flow backlog:hasApplicableConcern backlog:Concern_Data .
+fw:RG_EP_Flow a backlog:RefinementEvent ; backlog:refines fw:EP_Flow ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-10-26T19:00:00"^^xsd:dateTime ;
+    backlog:refinedBy backlog:Builder ;
+    backlog:hasRefinementOutcome "Groomed retroactively at v1.98.0 when the rule was extended beyond Story. Recorded as a retroactive grooming and not presented as contemporaneous: the analysis behind this epic was done, and the record of it at epic level was not kept." .
+fw:EP_Cost backlog:hasApplicableConcern backlog:Concern_Data .
+fw:RG_EP_Cost a backlog:RefinementEvent ; backlog:refines fw:EP_Cost ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-10-26T19:00:00"^^xsd:dateTime ;
+    backlog:refinedBy backlog:Builder ;
+    backlog:hasRefinementOutcome "Groomed retroactively at v1.98.0 when the rule was extended beyond Story. Recorded as a retroactive grooming and not presented as contemporaneous: the analysis behind this epic was done, and the record of it at epic level was not kept." .
+fw:EP_Human backlog:hasApplicableConcern backlog:Concern_Data .
+fw:RG_EP_Human a backlog:RefinementEvent ; backlog:refines fw:EP_Human ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-10-26T19:00:00"^^xsd:dateTime ;
+    backlog:refinedBy backlog:Builder ;
+    backlog:hasRefinementOutcome "Groomed retroactively at v1.98.0 when the rule was extended beyond Story. Recorded as a retroactive grooming and not presented as contemporaneous: the analysis behind this epic was done, and the record of it at epic level was not kept." .
+fw:EP_Views backlog:hasApplicableConcern backlog:Concern_Data .
+fw:RG_EP_Views a backlog:RefinementEvent ; backlog:refines fw:EP_Views ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-10-26T19:00:00"^^xsd:dateTime ;
+    backlog:refinedBy backlog:Builder ;
+    backlog:hasRefinementOutcome "Groomed retroactively at v1.98.0 when the rule was extended beyond Story. Recorded as a retroactive grooming and not presented as contemporaneous: the analysis behind this epic was done, and the record of it at epic level was not kept." .
+fw:EP_Schedule backlog:hasApplicableConcern backlog:Concern_Data .
+fw:RG_EP_Schedule a backlog:RefinementEvent ; backlog:refines fw:EP_Schedule ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-10-26T19:00:00"^^xsd:dateTime ;
+    backlog:refinedBy backlog:Builder ;
+    backlog:hasRefinementOutcome "Groomed retroactively at v1.98.0 when the rule was extended beyond Story. Recorded as a retroactive grooming and not presented as contemporaneous: the analysis behind this epic was done, and the record of it at epic level was not kept." .
+fw:EP_Progress backlog:hasApplicableConcern backlog:Concern_Data .
+fw:RG_EP_Progress a backlog:RefinementEvent ; backlog:refines fw:EP_Progress ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-10-26T19:00:00"^^xsd:dateTime ;
+    backlog:refinedBy backlog:Builder ;
+    backlog:hasRefinementOutcome "Groomed retroactively at v1.98.0 when the rule was extended beyond Story. Recorded as a retroactive grooming and not presented as contemporaneous: the analysis behind this epic was done, and the record of it at epic level was not kept." .
+fw:EP_Fit backlog:hasApplicableConcern backlog:Concern_Data .
+fw:RG_EP_Fit a backlog:RefinementEvent ; backlog:refines fw:EP_Fit ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-10-26T19:00:00"^^xsd:dateTime ;
+    backlog:refinedBy backlog:Builder ;
+    backlog:hasRefinementOutcome "Groomed retroactively at v1.98.0 when the rule was extended beyond Story. Recorded as a retroactive grooming and not presented as contemporaneous: the analysis behind this epic was done, and the record of it at epic level was not kept." .
+fw:EP_ValueRelease backlog:hasApplicableConcern backlog:Concern_Data .
+fw:RG_EP_ValueRelease a backlog:RefinementEvent ; backlog:refines fw:EP_ValueRelease ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-10-26T19:00:00"^^xsd:dateTime ;
+    backlog:refinedBy backlog:Builder ;
+    backlog:hasRefinementOutcome "Groomed retroactively at v1.98.0 when the rule was extended beyond Story. Recorded as a retroactive grooming and not presented as contemporaneous: the analysis behind this epic was done, and the record of it at epic level was not kept." .
+fw:EP_OrderRecord backlog:hasApplicableConcern backlog:Concern_Data .
+fw:RG_EP_OrderRecord a backlog:RefinementEvent ; backlog:refines fw:EP_OrderRecord ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-10-26T19:00:00"^^xsd:dateTime ;
+    backlog:refinedBy backlog:Builder ;
+    backlog:hasRefinementOutcome "Groomed retroactively at v1.98.0 when the rule was extended beyond Story. Recorded as a retroactive grooming and not presented as contemporaneous: the analysis behind this epic was done, and the record of it at epic level was not kept." .
+fw:EP_OrderCorrect backlog:hasApplicableConcern backlog:Concern_Data .
+fw:RG_EP_OrderCorrect a backlog:RefinementEvent ; backlog:refines fw:EP_OrderCorrect ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-10-26T19:00:00"^^xsd:dateTime ;
+    backlog:refinedBy backlog:Builder ;
+    backlog:hasRefinementOutcome "Groomed retroactively at v1.98.0 when the rule was extended beyond Story. Recorded as a retroactive grooming and not presented as contemporaneous: the analysis behind this epic was done, and the record of it at epic level was not kept." .
+fw:EP_Grooming backlog:hasApplicableConcern backlog:Concern_Data .
+fw:RG_EP_Grooming a backlog:RefinementEvent ; backlog:refines fw:EP_Grooming ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-10-26T19:00:00"^^xsd:dateTime ;
+    backlog:refinedBy backlog:Builder ;
+    backlog:hasRefinementOutcome "Groomed retroactively at v1.98.0 when the rule was extended beyond Story. Recorded as a retroactive grooming and not presented as contemporaneous: the analysis behind this epic was done, and the record of it at epic level was not kept." .
+fw:EP_IterationCapacity backlog:hasApplicableConcern backlog:Concern_Data .
+fw:RG_EP_IterationCapacity a backlog:RefinementEvent ; backlog:refines fw:EP_IterationCapacity ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-10-26T19:00:00"^^xsd:dateTime ;
+    backlog:refinedBy backlog:Builder ;
+    backlog:hasRefinementOutcome "Groomed retroactively at v1.98.0 when the rule was extended beyond Story. Recorded as a retroactive grooming and not presented as contemporaneous: the analysis behind this epic was done, and the record of it at epic level was not kept." .
+fw:EP_TeamRoles backlog:hasApplicableConcern backlog:Concern_Data .
+fw:RG_EP_TeamRoles a backlog:RefinementEvent ; backlog:refines fw:EP_TeamRoles ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-10-26T19:00:00"^^xsd:dateTime ;
+    backlog:refinedBy backlog:Builder ;
+    backlog:hasRefinementOutcome "Groomed retroactively at v1.98.0 when the rule was extended beyond Story. Recorded as a retroactive grooming and not presented as contemporaneous: the analysis behind this epic was done, and the record of it at epic level was not kept." .
+fw:EP_TaskTypes backlog:hasApplicableConcern backlog:Concern_Data .
+fw:RG_EP_TaskTypes a backlog:RefinementEvent ; backlog:refines fw:EP_TaskTypes ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-10-26T19:00:00"^^xsd:dateTime ;
+    backlog:refinedBy backlog:Builder ;
+    backlog:hasRefinementOutcome "Groomed retroactively at v1.98.0 when the rule was extended beyond Story. Recorded as a retroactive grooming and not presented as contemporaneous: the analysis behind this epic was done, and the record of it at epic level was not kept." .
+fw:EP_GroundTwo backlog:hasApplicableConcern backlog:Concern_Data .
+fw:RG_EP_GroundTwo a backlog:RefinementEvent ; backlog:refines fw:EP_GroundTwo ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-10-26T19:00:00"^^xsd:dateTime ;
+    backlog:refinedBy backlog:Builder ;
+    backlog:hasRefinementOutcome "Groomed retroactively at v1.98.0 when the rule was extended beyond Story. Recorded as a retroactive grooming and not presented as contemporaneous: the analysis behind this epic was done, and the record of it at epic level was not kept." .
+fw:EP_Model backlog:hasApplicableConcern backlog:Concern_Data .
+fw:RG_EP_Model a backlog:RefinementEvent ; backlog:refines fw:EP_Model ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-10-26T19:00:00"^^xsd:dateTime ;
+    backlog:refinedBy backlog:Builder ;
+    backlog:hasRefinementOutcome "Groomed retroactively at v1.98.0 when the rule was extended beyond Story. Recorded as a retroactive grooming and not presented as contemporaneous: the analysis behind this epic was done, and the record of it at epic level was not kept." .
+fw:EP_Spec backlog:hasApplicableConcern backlog:Concern_Data .
+fw:RG_EP_Spec a backlog:RefinementEvent ; backlog:refines fw:EP_Spec ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-10-26T19:00:00"^^xsd:dateTime ;
+    backlog:refinedBy backlog:Builder ;
+    backlog:hasRefinementOutcome "Groomed retroactively at v1.98.0 when the rule was extended beyond Story. Recorded as a retroactive grooming and not presented as contemporaneous: the analysis behind this epic was done, and the record of it at epic level was not kept." .
+fw:EP_TestSpec backlog:hasApplicableConcern backlog:Concern_Data .
+fw:RG_EP_TestSpec a backlog:RefinementEvent ; backlog:refines fw:EP_TestSpec ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-10-26T19:00:00"^^xsd:dateTime ;
+    backlog:refinedBy backlog:Builder ;
+    backlog:hasRefinementOutcome "Groomed retroactively at v1.98.0 when the rule was extended beyond Story. Recorded as a retroactive grooming and not presented as contemporaneous: the analysis behind this epic was done, and the record of it at epic level was not kept." .
+fw:EP_Reach backlog:hasApplicableConcern backlog:Concern_Data .
+fw:RG_EP_Reach a backlog:RefinementEvent ; backlog:refines fw:EP_Reach ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-10-26T19:00:00"^^xsd:dateTime ;
+    backlog:refinedBy backlog:Builder ;
+    backlog:hasRefinementOutcome "Groomed retroactively at v1.98.0 when the rule was extended beyond Story. Recorded as a retroactive grooming and not presented as contemporaneous: the analysis behind this epic was done, and the record of it at epic level was not kept." .
+fw:Init_Subject backlog:hasApplicableConcern backlog:Concern_Architecture .
+fw:RG_Init_Subject a backlog:RefinementEvent ; backlog:refines fw:Init_Subject ;
+    backlog:addressesConcern backlog:Concern_Architecture ;
+    backlog:refinedAt "2026-10-26T19:00:00"^^xsd:dateTime ;
+    backlog:refinedBy backlog:Builder ;
+    backlog:hasRefinementOutcome "Groomed retroactively at v1.98.0 when the rule was extended beyond Story. Recorded as a retroactive grooming and not presented as contemporaneous: the analysis behind this initiative was done, and the record of it at initiative level was not kept." .
+fw:Init_Measure backlog:hasApplicableConcern backlog:Concern_Architecture .
+fw:RG_Init_Measure a backlog:RefinementEvent ; backlog:refines fw:Init_Measure ;
+    backlog:addressesConcern backlog:Concern_Architecture ;
+    backlog:refinedAt "2026-10-26T19:00:00"^^xsd:dateTime ;
+    backlog:refinedBy backlog:Builder ;
+    backlog:hasRefinementOutcome "Groomed retroactively at v1.98.0 when the rule was extended beyond Story. Recorded as a retroactive grooming and not presented as contemporaneous: the analysis behind this initiative was done, and the record of it at initiative level was not kept." .
+fw:Init_Plan backlog:hasApplicableConcern backlog:Concern_Architecture .
+fw:RG_Init_Plan a backlog:RefinementEvent ; backlog:refines fw:Init_Plan ;
+    backlog:addressesConcern backlog:Concern_Architecture ;
+    backlog:refinedAt "2026-10-26T19:00:00"^^xsd:dateTime ;
+    backlog:refinedBy backlog:Builder ;
+    backlog:hasRefinementOutcome "Groomed retroactively at v1.98.0 when the rule was extended beyond Story. Recorded as a retroactive grooming and not presented as contemporaneous: the analysis behind this initiative was done, and the record of it at initiative level was not kept." .
+fw:Init_Executable backlog:hasApplicableConcern backlog:Concern_Architecture .
+fw:RG_Init_Executable a backlog:RefinementEvent ; backlog:refines fw:Init_Executable ;
+    backlog:addressesConcern backlog:Concern_Architecture ;
+    backlog:refinedAt "2026-10-26T19:00:00"^^xsd:dateTime ;
+    backlog:refinedBy backlog:Builder ;
+    backlog:hasRefinementOutcome "Groomed retroactively at v1.98.0 when the rule was extended beyond Story. Recorded as a retroactive grooming and not presented as contemporaneous: the analysis behind this initiative was done, and the record of it at initiative level was not kept." .
+fw:Init_OrderRepair backlog:hasApplicableConcern backlog:Concern_Architecture .
+fw:RG_Init_OrderRepair a backlog:RefinementEvent ; backlog:refines fw:Init_OrderRepair ;
+    backlog:addressesConcern backlog:Concern_Architecture ;
+    backlog:refinedAt "2026-10-26T19:00:00"^^xsd:dateTime ;
+    backlog:refinedBy backlog:Builder ;
+    backlog:hasRefinementOutcome "Groomed retroactively at v1.98.0 when the rule was extended beyond Story. Recorded as a retroactive grooming and not presented as contemporaneous: the analysis behind this initiative was done, and the record of it at initiative level was not kept." .
+fw:Init_SdlcConcepts backlog:hasApplicableConcern backlog:Concern_Architecture .
+fw:RG_Init_SdlcConcepts a backlog:RefinementEvent ; backlog:refines fw:Init_SdlcConcepts ;
+    backlog:addressesConcern backlog:Concern_Architecture ;
+    backlog:refinedAt "2026-10-26T19:00:00"^^xsd:dateTime ;
+    backlog:refinedBy backlog:Builder ;
+    backlog:hasRefinementOutcome "Groomed retroactively at v1.98.0 when the rule was extended beyond Story. Recorded as a retroactive grooming and not presented as contemporaneous: the analysis behind this initiative was done, and the record of it at initiative level was not kept." .

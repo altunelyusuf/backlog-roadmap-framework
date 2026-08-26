@@ -300,3 +300,10 @@ ex:Scope backlog:requiresDeliverable ex:Del2_Scope .
 ex:Del_Scope backlog:derivesFromMissionClause "practitioners recover unaided" .
 
 ex:Del2_Scope backlog:derivesFromMissionClause "practitioners recover unaided" .
+
+ex:EP backlog:hasApplicableConcern backlog:Concern_Data .
+ex:RG_EP a backlog:RefinementEvent ; backlog:refines ex:EP ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-08-01T09:00:00"^^xsd:dateTime ;
+    backlog:refinedBy backlog:Builder ;
+    backlog:hasRefinementOutcome "Groomed at container level: what the theme requires, distinct from how each slice is built." .

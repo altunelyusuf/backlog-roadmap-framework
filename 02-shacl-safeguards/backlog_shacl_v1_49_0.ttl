@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.48.0> ;
-    owl:versionInfo "1.48.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.49.0> ;
+    owl:versionInfo "1.49.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.48.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.47.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.46.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.45.0> ;
@@ -3165,7 +3166,7 @@ backlog:RoadmapIntentShape a sh:NodeShape ;
 #################################################################
 
 backlog:GroomingShape a sh:NodeShape ;
-    sh:targetClass backlog:Story ;
+    sh:targetClass backlog:Story , backlog:Epic , backlog:Initiative ;
     sh:severity sh:Violation ;
     rdfs:label "A story reaching Ready was analysed against the concerns that apply (L3)"@en ;
     sh:sparql [ a sh:SPARQLConstraint ;
@@ -3226,7 +3227,7 @@ backlog:TaskTypeShape a sh:NodeShape ;
         }""" ] .
 
 backlog:GroomingToExecutionShape a sh:NodeShape ;
-    sh:targetClass backlog:Story ;
+    sh:targetClass backlog:Story , backlog:Epic ;
     sh:severity sh:Warning ;
     rdfs:label "Advisory: a concern analysed and then not acted on"@en ;
     sh:sparql [ a sh:SPARQLConstraint ;
@@ -3803,4 +3804,49 @@ backlog:SpecificationAdvisoryShape a sh:NodeShape ;
         sh:select """SELECT $this WHERE {
             $this backlog:hasApplicableConcern backlog:Concern_Interaction .
             FILTER NOT EXISTS { $this backlog:hasSpecification ?s }
+        }""" ] .
+
+#################################################################
+#  v1.49.0 — states are declared by analysis, and grooming
+#  applies at every PBI level
+#
+#  GroomingShape and GroomingToExecutionShape targeted Story ALONE,
+#  so an Epic or Initiative could reach Done with no analysis at
+#  all — the level where a boundary decision is most consequential
+#  was the level nothing checked. Both now target the whole PBI
+#  hierarchy.
+#################################################################
+
+backlog:StateProvenanceShape a sh:NodeShape ;
+    sh:targetClass backlog:StateChange ;
+    sh:severity sh:Violation ;
+    rdfs:label "A state change names the analysis that declared its states (L3)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: this state change names no artefact declaring its states. A state name with no source is floating text — two stories can name the same state meaning different things and nothing notices. The states belong to the domain, and the lineage already carries where domain knowledge enters: mission analysis and requirements definition, recorded as a model artefact. Point at the artefact; the framework does not need to know what the states mean." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L3_Governed, backlog:L4_LineageEnforced))
+            FILTER NOT EXISTS { $this backlog:declaredByArtifact ?a }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L4: this state change uses a state the declaring artefact does not list. The artefact establishes the state space and this change moves outside it, which means either the analysis is incomplete or the story invented a state — and the register cannot tell which, only that they disagree." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel backlog:L4_LineageEnforced .
+            $this backlog:declaredByArtifact ?a ; backlog:hasFromState ?f .
+            FILTER EXISTS { ?a backlog:declaresState ?any }
+            FILTER NOT EXISTS { ?a backlog:declaresState ?f }
+        }""" ] .
+
+backlog:AnalysisArtifactShape a sh:NodeShape ;
+    sh:targetClass backlog:ModelArtifact ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: a state machine declaring no states"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: this is a state machine artefact and it lists no states. It can therefore be pointed at by a state change without constraining it, which makes the reference decorative — the L4 clause that checks a change stays inside the declared space cannot fire against an empty space." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasModelKind backlog:Kind_StateMachineDiagram .
+            FILTER NOT EXISTS { $this backlog:declaresState ?s }
         }""" ] .

@@ -1,5 +1,36 @@
 # Changelog
 
+## v1.98.0 — 2026-10-26 (MINOR: states come from analysis; grooming at every PBI level)
+
+### The owner's challenge was right
+
+*"The framework cannot know a domain state machine"* was **true and irrelevant**. The framework does
+not need to know the states — it needs to know **where they came from**, and the lineage already
+carried that: `Task_MissionAnalysis` is domain engineering, `Task_RequirementsDefinition` is business
+analysis, `Kind_StateMachineDiagram` is the artefact they produce. All three existed.
+
+`StateChange` simply did not point at any of them. A state name was floating text with no source —
+**the ungrounded-practice defect the framework forbids everywhere else, reappearing inside a concept
+built to close it.**
+
+`declaredByArtifact` and `declaresState` fix it. Free text remains, because a state's name is a domain
+word; what changes is that the name must be declared by an artefact some analysis task produced. At L4
+a change using a state the artefact does not list is rejected.
+
+### Grooming targeted Story alone
+
+`GroomingShape` and `GroomingToExecutionShape` checked `Story` only, so **an epic or initiative could
+reach Done with no analysis at all** — the level where a boundary decision is most consequential was
+the level nothing checked.
+
+Extended to the whole PBI hierarchy, the rule immediately found **26 epics and initiatives** in that
+state. Each is now groomed at its own level and **recorded as retroactive**, not presented as
+contemporaneous: the analysis behind them was done, the record at that level was not kept.
+
+An epic's analysis is not its stories' analysis summed. An epic decides what the theme requires; a
+story decides how a slice is built.
+
+
 ## v1.97.0 — 2026-10-26 (MINOR: the mission's second half delivered — mission accomplished)
 
 The six remaining items from the owner's mission, built in one release because they are one sentence:
