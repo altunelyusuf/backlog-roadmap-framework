@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.53.0> ;
-    owl:versionInfo "1.53.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.54.0> ;
+    owl:versionInfo "1.54.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.53.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.52.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.51.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.50.0> ;
@@ -3982,4 +3983,58 @@ backlog:AreaWithoutGoalShape a sh:NodeShape ;
             ?sc backlog:coversArea $this .
             FILTER EXISTS { ?g backlog:derivesFromScope ?sc ; backlog:hasGoalFacing backlog:Facing_Scope }
             FILTER NOT EXISTS { ?g2 backlog:hasGoalFacing backlog:Facing_Scope ; backlog:goalCoversArea $this }
+        }""" ] .
+
+#################################################################
+#  v1.54.0 — both layers, and an inverse goal per exclusion
+#################################################################
+
+backlog:ScopeLayerShape a sh:NodeShape ;
+    sh:targetClass backlog:ScopeArea , backlog:ScopeDeliverable , backlog:ScopeExclusion ;
+    sh:severity sh:Violation ;
+    rdfs:label "A boundary statement says which layer it is about (L3)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: this boundary statement does not say whether it is about the product or the work. PMBOK separates the two because they fail differently — a product-layer error ships the wrong capability, a work-layer error spends effort in the wrong place — and a statement that does not declare which cannot be used to refuse either." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L3_Governed, backlog:L4_LineageEnforced))
+            FILTER NOT EXISTS { $this backlog:hasScopeLayer ?l }
+            FILTER NOT EXISTS { ?s backlog:supersedesMission ?m . ?sc backlog:scopeForMission ?m .
+                                { ?sc backlog:requiresDeliverable $this } UNION { ?sc backlog:hasScopeExclusion $this } UNION { ?sc backlog:coversArea $this } }
+        }""" ] .
+
+backlog:UnguardedExclusionShape a sh:NodeShape ;
+    sh:targetClass backlog:ScopeExclusion ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: an exclusion no inverse goal guards"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: no exclusion-facing goal guards this exclusion, so nothing measures whether it held. PMBOK treats explicit exclusions as the principal safeguard against scope creep — but an exclusion nothing checks is a sentence, and the register cannot say whether the refusal was kept or quietly abandoned." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            FILTER NOT EXISTS { ?g backlog:hasGoalFacing backlog:Facing_Exclusion ; backlog:guardsExclusion $this }
+        }""" ] .
+
+backlog:InverseGoalShape a sh:NodeShape ;
+    sh:targetClass backlog:Goal ;
+    sh:severity sh:Violation ;
+    rdfs:label "An inverse goal names the exclusion it keeps (L2)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L2: this goal is exclusion-facing and names no exclusion. An inverse goal is met by absence, so without naming what is absent it cannot be measured — and a goal that cannot fail is not a goal." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasGoalFacing backlog:Facing_Exclusion .
+            FILTER NOT EXISTS { $this backlog:guardsExclusion ?e }
+        }""" ] .
+
+backlog:BothLayersShape a sh:NodeShape ;
+    sh:targetClass backlog:ScopeStatement ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: a scope stated in one layer only"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: every area and deliverable of this scope sits in one layer. That may be right — some boundaries genuinely concern only what is built or only where effort goes — and it is reported because the commoner cause is that the other layer was never considered, leaving the register unable to say whether a capability is out of scope or merely out of THIS project's work." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:coversArea ?a . ?a backlog:hasScopeLayer ?l .
+            FILTER NOT EXISTS { $this backlog:coversArea ?a2 . ?a2 backlog:hasScopeLayer ?l2 . FILTER (?l2 != ?l) }
         }""" ] .

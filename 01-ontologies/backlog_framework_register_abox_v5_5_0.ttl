@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/5.4.0> ;
-    owl:versionInfo "5.4.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/5.5.0> ;
+    owl:versionInfo "5.5.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/5.4.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/5.3.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/5.2.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/5.1.0> ;
@@ -6353,3 +6354,113 @@ fw:Inv_GoalSetSufficient a backlog:CrossCuttingInvariant ;
     backlog:hasInvariantStatus backlog:Holds ;
     backlog:tracksItem fw:EP_Model ;
     backlog:hasRationale "Withdrawn as goals at v1.103.0 and recorded here. An obligation every lineage carries is an invariant, not a goal: stating it as a goal puts a framework property inside one lineage's intent chain, where it displaces a real subject and reads the same whatever the mission. GoalSufficiencyShape already enforces it, so nothing is lost by the move — the five real goals carry the three facings between them." .
+
+#################################################################
+#  v5.5.0 — both scope layers, and an inverse goal per exclusion.
+#
+#  EXACT-MATCH AUDIT first. Splitting the mission into clauses and
+#  checking each against a goal found one clause claimed by nobody:
+#  "Neither carries meaning that only they define."
+#
+#  Judged, not padded: that clause is the SUMMARY of the two before
+#  it — prose explains, code executes engines — and inventing a
+#  sixth goal for a summary would put the same subject in the chain
+#  twice. Recorded as a judgement so a reader can disagree with it.
+#
+#  LAYERS. PMBOK separates product scope (features and functions)
+#  from project scope (the work required). Every area, deliverable
+#  and exclusion is now typed. The result is uncomfortable and
+#  correct: all four areas are WORK-layer. This scope says where
+#  effort goes and says almost nothing about what the framework
+#  will DO differently — which is what a mission about moving
+#  meaning looks like, and worth seeing rather than assuming.
+#################################################################
+
+fw:Area_Governance    backlog:hasScopeLayer backlog:Layer_Work .
+fw:Area_CodeTables    backlog:hasScopeLayer backlog:Layer_Work .
+fw:Area_RuleExecution backlog:hasScopeLayer backlog:Layer_Work .
+fw:Area_StandardDoc   backlog:hasScopeLayer backlog:Layer_Work .
+
+#  The product-layer area the audit found missing: what the
+#  framework will DO differently once the work is done.
+fw:Area_QueryableGovernance a backlog:ScopeArea ;
+    backlog:hasScopeLayer backlog:Layer_Product ;
+    backlog:areaLocation "The published TBox and shapes, as consumed by an adopter." ;
+    backlog:areaMeasure "Today an adopter can query 137 classes and 0 governance rulings: the rulings exist only in a document they must read. The product-layer change is that a ruling becomes answerable by query." .
+fw:Scope_Ontology backlog:coversArea fw:Area_QueryableGovernance .
+
+fw:Del_OntGovernance  backlog:hasScopeLayer backlog:Layer_Product .
+fw:Del_OntRuleExec    backlog:hasScopeLayer backlog:Layer_Product .
+fw:Del_OntExport      backlog:hasScopeLayer backlog:Layer_Work .
+fw:Del_ProseExplains  backlog:hasScopeLayer backlog:Layer_Work .
+fw:Del_CodeExecutes   backlog:hasScopeLayer backlog:Layer_Work .
+fw:Ex_NoNarrativeBan  backlog:hasScopeLayer backlog:Layer_Work .
+
+#  Exclusions in BOTH layers, so the scope can refuse a capability
+#  as well as a piece of work.
+fw:Ex_NoNewCapability a backlog:ScopeExclusion ;
+    backlog:hasScopeLayer backlog:Layer_Product ;
+    backlog:excludesConcern "Adding any capability the framework does not already have. This lineage MOVES meaning; it does not extend what the framework can express." ;
+    backlog:hasExclusionRationale "Product-layer refusal, and the one this session most needs. Measured precedent at v1.95.0: a reachability gate was built and shipped while the owner's mission waited — a new capability, defensible, and outside the boundary. Without a product-layer exclusion the register could not refuse it, because every work-layer area was still being served." ;
+    backlog:decidedBy backlog:Owner .
+fw:Scope_Ontology backlog:hasScopeExclusion fw:Ex_NoNewCapability .
+
+#  Inverse goals: one per exclusion, measurable by absence.
+fw:Goal_NoCapabilityCreep a backlog:Goal ;
+    rdfs:label "No capability is added that the framework did not already have"@en ;
+    backlog:contributesToMission fw:Mission_OntologyDriven ;
+    backlog:derivesFromScope fw:Scope_Ontology ;
+    backlog:hasGoalFacing backlog:Facing_Exclusion ;
+    backlog:guardsExclusion fw:Ex_NoNewCapability ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out2_Goal ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:hasRationale "INVERSE GOAL, product layer. Met by absence: every class or property added during this lineage must be one the exported material needs, not one that extends what the framework can express. Measurable, which is the point — PMBOK treats exclusions as the safeguard against scope creep, and an exclusion nothing measures is a sentence." .
+
+fw:Goal_NoProseStripping a backlog:Goal ;
+    rdfs:label "No explanatory prose is removed in the name of the mission"@en ;
+    backlog:contributesToMission fw:Mission_OntologyDriven ;
+    backlog:derivesFromScope fw:Scope_Ontology ;
+    backlog:hasGoalFacing backlog:Facing_Exclusion ;
+    backlog:guardsExclusion fw:Ex_NoNarrativeBan ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out2_Goal ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:hasRationale "INVERSE GOAL, work layer. The failure it guards is specific and likely: moving definitions into the ontology makes deleting the surrounding explanation feel like progress. A framework whose reasoning exists only as triples is unreadable, and unreadable governance is ignored governance." .
+
+fw:Inv_MissionClauseCovered a backlog:CrossCuttingInvariant ;
+    rdfs:label "Every mission clause is claimed by a goal or judged a summary"@en ;
+    backlog:hasCheckQuery "Manual: split the mission on clause boundaries, match each against a goal rationale." ;
+    backlog:hasExpectedResult "every clause claimed or judged" ;
+    backlog:hasInvariantStatus backlog:Holds ;
+    backlog:tracksItem fw:EP_Model ;
+    backlog:hasRationale "Four clauses, five subject-goals, and the fourth clause — 'Neither carries meaning that only they define' — is a summary of the two before it. Judged rather than padded with a sixth goal. Recorded as a manual check because splitting prose into clauses is not something a query does honestly; stating that openly is better than a SPARQL query that appears to check it and does not." .
+
+#  The previous lineage's boundary statements, typed retroactively.
+#  Its deliverables state capabilities the framework gains, so they
+#  are product-layer; its area and exclusions concern where effort
+#  goes and which practices are refused, so they are work-layer.
+#  Typed rather than exempted: the distinction is real for that
+#  lineage too, and it was simply never available.
+fw:Del_Autonomy backlog:hasScopeLayer backlog:Layer_Product .
+fw:Del_Checkable backlog:hasScopeLayer backlog:Layer_Product .
+fw:Del_Granular backlog:hasScopeLayer backlog:Layer_Product .
+fw:Del_Groom backlog:hasScopeLayer backlog:Layer_Product .
+fw:Del_Grounded backlog:hasScopeLayer backlog:Layer_Product .
+fw:Del_Model backlog:hasScopeLayer backlog:Layer_Product .
+fw:Del_Package backlog:hasScopeLayer backlog:Layer_Product .
+fw:Del_Spec backlog:hasScopeLayer backlog:Layer_Product .
+fw:Del_TestSpec backlog:hasScopeLayer backlog:Layer_Product .
+fw:Del_TimeBox backlog:hasScopeLayer backlog:Layer_Product .
+fw:Area_BuildFramework backlog:hasScopeLayer backlog:Layer_Work .
+fw:Ex_Complexity backlog:hasScopeLayer backlog:Layer_Work .
+fw:Ex_InventedPractice backlog:hasScopeLayer backlog:Layer_Work .
+fw:Ex_Method backlog:hasScopeLayer backlog:Layer_Work .
+fw:Ex_Modality backlog:hasScopeLayer backlog:Layer_Work .
+fw:Ex_NoOrderShape backlog:hasScopeLayer backlog:Layer_Work .
+fw:Ex_NoRewrite backlog:hasScopeLayer backlog:Layer_Work .
+fw:Ex_NoTimestampMandate backlog:hasScopeLayer backlog:Layer_Work .
+fw:Ex_Scale backlog:hasScopeLayer backlog:Layer_Work .
+fw:Ex_Schedule backlog:hasScopeLayer backlog:Layer_Work .
+fw:Ex_SingleMethod backlog:hasScopeLayer backlog:Layer_Work .
+fw:Ex_ToolChain backlog:hasScopeLayer backlog:Layer_Work .

@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.50.0
+# Backlog & Roadmap Semantic Framework — Standard v1.51.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -833,6 +833,24 @@ and they are not interchangeable. What is missing decides how the lineage fails:
 
 At L3 a goal must declare its facing. At L4 a live scope must have goals covering all three.
 `goalCoversArea` is required of scope-facing goals so an area answerable to nothing is visible.
+
+### 2.5c-xxxi Scope has two layers, and an outside
+
+**PMBOK separates product scope — the features and functions delivered — from project scope, the work
+required to produce them.** `ScopeLayer` carries the distinction on every area, deliverable and
+exclusion, because the two fail differently: a product-layer error ships the wrong capability, a
+work-layer error spends effort in the wrong place.
+
+A capability may be in the product scope while the work to build it sits outside this project's work
+scope — bought, inherited, or deferred. A framework with one layer cannot say that.
+
+**`Facing_Exclusion` is an inverse goal**: met by absence, naming the specific exclusion it keeps via
+`guardsExclusion`. Distinct from containment-facing, which asks whether work stayed inside the areas.
+PMBOK treats explicit exclusions as the principal safeguard against scope creep — and **an exclusion
+nothing measures is a sentence, not a safeguard**.
+
+At L3 a boundary statement must declare its layer. At L2 an exclusion-facing goal must name its
+exclusion. Advisories report an exclusion no inverse goal guards, and a scope stated in one layer only.
 
 ### 2.5d Decomposition, commitments, dependency kinds, impediments, flow, team (subject v1.4.0)
 

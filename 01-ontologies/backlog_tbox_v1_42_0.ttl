@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.41.0> ;
-    owl:versionInfo "1.41.0" ;
+    owl:versionIRI <http://example.org/backlog/1.42.0> ;
+    owl:versionInfo "1.42.0" ;
+    owl:priorVersion <http://example.org/backlog/1.41.0> ;
     owl:priorVersion <http://example.org/backlog/1.40.0> ;
     owl:priorVersion <http://example.org/backlog/1.39.0> ;
     owl:priorVersion <http://example.org/backlog/1.38.0> ;
@@ -4503,3 +4504,54 @@ backlog:goalCoversArea a owl:ObjectProperty ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "goal covers area"@en ;
     skos:definition "An area this goal is answerable for. Required of a scope-facing goal so that an area belonging to no goal is visible: an area nothing is answerable for will be done last or not at all."@en .
+
+#################################################################
+#  70. Scope has two layers, and an outside (v1.42.0)
+#
+#  Researched, not assumed. PMBOK distinguishes PRODUCT scope —
+#  the features and functions of what is delivered — from PROJECT
+#  scope — the work required to produce them. The framework had
+#  neither distinction: ScopeArea and ScopeDeliverable were untyped,
+#  so "which functionality" and "which work" were the same field.
+#
+#  PMBOK also treats explicit EXCLUSIONS as the principal safeguard
+#  against scope creep. The framework had ScopeExclusion and
+#  nothing measuring whether an exclusion held — an exclusion that
+#  is never checked is a sentence, not a safeguard.
+#
+#  Facing_Exclusion completes the goal set: a goal that states what
+#  must NOT happen, measurable, so a preventive mechanism has
+#  something to attach to.
+#################################################################
+
+backlog:ScopeLayer a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:Layer_Product backlog:Layer_Work ) ;
+    rdfs:label "Scope Layer"@en ;
+    skos:definition "Whether a boundary statement is about WHAT IS DELIVERED or about WHAT WORK IS DONE. PMBOK separates product scope from project scope, and the two fail differently: a product-layer error ships the wrong capability, a work-layer error spends effort in the wrong place. A framework carrying only one of them cannot tell those apart."@en ;
+    dcterms:source "PMBOK: product scope (features and functions) versus project scope (work required)"@en .
+
+backlog:Layer_Product a owl:NamedIndividual , backlog:ScopeLayer ;
+    rdfs:label "Product layer"@en ;
+    skos:definition "What functionality is or is not implemented. Answers: will the delivered thing do this?"@en .
+backlog:Layer_Work a owl:NamedIndividual , backlog:ScopeLayer ;
+    rdfs:label "Work layer"@en ;
+    skos:definition "Which work is or is not done. Answers: will effort go here? A capability may be in the product scope while the work to build it sits outside this project's work scope — bought, inherited, or deferred."@en .
+
+backlog:hasScopeLayer a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:ScopeArea backlog:ScopeDeliverable backlog:ScopeExclusion ) ] ;
+    rdfs:range backlog:ScopeLayer ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has scope layer"@en .
+
+backlog:Facing_Exclusion a owl:NamedIndividual , backlog:GoalFacing ;
+    rdfs:label "Exclusion-facing"@en ;
+    skos:definition "An INVERSE GOAL: it states what must not happen and is met by absence. Distinct from containment-facing, which asks whether work stayed inside the areas — an inverse goal names a specific thing the scope refused and can be measured against, so a preventive mechanism has something to attach to. PMBOK calls explicit exclusions the principal safeguard against scope creep; an exclusion nothing measures is a sentence rather than a safeguard."@en ;
+    dcterms:source "PMBOK: project exclusions as the safeguard against scope creep"@en .
+
+backlog:guardsExclusion a owl:ObjectProperty ;
+    rdfs:domain backlog:Goal ; rdfs:range backlog:ScopeExclusion ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "guards exclusion"@en ;
+    skos:definition "The exclusion this inverse goal keeps. Required of an exclusion-facing goal, so that an exclusion nothing guards is visible: the framework can then say which refusals are enforced and which were only written down."@en .

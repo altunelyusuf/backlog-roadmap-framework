@@ -1,5 +1,51 @@
 # Changelog
 
+## v1.104.0 — 2026-10-26 (MINOR: both scope layers, and an inverse goal per exclusion)
+
+### Exact-match audit first
+
+Splitting the mission into clauses and checking each against a goal found **one clause claimed by
+nobody**: *"Neither carries meaning that only they define."*
+
+**Judged, not padded.** That clause is the summary of the two before it — prose explains, code executes
+engines — and inventing a sixth goal for a summary would put the same subject in the chain twice.
+Recorded as `Inv_MissionClauseCovered` with the judgement stated, and as a **manual** check: splitting
+prose into clauses is not something a query does honestly, and saying so beats a SPARQL query that
+appears to check it and does not.
+
+### Two layers, researched not assumed
+
+PMBOK separates **product scope** (features and functions) from **project scope** (the work required).
+Every area, deliverable and exclusion is now typed.
+
+**The result is uncomfortable and correct: all four original areas were work-layer.** The scope said
+where effort goes and almost nothing about what the framework would *do* differently.
+`Area_QueryableGovernance` is the product-layer area the audit found missing — today an adopter can
+query 137 classes and **0 governance rulings**.
+
+```
+Product   IN: 1 area, 2 deliverables    OUT: Ex_NoNewCapability
+Work      IN: 4 areas, 3 deliverables   OUT: Ex_NoNarrativeBan
+```
+
+### Inverse goals
+
+`Facing_Exclusion` — met by absence, naming the exclusion it keeps.
+
+**`Goal_NoCapabilityCreep`** guards the product-layer refusal, and it is the one this session most
+needs. Measured precedent at v1.95.0: a reachability gate was built and shipped while the owner's
+mission waited. A new capability, defensible, outside the boundary — and **without a product-layer
+exclusion the register could not refuse it**, because every work-layer area was still being served.
+
+**`Goal_NoProseStripping`** guards a failure that is specific and likely: moving definitions into the
+ontology makes deleting the surrounding explanation feel like progress.
+
+```
+goals: 7    Mission 2 · Scope 1 · Containment 2 · Exclusion 2
+exclusions with no inverse goal: none
+```
+
+
 ## v1.103.0 — 2026-10-26 (MINOR: STAGE 3 REVISITED — goals are the mission's subjects)
 
 ### The challenge, tested
