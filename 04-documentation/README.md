@@ -19,7 +19,7 @@ prose that drifts. Generalised from an adopting project's product-backlog deposi
   backlog_release_metrics_v1_1_0.py            generates RELEASE_METRICS.txt; changelog figures are quoted from it
   backlog_repoint_v1_1_0.py                    corpus-wide rename; historical records excluded by class
   backlog_quality_assessment_v1_0_0.py         nine OntoQA structural metrics, computed not asserted
-  backlog_gate_v1_1_20.sh                       four-gate release check (0/P/K/R) + coverage, self-proving
+  backlog_gate_v1_1_21.sh                       four-gate release check (0/P/K/R) + coverage, self-proving
   fixtures/                                    positive, negative, R3 disagreement, and the adversarial random register
 06-package-provenance/
   backlog_staging_declaration_v1_1_1.ttl       BP-D15 staging declaration, rename record, retired name
@@ -30,7 +30,7 @@ prose that drifts. Generalised from an adopting project's product-backlog deposi
   backlog_framework_register_data_convention_proposal_v1_0_0.md  Phase-D proposal to OEE
   independent_package_naming_proposal_v1_0_0.ttl  proposed convention for OE-governed independent packages
 04-documentation/
-  BACKLOG_ROADMAP_FRAMEWORK_STANDARD_v1_45_0.md the standard: concepts, levels, adoption
+  BACKLOG_ROADMAP_FRAMEWORK_STANDARD_v1_46_0.md the standard: concepts, levels, adoption
   Coverage_Report_v1_1_0.md                    BP-D31 measurement: 22.2% at v1.0.0 -> 100% at v1.1.0
   CHANGELOG_v1_25_0.md                          what changed and what incident triggered it
   Naming_Decision_Record_v1_0_1.md             why the package is named what it is, and the L-88 scrub record
@@ -56,12 +56,12 @@ MANIFEST_SHA256.txt, VERSION.txt
 
 ```bash
 pip install rdflib pyshacl --break-system-packages
-bash 03-tooling/backlog_gate_v1_1_20.sh                      # four gates + self-proof + coverage
-bash 03-tooling/backlog_gate_v1_1_20.sh my_register.ttl      # ... plus a register
+bash 03-tooling/backlog_gate_v1_1_21.sh                      # four gates + self-proof + coverage
+bash 03-tooling/backlog_gate_v1_1_21.sh my_register.ttl      # ... plus a register
 python3 03-tooling/backlog_roadmap_report_v1_5_0.py my_register.ttl
 ```
 
-Read `04-documentation/BACKLOG_ROADMAP_FRAMEWORK_STANDARD_v1_45_0.md` first; section 4 is the
+Read `04-documentation/BACKLOG_ROADMAP_FRAMEWORK_STANDARD_v1_46_0.md` first; section 4 is the
 adoption procedure and section 9 lists what this release does and does not claim.
 
 ## Provenance (BP-D13 / BP-D14 / BP-D15)

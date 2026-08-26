@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.45.0
+# Backlog & Roadmap Semantic Framework — Standard v1.46.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -728,6 +728,26 @@ in view rather than a label applied afterwards.
 time box; a package is a capability; conflating them is how a release becomes "whatever finished this
 fortnight".
 
+### 2.5c-xxv Model artefacts
+
+`ModelArtifact` records **that** a model exists, its kind, and what it describes — never its content. A
+register holding diagrams becomes a modelling tool; the framework governs records about work.
+
+`ModelKind` carries the **14 UML 2.5 diagram kinds**, and `ModelCategory` the structure/behaviour split
+as a **separate property**, so asking for every behaviour artefact does not mean listing seven kinds and
+silently missing one when an eighth appears.
+
+**`Diagram` is not a class.** A diagram is a `ModelArtifact` whose kind is a diagram kind; a separate
+class would force every query to union two.
+
+`producesModelArtifact` has domain `ExecutionTask` **or** `RefinementEvent`: a design task produces
+artefacts during execution, a refinement produces them during grooming. The second is what makes
+grooming say what it *yielded* rather than only that it happened.
+
+At L2 an artefact must name its kind and the item it describes. An advisory reports a Done
+design-definition task producing nothing — a design task may legitimately conclude no model is needed,
+but a task that produced nothing and a task nobody recorded must not look identical.
+
 ### 2.5d Decomposition, commitments, dependency kinds, impediments, flow, team (subject v1.4.0)
 
 | Term | Meaning |
@@ -932,7 +952,7 @@ python3 03-tooling/backlog_evidence_bridge_v1_0_0.py my_register.ttl \
 python3 03-tooling/backlog_roadmap_report_v1_5_0.py my_register.ttl --emit report.ttl
 
 # 5. Run the four-gate release check (self-proving)
-bash 03-tooling/backlog_gate_v1_1_20.sh my_register.ttl
+bash 03-tooling/backlog_gate_v1_1_21.sh my_register.ttl
 ```
 
 Start at L1, move to L2 once a bridge exists, and to L3 when releases carry manifest hashes and the
@@ -942,7 +962,7 @@ blueprint sweep is real. Raising the level is a one-line edit to the profile.
 
 ## 5. What the gates prove, and what they do not
 
-`backlog_gate_v1_1_20.sh` runs Gate 0 (manifest self-verify), Gate P (every Turtle file parses),
+`backlog_gate_v1_1_21.sh` runs Gate 0 (manifest self-verify), Gate P (every Turtle file parses),
 Gate K (`versionInfo` == `versionIRI` token == filename token), Gate R (SHACL reconcile), and the
 BP-D31 coverage gate. Gate R first validates a positive fixture that must pass and a negative
 fixture that must fail, and aborts if either outcome inverts: a suite never shown to reject a

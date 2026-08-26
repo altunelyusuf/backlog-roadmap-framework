@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/4.5.0> ;
-    owl:versionInfo "4.5.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/4.6.0> ;
+    owl:versionInfo "4.6.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/4.5.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/4.4.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/4.3.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/4.2.0> ;
@@ -320,7 +321,7 @@ fw:Ev_PbiTask a backlog:TestEvidence ;
     backlog:hasTestId "BRF-EP1" ;
     backlog:evidenceVerified true ;
     backlog:verifiedAt "2026-08-06T13:00:00"^^xsd:dateTime ;
-    backlog:hasVerificationMethod "backlog_gate_v1_1_20.sh: positive fixture carries a planned iteration with two subordinate execution tasks at 0 violations; negative fixture plants four EP1 defects (scored task, ranked task, empty planning event, parent Done over an open task) and all four fire" ;
+    backlog:hasVerificationMethod "backlog_gate_v1_1_21.sh: positive fixture carries a planned iteration with two subordinate execution tasks at 0 violations; negative fixture plants four EP1 defects (scored task, ranked task, empty planning event, parent Done over an open task) and all four fire" ;
     backlog:verifiedByTool "backlog_validate_v1_4_0.py + pyshacl 0.40.0" ;
     backlog:attestsCriterion fw:AC_PbiTask .
 
@@ -416,7 +417,7 @@ fw:D3 a backlog:DoDCriterion ;
 fw:D4 a backlog:DoDCriterion ;
     rdfs:label "D4 — The full release gate passes from a clean extraction, includ"@en ;
     backlog:hasCriterionText "The full release gate passes from a clean extraction, including the three-fixture self-proof and the fixture-coverage gate." ;
-    backlog:hasCheckQuery "backlog_gate_v1_1_20.sh run against a freshly extracted bundle." ;
+    backlog:hasCheckQuery "backlog_gate_v1_1_21.sh run against a freshly extracted bundle." ;
     backlog:hasExpectedResult "RELEASE GATE: PASS" ;
     backlog:hasCriterionStatus backlog:Holds .
 fw:D5 a backlog:DoDCriterion ;
@@ -4720,7 +4721,8 @@ fw:Obs_ScopeDeliveredAfterWidening a backlog:MetricObservation ;
 fw:EP_Model a backlog:Epic ;
     backlog:hasIdentifier "BRF-EP17" ;
     backlog:hasTitle "Analysis and design work produces named model artefacts" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:InProgress ;
+    backlog:startedAt "2026-09-01T09:00:00"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register ;
     backlog:pursuesObjective fw:Obj_Modelling ;
     backlog:satisfiesDeliverable fw:Del_Model ;
@@ -4737,7 +4739,7 @@ fw:S_EP_Model a backlog:WSJFScore ;
     backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 7.0 ;
     backlog:hasUserBusinessValue 9.0 ; backlog:hasTimeCriticality 6.0 ;
     backlog:hasRiskReductionValue 6.0 ; backlog:hasJobSize 3.0 ;
-    backlog:scoredAt "2026-08-25T18:00:00"^^xsd:dateTime ;
+    backlog:scoredAt "2026-09-01T18:00:00"^^xsd:dateTime ;
     backlog:hasScoreRationale "Highest value in the register: it is the deliverable the other two rest on. A specification is a model artefact and so is a test case's subject, so nothing downstream can be typed until the artefact concept exists. Job size small because UML 2.5 supplies the taxonomy whole — 14 diagrams in two kinds, structure and behaviour — and nothing has to be invented." ;
     backlog:hasBasisKind backlog:Basis_Judged .
 fw:E_EP_Model a backlog:CostEstimate ;
@@ -4765,7 +4767,7 @@ fw:S_EP_Spec a backlog:WSJFScore ;
     backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 5.0 ;
     backlog:hasUserBusinessValue 7.0 ; backlog:hasTimeCriticality 5.0 ;
     backlog:hasRiskReductionValue 3.0 ; backlog:hasJobSize 3.0 ;
-    backlog:scoredAt "2026-08-25T18:00:00"^^xsd:dateTime ;
+    backlog:scoredAt "2026-09-01T18:00:00"^^xsd:dateTime ;
     backlog:hasScoreRationale "A story whose behaviour is prose cannot be checked against what was built, and acceptance criteria alone say whether it is done rather than what it does. Interaction steps and state changes are the two the standards separate: a step is what a person performs, a state change is what the system becomes." ;
     backlog:hasBasisKind backlog:Basis_Judged .
 fw:E_EP_Spec a backlog:CostEstimate ;
@@ -4793,7 +4795,7 @@ fw:S_EP_TestSpec a backlog:WSJFScore ;
     backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 5.0 ;
     backlog:hasUserBusinessValue 6.0 ; backlog:hasTimeCriticality 4.0 ;
     backlog:hasRiskReductionValue 5.0 ; backlog:hasJobSize 3.0 ;
-    backlog:scoredAt "2026-08-25T18:00:00"^^xsd:dateTime ;
+    backlog:scoredAt "2026-09-01T18:00:00"^^xsd:dateTime ;
     backlog:hasScoreRationale "Evidence currently points at a fixture path and a verdict. A test case names what was exercised and test data names what it was exercised with, so a reader can disagree with the check rather than only with the claim. Risk reduction is real: an acceptance criterion attested by evidence that names no case cannot be re-run." ;
     backlog:hasBasisKind backlog:Basis_Judged .
 fw:E_EP_TestSpec a backlog:CostEstimate ;
@@ -4806,7 +4808,13 @@ fw:Obj_Modelling backlog:metricMovableBy fw:EP_Model , fw:EP_Spec , fw:EP_TestSp
 fw:EP_Model_S1 a backlog:Story ;
     backlog:hasIdentifier "BRF-EP_Model_S1" ;
     backlog:hasTitle "A model artefact names its UML kind" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-09-01T09:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-09-01T17:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_ModelArtifact ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:lastAuditedAt "2026-09-01T17:00:00"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register ;
     backlog:pursuesObjective fw:Obj_Modelling ;
     backlog:satisfiesDeliverable fw:Del_Model ;
@@ -4821,7 +4829,13 @@ fw:AC_EP_Model_S1 a backlog:AcceptanceCriterion ;
 fw:EP_Model_S2 a backlog:Story ;
     backlog:hasIdentifier "BRF-EP_Model_S2" ;
     backlog:hasTitle "A design-definition task that produced no artefact is reported" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-09-01T09:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-09-01T17:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_ModelArtifact ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:lastAuditedAt "2026-09-01T17:00:00"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register ;
     backlog:pursuesObjective fw:Obj_Modelling ;
     backlog:satisfiesDeliverable fw:Del_Model ;
@@ -4973,7 +4987,7 @@ fw:Del_TestSpec backlog:derivesFromMissionClause "test cases and test data" .
 
 fw:It3 a backlog:Iteration ;
     backlog:hasIdentifier "It3" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
     backlog:iterationStart "2026-09-01T00:00:00"^^xsd:dateTime ;
     backlog:iterationEnd "2026-09-14T23:59:59"^^xsd:dateTime ;
     backlog:hasCapacity 9.0 ;
@@ -4988,7 +5002,12 @@ fw:Plan_EP_Model_S1 a backlog:PlanningEvent ;
 fw:T_EP_Model_S1 a backlog:ExecutionTask ;
     backlog:hasIdentifier "BRF-T-EP_Model_S1" ;
     backlog:hasTitle "Implement and gate EP_Model_S1" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-09-01T09:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-09-01T17:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_ModelArtifact ;
+    backlog:producesModelArtifact fw:MA_TBox ;
+    backlog:lastAuditedAt "2026-09-01T17:00:00"^^xsd:dateTime ;
     backlog:hasTaskType backlog:Task_DesignDefinition ;
     backlog:memberOfContainer fw:Register , fw:It3 .
 fw:EP_Model_S2 backlog:hasEffortEstimate 3.0 ; backlog:memberOfContainer fw:It3 .
@@ -5000,7 +5019,12 @@ fw:Plan_EP_Model_S2 a backlog:PlanningEvent ;
 fw:T_EP_Model_S2 a backlog:ExecutionTask ;
     backlog:hasIdentifier "BRF-T-EP_Model_S2" ;
     backlog:hasTitle "Implement and gate EP_Model_S2" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-09-01T09:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-09-01T17:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_ModelArtifact ;
+    backlog:producesModelArtifact fw:MA_TBox ;
+    backlog:lastAuditedAt "2026-09-01T17:00:00"^^xsd:dateTime ;
     backlog:hasTaskType backlog:Task_DesignDefinition ;
     backlog:memberOfContainer fw:Register , fw:It3 .
 fw:EP_Spec_S1 backlog:hasEffortEstimate 5.0 ; backlog:memberOfContainer fw:It5 .
@@ -5279,61 +5303,61 @@ fw:Inv_GroomingProducesArtefact a backlog:CrossCuttingInvariant ;
 #################################################################
 fw:R_EP_Model_S1_Data a backlog:RefinementEvent ;
     backlog:refines fw:EP_Model_S1 ;
-    backlog:addressesConcern backlog:Data ;
+    backlog:addressesConcern backlog:Concern_Data ;
     backlog:refinedAt "2026-08-25T16:00:00"^^xsd:dateTime ;
     backlog:refinedBy backlog:Builder ;
     backlog:hasRefinementOutcome "ModelArtifact carries a name, a kind and the item it describes. Kind is a CLOSED enumeration of the UML 2.5 diagram taxonomy: 7 structure kinds and 7 behaviour kinds, plus the two-way split as a separate property so a query can ask for all behaviour artefacts without listing seven. Diagram is NOT a separate class — a diagram is a ModelArtifact whose kind is a diagram kind, and adding a class would force every query to union two." .
 fw:R_EP_Model_S1_Architecture a backlog:RefinementEvent ;
     backlog:refines fw:EP_Model_S1 ;
-    backlog:addressesConcern backlog:Architecture ;
+    backlog:addressesConcern backlog:Concern_Architecture ;
     backlog:refinedAt "2026-08-25T16:00:00"^^xsd:dateTime ;
     backlog:refinedBy backlog:Builder ;
     backlog:hasRefinementOutcome "ModelArtifact hangs off ExecutionTask, not off Story: the task is what performs the technical process, and hanging artefacts on stories would make a story with three design tasks unable to say which produced what. Depends on nothing outside the backlog namespace." .
 fw:R_EP_Model_S2_Data a backlog:RefinementEvent ;
     backlog:refines fw:EP_Model_S2 ;
-    backlog:addressesConcern backlog:Data ;
+    backlog:addressesConcern backlog:Concern_Data ;
     backlog:refinedAt "2026-08-25T16:00:00"^^xsd:dateTime ;
     backlog:refinedBy backlog:Builder ;
     backlog:hasRefinementOutcome "No new stored structure. The constraint reads existing triples: a task whose hasTaskType is Task_DesignDefinition or Task_ArchitectureDefinition with no ModelArtifact. Severity is ADVISORY not violation, because a design task may legitimately conclude that no artefact is needed and must be able to say so." .
 fw:R_EP_Model_S3_Data a backlog:RefinementEvent ;
     backlog:refines fw:EP_Model_S3 ;
-    backlog:addressesConcern backlog:Data ;
+    backlog:addressesConcern backlog:Concern_Data ;
     backlog:refinedAt "2026-08-25T16:00:00"^^xsd:dateTime ;
     backlog:refinedBy backlog:Builder ;
     backlog:hasRefinementOutcome "producesArtifact goes from RefinementEvent to ModelArtifact, later-to-earlier like every other link. Not functional: one refinement may produce a class diagram and a sequence diagram together. The advisory fires when a refinement addresses a concern and names no artefact." .
 fw:R_EP_Spec_S1_Interaction a backlog:RefinementEvent ;
     backlog:refines fw:EP_Spec_S1 ;
-    backlog:addressesConcern backlog:Interaction ;
+    backlog:addressesConcern backlog:Concern_Interaction ;
     backlog:refinedAt "2026-08-25T16:00:00"^^xsd:dateTime ;
     backlog:refinedBy backlog:Builder ;
     backlog:hasRefinementOutcome "InteractionStep carries an ordinal, an actor and what the actor does. Ordinal rather than a linked list: a list makes insertion cheap and querying expensive, and the common question is what step 3 is. Belongs to a Story because a step is user-visible behaviour, unlike a ModelArtifact which belongs to the task that made it." .
 fw:R_EP_Spec_S1_Data a backlog:RefinementEvent ;
     backlog:refines fw:EP_Spec_S1 ;
-    backlog:addressesConcern backlog:Data ;
+    backlog:addressesConcern backlog:Concern_Data ;
     backlog:refinedAt "2026-08-25T16:00:00"^^xsd:dateTime ;
     backlog:refinedBy backlog:Builder ;
     backlog:hasRefinementOutcome "Ordinals must be unique within a story or two steps claim the same position; that is an L1 check, not L3, because it is a contradiction rather than an omission." .
 fw:R_EP_Spec_S2_Data a backlog:RefinementEvent ;
     backlog:refines fw:EP_Spec_S2 ;
-    backlog:addressesConcern backlog:Data ;
+    backlog:addressesConcern backlog:Concern_Data ;
     backlog:refinedAt "2026-08-25T16:00:00"^^xsd:dateTime ;
     backlog:refinedBy backlog:Builder ;
     backlog:hasRefinementOutcome "StateChange names fromState, toState and the trigger. States are free text, NOT an enumeration: the framework governs registers for any domain and cannot know a domain state machine. Constraint is that from and to differ — a change to the same state is not a change." .
 fw:R_EP_TestSpec_S1_Data a backlog:RefinementEvent ;
     backlog:refines fw:EP_TestSpec_S1 ;
-    backlog:addressesConcern backlog:Data ;
+    backlog:addressesConcern backlog:Concern_Data ;
     backlog:refinedAt "2026-08-25T16:00:00"^^xsd:dateTime ;
     backlog:refinedBy backlog:Builder ;
     backlog:hasRefinementOutcome "TestCase attaches to AcceptanceCriterion via a new exercisesCriterion, and TestEvidence gains attestsViaCase so evidence points at a case rather than only at a criterion. Without the second link the existing attestsCriterion stays the only path and the case is decorative." .
 fw:R_EP_TestSpec_S1_Security a backlog:RefinementEvent ;
     backlog:refines fw:EP_TestSpec_S1 ;
-    backlog:addressesConcern backlog:Security ;
+    backlog:addressesConcern backlog:Concern_Security ;
     backlog:refinedAt "2026-08-25T16:00:00"^^xsd:dateTime ;
     backlog:refinedBy backlog:Builder ;
     backlog:hasRefinementOutcome "No authorisation surface: test cases describe checks, not access. Recorded as considered-and-not-applicable rather than left silent, because a story that never mentions security and one where security was examined and dismissed look identical otherwise." .
 fw:R_EP_TestSpec_S2_Data a backlog:RefinementEvent ;
     backlog:refines fw:EP_TestSpec_S2 ;
-    backlog:addressesConcern backlog:Data ;
+    backlog:addressesConcern backlog:Concern_Data ;
     backlog:refinedAt "2026-08-25T16:00:00"^^xsd:dateTime ;
     backlog:refinedBy backlog:Builder ;
     backlog:hasRefinementOutcome "TestData attaches to TestCase, carries a name and a description of the fixture state it establishes. It does not carry the data itself: a register holding test payloads becomes a data store, and the framework governs records about work, not the work products." .
@@ -5562,3 +5586,53 @@ fw:Obs_Reach a backlog:MetricObservation ;
     backlog:hasObservedValue 0.0 ;
     backlog:observedAt "2026-08-25T17:40:00"^^xsd:dateTime ;
     backlog:hasObservationMethod "Three experiments. (1) The seven planned stories create seven classes and depend on none of the 23 unreachable ones — overlap zero, so the fit-gap cannot block the lineage. (2) Simulating those seven with the properties this session's grooming decided on, THREE are born unreachable: UseCase, Specification and TestCase. The current lineage would reproduce the defect the fit-gap just found. (3) A reachability gate over TBox plus register runs in under a second on 4338 triples and separates 45 classes reachable by rdf:type alone from 23 that are neither referenceable nor used. Obj_Grounded stays at 0: no framework-required practice lacks a source, and the reachability finding is a vocabulary gap rather than an ungrounded practice." .
+
+#################################################################
+#  v4.6.0 — BRF-EP17 delivered. The reachability gate is wired in.
+#################################################################
+
+fw:MA_TBox a backlog:ModelArtifact ;
+    backlog:hasModelKind backlog:Kind_ClassDiagram ;
+    backlog:describesItem fw:EP_Model ;
+    backlog:hasRationale "The ModelArtifact / ModelKind / ModelCategory structure itself, as added to the TBox. Recorded as a class-diagram artefact because that is what it is — the framework's first use of its own artefact vocabulary is the vocabulary's own structure." .
+
+fw:Ev_ModelArtifact a backlog:TestEvidence ;
+    backlog:hasTestSpec "03-tooling/fixtures/fixture_modelartifact_negative_v1_0_0.ttl" ;
+    backlog:hasTestId "BRF-EP17" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-09-01T17:00:00"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "Four cases verified individually. An artefact with kind and described item is silent; one with no kind is rejected at L2; one describing nothing is rejected at L2; a Done design-definition task producing no artefact raises an advisory rather than a violation, because a design task may legitimately conclude no model is needed. Built to the decisions the grooming refinements recorded and not redesigned: Diagram is not a separate class, artefacts hang off ExecutionTask, and the structure/behaviour split is a property so a query need not list seven kinds. The reachability gate ran before release and the count stayed at 23 — without it, measured beforehand, UseCase and Specification would have shipped unreferenceable." ;
+    backlog:verifiedByTool "backlog_validate + backlog_reachability_gate" ;
+    backlog:attestsCriterion fw:AC_EP_Model_S1 , fw:AC_EP_Model_S2 .
+
+fw:H_EP_Model_S1 a backlog:TestHarness ; backlog:harnessFor fw:EP_Model_S1 ;
+    backlog:hasHarnessEvidence fw:Ev_ModelArtifact ; backlog:harnessComplete true ;
+    backlog:hasRationale "As for the parent epic." .
+fw:H_EP_Model_S2 a backlog:TestHarness ; backlog:harnessFor fw:EP_Model_S2 ;
+    backlog:hasHarnessEvidence fw:Ev_ModelArtifact ; backlog:harnessComplete true ;
+    backlog:hasRationale "As for the parent epic." .
+fw:H_T_EP_Model_S1 a backlog:TestHarness ; backlog:harnessFor fw:T_EP_Model_S1 ;
+    backlog:hasHarnessEvidence fw:Ev_ModelArtifact ; backlog:harnessComplete true ;
+    backlog:hasRationale "As for the story." .
+fw:H_T_EP_Model_S2 a backlog:TestHarness ; backlog:harnessFor fw:T_EP_Model_S2 ;
+    backlog:hasHarnessEvidence fw:Ev_ModelArtifact ; backlog:harnessComplete true ;
+    backlog:hasRationale "As for the story." .
+
+fw:Rel_v1_96_0 a backlog:DeploymentUnit ;
+    backlog:hasIdentifier "BRF-REL-It3" ;
+    backlog:hasTitle "Model artefact vocabulary" ;
+    backlog:hasState backlog:Done ;
+    backlog:hasDeploymentDate "2026-09-01T18:00:00"^^xsd:dateTime ;
+    backlog:deploysFrom fw:It3 ;
+    backlog:deploysItem fw:EP_Model_S1 , fw:EP_Model_S2 ;
+    backlog:deliversPackage fw:Pkg_Modelling ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:hasSelectionBasis backlog:Sel_HighestScored ;
+    backlog:hasRationale "Ships what It3 planned and finished. Pkg_Modelling is only PARTLY delivered — EP_Model_S3 remains in It5 — which is what a package spanning two iterations looks like when the first closes." .
+fw:EP_Model_S1 backlog:memberOfContainer fw:Rel_v1_96_0 .
+fw:EP_Model_S2 backlog:memberOfContainer fw:Rel_v1_96_0 .
+
+#  Declarations restored: both concerns were analysed and the
+#  declaration on EP_Model_S1 had been lost when the story was
+#  re-estimated. The refinements were always there.
+fw:EP_Model_S1 backlog:hasApplicableConcern backlog:Concern_Data .

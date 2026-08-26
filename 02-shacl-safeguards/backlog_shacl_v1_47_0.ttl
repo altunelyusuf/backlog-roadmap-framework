@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.46.0> ;
-    owl:versionInfo "1.46.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.47.0> ;
+    owl:versionInfo "1.47.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.46.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.45.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.44.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.43.0> ;
@@ -3699,3 +3700,37 @@ backlog:DeliverableProvenanceShape a sh:NodeShape ;
             FILTER (?lvl IN (backlog:L3_Governed, backlog:L4_LineageEnforced))
             FILTER NOT EXISTS { $this backlog:derivesFromMissionClause ?c }
         }""" ] .
+
+#################################################################
+#  v1.47.0 — BRF-EP17: a design task says what it produced
+#################################################################
+
+backlog:ModelArtifactShape a sh:NodeShape ;
+    sh:targetClass backlog:ModelArtifact ;
+    sh:severity sh:Violation ;
+    rdfs:label "A model artefact names its kind and what it describes (L2)"@en ;
+    sh:property [ sh:path backlog:hasModelKind ; sh:minCount 1 ; sh:maxCount 1 ; sh:class backlog:ModelKind ;
+        sh:message "L2: a model artefact must name its kind. An artefact recorded without one says something was produced and not what, which is the same gap as a refinement that records attendance." ] ;
+    sh:property [ sh:path backlog:describesItem ; sh:minCount 1 ;
+        sh:message "L2: a model artefact must name the work item it describes. An artefact describing nothing cannot be found by anyone working on the item it was made for." ] .
+
+backlog:DesignTaskProducesShape a sh:NodeShape ;
+    sh:targetClass backlog:ExecutionTask ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: a design task that produced no model"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: this task performed architecture or design definition and records no model artefact. It may be correct — a design task can legitimately conclude that no model is needed — which is why this is an advisory and not a violation. What it must not do is leave the question unanswered: a task that produced nothing and a task nobody recorded are otherwise identical." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasTaskType ?tt .
+            FILTER (?tt IN (backlog:Task_DesignDefinition, backlog:Task_ArchitectureDefinition))
+            $this backlog:hasState backlog:Done .
+            FILTER NOT EXISTS { $this backlog:producesModelArtifact ?a }
+        }""" ] .
+
+backlog:ArtifactCategoryShape a sh:NodeShape ;
+    sh:targetClass backlog:ModelKind ;
+    sh:severity sh:Violation ;
+    rdfs:label "Every model kind is structure or behaviour (L1)"@en ;
+    sh:property [ sh:path backlog:hasModelCategory ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "L1: a model kind must be structure or behaviour. The split is UML's own and is carried as a property so that asking for every behaviour artefact does not mean listing seven kinds and missing one when an eighth appears." ] .

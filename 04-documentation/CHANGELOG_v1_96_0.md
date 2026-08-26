@@ -1,5 +1,40 @@
 # Changelog
 
+## v1.96.0 — 2026-09-01 (MINOR: BRF-EP17 delivered; the reachability gate is actually wired in)
+
+**First: the gate shipped last release and was never wired into the release gate.** A checker nobody
+runs prevents nothing. It now runs on every release, before the modelling work — which is the whole
+point of covering the mechanism rather than parking it.
+
+### BRF-EP17 — model artefacts, built to the grooming decisions
+
+Not redesigned. The refinements recorded at v1.94.0 decided the shape and the build followed them:
+`Diagram` is not a separate class; artefacts hang off `ExecutionTask`; the structure/behaviour split is
+a property rather than implicit in the kind.
+
+14 UML 2.5 diagram kinds in two categories, sourced to OMG. Four cases verified individually: kind and
+described item present → silent; no kind → rejected at L2; describes nothing → rejected at L2; a Done
+design task producing no artefact → **advisory, not violation**, because a design task may legitimately
+conclude no model is needed.
+
+**The gate earned itself immediately.** Measured before the work: without it, `UseCase` and
+`Specification` would have shipped unreferenceable. After the work: the count stayed at **23**, not 26.
+
+### It3 closed and shipped
+
+`Rel_v1_96_0` delivers `Pkg_Modelling` **partly** — `EP_Model_S3` remains in It5, which is what a
+package spanning two iterations looks like when the first closes.
+
+### Four defects caught while closing
+
+`EP_Model` set Done while `EP_Model_S3` was still open — an epic cannot be Done with a live child. A
+cost estimate on an item still in progress. `It3` asserted Done before its members were. And **all ten
+grooming refinements referenced `backlog:Data` instead of `backlog:Concern_Data`** — a format string
+that stripped the prefix, so 45 triples pointed at classes that do not exist. The L3 grooming clause
+caught it: two stories declared a concern no refinement addressed, because the refinements were
+addressing nothing.
+
+
 ## v1.95.0 — 2026-08-25 (MINOR: BRF-EP20 — the fit-gap ruled by experiment, and it split)
 
 Three experiments decided this rather than judgement.
@@ -2859,7 +2894,7 @@ moment another stage is inserted, so the decoupling is permanent instead.
 
 **Why every gate stayed green while this was live:** the three-fixture self-proof invokes the
 validator *directly*; only the register path formats its output, so a defect in the formatting layer
-was invisible to the proof. `backlog_gate_v1_1_20.sh` now runs the known-bad fixture through the
+was invisible to the proof. `backlog_gate_v1_1_21.sh` now runs the known-bad fixture through the
 **exact register path** and aborts if it does not fail. The self-proof covered the shapes; it had
 never covered its own plumbing.
 
@@ -3852,7 +3887,7 @@ executable and ordered.
 arbitration documented and implemented in the report tool.
 
 **Added — tooling:** `backlog_roadmap_report_v1_5_0.py` (eight sections, both NEXT answers, silent
--gap check), `backlog_coverage_gate_v1_1_1.py` (BP-D31), `backlog_gate_v1_1_20.sh` (Gate 0 / P / K /
+-gap check), `backlog_coverage_gate_v1_1_1.py` (BP-D31), `backlog_gate_v1_1_21.sh` (Gate 0 / P / K /
 R plus coverage), Gate K version-identity check in the validator.
 
 **Changed:** the v1.0.0 advisory "item carries no priority score" now excludes items correctly

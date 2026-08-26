@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.36.0> ;
-    owl:versionInfo "1.36.0" ;
+    owl:versionIRI <http://example.org/backlog/1.37.0> ;
+    owl:versionInfo "1.37.0" ;
+    owl:priorVersion <http://example.org/backlog/1.36.0> ;
     owl:priorVersion <http://example.org/backlog/1.35.0> ;
     owl:priorVersion <http://example.org/backlog/1.34.0> ;
     owl:priorVersion <http://example.org/backlog/1.33.0> ;
@@ -4120,3 +4121,122 @@ backlog:hasPackageVersion a owl:DatatypeProperty , owl:FunctionalProperty ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "has package version"@en ;
     skos:definition "The version this package will carry when released. Recorded at identification, so the increment is a decision taken with the content in view rather than a label applied afterwards."@en .
+
+#################################################################
+#  65. Model artefacts (v1.37.0) — BRF-EP17
+#
+#  Built to the decisions this session's grooming refinements
+#  recorded, not to a fresh design:
+#
+#   - Diagram is NOT a separate class. A diagram is a ModelArtifact
+#     whose kind is a diagram kind; a separate class would force
+#     every query to union two.
+#   - Artefacts hang off ExecutionTask, not Story. The task performs
+#     the technical process, and a story with three design tasks
+#     could not otherwise say which produced what.
+#   - The two-way structure/behaviour split is a SEPARATE property,
+#     so a query can ask for all behaviour artefacts without listing
+#     seven kinds.
+#
+#  Source: UML 2.5 (OMG) — 14 diagram kinds in two categories.
+#
+#  Every class below is reachable: producesModelArtifact names
+#  ModelArtifact as its range. The reachability gate now runs before
+#  release, and without it UseCase and Specification would have
+#  shipped unreferenceable — measured, not supposed.
+#################################################################
+
+backlog:ModelCategory a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:Cat_Structure backlog:Cat_Behaviour ) ;
+    rdfs:label "Model Category"@en ;
+    skos:definition "Whether a model describes what the system IS or what it DOES. UML's own top-level split, kept as a property rather than left implicit in the kind so that asking for every behaviour artefact does not mean listing seven kinds and silently missing one when an eighth is added."@en ;
+    dcterms:source "UML 2.5 (OMG): structure diagrams and behaviour diagrams"@en .
+
+backlog:Cat_Structure a owl:NamedIndividual , backlog:ModelCategory ;
+    rdfs:label "Structure"@en ;
+    skos:definition "What the system is: its parts and their arrangement."@en .
+backlog:Cat_Behaviour a owl:NamedIndividual , backlog:ModelCategory ;
+    rdfs:label "Behaviour"@en ;
+    skos:definition "What the system does: its dynamics over time."@en .
+
+backlog:ModelKind a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:Kind_ClassDiagram backlog:Kind_ObjectDiagram backlog:Kind_PackageDiagram backlog:Kind_CompositeStructure backlog:Kind_ComponentDiagram backlog:Kind_DeploymentDiagram backlog:Kind_ProfileDiagram backlog:Kind_UseCaseDiagram backlog:Kind_ActivityDiagram backlog:Kind_StateMachineDiagram backlog:Kind_SequenceDiagram backlog:Kind_CommunicationDiagram backlog:Kind_TimingDiagram backlog:Kind_InteractionOverview ) ;
+    rdfs:label "Model Kind"@en ;
+    skos:definition "The kind of model an artefact is, from the UML 2.5 taxonomy. Closed at fourteen because the standard names fourteen. An adopter modelling in a non-UML notation records the nearest kind and says so in the artefact's description rather than the framework inventing a fifteenth."@en ;
+    dcterms:source "UML 2.5 (OMG), clause 6: 14 diagram kinds"@en .
+
+backlog:Kind_ClassDiagram a owl:NamedIndividual , backlog:ModelKind ;
+    rdfs:label "Class diagram"@en ;
+    backlog:hasModelCategory backlog:Cat_Structure .
+backlog:Kind_ObjectDiagram a owl:NamedIndividual , backlog:ModelKind ;
+    rdfs:label "Object diagram"@en ;
+    backlog:hasModelCategory backlog:Cat_Structure .
+backlog:Kind_PackageDiagram a owl:NamedIndividual , backlog:ModelKind ;
+    rdfs:label "Package diagram"@en ;
+    backlog:hasModelCategory backlog:Cat_Structure .
+backlog:Kind_CompositeStructure a owl:NamedIndividual , backlog:ModelKind ;
+    rdfs:label "Composite structure diagram"@en ;
+    backlog:hasModelCategory backlog:Cat_Structure .
+backlog:Kind_ComponentDiagram a owl:NamedIndividual , backlog:ModelKind ;
+    rdfs:label "Component diagram"@en ;
+    backlog:hasModelCategory backlog:Cat_Structure .
+backlog:Kind_DeploymentDiagram a owl:NamedIndividual , backlog:ModelKind ;
+    rdfs:label "Deployment diagram"@en ;
+    backlog:hasModelCategory backlog:Cat_Structure .
+backlog:Kind_ProfileDiagram a owl:NamedIndividual , backlog:ModelKind ;
+    rdfs:label "Profile diagram"@en ;
+    backlog:hasModelCategory backlog:Cat_Structure .
+backlog:Kind_UseCaseDiagram a owl:NamedIndividual , backlog:ModelKind ;
+    rdfs:label "Use case diagram"@en ;
+    backlog:hasModelCategory backlog:Cat_Behaviour .
+backlog:Kind_ActivityDiagram a owl:NamedIndividual , backlog:ModelKind ;
+    rdfs:label "Activity diagram"@en ;
+    backlog:hasModelCategory backlog:Cat_Behaviour .
+backlog:Kind_StateMachineDiagram a owl:NamedIndividual , backlog:ModelKind ;
+    rdfs:label "State machine diagram"@en ;
+    backlog:hasModelCategory backlog:Cat_Behaviour .
+backlog:Kind_SequenceDiagram a owl:NamedIndividual , backlog:ModelKind ;
+    rdfs:label "Sequence diagram"@en ;
+    backlog:hasModelCategory backlog:Cat_Behaviour .
+backlog:Kind_CommunicationDiagram a owl:NamedIndividual , backlog:ModelKind ;
+    rdfs:label "Communication diagram"@en ;
+    backlog:hasModelCategory backlog:Cat_Behaviour .
+backlog:Kind_TimingDiagram a owl:NamedIndividual , backlog:ModelKind ;
+    rdfs:label "Timing diagram"@en ;
+    backlog:hasModelCategory backlog:Cat_Behaviour .
+backlog:Kind_InteractionOverview a owl:NamedIndividual , backlog:ModelKind ;
+    rdfs:label "Interaction overview diagram"@en ;
+    backlog:hasModelCategory backlog:Cat_Behaviour .
+
+backlog:hasModelCategory a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:ModelKind ; rdfs:range backlog:ModelCategory ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has model category"@en .
+
+backlog:ModelArtifact a owl:Class ;
+    rdfs:subClassOf core:Artifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Model Artifact"@en ;
+    skos:definition "What an analysis or design task produced: a model, named and typed. The framework records THAT an artefact exists, its kind, and what it describes — never the artefact's content, because a register holding diagrams becomes a modelling tool and the framework governs records about work rather than the work products themselves."@en .
+
+backlog:producesModelArtifact a owl:ObjectProperty ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:ExecutionTask backlog:RefinementEvent ) ] ;
+    rdfs:range backlog:ModelArtifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "produces model artifact"@en ;
+    skos:definition "The model this task or refinement produced. Domain is both because a design TASK produces artefacts during execution and a REFINEMENT produces them during grooming — the second is the join that makes grooming say what it yielded rather than only that it happened. Not functional: one task may produce a class diagram and a sequence diagram together."@en .
+
+backlog:hasModelKind a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:ModelArtifact ; rdfs:range backlog:ModelKind ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has model kind"@en .
+
+backlog:describesItem a owl:ObjectProperty ;
+    rdfs:domain backlog:ModelArtifact ; rdfs:range backlog:WorkItem ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "describes item"@en ;
+    skos:definition "The work item this model is about. Distinct from the task that produced it: a sequence diagram made while designing one story may describe another."@en .

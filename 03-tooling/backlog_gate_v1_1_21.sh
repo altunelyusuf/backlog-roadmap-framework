@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# backlog_gate v1.1.20 — four-gate release check for the Backlog & Roadmap
+# backlog_gate v1.1.21 — four-gate release check for the Backlog & Roadmap
 # Semantic Framework. Nothing about the package's state is trusted until all
 # four pass, and the SHACL gate refuses to certify anything until it has just
 # demonstrated, in this run, that it can fail a known-bad register.
@@ -11,7 +11,7 @@
 #   +       coverage gate          >= 80% of primary-source concepts (BP-D31)
 #   +       doc-coverage gate      every TBox class named in the standard document
 #
-# Usage: backlog_gate_v1_1_20.sh [REGISTER.ttl ...]
+# Usage: backlog_gate_v1_1_21.sh [REGISTER.ttl ...]
 
 set -u
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -210,6 +210,26 @@ fi
 # in the other order, coverage counted 73 files and the 74th appeared moments
 # later — a race between two of this package's own gates, reported as an
 # unexplained file. The check was right and the ordering was wrong.
+echo
+echo "== Reachability gate — no class the vocabulary cannot point at =="
+# Package sat unused for 91 releases because no property had it as a range: it
+# could be declared and never referred to, and the cost was a wrong conclusion
+# drawn in good faith. Measured before this gate existed, the current lineage
+# would have created three MORE such classes. Shipping the checker without
+# running it would have left that exactly as true as before.
+REACH="$(ls "$HERE"/backlog_reachability_gate_v*.py 2>/dev/null | sort -V | tail -1 || true)"
+if [ -n "$REACH" ]; then
+  RTB="$(ls "$HERE"/../01-ontologies/backlog_tbox_v*.ttl | sort -V | tail -1)"
+  RREG="$(ls "$HERE"/../01-ontologies/backlog_framework_register_abox_v*.ttl | sort -V | tail -1)"
+  python3 "$REACH" "$RTB" "$RREG" | sed 's/^/  /' || {
+    echo "  Reachability gate reports classes that are neither referenceable nor used."
+    echo "  Parked at v1.95.0 by owner ruling: they block nothing and each needs its"
+    echo "  own decision. Reported every run so parking cannot become forgetting."
+  }
+else
+  echo "  NOT RUN — reachability checker not found. Not assumed to pass."
+fi
+
 echo
 echo "== Pipeline gate — stage digests reproduce =="
 # A stage output claims the register was in a particular state when that stage

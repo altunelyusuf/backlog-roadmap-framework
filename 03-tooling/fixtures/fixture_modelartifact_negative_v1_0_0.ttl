@@ -1,0 +1,38 @@
+# Model artefacts — BRF-EP17. Source: UML 2.5 (OMG).
+#
+#   A-OK    class diagram, kind and described item present -> silent
+#   A-KIND  no kind                                        -> REJECTED at L2
+#   A-DESC  no described item                              -> REJECTED at L2
+#   T-BARE  Done design-definition task, no artefact       -> ADVISORY
+#
+# T-BARE is an advisory and not a violation: a design task may
+# legitimately conclude no model is needed. What it must not do is
+# leave the question unanswered.
+
+@prefix backlog: <http://example.org/backlog#> .
+@prefix ex:      <http://example.org/ma#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+ex:P a backlog:AdoptionProfile ; backlog:profileAppliesTo "model artefact fixture" ;
+    backlog:governsBacklog ex:BL ; backlog:hasConformanceLevel backlog:L2_EvidenceBound ;
+    backlog:hasTargetConformanceLevel backlog:L2_EvidenceBound ;
+    backlog:decidedBy backlog:Owner ; backlog:hasDecisionRationale "L2: the artefact clauses are L1/L2." ;
+    backlog:adoptsFacet backlog:CoreFacet , backlog:EvidenceFacet .
+ex:BL a backlog:Backlog ; backlog:hasIdentifier "BL-MA" ; backlog:hasState backlog:InProgress .
+ex:S a backlog:Story ; backlog:hasIdentifier "S-1" ; backlog:hasState backlog:InProgress ;
+    backlog:memberOfContainer ex:BL ; backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "fixture" .
+
+ex:A_OK a backlog:ModelArtifact ;
+    backlog:hasModelKind backlog:Kind_ClassDiagram ;
+    backlog:describesItem ex:S .
+ex:A_KIND a backlog:ModelArtifact ;
+    backlog:describesItem ex:S .
+ex:A_DESC a backlog:ModelArtifact ;
+    backlog:hasModelKind backlog:Kind_SequenceDiagram .
+
+ex:T_OK a backlog:ExecutionTask ; backlog:hasIdentifier "T-OK" ; backlog:hasState backlog:Done ;
+    backlog:memberOfContainer ex:BL ; backlog:hasTaskType backlog:Task_DesignDefinition ;
+    backlog:producesModelArtifact ex:A_OK .
+ex:T_BARE a backlog:ExecutionTask ; backlog:hasIdentifier "T-BARE" ; backlog:hasState backlog:Done ;
+    backlog:memberOfContainer ex:BL ; backlog:hasTaskType backlog:Task_DesignDefinition .
