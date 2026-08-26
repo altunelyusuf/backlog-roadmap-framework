@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.54.0> ;
-    owl:versionInfo "1.54.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.55.0> ;
+    owl:versionInfo "1.55.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.54.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.53.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.52.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.51.0> ;
@@ -1325,6 +1326,11 @@ backlog:ObjectiveFalsifiabilityShape a sh:NodeShape ;
         sh:select """SELECT $this WHERE {
             $this backlog:hasBaselineValue ?b ; backlog:hasTargetValue ?t .
             FILTER (?b = ?t)
+            # An inverse goal's objective is a CEILING: the count must not
+            # exceed its baseline. Dir_Hold says so explicitly rather than
+            # bending the baseline to satisfy a clause written for
+            # trajectories.
+            FILTER NOT EXISTS { $this backlog:hasTargetDirection backlog:Dir_Hold }
         }""" ] ;
     sh:sparql [ a sh:SPARQLConstraint ;
         sh:message "L3: this objective's deadline has passed with no observation of its metric and no recorded re-baseline; the target can therefore never be shown to have been missed." ;
@@ -4037,4 +4043,60 @@ backlog:BothLayersShape a sh:NodeShape ;
         sh:select """SELECT $this WHERE {
             $this backlog:coversArea ?a . ?a backlog:hasScopeLayer ?l .
             FILTER NOT EXISTS { $this backlog:coversArea ?a2 . ?a2 backlog:hasScopeLayer ?l2 . FILTER (?l2 != ?l) }
+        }""" ] .
+
+#################################################################
+#  v1.55.0 — objectives that can be monitored
+#################################################################
+
+backlog:ObjectiveMonitorShape a sh:NodeShape ;
+    sh:targetClass backlog:Objective ;
+    sh:severity sh:Violation ;
+    rdfs:label "An objective can be monitored before its deadline (L3)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: this objective has no checkpoint, so it can only be judged at its deadline. Progress is computable from observations, but nothing states what value was EXPECTED by a date — so no observation can be early or late, and the register cannot warn that a rate will not reach the target. That is the difference between a measure and a monitor." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L3_Governed, backlog:L4_LineageEnforced))
+            FILTER NOT EXISTS { $this backlog:hasCheckpoint ?c }
+            FILTER NOT EXISTS { ?s backlog:supersedesMission ?m . $this backlog:contributesToGoal ?g . ?g backlog:contributesToMission ?m }
+        }""" ] .
+
+backlog:MeasurementKindShape a sh:NodeShape ;
+    sh:targetClass backlog:Objective ;
+    sh:severity sh:Violation ;
+    rdfs:label "An objective says how its value is obtained (L3)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: this objective does not say whether its value is counted, derived or judged. The three carry different weight — a count anyone can reproduce, a derivation that depends on a query being right, a judgement that can only be agreed with — and a reader cannot weigh a number without knowing which it is." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L3_Governed, backlog:L4_LineageEnforced))
+            FILTER NOT EXISTS { $this backlog:hasMeasurementKind ?k }
+            FILTER NOT EXISTS { ?s backlog:supersedesMission ?m . $this backlog:contributesToGoal ?g . ?g backlog:contributesToMission ?m }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: this objective is derived and ships no query. A derived figure whose query is not shipped cannot be re-derived — it is a judged figure wearing better clothes, and the reader has no way to find that out." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L3_Governed, backlog:L4_LineageEnforced))
+            $this backlog:hasMeasurementKind backlog:Meas_Derived .
+            FILTER NOT EXISTS { $this backlog:hasMeasurementQuery ?q }
+        }""" ] .
+
+backlog:CheckpointBreachShape a sh:NodeShape ;
+    sh:targetClass backlog:ObjectiveCheckpoint ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: an objective behind its checkpoint"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: an observation taken on or after this checkpoint's date has not reached the expected value. The objective is behind its own plan, reported now rather than at the deadline — which is the only point at which the information can still change the outcome." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?o backlog:hasCheckpoint $this ; backlog:hasTargetDirection ?dir .
+            $this backlog:checkpointDate ?cd ; backlog:expectedValue ?ev .
+            ?obs backlog:observationFor ?o ; backlog:observedAt ?od ; backlog:hasObservedValue ?v .
+            FILTER (?od >= ?cd)
+            FILTER ((?dir = backlog:Dir_Decrease && ?v > ?ev) || (?dir = backlog:Dir_Increase && ?v < ?ev))
         }""" ] .

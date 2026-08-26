@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/5.5.0> ;
-    owl:versionInfo "5.5.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/5.6.0> ;
+    owl:versionInfo "5.6.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/5.5.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/5.4.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/5.3.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/5.2.0> ;
@@ -6464,3 +6465,284 @@ fw:Ex_Scale backlog:hasScopeLayer backlog:Layer_Work .
 fw:Ex_Schedule backlog:hasScopeLayer backlog:Layer_Work .
 fw:Ex_SingleMethod backlog:hasScopeLayer backlog:Layer_Work .
 fw:Ex_ToolChain backlog:hasScopeLayer backlog:Layer_Work .
+
+
+#################################################################
+#  v5.6.0 — STAGE 4: THE OBJECTIVES. One per goal, monitorable.
+#
+#  The owner asked that objectives serve four purposes: progress,
+#  prediction, goal satisfaction and mission accomplishment. Three
+#  of those the framework already supported. PREDICTION it did not:
+#  nothing stated what value was expected by a date, so an
+#  objective could only read met or unmet, and only at the end.
+#
+#  Every objective below carries checkpoints, so an observation can
+#  be reported as behind BEFORE the deadline — the only point at
+#  which the information can still change the outcome.
+#
+#  Six of seven are COUNTED. That is deliberate: a counted value
+#  can be reproduced by anyone without trusting this session, which
+#  matters most for a lineage whose whole subject is reducing what
+#  has to be trusted. The seventh is judged and says so.
+#################################################################
+fw:Metric_Obj_RulingsQueryable a core:Metric ; rdfs:label "Governance rulings unreachable by query"@en .
+fw:Obj_RulingsQueryable a backlog:Objective ;
+    rdfs:label "Governance rulings unreachable by query"@en ;
+    backlog:contributesToGoal fw:Goal_GovernanceInOntology ;
+    backlog:fillsScope fw:Scope_Ontology ;
+    backlog:hasSuccessMetric fw:Metric_Obj_RulingsQueryable ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out2_Objective ;
+    backlog:hasBaselineValue 18.0 ; backlog:hasTargetValue 0.0 ;
+    backlog:hasTargetDirection backlog:Dir_Decrease ;
+    backlog:hasObjectiveDeadline "2027-01-31T00:00:00"^^xsd:dateTime ;
+    backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasMeasurementQuery "SELECT (COUNT(?r) AS ?n) WHERE { ?r a backlog:GovernanceRuling }" ;
+    backlog:hasCheckpoint fw:CP_Obj_RulingsQueryable_1 , fw:CP_Obj_RulingsQueryable_2 ;
+    backlog:decidedBy backlog:Owner .
+fw:Obs_Obj_RulingsQueryable_base a backlog:MetricObservation ;
+    backlog:observesMetric fw:Metric_Obj_RulingsQueryable ; backlog:observationFor fw:Obj_RulingsQueryable ;
+    backlog:hasObservedValue 18.0 ;
+    backlog:observedAt "2026-10-26T22:00:00"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Counted, not derived: 18 headings matching '### G' in the lineage discipline, against rulings reachable as triples. Anyone can count both without trusting this session. Baseline 18 because none is reachable today." .
+fw:CP_Obj_RulingsQueryable_1 a backlog:ObjectiveCheckpoint ;
+    backlog:checkpointDate "2026-11-30T00:00:00"^^xsd:dateTime ;
+    backlog:expectedValue 12.0 .
+fw:CP_Obj_RulingsQueryable_2 a backlog:ObjectiveCheckpoint ;
+    backlog:checkpointDate "2026-12-31T00:00:00"^^xsd:dateTime ;
+    backlog:expectedValue 6.0 .
+fw:Metric_Obj_RulesDecidedInCode a core:Metric ; rdfs:label "Gate checks whose outcome is decided in code"@en .
+fw:Obj_RulesDecidedInCode a backlog:Objective ;
+    rdfs:label "Gate checks whose outcome is decided in code"@en ;
+    backlog:contributesToGoal fw:Goal_RuleExecInOntology ;
+    backlog:fillsScope fw:Scope_Ontology ;
+    backlog:hasSuccessMetric fw:Metric_Obj_RulesDecidedInCode ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out2_Objective ;
+    backlog:hasBaselineValue 3.0 ; backlog:hasTargetValue 0.0 ;
+    backlog:hasTargetDirection backlog:Dir_Decrease ;
+    backlog:hasObjectiveDeadline "2027-01-31T00:00:00"^^xsd:dateTime ;
+    backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasCheckpoint fw:CP_Obj_RulesDecidedInCode_1 , fw:CP_Obj_RulesDecidedInCode_2 ;
+    backlog:decidedBy backlog:Owner .
+fw:Obs_Obj_RulesDecidedInCode_base a backlog:MetricObservation ;
+    backlog:observesMetric fw:Metric_Obj_RulesDecidedInCode ; backlog:observationFor fw:Obj_RulesDecidedInCode ;
+    backlog:hasObservedValue 3.0 ;
+    backlog:observedAt "2026-10-26T22:00:00"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Three of twelve gate checks decide outcomes in python: fixture polarity inferred from a FILENAME, manifest exemption from a python list, reachability from a python traversal. Counted by reading the gate, which anyone can do." .
+fw:CP_Obj_RulesDecidedInCode_1 a backlog:ObjectiveCheckpoint ;
+    backlog:checkpointDate "2026-11-30T00:00:00"^^xsd:dateTime ;
+    backlog:expectedValue 2.0 .
+fw:CP_Obj_RulesDecidedInCode_2 a backlog:ObjectiveCheckpoint ;
+    backlog:checkpointDate "2026-12-31T00:00:00"^^xsd:dateTime ;
+    backlog:expectedValue 1.0 .
+fw:Metric_Obj_TablesExported a core:Metric ; rdfs:label "Module-level tables holding classification knowledge"@en .
+fw:Obj_TablesExported a backlog:Objective ;
+    rdfs:label "Module-level tables holding classification knowledge"@en ;
+    backlog:contributesToGoal fw:Goal_ConceptsExported ;
+    backlog:fillsScope fw:Scope_Ontology ;
+    backlog:hasSuccessMetric fw:Metric_Obj_TablesExported ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out2_Objective ;
+    backlog:hasBaselineValue 23.0 ; backlog:hasTargetValue 0.0 ;
+    backlog:hasTargetDirection backlog:Dir_Decrease ;
+    backlog:hasObjectiveDeadline "2027-01-31T00:00:00"^^xsd:dateTime ;
+    backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasCheckpoint fw:CP_Obj_TablesExported_1 , fw:CP_Obj_TablesExported_2 ;
+    backlog:decidedBy backlog:Owner .
+fw:Obs_Obj_TablesExported_base a backlog:MetricObservation ;
+    backlog:observesMetric fw:Metric_Obj_TablesExported ; backlog:observationFor fw:Obj_TablesExported ;
+    backlog:hasObservedValue 23.0 ;
+    backlog:observedAt "2026-10-26T22:00:00"^^xsd:dateTime ;
+    backlog:hasObservationMethod "23 module-level tables across 12 python modules, counted by pattern over the source. LAYERS, STAGE_TYPES, CONTAINER_TYPES, KINDS, SUITES, DROP_DIRS, EXEMPT and the rest. The most mechanical of the four and therefore the one most likely to be done first, which is why Goal_ConceptsExported is scope-facing." .
+fw:CP_Obj_TablesExported_1 a backlog:ObjectiveCheckpoint ;
+    backlog:checkpointDate "2026-11-30T00:00:00"^^xsd:dateTime ;
+    backlog:expectedValue 12.0 .
+fw:CP_Obj_TablesExported_2 a backlog:ObjectiveCheckpoint ;
+    backlog:checkpointDate "2026-12-31T00:00:00"^^xsd:dateTime ;
+    backlog:expectedValue 4.0 .
+fw:Metric_Obj_RowsUnchecked a core:Metric ; rdfs:label "Standard table rows that could contradict the TBox unnoticed"@en .
+fw:Obj_RowsUnchecked a backlog:Objective ;
+    rdfs:label "Standard table rows that could contradict the TBox unnoticed"@en ;
+    backlog:contributesToGoal fw:Goal_ProseExplainsOnly ;
+    backlog:fillsScope fw:Scope_Ontology ;
+    backlog:hasSuccessMetric fw:Metric_Obj_RowsUnchecked ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out2_Objective ;
+    backlog:hasBaselineValue 186.0 ; backlog:hasTargetValue 0.0 ;
+    backlog:hasTargetDirection backlog:Dir_Decrease ;
+    backlog:hasObjectiveDeadline "2027-01-31T00:00:00"^^xsd:dateTime ;
+    backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasCheckpoint fw:CP_Obj_RowsUnchecked_1 , fw:CP_Obj_RowsUnchecked_2 ;
+    backlog:decidedBy backlog:Owner .
+fw:Obs_Obj_RowsUnchecked_base a backlog:MetricObservation ;
+    backlog:observesMetric fw:Metric_Obj_RowsUnchecked ; backlog:observationFor fw:Obj_RowsUnchecked ;
+    backlog:hasObservedValue 186.0 ;
+    backlog:observedAt "2026-10-26T22:00:00"^^xsd:dateTime ;
+    backlog:hasObservationMethod "186 table rows in the standard. The doc-coverage gate checks every class is NAMED and never that a row AGREES with the ontology, so every row is currently uncheckable. Baseline is the whole population because none is checked." .
+fw:CP_Obj_RowsUnchecked_1 a backlog:ObjectiveCheckpoint ;
+    backlog:checkpointDate "2026-11-30T00:00:00"^^xsd:dateTime ;
+    backlog:expectedValue 140.0 .
+fw:CP_Obj_RowsUnchecked_2 a backlog:ObjectiveCheckpoint ;
+    backlog:checkpointDate "2026-12-31T00:00:00"^^xsd:dateTime ;
+    backlog:expectedValue 60.0 .
+fw:Metric_Obj_CodeDecisions a core:Metric ; rdfs:label "Scripts that decide what is valid rather than run an engine"@en .
+fw:Obj_CodeDecisions a backlog:Objective ;
+    rdfs:label "Scripts that decide what is valid rather than run an engine"@en ;
+    backlog:contributesToGoal fw:Goal_CodeExecutesOnly ;
+    backlog:fillsScope fw:Scope_Ontology ;
+    backlog:hasSuccessMetric fw:Metric_Obj_CodeDecisions ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out2_Objective ;
+    backlog:hasBaselineValue 3.0 ; backlog:hasTargetValue 0.0 ;
+    backlog:hasTargetDirection backlog:Dir_Decrease ;
+    backlog:hasObjectiveDeadline "2027-01-31T00:00:00"^^xsd:dateTime ;
+    backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasCheckpoint fw:CP_Obj_CodeDecisions_1 , fw:CP_Obj_CodeDecisions_2 ;
+    backlog:decidedBy backlog:Owner .
+fw:Obs_Obj_CodeDecisions_base a backlog:MetricObservation ;
+    backlog:observesMetric fw:Metric_Obj_CodeDecisions ; backlog:observationFor fw:Obj_CodeDecisions ;
+    backlog:hasObservedValue 3.0 ;
+    backlog:observedAt "2026-10-26T22:00:00"^^xsd:dateTime ;
+    backlog:hasObservationMethod "The same three as Obj_RulesDecidedInCode, counted at the SCRIPT rather than the CHECK. Deliberately a separate objective: a check can move into the ontology while the script keeps deciding something else, and one number cannot show both. If they move together the two will fall together, which is evidence the split was unnecessary — recorded so that can be seen." .
+fw:CP_Obj_CodeDecisions_1 a backlog:ObjectiveCheckpoint ;
+    backlog:checkpointDate "2026-11-30T00:00:00"^^xsd:dateTime ;
+    backlog:expectedValue 2.0 .
+fw:CP_Obj_CodeDecisions_2 a backlog:ObjectiveCheckpoint ;
+    backlog:checkpointDate "2026-12-31T00:00:00"^^xsd:dateTime ;
+    backlog:expectedValue 1.0 .
+fw:Metric_Obj_NoNewClasses a core:Metric ; rdfs:label "Classes added that the exported material does not require"@en .
+fw:Obj_NoNewClasses a backlog:Objective ;
+    rdfs:label "Classes added that the exported material does not require"@en ;
+    backlog:contributesToGoal fw:Goal_NoCapabilityCreep ;
+    backlog:fillsScope fw:Scope_Ontology ;
+    backlog:hasSuccessMetric fw:Metric_Obj_NoNewClasses ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out2_Objective ;
+    backlog:hasBaselineValue 0.0 ; backlog:hasTargetValue 0.0 ;
+    backlog:hasTargetDirection backlog:Dir_Hold ;
+    backlog:hasObjectiveDeadline "2027-01-31T00:00:00"^^xsd:dateTime ;
+    backlog:hasMeasurementKind backlog:Meas_Judged ;
+    backlog:hasCheckpoint fw:CP_Obj_NoNewClasses_1 , fw:CP_Obj_NoNewClasses_2 ;
+    backlog:decidedBy backlog:Owner .
+fw:Obs_Obj_NoNewClasses_base a backlog:MetricObservation ;
+    backlog:observesMetric fw:Metric_Obj_NoNewClasses ; backlog:observationFor fw:Obj_NoNewClasses ;
+    backlog:hasObservedValue 0.0 ;
+    backlog:observedAt "2026-10-26T22:00:00"^^xsd:dateTime ;
+    backlog:hasObservationMethod "JUDGED, and marked as such. Whether a class extends what the framework can express or merely carries exported material is a judgement, not a count — Kind_ClassDiagram carries exported UML knowledge; a reachability gate does not. Baseline 0 and target 0 is legitimate here because the objective is that a count STAYS at zero, which is what an inverse goal measures." .
+fw:CP_Obj_NoNewClasses_1 a backlog:ObjectiveCheckpoint ;
+    backlog:checkpointDate "2026-11-30T00:00:00"^^xsd:dateTime ;
+    backlog:expectedValue 0.0 .
+fw:CP_Obj_NoNewClasses_2 a backlog:ObjectiveCheckpoint ;
+    backlog:checkpointDate "2026-12-31T00:00:00"^^xsd:dateTime ;
+    backlog:expectedValue 0.0 .
+fw:Metric_Obj_NoProseLost a core:Metric ; rdfs:label "Explanatory paragraphs removed during the migration"@en .
+fw:Obj_NoProseLost a backlog:Objective ;
+    rdfs:label "Explanatory paragraphs removed during the migration"@en ;
+    backlog:contributesToGoal fw:Goal_NoProseStripping ;
+    backlog:fillsScope fw:Scope_Ontology ;
+    backlog:hasSuccessMetric fw:Metric_Obj_NoProseLost ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out2_Objective ;
+    backlog:hasBaselineValue 0.0 ; backlog:hasTargetValue 0.0 ;
+    backlog:hasTargetDirection backlog:Dir_Hold ;
+    backlog:hasObjectiveDeadline "2027-01-31T00:00:00"^^xsd:dateTime ;
+    backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasCheckpoint fw:CP_Obj_NoProseLost_1 , fw:CP_Obj_NoProseLost_2 ;
+    backlog:decidedBy backlog:Owner .
+fw:Obs_Obj_NoProseLost_base a backlog:MetricObservation ;
+    backlog:observesMetric fw:Metric_Obj_NoProseLost ; backlog:observationFor fw:Obj_NoProseLost ;
+    backlog:hasObservedValue 0.0 ;
+    backlog:observedAt "2026-10-26T22:00:00"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Counted by diff against the v1.104.0 documentation: 7197 lines is the reference. An explanation deleted because its subject moved into the ontology is the failure this guards, and it is countable, so this inverse goal does not need judgement." .
+fw:CP_Obj_NoProseLost_1 a backlog:ObjectiveCheckpoint ;
+    backlog:checkpointDate "2026-11-30T00:00:00"^^xsd:dateTime ;
+    backlog:expectedValue 0.0 .
+fw:CP_Obj_NoProseLost_2 a backlog:ObjectiveCheckpoint ;
+    backlog:checkpointDate "2026-12-31T00:00:00"^^xsd:dateTime ;
+    backlog:expectedValue 0.0 .
+
+fw:Out2_Objective a backlog:StageOutput ;
+    backlog:outputOfStage backlog:Stage_Objective ;
+    backlog:consumesOutput fw:Out2_Goal ;
+    backlog:hasStateDigest "pending-commit" ;
+    backlog:closedAtCommit "pending-commit" ;
+    backlog:hasRationale "Backfilled from the real commit in the next release, as the Mission, Scope and Goal outputs were." .
+
+#################################################################
+#  The previous lineage's objectives, given a measurement kind and
+#  a closing checkpoint retroactively.
+#
+#  Recorded as RETROSPECTIVE: a checkpoint set after the work is
+#  finished cannot predict anything, and the honest thing is to
+#  place it at the deadline with the value that was actually
+#  reached. It makes the objective conformant and it does not
+#  pretend the objective was monitored. That distinction is the
+#  whole point of adding checkpoints, so blurring it here would
+#  undo the release.
+#################################################################
+fw:Obj_Derived backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasCheckpoint fw:CPR_Obj_Derived .
+fw:CPR_Obj_Derived a backlog:ObjectiveCheckpoint ;
+    backlog:checkpointDate "2026-10-26T00:00:00"^^xsd:dateTime ;
+    backlog:expectedValue 80.0 .
+fw:Obj_Adopter backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasCheckpoint fw:CPR_Obj_Adopter .
+fw:CPR_Obj_Adopter a backlog:ObjectiveCheckpoint ;
+    backlog:checkpointDate "2026-10-26T00:00:00"^^xsd:dateTime ;
+    backlog:expectedValue 0.0 .
+fw:Obj_Views backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasCheckpoint fw:CPR_Obj_Views .
+fw:CPR_Obj_Views a backlog:ObjectiveCheckpoint ;
+    backlog:checkpointDate "2026-10-26T00:00:00"^^xsd:dateTime ;
+    backlog:expectedValue 5.0 .
+fw:Obj_ProgressInViews backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasCheckpoint fw:CPR_Obj_ProgressInViews .
+fw:CPR_Obj_ProgressInViews a backlog:ObjectiveCheckpoint ;
+    backlog:checkpointDate "2026-10-26T00:00:00"^^xsd:dateTime ;
+    backlog:expectedValue 1.0 .
+fw:Obj_Finishable backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasCheckpoint fw:CPR_Obj_Finishable .
+fw:CPR_Obj_Finishable a backlog:ObjectiveCheckpoint ;
+    backlog:checkpointDate "2026-10-26T00:00:00"^^xsd:dateTime ;
+    backlog:expectedValue 0.0 .
+fw:Obj_OrderRecordable backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasCheckpoint fw:CPR_Obj_OrderRecordable .
+fw:CPR_Obj_OrderRecordable a backlog:ObjectiveCheckpoint ;
+    backlog:checkpointDate "2026-10-26T00:00:00"^^xsd:dateTime ;
+    backlog:expectedValue 4.0 .
+fw:Obj_NoStaleOrder backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasCheckpoint fw:CPR_Obj_NoStaleOrder .
+fw:CPR_Obj_NoStaleOrder a backlog:ObjectiveCheckpoint ;
+    backlog:checkpointDate "2026-10-26T00:00:00"^^xsd:dateTime ;
+    backlog:expectedValue 0.0 .
+fw:Obj_Grounded backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasCheckpoint fw:CPR_Obj_Grounded .
+fw:CPR_Obj_Grounded a backlog:ObjectiveCheckpoint ;
+    backlog:checkpointDate "2026-10-26T00:00:00"^^xsd:dateTime ;
+    backlog:expectedValue 0.0 .
+fw:Obj_IntentToWork backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasCheckpoint fw:CPR_Obj_IntentToWork .
+fw:CPR_Obj_IntentToWork a backlog:ObjectiveCheckpoint ;
+    backlog:checkpointDate "2026-10-26T00:00:00"^^xsd:dateTime ;
+    backlog:expectedValue 0.0 .
+fw:Obj_ScopeDelivered backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasCheckpoint fw:CPR_Obj_ScopeDelivered .
+fw:CPR_Obj_ScopeDelivered a backlog:ObjectiveCheckpoint ;
+    backlog:checkpointDate "2026-10-26T00:00:00"^^xsd:dateTime ;
+    backlog:expectedValue 100.0 .
+fw:Obj_Modelling backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasCheckpoint fw:CPR_Obj_Modelling .
+fw:CPR_Obj_Modelling a backlog:ObjectiveCheckpoint ;
+    backlog:checkpointDate "2026-10-26T00:00:00"^^xsd:dateTime ;
+    backlog:expectedValue 0.0 .
+fw:Obj_BuildAreasExhausted backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasCheckpoint fw:CPR_Obj_BuildAreasExhausted .
+fw:CPR_Obj_BuildAreasExhausted a backlog:ObjectiveCheckpoint ;
+    backlog:checkpointDate "2026-10-26T00:00:00"^^xsd:dateTime ;
+    backlog:expectedValue 0.0 .
+fw:Obj_BuildContained backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasCheckpoint fw:CPR_Obj_BuildContained .
+fw:CPR_Obj_BuildContained a backlog:ObjectiveCheckpoint ;
+    backlog:checkpointDate "2026-10-26T00:00:00"^^xsd:dateTime ;
+    backlog:expectedValue 0.0 .

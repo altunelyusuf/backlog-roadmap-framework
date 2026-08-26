@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.51.0
+# Backlog & Roadmap Semantic Framework — Standard v1.52.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -851,6 +851,23 @@ nothing measures is a sentence, not a safeguard**.
 
 At L3 a boundary statement must declare its layer. At L2 an exclusion-facing goal must name its
 exclusion. Advisories report an exclusion no inverse goal guards, and a scope stated in one layer only.
+
+### 2.5c-xxxii An objective that can be monitored
+
+`ObjectiveCheckpoint` carries `expectedValue` at a `checkpointDate` — **what turns a measure into a
+monitor**. Progress was always computable from dated observations; prediction was not, because nothing
+stated what value was *expected* by a date. An objective could only read met or unmet, and only at the
+deadline. An advisory now reports an objective behind its own checkpoint, which is the only point at
+which the information can still change the outcome.
+
+`MeasurementKind` — `Meas_Counted`, `Meas_Derived`, `Meas_Judged`. The three carry different weight: a
+count anyone can reproduce, a derivation that depends on a query being right, a judgement that can only
+be agreed with. **A derived objective must ship its query**, or it is a judged figure wearing better
+clothes.
+
+`Dir_Hold` is for an **inverse goal**, whose objective is a *ceiling* rather than a trajectory: the
+count of things that should not happen must stay where it is. Distinct from `Dir_Decrease` with a
+target already reached, which claims an improvement that never occurred.
 
 ### 2.5d Decomposition, commitments, dependency kinds, impediments, flow, team (subject v1.4.0)
 

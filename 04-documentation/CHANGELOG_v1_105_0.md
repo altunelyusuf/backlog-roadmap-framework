@@ -1,5 +1,48 @@
 # Changelog
 
+## v1.105.0 — 2026-10-26 (MINOR: STAGE 4 — seven objectives, monitorable not merely judgeable)
+
+The owner asked that objectives serve four purposes: progress, prediction, goal satisfaction, mission
+accomplishment. **Three were already supported. Prediction was not** — nothing stated what value was
+expected by a date, so an objective could only read met or unmet, and only at the deadline.
+
+### The seven
+
+| Objective | Baseline → target | Kind |
+|---|---|---|
+| Governance rulings unreachable by query | 18 → 0 | Counted |
+| Gate checks decided in code | 3 → 0 | Counted |
+| Module-level tables holding classification | 23 → 0 | Counted |
+| Standard rows that could contradict the TBox | 186 → 0 | Counted |
+| Scripts deciding what is valid | 3 → 0 | Counted |
+| Classes added the export does not require | 0, hold | **Judged** |
+| Explanatory paragraphs lost | 0, hold | Counted |
+
+**Six of seven are counted.** Deliberate: a counted value can be reproduced without trusting this
+session, which matters most for a lineage whose whole subject is reducing what has to be trusted. The
+seventh is judged and says so — whether a class extends what the framework can express or merely
+carries exported material is a judgement, not a count.
+
+Each carries checkpoints at 30 Nov and 31 Dec, so an observation can be reported **behind before the
+deadline**.
+
+### Two framework gaps found by using it
+
+**`Dir_Hold`.** Both inverse objectives failed the L1 clause *"target equals baseline"* — and that
+clause is right for a trajectory. An inverse goal's objective is a **ceiling**: the count must never
+exceed zero. Bending the baseline would have made the number say something false; the clause was right
+and the vocabulary was missing a case.
+
+**A malformed FILTER, caught by a suspicious number.** The first `Dir_Hold` exemption put a triple
+pattern inside `FILTER`, which is invalid SPARQL. The result was **0 violations and 0 warnings** — down
+from 212. Zero violations looked like success; zero *warnings* is what gave it away. A clean result
+that arrives by the suite not running is the most dangerous kind.
+
+The previous lineage's 13 objectives are backfilled with a **retrospective** closing checkpoint,
+recorded as such: a checkpoint set after the work is finished cannot predict anything, and blurring
+that would undo the release.
+
+
 ## v1.104.0 — 2026-10-26 (MINOR: both scope layers, and an inverse goal per exclusion)
 
 ### Exact-match audit first

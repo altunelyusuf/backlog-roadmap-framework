@@ -368,3 +368,21 @@ ex:Del2_Scope backlog:hasScopeLayer backlog:Layer_Product .
 ex:Area_Scope backlog:hasScopeLayer backlog:Layer_Work .
 
 ex:Excl backlog:hasScopeLayer backlog:Layer_Work .
+
+ex:Objective backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasCheckpoint ex:CP_Objective .
+ex:CP_Objective a backlog:ObjectiveCheckpoint ;
+    backlog:checkpointDate "2026-12-01T00:00:00"^^xsd:dateTime ;
+    backlog:expectedValue 80.0 .
+
+ex:Obj_G_Areas_Scope backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasCheckpoint ex:CP_Obj_G_Areas_Scope .
+ex:CP_Obj_G_Areas_Scope a backlog:ObjectiveCheckpoint ;
+    backlog:checkpointDate "2026-12-01T00:00:00"^^xsd:dateTime ;
+    backlog:expectedValue 0.0 .
+
+ex:Obj_G_Contain_Scope backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasCheckpoint ex:CP_Obj_G_Contain_Scope .
+ex:CP_Obj_G_Contain_Scope a backlog:ObjectiveCheckpoint ;
+    backlog:checkpointDate "2026-12-01T00:00:00"^^xsd:dateTime ;
+    backlog:expectedValue 0.0 .

@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.42.0> ;
-    owl:versionInfo "1.42.0" ;
+    owl:versionIRI <http://example.org/backlog/1.43.0> ;
+    owl:versionInfo "1.43.0" ;
+    owl:priorVersion <http://example.org/backlog/1.42.0> ;
     owl:priorVersion <http://example.org/backlog/1.41.0> ;
     owl:priorVersion <http://example.org/backlog/1.40.0> ;
     owl:priorVersion <http://example.org/backlog/1.39.0> ;
@@ -2132,7 +2133,7 @@ backlog:soThat a owl:DatatypeProperty ;
 backlog:MetricDirection a owl:Class ;
     rdfs:subClassOf backlog:BacklogConcept ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
-    owl:oneOf ( backlog:Dir_Increase backlog:Dir_Decrease ) ;
+    owl:oneOf ( backlog:Dir_Increase backlog:Dir_Decrease backlog:Dir_Hold ) ;
     rdfs:label "Metric Direction"@en ;
     skos:definition "Which way a metric must move for an objective to be met. Closed set of two. Without it a baseline and a target are two numbers with no claim between them, and no observation can contradict them — the precise sense in which an unfalsifiable objective is not an objective."@en .
 
@@ -4555,3 +4556,85 @@ backlog:guardsExclusion a owl:ObjectProperty ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "guards exclusion"@en ;
     skos:definition "The exclusion this inverse goal keeps. Required of an exclusion-facing goal, so that an exclusion nothing guards is visible: the framework can then say which refusals are enforced and which were only written down."@en .
+
+#################################################################
+#  71. An objective that can be monitored, not only judged
+#     (v1.43.0)
+#
+#  Measured before writing: an objective carries a baseline, a
+#  target, a direction and a deadline, and observations carry a
+#  value and a date. PROGRESS is therefore computable. PREDICTION
+#  is not — nothing states what value was EXPECTED by a date, so no
+#  observation can be early or late. An objective can only read met
+#  or unmet, and only when the deadline arrives.
+#
+#  That is the difference between a measure and a monitor. A
+#  monitor tells you a month early that the rate will not reach the
+#  target; this framework has been telling owners at the end.
+#################################################################
+
+backlog:ObjectiveCheckpoint a owl:Class ;
+    rdfs:subClassOf core:Artifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Objective Checkpoint"@en ;
+    skos:definition "A value expected by a date, set when the objective is set. What turns a measure into a monitor: with it an observation can be compared against what was expected and reported as ahead, on track or behind, before the deadline. Without it the only question the register can answer is the last one."@en ;
+    dcterms:source "Earned value management: planned value as a time-phased baseline against which actuals are compared"@en .
+
+backlog:hasCheckpoint a owl:ObjectProperty ;
+    rdfs:domain backlog:Objective ; rdfs:range backlog:ObjectiveCheckpoint ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has checkpoint"@en .
+
+backlog:checkpointDate a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:ObjectiveCheckpoint ; rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "checkpoint date"@en .
+backlog:expectedValue a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:ObjectiveCheckpoint ; rdfs:range xsd:decimal ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "expected value"@en ;
+    skos:definition "The value the metric should have reached by this date if the objective is on course. Set at objective time and not revised: a checkpoint moved to match what happened measures nothing."@en .
+
+backlog:MeasurementKind a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:Meas_Counted backlog:Meas_Derived backlog:Meas_Judged ) ;
+    rdfs:label "Measurement Kind"@en ;
+    skos:definition "How a metric's value is obtained. Recorded because the three carry different weight: a counted value can be reproduced by anyone, a derived value depends on a query being right, and a judged value depends on whoever judged. An objective set on judgement is legitimate and must not be mistaken for one set on a count."@en .
+
+backlog:Meas_Counted a owl:NamedIndividual , backlog:MeasurementKind ;
+    rdfs:label "Counted"@en ;
+    skos:definition "Obtained by counting artefacts anyone can count: files, triples, rulings. Reproducible without trusting the counter."@en .
+backlog:Meas_Derived a owl:NamedIndividual , backlog:MeasurementKind ;
+    rdfs:label "Derived"@en ;
+    skos:definition "Computed by a named query over the register. Reproducible if the query is shipped, which is why the query must be."@en .
+backlog:Meas_Judged a owl:NamedIndividual , backlog:MeasurementKind ;
+    rdfs:label "Judged"@en ;
+    skos:definition "A person decided. Legitimate, and the weakest of the three: it cannot be reproduced, only agreed with or disputed."@en .
+
+backlog:hasMeasurementKind a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:Objective ; rdfs:range backlog:MeasurementKind ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "has measurement kind"@en .
+
+backlog:hasMeasurementQuery a owl:DatatypeProperty ;
+    rdfs:domain backlog:Objective ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has measurement query"@en ;
+    skos:definition "The query that produces this objective's value. Required of a derived objective so the number can be re-derived rather than believed — a derived figure whose query is not shipped is a judged figure wearing better clothes."@en .
+
+#################################################################
+#  72. A direction for an objective that must not move
+#
+#  Found by the inverse goals failing the L1 clause "target equals
+#  baseline". For an ordinary objective that clause is right: a
+#  target equal to the baseline asks for nothing.
+#
+#  An INVERSE goal is different in kind. Its objective is a CEILING
+#  — the count must never exceed zero — not a trajectory from a
+#  baseline to a target. Bending the baseline to satisfy the clause
+#  would have made the number say something false; the clause was
+#  right and the vocabulary was missing a case.
+#################################################################
+
+backlog:Dir_Hold a owl:NamedIndividual , backlog:MetricDirection ;
+    rdfs:label "Hold"@en ;
+    skos:definition "The value must not move from its baseline. Used by an inverse goal, whose objective is a ceiling rather than a trajectory: the count of things that should not happen must stay where it is. Distinct from Dir_Decrease with a target already reached, which claims an improvement that never occurred."@en .
