@@ -1,5 +1,59 @@
 # Changelog
 
+## v1.94.0 — 2026-08-25 (MINOR: grooming performed, plan repacked, fit-gap recorded)
+
+### Analysis and design at grooming level
+
+**As-is: all seven stories declared a concern and none carried a refinement.** Concerns named, no
+analysis done — exactly the state BRF-EP12 was built to make visible, and it was visible.
+
+Ten refinements recorded, one per applicable concern. The analysis changed the work:
+
+- **`Diagram` dropped as a class.** A diagram is a `ModelArtifact` whose kind is a diagram kind; a
+  separate class would force every query to union two.
+- **Artefacts hang off `ExecutionTask`, not `Story`** — the task performs the technical process, and a
+  story with three design tasks could not otherwise say which produced what.
+- **`StateChange` states stay free text**, not an enumeration: the framework governs registers for any
+  domain and cannot know a domain state machine.
+- **`TestData` does not carry the data**, only what fixture state it establishes — a register holding
+  payloads becomes a data store.
+- **Three stories gained a second concern** they had not been groomed against.
+
+### Repacked, because the analysis changed the estimates
+
+A story analysed against two concerns is not the story estimated against one. Three re-estimated 3 → 5,
+which put It3 at 13 against a capacity of 9. **The box was not widened.**
+
+```
+It3  cap 9  8/9   EP_Model_S1 5, EP_Model_S2 3
+It4  cap 9  6/9   EP_Spec_S2 3, EP_TestSpec_S2 3
+It5  cap 9  8/9   EP_Model_S3 3, EP_Spec_S1 5
+It6  cap 9  5/9   EP_TestSpec_S1 5          <- opened by the repack
+```
+
+`Pkg_Modelling` targets It3+It5; `Pkg_StoryDetail` targets It3+It4+It5+It6. A package is a capability
+and an iteration is a time box, so a package spanning four boxes is not a defect.
+
+### Fit-gap: 23 classes the vocabulary cannot point at
+
+`ArtifactEvidence`, `Blueprint`, `BlueprintGap`, `Budget`, `Defect`, `DimensionalCost`, `Enabler`,
+`EnhancementProposal`, `Feature`, `Impediment`, `ImplementationProject`, `Opportunity`,
+`PortfolioPolicy`, `RICEScore`, `RegisterPackage`, `RegisterSession`, `ReleaseEvidence`, `ReleaseGate`,
+`ReviewEvidence`, `Spike`, `TransitionEvent`, `WipLimit`, `Workflow`.
+
+**This is the `Package` defect generalised.** `Package` sat unused for 91 releases because no property
+had it as a range, and the cost was a wrong conclusion drawn in good faith — packages were believed
+impossible before delivery when the concept existed all along. **Each of these 23 is the same trap
+waiting.**
+
+`Inv_UnreachableClasses` is recorded as **Violated**, with the remedy stated and not built: an L3 shape
+rejecting a class the vocabulary cannot reach, run against the TBox rather than the register, plus a
+decision per class — give it a referring property or retire it.
+
+The three deliverables with no Done work are the planned modelling work, not a defect: a boundary
+widened before its backlog was built is the order the discipline asks for.
+
+
 ## v1.93.0 — 2026-08-25 (MINOR: the join the plan was missing — grooming to artefact)
 
 **Answer in two parts.** No artefacts exist: `ModelArtifact`, `Diagram`, `UseCase`, `Specification`,

@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/4.3.0> ;
-    owl:versionInfo "4.3.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/4.4.0> ;
+    owl:versionInfo "4.4.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/4.3.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/4.2.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/4.1.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/4.0.0> ;
@@ -4975,9 +4976,9 @@ fw:It3 a backlog:Iteration ;
     backlog:iterationStart "2026-09-01T00:00:00"^^xsd:dateTime ;
     backlog:iterationEnd "2026-09-14T23:59:59"^^xsd:dateTime ;
     backlog:hasCapacity 9.0 ;
-    backlog:hasCommittedEffort 9.0 ;
+    backlog:hasCommittedEffort 8.0 ;
     backlog:memberOfContainer fw:Register .
-fw:EP_Model_S1 backlog:hasEffortEstimate 3.0 ; backlog:memberOfContainer fw:It3 .
+fw:EP_Model_S1 backlog:hasEffortEstimate 5.0 ; backlog:memberOfContainer fw:It3 .
 fw:Plan_EP_Model_S1 a backlog:PlanningEvent ;
     backlog:plansItem fw:EP_Model_S1 ; backlog:plannedInto fw:It3 ;
     backlog:plannedAt "2026-09-01T09:00:00"^^xsd:dateTime ;
@@ -5001,9 +5002,9 @@ fw:T_EP_Model_S2 a backlog:ExecutionTask ;
     backlog:hasState backlog:Proposed ;
     backlog:hasTaskType backlog:Task_DesignDefinition ;
     backlog:memberOfContainer fw:Register , fw:It3 .
-fw:EP_Spec_S1 backlog:hasEffortEstimate 3.0 ; backlog:memberOfContainer fw:It3 .
+fw:EP_Spec_S1 backlog:hasEffortEstimate 5.0 ; backlog:memberOfContainer fw:It5 .
 fw:Plan_EP_Spec_S1 a backlog:PlanningEvent ;
-    backlog:plansItem fw:EP_Spec_S1 ; backlog:plannedInto fw:It3 ;
+    backlog:plansItem fw:EP_Spec_S1 ; backlog:plannedInto fw:It5 ;
     backlog:plannedAt "2026-09-01T09:00:00"^^xsd:dateTime ;
     backlog:plannedBy backlog:Builder ;
     backlog:producesTask fw:T_EP_Spec_S1 .
@@ -5012,7 +5013,7 @@ fw:T_EP_Spec_S1 a backlog:ExecutionTask ;
     backlog:hasTitle "Implement and gate EP_Spec_S1" ;
     backlog:hasState backlog:Proposed ;
     backlog:hasTaskType backlog:Task_RequirementsDefinition ;
-    backlog:memberOfContainer fw:Register , fw:It3 .
+    backlog:memberOfContainer fw:Register , fw:It5 .
 
 fw:It4 a backlog:Iteration ;
     backlog:hasIdentifier "It4" ;
@@ -5020,7 +5021,7 @@ fw:It4 a backlog:Iteration ;
     backlog:iterationStart "2026-09-15T00:00:00"^^xsd:dateTime ;
     backlog:iterationEnd "2026-09-28T23:59:59"^^xsd:dateTime ;
     backlog:hasCapacity 9.0 ;
-    backlog:hasCommittedEffort 9.0 ;
+    backlog:hasCommittedEffort 6.0 ;
     backlog:memberOfContainer fw:Register .
 fw:EP_Spec_S2 backlog:hasEffortEstimate 3.0 ; backlog:memberOfContainer fw:It4 .
 fw:Plan_EP_Spec_S2 a backlog:PlanningEvent ;
@@ -5034,9 +5035,9 @@ fw:T_EP_Spec_S2 a backlog:ExecutionTask ;
     backlog:hasState backlog:Proposed ;
     backlog:hasTaskType backlog:Task_RequirementsDefinition ;
     backlog:memberOfContainer fw:Register , fw:It4 .
-fw:EP_TestSpec_S1 backlog:hasEffortEstimate 3.0 ; backlog:memberOfContainer fw:It4 .
+fw:EP_TestSpec_S1 backlog:hasEffortEstimate 5.0 ; backlog:memberOfContainer fw:It6 .
 fw:Plan_EP_TestSpec_S1 a backlog:PlanningEvent ;
-    backlog:plansItem fw:EP_TestSpec_S1 ; backlog:plannedInto fw:It4 ;
+    backlog:plansItem fw:EP_TestSpec_S1 ; backlog:plannedInto fw:It6 ;
     backlog:plannedAt "2026-09-15T09:00:00"^^xsd:dateTime ;
     backlog:plannedBy backlog:Builder ;
     backlog:producesTask fw:T_EP_TestSpec_S1 .
@@ -5045,7 +5046,7 @@ fw:T_EP_TestSpec_S1 a backlog:ExecutionTask ;
     backlog:hasTitle "Implement and gate EP_TestSpec_S1" ;
     backlog:hasState backlog:Proposed ;
     backlog:hasTaskType backlog:Task_Verification ;
-    backlog:memberOfContainer fw:Register , fw:It4 .
+    backlog:memberOfContainer fw:Register , fw:It6 .
 fw:EP_TestSpec_S2 backlog:hasEffortEstimate 3.0 ; backlog:memberOfContainer fw:It4 .
 fw:Plan_EP_TestSpec_S2 a backlog:PlanningEvent ;
     backlog:plansItem fw:EP_TestSpec_S2 ; backlog:plannedInto fw:It4 ;
@@ -5237,7 +5238,7 @@ fw:It5 a backlog:Iteration ;
     backlog:iterationStart "2026-09-29T00:00:00"^^xsd:dateTime ;
     backlog:iterationEnd "2026-10-12T23:59:59"^^xsd:dateTime ;
     backlog:hasCapacity 9.0 ;
-    backlog:hasCommittedEffort 3.0 ;
+    backlog:hasCommittedEffort 8.0 ;
     backlog:memberOfContainer fw:Register .
 
 fw:Plan_EP_Model_S3 a backlog:PlanningEvent ;
@@ -5261,3 +5262,152 @@ fw:Inv_GroomingProducesArtefact a backlog:CrossCuttingInvariant ;
     backlog:hasInvariantStatus backlog:NotYetEnforceable ;
     backlog:tracksItem fw:EP_Model_S3 ;
     backlog:hasRationale "NotYetEnforceable because producesArtifact does not exist yet — BRF-EP_Model_S3 builds it. Recorded now so the gap is visible before the work rather than discovered after: six stories were planned to build artefact vocabulary and none of them connected an artefact to the grooming that produced it." .
+
+
+#################################################################
+#  v4.4.0 — ANALYSIS AND DESIGN AT GROOMING LEVEL.
+#
+#  As-is: all seven stories declared a concern and NONE carried a
+#  refinement. Concerns named, no analysis performed — the exact
+#  state BRF-EP12 was built to make visible, and it was visible.
+#
+#  Below is the analysis. Each refinement records what was decided
+#  and why, and the decisions changed the stories: EP_Spec_S1 gains
+#  a second concern, EP_TestSpec_S1 gains one, and Diagram is
+#  dropped as a class.
+#################################################################
+fw:R_EP_Model_S1_Data a backlog:RefinementEvent ;
+    backlog:refines fw:EP_Model_S1 ;
+    backlog:addressesConcern backlog:Data ;
+    backlog:refinedAt "2026-08-25T16:00:00"^^xsd:dateTime ;
+    backlog:refinedBy backlog:Builder ;
+    backlog:hasRefinementOutcome "ModelArtifact carries a name, a kind and the item it describes. Kind is a CLOSED enumeration of the UML 2.5 diagram taxonomy: 7 structure kinds and 7 behaviour kinds, plus the two-way split as a separate property so a query can ask for all behaviour artefacts without listing seven. Diagram is NOT a separate class — a diagram is a ModelArtifact whose kind is a diagram kind, and adding a class would force every query to union two." .
+fw:R_EP_Model_S1_Architecture a backlog:RefinementEvent ;
+    backlog:refines fw:EP_Model_S1 ;
+    backlog:addressesConcern backlog:Architecture ;
+    backlog:refinedAt "2026-08-25T16:00:00"^^xsd:dateTime ;
+    backlog:refinedBy backlog:Builder ;
+    backlog:hasRefinementOutcome "ModelArtifact hangs off ExecutionTask, not off Story: the task is what performs the technical process, and hanging artefacts on stories would make a story with three design tasks unable to say which produced what. Depends on nothing outside the backlog namespace." .
+fw:R_EP_Model_S2_Data a backlog:RefinementEvent ;
+    backlog:refines fw:EP_Model_S2 ;
+    backlog:addressesConcern backlog:Data ;
+    backlog:refinedAt "2026-08-25T16:00:00"^^xsd:dateTime ;
+    backlog:refinedBy backlog:Builder ;
+    backlog:hasRefinementOutcome "No new stored structure. The constraint reads existing triples: a task whose hasTaskType is Task_DesignDefinition or Task_ArchitectureDefinition with no ModelArtifact. Severity is ADVISORY not violation, because a design task may legitimately conclude that no artefact is needed and must be able to say so." .
+fw:R_EP_Model_S3_Data a backlog:RefinementEvent ;
+    backlog:refines fw:EP_Model_S3 ;
+    backlog:addressesConcern backlog:Data ;
+    backlog:refinedAt "2026-08-25T16:00:00"^^xsd:dateTime ;
+    backlog:refinedBy backlog:Builder ;
+    backlog:hasRefinementOutcome "producesArtifact goes from RefinementEvent to ModelArtifact, later-to-earlier like every other link. Not functional: one refinement may produce a class diagram and a sequence diagram together. The advisory fires when a refinement addresses a concern and names no artefact." .
+fw:R_EP_Spec_S1_Interaction a backlog:RefinementEvent ;
+    backlog:refines fw:EP_Spec_S1 ;
+    backlog:addressesConcern backlog:Interaction ;
+    backlog:refinedAt "2026-08-25T16:00:00"^^xsd:dateTime ;
+    backlog:refinedBy backlog:Builder ;
+    backlog:hasRefinementOutcome "InteractionStep carries an ordinal, an actor and what the actor does. Ordinal rather than a linked list: a list makes insertion cheap and querying expensive, and the common question is what step 3 is. Belongs to a Story because a step is user-visible behaviour, unlike a ModelArtifact which belongs to the task that made it." .
+fw:R_EP_Spec_S1_Data a backlog:RefinementEvent ;
+    backlog:refines fw:EP_Spec_S1 ;
+    backlog:addressesConcern backlog:Data ;
+    backlog:refinedAt "2026-08-25T16:00:00"^^xsd:dateTime ;
+    backlog:refinedBy backlog:Builder ;
+    backlog:hasRefinementOutcome "Ordinals must be unique within a story or two steps claim the same position; that is an L1 check, not L3, because it is a contradiction rather than an omission." .
+fw:R_EP_Spec_S2_Data a backlog:RefinementEvent ;
+    backlog:refines fw:EP_Spec_S2 ;
+    backlog:addressesConcern backlog:Data ;
+    backlog:refinedAt "2026-08-25T16:00:00"^^xsd:dateTime ;
+    backlog:refinedBy backlog:Builder ;
+    backlog:hasRefinementOutcome "StateChange names fromState, toState and the trigger. States are free text, NOT an enumeration: the framework governs registers for any domain and cannot know a domain state machine. Constraint is that from and to differ — a change to the same state is not a change." .
+fw:R_EP_TestSpec_S1_Data a backlog:RefinementEvent ;
+    backlog:refines fw:EP_TestSpec_S1 ;
+    backlog:addressesConcern backlog:Data ;
+    backlog:refinedAt "2026-08-25T16:00:00"^^xsd:dateTime ;
+    backlog:refinedBy backlog:Builder ;
+    backlog:hasRefinementOutcome "TestCase attaches to AcceptanceCriterion via a new exercisesCriterion, and TestEvidence gains attestsViaCase so evidence points at a case rather than only at a criterion. Without the second link the existing attestsCriterion stays the only path and the case is decorative." .
+fw:R_EP_TestSpec_S1_Security a backlog:RefinementEvent ;
+    backlog:refines fw:EP_TestSpec_S1 ;
+    backlog:addressesConcern backlog:Security ;
+    backlog:refinedAt "2026-08-25T16:00:00"^^xsd:dateTime ;
+    backlog:refinedBy backlog:Builder ;
+    backlog:hasRefinementOutcome "No authorisation surface: test cases describe checks, not access. Recorded as considered-and-not-applicable rather than left silent, because a story that never mentions security and one where security was examined and dismissed look identical otherwise." .
+fw:R_EP_TestSpec_S2_Data a backlog:RefinementEvent ;
+    backlog:refines fw:EP_TestSpec_S2 ;
+    backlog:addressesConcern backlog:Data ;
+    backlog:refinedAt "2026-08-25T16:00:00"^^xsd:dateTime ;
+    backlog:refinedBy backlog:Builder ;
+    backlog:hasRefinementOutcome "TestData attaches to TestCase, carries a name and a description of the fixture state it establishes. It does not carry the data itself: a register holding test payloads becomes a data store, and the framework governs records about work, not the work products." .
+
+#  Concerns the analysis found applicable that grooming had missed.
+fw:EP_Spec_S1 backlog:hasApplicableConcern backlog:Concern_Data .
+fw:EP_TestSpec_S1 backlog:hasApplicableConcern backlog:Concern_Security .
+
+#################################################################
+#  REPACK. The analysis changed the work, so the plan changes too.
+#
+#  EP_Model_S1 was groomed against Architecture as well as Data —
+#  the artefact hangs off ExecutionTask, which is a structural
+#  decision. EP_Spec_S1 and EP_TestSpec_S1 likewise gained a second
+#  concern. Three stories doubled their analysed surface and none
+#  had been re-estimated: a story analysed against two concerns is
+#  not the story that was estimated against one.
+#
+#  Re-estimated 3 -> 5 for those three. It3 then holds 5+3+5 = 13
+#  against a capacity of 9, which G9 forbids resolving by widening
+#  the box.
+#
+#  Repacked: EP_Spec_S1 moves out of It3. It4 is full, so it goes
+#  to It5 alongside EP_Model_S3 — and that moves it into a
+#  DIFFERENT PACKAGE'S iteration, which is fine because a package
+#  is a capability and an iteration is a time box. Pkg_StoryDetail
+#  now targets It3, It4 and It5.
+#################################################################
+
+fw:EP_Model_S1 backlog:hasApplicableConcern backlog:Concern_Architecture .
+
+fw:It6 a backlog:Iteration ;
+    backlog:hasIdentifier "It6" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:iterationStart "2026-10-13T00:00:00"^^xsd:dateTime ;
+    backlog:iterationEnd "2026-10-26T23:59:59"^^xsd:dateTime ;
+    backlog:hasCapacity 9.0 ;
+    backlog:hasCommittedEffort 5.0 ;
+    backlog:memberOfContainer fw:Register .
+
+fw:Pkg_StoryDetail backlog:targetsIteration fw:It5 , fw:It6 .
+fw:Pkg_Modelling backlog:targetsIteration fw:It5 .
+
+#################################################################
+#  FIT-GAP: the framework against the lineage.
+#################################################################
+
+fw:Adapt_FrameworkFit a backlog:LineageAdaptation ;
+    rdfs:label "Fit-gap of the framework against its own lineage"@en ;
+    backlog:adaptsScope fw:Scope_Build ;
+    backlog:hasAdaptationStage backlog:Stage_Ruling ;
+    backlog:hasAdaptationOutcome backlog:Adapt_BoundaryHolds .
+
+fw:Gate_FF_Assess a backlog:AdaptationGate ;
+    rdfs:label "Does the framework carry what the lineage needs?"@en ;
+    backlog:gateFor fw:Adapt_FrameworkFit ; backlog:gatesStage backlog:Stage_Assess ;
+    backlog:hasCheckQuery "SELECT ?c WHERE { ?c a owl:Class . FILTER NOT EXISTS { ?p rdfs:range ?c } FILTER NOT EXISTS { ?i a ?c } }" ;
+    backlog:hasExpectedResult "enumerated" ;
+    backlog:hasGateResult "enumerated" ;
+    backlog:gatePassed true ;
+    backlog:hasTransitionNote "23 classes have no property pointing at them and no instances." .
+
+fw:Gate_FF_FitGap a backlog:AdaptationGate ;
+    rdfs:label "Which gaps are real?"@en ;
+    backlog:gateFor fw:Adapt_FrameworkFit ; backlog:gatesStage backlog:Stage_FitGap ;
+    backlog:hasCheckQuery "ASK { fw:Scope_Build backlog:requiresDeliverable ?d FILTER NOT EXISTS { ?w backlog:satisfiesDeliverable ?d ; backlog:hasState backlog:Done } }" ;
+    backlog:hasExpectedResult "enumerated" ;
+    backlog:hasGateResult "enumerated" ;
+    backlog:gatePassed true ;
+    backlog:hasRationale "Three deliverables unsatisfied by Done work is the planned modelling work and not a defect — it is a boundary widened before its backlog was built, which is the order the discipline asks for. The real finding is the 23 unreachable classes." .
+
+fw:Inv_UnreachableClasses a backlog:CrossCuttingInvariant ;
+    rdfs:label "No class the vocabulary cannot point at"@en ;
+    backlog:hasCheckQuery "SELECT (COUNT(?c) AS ?n) WHERE { ?c a owl:Class . FILTER STRSTARTS(STR(?c), 'http://example.org/backlog#') FILTER NOT EXISTS { ?p rdfs:range ?c } FILTER NOT EXISTS { ?i a ?c } FILTER NOT EXISTS { ?c owl:oneOf ?l } FILTER NOT EXISTS { ?s rdfs:subClassOf ?c } }" ;
+    backlog:hasExpectedResult "0" ;
+    backlog:hasInvariantStatus backlog:Violated ;
+    backlog:tracksItem fw:EP_Model_S3 ;
+    backlog:hasRationale "23 classes: ArtifactEvidence, Blueprint, BlueprintGap, Budget, Defect, DimensionalCost, Enabler, EnhancementProposal, Feature, Impediment, ImplementationProject, Opportunity, PortfolioPolicy, RICEScore, RegisterPackage, RegisterSession, ReleaseEvidence, ReleaseGate, ReviewEvidence, Spike, TransitionEvent, WipLimit, Workflow. This is the Package defect generalised. Package sat unused for 91 releases because no property had it as a range, and the cost was a wrong conclusion drawn in good faith — packages were believed impossible before delivery when the concept existed all along. Each of these 23 is the same trap waiting. REMEDY, not built here: an L3 shape rejecting a class the vocabulary cannot reach, run against the TBox rather than the register, plus a decision per class — give it a referring property or retire it. Recorded as Violated rather than deferred silently." .
