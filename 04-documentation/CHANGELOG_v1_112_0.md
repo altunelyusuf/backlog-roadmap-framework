@@ -1,5 +1,48 @@
 # Changelog
 
+## v1.112.0 — 2026-11-29 (MINOR: It8 — the reader reads the ontology)
+
+**Re-groomed before building, per the owner's model.** It7 taught something the original grooming did
+not know: a table exported to the ontology while still present in python counts as **not exported**,
+because the script has not changed. That made story 2 the whole of the export, not a tidy-up.
+
+Recorded as a *second* refinement rather than an edit to the first — the earlier analysis was made in
+good faith on what was known then, and overwriting it would erase the fact that the plan changed for a
+reason.
+
+### The re-grooming narrowed one story, honestly
+
+**Reachability cannot move to the register.** It is a query over the TBox, and the register cannot hold
+a rule about classes that do not exist yet — expressing it as a shape would require the shape to run
+against the TBox as data, which the gate does not do. Recorded as a scope finding: the story ships one
+of its two steps and says so.
+
+### The reader fails loudly
+
+`_load_layers` reads the 18 layers from the ontology and the python literal is **deleted**. Verified
+twice: against the register it reports all 18 present; against a register carrying no `LineageLayer` it
+exits FATAL rather than falling back. **A silent fallback would leave the script working and the
+migration unfinished** — a fallback is a python decision wearing an ontology's clothes.
+
+### The export had dropped two fields
+
+The consumer unpacks four — `(label, class, why, tier)` — and the first export carried two. A reader
+returning fewer fields than its consumer unpacks fails at the first row. `layerLabel` and `layerTier`
+are now in the ontology, which makes *"which layers may an L2 register omit"* a queryable governance
+question rather than a string in a script.
+
+### Measured, and one objective is behind
+
+```
+Obj_RulesDecidedInCode   3 → 2    manifest exemption moved
+Obj_TablesExported      23 → 22   one fully migrated
+```
+
+The 30 November checkpoint expected **12** tables remaining. At 22 this objective is **behind its own
+plan and the advisory says so** — one table per iteration does not reach zero by January. That is the
+checkpoint doing exactly what it was added for: reporting before the deadline rather than at it.
+
+
 ## v1.111.0 — 2026-11-15 (MINOR: It7 delivered — governance is queryable)
 
 Built to the specifications the stories carried, one iteration only.

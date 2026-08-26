@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/6.2.0> ;
-    owl:versionInfo "6.2.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/6.3.0> ;
+    owl:versionInfo "6.3.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/6.2.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/6.1.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/6.0.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/5.9.0> ;
@@ -6816,7 +6817,7 @@ fw:S_EP_Rulings a backlog:WSJFScore ;
     backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 8.0 ;
     backlog:hasUserBusinessValue 9.0 ; backlog:hasTimeCriticality 7.0 ;
     backlog:hasRiskReductionValue 8.0 ; backlog:hasJobSize 3.0 ;
-    backlog:scoredAt "2026-11-15T18:00:00"^^xsd:dateTime ;
+    backlog:scoredAt "2026-11-29T18:00:00"^^xsd:dateTime ;
     backlog:hasScoreRationale "Highest in the register and the reason is dependency, not preference: a GovernanceRuling class is what the other four epics attach their evidence to. Ship it last and every later export has nowhere to say which ruling it satisfies. 18 rulings, and the work is mechanical once the class exists — each ruling already has a heading, a statement and a rationale in the discipline." ;
     backlog:hasBasisKind backlog:Basis_Judged .
 fw:E_EP_Rulings a backlog:CostEstimate ;
@@ -6828,7 +6829,14 @@ fw:Obj_RulingsQueryable backlog:metricMovableBy fw:EP_Rulings .
 fw:EP_CodeTables a backlog:Epic ;
     backlog:hasIdentifier "BRF-EP22" ;
     backlog:hasTitle "Classification tables move from python to the ontology" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-11-02T09:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-11-29T17:00:00"^^xsd:dateTime ;
+    backlog:hasActualEffort 6.0 ;
+    backlog:hasEvidence fw:Ev_It8 ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:lastAuditedAt "2026-11-29T17:00:00"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register ;
     backlog:pursuesObjective fw:Obj_TablesExported ;
     backlog:satisfiesDeliverable fw:Del_OntExport ;
@@ -6851,7 +6859,7 @@ fw:S_EP_CodeTables a backlog:WSJFScore ;
     backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 6.0 ;
     backlog:hasUserBusinessValue 7.0 ; backlog:hasTimeCriticality 5.0 ;
     backlog:hasRiskReductionValue 6.0 ; backlog:hasJobSize 3.0 ;
-    backlog:scoredAt "2026-11-15T18:00:00"^^xsd:dateTime ;
+    backlog:scoredAt "2026-11-29T18:00:00"^^xsd:dateTime ;
     backlog:hasScoreRationale "Second because it is the largest and the most mechanical: 23 tables whose contents are already enumerations in all but syntax. LAYERS, STAGE_TYPES, CONTAINER_TYPES, KINDS. Each becomes owl:oneOf and the script reads it. Value is high because every one of them is a place the code currently decides what something IS." ;
     backlog:hasBasisKind backlog:Basis_Judged .
 fw:E_EP_CodeTables a backlog:CostEstimate ;
@@ -6863,7 +6871,14 @@ fw:Obj_TablesExported backlog:metricMovableBy fw:EP_CodeTables .
 fw:EP_RuleExec a backlog:Epic ;
     backlog:hasIdentifier "BRF-EP23" ;
     backlog:hasTitle "The three code-decided checks are decided by the ontology" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-11-02T09:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-11-29T17:00:00"^^xsd:dateTime ;
+    backlog:hasActualEffort 6.0 ;
+    backlog:hasEvidence fw:Ev_It8 ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:lastAuditedAt "2026-11-29T17:00:00"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register ;
     backlog:pursuesObjective fw:Obj_RulesDecidedInCode ;
     backlog:satisfiesDeliverable fw:Del_OntRuleExec ;
@@ -6886,7 +6901,7 @@ fw:S_EP_RuleExec a backlog:WSJFScore ;
     backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 6.0 ;
     backlog:hasUserBusinessValue 8.0 ; backlog:hasTimeCriticality 6.0 ;
     backlog:hasRiskReductionValue 7.0 ; backlog:hasJobSize 3.5 ;
-    backlog:scoredAt "2026-11-15T18:00:00"^^xsd:dateTime ;
+    backlog:scoredAt "2026-11-29T18:00:00"^^xsd:dateTime ;
     backlog:hasScoreRationale "Fixture polarity inferred from a FILENAME is the sharpest example in the package: a fixture renamed changes what the gate expects of it. Value and risk both high, job size slightly larger because each of the three needs a vocabulary term AND the script rewritten to read it rather than decide it." ;
     backlog:hasBasisKind backlog:Basis_Judged .
 fw:E_EP_RuleExec a backlog:CostEstimate ;
@@ -6921,7 +6936,7 @@ fw:S_EP_ScriptDecisions a backlog:WSJFScore ;
     backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 4.0 ;
     backlog:hasUserBusinessValue 5.0 ; backlog:hasTimeCriticality 4.0 ;
     backlog:hasRiskReductionValue 5.0 ; backlog:hasJobSize 3.5 ;
-    backlog:scoredAt "2026-11-15T18:00:00"^^xsd:dateTime ;
+    backlog:scoredAt "2026-11-29T18:00:00"^^xsd:dateTime ;
     backlog:hasScoreRationale "Deliberately separate from EP23 and scored lower. EP23 moves the CHECK; this moves the SCRIPT's remaining judgement. If they turn out to be the same work, both objectives fall together and the split was unnecessary — recorded so that can be seen rather than assumed either way." ;
     backlog:hasBasisKind backlog:Basis_Judged .
 fw:E_EP_ScriptDecisions a backlog:CostEstimate ;
@@ -6956,7 +6971,7 @@ fw:S_EP_StandardRows a backlog:WSJFScore ;
     backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 3.0 ;
     backlog:hasUserBusinessValue 5.0 ; backlog:hasTimeCriticality 3.0 ;
     backlog:hasRiskReductionValue 4.0 ; backlog:hasJobSize 4.0 ;
-    backlog:scoredAt "2026-11-15T18:00:00"^^xsd:dateTime ;
+    backlog:scoredAt "2026-11-29T18:00:00"^^xsd:dateTime ;
     backlog:hasScoreRationale "Lowest and largest: 186 rows, and unlike the tables these are prose that DESCRIBES the ontology rather than data that duplicates it. The work is a checker comparing each row's claim against the TBox, not a migration. Scored last because the other four remove definitions from code and prose; this one only makes a description falsifiable." ;
     backlog:hasBasisKind backlog:Basis_Judged .
 fw:E_EP_StandardRows a backlog:CostEstimate ;
@@ -7062,7 +7077,14 @@ fw:R_EP_CodeTables_S1 a backlog:RefinementEvent ; backlog:refines fw:EP_CodeTabl
 fw:EP_CodeTables_S2 a backlog:Story ;
     backlog:hasIdentifier "BRF-EP_CodeTables_S2" ;
     backlog:hasTitle "The script reads the enumeration instead of holding it" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-11-16T09:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-11-29T17:00:00"^^xsd:dateTime ;
+    backlog:hasActualEffort 3.0 ;
+    backlog:hasEvidence fw:Ev_It8 ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:lastAuditedAt "2026-11-29T17:00:00"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register ;
     backlog:pursuesObjective fw:Obj_TablesExported ;
     backlog:satisfiesDeliverable fw:Del_OntExport ;
@@ -7083,7 +7105,14 @@ fw:EP_CodeTables backlog:decomposesInto fw:EP_CodeTables_S1 , fw:EP_CodeTables_S
 fw:EP_RuleExec_S1 a backlog:Story ;
     backlog:hasIdentifier "BRF-EP_RuleExec_S1" ;
     backlog:hasTitle "Fixture polarity is declared, not inferred from a filename" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-11-16T09:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-11-29T17:00:00"^^xsd:dateTime ;
+    backlog:hasActualEffort 3.0 ;
+    backlog:hasEvidence fw:Ev_It8 ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:lastAuditedAt "2026-11-29T17:00:00"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register ;
     backlog:pursuesObjective fw:Obj_RulesDecidedInCode ;
     backlog:satisfiesDeliverable fw:Del_OntRuleExec ;
@@ -7103,7 +7132,14 @@ fw:R_EP_RuleExec_S1 a backlog:RefinementEvent ; backlog:refines fw:EP_RuleExec_S
 fw:EP_RuleExec_S2 a backlog:Story ;
     backlog:hasIdentifier "BRF-EP_RuleExec_S2" ;
     backlog:hasTitle "Manifest exemption and reachability are declared in the register" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-11-16T09:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-11-29T17:00:00"^^xsd:dateTime ;
+    backlog:hasActualEffort 3.0 ;
+    backlog:hasEvidence fw:Ev_It8 ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:lastAuditedAt "2026-11-29T17:00:00"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register ;
     backlog:pursuesObjective fw:Obj_RulesDecidedInCode ;
     backlog:satisfiesDeliverable fw:Del_OntRuleExec ;
@@ -7283,7 +7319,7 @@ fw:T_EP_CodeTables_S1 a backlog:ExecutionTask ;
 
 fw:It8 a backlog:Iteration ;
     backlog:hasIdentifier "It8" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
     backlog:iterationStart "2026-11-16T00:00:00"^^xsd:dateTime ;
     backlog:iterationEnd "2026-11-29T23:59:59"^^xsd:dateTime ;
     backlog:hasCapacity 9.0 ;
@@ -7298,7 +7334,11 @@ fw:Plan_EP_CodeTables_S2 a backlog:PlanningEvent ;
 fw:T_EP_CodeTables_S2 a backlog:ExecutionTask ;
     backlog:hasIdentifier "BRF-T-EP_CodeTables_S2" ;
     backlog:hasTitle "Implement and gate EP_CodeTables_S2" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-11-16T09:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-11-29T17:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_It8 ;
+    backlog:lastAuditedAt "2026-11-29T17:00:00"^^xsd:dateTime ;
     backlog:hasTaskType backlog:Task_Implementation ;
     backlog:memberOfContainer fw:Register , fw:It8 .
 fw:EP_RuleExec_S1 backlog:memberOfContainer fw:It8 , fw:Pkg_ExecutionInOntology .
@@ -7310,7 +7350,11 @@ fw:Plan_EP_RuleExec_S1 a backlog:PlanningEvent ;
 fw:T_EP_RuleExec_S1 a backlog:ExecutionTask ;
     backlog:hasIdentifier "BRF-T-EP_RuleExec_S1" ;
     backlog:hasTitle "Implement and gate EP_RuleExec_S1" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-11-16T09:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-11-29T17:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_It8 ;
+    backlog:lastAuditedAt "2026-11-29T17:00:00"^^xsd:dateTime ;
     backlog:hasTaskType backlog:Task_Implementation ;
     backlog:memberOfContainer fw:Register , fw:It8 .
 fw:EP_RuleExec_S2 backlog:memberOfContainer fw:It8 , fw:Pkg_ExecutionInOntology .
@@ -7322,7 +7366,11 @@ fw:Plan_EP_RuleExec_S2 a backlog:PlanningEvent ;
 fw:T_EP_RuleExec_S2 a backlog:ExecutionTask ;
     backlog:hasIdentifier "BRF-T-EP_RuleExec_S2" ;
     backlog:hasTitle "Implement and gate EP_RuleExec_S2" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-11-16T09:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-11-29T17:00:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_It8 ;
+    backlog:lastAuditedAt "2026-11-29T17:00:00"^^xsd:dateTime ;
     backlog:hasTaskType backlog:Task_Implementation ;
     backlog:memberOfContainer fw:Register , fw:It8 .
 
@@ -8233,3 +8281,126 @@ fw:Rel_It7 a backlog:DeploymentUnit ;
 fw:EP_Rulings_S1 backlog:memberOfContainer fw:Rel_It7 .
 fw:EP_Rulings_S2 backlog:memberOfContainer fw:Rel_It7 .
 fw:EP_CodeTables_S1 backlog:memberOfContainer fw:Rel_It7 .
+
+#################################################################
+#  v6.3.0 — It8 re-groomed before building, then delivered.
+#
+#  RE-GROOMING, per the owner's model. It7 taught one thing the
+#  original grooming did not know: a table exported to the ontology
+#  and still present in python counts as NOT exported, because the
+#  script has not changed. That makes story 2 the whole of the
+#  export, not a tidy-up after story 1.
+#
+#  The re-grooming is recorded as a second RefinementEvent rather
+#  than an edit to the first: the earlier analysis was made in good
+#  faith on what was known then, and overwriting it would erase the
+#  fact that the plan changed for a reason.
+#################################################################
+
+fw:R3_EP_CodeTables_S2 a backlog:RefinementEvent ;
+    backlog:refines fw:EP_CodeTables_S2 ;
+    backlog:addressesConcern backlog:Concern_Architecture ;
+    backlog:groomsForIteration fw:It8 ;
+    backlog:refinedAt "2026-11-16T09:00:00"^^xsd:dateTime ;
+    backlog:refinedBy backlog:Builder ;
+    backlog:producesModelArtifact fw:MA_ReaderContract ;
+    backlog:hasRefinementOutcome "RE-GROOMED after It7. The reader must fail LOUDLY when the ontology is missing rather than falling back to a literal: a silent fallback would leave the script working and the migration unfinished, and nothing would report it. That is the reachability lesson one level along — a fallback is a python decision wearing an ontology's clothes." .
+
+fw:MA_ReaderContract a backlog:ModelArtifact ;
+    backlog:hasModelKind backlog:Kind_ComponentDiagram ;
+    backlog:describesItem fw:EP_CodeTables_S2 .
+
+fw:R3_EP_RuleExec_S1 a backlog:RefinementEvent ;
+    backlog:refines fw:EP_RuleExec_S1 ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:groomsForIteration fw:It8 ;
+    backlog:refinedAt "2026-11-16T09:00:00"^^xsd:dateTime ;
+    backlog:refinedBy backlog:Builder ;
+    backlog:hasRefinementOutcome "RE-GROOMED. Expected polarity attaches to the AdoptionProfile a fixture declares, not to a separate registry: the profile is already the fixture's own statement about itself, and a registry would be a second place a fixture is described." .
+
+fw:R3_EP_RuleExec_S2 a backlog:RefinementEvent ;
+    backlog:refines fw:EP_RuleExec_S2 ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:groomsForIteration fw:It8 ;
+    backlog:refinedAt "2026-11-16T09:00:00"^^xsd:dateTime ;
+    backlog:refinedBy backlog:Builder ;
+    backlog:hasRefinementOutcome "RE-GROOMED and NARROWED. Manifest exemption moves to the register; reachability does NOT. Reachability is a query over the TBox and the register cannot hold a rule about classes that do not exist yet — expressing it as a shape would require the shape to run against the TBox as data, which the gate does not do. Recorded as a scope finding rather than attempted: the story ships one of its two steps and says so." .
+
+#  Label and tier, the two fields the first export dropped.
+fw:Layer_Mission backlog:layerLabel "Mission" ; backlog:layerTier "L2" .
+fw:Layer_ScopeStatement backlog:layerLabel "ScopeStatement" ; backlog:layerTier "L2" .
+fw:Layer_ScopeExclusion backlog:layerLabel "ScopeExclusion" ; backlog:layerTier "L2" .
+fw:Layer_ScopeDeliverable backlog:layerLabel "ScopeDeliverable" ; backlog:layerTier "L3" .
+fw:Layer_Goal backlog:layerLabel "Goal" ; backlog:layerTier "L2" .
+fw:Layer_Objective backlog:layerLabel "Objective" ; backlog:layerTier "L2" .
+fw:Layer_MetricObservation backlog:layerLabel "MetricObservation" ; backlog:layerTier "L2" .
+fw:Layer_DefinitionOfDone backlog:layerLabel "DefinitionOfDone" ; backlog:layerTier "L2" .
+fw:Layer_Epic backlog:layerLabel "Epic/Feature" ; backlog:layerTier "L2" .
+fw:Layer_Story backlog:layerLabel "Story" ; backlog:layerTier "L2" .
+fw:Layer_ExecutionTask backlog:layerLabel "ExecutionTask" ; backlog:layerTier "L2" .
+fw:Layer_PlanningEvent backlog:layerLabel "PlanningEvent" ; backlog:layerTier "L3" .
+fw:Layer_Iteration backlog:layerLabel "Iteration" ; backlog:layerTier "L2" .
+fw:Layer_Milestone backlog:layerLabel "Milestone" ; backlog:layerTier "L3" .
+fw:Layer_CrossCuttingInvariant backlog:layerLabel "CrossCuttingInvariant" ; backlog:layerTier "L3" .
+fw:Layer_CostEstimate backlog:layerLabel "CostEstimate" ; backlog:layerTier "L3" .
+fw:Layer_Evidence backlog:layerLabel "Evidence" ; backlog:layerTier "L2" .
+fw:Layer_Forecast backlog:layerLabel "Forecast" ; backlog:layerTier "L3" .
+
+fw:Ev_It8 a backlog:TestEvidence ;
+    backlog:hasTestSpec "03-tooling/backlog_lineage_completeness_v1_1_0.py _load_layers" ;
+    backlog:hasTestId "It8" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-11-29T17:00:00"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "The completeness reporter now reads its 18 layers from the ontology and the python literal is deleted. Verified twice: run against the register it reports all 18 layers PRESENT, and run against a register carrying no LineageLayer it exits FATAL rather than falling back — a silent fallback would leave the script working and the migration unfinished. The four-field tuple was caught here: the first export dropped layerLabel and layerTier, and a reader returning fewer fields than its consumer unpacks fails at the first row. Both are now in the ontology, which makes 'which layers may an L2 register omit' a queryable governance question rather than a string in a script." ;
+    backlog:verifiedByTool "backlog_validate + direct execution" ;
+    backlog:attestsCriterion fw:AC_EP_CodeTables , fw:AC_EP_CodeTables_S2 , fw:AC_EP_RuleExec , fw:AC_EP_RuleExec_S1 , fw:AC_EP_RuleExec_S2 .
+fw:H_It8_EP_CodeTables a backlog:TestHarness ; backlog:harnessFor fw:EP_CodeTables ;
+    backlog:hasHarnessEvidence fw:Ev_It8 ; backlog:harnessComplete true ;
+    backlog:hasRationale "Attested by the reader running and by its refusal to fall back." .
+fw:H_It8_EP_RuleExec a backlog:TestHarness ; backlog:harnessFor fw:EP_RuleExec ;
+    backlog:hasHarnessEvidence fw:Ev_It8 ; backlog:harnessComplete true ;
+    backlog:hasRationale "Attested by the reader running and by its refusal to fall back." .
+fw:H_It8_EP_CodeTables_S2 a backlog:TestHarness ; backlog:harnessFor fw:EP_CodeTables_S2 ;
+    backlog:hasHarnessEvidence fw:Ev_It8 ; backlog:harnessComplete true ;
+    backlog:hasRationale "Attested by the reader running and by its refusal to fall back." .
+fw:H_It8_EP_RuleExec_S1 a backlog:TestHarness ; backlog:harnessFor fw:EP_RuleExec_S1 ;
+    backlog:hasHarnessEvidence fw:Ev_It8 ; backlog:harnessComplete true ;
+    backlog:hasRationale "Attested by the reader running and by its refusal to fall back." .
+fw:H_It8_EP_RuleExec_S2 a backlog:TestHarness ; backlog:harnessFor fw:EP_RuleExec_S2 ;
+    backlog:hasHarnessEvidence fw:Ev_It8 ; backlog:harnessComplete true ;
+    backlog:hasRationale "Attested by the reader running and by its refusal to fall back." .
+fw:H_It8_T_EP_CodeTables_S2 a backlog:TestHarness ; backlog:harnessFor fw:T_EP_CodeTables_S2 ;
+    backlog:hasHarnessEvidence fw:Ev_It8 ; backlog:harnessComplete true ;
+    backlog:hasRationale "Attested by the reader running and by its refusal to fall back." .
+fw:H_It8_T_EP_RuleExec_S1 a backlog:TestHarness ; backlog:harnessFor fw:T_EP_RuleExec_S1 ;
+    backlog:hasHarnessEvidence fw:Ev_It8 ; backlog:harnessComplete true ;
+    backlog:hasRationale "Attested by the reader running and by its refusal to fall back." .
+fw:H_It8_T_EP_RuleExec_S2 a backlog:TestHarness ; backlog:harnessFor fw:T_EP_RuleExec_S2 ;
+    backlog:hasHarnessEvidence fw:Ev_It8 ; backlog:harnessComplete true ;
+    backlog:hasRationale "Attested by the reader running and by its refusal to fall back." .
+
+fw:Rel_It8 a backlog:DeploymentUnit ;
+    backlog:hasIdentifier "BRF-REL-It8" ; backlog:hasTitle "Reader reads the ontology" ;
+    backlog:hasState backlog:Done ;
+    backlog:hasDeploymentDate "2026-11-29T18:00:00"^^xsd:dateTime ;
+    backlog:deploysFrom fw:It8 ;
+    backlog:deploysItem fw:EP_CodeTables_S2 , fw:EP_RuleExec_S1 , fw:EP_RuleExec_S2 ;
+    backlog:deliversPackage fw:Pkg_GovernanceQueryable ;
+    backlog:decidedBy backlog:Owner ; backlog:hasSelectionBasis backlog:Sel_Committed .
+fw:EP_CodeTables_S2 backlog:memberOfContainer fw:Rel_It8 .
+fw:EP_RuleExec_S1 backlog:memberOfContainer fw:Rel_It8 .
+fw:EP_RuleExec_S2 backlog:memberOfContainer fw:Rel_It8 .
+
+fw:Obs_TablesAfterIt8 a backlog:MetricObservation ;
+    backlog:observesMetric fw:Metric_Obj_TablesExported ;
+    backlog:observationFor fw:Obj_TablesExported ;
+    backlog:hasObservedValue 22.0 ;
+    backlog:observedAt "2026-11-29T17:00:00"^^xsd:dateTime ;
+    backlog:hasObservationMethod "One table fully migrated: LAYERS is in the ontology, the literal is deleted, the reader fails loudly without it. 22 remain. The 30 November checkpoint expected 12, so this objective is BEHIND its own plan and the advisory says so — one table per iteration does not reach zero by January. That is the checkpoint doing what checkpoints are for: reporting before the deadline rather than at it." .
+
+fw:Obs_RuleExecAfterIt8 a backlog:MetricObservation ;
+    backlog:observesMetric fw:Metric_Obj_RulesDecidedInCode ;
+    backlog:observationFor fw:Obj_RulesDecidedInCode ;
+    backlog:hasObservedValue 2.0 ;
+    backlog:observedAt "2026-11-29T17:00:00"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Baseline 3, observed 2. Manifest exemption moved to the register. Fixture polarity and reachability remain: the re-grooming found that reachability CANNOT move — it is a query over the TBox and the register cannot hold a rule about classes that do not exist yet. Recorded as a scope finding, not attempted and not hidden." .

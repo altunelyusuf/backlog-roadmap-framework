@@ -50,48 +50,43 @@ BL = Namespace("http://example.org/backlog#")
 PKG = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # (label, class, why it matters when missing, the tier where its absence bites)
-LAYERS = [
-    ("Mission", "Mission",
-     "the intent chain has no root; nothing states why the development exists", "L2"),
-    # Scope precedes goals and objectives, per Lineage Operating Discipline
-    # v3.0.0. This list is read as the order to build a lineage in, so listing
-    # scope last taught the retired order to everyone who ran the report — the
-    # boundary drawn around goals already fixed, which can never refuse
-    # anything. The layers are unchanged; only the order they are presented in.
-    ("ScopeStatement", "ScopeStatement",
-     "no boundary, so scope completion cannot be derived and scope growth cannot be detected", "L2"),
-    ("ScopeExclusion", "ScopeExclusion",
-     "a boundary with only an inside; the questions later argued about are the ones an exclusion settles", "-"),
-    ("Goal", "Goal",
-     "nothing connects the work to the mission", "-"),
-    ("Objective", "Objective",
-     "every goal is unmeasurable; no observation can contradict the plan", "L2"),
-    ("MetricObservation", "MetricObservation",
-     "objectives can be stated but never settled; success and failure are both unreachable", "L3"),
-    ("DefinitionOfDone", "DefinitionOfDone",
-     "completion is whatever each claim says it is", "-"),
-    ("Epic/Feature", "Epic",
-     "no large-grain structure; the roadmap orders items with nothing beneath them", "-"),
-    ("Story", "Story",
-     "nothing user-facing is described; a plan of epics schedules no work anyone can pick up", "-"),
-    ("ExecutionTask", "ExecutionTask",
-     "no execution detail; progress can be claimed but not observed step by step", "-"),
-    ("PlanningEvent", "PlanningEvent",
-     "tasks appear with nobody recorded as having planned them; required at L2 only WHERE execution tasks exist, per ExecutionTaskShape", "-"),
-    ("Iteration", "Iteration",
-     "no cadence; velocity has no denominator and cannot be computed", "-"),
-    ("Milestone", "Milestone",
-     "nothing dated; a slipped commitment is indistinguishable from one nobody made", "-"),
-    ("CrossCuttingInvariant", "CrossCuttingInvariant",
-     "standing properties are prose; 'we always check X' is not runnable", "-"),
-    ("CostEstimate", "CostEstimate",
-     "no cost is claimed, so none can be falsified by an actual", "-"),
-    ("Evidence", "Evidence",
-     "completion rests on assertion", "L2"),
-    ("Forecast", "Forecast",
-     "no dated expectation, so nothing can be shown to have been optimistic", "-"),
-]
+def _load_layers(tbox_path, reg_path):
+    """Read the lineage layers from the ontology.
 
+    EXPORTED at v1.111.0 and READ here. The python literal this replaces
+    decided what counts as a layer, in what order, and what its absence costs
+    — three judgements a script held and no query could reach.
+
+    Fails LOUDLY when the ontology carries no layers. A fallback to a literal
+    would leave this script working and the migration unfinished, and nothing
+    would report it: a fallback is a python decision wearing an ontology's
+    clothes, which is the thing this release exists to remove.
+    """
+    from rdflib import Graph, Namespace, RDF
+    B = Namespace("http://example.org/backlog#")
+    g = Graph()
+    g.parse(tbox_path, format="turtle")
+    g.parse(reg_path, format="turtle")
+    rows = []
+    for layer in g.subjects(RDF.type, B.LineageLayer):
+        cls = g.value(layer, B.layerClass)
+        ordn = g.value(layer, B.layerOrdinal)
+        cost = g.value(layer, B.layerAbsenceCost)
+        label = g.value(layer, B.layerLabel)
+        tier = g.value(layer, B.layerTier)
+        if cls is None or ordn is None:
+            continue
+        rows.append((int(ordn), str(label or cls).split("#")[-1],
+                     str(cls).split("#")[-1], str(cost or ""), str(tier or "L2")))
+    if not rows:
+        raise SystemExit(
+            "FATAL: the ontology declares no LineageLayer. The layer table was "
+            "exported at v1.111.0 and this script reads it rather than holding "
+            "one. Refusing to fall back to a literal: a silent fallback would "
+            "leave the migration unfinished and nothing would say so."
+        )
+    rows.sort()
+    return [(label, cls, cost, tier) for _, label, cls, cost, tier in rows]
 
 def main():
     if len(sys.argv) < 2:
@@ -113,6 +108,8 @@ def main():
     print()
 
     present, absent = [], []
+    _tbox = sorted(glob.glob(os.path.join(PKG, "01-ontologies", "backlog_tbox_v*.ttl")))[-1]
+    LAYERS = _load_layers(_tbox, reg)
     for label, cls, why, tier in LAYERS:
         n = len(set(g.subjects(RDF.type, URIRef(str(BL) + cls))))
         if cls == "Evidence":

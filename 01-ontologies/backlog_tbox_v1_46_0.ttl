@@ -4766,3 +4766,15 @@ backlog:layerAbsenceCost a owl:DatatypeProperty ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "layer absence cost"@en ;
     skos:definition "What is lost when this layer is missing. The reporter held these strings inline; they are the reason a layer matters and belong with the layer."@en .
+
+backlog:layerLabel a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:LineageLayer ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "layer label"@en ;
+    skos:definition "How the layer is named in a report, which is not always its class name — Epic and Feature are one layer displayed as 'Epic/Feature'. Found when the reader was written: the exported table had dropped two of the original tuple's four fields, and a reader that returns fewer fields than its consumer unpacks fails at the first row."@en .
+
+backlog:layerTier a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:LineageLayer ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "layer tier"@en ;
+    skos:definition "The conformance level at which this layer's absence starts to matter. Held in the python table as a bare string and now queryable: which layers an L2 register may omit is a governance question, not a reporting detail."@en .
