@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/5.3.0> ;
-    owl:versionInfo "5.3.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/5.4.0> ;
+    owl:versionInfo "5.4.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/5.3.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/5.2.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/5.1.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/5.0.0> ;
@@ -6176,36 +6177,8 @@ fw:Scope_Build backlog:coversArea fw:Area_BuildFramework .
 #  is a restatement of another.
 #################################################################
 
-fw:Goal_MeaningInOntology a backlog:Goal ;
-    rdfs:label "No meaning is defined only by prose or by code"@en ;
-    backlog:contributesToMission fw:Mission_OntologyDriven ;
-    backlog:derivesFromScope fw:Scope_Ontology ;
-    backlog:hasGoalFacing backlog:Facing_Mission ;
-    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
-    backlog:producedByStage fw:Out2_Goal ;
-    backlog:decidedBy backlog:Owner ;
-    backlog:hasRationale "MISSION-FACING, and deliberately not phrased in terms of the four areas. Test: if all four areas finish and this goal is unmet, the areas were the wrong ones and the SCOPE was insufficient — which is a failure no scope-facing measure can report, because the scope is the thing being measured. This goal is the only one that can fail in a way that indicts the boundary." .
 
-fw:Goal_AreasExhausted a backlog:Goal ;
-    rdfs:label "Every area the scope names reaches its finish condition"@en ;
-    backlog:contributesToMission fw:Mission_OntologyDriven ;
-    backlog:derivesFromScope fw:Scope_Ontology ;
-    backlog:hasGoalFacing backlog:Facing_Scope ;
-    backlog:goalCoversArea fw:Area_Governance , fw:Area_CodeTables , fw:Area_RuleExecution , fw:Area_StandardDoc ;
-    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
-    backlog:producedByStage fw:Out2_Goal ;
-    backlog:decidedBy backlog:Owner ;
-    backlog:hasRationale "SCOPE-FACING. Test: without it, Goal_MeaningInOntology can read met once the easy areas are done — the 23 code tables are mechanical, the 186 standard rows are not — and a mission condition stated generally does not notice which half was skipped. Names all four areas explicitly so an area belonging to no goal is visible." .
 
-fw:Goal_NoWorkOutsideAreas a backlog:Goal ;
-    rdfs:label "No work is done outside the areas the scope names"@en ;
-    backlog:contributesToMission fw:Mission_OntologyDriven ;
-    backlog:derivesFromScope fw:Scope_Ontology ;
-    backlog:hasGoalFacing backlog:Facing_Containment ;
-    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
-    backlog:producedByStage fw:Out2_Goal ;
-    backlog:decidedBy backlog:Owner ;
-    backlog:hasRationale "CONTAINMENT-FACING, and this is the one this session most needs. Test: with the other two met, effort can still go somewhere the scope never named and every measure reads success — no figure that counts what was REQUIRED can see what was not. Measured precedent: at v1.95.0 this session built a reachability gate and shipped a release for it while the owner's mission waited; that work was defensible and outside the boundary, and nothing in the register objected." .
 
 fw:Out2_Goal a backlog:StageOutput ;
     backlog:outputOfStage backlog:Stage_Goal ;
@@ -6298,3 +6271,85 @@ fw:Obs_BuildOutside a backlog:MetricObservation ;
     backlog:hasObservedValue 1.0 ;
     backlog:observedAt "2026-10-26T21:00:00"^^xsd:dateTime ;
     backlog:hasObservationMethod "One: BRF-EP20, the reachability gate. It satisfies Del_Checkable and was still built while the owner's mission waited — defensible work the owner had not asked for at that moment. Recorded as 1 against a target of 0, so the objective reads NOT MET on a finished development. That is the honest result: a containment measure that reported zero here would be measuring nothing." .
+
+
+#################################################################
+#  v5.4.0 — STAGE 3 REVISITED. The goals are the mission's
+#  subjects, not properties every lineage should have.
+#
+#  OWNER CHALLENGE, tested and confirmed. Substituting any other
+#  mission, Goal_AreasExhausted and Goal_NoWorkOutsideAreas read
+#  IDENTICALLY — they name no subject of this mission. They were
+#  meta-goals: obligations any lineage carries, which is what
+#  CrossCuttingInvariant is for and what GoalSufficiencyShape
+#  already enforces. Stating them as goals put a framework property
+#  in a lineage's intent chain.
+#
+#  The owner also saw where the earlier discarded scope belonged:
+#  those five condition-statements were never deliverables and were
+#  never wrong — they were in the wrong LAYER. They are the
+#  mission's distinct subjects, and that makes them the goals.
+#
+#  Each goal below names one subject, one area, and the mission
+#  clause it came from. The facings survive as a PROPERTY of real
+#  goals rather than as goals in themselves.
+#################################################################
+fw:Goal_GovernanceInOntology a backlog:Goal ;
+    rdfs:label "Every governance ruling the framework enforces is a machine-checkable statement"@en ;
+    backlog:contributesToMission fw:Mission_OntologyDriven ;
+    backlog:derivesFromScope fw:Scope_Ontology ;
+    backlog:hasGoalFacing backlog:Facing_Mission ;
+    backlog:goalCoversArea fw:Area_Governance ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out2_Goal ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:hasRationale "From the mission clause: 'the governance model should be based on the ontologies'. MISSION SUBJECT 1. Named from the mission's own clause, not from a property a lineage should have. Test the owner's way: substitute a different mission and this goal becomes meaningless, which is what separates a goal from a meta-goal. The 18 rulings in the lineage discipline are its subject." .
+fw:Goal_RuleExecInOntology a backlog:Goal ;
+    rdfs:label "A rule's outcome is decided by the ontology, never by the code that runs it"@en ;
+    backlog:contributesToMission fw:Mission_OntologyDriven ;
+    backlog:derivesFromScope fw:Scope_Ontology ;
+    backlog:hasGoalFacing backlog:Facing_Mission ;
+    backlog:goalCoversArea fw:Area_RuleExecution ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out2_Goal ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:hasRationale "From the mission clause: 'execution of the rules be transferred to the ontology levels from the prose and source codes'. MISSION SUBJECT 2. Distinct from subject 1: a ruling can exist as a shape and still have its OUTCOME decided in python — fixture polarity is inferred from a filename today. Governance being expressed and rules being executed are two conditions, and satisfying one does not satisfy the other." .
+fw:Goal_ConceptsExported a backlog:Goal ;
+    rdfs:label "The classes, relationships, properties and instances that live in code are in the ontology"@en ;
+    backlog:contributesToMission fw:Mission_OntologyDriven ;
+    backlog:derivesFromScope fw:Scope_Ontology ;
+    backlog:hasGoalFacing backlog:Facing_Scope ;
+    backlog:goalCoversArea fw:Area_CodeTables ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out2_Goal ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:hasRationale "From the mission clause: 'not just the rules but also the clasesses, relationships, properties, objects/instances'. MISSION SUBJECT 3, and scope-facing because it is exhaustive by nature: 23 named tables either move or they do not. This is the goal that catches the easy half being done — the tables are mechanical and the standard rows are not." .
+fw:Goal_ProseExplainsOnly a backlog:Goal ;
+    rdfs:label "No sentence in the documentation is the only place something is defined"@en ;
+    backlog:contributesToMission fw:Mission_OntologyDriven ;
+    backlog:derivesFromScope fw:Scope_Ontology ;
+    backlog:hasGoalFacing backlog:Facing_Containment ;
+    backlog:goalCoversArea fw:Area_StandardDoc ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out2_Goal ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:hasRationale "From the mission clause: 'What remains as prose explains'. MISSION SUBJECT 4, containment-facing: it states what must NOT be true. The 186 standard rows are checked for NAMING every class and never for AGREEING with the TBox, so a row can contradict the ontology indefinitely. A goal about absence needs a containment measure because no count of what was required can see it." .
+fw:Goal_CodeExecutesOnly a backlog:Goal ;
+    rdfs:label "No script decides what is valid; scripts run engines over what the ontology says"@en ;
+    backlog:contributesToMission fw:Mission_OntologyDriven ;
+    backlog:derivesFromScope fw:Scope_Ontology ;
+    backlog:hasGoalFacing backlog:Facing_Containment ;
+    backlog:goalCoversArea fw:Area_CodeTables ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out2_Goal ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:hasRationale "From the mission clause: 'what remains as code executes standard engines'. MISSION SUBJECT 5. Also containment-facing and deliberately not merged with subject 3: exporting a table to the ontology does not stop the code deciding — a script can read the ontology and still apply its own logic. Three of the twelve gate checks decide outcomes in code today." .
+
+#  The two withdrawn meta-goals, recorded as what they actually are.
+fw:Inv_GoalSetSufficient a backlog:CrossCuttingInvariant ;
+    rdfs:label "A goal set covers mission, scope and containment"@en ;
+    backlog:hasCheckQuery "ASK { ?sc backlog:coversArea ?a . FILTER NOT EXISTS { ?g backlog:derivesFromScope ?sc ; backlog:hasGoalFacing backlog:Facing_Containment } }" ;
+    backlog:hasExpectedResult "false" ;
+    backlog:hasInvariantStatus backlog:Holds ;
+    backlog:tracksItem fw:EP_Model ;
+    backlog:hasRationale "Withdrawn as goals at v1.103.0 and recorded here. An obligation every lineage carries is an invariant, not a goal: stating it as a goal puts a framework property inside one lineage's intent chain, where it displaces a real subject and reads the same whatever the mission. GoalSufficiencyShape already enforces it, so nothing is lost by the move — the five real goals carry the three facings between them." .

@@ -1,5 +1,46 @@
 # Changelog
 
+## v1.103.0 — 2026-10-26 (MINOR: STAGE 3 REVISITED — goals are the mission's subjects)
+
+### The challenge, tested
+
+Substituting any other mission, `Goal_AreasExhausted` and `Goal_NoWorkOutsideAreas` read **identically**
+— they name no subject of this mission at all. Only the first mentioned prose and code.
+
+**They were meta-goals**: obligations any lineage carries. Stating them as goals put a framework
+property inside one lineage's intent chain, where it displaces a real subject and reads the same
+whatever the mission.
+
+Withdrawn and recorded as `Inv_GoalSetSufficient`. `GoalSufficiencyShape` already enforced it, so
+nothing is lost by the move.
+
+### And the owner saw where the discarded scope belonged
+
+The five condition-statements written at v1.100.0 were **never wrong — they were in the wrong layer**.
+They are not deliverables, they are the mission's distinct subjects, and that makes them the goals.
+
+| Goal | Facing | Area | From the mission |
+|---|---|---|---|
+| Governance in ontology | Mission | Governance | *the governance model should be based on the ontologies* |
+| Rule execution in ontology | Mission | Rule execution | *execution of the rules be transferred to the ontology levels* |
+| Concepts exported | Scope | Code tables | *classes, relationships, properties, objects/instances* |
+| Prose explains only | Containment | Standard doc | *what remains as prose explains* |
+| Code executes only | Containment | Code tables | *what remains as code executes standard engines* |
+
+**Subject 2 is distinct from subject 1**: a ruling can exist as a shape and still have its outcome
+decided in python — fixture polarity is inferred from a *filename* today. **Subject 5 is distinct from
+subject 3**: exporting a table does not stop the code deciding, since a script can read the ontology
+and still apply its own logic.
+
+The facings survive as a **property of real goals** rather than as goals in themselves.
+
+```
+areas covered by a goal : 4 of 4
+facings present         : Containment, Mission, Scope
+round trip agrees       : yes
+```
+
+
 ## v1.102.0 — 2026-10-26 (MINOR: STAGE 3 — three goals, each tested by what fails without it)
 
 The owner's requirement was **two obligations at once**: serve the mission *independently of the
