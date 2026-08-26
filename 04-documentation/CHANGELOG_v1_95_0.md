@@ -1,5 +1,50 @@
 # Changelog
 
+## v1.95.0 — 2026-08-25 (MINOR: BRF-EP20 — the fit-gap ruled by experiment, and it split)
+
+Three experiments decided this rather than judgement.
+
+**Experiment 1 — do the 23 unreachable classes block the current lineage?** The seven planned stories
+*create* seven new classes and depend on none of the 23. **Overlap: zero.** They cannot block it.
+
+**Experiment 2 — the decisive one.** Simulating those seven stories with the properties this session's
+grooming refinements decided on, **three are born unreachable**: `UseCase`, `Specification` and
+`TestCase`. The grooming gave `TestCase` a *domain* property, `exercisesCriterion`, and no *range*
+property — **which is exactly how `Package` was lost.**
+
+So the current lineage would reproduce the defect the fit-gap just found, in the very release meant to
+add modelling.
+
+**Experiment 3 — cost and design of the remedy.** A reachability gate over TBox plus register runs in
+**under one second on 4338 triples**, and separates two signals that must not be conflated:
+
+```
+no range property        45  reachable by rdf:type — AdoptionProfile among them; reported, not failed
+no range AND no instance 23  the Package trap — fails the gate
+```
+
+Conflating them would fail 45 classes and make the gate unusable on its first run.
+
+### Ruling: split
+
+**COVER NOW — the mechanism.** `backlog_reachability_gate_v1_0_0.py` ships in this release and runs
+before the modelling work, so the three new classes cannot be born unreachable. Two effort points,
+under a second per run, and it *prevents* the defect rather than recording it. `BRF-EP20` scores 8.00,
+the highest time criticality in the register — it must land before the modelling work or the count goes
+from 23 to 26.
+
+**PARK — the 23 existing classes.** They block nothing, and each needs a decision of its own: give it a
+referring property, or retire it. **Taking 23 judgements to clear a gate would be taking them for the
+gate rather than for the framework.** Parked with the gate naming all 23 on every run, so parking
+cannot become forgetting.
+
+### Caught while building it
+
+`Basis_Measured` requires `basisObservation`, and this session first wrote `hasMeasurementSource` — an
+invented property name, the same class of error as `refinedItem` at v1.74.0 and `Fails` at v1.87.0. The
+L1 clause caught it twice in one release.
+
+
 ## v1.94.0 — 2026-08-25 (MINOR: grooming performed, plan repacked, fit-gap recorded)
 
 ### Analysis and design at grooming level

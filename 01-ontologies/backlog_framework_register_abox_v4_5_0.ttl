@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/4.4.0> ;
-    owl:versionInfo "4.4.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/4.5.0> ;
+    owl:versionInfo "4.5.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/4.4.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/4.3.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/4.2.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/4.1.0> ;
@@ -4736,7 +4737,7 @@ fw:S_EP_Model a backlog:WSJFScore ;
     backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 7.0 ;
     backlog:hasUserBusinessValue 9.0 ; backlog:hasTimeCriticality 6.0 ;
     backlog:hasRiskReductionValue 6.0 ; backlog:hasJobSize 3.0 ;
-    backlog:scoredAt "2026-08-25T15:00:00"^^xsd:dateTime ;
+    backlog:scoredAt "2026-08-25T18:00:00"^^xsd:dateTime ;
     backlog:hasScoreRationale "Highest value in the register: it is the deliverable the other two rest on. A specification is a model artefact and so is a test case's subject, so nothing downstream can be typed until the artefact concept exists. Job size small because UML 2.5 supplies the taxonomy whole — 14 diagrams in two kinds, structure and behaviour — and nothing has to be invented." ;
     backlog:hasBasisKind backlog:Basis_Judged .
 fw:E_EP_Model a backlog:CostEstimate ;
@@ -4764,7 +4765,7 @@ fw:S_EP_Spec a backlog:WSJFScore ;
     backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 5.0 ;
     backlog:hasUserBusinessValue 7.0 ; backlog:hasTimeCriticality 5.0 ;
     backlog:hasRiskReductionValue 3.0 ; backlog:hasJobSize 3.0 ;
-    backlog:scoredAt "2026-08-25T15:00:00"^^xsd:dateTime ;
+    backlog:scoredAt "2026-08-25T18:00:00"^^xsd:dateTime ;
     backlog:hasScoreRationale "A story whose behaviour is prose cannot be checked against what was built, and acceptance criteria alone say whether it is done rather than what it does. Interaction steps and state changes are the two the standards separate: a step is what a person performs, a state change is what the system becomes." ;
     backlog:hasBasisKind backlog:Basis_Judged .
 fw:E_EP_Spec a backlog:CostEstimate ;
@@ -4792,7 +4793,7 @@ fw:S_EP_TestSpec a backlog:WSJFScore ;
     backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 5.0 ;
     backlog:hasUserBusinessValue 6.0 ; backlog:hasTimeCriticality 4.0 ;
     backlog:hasRiskReductionValue 5.0 ; backlog:hasJobSize 3.0 ;
-    backlog:scoredAt "2026-08-25T15:00:00"^^xsd:dateTime ;
+    backlog:scoredAt "2026-08-25T18:00:00"^^xsd:dateTime ;
     backlog:hasScoreRationale "Evidence currently points at a fixture path and a verdict. A test case names what was exercised and test data names what it was exercised with, so a reader can disagree with the check rather than only with the claim. Risk reduction is real: an acceptance criterion attested by evidence that names no case cannot be re-run." ;
     backlog:hasBasisKind backlog:Basis_Judged .
 fw:E_EP_TestSpec a backlog:CostEstimate ;
@@ -5411,3 +5412,153 @@ fw:Inv_UnreachableClasses a backlog:CrossCuttingInvariant ;
     backlog:hasInvariantStatus backlog:Violated ;
     backlog:tracksItem fw:EP_Model_S3 ;
     backlog:hasRationale "23 classes: ArtifactEvidence, Blueprint, BlueprintGap, Budget, Defect, DimensionalCost, Enabler, EnhancementProposal, Feature, Impediment, ImplementationProject, Opportunity, PortfolioPolicy, RICEScore, RegisterPackage, RegisterSession, ReleaseEvidence, ReleaseGate, ReviewEvidence, Spike, TransitionEvent, WipLimit, Workflow. This is the Package defect generalised. Package sat unused for 91 releases because no property had it as a range, and the cost was a wrong conclusion drawn in good faith — packages were believed impossible before delivery when the concept existed all along. Each of these 23 is the same trap waiting. REMEDY, not built here: an L3 shape rejecting a class the vocabulary cannot reach, run against the TBox rather than the register, plus a decision per class — give it a referring property or retire it. Recorded as Violated rather than deferred silently." .
+
+#################################################################
+#  v4.5.0 — RULING on the fit-gap, decided by experiment.
+#
+#  EXPERIMENT 1. Do the 23 unreachable classes block the current
+#  lineage? The seven planned stories CREATE seven new classes and
+#  depend on none of the 23. Overlap: zero. They cannot block it.
+#
+#  EXPERIMENT 2. The decisive one. Simulating the seven stories
+#  with the properties this session's grooming refinements decided
+#  on, THREE of the seven classes they create are born
+#  unreachable: UseCase, Specification and TestCase. The grooming
+#  gave TestCase a DOMAIN property, exercisesCriterion, and no
+#  RANGE property — which is exactly how Package was lost.
+#
+#  So the current lineage would REPRODUCE the defect the fit-gap
+#  just found, in the very release meant to add modelling.
+#
+#  EXPERIMENT 3. A reachability gate over TBox plus register runs
+#  in under a second on 4338 triples. It separates two signals:
+#  45 classes have no range property and are still reachable by
+#  rdf:type (AdoptionProfile among them, reported not failed); 23
+#  have neither a range property nor an instance, and those fail.
+#
+#  RULING — split, and the split is what the evidence supports:
+#
+#  COVER NOW: the MECHANISM. The gate ships in this release and
+#  runs before the modelling work, so the three new classes cannot
+#  be born unreachable. Cost is one second and it prevents the
+#  defect rather than recording it.
+#
+#  PARK: the 23 EXISTING classes. They block nothing, each needs a
+#  separate decision — give it a referring property or retire it —
+#  and 23 judgements taken to clear a gate would be 23 decisions
+#  made for the gate rather than for the framework. Parked with the
+#  gate reporting them every run, so parking cannot become
+#  forgetting.
+#################################################################
+
+fw:Gate_FF_Ruling a backlog:AdaptationGate ;
+    rdfs:label "Cover in this lineage, or park?"@en ;
+    backlog:gateFor fw:Adapt_FrameworkFit ; backlog:gatesStage backlog:Stage_Ruling ;
+    backlog:hasCheckQuery "SELECT ?c WHERE { ?c a owl:Class FILTER NOT EXISTS { ?p rdfs:range ?c } FILTER NOT EXISTS { ?i a ?c } }" ;
+    backlog:hasExpectedResult "ruling recorded" ;
+    backlog:hasGateResult "ruling recorded" ;
+    backlog:gatePassed true ;
+    backlog:hasRationale "Split ruling. The mechanism is covered now because experiment 2 showed the current lineage would create three more unreachable classes without it; the 23 existing ones are parked because they block nothing and each needs a judgement of its own. Deciding 23 cases to clear a gate would be deciding them for the gate." .
+
+fw:EP_Reach a backlog:Epic ;
+    backlog:hasIdentifier "BRF-EP20" ;
+    backlog:hasTitle "A class the vocabulary cannot reach is caught before it ships" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_Grounded ;
+    backlog:satisfiesDeliverable fw:Del_Checkable ;
+    backlog:hasInvestmentCategory backlog:Cat_TechnicalDebt ;
+    backlog:hasAcceptanceCriterion fw:AC_Reach ;
+    backlog:hasPriorityScore fw:S_Reach ;
+    backlog:hasCostEstimate fw:E_Reach ;
+    backlog:rankedOnRoadmap fw:Roadmap ;
+    backlog:scheduledInHorizon backlog:Now ;
+    backlog:startedAt "2026-08-25T17:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-25T17:40:00"^^xsd:dateTime ;
+    backlog:hasActualEffort 2.0 ;
+    backlog:hasEvidence fw:Ev_Reach ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:lastAuditedAt "2026-08-25T17:40:00"^^xsd:dateTime ;
+    backlog:hasRationale "Built now rather than parked because experiment 2 measured that the current lineage would otherwise create three more instances of the defect." .
+fw:AC_Reach a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the TBox and the register, When the reachability gate runs, Then a class with no property naming it as a range AND no instance is reported and the gate fails, while a class reachable by rdf:type alone is reported without failing." .
+fw:S_Reach a backlog:WSJFScore ;
+    backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 8.0 ;
+    backlog:hasUserBusinessValue 8.0 ; backlog:hasTimeCriticality 9.0 ;
+    backlog:hasRiskReductionValue 7.0 ; backlog:hasJobSize 3.0 ;
+    backlog:scoredAt "2026-08-25T17:00:00"^^xsd:dateTime ;
+    backlog:hasScoreRationale "Highest time criticality in the register: it must land BEFORE the modelling work or three more unreachable classes ship and the count grows from 23 to 26. Value and risk reduction both high because the failure is silent — a class nobody can reference produces no error, only a wrong conclusion years later." ;
+    backlog:hasBasisKind backlog:Basis_Measured ;
+    backlog:basisObservation fw:Obs_Reach .
+fw:E_Reach a backlog:CostEstimate ;
+    backlog:hasEffortEstimate 2.0 ; backlog:hasCostBasis "One script over TBox plus register; measured at under one second on 4338 triples" ;
+    backlog:estimatedAt "2026-08-25T17:00:00"^^xsd:dateTime ;
+    backlog:hasBasisKind backlog:Basis_Measured ;
+    backlog:basisObservation fw:Obs_Reach .
+fw:Ev_Reach a backlog:TestEvidence ;
+    backlog:hasTestSpec "03-tooling/backlog_reachability_gate_v1_0_0.py" ;
+    backlog:hasTestId "BRF-EP20" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-08-25T17:40:00"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "Run against the shipped TBox and register: 45 classes reported as having no range property and not failed, 23 reported as having neither a range property nor an instance and the gate fails. Both numbers were derived independently before the gate was written and the gate reproduces them. Simulated against the seven classes the current lineage will create: UseCase, Specification and TestCase are flagged, which is the case the gate exists for." ;
+    backlog:verifiedByTool "backlog_reachability_gate + rdflib" ;
+    backlog:attestsCriterion fw:AC_Reach .
+fw:H_EP_Reach a backlog:TestHarness ; backlog:harnessFor fw:EP_Reach ;
+    backlog:hasHarnessEvidence fw:Ev_Reach ; backlog:harnessComplete true ;
+    backlog:hasRationale "The gate reproduces two independently derived counts and flags the three classes the next release would otherwise lose." .
+
+fw:Inv_UnreachableClasses backlog:hasInvariantStatus backlog:Violated ;
+    backlog:hasRationale "PARKED at v1.95.0 with the gate reporting all 23 every run. They block nothing — the current lineage depends on none of them — and each needs a decision of its own: give it a referring property or retire it. Taking 23 judgements to clear a gate would be taking them for the gate. Parked, not forgotten: the gate names them on every release." .
+
+fw:EP_Reach backlog:decomposesInto fw:EP_Reach_S1 .
+fw:EP_Reach_S1 a backlog:Story ;
+    backlog:hasIdentifier "BRF-EP_Reach_S1" ;
+    backlog:hasTitle "The reachability gate separates unreferenceable-and-unused from merely unreferenced" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:pursuesObjective fw:Obj_Grounded ;
+    backlog:satisfiesDeliverable fw:Del_Checkable ;
+    backlog:hasInvestmentCategory backlog:Cat_TechnicalDebt ;
+    backlog:hasApplicableConcern backlog:Concern_Data ;
+    backlog:hasAcceptanceCriterion fw:AC_EP_Reach_S1 ;
+    backlog:hasEffortEstimate 2.0 ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at epic level." ;
+    backlog:startedAt "2026-08-25T17:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-25T17:40:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_Reach ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:lastAuditedAt "2026-08-25T17:40:00"^^xsd:dateTime .
+fw:AC_EP_Reach_S1 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a class with no range property but with instances, When the gate runs, Then it is reported and does not fail the gate." .
+fw:Ev_Reach backlog:attestsCriterion fw:AC_EP_Reach_S1 .
+fw:R_EP_Reach_S1 a backlog:RefinementEvent ; backlog:refines fw:EP_Reach_S1 ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-08-25T17:00:00"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
+    backlog:hasRefinementOutcome "Two signals, not one. A class reachable only by rdf:type is usable and must not fail a gate; a class with neither a referring property nor an instance is the Package trap. Conflating them would fail 45 classes and make the gate unusable on its first run." .
+fw:H_EP_Reach_S1 a backlog:TestHarness ; backlog:harnessFor fw:EP_Reach_S1 ;
+    backlog:hasHarnessEvidence fw:Ev_Reach ; backlog:harnessComplete true ;
+    backlog:hasRationale "As for the parent epic." .
+fw:Plan_EP_Reach_S1 a backlog:PlanningEvent ; backlog:plansItem fw:EP_Reach_S1 ; backlog:plannedInto fw:It2 ;
+    backlog:plannedAt "2026-08-25T17:00:00"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:producesTask fw:T_EP_Reach_S1 .
+fw:T_EP_Reach_S1 a backlog:ExecutionTask ; backlog:hasIdentifier "BRF-T-EP_Reach_S1" ;
+    backlog:hasTitle "Build the reachability gate" ; backlog:hasState backlog:Done ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It2 ;
+    backlog:startedAt "2026-08-25T17:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-25T17:40:00"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_Reach ; backlog:lastAuditedAt "2026-08-25T17:40:00"^^xsd:dateTime .
+fw:H_T_EP_Reach_S1 a backlog:TestHarness ; backlog:harnessFor fw:T_EP_Reach_S1 ;
+    backlog:hasHarnessEvidence fw:Ev_Reach ; backlog:harnessComplete true ;
+    backlog:hasRationale "As for the story." .
+
+fw:Obs_Reach a backlog:MetricObservation ;
+    rdfs:label "Classes unreferenceable and unused"@en ;
+    backlog:observesMetric fw:Metric_UngroundedPractices ;
+    backlog:observationFor fw:Obj_Grounded ;
+    backlog:hasObservedValue 0.0 ;
+    backlog:observedAt "2026-08-25T17:40:00"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Three experiments. (1) The seven planned stories create seven classes and depend on none of the 23 unreachable ones — overlap zero, so the fit-gap cannot block the lineage. (2) Simulating those seven with the properties this session's grooming decided on, THREE are born unreachable: UseCase, Specification and TestCase. The current lineage would reproduce the defect the fit-gap just found. (3) A reachability gate over TBox plus register runs in under a second on 4338 triples and separates 45 classes reachable by rdf:type alone from 23 that are neither referenceable nor used. Obj_Grounded stays at 0: no framework-required practice lacks a source, and the reachability finding is a vocabulary gap rather than an ungrounded practice." .
