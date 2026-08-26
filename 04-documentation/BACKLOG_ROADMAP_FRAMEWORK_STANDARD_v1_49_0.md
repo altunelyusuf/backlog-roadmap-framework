@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.48.0
+# Backlog & Roadmap Semantic Framework — Standard v1.49.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -797,6 +797,28 @@ consequential was the level nothing checked**.
 
 An epic's analysis is not its stories' analysis summed: an epic decides what the theme requires, a
 story decides how a slice is built.
+
+### 2.5c-xxix A scope says WHERE, not only what must be true
+
+`ScopeArea` names a place the work must reach — files, modules, a body of material — with
+`areaLocation` (precise enough to open) and `areaMeasure` (**counted**, not described).
+`deliverableForArea` binds a finish condition to a place.
+
+**Why this was needed.** `ScopeDeliverable` says *what must be true*. Applied to a mission already
+stated as conditions, that definition can only produce **restatement**: "governance is expressed as
+ontology" is the mission's own sentence with the subject changed. Such a scope has content, its
+coverage figure can fall, and it is still the mission said twice — the v1.83.0 fix does not catch it,
+because nothing was missing, only misplaced.
+
+A scope of deliverables alone cannot be acted on: it names no place. A scope of areas alone is a task
+list with no finish condition. **Both are needed**, and the framework had only one.
+
+At L3 a scope enumerating deliverables and naming no area is rejected.
+
+**`PrematureExclusionShape`** reports a scope carrying exclusions while naming no area: what is being
+excluded was decided before anyone established what the mission needs. Narrowing a boundary before
+knowing what it must cover removes work nobody has shown to be unnecessary — and an exclusion, once
+written, reads as settled.
 
 ### 2.5d Decomposition, commitments, dependency kinds, impediments, flow, team (subject v1.4.0)
 

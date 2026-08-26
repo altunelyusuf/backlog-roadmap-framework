@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.51.0> ;
-    owl:versionInfo "1.51.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.52.0> ;
+    owl:versionInfo "1.52.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.51.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.50.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.49.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.48.0> ;
@@ -3883,4 +3884,44 @@ backlog:UnfinishedLineageShape a sh:NodeShape ;
         sh:select """SELECT $this WHERE {
             FILTER NOT EXISTS { ?g backlog:contributesToMission $this }
             FILTER NOT EXISTS { ?s backlog:supersedesMission $this }
+        }""" ] .
+
+#################################################################
+#  v1.52.0 — a scope names where, and exclusions come last
+#################################################################
+
+backlog:ScopeAreaShape a sh:NodeShape ;
+    sh:targetClass backlog:ScopeArea ;
+    sh:severity sh:Violation ;
+    rdfs:label "An area names a location and a measure (L2)"@en ;
+    sh:property [ sh:path backlog:areaLocation ; sh:minCount 1 ;
+        sh:message "L2: a scope area must name where it is, precisely enough to open. An area nobody can locate is a topic, not a place." ] ;
+    sh:property [ sh:path backlog:areaMeasure ; sh:minCount 1 ;
+        sh:message "L2: a scope area must state what is in it, counted. A measure rather than an adjective, so the work can be sized and so anyone can check later whether the area shrank." ] .
+
+backlog:ScopeWhereShape a sh:NodeShape ;
+    sh:targetClass backlog:ScopeStatement ;
+    sh:severity sh:Violation ;
+    rdfs:label "A scope says where the work is, not only what must be true (L3)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: this scope enumerates deliverables and names no area. A scope of conditions alone restates its mission — 'governance is expressed as ontology' is the mission's sentence with the subject changed — and nobody can act on it because it names no place. Coverage will still fall and every deliverable will still be the mission said twice." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L3_Governed, backlog:L4_LineageEnforced))
+            $this backlog:requiresDeliverable ?d .
+            FILTER NOT EXISTS { $this backlog:coversArea ?a }
+            FILTER NOT EXISTS { ?s backlog:supersedesMission ?m . $this backlog:scopeForMission ?m }
+        }""" ] .
+
+backlog:PrematureExclusionShape a sh:NodeShape ;
+    sh:targetClass backlog:ScopeStatement ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: exclusions written before coverage was shown"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: this scope carries exclusions and names no area, so what is being excluded was decided before anyone established what the mission needs. Narrowing a boundary before knowing what it must cover removes work nobody has yet shown to be unnecessary — and an exclusion, once written, reads as settled." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasScopeExclusion ?e .
+            FILTER NOT EXISTS { $this backlog:coversArea ?a }
         }""" ] .

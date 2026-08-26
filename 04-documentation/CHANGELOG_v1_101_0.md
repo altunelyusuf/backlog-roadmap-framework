@@ -1,5 +1,47 @@
 # Changelog
 
+## v1.101.0 — 2026-10-26 (MINOR: the scope now says WHERE — and the cause was the framework)
+
+### The owner's finding
+
+The deliverables written at v1.100.0 were **the mission restated**. *"Governance is expressed as
+ontology"* is the mission's own sentence with the subject changed. A scope must say what should be
+**done** and **where**; that one did neither.
+
+### The cause is the framework, not only the session that used it
+
+`ScopeDeliverable` is defined as *"a deliverable says WHAT MUST BE TRUE"*. Applied to a mission already
+stated as conditions, that definition **can only produce restatement**.
+
+And the v1.83.0 fix does not catch it: the scope had content, the coverage figure could fall, every
+deliverable was still the mission said twice. Nothing was missing — it was misplaced.
+
+`ScopeArea` carries the WHERE. At L3 a scope with deliverables and no area is rejected.
+
+### The four areas, measured
+
+| Area | Where | What is in it |
+|---|---|---|
+| Governance | `LINEAGE_OPERATING_DISCIPLINE_v5_0_0.md` | 18 rulings G1–G18, markdown headings only; no query can reach them |
+| Code tables | 12 python modules | 23 module-level tables deciding what something **is**, in python |
+| Rule execution | validator + gate | 12 checks; 9 evaluate SHACL, **3 decide outcomes in code** — fixture polarity from a filename, exemption from a list, reachability from a traversal |
+| Standard doc | `..._STANDARD_v1_48_0.md` | 186 table rows; coverage checks a class is **named**, never that the row **agrees** with the TBox |
+
+### Exclusions withdrawn — the order was wrong
+
+`Ex_NoEngineRewrite` and `Ex_NoReasonerMandate` were written **before** anyone established what the
+mission needs. They may both be right; they were decided in the wrong order, and an exclusion once
+written reads as settled. They return at the Ruling stage or not at all.
+
+`Ex_NoNarrativeBan` is restored, now **established by the area analysis** rather than assumed: all four
+areas are places where prose or code *defines*, and explanatory prose is not among them.
+
+`PrematureExclusionShape` now reports this pattern.
+
+**The Scope stage output is not re-issued.** The stage closed at commit `a52ccfe`; this is a correction
+within it. Re-issuing would claim the boundary was drawn twice.
+
+
 ## v1.100.0 — 2026-10-26 (MINOR: STAGE 2 — the scope, deliverables and exclusions only)
 
 The Mission stage closed at commit `f2f4e0f` and its digest is **backfilled from the real commit** —

@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.39.0> ;
-    owl:versionInfo "1.39.0" ;
+    owl:versionIRI <http://example.org/backlog/1.40.0> ;
+    owl:versionInfo "1.40.0" ;
+    owl:priorVersion <http://example.org/backlog/1.39.0> ;
     owl:priorVersion <http://example.org/backlog/1.38.0> ;
     owl:priorVersion <http://example.org/backlog/1.37.0> ;
     owl:priorVersion <http://example.org/backlog/1.36.0> ;
@@ -4398,3 +4399,56 @@ backlog:declaresState a owl:DatatypeProperty ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "declares state"@en ;
     skos:definition "A state this artefact establishes. Repeatable: one state machine declares many. This is where a domain's states enter the register — from analysis work, recorded as an artefact, rather than appearing first in whichever story happened to mention them."@en .
+
+#################################################################
+#  68. A scope says WHERE the work is (v1.40.0)
+#
+#  OWNER FINDING, and the cause is the FRAMEWORK, not only the
+#  session that used it. ScopeDeliverable is defined as "a
+#  capability the scope requires... a deliverable says WHAT MUST BE
+#  TRUE". When the mission is already stated as conditions, that
+#  definition produces deliverables that RESTATE THE MISSION —
+#  "governance is expressed as ontology" is the mission's own
+#  sentence with the subject changed.
+#
+#  A scope that restates its mission is unfalsifiable in a way the
+#  v1.83.0 fix did not catch: it has content, the coverage figure
+#  can fall, and every deliverable is still just the mission said
+#  twice. Nobody can act on it, because it names no place.
+#
+#  ScopeArea names WHERE. It carries the artefacts to be worked on
+#  and what is in them, measured. A deliverable then says what must
+#  become true OF AN AREA, and the pair is actionable: the area
+#  says where to go, the deliverable says what done looks like when
+#  you get there.
+#################################################################
+
+backlog:ScopeArea a owl:Class ;
+    rdfs:subClassOf core:Artifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Scope Area"@en ;
+    skos:definition "A named place the work must reach: files, modules, or a body of existing material, with what they contain measured rather than described. Distinct from a deliverable, which says what must become true. A scope of deliverables alone restates its mission and cannot be acted on; a scope of areas alone is a task list with no finish condition. Both are needed, and the framework previously had only one."@en ;
+    dcterms:source "PMBOK scope baseline: the work breakdown identifies the work, the scope statement its acceptance"@en .
+
+backlog:coversArea a owl:ObjectProperty ;
+    rdfs:domain backlog:ScopeStatement ; rdfs:range backlog:ScopeArea ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "covers area"@en .
+
+backlog:areaLocation a owl:DatatypeProperty ;
+    rdfs:domain backlog:ScopeArea ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "area location"@en ;
+    skos:definition "Where this area is, precisely enough to open: a path, a module, a named document. Repeatable when an area spans several."@en .
+
+backlog:areaMeasure a owl:DatatypeProperty ;
+    rdfs:domain backlog:ScopeArea ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "area measure"@en ;
+    skos:definition "What is in this area, counted at the time the scope was drawn. A measure rather than an adjective, so the work can be sized and so anyone can check later whether the area shrank."@en .
+
+backlog:deliverableForArea a owl:ObjectProperty ;
+    rdfs:domain backlog:ScopeDeliverable ; rdfs:range backlog:ScopeArea ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "deliverable for area"@en ;
+    skos:definition "The area this deliverable states the finish condition for. A deliverable naming no area is a condition floating free of any place — which is how a scope comes to restate its mission."@en .

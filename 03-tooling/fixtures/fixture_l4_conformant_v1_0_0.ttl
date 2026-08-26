@@ -307,3 +307,8 @@ ex:RG_EP a backlog:RefinementEvent ; backlog:refines ex:EP ;
     backlog:refinedAt "2026-08-01T09:00:00"^^xsd:dateTime ;
     backlog:refinedBy backlog:Builder ;
     backlog:hasRefinementOutcome "Groomed at container level: what the theme requires, distinct from how each slice is built." .
+
+ex:Area_Scope a backlog:ScopeArea ;
+    backlog:areaLocation "The account recovery service and its identity store." ;
+    backlog:areaMeasure "One sign-in flow, one credential store, two supported second factors." .
+ex:Scope backlog:coversArea ex:Area_Scope .

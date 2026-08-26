@@ -94,3 +94,8 @@ ex:Scope backlog:requiresDeliverable ex:Del2_Scope .
 ex:Del_Scope backlog:derivesFromMissionClause "practitioners recover unaided" .
 
 ex:Del2_Scope backlog:derivesFromMissionClause "practitioners recover unaided" .
+
+ex:Area_Scope a backlog:ScopeArea ;
+    backlog:areaLocation "The account recovery service and its identity store." ;
+    backlog:areaMeasure "One sign-in flow, one credential store, two supported second factors." .
+ex:Scope backlog:coversArea ex:Area_Scope .

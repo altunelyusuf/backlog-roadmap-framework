@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/5.1.0> ;
-    owl:versionInfo "5.1.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/5.2.0> ;
+    owl:versionInfo "5.2.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/5.1.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/5.0.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/4.8.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/4.7.0> ;
@@ -6079,22 +6080,10 @@ fw:Scope_Ontology a backlog:ScopeStatement ;
     backlog:producedByStage fw:Out2_Scope ;
     backlog:requiresDeliverable fw:Del_OntGovernance , fw:Del_OntRuleExec , fw:Del_OntExport ,
                                 fw:Del_ProseExplains , fw:Del_CodeExecutes ;
-    backlog:hasScopeExclusion fw:Ex_NoNarrativeBan , fw:Ex_NoEngineRewrite , fw:Ex_NoReasonerMandate .
+    backlog:coversArea fw:Area_Governance , fw:Area_CodeTables , fw:Area_RuleExecution , fw:Area_StandardDoc .
 
-fw:Ex_NoNarrativeBan a backlog:ScopeExclusion ;
-    backlog:excludesConcern "Removing explanatory prose, or requiring that every document sentence have an ontology counterpart." ;
-    backlog:hasExclusionRationale "Prose that EXPLAINS is not the problem; prose that DEFINES is. A framework whose reasoning exists only as triples is unreadable, and unreadable governance is ignored governance. The line is whether removing the sentence would lose a rule." ;
-    backlog:decidedBy backlog:Owner .
 
-fw:Ex_NoEngineRewrite a backlog:ScopeExclusion ;
-    backlog:excludesConcern "Replacing pyshacl, rdflib, git or any other standard engine with framework-owned implementations." ;
-    backlog:hasExclusionRationale "The mission says code should execute standard engines, not that the framework should own them. Writing a SHACL engine to reduce dependency on code would multiply the code that carries meaning, which is the opposite of the mission." ;
-    backlog:decidedBy backlog:Owner .
 
-fw:Ex_NoReasonerMandate a backlog:ScopeExclusion ;
-    backlog:excludesConcern "Requiring an OWL reasoner at any conformance level." ;
-    backlog:hasExclusionRationale "Moving meaning into the ontology does not mean requiring inference to read it. A register that needs a reasoner to answer what it says has moved the dependency rather than removed it — from a script an adopter can read to an engine they cannot." ;
-    backlog:decidedBy backlog:Owner .
 
 fw:Out2_Scope a backlog:StageOutput ;
     backlog:outputOfStage backlog:Stage_Scope ;
@@ -6102,3 +6091,71 @@ fw:Out2_Scope a backlog:StageOutput ;
     backlog:hasStateDigest "pending-commit" ;
     backlog:closedAtCommit "pending-commit" ;
     backlog:hasRationale "Backfilled from the real commit in the next release, as the Mission stage output was." .
+
+
+#################################################################
+#  v5.2.0 — STAGE 2 REVISITED. The scope now says WHERE.
+#
+#  OWNER FINDING: the deliverables written at v1.100.0 were the
+#  mission restated — "governance is expressed as ontology" is the
+#  mission's own sentence with the subject changed. A scope must
+#  say what should be DONE and WHERE, and that one did neither.
+#
+#  CAUSE: the framework, not only the session. ScopeDeliverable is
+#  defined as "a deliverable says WHAT MUST BE TRUE". Applied to a
+#  mission already stated as conditions, that definition can only
+#  produce restatement. ScopeArea is added to carry the WHERE.
+#
+#  EXCLUSIONS WITHDRAWN. Ex_NoNarrativeBan, Ex_NoEngineRewrite and
+#  Ex_NoReasonerMandate were written before anyone had established
+#  what the mission needs — narrowing a boundary before knowing
+#  what it must cover. They may all three be right; they were
+#  decided in the wrong order, and an exclusion once written reads
+#  as settled. They return at the Ruling stage if the coverage
+#  analysis still supports them.
+#################################################################
+fw:Area_Governance a backlog:ScopeArea ;
+    backlog:areaLocation "LINEAGE_OPERATING_DISCIPLINE_v5_0_0.md" ;
+    backlog:areaMeasure "18 governance rulings G1-G18, each a markdown heading with prose. Nothing in the ontology carries them; the lineage-discipline gate checks that claims about ENFORCEMENT match the shapes, and does not check that the rulings themselves exist as anything a query can reach." .
+fw:Del_OntGovernance backlog:deliverableForArea fw:Area_Governance .
+fw:Area_CodeTables a backlog:ScopeArea ;
+    backlog:areaLocation "03-tooling/ — 12 python modules" ;
+    backlog:areaMeasure "23 module-level tables holding classification knowledge: LAYERS in the completeness reporter, STAGE_TYPES and ORDER in the pipeline verifier, CONTAINER_TYPES and SECTIONS in the roadmap report, KINDS in the evidence bridge, SUITES and FOREIGN in registration readiness, DROP_DIRS and SUBSTITUTIONS in the public distribution builder, EXEMPT in the manifest builder. Each decides what something IS, in python." .
+fw:Del_OntExport backlog:deliverableForArea fw:Area_CodeTables .
+fw:Area_RuleExecution a backlog:ScopeArea ;
+    backlog:areaLocation "03-tooling/backlog_validate_v*.py and backlog_gate_v*.sh" ;
+    backlog:areaMeasure "The gate runs 12 named checks. 9 evaluate SHACL and carry no meaning. 3 decide outcomes in code: fixture polarity is inferred from the FILENAME, manifest exemption from a python list, reachability from a python traversal. Those three are rules executing outside the ontology." .
+fw:Del_OntRuleExec backlog:deliverableForArea fw:Area_RuleExecution .
+fw:Area_StandardDoc a backlog:ScopeArea ;
+    backlog:areaLocation "BACKLOG_ROADMAP_FRAMEWORK_STANDARD_v1_48_0.md" ;
+    backlog:areaMeasure "186 table rows describing classes, levels and constraint behaviour. The doc-coverage gate checks every class is NAMED here; nothing checks that what the table SAYS about a class matches the ontology, so a row can contradict the TBox indefinitely." .
+fw:Del_ProseExplains backlog:deliverableForArea fw:Area_StandardDoc .
+
+#  Del_CodeExecutes has no area of its own: it is the finish
+#  condition for Area_RuleExecution and Area_CodeTables together,
+#  and inventing a fifth area to give it one would be padding the
+#  scope to make the shape look tidy.
+fw:Del_CodeExecutes backlog:deliverableForArea fw:Area_RuleExecution , fw:Area_CodeTables .
+
+fw:Out2_Scope backlog:hasRationale "Revised at v1.101.0 after the owner found the deliverables restated the mission. The stage output is NOT re-issued: the Scope stage closed at commit a52ccfe and this is a correction within it, not a new closing. Re-issuing would claim the boundary was drawn twice." .
+
+#  The L2 clause is right: a boundary with no exclusion refuses
+#  nothing. What was wrong at v1.100.0 was WHICH exclusions and in
+#  what order — three written before any area was known. One is
+#  restored now, because the coverage analysis above establishes it
+#  directly rather than assuming it: the four areas name documents
+#  and modules, and none of them is "all prose everywhere". The
+#  other two return at the Ruling stage or not at all.
+fw:Ex_NoNarrativeBan a backlog:ScopeExclusion ;
+    backlog:excludesConcern "Removing explanatory prose, or requiring that every document sentence have an ontology counterpart." ;
+    backlog:hasExclusionRationale "Established by the area analysis rather than assumed: the four areas are 18 rulings, 23 code tables, 3 code-executed rules and 186 standard rows — all places where prose or code DEFINES. Explanatory prose is not among them, and a framework whose reasoning exists only as triples is unreadable. The test is whether removing a sentence would lose a rule." ;
+    backlog:decidedBy backlog:Owner .
+fw:Scope_Ontology backlog:hasScopeExclusion fw:Ex_NoNarrativeBan .
+
+#  Scope_Build predates ScopeArea and has none. Its areas are
+#  recorded from what its deliverables actually touched, so the new
+#  clause is satisfied by history rather than by exempting it.
+fw:Area_BuildFramework a backlog:ScopeArea ;
+    backlog:areaLocation "01-ontologies/backlog_tbox_v*.ttl and 02-shacl-safeguards/backlog_shacl_v*.ttl" ;
+    backlog:areaMeasure "Recorded retroactively at v1.101.0: the TBox and shapes, where all ten of Scope_Build's deliverables were built. Retroactive because ScopeArea did not exist when that scope was drawn." .
+fw:Scope_Build backlog:coversArea fw:Area_BuildFramework .
