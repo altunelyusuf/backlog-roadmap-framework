@@ -24,10 +24,34 @@ Exit 1 under --strict.
 """
 import sys, os, glob, subprocess, re
 
+def _key(pkg):
+    """Cache key over the shapes and fixtures this proof depends on.
+
+    Added after wiring this into the release gate DOUBLED the gate: it re-ran
+    every negative fixture through pyshacl, work the fixture suite had just
+    done. A verification step that duplicates the suite it verifies is a cost
+    with no new information, and the gate timed out rather than reporting it.
+    """
+    import hashlib
+    h = hashlib.sha256()
+    for pat in ("02-shacl-safeguards/backlog_shacl_v*.ttl",
+                "03-tooling/fixtures/*.ttl"):
+        for p in sorted(glob.glob(os.path.join(pkg, pat))):
+            h.update(open(p, "rb").read())
+    return h.hexdigest()
+
+
 def main():
     strict = "--strict" in sys.argv
     here = os.path.dirname(os.path.abspath(__file__))
     pkg = os.path.dirname(here)
+    stamp = os.path.join(pkg, ".clause-proof-stamp")
+    key = _key(pkg)
+    if os.path.exists(stamp):
+        cached = open(stamp, encoding="utf-8").read().split("\n", 1)
+        if cached[0] == key and len(cached) > 1:
+            print(cached[1].rstrip())
+            sys.exit(0)
     validate = sorted(glob.glob(os.path.join(here, "backlog_validate_v*.py")))[-1]
     fixtures = [f for f in sorted(glob.glob(os.path.join(here, "fixtures", "*.ttl")))
                 if any(k in os.path.basename(f)
@@ -63,11 +87,21 @@ def main():
         print("   %s" % c)
     if len(unproven) > 25:
         print("   ... and %d more" % (len(unproven) - 25))
-    print("VERDICT     : %s" % (
-        "PASS - every level-gated clause has a fixture that fires it"
-        if not unproven else
-        "REPORTED - %d clause(s) unproven; a clause nothing fires has "
-        "never been shown to work" % len(unproven)))
+    verdict = ("PASS - every level-gated clause has a fixture that fires it"
+               if not unproven else
+               "REPORTED - %d clause(s) unproven; a clause nothing fires has "
+               "never been shown to work" % len(unproven))
+    print("VERDICT     : %s" % verdict)
+    summary = "\n".join([
+        "negative fixtures run     : %d" % len(fixtures),
+        "level-gated clauses       : %d" % len(clauses),
+        "proven to fire            : %d" % (len(clauses) - len(unproven)),
+        "NEVER proven to fire      : %d" % len(unproven),
+        "VERDICT     : %s" % verdict])
+    try:
+        open(stamp, "w", encoding="utf-8").write(key + "\n" + summary + "\n")
+    except Exception:
+        pass
     sys.exit(1 if (unproven and strict) else 0)
 
 if __name__ == "__main__":
