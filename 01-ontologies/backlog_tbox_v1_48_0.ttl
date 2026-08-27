@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.47.0> ;
-    owl:versionInfo "1.47.0" ;
+    owl:versionIRI <http://example.org/backlog/1.48.0> ;
+    owl:versionInfo "1.48.0" ;
+    owl:priorVersion <http://example.org/backlog/1.47.0> ;
     owl:priorVersion <http://example.org/backlog/1.46.0> ;
     owl:priorVersion <http://example.org/backlog/1.45.0> ;
     owl:priorVersion <http://example.org/backlog/1.44.0> ;
@@ -4809,3 +4810,35 @@ backlog:hasBatchCompleted a owl:DatatypeProperty , owl:FunctionalProperty ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "has batch completed"@en ;
     skos:definition "How many of the batch are finished. The point of the pair: an objective counting units can read partial progress from a story that is not Done. Without it a batch decouples the measure from the increment, and seven finished tables inside one blocked story report as none."@en .
+
+#################################################################
+#  78. An iteration's length is measured, not assumed (v1.48.0)
+#
+#  OWNER FINDING: the dates were fiction. Measured from the real
+#  publish commits, It7 took 32 minutes and It8 took 28. The
+#  register declared fourteen days each — an overstatement of 667x
+#  — and scheduled iterations for November when the day was the
+#  27th of August.
+#
+#  Nothing caught it because iterationStart and iterationEnd are
+#  asserted dateTimes and no clause compares them to anything that
+#  happened. The same defect as committed effort one release ago:
+#  a number stated rather than derived.
+#
+#  hasObservedDuration records what an iteration ACTUALLY took, in
+#  minutes, so the next one can be planned from evidence. A
+#  developer that runs in minutes and plans in fortnights is not
+#  planning; it is copying a human cadence it does not have.
+#################################################################
+
+backlog:hasObservedDuration a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:Iteration ; rdfs:range xsd:decimal ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has observed duration"@en ;
+    skos:definition "Minutes the iteration actually took, from the commit closing the previous one to the commit closing this. Recorded because the declared start and end are assertions and nothing compared them to the work: an autonomous developer completing a nine-point iteration in half an hour, planning in fortnights, is copying a cadence it does not have."@en .
+
+backlog:hasDurationSource a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:Iteration ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has duration source"@en ;
+    skos:definition "Where the observed duration was read from — normally the two publish commits that bound the iteration. Required so a duration can be re-derived rather than believed, which is what separates it from the declared dates it replaces."@en .

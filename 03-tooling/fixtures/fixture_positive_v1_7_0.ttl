@@ -1002,3 +1002,6 @@ ex:EP001 backlog:appliesDefinitionOfDone ex:DoD_EP001 .
 ex:TC_EP001 a backlog:TestCase ; backlog:exercisesCriterion ex:EP001_AC ; backlog:runsOnData ex:TD_EP001 .
 ex:EP001_AC backlog:coveredByCase ex:TC_EP001 .
 ex:TD_EP001 a backlog:TestData ; backlog:hasFixtureState "One account in state Locked." .
+
+ex:Sprint11 backlog:hasObservedDuration 30.0 ;
+    backlog:hasDurationSource "The two publish commits bounding this iteration." .

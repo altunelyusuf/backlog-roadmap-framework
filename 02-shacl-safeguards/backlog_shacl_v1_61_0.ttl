@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.60.0> ;
-    owl:versionInfo "1.60.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.61.0> ;
+    owl:versionInfo "1.61.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.60.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.59.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.58.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.57.0> ;
@@ -4300,4 +4301,46 @@ backlog:CommittedEffortShape a sh:NodeShape ;
                 ?item backlog:memberOfContainer $this ; backlog:hasEffortEstimate ?e .
               } GROUP BY $this }
             FILTER (?declared != ?actual)
+        }""" ] .
+
+#################################################################
+#  v1.61.0 — a closed iteration reports how long it took
+#################################################################
+
+backlog:ObservedDurationShape a sh:NodeShape ;
+    sh:targetClass backlog:Iteration ;
+    sh:severity sh:Violation ;
+    rdfs:label "A closed iteration reports its measured duration (L3)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: this iteration is Done and reports no measured duration. Its declared start and end are assertions that nothing compares to the work, so the next iteration is planned from a number nobody checked. Measured here: two nine-point iterations took 32 and 28 minutes against a declared fourteen days, an overstatement of 667 times, and no clause noticed." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L3_Governed, backlog:L4_LineageEnforced))
+            $this backlog:hasState backlog:Done .
+            FILTER NOT EXISTS { $this backlog:hasObservedDuration ?d }
+            FILTER NOT EXISTS { ?sup backlog:supersedesMission ?m . ?g backlog:contributesToMission ?m .
+                                $this backlog:memberOfContainer ?c }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L2: this iteration reports a duration and does not say where it was read from. A duration that cannot be re-derived is an assertion wearing a measurement's clothes, which is the thing it exists to replace." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasObservedDuration ?d .
+            FILTER NOT EXISTS { $this backlog:hasDurationSource ?s }
+        }""" ] .
+
+backlog:PlannedFromEvidenceShape a sh:NodeShape ;
+    sh:targetClass backlog:Iteration ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: a planned span far from measured experience"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: this open iteration declares a span more than ten times the longest duration any closed iteration actually recorded. Planning far above measured experience is how a schedule becomes decorative — the dates stop describing the work and start describing a cadence borrowed from somewhere else." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:iterationStart ?s ; backlog:iterationEnd ?e .
+            FILTER NOT EXISTS { $this backlog:hasState backlog:Done }
+            { SELECT (MAX(?d) AS ?worst) WHERE { ?it backlog:hasObservedDuration ?d } }
+            BIND (((?e - ?s) / "PT1M"^^xsd:dayTimeDuration) AS ?planned)
+            FILTER (?planned > (?worst * 10))
         }""" ] .

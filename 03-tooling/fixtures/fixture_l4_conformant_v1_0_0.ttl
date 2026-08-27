@@ -393,3 +393,6 @@ ex:EP backlog:appliesDefinitionOfDone ex:DoD_EP .
 ex:TC_EP a backlog:TestCase ; backlog:exercisesCriterion ex:AC_EP ; backlog:runsOnData ex:TD_EP .
 ex:AC_EP backlog:coveredByCase ex:TC_EP .
 ex:TD_EP a backlog:TestData ; backlog:hasFixtureState "One account in state Locked." .
+
+ex:It1 backlog:hasObservedDuration 30.0 ;
+    backlog:hasDurationSource "The two publish commits bounding this iteration." .

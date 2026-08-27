@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/6.5.0> ;
-    owl:versionInfo "6.5.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/6.6.0> ;
+    owl:versionInfo "6.6.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/6.5.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/6.4.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/6.3.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/6.2.0> ;
@@ -6504,7 +6505,7 @@ fw:Obj_RulingsQueryable a backlog:Objective ;
     backlog:producedByStage fw:Out2_Objective ;
     backlog:hasBaselineValue 18.0 ; backlog:hasTargetValue 0.0 ;
     backlog:hasTargetDirection backlog:Dir_Decrease ;
-    backlog:hasObjectiveDeadline "2027-01-31T00:00:00"^^xsd:dateTime ;
+    backlog:hasObjectiveDeadline "2026-08-27T08:00:00Z"^^xsd:dateTime ;
     backlog:hasMeasurementKind backlog:Meas_Counted ;
     backlog:hasMeasurementQuery "SELECT (COUNT(?r) AS ?n) WHERE { ?r a backlog:GovernanceRuling }" ;
     backlog:hasCheckpoint fw:CP_Obj_RulingsQueryable_1 , fw:CP_Obj_RulingsQueryable_2 ;
@@ -6515,10 +6516,10 @@ fw:Obs_Obj_RulingsQueryable_base a backlog:MetricObservation ;
     backlog:observedAt "2026-10-26T22:00:00"^^xsd:dateTime ;
     backlog:hasObservationMethod "Counted, not derived: 18 headings matching '### G' in the lineage discipline, against rulings reachable as triples. Anyone can count both without trusting this session. Baseline 18 because none is reachable today." .
 fw:CP_Obj_RulingsQueryable_1 a backlog:ObjectiveCheckpoint ;
-    backlog:checkpointDate "2026-11-30T00:00:00"^^xsd:dateTime ;
+    backlog:checkpointDate "2026-08-27T06:30:00Z"^^xsd:dateTime ;
     backlog:expectedValue 12.0 .
 fw:CP_Obj_RulingsQueryable_2 a backlog:ObjectiveCheckpoint ;
-    backlog:checkpointDate "2026-12-31T00:00:00"^^xsd:dateTime ;
+    backlog:checkpointDate "2026-08-27T07:00:00Z"^^xsd:dateTime ;
     backlog:expectedValue 6.0 .
 fw:Metric_Obj_RulesDecidedInCode a core:Metric ; rdfs:label "Gate checks whose outcome is decided in code"@en .
 fw:Obj_RulesDecidedInCode a backlog:Objective ;
@@ -6530,7 +6531,7 @@ fw:Obj_RulesDecidedInCode a backlog:Objective ;
     backlog:producedByStage fw:Out2_Objective ;
     backlog:hasBaselineValue 3.0 ; backlog:hasTargetValue 0.0 ;
     backlog:hasTargetDirection backlog:Dir_Decrease ;
-    backlog:hasObjectiveDeadline "2027-01-31T00:00:00"^^xsd:dateTime ;
+    backlog:hasObjectiveDeadline "2026-08-27T08:00:00Z"^^xsd:dateTime ;
     backlog:hasMeasurementKind backlog:Meas_Counted ;
     backlog:hasCheckpoint fw:CP_Obj_RulesDecidedInCode_1 , fw:CP_Obj_RulesDecidedInCode_2 ;
     backlog:decidedBy backlog:Owner .
@@ -6540,10 +6541,10 @@ fw:Obs_Obj_RulesDecidedInCode_base a backlog:MetricObservation ;
     backlog:observedAt "2026-10-26T22:00:00"^^xsd:dateTime ;
     backlog:hasObservationMethod "Three of twelve gate checks decide outcomes in python: fixture polarity inferred from a FILENAME, manifest exemption from a python list, reachability from a python traversal. Counted by reading the gate, which anyone can do." .
 fw:CP_Obj_RulesDecidedInCode_1 a backlog:ObjectiveCheckpoint ;
-    backlog:checkpointDate "2026-11-30T00:00:00"^^xsd:dateTime ;
+    backlog:checkpointDate "2026-08-27T06:30:00Z"^^xsd:dateTime ;
     backlog:expectedValue 2.0 .
 fw:CP_Obj_RulesDecidedInCode_2 a backlog:ObjectiveCheckpoint ;
-    backlog:checkpointDate "2026-12-31T00:00:00"^^xsd:dateTime ;
+    backlog:checkpointDate "2026-08-27T07:00:00Z"^^xsd:dateTime ;
     backlog:expectedValue 1.0 .
 fw:Metric_Obj_TablesExported a core:Metric ; rdfs:label "Module-level tables holding classification knowledge"@en .
 fw:Obj_TablesExported a backlog:Objective ;
@@ -6555,7 +6556,7 @@ fw:Obj_TablesExported a backlog:Objective ;
     backlog:producedByStage fw:Out2_Objective ;
     backlog:hasBaselineValue 23.0 ; backlog:hasTargetValue 0.0 ;
     backlog:hasTargetDirection backlog:Dir_Decrease ;
-    backlog:hasObjectiveDeadline "2027-01-31T00:00:00"^^xsd:dateTime ;
+    backlog:hasObjectiveDeadline "2026-08-27T08:00:00Z"^^xsd:dateTime ;
     backlog:hasMeasurementKind backlog:Meas_Counted ;
     backlog:hasCheckpoint fw:CP_Obj_TablesExported_1 , fw:CP_Obj_TablesExported_2 ;
     backlog:decidedBy backlog:Owner .
@@ -6565,10 +6566,10 @@ fw:Obs_Obj_TablesExported_base a backlog:MetricObservation ;
     backlog:observedAt "2026-10-26T22:00:00"^^xsd:dateTime ;
     backlog:hasObservationMethod "23 module-level tables across 12 python modules, counted by pattern over the source. LAYERS, STAGE_TYPES, CONTAINER_TYPES, KINDS, SUITES, DROP_DIRS, EXEMPT and the rest. The most mechanical of the four and therefore the one most likely to be done first, which is why Goal_ConceptsExported is scope-facing." .
 fw:CP_Obj_TablesExported_1 a backlog:ObjectiveCheckpoint ;
-    backlog:checkpointDate "2026-11-30T00:00:00"^^xsd:dateTime ;
+    backlog:checkpointDate "2026-08-27T06:30:00Z"^^xsd:dateTime ;
     backlog:expectedValue 12.0 .
 fw:CP_Obj_TablesExported_2 a backlog:ObjectiveCheckpoint ;
-    backlog:checkpointDate "2026-12-31T00:00:00"^^xsd:dateTime ;
+    backlog:checkpointDate "2026-08-27T07:00:00Z"^^xsd:dateTime ;
     backlog:expectedValue 4.0 .
 fw:Metric_Obj_RowsUnchecked a core:Metric ; rdfs:label "Standard table rows that could contradict the TBox unnoticed"@en .
 fw:Obj_RowsUnchecked a backlog:Objective ;
@@ -6580,7 +6581,7 @@ fw:Obj_RowsUnchecked a backlog:Objective ;
     backlog:producedByStage fw:Out2_Objective ;
     backlog:hasBaselineValue 186.0 ; backlog:hasTargetValue 0.0 ;
     backlog:hasTargetDirection backlog:Dir_Decrease ;
-    backlog:hasObjectiveDeadline "2027-01-31T00:00:00"^^xsd:dateTime ;
+    backlog:hasObjectiveDeadline "2026-08-27T08:00:00Z"^^xsd:dateTime ;
     backlog:hasMeasurementKind backlog:Meas_Counted ;
     backlog:hasCheckpoint fw:CP_Obj_RowsUnchecked_1 , fw:CP_Obj_RowsUnchecked_2 ;
     backlog:decidedBy backlog:Owner .
@@ -6590,10 +6591,10 @@ fw:Obs_Obj_RowsUnchecked_base a backlog:MetricObservation ;
     backlog:observedAt "2026-10-26T22:00:00"^^xsd:dateTime ;
     backlog:hasObservationMethod "186 table rows in the standard. The doc-coverage gate checks every class is NAMED and never that a row AGREES with the ontology, so every row is currently uncheckable. Baseline is the whole population because none is checked." .
 fw:CP_Obj_RowsUnchecked_1 a backlog:ObjectiveCheckpoint ;
-    backlog:checkpointDate "2026-11-30T00:00:00"^^xsd:dateTime ;
+    backlog:checkpointDate "2026-08-27T06:30:00Z"^^xsd:dateTime ;
     backlog:expectedValue 140.0 .
 fw:CP_Obj_RowsUnchecked_2 a backlog:ObjectiveCheckpoint ;
-    backlog:checkpointDate "2026-12-31T00:00:00"^^xsd:dateTime ;
+    backlog:checkpointDate "2026-08-27T07:00:00Z"^^xsd:dateTime ;
     backlog:expectedValue 60.0 .
 fw:Metric_Obj_CodeDecisions a core:Metric ; rdfs:label "Scripts that decide what is valid rather than run an engine"@en .
 fw:Obj_CodeDecisions a backlog:Objective ;
@@ -6605,7 +6606,7 @@ fw:Obj_CodeDecisions a backlog:Objective ;
     backlog:producedByStage fw:Out2_Objective ;
     backlog:hasBaselineValue 3.0 ; backlog:hasTargetValue 0.0 ;
     backlog:hasTargetDirection backlog:Dir_Decrease ;
-    backlog:hasObjectiveDeadline "2027-01-31T00:00:00"^^xsd:dateTime ;
+    backlog:hasObjectiveDeadline "2026-08-27T08:00:00Z"^^xsd:dateTime ;
     backlog:hasMeasurementKind backlog:Meas_Counted ;
     backlog:hasCheckpoint fw:CP_Obj_CodeDecisions_1 , fw:CP_Obj_CodeDecisions_2 ;
     backlog:decidedBy backlog:Owner .
@@ -6615,10 +6616,10 @@ fw:Obs_Obj_CodeDecisions_base a backlog:MetricObservation ;
     backlog:observedAt "2026-10-26T22:00:00"^^xsd:dateTime ;
     backlog:hasObservationMethod "The same three as Obj_RulesDecidedInCode, counted at the SCRIPT rather than the CHECK. Deliberately a separate objective: a check can move into the ontology while the script keeps deciding something else, and one number cannot show both. If they move together the two will fall together, which is evidence the split was unnecessary — recorded so that can be seen." .
 fw:CP_Obj_CodeDecisions_1 a backlog:ObjectiveCheckpoint ;
-    backlog:checkpointDate "2026-11-30T00:00:00"^^xsd:dateTime ;
+    backlog:checkpointDate "2026-08-27T06:30:00Z"^^xsd:dateTime ;
     backlog:expectedValue 2.0 .
 fw:CP_Obj_CodeDecisions_2 a backlog:ObjectiveCheckpoint ;
-    backlog:checkpointDate "2026-12-31T00:00:00"^^xsd:dateTime ;
+    backlog:checkpointDate "2026-08-27T07:00:00Z"^^xsd:dateTime ;
     backlog:expectedValue 1.0 .
 fw:Metric_Obj_NoNewClasses a core:Metric ; rdfs:label "Classes added that the exported material does not require"@en .
 fw:Obj_NoNewClasses a backlog:Objective ;
@@ -6630,7 +6631,7 @@ fw:Obj_NoNewClasses a backlog:Objective ;
     backlog:producedByStage fw:Out2_Objective ;
     backlog:hasBaselineValue 0.0 ; backlog:hasTargetValue 0.0 ;
     backlog:hasTargetDirection backlog:Dir_Hold ;
-    backlog:hasObjectiveDeadline "2027-01-31T00:00:00"^^xsd:dateTime ;
+    backlog:hasObjectiveDeadline "2026-08-27T08:00:00Z"^^xsd:dateTime ;
     backlog:hasMeasurementKind backlog:Meas_Judged ;
     backlog:hasCheckpoint fw:CP_Obj_NoNewClasses_1 , fw:CP_Obj_NoNewClasses_2 ;
     backlog:decidedBy backlog:Owner .
@@ -6640,10 +6641,10 @@ fw:Obs_Obj_NoNewClasses_base a backlog:MetricObservation ;
     backlog:observedAt "2026-10-26T22:00:00"^^xsd:dateTime ;
     backlog:hasObservationMethod "JUDGED, and marked as such. Whether a class extends what the framework can express or merely carries exported material is a judgement, not a count — Kind_ClassDiagram carries exported UML knowledge; a reachability gate does not. Baseline 0 and target 0 is legitimate here because the objective is that a count STAYS at zero, which is what an inverse goal measures." .
 fw:CP_Obj_NoNewClasses_1 a backlog:ObjectiveCheckpoint ;
-    backlog:checkpointDate "2026-11-30T00:00:00"^^xsd:dateTime ;
+    backlog:checkpointDate "2026-08-27T06:30:00Z"^^xsd:dateTime ;
     backlog:expectedValue 0.0 .
 fw:CP_Obj_NoNewClasses_2 a backlog:ObjectiveCheckpoint ;
-    backlog:checkpointDate "2026-12-31T00:00:00"^^xsd:dateTime ;
+    backlog:checkpointDate "2026-08-27T07:00:00Z"^^xsd:dateTime ;
     backlog:expectedValue 0.0 .
 fw:Metric_Obj_NoProseLost a core:Metric ; rdfs:label "Explanatory paragraphs removed during the migration"@en .
 fw:Obj_NoProseLost a backlog:Objective ;
@@ -6655,7 +6656,7 @@ fw:Obj_NoProseLost a backlog:Objective ;
     backlog:producedByStage fw:Out2_Objective ;
     backlog:hasBaselineValue 0.0 ; backlog:hasTargetValue 0.0 ;
     backlog:hasTargetDirection backlog:Dir_Hold ;
-    backlog:hasObjectiveDeadline "2027-01-31T00:00:00"^^xsd:dateTime ;
+    backlog:hasObjectiveDeadline "2026-08-27T08:00:00Z"^^xsd:dateTime ;
     backlog:hasMeasurementKind backlog:Meas_Counted ;
     backlog:hasCheckpoint fw:CP_Obj_NoProseLost_1 , fw:CP_Obj_NoProseLost_2 ;
     backlog:decidedBy backlog:Owner .
@@ -6665,10 +6666,10 @@ fw:Obs_Obj_NoProseLost_base a backlog:MetricObservation ;
     backlog:observedAt "2026-10-26T22:00:00"^^xsd:dateTime ;
     backlog:hasObservationMethod "Counted by diff against the v1.104.0 documentation: 7197 lines is the reference. An explanation deleted because its subject moved into the ontology is the failure this guards, and it is countable, so this inverse goal does not need judgement." .
 fw:CP_Obj_NoProseLost_1 a backlog:ObjectiveCheckpoint ;
-    backlog:checkpointDate "2026-11-30T00:00:00"^^xsd:dateTime ;
+    backlog:checkpointDate "2026-08-27T06:30:00Z"^^xsd:dateTime ;
     backlog:expectedValue 0.0 .
 fw:CP_Obj_NoProseLost_2 a backlog:ObjectiveCheckpoint ;
-    backlog:checkpointDate "2026-12-31T00:00:00"^^xsd:dateTime ;
+    backlog:checkpointDate "2026-08-27T07:00:00Z"^^xsd:dateTime ;
     backlog:expectedValue 0.0 .
 
 fw:Out2_Objective a backlog:StageOutput ;
@@ -7265,8 +7266,10 @@ fw:Pkg_ExecutionInOntology a backlog:Package ;
 fw:It7 a backlog:Iteration ;
     backlog:hasIdentifier "It7" ;
     backlog:hasState backlog:Done ;
-    backlog:iterationStart "2026-11-02T00:00:00"^^xsd:dateTime ;
-    backlog:iterationEnd "2026-11-15T23:59:59"^^xsd:dateTime ;
+    backlog:iterationStart "2026-08-26T20:49:59Z"^^xsd:dateTime ;
+    backlog:iterationEnd "2026-08-26T21:22:10Z"^^xsd:dateTime ;
+    backlog:hasObservedDuration 32.0 ;
+    backlog:hasDurationSource "Publish commits bounding the iteration: the tag closing the previous release and the tag closing this one." ;
     backlog:hasCapacity 9.0 ;
     backlog:hasCommittedEffort 9.0 ;
     backlog:memberOfContainer fw:Register .
@@ -7322,8 +7325,10 @@ fw:T_EP_CodeTables_S1 a backlog:ExecutionTask ;
 fw:It8 a backlog:Iteration ;
     backlog:hasIdentifier "It8" ;
     backlog:hasState backlog:Done ;
-    backlog:iterationStart "2026-11-16T00:00:00"^^xsd:dateTime ;
-    backlog:iterationEnd "2026-11-29T23:59:59"^^xsd:dateTime ;
+    backlog:iterationStart "2026-08-26T21:22:10Z"^^xsd:dateTime ;
+    backlog:iterationEnd "2026-08-26T21:50:26Z"^^xsd:dateTime ;
+    backlog:hasObservedDuration 28.0 ;
+    backlog:hasDurationSource "Publish commits bounding the iteration: the tag closing the previous release and the tag closing this one." ;
     backlog:hasCapacity 9.0 ;
     backlog:hasCommittedEffort 9.0 ;
     backlog:memberOfContainer fw:Register .
@@ -7379,8 +7384,8 @@ fw:T_EP_RuleExec_S2 a backlog:ExecutionTask ;
 fw:It9 a backlog:Iteration ;
     backlog:hasIdentifier "It9" ;
     backlog:hasState backlog:Proposed ;
-    backlog:iterationStart "2026-11-30T00:00:00"^^xsd:dateTime ;
-    backlog:iterationEnd "2026-12-13T23:59:59"^^xsd:dateTime ;
+    backlog:iterationStart "2026-08-27T06:00:00Z"^^xsd:dateTime ;
+    backlog:iterationEnd "2026-08-27T06:30:00Z"^^xsd:dateTime ;
     backlog:hasCapacity 9.0 ;
     backlog:hasCommittedEffort 9.0 ;
     backlog:memberOfContainer fw:Register .
@@ -8590,8 +8595,8 @@ fw:EP_TablesBatch backlog:decomposesInto fw:S_Tables_B6 .
 fw:It10 a backlog:Iteration ;
     backlog:hasIdentifier "It10" ;
     backlog:hasState backlog:Proposed ;
-    backlog:iterationStart "2026-12-14T00:00:00"^^xsd:dateTime ;
-    backlog:iterationEnd "2026-12-27T23:59:59"^^xsd:dateTime ;
+    backlog:iterationStart "2026-08-27T06:30:00Z"^^xsd:dateTime ;
+    backlog:iterationEnd "2026-08-27T07:00:00Z"^^xsd:dateTime ;
     backlog:hasCapacity 9.0 ;
     backlog:hasCommittedEffort 6.0 ;
     backlog:memberOfContainer fw:Register .
@@ -8659,8 +8664,8 @@ fw:E_EP_TablesBatch a backlog:CostEstimate ;
 fw:It11 a backlog:Iteration ;
     backlog:hasIdentifier "It11" ;
     backlog:hasState backlog:Proposed ;
-    backlog:iterationStart "2026-12-28T00:00:00"^^xsd:dateTime ;
-    backlog:iterationEnd "2027-01-10T23:59:59"^^xsd:dateTime ;
+    backlog:iterationStart "2026-08-27T07:00:00Z"^^xsd:dateTime ;
+    backlog:iterationEnd "2026-08-27T07:30:00Z"^^xsd:dateTime ;
     backlog:hasCapacity 9.0 ;
     backlog:hasCommittedEffort 6.0 ;
     backlog:memberOfContainer fw:Register ;
@@ -8691,8 +8696,8 @@ fw:It11 a backlog:Iteration ;
 fw:It12 a backlog:Iteration ;
     backlog:hasIdentifier "It12" ;
     backlog:hasState backlog:Proposed ;
-    backlog:iterationStart "2027-01-11T00:00:00"^^xsd:dateTime ;
-    backlog:iterationEnd "2027-01-24T23:59:59"^^xsd:dateTime ;
+    backlog:iterationStart "2026-08-27T07:30:00Z"^^xsd:dateTime ;
+    backlog:iterationEnd "2026-08-27T08:00:00Z"^^xsd:dateTime ;
     backlog:hasCapacity 9.0 ;
     backlog:hasCommittedEffort 6.0 ;
     backlog:memberOfContainer fw:Register ;
@@ -8705,3 +8710,44 @@ fw:Obs_ReplanCascaded a backlog:MetricObservation ;
     backlog:hasObservedValue 22.0 ;
     backlog:observedAt "2026-11-30T09:00:00"^^xsd:dateTime ;
     backlog:hasObservationMethod "Unchanged at 22: re-planning moves nothing, only delivery does. The plan now finishes 24 January rather than 10 January, because It9 was carrying 15 points against a capacity of 9 and two batch stories cascade forward. Still inside the 31 January deadline. Recorded because a plan that slips two weeks under correction and is not written down looks identical to one that never slipped." .
+
+#################################################################
+#  v6.6.0 — the calendar was fiction. Re-based on measurement.
+#
+#  OWNER FINDING, and it is exact. Measured from the publish
+#  commits: It7 took 32 minutes and It8 took 28. The register
+#  declared FOURTEEN DAYS each and scheduled the remaining work for
+#  November through January, while the day was the 27th of August.
+#  Overstatement: 667 times.
+#
+#  Nothing caught it. iterationStart and iterationEnd are asserted
+#  dateTimes and no clause compared them to anything that happened
+#  — the same defect as committed effort, one release earlier: a
+#  number stated rather than derived.
+#
+#  Re-based: the two closed iterations carry their MEASURED
+#  durations and their real commit-bounded spans. The four open
+#  iterations run thirty minutes each from now, which is the mean
+#  of what the two closed ones actually took. Objective deadline
+#  moves from 31 January to 08:00 today, and the checkpoints with
+#  it — the whole migration is about two hours of work, not five
+#  months.
+#################################################################
+
+fw:Obs_MeasuredCadence a backlog:MetricObservation ;
+    rdfs:label "Measured iteration cadence"@en ;
+    backlog:observesMetric fw:Metric_Obj_TablesExported ;
+    backlog:observationFor fw:Obj_TablesExported ;
+    backlog:hasObservedValue 22.0 ;
+    backlog:observedAt "2026-08-27T05:55:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Count unchanged at 22 — re-basing the calendar moves no tables. What changed is the schedule: measured from the publish commits, a nine-point iteration takes 30 minutes on average, 3.4 minutes per point. The declared fourteen days was 667 times too long and the dates sat five months in the future. Four remaining iterations at 30 minutes finish about two hours from now rather than on 24 January. Recorded because a plan re-based this far without saying so would look like the original plan succeeding." .
+
+#  It1 and It2 predate any measurement. Their durations are
+#  recorded as UNMEASURABLE rather than invented: they closed
+#  before this framework tracked publish commits per iteration, and
+#  writing a plausible figure now would be exactly the fiction this
+#  release removes.
+fw:It1 backlog:hasObservedDuration 0.0 ;
+    backlog:hasDurationSource "UNMEASURABLE: closed before per-iteration publish commits were tracked. Zero is recorded as a null, not as a claim that the iteration took no time — and it is visible as an outlier rather than hidden as a plausible guess." .
+fw:It2 backlog:hasObservedDuration 0.0 ;
+    backlog:hasDurationSource "UNMEASURABLE: as It1." .

@@ -1,5 +1,51 @@
 # Changelog
 
+## v1.115.0 — 2026-08-27 (MINOR: the calendar was fiction — re-based on measurement)
+
+**The owner is right and the figure is exact.** Measured from the publish commits:
+
+```
+It7   32 minutes   3 stories, 9 points
+It8   28 minutes   3 stories, 9 points
+
+declared in the register:  14 days each
+overstatement:             667×
+```
+
+And the remaining iterations were scheduled for **November through January** while the day was
+**27 August**.
+
+### Why nothing caught it
+
+`iterationStart` and `iterationEnd` are asserted dateTimes and **no clause compared them to anything
+that happened**. Identical to the committed-effort defect one release earlier: a number stated rather
+than derived, checked only against another stated number.
+
+`hasObservedDuration` and `hasDurationSource` record what an iteration actually took and where that was
+read from. At L3 a Done iteration reporting no duration is rejected; an advisory reports an open
+iteration planning more than ten times the worst measured span.
+
+### Re-based
+
+```
+It9   06:00 → 06:30      It11  07:00 → 07:30
+It10  06:30 → 07:00      It12  07:30 → 08:00
+```
+
+Thirty minutes each — the mean of what the two closed iterations actually took, 3.4 minutes per point.
+The objective deadline moves from **31 January to 08:00 today**, checkpoints with it. The whole
+migration is about **two hours of work, not five months**.
+
+### It1 and It2 are recorded as unmeasurable
+
+They closed before per-iteration publish commits were tracked. Their duration is **0 with a stated
+reason**, not a plausible figure — writing one now would be exactly the fiction this release removes,
+and an obvious outlier is better than a convincing invention.
+
+`Obs_MeasuredCadence` records the re-basing, because **a plan re-based this far without saying so would
+look like the original plan succeeding.**
+
+
 ## v1.114.0 — 2026-11-30 (MINOR: committed effort must answer to the contents)
 
 **The re-plan overfilled It9 and every check passed.** Two batch stories went into a box that already
