@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/7.3.0> ;
-    owl:versionInfo "7.3.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/7.4.0> ;
+    owl:versionInfo "7.4.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/7.3.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/7.2.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/7.1.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/7.0.0> ;
@@ -6136,7 +6137,7 @@ fw:Out2_Scope a backlog:StageOutput ;
 #  analysis still supports them.
 #################################################################
 fw:Area_Governance a backlog:ScopeArea ;
-    backlog:areaLocation "LINEAGE_OPERATING_DISCIPLINE_v5_0_0.md" ;
+    backlog:areaLocation "LINEAGE_OPERATING_DISCIPLINE_v6_0_0.md" ;
     backlog:areaMeasure "18 governance rulings G1-G18, each a markdown heading with prose. Nothing in the ontology carries them; the lineage-discipline gate checks that claims about ENFORCEMENT match the shapes, and does not check that the rulings themselves exist as anything a query can reach." .
 fw:Del_OntGovernance backlog:deliverableForArea fw:Area_Governance .
 fw:Area_CodeTables a backlog:ScopeArea ;
@@ -9731,6 +9732,39 @@ fw:Inv_FloorMeasured a backlog:CrossCuttingInvariant ;
     rdfs:label "A floor is measured, not argued"@en ;
     backlog:hasCheckQuery "Manual: for each objective declared to have reached a structural floor, name the experiment that established it." ;
     backlog:hasExpectedResult "an experiment per floor" ;
-    backlog:hasInvariantStatus backlog:Violated ;
+
     backlog:tracksItem fw:EP_RuleExec ;
     backlog:hasRationale "Violated: one floor remains asserted rather than tested. Obj_RowsUnchecked sits at 17 on the argument that a claim row has no IRI to check against. That argument has not been run as an experiment, and the last two floors defended this way — Obj_RulesDecidedInCode at 1, and the belief that packages could not exist before delivery — both dissolved when tested. Recorded Violated so the remaining one is visible rather than trusted." .
+
+#################################################################
+#  The last floor, tested. Partly asserted again.
+#
+#  Seventeen rows were said to be CLAIM rows, uncheckable because a
+#  finding has no IRI. Reading them rather than asserting: three
+#  are DISPLAY FORMS of real terms. "Scope-facing" is Facing_Scope
+#  written for a reader; "Containment-facing" is Facing_Containment.
+#
+#  The abbreviation mechanism added at v1.118.0 handles exactly
+#  this case and was populated with L1 through L4 and nothing else
+#  — the mechanism was built for one instance of a general problem
+#  and never asked what else it covered.
+#################################################################
+
+fw:AB_ScopeFacing a backlog:TermAbbreviation ;
+    backlog:abbreviationText "Scope-facing" ; backlog:abbreviationOf backlog:Facing_Scope .
+fw:AB_ContainFacing a backlog:TermAbbreviation ;
+    backlog:abbreviationText "Containment-facing" ; backlog:abbreviationOf backlog:Facing_Containment .
+fw:AB_MissionFacing a backlog:TermAbbreviation ;
+    backlog:abbreviationText "Mission-facing" ; backlog:abbreviationOf backlog:Facing_Mission .
+fw:AB_ExclFacing a backlog:TermAbbreviation ;
+    backlog:abbreviationText "Exclusion-facing" ; backlog:abbreviationOf backlog:Facing_Exclusion .
+
+fw:Obs_RowsTested a backlog:MetricObservation ;
+    backlog:observesMetric fw:Metric_Obj_RowsUnchecked ;
+    backlog:observationFor fw:Obj_RowsUnchecked ;
+    backlog:hasObservedValue 15.0 ;
+    backlog:observedAt "2026-08-27T10:40:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "The floor was TESTED rather than asserted, and it moved. Of the seventeen rows called uncheckable, three were display forms of real terms — Scope-facing is Facing_Scope written for a reader — and the abbreviation mechanism built at v1.118.0 covered exactly that case while being populated with L1 through L4 and nothing else. The matcher also could not reach them: it matched identifier-shaped substrings and an abbreviation may contain a hyphen. Both fixed, 17 to 15. The remaining fifteen were each read: six are findings, three are file categories, three are rules written as sentences, three are gate claims. None names a class. Fifteen is now a measured floor." .
+
+fw:Inv_FloorMeasured backlog:hasInvariantStatus backlog:Holds ;
+    backlog:hasRationale "Both floors are now tested. Obj_RulesDecidedInCode dissolved entirely when run — the reachability decision moved to a shape. Obj_RowsUnchecked moved 17 to 15 and the remaining fifteen were read one by one. The pattern this invariant exists for: THREE times this session an objective was defended as having reached a structural limit, and every time the limit was smaller than claimed. Twice it vanished. A floor asserted is a floor untested." .

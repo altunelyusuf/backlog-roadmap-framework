@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v5.0.0
+# Lineage Operating Discipline — v6.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -350,3 +350,115 @@ added to the standing rules. G1's note corrected: `LineageDepthAdvisoryShape` is
 
 Authored by a parallel session. Ceremony, six boundaries, and the self-checking mechanism, all
 carried forward.
+
+---
+
+## G19 — A floor is measured, not argued
+
+An objective that stops short of its target is either unfinished work or a real
+limit, and the two look identical from the inside. **Three times in one session an
+objective was declared to have reached a structural floor, and every time the
+floor was smaller than claimed. Twice it vanished entirely.**
+
+- **Packages before delivery.** Believed impossible; `Package` existed unused for
+  91 releases. The concept was there the whole time.
+- **Reachability in the ontology.** Argued twice as a query a register cannot
+  hold. Tested: SPARQL returns 25 classes, a SHACL shape returns the same 25.
+  The rule was never about classes that do not exist — it was about classes that
+  do and are unreachable, all of them already subjects in the shipped graphs.
+- **Uncheckable standard rows.** Called 17 on the argument that a finding has no
+  IRI. Read one by one: three were display forms of real terms.
+
+Before an objective is accepted as floored, name the experiment. A floor with no
+experiment is an argument, and this framework has produced three sound arguments
+with wrong premises.
+
+## G20 — A capability available and not obligatory is a capability skipped
+
+`TaskType` shipped with fourteen values from ISO 12207 and 44 of 51 tasks chose
+`Task_Implementation`. `TestCase` and `TestData` shipped at v1.97.0 and 46 of 55
+stories never used them. `Package` sat unused for 91 releases. `CodeTable`
+carried `hasTableKind` with nothing requiring it, while the whole table migration
+turned on that distinction.
+
+**Building a capability and adopting it are separate acts, and nothing notices the
+gap between them.** Under time pressure the cheapest shape wins every time — and
+development is always under time pressure.
+
+Ship the constraint in the same increment as the capability, or record why not.
+
+## G21 — Evidence batched across criteria carries the false one
+
+A story was Done with a specification, ordered steps, a test case, test data, a
+planned task, verified evidence and a complete harness. **The property it promised
+did not exist.**
+
+It passed because one `TestEvidence` attested five criteria across three stories
+and described what the iteration did as a whole. Every clause was satisfied; none
+asked whether the thing existed. **24 of 49 evidence records attested more than
+one criterion.**
+
+Evidence records that testing HAPPENED. A criterion must separately name the
+artefact whose existence makes it true, per criterion — because a criterion
+covered by a claim about its neighbours is not covered.
+
+## G22 — A clause nothing fires has never been shown to work
+
+96 of 276 level-gated clauses had never been made to fire by any fixture, and all
+six clauses one lineage built were among them.
+
+A clause may be correct, or it may be malformed SPARQL returning nothing. **Both
+look identical from a green gate.** This package produced two — a triple pattern
+inside `FILTER` reporting zero violations *and* zero warnings, and a `dateTime`
+subtraction reporting zero on a 34-day gap — and both were caught by accident.
+
+Write the negative fixture in the same increment as the clause. A negative fixture
+that passes is either a missing clause or a broken one, and only looking tells you
+which — one such case, written knowing it might be silent, exposed a missing
+constraint.
+
+## G23 — Verifying closed work is not backfilling it
+
+Backfilling tasks onto closed stories records work that was never planned, which
+is a defect. **Verifying that closed stories built the right thing is not the same
+act**, and refusing the second because the first is wrong leaves the register
+asserting completeness it has never checked.
+
+Closed does not mean verified. It means nobody looked again.
+
+## G24 — A derived number must answer to what it derives from
+
+`hasCommittedEffort` was compared against `hasCapacity` and **both were asserted**.
+An iteration held 15 points while declaring 9 and every check passed.
+`iterationStart` and `iterationEnd` were asserted dateTimes compared to nothing —
+two closed iterations took 32 and 28 minutes against a declared fourteen days, an
+overstatement of 667 times, with the calendar sitting five months in the future.
+
+A number that agrees with another number proves nothing. Derive it from the
+contents, or state that it is a judgement.
+
+---
+
+## Architectural mitigations for the next lineage
+
+These are not fixes to apply now; they are shape changes worth scoping.
+
+**A1 — Capability adoption as a first-class link.** G20 recurs because a class and
+its enforcing constraint are separate objects with no relation between them. A
+`requiresConstraint` on a shipped term, checked at release, would make an
+unadopted capability visible rather than silent.
+
+**A2 — Fixture obligation per clause.** G22 recurs because a clause and its proof
+are separate files. Naming the fixture on the shape itself would make an unproven
+clause a structural fact rather than a report from a separate tool.
+
+**A3 — Derivation provenance on every measure.** G24 recurs because nothing marks
+a number as derived or asserted. `MeasurementKind` does this for objectives and
+nothing else; extending it to every numeric property would let a single query find
+every figure that answers to nothing.
+
+**A4 — Self-application as a gate, not a habit.** Several findings came from
+running a checker against the package that ships it — the audit that caught its
+own author, the exclusion list with two caches and one entry. Making
+self-application a required step would catch these on purpose rather than by
+noticing.

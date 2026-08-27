@@ -123,6 +123,15 @@ def main():
         # audit flags the pattern and the exemption is stated rather than hidden.
         if first[:2] == "**" and first[-2:] == "**":  # audit-exempt: presentation
             continue
+        # An abbreviation may contain characters an identifier cannot —
+        # "Scope-facing" is Facing_Scope written for a reader. Matching only
+        # identifier-shaped substrings never reaches it. Found when three of
+        # the seventeen "uncheckable claim rows" turned out to be display
+        # forms of real terms: the abbreviation mechanism existed and the
+        # matcher could not use it.
+        if bare in terms:
+            named.append((ln, bare))
+            continue
         cands = re.findall(r"[A-Za-z_][A-Za-z0-9_]*", first)
         hit = [c for c in cands if c in terms]
         if hit:

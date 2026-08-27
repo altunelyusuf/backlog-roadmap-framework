@@ -1,5 +1,59 @@
 # Changelog
 
+## v1.123.0 — 2026-08-27 (MAJOR-class: lineage discipline v6.0.0 — six rulings and four architectural mitigations)
+
+### The last floor, tested rather than asserted — and it moved again
+
+Seventeen rows were called uncheckable because a finding has no IRI. Read one by one, **three were
+display forms of real terms**: "Scope-facing" is `Facing_Scope` written for a reader.
+
+The abbreviation mechanism built at v1.118.0 covered exactly that case and **had been populated with
+L1–L4 and nothing else** — a mechanism built for one instance of a general problem, never asked what
+else it covered. The matcher could not reach them either: it matched identifier-shaped substrings, and
+an abbreviation may contain a hyphen.
+
+```
+Obj_RowsUnchecked   17 → 15
+6 of 7 objectives met
+```
+
+The remaining fifteen were each read: six findings, three file categories, three rules written as
+sentences, three gate claims. **None names a class. Fifteen is now a measured floor.**
+
+### Lineage discipline v6.0.0 — G19 through G24
+
+**G19 — A floor is measured, not argued.** Three times this session an objective was declared floored
+and every time the floor was smaller than claimed; twice it vanished. Packages before delivery.
+Reachability in the ontology. Uncheckable rows. Name the experiment before accepting a limit.
+
+**G20 — A capability available and not obligatory is a capability skipped.** `TaskType` shipped with 14
+values and 44 of 51 tasks chose Implementation. `TestCase` shipped and 46 of 55 stories never used it.
+`Package` sat unused for 91 releases. Ship the constraint with the capability, or record why not.
+
+**G21 — Evidence batched across criteria carries the false one.** One record attested five criteria
+across three stories; every clause passed and the property did not exist. 24 of 49 records attested
+more than one.
+
+**G22 — A clause nothing fires has never been shown to work.** 96 of 276 unproven, and both malformed
+clauses this package produced were caught by accident.
+
+**G23 — Verifying closed work is not backfilling it.** Refusing the second because the first is wrong
+leaves the register asserting completeness it never checked.
+
+**G24 — A derived number must answer to what it derives from.** Committed effort compared to capacity,
+both asserted. Iteration dates overstated 667×.
+
+### Four architectural mitigations, scoped for the next lineage
+
+**A1** capability adoption as a first-class link — a class and its enforcing constraint are separate
+objects with no relation between them.
+**A2** fixture obligation named on the shape itself, so an unproven clause is structural rather than a
+report from a separate tool.
+**A3** derivation provenance on every measure, not just objectives.
+**A4** self-application as a required gate step — several findings came from running a checker against
+the package that ships it, and all were noticed by accident.
+
+
 ## v1.122.0 — 2026-08-27 (MINOR: the floor was not a floor)
 
 I claimed **twice** that reachability could not move to the ontology — that it is a query over the
@@ -943,7 +997,7 @@ deliverable was still the mission said twice. Nothing was missing — it was mis
 
 | Area | Where | What is in it |
 |---|---|---|
-| Governance | `LINEAGE_OPERATING_DISCIPLINE_v5_0_0.md` | 18 rulings G1–G18, markdown headings only; no query can reach them |
+| Governance | `LINEAGE_OPERATING_DISCIPLINE_v6_0_0.md` | 18 rulings G1–G18, markdown headings only; no query can reach them |
 | Code tables | 12 python modules | 23 module-level tables deciding what something **is**, in python |
 | Rule execution | validator + gate | 12 checks; 9 evaluate SHACL, **3 decide outcomes in code** — fixture polarity from a filename, exemption from a list, reachability from a traversal |
 | Standard doc | `..._STANDARD_v1_48_0.md` | 186 table rows; coverage checks a class is **named**, never that the row **agrees** with the TBox |
