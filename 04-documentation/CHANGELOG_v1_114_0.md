@@ -1,5 +1,39 @@
 # Changelog
 
+## v1.114.0 — 2026-11-30 (MINOR: committed effort must answer to the contents)
+
+**The re-plan overfilled It9 and every check passed.** Two batch stories went into a box that already
+held three: **15 points against a capacity of 9**.
+
+### Why nothing objected
+
+The capacity clause compares `hasCommittedEffort` against `hasCapacity` — and **both are asserted**.
+Adding stories to an iteration does not change the declared commitment, so a box can hold fifteen points
+while declaring nine and the comparison still passes.
+
+This is the ungrounded-practice defect one level along: **a number stated rather than derived, agreeing
+with another stated number, and nothing comparing either to the work.** It10 was caught last release
+only because its *declared* figure was raised. It9 was not, because it was not.
+
+`CommittedEffortShape` now derives the sum from the iteration's members. It fires on It9 alone.
+
+### Cascaded, not compressed
+
+```
+It9   9/9   ends 13 Dec
+It10  6/9   ends 27 Dec
+It11  6/9   ends 10 Jan
+It12  6/9   ends 24 Jan     ← opened by the cascade
+```
+
+The migration now finishes **24 January instead of 10 January** — still inside the 31 January deadline,
+and the honest date rather than the one that fitted. The alternative was compressing two stories into
+an already full box, which is what the overfill *was*.
+
+`Obs_ReplanCascaded` records the slip, because **a plan that loses two weeks under correction and does
+not write it down looks identical to one that never slipped.**
+
+
 ## v1.113.0 — 2026-11-29 (MINOR: the table migration re-planned as batches of four, baseline retained)
 
 **Risks found, so the plan changed.** Three, and the first is measurable.
