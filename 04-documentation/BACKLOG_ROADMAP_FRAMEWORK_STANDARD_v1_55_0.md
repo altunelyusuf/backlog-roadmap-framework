@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.54.0
+# Backlog & Roadmap Semantic Framework — Standard v1.55.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -909,6 +909,43 @@ from a decision reports its own success as a failure.
 annotation. It reports rows naming a term the TBox lacks, and states its own limit: a row whose first
 cell is a *claim* rather than an identifier cannot be checked, and those are reported rather than
 excluded — a longer exclusion list would make the checker agree with the document by construction.
+
+### 2.5c-xxxv Which tables belong in the ontology
+
+`TableKind` — `Table_Classification` or `Table_Operational`. A classification table states what
+something **is**; an operational table states how the tooling **runs**.
+
+The distinction decides whether a table belongs in the ontology. Exporting operational configuration
+would put build settings in an ontology about backlogs and **add classes the exported material does not
+require**, which is what a containment objective is held at zero to prevent — the migration would
+breach one goal in the act of satisfying another.
+
+`CodeTable` records the population by name, because a count of capitalised assignments **moved from 23
+to 26 during the migration**: the work itself shipped scripts carrying new tables, and an objective
+whose denominator moves cannot be met.
+
+**Sort by content, not by name.** `SCAN` and `PATTERNS` sound like classifications and are regex lists.
+Reading each table rather than its identifier moved six more into the operational set — the honest
+denominator was eight, not 23.
+
+`stageRequiresType` carries what each lineage stage must contain. It was a python dictionary defining
+the ceremony this framework **enforces**, which no query could reach: an adopter following the published
+ceremony and one checked by the verifier were reading two different specifications.
+
+`bridgeCoversEvidence` is the sharpest split. The source list paired an evidence **class** with a python
+function checking it — which kinds are covered is a domain statement and moved; how each is checked is
+the script's behaviour and stayed.
+
+### 2.5c-xxxvi Three more exported classifications
+
+`ContainerRole` names the classes the reporting tools treat as containers of work, so an adopter
+defining their own container is counted by the reports without editing them.
+
+`ForeignNamespace` names the namespaces this package uses and does not own — a governance statement
+rather than a lookup, since an adopter must not assume a term from one of these is theirs to change.
+
+`ShapeSuite` names the SHACL suites a register is expected to satisfy. Its filename glob is kept beside
+the name deliberately: separating them would leave the ontology naming suites nothing could find.
 
 ### 2.5d Decomposition, commitments, dependency kinds, impediments, flow, team (subject v1.4.0)
 

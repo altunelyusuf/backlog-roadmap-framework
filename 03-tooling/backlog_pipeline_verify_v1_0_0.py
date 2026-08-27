@@ -44,15 +44,7 @@ B = "http://example.org/backlog#"
 
 # What each stage may contain. A stage's digest covers its own types and every
 # earlier stage's, because a stage inherits the state it was handed.
-STAGE_TYPES = {
-    "Stage_Mission": ["Mission"],
-    "Stage_Scope": ["Mission", "ScopeStatement", "ScopeExclusion", "ScopeDeliverable"],
-    "Stage_Goal": ["Mission", "ScopeStatement", "ScopeExclusion", "ScopeDeliverable", "Goal"],
-    "Stage_Objective": ["Mission", "ScopeStatement", "ScopeExclusion", "ScopeDeliverable",
-                        "Goal", "Objective"],
-    "Stage_Backlog": ["Mission", "ScopeStatement", "ScopeExclusion", "ScopeDeliverable",
-                      "Goal", "Objective", "Initiative", "Epic", "Story", "ExecutionTask"],
-}
+STAGE_TYPES = None  # loaded from the ontology; see _load_stage_types
 ORDER = ["Stage_Mission", "Stage_Scope", "Stage_Goal", "Stage_Objective", "Stage_Backlog"]
 
 
@@ -70,7 +62,40 @@ def state_digest(g, stage):
     return hashlib.sha256("\n".join(sorted(subs)).encode("utf-8")).hexdigest()
 
 
+
+def _load_stage_types(tbox_path):
+    """What each lineage stage must contain, from the ontology.
+
+    EXPORTED at v1.117.0. This was a python dictionary that defined the
+    ceremony this framework ENFORCES — the most consequential table in the
+    tooling, and no query could reach it. An adopter following the published
+    ceremony and an adopter checked by this verifier were reading two
+    different specifications with nothing comparing them.
+
+    Fails loudly. A fallback would restore exactly that split.
+    """
+    from rdflib import Graph, Namespace
+    B = Namespace("http://example.org/backlog#")
+    g = Graph()
+    g.parse(tbox_path, format="turtle")
+    out = {}
+    for st, _, cls in g.triples((None, B.stageRequiresType, None)):
+        out.setdefault(str(st).split("#")[-1], []).append(str(cls).split("#")[-1])
+    if not out:
+        raise SystemExit(
+            "FATAL: the ontology declares no stageRequiresType. The stage "
+            "content table was exported at v1.117.0 and is read here; refusing "
+            "to fall back to a literal, which would put the enforced ceremony "
+            "back out of reach of every query."
+        )
+    return out
+
 def main():
+    global STAGE_TYPES
+    import os as _os, glob as _glob
+    _pkg = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
+    _tb = sorted(_glob.glob(_os.path.join(_pkg, "01-ontologies", "backlog_tbox_v*.ttl")))[-1]
+    STAGE_TYPES = _load_stage_types(_tb)
     if len(sys.argv) < 2:
         print("usage: backlog_pipeline_verify_v1_0_0.py <register.ttl> [tbox.ttl]")
         return 1

@@ -1,5 +1,58 @@
 # Changelog
 
+## v1.117.0 — 2026-08-27 (MINOR: It10 and It11 — the table migration finishes, and the denominator was wrong)
+
+### It10 began by counting, and the count had grown
+
+**26 tables, not 22.** The count grew because this lineage shipped new scripts carrying new tables. **An
+objective whose denominator moves cannot be met**, and nothing was watching it.
+
+`TableKind` and `CodeTable` make the population a named set rather than a regex over capitalised names.
+
+### STAGE_TYPES was the most consequential table in the tooling
+
+It defined the ceremony this framework **enforces**, as a python dictionary no query could reach — an
+adopter following the published ceremony and one checked by the verifier were reading two different
+specifications. Now `stageRequiresType`, read by the verifier, which exits FATAL without it.
+
+**The loud failure earned itself on its first run**: it located statements written into the wrong graph
+immediately.
+
+**All five stage digests now reproduce.** Four were `pending-commit`; backfilled from real commits, and
+the verifier reports the chain is a line.
+
+### It11 and the KINDS split
+
+`KINDS` paired an evidence **class** with a python function. Exporting the pair would have put a
+lambda's identity in an ontology; exporting neither leaves coverage unanswerable. Which kinds are
+covered moved; how each is checked stayed.
+
+### Then reading the last six changed the answer
+
+Every one is operational — regexes, globs, filenames. **The v1.117.0 split had sorted by name rather
+than by content**: `SCAN` and `PATTERNS` sound like classifications and are not.
+
+```
+Obj_TablesExported   baseline 23 -> observed 0
+honest denominator: 8, not 23
+```
+
+**A target reached by narrowing the population is not a target reached by doing the work.** Both
+readings are recorded so the difference is visible.
+
+### It12 removed, not marked Done
+
+All four of its members were cancelled before it ran. Marking it Done would have recorded a closed
+iteration with **no deployment** — a cadence entry that never happened. The L4 clause caught the easier
+answer.
+
+### Nine violations of my own making, repaired
+
+Withdrawing the two stories, I used regexes that matched more than intended, and invented `Withdrawn`
+for a state enumeration that says `Cancelled`. Every one was caught by the suite: duplicate states,
+missing states, an orphaned task, a container state asserted by preference rather than derived.
+
+
 ## v1.116.0 — 2026-08-27 (MINOR: It9 delivered — script decisions removed, standard rows checked)
 
 Two auditors ship, both scanning for the **shape** of a defect rather than a list of known offenders —

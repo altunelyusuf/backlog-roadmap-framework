@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/6.7.0> ;
-    owl:versionInfo "6.7.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/6.8.0> ;
+    owl:versionInfo "6.8.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/6.7.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/6.6.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/6.5.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/6.4.0> ;
@@ -95,7 +96,7 @@ fw:Profile a backlog:AdoptionProfile ;
 fw:Register a backlog:Backlog ;
     backlog:hasIdentifier "BRF-REG" ;
     backlog:hasTitle "backlog-roadmap-framework development register" ;
-    backlog:hasState backlog:InProgress ;
+    backlog:hasState backlog:Done ;
     backlog:appliesDefinitionOfDone backlog:DoD_Baseline ;
     backlog:hasCommitment fw:Commitment_Dev .
 
@@ -6103,8 +6104,8 @@ fw:Scope_Ontology a backlog:ScopeStatement ;
 fw:Out2_Scope a backlog:StageOutput ;
     backlog:outputOfStage backlog:Stage_Scope ;
     backlog:consumesOutput fw:Out2_Mission ;
-    backlog:hasStateDigest "pending-commit" ;
-    backlog:closedAtCommit "pending-commit" ;
+    backlog:hasStateDigest "833c3468bbb084d1ea73823d5a8006551e33a9c770760c07700a6c652e5a2e20" ;
+    backlog:closedAtCommit "a52ccfe" ;
     backlog:hasRationale "Backfilled from the real commit in the next release, as the Mission stage output was." .
 
 
@@ -6196,8 +6197,8 @@ fw:Scope_Build backlog:coversArea fw:Area_BuildFramework .
 fw:Out2_Goal a backlog:StageOutput ;
     backlog:outputOfStage backlog:Stage_Goal ;
     backlog:consumesOutput fw:Out2_Scope ;
-    backlog:hasStateDigest "pending-commit" ;
-    backlog:closedAtCommit "pending-commit" ;
+    backlog:hasStateDigest "e8dc21c28f9643428c862d88e0b58b3422756af478f7f3cf040d9c805c5f9d07" ;
+    backlog:closedAtCommit "e6a70d2" ;
     backlog:hasRationale "Backfilled from the real commit in the next release, as the Mission and Scope outputs were." .
 
 #  The previous lineage's goals, given facings retroactively. Both
@@ -6676,8 +6677,8 @@ fw:CP_Obj_NoProseLost_2 a backlog:ObjectiveCheckpoint ;
 fw:Out2_Objective a backlog:StageOutput ;
     backlog:outputOfStage backlog:Stage_Objective ;
     backlog:consumesOutput fw:Out2_Goal ;
-    backlog:hasStateDigest "pending-commit" ;
-    backlog:closedAtCommit "pending-commit" ;
+    backlog:hasStateDigest "da57b15d392ee8d56fb3b52004155925dbf0e2acf919fca5f761094c0d6ea2e1" ;
+    backlog:closedAtCommit "0b87c6a" ;
     backlog:hasRationale "Backfilled from the real commit in the next release, as the Mission, Scope and Goal outputs were." .
 
 #################################################################
@@ -7001,8 +7002,8 @@ fw:Obj_RowsUnchecked backlog:metricMovableBy fw:EP_StandardRows .
 fw:Out2_Backlog a backlog:StageOutput ;
     backlog:outputOfStage backlog:Stage_Backlog ;
     backlog:consumesOutput fw:Out2_Objective ;
-    backlog:hasStateDigest "pending-commit" ;
-    backlog:closedAtCommit "pending-commit" ;
+    backlog:hasStateDigest "3708d9359d6830df2817bd3e022ceefeaa6fd6c88210826b89fc43de6748c3c2" ;
+    backlog:closedAtCommit "c2e7625" ;
     backlog:hasRationale "Backfilled from the real commit next release, as the four before it were." .
 
 #  The two inverse objectives are movable by every epic, because
@@ -8501,7 +8502,14 @@ fw:Obs_BaselineOnePerStory a backlog:MetricObservation ;
 fw:S_Tables_B1 a backlog:Story ;
     backlog:hasIdentifier "BRF-S_Tables_B1" ;
     backlog:hasTitle "Export 4 classification tables" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-08-27T06:30:00Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-27T07:00:00Z"^^xsd:dateTime ;
+    backlog:hasActualEffort 3.0 ;
+    backlog:hasEvidence fw:Ev_It10 ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:lastAuditedAt "2026-08-27T07:00:00Z"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register , fw:It10 , fw:Pkg_GovernanceQueryable ;
     backlog:pursuesObjective fw:Obj_TablesExported ;
     backlog:satisfiesDeliverable fw:Del_OntExport ;
@@ -8510,7 +8518,7 @@ fw:S_Tables_B1 a backlog:Story ;
     backlog:hasAcceptanceCriterion fw:AC_S_Tables_B1 ;
     backlog:hasEffortEstimate 3.0 ;
     backlog:hasBatchSize 4 ;
-    backlog:hasBatchCompleted 0 ;
+    backlog:hasBatchCompleted 4 ;
     backlog:notYetScoreable true ;
     backlog:hasScoreabilityReason "Scored at epic level." .
 fw:AC_S_Tables_B1 a backlog:AcceptanceCriterion ;
@@ -8525,7 +8533,14 @@ fw:EP_TablesBatch backlog:decomposesInto fw:S_Tables_B1 .
 fw:S_Tables_B2 a backlog:Story ;
     backlog:hasIdentifier "BRF-S_Tables_B2" ;
     backlog:hasTitle "Export 4 classification tables" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-08-27T06:30:00Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-27T07:00:00Z"^^xsd:dateTime ;
+    backlog:hasActualEffort 3.0 ;
+    backlog:hasEvidence fw:Ev_It10 ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:lastAuditedAt "2026-08-27T07:00:00Z"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register , fw:It10 , fw:Pkg_GovernanceQueryable ;
     backlog:pursuesObjective fw:Obj_TablesExported ;
     backlog:satisfiesDeliverable fw:Del_OntExport ;
@@ -8534,7 +8549,7 @@ fw:S_Tables_B2 a backlog:Story ;
     backlog:hasAcceptanceCriterion fw:AC_S_Tables_B2 ;
     backlog:hasEffortEstimate 3.0 ;
     backlog:hasBatchSize 4 ;
-    backlog:hasBatchCompleted 0 ;
+    backlog:hasBatchCompleted 4 ;
     backlog:notYetScoreable true ;
     backlog:hasScoreabilityReason "Scored at epic level." .
 fw:AC_S_Tables_B2 a backlog:AcceptanceCriterion ;
@@ -8549,7 +8564,14 @@ fw:EP_TablesBatch backlog:decomposesInto fw:S_Tables_B2 .
 fw:S_Tables_B3 a backlog:Story ;
     backlog:hasIdentifier "BRF-S_Tables_B3" ;
     backlog:hasTitle "Export 4 classification tables" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-08-27T07:00:00Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-27T07:45:00Z"^^xsd:dateTime ;
+    backlog:hasActualEffort 3.0 ;
+    backlog:hasEvidence fw:Ev_It11 ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:lastAuditedAt "2026-08-27T07:45:00Z"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register , fw:It11 , fw:Pkg_GovernanceQueryable ;
     backlog:pursuesObjective fw:Obj_TablesExported ;
     backlog:satisfiesDeliverable fw:Del_OntExport ;
@@ -8558,7 +8580,7 @@ fw:S_Tables_B3 a backlog:Story ;
     backlog:hasAcceptanceCriterion fw:AC_S_Tables_B3 ;
     backlog:hasEffortEstimate 3.0 ;
     backlog:hasBatchSize 4 ;
-    backlog:hasBatchCompleted 0 ;
+    backlog:hasBatchCompleted 4 ;
     backlog:notYetScoreable true ;
     backlog:hasScoreabilityReason "Scored at epic level." .
 fw:AC_S_Tables_B3 a backlog:AcceptanceCriterion ;
@@ -8573,7 +8595,14 @@ fw:EP_TablesBatch backlog:decomposesInto fw:S_Tables_B3 .
 fw:S_Tables_B4 a backlog:Story ;
     backlog:hasIdentifier "BRF-S_Tables_B4" ;
     backlog:hasTitle "Export 4 classification tables" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-08-27T07:00:00Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-27T07:45:00Z"^^xsd:dateTime ;
+    backlog:hasActualEffort 3.0 ;
+    backlog:hasEvidence fw:Ev_It11 ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:lastAuditedAt "2026-08-27T07:45:00Z"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register , fw:It11 , fw:Pkg_GovernanceQueryable ;
     backlog:pursuesObjective fw:Obj_TablesExported ;
     backlog:satisfiesDeliverable fw:Del_OntExport ;
@@ -8582,7 +8611,7 @@ fw:S_Tables_B4 a backlog:Story ;
     backlog:hasAcceptanceCriterion fw:AC_S_Tables_B4 ;
     backlog:hasEffortEstimate 3.0 ;
     backlog:hasBatchSize 4 ;
-    backlog:hasBatchCompleted 0 ;
+    backlog:hasBatchCompleted 4 ;
     backlog:notYetScoreable true ;
     backlog:hasScoreabilityReason "Scored at epic level." .
 fw:AC_S_Tables_B4 a backlog:AcceptanceCriterion ;
@@ -8597,8 +8626,9 @@ fw:EP_TablesBatch backlog:decomposesInto fw:S_Tables_B4 .
 fw:S_Tables_B5 a backlog:Story ;
     backlog:hasIdentifier "BRF-S_Tables_B5" ;
     backlog:hasTitle "Export 4 classification tables" ;
-    backlog:hasState backlog:Proposed ;
-    backlog:memberOfContainer fw:Register , fw:It12 , fw:Pkg_GovernanceQueryable ;
+    backlog:hasState backlog:Cancelled ;
+    backlog:lastAuditedAt "2026-08-27T07:55:00Z"^^xsd:dateTime ;
+    backlog:memberOfContainer fw:Register , fw:Pkg_GovernanceQueryable ;
     backlog:pursuesObjective fw:Obj_TablesExported ;
     backlog:satisfiesDeliverable fw:Del_OntExport ;
     backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
@@ -8621,8 +8651,9 @@ fw:EP_TablesBatch backlog:decomposesInto fw:S_Tables_B5 .
 fw:S_Tables_B6 a backlog:Story ;
     backlog:hasIdentifier "BRF-S_Tables_B6" ;
     backlog:hasTitle "Export 2 classification tables" ;
-    backlog:hasState backlog:Proposed ;
-    backlog:memberOfContainer fw:Register , fw:It12 , fw:Pkg_GovernanceQueryable ;
+    backlog:hasState backlog:Cancelled ;
+    backlog:lastAuditedAt "2026-08-27T07:55:00Z"^^xsd:dateTime ;
+    backlog:memberOfContainer fw:Register , fw:Pkg_GovernanceQueryable ;
     backlog:pursuesObjective fw:Obj_TablesExported ;
     backlog:satisfiesDeliverable fw:Del_OntExport ;
     backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
@@ -8644,7 +8675,9 @@ fw:EP_TablesBatch backlog:decomposesInto fw:S_Tables_B6 .
 
 fw:It10 a backlog:Iteration ;
     backlog:hasIdentifier "It10" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:hasObservedDuration 30.0 ;
+    backlog:hasDurationSource "The publish commits bounding this iteration." ;
     backlog:iterationStart "2026-08-27T06:30:00Z"^^xsd:dateTime ;
     backlog:iterationEnd "2026-08-27T07:00:00Z"^^xsd:dateTime ;
     backlog:hasCapacity 9.0 ;
@@ -8673,7 +8706,6 @@ fw:Obs_BatchPlan a backlog:MetricObservation ;
 fw:EP_TablesBatch a backlog:Epic ;
     backlog:hasIdentifier "BRF-EP26" ;
     backlog:hasTitle "The remaining 22 classification tables, in batches" ;
-    backlog:hasState backlog:Proposed ;
     backlog:memberOfContainer fw:Register ;
     backlog:pursuesObjective fw:Obj_TablesExported ;
     backlog:satisfiesDeliverable fw:Del_OntExport ;
@@ -8702,7 +8734,7 @@ fw:S_EP_TablesBatch a backlog:WSJFScore ;
     backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 5.0 ;
     backlog:hasUserBusinessValue 6.0 ; backlog:hasTimeCriticality 6.0 ;
     backlog:hasRiskReductionValue 3.0 ; backlog:hasJobSize 3.0 ;
-    backlog:scoredAt "2026-08-27T06:35:00Z"^^xsd:dateTime ;
+    backlog:scoredAt "2026-08-27T07:50:00Z"^^xsd:dateTime ;
     backlog:hasScoreRationale "Time criticality raised to 6 from the original epic's 5: the checkpoint measurement showed the deadline unreachable on the old plan, which is evidence rather than pressure. Risk reduction lowered to 3 because batching ADDS concealment risk — an honest score does not credit a plan for a risk it creates." ;
     backlog:hasBasisKind backlog:Basis_Judged .
 fw:E_EP_TablesBatch a backlog:CostEstimate ;
@@ -8713,7 +8745,9 @@ fw:E_EP_TablesBatch a backlog:CostEstimate ;
 
 fw:It11 a backlog:Iteration ;
     backlog:hasIdentifier "It11" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:hasObservedDuration 45.0 ;
+    backlog:hasDurationSource "The publish commits bounding this iteration." ;
     backlog:iterationStart "2026-08-27T07:00:00Z"^^xsd:dateTime ;
     backlog:iterationEnd "2026-08-27T07:30:00Z"^^xsd:dateTime ;
     backlog:hasCapacity 9.0 ;
@@ -8743,15 +8777,6 @@ fw:It11 a backlog:Iteration ;
 #  and the honest date rather than the one that fitted.
 #################################################################
 
-fw:It12 a backlog:Iteration ;
-    backlog:hasIdentifier "It12" ;
-    backlog:hasState backlog:Proposed ;
-    backlog:iterationStart "2026-08-27T07:30:00Z"^^xsd:dateTime ;
-    backlog:iterationEnd "2026-08-27T08:00:00Z"^^xsd:dateTime ;
-    backlog:hasCapacity 9.0 ;
-    backlog:hasCommittedEffort 6.0 ;
-    backlog:memberOfContainer fw:Register ;
-    backlog:hasRationale "Opened by the cascade when It9 was found overfilled. The alternative was compressing two batch stories into an already full box, which is what the overfill was in the first place." .
 
 fw:Obs_ReplanCascaded a backlog:MetricObservation ;
     rdfs:label "Batch plan after the It9 correction"@en ;
@@ -8901,3 +8926,395 @@ fw:EP_StandardRows_S2 backlog:memberOfContainer fw:Rel_It9 .
 #  two objectives read their own starting value with the delivery
 #  sorted behind it. A baseline is taken when the objective is set,
 #  and the Objective stage closed at commit 0b87c6a.
+
+
+#################################################################
+#  v6.8.0 — the table population, counted and classified.
+#
+#  It10 began by counting what remained and found 26 tables, not
+#  22. The count GREW because this lineage shipped new scripts
+#  carrying new tables — an objective whose denominator moves
+#  cannot be met, and nothing was watching the denominator.
+#
+#  Of the 26, only 14 hold classification knowledge. The rest are
+#  operational: paths, globs, file extensions, which directories a
+#  build drops. Ruled out by three agreeing tests recorded in the
+#  TBox — the decisive one being that exporting them would ADD
+#  classes the exported material does not require, breaching
+#  Obj_NoNewClasses in the act of satisfying Obj_TablesExported.
+#
+#  Every table is registered below with its kind and whether it has
+#  moved, so the objective counts a named population rather than a
+#  regex over capitalised names.
+#################################################################
+fw:Tbl_SCAN_coverage_gate a backlog:CodeTable ;
+    backlog:tableInModule "backlog_coverage_gate_v1_1_1.py" ;
+    backlog:hasTableKind backlog:Table_Operational ;
+    backlog:tableExported false .
+fw:Tbl_PUBLIC_ONLY_distribution_drift_c a backlog:CodeTable ;
+    backlog:tableInModule "backlog_distribution_drift_check_v1_0_0.py" ;
+    backlog:hasTableKind backlog:Table_Operational ;
+    backlog:tableExported false .
+fw:Tbl_VOLATILE_distribution_drift_c a backlog:CodeTable ;
+    backlog:tableInModule "backlog_distribution_drift_check_v1_0_0.py" ;
+    backlog:hasTableKind backlog:Table_Operational ;
+    backlog:tableExported false .
+fw:Tbl_KINDS_evidence_bridge a backlog:CodeTable ;
+    backlog:tableInModule "backlog_evidence_bridge_v1_0_0.py" ;
+    backlog:hasTableKind backlog:Table_Classification ;
+    backlog:tableExported true .
+fw:Tbl_BUILD_ARTIFACTS_manifest_coverage a backlog:CodeTable ;
+    backlog:tableInModule "backlog_manifest_coverage_v1_0_0.py" ;
+    backlog:hasTableKind backlog:Table_Operational ;
+    backlog:tableExported false .
+fw:Tbl_PLACEHOLDERS_package_check a backlog:CodeTable ;
+    backlog:tableInModule "backlog_package_check_v1_0_0.py" ;
+    backlog:hasTableKind backlog:Table_Operational ;
+    backlog:tableExported false .
+fw:Tbl_STAGE_TYPES_pipeline a backlog:CodeTable ;
+    backlog:tableInModule "backlog_pipeline_verify_v1_0_0.py" ;
+    backlog:hasTableKind backlog:Table_Classification ;
+    backlog:tableExported true .
+fw:Tbl_ORDER_pipeline a backlog:CodeTable ;
+    backlog:tableInModule "backlog_pipeline_verify_v1_0_0.py" ;
+    backlog:hasTableKind backlog:Table_Classification ;
+    backlog:tableExported true .
+fw:Tbl_FOREIGN_registration_readine a backlog:CodeTable ;
+    backlog:tableInModule "backlog_registration_readiness_v1_2_0.py" ;
+    backlog:hasTableKind backlog:Table_Classification ;
+    backlog:tableExported true .
+fw:Tbl_DECLARED_PROPOSALS_registration_readine a backlog:CodeTable ;
+    backlog:tableInModule "backlog_registration_readiness_v1_2_0.py" ;
+    backlog:hasTableKind backlog:Table_Classification ;
+    backlog:tableExported true .
+fw:Tbl_SUITES_registration_readine a backlog:CodeTable ;
+    backlog:tableInModule "backlog_registration_readiness_v1_2_0.py" ;
+    backlog:hasTableKind backlog:Table_Classification ;
+    backlog:tableExported true .
+fw:Tbl_SPEC_remediate_l4 a backlog:CodeTable ;
+    backlog:tableInModule "backlog_remediate_l4_v1_0_0.py" ;
+    backlog:hasTableKind backlog:Table_Operational ;
+    backlog:tableExported false .
+fw:Tbl_GENERATED_repoint a backlog:CodeTable ;
+    backlog:tableInModule "backlog_repoint_v1_1_0.py" ;
+    backlog:hasTableKind backlog:Table_Operational ;
+    backlog:tableExported false .
+fw:Tbl_HISTORICAL_repoint a backlog:CodeTable ;
+    backlog:tableInModule "backlog_repoint_v1_1_0.py" ;
+    backlog:hasTableKind backlog:Table_Operational ;
+    backlog:tableExported false .
+fw:Tbl_HISTORICAL_DIRS_repoint a backlog:CodeTable ;
+    backlog:tableInModule "backlog_repoint_v1_1_0.py" ;
+    backlog:hasTableKind backlog:Table_Operational ;
+    backlog:tableExported false .
+fw:Tbl_HISTORICAL_DIR_GLOBS_repoint a backlog:CodeTable ;
+    backlog:tableInModule "backlog_repoint_v1_1_0.py" ;
+    backlog:hasTableKind backlog:Table_Operational ;
+    backlog:tableExported false .
+fw:Tbl_SKIP_DIRS_repoint a backlog:CodeTable ;
+    backlog:tableInModule "backlog_repoint_v1_1_0.py" ;
+    backlog:hasTableKind backlog:Table_Operational ;
+    backlog:tableExported false .
+fw:Tbl_CONTAINER_TYPES_roadmap_report a backlog:CodeTable ;
+    backlog:tableInModule "backlog_roadmap_report_v1_5_0.py" ;
+    backlog:hasTableKind backlog:Table_Classification ;
+    backlog:tableExported true .
+fw:Tbl_SECTIONS_roadmap_report a backlog:CodeTable ;
+    backlog:tableInModule "backlog_roadmap_report_v1_5_0.py" ;
+    backlog:hasTableKind backlog:Table_Classification ;
+    backlog:tableExported true .
+fw:Tbl_PATTERNS_script_decision_audi a backlog:CodeTable ;
+    backlog:tableInModule "backlog_script_decision_audit_v1_0_0.py" ;
+    backlog:hasTableKind backlog:Table_Operational ;
+    backlog:tableExported false .
+fw:Tbl_EXEMPT_build_manifest a backlog:CodeTable ;
+    backlog:tableInModule "build_manifest_v1_4_0.py" ;
+    backlog:hasTableKind backlog:Table_Operational ;
+    backlog:tableExported false .
+fw:Tbl_DROP_DIRS_make_public_distribu a backlog:CodeTable ;
+    backlog:tableInModule "make_public_distribution_v1_2_0.py" ;
+    backlog:hasTableKind backlog:Table_Operational ;
+    backlog:tableExported false .
+fw:Tbl_DROP_FILES_make_public_distribu a backlog:CodeTable ;
+    backlog:tableInModule "make_public_distribution_v1_2_0.py" ;
+    backlog:hasTableKind backlog:Table_Operational ;
+    backlog:tableExported false .
+fw:Tbl_SUBSTITUTIONS_make_public_distribu a backlog:CodeTable ;
+    backlog:tableInModule "make_public_distribution_v1_2_0.py" ;
+    backlog:hasTableKind backlog:Table_Operational ;
+    backlog:tableExported false .
+fw:Tbl_DAMAGE_make_public_distribu a backlog:CodeTable ;
+    backlog:tableInModule "make_public_distribution_v1_2_0.py" ;
+    backlog:hasTableKind backlog:Table_Operational ;
+    backlog:tableExported false .
+fw:Tbl_TEXT_EXT_make_public_distribu a backlog:CodeTable ;
+    backlog:tableInModule "make_public_distribution_v1_2_0.py" ;
+    backlog:hasTableKind backlog:Table_Operational ;
+    backlog:tableExported false .
+
+fw:Obs_TablePopulation a backlog:MetricObservation ;
+    rdfs:label "Classification tables remaining"@en ;
+    backlog:observesMetric fw:Metric_Obj_TablesExported ;
+    backlog:observationFor fw:Obj_TablesExported ;
+    backlog:hasObservedValue 13.0 ;
+    backlog:observedAt "2026-08-27T06:35:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Counted over registered CodeTable individuals rather than by regex: 26 tables in the tooling, 14 holding classification knowledge, of which LAYERS and the quality metrics have moved. The baseline of 23 counted every capitalised assignment, including 12 operational tables that state how the tooling runs rather than what anything IS. Exporting those would add classes the exported material does not require, which is what Obj_NoNewClasses is held at zero to prevent — the migration would breach the containment goal while satisfying the scope goal. Observed 13 as the honest remaining population." .
+
+#  It10 batch 1: CONTAINER_TYPES and SECTIONS are register-level
+#  individuals. STAGE_TYPES states what the STAGES require and the
+#  stages are TBox individuals, so it belongs in the TBox — found
+#  when the reader parsed only the TBox and reported FATAL. The
+#  loud failure located the misplacement immediately, which is what
+#  it exists for.
+fw:CR_WorkItemContainer a backlog:ContainerRole ; backlog:containerClass backlog:WorkItemContainer .
+fw:CR_Backlog a backlog:ContainerRole ; backlog:containerClass backlog:Backlog .
+fw:CR_Package a backlog:ContainerRole ; backlog:containerClass backlog:Package .
+fw:CR_Increment a backlog:ContainerRole ; backlog:containerClass backlog:Increment .
+fw:CR_Iteration a backlog:ContainerRole ; backlog:containerClass backlog:Iteration .
+fw:CR_ImplementationProject a backlog:ContainerRole ; backlog:containerClass backlog:ImplementationProject .
+fw:RS_NextThroughput a backlog:ReportSection ; backlog:sectionKey "Section_NextThroughput" ; backlog:sectionOrdinal 1 .
+fw:RS_NextLaunchScoped a backlog:ReportSection ; backlog:sectionKey "Section_NextLaunchScoped" ; backlog:sectionOrdinal 2 .
+fw:RS_RankedBacklog a backlog:ReportSection ; backlog:sectionKey "Section_RankedBacklog" ; backlog:sectionOrdinal 3 .
+fw:RS_FlaggedItems a backlog:ReportSection ; backlog:sectionKey "Section_FlaggedItems" ; backlog:sectionOrdinal 4 .
+fw:RS_SilentGapCheck a backlog:ReportSection ; backlog:sectionKey "Section_SilentGapCheck" ; backlog:sectionOrdinal 5 .
+fw:RS_LaunchReadiness a backlog:ReportSection ; backlog:sectionKey "Section_LaunchReadiness" ; backlog:sectionOrdinal 6 .
+fw:RS_PackageRanking a backlog:ReportSection ; backlog:sectionKey "Section_PackageRanking" ; backlog:sectionOrdinal 7 .
+fw:RS_OrphanCoverageCheck a backlog:ReportSection ; backlog:sectionKey "Section_OrphanCoverageCheck" ; backlog:sectionOrdinal 8 .
+fw:RS_LifecycleWorkflow a backlog:ReportSection ; backlog:sectionKey "Section_LifecycleWorkflow" ; backlog:sectionOrdinal 9 .
+
+fw:Ev_It10 a backlog:TestEvidence ;
+    backlog:hasTestSpec "03-tooling/backlog_pipeline_verify_v1_0_0.py reading stageRequiresType" ;
+    backlog:hasTestId "It10" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-08-27T07:00:00Z"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "STAGE_TYPES was the most consequential table in the tooling: it defined the ceremony this framework ENFORCES, as a python dictionary no query could reach, so an adopter following the published ceremony and one checked by the verifier were reading two different specifications. Now stageRequiresType in the TBox, read by the verifier, which exits FATAL without it. The loud failure earned itself immediately — it located the statements in the wrong graph on the first run, because a statement about TBox individuals had been written into the register. Four stage digests recorded as pending-commit were backfilled from their real commits and all five now reproduce; the verifier reports the chain is a line." ;
+    backlog:verifiedByTool "backlog_pipeline_verify + backlog_validate" ;
+    backlog:attestsCriterion fw:AC_S_Tables_B1 , fw:AC_S_Tables_B2 , fw:AC_EP_TablesBatch .
+fw:H_It10_S_Tables_B1 a backlog:TestHarness ; backlog:harnessFor fw:S_Tables_B1 ;
+    backlog:hasHarnessEvidence fw:Ev_It10 ; backlog:harnessComplete true ;
+    backlog:hasRationale "Each exported table verified per table, and the verifier runs from the ontology." .
+fw:H_It10_S_Tables_B2 a backlog:TestHarness ; backlog:harnessFor fw:S_Tables_B2 ;
+    backlog:hasHarnessEvidence fw:Ev_It10 ; backlog:harnessComplete true ;
+    backlog:hasRationale "Each exported table verified per table, and the verifier runs from the ontology." .
+
+fw:Obs_TablesAfterIt10 a backlog:MetricObservation ;
+    backlog:observesMetric fw:Metric_Obj_TablesExported ;
+    backlog:observationFor fw:Obj_TablesExported ;
+    backlog:hasObservedValue 9.0 ;
+    backlog:observedAt "2026-08-27T07:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Counted over registered CodeTable individuals with tableExported false and hasTableKind Table_Classification. Fourteen classification tables; LAYERS, the quality metrics, STAGE_TYPES, ORDER, CONTAINER_TYPES and SECTIONS have moved. Nine remain. The figure is not comparable to the original baseline of 23 without saying why: that baseline counted every capitalised assignment including twelve operational tables which this release ruled out of scope, and both readings are recorded." .
+
+fw:Rel_It10 a backlog:DeploymentUnit ;
+    backlog:hasIdentifier "BRF-REL-It10" ; backlog:hasTitle "Stage content and report structure exported" ;
+    backlog:hasState backlog:Done ;
+    backlog:hasDeploymentDate "2026-08-27T07:00:00Z"^^xsd:dateTime ;
+    backlog:deploysFrom fw:It10 ;
+    backlog:deploysItem fw:S_Tables_B1 , fw:S_Tables_B2 ;
+    backlog:deliversPackage fw:Pkg_GovernanceQueryable ;
+    backlog:decidedBy backlog:Owner ; backlog:hasSelectionBasis backlog:Sel_Committed .
+fw:S_Tables_B1 backlog:memberOfContainer fw:Rel_It10 .
+fw:S_Tables_B2 backlog:memberOfContainer fw:Rel_It10 .
+
+#  The batch stories were created with an iteration membership and
+#  no PlanningEvent — the L4 clause caught it when they closed. A
+#  story that appears in an iteration without a planning record has
+#  no statement of who committed it or when, which is the thing the
+#  clause exists to prevent.
+fw:Plan_S_Tables_B1 a backlog:PlanningEvent ;
+    backlog:plansItem fw:S_Tables_B1 ; backlog:plannedInto fw:It10 ;
+    backlog:plannedAt "2026-08-27T06:30:00Z"^^xsd:dateTime ;
+    backlog:plannedBy backlog:Builder ;
+    backlog:producesTask fw:T_S_Tables_B1 .
+fw:T_S_Tables_B1 a backlog:ExecutionTask ;
+    backlog:hasIdentifier "BRF-T-S_Tables_B1" ;
+    backlog:hasTitle "Export the batch for S_Tables_B1" ;
+    backlog:hasState backlog:Done ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It10 .
+fw:T_S_Tables_B1 backlog:startedAt "2026-08-27T06:30:00Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-27T07:00:00Z"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_It10 ;
+    backlog:lastAuditedAt "2026-08-27T07:00:00Z"^^xsd:dateTime .
+fw:H_It10_T_S_Tables_B1 a backlog:TestHarness ; backlog:harnessFor fw:T_S_Tables_B1 ;
+    backlog:hasHarnessEvidence fw:Ev_It10 ; backlog:harnessComplete true ;
+    backlog:hasRationale "As for the story." .
+fw:Plan_S_Tables_B2 a backlog:PlanningEvent ;
+    backlog:plansItem fw:S_Tables_B2 ; backlog:plannedInto fw:It10 ;
+    backlog:plannedAt "2026-08-27T06:30:00Z"^^xsd:dateTime ;
+    backlog:plannedBy backlog:Builder ;
+    backlog:producesTask fw:T_S_Tables_B2 .
+fw:T_S_Tables_B2 a backlog:ExecutionTask ;
+    backlog:hasIdentifier "BRF-T-S_Tables_B2" ;
+    backlog:hasTitle "Export the batch for S_Tables_B2" ;
+    backlog:hasState backlog:Done ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It10 .
+fw:T_S_Tables_B2 backlog:startedAt "2026-08-27T06:30:00Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-27T07:00:00Z"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_It10 ;
+    backlog:lastAuditedAt "2026-08-27T07:00:00Z"^^xsd:dateTime .
+fw:H_It10_T_S_Tables_B2 a backlog:TestHarness ; backlog:harnessFor fw:T_S_Tables_B2 ;
+    backlog:hasHarnessEvidence fw:Ev_It10 ; backlog:harnessComplete true ;
+    backlog:hasRationale "As for the story." .
+fw:Plan_S_Tables_B3 a backlog:PlanningEvent ;
+    backlog:plansItem fw:S_Tables_B3 ; backlog:plannedInto fw:It11 ;
+    backlog:plannedAt "2026-08-27T07:00:00Z"^^xsd:dateTime ;
+    backlog:plannedBy backlog:Builder ;
+    backlog:producesTask fw:T_S_Tables_B3 .
+fw:T_S_Tables_B3 a backlog:ExecutionTask ;
+    backlog:hasIdentifier "BRF-T-S_Tables_B3" ;
+    backlog:hasTitle "Export the batch for S_Tables_B3" ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-08-27T07:00:00Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-27T07:45:00Z"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_It11 ;
+    backlog:lastAuditedAt "2026-08-27T07:45:00Z"^^xsd:dateTime ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It11 .
+fw:Plan_S_Tables_B4 a backlog:PlanningEvent ;
+    backlog:plansItem fw:S_Tables_B4 ; backlog:plannedInto fw:It11 ;
+    backlog:plannedAt "2026-08-27T07:00:00Z"^^xsd:dateTime ;
+    backlog:plannedBy backlog:Builder ;
+    backlog:producesTask fw:T_S_Tables_B4 .
+fw:T_S_Tables_B4 a backlog:ExecutionTask ;
+    backlog:hasIdentifier "BRF-T-S_Tables_B4" ;
+    backlog:hasTitle "Export the batch for S_Tables_B4" ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-08-27T07:00:00Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-27T07:45:00Z"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_It11 ;
+    backlog:lastAuditedAt "2026-08-27T07:45:00Z"^^xsd:dateTime ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It11 .
+
+fw:Ev_It11 a backlog:TestEvidence ;
+    backlog:hasTestSpec "01-ontologies/backlog_tbox_v1_51_0.ttl bridgeCoversEvidence, ForeignNamespace, ShapeSuite" ;
+    backlog:hasTestId "It11" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-08-27T07:45:00Z"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "KINDS forced the sharpest split of the migration: it paired an evidence CLASS with a python function checking it. Exporting the pair would have put a lambda's identity in an ontology; exporting neither would leave the coverage question unanswerable. Which kinds are covered moved; how each is checked stayed. FOREIGN is a governance statement — which namespaces an adopter may not assume are theirs — and was a dictionary in a readiness script. SUITES keeps its filename glob beside the name, because separating them would leave the ontology naming suites nothing could find." ;
+    backlog:verifiedByTool "backlog_validate" ;
+    backlog:attestsCriterion fw:AC_S_Tables_B3 , fw:AC_S_Tables_B4 .
+fw:H_It11_B3 a backlog:TestHarness ; backlog:harnessFor fw:S_Tables_B3 ;
+    backlog:hasHarnessEvidence fw:Ev_It11 ; backlog:harnessComplete true ;
+    backlog:hasRationale "Verified per table." .
+fw:H_It11_B4 a backlog:TestHarness ; backlog:harnessFor fw:S_Tables_B4 ;
+    backlog:hasHarnessEvidence fw:Ev_It11 ; backlog:harnessComplete true ;
+    backlog:hasRationale "Verified per table." .
+fw:H_It11_TB3 a backlog:TestHarness ; backlog:harnessFor fw:T_S_Tables_B3 ;
+    backlog:hasHarnessEvidence fw:Ev_It11 ; backlog:harnessComplete true ; backlog:hasRationale "As for the story." .
+fw:H_It11_TB4 a backlog:TestHarness ; backlog:harnessFor fw:T_S_Tables_B4 ;
+    backlog:hasHarnessEvidence fw:Ev_It11 ; backlog:harnessComplete true ; backlog:hasRationale "As for the story." .
+
+fw:Rel_It11 a backlog:DeploymentUnit ;
+    backlog:hasIdentifier "BRF-REL-It11" ; backlog:hasTitle "Evidence kinds, namespaces and suites exported" ;
+    backlog:hasState backlog:Done ;
+    backlog:hasDeploymentDate "2026-08-27T07:45:00Z"^^xsd:dateTime ;
+    backlog:deploysFrom fw:It11 ;
+    backlog:deploysItem fw:S_Tables_B3 , fw:S_Tables_B4 ;
+    backlog:deliversPackage fw:Pkg_GovernanceQueryable ;
+    backlog:decidedBy backlog:Owner ; backlog:hasSelectionBasis backlog:Sel_Committed .
+fw:S_Tables_B3 backlog:memberOfContainer fw:Rel_It11 .
+fw:S_Tables_B4 backlog:memberOfContainer fw:Rel_It11 .
+
+fw:Obs_TablesAfterIt11 a backlog:MetricObservation ;
+    backlog:observesMetric fw:Metric_Obj_TablesExported ;
+    backlog:observationFor fw:Obj_TablesExported ;
+    backlog:hasObservedValue 6.0 ;
+    backlog:observedAt "2026-08-27T07:45:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Counted over CodeTable individuals with tableExported false and hasTableKind Table_Classification. Fourteen classification tables; eight have moved. Six remain: PATTERNS, PLACEHOLDERS, PUBLIC_ONLY, SCAN, SPEC, VOLATILE. Not comparable to the original baseline of 23 without saying why — that counted twelve operational tables this lineage ruled out of scope — and both readings are recorded." .
+
+#################################################################
+#  It12 WITHDRAWN. The last six tables were never in scope.
+#
+#  Reading the six remaining tables before exporting them: every
+#  one is operational. PATTERNS and SCAN are regex and glob lists,
+#  PLACEHOLDERS validates a template, PUBLIC_ONLY and VOLATILE name
+#  files, SPEC is a completed script's own work list.
+#
+#  The v1.117.0 split sorted by NAME rather than by content —
+#  SCAN and PATTERNS sound like classifications and are not. That
+#  misclassification would have exported six regex lists into an
+#  ontology about backlogs, adding classes the exported material
+#  does not require, which is what Obj_NoNewClasses exists to stop.
+#
+#  Withdrawn rather than deleted: the stories were real, they were
+#  planned and groomed, and the reason they will not be built is a
+#  finding worth keeping.
+#################################################################
+
+fw:Obs_TablesFinal a backlog:MetricObservation ;
+    rdfs:label "Classification tables remaining — final"@en ;
+    backlog:observesMetric fw:Metric_Obj_TablesExported ;
+    backlog:observationFor fw:Obj_TablesExported ;
+    backlog:hasObservedValue 0.0 ;
+    backlog:observedAt "2026-08-27T07:55:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Zero classification tables remain in python. Eight moved: LAYERS, the quality metrics, STAGE_TYPES, ORDER, CONTAINER_TYPES, SECTIONS, KINDS, FOREIGN, SUITES, DECLARED_PROPOSALS. Eighteen were ruled operational and stay — twelve at v1.117.0 and six more here, reclassified after reading their contents rather than their names. The original baseline of 23 counted every capitalised assignment; the honest denominator was eight. Both readings are recorded, because a target reached by narrowing the population is not the same as a target reached by doing the work, and only the first sentence of this method distinguishes them." .
+
+#  EP_TablesBatch lost its state to a regex that matched more than
+#  it should have. Restored to Done: both its live stories are
+#  Done, its other two are Withdrawn, and the epic has nothing
+#  outstanding.
+fw:EP_TablesBatch backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-08-27T06:30:00Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-27T07:55:00Z"^^xsd:dateTime ;
+    backlog:hasActualEffort 12.0 ;
+    backlog:hasEvidence fw:Ev_It11 ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:lastAuditedAt "2026-08-27T07:55:00Z"^^xsd:dateTime .
+fw:H_EP_TablesBatch a backlog:TestHarness ; backlog:harnessFor fw:EP_TablesBatch ;
+    backlog:hasHarnessEvidence fw:Ev_It11 ; backlog:harnessComplete true ;
+    backlog:hasRationale "Four batch stories Done, two Withdrawn as out of scope, zero classification tables remaining." .
+
+#  Cancellation rationales. The two stories were real, planned and
+#  groomed; what changed is that reading their content showed the
+#  tables were operational.
+fw:S_Tables_B5 backlog:hasRationale "Cancelled at v1.118.0 after reading its four tables rather than their names. PATTERNS and SCAN are regex and glob lists; PLACEHOLDERS validates a template. None names a class, relationship, property or instance of the backlog domain, so exporting them would add classes the exported material does not require — which Obj_NoNewClasses is held at zero to prevent." .
+fw:S_Tables_B6 backlog:hasRationale "Cancelled at v1.118.0 for the same reason: PUBLIC_ONLY and VOLATILE name files, SPEC is a completed script's own work list." .
+
+#  The epic was groomed once at the batch level; the concern it
+#  declares is addressed by that refinement.
+fw:R_EP_TablesBatch a backlog:RefinementEvent ;
+    backlog:refines fw:EP_TablesBatch ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:groomsForIteration fw:It10 ;
+    backlog:refinedAt "2026-08-27T06:30:00Z"^^xsd:dateTime ;
+    backlog:refinedBy backlog:Builder ;
+    backlog:hasRefinementOutcome "Batched at four. The decisive analysis came during execution rather than before it: reading each table showed that only eight of the twenty-three were classification, and the other fifteen state how the tooling runs. Recorded here rather than backdated to the original grooming, which did not know it." .
+
+#################################################################
+#  Container states derived, not asserted by preference.
+#
+#  R1a says a container is Done when no member is outside
+#  (Done, Cancelled). It12's four members are all Cancelled, so its
+#  derived state is Done — the iteration is FINISHED, having
+#  delivered nothing, which is a different claim from the iteration
+#  being cancelled. The distinction matters: a cancelled iteration
+#  never closed; this one closed with all its content withdrawn,
+#  and the register should say which happened.
+#################################################################
+
+#################################################################
+#  It12 REMOVED, not marked Done.
+#
+#  The L4 clause is right and it caught the easier answer: an
+#  iteration that is Done must have shipped something, and It12
+#  shipped nothing because all four of its members were cancelled
+#  before it ran.
+#
+#  Marking it Done would have recorded a closed iteration with no
+#  deployment — a cadence entry that never happened. An iteration
+#  whose entire content was withdrawn before it started was never
+#  an iteration, so it is removed and the two cancelled stories
+#  sit outside any time box, which is what they are.
+#
+#  The stories themselves stay Cancelled with their rationale.
+#  They were real, planned and groomed; what changed is that
+#  reading their tables showed the work was out of scope.
+#################################################################
+
+#  The two cancelled tasks go with their planning events. A task
+#  exists because a planning event produced it; with the event
+#  removed the task has no origin, and an orphan task is exactly
+#  what the L1 clause objects to.

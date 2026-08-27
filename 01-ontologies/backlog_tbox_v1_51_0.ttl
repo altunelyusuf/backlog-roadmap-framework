@@ -18,8 +18,10 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.49.0> ;
-    owl:versionInfo "1.49.0" ;
+    owl:versionIRI <http://example.org/backlog/1.51.0> ;
+    owl:versionInfo "1.51.0" ;
+    owl:priorVersion <http://example.org/backlog/1.50.0> ;
+    owl:priorVersion <http://example.org/backlog/1.49.0> ;
     owl:priorVersion <http://example.org/backlog/1.48.0> ;
     owl:priorVersion <http://example.org/backlog/1.47.0> ;
     owl:priorVersion <http://example.org/backlog/1.46.0> ;
@@ -4875,3 +4877,159 @@ backlog:isPopulationSensitive a owl:DatatypeProperty , owl:FunctionalProperty ;
 backlog:hasMetricName a owl:DatatypeProperty , owl:FunctionalProperty ;
     rdfs:domain backlog:QualityMetric ; rdfs:range xsd:string ;
     rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "has metric name"@en .
+
+#################################################################
+#  80. Not every table belongs in the ontology (v1.50.0)
+#
+#  Found counting the remaining tables for It10. There are 26, not
+#  the 22 the objective assumed — the count GREW because this
+#  lineage shipped new scripts carrying new tables.
+#
+#  More important: only 14 of them hold CLASSIFICATION knowledge.
+#  The other 12 are operational — which directories to drop from a
+#  distribution, which file extensions are text, which paths are
+#  historical. Three tests, all agreeing:
+#
+#   1. The mission asks for classes, relationships, properties and
+#      instances OF THE DOMAIN. DROP_DIRS is build configuration.
+#   2. Nothing an adopter can observe breaks if it stays in python:
+#      the ontology says nothing about distributions, so no query
+#      becomes answerable.
+#   3. Exporting it would ADD a class the exported material does
+#      not require — which is what Obj_NoNewClasses is held at zero
+#      to prevent. The migration would breach the containment goal
+#      in the act of satisfying the scope goal.
+#
+#  TableKind makes the distinction queryable so the objective can
+#  count the right population instead of every capitalised name.
+#################################################################
+
+backlog:TableKind a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:Table_Classification backlog:Table_Operational ) ;
+    rdfs:label "Table Kind"@en ;
+    skos:definition "Whether a module-level table states something about the DOMAIN or something about how the tooling runs. The distinction decides whether a table belongs in the ontology: exporting operational configuration would put build settings in an ontology about backlogs, and would add classes the exported material does not require."@en .
+
+backlog:Table_Classification a owl:NamedIndividual , backlog:TableKind ;
+    rdfs:label "Classification"@en ;
+    skos:definition "States what something IS — which task types exist, which metrics respond to population, which stages a pipeline has. Belongs in the ontology: an adopter cannot extend it by editing a script they do not ship."@en .
+backlog:Table_Operational a owl:NamedIndividual , backlog:TableKind ;
+    rdfs:label "Operational"@en ;
+    skos:definition "States how the tooling runs — paths, globs, file extensions, which directories a build drops. Belongs in the script: it describes the script's own behaviour, and moving it to the ontology would make the ontology answer questions about builds rather than about work."@en .
+
+backlog:CodeTable a owl:Class ;
+    rdfs:subClassOf core:Artifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Code Table"@en ;
+    skos:definition "A module-level table in the tooling, recorded so the migration can count the population it actually targets. Named rather than inferred: a count of capitalised assignments grew from 23 to 26 during this lineage because the work itself added scripts, and an objective whose denominator moves cannot be met."@en .
+
+backlog:hasTableKind a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:CodeTable ; rdfs:range backlog:TableKind ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "has table kind"@en .
+backlog:tableInModule a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:CodeTable ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "table in module"@en .
+backlog:tableExported a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:CodeTable ; rdfs:range xsd:boolean ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "table exported"@en .
+
+#################################################################
+#  81. Stage content and report structure, exported — It10
+#
+#  STAGE_TYPES decided WHAT EACH LINEAGE STAGE MUST CONTAIN, in
+#  python. It is the most consequential table in the tooling: the
+#  ceremony this framework enforces was defined by a dictionary
+#  that no query could reach, so an adopter following the published
+#  ceremony and an adopter checked by the verifier were reading two
+#  different specifications.
+#
+#  stageRequiresType makes the ceremony's own content queryable.
+#  CONTAINER_TYPES and SECTIONS follow: what counts as a container,
+#  and what a roadmap report is obliged to cover.
+#################################################################
+
+backlog:stageRequiresType a owl:ObjectProperty ;
+    rdfs:domain backlog:LineageStage ; rdfs:range rdfs:Resource ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "stage requires type"@en ;
+    skos:definition "A class the register must carry by the time this stage closes. Exported from the pipeline verifier, where the ceremony's content was a python dictionary: the framework enforced a ceremony nobody could query, so the published description and the enforced one could drift with nothing comparing them."@en .
+
+backlog:ContainerRole a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Container Role"@en ;
+    skos:definition "A class the reporting tools treat as a container of work items. Exported so an adopter defining their own container can be counted by the reports without editing them."@en .
+
+backlog:containerClass a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:ContainerRole ; rdfs:range rdfs:Resource ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "container class"@en .
+
+backlog:ReportSection a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Report Section"@en ;
+    skos:definition "A section a roadmap report is obliged to produce. Exported so that what a report must cover is a governance statement rather than a list inside the reporter — dropping a section previously meant deleting a string, and nothing recorded that the report had narrowed."@en .
+
+backlog:sectionOrdinal a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:ReportSection ; rdfs:range xsd:integer ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "section ordinal"@en .
+backlog:sectionKey a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:ReportSection ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "section key"@en .
+
+#  Stage content, exported from the pipeline verifier.
+backlog:Stage_Mission backlog:stageRequiresType backlog:Mission .
+backlog:Stage_Scope backlog:stageRequiresType backlog:Mission , backlog:ScopeStatement , backlog:ScopeExclusion , backlog:ScopeDeliverable .
+backlog:Stage_Goal backlog:stageRequiresType backlog:Mission , backlog:ScopeStatement , backlog:ScopeExclusion , backlog:ScopeDeliverable , backlog:Goal .
+backlog:Stage_Objective backlog:stageRequiresType backlog:Mission , backlog:ScopeStatement , backlog:ScopeExclusion , backlog:ScopeDeliverable , backlog:Goal , backlog:Objective .
+backlog:Stage_Backlog backlog:stageRequiresType backlog:Mission , backlog:ScopeStatement , backlog:ScopeExclusion , backlog:ScopeDeliverable , backlog:Goal , backlog:Objective , backlog:Initiative , backlog:Epic , backlog:Story , backlog:ExecutionTask .
+
+#################################################################
+#  82. Evidence kinds and foreign namespaces — It11
+#
+#  KINDS in the evidence bridge pairs an evidence CLASS with a
+#  python function that checks it. Only half of that belongs here:
+#  WHICH evidence kinds the bridge covers is a statement about the
+#  domain; HOW each is checked is the script's own behaviour and
+#  stays where it runs.
+#
+#  Exporting the pair would have put a lambda's identity in an
+#  ontology. Exporting neither would leave the coverage question
+#  unanswerable. The split is the finding, and it is the same
+#  distinction TableKind draws one level up.
+#################################################################
+
+backlog:bridgeCoversEvidence a owl:ObjectProperty ;
+    rdfs:domain backlog:AdoptionProfile ; rdfs:range rdfs:Resource ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "bridge covers evidence"@en ;
+    skos:definition "An evidence class the evidence bridge verifies. Exported from a python list that paired each class with its checking function: which kinds are covered is a domain statement and belongs here, while how each is checked is the script's behaviour and stays there. An adopter adding an evidence kind can now see whether the bridge covers it without reading the bridge."@en .
+
+backlog:ForeignNamespace a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Foreign Namespace"@en ;
+    skos:definition "A namespace this package uses and does not own. Recorded because it is a governance statement rather than a lookup: an adopter must not assume a term from one of these is theirs to change, and that was previously a dictionary inside a readiness script."@en .
+
+backlog:namespaceIRI a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:ForeignNamespace ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "namespace IRI"@en .
+backlog:namespaceOwner a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:ForeignNamespace ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "namespace owner"@en .
+
+backlog:ShapeSuite a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Shape Suite"@en ;
+    skos:definition "A SHACL suite this package expects to find when checking registration readiness. Exported so that which suites a register must satisfy is answerable by query rather than by reading a list of filename globs."@en .
+
+backlog:suiteName a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:ShapeSuite ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "suite name"@en .
+backlog:suitePattern a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:ShapeSuite ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "suite pattern"@en ;
+    skos:definition "The filename glob locating the suite. Operational, and kept beside the name deliberately: separating them would leave the ontology naming suites nothing could find."@en .
