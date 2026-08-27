@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# backlog_gate v1.1.23 — four-gate release check for the Backlog & Roadmap
+# backlog_gate v1.1.24 — four-gate release check for the Backlog & Roadmap
 # Semantic Framework. Nothing about the package's state is trusted until all
 # four pass, and the SHACL gate refuses to certify anything until it has just
 # demonstrated, in this run, that it can fail a known-bad register.
@@ -11,7 +11,7 @@
 #   +       coverage gate          >= 80% of primary-source concepts (BP-D31)
 #   +       doc-coverage gate      every TBox class named in the standard document
 #
-# Usage: backlog_gate_v1_1_23.sh [REGISTER.ttl ...]
+# Usage: backlog_gate_v1_1_24.sh [REGISTER.ttl ...]
 
 set -u
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -240,6 +240,23 @@ if [ -n "$CR" ]; then
   }
 else
   echo "  NOT RUN — criterion resolver not found. Not assumed to pass."
+fi
+
+echo
+echo "== Self-application — does any checker report on a graph it never read? =="
+# A4 from the lineage discipline. Several findings came from running a checker
+# against the package that ships it, and every one was noticed by accident. The
+# reachability gate reported PASS on an empty graph when run without arguments,
+# and that was found by writing this step rather than by anyone looking.
+SA="$(ls "$HERE"/backlog_self_application_v*.py 2>/dev/null | sort -V | tail -1 || true)"
+if [ -n "$SA" ]; then
+  python3 "$SA" --strict | sed 's/^/  /' || {
+    echo "  A checker returns a verdict about a graph it never read."
+    echo "  A tool that passes on nothing reports green for work nobody checked."
+    exit 1
+  }
+else
+  echo "  NOT RUN — self-application checker not found. Not assumed to pass."
 fi
 
 echo

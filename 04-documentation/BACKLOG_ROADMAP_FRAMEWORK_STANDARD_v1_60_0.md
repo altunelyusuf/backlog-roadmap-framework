@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.59.0
+# Backlog & Roadmap Semantic Framework — Standard v1.60.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -1028,6 +1028,25 @@ and turned out to be unfinished work — this, and the belief that packages coul
 delivery. **A floor asserted is not a floor measured**, and an objective stalled on an argument
 deserves an experiment before it is accepted.
 
+### 2.5c-xli No verdict about a graph nobody read
+
+`backlog_self_application` runs every input-taking checker with **no arguments** and fails if any
+returns a verdict.
+
+It found one on its first run. The reachability gate parsed nothing, counted zero classes, found zero
+unreachable, and reported **PASS**. The release gate happens to pass paths so it never fired there —
+but the script ships, and an adopter running it bare would be told their vocabulary is clean when it
+was never read.
+
+**A checker that passes on an empty graph is worse than no checker**: it produces the appearance of
+verification.
+
+This is the third variant of one failure in this framework's history — a clause returning no rows, an
+evidence record covering a criterion it never checked, and a checker reading no file. Each time the
+result was green, and the greenness came from nothing having been examined.
+
+Every previous self-application finding here was noticed **by accident**. This one was found by asking.
+
 ### 2.5d Decomposition, commitments, dependency kinds, impediments, flow, team (subject v1.4.0)
 
 | Term | Meaning |
@@ -1232,7 +1251,7 @@ python3 03-tooling/backlog_evidence_bridge_v1_0_0.py my_register.ttl \
 python3 03-tooling/backlog_roadmap_report_v1_5_0.py my_register.ttl --emit report.ttl
 
 # 5. Run the four-gate release check (self-proving)
-bash 03-tooling/backlog_gate_v1_1_23.sh my_register.ttl
+bash 03-tooling/backlog_gate_v1_1_24.sh my_register.ttl
 ```
 
 Start at L1, move to L2 once a bridge exists, and to L3 when releases carry manifest hashes and the
@@ -1242,7 +1261,7 @@ blueprint sweep is real. Raising the level is a one-line edit to the profile.
 
 ## 5. What the gates prove, and what they do not
 
-`backlog_gate_v1_1_23.sh` runs Gate 0 (manifest self-verify), Gate P (every Turtle file parses),
+`backlog_gate_v1_1_24.sh` runs Gate 0 (manifest self-verify), Gate P (every Turtle file parses),
 Gate K (`versionInfo` == `versionIRI` token == filename token), Gate R (SHACL reconcile), and the
 BP-D31 coverage gate. Gate R first validates a positive fixture that must pass and a negative
 fixture that must fail, and aborts if either outcome inverts: a suite never shown to reject a

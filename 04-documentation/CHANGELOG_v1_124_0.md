@@ -1,5 +1,44 @@
 # Changelog
 
+## v1.124.0 — 2026-08-27 (MINOR: A4 built, and it found something on its first run)
+
+The first architectural mitigation from v1.123.0, built rather than scoped.
+
+### The reachability gate reported PASS on nothing
+
+Run with no arguments it parsed no files, counted zero classes, found zero unreachable, and returned
+**green**.
+
+The release gate happens to pass paths, so this never fired here. But **the script ships** — an adopter
+running it bare would be told their vocabulary is clean when it was never read.
+
+**A checker that passes on an empty graph is worse than no checker: it produces the appearance of
+verification.**
+
+It now exits FATAL and says why. Verified both directions — with arguments it still reports the 25
+unreachable classes, so the fix refuses blindness without changing the verdict.
+
+### The third variant of one failure
+
+```
+v1.105.0   a clause returning no rows          0 violations AND 0 warnings
+v1.119.0   evidence covering a criterion       5 criteria, 1 of them false
+           it never checked
+v1.124.0   a checker reading no file           PASS on an empty graph
+```
+
+Each time the result was green, and **the greenness came from nothing having been examined**.
+
+### Why A4 was worth building rather than noting
+
+Every previous self-application finding in this package was noticed **by accident** — the audit that
+flagged the checker written beside it, the exclusion list with two caches and one entry. This one was
+found by asking, in the first run of the step that asks.
+
+`backlog_self_application_v1_0_0.py` runs in the release gate at `--strict`. Four of four checkers now
+refuse to run blind.
+
+
 ## v1.123.0 — 2026-08-27 (MAJOR-class: lineage discipline v6.0.0 — six rulings and four architectural mitigations)
 
 ### The last floor, tested rather than asserted — and it moved again
@@ -4076,7 +4115,7 @@ moment another stage is inserted, so the decoupling is permanent instead.
 
 **Why every gate stayed green while this was live:** the three-fixture self-proof invokes the
 validator *directly*; only the register path formats its output, so a defect in the formatting layer
-was invisible to the proof. `backlog_gate_v1_1_23.sh` now runs the known-bad fixture through the
+was invisible to the proof. `backlog_gate_v1_1_24.sh` now runs the known-bad fixture through the
 **exact register path** and aborts if it does not fail. The self-proof covered the shapes; it had
 never covered its own plumbing.
 
@@ -5069,7 +5108,7 @@ executable and ordered.
 arbitration documented and implemented in the report tool.
 
 **Added — tooling:** `backlog_roadmap_report_v1_5_0.py` (eight sections, both NEXT answers, silent
--gap check), `backlog_coverage_gate_v1_1_1.py` (BP-D31), `backlog_gate_v1_1_23.sh` (Gate 0 / P / K /
+-gap check), `backlog_coverage_gate_v1_1_1.py` (BP-D31), `backlog_gate_v1_1_24.sh` (Gate 0 / P / K /
 R plus coverage), Gate K version-identity check in the validator.
 
 **Changed:** the v1.0.0 advisory "item carries no priority score" now excludes items correctly

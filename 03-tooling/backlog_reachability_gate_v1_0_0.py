@@ -22,7 +22,22 @@ import sys, glob
 from rdflib import Graph, RDF, RDFS, OWL, URIRef
 B="http://example.org/backlog#"
 g=Graph()
-for f in sys.argv[1:]: g.parse(f,format='turtle')
+args=[a for a in sys.argv[1:] if not a.startswith("-")]
+if not args:
+    # Found by self-application, which is the whole point of running a checker
+    # against the package that ships it. With no arguments this parsed NOTHING
+    # and reported PASS: zero classes, zero unreachable, green.
+    #
+    # A checker that passes on an empty graph is worse than no checker. The
+    # release gate happens to pass paths, so this never fired here — but the
+    # script ships, and an adopter running it bare would be told their
+    # vocabulary is clean when it was never read.
+    raise SystemExit(
+        "FATAL: no input given. This checker reports on the classes it is "
+        "handed, so with no input it would report zero unreachable classes "
+        "and PASS. Refusing to return a verdict about a graph it never read.\n"
+        "usage: backlog_reachability_gate_v1_0_0.py TBOX.ttl [REGISTER.ttl ...]")
+for f in args: g.parse(f,format='turtle')
 bad=[]; norange=[]
 for cl in g.subjects(RDF.type,OWL.Class):
     if not str(cl).startswith(B): continue

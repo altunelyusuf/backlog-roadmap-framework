@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/7.4.0> ;
-    owl:versionInfo "7.4.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/7.5.0> ;
+    owl:versionInfo "7.5.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/7.4.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/7.3.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/7.2.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/7.1.0> ;
@@ -348,7 +349,7 @@ fw:Ev_PbiTask a backlog:TestEvidence ;
     backlog:hasTestId "BRF-EP1" ;
     backlog:evidenceVerified true ;
     backlog:verifiedAt "2026-08-06T13:00:00"^^xsd:dateTime ;
-    backlog:hasVerificationMethod "backlog_gate_v1_1_23.sh: positive fixture carries a planned iteration with two subordinate execution tasks at 0 violations; negative fixture plants four EP1 defects (scored task, ranked task, empty planning event, parent Done over an open task) and all four fire" ;
+    backlog:hasVerificationMethod "backlog_gate_v1_1_24.sh: positive fixture carries a planned iteration with two subordinate execution tasks at 0 violations; negative fixture plants four EP1 defects (scored task, ranked task, empty planning event, parent Done over an open task) and all four fire" ;
     backlog:verifiedByTool "backlog_validate_v1_4_0.py + pyshacl 0.40.0" ;
     backlog:attestsCriterion fw:AC_PbiTask .
 
@@ -444,7 +445,7 @@ fw:D3 a backlog:DoDCriterion ;
 fw:D4 a backlog:DoDCriterion ;
     rdfs:label "D4 — The full release gate passes from a clean extraction, includ"@en ;
     backlog:hasCriterionText "The full release gate passes from a clean extraction, including the three-fixture self-proof and the fixture-coverage gate." ;
-    backlog:hasCheckQuery "backlog_gate_v1_1_23.sh run against a freshly extracted bundle." ;
+    backlog:hasCheckQuery "backlog_gate_v1_1_24.sh run against a freshly extracted bundle." ;
     backlog:hasExpectedResult "RELEASE GATE: PASS" ;
     backlog:hasCriterionStatus backlog:Holds .
 fw:D5 a backlog:DoDCriterion ;
@@ -9768,3 +9769,42 @@ fw:Obs_RowsTested a backlog:MetricObservation ;
 
 fw:Inv_FloorMeasured backlog:hasInvariantStatus backlog:Holds ;
     backlog:hasRationale "Both floors are now tested. Obj_RulesDecidedInCode dissolved entirely when run — the reachability decision moved to a shape. Obj_RowsUnchecked moved 17 to 15 and the remaining fifteen were read one by one. The pattern this invariant exists for: THREE times this session an objective was defended as having reached a structural limit, and every time the limit was smaller than claimed. Twice it vanished. A floor asserted is a floor untested." .
+
+#################################################################
+#  v7.5.0 — A4 built, and it found something on its first run.
+#
+#  The reachability gate reported PASS when run with no arguments.
+#  It parsed nothing, counted zero classes, found zero unreachable,
+#  and returned green. The release gate happens to pass paths, so
+#  it never fired here — but the script SHIPS, and an adopter
+#  running it bare would be told their vocabulary is clean when it
+#  was never read.
+#
+#  A checker that passes on an empty graph is worse than no checker:
+#  it produces the appearance of verification. This is the same
+#  shape as the malformed FILTER that reported zero violations and
+#  zero warnings, and the same shape as evidence attesting five
+#  criteria while one was false — a green result whose greenness
+#  came from nothing having been examined.
+#
+#  Found by writing the self-application step rather than by anyone
+#  looking, which is the argument A4 was scoped on: every previous
+#  self-application finding in this package was noticed BY ACCIDENT.
+#################################################################
+
+fw:Ev_SelfApplication a backlog:TestEvidence ;
+    backlog:hasTestSpec "03-tooling/backlog_self_application_v1_0_0.py" ;
+    backlog:hasTestId "A4" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-08-27T11:10:00Z"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "Four input-taking checkers run with no arguments. Before this release the reachability gate returned PASS on an empty graph; it now exits FATAL and states why. All four refuse. Verified both directions: with arguments the gate still reports the 25 unreachable classes it should, so the fix refuses blindness without changing the verdict." ;
+    backlog:verifiedByTool "backlog_self_application" ;
+    backlog:attestsCriterion fw:AC_EP_ScriptDecisions_S1 .
+
+fw:Inv_NoBlindVerdict a backlog:CrossCuttingInvariant ;
+    rdfs:label "No checker returns a verdict about a graph it never read"@en ;
+    backlog:hasCheckQuery "Run 03-tooling/backlog_self_application_v1_0_0.py --strict" ;
+    backlog:hasExpectedResult "0 blind checkers" ;
+    backlog:hasInvariantStatus backlog:Holds ;
+    backlog:tracksItem fw:EP_ScriptDecisions ;
+    backlog:hasRationale "Four of four refuse. Recorded because the failure it prevents is invisible by construction — a tool passing on nothing looks exactly like a tool passing on something, and this package has now produced three variants of that: a clause returning no rows, evidence covering a criterion it never checked, and a checker reading no file." .
