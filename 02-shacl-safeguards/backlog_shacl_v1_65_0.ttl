@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.64.0> ;
-    owl:versionInfo "1.64.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.65.0> ;
+    owl:versionInfo "1.65.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.64.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.63.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.62.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.61.0> ;
@@ -4473,3 +4474,42 @@ backlog:CodeTableShape a sh:NodeShape ;
         sh:message "L2: a code table must name the module it lives in, or nobody can find the thing being counted." ] ;
     sh:property [ sh:path backlog:hasTableKind ; sh:minCount 1 ; sh:maxCount 1 ;
         sh:message "L2: a code table must say whether it holds classification or operational knowledge. The whole migration turned on that distinction — eighteen tables stayed in python because they were operational — and a table with no kind is counted by whichever query happens to reach it." ] .
+
+#################################################################
+#  v1.65.0 — reachability moves to the ontology
+#
+#  I claimed twice that this decision COULD NOT move: that
+#  reachability is a query over the TBox, and a register cannot
+#  hold a rule about classes that do not exist yet. I argued it and
+#  did not test it, and recorded 1 as a structural floor.
+#
+#  Test drive, three experiments:
+#    1. Read what the python gate decides: skip enumerations, skip
+#       classes with subclasses, skip classes named as a range,
+#       report the rest that also have no instance.
+#    2. Write it as SPARQL over TBox plus register: 25 classes.
+#    3. Write it as a SHACL shape and compare focus nodes against
+#       the query: 25 and 25, exact agreement.
+#
+#  The premise was wrong in a specific way. The rule is not ABOUT
+#  classes that do not exist; it is about classes that DO exist and
+#  are unreachable, and every one of them is a subject in the
+#  shipped graphs. Nothing had to be invented — the graphs already
+#  carried what the shape needed, and I had reasoned about the
+#  problem instead of running it.
+#################################################################
+
+backlog:ClassReachabilityShape a sh:NodeShape ;
+    sh:targetClass owl:Class ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: a class the vocabulary cannot reach"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: no property names this class as a range and no individual is of this type, so nothing in the vocabulary can point at it and nothing uses it. Package sat unused for 91 releases in exactly this state, and the cost was a wrong conclusion drawn in good faith — packages were believed impossible before delivery when the concept had existed all along. Advisory rather than violation because 25 such classes exist today and a rule that fires 25 times on its first run gets suppressed." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            FILTER STRSTARTS(STR($this), "http://example.org/backlog#")
+            FILTER NOT EXISTS { $this owl:oneOf ?l }
+            FILTER NOT EXISTS { ?s rdfs:subClassOf $this }
+            FILTER NOT EXISTS { ?p rdfs:range $this }
+            FILTER NOT EXISTS { ?i a $this }
+        }""" ] .

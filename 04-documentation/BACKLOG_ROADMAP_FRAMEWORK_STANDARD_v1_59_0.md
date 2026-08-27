@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.58.0
+# Backlog & Roadmap Semantic Framework — Standard v1.59.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -1008,6 +1008,25 @@ They are advisories rather than violations for a measured reason. Making them L3
 already closed, and **a rule that fires 55 times on its first run gets suppressed; one that reports 55
 times gets worked down.** That is how deployment coverage, self-exemption and grooming depth were
 actually corrected.
+
+### 2.5c-xl A floor is measured, not argued
+
+`ClassReachabilityShape` reports a class that no property names as a range and no individual is of.
+That decision lived in python, and was twice declared **unable** to move to the ontology on the
+grounds that a register cannot hold a rule about classes that do not exist.
+
+**The premise was wrong in a specific way.** The rule is not about classes that do not exist; it is
+about classes that **do** exist and are unreachable, and every one is already a subject in the shipped
+graphs.
+
+Established by three experiments rather than by argument: read what the code decides, write it as
+SPARQL (25 classes), write it as a shape and compare **element-wise** against the query (25 and 25,
+identical sets). Element-wise, because two wrong answers of the same size agree on a count.
+
+Twice in this framework's history an objective has been defended as having reached a structural floor
+and turned out to be unfinished work — this, and the belief that packages could not exist before
+delivery. **A floor asserted is not a floor measured**, and an objective stalled on an argument
+deserves an experiment before it is accepted.
 
 ### 2.5d Decomposition, commitments, dependency kinds, impediments, flow, team (subject v1.4.0)
 

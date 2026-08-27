@@ -1,5 +1,45 @@
 # Changelog
 
+## v1.122.0 — 2026-08-27 (MINOR: the floor was not a floor)
+
+I claimed **twice** that reachability could not move to the ontology — that it is a query over the
+TBox, and a register cannot hold a rule about classes that do not exist yet. I recorded **1** as a
+structural floor and used it to argue that no further progress was possible.
+
+**I argued it and did not test it.**
+
+### Test drive
+
+```
+1. read what the python gate decides    skip enumerations, skip subclassed,
+                                        skip ranged, report the rest with no instance
+2. same decision as SPARQL              25 classes
+3. same decision as a SHACL shape       25 focus nodes — sets compared
+                                        ELEMENT-WISE, identical
+```
+
+Element-wise, because two wrong answers of the same size agree on a count.
+
+**The premise was wrong in a specific way.** The rule is not about classes that *do not* exist; it is
+about classes that **do** exist and are unreachable, and every one is already a subject in the shipped
+graphs. Nothing had to be invented. The graphs carried what the shape needed the whole time.
+
+```
+Obj_RulesDecidedInCode   3 → 0    MET
+6 of 7 objectives met
+```
+
+### The general finding
+
+**Twice this session an unmet objective was defended as structural and turned out to be unfinished
+work** — this, and the belief that packages could not exist before delivery, which left `Package`
+unused for 91 releases.
+
+`Inv_FloorMeasured` is recorded **Violated**, because one floor remains asserted rather than tested:
+`Obj_RowsUnchecked` at 17, on the argument that a claim row has no IRI to check against. That argument
+has not been run as an experiment, and the last two floors defended this way both dissolved when tested.
+
+
 ## v1.121.0 — 2026-08-27 (MINOR: the closed stories re-verified — and the owner was right to insist)
 
 I ruled last release that the remedy was **not retroactive**, because backfilling tasks onto closed

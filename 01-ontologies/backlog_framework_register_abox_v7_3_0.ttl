@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/7.2.0> ;
-    owl:versionInfo "7.2.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/7.3.0> ;
+    owl:versionInfo "7.3.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/7.2.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/7.1.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/7.0.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/6.9.0> ;
@@ -9679,3 +9680,57 @@ fw:Inv_ClauseProven a backlog:CrossCuttingInvariant ;
     backlog:hasInvariantStatus backlog:Violated ;
     backlog:tracksItem fw:EP_RuleExec ;
     backlog:hasRationale "96 of 276 clauses unproven at the time of writing, down from 96 with six newly proven — the count moves as fixtures are written, and it is reported rather than enforced because a gate failing on 96 gets suppressed while a report on 96 gets worked down. Recorded Violated so the number is visible on every release rather than sitting in a script nobody runs." .
+
+#################################################################
+#  v7.3.0 — the floor was not a floor.
+#
+#  I claimed TWICE that reachability could not move to the
+#  ontology: that it is a query over the TBox, and a register
+#  cannot hold a rule about classes that do not exist yet. I
+#  recorded 1 as a structural floor and used it to argue that no
+#  further progress was possible.
+#
+#  I argued it and did not test it. Test-driven now:
+#
+#    1. Read what the python gate decides — skip enumerations,
+#       skip classes with subclasses, skip classes named as a
+#       range, report the rest that also have no instance.
+#    2. Write it as SPARQL over TBox plus register: 25 classes.
+#    3. Write it as a SHACL shape and compare focus nodes against
+#       the query: 25 and 25, EXACT agreement.
+#
+#  The premise was wrong in a specific way. The rule is not about
+#  classes that DO NOT exist; it is about classes that DO exist and
+#  are unreachable, and every one is already a subject in the
+#  shipped graphs. Nothing had to be invented. The graphs carried
+#  what the shape needed the whole time, and I reasoned about the
+#  problem instead of running it.
+#
+#  A floor asserted is not a floor measured. This is the second
+#  time this session an unmet objective was defended as structural
+#  and turned out to be unfinished work.
+#################################################################
+
+fw:Ev_ReachInOntology a backlog:TestEvidence ;
+    backlog:hasTestSpec "02-shacl-safeguards ClassReachabilityShape" ;
+    backlog:hasTestId "reachability" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-08-27T10:10:00Z"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "Three experiments. The python gate's logic was read rather than remembered. The same decision as SPARQL over TBox plus register returns 25 classes. The same decision as a SHACL shape produces 25 focus nodes, and the two sets are identical — compared element-wise, not by count, because two wrong answers of the same size would agree on a count. The shape ships and fires 25 times through the suite." ;
+    backlog:verifiedByTool "pyshacl + rdflib, compared element-wise" ;
+    backlog:attestsCriterion fw:AC_EP_RuleExec_S2 .
+
+fw:Obs_RulesZero a backlog:MetricObservation ;
+    backlog:observesMetric fw:Metric_Obj_RulesDecidedInCode ;
+    backlog:observationFor fw:Obj_RulesDecidedInCode ;
+    backlog:hasObservedValue 0.0 ;
+    backlog:observedAt "2026-08-27T10:10:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Baseline 3. Manifest exemption moved at It8, fixture polarity at v1.119.0, and reachability here. Zero gate checks now decide an outcome in code. The previous observation of 1 was recorded as a structural floor on an argument rather than a measurement, and the measurement disagreed." .
+
+fw:Inv_FloorMeasured a backlog:CrossCuttingInvariant ;
+    rdfs:label "A floor is measured, not argued"@en ;
+    backlog:hasCheckQuery "Manual: for each objective declared to have reached a structural floor, name the experiment that established it." ;
+    backlog:hasExpectedResult "an experiment per floor" ;
+    backlog:hasInvariantStatus backlog:Violated ;
+    backlog:tracksItem fw:EP_RuleExec ;
+    backlog:hasRationale "Violated: one floor remains asserted rather than tested. Obj_RowsUnchecked sits at 17 on the argument that a claim row has no IRI to check against. That argument has not been run as an experiment, and the last two floors defended this way — Obj_RulesDecidedInCode at 1, and the belief that packages could not exist before delivery — both dissolved when tested. Recorded Violated so the remaining one is visible rather than trusted." .
