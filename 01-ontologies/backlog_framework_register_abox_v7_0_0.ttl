@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/6.9.0> ;
-    owl:versionInfo "6.9.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/7.0.0> ;
+    owl:versionInfo "7.0.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/6.9.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/6.8.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/6.7.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/6.6.0> ;
@@ -343,7 +344,7 @@ fw:Ev_PbiTask a backlog:TestEvidence ;
     backlog:hasTestId "BRF-EP1" ;
     backlog:evidenceVerified true ;
     backlog:verifiedAt "2026-08-06T13:00:00"^^xsd:dateTime ;
-    backlog:hasVerificationMethod "backlog_gate_v1_1_21.sh: positive fixture carries a planned iteration with two subordinate execution tasks at 0 violations; negative fixture plants four EP1 defects (scored task, ranked task, empty planning event, parent Done over an open task) and all four fire" ;
+    backlog:hasVerificationMethod "backlog_gate_v1_1_22.sh: positive fixture carries a planned iteration with two subordinate execution tasks at 0 violations; negative fixture plants four EP1 defects (scored task, ranked task, empty planning event, parent Done over an open task) and all four fire" ;
     backlog:verifiedByTool "backlog_validate_v1_4_0.py + pyshacl 0.40.0" ;
     backlog:attestsCriterion fw:AC_PbiTask .
 
@@ -439,7 +440,7 @@ fw:D3 a backlog:DoDCriterion ;
 fw:D4 a backlog:DoDCriterion ;
     rdfs:label "D4 — The full release gate passes from a clean extraction, includ"@en ;
     backlog:hasCriterionText "The full release gate passes from a clean extraction, including the three-fixture self-proof and the fixture-coverage gate." ;
-    backlog:hasCheckQuery "backlog_gate_v1_1_21.sh run against a freshly extracted bundle." ;
+    backlog:hasCheckQuery "backlog_gate_v1_1_22.sh run against a freshly extracted bundle." ;
     backlog:hasExpectedResult "RELEASE GATE: PASS" ;
     backlog:hasCriterionStatus backlog:Holds .
 fw:D5 a backlog:DoDCriterion ;
@@ -9369,3 +9370,189 @@ fw:Inv_ClaimRowsUncheckable a backlog:CrossCuttingInvariant ;
     backlog:hasInvariantStatus backlog:Holds ;
     backlog:tracksItem fw:EP_StandardRows ;
     backlog:hasRationale "Recorded as a manual check because deciding whether a first cell is a claim or a name is a reading, and a SPARQL query claiming to do it would be the same false precision the 17 rows exist to avoid. Obj_RowsUnchecked will not reach 0 and the reason is stated rather than engineered away." .
+
+#################################################################
+#  Every criterion of this lineage names the artefact that makes
+#  it true. Named per criterion, so one that is false cannot be
+#  carried by a claim about its neighbours.
+#################################################################
+fw:AC_EP_Rulings_S1 backlog:satisfiedByArtifact "backlog:GovernanceRuling" .
+fw:AC_EP_Rulings_S2 backlog:satisfiedByArtifact "backlog:enforcedByShape" .
+fw:AC_EP_CodeTables_S1 backlog:satisfiedByArtifact "backlog:LineageLayer" .
+fw:AC_EP_CodeTables_S2 backlog:satisfiedByArtifact "03-tooling/backlog_lineage_completeness_v*.py#_load_layers" .
+fw:AC_EP_RuleExec_S1 backlog:satisfiedByArtifact "backlog:hasExpectedPolarity" .
+fw:AC_EP_RuleExec_S2 backlog:satisfiedByArtifact "backlog:ForeignNamespace" .
+fw:AC_EP_ScriptDecisions_S1 backlog:satisfiedByArtifact "03-tooling/backlog_script_decision_audit_v*.py#PATTERNS" .
+fw:AC_EP_StandardRows_S1 backlog:satisfiedByArtifact "03-tooling/backlog_standard_row_check_v*.py#tbox_terms" .
+fw:AC_EP_StandardRows_S2 backlog:satisfiedByArtifact "03-tooling/backlog_standard_row_check_v*.py#ABSENT" .
+fw:AC_S_Tables_B1 backlog:satisfiedByArtifact "backlog:stageRequiresType" .
+fw:AC_S_Tables_B2 backlog:satisfiedByArtifact "backlog:ReportSection" .
+fw:AC_S_Tables_B3 backlog:satisfiedByArtifact "backlog:bridgeCoversEvidence" .
+fw:AC_S_Tables_B4 backlog:satisfiedByArtifact "backlog:ShapeSuite" .
+
+#################################################################
+#  v7.0.0 — MAJOR. A story was Done and its work was not.
+#
+#  OWNER CHALLENGE, and the audit confirms it. EP_RuleExec_S1
+#  specified an expected-polarity property on every fixture and a
+#  gate reading it instead of the filename. The story was Done, had
+#  a specification with two ordered steps, a test case, test data,
+#  a planned task, evidence marked verified, and a complete
+#  harness. The property did not exist.
+#
+#  ROOT CAUSE: one TestEvidence attested FIVE criteria across three
+#  stories, and its verification method described what the
+#  iteration did as a whole. Every clause in the suite was
+#  satisfied. None asked whether the thing the criterion describes
+#  exists — the framework could say testing HAPPENED and could not
+#  say what testing FOUND, per criterion.
+#
+#  Measured: 24 of 49 evidence records attest more than one
+#  criterion. Batching evidence is how a criterion comes to be
+#  carried by a claim about its neighbours.
+#
+#  SECOND FINDING, from the same audit: the four batch stories
+#  S_Tables_B1..B4 were closed with NO specification, NO test case
+#  and NO test data. They were created during execution, after the
+#  grooming that would have given them any. The ceremony was
+#  followed for the nine stories groomed before the sprint and not
+#  for the four invented during it.
+#################################################################
+
+fw:Ev_PolarityFixed a backlog:TestEvidence ;
+    backlog:hasTestSpec "03-tooling/backlog_criterion_resolve_v1_0_0.py" ;
+    backlog:hasTestId "AC_EP_RuleExec_S1" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-08-27T08:50:00Z"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "hasExpectedPolarity now exists on AdoptionProfile with a closed Positive/Negative enumeration, and all 22 fixtures declare theirs. Verified against the old filename inference: all 22 agree, so the migration is faithful and not a re-labelling. The resolver reports 13 of 13 criterion artefacts resolving, having reported exactly one unresolved before the work — the one this story promised." ;
+    backlog:verifiedByTool "backlog_criterion_resolve" ;
+    backlog:attestsCriterion fw:AC_EP_RuleExec_S1 .
+
+fw:CS_EP_RuleExec_S1 a backlog:CriterionSatisfaction ;
+    backlog:satisfiesCriterion fw:AC_EP_RuleExec_S1 ;
+    backlog:artifactResolved true ;
+    backlog:hasRationale "Resolved at v1.119.0. Recorded false between It8 and here would have been the honest state; the framework could not express it, which is why this class exists." .
+
+fw:Obs_RulesFinal a backlog:MetricObservation ;
+    backlog:observesMetric fw:Metric_Obj_RulesDecidedInCode ;
+    backlog:observationFor fw:Obj_RulesDecidedInCode ;
+    backlog:hasObservedValue 1.0 ;
+    backlog:observedAt "2026-08-27T08:50:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Baseline 3. Manifest exemption moved at It8; fixture polarity moves here, having been reported Done at It8 and not done. One remains: reachability, which is a query over the TBox and cannot move to a register that holds no rule about classes not yet declared. Observed 1, and the honest floor is 1." .
+
+fw:Inv_CriterionArtifactNamed a backlog:CrossCuttingInvariant ;
+    rdfs:label "Every criterion on Done work names a resolving artefact"@en ;
+    backlog:hasCheckQuery "Run 03-tooling/backlog_criterion_resolve_v1_0_0.py --strict" ;
+    backlog:hasExpectedResult "0 unresolved" ;
+    backlog:hasInvariantStatus backlog:Holds ;
+    backlog:tracksItem fw:EP_RuleExec ;
+    backlog:hasRationale "13 criteria name an artefact and 13 resolve. The checker found exactly one unresolved on its first run — the criterion of the story closed without its work — and nothing else, which is the evidence that it discriminates rather than merely passing." .
+
+#################################################################
+#  The previous lineage's criteria, given the artefact each was
+#  actually verified against.
+#
+#  Not exempted. Each names the fixture its evidence already cites
+#  — the evidence existed and named a spec; what was missing was
+#  the link from the CRITERION to it, which is exactly the gap that
+#  let one criterion pass on a claim about its neighbours.
+#
+#  A fixture path is a weaker artefact than a term IRI: it proves
+#  the test file exists, not that the term does. Recorded as the
+#  honest best available for work already closed, rather than
+#  backfilling term IRIs this session did not verify at the time.
+#################################################################
+fw:AC_PbiTask backlog:satisfiedByArtifact "03-tooling/fixtures/fixture_positive_v1_7_0.ttl" .
+fw:AC_Flow backlog:satisfiedByArtifact "03-tooling/fixtures/fixture_positive_v1_7_0.ttl" .
+fw:AC_Cost backlog:satisfiedByArtifact "03-tooling/fixtures/fixture_positive_v1_7_0.ttl" .
+fw:AC_Human backlog:satisfiedByArtifact "03-tooling/fixtures/fixture_positive_v1_7_0.ttl" .
+fw:AC_S31 backlog:satisfiedByArtifact "03-tooling/fixtures/fixture_positive_v1_7_0.ttl" .
+fw:AC_S32 backlog:satisfiedByArtifact "03-tooling/fixtures/fixture_positive_v1_7_0.ttl" .
+fw:AC_S33 backlog:satisfiedByArtifact "03-tooling/fixtures/fixture_positive_v1_7_0.ttl" .
+fw:AC_S41 backlog:satisfiedByArtifact "03-tooling/fixtures/fixture_positive_v1_7_0.ttl" .
+fw:AC_S42 backlog:satisfiedByArtifact "03-tooling/fixtures/fixture_positive_v1_7_0.ttl" .
+fw:AC_S43 backlog:satisfiedByArtifact "03-tooling/fixtures/fixture_positive_v1_7_0.ttl" .
+fw:AC_Views backlog:satisfiedByArtifact "03-tooling/backlog_views_v1_5_0.py" .
+fw:AC_Schedule backlog:satisfiedByArtifact "03-tooling/fixtures/fixture_positive_v1_7_0.ttl" .
+fw:RelAC_1_23_0 backlog:satisfiedByArtifact "03-tooling/fixtures" .
+fw:RelAC_1_24_0 backlog:satisfiedByArtifact "03-tooling/fixtures" .
+fw:RelAC_1_25_0 backlog:satisfiedByArtifact "03-tooling/fixtures" .
+fw:RelAC_1_26_0 backlog:satisfiedByArtifact "03-tooling/fixtures" .
+fw:RelAC_1_27_0 backlog:satisfiedByArtifact "03-tooling/fixtures" .
+fw:RelAC_1_28_0 backlog:satisfiedByArtifact "03-tooling/fixtures" .
+fw:RelAC_1_29_0 backlog:satisfiedByArtifact "03-tooling/fixtures" .
+fw:RelAC_1_30_0 backlog:satisfiedByArtifact "03-tooling/fixtures" .
+fw:RelAC_1_31_0 backlog:satisfiedByArtifact "03-tooling/fixtures" .
+fw:RelAC_1_32_0 backlog:satisfiedByArtifact "03-tooling/fixtures" .
+fw:RelAC_1_33_0 backlog:satisfiedByArtifact "03-tooling/fixtures" .
+fw:RelAC_1_34_0 backlog:satisfiedByArtifact "03-tooling/fixtures" .
+fw:RelAC_1_35_0 backlog:satisfiedByArtifact "03-tooling/fixtures" .
+fw:RelAC_1_36_0 backlog:satisfiedByArtifact "03-tooling/fixtures" .
+fw:RelAC_1_37_0 backlog:satisfiedByArtifact "03-tooling/fixtures" .
+fw:RelAC_1_38_0 backlog:satisfiedByArtifact "03-tooling/fixtures" .
+fw:RelAC_1_39_0 backlog:satisfiedByArtifact "03-tooling/fixtures" .
+fw:RelAC_1_40_0 backlog:satisfiedByArtifact "03-tooling/fixtures" .
+fw:RelAC_1_41_0 backlog:satisfiedByArtifact "03-tooling/fixtures" .
+fw:RelAC_1_42_0 backlog:satisfiedByArtifact "03-tooling/fixtures" .
+fw:AC_Progress backlog:satisfiedByArtifact "03-tooling/fixtures/fixture_progress_v1_0_0.ttl" .
+fw:AC_Fit backlog:satisfiedByArtifact "03-tooling/fixtures/fixture_l4_conformant_v1_0_0.ttl" .
+fw:AC_ValueRelease backlog:satisfiedByArtifact "03-tooling/fixtures/fixture_l4_conformant_v1_0_0.ttl" .
+fw:AC_OrderRecord backlog:satisfiedByArtifact "03-tooling/fixtures/fixture_scope_first_v1_0_0.ttl" .
+fw:AC_OrderCorrect backlog:satisfiedByArtifact "03-tooling/fixtures" .
+fw:AC_BRF_I1 backlog:satisfiedByArtifact "03-tooling/fixtures/fixture_positive_v1_7_0.ttl" .
+fw:AC_BRF_I2 backlog:satisfiedByArtifact "03-tooling/fixtures/fixture_positive_v1_7_0.ttl" .
+fw:AC_BRF_I3 backlog:satisfiedByArtifact "03-tooling/fixtures/fixture_positive_v1_7_0.ttl" .
+fw:AC_BRF_I4 backlog:satisfiedByArtifact "03-tooling/fixtures/fixture_l4_conformant_v1_0_0.ttl" .
+fw:AC_BRF_I5 backlog:satisfiedByArtifact "03-tooling/fixtures" .
+fw:AC_BRF_I6 backlog:satisfiedByArtifact "03-tooling/fixtures/fixture_tasktype_negative_v1_0_0.ttl" .
+fw:AC_Grooming backlog:satisfiedByArtifact "03-tooling/fixtures/fixture_grooming_negative_v1_0_0.ttl" .
+fw:AC_IterationCapacity backlog:satisfiedByArtifact "03-tooling/fixtures/fixture_capacity_negative_v1_0_0.ttl" .
+fw:AC_TeamRoles backlog:satisfiedByArtifact "01-ontologies/backlog_tbox_v1_29_0.ttl" .
+fw:AC_TaskTypes backlog:satisfiedByArtifact "03-tooling/fixtures/fixture_tasktype_negative_v1_0_0.ttl" .
+fw:AC_EP_PbiTask_S1 backlog:satisfiedByArtifact "03-tooling/fixtures/fixture_positive_v1_7_0.ttl" .
+fw:AC_EP_PbiTask_S2 backlog:satisfiedByArtifact "03-tooling/fixtures/fixture_positive_v1_7_0.ttl" .
+fw:AC_EP_Flow_S1 backlog:satisfiedByArtifact "03-tooling/fixtures/fixture_positive_v1_7_0.ttl" .
+fw:AC_EP_Flow_S2 backlog:satisfiedByArtifact "03-tooling/fixtures/fixture_positive_v1_7_0.ttl" .
+fw:AC_EP_Views_S1 backlog:satisfiedByArtifact "03-tooling/backlog_views_v1_5_0.py" .
+fw:AC_EP_Views_S2 backlog:satisfiedByArtifact "03-tooling/backlog_views_v1_5_0.py" .
+fw:AC_EP_Schedule_S1 backlog:satisfiedByArtifact "03-tooling/fixtures/fixture_positive_v1_7_0.ttl" .
+fw:AC_EP_Schedule_S2 backlog:satisfiedByArtifact "03-tooling/fixtures/fixture_positive_v1_7_0.ttl" .
+fw:AC_EP_Progress_S1 backlog:satisfiedByArtifact "03-tooling/fixtures/fixture_progress_v1_0_0.ttl" .
+fw:AC_EP_Progress_S2 backlog:satisfiedByArtifact "03-tooling/fixtures/fixture_progress_v1_0_0.ttl" .
+fw:AC_EP_Fit_S1 backlog:satisfiedByArtifact "03-tooling/fixtures/fixture_l4_conformant_v1_0_0.ttl" .
+fw:AC_EP_Fit_S2 backlog:satisfiedByArtifact "03-tooling/fixtures/fixture_l4_conformant_v1_0_0.ttl" .
+fw:AC_EP_ValueRelease_S1 backlog:satisfiedByArtifact "03-tooling/fixtures/fixture_l4_conformant_v1_0_0.ttl" .
+fw:AC_EP_ValueRelease_S2 backlog:satisfiedByArtifact "03-tooling/fixtures/fixture_l4_conformant_v1_0_0.ttl" .
+fw:AC_EP_OrderRecord_S1 backlog:satisfiedByArtifact "03-tooling/fixtures/fixture_scope_first_v1_0_0.ttl" .
+fw:AC_EP_OrderRecord_S2 backlog:satisfiedByArtifact "03-tooling/fixtures/fixture_scope_first_v1_0_0.ttl" .
+fw:AC_EP_OrderCorrect_S1 backlog:satisfiedByArtifact "03-tooling/fixtures" .
+fw:AC_EP_OrderCorrect_S2 backlog:satisfiedByArtifact "03-tooling/fixtures" .
+fw:AC_EP_Grooming_S1 backlog:satisfiedByArtifact "03-tooling/fixtures/fixture_grooming_negative_v1_0_0.ttl" .
+fw:AC_EP_Grooming_S2 backlog:satisfiedByArtifact "03-tooling/fixtures/fixture_grooming_negative_v1_0_0.ttl" .
+fw:AC_EP_TaskTypes_S1 backlog:satisfiedByArtifact "03-tooling/fixtures/fixture_tasktype_negative_v1_0_0.ttl" .
+fw:AC_EP_TaskTypes_S2 backlog:satisfiedByArtifact "03-tooling/fixtures/fixture_tasktype_negative_v1_0_0.ttl" .
+fw:AC_EP_IterationCapacity_S1 backlog:satisfiedByArtifact "03-tooling/fixtures/fixture_capacity_negative_v1_0_0.ttl" .
+fw:AC_EP_TeamRoles_S1 backlog:satisfiedByArtifact "01-ontologies/backlog_tbox_v1_29_0.ttl" .
+fw:AC_S11 backlog:satisfiedByArtifact "03-tooling/fixtures/fixture_positive_v1_7_0.ttl" .
+fw:AC_S12 backlog:satisfiedByArtifact "03-tooling/fixtures/fixture_positive_v1_7_0.ttl" .
+fw:AC_GroundTwo backlog:satisfiedByArtifact "01-ontologies/backlog_tbox_v1_31_0.ttl" .
+fw:AC_S_GroundIteration backlog:satisfiedByArtifact "01-ontologies/backlog_tbox_v1_31_0.ttl" .
+fw:AC_S_GroundSelection backlog:satisfiedByArtifact "01-ontologies/backlog_tbox_v1_31_0.ttl" .
+fw:AC_EP_Model backlog:satisfiedByArtifact "03-tooling/fixtures/fixture_storydetail_negative_v1_0_0.ttl" .
+fw:AC_EP_Spec backlog:satisfiedByArtifact "03-tooling/fixtures/fixture_storydetail_negative_v1_0_0.ttl" .
+fw:AC_EP_TestSpec backlog:satisfiedByArtifact "03-tooling/fixtures/fixture_storydetail_negative_v1_0_0.ttl" .
+fw:AC_EP_Model_S1 backlog:satisfiedByArtifact "03-tooling/fixtures/fixture_modelartifact_negative_v1_0_0.ttl" .
+fw:AC_EP_Model_S2 backlog:satisfiedByArtifact "03-tooling/fixtures/fixture_modelartifact_negative_v1_0_0.ttl" .
+fw:AC_EP_Spec_S1 backlog:satisfiedByArtifact "03-tooling/fixtures/fixture_storydetail_negative_v1_0_0.ttl" .
+fw:AC_EP_Spec_S2 backlog:satisfiedByArtifact "03-tooling/fixtures/fixture_storydetail_negative_v1_0_0.ttl" .
+fw:AC_EP_TestSpec_S1 backlog:satisfiedByArtifact "03-tooling/fixtures/fixture_storydetail_negative_v1_0_0.ttl" .
+fw:AC_EP_TestSpec_S2 backlog:satisfiedByArtifact "03-tooling/fixtures/fixture_storydetail_negative_v1_0_0.ttl" .
+fw:AC_EP_Model_S3 backlog:satisfiedByArtifact "03-tooling/fixtures/fixture_storydetail_negative_v1_0_0.ttl" .
+fw:AC_Reach backlog:satisfiedByArtifact "03-tooling/backlog_reachability_gate_v1_0_0.py" .
+fw:AC_EP_Reach_S1 backlog:satisfiedByArtifact "03-tooling/backlog_reachability_gate_v1_0_0.py" .
+fw:AC_EP_Rulings backlog:satisfiedByArtifact "01-ontologies/backlog_tbox_v1_46_0.ttl" .
+fw:AC_EP_CodeTables backlog:satisfiedByArtifact "03-tooling/backlog_lineage_completeness_v1_1_0.py" .
+fw:AC_EP_RuleExec backlog:satisfiedByArtifact "03-tooling/backlog_lineage_completeness_v1_1_0.py" .
+fw:AC_EP_ScriptDecisions backlog:satisfiedByArtifact "03-tooling/backlog_script_decision_audit_v1_0_0.py" .
+fw:AC_EP_StandardRows backlog:satisfiedByArtifact "03-tooling/backlog_script_decision_audit_v1_0_0.py" .
+fw:AC_EP_TablesBatch backlog:satisfiedByArtifact "01-ontologies/backlog_tbox_v1_51_0.ttl" .

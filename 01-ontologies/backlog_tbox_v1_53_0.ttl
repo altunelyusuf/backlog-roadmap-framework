@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.52.0> ;
-    owl:versionInfo "1.52.0" ;
+    owl:versionIRI <http://example.org/backlog/1.53.0> ;
+    owl:versionInfo "1.53.0" ;
+    owl:priorVersion <http://example.org/backlog/1.52.0> ;
     owl:priorVersion <http://example.org/backlog/1.51.0> ;
     owl:priorVersion <http://example.org/backlog/1.50.0> ;
     owl:priorVersion <http://example.org/backlog/1.49.0> ;
@@ -5075,3 +5076,78 @@ backlog:abbreviationOf a owl:ObjectProperty , owl:FunctionalProperty ;
 backlog:abbreviationText a owl:DatatypeProperty , owl:FunctionalProperty ;
     rdfs:domain backlog:TermAbbreviation ; rdfs:range xsd:string ;
     rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "abbreviation text"@en .
+
+#################################################################
+#  84. A criterion names the artefact that satisfies it
+#
+#  ROOT CAUSE of a story closed with its work undone. EP_RuleExec_S1
+#  specified an expected-polarity property on every fixture and a
+#  gate reading it instead of the filename. The story is Done, has
+#  a test case, has test data, has a task, and the property DOES
+#  NOT EXIST.
+#
+#  It passed because one TestEvidence attested FIVE criteria across
+#  three stories, describing what the iteration did as a whole.
+#  Every clause in the suite was satisfied: evidence present,
+#  verified true, criteria attested, harness complete. None asked
+#  the only question that mattered — does the thing this criterion
+#  describes exist?
+#
+#  Measured: 24 of 49 evidence records attest more than one
+#  criterion. Batched evidence is how a criterion gets carried by
+#  a claim about its neighbours.
+#
+#  satisfiedByArtifact names, per criterion, the artefact that
+#  makes it true — a class, a property, a file. Checkable, because
+#  an IRI either resolves in the shipped ontology or does not.
+#################################################################
+
+backlog:satisfiedByArtifact a owl:DatatypeProperty ;
+    rdfs:domain backlog:AcceptanceCriterion ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "satisfied by artifact"@en ;
+    skos:definition "The named thing whose existence makes this criterion true — a term IRI, or a path with the symbol inside it. Per criterion and not per story, because a story with two criteria can have one satisfied and the other not, and a single evidence record covering both cannot say which. Named rather than described: a description is checked by reading, and reading is what let a criterion pass on a claim about its neighbours."@en .
+
+backlog:CriterionSatisfaction a owl:Class ;
+    rdfs:subClassOf core:Artifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Criterion Satisfaction"@en ;
+    skos:definition "The record that one criterion was verified against one artefact, at a moment. Separate from TestEvidence, which records that testing HAPPENED: this records what the testing FOUND, for a single criterion. The distinction is the finding — evidence batched across five criteria satisfied every clause in the suite while one of the five was untrue."@en .
+
+backlog:satisfiesCriterion a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:CriterionSatisfaction ; rdfs:range backlog:AcceptanceCriterion ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "satisfies criterion"@en .
+backlog:artifactResolved a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:CriterionSatisfaction ; rdfs:range xsd:boolean ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "artifact resolved"@en ;
+    skos:definition "Whether the named artefact was found when the criterion was checked. False is a legitimate and useful value: it records a criterion that was looked for and not found, which is what nothing in the framework could previously say."@en .
+
+#################################################################
+#  85. Fixture polarity, declared — the work EP_RuleExec_S1
+#      promised and did not do.
+#
+#  A fixture's expected polarity was inferred from its FILENAME:
+#  a file with "negative" in the name was expected to fail. Rename
+#  the file and the expectation changes with it, silently, and a
+#  positive fixture renamed for tidiness becomes a negative one
+#  that passes by failing.
+#################################################################
+
+backlog:hasExpectedPolarity a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:AdoptionProfile ; rdfs:range backlog:FixturePolarity ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has expected polarity"@en ;
+    skos:definition "Whether the fixture this profile governs is expected to validate cleanly or to be rejected. Declared on the profile because that is already the fixture's own statement about itself; a separate registry would be a second place a fixture is described. Replaces inference from the filename, where a rename changed what the suite expected of a file without changing the file."@en .
+
+backlog:FixturePolarity a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:Polarity_Positive backlog:Polarity_Negative ) ;
+    rdfs:label "Fixture Polarity"@en .
+backlog:Polarity_Positive a owl:NamedIndividual , backlog:FixturePolarity ;
+    rdfs:label "Positive"@en ;
+    skos:definition "The fixture is expected to validate with no violation. A positive fixture that fails is a regression."@en .
+backlog:Polarity_Negative a owl:NamedIndividual , backlog:FixturePolarity ;
+    rdfs:label "Negative"@en ;
+    skos:definition "The fixture is expected to be rejected. A negative fixture that PASSES is the more dangerous failure: it means the clause it was built to prove no longer fires."@en .

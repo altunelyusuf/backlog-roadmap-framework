@@ -301,3 +301,29 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+def expected_polarity(fixture_path):
+    """What the suite expects of a fixture, from the fixture itself.
+
+    Replaces inference from the FILENAME. A file with "negative" in its name
+    was expected to fail; rename it and the expectation moved with the name,
+    silently. A positive fixture renamed for tidiness became a negative one
+    that passed by failing.
+
+    Declared on the fixture's own AdoptionProfile, which is already its
+    statement about itself. Returns "positive", "negative", or None when the
+    fixture declares nothing — None is reported, not guessed, because guessing
+    is what this replaces.
+    """
+    from rdflib import Graph, Namespace, RDF
+    B = Namespace("http://example.org/backlog#")
+    g = Graph()
+    try:
+        g.parse(fixture_path, format="turtle")
+    except Exception:
+        return None
+    for p in g.subjects(RDF.type, B.AdoptionProfile):
+        pol = g.value(p, B.hasExpectedPolarity)
+        if pol is not None:
+            return str(pol).split("#")[-1].replace("Polarity_", "").lower()
+    return None

@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.56.0
+# Backlog & Roadmap Semantic Framework — Standard v1.57.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -965,6 +965,28 @@ Some rows remain uncheckable and that is a property of prose. A row whose first 
 no IRI to check against, and the three ways out are: invent individuals so a checker passes, exclude
 the rows, or state the limit. Only the third leaves the measure meaning anything.
 
+### 2.5c-xxxviii A criterion names the artefact that satisfies it
+
+`satisfiedByArtifact` on `AcceptanceCriterion` names the thing whose existence makes it true — a term
+IRI, or a path with a symbol in it. `CriterionSatisfaction` records what a check **found**, per
+criterion, as distinct from `TestEvidence` which records that testing **happened**.
+
+**Why both are needed.** A story can be Done with a specification, ordered steps, a test case, test
+data, a planned task, verified evidence and a complete harness — and the thing it promised can not
+exist. Every clause in the suite passes because none asks whether the artefact is there.
+
+It passes when **one evidence record attests several criteria** and its verification method describes
+the iteration as a whole. A criterion then rides on a claim about its neighbours. An advisory reports
+evidence attesting more than three.
+
+`artifactResolved false` is a legitimate value: a criterion looked for and not found was previously
+unsayable.
+
+`FixturePolarity` replaces inference from a filename. A file with "negative" in its name was expected
+to fail, so a rename changed what the suite expected of a file without changing the file — and a
+negative fixture that starts **passing** is the dangerous direction, because the clause it exists to
+prove has stopped firing.
+
 ### 2.5d Decomposition, commitments, dependency kinds, impediments, flow, team (subject v1.4.0)
 
 | Term | Meaning |
@@ -1169,7 +1191,7 @@ python3 03-tooling/backlog_evidence_bridge_v1_0_0.py my_register.ttl \
 python3 03-tooling/backlog_roadmap_report_v1_5_0.py my_register.ttl --emit report.ttl
 
 # 5. Run the four-gate release check (self-proving)
-bash 03-tooling/backlog_gate_v1_1_21.sh my_register.ttl
+bash 03-tooling/backlog_gate_v1_1_22.sh my_register.ttl
 ```
 
 Start at L1, move to L2 once a bridge exists, and to L3 when releases carry manifest hashes and the
@@ -1179,7 +1201,7 @@ blueprint sweep is real. Raising the level is a one-line edit to the profile.
 
 ## 5. What the gates prove, and what they do not
 
-`backlog_gate_v1_1_21.sh` runs Gate 0 (manifest self-verify), Gate P (every Turtle file parses),
+`backlog_gate_v1_1_22.sh` runs Gate 0 (manifest self-verify), Gate P (every Turtle file parses),
 Gate K (`versionInfo` == `versionIRI` token == filename token), Gate R (SHACL reconcile), and the
 BP-D31 coverage gate. Gate R first validates a positive fixture that must pass and a negative
 fixture that must fail, and aborts if either outcome inverts: a suite never shown to reject a

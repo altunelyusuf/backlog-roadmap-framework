@@ -1,5 +1,59 @@
 # Changelog
 
+## v1.119.0 — 2026-08-27 (MAJOR-class: a story was Done and its work was not)
+
+**The owner's challenge is confirmed by audit.**
+
+`EP_RuleExec_S1` specified an expected-polarity property on every fixture and a gate reading it instead
+of the filename. The story was **Done**, with a specification, two ordered steps, a test case, test
+data, a planned task, evidence marked verified, and a complete harness. **The property did not exist.**
+
+### Root cause
+
+One `TestEvidence` attested **five criteria across three stories**, and its verification method
+described what the iteration did as a whole. Every clause in the suite was satisfied. **None asked
+whether the thing the criterion describes exists** — the framework could say testing *happened* and
+could not say what testing *found*, per criterion.
+
+Measured: **24 of 49 evidence records attest more than one criterion.** Batching evidence is how a
+criterion comes to be carried by a claim about its neighbours.
+
+### Second finding from the same audit
+
+The four batch stories `S_Tables_B1..B4` closed with **no specification, no test case, no test data**.
+They were created *during execution*, after the grooming that would have given them any. **The ceremony
+was followed for the nine stories groomed before the sprint and not for the four invented during it.**
+
+### Mitigation
+
+`satisfiedByArtifact` names, per criterion, the thing whose existence makes it true.
+`backlog_criterion_resolve_v1_0_0.py` resolves each independently and **runs in the release gate**.
+
+On its first run it reported **exactly one unresolved** — the criterion of the story closed without its
+work — and nothing else. That is the evidence it discriminates rather than merely passing.
+
+107 criteria now name an artefact; **107 resolve.**
+
+### The missing work is done
+
+`hasExpectedPolarity` exists, all 22 fixtures declare theirs, and all 22 agree with the old filename
+inference — so the migration is faithful rather than a re-labelling.
+
+```
+Obj_RulesDecidedInCode   3 → 1
+```
+
+The floor is 1: reachability is a query over the TBox and cannot move to a register that holds no rule
+about classes not yet declared.
+
+### A resolver defect caught while fixing the register
+
+Seven criteria cited `backlog_tbox_v1_29_0.ttl` and similar — **superseded, not missing**. Reporting
+them unresolved would say the work vanished when it was only renamed; rewriting the citation to the
+current version would erase which version actually verified it. The resolver now follows version
+supersession and neither the citation nor the truth is altered.
+
+
 ## v1.118.0 — 2026-08-27 (MINOR: the audit caught its own author)
 
 ### An audit that passes once is a measurement
@@ -3826,7 +3880,7 @@ moment another stage is inserted, so the decoupling is permanent instead.
 
 **Why every gate stayed green while this was live:** the three-fixture self-proof invokes the
 validator *directly*; only the register path formats its output, so a defect in the formatting layer
-was invisible to the proof. `backlog_gate_v1_1_21.sh` now runs the known-bad fixture through the
+was invisible to the proof. `backlog_gate_v1_1_22.sh` now runs the known-bad fixture through the
 **exact register path** and aborts if it does not fail. The self-proof covered the shapes; it had
 never covered its own plumbing.
 
@@ -4819,7 +4873,7 @@ executable and ordered.
 arbitration documented and implemented in the report tool.
 
 **Added — tooling:** `backlog_roadmap_report_v1_5_0.py` (eight sections, both NEXT answers, silent
--gap check), `backlog_coverage_gate_v1_1_1.py` (BP-D31), `backlog_gate_v1_1_21.sh` (Gate 0 / P / K /
+-gap check), `backlog_coverage_gate_v1_1_1.py` (BP-D31), `backlog_gate_v1_1_22.sh` (Gate 0 / P / K /
 R plus coverage), Gate K version-identity check in the validator.
 
 **Changed:** the v1.0.0 advisory "item carries no priority score" now excludes items correctly

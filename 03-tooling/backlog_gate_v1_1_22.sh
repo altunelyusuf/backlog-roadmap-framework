@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# backlog_gate v1.1.21 — four-gate release check for the Backlog & Roadmap
+# backlog_gate v1.1.22 — four-gate release check for the Backlog & Roadmap
 # Semantic Framework. Nothing about the package's state is trusted until all
 # four pass, and the SHACL gate refuses to certify anything until it has just
 # demonstrated, in this run, that it can fail a known-bad register.
@@ -11,7 +11,7 @@
 #   +       coverage gate          >= 80% of primary-source concepts (BP-D31)
 #   +       doc-coverage gate      every TBox class named in the standard document
 #
-# Usage: backlog_gate_v1_1_21.sh [REGISTER.ttl ...]
+# Usage: backlog_gate_v1_1_22.sh [REGISTER.ttl ...]
 
 set -u
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -210,6 +210,23 @@ fi
 # in the other order, coverage counted 73 files and the 74th appeared moments
 # later — a race between two of this package's own gates, reported as an
 # unexplained file. The check was right and the ordering was wrong.
+echo
+echo "== Criterion artefacts — does the thing each criterion names exist? =="
+# A story was closed with its work undone: it had a specification, a test case,
+# test data, a task, verified evidence and a complete harness, and the property
+# it promised did not exist. One evidence record attested five criteria across
+# three stories and described the iteration as a whole. Every clause passed.
+# This asks the only question none of them asked.
+CR="$(ls "$HERE"/backlog_criterion_resolve_v*.py 2>/dev/null | sort -V | tail -1 || true)"
+if [ -n "$CR" ]; then
+  python3 "$CR" | sed 's/^/  /' || {
+    echo "  One or more criterion artefacts do not resolve. A criterion on Done"
+    echo "  work naming something absent means the story closed without its work."
+  }
+else
+  echo "  NOT RUN — criterion resolver not found. Not assumed to pass."
+fi
+
 echo
 echo "== Reachability gate — no class the vocabulary cannot point at =="
 # Package sat unused for 91 releases because no property had it as a range: it

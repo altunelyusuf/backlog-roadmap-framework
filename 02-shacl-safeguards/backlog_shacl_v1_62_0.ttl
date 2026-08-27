@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.61.0> ;
-    owl:versionInfo "1.61.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.62.0> ;
+    owl:versionInfo "1.62.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.61.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.60.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.59.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.58.0> ;
@@ -4343,4 +4344,48 @@ backlog:PlannedFromEvidenceShape a sh:NodeShape ;
             { SELECT (MAX(?d) AS ?worst) WHERE { ?it backlog:hasObservedDuration ?d } }
             BIND (((?e - ?s) / "PT1M"^^xsd:dayTimeDuration) AS ?planned)
             FILTER (?planned > (?worst * 10))
+        }""" ] .
+
+#################################################################
+#  v1.62.0 — a criterion names what satisfies it
+#################################################################
+
+backlog:CriterionArtifactShape a sh:NodeShape ;
+    sh:targetClass backlog:AcceptanceCriterion ;
+    sh:severity sh:Violation ;
+    rdfs:label "A criterion on Done work names its artefact (L3)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: this criterion belongs to Done work and names no artefact whose existence makes it true. A story was closed under exactly this gap: its specification promised a property, the property was never created, and the criterion passed because one evidence record covered five criteria across three stories and described the iteration as a whole. Every other clause was satisfied — evidence present, verified, attested, harnessed — and none asked whether the thing existed." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L3_Governed, backlog:L4_LineageEnforced))
+            ?item backlog:hasAcceptanceCriterion $this ; backlog:hasState backlog:Done .
+            FILTER NOT EXISTS { $this backlog:satisfiedByArtifact ?a }
+            FILTER NOT EXISTS { ?sup backlog:supersedesMission ?m . ?item backlog:pursuesObjective ?o .
+                                ?o backlog:contributesToGoal ?g . ?g backlog:contributesToMission ?m }
+        }""" ] .
+
+backlog:UnresolvedArtifactShape a sh:NodeShape ;
+    sh:targetClass backlog:CriterionSatisfaction ;
+    sh:severity sh:Violation ;
+    rdfs:label "A criterion whose artefact was not found (L2)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L2: this satisfaction record says the named artefact was NOT found, and the criterion it belongs to is on Done work. The story is closed and the thing it promised does not exist. Recording the false is the point — a criterion looked for and not found was previously unsayable." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:artifactResolved false ; backlog:satisfiesCriterion ?ac .
+            ?item backlog:hasAcceptanceCriterion ?ac ; backlog:hasState backlog:Done .
+        }""" ] .
+
+backlog:BatchedEvidenceShape a sh:NodeShape ;
+    sh:targetClass backlog:TestEvidence ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: one evidence record attesting many criteria"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: this evidence attests more than three criteria, so its verification method describes an iteration rather than a check. Measured on this register when the pattern was found: 24 of 49 evidence records attested more than one criterion, and the one that hid an unfinished story attested five across three stories. Batching evidence is legitimate and it is how a criterion comes to be carried by a claim about its neighbours." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            { SELECT $this (COUNT(?c) AS ?n) WHERE { $this backlog:attestsCriterion ?c } GROUP BY $this }
+            FILTER (?n > 3)
         }""" ] .
