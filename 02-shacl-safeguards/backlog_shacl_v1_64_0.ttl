@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.63.0> ;
-    owl:versionInfo "1.63.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.64.0> ;
+    owl:versionInfo "1.64.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.63.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.62.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.61.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.60.0> ;
@@ -4448,3 +4449,27 @@ backlog:StoryTestAnalysisShape a sh:NodeShape ;
             $this backlog:hasState backlog:Done ; backlog:hasAcceptanceCriterion ?ac .
             FILTER NOT EXISTS { ?ac2 backlog:coveredByCase ?c . $this backlog:hasAcceptanceCriterion ?ac2 }
         }""" ] .
+
+#################################################################
+#  v1.64.0 — the clause the re-verification exposed
+#
+#  CodeTable was added at v1.117.0 with hasTableKind, and NOTHING
+#  required it. The whole migration turned on that distinction:
+#  eighteen tables were ruled operational and stayed in python
+#  because of it, and a table could be registered with no kind at
+#  all and pass every check.
+#
+#  Found by writing a fixture for a clause that did not exist —
+#  which is why the case was written knowing it might be silent.
+#  A negative fixture that passes is either a missing clause or a
+#  broken one, and the only way to tell is to look.
+#################################################################
+
+backlog:CodeTableShape a sh:NodeShape ;
+    sh:targetClass backlog:CodeTable ;
+    sh:severity sh:Violation ;
+    rdfs:label "A code table says which kind it is (L2)"@en ;
+    sh:property [ sh:path backlog:tableInModule ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "L2: a code table must name the module it lives in, or nobody can find the thing being counted." ] ;
+    sh:property [ sh:path backlog:hasTableKind ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "L2: a code table must say whether it holds classification or operational knowledge. The whole migration turned on that distinction — eighteen tables stayed in python because they were operational — and a table with no kind is counted by whichever query happens to reach it." ] .

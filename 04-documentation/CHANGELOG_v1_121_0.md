@@ -1,5 +1,52 @@
 # Changelog
 
+## v1.121.0 — 2026-08-27 (MINOR: the closed stories re-verified — and the owner was right to insist)
+
+I ruled last release that the remedy was **not retroactive**, because backfilling tasks onto closed
+stories records work that was never planned. That reasoning was sound and **the conclusion was wrong**:
+it answered a question nobody asked. **Verifying closed work is not backfilling it.**
+
+### Measured
+
+```
+level-gated clauses in the suite      276
+never proven to fire by any fixture    96
+
+clauses THIS lineage's stories built     6
+of those, unproven                       6
+```
+
+**A clause nothing fires has never been shown to work.** It may be correct; it may be malformed SPARQL
+returning nothing — and both look identical from a green gate.
+
+That is not hypothetical. This package has produced two: a triple pattern inside `FILTER` at v1.105.0,
+reporting **0 violations and 0 warnings**; a `dateTime` subtraction at v1.110.0, reporting zero on a
+34-day gap. **Both were caught by accident.**
+
+### Proven on purpose
+
+`fixture_ontologydriven_negative` carries six cases, each naming one clause this lineage built. Five
+fire: a ruling enforced by nothing, a layer with no ordinal, two layers at one position, a scenario
+with no kind, an area with no location.
+
+**The sixth was written knowing it might be silent, and it was.** `CodeTable` had `hasTableKind` and
+**nothing required it** — while the entire table migration turned on that distinction, with eighteen
+tables staying in python because they were operational. A negative fixture that passes is either a
+missing clause or a broken one, and only looking tells you which.
+
+`CodeTableShape` now requires it and the case fires.
+
+```
+unproven: 96 → 92
+```
+
+`backlog_clause_proof_v1_0_0.py` ships and **runs in the release gate**. `Inv_ClauseProven` reads
+Violated so the number is visible on every release rather than sitting in a script nobody runs.
+
+Reported rather than enforced: **a gate failing on 92 gets suppressed; a report on 92 gets worked
+down.**
+
+
 ## v1.120.0 — 2026-08-27 (MINOR: fit-gap against field practice — five gaps, all self-inflicted)
 
 **The owner is right: one story, one task is not a normal configuration.** Measured across the register:
@@ -3935,7 +3982,7 @@ moment another stage is inserted, so the decoupling is permanent instead.
 
 **Why every gate stayed green while this was live:** the three-fixture self-proof invokes the
 validator *directly*; only the register path formats its output, so a defect in the formatting layer
-was invisible to the proof. `backlog_gate_v1_1_22.sh` now runs the known-bad fixture through the
+was invisible to the proof. `backlog_gate_v1_1_23.sh` now runs the known-bad fixture through the
 **exact register path** and aborts if it does not fail. The self-proof covered the shapes; it had
 never covered its own plumbing.
 
@@ -4928,7 +4975,7 @@ executable and ordered.
 arbitration documented and implemented in the report tool.
 
 **Added — tooling:** `backlog_roadmap_report_v1_5_0.py` (eight sections, both NEXT answers, silent
--gap check), `backlog_coverage_gate_v1_1_1.py` (BP-D31), `backlog_gate_v1_1_22.sh` (Gate 0 / P / K /
+-gap check), `backlog_coverage_gate_v1_1_1.py` (BP-D31), `backlog_gate_v1_1_23.sh` (Gate 0 / P / K /
 R plus coverage), Gate K version-identity check in the validator.
 
 **Changed:** the v1.0.0 advisory "item carries no priority score" now excludes items correctly

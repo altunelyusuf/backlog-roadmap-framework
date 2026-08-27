@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# backlog_gate v1.1.22 — four-gate release check for the Backlog & Roadmap
+# backlog_gate v1.1.23 — four-gate release check for the Backlog & Roadmap
 # Semantic Framework. Nothing about the package's state is trusted until all
 # four pass, and the SHACL gate refuses to certify anything until it has just
 # demonstrated, in this run, that it can fail a known-bad register.
@@ -11,7 +11,7 @@
 #   +       coverage gate          >= 80% of primary-source concepts (BP-D31)
 #   +       doc-coverage gate      every TBox class named in the standard document
 #
-# Usage: backlog_gate_v1_1_22.sh [REGISTER.ttl ...]
+# Usage: backlog_gate_v1_1_23.sh [REGISTER.ttl ...]
 
 set -u
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -210,6 +210,21 @@ fi
 # in the other order, coverage counted 73 files and the 74th appeared moments
 # later — a race between two of this package's own gates, reported as an
 # unexplained file. The check was right and the ordering was wrong.
+echo
+echo "== Clause proof — which constraints has a fixture made fire? =="
+# A clause nothing fires has never been shown to work. It may be correct; it
+# may be malformed SPARQL returning nothing, and both look identical from a
+# green gate. This package has produced two: a triple pattern inside FILTER
+# reporting 0 violations AND 0 warnings, and a dateTime subtraction reporting
+# zero on a 34-day gap. Both were caught by accident. This catches them on
+# purpose.
+CP="$(ls "$HERE"/backlog_clause_proof_v*.py 2>/dev/null | sort -V | tail -1 || true)"
+if [ -n "$CP" ]; then
+  python3 "$CP" 2>/dev/null | head -6 | sed 's/^/  /' || true
+else
+  echo "  NOT RUN — clause proof checker not found. Not assumed to pass."
+fi
+
 echo
 echo "== Criterion artefacts — does the thing each criterion names exist? =="
 # A story was closed with its work undone: it had a specification, a test case,

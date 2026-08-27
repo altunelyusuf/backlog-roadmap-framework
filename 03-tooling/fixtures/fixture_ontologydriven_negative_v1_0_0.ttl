@@ -1,0 +1,71 @@
+# Re-verification of the ontology-driven lineage's own clauses.
+#
+# Written after finding that SIX of six clauses this lineage built
+# had never been made to fire by any fixture. A clause nothing
+# fires has never been shown to work — it may be correct, or it may
+# be malformed SPARQL returning nothing, and both look identical
+# from a green gate. That is not hypothetical: twice in this
+# package a clause looked right and returned no rows, and both were
+# caught by accident.
+#
+#   RUL-NOSHAPE   ruling naming no enforcing shape   -> REJECTED L3
+#   LAY-NOORD     layer with no ordinal              -> REJECTED L2
+#   LAY-DUP       two layers at the same position    -> REJECTED L1
+#   SCEN-NOKIND   scenario with no kind              -> REJECTED L2
+#   AREA-NOLOC    scope area with no location        -> REJECTED L2
+#   CT-NOKIND     code table with no kind            -> silent (no clause yet)
+#
+# CT-NOKIND is listed deliberately: writing it and finding it
+# silent is how the absence of a clause becomes visible.
+
+@prefix backlog: <http://example.org/backlog#> .
+@prefix core:    <http://example.org/core#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix ex:      <http://example.org/od#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+ex:P a backlog:AdoptionProfile ; backlog:profileAppliesTo "ontology-driven clause proof" ;
+    backlog:governsBacklog ex:BL ; backlog:hasConformanceLevel backlog:L3_Governed ;
+    backlog:hasTargetConformanceLevel backlog:L3_Governed ;
+    backlog:hasExpectedPolarity backlog:Polarity_Negative ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:hasDecisionRationale "L3: the ruling and area clauses are L2/L3." ;
+    backlog:adoptsFacet backlog:CoreFacet , backlog:EvidenceFacet .
+ex:BL a backlog:Backlog ; backlog:hasIdentifier "BL-OD" ; backlog:hasState backlog:InProgress .
+ex:S a backlog:Story ; backlog:hasIdentifier "S-OD" ; backlog:hasState backlog:InProgress ;
+    backlog:memberOfContainer ex:BL ; backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "fixture" .
+
+# RUL-NOSHAPE: identified and stated, enforced by nothing.
+ex:RUL_NOSHAPE a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "GX" ;
+    rdfs:label "A ruling nothing carries out"@en ;
+    backlog:hasRulingStatement "Every increment is published separately." ;
+    backlog:rulingSource "fixture" .
+
+# LAY-NOORD: a layer with no position.
+ex:LAY_NOORD a backlog:LineageLayer ;
+    backlog:layerClass backlog:Mission ;
+    backlog:layerAbsenceCost "No stated purpose." .
+
+# LAY-DUP: two layers claiming position 1.
+ex:LAY_D1 a backlog:LineageLayer ; backlog:layerClass backlog:Goal ;
+    backlog:layerOrdinal 1 ; backlog:layerAbsenceCost "a" .
+ex:LAY_D2 a backlog:LineageLayer ; backlog:layerClass backlog:Objective ;
+    backlog:layerOrdinal 1 ; backlog:layerAbsenceCost "b" .
+
+# SCEN-NOKIND: a scenario belonging to a criterion, with no kind.
+ex:AC a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a locked account, When recovery completes, Then it is active." .
+ex:SCEN_NOKIND a backlog:TestScenario ;
+    backlog:scenarioOf ex:AC .
+
+# AREA-NOLOC: an area nobody can open.
+ex:AREA_NOLOC a backlog:ScopeArea ;
+    backlog:areaMeasure "Some tables." ;
+    backlog:hasScopeLayer backlog:Layer_Work .
+
+# CT-NOKIND: a code table with no kind. No clause requires one.
+ex:CT_NOKIND a backlog:CodeTable ;
+    backlog:tableInModule "some_module.py" ;
+    backlog:tableExported false .

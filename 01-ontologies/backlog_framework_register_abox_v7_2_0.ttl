@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/7.1.0> ;
-    owl:versionInfo "7.1.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/7.2.0> ;
+    owl:versionInfo "7.2.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/7.1.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/7.0.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/6.9.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/6.8.0> ;
@@ -345,7 +346,7 @@ fw:Ev_PbiTask a backlog:TestEvidence ;
     backlog:hasTestId "BRF-EP1" ;
     backlog:evidenceVerified true ;
     backlog:verifiedAt "2026-08-06T13:00:00"^^xsd:dateTime ;
-    backlog:hasVerificationMethod "backlog_gate_v1_1_22.sh: positive fixture carries a planned iteration with two subordinate execution tasks at 0 violations; negative fixture plants four EP1 defects (scored task, ranked task, empty planning event, parent Done over an open task) and all four fire" ;
+    backlog:hasVerificationMethod "backlog_gate_v1_1_23.sh: positive fixture carries a planned iteration with two subordinate execution tasks at 0 violations; negative fixture plants four EP1 defects (scored task, ranked task, empty planning event, parent Done over an open task) and all four fire" ;
     backlog:verifiedByTool "backlog_validate_v1_4_0.py + pyshacl 0.40.0" ;
     backlog:attestsCriterion fw:AC_PbiTask .
 
@@ -441,7 +442,7 @@ fw:D3 a backlog:DoDCriterion ;
 fw:D4 a backlog:DoDCriterion ;
     rdfs:label "D4 — The full release gate passes from a clean extraction, includ"@en ;
     backlog:hasCriterionText "The full release gate passes from a clean extraction, including the three-fixture self-proof and the fixture-coverage gate." ;
-    backlog:hasCheckQuery "backlog_gate_v1_1_22.sh run against a freshly extracted bundle." ;
+    backlog:hasCheckQuery "backlog_gate_v1_1_23.sh run against a freshly extracted bundle." ;
     backlog:hasExpectedResult "RELEASE GATE: PASS" ;
     backlog:hasCriterionStatus backlog:Holds .
 fw:D5 a backlog:DoDCriterion ;
@@ -9630,3 +9631,51 @@ fw:Inv_StoryDecomposition a backlog:CrossCuttingInvariant ;
     backlog:hasInvariantStatus backlog:Violated ;
     backlog:tracksItem fw:EP_RuleExec ;
     backlog:hasRationale "Violated, and recorded as such rather than deferred. 55 stories carry one implementation task apiece. The remedy is not retroactive: backfilling analysis and test tasks onto closed stories would record work that was never planned, which is the defect one level along from closing a story whose work was undone. It applies to the next story planned." .
+
+#################################################################
+#  v7.2.0 — the closed stories re-verified, and the owner was right
+#  to insist.
+#
+#  I ruled at v1.120.0 that the remedy was not retroactive, on the
+#  grounds that backfilling tasks onto closed stories records work
+#  that was never planned. That reasoning was sound and the
+#  conclusion was wrong, because it answered a question nobody
+#  asked: VERIFYING closed work is not backfilling it.
+#
+#  MEASURED, and it is the risk the owner named. Of 276 level-gated
+#  clauses in the suite, 96 have NEVER been made to fire by any
+#  fixture. And of the six clauses THIS lineage's stories built,
+#  SIX OF SIX were unproven.
+#
+#  A clause nothing fires has never been shown to work. It may be
+#  correct; it may be malformed SPARQL returning nothing. Both look
+#  identical from a green gate, and this package has produced two:
+#  a triple pattern inside FILTER at v1.105.0, reporting 0
+#  violations AND 0 warnings; a dateTime subtraction at v1.110.0,
+#  reporting zero on a 34-day gap. Both were caught by accident.
+#
+#  fixture_ontologydriven_negative proves five of the six on
+#  purpose. The sixth case was written knowing it might be silent —
+#  and it was. CodeTable had hasTableKind and NOTHING required it,
+#  while the entire table migration turned on that distinction:
+#  eighteen tables stayed in python because they were operational.
+#  A negative fixture that passes is either a missing clause or a
+#  broken one, and only looking tells you which.
+#################################################################
+
+fw:Ev_ReVerify a backlog:TestEvidence ;
+    backlog:hasTestSpec "03-tooling/fixtures/fixture_ontologydriven_negative_v1_0_0.ttl" ;
+    backlog:hasTestId "re-verification" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-08-27T09:30:00Z"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "Six cases, each naming one clause this lineage built. Five fire and are now proven: a ruling enforced by nothing, a layer with no ordinal, two layers at one position, a scenario with no kind, an area with no location. The sixth was silent and exposed a missing clause — CodeTableShape now requires hasTableKind and the case fires. Verified individually rather than as a set, because a fixture reporting eighteen violations proves nothing about which case caused which." ;
+    backlog:verifiedByTool "backlog_validate + backlog_clause_proof" ;
+    backlog:attestsCriterion fw:AC_EP_Rulings_S2 , fw:AC_EP_CodeTables_S1 , fw:AC_S_Tables_B1 .
+
+fw:Inv_ClauseProven a backlog:CrossCuttingInvariant ;
+    rdfs:label "Every level-gated clause has a fixture that fires it"@en ;
+    backlog:hasCheckQuery "Run 03-tooling/backlog_clause_proof_v1_0_0.py" ;
+    backlog:hasExpectedResult "0 unproven" ;
+    backlog:hasInvariantStatus backlog:Violated ;
+    backlog:tracksItem fw:EP_RuleExec ;
+    backlog:hasRationale "96 of 276 clauses unproven at the time of writing, down from 96 with six newly proven — the count moves as fixtures are written, and it is reported rather than enforced because a gate failing on 96 gets suppressed while a report on 96 gets worked down. Recorded Violated so the number is visible on every release rather than sitting in a script nobody runs." .
