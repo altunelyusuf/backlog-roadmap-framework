@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/7.0.0> ;
-    owl:versionInfo "7.0.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/7.1.0> ;
+    owl:versionInfo "7.1.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/7.0.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/6.9.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/6.8.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/6.7.0> ;
@@ -9556,3 +9557,76 @@ fw:AC_EP_RuleExec backlog:satisfiedByArtifact "03-tooling/backlog_lineage_comple
 fw:AC_EP_ScriptDecisions backlog:satisfiedByArtifact "03-tooling/backlog_script_decision_audit_v1_0_0.py" .
 fw:AC_EP_StandardRows backlog:satisfiedByArtifact "03-tooling/backlog_script_decision_audit_v1_0_0.py" .
 fw:AC_EP_TablesBatch backlog:satisfiedByArtifact "01-ontologies/backlog_tbox_v1_51_0.ttl" .
+
+#################################################################
+#  v7.1.0 — FIT-GAP against field practice. Five gaps.
+#
+#  MEASURED: 55 Done stories, ONE task each, ONE acceptance
+#  criterion each, and 46 of them carrying NO test case.
+#  44 of 51 tasks are Task_Implementation.
+#
+#  RESEARCHED, not assumed. Field practice decomposes a story until
+#  each task is a few hours' work; developers carry out story
+#  analysis for design while testers perform test analysis and
+#  produce the cases, both inside the sprint; and a story carries a
+#  FULL SET of acceptance tests before it is planned.
+#
+#    practice                                as-is
+#    several small tasks per story           1 task, all 55        GAP
+#    analysis/design distinct from build     44/51 implementation  GAP
+#    test analysis inside the sprint         46/55 no test case    GAP
+#    full set of acceptance tests            1 criterion, all 55   GAP
+#    scenarios per criterion                 1 case where present  GAP
+#    task type taxonomy                      ISO 12207, 14 values  FIT
+#    design concerns drive grooming          5 concerns            FIT
+#    Definition of Done at epic level        every epic            FIT
+#
+#  ROOT CAUSE: the framework could express all five throughout.
+#  TaskType shipped with fourteen values and forty-four tasks chose
+#  Implementation. TestCase and TestData shipped at v1.97.0 and
+#  forty-six stories never used them.
+#
+#  Nothing REQUIRED the decomposition, so the cheapest shape won
+#  every time. A capability that is available and not obligatory is
+#  one that gets skipped under time pressure, and this session was
+#  always under time pressure — which is the general finding, not
+#  an excuse for this instance of it.
+#################################################################
+
+fw:Adapt_StoryShape a backlog:LineageAdaptation ;
+    rdfs:label "Fit-gap: story decomposition against field practice"@en ;
+    backlog:adaptsScope fw:Scope_Ontology ;
+    backlog:hasAdaptationStage backlog:Stage_Ruling ;
+    backlog:hasAdaptationOutcome backlog:Adapt_BoundaryHolds .
+
+fw:Gate_SS_Assess a backlog:AdaptationGate ;
+    rdfs:label "How does this register decompose a story?"@en ;
+    backlog:gateFor fw:Adapt_StoryShape ; backlog:gatesStage backlog:Stage_Assess ;
+    backlog:hasCheckQuery "SELECT ?s (COUNT(?t) AS ?tasks) WHERE { ?pe backlog:plansItem ?s ; backlog:producesTask ?t } GROUP BY ?s" ;
+    backlog:hasExpectedResult "measured" ; backlog:hasGateResult "measured" ;
+    backlog:gatePassed true ;
+    backlog:hasTransitionNote "55 stories, 1 task each, 1 criterion each, 46 with no test case." .
+
+fw:Gate_SS_FitGap a backlog:AdaptationGate ;
+    rdfs:label "Which practices does the register not follow?"@en ;
+    backlog:gateFor fw:Adapt_StoryShape ; backlog:gatesStage backlog:Stage_FitGap ;
+    backlog:hasCheckQuery "Compare against researched practice: task decomposition, analysis and test tasks, test analysis in sprint, full acceptance test set, scenarios per criterion." ;
+    backlog:hasExpectedResult "enumerated" ; backlog:hasGateResult "enumerated" ;
+    backlog:gatePassed true ;
+    backlog:hasRationale "Five gaps, three fits. Every gap is expressible in the framework today, which is what makes it a discipline failure rather than a capability failure — and a discipline failure is fixed by making the capability obligatory rather than by adding another one." .
+
+fw:Gate_SS_Ruling a backlog:AdaptationGate ;
+    rdfs:label "Require, or record?"@en ;
+    backlog:gateFor fw:Adapt_StoryShape ; backlog:gatesStage backlog:Stage_Ruling ;
+    backlog:hasCheckQuery "ASK { ?s a backlog:Story ; backlog:hasState backlog:Done FILTER NOT EXISTS { ?ac backlog:coveredByCase ?c . ?s backlog:hasAcceptanceCriterion ?ac } }" ;
+    backlog:hasExpectedResult "ruling recorded" ; backlog:hasGateResult "ruling recorded" ;
+    backlog:gatePassed true ;
+    backlog:hasRationale "ADVISORY, not violation, and the reason is measured: making these L3 would fail 55 stories already Done and closed, which turns a finding into a wall. Advisories that report on every release are how the previous drift patterns were actually corrected — deployment coverage, self-exemption, grooming depth. A rule that fires 55 times on its first run gets suppressed; one that reports 55 times gets worked down." .
+
+fw:Inv_StoryDecomposition a backlog:CrossCuttingInvariant ;
+    rdfs:label "A story decomposes into more than one kind of work"@en ;
+    backlog:hasCheckQuery "SELECT (COUNT(DISTINCT ?s) AS ?n) WHERE { ?pe backlog:plansItem ?s ; backlog:producesTask ?t . FILTER NOT EXISTS { ?pe2 backlog:plansItem ?s ; backlog:producesTask ?t2 . ?t2 backlog:hasTaskType ?tt FILTER (?tt != backlog:Task_Implementation) } }" ;
+    backlog:hasExpectedResult "0" ;
+    backlog:hasInvariantStatus backlog:Violated ;
+    backlog:tracksItem fw:EP_RuleExec ;
+    backlog:hasRationale "Violated, and recorded as such rather than deferred. 55 stories carry one implementation task apiece. The remedy is not retroactive: backfilling analysis and test tasks onto closed stories would record work that was never planned, which is the defect one level along from closing a story whose work was undone. It applies to the next story planned." .

@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.57.0
+# Backlog & Roadmap Semantic Framework — Standard v1.58.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -986,6 +986,28 @@ unsayable.
 to fail, so a rename changed what the suite expected of a file without changing the file — and a
 negative fixture that starts **passing** is the dangerous direction, because the clause it exists to
 prove has stopped firing.
+
+### 2.5c-xxxix A criterion is tested in more than one situation
+
+`TestScenario` names the situation a case exercises, with `ScenarioKind` — nominal, boundary,
+rejection, absent. Four, because they fail differently: the nominal path proves the feature works, a
+boundary proves it stops where it should, a rejection proves it refuses what it must, and an absent
+case proves it **fails loudly rather than silently returning nothing**.
+
+That last one is not academic. A malformed FILTER once reported zero violations *and* zero warnings,
+and only the second number gave it away.
+
+**A criterion with one test case has been tested in one situation and reads as fully covered.** The
+count of cases says how much testing happened; the count of scenario kinds says how much of the
+criterion it reached.
+
+Three advisories accompany this: a story whose every task is implementation, a criterion reaching fewer
+than two scenario kinds, and a Done story with no test case at all.
+
+They are advisories rather than violations for a measured reason. Making them L3 would fail 55 stories
+already closed, and **a rule that fires 55 times on its first run gets suppressed; one that reports 55
+times gets worked down.** That is how deployment coverage, self-exemption and grooming depth were
+actually corrected.
 
 ### 2.5d Decomposition, commitments, dependency kinds, impediments, flow, team (subject v1.4.0)
 

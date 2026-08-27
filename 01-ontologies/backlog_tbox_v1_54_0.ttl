@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.53.0> ;
-    owl:versionInfo "1.53.0" ;
+    owl:versionIRI <http://example.org/backlog/1.54.0> ;
+    owl:versionInfo "1.54.0" ;
+    owl:priorVersion <http://example.org/backlog/1.53.0> ;
     owl:priorVersion <http://example.org/backlog/1.52.0> ;
     owl:priorVersion <http://example.org/backlog/1.51.0> ;
     owl:priorVersion <http://example.org/backlog/1.50.0> ;
@@ -5151,3 +5152,69 @@ backlog:Polarity_Positive a owl:NamedIndividual , backlog:FixturePolarity ;
 backlog:Polarity_Negative a owl:NamedIndividual , backlog:FixturePolarity ;
     rdfs:label "Negative"@en ;
     skos:definition "The fixture is expected to be rejected. A negative fixture that PASSES is the more dangerous failure: it means the clause it was built to prove no longer fires."@en .
+
+#################################################################
+#  86. A story is more than one task and one test
+#
+#  OWNER FINDING, and the measurement is stark. Fifty-five Done
+#  stories: ONE task each, ONE acceptance criterion each, and
+#  forty-six of them carry NO test case at all.
+#
+#  The framework could express better throughout. TaskType has
+#  fourteen values from ISO 12207 and forty-four of fifty-one tasks
+#  chose Task_Implementation. TestCase and TestData shipped at
+#  v1.97.0 and forty-six stories never used them. Nothing REQUIRED
+#  the decomposition, so the cheapest shape won every time — a
+#  capability that is available and not obligatory is a capability
+#  that gets skipped under time pressure, and this session was
+#  always under time pressure.
+#
+#  Field practice, researched: a story is decomposed until each
+#  task is a few hours' work; developers carry out story analysis
+#  for design and implementation while testers perform test
+#  analysis and produce the test cases, both inside the sprint; and
+#  a story carries a FULL SET of acceptance tests before it is
+#  planned, not one.
+#
+#  TestScenario names the situation a case exercises, because one
+#  criterion normally needs several — the nominal path, the
+#  boundary, the rejection — and a criterion with one case has
+#  tested one of them.
+#################################################################
+
+backlog:TestScenario a owl:Class ;
+    rdfs:subClassOf core:Artifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Test Scenario"@en ;
+    skos:definition "A situation a criterion must hold in — the nominal path, a boundary, a rejection, an empty case. Named because a criterion with one test case has been tested in one situation and reads as fully covered: the count of cases says how much testing happened and the count of scenarios says how much of the criterion it reached."@en ;
+    dcterms:source "ISO/IEC/IEEE 29119-3: test case specification covers identified test conditions"@en .
+
+backlog:coversScenario a owl:ObjectProperty ;
+    rdfs:domain backlog:TestCase ; rdfs:range backlog:TestScenario ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "covers scenario"@en .
+backlog:scenarioOf a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:TestScenario ; rdfs:range backlog:AcceptanceCriterion ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "scenario of"@en .
+backlog:scenarioKind a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:TestScenario ; rdfs:range backlog:ScenarioKind ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "scenario kind"@en .
+
+backlog:ScenarioKind a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:Scen_Nominal backlog:Scen_Boundary backlog:Scen_Rejection backlog:Scen_Absent ) ;
+    rdfs:label "Scenario Kind"@en ;
+    skos:definition "What kind of situation a scenario is. Four, because they fail differently: the nominal path proves the feature works, a boundary proves it stops where it should, a rejection proves it refuses what it must, and an absent case proves it survives having nothing to work with. A criterion covered only nominally is the commonest shape and the least informative."@en .
+
+backlog:Scen_Nominal a owl:NamedIndividual , backlog:ScenarioKind ;
+    rdfs:label "Nominal"@en ;
+    skos:definition "The expected path with expected input. Proves the feature works and nothing else."@en .
+backlog:Scen_Boundary a owl:NamedIndividual , backlog:ScenarioKind ;
+    rdfs:label "Boundary"@en ;
+    skos:definition "The edge of the allowed range. Proves the feature stops where it should."@en .
+backlog:Scen_Rejection a owl:NamedIndividual , backlog:ScenarioKind ;
+    rdfs:label "Rejection"@en ;
+    skos:definition "Input the feature must refuse. Proves a constraint fires — the case a negative fixture exists for."@en .
+backlog:Scen_Absent a owl:NamedIndividual , backlog:ScenarioKind ;
+    rdfs:label "Absent"@en ;
+    skos:definition "Nothing to work with: an empty set, a missing file, an unpopulated graph. Proves the feature fails loudly rather than silently returning nothing — the case that caught a malformed FILTER reporting zero violations and zero warnings."@en .

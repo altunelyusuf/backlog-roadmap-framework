@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.62.0> ;
-    owl:versionInfo "1.62.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.63.0> ;
+    owl:versionInfo "1.63.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.62.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.61.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.60.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.59.0> ;
@@ -4388,4 +4389,62 @@ backlog:BatchedEvidenceShape a sh:NodeShape ;
         sh:select """SELECT $this WHERE {
             { SELECT $this (COUNT(?c) AS ?n) WHERE { $this backlog:attestsCriterion ?c } GROUP BY $this }
             FILTER (?n > 3)
+        }""" ] .
+
+#################################################################
+#  v1.63.0 — a story decomposes, and a criterion is tested
+#  in more than one situation
+#################################################################
+
+backlog:StoryTaskSpreadShape a sh:NodeShape ;
+    sh:targetClass backlog:Story ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: a story whose whole life is one implementation task"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: every task planned from this story is implementation. Field practice decomposes a story until each task is a few hours' work, with story analysis for design and test analysis for cases happening inside the same sprint. A single implementation task records that something was built and nothing about what was analysed, designed or tested to get there. Measured when this clause was written: 44 of 51 tasks in this register were Task_Implementation and 55 of 55 stories had exactly one task." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?pe backlog:plansItem $this ; backlog:producesTask ?t .
+            FILTER NOT EXISTS {
+                ?pe2 backlog:plansItem $this ; backlog:producesTask ?t2 .
+                ?t2 backlog:hasTaskType ?tt .
+                FILTER (?tt != backlog:Task_Implementation)
+            }
+        }""" ] .
+
+backlog:CriterionCoverageShape a sh:NodeShape ;
+    sh:targetClass backlog:AcceptanceCriterion ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: a criterion tested in one situation"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: this criterion is covered by test cases reaching fewer than two scenario kinds. A criterion proven only on the nominal path has been shown to work and not shown to stop, refuse, or survive having nothing to work with — and it reads as fully covered. The absent case is not academic here: a malformed FILTER once reported zero violations AND zero warnings, and only the second number gave it away." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:coveredByCase ?c .
+            { SELECT $this (COUNT(DISTINCT ?k) AS ?kinds) WHERE {
+                $this backlog:coveredByCase ?cc . ?cc backlog:coversScenario ?sc .
+                ?sc backlog:scenarioKind ?k .
+              } GROUP BY $this }
+            FILTER (?kinds < 2)
+        }""" ] .
+
+backlog:ScenarioShape a sh:NodeShape ;
+    sh:targetClass backlog:TestScenario ;
+    sh:severity sh:Violation ;
+    rdfs:label "A scenario names its criterion and its kind (L2)"@en ;
+    sh:property [ sh:path backlog:scenarioOf ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "L2: a test scenario must name the criterion it is a situation of. A scenario belonging to nothing cannot be counted toward any criterion's coverage." ] ;
+    sh:property [ sh:path backlog:scenarioKind ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "L2: a test scenario must say what kind of situation it is. The four kinds fail differently, and a set of scenarios that does not distinguish them cannot show whether a criterion was tested broadly or four times on the nominal path." ] .
+
+backlog:StoryTestAnalysisShape a sh:NodeShape ;
+    sh:targetClass backlog:Story ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: a Done story with no test case"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: this story is Done and no test case exercises any of its criteria. Test analysis belongs inside the sprint alongside story analysis, and a story closed without it rests on evidence that testing happened somewhere rather than on a case anyone can re-run. Measured when this clause was written: 46 of 55 Done stories carried no test case." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasState backlog:Done ; backlog:hasAcceptanceCriterion ?ac .
+            FILTER NOT EXISTS { ?ac2 backlog:coveredByCase ?c . $this backlog:hasAcceptanceCriterion ?ac2 }
         }""" ] .

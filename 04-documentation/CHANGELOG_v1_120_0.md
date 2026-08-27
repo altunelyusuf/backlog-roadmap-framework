@@ -1,5 +1,60 @@
 # Changelog
 
+## v1.120.0 — 2026-08-27 (MINOR: fit-gap against field practice — five gaps, all self-inflicted)
+
+**The owner is right: one story, one task is not a normal configuration.** Measured across the register:
+
+```
+55 Done stories    1 task each        1 criterion each
+46 of 55           no test case at all
+44 of 51 tasks     Task_Implementation
+```
+
+### Researched, not assumed
+
+Field practice decomposes a story until each task is a few hours' work. Developers carry out **story
+analysis for design** while testers perform **test analysis and produce the cases** — both inside the
+sprint. A story carries a **full set** of acceptance tests before it is planned.
+
+| Practice | As-is | |
+|---|---|---|
+| Several small tasks per story | 1 task, all 55 | **GAP** |
+| Analysis and design distinct from build | 44/51 implementation | **GAP** |
+| Test analysis inside the sprint | 46/55 no test case | **GAP** |
+| Full set of acceptance tests | 1 criterion, all 55 | **GAP** |
+| Scenarios per criterion | 1 case where present | **GAP** |
+| Task type taxonomy | ISO 12207, 14 values | FIT |
+| Design concerns drive grooming | 5 concerns | FIT |
+| Definition of Done at epic level | every epic | FIT |
+
+### Root cause
+
+**The framework could express all five, throughout.** `TaskType` shipped with fourteen values and
+forty-four tasks chose Implementation. `TestCase` and `TestData` shipped at v1.97.0 and forty-six
+stories never touched them.
+
+Nothing **required** the decomposition, so the cheapest shape won every time. **A capability that is
+available and not obligatory is one that gets skipped under time pressure** — and this session was
+always under time pressure. That is the general finding, not an excuse for this instance of it.
+
+### Proposal, built
+
+`TestScenario` with four kinds — nominal, boundary, rejection, absent — because a criterion with one
+case has been tested in one situation and reads as fully covered.
+
+Three advisories now report the gap on every release: a story whose every task is implementation, a
+criterion reaching fewer than two scenario kinds, a Done story with no test case.
+
+**Advisory, not violation, for a measured reason.** L3 would fail 55 closed stories and turn a finding
+into a wall. A rule that fires 55 times on its first run gets suppressed; one that reports 55 times
+gets worked down — which is how deployment coverage, self-exemption and grooming depth were actually
+corrected.
+
+`Inv_StoryDecomposition` is recorded **Violated**. The remedy is not retroactive: backfilling analysis
+and test tasks onto closed stories would record work that was never planned, which is the defect one
+level along from closing a story whose work was undone. **It applies to the next story planned.**
+
+
 ## v1.119.0 — 2026-08-27 (MAJOR-class: a story was Done and its work was not)
 
 **The owner's challenge is confirmed by audit.**
