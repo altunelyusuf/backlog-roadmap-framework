@@ -1,5 +1,57 @@
 # Changelog
 
+## v1.116.0 — 2026-08-27 (MINOR: It9 delivered — script decisions removed, standard rows checked)
+
+Two auditors ship, both scanning for the **shape** of a defect rather than a list of known offenders —
+a list goes stale the moment someone writes a new one.
+
+### Script decisions: 3 → 0
+
+`backlog_script_decision_audit_v1_0_0.py` found two, both the same classification written twice:
+**which OntoQA metrics respond to population**. Exported as `QualityMetric` with
+`isPopulationSensitive`; the assessor reads it and fails loudly without it.
+
+**The audit caught a false positive on its first clean run** — it flagged a docstring *quoting the code
+it had just caused to be removed*. Fixed to parse rather than grep: an audit that cannot tell an
+explanation from a decision reports its own success as a failure.
+
+### Standard rows: 186 → 21
+
+`backlog_standard_row_check_v1_0_0.py` resolves rows against the TBox rather than requiring 186 hand
+annotations, which would themselves be prose nobody checks. 124 rows now resolve and are checked; **0
+name a term the TBox lacks**.
+
+**21 remain unchecked and are reported, not tuned away.** Their first cell is a *claim* — "Order needs
+an external witness", "Every epic decomposes" — not an identifier. No pattern turns a sentence into a
+class name, and a longer exclusion list would make the checker agree with the document by construction.
+Observed 21 rather than 0, because reporting 0 would claim a check that does not happen.
+
+### 203 timestamps were still fictional
+
+Found while measuring It9: the objective baselines were dated **26 October** — two months in the future
+— so a real observation taken today sorted *before* its own baseline and every objective read at its
+starting value.
+
+**A partial re-basing is worse than none.** v1.115.0 corrected the iteration calendar and left the
+observation and refinement timestamps in the invented one, putting real and fictional dates in the same
+ordering with nothing in a timestamp to say which is which.
+
+Then the blanket fix over-corrected: every baseline landed at 05:50 today, *after* the It7 and It8
+deliveries that moved them. Baselines are taken when the objective is set, so they now sit at the
+Objective stage close.
+
+```
+Obj_CodeDecisions        3 → 0     MET
+Obj_RulingsQueryable    18 → 0     MET
+Obj_NoNewClasses / Obj_NoProseLost  held at 0   MET
+Obj_TablesExported      23 → 22    not met
+Obj_RulesDecidedInCode   3 → 2     not met
+Obj_RowsUnchecked      186 → 21    not met
+
+4 of 7 met
+```
+
+
 ## v1.115.0 — 2026-08-27 (MINOR: the calendar was fiction — re-based on measurement)
 
 **The owner is right and the figure is exact.** Measured from the publish commits:

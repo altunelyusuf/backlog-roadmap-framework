@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/6.6.0> ;
-    owl:versionInfo "6.6.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/6.7.0> ;
+    owl:versionInfo "6.7.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/6.6.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/6.5.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/6.4.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/6.3.0> ;
@@ -4741,14 +4742,14 @@ fw:EP_Model a backlog:Epic ;
     backlog:hasIdentifier "BRF-EP17" ;
     backlog:hasTitle "Analysis and design work produces named model artefacts" ;
     backlog:hasState backlog:Done ;
-    backlog:startedAt "2026-09-01T09:00:00"^^xsd:dateTime ;
+    backlog:startedAt "2026-08-26T20:00:00Z"^^xsd:dateTime ;
     backlog:hasActualEffort 8.0 ;
-    backlog:finishedAt "2026-10-26T17:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-26T20:45:00Z"^^xsd:dateTime ;
     backlog:hasEvidence fw:Ev_StoryDetail ;
     backlog:hasExecutionModality backlog:Mode_Hybrid ;
     backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
-    backlog:lastAuditedAt "2026-10-26T17:00:00"^^xsd:dateTime ;
-    backlog:startedAt "2026-09-01T09:00:00"^^xsd:dateTime ;
+    backlog:lastAuditedAt "2026-08-26T20:45:00Z"^^xsd:dateTime ;
+    backlog:startedAt "2026-08-26T20:00:00Z"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register ;
     backlog:pursuesObjective fw:Obj_Modelling ;
     backlog:satisfiesDeliverable fw:Del_Model ;
@@ -4765,7 +4766,7 @@ fw:S_EP_Model a backlog:WSJFScore ;
     backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 7.0 ;
     backlog:hasUserBusinessValue 9.0 ; backlog:hasTimeCriticality 6.0 ;
     backlog:hasRiskReductionValue 6.0 ; backlog:hasJobSize 3.0 ;
-    backlog:scoredAt "2026-09-01T18:00:00"^^xsd:dateTime ;
+    backlog:scoredAt "2026-08-26T20:30:00Z"^^xsd:dateTime ;
     backlog:hasScoreRationale "Highest value in the register: it is the deliverable the other two rest on. A specification is a model artefact and so is a test case's subject, so nothing downstream can be typed until the artefact concept exists. Job size small because UML 2.5 supplies the taxonomy whole — 14 diagrams in two kinds, structure and behaviour — and nothing has to be invented." ;
     backlog:hasBasisKind backlog:Basis_Judged .
 fw:E_EP_Model a backlog:CostEstimate ;
@@ -4779,11 +4780,11 @@ fw:EP_Spec a backlog:Epic ;
     backlog:hasState backlog:Done ;
     backlog:startedAt "2026-09-15T09:00:00"^^xsd:dateTime ;
     backlog:hasActualEffort 8.0 ;
-    backlog:finishedAt "2026-10-26T17:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-26T20:45:00Z"^^xsd:dateTime ;
     backlog:hasEvidence fw:Ev_StoryDetail ;
     backlog:hasExecutionModality backlog:Mode_Hybrid ;
     backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
-    backlog:lastAuditedAt "2026-10-26T17:00:00"^^xsd:dateTime ;
+    backlog:lastAuditedAt "2026-08-26T20:45:00Z"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register ;
     backlog:pursuesObjective fw:Obj_Modelling ;
     backlog:satisfiesDeliverable fw:Del_Spec ;
@@ -4800,7 +4801,7 @@ fw:S_EP_Spec a backlog:WSJFScore ;
     backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 5.0 ;
     backlog:hasUserBusinessValue 7.0 ; backlog:hasTimeCriticality 5.0 ;
     backlog:hasRiskReductionValue 3.0 ; backlog:hasJobSize 3.0 ;
-    backlog:scoredAt "2026-09-01T18:00:00"^^xsd:dateTime ;
+    backlog:scoredAt "2026-08-26T20:30:00Z"^^xsd:dateTime ;
     backlog:hasScoreRationale "A story whose behaviour is prose cannot be checked against what was built, and acceptance criteria alone say whether it is done rather than what it does. Interaction steps and state changes are the two the standards separate: a step is what a person performs, a state change is what the system becomes." ;
     backlog:hasBasisKind backlog:Basis_Judged .
 fw:E_EP_Spec a backlog:CostEstimate ;
@@ -4814,11 +4815,11 @@ fw:EP_TestSpec a backlog:Epic ;
     backlog:hasState backlog:Done ;
     backlog:startedAt "2026-09-15T09:00:00"^^xsd:dateTime ;
     backlog:hasActualEffort 8.0 ;
-    backlog:finishedAt "2026-10-26T17:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-26T20:45:00Z"^^xsd:dateTime ;
     backlog:hasEvidence fw:Ev_StoryDetail ;
     backlog:hasExecutionModality backlog:Mode_Hybrid ;
     backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
-    backlog:lastAuditedAt "2026-10-26T17:00:00"^^xsd:dateTime ;
+    backlog:lastAuditedAt "2026-08-26T20:45:00Z"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register ;
     backlog:pursuesObjective fw:Obj_Modelling ;
     backlog:satisfiesDeliverable fw:Del_TestSpec ;
@@ -4835,7 +4836,7 @@ fw:S_EP_TestSpec a backlog:WSJFScore ;
     backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 5.0 ;
     backlog:hasUserBusinessValue 6.0 ; backlog:hasTimeCriticality 4.0 ;
     backlog:hasRiskReductionValue 5.0 ; backlog:hasJobSize 3.0 ;
-    backlog:scoredAt "2026-09-01T18:00:00"^^xsd:dateTime ;
+    backlog:scoredAt "2026-08-26T20:30:00Z"^^xsd:dateTime ;
     backlog:hasScoreRationale "Evidence currently points at a fixture path and a verdict. A test case names what was exercised and test data names what it was exercised with, so a reader can disagree with the check rather than only with the claim. Risk reduction is real: an acceptance criterion attested by evidence that names no case cannot be re-run." ;
     backlog:hasBasisKind backlog:Basis_Judged .
 fw:E_EP_TestSpec a backlog:CostEstimate ;
@@ -4849,12 +4850,12 @@ fw:EP_Model_S1 a backlog:Story ;
     backlog:hasIdentifier "BRF-EP_Model_S1" ;
     backlog:hasTitle "A model artefact names its UML kind" ;
     backlog:hasState backlog:Done ;
-    backlog:startedAt "2026-09-01T09:00:00"^^xsd:dateTime ;
-    backlog:finishedAt "2026-09-01T17:00:00"^^xsd:dateTime ;
+    backlog:startedAt "2026-08-26T20:00:00Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-26T20:30:00Z"^^xsd:dateTime ;
     backlog:hasEvidence fw:Ev_ModelArtifact ;
     backlog:hasExecutionModality backlog:Mode_Hybrid ;
     backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
-    backlog:lastAuditedAt "2026-09-01T17:00:00"^^xsd:dateTime ;
+    backlog:lastAuditedAt "2026-08-26T20:30:00Z"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register ;
     backlog:pursuesObjective fw:Obj_Modelling ;
     backlog:satisfiesDeliverable fw:Del_Model ;
@@ -4870,12 +4871,12 @@ fw:EP_Model_S2 a backlog:Story ;
     backlog:hasIdentifier "BRF-EP_Model_S2" ;
     backlog:hasTitle "A design-definition task that produced no artefact is reported" ;
     backlog:hasState backlog:Done ;
-    backlog:startedAt "2026-09-01T09:00:00"^^xsd:dateTime ;
-    backlog:finishedAt "2026-09-01T17:00:00"^^xsd:dateTime ;
+    backlog:startedAt "2026-08-26T20:00:00Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-26T20:30:00Z"^^xsd:dateTime ;
     backlog:hasEvidence fw:Ev_ModelArtifact ;
     backlog:hasExecutionModality backlog:Mode_Hybrid ;
     backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
-    backlog:lastAuditedAt "2026-09-01T17:00:00"^^xsd:dateTime ;
+    backlog:lastAuditedAt "2026-08-26T20:30:00Z"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register ;
     backlog:pursuesObjective fw:Obj_Modelling ;
     backlog:satisfiesDeliverable fw:Del_Model ;
@@ -4893,12 +4894,12 @@ fw:EP_Spec_S1 a backlog:Story ;
     backlog:hasTitle "A story's interaction steps are ordered" ;
     backlog:hasState backlog:Done ;
     backlog:hasActualEffort 3.0 ;
-    backlog:startedAt "2026-10-01T09:00:00"^^xsd:dateTime ;
-    backlog:finishedAt "2026-10-26T17:00:00"^^xsd:dateTime ;
+    backlog:startedAt "2026-08-26T20:35:00Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-26T20:45:00Z"^^xsd:dateTime ;
     backlog:hasEvidence fw:Ev_StoryDetail ;
     backlog:hasExecutionModality backlog:Mode_Hybrid ;
     backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
-    backlog:lastAuditedAt "2026-10-26T17:00:00"^^xsd:dateTime ;
+    backlog:lastAuditedAt "2026-08-26T20:45:00Z"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register ;
     backlog:pursuesObjective fw:Obj_Modelling ;
     backlog:satisfiesDeliverable fw:Del_Spec ;
@@ -4915,12 +4916,12 @@ fw:EP_Spec_S2 a backlog:Story ;
     backlog:hasTitle "A state change names a from-state and a to-state" ;
     backlog:hasState backlog:Done ;
     backlog:hasActualEffort 3.0 ;
-    backlog:startedAt "2026-10-01T09:00:00"^^xsd:dateTime ;
-    backlog:finishedAt "2026-10-26T17:00:00"^^xsd:dateTime ;
+    backlog:startedAt "2026-08-26T20:35:00Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-26T20:45:00Z"^^xsd:dateTime ;
     backlog:hasEvidence fw:Ev_StoryDetail ;
     backlog:hasExecutionModality backlog:Mode_Hybrid ;
     backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
-    backlog:lastAuditedAt "2026-10-26T17:00:00"^^xsd:dateTime ;
+    backlog:lastAuditedAt "2026-08-26T20:45:00Z"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register ;
     backlog:pursuesObjective fw:Obj_Modelling ;
     backlog:satisfiesDeliverable fw:Del_Spec ;
@@ -4938,12 +4939,12 @@ fw:EP_TestSpec_S1 a backlog:Story ;
     backlog:hasTitle "An acceptance criterion names its test cases" ;
     backlog:hasState backlog:Done ;
     backlog:hasActualEffort 3.0 ;
-    backlog:startedAt "2026-10-01T09:00:00"^^xsd:dateTime ;
-    backlog:finishedAt "2026-10-26T17:00:00"^^xsd:dateTime ;
+    backlog:startedAt "2026-08-26T20:35:00Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-26T20:45:00Z"^^xsd:dateTime ;
     backlog:hasEvidence fw:Ev_StoryDetail ;
     backlog:hasExecutionModality backlog:Mode_Hybrid ;
     backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
-    backlog:lastAuditedAt "2026-10-26T17:00:00"^^xsd:dateTime ;
+    backlog:lastAuditedAt "2026-08-26T20:45:00Z"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register ;
     backlog:pursuesObjective fw:Obj_Modelling ;
     backlog:satisfiesDeliverable fw:Del_TestSpec ;
@@ -4960,12 +4961,12 @@ fw:EP_TestSpec_S2 a backlog:Story ;
     backlog:hasTitle "A test case names the test data it runs on" ;
     backlog:hasState backlog:Done ;
     backlog:hasActualEffort 3.0 ;
-    backlog:startedAt "2026-10-01T09:00:00"^^xsd:dateTime ;
-    backlog:finishedAt "2026-10-26T17:00:00"^^xsd:dateTime ;
+    backlog:startedAt "2026-08-26T20:35:00Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-26T20:45:00Z"^^xsd:dateTime ;
     backlog:hasEvidence fw:Ev_StoryDetail ;
     backlog:hasExecutionModality backlog:Mode_Hybrid ;
     backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
-    backlog:lastAuditedAt "2026-10-26T17:00:00"^^xsd:dateTime ;
+    backlog:lastAuditedAt "2026-08-26T20:45:00Z"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register ;
     backlog:pursuesObjective fw:Obj_Modelling ;
     backlog:satisfiesDeliverable fw:Del_TestSpec ;
@@ -5064,51 +5065,51 @@ fw:It3 a backlog:Iteration ;
 fw:EP_Model_S1 backlog:hasEffortEstimate 5.0 ; backlog:memberOfContainer fw:It3 .
 fw:Plan_EP_Model_S1 a backlog:PlanningEvent ;
     backlog:plansItem fw:EP_Model_S1 ; backlog:plannedInto fw:It3 ;
-    backlog:plannedAt "2026-09-01T09:00:00"^^xsd:dateTime ;
+    backlog:plannedAt "2026-08-26T20:00:00Z"^^xsd:dateTime ;
     backlog:plannedBy backlog:Builder ;
     backlog:producesTask fw:T_EP_Model_S1 .
 fw:T_EP_Model_S1 a backlog:ExecutionTask ;
     backlog:hasIdentifier "BRF-T-EP_Model_S1" ;
     backlog:hasTitle "Implement and gate EP_Model_S1" ;
     backlog:hasState backlog:Done ;
-    backlog:startedAt "2026-09-01T09:00:00"^^xsd:dateTime ;
-    backlog:finishedAt "2026-09-01T17:00:00"^^xsd:dateTime ;
+    backlog:startedAt "2026-08-26T20:00:00Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-26T20:30:00Z"^^xsd:dateTime ;
     backlog:hasEvidence fw:Ev_ModelArtifact ;
     backlog:producesModelArtifact fw:MA_TBox ;
-    backlog:lastAuditedAt "2026-09-01T17:00:00"^^xsd:dateTime ;
+    backlog:lastAuditedAt "2026-08-26T20:30:00Z"^^xsd:dateTime ;
     backlog:hasTaskType backlog:Task_DesignDefinition ;
     backlog:memberOfContainer fw:Register , fw:It3 .
 fw:EP_Model_S2 backlog:hasEffortEstimate 3.0 ; backlog:memberOfContainer fw:It3 .
 fw:Plan_EP_Model_S2 a backlog:PlanningEvent ;
     backlog:plansItem fw:EP_Model_S2 ; backlog:plannedInto fw:It3 ;
-    backlog:plannedAt "2026-09-01T09:00:00"^^xsd:dateTime ;
+    backlog:plannedAt "2026-08-26T20:00:00Z"^^xsd:dateTime ;
     backlog:plannedBy backlog:Builder ;
     backlog:producesTask fw:T_EP_Model_S2 .
 fw:T_EP_Model_S2 a backlog:ExecutionTask ;
     backlog:hasIdentifier "BRF-T-EP_Model_S2" ;
     backlog:hasTitle "Implement and gate EP_Model_S2" ;
     backlog:hasState backlog:Done ;
-    backlog:startedAt "2026-09-01T09:00:00"^^xsd:dateTime ;
-    backlog:finishedAt "2026-09-01T17:00:00"^^xsd:dateTime ;
+    backlog:startedAt "2026-08-26T20:00:00Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-26T20:30:00Z"^^xsd:dateTime ;
     backlog:hasEvidence fw:Ev_ModelArtifact ;
     backlog:producesModelArtifact fw:MA_TBox ;
-    backlog:lastAuditedAt "2026-09-01T17:00:00"^^xsd:dateTime ;
+    backlog:lastAuditedAt "2026-08-26T20:30:00Z"^^xsd:dateTime ;
     backlog:hasTaskType backlog:Task_DesignDefinition ;
     backlog:memberOfContainer fw:Register , fw:It3 .
 fw:EP_Spec_S1 backlog:hasEffortEstimate 5.0 ; backlog:memberOfContainer fw:It5 .
 fw:Plan_EP_Spec_S1 a backlog:PlanningEvent ;
     backlog:plansItem fw:EP_Spec_S1 ; backlog:plannedInto fw:It5 ;
-    backlog:plannedAt "2026-09-01T09:00:00"^^xsd:dateTime ;
+    backlog:plannedAt "2026-08-26T20:00:00Z"^^xsd:dateTime ;
     backlog:plannedBy backlog:Builder ;
     backlog:producesTask fw:T_EP_Spec_S1 .
 fw:T_EP_Spec_S1 a backlog:ExecutionTask ;
     backlog:hasIdentifier "BRF-T-EP_Spec_S1" ;
     backlog:hasTitle "Implement and gate EP_Spec_S1" ;
     backlog:hasState backlog:Done ;
-    backlog:startedAt "2026-10-01T09:00:00"^^xsd:dateTime ;
-    backlog:finishedAt "2026-10-26T17:00:00"^^xsd:dateTime ;
+    backlog:startedAt "2026-08-26T20:35:00Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-26T20:45:00Z"^^xsd:dateTime ;
     backlog:hasEvidence fw:Ev_StoryDetail ;
-    backlog:lastAuditedAt "2026-10-26T17:00:00"^^xsd:dateTime ;
+    backlog:lastAuditedAt "2026-08-26T20:45:00Z"^^xsd:dateTime ;
     backlog:hasTaskType backlog:Task_RequirementsDefinition ;
     backlog:memberOfContainer fw:Register , fw:It5 .
 
@@ -5130,10 +5131,10 @@ fw:T_EP_Spec_S2 a backlog:ExecutionTask ;
     backlog:hasIdentifier "BRF-T-EP_Spec_S2" ;
     backlog:hasTitle "Implement and gate EP_Spec_S2" ;
     backlog:hasState backlog:Done ;
-    backlog:startedAt "2026-10-01T09:00:00"^^xsd:dateTime ;
-    backlog:finishedAt "2026-10-26T17:00:00"^^xsd:dateTime ;
+    backlog:startedAt "2026-08-26T20:35:00Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-26T20:45:00Z"^^xsd:dateTime ;
     backlog:hasEvidence fw:Ev_StoryDetail ;
-    backlog:lastAuditedAt "2026-10-26T17:00:00"^^xsd:dateTime ;
+    backlog:lastAuditedAt "2026-08-26T20:45:00Z"^^xsd:dateTime ;
     backlog:hasTaskType backlog:Task_RequirementsDefinition ;
     backlog:memberOfContainer fw:Register , fw:It4 .
 fw:EP_TestSpec_S1 backlog:hasEffortEstimate 5.0 ; backlog:memberOfContainer fw:It6 .
@@ -5146,10 +5147,10 @@ fw:T_EP_TestSpec_S1 a backlog:ExecutionTask ;
     backlog:hasIdentifier "BRF-T-EP_TestSpec_S1" ;
     backlog:hasTitle "Implement and gate EP_TestSpec_S1" ;
     backlog:hasState backlog:Done ;
-    backlog:startedAt "2026-10-01T09:00:00"^^xsd:dateTime ;
-    backlog:finishedAt "2026-10-26T17:00:00"^^xsd:dateTime ;
+    backlog:startedAt "2026-08-26T20:35:00Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-26T20:45:00Z"^^xsd:dateTime ;
     backlog:hasEvidence fw:Ev_StoryDetail ;
-    backlog:lastAuditedAt "2026-10-26T17:00:00"^^xsd:dateTime ;
+    backlog:lastAuditedAt "2026-08-26T20:45:00Z"^^xsd:dateTime ;
     backlog:hasTaskType backlog:Task_Verification ;
     backlog:memberOfContainer fw:Register , fw:It6 .
 fw:EP_TestSpec_S2 backlog:hasEffortEstimate 3.0 ; backlog:memberOfContainer fw:It4 .
@@ -5162,10 +5163,10 @@ fw:T_EP_TestSpec_S2 a backlog:ExecutionTask ;
     backlog:hasIdentifier "BRF-T-EP_TestSpec_S2" ;
     backlog:hasTitle "Implement and gate EP_TestSpec_S2" ;
     backlog:hasState backlog:Done ;
-    backlog:startedAt "2026-10-01T09:00:00"^^xsd:dateTime ;
-    backlog:finishedAt "2026-10-26T17:00:00"^^xsd:dateTime ;
+    backlog:startedAt "2026-08-26T20:35:00Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-26T20:45:00Z"^^xsd:dateTime ;
     backlog:hasEvidence fw:Ev_StoryDetail ;
-    backlog:lastAuditedAt "2026-10-26T17:00:00"^^xsd:dateTime ;
+    backlog:lastAuditedAt "2026-08-26T20:45:00Z"^^xsd:dateTime ;
     backlog:hasTaskType backlog:Task_Verification ;
     backlog:memberOfContainer fw:Register , fw:It4 .
 
@@ -5329,12 +5330,12 @@ fw:EP_Model_S3 a backlog:Story ;
     backlog:hasTitle "A refinement names the artefact it produced" ;
     backlog:hasState backlog:Done ;
     backlog:hasActualEffort 3.0 ;
-    backlog:startedAt "2026-10-01T09:00:00"^^xsd:dateTime ;
-    backlog:finishedAt "2026-10-26T17:00:00"^^xsd:dateTime ;
+    backlog:startedAt "2026-08-26T20:35:00Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-26T20:45:00Z"^^xsd:dateTime ;
     backlog:hasEvidence fw:Ev_StoryDetail ;
     backlog:hasExecutionModality backlog:Mode_Hybrid ;
     backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
-    backlog:lastAuditedAt "2026-10-26T17:00:00"^^xsd:dateTime ;
+    backlog:lastAuditedAt "2026-08-26T20:45:00Z"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register , fw:It5 , fw:Pkg_Modelling ;
     backlog:pursuesObjective fw:Obj_Modelling ;
     backlog:satisfiesDeliverable fw:Del_Model ;
@@ -5366,10 +5367,10 @@ fw:T_EP_Model_S3 a backlog:ExecutionTask ;
     backlog:hasIdentifier "BRF-T-EP_Model_S3" ;
     backlog:hasTitle "Join RefinementEvent to the artefact it produced" ;
     backlog:hasState backlog:Done ;
-    backlog:startedAt "2026-10-01T09:00:00"^^xsd:dateTime ;
-    backlog:finishedAt "2026-10-26T17:00:00"^^xsd:dateTime ;
+    backlog:startedAt "2026-08-26T20:35:00Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-26T20:45:00Z"^^xsd:dateTime ;
     backlog:hasEvidence fw:Ev_StoryDetail ;
-    backlog:lastAuditedAt "2026-10-26T17:00:00"^^xsd:dateTime ;
+    backlog:lastAuditedAt "2026-08-26T20:45:00Z"^^xsd:dateTime ;
     backlog:hasTaskType backlog:Task_DesignDefinition ;
     backlog:memberOfContainer fw:Register , fw:It5 .
 
@@ -5694,7 +5695,7 @@ fw:Ev_ModelArtifact a backlog:TestEvidence ;
     backlog:hasTestSpec "03-tooling/fixtures/fixture_modelartifact_negative_v1_0_0.ttl" ;
     backlog:hasTestId "BRF-EP17" ;
     backlog:evidenceVerified true ;
-    backlog:verifiedAt "2026-09-01T17:00:00"^^xsd:dateTime ;
+    backlog:verifiedAt "2026-08-26T20:30:00Z"^^xsd:dateTime ;
     backlog:hasVerificationMethod "Four cases verified individually. An artefact with kind and described item is silent; one with no kind is rejected at L2; one describing nothing is rejected at L2; a Done design-definition task producing no artefact raises an advisory rather than a violation, because a design task may legitimately conclude no model is needed. Built to the decisions the grooming refinements recorded and not redesigned: Diagram is not a separate class, artefacts hang off ExecutionTask, and the structure/behaviour split is a property so a query need not list seven kinds. The reachability gate ran before release and the count stayed at 23 — without it, measured beforehand, UseCase and Specification would have shipped unreferenceable." ;
     backlog:verifiedByTool "backlog_validate + backlog_reachability_gate" ;
     backlog:attestsCriterion fw:AC_EP_Model_S1 , fw:AC_EP_Model_S2 .
@@ -5716,7 +5717,7 @@ fw:Rel_v1_96_0 a backlog:DeploymentUnit ;
     backlog:hasIdentifier "BRF-REL-It3" ;
     backlog:hasTitle "Model artefact vocabulary" ;
     backlog:hasState backlog:Done ;
-    backlog:hasDeploymentDate "2026-09-01T18:00:00"^^xsd:dateTime ;
+    backlog:hasDeploymentDate "2026-08-26T20:30:00Z"^^xsd:dateTime ;
     backlog:deploysFrom fw:It3 ;
     backlog:deploysItem fw:EP_Model_S1 , fw:EP_Model_S2 ;
     backlog:deliversPackage fw:Pkg_Modelling ;
@@ -5739,7 +5740,7 @@ fw:Ev_StoryDetail a backlog:TestEvidence ;
     backlog:hasTestSpec "03-tooling/fixtures/fixture_storydetail_negative_v1_0_0.ttl" ;
     backlog:hasTestId "BRF-EP18-19" ;
     backlog:evidenceVerified true ;
-    backlog:verifiedAt "2026-10-26T17:00:00"^^xsd:dateTime ;
+    backlog:verifiedAt "2026-08-26T20:45:00Z"^^xsd:dateTime ;
     backlog:hasVerificationMethod "Five cases verified individually. A specification with ordered steps, a real state change, and a test case exercising a criterion with named data is silent. Two steps claiming position 1 are rejected at L1. A state change from Locked to Locked is rejected at L1 — a change to the same state is not a change. A test case exercising nothing and naming no data is rejected twice at L3. A story groomed for Interaction with no specification raises an advisory. The reachability gate ran before release and the count held at 23: all six new classes are named as a range, which is why TestCase gained coveredByCase as well as exercisesCriterion." ;
     backlog:verifiedByTool "backlog_validate + backlog_reachability_gate" ;
     backlog:attestsCriterion fw:AC_EP_Model , fw:AC_EP_Model_S3 , fw:AC_EP_Spec , fw:AC_EP_Spec_S1 ,
@@ -5750,7 +5751,7 @@ fw:Obs_ModellingFinal a backlog:MetricObservation ;
     backlog:observesMetric fw:Metric_ModellingGaps ;
     backlog:observationFor fw:Obj_Modelling ;
     backlog:hasObservedValue 0.0 ;
-    backlog:observedAt "2026-10-26T17:00:00"^^xsd:dateTime ;
+    backlog:observedAt "2026-08-26T20:45:00Z"^^xsd:dateTime ;
     backlog:hasObservationMethod "Counted by direct class lookup against the shipped TBox, the same method as the baseline. ModelArtifact, ModelKind, Specification, InteractionStep, StateChange, TestCase, TestData all present; UseCase is expressible as a ModelArtifact of Kind_UseCaseDiagram and needs no class of its own. Baseline 8, observed 0." .
 
 #  Harnesses for the work closed in this release.
@@ -5799,7 +5800,7 @@ fw:Rel_v1_97_0 a backlog:DeploymentUnit ;
     backlog:hasIdentifier "BRF-REL-It4-6" ;
     backlog:hasTitle "Story detail: steps, state changes, test cases and data" ;
     backlog:hasState backlog:Done ;
-    backlog:hasDeploymentDate "2026-10-26T18:00:00"^^xsd:dateTime ;
+    backlog:hasDeploymentDate "2026-08-26T20:45:00Z"^^xsd:dateTime ;
     backlog:deploysFrom fw:It6 ;
     backlog:deploysItem fw:EP_TestSpec_S1 ;
     backlog:deliversPackage fw:Pkg_StoryDetail ;
@@ -5841,7 +5842,7 @@ fw:Obs_ScopeDeliveredComplete a backlog:MetricObservation ;
     backlog:observesMetric fw:Metric_ScopeDelivered ;
     backlog:observationFor fw:Obj_ScopeDelivered ;
     backlog:hasObservedValue 100.0 ;
-    backlog:observedAt "2026-10-26T18:00:00"^^xsd:dateTime ;
+    backlog:observedAt "2026-08-26T20:45:00Z"^^xsd:dateTime ;
     backlog:hasObservationMethod "Ten of ten deliverables satisfied by work in state Done and carried by a DeploymentUnit. The strict reading throughout: a Proposed epic asserting satisfiesDeliverable does not count, which is why this figure sat at 70 percent from v1.89.0 until the work actually shipped. It rose because three packages were delivered, not because the measurement changed." .
 
 
@@ -5860,157 +5861,157 @@ fw:Obs_ScopeDeliveredComplete a backlog:MetricObservation ;
 fw:EP_PbiTask backlog:hasApplicableConcern backlog:Concern_Data .
 fw:RG_EP_PbiTask a backlog:RefinementEvent ; backlog:refines fw:EP_PbiTask ;
     backlog:addressesConcern backlog:Concern_Data ;
-    backlog:refinedAt "2026-10-26T19:00:00"^^xsd:dateTime ;
+    backlog:refinedAt "2026-08-27T05:44:00Z"^^xsd:dateTime ;
     backlog:refinedBy backlog:Builder ;
     backlog:hasRefinementOutcome "Groomed retroactively at v1.98.0 when the rule was extended beyond Story. Recorded as a retroactive grooming and not presented as contemporaneous: the analysis behind this epic was done, and the record of it at epic level was not kept." .
 fw:EP_Flow backlog:hasApplicableConcern backlog:Concern_Data .
 fw:RG_EP_Flow a backlog:RefinementEvent ; backlog:refines fw:EP_Flow ;
     backlog:addressesConcern backlog:Concern_Data ;
-    backlog:refinedAt "2026-10-26T19:00:00"^^xsd:dateTime ;
+    backlog:refinedAt "2026-08-27T05:44:00Z"^^xsd:dateTime ;
     backlog:refinedBy backlog:Builder ;
     backlog:hasRefinementOutcome "Groomed retroactively at v1.98.0 when the rule was extended beyond Story. Recorded as a retroactive grooming and not presented as contemporaneous: the analysis behind this epic was done, and the record of it at epic level was not kept." .
 fw:EP_Cost backlog:hasApplicableConcern backlog:Concern_Data .
 fw:RG_EP_Cost a backlog:RefinementEvent ; backlog:refines fw:EP_Cost ;
     backlog:addressesConcern backlog:Concern_Data ;
-    backlog:refinedAt "2026-10-26T19:00:00"^^xsd:dateTime ;
+    backlog:refinedAt "2026-08-27T05:44:00Z"^^xsd:dateTime ;
     backlog:refinedBy backlog:Builder ;
     backlog:hasRefinementOutcome "Groomed retroactively at v1.98.0 when the rule was extended beyond Story. Recorded as a retroactive grooming and not presented as contemporaneous: the analysis behind this epic was done, and the record of it at epic level was not kept." .
 fw:EP_Human backlog:hasApplicableConcern backlog:Concern_Data .
 fw:RG_EP_Human a backlog:RefinementEvent ; backlog:refines fw:EP_Human ;
     backlog:addressesConcern backlog:Concern_Data ;
-    backlog:refinedAt "2026-10-26T19:00:00"^^xsd:dateTime ;
+    backlog:refinedAt "2026-08-27T05:44:00Z"^^xsd:dateTime ;
     backlog:refinedBy backlog:Builder ;
     backlog:hasRefinementOutcome "Groomed retroactively at v1.98.0 when the rule was extended beyond Story. Recorded as a retroactive grooming and not presented as contemporaneous: the analysis behind this epic was done, and the record of it at epic level was not kept." .
 fw:EP_Views backlog:hasApplicableConcern backlog:Concern_Data .
 fw:RG_EP_Views a backlog:RefinementEvent ; backlog:refines fw:EP_Views ;
     backlog:addressesConcern backlog:Concern_Data ;
-    backlog:refinedAt "2026-10-26T19:00:00"^^xsd:dateTime ;
+    backlog:refinedAt "2026-08-27T05:44:00Z"^^xsd:dateTime ;
     backlog:refinedBy backlog:Builder ;
     backlog:hasRefinementOutcome "Groomed retroactively at v1.98.0 when the rule was extended beyond Story. Recorded as a retroactive grooming and not presented as contemporaneous: the analysis behind this epic was done, and the record of it at epic level was not kept." .
 fw:EP_Schedule backlog:hasApplicableConcern backlog:Concern_Data .
 fw:RG_EP_Schedule a backlog:RefinementEvent ; backlog:refines fw:EP_Schedule ;
     backlog:addressesConcern backlog:Concern_Data ;
-    backlog:refinedAt "2026-10-26T19:00:00"^^xsd:dateTime ;
+    backlog:refinedAt "2026-08-27T05:44:00Z"^^xsd:dateTime ;
     backlog:refinedBy backlog:Builder ;
     backlog:hasRefinementOutcome "Groomed retroactively at v1.98.0 when the rule was extended beyond Story. Recorded as a retroactive grooming and not presented as contemporaneous: the analysis behind this epic was done, and the record of it at epic level was not kept." .
 fw:EP_Progress backlog:hasApplicableConcern backlog:Concern_Data .
 fw:RG_EP_Progress a backlog:RefinementEvent ; backlog:refines fw:EP_Progress ;
     backlog:addressesConcern backlog:Concern_Data ;
-    backlog:refinedAt "2026-10-26T19:00:00"^^xsd:dateTime ;
+    backlog:refinedAt "2026-08-27T05:44:00Z"^^xsd:dateTime ;
     backlog:refinedBy backlog:Builder ;
     backlog:hasRefinementOutcome "Groomed retroactively at v1.98.0 when the rule was extended beyond Story. Recorded as a retroactive grooming and not presented as contemporaneous: the analysis behind this epic was done, and the record of it at epic level was not kept." .
 fw:EP_Fit backlog:hasApplicableConcern backlog:Concern_Data .
 fw:RG_EP_Fit a backlog:RefinementEvent ; backlog:refines fw:EP_Fit ;
     backlog:addressesConcern backlog:Concern_Data ;
-    backlog:refinedAt "2026-10-26T19:00:00"^^xsd:dateTime ;
+    backlog:refinedAt "2026-08-27T05:44:00Z"^^xsd:dateTime ;
     backlog:refinedBy backlog:Builder ;
     backlog:hasRefinementOutcome "Groomed retroactively at v1.98.0 when the rule was extended beyond Story. Recorded as a retroactive grooming and not presented as contemporaneous: the analysis behind this epic was done, and the record of it at epic level was not kept." .
 fw:EP_ValueRelease backlog:hasApplicableConcern backlog:Concern_Data .
 fw:RG_EP_ValueRelease a backlog:RefinementEvent ; backlog:refines fw:EP_ValueRelease ;
     backlog:addressesConcern backlog:Concern_Data ;
-    backlog:refinedAt "2026-10-26T19:00:00"^^xsd:dateTime ;
+    backlog:refinedAt "2026-08-27T05:44:00Z"^^xsd:dateTime ;
     backlog:refinedBy backlog:Builder ;
     backlog:hasRefinementOutcome "Groomed retroactively at v1.98.0 when the rule was extended beyond Story. Recorded as a retroactive grooming and not presented as contemporaneous: the analysis behind this epic was done, and the record of it at epic level was not kept." .
 fw:EP_OrderRecord backlog:hasApplicableConcern backlog:Concern_Data .
 fw:RG_EP_OrderRecord a backlog:RefinementEvent ; backlog:refines fw:EP_OrderRecord ;
     backlog:addressesConcern backlog:Concern_Data ;
-    backlog:refinedAt "2026-10-26T19:00:00"^^xsd:dateTime ;
+    backlog:refinedAt "2026-08-27T05:44:00Z"^^xsd:dateTime ;
     backlog:refinedBy backlog:Builder ;
     backlog:hasRefinementOutcome "Groomed retroactively at v1.98.0 when the rule was extended beyond Story. Recorded as a retroactive grooming and not presented as contemporaneous: the analysis behind this epic was done, and the record of it at epic level was not kept." .
 fw:EP_OrderCorrect backlog:hasApplicableConcern backlog:Concern_Data .
 fw:RG_EP_OrderCorrect a backlog:RefinementEvent ; backlog:refines fw:EP_OrderCorrect ;
     backlog:addressesConcern backlog:Concern_Data ;
-    backlog:refinedAt "2026-10-26T19:00:00"^^xsd:dateTime ;
+    backlog:refinedAt "2026-08-27T05:44:00Z"^^xsd:dateTime ;
     backlog:refinedBy backlog:Builder ;
     backlog:hasRefinementOutcome "Groomed retroactively at v1.98.0 when the rule was extended beyond Story. Recorded as a retroactive grooming and not presented as contemporaneous: the analysis behind this epic was done, and the record of it at epic level was not kept." .
 fw:EP_Grooming backlog:hasApplicableConcern backlog:Concern_Data .
 fw:RG_EP_Grooming a backlog:RefinementEvent ; backlog:refines fw:EP_Grooming ;
     backlog:addressesConcern backlog:Concern_Data ;
-    backlog:refinedAt "2026-10-26T19:00:00"^^xsd:dateTime ;
+    backlog:refinedAt "2026-08-27T05:44:00Z"^^xsd:dateTime ;
     backlog:refinedBy backlog:Builder ;
     backlog:hasRefinementOutcome "Groomed retroactively at v1.98.0 when the rule was extended beyond Story. Recorded as a retroactive grooming and not presented as contemporaneous: the analysis behind this epic was done, and the record of it at epic level was not kept." .
 fw:EP_IterationCapacity backlog:hasApplicableConcern backlog:Concern_Data .
 fw:RG_EP_IterationCapacity a backlog:RefinementEvent ; backlog:refines fw:EP_IterationCapacity ;
     backlog:addressesConcern backlog:Concern_Data ;
-    backlog:refinedAt "2026-10-26T19:00:00"^^xsd:dateTime ;
+    backlog:refinedAt "2026-08-27T05:44:00Z"^^xsd:dateTime ;
     backlog:refinedBy backlog:Builder ;
     backlog:hasRefinementOutcome "Groomed retroactively at v1.98.0 when the rule was extended beyond Story. Recorded as a retroactive grooming and not presented as contemporaneous: the analysis behind this epic was done, and the record of it at epic level was not kept." .
 fw:EP_TeamRoles backlog:hasApplicableConcern backlog:Concern_Data .
 fw:RG_EP_TeamRoles a backlog:RefinementEvent ; backlog:refines fw:EP_TeamRoles ;
     backlog:addressesConcern backlog:Concern_Data ;
-    backlog:refinedAt "2026-10-26T19:00:00"^^xsd:dateTime ;
+    backlog:refinedAt "2026-08-27T05:44:00Z"^^xsd:dateTime ;
     backlog:refinedBy backlog:Builder ;
     backlog:hasRefinementOutcome "Groomed retroactively at v1.98.0 when the rule was extended beyond Story. Recorded as a retroactive grooming and not presented as contemporaneous: the analysis behind this epic was done, and the record of it at epic level was not kept." .
 fw:EP_TaskTypes backlog:hasApplicableConcern backlog:Concern_Data .
 fw:RG_EP_TaskTypes a backlog:RefinementEvent ; backlog:refines fw:EP_TaskTypes ;
     backlog:addressesConcern backlog:Concern_Data ;
-    backlog:refinedAt "2026-10-26T19:00:00"^^xsd:dateTime ;
+    backlog:refinedAt "2026-08-27T05:44:00Z"^^xsd:dateTime ;
     backlog:refinedBy backlog:Builder ;
     backlog:hasRefinementOutcome "Groomed retroactively at v1.98.0 when the rule was extended beyond Story. Recorded as a retroactive grooming and not presented as contemporaneous: the analysis behind this epic was done, and the record of it at epic level was not kept." .
 fw:EP_GroundTwo backlog:hasApplicableConcern backlog:Concern_Data .
 fw:RG_EP_GroundTwo a backlog:RefinementEvent ; backlog:refines fw:EP_GroundTwo ;
     backlog:addressesConcern backlog:Concern_Data ;
-    backlog:refinedAt "2026-10-26T19:00:00"^^xsd:dateTime ;
+    backlog:refinedAt "2026-08-27T05:44:00Z"^^xsd:dateTime ;
     backlog:refinedBy backlog:Builder ;
     backlog:hasRefinementOutcome "Groomed retroactively at v1.98.0 when the rule was extended beyond Story. Recorded as a retroactive grooming and not presented as contemporaneous: the analysis behind this epic was done, and the record of it at epic level was not kept." .
 fw:EP_Model backlog:hasApplicableConcern backlog:Concern_Data .
 fw:RG_EP_Model a backlog:RefinementEvent ; backlog:refines fw:EP_Model ;
     backlog:addressesConcern backlog:Concern_Data ;
-    backlog:refinedAt "2026-10-26T19:00:00"^^xsd:dateTime ;
+    backlog:refinedAt "2026-08-27T05:44:00Z"^^xsd:dateTime ;
     backlog:refinedBy backlog:Builder ;
     backlog:hasRefinementOutcome "Groomed retroactively at v1.98.0 when the rule was extended beyond Story. Recorded as a retroactive grooming and not presented as contemporaneous: the analysis behind this epic was done, and the record of it at epic level was not kept." .
 fw:EP_Spec backlog:hasApplicableConcern backlog:Concern_Data .
 fw:RG_EP_Spec a backlog:RefinementEvent ; backlog:refines fw:EP_Spec ;
     backlog:addressesConcern backlog:Concern_Data ;
-    backlog:refinedAt "2026-10-26T19:00:00"^^xsd:dateTime ;
+    backlog:refinedAt "2026-08-27T05:44:00Z"^^xsd:dateTime ;
     backlog:refinedBy backlog:Builder ;
     backlog:hasRefinementOutcome "Groomed retroactively at v1.98.0 when the rule was extended beyond Story. Recorded as a retroactive grooming and not presented as contemporaneous: the analysis behind this epic was done, and the record of it at epic level was not kept." .
 fw:EP_TestSpec backlog:hasApplicableConcern backlog:Concern_Data .
 fw:RG_EP_TestSpec a backlog:RefinementEvent ; backlog:refines fw:EP_TestSpec ;
     backlog:addressesConcern backlog:Concern_Data ;
-    backlog:refinedAt "2026-10-26T19:00:00"^^xsd:dateTime ;
+    backlog:refinedAt "2026-08-27T05:44:00Z"^^xsd:dateTime ;
     backlog:refinedBy backlog:Builder ;
     backlog:hasRefinementOutcome "Groomed retroactively at v1.98.0 when the rule was extended beyond Story. Recorded as a retroactive grooming and not presented as contemporaneous: the analysis behind this epic was done, and the record of it at epic level was not kept." .
 fw:EP_Reach backlog:hasApplicableConcern backlog:Concern_Data .
 fw:RG_EP_Reach a backlog:RefinementEvent ; backlog:refines fw:EP_Reach ;
     backlog:addressesConcern backlog:Concern_Data ;
-    backlog:refinedAt "2026-10-26T19:00:00"^^xsd:dateTime ;
+    backlog:refinedAt "2026-08-27T05:44:00Z"^^xsd:dateTime ;
     backlog:refinedBy backlog:Builder ;
     backlog:hasRefinementOutcome "Groomed retroactively at v1.98.0 when the rule was extended beyond Story. Recorded as a retroactive grooming and not presented as contemporaneous: the analysis behind this epic was done, and the record of it at epic level was not kept." .
 fw:Init_Subject backlog:hasApplicableConcern backlog:Concern_Architecture .
 fw:RG_Init_Subject a backlog:RefinementEvent ; backlog:refines fw:Init_Subject ;
     backlog:addressesConcern backlog:Concern_Architecture ;
-    backlog:refinedAt "2026-10-26T19:00:00"^^xsd:dateTime ;
+    backlog:refinedAt "2026-08-27T05:44:00Z"^^xsd:dateTime ;
     backlog:refinedBy backlog:Builder ;
     backlog:hasRefinementOutcome "Groomed retroactively at v1.98.0 when the rule was extended beyond Story. Recorded as a retroactive grooming and not presented as contemporaneous: the analysis behind this initiative was done, and the record of it at initiative level was not kept." .
 fw:Init_Measure backlog:hasApplicableConcern backlog:Concern_Architecture .
 fw:RG_Init_Measure a backlog:RefinementEvent ; backlog:refines fw:Init_Measure ;
     backlog:addressesConcern backlog:Concern_Architecture ;
-    backlog:refinedAt "2026-10-26T19:00:00"^^xsd:dateTime ;
+    backlog:refinedAt "2026-08-27T05:44:00Z"^^xsd:dateTime ;
     backlog:refinedBy backlog:Builder ;
     backlog:hasRefinementOutcome "Groomed retroactively at v1.98.0 when the rule was extended beyond Story. Recorded as a retroactive grooming and not presented as contemporaneous: the analysis behind this initiative was done, and the record of it at initiative level was not kept." .
 fw:Init_Plan backlog:hasApplicableConcern backlog:Concern_Architecture .
 fw:RG_Init_Plan a backlog:RefinementEvent ; backlog:refines fw:Init_Plan ;
     backlog:addressesConcern backlog:Concern_Architecture ;
-    backlog:refinedAt "2026-10-26T19:00:00"^^xsd:dateTime ;
+    backlog:refinedAt "2026-08-27T05:44:00Z"^^xsd:dateTime ;
     backlog:refinedBy backlog:Builder ;
     backlog:hasRefinementOutcome "Groomed retroactively at v1.98.0 when the rule was extended beyond Story. Recorded as a retroactive grooming and not presented as contemporaneous: the analysis behind this initiative was done, and the record of it at initiative level was not kept." .
 fw:Init_Executable backlog:hasApplicableConcern backlog:Concern_Architecture .
 fw:RG_Init_Executable a backlog:RefinementEvent ; backlog:refines fw:Init_Executable ;
     backlog:addressesConcern backlog:Concern_Architecture ;
-    backlog:refinedAt "2026-10-26T19:00:00"^^xsd:dateTime ;
+    backlog:refinedAt "2026-08-27T05:44:00Z"^^xsd:dateTime ;
     backlog:refinedBy backlog:Builder ;
     backlog:hasRefinementOutcome "Groomed retroactively at v1.98.0 when the rule was extended beyond Story. Recorded as a retroactive grooming and not presented as contemporaneous: the analysis behind this initiative was done, and the record of it at initiative level was not kept." .
 fw:Init_OrderRepair backlog:hasApplicableConcern backlog:Concern_Architecture .
 fw:RG_Init_OrderRepair a backlog:RefinementEvent ; backlog:refines fw:Init_OrderRepair ;
     backlog:addressesConcern backlog:Concern_Architecture ;
-    backlog:refinedAt "2026-10-26T19:00:00"^^xsd:dateTime ;
+    backlog:refinedAt "2026-08-27T05:44:00Z"^^xsd:dateTime ;
     backlog:refinedBy backlog:Builder ;
     backlog:hasRefinementOutcome "Groomed retroactively at v1.98.0 when the rule was extended beyond Story. Recorded as a retroactive grooming and not presented as contemporaneous: the analysis behind this initiative was done, and the record of it at initiative level was not kept." .
 fw:Init_SdlcConcepts backlog:hasApplicableConcern backlog:Concern_Architecture .
 fw:RG_Init_SdlcConcepts a backlog:RefinementEvent ; backlog:refines fw:Init_SdlcConcepts ;
     backlog:addressesConcern backlog:Concern_Architecture ;
-    backlog:refinedAt "2026-10-26T19:00:00"^^xsd:dateTime ;
+    backlog:refinedAt "2026-08-27T05:44:00Z"^^xsd:dateTime ;
     backlog:refinedBy backlog:Builder ;
     backlog:hasRefinementOutcome "Groomed retroactively at v1.98.0 when the rule was extended beyond Story. Recorded as a retroactive grooming and not presented as contemporaneous: the analysis behind this initiative was done, and the record of it at initiative level was not kept." .
 
@@ -6047,7 +6048,7 @@ fw:Obs_ProseCodeAsIs a backlog:MetricObservation ;
     backlog:observesMetric fw:Metric_UngroundedPractices ;
     backlog:observationFor fw:Obj_Grounded ;
     backlog:hasObservedValue 0.0 ;
-    backlog:observedAt "2026-10-26T20:00:00"^^xsd:dateTime ;
+    backlog:observedAt "2026-08-27T05:46:00Z"^^xsd:dateTime ;
     backlog:hasObservationMethod "Counted directly, not estimated. Prose: 18 markdown files, 7197 lines, 19 governance rulings (G1 to G18) that exist only as headings, 413 table rows carrying rules or mappings nothing validates. Code: 20 python files, 3978 lines, 23 module-level tables holding classification and layer knowledge — the reporter's LAYERS list, the task-type guesses, the stage-type map. Zero hard-coded numeric thresholds, which is the one thing already clean. Obj_Grounded stays at 0: no framework-REQUIRED practice lacks a source. What this measures is different — meaning that lives where nothing can check it — and it needs its own objective, which the Objective stage will set." .
 
 #  The Mission stage output, closing this stage.
@@ -6261,7 +6262,7 @@ fw:Obs_BuildAreasDone a backlog:MetricObservation ;
     backlog:observesMetric fw:Metric_BuildAreasDone ;
     backlog:observationFor fw:Obj_BuildAreasExhausted ;
     backlog:hasObservedValue 0.0 ;
-    backlog:observedAt "2026-10-26T21:00:00"^^xsd:dateTime ;
+    backlog:observedAt "2026-08-27T05:48:00Z"^^xsd:dateTime ;
     backlog:hasObservationMethod "One area, Area_BuildFramework, and all ten of Scope_Build's deliverables are satisfied by work that is Done and shipped in a package. Measured on a finished development, so this reports rather than steers." .
 
 fw:Metric_BuildOutside a core:Metric ;
@@ -6281,7 +6282,7 @@ fw:Obs_BuildOutside a backlog:MetricObservation ;
     backlog:observesMetric fw:Metric_BuildOutside ;
     backlog:observationFor fw:Obj_BuildContained ;
     backlog:hasObservedValue 1.0 ;
-    backlog:observedAt "2026-10-26T21:00:00"^^xsd:dateTime ;
+    backlog:observedAt "2026-08-27T05:48:00Z"^^xsd:dateTime ;
     backlog:hasObservationMethod "One: BRF-EP20, the reachability gate. It satisfies Del_Checkable and was still built while the owner's mission waited — defensible work the owner had not asked for at that moment. Recorded as 1 against a target of 0, so the objective reads NOT MET on a finished development. That is the honest result: a containment measure that reported zero here would be measuring nothing." .
 
 
@@ -6513,7 +6514,7 @@ fw:Obj_RulingsQueryable a backlog:Objective ;
 fw:Obs_Obj_RulingsQueryable_base a backlog:MetricObservation ;
     backlog:observesMetric fw:Metric_Obj_RulingsQueryable ; backlog:observationFor fw:Obj_RulingsQueryable ;
     backlog:hasObservedValue 18.0 ;
-    backlog:observedAt "2026-10-26T22:00:00"^^xsd:dateTime ;
+    backlog:observedAt "2026-08-26T20:30:00Z"^^xsd:dateTime ;
     backlog:hasObservationMethod "Counted, not derived: 18 headings matching '### G' in the lineage discipline, against rulings reachable as triples. Anyone can count both without trusting this session. Baseline 18 because none is reachable today." .
 fw:CP_Obj_RulingsQueryable_1 a backlog:ObjectiveCheckpoint ;
     backlog:checkpointDate "2026-08-27T06:30:00Z"^^xsd:dateTime ;
@@ -6538,7 +6539,7 @@ fw:Obj_RulesDecidedInCode a backlog:Objective ;
 fw:Obs_Obj_RulesDecidedInCode_base a backlog:MetricObservation ;
     backlog:observesMetric fw:Metric_Obj_RulesDecidedInCode ; backlog:observationFor fw:Obj_RulesDecidedInCode ;
     backlog:hasObservedValue 3.0 ;
-    backlog:observedAt "2026-10-26T22:00:00"^^xsd:dateTime ;
+    backlog:observedAt "2026-08-26T20:30:00Z"^^xsd:dateTime ;
     backlog:hasObservationMethod "Three of twelve gate checks decide outcomes in python: fixture polarity inferred from a FILENAME, manifest exemption from a python list, reachability from a python traversal. Counted by reading the gate, which anyone can do." .
 fw:CP_Obj_RulesDecidedInCode_1 a backlog:ObjectiveCheckpoint ;
     backlog:checkpointDate "2026-08-27T06:30:00Z"^^xsd:dateTime ;
@@ -6563,7 +6564,7 @@ fw:Obj_TablesExported a backlog:Objective ;
 fw:Obs_Obj_TablesExported_base a backlog:MetricObservation ;
     backlog:observesMetric fw:Metric_Obj_TablesExported ; backlog:observationFor fw:Obj_TablesExported ;
     backlog:hasObservedValue 23.0 ;
-    backlog:observedAt "2026-10-26T22:00:00"^^xsd:dateTime ;
+    backlog:observedAt "2026-08-26T20:30:00Z"^^xsd:dateTime ;
     backlog:hasObservationMethod "23 module-level tables across 12 python modules, counted by pattern over the source. LAYERS, STAGE_TYPES, CONTAINER_TYPES, KINDS, SUITES, DROP_DIRS, EXEMPT and the rest. The most mechanical of the four and therefore the one most likely to be done first, which is why Goal_ConceptsExported is scope-facing." .
 fw:CP_Obj_TablesExported_1 a backlog:ObjectiveCheckpoint ;
     backlog:checkpointDate "2026-08-27T06:30:00Z"^^xsd:dateTime ;
@@ -6588,7 +6589,7 @@ fw:Obj_RowsUnchecked a backlog:Objective ;
 fw:Obs_Obj_RowsUnchecked_base a backlog:MetricObservation ;
     backlog:observesMetric fw:Metric_Obj_RowsUnchecked ; backlog:observationFor fw:Obj_RowsUnchecked ;
     backlog:hasObservedValue 186.0 ;
-    backlog:observedAt "2026-10-26T22:00:00"^^xsd:dateTime ;
+    backlog:observedAt "2026-08-26T20:30:00Z"^^xsd:dateTime ;
     backlog:hasObservationMethod "186 table rows in the standard. The doc-coverage gate checks every class is NAMED and never that a row AGREES with the ontology, so every row is currently uncheckable. Baseline is the whole population because none is checked." .
 fw:CP_Obj_RowsUnchecked_1 a backlog:ObjectiveCheckpoint ;
     backlog:checkpointDate "2026-08-27T06:30:00Z"^^xsd:dateTime ;
@@ -6613,7 +6614,7 @@ fw:Obj_CodeDecisions a backlog:Objective ;
 fw:Obs_Obj_CodeDecisions_base a backlog:MetricObservation ;
     backlog:observesMetric fw:Metric_Obj_CodeDecisions ; backlog:observationFor fw:Obj_CodeDecisions ;
     backlog:hasObservedValue 3.0 ;
-    backlog:observedAt "2026-10-26T22:00:00"^^xsd:dateTime ;
+    backlog:observedAt "2026-08-26T20:30:00Z"^^xsd:dateTime ;
     backlog:hasObservationMethod "The same three as Obj_RulesDecidedInCode, counted at the SCRIPT rather than the CHECK. Deliberately a separate objective: a check can move into the ontology while the script keeps deciding something else, and one number cannot show both. If they move together the two will fall together, which is evidence the split was unnecessary — recorded so that can be seen." .
 fw:CP_Obj_CodeDecisions_1 a backlog:ObjectiveCheckpoint ;
     backlog:checkpointDate "2026-08-27T06:30:00Z"^^xsd:dateTime ;
@@ -6638,7 +6639,7 @@ fw:Obj_NoNewClasses a backlog:Objective ;
 fw:Obs_Obj_NoNewClasses_base a backlog:MetricObservation ;
     backlog:observesMetric fw:Metric_Obj_NoNewClasses ; backlog:observationFor fw:Obj_NoNewClasses ;
     backlog:hasObservedValue 0.0 ;
-    backlog:observedAt "2026-10-26T22:00:00"^^xsd:dateTime ;
+    backlog:observedAt "2026-08-26T20:30:00Z"^^xsd:dateTime ;
     backlog:hasObservationMethod "JUDGED, and marked as such. Whether a class extends what the framework can express or merely carries exported material is a judgement, not a count — Kind_ClassDiagram carries exported UML knowledge; a reachability gate does not. Baseline 0 and target 0 is legitimate here because the objective is that a count STAYS at zero, which is what an inverse goal measures." .
 fw:CP_Obj_NoNewClasses_1 a backlog:ObjectiveCheckpoint ;
     backlog:checkpointDate "2026-08-27T06:30:00Z"^^xsd:dateTime ;
@@ -6663,7 +6664,7 @@ fw:Obj_NoProseLost a backlog:Objective ;
 fw:Obs_Obj_NoProseLost_base a backlog:MetricObservation ;
     backlog:observesMetric fw:Metric_Obj_NoProseLost ; backlog:observationFor fw:Obj_NoProseLost ;
     backlog:hasObservedValue 0.0 ;
-    backlog:observedAt "2026-10-26T22:00:00"^^xsd:dateTime ;
+    backlog:observedAt "2026-08-26T20:30:00Z"^^xsd:dateTime ;
     backlog:hasObservationMethod "Counted by diff against the v1.104.0 documentation: 7197 lines is the reference. An explanation deleted because its subject moved into the ontology is the failure this guards, and it is countable, so this inverse goal does not need judgement." .
 fw:CP_Obj_NoProseLost_1 a backlog:ObjectiveCheckpoint ;
     backlog:checkpointDate "2026-08-27T06:30:00Z"^^xsd:dateTime ;
@@ -6791,13 +6792,13 @@ fw:EP_Rulings a backlog:Epic ;
     backlog:hasIdentifier "BRF-EP21" ;
     backlog:hasTitle "Governance rulings become machine-checkable statements" ;
     backlog:hasState backlog:Done ;
-    backlog:startedAt "2026-11-02T09:00:00"^^xsd:dateTime ;
-    backlog:finishedAt "2026-11-15T17:00:00"^^xsd:dateTime ;
+    backlog:startedAt "2026-08-26T20:49:59Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-26T21:22:10Z"^^xsd:dateTime ;
     backlog:hasActualEffort 6.0 ;
     backlog:hasEvidence fw:Ev_It7 ;
     backlog:hasExecutionModality backlog:Mode_Hybrid ;
     backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
-    backlog:lastAuditedAt "2026-11-15T17:00:00"^^xsd:dateTime ;
+    backlog:lastAuditedAt "2026-08-26T21:22:10Z"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register ;
     backlog:pursuesObjective fw:Obj_RulingsQueryable ;
     backlog:satisfiesDeliverable fw:Del_OntGovernance ;
@@ -6814,18 +6815,18 @@ fw:AC_EP_Rulings a backlog:AcceptanceCriterion ;
     backlog:hasGherkinText "Given the framework suite, When it is run, Then governance rulings become machine-checkable statements, and the objective it moves is observed at its new value." .
 fw:R_EP_Rulings a backlog:RefinementEvent ; backlog:refines fw:EP_Rulings ;
     backlog:addressesConcern backlog:Concern_Data ;
-    backlog:refinedAt "2026-10-26T23:00:00"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
+    backlog:refinedAt "2026-08-27T05:52:00Z"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
     backlog:hasRefinementOutcome "Highest in the register and the reason is dependency, not preference: a GovernanceRuling class is what the other four epics attach their evidence to. Ship it last and every later export has nowhere to say which ruling it satisfies. 18 rulings, and the work is mechanical once the class exists — each ruling already has a heading, a statement and a rationale in the discipline." .
 fw:S_EP_Rulings a backlog:WSJFScore ;
     backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 8.0 ;
     backlog:hasUserBusinessValue 9.0 ; backlog:hasTimeCriticality 7.0 ;
     backlog:hasRiskReductionValue 8.0 ; backlog:hasJobSize 3.0 ;
-    backlog:scoredAt "2026-11-29T18:00:00"^^xsd:dateTime ;
+    backlog:scoredAt "2026-08-26T21:50:26Z"^^xsd:dateTime ;
     backlog:hasScoreRationale "Highest in the register and the reason is dependency, not preference: a GovernanceRuling class is what the other four epics attach their evidence to. Ship it last and every later export has nowhere to say which ruling it satisfies. 18 rulings, and the work is mechanical once the class exists — each ruling already has a heading, a statement and a rationale in the discipline." ;
     backlog:hasBasisKind backlog:Basis_Judged .
 fw:E_EP_Rulings a backlog:CostEstimate ;
     backlog:hasEffortEstimate 3.0 ; backlog:hasCostBasis "Vocabulary plus constraints plus the script change to read rather than decide" ;
-    backlog:estimatedAt "2026-10-26T23:00:00"^^xsd:dateTime ;
+    backlog:estimatedAt "2026-08-27T05:52:00Z"^^xsd:dateTime ;
     backlog:hasBasisKind backlog:Basis_Judged .
 fw:Obj_RulingsQueryable backlog:metricMovableBy fw:EP_Rulings .
 
@@ -6833,13 +6834,13 @@ fw:EP_CodeTables a backlog:Epic ;
     backlog:hasIdentifier "BRF-EP22" ;
     backlog:hasTitle "Classification tables move from python to the ontology" ;
     backlog:hasState backlog:Done ;
-    backlog:startedAt "2026-11-02T09:00:00"^^xsd:dateTime ;
-    backlog:finishedAt "2026-11-29T17:00:00"^^xsd:dateTime ;
+    backlog:startedAt "2026-08-26T20:49:59Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-26T21:50:26Z"^^xsd:dateTime ;
     backlog:hasActualEffort 6.0 ;
     backlog:hasEvidence fw:Ev_It8 ;
     backlog:hasExecutionModality backlog:Mode_Hybrid ;
     backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
-    backlog:lastAuditedAt "2026-11-29T17:00:00"^^xsd:dateTime ;
+    backlog:lastAuditedAt "2026-08-26T21:50:26Z"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register ;
     backlog:pursuesObjective fw:Obj_TablesExported ;
     backlog:satisfiesDeliverable fw:Del_OntExport ;
@@ -6856,18 +6857,18 @@ fw:AC_EP_CodeTables a backlog:AcceptanceCriterion ;
     backlog:hasGherkinText "Given the framework suite, When it is run, Then classification tables move from python to the ontology, and the objective it moves is observed at its new value." .
 fw:R_EP_CodeTables a backlog:RefinementEvent ; backlog:refines fw:EP_CodeTables ;
     backlog:addressesConcern backlog:Concern_Data ;
-    backlog:refinedAt "2026-10-26T23:00:00"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
+    backlog:refinedAt "2026-08-27T05:52:00Z"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
     backlog:hasRefinementOutcome "Second because it is the largest and the most mechanical: 23 tables whose contents are already enumerations in all but syntax. LAYERS, STAGE_TYPES, CONTAINER_TYPES, KINDS. Each becomes owl:oneOf and the script reads it. Value is high because every one of them is a place the code currently decides what something IS." .
 fw:S_EP_CodeTables a backlog:WSJFScore ;
     backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 6.0 ;
     backlog:hasUserBusinessValue 7.0 ; backlog:hasTimeCriticality 5.0 ;
     backlog:hasRiskReductionValue 6.0 ; backlog:hasJobSize 3.0 ;
-    backlog:scoredAt "2026-11-29T18:00:00"^^xsd:dateTime ;
+    backlog:scoredAt "2026-08-26T21:50:26Z"^^xsd:dateTime ;
     backlog:hasScoreRationale "Second because it is the largest and the most mechanical: 23 tables whose contents are already enumerations in all but syntax. LAYERS, STAGE_TYPES, CONTAINER_TYPES, KINDS. Each becomes owl:oneOf and the script reads it. Value is high because every one of them is a place the code currently decides what something IS." ;
     backlog:hasBasisKind backlog:Basis_Judged .
 fw:E_EP_CodeTables a backlog:CostEstimate ;
     backlog:hasEffortEstimate 3.0 ; backlog:hasCostBasis "Vocabulary plus constraints plus the script change to read rather than decide" ;
-    backlog:estimatedAt "2026-10-26T23:00:00"^^xsd:dateTime ;
+    backlog:estimatedAt "2026-08-27T05:52:00Z"^^xsd:dateTime ;
     backlog:hasBasisKind backlog:Basis_Judged .
 fw:Obj_TablesExported backlog:metricMovableBy fw:EP_CodeTables .
 
@@ -6875,13 +6876,13 @@ fw:EP_RuleExec a backlog:Epic ;
     backlog:hasIdentifier "BRF-EP23" ;
     backlog:hasTitle "The three code-decided checks are decided by the ontology" ;
     backlog:hasState backlog:Done ;
-    backlog:startedAt "2026-11-02T09:00:00"^^xsd:dateTime ;
-    backlog:finishedAt "2026-11-29T17:00:00"^^xsd:dateTime ;
+    backlog:startedAt "2026-08-26T20:49:59Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-26T21:50:26Z"^^xsd:dateTime ;
     backlog:hasActualEffort 6.0 ;
     backlog:hasEvidence fw:Ev_It8 ;
     backlog:hasExecutionModality backlog:Mode_Hybrid ;
     backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
-    backlog:lastAuditedAt "2026-11-29T17:00:00"^^xsd:dateTime ;
+    backlog:lastAuditedAt "2026-08-26T21:50:26Z"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register ;
     backlog:pursuesObjective fw:Obj_RulesDecidedInCode ;
     backlog:satisfiesDeliverable fw:Del_OntRuleExec ;
@@ -6898,25 +6899,32 @@ fw:AC_EP_RuleExec a backlog:AcceptanceCriterion ;
     backlog:hasGherkinText "Given the framework suite, When it is run, Then the three code-decided checks are decided by the ontology, and the objective it moves is observed at its new value." .
 fw:R_EP_RuleExec a backlog:RefinementEvent ; backlog:refines fw:EP_RuleExec ;
     backlog:addressesConcern backlog:Concern_Data ;
-    backlog:refinedAt "2026-10-26T23:00:00"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
+    backlog:refinedAt "2026-08-27T05:52:00Z"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
     backlog:hasRefinementOutcome "Fixture polarity inferred from a FILENAME is the sharpest example in the package: a fixture renamed changes what the gate expects of it. Value and risk both high, job size slightly larger because each of the three needs a vocabulary term AND the script rewritten to read it rather than decide it." .
 fw:S_EP_RuleExec a backlog:WSJFScore ;
     backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 6.0 ;
     backlog:hasUserBusinessValue 8.0 ; backlog:hasTimeCriticality 6.0 ;
     backlog:hasRiskReductionValue 7.0 ; backlog:hasJobSize 3.5 ;
-    backlog:scoredAt "2026-11-29T18:00:00"^^xsd:dateTime ;
+    backlog:scoredAt "2026-08-26T21:50:26Z"^^xsd:dateTime ;
     backlog:hasScoreRationale "Fixture polarity inferred from a FILENAME is the sharpest example in the package: a fixture renamed changes what the gate expects of it. Value and risk both high, job size slightly larger because each of the three needs a vocabulary term AND the script rewritten to read it rather than decide it." ;
     backlog:hasBasisKind backlog:Basis_Judged .
 fw:E_EP_RuleExec a backlog:CostEstimate ;
     backlog:hasEffortEstimate 3.5 ; backlog:hasCostBasis "Vocabulary plus constraints plus the script change to read rather than decide" ;
-    backlog:estimatedAt "2026-10-26T23:00:00"^^xsd:dateTime ;
+    backlog:estimatedAt "2026-08-27T05:52:00Z"^^xsd:dateTime ;
     backlog:hasBasisKind backlog:Basis_Judged .
 fw:Obj_RulesDecidedInCode backlog:metricMovableBy fw:EP_RuleExec .
 
 fw:EP_ScriptDecisions a backlog:Epic ;
     backlog:hasIdentifier "BRF-EP24" ;
     backlog:hasTitle "Scripts stop deciding and start executing" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-08-27T06:00:00Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-27T06:30:00Z"^^xsd:dateTime ;
+    backlog:hasActualEffort 3.0 ;
+    backlog:hasEvidence fw:Ev_It9 ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:lastAuditedAt "2026-08-27T06:30:00Z"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register ;
     backlog:pursuesObjective fw:Obj_CodeDecisions ;
     backlog:satisfiesDeliverable fw:Del_CodeExecutes ;
@@ -6933,25 +6941,32 @@ fw:AC_EP_ScriptDecisions a backlog:AcceptanceCriterion ;
     backlog:hasGherkinText "Given the framework suite, When it is run, Then scripts stop deciding and start executing, and the objective it moves is observed at its new value." .
 fw:R_EP_ScriptDecisions a backlog:RefinementEvent ; backlog:refines fw:EP_ScriptDecisions ;
     backlog:addressesConcern backlog:Concern_Data ;
-    backlog:refinedAt "2026-10-26T23:00:00"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
+    backlog:refinedAt "2026-08-27T05:52:00Z"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
     backlog:hasRefinementOutcome "Deliberately separate from EP23 and scored lower. EP23 moves the CHECK; this moves the SCRIPT's remaining judgement. If they turn out to be the same work, both objectives fall together and the split was unnecessary — recorded so that can be seen rather than assumed either way." .
 fw:S_EP_ScriptDecisions a backlog:WSJFScore ;
     backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 4.0 ;
     backlog:hasUserBusinessValue 5.0 ; backlog:hasTimeCriticality 4.0 ;
     backlog:hasRiskReductionValue 5.0 ; backlog:hasJobSize 3.5 ;
-    backlog:scoredAt "2026-11-29T18:00:00"^^xsd:dateTime ;
+    backlog:scoredAt "2026-08-26T21:50:26Z"^^xsd:dateTime ;
     backlog:hasScoreRationale "Deliberately separate from EP23 and scored lower. EP23 moves the CHECK; this moves the SCRIPT's remaining judgement. If they turn out to be the same work, both objectives fall together and the split was unnecessary — recorded so that can be seen rather than assumed either way." ;
     backlog:hasBasisKind backlog:Basis_Judged .
 fw:E_EP_ScriptDecisions a backlog:CostEstimate ;
     backlog:hasEffortEstimate 3.5 ; backlog:hasCostBasis "Vocabulary plus constraints plus the script change to read rather than decide" ;
-    backlog:estimatedAt "2026-10-26T23:00:00"^^xsd:dateTime ;
+    backlog:estimatedAt "2026-08-27T05:52:00Z"^^xsd:dateTime ;
     backlog:hasBasisKind backlog:Basis_Judged .
 fw:Obj_CodeDecisions backlog:metricMovableBy fw:EP_ScriptDecisions .
 
 fw:EP_StandardRows a backlog:Epic ;
     backlog:hasIdentifier "BRF-EP25" ;
     backlog:hasTitle "Standard table rows are checked against the TBox" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-08-27T06:00:00Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-27T06:30:00Z"^^xsd:dateTime ;
+    backlog:hasActualEffort 3.0 ;
+    backlog:hasEvidence fw:Ev_It9 ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:lastAuditedAt "2026-08-27T06:30:00Z"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register ;
     backlog:pursuesObjective fw:Obj_RowsUnchecked ;
     backlog:satisfiesDeliverable fw:Del_ProseExplains ;
@@ -6968,18 +6983,18 @@ fw:AC_EP_StandardRows a backlog:AcceptanceCriterion ;
     backlog:hasGherkinText "Given the framework suite, When it is run, Then standard table rows are checked against the TBox, and the objective it moves is observed at its new value." .
 fw:R_EP_StandardRows a backlog:RefinementEvent ; backlog:refines fw:EP_StandardRows ;
     backlog:addressesConcern backlog:Concern_Data ;
-    backlog:refinedAt "2026-10-26T23:00:00"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
+    backlog:refinedAt "2026-08-27T05:52:00Z"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
     backlog:hasRefinementOutcome "Lowest and largest: 186 rows, and unlike the tables these are prose that DESCRIBES the ontology rather than data that duplicates it. The work is a checker comparing each row's claim against the TBox, not a migration. Scored last because the other four remove definitions from code and prose; this one only makes a description falsifiable." .
 fw:S_EP_StandardRows a backlog:WSJFScore ;
     backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 3.0 ;
     backlog:hasUserBusinessValue 5.0 ; backlog:hasTimeCriticality 3.0 ;
     backlog:hasRiskReductionValue 4.0 ; backlog:hasJobSize 4.0 ;
-    backlog:scoredAt "2026-11-29T18:00:00"^^xsd:dateTime ;
+    backlog:scoredAt "2026-08-26T21:50:26Z"^^xsd:dateTime ;
     backlog:hasScoreRationale "Lowest and largest: 186 rows, and unlike the tables these are prose that DESCRIBES the ontology rather than data that duplicates it. The work is a checker comparing each row's claim against the TBox, not a migration. Scored last because the other four remove definitions from code and prose; this one only makes a description falsifiable." ;
     backlog:hasBasisKind backlog:Basis_Judged .
 fw:E_EP_StandardRows a backlog:CostEstimate ;
     backlog:hasEffortEstimate 4.0 ; backlog:hasCostBasis "Vocabulary plus constraints plus the script change to read rather than decide" ;
-    backlog:estimatedAt "2026-10-26T23:00:00"^^xsd:dateTime ;
+    backlog:estimatedAt "2026-08-27T05:52:00Z"^^xsd:dateTime ;
     backlog:hasBasisKind backlog:Basis_Judged .
 fw:Obj_RowsUnchecked backlog:metricMovableBy fw:EP_StandardRows .
 
@@ -6999,13 +7014,13 @@ fw:EP_Rulings_S1 a backlog:Story ;
     backlog:hasIdentifier "BRF-EP_Rulings_S1" ;
     backlog:hasTitle "A ruling exists as a machine-checkable statement" ;
     backlog:hasState backlog:Done ;
-    backlog:startedAt "2026-11-02T09:00:00"^^xsd:dateTime ;
-    backlog:finishedAt "2026-11-15T17:00:00"^^xsd:dateTime ;
+    backlog:startedAt "2026-08-26T20:49:59Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-26T21:22:10Z"^^xsd:dateTime ;
     backlog:hasActualEffort 3.0 ;
     backlog:hasEvidence fw:Ev_It7 ;
     backlog:hasExecutionModality backlog:Mode_Hybrid ;
     backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
-    backlog:lastAuditedAt "2026-11-15T17:00:00"^^xsd:dateTime ;
+    backlog:lastAuditedAt "2026-08-26T21:22:10Z"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register ;
     backlog:pursuesObjective fw:Obj_RulingsQueryable ;
     backlog:satisfiesDeliverable fw:Del_OntGovernance ;
@@ -7019,20 +7034,20 @@ fw:AC_EP_Rulings_S1 a backlog:AcceptanceCriterion ;
     backlog:hasGherkinText "Given the framework suite, When it is run, Then a ruling exists as a machine-checkable statement." .
 fw:R_EP_Rulings_S1 a backlog:RefinementEvent ; backlog:refines fw:EP_Rulings_S1 ;
     backlog:addressesConcern backlog:Concern_Data ;
-    backlog:refinedAt "2026-10-26T23:00:00"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
+    backlog:refinedAt "2026-08-27T05:52:00Z"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
     backlog:hasRefinementOutcome "Analysed with the parent epic; the split is by artefact, not by phase." .
 
 fw:EP_Rulings_S2 a backlog:Story ;
     backlog:hasIdentifier "BRF-EP_Rulings_S2" ;
     backlog:hasTitle "Each ruling names the shape that enforces it" ;
     backlog:hasState backlog:Done ;
-    backlog:startedAt "2026-11-02T09:00:00"^^xsd:dateTime ;
-    backlog:finishedAt "2026-11-15T17:00:00"^^xsd:dateTime ;
+    backlog:startedAt "2026-08-26T20:49:59Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-26T21:22:10Z"^^xsd:dateTime ;
     backlog:hasActualEffort 3.0 ;
     backlog:hasEvidence fw:Ev_It7 ;
     backlog:hasExecutionModality backlog:Mode_Hybrid ;
     backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
-    backlog:lastAuditedAt "2026-11-15T17:00:00"^^xsd:dateTime ;
+    backlog:lastAuditedAt "2026-08-26T21:22:10Z"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register ;
     backlog:pursuesObjective fw:Obj_RulingsQueryable ;
     backlog:satisfiesDeliverable fw:Del_OntGovernance ;
@@ -7046,7 +7061,7 @@ fw:AC_EP_Rulings_S2 a backlog:AcceptanceCriterion ;
     backlog:hasGherkinText "Given the framework suite, When it is run, Then each ruling names the shape that enforces it." .
 fw:R_EP_Rulings_S2 a backlog:RefinementEvent ; backlog:refines fw:EP_Rulings_S2 ;
     backlog:addressesConcern backlog:Concern_Architecture ;
-    backlog:refinedAt "2026-10-26T23:00:00"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
+    backlog:refinedAt "2026-08-27T05:52:00Z"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
     backlog:hasRefinementOutcome "Analysed with the parent epic; the split is by artefact, not by phase." .
 fw:EP_Rulings backlog:decomposesInto fw:EP_Rulings_S1 , fw:EP_Rulings_S2 .
 
@@ -7054,13 +7069,13 @@ fw:EP_CodeTables_S1 a backlog:Story ;
     backlog:hasIdentifier "BRF-EP_CodeTables_S1" ;
     backlog:hasTitle "Each classification table is an ontology enumeration" ;
     backlog:hasState backlog:Done ;
-    backlog:startedAt "2026-11-02T09:00:00"^^xsd:dateTime ;
-    backlog:finishedAt "2026-11-15T17:00:00"^^xsd:dateTime ;
+    backlog:startedAt "2026-08-26T20:49:59Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-26T21:22:10Z"^^xsd:dateTime ;
     backlog:hasActualEffort 3.0 ;
     backlog:hasEvidence fw:Ev_It7 ;
     backlog:hasExecutionModality backlog:Mode_Hybrid ;
     backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
-    backlog:lastAuditedAt "2026-11-15T17:00:00"^^xsd:dateTime ;
+    backlog:lastAuditedAt "2026-08-26T21:22:10Z"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register ;
     backlog:pursuesObjective fw:Obj_TablesExported ;
     backlog:satisfiesDeliverable fw:Del_OntExport ;
@@ -7074,20 +7089,20 @@ fw:AC_EP_CodeTables_S1 a backlog:AcceptanceCriterion ;
     backlog:hasGherkinText "Given the framework suite, When it is run, Then each classification table is an ontology enumeration." .
 fw:R_EP_CodeTables_S1 a backlog:RefinementEvent ; backlog:refines fw:EP_CodeTables_S1 ;
     backlog:addressesConcern backlog:Concern_Data ;
-    backlog:refinedAt "2026-10-26T23:00:00"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
+    backlog:refinedAt "2026-08-27T05:52:00Z"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
     backlog:hasRefinementOutcome "Analysed with the parent epic; the split is by artefact, not by phase." .
 
 fw:EP_CodeTables_S2 a backlog:Story ;
     backlog:hasIdentifier "BRF-EP_CodeTables_S2" ;
     backlog:hasTitle "The script reads the enumeration instead of holding it" ;
     backlog:hasState backlog:Done ;
-    backlog:startedAt "2026-11-16T09:00:00"^^xsd:dateTime ;
-    backlog:finishedAt "2026-11-29T17:00:00"^^xsd:dateTime ;
+    backlog:startedAt "2026-08-26T21:25:00Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-26T21:50:26Z"^^xsd:dateTime ;
     backlog:hasActualEffort 3.0 ;
     backlog:hasEvidence fw:Ev_It8 ;
     backlog:hasExecutionModality backlog:Mode_Hybrid ;
     backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
-    backlog:lastAuditedAt "2026-11-29T17:00:00"^^xsd:dateTime ;
+    backlog:lastAuditedAt "2026-08-26T21:50:26Z"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register ;
     backlog:pursuesObjective fw:Obj_TablesExported ;
     backlog:satisfiesDeliverable fw:Del_OntExport ;
@@ -7101,7 +7116,7 @@ fw:AC_EP_CodeTables_S2 a backlog:AcceptanceCriterion ;
     backlog:hasGherkinText "Given the framework suite, When it is run, Then the script reads the enumeration instead of holding it." .
 fw:R_EP_CodeTables_S2 a backlog:RefinementEvent ; backlog:refines fw:EP_CodeTables_S2 ;
     backlog:addressesConcern backlog:Concern_Architecture ;
-    backlog:refinedAt "2026-10-26T23:00:00"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
+    backlog:refinedAt "2026-08-27T05:52:00Z"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
     backlog:hasRefinementOutcome "Analysed with the parent epic; the split is by artefact, not by phase." .
 fw:EP_CodeTables backlog:decomposesInto fw:EP_CodeTables_S1 , fw:EP_CodeTables_S2 .
 
@@ -7109,13 +7124,13 @@ fw:EP_RuleExec_S1 a backlog:Story ;
     backlog:hasIdentifier "BRF-EP_RuleExec_S1" ;
     backlog:hasTitle "Fixture polarity is declared, not inferred from a filename" ;
     backlog:hasState backlog:Done ;
-    backlog:startedAt "2026-11-16T09:00:00"^^xsd:dateTime ;
-    backlog:finishedAt "2026-11-29T17:00:00"^^xsd:dateTime ;
+    backlog:startedAt "2026-08-26T21:25:00Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-26T21:50:26Z"^^xsd:dateTime ;
     backlog:hasActualEffort 3.0 ;
     backlog:hasEvidence fw:Ev_It8 ;
     backlog:hasExecutionModality backlog:Mode_Hybrid ;
     backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
-    backlog:lastAuditedAt "2026-11-29T17:00:00"^^xsd:dateTime ;
+    backlog:lastAuditedAt "2026-08-26T21:50:26Z"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register ;
     backlog:pursuesObjective fw:Obj_RulesDecidedInCode ;
     backlog:satisfiesDeliverable fw:Del_OntRuleExec ;
@@ -7129,20 +7144,20 @@ fw:AC_EP_RuleExec_S1 a backlog:AcceptanceCriterion ;
     backlog:hasGherkinText "Given the framework suite, When it is run, Then fixture polarity is declared, not inferred from a filename." .
 fw:R_EP_RuleExec_S1 a backlog:RefinementEvent ; backlog:refines fw:EP_RuleExec_S1 ;
     backlog:addressesConcern backlog:Concern_Data ;
-    backlog:refinedAt "2026-10-26T23:00:00"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
+    backlog:refinedAt "2026-08-27T05:52:00Z"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
     backlog:hasRefinementOutcome "Analysed with the parent epic; the split is by artefact, not by phase." .
 
 fw:EP_RuleExec_S2 a backlog:Story ;
     backlog:hasIdentifier "BRF-EP_RuleExec_S2" ;
     backlog:hasTitle "Manifest exemption and reachability are declared in the register" ;
     backlog:hasState backlog:Done ;
-    backlog:startedAt "2026-11-16T09:00:00"^^xsd:dateTime ;
-    backlog:finishedAt "2026-11-29T17:00:00"^^xsd:dateTime ;
+    backlog:startedAt "2026-08-26T21:25:00Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-26T21:50:26Z"^^xsd:dateTime ;
     backlog:hasActualEffort 3.0 ;
     backlog:hasEvidence fw:Ev_It8 ;
     backlog:hasExecutionModality backlog:Mode_Hybrid ;
     backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
-    backlog:lastAuditedAt "2026-11-29T17:00:00"^^xsd:dateTime ;
+    backlog:lastAuditedAt "2026-08-26T21:50:26Z"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register ;
     backlog:pursuesObjective fw:Obj_RulesDecidedInCode ;
     backlog:satisfiesDeliverable fw:Del_OntRuleExec ;
@@ -7156,14 +7171,21 @@ fw:AC_EP_RuleExec_S2 a backlog:AcceptanceCriterion ;
     backlog:hasGherkinText "Given the framework suite, When it is run, Then manifest exemption and reachability are declared in the register." .
 fw:R_EP_RuleExec_S2 a backlog:RefinementEvent ; backlog:refines fw:EP_RuleExec_S2 ;
     backlog:addressesConcern backlog:Concern_Data ;
-    backlog:refinedAt "2026-10-26T23:00:00"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
+    backlog:refinedAt "2026-08-27T05:52:00Z"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
     backlog:hasRefinementOutcome "Analysed with the parent epic; the split is by artefact, not by phase." .
 fw:EP_RuleExec backlog:decomposesInto fw:EP_RuleExec_S1 , fw:EP_RuleExec_S2 .
 
 fw:EP_ScriptDecisions_S1 a backlog:Story ;
     backlog:hasIdentifier "BRF-EP_ScriptDecisions_S1" ;
     backlog:hasTitle "No script applies logic the ontology does not state" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-08-27T06:00:00Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-27T06:30:00Z"^^xsd:dateTime ;
+    backlog:hasActualEffort 3.0 ;
+    backlog:hasEvidence fw:Ev_It9 ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:lastAuditedAt "2026-08-27T06:30:00Z"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register ;
     backlog:pursuesObjective fw:Obj_CodeDecisions ;
     backlog:satisfiesDeliverable fw:Del_CodeExecutes ;
@@ -7177,14 +7199,21 @@ fw:AC_EP_ScriptDecisions_S1 a backlog:AcceptanceCriterion ;
     backlog:hasGherkinText "Given the framework suite, When it is run, Then no script applies logic the ontology does not state." .
 fw:R_EP_ScriptDecisions_S1 a backlog:RefinementEvent ; backlog:refines fw:EP_ScriptDecisions_S1 ;
     backlog:addressesConcern backlog:Concern_Architecture ;
-    backlog:refinedAt "2026-10-26T23:00:00"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
+    backlog:refinedAt "2026-08-27T05:52:00Z"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
     backlog:hasRefinementOutcome "Analysed with the parent epic; the split is by artefact, not by phase." .
 fw:EP_ScriptDecisions backlog:decomposesInto fw:EP_ScriptDecisions_S1 .
 
 fw:EP_StandardRows_S1 a backlog:Story ;
     backlog:hasIdentifier "BRF-EP_StandardRows_S1" ;
     backlog:hasTitle "Each standard row names the term it describes" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-08-27T06:00:00Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-27T06:30:00Z"^^xsd:dateTime ;
+    backlog:hasActualEffort 3.0 ;
+    backlog:hasEvidence fw:Ev_It9 ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:lastAuditedAt "2026-08-27T06:30:00Z"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register ;
     backlog:pursuesObjective fw:Obj_RowsUnchecked ;
     backlog:satisfiesDeliverable fw:Del_ProseExplains ;
@@ -7198,13 +7227,20 @@ fw:AC_EP_StandardRows_S1 a backlog:AcceptanceCriterion ;
     backlog:hasGherkinText "Given the framework suite, When it is run, Then each standard row names the term it describes." .
 fw:R_EP_StandardRows_S1 a backlog:RefinementEvent ; backlog:refines fw:EP_StandardRows_S1 ;
     backlog:addressesConcern backlog:Concern_Data ;
-    backlog:refinedAt "2026-10-26T23:00:00"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
+    backlog:refinedAt "2026-08-27T05:52:00Z"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
     backlog:hasRefinementOutcome "Analysed with the parent epic; the split is by artefact, not by phase." .
 
 fw:EP_StandardRows_S2 a backlog:Story ;
     backlog:hasIdentifier "BRF-EP_StandardRows_S2" ;
     backlog:hasTitle "A row contradicting the TBox is reported" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-08-27T06:00:00Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-27T06:30:00Z"^^xsd:dateTime ;
+    backlog:hasActualEffort 3.0 ;
+    backlog:hasEvidence fw:Ev_It9 ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasSupervisionMode backlog:Sup_OnTheLoop ;
+    backlog:lastAuditedAt "2026-08-27T06:30:00Z"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register ;
     backlog:pursuesObjective fw:Obj_RowsUnchecked ;
     backlog:satisfiesDeliverable fw:Del_ProseExplains ;
@@ -7218,7 +7254,7 @@ fw:AC_EP_StandardRows_S2 a backlog:AcceptanceCriterion ;
     backlog:hasGherkinText "Given the framework suite, When it is run, Then a row contradicting the TBox is reported." .
 fw:R_EP_StandardRows_S2 a backlog:RefinementEvent ; backlog:refines fw:EP_StandardRows_S2 ;
     backlog:addressesConcern backlog:Concern_Data ;
-    backlog:refinedAt "2026-10-26T23:00:00"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
+    backlog:refinedAt "2026-08-27T05:52:00Z"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
     backlog:hasRefinementOutcome "Analysed with the parent epic; the split is by artefact, not by phase." .
 fw:EP_StandardRows backlog:decomposesInto fw:EP_StandardRows_S1 , fw:EP_StandardRows_S2 .
 
@@ -7276,49 +7312,49 @@ fw:It7 a backlog:Iteration ;
 fw:EP_Rulings_S1 backlog:memberOfContainer fw:It7 , fw:Pkg_GovernanceQueryable .
 fw:Plan_EP_Rulings_S1 a backlog:PlanningEvent ;
     backlog:plansItem fw:EP_Rulings_S1 ; backlog:plannedInto fw:It7 ;
-    backlog:plannedAt "2026-11-02T09:00:00"^^xsd:dateTime ;
+    backlog:plannedAt "2026-08-26T20:49:59Z"^^xsd:dateTime ;
     backlog:plannedBy backlog:Builder ;
     backlog:producesTask fw:T_EP_Rulings_S1 .
 fw:T_EP_Rulings_S1 a backlog:ExecutionTask ;
     backlog:hasIdentifier "BRF-T-EP_Rulings_S1" ;
     backlog:hasTitle "Implement and gate EP_Rulings_S1" ;
     backlog:hasState backlog:Done ;
-    backlog:startedAt "2026-11-02T09:00:00"^^xsd:dateTime ;
-    backlog:finishedAt "2026-11-15T17:00:00"^^xsd:dateTime ;
+    backlog:startedAt "2026-08-26T20:49:59Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-26T21:22:10Z"^^xsd:dateTime ;
     backlog:hasEvidence fw:Ev_It7 ;
-    backlog:lastAuditedAt "2026-11-15T17:00:00"^^xsd:dateTime ;
+    backlog:lastAuditedAt "2026-08-26T21:22:10Z"^^xsd:dateTime ;
     backlog:hasTaskType backlog:Task_Implementation ;
     backlog:memberOfContainer fw:Register , fw:It7 .
 fw:EP_Rulings_S2 backlog:memberOfContainer fw:It7 , fw:Pkg_GovernanceQueryable .
 fw:Plan_EP_Rulings_S2 a backlog:PlanningEvent ;
     backlog:plansItem fw:EP_Rulings_S2 ; backlog:plannedInto fw:It7 ;
-    backlog:plannedAt "2026-11-02T09:00:00"^^xsd:dateTime ;
+    backlog:plannedAt "2026-08-26T20:49:59Z"^^xsd:dateTime ;
     backlog:plannedBy backlog:Builder ;
     backlog:producesTask fw:T_EP_Rulings_S2 .
 fw:T_EP_Rulings_S2 a backlog:ExecutionTask ;
     backlog:hasIdentifier "BRF-T-EP_Rulings_S2" ;
     backlog:hasTitle "Implement and gate EP_Rulings_S2" ;
     backlog:hasState backlog:Done ;
-    backlog:startedAt "2026-11-02T09:00:00"^^xsd:dateTime ;
-    backlog:finishedAt "2026-11-15T17:00:00"^^xsd:dateTime ;
+    backlog:startedAt "2026-08-26T20:49:59Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-26T21:22:10Z"^^xsd:dateTime ;
     backlog:hasEvidence fw:Ev_It7 ;
-    backlog:lastAuditedAt "2026-11-15T17:00:00"^^xsd:dateTime ;
+    backlog:lastAuditedAt "2026-08-26T21:22:10Z"^^xsd:dateTime ;
     backlog:hasTaskType backlog:Task_Implementation ;
     backlog:memberOfContainer fw:Register , fw:It7 .
 fw:EP_CodeTables_S1 backlog:memberOfContainer fw:It7 , fw:Pkg_GovernanceQueryable .
 fw:Plan_EP_CodeTables_S1 a backlog:PlanningEvent ;
     backlog:plansItem fw:EP_CodeTables_S1 ; backlog:plannedInto fw:It7 ;
-    backlog:plannedAt "2026-11-02T09:00:00"^^xsd:dateTime ;
+    backlog:plannedAt "2026-08-26T20:49:59Z"^^xsd:dateTime ;
     backlog:plannedBy backlog:Builder ;
     backlog:producesTask fw:T_EP_CodeTables_S1 .
 fw:T_EP_CodeTables_S1 a backlog:ExecutionTask ;
     backlog:hasIdentifier "BRF-T-EP_CodeTables_S1" ;
     backlog:hasTitle "Implement and gate EP_CodeTables_S1" ;
     backlog:hasState backlog:Done ;
-    backlog:startedAt "2026-11-02T09:00:00"^^xsd:dateTime ;
-    backlog:finishedAt "2026-11-15T17:00:00"^^xsd:dateTime ;
+    backlog:startedAt "2026-08-26T20:49:59Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-26T21:22:10Z"^^xsd:dateTime ;
     backlog:hasEvidence fw:Ev_It7 ;
-    backlog:lastAuditedAt "2026-11-15T17:00:00"^^xsd:dateTime ;
+    backlog:lastAuditedAt "2026-08-26T21:22:10Z"^^xsd:dateTime ;
     backlog:hasTaskType backlog:Task_Implementation ;
     backlog:memberOfContainer fw:Register , fw:It7 .
 
@@ -7335,55 +7371,57 @@ fw:It8 a backlog:Iteration ;
 fw:EP_CodeTables_S2 backlog:memberOfContainer fw:It8 , fw:Pkg_GovernanceQueryable .
 fw:Plan_EP_CodeTables_S2 a backlog:PlanningEvent ;
     backlog:plansItem fw:EP_CodeTables_S2 ; backlog:plannedInto fw:It8 ;
-    backlog:plannedAt "2026-11-16T09:00:00"^^xsd:dateTime ;
+    backlog:plannedAt "2026-08-26T21:25:00Z"^^xsd:dateTime ;
     backlog:plannedBy backlog:Builder ;
     backlog:producesTask fw:T_EP_CodeTables_S2 .
 fw:T_EP_CodeTables_S2 a backlog:ExecutionTask ;
     backlog:hasIdentifier "BRF-T-EP_CodeTables_S2" ;
     backlog:hasTitle "Implement and gate EP_CodeTables_S2" ;
     backlog:hasState backlog:Done ;
-    backlog:startedAt "2026-11-16T09:00:00"^^xsd:dateTime ;
-    backlog:finishedAt "2026-11-29T17:00:00"^^xsd:dateTime ;
+    backlog:startedAt "2026-08-26T21:25:00Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-26T21:50:26Z"^^xsd:dateTime ;
     backlog:hasEvidence fw:Ev_It8 ;
-    backlog:lastAuditedAt "2026-11-29T17:00:00"^^xsd:dateTime ;
+    backlog:lastAuditedAt "2026-08-26T21:50:26Z"^^xsd:dateTime ;
     backlog:hasTaskType backlog:Task_Implementation ;
     backlog:memberOfContainer fw:Register , fw:It8 .
 fw:EP_RuleExec_S1 backlog:memberOfContainer fw:It8 , fw:Pkg_ExecutionInOntology .
 fw:Plan_EP_RuleExec_S1 a backlog:PlanningEvent ;
     backlog:plansItem fw:EP_RuleExec_S1 ; backlog:plannedInto fw:It8 ;
-    backlog:plannedAt "2026-11-16T09:00:00"^^xsd:dateTime ;
+    backlog:plannedAt "2026-08-26T21:25:00Z"^^xsd:dateTime ;
     backlog:plannedBy backlog:Builder ;
     backlog:producesTask fw:T_EP_RuleExec_S1 .
 fw:T_EP_RuleExec_S1 a backlog:ExecutionTask ;
     backlog:hasIdentifier "BRF-T-EP_RuleExec_S1" ;
     backlog:hasTitle "Implement and gate EP_RuleExec_S1" ;
     backlog:hasState backlog:Done ;
-    backlog:startedAt "2026-11-16T09:00:00"^^xsd:dateTime ;
-    backlog:finishedAt "2026-11-29T17:00:00"^^xsd:dateTime ;
+    backlog:startedAt "2026-08-26T21:25:00Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-26T21:50:26Z"^^xsd:dateTime ;
     backlog:hasEvidence fw:Ev_It8 ;
-    backlog:lastAuditedAt "2026-11-29T17:00:00"^^xsd:dateTime ;
+    backlog:lastAuditedAt "2026-08-26T21:50:26Z"^^xsd:dateTime ;
     backlog:hasTaskType backlog:Task_Implementation ;
     backlog:memberOfContainer fw:Register , fw:It8 .
 fw:EP_RuleExec_S2 backlog:memberOfContainer fw:It8 , fw:Pkg_ExecutionInOntology .
 fw:Plan_EP_RuleExec_S2 a backlog:PlanningEvent ;
     backlog:plansItem fw:EP_RuleExec_S2 ; backlog:plannedInto fw:It8 ;
-    backlog:plannedAt "2026-11-16T09:00:00"^^xsd:dateTime ;
+    backlog:plannedAt "2026-08-26T21:25:00Z"^^xsd:dateTime ;
     backlog:plannedBy backlog:Builder ;
     backlog:producesTask fw:T_EP_RuleExec_S2 .
 fw:T_EP_RuleExec_S2 a backlog:ExecutionTask ;
     backlog:hasIdentifier "BRF-T-EP_RuleExec_S2" ;
     backlog:hasTitle "Implement and gate EP_RuleExec_S2" ;
     backlog:hasState backlog:Done ;
-    backlog:startedAt "2026-11-16T09:00:00"^^xsd:dateTime ;
-    backlog:finishedAt "2026-11-29T17:00:00"^^xsd:dateTime ;
+    backlog:startedAt "2026-08-26T21:25:00Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-26T21:50:26Z"^^xsd:dateTime ;
     backlog:hasEvidence fw:Ev_It8 ;
-    backlog:lastAuditedAt "2026-11-29T17:00:00"^^xsd:dateTime ;
+    backlog:lastAuditedAt "2026-08-26T21:50:26Z"^^xsd:dateTime ;
     backlog:hasTaskType backlog:Task_Implementation ;
     backlog:memberOfContainer fw:Register , fw:It8 .
 
 fw:It9 a backlog:Iteration ;
     backlog:hasIdentifier "It9" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:hasObservedDuration 30.0 ;
+    backlog:hasDurationSource "The publish commits bounding this iteration." ;
     backlog:iterationStart "2026-08-27T06:00:00Z"^^xsd:dateTime ;
     backlog:iterationEnd "2026-08-27T06:30:00Z"^^xsd:dateTime ;
     backlog:hasCapacity 9.0 ;
@@ -7392,43 +7430,55 @@ fw:It9 a backlog:Iteration ;
 fw:EP_ScriptDecisions_S1 backlog:memberOfContainer fw:It9 , fw:Pkg_ExecutionInOntology .
 fw:Plan_EP_ScriptDecisions_S1 a backlog:PlanningEvent ;
     backlog:plansItem fw:EP_ScriptDecisions_S1 ; backlog:plannedInto fw:It9 ;
-    backlog:plannedAt "2026-11-30T09:00:00"^^xsd:dateTime ;
+    backlog:plannedAt "2026-08-27T05:58:00Z"^^xsd:dateTime ;
     backlog:plannedBy backlog:Builder ;
     backlog:producesTask fw:T_EP_ScriptDecisions_S1 .
 fw:T_EP_ScriptDecisions_S1 a backlog:ExecutionTask ;
     backlog:hasIdentifier "BRF-T-EP_ScriptDecisions_S1" ;
     backlog:hasTitle "Implement and gate EP_ScriptDecisions_S1" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-08-27T06:00:00Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-27T06:30:00Z"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_It9 ;
+    backlog:lastAuditedAt "2026-08-27T06:30:00Z"^^xsd:dateTime ;
     backlog:hasTaskType backlog:Task_Implementation ;
     backlog:memberOfContainer fw:Register , fw:It9 .
 fw:EP_StandardRows_S1 backlog:memberOfContainer fw:It9 , fw:Pkg_ExecutionInOntology .
 fw:Plan_EP_StandardRows_S1 a backlog:PlanningEvent ;
     backlog:plansItem fw:EP_StandardRows_S1 ; backlog:plannedInto fw:It9 ;
-    backlog:plannedAt "2026-11-30T09:00:00"^^xsd:dateTime ;
+    backlog:plannedAt "2026-08-27T05:58:00Z"^^xsd:dateTime ;
     backlog:plannedBy backlog:Builder ;
     backlog:producesTask fw:T_EP_StandardRows_S1 .
 fw:T_EP_StandardRows_S1 a backlog:ExecutionTask ;
     backlog:hasIdentifier "BRF-T-EP_StandardRows_S1" ;
     backlog:hasTitle "Implement and gate EP_StandardRows_S1" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-08-27T06:00:00Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-27T06:30:00Z"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_It9 ;
+    backlog:lastAuditedAt "2026-08-27T06:30:00Z"^^xsd:dateTime ;
     backlog:hasTaskType backlog:Task_Verification ;
     backlog:memberOfContainer fw:Register , fw:It9 .
 fw:EP_StandardRows_S2 backlog:memberOfContainer fw:It9 , fw:Pkg_ExecutionInOntology .
 fw:Plan_EP_StandardRows_S2 a backlog:PlanningEvent ;
     backlog:plansItem fw:EP_StandardRows_S2 ; backlog:plannedInto fw:It9 ;
-    backlog:plannedAt "2026-11-30T09:00:00"^^xsd:dateTime ;
+    backlog:plannedAt "2026-08-27T05:58:00Z"^^xsd:dateTime ;
     backlog:plannedBy backlog:Builder ;
     backlog:producesTask fw:T_EP_StandardRows_S2 .
 fw:T_EP_StandardRows_S2 a backlog:ExecutionTask ;
     backlog:hasIdentifier "BRF-T-EP_StandardRows_S2" ;
     backlog:hasTitle "Implement and gate EP_StandardRows_S2" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-08-27T06:00:00Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-27T06:30:00Z"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_It9 ;
+    backlog:lastAuditedAt "2026-08-27T06:30:00Z"^^xsd:dateTime ;
     backlog:hasTaskType backlog:Task_Verification ;
     backlog:memberOfContainer fw:Register , fw:It9 .
 
 fw:KO_Ontology a backlog:KickOff ;
     rdfs:label "Kick-off: the ontology-driven lineage"@en ;
-    backlog:kickedOffAt "2026-11-02T09:00:00"^^xsd:dateTime ;
+    backlog:kickedOffAt "2026-08-26T20:49:59Z"^^xsd:dateTime ;
     backlog:hasKickOffMode backlog:KickOff_Declared ;
     backlog:kickOffFor fw:Register ;
     backlog:decidedBy backlog:Owner ;
@@ -7459,7 +7509,7 @@ fw:KO_Ontology a backlog:KickOff ;
 fw:EP_Rulings backlog:hasApplicableConcern backlog:Concern_Architecture .
 fw:R2_EP_Rulings a backlog:RefinementEvent ; backlog:refines fw:EP_Rulings ;
     backlog:addressesConcern backlog:Concern_Architecture ;
-    backlog:refinedAt "2026-10-27T09:00:00"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
+    backlog:refinedAt "2026-08-27T05:54:00Z"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
     backlog:producesModelArtifact fw:MA_EP_Rulings ;
     backlog:hasRefinementOutcome "A GovernanceRuling class hangs off the discipline document as its source and is referenced by the shape that enforces it. Structural because every later export attaches to it." .
 fw:MA_EP_Rulings a backlog:ModelArtifact ;
@@ -7468,7 +7518,7 @@ fw:MA_EP_Rulings a backlog:ModelArtifact ;
 fw:EP_CodeTables backlog:hasApplicableConcern backlog:Concern_Interface .
 fw:R2_EP_CodeTables a backlog:RefinementEvent ; backlog:refines fw:EP_CodeTables ;
     backlog:addressesConcern backlog:Concern_Interface ;
-    backlog:refinedAt "2026-10-27T09:00:00"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
+    backlog:refinedAt "2026-08-27T05:54:00Z"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
     backlog:producesModelArtifact fw:MA_EP_CodeTables ;
     backlog:hasRefinementOutcome "Each exported table becomes an owl:oneOf the SCRIPT reads. That changes the contract between register and tooling: a script that previously held its own list now depends on the ontology shipping one." .
 fw:MA_EP_CodeTables a backlog:ModelArtifact ;
@@ -7477,7 +7527,7 @@ fw:MA_EP_CodeTables a backlog:ModelArtifact ;
 fw:EP_RuleExec backlog:hasApplicableConcern backlog:Concern_Architecture .
 fw:R2_EP_RuleExec a backlog:RefinementEvent ; backlog:refines fw:EP_RuleExec ;
     backlog:addressesConcern backlog:Concern_Architecture ;
-    backlog:refinedAt "2026-10-27T09:00:00"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
+    backlog:refinedAt "2026-08-27T05:54:00Z"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
     backlog:producesModelArtifact fw:MA_EP_RuleExec ;
     backlog:hasRefinementOutcome "Fixture polarity moves from filename inference to a declared property. The gate becomes a consumer of the register rather than an interpreter of the filesystem." .
 fw:MA_EP_RuleExec a backlog:ModelArtifact ;
@@ -7486,7 +7536,7 @@ fw:MA_EP_RuleExec a backlog:ModelArtifact ;
 fw:EP_ScriptDecisions backlog:hasApplicableConcern backlog:Concern_Interface .
 fw:R2_EP_ScriptDecisions a backlog:RefinementEvent ; backlog:refines fw:EP_ScriptDecisions ;
     backlog:addressesConcern backlog:Concern_Interface ;
-    backlog:refinedAt "2026-10-27T09:00:00"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
+    backlog:refinedAt "2026-08-27T05:54:00Z"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
     backlog:producesModelArtifact fw:MA_EP_ScriptDecisions ;
     backlog:hasRefinementOutcome "The remaining script judgement is replaced by a query. The interface between tooling and ontology becomes read-only in both directions of meaning." .
 fw:MA_EP_ScriptDecisions a backlog:ModelArtifact ;
@@ -7495,7 +7545,7 @@ fw:MA_EP_ScriptDecisions a backlog:ModelArtifact ;
 fw:EP_StandardRows backlog:hasApplicableConcern backlog:Concern_Interaction .
 fw:R2_EP_StandardRows a backlog:RefinementEvent ; backlog:refines fw:EP_StandardRows ;
     backlog:addressesConcern backlog:Concern_Interaction ;
-    backlog:refinedAt "2026-10-27T09:00:00"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
+    backlog:refinedAt "2026-08-27T05:54:00Z"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
     backlog:producesModelArtifact fw:MA_EP_StandardRows ;
     backlog:hasRefinementOutcome "A reader compares a standard row against the TBox. This is the only story in the lineage where a PERSON is the actor, which is why it needs an interaction concern the others do not." .
 fw:MA_EP_StandardRows a backlog:ModelArtifact ;
@@ -8234,7 +8284,7 @@ fw:Ev_It7 a backlog:TestEvidence ;
     backlog:hasTestSpec "01-ontologies/backlog_tbox_v1_46_0.ttl and the register's 18 GovernanceRuling instances" ;
     backlog:hasTestId "It7" ;
     backlog:evidenceVerified true ;
-    backlog:verifiedAt "2026-11-15T17:00:00"^^xsd:dateTime ;
+    backlog:verifiedAt "2026-08-26T21:22:10Z"^^xsd:dateTime ;
     backlog:hasVerificationMethod "The rulings were EXTRACTED from the discipline document by pattern, not retyped — retyping would have created a second source of truth in the release whose purpose is removing them. A query for GovernanceRuling returns all 18 by identifier. Each names the shape that enforces it, which the document could only assert in prose. The LAYERS table is declared as 18 LineageLayer individuals with ordinals and absence costs; the python literal is NOT yet deleted, because deleting it before the script reads the ontology would leave the reporter unable to run — that is story 2, in It8." ;
     backlog:verifiedByTool "backlog_validate + rdflib query" ;
     backlog:attestsCriterion fw:AC_EP_Rulings , fw:AC_EP_Rulings_S1 , fw:AC_EP_Rulings_S2 , fw:AC_EP_CodeTables_S1 .
@@ -8263,7 +8313,7 @@ fw:Obs_RulingsAfterIt7 a backlog:MetricObservation ;
     backlog:observesMetric fw:Metric_Obj_RulingsQueryable ;
     backlog:observationFor fw:Obj_RulingsQueryable ;
     backlog:hasObservedValue 0.0 ;
-    backlog:observedAt "2026-11-15T17:00:00"^^xsd:dateTime ;
+    backlog:observedAt "2026-08-26T21:22:10Z"^^xsd:dateTime ;
     backlog:hasObservationMethod "Counted the same way as the baseline: headings matching '### G' in the discipline, against GovernanceRuling instances returned by query. 18 and 18. Baseline 18, target 0, observed 0 — MET, ahead of the 30 November checkpoint which expected 12." .
 
 fw:Obs_TablesAfterIt7 a backlog:MetricObservation ;
@@ -8271,14 +8321,14 @@ fw:Obs_TablesAfterIt7 a backlog:MetricObservation ;
     backlog:observesMetric fw:Metric_Obj_TablesExported ;
     backlog:observationFor fw:Obj_TablesExported ;
     backlog:hasObservedValue 22.0 ;
-    backlog:observedAt "2026-11-15T17:00:00"^^xsd:dateTime ;
+    backlog:observedAt "2026-08-26T21:22:10Z"^^xsd:dateTime ;
     backlog:hasObservationMethod "LAYERS is declared in the ontology and its python literal still stands, so the count falls by one only when the script reads the ontology instead — story 2, It8. Counted as 22 rather than 23 because the ontology now carries the table; counting it as exported would claim the migration finished when the script has not changed." .
 
 fw:Rel_It7 a backlog:DeploymentUnit ;
     backlog:hasIdentifier "BRF-REL-It7" ;
     backlog:hasTitle "Governance queryable, first table exported" ;
     backlog:hasState backlog:Done ;
-    backlog:hasDeploymentDate "2026-11-15T18:00:00"^^xsd:dateTime ;
+    backlog:hasDeploymentDate "2026-08-26T21:22:10Z"^^xsd:dateTime ;
     backlog:deploysFrom fw:It7 ;
     backlog:deploysItem fw:EP_Rulings_S1 , fw:EP_Rulings_S2 , fw:EP_CodeTables_S1 ;
     backlog:deliversPackage fw:Pkg_GovernanceQueryable ;
@@ -8308,7 +8358,7 @@ fw:R3_EP_CodeTables_S2 a backlog:RefinementEvent ;
     backlog:refines fw:EP_CodeTables_S2 ;
     backlog:addressesConcern backlog:Concern_Architecture ;
     backlog:groomsForIteration fw:It8 ;
-    backlog:refinedAt "2026-11-16T09:00:00"^^xsd:dateTime ;
+    backlog:refinedAt "2026-08-26T21:25:00Z"^^xsd:dateTime ;
     backlog:refinedBy backlog:Builder ;
     backlog:producesModelArtifact fw:MA_ReaderContract ;
     backlog:hasRefinementOutcome "RE-GROOMED after It7. The reader must fail LOUDLY when the ontology is missing rather than falling back to a literal: a silent fallback would leave the script working and the migration unfinished, and nothing would report it. That is the reachability lesson one level along — a fallback is a python decision wearing an ontology's clothes." .
@@ -8321,7 +8371,7 @@ fw:R3_EP_RuleExec_S1 a backlog:RefinementEvent ;
     backlog:refines fw:EP_RuleExec_S1 ;
     backlog:addressesConcern backlog:Concern_Data ;
     backlog:groomsForIteration fw:It8 ;
-    backlog:refinedAt "2026-11-16T09:00:00"^^xsd:dateTime ;
+    backlog:refinedAt "2026-08-26T21:25:00Z"^^xsd:dateTime ;
     backlog:refinedBy backlog:Builder ;
     backlog:hasRefinementOutcome "RE-GROOMED. Expected polarity attaches to the AdoptionProfile a fixture declares, not to a separate registry: the profile is already the fixture's own statement about itself, and a registry would be a second place a fixture is described." .
 
@@ -8329,7 +8379,7 @@ fw:R3_EP_RuleExec_S2 a backlog:RefinementEvent ;
     backlog:refines fw:EP_RuleExec_S2 ;
     backlog:addressesConcern backlog:Concern_Data ;
     backlog:groomsForIteration fw:It8 ;
-    backlog:refinedAt "2026-11-16T09:00:00"^^xsd:dateTime ;
+    backlog:refinedAt "2026-08-26T21:25:00Z"^^xsd:dateTime ;
     backlog:refinedBy backlog:Builder ;
     backlog:hasRefinementOutcome "RE-GROOMED and NARROWED. Manifest exemption moves to the register; reachability does NOT. Reachability is a query over the TBox and the register cannot hold a rule about classes that do not exist yet — expressing it as a shape would require the shape to run against the TBox as data, which the gate does not do. Recorded as a scope finding rather than attempted: the story ships one of its two steps and says so." .
 
@@ -8357,7 +8407,7 @@ fw:Ev_It8 a backlog:TestEvidence ;
     backlog:hasTestSpec "03-tooling/backlog_lineage_completeness_v1_1_0.py _load_layers" ;
     backlog:hasTestId "It8" ;
     backlog:evidenceVerified true ;
-    backlog:verifiedAt "2026-11-29T17:00:00"^^xsd:dateTime ;
+    backlog:verifiedAt "2026-08-26T21:50:26Z"^^xsd:dateTime ;
     backlog:hasVerificationMethod "The completeness reporter now reads its 18 layers from the ontology and the python literal is deleted. Verified twice: run against the register it reports all 18 layers PRESENT, and run against a register carrying no LineageLayer it exits FATAL rather than falling back — a silent fallback would leave the script working and the migration unfinished. The four-field tuple was caught here: the first export dropped layerLabel and layerTier, and a reader returning fewer fields than its consumer unpacks fails at the first row. Both are now in the ontology, which makes 'which layers may an L2 register omit' a queryable governance question rather than a string in a script." ;
     backlog:verifiedByTool "backlog_validate + direct execution" ;
     backlog:attestsCriterion fw:AC_EP_CodeTables , fw:AC_EP_CodeTables_S2 , fw:AC_EP_RuleExec , fw:AC_EP_RuleExec_S1 , fw:AC_EP_RuleExec_S2 .
@@ -8389,7 +8439,7 @@ fw:H_It8_T_EP_RuleExec_S2 a backlog:TestHarness ; backlog:harnessFor fw:T_EP_Rul
 fw:Rel_It8 a backlog:DeploymentUnit ;
     backlog:hasIdentifier "BRF-REL-It8" ; backlog:hasTitle "Reader reads the ontology" ;
     backlog:hasState backlog:Done ;
-    backlog:hasDeploymentDate "2026-11-29T18:00:00"^^xsd:dateTime ;
+    backlog:hasDeploymentDate "2026-08-26T21:50:26Z"^^xsd:dateTime ;
     backlog:deploysFrom fw:It8 ;
     backlog:deploysItem fw:EP_CodeTables_S2 , fw:EP_RuleExec_S1 , fw:EP_RuleExec_S2 ;
     backlog:deliversPackage fw:Pkg_GovernanceQueryable ;
@@ -8402,14 +8452,14 @@ fw:Obs_TablesAfterIt8 a backlog:MetricObservation ;
     backlog:observesMetric fw:Metric_Obj_TablesExported ;
     backlog:observationFor fw:Obj_TablesExported ;
     backlog:hasObservedValue 22.0 ;
-    backlog:observedAt "2026-11-29T17:00:00"^^xsd:dateTime ;
+    backlog:observedAt "2026-08-26T21:50:26Z"^^xsd:dateTime ;
     backlog:hasObservationMethod "One table fully migrated: LAYERS is in the ontology, the literal is deleted, the reader fails loudly without it. 22 remain. The 30 November checkpoint expected 12, so this objective is BEHIND its own plan and the advisory says so — one table per iteration does not reach zero by January. That is the checkpoint doing what checkpoints are for: reporting before the deadline rather than at it." .
 
 fw:Obs_RuleExecAfterIt8 a backlog:MetricObservation ;
     backlog:observesMetric fw:Metric_Obj_RulesDecidedInCode ;
     backlog:observationFor fw:Obj_RulesDecidedInCode ;
     backlog:hasObservedValue 2.0 ;
-    backlog:observedAt "2026-11-29T17:00:00"^^xsd:dateTime ;
+    backlog:observedAt "2026-08-26T21:50:26Z"^^xsd:dateTime ;
     backlog:hasObservationMethod "Baseline 3, observed 2. Manifest exemption moved to the register. Fixture polarity and reachability remain: the re-grooming found that reachability CANNOT move — it is a query over the TBox and the register cannot hold a rule about classes that do not exist yet. Recorded as a scope finding, not attempted and not hidden." .
 
 
@@ -8445,7 +8495,7 @@ fw:Obs_BaselineOnePerStory a backlog:MetricObservation ;
     backlog:observesMetric fw:Metric_Obj_TablesExported ;
     backlog:observationFor fw:Obj_TablesExported ;
     backlog:hasObservedValue 22.0 ;
-    backlog:observedAt "2026-11-29T19:00:00"^^xsd:dateTime ;
+    backlog:observedAt "2026-08-27T05:56:00Z"^^xsd:dateTime ;
     backlog:hasObservationMethod "BASELINE RETAINED for comparison. One table per story at 3 points reaches zero in 7.3 iterations, about 15 weeks, ending late April against a 31 January deadline. Recorded so the batch plan can be measured against what it replaced rather than against nothing — a re-plan whose predecessor is deleted cannot be shown to have helped." .
 
 fw:S_Tables_B1 a backlog:Story ;
@@ -8468,7 +8518,7 @@ fw:AC_S_Tables_B1 a backlog:AcceptanceCriterion ;
 fw:R_S_Tables_B1 a backlog:RefinementEvent ; backlog:refines fw:S_Tables_B1 ;
     backlog:addressesConcern backlog:Concern_Data ;
     backlog:groomsForIteration fw:It10 ;
-    backlog:refinedAt "2026-11-29T19:00:00"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
+    backlog:refinedAt "2026-08-27T05:56:00Z"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
     backlog:hasRefinementOutcome "Subject: Roadmap report: CONTAINER_TYPES, SECTIONS; pipeline verifier: STAGE_TYPES, ORDER. Batched at four because the concealment measurement puts the knee there. The acceptance criterion verifies PER TABLE — the It8 fallback trap recurs once per reader changed, and one criterion covering four readers would let three silent fallbacks pass." .
 fw:EP_TablesBatch backlog:decomposesInto fw:S_Tables_B1 .
 
@@ -8492,7 +8542,7 @@ fw:AC_S_Tables_B2 a backlog:AcceptanceCriterion ;
 fw:R_S_Tables_B2 a backlog:RefinementEvent ; backlog:refines fw:S_Tables_B2 ;
     backlog:addressesConcern backlog:Concern_Data ;
     backlog:groomsForIteration fw:It10 ;
-    backlog:refinedAt "2026-11-29T19:00:00"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
+    backlog:refinedAt "2026-08-27T05:56:00Z"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
     backlog:hasRefinementOutcome "Subject: Evidence bridge KINDS; registration readiness SUITES and FOREIGN; manifest EXEMPT. Batched at four because the concealment measurement puts the knee there. The acceptance criterion verifies PER TABLE — the It8 fallback trap recurs once per reader changed, and one criterion covering four readers would let three silent fallbacks pass." .
 fw:EP_TablesBatch backlog:decomposesInto fw:S_Tables_B2 .
 
@@ -8516,7 +8566,7 @@ fw:AC_S_Tables_B3 a backlog:AcceptanceCriterion ;
 fw:R_S_Tables_B3 a backlog:RefinementEvent ; backlog:refines fw:S_Tables_B3 ;
     backlog:addressesConcern backlog:Concern_Data ;
     backlog:groomsForIteration fw:It11 ;
-    backlog:refinedAt "2026-11-29T19:00:00"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
+    backlog:refinedAt "2026-08-27T05:56:00Z"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
     backlog:hasRefinementOutcome "Subject: Public distribution DROP_DIRS and SUBSTITUTIONS; doc-coverage LAYER_HINTS and RESTATED. Batched at four because the concealment measurement puts the knee there. The acceptance criterion verifies PER TABLE — the It8 fallback trap recurs once per reader changed, and one criterion covering four readers would let three silent fallbacks pass." .
 fw:EP_TablesBatch backlog:decomposesInto fw:S_Tables_B3 .
 
@@ -8540,7 +8590,7 @@ fw:AC_S_Tables_B4 a backlog:AcceptanceCriterion ;
 fw:R_S_Tables_B4 a backlog:RefinementEvent ; backlog:refines fw:S_Tables_B4 ;
     backlog:addressesConcern backlog:Concern_Data ;
     backlog:groomsForIteration fw:It11 ;
-    backlog:refinedAt "2026-11-29T19:00:00"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
+    backlog:refinedAt "2026-08-27T05:56:00Z"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
     backlog:hasRefinementOutcome "Subject: Validate FACETS and LEVELS; gate STEPS and ORDERING. Batched at four because the concealment measurement puts the knee there. The acceptance criterion verifies PER TABLE — the It8 fallback trap recurs once per reader changed, and one criterion covering four readers would let three silent fallbacks pass." .
 fw:EP_TablesBatch backlog:decomposesInto fw:S_Tables_B4 .
 
@@ -8564,7 +8614,7 @@ fw:AC_S_Tables_B5 a backlog:AcceptanceCriterion ;
 fw:R_S_Tables_B5 a backlog:RefinementEvent ; backlog:refines fw:S_Tables_B5 ;
     backlog:addressesConcern backlog:Concern_Data ;
     backlog:groomsForIteration fw:It12 ;
-    backlog:refinedAt "2026-11-29T19:00:00"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
+    backlog:refinedAt "2026-08-27T05:56:00Z"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
     backlog:hasRefinementOutcome "Subject: Reachability EXEMPT_KINDS; roadmap HORIZONS; report BASIS_KINDS; adaptation STAGE_ORDER. Batched at four because the concealment measurement puts the knee there. The acceptance criterion verifies PER TABLE — the It8 fallback trap recurs once per reader changed, and one criterion covering four readers would let three silent fallbacks pass." .
 fw:EP_TablesBatch backlog:decomposesInto fw:S_Tables_B5 .
 
@@ -8588,7 +8638,7 @@ fw:AC_S_Tables_B6 a backlog:AcceptanceCriterion ;
 fw:R_S_Tables_B6 a backlog:RefinementEvent ; backlog:refines fw:S_Tables_B6 ;
     backlog:addressesConcern backlog:Concern_Data ;
     backlog:groomsForIteration fw:It12 ;
-    backlog:refinedAt "2026-11-29T19:00:00"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
+    backlog:refinedAt "2026-08-27T05:56:00Z"^^xsd:dateTime ; backlog:refinedBy backlog:Builder ;
     backlog:hasRefinementOutcome "Subject: The two remaining tables, whichever prove hardest — deliberately last and deliberately small. Batched at four because the concealment measurement puts the knee there. The acceptance criterion verifies PER TABLE — the It8 fallback trap recurs once per reader changed, and one criterion covering four readers would let three silent fallbacks pass." .
 fw:EP_TablesBatch backlog:decomposesInto fw:S_Tables_B6 .
 
@@ -8606,7 +8656,7 @@ fw:Obs_BatchPlan a backlog:MetricObservation ;
     backlog:observesMetric fw:Metric_Obj_TablesExported ;
     backlog:observationFor fw:Obj_TablesExported ;
     backlog:hasObservedValue 22.0 ;
-    backlog:observedAt "2026-11-29T19:30:00"^^xsd:dateTime ;
+    backlog:observedAt "2026-08-27T05:57:00Z"^^xsd:dateTime ;
     backlog:hasObservationMethod "RE-PLANNED. Six stories of four (the last of two), 18 points, reaching zero within It9 and It10 — inside the 31 January deadline where the baseline ended in late April. The count is unchanged at 22 because re-planning moves nothing; only delivery does. Both plans are recorded so the batch can be measured against what it replaced." .
 
 #################################################################
@@ -8652,12 +8702,12 @@ fw:S_EP_TablesBatch a backlog:WSJFScore ;
     backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 5.0 ;
     backlog:hasUserBusinessValue 6.0 ; backlog:hasTimeCriticality 6.0 ;
     backlog:hasRiskReductionValue 3.0 ; backlog:hasJobSize 3.0 ;
-    backlog:scoredAt "2026-11-29T19:30:00"^^xsd:dateTime ;
+    backlog:scoredAt "2026-08-27T06:35:00Z"^^xsd:dateTime ;
     backlog:hasScoreRationale "Time criticality raised to 6 from the original epic's 5: the checkpoint measurement showed the deadline unreachable on the old plan, which is evidence rather than pressure. Risk reduction lowered to 3 because batching ADDS concealment risk — an honest score does not credit a plan for a risk it creates." ;
     backlog:hasBasisKind backlog:Basis_Judged .
 fw:E_EP_TablesBatch a backlog:CostEstimate ;
     backlog:hasEffortEstimate 3.0 ; backlog:hasCostBasis "Six batch stories at 3 points, measured against the one table It8 actually took" ;
-    backlog:estimatedAt "2026-11-29T19:30:00"^^xsd:dateTime ;
+    backlog:estimatedAt "2026-08-27T05:57:00Z"^^xsd:dateTime ;
     backlog:hasBasisKind backlog:Basis_Measured ;
     backlog:basisObservation fw:Obs_BaselineOnePerStory .
 
@@ -8708,7 +8758,7 @@ fw:Obs_ReplanCascaded a backlog:MetricObservation ;
     backlog:observesMetric fw:Metric_Obj_TablesExported ;
     backlog:observationFor fw:Obj_TablesExported ;
     backlog:hasObservedValue 22.0 ;
-    backlog:observedAt "2026-11-30T09:00:00"^^xsd:dateTime ;
+    backlog:observedAt "2026-08-27T05:58:00Z"^^xsd:dateTime ;
     backlog:hasObservationMethod "Unchanged at 22: re-planning moves nothing, only delivery does. The plan now finishes 24 January rather than 10 January, because It9 was carrying 15 points against a capacity of 9 and two batch stories cascade forward. Still inside the 31 January deadline. Recorded because a plan that slips two weeks under correction and is not written down looks identical to one that never slipped." .
 
 #################################################################
@@ -8751,3 +8801,103 @@ fw:It1 backlog:hasObservedDuration 0.0 ;
     backlog:hasDurationSource "UNMEASURABLE: closed before per-iteration publish commits were tracked. Zero is recorded as a null, not as a claim that the iteration took no time — and it is visible as an outlier rather than hidden as a plausible guess." .
 fw:It2 backlog:hasObservedDuration 0.0 ;
     backlog:hasDurationSource "UNMEASURABLE: as It1." .
+
+#  The OntoQA metrics, with population sensitivity declared.
+#  Exported from the quality assessor's python tuple.
+fw:QM_ClassRichness a backlog:QualityMetric ;
+    backlog:hasMetricName "ClassRichness" ; backlog:isPopulationSensitive true .
+fw:QM_AveragePopulation a backlog:QualityMetric ;
+    backlog:hasMetricName "AveragePopulation" ; backlog:isPopulationSensitive true .
+fw:QM_RelationshipRichness a backlog:QualityMetric ;
+    backlog:hasMetricName "RelationshipRichness" ; backlog:isPopulationSensitive false .
+fw:QM_AttributeRichness a backlog:QualityMetric ;
+    backlog:hasMetricName "AttributeRichness" ; backlog:isPopulationSensitive false .
+fw:QM_InheritanceRichness a backlog:QualityMetric ;
+    backlog:hasMetricName "InheritanceRichness" ; backlog:isPopulationSensitive false .
+
+#################################################################
+#  It9 delivered. Three stories, three findings.
+#################################################################
+
+fw:Ev_It9 a backlog:TestEvidence ;
+    backlog:hasTestSpec "03-tooling/backlog_script_decision_audit_v1_0_0.py and backlog_standard_row_check_v1_0_0.py" ;
+    backlog:hasTestId "It9" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-08-27T06:30:00Z"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "Script audit: 20 scripts scanned for the SHAPE of a decision rather than a list of known offenders — a list goes stale the moment someone writes a new one. Two findings, both the same classification written twice: which OntoQA metrics respond to population. Exported as QualityMetric with isPopulationSensitive, and the assessor now reads it and fails loudly without it. Audit now reports 0. Standard rows: 187 rows, 124 naming a TBox term, 0 naming a term the TBox lacks, 21 whose first cell is a CLAIM rather than an identifier. Those 21 are recorded as a known population and NOT excluded by a longer pattern list, because suppressing them would make the checker agree with the document by construction." ;
+    backlog:verifiedByTool "backlog_script_decision_audit + backlog_standard_row_check" ;
+    backlog:attestsCriterion fw:AC_EP_ScriptDecisions , fw:AC_EP_ScriptDecisions_S1 ,
+        fw:AC_EP_StandardRows , fw:AC_EP_StandardRows_S1 , fw:AC_EP_StandardRows_S2 .
+
+fw:Obs_CodeDecisionsAfterIt9 a backlog:MetricObservation ;
+    backlog:observesMetric fw:Metric_Obj_CodeDecisions ;
+    backlog:observationFor fw:Obj_CodeDecisions ;
+    backlog:hasObservedValue 0.0 ;
+    backlog:observedAt "2026-08-27T06:30:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Counted by the shipped audit over 20 scripts: 0 decisions remain in code. Baseline 3, target 0, MET. The audit itself caught one false positive on its first clean run — it flagged a docstring QUOTING the code it had just caused to be removed — and was fixed to parse rather than grep, because an audit that cannot tell an explanation from a decision reports its own success as a failure." .
+
+fw:Obs_RowsAfterIt9 a backlog:MetricObservation ;
+    backlog:observesMetric fw:Metric_Obj_RowsUnchecked ;
+    backlog:observationFor fw:Obj_RowsUnchecked ;
+    backlog:hasObservedValue 21.0 ;
+    backlog:observedAt "2026-08-27T06:30:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Baseline 186 — every row uncheckable. Now 124 rows resolve to a TBox term and are checked, 3 are structural, and 21 remain unchecked because their first cell is a CLAIM about the framework rather than a class name. Observed 21 rather than 0: the tool cannot check a sentence against a TBox, and reporting 0 would claim a check that does not happen." .
+fw:H_It9_EP_ScriptDecisions a backlog:TestHarness ; backlog:harnessFor fw:EP_ScriptDecisions ;
+    backlog:hasHarnessEvidence fw:Ev_It9 ; backlog:harnessComplete true ;
+    backlog:hasRationale "Attested by the two shipped auditors and their measured counts." .
+fw:H_It9_EP_StandardRows a backlog:TestHarness ; backlog:harnessFor fw:EP_StandardRows ;
+    backlog:hasHarnessEvidence fw:Ev_It9 ; backlog:harnessComplete true ;
+    backlog:hasRationale "Attested by the two shipped auditors and their measured counts." .
+fw:H_It9_EP_ScriptDecisions_S1 a backlog:TestHarness ; backlog:harnessFor fw:EP_ScriptDecisions_S1 ;
+    backlog:hasHarnessEvidence fw:Ev_It9 ; backlog:harnessComplete true ;
+    backlog:hasRationale "Attested by the two shipped auditors and their measured counts." .
+fw:H_It9_EP_StandardRows_S1 a backlog:TestHarness ; backlog:harnessFor fw:EP_StandardRows_S1 ;
+    backlog:hasHarnessEvidence fw:Ev_It9 ; backlog:harnessComplete true ;
+    backlog:hasRationale "Attested by the two shipped auditors and their measured counts." .
+fw:H_It9_EP_StandardRows_S2 a backlog:TestHarness ; backlog:harnessFor fw:EP_StandardRows_S2 ;
+    backlog:hasHarnessEvidence fw:Ev_It9 ; backlog:harnessComplete true ;
+    backlog:hasRationale "Attested by the two shipped auditors and their measured counts." .
+fw:H_It9_T_EP_ScriptDecisions_S1 a backlog:TestHarness ; backlog:harnessFor fw:T_EP_ScriptDecisions_S1 ;
+    backlog:hasHarnessEvidence fw:Ev_It9 ; backlog:harnessComplete true ;
+    backlog:hasRationale "Attested by the two shipped auditors and their measured counts." .
+fw:H_It9_T_EP_StandardRows_S1 a backlog:TestHarness ; backlog:harnessFor fw:T_EP_StandardRows_S1 ;
+    backlog:hasHarnessEvidence fw:Ev_It9 ; backlog:harnessComplete true ;
+    backlog:hasRationale "Attested by the two shipped auditors and their measured counts." .
+fw:H_It9_T_EP_StandardRows_S2 a backlog:TestHarness ; backlog:harnessFor fw:T_EP_StandardRows_S2 ;
+    backlog:hasHarnessEvidence fw:Ev_It9 ; backlog:harnessComplete true ;
+    backlog:hasRationale "Attested by the two shipped auditors and their measured counts." .
+
+fw:Rel_It9 a backlog:DeploymentUnit ;
+    backlog:hasIdentifier "BRF-REL-It9" ; backlog:hasTitle "Script decisions removed, standard rows checked" ;
+    backlog:hasState backlog:Done ;
+    backlog:hasDeploymentDate "2026-08-27T06:30:00Z"^^xsd:dateTime ;
+    backlog:deploysFrom fw:It9 ;
+    backlog:deploysItem fw:EP_ScriptDecisions_S1 , fw:EP_StandardRows_S1 , fw:EP_StandardRows_S2 ;
+    backlog:deliversPackage fw:Pkg_ExecutionInOntology ;
+    backlog:decidedBy backlog:Owner ; backlog:hasSelectionBasis backlog:Sel_Committed .
+fw:EP_ScriptDecisions_S1 backlog:memberOfContainer fw:Rel_It9 .
+fw:EP_StandardRows_S1 backlog:memberOfContainer fw:Rel_It9 .
+fw:EP_StandardRows_S2 backlog:memberOfContainer fw:Rel_It9 .
+
+#################################################################
+#  Every timestamp re-based to real time.
+#
+#  Found while measuring It9: the objective baselines were dated
+#  26 OCTOBER — two months in the FUTURE — so a real observation
+#  taken today sorted BEFORE its own baseline and every objective
+#  read at its starting value. Three met became three met by
+#  accident; four unmet were unmeasurable.
+#
+#  The v1.115.0 re-basing corrected the iteration calendar and left
+#  the observation and refinement timestamps in the invented one. A
+#  partial re-basing is worse than none: it puts real and fictional
+#  dates in the same ordering and nothing in a timestamp says which
+#  is which.
+#################################################################
+
+#  Baselines dated to the Objective stage, not to the moment of
+#  re-basing. The blanket substitution put every baseline at 05:50
+#  today — AFTER the It7 and It8 deliveries that moved them — so
+#  two objectives read their own starting value with the delivery
+#  sorted behind it. A baseline is taken when the objective is set,
+#  and the Objective stage closed at commit 0b87c6a.

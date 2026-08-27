@@ -131,6 +131,39 @@ def measure(with_fixture=False):
     }
 
 
+
+_POP_SENSITIVE = None
+
+
+def _population_sensitive(tbox_path, reg_path):
+    """Which metrics respond to individuals being added.
+
+    EXPORTED at v1.116.0. This was `if name in ("ClassRichness",
+    "AveragePopulation")`, written twice — a statement about the metrics
+    living inside the script that reports them. An adopter adding their own
+    metric could not register it as population-sensitive without editing a
+    tuple they do not ship.
+    """
+    from rdflib import Graph, Namespace, RDF, Literal
+    B = Namespace("http://example.org/backlog#")
+    g = Graph()
+    g.parse(tbox_path, format="turtle")
+    g.parse(reg_path, format="turtle")
+    names = set()
+    for m in g.subjects(RDF.type, B.QualityMetric):
+        if g.value(m, B.isPopulationSensitive) == Literal(True):
+            nm = g.value(m, B.hasMetricName)
+            if nm is not None:
+                names.add(str(nm))
+    if not names:
+        raise SystemExit(
+            "FATAL: no QualityMetric is declared population-sensitive. This was "
+            "exported from a python tuple at v1.116.0 and is read here; refusing "
+            "to fall back to a literal, which would leave the migration "
+            "unfinished with nothing reporting it."
+        )
+    return names
+
 def main():
     ap = argparse.ArgumentParser(description="Compute structural quality metrics for the backlog subject.")
     ap.add_argument("--emit", default=None, help="write the QualityAssessment instances to this Turtle file")
@@ -145,9 +178,13 @@ def main():
     print("\nstructural metrics (OntoQA family):")
     for name, value, method in r["metrics"]:
         print("  %-22s %8.3f   %s" % (name, value, method))
+    global _POP_SENSITIVE
+    _tb = sorted(glob.glob(os.path.join(PKG, "01-ontologies", "backlog_tbox_v*.ttl")))[-1]
+    _rg = sorted(glob.glob(os.path.join(PKG, "01-ontologies", "backlog_framework_register_abox_v*.ttl")))[-1]
+    _POP_SENSITIVE = _population_sensitive(_tb, _rg)
     print("\npopulation metrics, second reading with the shipped adopter fixture merged (%s):" % r_used["fixture"])
     for name, value, _ in r_used["metrics"]:
-        if name in ("ClassRichness", "AveragePopulation"):
+        if name in _POP_SENSITIVE:
             print("  %-22s %8.3f" % (name, value))
     print("  the framework ABox holds framework-level individuals only, so the first reading")
     print("  understates population by design; both are reported rather than the flattering one.")
@@ -177,7 +214,7 @@ def main():
             "tier-weighted, pitfall-scanning, or usability claim, so it must not be read as a "
             "comprehensive quality assessment.", lang="en")))
         for name, value, method in r["metrics"]:
-            if name in ("ClassRichness", "AveragePopulation"):
+            if name in _POP_SENSITIVE:
                 used = dict((n, v) for n, v, _ in r_used["metrics"])[name]
                 method = ("%s — framework ABox only; with the shipped adopter fixture merged the "
                           "value is %.3f, and both readings are recorded because the framework ABox "

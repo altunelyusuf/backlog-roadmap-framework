@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.48.0> ;
-    owl:versionInfo "1.48.0" ;
+    owl:versionIRI <http://example.org/backlog/1.49.0> ;
+    owl:versionInfo "1.49.0" ;
+    owl:priorVersion <http://example.org/backlog/1.48.0> ;
     owl:priorVersion <http://example.org/backlog/1.47.0> ;
     owl:priorVersion <http://example.org/backlog/1.46.0> ;
     owl:priorVersion <http://example.org/backlog/1.45.0> ;
@@ -4842,3 +4843,35 @@ backlog:hasDurationSource a owl:DatatypeProperty , owl:FunctionalProperty ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "has duration source"@en ;
     skos:definition "Where the observed duration was read from — normally the two publish commits that bound the iteration. Required so a duration can be re-derived rather than believed, which is what separates it from the declared dates it replaces."@en .
+
+#################################################################
+#  79. Which quality metrics move with population (v1.49.0)
+#
+#  BRF-EP24, found by the script-decision audit. The quality
+#  assessor held `if name in ("ClassRichness", "AveragePopulation")`
+#  — a real classification about which OntoQA metrics respond to
+#  individuals being added, written twice as a python tuple.
+#
+#  It decides which figures get a second reading against a merged
+#  fixture. That is a statement about the metrics, not about the
+#  script, so the ontology is where it belongs: an adopter adding
+#  their own metric cannot register it as population-sensitive by
+#  editing a tuple they do not ship.
+#################################################################
+
+backlog:QualityMetric a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Quality Metric"@en ;
+    skos:definition "A structural measure of the ontology itself, from the OntoQA family. Named here so that which metrics exist, and which respond to population, is a queryable statement rather than a tuple inside the script that reports them."@en ;
+    dcterms:source "OntoQA: Metric-Based Ontology Quality Analysis (Tartir et al.)"@en .
+
+backlog:isPopulationSensitive a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:QualityMetric ; rdfs:range xsd:boolean ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "is population sensitive"@en ;
+    skos:definition "Whether this metric changes when individuals are added. The framework ABox holds framework-level individuals only, so population-sensitive metrics understate by design and are read twice — once alone and once with an adopter fixture merged. Both readings are reported rather than the flattering one, and which metrics need the second is now something a query can answer."@en .
+
+backlog:hasMetricName a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:QualityMetric ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "has metric name"@en .

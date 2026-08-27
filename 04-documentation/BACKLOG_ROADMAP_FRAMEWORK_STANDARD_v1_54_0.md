@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.53.0
+# Backlog & Roadmap Semantic Framework — Standard v1.54.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -885,6 +885,30 @@ and the reasoning must not be**.
 `LineageLayer` is the first exported code table: `layerClass`, `layerOrdinal`, `layerAbsenceCost`. The
 ordinal is an integer rather than list position, so the order survives being queried in any sequence — a
 list's meaning depends on nothing reordering it.
+
+### 2.5c-xxxiv Quality metrics, and what a script may decide
+
+`QualityMetric` with `hasMetricName` and `isPopulationSensitive` names the OntoQA measures and says
+which of them respond to individuals being added.
+
+It exists because the quality assessor held `if name in ("ClassRichness", "AveragePopulation")` —
+written twice. That is a statement **about the metrics**, not about the script, and an adopter adding
+their own measure could not register it as population-sensitive without editing a tuple they do not
+ship.
+
+The framework ABox holds framework-level individuals only, so population-sensitive metrics understate
+by design and are read twice: once alone, once with an adopter fixture merged. Both readings are
+reported rather than the flattering one.
+
+**`backlog_script_decision_audit`** scans for the *shape* of a decision — literal membership, filename
+decisions, polarity by name — rather than a list of known offenders, which goes stale the moment
+someone writes a new one. It parses rather than greps, because an audit that cannot tell a docstring
+from a decision reports its own success as a failure.
+
+**`backlog_standard_row_check`** resolves table rows against the TBox rather than requiring hand
+annotation. It reports rows naming a term the TBox lacks, and states its own limit: a row whose first
+cell is a *claim* rather than an identifier cannot be checked, and those are reported rather than
+excluded — a longer exclusion list would make the checker agree with the document by construction.
 
 ### 2.5d Decomposition, commitments, dependency kinds, impediments, flow, team (subject v1.4.0)
 
