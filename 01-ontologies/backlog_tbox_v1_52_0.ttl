@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.51.0> ;
-    owl:versionInfo "1.51.0" ;
+    owl:versionIRI <http://example.org/backlog/1.52.0> ;
+    owl:versionInfo "1.52.0" ;
+    owl:priorVersion <http://example.org/backlog/1.51.0> ;
     owl:priorVersion <http://example.org/backlog/1.50.0> ;
     owl:priorVersion <http://example.org/backlog/1.49.0> ;
     owl:priorVersion <http://example.org/backlog/1.48.0> ;
@@ -5033,3 +5034,44 @@ backlog:suitePattern a owl:DatatypeProperty , owl:FunctionalProperty ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "suite pattern"@en ;
     skos:definition "The filename glob locating the suite. Operational, and kept beside the name deliberately: separating them would leave the ontology naming suites nothing could find."@en .
+
+#################################################################
+#  83. Header words, and a rule that caught its own author
+#
+#  The script-decision audit shipped at It9 reported zero. It now
+#  reports two, and both are in the row checker written in the SAME
+#  iteration: a tuple of header words and a bold-text test.
+#
+#  This is the finding worth keeping. An audit that passes once is
+#  a measurement; an audit that keeps passing is a constraint. The
+#  count went 0 to 2 because the work continued, exactly as the
+#  table count went 23 to 26 — a denominator moves when the thing
+#  measuring it is also the thing being built.
+#
+#  The header words are a real classification: which first-cell
+#  values name a column rather than a term. That belongs here. The
+#  bold test is presentation and stays in the script, marked.
+#################################################################
+
+backlog:TableHeaderWord a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Table Header Word"@en ;
+    skos:definition "A first-cell value that names a COLUMN rather than a term, so a row carrying it is a header and not a claim about the ontology. Exported from a python tuple: which words head a column is a statement about how this package writes documentation, and an adopter writing tables in their own idiom could not extend the list without editing a checker they do not ship."@en .
+
+backlog:headerWord a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:TableHeaderWord ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "header word"@en .
+
+backlog:TermAbbreviation a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Term Abbreviation"@en ;
+    skos:definition "A short form the documentation uses for a term whose full name is longer — L2 for L2_EvidenceBound. Recorded because a checker resolving identifiers literally reads a documented abbreviation as an absent term, and the honest fix is to teach the checker the abbreviation rather than to rewrite the document or exclude the row."@en .
+
+backlog:abbreviationOf a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:TermAbbreviation ; rdfs:range rdfs:Resource ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "abbreviation of"@en .
+backlog:abbreviationText a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:TermAbbreviation ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "abbreviation text"@en .

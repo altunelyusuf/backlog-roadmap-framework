@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/6.8.0> ;
-    owl:versionInfo "6.8.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/6.9.0> ;
+    owl:versionInfo "6.9.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/6.8.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/6.7.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/6.6.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/6.5.0> ;
@@ -9318,3 +9319,53 @@ fw:R_EP_TablesBatch a backlog:RefinementEvent ;
 #  exists because a planning event produced it; with the event
 #  removed the task has no origin, and an orphan task is exactly
 #  what the L1 clause objects to.
+
+#  Header words, exported from the row checker.
+fw:HW_Term a backlog:TableHeaderWord ; backlog:headerWord "Term" .
+fw:HW_Field a backlog:TableHeaderWord ; backlog:headerWord "Field" .
+fw:HW_Property a backlog:TableHeaderWord ; backlog:headerWord "Property" .
+fw:HW_Class a backlog:TableHeaderWord ; backlog:headerWord "Class" .
+fw:HW_Level a backlog:TableHeaderWord ; backlog:headerWord "Level" .
+fw:HW_Kind a backlog:TableHeaderWord ; backlog:headerWord "Kind" .
+fw:HW_Name a backlog:TableHeaderWord ; backlog:headerWord "Name" .
+fw:HW_Value a backlog:TableHeaderWord ; backlog:headerWord "Value" .
+fw:HW_Rule a backlog:TableHeaderWord ; backlog:headerWord "Rule" .
+fw:HW_Stage a backlog:TableHeaderWord ; backlog:headerWord "Stage" .
+fw:HW_Concern a backlog:TableHeaderWord ; backlog:headerWord "Concern" .
+fw:HW_Facet a backlog:TableHeaderWord ; backlog:headerWord "Facet" .
+
+#  Documented abbreviations. The row checker read these as absent
+#  terms because it resolves identifiers literally.
+fw:AB_L1 a backlog:TermAbbreviation ; backlog:abbreviationText "L1" ; backlog:abbreviationOf backlog:L1_Structural .
+fw:AB_L2 a backlog:TermAbbreviation ; backlog:abbreviationText "L2" ; backlog:abbreviationOf backlog:L2_EvidenceBound .
+fw:AB_L3 a backlog:TermAbbreviation ; backlog:abbreviationText "L3" ; backlog:abbreviationOf backlog:L3_Governed .
+fw:AB_L4 a backlog:TermAbbreviation ; backlog:abbreviationText "L4" ; backlog:abbreviationOf backlog:L4_LineageEnforced .
+
+#################################################################
+#  The audit caught its own author, and the row checker its own
+#  limit.
+#################################################################
+
+fw:Ev_It12 a backlog:TestEvidence ;
+    backlog:hasTestSpec "03-tooling/backlog_script_decision_audit_v1_0_0.py and backlog_standard_row_check_v1_0_0.py" ;
+    backlog:hasTestId "post-It11" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-08-27T08:20:00Z"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "The script-decision audit shipped at It9 reporting zero. It now reports the row checker written in the SAME iteration: a tuple of header words and a bold-text test. An audit that passes once is a measurement; one that keeps passing is a constraint. Header words exported as TableHeaderWord; the bold test is presentation, stays in the script, and is marked audit-exempt in place rather than hidden. Audit back to zero over 21 scripts. Separately the row checker was reading L2, L3 and L4 as absent terms because it resolves identifiers literally and the classes are L2_EvidenceBound and so on — a checker defect, fixed by teaching it the documented abbreviation rather than by rewriting the document or excluding the rows, either of which would make the checker agree with the document by construction. 21 unchecked rows fell to 17." ;
+    backlog:verifiedByTool "backlog_script_decision_audit + backlog_standard_row_check" ;
+    backlog:attestsCriterion fw:AC_EP_StandardRows_S2 .
+
+fw:Obs_RowsFinal a backlog:MetricObservation ;
+    backlog:observesMetric fw:Metric_Obj_RowsUnchecked ;
+    backlog:observationFor fw:Obj_RowsUnchecked ;
+    backlog:hasObservedValue 17.0 ;
+    backlog:observedAt "2026-08-27T08:20:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Baseline 186 — every row uncheckable. Now 128 resolve to a TBox term and are checked, 3 are structural, 17 remain. Those 17 are CLAIM rows: their first cell is a finding about the framework — 'Order needs an external witness', 'Digests catch fabrication' — and a finding has no IRI to check against. Three options were weighed. Giving each an IRI would invent individuals so a checker can pass, growing the register to satisfy a measure. Excluding them would make the checker agree with the document by construction. Stating the limit is the third, and it is why this reads 17 rather than 0: the objective will not reach its target, and the reason is a property of prose rather than a shortfall in the work." .
+
+fw:Inv_ClaimRowsUncheckable a backlog:CrossCuttingInvariant ;
+    rdfs:label "Claim rows cannot be checked against a TBox"@en ;
+    backlog:hasCheckQuery "Manual: read the 17 reported rows and confirm each first cell is a sentence rather than an identifier." ;
+    backlog:hasExpectedResult "17, and accepted" ;
+    backlog:hasInvariantStatus backlog:Holds ;
+    backlog:tracksItem fw:EP_StandardRows ;
+    backlog:hasRationale "Recorded as a manual check because deciding whether a first cell is a claim or a name is a reading, and a SPARQL query claiming to do it would be the same false precision the 17 rows exist to avoid. Obj_RowsUnchecked will not reach 0 and the reason is stated rather than engineered away." .

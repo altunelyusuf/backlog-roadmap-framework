@@ -32,6 +32,31 @@ Exit 0 unless --strict and unresolved rows.
 """
 import sys, os, re, glob
 
+def _header_words(tbox_path, reg_path):
+    """First-cell values that name a column rather than a term.
+
+    EXPORTED at v1.118.0, after the script-decision audit caught this file.
+    The audit shipped in the same iteration and reported zero; it now reports
+    the checker written beside it. An audit that passes once is a measurement;
+    one that keeps passing is a constraint.
+
+    Fails loudly rather than falling back.
+    """
+    from rdflib import Graph, Namespace, RDF
+    B = Namespace("http://example.org/backlog#")
+    g = Graph()
+    g.parse(tbox_path, format="turtle")
+    g.parse(reg_path, format="turtle")
+    words = {str(g.value(w, B.headerWord)) for w in g.subjects(RDF.type, B.TableHeaderWord)
+             if g.value(w, B.headerWord) is not None}
+    if not words:
+        raise SystemExit(
+            "FATAL: the ontology declares no TableHeaderWord. Exported at "
+            "v1.118.0 and read here; refusing to fall back to a literal."
+        )
+    return words
+
+
 def rows_of(md):
     out = []
     for i, line in enumerate(open(md, encoding="utf-8", errors="ignore"), 1):
@@ -43,12 +68,30 @@ def rows_of(md):
             out.append((i, cells[0]))
     return out
 
-def tbox_terms(tbox):
-    from rdflib import Graph
+def tbox_terms(tbox, reg=None):
+    """Terms the TBox defines, plus the abbreviations the docs use for them.
+
+    A checker resolving identifiers literally reads "L2" as an absent term
+    because the class is L2_EvidenceBound. The honest fix is to teach the
+    checker the abbreviation, not to rewrite the document or exclude the row —
+    both of which would make the checker agree with the document by
+    construction.
+    """
+    from rdflib import Graph, Namespace, RDF
+    B = Namespace("http://example.org/backlog#")
     g = Graph()
     g.parse(tbox, format="turtle")
-    B = "http://example.org/backlog#"
-    return {str(s).split("#")[-1] for s in set(g.subjects()) if str(s).startswith(B)}
+    terms = {str(s).split("#")[-1] for s in set(g.subjects())
+             if str(s).startswith(str(B))}
+    if reg:
+        gr = Graph()
+        gr.parse(tbox, format="turtle")
+        gr.parse(reg, format="turtle")
+        for a in gr.subjects(RDF.type, B.TermAbbreviation):
+            txt = gr.value(a, B.abbreviationText)
+            if txt is not None:
+                terms.add(str(txt))
+    return terms
 
 def main():
     strict = "--strict" in sys.argv
@@ -58,7 +101,10 @@ def main():
         pkg, "04-documentation", "BACKLOG_ROADMAP_FRAMEWORK_STANDARD_v*.md")))[-1]
     tbox = sorted(glob.glob(os.path.join(
         pkg, "01-ontologies", "backlog_tbox_v*.ttl")))[-1]
-    terms = tbox_terms(tbox)
+    reg = sorted(glob.glob(os.path.join(
+        pkg, "01-ontologies", "backlog_framework_register_abox_v*.ttl")))[-1]
+    headers = _header_words(tbox, reg)
+    terms = tbox_terms(tbox, reg)
     rows = rows_of(std)
     named, unnamed, absent = [], [], []
     for ln, first in rows:
@@ -70,10 +116,12 @@ def main():
         # a checker that cannot tell a header from a claim reports the
         # document's structure as a defect.
         bare = first.strip("*` ")
-        if bare in ("Term", "Field", "Property", "Class", "Level", "Kind",
-                    "Name", "Value", "Rule", "Stage", "Concern", "Facet"):
+        if bare in headers:
             continue
-        if first.startswith("**") and first.endswith("**"):
+        # Presentation, not classification: emphasis marks how a row READS and
+        # states nothing about the ontology, so this stays in the script. The
+        # audit flags the pattern and the exemption is stated rather than hidden.
+        if first[:2] == "**" and first[-2:] == "**":  # audit-exempt: presentation
             continue
         cands = re.findall(r"[A-Za-z_][A-Za-z0-9_]*", first)
         hit = [c for c in cands if c in terms]

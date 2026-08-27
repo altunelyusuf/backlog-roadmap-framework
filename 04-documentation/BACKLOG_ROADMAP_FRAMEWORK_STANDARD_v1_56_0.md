@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.55.0
+# Backlog & Roadmap Semantic Framework — Standard v1.56.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -946,6 +946,24 @@ rather than a lookup, since an adopter must not assume a term from one of these 
 
 `ShapeSuite` names the SHACL suites a register is expected to satisfy. Its filename glob is kept beside
 the name deliberately: separating them would leave the ontology naming suites nothing could find.
+
+### 2.5c-xxxvii Header words and documented abbreviations
+
+`TableHeaderWord` names the first-cell values that head a column rather than name a term.
+`TermAbbreviation` records the short forms the documentation uses — `L2` for `L2_EvidenceBound`.
+
+Both were found by tools catching their own author. The script-decision audit shipped reporting zero
+and then reported **the checker written beside it in the same iteration**. An audit that passes once is
+a measurement; one that keeps passing is a constraint.
+
+The abbreviation case is a checker defect, not a document defect: a checker resolving identifiers
+literally reads a documented short form as an absent term. **The fix is to teach the checker, not to
+rewrite the document or exclude the row** — either of those makes the checker agree with the document
+by construction.
+
+Some rows remain uncheckable and that is a property of prose. A row whose first cell is a *finding* has
+no IRI to check against, and the three ways out are: invent individuals so a checker passes, exclude
+the rows, or state the limit. Only the third leaves the measure meaning anything.
 
 ### 2.5d Decomposition, commitments, dependency kinds, impediments, flow, team (subject v1.4.0)
 

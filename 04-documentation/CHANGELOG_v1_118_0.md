@@ -1,5 +1,46 @@
 # Changelog
 
+## v1.118.0 — 2026-08-27 (MINOR: the audit caught its own author)
+
+### An audit that passes once is a measurement
+
+The script-decision audit shipped at It9 reporting **zero**. It now reports **two** — both in the row
+checker written in the *same iteration*: a tuple of header words and a bold-text test.
+
+The count moved 0 → 2 because the work continued, exactly as the table count moved 23 → 26. **A
+denominator moves when the thing measuring it is also the thing being built.**
+
+Header words exported as `TableHeaderWord`. The bold test is presentation, stays in the script, and is
+**marked audit-exempt in place** rather than hidden. Audit back to zero across 21 scripts.
+
+### A checker defect, not a document defect
+
+The row checker was reading `L2`, `L3` and `L4` as absent terms — it resolves identifiers literally and
+the classes are `L2_EvidenceBound` and so on.
+
+**Fixed by teaching the checker the documented abbreviation**, not by rewriting the document or
+excluding the rows. Either of those would make the checker agree with the document by construction,
+which is the defect it exists to catch one level up.
+
+```
+Obj_RowsUnchecked   186 → 21 → 17
+```
+
+### 17 rows will not become 0, and the reason is stated
+
+Their first cell is a **finding** — *"Order needs an external witness"*, *"Digests catch fabrication"* —
+and a finding has no IRI to check against. Three options were weighed:
+
+- give each an IRI → **invents individuals so a checker can pass**, growing the register to satisfy a
+  measure
+- exclude them → the checker agrees with the document by construction
+- state the limit → the measure keeps meaning something
+
+`Inv_ClaimRowsUncheckable` records it as a **manual** check, because deciding whether a first cell is a
+claim or a name is a reading, and a SPARQL query claiming to do it would be the same false precision
+the 17 rows exist to avoid.
+
+
 ## v1.117.0 — 2026-08-27 (MINOR: It10 and It11 — the table migration finishes, and the denominator was wrong)
 
 ### It10 began by counting, and the count had grown
