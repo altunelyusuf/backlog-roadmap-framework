@@ -1,5 +1,61 @@
 # Changelog
 
+## v1.131.0 — 2026-08-27 (MAJOR: Mission_OntologyDriven achieved — all seven missions settled)
+
+### Reading the mission statement changed the answer
+
+The owner asked me to read the mission statements rather than the counters. `Mission_OntologyDriven`
+says:
+
+> What remains as prose **explains**; what remains as code executes standard engines. **Neither carries
+> meaning that only they define.**
+
+`Obj_RowsUnchecked` counts rows whose first cell resolves to a TBox term. **That is a proxy for the
+mission clause, not the clause itself** — and on the last fifteen rows the proxy and the clause
+disagree.
+
+### Tested one by one against the real clause
+
+Is this row's meaning defined anywhere but the prose?
+
+```
+the fit-gap gate passes on measured        AdaptationGate, gatePassed
+a gate whose result contradicts            the gatePassed clause
+digests catch fabrication                  StageOutput, hasStateDigest
+digests miss backwards construction        closedAtCommit
+order needs an external witness            closedAtCommit
+the witness has a measured limit           hasDurationSource
+the facing rows                            GoalFacing
+the five artefact-file rows                ArtifactEvidence, Manifest
+every item traces to an objective          pursuesObjective + L4 clause
+every epic decomposes                      decomposesInto, EpicSpecifiedShape
+no item pursues an out-of-scope objective  fillsScope + clause
+```
+
+**Eleven of eleven.** Every remaining row explains something the ontology already defines and enforces.
+Not one carries meaning that only it defines.
+
+The one that looked unenforced — *a gate marked passed whose observed result contradicts its
+expectation* — is carried by the `gatePassed` clause comparing `hasExpectedResult` to `hasGateResult`.
+Found by reading the clause rather than grepping its message.
+
+### The count stays at 15
+
+`Ach_Retrospective`, not an adjustment. **Changing the number so the objective could read 0 would be
+the exact fabrication this framework exists to catch.**
+
+### All seven missions are now settled
+
+```
+Mission_Plan, OrderRepair, Executable, Ops, Dev   superseded → chain into
+Mission_BuildSoftware → Mission_BuildSoftware_v2   Out_Achieved
+Mission_OntologyDriven                             Out_Achieved
+```
+
+168 work items across seven lineages, **none open**. Six objectives met outright, the seventh
+retrospective with its reason recorded.
+
+
 ## v1.130.0 — 2026-08-27 (MAJOR: a lineage becomes a first-class object)
 
 ### The modelling gap

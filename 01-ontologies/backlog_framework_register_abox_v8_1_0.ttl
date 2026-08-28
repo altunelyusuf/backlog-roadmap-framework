@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/8.0.0> ;
-    owl:versionInfo "8.0.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/8.1.0> ;
+    owl:versionInfo "8.1.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/8.0.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/7.11.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/7.8.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/7.7.0> ;
@@ -9978,7 +9979,7 @@ fw:Mission_BuildSoftware_v2 backlog:hasMissionOutcome backlog:Out_Achieved ;
     backlog:outcomeRationale "Achieved. Scope_Build: 10 of 10 deliverables satisfied by work that is Done and shipped in a package. Goal_MissionToWork, Goal_GroundedPractice and Goal_BuildAreasExhausted all reached. Goal_BuildContained is unreached and its objective now carries Ach_Retrospective with its reason, so nothing is left unexplained — which is the only condition under which this outcome may be set." ;
     backlog:retiredAtCommit "pending-commit" .
 
-fw:Mission_OntologyDriven backlog:hasMissionOutcome backlog:Out_InFlight .
+
 
 #################################################################
 #  v7.10.0 — the speed problem, measured rather than assumed.
@@ -11347,3 +11348,62 @@ fw:Inv_PerLineageContainer a backlog:CrossCuttingInvariant ;
 #  Both found by a gate whose whole job is comparing three
 #  statements of the same number — the kind of check that looks
 #  redundant until the day the three disagree.
+
+#################################################################
+#  v8.1.0 — the mission statement, read back, settles the floor.
+#
+#  The owner asked me to read the mission statements rather than
+#  the counters. Mission_OntologyDriven says:
+#
+#    "What remains as prose EXPLAINS; what remains as code executes
+#     standard engines. NEITHER CARRIES MEANING THAT ONLY THEY
+#     DEFINE."
+#
+#  Obj_RowsUnchecked counts rows whose first cell does not resolve
+#  to a TBox term. That is a PROXY for the mission clause and not
+#  the clause itself, and the proxy and the clause disagree on the
+#  last fifteen rows.
+#
+#  Tested one by one against the actual clause — is this row's
+#  meaning defined anywhere but the prose?
+#
+#    the fit-gap gate passes on measured        AdaptationGate, gatePassed
+#    a gate whose result contradicts            the gatePassed clause
+#    digests catch fabrication                  StageOutput, hasStateDigest
+#    digests miss backwards construction        closedAtCommit
+#    order needs an external witness            closedAtCommit
+#    the witness has a measured limit           hasDurationSource
+#    the facing rows                            GoalFacing
+#    the five artefact-file rows                ArtifactEvidence, Manifest
+#    every item traces to an objective          pursuesObjective + L4 clause
+#    every epic decomposes                      decomposesInto, EpicSpecifiedShape
+#    no item pursues an out-of-scope objective  fillsScope + clause
+#
+#  ELEVEN of eleven. Every remaining row EXPLAINS something the
+#  ontology already defines and enforces. Not one carries meaning
+#  that only it defines.
+#
+#  So the objective is MET on its mission's terms and its counter
+#  reads 15 on a proxy that was never the requirement. Recorded as
+#  Ach_Retrospective — the count stays at 15 permanently rather
+#  than being adjusted, because adjusting it would be the exact
+#  fabrication this framework exists to catch.
+#################################################################
+
+fw:Obj_RowsUnchecked backlog:hasAchievementStatus backlog:Ach_Retrospective ;
+    backlog:hasRationale "Retrospective, and the reason is the mission clause rather than the count. Obj_RowsUnchecked counts rows whose first cell resolves to a TBox term, which is a PROXY for the requirement that prose carry no meaning only it defines. Each of the fifteen remaining rows was read against the real clause and each explains something the ontology already defines and enforces — AdaptationGate and gatePassed, StageOutput and hasStateDigest, closedAtCommit, hasDurationSource, GoalFacing, ArtifactEvidence, pursuesObjective, decomposesInto, fillsScope. Eleven of eleven. The count stays at 15 permanently; adjusting it so the objective could read 0 would be the fabrication this framework exists to catch." .
+
+fw:Ev_MissionRead a backlog:TestEvidence ;
+    backlog:hasTestSpec "04-documentation standard table rows against Mission_OntologyDriven" ;
+    backlog:hasTestId "rows-vs-mission" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-08-27T18:30:00Z"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "Each of the fifteen rows resolved individually against the TBox and shapes to find where its meaning is defined. Eleven distinct claims, eleven found enforced. The one that looked unenforced — a gate marked passed whose observed result contradicts its expectation — is carried by the gatePassed clause comparing hasExpectedResult to hasGateResult, found by reading the clause rather than grepping its message." ;
+    backlog:verifiedByTool "manual resolution against tbox and shapes" ;
+    backlog:attestsCriterion fw:AC_EP_StandardRows_S2 .
+
+fw:Mission_OntologyDriven backlog:hasMissionOutcome backlog:Out_Achieved ;
+    backlog:outcomeRationale "Achieved. Six objectives met outright: governance rulings queryable 18 to 0, classification tables exported 23 to 0, scripts deciding what is valid 3 to 0, rules decided in code 3 to 0, and the two containment ceilings held at 0. The seventh, Obj_RowsUnchecked, carries Ach_Retrospective: its counter reads 15 on a proxy for the mission clause, and each of the fifteen rows was read against the clause itself and found to explain something the ontology already defines and enforces. Every goal is reached or has a status saying why it no longer steers, which is the only condition under which this outcome may be set." ;
+    backlog:retiredAtCommit "pending-commit" .
+
+fw:L_OntologyDriven backlog:lineageArchived false .
