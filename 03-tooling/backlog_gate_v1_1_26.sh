@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# backlog_gate v1.1.25 — four-gate release check for the Backlog & Roadmap
+# backlog_gate v1.1.26 — four-gate release check for the Backlog & Roadmap
 # Semantic Framework. Nothing about the package's state is trusted until all
 # four pass, and the SHACL gate refuses to certify anything until it has just
 # demonstrated, in this run, that it can fail a known-bad register.
@@ -11,7 +11,7 @@
 #   +       coverage gate          >= 80% of primary-source concepts (BP-D31)
 #   +       doc-coverage gate      every TBox class named in the standard document
 #
-# Usage: backlog_gate_v1_1_25.sh [REGISTER.ttl ...]
+# Usage: backlog_gate_v1_1_26.sh [REGISTER.ttl ...]
 
 set -u
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -240,6 +240,22 @@ if [ -n "$CR" ]; then
   }
 else
   echo "  NOT RUN — criterion resolver not found. Not assumed to pass."
+fi
+
+echo
+echo "== Number origin — does every figure say where it came from? =="
+# A3. hasCommittedEffort was compared against hasCapacity and both were
+# assertions: an iteration held 15 points while declaring 9 and every check
+# passed. Two numbers agreeing prove only that someone wrote both.
+NO="$(ls "$HERE"/backlog_number_origin_v*.py 2>/dev/null | sort -V | tail -1 || true)"
+if [ -n "$NO" ]; then
+  python3 "$NO" --strict | sed 's/^/  /' || {
+    echo "  A numeric property does not state its origin, or a derived one"
+    echo "  ships no query. An unshipped derivation is an assertion."
+    exit 1
+  }
+else
+  echo "  NOT RUN — number origin checker not found. Not assumed to pass."
 fi
 
 echo

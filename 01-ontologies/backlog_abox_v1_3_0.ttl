@@ -141,13 +141,13 @@ backlog:Section_OrphanCoverageCheck a owl:NamedIndividual , backlog:ReportSectio
 backlog:Gate0_ManifestSelfVerify a owl:NamedIndividual , backlog:ReleaseGate ;
     rdfs:label "Gate 0 — manifest self-verify"@en ;
     skos:definition "Every shipped file hashes as recorded in the manifest. Guards the inputs every later gate assumes."@en ;
-    backlog:hasGateCommand "backlog_gate_v1_1_25.sh (step: manifest self-verify)" ;
+    backlog:hasGateCommand "backlog_gate_v1_1_26.sh (step: manifest self-verify)" ;
     backlog:hasGateOrder 0 .
 
 backlog:GateP_TurtleParse a owl:NamedIndividual , backlog:ReleaseGate ;
     rdfs:label "Gate P — Turtle parse"@en ;
     skos:definition "Every shipped Turtle file parses. A file that does not parse cannot be validated, and a validator that silently skips it reports a pass it did not measure."@en ;
-    backlog:hasGateCommand "backlog_gate_v1_1_25.sh (step: parse)" ;
+    backlog:hasGateCommand "backlog_gate_v1_1_26.sh (step: parse)" ;
     backlog:hasGateOrder 1 .
 
 backlog:GateK_VersionIdentity a owl:NamedIndividual , backlog:ReleaseGate ;

@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/7.7.0> ;
-    owl:versionInfo "7.7.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/7.8.0> ;
+    owl:versionInfo "7.8.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/7.7.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/7.6.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/7.5.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/7.4.0> ;
@@ -351,7 +352,7 @@ fw:Ev_PbiTask a backlog:TestEvidence ;
     backlog:hasTestId "BRF-EP1" ;
     backlog:evidenceVerified true ;
     backlog:verifiedAt "2026-08-06T13:00:00"^^xsd:dateTime ;
-    backlog:hasVerificationMethod "backlog_gate_v1_1_25.sh: positive fixture carries a planned iteration with two subordinate execution tasks at 0 violations; negative fixture plants four EP1 defects (scored task, ranked task, empty planning event, parent Done over an open task) and all four fire" ;
+    backlog:hasVerificationMethod "backlog_gate_v1_1_26.sh: positive fixture carries a planned iteration with two subordinate execution tasks at 0 violations; negative fixture plants four EP1 defects (scored task, ranked task, empty planning event, parent Done over an open task) and all four fire" ;
     backlog:verifiedByTool "backlog_validate_v1_4_0.py + pyshacl 0.40.0" ;
     backlog:attestsCriterion fw:AC_PbiTask .
 
@@ -447,7 +448,7 @@ fw:D3 a backlog:DoDCriterion ;
 fw:D4 a backlog:DoDCriterion ;
     rdfs:label "D4 — The full release gate passes from a clean extraction, includ"@en ;
     backlog:hasCriterionText "The full release gate passes from a clean extraction, including the three-fixture self-proof and the fixture-coverage gate." ;
-    backlog:hasCheckQuery "backlog_gate_v1_1_25.sh run against a freshly extracted bundle." ;
+    backlog:hasCheckQuery "backlog_gate_v1_1_26.sh run against a freshly extracted bundle." ;
     backlog:hasExpectedResult "RELEASE GATE: PASS" ;
     backlog:hasCriterionStatus backlog:Holds .
 fw:D5 a backlog:DoDCriterion ;
@@ -9894,3 +9895,53 @@ fw:Inv_NoUnadoptedCapability a backlog:CrossCuttingInvariant ;
     backlog:hasInvariantStatus backlog:Holds ;
     backlog:tracksItem fw:EP_ScriptDecisions ;
     backlog:hasRationale "Zero orphans. Holds because optional-by-decision is now distinguishable from optional-by-omission, which was the whole gap: Package was the second kind for 91 releases and nothing could tell." .
+
+#################################################################
+#  v7.8.0 — A3 built. Every number says where it came from.
+#
+#  Thirty-six numeric properties, none declaring its provenance.
+#  MeasurementKind did this for Objective and for nothing else.
+#
+#  Classified one by one — the last bulk ruling in this package was
+#  wrong six times out of six — by asking what would have to be
+#  true to recompute each:
+#
+#    3 DERIVED, each shipping its query. hasCommittedEffort is the
+#      one that caused G24. hasScoreValue is WSJF arithmetic this
+#      session got wrong by hand five times in one release.
+#    5 MEASURED: from a clock, a commit, a count outside the
+#      register, and re-takeable by anyone with the same source.
+#   28 ASSERTED, and saying so. Not a failing — a capacity IS a
+#      judgement — but a judgement compared against a judgement
+#      proves nothing, and the framework could not tell a reader
+#      which comparisons those were.
+#
+#  THE FINDING: eight clauses in the shipped suite compare two
+#  ASSERTED properties to each other. hasCapacity against
+#  hasEffortEstimate, hasBaselineValue against hasTargetValue,
+#  hasJobSize against hasTimeCriticality. Each looks like a check
+#  and establishes only that someone wrote both numbers.
+#
+#  Reported rather than failed: several are legitimate — comparing
+#  a baseline to a target is how a direction is checked, and both
+#  SHOULD be judgements. What was missing is that a reader could
+#  not tell those from the one that let an iteration hold fifteen
+#  points while declaring nine.
+#################################################################
+
+fw:Ev_A3 a backlog:TestEvidence ;
+    backlog:hasTestSpec "03-tooling/backlog_number_origin_v1_0_0.py" ;
+    backlog:hasTestId "A3" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-08-27T13:00:00Z"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "36 numeric properties, 0 undeclared, 0 derived without a query. Eight clauses found comparing two asserted properties — the G24 shape, previously invisible. The checker refuses to run without a TBox and shapes, verified by the self-application step, so it cannot report zero undeclared numbers for files it never opened." ;
+    backlog:verifiedByTool "backlog_number_origin + backlog_self_application" ;
+    backlog:attestsCriterion fw:AC_EP_ScriptDecisions_S1 .
+
+fw:Inv_NumberOriginDeclared a backlog:CrossCuttingInvariant ;
+    rdfs:label "Every numeric property states its origin"@en ;
+    backlog:hasCheckQuery "Run 03-tooling/backlog_number_origin_v1_0_0.py --strict" ;
+    backlog:hasExpectedResult "0 undeclared, 0 derived without a query" ;
+    backlog:hasInvariantStatus backlog:Holds ;
+    backlog:tracksItem fw:EP_ScriptDecisions ;
+    backlog:hasRationale "36 of 36 declared. The eight assertion-versus-assertion comparisons are reported and not counted as failures: several are legitimate, and the framework's job here is to make the distinction visible rather than to rule on each. A reader can now find them; before, nobody could." .

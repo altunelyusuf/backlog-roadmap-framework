@@ -1,5 +1,53 @@
 # Changelog
 
+## v1.127.0 — 2026-08-27 (MINOR: A3 — every number says where it came from. All four mitigations built.)
+
+Thirty-six numeric properties, **none declaring its provenance**. `MeasurementKind` did this for
+`Objective` and for nothing else.
+
+### Classified one by one
+
+The last bulk ruling in this package was wrong six times out of six, so each was decided by asking what
+would have to be true to recompute it.
+
+```
+ 3 DERIVED    each ships its query
+ 5 MEASURED   from a clock, a commit, a count outside the register
+28 ASSERTED   and saying so
+```
+
+`hasCommittedEffort` is the one that caused G24. `hasScoreValue` is WSJF arithmetic this session got
+wrong **by hand, five times in one release** — now derived and shipping the formula.
+
+Twenty-eight assertions is not a failing. **A capacity is a judgement and cannot be otherwise.** But a
+judgement compared against a judgement proves nothing, and the framework could not tell a reader which
+comparisons those were.
+
+### The finding
+
+**Eight clauses in the shipped suite compare two asserted properties to each other.** `hasCapacity` vs
+`hasEffortEstimate`. `hasBaselineValue` vs `hasTargetValue`. `hasJobSize` vs `hasTimeCriticality`.
+
+Each looks like a check and establishes only that someone wrote both numbers.
+
+Reported rather than failed: several are legitimate — comparing a baseline to a target is how a
+direction is checked. What was missing is that nobody could tell those from the one that let an
+iteration hold fifteen points while declaring nine.
+
+### All four architectural mitigations are now built
+
+```
+A1  capability adoption as a link       99 obliged, 12 optional, 0 orphans
+A2  fixture obligation on the shape      5 declared, 5 verified
+A3  derivation provenance on numbers    36 of 36 declared
+A4  self-application as a gate step      4 of 4 refuse to run blind
+```
+
+Each found something on its first run. A4 found a checker reporting PASS on an empty graph; A1 found
+six obligations I had asserted and never built; A2 caught a false declaration when tested in the
+failing direction; A3 found eight assertion-versus-assertion comparisons.
+
+
 ## v1.126.0 — 2026-08-27 (MINOR: A1 — and my own ruling was wrong six times out of six)
 
 The third architectural mitigation, built. **18 classes shipped with nothing requiring their use** —
@@ -4189,7 +4237,7 @@ moment another stage is inserted, so the decoupling is permanent instead.
 
 **Why every gate stayed green while this was live:** the three-fixture self-proof invokes the
 validator *directly*; only the register path formats its output, so a defect in the formatting layer
-was invisible to the proof. `backlog_gate_v1_1_25.sh` now runs the known-bad fixture through the
+was invisible to the proof. `backlog_gate_v1_1_26.sh` now runs the known-bad fixture through the
 **exact register path** and aborts if it does not fail. The self-proof covered the shapes; it had
 never covered its own plumbing.
 
@@ -5182,7 +5230,7 @@ executable and ordered.
 arbitration documented and implemented in the report tool.
 
 **Added — tooling:** `backlog_roadmap_report_v1_5_0.py` (eight sections, both NEXT answers, silent
--gap check), `backlog_coverage_gate_v1_1_1.py` (BP-D31), `backlog_gate_v1_1_25.sh` (Gate 0 / P / K /
+-gap check), `backlog_coverage_gate_v1_1_1.py` (BP-D31), `backlog_gate_v1_1_26.sh` (Gate 0 / P / K /
 R plus coverage), Gate K version-identity check in the validator.
 
 **Changed:** the v1.0.0 advisory "item carries no priority score" now excludes items correctly

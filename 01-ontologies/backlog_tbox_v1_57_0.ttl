@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.56.0> ;
-    owl:versionInfo "1.56.0" ;
+    owl:versionIRI <http://example.org/backlog/1.57.0> ;
+    owl:versionInfo "1.57.0" ;
+    owl:priorVersion <http://example.org/backlog/1.56.0> ;
     owl:priorVersion <http://example.org/backlog/1.55.0> ;
     owl:priorVersion <http://example.org/backlog/1.54.0> ;
     owl:priorVersion <http://example.org/backlog/1.53.0> ;
@@ -5319,3 +5320,117 @@ backlog:RoadmapElement backlog:adoptionRationale "An abstract parent, as Backlog
 backlog:Spike backlog:adoptionRationale "Timeboxed investigation. Optional because a register may record investigation as an ordinary Story with a Task_SystemAnalysis task." .
 backlog:TableHeaderWord backlog:adoptionRationale "Documentation vocabulary read by the row checker. Requiring instances would oblige every adopter to describe our table conventions." .
 backlog:TermAbbreviation backlog:adoptionRationale "As TableHeaderWord: a display convenience, not a governing concept." .
+
+#################################################################
+#  89. Every number says where it came from — A3
+#
+#  G24 recurs because nothing marks a figure as derived or
+#  asserted. hasCommittedEffort was compared against hasCapacity
+#  and BOTH were assertions: an iteration held 15 points while
+#  declaring 9 and every check passed. iterationStart and
+#  iterationEnd were asserted dateTimes compared to nothing — two
+#  iterations took 32 and 28 minutes against a declared fourteen
+#  days, an overstatement of 667 times.
+#
+#  MeasurementKind already does this for Objective and for nothing
+#  else. There are 36 numeric properties in this vocabulary and 35
+#  of them carry no statement about their own provenance.
+#
+#  numberOrigin is declared on the PROPERTY, not on each value: a
+#  property is derived or asserted by its nature, and saying so 36
+#  times is a vocabulary decision rather than 36 000 data
+#  decisions. derivationQuery ships the query for a derived one, so
+#  the figure can be recomputed rather than believed.
+#################################################################
+
+backlog:NumberOrigin a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:Num_Derived backlog:Num_Asserted backlog:Num_Measured ) ;
+    rdfs:label "Number Origin"@en ;
+    skos:definition "Where a numeric property's values come from. Three, because they carry different weight and the framework has confused them: a derived value is computable from other data and can be checked, an asserted value is a judgement and can only be agreed with, and a measured value comes from outside the register and can be re-taken. A number compared only against another number of unstated origin proves nothing."@en .
+
+backlog:Num_Derived a owl:NamedIndividual , backlog:NumberOrigin ;
+    rdfs:label "Derived"@en ;
+    skos:definition "Computable from other data in the register. Must ship its query, or it is an assertion wearing a derivation's clothes."@en .
+backlog:Num_Asserted a owl:NamedIndividual , backlog:NumberOrigin ;
+    rdfs:label "Asserted"@en ;
+    skos:definition "A judgement someone recorded. Legitimate and the weakest: it cannot be recomputed, only disputed. Two asserted numbers agreeing with each other is the defect that let an iteration hold fifteen points while declaring nine."@en .
+backlog:Num_Measured a owl:NamedIndividual , backlog:NumberOrigin ;
+    rdfs:label "Measured"@en ;
+    skos:definition "Taken from outside the register — a commit timestamp, a file count, a clock. Re-takeable by anyone with the same source, which is what distinguishes it from an assertion."@en .
+
+backlog:numberOrigin a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain rdf:Property ; rdfs:range backlog:NumberOrigin ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "number origin"@en ;
+    skos:definition "Declared on the PROPERTY rather than on each value: a property is derived or asserted by its nature, so this is a vocabulary decision made once rather than a data decision made per figure."@en .
+
+backlog:derivationQuery a owl:DatatypeProperty ;
+    rdfs:domain rdf:Property ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "derivation query"@en ;
+    skos:definition "How a derived property's value is computed. Required of a derived property so the figure can be recomputed rather than believed — an unshipped derivation is an assertion, and the difference is invisible from the value alone."@en .
+
+#################################################################
+#  Origin declared for all 36 numeric properties, read one by one.
+#
+#  The last bulk ruling in this package was wrong six times out of
+#  six, so each was decided by asking what would have to be true to
+#  recompute it.
+#
+#  THREE are derived and ship their query. hasCommittedEffort is
+#  the one that caused G24 — it was compared against hasCapacity
+#  while both were assertions, and an iteration held fifteen points
+#  declaring nine. hasScoreValue is WSJF arithmetic that this
+#  session got wrong by hand five times in one release.
+#
+#  FIVE are measured: they come from a clock, a commit, or a count
+#  outside the register, and can be re-taken.
+#
+#  The remaining twenty-eight are ASSERTED and say so. That is not
+#  a failing — a capacity is a judgement and cannot be otherwise —
+#  but a judgement compared against another judgement proves
+#  nothing, and until now the framework could not tell the reader
+#  which comparisons those were.
+#################################################################
+
+backlog:expectedValue backlog:numberOrigin backlog:Num_Asserted .
+backlog:forecastIterationsObserved backlog:numberOrigin backlog:Num_Measured .
+backlog:forecastObservedVelocity backlog:numberOrigin backlog:Num_Measured .
+backlog:hasActualEffort backlog:numberOrigin backlog:Num_Measured .
+backlog:hasBaselineValue backlog:numberOrigin backlog:Num_Asserted .
+backlog:hasBatchCompleted backlog:numberOrigin backlog:Num_Derived ;
+    backlog:derivationQuery "SELECT (COUNT(?u) AS ?v) WHERE { $this backlog:batchUnitDone ?u }" .
+backlog:hasBatchSize backlog:numberOrigin backlog:Num_Asserted .
+backlog:hasBudgetCeiling backlog:numberOrigin backlog:Num_Asserted .
+backlog:hasCapacity backlog:numberOrigin backlog:Num_Asserted .
+backlog:hasCommittedEffort backlog:numberOrigin backlog:Num_Derived ;
+    backlog:derivationQuery "SELECT (SUM(?e) AS ?v) WHERE { ?i backlog:memberOfContainer $this ; backlog:hasEffortEstimate ?e }" .
+backlog:hasConfidence backlog:numberOrigin backlog:Num_Asserted .
+backlog:hasDepFactor backlog:numberOrigin backlog:Num_Asserted .
+backlog:hasDimensionRate backlog:numberOrigin backlog:Num_Asserted .
+backlog:hasDuration backlog:numberOrigin backlog:Num_Asserted .
+backlog:hasEffort backlog:numberOrigin backlog:Num_Asserted .
+backlog:hasEffortEstimate backlog:numberOrigin backlog:Num_Asserted .
+backlog:hasEstimateConfidence backlog:numberOrigin backlog:Num_Asserted .
+backlog:hasGateOrder backlog:numberOrigin backlog:Num_Asserted .
+backlog:hasImpact backlog:numberOrigin backlog:Num_Asserted .
+backlog:hasJobSize backlog:numberOrigin backlog:Num_Asserted .
+backlog:hasLaunchPriority backlog:numberOrigin backlog:Num_Asserted .
+backlog:hasObservedDuration backlog:numberOrigin backlog:Num_Measured .
+backlog:hasObservedValue backlog:numberOrigin backlog:Num_Measured .
+backlog:hasQuantity backlog:numberOrigin backlog:Num_Asserted .
+backlog:hasReach backlog:numberOrigin backlog:Num_Asserted .
+backlog:hasRiskReductionValue backlog:numberOrigin backlog:Num_Asserted .
+backlog:hasRoadmapRank backlog:numberOrigin backlog:Num_Asserted .
+backlog:hasScoreValue backlog:numberOrigin backlog:Num_Derived ;
+    backlog:derivationQuery "SELECT ((?bv + ?tc + ?rr) / ?js AS ?v) WHERE { $this backlog:hasUserBusinessValue ?bv ; backlog:hasTimeCriticality ?tc ; backlog:hasRiskReductionValue ?rr ; backlog:hasJobSize ?js }" .
+backlog:hasStepOrdinal backlog:numberOrigin backlog:Num_Asserted .
+backlog:hasTargetShare backlog:numberOrigin backlog:Num_Asserted .
+backlog:hasTargetValue backlog:numberOrigin backlog:Num_Asserted .
+backlog:hasTimeCriticality backlog:numberOrigin backlog:Num_Asserted .
+backlog:hasUserBusinessValue backlog:numberOrigin backlog:Num_Asserted .
+backlog:hasWipLimitValue backlog:numberOrigin backlog:Num_Asserted .
+backlog:layerOrdinal backlog:numberOrigin backlog:Num_Asserted .
+backlog:sectionOrdinal backlog:numberOrigin backlog:Num_Asserted .

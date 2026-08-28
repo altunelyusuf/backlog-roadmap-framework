@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.62.0
+# Backlog & Roadmap Semantic Framework — Standard v1.63.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -1077,6 +1077,23 @@ values and 44 of 51 tasks chose one; `TestCase` shipped and 46 of 55 stories nev
 them.** `backlog_adoption_check` reports three states — obliged, optional-with-reason, and **orphan** —
 kept separate because they mean different things.
 
+### 2.5c-xliv Every number says where it came from
+
+`NumberOrigin` — `Num_Derived`, `Num_Asserted`, `Num_Measured` — declared on the **property**, because a
+property is derived or asserted by its nature. A derived property must ship its `derivationQuery`, or
+it is an assertion wearing a derivation's clothes.
+
+**Why it matters.** `hasCommittedEffort` was compared against `hasCapacity` and both were assertions: an
+iteration held 15 points while declaring 9 and every check passed. Iteration dates were asserted and
+compared to nothing — 32 and 28 real minutes declared as fourteen days.
+
+**Two numbers agreeing prove only that someone wrote both.**
+
+Eight clauses in the shipped suite compare two asserted properties to each other. Several are
+legitimate — comparing a baseline to a target is how a direction is checked, and both *should* be
+judgements. What was missing is that a reader could not tell those from the one that let an iteration
+overfill in silence. They are reported, not failed.
+
 ### 2.5d Decomposition, commitments, dependency kinds, impediments, flow, team (subject v1.4.0)
 
 | Term | Meaning |
@@ -1281,7 +1298,7 @@ python3 03-tooling/backlog_evidence_bridge_v1_0_0.py my_register.ttl \
 python3 03-tooling/backlog_roadmap_report_v1_5_0.py my_register.ttl --emit report.ttl
 
 # 5. Run the four-gate release check (self-proving)
-bash 03-tooling/backlog_gate_v1_1_25.sh my_register.ttl
+bash 03-tooling/backlog_gate_v1_1_26.sh my_register.ttl
 ```
 
 Start at L1, move to L2 once a bridge exists, and to L3 when releases carry manifest hashes and the
@@ -1291,7 +1308,7 @@ blueprint sweep is real. Raising the level is a one-line edit to the profile.
 
 ## 5. What the gates prove, and what they do not
 
-`backlog_gate_v1_1_25.sh` runs Gate 0 (manifest self-verify), Gate P (every Turtle file parses),
+`backlog_gate_v1_1_26.sh` runs Gate 0 (manifest self-verify), Gate P (every Turtle file parses),
 Gate K (`versionInfo` == `versionIRI` token == filename token), Gate R (SHACL reconcile), and the
 BP-D31 coverage gate. Gate R first validates a positive fixture that must pass and a negative
 fixture that must fail, and aborts if either outcome inverts: a suite never shown to reject a
