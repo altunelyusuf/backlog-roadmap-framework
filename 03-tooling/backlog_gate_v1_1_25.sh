@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# backlog_gate v1.1.24 — four-gate release check for the Backlog & Roadmap
+# backlog_gate v1.1.25 — four-gate release check for the Backlog & Roadmap
 # Semantic Framework. Nothing about the package's state is trusted until all
 # four pass, and the SHACL gate refuses to certify anything until it has just
 # demonstrated, in this run, that it can fail a known-bad register.
@@ -11,7 +11,7 @@
 #   +       coverage gate          >= 80% of primary-source concepts (BP-D31)
 #   +       doc-coverage gate      every TBox class named in the standard document
 #
-# Usage: backlog_gate_v1_1_24.sh [REGISTER.ttl ...]
+# Usage: backlog_gate_v1_1_25.sh [REGISTER.ttl ...]
 
 set -u
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -240,6 +240,19 @@ if [ -n "$CR" ]; then
   }
 else
   echo "  NOT RUN — criterion resolver not found. Not assumed to pass."
+fi
+
+echo
+echo "== Adoption — is any capability shipped and required by nothing? =="
+# A1. Package sat unused for 91 releases; TaskType shipped with 14 values and 44
+# of 51 tasks chose one; TestCase shipped and 46 of 55 stories never used it.
+# Every one was a capability delivered and not adopted, invisible because
+# nothing joined the thing built to the thing that would make anyone use it.
+AD="$(ls "$HERE"/backlog_adoption_check_v*.py 2>/dev/null | sort -V | tail -1 || true)"
+if [ -n "$AD" ]; then
+  python3 "$AD" | tail -4 | sed 's/^/  /' || true
+else
+  echo "  NOT RUN — adoption checker not found. Not assumed to pass."
 fi
 
 echo

@@ -71,3 +71,18 @@ ex:Fast_Score a backlog:WSJFScore ;
     backlog:hasRiskReductionValue 2.0 ; backlog:hasJobSize 2.0 .
 
 <http://example.org/fixture-r3#Profile> backlog:hasExpectedPolarity backlog:Polarity_Positive .
+
+ex:PkgLaunch backlog:hasPackageVersion "1.0.0" ; backlog:targetsIteration ex:It_Pkg .
+
+ex:PkgLater backlog:hasPackageVersion "1.0.0" ; backlog:targetsIteration ex:It_Pkg .
+
+ex:It_Pkg a backlog:Iteration ; backlog:hasIdentifier "IT-PKG" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:iterationStart "2026-08-01T00:00:00"^^xsd:dateTime ;
+    backlog:iterationEnd "2026-08-14T23:59:59"^^xsd:dateTime ;
+    backlog:hasCapacity 9.0 ; backlog:hasCommittedEffort 0.0 .
+
+# The iteration needs a member: an empty container is rejected, and
+# inventing one to satisfy a package obligation would be the shape of
+# defect this release exists to expose.
+ex:Gated backlog:memberOfContainer ex:It_Pkg .

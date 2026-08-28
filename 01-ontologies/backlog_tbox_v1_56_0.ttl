@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.55.0> ;
-    owl:versionInfo "1.55.0" ;
+    owl:versionIRI <http://example.org/backlog/1.56.0> ;
+    owl:versionInfo "1.56.0" ;
+    owl:priorVersion <http://example.org/backlog/1.55.0> ;
     owl:priorVersion <http://example.org/backlog/1.54.0> ;
     owl:priorVersion <http://example.org/backlog/1.53.0> ;
     owl:priorVersion <http://example.org/backlog/1.52.0> ;
@@ -5252,3 +5253,69 @@ backlog:fixtureCaseName a owl:DatatypeProperty ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "fixture case name"@en ;
     skos:definition "The individual inside the fixture that triggers this shape. Named because a fixture usually carries several cases and reporting that SOME case in a file fired says nothing about which clause was reached — the same batching defect as one evidence record attesting five criteria."@en .
+
+#################################################################
+#  88. A capability names what obliges its use — A1
+#
+#  G20 recurs because a class and the constraint that requires it
+#  are separate objects with no relation between them. Package sat
+#  unused for 91 releases; TaskType shipped with fourteen values
+#  and 44 of 51 tasks chose one; TestCase shipped and 46 of 55
+#  stories never used it; CodeTable carried hasTableKind with
+#  nothing requiring it.
+#
+#  Every one was a capability delivered and not adopted, and in
+#  every case the gap was invisible because nothing joined the
+#  thing built to the thing that would make anyone use it.
+#
+#  obligedBy names the shape. adoptionRationale states, for a class
+#  that is DELIBERATELY optional, why — because "no obligation" and
+#  "obligation forgotten" look identical, and 18 classes currently
+#  carry no shape mentioning them at all.
+#################################################################
+
+backlog:obligedBy a owl:DatatypeProperty ;
+    rdfs:domain rdfs:Resource ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "obliged by"@en ;
+    skos:definition "The shape that makes this class or property obligatory somewhere. Declared on the term because a capability and its obligation are otherwise separate objects with nothing joining them, which is how a class ships and is never adopted. A term with no obligation is not necessarily wrong — it may be deliberately optional — but the framework should be able to tell the two apart."@en .
+
+backlog:adoptionRationale a owl:DatatypeProperty ;
+    rdfs:domain rdfs:Resource ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "adoption rationale"@en ;
+    skos:definition "Why this term carries no obligation. Required of a deliberately optional term so that optional-by-decision is distinguishable from optional-by-omission — the second is what left Package unused for 91 releases while every check passed."@en .
+
+#################################################################
+#  Adoption ruled per class, read rather than labelled in bulk.
+#
+#  Eighteen orphans. Five are genuinely obliged and the checker
+#  could not see it because their shapes reference INSTANCES rather
+#  than naming the class — Package, TestData, ContainerRole,
+#  ForeignNamespace, QualityMetric all have shapes, and a text
+#  match for "backlog:Package" missed PackageShape targeting it by
+#  a different route.
+#
+#  The other thirteen are optional for stated reasons, and the
+#  reasons differ in kind: two are abstract parents whose children
+#  carry the obligation; five are adopter-facing vocabulary a
+#  register may legitimately not use; two are documentation
+#  conveniences; four are ISO 12207 terms an adopter may fold into
+#  ordinary work items.
+#
+#  Blanket-labelling all eighteen would have hidden the five real
+#  ones, which is why each was read.
+#################################################################
+
+backlog:BacklogConcept backlog:adoptionRationale "An abstract parent. Its children carry the obligations; requiring the parent directly would double every check." .
+backlog:CapabilityClass backlog:adoptionRationale "Adopter-facing vocabulary for describing what a register governs. Optional by design: a register that governs one thing needs no capability taxonomy." .
+backlog:ComplianceObligation backlog:adoptionRationale "For adopters under external regulation. This register has none, and requiring one would make an unregulated adopter invent a compliance record to pass." .
+backlog:Defect backlog:adoptionRationale "Adopter-facing. A register tracking defects uses it; one tracking only forward work does not, and the framework should not force a defect log on a greenfield backlog." .
+backlog:Enabler backlog:adoptionRationale "SAFe vocabulary for architectural work. Optional because a register may classify such work as an ordinary Epic and lose nothing." .
+backlog:EnforcementDomain backlog:adoptionRationale "Groups shapes for reporting. Descriptive rather than governing; requiring it would oblige a register to categorise the framework rather than its own work." .
+backlog:ModificationRequest backlog:adoptionRationale "ISO 12207 change vocabulary. Optional: a register may record change as a new WorkItem rather than a request against an existing one." .
+backlog:ProblemReport backlog:adoptionRationale "As ModificationRequest — ISO 12207 vocabulary an adopter may or may not separate from ordinary work items." .
+backlog:RoadmapElement backlog:adoptionRationale "An abstract parent, as BacklogConcept." .
+backlog:Spike backlog:adoptionRationale "Timeboxed investigation. Optional because a register may record investigation as an ordinary Story with a Task_SystemAnalysis task." .
+backlog:TableHeaderWord backlog:adoptionRationale "Documentation vocabulary read by the row checker. Requiring instances would oblige every adopter to describe our table conventions." .
+backlog:TermAbbreviation backlog:adoptionRationale "As TableHeaderWord: a display convenience, not a governing concept." .

@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.61.0
+# Backlog & Roadmap Semantic Framework — Standard v1.62.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -1064,6 +1064,19 @@ checked, which is the defect of evidence covering criteria it never examined. Th
 declared and inferred counts **separately**, so the difference stays visible rather than averaging into
 one reassuring number.
 
+### 2.5c-xliii A capability names what obliges its use
+
+`obligedBy` names the shape that makes a term obligatory. `adoptionRationale` states, for a term that
+is **deliberately** optional, why.
+
+Both exist because *optional by decision* and *optional by omission* look identical, and the second is
+what left `Package` unused for 91 releases while every check passed. `TaskType` shipped with fourteen
+values and 44 of 51 tasks chose one; `TestCase` shipped and 46 of 55 stories never used it.
+
+**A capability and the constraint that requires it are otherwise separate objects with nothing joining
+them.** `backlog_adoption_check` reports three states — obliged, optional-with-reason, and **orphan** —
+kept separate because they mean different things.
+
 ### 2.5d Decomposition, commitments, dependency kinds, impediments, flow, team (subject v1.4.0)
 
 | Term | Meaning |
@@ -1268,7 +1281,7 @@ python3 03-tooling/backlog_evidence_bridge_v1_0_0.py my_register.ttl \
 python3 03-tooling/backlog_roadmap_report_v1_5_0.py my_register.ttl --emit report.ttl
 
 # 5. Run the four-gate release check (self-proving)
-bash 03-tooling/backlog_gate_v1_1_24.sh my_register.ttl
+bash 03-tooling/backlog_gate_v1_1_25.sh my_register.ttl
 ```
 
 Start at L1, move to L2 once a bridge exists, and to L3 when releases carry manifest hashes and the
@@ -1278,7 +1291,7 @@ blueprint sweep is real. Raising the level is a one-line edit to the profile.
 
 ## 5. What the gates prove, and what they do not
 
-`backlog_gate_v1_1_24.sh` runs Gate 0 (manifest self-verify), Gate P (every Turtle file parses),
+`backlog_gate_v1_1_25.sh` runs Gate 0 (manifest self-verify), Gate P (every Turtle file parses),
 Gate K (`versionInfo` == `versionIRI` token == filename token), Gate R (SHACL reconcile), and the
 BP-D31 coverage gate. Gate R first validates a positive fixture that must pass and a negative
 fixture that must fail, and aborts if either outcome inverts: a suite never shown to reject a

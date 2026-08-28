@@ -1,5 +1,42 @@
 # Changelog
 
+## v1.126.0 — 2026-08-27 (MINOR: A1 — and my own ruling was wrong six times out of six)
+
+The third architectural mitigation, built. **18 classes shipped with nothing requiring their use** —
+`Package` among them, the class that sat unused for 91 releases while every check passed.
+
+### Each orphan read, not labelled in bulk
+
+Twelve are optional for reasons that **differ in kind**: two abstract parents whose children carry the
+obligation, five adopter-facing vocabularies a register may legitimately not use, two documentation
+conveniences, three ISO 12207 terms an adopter may fold into ordinary work items.
+
+Six I ruled **already obliged**.
+
+### The ruling was checked, and it was wrong six times
+
+**None of the six had a shape targeting it.** `Package`'s apparent hit was `PackageShape` targeting
+`RegisterPackage` — a *different* class whose name contains the first, a substring match reading as a
+real obligation.
+
+Six asserted, zero real. **That is G19 at the level of a single ruling**: I reasoned about which classes
+were covered instead of looking, and was wrong every time.
+
+The shapes were **built** rather than the ruling softened, because the ruling was right about what
+*should* be obliged and wrong only about what already was.
+
+```
+before   93 obliged   0 optional   18 ORPHAN
+after    99 obliged  12 optional    0 orphan
+```
+
+The register still validates at **0 violations**, which means the six new obligations are satisfied by
+existing data rather than requiring it to change — the capability was already being used correctly and
+nothing had ever required it.
+
+`backlog_adoption_check_v1_0_0.py` runs in the release gate.
+
+
 ## v1.125.0 — 2026-08-27 (MINOR: A2 — a shape names the fixture that proves it)
 
 The second architectural mitigation, built.
@@ -4152,7 +4189,7 @@ moment another stage is inserted, so the decoupling is permanent instead.
 
 **Why every gate stayed green while this was live:** the three-fixture self-proof invokes the
 validator *directly*; only the register path formats its output, so a defect in the formatting layer
-was invisible to the proof. `backlog_gate_v1_1_24.sh` now runs the known-bad fixture through the
+was invisible to the proof. `backlog_gate_v1_1_25.sh` now runs the known-bad fixture through the
 **exact register path** and aborts if it does not fail. The self-proof covered the shapes; it had
 never covered its own plumbing.
 
@@ -5145,7 +5182,7 @@ executable and ordered.
 arbitration documented and implemented in the report tool.
 
 **Added — tooling:** `backlog_roadmap_report_v1_5_0.py` (eight sections, both NEXT answers, silent
--gap check), `backlog_coverage_gate_v1_1_1.py` (BP-D31), `backlog_gate_v1_1_24.sh` (Gate 0 / P / K /
+-gap check), `backlog_coverage_gate_v1_1_1.py` (BP-D31), `backlog_gate_v1_1_25.sh` (Gate 0 / P / K /
 R plus coverage), Gate K version-identity check in the validator.
 
 **Changed:** the v1.0.0 advisory "item carries no priority score" now excludes items correctly

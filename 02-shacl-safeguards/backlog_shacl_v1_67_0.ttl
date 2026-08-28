@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.66.0> ;
-    owl:versionInfo "1.66.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.67.0> ;
+    owl:versionInfo "1.67.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.66.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.65.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.64.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.63.0> ;
@@ -4539,3 +4540,72 @@ backlog:ClassReachabilityShape a sh:NodeShape ;
 #  checker reports both counts separately so the difference stays
 #  visible.
 #################################################################
+
+#################################################################
+#  v1.67.0 — the six obligations I asserted and had not built
+#
+#  Ruling on the eighteen orphans, I marked six as already obliged.
+#  Checking rather than trusting that ruling: NONE of the six had a
+#  shape targeting it. Package's apparent hit was PackageShape
+#  targeting RegisterPackage, a DIFFERENT class whose name contains
+#  the first — a substring match reading as a real obligation.
+#
+#  Six asserted obligations, zero real. This is G19 at the level of
+#  a single ruling: I reasoned about which classes were covered
+#  instead of grepping for their shapes, and was wrong six times
+#  out of six.
+#
+#  The shapes are built here rather than the ruling softened,
+#  because the ruling was right about what SHOULD be obliged and
+#  wrong only about what already was.
+#################################################################
+
+backlog:PackageContentShape a sh:NodeShape ;
+    sh:targetClass backlog:Package ;
+    sh:severity sh:Violation ;
+    rdfs:label "A package names its version and its target (L2)"@en ;
+    sh:property [ sh:path backlog:hasPackageVersion ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "L2: a package must carry the version it will release under, recorded at identification so the increment is a decision taken with the content in view rather than a label applied afterwards." ] ;
+    sh:property [ sh:path backlog:targetsIteration ; sh:minCount 1 ;
+        sh:message "L2: a package must target at least one iteration. A package targeting nothing is a grouping with no plan to deliver it — which is how this class sat unused for 91 releases while every check passed." ] .
+
+backlog:TestDataShape a sh:NodeShape ;
+    sh:targetClass backlog:TestData ;
+    sh:severity sh:Violation ;
+    rdfs:label "Test data states the fixture state it establishes (L2)"@en ;
+    sh:property [ sh:path backlog:hasFixtureState ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "L2: test data must describe the starting state it establishes. Data that says nothing about the state cannot be re-created by anyone who did not write it, which makes the case that runs on it a claim rather than a check." ] .
+
+backlog:ContainerRoleShape a sh:NodeShape ;
+    sh:targetClass backlog:ContainerRole ;
+    sh:severity sh:Violation ;
+    rdfs:label "A container role names its class (L2)"@en ;
+    sh:property [ sh:path backlog:containerClass ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "L2: a container role must name the class the reports treat as a container. A role naming nothing is counted by no query and excluded from none." ] .
+
+backlog:ForeignNamespaceShape a sh:NodeShape ;
+    sh:targetClass backlog:ForeignNamespace ;
+    sh:severity sh:Violation ;
+    rdfs:label "A foreign namespace names its IRI and owner (L2)"@en ;
+    sh:property [ sh:path backlog:namespaceIRI ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "L2: a foreign namespace must state its IRI, or nobody can tell which terms it covers." ] ;
+    sh:property [ sh:path backlog:namespaceOwner ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "L2: a foreign namespace must name its owner. The point of recording it is that an adopter must not assume a term from it is theirs to change, and that is unanswerable without an owner." ] .
+
+backlog:QualityMetricShape a sh:NodeShape ;
+    sh:targetClass backlog:QualityMetric ;
+    sh:severity sh:Violation ;
+    rdfs:label "A quality metric names itself and its population sensitivity (L2)"@en ;
+    sh:property [ sh:path backlog:hasMetricName ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "L2: a quality metric must carry the name the assessor reports it under, or the ontology and the report cannot be matched." ] ;
+    sh:property [ sh:path backlog:isPopulationSensitive ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:boolean ;
+        sh:message "L2: a quality metric must say whether it responds to population. Population-sensitive metrics understate by design and are read twice; a metric that does not declare this is read once and reported as if complete." ] .
+
+backlog:ShapeSuiteShape a sh:NodeShape ;
+    sh:targetClass backlog:ShapeSuite ;
+    sh:severity sh:Violation ;
+    rdfs:label "A shape suite names itself and where it is found (L2)"@en ;
+    sh:property [ sh:path backlog:suiteName ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "L2: a shape suite must carry its name." ] ;
+    sh:property [ sh:path backlog:suitePattern ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "L2: a shape suite must carry the glob that locates it, or the ontology names a suite nothing can find." ] .

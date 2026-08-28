@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/7.6.0> ;
-    owl:versionInfo "7.6.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/7.7.0> ;
+    owl:versionInfo "7.7.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/7.6.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/7.5.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/7.4.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/7.3.0> ;
@@ -350,7 +351,7 @@ fw:Ev_PbiTask a backlog:TestEvidence ;
     backlog:hasTestId "BRF-EP1" ;
     backlog:evidenceVerified true ;
     backlog:verifiedAt "2026-08-06T13:00:00"^^xsd:dateTime ;
-    backlog:hasVerificationMethod "backlog_gate_v1_1_24.sh: positive fixture carries a planned iteration with two subordinate execution tasks at 0 violations; negative fixture plants four EP1 defects (scored task, ranked task, empty planning event, parent Done over an open task) and all four fire" ;
+    backlog:hasVerificationMethod "backlog_gate_v1_1_25.sh: positive fixture carries a planned iteration with two subordinate execution tasks at 0 violations; negative fixture plants four EP1 defects (scored task, ranked task, empty planning event, parent Done over an open task) and all four fire" ;
     backlog:verifiedByTool "backlog_validate_v1_4_0.py + pyshacl 0.40.0" ;
     backlog:attestsCriterion fw:AC_PbiTask .
 
@@ -446,7 +447,7 @@ fw:D3 a backlog:DoDCriterion ;
 fw:D4 a backlog:DoDCriterion ;
     rdfs:label "D4 — The full release gate passes from a clean extraction, includ"@en ;
     backlog:hasCriterionText "The full release gate passes from a clean extraction, including the three-fixture self-proof and the fixture-coverage gate." ;
-    backlog:hasCheckQuery "backlog_gate_v1_1_24.sh run against a freshly extracted bundle." ;
+    backlog:hasCheckQuery "backlog_gate_v1_1_25.sh run against a freshly extracted bundle." ;
     backlog:hasExpectedResult "RELEASE GATE: PASS" ;
     backlog:hasCriterionStatus backlog:Holds .
 fw:D5 a backlog:DoDCriterion ;
@@ -9848,3 +9849,48 @@ fw:Inv_DeclaredProofVerified a backlog:CrossCuttingInvariant ;
     backlog:hasInvariantStatus backlog:Holds ;
     backlog:tracksItem fw:EP_ScriptDecisions ;
     backlog:hasRationale "Five declared, five verified, zero failed. Holds on a small population deliberately: the alternative was 222 declarations of which 217 would be assertions, and an invariant that holds over unverified claims is the shape of every defect this session found." .
+
+#################################################################
+#  v7.7.0 — A1 built, and my own ruling was wrong six times.
+#
+#  Eighteen classes shipped with nothing requiring their use.
+#  Package was among them — the class that sat unused for 91
+#  releases while every check passed.
+#
+#  Ruling on each rather than labelling in bulk, I marked six as
+#  ALREADY obliged. Checking rather than trusting that ruling: NONE
+#  of the six had a shape targeting it. Package's apparent hit was
+#  PackageShape targeting RegisterPackage — a DIFFERENT class whose
+#  name contains the first, a substring match reading as a real
+#  obligation.
+#
+#  Six asserted, zero real. That is G19 at the level of a single
+#  ruling: I reasoned about which classes were covered instead of
+#  looking, and was wrong six times out of six. The shapes were
+#  built rather than the ruling softened, because the ruling was
+#  right about what SHOULD be obliged and wrong only about what
+#  already was.
+#
+#  Result: 99 obliged, 12 optional with a stated reason, 0 orphans.
+#  The twelve reasons differ in kind — two abstract parents, five
+#  adopter-facing vocabularies, two documentation conveniences,
+#  three ISO 12207 terms an adopter may fold into ordinary work
+#  items — which is why blanket-labelling would have hidden the six.
+#################################################################
+
+fw:Ev_A1 a backlog:TestEvidence ;
+    backlog:hasTestSpec "03-tooling/backlog_adoption_check_v1_0_0.py" ;
+    backlog:hasTestId "A1" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-08-27T12:20:00Z"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "111 classes examined. Before: 93 obliged, 18 orphans. Each orphan read individually rather than labelled in bulk. Twelve are optional for reasons that differ in kind and are stated per class. Six were ruled obliged and the ruling was CHECKED against the shapes file — none had one, so six shapes were built. After: 99 obliged, 12 optional, 0 orphans, and the register still validates at 0 violations, which means the six new obligations are satisfied by the existing data rather than requiring it to change." ;
+    backlog:verifiedByTool "backlog_adoption_check + backlog_validate" ;
+    backlog:attestsCriterion fw:AC_EP_ScriptDecisions_S1 .
+
+fw:Inv_NoUnadoptedCapability a backlog:CrossCuttingInvariant ;
+    rdfs:label "No class is optional by omission"@en ;
+    backlog:hasCheckQuery "Run 03-tooling/backlog_adoption_check_v1_0_0.py --strict" ;
+    backlog:hasExpectedResult "0 orphans" ;
+    backlog:hasInvariantStatus backlog:Holds ;
+    backlog:tracksItem fw:EP_ScriptDecisions ;
+    backlog:hasRationale "Zero orphans. Holds because optional-by-decision is now distinguishable from optional-by-omission, which was the whole gap: Package was the second kind for 91 releases and nothing could tell." .
