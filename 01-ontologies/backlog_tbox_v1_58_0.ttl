@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.57.0> ;
-    owl:versionInfo "1.57.0" ;
+    owl:versionIRI <http://example.org/backlog/1.58.0> ;
+    owl:versionInfo "1.58.0" ;
+    owl:priorVersion <http://example.org/backlog/1.57.0> ;
     owl:priorVersion <http://example.org/backlog/1.56.0> ;
     owl:priorVersion <http://example.org/backlog/1.55.0> ;
     owl:priorVersion <http://example.org/backlog/1.54.0> ;
@@ -2164,7 +2165,7 @@ backlog:Dir_Decrease a owl:NamedIndividual , backlog:MetricDirection ;
 backlog:AchievementStatus a owl:Class ;
     rdfs:subClassOf backlog:BacklogConcept ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
-    owl:oneOf ( backlog:Ach_Met backlog:Ach_Missed backlog:Ach_Pending ) ;
+    owl:oneOf ( backlog:Ach_Met backlog:Ach_Missed backlog:Ach_Pending backlog:Ach_Withdrawn backlog:Ach_Retrospective ) ;
     rdfs:label "Achievement Status"@en ;
     skos:definition "Whether a stated target was met, missed, or is still open. Closed set of three, derived from observation rather than asserted, so that failure is a computed outcome nobody has to volunteer."@en .
 
@@ -5434,3 +5435,75 @@ backlog:hasUserBusinessValue backlog:numberOrigin backlog:Num_Asserted .
 backlog:hasWipLimitValue backlog:numberOrigin backlog:Num_Asserted .
 backlog:layerOrdinal backlog:numberOrigin backlog:Num_Asserted .
 backlog:sectionOrdinal backlog:numberOrigin backlog:Num_Asserted .
+
+#################################################################
+#  90. A lineage is set down, not left running
+#
+#  OWNER FINDING, three parts, each measured.
+#
+#  1. Mission_BuildSoftware_v2 has 10 of 10 deliverables satisfied
+#     by Done work and is still LIVE. The framework can supersede a
+#     mission — replaced by a better statement of the same intent —
+#     and has no word for one that was ACHIEVED. So a finished
+#     lineage stays in scope: 294 clauses query its 55 closed
+#     stories on every run, forever.
+#
+#  2. Ach_Withdrawn is used TWICE in the register and declared
+#     NOWHERE. AchievementStatus is closed at three by owl:oneOf,
+#     so two individuals sit outside a closed enumeration — a
+#     contradiction, and no clause noticed. Declared here.
+#
+#  3. Ach_Retrospective is the missing state the owner's rule
+#     needs. Goal_BuildContained counts work done outside scope
+#     during a FINISHED development: the count is fixed at 1
+#     forever and no future work can reduce it. That is not a goal
+#     — a goal steers — it is a record. It was added retroactively
+#     at v1.102.0 and said so at the time.
+#
+#  The owner's rule: a lineage with an unreached goal is NOT
+#  retired; the goal's status changes first, if it is no longer
+#  needed. Ach_Retrospective is that change, and it is narrower
+#  than withdrawal: withdrawn means the measure was wrong,
+#  retrospective means it was right and can only report.
+#################################################################
+
+backlog:Ach_Withdrawn a owl:NamedIndividual , backlog:AchievementStatus ;
+    rdfs:label "Withdrawn"@en ;
+    skos:definition "The objective was retired because it measured the wrong thing — normally a superseded mission's progress. Used in this register since v1.82.0 and never declared until v1.128.0, which is a term in use sitting outside its own closed enumeration."@en .
+
+backlog:Ach_Retrospective a owl:NamedIndividual , backlog:AchievementStatus ;
+    rdfs:label "Retrospective"@en ;
+    skos:definition "The objective measures a fact about finished work and cannot move: the event it counts already happened. Distinct from Withdrawn, which says the measure was wrong — retrospective says it was right and can now only report. A retrospective objective must never read Met by having its number adjusted; it reads what it read, permanently."@en .
+
+backlog:MissionOutcome a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:Out_InFlight backlog:Out_Achieved backlog:Out_Abandoned ) ;
+    rdfs:label "Mission Outcome"@en ;
+    skos:definition "Where a mission stands as a whole. Superseding is not an outcome — it replaces a statement of intent with a better one and the intent continues. These three are what happens to the intent itself, and the framework had none of them: a mission achieved and a mission still running were indistinguishable, so a finished lineage stayed in scope of every query forever."@en .
+
+backlog:Out_InFlight a owl:NamedIndividual , backlog:MissionOutcome ;
+    rdfs:label "In flight"@en ;
+    skos:definition "Work continues. The default, and the only state in which a mission belongs in the live register."@en .
+backlog:Out_Achieved a owl:NamedIndividual , backlog:MissionOutcome ;
+    rdfs:label "Achieved"@en ;
+    skos:definition "Every goal is reached or has a status saying why it no longer steers. A mission may only reach this state when NO goal is left unreached and unexplained — a lineage carrying a live unmet goal is not finished, it is stalled, and retiring it would bury the reason."@en .
+backlog:Out_Abandoned a owl:NamedIndividual , backlog:MissionOutcome ;
+    rdfs:label "Abandoned"@en ;
+    skos:definition "Work stopped without the goals being reached, and the reason is recorded. Named so that abandonment is a decision with an author rather than a lineage that quietly stopped being mentioned."@en .
+
+backlog:hasMissionOutcome a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:Mission ; rdfs:range backlog:MissionOutcome ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "has mission outcome"@en .
+
+backlog:outcomeRationale a owl:DatatypeProperty ;
+    rdfs:domain backlog:Mission ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "outcome rationale"@en ;
+    skos:definition "Why the mission reached this outcome, quoting the evidence. Required for Achieved and Abandoned so that setting a lineage down is an act with a reason rather than a status someone changed."@en .
+
+backlog:retiredAtCommit a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:Mission ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "retired at commit"@en ;
+    skos:definition "The commit at which the lineage was set down. An external witness, as closedAtCommit is for a stage: without it a retirement date is an assertion and the framework already learned what asserted dates are worth."@en .

@@ -1,5 +1,46 @@
 # Changelog
 
+## v1.128.0 — 2026-08-27 (MAJOR-class: a lineage can be set down — three findings from the owner's question)
+
+### 1. A finished lineage was still live
+
+`Mission_BuildSoftware_v2` has **10 of 10 deliverables satisfied by Done work** and was still LIVE. The
+framework could *supersede* a mission — replaced by a better statement of the same intent — and had **no
+word for one that was achieved**.
+
+So 294 clauses queried its 55 closed stories on every run, forever. That is also the answer to the
+speed question, reached from the compliance side.
+
+### 2. A term in use, declared nowhere
+
+`Ach_Withdrawn` is used **twice** in the register and was declared **nowhere**. `AchievementStatus` is
+closed at three by `owl:oneOf`, so two individuals sat outside a closed enumeration — a contradiction
+the ontology states and nothing evaluated. Declared, with an advisory that would now catch it.
+
+### 3. The owner's rule, applied in the owner's order
+
+**A lineage with an unreached goal is not retired. The goal's status changes first.**
+
+`Goal_BuildContained` counts work done outside scope during a **finished** development. The count is
+fixed at 1 forever — no future work can reduce it, because the event happened.
+
+`Ach_Retrospective`, **not** `Ach_Withdrawn`. Withdrawn would say the measure was wrong. It was right:
+the reachability gate *was* built while the owner's mission waited, and that finding is the most useful
+thing that lineage produced about how this session behaves. **The number stays at 1 permanently rather
+than being adjusted so a mission could read Achieved.**
+
+Only then was the mission set down.
+
+### Two clause defects caught while building it
+
+**The Achieved rule checked *any* observation, not the latest.** It fired on every baseline reading —
+an objective that started at 3 and reached 0 still had a 3 on record, so a mission could never be
+achieved once its own progress was written down.
+
+**Verified in the failing direction**: removing the retrospective status makes the retirement rule fire
+again. A rule that only ever passes proves nothing about its discrimination.
+
+
 ## v1.127.0 — 2026-08-27 (MINOR: A3 — every number says where it came from. All four mitigations built.)
 
 Thirty-six numeric properties, **none declaring its provenance**. `MeasurementKind` did this for

@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/7.8.0> ;
-    owl:versionInfo "7.8.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/7.9.0> ;
+    owl:versionInfo "7.9.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/7.8.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/7.7.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/7.6.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/7.5.0> ;
@@ -9945,3 +9946,35 @@ fw:Inv_NumberOriginDeclared a backlog:CrossCuttingInvariant ;
     backlog:hasInvariantStatus backlog:Holds ;
     backlog:tracksItem fw:EP_ScriptDecisions ;
     backlog:hasRationale "36 of 36 declared. The eight assertion-versus-assertion comparisons are reported and not counted as failures: several are legitimate, and the framework's job here is to make the distinction visible rather than to rule on each. A reader can now find them; before, nobody could." .
+
+#################################################################
+#  v7.9.0 — the finished lineage set down, in the owner's order.
+#
+#  THE RULE: a lineage with an unreached goal is not retired. The
+#  goal's status changes first, if it is no longer needed.
+#
+#  Goal_BuildContained is unreached and cannot be reached. Its
+#  objective counts work done outside scope during a FINISHED
+#  development — the count is fixed at 1 forever and no future work
+#  can reduce it, because the event already happened. That is not a
+#  goal, which steers; it is a record. It was added retroactively
+#  at v1.102.0 and said so at the time.
+#
+#  Ach_Retrospective, and NOT Ach_Withdrawn. Withdrawn would say
+#  the measure was wrong. It was right: the reachability gate WAS
+#  built while the owner's mission waited, and that finding is the
+#  most useful thing that lineage produced about how this session
+#  behaves. Retrospective keeps the number at 1 permanently rather
+#  than adjusting it to let a mission read Achieved.
+#
+#  Only then is the mission set down.
+#################################################################
+
+fw:Obj_BuildContained backlog:hasAchievementStatus backlog:Ach_Retrospective ;
+    backlog:hasRationale "Retrospective, not withdrawn. The measure was correct and the event it counts is finished: BRF-EP20 was built while the owner's mission waited, and no work done now can make that untrue. It reads 1 against a target of 0 permanently. Adjusting the number so the mission could read Achieved would be the exact failure this objective exists to detect — work that suits the measurer rather than the owner." .
+
+fw:Mission_BuildSoftware_v2 backlog:hasMissionOutcome backlog:Out_Achieved ;
+    backlog:outcomeRationale "Achieved. Scope_Build: 10 of 10 deliverables satisfied by work that is Done and shipped in a package. Goal_MissionToWork, Goal_GroundedPractice and Goal_BuildAreasExhausted all reached. Goal_BuildContained is unreached and its objective now carries Ach_Retrospective with its reason, so nothing is left unexplained — which is the only condition under which this outcome may be set." ;
+    backlog:retiredAtCommit "pending-commit" .
+
+fw:Mission_OntologyDriven backlog:hasMissionOutcome backlog:Out_InFlight .

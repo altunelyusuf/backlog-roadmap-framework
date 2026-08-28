@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.63.0
+# Backlog & Roadmap Semantic Framework — Standard v1.64.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -1093,6 +1093,27 @@ Eight clauses in the shipped suite compare two asserted properties to each other
 legitimate — comparing a baseline to a target is how a direction is checked, and both *should* be
 judgements. What was missing is that a reader could not tell those from the one that let an iteration
 overfill in silence. They are reported, not failed.
+
+### 2.5c-xlv A lineage is set down, not left running
+
+`MissionOutcome` — `Out_InFlight`, `Out_Achieved`, `Out_Abandoned`. **Superseding is not an outcome**:
+it replaces a statement of intent with a better one and the intent continues. These three are what
+happens to the intent itself.
+
+Without them a mission that was achieved and one still running are indistinguishable, so a finished
+lineage stays in scope of every query forever.
+
+**A mission may not be Achieved while a goal is unreached and unexplained.** A lineage carrying a live
+unmet goal is not finished, it is stalled, and retiring it would bury the reason. The goal's status
+changes first, with a rationale, or the mission stays in flight.
+
+`Ach_Retrospective` is that change and it is narrower than `Ach_Withdrawn`. **Withdrawn says the
+measure was wrong; retrospective says it was right and the event it counts already happened.** A
+retrospective objective keeps its number permanently — adjusting it so a mission can read Achieved is
+the failure such an objective exists to detect.
+
+`retiredAtCommit` is an external witness, as `closedAtCommit` is for a stage: without it a retirement
+date is an assertion, and this framework has already learned what asserted dates are worth.
 
 ### 2.5d Decomposition, commitments, dependency kinds, impediments, flow, team (subject v1.4.0)
 

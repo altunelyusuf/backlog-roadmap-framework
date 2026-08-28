@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.67.0> ;
-    owl:versionInfo "1.67.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.68.0> ;
+    owl:versionInfo "1.68.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.67.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.66.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.65.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.64.0> ;
@@ -4609,3 +4610,83 @@ backlog:ShapeSuiteShape a sh:NodeShape ;
         sh:message "L2: a shape suite must carry its name." ] ;
     sh:property [ sh:path backlog:suitePattern ; sh:minCount 1 ; sh:maxCount 1 ;
         sh:message "L2: a shape suite must carry the glob that locates it, or the ontology names a suite nothing can find." ] .
+
+#################################################################
+#  v1.68.0 — a lineage is set down only when nothing is
+#  left unexplained
+#################################################################
+
+backlog:MissionOutcomeShape a sh:NodeShape ;
+    sh:targetClass backlog:Mission ;
+    sh:severity sh:Violation ;
+    rdfs:label "A mission states its outcome, and Achieved is earned (L3)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: this mission does not say where it stands. A mission that is achieved and one still in flight are otherwise indistinguishable, which is how a finished lineage stays in scope of every query forever — 294 clauses were running against 55 closed stories because nothing could say the work was done." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L3_Governed, backlog:L4_LineageEnforced))
+            FILTER NOT EXISTS { $this backlog:hasMissionOutcome ?o }
+            FILTER NOT EXISTS { ?s backlog:supersedesMission $this }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L2: this mission is Achieved or Abandoned and gives no rationale. Setting a lineage down is an act with a reason, not a status someone changed — and the reason is the only thing a later reader has when the register no longer carries the work." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasMissionOutcome ?o .
+            FILTER (?o IN (backlog:Out_Achieved, backlog:Out_Abandoned))
+            FILTER NOT EXISTS { $this backlog:outcomeRationale ?r }
+        }""" ] .
+
+backlog:AchievedOnlyWhenClearShape a sh:NodeShape ;
+    sh:targetClass backlog:Mission ;
+    sh:severity sh:Violation ;
+    rdfs:label "A mission is not Achieved while a goal is unreached and unexplained (L3)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: this mission is marked Achieved while one of its goals carries an objective that is neither met nor given a status explaining why it no longer steers. A lineage with a live unreached goal is not finished, it is stalled, and retiring it would bury the reason it stalled. Change the goal's status first, with a rationale, or leave the mission in flight." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasMissionOutcome backlog:Out_Achieved .
+            ?g backlog:contributesToMission $this .
+            ?o backlog:contributesToGoal ?g ; backlog:hasTargetValue ?t ; backlog:hasTargetDirection ?d .
+            # The LATEST observation, not any observation. Written first as
+            # "any", which fired on every baseline reading forever: an
+            # objective that started at 3 and reached 0 still had a 3 on
+            # record, so a mission could never be Achieved once its own
+            # progress was written down. An objective is judged by where it
+            # ENDED, and the history is what shows it moved.
+            ?obs backlog:observationFor ?o ; backlog:hasObservedValue ?v ;
+                 backlog:observedAt ?at .
+            FILTER NOT EXISTS {
+                ?later backlog:observationFor ?o ; backlog:observedAt ?lat .
+                FILTER (?lat > ?at)
+            }
+            FILTER NOT EXISTS { ?o backlog:hasAchievementStatus ?st }
+            FILTER ((?d = backlog:Dir_Decrease && ?v > ?t) ||
+                    (?d = backlog:Dir_Increase && ?v < ?t) ||
+                    (?d = backlog:Dir_Hold && ?v != ?t))
+        }""" ] .
+
+backlog:RetrospectiveObjectiveShape a sh:NodeShape ;
+    sh:targetClass backlog:Objective ;
+    sh:severity sh:Violation ;
+    rdfs:label "A retrospective objective explains why it can only report (L2)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L2: this objective is marked Retrospective or Withdrawn and gives no rationale. The two states mean different things — withdrawn says the measure was wrong, retrospective says it was right and the event it counts already happened — and a reader cannot tell which without being told." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasAchievementStatus ?st .
+            FILTER (?st IN (backlog:Ach_Retrospective, backlog:Ach_Withdrawn))
+            FILTER NOT EXISTS { $this backlog:hasRationale ?r }
+        }""" ] .
+
+backlog:UndeclaredIndividualShape a sh:NodeShape ;
+    sh:targetClass backlog:AchievementStatus ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: a status individual outside its own enumeration"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: this individual is used as an AchievementStatus and is not a member of the class's owl:oneOf list. A closed enumeration with individuals outside it is a contradiction the ontology states and nothing evaluates — Ach_Withdrawn sat in exactly this state from v1.82.0 to v1.128.0, used twice and declared nowhere." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            FILTER NOT EXISTS { $this a owl:NamedIndividual }
+        }""" ] .
