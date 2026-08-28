@@ -79,6 +79,47 @@ def main():
 
     unproven = sorted(c for c in clauses
                       if not any(c[:38] in f for f in fired))
+
+    # A2: shapes that DECLARE their proof, verified rather than inferred.
+    #
+    # The inference above matches message text, which is fragile by
+    # construction: reword a message and a clause silently becomes unproven,
+    # or matches a different one and reports proven. A declared link can be
+    # CHECKED — run the named fixture, look for the named case.
+    #
+    # Reported separately from the inferred count so the difference stays
+    # visible. Five shapes declare a proof today and 217 do not; annotating
+    # all of them would assert links nobody checked, which is the defect this
+    # whole line of work exists to prevent.
+    declared = list(g.triples((None, URIRef(str(B) + "provenByFixture"), None))) \
+        if False else []
+    from rdflib import Namespace
+    BL = Namespace("http://example.org/backlog#")
+    declared = [(sh, str(fx)) for sh, _, fx in g.triples((None, BL.provenByFixture, None))]
+    dec_ok = dec_bad = 0
+    for sh, fx in declared:
+        case = g.value(sh, BL.fixtureCaseName)
+        path = os.path.join(pkg, fx)
+        if not os.path.exists(path):
+            dec_bad += 1
+            print("   DECLARED PROOF MISSING  %-30s -> %s"
+                  % (str(sh).split("#")[-1], fx))
+            continue
+        try:
+            out = subprocess.run([sys.executable, validate, path],
+                                 capture_output=True, text=True,
+                                 timeout=90).stdout
+        except Exception:
+            out = ""
+        if case is not None and str(case) in out:
+            dec_ok += 1
+        else:
+            dec_bad += 1
+            print("   DECLARED CASE DID NOT FIRE  %-24s case %s"
+                  % (str(sh).split("#")[-1], case))
+    print("shapes declaring a proof  : %d" % len(declared))
+    print("  declaration verified    : %d" % dec_ok)
+    print("  declaration FAILED      : %d" % dec_bad)
     print("negative fixtures run     : %d" % len(fixtures))
     print("level-gated clauses       : %d" % len(clauses))
     print("proven to fire            : %d" % (len(clauses) - len(unproven)))

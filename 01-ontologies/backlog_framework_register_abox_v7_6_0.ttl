@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/7.5.0> ;
-    owl:versionInfo "7.5.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/7.6.0> ;
+    owl:versionInfo "7.6.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/7.5.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/7.4.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/7.3.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/7.2.0> ;
@@ -9808,3 +9809,42 @@ fw:Inv_NoBlindVerdict a backlog:CrossCuttingInvariant ;
     backlog:hasInvariantStatus backlog:Holds ;
     backlog:tracksItem fw:EP_ScriptDecisions ;
     backlog:hasRationale "Four of four refuse. Recorded because the failure it prevents is invisible by construction — a tool passing on nothing looks exactly like a tool passing on something, and this package has now produced three variants of that: a clause returning no rows, evidence covering a criterion it never checked, and a checker reading no file." .
+
+#################################################################
+#  v7.6.0 — A2 built. A shape may name the fixture that proves it.
+#
+#  G22 recurs because a clause and its proof are separate files
+#  with nothing joining them. The clause-proof checker inferred the
+#  link by MATCHING MESSAGE TEXT — fragile by construction: reword
+#  a message and a clause silently becomes unproven, or matches a
+#  different clause and reports proven.
+#
+#  provenByFixture and fixtureCaseName are declared on the shape,
+#  and the checker VERIFIES them: it runs the named fixture and
+#  looks for the named case. That is the difference between a link
+#  and a claim.
+#
+#  FIVE shapes carry a declared proof. NOT 222. Annotating all of
+#  them would assert 217 links nobody checked, which is exactly the
+#  defect G21 names — evidence covering criteria it never examined.
+#  The honest state is five declared and the rest inferred, and the
+#  checker reports the two counts separately so the difference
+#  stays visible rather than averaging into one reassuring number.
+#################################################################
+
+fw:Ev_A2 a backlog:TestEvidence ;
+    backlog:hasTestSpec "03-tooling/backlog_clause_proof_v1_0_0.py declared-proof verification" ;
+    backlog:hasTestId "A2" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-08-27T11:40:00Z"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "Five shapes declare a fixture and a case; the checker runs each fixture and confirms the named case appears. All five verify. Tested in the failing direction too, which is the part that matters: one declaration was altered to name a case that does not exist, and the checker reported DECLARED CASE DID NOT FIRE and dropped to four verified. A check that only ever passes proves nothing about its own discrimination." ;
+    backlog:verifiedByTool "backlog_clause_proof" ;
+    backlog:attestsCriterion fw:AC_EP_ScriptDecisions_S1 .
+
+fw:Inv_DeclaredProofVerified a backlog:CrossCuttingInvariant ;
+    rdfs:label "A declared proof is run, not trusted"@en ;
+    backlog:hasCheckQuery "Run 03-tooling/backlog_clause_proof_v1_0_0.py and read the declaration counts" ;
+    backlog:hasExpectedResult "0 failed declarations" ;
+    backlog:hasInvariantStatus backlog:Holds ;
+    backlog:tracksItem fw:EP_ScriptDecisions ;
+    backlog:hasRationale "Five declared, five verified, zero failed. Holds on a small population deliberately: the alternative was 222 declarations of which 217 would be assertions, and an invariant that holds over unverified claims is the shape of every defect this session found." .

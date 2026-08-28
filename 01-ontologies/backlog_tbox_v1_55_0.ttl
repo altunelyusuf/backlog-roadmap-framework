@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.54.0> ;
-    owl:versionInfo "1.54.0" ;
+    owl:versionIRI <http://example.org/backlog/1.55.0> ;
+    owl:versionInfo "1.55.0" ;
+    owl:priorVersion <http://example.org/backlog/1.54.0> ;
     owl:priorVersion <http://example.org/backlog/1.53.0> ;
     owl:priorVersion <http://example.org/backlog/1.52.0> ;
     owl:priorVersion <http://example.org/backlog/1.51.0> ;
@@ -5218,3 +5219,36 @@ backlog:Scen_Rejection a owl:NamedIndividual , backlog:ScenarioKind ;
 backlog:Scen_Absent a owl:NamedIndividual , backlog:ScenarioKind ;
     rdfs:label "Absent"@en ;
     skos:definition "Nothing to work with: an empty set, a missing file, an unpopulated graph. Proves the feature fails loudly rather than silently returning nothing — the case that caught a malformed FILTER reporting zero violations and zero warnings."@en .
+
+#################################################################
+#  87. A shape names the fixture that proves it — A2
+#
+#  G22 recurs because a clause and its proof are separate files
+#  with nothing joining them. The clause-proof checker infers the
+#  link by MATCHING MESSAGE TEXT, which is fragile by construction:
+#  reword a message and the clause silently becomes unproven, or
+#  worse, matches a different clause and reports proven.
+#
+#  provenByFixture is a declared link on the shape. With it, an
+#  unproven clause is a structural fact a query can find, not the
+#  output of a heuristic — and the heuristic can be checked against
+#  the declaration rather than trusted.
+#
+#  The 222 shapes are NOT annotated retroactively here. Doing so
+#  would mean asserting 222 links this session did not verify, and
+#  a link asserted without checking is the defect G21 names. The
+#  property ships, the checker reads it where present, and the
+#  count of shapes carrying one is reported.
+#################################################################
+
+backlog:provenByFixture a owl:DatatypeProperty ;
+    rdfs:domain rdfs:Resource ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "proven by fixture"@en ;
+    skos:definition "The fixture whose failure demonstrates this shape fires. Declared on the shape rather than inferred from its message, because a message is prose and rewording it silently unproves the clause or, worse, matches a different one and reports it proven. A shape carrying no such link is not necessarily unproven — it is unverifiable, which is the weaker and more honest claim."@en .
+
+backlog:fixtureCaseName a owl:DatatypeProperty ;
+    rdfs:domain rdfs:Resource ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "fixture case name"@en ;
+    skos:definition "The individual inside the fixture that triggers this shape. Named because a fixture usually carries several cases and reporting that SOME case in a file fired says nothing about which clause was reached — the same batching defect as one evidence record attesting five criteria."@en .

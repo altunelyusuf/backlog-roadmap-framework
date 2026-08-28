@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.60.0
+# Backlog & Roadmap Semantic Framework — Standard v1.61.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -1046,6 +1046,23 @@ evidence record covering a criterion it never checked, and a checker reading no 
 result was green, and the greenness came from nothing having been examined.
 
 Every previous self-application finding here was noticed **by accident**. This one was found by asking.
+
+### 2.5c-xlii A shape names the fixture that proves it
+
+`provenByFixture` and `fixtureCaseName` declare, on the shape, which fixture demonstrates it fires and
+which case inside that fixture triggers it.
+
+**Why declared rather than inferred.** The clause-proof checker matched message text, which is fragile
+by construction: reword a message and a clause silently becomes unproven — or matches a *different*
+clause and reports proven.
+
+A declared link can be **verified**: run the named fixture, look for the named case. That is the
+difference between a link and a claim, and the checker does exactly that.
+
+**Five shapes carry a declared proof, not 222.** Annotating all of them would assert 217 links nobody
+checked, which is the defect of evidence covering criteria it never examined. The checker reports
+declared and inferred counts **separately**, so the difference stays visible rather than averaging into
+one reassuring number.
 
 ### 2.5d Decomposition, commitments, dependency kinds, impediments, flow, team (subject v1.4.0)
 

@@ -1,5 +1,42 @@
 # Changelog
 
+## v1.125.0 — 2026-08-27 (MINOR: A2 — a shape names the fixture that proves it)
+
+The second architectural mitigation, built.
+
+### The link was inferred from prose
+
+G22 recurs because a clause and its proof are separate files with nothing joining them. The clause
+proof checker matched **message text** — fragile by construction. Reword a message and a clause
+silently becomes unproven, or matches a different clause and reports **proven**.
+
+`provenByFixture` and `fixtureCaseName` declare it on the shape, and the checker **verifies** rather
+than trusts: it runs the named fixture and looks for the named case.
+
+### Tested in the failing direction, which is the part that matters
+
+One declaration was altered to name a case that does not exist. The checker reported **DECLARED CASE
+DID NOT FIRE** and dropped from five verified to four.
+
+**A check that only ever passes proves nothing about its own discrimination** — which is the same
+argument that produced the clause-proof tool in the first place.
+
+```
+shapes declaring a proof   5
+declaration verified       5
+declaration FAILED         0
+clauses never proven      92  (inferred, reported separately)
+```
+
+### Five, not 222
+
+Annotating every shape would assert **217 links nobody checked** — the defect of evidence covering
+criteria it never examined, one level along.
+
+The honest state is five declared and the rest inferred, and the checker reports the two counts
+**separately** so the difference stays visible rather than averaging into one reassuring number.
+
+
 ## v1.124.0 — 2026-08-27 (MINOR: A4 built, and it found something on its first run)
 
 The first architectural mitigation from v1.123.0, built rather than scoped.

@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.65.0> ;
-    owl:versionInfo "1.65.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.66.0> ;
+    owl:versionInfo "1.66.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.65.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.64.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.63.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.62.0> ;
@@ -3917,6 +3918,8 @@ backlog:UnfinishedLineageShape a sh:NodeShape ;
 #################################################################
 
 backlog:ScopeAreaShape a sh:NodeShape ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_ontologydriven_negative_v1_0_0.ttl" ;
+    backlog:fixtureCaseName "AREA_NOLOC" ;
     sh:targetClass backlog:ScopeArea ;
     sh:severity sh:Violation ;
     rdfs:label "An area names a location and a measure (L2)"@en ;
@@ -4202,6 +4205,8 @@ backlog:GroomedAheadShape a sh:NodeShape ;
 #################################################################
 
 backlog:GovernanceRulingShape a sh:NodeShape ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_ontologydriven_negative_v1_0_0.ttl" ;
+    backlog:fixtureCaseName "RUL_NOSHAPE" ;
     sh:targetClass backlog:GovernanceRuling ;
     sh:severity sh:Violation ;
     rdfs:label "A ruling is identified, stated and enforced (L2)"@en ;
@@ -4219,6 +4224,8 @@ backlog:GovernanceRulingShape a sh:NodeShape ;
         }""" ] .
 
 backlog:LineageLayerShape a sh:NodeShape ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_ontologydriven_negative_v1_0_0.ttl" ;
+    backlog:fixtureCaseName "LAY_NOORD" ;
     sh:targetClass backlog:LineageLayer ;
     sh:severity sh:Violation ;
     rdfs:label "A layer names its class, position and cost (L2)"@en ;
@@ -4431,6 +4438,8 @@ backlog:CriterionCoverageShape a sh:NodeShape ;
         }""" ] .
 
 backlog:ScenarioShape a sh:NodeShape ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_ontologydriven_negative_v1_0_0.ttl" ;
+    backlog:fixtureCaseName "SCEN_NOKIND" ;
     sh:targetClass backlog:TestScenario ;
     sh:severity sh:Violation ;
     rdfs:label "A scenario names its criterion and its kind (L2)"@en ;
@@ -4467,6 +4476,8 @@ backlog:StoryTestAnalysisShape a sh:NodeShape ;
 #################################################################
 
 backlog:CodeTableShape a sh:NodeShape ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_ontologydriven_negative_v1_0_0.ttl" ;
+    backlog:fixtureCaseName "CT_NOKIND" ;
     sh:targetClass backlog:CodeTable ;
     sh:severity sh:Violation ;
     rdfs:label "A code table says which kind it is (L2)"@en ;
@@ -4513,3 +4524,18 @@ backlog:ClassReachabilityShape a sh:NodeShape ;
             FILTER NOT EXISTS { ?p rdfs:range $this }
             FILTER NOT EXISTS { ?i a $this }
         }""" ] .
+
+#################################################################
+#  v1.66.0 — A2: a shape may name its proof
+#
+#  provenByFixture is declared on the FIVE shapes this session's
+#  fixture verifiably fires, each with the individual that triggers
+#  it. Not on the other 217.
+#
+#  Annotating all 222 would assert 217 links nobody checked, which
+#  is precisely the defect G21 names — evidence covering criteria
+#  it never examined. The honest state is that five clauses have a
+#  declared proof and the rest have an inferred one, and the
+#  checker reports both counts separately so the difference stays
+#  visible.
+#################################################################
