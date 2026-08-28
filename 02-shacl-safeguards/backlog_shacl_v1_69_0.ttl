@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.68.0> ;
-    owl:versionInfo "1.68.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.69.0> ;
+    owl:versionInfo "1.69.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.68.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.67.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.66.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.65.0> ;
@@ -4689,4 +4690,49 @@ backlog:UndeclaredIndividualShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             FILTER NOT EXISTS { $this a owl:NamedIndividual }
+        }""" ] .
+
+#################################################################
+#  v1.69.0 — every work item names its lineage
+#################################################################
+
+backlog:LineageMembershipShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItem ;
+    sh:severity sh:Violation ;
+    rdfs:label "A work item names the lineage it was created in (L2)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L2: this work item belongs to no lineage, so nothing can say which archive it goes to when its lineage finishes. Partitioning this register by inferring the closure broke 297 constraints for exactly this reason — harnesses, refinements and planning events stayed behind while the items they pointed at moved." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
+            FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed, backlog:L4_LineageEnforced))
+            FILTER NOT EXISTS { $this backlog:belongsToLineage ?l }
+        }""" ] .
+
+backlog:LineageShape a sh:NodeShape ;
+    sh:targetClass backlog:Lineage ;
+    sh:severity sh:Violation ;
+    rdfs:label "A lineage names its mission and its place (L2)"@en ;
+    sh:property [ sh:path backlog:lineageForMission ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "L2: a lineage must name the mission it pursues, or it is a bag of work with no stated intent." ] ;
+    sh:property [ sh:path backlog:lineageOrdinal ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "L2: a lineage must state where it falls in the sequence of runs, so history has an order independent of dates — which this framework has already found unreliable." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L2: this lineage is marked archived and names no archive file. The saving comes from the file NOT BEING LOADED, so a reader who cannot find it has lost the work rather than set it aside." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:lineageArchived true .
+            FILTER NOT EXISTS { $this backlog:archiveFile ?f }
+        }""" ] .
+
+backlog:ArchiveOnlyWhenAchievedShape a sh:NodeShape ;
+    sh:targetClass backlog:Lineage ;
+    sh:severity sh:Violation ;
+    rdfs:label "A lineage is archived only when its mission is settled (L3)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: this lineage is archived while its mission is still in flight. Archiving removes the work from every future check, so doing it to a running lineage silently stops governing it — the opposite of what the archive exists for." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:lineageArchived true ; backlog:lineageForMission ?m .
+            ?m backlog:hasMissionOutcome backlog:Out_InFlight .
         }""" ] .

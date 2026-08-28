@@ -1017,3 +1017,18 @@ ex:PkgPointFixes backlog:hasPackageVersion "1.0.0" ; backlog:targetsIteration ex
 ex:PkgPlatform backlog:hasPackageVersion "1.0.0" ; backlog:targetsIteration ex:Sprint11 .
 
 ex:Mission backlog:hasMissionOutcome backlog:Out_InFlight .
+
+# Every work item names the lineage it was created in (v1.130.0).
+<http://example.org/fixture-positive#Lin1> a backlog:Lineage ;
+    backlog:lineageForMission <http://example.org/fixture-positive#Mission> ;
+    backlog:lineageOrdinal 1 ;
+    backlog:lineageArchived false .
+<http://example.org/fixture-positive#EP001> backlog:belongsToLineage <http://example.org/fixture-positive#Lin1> .
+<http://example.org/fixture-positive#T_ResetMail> backlog:belongsToLineage <http://example.org/fixture-positive#Lin1> .
+<http://example.org/fixture-positive#T_ResetToken> backlog:belongsToLineage <http://example.org/fixture-positive#Lin1> .
+<http://example.org/fixture-positive#US001> backlog:belongsToLineage <http://example.org/fixture-positive#Lin1> .
+<http://example.org/fixture-positive#US002> backlog:belongsToLineage <http://example.org/fixture-positive#Lin1> .
+<http://example.org/fixture-positive#US003> backlog:belongsToLineage <http://example.org/fixture-positive#Lin1> .
+<http://example.org/fixture-positive#US004> backlog:belongsToLineage <http://example.org/fixture-positive#Lin1> .
+<http://example.org/fixture-positive#US005> backlog:belongsToLineage <http://example.org/fixture-positive#Lin1> .
+<http://example.org/fixture-positive#US006> backlog:belongsToLineage <http://example.org/fixture-positive#Lin1> .

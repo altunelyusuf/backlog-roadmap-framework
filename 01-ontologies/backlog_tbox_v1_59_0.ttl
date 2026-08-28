@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.58.0> ;
-    owl:versionInfo "1.58.0" ;
+    owl:versionIRI <http://example.org/backlog/1.59.0> ;
+    owl:versionInfo "1.59.0" ;
+    owl:priorVersion <http://example.org/backlog/1.58.0> ;
     owl:priorVersion <http://example.org/backlog/1.57.0> ;
     owl:priorVersion <http://example.org/backlog/1.56.0> ;
     owl:priorVersion <http://example.org/backlog/1.55.0> ;
@@ -5507,3 +5508,70 @@ backlog:retiredAtCommit a owl:DatatypeProperty , owl:FunctionalProperty ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "retired at commit"@en ;
     skos:definition "The commit at which the lineage was set down. An external witness, as closedAtCommit is for a stage: without it a retirement date is an assertion and the framework already learned what asserted dates are worth."@en .
+
+#################################################################
+#  91. A lineage is a thing, not a pattern of links — META
+#
+#  OWNER RULING, and the analysis that led to it. Seven lineages
+#  live in one register file: six finished or superseded, one
+#  active, all validated on every run. They are near-disjoint —
+#  only 22 cross-lineage references exist and every one is
+#  memberOfContainer pointing at a shared container.
+#
+#  So why does a finished lineage stay in scope? Because THERE IS
+#  NO LINEAGE OBJECT. A lineage was a pattern of links from a
+#  mission down through goals to work items, and a pattern cannot
+#  be picked up and moved. Partitioning by inferring the closure
+#  broke 297 constraints: harnesses, refinements and planning
+#  events have no lineage of their own, so they stayed behind while
+#  the items they point at moved.
+#
+#  Lineage is instantiated as INDIVIDUALS, not generated as a class
+#  per lineage. Seven lineages would otherwise mean seven classes,
+#  every new lineage a TBox change, and the ontology growing with
+#  the work rather than governing it. The framework already puns
+#  this way — stageRequiresType points from an individual to a
+#  class and has shipped since v1.117.
+#
+#  MEASURED before building: not loading the archive saves 60s of
+#  139s, 43 percent. The saving comes from the file being absent,
+#  not from a filter inside a clause — a filter still costs per
+#  focus node.
+#################################################################
+
+backlog:Lineage a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Lineage"@en ;
+    skos:definition "One complete run from a mission to its outcome, as a first-class object that can be counted, queried and moved. A lineage was previously a pattern of links and nothing more, which is why a finished one could not be set aside: patterns cannot be picked up. Instantiated as individuals rather than generated as a class per lineage, so that starting a lineage is data and not a change to the vocabulary."@en .
+
+backlog:belongsToLineage a owl:ObjectProperty ;
+    rdfs:domain backlog:BacklogConcept ; rdfs:range backlog:Lineage ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "belongs to lineage"@en ;
+    skos:definition "The lineage this individual was created during. Carried by EVERY individual, not only work items: the partition that broke 297 constraints failed precisely because harnesses, refinements and planning events had no lineage and had to be inferred from what they pointed at. An individual with no lineage cannot be archived, because nothing can say which archive it belongs in."@en .
+
+backlog:lineageForMission a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:Lineage ; rdfs:range backlog:Mission ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "lineage for mission"@en ;
+    skos:definition "The mission this lineage pursues. One mission per lineage: a mission amended mid-flight is the same lineage under a better statement, which is what supersedesMission records."@en .
+
+backlog:lineageOrdinal a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:Lineage ; rdfs:range xsd:integer ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "lineage ordinal"@en ;
+    skos:definition "Where this lineage falls in the sequence of runs. Recorded so that history has an order independent of dates, which this framework has already found to be unreliable."@en ;
+    backlog:numberOrigin backlog:Num_Asserted .
+
+backlog:lineageArchived a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:Lineage ; rdfs:range xsd:boolean ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "lineage archived"@en ;
+    skos:definition "Whether this lineage's individuals have been moved out of the live register. Distinct from its mission's outcome: a lineage may be achieved and not yet archived, and stating both separately means the move is an act with its own record rather than a side effect of a status."@en .
+
+backlog:archiveFile a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:Lineage ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "archive file"@en ;
+    skos:definition "Where an archived lineage now lives. Named rather than implied, because the saving comes from the file NOT BEING LOADED, and a reader must be able to find what was set aside without guessing a filename."@en .

@@ -402,3 +402,18 @@ ex:It1 backlog:hasObservedDuration 30.0 ;
 ex:AC1 backlog:satisfiedByArtifact "backlog:AcceptanceCriterion" .
 
 ex:Mission backlog:hasMissionOutcome backlog:Out_InFlight .
+
+# Every work item names the lineage it was created in (v1.130.0).
+<http://example.org/l4#Lin1> a backlog:Lineage ;
+    backlog:lineageForMission <http://example.org/l4#Mission> ;
+    backlog:lineageOrdinal 1 ;
+    backlog:lineageArchived false .
+<http://example.org/l4#EP> backlog:belongsToLineage <http://example.org/l4#Lin1> .
+<http://example.org/l4#T1> backlog:belongsToLineage <http://example.org/l4#Lin1> .
+<http://example.org/l4#T2> backlog:belongsToLineage <http://example.org/l4#Lin1> .
+<http://example.org/l4#T3> backlog:belongsToLineage <http://example.org/l4#Lin1> .
+<http://example.org/l4#US1> backlog:belongsToLineage <http://example.org/l4#Lin1> .
+<http://example.org/l4#US2> backlog:belongsToLineage <http://example.org/l4#Lin1> .
+<http://example.org/l4#US_Big> backlog:belongsToLineage <http://example.org/l4#Lin1> .
+<http://example.org/l4#US_Split1> backlog:belongsToLineage <http://example.org/l4#Lin1> .
+<http://example.org/l4#US_Split2> backlog:belongsToLineage <http://example.org/l4#Lin1> .

@@ -1,5 +1,48 @@
 # Changelog
 
+## v1.130.0 — 2026-08-27 (MAJOR: a lineage becomes a first-class object)
+
+### The modelling gap
+
+Seven lineages ran in one register and every one was validated on every release. They are
+near-disjoint — **22 cross-lineage references, all `memberOfContainer`** — yet none could be set aside,
+because **a lineage was a pattern of links and not an object.**
+
+Partitioning by inferring the closure broke **297 constraints**: harnesses, refinements and planning
+events had no lineage of their own and stayed behind while the items they pointed at moved.
+
+### Lineages as instances
+
+`Lineage` instantiated as **individuals**, not generated as a class per lineage — plain OWL 2 DL, no
+metaclasses. Seven lineages as classes would mean every new run is a TBox change.
+
+```
+1,147 individuals assigned by walking out from each mission
+  114 framework-wide (code tables, rulings, metrics, the Lineage index itself)
+    7 lineages instantiated, L_Plan through L_OntologyDriven
+```
+
+`belongsToLineage` is carried by **every** individual and required at L2, so the 297-constraint failure
+cannot recur.
+
+### The archive split is blocked, and the blocker is named
+
+With membership in place: **805 retired individuals, 7,063 archive triples, 68% of the register.** Not
+loading the archive was measured at **139.5s → 79.8s, a 43% saving.**
+
+Then seven edge types were found still crossing from live into the archive, and **every one originates
+at a shared container** — one Register, one Roadmap, one Scope, one Commitment, one DefinitionOfDone
+serving all seven lineages. They cannot go to the archive because live work uses them, and cannot stay
+whole because they reference retired work.
+
+`lineageForMission` is the exception and is correct: the `Lineage` individuals are the index and stay
+live.
+
+**Half the gap closes here. The second half is per-lineage containers** — recorded as
+`Inv_PerLineageContainer`, Violated, rather than forced through by cutting edges, which would produce
+exactly the corruption this release prevents.
+
+
 ## v1.129.0 — 2026-08-27 (MINOR: gate cost halved, two checkers reconciled, and an export that was claimed and never written)
 
 ### The speed problem — measured, and I was wrong about the cause

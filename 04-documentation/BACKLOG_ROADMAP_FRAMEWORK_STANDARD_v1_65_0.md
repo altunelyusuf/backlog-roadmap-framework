@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.64.0
+# Backlog & Roadmap Semantic Framework — Standard v1.65.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -1114,6 +1114,28 @@ the failure such an objective exists to detect.
 
 `retiredAtCommit` is an external witness, as `closedAtCommit` is for a stage: without it a retirement
 date is an assertion, and this framework has already learned what asserted dates are worth.
+
+### 2.5c-xlvi A lineage is a thing, not a pattern of links
+
+`Lineage` with `belongsToLineage`, `lineageForMission`, `lineageOrdinal`, `lineageArchived` and
+`archiveFile`.
+
+**Instantiated as individuals, not generated as a class per lineage.** Seven lineages would otherwise
+mean seven classes, every new run a TBox change, and the ontology growing with the work rather than
+governing it. Standard OWL 2 DL — no metaclasses, no OWL Full. The framework already puns this way:
+`stageRequiresType` points from an individual to a class.
+
+**Why it was needed.** Seven lineages shared one register and every one was validated on every run.
+They are near-disjoint — 22 cross-lineage references, all `memberOfContainer` — yet none could be set
+aside, because a lineage was a pattern of links and patterns cannot be picked up.
+
+Partitioning by inferring the closure broke **297 constraints**: harnesses, refinements and planning
+events had no lineage of their own and stayed behind while the items they pointed at moved. So
+`belongsToLineage` is carried by **every** individual, not only work items, and is required at L2.
+
+Some individuals are **framework-wide** — code tables, governance rulings, quality metrics, and the
+`Lineage` individuals themselves, which are the index. An index that archives with its contents cannot
+be searched.
 
 ### 2.5d Decomposition, commitments, dependency kinds, impediments, flow, team (subject v1.4.0)
 

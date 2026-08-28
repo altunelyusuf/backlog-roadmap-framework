@@ -177,3 +177,10 @@ ex:CP_Obj_G_Contain_Scope a backlog:ObjectiveCheckpoint ;
 <http://example.org/ob#P> backlog:hasExpectedPolarity backlog:Polarity_Positive .
 
 ex:M backlog:hasMissionOutcome backlog:Out_InFlight .
+
+# Every work item names the lineage it was created in (v1.130.0).
+<http://example.org/ob#Lin1> a backlog:Lineage ;
+    backlog:lineageForMission <http://example.org/ob#M> ;
+    backlog:lineageOrdinal 1 ;
+    backlog:lineageArchived false .
+<http://example.org/ob#W> backlog:belongsToLineage <http://example.org/ob#Lin1> .
