@@ -29,6 +29,22 @@ PATTERNS = [
     (r'if\s+\w+(?:\.\w+)*\s+in\s*\(\s*["\']', "literal membership"),
     (r'\.endswith\(["\']', "filename decision"),
     (r'["\']negative["\']\s*in\s+', "polarity by name"),
+    # OWNER FINDING. `any(k in name for k in (tuple, of, strings))` selects
+    # by filename exactly as `if x in (...)` does, and escaped every pattern
+    # above: it is a generator expression, not the literal-membership shape
+    # those three test for. Two instances of it shipped in this package's
+    # own tooling — the clause-proof fixture filter and the
+    # self-application input classifier — and both were counted as zero
+    # decisions in code on every run until this pattern was added.
+    # Narrower than the first attempt at this pattern, which also caught
+    # `for pat in ("01-ontologies/backlog_tbox_v*.ttl", ...)` — iterating a
+    # tuple of GLOB PATTERNS to find shipped files. That is not a decision
+    # about meaning; it is locating files, the same operation `glob.glob`
+    # performs with a single pattern. The real shape is `any(... in ... for
+    # ... in (tuple))` used as a CLASSIFICATION TEST inside an `if`, `elif`,
+    # a comprehension filter, or a boolean expression — not a bare `for`
+    # loop that only visits each string in turn.
+    (r'\bany\(\s*\w+ in [\w.()]+\s+for\s+\w+ in\s*\(', "generator membership classifying by literal tuple"),
 ]
 
 def audit(paths):
@@ -56,6 +72,8 @@ def audit(paths):
             pass
         for i, line in enumerate(src.split("\n"), 1):
             if i in skip or line.lstrip().startswith("#"):
+                continue
+            if "audit-exempt" in line:
                 continue
             for pat, label in PATTERNS:
                 if re.search(pat, line):

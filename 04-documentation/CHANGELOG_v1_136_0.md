@@ -1,5 +1,49 @@
 # Changelog
 
+## v1.136.0 — 2026-08-27 (MAJOR: the owner's challenge — I was inserting escape points, and stopping cost three attempts)
+
+### The concrete complaint
+
+The clause-proof fixture filter decided by testing filenames for `"negative"`, `"adversarial"`,
+`"digestfail"` — a plain Python string check, in a package whose entire mission is that the ontology
+decides. It escaped the script-decision audit: the shape `any(k in name for k in (tuple,))` matched
+none of the audit's three patterns.
+
+**Fixed** by reading `hasExpectedPolarity`, already declared on every fixture since v1.119.0 for the
+identical reason. Verified against ground truth: 15 of 15, exact.
+
+### The audit's blind spot, closed — and it immediately found a second instance
+
+A fourth pattern catches the generator-expression shape. It found `backlog_self_application`'s
+`TAKES_INPUT` tuple — the same defect, unfixed until now.
+
+### Three attempts to fix it, and two of them were wrong
+
+1. **Source-shape guess** (does the script read `sys.argv[1:]`) — wrong. Misclassified `backlog_validate`,
+   which uses `argparse` and correctly refuses with a usage error, never touching raw `argv`.
+2. **Behavioural bare-run test** (does it print PASS with no arguments) — wrong. Misclassified six
+   checkers — `adoption_check`, `criterion_resolve`, `number_origin`, `coverage_gate`,
+   `doc_coverage_gate`, `lineage_discipline_check` — that legitimately locate their own data via
+   internal `glob` and correctly report real, clean results.
+3. **Declared fact, verified individually** — `ToolScript` with `acceptsGraphPath`, checked against each
+   script's actual observed behaviour rather than guessed from source or output. This is the one that
+   shipped.
+
+### A stale defect found and fixed along the way
+
+Rebuilding the register this release surfaced duplicate archived-lineage individuals (`TA_S11`, `TA_S12`)
+present in the working copy and absent from the last published version — an accumulation from earlier in
+the session, not from this fix. Rebuilt from the last known-good published register with only this
+release's real changes reapplied.
+
+### A known gap, named rather than hidden
+
+The `audit-exempt` marker used to silence one genuine false positive suppresses **any** decision on its
+line, unconditionally. Proven directly: a planted decision marked exempt with an unrelated reason went
+uncaught. `Inv_AuditExemptionUnchecked` recorded **Violated** — not patched under the same pressure that
+produced the three wrong attempts above.
+
+
 ## v1.135.0 — 2026-08-27 (MINOR: Inv_ClauseProven worked down — 112 to 80, and a naming defect that made the first measurement lie)
 
 ### One fixture, one case per unproven clause

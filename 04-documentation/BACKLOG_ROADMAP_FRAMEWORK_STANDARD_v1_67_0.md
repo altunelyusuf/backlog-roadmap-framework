@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.66.0
+# Backlog & Roadmap Semantic Framework — Standard v1.67.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -1156,6 +1156,31 @@ lineage must name its `archiveFile`.
 
 The `Register` is the case that forces framework scope to exist: a register that archives with its
 contents cannot be read.
+
+### 2.5c-xlviii Whether a checker accepts a graph is declared, not guessed
+
+`ToolScript` with `acceptsGraphPath`, verified against real observed behaviour rather than trusted.
+
+**The owner's challenge, and three wrong attempts before this one.** The clause-proof fixture filter
+decided by testing filenames for `"negative"`, `"adversarial"`, `"digestfail"` — a plain Python string
+check in a package whose mission is that the ontology decides, not the script. It escaped the
+script-decision audit because the shape (`any(k in name for k in (tuple,))`) matched none of the
+audit's existing patterns.
+
+Fixed by reading `hasExpectedPolarity`, already declared on every fixture since v1.119.0 for the
+identical reason. Verified against the ontology directly: 15 of 15, exact match.
+
+The audit gained a fourth pattern and immediately found a **second** instance — the same shape in
+`backlog_self_application`'s `TAKES_INPUT` tuple. Replacing it took three attempts: a source-shape guess
+(wrong — misclassified `backlog_validate`, which uses argparse rather than raw `sys.argv`), a behavioural
+bare-run test (wrong — misclassified six checkers that legitimately locate their own data via internal
+glob and report real, clean results), and finally a declared fact, verified individually against each
+script's actual behaviour.
+
+**A known gap, stated rather than hidden.** The audit's `audit-exempt` marker — added to exempt one
+genuine false positive — suppresses *any* decision on the line it sits on, unconditionally, with no
+check that the exemption is true. Proven directly rather than assumed: a planted decision marked exempt
+with an unrelated reason went uncaught. Recorded as `Inv_AuditExemptionUnchecked`, Violated.
 
 ### 2.5d Decomposition, commitments, dependency kinds, impediments, flow, team (subject v1.4.0)
 

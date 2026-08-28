@@ -41,6 +41,48 @@ def _key(pkg):
     return h.hexdigest()
 
 
+
+def _negative_fixtures(fixtures_dir):
+    """Fixtures whose OWN declared polarity is negative.
+
+    OWNER FINDING. This checker used to select fixtures by testing whether
+    "negative", "adversarial" or "digestfail" appeared in the FILENAME — a
+    decision written in Python that the ontology never stated, in a package
+    whose whole mission is that no script decides what the ontology should.
+
+    It was invisible to backlog_script_decision_audit, whose patterns look
+    for `if x in (...)`, `.endswith(...)` and `"negative" in ...` — none of
+    which matches `any(k in name for k in (tuple,))`. A generator-expression
+    membership test escaped the very tool built to catch this shape, which
+    is why the audit's patterns were extended in the same release that fixed
+    this.
+
+    The fix reads what a fixture already declares about itself:
+    hasExpectedPolarity, added at v1.119.0 for the identical reason — to
+    replace filename inference in the SUITE'S own polarity check. This
+    checker had reinvented a second, undeclared filename filter instead of
+    using the one that already existed, and the fixture that exposed the
+    defect (fixture_sparse_shapes, before it was renamed) was invisible to
+    this filter for exactly that reason: its filename carried no signal
+    and its ontology declaration was never consulted.
+    """
+    from rdflib import Graph, Namespace, RDF
+    B = Namespace("http://example.org/backlog#")
+    out = []
+    for f in sorted(glob.glob(os.path.join(fixtures_dir, "*.ttl"))):
+        g = Graph()
+        try:
+            g.parse(f, format="turtle")
+        except Exception:
+            continue
+        for p in g.subjects(RDF.type, B.AdoptionProfile):
+            pol = g.value(p, B.hasExpectedPolarity)
+            if pol is not None and str(pol).endswith("Polarity_Negative"):  # audit-exempt: IRI suffix, not a filename
+                out.append(f)
+                break
+    return out
+
+
 def main():
     strict = "--strict" in sys.argv
     here = os.path.dirname(os.path.abspath(__file__))
@@ -53,9 +95,7 @@ def main():
             print(cached[1].rstrip())
             sys.exit(0)
     validate = sorted(glob.glob(os.path.join(here, "backlog_validate_v*.py")))[-1]
-    fixtures = [f for f in sorted(glob.glob(os.path.join(here, "fixtures", "*.ttl")))
-                if any(k in os.path.basename(f)
-                       for k in ("negative", "adversarial", "digestfail"))]
+    fixtures = _negative_fixtures(os.path.join(here, "fixtures"))
     fired = set()
     for f in fixtures:
         try:

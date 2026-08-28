@@ -22,35 +22,86 @@ Two things are checked here, both cheap:
 
 Exit 1 under --strict if any checker is blind.
 """
-import sys, os, glob, subprocess
+import sys, os, re, glob, subprocess
 
-# Checkers that take graph paths and should refuse to run without them.
-TAKES_INPUT = ("backlog_reachability_gate", "backlog_validate",
-               "backlog_pipeline_verify", "backlog_lineage_completeness")
+def _accepts_graph_path(script_name, tbox_path, register_path):
+    """Does this checker take a graph via CLI argument?
+
+    OWNER FINDING, corrected TWICE in this release before landing here, and
+    the second correction is the one worth keeping honest about. First
+    attempt: a hardcoded python tuple of script names — a decision the
+    ontology never stated. Second attempt: guessed from whether the source
+    touches sys.argv[1:] directly — WRONG, because backlog_validate uses
+    argparse and was misclassified as self-sufficient when it in fact
+    refuses correctly. Third attempt: "run bare, is the output PASS" —
+    ALSO WRONG, because six checkers (adoption_check, criterion_resolve,
+    number_origin, coverage_gate, doc_coverage_gate, lineage_discipline)
+    locate their own data via internal glob and correctly report PASS on
+    real, self-located data. That behavioural test cannot distinguish a
+    checker that examined nothing from one that examined everything and
+    found it clean.
+
+    The fact does not derive cleanly from source shape or from output text.
+    It is declared here, as ToolScript individuals in the register — the
+    same move CodeTable made for classification tables baked into python —
+    and VERIFIED once against real observed behaviour rather than trusted.
+    """
+    from rdflib import Graph, Namespace, RDF
+    B = Namespace("http://example.org/backlog#")
+    g = Graph()
+    g.parse(tbox_path, format="turtle")
+    g.parse(register_path, format="turtle")
+    for t in g.subjects(RDF.type, B.ToolScript):
+        if str(g.value(t, B.scriptFileName)) == script_name:
+            v = g.value(t, B.acceptsGraphPath)
+            return v is not None and str(v) == "true"
+    return None  # undeclared: reported, not guessed
+
+
+def _returns_pass_blind(script_path):
+    """Run a graph-accepting checker bare; PASS with nothing read is blind."""
+    try:
+        r = subprocess.run([sys.executable, script_path], capture_output=True,
+                           text=True, timeout=60)
+    except subprocess.TimeoutExpired:
+        return None
+    out = r.stdout + r.stderr
+    return r.returncode == 0 and "PASS" in out
 
 def main():
     strict = "--strict" in sys.argv
     here = os.path.dirname(os.path.abspath(__file__))
+    pkg = os.path.dirname(here)
     me = os.path.basename(__file__)
-    blind, crashed, ok = [], [], 0
+    tbox = sorted(glob.glob(os.path.join(pkg, "01-ontologies", "backlog_tbox_v*.ttl")))
+    reg = sorted(glob.glob(os.path.join(pkg, "01-ontologies",
+                 "backlog_framework_register_abox_v*.ttl")))
+    if not tbox or not reg:
+        raise SystemExit(
+            "FATAL: no TBox or register found. This reads acceptsGraphPath "
+            "from the ontology, so with nothing to read it would examine "
+            "zero declared scripts and PASS. Refusing that verdict.")
+    blind, crashed, ok, undeclared = [], [], 0, []
     for path in sorted(glob.glob(os.path.join(here, "*.py"))):
         name = os.path.basename(path)
-        if name == me or not any(name.startswith(p) for p in TAKES_INPUT):
+        if name == me:
             continue
-        try:
-            r = subprocess.run([sys.executable, path], capture_output=True,
-                               text=True, timeout=60)
-        except subprocess.TimeoutExpired:
+        accepts = _accepts_graph_path(name, tbox[-1], reg[-1])
+        if accepts is None:
+            undeclared.append(name)
+            continue
+        if not accepts:
+            continue
+        verdict = _returns_pass_blind(path)
+        if verdict is None:
             crashed.append((name, "timed out"))
-            continue
-        out = (r.stdout + r.stderr)
-        if r.returncode == 0 and "PASS" in out:
+        elif verdict:
             blind.append(name)
-        elif "FATAL" in out or r.returncode != 0:
-            ok += 1
         else:
             ok += 1
-    print("input-taking checkers  : %d" % (ok + len(blind) + len(crashed)))
+    for name in undeclared:
+        print("   UNDECLARED  %s (not in ToolScript; not tested)" % name)
+    print("graph-accepting checkers : %d" % (ok + len(blind) + len(crashed)))
     print("refuse to run blind    : %d" % ok)
     print("PASS on no input       : %d" % len(blind))
     for n in blind:

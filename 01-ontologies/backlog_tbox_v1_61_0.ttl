@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.60.0> ;
-    owl:versionInfo "1.60.0" ;
+    owl:versionIRI <http://example.org/backlog/1.61.0> ;
+    owl:versionInfo "1.61.0" ;
+    owl:priorVersion <http://example.org/backlog/1.60.0> ;
     owl:priorVersion <http://example.org/backlog/1.59.0> ;
     owl:priorVersion <http://example.org/backlog/1.58.0> ;
     owl:priorVersion <http://example.org/backlog/1.57.0> ;
@@ -5620,3 +5621,34 @@ backlog:CScope_Lineage a owl:NamedIndividual , backlog:ContainerScope ;
 backlog:CScope_Framework a owl:NamedIndividual , backlog:ContainerScope ;
     rdfs:label "Framework-scoped"@en ;
     skos:definition "Serves the framework across lineages and stays live. The Register is the case that forces this to exist: a register that archives with its contents cannot be read."@en .
+
+#################################################################
+#  93. Whether a checker accepts a graph is a declared fact — A4
+#
+#  Corrected twice before landing here. A hardcoded python tuple,
+#  then a source-shape guess that misclassified backlog_validate,
+#  then a bare-run behavioural test that misclassified six checkers
+#  legitimately reporting real data. Three attempts to guess a fact
+#  that has no reliable shortcut in either source code or runtime
+#  output.
+#
+#  ToolScript declares it once, verified against observed behaviour
+#  rather than trusted — the same discipline CodeTable applied to
+#  classification tables buried in python.
+#################################################################
+
+backlog:ToolScript a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Tool Script"@en ;
+    skos:definition "A shipped checker, recorded so the fact of whether it accepts a graph via CLI argument is data rather than a guess made three different ways in three different releases."@en .
+
+backlog:scriptFileName a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:ToolScript ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "script file name"@en .
+
+backlog:acceptsGraphPath a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:ToolScript ; rdfs:range xsd:boolean ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "accepts graph path"@en ;
+    skos:definition "Whether this checker takes a graph file via CLI argument and must therefore refuse rather than default to empty when given none. False means the checker locates its own data internally and a bare run examining real data is correct, not blind."@en .
