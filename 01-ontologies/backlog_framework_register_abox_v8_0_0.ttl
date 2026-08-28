@@ -10,10 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/7.11.0> ;
-    owl:versionInfo "7.11.0" ;
-    owl:priorVersion <http://example.org/backlog-framework-register/7.10.0> ;
-    owl:priorVersion <http://example.org/backlog-framework-register/7.9.0> ;
+    owl:versionIRI <http://example.org/backlog-framework-register/8.0.0> ;
+    owl:versionInfo "8.0.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/7.11.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/7.8.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/7.7.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/7.6.0> ;
@@ -11334,3 +11333,17 @@ fw:Inv_PerLineageContainer a backlog:CrossCuttingInvariant ;
     backlog:hasInvariantStatus backlog:Violated ;
     backlog:tracksItem fw:EP_ScriptDecisions ;
     backlog:hasRationale "Violated: five shared containers serve all seven lineages, and each is referenced by live and retired work at once. Recorded rather than worked around, because forcing the split by cutting those edges would produce exactly the corruption this release exists to prevent — a live register pointing at individuals that are no longer there." .
+
+#  Gate K caught two defects in one header. The v7.12.0 bump never
+#  landed — the block still read 7.11.0, so the 8.0.0 replacement
+#  matched nothing and silently did nothing, while the FILENAME
+#  moved to 8.0.0 and the changelog announced it. Two releases were
+#  described as versions the file did not claim.
+#
+#  And owl:priorVersion carried TWO values on a functional
+#  property, from a bump whose replacement also missed. A chain of
+#  versions that forks is not a chain.
+#
+#  Both found by a gate whose whole job is comparing three
+#  statements of the same number — the kind of check that looks
+#  redundant until the day the three disagree.
