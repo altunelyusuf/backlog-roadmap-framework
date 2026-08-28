@@ -10,8 +10,10 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/7.9.0> ;
-    owl:versionInfo "7.9.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/7.11.0> ;
+    owl:versionInfo "7.11.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/7.10.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/7.9.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/7.8.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/7.7.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/7.6.0> ;
@@ -353,7 +355,7 @@ fw:Ev_PbiTask a backlog:TestEvidence ;
     backlog:hasTestId "BRF-EP1" ;
     backlog:evidenceVerified true ;
     backlog:verifiedAt "2026-08-06T13:00:00"^^xsd:dateTime ;
-    backlog:hasVerificationMethod "backlog_gate_v1_1_26.sh: positive fixture carries a planned iteration with two subordinate execution tasks at 0 violations; negative fixture plants four EP1 defects (scored task, ranked task, empty planning event, parent Done over an open task) and all four fire" ;
+    backlog:hasVerificationMethod "backlog_gate_v1_1_27.sh: positive fixture carries a planned iteration with two subordinate execution tasks at 0 violations; negative fixture plants four EP1 defects (scored task, ranked task, empty planning event, parent Done over an open task) and all four fire" ;
     backlog:verifiedByTool "backlog_validate_v1_4_0.py + pyshacl 0.40.0" ;
     backlog:attestsCriterion fw:AC_PbiTask .
 
@@ -449,7 +451,7 @@ fw:D3 a backlog:DoDCriterion ;
 fw:D4 a backlog:DoDCriterion ;
     rdfs:label "D4 — The full release gate passes from a clean extraction, includ"@en ;
     backlog:hasCriterionText "The full release gate passes from a clean extraction, including the three-fixture self-proof and the fixture-coverage gate." ;
-    backlog:hasCheckQuery "backlog_gate_v1_1_26.sh run against a freshly extracted bundle." ;
+    backlog:hasCheckQuery "backlog_gate_v1_1_27.sh run against a freshly extracted bundle." ;
     backlog:hasExpectedResult "RELEASE GATE: PASS" ;
     backlog:hasCriterionStatus backlog:Holds .
 fw:D5 a backlog:DoDCriterion ;
@@ -9978,3 +9980,94 @@ fw:Mission_BuildSoftware_v2 backlog:hasMissionOutcome backlog:Out_Achieved ;
     backlog:retiredAtCommit "pending-commit" .
 
 fw:Mission_OntologyDriven backlog:hasMissionOutcome backlog:Out_InFlight .
+
+#################################################################
+#  v7.10.0 — the speed problem, measured rather than assumed.
+#
+#  I proposed archiving the retired lineage as the fix and TESTED
+#  it before building. The test says I was wrong about the cause.
+#
+#    full graph, full suite          145s
+#    full graph, HALF the shapes      93s   -36%
+#    full suite, lineage removed     122s   -16%
+#
+#  Cost is dominated by CLAUSE COUNT, not data volume. 299 SPARQL
+#  constraints, every one containing a NOT EXISTS — a nested scan
+#  per constraint per focus node. 170 property shapes cost almost
+#  nothing by comparison because they are indexed lookups.
+#
+#  Archiving would have bought 16 percent for a substantial piece
+#  of work. The honest fix is cheaper and I found it by counting
+#  invocations rather than triples: THE GATE RAN THE VALIDATOR
+#  TWICE PER CHECK — once to show output, once to read the exit
+#  code. Eleven invocations where eight suffice, and the three
+#  removed were the expensive ones.
+#
+#  Every checker added this session costs 0 to 2 seconds. The
+#  slowness was never the new work; it was one step run twice.
+#################################################################
+
+fw:Obs_GateCost a backlog:MetricObservation ;
+    rdfs:label "Gate cost, measured by component"@en ;
+    backlog:observesMetric fw:Metric_Obj_CodeDecisions ;
+    backlog:observationFor fw:Obj_CodeDecisions ;
+    backlog:hasObservedValue 0.0 ;
+    backlog:observedAt "2026-08-27T14:30:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Measured, not estimated. Full suite over the full graph 145s; the same graph with half the shapes 93s; the full suite with the retired lineage removed 122s. Clause count dominates: 299 SPARQL constraints each carrying a NOT EXISTS nested scan, against 170 property shapes that are indexed and nearly free. The seven checkers added this session cost 0 to 2 seconds each. The register-archiving I proposed would have bought 16 percent for substantial work; removing three duplicate validator invocations from the gate costs nothing and removes the same step run twice. Obj_CodeDecisions is unaffected and stays at 0 — this observation is recorded against it because the finding is about how the tooling runs, and no metric for gate cost exists." .
+
+fw:Inv_GateInvokedOnce a backlog:CrossCuttingInvariant ;
+    rdfs:label "The gate runs each check once"@en ;
+    backlog:hasCheckQuery "Count python3 \"$VALIDATE\" invocations in the gate script" ;
+    backlog:hasExpectedResult "one per check" ;
+    backlog:hasInvariantStatus backlog:Holds ;
+    backlog:tracksItem fw:EP_ScriptDecisions ;
+    backlog:hasRationale "Eleven invocations reduced to eight. The pattern was run-to-display then run-again-to-test, which doubles the most expensive step in the package and is invisible in a script that reads correctly line by line. Recorded because it will recur: adding a gate step with visible output invites exactly this shape." .
+
+#################################################################
+#  v7.11.0 — the It11 export was claimed and never written.
+#
+#  Found by two checkers disagreeing about the same 25 classes. The
+#  reachability gate reported ForeignNamespace and ShapeSuite as
+#  unreachable; A1 reported zero orphans. Both were right about
+#  different questions, and reconciling them exposed a third thing:
+#  THE INDIVIDUALS DO NOT EXIST.
+#
+#  Ev_It11 states that FOREIGN and SUITES moved to the ontology.
+#  The TBox carries the classes. The register carries no instance
+#  of either — the export was written into a working copy that a
+#  later ceremony overwrote from GitHub, and the evidence survived
+#  because evidence is prose about work rather than the work.
+#
+#  This is exactly the defect satisfiedByArtifact was built to
+#  catch at v1.119.0, and it did not, because AC_S_Tables_B3 names
+#  "backlog:bridgeCoversEvidence" — a PROPERTY that does exist —
+#  while the individuals it was supposed to carry do not. The
+#  artefact resolved and the work was still missing.
+#################################################################
+
+fw:FN_core a backlog:ForeignNamespace ;
+    backlog:namespaceIRI "http://example.org/core#" ; backlog:namespaceOwner "core" .
+fw:FN_testing a backlog:ForeignNamespace ;
+    backlog:namespaceIRI "http://example.org/testing#" ; backlog:namespaceOwner "testing" .
+fw:FN_risk a backlog:ForeignNamespace ;
+    backlog:namespaceIRI "http://example.org/risk#" ; backlog:namespaceOwner "risk" .
+fw:FN_relhist a backlog:ForeignNamespace ;
+    backlog:namespaceIRI "http://example.org/oepack-release-history#" ; backlog:namespaceOwner "release-history" .
+
+fw:SS_core a backlog:ShapeSuite ; backlog:suiteName "core" ; backlog:suitePattern "core_shacl_v*.ttl" .
+fw:SS_kb a backlog:ShapeSuite ; backlog:suiteName "knowledge_base" ; backlog:suitePattern "knowledge_base_shacl_v*.ttl" .
+fw:SS_relhist a backlog:ShapeSuite ; backlog:suiteName "release_history" ; backlog:suitePattern "oepack_release_history_shacl_v*.ttl" .
+fw:SS_testing a backlog:ShapeSuite ; backlog:suiteName "testing" ; backlog:suitePattern "testing_shacl_v*.ttl" .
+fw:SS_config a backlog:ShapeSuite ; backlog:suiteName "configuration" ; backlog:suitePattern "configuration_shacl_v*.ttl" .
+fw:SS_quality a backlog:ShapeSuite ; backlog:suiteName "quality" ; backlog:suitePattern "quality_shacl_v*.ttl" .
+
+fw:Profile backlog:bridgeCoversEvidence backlog:TestEvidence , backlog:ReleaseEvidence ,
+    backlog:ArtifactEvidence , backlog:ReviewEvidence .
+
+fw:Inv_ArtefactNotProperty a backlog:CrossCuttingInvariant ;
+    rdfs:label "A criterion naming a property is not proof the data exists"@en ;
+    backlog:hasCheckQuery "Manual: for each satisfiedByArtifact naming a property rather than a class, confirm the individuals it was meant to carry exist." ;
+    backlog:hasExpectedResult "every named property has the instances its story promised" ;
+    backlog:hasInvariantStatus backlog:Violated ;
+    backlog:tracksItem fw:EP_ScriptDecisions ;
+    backlog:hasRationale "Violated and recorded rather than closed. AC_S_Tables_B3 named backlog:bridgeCoversEvidence, the resolver confirmed the PROPERTY exists, and the four evidence-kind statements it was supposed to carry did not. A property is cheap to declare and says nothing about whether anything uses it — which is the Package trap one level down, inside the very mechanism built to catch it." .

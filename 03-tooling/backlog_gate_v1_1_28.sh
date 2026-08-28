@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# backlog_gate v1.1.26 — four-gate release check for the Backlog & Roadmap
+# backlog_gate v1.1.28 — four-gate release check for the Backlog & Roadmap
 # Semantic Framework. Nothing about the package's state is trusted until all
 # four pass, and the SHACL gate refuses to certify anything until it has just
 # demonstrated, in this run, that it can fail a known-bad register.
@@ -11,7 +11,7 @@
 #   +       coverage gate          >= 80% of primary-source concepts (BP-D31)
 #   +       doc-coverage gate      every TBox class named in the standard document
 #
-# Usage: backlog_gate_v1_1_26.sh [REGISTER.ttl ...]
+# Usage: backlog_gate_v1_1_28.sh [REGISTER.ttl ...]
 
 set -u
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -88,19 +88,23 @@ PY
 
 echo
 echo "== Gate K — version identity =="
-python3 "$VALIDATE" --gate-k | tail -1
-python3 "$VALIDATE" --gate-k >/dev/null 2>&1 || { echo "Gate K FAILED"; FAILED=1; }
+_K="$(python3 "$VALIDATE" --gate-k 2>&1)"; _KR=$?
+echo "$_K" | tail -1
+[ $_KR -eq 0 ] || { echo "Gate K FAILED"; FAILED=1; }
 
 echo
 echo "== Gate R — SHACL reconcile (self-proof first) =="
-python3 "$VALIDATE" "$POS" | grep -E '^results|^VERDICT'
-python3 "$VALIDATE" "$POS" >/dev/null 2>&1 || { echo "  ABORT: positive fixture failed — the suite is broken, not the register."; exit 3; }
-python3 "$VALIDATE" "$NEG" | grep -E '^results|^advisory|^ +[0-9]+ x \[|^VERDICT'
-if python3 "$VALIDATE" "$NEG" >/dev/null 2>&1; then
+_P="$(python3 "$VALIDATE" "$POS" 2>&1)"; _PR=$?
+echo "$_P" | grep -E '^results|^VERDICT'
+[ $_PR -eq 0 ] || { echo "  ABORT: positive fixture failed — the suite is broken, not the register."; exit 3; }
+_N="$(python3 "$VALIDATE" "$NEG" 2>&1)"; _NR=$?
+echo "$_N" | grep -E '^results|^advisory|^ +[0-9]+ x \[|^VERDICT'
+if [ $_NR -eq 0 ]; then
   echo "  ABORT: negative fixture passed — the suite is decorative and certifies nothing."; exit 3
 fi
-python3 "$VALIDATE" "$ADV" | grep -E '^results|^VERDICT'
-if python3 "$VALIDATE" "$ADV" >/dev/null 2>&1; then
+_A="$(python3 "$VALIDATE" "$ADV" 2>&1)"; _AR=$?
+echo "$_A" | grep -E '^results|^VERDICT'
+if [ $_AR -eq 0 ]; then
   echo "  ABORT: the adversarial random register passed. The suite admits a backlog whose"
   echo "  success cannot be told from its failure, which is the defect this fixture exists to catch."; exit 3
 fi

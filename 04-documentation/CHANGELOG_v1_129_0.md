@@ -1,5 +1,60 @@
 # Changelog
 
+## v1.129.0 — 2026-08-27 (MINOR: gate cost halved, two checkers reconciled, and an export that was claimed and never written)
+
+### The speed problem — measured, and I was wrong about the cause
+
+I proposed archiving the retired lineage. **Tested it first:**
+
+```
+full graph, full suite          145s
+full graph, HALF the shapes      93s   −36%
+full suite, lineage removed     122s   −16%
+```
+
+Cost is dominated by **clause count**, not data volume: 299 SPARQL constraints, each carrying a
+`NOT EXISTS` nested scan, against 170 property shapes that are indexed and nearly free.
+
+Archiving would have bought 16% for substantial work. The real cause was found by counting invocations
+instead of triples: **the gate ran the validator twice per check** — once to display output, once to
+read the exit code.
+
+```
+before   275s+ and incomplete, reaching step 9 of 20
+after    114s, all 20 steps
+```
+
+Every checker added this session costs **0–2 seconds**. The slowness was never the new work; it was one
+step run twice, invisible in a script that reads correctly line by line.
+
+### Two checkers disagreeing about one population
+
+The reachability gate reported FAIL on 25 classes; A1 reported zero orphans. **Both were right about
+different questions** — reachability asks whether a class can be pointed at, A1 asks whether anything
+requires it — and a reader could not tell which to believe.
+
+Reconciled: a class ruled optional-with-reason is reported separately and not counted as a failure. The
+gate now **reports** by default and fails only under `--strict`, because a gate that blocks on 20
+pre-existing classes gets suppressed.
+
+### And reconciling them exposed a third thing
+
+`ForeignNamespace` and `ShapeSuite` were reported unreachable — classes created and *populated* at
+It11. **The individuals do not exist.** The export was written into a working copy that a later
+ceremony overwrote from GitHub, and the evidence survived because evidence is prose about work rather
+than the work.
+
+**`satisfiedByArtifact` did not catch it.** `AC_S_Tables_B3` names `backlog:bridgeCoversEvidence` — a
+property that *does* exist — while the four statements it was meant to carry do not. **The artefact
+resolved and the work was still missing.**
+
+`Inv_ArtefactNotProperty` records this as Violated: a property is cheap to declare and says nothing
+about whether anything uses it. That is the Package trap one level down, inside the mechanism built to
+catch it.
+
+Unreachable classes: **22 → 20**.
+
+
 ## v1.128.0 — 2026-08-27 (MAJOR-class: a lineage can be set down — three findings from the owner's question)
 
 ### 1. A finished lineage was still live
@@ -4278,7 +4333,7 @@ moment another stage is inserted, so the decoupling is permanent instead.
 
 **Why every gate stayed green while this was live:** the three-fixture self-proof invokes the
 validator *directly*; only the register path formats its output, so a defect in the formatting layer
-was invisible to the proof. `backlog_gate_v1_1_26.sh` now runs the known-bad fixture through the
+was invisible to the proof. `backlog_gate_v1_1_27.sh` now runs the known-bad fixture through the
 **exact register path** and aborts if it does not fail. The self-proof covered the shapes; it had
 never covered its own plumbing.
 
@@ -5271,7 +5326,7 @@ executable and ordered.
 arbitration documented and implemented in the report tool.
 
 **Added — tooling:** `backlog_roadmap_report_v1_5_0.py` (eight sections, both NEXT answers, silent
--gap check), `backlog_coverage_gate_v1_1_1.py` (BP-D31), `backlog_gate_v1_1_26.sh` (Gate 0 / P / K /
+-gap check), `backlog_coverage_gate_v1_1_1.py` (BP-D31), `backlog_gate_v1_1_27.sh` (Gate 0 / P / K /
 R plus coverage), Gate K version-identity check in the validator.
 
 **Changed:** the v1.0.0 advisory "item carries no priority score" now excludes items correctly
