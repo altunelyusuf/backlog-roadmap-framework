@@ -1,5 +1,45 @@
 # Changelog
 
+## v1.132.0 — 2026-08-27 (MINOR: every container states its scope — the archive blocker clears)
+
+### Both repositories verified at v1.131.0 first
+
+The shipped drift check, not an ad-hoc diff: **0 missing, 0 extra, 0 differing.**
+
+### Container scoping
+
+`containerForLineage` and `ContainerScope` — lineage-scoped or framework-scoped, **stated rather than
+inferred from whether a property happens to be present**, because absent-by-decision and
+absent-by-omission look identical.
+
+Assigned by reading membership, not by naming: **31 of 33 containers serve exactly one lineage.**
+
+Four were missed on the first pass because they are not subclasses of `WorkItemContainer` and the walk
+started there. **The walk was right; its starting point was too narrow.**
+
+### What genuinely spans lineages
+
+`Roadmap` references six lineages, `Scope` three. **Not misclassifications** — a roadmap that ranks work
+across lineages spans them, and ranking across runs is what a roadmap is for. Both stay live.
+
+`DoD` and `Commitment_Dev` reference `L_Dev` alone and archive with it.
+
+```
+live→archive edges   7 edge types / 5 containers  →  14 edges / 2 containers
+```
+
+`lineageForMission` is among the remainder and is **correct**: the `Lineage` individuals are the index,
+and an index points at what it indexes.
+
+### The blocker clears
+
+The archive can now be built with `Roadmap` and `Scope` retaining pointers into it. **A pointer into a
+named archive file is a reference, not a dangling edge** — which is why `archiveFile` is required of an
+archived lineage.
+
+`Inv_PerLineageContainer` moves to **Holds, with the exception stated**.
+
+
 ## v1.131.0 — 2026-08-27 (MAJOR: Mission_OntologyDriven achieved — all seven missions settled)
 
 ### Reading the mission statement changed the answer

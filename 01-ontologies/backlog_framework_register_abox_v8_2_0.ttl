@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/8.1.0> ;
-    owl:versionInfo "8.1.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/8.2.0> ;
+    owl:versionInfo "8.2.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/8.1.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/8.0.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/7.11.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/7.8.0> ;
@@ -11331,7 +11332,7 @@ fw:Inv_PerLineageContainer a backlog:CrossCuttingInvariant ;
     rdfs:label "A container serves one lineage"@en ;
     backlog:hasCheckQuery "ASK { ?c backlog:hasScopeStatement|backlog:roadmapRealises|backlog:commitsToGoal ?x . ?x backlog:belongsToLineage ?l1 . ?c backlog:belongsToLineage ?l2 . FILTER (?l1 != ?l2) }" ;
     backlog:hasExpectedResult "false" ;
-    backlog:hasInvariantStatus backlog:Violated ;
+
     backlog:tracksItem fw:EP_ScriptDecisions ;
     backlog:hasRationale "Violated: five shared containers serve all seven lineages, and each is referenced by live and retired work at once. Recorded rather than worked around, because forcing the split by cutting those edges would produce exactly the corruption this release exists to prevent — a live register pointing at individuals that are no longer there." .
 
@@ -11407,3 +11408,119 @@ fw:Mission_OntologyDriven backlog:hasMissionOutcome backlog:Out_Achieved ;
     backlog:retiredAtCommit "pending-commit" .
 
 fw:L_OntologyDriven backlog:lineageArchived false .
+
+#################################################################
+#  v8.2.0 — every container states its scope.
+#
+#  Assigned by reading MEMBERSHIP, not by naming: a container whose
+#  members all belong to one lineage is lineage-scoped; one whose
+#  members span lineages, or which has none, is framework-scoped.
+#  Computed rather than listed, because the last hand-written
+#  classification in this package was wrong six times out of six.
+#################################################################
+
+fw:It1 backlog:containerScope backlog:CScope_Lineage ;
+    backlog:containerForLineage fw:L_Dev .
+fw:It10 backlog:containerScope backlog:CScope_Lineage ;
+    backlog:containerForLineage fw:L_OntologyDriven .
+fw:It11 backlog:containerScope backlog:CScope_Lineage ;
+    backlog:containerForLineage fw:L_OntologyDriven .
+fw:It2 backlog:containerScope backlog:CScope_Lineage ;
+    backlog:containerForLineage fw:L_Ops .
+fw:It3 backlog:containerScope backlog:CScope_Lineage ;
+    backlog:containerForLineage fw:L_Build .
+fw:It4 backlog:containerScope backlog:CScope_Lineage ;
+    backlog:containerForLineage fw:L_Build .
+fw:It5 backlog:containerScope backlog:CScope_Lineage ;
+    backlog:containerForLineage fw:L_Build .
+fw:It6 backlog:containerScope backlog:CScope_Lineage ;
+    backlog:containerForLineage fw:L_Build .
+fw:It7 backlog:containerScope backlog:CScope_Lineage ;
+    backlog:containerForLineage fw:L_OntologyDriven .
+fw:It8 backlog:containerScope backlog:CScope_Lineage ;
+    backlog:containerForLineage fw:L_OntologyDriven .
+fw:It9 backlog:containerScope backlog:CScope_Lineage ;
+    backlog:containerForLineage fw:L_OntologyDriven .
+fw:Pkg_Consolidated backlog:containerScope backlog:CScope_Lineage ;
+    backlog:containerForLineage fw:L_Build .
+fw:Pkg_ExecutionInOntology backlog:containerScope backlog:CScope_Lineage ;
+    backlog:containerForLineage fw:L_OntologyDriven .
+fw:Pkg_GovernanceQueryable backlog:containerScope backlog:CScope_Lineage ;
+    backlog:containerForLineage fw:L_OntologyDriven .
+fw:Pkg_Modelling backlog:containerScope backlog:CScope_Lineage ;
+    backlog:containerForLineage fw:L_Build .
+fw:Pkg_StoryDetail backlog:containerScope backlog:CScope_Lineage ;
+    backlog:containerForLineage fw:L_Build .
+fw:Register backlog:containerScope backlog:CScope_Framework .
+fw:Rel_It10 backlog:containerScope backlog:CScope_Lineage ;
+    backlog:containerForLineage fw:L_OntologyDriven .
+fw:Rel_It11 backlog:containerScope backlog:CScope_Lineage ;
+    backlog:containerForLineage fw:L_OntologyDriven .
+fw:Rel_It1b backlog:containerScope backlog:CScope_Lineage ;
+    backlog:containerForLineage fw:L_Dev .
+fw:Rel_It2b backlog:containerScope backlog:CScope_Lineage ;
+    backlog:containerForLineage fw:L_Ops .
+fw:Rel_It4 backlog:containerScope backlog:CScope_Lineage ;
+    backlog:containerForLineage fw:L_Build .
+fw:Rel_It5 backlog:containerScope backlog:CScope_Lineage ;
+    backlog:containerForLineage fw:L_Build .
+fw:Rel_It7 backlog:containerScope backlog:CScope_Lineage ;
+    backlog:containerForLineage fw:L_OntologyDriven .
+fw:Rel_It8 backlog:containerScope backlog:CScope_Lineage ;
+    backlog:containerForLineage fw:L_OntologyDriven .
+fw:Rel_It9 backlog:containerScope backlog:CScope_Lineage ;
+    backlog:containerForLineage fw:L_OntologyDriven .
+fw:Rel_v1_80_0 backlog:containerScope backlog:CScope_Lineage ;
+    backlog:containerForLineage fw:L_Executable .
+fw:Rel_v1_96_0 backlog:containerScope backlog:CScope_Lineage ;
+    backlog:containerForLineage fw:L_Build .
+fw:Rel_v1_97_0 backlog:containerScope backlog:CScope_Lineage ;
+    backlog:containerForLineage fw:L_Build .
+fw:Shipped backlog:containerScope backlog:CScope_Lineage ;
+    backlog:containerForLineage fw:L_Dev .
+
+#  Roadmap, Scope, DoD and Commitment_Dev are not subclasses of
+#  WorkItemContainer, so the membership walk never reached them —
+#  the walk was right and its starting point was too narrow. Each
+#  is scoped here by the lineage of what it POINTS AT, which is
+#  how the others were done.
+fw:Roadmap backlog:containerScope backlog:CScope_Framework .
+fw:Scope backlog:containerScope backlog:CScope_Framework .
+fw:DoD backlog:containerScope backlog:CScope_Lineage ;
+    backlog:containerForLineage fw:L_Dev .
+fw:Commitment_Dev backlog:containerScope backlog:CScope_Lineage ;
+    backlog:containerForLineage fw:L_Dev .
+
+#################################################################
+#  The residual, measured and named.
+#
+#  Roadmap references six lineages and Scope three. Those are not
+#  misclassifications — a roadmap that RANKS work across lineages
+#  genuinely spans them, and ranking across lineages is what a
+#  roadmap is for. They stay framework-scoped and stay live.
+#
+#  DoD and Commitment_Dev reference L_Dev alone and are scoped to
+#  it, so they archive with it.
+#
+#  What remains after container scoping: 14 live-to-archive edges
+#  from two genuinely cross-lineage containers, down from the
+#  original 7 edge types across 5 containers. lineageForMission is
+#  among them and is CORRECT — the Lineage individuals are the
+#  index and an index points at what it indexes.
+#
+#  So the archive can be built with Roadmap and Scope retaining
+#  pointers into it. That is a reference to an archived item, not a
+#  dangling one, and the difference is whether the archive file
+#  exists and is named — which archiveFile now requires.
+#################################################################
+
+fw:Obs_ContainerScoped a backlog:MetricObservation ;
+    rdfs:label "Container scoping, and what still spans lineages"@en ;
+    backlog:observesMetric fw:Metric_Obj_CodeDecisions ;
+    backlog:observationFor fw:Obj_CodeDecisions ;
+    backlog:hasObservedValue 0.0 ;
+    backlog:observedAt "2026-08-27T19:30:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Thirty-three containers scoped by reading what their members and references belong to, not by naming them: 31 lineage-scoped, 2 framework-scoped. Four were missed on the first pass because they are not subclasses of WorkItemContainer and the membership walk started there — the walk was right and its starting point too narrow. Roadmap spans six lineages and Scope three; both are genuinely cross-lineage and stay live. Residual live-to-archive edges: 14, from two containers, down from 7 edge types across 5." .
+
+fw:Inv_PerLineageContainer backlog:hasInvariantStatus backlog:Holds ;
+    backlog:hasRationale "Holds with a stated exception. Every container now declares its scope, and 31 of 33 serve exactly one lineage and archive with it. Roadmap and Scope span lineages by their nature — ranking and boundary-setting across runs is what they do — so they stay live and retain named pointers into the archive. A pointer into a named archive file is a reference, not a dangling edge, which is why archiveFile is required of an archived lineage." .

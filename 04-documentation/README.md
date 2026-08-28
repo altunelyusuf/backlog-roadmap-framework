@@ -30,7 +30,7 @@ prose that drifts. Generalised from an adopting project's product-backlog deposi
   backlog_framework_register_data_convention_proposal_v1_0_0.md  Phase-D proposal to OEE
   independent_package_naming_proposal_v1_0_0.ttl  proposed convention for OE-governed independent packages
 04-documentation/
-  BACKLOG_ROADMAP_FRAMEWORK_STANDARD_v1_65_0.md the standard: concepts, levels, adoption
+  BACKLOG_ROADMAP_FRAMEWORK_STANDARD_v1_66_0.md the standard: concepts, levels, adoption
   Coverage_Report_v1_1_0.md                    BP-D31 measurement: 22.2% at v1.0.0 -> 100% at v1.1.0
   CHANGELOG_v1_25_0.md                          what changed and what incident triggered it
   Naming_Decision_Record_v1_0_1.md             why the package is named what it is, and the L-88 scrub record
@@ -61,7 +61,7 @@ bash 03-tooling/backlog_gate_v1_1_27.sh my_register.ttl      # ... plus a regist
 python3 03-tooling/backlog_roadmap_report_v1_5_0.py my_register.ttl
 ```
 
-Read `04-documentation/BACKLOG_ROADMAP_FRAMEWORK_STANDARD_v1_65_0.md` first; section 4 is the
+Read `04-documentation/BACKLOG_ROADMAP_FRAMEWORK_STANDARD_v1_66_0.md` first; section 4 is the
 adoption procedure and section 9 lists what this release does and does not claim.
 
 ## Provenance (BP-D13 / BP-D14 / BP-D15)

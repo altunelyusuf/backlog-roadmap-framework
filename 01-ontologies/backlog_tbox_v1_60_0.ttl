@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.59.0> ;
-    owl:versionInfo "1.59.0" ;
+    owl:versionIRI <http://example.org/backlog/1.60.0> ;
+    owl:versionInfo "1.60.0" ;
+    owl:priorVersion <http://example.org/backlog/1.59.0> ;
     owl:priorVersion <http://example.org/backlog/1.58.0> ;
     owl:priorVersion <http://example.org/backlog/1.57.0> ;
     owl:priorVersion <http://example.org/backlog/1.56.0> ;
@@ -5575,3 +5576,47 @@ backlog:archiveFile a owl:DatatypeProperty , owl:FunctionalProperty ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "archive file"@en ;
     skos:definition "Where an archived lineage now lives. Named rather than implied, because the saving comes from the file NOT BEING LOADED, and a reader must be able to find what was set aside without guessing a filename."@en .
+
+#################################################################
+#  92. A container serves one lineage
+#
+#  The archive split was blocked by five shared containers — one
+#  Register, one Roadmap, one Scope, one Commitment, one
+#  DefinitionOfDone — serving all seven lineages at once. They
+#  could not move to the archive because live work uses them, and
+#  could not stay whole because they reference retired work.
+#
+#  Measured per container: Roadmap references six lineages, Scope
+#  three, Commitment and DoD one each, Register none directly. So
+#  the sharing is real but shallow, and the fix is a container per
+#  lineage rather than a general-purpose splitter.
+#
+#  containerForLineage says which lineage a container serves. A
+#  container serving none is FRAMEWORK-WIDE and stays live by
+#  design — the Register itself is the obvious case, since a
+#  register that archives with its contents cannot be read.
+#################################################################
+
+backlog:containerForLineage a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:WorkItemContainer ; rdfs:range backlog:Lineage ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "container for lineage"@en ;
+    skos:definition "The lineage this container serves. Absent means framework-wide, which is a claim rather than an omission: a container with no lineage stays live when every lineage around it is archived, and that must be a decision someone took."@en .
+
+backlog:containerScope a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:WorkItemContainer ; rdfs:range backlog:ContainerScope ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "container scope"@en .
+
+backlog:ContainerScope a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:CScope_Lineage backlog:CScope_Framework ) ;
+    rdfs:label "Container Scope"@en ;
+    skos:definition "Whether a container belongs to one lineage or to the framework. Stated rather than inferred from whether containerForLineage happens to be present, because absent-by-decision and absent-by-omission look identical — the distinction this framework has already had to learn twice."@en .
+
+backlog:CScope_Lineage a owl:NamedIndividual , backlog:ContainerScope ;
+    rdfs:label "Lineage-scoped"@en ;
+    skos:definition "Serves one lineage and archives with it."@en .
+backlog:CScope_Framework a owl:NamedIndividual , backlog:ContainerScope ;
+    rdfs:label "Framework-scoped"@en ;
+    skos:definition "Serves the framework across lineages and stays live. The Register is the case that forces this to exist: a register that archives with its contents cannot be read."@en .

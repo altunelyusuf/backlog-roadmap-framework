@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.65.0
+# Backlog & Roadmap Semantic Framework — Standard v1.66.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -1136,6 +1136,26 @@ events had no lineage of their own and stayed behind while the items they pointe
 Some individuals are **framework-wide** — code tables, governance rulings, quality metrics, and the
 `Lineage` individuals themselves, which are the index. An index that archives with its contents cannot
 be searched.
+
+### 2.5c-xlvii A container serves one lineage, or says it doesn't
+
+`containerForLineage` names the lineage a container serves; `ContainerScope` states whether it is
+lineage-scoped or framework-scoped.
+
+**Stated rather than inferred** from whether `containerForLineage` happens to be present, because
+absent-by-decision and absent-by-omission look identical — a distinction this framework has had to
+learn more than once.
+
+Assigned by reading what a container's members and references belong to, not by naming it: 31 of 33
+serve exactly one lineage and archive with it.
+
+Two genuinely span lineages. A `Roadmap` that ranks work across runs spans them by its nature, and so
+does a `Scope` that drew boundaries for several. Both stay live and retain pointers into the archive —
+**a pointer into a named archive file is a reference, not a dangling edge**, which is why an archived
+lineage must name its `archiveFile`.
+
+The `Register` is the case that forces framework scope to exist: a register that archives with its
+contents cannot be read.
 
 ### 2.5d Decomposition, commitments, dependency kinds, impediments, flow, team (subject v1.4.0)
 
