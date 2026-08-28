@@ -1,0 +1,86 @@
+# Proves the sh:property clauses on lightly-used classes that Inv_ClauseProven
+# reported unproven at v1.134.0: Budget, WorkItemContainer, DeploymentUnit,
+# AdaptationGate, KickOff, Lineage, Milestone, Mission, PlanBaseline,
+# FitGapFinding, ModelKind. Each case omits exactly the field its clause
+# requires and nothing else, so a fixture reporting many violations still
+# proves each independently rather than as a batch.
+@prefix backlog: <http://example.org/backlog#> .
+@prefix core:    <http://example.org/core#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix ex:      <http://example.org/sparse#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+ex:P a backlog:AdoptionProfile ; backlog:profileAppliesTo "sparse-shape clause proof" ;
+    backlog:governsBacklog ex:BL ; backlog:hasConformanceLevel backlog:L3_Governed ;
+    backlog:hasTargetConformanceLevel backlog:L3_Governed ;
+    backlog:hasExpectedPolarity backlog:Polarity_Negative ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:hasDecisionRationale "L1: every case below is a required-field clause." ;
+    backlog:adoptsFacet backlog:CoreFacet .
+ex:BL a backlog:Backlog ; backlog:hasIdentifier "BL-SPARSE" ; backlog:hasState backlog:InProgress .
+
+# Budget: missing dimension, missing what it constrains, missing ceiling.
+ex:BUD_NODIM a backlog:Budget ; backlog:budgetFor ex:BL .
+ex:BUD_NOCAP a backlog:Budget ; backlog:budgetDimension backlog:CDim_Effort .
+
+# WorkItemContainer: missing identifier.
+ex:CONT_NOID a backlog:WorkItemContainer .
+
+# DeploymentUnit: missing deployment date.
+ex:DEP_NODATE a backlog:DeploymentUnit ; backlog:hasIdentifier "REL-X" .
+
+# AdaptationGate: missing everything a gate must carry.
+ex:GATE_BARE a backlog:AdaptationGate .
+
+# KickOff: missing target, timestamp, mode.
+ex:KO_BARE a backlog:KickOff .
+
+# Lineage: missing mission, ordinal, archived flag; two values where one.
+ex:LIN_BARE a backlog:Lineage .
+
+# Milestone: missing identifier and target date.
+ex:MILE_BARE a backlog:Milestone .
+
+# Mission: missing its statement.
+ex:MISS_BARE a backlog:Mission .
+
+# PlanBaseline: missing what it baselines and when.
+ex:BASE_BARE a backlog:PlanBaseline .
+
+# FitGapFinding: missing the adaptation and item it names, and its reason.
+ex:FIND_BARE a backlog:FitGapFinding .
+
+# ModelKind: missing its category.
+ex:MODEL_BARE a backlog:ModelKind .
+
+# DimensionalCost: missing quantity.
+ex:COST_NOQTY a backlog:DimensionalCost ; backlog:alongDimension backlog:CDim_Effort .
+
+# Forecast: missing the completion date it exists to state.
+ex:FCAST_BARE a backlog:Forecast ; backlog:forecastMadeAt "2026-08-27T00:00:00"^^xsd:dateTime .
+
+# PriorityScore: no written rationale, to prove the constraint requires a
+# Builder judgement rather than a bare number.
+ex:SCORE_BAD a backlog:PriorityScore ; backlog:hasScoreValue 3.0 .
+ex:CONT_SCORED a backlog:WorkItemContainer ; backlog:hasIdentifier "C-SCORED" ;
+    backlog:hasPriorityScore ex:SCORE_BAD .
+
+# Lineage: TWO archive files, to prove the maxCount clause distinct from
+# the minCount clauses already covered by LIN_BARE above.
+ex:LIN_TWOFILE a backlog:Lineage ;
+    backlog:lineageForMission ex:MISS_BARE ; backlog:lineageOrdinal 1 ;
+    backlog:lineageArchived true ;
+    backlog:archiveFile "a.ttl" ; backlog:archiveFile "b.ttl" .
+
+# Lineage: TWO ordinals and TWO missions, to prove those maxCount clauses
+# specifically rather than relying on LIN_TWOFILE's archiveFile duplication.
+ex:LIN_TWOORD a backlog:Lineage ;
+    backlog:lineageForMission ex:MISS_BARE ; backlog:lineageOrdinal 1 , 2 ;
+    backlog:lineageArchived true .
+ex:LIN_TWOMISS a backlog:Lineage ;
+    backlog:lineageForMission ex:MISS_BARE , ex:MISS_TWOOUT ;
+    backlog:lineageOrdinal 1 ; backlog:lineageArchived true .
+
+# Mission: TWO outcomes, to prove a mission reports at most one.
+ex:MISS_TWOOUT a backlog:Mission ; backlog:hasMissionStatement "x" ;
+    backlog:hasMissionOutcome backlog:Out_Achieved , backlog:Out_InFlight .

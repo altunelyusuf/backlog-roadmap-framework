@@ -1,5 +1,39 @@
 # Changelog
 
+## v1.135.0 — 2026-08-27 (MINOR: Inv_ClauseProven worked down — 112 to 80, and a naming defect that made the first measurement lie)
+
+### One fixture, one case per unproven clause
+
+`fixture_sparse_shapes_negative_v1_0_0.ttl` — a bare individual per class, each omitting exactly the
+field its clause requires: `Budget`, `WorkItemContainer`, `DeploymentUnit`, `AdaptationGate`, `KickOff`,
+`Lineage`, `Milestone`, `Mission`, `PlanBaseline`, `FitGapFinding`, `ModelKind`, `DimensionalCost`,
+`Forecast`, `PriorityScore`.
+
+### The first measurement was wrong, and comparing it to a true baseline caught it
+
+The clause-proof checker filters fixtures **by filename** — it only scans files containing
+`negative`, `adversarial`, or `digestfail`. The fixture was first named `fixture_sparse_shapes` and the
+checker never read it.
+
+Direct invocation showed it firing 25+ target clauses. The tool's own count stayed at **112 unchanged**
+— because it was silently ignoring the file meant to move it.
+
+**Caught by measuring a true baseline** (the fixture entirely absent) against the after-state, rather
+than trusting a single number. The two were identical, which is the sign a comparison is broken, not a
+sign nothing moved.
+
+Renamed to `fixture_sparse_shapes_negative`. Re-measured:
+
+```
+Inv_ClauseProven   112 → 80  (32 clauses closed)
+```
+
+### What remains
+
+Mostly cross-item structural rules — `decomposesInto` pointing at a real item, `dependsOn` cycles —
+needing multi-node fixtures rather than single bare individuals. A larger, separate piece of work.
+
+
 ## v1.134.0 — 2026-08-27 (MINOR: the archive flags said both true and false)
 
 Found by reading the **published files** rather than trusting last release's report.

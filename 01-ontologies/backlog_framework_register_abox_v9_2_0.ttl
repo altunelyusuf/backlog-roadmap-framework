@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.1.0> ;
-    owl:versionInfo "9.1.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.2.0> ;
+    owl:versionInfo "9.2.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.1.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.0.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/8.2.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/8.1.0> ;
@@ -4061,3 +4062,35 @@ fw:Obs_FinalState a backlog:MetricObservation ;
     backlog:hasObservedValue 0.0 ;
     backlog:observedAt "2026-08-27T21:00:00Z"^^xsd:dateTime ;
     backlog:hasObservationMethod "Read from the published files, not from the previous release's report — which is how the archive-flag defect was found. Four shipped checkers PASS: adoption, criterion resolution, number origin, self-application. Clause proof reports 112 of 302 unproven, up from 92 because this lineage added clauses faster than it added fixtures. Three invariants stand Violated by design: Inv_StoryDecomposition, Inv_ClauseProven and Inv_ArtefactNotProperty, each recording a gap that is real and not yet closed." .
+
+#################################################################
+#  v9.2.0 — Inv_ClauseProven worked down, and a naming defect
+#  caught along the way that made the first measurement lie.
+#
+#  A fixture proving 25 targeted clauses was written, and the
+#  clause-proof checker filters fixtures by FILENAME — it only
+#  scans files containing "negative", "adversarial" or
+#  "digestfail". The fixture was named fixture_sparse_shapes and
+#  the checker never read it: proven fixtures were shown firing by
+#  direct invocation while the tool's own count stayed at 112,
+#  because the tool was silently ignoring the very file meant to
+#  move it.
+#
+#  Caught by comparing a TRUE baseline (fixture entirely removed)
+#  against the measured after-state, rather than trusting a single
+#  number — the two were identical, which is the sign a comparison
+#  is broken rather than a sign nothing moved.
+#
+#  Renamed to fixture_sparse_shapes_negative and re-measured:
+#################################################################
+
+fw:Ev_ClauseProofReduction a backlog:TestEvidence ;
+    backlog:hasTestSpec "03-tooling/fixtures/fixture_sparse_shapes_negative_v1_0_0.ttl" ;
+    backlog:hasTestId "Inv_ClauseProven-reduction" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-08-27T22:00:00Z"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "One fixture, one case per unproven sh:property clause on lightly-used classes: Budget, WorkItemContainer, DeploymentUnit, AdaptationGate, KickOff, Lineage, Milestone, Mission, PlanBaseline, FitGapFinding, ModelKind, DimensionalCost, Forecast, PriorityScore. Measured with a true before-state (the fixture entirely absent, not merely incomplete) against a true after-state: 112 to 80. The first attempt to measure this reported no change because the checker filters fixtures by filename and the file was not named to match — a defect that made the comparison lie by testing itself against itself." ;
+    backlog:verifiedByTool "backlog_clause_proof" ;
+    backlog:attestsCriterion fw:AC_EP_ScriptDecisions_S1 .
+
+fw:Inv_ClauseProven backlog:hasRationale "80 of 302 unproven, down from 112. 32 clauses closed by one fixture covering the sparse-shape population. Remaining are mostly cross-item structural rules (decomposesInto pointing at real items, dependsOn cycles) needing multi-node fixtures rather than single bare individuals, which is a larger and separate piece of work." .
