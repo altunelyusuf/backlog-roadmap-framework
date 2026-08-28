@@ -1,5 +1,29 @@
 # Changelog
 
+## v1.134.0 — 2026-08-27 (MINOR: the archive flags said both true and false)
+
+Found by reading the **published files** rather than trusting last release's report.
+
+Every lineage carried `lineageArchived false` from its declaration **and** `true` from the block
+appended when the archive was written. Both on a functional property.
+
+**So the six archived lineages reported themselves as not archived.** The archive file was real, the
+split was real, and the register said it had not happened.
+
+### Why nothing caught it
+
+`owl:FunctionalProperty` is a statement an **OWL reasoner** enforces. This suite is SHACL, and SHACL does
+not read it. The ontology declared the constraint and nothing evaluated it — the same shape as a closed
+`owl:oneOf` with individuals outside it, found earlier in this lineage.
+
+**Third occurrence this session**: `hasInvariantStatus` twice, `owl:priorVersion` once, `lineageArchived`
+here. The pattern is always **an append that should have been a replace**, which is why a generic clause
+is worth more than fixing each instance.
+
+`FunctionalOnceShape` and `MissionOnceShape` now enforce single-valuedness in SHACL. Verified in the
+failing direction: re-adding the second value makes the clause fire.
+
+
 ## v1.133.0 — 2026-08-27 (MAJOR: six lineages set down — validation 139s to 42s)
 
 ### The archive exists

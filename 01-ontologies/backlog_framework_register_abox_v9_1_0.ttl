@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.0.0> ;
-    owl:versionInfo "9.0.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.1.0> ;
+    owl:versionInfo "9.1.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.0.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/8.2.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/8.1.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/8.0.0> ;
@@ -3477,32 +3478,38 @@ fw:L_Plan a backlog:Lineage ;
     rdfs:label "Lineage 1"@en ;
     backlog:lineageForMission fw:Mission_Plan ;
     backlog:lineageOrdinal 1 ;
-    backlog:lineageArchived false .
+    backlog:lineageArchived true ;
+    backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_0_0.ttl" .
 fw:L_OrderRepair a backlog:Lineage ;
     rdfs:label "Lineage 2"@en ;
     backlog:lineageForMission fw:Mission_OrderRepair ;
     backlog:lineageOrdinal 2 ;
-    backlog:lineageArchived false .
+    backlog:lineageArchived true ;
+    backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_0_0.ttl" .
 fw:L_Executable a backlog:Lineage ;
     rdfs:label "Lineage 3"@en ;
     backlog:lineageForMission fw:Mission_Executable ;
     backlog:lineageOrdinal 3 ;
-    backlog:lineageArchived false .
+    backlog:lineageArchived true ;
+    backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_0_0.ttl" .
 fw:L_Ops a backlog:Lineage ;
     rdfs:label "Lineage 4"@en ;
     backlog:lineageForMission fw:Mission_Ops ;
     backlog:lineageOrdinal 4 ;
-    backlog:lineageArchived false .
+    backlog:lineageArchived true ;
+    backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_0_0.ttl" .
 fw:L_Dev a backlog:Lineage ;
     rdfs:label "Lineage 5"@en ;
     backlog:lineageForMission fw:Mission_Dev ;
     backlog:lineageOrdinal 5 ;
-    backlog:lineageArchived false .
+    backlog:lineageArchived true ;
+    backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_0_0.ttl" .
 fw:L_Build a backlog:Lineage ;
     rdfs:label "Lineage 6"@en ;
     backlog:lineageForMission fw:Mission_BuildSoftware_v2 ;
     backlog:lineageOrdinal 6 ;
-    backlog:lineageArchived false .
+    backlog:lineageArchived true ;
+    backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_0_0.ttl" .
 fw:L_OntologyDriven a backlog:Lineage ;
     rdfs:label "Lineage 7"@en ;
     backlog:lineageForMission fw:Mission_OntologyDriven ;
@@ -4001,12 +4008,6 @@ fw:Inv_PerLineageContainer backlog:hasInvariantStatus backlog:Holds ;
 #  what was set aside rather than discover that it vanished.
 #################################################################
 
-fw:L_Plan backlog:lineageArchived true ; backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_0_0.ttl" .
-fw:L_OrderRepair backlog:lineageArchived true ; backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_0_0.ttl" .
-fw:L_Executable backlog:lineageArchived true ; backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_0_0.ttl" .
-fw:L_Ops backlog:lineageArchived true ; backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_0_0.ttl" .
-fw:L_Dev backlog:lineageArchived true ; backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_0_0.ttl" .
-fw:L_Build backlog:lineageArchived true ; backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_0_0.ttl" .
 
 
 #  Scope, Roadmap, Commitment_Dev and DoD moved to the archive
@@ -4032,3 +4033,31 @@ fw:Commitment_Ontology a backlog:GoalCommitment ;
     backlog:commitsToGoal fw:Goal_GovernanceInOntology ;
     backlog:hasCommitmentRationale "The register commits to the mission-facing goal of the ontology-driven lineage: that the governance model is expressed as ontology rather than as documentation. Recorded at v1.133.0 when the archive split removed Commitment_Dev and the clause reported a backlog with no committed goal." .
 fw:Register backlog:hasCommitment fw:Commitment_Ontology .
+
+#################################################################
+#  v9.1.0 — the archive flags said both true and false.
+#
+#  Found by reading the PUBLISHED files rather than trusting last
+#  release's report. Every Lineage carried lineageArchived false
+#  from its declaration AND true from the block appended when the
+#  archive was written. Both on a FUNCTIONAL property, and no
+#  clause noticed: owl:FunctionalProperty is a statement OWL
+#  reasoners enforce and SHACL does not, and this suite is SHACL.
+#
+#  Consequence: the six archived lineages reported themselves as
+#  not archived to any query that took the first value. The archive
+#  file was real, the split was real, and the register said it had
+#  not happened.
+#
+#  Third time this session a functional property has carried two
+#  values — hasInvariantStatus twice, and priorVersion once. The
+#  pattern is always an append that should have been a replace.
+#################################################################
+
+fw:Obs_FinalState a backlog:MetricObservation ;
+    rdfs:label "State at the close of the ontology-driven lineage"@en ;
+    backlog:observesMetric fw:Metric_Obj_CodeDecisions ;
+    backlog:observationFor fw:Obj_CodeDecisions ;
+    backlog:hasObservedValue 0.0 ;
+    backlog:observedAt "2026-08-27T21:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Read from the published files, not from the previous release's report — which is how the archive-flag defect was found. Four shipped checkers PASS: adoption, criterion resolution, number origin, self-application. Clause proof reports 112 of 302 unproven, up from 92 because this lineage added clauses faster than it added fixtures. Three invariants stand Violated by design: Inv_StoryDecomposition, Inv_ClauseProven and Inv_ArtefactNotProperty, each recording a gap that is real and not yet closed." .

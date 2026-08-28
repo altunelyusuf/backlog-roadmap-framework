@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.69.0> ;
-    owl:versionInfo "1.69.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.70.0> ;
+    owl:versionInfo "1.70.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.69.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.68.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.67.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.66.0> ;
@@ -4736,3 +4737,42 @@ backlog:ArchiveOnlyWhenAchievedShape a sh:NodeShape ;
             $this backlog:lineageArchived true ; backlog:lineageForMission ?m .
             ?m backlog:hasMissionOutcome backlog:Out_InFlight .
         }""" ] .
+
+#################################################################
+#  v1.70.0 — a functional property carries one value
+#
+#  Three times this session a functional property has held two
+#  values: hasInvariantStatus twice, owl:priorVersion once, and
+#  lineageArchived once with true AND false at the same time — so
+#  six archived lineages reported themselves as not archived.
+#
+#  owl:FunctionalProperty is a statement an OWL REASONER enforces.
+#  This suite is SHACL, and SHACL does not read it. The ontology
+#  declared the constraint and nothing evaluated it — the same
+#  shape as a closed owl:oneOf with individuals outside it, found
+#  earlier in this lineage.
+#
+#  The pattern is always an APPEND THAT SHOULD HAVE BEEN A
+#  REPLACE, which is why a generic check is worth more than fixing
+#  each instance.
+#################################################################
+
+backlog:FunctionalOnceShape a sh:NodeShape ;
+    sh:targetClass backlog:Lineage ;
+    sh:severity sh:Violation ;
+    rdfs:label "A lineage reports one archive state (L1)"@en ;
+    sh:property [ sh:path backlog:lineageArchived ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "L1: a lineage must report exactly one archive state. This carried true and false at once, so a query taking the first value was told the archive had not happened while the archive file existed. owl:FunctionalProperty says one value and only an OWL reasoner enforces it; this suite is SHACL and must say so itself." ] ;
+    sh:property [ sh:path backlog:lineageForMission ; sh:maxCount 1 ;
+        sh:message "L1: a lineage pursues exactly one mission." ] ;
+    sh:property [ sh:path backlog:lineageOrdinal ; sh:maxCount 1 ;
+        sh:message "L1: a lineage has exactly one place in the sequence." ] ;
+    sh:property [ sh:path backlog:archiveFile ; sh:maxCount 1 ;
+        sh:message "L1: a lineage names at most one archive file, or a reader cannot tell which holds its contents." ] .
+
+backlog:MissionOnceShape a sh:NodeShape ;
+    sh:targetClass backlog:Mission ;
+    sh:severity sh:Violation ;
+    rdfs:label "A mission reports one outcome (L1)"@en ;
+    sh:property [ sh:path backlog:hasMissionOutcome ; sh:maxCount 1 ;
+        sh:message "L1: a mission must report at most one outcome. Achieved and in-flight at once is the defect that let six archived lineages report themselves as not archived, one level along." ] .
