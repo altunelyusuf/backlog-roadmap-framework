@@ -1,5 +1,45 @@
 # Changelog
 
+## v1.133.0 — 2026-08-27 (MAJOR: six lineages set down — validation 139s to 42s)
+
+### The archive exists
+
+`backlog_framework_archive_abox_v1_0_0.ttl` holds **807 individuals and 7,076 triples** from six
+finished lineages. The ordinary validation path does not load it. **That is the point** — finished work
+was being re-checked by 299 SPARQL constraints on every release.
+
+```
+before   10,523 triples   139s   404 advisories
+after     3,469 triples    42s   120 advisories
+                          ────
+                          −70%
+```
+
+Verified nothing was lost: live + archive reconstructs the original exactly, minus the two triples of
+the superseded version header.
+
+### The scoping rule was wrong and the measurement said so
+
+I had scoped `Scope` and `Roadmap` **framework-wide** because they span several lineages. Measured after
+the split: `Scope` holds 14 references and **zero to live work**, `Roadmap` 12 and zero.
+
+**Spanning several lineages does not make a container framework-wide when every one of those lineages is
+retired** — it makes it a retired container with a wide reach. Rule corrected: framework-scoped means
+serving the *live* lineage, not having once served many.
+
+### A clause caught what the split removed
+
+`Commitment_Dev` went to the archive with the lineage it was made for and nothing replaced it. The L2
+clause reported **a backlog with no committed goal is a list**. `Commitment_Ontology` now commits the
+register to `Goal_GovernanceInOntology` — the live lineage always had the goal and had simply never
+recorded the commitment separately.
+
+### The Lineage individuals stay live
+
+They are the index, and an index that archives with its contents cannot be searched. Each names the file
+its contents went to, so a reader finds what was set aside rather than discovering it vanished.
+
+
 ## v1.132.0 — 2026-08-27 (MINOR: every container states its scope — the archive blocker clears)
 
 ### Both repositories verified at v1.131.0 first
