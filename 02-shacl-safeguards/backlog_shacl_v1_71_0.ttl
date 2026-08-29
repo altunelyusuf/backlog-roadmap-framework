@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.70.0> ;
-    owl:versionInfo "1.70.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.71.0> ;
+    owl:versionInfo "1.71.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.70.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.69.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.68.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.67.0> ;
@@ -1513,6 +1514,7 @@ backlog:MissionShape a sh:NodeShape ;
             ?p a backlog:AdoptionProfile ; backlog:hasConformanceLevel ?lvl .
             FILTER (?lvl IN (backlog:L2_EvidenceBound, backlog:L3_Governed, backlog:L4_LineageEnforced))
             FILTER NOT EXISTS { ?g backlog:contributesToMission $this }
+            FILTER NOT EXISTS { $this backlog:belongsToLineage ?l . ?l backlog:lineageArchived true }
             # A mission whose lineage has not yet reached the Goal stage
             # SHOULD have no goals. Found the first time the v5.0.0 staged
             # ceremony was actually followed: it says the Mission stage closes
@@ -4776,3 +4778,19 @@ backlog:MissionOnceShape a sh:NodeShape ;
     rdfs:label "A mission reports one outcome (L1)"@en ;
     sh:property [ sh:path backlog:hasMissionOutcome ; sh:maxCount 1 ;
         sh:message "L1: a mission must report at most one outcome. Achieved and in-flight at once is the defect that let six archived lineages report themselves as not archived, one level along." ] .
+
+#################################################################
+#  v1.71.0 — #6 of the mitigation plan: A1 applied to
+#  ToolScript, the class that fixed the filename-decision defect
+#  and was itself unobliged, caught by the adoption checker on its
+#  first re-run.
+#################################################################
+
+backlog:ToolScriptShape a sh:NodeShape ;
+    sh:targetClass backlog:ToolScript ;
+    sh:severity sh:Violation ;
+    rdfs:label "A tool script names its file and whether it accepts a graph (L2)"@en ;
+    sh:property [ sh:path backlog:scriptFileName ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "L2: a tool script must name the file it describes, or it cannot be matched against anything real." ] ;
+    sh:property [ sh:path backlog:acceptsGraphPath ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:boolean ;
+        sh:message "L2: a tool script must state whether it accepts a graph path. This is the exact fact three wrong guesses tried to derive without declaring it; the class that fixed that was itself unobliged until this shape." ] .

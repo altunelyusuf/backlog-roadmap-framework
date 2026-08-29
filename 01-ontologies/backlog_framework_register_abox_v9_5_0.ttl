@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.4.0> ;
-    owl:versionInfo "9.4.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.5.0> ;
+    owl:versionInfo "9.5.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.4.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.3.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/8.2.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/8.1.0> ;
@@ -3445,10 +3446,8 @@ fw:Inv_ArtefactNotProperty a backlog:CrossCuttingInvariant ;
     rdfs:label "A criterion naming a property is not proof the data exists"@en ;
     backlog:hasCheckQuery "Manual: for each satisfiedByArtifact naming a property rather than a class, confirm the individuals it was meant to carry exist." ;
     backlog:hasExpectedResult "every named property has the instances its story promised" ;
-    backlog:hasInvariantStatus backlog:Violated ;
-    backlog:tracksItem fw:EP_ScriptDecisions ;
-    backlog:hasRationale "Violated and recorded rather than closed. AC_S_Tables_B3 named backlog:bridgeCoversEvidence, the resolver confirmed the PROPERTY exists, and the four evidence-kind statements it was supposed to carry did not. A property is cheap to declare and says nothing about whether anything uses it — which is the Package trap one level down, inside the very mechanism built to catch it." .
-
+    backlog:hasInvariantStatus backlog:Holds ;
+    backlog:tracksItem fw:EP_ScriptDecisions .
 
 #################################################################
 #  v8.0.0 — MAJOR. A lineage becomes a thing.
@@ -4165,3 +4164,139 @@ fw:Inv_AuditExemptionUnchecked a backlog:CrossCuttingInvariant ;
     backlog:hasInvariantStatus backlog:Violated ;
     backlog:tracksItem fw:EP_ScriptDecisions ;
     backlog:hasRationale "Violated, proven directly rather than assumed. The marker suppresses unconditionally; any comment containing the string silences the line. This is the owner's concern materialised inside the very tool built to prevent it, found by testing the mechanism against itself rather than trusting that writing an exemption made it correct." .
+
+#################################################################
+#  #5 of the mitigation plan: a Mission is index-level data, the
+#  same rule already applied to Lineage individuals. All seven
+#  mission headers copied back into the live register; content
+#  each mission governs stays archived. Mission_BuildSoftware's
+#  belongsToLineage was wrong (L_Plan, from the original bulk
+#  assignment) -- corrected to L_Build while moving it.
+#################################################################
+
+fw:Mission_Plan a backlog:Mission ;
+    backlog:hasMissionOrigin backlog:Origin_SessionDrafted ;
+    fw:label "Plan-based visibility mission"@en ;
+    backlog:hasMissionStatement "A register can be read as a plan as well as a backlog: what was scheduled, what actually happened, and the difference — without exporting anything to a spreadsheet or a project tool." ;
+    backlog:missionFor fw:Register ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:belongsToLineage fw:L_Plan .
+fw:Mission_OrderRepair a backlog:Mission ;
+    backlog:hasMissionOrigin backlog:Origin_SessionDrafted ;
+    fw:label "Recorded-order mission"@en ;
+    backlog:hasMissionStatement "A reader of any lineage in this store can tell whether its scope was fixed before its goals or drawn around them afterwards, without asking the session that wrote it." ;
+    backlog:missionFor fw:Register ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:belongsToLineage fw:L_OrderRepair .
+fw:Mission_Executable a backlog:Mission ;
+    backlog:hasMissionOrigin backlog:Origin_SessionDrafted ;
+    fw:label "Executable roadmap mission"@en ;
+    backlog:hasMissionStatement "A reader of the roadmap can see how far started work has actually got, every story fits the iteration it was committed to, and each release carries the most valuable work available rather than whatever shared a theme." ;
+    backlog:missionFor fw:Register ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:belongsToLineage fw:L_Executable .
+fw:Mission_Ops a backlog:Mission ;
+    backlog:hasMissionOrigin backlog:Origin_SessionDrafted ;
+    fw:label "Operational mission"@en ;
+    backlog:hasMissionStatement "An adopting team can answer, from the register alone and without a spreadsheet beside it: what did this cost, how fast are we going, what will it take to finish, and where did a human decide." ;
+    backlog:missionFor fw:Register ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:belongsToLineage fw:L_Ops .
+fw:Mission_Dev a backlog:Mission ;
+    backlog:hasMissionOrigin backlog:Origin_SessionDrafted ;
+    fw:label "Development mission"@en ;
+    backlog:hasMissionStatement "Extend the framework so that a register can report its own progress, cost and human involvement as computed facts rather than as claims. Not attempted: prescribing a delivery method, an estimation scale, or a unit of value." ;
+    backlog:missionFor fw:Register ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:belongsToLineage fw:L_Dev .
+fw:Mission_BuildSoftware a backlog:Mission ;
+    fw:label "Build software from mission statements"@en ;
+    backlog:hasMissionStatement "Software is built from mission statements: an intent chain is groomed and granularised down to executable work, delivered in regularly deployable packages, through time-boxed iterations planned to finish their package content, under autonomous, semi-autonomous or non-autonomous execution. The practices are grounded in software engineering standards rather than invented, and every step is machine-confirmable through ontologies." ;
+    backlog:missionFor fw:Register ;
+    backlog:hasMissionOrigin backlog:Origin_OwnerStated ;
+    backlog:missionSource "Owner instruction, 2026-08-20, correcting this session's reading of the framework's purpose: 'We have a backlog-roadmap framework because we want to build software from the mission statements. The methodology should be supporting autonomous, semi-autonomous, and non-autonomous development using iterative/sprint based approach ... All should be machine-confirmable especially using ontologies.'" ;
+    backlog:supersedesMission fw:Mission_Dev ;
+    backlog:supersedesMission fw:Mission_Ops ;
+    backlog:supersedesMission fw:Mission_Plan ;
+    backlog:supersedesMission fw:Mission_Executable ;
+    backlog:supersedesMission fw:Mission_OrderRepair ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:belongsToLineage fw:L_Build .
+fw:Mission_BuildSoftware_v2 a backlog:Mission ;
+    backlog:hasMissionStatement "Software is built from mission statements: an intent chain is groomed and granularised down to executable work, delivered in regularly deployable packages, through time-boxed iterations planned to finish their package content, under autonomous, semi-autonomous or non-autonomous execution. Analysis and design work produces named artefacts — traditional and UML models, diagrams and specifications — and a story carries its steps, interactions, state changes, test cases and test data. The practices are grounded in software engineering standards rather than invented, and every step is machine-confirmable through ontologies." ;
+    backlog:missionFor fw:Register ;
+    backlog:hasMissionOrigin backlog:Origin_OwnerStated ;
+    backlog:missionSource "Owner, 2026-08-25, verbatim: 'Do we have analysis and design activities using traditional and UML based methods, diagram development, specifications and all are part of user stories, definition of done, steps, interactions, state changes, test cases and test data. If not, let us build a lineage to fix the missing concepts in the framework.' Amends the v1.70.0 statement by naming what the analysis and design steps PRODUCE; the original said how work is groomed and delivered and not what it yields." ;
+    backlog:supersedesMission fw:Mission_BuildSoftware ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:hasMissionOutcome backlog:Out_Achieved ;
+    backlog:outcomeRationale "Achieved. Scope_Build: 10 of 10 deliverables satisfied by work that is Done and shipped in a package. Goal_MissionToWork, Goal_GroundedPractice and Goal_BuildAreasExhausted all reached. Goal_BuildContained is unreached and its objective now carries Ach_Retrospective with its reason, so nothing is left unexplained — which is the only condition under which this outcome may be set." ;
+    backlog:retiredAtCommit "pending-commit" ;
+    backlog:belongsToLineage fw:L_Build .
+
+#################################################################
+#  #2 of the mitigation plan, ATTEMPTED and REVERTED. The proposal
+#  was to promote the decomposition advisories to Violation scoped
+#  to belongsToLineage archived=false, on the reasoning that this
+#  would enforce forward without touching settled history.
+#
+#  Tested before committing further, per G19. It failed
+#  immediately: Mission_OntologyDriven, the live lineage, is
+#  ALREADY Out_Achieved. "Live" means "not archived," not "still in
+#  flight" — those turned out to be different facts once a lineage
+#  can be achieved without being archived yet. The promotion fired
+#  15 violations against 34 closed, unchangeable stories in the
+#  ALREADY-SETTLED live lineage: the exact retroactive-fabrication
+#  shape G23 exists to prevent, produced by a scoping choice that
+#  looked forward-only and was not.
+#
+#  Reverted to the original unscoped Warning form. The correct
+#  scope is temporal, not lineage-membership: enforcement belongs
+#  on a lineage that is BOTH unarchived AND not yet Achieved, i.e.
+#  the NEXT lineage this framework opens, which does not exist yet.
+#  Recorded rather than forced through under the same pressure that
+#  produced this session's other wrong attempts.
+#################################################################
+
+fw:Inv_LiveScopeIsNotTemporalScope a backlog:CrossCuttingInvariant ;
+    rdfs:label "A live lineage may already be settled; enforce on open, not on live"@en ;
+    backlog:hasCheckQuery "Before promoting any advisory to Violation scoped by lineageArchived=false, confirm the target lineage's mission outcome is Out_InFlight, not merely unarchived." ;
+    backlog:hasExpectedResult "0 violations against already-Achieved live-lineage content" ;
+    backlog:hasInvariantStatus backlog:Violated ;
+    backlog:tracksItem fw:EP_ScriptDecisions ;
+    backlog:hasRationale "Violated by demonstration: promoting StoryTaskSpreadShape and StoryTestAnalysisShape with exactly this scope produced 15 violations against Mission_OntologyDriven, which is Achieved. Reverted. The decomposition advisories remain Warning, unscoped, as they were before this attempt — no capability was lost, and none was gained. The correct promotion waits for a lineage that is open, which this register does not currently have." .
+
+#################################################################
+#  #3 of the mitigation plan, complete. backlog_criterion_resolve
+#  now requires a property-type artefact to show a real triple
+#  using it, not merely exist in the TBox.
+#
+#  Testing it surfaced two things the weaker check could not see.
+#  First: AC_S_Tables_B3's own defect, the one that motivated this
+#  fix, was ALREADY corrected at v1.129.0 -- bridgeCoversEvidence
+#  now carries four real statements, found by checking rather than
+#  trusting the earlier finding was still current.
+#
+#  Second: a false positive. hasExpectedPolarity resolved as
+#  unused, because that property's own definition says it lives on
+#  FIXTURES and the check loaded only the TBox and register. Fixed
+#  by loading fixtures into the same use-check graph, since a
+#  check that does not load the population a property is
+#  documented to inhabit reproduces the exact false confidence
+#  this fix exists to remove.
+#
+#  Verified in the failing direction: a genuinely unused property,
+#  hasArtifactPath, planted as a criterion artefact and caught.
+#  Verified in the non-failing direction: a property used only in
+#  a fixture, hasReleaseVersion, correctly resolves rather than
+#  reporting a false failure.
+#################################################################
+
+fw:Ev_ArtefactUseCheck a backlog:TestEvidence ;
+    backlog:hasTestSpec "03-tooling/backlog_criterion_resolve_v1_0_0.py, property-use strengthening" ;
+    backlog:hasTestId "Inv_ArtefactNotProperty-close" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-08-28T21:30:00Z"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "AC_S_Tables_B3 re-checked directly: bridgeCoversEvidence carries four real triples in the live register, already fixed at v1.129.0. The resolver now requires this for any property target, verified in both directions: hasArtifactPath (used nowhere) caught; hasReleaseVersion (used only in fixtures) correctly resolved once fixtures were added to the use-check's own graph, which the first version of the fix omitted." ;
+    backlog:verifiedByTool "backlog_criterion_resolve" ;
+    backlog:attestsCriterion fw:AC_S_Tables_B3 .

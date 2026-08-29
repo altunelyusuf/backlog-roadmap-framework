@@ -4873,14 +4873,6 @@ fw:Obs_ScopeDeliveredStrict a backlog:MetricObservation ;
 #  not author it.
 #################################################################
 
-fw:Mission_BuildSoftware_v2 a backlog:Mission ;
-    backlog:hasMissionStatement "Software is built from mission statements: an intent chain is groomed and granularised down to executable work, delivered in regularly deployable packages, through time-boxed iterations planned to finish their package content, under autonomous, semi-autonomous or non-autonomous execution. Analysis and design work produces named artefacts — traditional and UML models, diagrams and specifications — and a story carries its steps, interactions, state changes, test cases and test data. The practices are grounded in software engineering standards rather than invented, and every step is machine-confirmable through ontologies." ;
-    backlog:missionFor fw:Register ;
-    backlog:hasMissionOrigin backlog:Origin_OwnerStated ;
-    backlog:missionSource "Owner, 2026-08-25, verbatim: 'Do we have analysis and design activities using traditional and UML based methods, diagram development, specifications and all are part of user stories, definition of done, steps, interactions, state changes, test cases and test data. If not, let us build a lineage to fix the missing concepts in the framework.' Amends the v1.70.0 statement by naming what the analysis and design steps PRODUCE; the original said how work is groomed and delivered and not what it yields." ;
-    backlog:supersedesMission fw:Mission_BuildSoftware ;
-    backlog:decidedBy backlog:Owner .
-
 fw:Scope_Build backlog:scopeForMission fw:Mission_BuildSoftware_v2 .
 fw:Goal_MissionToWork backlog:contributesToMission fw:Mission_BuildSoftware_v2 .
 fw:Goal_GroundedPractice backlog:contributesToMission fw:Mission_BuildSoftware_v2 .

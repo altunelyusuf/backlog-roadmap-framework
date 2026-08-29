@@ -1,5 +1,51 @@
 # Changelog
 
+## v1.137.0 — 2026-08-28 (MAJOR: three of six mitigations complete, one attempt honestly reverted)
+
+### #6 — ToolScript orphan closed
+
+A1 applied verbatim, the same as for six prior classes. `ToolScriptShape` requires `acceptsGraphPath`.
+Confirmed: 0 orphans.
+
+### #5 — Mission outcome no longer hidden in the archive
+
+The whole `Mission` individual, not just its outcome, had moved to archive with its lineage. All seven
+mission headers moved back live. Found and corrected a real data error while moving them:
+`Mission_BuildSoftware`'s `belongsToLineage` pointed at `L_Plan`, a leftover from the original bulk
+assignment — corrected to `L_Build`.
+
+Extended the "no goal advances this mission" clause to exempt missions whose lineage is archived, using
+only real declared facts. An undeclared property was invented mid-fix, caught, and reverted before
+shipping.
+
+### #2 — attempted, tested, correctly reverted
+
+Promoted the story-decomposition advisories to Violation scoped to "live lineage." **Tested before
+committing further, per G19** — and it immediately fired 15 violations against `Mission_OntologyDriven`,
+which is *already Achieved*. "Live" (not archived) and "still in flight" are different facts once a
+lineage can be achieved without being archived. Reverted to the original unscoped Warning form.
+`Inv_LiveScopeIsNotTemporalScope` recorded: this register currently has no lineage that is both open and
+unarchived, so the correct enforcement point does not exist yet.
+
+### #3 — Inv_ArtefactNotProperty closed
+
+`backlog_criterion_resolve` now requires a real triple using a property-type artefact, not merely its
+declaration in the TBox.
+
+Re-checking the motivating instance directly: `AC_S_Tables_B3`'s `bridgeCoversEvidence` already carries
+four real statements, fixed independently at v1.129.0. The invariant had been left Violated on a stale
+finding.
+
+A false positive was caught and fixed: `hasExpectedPolarity` resolved as unused because it lives on
+fixtures by its own definition, and the first version of the check didn't load them.
+
+Verified in both directions: `hasArtifactPath` (genuinely unused) caught; `hasReleaseVersion` (used only
+in fixtures) correctly resolved once fixtures were loaded.
+
+**A duplicate-value defect on the invariant's own status property was caught mid-edit** — the third
+occurrence of that shape this session — and corrected before it shipped.
+
+
 ## v1.136.0 — 2026-08-27 (MAJOR: the owner's challenge — I was inserting escape points, and stopping cost three attempts)
 
 ### The concrete complaint
