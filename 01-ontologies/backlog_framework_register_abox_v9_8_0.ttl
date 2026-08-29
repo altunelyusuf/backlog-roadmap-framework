@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.7.0> ;
-    owl:versionInfo "9.7.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.8.0> ;
+    owl:versionInfo "9.8.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.7.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.6.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.5.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.4.0> ;
@@ -4359,4 +4360,44 @@ fw:Ev_VAFHandoverVerified a backlog:TestEvidence ;
     backlog:verifiedAt "2026-08-29T18:00:00Z"^^xsd:dateTime ;
     backlog:hasVerificationMethod "Six cited commits confirmed present with matching messages. Mission draft rejection quoted verbatim in the corrected mission's own missionSource. Goal-facing distribution counted directly: 7 mission-facing, 1 scope-facing, 1 containment-facing, 2 exclusion-facing, matching 2 live ScopeExclusion individuals exactly. Both FMEA RPN calculations reproduced by hand from the recorded S/O/D factors and found exact. The fit-gap artifact's absence from the repository was checked and matches the handover's own disclosure that it was not yet committed." ;
     backlog:verifiedByTool "manual verification against the real repository" ;
+    backlog:attestsCriterion fw:AC_EP_ScriptDecisions_S1 .
+
+#################################################################
+#  Candidate 2, completed properly this time — read from another registrant's own
+#  code comment, not from a prior turn's memory of it.
+#
+#  another registrant's actual annotation: "Same producedByStage-excluded
+#  canonicalization method as every other StageOutput here." No
+#  shared, ecosystem-level digest standard exists in oe-pack or
+#  oe-method -- checked directly, absent from both. Each registrant
+#  implements its own StageOutput digest independently.
+#
+#  BRSF's own state_digest, reread fresh from the shipped script:
+#  hashes the SORTED SET OF SUBJECT IRIS typed under a stage's
+#  declared classes. It never reads a property value at all, so it
+#  cannot be sensitive to WHEN any property -- producedByStage or
+#  any other -- was added. This solves a strictly more general
+#  version of the problem another registrant's specific exclusion solves.
+#
+#  A further finding, not in the original candidate: another registrant has NO
+#  digest-computing script in its repository at all. Its
+#  hasStateDigest values are produced by a documented CONVENTION,
+#  followed by hand, not by a re-runnable tool -- unlike BRSF's own
+#  backlog_pipeline_verify, which recomputes and compares
+#  automatically. another registrant's digests cannot currently be independently
+#  re-verified by anyone who did not personally follow the written
+#  convention correctly.
+#
+#  CONCLUSION: no code change adopted. BRSF's existing design
+#  already satisfies the principle Candidate 2 argues for, more
+#  generally than the specific fix another registrant applied to itself.
+#################################################################
+
+fw:Ev_Candidate2Closed a backlog:TestEvidence ;
+    backlog:hasTestSpec "03-tooling/backlog_pipeline_verify_v1_0_0.py:state_digest, vs another registrant 08-lineage/lineage_vaf_v1_0_0.ttl line 84-85" ;
+    backlog:hasTestId "vaf-candidate-2-final" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-08-29T19:00:00Z"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "Read another registrant's actual code comment directly rather than a prior summary of it: the canonicalization excludes producedByStage specifically. Checked both oe-pack and oe-method for a shared digest standard -- absent from each; every registrant implements its own. Reread BRSF's own state_digest fresh: hashes subject-set membership by rdf:type, never a property value, making it immune to property-timing sensitivity in general rather than one named property. Confirmed another registrant ships no digest-computing script at all -- its convention is manually followed, not automated and re-verified the way BRSF's is." ;
+    backlog:verifiedByTool "manual comparison against both repositories' actual files" ;
     backlog:attestsCriterion fw:AC_EP_ScriptDecisions_S1 .

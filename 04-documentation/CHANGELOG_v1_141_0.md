@@ -1,5 +1,31 @@
 # Changelog
 
+## v1.141.0 — 2026-08-29 (MINOR: Candidate 2 completed properly — read from the source, not a prior summary)
+
+Re-investigated from another registrant's own code comment rather than trusting the earlier turn's characterization.
+Their exact annotation: *"Same producedByStage-excluded canonicalization method as every other
+StageOutput here."*
+
+Checked both `oe-pack` and `oe-method` directly for a shared, ecosystem-level digest standard —
+**absent from both**. Each registrant package implements its own.
+
+Reread BRSF's own `state_digest` fresh: it hashes the sorted **set of subject IRIs** typed under a
+stage's declared classes. It never reads a property value at all, so it cannot be sensitive to *when*
+any property — `producedByStage` or any other — was added. This solves a strictly more general version
+of the problem another registrant's specific exclusion solves.
+
+**A further finding, not in the original candidate**: another registrant ships no digest-computing script at all. Its
+`hasStateDigest` values are produced by a documented convention, followed by hand — unlike BRSF's own
+`backlog_pipeline_verify`, which recomputes and compares automatically. another registrant's digests cannot currently
+be independently re-verified by anyone who didn't personally follow the written convention correctly.
+
+**Conclusion: no code change adopted.** BRSF's existing design already satisfies the principle Candidate
+2 argues for, more generally than the specific fix another registrant applied to itself.
+
+**All four another registrant candidates are now resolved**: Candidate 1 adopted and fixed (3 stale citations),
+Candidate 2 closed as already-satisfied-by-design, Candidates 3 and 4 folded into G26–G32.
+
+
 ## v1.140.0 — 2026-08-29 (MAJOR: the another registrant handover, fully investigated — genuine, and adopted)
 
 ### The access problem was mine
