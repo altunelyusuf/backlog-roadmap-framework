@@ -4499,7 +4499,7 @@ backlog:deliverableForArea a owl:ObjectProperty ;
 backlog:GoalFacing a owl:Class ;
     rdfs:subClassOf backlog:BacklogConcept ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
-    owl:oneOf ( backlog:Facing_Mission backlog:Facing_Scope backlog:Facing_Containment ) ;
+    owl:oneOf ( backlog:Facing_Mission backlog:Facing_Scope backlog:Facing_Containment backlog:Facing_Exclusion ) ;
     rdfs:label "Goal Facing"@en ;
     skos:definition "Which obligation a goal carries. A lineage needs all three and they are not interchangeable: a mission-facing goal can be met with the scope half-untouched, a scope-facing goal can be met with the mission unreached, and both can be met while work happened in places the scope never named."@en .
 

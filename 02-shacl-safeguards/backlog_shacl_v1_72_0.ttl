@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.71.0> ;
-    owl:versionInfo "1.71.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.72.0> ;
+    owl:versionInfo "1.72.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.71.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.70.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.69.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.68.0> ;
@@ -3463,14 +3464,16 @@ backlog:ObjectiveStalledShape a sh:NodeShape ;
     sh:severity sh:Warning ;
     rdfs:label "Advisory: every mover is Done and the metric has not moved"@en ;
     sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "Advisory: every work item recorded as able to move this objective's metric is Done, and the latest observation still sits at the baseline. Either the movability claim was wrong, or the work did not do what it was scoped to do. This is the mismatch that leaves a register showing every epic complete and every objective unmet — the backlog needs adjusting, not the objective." ;
+        sh:message "Advisory: every work item recorded as able to move this objective's metric is Done, and the LATEST observation still sits at the baseline. Either the movability claim was wrong, or the work did not do what it was scoped to do. Flagged by an external OEE governance session on 2026-08-25 (found only now, investigating a handover): the clause matched ANY recorded observation equalling the baseline, not the latest one. Confirmed misfiring on this register directly: 7 of 7 objectives, including ones already Met and Achieved." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             $this backlog:metricMovableBy ?i ; backlog:hasBaselineValue ?base .
             FILTER NOT EXISTS { $this backlog:metricMovableBy ?j . ?j backlog:hasState ?st .
                                 FILTER (?st NOT IN (backlog:Done, backlog:Cancelled)) }
-            ?obs backlog:observationFor $this ; backlog:hasObservedValue ?v .
+            ?obs backlog:observationFor $this ; backlog:hasObservedValue ?v ; backlog:observedAt ?at .
+            FILTER NOT EXISTS { ?obs2 backlog:observationFor $this ; backlog:observedAt ?at2 . FILTER (?at2 > ?at) }
             FILTER (?v = ?base)
+            FILTER NOT EXISTS { $this backlog:hasTargetDirection backlog:Dir_Hold }
         }""" ] .
 
 backlog:DeploymentCoverageShape a sh:NodeShape ;
@@ -4685,14 +4688,16 @@ backlog:RetrospectiveObjectiveShape a sh:NodeShape ;
         }""" ] .
 
 backlog:UndeclaredIndividualShape a sh:NodeShape ;
-    sh:targetClass backlog:AchievementStatus ;
+    sh:targetClass owl:Class ;
     sh:severity sh:Warning ;
-    rdfs:label "Advisory: a status individual outside its own enumeration"@en ;
+    rdfs:label "Advisory: an individual outside its class's own closed enumeration"@en ;
     sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "Advisory: this individual is used as an AchievementStatus and is not a member of the class's owl:oneOf list. A closed enumeration with individuals outside it is a contradiction the ontology states and nothing evaluates — Ach_Withdrawn sat in exactly this state from v1.82.0 to v1.128.0, used twice and declared nowhere." ;
-        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:message "Advisory: some individual is typed as this class and is not a member of its own owl:oneOf list. A closed enumeration with individuals outside it is a contradiction the ontology states and nothing evaluates — Ach_Withdrawn sat in exactly this state from v1.82.0 to v1.128.0, used twice and declared nowhere; GoalFacing's Facing_Exclusion sat in the identical state, found by generalizing this check rather than trusting the narrow, single-class version that fixed only the first instance." ;
+        sh:prefixes [ sh:declare [ sh:prefix "rdf" ; sh:namespace "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
-            FILTER NOT EXISTS { $this a owl:NamedIndividual }
+            $this owl:oneOf ?list .
+            ?member a $this .
+            FILTER NOT EXISTS { ?list rdf:rest*/rdf:first ?member }
         }""" ] .
 
 #################################################################
@@ -4794,3 +4799,37 @@ backlog:ToolScriptShape a sh:NodeShape ;
         sh:message "L2: a tool script must name the file it describes, or it cannot be matched against anything real." ] ;
     sh:property [ sh:path backlog:acceptsGraphPath ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:boolean ;
         sh:message "L2: a tool script must state whether it accepts a graph path. This is the exact fact three wrong guesses tried to derive without declaring it; the class that fixed that was itself unobliged until this shape." ] .
+
+#################################################################
+#  v1.72.0 — Candidate G-item 1, adapted from a handover
+#  and independently reproduced in this framework's own data.
+#
+#  A parallel adoption (another registrant) reported that mission-clause citations
+#  went unverified after a mission was amended: 6 of 9 citations
+#  quoted text that no longer existed verbatim. Rather than trust
+#  the report, this was tested against OUR OWN register directly.
+#
+#  3 of our own 5 derivesFromMissionClause citations were already
+#  stale: Del_OntGovernance, Del_OntRuleExec and Del_OntExport
+#  quoted an early, informal rendering of the mission's intent —
+#  never re-checked once the mission crystallized into its current
+#  wording. The underlying claims remain true; only the citation
+#  had gone stale.
+#
+#  derivesFromMissionClause's own definition already states the
+#  intent — "a citation can point at a mission that has since
+#  changed, while a quotation can be compared against the current
+#  text" — and nothing had ever compared it.
+#################################################################
+
+backlog:MissionClauseCitationShape a sh:NodeShape ;
+    sh:targetClass backlog:ScopeDeliverable ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: a mission-clause citation is not a literal substring of any current mission"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: this deliverable's derivesFromMissionClause quote does not appear verbatim in any Mission's current hasMissionStatement. A citation was written to be checkable, not merely traceable — if the mission has been amended since, the underlying claim may still be true while the citation has gone stale. Found in this register's own data: 3 of 5 citations quoted an early rendering of the mission superseded by its crystallized wording, none re-checked when it changed." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:derivesFromMissionClause ?q .
+            FILTER NOT EXISTS { ?m backlog:hasMissionStatement ?s . FILTER CONTAINS(?s, ?q) }
+        }""" ] .

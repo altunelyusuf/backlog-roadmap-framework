@@ -1,5 +1,47 @@
 # Changelog
 
+## v1.140.0 — 2026-08-29 (MAJOR: the another registrant handover, fully investigated — genuine, and adopted)
+
+### The access problem was mine
+
+`the project repository registrant` was reachable the whole session. The earlier "cannot verify" was an
+untested credential embedding in a `git clone` call, not a real permission barrier.
+
+### Verified against the real repository, not just commit existence
+
+```
+mission-clause rejection    quoted verbatim in the corrected mission's own missionSource
+goal-facing closure         2 exclusions -> 2 exclusion-facing goals, exactly 1 scope-facing,
+                            exactly 1 containment-facing — matches exactly
+FMEA arithmetic             7x8x8=448 -> 7x3x2=42 (91%); 8x9x9=648 -> 8x3x2=48 (93%) — both exact
+fit-gap artifact absence    matches the handover's own disclosure it was uncommitted
+```
+
+**The handover is genuine and carefully built.**
+
+### Independently reproduced in our own data
+
+3 of 5 `derivesFromMissionClause` citations were stale, quoting an early informal mission draft
+never re-checked against the crystallized text. **Fixed** — after two failed attempts whose real
+cause was a mismatched-indentation string replace mistaken for a systemic SHACL bug. Resolved by
+anchoring each fix on its subject rather than a fragment of overlapping text.
+
+### Six new G-rulings adopted, each grounded in verified evidence
+
+```
+G26  test a mission draft's cardinality before its wording
+G27  a legacy source's silence is not a current boundary
+G28  scope derived by testing against an external taxonomy's structure
+G29  goal generation as a closure test over GoalFacing
+G30  a metric family is chosen by testing it against a real case
+G31  "when to measure" is a condition, not a fabricated date
+G32  an exclusion cites the mission or a checked fact, not a legacy authority
+```
+
+G32 is documentation only — a keyword-based SHACL check for "cites a legacy authority" would be
+exactly the fragile decision-in-code pattern this session's own audit exists to catch.
+
+
 ## v1.138.0 — 2026-08-29 (MAJOR: all six mitigations resolved — #1 and #4 close the plan)
 
 ### #1 — A2 scaled forward, not backfilled

@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.6.0> ;
-    owl:versionInfo "9.6.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.7.0> ;
+    owl:versionInfo "9.7.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.6.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.5.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.4.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.3.0> ;
@@ -165,13 +166,13 @@ fw:Out2_Mission a backlog:StageOutput ;
 #################################################################
 fw:Del_OntGovernance a backlog:ScopeDeliverable ;
     backlog:hasDeliverableText "The governance model is expressed as ontology: every governance ruling the framework enforces exists as a machine-checkable statement, not only as a heading in a document." ;
-    backlog:derivesFromMissionClause "the governance model should be based on the ontologies" .
+    backlog:derivesFromMissionClause "the governance model is expressed as ontology rather than as documentation" .
 fw:Del_OntRuleExec a backlog:ScopeDeliverable ;
     backlog:hasDeliverableText "Rule execution happens at the ontology layer: a rule's meaning is carried by the ontology and code only runs a standard engine over it, so no rule can behave differently from what the ontology says." ;
-    backlog:derivesFromMissionClause "execution of the rules be transferred to the ontology levels from the prose and source codes" .
+    backlog:derivesFromMissionClause "rule execution moves from prose and code to the ontology layer" .
 fw:Del_OntExport a backlog:ScopeDeliverable ;
     backlog:hasDeliverableText "Classes, relationships, properties and instances that live in prose or in source code are exported to the ontology, so that meaning is not defined by a table in a document or a map in a script." ;
-    backlog:derivesFromMissionClause "identify the possible exports from them to the ontology not just the rules but also the clasesses, relationships, properties, objects/instances" .
+    backlog:derivesFromMissionClause "classes, relationships, properties and instances that today live in prose or in source code are exported to the ontology" .
 fw:Del_ProseExplains a backlog:ScopeDeliverable ;
     backlog:hasDeliverableText "What remains as prose explains and does not define. A document may describe what the ontology says; it may not be the only place something is said." ;
     backlog:derivesFromMissionClause "What remains as prose explains" .
@@ -221,7 +222,7 @@ fw:Out2_Scope a backlog:StageOutput ;
 #  analysis still supports them.
 #################################################################
 fw:Area_Governance a backlog:ScopeArea ;
-    backlog:areaLocation "LINEAGE_OPERATING_DISCIPLINE_v6_0_0.md" ;
+    backlog:areaLocation "LINEAGE_OPERATING_DISCIPLINE_v7_0_0.md" ;
     backlog:areaMeasure "18 governance rulings G1-G18, each a markdown heading with prose. Nothing in the ontology carries them; the lineage-discipline gate checks that claims about ENFORCEMENT match the shapes, and does not check that the rulings themselves exist as anything a query can reach." .
 fw:Del_OntGovernance backlog:deliverableForArea fw:Area_Governance .
 fw:Area_CodeTables a backlog:ScopeArea ;
@@ -4327,4 +4328,35 @@ fw:Ev_ExemptionVerified a backlog:TestEvidence ;
     backlog:verifiedAt "2026-08-29T13:10:00Z"^^xsd:dateTime ;
     backlog:hasVerificationMethod "Three cases run directly against the audit. The real exemption, iri-suffix-match on hasExpectedPolarity's endswith check, still passes. A planted literal-membership decision tagged with an unrelated, undefined exemption reason is reported. A planted decision tagged with the REAL shape name, on code that does not match that shape's regex, is also reported -- the check reads the code the marker sits on, not the label it claims." ;
     backlog:verifiedByTool "backlog_script_decision_audit" ;
+    backlog:attestsCriterion fw:AC_EP_ScriptDecisions_S1 .
+
+#################################################################
+#  A genuine handover, fully investigated rather than skimmed.
+#
+#  another registrant's own repository was reachable the whole time -- the earlier
+#  "cannot verify" was my own untested credential embedding, not a
+#  real barrier. With real access: all six cited commits exist with
+#  matching messages, the goal-facing closure matches exactly (2
+#  exclusions, 2 exclusion-facing goals, one scope-facing, one
+#  containment-facing), both FMEA calculations are arithmetically
+#  exact (7x8x8=448 -> 7x3x2=42; 8x9x9=648 -> 8x3x2=48), and the
+#  mission's own missionSource quotes the owner naming the exact
+#  cardinality constraint that forced a two-mission draft into one.
+#
+#  Independently reproduced in OUR OWN data along the way: 3 of 5
+#  derivesFromMissionClause citations were stale, quoting an early
+#  informal mission draft never re-checked against the crystallized
+#  text. Fixed this release, after two failed attempts whose real
+#  cause was a mismatched-indentation string replace mistaken for a
+#  systemic SHACL bug -- resolved by anchoring the fix on the
+#  correct SUBJECT rather than a fragment of shared text.
+#################################################################
+
+fw:Ev_VAFHandoverVerified a backlog:TestEvidence ;
+    backlog:hasTestSpec "the project repository registrant, 08-lineage/lineage_vaf_v1_0_0.ttl, six named commits" ;
+    backlog:hasTestId "vaf-handover-verification" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-08-29T18:00:00Z"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "Six cited commits confirmed present with matching messages. Mission draft rejection quoted verbatim in the corrected mission's own missionSource. Goal-facing distribution counted directly: 7 mission-facing, 1 scope-facing, 1 containment-facing, 2 exclusion-facing, matching 2 live ScopeExclusion individuals exactly. Both FMEA RPN calculations reproduced by hand from the recorded S/O/D factors and found exact. The fit-gap artifact's absence from the repository was checked and matches the handover's own disclosure that it was not yet committed." ;
+    backlog:verifiedByTool "manual verification against the real repository" ;
     backlog:attestsCriterion fw:AC_EP_ScriptDecisions_S1 .

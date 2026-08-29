@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v6.0.0
+# Lineage Operating Discipline — v7.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -462,3 +462,84 @@ running a checker against the package that ships it — the audit that caught it
 own author, the exclusion list with two caches and one entry. Making
 self-application a required step would catch these on purpose rather than by
 noticing.
+
+---
+
+## G26 — Test a mission draft's structural cardinality before its wording
+
+A two-part Mission draft was rejected on a mechanical ground, not a stylistic one:
+`lineageForMission` is `owl:FunctionalProperty` — two missions would need two lineages. The fix
+was not softer wording; it was restructuring into one mission with an internal development
+sequence, found by checking the property's own cardinality before touching the text again.
+
+**Verified against a real, external adoption of this framework** (another registrant, commit history:
+`missionSource` on the corrected mission literally quotes the owner naming this exact
+constraint as the reason for rejection).
+
+Before formalizing or amending a Mission, check the target property's cardinality for hidden
+structural constraints before revising the prose.
+
+## G27 — A legacy source's silence is not a current boundary
+
+A Mission draft leaned on a foundational document as a scope *authority* — "the thesis didn't
+cover this, so neither should we." Corrected on the ground that a foundational document is a
+theoretical base, not a boundary on current work: silence in an old source is not evidence of
+exclusion.
+
+Any clause whose justification rests on what an old source *doesn't* say, rather than on the
+current owner's stated intent, is ungrounded and should be re-tested against the mission
+directly.
+
+## G28 — Scope is derived by testing the Mission against an external taxonomy's own structure, not brainstormed from the Mission's prose
+
+Where a Mission's domain has a real external body of theory behind it, Scope areas are found by
+building a reference table from that theory's own structure, then testing the Mission's concepts
+against every cell of it — not by paraphrasing the Mission text into areas. A domain-blind
+fit-gap misses exactly the sub-concepts the Mission's own author didn't happen to phrase
+explicitly, and produces defensible non-goals with reasons tied to the external source rather
+than house preference.
+
+## G29 — Goal generation is complete by construction once GoalFacing is treated as a closure test
+
+One mission-facing Goal per mission clause (checked: does the clause appear as a literal
+substring in a Goal's citation). Exactly one scope-facing Goal covering every Area. Exactly one
+containment-facing Goal covering every Area. One exclusion-facing Goal per Exclusion.
+
+**Verified against a real external adoption**: 2 Exclusions produced exactly 2 exclusion-facing
+Goals, exactly one scope-facing and one containment-facing Goal existed, and mission-facing
+Goals matched the mission's own clause count. Under-generation (an Area with no Goal) and
+over-generation (a Goal citing nothing real) are both mechanically detectable this way, and a
+bidirectional coverage check closes the stage.
+
+## G30 — A metric family is chosen by testing it against a real case, not by category default
+
+Before assigning a measurement dimension to a Goal, ask which of the available standards-grounded
+dimensions (quality, testing, risk, efficiency, performance, project management) actually answers
+that Goal's own failure mode — then walk a real case from the project through that one dimension
+before trusting it with a target.
+
+**Verified against a real external adoption**: two FMEA objectives were walked through with real
+Severity/Occurrence/Detection scores before adoption (7×8×8=448→7×3×2=42, a 91% reduction;
+8×9×9=648→8×3×2=48, a 93% reduction) — both arithmetically exact, not asserted. A dimension
+chosen by category default (whatever module happens to be handy) is indistinguishable, at
+adoption time, from one chosen because it answers the real question; only the test-drive tells
+them apart. This generalizes G11 (test-drive before trusting a gate) to metric *selection*, not
+only gate verification.
+
+## G31 — "When to measure" is a condition, not a fabricated date, unless the timing is genuinely calendar-bound
+
+A calendar deadline invented for a technical objective whose real timing depends on unpredictable
+engineering work is decoration, not information — it adds false precision. Where the honest "when"
+is a condition on another artifact's state (an Objective is measurable once a specific WorkItem is
+Done), that condition should be recorded directly rather than approximated with a date. Some
+objectives genuinely are calendar-bound (a regulatory date, an external commitment); both forms
+are real, and the choice between them is itself something to verify, not default.
+
+## G32 — An exclusion's rationale must cite the mission or a checked current fact, not a legacy or unverified authority
+
+Before trusting an Exclusion, check whether its `hasExclusionRationale` cites (a) the lineage's
+own current Mission text, or (b) a checked, current fact about the project — versus (c) an
+external, legacy, or unverified authority. (c) should prompt re-examination before the exclusion
+is trusted: verified against a real case where an exclusion's stated authority ("another registrant's own scope
+note restricts it to software") was checked against the actual bytes and found false — the real
+note was about something unrelated.
