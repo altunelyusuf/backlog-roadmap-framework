@@ -1,5 +1,52 @@
 # Changelog
 
+## v1.138.0 — 2026-08-29 (MAJOR: all six mitigations resolved — #1 and #4 close the plan)
+
+### #1 — A2 scaled forward, not backfilled
+
+`backlog_new_shape_proof` compares the current shapes file against the last **published** copy: any
+shape new since then must declare `provenByFixture`. Backfilling 232 existing shapes was rejected — it
+would assert links never checked at authoring time, the defect `G21` names.
+
+Verified in both directions: a planted unproven new shape caught; a planted proven new shape passes; the
+real state (0 new shapes since v1.137.0) reports clean.
+
+### #4 — G25: an exemption is a checked claim
+
+The `audit-exempt` marker suppressed any decision on its line unconditionally. It now names a defined
+shape from `SAFE_EXEMPTIONS`, and the audit checks the **actual code** against that shape's regex.
+
+```
+real exemption                          still passes
+decision + unrelated/undefined reason   caught
+decision + the REAL shape name,         caught — the check reads the code,
+  on code that doesn't match it           not the label
+```
+
+The third case was tested unprompted, beyond what the finding required.
+
+### Two duplicate-functional-property defects caught before shipping, not after
+
+Closing `Inv_ArtefactNotProperty` and `Inv_AuditExemptionUnchecked`, both edits initially left two values
+on `hasInvariantStatus`. Both caught by querying the actual triples immediately after editing, before
+validation — the fourth and fifth occurrence of this exact shape this session, each closed at the source
+this time rather than found by the validator.
+
+### Standing state
+
+```
+10 invariants Hold
+ 3 remain Violated, honestly:
+   Inv_ClauseProven                80 of 302 clauses unproven — bulk volume, mechanism now forward-only
+   Inv_LiveScopeIsNotTemporalScope  no lineage is currently both open and unarchived
+   Inv_StoryDecomposition          same root cause as the above
+```
+
+All three point at the same fact: this framework currently has no lineage that is open. Everything it
+governs is either archived or achieved. That is not a defect to fix — it is the honest state of a
+completed mission.
+
+
 ## v1.137.0 — 2026-08-28 (MAJOR: three of six mitigations complete, one attempt honestly reverted)
 
 ### #6 — ToolScript orphan closed

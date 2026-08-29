@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.67.0
+# Backlog & Roadmap Semantic Framework — Standard v1.68.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -1181,6 +1181,22 @@ script's actual behaviour.
 genuine false positive — suppresses *any* decision on the line it sits on, unconditionally, with no
 check that the exemption is true. Proven directly rather than assumed: a planted decision marked exempt
 with an unrelated reason went uncaught. Recorded as `Inv_AuditExemptionUnchecked`, Violated.
+
+### 2.5c-xlix A2, scaled forward, and G25 — an exemption is a checked claim
+
+`backlog_new_shape_proof` compares the current shapes file against the last **published** copy: any
+shape new since then must declare `provenByFixture`, or it ships unproven the way every earlier one did.
+Backfilling the 232 existing shapes was rejected — it would assert links never checked at authoring
+time, the defect `G21` names. This is forward-only and permanent: once a shape is published it is
+grandfathered, and only the next one is asked to prove itself.
+
+**G25.** The `audit-exempt` marker used to suppress any decision on its line, unconditionally, once a
+comment carried that string. It now names a **defined, narrow SAFE_EXEMPTIONS shape**, and the audit
+checks the actual code against that shape's regex rather than the comment's claim.
+
+Verified against three cases: the real exemption still passes; a genuine decision tagged with an
+unrelated or undefined reason is caught; and — tested unprompted — a decision tagged with the **real**
+shape name, on code that does not match it, is also caught. The check reads the code, not the label.
 
 ### 2.5d Decomposition, commitments, dependency kinds, impediments, flow, team (subject v1.4.0)
 

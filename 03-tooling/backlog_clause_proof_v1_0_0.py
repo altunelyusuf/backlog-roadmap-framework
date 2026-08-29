@@ -77,7 +77,7 @@ def _negative_fixtures(fixtures_dir):
             continue
         for p in g.subjects(RDF.type, B.AdoptionProfile):
             pol = g.value(p, B.hasExpectedPolarity)
-            if pol is not None and str(pol).endswith("Polarity_Negative"):  # audit-exempt: IRI suffix, not a filename
+            if pol is not None and str(pol).endswith("Polarity_Negative"):  # audit-exempt: iri-suffix-match
                 out.append(f)
                 break
     return out

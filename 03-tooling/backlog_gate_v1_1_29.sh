@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# backlog_gate v1.1.28 — four-gate release check for the Backlog & Roadmap
+# backlog_gate v1.1.29 — four-gate release check for the Backlog & Roadmap
 # Semantic Framework. Nothing about the package's state is trusted until all
 # four pass, and the SHACL gate refuses to certify anything until it has just
 # demonstrated, in this run, that it can fail a known-bad register.
@@ -11,7 +11,7 @@
 #   +       coverage gate          >= 80% of primary-source concepts (BP-D31)
 #   +       doc-coverage gate      every TBox class named in the standard document
 #
-# Usage: backlog_gate_v1_1_28.sh [REGISTER.ttl ...]
+# Usage: backlog_gate_v1_1_29.sh [REGISTER.ttl ...]
 
 set -u
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -214,6 +214,23 @@ fi
 # in the other order, coverage counted 73 files and the 74th appeared moments
 # later — a race between two of this package's own gates, reported as an
 # unexplained file. The check was right and the ordering was wrong.
+echo
+echo "== New-shape proof — does every shape authored since last publish cite its fixture? =="
+# #1 of the mitigation plan. A2 proved the mechanism at 6 of 238 shapes.
+# Backfilling the rest would assert 232 links never checked at authoring time.
+# Forward-only: any shape new since the last publish must declare
+# provenByFixture, checked against the governed copy the same way
+# distribution-drift compares against it.
+NSP="$(ls "$HERE"/backlog_new_shape_proof_v*.py 2>/dev/null | sort -V | tail -1 || true)"
+if [ -n "$NSP" ]; then
+  python3 "$NSP" --strict | sed 's/^/  /' || {
+    echo "  A shape authored since the last publish names no fixture proving it."
+    exit 1
+  }
+else
+  echo "  NOT RUN — new-shape proof checker not found. Not assumed to pass."
+fi
+
 echo
 echo "== Clause proof — which constraints has a fixture made fire? =="
 # A clause nothing fires has never been shown to work. It may be correct; it

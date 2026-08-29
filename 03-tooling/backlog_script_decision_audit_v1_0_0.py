@@ -25,6 +25,14 @@ Exit 0 unless --strict and findings.
 """
 import sys, os, re, glob
 
+# #4 of the mitigation plan: the only exemption shapes this audit trusts,
+# each a regex checked against the ACTUAL code on the marked line — never
+# the comment's own claim. Adding a new safe shape here is a deliberate,
+# reviewable act; the empty default is that nothing is exempt.
+SAFE_EXEMPTIONS = {
+    "iri-suffix-match": re.compile(r'str\([\w.]+\)\.endswith\('),
+}
+
 PATTERNS = [
     (r'if\s+\w+(?:\.\w+)*\s+in\s*\(\s*["\']', "literal membership"),
     (r'\.endswith\(["\']', "filename decision"),
@@ -73,8 +81,28 @@ def audit(paths):
         for i, line in enumerate(src.split("\n"), 1):
             if i in skip or line.lstrip().startswith("#"):
                 continue
-            if "audit-exempt" in line:
-                continue
+            # #4 of the mitigation plan. "audit-exempt" as a bare marker
+            # suppressed ANY decision on its line unconditionally — proven
+            # directly by planting a real decision, tagging it exempt with
+            # an unrelated reason, and watching the audit miss it.
+            #
+            # An exemption is now a claim naming a specific, pre-verified
+            # SAFE SHAPE, checked against the actual code on the line rather
+            # than trusted because a comment says so. "iri-suffix-match" is
+            # the only safe shape defined so far: str(x).endswith("...") on
+            # an rdflib term, which reads what an identifier IS and is not
+            # a filename-shaped guess about what a file is called. A marker
+            # naming an undefined shape, or a line that does not match the
+            # shape it claims, is NOT exempt and is reported like any other
+            # decision — closing exactly the gap the bare marker left open.
+            m = re.search(r'audit-exempt:\s*([\w-]+)', line)
+            if m:
+                shape = m.group(1)
+                pattern = SAFE_EXEMPTIONS.get(shape)
+                if pattern and pattern.search(line):
+                    continue
+                # falls through: undefined shape, or claimed shape does not
+                # match the code — reported, not silenced.
             for pat, label in PATTERNS:
                 if re.search(pat, line):
                     findings.append((os.path.basename(f), i, label, line.strip()[:60]))

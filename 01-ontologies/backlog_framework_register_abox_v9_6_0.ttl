@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.5.0> ;
-    owl:versionInfo "9.5.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.6.0> ;
+    owl:versionInfo "9.6.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.5.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.4.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.3.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/8.2.0> ;
@@ -4161,9 +4162,8 @@ fw:Inv_AuditExemptionUnchecked a backlog:CrossCuttingInvariant ;
     rdfs:label "The audit-exempt marker is not itself verified"@en ;
     backlog:hasCheckQuery "Mark a genuine literal-membership decision audit-exempt with an unrelated comment; confirm the audit still reports it." ;
     backlog:hasExpectedResult "reported despite the marker" ;
-    backlog:hasInvariantStatus backlog:Violated ;
-    backlog:tracksItem fw:EP_ScriptDecisions ;
-    backlog:hasRationale "Violated, proven directly rather than assumed. The marker suppresses unconditionally; any comment containing the string silences the line. This is the owner's concern materialised inside the very tool built to prevent it, found by testing the mechanism against itself rather than trusting that writing an exemption made it correct." .
+    backlog:hasInvariantStatus backlog:Holds ;
+    backlog:tracksItem fw:EP_ScriptDecisions .
 
 #################################################################
 #  #5 of the mitigation plan: a Mission is index-level data, the
@@ -4300,3 +4300,31 @@ fw:Ev_ArtefactUseCheck a backlog:TestEvidence ;
     backlog:hasVerificationMethod "AC_S_Tables_B3 re-checked directly: bridgeCoversEvidence carries four real triples in the live register, already fixed at v1.129.0. The resolver now requires this for any property target, verified in both directions: hasArtifactPath (used nowhere) caught; hasReleaseVersion (used only in fixtures) correctly resolved once fixtures were added to the use-check's own graph, which the first version of the fix omitted." ;
     backlog:verifiedByTool "backlog_criterion_resolve" ;
     backlog:attestsCriterion fw:AC_S_Tables_B3 .
+
+fw:TS_backlog_new_shape_proof_v1_0_0 a backlog:ToolScript ;
+    backlog:scriptFileName "backlog_new_shape_proof_v1_0_0.py" ; backlog:acceptsGraphPath false .
+
+#################################################################
+#  #4 of the mitigation plan, closed. G25.
+#
+#  The bare audit-exempt marker suppressed any decision on its
+#  line unconditionally. Fixed by making an exemption a checked
+#  claim: it must name a defined SAFE shape from a small allow-list,
+#  and the audit verifies the actual code against that shape's
+#  regex rather than trusting the comment.
+#
+#  Tested against exactly the case the owner raised: a genuine
+#  decision, tagged exempt with an unrelated or undefined reason,
+#  is now caught. A further case was tested unprompted -- spoofing
+#  the REAL shape name on code that does not match it -- and that
+#  is also caught, because the check reads the code, not the label.
+#################################################################
+
+fw:Ev_ExemptionVerified a backlog:TestEvidence ;
+    backlog:hasTestSpec "03-tooling/backlog_script_decision_audit_v1_0_0.py, SAFE_EXEMPTIONS" ;
+    backlog:hasTestId "G25-close" ;
+    backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-08-29T13:10:00Z"^^xsd:dateTime ;
+    backlog:hasVerificationMethod "Three cases run directly against the audit. The real exemption, iri-suffix-match on hasExpectedPolarity's endswith check, still passes. A planted literal-membership decision tagged with an unrelated, undefined exemption reason is reported. A planted decision tagged with the REAL shape name, on code that does not match that shape's regex, is also reported -- the check reads the code the marker sits on, not the label it claims." ;
+    backlog:verifiedByTool "backlog_script_decision_audit" ;
+    backlog:attestsCriterion fw:AC_EP_ScriptDecisions_S1 .
