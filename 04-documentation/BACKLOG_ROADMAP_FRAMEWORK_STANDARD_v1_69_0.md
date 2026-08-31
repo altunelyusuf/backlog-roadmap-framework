@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.68.0
+# Backlog & Roadmap Semantic Framework — Standard v1.69.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -851,6 +851,24 @@ nothing measures is a sentence, not a safeguard**.
 
 At L3 a boundary statement must declare its layer. At L2 an exclusion-facing goal must name its
 exclusion. Advisories report an exclusion no inverse goal guards, and a scope stated in one layer only.
+
+### 2.5c-xxxi Within product scope, a second axis: what it does, and how well
+
+**ScopeLayer says what a boundary is about; `ProductScopeKind` says, within the product layer, what
+kind of claim a deliverable is making.** ISO/IEC 25010 separates functional suitability from its other
+quality characteristics, and the two fail as differently as product and work scope already do: a
+`Kind_Functional` error ships the wrong capability, a `Kind_NonFunctional` error ships the right
+capability unreliably, opaquely, or unsafely.
+
+`hasProductScopeKind` is narrower than `hasScopeLayer`'s own three-class domain, deliberately — only a
+`ScopeDeliverable` makes a capability-or-quality claim; a `ScopeArea` names a place and a
+`ScopeExclusion` names a work-boundary, neither of which is itself functional or non-functional.
+
+`ProductScopeKindShape` mirrors the layer advisory exactly: it reports when every product-scope
+deliverable of a scope names the same kind, for the same reason a single-layer scope is reported — the
+commoner cause is that the other kind of failure was never considered, and a scope silent on
+reliability, transparency or safety cannot later say those were out of scope rather than simply
+unexamined.
 
 ### 2.5c-xxxii An objective that can be monitored
 

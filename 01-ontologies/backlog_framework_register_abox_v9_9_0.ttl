@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.8.0> ;
-    owl:versionInfo "9.8.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.9.0> ;
+    owl:versionInfo "9.9.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.8.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.7.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.6.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.5.0> ;
@@ -344,6 +345,16 @@ fw:Del_OntGovernance  backlog:hasScopeLayer backlog:Layer_Product .
 fw:Del_OntRuleExec    backlog:hasScopeLayer backlog:Layer_Product .
 fw:Del_OntExport      backlog:hasScopeLayer backlog:Layer_Work .
 fw:Del_ProseExplains  backlog:hasScopeLayer backlog:Layer_Work .
+
+#  ProductScopeKind test-drive (proposed by code-abundance-rdodi, adopted
+#  v1.63.0): the framework's own two Layer_Product deliverables, classified
+#  on their existing text, not reworded to fit. Del_OntGovernance claims a
+#  capability the ontology has (machine-checkable rulings exist); Del_OntRuleExec
+#  claims a reliability guarantee about how rule execution behaves once it does
+#  — a quality, not a new capability. A real mixed result, matching the
+#  proposal's own verification method.
+fw:Del_OntGovernance  backlog:hasProductScopeKind backlog:Kind_Functional .
+fw:Del_OntRuleExec    backlog:hasProductScopeKind backlog:Kind_NonFunctional .
 fw:Del_CodeExecutes   backlog:hasScopeLayer backlog:Layer_Work .
 fw:Ex_NoNarrativeBan  backlog:hasScopeLayer backlog:Layer_Work .
 

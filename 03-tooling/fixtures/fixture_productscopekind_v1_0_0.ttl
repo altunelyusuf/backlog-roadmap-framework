@@ -1,0 +1,20 @@
+# fixture_productscopekind_v1_0_0.ttl — proves ProductScopeKindShape.
+#
+# A scope whose two Layer_Product deliverables both name the same
+# ProductScopeKind (both Kind_Functional here). Mirrors the structure of
+# fixture_tasktype_negative and BothLayersShape's own proof: minimal,
+# self-contained, one node built to trip exactly one advisory.
+
+@prefix backlog: <http://example.org/backlog#> .
+@prefix ex:      <http://example.org/productscopekind-fixture#> .
+
+ex:SCOPE_ONEKIND a backlog:ScopeStatement ;
+    backlog:requiresDeliverable ex:D1 , ex:D2 .
+
+ex:D1 a backlog:ScopeDeliverable ;
+    backlog:hasScopeLayer backlog:Layer_Product ;
+    backlog:hasProductScopeKind backlog:Kind_Functional .
+
+ex:D2 a backlog:ScopeDeliverable ;
+    backlog:hasScopeLayer backlog:Layer_Product ;
+    backlog:hasProductScopeKind backlog:Kind_Functional .

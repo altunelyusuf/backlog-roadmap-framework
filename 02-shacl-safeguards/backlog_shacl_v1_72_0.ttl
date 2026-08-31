@@ -4071,6 +4071,20 @@ backlog:BothLayersShape a sh:NodeShape ;
             FILTER NOT EXISTS { $this backlog:coversArea ?a2 . ?a2 backlog:hasScopeLayer ?l2 . FILTER (?l2 != ?l) }
         }""" ] .
 
+backlog:ProductScopeKindShape a sh:NodeShape ;
+    sh:targetClass backlog:ScopeStatement ;
+    sh:severity sh:Warning ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_productscopekind_v1_0_0.ttl" ;
+    backlog:fixtureCaseName "SCOPE_ONEKIND" ;
+    rdfs:label "Advisory: a scope's product deliverables are all one kind"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: every product-scope deliverable of this scope names the same ProductScopeKind — all functional or all non-functional. That may be right for a narrowly-scoped increment, and it is reported for the same reason BothLayersShape reports a single-layer scope: the commoner cause is that the other kind of failure was never considered, and a scope silent about reliability, transparency or safety cannot later say those were out of scope rather than simply unexamined." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:requiresDeliverable ?d . ?d backlog:hasScopeLayer backlog:Layer_Product ; backlog:hasProductScopeKind ?k .
+            FILTER NOT EXISTS { $this backlog:requiresDeliverable ?d2 . ?d2 backlog:hasScopeLayer backlog:Layer_Product ; backlog:hasProductScopeKind ?k2 . FILTER (?k2 != ?k) }
+        }""" ] .
+
 #################################################################
 #  v1.55.0 — objectives that can be monitored
 #################################################################

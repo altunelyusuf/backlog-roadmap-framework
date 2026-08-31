@@ -1,5 +1,57 @@
 # Changelog
 
+## v1.143.0 — 2026-08-31 (MINOR: adopts a code-abundance-rdodi proposal — ProductScopeKind)
+
+**Adopted, in full, `Proposal_BRSF_ProductScopeKind_v1_0_0.md`** (code-abundance-rdodi-v1.6.1,
+commit `de77047`). Verified before adopting, not taken on the proposal's word: re-searched this
+package's own TBox for `functional`, `non-functional`, `FURPS`, `ISO 25010` myself and found only
+the OWL reserved term — the gap is real. Cross-checked all three of the proposing session's quoted
+deliverable statements directly against its own register, byte-for-byte matches.
+
+Adds `ProductScopeKind` (`Kind_Functional`, `Kind_NonFunctional`; `dcterms:source` ISO/IEC 25010) and
+`hasProductScopeKind` (domain `ScopeDeliverable`, narrower than `hasScopeLayer`'s three-class domain —
+the proposal's own reasoning, unchanged: only a Deliverable makes a capability-or-quality claim).
+`ProductScopeKindShape` mirrors `BothLayersShape`'s existing pattern exactly, as the proposal's own
+step 3 suggested: an advisory, not a violation, when a scope's product-layer deliverables all name
+the same kind.
+
+**Test-driven against this package's own register, not shipped as schema alone** (`G30`): this
+package's own two `Layer_Product` deliverables were a real, unforced case waiting — `Del_OntGovernance`
+("the governance model is expressed as ontology... every ruling exists as a machine-checkable
+statement") names a capability, classified `Kind_Functional`; `Del_OntRuleExec` ("a rule's meaning is
+carried by the ontology... so no rule can behave differently from what the ontology says") names a
+reliability guarantee about how that capability behaves, not a new one, classified
+`Kind_NonFunctional`. A genuine mixed result, matching the mixed result the proposing session found in
+its own three deliverables (two non-functional, one functional).
+
+**Correctness catch before shipping**: `backlog_new_shape_proof_v1_0_0.py`'s published-baseline path
+resolves relative to its own package directory and, in this session's working-copy layout, silently
+compared the shapes file against itself — a false PASS (240 current, 240 "already published", 0 new).
+Re-verified directly against the true git-published baseline (commit `10e6893`) instead of trusting
+the tool's own output: 1 genuinely new shape, correctly requiring `provenByFixture`.
+`fixture_productscopekind_v1_0_0.ttl` built and confirmed to trip the shape exactly once; confirmed
+the shape can also stay silent (this package's own mixed register) and can also fire (a synthetic
+uniform case tested in scratch, not shipped) before adding the fixture citation.
+
+**Second catch, from `backlog_clause_proof` rather than `backlog_new_shape_proof`**: declaring
+`provenByFixture` alone was not enough — `backlog_clause_proof` separately requires a matching
+`fixtureCaseName`, checked by literally running the declared fixture and confirming that name
+appears in the report (`on: <name>`), and reported the declaration FAILED (`case None`) until this
+was added. Traced to the actual check logic rather than guessed at; the fixture's own focus-node
+name was renamed from the placeholder `SC` to the self-documenting `SCOPE_ONEKIND` to match the
+convention of the five prior declarations (`AREA_NOLOC`, `RUL_NOSHAPE`, ...), not just to satisfy
+the check. Re-ran to confirm: 6 declared, 6 verified, 0 failed.
+
+**Third catch, from `backlog_doc_coverage_gate`**: `ProductScopeKind` shipped in the TBox undocumented
+in the standard. Added §2.5c-xxxi (a second, deliberately-repeated use of that section number,
+matching this document's own existing precedent at §2.5c-v) immediately after the `ScopeLayer`
+section it extends. Standard bumped 1.68.0 -> 1.69.0; two stale filename references in
+`04-documentation/README.md` corrected in the same pass, found by grep rather than assumed absent.
+
+0 SHACL violations before and after (116 warnings, unchanged — the new advisory correctly stays
+silent on this package's own mixed data). All six shipped checkers still PASS. Register bumped
+9.8.0 -> 9.9.0 for the two new `hasProductScopeKind` assertions; TBox bumped 1.62.0 -> 1.63.0.
+
 ## v1.142.0 — 2026-08-30 (PATCH: two oe-pack findings closed, Inv_ClauseProven reduced 82 -> 67)
 
 Continuation session, scoped strictly to this package (session hygiene: no other ontology in the
