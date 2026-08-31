@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.69.0
+# Backlog & Roadmap Semantic Framework — Standard v1.70.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -727,6 +727,27 @@ in view rather than a label applied afterwards.
 **Packages are grouped by what they deliver, not by which iteration holds them.** An iteration is a
 time box; a package is a capability; conflating them is how a release becomes "whatever finished this
 fortnight".
+
+### 2.5c-xxv A roadmap of wildly uneven releases is usually unexamined, not deliberate
+
+**A package's own well-formedness says nothing about whether it fits the sequence it ships in.**
+`PackageContentShape` checks one package at a time; nothing checked whether a roadmap's releases hold
+together as a *sequence* of comparable size — until an adopting lineage disclosed the gap directly: a
+package built as one large, unevenly-sized release next to its siblings, corrected by hand only
+because an owner noticed.
+
+`PackageRegularityShape` reports a package whose sprint count (`targetsIteration`) diverges by 2x or
+more from a **majority** of its siblings in the same `Lineage`, with no `hasDecisionRationale`
+recorded — majority, not any single sibling, because a pairwise test would flag the normal releases
+too whenever one release is a genuine outlier. `RoadmapOverrideShape`'s own precedent supplies the
+escape hatch: a package outside the normal range may carry a rationale, the same way a roadmap rank
+that departs from score order already must.
+
+**Deliberately scoped to sprint count, not total committed size.** Size would need summing
+`hasJobSize` across every member, and `hasJobSize` exists only on a `WSJFScore` — a signal this
+framework cannot yet compute for a package whose members are scored by another method. An
+incomplete measure asserted as complete is worse than an absent one; size-based regularity is left
+for whichever lineage tests it against a real case first.
 
 ### 2.5c-xxv Model artefacts
 

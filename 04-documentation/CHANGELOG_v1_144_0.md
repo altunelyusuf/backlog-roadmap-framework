@@ -1,5 +1,52 @@
 # Changelog
 
+## v1.144.0 — 2026-08-31 (MINOR: adopts a another registrant handover — package-sprint-count regularity)
+
+**Adopted, from `HANDOVER_vaf-lineage_to_backlog-roadmap-framework_package-regularity_v1_0_0.md`
+(another registrant v1.49.1, commit `bd6cf22`).** Verified before adopting: re-searched this package's own SHACL
+directly — exactly one shape targets `backlog:Package` (`PackageContentShape`), confirming the
+proposal's claim that nothing checks roadmap-wide sizing regularity. Cross-checked the cited
+properties (`hasPriorityScore`, `hasScoreRationale`, `hasJobSize`, `targetsIteration`) all real,
+and found the actual design precedent the proposal only gestured at:
+`RoadmapOverrideShape` — the existing pattern of requiring `hasDecisionRationale` when a container
+departs from its siblings' expected order.
+
+The proposal was explicit that its own shape was "deliberately incomplete... needs real test cases,"
+and disclosed the request as evaluate-and-design, not adopt-as-is. Designed the actual comparison
+logic here rather than copying the sketch: **majority-divergence, not pairwise**. A first draft
+comparing `$this` against any single sibling flagged the *normal* packages too, whenever one sibling
+was a real outlier — caught by testing against a 3-normal/1-odd/1-excused fixture before shipping,
+not assumed correct from the query reading plausibly. Revised to require that a **majority** of a
+package's siblings diverge from it by 2x or more, which correctly leaves normal packages alone even
+next to a real outlier.
+
+**Deliberately scoped to sprint count only, not total committed size** — summing `hasJobSize` would
+be incomplete, since that property exists only on `WSJFScore`, not on every scoring method a
+package's members might carry. Recorded as a real, disclosed limitation, not silently dropped.
+
+BRSF's own register (2 packages, both regular) gave a true-negative test but no real irregular case
+to test against — correctly left unchanged rather than fabricating an irregularity in the framework's
+own actual development history. `fixture_package_regularity_v1_0_0.ttl` built and verified instead:
+fires exactly once (`Pkg_Odd`), stays silent on 3 regular siblings and on the excused outlier
+(`Pkg_Excused`, carrying a rationale matching the proposal's own disclosed exception case).
+
+**A process gap caught and corrected, not carried forward silently**: `backlog_shacl_v1_72_0.ttl`'s
+own internal version was never bumped when `ProductScopeKindShape` was added in v1.143.0 — the
+filename and internal `owl:versionInfo` stayed consistent with each other (so Gate K never caught
+it), but the file's content changed without its version reflecting that, breaking this package's own
+"every changed file gets a new version" convention. Already published at v1.143.0 and not
+retroactively fixable; corrected going forward here (`backlog_shacl_v1_73_0.ttl`) and disclosed
+plainly rather than left to recur.
+
+Standard document gets a new §2.5c-xxv (bumped 1.69.0 -> 1.70.0) even though `backlog_doc_coverage_gate`
+did not require it — no new class was added, only new SHACL behavior, and the checker only verifies
+class coverage. Documented anyway, matching the standard's own completeness rather than the
+checker's minimum. One stale README filename reference fixed in the same pass.
+
+0 SHACL violations before and after (116 warnings, unchanged). All six shipped checkers still PASS.
+`backlog_new_shape_proof` re-verified against the true git-published baseline (commit `42585ab`):
+1 genuinely new shape, `PackageRegularityShape`, proven.
+
 ## v1.143.0 — 2026-08-31 (MINOR: adopts a code-abundance-rdodi proposal — ProductScopeKind)
 
 **Adopted, in full, `Proposal_BRSF_ProductScopeKind_v1_0_0.md`** (code-abundance-rdodi-v1.6.1,

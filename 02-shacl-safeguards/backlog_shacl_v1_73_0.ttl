@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.72.0> ;
-    owl:versionInfo "1.72.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.73.0> ;
+    owl:versionInfo "1.73.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.72.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.71.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.70.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.69.0> ;
@@ -4590,6 +4591,30 @@ backlog:PackageContentShape a sh:NodeShape ;
         sh:message "L2: a package must carry the version it will release under, recorded at identification so the increment is a decision taken with the content in view rather than a label applied afterwards." ] ;
     sh:property [ sh:path backlog:targetsIteration ; sh:minCount 1 ;
         sh:message "L2: a package must target at least one iteration. A package targeting nothing is a grouping with no plan to deliver it — which is how this class sat unused for 91 releases while every check passed." ] .
+
+backlog:PackageRegularityShape a sh:NodeShape ;
+    sh:targetClass backlog:Package ;
+    sh:severity sh:Warning ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_package_regularity_v1_0_0.ttl" ;
+    backlog:fixtureCaseName "Pkg_Odd" ;
+    rdfs:label "Advisory: a package's sprint count diverges sharply from its siblings"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: this package's sprint count diverges sharply from its siblings in the same lineage, with no rationale recorded. A roadmap of wildly uneven releases is either an unexamined sizing decision or a real, named constraint — a rationale is what distinguishes them. Scoped to sprint count only: total committed size would need summing hasJobSize across members, and hasJobSize exists only on a WSJF score, not on every scoring method a member might carry — a signal this framework cannot yet compute for every package, and one this shape does not assert." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:belongsToLineage ?ln .
+            { SELECT $this (COUNT(DISTINCT ?it) AS ?n) WHERE { $this backlog:targetsIteration ?it } GROUP BY $this }
+            ?tot a backlog:Package ; backlog:belongsToLineage ?ln . FILTER (?tot != $this)
+            OPTIONAL {
+                ?tot backlog:targetsIteration ?anyit .
+                { SELECT ?tot (COUNT(DISTINCT ?it2) AS ?n2) WHERE { ?tot backlog:targetsIteration ?it2 } GROUP BY ?tot }
+                FILTER (?n >= 2*?n2 || ?n2 >= 2*?n)
+                BIND(?tot AS ?farSib)
+            }
+            FILTER NOT EXISTS { $this backlog:hasDecisionRationale ?rat }
+        }
+        GROUP BY $this ?n
+        HAVING (COUNT(DISTINCT ?tot) > 0 && COUNT(DISTINCT ?farSib) * 2 > COUNT(DISTINCT ?tot))""" ] .
 
 backlog:TestDataShape a sh:NodeShape ;
     sh:targetClass backlog:TestData ;

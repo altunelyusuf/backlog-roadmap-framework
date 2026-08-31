@@ -1,0 +1,47 @@
+# fixture_package_regularity_v1_0_0.ttl — proves PackageRegularityShape.
+#
+# Five packages sharing one (deliberately untyped — this shape's own SPARQL
+# never requires ?ln to be typed Lineage, and typing it would pull in
+# LineageShape's unrelated mission/ordinal/archive requirements this fixture
+# has no need of) grouping resource. Pkg_Norm1/2/3 each target 2 iterations —
+# the regular case, mirrors this framework's own two real packages. Pkg_Odd
+# targets 4 against those three siblings' 2 — a clear majority divergence,
+# no rationale, meant to fire. Pkg_Excused also targets 4, same divergence,
+# but carries hasDecisionRationale — meant to stay silent, the proposal's
+# own disclosed-exception case (a single high-fan-in item that genuinely
+# cannot be split or paired). Otherwise structurally complete (identifier,
+# package version, one member each) so only the intended advisory fires.
+
+@prefix backlog: <http://example.org/backlog#> .
+@prefix ex:      <http://example.org/package-regularity-fixture#> .
+
+ex:Pkg_Norm1 a backlog:Package ; backlog:belongsToLineage ex:Ln ;
+    backlog:hasIdentifier "PKG-NORM1" ; backlog:hasPackageVersion "1.0.0" ;
+    backlog:targetsIteration ex:It1 , ex:It2 .
+ex:Norm1_Member a backlog:Story ; backlog:hasIdentifier "WI-NORM1-M" ;
+    backlog:hasState backlog:InProgress ; backlog:memberOfContainer ex:Pkg_Norm1 .
+
+ex:Pkg_Norm2 a backlog:Package ; backlog:belongsToLineage ex:Ln ;
+    backlog:hasIdentifier "PKG-NORM2" ; backlog:hasPackageVersion "1.0.0" ;
+    backlog:targetsIteration ex:It1 , ex:It2 .
+ex:Norm2_Member a backlog:Story ; backlog:hasIdentifier "WI-NORM2-M" ;
+    backlog:hasState backlog:InProgress ; backlog:memberOfContainer ex:Pkg_Norm2 .
+
+ex:Pkg_Norm3 a backlog:Package ; backlog:belongsToLineage ex:Ln ;
+    backlog:hasIdentifier "PKG-NORM3" ; backlog:hasPackageVersion "1.0.0" ;
+    backlog:targetsIteration ex:It1 , ex:It2 .
+ex:Norm3_Member a backlog:Story ; backlog:hasIdentifier "WI-NORM3-M" ;
+    backlog:hasState backlog:InProgress ; backlog:memberOfContainer ex:Pkg_Norm3 .
+
+ex:Pkg_Odd a backlog:Package ; backlog:belongsToLineage ex:Ln ;
+    backlog:hasIdentifier "PKG-ODD" ; backlog:hasPackageVersion "1.0.0" ;
+    backlog:targetsIteration ex:It1 , ex:It2 , ex:It3 , ex:It4 .
+ex:Odd_Member a backlog:Story ; backlog:hasIdentifier "WI-ODD-M" ;
+    backlog:hasState backlog:InProgress ; backlog:memberOfContainer ex:Pkg_Odd .
+
+ex:Pkg_Excused a backlog:Package ; backlog:belongsToLineage ex:Ln ;
+    backlog:hasIdentifier "PKG-EXCUSED" ; backlog:hasPackageVersion "1.0.0" ;
+    backlog:targetsIteration ex:It1 , ex:It2 , ex:It3 , ex:It4 ;
+    backlog:hasDecisionRationale "Single item, seven unmet dependencies, the highest fan-in in the backlog — cannot be paired or split regardless of size." .
+ex:Excused_Member a backlog:Story ; backlog:hasIdentifier "WI-EXCUSED-M" ;
+    backlog:hasState backlog:InProgress ; backlog:memberOfContainer ex:Pkg_Excused .
