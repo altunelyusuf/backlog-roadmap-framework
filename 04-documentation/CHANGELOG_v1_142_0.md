@@ -1,5 +1,92 @@
 # Changelog
 
+## v1.142.0 — 2026-08-30 (PATCH: two oe-pack findings closed, Inv_ClauseProven reduced 82 -> 67)
+
+Continuation session, scoped strictly to this package (session hygiene: no other ontology in the
+ecosystem touched; the overdue ecosystem-deposit gap flagged in the prior handover stays deferred
+to a dedicated session that includes `oe-pack`, on the owner's own call).
+
+**Finding 1/2 from the external oe-pack governance handover (2026-08-25), closed.** `TaskType`'s
+five referenced members — `Task_DesignDefinition`, `Task_SystemAnalysis`, `Task_Implementation`,
+`Task_Integration`, `Task_Verification` — now carry `dcterms:source` citing their specific
+ISO/IEC/IEEE 12207:2017 sub-clause (6.4.5-6.4.9). Each source string states plainly that the
+clause number is confirmed via secondary sources, not the primary paywalled standard text, and
+still needs final confirmation by a holder of standard's-body access — the same caveat the
+original finding carried, not silently dropped in the fix.
+
+**Finding 2/2, closed differently than proposed.** `DesignConcern`'s five members —
+`Concern_Data`, `Concern_Interface`, `Concern_Interaction`, `Concern_Architecture`,
+`Concern_Security` — now carry `isFrameworkOriginal` (the framework's own string-valued
+provenance property, not a boolean as the handover's shorthand implied). Re-checked this session
+against a fresh search of Satzinger et al. ch.6's own chapter structure rather than trusting the
+prior "no converging source" finding blindly: the parent `DesignConcern` class's five-way split
+does map to five named design activities in that source (databases / system interfaces / user
+interface / architecture / security), so each individual's `isFrameworkOriginal` names that
+specific counterpart while stating why the per-story analysis framing used here is still original
+at that level of specificity.
+
+**`Inv_ClauseProven` reduction.** Added `fixture_l1_structural_batch_negative_v1_0_0.ttl`, fifteen
+minimal nodes each built to trip exactly one previously-unfired L1 SHACL clause: WorkItem core
+cardinality and reference integrity (identifier, state, dependsOn, memberOfContainer, hasEvidence),
+priority-score value cardinality, roadmap-projects-a-backlog cardinality, adoption-profile
+cardinality (conformance level, governed backlog, Core facet — three clauses on one deliberately
+bare node), container-dependency reference integrity, roadmap-rank tie and orphan-rank checks on
+both containers and work items, decomposesInto reference integrity, and the decompose-vs-depend
+mutual-exclusion rule. `backlog_clause_proof_v1_0_0`: **82 -> 67** clauses never proven to fire,
+confirmed by direct re-run, not asserted from the fixture's expected effect.
+
+**Measured this release:** live register (`backlog_framework_register_abox_v9_8_0.ttl`) 0
+violations before and after, 116 warnings unchanged except the 10 `PracticeGroundingShape`
+advisories the two findings above resolved; all six shipped checkers still PASS
+(`backlog_adoption_check`, `backlog_criterion_resolve`, `backlog_number_origin`,
+`backlog_self_application`, `backlog_script_decision_audit`, `backlog_new_shape_proof`); coverage
+gate 36/36 (100%); doc-coverage gate 159/159 classes named in the standard; every shipped Turtle
+file re-parsed clean after the TBox rename. TBox `backlog_tbox_v1_61_0.ttl` -> `v1_62_0.ttl`
+(+2 triples: one `owl:priorVersion`, one `rdfs:comment` history entry, beyond the two findings'
+own +10).
+
+**Not done, and not attempted:** the ecosystem-deposit gap in `oe-pack/a registrant deposit`
+remains untouched — real, overdue, and explicitly out of this session's scope. Remaining
+`Inv_ClauseProven` headroom: 67 clauses still unproven, mostly L2/L3 clauses needing more built-out
+supporting structure than the L1 batch required; flagged as further diminishing-returns work, not
+urgent.
+
+**A second another registrant handover arrived this session** (`HANDOVER_vaf-lineage_to_backlog-roadmap-framework_v1_0_0.md`,
+authored against `LINEAGE_OPERATING_DISCIPLINE_v6.0.0`) proposing four "Candidate G-items" and six
+generative "Patterns." Cross-checked against this package's own governed files rather than taken at
+face value (its commits, arithmetic and citations all independently verified genuine — another registrant cloned
+read-only, B1: proposal-only, nothing written there). **6 of 7 substantive items were already
+resolved by this framework before this handover was read**: Patterns A/B/C/E and Candidate G-item 3
+are `G26`-`G29`/`G32` verbatim in `LINEAGE_OPERATING_DISCIPLINE_v7_0_0.md` (the v6.0.0 this handover
+was written against no longer exists — retired when v7.0.0 shipped, which is exactly where these
+landed); Candidate G-item 4 is folded into `G30`'s own text ("generalizes G11... to metric
+selection"); Candidate G-item 1 (mission-clause citation staleness) is already shipped as
+`MissionClauseCitationShape` (SHACL v1.72.0) — self-applied, and 3 of this package's *own* 5
+`derivesFromMissionClause` citations were already found stale and fixed by a prior session,
+re-verified fresh here again just now; Candidate G-item 2 (digest excludes `producedByStage`) was
+already investigated and explicitly rejected in the v1.141.0 entry above, on stronger grounds than
+this handover offers (this package's own digest method never reads property values at all, so it
+was never exposed to the bug class another registrant's fix defends against).
+
+**Pattern F — DesignConcern + coversTaskType as "the standard way" a Story records its analysis
+need, replacing an informal functional/non-functional label — examined on its own merits and left
+undecided, deliberately.** The mechanism this pattern asks for already exists and is already
+enforced: `GroomingShape` requires `hasApplicableConcern` or `hasNoApplicableConcern` at L3/L4
+(violation, not advisory), and `GroomingToExecutionShape` already checks the join to
+`coversTaskType` this pattern's selling point rests on. So there is no new vocabulary or shape to
+build here — the only open question is whether the standard's own documentation should say, in so
+many words, that this replaces ad-hoc functional/non-functional tagging. Checked the one cited
+real-world case directly against another registrant's repository: `WI_ProbabilisticGuardFact` genuinely carries
+`Concern_Security` and `Concern_Data`, exactly as claimed — but carries no formal `ExecutionTask`
+yet, so the claimed match to real completed work is this handover's own narrative account, not
+something `GroomingToExecutionShape` has mechanically checked. One real case, checked and genuine,
+is still one case. Per this package's own `G30` (a pattern earns a promotion by being test-driven
+against a real case, not adopted by plausibility) — elevating a mechanism that already exists into
+prescriptive "the standard way" documentation on the strength of a single anecdotal instance would
+be exactly the failure `G30` exists to catch, applied reflexively to a proposal about this
+package's own documentation. **No documentation change made.** Revisit once this pattern has been
+exercised, and mechanically checked, across more than one register.
+
 ## v1.141.0 — 2026-08-29 (MINOR: Candidate 2 completed properly — read from the source, not a prior summary)
 
 Re-investigated from another registrant's own code comment rather than trusting the earlier turn's characterization.

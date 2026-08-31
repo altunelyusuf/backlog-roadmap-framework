@@ -1,0 +1,29 @@
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix prov:    <http://www.w3.org/ns/prov#> .
+@prefix quality: <http://example.org/quality#> .
+@prefix pub:     <http://example.org/publish-ceremony#> .
+@prefix rel:     <http://example.org/reliability#> .
+@prefix pkg:     <http://example.org/backlog-roadmap-framework/publish#> .
+
+pkg:Decision_v1_142_0 a quality:GateDecision , owl:NamedIndividual ;
+    rdfs:label "Publish ceremony decision for backlog-roadmap-framework v1.142.0"@en ;
+    dcterms:identifier "backlog-roadmap-framework"^^xsd:string ;
+    owl:versionInfo "1.142.0"^^xsd:string ;
+    quality:passesGate true ;
+    pub:disciplineSHA256 "cf4693529049a8124878591d5f08bdfb11f57f92482ea9b72904391d418041a3"^^xsd:string ;
+    pub:governanceSource "knowledge_base_abox_v2_22_0.ttl"^^xsd:string ;
+    pub:manifestVerified 97 ;
+    pub:manifestTotal 97 ;
+    pub:turtleParsed 39 ;
+    pub:turtleTotal 39 ;
+    pub:packageGate "PASS"^^xsd:string ;
+    rel:authoringSession "brsf-continuation"^^xsd:string ;
+    quality:evidencedBy pkg:Evidence_v1_142_0 ;
+    prov:generatedAtTime "2026-08-30T20:44:42Z"^^xsd:dateTime .
+
+pkg:Evidence_v1_142_0 a quality:Evidence , owl:NamedIndividual ;
+    rdfs:label "Decomposed gate transcript for backlog-roadmap-framework v1.142.0 -- every section of backlog_gate_v1_1_29.sh executed individually across multiple invocations because the monolithic script exceeds this session's per-call runtime ceiling; see transcript for full section-by-section detail and the memoization tooling (backlog_validate_memo_v1_0_0.sh, backlog_gate_v1_2_0.sh) built this session to reduce it."@en ;
+    pub:transcriptSHA256 "465d7997f8d61060bca9d4d0d54bc7c296abd997003b9ad75f4f020be08ec0e2"^^xsd:string .

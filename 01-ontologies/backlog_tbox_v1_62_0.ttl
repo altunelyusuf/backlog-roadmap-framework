@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.61.0> ;
-    owl:versionInfo "1.61.0" ;
+    owl:versionIRI <http://example.org/backlog/1.62.0> ;
+    owl:versionInfo "1.62.0" ;
+    owl:priorVersion <http://example.org/backlog/1.61.0> ;
     owl:priorVersion <http://example.org/backlog/1.60.0> ;
     owl:priorVersion <http://example.org/backlog/1.59.0> ;
     owl:priorVersion <http://example.org/backlog/1.58.0> ;
@@ -88,7 +89,7 @@
                 <http://example.org/oepack-release-history> ;
     dcterms:identifier "backlog" ;
     dcterms:created "2026-07-27T00:00:00"^^xsd:dateTime ;
-    dcterms:modified "2026-07-27T12:00:00"^^xsd:dateTime ;
+    dcterms:modified "2026-08-30T00:00:00"^^xsd:dateTime ;
     dcterms:creator "Yusuf Altunel" ;
     dcterms:publisher "İstanbul Kültür Üniversitesi, Department of Computer Engineering" ;
     dcterms:rightsHolder "İstanbul Kültür Üniversitesi, Department of Computer Engineering" ;
@@ -97,7 +98,8 @@
     prov:wasAttributedTo "Yusuf Altunel" ;
     skos:definition "A domain-neutral, reusable schema for backlog-and-roadmap governance across independent developments. It standardises five concept groups that recur in every product/engineering effort: (1) work items and their containers, (2) a closed lifecycle whose Done state is a constrained fact rather than asserted prose, (3) completion Evidence anchored to real delivered artifacts (a named passing test, a release carrying its package SHA-256, a file hash, or a recorded review), (4) method-parameterised prioritisation scores, and (5) a roadmap modelled as a derived projection over the backlog rather than an independently maintained list. Adoption is declared by an AdoptionProfile carrying a ConformanceLevel (L1 Core / L2 Evidence-Bound / L3 Governed), which the paired SHACL suite reads to decide which constraints are enforced, so one framework serves developments at different governance maturity without forking the vocabulary. This TBox defines vocabulary only; the paired SHACL shapes supply enforcement, the SPARQL rules supply derivation (container status, next-item selection, milestone status), and an execution bridge asserts observed real-world verification facts back into the ABox."@en ;
     dcterms:source "Scrum Guide 2020 (Product Backlog, Increment, Definition of Done); SAFe 6.0 (Epic/Feature/Story ladder, WSJF); Now-Next-Later roadmap practice; Intercom RICE prioritisation; W3C OWL 2, SHACL, SHACL-AF."@en ;
-    rdfs:comment "v1.0.0 — generalisation of an adopting project's product-backlog deposit (an OE Pack registrant deposit, http://example.org/product-backlog 1.3.0) into a project-independent subject. Per L-105 this is an extension of that implementation, not a parallel one: every pb: term has a declared alignment in backlog_alignment_productbacklog_v1_0_0.ttl. Per L-68 the hyphenated/abbreviated form (product-backlog / pb:) is replaced by a single full-word prefix (backlog:); per L-69 the retained terminology anchors to the Scrum Guide and SAFe rather than to project-internal names. The deposit files themselves are NOT modified by this release (L-X7 / B1: the owning session decides supersession)."@en ,
+    rdfs:comment "v1.62.0 (PATCH, provenance only) — closes two findings from an external oe-pack governance handover (2026-08-25), both about TaskType and DesignConcern members shipping no dcterms:source and no isFrameworkOriginal declaration, silently indistinguishable from terms nobody sourced (Ex_InventedPractice / PracticeGroundingShape). Task_DesignDefinition, Task_SystemAnalysis, Task_Implementation, Task_Integration and Task_Verification now carry dcterms:source citing their specific ISO/IEC/IEEE 12207:2017 sub-clause (6.4.5-6.4.9), each flagged as clause-number-confirmed via secondary sources only, pending final confirmation against the primary paywalled text. Concern_Data, Concern_Interface, Concern_Interaction, Concern_Architecture and Concern_Security now carry isFrameworkOriginal: the parent DesignConcern class already cites Satzinger et al. ch.6 for the five-way split, but no single converging source was found for each concern's specific per-story analysis framing, independently re-checked this release against a fresh search of the source's own chapter structure. No class, property or individual added or removed; +10 triples total, 0 SHACL violations before or after, PracticeGroundingShape advisory count dropped by exactly 10."@en ,
+    "v1.0.0 — generalisation of an adopting project's product-backlog deposit (an OE Pack registrant deposit, http://example.org/product-backlog 1.3.0) into a project-independent subject. Per L-105 this is an extension of that implementation, not a parallel one: every pb: term has a declared alignment in backlog_alignment_productbacklog_v1_0_0.ttl. Per L-68 the hyphenated/abbreviated form (product-backlog / pb:) is replaced by a single full-word prefix (backlog:); per L-69 the retained terminology anchors to the Scrum Guide and SAFe rather than to project-internal names. The deposit files themselves are NOT modified by this release (L-X7 / B1: the owning session decides supersession)."@en ,
     "v1.23.0 (MINOR, additions only) — an initiative-kind layer taken from ISO/IEC/IEEE 14764:2022 and 12207 rather than invented. The standard's own structure is a 2x2, not a list: maintenance work is classified by the TIMING of the change (reactive or proactive) and its GOAL (correction or enhancement), and the four familiar names are the cells. Corrective is reactive correction, preventive is proactive correction, adaptive is reactive enhancement, perfective is proactive enhancement. Recording the two axes and deriving the category, rather than picking a name from a list, is what makes the classification arguable: a reader can disagree with 'this was proactive' in a way they cannot disagree with 'this was perfective'. ModificationRequest and ProblemReport are 14764's own terms for what arrives and triggers the work."@en ,
     "v1.22.0 (MINOR, additions only) — makes the scope-first adaptation a governed procedure rather than a document someone follows carefully. Four ordered stages, each with a control point that must be recorded before the next may begin: assess the current order, run a fit-gap between the standing scope and the work actually underway, rule on whether the boundary is unchanged or must be rewritten, and only then re-link the lineage. The ruling is the branch the owner asked for: an unchanged boundary needs only re-linking, while a boundary with gaps needs rewriting and the goals and objectives beneath it revisited. Gates carry an executable check and an expected result, on the same pattern CrossCuttingInvariant already uses, so a stage cannot be declared passed on assertion alone."@en ,
     "v1.21.0 (MINOR, additions only) — records the ceremony order STRUCTURALLY instead of in prose. Every link in the intent chain already points from the later-written element to the earlier one: a Goal points at its Mission, an Objective at its Goal. The direction IS the order, and no date is needed to read it. scopeRealizesObjective points ScopeStatement at Objective, which encodes scope-written-last — the retired order, baked into the vocabulary. fillsScope is the reverse: an Objective names the scope it fills, so the scope must exist before the objective can be written. Deliberately NOT declared owl:inverseOf scopeRealizesObjective: making them inverses would let a reasoner materialise either from the other and destroy the very signal the direction carries."@en ,
@@ -3662,19 +3664,24 @@ backlog:DesignConcern a owl:Class ;
 
 backlog:Concern_Data a owl:NamedIndividual , backlog:DesignConcern ;
     rdfs:label "Data"@en ;
-    skos:definition "What persists, and its structure. Applies wherever a story creates, changes or retires stored state — the concern whose omission is cheapest to skip and most expensive to correct, because a schema in use is difficult to change."@en .
+    skos:definition "What persists, and its structure. Applies wherever a story creates, changes or retires stored state — the concern whose omission is cheapest to skip and most expensive to correct, because a schema in use is difficult to change."@en ;
+    backlog:isFrameworkOriginal "The parent class borrows its five-way split from Satzinger et al. ch.6, whose 'designing databases' activity is the nearest named counterpart. No single converging seminal source was found for this concern at the level defined here: the source describes an activity performed once for a system, not a per-story analysis criterion a backlog item is checked against. Declared framework-original at this level of specificity rather than attributed to a source it does not have."@en .
 backlog:Concern_Interface a owl:NamedIndividual , backlog:DesignConcern ;
     rdfs:label "Interface"@en ;
-    skos:definition "How the system is reached from outside: an API, a message contract, a file exchange. Applies wherever a story changes what another system may rely on."@en .
+    skos:definition "How the system is reached from outside: an API, a message contract, a file exchange. Applies wherever a story changes what another system may rely on."@en ;
+    backlog:isFrameworkOriginal "The parent class borrows its five-way split from Satzinger et al. ch.6, whose 'designing system interfaces' activity is the nearest named counterpart. No single converging seminal source was found for this concern at the level defined here: the source describes an activity performed once for a system, not a per-story analysis criterion a backlog item is checked against. Declared framework-original at this level of specificity rather than attributed to a source it does not have."@en .
 backlog:Concern_Interaction a owl:NamedIndividual , backlog:DesignConcern ;
     rdfs:label "Interaction"@en ;
-    skos:definition "How a person uses the capability. Applies wherever a story changes what a user does, as distinct from what the system stores or exposes."@en .
+    skos:definition "How a person uses the capability. Applies wherever a story changes what a user does, as distinct from what the system stores or exposes."@en ;
+    backlog:isFrameworkOriginal "The parent class borrows its five-way split from Satzinger et al. ch.6, whose 'designing the user interface' activity is the nearest named counterpart. No single converging seminal source was found for this concern at the level defined here: the source describes an activity performed once for a system, not a per-story analysis criterion a backlog item is checked against. Declared framework-original at this level of specificity rather than attributed to a source it does not have."@en .
 backlog:Concern_Architecture a owl:NamedIndividual , backlog:DesignConcern ;
     rdfs:label "Architecture"@en ;
-    skos:definition "Where the capability sits in the system's structure, and what it depends on. Applies wherever a story introduces a component, a dependency or a deployment boundary."@en .
+    skos:definition "Where the capability sits in the system's structure, and what it depends on. Applies wherever a story introduces a component, a dependency or a deployment boundary."@en ;
+    backlog:isFrameworkOriginal "The parent class borrows its five-way split from Satzinger et al. ch.6, whose 'architectural design' activity is the nearest named counterpart. No single converging seminal source was found for this concern at the level defined here: the source describes an activity performed once for a system, not a per-story analysis criterion a backlog item is checked against. Declared framework-original at this level of specificity rather than attributed to a source it does not have."@en .
 backlog:Concern_Security a owl:NamedIndividual , backlog:DesignConcern ;
     rdfs:label "Security"@en ;
-    skos:definition "Who may do this, and what it exposes. Applies wherever a story touches identity, authorisation or data a policy governs."@en .
+    skos:definition "Who may do this, and what it exposes. Applies wherever a story touches identity, authorisation or data a policy governs."@en ;
+    backlog:isFrameworkOriginal "The parent class borrows its five-way split from Satzinger et al. ch.6, whose 'controls and security' design activity is the nearest named counterpart. No single converging seminal source was found for this concern at the level defined here: the source describes an activity performed once for a system, not a per-story analysis criterion a backlog item is checked against. Declared framework-original at this level of specificity rather than attributed to a source it does not have."@en .
 
 backlog:addressesConcern a owl:ObjectProperty ;
     rdfs:domain backlog:RefinementEvent ; rdfs:range backlog:DesignConcern ;
@@ -3736,19 +3743,24 @@ backlog:Task_ArchitectureDefinition a owl:NamedIndividual , backlog:TaskType ;
     skos:definition "6.4.4. Establishes the structure: components, their responsibilities, and the boundaries between them. Separate from design definition because architecture fixes what may not change cheaply later."@en .
 backlog:Task_DesignDefinition a owl:NamedIndividual , backlog:TaskType ;
     rdfs:label "Design definition"@en ;
-    skos:definition "6.4.5. Provides detail sufficient to implement, within the architecture. Where the five DesignConcerns are analysed."@en .
+    skos:definition "6.4.5. Provides detail sufficient to implement, within the architecture. Where the five DesignConcerns are analysed."@en ;
+    dcterms:source "ISO/IEC/IEEE 12207:2017, clause 6.4.5 Design definition process. Clause number confirmed via web search of secondary sources, not against the primary paywalled standard text; needs final confirmation by a holder of standard's-body access."@en .
 backlog:Task_SystemAnalysis a owl:NamedIndividual , backlog:TaskType ;
     rdfs:label "System analysis"@en ;
-    skos:definition "6.4.6. Analytical work supporting a decision — trade studies, feasibility, performance modelling. The owner's technical analysis. Named separately because it produces a decision and its rationale, not a component, and is otherwise recorded as design or lost."@en .
+    skos:definition "6.4.6. Analytical work supporting a decision — trade studies, feasibility, performance modelling. The owner's technical analysis. Named separately because it produces a decision and its rationale, not a component, and is otherwise recorded as design or lost."@en ;
+    dcterms:source "ISO/IEC/IEEE 12207:2017, clause 6.4.6 System analysis process. Clause number confirmed via web search of secondary sources, not against the primary paywalled standard text; needs final confirmation by a holder of standard's-body access."@en .
 backlog:Task_Implementation a owl:NamedIndividual , backlog:TaskType ;
     rdfs:label "Implementation"@en ;
-    skos:definition "6.4.7. Builds the element. The task type most registers record and often the only one, which is why a backlog can look full while every other process is invisible."@en .
+    skos:definition "6.4.7. Builds the element. The task type most registers record and often the only one, which is why a backlog can look full while every other process is invisible."@en ;
+    dcterms:source "ISO/IEC/IEEE 12207:2017, clause 6.4.7 Implementation process. Clause number confirmed via web search of secondary sources, not against the primary paywalled standard text; needs final confirmation by a holder of standard's-body access."@en .
 backlog:Task_Integration a owl:NamedIndividual , backlog:TaskType ;
     rdfs:label "Integration"@en ;
-    skos:definition "6.4.8. Assembles elements into a working whole. Distinct from implementation: a set of correct parts that do not compose is the failure this process exists to catch."@en .
+    skos:definition "6.4.8. Assembles elements into a working whole. Distinct from implementation: a set of correct parts that do not compose is the failure this process exists to catch."@en ;
+    dcterms:source "ISO/IEC/IEEE 12207:2017, clause 6.4.8 Integration process. Clause number confirmed via web search of secondary sources, not against the primary paywalled standard text; needs final confirmation by a holder of standard's-body access."@en .
 backlog:Task_Verification a owl:NamedIndividual , backlog:TaskType ;
     rdfs:label "Verification"@en ;
-    skos:definition "6.4.9. Confirms the element meets its specified requirements — was it built right. Half of the owner's testing."@en .
+    skos:definition "6.4.9. Confirms the element meets its specified requirements — was it built right. Half of the owner's testing."@en ;
+    dcterms:source "ISO/IEC/IEEE 12207:2017, clause 6.4.9 Verification process. Clause number confirmed via web search of secondary sources, not against the primary paywalled standard text; needs final confirmation by a holder of standard's-body access."@en .
 backlog:Task_Validation a owl:NamedIndividual , backlog:TaskType ;
     rdfs:label "Validation"@en ;
     skos:definition "6.4.11. Confirms the element serves its intended use in its intended environment — was the right thing built. The other half of testing, and the one skipped when verification passes and nobody asks whether the requirement was correct."@en .

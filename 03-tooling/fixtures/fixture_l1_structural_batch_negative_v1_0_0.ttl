@@ -1,0 +1,110 @@
+# L1 structural-integrity batch — proving clauses nothing had fired.
+#
+# backlog_clause_proof_v1_0_0 reported 82 of 304 level-gated clauses never
+# made to fire by a fixture. This batch targets the 15 cheapest: WorkItem
+# core-integrity cardinality/reference checks, adoption-profile cardinality,
+# roadmap/container rank-and-reference checks, and the decompose-vs-depend
+# mutual-exclusion rule. Each node below exists to trip exactly one named
+# clause; nodes are otherwise minimal, not realistic registers.
+#
+#   ex:WI_NoId        -> L1 work item must have exactly one string identifier
+#   ex:WI_NoState      -> L1 work item must have exactly one lifecycle state
+#   ex:WI_BadDep        -> L1 dependsOn must point to a real work item
+#   ex:WI_BadContainer  -> L1 memberOfContainer must point to a real container
+#   ex:WI_BadEvidence   -> L1 hasEvidence must point to a real Evidence artifact
+#   ex:PS_NoValue       -> L1 every priority score must carry exactly one decimal value
+#   ex:RM_NoBacklog     -> L1 a roadmap must project exactly one backlog
+#   ex:P_Bad            -> L1 adoption profile: no conformance level, no governed
+#                          backlog, no Core facet (three clauses, one node)
+#   ex:CD_BadDep        -> L1 containerDependsOn must point at a real container
+#   ex:CD_Tie1/ex:CD_Tie2 -> L1 two containers hold the same rank on one roadmap
+#   ex:WI_BadDecomp     -> L1 decomposesInto must point at a real work item
+#   ex:WI_DecompAndDep  -> L1 an item may not both decompose into another and
+#                          depend on it (with ex:WI_Child)
+#   ex:WI_RankNoRoadmap -> L1 work item carries a roadmap rank without naming
+#                          the roadmap it is ranked on
+#
+# All nodes are deliberately malformed; none is meant to also validate
+# cleanly against unrelated shapes.
+
+@prefix backlog: <http://example.org/backlog#> .
+@prefix ex:      <http://example.org/l1batch#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+# Governing profile — valid, so unrelated register-level checks stay quiet.
+ex:P a backlog:AdoptionProfile ; backlog:profileAppliesTo "L1 structural batch fixture" ;
+    backlog:governsBacklog ex:BL ; backlog:hasConformanceLevel backlog:L1_Core ;
+    backlog:decidedBy backlog:Owner ; backlog:hasDecisionRationale "L1: batch fixture, L1 only." ;
+    backlog:adoptsFacet backlog:CoreFacet .
+ex:BL a backlog:Backlog ; backlog:hasIdentifier "BL-L1BATCH" ; backlog:hasState backlog:InProgress .
+
+# 1 — missing identifier
+ex:WI_NoId a backlog:Story ; backlog:hasState backlog:InProgress ;
+    backlog:memberOfContainer ex:BL .
+
+# 2 — missing lifecycle state
+ex:WI_NoState a backlog:Story ; backlog:hasIdentifier "WI-NOSTATE" ;
+    backlog:memberOfContainer ex:BL .
+
+# 3 — dependsOn a non-WorkItem
+ex:NotAWorkItem a backlog:Evidence .
+ex:WI_BadDep a backlog:Story ; backlog:hasIdentifier "WI-BADDEP" ; backlog:hasState backlog:InProgress ;
+    backlog:memberOfContainer ex:BL ; backlog:dependsOn ex:NotAWorkItem .
+
+# 4 — memberOfContainer a non-container
+ex:NotAContainer a backlog:Evidence .
+ex:WI_BadContainer a backlog:Story ; backlog:hasIdentifier "WI-BADCONTAINER" ;
+    backlog:hasState backlog:InProgress ; backlog:memberOfContainer ex:NotAContainer .
+
+# 5 — hasEvidence a non-Evidence
+ex:NotEvidence a backlog:Story ; backlog:hasIdentifier "WI-NOTEVIDENCE-TARGET" ;
+    backlog:hasState backlog:InProgress ; backlog:memberOfContainer ex:BL .
+ex:WI_BadEvidence a backlog:Story ; backlog:hasIdentifier "WI-BADEVIDENCE" ;
+    backlog:hasState backlog:InProgress ; backlog:memberOfContainer ex:BL ;
+    backlog:hasEvidence ex:NotEvidence .
+
+# 6 — priority score with no decimal value
+ex:M_WSJF a backlog:PrioritizationMethod .
+ex:PS_NoValue a backlog:PriorityScore ; backlog:scoredByMethod ex:M_WSJF .
+
+# 7 — roadmap with no backlog projected
+ex:RM_NoBacklog a backlog:Roadmap .
+
+# 8, 9, 10 — adoption profile missing conformance level, governed backlog, Core facet
+ex:P_Bad a backlog:AdoptionProfile .
+
+# 11 — containerDependsOn a non-container
+ex:CD_BadDep a backlog:WorkItemContainer ; backlog:hasIdentifier "CD-BADDEP" ;
+    backlog:containerDependsOn ex:NotAContainer .
+ex:CD_BadDep_Member a backlog:Story ; backlog:hasIdentifier "WI-CDBADDEP-MEMBER" ;
+    backlog:hasState backlog:InProgress ; backlog:memberOfContainer ex:CD_BadDep .
+
+# 12 — two containers tied on the same roadmap rank
+ex:RM_Tie a backlog:Roadmap ; backlog:roadmapOf ex:BL .
+ex:CD_Tie1 a backlog:WorkItemContainer ; backlog:hasIdentifier "CD-TIE1" ;
+    backlog:rankedOnRoadmap ex:RM_Tie ; backlog:hasRoadmapRank 1 .
+ex:CD_Tie1_Member a backlog:Story ; backlog:hasIdentifier "WI-CDTIE1-MEMBER" ;
+    backlog:hasState backlog:InProgress ; backlog:memberOfContainer ex:CD_Tie1 .
+ex:CD_Tie2 a backlog:WorkItemContainer ; backlog:hasIdentifier "CD-TIE2" ;
+    backlog:rankedOnRoadmap ex:RM_Tie ; backlog:hasRoadmapRank 1 .
+ex:CD_Tie2_Member a backlog:Story ; backlog:hasIdentifier "WI-CDTIE2-MEMBER" ;
+    backlog:hasState backlog:InProgress ; backlog:memberOfContainer ex:CD_Tie2 .
+
+# 13 — decomposesInto a non-WorkItem
+ex:WI_BadDecomp a backlog:Story ; backlog:hasIdentifier "WI-BADDECOMP" ;
+    backlog:hasState backlog:InProgress ; backlog:memberOfContainer ex:BL ;
+    backlog:decomposesInto ex:NotAWorkItem .
+
+# 14 — an item that both decomposes into and depends on the same child
+ex:WI_Child a backlog:Story ; backlog:hasIdentifier "WI-CHILD" ;
+    backlog:hasState backlog:InProgress ; backlog:memberOfContainer ex:BL .
+ex:WI_DecompAndDep a backlog:Story ; backlog:hasIdentifier "WI-DECOMPANDDEP" ;
+    backlog:hasState backlog:InProgress ; backlog:memberOfContainer ex:BL ;
+    backlog:decomposesInto ex:WI_Child ; backlog:dependsOn ex:WI_Child .
+
+# 15 — a roadmap rank with no roadmap named
+ex:WI_RankNoRoadmap a backlog:Story ; backlog:hasIdentifier "WI-RANKNOROADMAP" ;
+    backlog:hasState backlog:InProgress ; backlog:memberOfContainer ex:BL ;
+    backlog:hasRoadmapRank 3 .
+
+<http://example.org/l1batch#P> backlog:hasExpectedPolarity backlog:Polarity_Negative .
