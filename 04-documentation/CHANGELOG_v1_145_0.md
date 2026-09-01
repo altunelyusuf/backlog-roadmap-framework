@@ -1,5 +1,71 @@
 # Changelog
 
+## v1.145.0 — 2026-08-31 (MAJOR: six new lineage-discipline rulings from a real drift retrospective, plus a shipped-shape bug found and fixed)
+
+**Adopted, from two another registrant handovers delivered together**: a full drift retrospective (another registrant v1.56.1,
+commit `f140046`, built at the owner's own direct request: *"list the drifts you have in
+application of the BRSF methodology and build a handover to update the lineage discipline to
+prevent them"*) and a maturity-gate investigation (another registrant v1.56.0-era, with two later addenda).
+
+**`LINEAGE_OPERATING_DISCIPLINE` bumped v7.0.0 -> v8.0.0, adding G33-G38.** Each grounded in a
+real, cited drift from the retrospective's own nine — not written from a template. Spot-checked
+before drafting, not trusted from the handover's prose: `d70664d` (Drift 1's cited commit) and
+`L4StoryGranularityShape`/`d2d13ec` (Drift 5, Drift-retrospective and the maturity-gate handover's
+own premise-correction) both confirmed to exist exactly as described.
+
+- **G33** — state is grounded in re-checked evidence, never in whether a ceremony happened (Drift
+  1: a state reverted twice, in opposite directions, both times testing process instead of
+  evidence).
+- **G34** — a "what's next" claim queries the full scored set, never a pairwise comparison (Drift
+  4: two items compared in isolation while a third, higher-scored item sat unchecked).
+- **G35** — attributed rationale must be traceable to an actual statement, never extrapolated and
+  presented as specific (Drift 6: a ranking rationale claimed a specific instruction the owner
+  never gave).
+- **G36** — a Deliverable joins an existing Goal only if it alone would satisfy that Goal's own
+  stated purpose (Drift 7: two genuinely different activities bundled under one Goal).
+- **G37** — a changelog entry is a mechanical, checked step, not a habit remembered by discipline
+  alone (Drift 8: three separate releases in one lineage shipped without one, each caught and
+  backfilled later — the same rigor already applied mechanically to manifest regeneration was not
+  applied with the same consistency here).
+- **G38** — a conformance-level claim requires its own real infrastructure underneath it, not just
+  that the destination sounds right (the maturity-gate handover's own premise-correction: a
+  session was about to propose a control that, checked directly, already existed and already
+  worked — it had simply never fired because another registrant's own declared level gated it out three levels
+  below. Verified test-driven, not assumed: temporarily set to the target level, reverted
+  immediately after, 154 real violations surfaced, confirming both that the control works and
+  that the lower level remains another registrant's honest current maturity).
+
+**A real, already-shipped bug found and fixed**: applying `PackageRegularityShape` (v1.144.0) to
+another registrant's own register surfaced a genuine edge case — 4 packages split 2-2 by sprint count, where 2
+individually-excused exceptions (1 sprint each, correctly carrying `hasDecisionRationale`)
+outnumbered the 2-package regular baseline (2 sprints each, unexcused), so the majority-divergence
+rule counted the baseline as the outlier. Reproduced independently before fixing, not trusted from
+the report. Fixed: a sibling that itself carries a rationale is now excluded from the comparison
+pool entirely, not merely self-suppressed — re-verified against both the original fixture (still
+fires correctly on a real 3-normal/1-odd case) and a new regression case matching another registrant's exact 2-2
+split (added to `fixture_package_regularity_v1_0_0.ttl`; both baselines correctly stay silent).
+
+**Two findings from the maturity-gate handover deliberately not acted on this release**: a
+task-type-completeness-by-claim-detection shape (the handover's own words: "a real, hard
+natural-language problem, not a structural one a SPARQL SELECT can safely solve alone") and a
+proposed `SprintGoal`/`hasStatedGoal` property — both explicitly offered as starting points
+needing this framework's own G30 test-drive discipline before shipping, not as finished designs;
+rushing either now would repeat the exact mistake G38 just named. The smaller, already-adoptable
+`hasBatchSize`/`hasBatchCompleted` recommendation and the confirmed-already-possible
+`Task_Implementation dependsOn` SDLC-ordering pattern require no framework change at all — noted
+here as real, standing recommendations for any adopting lineage, not shipped as new vocabulary.
+
+**A second, pre-existing staleness found and fixed while touching this area**: BRSF's own register
+described its own governance area as "18 governance rulings G1-G18" — already stale before this
+release (the real count passed G18 when G26-G32 were added at v7.0.0) and never caught until this
+edit. Corrected to G1-G38 alongside the filename reference. Register bumped 9.9.0 -> 9.10.0.
+
+0 SHACL violations before and after (116 warnings, unchanged). All six shipped checkers PASS.
+`clause-proof`: 7/7 fixture-proof declarations verified (fixture content changed but its
+declared case remains provable), 237/304 clauses still proven. Full 27-fixture coverage sweep
+re-run in full: every fixture's pass/fail matches its declared expectation.
+
+
 ## v1.144.0 — 2026-08-31 (MINOR: adopts a another registrant handover — package-sprint-count regularity)
 
 **Adopted, from `HANDOVER_vaf-lineage_to_backlog-roadmap-framework_package-regularity_v1_0_0.md`

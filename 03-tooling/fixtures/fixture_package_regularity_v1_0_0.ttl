@@ -45,3 +45,38 @@ ex:Pkg_Excused a backlog:Package ; backlog:belongsToLineage ex:Ln ;
     backlog:hasDecisionRationale "Single item, seven unmet dependencies, the highest fan-in in the backlog — cannot be paired or split regardless of size." .
 ex:Excused_Member a backlog:Story ; backlog:hasIdentifier "WI-EXCUSED-M" ;
     backlog:hasState backlog:InProgress ; backlog:memberOfContainer ex:Pkg_Excused .
+
+# Regression case (v1.145.0), a real bug another registrant found applying this shape to its
+# own register: a second, separate lineage where 2 excused exceptions
+# (1 sprint each, individually rationale'd) outnumber the 2-package baseline
+# (2 sprints each, unexcused) — 4 packages total, split 2-2 by count. The
+# original majority-divergence rule counted the excused packages as "far"
+# siblings toward the BASELINE's total, making the real baseline look like
+# the outlier. Fixed: a sibling that itself carries a rationale is excluded
+# from the comparison pool entirely, not merely self-suppressed. Ln2_Base1
+# and Ln2_Base2 must NOT fire.
+ex:Ln2_Base1 a backlog:Package ; backlog:belongsToLineage ex:Ln2 ;
+    backlog:hasIdentifier "PKG-LN2-BASE1" ; backlog:hasPackageVersion "1.0.0" ;
+    backlog:targetsIteration ex:It1 , ex:It2 .
+ex:Ln2Base1_Member a backlog:Story ; backlog:hasIdentifier "WI-LN2BASE1-M" ;
+    backlog:hasState backlog:InProgress ; backlog:memberOfContainer ex:Ln2_Base1 .
+
+ex:Ln2_Base2 a backlog:Package ; backlog:belongsToLineage ex:Ln2 ;
+    backlog:hasIdentifier "PKG-LN2-BASE2" ; backlog:hasPackageVersion "1.0.0" ;
+    backlog:targetsIteration ex:It1 , ex:It2 .
+ex:Ln2Base2_Member a backlog:Story ; backlog:hasIdentifier "WI-LN2BASE2-M" ;
+    backlog:hasState backlog:InProgress ; backlog:memberOfContainer ex:Ln2_Base2 .
+
+ex:Ln2_Excused1 a backlog:Package ; backlog:belongsToLineage ex:Ln2 ;
+    backlog:hasIdentifier "PKG-LN2-EXC1" ; backlog:hasPackageVersion "1.0.0" ;
+    backlog:targetsIteration ex:It1 ;
+    backlog:hasDecisionRationale "Real, disclosed exception 1 — matches another registrant's own Package_1 case." .
+ex:Ln2Exc1_Member a backlog:Story ; backlog:hasIdentifier "WI-LN2EXC1-M" ;
+    backlog:hasState backlog:InProgress ; backlog:memberOfContainer ex:Ln2_Excused1 .
+
+ex:Ln2_Excused2 a backlog:Package ; backlog:belongsToLineage ex:Ln2 ;
+    backlog:hasIdentifier "PKG-LN2-EXC2" ; backlog:hasPackageVersion "1.0.0" ;
+    backlog:targetsIteration ex:It1 ;
+    backlog:hasDecisionRationale "Real, disclosed exception 2 — matches another registrant's own Package_4 case." .
+ex:Ln2Exc2_Member a backlog:Story ; backlog:hasIdentifier "WI-LN2EXC2-M" ;
+    backlog:hasState backlog:InProgress ; backlog:memberOfContainer ex:Ln2_Excused2 .

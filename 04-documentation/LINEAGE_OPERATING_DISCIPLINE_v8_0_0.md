@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v7.0.0
+# Lineage Operating Discipline — v8.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -543,3 +543,89 @@ external, legacy, or unverified authority. (c) should prompt re-examination befo
 is trusted: verified against a real case where an exclusion's stated authority ("another registrant's own scope
 note restricts it to software") was checked against the actual bytes and found false — the real
 note was about something unrelated.
+
+## G33 — State is grounded in re-checked evidence, never in whether a ceremony happened
+
+A `WorkItem`'s state was moved twice on the wrong basis, in opposite directions: first marked
+`Done` because a `PlanningEvent`/`ExecutionTask` had been freshly created to frame the claim,
+without the owner ever authorizing the kick-off those records implied; then, once corrected,
+reverted a second time reasoning "no kick-off was authorized" — still a process test, just now
+answering no instead of yes. Both were wrong for the same reason: state was tied to whether a
+procedural artifact existed, not to whether the deliverable objectively satisfies its DoD.
+
+**Verified against a real external adoption**: the owner's own correction was explicit and general
+— *"State changes should be based on reality... not my or anybody else's free will."* — applied
+first to a scoring dispute, then again, independently, to this exact state-reversion. A state
+change grounded in "was a ceremony performed" is checking the wrong thing regardless of which
+answer the ceremony gives; check the evidence directly, every time, in both directions.
+
+## G34 — A "what's next" claim queries the full scored set, never a pairwise or small-group comparison
+
+Two items were compared against each other in isolation, and the winner treated as the answer,
+without checking the other twelve-plus already-scored items in the same backlog. A later, real
+full-backlog review found a third, previously-uncompared item scored far higher than either.
+
+**Verified against a real external adoption**: the pairwise comparison used real WSJF scores
+(2.29 vs 4.80) and was not itself wrong about those two items — the error was in never asking
+whether a wider comparison existed. Any prioritization claim answering "what's next" must query
+every currently-scored item in the relevant set; a comparison scoped smaller than the real
+candidate set can be locally correct and globally wrong at the same time.
+
+## G35 — Attributed rationale must be traceable to an actual statement, never extrapolated and then presented as specific
+
+A ranking's own `hasDecisionRationale` claimed a specific instruction — "by the owner's own direct
+instruction" — that the owner never gave. A real, general instruction ("continue with the first
+package") had been extrapolated into a specific claim and then recorded as if directly stated.
+
+**Verified against a real external adoption**: the owner's own correction was direct — *"I don't
+rank anything... Why do you say such a thing?"* Before writing `hasDecisionRationale` (or any
+prose framed as the owner's own words) as attributed to a person, check it names something that
+person actually said, at that level of specificity — a general instruction supports a general
+rationale, not a specific one built on top of it.
+
+## G36 — A Deliverable joins an existing Goal only if that Deliverable alone would satisfy the Goal's own stated purpose
+
+A second, genuinely different activity was bundled under an existing Goal rather than given its
+own — the existing Goal named one kind of work (code-to-ontology conversion), and the new
+deliverable was a different kind (ontology-to-ontology reconciliation), found and corrected only
+after direct challenge.
+
+**Verified against a real external adoption**: the two activities were real and distinct enough
+that separating them was uncontroversial once named — the failure was in not asking the question
+before bundling, not in a genuinely hard borderline case. Before adding a Deliverable to an
+existing Goal, check whether completing that Deliverable alone would satisfy the Goal's own
+stated name and purpose; if not, it needs its own Goal.
+
+## G37 — A changelog entry is a mechanical, checked step, not a habit remembered by discipline alone
+
+At least three separate releases in one lineage shipped without their own changelog entry,
+caught and backfilled one or more releases later in each case — the same rigor already applied
+mechanically to manifest regeneration was not applied with the same consistency to the
+changelog, because nothing checked for its absence at commit time.
+
+**Verified against a real external adoption**: three distinct instances across one lineage's own
+history (`v1.47.0`; `v1.49.1`; the `v1.52.0`/`v1.52.1`/`v1.53.0` sequence) — not a single lapse,
+a pattern. A step that depends on being remembered, with nothing else checking for it, will be
+skipped at the same rate discipline alone is skipped everywhere else; where a mechanical check is
+possible (does this version's own changelog section exist), prefer it over relying on the habit.
+
+## G38 — A conformance-level claim requires its own real infrastructure underneath it, not just that the destination sounds right
+
+A session was about to propose a new control for a gap that, checked directly, already existed
+and already worked — it had simply never fired, because the adopting lineage's own declared
+conformance level gated it out three levels below where the control lived. The deeper version of
+the same mistake was avoided only by checking further: adopting the higher level to receive the
+control would itself have required real, unbuilt infrastructure (cross-cutting invariant checks,
+audit timestamps) the lineage did not yet have — declaring the level without that work would
+repeat, at the conformance-level layer, the exact "claim true because it sounds right" error this
+correction was already about.
+
+**Verified against a real external adoption, test-driven not assumed**: conformance was
+temporarily raised to the target level and validation re-run (reverted immediately after,
+investigation only, never committed) — 154 real violations and 61 warnings surfaced, including
+the exact control the session had almost proposed as missing, firing correctly on every item it
+should have. Before recommending a lineage adopt a higher conformance level, check what facets
+and infrastructure that level actually requires and whether the real work behind them already
+exists — a level is not a label to declare toward, it is a set of real checks that must already
+be survivable.
+

@@ -4599,12 +4599,13 @@ backlog:PackageRegularityShape a sh:NodeShape ;
     backlog:fixtureCaseName "Pkg_Odd" ;
     rdfs:label "Advisory: a package's sprint count diverges sharply from its siblings"@en ;
     sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "Advisory: this package's sprint count diverges sharply from its siblings in the same lineage, with no rationale recorded. A roadmap of wildly uneven releases is either an unexamined sizing decision or a real, named constraint — a rationale is what distinguishes them. Scoped to sprint count only: total committed size would need summing hasJobSize across members, and hasJobSize exists only on a WSJF score, not on every scoring method a member might carry — a signal this framework cannot yet compute for every package, and one this shape does not assert." ;
+        sh:message "Advisory: this package's sprint count diverges sharply from its siblings in the same lineage, with no rationale recorded. A roadmap of wildly uneven releases is either an unexamined sizing decision or a real, named constraint — a rationale is what distinguishes them. Comparison excludes siblings that already carry their own rationale: a real exception should not count toward making its own baseline look like the outlier, a failure mode found and corrected against a real four-package case where the baseline (2 of 4, both unexcused) was outnumbered by two individually-excused exceptions (1 of 4 each). Scoped to sprint count only: total committed size would need summing hasJobSize across members, and hasJobSize exists only on a WSJF score, not on every scoring method a member might carry — a signal this framework cannot yet compute for every package, and one this shape does not assert." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             $this backlog:belongsToLineage ?ln .
             { SELECT $this (COUNT(DISTINCT ?it) AS ?n) WHERE { $this backlog:targetsIteration ?it } GROUP BY $this }
             ?tot a backlog:Package ; backlog:belongsToLineage ?ln . FILTER (?tot != $this)
+            FILTER NOT EXISTS { ?tot backlog:hasDecisionRationale ?trat }
             OPTIONAL {
                 ?tot backlog:targetsIteration ?anyit .
                 { SELECT ?tot (COUNT(DISTINCT ?it2) AS ?n2) WHERE { ?tot backlog:targetsIteration ?it2 } GROUP BY ?tot }
