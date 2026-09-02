@@ -34,3 +34,28 @@ ex:RETRO_WithBadFinding a backlog:SprintRetrospective ;
     backlog:heldAt "2026-09-01T00:00:00Z"^^xsd:dateTime ;
     backlog:producesFinding ex:FIND_NoRootCause .
 ex:FIND_NoRootCause a backlog:RetrospectiveFinding .
+
+# REVIEW_WrongPlan — reviews a plan for a different iteration than its own
+# ceremonyFor names.
+ex:PLAN_ForItY a backlog:SprintPlanningCeremony ;
+    backlog:ceremonyFor ex:It_Y ; backlog:heldAt "2026-09-01T00:00:00Z"^^xsd:dateTime ;
+    backlog:includesPlanningEvent ex:PE_ForItY .
+ex:PE_ForItY a backlog:PlanningEvent .
+ex:REVIEW_WrongPlan a backlog:SprintReviewCeremony ;
+    backlog:ceremonyFor ex:It_X ; backlog:heldAt "2026-09-01T00:00:00Z"^^xsd:dateTime ;
+    backlog:reviewsCeremony ex:PLAN_ForItY ; backlog:closesStory ex:S_WrongPlanDummy .
+ex:S_WrongPlanDummy a backlog:Story .
+
+# REVIEW_DirtyClose — closes an iteration while one of its real member
+# stories is neither Done nor flagged for carry-over.
+ex:It_Dirty a backlog:Iteration .
+ex:S_Dirty_Left a backlog:Story ; backlog:memberOfContainer ex:It_Dirty ; backlog:hasState backlog:InProgress .
+ex:PLAN_ForItDirty a backlog:SprintPlanningCeremony ;
+    backlog:ceremonyFor ex:It_Dirty ; backlog:heldAt "2026-09-01T00:00:00Z"^^xsd:dateTime ;
+    backlog:includesPlanningEvent ex:PE_ForItDirty .
+ex:PE_ForItDirty a backlog:PlanningEvent .
+ex:REVIEW_DirtyClose a backlog:SprintReviewCeremony ;
+    backlog:ceremonyFor ex:It_Dirty ; backlog:heldAt "2026-09-01T00:00:00Z"^^xsd:dateTime ;
+    backlog:reviewsCeremony ex:PLAN_ForItDirty ; backlog:closesIteration ex:It_Dirty ;
+    backlog:closesStory ex:S_DirtyDummy .
+ex:S_DirtyDummy a backlog:Story .

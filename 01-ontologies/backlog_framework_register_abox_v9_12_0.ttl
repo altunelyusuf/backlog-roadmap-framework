@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.11.0> ;
-    owl:versionInfo "9.11.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.12.0> ;
+    owl:versionInfo "9.12.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.11.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.10.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.9.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.8.0> ;
@@ -4432,6 +4433,8 @@ fw:Plan_It11 a backlog:SprintPlanningCeremony ;
 fw:Review_It11 a backlog:SprintReviewCeremony ;
     backlog:ceremonyFor fw:It11 ;
     backlog:heldAt "2026-08-27T07:30:00Z"^^xsd:dateTime ;
+    backlog:reviewsCeremony fw:Plan_It11 ;
+    backlog:closesIteration fw:It11 ;
     backlog:closesStory fw:S_Tables_B3 , fw:S_Tables_B4 .
 
 #  Retrospective test case: real findings from this session's own
@@ -4449,18 +4452,23 @@ fw:Retro_ToolingProcess a backlog:SprintRetrospective ;
         fw:Find_SymmetricDivergenceRule , fw:Find_ChangelogHeaderLoss .
 
 fw:Find_SelfReferentialProofPath a backlog:RetrospectiveFinding ;
+    backlog:hasFindingScope backlog:Scope_LineageLocal ;
     backlog:hasRootCause "backlog_new_shape_proof's published-baseline path resolves relative to its own package directory; in a working-copy layout that copies the governed package directly rather than a genuine sibling checkout, the path resolved back to the same working file, so the checker compared the shapes file against itself and reported a false PASS." ;
     backlog:hasRemedy "Never trust a self-comparison checker's PASS without independently re-deriving the true baseline from the actual git-published commit, every release, not only when a result looks surprising." .
 
 fw:Find_MissingFixtureCaseName a backlog:RetrospectiveFinding ;
+    backlog:hasFindingScope backlog:Scope_LineageLocal ;
     backlog:hasRootCause "provenByFixture alone was assumed sufficient to satisfy backlog_clause_proof's own proof requirement; a second, paired property (fixtureCaseName, checked against the fixture's actual focus-node output) was missed until the checker itself reported the declaration FAILED." ;
     backlog:hasRemedy "Before declaring a new shape's proof, read the checker's own verification source rather than infer its requirement from one example." .
 
 fw:Find_SymmetricDivergenceRule a backlog:RetrospectiveFinding ;
+    backlog:hasFindingScope backlog:Scope_Methodology ;
+    backlog:escalatedVia "Direct fix, backlog-roadmap-framework-v1.144.0 -- this session held authority over both the finding and the framework, so no separate handover was needed; the remedy is now PackageRegularityShape's own actual comparison logic, not only a practice note." ;
     backlog:hasRootCause "PackageRegularityShape's first design compared a package against any single sibling; a symmetric 2x-divergence test flags both directions of a real outlier pair, so a genuine baseline sitting next to one real outlier was flagged as often as the outlier itself. Only surfaced when an external lineage's real, small (four-package) dataset produced the inverted case." ;
     backlog:hasRemedy "Majority-of-siblings divergence, not any-single-sibling divergence, for any future regularity check comparing one item against a small population." .
 
 fw:Find_ChangelogHeaderLoss a backlog:RetrospectiveFinding ;
+    backlog:hasFindingScope backlog:Scope_LineageLocal ;
     backlog:hasRootCause "A str_replace prepending a new changelog entry consumed the following version's own header line because the replacement text did not re-include it, silently orphaning that entry's body under the wrong heading until the next read caught the gap in the header sequence." ;
     backlog:hasRemedy "After any edit that prepends content above existing text, re-read the header sequence immediately rather than trusting the edit tool's success response alone." .
 

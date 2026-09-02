@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.75.0> ;
-    owl:versionInfo "1.75.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.76.0> ;
+    owl:versionInfo "1.76.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.75.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.74.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.73.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.72.0> ;
@@ -4665,11 +4666,13 @@ backlog:SprintReviewCeremonyShape a sh:NodeShape ;
     sh:severity sh:Violation ;
     backlog:provenByFixture "03-tooling/fixtures/fixture_sprint_ceremonies_negative_v1_0_0.ttl" ;
     backlog:fixtureCaseName "REVIEW_NoDecision" ;
-    rdfs:label "L1: a review ceremony names its iteration, when it happened, and made a decision"@en ;
+    rdfs:label "L1: a review ceremony names its iteration, when it happened, what it reviewed, and made a decision"@en ;
     sh:property [ sh:path backlog:ceremonyFor ; sh:minCount 1 ; sh:maxCount 1 ;
         sh:message "L1: a sprint review ceremony must name exactly one iteration." ] ;
     sh:property [ sh:path backlog:heldAt ; sh:minCount 1 ; sh:maxCount 1 ;
         sh:message "L1: a sprint review ceremony must record when it happened." ] ;
+    sh:property [ sh:path backlog:reviewsCeremony ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "L1: a sprint review ceremony must name the planning ceremony it reviews. A review's real job is to review what was planned; one that names no plan is checking nothing in particular." ] ;
     sh:sparql [ a sh:SPARQLConstraint ;
         sh:message "L1: a sprint review ceremony must close at least one story or flag at least one for carry-over. A review that decided nothing is not distinguishable from a review that did not happen." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
@@ -4677,6 +4680,37 @@ backlog:SprintReviewCeremonyShape a sh:NodeShape ;
             $this a backlog:SprintReviewCeremony .
             FILTER NOT EXISTS { $this backlog:closesStory ?s }
             FILTER NOT EXISTS { $this backlog:flagsForCarryOver ?f }
+        }""" ] .
+
+backlog:ReviewsPlanConsistencyShape a sh:NodeShape ;
+    sh:targetClass backlog:SprintReviewCeremony ;
+    sh:severity sh:Violation ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_sprint_ceremonies_negative_v1_0_0.ttl" ;
+    backlog:fixtureCaseName "REVIEW_WrongPlan" ;
+    rdfs:label "L1: a review's own iteration must agree with the plan it reviews"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this review ceremony's own ceremonyFor names a different iteration than the planning ceremony it reviews. A review naming one sprint while reviewing another's plan is reviewing the wrong sprint." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this a backlog:SprintReviewCeremony ; backlog:ceremonyFor ?it1 ; backlog:reviewsCeremony ?plan .
+            ?plan backlog:ceremonyFor ?it2 .
+            FILTER (?it1 != ?it2)
+        }""" ] .
+
+backlog:IterationNotCleanedShape a sh:NodeShape ;
+    sh:targetClass backlog:SprintReviewCeremony ;
+    sh:severity sh:Violation ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_sprint_ceremonies_negative_v1_0_0.ttl" ;
+    backlog:fixtureCaseName "REVIEW_DirtyClose" ;
+    rdfs:label "L1: closing an iteration requires a disposition for every story in it"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this review closed its iteration, but at least one story still a member of it is neither Done nor named in this review's own flagsForCarryOver. Closing a sprint means every item in it has a real disposition — finished, or seen and carried forward on purpose — not that some were simply left behind." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT DISTINCT $this WHERE {
+            $this a backlog:SprintReviewCeremony ; backlog:closesIteration ?it .
+            ?story a backlog:Story ; backlog:memberOfContainer ?it .
+            FILTER NOT EXISTS { ?story backlog:hasState backlog:Done }
+            FILTER NOT EXISTS { $this backlog:flagsForCarryOver ?story }
         }""" ] .
 
 backlog:RetrospectiveNotStartedShape a sh:NodeShape ;
@@ -4710,7 +4744,9 @@ backlog:RetrospectiveFindingShape a sh:NodeShape ;
     sh:severity sh:Violation ;
     backlog:provenByFixture "03-tooling/fixtures/fixture_sprint_ceremonies_negative_v1_0_0.ttl" ;
     backlog:fixtureCaseName "FIND_NoRootCause" ;
-    rdfs:label "L1: a retrospective finding names its root cause"@en ;
+    rdfs:label "L1: a retrospective finding names its root cause and its scope"@en ;
+    sh:property [ sh:path backlog:hasFindingScope ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "L1: a retrospective finding must state whether its remedy is this lineage's own practice or a methodology-level gap. A finding whose scope was never decided is one nobody judged worth reusing anywhere." ] ;
     sh:property [ sh:path backlog:hasRootCause ; sh:minCount 1 ; sh:maxCount 1 ;
         sh:message "L1: a retrospective finding must state its root cause. hasRemedy stays optional — naming a fix before one is genuinely known is worse than leaving it open — but a finding with no stated cause at all is not yet a finding." ] .
 

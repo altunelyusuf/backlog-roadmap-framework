@@ -1,5 +1,56 @@
 # Changelog
 
+## v1.148.0 — 2026-09-02 (MAJOR: ceremonies chain structurally — review depends on planning, closing cleans the environment, findings become reusable)
+
+**Challenged directly, and answered honestly rather than defended.** The prior release's own
+recommendation — align `followsReview` to `prov:wasInformedBy` and stop there — was examined again
+under direct challenge and found to rest on general caution about scope, not a specific technical
+objection to building the fuller structure. Said so plainly rather than hold the more conservative
+position for its own sake, then built it.
+
+**Review now depends on planning, structurally, not just by shared timing.** `reviewsCeremony`
+(required, `SprintReviewCeremony` -> `SprintPlanningCeremony`) names the plan a review actually
+reviews. `ReviewsPlanConsistencyShape` checks the review's own `ceremonyFor` agrees with that
+plan's — a review naming one iteration while reviewing another's plan is reviewing the wrong
+sprint, now a real, checked error class rather than an unstated assumption.
+
+**Closing a sprint now means cleaning it, not just deciding something.** `closesIteration` records
+the act that formally ends an iteration, distinct from `ceremonyFor`. `IterationNotCleanedShape`
+requires every story still a member of a closed iteration to be either `Done` or named in the same
+review's own `flagsForCarryOver` — clean means every item has a real disposition, not that
+everything happened to finish. `carriesOverFrom` (optional, `PlanningEvent` -> `SprintReviewCeremony`)
+closes the loop on the far side: a later planning event that re-plans a spillover can now say which
+review's own flag it answers.
+
+**Retrospective findings are now structured for reuse, not only recorded.** `FindingScope`
+(`Scope_LineageLocal`, `Scope_Methodology`) and `hasFindingScope` (now required) name whether a
+finding's remedy is this lineage's own practice or a real methodology gap — the distinction this
+whole session's real handover exchanges with another registrant and code-abundance-rdodi already drew informally,
+made structured. `informsRuling`/`escalatedVia` (optional strings, the same plain-citation
+convention already used for governance rulings) record what a finding actually became.
+
+**Every addition test-driven against this package's own real data, including a real regression
+caught and fixed before publishing.** `Review_It11` updated with its own real `reviewsCeremony`
+(`Plan_It11`) and `closesIteration` (`It11`) — still 0 violations, its two real member stories both
+already `Done`, genuinely nothing to carry over. The four existing retrospective findings were
+re-examined by what their remedies actually *are*, not assigned a scope to fill the field: three
+turned out to be genuinely lineage-local (practice notes, not framework changes) and only one —
+the `PackageRegularityShape` divergence-rule correction — genuinely methodology-scope, because its
+remedy is that shape's own logic today, not only advice for next time. Making `reviewsCeremony` and
+`hasFindingScope` required broke this package's own earlier positive fixture
+(`REVIEW_NoRetro`/`REVIEW_WithRetro` had no plan to name, `Find_WithRetro` had no declared scope) —
+caught by re-running full validation before assuming the new requirements were compatible with
+already-shipped test data, not discovered after publishing. Fixed: added the missing planning
+ceremony the fixture's own reviews were always implicitly reviewing.
+
+Two new negative-fixture cases built and verified (`REVIEW_WrongPlan`, `REVIEW_DirtyClose`), each
+firing exactly the intended shape and nothing else unexpected. 0 SHACL violations on the real,
+populated register (117 warnings, unchanged). All shipped checkers PASS. `new-shape-proof`
+re-verified against the true git-published baseline: 2 genuinely new shapes
+(`ReviewsPlanConsistencyShape`, `IterationNotCleanedShape`), both proven. Full 29-fixture coverage
+sweep re-run in full.
+
+
 ## v1.147.0 — 2026-09-02 (MAJOR: sprint ceremonies test-driven and adopted — extends RegisterSession's boundary, does not reverse it)
 
 **Adopted on direct challenge**: RegisterSession's own exclusion of planning meetings, reviews and

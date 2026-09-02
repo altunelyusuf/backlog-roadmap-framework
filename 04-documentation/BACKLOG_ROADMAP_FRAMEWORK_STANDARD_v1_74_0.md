@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.73.0
+# Backlog & Roadmap Semantic Framework — Standard v1.74.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -826,6 +826,33 @@ own dedicated reflection. Verified against this package's own real, un-retrofitt
 `Review_It11`, retroactively modeled earlier in this same pass, genuinely never had a retrospective
 follow it, and the shape reports exactly that, honestly, rather than being satisfied by a
 fabricated link added only to silence it.
+
+**Ceremonies now chain to each other structurally, not only by shared timing.** A review's real
+job is to review what was planned, not independently re-derive which sprint it concerns:
+`reviewsCeremony` (required, `SprintReviewCeremony` -> `SprintPlanningCeremony`) names the plan, and
+`ReviewsPlanConsistencyShape` checks that the review's own `ceremonyFor` agrees with that plan's —
+a review naming one iteration while reviewing another's plan is reviewing the wrong sprint.
+`closesIteration` records the act that formally ends a sprint, distinct from `ceremonyFor`, which
+only says the review concerns it; once asserted, `IterationNotCleanedShape` requires every story
+still a member of that iteration to be either `Done` or named in the same review's own
+`flagsForCarryOver` — the environment is clean, in the sense that matters, when nothing is left
+with no disposition, not when every item happened to finish. `carriesOverFrom` (optional, on
+`PlanningEvent`) closes the loop on the other side: the later planning event that re-plans a
+spillover can say which review's own flag it answers.
+
+**A retrospective's findings are reusable, not only recorded.** `hasFindingScope` (required, on
+`RetrospectiveFinding`) names whether a finding's remedy is this lineage's own practice
+(`Scope_LineageLocal`) or a real gap in the shared methodology (`Scope_Methodology`) — the two
+individuals `FindingScope` is closed to, the same distinction this framework's own real handover exchanges with adopting lineages already draw
+informally, made structured. `informsRuling` and `escalatedVia` (both optional strings, the same
+plain-citation convention this framework already uses for governance rulings, since they are not
+reified as graph individuals) record what a finding actually became: a standing rule, or a
+methodology change put to the framework directly. Test-driven against this package's own real
+findings, not asserted as a category split in the abstract: of the four retrospective findings this
+package's own recent engineering process produced, three were genuinely lineage-local — practice
+recommendations, not framework changes — and one, the `PackageRegularityShape` divergence-rule
+correction, was genuinely methodology-scope, because its remedy is now that shape's own actual
+logic, not only a note for next time.
 
 ### 2.5c-xxvii Model artefacts
 

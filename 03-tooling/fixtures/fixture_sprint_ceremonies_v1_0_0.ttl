@@ -89,17 +89,24 @@ ex:WI_BatchStartedInProgress a backlog:Story ; backlog:hasIdentifier "WI-BATCHST
     backlog:hasBatchSize 44 ; backlog:hasBatchCompleted 5 ; backlog:hasState backlog:InProgress .
 
 # --- RetrospectiveNotStartedShape ---
+ex:Plan_Neutral a backlog:SprintPlanningCeremony ; backlog:ceremonyFor ex:It_Neutral ;
+    backlog:heldAt "2026-01-02T00:00:00Z"^^xsd:dateTime ;
+    backlog:includesPlanningEvent ex:PE_ReadyToClose , ex:PE_StillOpen .
+
 # REVIEW_NoRetro: closed a story, no retrospective follows it -> fires.
 ex:REVIEW_NoRetro a backlog:SprintReviewCeremony ; backlog:ceremonyFor ex:It_Neutral ;
-    backlog:heldAt "2026-01-03T00:00:00Z"^^xsd:dateTime ; backlog:closesStory ex:S_ReadyToClose .
+    backlog:heldAt "2026-01-03T00:00:00Z"^^xsd:dateTime ; backlog:reviewsCeremony ex:Plan_Neutral ;
+    backlog:closesStory ex:S_ReadyToClose .
 
 # REVIEW_WithRetro: closed a story, and a retrospective follows it -> must
 # stay silent.
 ex:REVIEW_WithRetro a backlog:SprintReviewCeremony ; backlog:ceremonyFor ex:It_Neutral ;
-    backlog:heldAt "2026-01-03T00:00:00Z"^^xsd:dateTime ; backlog:closesStory ex:S_StillOpen .
+    backlog:heldAt "2026-01-03T00:00:00Z"^^xsd:dateTime ; backlog:reviewsCeremony ex:Plan_Neutral ;
+    backlog:closesStory ex:S_StillOpen .
 ex:Retro_WithRetro a backlog:SprintRetrospective ; backlog:followsReview ex:REVIEW_WithRetro ;
     backlog:heldAt "2026-01-04T00:00:00Z"^^xsd:dateTime ;
     backlog:producesFinding ex:Find_WithRetro .
 ex:Find_WithRetro a backlog:RetrospectiveFinding ;
+    backlog:hasFindingScope backlog:Scope_LineageLocal ;
     backlog:hasRootCause "Test-drive fixture case only, not a real finding." .
 
