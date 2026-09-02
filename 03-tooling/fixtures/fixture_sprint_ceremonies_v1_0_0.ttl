@@ -1,0 +1,89 @@
+# fixture_sprint_ceremonies_v1_0_0.ttl — proves the four sprint-ceremony
+# advisories added under G33-G38 governance (another registrant's ceremony-coverage
+# handover): StoryReadyToCloseShape, IterationEndedIncompleteShape,
+# BatchCompleteButNotDoneShape, BatchStartedStateStaleShape.
+#
+# Each case is paired with a negative control that must stay silent, so a
+# broken query that always fires is as visible as one that never does.
+# Otherwise structurally complete (every PlanningEvent records when it
+# happened, what it planned into, and at least one task; every Iteration
+# has a start, an end, and a member) so only the four intended advisories
+# fire, matching this package's own convention for advisory-proof fixtures.
+
+@prefix backlog: <http://example.org/backlog#> .
+@prefix ex:      <http://example.org/sprint-ceremonies-fixture#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+ex:It_Neutral a backlog:Iteration ; backlog:hasIdentifier "IT-NEUTRAL" ;
+    backlog:iterationStart "2026-01-01T00:00:00Z"^^xsd:dateTime ;
+    backlog:iterationEnd "2099-01-01T00:00:00Z"^^xsd:dateTime .
+ex:ItNeutral_Member a backlog:Story ; backlog:hasIdentifier "WI-ITNEUTRAL-M" ;
+    backlog:hasState backlog:InProgress ; backlog:memberOfContainer ex:It_Neutral .
+
+ex:It_Ended a backlog:Iteration ; backlog:hasIdentifier "IT-ENDED" ;
+    backlog:iterationStart "2019-01-01T00:00:00Z"^^xsd:dateTime ;
+    backlog:iterationEnd "2020-01-01T00:00:00Z"^^xsd:dateTime .
+ex:ItEnded_Member a backlog:Story ; backlog:hasIdentifier "WI-ITENDED-M" ;
+    backlog:hasState backlog:InProgress ; backlog:memberOfContainer ex:It_Ended .
+
+ex:It_Open a backlog:Iteration ; backlog:hasIdentifier "IT-OPEN" ;
+    backlog:iterationStart "2026-01-01T00:00:00Z"^^xsd:dateTime ;
+    backlog:iterationEnd "2099-01-01T00:00:00Z"^^xsd:dateTime .
+ex:ItOpen_Member a backlog:Story ; backlog:hasIdentifier "WI-ITOPEN-M" ;
+    backlog:hasState backlog:InProgress ; backlog:memberOfContainer ex:It_Open .
+
+# --- StoryReadyToCloseShape ---
+# S_ReadyToClose: all tasks Done, story itself is not -> fires.
+ex:PE_ReadyToClose a backlog:PlanningEvent ; backlog:plansItem ex:S_ReadyToClose ;
+    backlog:plannedInto ex:It_Neutral ; backlog:plannedAt "2026-01-02T00:00:00Z"^^xsd:dateTime ;
+    backlog:producesTask ex:T_RTC1 , ex:T_RTC2 .
+ex:T_RTC1 a backlog:ExecutionTask ; backlog:hasIdentifier "T-RTC1" ; backlog:hasState backlog:Done .
+ex:T_RTC2 a backlog:ExecutionTask ; backlog:hasIdentifier "T-RTC2" ; backlog:hasState backlog:Done .
+ex:S_ReadyToClose a backlog:Story ; backlog:hasIdentifier "S-READYTOCLOSE" ; backlog:hasState backlog:InProgress .
+
+# S_StillOpen: one task not Done -> must stay silent.
+ex:PE_StillOpen a backlog:PlanningEvent ; backlog:plansItem ex:S_StillOpen ;
+    backlog:plannedInto ex:It_Neutral ; backlog:plannedAt "2026-01-02T00:00:00Z"^^xsd:dateTime ;
+    backlog:producesTask ex:T_SO1 , ex:T_SO2 .
+ex:T_SO1 a backlog:ExecutionTask ; backlog:hasIdentifier "T-SO1" ; backlog:hasState backlog:Done .
+ex:T_SO2 a backlog:ExecutionTask ; backlog:hasIdentifier "T-SO2" ; backlog:hasState backlog:InProgress .
+ex:S_StillOpen a backlog:Story ; backlog:hasIdentifier "S-STILLOPEN" ; backlog:hasState backlog:InProgress .
+
+# --- IterationEndedIncompleteShape ---
+# S_Spillover: planned into an already-ended iteration, not Done -> fires.
+ex:PE_Spillover a backlog:PlanningEvent ; backlog:plansItem ex:S_Spillover ;
+    backlog:plannedInto ex:It_Ended ; backlog:plannedAt "2019-01-02T00:00:00Z"^^xsd:dateTime ;
+    backlog:producesTask ex:T_Spillover .
+ex:T_Spillover a backlog:ExecutionTask ; backlog:hasIdentifier "T-SPILLOVER" ; backlog:hasState backlog:InProgress .
+ex:S_Spillover a backlog:Story ; backlog:hasIdentifier "S-SPILLOVER" ; backlog:hasState backlog:InProgress .
+
+# S_OnTrack: planned into a still-open iteration -> must stay silent.
+ex:PE_OnTrack a backlog:PlanningEvent ; backlog:plansItem ex:S_OnTrack ;
+    backlog:plannedInto ex:It_Open ; backlog:plannedAt "2026-01-02T00:00:00Z"^^xsd:dateTime ;
+    backlog:producesTask ex:T_OnTrack .
+ex:T_OnTrack a backlog:ExecutionTask ; backlog:hasIdentifier "T-ONTRACK" ; backlog:hasState backlog:InProgress .
+ex:S_OnTrack a backlog:Story ; backlog:hasIdentifier "S-ONTRACK" ; backlog:hasState backlog:InProgress .
+
+# --- BatchCompleteButNotDoneShape ---
+# WI_BatchDoneNotClosed: completed == size, state not Done -> fires.
+ex:WI_BatchDoneNotClosed a backlog:Story ; backlog:hasIdentifier "WI-BATCHDONENOTCLOSED" ;
+    backlog:hasBatchSize 5 ; backlog:hasBatchCompleted 5 ; backlog:hasState backlog:InProgress .
+
+# WI_BatchDoneAndClosed: completed == size, state Done -> must stay silent.
+ex:WI_BatchDoneAndClosed a backlog:Story ; backlog:hasIdentifier "WI-BATCHDONEANDCLOSED" ;
+    backlog:hasBatchSize 5 ; backlog:hasBatchCompleted 5 ; backlog:hasState backlog:Done .
+
+# --- BatchStartedStateStaleShape ---
+# WI_BatchStartedStale: completed > 0, state still Ready -> fires.
+ex:WI_BatchStartedStale a backlog:Story ; backlog:hasIdentifier "WI-BATCHSTARTEDSTALE" ;
+    backlog:hasBatchSize 44 ; backlog:hasBatchCompleted 5 ; backlog:hasState backlog:Ready .
+
+# WI_BatchNotStarted: completed == 0, state Proposed -> must stay silent
+# (nothing has moved yet, so there is nothing stale to flag).
+ex:WI_BatchNotStarted a backlog:Story ; backlog:hasIdentifier "WI-BATCHNOTSTARTED" ;
+    backlog:hasBatchSize 10 ; backlog:hasBatchCompleted 0 ; backlog:hasState backlog:Proposed .
+
+# WI_BatchStartedInProgress: completed > 0, state already InProgress ->
+# must stay silent (state already reflects the real work under it).
+ex:WI_BatchStartedInProgress a backlog:Story ; backlog:hasIdentifier "WI-BATCHSTARTEDINPROGRESS" ;
+    backlog:hasBatchSize 44 ; backlog:hasBatchCompleted 5 ; backlog:hasState backlog:InProgress .

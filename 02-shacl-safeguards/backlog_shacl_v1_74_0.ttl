@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.73.0> ;
-    owl:versionInfo "1.73.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.74.0> ;
+    owl:versionInfo "1.74.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.73.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.72.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.71.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.70.0> ;
@@ -2615,6 +2616,68 @@ backlog:L4StoryGranularityShape a sh:NodeShape ;
             $this backlog:hasState ?st .
             FILTER (?st IN (backlog:InProgress, backlog:Done))
             FILTER NOT EXISTS { ?e a backlog:PlanningEvent ; backlog:plansItem $this }
+        }""" ] .
+
+backlog:StoryReadyToCloseShape a sh:NodeShape ;
+    sh:targetClass backlog:Story ;
+    sh:severity sh:Warning ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_sprint_ceremonies_v1_0_0.ttl" ;
+    backlog:fixtureCaseName "S_ReadyToClose" ;
+    rdfs:label "Advisory: this story's tasks are all Done but the story itself is not"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: every ExecutionTask this story's own PlanningEvent produced is Done, but the story itself has not been moved. The DoD check that refuses an incorrect Done claim is a validator, not an actor — nothing else proposes closing a story once the work under it genuinely finishes, so the decision is only made when someone happens to look." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT DISTINCT $this WHERE {
+            $this a backlog:Story .
+            FILTER NOT EXISTS { $this backlog:hasState backlog:Done }
+            ?pe backlog:plansItem $this ; backlog:producesTask ?t .
+            FILTER NOT EXISTS { ?pe backlog:producesTask ?t2 . FILTER NOT EXISTS { ?t2 backlog:hasState backlog:Done } }
+        }""" ] .
+
+backlog:IterationEndedIncompleteShape a sh:NodeShape ;
+    sh:targetClass backlog:Story ;
+    sh:severity sh:Warning ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_sprint_ceremonies_v1_0_0.ttl" ;
+    backlog:fixtureCaseName "S_Spillover" ;
+    rdfs:label "Advisory: this story's iteration has ended and the story is not Done"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: the iteration this story was planned into has already ended, and the story is not Done. Recovering or carrying forward unfinished work is achievable today with an ordinary PlanningEvent into a new iteration, but nothing flags that this specific item needs that decision — it is reported here so a real spillover is a visible choice, not a silent one." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT DISTINCT $this WHERE {
+            $this a backlog:Story .
+            FILTER NOT EXISTS { $this backlog:hasState backlog:Done }
+            ?pe backlog:plansItem $this ; backlog:plannedInto ?it .
+            ?it backlog:iterationEnd ?end .
+            FILTER (?end < NOW())
+        }""" ] .
+
+backlog:BatchCompleteButNotDoneShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItem ;
+    sh:severity sh:Warning ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_sprint_ceremonies_v1_0_0.ttl" ;
+    backlog:fixtureCaseName "WI_BatchDoneNotClosed" ;
+    rdfs:label "Advisory: every batch unit is complete but the item itself is not Done"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: hasBatchCompleted equals hasBatchSize, but hasState is not Done. A batch reaching its own declared total is exactly the moment the item-level state should be revisited — found real in a lineage that reached this state and left it unrevisited for a full turn, caught only when the terminal Done claim was finally made." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasBatchSize ?sz ; backlog:hasBatchCompleted ?comp .
+            FILTER (?comp = ?sz)
+            FILTER NOT EXISTS { $this backlog:hasState backlog:Done }
+        }""" ] .
+
+backlog:BatchStartedStateStaleShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItem ;
+    sh:severity sh:Warning ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_sprint_ceremonies_v1_0_0.ttl" ;
+    backlog:fixtureCaseName "WI_BatchStartedStale" ;
+    rdfs:label "Advisory: real batch progress recorded but the item's own state is still its initial value"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: hasBatchCompleted is greater than zero, but hasState is still Ready or Proposed — real, verified work has happened and the item-level state was never moved to reflect it. Found real in a lineage where a batch-tracked item sat at Ready with real partial progress underneath it, corrected only on direct sweep." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasBatchCompleted ?comp . FILTER (?comp > 0)
+            $this backlog:hasState ?st . FILTER (?st IN (backlog:Ready, backlog:Proposed))
         }""" ] .
 
 backlog:L4DeploymentShape a sh:NodeShape ;

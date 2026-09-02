@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.70.0
+# Backlog & Roadmap Semantic Framework — Standard v1.71.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -749,7 +749,44 @@ framework cannot yet compute for a package whose members are scored by another m
 incomplete measure asserted as complete is worse than an absent one; size-based regularity is left
 for whichever lineage tests it against a real case first.
 
-### 2.5c-xxv Model artefacts
+### 2.5c-xxv Automated-run ceremony coverage, not ceremony modeling
+
+**`RegisterSession` draws a deliberate boundary: it does not model planning meetings, reviews or
+retrospectives, which remain outside this framework.** That boundary stands. What a direct coverage
+check found is narrower and more concrete: several *automated-run* functions that a Planning,
+Review or Retrospective ceremony would produce as byproducts had no vocabulary at all, independent
+of whether any meeting ever happens.
+
+**Planning** already covers item selection and breakdown (`Ready` state, `PlanningEvent`,
+`producesTask`) but had no way to state a whole-iteration goal distinct from its individual items.
+`hasSprintGoal` is a single optional string on `Iteration` — deliberately unstructured, for the
+same reason `hasScoreRationale` is: forcing a template risks producing theater rather than a real
+answer. Deliberately optional: an `Iteration` without one is not itself a defect.
+
+**Review** already has a real, but *passive*, check — the existing DoD/dependency shapes correctly
+refuse an incorrect `Done` claim, proven by catching a real drift in a lineage's own practice — but
+nothing *proposed* the two decisions a review actually makes. `StoryReadyToCloseShape` reports a
+story whose `PlanningEvent` produced only `Done` tasks while the story itself has not moved;
+`IterationEndedIncompleteShape` reports a story whose iteration has already ended
+(`iterationEnd < now`) while the story is not `Done` — the moment a spillover decision is needed,
+made visible rather than found only by someone happening to check.
+
+**Batch tracking** gets its own pair, found real in a lineage's own practice: a batch-tracked
+`WorkItem` (`hasBatchSize`/`hasBatchCompleted`) can drift from its own `hasState` across several
+turns with nothing noticing until a terminal check finally runs.
+`BatchCompleteButNotDoneShape` reports `hasBatchCompleted` reaching `hasBatchSize` while `hasState`
+is still not `Done`; `BatchStartedStateStaleShape` reports real, verified progress
+(`hasBatchCompleted` > 0) sitting under a `hasState` that still reads `Ready` or `Proposed`, as
+though no work had begun.
+
+**Retrospective** remains, correctly, out of this framework's scope — no `RootCause`, `Remedy`, or
+similar vocabulary is added here. What a lineage's own real experience produces instead — forensic,
+drift, and root-cause documents, written when a real problem surfaces — is a genuine and useful
+practice; giving that practice's *output* a first-class, queryable home in the ontology (rather
+than a loose `.md` file) is a real, larger design question, deliberately left open rather than
+answered by adding a class this pass had not test-driven against more than one real case.
+
+### 2.5c-xxvi Model artefacts
 
 `ModelArtifact` records **that** a model exists, its kind, and what it describes — never its content. A
 register holding diagrams becomes a modelling tool; the framework governs records about work.

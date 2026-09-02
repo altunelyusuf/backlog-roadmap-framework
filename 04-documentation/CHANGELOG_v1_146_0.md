@@ -1,5 +1,63 @@
 # Changelog
 
+## v1.146.0 — 2026-09-02 (MINOR: adopts a another registrant ceremony-coverage handover — automated-run Planning/Review/Retrospective functionality)
+
+**Adopted, from a full ceremony-coverage check** (`CEREMONY_COVERAGE_CHECK_v1_0_0.md`, another registrant v1.71.3,
+folded into `HANDOVER_..._batch-tracking_v1_0_0.md`'s 4th proposal) — built at the owner's own
+direct challenge asking whether ceremonies had been skipped, checked directly against
+`backlog_tbox_v1_63_0.ttl` and `backlog_shacl_v1_73_0.ttl` rather than assumed. The check is
+careful about a distinction this release preserves in full: `RegisterSession`'s own definition
+draws a deliberate boundary — *"it does not model planning meetings, reviews or retrospectives,
+which remain outside this framework"* — verified word-for-word against the real TBox before
+building anything. Nothing in this release models a meeting. What was missing, checked precisely,
+was automated-run *functionality*: data a ceremony's real output should leave behind, independent
+of whether the ceremony itself is ever modeled.
+
+**Adds `hasSprintGoal`** (optional string on `Iteration`) — Planning had item-level breakdown
+covered but no whole-sprint goal statement; deliberately unstructured and deliberately optional,
+matching `hasScoreRationale`'s own precedent.
+
+**Adds four new advisory shapes** (`StoryReadyToCloseShape`, `IterationEndedIncompleteShape`,
+`BatchCompleteButNotDoneShape`, `BatchStartedStateStaleShape`) — Review had a real but *passive*
+check (the DoD/dependency shapes correctly refuse an incorrect `Done` claim) but nothing proposed
+either decision a review actually makes: closing a story once its tasks are genuinely done, or
+flagging a spillover once its iteration has ended. The batch pair addresses a distinct, separately
+real finding: a batch-tracked item's own state can silently lag its own real progress across
+several turns, caught in another registrant's own practice only when a terminal check finally ran.
+
+**Test-driven, not shipped as schema alone.** Two real bugs caught before shipping, not assumed
+correct from the query reading plausibly: (1) a first draft of the iteration-end check compared a
+timezone-naive test literal against SPARQL's `NOW()` (timezone-aware) and silently misfired —
+caught by checking BRSF's own real register data uses `Z`-suffixed timestamps throughout, then
+rebuilding the test fixture to match; (2) the fixture itself initially carried 12 real SHACL
+violations from incomplete `PlanningEvent`/`Iteration` structure, invisible to a naming-based
+pass/fail sweep since the filename didn't declare "expect fail" — caught by running the full
+validator before assuming clean, not just checking the four target messages appeared. Rebuilt
+fully structurally complete; `fixture_sprint_ceremonies_v1_0_0.ttl` now conforms with 0 violations
+and each of the four target advisories firing exactly once, each on the correct node, with a
+negative control for every case. Confirmed silent against BRSF's own real register (116 warnings,
+unchanged).
+
+**A finding that turned out not to be a gap, confirmed rather than assumed**: the handover's own
+Finding 2 proposed a distinct `DefinitionOfDone` for classification-type work. Checked directly:
+`DefinitionOfDone` and `DoDCriterion` are already open, freely-extensible classes — any lineage,
+including another registrant's own, can define a second `DefinitionOfDone` individual today using existing
+vocabulary, with no BRSF change required. Not built; the real action is on the adopting lineage's
+side, not this framework's.
+
+**Deliberately left open, not silently dropped**: a first-class, queryable artifact type for
+retrospective *findings* (as distinct from modeling the retrospective ceremony itself, which
+stays out of scope) is a real, larger design question the handover itself offered "for BRSF's own
+authors' judgment... if BRSF's own authors still judge this out of scope, that is a legitimate,
+real answer." Left open rather than answered this release: a new artifact class deserves its own
+G30 test-drive against more than one real case before shipping, not a rushed addition riding
+alongside five already-verified pieces.
+
+0 SHACL violations before and after (116 warnings, unchanged). All six shipped checkers PASS.
+`new-shape-proof` re-verified against the true git-published baseline (commit `02f9e86`): 4
+genuinely new shapes, all proven.
+
+
 ## v1.145.0 — 2026-08-31 (MAJOR: six new lineage-discipline rulings from a real drift retrospective, plus a shipped-shape bug found and fixed)
 
 **Adopted, from two another registrant handovers delivered together**: a full drift retrospective (another registrant v1.56.1,
