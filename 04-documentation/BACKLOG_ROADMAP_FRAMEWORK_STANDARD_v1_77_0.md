@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.76.0
+# Backlog & Roadmap Semantic Framework — Standard v1.77.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -902,7 +902,41 @@ own real register: BRSF's own `metricMovableBy` assertions currently sit at the 
 the Story level a `SprintReviewCeremony` actually closes, so the shape correctly stays silent
 against real data today — disclosed rather than smoothed into a false positive test.
 
-### 2.5c-xxx Model artefacts
+### 2.5c-xxx Conformance-level gating is retired
+
+**Levels graded which constraints applied; every constraint now applies to every current and new
+lineage.** A real, scoped bug — `L3_Governed`'s own facet requirements never applying to
+`L4_LineageEnforced`, because two shapes tested for an exact level match rather than "at or above"
+— was traced during a direct cost comparison of L2 versus L3 versus L4. Challenged on whether the
+tiering itself was worth its own cost, not just this one asymmetry: most of this framework's own
+real, valuable advisory shapes were already ungated, firing at every level regardless — the
+tiering machine was protecting a minority of its own shapes while adding a surface area a bug like
+this one could recur on indefinitely.
+
+The true scope was found before anything was removed: over 90 distinct SPARQL blocks referenced
+`hasConformanceLevel`, not the ~24 the `L4`-labelled shapes alone suggested. Removed across an
+explicit multi-pass plan rather than one sweeping edit. Level-gating logic stripped from every
+content-checking shape. Five shapes whose entire subject was the level mechanism itself —
+`AdoptionRampShape`, `ConformanceDowngradeShape`, `StaleLevelReviewAdvisoryShape`,
+`SelfExemptionShape`, `ConformanceDeclarationShape` — retired outright, each with its historical
+incident comment preserved rather than deleted. `AdoptionProfileShape` no longer requires
+declaring a level; all four facets (Core, Evidence, Invariant, Audit) are now unconditionally
+required, which also resolves the original asymmetry as a side effect.
+
+`hasConformanceLevel`, `ConformanceLevel`, and the four level-management properties
+(`hasTargetConformanceLevel`, `hasLevelReviewDate`, `hasPriorConformanceLevel`,
+`hasDowngradeRationale`) are kept, not deleted — a done lineage's own asserted level is left
+exactly as recorded, honestly marked historical rather than silently orphaned. No new or currently
+active lineage declares a level; every constraint this framework ships is unconditional for all of
+them.
+
+**Real follow-up disclosed, not absorbed.** Making every constraint unconditional broke several
+previously-clean positive fixtures, each built to be minimally complete for whatever level it once
+declared. The ones load-bearing for a shape's own proof or Gate R's self-proof triad were repaired
+this pass; the rest remain real, tracked work for a future one, alongside a handful of tooling
+scripts that still reference conformance levels for reporting rather than enforcement.
+
+### 2.5c-xxxi Model artefacts
 
 `ModelArtifact` records **that** a model exists, its kind, and what it describes — never its content. A
 register holding diagrams becomes a modelling tool; the framework governs records about work.

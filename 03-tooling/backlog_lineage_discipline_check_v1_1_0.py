@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_lineage_discipline_check v1.0.1 — the discipline's claims are checked.
+"""backlog_lineage_discipline_check v1.1.0 — the discipline's claims are checked.
 
 A discipline document that names shapes as enforcing its boundaries is making
 externally-verifiable claims. Those claims drift: a shape gets renamed, a
@@ -13,8 +13,11 @@ So this reads the discipline and the shipped shapes file and checks:
   2. each carries the severity the discipline implies — a boundary described as
      a violation must not be enforced by an sh:Warning, and one described as an
      advisory must not silently have become a violation
-  3. every L4 shape named is actually gated on L4_LineageEnforced, so a
-     "violation at L4" claim is not in fact firing at every level
+
+Rule 3 (every L4-named shape actually gated on L4_LineageEnforced) retired at
+v1.1.0: conformance-level gating was removed from this framework entirely at
+v1.152.0, so a shape's own "L4" name prefix no longer implies, or should
+imply, any gate.
 
 It does NOT check that the prose is wise. It checks that the prose is true about
 the suite, which is the part that can be checked.
@@ -112,10 +115,12 @@ def main():
         if claims_violation and not claims_advisory and sev != "Violation":
             failures.append("%s is described as enforcing/rejecting but carries sh:%s" % (name, sev))
             note = " <- described as enforcing, is sh:%s" % sev
-        if "L4" in name and not l4:
-            failures.append("%s is named as an L4 shape but its SPARQL does not gate on "
-                            "L4_LineageEnforced, so it would fire at every level" % name)
-            note = " <- not gated on L4"
+        # Rule 3 (every L4-named shape must gate on L4_LineageEnforced) retired
+        # at v1.1.0: conformance-level gating itself was removed from this
+        # framework at v1.152.0, so an "L4" prefix in a shape's own name no
+        # longer implies, or should imply, any gate at all. A shape's name
+        # may still start with L4 as a historical label of when it was
+        # introduced; that is prose, not a claim this checker enforces.
         print("  %-34s sh:%-9s %s%s" % (name, sev, "L4-gated" if l4 else "ungated", note))
 
     print("\nVERDICT     : %s" % ("PASS — every enforcement claim in the discipline holds"

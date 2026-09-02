@@ -38,9 +38,9 @@ Design points that are not incidental:
   filename, so it is never left to inspection.
 
 Usage:
-  backlog_validate_v1_4_0.py DATA.ttl [DATA2.ttl ...]
-  backlog_validate_v1_4_0.py --next DATA.ttl [--method IRI]
-  backlog_validate_v1_4_0.py --gate-k
+  backlog_validate_v1_5_0.py DATA.ttl [DATA2.ttl ...]
+  backlog_validate_v1_5_0.py --next DATA.ttl [--method IRI]
+  backlog_validate_v1_5_0.py --gate-k
 """
 
 import argparse
@@ -144,37 +144,6 @@ def validate(data_files):
     print("rules       : %s (sha256 %s)" % (os.path.basename(RULES), sha256(RULES)[:16]))
     print("data        : %s" % ", ".join(os.path.basename(f) for f in data_files))
     print("tooling     : pyshacl %s, rdflib %s, advanced mode ON" % (pyshacl_version(), rdflib.__version__))
-    # what did the declared level switch off?
-    try:
-        lvl = None
-        _dg = Graph()
-        _dg.parse(data_path, format="turtle")
-        for _, _o in _dg.subject_objects(
-                URIRef("http://example.org/backlog#hasConformanceLevel")):
-            lvl = str(_o).rsplit("#", 1)[-1]
-        gated = {"L1_Core": 0, "L2_EvidenceBound": 0, "L3_Governed": 0}
-        shapes_text = open(shapes_path, encoding="utf-8").read()
-        import re as _re
-        for blk in _re.split(r"sh:sparql \[", shapes_text)[1:]:
-            if "AdoptionProfile" not in blk:
-                continue
-            if "L3_Governed" in blk and "L2_EvidenceBound" not in blk:
-                gated["L3_Governed"] += 1
-            else:
-                gated["L2_EvidenceBound"] += 1
-        total_gated = gated["L2_EvidenceBound"] + gated["L3_Governed"]
-        if lvl == "L1_Core":
-            supp = total_gated
-        elif lvl == "L2_EvidenceBound":
-            supp = gated["L3_Governed"]
-        else:
-            supp = 0
-        if lvl:
-            print("level       : %s — %d of %d level-gated constraint(s) did NOT run%s"
-                  % (lvl, supp, total_gated,
-                     "" if supp == 0 else "; a clean result here is a narrower claim than at L3_Governed"))
-    except Exception:
-        pass
 
     print("results     : %d Violation, %d Warning, %d Info"
           % (counts["Violation"], counts["Warning"], counts["Info"]))

@@ -1,5 +1,77 @@
 # Changelog
 
+## v1.152.0 — 2026-09-02 (MAJOR: conformance-level gating removed entirely — Pass 1 and Pass 2 of an explicit multi-pass plan)
+
+**A real, scoped bug uncovered a much larger question.** Comparing L2/L3/L4's real cost directly
+found `L3_Governed`'s own facet requirements silently never applying to `L4_LineageEnforced` — an
+exact-match condition where an "at or above" one belonged. Challenged on whether the tiering
+itself was worth its own cost, not just this one asymmetry: most of this framework's own real,
+valuable advisory shapes were already ungated, firing at every level regardless. The scale was
+found before anything was removed, not discovered by removing and then finding the damage: over
+90 distinct SPARQL blocks referenced `hasConformanceLevel`, not the ~24 the `L4`-labelled shapes
+alone suggested.
+
+**Pass 1 — the core removal, agreed and executed as a genuine multi-pass plan.** Level-gating
+logic stripped from every content-checking shape. Five shapes whose entire subject was the level
+mechanism itself — `AdoptionRampShape`, `ConformanceDowngradeShape`, `StaleLevelReviewAdvisoryShape`,
+`SelfExemptionShape`, `ConformanceDeclarationShape` — retired outright rather than left ungated,
+each with its own historical incident comment preserved unedited: a rule keeps its incident even
+after the mechanism built for it retires. `AdoptionProfileShape` no longer requires declaring a
+level at all; all four facets (Core, Evidence, Invariant, Audit) are now unconditionally required,
+which also resolves the original L3/L4 asymmetry as a side effect, since there is no longer an
+L3-vs-L4 distinction to be asymmetric about. `backlog_validate` itself cleaned of its own now-
+meaningless "what did the level switch off" reporting (renamed 1.4.0 -> 1.5.0). `hasConformanceLevel`,
+`ConformanceLevel`, and the four level-management properties kept, not deleted — a done lineage's
+own asserted level is left exactly as recorded, its TBox definition now saying plainly it is
+historical and no longer read by any shape.
+
+**Pass 2 — the repair, done with the same rigor as Pass 1, not rushed to close the gap.** Making
+every constraint unconditional broke 13 previously-clean positive fixtures. Rather than force all
+13 into this same pass, only the load-bearing ones were repaired: 3 of 4 `provenByFixture`-
+dependent fixtures were confirmed to have never actually broken (the proof mechanism only checks
+that a target message appears, not overall pass/fail, so extra unrelated violations don't affect
+it). `fixture_positive_v1_7_0` — the one fixture load-bearing for Gate R's own self-proof triad —
+was rebuilt to genuine, unconditional completeness: a dangling-in-time date fixed (a general
+lesson for any dated fixture), a real logical contradiction caught in the repair's own first
+attempt (asserting `scopeRealizesObjective` and `fillsScope` on the same pair — the framework
+correctly flagged this as recording no order at all), a `DeploymentUnit` built with full structural
+completeness, a `PlanningEvent` added, and `pursuesObjective` added to a cancelled story — reasoned
+through as honest (recording what withdrawn work was meant to advance, not a false success claim).
+Verified clean at every step, not just at the end.
+
+**Two further, genuinely unrelated bugs caught only because this repair forced a re-check nothing
+had needed before.** A case-sensitivity mismatch in `MeasurementDueAfterReviewShape`'s own
+`fixtureCaseName` (`"REVIEW_NoReading"` declared, `Review_NoReading` actual) — the shape's real
+SPARQL logic was proven correct in isolation before concluding this, not assumed broken from a
+grep miss. A fabricated file-path artefact citation, caught by `backlog_criterion_resolve` rather
+than assumed to resolve, corrected to reference a real ontology term matching this package's own
+existing convention.
+
+**Real, disclosed follow-up, not silently absorbed.** 12 fixtures remain with a pass/fail label
+that no longer matches a naming convention built for a leveled world — their actual functional
+purpose (determinism, pipeline, digest-fail testing, and similar) is not broken, only their
+"expect=pass" label. 5 tooling scripts (`backlog_lineage_completeness`, `backlog_lineage_discipline_check`,
+`backlog_remediate_l4`, `backlog_standard_row_check`, `backlog_views`) still reference conformance
+levels for reporting purposes, untouched this pass; `backlog_remediate_l4` may need retiring
+outright given its own name, not editing.
+
+`LINEAGE_OPERATING_DISCIPLINE` bumped v9.0.0 -> v10.0.0, adding `G40`, recording the full
+architecture change, the true scope found before removal began, and the standing rule going
+forward: no new or currently active lineage declares a conformance level.
+
+**A second checker's own assumption found obsolete by running it, not assumed clean.**
+`backlog_lineage_discipline_check` carried its own rule that every `L4`-named shape must be gated
+on `L4_LineageEnforced` — true when the checker was written, false now that gating is gone by
+design. Bumped 1.0.1 -> 1.1.0, the rule retired rather than the shapes re-gated to satisfy it;
+four now-stale "Enforced by ... at L4" claims in the discipline's own prose corrected in the same
+pass to say plainly they are unconditional since this release.
+
+0 SHACL violations on the real, populated register (117 warnings, unchanged). All six shipped
+checkers PASS. `new-shape-proof` re-verified against the true git-published baseline: 0 genuinely
+new shapes, 5 genuinely removed, matching exactly the 5 retired. Gate R self-proof triad (POS/NEG/ADV)
+re-confirmed correct direction. Manifest 111/111.
+
+
 ## v1.151.0 — 2026-09-02 (MINOR: confirmed the tier fix never touched real measurability; a reading is now proposed when a review closes metric-moving work)
 
 **Analysis requested, delivered by direct proof rather than reasoning about it.** Whether

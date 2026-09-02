@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v9.0.0
+# Lineage Operating Discipline — v10.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -78,21 +78,23 @@ means.** Two sessions made this error from opposite ends within a day.
 ### G4 — Completion is not accomplishment
 Completion is a fact about **effort**; accomplishment is a fact about the **world**, and only the
 second requires a measurement. A register of Done items proves the first and says nothing about the
-second. *Enforced by* `L4MeasuredObjectiveShape`: every objective carries a `MetricObservation`,
+second. *Enforced by* `L4MeasuredObjectiveShape` (unconditional since v1.152.0, when
+conformance-level gating was removed entirely): every objective carries a `MetricObservation`,
 whatever the reading said.
 
 ### G5 — Why, when, and what are three questions
 `Epic` answers **why**, `Iteration` answers **when**, `DeploymentUnit` answers **what users
 received**. Conflating them is the commonest drift observed here: an epic in a sprint looks like
 planning and commits nothing anyone can finish; an epic in a release names something that cannot
-ship. *Enforced by* `L4GroomingShape`.
+ship. *Enforced by* `L4GroomingShape` (unconditional since v1.152.0).
 
 ### G6 — Drift is the default, not the exception
 **Corollary from v3.0.0:** drift is *detected* identically whichever order the chain was built in —
 `L4DriftShape` fires on an item pursuing an unrealised objective either way, verified by construction
 on both. What the order changes is **when a human notices**: scope-first surfaces the conflict while
 the objective is being written, scope-last surfaces it only once work exists to be rejected.
-Work migrates outside the declared boundary unless something objects. *Enforced by* `L4DriftShape`:
+Work migrates outside the declared boundary unless something objects. *Enforced by* `L4DriftShape`
+(unconditional since v1.152.0):
 an item pursuing an objective the scope does not realise is a violation. Reversing an exclusion is
 legitimate — record a `ScopeChange`; **the exclusion is superseded, never deleted.**
 
@@ -249,7 +251,7 @@ because a fixture existed that exercised the new member, which is G7 applied to 
   bridge-verified `Evidence`, and has **every** acceptance criterion attested. That last is coverage
   at release time: a suite can be green while the criterion everyone cared about is untested.
   `TestHarness.harnessComplete` already computed this per item long before anything consulted it at
-  release. *Enforced by* `L4DeploymentVerifiedShape`.
+  release. *Enforced by* `L4DeploymentVerifiedShape` (unconditional since v1.152.0).
 
 ---
 
@@ -650,4 +652,48 @@ left open, not declined), with one line added to `07-handover-inbox/HANDOVER_LOG
 reaches for a fuller, more general-purpose structure by default, check what the problem actually
 needs before building it — the same discipline `G30` already names for metrics and shapes, here
 applied to a proposal about this package's own governance tooling.
+
+## G40 — Conformance-level gating is retired for current and new lineages; a done lineage's own history is left alone
+
+A real, scoped bug (`L3_Governed`'s own facet requirements silently never applying to
+`L4_LineageEnforced`, because two shapes checked for an exact level match instead of "at or
+above") was traced to its true cause during a direct cost comparison of L2 versus L3 versus L4.
+Challenged on whether the tiering itself, not just this one asymmetry, was worth its own cost:
+most of this package's own real, valuable corrections were already ungated, firing at every level
+regardless — the tiering machine was protecting a minority of its own shapes while adding a
+surface area a bug like this one could recur on indefinitely.
+
+**The scale was found before anything was removed, not discovered by removing and finding the
+damage.** A search for every place `hasConformanceLevel` participated in shape logic found over
+90 distinct SPARQL blocks, not the ~24 the `L4`-labelled shapes alone suggested — level-gating was
+load-bearing through most of this framework's real constraint set, not a contained subsystem.
+Given that real scale, the removal was executed as an explicit multi-pass plan rather than a
+single sweeping edit, each pass verified before the next began.
+
+**What changed.** Level-gating logic removed from every content-checking shape; five shapes whose
+entire subject was the level mechanism itself — not a shape that happened to be gated, but a
+shape *about* declaring, targeting, downgrading, or reviewing a level — retired outright, each
+with its historical incident comment preserved unedited rather than deleted. `AdoptionProfileShape`
+no longer requires declaring a level; all four facets are now unconditionally required, which also
+resolves the original asymmetry as a side effect. `hasConformanceLevel` and its five companion
+properties are kept, not deleted, and their own TBox definitions now say plainly that they are
+historical and no longer read by any shape — a done lineage's own asserted level is left exactly
+as it was recorded, honestly labelled rather than silently orphaned.
+
+**What the repair pass found, disclosed rather than smoothed over.** Making every constraint
+unconditional broke 13 previously-clean positive fixtures, each built to be minimally complete for
+whatever level it once declared. Of those, only the ones load-bearing for a shape's own proof or
+for Gate R's self-proof triad were repaired this pass — `fixture_positive_v1_7_0` rebuilt to
+genuine, unconditional completeness, verified clean. The remaining fixtures, and a handful of
+tooling scripts that still reference conformance levels for reporting rather than enforcement, are
+real, tracked, disclosed follow-up — not treated as done because the highest-priority pieces were.
+Two further, genuinely unrelated bugs surfaced only because this repair forced a re-check nothing
+had needed before: a case-sensitivity mismatch in a `fixtureCaseName` declaration, and a
+fabricated file-path artefact citation — both real, both fixed, neither caused by the level
+removal itself.
+
+**The standing rule going forward**: no new or currently-active lineage declares a conformance
+level; every constraint this framework ships is unconditional for all of them. A lineage whose own
+register already carries historical `hasConformanceLevel` data from before this change keeps that
+data unedited — retired as a mechanism, not rewritten as history.
 

@@ -362,7 +362,8 @@ ex:Risk_ResetAbuse a risk:Risk ;
 ex:Mit_RateLimit a risk:Mitigation ;
     rdfs:label "Rate-limit reset requests per address and per source"@en .
 
-ex:US003 backlog:hasInvestmentCategory backlog:Cat_NewCapability .
+ex:US003 backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:pursuesObjective ex:Obj_SelfService .
 
 ex:US004 backlog:pursuesObjective ex:Obj_SelfService ;
     backlog:hasInvestmentCategory backlog:Cat_Maintenance ;
@@ -588,7 +589,7 @@ ex:Mission a backlog:Mission ;
 
 ex:Goal_Retention backlog:contributesToMission ex:Mission .
 
-ex:Scope_Launch backlog:scopeRealizesObjective ex:Obj_SelfService .
+ex:Obj_SelfService backlog:fillsScope ex:Scope_Launch .
 
 # an external dependency the development consumes, and one it needs changed
 ex:Ext_MailProvider a backlog:ExternalDependency ;
@@ -749,12 +750,21 @@ ex:Sprint11 a backlog:Iteration ;
     backlog:iterationEnd "2026-07-27T23:59:59"^^xsd:dateTime ;
     backlog:hasCapacity 10.0 .
 
+ex:Rel_Sprint11 a backlog:DeploymentUnit ;
+    backlog:hasIdentifier "REL-11" ;
+    backlog:deploysFrom ex:Sprint11 ;
+    backlog:deploysItem ex:US001 ;
+    backlog:hasSelectionBasis backlog:Sel_Opportunistic ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:hasDeploymentDate "2026-07-27T18:00:00"^^xsd:dateTime .
+ex:US001 backlog:memberOfContainer ex:Rel_Sprint11 .
+
 ex:Sprint12 a backlog:Iteration ;
     backlog:hasIdentifier "IT-12" ;
     backlog:hasTitle "Iteration 12" ;
     backlog:hasState backlog:InProgress ;
-    backlog:iterationStart "2026-07-28T00:00:00"^^xsd:dateTime ;
-    backlog:iterationEnd "2026-08-11T23:59:59"^^xsd:dateTime ;
+    backlog:iterationStart "2099-07-28T00:00:00"^^xsd:dateTime ;
+    backlog:iterationEnd "2099-08-11T23:59:59"^^xsd:dateTime ;
     backlog:hasCapacity 10.0 .
 
 # a forecast is a CLAIM: it carries what would make it wrong
@@ -768,6 +778,36 @@ ex:Fc_Launch a backlog:Forecast ;
     backlog:forecastAssumption "Velocity holds at the single observed iteration's rate; one iteration is a data point, not a rate, so this is the weakest assumption here." ;
     backlog:forecastAssumption "Scope does not grow: no ScopeChange admits further work into the launch package." ;
     backlog:forecastAssumption "The mail-sandbox external dependency clears; its enhancement proposal is Accepted but not yet delivered." .
+
+ex:Plan_US001 a backlog:PlanningEvent ;
+    rdfs:label "US-001 planned into iteration 11"@en ;
+    backlog:plansItem ex:US001 ;
+    backlog:plannedInto ex:Sprint11 ;
+    backlog:plannedAt "2026-07-13T09:00:00"^^xsd:dateTime ;
+    backlog:plannedBy backlog:Builder ;
+    backlog:producesTask ex:T_EmailSignIn .
+
+ex:T_EmailSignIn a backlog:ExecutionTask ;
+    backlog:hasIdentifier "T-EMAILSIGNIN" ;
+    backlog:hasState backlog:Done ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:hasAcceptanceCriterion ex:T_EmailSignIn_AC1 ;
+    backlog:hasEvidence ex:US001_Test , ex:US001_Release ;
+    backlog:lastAuditedAt "2026-07-27T09:00:00"^^xsd:dateTime ;
+    backlog:startedAt "2026-07-13T09:00:00"^^xsd:dateTime ;
+    backlog:finishedAt "2026-07-27T09:00:00"^^xsd:dateTime ;
+    backlog:memberOfContainer ex:Backlog ;
+    backlog:belongsToLineage <http://example.org/fixture-positive#Lin1> .
+
+ex:T_EmailSignIn_AC1 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the email sign-in task is implemented, When the same suite that proves US-001 runs, Then it passes." ;
+    backlog:satisfiedByArtifact "backlog:AcceptanceCriterion" .
+ex:US001_Test backlog:attestsCriterion ex:T_EmailSignIn_AC1 .
+
+ex:Harness_T_EmailSignIn a backlog:TestHarness ;
+    rdfs:label "Harness proving T-EMAILSIGNIN"@en ;
+    backlog:harnessFor ex:T_EmailSignIn ;
+    backlog:hasHarnessEvidence ex:US001_Test , ex:US001_Release .
 
 ex:Plan_US002 a backlog:PlanningEvent ;
     rdfs:label "US-002 planned into iteration 12"@en ;
