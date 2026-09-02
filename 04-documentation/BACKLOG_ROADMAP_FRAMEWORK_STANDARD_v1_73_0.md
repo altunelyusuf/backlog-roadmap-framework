@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.71.0
+# Backlog & Roadmap Semantic Framework — Standard v1.73.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -779,14 +779,55 @@ is still not `Done`; `BatchStartedStateStaleShape` reports real, verified progre
 (`hasBatchCompleted` > 0) sitting under a `hasState` that still reads `Ready` or `Proposed`, as
 though no work had begun.
 
-**Retrospective** remains, correctly, out of this framework's scope — no `RootCause`, `Remedy`, or
-similar vocabulary is added here. What a lineage's own real experience produces instead — forensic,
-drift, and root-cause documents, written when a real problem surfaces — is a genuine and useful
-practice; giving that practice's *output* a first-class, queryable home in the ontology (rather
-than a loose `.md` file) is a real, larger design question, deliberately left open rather than
-answered by adding a class this pass had not test-driven against more than one real case.
+**Retrospective was, at this pass, left correctly out of scope** — no `RootCause`, `Remedy`, or
+similar vocabulary was added, and modeling the output of a lineage's own forensic practice was
+named as a real, larger design question deserving its own test-drive rather than a rushed
+addition. That test-drive happened the same session, on direct challenge: see §2.5c-xxvi.
 
-### 2.5c-xxvi Model artefacts
+### 2.5c-xxvi Sprint ceremonies, test-driven against this package's own real history
+
+**`RegisterSession`'s own boundary is about `RegisterSession`, not about the whole methodology —
+and what is right for a narrowly-scoped provenance class is not automatically right for the rest
+of it.** Challenged directly on exactly this point, this framework test-drove modeling the
+ceremonies themselves: not the meeting's human conduct (attendance, duration, what was discussed
+and not acted on stays out of scope, unchanged), but the ceremony as a dated record of a real
+planning, review, or retrospective decision — the same way `PlanningEvent` already models a
+per-item commitment rather than the conversation that produced it.
+
+`SprintCeremony` is an abstract parent (`adoptionRationale`-exempt, same as `BacklogConcept`) with
+three children. `SprintPlanningCeremony` records that a whole iteration's scope was decided
+together (`ceremonyFor`, `heldAt`, and `includesPlanningEvent` linking the individual
+`PlanningEvent`s that happened within it) — required to include at least one, since a planning
+ceremony that planned nothing recorded a meeting, not a plan. `SprintReviewCeremony` records the
+actual decision a review makes, `closesStory` or `flagsForCarryOver`, distinct from the advisory
+shapes that only propose it — required to make at least one such decision. `SprintRetrospective`
+records that real problems were found and gives that output — previously a loose `.md` file — a
+first-class, queryable `RetrospectiveFinding` (`hasRootCause` required, `hasRemedy` deliberately
+optional: naming a fix before one is genuinely known produces false closure).
+
+**One real design point the test-drive itself surfaced, not smoothed over**: `SprintCeremony`'s
+common `ceremonyFor` (an `Iteration`) is required on Planning and Review, where it fits naturally,
+but deliberately *not* required on `SprintRetrospective`. Populating this package's own register
+with real retrospective findings from its own recent engineering process (a self-referential
+proof-path bug, a missed paired-declaration requirement, a symmetric-divergence design error, a
+changelog-editing mistake — all real, all from this lineage's own history, none imported from
+another lineage's register) showed that a retrospective's real content spans a release's whole
+engineering process, not one time-boxed iteration. The requirement was shaped by that finding, not
+decided in advance of it.
+
+**Retrospectives cannot be made to happen — the ontology cannot make a meeting happen, the same
+limit named throughout this framework — but a review that decided something real can be proposed
+one, the same way `StoryReadyToCloseShape` proposes a closing decision rather than making it.**
+`followsReview` (optional, on `SprintRetrospective`) names the review a retrospective was prompted
+by, when it was one review specifically. `RetrospectiveNotStartedShape` reports a
+`SprintReviewCeremony` that closed or carried over at least one story while no retrospective's
+`followsReview` names it yet — advisory, not required, since not every review's decision needs its
+own dedicated reflection. Verified against this package's own real, un-retrofitted history:
+`Review_It11`, retroactively modeled earlier in this same pass, genuinely never had a retrospective
+follow it, and the shape reports exactly that, honestly, rather than being satisfied by a
+fabricated link added only to silence it.
+
+### 2.5c-xxvii Model artefacts
 
 `ModelArtifact` records **that** a model exists, its kind, and what it describes — never its content. A
 register holding diagrams becomes a modelling tool; the framework governs records about work.

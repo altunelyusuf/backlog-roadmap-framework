@@ -1,5 +1,63 @@
 # Changelog
 
+## v1.147.0 — 2026-09-02 (MAJOR: sprint ceremonies test-driven and adopted — extends RegisterSession's boundary, does not reverse it)
+
+**Adopted on direct challenge**: RegisterSession's own exclusion of planning meetings, reviews and
+retrospectives is scoped to RegisterSession — a narrowly-purposed provenance class — not stated as
+a whole-methodology argument. What is right for that one class is not automatically right for the
+rest of the register. Test-driven before shipping, per this discipline's own G30: designed real
+vocabulary, populated it with real data from this package's own history, and let the results — not
+a decision made in advance — shape the final design.
+
+**Adds `SprintCeremony`** (abstract; `adoptionRationale`, same precedent as `BacklogConcept`) **with
+three children**: `SprintPlanningCeremony` (`ceremonyFor`, `heldAt`, `includesPlanningEvent`, at
+least one required — a ceremony that planned nothing recorded a meeting, not a plan);
+`SprintReviewCeremony` (`closesStory`/`flagsForCarryOver`, at least one required — the actual
+decision a review makes, distinct from the advisory shapes that only propose it);
+`SprintRetrospective` (`producesFinding`, at least one required, `ceremonyFor` deliberately **not**
+required — see below). **Adds `RetrospectiveFinding`** (`hasRootCause` required, `hasRemedy`
+deliberately optional: naming a fix before one is genuinely known produces false closure).
+Deliberately still does not model the meeting itself — attendance, duration, unacted-on discussion
+stay out of scope, the same boundary `RegisterSession` already draws, extended rather than reversed.
+
+**Populated with real data, not synthetic.** `SprintPlanningCeremony`/`SprintReviewCeremony` for
+this package's own real, already-closed `It11` — retroactively documenting that closing
+`S_Tables_B3`/`S_Tables_B4` was a real reviewed decision, not only a mechanical check.
+`SprintRetrospective` with 4 real `RetrospectiveFinding`s from this session's own actual
+engineering mistakes across v1.143.0–v1.146.0 (a self-referential proof-path bug, a missed
+paired-declaration requirement, a symmetric-divergence design error in `PackageRegularityShape`, a
+changelog-editing mistake) — deliberately not imported from any other lineage's register, the same
+boundary already confirmed for another registrant's own data. One fabrication caught and removed before
+verifying: a first draft incorrectly linked a finding to a real `WorkItem` it had nothing to do
+with.
+
+**One real design point the population itself surfaced, not decided in advance**: `ceremonyFor`
+fits `SprintPlanningCeremony`/`SprintReviewCeremony` naturally, but forcing it onto
+`SprintRetrospective` didn't fit the real data — this session's own retrospective content spanned
+a whole release's engineering process, not one time-boxed iteration. Required on the first two,
+left deliberately optional on the third, because the real data showed it should be, not because it
+was assumed either way beforehand.
+
+**"Automatically started," honestly scoped.** The ontology cannot make a meeting happen — stated
+plainly rather than worked around. Adds `followsReview` (optional, `SprintRetrospective` ->
+`SprintReviewCeremony`) and `RetrospectiveNotStartedShape`: a review that closed or carried over at
+least one story and has no retrospective's `followsReview` naming it is *proposed* one, the same
+way `StoryReadyToCloseShape` proposes a closing decision rather than making it. Verified against
+this package's own real, un-retrofitted history: `Review_It11` genuinely never had a retrospective
+follow it, and the shape reports exactly that — no fabricated link was added just to silence it.
+
+**Full verification, findings included, not smoothed over.** `backlog_adoption_check` first
+reported `SprintCeremony` as an orphan (no shape, no declared reason) — real, fixed. `doc_coverage_gate`
+first failed on three undocumented classes — real, fixed with a full new standard section, and the
+now-outdated "retrospective remains out of scope" line from v1.146.0's own section was corrected
+in place rather than left contradicting the new one. Built `fixture_sprint_ceremonies_negative_v1_0_0.ttl`
+proving all 5 new shapes fire correctly, one violation each, on the right node; the existing
+positive fixture extended with matching silent/firing pairs for the new advisory. 0 SHACL
+violations on the real, populated register (117 warnings — 116 unchanged plus one honest new
+advisory). All shipped checkers PASS. `new-shape-proof` re-verified against the true
+git-published baseline (commit `5d8d5c1`): 5 genuinely new shapes, all proven.
+
+
 ## v1.146.0 — 2026-09-02 (MINOR: adopts a another registrant ceremony-coverage handover — automated-run Planning/Review/Retrospective functionality)
 
 **Adopted, from a full ceremony-coverage check** (`CEREMONY_COVERAGE_CHECK_v1_0_0.md`, another registrant v1.71.3,

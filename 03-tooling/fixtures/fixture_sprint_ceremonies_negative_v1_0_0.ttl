@@ -1,0 +1,36 @@
+# fixture_sprint_ceremonies_negative_v1_0_0.ttl — proves the four L1
+# structural shapes over the sprint-ceremony hierarchy added in the
+# ceremony test-drive (SprintPlanningCeremonyShape, SprintReviewCeremonyShape,
+# SprintRetrospectiveShape, RetrospectiveFindingShape). Each violating node
+# is minimal, built to trip exactly one shape.
+
+@prefix backlog: <http://example.org/backlog#> .
+@prefix ex:      <http://example.org/sprint-ceremonies-negative-fixture#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+ex:P a backlog:AdoptionProfile ; backlog:profileAppliesTo "Sprint ceremonies negative fixture" ;
+    backlog:governsBacklog ex:BL ; backlog:hasConformanceLevel backlog:L1_Core ;
+    backlog:decidedBy backlog:Owner ; backlog:hasDecisionRationale "L1: sprint ceremony structural fixture, L1 only." ;
+    backlog:adoptsFacet backlog:CoreFacet ;
+    backlog:hasExpectedPolarity backlog:Polarity_Negative .
+ex:BL a backlog:Backlog ; backlog:hasIdentifier "BL-SPRINTCEREMONIESNEG" ; backlog:hasState backlog:InProgress .
+
+# PLAN_NoEvent — a planning ceremony with an iteration and a date but no
+# included planning event.
+ex:PLAN_NoEvent a backlog:SprintPlanningCeremony ;
+    backlog:ceremonyFor ex:It_X ; backlog:heldAt "2026-09-01T00:00:00Z"^^xsd:dateTime .
+
+# REVIEW_NoDecision — a review ceremony that neither closes nor flags
+# anything.
+ex:REVIEW_NoDecision a backlog:SprintReviewCeremony ;
+    backlog:ceremonyFor ex:It_X ; backlog:heldAt "2026-09-01T00:00:00Z"^^xsd:dateTime .
+
+# RETRO_NoFinding — a retrospective that produced nothing.
+ex:RETRO_NoFinding a backlog:SprintRetrospective ;
+    backlog:heldAt "2026-09-01T00:00:00Z"^^xsd:dateTime .
+
+# FIND_NoRootCause — a finding stating no root cause.
+ex:RETRO_WithBadFinding a backlog:SprintRetrospective ;
+    backlog:heldAt "2026-09-01T00:00:00Z"^^xsd:dateTime ;
+    backlog:producesFinding ex:FIND_NoRootCause .
+ex:FIND_NoRootCause a backlog:RetrospectiveFinding .

@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.64.0> ;
-    owl:versionInfo "1.64.0" ;
+    owl:versionIRI <http://example.org/backlog/1.65.0> ;
+    owl:versionInfo "1.65.0" ;
+    owl:priorVersion <http://example.org/backlog/1.64.0> ;
     owl:priorVersion <http://example.org/backlog/1.63.0> ;
     owl:priorVersion <http://example.org/backlog/1.62.0> ;
     owl:priorVersion <http://example.org/backlog/1.61.0> ;
@@ -91,7 +92,7 @@
                 <http://example.org/oepack-release-history> ;
     dcterms:identifier "backlog" ;
     dcterms:created "2026-07-27T00:00:00"^^xsd:dateTime ;
-    dcterms:modified "2026-09-02T00:00:00"^^xsd:dateTime ;
+    dcterms:modified "2026-09-02T12:00:00"^^xsd:dateTime ;
     dcterms:creator "Yusuf Altunel" ;
     dcterms:publisher "İstanbul Kültür Üniversitesi, Department of Computer Engineering" ;
     dcterms:rightsHolder "İstanbul Kültür Üniversitesi, Department of Computer Engineering" ;
@@ -100,7 +101,8 @@
     prov:wasAttributedTo "Yusuf Altunel" ;
     skos:definition "A domain-neutral, reusable schema for backlog-and-roadmap governance across independent developments. It standardises five concept groups that recur in every product/engineering effort: (1) work items and their containers, (2) a closed lifecycle whose Done state is a constrained fact rather than asserted prose, (3) completion Evidence anchored to real delivered artifacts (a named passing test, a release carrying its package SHA-256, a file hash, or a recorded review), (4) method-parameterised prioritisation scores, and (5) a roadmap modelled as a derived projection over the backlog rather than an independently maintained list. Adoption is declared by an AdoptionProfile carrying a ConformanceLevel (L1 Core / L2 Evidence-Bound / L3 Governed), which the paired SHACL suite reads to decide which constraints are enforced, so one framework serves developments at different governance maturity without forking the vocabulary. This TBox defines vocabulary only; the paired SHACL shapes supply enforcement, the SPARQL rules supply derivation (container status, next-item selection, milestone status), and an execution bridge asserts observed real-world verification facts back into the ABox."@en ;
     dcterms:source "Scrum Guide 2020 (Product Backlog, Increment, Definition of Done); SAFe 6.0 (Epic/Feature/Story ladder, WSJF); Now-Next-Later roadmap practice; Intercom RICE prioritisation; W3C OWL 2, SHACL, SHACL-AF."@en ;
-    rdfs:comment "v1.64.0 (MINOR, additive) — adopts another registrant's ceremony-coverage handover: a direct check of Sprint Planning/Review/Retrospective functionality found real, checked gaps in what this framework tracks automatically, distinct from human-ceremony modeling (which RegisterSession already, deliberately excludes). Adds hasSprintGoal (optional string on Iteration, deliberately unstructured for the same reason hasScoreRationale is, and deliberately optional: an Iteration without one is not itself a defect). No class added or removed; +7 triples. Separately confirmed NOT a gap: a distinct DefinitionOfDone for classification-type work, since DefinitionOfDone/DoDCriterion are already open, freely-extensible classes any lineage can add to without any TBox change."@en ,
+    rdfs:comment "v1.65.0 (MAJOR, extends a documented boundary rather than reversing it) — challenged directly: RegisterSession's own exclusion of planning meetings, reviews and retrospectives is scoped to RegisterSession, not asserted as a whole-methodology argument, and what is right for a narrowly-scoped provenance class is not automatically right for the rest of it. Test-driven, not asserted: adds SprintCeremony (abstract, adoptionRationale same reason as BacklogConcept) with three children (SprintPlanningCeremony, SprintReviewCeremony, SprintRetrospective) and RetrospectiveFinding, modeling the ceremony as a dated record of a real decision or finding -- never the meeting's human conduct, the same boundary RegisterSession already draws, extended rather than reversed. Populated with real data: SprintPlanningCeremony/SprintReviewCeremony for this package's own real, already-closed Iteration It11; a SprintRetrospective with real findings from this session's own engineering mistakes (a self-referential proof-path bug, a missed paired-declaration requirement, a symmetric-divergence design error, a changelog-editing mistake), none imported from another lineage's register. One real design point the population itself surfaced: ceremonyFor (an Iteration) fits Planning and Review but not Retrospective, whose real content spanned a release's whole process rather than one sprint -- required on the first two, deliberately optional on the third, shaped by the finding rather than decided ahead of it. Adds followsReview (optional, SprintRetrospective -> SprintReviewCeremony) and RetrospectiveNotStartedShape: a review that decided something real and has no retrospective following it is proposed one, the same way StoryReadyToCloseShape proposes a closing decision -- the ontology cannot make a meeting happen, so this proposes, it does not create."@en ,
+    "v1.64.0 (MINOR, additive) — adopts another registrant's ceremony-coverage handover: a direct check of Sprint Planning/Review/Retrospective functionality found real, checked gaps in what this framework tracks automatically, distinct from human-ceremony modeling (which RegisterSession already, deliberately excludes). Adds hasSprintGoal (optional string on Iteration, deliberately unstructured for the same reason hasScoreRationale is, and deliberately optional: an Iteration without one is not itself a defect). No class added or removed; +7 triples. Separately confirmed NOT a gap: a distinct DefinitionOfDone for classification-type work, since DefinitionOfDone/DoDCriterion are already open, freely-extensible classes any lineage can add to without any TBox change."@en ,
     "v1.63.0 (MINOR, additive) — adopts Proposal_BRSF_ProductScopeKind_v1_0_0.md from code-abundance-rdodi-v1.6.1: this session's own ScopeLayer, applied at Layer_Product's boundary between what capability is delivered and how well/safely/transparently it works, had no vocabulary for that distinction, verified by searching the whole TBox for 'functional', 'non-functional', 'FURPS', 'ISO 25010' and finding only the OWL reserved term. Adds ProductScopeKind (Kind_Functional, Kind_NonFunctional; dcterms:source ISO/IEC 25010), hasProductScopeKind (domain ScopeDeliverable, narrower than hasScopeLayer's three-class domain, deliberately: only a Deliverable makes a capability-or-quality claim), and ProductScopeKindShape (advisory, mirroring BothLayersShape's own pattern). Test-driven against this package's own register per the proposal's own verification method and this discipline's G30, not added as schema alone: Del_OntGovernance (a capability claim) classified Kind_Functional, Del_OntRuleExec (a reliability guarantee about how that capability behaves) classified Kind_NonFunctional — a real mixed result on unforced data. The proposing session's own three deliverables (cross-checked directly against its repository, not summarized) give a second, independent mixed case: two non-functional, one functional."@en ,
     "v1.62.0 (PATCH, provenance only) — closes two findings from an external oe-pack governance handover (2026-08-25), both about TaskType and DesignConcern members shipping no dcterms:source and no isFrameworkOriginal declaration, silently indistinguishable from terms nobody sourced (Ex_InventedPractice / PracticeGroundingShape). Task_DesignDefinition, Task_SystemAnalysis, Task_Implementation, Task_Integration and Task_Verification now carry dcterms:source citing their specific ISO/IEC/IEEE 12207:2017 sub-clause (6.4.5-6.4.9), each flagged as clause-number-confirmed via secondary sources only, pending final confirmation against the primary paywalled text. Concern_Data, Concern_Interface, Concern_Interaction, Concern_Architecture and Concern_Security now carry isFrameworkOriginal: the parent DesignConcern class already cites Satzinger et al. ch.6 for the five-way split, but no single converging source was found for each concern's specific per-story analysis framing, independently re-checked this release against a fresh search of the source's own chapter structure. No class, property or individual added or removed; +10 triples total, 0 SHACL violations before or after, PracticeGroundingShape advisory count dropped by exactly 10."@en ,
     "v1.0.0 — generalisation of an adopting project's product-backlog deposit (an OE Pack registrant deposit, http://example.org/product-backlog 1.3.0) into a project-independent subject. Per L-105 this is an extension of that implementation, not a parallel one: every pb: term has a declared alignment in backlog_alignment_productbacklog_v1_0_0.ttl. Per L-68 the hyphenated/abbreviated form (product-backlog / pb:) is replaced by a single full-word prefix (backlog:); per L-69 the retained terminology anchors to the Scrum Guide and SAFe rather than to project-internal names. The deposit files themselves are NOT modified by this release (L-X7 / B1: the owning session decides supersession)."@en ,
@@ -2831,6 +2833,106 @@ backlog:hasSprintGoal a owl:DatatypeProperty , owl:FunctionalProperty ;
     rdfs:label "has sprint goal"@en ;
     skos:definition "A whole-iteration statement of what a person could do differently once this time box ships — not a restatement of the items in it, and not required to be structured, since forcing a template here risks theater rather than a real answer, the same lesson hasScoreRationale already encodes for WSJF. Optional: an Iteration without one is not itself a defect, but a register with no sprint ever stating why its items were grouped together cannot distinguish a coherent increment from a bin of whatever fit."@en .
 
+#################################################################
+#  Sprint ceremonies — test-driven addition (v1.65.0). Not a
+#  reversal of RegisterSession's own scope: RegisterSession stays
+#  narrowly about edit provenance. This models the ceremony as a
+#  dated record of a real decision or finding, the same way
+#  PlanningEvent already models a real per-item commitment — never
+#  the meeting's human conduct (who spoke, how long, what was
+#  discussed and not acted on).
+#################################################################
+
+backlog:SprintCeremony a owl:Class ;
+    rdfs:subClassOf core:Artifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Sprint Ceremony"@en ;
+    skos:definition "A dated record that a real planning, review or retrospective decision was made for one iteration, and what it was. Models the decision and its record, not the meeting: attendance, duration and unacted-on discussion are deliberately out of scope, the same boundary RegisterSession already draws for register edits, extended here rather than reversed."@en .
+
+backlog:ceremonyFor a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:SprintCeremony ; rdfs:range backlog:Iteration ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "ceremony for"@en ;
+    skos:definition "The iteration this ceremony's decision or finding concerns. Functional: one ceremony record concerns one iteration, so a review's closing decisions are unambiguously that iteration's."@en .
+
+backlog:heldAt a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:SprintCeremony ; rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "held at"@en ;
+    skos:definition "When the ceremony's recorded decision was made, for the same reason plannedAt exists on PlanningEvent: a decision with no date is a decision nobody can say came before or after the state it changed."@en .
+
+backlog:SprintPlanningCeremony a owl:Class ;
+    rdfs:subClassOf backlog:SprintCeremony ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Sprint Planning Ceremony"@en ;
+    skos:definition "The session in which an iteration's own goal was set and its items were committed. Distinct from PlanningEvent, which records one item's own conversion into tasks: a planning ceremony is the encompassing record that a whole iteration's scope was decided together, not item by item in isolation."@en .
+
+backlog:includesPlanningEvent a owl:ObjectProperty ;
+    rdfs:domain backlog:SprintPlanningCeremony ; rdfs:range backlog:PlanningEvent ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "includes planning event"@en ;
+    skos:definition "A per-item PlanningEvent that happened as part of this planning ceremony, so a whole sprint's commitments are traceable to the session that made them, not only to each item's own isolated record."@en .
+
+backlog:SprintReviewCeremony a owl:Class ;
+    rdfs:subClassOf backlog:SprintCeremony ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Sprint Review Ceremony"@en ;
+    skos:definition "The session in which a finished iteration's stories were checked against their tasks and either closed or carried forward. The DoD/dependency shapes already refuse an incorrect Done claim and the advisory shapes already propose the two decisions this ceremony makes; this class records that the decision was actually taken, by whom the register can say, and when — the difference between a proposal and a resolution."@en .
+
+backlog:closesStory a owl:ObjectProperty ;
+    rdfs:domain backlog:SprintReviewCeremony ; rdfs:range backlog:Story ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "closes story"@en ;
+    skos:definition "A story this review ceremony decided was genuinely finished. The decision, not the state change itself: hasState still carries Done, this records that a review, not only a mechanical check, made the call."@en .
+
+backlog:flagsForCarryOver a owl:ObjectProperty ;
+    rdfs:domain backlog:SprintReviewCeremony ; rdfs:range backlog:Story ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "flags for carry over"@en ;
+    skos:definition "A story this review ceremony found unfinished at the iteration's end and marked for a decision — carried into a new iteration via an ordinary PlanningEvent, or reconsidered. Records that the spillover was a real, seen choice, not a silently missed deadline."@en .
+
+backlog:SprintRetrospective a owl:Class ;
+    rdfs:subClassOf backlog:SprintCeremony ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Sprint Retrospective"@en ;
+    skos:definition "The session that produced one or more RetrospectiveFindings for an iteration — real problems found, their root cause, and what changes as a result. Deliberately not required, deliberately not scheduled by the ontology (the ontology cannot make a meeting happen): exists so that when this reflection does occur, real and already common in adopting lineages as informal forensic documents, its output is a first-class, queryable fact rather than a loose file."@en .
+
+backlog:producesFinding a owl:ObjectProperty ;
+    rdfs:domain backlog:SprintRetrospective ; rdfs:range backlog:RetrospectiveFinding ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "produces finding"@en ;
+    skos:definition "A RetrospectiveFinding this retrospective produced. A retrospective that produces none recorded that a meeting happened, not that anything was found — indistinguishable from not having happened at all for any purpose but attendance."@en .
+
+backlog:RetrospectiveFinding a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Retrospective Finding"@en ;
+    skos:definition "One real problem or pattern a retrospective found, its root cause, and what should change as a result — the queryable form of what an adopting lineage's own forensic and drift-analysis documents already contain in prose. Not required to name a fix: a finding whose remedy is still open is more honest than one closed prematurely to fill the field."@en .
+
+backlog:hasRootCause a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:RetrospectiveFinding ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has root cause"@en ;
+    skos:definition "What actually produced the problem, stated as a pattern that could recur, not only as what happened this one time. A finding whose root cause restates the symptom has not yet found the cause."@en .
+
+backlog:hasRemedy a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:RetrospectiveFinding ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has remedy"@en ;
+    skos:definition "What changes going forward as a result of this finding — a new check, a new habit, a new standing rule. Optional, deliberately: naming a remedy before one is genuinely known produces a false sense of closure."@en .
+
+backlog:relatesToWorkItem a owl:ObjectProperty ;
+    rdfs:domain backlog:RetrospectiveFinding ; rdfs:range backlog:WorkItem ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "relates to work item"@en ;
+    skos:definition "The WorkItem this finding was found against, when the finding is item-specific rather than a pattern across the whole register. Optional: a systemic finding may name no single item."@en .
+
+backlog:followsReview a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:SprintRetrospective ; rdfs:range backlog:SprintReviewCeremony ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "follows review"@en ;
+    skos:definition "The review ceremony this retrospective was prompted by, when it followed one review specifically. Distinct from, and does not replace, ceremonyFor: a retrospective spanning more than one iteration's own work may follow no single review and name none here, but a retrospective started because of a particular review's own decisions should say which one."@en .
+
 backlog:plannedBy a owl:ObjectProperty ;
     rdfs:domain backlog:PlanningEvent ; rdfs:range backlog:Role ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
@@ -5357,6 +5459,7 @@ backlog:adoptionRationale a owl:DatatypeProperty ;
 #################################################################
 
 backlog:BacklogConcept backlog:adoptionRationale "An abstract parent. Its children carry the obligations; requiring the parent directly would double every check." .
+backlog:SprintCeremony backlog:adoptionRationale "An abstract parent, same reason as BacklogConcept: SprintPlanningCeremony, SprintReviewCeremony and SprintRetrospective each carry their own shape and obligation; requiring the parent directly would double every check without adding one." .
 backlog:CapabilityClass backlog:adoptionRationale "Adopter-facing vocabulary for describing what a register governs. Optional by design: a register that governs one thing needs no capability taxonomy." .
 backlog:ComplianceObligation backlog:adoptionRationale "For adopters under external regulation. This register has none, and requiring one would make an unregulated adopter invent a compliance record to pass." .
 backlog:Defect backlog:adoptionRationale "Adopter-facing. A register tracking defects uses it; one tracking only forward work does not, and the framework should not force a defect log on a greenfield backlog." .

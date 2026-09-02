@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.10.0> ;
-    owl:versionInfo "9.10.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.11.0> ;
+    owl:versionInfo "9.11.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.10.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.9.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.8.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.7.0> ;
@@ -4413,3 +4414,53 @@ fw:Ev_Candidate2Closed a backlog:TestEvidence ;
     backlog:hasVerificationMethod "Read another registrant's actual code comment directly rather than a prior summary of it: the canonicalization excludes producedByStage specifically. Checked both oe-pack and oe-method for a shared digest standard -- absent from each; every registrant implements its own. Reread BRSF's own state_digest fresh: hashes subject-set membership by rdf:type, never a property value, making it immune to property-timing sensitivity in general rather than one named property. Confirmed another registrant ships no digest-computing script at all -- its convention is manually followed, not automated and re-verified the way BRSF's is." ;
     backlog:verifiedByTool "manual comparison against both repositories' actual files" ;
     backlog:attestsCriterion fw:AC_EP_ScriptDecisions_S1 .
+
+#################################################################
+#  Sprint ceremony test-drive (v1.146->v1.147 session), against
+#  this package's own real register data, per the owner's own
+#  direct challenge that RegisterSession's exclusion may not suit
+#  the whole methodology. Real, retroactive: It11 genuinely closed
+#  with S_Tables_B3/B4 both Done; the planning ceremony genuinely
+#  included both of It11's real PlanningEvents.
+#################################################################
+
+fw:Plan_It11 a backlog:SprintPlanningCeremony ;
+    backlog:ceremonyFor fw:It11 ;
+    backlog:heldAt "2026-08-27T07:00:00Z"^^xsd:dateTime ;
+    backlog:includesPlanningEvent fw:Plan_S_Tables_B3 , fw:Plan_S_Tables_B4 .
+
+fw:Review_It11 a backlog:SprintReviewCeremony ;
+    backlog:ceremonyFor fw:It11 ;
+    backlog:heldAt "2026-08-27T07:30:00Z"^^xsd:dateTime ;
+    backlog:closesStory fw:S_Tables_B3 , fw:S_Tables_B4 .
+
+#  Retrospective test case: real findings from this session's own
+#  engineering process across v1.143.0-v1.146.0, not imported from
+#  any other lineage's register -- BRSF holds its own findings about
+#  its own tooling, the same boundary already confirmed for another registrant's
+#  lineage data. Not tied to one Iteration: each finding spans a
+#  whole release's engineering process, not one time-boxed sprint --
+#  noted as a real, honest friction point in the ceremonyFor design,
+#  not smoothed over by forcing a false Iteration link.
+
+fw:Retro_ToolingProcess a backlog:SprintRetrospective ;
+    backlog:heldAt "2026-09-02T00:00:00Z"^^xsd:dateTime ;
+    backlog:producesFinding fw:Find_SelfReferentialProofPath , fw:Find_MissingFixtureCaseName ,
+        fw:Find_SymmetricDivergenceRule , fw:Find_ChangelogHeaderLoss .
+
+fw:Find_SelfReferentialProofPath a backlog:RetrospectiveFinding ;
+    backlog:hasRootCause "backlog_new_shape_proof's published-baseline path resolves relative to its own package directory; in a working-copy layout that copies the governed package directly rather than a genuine sibling checkout, the path resolved back to the same working file, so the checker compared the shapes file against itself and reported a false PASS." ;
+    backlog:hasRemedy "Never trust a self-comparison checker's PASS without independently re-deriving the true baseline from the actual git-published commit, every release, not only when a result looks surprising." .
+
+fw:Find_MissingFixtureCaseName a backlog:RetrospectiveFinding ;
+    backlog:hasRootCause "provenByFixture alone was assumed sufficient to satisfy backlog_clause_proof's own proof requirement; a second, paired property (fixtureCaseName, checked against the fixture's actual focus-node output) was missed until the checker itself reported the declaration FAILED." ;
+    backlog:hasRemedy "Before declaring a new shape's proof, read the checker's own verification source rather than infer its requirement from one example." .
+
+fw:Find_SymmetricDivergenceRule a backlog:RetrospectiveFinding ;
+    backlog:hasRootCause "PackageRegularityShape's first design compared a package against any single sibling; a symmetric 2x-divergence test flags both directions of a real outlier pair, so a genuine baseline sitting next to one real outlier was flagged as often as the outlier itself. Only surfaced when an external lineage's real, small (four-package) dataset produced the inverted case." ;
+    backlog:hasRemedy "Majority-of-siblings divergence, not any-single-sibling divergence, for any future regularity check comparing one item against a small population." .
+
+fw:Find_ChangelogHeaderLoss a backlog:RetrospectiveFinding ;
+    backlog:hasRootCause "A str_replace prepending a new changelog entry consumed the following version's own header line because the replacement text did not re-include it, silently orphaning that entry's body under the wrong heading until the next read caught the gap in the header sequence." ;
+    backlog:hasRemedy "After any edit that prepends content above existing text, re-read the header sequence immediately rather than trusting the edit tool's success response alone." .
+

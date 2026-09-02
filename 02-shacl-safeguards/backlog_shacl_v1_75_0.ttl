@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.74.0> ;
-    owl:versionInfo "1.74.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.75.0> ;
+    owl:versionInfo "1.75.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.74.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.73.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.72.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.71.0> ;
@@ -4645,6 +4646,73 @@ backlog:ClassReachabilityShape a sh:NodeShape ;
 #  because the ruling was right about what SHOULD be obliged and
 #  wrong only about what already was.
 #################################################################
+
+backlog:SprintPlanningCeremonyShape a sh:NodeShape ;
+    sh:targetClass backlog:SprintPlanningCeremony ;
+    sh:severity sh:Violation ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_sprint_ceremonies_negative_v1_0_0.ttl" ;
+    backlog:fixtureCaseName "PLAN_NoEvent" ;
+    rdfs:label "L1: a planning ceremony names its iteration, when it happened, and what it planned"@en ;
+    sh:property [ sh:path backlog:ceremonyFor ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "L1: a sprint planning ceremony must name exactly one iteration. A planning record naming no iteration cannot say which sprint's scope it decided." ] ;
+    sh:property [ sh:path backlog:heldAt ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "L1: a sprint planning ceremony must record when it happened." ] ;
+    sh:property [ sh:path backlog:includesPlanningEvent ; sh:minCount 1 ;
+        sh:message "L1: a sprint planning ceremony must include at least one planning event. A ceremony that planned nothing recorded a meeting, not a plan." ] .
+
+backlog:SprintReviewCeremonyShape a sh:NodeShape ;
+    sh:targetClass backlog:SprintReviewCeremony ;
+    sh:severity sh:Violation ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_sprint_ceremonies_negative_v1_0_0.ttl" ;
+    backlog:fixtureCaseName "REVIEW_NoDecision" ;
+    rdfs:label "L1: a review ceremony names its iteration, when it happened, and made a decision"@en ;
+    sh:property [ sh:path backlog:ceremonyFor ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "L1: a sprint review ceremony must name exactly one iteration." ] ;
+    sh:property [ sh:path backlog:heldAt ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "L1: a sprint review ceremony must record when it happened." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: a sprint review ceremony must close at least one story or flag at least one for carry-over. A review that decided nothing is not distinguishable from a review that did not happen." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this a backlog:SprintReviewCeremony .
+            FILTER NOT EXISTS { $this backlog:closesStory ?s }
+            FILTER NOT EXISTS { $this backlog:flagsForCarryOver ?f }
+        }""" ] .
+
+backlog:RetrospectiveNotStartedShape a sh:NodeShape ;
+    sh:targetClass backlog:SprintReviewCeremony ;
+    sh:severity sh:Warning ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_sprint_ceremonies_v1_0_0.ttl" ;
+    backlog:fixtureCaseName "REVIEW_NoRetro" ;
+    rdfs:label "Advisory: this review made a real decision but no retrospective has started following it"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: this review ceremony closed or carried over at least one story, but no SprintRetrospective's followsReview names it yet. The ontology cannot make a meeting happen — this proposes the retrospective the same way StoryReadyToCloseShape proposes closing a story, it does not create one." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT DISTINCT $this WHERE {
+            $this a backlog:SprintReviewCeremony .
+            { $this backlog:closesStory ?s } UNION { $this backlog:flagsForCarryOver ?s }
+            FILTER NOT EXISTS { ?r backlog:followsReview $this }
+        }""" ] .
+
+backlog:SprintRetrospectiveShape a sh:NodeShape ;
+    sh:targetClass backlog:SprintRetrospective ;
+    sh:severity sh:Violation ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_sprint_ceremonies_negative_v1_0_0.ttl" ;
+    backlog:fixtureCaseName "RETRO_NoFinding" ;
+    rdfs:label "L1: a retrospective records when it happened and produced at least one finding"@en ;
+    sh:property [ sh:path backlog:heldAt ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "L1: a sprint retrospective must record when it happened." ] ;
+    sh:property [ sh:path backlog:producesFinding ; sh:minCount 1 ;
+        sh:message "L1: a sprint retrospective must produce at least one finding, per the class's own definition — a retrospective producing none is indistinguishable from one that did not happen. Deliberately does not require ceremonyFor: a real retrospective's own findings, test-driven against this package's own recent process, span a release's whole engineering process rather than one time-boxed iteration." ] .
+
+backlog:RetrospectiveFindingShape a sh:NodeShape ;
+    sh:targetClass backlog:RetrospectiveFinding ;
+    sh:severity sh:Violation ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_sprint_ceremonies_negative_v1_0_0.ttl" ;
+    backlog:fixtureCaseName "FIND_NoRootCause" ;
+    rdfs:label "L1: a retrospective finding names its root cause"@en ;
+    sh:property [ sh:path backlog:hasRootCause ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "L1: a retrospective finding must state its root cause. hasRemedy stays optional — naming a fix before one is genuinely known is worse than leaving it open — but a finding with no stated cause at all is not yet a finding." ] .
 
 backlog:PackageContentShape a sh:NodeShape ;
     sh:targetClass backlog:Package ;
