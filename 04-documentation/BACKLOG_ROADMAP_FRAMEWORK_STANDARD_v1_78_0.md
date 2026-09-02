@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.77.0
+# Backlog & Roadmap Semantic Framework — Standard v1.78.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -936,7 +936,32 @@ declared. The ones load-bearing for a shape's own proof or Gate R's self-proof t
 this pass; the rest remain real, tracked work for a future one, alongside a handful of tooling
 scripts that still reference conformance levels for reporting rather than enforcement.
 
-### 2.5c-xxxi Model artefacts
+### 2.5c-xxxii A closed lineage is exempt from further advisory processing; an active one is not
+
+**Asked to differentiate lineage-specific gaps from methodology gaps, and to build the methodology
+to enforce full conformance — nothing less — while disclosing closed lineages as exempt from
+further processing.** Investigated rather than assumed: of the register's own advisory warnings,
+only three shapes' worth actually concerned a mission whose entire lineage had already been marked
+`lineageArchived true` — `SessionDraftedMissionAdvisoryShape`, `MissionReachShape`, and
+`UnfinishedLineageShape`, together 13 warnings across the five long-superseded missions
+(`Mission_Dev`, `Mission_Executable`, `Mission_Ops`, `Mission_OrderRepair`, `Mission_BuildSoftware`)
+and the current one mid-retirement (`Mission_BuildSoftware_v2`, whose own `Out_Achieved` outcome and
+`retiredAtCommit` are already consistent with its lineage's own already-`true` archived flag).
+Every other remaining warning was checked and confirmed to belong to `L_OntologyDriven`, this
+package's own still-active lineage — genuinely open, not eligible for exemption under the same
+criterion, and left fully, strictly enforced rather than quietly softened alongside the ones that
+were.
+
+**No new mechanism was invented.** `Lineage`, `belongsToLineage`, and `lineageArchived` already
+existed and already carried the disclosure the request asked for — six of seven lineages were
+already marked archived, the framework's own comment already noting they "sat validated on every
+run" without being respected by any shape. The fix was making the shapes that fire on a `Mission`
+check the flag that was already there, not building a new one: `FILTER NOT EXISTS { $this
+backlog:belongsToLineage ?lin . ?lin backlog:lineageArchived true }`, added identically to all
+three. A closed lineage's own disclosure remains exactly its `lineageArchived true` assertion and
+`archiveFile` pointer — visible, queryable, and not duplicated into a second notice.
+
+### 2.5c-xxxiii Model artefacts
 
 `ModelArtifact` records **that** a model exists, its kind, and what it describes — never its content. A
 register holding diagrams becomes a modelling tool; the framework governs records about work.

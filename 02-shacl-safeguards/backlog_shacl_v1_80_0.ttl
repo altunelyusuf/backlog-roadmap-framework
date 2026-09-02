@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.79.0> ;
-    owl:versionInfo "1.79.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.80.0> ;
+    owl:versionInfo "1.80.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.79.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.78.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.77.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.76.0> ;
@@ -3007,6 +3008,7 @@ backlog:SessionDraftedMissionAdvisoryShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             $this backlog:hasMissionOrigin backlog:Origin_SessionDrafted .
+            FILTER NOT EXISTS { $this backlog:belongsToLineage ?lin . ?lin backlog:lineageArchived true }
         }""" ] .
 
 backlog:MissionReachShape a sh:NodeShape ;
@@ -3018,6 +3020,7 @@ backlog:MissionReachShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             FILTER NOT EXISTS { ?g backlog:contributesToMission $this }
+            FILTER NOT EXISTS { $this backlog:belongsToLineage ?lin . ?lin backlog:lineageArchived true }
         }""" ] .
 
 #################################################################
@@ -3733,6 +3736,7 @@ backlog:UnfinishedLineageShape a sh:NodeShape ;
         sh:select """SELECT $this WHERE {
             FILTER NOT EXISTS { ?g backlog:contributesToMission $this }
             FILTER NOT EXISTS { ?s backlog:supersedesMission $this }
+            FILTER NOT EXISTS { $this backlog:belongsToLineage ?lin . ?lin backlog:lineageArchived true }
         }""" ] .
 
 #################################################################

@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v10.0.0
+# Lineage Operating Discipline — v11.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -696,4 +696,25 @@ removal itself.
 level; every constraint this framework ships is unconditional for all of them. A lineage whose own
 register already carries historical `hasConformanceLevel` data from before this change keeps that
 data unedited — retired as a mechanism, not rewritten as history.
+
+## G41 — A closed lineage is exempt from further advisory processing; an active one earns full conformance, nothing less
+
+Asked to separate lineage-specific gaps from methodology gaps: the great majority of this
+package's own real advisory warnings are lineage-specific, not methodology defects — real facts
+about real backlog items in `L_OntologyDriven`, this package's own still-active lineage, that stay
+fully enforced. Only three shapes concerned a `Mission` whose entire lineage was already marked
+`lineageArchived true`: `SessionDraftedMissionAdvisoryShape`, `MissionReachShape`, and
+`UnfinishedLineageShape`. Fixed by making each check the flag `Lineage` already carried, not by
+building a new mechanism — `Lineage`, `belongsToLineage`, and `lineageArchived` already existed,
+six of seven lineages were already marked archived, and the framework's own comment already named
+the gap: they "sat validated on every run" without any shape respecting the flag.
+
+**The standing rule**: a mission-level advisory checks whether its own `belongsToLineage` points at
+a `Lineage` with `lineageArchived true`, and stays silent if so — the same disclosure the lineage
+already carries, not a second, duplicated notice. This exemption is scoped to advisories that
+concern the *quality of how a mission was built*, not to structural or data-integrity requirements,
+which continue to apply to every individual regardless of lineage status. An active lineage's own
+gaps are never exempted this way, however old the individual item inside it — `Ev_It7` and
+`EP_CodeTables` belong to `L_OntologyDriven`, not an archived lineage, and their own warnings stay
+exactly as strict as everything else the still-open lineage is held to.
 

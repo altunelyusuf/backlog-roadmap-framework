@@ -1,5 +1,37 @@
 # Changelog
 
+## v1.154.0 — 2026-09-02 (MINOR: closed lineages exempted from advisory processing, using an existing mechanism; the still-active lineage kept fully enforced)
+
+**Asked to differentiate lineage-specific gaps from methodology gaps, build the methodology to
+enforce full conformance nothing less, and disclose closed lineages as exempt from further
+processing.** Investigated rather than assumed: of the 98 real warnings on this package's own
+register, only three shapes — `SessionDraftedMissionAdvisoryShape`, `MissionReachShape`,
+`UnfinishedLineageShape` — fire on a `Mission` whose entire lineage is already marked
+`lineageArchived true`. 13 warnings total, across five long-superseded missions (`Mission_Dev`,
+`Mission_Executable`, `Mission_Ops`, `Mission_OrderRepair`, `Mission_BuildSoftware`) and one
+currently mid-retirement (`Mission_BuildSoftware_v2`, whose `Out_Achieved` outcome and
+`retiredAtCommit` are already consistent with its own lineage's already-`true` archived flag).
+Every other remaining warning was checked individually and confirmed to belong to
+`L_OntologyDriven`, this package's own still-active lineage — genuinely open, ineligible for
+exemption under the same criterion, and left exactly as strictly enforced as before.
+
+**No new mechanism was built.** `Lineage`, `belongsToLineage`, and `lineageArchived` already
+existed; six of seven lineages were already marked archived; the framework's own comment already
+named the gap — they "sat validated on every run" with no shape respecting the flag. Fixed by
+adding one identical filter to all three shapes: `FILTER NOT EXISTS { $this backlog:belongsToLineage
+?lin . ?lin backlog:lineageArchived true }`. A closed lineage's disclosure remains exactly its
+existing `lineageArchived true` assertion and `archiveFile` pointer — visible and queryable, not
+duplicated into a second notice.
+
+98 warnings -> 85. `LINEAGE_OPERATING_DISCIPLINE` bumped v10.0.0 -> v11.0.0, adding `G41`: the
+exemption is scoped to advisories about how a mission was built, never to structural or
+data-integrity requirements, and never extends to an active lineage's own items regardless of how
+old they are within it.
+
+0 SHACL violations on the real register (85 warnings). All six shipped checkers PASS.
+Lineage-discipline check PASS.
+
+
 ## v1.153.0 — 2026-09-02 (MINOR: 19 of 117 real advisories genuinely, autonomously resolved; the rest left for discussion, not fabricated away)
 
 **Asked how the register's own 117 real warnings should be treated, and whether any could be
