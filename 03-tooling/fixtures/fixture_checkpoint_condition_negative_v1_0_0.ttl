@@ -1,0 +1,32 @@
+# fixture_checkpoint_condition_negative_v1_0_0.ttl — proves
+# ObjectiveCheckpointTimingShape and confirms checkpointCondition works as
+# a real alternative to checkpointDate, per code-abundance-rdodi's proposal
+# (07-handover-inbox/accepted/... — this one is still pending review at
+# the time this fixture was built, see the inbox log) grounded in G31: a
+# checkpoint's timing is a condition, not a fabricated date, unless it is
+# genuinely calendar-bound.
+
+@prefix backlog: <http://example.org/backlog#> .
+@prefix ex:      <http://example.org/checkpoint-condition-negative-fixture#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+ex:P a backlog:AdoptionProfile ; backlog:profileAppliesTo "Checkpoint condition negative fixture" ;
+    backlog:governsBacklog ex:BL ; backlog:hasConformanceLevel backlog:L1_Core ;
+    backlog:decidedBy backlog:Owner ; backlog:hasDecisionRationale "L1: checkpoint timing structural fixture, L1 only." ;
+    backlog:adoptsFacet backlog:CoreFacet ;
+    backlog:hasExpectedPolarity backlog:Polarity_Negative .
+ex:BL a backlog:Backlog ; backlog:hasIdentifier "BL-CPCONDNEG" ; backlog:hasState backlog:InProgress .
+
+# CP_NoTiming — neither checkpointDate nor checkpointCondition -> fires.
+ex:CP_NoTiming a backlog:ObjectiveCheckpoint ; backlog:expectedValue 10.0 .
+
+# CP_Dated — a real, calendar-bound checkpoint -> must stay silent.
+ex:CP_Dated a backlog:ObjectiveCheckpoint ; backlog:expectedValue 10.0 ;
+    backlog:checkpointDate "2026-06-01T00:00:00Z"^^xsd:dateTime .
+
+# CP_Conditional — a real, condition-bound checkpoint -> must stay silent,
+# proving checkpointCondition genuinely satisfies the requirement, not
+# just checkpointDate.
+ex:WI_Gate a backlog:Story .
+ex:CP_Conditional a backlog:ObjectiveCheckpoint ; backlog:expectedValue 10.0 ;
+    backlog:checkpointCondition ex:WI_Gate .

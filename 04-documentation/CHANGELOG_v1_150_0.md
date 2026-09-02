@@ -1,5 +1,47 @@
 # Changelog
 
+## v1.150.0 — 2026-09-02 (MAJOR: the handover inbox's first real catches — a packaging defect fixed, a structural alternative to a fabricated date)
+
+**The handover inbox mechanism (v1.149.0) found real, unreviewed work the moment it existed to
+find it.** Both items processed this release, verified independently before acting, not taken on
+either report alone.
+
+**Fixed: `backlog_lineage_completeness` was unusable by any adopter but this package itself**
+(`07-handover-inbox/accepted/RDODI_Proposal_LineageLayerGaps_v1_0_0.md`, code-abundance-rdodi).
+The 18-individual LAYERS table lived only in this package's own internal register; the tool's own
+glob only ever searches the shared TBox. Reproduced directly before fixing: `FATAL` against a
+register carrying nothing but an `AdoptionProfile`. Fixed by moving all 18 `LineageLayer`
+individuals into the shared TBox, where `DesignConcern`'s and `TaskType`'s own enumerated members
+already live — shared vocabulary belongs in the shared TBox, not this package's own private data.
+Re-verified the fix the way it actually matters: run against a genuinely empty adopter register,
+the tool now reports all 18 layers correctly, `MetricObservation` included.
+
+**Fixed: `MetricObservation`'s own `layerTier` was stale** — asserted `L2`, the shape that actually
+enforces it (`MetricObservationShape`) fires at `L4`. Confirmed independently, not taken on the
+proposal's own spot-check: read `backlog_shacl_v1_76_0.ttl`'s own message text directly. Corrected
+in the same move. **The other 17 tiers are carried over unchanged, disclosed as unaudited, not
+implied checked** — a full audit of each against its own real enforcing shape turned out to be
+real, separate work (most don't share `MetricObservation`'s own simple "register declares no X"
+shape pattern at all), matching the proposal's own honest scope rather than overclaiming a
+completeness this pass didn't do.
+
+**Adds `checkpointCondition`** (optional, `ObjectiveCheckpoint` -> `WorkItem`) and
+`ObjectiveCheckpointTimingShape` (`07-handover-inbox/accepted/RDODI_Proposal_ConditionBasedCheckpoint_v1_0_0.md`,
+code-abundance-rdodi) — `G31`'s own distinction, a condition rather than a fabricated date unless
+genuinely calendar-bound, now has a structural alternative to `checkpointDate`, not only prose. A
+checkpoint must state one or the other; neither is a new, checked violation.
+
+Both items moved from `07-handover-inbox/pending/` to `accepted/`, with a line each in
+`HANDOVER_LOG.md`. Built a dedicated negative fixture
+(`fixture_checkpoint_condition_negative_v1_0_0.ttl`) proving the new shape fires only when neither
+timing mechanism is present, and stays silent for a condition-based checkpoint exactly as much as a
+date-based one — proving `checkpointCondition` is a genuine alternative, not decoration.
+
+0 SHACL violations on the real, populated register (117 warnings, unchanged). All six shipped
+checkers PASS. `new-shape-proof` re-verified against the true git-published baseline: 1 genuinely
+new shape, proven. Full 30-fixture coverage sweep re-run in full.
+
+
 ## v1.149.0 — 2026-09-02 (MINOR: a handover inbox, chosen over a heavier design after a real cost/benefit/risk comparison)
 
 **A proposal to make incoming lineage-consumer handovers discoverable was first analyzed, then

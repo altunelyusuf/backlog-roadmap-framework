@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.76.0> ;
-    owl:versionInfo "1.76.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.77.0> ;
+    owl:versionInfo "1.77.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.76.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.75.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.74.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.73.0> ;
@@ -4190,6 +4191,21 @@ backlog:MeasurementKindShape a sh:NodeShape ;
             FILTER (?lvl IN (backlog:L3_Governed, backlog:L4_LineageEnforced))
             $this backlog:hasMeasurementKind backlog:Meas_Derived .
             FILTER NOT EXISTS { $this backlog:hasMeasurementQuery ?q }
+        }""" ] .
+
+backlog:ObjectiveCheckpointTimingShape a sh:NodeShape ;
+    sh:targetClass backlog:ObjectiveCheckpoint ;
+    sh:severity sh:Violation ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_checkpoint_condition_negative_v1_0_0.ttl" ;
+    backlog:fixtureCaseName "CP_NoTiming" ;
+    rdfs:label "L1: a checkpoint states when it applies, by date or by condition"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this checkpoint states neither a checkpointDate nor a checkpointCondition. A checkpoint that says nothing about when it applies cannot be reported ahead, on track, or behind anything." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this a backlog:ObjectiveCheckpoint .
+            FILTER NOT EXISTS { $this backlog:checkpointDate ?d }
+            FILTER NOT EXISTS { $this backlog:checkpointCondition ?c }
         }""" ] .
 
 backlog:CheckpointBreachShape a sh:NodeShape ;

@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.66.0> ;
-    owl:versionInfo "1.66.0" ;
+    owl:versionIRI <http://example.org/backlog/1.67.0> ;
+    owl:versionInfo "1.67.0" ;
+    owl:priorVersion <http://example.org/backlog/1.66.0> ;
     owl:priorVersion <http://example.org/backlog/1.65.0> ;
     owl:priorVersion <http://example.org/backlog/1.64.0> ;
     owl:priorVersion <http://example.org/backlog/1.63.0> ;
@@ -102,7 +103,8 @@
     prov:wasAttributedTo "Yusuf Altunel" ;
     skos:definition "A domain-neutral, reusable schema for backlog-and-roadmap governance across independent developments. It standardises five concept groups that recur in every product/engineering effort: (1) work items and their containers, (2) a closed lifecycle whose Done state is a constrained fact rather than asserted prose, (3) completion Evidence anchored to real delivered artifacts (a named passing test, a release carrying its package SHA-256, a file hash, or a recorded review), (4) method-parameterised prioritisation scores, and (5) a roadmap modelled as a derived projection over the backlog rather than an independently maintained list. Adoption is declared by an AdoptionProfile carrying a ConformanceLevel (L1 Core / L2 Evidence-Bound / L3 Governed), which the paired SHACL suite reads to decide which constraints are enforced, so one framework serves developments at different governance maturity without forking the vocabulary. This TBox defines vocabulary only; the paired SHACL shapes supply enforcement, the SPARQL rules supply derivation (container status, next-item selection, milestone status), and an execution bridge asserts observed real-world verification facts back into the ABox."@en ;
     dcterms:source "Scrum Guide 2020 (Product Backlog, Increment, Definition of Done); SAFe 6.0 (Epic/Feature/Story ladder, WSJF); Now-Next-Later roadmap practice; Intercom RICE prioritisation; W3C OWL 2, SHACL, SHACL-AF."@en ;
-    rdfs:comment "v1.66.0 (MAJOR, deepens the ceremony chain rather than working around it) — challenged again, directly: an earlier, more conservative recommendation (align followsReview to prov:wasInformedBy and stop there) was examined honestly and found to rest on general caution, not a specific technical objection, against building the fuller SCRUM-spirit structure the owner asked for. Adds reviewsCeremony (required, SprintReviewCeremony -> SprintPlanningCeremony: a review's real job is to review what was planned, not independently re-derive which sprint it concerns) and ReviewsPlanConsistencyShape, checking the review's own ceremonyFor agrees with the reviewed plan's. Adds closesIteration (SprintReviewCeremony -> Iteration) and IterationNotCleanedShape: closing a sprint requires every member story to be either Done or named in the same review's own flagsForCarryOver -- clean means nothing left with no disposition, not that everything finished. Adds carriesOverFrom (optional, PlanningEvent -> SprintReviewCeremony), closing the loop on the far side of a flagged spillover. Adds FindingScope (Scope_LineageLocal, Scope_Methodology), hasFindingScope (now required on RetrospectiveFinding), informsRuling and escalatedVia (both optional strings, the same plain-citation convention already used for governance rulings): a finding's remedy is reusable only once it says where it belongs. Test-driven against this package's own real data throughout, not asserted as a category split in the abstract: Review_It11 updated with its own real reviewsCeremony/closesIteration; of the four real findings from this package's own engineering process, three were honestly reclassified as lineage-local (their remedies are practice, not framework changes) and one, the PackageRegularityShape divergence-rule correction, as genuinely methodology-scope, because its remedy is that shape's own actual logic today."@en ,
+    rdfs:comment "v1.67.0 (MAJOR, a real packaging defect fixed, found through the new handover inbox) — code-abundance-rdodi's proposal, archived in 07-handover-inbox/pending/ the moment the inbox mechanism was built, reviewed and both findings independently reproduced before acting, not taken on the report alone. The LAYERS table's 18 LineageLayer individuals lived only in this package's own internal register; backlog_lineage_completeness's own glob only ever searches the shared TBox, so the tool was FATAL for any adopter with nothing but that TBox loaded -- reproduced directly, confirmed fixed directly: works standalone against an empty adopter register once the individuals moved to where DesignConcern's and TaskType's own enumerated members already live. MetricObservation's own layerTier corrected L2 -> L4 in the same move, independently re-verified against MetricObservationShape's real severity, not taken on the proposal's own finding alone; the other 17 tiers carried over unchanged, disclosed as unaudited rather than implied checked. Adds checkpointCondition (optional, ObjectiveCheckpoint -> WorkItem) and ObjectiveCheckpointTimingShape: G31's own distinction (a condition, not a fabricated date, unless genuinely calendar-bound) now has a structural alternative to checkpointDate, not only prose."@en ,
+    "v1.66.0 (MAJOR, deepens the ceremony chain rather than working around it) — challenged again, directly: an earlier, more conservative recommendation (align followsReview to prov:wasInformedBy and stop there) was examined honestly and found to rest on general caution, not a specific technical objection, against building the fuller SCRUM-spirit structure the owner asked for. Adds reviewsCeremony (required, SprintReviewCeremony -> SprintPlanningCeremony: a review's real job is to review what was planned, not independently re-derive which sprint it concerns) and ReviewsPlanConsistencyShape, checking the review's own ceremonyFor agrees with the reviewed plan's. Adds closesIteration (SprintReviewCeremony -> Iteration) and IterationNotCleanedShape: closing a sprint requires every member story to be either Done or named in the same review's own flagsForCarryOver -- clean means nothing left with no disposition, not that everything finished. Adds carriesOverFrom (optional, PlanningEvent -> SprintReviewCeremony), closing the loop on the far side of a flagged spillover. Adds FindingScope (Scope_LineageLocal, Scope_Methodology), hasFindingScope (now required on RetrospectiveFinding), informsRuling and escalatedVia (both optional strings, the same plain-citation convention already used for governance rulings): a finding's remedy is reusable only once it says where it belongs. Test-driven against this package's own real data throughout, not asserted as a category split in the abstract: Review_It11 updated with its own real reviewsCeremony/closesIteration; of the four real findings from this package's own engineering process, three were honestly reclassified as lineage-local (their remedies are practice, not framework changes) and one, the PackageRegularityShape divergence-rule correction, as genuinely methodology-scope, because its remedy is that shape's own actual logic today."@en ,
     "v1.65.0 (MAJOR, extends a documented boundary rather than reversing it) — challenged directly: RegisterSession's own exclusion of planning meetings, reviews and retrospectives is scoped to RegisterSession, not asserted as a whole-methodology argument, and what is right for a narrowly-scoped provenance class is not automatically right for the rest of it. Test-driven, not asserted: adds SprintCeremony (abstract, adoptionRationale same reason as BacklogConcept) with three children (SprintPlanningCeremony, SprintReviewCeremony, SprintRetrospective) and RetrospectiveFinding, modeling the ceremony as a dated record of a real decision or finding -- never the meeting's human conduct, the same boundary RegisterSession already draws, extended rather than reversed. Populated with real data: SprintPlanningCeremony/SprintReviewCeremony for this package's own real, already-closed Iteration It11; a SprintRetrospective with real findings from this session's own engineering mistakes (a self-referential proof-path bug, a missed paired-declaration requirement, a symmetric-divergence design error, a changelog-editing mistake), none imported from another lineage's register. One real design point the population itself surfaced: ceremonyFor (an Iteration) fits Planning and Review but not Retrospective, whose real content spanned a release's whole process rather than one sprint -- required on the first two, deliberately optional on the third, shaped by the finding rather than decided ahead of it. Adds followsReview (optional, SprintRetrospective -> SprintReviewCeremony) and RetrospectiveNotStartedShape: a review that decided something real and has no retrospective following it is proposed one, the same way StoryReadyToCloseShape proposes a closing decision -- the ontology cannot make a meeting happen, so this proposes, it does not create."@en ,
     "v1.64.0 (MINOR, additive) — adopts another registrant's ceremony-coverage handover: a direct check of Sprint Planning/Review/Retrospective functionality found real, checked gaps in what this framework tracks automatically, distinct from human-ceremony modeling (which RegisterSession already, deliberately excludes). Adds hasSprintGoal (optional string on Iteration, deliberately unstructured for the same reason hasScoreRationale is, and deliberately optional: an Iteration without one is not itself a defect). No class added or removed; +7 triples. Separately confirmed NOT a gap: a distinct DefinitionOfDone for classification-type work, since DefinitionOfDone/DoDCriterion are already open, freely-extensible classes any lineage can add to without any TBox change."@en ,
     "v1.63.0 (MINOR, additive) — adopts Proposal_BRSF_ProductScopeKind_v1_0_0.md from code-abundance-rdodi-v1.6.1: this session's own ScopeLayer, applied at Layer_Product's boundary between what capability is delivered and how well/safely/transparently it works, had no vocabulary for that distinction, verified by searching the whole TBox for 'functional', 'non-functional', 'FURPS', 'ISO 25010' and finding only the OWL reserved term. Adds ProductScopeKind (Kind_Functional, Kind_NonFunctional; dcterms:source ISO/IEC 25010), hasProductScopeKind (domain ScopeDeliverable, narrower than hasScopeLayer's three-class domain, deliberately: only a Deliverable makes a capability-or-quality claim), and ProductScopeKindShape (advisory, mirroring BothLayersShape's own pattern). Test-driven against this package's own register per the proposal's own verification method and this discipline's G30, not added as schema alone: Del_OntGovernance (a capability claim) classified Kind_Functional, Del_OntRuleExec (a reliability guarantee about how that capability behaves) classified Kind_NonFunctional — a real mixed result on unforced data. The proposing session's own three deliverables (cross-checked directly against its repository, not summarized) give a second, independent mixed case: two non-functional, one functional."@en ,
@@ -4804,6 +4806,11 @@ backlog:hasCheckpoint a owl:ObjectProperty ;
 backlog:checkpointDate a owl:DatatypeProperty , owl:FunctionalProperty ;
     rdfs:domain backlog:ObjectiveCheckpoint ; rdfs:range xsd:dateTime ;
     rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "checkpoint date"@en .
+backlog:checkpointCondition a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:ObjectiveCheckpoint ; rdfs:range backlog:WorkItem ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "checkpoint condition"@en ;
+    skos:definition "The WorkItem whose Done state is what this checkpoint actually waits on, when the real timing is conditional rather than calendar-bound. G31's own distinction made structural here: some checkpoints genuinely are calendar-bound (a regulatory date, an external commitment) and keep checkpointDate; others depend on unpredictable engineering work reaching Done, and inventing a date for those is false precision standing in for a condition. A checkpoint states whichever is honest, not both."@en .
 backlog:expectedValue a owl:DatatypeProperty , owl:FunctionalProperty ;
     rdfs:domain backlog:ObjectiveCheckpoint ; rdfs:range xsd:decimal ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
@@ -4991,6 +4998,100 @@ backlog:layerTier a owl:DatatypeProperty , owl:FunctionalProperty ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "layer tier"@en ;
     skos:definition "The conformance level at which this layer's absence starts to matter. Held in the python table as a bare string and now queryable: which layers an L2 register may omit is a governance question, not a reporting detail."@en .
+
+#  The 18 individuals of the LAYERS table itself (v1.66.0, moved here from
+#  this package's own internal register). code-abundance-rdodi found, by
+#  running backlog_lineage_completeness_v1_1_0.py against its own register
+#  and reproducing the failure directly, that these lived only in this
+#  package's internal working register -- 01-ontologies/backlog_tbox_v*.ttl
+#  is the only path the tool's own glob ever searches, so no adopter's
+#  register could ever supply them, and the tool was unusable by anyone but
+#  this package itself. Not proposed as a fix by the finding session (B1);
+#  the fix is this move, matching where DesignConcern's and TaskType's own
+#  enumerated members already live -- shared vocabulary belongs in the
+#  shared TBox, not this package's own private data.
+#
+#  MetricObservation's own layerTier corrected from L2 to L4 in the same
+#  move: the same session found this by direct comparison against
+#  MetricObservationShape's own real severity in backlog_shacl_v1_72_0.ttl,
+#  disclosed as the one tier byte-for-byte re-verified, not all 18 --
+#  re-confirmed here against the current shapes file before correcting,
+#  not taken on the finding alone. The other 17 tiers are carried over
+#  unchanged: a full audit of each against its own real enforcing shape is
+#  real, separate work this pass did not do, not a check that quietly
+#  passed.
+backlog:Layer_Mission a backlog:LineageLayer ;
+    backlog:layerClass backlog:Mission ; backlog:layerOrdinal 1 ;
+    backlog:layerAbsenceCost "No stated purpose; every goal below is asserted rather than argued." ;
+    backlog:layerLabel "Mission" ; backlog:layerTier "L2" .
+backlog:Layer_ScopeStatement a backlog:LineageLayer ;
+    backlog:layerClass backlog:ScopeStatement ; backlog:layerOrdinal 2 ;
+    backlog:layerAbsenceCost "No boundary; the backlog defines what was wanted." ;
+    backlog:layerLabel "ScopeStatement" ; backlog:layerTier "L2" .
+backlog:Layer_ScopeExclusion a backlog:LineageLayer ;
+    backlog:layerClass backlog:ScopeExclusion ; backlog:layerOrdinal 3 ;
+    backlog:layerAbsenceCost "Nothing refused; the boundary admits whatever is proposed." ;
+    backlog:layerLabel "ScopeExclusion" ; backlog:layerTier "L2" .
+backlog:Layer_ScopeDeliverable a backlog:LineageLayer ;
+    backlog:layerClass backlog:ScopeDeliverable ; backlog:layerOrdinal 4 ;
+    backlog:layerAbsenceCost "No content; coverage is computed over the work that exists." ;
+    backlog:layerLabel "ScopeDeliverable" ; backlog:layerTier "L3" .
+backlog:Layer_Goal a backlog:LineageLayer ;
+    backlog:layerClass backlog:Goal ; backlog:layerOrdinal 5 ;
+    backlog:layerAbsenceCost "Nothing derives the objectives; they measure whatever was convenient." ;
+    backlog:layerLabel "Goal" ; backlog:layerTier "L2" .
+backlog:Layer_Objective a backlog:LineageLayer ;
+    backlog:layerClass backlog:Objective ; backlog:layerOrdinal 6 ;
+    backlog:layerAbsenceCost "No measure; completion rests on judgement." ;
+    backlog:layerLabel "Objective" ; backlog:layerTier "L2" .
+backlog:Layer_MetricObservation a backlog:LineageLayer ;
+    backlog:layerClass backlog:MetricObservation ; backlog:layerOrdinal 7 ;
+    backlog:layerAbsenceCost "No reading; the objective can only be asserted met." ;
+    backlog:layerLabel "MetricObservation" ; backlog:layerTier "L4" .
+backlog:Layer_DefinitionOfDone a backlog:LineageLayer ;
+    backlog:layerClass backlog:DefinitionOfDone ; backlog:layerOrdinal 8 ;
+    backlog:layerAbsenceCost "No completion standard; Done means whoever said so." ;
+    backlog:layerLabel "DefinitionOfDone" ; backlog:layerTier "L2" .
+backlog:Layer_Epic a backlog:LineageLayer ;
+    backlog:layerClass backlog:Epic ; backlog:layerOrdinal 9 ;
+    backlog:layerAbsenceCost "No theme; stories answer to nothing above them." ;
+    backlog:layerLabel "Epic/Feature" ; backlog:layerTier "L2" .
+backlog:Layer_Story a backlog:LineageLayer ;
+    backlog:layerClass backlog:Story ; backlog:layerOrdinal 10 ;
+    backlog:layerAbsenceCost "No user-facing slice; work is tasks with no stated value." ;
+    backlog:layerLabel "Story" ; backlog:layerTier "L2" .
+backlog:Layer_ExecutionTask a backlog:LineageLayer ;
+    backlog:layerClass backlog:ExecutionTask ; backlog:layerOrdinal 11 ;
+    backlog:layerAbsenceCost "No executable step; a story is a wish." ;
+    backlog:layerLabel "ExecutionTask" ; backlog:layerTier "L2" .
+backlog:Layer_PlanningEvent a backlog:LineageLayer ;
+    backlog:layerClass backlog:PlanningEvent ; backlog:layerOrdinal 12 ;
+    backlog:layerAbsenceCost "No record of commitment; work appears in an iteration unexplained." ;
+    backlog:layerLabel "PlanningEvent" ; backlog:layerTier "L3" .
+backlog:Layer_Iteration a backlog:LineageLayer ;
+    backlog:layerClass backlog:Iteration ; backlog:layerOrdinal 13 ;
+    backlog:layerAbsenceCost "No time box; cadence is unmeasurable." ;
+    backlog:layerLabel "Iteration" ; backlog:layerTier "L2" .
+backlog:Layer_Milestone a backlog:LineageLayer ;
+    backlog:layerClass backlog:Milestone ; backlog:layerOrdinal 14 ;
+    backlog:layerAbsenceCost "No external commitment; slippage is invisible to anyone outside." ;
+    backlog:layerLabel "Milestone" ; backlog:layerTier "L3" .
+backlog:Layer_CrossCuttingInvariant a backlog:LineageLayer ;
+    backlog:layerClass backlog:CrossCuttingInvariant ; backlog:layerOrdinal 15 ;
+    backlog:layerAbsenceCost "No standing condition; each release re-argues the same rules." ;
+    backlog:layerLabel "CrossCuttingInvariant" ; backlog:layerTier "L3" .
+backlog:Layer_CostEstimate a backlog:LineageLayer ;
+    backlog:layerClass backlog:CostEstimate ; backlog:layerOrdinal 16 ;
+    backlog:layerAbsenceCost "No effort claim; capacity cannot be checked." ;
+    backlog:layerLabel "CostEstimate" ; backlog:layerTier "L3" .
+backlog:Layer_Evidence a backlog:LineageLayer ;
+    backlog:layerClass backlog:Evidence ; backlog:layerOrdinal 17 ;
+    backlog:layerAbsenceCost "No proof; Done is a claim." ;
+    backlog:layerLabel "Evidence" ; backlog:layerTier "L2" .
+backlog:Layer_Forecast a backlog:LineageLayer ;
+    backlog:layerClass backlog:Forecast ; backlog:layerOrdinal 18 ;
+    backlog:layerAbsenceCost "No projection; the future is unstated." ;
+    backlog:layerLabel "Forecast" ; backlog:layerTier "L3" .
 
 #################################################################
 #  77. A story that carries a countable batch (v1.47.0)

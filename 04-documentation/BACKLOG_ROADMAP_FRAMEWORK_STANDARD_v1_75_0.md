@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.74.0
+# Backlog & Roadmap Semantic Framework — Standard v1.75.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -854,7 +854,30 @@ recommendations, not framework changes — and one, the `PackageRegularityShape`
 correction, was genuinely methodology-scope, because its remedy is now that shape's own actual
 logic, not only a note for next time.
 
-### 2.5c-xxvii Model artefacts
+### 2.5c-xxvii The LAYERS table lives in the shared TBox, and a checkpoint's timing can be a condition
+
+**Two real findings from the handover inbox, both grounded in G31, both verified independently
+before acting.** `backlog_lineage_completeness`'s own 18-individual LAYERS table was shipped only
+in this package's internal register, not the shared TBox its own tool glob searches — reproduced
+directly: the tool is `FATAL` for any adopter with nothing but the shared TBox loaded, and works
+only once the 18 individuals are manually copied in, which no adopter has reason to know to do.
+Moved to the shared TBox, where `DesignConcern`'s and `TaskType`'s own enumerated members already
+live — shared vocabulary belongs in the shared TBox, not this package's own private data.
+`MetricObservation`'s own `layerTier` corrected from `L2` to `L4` in the same move, independently
+re-verified against `MetricObservationShape`'s real severity before correcting, not taken on the
+finding alone. The other 17 tiers travel unchanged: a full audit of each against its own real
+enforcing shape is separate, real work this pass did not do, disclosed rather than implied.
+
+**`checkpointCondition`** (optional, `ObjectiveCheckpoint` -> `WorkItem`) gives `G31`'s own
+distinction — a condition, not a fabricated date, unless the timing is genuinely calendar-bound —
+a structural alternative to `checkpointDate` rather than leaving it to prose. `ObjectiveCheckpointTimingShape`
+requires at least one of the two: a checkpoint stating neither cannot be reported ahead, on track,
+or behind anything. `CheckpointBreachShape`'s own date-comparison logic is unaffected — a
+condition-based checkpoint simply isn't a candidate for a *date* breach, which is correct, not a
+gap: its own condition (a named `WorkItem` reaching `Done`) is a different kind of check nothing
+here yet formalizes, left for whichever lineage needs it to test-drive first.
+
+### 2.5c-xxviii Model artefacts
 
 `ModelArtifact` records **that** a model exists, its kind, and what it describes — never its content. A
 register holding diagrams becomes a modelling tool; the framework governs records about work.

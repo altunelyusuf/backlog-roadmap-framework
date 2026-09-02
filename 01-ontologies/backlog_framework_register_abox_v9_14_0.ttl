@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.13.0> ;
-    owl:versionInfo "9.13.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.14.0> ;
+    owl:versionInfo "9.14.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.13.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.12.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.11.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.10.0> ;
@@ -1746,79 +1747,14 @@ fw:Ruling_G8 a backlog:GovernanceRuling ;
     backlog:enforcedByShape backlog:DecompositionShape ;
     backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
 
-#  The LAYERS table, exported from the completeness reporter.
-fw:Layer_Mission a backlog:LineageLayer ;
-    backlog:layerClass backlog:Mission ;
-    backlog:layerOrdinal 1 ;
-    backlog:layerAbsenceCost "No stated purpose; every goal below is asserted rather than argued." .
-fw:Layer_ScopeStatement a backlog:LineageLayer ;
-    backlog:layerClass backlog:ScopeStatement ;
-    backlog:layerOrdinal 2 ;
-    backlog:layerAbsenceCost "No boundary; the backlog defines what was wanted." .
-fw:Layer_ScopeExclusion a backlog:LineageLayer ;
-    backlog:layerClass backlog:ScopeExclusion ;
-    backlog:layerOrdinal 3 ;
-    backlog:layerAbsenceCost "Nothing refused; the boundary admits whatever is proposed." .
-fw:Layer_ScopeDeliverable a backlog:LineageLayer ;
-    backlog:layerClass backlog:ScopeDeliverable ;
-    backlog:layerOrdinal 4 ;
-    backlog:layerAbsenceCost "No content; coverage is computed over the work that exists." .
-fw:Layer_Goal a backlog:LineageLayer ;
-    backlog:layerClass backlog:Goal ;
-    backlog:layerOrdinal 5 ;
-    backlog:layerAbsenceCost "Nothing derives the objectives; they measure whatever was convenient." .
-fw:Layer_Objective a backlog:LineageLayer ;
-    backlog:layerClass backlog:Objective ;
-    backlog:layerOrdinal 6 ;
-    backlog:layerAbsenceCost "No measure; completion rests on judgement." .
-fw:Layer_MetricObservation a backlog:LineageLayer ;
-    backlog:layerClass backlog:MetricObservation ;
-    backlog:layerOrdinal 7 ;
-    backlog:layerAbsenceCost "No reading; the objective can only be asserted met." .
-fw:Layer_DefinitionOfDone a backlog:LineageLayer ;
-    backlog:layerClass backlog:DefinitionOfDone ;
-    backlog:layerOrdinal 8 ;
-    backlog:layerAbsenceCost "No completion standard; Done means whoever said so." .
-fw:Layer_Epic a backlog:LineageLayer ;
-    backlog:layerClass backlog:Epic ;
-    backlog:layerOrdinal 9 ;
-    backlog:layerAbsenceCost "No theme; stories answer to nothing above them." .
-fw:Layer_Story a backlog:LineageLayer ;
-    backlog:layerClass backlog:Story ;
-    backlog:layerOrdinal 10 ;
-    backlog:layerAbsenceCost "No user-facing slice; work is tasks with no stated value." .
-fw:Layer_ExecutionTask a backlog:LineageLayer ;
-    backlog:layerClass backlog:ExecutionTask ;
-    backlog:layerOrdinal 11 ;
-    backlog:layerAbsenceCost "No executable step; a story is a wish." .
-fw:Layer_PlanningEvent a backlog:LineageLayer ;
-    backlog:layerClass backlog:PlanningEvent ;
-    backlog:layerOrdinal 12 ;
-    backlog:layerAbsenceCost "No record of commitment; work appears in an iteration unexplained." .
-fw:Layer_Iteration a backlog:LineageLayer ;
-    backlog:layerClass backlog:Iteration ;
-    backlog:layerOrdinal 13 ;
-    backlog:layerAbsenceCost "No time box; cadence is unmeasurable." .
-fw:Layer_Milestone a backlog:LineageLayer ;
-    backlog:layerClass backlog:Milestone ;
-    backlog:layerOrdinal 14 ;
-    backlog:layerAbsenceCost "No external commitment; slippage is invisible to anyone outside." .
-fw:Layer_CrossCuttingInvariant a backlog:LineageLayer ;
-    backlog:layerClass backlog:CrossCuttingInvariant ;
-    backlog:layerOrdinal 15 ;
-    backlog:layerAbsenceCost "No standing condition; each release re-argues the same rules." .
-fw:Layer_CostEstimate a backlog:LineageLayer ;
-    backlog:layerClass backlog:CostEstimate ;
-    backlog:layerOrdinal 16 ;
-    backlog:layerAbsenceCost "No effort claim; capacity cannot be checked." .
-fw:Layer_Evidence a backlog:LineageLayer ;
-    backlog:layerClass backlog:Evidence ;
-    backlog:layerOrdinal 17 ;
-    backlog:layerAbsenceCost "No proof; Done is a claim." .
-fw:Layer_Forecast a backlog:LineageLayer ;
-    backlog:layerClass backlog:Forecast ;
-    backlog:layerOrdinal 18 ;
-    backlog:layerAbsenceCost "No projection; the future is unstated." .
+#  The LAYERS table moved to the shared TBox at v1.66.0 -- code-abundance-
+#  rdodi found, by reproducing the failure directly, that this data living
+#  only here left backlog_lineage_completeness_v1_1_0.py unusable by any
+#  adopter, since the tool's own glob only ever searches
+#  01-ontologies/backlog_tbox_v*.ttl. See the current backlog_tbox_v*.ttl for the
+#  18 individuals, MetricObservation's own layerTier corrected from L2 to
+#  L4 in the same move (found and independently re-verified against
+#  MetricObservationShape's real severity, not taken on the finding alone).
 
 fw:Ev_It7 a backlog:TestEvidence ;
     backlog:hasTestSpec "01-ontologies/backlog_tbox_v1_46_0.ttl and the register's 18 GovernanceRuling instances" ;
@@ -1923,25 +1859,8 @@ fw:R3_EP_RuleExec_S2 a backlog:RefinementEvent ;
     backlog:refinedBy backlog:Builder ;
     backlog:hasRefinementOutcome "RE-GROOMED and NARROWED. Manifest exemption moves to the register; reachability does NOT. Reachability is a query over the TBox and the register cannot hold a rule about classes that do not exist yet — expressing it as a shape would require the shape to run against the TBox as data, which the gate does not do. Recorded as a scope finding rather than attempted: the story ships one of its two steps and says so." .
 
-#  Label and tier, the two fields the first export dropped.
-fw:Layer_Mission backlog:layerLabel "Mission" ; backlog:layerTier "L2" .
-fw:Layer_ScopeStatement backlog:layerLabel "ScopeStatement" ; backlog:layerTier "L2" .
-fw:Layer_ScopeExclusion backlog:layerLabel "ScopeExclusion" ; backlog:layerTier "L2" .
-fw:Layer_ScopeDeliverable backlog:layerLabel "ScopeDeliverable" ; backlog:layerTier "L3" .
-fw:Layer_Goal backlog:layerLabel "Goal" ; backlog:layerTier "L2" .
-fw:Layer_Objective backlog:layerLabel "Objective" ; backlog:layerTier "L2" .
-fw:Layer_MetricObservation backlog:layerLabel "MetricObservation" ; backlog:layerTier "L2" .
-fw:Layer_DefinitionOfDone backlog:layerLabel "DefinitionOfDone" ; backlog:layerTier "L2" .
-fw:Layer_Epic backlog:layerLabel "Epic/Feature" ; backlog:layerTier "L2" .
-fw:Layer_Story backlog:layerLabel "Story" ; backlog:layerTier "L2" .
-fw:Layer_ExecutionTask backlog:layerLabel "ExecutionTask" ; backlog:layerTier "L2" .
-fw:Layer_PlanningEvent backlog:layerLabel "PlanningEvent" ; backlog:layerTier "L3" .
-fw:Layer_Iteration backlog:layerLabel "Iteration" ; backlog:layerTier "L2" .
-fw:Layer_Milestone backlog:layerLabel "Milestone" ; backlog:layerTier "L3" .
-fw:Layer_CrossCuttingInvariant backlog:layerLabel "CrossCuttingInvariant" ; backlog:layerTier "L3" .
-fw:Layer_CostEstimate backlog:layerLabel "CostEstimate" ; backlog:layerTier "L3" .
-fw:Layer_Evidence backlog:layerLabel "Evidence" ; backlog:layerTier "L2" .
-fw:Layer_Forecast backlog:layerLabel "Forecast" ; backlog:layerTier "L3" .
+#  Label and tier now travel with the rest of each layer's definition in
+#  the shared TBox, not as a separate patch here (see the note above).
 
 fw:Ev_It8 a backlog:TestEvidence ;
     backlog:hasTestSpec "03-tooling/backlog_lineage_completeness_v1_1_0.py _load_layers" ;
