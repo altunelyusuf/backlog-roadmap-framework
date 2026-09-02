@@ -1,5 +1,42 @@
 # Changelog
 
+## v1.153.0 — 2026-09-02 (MINOR: 19 of 117 real advisories genuinely, autonomously resolved; the rest left for discussion, not fabricated away)
+
+**Asked how the register's own 117 real warnings should be treated, and whether any could be
+autonomously remedied.** Categorized all 16 distinct warning types honestly before touching
+anything: the overwhelming majority represent real facts about this package's own actual history
+and practice — a mission genuinely drafted by a session, a review genuinely not yet followed by a
+retrospective, a checkpoint genuinely not yet meeting its target — that could only be "fixed" by
+fabricating project facts this framework does not have. Those are not autonomously remediable, and
+were not touched.
+
+**One category — 19 warnings, all `PracticeGroundingShape` firing on `TaskType`, `MaintenanceCategory`,
+and `InitiativeKind` members — turned out to be genuinely, honestly fixable.** Investigation found
+a prior session had already researched the correct external citations and written them directly
+into each term's own `skos:definition` prose (clause numbers, standard names), but never added the
+formal `dcterms:source` triple the shape actually checks for. Verified each citation independently
+before trusting the prose, not assumed correct because it was already there: confirmed
+`ISO/IEC/IEEE 12207:2017`'s own technical-process table of contents names all 9 remaining `TaskType`
+terms at exactly the clauses already written (6.4.1-6.4.4, 6.4.10-6.4.14); confirmed
+`ISO/IEC/IEEE 14764:2022` specifically — not the 1999/2006 editions — is where "Additive" appears
+as a named fifth maintenance type, matching `Maint_Additive`'s own prose exactly.
+
+**Two of `InitiativeKind`'s five members found to have no real external source at all on
+re-checking, despite sharing a class with three that do.** `Kind_Migration` and `Kind_Retirement`
+cite `ISO/IEC/IEEE 14764:2022` correctly (both are named maintainer activities in that standard);
+`Kind_Maintenance` cites `ISO/IEC/IEEE 12207:2017` correctly. `Kind_InitialDevelopment` and
+`Kind_EvolutionaryDevelopment` do not trace to either standard — no source classifies
+project-scale, major-version work into "initial" versus "evolutionary" by version-increment size.
+Marked `isFrameworkOriginal` with an honest reason rather than forced under a citation their
+neighbours have and they do not.
+
+117 warnings -> 98. The remaining 15 categories, and what each would genuinely require to close,
+are left for discussion rather than silently absorbed or left unexamined.
+
+0 SHACL violations on the real register (98 warnings). All six shipped checkers PASS.
+Lineage-discipline check PASS. Doc-coverage PASS.
+
+
 ## v1.152.0 — 2026-09-02 (MAJOR: conformance-level gating removed entirely — Pass 1 and Pass 2 of an explicit multi-pass plan)
 
 **A real, scoped bug uncovered a much larger question.** Comparing L2/L3/L4's real cost directly
