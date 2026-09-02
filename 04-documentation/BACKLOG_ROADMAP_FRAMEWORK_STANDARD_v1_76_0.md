@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.75.0
+# Backlog & Roadmap Semantic Framework — Standard v1.76.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -877,7 +877,32 @@ condition-based checkpoint simply isn't a candidate for a *date* breach, which i
 gap: its own condition (a named `WorkItem` reaching `Done`) is a different kind of check nothing
 here yet formalizes, left for whichever lineage needs it to test-drive first.
 
-### 2.5c-xxviii Model artefacts
+### 2.5c-xxix A layer-tier correction does not touch real measurability, and closing metric-moving work is proposed a reading
+
+**The `MetricObservation` layer-tier correction (v1.67.0) is reporting metadata, not
+enforcement.** `layerTier` is read by exactly one script, the completeness reporter; no SHACL
+shape references it at all, and `MetricObservationShape`'s own real severity was `L4` both before
+and after the correction — only the printed label was wrong. Confirmed directly, not asserted: the
+governed register's own real validation result is byte-identical between the commit before the
+correction and the one after it, real `MetricObservation`s already present both times. A register
+that was already measuring stayed measuring; a register that would have been told the wrong level
+to expect a reading at is now told correctly.
+
+**`MeasurementDueAfterReviewShape`** proposes a reading at exactly the point closing real,
+metric-moving work makes one cheap and meaningful — the same limit as everywhere else in this
+framework: the ontology cannot take a measurement any more than it can hold a meeting or start a
+session, so this proposes, it does not create. Deliberately anchored to `metricMovableBy`, the
+capability link, not the weaker `pursuesObjective`: this framework's own governance ruling already
+names the exact failure this shape would reopen if it used intent instead of capability — every
+epic reaching `Done` with every objective unmet, flagged nowhere. Fires when a review closes a
+story `metricMovableBy` names for some objective and no `MetricObservation` for that objective was
+taken at or after the review; a reading taken *before* the closing work still counts as due, not
+as evidence the work moved anything. Test-driven against a dedicated fixture, not this package's
+own real register: BRSF's own `metricMovableBy` assertions currently sit at the Epic level, not
+the Story level a `SprintReviewCeremony` actually closes, so the shape correctly stays silent
+against real data today — disclosed rather than smoothed into a false positive test.
+
+### 2.5c-xxx Model artefacts
 
 `ModelArtifact` records **that** a model exists, its kind, and what it describes — never its content. A
 register holding diagrams becomes a modelling tool; the framework governs records about work.

@@ -1,5 +1,45 @@
 # Changelog
 
+## v1.151.0 — 2026-09-02 (MINOR: confirmed the tier fix never touched real measurability; a reading is now proposed when a review closes metric-moving work)
+
+**Analysis requested, delivered by direct proof rather than reasoning about it.** Whether
+v1.150.0's `MetricObservation` `layerTier` correction (`L2` -> `L4`) broke this package's own real
+measurability. Traced first: `layerTier` is read by exactly one script (the completeness
+reporter); zero SHACL shapes reference it. `MetricObservationShape`'s own real severity was `L4`
+both before and after — only a printed advisory label was ever wrong. Then proved directly, not
+argued: checked out the exact pre-fix commit (`c94765d`) and ran real validation against it,
+compared byte-for-byte against the current state. Identical violation count, identical warning
+count, both times. The register's own real `MetricObservation` data was present, never absent, in
+either version. Measurability was never at risk.
+
+**Adds `MeasurementDueAfterReviewShape`** — the same limit as everywhere else in this framework:
+the ontology cannot take a measurement any more than it can hold a meeting or start a session, so
+this proposes a reading, it does not create one. Fires when a `SprintReviewCeremony` closes a
+story `metricMovableBy` names as capable of moving an objective's metric, and no
+`MetricObservation` for that objective was taken at or after the review — a reading taken *before*
+the closing work still counts as due. Deliberately anchored to `metricMovableBy`, not the weaker
+`pursuesObjective`: this package's own governance history already names the exact failure a
+weaker link would reopen, every epic reaching `Done` with every objective unmet and nothing
+flagged.
+
+**Honestly scoped against real data, not force-fit.** BRSF's own `metricMovableBy` assertions
+currently sit at the Epic level, not the Story level a review actually closes — the shape
+correctly, and disclosedly, stays silent against this package's own real register today. Built a
+dedicated fixture (`fixture_measurement_due_v1_0_0.ttl`) instead of a fabricated positive case:
+three real scenarios (no reading, a fresh reading taken after the review, a stale reading taken
+before it), all verified to behave correctly, the stale case included because a reading that
+predates the work it was meant to measure is not evidence the work moved anything.
+
+A restated-measurement mistake caught in the same pass it was made: the first draft of this
+release's own standard documentation quoted specific violation/warning counts that would go stale,
+caught by `doc_coverage_gate`'s own L-91 check, corrected to the qualitative claim before
+publishing.
+
+0 SHACL violations on the real register and the new fixture. All six shipped checkers PASS.
+`new-shape-proof` re-verified against the true git-published baseline: 1 genuinely new shape,
+proven.
+
+
 ## v1.150.0 — 2026-09-02 (MAJOR: the handover inbox's first real catches — a packaging defect fixed, a structural alternative to a fabricated date)
 
 **The handover inbox mechanism (v1.149.0) found real, unreviewed work the moment it existed to

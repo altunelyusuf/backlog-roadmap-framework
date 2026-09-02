@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.77.0> ;
-    owl:versionInfo "1.77.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.78.0> ;
+    owl:versionInfo "1.78.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.77.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.76.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.75.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.74.0> ;
@@ -4206,6 +4207,24 @@ backlog:ObjectiveCheckpointTimingShape a sh:NodeShape ;
             $this a backlog:ObjectiveCheckpoint .
             FILTER NOT EXISTS { $this backlog:checkpointDate ?d }
             FILTER NOT EXISTS { $this backlog:checkpointCondition ?c }
+        }""" ] .
+
+backlog:MeasurementDueAfterReviewShape a sh:NodeShape ;
+    sh:targetClass backlog:SprintReviewCeremony ;
+    sh:severity sh:Warning ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_measurement_due_v1_0_0.ttl" ;
+    backlog:fixtureCaseName "REVIEW_NoReading" ;
+    rdfs:label "Advisory: this review closed metric-moving work with no reading since"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: this review closed a story that metricMovableBy names as actually capable of shifting an objective's measured value, but no MetricObservation for that objective was taken at or after this review. Closing metric-moving work is exactly the moment a reading is cheap and meaningful — proposed here, the same way a retrospective is proposed after a review, not forced: the ontology cannot take a measurement any more than it can hold a meeting. Deliberately anchored to metricMovableBy, not the weaker pursuesObjective — a register can reach every epic Done with every objective unmet and flag nothing, which is the exact gap metricMovableBy exists to close, and this shape would reopen it by anchoring to intent instead of capability." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT DISTINCT $this WHERE {
+            $this a backlog:SprintReviewCeremony ; backlog:closesStory ?story ; backlog:heldAt ?ht .
+            ?obj backlog:metricMovableBy ?story .
+            FILTER NOT EXISTS {
+                ?mo a backlog:MetricObservation ; backlog:observationFor ?obj ; backlog:observedAt ?od .
+                FILTER (?od >= ?ht)
+            }
         }""" ] .
 
 backlog:CheckpointBreachShape a sh:NodeShape ;

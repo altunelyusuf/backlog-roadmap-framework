@@ -1,0 +1,71 @@
+# fixture_measurement_due_v1_0_0.ttl — proves MeasurementDueAfterReviewShape.
+# Three reviews, each closing a story metricMovableBy names for a distinct
+# objective: one with no reading at all (fires), one with a fresh reading
+# taken after the review (stays silent), one with only a stale reading
+# taken before the review (fires — a reading that predates the work it
+# was supposed to measure is not evidence the work moved anything).
+
+@prefix backlog: <http://example.org/backlog#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix ex:      <http://example.org/measurement-due-fixture#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+ex:It_M a backlog:Iteration ; backlog:hasIdentifier "IT-M" ;
+    backlog:iterationStart "2026-06-01T00:00:00Z"^^xsd:dateTime ;
+    backlog:iterationEnd "2026-06-14T00:00:00Z"^^xsd:dateTime .
+ex:ItM_Member a backlog:Story ; backlog:hasIdentifier "WI-ITM-M" ;
+    backlog:hasState backlog:InProgress ; backlog:memberOfContainer ex:It_M .
+
+ex:Plan_M a backlog:SprintPlanningCeremony ; backlog:ceremonyFor ex:It_M ;
+    backlog:heldAt "2026-06-01T00:00:00Z"^^xsd:dateTime ;
+    backlog:includesPlanningEvent ex:PE_S1 , ex:PE_S2 , ex:PE_S3 .
+
+# --- Case 1: no reading at all -> fires ---
+ex:S1 a backlog:Story ; backlog:hasIdentifier "S-M1" ; backlog:hasState backlog:Done ; backlog:pursuesObjective ex:Obj1 .
+ex:PE_S1 a backlog:PlanningEvent ; backlog:plansItem ex:S1 ; backlog:plannedInto ex:It_M ;
+    backlog:plannedAt "2026-06-01T00:00:00Z"^^xsd:dateTime ; backlog:producesTask ex:T_S1 .
+ex:T_S1 a backlog:ExecutionTask ; backlog:hasIdentifier "T-M1" ; backlog:hasState backlog:Done .
+ex:Goal_M a backlog:Goal ; rdfs:label "Fixture goal"@en ; backlog:decidedBy backlog:Owner .
+
+ex:Obj1 a backlog:Objective ; backlog:metricMovableBy ex:S1 ;
+    backlog:contributesToGoal ex:Goal_M ; backlog:hasSuccessMetric ex:Metric_M1 ;
+    backlog:hasBaselineValue 0.0 ; backlog:hasTargetValue 10.0 ;
+    backlog:hasTargetDirection backlog:Dir_Increase .
+ex:Metric_M1 a ex:LocalMetric .
+ex:Review_NoReading a backlog:SprintReviewCeremony ; backlog:ceremonyFor ex:It_M ;
+    backlog:heldAt "2026-06-14T00:00:00Z"^^xsd:dateTime ; backlog:reviewsCeremony ex:Plan_M ;
+    backlog:closesStory ex:S1 .
+
+# --- Case 2: a fresh reading taken after the review -> stays silent ---
+ex:S2 a backlog:Story ; backlog:hasIdentifier "S-M2" ; backlog:hasState backlog:Done ; backlog:pursuesObjective ex:Obj2 .
+ex:PE_S2 a backlog:PlanningEvent ; backlog:plansItem ex:S2 ; backlog:plannedInto ex:It_M ;
+    backlog:plannedAt "2026-06-01T00:00:00Z"^^xsd:dateTime ; backlog:producesTask ex:T_S2 .
+ex:T_S2 a backlog:ExecutionTask ; backlog:hasIdentifier "T-M2" ; backlog:hasState backlog:Done .
+ex:Obj2 a backlog:Objective ; backlog:metricMovableBy ex:S2 ;
+    backlog:contributesToGoal ex:Goal_M ; backlog:hasSuccessMetric ex:Metric_M2 ;
+    backlog:hasBaselineValue 0.0 ; backlog:hasTargetValue 10.0 ;
+    backlog:hasTargetDirection backlog:Dir_Increase .
+ex:Metric_M2 a ex:LocalMetric .
+ex:Review_FreshReading a backlog:SprintReviewCeremony ; backlog:ceremonyFor ex:It_M ;
+    backlog:heldAt "2026-06-14T00:00:00Z"^^xsd:dateTime ; backlog:reviewsCeremony ex:Plan_M ;
+    backlog:closesStory ex:S2 .
+ex:MO2 a backlog:MetricObservation ; backlog:observationFor ex:Obj2 ;
+    backlog:observesMetric ex:Metric_M2 ; backlog:hasObservationMethod "Fixture-stated value, not re-derivable." ;
+    backlog:observedAt "2026-06-15T00:00:00Z"^^xsd:dateTime ; backlog:hasObservedValue 5.0 .
+
+# --- Case 3: only a stale reading, taken before the review -> fires ---
+ex:S3 a backlog:Story ; backlog:hasIdentifier "S-M3" ; backlog:hasState backlog:Done ; backlog:pursuesObjective ex:Obj3 .
+ex:PE_S3 a backlog:PlanningEvent ; backlog:plansItem ex:S3 ; backlog:plannedInto ex:It_M ;
+    backlog:plannedAt "2026-06-01T00:00:00Z"^^xsd:dateTime ; backlog:producesTask ex:T_S3 .
+ex:T_S3 a backlog:ExecutionTask ; backlog:hasIdentifier "T-M3" ; backlog:hasState backlog:Done .
+ex:Obj3 a backlog:Objective ; backlog:metricMovableBy ex:S3 ;
+    backlog:contributesToGoal ex:Goal_M ; backlog:hasSuccessMetric ex:Metric_M3 ;
+    backlog:hasBaselineValue 0.0 ; backlog:hasTargetValue 10.0 ;
+    backlog:hasTargetDirection backlog:Dir_Increase .
+ex:Metric_M3 a ex:LocalMetric .
+ex:Review_StaleReading a backlog:SprintReviewCeremony ; backlog:ceremonyFor ex:It_M ;
+    backlog:heldAt "2026-06-14T00:00:00Z"^^xsd:dateTime ; backlog:reviewsCeremony ex:Plan_M ;
+    backlog:closesStory ex:S3 .
+ex:MO3 a backlog:MetricObservation ; backlog:observationFor ex:Obj3 ;
+    backlog:observesMetric ex:Metric_M3 ; backlog:hasObservationMethod "Fixture-stated value, not re-derivable." ;
+    backlog:observedAt "2025-01-01T00:00:00Z"^^xsd:dateTime ; backlog:hasObservedValue 1.0 .
