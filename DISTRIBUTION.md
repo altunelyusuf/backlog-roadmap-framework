@@ -29,7 +29,7 @@ the correction.
 ## Regenerating this copy
 
 It is derived by script, not by hand, so it can be re-derived and checked for drift. The script
-(`make_public_distribution_v1_2_0.py`) lives with the **governed** package, not here — its
+(`make_public_distribution_v1_3_0.py`) lives with the **governed** package, not here — its
 substitution patterns necessarily contain the very names it removes, so shipping it in the public
 copy would reintroduce them. The final scan caught exactly that and the script was pulled.
 

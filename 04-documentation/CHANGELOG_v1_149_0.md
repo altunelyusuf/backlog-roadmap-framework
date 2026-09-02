@@ -1,5 +1,45 @@
 # Changelog
 
+## v1.149.0 — 2026-09-02 (MINOR: a handover inbox, chosen over a heavier design after a real cost/benefit/risk comparison)
+
+**A proposal to make incoming lineage-consumer handovers discoverable was first analyzed, then
+compared against a simpler alternative, then built as the cheaper one.** The first analysis
+reached for reified TBox/SHACL provenance by default — a new class, a shape, a fixture, a registry
+of every consumer lineage's repository. Challenged directly on the comparison rather than the
+design in isolation, a real cost/benefit/risk analysis of four options found that "has this file
+been read yet" is bookkeeping, not domain knowledge worth a shape proving it, and that a plain
+folder plus a plain-text log inside this package's own already-cloned repository does the same job
+for a fraction of the cost, with no per-consumer registry and no extra clone per session.
+
+**Adds `07-handover-inbox/`**: `pending/` for anything not yet reviewed, `accepted/`/`rejected/`
+for decided items, and `deferred/` — a real third category, not folded into `rejected`, since
+several real items this session were genuinely offered and left open rather than declined, and
+calling that "rejected" would misrepresent them. `HANDOVER_LOG.md` tracks one line per item: file,
+source, disposition, where it was decided, and a note. Excluded from the public distribution
+(`make_public_distribution` bumped 1.2.0 -> 1.3.0, `backlog_distribution_drift_check` bumped 1.0.0
+-> 1.1.0 for the matching filename reference), the same reason `05-lesson-deposits` and
+`06-package-provenance` already are: correspondence with other sessions about their own artifacts.
+
+**`LINEAGE_OPERATING_DISCIPLINE` bumped v8.0.0 -> v9.0.0, adding G39**: checking the inbox is now a
+standing ceremony step, free since the repository is already cloned regardless — and the general
+lesson generalized beyond this one mechanism: when a proposal's own first draft reaches for a
+fuller, more general-purpose structure by default, check what the problem actually needs before
+building it, the same discipline `G30` already names for metrics and shapes.
+
+**Populated with this session's own real history, not left empty for a future session to fill.**
+Five items moved to `accepted/` (the `ProductScopeKind` proposal, and four another registrant handovers spanning
+`PackageRegularityShape` through the full sprint-ceremony work), one to `deferred/` (the
+maturity-gate handover's own concrete asks — task-type-completeness-by-claim-detection, a
+`hasStatedGoal` property — genuinely still open, not built). Building the inbox surfaced two real,
+previously unreviewed proposals from code-abundance-rdodi (`ConditionBasedCheckpoint`,
+`LineageLayerGaps`) — archived honestly to `pending/` rather than decided on the spot, exactly the
+failure mode this mechanism exists to catch: a real proposal sitting unnoticed because nothing
+made checking for it cheap and habitual.
+
+0 SHACL violations (117 warnings, unchanged — no new TBox vocabulary this release). All six
+shipped checkers PASS. Manifest 109/109.
+
+
 ## v1.148.0 — 2026-09-02 (MAJOR: ceremonies chain structurally — review depends on planning, closing cleans the environment, findings become reusable)
 
 **Challenged directly, and answered honestly rather than defended.** The prior release's own

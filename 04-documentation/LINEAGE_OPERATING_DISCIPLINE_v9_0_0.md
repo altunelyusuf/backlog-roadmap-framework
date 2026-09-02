@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v8.0.0
+# Lineage Operating Discipline — v9.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -628,4 +628,26 @@ should have. Before recommending a lineage adopt a higher conformance level, che
 and infrastructure that level actually requires and whether the real work behind them already
 exists — a level is not a label to declare toward, it is a set of real checks that must already
 be survivable.
+
+## G39 — Check the handover inbox at session start, and prefer the cheaper mechanism over the more complete one
+
+A proposal to track incoming lineage-consumer handovers was first drafted as reified TBox/SHACL
+provenance (a new class, a shape, a fixture, a registry of every consumer lineage's repository) —
+built to the same standard as everything else in this package, but for a problem that turned out
+to be simpler than that: whether a file has been read yet is bookkeeping, not domain knowledge
+worth a shape proving it. Challenged on the comparison, not the design in isolation, a
+cost/benefit/risk analysis of the alternatives found a plain folder plus a plain-text log
+inside this package's own already-cloned repository did the same job at a fraction of the cost,
+with no per-consumer registry to maintain and no extra clone per session.
+
+**Standing rule**: `07-handover-inbox/pending/` is checked at the start of any session working on
+this package — free, since the whole repository is already cloned for the freshness ceremony
+regardless. An item found there is reviewed and moved to `accepted/`, `rejected/`, or `deferred/`
+(a real third category, not folded into `rejected`: several real items were genuinely offered and
+left open, not declined), with one line added to `07-handover-inbox/HANDOVER_LOG.md`.
+
+**The general lesson, not just this specific mechanism**: when a proposal's own first draft
+reaches for a fuller, more general-purpose structure by default, check what the problem actually
+needs before building it — the same discipline `G30` already names for metrics and shapes, here
+applied to a proposal about this package's own governance tooling.
 
