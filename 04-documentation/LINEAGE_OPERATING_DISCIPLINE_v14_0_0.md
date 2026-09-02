@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v13.0.0
+# Lineage Operating Discipline — v14.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -764,7 +764,15 @@ miniature.
 register makes is weaker than it looks. `sh:Info` — nothing is wrong or at risk; a genuine
 opportunity to be more complete, precise, or useful than required.
 
-**Not retroactively re-graded across the whole suite in this pass.** 65 of 66 `sh:Warning` shapes
+**The one shape this taxonomy was first applied to failed it, and was retired rather than
+relabelled.** `UnscoredItemAdvisoryShape`, this framework's only `sh:Info` shape before this
+ruling, shared its exact condition with `SilentGapShape`'s own real `sh:Violation` — something was
+already wrong there, and a real rule already said so; calling it an opportunity would have been
+the dishonest fit this same ruling exists to prevent. Retired per `G40`'s own precedent, historical
+comment kept. `sh:Info` now governs zero shapes, an honest starting point for the audit, not a gap
+papered over.
+
+**Not retroactively re-graded across the whole suite in this pass.** The 66 `sh:Warning` shapes
 were written before this three-tier definition existed and have not been individually checked
 against it; this ruling sets the standard future audit work checks against, not a claim the audit
 already happened. A `Violation` newly added under this same session — `AdoptionConformanceGoalShape`

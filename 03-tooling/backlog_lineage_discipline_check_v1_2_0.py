@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_lineage_discipline_check v1.1.0 — the discipline's claims are checked.
+"""backlog_lineage_discipline_check v1.2.0 — the discipline's claims are checked.
 
 A discipline document that names shapes as enforcing its boundaries is making
 externally-verifiable claims. Those claims drift: a shape gets renamed, a
@@ -95,6 +95,17 @@ def main():
     for name in named:
         blk = blocks.get(name)
         if blk is None:
+            # A retired shape is legitimately still named in past tense, the same
+            # way this file's own G40/G42/G43 already do -- "a rule keeps its
+            # incident even after the mechanism built for it retires". Only a
+            # genuinely missing shape the prose does NOT call retired is a real
+            # drift; check the same 400-char window severity-claims use.
+            ctx = ""
+            for m in re.finditer(re.escape(name), dtext):
+                ctx += dtext[max(0, m.start() - 400):m.start() + 400] + " "
+            if re.search(r"retired", ctx, re.I):
+                print("  %-34s retired (named historically, not claimed live)" % name)
+                continue
             failures.append("%s is named by the discipline but does not exist in the shapes file"
                             % name)
             print("  %-34s MISSING" % name)

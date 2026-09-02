@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.80.0
+# Backlog & Roadmap Semantic Framework — Standard v1.81.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -1057,8 +1057,17 @@ only once before now:**
 | `sh:Warning` | ISO Observation | No rule is broken, but a real risk exists that one will be, or that the register's own claim is weaker than it looks. | Reported, never blocks conformance |
 | `sh:Info` | ISO Opportunity for Improvement | Nothing is wrong and nothing is at risk; a genuine opportunity exists to make the register more complete, precise, or useful than it is required to be. | Reported, never blocks conformance, never phrased as a problem |
 
-**Not retroactively re-graded across the whole suite in this pass.** Only one shape
-(`UnscoredItemAdvisoryShape`) used `sh:Info` before this ruling; the other 65 shapes currently
+**The one shape this taxonomy was first applied to failed it, and was retired rather than
+relabelled.** `UnscoredItemAdvisoryShape`, the single `sh:Info` shape this framework had before
+this ruling, was checked against the standing definition and found not to qualify at all: its
+condition (unscored, unflagged, `Proposed`/`Ready`) is identical to `SilentGapShape`'s own real
+`sh:Violation` a few lines below it in the same file — something *was* already wrong there, and a
+real rule already said so. Calling it an opportunity would have been the dishonest fit this same
+ruling exists to prevent. Retired, its historical comment kept, per the same practice `G40`
+already established for retired mechanisms. `sh:Info` currently governs zero shapes in this
+framework's own suite — an honest starting point for the audit below, not a gap to paper over.
+
+**Not retroactively re-graded across the whole suite in this pass.** The 65 shapes currently
 carrying `sh:Warning` were written under a two-tier habit, not against this three-tier definition,
 and a systematic pass checking each against "risk" versus "opportunity" is real, separate audit
 work — this ruling establishes the standard to audit against, not a claim that the audit is done.

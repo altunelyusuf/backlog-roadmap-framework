@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.17.0> ;
-    owl:versionInfo "9.17.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.18.0> ;
+    owl:versionInfo "9.18.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.17.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.16.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.15.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.14.0> ;
@@ -232,7 +233,7 @@ fw:Out2_Scope a backlog:StageOutput ;
 #  analysis still supports them.
 #################################################################
 fw:Area_Governance a backlog:ScopeArea ;
-    backlog:areaLocation "LINEAGE_OPERATING_DISCIPLINE_v13_0_0.md" ;
+    backlog:areaLocation "LINEAGE_OPERATING_DISCIPLINE_v14_0_0.md" ;
     backlog:areaMeasure "Governance rulings G1-G43, each a markdown heading with prose. Nothing in the ontology carries them; the lineage-discipline gate checks that claims about ENFORCEMENT match the shapes, and does not check that the rulings themselves exist as anything a query can reach." .
 fw:Del_OntGovernance backlog:deliverableForArea fw:Area_Governance .
 fw:Area_CodeTables a backlog:ScopeArea ;
@@ -4101,7 +4102,7 @@ fw:TS_backlog_coverage_gateV1_1_1 a backlog:ToolScript ; backlog:scriptFileName 
 fw:TS_backlog_criterion_resolveV1_0_0 a backlog:ToolScript ; backlog:scriptFileName "backlog_criterion_resolve_v1_0_0.py" ; backlog:acceptsGraphPath false .
 fw:TS_backlog_distribution_drift_checkV1_0_0 a backlog:ToolScript ; backlog:scriptFileName "backlog_distribution_drift_check_v1_0_0.py" ; backlog:acceptsGraphPath false .
 fw:TS_backlog_doc_coverage_gateV1_2_0 a backlog:ToolScript ; backlog:scriptFileName "backlog_doc_coverage_gate_v1_2_0.py" ; backlog:acceptsGraphPath false .
-fw:TS_backlog_lineage_discipline_checkV1_1_0 a backlog:ToolScript ; backlog:scriptFileName "backlog_lineage_discipline_check_v1_1_0.py" ; backlog:acceptsGraphPath false .
+fw:TS_backlog_lineage_discipline_checkV1_2_0 a backlog:ToolScript ; backlog:scriptFileName "backlog_lineage_discipline_check_v1_2_0.py" ; backlog:acceptsGraphPath false .
 fw:TS_backlog_manifest_coverageV1_0_0 a backlog:ToolScript ; backlog:scriptFileName "backlog_manifest_coverage_v1_0_0.py" ; backlog:acceptsGraphPath false .
 fw:TS_backlog_number_originV1_0_0 a backlog:ToolScript ; backlog:scriptFileName "backlog_number_origin_v1_0_0.py" ; backlog:acceptsGraphPath false .
 fw:TS_backlog_quality_assessmentV1_0_0 a backlog:ToolScript ; backlog:scriptFileName "backlog_quality_assessment_v1_0_0.py" ; backlog:acceptsGraphPath false .

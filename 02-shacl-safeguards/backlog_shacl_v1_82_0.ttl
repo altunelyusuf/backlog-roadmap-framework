@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.81.0> ;
-    owl:versionInfo "1.81.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.82.0> ;
+    owl:versionInfo "1.82.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.81.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.80.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.79.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.78.0> ;
@@ -441,22 +442,18 @@ backlog:GovernedDoneShape a sh:NodeShape ;
 #################################################################
 #  Advisory tier — node-level severity (L-36: severity must not sit
 #  inside an sh:sparql blank node, where pyshacl ignores it)
+#
+#  UnscoredItemAdvisoryShape retired at v1.156.0, found while applying
+#  G43's own severity taxonomy to this framework's single existing
+#  sh:Info shape: its condition (unscored, unflagged, Proposed/Ready)
+#  is identical to SilentGapShape's own real sh:Violation, a few lines
+#  below. Not a genuine opportunity at all -- something IS already
+#  wrong here, and SilentGapShape already says so. Relabelling this as
+#  "Opportunity" per G43 would have been the dishonest fit G43 itself
+#  exists to prevent; retiring it, not relabelling it, is the correct
+#  application of the same ruling that named it. The incident above is
+#  left as written.
 #################################################################
-
-backlog:UnscoredItemAdvisoryShape a sh:NodeShape ;
-    sh:targetClass backlog:WorkItem ;
-    sh:severity sh:Info ;
-    rdfs:label "Advisory: item has no priority score"@en ;
-    sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "Advisory: this item carries no priority score and no not-yet-scoreable flag; under an L2 profile this is a silent gap and a violation." ;
-        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
-        sh:select """SELECT $this WHERE {
-            $this backlog:hasState ?s .
-            FILTER (?s IN (backlog:Proposed, backlog:Ready))
-            FILTER NOT EXISTS { $this backlog:hasPriorityScore ?p }
-            FILTER NOT EXISTS { $this backlog:notYetScoreable true }
-            FILTER NOT EXISTS { $this a backlog:ExecutionTask }
-        }""" ] .
 
 backlog:HorizonCoherenceAdvisoryShape a sh:NodeShape ;
     sh:targetClass backlog:WorkItem ;

@@ -1,5 +1,37 @@
 # Changelog
 
+## v1.156.0 — 2026-09-02 (MINOR: priority analysis delivered; applying the severity taxonomy to its first real case retired a shape instead of relabelling it)
+
+**A cost-benefit/risk-opportunity analysis was requested to prioritize three open work items** —
+the 14-fixture repair, the 65-shape severity re-audit, the 32-class investigation. Delivered
+directly, not deferred: the fixture repair ranked first (the only item with an active, compounding
+defect and the lowest, best-understood cost), the severity re-audit second (operationalizes `G43`
+while its reasoning is fresh; correctness is not at risk either way), the 32-class investigation
+third (this package's own prior judgement already treated it as low-urgency). Neither audit item
+loses value by waiting; the fixture repair does not gain any by it.
+
+**Asked to align the "opportunity" wording with common practice — applying `G43` to its own
+first real case found the case did not qualify at all.** `UnscoredItemAdvisoryShape`, this
+package's only `sh:Info` shape, was checked against the standing definition rather than simply
+relabelled. Its condition turned out to be identical to `SilentGapShape`'s own real `sh:Violation`
+a few lines below it — something was already wrong there, and a real rule already said so.
+Retired, not relabelled: calling it an opportunity would have been exactly the dishonest fit `G43`
+exists to prevent. Historical comment kept, per `G40`'s own precedent for retired mechanisms.
+`sh:Info` now governs zero shapes in this package's own suite — an honest starting point for the
+severity re-audit, not a gap papered over.
+
+**A second checker fix, same pattern as before.** `backlog_lineage_discipline_check`'s own rule
+that every named shape must exist could not distinguish an active enforcement claim from a
+legitimate historical mention of a retired one — exactly the pattern `G40`, `G42`, and `G43` all
+already use ("a rule keeps its incident"). Bumped 1.1.0 -> 1.2.0, taught to recognize the word
+"retired" in the same 400-character context window severity-claims already use, rather than
+reworded around the checker's own blind spot.
+
+0 SHACL violations on the real register (85 warnings, 0 Info, unchanged in count but now honestly
+zero rather than one mislabelled). All six shipped checkers PASS. Lineage-discipline check PASS.
+`new-shape-proof` re-verified: 0 new shapes, 1 genuinely retired, matching exactly.
+
+
 ## v1.155.0 — 2026-09-02 (MAJOR: another registrant's updated conformance-goal handover fully adopted; a researched, externally-grounded severity taxonomy established; a real fixture-cascade honestly disclosed, not rushed)
 
 **another registrant's handover was updated (v1.0.0 -> v1.1.0) mid-session, following a direct owner request to
