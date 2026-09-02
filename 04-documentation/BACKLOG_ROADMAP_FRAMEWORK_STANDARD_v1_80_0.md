@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.78.0
+# Backlog & Roadmap Semantic Framework — Standard v1.80.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -961,7 +961,109 @@ backlog:belongsToLineage ?lin . ?lin backlog:lineageArchived true }`, added iden
 three. A closed lineage's own disclosure remains exactly its `lineageArchived true` assertion and
 `archiveFile` pointer — visible, queryable, and not duplicated into a second notice.
 
-### 2.5c-xxxiii Model artefacts
+### 2.5c-xxxiv Every adopting lineage carries a default goal for its own conformance, built at kickoff
+
+**Enforced, not merely recommended.** `AdoptionConformanceGoalShape` requires every `AdoptionProfile`
+to carry a real `Goal` (`isConformanceGoal true`, genuinely `Facing_Mission`) whose own `Objective`
+names a success metric, a checkpoint, and at least one real measurement — the same chain (goal,
+objective, metric, time to measure) this framework already requires of every product claim,
+applied reflexively to the register's own trustworthiness. Originally another registrant's own real fix to
+itself (`07-handover-inbox/accepted`): `WI_L4ConformanceGapClosure`, the item tracking that
+lineage's real conformance work, had nowhere honest to attach, because no product `Objective` was
+honestly about the register's own state. Archived at the owner's own direct suggestion that this
+become the standard default, not rediscovered independently by every adopter under time pressure.
+
+**Built at lineage kickoff, not reactively.** The handover's own revision (v1.1.0), following a
+direct request to specify exactly when each measure should be taken, makes the case precisely:
+this goal is a standing property of the whole lineage from day one, not a fix built only once a
+gap is found. A lineage that waits until conformance work is actually needed to build this goal
+has already lost the ability to honestly attach that work anywhere.
+
+BRSF's own register carries `Goal_BRSFConformance` / `Obj_BRSFConformanceHeld` as its own real
+instance of the pattern — `Dir_Hold`, not `Dir_Increase`: unlike another registrant's own real backlog of 22
+categories to close, this package's own violation count has genuinely never moved from zero
+across this session's work, so the honest objective is proving it keeps not moving, not closing a
+gap that does not exist.
+
+### 2.5c-xxxv A reading belongs to the ceremony that produced it, and can now say so
+
+**`observedDuringCeremony`** (optional, `MetricObservation` → `SprintReviewCeremony`) lets a
+`MetricObservation` name which review it was actually taken during, when it was taken at one.
+Advisory-only by design (`CeremonyLinkAdvisoryShape`, `sh:Warning`): nothing here can verify a
+claimed timing was honest the way `closedAtCommit` verifies stage order from git history, so the
+property lets a lineage that *does* discipline itself to real-time measurement say so
+structurally, rather than asserting that a lineage without the link is lying. Grounded in another registrant's
+own real incident: three closed reviews, only the third even attempting a same-session reading,
+and that attempt still landing 34 minutes before the ceremony's own `heldAt` — a plausible-looking
+but wrong moment that `MetricObservationShape` cannot catch, because *what* was measured was
+correct throughout; only *when* was wrong, and nothing in the vocabulary said when until now.
+
+### 2.5c-xxxvi When each real measure belongs, as a recommended pattern rather than a SHACL check
+
+The same handover proposes a starting table for exactly which event each property belongs to,
+built from another registrant's own real history of getting this wrong at three separate points: a baseline
+declared as a disclosed placeholder rather than a real reading taken at objective authorship, a
+`MetricObservation` taken in a later reporting pass rather than at the review that closed the
+work, and evidence typed generically rather than as `TestEvidence` at the moment a real test ran.
+**Deliberately not encoded as SHACL** — the handover's own argument, grounded in `G7` ("a tool
+that refuses is not thereby correct"), is that "was this the right moment" is a judgement no
+git-commit-ordered chain can verify the way stage order can, and a temporal check nobody can
+fixture honestly is worse than no check. Offered as documentation:
+
+| Real measure / property | Real event it belongs to |
+|---|---|
+| `Mission.hasMissionStatement` | Stage 1 commit (Mission authored) |
+| `Mission.hasMissionOutcome` | Mission superseded or lineage closed — never at authorship |
+| Scope-stage properties (`derivesFromMissionClause`, `coversArea`, `hasScopeLayer`) | Stage 2 commit, before any `WorkItem` exists |
+| `Goal.hasGoalFacing`, `derivesFromScope` | Stage 3 commit, once the scope it derives from is closed |
+| `Objective.hasBaselineValue` | Stage 4 commit — a real, as-of-now reading, not a placeholder deferred to later |
+| `Objective.hasMeasurementKind`, `hasCheckpoint`, `metricMovableBy` | Same commit as the objective itself |
+| `WorkItem.pursuesObjective`, `hasInvestmentCategory`, applicable concerns | Backlog grooming, before the item leaves `Proposed` |
+| `PlanningEvent`, `producesTask` | The Sprint Planning ceremony that actually makes the commitment |
+| `WorkItem.startedAt` | The real moment work begins, distinct from the planning moment |
+| Evidence properties, `TestEvidence` typing | The moment the real check actually runs, not reconstructed later |
+| `WorkItem.finishedAt`, `hasState Done` | The real moment work genuinely completes |
+| `TestHarness`, `harnessComplete`, `attestsCriterion` | The `Done` transition itself — they gate it, not follow it |
+| `WorkItem.lastAuditedAt` | Any real, recurring re-verification pass, distinct from `finishedAt` |
+| `MetricObservation` | **The `SprintReviewCeremony` that closes metric-moving work — at or immediately after, never a later pass** |
+| `RetrospectiveFinding` | The `SprintRetrospective` that follows the review, not before |
+| `ReleaseEvidence.deliveredInRelease`, `DeploymentUnit.decidedBy` | The real release/deploy event |
+| The conformance goal pattern (2.5c-xxxiv above) | Lineage kickoff, alongside everything else set once at the start |
+
+### 2.5c-xxxvii Three severities, not four, and what each one means
+
+**Asked to discipline what counts as a violation, a warning, and an opportunity, and whether a
+fourth category exists — researched against external standards before finalizing, not designed
+from this framework's own prior habit alone.** Two independent standard families converge on the
+same three-tier structure. SHACL 1.2 Core itself defines exactly three severities —
+`sh:Violation`, `sh:Warning`, `sh:Info` — with `sh:Info` explicitly documented as not signalling a
+problem at all. Separately, and without reference to SHACL, ISO 9001/13485/14001/45001 audit
+practice converges on the identical three-way split: a **Nonconformity** (a requirement is
+breached), an **Observation** (*"a concern or risk... that does not breach a specific requirement.
+No mandatory response required, but best practice is to address it"*), and an **Opportunity for
+Improvement** (*"a suggestion for how you might enhance your system. No response required"*). No
+external standard checked names a fourth tier as a distinct severity level; ISO audit practice
+subdivides Nonconformity into Major/Minor, but that is a subdivision of one tier's own consequence
+(does certification stay at risk), not a fourth kind of finding, and this framework has just
+removed the one graded-severity mechanism (`hasConformanceLevel`) it had — reintroducing grading
+inside `sh:Violation` itself would undo that in miniature.
+
+**The standing definition, both severities SHACL already ships and one this framework had used
+only once before now:**
+
+| Severity | External anchor | This framework's own definition | Consequence |
+|---|---|---|---|
+| `sh:Violation` | ISO Nonconformity; the SHACL default | A stated rule is broken. What the framework requires did not happen. | `sh:conforms` is false; blocks conformance |
+| `sh:Warning` | ISO Observation | No rule is broken, but a real risk exists that one will be, or that the register's own claim is weaker than it looks. | Reported, never blocks conformance |
+| `sh:Info` | ISO Opportunity for Improvement | Nothing is wrong and nothing is at risk; a genuine opportunity exists to make the register more complete, precise, or useful than it is required to be. | Reported, never blocks conformance, never phrased as a problem |
+
+**Not retroactively re-graded across the whole suite in this pass.** Only one shape
+(`UnscoredItemAdvisoryShape`) used `sh:Info` before this ruling; the other 65 shapes currently
+carrying `sh:Warning` were written under a two-tier habit, not against this three-tier definition,
+and a systematic pass checking each against "risk" versus "opportunity" is real, separate audit
+work — this ruling establishes the standard to audit against, not a claim that the audit is done.
+
+### 2.5c-xxxvii Model artefacts
 
 `ModelArtifact` records **that** a model exists, its kind, and what it describes — never its content. A
 register holding diagrams becomes a modelling tool; the framework governs records about work.

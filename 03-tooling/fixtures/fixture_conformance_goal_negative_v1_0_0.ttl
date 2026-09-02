@@ -1,0 +1,22 @@
+# fixture_conformance_goal_negative_v1_0_0.ttl — proves
+# AdoptionConformanceGoalShape. Register-wide by design, matching the
+# established pattern for "this register declares no Mission"-style
+# checks: a single profile, a single graph, checked incrementally by
+# adding exactly what each clause needs and re-testing before moving on
+# (verified directly via SPARQL during authoring, not asserted). Kept to
+# one profile deliberately -- multiple AdoptionProfiles in one graph
+# would make every clause's own $this-independent register-wide check
+# fire identically for all of them, which is correct behavior for a
+# real, single-profile deployment but a misleading test shape.
+
+@prefix backlog: <http://example.org/backlog#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix ex:      <http://example.org/conformance-goal-negative-fixture#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+ex:P_NoConformanceGoal a backlog:AdoptionProfile ; backlog:profileAppliesTo "No conformance goal case" ;
+    backlog:governsBacklog ex:BL1 ; backlog:decidedBy backlog:Owner ;
+    backlog:hasDecisionRationale "L1: conformance-goal structural fixture." ;
+    backlog:adoptsFacet backlog:CoreFacet , backlog:EvidenceFacet , backlog:InvariantFacet , backlog:AuditFacet ;
+    backlog:hasExpectedPolarity backlog:Polarity_Negative .
+ex:BL1 a backlog:Backlog ; backlog:hasIdentifier "BL-NOGOAL" ; backlog:hasState backlog:InProgress .

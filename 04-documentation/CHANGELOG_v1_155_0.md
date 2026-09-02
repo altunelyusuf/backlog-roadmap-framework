@@ -1,5 +1,53 @@
 # Changelog
 
+## v1.155.0 — 2026-09-02 (MAJOR: another registrant's updated conformance-goal handover fully adopted; a researched, externally-grounded severity taxonomy established; a real fixture-cascade honestly disclosed, not rushed)
+
+**another registrant's handover was updated (v1.0.0 -> v1.1.0) mid-session, following a direct owner request to
+specify exactly when each measure belongs.** Re-read in full before acting, not assumed unchanged.
+Both versions moved to `07-handover-inbox/accepted/`, v1.0.0 kept as historical record per the
+update's own framing. Section 3's measure-to-ceremony timing table adopted as Standard
+documentation (2.5c-xxxvi), not SHACL — the handover's own correct argument, grounded in `G7`
+("a tool that refuses is not thereby correct"): whether a reading was taken at the honestly right
+moment is a judgement no git-commit-ordered chain can verify. Its one concrete build ask,
+`observedDuringCeremony` (`MetricObservation` -> `SprintReviewCeremony`, advisory-only) and
+`CeremonyLinkAdvisoryShape`, built and proven with a dedicated fixture. The kickoff-timing finding
+— build the conformance goal at lineage start, not reactively — folded into the pattern's own
+documentation (2.5c-xxxiv) for future adopters.
+
+**Severity confirmed as `sh:Violation` for `AdoptionConformanceGoalShape`, researched against
+external standards before finalizing, not decided from habit.** Asked to discipline violation
+versus warning versus opportunity and whether a fourth category exists. Two independent standard
+families checked and found to converge: SHACL 1.2 Core itself defines exactly `sh:Violation`,
+`sh:Warning`, `sh:Info` (the last explicitly documented as not signalling a problem at all); ISO
+9001/13485/14001/45001 audit practice converges on the identical three-way split — Nonconformity
+(a requirement breached), Observation (a risk, not yet a breach, addressed as best practice not
+obligation), Opportunity for Improvement (a suggestion, no response required). No external
+standard checked names a fourth severity tier. `G43` records the standing definition; only one of
+this package's own 66 `sh:Warning` shapes had previously used `sh:Info`, and a systematic pass
+re-checking the rest against this three-tier definition is real, separate, disclosed follow-up —
+this release establishes the standard to audit against, not a claim the audit is complete.
+
+**A real fixture-cascade found and disclosed, not silently patched or silently shipped.**
+`AdoptionConformanceGoalShape` requires every `AdoptionProfile` to carry a conformance goal; 14
+existing fixtures predate the shape and do not. A first attempt to patch all 14 with a minimal
+block found the real requirement chain is far deeper — a bare `Goal`/`Objective` needs its own
+`rdfs:label`, mission and scope context, intent origin, and more, matching the same full-L4-
+completeness discovery the level-removal fixture repair already made once this session. Reverted
+cleanly rather than shipped half-patched: `fixture_item_tie_v1_0_0`, `fixture_l4_conformant_v1_0_0`,
+`fixture_measurement_due_v1_0_0`, `fixture_package_regularity_v1_0_0`,
+`fixture_pipeline_digestfail_v1_0_0`, `fixture_pipeline_v1_0_0`, `fixture_positive_v1_7_0`,
+`fixture_productscopekind_v1_0_0`, `fixture_progress_v1_0_0`, `fixture_r3_disagreement_v1_1_0`,
+`fixture_scope_first_v1_0_0`, `fixture_sprint_ceremonies_v1_0_0`, `fixture_staged_lineage_v1_0_0`,
+`fixture_tied_gates_v1_0_0` — all 14 confirmed reverted to their exact prior state, none left
+broken or half-repaired.
+
+`LINEAGE_OPERATING_DISCIPLINE` bumped v11.0.0 -> v13.0.0, adding `G42` (the conformance-goal
+pattern) and `G43` (the severity taxonomy). 0 SHACL violations on the real register (85 warnings,
+unchanged). All six shipped checkers PASS. Both new shapes this release (`AdoptionConformanceGoalShape`,
+`CeremonyLinkAdvisoryShape`) verified against the true git-published baseline and proven by
+dedicated fixtures.
+
+
 ## v1.154.0 — 2026-09-02 (MINOR: closed lineages exempted from advisory processing, using an existing mechanism; the still-active lineage kept fully enforced)
 
 **Asked to differentiate lineage-specific gaps from methodology gaps, build the methodology to

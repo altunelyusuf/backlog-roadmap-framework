@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.80.0> ;
-    owl:versionInfo "1.80.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.81.0> ;
+    owl:versionInfo "1.81.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.80.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.79.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.78.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.77.0> ;
@@ -251,6 +252,61 @@ backlog:AdoptionProfileShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             FILTER NOT EXISTS { $this backlog:adoptsFacet backlog:AuditFacet }
+        }""" ] .
+
+backlog:AdoptionConformanceGoalShape a sh:NodeShape ;
+    sh:targetClass backlog:AdoptionProfile ;
+    sh:severity sh:Violation ;
+    rdfs:label "Every lineage carries a real goal for its own BRSF conformance"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_conformance_goal_negative_v1_0_0.ttl" ;
+    backlog:fixtureCaseName "P_NoConformanceGoal" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "This lineage carries no conformance goal. Per the default pattern this framework recommends for every adopting lineage (07-handover-inbox/accepted, originally another registrant's own real fix to itself): a Goal with isConformanceGoal true, genuinely Mission-facing, because every claim a mission makes depends on the register carrying that claim being itself honestly conformant to the framework governing it. Never a forced fit onto an existing product goal — that is exactly the dishonest fit this framework's own checks exist to catch elsewhere." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            FILTER NOT EXISTS { ?g a backlog:Goal ; backlog:isConformanceGoal true }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "This lineage's conformance goal has no real objective beneath it. A goal with nothing measuring it is the unfalsifiable-plan failure in its plainest form, here applied reflexively to the register's own trustworthiness rather than the product." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?g a backlog:Goal ; backlog:isConformanceGoal true .
+            FILTER NOT EXISTS { ?o backlog:contributesToGoal ?g }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "This lineage's conformance objective names no success metric. Conformance that cannot be counted cannot be missed, and an objective that cannot be missed constrains no decision." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?g a backlog:Goal ; backlog:isConformanceGoal true .
+            ?o backlog:contributesToGoal ?g .
+            FILTER NOT EXISTS { ?o backlog:hasSuccessMetric ?m }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "This lineage's conformance objective names no checkpoint — no time or condition by which it must be measured again. A metric with nothing to measure it by is a number nobody is committed to revisiting." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?g a backlog:Goal ; backlog:isConformanceGoal true .
+            ?o backlog:contributesToGoal ?g .
+            FILTER NOT EXISTS { ?o backlog:hasCheckpoint ?cp }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "This lineage's conformance objective has never actually been measured. A checkpoint with no observation against it is a commitment to measure that was never kept — the same gap SelfExemptionShape's own incident named for a declared level nobody test-drove." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?g a backlog:Goal ; backlog:isConformanceGoal true .
+            ?o backlog:contributesToGoal ?g .
+            FILTER NOT EXISTS { ?obs a backlog:MetricObservation ; backlog:observationFor ?o }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "More than one Goal in this lineage carries isConformanceGoal true. Conformance is one fact about the register, not a family of them — a second conformance goal is either a duplicate this lineage should retire, or a sign the first one was scoped wrong." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            { SELECT $this (COUNT(?g) AS ?n) WHERE {
+                $this a backlog:AdoptionProfile .
+                ?g a backlog:Goal ; backlog:isConformanceGoal true .
+              } GROUP BY $this
+            }
+            FILTER (?n > 1)
         }""" ] .
 
 #################################################################
@@ -3943,6 +3999,23 @@ backlog:ObjectiveCheckpointTimingShape a sh:NodeShape ;
             $this a backlog:ObjectiveCheckpoint .
             FILTER NOT EXISTS { $this backlog:checkpointDate ?d }
             FILTER NOT EXISTS { $this backlog:checkpointCondition ?c }
+        }""" ] .
+
+backlog:CeremonyLinkAdvisoryShape a sh:NodeShape ;
+    sh:targetClass backlog:MetricObservation ;
+    sh:severity sh:Warning ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_ceremony_link_negative_v1_0_0.ttl" ;
+    backlog:fixtureCaseName "MO_NoLink" ;
+    rdfs:label "Advisory: a reading that could be tied to the review that produced it, isn't"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: this observation was taken at or after the review that closed metric-moving work for the same objective, but does not say observedDuringCeremony. Not a claim the reading was taken at the wrong moment -- only that the structural link this framework's own recommended pattern uses to say so is missing. another registrant's own real incident (07-handover-inbox/accepted) found readings landing at plausible-looking but wrong moments precisely because nothing recorded which ceremony, if any, a reading belonged to." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT DISTINCT $this WHERE {
+            ?rev a backlog:SprintReviewCeremony ; backlog:closesStory ?story ; backlog:heldAt ?ht .
+            ?obj backlog:metricMovableBy ?story .
+            $this a backlog:MetricObservation ; backlog:observationFor ?obj ; backlog:observedAt ?od .
+            FILTER (?od >= ?ht)
+            FILTER NOT EXISTS { $this backlog:observedDuringCeremony ?rev }
         }""" ] .
 
 backlog:MeasurementDueAfterReviewShape a sh:NodeShape ;

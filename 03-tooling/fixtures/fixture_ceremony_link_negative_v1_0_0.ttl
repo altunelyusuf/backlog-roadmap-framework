@@ -1,0 +1,55 @@
+# fixture_ceremony_link_negative_v1_0_0.ttl — proves CeremonyLinkAdvisoryShape.
+# Two reviews, each closing a story metricMovableBy names for a distinct
+# objective, each with a fresh reading taken after the review: one names
+# observedDuringCeremony (stays silent), one doesn't (fires). Structural
+# pattern reused from fixture_measurement_due_v1_0_0.ttl, already proven.
+
+@prefix backlog: <http://example.org/backlog#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix ex:      <http://example.org/ceremony-link-fixture#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+ex:It_C a backlog:Iteration ; backlog:hasIdentifier "IT-C" ;
+    backlog:iterationStart "2026-06-01T00:00:00Z"^^xsd:dateTime ;
+    backlog:iterationEnd "2026-06-14T00:00:00Z"^^xsd:dateTime .
+
+ex:Plan_C a backlog:SprintPlanningCeremony ; backlog:ceremonyFor ex:It_C ;
+    backlog:heldAt "2026-06-01T00:00:00Z"^^xsd:dateTime ;
+    backlog:includesPlanningEvent ex:PE_S1 , ex:PE_S2 .
+
+ex:Goal_C a backlog:Goal ; rdfs:label "Fixture goal"@en ; backlog:decidedBy backlog:Owner .
+
+# --- Case 1: reading present, but no observedDuringCeremony -> fires ---
+ex:S1 a backlog:Story ; backlog:hasIdentifier "S-C1" ; backlog:hasState backlog:Done ; backlog:pursuesObjective ex:Obj1 .
+ex:PE_S1 a backlog:PlanningEvent ; backlog:plansItem ex:S1 ; backlog:plannedInto ex:It_C ;
+    backlog:plannedAt "2026-06-01T00:00:00Z"^^xsd:dateTime ; backlog:producesTask ex:T_S1 .
+ex:T_S1 a backlog:ExecutionTask ; backlog:hasIdentifier "T-C1" ; backlog:hasState backlog:Done .
+ex:Obj1 a backlog:Objective ; backlog:metricMovableBy ex:S1 ;
+    backlog:contributesToGoal ex:Goal_C ; backlog:hasSuccessMetric ex:Metric_C1 ;
+    backlog:hasBaselineValue 0.0 ; backlog:hasTargetValue 10.0 ;
+    backlog:hasTargetDirection backlog:Dir_Increase .
+ex:Metric_C1 a ex:LocalMetric .
+ex:Review_NoLink a backlog:SprintReviewCeremony ; backlog:ceremonyFor ex:It_C ;
+    backlog:heldAt "2026-06-14T00:00:00Z"^^xsd:dateTime ; backlog:reviewsCeremony ex:Plan_C ;
+    backlog:closesStory ex:S1 .
+ex:MO_NoLink a backlog:MetricObservation ; backlog:observationFor ex:Obj1 ;
+    backlog:observesMetric ex:Metric_C1 ; backlog:hasObservationMethod "Fixture-stated value, not re-derivable." ;
+    backlog:observedAt "2026-06-15T00:00:00Z"^^xsd:dateTime ; backlog:hasObservedValue 5.0 .
+
+# --- Case 2: reading present, observedDuringCeremony correctly links it -> stays silent ---
+ex:S2 a backlog:Story ; backlog:hasIdentifier "S-C2" ; backlog:hasState backlog:Done ; backlog:pursuesObjective ex:Obj2 .
+ex:PE_S2 a backlog:PlanningEvent ; backlog:plansItem ex:S2 ; backlog:plannedInto ex:It_C ;
+    backlog:plannedAt "2026-06-01T00:00:00Z"^^xsd:dateTime ; backlog:producesTask ex:T_S2 .
+ex:T_S2 a backlog:ExecutionTask ; backlog:hasIdentifier "T-C2" ; backlog:hasState backlog:Done .
+ex:Obj2 a backlog:Objective ; backlog:metricMovableBy ex:S2 ;
+    backlog:contributesToGoal ex:Goal_C ; backlog:hasSuccessMetric ex:Metric_C2 ;
+    backlog:hasBaselineValue 0.0 ; backlog:hasTargetValue 10.0 ;
+    backlog:hasTargetDirection backlog:Dir_Increase .
+ex:Metric_C2 a ex:LocalMetric .
+ex:Review_Linked a backlog:SprintReviewCeremony ; backlog:ceremonyFor ex:It_C ;
+    backlog:heldAt "2026-06-14T00:00:00Z"^^xsd:dateTime ; backlog:reviewsCeremony ex:Plan_C ;
+    backlog:closesStory ex:S2 .
+ex:MO_Linked a backlog:MetricObservation ; backlog:observationFor ex:Obj2 ;
+    backlog:observesMetric ex:Metric_C2 ; backlog:hasObservationMethod "Fixture-stated value, not re-derivable." ;
+    backlog:observedAt "2026-06-15T00:00:00Z"^^xsd:dateTime ; backlog:hasObservedValue 5.0 ;
+    backlog:observedDuringCeremony ex:Review_Linked .

@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v11.0.0
+# Lineage Operating Discipline — v13.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -717,4 +717,57 @@ which continue to apply to every individual regardless of lineage status. An act
 gaps are never exempted this way, however old the individual item inside it — `Ev_It7` and
 `EP_CodeTables` belong to `L_OntologyDriven`, not an archived lineage, and their own warnings stay
 exactly as strict as everything else the still-open lineage is held to.
+
+## G42 — Every adopting lineage carries a real, enforced goal for its own conformance, built at kickoff
+
+Adopted from another registrant's own real fix to itself (`07-handover-inbox/accepted`), enforced rather than
+merely documented per the owner's own explicit direction: `AdoptionConformanceGoalShape` requires
+every `AdoptionProfile` to carry a `Goal` (`isConformanceGoal true`, `Facing_Mission`) with a real
+`Objective` — success metric, checkpoint, and at least one actual measurement, the full goal ->
+objective -> metric -> time-to-measure chain this framework already requires of every product
+claim, applied reflexively to the register's own trustworthiness. `WI_L4ConformanceGapClosure` had
+nowhere honest to attach in another registrant's own register precisely because no product `Objective` was
+honestly about this; forcing it onto one would have been the dishonest fit this framework's own
+checks exist to catch elsewhere.
+
+**Built at lineage kickoff, not reactively.** another registrant's own revision of the handover, following a
+direct request to specify exactly which measure belongs at which event, makes the case precisely:
+a lineage that waits until conformance work is needed to build this goal has already lost the
+ability to attach that work anywhere honest. BRSF's own register now carries its own real instance
+— `Dir_Hold`, not `Dir_Increase`, since the honest objective is proving a count that has never
+moved continues not to, not closing a gap that was never real.
+
+**The companion finding — `observedDuringCeremony`, advisory-only** — is deliberately not a
+violation and never will be by the same reasoning `G7` already gives: whether a reading was taken
+at the honestly right moment is a judgement no git-commit-ordered chain can verify the way stage
+order can, so the property lets a disciplined lineage say so structurally rather than accusing an
+undisciplined one of dishonesty it cannot actually detect. The full measure-to-ceremony timing
+table this same handover proposes is documentation (Standard 2.5c-xxxvi), not SHACL, for the
+identical reason — a temporal check nobody can fixture honestly is worse than no check.
+
+## G43 — Three severities, researched against external standards before finalizing, not four
+
+Asked to discipline violation versus warning versus opportunity, and whether a fourth category
+exists, checked against real external standards rather than decided from this framework's own
+prior habit. SHACL 1.2 Core itself defines exactly `sh:Violation`, `sh:Warning`, `sh:Info` — the
+last explicitly documented as not signalling a problem. Independently, ISO 9001/13485/14001/45001
+audit practice converges on the identical three-way split: Nonconformity (a requirement breached),
+Observation (a risk, not yet a breach, addressed as best practice not obligation), Opportunity for
+Improvement (a suggestion, no response required). No standard checked names a fourth severity
+tier; ISO's own Major/Minor is a subdivision of Nonconformity's consequence, not a fourth kind of
+finding — and this framework has just removed the one graded-severity mechanism it had
+(`hasConformanceLevel`, `G40`); grading inside `sh:Violation` itself would reintroduce that in
+miniature.
+
+**The standing definition** (Standard 2.5c-xxxvii): `sh:Violation` — a stated rule is broken.
+`sh:Warning` — no rule is broken, but a real risk exists that one will be, or that a claim the
+register makes is weaker than it looks. `sh:Info` — nothing is wrong or at risk; a genuine
+opportunity to be more complete, precise, or useful than required.
+
+**Not retroactively re-graded across the whole suite in this pass.** 65 of 66 `sh:Warning` shapes
+were written before this three-tier definition existed and have not been individually checked
+against it; this ruling sets the standard future audit work checks against, not a claim the audit
+already happened. A `Violation` newly added under this same session — `AdoptionConformanceGoalShape`
+— is confirmed correctly graded by this same standard: a lineage lacking the enforced conformance
+goal has broken a stated rule, not merely risked breaking one.
 

@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.16.0> ;
-    owl:versionInfo "9.16.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.17.0> ;
+    owl:versionInfo "9.17.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.16.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.15.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.14.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.13.0> ;
@@ -231,8 +232,8 @@ fw:Out2_Scope a backlog:StageOutput ;
 #  analysis still supports them.
 #################################################################
 fw:Area_Governance a backlog:ScopeArea ;
-    backlog:areaLocation "LINEAGE_OPERATING_DISCIPLINE_v11_0_0.md" ;
-    backlog:areaMeasure "Governance rulings G1-G41, each a markdown heading with prose. Nothing in the ontology carries them; the lineage-discipline gate checks that claims about ENFORCEMENT match the shapes, and does not check that the rulings themselves exist as anything a query can reach." .
+    backlog:areaLocation "LINEAGE_OPERATING_DISCIPLINE_v13_0_0.md" ;
+    backlog:areaMeasure "Governance rulings G1-G43, each a markdown heading with prose. Nothing in the ontology carries them; the lineage-discipline gate checks that claims about ENFORCEMENT match the shapes, and does not check that the rulings themselves exist as anything a query can reach." .
 fw:Del_OntGovernance backlog:deliverableForArea fw:Area_Governance .
 fw:Area_CodeTables a backlog:ScopeArea ;
     backlog:areaLocation "03-tooling/ — 12 python modules" ;
@@ -283,6 +284,45 @@ fw:Out2_Goal a backlog:StageOutput ;
 #  not about areas — which is itself the finding, since that lineage
 #  had no scope-facing or containment-facing goal at all and could
 #  not have reported either failure.
+fw:Goal_BRSFConformance a backlog:Goal ;
+    rdfs:label "This package's own real record honestly conforms to the framework it publishes"@en ;
+    backlog:contributesToMission fw:Mission_OntologyDriven ;
+    backlog:derivesFromScope fw:Scope_Ontology ;
+    backlog:hasGoalFacing backlog:Facing_Mission ;
+    backlog:goalCoversArea fw:Area_Governance ;
+    backlog:isConformanceGoal true ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out2_Goal ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:hasRationale "The default pattern this package itself now recommends to every adopting lineage, applied reflexively to its own register: adopted from another registrant's own real fix to itself (07-handover-inbox/accepted, owner's direct suggestion it become standard). Genuinely Mission-facing, not scope-facing: every claim this package's own mission makes about being machine-confirmable through ontologies depends on this register carrying that claim being itself honestly conformant -- a register that fails its own suite cannot be trusted to check anyone else's. Distinct from Goal_GovernanceInOntology and Goal_RuleExecInOntology, both about the PRODUCT (governance expressed as ontology, rules executed by it); this goal is about the REGISTER'S OWN real state against the shapes it ships." .
+
+fw:Obj_BRSFConformanceHeld a backlog:Objective ;
+    rdfs:label "Real SHACL violations against this package's own register, held at zero"@en ;
+    backlog:contributesToGoal fw:Goal_BRSFConformance ;
+    backlog:fillsScope fw:Scope_Ontology ;
+    backlog:hasSuccessMetric fw:Metric_BRSFViolationCount ;
+    backlog:hasBaselineValue "0.0"^^xsd:decimal ;
+    backlog:hasTargetValue "0.0"^^xsd:decimal ;
+    backlog:hasTargetDirection backlog:Dir_Hold ;
+    backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:hasRationale "Baseline and target both zero, honestly: unlike another registrant's own real gap-closure objective (which counted 22 real categories down from a genuine backlog), this package's own register has held zero real violations across the whole of this session's work, itself the direct product of never publishing a release without re-running the six-checker suite first. The objective is not to CLOSE a gap that does not exist, but to keep proving, on a real cadence, that it continues not to -- Dir_Hold, not Dir_Increase, because the honest target here is that the count never moves." ;
+    backlog:producedByStage fw:Out2_Goal .
+
+fw:Metric_BRSFViolationCount a <http://example.org/core#Metric> ;
+    rdfs:label "Real SHACL violations against this package's own register"@en .
+
+fw:CP_BRSFConformanceHeld a backlog:ObjectiveCheckpoint ;
+    backlog:checkpointDate "2026-12-01T00:00:00Z"^^xsd:dateTime ;
+    backlog:expectedValue "0.0"^^xsd:decimal .
+fw:Obj_BRSFConformanceHeld backlog:hasCheckpoint fw:CP_BRSFConformanceHeld .
+
+fw:Obs_BRSFConformanceHeld_v1 a backlog:MetricObservation ;
+    backlog:observesMetric fw:Metric_BRSFViolationCount ; backlog:hasObservedValue "0.0"^^xsd:decimal ;
+    backlog:observedAt "2026-09-02T00:00:00Z"^^xsd:dateTime ; backlog:observationFor fw:Obj_BRSFConformanceHeld ;
+    backlog:hasObservationMethod "Direct read of backlog_validate_v1_5_0.py's own results line against this package's own register at the moment this goal was added: 0 Violation, confirmed identically both before and after this shape's own addition to the suite that checks it." .
+
 fw:Goal_GovernanceInOntology a backlog:Goal ;
     rdfs:label "Every governance ruling the framework enforces is a machine-checkable statement"@en ;
     backlog:contributesToMission fw:Mission_OntologyDriven ;
