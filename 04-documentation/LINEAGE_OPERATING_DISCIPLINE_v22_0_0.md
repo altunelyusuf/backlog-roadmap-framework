@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v21.0.0
+# Lineage Operating Discipline — v22.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -1000,4 +1000,35 @@ checked for a reusable alternative per the owner's own suggestion and found not 
 `document_ontology` governs educational content structure, a different domain, not report-file
 naming. The real path is a third proposal, matching the same precedent, not built this pass: still
 open, not yet closed.
+
+## G51 — `G50`'s own another registrant finding corrected: real, extensible taxonomy, checked at one file rather than the whole ecosystem
+
+Challenged directly, correctly: `G50` checked one another registrant file (`document_ontology_tbox`) and
+concluded another registrant covers only educational content structure. Wrong, and a real instance of the same
+shallow-check failure `L-106` exists to catch — one file is not "another registrant," the same way one class's
+definition read in isolation was not a complete investigation of the 30 unreachable classes
+earlier this session.
+
+Checked properly this time: `rdodi-ecosystem/01-profiles/rdodi_profiles_abox_v1_0_0.ttl` states its
+own real purpose directly — "Profiles are `doc:ArtifactKindSpec` individuals over the existing
+genre/template abstraction... proving type-agnosticism." Three profiles already exist
+(course-companion, technical-report, whitepaper) *specifically to demonstrate* the abstraction is
+not education-specific — the file that would have corrected `G50`'s own claim was one directory
+away and unread.
+
+`G50`'s narrower finding still holds: `doc:ArtifactKindSpec` genuinely does not cover filename
+patterns (checked directly — its own real properties are genre, structural template, voice
+constraint, citation form, quality-scorecard form; a broader ecosystem search for a filename-level
+mechanism inside another registrant found none, confirming filename patterns are genuinely centralized in
+`configuration:` rather than assumed). The naming-convention proposal (`G50`) stands unchanged and
+is still needed. What `G50` got wrong was the *scope* of the another registrant dismissal, not this specific
+technical distinction.
+
+A second real proposal filed on the corrected finding:
+`PROPOSAL_brsf-continuation_rdodi-roadmap-report-profile_v1_0_0.md` — `prof:RoadmapReportKind`, a
+real `ArtifactKindSpec` describing BRSF's own real roadmap-report structure (its actual, verified
+section sequence: header, two NEXT sections under different scoring models, full ranked backlog),
+addressed to another registrant's own governing session per `B1`. Complementary to, not a substitute for, the
+naming-convention proposal — one describes what the artifact structurally is, the other what its
+filename must look like; `RegisterPackage` needs both before it is honestly buildable.
 

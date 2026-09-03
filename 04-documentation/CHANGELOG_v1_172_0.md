@@ -1,5 +1,40 @@
 # Changelog
 
+## v1.172.0 — 2026-09-02 (MINOR: another registrant dismissal corrected — a real, extensible document-profile taxonomy, checked at one file rather than the whole ecosystem; a second, complementary proposal filed for RegisterPackage)
+
+**Challenged directly, correctly.** `v1.171.0`'s own finding that another registrant covers "only educational
+content structure" checked one file (`document_ontology_tbox`) and stopped. The same shallow-check
+failure this session has caught in other forms all along, this time applied to a cross-package
+investigation rather than an in-package one.
+
+**Corrected properly.** `rdodi-ecosystem/01-profiles/rdodi_profiles_abox_v1_0_0.ttl` — one
+directory away from the file first checked — states its own real purpose directly: "Profiles are
+`doc:ArtifactKindSpec` individuals over the existing genre/template abstraction... proving
+type-agnosticism." Three profiles already exist (course-companion, technical-report, whitepaper)
+specifically to demonstrate the abstraction is not education-specific.
+
+**The narrower technical finding still holds.** `doc:ArtifactKindSpec` genuinely does not cover
+filename patterns — its own real properties are genre, structural template, voice constraint,
+citation form, quality-scorecard form. A broader ecosystem search for a filename-level mechanism
+inside another registrant found none; filename patterns are genuinely centralized in `configuration:` across
+the whole OE ecosystem. `G50`'s naming-convention proposal stands unchanged and is still needed —
+what was wrong was the scope of the another registrant dismissal, not this specific distinction.
+
+**A second, complementary proposal filed.**
+`PROPOSAL_brsf-continuation_rdodi-roadmap-report-profile_v1_0_0.md` proposes
+`prof:RoadmapReportKind`, a real `ArtifactKindSpec` describing BRSF's own roadmap report's actual,
+verified structure (header, two `NEXT` sections under different scoring models, full ranked
+backlog — read directly from `backlog_roadmap_report_v1_5_0.py`'s own real output, not assumed).
+Addressed to another registrant's own governing session per `B1`. This describes what the artifact structurally
+*is*; the naming-convention proposal governs what its filename must look like. `RegisterPackage`
+needs both resolved before it is honestly buildable — neither substitutes for the other.
+
+**`G51` records the correction and the second proposal.** Proposal document revised to v1.5.0.
+
+0 SHACL violations on the real register (81 warnings, unchanged — this release is documentation
+only). All six shipped checkers PASS.
+
+
 ## v1.171.0 — 2026-09-02 (MINOR: Increment/ReleaseEvidence built via the alternative mechanism the owner asked to find; RegisterPackage's real root cause traced and a real fix proposed, not adapted)
 
 **Challenged directly, both findings correct.** Asked to check for an alternative mechanism for
