@@ -54,3 +54,7 @@ ex:S_Fake a backlog:Story ; backlog:hasIdentifier "S-FAKE" ; backlog:hasState ba
     backlog:memberOfContainer ex:BL .
 ex:PE_Fake a backlog:PlanningEvent ; backlog:producesTask ex:S_Fake ; backlog:plansItem ex:S_Parent ;
     backlog:plannedInto ex:It ; backlog:plannedAt "2026-08-01T00:00:00Z"^^xsd:dateTime .
+
+# Blueprint (G45/domain-modeling handover): register-level completeness only,
+# no epic in this fixture decomposes, so no entity coverage needed.
+ex:CBP a backlog:Blueprint ; backlog:blueprintFor ex:BL .

@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.83.0> ;
-    owl:versionInfo "1.83.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.84.0> ;
+    owl:versionInfo "1.84.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.83.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.82.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.81.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.80.0> ;
@@ -2173,6 +2174,13 @@ backlog:LineageCompletenessShape a sh:NodeShape ;
         }""" ] ;
 
     sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L2: this register declares no Blueprint. Mission, Objective and ScopeStatement are already register-level required here; a domain model is not, despite being the one intent-chain-adjacent element that establishes what the work is ABOUT rather than what it is FOR. An epic can decompose into fully evidenced, test-harnessed stories with no domain entity ever named, and every other shape in this suite reports clean the whole way." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            FILTER NOT EXISTS { ?b a backlog:Blueprint ; backlog:blueprintFor $this }
+        }""" ] ;
+
+    sh:sparql [ a sh:SPARQLConstraint ;
         sh:message "L2: this register names no Definition of Done. Completion is then whatever each claim says it is, and every Done in the register rests on an unstated bar." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
@@ -4112,6 +4120,15 @@ backlog:EpicSpecifiedShape a sh:NodeShape ;
         sh:select """SELECT $this WHERE {
             $this backlog:decomposesInto ?s ; backlog:hasAcceptanceCriterion ?ac .
             FILTER NOT EXISTS { ?ac backlog:coveredByCase ?tc }
+            FILTER NOT EXISTS { ?sup backlog:supersedesMission ?m . $this backlog:pursuesObjective ?o .
+                                ?o backlog:contributesToGoal ?g . ?g backlog:contributesToMission ?m }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: this epic decomposes into stories and covers no domain entity. Analysis is meant to precede design the same way specification precedes conversion — the two other clauses of this shape already enforce that order for Definition of Done and test coverage. An epic can build real capability against entities never named in any domain model, and nothing upstream of this clause would notice." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:decomposesInto ?s .
+            FILTER NOT EXISTS { $this backlog:coversEntity ?e }
             FILTER NOT EXISTS { ?sup backlog:supersedesMission ?m . $this backlog:pursuesObjective ?o .
                                 ?o backlog:contributesToGoal ?g . ?g backlog:contributesToMission ?m }
         }""" ] .

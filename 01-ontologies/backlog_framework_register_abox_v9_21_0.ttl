@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.20.0> ;
-    owl:versionInfo "9.20.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.21.0> ;
+    owl:versionInfo "9.21.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.20.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.19.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.18.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.17.0> ;
@@ -235,8 +236,8 @@ fw:Out2_Scope a backlog:StageOutput ;
 #  analysis still supports them.
 #################################################################
 fw:Area_Governance a backlog:ScopeArea ;
-    backlog:areaLocation "LINEAGE_OPERATING_DISCIPLINE_v16_0_0.md" ;
-    backlog:areaMeasure "Governance rulings G1-G45, each a markdown heading with prose. Nothing in the ontology carries them; the lineage-discipline gate checks that claims about ENFORCEMENT match the shapes, and does not check that the rulings themselves exist as anything a query can reach." .
+    backlog:areaLocation "LINEAGE_OPERATING_DISCIPLINE_v17_0_0.md" ;
+    backlog:areaMeasure "Governance rulings G1-G46, each a markdown heading with prose. Nothing in the ontology carries them; the lineage-discipline gate checks that claims about ENFORCEMENT match the shapes, and does not check that the rulings themselves exist as anything a query can reach." .
 fw:Del_OntGovernance backlog:deliverableForArea fw:Area_Governance .
 fw:Area_CodeTables a backlog:ScopeArea ;
     backlog:areaLocation "03-tooling/ — 12 python modules" ;
@@ -4437,3 +4438,61 @@ fw:Find_ChangelogHeaderLoss a backlog:RetrospectiveFinding ;
     backlog:hasRootCause "A str_replace prepending a new changelog entry consumed the following version's own header line because the replacement text did not re-include it, silently orphaning that entry's body under the wrong heading until the next read caught the gap in the header sequence." ;
     backlog:hasRemedy "After any edit that prepends content above existing text, re-read the header sequence immediately rather than trusting the edit tool's success response alone." .
 
+
+#################################################################
+#  v1.166.0 — BRSF's own real Blueprint (G45's own domain-modeling
+#  requirement, applied reflexively -- the register carrying that
+#  requirement is itself now honestly conformant to it, matching the
+#  same discipline G42/AdoptionConformanceGoalShape already applies
+#  to conformance goals). Three domain entities, each a real class
+#  already shipped in this package's own TBox -- the same rigor
+#  agentic-sdlc's own real fix used, not invented for this pass.
+#################################################################
+
+fw:Blueprint_BRSF a backlog:Blueprint ; backlog:blueprintFor fw:Register .
+
+fw:Entity_GovernanceRuling a backlog:DomainEntity ; rdfs:label "Governance ruling"@en .
+fw:Entity_CodeTable a backlog:DomainEntity ; rdfs:label "Code table"@en .
+fw:Entity_ToolScript a backlog:DomainEntity ; rdfs:label "Tool script"@en .
+
+# Governance ruling: created when this package's own governance decisions were
+# moved out of prose into the ontology (EP_Rulings); actively used every time
+# the lineage-discipline gate checks a ruling's own enforcement claim against
+# the shapes. Never suspended or terminated by design -- this package's own
+# discipline is "a rule keeps its incident": a ruling's mechanism can retire,
+# but the ruling's own text and record never do, so those two stages are a
+# genuine, honest gap, not an oversight.
+fw:EP_Rulings backlog:coversEntity fw:Entity_GovernanceRuling ; backlog:coversStage backlog:Stage_Creation .
+fw:Gap_GovRuling_ActiveUse a backlog:BlueprintGap ; backlog:gapForEntity fw:Entity_GovernanceRuling ;
+    backlog:gapForStage backlog:Stage_ActiveUse ;
+    backlog:hasGapReason "No work item names this stage directly; active use is the lineage-discipline gate's own re-verification, not a backlog item, and this package has not yet modeled tooling-driven use as coverage." .
+fw:Gap_GovRuling_Suspension a backlog:BlueprintGap ; backlog:gapForEntity fw:Entity_GovernanceRuling ;
+    backlog:gapForStage backlog:Stage_SuspensionException ;
+    backlog:hasGapReason "Genuinely not modeled: this package's own discipline treats a ruling as either standing or superseded, with no intermediate suspended state." .
+fw:Gap_GovRuling_Termination a backlog:BlueprintGap ; backlog:gapForEntity fw:Entity_GovernanceRuling ;
+    backlog:gapForStage backlog:Stage_Termination ;
+    backlog:hasGapReason "Deliberately absent by design: 'a rule keeps its incident' (G40) means a ruling's own record is never removed, only its enforcing mechanism retires." .
+
+# Code table: created across EP_CodeTables/EP_StandardRows/EP_TablesBatch;
+# actively used by every shape and script that queries a table's own rows.
+fw:EP_CodeTables backlog:coversEntity fw:Entity_CodeTable ; backlog:coversStage backlog:Stage_Creation .
+fw:EP_StandardRows backlog:coversEntity fw:Entity_CodeTable ; backlog:coversStage backlog:Stage_ActiveUse .
+fw:EP_TablesBatch backlog:coversEntity fw:Entity_CodeTable ; backlog:coversStage backlog:Stage_Creation .
+fw:Gap_CodeTable_Suspension a backlog:BlueprintGap ; backlog:gapForEntity fw:Entity_CodeTable ;
+    backlog:gapForStage backlog:Stage_SuspensionException ;
+    backlog:hasGapReason "Genuinely not modeled: a table is complete or it is being actively populated; nothing in this package's own history has needed a suspended state." .
+fw:Gap_CodeTable_Termination a backlog:BlueprintGap ; backlog:gapForEntity fw:Entity_CodeTable ;
+    backlog:gapForStage backlog:Stage_Termination ;
+    backlog:hasGapReason "No table has ever been retired in this package's own history; the standing rule (no multi-version clutter) exists but has not yet had a real instance to cover." .
+
+# Tool script: created across EP_RuleExec/EP_ScriptDecisions, where scripts
+# stopped deciding and started executing; actively used every validation run
+# this whole session performed.
+fw:EP_RuleExec backlog:coversEntity fw:Entity_ToolScript ; backlog:coversStage backlog:Stage_Creation .
+fw:EP_ScriptDecisions backlog:coversEntity fw:Entity_ToolScript ; backlog:coversStage backlog:Stage_ActiveUse .
+fw:Gap_ToolScript_Suspension a backlog:BlueprintGap ; backlog:gapForEntity fw:Entity_ToolScript ;
+    backlog:gapForStage backlog:Stage_SuspensionException ;
+    backlog:hasGapReason "Genuinely not modeled: a script is current or superseded by a new version; this package has never suspended one without replacing it outright." .
+fw:Gap_ToolScript_Termination a backlog:BlueprintGap ; backlog:gapForEntity fw:Entity_ToolScript ;
+    backlog:gapForStage backlog:Stage_Termination ;
+    backlog:hasGapReason "Real gap: superseded script versions are removed from the package on each release (no multi-version clutter), but nothing records that removal as a lifecycle event on the entity itself." .

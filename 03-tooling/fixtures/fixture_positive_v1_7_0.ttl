@@ -477,6 +477,7 @@ ex:EP001 a backlog:Epic ;
     backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
     backlog:pursuesObjective ex:Obj_SelfService ;
     backlog:decomposesInto ex:US001 , ex:US002 ;
+    backlog:coversEntity ex:Entity_Client ; backlog:coversStage backlog:Stage_ActiveUse ;
     backlog:hasAcceptanceCriterion ex:EP001_AC ;
     backlog:notYetScoreable true ;
     backlog:hasScoreabilityReason "Scored at slice level: the epic carries no score of its own so parent and children cannot double-count." .

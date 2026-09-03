@@ -1,0 +1,43 @@
+# Blueprint/domain-modeling enforcement gap — test drive, not a construction.
+#
+# Proves discrimination for the two new clauses added to LineageCompletenessShape
+# (register declares no Blueprint) and EpicSpecifiedShape (epic decomposes covering
+# no domain entity), proposed by the agentic-sdlc handover
+# (07-handover-inbox/accepted) and built here at the same severity as the real
+# precedent shapes they extend — Violation, matching Mission/Objective/ScopeStatement
+# and matching EpicSpecifiedShape's own DoD/test-coverage clauses — not softened for
+# convenience.
+#
+# EP_Neg: no Blueprint anywhere, decomposes with no coversEntity -> both new clauses fire.
+# EP_Pos: a real Blueprint exists for the backlog, the epic covers a real entity -> silent.
+
+@prefix backlog: <http://example.org/backlog#> .
+@prefix ex:      <http://example.org/bpgap#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+# --- Negative case: BL_Neg carries no Blueprint; EP_Neg covers no entity ---
+ex:BL_Neg a backlog:Backlog ; backlog:hasIdentifier "BL-NEG" ; backlog:hasState backlog:Proposed .
+ex:EP_Neg a backlog:Epic ; backlog:hasIdentifier "E-NEG" ; backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer ex:BL_Neg ; backlog:decomposesInto ex:S_Neg ;
+    backlog:appliesDefinitionOfDone ex:DoD_BG ;
+    backlog:hasAcceptanceCriterion ex:AC_Neg .
+ex:AC_Neg a backlog:AcceptanceCriterion ; backlog:hasGherkinText "Given X, When Y, Then Z." ;
+    backlog:satisfiedByArtifact "backlog:AcceptanceCriterion" ; backlog:coveredByCase ex:TC_Neg .
+ex:TC_Neg a backlog:TestCase ; backlog:exercisesCriterion ex:AC_Neg ; backlog:runsOnData "Fixture-only." .
+ex:S_Neg a backlog:Story ; backlog:hasIdentifier "S-NEG" ; backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer ex:BL_Neg .
+ex:DoD_BG a backlog:DefinitionOfDone .
+
+# --- Positive case: BL_Pos carries a real Blueprint; EP_Pos covers a real entity ---
+ex:BL_Pos a backlog:Backlog ; backlog:hasIdentifier "BL-POS" ; backlog:hasState backlog:Proposed .
+ex:BP_Pos a backlog:Blueprint ; backlog:blueprintFor ex:BL_Pos .
+ex:Ent_Client a backlog:DomainEntity .
+ex:EP_Pos a backlog:Epic ; backlog:hasIdentifier "E-POS" ; backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer ex:BL_Pos ; backlog:decomposesInto ex:S_Pos ;
+    backlog:appliesDefinitionOfDone ex:DoD_BG ; backlog:coversEntity ex:Ent_Client ;
+    backlog:hasAcceptanceCriterion ex:AC_Pos .
+ex:AC_Pos a backlog:AcceptanceCriterion ; backlog:hasGherkinText "Given X, When Y, Then Z." ;
+    backlog:satisfiedByArtifact "backlog:AcceptanceCriterion" ; backlog:coveredByCase ex:TC_Pos .
+ex:TC_Pos a backlog:TestCase ; backlog:exercisesCriterion ex:AC_Pos ; backlog:runsOnData "Fixture-only." .
+ex:S_Pos a backlog:Story ; backlog:hasIdentifier "S-POS" ; backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer ex:BL_Pos .

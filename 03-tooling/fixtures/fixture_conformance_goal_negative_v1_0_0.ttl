@@ -20,3 +20,7 @@ ex:P_NoConformanceGoal a backlog:AdoptionProfile ; backlog:profileAppliesTo "No 
     backlog:adoptsFacet backlog:CoreFacet , backlog:EvidenceFacet , backlog:InvariantFacet , backlog:AuditFacet ;
     backlog:hasExpectedPolarity backlog:Polarity_Negative .
 ex:BL1 a backlog:Backlog ; backlog:hasIdentifier "BL-NOGOAL" ; backlog:hasState backlog:InProgress .
+
+# Blueprint (G45/domain-modeling handover): register-level completeness only,
+# no epic in this fixture decomposes, so no entity coverage needed.
+ex:CBP a backlog:Blueprint ; backlog:blueprintFor ex:BL1 .

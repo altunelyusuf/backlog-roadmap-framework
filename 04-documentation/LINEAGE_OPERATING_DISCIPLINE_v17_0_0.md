@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v16.0.0
+# Lineage Operating Discipline — v17.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -833,4 +833,30 @@ cannot borrow it; only a real `ExecutionTask` with a real, compliant, `PlanningE
 is silent on all four. Zero regressions against the existing fixture suite or BRSF's own register
 (no `ExecutionTask` individuals exist there yet, so the change is purely neutral until this
 framework builds some of its own).
+
+## G46 — Severity is decided by grounded test drive, never by convenience
+
+Challenged directly: proposing `sh:Warning` for the Blueprint/domain-modeling checks (`G45`'s
+sibling ruling) because `Violation` would immediately break BRSF's own register was named for what
+it was — engineering a check to stop seeing what it correctly sees, not a principled severity
+judgement. The correction: build the shape at the severity the real precedent demands
+(`LineageCompletenessShape`'s `Mission`/`Objective`/`ScopeStatement`, `EpicSpecifiedShape`'s own
+`Violation` clauses — the identical shape of check, checking the identical kind of mandatory
+intent-chain element), prove it discriminating against a positive and negative fixture (`L-95`),
+then run it against real data and accept whatever the real data shows.
+
+Run honestly: BRSF's own register produced 7 real violations — 6 epics that genuinely decompose
+without ever naming a domain entity, and the register itself for carrying no `Blueprint`. No
+noise, no false positives; every violation traced to a real, specific, correctly-targeted gap. That
+result is the actual evidence for the severity question, not a hunch about what would be
+convenient — `Violation` was grounded, and the honest next step was closing BRSF's own gap with
+real work (a genuine `Blueprint`, real domain entities, real coverage), not softening the check
+that found it.
+
+**Standing rule:** a shape's severity is set by what the shape's own condition means (a rule
+genuinely broken, versus a real but unproven risk, per `G43`), proven correct by discrimination
+fixtures, and confirmed — never decided — by running it against real data. If a grounded test
+drive against real data produces the severity question's own answer, use it; manually picking a
+milder severity because the honest one is inconvenient is the dishonest fit `G43` and this ruling
+both exist to prevent, even when done with good intentions and real rationality behind it.
 

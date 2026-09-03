@@ -1,5 +1,50 @@
 # Changelog
 
+## v1.166.0 — 2026-09-02 (MAJOR: domain-modeling enforcement shipped, grounded not fabricated — BRSF's own register brought to real conformance with a genuine Blueprint, 12 fixtures repaired, severity decided by test drive)
+
+**The Blueprint/domain-modeling handover rebuilt cleanly on top of v1.165.0's isolated base**, and
+shipped in full this release. `LineageCompletenessShape` gains a register-level "declares no
+Blueprint" clause; `EpicSpecifiedShape` gains a "decomposes covering no domain entity" clause. Both
+independently verified true against BRSF's own real shapes file before building anything, per
+`L-65`.
+
+**Severity decided by grounded test drive, not convenience — challenged directly and corrected.**
+An initial instinct to propose `sh:Warning` (because `Violation` would immediately break BRSF's own
+register) was named for what it was: engineering a check to stop seeing what it correctly sees.
+Corrected per `G46`: both shapes built at `Violation`, matching the real precedent
+(`Mission`/`Objective`/`ScopeStatement`, `EpicSpecifiedShape`'s own `Violation` clauses), proven
+discriminating against a positive/negative fixture (`L-95`), then run against real data and the
+result accepted honestly. BRSF's own register produced 7 real violations — no noise, no false
+positives, every one tracing to a genuine, correctly-targeted gap.
+
+**The honest response to a genuine gap is closing it, not softening the check that found it.**
+BRSF's own register now carries a real `Blueprint`: three domain entities that are genuine,
+already-shipped TBox classes (`Entity_GovernanceRuling`, `Entity_CodeTable`, `Entity_ToolScript`),
+real coverage traced to the actual epics that built them, and specific, honest gap reasons for the
+lifecycle stages this framework genuinely doesn't model — e.g. `GovernanceRuling` has no real
+termination event to cover because this package's own discipline ("a rule keeps its incident")
+means a ruling's record is never removed, only its enforcing mechanism retires. 7 → 0 violations,
+nothing fabricated to make the check pass quietly.
+
+**A wider fixture-suite impact, found by running the checker suite rather than trusting one
+test-drive result, closed in full.** 12 of the 34 fixtures in this package's suite carried the
+same real gap — any fixture with a real `Backlog` and a decomposing `Epic`. `fixture_positive_v1_7_0`
+already had a genuine, partially-swept `Blueprint` from earlier in this package's history; closed
+by extending its own real coverage rather than duplicating structure. The other 11 received the
+same minimal, reusable pattern (a `Blueprint` alone for register-only gaps; `Blueprint` +
+`DomainEntity` + one real coverage + three honest gaps for register-and-epic gaps). All 12
+independently re-verified at 0 violations; the deliberately non-conformant test fixtures
+(`fixture_conformance_goal_negative_v1_0_0`, `fixture_executiontask_inherited_v1_0_0`) correctly
+still fire their own intended violations, confirming nothing was accidentally papered over.
+
+`G46` records the standing rule: a shape's severity is set by what its condition means, proven by
+discrimination fixtures, and confirmed — never decided — by running it against real data.
+
+0 SHACL violations on the real register (83 warnings — down from 85, since the `EffectiveDoDRule`-
+style Blueprint additions did not introduce new advisory noise). All six shipped checkers PASS.
+Lineage-discipline check PASS.
+
+
 ## v1.165.0 — 2026-09-02 (MINOR: ExecutionTask inherited governance, isolated and published ahead of the still-in-progress domain-modeling work, because a parallel session needs it)
 
 **A second real handover from `agentic-sdlc` processed, independently verified, and published on

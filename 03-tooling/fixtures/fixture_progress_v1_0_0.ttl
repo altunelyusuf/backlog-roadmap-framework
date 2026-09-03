@@ -162,3 +162,17 @@ ex:CObj backlog:hasCheckpoint ex:CCP ; backlog:metricMovableBy ex:EP .
 ex:CObs a backlog:MetricObservation ; backlog:observesMetric ex:CMetric ; backlog:observationFor ex:CObj ;
     backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-09-02T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
     backlog:hasObservationMethod "Fixture-stated value, not re-derivable." .
+
+# Blueprint (G45/domain-modeling handover): register-level completeness plus
+# the epic's own domain-entity coverage, swept across all 4 lifecycle stages
+# (1 real coverage from the epic itself, 3 gaps -- matching the framework's
+# own real usage in fixture_positive_v1_7_0, not invented for this fixture).
+ex:CBP a backlog:Blueprint ; backlog:blueprintFor ex:BL .
+ex:CEntity a backlog:DomainEntity .
+ex:EP backlog:coversEntity ex:CEntity ; backlog:coversStage backlog:Stage_ActiveUse .
+ex:CGap1 a backlog:BlueprintGap ; backlog:gapForEntity ex:CEntity ; backlog:gapForStage backlog:Stage_Creation ;
+    backlog:hasGapReason "Fixture-only: creation stage not modeled." .
+ex:CGap2 a backlog:BlueprintGap ; backlog:gapForEntity ex:CEntity ; backlog:gapForStage backlog:Stage_SuspensionException ;
+    backlog:hasGapReason "Fixture-only: suspension/exception stage not modeled." .
+ex:CGap3 a backlog:BlueprintGap ; backlog:gapForEntity ex:CEntity ; backlog:gapForStage backlog:Stage_Termination ;
+    backlog:hasGapReason "Fixture-only: termination stage not modeled." .
