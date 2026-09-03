@@ -1,0 +1,56 @@
+# ExecutionTask inherited governance — test drive, not a construction.
+#
+# Proves discrimination for the four clauses modified per the agentic-sdlc
+# handover (07-handover-inbox/accepted): GovernedDoneShape's evidence and
+# lastAuditedAt clauses, ItemCompletenessLinkageShape's harness clause, and
+# FlowShape's finishedAt clause. Each now accepts inheritance from a real,
+# PlanningEvent-linked, already-compliant parent -- never a blanket waiver.
+#
+# T_NoParent: Done ExecutionTask, no own evidence, no PlanningEvent at all
+#   -> all four clauses fire. The severity mechanism stays live for a task
+#      with nothing to inherit from.
+# T_Inherits: Done ExecutionTask, no own evidence, a real PlanningEvent
+#   names a Story that is itself fully compliant -> all four silent.
+# S_Fake: a Story (NOT an ExecutionTask) with no own evidence and a
+#   PlanningEvent pointing at a compliant "parent" -> still fires. The
+#   inheritance path is conditioned on $this actually being an
+#   ExecutionTask; relabelling cannot borrow it.
+
+@prefix backlog: <http://example.org/backlog#> .
+@prefix ex:      <http://example.org/ettest#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+ex:BL a backlog:Backlog ; backlog:hasIdentifier "BL-ET" ; backlog:hasState backlog:Proposed .
+ex:It a backlog:Iteration ; backlog:hasIdentifier "IT-ET" ; backlog:hasState backlog:Proposed ;
+    backlog:iterationStart "2026-08-01T00:00:00Z"^^xsd:dateTime ; backlog:iterationEnd "2099-08-14T23:59:59Z"^^xsd:dateTime ;
+    backlog:hasCapacity 10.0 .
+
+# --- The compliant parent both real cases plan from ---
+ex:S_Parent a backlog:Story ; backlog:hasIdentifier "S-PARENT" ; backlog:hasState backlog:Done ;
+    backlog:memberOfContainer ex:BL ;
+    backlog:hasAcceptanceCriterion ex:AC_Parent ;
+    backlog:hasEvidence ex:Ev_Parent ; backlog:lastAuditedAt "2026-09-02T00:00:00Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-10T00:00:00Z"^^xsd:dateTime .
+ex:AC_Parent a backlog:AcceptanceCriterion ; backlog:hasGherkinText "Given X, When Y, Then Z." ;
+    backlog:satisfiedByArtifact "backlog:AcceptanceCriterion" .
+ex:Ev_Parent a backlog:TestEvidence ; backlog:evidenceVerified true ;
+    backlog:verifiedByTool "pytest" ; backlog:hasTestSpec "tests/test_parent.py" ;
+    backlog:attestsCriterion ex:AC_Parent .
+ex:Harness_Parent a backlog:TestHarness ; backlog:harnessFor ex:S_Parent ; backlog:hasHarnessEvidence ex:Ev_Parent .
+
+# --- Negative: no PlanningEvent at all, no own evidence -> must still fire ---
+ex:T_NoParent a backlog:ExecutionTask ; backlog:hasIdentifier "T-NOPARENT" ; backlog:hasState backlog:Done ;
+    backlog:hasTaskType backlog:Task_Implementation .
+
+# --- Positive: real PlanningEvent names the compliant parent -> must be silent ---
+ex:T_Inherits a backlog:ExecutionTask ; backlog:hasIdentifier "T-INHERITS" ; backlog:hasState backlog:Done ;
+    backlog:hasTaskType backlog:Task_Implementation .
+ex:PE_Inherits a backlog:PlanningEvent ; backlog:producesTask ex:T_Inherits ; backlog:plansItem ex:S_Parent ;
+    backlog:plannedInto ex:It ; backlog:plannedAt "2026-08-01T00:00:00Z"^^xsd:dateTime .
+
+# --- Defeat guard: a Story, not an ExecutionTask, "planned from" the compliant
+#     parent by the same shape of link -> the exemption must NOT transfer ---
+ex:S_Fake a backlog:Story ; backlog:hasIdentifier "S-FAKE" ; backlog:hasState backlog:Done ;
+    backlog:memberOfContainer ex:BL .
+ex:PE_Fake a backlog:PlanningEvent ; backlog:producesTask ex:S_Fake ; backlog:plansItem ex:S_Parent ;
+    backlog:plannedInto ex:It ; backlog:plannedAt "2026-08-01T00:00:00Z"^^xsd:dateTime .

@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v15.0.0
+# Lineage Operating Discipline — v16.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -799,4 +799,38 @@ well-calibrated to a distinction they predate. The 63 shapes not checked at full
 were judged from message text only; that is a lighter check than the three spot-checks, and a
 later pass with new evidence (firing rate against real data, an adopter's report) is not
 foreclosed.
+
+## G45 — An `ExecutionTask`'s governance may be inherited from a compliant real parent; it may never be waived unconditionally
+
+Adopted from `agentic-sdlc`'s own real reproduction (`07-handover-inbox/accepted`): 13 genuine
+`ExecutionTask` individuals, built exactly as this framework's own vocabulary describes (one real
+step per Story, produced by a real `PlanningEvent`), triggered 81 new violations — nearly doubling
+that session's own register total for artifacts whose own `skos:definition` states they should
+carry minimal overhead ("subordinate by construction, carrying no independent value... when the
+parent is Done the task has no separate life"). `ItemCompletenessLinkageShape`'s own first clause
+already exempts `ExecutionTask`; its other three, and `GovernedDoneShape` and `FlowShape`, did not
+— an inconsistency against the class's own stated design, not a policy choice.
+
+**Explicitly not a blanket exemption**, per the operator's own direct constraint against defeating
+the severity mechanism: adding `FILTER NOT EXISTS { $this a backlog:ExecutionTask }` to the
+remaining clauses, matching the one that already exists, was the first design considered and
+rejected — it would let any item dodge evidence, harness, and flow-tracking requirements entirely
+by relabelling. What is built instead: each of the four affected clauses (`GovernedDoneShape`'s
+evidence and `lastAuditedAt`, `ItemCompletenessLinkageShape`'s harness, `FlowShape`'s `finishedAt`)
+gains an alternate satisfying path — compliant if the task's own evidence exists, **or** if the
+real `PlanningEvent` that produced it (`producesTask`/`plansItem`) names a parent that is itself
+compliant. A task with no real, compliant parent — including one mislabelled to dodge governance —
+still fires exactly as before. This is the same shape of mechanism this framework already uses for
+`effectiveDefinitionOfDone` (`EffectiveDoDRule`, `backlog_rules_v1_6_0.ttl`, R7a/R7b: declared on
+the item, or inherited from a container), applied here to a different, PlanningEvent-based chain
+rather than invented fresh.
+
+Proven discriminating (`fixture_executiontask_inherited_v1_0_0.ttl`, three cases): a `Done`
+`ExecutionTask` with no `PlanningEvent` at all still fires all four clauses; a `Done` `Story` with
+the identical shape of `producesTask`/`plansItem` link to a compliant "parent" still fires all
+four — the exemption is conditioned on `$this` genuinely being an `ExecutionTask`, and relabelling
+cannot borrow it; only a real `ExecutionTask` with a real, compliant, `PlanningEvent`-linked parent
+is silent on all four. Zero regressions against the existing fixture suite or BRSF's own register
+(no `ExecutionTask` individuals exist there yet, so the change is purely neutral until this
+framework builds some of its own).
 

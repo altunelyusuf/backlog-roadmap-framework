@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.82.0> ;
-    owl:versionInfo "1.82.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.83.0> ;
+    owl:versionInfo "1.83.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.82.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.81.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.80.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.79.0> ;
@@ -421,7 +422,7 @@ backlog:GovernedDoneShape a sh:NodeShape ;
     sh:severity sh:Violation ;
     rdfs:label "Governed completion (L3)"@en ;
     sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "L3: a Done item must be anchored by verified test or release evidence; review evidence alone is insufficient." ;
+        sh:message "L3: a Done item must be anchored by verified test or release evidence; review evidence alone is insufficient. An ExecutionTask may inherit this from the real, PlanningEvent-linked parent it was produced from, if that parent is itself compliant; it may never be waived unconditionally." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             $this backlog:hasState backlog:Done .
@@ -430,13 +431,24 @@ backlog:GovernedDoneShape a sh:NodeShape ;
                 ?e backlog:evidenceVerified true .
                 { ?e a backlog:TestEvidence } UNION { ?e a backlog:ReleaseEvidence }
             }
+            FILTER NOT EXISTS {
+                $this a backlog:ExecutionTask .
+                ?pe backlog:producesTask $this ; backlog:plansItem ?parent .
+                ?parent backlog:hasEvidence ?e2 . ?e2 backlog:evidenceVerified true .
+                { ?e2 a backlog:TestEvidence } UNION { ?e2 a backlog:ReleaseEvidence }
+            }
         }""" ] ;
     sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "L3: a Done item must record when it was last individually re-verified (lastAuditedAt); absence means unchecked, not fine." ;
+        sh:message "L3: a Done item must record when it was last individually re-verified (lastAuditedAt); absence means unchecked, not fine. An ExecutionTask may inherit this from a real, compliant PlanningEvent-linked parent; it may never be waived unconditionally." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             $this backlog:hasState backlog:Done .
             FILTER NOT EXISTS { $this backlog:lastAuditedAt ?t }
+            FILTER NOT EXISTS {
+                $this a backlog:ExecutionTask .
+                ?pe backlog:producesTask $this ; backlog:plansItem ?parent .
+                ?parent backlog:lastAuditedAt ?t2 .
+            }
         }""" ] .
 
 #################################################################
@@ -1018,11 +1030,16 @@ backlog:ItemCompletenessLinkageShape a sh:NodeShape ;
             FILTER NOT EXISTS { $this backlog:effectiveDefinitionOfDone ?d }
         }""" ] ;
     sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "L3: a Done item must have a test harness whose completeness was derived, not asserted." ;
+        sh:message "L3: a Done item must have a test harness whose completeness was derived, not asserted. An ExecutionTask may inherit this from a real, compliant PlanningEvent-linked parent; it may never be waived unconditionally." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             $this backlog:hasState backlog:Done .
             FILTER NOT EXISTS { ?h backlog:harnessFor $this ; backlog:harnessComplete true }
+            FILTER NOT EXISTS {
+                $this a backlog:ExecutionTask .
+                ?pe backlog:producesTask $this ; backlog:plansItem ?parent .
+                ?h2 backlog:harnessFor ?parent ; backlog:harnessComplete true .
+            }
         }""" ] ;
     sh:sparql [ a sh:SPARQLConstraint ;
         sh:message "L3: an acceptance criterion of this Done item is attested by no bridge-verified evidence; a green suite that never touched the criterion does not close it." ;
@@ -1225,11 +1242,16 @@ backlog:FlowShape a sh:NodeShape ;
             FILTER (?f < ?s)
         }""" ] ;
     sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "L3: this Done item records no finish point, so throughput and cycle time cannot be measured for it." ;
+        sh:message "L3: this Done item records no finish point, so throughput and cycle time cannot be measured for it. An ExecutionTask may inherit this from a real, compliant PlanningEvent-linked parent; it may never be waived unconditionally." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             $this backlog:hasState backlog:Done .
             FILTER NOT EXISTS { $this backlog:finishedAt ?f }
+            FILTER NOT EXISTS {
+                $this a backlog:ExecutionTask .
+                ?pe backlog:producesTask $this ; backlog:plansItem ?parent .
+                ?parent backlog:finishedAt ?f2 .
+            }
         }""" ] .
 
 backlog:WipLimitShape a sh:NodeShape ;

@@ -1,5 +1,46 @@
 # Changelog
 
+## v1.165.0 — 2026-09-02 (MINOR: ExecutionTask inherited governance, isolated and published ahead of the still-in-progress domain-modeling work, because a parallel session needs it)
+
+**A second real handover from `agentic-sdlc` processed, independently verified, and published on
+its own** — deliberately kept separate from the still-in-progress Blueprint/domain-modeling work
+from earlier this release cycle, because the parallel session that raised this finding needs the
+fix now, not once the larger domain-modeling piece is also ready. Every claim checked against
+BRSF's own real shapes file before acting, not trusted from the proposal: `ItemCompletenessLinkageShape`'s
+first clause genuinely exempts `ExecutionTask` and its other three genuinely do not; neither do
+`GovernedDoneShape` or `FlowShape`, both targeting `WorkItem` broadly.
+
+**Explicitly not a blanket exemption**, per the reporting session's own disclosed operator
+constraint against defeating the severity mechanism. `GovernedDoneShape`'s evidence and
+`lastAuditedAt` clauses, `ItemCompletenessLinkageShape`'s harness clause, and `FlowShape`'s
+`finishedAt` clause each gain an alternate satisfying path: compliant if the task's own evidence
+exists, or if the real `PlanningEvent` that produced it (`producesTask`/`plansItem`) names a
+parent that is itself compliant. The mechanism is the same shape this framework already uses for
+`effectiveDefinitionOfDone` (`EffectiveDoDRule`, `backlog_rules_v1_6_0.ttl`) — found and reused as
+the template, not invented fresh.
+
+**Proven discriminating**, not merely asserted correct: `fixture_executiontask_inherited_v1_0_0.ttl`
+carries three cases — a `Done` `ExecutionTask` with no `PlanningEvent` at all still fires all four
+clauses; a `Done` `Story` given the identical shape of link to a compliant "parent" still fires all
+four (the exemption is conditioned on `$this` genuinely being an `ExecutionTask`, and relabelling
+cannot borrow it); only a real `ExecutionTask` with a real, compliant, `PlanningEvent`-linked
+parent is silent on all four.
+
+**Zero regressions.** All ten previously-repaired fixtures re-verified at 0 violations; BRSF's own
+register unaffected (no `ExecutionTask` individuals exist there yet, so the change is purely
+neutral pending this framework building some of its own). `G45` records the standing ruling —
+inherited, never waived unconditionally — in the discipline itself, per the reporting session's
+own explicit request that the boundary stay recorded, not only implied by the shape text.
+
+**Deliberately excludes** the Blueprint/domain-modeling shapes from the same release cycle — those
+are verified correct and discriminating but affect more of the existing fixture suite than
+initially measured, and need their own dedicated sweep plus BRSF's own real Blueprint before they
+ship. This release isolates the two cleanly rather than shipping either half-finished.
+
+0 SHACL violations on the real register (85 warnings, unchanged). All six shipped checkers PASS.
+Lineage-discipline check PASS.
+
+
 ## v1.164.0 — 2026-09-02 (MINOR: the severity re-audit G43 deferred, run — 0 of 66 sh:Warning shapes warrant reclassification)
 
 **Proceeded on the second item from the standing priority list, now that the fixture cascade is
