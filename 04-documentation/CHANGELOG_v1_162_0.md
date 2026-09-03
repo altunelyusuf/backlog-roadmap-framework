@@ -1,5 +1,37 @@
 # Changelog
 
+## v1.162.0 — 2026-09-02 (MINOR: 9th fixture fully repaired — the largest and most complex of the fourteen — self-inflicted cascade caught and walked back)
+
+**`fixture_progress_v1_0_0` brought from 38 violations to 0** — the largest and most structurally
+varied of the fourteen fixtures, testing progress-rendering across four sibling stories in four
+distinct states (a finished leaf, a started leaf with nothing to measure against, an unstarted
+leaf, a cancelled leaf counted as resolved). The `Done` story required the full evidence/harness/
+audit chain proven on `fixture_positive_v1_7_0` earlier this session; the epic itself needed a
+`TestCase` — a class distinct from `TestEvidence` — via `coveredByCase`/`exercisesCriterion`/
+`runsOnData`, its own real requirement chain.
+
+**`L-31` (verify a property's real domain/range before use) caught two more mistakes this pass,
+both before they reached the validator**: `hasPlanningEvent` does not exist and was redundant
+regardless; `Modality_Human` is actually `Mode_Human`. A malformed SHA-256 hash string (not valid
+64-character lowercase hex) was also caught and corrected before use, not after.
+
+**A self-inflicted cascade noticed and walked back, not pushed through.** Marking a newly-added
+`Iteration` individual `Done` (to close out an otherwise-required `PlanningEvent`) triggered a
+demand for measured duration and a linked deployment record — real requirements, but for a claim
+this fixture never needed to make. Changed to `InProgress` instead, which is honest and sidesteps
+a cascade unrelated to the fixture's actual purpose. The resulting derived-vs-asserted state
+mismatch (one `Done` member alone would derive `Done`) was resolved by adding a second, genuinely
+`InProgress` member, so the asserted state matches what the membership actually implies.
+
+Every state assertion central to the fixture's own test purpose — the finished, started,
+unstarted, and cancelled leaves — was re-verified unchanged after the repair.
+
+**9 of 14 fixtures now fully repaired.** 1 remains with real, disclosed partial progress; 4 remain
+untouched, unrelated to this shape.
+
+0 SHACL violations on the real register (85 warnings, unchanged). All six shipped checkers PASS.
+
+
 ## v1.161.0 — 2026-09-02 (MINOR: 8th fixture fully repaired — OE ceremony revived fresh again, a self-caught mistake this time)
 
 **OE discipline revived fresh from GitHub again, per its own `L-83`** — ceremony re-run as its own

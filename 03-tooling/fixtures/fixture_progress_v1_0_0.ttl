@@ -22,25 +22,80 @@ ex:P a backlog:AdoptionProfile ; backlog:profileAppliesTo "progress probe" ;
     backlog:hasLevelReviewDate "2027-01-01T00:00:00"^^xsd:dateTime ;
     backlog:decidedBy backlog:Owner ; backlog:hasDecisionRationale "probe" ;
     backlog:adoptsFacet backlog:CoreFacet , backlog:EvidenceFacet , backlog:InvariantFacet , backlog:AuditFacet .
-ex:BL a backlog:Backlog ; backlog:hasIdentifier "BL" ; backlog:hasState backlog:InProgress .
+ex:BL a backlog:Backlog ; backlog:hasIdentifier "BL" ; backlog:hasState backlog:InProgress ;
+    backlog:appliesDefinitionOfDone ex:DoD_PG ; backlog:hasCommitment ex:Commit_PG .
+ex:DoD_PG a backlog:DefinitionOfDone .
+ex:Commit_PG a backlog:Commitment ; backlog:commitsToGoal ex:CGoal .
+ex:Lin_PG a backlog:Lineage ; backlog:lineageArchived false ; backlog:lineageForMission ex:CMission ; backlog:lineageOrdinal 1 .
 # a parent one-quarter through: 1 of 4 children resolved
 ex:EP a backlog:Epic ; backlog:hasIdentifier "E-1" ; backlog:hasState backlog:InProgress ;
     backlog:memberOfContainer ex:BL ; backlog:notYetScoreable true ; backlog:hasScoreabilityReason "probe" ;
-    backlog:decomposesInto ex:S1 , ex:S2 , ex:S3 , ex:S4 .
+    backlog:decomposesInto ex:S1 , ex:S2 , ex:S3 , ex:S4 ;
+    backlog:hasAcceptanceCriterion ex:EP_AC1 ; backlog:appliesDefinitionOfDone ex:DoD_PG ;
+    backlog:belongsToLineage ex:Lin_PG ; backlog:pursuesObjective ex:CObj ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasNoApplicableConcern "Fixture epic: no stored state, interface, interaction, structure or authorisation is touched." .
+ex:EP_AC1 a backlog:AcceptanceCriterion ; backlog:hasGherkinText "Given all four children resolve, When the epic is reviewed, Then it is complete." ;
+    backlog:satisfiedByArtifact "backlog:AcceptanceCriterion" ; backlog:coveredByCase ex:TC_EP1 .
+ex:TC_EP1 a backlog:TestCase ; backlog:exercisesCriterion ex:EP_AC1 ; backlog:runsOnData "Fixture-only: all four children in their declared states." .
 ex:S1 a backlog:Story ;
     backlog:hasNoApplicableConcern "Fixture story: no stored state, interface, interaction, structure or authorisation is touched." ; backlog:hasIdentifier "S-1" ; backlog:hasState backlog:Done ;
-    backlog:memberOfContainer ex:BL ; backlog:notYetScoreable true ; backlog:hasScoreabilityReason "probe" .
+    backlog:memberOfContainer ex:BL ; backlog:notYetScoreable true ; backlog:hasScoreabilityReason "probe" ;
+    backlog:hasAcceptanceCriterion ex:S1_AC1 ; backlog:appliesDefinitionOfDone ex:DoD_PG ;
+    backlog:belongsToLineage ex:Lin_PG ; backlog:pursuesObjective ex:CObjScope ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasEvidence ex:S1_Test , ex:S1_Release ;
+    backlog:hasExecutionModality backlog:Mode_Human ;
+    backlog:lastAuditedAt "2026-09-02T00:00:00Z"^^xsd:dateTime ;
+    backlog:startedAt "2026-08-01T00:00:00Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-08-15T00:00:00Z"^^xsd:dateTime .
+ex:S1_AC1 a backlog:AcceptanceCriterion ; backlog:hasGherkinText "Given S-1 is implemented, When the suite runs, Then it passes." ;
+    backlog:satisfiedByArtifact "backlog:AcceptanceCriterion" .
+ex:S1_Test a backlog:TestEvidence ; backlog:evidenceVerified true ; backlog:attestsCriterion ex:S1_AC1 ;
+    backlog:verifiedByTool "pytest" ; backlog:hasTestSpec "tests/test_s1.py::test_done" .
+ex:S1_Release a backlog:ReleaseEvidence ; backlog:evidenceVerified true ;
+    backlog:verifiedByTool "release-pipeline" ; backlog:hasReleaseVersion "1.0.0" ;
+    backlog:hasPackageSHA256 "0000000000000000000000000000000000000000000000000000000000000000" .
+ex:Harness_S1 a backlog:TestHarness ; backlog:harnessFor ex:S1 ; backlog:hasHarnessEvidence ex:S1_Test , ex:S1_Release .
+ex:PE_S1 a backlog:PlanningEvent ; backlog:plansItem ex:S1 ; backlog:plannedInto ex:It_PG ;
+    backlog:plannedAt "2026-08-01T00:00:00Z"^^xsd:dateTime ; backlog:producesTask ex:T_S1 .
+ex:T_S1 a backlog:ExecutionTask ; backlog:hasIdentifier "T-1" ; backlog:hasState backlog:Done ; backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:hasEvidence ex:S1_Test , ex:S1_Release ; backlog:appliesDefinitionOfDone ex:DoD_PG ;
+    backlog:belongsToLineage ex:Lin_PG ; backlog:lastAuditedAt "2026-09-02T00:00:00Z"^^xsd:dateTime ;
+    backlog:startedAt "2026-08-01T00:00:00Z"^^xsd:dateTime ; backlog:finishedAt "2026-08-15T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasAcceptanceCriterion ex:T_S1_AC1 .
+ex:T_S1_AC1 a backlog:AcceptanceCriterion ; backlog:hasGherkinText "Given T-1 is implemented, When the suite runs, Then it passes." ;
+    backlog:satisfiedByArtifact "backlog:AcceptanceCriterion" .
+ex:Harness_T_S1 a backlog:TestHarness ; backlog:harnessFor ex:T_S1 ; backlog:hasHarnessEvidence ex:S1_Test , ex:S1_Release .
+ex:S1_Test backlog:attestsCriterion ex:T_S1_AC1 .
+ex:It_PG a backlog:Iteration ; backlog:hasIdentifier "IT-PG" ; backlog:hasState backlog:InProgress ;
+    backlog:iterationStart "2026-08-01T00:00:00Z"^^xsd:dateTime ; backlog:iterationEnd "2099-08-14T23:59:59Z"^^xsd:dateTime ;
+    backlog:hasCapacity 10.0 .
+ex:S1 backlog:memberOfContainer ex:It_PG .
+ex:S2 backlog:memberOfContainer ex:It_PG .
 ex:S2 a backlog:Story ;
     backlog:hasNoApplicableConcern "Fixture story: no stored state, interface, interaction, structure or authorisation is touched." ; backlog:hasIdentifier "S-2" ; backlog:hasState backlog:InProgress ;
     backlog:memberOfContainer ex:BL ; backlog:notYetScoreable true ; backlog:hasScoreabilityReason "probe" ;
-    backlog:dependsOn ex:S1 .
+    backlog:dependsOn ex:S1 ;
+    backlog:hasAcceptanceCriterion ex:S2_AC1 ; backlog:appliesDefinitionOfDone ex:DoD_PG ;
+    backlog:belongsToLineage ex:Lin_PG ; backlog:pursuesObjective ex:CObjContain ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability .
+ex:S2_AC1 a backlog:AcceptanceCriterion ; backlog:hasGherkinText "Given S-2 is implemented, When the suite runs, Then it passes." ;
+    backlog:satisfiedByArtifact "backlog:AcceptanceCriterion" .
+ex:PE_S2 a backlog:PlanningEvent ; backlog:plansItem ex:S2 ; backlog:plannedInto ex:It_PG ;
+    backlog:plannedAt "2026-08-01T00:00:00Z"^^xsd:dateTime ; backlog:producesTask ex:T_S2 .
+ex:T_S2 a backlog:ExecutionTask ; backlog:hasIdentifier "T-2" ; backlog:hasState backlog:InProgress ; backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:appliesDefinitionOfDone ex:DoD_PG ; backlog:belongsToLineage ex:Lin_PG .
 ex:S3 a backlog:Story ; backlog:hasIdentifier "S-3" ; backlog:hasState backlog:Proposed ;
     backlog:memberOfContainer ex:BL ; backlog:notYetScoreable true ; backlog:hasScoreabilityReason "probe" ;
-    backlog:dependsOn ex:S2 .
+    backlog:dependsOn ex:S2 ;
+    backlog:appliesDefinitionOfDone ex:DoD_PG ; backlog:belongsToLineage ex:Lin_PG ;
+    backlog:pursuesObjective ex:CObj ; backlog:hasInvestmentCategory backlog:Cat_NewCapability .
 ex:S4 a backlog:Story ;
     backlog:hasNoApplicableConcern "Fixture story: no stored state, interface, interaction, structure or authorisation is touched." ; backlog:hasIdentifier "S-4" ; backlog:hasState backlog:Cancelled ;
     backlog:memberOfContainer ex:BL ; backlog:notYetScoreable true ; backlog:hasScoreabilityReason "probe" ;
-    backlog:hasRationale "Superseded by S-2, which covers the same capability; kept in the register so the parent's completion accounts for it as resolved rather than outstanding." .
+    backlog:hasRationale "Superseded by S-2, which covers the same capability; kept in the register so the parent's completion accounts for it as resolved rather than outstanding." ;
+    backlog:belongsToLineage ex:Lin_PG ; backlog:pursuesObjective ex:CObj .
 
 <http://example.org/pg#P> backlog:hasExpectedPolarity backlog:Polarity_Positive .
 # Conformance-goal pattern (G42/AdoptionConformanceGoalShape), self-contained,
@@ -87,12 +142,12 @@ ex:CObjContain a backlog:Objective ; backlog:contributesToGoal ex:CGoalContain ;
     backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ; backlog:decidedBy backlog:Owner .
 ex:CMetricContain a ex:CLocalMetric .
 ex:CCPScope a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-12-01T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
-ex:CObjScope backlog:hasCheckpoint ex:CCPScope .
+ex:CObjScope backlog:hasCheckpoint ex:CCPScope ; backlog:metricMovableBy ex:S1 .
 ex:CObsScope a backlog:MetricObservation ; backlog:observesMetric ex:CMetricScope ; backlog:observationFor ex:CObjScope ;
     backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-09-02T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
     backlog:hasObservationMethod "Fixture-stated value, not re-derivable." .
 ex:CCPContain a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-12-01T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
-ex:CObjContain backlog:hasCheckpoint ex:CCPContain .
+ex:CObjContain backlog:hasCheckpoint ex:CCPContain ; backlog:metricMovableBy ex:S2 .
 ex:CObsContain a backlog:MetricObservation ; backlog:observesMetric ex:CMetricContain ; backlog:observationFor ex:CObjContain ;
     backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-09-02T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
     backlog:hasObservationMethod "Fixture-stated value, not re-derivable." .
@@ -103,7 +158,7 @@ ex:CObj a backlog:Objective ;
     backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ; backlog:decidedBy backlog:Owner .
 ex:CMetric a ex:CLocalMetric .
 ex:CCP a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-12-01T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
-ex:CObj backlog:hasCheckpoint ex:CCP .
+ex:CObj backlog:hasCheckpoint ex:CCP ; backlog:metricMovableBy ex:EP .
 ex:CObs a backlog:MetricObservation ; backlog:observesMetric ex:CMetric ; backlog:observationFor ex:CObj ;
     backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-09-02T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
     backlog:hasObservationMethod "Fixture-stated value, not re-derivable." .
