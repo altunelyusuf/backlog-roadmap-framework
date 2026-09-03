@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v23.0.0
+# Lineage Operating Discipline — v24.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -1061,4 +1061,41 @@ violations, no retrofit of the historical scope attempted.
 Proven built, not merely proposed: `fw:SC_ExecutionTaskGovernance` and
 `fw:SC_DomainModelingEnforcement`, each naming the real handover it admitted, the real trade made,
 and the real epic it touched.
+
+## G53 — A real handover from the OEE governance session processed; one finding closed as already-fixed, one formalized, one left genuinely open
+
+A real handover was found in `oe-pack/04-documentation/handovers/HANDOVER_backlog-roadmap-framework.md`
+(filed 2026-08-25 by the session that owns `oe-pack`/`oe-method`/`repo-tooling`, per `B1` — findings,
+not an edit), copied into this package's own inbox and accepted. Three findings, each checked
+directly against this package's own real files rather than trusted from the handover's own text.
+
+**Finding 1 (`ObjectiveStalledShape`) — already fixed, confirmed not assumed.** The handover
+reported a false-positive bug: the shape's own SPARQL matched any historical `MetricObservation`
+equalling the baseline, not the most recent one, so an objective with a healthy observation history
+necessarily fires regardless of its current reading. Re-reading `ObjectiveStalledShape`'s own
+current text in this package's shapes file found the fix already present — a `MAX`-style
+latest-only filter, and the shape's own message already names this exact handover and the 2026-08-25
+date. An earlier session's own real work, done before this session's own tracked history; this
+handover's finding is correct but moot, not something this pass needed to act on.
+
+**Finding 2 (`TaskType`) — formalized, low risk, matched existing informal text.** The class's own
+`skos:definition` already said "from ISO/IEC/IEEE 12207 clause 6.4" informally; the handover's
+recommendation to add a real `dcterms:source` triple was built as proposed, with the same
+paywall-verification caveat the handover itself disclosed carried into the citation text rather
+than dropped.
+
+**Finding 3 (`DesignConcern`) — a real discrepancy, left open rather than resolved either way.**
+The handover reported searching genuinely for a seminal source for the five-way `Data`/`Interface`/
+`Interaction`/`Architecture`/`Security` partition and finding none, recommending
+`isFrameworkOriginal true`. This package's own TBox already carries a specific `dcterms:source`
+for this class — Satzinger, Jackson & Burd, ch.6 — which the handover's own search apparently
+missed or didn't weigh. Researched directly rather than trusting either side: different editions'
+own published tables of contents give genuinely different chapter structures (one edition's
+ch.6 is "Foundations for Systems Design," with architecture, interface and database design each
+split into separate later chapters; earlier editions structure this differently), and the book's
+own full text sits behind the same paywall the handover itself could not cross. Neither this
+session nor the OEE session could verify the claim against the source's actual content. Per `B2`
+— act when evidence settles a question, ask when it is genuinely undecidable — this is the second
+case: left open, both the existing citation and the handover's alternative recorded here for the
+owner's own judgment, not silently resolved by picking one.
 

@@ -1,5 +1,38 @@
 # Changelog
 
+## v1.174.0 — 2026-09-02 (PATCH: a real handover from the OEE governance session processed — one bug already fixed, one citation formalized, one genuine discrepancy left open for the owner's own judgment)
+
+**A real, previously-unprocessed handover found and acted on**, per the owner's own flag that it
+might be critical.
+`oe-pack/04-documentation/handovers/HANDOVER_backlog-roadmap-framework.md`, filed 2026-08-25 by
+the OEE governance session (owns `oe-pack`/`oe-method`/`repo-tooling`, per `B1` — findings, not an
+edit), copied into this package's own inbox and accepted. Three findings, each checked directly
+against this package's own real files rather than trusted from the handover's own text.
+
+**`ObjectiveStalledShape` — already fixed, confirmed not assumed.** The handover's own real bug
+report (the shape matched any historical observation equalling baseline, not the latest one, so a
+healthy objective with observation history necessarily false-fires) turned out to already be fixed
+in this package's current shapes file — the shape's own message text already names this exact
+handover. An earlier session's own real work, predating this session's own tracked history;
+nothing to build here, verified rather than assumed moot.
+
+**`TaskType` — formalized.** The class's own `skos:definition` already said "from ISO/IEC/IEEE
+12207 clause 6.4" informally; the handover's recommended `dcterms:source` triple built as
+proposed, carrying forward the same paywall-verification caveat the handover itself disclosed.
+
+**`DesignConcern` — a real discrepancy, left genuinely open.** The handover reported finding no
+seminal source for the five-way partition and recommended `isFrameworkOriginal true`; this
+package's own TBox already carries a specific citation (Satzinger, Jackson & Burd, ch.6) the
+handover's own search apparently missed. Researched directly rather than trusting either side:
+different editions' own published tables of contents give genuinely different chapter structures,
+and the book's full text sits behind the same paywall the handover itself could not cross. Neither
+session could verify the claim. Per `B2`, left open rather than silently resolved either way — `G53`
+records both the existing citation and the handover's alternative for the owner's own judgment.
+
+0 SHACL violations on the real register (80 warnings, unchanged). All six shipped checkers PASS.
+Lineage-discipline check PASS.
+
+
 ## v1.173.0 — 2026-09-02 (MINOR: ScopeChange built, chosen by this framework's own real BP-D10 ranking rather than sequencing preference; a real archive-vs-active scope mistake caught before publish)
 
 **Instructed directly: decide the next step by the methodology's own ranking, not preference.**
