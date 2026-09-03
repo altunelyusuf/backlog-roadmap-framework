@@ -1,5 +1,43 @@
 # Changelog
 
+## v1.171.0 — 2026-09-02 (MINOR: Increment/ReleaseEvidence built via the alternative mechanism the owner asked to find; RegisterPackage's real root cause traced and a real fix proposed, not adapted)
+
+**Challenged directly, both findings correct.** Asked to check for an alternative mechanism for
+`Increment`/`ReleaseEvidence` already covered before adapting anything, and to look past
+"reporting" as `RegisterPackage`'s presumed root cause.
+
+**`Increment`/`ReleaseEvidence` built.** `ReleaseEvidenceShape` (read directly, not assumed from
+`deliveredInRelease`'s own existence) requires only `hasReleaseVersion` and `hasPackageSHA256` —
+both same-package properties this session already has real, verified data for.
+`deliveredInRelease`'s cross-package range (`orh:ReleaseEvent`) is real but was never mandatory;
+the prior deferral rested on an unverified assumption. `fw:Inc_v1_170_0` and
+`fw:Ev_Release_v1_170_0` built on that basis, the latter carrying the actual `MANIFEST_SHA256.txt`
+hash from the real, already-published commit `ec9a3c9`, re-derived by `sha256sum` against the
+governed git history. `Increment` is a `WorkItemContainer`, not a `WorkItem` — the real evidence
+attaches instead to `fw:Init_OntologyDrivenConversion` (a real item that genuinely shipped in
+v1.170.0), with `memberOfContainer` naming the `Increment` — a second real structural correction
+caught by the framework's own type system before publish.
+
+**`RegisterPackage`'s real root cause traced, not assumed.** It is not distribution mechanics —
+this framework already, deliberately, correctly keeps build/distribution configuration out of
+ontology scope (`TableKind`'s own commentary: "the ontology says nothing about distributions, so
+no query becomes answerable"). `RegisterPackageShape`'s own `Role_ProgressReport` requirement sits
+on the *other* side of that boundary — already shipped, `Violation`-severity, not a proposal. The
+real gap is narrower: no ratified naming convention exists for a roadmap-report artifact
+specifically, and the only markdown-report convention that does exist is typed for audits. another registrant's
+own ecosystem was checked for a reusable alternative per the owner's own suggestion and found not
+to match — a different domain (educational content structure), not report-file naming.
+
+**A real proposal drafted, not an adapted workaround.** `PROPOSAL_brsf-continuation_roadmap-report-naming-convention_v1_0_0.md`
+requests `configuration:RoadmapReportConvention`, matching this framework's own twice-proven
+precedent — `ABoxFileConvention` and `IndependentPackageArchiveConvention` were both ratified from
+this framework's own prior proposals. Not built here per `B1`: `configuration_abox` belongs to a
+different session's own governance.
+
+0 SHACL violations on the real register (81 warnings). All six shipped checkers PASS.
+Lineage-discipline check PASS.
+
+
 ## v1.170.0 — 2026-09-02 (MINOR: continuing autonomously — Initiative and ArtifactEvidence built together, Increment/ReleaseEvidence deferred on a real cross-package finding, not skipped)
 
 **Continuing autonomously per the owner's own direct instruction.** `BP-D12`'s own re-derivation

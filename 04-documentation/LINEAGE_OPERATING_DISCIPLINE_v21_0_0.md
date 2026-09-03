@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v20.0.0
+# Lineage Operating Discipline — v21.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -956,4 +956,48 @@ closed with a second, real `TestEvidence` naming this session's own validator ru
 0 SHACL violations on the real register throughout every intermediate step, not only the final
 one — each gap the framework's own checks surfaced was closed before moving to the next, per this
 discipline's own standing practice.
+
+## G50 — `Increment`/`ReleaseEvidence` built via their own real same-package requirement; `deliveredInRelease` is real but never mandatory
+
+Challenged directly on `G49`'s own deferral: asked to check for an alternative mechanism already
+covered before adapting anything. Correctly found: `ReleaseEvidenceShape` (read directly, not
+assumed from `deliveredInRelease`'s own existence) requires only `hasReleaseVersion` and
+`hasPackageSHA256` — both same-package, both properties this session already has real, verified
+values for from every release shipped. `deliveredInRelease`'s range (`orh:ReleaseEvent`, the OE
+Pack's own separate release-history ontology) is a real property this framework may still use, but
+`G49`'s own deferral rested on an unverified assumption that it was required. It is not.
+
+Built on that basis: `fw:Inc_v1_170_0` (a real `Increment`, `appliesDefinitionOfDone
+backlog:DoD_Baseline`) and `fw:Ev_Release_v1_170_0` (a real `ReleaseEvidence`, `hasReleaseVersion
+"1.170.0"`, `hasPackageSHA256` the actual `MANIFEST_SHA256.txt` hash from the real, already-published
+commit `ec9a3c9`, re-derived by `sha256sum` against the governed git history, not copied from
+memory). `Increment` is a `WorkItemContainer`, not a `WorkItem` — `hasEvidence`'s domain does not
+match it directly; the real evidence attaches instead to `fw:Init_OntologyDrivenConversion` (a real
+`WorkItem` that genuinely shipped as part of v1.170.0), with `memberOfContainer` naming the
+`Increment` it belongs to. A second real structural correction the framework's own type system
+caught before publish, the same pattern as `G49`'s own `GovernedDoneShape` finding.
+
+## Open, not yet closed: `RegisterPackage`'s real root cause
+
+Investigated per the owner's own direct challenge that "reporting" might not be the real root
+cause. Traced to a real, deliberate, already-documented framework decision (`TableKind`'s own
+commentary, `01-ontologies/backlog_tbox`): distribution and build mechanics are held out of
+ontology scope on purpose — "the ontology says nothing about distributions, so no query becomes
+answerable" — the same reasoning that keeps `DROP_DIRS` and similar build configuration in Python
+rather than exported as classes, per `Obj_NoNewClasses`. `RegisterPackageShape`'s own
+`Role_ProgressReport` requirement, and `RegisterArtifactShape`'s own `conformsToNamingConvention`
+requirement on every non-manifest artifact, sit on the other side of that boundary: they are real,
+already-shipped, `Violation`-severity requirements, not proposed ones — the framework already
+decided a roadmap-report artifact belongs in scope; what it lacks is a ratified naming convention
+for that specific artifact type. The only markdown-report convention that exists
+(`configuration:AuditReportMarkdownConvention`) is typed for audit reports specifically; using it
+for a roadmap report would be the dishonest fit `G43`/`G46` exist to prevent.
+
+This framework has the real, proven precedent for closing exactly this kind of gap:
+`configuration:ABoxFileConvention` and `configuration:IndependentPackageArchiveConvention` were
+both ratified from backlog-roadmap-framework's own prior proposals. another registrant's own ecosystem was
+checked for a reusable alternative per the owner's own suggestion and found not to match — its
+`document_ontology` governs educational content structure, a different domain, not report-file
+naming. The real path is a third proposal, matching the same precedent, not built this pass: still
+open, not yet closed.
 

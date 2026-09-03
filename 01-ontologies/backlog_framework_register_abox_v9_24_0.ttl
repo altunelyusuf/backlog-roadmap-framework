@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.23.0> ;
-    owl:versionInfo "9.23.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.24.0> ;
+    owl:versionInfo "9.24.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.23.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.22.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.21.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.20.0> ;
@@ -238,8 +239,8 @@ fw:Out2_Scope a backlog:StageOutput ;
 #  analysis still supports them.
 #################################################################
 fw:Area_Governance a backlog:ScopeArea ;
-    backlog:areaLocation "LINEAGE_OPERATING_DISCIPLINE_v20_0_0.md" ;
-    backlog:areaMeasure "Governance rulings G1-G49, each a markdown heading with prose. Nothing in the ontology carries them; the lineage-discipline gate checks that claims about ENFORCEMENT match the shapes, and does not check that the rulings themselves exist as anything a query can reach." .
+    backlog:areaLocation "LINEAGE_OPERATING_DISCIPLINE_v21_0_0.md" ;
+    backlog:areaMeasure "Governance rulings G1-G50, each a markdown heading with prose. Nothing in the ontology carries them; the lineage-discipline gate checks that claims about ENFORCEMENT match the shapes, and does not check that the rulings themselves exist as anything a query can reach." .
 fw:Del_OntGovernance backlog:deliverableForArea fw:Area_Governance .
 fw:Area_CodeTables a backlog:ScopeArea ;
     backlog:areaLocation "03-tooling/ — 12 python modules" ;
@@ -4584,3 +4585,25 @@ fw:Harness_Init a backlog:TestHarness ; backlog:harnessFor fw:Init_OntologyDrive
     backlog:hasHarnessEvidence fw:Ev_Init_ShapesFile , fw:Ev_Init_ValidatorRun .
 
 fw:Obj_BRSFConformanceHeld backlog:metricMovableBy fw:Init_OntologyDrivenConversion .
+
+#################################################################
+#  v1.171.0 — Increment and ReleaseEvidence built via their own
+#  real, same-package requirements (hasReleaseVersion,
+#  hasPackageSHA256), not the cross-package orh:ReleaseEvent path
+#  G49 correctly deferred pending its own investigation.
+#  deliveredInRelease is a real property but not required by
+#  ReleaseEvidenceShape -- verified by reading the shape, not
+#  assumed from the property's own existence.
+#################################################################
+
+fw:Inc_v1_170_0 a backlog:Increment ; backlog:hasIdentifier "BRF-INC-1.170.0" ;
+    backlog:hasTitle "backlog-roadmap-framework v1.170.0" ;
+    backlog:appliesDefinitionOfDone backlog:DoD_Baseline .
+
+fw:Ev_Release_v1_170_0 a backlog:ReleaseEvidence ; backlog:evidenceVerified true ;
+    backlog:hasReleaseVersion "1.170.0" ;
+    backlog:hasPackageSHA256 "0969ed08dbc868774fb149fc7ab1c05a6f0288735bf94b26d6621b84947be09e" ;
+    backlog:verifiedByTool "sha256sum (git show ec9a3c9:backlog-roadmap-framework/MANIFEST_SHA256.txt)" .
+
+fw:Init_OntologyDrivenConversion backlog:memberOfContainer fw:Inc_v1_170_0 ;
+    backlog:hasEvidence fw:Ev_Release_v1_170_0 .
