@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.81.0
+# Backlog & Roadmap Semantic Framework — Standard v1.82.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -1067,7 +1067,28 @@ ruling exists to prevent. Retired, its historical comment kept, per the same pra
 already established for retired mechanisms. `sh:Info` currently governs zero shapes in this
 framework's own suite — an honest starting point for the audit below, not a gap to paper over.
 
-**Not retroactively re-graded across the whole suite in this pass.** The 65 shapes currently
+**Not retroactively re-graded across the whole suite when this ruling was first made, and the
+first-pass audit against it is now recorded here.** At the time `G43` was written, 65 shapes
+carried `sh:Warning` under the older two-tier habit, unchecked against the new definition. Since
+then two more `sh:Warning` shapes were added (`MeasurementDueAfterReviewShape`,
+`CeremonyLinkAdvisoryShape`, per `G42`), bringing the real count to **66** — itself worth
+recording, since restating the stale "65" would have been exactly the kind of unverified figure
+`L-65`/`B3` exist to catch. Every one of the 66 shapes' own advisory message was read against the
+standing definition (risk the register's claim is wrong or weaker than it looks, versus a pure,
+risk-free opportunity). Three that read as the strongest candidates for reclassification from
+message text alone — `ClassReachabilityShape`, `PbiKindAdvisoryShape`, `BothLayersShape` — were
+checked against their full `sh:sparql` definition, not the message alone, the same depth applied
+to `UnscoredItemAdvisoryShape` above. All three held: `ClassReachabilityShape`'s own message names
+a real, documented incident (an unreachable class went unnoticed for 91 releases and produced a
+wrong conclusion drawn in good faith); `PbiKindAdvisoryShape` names a mistake this package itself
+made and withdrew; `BothLayersShape` flags precisely the "claim weaker than it looks" pattern `G43`
+defines. **Finding: 0 of 66 warrant reclassification.** This framework's severities were already
+well-calibrated before the taxonomy was formalized enough to check them against — a result worth
+recording plainly rather than treated as an audit that found nothing because it wasn't thorough.
+The 63 shapes not individually checked against their full definition were judged from message text
+only, a lighter standard than the three spot-checks; a future pass that finds new evidence (a
+shape's real-world firing rate, an adopter's report) is not foreclosed by this one.
+
 carrying `sh:Warning` were written under a two-tier habit, not against this three-tier definition,
 and a systematic pass checking each against "risk" versus "opportunity" is real, separate audit
 work — this ruling establishes the standard to audit against, not a claim that the audit is done.

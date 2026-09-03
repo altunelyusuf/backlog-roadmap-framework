@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v14.0.0
+# Lineage Operating Discipline — v15.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -778,4 +778,25 @@ against it; this ruling sets the standard future audit work checks against, not 
 already happened. A `Violation` newly added under this same session — `AdoptionConformanceGoalShape`
 — is confirmed correctly graded by this same standard: a lineage lacking the enforced conformance
 goal has broken a stated rule, not merely risked breaking one.
+
+## G44 — The severity audit `G43` deferred, run: 0 of 66 `sh:Warning` shapes warrant reclassification
+
+`G43` established the standard and explicitly deferred auditing the suite against it. This ruling
+records that audit's first pass. The real count was 66, not the 65 `G43` stated — two more
+`sh:Warning` shapes (`MeasurementDueAfterReviewShape`, `CeremonyLinkAdvisoryShape`) were added
+under `G42` after `G43` was written; restating "65" without checking would have been exactly the
+unverified figure `L-65`/`B3` exist to catch. Every shape's own advisory message was read against
+`G43`'s definition. Three read as the strongest candidates for reclassification from message text
+alone — `ClassReachabilityShape`, `PbiKindAdvisoryShape`, `BothLayersShape` — and were checked
+against their full `sh:sparql` definition rather than the message, the same depth `UnscoredItemAdvisoryShape`
+was checked at under `G43`. All three held as genuine risk, not opportunity: `ClassReachabilityShape`
+names a documented incident (an unreachable class produced a wrong conclusion drawn in good faith
+over 91 releases); `PbiKindAdvisoryShape` names a mistake this package itself made and withdrew;
+`BothLayersShape` names precisely the "claim weaker than it looks" pattern the definition itself
+uses. **Finding: 0 of 66 reclassified.** Recorded plainly as a real result, not treated as
+inconclusive because nothing moved — this framework's prior severity habits were already
+well-calibrated to a distinction they predate. The 63 shapes not checked at full-definition depth
+were judged from message text only; that is a lighter check than the three spot-checks, and a
+later pass with new evidence (firing rate against real data, an adopter's report) is not
+foreclosed.
 

@@ -1,5 +1,40 @@
 # Changelog
 
+## v1.164.0 — 2026-09-02 (MINOR: the severity re-audit G43 deferred, run — 0 of 66 sh:Warning shapes warrant reclassification)
+
+**Proceeded on the second item from the standing priority list, now that the fixture cascade is
+fully closed.** `G43` established the severity taxonomy and explicitly deferred auditing this
+package's own 65 `sh:Warning` shapes against it. This release runs that audit's first pass.
+
+**A stale count caught before it could be restated.** The real number was 66, not 65 — two more
+`sh:Warning` shapes (`MeasurementDueAfterReviewShape`, `CeremonyLinkAdvisoryShape`) were added
+under `G42` after `G43` was written. Recording "65" without checking would have been exactly the
+unverified figure `L-65`/`B3` exist to catch; caught by counting fresh via `rdflib` rather than
+citing the number already in the document.
+
+**Every one of the 66 shapes' own advisory message read against `G43`'s definition.** Three read
+as the strongest candidates for reclassification from message text alone —
+`ClassReachabilityShape`, `PbiKindAdvisoryShape`, `BothLayersShape` — and were checked against
+their full `sh:sparql` definition, not the truncated message, the same depth `UnscoredItemAdvisoryShape`
+was checked at when `G43` was first written. All three held as genuine risk, not opportunity, on
+closer reading: `ClassReachabilityShape`'s own message names a real, documented incident (an
+unreachable class went unnoticed for 91 releases and produced a wrong conclusion drawn in good
+faith); `PbiKindAdvisoryShape` names a mistake this package itself made and withdrew;
+`BothLayersShape` names precisely the "claim weaker than it looks" pattern the taxonomy's own
+definition uses. The full-definition check on `ClassReachabilityShape` in particular reversed an
+initial, message-text-only impression that it might be a pure opportunity — exactly the kind of
+correction `L-65`'s verify-before-claim discipline exists to produce.
+
+**Finding: 0 of 66 shapes reclassified.** Recorded as a real, positive result — this package's
+severity habits were already well-calibrated to a distinction they predate — not treated as an
+inconclusive audit because nothing moved. The 63 shapes not checked at full-definition depth were
+judged from message text only, an honestly lighter standard than the three spot-checks; `G44`
+records this explicitly rather than implying uniform coverage from the aggregate "audit complete."
+
+0 SHACL violations on the real register (85 warnings, unchanged). All six shipped checkers PASS.
+Lineage-discipline check PASS.
+
+
 ## v1.163.0 — 2026-09-02 (MINOR: the AdoptionConformanceGoalShape fixture cascade fully closed — all 10 affected fixtures now clean)
 
 **`fixture_item_tie_v1_0_0` brought from 50 violations to 0** — the tenth and final fixture whose
