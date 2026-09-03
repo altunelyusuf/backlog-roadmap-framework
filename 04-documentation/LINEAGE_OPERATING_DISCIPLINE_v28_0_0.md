@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v27.0.0
+# Lineage Operating Discipline — v28.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -1163,4 +1163,54 @@ an `Artifact`, not a `WorkItem` — no completion chain, four clean properties
 real occasion: the owner's own real, already-quoted instruction (`fw:Mission_OntologyDriven`'s own
 `missionSource`, dated 2026-10-26) that started the ontology-driven mission. `fw:KO_OntologyDriven`
 built naming that real moment, `KickOff_Declared`, `decidedBy backlog:Owner`.
+
+## G57 — The cost/risk/prediction set re-investigated properly; four real occasions found, two more disqualified on confirmed infrastructure cost
+
+Instructed to proceed as far as possible. The 12 remaining classes from the original 30 — every
+one the earlier pass had checked and found genuinely no occasion for — were re-read fresh rather
+than trusted from that earlier finding, since the owner had already corrected two premature
+dismissals this session (`G51`, `G54`) for the identical failure mode: closing an investigation at
+one file, or one plausible reading, instead of the whole ecosystem.
+
+**Four real, precise occasions found on the re-read, not asserted:**
+
+`EnhancementProposal` — its own real definition ("a request to a party outside the development to
+change something they own") and `Ext_UpstreamComponent`'s own real wording ("a library, framework,
+dataset, standard or ontology the development consumes but does not own... proposed to the
+upstream maintainers") match this session's own two real proposals exactly:
+`fw:EnhProp_RoadmapReportConvention` and `fw:EnhProp_RoadmapReportKind`, each with a real
+`ExternalDependency` naming the actual governing session and the actual proposal file.
+
+`Opportunity` — "an identified upside uncertainty that is not yet committed work" is precisely
+what `Enabler`, `TransitionEvent`, and `Defect` became once each was investigated and re-scored
+down this session (`G54`, `G56`): real, identified, genuinely not pursued. Three real
+`Opportunity` individuals recorded, each naming the actual reason it wasn't pursued.
+
+`Impediment` — "an unavailable decision-maker" is the real, current state of `RegisterPackage`:
+blocked on two external proposals this register's own governing session cannot itself resolve.
+`fw:Imp_RegisterPackageDecisions` recorded, unresolved, owned by `backlog:Owner`.
+
+`DimensionalCost` — its own real definition names its own worked example verbatim: "an increment
+worked by an agent under human supervision has a token cost." This session's own real `Increment`
+is exactly that. `fw:Cost_Init_Tokens` recorded against `fw:Init_OntologyDrivenConversion`, a real
+but deliberately estimated figure (`isEstimatedCost true`) rather than a false precision this
+session never actually metered — the property exists specifically to keep that distinction honest.
+
+**Two more re-investigated and disqualified, not built on a stale reading.** `FitGapFinding`'s only
+real connection point (`findingOf`) requires a `LineageAdaptation` — a full, gated, four-stage
+apparatus (Assess→Fit-gap→Ruling→Re-link, each needing a passed gate) BRSF has never gone through,
+being an original rather than an adapted register. `ImplementationProject` would need the same
+full completion chain `Initiative` required, at a larger, less-grounded scope. Both re-scored down
+on confirmed real cost, the same discipline `G54` and `G56` already established, not silently
+skipped.
+
+**Remaining, genuinely checked and found absent, not left unexamined:** `Budget`, `PlanBaseline`,
+`PortfolioPolicy` (no declared ceiling, baseline, or capacity split exists in this session's real
+history), `Task` (ambiguous fit against the already-built `ExecutionTask`), `WipLimit` (this
+session's own one-thing-at-a-time practice was never formally declared as a policy). These are not
+re-asserted as dispensable — the same standing the earlier 14 were given — only checked with the
+same rigor and found, honestly, to have nothing to connect to yet.
+
+`0` violations at every one of the four builds, verified independently after each, not only at the
+end.
 

@@ -1,5 +1,51 @@
 # Changelog
 
+## v1.178.0 — 2026-09-02 (MINOR: the cost/risk/prediction set re-investigated properly — four real occasions found, two more disqualified on confirmed infrastructure cost, three genuinely absent)
+
+**Instructed to proceed as far as possible.** The 12 remaining classes from the original 30 —
+every one the earlier pass had checked and found genuinely no occasion for — were re-read fresh
+rather than trusted from that earlier finding, since two premature dismissals this session
+(`G51`, `G54`) had already turned out to be the same failure: closing an investigation at one
+file, or one plausible reading, instead of the whole picture.
+
+**Four real, precise occasions found on the re-read, not asserted.** `EnhancementProposal`'s own
+real definition ("a request to a party outside the development to change something they own") and
+`Ext_UpstreamComponent`'s own real wording ("a library, framework, dataset, standard or ontology
+the development consumes but does not own... proposed to the upstream maintainers") match this
+session's own two real proposals exactly — `fw:EnhProp_RoadmapReportConvention` and
+`fw:EnhProp_RoadmapReportKind`, each with a real `ExternalDependency` naming the actual governing
+session and proposal file.
+
+`Opportunity`'s own definition ("an identified upside uncertainty that is not yet committed work")
+is precisely what `Enabler`, `TransitionEvent`, and `Defect` became once each was investigated and
+re-scored down this session — real, identified, genuinely not pursued. Three real `Opportunity`
+individuals recorded, each naming the actual reason.
+
+`Impediment`'s own definition ("an unavailable decision-maker") is the real, current state of
+`RegisterPackage`: blocked on two external proposals this register's own governing session cannot
+itself resolve. `fw:Imp_RegisterPackageDecisions` recorded, unresolved, owned by `backlog:Owner`.
+
+`DimensionalCost`'s own real definition names its own worked example verbatim: "an increment
+worked by an agent under human supervision has a token cost." This session's own real `Increment`
+is exactly that. `fw:Cost_Init_Tokens` recorded against `fw:Init_OntologyDrivenConversion` — a
+real but deliberately estimated figure (`isEstimatedCost true`), not a false precision this
+session never actually metered.
+
+**Two more re-investigated and disqualified, not built on a stale reading.** `FitGapFinding`'s
+only real connection point requires a `LineageAdaptation` — a full, gated, four-stage apparatus
+BRSF has never gone through, being an original rather than an adapted register.
+`ImplementationProject` would need the same full completion chain `Initiative` required, at a
+larger, less-grounded scope. Both re-scored down on confirmed real cost.
+
+**Remaining, genuinely checked and found absent, not left unexamined.** `Budget`, `PlanBaseline`,
+`PortfolioPolicy` (no declared ceiling, baseline, or capacity split exists in this session's real
+history), `Task` (ambiguous fit), `WipLimit` (never formally declared as a policy). `G57` records
+the full reasoning for every finding. Proposal revised to v1.10.0.
+
+0 SHACL violations on the real register (74 warnings). All six shipped checkers PASS.
+Lineage-discipline check PASS.
+
+
 ## v1.177.0 — 2026-09-02 (MINOR: KickOff built after Defect/ProblemReport was re-scored down; ProblemReport's real requirement traced to a maintenance Initiative BRSF does not have)
 
 **Continuing the ranked queue.** `Defect`/`ProblemReport` (0.5) investigated next: `Defect` alone

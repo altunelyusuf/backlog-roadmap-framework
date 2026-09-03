@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.29.0> ;
-    owl:versionInfo "9.29.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.30.0> ;
+    owl:versionInfo "9.30.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.29.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.28.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.27.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.26.0> ;
@@ -244,8 +245,8 @@ fw:Out2_Scope a backlog:StageOutput ;
 #  analysis still supports them.
 #################################################################
 fw:Area_Governance a backlog:ScopeArea ;
-    backlog:areaLocation "LINEAGE_OPERATING_DISCIPLINE_v27_0_0.md" ;
-    backlog:areaMeasure "Governance rulings G1-G56, each a markdown heading with prose. Nothing in the ontology carries them; the lineage-discipline gate checks that claims about ENFORCEMENT match the shapes, and does not check that the rulings themselves exist as anything a query can reach." .
+    backlog:areaLocation "LINEAGE_OPERATING_DISCIPLINE_v28_0_0.md" ;
+    backlog:areaMeasure "Governance rulings G1-G57, each a markdown heading with prose. Nothing in the ontology carries them; the lineage-discipline gate checks that claims about ENFORCEMENT match the shapes, and does not check that the rulings themselves exist as anything a query can reach." .
 fw:Del_OntGovernance backlog:deliverableForArea fw:Area_Governance .
 fw:Area_CodeTables a backlog:ScopeArea ;
     backlog:areaLocation "03-tooling/ — 12 python modules" ;
@@ -4719,3 +4720,94 @@ fw:KO_OntologyDriven a backlog:KickOff ;
     backlog:kickedOffAt "2026-10-26T00:00:00Z"^^xsd:dateTime ;
     backlog:hasKickOffMode backlog:KickOff_Declared ;
     backlog:decidedBy backlog:Owner .
+
+#################################################################
+#  v1.178.0 — EnhancementProposal, ranked first among the
+#  cost/risk/prediction re-investigation. A real, precise match:
+#  Ext_UpstreamComponent names exactly "a library, framework,
+#  dataset, standard or ONTOLOGY the development consumes but does
+#  not own. Changes are proposed to the upstream maintainers" --
+#  this session's own two real proposals filed this session,
+#  addressed to the configuration ontology's own governing session
+#  and another registrant's own governing session, per B1.
+#################################################################
+
+fw:ExtDep_ConfigurationOntology a backlog:ExternalDependency ;
+    backlog:hasExternalDependencyType backlog:Ext_UpstreamComponent ;
+    backlog:hasExternalParty "The session governing configuration_abox/configuration_tbox in the OE Pack (oe-pack/01-ontologies/)." .
+
+fw:EnhProp_RoadmapReportConvention a backlog:EnhancementProposal ;
+    backlog:proposalFor fw:ExtDep_ConfigurationOntology ;
+    backlog:hasRequestedChange "Ratify configuration:RoadmapReportConvention, a new NamingConvention for a roadmap-report-run artifact, matching the pattern this framework's own AuditReportMarkdownConvention already uses for a sibling report type." ;
+    backlog:submittedTo "07-handover-inbox/pending/PROPOSAL_brsf-continuation_roadmap-report-naming-convention_v1_0_0.md" ;
+    backlog:proposalRaisedAt "2026-09-03T10:00:00Z"^^xsd:dateTime ;
+    backlog:hasProposalStatus backlog:Prop_Submitted .
+
+fw:ExtDep_RDODI a backlog:ExternalDependency ;
+    backlog:hasExternalDependencyType backlog:Ext_UpstreamComponent ;
+    backlog:hasExternalParty "The session governing rdodi-ecosystem/01-profiles (rdodi_profiles_abox)." .
+
+fw:EnhProp_RoadmapReportKind a backlog:EnhancementProposal ;
+    backlog:proposalFor fw:ExtDep_RDODI ;
+    backlog:hasRequestedChange "Add prof:RoadmapReportKind, a real doc:ArtifactKindSpec describing this framework's own real roadmap-report structure, matching another registrant's own real precedent of genre-agnostic profiles." ;
+    backlog:submittedTo "07-handover-inbox/pending/PROPOSAL_brsf-continuation_rdodi-roadmap-report-profile_v1_0_0.md" ;
+    backlog:proposalRaisedAt "2026-09-03T11:00:00Z"^^xsd:dateTime ;
+    backlog:hasProposalStatus backlog:Prop_Submitted .
+
+#################################################################
+#  v1.179.0 — Opportunity, second-ranked in the cost/risk/
+#  prediction re-investigation. A real, precise match: three
+#  candidates from this session's own real prioritization queue
+#  (Enabler, TransitionEvent, Defect) were investigated, found
+#  genuinely more costly than first scored, and deprioritized --
+#  exactly "an identified upside uncertainty that is not yet
+#  committed work... converted into a work item explicitly when
+#  someone decides to pursue it."
+#################################################################
+
+fw:Opp_Enabler a backlog:Opportunity ;
+    backlog:opportunityFor fw:Obj_BRSFConformanceHeld ;
+    backlog:hasOpportunityStatement "Retype the six real ontology-driven-conversion epics (or a future one) as Enabler, matching their own real definition (architectural/infrastructural capability required by other work items). Confirmed disjoint with Epic (G54): would cost a full retype plus regression testing of every Epic-targeting shape, not a multityping addition. Not pursued this session." .
+
+fw:Opp_TransitionEvent a backlog:Opportunity ;
+    backlog:opportunityFor fw:Obj_BRSFConformanceHeld ;
+    backlog:hasOpportunityStatement "Build a real Workflow/StateTransition apparatus and record real TransitionEvent history for this register's own state changes, closing the audit-trail gap G54 named. Would cost designing a full state machine with a required guard on every transition before a single event could be recorded. Not pursued this session." .
+
+fw:Opp_Defect a backlog:Opportunity ;
+    backlog:opportunityFor fw:Obj_BRSFConformanceHeld ;
+    backlog:hasOpportunityStatement "Record this session's own real bugs (the malformed FILTER, harness cardinality, changelog header loss, same-version-content-change) as real Defect work items with regression-test evidence. G56 found ProblemReport's own proper connection needs a maintenance-kind Initiative BRSF does not have; Defect alone was re-scored below KickOff and not pursued this session." .
+
+#################################################################
+#  v1.180.0 — Impediment, third-ranked in the cost/risk/
+#  prediction re-investigation. A real, current, ongoing occasion:
+#  "an unavailable decision-maker" -- RegisterPackage remains
+#  blocked on two external proposals, waiting on decisions this
+#  register cannot make itself, exactly the distinction Impediment
+#  draws against an item-level dependency.
+#################################################################
+
+fw:Imp_RegisterPackageDecisions a backlog:Impediment ;
+    backlog:impedes fw:Register ;
+    backlog:hasImpedimentStatement "RegisterPackage cannot be honestly built: RegisterArtifactShape requires a real configuration:NamingConvention for the roadmap-report artifact, and none exists for that artifact type; the only candidate this register's own governing session can act on is a proposal to whichever session governs configuration_abox and rdodi_profiles_abox. Cleared when either or both proposals are ratified." ;
+    backlog:raisedAt "2026-09-03T10:00:00Z"^^xsd:dateTime ;
+    backlog:hasImpedimentOwner backlog:Owner .
+
+#################################################################
+#  v1.181.0 — DimensionalCost, fourth-ranked in the cost/risk/
+#  prediction re-investigation. A striking, precise match: the
+#  class's own real definition names "an increment worked by an
+#  agent under human supervision" as its own worked example --
+#  this session's real work, matching fw:Init_OntologyDrivenConversion
+#  exactly. Deliberately estimated, not metered: this session never
+#  tracked exact token counts, and the class's own isEstimatedCost
+#  property exists precisely so an honest estimate is distinguishable
+#  from a real measurement rather than silently presented as one.
+#################################################################
+
+fw:Dim_TokenSpend a backlog:CostDimension ; backlog:hasDimensionUnit "tokens (input+output, approximate)" .
+
+fw:Cost_Init_Tokens a backlog:DimensionalCost ;
+    backlog:costOfItem fw:Init_OntologyDrivenConversion ;
+    backlog:alongDimension fw:Dim_TokenSpend ;
+    backlog:hasQuantity "500000"^^xsd:decimal ;
+    backlog:isEstimatedCost true .
