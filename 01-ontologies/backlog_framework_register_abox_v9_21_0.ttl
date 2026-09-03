@@ -236,8 +236,8 @@ fw:Out2_Scope a backlog:StageOutput ;
 #  analysis still supports them.
 #################################################################
 fw:Area_Governance a backlog:ScopeArea ;
-    backlog:areaLocation "LINEAGE_OPERATING_DISCIPLINE_v17_0_0.md" ;
-    backlog:areaMeasure "Governance rulings G1-G46, each a markdown heading with prose. Nothing in the ontology carries them; the lineage-discipline gate checks that claims about ENFORCEMENT match the shapes, and does not check that the rulings themselves exist as anything a query can reach." .
+    backlog:areaLocation "LINEAGE_OPERATING_DISCIPLINE_v18_0_0.md" ;
+    backlog:areaMeasure "Governance rulings G1-G47, each a markdown heading with prose. Nothing in the ontology carries them; the lineage-discipline gate checks that claims about ENFORCEMENT match the shapes, and does not check that the rulings themselves exist as anything a query can reach." .
 fw:Del_OntGovernance backlog:deliverableForArea fw:Area_Governance .
 fw:Area_CodeTables a backlog:ScopeArea ;
     backlog:areaLocation "03-tooling/ — 12 python modules" ;
@@ -4496,3 +4496,23 @@ fw:Gap_ToolScript_Suspension a backlog:BlueprintGap ; backlog:gapForEntity fw:En
 fw:Gap_ToolScript_Termination a backlog:BlueprintGap ; backlog:gapForEntity fw:Entity_ToolScript ;
     backlog:gapForStage backlog:Stage_Termination ;
     backlog:hasGapReason "Real gap: superseded script versions are removed from the package on each release (no multi-version clutter), but nothing records that removal as a lifecycle event on the entity itself." .
+
+#################################################################
+#  v1.167.0 — this session's own real RICE+DepFactor decision,
+#  scoring the 16-candidate unused-domain-classes proposal, recorded
+#  as the framework's own first real instance of consideredOptionCount
+#  / decisionBackedByScore (G47) rather than left as narrative alone.
+#################################################################
+
+fw:RS_UnusedClassesPrioritization a backlog:RegisterSession ; backlog:sessionFor fw:Register ;
+    backlog:consideredOptionCount 14 ;
+    backlog:decisionBackedByScore fw:Score_RICEScore_SelfHosting ;
+    backlog:sessionStartedAt "2026-09-03T09:00:00Z"^^xsd:dateTime ;
+    backlog:stateVerifiedAtStart true ;
+    backlog:hasSessionScopeNote "Re-scored the 16-candidate unused-domain-classes proposal (07-handover-inbox/pending) using this framework's own real RICE+DepFactor discipline (BP-D10, OE knowledge base) after the owner's own direct challenge that the prior sequencing was ad hoc. Out of scope: did not build or enforce any candidate other than RICEScore itself and the session-level scoring gate this release adds." ;
+    backlog:changedItem fw:Score_RICEScore_SelfHosting .
+
+fw:Score_RICEScore_SelfHosting a backlog:RICEScore ; backlog:scoredByMethod backlog:Method_RICE_DepFactor ;
+    backlog:hasReach 10.0 ; backlog:hasImpact 2.0 ; backlog:hasConfidence 0.8 ; backlog:hasEffort 1.5 ;
+    backlog:hasDepFactor 2.0 ; backlog:hasScoreValue 10.667 ;
+    backlog:hasScoreRationale "Base RICE (reach x impact x confidence / effort) is 10.667; hasDepFactor (2.0) is reported separately per RiceArithmeticShape's own real check, which verifies hasScoreValue against reach/impact/confidence/effort alone -- the DepFactor-adjusted total (21.333) is the real ranking value used for comparison against the other 13 candidates, not the value this property stores. Reach=10: this session's own real, recoverable informal prioritization calls (fixture-repair order, handover-processing order, the original ad hoc 16-class sequencing itself) that a real RICEScore record would have made checkable. Impact=2 (high): closes a real governance gap this framework's own PBI-level SilentGapShape left open one level up. Confidence=0.8: the mechanism (consideredOptionCount/decisionBackedByScore, mirroring SilentGapShape's own real pattern) is well-precedented, not novel. Effort=1.5: two new properties, one shape, one fixture, one real instance -- comparable to the smallest prior releases this session shipped. DepFactor=2 (enables ~2 other real things: this very scoring record, and any future session's own decision trail). Conservative on Reach deliberately: the true reach (every future multi-candidate decision this framework's adopters make) is far larger and unverifiable, so the lower, defensible bound is used per BP-D10's own honesty rule rather than the inflated one." .

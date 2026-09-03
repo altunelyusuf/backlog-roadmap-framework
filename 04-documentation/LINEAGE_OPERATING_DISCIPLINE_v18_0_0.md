@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v17.0.0
+# Lineage Operating Discipline — v18.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -859,4 +859,42 @@ fixtures, and confirmed — never decided — by running it against real data. I
 drive against real data produces the severity question's own answer, use it; manually picking a
 milder severity because the honest one is inconvenient is the dishonest fit `G43` and this ruling
 both exist to prevent, even when done with good intentions and real rationality behind it.
+
+## G47 — A multi-candidate session decision is backed by a real score, closing SilentGapShape's own gap one level up
+
+Challenged directly on a second front: treating "no historical occasion in this session" as
+grounds to set aside 14 candidate classes — including cost, prediction and risk-assessment
+vocabulary — was itself premature closure, the same failure `L-106` names, applied to a class
+investigation rather than an item-by-item re-verification pass. Corrected by re-scoring the real
+candidate set using this framework's own real prioritization discipline (`BP-D10`, RICE+DepFactor,
+extracted verbatim from the OE knowledge base rather than reconstructed from memory) instead of ad
+hoc sequencing. `RICEScore` itself ranked first by the method's own logic — the identical
+meta-leverage a prior OE session's own real precedent (`BP-D12`) found for encoding the scoring
+discipline itself, not asserted here by preference.
+
+**What this ruling enforces, concretely.** `SilentGapShape` already requires every open `WorkItem`
+to carry a real `PriorityScore` or an explicit not-yet-scoreable flag — the item-level half of
+"no vibes-based prioritization." `BP-D10`'s own trigger condition ("facing 3+ candidate options for
+next work") is a session-level decision, one level above any single item, and nothing previously
+required that decision to be backed by anything real either. `consideredOptionCount` and
+`decisionBackedByScore` on `RegisterSession`, and `SessionDecisionScoringShape` (`Violation`,
+proven discriminating against a three-case fixture — below-threshold silent, above-threshold with
+no score fires, above-threshold with a real score silent) close that gap the same way, one level
+up: a session that weighs three or more real candidates and picks one from narrative preference
+alone is now a structural violation, not a habit nobody can check.
+
+**Built, not merely proposed, and applied to this session's own real decision first.** This
+release's own re-scoring of the 16-candidate proposal is recorded as BRSF's own real
+`RegisterSession`/`RICEScore` instance — the framework practicing what this ruling requires before
+requiring it of anyone else, the same standard `G45`/`G46` already held BRSF's own register to for
+`Blueprint`. A real arithmetic mistake was caught by this same discipline while building it:
+`RiceArithmeticShape`'s own real check verifies `hasScoreValue` against reach/impact/confidence/effort
+alone, not the DepFactor-adjusted total — an initial attempt stored the adjusted value and the
+existing shape correctly rejected it before publish, not after.
+
+**Scope, disclosed rather than overstated.** Only `RICEScore` and this session-level gate were
+built this release. The other 15 candidates in the unused-domain-classes proposal — including the
+remaining cost/risk/prediction vocabulary this ruling was raised to defend — remain proposed, not
+built, each still needing its own grounded connection and, where relevant, its own enforcement
+question resolved the way this one was: by test drive, not assertion.
 

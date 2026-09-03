@@ -1,0 +1,30 @@
+# Session-decision scoring — test drive, not a construction.
+#
+# Proves discrimination for SessionDecisionScoringShape, closing the session-
+# level half of the gap SilentGapShape already closes at the individual
+# work-item level, per BP-D10's own real discipline (RICE+DepFactor,
+# extracted from the OE knowledge base, not reconstructed from memory).
+#
+# RS_NoScore: 3 candidates considered, no score named -> fires.
+# RS_TwoOnly: 2 candidates considered, no score named -> silent (below the
+#   BP-D10 trigger of 3+; a two-way choice is not the anti-pattern this
+#   shape exists to catch).
+# RS_Backed: 3 candidates considered, a real RICEScore named -> silent.
+
+@prefix backlog: <http://example.org/backlog#> .
+@prefix ex:      <http://example.org/sessionscore#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+ex:BL a backlog:Backlog ; backlog:hasIdentifier "BL-SS" ; backlog:hasState backlog:Proposed .
+
+ex:RS_NoScore a backlog:RegisterSession ; backlog:sessionFor ex:BL ;
+    backlog:consideredOptionCount 3 .
+
+ex:RS_TwoOnly a backlog:RegisterSession ; backlog:sessionFor ex:BL ;
+    backlog:consideredOptionCount 2 .
+
+ex:RS_Backed a backlog:RegisterSession ; backlog:sessionFor ex:BL ;
+    backlog:consideredOptionCount 3 ; backlog:decisionBackedByScore ex:Score_Backed .
+ex:Score_Backed a backlog:RICEScore ; backlog:scoredByMethod backlog:Method_RICE ;
+    backlog:hasReach 10.0 ; backlog:hasImpact 2.0 ; backlog:hasConfidence 0.8 ; backlog:hasEffort 1.5 ;
+    backlog:hasScoreValue 10.667 ; backlog:hasScoreRationale "Fixture-only: matches this session's own real RICEScore-for-RICEScore case." .

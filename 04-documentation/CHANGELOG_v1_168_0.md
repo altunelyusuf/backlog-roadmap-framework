@@ -1,5 +1,53 @@
 # Changelog
 
+## v1.168.0 — 2026-09-02 (MINOR: session-level decision scoring enforced, not merely documented — RICEScore built and applied to itself, closing SilentGapShape's own gap one level up)
+
+**Challenged a second time, correctly.** v1.167.0's proposal treated 14 classes — including cost,
+prediction, and risk-assessment vocabulary — as having "no honest occasion" after checking only
+this session's own narrow history, and its own "recommended sequencing" was this session's
+preference, not grounded in anything. Both corrected: the 14 are re-framed as checked-in-this-
+session-only, not judged unimportant to the methodology, and sequencing is now decided by this
+framework's own real prioritization discipline (`BP-D10`, RICE+DepFactor, extracted verbatim from
+the OE knowledge base) rather than ad hoc preference.
+
+**`RICEScore` re-examined under that correction and found to have a real occasion after all** —
+this session's own informal prioritization calls, never once recorded as what they were. Scored by
+the method itself against the other fifteen candidates, `RICEScore` ranked first, the same
+meta-leverage a prior OE session's own real precedent found for encoding a scoring discipline once
+it exists.
+
+**Built, not merely proposed — and enforced, per the owner's own direct request.**
+`SilentGapShape` already requires every individual `WorkItem` to carry a real score or an explicit
+not-yet-scoreable flag. `consideredOptionCount` and `decisionBackedByScore` on `RegisterSession`,
+paired with `SessionDecisionScoringShape` (`Violation`, proven discriminating against a three-case
+fixture — below `BP-D10`'s own 3-candidate threshold: silent; above threshold with no score: fires;
+above threshold with a real score: silent), close the identical gap one level up: a session
+weighing three or more real candidates and picking one from narrative preference alone is now a
+structural violation this framework can catch, not a habit nobody could check.
+
+**Applied to itself first.** This release's own re-scoring of the 16-candidate proposal is BRSF's
+own real `RegisterSession`/`RICEScore` instance — the same standard `G45`/`G46` already held this
+package's own register to for `Blueprint`. The new discipline caught a real mistake while being
+built: an initial attempt stored the DepFactor-adjusted total in `hasScoreValue`, and the existing
+`RiceArithmeticShape` (which checks that value against reach/impact/confidence/effort alone)
+correctly rejected it before publish. `backlog_number_origin` separately caught a missing
+`numberOrigin` declaration on the new `consideredOptionCount` property — both real, both caught by
+the framework's own existing checks doing their job, not asserted clean.
+
+**`G47` records the ruling.** The proposal document is revised to v1.1.0, `RICEScore` moved from
+"proposed" to "built" with the objective RICE-scored ranking replacing the retracted ad hoc
+sequencing; v1.0.0 kept unedited as historical record of the original, corrected finding.
+
+**Honestly scoped.** Only `RICEScore` and the session-level gate were built. The other 15
+candidates — including the cost/risk/prediction vocabulary this ruling was raised to defend —
+remain proposed, not built, each still needing its own grounded connection and enforcement
+question resolved by test drive, the same discipline just applied here.
+
+0 SHACL violations on the real register (81 warnings, down from 83 — two advisory results resolved
+as a side effect of the new individuals' own completeness, not targeted directly). All six shipped
+checkers PASS.
+
+
 ## v1.167.0 — 2026-09-02 (MINOR: the 32-class investigation redone properly after being challenged for premature closure — a real proposal filed, nothing built without its own grounded test drive)
 
 **Challenged directly, and correctly**: a first pass over the 30 currently-unreachable classes
