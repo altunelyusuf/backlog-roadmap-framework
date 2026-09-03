@@ -1,5 +1,35 @@
 # Changelog
 
+## v1.159.0 — 2026-09-02 (MINOR: 2 more fixtures fully repaired — 6 of 14 now clean — under the revived OE ceremony)
+
+**Continued the fixture-repair work, per-action ceremony re-run fresh rather than carried forward
+from the prior turn (`L-83`).** `fixture_r3_disagreement_v1_1_0` brought from 19 violations to 0:
+goal commitment and DoD on the backlog, a real roadmap placement for the launch-gated package,
+and — for both competing work items (`Fast`, `Gated`) — acceptance criteria, a refinement event
+with a real outcome, lineage membership, objective pursuit, investment category, and
+`metricMovableBy`. Two real mistakes caught by re-checking rather than assumed correct: an initial
+`pursuesObjective` pointed at a `Goal` instead of the `Objective` it should reach, and
+`RefinementEvent`'s own real linking property is `refines`, not the guessed `refinesItem`.
+
+**`fixture_pipeline_v1_0_0` brought from 21 violations to 0**, using the same Mission/Scope/Goal
+three-facing-goal template proven on `fixture_staged_lineage_v1_0_0` two releases ago, plus one
+gap specific to this fixture's own purpose: its five `StageOutput` records (demonstrating that a
+forward-built digest chain reproduces cleanly) needed `closedAtCommit` on each, added as clearly
+fixture-only placeholder commit strings rather than fabricated real hashes.
+
+Both fixtures' own original test purposes were preserved, not incidentally broken by the repair:
+the R3 prioritisation-model disagreement (WSJF scores and launch-gate flags untouched throughout)
+and the pipeline's own forward-digest-chain claim (only additive properties, no existing digest or
+`consumesOutput` edge touched).
+
+**6 of 14 fixtures now fully repaired**: `fixture_positive_v1_7_0`, `fixture_l4_conformant_v1_0_0`,
+`fixture_scope_first_v1_0_0`, `fixture_staged_lineage_v1_0_0`, `fixture_r3_disagreement_v1_1_0`,
+`fixture_pipeline_v1_0_0`. 4 fixtures remain with real partial progress; 4 remain untouched,
+disclosed as never having been this shape's problem.
+
+0 SHACL violations on the real register (85 warnings, unchanged). All six shipped checkers PASS.
+
+
 ## v1.158.0 — 2026-09-02 (MINOR: OE discipline genuinely revived from source, not just hash-checked; a 4th fixture fully repaired)
 
 **Asked to revive the OE discipline from GitHub, not trust memory.** Read `OE_Operating_Discipline_v2_3_0.md` in full rather than re-hashing it as prior turns had done, and executed its own actual three-step ceremony for the first time this session at the depth it specifies: identified the OE ABox's real location

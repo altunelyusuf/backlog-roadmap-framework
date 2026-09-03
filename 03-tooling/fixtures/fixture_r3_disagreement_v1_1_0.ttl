@@ -27,7 +27,13 @@ ex:Profile a backlog:AdoptionProfile ;
 
 ex:Backlog a backlog:Backlog ;
     backlog:hasIdentifier "BL-R3" ;
-    backlog:hasState backlog:Proposed .
+    backlog:hasState backlog:Proposed ;
+    backlog:appliesDefinitionOfDone ex:DoD_R3 ; backlog:hasCommitment ex:Commit_R3 .
+ex:DoD_R3 a backlog:DefinitionOfDone ; rdfs:label "Fixture DoD"@en .
+ex:Commit_R3 a backlog:Commitment ; backlog:commitsToGoal ex:CGoal .
+
+ex:RM_R3 a backlog:Roadmap ; backlog:roadmapOf ex:Backlog .
+ex:PkgLaunch backlog:rankedOnRoadmap ex:RM_R3 ; backlog:hasRoadmapRank 1 .
 
 ex:PkgLaunch a backlog:Package ;
     backlog:hasIdentifier "PKG-LAUNCH" ;
@@ -49,7 +55,16 @@ ex:Gated a backlog:Story ;
     backlog:hasTitle "Booking conflict detection" ;
     backlog:hasState backlog:Ready ;
     backlog:memberOfContainer ex:Backlog , ex:PkgLaunch ;
-    backlog:hasPriorityScore ex:Gated_Score .
+    backlog:hasPriorityScore ex:Gated_Score ;
+    backlog:hasAcceptanceCriterion ex:Gated_AC1 ;
+    backlog:appliesDefinitionOfDone ex:DoD_R3 ;
+    backlog:belongsToLineage ex:Lin_R3 ;
+    backlog:pursuesObjective ex:CObjScope ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability .
+ex:Gated_AC1 a backlog:AcceptanceCriterion ; backlog:hasGherkinText "Given two overlapping bookings, When conflict detection runs, Then the second is refused." ;
+    backlog:satisfiedByArtifact "backlog:AcceptanceCriterion" .
+ex:Ref_Gated a backlog:RefinementEvent ; backlog:refines ex:Gated ; backlog:refinedAt "2026-08-01T00:00:00Z"^^xsd:dateTime ; backlog:hasRefinementOutcome "Split criteria agreed, ready for sprint." .
+ex:Lin_R3 a backlog:Lineage ; backlog:lineageArchived false ; backlog:lineageForMission ex:CMission ; backlog:lineageOrdinal 1 .
 
 ex:Gated_Score a backlog:WSJFScore ;
     backlog:scoredByMethod backlog:Method_WSJF ;
@@ -62,7 +77,15 @@ ex:Fast a backlog:Task ;
     backlog:hasTitle "Cheap high-value tweak outside the launch gate" ;
     backlog:hasState backlog:Ready ;
     backlog:memberOfContainer ex:Backlog , ex:PkgLater ;
-    backlog:hasPriorityScore ex:Fast_Score .
+    backlog:hasPriorityScore ex:Fast_Score ;
+    backlog:hasAcceptanceCriterion ex:Fast_AC1 ;
+    backlog:appliesDefinitionOfDone ex:DoD_R3 ;
+    backlog:belongsToLineage ex:Lin_R3 ;
+    backlog:pursuesObjective ex:CObjContain ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability .
+ex:Fast_AC1 a backlog:AcceptanceCriterion ; backlog:hasGherkinText "Given the tweak is applied, When the page loads, Then the change is visible." ;
+    backlog:satisfiedByArtifact "backlog:AcceptanceCriterion" .
+ex:Ref_Fast a backlog:RefinementEvent ; backlog:refines ex:Fast ; backlog:refinedAt "2026-08-01T00:00:00Z"^^xsd:dateTime ; backlog:hasRefinementOutcome "Split criteria agreed, ready for sprint." .
 
 ex:Fast_Score a backlog:WSJFScore ;
     backlog:scoredByMethod backlog:Method_WSJF ;
@@ -130,12 +153,12 @@ ex:CObjContain a backlog:Objective ; backlog:contributesToGoal ex:CGoalContain ;
     backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ; backlog:decidedBy backlog:Owner .
 ex:CMetricContain a ex:CLocalMetric .
 ex:CCPScope a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-12-01T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
-ex:CObjScope backlog:hasCheckpoint ex:CCPScope .
+ex:CObjScope backlog:hasCheckpoint ex:CCPScope ; backlog:metricMovableBy ex:Gated .
 ex:CObsScope a backlog:MetricObservation ; backlog:observesMetric ex:CMetricScope ; backlog:observationFor ex:CObjScope ;
     backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-09-02T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
     backlog:hasObservationMethod "Fixture-stated value, not re-derivable." .
 ex:CCPContain a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-12-01T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
-ex:CObjContain backlog:hasCheckpoint ex:CCPContain .
+ex:CObjContain backlog:hasCheckpoint ex:CCPContain ; backlog:metricMovableBy ex:Fast .
 ex:CObsContain a backlog:MetricObservation ; backlog:observesMetric ex:CMetricContain ; backlog:observationFor ex:CObjContain ;
     backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-09-02T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
     backlog:hasObservationMethod "Fixture-stated value, not re-derivable." .
