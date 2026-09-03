@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v24.0.0
+# Lineage Operating Discipline — v25.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -1098,4 +1098,28 @@ session nor the OEE session could verify the claim against the source's actual c
 — act when evidence settles a question, ask when it is genuinely undecidable — this is the second
 case: left open, both the existing citation and the handover's alternative recorded here for the
 owner's own judgment, not silently resolved by picking one.
+
+## G54 — `Enabler` and `TransitionEvent` both re-scored down on confirmed real cost; `Spike` built instead, per `BP-D11`
+
+Continuing the ranked queue. `Enabler`'s own `Confidence=0.5` from `G52`'s scoring was a suspicion
+of disjointness with `Epic`; investigated directly and confirmed true —
+`owl:AllDisjointClasses` names `Enabler` alongside `Initiative`, `Epic`, `Feature`, `Story`, `Task`,
+`Defect`, `Spike`. Retyping BRSF's own six real, closed epics is not a multityping option; it would
+be a full retype touching every shape that targets `Epic` specifically. Re-scored with the
+confirmed cost: `Confidence=0.3`, `Effort=4` → `0.45`, dropping below every remaining candidate.
+
+`TransitionEvent` investigated next and found similarly more expensive than `G52`'s own estimate:
+`viaTransition` requires a real `StateTransition` from a declared `Workflow`, and BRSF's own
+register has zero of either — building one real `TransitionEvent` means building the whole
+apparatus first, each transition needing a required guard. Re-scored: `Confidence=0.3`,
+`Effort=5` → `0.45`, tied with `Enabler`'s revised score, both now below the remaining candidates.
+
+`Spike` built instead — no dedicated shape, ordinary `WorkItem` completion requirements this
+session already knows well from `Initiative`. This session's own domain-modeling severity test
+drive (the investigation that grounded `G46`) is a real, well-documented instance: a time-boxed
+investigation whose deliverable was a decision ("`Violation` is grounded, not fabricated"), not
+shipped functionality, matching `Spike`'s own definition exactly. `fw:SPK_DomainModelingSeverity`
+built with real evidence — `fixture_blueprint_gap_v1_0_0.ttl` (the actual discrimination fixture,
+named by path and SHA-256) and a `TestEvidence` naming the real 7-violation finding that grounded
+the ruling. `0` violations, verified.
 

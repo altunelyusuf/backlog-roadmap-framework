@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.26.0> ;
-    owl:versionInfo "9.26.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.27.0> ;
+    owl:versionInfo "9.27.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.26.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.25.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.24.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.23.0> ;
@@ -241,8 +242,8 @@ fw:Out2_Scope a backlog:StageOutput ;
 #  analysis still supports them.
 #################################################################
 fw:Area_Governance a backlog:ScopeArea ;
-    backlog:areaLocation "LINEAGE_OPERATING_DISCIPLINE_v24_0_0.md" ;
-    backlog:areaMeasure "Governance rulings G1-G53, each a markdown heading with prose. Nothing in the ontology carries them; the lineage-discipline gate checks that claims about ENFORCEMENT match the shapes, and does not check that the rulings themselves exist as anything a query can reach." .
+    backlog:areaLocation "LINEAGE_OPERATING_DISCIPLINE_v25_0_0.md" ;
+    backlog:areaMeasure "Governance rulings G1-G54, each a markdown heading with prose. Nothing in the ontology carries them; the lineage-discipline gate checks that claims about ENFORCEMENT match the shapes, and does not check that the rulings themselves exist as anything a query can reach." .
 fw:Del_OntGovernance backlog:deliverableForArea fw:Area_Governance .
 fw:Area_CodeTables a backlog:ScopeArea ;
     backlog:areaLocation "03-tooling/ — 12 python modules" ;
@@ -4633,3 +4634,48 @@ fw:SC_DomainModelingEnforcement a backlog:ScopeChange ;
     backlog:admitsItem fw:EP_CodeTables ;
     backlog:hasScopeChangeRationale "agentic-sdlc's own real handover: LineageCompletenessShape and EpicSpecifiedShape both gained real Violation-severity checks. Traded: severity decided by grounded test drive against BRSF's own real register (G46) rather than softened for convenience, which meant closing 7 real violations with a genuine Blueprint (three real domain entities) and repairing 12 of 34 fixtures, a materially larger cost than a Warning-severity shortcut would have been (v1.166.0)." ;
     backlog:decidedBy backlog:Owner .
+
+#################################################################
+#  v1.175.0 — Spike, chosen after re-scoring Enabler and
+#  TransitionEvent honestly downward once their real costs were
+#  confirmed (Enabler: disjoint with Epic, retyping 6 real closed
+#  epics infeasible; TransitionEvent: no Workflow/StateTransition
+#  infrastructure exists yet). Spike is a plain WorkItem with no
+#  dedicated shape, and this session's own domain-modeling
+#  severity test drive (G46) is a real, well-documented instance:
+#  a time-boxed investigation whose deliverable was a decision
+#  (Violation is grounded, not fabricated), not shipped
+#  functionality.
+#################################################################
+
+fw:SPK_DomainModelingSeverity a backlog:Spike ; backlog:hasIdentifier "BRF-SPK01" ;
+    backlog:hasTitle "Is Violation severity grounded for the Blueprint/domain-modeling shapes, or convenience?" ;
+    backlog:hasState backlog:Done ; backlog:memberOfContainer fw:Register ;
+    backlog:belongsToLineage fw:L_OntologyDriven ;
+    backlog:hasExecutionModality backlog:Mode_Human ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:pursuesObjective fw:Obj_BRSFConformanceHeld ;
+    backlog:hasNoApplicableConcern "Investigation, not a design deliverable; the concern being investigated (whether a check's severity is grounded) is the spike's own subject, not something it must itself be analysed for." ;
+    backlog:hasAcceptanceCriterion fw:SPK_AC1 ;
+    backlog:startedAt "2026-09-03T08:00:00Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-09-03T08:30:00Z"^^xsd:dateTime ;
+    backlog:lastAuditedAt "2026-09-03T14:30:00Z"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_Spike_Fixture , fw:Ev_Spike_TestRun .
+
+fw:SPK_AC1 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a proposed Violation-severity check with no precedent yet run against real data, When a positive/negative discrimination fixture is built and the check is run against BRSF's own real register, Then the severity decision is grounded in what actually fired, not in which severity would be convenient." ;
+    backlog:satisfiedByArtifact "backlog:AcceptanceCriterion" .
+
+fw:Ev_Spike_Fixture a backlog:ArtifactEvidence ; backlog:evidenceVerified true ;
+    backlog:hasArtifactPath "03-tooling/fixtures/fixture_blueprint_gap_v1_0_0.ttl" ;
+    backlog:hasArtifactSHA256 "2ad2efbac9a4784d5442fc779e8b999ead983b16585a656dfb1c2b04828335fa" ;
+    backlog:verifiedByTool "backlog_validate_v1_5_0.py" ;
+    backlog:attestsCriterion fw:SPK_AC1 .
+
+fw:Ev_Spike_TestRun a backlog:TestEvidence ; backlog:evidenceVerified true ;
+    backlog:verifiedByTool "backlog_validate_v1_5_0.py" ;
+    backlog:hasTestSpec "Blueprint/domain-modeling shapes run against BRSF's own real register at v1.166.0: 7 genuine, correctly-targeted violations, no noise -- the finding that grounded G46." ;
+    backlog:attestsCriterion fw:SPK_AC1 .
+
+fw:Harness_Spike a backlog:TestHarness ; backlog:harnessFor fw:SPK_DomainModelingSeverity ;
+    backlog:hasHarnessEvidence fw:Ev_Spike_Fixture , fw:Ev_Spike_TestRun .

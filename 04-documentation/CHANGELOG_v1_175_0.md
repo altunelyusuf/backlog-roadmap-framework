@@ -1,5 +1,33 @@
 # Changelog
 
+## v1.175.0 — 2026-09-02 (MINOR: Spike built, chosen after Enabler and TransitionEvent were both re-scored down on confirmed real cost, per BP-D11)
+
+**Continuing the ranked queue.** `Enabler`'s `Confidence=0.5` from `G52` was a suspicion of
+disjointness with `Epic`; investigated directly and confirmed: `owl:AllDisjointClasses` names
+`Enabler` alongside every real `WorkItem` subtype this package uses (`Initiative`, `Epic`,
+`Feature`, `Story`, `Task`, `Defect`, `Spike`). Retyping BRSF's own six real, closed epics is not a
+multityping option — it would touch every shape that targets `Epic` specifically. Re-scored with
+the confirmed cost (`Confidence=0.3`, `Effort=4`) to `0.45`.
+
+**`TransitionEvent` investigated next, found similarly more expensive.** `viaTransition` requires
+a real `StateTransition` from a declared `Workflow`; BRSF's own register has zero of either.
+Building one real `TransitionEvent` means building the whole apparatus first, with a required
+guard on every transition. Re-scored to `0.45`, tied with `Enabler`'s revised score.
+
+**`Spike` built instead**, both now below it. No dedicated shape — ordinary `WorkItem`
+requirements this session already knows well from `Initiative`. This session's own domain-modeling
+severity test drive — the investigation that grounded `G46` — is a real, well-documented instance:
+a time-boxed investigation whose deliverable was a decision ("`Violation` is grounded, not
+fabricated"), not shipped functionality, matching `Spike`'s own definition exactly.
+`fw:SPK_DomainModelingSeverity` built with real evidence: the actual discrimination fixture (named
+by path and SHA-256) and a `TestEvidence` naming the real 7-violation finding that grounded the
+ruling. `G54` records the full re-scoring.
+
+**Proposal revised to v1.7.0.**
+
+0 SHACL violations on the real register (81 warnings). All six shipped checkers PASS.
+
+
 ## v1.174.0 — 2026-09-02 (PATCH: a real handover from the OEE governance session processed — one bug already fixed, one citation formalized, one genuine discrepancy left open for the owner's own judgment)
 
 **A real, previously-unprocessed handover found and acted on**, per the owner's own flag that it
