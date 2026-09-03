@@ -1,5 +1,37 @@
 # Changelog
 
+## v1.167.0 — 2026-09-02 (MINOR: the 32-class investigation redone properly after being challenged for premature closure — a real proposal filed, nothing built without its own grounded test drive)
+
+**Challenged directly, and correctly**: a first pass over the 30 currently-unreachable classes
+(the real, validator-verified count, not the stale "32" this session had been citing) dismissed 28
+of them as "framework-original vocabulary this narrow register has no honest occasion to use"
+after reading only their definitions in isolation, not against this session's own actual history.
+Named for what it was — the same premature-closure failure `L-106` exists to catch, just applied
+to a class-by-class investigation instead of an item-by-item re-verification pass.
+
+**Redone properly**: every one of the 30 definitions checked again, this time against specific,
+real events in this session's own record rather than against the class text alone. That reversed
+the finding substantially: **16 of the 30 have a genuine, findable occasion**, not a hypothetical
+one — including `RegisterSession` (this session's own turns, never once recorded as the class
+built specifically to describe them, its own `stateVerifiedAtStart` property nearly a direct
+restatement of what `B5`'s own ceremony has required every turn), `Increment`/`ReleaseEvidence`
+(all 17 real releases this session shipped), `TransitionEvent` (every state change this session
+made, still a bare assertion), `Initiative` (the six real ontology-driven epics, never given the
+strategic-outcome parent `decomposesInto`'s own definition names for exactly this case), and ten
+more, each with a specific occasion named, not asserted generically.
+
+**A full proposal filed, nothing built yet.** `PROPOSAL_brsf-continuation_unused-domain-classes-connection_v1_0_0.md`
+(`07-handover-inbox/pending`) covers all 16 candidates in seven groups, each with the real occasion,
+a concrete connection plan, and — where relevant — an enforcement question genuinely left open
+rather than answered by assertion (`TransitionEvent`'s severity, `Defect`'s retrofit cost,
+`Enabler`'s disjointness with `Epic`) pending its own grounded test drive against real data, per
+`G46`. The other 14 classes were checked with the same rigor and genuinely have no real occasion —
+disclosed as checked-and-negative, not silently dropped.
+
+0 SHACL violations on the real register (83 warnings, unchanged — this release is documentation
+only). All six shipped checkers PASS.
+
+
 ## v1.166.0 — 2026-09-02 (MAJOR: domain-modeling enforcement shipped, grounded not fabricated — BRSF's own register brought to real conformance with a genuine Blueprint, 12 fixtures repaired, severity decided by test drive)
 
 **The Blueprint/domain-modeling handover rebuilt cleanly on top of v1.165.0's isolated base**, and
