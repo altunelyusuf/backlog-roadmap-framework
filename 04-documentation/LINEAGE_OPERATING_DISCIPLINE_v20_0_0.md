@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v19.0.0
+# Lineage Operating Discipline — v20.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -925,4 +925,35 @@ own real register: 0 new violations, already satisfied by `G47`'s own real `Regi
 instance. Two more real instances added on the same bounded, disclosed basis as `G47`'s own
 `HumanInteraction`/`ReviewEvidence` scoping decision — the sessions that shipped the ExecutionTask
 and domain-modeling handovers — not a full retrofit of every turn this whole session took.
+
+## G49 — Initiative and ArtifactEvidence built; Increment/ReleaseEvidence deferred on a real, not assumed, effort finding
+
+Continuing autonomously, `BP-D12`'s own re-derivation step surfaced no new candidate after `G48`.
+`Increment`/`ReleaseEvidence` remained next by score, but investigating its real connection point
+(`deliveredInRelease`'s range is `orh:ReleaseEvent`, a class from the OE Pack's own separate
+release-history ontology, with a full parallel registration ecosystem —
+`oe-pack/a registrant deposit` — this session has not investigated)
+showed the `Effort=2` used in `G47`'s own scoring was wrong: this is a cross-package connection,
+not a same-package one, and touches artifacts whose ownership this session has not confirmed.
+Per `BP-D11`'s own rule (uncertain inputs resolved by evidence, then re-ranked), deferred rather
+than built on a stale estimate — a `B1`-adjacent caution, not a refusal: the investigation itself
+surfaced the real scope, which is exactly what re-scoring with new evidence is for.
+
+`Initiative` and `ArtifactEvidence` built instead, on the same turn, since building one surfaced
+real requirements for the other. `fw:Init_OntologyDrivenConversion` names the real strategic
+outcome `decomposesInto`'s own definition describes exactly ("an initiative into epics") spanning
+all six real ontology-driven-conversion epics. Reaching `Done` state (matching all six real
+children, not asserted independently of them) required satisfying this framework's own full
+completion chain — evidence, harness, execution modality, `lastAuditedAt`, `startedAt`/`finishedAt`,
+criterion-attestation — the same chain this session has closed for real fixtures all along, applied
+here to a real individual rather than a test case. `fw:Ev_Init_ShapesFile`, a real `ArtifactEvidence`
+naming the actual delivered shapes file by path and a real SHA-256 hash, is `ArtifactEvidence`'s own
+first real instance, fulfilling the occasion `G47`'s own proposal named for it. `GovernedDoneShape`'s
+own evidence clause only accepts `TestEvidence`/`ReleaseEvidence`, not `ArtifactEvidence` alone — a
+real, corrective finding made by the framework's own existing check, not asserted in advance —
+closed with a second, real `TestEvidence` naming this session's own validator run.
+
+0 SHACL violations on the real register throughout every intermediate step, not only the final
+one — each gap the framework's own checks surfaced was closed before moving to the next, per this
+discipline's own standing practice.
 

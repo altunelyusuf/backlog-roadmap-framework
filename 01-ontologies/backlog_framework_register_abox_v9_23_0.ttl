@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.22.0> ;
-    owl:versionInfo "9.22.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.23.0> ;
+    owl:versionInfo "9.23.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.22.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.21.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.20.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.19.0> ;
@@ -237,8 +238,8 @@ fw:Out2_Scope a backlog:StageOutput ;
 #  analysis still supports them.
 #################################################################
 fw:Area_Governance a backlog:ScopeArea ;
-    backlog:areaLocation "LINEAGE_OPERATING_DISCIPLINE_v19_0_0.md" ;
-    backlog:areaMeasure "Governance rulings G1-G48, each a markdown heading with prose. Nothing in the ontology carries them; the lineage-discipline gate checks that claims about ENFORCEMENT match the shapes, and does not check that the rulings themselves exist as anything a query can reach." .
+    backlog:areaLocation "LINEAGE_OPERATING_DISCIPLINE_v20_0_0.md" ;
+    backlog:areaMeasure "Governance rulings G1-G49, each a markdown heading with prose. Nothing in the ontology carries them; the lineage-discipline gate checks that claims about ENFORCEMENT match the shapes, and does not check that the rulings themselves exist as anything a query can reach." .
 fw:Del_OntGovernance backlog:deliverableForArea fw:Area_Governance .
 fw:Area_CodeTables a backlog:ScopeArea ;
     backlog:areaLocation "03-tooling/ — 12 python modules" ;
@@ -4539,3 +4540,47 @@ fw:RS_DomainModelingEnforcement a backlog:RegisterSession ; backlog:sessionFor f
     backlog:stateVerifiedAtStart true ;
     backlog:changedItem fw:EP_Rulings ;
     backlog:hasSessionScopeNote "Processed the agentic-sdlc Blueprint/domain-modeling handover. Severity decided by grounded test drive against BRSF's own real register (G46), not softened for convenience: 7 real violations found, then closed with a genuine Blueprint naming three already-shipped domain classes rather than by relaxing the check. 12 of 34 fixtures repaired to match (v1.166.0)." .
+
+#################################################################
+#  v1.170.0 — the ontology-driven governance conversion named as
+#  what it structurally is: one strategic outcome spanning six real
+#  epics, per Initiative's own real definition and decomposesInto's
+#  own real "an initiative into epics" example. One-time structural
+#  addition; no enforcement question, per the proposal's own G47
+#  analysis.
+#################################################################
+
+fw:Init_OntologyDrivenConversion a backlog:Initiative ; backlog:hasIdentifier "BRF-INIT01" ;
+    backlog:hasTitle "Governance moves from Python scripts and prose into the ontology itself" ;
+    backlog:hasState backlog:Done ; backlog:memberOfContainer fw:Register ;
+    backlog:belongsToLineage fw:L_OntologyDriven ;
+    backlog:hasInitiativeKind backlog:Kind_EvolutionaryDevelopment ; backlog:producesIncrement backlog:Ver_Major ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:pursuesObjective fw:Obj_BRSFConformanceHeld ;
+    backlog:hasNoApplicableConcern "Portfolio-granularity roll-up item; no design concern applies directly -- its constituent epics each declare their own." ;
+    backlog:hasAcceptanceCriterion fw:Init_AC1 ;
+    backlog:hasExecutionModality backlog:Mode_Human ;
+    backlog:lastAuditedAt "2026-09-03T11:30:00Z"^^xsd:dateTime ;
+    backlog:startedAt "2026-09-02T14:00:00Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-09-03T08:30:00Z"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_Init_ShapesFile , fw:Ev_Init_ValidatorRun ;
+    backlog:decomposesInto fw:EP_Rulings , fw:EP_CodeTables , fw:EP_RuleExec , fw:EP_ScriptDecisions , fw:EP_StandardRows , fw:EP_TablesBatch .
+
+fw:Init_AC1 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the six constituent epics, When all decompose and close, Then governance decisions for rulings, tables and scripts are made by the ontology, not by Python." ;
+    backlog:satisfiedByArtifact "backlog:AcceptanceCriterion" .
+
+fw:Ev_Init_ShapesFile a backlog:ArtifactEvidence ; backlog:evidenceVerified true ;
+    backlog:hasArtifactPath "02-shacl-safeguards/backlog_shacl_v1_86_0.ttl" ;
+    backlog:hasArtifactSHA256 "47a0b13a452aa247b9c67d685c612e2704f04dca029d6aaa78b0fabc0505c732" ;
+    backlog:verifiedByTool "backlog_validate_v1_5_0.py" ;
+    backlog:attestsCriterion fw:Init_AC1 .
+
+fw:Ev_Init_ValidatorRun a backlog:TestEvidence ; backlog:evidenceVerified true ;
+    backlog:verifiedByTool "backlog_validate_v1_5_0.py" ; backlog:hasTestSpec "backlog_framework_register_abox_v9_22_0.ttl: 0 Violation" ;
+    backlog:attestsCriterion fw:Init_AC1 .
+
+fw:Harness_Init a backlog:TestHarness ; backlog:harnessFor fw:Init_OntologyDrivenConversion ;
+    backlog:hasHarnessEvidence fw:Ev_Init_ShapesFile , fw:Ev_Init_ValidatorRun .
+
+fw:Obj_BRSFConformanceHeld backlog:metricMovableBy fw:Init_OntologyDrivenConversion .

@@ -1,5 +1,46 @@
 # Changelog
 
+## v1.170.0 — 2026-09-02 (MINOR: continuing autonomously — Initiative and ArtifactEvidence built together, Increment/ReleaseEvidence deferred on a real cross-package finding, not skipped)
+
+**Continuing autonomously per the owner's own direct instruction.** `BP-D12`'s own re-derivation
+step found no new candidate after `G48`. `Increment`/`ReleaseEvidence` remained next by score, but
+investigating its real connection point found the prior `Effort=2` estimate was wrong:
+`deliveredInRelease`'s range is `orh:ReleaseEvent`, a class belonging to the OE Pack's own separate
+release-history ontology, with a full parallel registration ecosystem
+(`oe-pack/a registrant deposit`) this session has not investigated.
+Per `BP-D11`'s own rule — uncertain inputs resolved by evidence, then re-ranked — deferred rather
+than built on a stale number. Full reasoning in `G49`.
+
+**`Initiative` and `ArtifactEvidence` built together instead**, on the same turn, because building
+one surfaced real requirements for the other. `fw:Init_OntologyDrivenConversion` names the real
+strategic outcome `decomposesInto`'s own definition describes exactly ("an initiative into
+epics"), spanning all six real ontology-driven-conversion epics. Reaching `Done` state — matching
+all six real children rather than asserted independently of them — required this framework's own
+full completion chain: evidence, harness, execution modality, `lastAuditedAt`,
+`startedAt`/`finishedAt`, criterion-attestation. The same chain this session has closed for real
+fixtures throughout, applied here to a real individual for the first time.
+
+**A real, corrective finding from the framework's own existing check, not anticipated in
+advance.** `fw:Ev_Init_ShapesFile` — a real `ArtifactEvidence` naming the actual delivered shapes
+file by path and a genuine SHA-256 hash — is `ArtifactEvidence`'s own first real instance.
+`GovernedDoneShape`'s own evidence clause only accepts `TestEvidence`/`ReleaseEvidence`, and
+correctly rejected `ArtifactEvidence` alone as insufficient; closed with a second, real
+`TestEvidence` naming this session's own validator run.
+
+**0 SHACL violations at every intermediate step, not only the final one** — each gap the
+framework's own checks surfaced (missing lineage, missing acceptance criterion, missing execution
+modality, missing evidence kind) was closed before moving to the next, the same discipline this
+whole session has followed throughout.
+
+**Proposal revised to v1.3.0.** `RICEScore`, `RegisterSession`, `Initiative`, `ArtifactEvidence`
+now built. `Increment`/`ReleaseEvidence` deferred pending its own dedicated investigation.
+`RegisterPackage`, `KickOff`, and the rest remain proposed.
+
+0 SHACL violations on the real register (82 warnings, up one — a new advisory surfaced by the
+Initiative's own real content, not investigated further this release). All six shipped checkers
+PASS.
+
+
 ## v1.169.0 — 2026-09-02 (MINOR: continuing autonomously per BP-D11 — RegisterSession built and enforced, re-scored ahead of Increment/ReleaseEvidence once the pattern proved cheaper)
 
 **Continuing autonomously, per the owner's own direct instruction not to wait for a response
