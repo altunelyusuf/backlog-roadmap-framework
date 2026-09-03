@@ -1,5 +1,37 @@
 # Changelog
 
+## v1.158.0 — 2026-09-02 (MINOR: OE discipline genuinely revived from source, not just hash-checked; a 4th fixture fully repaired)
+
+**Asked to revive the OE discipline from GitHub, not trust memory.** Read `OE_Operating_Discipline_v2_3_0.md` in full rather than re-hashing it as prior turns had done, and executed its own actual three-step ceremony for the first time this session at the depth it specifies: identified the OE ABox's real location
+(`oe-method/01-vocabularies/knowledge_base_abox_v2_22_0.ttl` — not `01-ontologies`, correcting a
+wrong assumption in the discipline's own prose), loaded it via rdflib, and extracted verbatim
+`skos:definition` for the lessons most relevant to this session's own pattern: `L-83` (discipline
+does not auto-renew turn to turn), `L-90` (validate against the suite that governs what you author,
+not only what you're editing), `L-65`/`L-98` (verify before claiming, count violations not results).
+
+**Continued the fixture-repair work under that discipline.** `fixture_staged_lineage_v1_0_0`
+brought from 15 violations to 0, verified clean. Real, incremental fixes: `hasMissionOutcome` on
+the Mission, a real `ScopeArea` with location/measure/layer, all three goal facings each with a
+full Objective/Metric/Checkpoint/Observation chain (same pattern as the prior session's template),
+lineage completion (`lineageForMission`, `lineageOrdinal`), and a genuine correction caught by
+re-checking rather than assuming: `Epic` is not a `WorkItemContainer` in this framework's own type
+system, so a child Story attaches via `decomposesInto`, not `memberOfContainer` — the first attempt
+used the wrong property and was caught by re-running the validator, not assumed correct.
+`hasCommitment`'s own real range (`Commitment`, not `Increment`) was verified before use rather
+than guessed, avoiding a second wrong-class mistake before it shipped.
+
+The fixture's own original test claim — 0 order advisories at L4 — was re-verified to still hold
+after these additions, confirming its special staged-commit-digest purpose was preserved, not
+incidentally broken by the repair.
+
+**4 of 14 fixtures now fully repaired**: `fixture_positive_v1_7_0`, `fixture_l4_conformant_v1_0_0`,
+`fixture_scope_first_v1_0_0`, `fixture_staged_lineage_v1_0_0`. 6 fixtures remain with real,
+partial progress from the prior release; 4 remain untouched, disclosed as never having been this
+shape's problem.
+
+0 SHACL violations on the real register (85 warnings, unchanged). All six shipped checkers PASS.
+
+
 ## v1.157.0 — 2026-09-02 (MINOR: real, disclosed progress on the fixture cascade — 3 of 14 fully repaired, 7 more partially, using this package's own already-proven conformance-goal structure as the template)
 
 **Proceeded on the top-priority item from the prior cost-benefit analysis.** Built a complete,

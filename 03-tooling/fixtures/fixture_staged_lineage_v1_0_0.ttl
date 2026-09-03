@@ -22,7 +22,9 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-ex:BL a backlog:Backlog ; backlog:hasIdentifier "BL-TD" ; backlog:hasState backlog:Proposed .
+ex:BL a backlog:Backlog ; backlog:hasIdentifier "BL-TD" ; backlog:hasState backlog:Proposed ;
+    backlog:appliesDefinitionOfDone ex:DoD_TD ; backlog:hasCommitment ex:Commit_TD .
+ex:Commit_TD a backlog:Commitment ; backlog:commitsToGoal ex:G .
 ex:P a backlog:AdoptionProfile ; backlog:profileAppliesTo "staged test drive" ;
     backlog:governsBacklog ex:BL ; backlog:hasConformanceLevel backlog:L1_Core ;
     backlog:hasTargetConformanceLevel backlog:L2_EvidenceBound ;
@@ -32,34 +34,84 @@ ex:P a backlog:AdoptionProfile ; backlog:profileAppliesTo "staged test drive" ;
 
 ex:M a backlog:Mission ; backlog:hasMissionStatement "Practitioners recover unaided." ;
     backlog:missionFor ex:BL ; backlog:hasMissionOrigin backlog:Origin_OwnerStated ;
-    backlog:missionSource "Owner, staged drive" ; backlog:decidedBy backlog:Owner .
+    backlog:missionSource "Owner, staged drive" ; backlog:decidedBy backlog:Owner ;
+    backlog:hasMissionOutcome backlog:Out_InFlight .
 
 ex:Scope a backlog:ScopeStatement ; backlog:hasScopeStatementText "Self-service recovery for practitioner accounts." ;
     backlog:scopeForMission ex:M ; backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ;
-    backlog:requiresDeliverable ex:D1 , ex:D2 ; backlog:hasScopeExclusion ex:X .
-ex:D1 a backlog:ScopeDeliverable ; backlog:hasDeliverableText "Recovery completes without a support contact." .
-ex:D2 a backlog:ScopeDeliverable ; backlog:hasDeliverableText "Every recovery attempt leaves an audit record." .
+    backlog:requiresDeliverable ex:D1 , ex:D2 ; backlog:hasScopeExclusion ex:X ;
+    backlog:coversArea ex:Area_TD .
+ex:Area_TD a backlog:ScopeArea ; backlog:areaLocation "Practitioner account recovery flow." ;
+    backlog:areaMeasure "2 deliverables, counted." ; backlog:hasScopeLayer backlog:Layer_Product .
+ex:D1 a backlog:ScopeDeliverable ; backlog:hasDeliverableText "Recovery completes without a support contact." ;
+    backlog:hasScopeLayer backlog:Layer_Product .
+ex:D2 a backlog:ScopeDeliverable ; backlog:hasDeliverableText "Every recovery attempt leaves an audit record." ;
+    backlog:hasScopeLayer backlog:Layer_Product .
 ex:X a backlog:ScopeExclusion ; backlog:excludesConcern "Administrator recovery." ;
-    backlog:hasExclusionRationale "Different threat model." ; backlog:decidedBy backlog:Owner .
+    backlog:hasExclusionRationale "Different threat model." ; backlog:decidedBy backlog:Owner ;
+    backlog:hasScopeLayer backlog:Layer_Product .
 
 ex:G a backlog:Goal ; rdfs:label "Self-service recovery"@en ;
     backlog:contributesToMission ex:M ; backlog:derivesFromScope ex:Scope ;
+    backlog:hasGoalFacing backlog:Facing_Mission ; backlog:goalCoversArea ex:Area_TD ;
     backlog:hasIntentOrigin backlog:IOrigin_Derived ; backlog:decidedBy backlog:Owner .
+ex:GScope a backlog:Goal ; rdfs:label "Fixture scope-facing goal"@en ;
+    backlog:contributesToMission ex:M ; backlog:derivesFromScope ex:Scope ;
+    backlog:hasGoalFacing backlog:Facing_Scope ; backlog:goalCoversArea ex:Area_TD ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ; backlog:decidedBy backlog:Owner .
+ex:GContain a backlog:Goal ; rdfs:label "Fixture containment-facing goal"@en ;
+    backlog:contributesToMission ex:M ; backlog:derivesFromScope ex:Scope ;
+    backlog:hasGoalFacing backlog:Facing_Containment ; backlog:goalCoversArea ex:Area_TD ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ; backlog:decidedBy backlog:Owner .
+ex:OScope a backlog:Objective ; backlog:contributesToGoal ex:GScope ; backlog:fillsScope ex:Scope ;
+    backlog:hasSuccessMetric ex:MetScope ; backlog:hasBaselineValue 0.0 ; backlog:hasTargetValue 0.0 ;
+    backlog:hasTargetDirection backlog:Dir_Hold ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ; backlog:decidedBy backlog:Owner .
+ex:MetScope a core:Metric .
+ex:CP_OScope a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-12-01T00:00:00Z"^^xsd:dateTime .
+ex:OScope backlog:hasCheckpoint ex:CP_OScope .
+ex:Obs_OScope a backlog:MetricObservation ; backlog:observesMetric ex:MetScope ; backlog:observationFor ex:OScope ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-09-02T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Fixture-stated value, not re-derivable." .
+ex:OContain a backlog:Objective ; backlog:contributesToGoal ex:GContain ; backlog:fillsScope ex:Scope ;
+    backlog:hasSuccessMetric ex:MetContain ; backlog:hasBaselineValue 0.0 ; backlog:hasTargetValue 0.0 ;
+    backlog:hasTargetDirection backlog:Dir_Hold ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ; backlog:decidedBy backlog:Owner .
+ex:MetContain a core:Metric .
+ex:CP_OContain a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-12-01T00:00:00Z"^^xsd:dateTime .
+ex:OContain backlog:hasCheckpoint ex:CP_OContain .
+ex:Obs_OContain a backlog:MetricObservation ; backlog:observesMetric ex:MetContain ; backlog:observationFor ex:OContain ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-09-02T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Fixture-stated value, not re-derivable." .
 
 ex:Met a core:Metric ; rdfs:label "Unaided recovery share"@en .
 ex:O a backlog:Objective ; rdfs:label "Recoveries need no support"@en ;
     backlog:fillsScope ex:Scope ; backlog:contributesToGoal ex:G ;
     backlog:hasSuccessMetric ex:Met ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
     backlog:hasBaselineValue 12.0 ; backlog:hasTargetValue 80.0 ;
-    backlog:hasTargetDirection backlog:Dir_Increase ;
+    backlog:hasTargetDirection backlog:Dir_Increase ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:metricMovableBy ex:EP ;
     backlog:hasObjectiveDeadline "2027-01-31T00:00:00"^^xsd:dateTime ;
     backlog:decidedBy backlog:Owner .
+ex:CP_O a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-12-01T00:00:00Z"^^xsd:dateTime .
+ex:O backlog:hasCheckpoint ex:CP_O .
+ex:Obs_O a backlog:MetricObservation ; backlog:observesMetric ex:Met ; backlog:observationFor ex:O ;
+    backlog:hasObservedValue 12.0 ; backlog:observedAt "2026-09-02T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Fixture-stated value, not re-derivable." .
 
 ex:EP a backlog:Epic ; backlog:hasIdentifier "E-1" ; backlog:hasTitle "Email-factor recovery" ;
     backlog:hasState backlog:Proposed ; backlog:memberOfContainer ex:BL ;
     backlog:pursuesObjective ex:O ; backlog:satisfiesDeliverable ex:D1 ;
     backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
-    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "Scored at next planning." .
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "Scored at next planning." ;
+    backlog:appliesDefinitionOfDone ex:DoD_TD ; backlog:belongsToLineage ex:Lin_TD .
+ex:DoD_TD a backlog:DefinitionOfDone ; rdfs:label "Fixture DoD"@en .
+ex:Lin_TD a backlog:Lineage ; backlog:lineageArchived false ; backlog:lineageForMission ex:M ; backlog:lineageOrdinal 1 .
+ex:S1 a backlog:Story ; backlog:hasIdentifier "S-1" ; backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer ex:BL ; backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at next planning." ;
+    backlog:belongsToLineage ex:Lin_TD ; backlog:hasInvestmentCategory backlog:Cat_NewCapability .
+ex:EP backlog:decomposesInto ex:S1 .
 
 ex:Out_Mission a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Mission ;
     backlog:hasStateDigest "cb79327781e5569a914f57972ce8f2bb2c60d472a0854f6f20d091708050efef" ;
