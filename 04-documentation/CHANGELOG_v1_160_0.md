@@ -1,5 +1,26 @@
 # Changelog
 
+## v1.160.0 — 2026-09-02 (MINOR: 7th fixture fully repaired, in one pass, template proven stable)
+
+**`fixture_pipeline_digestfail_v1_0_0` brought from 23 violations to 0 in a single pass** — the
+same template proven on `fixture_pipeline_v1_0_0` (Mission outcome, real `ScopeArea`, three
+goal facings each with a full Objective/Metric/Checkpoint/Observation chain, epic completeness,
+`closedAtCommit` on all five `StageOutput` records) applied directly, plus one gap specific to
+this fixture: its two deliverables needed `derivesFromMissionClause`, closed identically for both.
+
+**This fixture's own special purpose was checked, not assumed preserved.** Its own comment states
+it is deliberately SHACL-valid by design — the defect it demonstrates is only visible to digest
+*recomputation*, a separate pipeline-verifier check, not anything SHACL can catch. Every edit this
+pass was additive (new triples only); the fabricated `hasStateDigest` values themselves were never
+touched, so the fixture's real purpose — proving recomputation catches what SHACL structurally
+cannot — remains intact.
+
+**7 of 14 fixtures now fully repaired.** 3 remain with real partial progress; 4 remain untouched,
+disclosed as never having been this shape's problem.
+
+0 SHACL violations on the real register (85 warnings, unchanged). All six shipped checkers PASS.
+
+
 ## v1.159.0 — 2026-09-02 (MINOR: 2 more fixtures fully repaired — 6 of 14 now clean — under the revived OE ceremony)
 
 **Continued the fixture-repair work, per-action ceremony re-run fresh rather than carried forward
