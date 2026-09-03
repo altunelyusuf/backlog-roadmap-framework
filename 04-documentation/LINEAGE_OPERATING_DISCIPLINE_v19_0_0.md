@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v18.0.0
+# Lineage Operating Discipline — v19.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -897,4 +897,32 @@ built this release. The other 15 candidates in the unused-domain-classes proposa
 remaining cost/risk/prediction vocabulary this ruling was raised to defend — remain proposed, not
 built, each still needing its own grounded connection and, where relevant, its own enforcement
 question resolved the way this one was: by test drive, not assertion.
+
+## G48 — A register with real content names a real RegisterSession; a session that changed items states whether it verified first
+
+Continuing autonomously per `BP-D11`'s own mandatory re-scoring after each completion, not
+re-asserting `G47`'s prior ranking: `RegisterSession`'s own effort dropped once the pattern was
+proven (`G47`'s own real instance), moving it from third to first — `Reach=15, Impact=2,
+Confidence=0.95, Effort=2` scores `14.25`, above `Increment`/`ReleaseEvidence`'s `12.1`. Built next
+on that basis, not on the prior turn's stale ranking.
+
+Two real gaps closed. First, register-level: `LineageCompletenessShape` already requires a
+register with real content to name a `Mission`, `Objective` and `ScopeStatement`; nothing required
+it to name a real `RegisterSession` either, despite `RegisterSession`'s own definition existing
+specifically because "a register nobody verified before editing is a register whose history cannot
+be trusted." A new clause closes this the same way: real content (`Mission` or `Blueprint`) and
+zero recorded sessions is now a `Violation`.
+
+Second, per-session: `RegisterSessionIntegrityShape` requires every `RegisterSession` to record
+`sessionStartedAt` and `stateVerifiedAtStart`, and separately fires if a session `changedItem`
+while `stateVerifiedAtStart` is `false` — a session that edited without verifying cannot tell what
+it inherited from what it introduced, exactly `RegisterSession`'s own stated reason for existing.
+
+Both proven discriminating (`fixture_registersession_integrity_v1_0_0.ttl`, three cases: no
+session at all fires the register-level clause; a complete, verified session is silent; an
+unverified session that changed an item fires the integrity clause). Test-driven against BRSF's
+own real register: 0 new violations, already satisfied by `G47`'s own real `RegisterSession`
+instance. Two more real instances added on the same bounded, disclosed basis as `G47`'s own
+`HumanInteraction`/`ReviewEvidence` scoping decision — the sessions that shipped the ExecutionTask
+and domain-modeling handovers — not a full retrofit of every turn this whole session took.
 

@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.85.0> ;
-    owl:versionInfo "1.85.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.86.0> ;
+    owl:versionInfo "1.86.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.85.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.84.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.83.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.82.0> ;
@@ -2207,6 +2208,29 @@ backlog:LineageCompletenessShape a sh:NodeShape ;
         sh:select """SELECT $this WHERE {
             ?e a backlog:Epic ; backlog:memberOfContainer $this ; backlog:hasPriorityScore ?sc .
             FILTER NOT EXISTS { ?e backlog:decomposesInto ?child }
+        }""" ] ;
+
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L2: this register carries edit history (real Blueprint, Mission, Objective or ScopeStatement individuals exist) and names no RegisterSession. Someone changed this backlog; a register with real content and zero recorded sessions cannot say who, or whether its state was verified before they did, which is the unattributable-edit failure this class exists to prevent." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            { ?m a backlog:Mission ; backlog:missionFor $this } UNION { ?b a backlog:Blueprint ; backlog:blueprintFor $this }
+            FILTER NOT EXISTS { ?rs a backlog:RegisterSession ; backlog:sessionFor $this }
+        }""" ] .
+
+backlog:RegisterSessionIntegrityShape a sh:NodeShape ;
+    sh:targetClass backlog:RegisterSession ;
+    sh:severity sh:Violation ;
+    rdfs:label "A recorded session states when it started and whether it verified first (L1)"@en ;
+    sh:property [ sh:path backlog:sessionStartedAt ; sh:minCount 1 ; sh:datatype xsd:dateTime ;
+                  sh:message "A session must record when it started." ] ;
+    sh:property [ sh:path backlog:stateVerifiedAtStart ; sh:minCount 1 ; sh:datatype xsd:boolean ;
+                  sh:message "A session that changed items must state whether it verified the register first; the check exists precisely so this cannot be left unanswered." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this session changed items without verifying the register's state first, so it cannot tell the defects it inherited from the ones it introduced." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:changedItem ?i ; backlog:stateVerifiedAtStart false .
         }""" ] .
 
 backlog:LineageDepthAdvisoryShape a sh:NodeShape ;

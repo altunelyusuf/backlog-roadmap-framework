@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.21.0> ;
-    owl:versionInfo "9.21.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.22.0> ;
+    owl:versionInfo "9.22.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.21.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.20.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.19.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.18.0> ;
@@ -236,8 +237,8 @@ fw:Out2_Scope a backlog:StageOutput ;
 #  analysis still supports them.
 #################################################################
 fw:Area_Governance a backlog:ScopeArea ;
-    backlog:areaLocation "LINEAGE_OPERATING_DISCIPLINE_v18_0_0.md" ;
-    backlog:areaMeasure "Governance rulings G1-G47, each a markdown heading with prose. Nothing in the ontology carries them; the lineage-discipline gate checks that claims about ENFORCEMENT match the shapes, and does not check that the rulings themselves exist as anything a query can reach." .
+    backlog:areaLocation "LINEAGE_OPERATING_DISCIPLINE_v19_0_0.md" ;
+    backlog:areaMeasure "Governance rulings G1-G48, each a markdown heading with prose. Nothing in the ontology carries them; the lineage-discipline gate checks that claims about ENFORCEMENT match the shapes, and does not check that the rulings themselves exist as anything a query can reach." .
 fw:Del_OntGovernance backlog:deliverableForArea fw:Area_Governance .
 fw:Area_CodeTables a backlog:ScopeArea ;
     backlog:areaLocation "03-tooling/ — 12 python modules" ;
@@ -4516,3 +4517,25 @@ fw:Score_RICEScore_SelfHosting a backlog:RICEScore ; backlog:scoredByMethod back
     backlog:hasReach 10.0 ; backlog:hasImpact 2.0 ; backlog:hasConfidence 0.8 ; backlog:hasEffort 1.5 ;
     backlog:hasDepFactor 2.0 ; backlog:hasScoreValue 10.667 ;
     backlog:hasScoreRationale "Base RICE (reach x impact x confidence / effort) is 10.667; hasDepFactor (2.0) is reported separately per RiceArithmeticShape's own real check, which verifies hasScoreValue against reach/impact/confidence/effort alone -- the DepFactor-adjusted total (21.333) is the real ranking value used for comparison against the other 13 candidates, not the value this property stores. Reach=10: this session's own real, recoverable informal prioritization calls (fixture-repair order, handover-processing order, the original ad hoc 16-class sequencing itself) that a real RICEScore record would have made checkable. Impact=2 (high): closes a real governance gap this framework's own PBI-level SilentGapShape left open one level up. Confidence=0.8: the mechanism (consideredOptionCount/decisionBackedByScore, mirroring SilentGapShape's own real pattern) is well-precedented, not novel. Effort=1.5: two new properties, one shape, one fixture, one real instance -- comparable to the smallest prior releases this session shipped. DepFactor=2 (enables ~2 other real things: this very scoring record, and any future session's own decision trail). Conservative on Reach deliberately: the true reach (every future multi-candidate decision this framework's adopters make) is far larger and unverifiable, so the lower, defensible bound is used per BP-D10's own honesty rule rather than the inflated one." .
+
+#################################################################
+#  v1.169.0 — RegisterSession completeness and integrity, both
+#  register-level and per-session, closing the gap G47 left open:
+#  a register must actually have real sessions, not just permit
+#  them, and each one must record whether it verified state first.
+#  Two more real, bounded instances added -- not a full historical
+#  retrofit of every turn, the same disclosed scoping decision
+#  already made for HumanInteraction/ReviewEvidence in the proposal.
+#################################################################
+
+fw:RS_ExecutionTaskGovernance a backlog:RegisterSession ; backlog:sessionFor fw:Register ;
+    backlog:sessionStartedAt "2026-09-03T07:40:00Z"^^xsd:dateTime ;
+    backlog:stateVerifiedAtStart true ;
+    backlog:changedItem fw:EP_Rulings ;
+    backlog:hasSessionScopeNote "Processed the agentic-sdlc ExecutionTask-inherited-governance handover: GovernedDoneShape, ItemCompletenessLinkageShape and FlowShape each gained an inheritance path from a real, compliant PlanningEvent-linked parent, explicitly not a blanket exemption. Published isolated from the concurrently in-progress domain-modeling work so the fix reached the reporting session immediately (v1.165.0)." .
+
+fw:RS_DomainModelingEnforcement a backlog:RegisterSession ; backlog:sessionFor fw:Register ;
+    backlog:sessionStartedAt "2026-09-03T08:30:00Z"^^xsd:dateTime ;
+    backlog:stateVerifiedAtStart true ;
+    backlog:changedItem fw:EP_Rulings ;
+    backlog:hasSessionScopeNote "Processed the agentic-sdlc Blueprint/domain-modeling handover. Severity decided by grounded test drive against BRSF's own real register (G46), not softened for convenience: 7 real violations found, then closed with a genuine Blueprint naming three already-shipped domain classes rather than by relaxing the check. 12 of 34 fixtures repaired to match (v1.166.0)." .

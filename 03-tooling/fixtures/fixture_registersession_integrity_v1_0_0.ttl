@@ -1,0 +1,36 @@
+# RegisterSession completeness and integrity — test drive, not a construction.
+#
+# Two clauses proven here: (1) LineageCompletenessShape's new register-level
+# clause -- a register with real content (a Mission or Blueprint) and no
+# RegisterSession is a violation; (2) RegisterSessionIntegrityShape -- a
+# session that changed items while stateVerifiedAtStart is false is a
+# violation, closing the same "someone changed the backlog unattributably"
+# gap RegisterSession's own real definition names.
+#
+# BL_Neg: real Mission, no RegisterSession at all -> register-level clause fires.
+# BL_Pos: real Mission, a real, complete, verified RegisterSession -> silent.
+# RS_Unverified: a session that changed an item with stateVerifiedAtStart false -> fires.
+
+@prefix backlog: <http://example.org/backlog#> .
+@prefix ex:      <http://example.org/rsintegrity#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+# --- Negative: real Mission, zero RegisterSession individuals ---
+ex:BL_Neg a backlog:Backlog ; backlog:hasIdentifier "BL-NEG" ; backlog:hasState backlog:Proposed .
+ex:M_Neg a backlog:Mission ; backlog:hasMissionStatement "Fixture-only." ; backlog:missionFor ex:BL_Neg ;
+    backlog:decidedBy backlog:Owner .
+
+# --- Positive: real Mission, a real, complete, verified RegisterSession ---
+ex:BL_Pos a backlog:Backlog ; backlog:hasIdentifier "BL-POS" ; backlog:hasState backlog:Proposed .
+ex:M_Pos a backlog:Mission ; backlog:hasMissionStatement "Fixture-only." ; backlog:missionFor ex:BL_Pos ;
+    backlog:decidedBy backlog:Owner .
+ex:S_Item a backlog:Story ; backlog:hasIdentifier "S-1" ; backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer ex:BL_Pos .
+ex:RS_Pos a backlog:RegisterSession ; backlog:sessionFor ex:BL_Pos ;
+    backlog:sessionStartedAt "2026-09-03T00:00:00Z"^^xsd:dateTime ;
+    backlog:stateVerifiedAtStart true ; backlog:changedItem ex:S_Item .
+
+# --- Integrity negative: a session changed an item without verifying first ---
+ex:RS_Unverified a backlog:RegisterSession ; backlog:sessionFor ex:BL_Pos ;
+    backlog:sessionStartedAt "2026-09-03T00:00:00Z"^^xsd:dateTime ;
+    backlog:stateVerifiedAtStart false ; backlog:changedItem ex:S_Item .

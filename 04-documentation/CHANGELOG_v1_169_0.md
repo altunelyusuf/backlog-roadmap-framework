@@ -1,5 +1,42 @@
 # Changelog
 
+## v1.169.0 — 2026-09-02 (MINOR: continuing autonomously per BP-D11 — RegisterSession built and enforced, re-scored ahead of Increment/ReleaseEvidence once the pattern proved cheaper)
+
+**Continuing autonomously, per the owner's own direct instruction not to wait for a response
+between gates.** `BP-D11`'s own mandatory re-scoring (not re-asserting the prior ranking) after
+`RICEScore`'s own completion found `RegisterSession`'s effort had genuinely dropped — the pattern
+was already proven real by `G47`'s own instance — moving its RICE total from `9.5` to `14.25`,
+above `Increment`/`ReleaseEvidence`'s unchanged `12.1`. Built next on that basis, not on the prior
+release's stale ranking.
+
+**Two real gaps closed, per `G48`.** `LineageCompletenessShape` already required a register with
+real content to name a `Mission`, `Objective` and `ScopeStatement`; nothing required it to name a
+real `RegisterSession` either, despite that class existing specifically because "a register nobody
+verified before editing is a register whose history cannot be trusted." A new register-level
+clause closes this: real content and zero recorded sessions is now a `Violation`. Separately,
+`RegisterSessionIntegrityShape` requires every session to record when it started and whether it
+verified first, and fires if a session changed an item while `stateVerifiedAtStart` is `false`.
+
+**Proven discriminating, test-driven honestly.** `fixture_registersession_integrity_v1_0_0.ttl`
+covers three cases: no session at all (fires the register-level clause), a complete verified
+session (silent), an unverified session that changed an item (fires the integrity clause). Against
+BRSF's own real register: 0 new violations — already satisfied by `G47`'s own real
+`RegisterSession` instance, confirmed rather than assumed.
+
+**Two more real instances added, on the same bounded, disclosed basis `G47` already set** for
+`HumanInteraction`/`ReviewEvidence` — the sessions that shipped the ExecutionTask (v1.165.0) and
+domain-modeling (v1.166.0) handovers, named with their own real scope notes. Not a full retrofit
+of every turn this session took; that remains a separate, disclosed, larger question.
+
+**Proposal revised to v1.2.0.** `RegisterSession` moves from proposed to built alongside
+`RICEScore`; `Increment`/`ReleaseEvidence` re-confirmed as the next-highest scored candidate per
+`BP-D12`'s own re-derivation step, no new options surfacing from this completion. `v1.0.0`/`v1.1.0`
+kept unedited as historical record.
+
+0 SHACL violations on the real register (81 warnings, unchanged). All six shipped checkers PASS.
+Lineage-discipline check PASS.
+
+
 ## v1.168.0 — 2026-09-02 (MINOR: session-level decision scoring enforced, not merely documented — RICEScore built and applied to itself, closing SilentGapShape's own gap one level up)
 
 **Challenged a second time, correctly.** v1.167.0's proposal treated 14 classes — including cost,
