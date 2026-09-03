@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v25.0.0
+# Lineage Operating Discipline — v26.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -1122,4 +1122,24 @@ shipped functionality, matching `Spike`'s own definition exactly. `fw:SPK_Domain
 built with real evidence — `fixture_blueprint_gap_v1_0_0.ttl` (the actual discrimination fixture,
 named by path and SHA-256) and a `TestEvidence` naming the real 7-violation finding that grounded
 the ruling. `0` violations, verified.
+
+## G55 — `HumanInteraction`/`ReviewEvidence` built next by score; a real definitional distinction caught and honored, not worked around
+
+Continuing the ranked queue: `HumanInteraction`/`ReviewEvidence` (0.8) is the highest remaining
+candidate once `Spike` cleared it. `InteractionKind`'s own closed enumeration
+(`Int_Confirm`/`Int_Reject`/`Int_Correct`/`Int_Propose`/`Int_Review`/`Int_Respond`) maps precisely
+onto a real, findable moment this session had: the direct challenge that produced `G46` — rejecting
+a softened `sh:Warning` instinct before the domain-modeling shapes shipped, `Int_Reject`, and
+`gatesTransition true` in the class's own real sense, since the work could not have proceeded
+correctly without it. `fw:HI_G46Challenge` built on that basis, naming the real epic
+(`fw:EP_CodeTables`) the decision affected.
+
+**A real definitional distinction caught by the framework's own generic evidence check, not worked
+around.** A generic shape (not `ReviewEvidenceShape` itself, but a broader one governing every
+`evidenceVerified true` claim) requires `verifiedByTool` on anything marked verified. Setting that
+for a human sign-off would have been dishonest — `ReviewEvidence`'s own definition already calls
+it "the weakest evidence kind... admissible only where no executable check exists," precisely
+because no tool verified it, a person did. Corrected: `fw:RevEv_G46Challenge` carries
+`evidenceVerified false`, matching what "verified" means in this framework (tool-checked, not
+merely asserted) rather than forcing the field to make the shape pass. `0` violations, verified.
 

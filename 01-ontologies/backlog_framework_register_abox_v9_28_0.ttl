@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.27.0> ;
-    owl:versionInfo "9.27.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.28.0> ;
+    owl:versionInfo "9.28.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.27.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.26.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.25.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.24.0> ;
@@ -242,8 +243,8 @@ fw:Out2_Scope a backlog:StageOutput ;
 #  analysis still supports them.
 #################################################################
 fw:Area_Governance a backlog:ScopeArea ;
-    backlog:areaLocation "LINEAGE_OPERATING_DISCIPLINE_v25_0_0.md" ;
-    backlog:areaMeasure "Governance rulings G1-G54, each a markdown heading with prose. Nothing in the ontology carries them; the lineage-discipline gate checks that claims about ENFORCEMENT match the shapes, and does not check that the rulings themselves exist as anything a query can reach." .
+    backlog:areaLocation "LINEAGE_OPERATING_DISCIPLINE_v26_0_0.md" ;
+    backlog:areaMeasure "Governance rulings G1-G55, each a markdown heading with prose. Nothing in the ontology carries them; the lineage-discipline gate checks that claims about ENFORCEMENT match the shapes, and does not check that the rulings themselves exist as anything a query can reach." .
 fw:Del_OntGovernance backlog:deliverableForArea fw:Area_Governance .
 fw:Area_CodeTables a backlog:ScopeArea ;
     backlog:areaLocation "03-tooling/ — 12 python modules" ;
@@ -4679,3 +4680,24 @@ fw:Ev_Spike_TestRun a backlog:TestEvidence ; backlog:evidenceVerified true ;
 
 fw:Harness_Spike a backlog:TestHarness ; backlog:harnessFor fw:SPK_DomainModelingSeverity ;
     backlog:hasHarnessEvidence fw:Ev_Spike_Fixture , fw:Ev_Spike_TestRun .
+
+#################################################################
+#  v1.176.0 — HumanInteraction/ReviewEvidence, chosen next in the
+#  BP-D10 queue once Enabler/TransitionEvent were confirmed
+#  costlier. A real, findable moment this session had: the direct
+#  challenge that produced G46 -- rejecting the softened-severity
+#  instinct before the domain-modeling shapes shipped, which is
+#  gating in the class's own real sense: the work could not have
+#  proceeded correctly without it.
+#################################################################
+
+fw:HI_G46Challenge a backlog:HumanInteraction ;
+    backlog:interactsWith fw:EP_CodeTables ;
+    backlog:hasInteractionKind backlog:Int_Reject ;
+    backlog:interactedAt "2026-09-03T08:15:00Z"^^xsd:dateTime ;
+    backlog:interactedBy backlog:Owner ;
+    backlog:gatesTransition true .
+
+fw:RevEv_G46Challenge a backlog:ReviewEvidence ; backlog:evidenceVerified false ;
+    backlog:hasReviewer "Yusuf Altunel (Owner)" ;
+    backlog:hasReviewRecordRef "brsf-continuation session transcript: direct challenge that a proposed sh:Warning for the Blueprint/domain-modeling shapes (softened to avoid immediately breaking BRSF's own conformance) was named for what it was rather than accepted, requiring the severity be decided by grounded test drive instead -- the finding recorded verbatim in G46, LINEAGE_OPERATING_DISCIPLINE (current highest version in the attached pack, per BP-D2/pointer resolution)." .

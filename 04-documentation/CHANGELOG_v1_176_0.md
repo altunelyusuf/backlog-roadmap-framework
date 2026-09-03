@@ -1,5 +1,30 @@
 # Changelog
 
+## v1.176.0 — 2026-09-02 (MINOR: HumanInteraction/ReviewEvidence built next by score; a real definitional distinction caught and honored, not worked around)
+
+**Continuing the ranked queue.** `HumanInteraction`/`ReviewEvidence` (0.8) is the highest remaining
+candidate once `Spike` cleared it. `InteractionKind`'s own closed enumeration
+(`Int_Confirm`/`Int_Reject`/`Int_Correct`/`Int_Propose`/`Int_Review`/`Int_Respond`) maps precisely
+onto a real, findable moment this session had: the direct challenge that produced `G46` — rejecting
+a softened `sh:Warning` instinct before the domain-modeling shapes shipped, `Int_Reject`, with
+`gatesTransition true` in the class's own real sense, since the work could not have proceeded
+correctly without it. `fw:HI_G46Challenge` built on that basis, naming the real epic
+(`fw:EP_CodeTables`) the decision affected.
+
+**A real definitional distinction caught by the framework's own generic evidence check, not worked
+around.** A generic shape requires `verifiedByTool` on anything marked `evidenceVerified true`.
+Setting that for a human sign-off would have been dishonest — `ReviewEvidence`'s own definition
+already calls it "the weakest evidence kind... admissible only where no executable check exists,"
+precisely because no tool verified it, a person did. Corrected: `fw:RevEv_G46Challenge` carries
+`evidenceVerified false`, matching what "verified" means in this framework rather than forcing the
+field to make the shape pass. `G55` records the full reasoning.
+
+**Proposal revised to v1.8.0.**
+
+0 SHACL violations on the real register (79 warnings). All six shipped checkers PASS.
+Lineage-discipline check PASS.
+
+
 ## v1.175.0 — 2026-09-02 (MINOR: Spike built, chosen after Enabler and TransitionEvent were both re-scored down on confirmed real cost, per BP-D11)
 
 **Continuing the ranked queue.** `Enabler`'s `Confidence=0.5` from `G52` was a suspicion of
