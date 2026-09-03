@@ -1,5 +1,27 @@
 # Changelog
 
+## v1.161.0 — 2026-09-02 (MINOR: 8th fixture fully repaired — OE ceremony revived fresh again, a self-caught mistake this time)
+
+**OE discipline revived fresh from GitHub again, per its own `L-83`** — ceremony re-run as its own
+gate, not carried forward from the prior turn. This time the extraction also surfaced `L-31`
+("property names alone are insufficient guidance... before using a property in ABox content, run
+a query for its rdfs:domain and rdfs:range"), directly naming the exact class of mistake made three
+times already this session (guessed property names caught only by re-validation:
+`memberOfContainer`/`decomposesInto`, `refinesItem`/`refines`, `Increment`/`Commitment`).
+
+**`fixture_tied_gates_v1_0_0` brought from 31 violations to 0** — four work items each completed
+with acceptance criteria, a refinement event with a real outcome (for the three in `Ready`),
+Definition of Done, lineage membership, objective pursuit, investment category, and
+`metricMovableBy` on the objectives pursued. `L-31`'s own discipline caught a mistake mid-edit
+rather than after: a first attempt at `pursuesObjective` pointed at a `Goal` again, caught by
+re-checking the property's own range before moving to the next item, not by a later validator run.
+
+**8 of 14 fixtures now fully repaired**, exactly matching the count of fixtures still needing work
+(3 partial, 4 untouched, disclosed unchanged from the prior release).
+
+0 SHACL violations on the real register (85 warnings, unchanged). All six shipped checkers PASS.
+
+
 ## v1.160.0 — 2026-09-02 (MINOR: 7th fixture fully repaired, in one pass, template proven stable)
 
 **`fixture_pipeline_digestfail_v1_0_0` brought from 23 violations to 0 in a single pass** — the

@@ -23,7 +23,11 @@ ex:Backlog a backlog:Backlog ;
     backlog:hasIdentifier "BL-TIED" ; backlog:hasState backlog:Proposed ;
     backlog:hasRankingForkResolution backlog:LaunchScopedRanking ;
     backlog:decidedBy backlog:Owner ;
-    backlog:hasDecisionRationale "Owner call: nothing ships before the three foundation gates clear, so launch scope governs pickup until they do." .
+    backlog:hasDecisionRationale "Owner call: nothing ships before the three foundation gates clear, so launch scope governs pickup until they do." ;
+    backlog:appliesDefinitionOfDone ex:DoD_Tied ; backlog:hasCommitment ex:Commit_Tied .
+ex:DoD_Tied a backlog:DefinitionOfDone ; rdfs:label "Fixture DoD"@en .
+ex:Commit_Tied a backlog:Commitment ; backlog:commitsToGoal ex:CGoal .
+ex:Lin_Tied a backlog:Lineage ; backlog:lineageArchived false ; backlog:lineageForMission ex:CMission ; backlog:lineageOrdinal 1 .
 
 ex:Roadmap a backlog:Roadmap ; backlog:roadmapOf ex:Backlog .
 
@@ -54,7 +58,14 @@ ex:InZulu a backlog:Story ;
     backlog:hasIdentifier "US-ZULU" ; backlog:hasTitle "Work inside the last-sorting gate" ;
     backlog:hasState backlog:Ready ;
     backlog:memberOfContainer ex:Backlog , ex:GateZulu ;
-    backlog:hasPriorityScore ex:ScoreZulu .
+    backlog:hasPriorityScore ex:ScoreZulu ;
+    backlog:hasAcceptanceCriterion ex:Zulu_AC1 ; backlog:appliesDefinitionOfDone ex:DoD_Tied ;
+    backlog:belongsToLineage ex:Lin_Tied ; backlog:pursuesObjective ex:CObjScope ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability .
+ex:Zulu_AC1 a backlog:AcceptanceCriterion ; backlog:hasGherkinText "Given the last-sorting gate, When work completes, Then it is verified." ;
+    backlog:satisfiedByArtifact "backlog:AcceptanceCriterion" .
+ex:Ref_Zulu a backlog:RefinementEvent ; backlog:refines ex:InZulu ; backlog:refinedAt "2026-08-01T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Split criteria agreed, ready for sprint." .
 ex:ScoreZulu a backlog:WSJFScore ;
     backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 9.0 ;
     backlog:hasUserBusinessValue 8.0 ; backlog:hasTimeCriticality 6.0 ;
@@ -65,7 +76,14 @@ ex:InAlpha a backlog:Story ;
     backlog:hasIdentifier "US-ALPHA" ; backlog:hasTitle "Work inside the first-sorting gate" ;
     backlog:hasState backlog:Ready ;
     backlog:memberOfContainer ex:Backlog , ex:GateAlpha ;
-    backlog:hasPriorityScore ex:ScoreAlpha .
+    backlog:hasPriorityScore ex:ScoreAlpha ;
+    backlog:hasAcceptanceCriterion ex:Alpha_AC1 ; backlog:appliesDefinitionOfDone ex:DoD_Tied ;
+    backlog:belongsToLineage ex:Lin_Tied ; backlog:pursuesObjective ex:CObjContain ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability .
+ex:Alpha_AC1 a backlog:AcceptanceCriterion ; backlog:hasGherkinText "Given the first-sorting gate, When work completes, Then it is verified." ;
+    backlog:satisfiedByArtifact "backlog:AcceptanceCriterion" .
+ex:Ref_Alpha a backlog:RefinementEvent ; backlog:refines ex:InAlpha ; backlog:refinedAt "2026-08-01T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Split criteria agreed, ready for sprint." .
 ex:ScoreAlpha a backlog:WSJFScore ;
     backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 2.0 ;
     backlog:hasUserBusinessValue 2.0 ; backlog:hasTimeCriticality 1.0 ;
@@ -75,7 +93,9 @@ ex:InBeta a backlog:Task ;
     backlog:hasIdentifier "US-BETA" ; backlog:hasState backlog:Proposed ;
     backlog:memberOfContainer ex:Backlog , ex:GateBeta ;
     backlog:notYetScoreable true ;
-    backlog:hasScoreabilityReason "Not yet separated from the surrounding platform work." .
+    backlog:hasScoreabilityReason "Not yet separated from the surrounding platform work." ;
+    backlog:appliesDefinitionOfDone ex:DoD_Tied ; backlog:belongsToLineage ex:Lin_Tied ;
+    backlog:pursuesObjective ex:CObj ; backlog:hasInvestmentCategory backlog:Cat_NewCapability .
 
 # work outside every gate, scoring highest overall -> throughput and launch-scoped disagree
 ex:Outside a backlog:Story ;
@@ -83,7 +103,14 @@ ex:Outside a backlog:Story ;
     backlog:hasIdentifier "US-OUT" ; backlog:hasTitle "Cheap high-value work outside every gate" ;
     backlog:hasState backlog:Ready ;
     backlog:memberOfContainer ex:Backlog , ex:PkgLater ;
-    backlog:hasPriorityScore ex:ScoreOut .
+    backlog:hasPriorityScore ex:ScoreOut ;
+    backlog:hasAcceptanceCriterion ex:Out_AC1 ; backlog:appliesDefinitionOfDone ex:DoD_Tied ;
+    backlog:belongsToLineage ex:Lin_Tied ; backlog:pursuesObjective ex:CObj ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability .
+ex:Out_AC1 a backlog:AcceptanceCriterion ; backlog:hasGherkinText "Given the outside work, When it completes, Then it is verified." ;
+    backlog:satisfiedByArtifact "backlog:AcceptanceCriterion" .
+ex:Ref_Out a backlog:RefinementEvent ; backlog:refines ex:Outside ; backlog:refinedAt "2026-08-01T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Split criteria agreed, ready for sprint." .
 ex:ScoreOut a backlog:WSJFScore ;
     backlog:scoredByMethod backlog:Method_WSJF ; backlog:hasScoreValue 12.0 ;
     backlog:hasUserBusinessValue 9.0 ; backlog:hasTimeCriticality 9.0 ;
@@ -156,12 +183,12 @@ ex:CObjContain a backlog:Objective ; backlog:contributesToGoal ex:CGoalContain ;
     backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ; backlog:decidedBy backlog:Owner .
 ex:CMetricContain a ex:CLocalMetric .
 ex:CCPScope a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-12-01T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
-ex:CObjScope backlog:hasCheckpoint ex:CCPScope .
+ex:CObjScope backlog:hasCheckpoint ex:CCPScope ; backlog:metricMovableBy ex:InZulu .
 ex:CObsScope a backlog:MetricObservation ; backlog:observesMetric ex:CMetricScope ; backlog:observationFor ex:CObjScope ;
     backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-09-02T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
     backlog:hasObservationMethod "Fixture-stated value, not re-derivable." .
 ex:CCPContain a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-12-01T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
-ex:CObjContain backlog:hasCheckpoint ex:CCPContain .
+ex:CObjContain backlog:hasCheckpoint ex:CCPContain ; backlog:metricMovableBy ex:InAlpha .
 ex:CObsContain a backlog:MetricObservation ; backlog:observesMetric ex:CMetricContain ; backlog:observationFor ex:CObjContain ;
     backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-09-02T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
     backlog:hasObservationMethod "Fixture-stated value, not re-derivable." .
@@ -172,7 +199,7 @@ ex:CObj a backlog:Objective ;
     backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ; backlog:decidedBy backlog:Owner .
 ex:CMetric a ex:CLocalMetric .
 ex:CCP a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-12-01T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
-ex:CObj backlog:hasCheckpoint ex:CCP .
+ex:CObj backlog:hasCheckpoint ex:CCP ; backlog:metricMovableBy ex:InBeta .
 ex:CObs a backlog:MetricObservation ; backlog:observesMetric ex:CMetric ; backlog:observationFor ex:CObj ;
     backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-09-02T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
     backlog:hasObservationMethod "Fixture-stated value, not re-derivable." .
