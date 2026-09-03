@@ -17,7 +17,7 @@ ex:P a backlog:AdoptionProfile ; backlog:profileAppliesTo "pipeline fixture" ;
     backlog:hasTargetConformanceLevel backlog:L2_EvidenceBound ;
     backlog:hasLevelReviewDate "2027-01-01T00:00:00"^^xsd:dateTime ;
     backlog:decidedBy backlog:Owner ; backlog:hasDecisionRationale "Core: the pipeline clauses are L1/L2." ;
-    backlog:adoptsFacet backlog:CoreFacet .
+    backlog:adoptsFacet backlog:CoreFacet , backlog:EvidenceFacet , backlog:InvariantFacet , backlog:AuditFacet .
 
 ex:M a backlog:Mission ; backlog:hasMissionStatement "Practitioners recover unaided." ;
     backlog:missionFor ex:BL ; backlog:hasMissionOrigin backlog:Origin_OwnerStated ;
@@ -61,3 +61,67 @@ ex:D1 backlog:derivesFromMissionClause "practitioners recover unaided" .
 ex:D2 backlog:derivesFromMissionClause "practitioners recover unaided" .
 
 <http://example.org/pl#P> backlog:hasExpectedPolarity backlog:Polarity_Positive .
+# Conformance-goal pattern (G42/AdoptionConformanceGoalShape), self-contained,
+# using this package's own already-proven Goal_BRSFConformance/Obj_BRSFConformanceHeld
+# structure as the exact template rather than re-deriving requirements by trial.
+ex:CMission a backlog:Mission ;
+    backlog:hasMissionStatement "Fixture conformance-goal test mission." ;
+    backlog:missionFor ex:BL ; backlog:hasMissionOrigin backlog:IOrigin_OwnerStated ;
+    backlog:hasMissionOutcome backlog:Out_InFlight ; backlog:decidedBy backlog:Owner .
+ex:CDel a backlog:ScopeDeliverable ; backlog:hasDeliverableText "Fixture deliverable." ;
+    backlog:derivesFromMissionClause "Fixture conformance-goal test mission." ;
+    backlog:hasScopeLayer backlog:Layer_Product .
+ex:CScope a backlog:ScopeStatement ;
+    backlog:hasScopeStatementText "Fixture conformance-goal test scope." ;
+    backlog:scopeForMission ex:CMission ; backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ;
+    backlog:requiresDeliverable ex:CDel ; backlog:hasScopeExclusion ex:CExcl ;
+    backlog:coversArea ex:CArea .
+ex:CExcl a backlog:ScopeExclusion ; backlog:excludesConcern "Fixture-only exclusion." ;
+    backlog:hasExclusionRationale "Fixture-only, not a real design decision." ; backlog:decidedBy backlog:Owner ;
+    backlog:hasScopeLayer backlog:Layer_Product .
+ex:CArea a backlog:ScopeArea ; backlog:areaLocation "Fixture-only area, no real location." ;
+    backlog:areaMeasure "0 real measure; fixture-only." ; backlog:hasScopeLayer backlog:Layer_Product .
+ex:CGoal a backlog:Goal ; <http://www.w3.org/2000/01/rdf-schema#label> "Fixture conformance goal" ;
+    backlog:isConformanceGoal true ; backlog:contributesToMission ex:CMission ;
+    backlog:derivesFromScope ex:CScope ; backlog:hasGoalFacing backlog:Facing_Mission ;
+    backlog:goalCoversArea ex:CArea ; backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ;
+    backlog:decidedBy backlog:Owner .
+ex:CGoalScope a backlog:Goal ; <http://www.w3.org/2000/01/rdf-schema#label> "Fixture scope-facing goal" ;
+    backlog:contributesToMission ex:CMission ; backlog:derivesFromScope ex:CScope ;
+    backlog:hasGoalFacing backlog:Facing_Scope ; backlog:goalCoversArea ex:CArea ;
+    backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ; backlog:decidedBy backlog:Owner .
+ex:CGoalContain a backlog:Goal ; <http://www.w3.org/2000/01/rdf-schema#label> "Fixture containment-facing goal" ;
+    backlog:contributesToMission ex:CMission ; backlog:derivesFromScope ex:CScope ;
+    backlog:hasGoalFacing backlog:Facing_Containment ; backlog:goalCoversArea ex:CArea ;
+    backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ; backlog:decidedBy backlog:Owner .
+ex:CObjScope a backlog:Objective ; backlog:contributesToGoal ex:CGoalScope ; backlog:fillsScope ex:CScope ;
+    backlog:hasSuccessMetric ex:CMetricScope ; backlog:hasBaselineValue 0.0 ; backlog:hasTargetValue 0.0 ;
+    backlog:hasTargetDirection backlog:Dir_Hold ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ; backlog:decidedBy backlog:Owner .
+ex:CMetricScope a ex:CLocalMetric .
+ex:CObjContain a backlog:Objective ; backlog:contributesToGoal ex:CGoalContain ; backlog:fillsScope ex:CScope ;
+    backlog:hasSuccessMetric ex:CMetricContain ; backlog:hasBaselineValue 0.0 ; backlog:hasTargetValue 0.0 ;
+    backlog:hasTargetDirection backlog:Dir_Hold ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ; backlog:decidedBy backlog:Owner .
+ex:CMetricContain a ex:CLocalMetric .
+ex:CCPScope a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-12-01T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+ex:CObjScope backlog:hasCheckpoint ex:CCPScope .
+ex:CObsScope a backlog:MetricObservation ; backlog:observesMetric ex:CMetricScope ; backlog:observationFor ex:CObjScope ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-09-02T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+    backlog:hasObservationMethod "Fixture-stated value, not re-derivable." .
+ex:CCPContain a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-12-01T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+ex:CObjContain backlog:hasCheckpoint ex:CCPContain .
+ex:CObsContain a backlog:MetricObservation ; backlog:observesMetric ex:CMetricContain ; backlog:observationFor ex:CObjContain ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-09-02T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+    backlog:hasObservationMethod "Fixture-stated value, not re-derivable." .
+ex:CObj a backlog:Objective ;
+    backlog:contributesToGoal ex:CGoal ; backlog:fillsScope ex:CScope ;
+    backlog:hasSuccessMetric ex:CMetric ; backlog:hasBaselineValue 0.0 ; backlog:hasTargetValue 0.0 ;
+    backlog:hasTargetDirection backlog:Dir_Hold ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ; backlog:decidedBy backlog:Owner .
+ex:CMetric a ex:CLocalMetric .
+ex:CCP a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-12-01T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+ex:CObj backlog:hasCheckpoint ex:CCP .
+ex:CObs a backlog:MetricObservation ; backlog:observesMetric ex:CMetric ; backlog:observationFor ex:CObj ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-09-02T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+    backlog:hasObservationMethod "Fixture-stated value, not re-derivable." .

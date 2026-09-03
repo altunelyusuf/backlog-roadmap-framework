@@ -1,5 +1,52 @@
 # Changelog
 
+## v1.157.0 — 2026-09-02 (MINOR: real, disclosed progress on the fixture cascade — 3 of 14 fully repaired, 7 more partially, using this package's own already-proven conformance-goal structure as the template)
+
+**Proceeded on the top-priority item from the prior cost-benefit analysis.** Built a complete,
+self-contained conformance-goal block — Mission, Scope (with a deliverable, an exclusion, an
+area), and all three required goal facings (Mission, Scope, Containment), each with its own
+Objective, Metric, Checkpoint, and Observation — derived directly from this package's own already-
+proven `Goal_BRSFConformance`/`Obj_BRSFConformanceHeld` structure rather than re-deriving the
+requirement chain by further trial and error. Verified against `fixture_item_tie_v1_0_0` first:
+zero new violations from the block itself, confirming the template works before reusing it
+anywhere else.
+
+**Reusing an existing `Backlog` rather than creating a new empty one turned out to matter.** An
+earlier attempt that created a fresh, empty container for the Mission to point at triggered an
+unrelated cascade (empty-container checks: no member, no Definition of Done, no goal commitment)
+that had nothing to do with the conformance-goal pattern. Pointing the Mission at each fixture's
+own real, pre-existing `Backlog` individual instead avoided the cascade entirely.
+
+**3 fixtures fully repaired and re-verified clean**: `fixture_positive_v1_7_0` (0 violations,
+confirming the earlier full L4 repair plus this new template compose cleanly),
+`fixture_l4_conformant_v1_0_0`, `fixture_scope_first_v1_0_0` (the latter needed one further,
+trivial fix — its `AdoptionProfile` was missing the `InvariantFacet`/`AuditFacet` `G43` `Warning`
+went uncaught for cases outside the register's own real data — found and closed the same pass).
+
+**The same missing-facet gap found and fixed identically across 6 more fixtures**
+(`fixture_pipeline_v1_0_0`, `fixture_pipeline_digestfail_v1_0_0`, `fixture_r3_disagreement_v1_1_0`,
+`fixture_staged_lineage_v1_0_0`, `fixture_tied_gates_v1_0_0`, `fixture_progress_v1_0_0`) — real
+progress, violation counts dropped in every one, but each still carries deeper, pre-existing gaps
+from before this session's level-removal work (missing acceptance criteria, lineage membership,
+objective pursuit, investment category, and similar) that are unrelated to the conformance-goal
+pattern and were not fixed this pass.
+
+**`fixture_item_tie_v1_0_0` received the full conformance-goal template but remains non-conformant**
+— its own gaps (the same class of pre-existing, level-removal-era completeness gaps found in the
+6 above) go deeper than the conformance-goal piece alone closes. The template addition is real,
+verified, zero-cost progress even though the fixture as a whole still fails.
+
+**4 fixtures untouched this pass** (`fixture_measurement_due_v1_0_0`,
+`fixture_package_regularity_v1_0_0`, `fixture_productscopekind_v1_0_0`,
+`fixture_sprint_ceremonies_v1_0_0`) — none carry an `AdoptionProfile` at all, so
+`AdoptionConformanceGoalShape` was never their problem; their own failures are entirely the
+pre-existing, level-removal-era gap, disclosed rather than assumed fixed by proxy.
+
+0 SHACL violations on the real register (85 warnings, unchanged). All six shipped checkers PASS.
+The conformance-goal template itself is now proven reusable across 10 fixtures and ready to apply
+to whatever remains.
+
+
 ## v1.156.0 — 2026-09-02 (MINOR: priority analysis delivered; applying the severity taxonomy to its first real case retired a shape instead of relabelling it)
 
 **A cost-benefit/risk-opportunity analysis was requested to prioritize three open work items** —
