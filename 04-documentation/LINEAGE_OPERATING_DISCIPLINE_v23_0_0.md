@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v22.0.0
+# Lineage Operating Discipline — v23.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -1031,4 +1031,34 @@ section sequence: header, two NEXT sections under different scoring models, full
 addressed to another registrant's own governing session per `B1`. Complementary to, not a substitute for, the
 naming-convention proposal — one describes what the artifact structurally is, the other what its
 filename must look like; `RegisterPackage` needs both before it is honestly buildable.
+
+## G52 — `ScopeChange` built next by this framework's own real BP-D10 ranking, not preference; a real archive-vs-active scope mistake caught before publish
+
+Instructed directly: decide the next step by this framework's own ranking discipline, not
+sequencing convenience. Re-derived the option set fresh from the latest real status (`RegisterPackage`
+correctly excluded as not currently actionable, blocked on two external proposals) and scored the
+seven remaining actionable candidates with `BP-D10`, each input justified against real, observable
+session state, not asserted:
+
+`ScopeChange` (1.8) and `Enabler` (1.5) fell within `BP-D10`'s own 20% tie band. Broken on
+regression risk, the method's own named secondary criterion: `Enabler`'s disjointness with `Epic`
+is unverified and would require multityping six real, closed epics other shapes already target;
+`ScopeChange` is purely additive, no structural risk to existing data. `ScopeChange` built.
+
+**A real mistake caught mid-build, by the framework's own type-completeness checks, not by
+inspection.** A real, existing `ScopeChange` precedent was found in the archive ABox
+(`fw:SC_OrderRepair`) and matched exactly — but its target, `fw:Scope`, turned out to be BRSF's own
+*historical*, closed scope statement (its own real narrative names the product-backlog/execution-
+task split, derived flow, multi-dimensional cost — an earlier epoch, not the current one), typed
+only in the archive file and invisible when validating the active register alone. Adding the bare
+type triggered a full completeness chain requiring roughly ten more individuals from that same
+retired epoch — a real, higher-effort path than the one this ruling had scored. Investigating
+further found the real, currently-active scope was `fw:Scope_Ontology` all along — already fully
+complete, already the real target of the ontology-driven-conversion work these two `ScopeChange`s
+are actually about. Corrected before publish: both individuals point at `fw:Scope_Ontology`, `0`
+violations, no retrofit of the historical scope attempted.
+
+Proven built, not merely proposed: `fw:SC_ExecutionTaskGovernance` and
+`fw:SC_DomainModelingEnforcement`, each naming the real handover it admitted, the real trade made,
+and the real epic it touched.
 

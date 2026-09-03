@@ -1,5 +1,37 @@
 # Changelog
 
+## v1.173.0 — 2026-09-02 (MINOR: ScopeChange built, chosen by this framework's own real BP-D10 ranking rather than sequencing preference; a real archive-vs-active scope mistake caught before publish)
+
+**Instructed directly: decide the next step by the methodology's own ranking, not preference.**
+The option set re-derived fresh (`RegisterPackage` correctly excluded as not currently actionable,
+blocked on two external proposals filed this session) and scored with `BP-D10` — each input
+justified against real, observable session state, not asserted. `ScopeChange` (1.8) and `Enabler`
+(1.5) fell within `BP-D10`'s own 20% tie band; broken on regression risk, the method's own named
+secondary criterion: `Enabler`'s disjointness with `Epic` is unverified and would require
+multityping six real, closed epics other shapes already target, while `ScopeChange` is purely
+additive with no structural risk to existing data.
+
+**A real mistake caught mid-build, by the framework's own checks, not by inspection.** A real,
+existing `ScopeChange` precedent was found in the archive ABox (`fw:SC_OrderRepair`) and matched
+exactly — but its target, `fw:Scope`, turned out to be BRSF's own historical, closed scope from an
+earlier epoch (its own real narrative names the product-backlog/execution-task split, derived
+flow, multi-dimensional cost — work from before the current ontology-driven-conversion era), typed
+only in the archive and invisible to the active register's own validation. Adding the bare type
+would have triggered a full completeness chain requiring roughly ten more individuals from that
+same retired epoch. Investigating further found the real, currently-active scope was
+`fw:Scope_Ontology` all along — already complete, already the real target of the work these
+`ScopeChange`s actually describe.
+
+**Built and verified.** `fw:SC_ExecutionTaskGovernance` and `fw:SC_DomainModelingEnforcement`, each
+naming the real handover admitted, the real trade made, and the real epic touched, both correctly
+pointing at `fw:Scope_Ontology`. `G52` records the full ranking table and the correction.
+
+**Proposal revised to v1.6.0.**
+
+0 SHACL violations on the real register (80 warnings). All six shipped checkers PASS.
+Lineage-discipline check PASS.
+
+
 ## v1.172.0 — 2026-09-02 (MINOR: another registrant dismissal corrected — a real, extensible document-profile taxonomy, checked at one file rather than the whole ecosystem; a second, complementary proposal filed for RegisterPackage)
 
 **Challenged directly, correctly.** `v1.171.0`'s own finding that another registrant covers "only educational
