@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v26.0.0
+# Lineage Operating Discipline — v27.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -1142,4 +1142,25 @@ it "the weakest evidence kind... admissible only where no executable check exist
 because no tool verified it, a person did. Corrected: `fw:RevEv_G46Challenge` carries
 `evidenceVerified false`, matching what "verified" means in this framework (tool-checked, not
 merely asserted) rather than forcing the field to make the shape pass. `0` violations, verified.
+
+## G56 — `KickOff` built after `Defect`/`ProblemReport` was re-scored down; `ProblemReport`'s real requirement traced to a maintenance `Initiative` BRSF does not have
+
+Continuing the ranked queue. `Defect`/`ProblemReport` (0.5) investigated next: `Defect` alone
+follows ordinary `WorkItem` completion (no dedicated shape), a real occasion exists (this session's
+own real bugs), and its evidence question is the same one `Spike` already resolved (a real
+`TestEvidence` naming the actual before/after validator run, not a dedicated regression-test file
+`skos:definition`'s own "normally" leaves room for). `ProblemReport`, however, has no property
+connecting it to `Defect` directly — its only real link (`triggeredBy`) has domain `Initiative`,
+and specifically implies a maintenance-kind one; BRSF's own single `Initiative`
+(`fw:Init_OntologyDrivenConversion`) is `Kind_EvolutionaryDevelopment`. Building `ProblemReport`
+properly means building a second, real maintenance `Initiative` first — substantially larger than
+the original estimate. Re-scored: `Defect` alone (without the `ProblemReport` pairing originally
+assumed), `Reach=1, Confidence=0.7, Effort=2` → `0.35`, below `KickOff`.
+
+`KickOff` built instead. Unlike every recent candidate, genuinely as simple as scored: `KickOff` is
+an `Artifact`, not a `WorkItem` — no completion chain, four clean properties
+(`kickOffFor`/`kickedOffAt`/`hasKickOffMode`/`decidedBy`), 0 violations on the first attempt. The
+real occasion: the owner's own real, already-quoted instruction (`fw:Mission_OntologyDriven`'s own
+`missionSource`, dated 2026-10-26) that started the ontology-driven mission. `fw:KO_OntologyDriven`
+built naming that real moment, `KickOff_Declared`, `decidedBy backlog:Owner`.
 

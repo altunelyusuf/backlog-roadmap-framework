@@ -1,5 +1,30 @@
 # Changelog
 
+## v1.177.0 — 2026-09-02 (MINOR: KickOff built after Defect/ProblemReport was re-scored down; ProblemReport's real requirement traced to a maintenance Initiative BRSF does not have)
+
+**Continuing the ranked queue.** `Defect`/`ProblemReport` (0.5) investigated next: `Defect` alone
+follows ordinary `WorkItem` completion with no dedicated shape, and a real occasion exists in this
+session's own real bugs, using the same evidence pattern `Spike` already proved (a real
+`TestEvidence` naming the actual before/after validator run — the class's own `skos:definition`
+says "normally" a regression test, leaving room for it). `ProblemReport`, however, has no property
+connecting it to `Defect` directly; its only real link (`triggeredBy`) has domain `Initiative` and
+specifically implies a maintenance-kind one. BRSF's own single `Initiative` is
+`Kind_EvolutionaryDevelopment` — building `ProblemReport` properly means building a second, real
+maintenance `Initiative` first. Re-scored `Defect` alone to `0.35`, below `KickOff`.
+
+**`KickOff` built instead** — genuinely as simple as scored, unlike the last several candidates.
+`KickOff` is an `Artifact`, not a `WorkItem`: no completion chain, four clean properties
+(`kickOffFor`/`kickedOffAt`/`hasKickOffMode`/`decidedBy`). `fw:KO_OntologyDriven` names the
+owner's own real, already-quoted instruction (`fw:Mission_OntologyDriven`'s own `missionSource`,
+dated 2026-10-26) that started the ontology-driven mission. `0` violations on the first attempt.
+`G56` records the full re-scoring and build.
+
+**Proposal revised to v1.9.0.**
+
+0 SHACL violations on the real register (78 warnings). All six shipped checkers PASS.
+Lineage-discipline check PASS.
+
+
 ## v1.176.0 — 2026-09-02 (MINOR: HumanInteraction/ReviewEvidence built next by score; a real definitional distinction caught and honored, not worked around)
 
 **Continuing the ranked queue.** `HumanInteraction`/`ReviewEvidence` (0.8) is the highest remaining
