@@ -17,14 +17,23 @@ ex:P a backlog:AdoptionProfile ; backlog:profileAppliesTo "item tie" ;
     backlog:hasTargetConformanceLevel backlog:L2_EvidenceBound ;
     backlog:hasLevelReviewDate "2026-12-01T00:00:00"^^xsd:dateTime ;
     backlog:decidedBy backlog:Owner ; backlog:hasDecisionRationale "probe" ;
-    backlog:adoptsFacet backlog:CoreFacet , backlog:PrioritizationFacet .
-ex:BL a backlog:Backlog ; backlog:hasIdentifier "BL" ; backlog:hasState backlog:Proposed .
+    backlog:adoptsFacet backlog:CoreFacet , backlog:PrioritizationFacet , backlog:EvidenceFacet , backlog:InvariantFacet , backlog:AuditFacet .
+ex:BL a backlog:Backlog ; backlog:hasIdentifier "BL" ; backlog:hasState backlog:Proposed ;
+    backlog:appliesDefinitionOfDone ex:DoD_T2 ; backlog:hasCommitment ex:Commit_T2 .
+ex:DoD_T2 a backlog:DefinitionOfDone .
+ex:Commit_T2 a backlog:Commitment ; backlog:commitsToGoal ex:CGoal .
+ex:Lin_T2 a backlog:Lineage ; backlog:lineageArchived false ; backlog:lineageForMission ex:CMission ; backlog:lineageOrdinal 1 .
 
 ex:US001 a backlog:Story ;
     backlog:hasApplicableConcern backlog:Concern_Data , backlog:Concern_Security ;
     backlog:hasIdentifier "US-001" ; backlog:hasState backlog:Ready ;
     backlog:memberOfContainer ex:BL ;
-    backlog:hasPriorityScore ex:S001 .
+    backlog:hasPriorityScore ex:S001 ;
+    backlog:hasAcceptanceCriterion ex:AC001 ; backlog:appliesDefinitionOfDone ex:DoD_T2 ;
+    backlog:belongsToLineage ex:Lin_T2 ; backlog:pursuesObjective ex:CObj ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability .
+ex:AC001 a backlog:AcceptanceCriterion ; backlog:hasGherkinText "Given US-001 is implemented, When the suite runs, Then it passes." ;
+    backlog:satisfiedByArtifact "backlog:AcceptanceCriterion" .
 ex:S001 a backlog:WSJFScore ; backlog:scoredByMethod backlog:Method_WSJF ;
     backlog:hasScoreValue 1.8 ;
     backlog:hasUserBusinessValue 9.0 ; backlog:hasTimeCriticality 0.0 ;
@@ -34,7 +43,12 @@ ex:US002 a backlog:Story ;
     backlog:hasApplicableConcern backlog:Concern_Interaction ;
     backlog:hasIdentifier "US-002" ; backlog:hasState backlog:Ready ;
     backlog:memberOfContainer ex:BL ;
-    backlog:hasPriorityScore ex:S002 .
+    backlog:hasPriorityScore ex:S002 ;
+    backlog:hasAcceptanceCriterion ex:AC002 ; backlog:appliesDefinitionOfDone ex:DoD_T2 ;
+    backlog:belongsToLineage ex:Lin_T2 ; backlog:pursuesObjective ex:CObj ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability .
+ex:AC002 a backlog:AcceptanceCriterion ; backlog:hasGherkinText "Given US-002 is implemented, When the suite runs, Then it passes." ;
+    backlog:satisfiedByArtifact "backlog:AcceptanceCriterion" .
 ex:S002 a backlog:WSJFScore ; backlog:scoredByMethod backlog:Method_WSJF ;
     backlog:hasScoreValue 1.8 ;
     backlog:hasUserBusinessValue 3.6 ; backlog:hasTimeCriticality 0.0 ;
@@ -44,7 +58,12 @@ ex:US003 a backlog:Story ;
     backlog:hasApplicableConcern backlog:Concern_Interface ;
     backlog:hasIdentifier "US-003" ; backlog:hasState backlog:Ready ;
     backlog:memberOfContainer ex:BL ;
-    backlog:hasPriorityScore ex:S003 .
+    backlog:hasPriorityScore ex:S003 ;
+    backlog:hasAcceptanceCriterion ex:AC003 ; backlog:appliesDefinitionOfDone ex:DoD_T2 ;
+    backlog:belongsToLineage ex:Lin_T2 ; backlog:pursuesObjective ex:CObj ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability .
+ex:AC003 a backlog:AcceptanceCriterion ; backlog:hasGherkinText "Given US-003 is implemented, When the suite runs, Then it passes." ;
+    backlog:satisfiedByArtifact "backlog:AcceptanceCriterion" .
 ex:S003 a backlog:WSJFScore ; backlog:scoredByMethod backlog:Method_WSJF ;
     backlog:hasScoreValue 1.8 ;
     backlog:hasUserBusinessValue 18.0 ; backlog:hasTimeCriticality 0.0 ;
@@ -54,7 +73,12 @@ ex:US004 a backlog:Story ;
     backlog:hasNoApplicableConcern "Fixture story: no stored state, interface, interaction, structure or authorisation is touched." ;
     backlog:hasIdentifier "US-004" ; backlog:hasState backlog:Ready ;
     backlog:memberOfContainer ex:BL ;
-    backlog:hasPriorityScore ex:S004 .
+    backlog:hasPriorityScore ex:S004 ;
+    backlog:hasAcceptanceCriterion ex:AC004 ; backlog:appliesDefinitionOfDone ex:DoD_T2 ;
+    backlog:belongsToLineage ex:Lin_T2 ; backlog:pursuesObjective ex:CObj ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability .
+ex:AC004 a backlog:AcceptanceCriterion ; backlog:hasGherkinText "Given US-004 is implemented, When the suite runs, Then it passes." ;
+    backlog:satisfiedByArtifact "backlog:AcceptanceCriterion" .
 ex:S004 a backlog:WSJFScore ; backlog:scoredByMethod backlog:Method_WSJF ;
     backlog:hasScoreValue 1.8 ;
     backlog:hasUserBusinessValue 1.8 ; backlog:hasTimeCriticality 0.0 ;
@@ -64,7 +88,12 @@ ex:US005 a backlog:Story ;
     backlog:hasNoApplicableConcern "Fixture story: no stored state, interface, interaction, structure or authorisation is touched." ;
     backlog:hasIdentifier "US-005" ; backlog:hasState backlog:Ready ;
     backlog:memberOfContainer ex:BL ;
-    backlog:hasPriorityScore ex:S005 .
+    backlog:hasPriorityScore ex:S005 ;
+    backlog:hasAcceptanceCriterion ex:AC005 ; backlog:appliesDefinitionOfDone ex:DoD_T2 ;
+    backlog:belongsToLineage ex:Lin_T2 ; backlog:pursuesObjective ex:CObj ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability .
+ex:AC005 a backlog:AcceptanceCriterion ; backlog:hasGherkinText "Given US-005 is implemented, When the suite runs, Then it passes." ;
+    backlog:satisfiedByArtifact "backlog:AcceptanceCriterion" .
 ex:S005 a backlog:WSJFScore ; backlog:scoredByMethod backlog:Method_WSJF ;
     backlog:hasScoreValue 1.8 ;
     backlog:hasUserBusinessValue 7.2 ; backlog:hasTimeCriticality 0.0 ;
@@ -74,7 +103,12 @@ ex:US006 a backlog:Story ;
     backlog:hasNoApplicableConcern "Fixture story: no stored state, interface, interaction, structure or authorisation is touched." ;
     backlog:hasIdentifier "US-006" ; backlog:hasState backlog:Ready ;
     backlog:memberOfContainer ex:BL ;
-    backlog:hasPriorityScore ex:S006 .
+    backlog:hasPriorityScore ex:S006 ;
+    backlog:hasAcceptanceCriterion ex:AC006 ; backlog:appliesDefinitionOfDone ex:DoD_T2 ;
+    backlog:belongsToLineage ex:Lin_T2 ; backlog:pursuesObjective ex:CObj ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability .
+ex:AC006 a backlog:AcceptanceCriterion ; backlog:hasGherkinText "Given US-006 is implemented, When the suite runs, Then it passes." ;
+    backlog:satisfiedByArtifact "backlog:AcceptanceCriterion" .
 ex:S006 a backlog:WSJFScore ; backlog:scoredByMethod backlog:Method_WSJF ;
     backlog:hasScoreValue 1.8 ;
     backlog:hasUserBusinessValue 14.4 ; backlog:hasTimeCriticality 0.0 ;
@@ -102,6 +136,21 @@ ex:R_US003_Interface a backlog:RefinementEvent ; backlog:refines ex:US003 ;
     backlog:addressesConcern backlog:Concern_Interface ;
     backlog:refinedAt "2026-08-01T09:00:00"^^xsd:dateTime ;
     backlog:hasRefinementOutcome "Analysed for interface; approach agreed." ;
+    backlog:refinedBy backlog:Builder .
+
+ex:R_US004 a backlog:RefinementEvent ; backlog:refines ex:US004 ;
+    backlog:refinedAt "2026-08-01T09:00:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "No applicable concern; ready as-is." ;
+    backlog:refinedBy backlog:Builder .
+
+ex:R_US005 a backlog:RefinementEvent ; backlog:refines ex:US005 ;
+    backlog:refinedAt "2026-08-01T09:00:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "No applicable concern; ready as-is." ;
+    backlog:refinedBy backlog:Builder .
+
+ex:R_US006 a backlog:RefinementEvent ; backlog:refines ex:US006 ;
+    backlog:refinedAt "2026-08-01T09:00:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "No applicable concern; ready as-is." ;
     backlog:refinedBy backlog:Builder .
 
 <http://example.org/t2#P> backlog:hasExpectedPolarity backlog:Polarity_Positive .
@@ -166,7 +215,7 @@ ex:CObj a backlog:Objective ;
     backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ; backlog:decidedBy backlog:Owner .
 ex:CMetric a ex:CLocalMetric .
 ex:CCP a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-12-01T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
-ex:CObj backlog:hasCheckpoint ex:CCP .
+ex:CObj backlog:hasCheckpoint ex:CCP ; backlog:metricMovableBy ex:US001 , ex:US002 , ex:US003 , ex:US004 , ex:US005 , ex:US006 .
 ex:CObs a backlog:MetricObservation ; backlog:observesMetric ex:CMetric ; backlog:observationFor ex:CObj ;
     backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-09-02T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
     backlog:hasObservationMethod "Fixture-stated value, not re-derivable." .

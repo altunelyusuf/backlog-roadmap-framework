@@ -1,5 +1,32 @@
 # Changelog
 
+## v1.163.0 — 2026-09-02 (MINOR: the AdoptionConformanceGoalShape fixture cascade fully closed — all 10 affected fixtures now clean)
+
+**`fixture_item_tie_v1_0_0` brought from 50 violations to 0** — the tenth and final fixture whose
+gap traced to `AdoptionConformanceGoalShape`, closing an effort that spanned multiple releases.
+Six work items each completed with acceptance criteria, Definition of Done, lineage membership,
+objective pursuit, investment category, and (for three of them) a real refinement event; the
+adoption profile's own missing `EvidenceFacet`/`InvariantFacet`/`AuditFacet` — the same simple gap
+found and fixed identically across six other fixtures this session — closed the same way here.
+`metricMovableBy` on the shared conformance objective was extended to name all six items at once,
+since the property is not functional and nothing in this fixture's own design called for six
+separate objectives to make the same point.
+
+**This fixture's own test purpose — six items scoring identically on WSJF, resolved only by job
+size as the secondary key — was re-verified untouched**: every `hasScoreValue` (all `1.8`) and
+`hasJobSize` (`5, 2, 10, 1, 4, 8`, `US-004` smallest) confirmed unchanged after the repair.
+
+**All 10 fixtures whose failures traced to `AdoptionConformanceGoalShape` are now confirmed
+clean in a single sweep**: `fixture_positive_v1_7_0`, `fixture_l4_conformant_v1_0_0`,
+`fixture_scope_first_v1_0_0`, `fixture_staged_lineage_v1_0_0`, `fixture_r3_disagreement_v1_1_0`,
+`fixture_pipeline_v1_0_0`, `fixture_pipeline_digestfail_v1_0_0`, `fixture_tied_gates_v1_0_0`,
+`fixture_progress_v1_0_0`, `fixture_item_tie_v1_0_0`. The remaining 4 fixtures in this package's
+suite were never this shape's problem — none carry an `AdoptionProfile` — and remain correctly
+untouched by this effort, disclosed rather than silently folded into "done."
+
+0 SHACL violations on the real register (85 warnings, unchanged). All six shipped checkers PASS.
+
+
 ## v1.162.0 — 2026-09-02 (MINOR: 9th fixture fully repaired — the largest and most complex of the fourteen — self-inflicted cascade caught and walked back)
 
 **`fixture_progress_v1_0_0` brought from 38 violations to 0** — the largest and most structurally
