@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v32.0.0
+# Lineage Operating Discipline — v34.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -1374,4 +1374,96 @@ abandonment is not yet the real question here.
 Together, `G60` and `G61` are the double-control asked for: one direction makes inaction structurally
 visible, the other makes a real pattern of failed attempts visible too, and neither one decides the
 outcome for a human.
+
+## G62 — `G61`'s own threshold had no objective grounding, corrected; a real taxonomy, checked structurally not asserted; scope conformance covers the whole lifecycle
+
+Challenged directly, and correct: `G61`'s own "2 or more closed attempts" threshold was a chosen
+count, not derived from anything. Replaced entirely — **`ExhaustedCorrectiveAttemptsAdvisoryShape`
+is retired**; `IneffectiveCorrectiveAttemptAdvisoryShape` targets the work item itself and compares
+its objective's own real observation immediately before the item's `startedAt` against the real
+observation at or after its `finishedAt`. No count: one confirmed instance, checkable from the data
+alone, is real evidence regardless of how many other attempts are open or closed. Silent, honestly,
+when the bracketing observations do not exist — never a false positive manufactured from missing
+data.
+
+**Also asked for: the double-control working across the whole lineage lifecycle, not only the
+objective-metric level**, with scope conformance named directly as an example. Built two more
+members of the same catalogue: `ScopeCreepAdvisoryShape` (an epic pursuing an objective whose own
+goal derives from no `ScopeStatement`, admitted by no real `ScopeChange` — work a boundary never
+authorized) and `ScopeGapAdvisoryShape` (a declared scope with no goal deriving from it — the
+reverse, a boundary wider than the actual backlog). Both real occasions this framework's own
+`derivesFromScope`/`admitsItem`/`ScopeChange` vocabulary already existed for; neither needed new
+vocabulary invented to check.
+
+**Built: a real `FailureMode`/`SuccessMode` taxonomy**, not a prose checklist. `FailureMode` and
+`SuccessMode` are real classes; each named member (`FM_IneffectiveCorrectiveAction`, `FM_ScopeCreep`,
+`FM_ScopeGap`, `SM_ConfirmedMovement`, `SM_ExplicitScopeAdmission`) exists only where a structural
+check can actually detect it — `FailureMode`'s own definition says this directly: "a name with no
+structural check attached is a checklist item, not a failure mode this ontology can enforce."
+`RetrospectiveFinding` can now be typed against the catalogue via `hasFailureMode`/`hasSuccessMode`,
+both deliberately optional for the identical reason the properties they parallel are optional. Two
+success-mode members are named without a dedicated positive-confirmation shape yet, disclosed
+honestly in their own `adoptionRationale` rather than claimed as enforced.
+
+**Out of this session's own real scope, disclosed rather than silently assumed.** The request named
+"OE discipline" as where this taxonomy should live — genuinely a different package this session does
+not govern (`B1`). Built and proven in BRSF's own real vocabulary first, self-applied honestly (see
+below); whether it belongs in the shared OE methodology is a real question for that package's own
+governing session, not decided here.
+
+**Applied to BRSF's own real gap before anything else**, the same standard every prior ruling this
+session has held itself to. The redesigned shape found a real, honest instance on this register's
+own data: `EP_Rulings`, confirmed by its own bracketing observations, closed without moving
+`Obj_RulingsQueryable` toward target. `fw:Find_EPRulingsIneffective` records it — not as a failure
+of `EP_Rulings`' own real work (the original migration genuinely completed), but as confirmation
+that a point-in-time corrective action cannot move a metric that keeps counting unrelated, ongoing
+growth, and naming `fw:S_RulingsQueryableDecision` (`G60`) as the real remedy already in progress.
+
+A real bug in the tooling caught and fixed while building this, disclosed in full in `03-tooling/
+backlog_lineage_compass_v1_0_0.py`'s own commit history: pyshacl's `sh:sparql` does not resolve
+`$this` inside a nested `GROUP BY` subquery, the defect that originally motivated the arbitrary
+count this ruling now retires — the elegant redesign fixes both the objective-grounding problem and
+sidesteps the tooling defect at once, since it needs no aggregation at all.
+
+## G63 — A real correction of scope (compliance, not migration); measurements enforced into analysis, not left as unread signals; a two-tier catalogue; a real OE compliance investigation and proposal
+
+Corrected directly: `G62` misread the request as asking to build the taxonomy *inside* the OE
+package. The actual ask was that BRSF's own ontology be *compliant with* the OE Ecosystem — a
+narrower, different, and genuinely investigable question, not decided by assumption.
+
+**Investigated properly, not asserted.** OE ships a real, registered protocol for exactly this
+(`Ontology_Registration_Conformance_Protocol_v1.0.0`) — BRSF is an existing registrant, last closed
+at round 12 (`v1.18.0`, pack `v20.26.2`). Checked `risk:FailureMode` directly against
+`backlog:FailureMode` rather than assuming a name match means a semantic one: `risk:FailureMode` is
+ISO 60812:2018 FMEA vocabulary — the manner a physical/technical item's failure is *observed*
+(fail-open, intermittent, no-output...) — a genuinely different domain from a structurally-checkable
+pattern in a lineage's own progress. No true purpose-fit collision (L-89); no rename warranted. But
+`risk:hasIdentifiedRisk` (`core:Artifact → risk:Risk`) is a real, general registration hook this
+package's own findings could plausibly use — proposed to OEE for adjudication
+(`07-handover-inbox/pending/PROPOSAL_brsf-continuation_risk-facet-registration_v1_0_0.md`), not
+implemented unilaterally (B1/L-64: registrant proposes, OEE ratifies and owns the decision). The
+same proposal discloses, for the package owner's own awareness, that this session's real work since
+round 12 (`v1.19.0` onward) has never been submitted as a bundle.
+
+**Built: measurements enforced into analysis, not left as detected-and-ignored.**
+`IneffectiveCorrectiveAttemptAdvisoryShape` (`G62`) detects the pattern at `Warning`; a genuinely
+different question — was it *interpreted* — is now separately enforced at `Violation`:
+`MeasurementAnalysisRequiredShape` fires when the identical confirmed-ineffective condition holds
+and no real `RetrospectiveFinding` `relatesToWorkItem` it. Deliberately `Violation`, unlike the
+advisory: recording that a confirmed pattern was seen and considered is not the same judgement as
+deciding to continue, redefine, or abandon — it is bookkeeping this register already requires
+everywhere else, not a conclusion this framework would be forcing. Proven discriminating
+(`fixture_measurement_analysis_required_v1_0_0.ttl`); BRSF's own register already satisfies it
+(`fw:Find_EPRulingsIneffective`, `G62`, closes the loop it would otherwise have left open).
+
+**Built: a real two-tier catalogue**, not asserted as a design intent. `hasModeScope`
+(`FailureMode`/`SuccessMode → FindingScope`, reusing the identical enumeration `hasFindingScope`
+already uses for individual findings) is now required on every catalogue entry. The five existing
+modes are marked `Scope_Methodology` — genuinely reusable by any BRSF lineage, the shared catalogue
+requested. A lineage may mint its own new `FailureMode`/`SuccessMode` individual scoped
+`Scope_LineageLocal` from its own real experience — nothing in this framework requires a new
+pattern to already be shared before it can be recorded — and a mode proven to recur can later be
+proposed for promotion to `Scope_Methodology` the same way `FitGapFinding`'s own methodology-scope
+escalation already works, through the handover/proposal mechanism this ruling's own OE proposal is
+itself an instance of.
 

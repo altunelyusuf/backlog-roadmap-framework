@@ -274,44 +274,111 @@ def main():
                   % (local(top[1]), worse_word, top[2]["remaining_fraction"] * 100))
             print("    the largest of any open objective. Closure work should aim here first.")
 
-        # --- 5. EXHAUSTED ATTEMPTS -- the reverse-direction check, per ExhaustedCorrectiveAttemptsAdvisoryShape ---
-        print("\n[5] EXHAUSTED ATTEMPTS (reverse compass -- is this trending toward an honest failure, not a fix?)")
-        exhausted = []
+        # --- 5. FAILURE MODE TAXONOMY -- the reverse-direction check, elegant not counted ---
+        print("\n[5] FAILURE MODE TAXONOMY (reverse compass -- real patterns, not a fixed attempt count)")
+
+        def observation_before(obj_node, at_dt):
+            best, best_at = None, None
+            for o in g.subjects(BL.observationFor, obj_node):
+                oa = g.value(o, BL.observedAt)
+                if oa is None or oa.toPython() > at_dt:
+                    continue
+                if best_at is None or oa.toPython() > best_at:
+                    best, best_at = o, oa.toPython()
+            return best
+
+        def observation_at_or_after(obj_node, at_dt):
+            best, best_at = None, None
+            for o in g.subjects(BL.observationFor, obj_node):
+                oa = g.value(o, BL.observedAt)
+                if oa is None or oa.toPython() < at_dt:
+                    continue
+                if best_at is None or oa.toPython() > best_at:
+                    best, best_at = o, oa.toPython()
+            return best
+
+        def attempt_ineffective(w, obj_node, direction):
+            started = g.value(w, BL.startedAt)
+            finished = g.value(w, BL.finishedAt)
+            if started is None or finished is None:
+                return None  # cannot judge without data
+            before = observation_before(obj_node, started.toPython())
+            after = observation_at_or_after(obj_node, finished.toPython())
+            if before is None or after is None:
+                return None
+            vb = float(g.value(before, BL.hasObservedValue))
+            va = float(g.value(after, BL.hasObservedValue))
+            d = local(direction)
+            if d == "Dir_Decrease":
+                return va >= vb
+            if d == "Dir_Increase":
+                return va <= vb
+            if d == "Dir_Hold":
+                return va != vb
+            return None
+
+        ineffective = []
         for goal, obj, st in rows:
             if st["achieved"] or st["achievement_status"] is not None:
                 continue
-            closed = [w for w in g.objects(obj, BL.metricMovableBy)
-                      if local(g.value(w, BL.hasState)) in ("Done", "Cancelled")]
-            if len(closed) >= 2:
-                exhausted.append((goal, obj, st, closed))
-        if not exhausted:
-            print("    No open objective has 2+ closed corrective attempts. Nothing flagged.")
-        for goal, obj, st, closed in exhausted:
-            print("    %-28s %d closed attempts (%s), still open -- consider Out_Abandoned"
-                  % (local(obj), len(closed), ", ".join(local(w) for w in closed)))
+            for w in g.objects(obj, BL.metricMovableBy):
+                if local(g.value(w, BL.hasState)) not in ("Done", "Cancelled"):
+                    continue
+                result = attempt_ineffective(w, obj, st["direction"])
+                if result:
+                    ineffective.append((goal, obj, st, w))
 
+        scope_creep = []
+        for e in g.subjects(RDF.type, BL.Epic):
+            po = g.value(e, BL.pursuesObjective)
+            if po is None:
+                continue
+            goal_of = g.value(po, BL.contributesToGoal)
+            if goal_of is None:
+                continue
+            has_scope = g.value(goal_of, BL.derivesFromScope) is not None
+            admitted = any(True for _ in g.subjects(BL.admitsItem, e))
+            if not has_scope and not admitted:
+                scope_creep.append(e)
+
+        scope_gaps = [s for s in g.subjects(RDF.type, BL.ScopeStatement)
+                      if not any(True for _ in g.subjects(BL.derivesFromScope, s))]
+
+        if not ineffective and not scope_creep and not scope_gaps:
+            print("    FM_IneffectiveCorrectiveAction: none. FM_ScopeCreep: none. FM_ScopeGap: none.")
+        for goal, obj, st, w in ineffective:
+            print("    FM_IneffectiveCorrectiveAction: %-24s via %-20s (closed, did not move the metric)"
+                  % (local(obj), local(w)))
+        for e in scope_creep:
+            print("    FM_ScopeCreep: %-30s (no scope path, no ScopeChange admits it)" % local(e))
+        for s in scope_gaps:
+            print("    FM_ScopeGap: %-32s (no goal derives from this scope)" % local(s))
+
+        exhausted = [(goal, obj, st) for goal, obj, st, w in ineffective]
         if args.propose_retrospective and exhausted:
-            goal, obj, st, closed = exhausted[0]
-            finding = URIRef(str(obj) + "_ExhaustionFinding")
+            goal, obj, st = exhausted[0]
+            attempts = [w for g2, o2, s2, w in ineffective if o2 == obj]
+            finding = URIRef(str(obj) + "_IneffectivenessFinding")
             out = Graph()
             out.bind("backlog", BL)
             out.add((finding, RDF.type, BL.RetrospectiveFinding))
+            out.add((finding, BL.hasFailureMode, BL.FM_IneffectiveCorrectiveAction))
             out.add((finding, BL.hasRootCause, Literal(
                 "PROPOSED by backlog_lineage_compass_v1_0_0, not a finished analysis: %d real corrective "
-                "attempts (%s) reached Done or Cancelled without moving %s to target (current %s, target %s). "
-                "The actual root cause -- whether the objective itself is achievable as stated, whether the "
-                "attempts were poorly scoped, or whether the metric needs redefining -- is for a human "
-                "retrospective to determine; this tool can only see that the pattern exists."
-                % (len(closed), ", ".join(local(w) for w in closed), local(obj), st["current"], st["target"]))))
+                "attempt(s) (%s), each confirmed by its own before/after observation to have closed without "
+                "moving %s toward target (current %s, target %s). The actual root cause -- whether the "
+                "objective itself is achievable as stated, whether the attempts were poorly scoped, or whether "
+                "the metric needs redefining -- is for a human retrospective to determine; this tool can only "
+                "see that the pattern exists, confirmed by data rather than assumed from a count."
+                % (len(attempts), ", ".join(local(w) for w in attempts), local(obj), st["current"], st["target"]))))
             out.add((finding, BL.hasFindingScope, BL.Scope_LineageLocal))
             out.add((finding, BL.relatesToWorkItem, obj))
-            mis_uri = mission
-            out.add((mis_uri, BL.hasMissionOutcome, BL.Out_Abandoned))
-            out.add((mis_uri, rdflib.RDFS.comment, Literal(
-                "PROPOSED, not applied. %d closed corrective attempts against %s with no target reached. "
-                "Review the RetrospectiveFinding, set a real outcomeRationale, and confirm this is genuinely "
-                "the honest call before publishing -- this tool proposes the option, it does not decide it."
-                % (len(closed), local(obj)))))
+            out.add((mission, BL.hasMissionOutcome, BL.Out_Abandoned))
+            out.add((mission, rdflib.RDFS.comment, Literal(
+                "PROPOSED, not applied. %d confirmed-ineffective corrective attempt(s) against %s with no "
+                "target reached. Review the RetrospectiveFinding, set a real outcomeRationale, and confirm "
+                "this is genuinely the honest call before publishing -- this tool proposes the option, it "
+                "does not decide it." % (len(attempts), local(obj)))))
             out.serialize(destination=args.propose_retrospective, format="turtle")
             print("\n    Proposed retrospective + Out_Abandoned option for %s written to %s"
                   % (local(obj), args.propose_retrospective))

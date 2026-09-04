@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.82.0
+# Backlog & Roadmap Semantic Framework — Standard v1.83.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -170,6 +170,7 @@ delivered in full and deliver nothing.
 | `Objective` | A measurable, time-bounded target advancing a goal — metric, baseline, target, deadline. An objective without a metric cannot be missed |
 | `Benefit` | A specific improvement expected from completing work, owned by a `core:Stakeholder`; a realisation claim needs verified evidence, exactly like a Done claim |
 | `Opportunity` | Identified upside not yet committed as work, converted into an item explicitly when someone decides to pursue it |
+| `FailureMode` / `SuccessMode` | A named, reusable pattern by which real progress can go wrong or be confirmed, checkable structurally rather than asserted — a `RetrospectiveFinding` may be typed against one via `hasFailureMode`/`hasSuccessMode`. Membership is earned by a real check that can detect the pattern from data, not by a name alone |
 | `ScopeStatement` / `ScopeExclusion` | The declared boundary and the owner-decided things deliberately outside it, each with a rationale |
 | `RefinementEvent` | The dated act that makes an item Ready — readiness is done to an item, not drifted into |
 | `EstimationBasisKind` — `hasBasisKind`, `basisObservation`, `analogousTo` | Whether an estimate or score was **Measured**, **Analogous** or **Judged**. `hasCostBasis` records *what* a figure rested on; this records whether that basis was **run**. A Measured claim must name the `MetricObservation` that produced it, an Analogous one the completed item it was drawn from. Judgement is legitimate and is the majority case — what is refused is a judgement being indistinguishable from a measurement. An advisory fires where measuring pays best: a judged estimate on an item inside a launch gate |

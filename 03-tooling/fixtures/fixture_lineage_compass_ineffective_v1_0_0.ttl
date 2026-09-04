@@ -1,0 +1,32 @@
+# backlog_lineage_compass_v1_0_0.py -- test drive, not a construction.
+#
+# A minimal graph proving the tool's own [5] FAILURE MODE TAXONOMY section
+# and --propose-retrospective logic under the elegant, before/after-observation
+# design (replacing the earlier fixed-count fixture this session's own G61
+# correction retired). Not run through backlog_validate_v1_5_0.py; it is not
+# meant to be SHACL-conformant, the same convention as the other compass
+# fixtures.
+#
+# One real corrective attempt, confirmed ineffective by its own bracketing
+# observations (not a count) -> the tool's own reverse-compass section flags
+# it and --propose-retrospective writes a real RetrospectiveFinding (typed
+# via hasFailureMode against FM_IneffectiveCorrectiveAction) plus a PROPOSED
+# Out_Abandoned transition, clearly labelled, never applied.
+
+@prefix backlog: <http://example.org/backlog#> .
+@prefix ex: <http://example.org/ineffectivelin#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+ex:Lin a backlog:Lineage ; backlog:lineageForMission ex:Mis ; backlog:lineageOrdinal 99 ; backlog:lineageArchived false .
+ex:Mis a backlog:Mission ; backlog:hasMissionOutcome backlog:Out_InFlight .
+ex:Goal a backlog:Goal ; backlog:contributesToMission ex:Mis .
+ex:Obj a backlog:Objective ; backlog:contributesToGoal ex:Goal ;
+    backlog:hasBaselineValue "10"^^xsd:decimal ; backlog:hasTargetValue "0"^^xsd:decimal ;
+    backlog:hasTargetDirection backlog:Dir_Decrease ;
+    backlog:metricMovableBy ex:Attempt .
+ex:Attempt a backlog:Story ; backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-01-01T00:00:00Z"^^xsd:dateTime ; backlog:finishedAt "2026-01-10T00:00:00Z"^^xsd:dateTime .
+ex:Obs_Before a backlog:MetricObservation ; backlog:observationFor ex:Obj ;
+    backlog:hasObservedValue "8"^^xsd:decimal ; backlog:observedAt "2025-12-30T00:00:00Z"^^xsd:dateTime .
+ex:Obs_After a backlog:MetricObservation ; backlog:observationFor ex:Obj ;
+    backlog:hasObservedValue "8"^^xsd:decimal ; backlog:observedAt "2026-01-15T00:00:00Z"^^xsd:dateTime .

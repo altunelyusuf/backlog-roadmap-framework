@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.72.0> ;
-    owl:versionInfo "1.72.0" ;
+    owl:versionIRI <http://example.org/backlog/1.73.0> ;
+    owl:versionInfo "1.73.0" ;
+    owl:priorVersion <http://example.org/backlog/1.72.0> ;
     owl:priorVersion <http://example.org/backlog/1.71.0> ;
     owl:priorVersion <http://example.org/backlog/1.70.0> ;
     owl:priorVersion <http://example.org/backlog/1.69.0> ;
@@ -108,7 +109,8 @@
     prov:wasAttributedTo "Yusuf Altunel" ;
     skos:definition "A domain-neutral, reusable schema for backlog-and-roadmap governance across independent developments. It standardises five concept groups that recur in every product/engineering effort: (1) work items and their containers, (2) a closed lifecycle whose Done state is a constrained fact rather than asserted prose, (3) completion Evidence anchored to real delivered artifacts (a named passing test, a release carrying its package SHA-256, a file hash, or a recorded review), (4) method-parameterised prioritisation scores, and (5) a roadmap modelled as a derived projection over the backlog rather than an independently maintained list. Adoption is declared by an AdoptionProfile carrying a ConformanceLevel (L1 Core / L2 Evidence-Bound / L3 Governed), which the paired SHACL suite reads to decide which constraints are enforced, so one framework serves developments at different governance maturity without forking the vocabulary. This TBox defines vocabulary only; the paired SHACL shapes supply enforcement, the SPARQL rules supply derivation (container status, next-item selection, milestone status), and an execution bridge asserts observed real-world verification facts back into the ABox."@en ;
     dcterms:source "Scrum Guide 2020 (Product Backlog, Increment, Definition of Done); SAFe 6.0 (Epic/Feature/Story ladder, WSJF); Now-Next-Later roadmap practice; Intercom RICE prioritisation; W3C OWL 2, SHACL, SHACL-AF."@en ;
-    rdfs:comment "v1.72.0 (PATCH, additive) — a real handover from the OEE governance session processed (07-handover-inbox/accepted): its ObjectiveStalledShape false-positive finding was already fixed in this package's own shapes file before the handover was even found (an earlier session's own real work, confirmed by re-reading the shape's own message text and SPARQL directly, not assumed). Its TaskType grounding recommendation, matching what this class's own skos:definition already said informally, formalized into a real dcterms:source. Its DesignConcern finding surfaced a genuine discrepancy with this package's own existing citation (Satzinger et al., ch.6) that neither this session nor the OEE session's own search could verify against the paywalled text -- left open rather than silently resolved either way, since B2 governs acting on settled evidence, not on a real, disclosed unknown."@en ,
+    rdfs:comment "v1.73.0 (MINOR, additive) — challenged directly: the exhausted-corrective-attempts threshold (G61) had no objective grounding, just a chosen count. Built the elegant alternative -- FM_IneffectiveCorrectiveAction checks each attempt against its own real before/after observations, no count needed -- and a real FailureMode/SuccessMode taxonomy (this framework's own vocabulary, checked structurally, not a prose checklist) so both directions of the double-control work across the whole lineage lifecycle, not only at the objective-metric level."@en ,
+    "v1.72.0 (PATCH, additive) — a real handover from the OEE governance session processed (07-handover-inbox/accepted): its ObjectiveStalledShape false-positive finding was already fixed in this package's own shapes file before the handover was even found (an earlier session's own real work, confirmed by re-reading the shape's own message text and SPARQL directly, not assumed). Its TaskType grounding recommendation, matching what this class's own skos:definition already said informally, formalized into a real dcterms:source. Its DesignConcern finding surfaced a genuine discrepancy with this package's own existing citation (Satzinger et al., ch.6) that neither this session nor the OEE session's own search could verify against the paywalled text -- left open rather than silently resolved either way, since B2 governs acting on settled evidence, not on a real, disclosed unknown."@en ,
     "v1.71.0 (MINOR, additive) — challenged directly on treating 'no historical occasion in this session' as grounds to set aside cost/risk/prediction vocabulary; re-scored the 16-candidate proposal using this framework's own real RICE+DepFactor discipline (BP-D10) rather than ad hoc sequencing, and RICEScore itself ranked first by the method's own logic -- the same meta-leverage a prior OE session's own real precedent found for encoding the scoring discipline itself. consideredOptionCount and decisionBackedByScore added on RegisterSession so a future session's own multi-candidate decision is a recorded, checkable score rather than a narrative preference, closing the session-level half of the gap SilentGapShape already closes at the individual-item level."@en ,
     "v1.70.0 (MAJOR, additive) — two real requests processed together: differentiate lineage-specific gaps from methodology gaps and enforce full conformance on active lineages nothing less, and adopt another registrant's own real, working conformance-goal pattern as this framework's default, enforced rather than merely documented, then updated again per another registrant's own revision specifying exactly when each measure belongs. isConformanceGoal (boolean marker on Goal, not a new class, per the handover's own Ex_InventedPractice-avoidance reasoning) and observedDuringCeremony (MetricObservation -> SprintReviewCeremony, advisory-only, since no structural check can verify a claimed timing was honest the way closedAtCommit verifies stage order) both added; BRSF's own register given its own honest instance of the pattern, Dir_Hold rather than Dir_Increase since this package's own violation count has genuinely never moved. Both new shapes verified against the true git-published baseline, both proven by dedicated fixtures, a real SPARQL HAVING-clause bug caught and fixed during that verification rather than trusted on first pass."@en ,
     "v1.69.0 (MINOR, additive) — asked how warnings should be treated and whether any could be autonomously remedied: 19 of the register's own 117 real advisories, all firing the same PracticeGroundingShape message on TaskType/MaintenanceCategory/InitiativeKind members, were genuinely autonomously fixable, not fabrication -- a prior session had already researched and written the correct ISO/IEC/IEEE 12207:2017 and 14764:2022 clause citations directly into each term's own skos:definition prose, but never added the formal dcterms:source triple PracticeGroundingShape actually checks for. Verified each citation's own real content before trusting the prose: confirmed 12207:2017's own technical-process table of contents names all 9 remaining TaskType terms at exactly the clauses already written (6.4.1-6.4.4, 6.4.10-6.4.14); confirmed 14764:2022 specifically, not the 1999/2006 editions, is where Additive appears as a named fifth maintenance type. Two of InitiativeKind's five members (Kind_InitialDevelopment, Kind_EvolutionaryDevelopment) found to have no external source at all on re-checking, despite sharing a class with three members that do -- marked isFrameworkOriginal with an honest reason rather than forced under the same citation as their neighbours. 117 warnings -> 98; the other 15 categories left for discussion, since remedying them would mean fabricating project facts this framework does not have, not researching real ones."@en ,
@@ -2956,6 +2958,73 @@ backlog:producesFinding a owl:ObjectProperty ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "produces finding"@en ;
     skos:definition "A RetrospectiveFinding this retrospective produced. A retrospective that produces none recorded that a meeting happened, not that anything was found — indistinguishable from not having happened at all for any purpose but attendance."@en .
+
+#################################################################
+#  Failure mode / success mode taxonomy — the double-control
+#  catalogue. Neither class is populated by counting; every named
+#  member is a structurally checkable condition (a real SHACL
+#  advisory shape verifies it), and hasFailureMode/hasSuccessMode
+#  types a real, individual occurrence against the catalogue rather
+#  than leaving each finding to restate its own pattern in prose.
+#################################################################
+
+backlog:hasModeScope a owl:ObjectProperty ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:FailureMode backlog:SuccessMode ) ] ;
+    rdfs:range backlog:FindingScope ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has mode scope"@en ;
+    skos:definition "Whether this catalogue entry is shared methodology, reusable by any lineage, or local to the one lineage whose real experience minted it -- the same real distinction hasFindingScope already draws for individual findings, applied to the catalogue entries themselves. A lineage-local mode is not a lesser one: it is a pattern proven once, in one real place, not yet shown to recur elsewhere. Required, for the identical reason hasFindingScope is required: an entry whose scope was never decided cannot be told apart from one nobody has judged worth reusing."@en .
+
+backlog:FailureMode a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Failure Mode"@en ;
+    backlog:adoptionRationale "Referenced only through the optional hasFailureMode property on RetrospectiveFinding, itself optional by that property's own real definition ('not every retrospective finding fits an existing pattern'). Membership in the catalogue is earned by a real, structural SHACL check existing to detect it (IneffectiveCorrectiveAttemptAdvisoryShape, ScopeCreepAdvisoryShape, ScopeGapAdvisoryShape), not by a mandatory reference from every finding." ;
+    skos:definition "A named, reusable pattern by which a lineage's own real progress toward its mission can go wrong, checkable structurally rather than asserted. Distinct from a RetrospectiveFinding, which records one real occurrence; a FailureMode is the catalogue entry a finding can be typed against, the same relationship Method_RICE has to a real RICEScore. Membership in this class is deliberately closed to patterns this framework can actually detect from real data — a name with no structural check attached is a checklist item, not a failure mode this ontology can enforce."@en .
+
+backlog:SuccessMode a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Success Mode"@en ;
+    backlog:adoptionRationale "The identical reasoning as FailureMode's own adoptionRationale, mirrored: referenced only through the optional hasSuccessMode property, earned by a real structural check (currently none of the two named members, SM_ConfirmedMovement and SM_ExplicitScopeAdmission, has a dedicated positive-confirmation shape yet — they document the patterns IneffectiveCorrectiveAttemptAdvisoryShape and ScopeCreepAdvisoryShape stay silent against, not a separately enforced check of their own)." ;
+    skos:definition "A named, reusable pattern by which real progress toward a mission is confirmed, structurally checkable the same way a FailureMode is — the positive half of the same catalogue, not merely the absence of the negative half. A corrective action that genuinely moved a metric and a scope-conformant admission of new work are different confirmations, not the same fact stated twice, which is why each is its own named member rather than one generic 'it worked'."@en .
+
+backlog:hasFailureMode a owl:ObjectProperty ;
+    rdfs:domain backlog:RetrospectiveFinding ; rdfs:range backlog:FailureMode ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has failure mode"@en ;
+    skos:definition "Which catalogued failure mode this finding is a real instance of. Optional, deliberately: not every retrospective finding fits an existing pattern, and forcing one that does not fit is how a catalogue accumulates entries nobody re-derives from real data."@en .
+
+backlog:hasSuccessMode a owl:ObjectProperty ;
+    rdfs:domain backlog:RetrospectiveFinding ; rdfs:range backlog:SuccessMode ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has success mode"@en ;
+    skos:definition "Which catalogued success mode this finding is a real instance of. The same optionality as hasFailureMode, for the same reason."@en .
+
+backlog:FM_IneffectiveCorrectiveAction a owl:NamedIndividual , backlog:FailureMode ;
+    rdfs:label "Ineffective corrective action"@en ;
+    backlog:hasModeScope backlog:Scope_Methodology ;
+    skos:definition "A work item was asserted via metricMovableBy, reached Done or Cancelled, and the objective's own observation at or after that closure was no better than its observation at or before that item's own start. Checked by comparing two real MetricObservations bracketing the attempt, never by counting how many attempts existed — a single confirmed instance is real evidence regardless of how many other attempts are still open." .
+
+backlog:FM_ScopeCreep a owl:NamedIndividual , backlog:FailureMode ;
+    rdfs:label "Scope creep"@en ;
+    backlog:hasModeScope backlog:Scope_Methodology ;
+    skos:definition "A real work item exists with no path back to the mission's own declared scope — neither through a Goal that derivesFromScope reaching its own pursuesObjective, nor through a real ScopeChange admitting it explicitly. Work a boundary never authorized and nobody recorded admitting." .
+
+backlog:FM_ScopeGap a owl:NamedIndividual , backlog:FailureMode ;
+    rdfs:label "Scope gap (a declared deliverable with no work addressing it)"@en ;
+    backlog:hasModeScope backlog:Scope_Methodology ;
+    skos:definition "The scope names a real deliverable or exclusion boundary and no work item in the register traces back to it at all — the declared boundary is wider than the actual backlog, the reverse failure of scope creep." .
+
+backlog:SM_ConfirmedMovement a owl:NamedIndividual , backlog:SuccessMode ;
+    rdfs:label "Confirmed movement"@en ;
+    backlog:hasModeScope backlog:Scope_Methodology ;
+    skos:definition "The positive mirror of FM_IneffectiveCorrectiveAction: a work item asserted via metricMovableBy reached Done, and the objective's own observation afterward genuinely moved toward target relative to before it started. A real, checkable confirmation that a specific approach worked, worth recording as a pattern rather than only as a passing metric." .
+
+backlog:SM_ExplicitScopeAdmission a owl:NamedIndividual , backlog:SuccessMode ;
+    rdfs:label "Explicit scope admission"@en ;
+    backlog:hasModeScope backlog:Scope_Methodology ;
+    skos:definition "New work that fell outside the mission's own original scope was brought in through a real, recorded ScopeChange rather than silently absorbed — the mirror of FM_ScopeCreep, confirming the boundary was kept honest rather than merely not yet violated." .
 
 backlog:RetrospectiveFinding a owl:Class ;
     rdfs:subClassOf backlog:BacklogConcept ;

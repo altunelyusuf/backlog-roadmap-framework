@@ -9,8 +9,10 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.89.0> ;
-    owl:versionInfo "1.89.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.91.0> ;
+    owl:versionInfo "1.91.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.90.0> ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.89.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.88.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.87.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.86.0> ;
@@ -4113,29 +4115,87 @@ backlog:ObjectiveHasCorrectiveActionShape a sh:NodeShape ;
             }
         }""" ] .
 
-backlog:ExhaustedCorrectiveAttemptsAdvisoryShape a sh:NodeShape ;
-    sh:targetClass backlog:Objective ;
+backlog:IneffectiveCorrectiveAttemptAdvisoryShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItem ;
     sh:severity sh:Warning ;
-    rdfs:label "Advisory: two or more closed corrective attempts, still open -- consider whether closure-with-failure is the honest call"@en ;
+    rdfs:label "Advisory: a real corrective attempt closed without moving its objective (FM_IneffectiveCorrectiveAction)"@en ;
     sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "Advisory: two or more real work items have already been asserted via metricMovableBy for this objective and reached Done or Cancelled, and it is still open. ObjectiveHasCorrectiveActionShape only checks that a live attempt exists right now; it cannot see a pattern of attempts that individually looked live and did not move the metric. Deliberately a Warning, not a Violation: whether to keep trying, redefine the objective, or close the mission Out_Abandoned with a real RetrospectiveFinding is a judgement this framework will not force, the same reasoning G58 already applied to AchievementStatus. backlog_lineage_compass's own --propose-retrospective exists to draft that option, not to make it automatic." ;
+        sh:message "Advisory (FM_IneffectiveCorrectiveAction): this work item was asserted via metricMovableBy, reached Done or Cancelled, and its objective's own observation at or after this item's finishedAt was no better than its observation at or before this item's startedAt. Replaces a fixed attempt-count (G61's own original 2-or-more threshold, which had no objective grounding) with a real, single-instance comparison: whether THIS attempt actually moved the metric is checkable from the data itself, and one confirmed instance is real evidence regardless of how many attempts are still open. Deliberately Warning, not Violation, for the identical reason G61 already gave -- this framework will not force the conclusion, only surface the pattern." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
-            FILTER NOT EXISTS { $this backlog:hasAchievementStatus ?st }
-            $this backlog:hasTargetValue ?t ; backlog:hasTargetDirection ?d .
-            ?obs backlog:observationFor $this ; backlog:hasObservedValue ?v ; backlog:observedAt ?at .
+            $this backlog:hasState ?ws . FILTER (?ws IN (backlog:Done, backlog:Cancelled))
+            $this backlog:startedAt ?started ; backlog:finishedAt ?finished .
+            ?obj backlog:metricMovableBy $this ; backlog:hasTargetValue ?t ; backlog:hasTargetDirection ?d .
+            ?before backlog:observationFor ?obj ; backlog:hasObservedValue ?vb ; backlog:observedAt ?atb .
+            FILTER (?atb <= ?started)
             FILTER NOT EXISTS {
-                ?later backlog:observationFor $this ; backlog:observedAt ?lat .
-                FILTER (?lat > ?at)
+                ?laterb backlog:observationFor ?obj ; backlog:observedAt ?latb .
+                FILTER (?latb > ?atb && ?latb <= ?started)
             }
-            FILTER ((?d = backlog:Dir_Decrease && ?v > ?t) ||
-                    (?d = backlog:Dir_Increase && ?v < ?t) ||
-                    (?d = backlog:Dir_Hold && ?v != ?t))
-            $this backlog:metricMovableBy ?w1 . ?w1 backlog:hasState ?ws1 .
-            FILTER (?ws1 IN (backlog:Done, backlog:Cancelled))
-            $this backlog:metricMovableBy ?w2 . ?w2 backlog:hasState ?ws2 .
-            FILTER (?ws2 IN (backlog:Done, backlog:Cancelled))
-            FILTER (?w1 != ?w2)
+            ?after backlog:observationFor ?obj ; backlog:hasObservedValue ?va ; backlog:observedAt ?ata .
+            FILTER (?ata >= ?finished)
+            FILTER NOT EXISTS {
+                ?latera backlog:observationFor ?obj ; backlog:observedAt ?lata .
+                FILTER (?lata > ?ata)
+            }
+            FILTER ((?d = backlog:Dir_Decrease && ?va >= ?vb) ||
+                    (?d = backlog:Dir_Increase && ?va <= ?vb) ||
+                    (?d = backlog:Dir_Hold && ?va != ?vb))
+        }""" ] .
+
+backlog:MeasurementAnalysisRequiredShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItem ;
+    sh:severity sh:Violation ;
+    rdfs:label "A confirmed pattern is recorded as a real finding, not left as an unread signal (L3)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: this work item's own bracketing observations confirm FM_IneffectiveCorrectiveAction (the identical condition IneffectiveCorrectiveAttemptAdvisoryShape reports), and no RetrospectiveFinding relatesToWorkItem it. Detecting the pattern is not the same as interpreting it -- a measurement nobody analysed is a number, not a conclusion, and this framework's own real corrective-action work (G60-G62) exists precisely so that a confirmed signal cannot sit unread. Distinct from the advisory: this does not require a decision about WHAT the finding says, only that one exists. Violation, not Warning -- unlike choosing between continuing, redefining, or abandoning (a real judgement this framework will not force), recording that the pattern was seen and considered is not a judgement, it is bookkeeping this register already requires everywhere else." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasState ?ws . FILTER (?ws IN (backlog:Done, backlog:Cancelled))
+            $this backlog:startedAt ?started ; backlog:finishedAt ?finished .
+            ?obj backlog:metricMovableBy $this ; backlog:hasTargetValue ?t ; backlog:hasTargetDirection ?d .
+            ?before backlog:observationFor ?obj ; backlog:hasObservedValue ?vb ; backlog:observedAt ?atb .
+            FILTER (?atb <= ?started)
+            FILTER NOT EXISTS {
+                ?laterb backlog:observationFor ?obj ; backlog:observedAt ?latb .
+                FILTER (?latb > ?atb && ?latb <= ?started)
+            }
+            ?after backlog:observationFor ?obj ; backlog:hasObservedValue ?va ; backlog:observedAt ?ata .
+            FILTER (?ata >= ?finished)
+            FILTER NOT EXISTS {
+                ?latera backlog:observationFor ?obj ; backlog:observedAt ?lata .
+                FILTER (?lata > ?ata)
+            }
+            FILTER ((?d = backlog:Dir_Decrease && ?va >= ?vb) ||
+                    (?d = backlog:Dir_Increase && ?va <= ?vb) ||
+                    (?d = backlog:Dir_Hold && ?va != ?vb))
+            FILTER NOT EXISTS { ?f backlog:relatesToWorkItem $this ; a backlog:RetrospectiveFinding }
+        }""" ] .
+
+backlog:ScopeCreepAdvisoryShape a sh:NodeShape ;
+    sh:targetClass backlog:Epic ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: an epic with no path back to any declared scope (FM_ScopeCreep)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory (FM_ScopeCreep): this epic pursues an objective whose goal does not derive from any ScopeStatement, and no real ScopeChange admits this epic explicitly. Work a boundary never authorized and nobody recorded admitting -- the exact case this session's own ScopeChange class exists to make visible when it happens honestly (G54: two real handovers admitted this way) rather than silently absorbed." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this a backlog:Epic ; backlog:pursuesObjective ?obj .
+            ?obj backlog:contributesToGoal ?g .
+            FILTER NOT EXISTS { ?g backlog:derivesFromScope ?sc }
+            FILTER NOT EXISTS { ?change backlog:admitsItem $this }
+        }""" ] .
+
+backlog:ScopeGapAdvisoryShape a sh:NodeShape ;
+    sh:targetClass backlog:ScopeStatement ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: a declared scope boundary with no goal deriving from it (FM_ScopeGap)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory (FM_ScopeGap): this scope statement names a real boundary and no Goal in the register derivesFromScope it -- the reverse of scope creep, a declared boundary wider than the actual backlog. A scope nothing traces back to cannot be tested for fit against the mission it was meant to bound." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this a backlog:ScopeStatement .
+            FILTER NOT EXISTS { ?g backlog:derivesFromScope $this }
         }""" ] .
 
 backlog:CeremonyLinkAdvisoryShape a sh:NodeShape ;

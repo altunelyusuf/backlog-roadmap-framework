@@ -1,5 +1,76 @@
 # Changelog
 
+## v1.184.0 — 2026-09-02 (MAJOR: a real correction of scope — compliance with OE, not migration into it; measurements enforced into analysis; a two-tier catalogue; a real OE compliance investigation and proposal)
+
+**Corrected directly: the prior release misread the request.** The ask was that BRSF's own ontology
+be compliant with the OE Ecosystem, not built inside it. Investigated properly: OE ships a real
+registration protocol (ORCP v1.0.0); BRSF is an existing registrant, last closed at round 12
+(`v1.18.0`). Checked `risk:FailureMode` directly rather than assuming a name match means a semantic
+one — it is ISO 60812:2018 FMEA vocabulary (the manner a physical item's failure is *observed*), a
+genuinely different domain from BRSF's own structurally-checkable lineage-progress patterns. No
+collision, no rename. But `risk:hasIdentifiedRisk` is a real, general hook BRSF's own findings
+could plausibly use — proposed to OEE for adjudication, not implemented unilaterally. The same
+proposal discloses that this session's work since round 12 has never been submitted as a bundle.
+
+**Built: measurements enforced into analysis, not left as detected-and-ignored.**
+`MeasurementAnalysisRequiredShape` — `Violation` severity, deliberately different from the
+`Warning`-level detection shape — fires when a work item is confirmed ineffective by its own real
+bracketing observations and no real `RetrospectiveFinding` records it. Recording that a pattern was
+seen is bookkeeping, not the judgement of what to do about it, which is why this can be enforced
+where the underlying decision cannot. Proven discriminating; BRSF's own register already satisfies
+it.
+
+**Built: a real two-tier catalogue.** `hasModeScope` (reusing `FindingScope`'s own enumeration) is
+now required on every `FailureMode`/`SuccessMode` entry. The five existing modes are marked
+methodology-wide — the shared catalogue. A lineage may mint its own local mode from real experience
+without waiting for it to already be shared, promotable later through the same handover mechanism
+this release's own OE proposal is an instance of.
+
+`G63` records the full reasoning. 0 SHACL violations on the real register (77 warnings). All six
+shipped checkers PASS. Lineage-discipline check PASS.
+
+
+## v1.183.0 — 2026-09-02 (MAJOR: G61's own threshold had no objective grounding, corrected; a real FailureMode/SuccessMode taxonomy, checked structurally not asserted; scope conformance across the whole lineage lifecycle)
+
+**Challenged directly, and correct.** `G61`'s own "2 or more closed attempts" threshold was a
+chosen count, not derived from anything. Replaced entirely: `ExhaustedCorrectiveAttemptsAdvisoryShape`
+is retired; `IneffectiveCorrectiveAttemptAdvisoryShape` targets the work item itself and compares
+its objective's own real observation immediately before the item's `startedAt` against the real
+observation at or after its `finishedAt`. No count — one confirmed instance is real evidence.
+Silent, honestly, when the bracketing observations do not exist.
+
+**Also asked for: the double-control working across the whole lineage lifecycle**, with scope
+conformance named directly. Built `ScopeCreepAdvisoryShape` (an epic with no path back to any
+declared scope, admitted by no real `ScopeChange`) and `ScopeGapAdvisoryShape` (a declared scope
+no goal derives from — the reverse). Both real occasions this framework's own
+`derivesFromScope`/`admitsItem`/`ScopeChange` vocabulary already existed for.
+
+**Built: a real `FailureMode`/`SuccessMode` taxonomy**, not a prose checklist. Each named member
+(`FM_IneffectiveCorrectiveAction`, `FM_ScopeCreep`, `FM_ScopeGap`, `SM_ConfirmedMovement`,
+`SM_ExplicitScopeAdmission`) exists only where a structural check can detect it — `FailureMode`'s
+own definition: "a name with no structural check attached is a checklist item, not a failure mode
+this ontology can enforce." `RetrospectiveFinding` can now be typed against the catalogue via
+`hasFailureMode`/`hasSuccessMode`.
+
+**Out of this session's own real scope, disclosed rather than assumed.** "OE discipline" names a
+different package this session does not govern. Built and proven in BRSF's own real vocabulary
+first; whether it belongs in the shared OE methodology is a question for that package's own
+governing session.
+
+**Applied to BRSF's own real gap first.** The redesigned shape found a real instance:
+`fw:Find_EPRulingsIneffective` records that `EP_Rulings`, confirmed by its own bracketing
+observations, closed without moving `Obj_RulingsQueryable` toward target — not a failure of its
+own real work, but confirmation that a point-in-time action cannot move a metric counting
+unrelated, ongoing growth.
+
+A real mistake caught and fixed before shipping: the discipline document's own G62 initially
+referenced the retired shape's old name; the lineage-discipline check caught the drift and it was
+corrected.
+
+`G62` records the full reasoning. 0 SHACL violations on the real register (77 warnings). All six
+shipped checkers PASS. Lineage-discipline check PASS.
+
+
 ## v1.182.0 — 2026-09-02 (MAJOR: the reverse-direction check — real, exhausted corrective attempts can suggest closure-with-failure, never force it; a real bug caught in pyshacl's own nested-subquery handling)
 
 **Named directly as a real asymmetry, and correct.** `G60`'s own enforcement only pulls toward

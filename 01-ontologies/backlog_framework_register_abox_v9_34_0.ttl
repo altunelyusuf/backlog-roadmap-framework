@@ -10,8 +10,10 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.32.0> ;
-    owl:versionInfo "9.32.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.34.0> ;
+    owl:versionInfo "9.34.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.33.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.32.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.31.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.30.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.29.0> ;
@@ -247,8 +249,8 @@ fw:Out2_Scope a backlog:StageOutput ;
 #  analysis still supports them.
 #################################################################
 fw:Area_Governance a backlog:ScopeArea ;
-    backlog:areaLocation "LINEAGE_OPERATING_DISCIPLINE_v32_0_0.md" ;
-    backlog:areaMeasure "Governance rulings G1-G61, each a markdown heading with prose. Nothing in the ontology carries them; the lineage-discipline gate checks that claims about ENFORCEMENT match the shapes, and does not check that the rulings themselves exist as anything a query can reach." .
+    backlog:areaLocation "LINEAGE_OPERATING_DISCIPLINE_v34_0_0.md" ;
+    backlog:areaMeasure "Governance rulings G1-G63, each a markdown heading with prose. Nothing in the ontology carries them; the lineage-discipline gate checks that claims about ENFORCEMENT match the shapes, and does not check that the rulings themselves exist as anything a query can reach." .
 fw:Del_OntGovernance backlog:deliverableForArea fw:Area_Governance .
 fw:Area_CodeTables a backlog:ScopeArea ;
     backlog:areaLocation "03-tooling/ — 12 python modules" ;
@@ -4867,3 +4869,20 @@ fw:Score_RulingsQueryableDecision a backlog:RICEScore ; backlog:scoredByMethod b
     backlog:hasReach 1.0 ; backlog:hasImpact 1.5 ; backlog:hasConfidence 0.7 ; backlog:hasEffort 1.0 ;
     backlog:hasScoreValue 1.05 ;
     backlog:hasScoreRationale "Re-scored from backlog_lineage_compass_v1_0_0's own low-confidence starting proposal (0.3) now that a real scope statement exists. Reach=1 (this single objective). Impact=1.5 (resolves a standing ambiguity G58 itself flagged, not just one number). Confidence=0.7 (the decision itself is well-scoped even though its answer isn't chosen yet -- deciding between two named options is tractable). Effort=1 (a decision record, not a migration)." .
+
+#################################################################
+#  v1.183.0 — IneffectiveCorrectiveAttemptAdvisoryShape and the
+#  scope-conformance shapes, closing G62. The elegant redesign
+#  found a real, honest finding on BRSF's own register: EP_Rulings,
+#  confirmed by its own before/after observations, closed without
+#  moving Obj_RulingsQueryable toward target. Recorded, not left
+#  as an unexplained Warning -- the same standard applied to every
+#  prior finding this session.
+#################################################################
+
+fw:Find_EPRulingsIneffective a backlog:RetrospectiveFinding ;
+    backlog:hasFailureMode backlog:FM_IneffectiveCorrectiveAction ;
+    backlog:hasFindingScope backlog:Scope_LineageLocal ;
+    backlog:relatesToWorkItem fw:EP_Rulings ;
+    backlog:hasRootCause "Confirmed by IneffectiveCorrectiveAttemptAdvisoryShape's own real before/after comparison, not asserted: EP_Rulings started when Obj_RulingsQueryable's own metric read 18, finished when it still read (effectively) the same order of magnitude by the same counting method, because the metric's own count includes governance rulings authored after EP_Rulings closed -- work the epic was never scoped to address. Not a failure of EP_Rulings' own real work (the original 18-ruling migration genuinely completed), but confirmation that a corrective action scoped to a point-in-time backlog cannot move a metric that keeps counting new, unrelated growth." ;
+    backlog:hasRemedy "fw:S_RulingsQueryableDecision, already built (G60), is the real remedy in progress: decide whether the metric should keep counting ongoing governance growth or be redefined to close honestly. This finding records why EP_Rulings itself could never have been the fix." .

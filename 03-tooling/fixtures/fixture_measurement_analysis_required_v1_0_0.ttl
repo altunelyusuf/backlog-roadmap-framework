@@ -1,0 +1,38 @@
+# Measurement analysis required — test drive, not a construction.
+#
+# Proves discrimination for MeasurementAnalysisRequiredShape: detecting an
+# ineffective attempt (IneffectiveCorrectiveAttemptAdvisoryShape, Warning) is
+# not the same as requiring it be interpreted (this shape, Violation). The
+# same confirmed-ineffective condition, but this one asks a different
+# question: does a real RetrospectiveFinding exist, not what it concludes.
+#
+# W_Unanalyzed: confirmed ineffective (bracketing observations show no
+#   movement), no RetrospectiveFinding relates to it -> fires.
+# W_Analyzed: the identical confirmed-ineffective pattern, but a real
+#   RetrospectiveFinding relatesToWorkItem it -> silent.
+
+@prefix backlog: <http://example.org/backlog#> .
+@prefix ex:      <http://example.org/analysistest#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+ex:Obj_Unanalyzed a backlog:Objective ; backlog:hasTargetValue "0"^^xsd:decimal ; backlog:hasTargetDirection backlog:Dir_Decrease ;
+    backlog:metricMovableBy ex:W_Unanalyzed .
+ex:W_Unanalyzed a backlog:Story ; backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-01-01T00:00:00Z"^^xsd:dateTime ; backlog:finishedAt "2026-01-10T00:00:00Z"^^xsd:dateTime .
+ex:Obs_UA_Before a backlog:MetricObservation ; backlog:observationFor ex:Obj_Unanalyzed ;
+    backlog:hasObservedValue "10"^^xsd:decimal ; backlog:observedAt "2025-12-30T00:00:00Z"^^xsd:dateTime .
+ex:Obs_UA_After a backlog:MetricObservation ; backlog:observationFor ex:Obj_Unanalyzed ;
+    backlog:hasObservedValue "10"^^xsd:decimal ; backlog:observedAt "2026-01-15T00:00:00Z"^^xsd:dateTime .
+
+ex:Obj_Analyzed a backlog:Objective ; backlog:hasTargetValue "0"^^xsd:decimal ; backlog:hasTargetDirection backlog:Dir_Decrease ;
+    backlog:metricMovableBy ex:W_Analyzed .
+ex:W_Analyzed a backlog:Story ; backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-01-01T00:00:00Z"^^xsd:dateTime ; backlog:finishedAt "2026-01-10T00:00:00Z"^^xsd:dateTime .
+ex:Obs_A_Before a backlog:MetricObservation ; backlog:observationFor ex:Obj_Analyzed ;
+    backlog:hasObservedValue "10"^^xsd:decimal ; backlog:observedAt "2025-12-30T00:00:00Z"^^xsd:dateTime .
+ex:Obs_A_After a backlog:MetricObservation ; backlog:observationFor ex:Obj_Analyzed ;
+    backlog:hasObservedValue "10"^^xsd:decimal ; backlog:observedAt "2026-01-15T00:00:00Z"^^xsd:dateTime .
+ex:Find_Analyzed a backlog:RetrospectiveFinding ; backlog:relatesToWorkItem ex:W_Analyzed ;
+    backlog:hasFailureMode backlog:FM_IneffectiveCorrectiveAction ;
+    backlog:hasFindingScope backlog:Scope_LineageLocal ;
+    backlog:hasRootCause "Fixture-only: proves the shape stays silent once a real finding exists." .
