@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.92.0> ;
-    owl:versionInfo "1.92.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.93.0> ;
+    owl:versionInfo "1.93.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.92.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.91.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.90.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.89.0> ;
@@ -4188,6 +4189,34 @@ backlog:CorrectiveActionMeasuredOnCloseShape a sh:NodeShape ;
                 ?o backlog:observationFor ?obj ; backlog:observedAt ?oa .
                 FILTER (?oa >= ?finished)
             }
+        }""" ] .
+
+backlog:LineageLocalModeRecurrenceAdvisoryShape a sh:NodeShape ;
+    sh:targetClass backlog:FailureMode ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: a lineage-local mode has recurred -- consider proposing promotion to Scope_Methodology"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: this mode carries hasModeScope Scope_LineageLocal and 2 or more distinct RetrospectiveFindings are already typed against it. A pattern minted from one real experience and never seen again stays local honestly; a pattern a lineage keeps reaching for is exactly what hasModeScope's own definition calls 'a pattern proven once' that has since been shown to recur -- the real, evidence-based signal G63 named for promotion, not a fixed count on failures (the arbitrary-threshold mistake G62 already corrected) but a count on genuine reuse of the same catalogue entry, which is what recurrence actually means. Deliberately Warning: promotion is the handover/proposal mechanism's own real decision (per G63), not this shape's to make." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasModeScope backlog:Scope_LineageLocal .
+            ?f1 backlog:hasFailureMode ?this .
+            ?f2 backlog:hasFailureMode ?this .
+            FILTER (?f1 != ?f2)
+        }""" ] .
+
+backlog:LineageLocalSuccessModeRecurrenceAdvisoryShape a sh:NodeShape ;
+    sh:targetClass backlog:SuccessMode ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: a lineage-local mode has recurred -- consider proposing promotion to Scope_Methodology"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: this mode carries hasModeScope Scope_LineageLocal and 2 or more distinct RetrospectiveFindings are already typed against it. The identical reasoning as LineageLocalModeRecurrenceAdvisoryShape, mirrored for SuccessMode -- a confirmed approach a lineage keeps reaching for is a real candidate for the shared catalogue, and this shape only surfaces that, it does not decide it." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasModeScope backlog:Scope_LineageLocal .
+            ?f1 backlog:hasSuccessMode ?this .
+            ?f2 backlog:hasSuccessMode ?this .
+            FILTER (?f1 != ?f2)
         }""" ] .
 
 backlog:ScopeCreepAdvisoryShape a sh:NodeShape ;

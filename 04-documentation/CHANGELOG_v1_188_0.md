@@ -1,5 +1,38 @@
 # Changelog
 
+## v1.188.0 — 2026-09-02 (MAJOR: closing the two named open items — one built, one honestly withdrawn on re-examination; a real bug caught and fixed before shipping)
+
+**Asked directly how to close both items the prior release left open, and for the real, current
+closure status.** Ran `backlog_lineage_compass` live: 7 of 8 objectives `MET`, the one real blocker
+already carries a live corrective action, still `Proposed`. This lineage is `NOT eligible` for
+closure right now, for exactly one named reason.
+
+**The second open item withdrawn, not built, on honest re-examination.** Re-read the existing
+corrective-action shape before designing anything new: it already requires a live action for every
+open, unexplained objective in an in-flight mission, and the mission-achievement shape treats every
+such objective as genuinely blocking — there is no real third category between "blocking" and
+"archived" (deliberately excluded; archiving stops active governance on purpose). The prior
+release's own framing was imprecise, not a real gap; corrected here rather than building an
+unneeded mechanism to match language that didn't hold up.
+
+**Built: the lineage-local mode promotion nudge.**
+`LineageLocalModeRecurrenceAdvisoryShape`/`LineageLocalSuccessModeRecurrenceAdvisoryShape` — a mode
+carrying `hasModeScope Scope_LineageLocal` with 2 or more distinct `RetrospectiveFinding`s already
+typed against it is a `Warning`. Deliberately a count on genuine reuse of the same catalogue entry
+— the real, evidence-based meaning of recurrence — not the fixed-attempt-count mistake already
+corrected earlier this session.
+
+**A real bug caught while building it.** The first version targeted a single anonymous
+`owl:unionOf` class in one shape; pyshacl does not fire `sh:targetClass` against an anonymous
+union. Confirmed by testing the identical query directly against rdflib versus through pyshacl —
+the same diagnostic already used for an earlier nested-subquery defect. Split into two concrete
+shapes, matching this suite's own established convention; re-verified firing exactly once, on
+exactly the right fixture case.
+
+`G66` records the full reasoning. 0 SHACL violations on the real register (77 warnings,
+unchanged). All six shipped checkers PASS. Lineage-discipline check PASS.
+
+
 ## v1.187.0 — 2026-09-02 (MAJOR: asked directly whether enforcement is real for every lineage; checked, found a precise structural gap, closed it)
 
 **Asked directly whether the double-control actually guarantees execution, or only reports it.**

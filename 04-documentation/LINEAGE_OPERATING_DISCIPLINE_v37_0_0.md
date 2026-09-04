@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v36.0.0
+# Lineage Operating Discipline — v37.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -1540,4 +1540,42 @@ requires a live action only for objectives currently blocking a mission's closur
 is merely off-track but not yet the reason a mission cannot close has no equivalent structural pull.
 Neither is built here — named honestly as the next real candidates, not treated as already covered
 by what this ruling closes.
+
+## G66 — Closing the two named open items: one built, one honestly withdrawn on re-examination
+
+Asked directly how to close both items `G65` left open, and for the real, current closure status.
+Ran `backlog_lineage_compass` live: 7 of 8 objectives `MET`, the one real blocker
+(`Obj_RulingsQueryable`, 211% past its original baseline) already carries a live corrective action
+(`G60`'s own `fw:S_RulingsQueryableDecision`, still `Proposed`) — this lineage is `NOT eligible`
+for closure right now, for exactly one named reason, not several.
+
+**The second `G65` item withdrawn, not built, on honest re-examination.** Re-read
+`ObjectiveHasCorrectiveActionShape`'s own real condition before designing anything: it already
+requires a live action for *every* open, unexplained objective in an `Out_InFlight` mission, and
+`AchievedOnlyWhenClearShape`'s own condition treats every such objective as genuinely blocking —
+there is no real third category between "blocking" and "archived" (deliberately excluded;
+`ArchiveOnlyWhenAchievedShape`'s own reasoning is that archiving stops active governance on
+purpose, "the saving comes from the file not being loaded"). `G65`'s own framing was imprecise, not
+a real gap; correcting it here rather than building an unneeded mechanism to match language that
+did not hold up.
+
+**Built: `LineageLocalModeRecurrenceAdvisoryShape` / `LineageLocalSuccessModeRecurrenceAdvisoryShape`.**
+A mode carrying `hasModeScope Scope_LineageLocal` with 2 or more distinct `RetrospectiveFinding`s
+already typed against it is a `Warning`. Deliberately a count on *genuine reuse of the same
+catalogue entry* — the real, evidence-based meaning of recurrence — not the fixed-attempt-count
+mistake `G62` already corrected; a pattern seen once stays honestly local, a pattern a lineage keeps
+reaching for is the real signal `G63` named for promotion. Deliberately `Warning`: whether to
+actually propose promotion is the handover mechanism's own decision, not this shape's to make.
+
+**A real bug caught while building it, disclosed rather than silently worked around.** The first
+version targeted a single anonymous `owl:unionOf` class (`FailureMode` or `SuccessMode` in one
+shape); pyshacl does not fire `sh:targetClass` against an anonymous union — confirmed by testing
+the identical query directly against rdflib (fires correctly) versus through pyshacl (silent), the
+same diagnostic this session used for the earlier nested-`GROUP BY` defect. Split into two concrete
+shapes, one per class, matching this suite's own established convention; re-verified firing exactly
+once, on exactly the fixture case that should trigger it
+(`fixture_mode_recurrence_v1_0_0.ttl`: one use silent, two uses of the same local mode fires, two
+uses of an already-methodology mode stays silent). Test-driven against BRSF's own real register:
+silent, honestly — zero lineage-local modes exist yet, so there is nothing to promote right now,
+not because the mechanism is untested.
 

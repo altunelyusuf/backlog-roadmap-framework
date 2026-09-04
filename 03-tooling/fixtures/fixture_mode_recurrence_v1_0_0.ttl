@@ -1,0 +1,38 @@
+# Lineage-local mode recurrence — test drive, not a construction.
+#
+# Proves discrimination for LineageLocalModeRecurrenceAdvisoryShape, the
+# real evidence-based signal for promotion this session's own G63/G65
+# named but never built: not a fixed count on failures (the mistake G62
+# already corrected), a count on genuine reuse of the same lineage-local
+# catalogue entry.
+#
+# FM_UsedOnce: Scope_LineageLocal, exactly one RetrospectiveFinding typed
+#   against it -> silent (proven once, not yet shown to recur).
+# FM_UsedTwice: Scope_LineageLocal, two distinct RetrospectiveFindings
+#   typed against it -> fires.
+# FM_MethodologyReused: Scope_Methodology, two distinct findings typed
+#   against it -> silent (already shared; nothing to promote).
+
+@prefix backlog: <http://example.org/backlog#> .
+@prefix ex:      <http://example.org/recurrencetest#> .
+
+ex:FM_UsedOnce a backlog:FailureMode ; backlog:hasModeScope backlog:Scope_LineageLocal .
+ex:Find_Once a backlog:RetrospectiveFinding ; backlog:hasFailureMode ex:FM_UsedOnce ;
+    backlog:hasFindingScope backlog:Scope_LineageLocal ;
+    backlog:hasRootCause "Fixture-only: a single, real occurrence." .
+
+ex:FM_UsedTwice a backlog:FailureMode ; backlog:hasModeScope backlog:Scope_LineageLocal .
+ex:Find_Twice1 a backlog:RetrospectiveFinding ; backlog:hasFailureMode ex:FM_UsedTwice ;
+    backlog:hasFindingScope backlog:Scope_LineageLocal ;
+    backlog:hasRootCause "Fixture-only: first real occurrence." .
+ex:Find_Twice2 a backlog:RetrospectiveFinding ; backlog:hasFailureMode ex:FM_UsedTwice ;
+    backlog:hasFindingScope backlog:Scope_LineageLocal ;
+    backlog:hasRootCause "Fixture-only: second real occurrence -- the recurrence." .
+
+ex:FM_MethodologyReused a backlog:FailureMode ; backlog:hasModeScope backlog:Scope_Methodology .
+ex:Find_Method1 a backlog:RetrospectiveFinding ; backlog:hasFailureMode ex:FM_MethodologyReused ;
+    backlog:hasFindingScope backlog:Scope_Methodology ;
+    backlog:hasRootCause "Fixture-only: already shared, first use." .
+ex:Find_Method2 a backlog:RetrospectiveFinding ; backlog:hasFailureMode ex:FM_MethodologyReused ;
+    backlog:hasFindingScope backlog:Scope_Methodology ;
+    backlog:hasRootCause "Fixture-only: already shared, second use -- nothing to promote." .
