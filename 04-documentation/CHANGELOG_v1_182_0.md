@@ -1,5 +1,39 @@
 # Changelog
 
+## v1.182.0 — 2026-09-02 (MAJOR: the reverse-direction check — real, exhausted corrective attempts can suggest closure-with-failure, never force it; a real bug caught in pyshacl's own nested-subquery handling)
+
+**Named directly as a real asymmetry, and correct.** `G60`'s own enforcement only pulls toward
+success — an open objective with no live corrective action is a `Violation`, but nothing detected
+when the honest answer is that closure is heading toward failure, not success. Built the missing
+half, deliberately at a different severity: `Violation` was right for "nothing is being tried" — an
+unambiguous defect. `Warning` is right for "trying has not worked twice" — a real judgement, the
+identical reasoning `G58` already applied to `AchievementStatus`.
+
+**Built: `ExhaustedCorrectiveAttemptsAdvisoryShape`.** An open objective with 2+ distinct closed
+(`Done`/`Cancelled`) `metricMovableBy` attempts, still not at target, is a `Warning`. The threshold
+(2, not 1) checked honestly against BRSF's own real case before shipping: `Obj_RulingsQueryable`
+has exactly one closed attempt, correctly below the bar.
+
+**A real bug caught while building it.** pyshacl's own `sh:sparql` does not resolve `$this`
+correctly inside a nested `SELECT ... GROUP BY` subquery — it silently matched nothing rather than
+erroring, found only by testing the identical SPARQL directly against rdflib outside pyshacl and
+comparing results. Rewritten to two existentially-bound, distinct work items instead of a nested
+count; re-verified firing exactly once, on exactly the fixture case that should trigger it.
+
+**`backlog_lineage_compass` extended with `[5] EXHAUSTED ATTEMPTS` and `--propose-retrospective`.**
+Generates a real `RetrospectiveFinding` (root cause left honestly open, per that class's own real
+definition) and a proposed `Out_Abandoned` transition, symmetric to `--emit-closure`'s `Out_Achieved`
+path and equally never applied automatically. BRSF's own current lineage correctly produces nothing
+to propose.
+
+Together, `G60` and `G61` are the double-control asked for: one direction makes inaction structurally
+visible, the other makes a real pattern of failed attempts visible too, and neither decides the
+outcome for a human.
+
+`G61` records the full reasoning. 0 SHACL violations on the real register (76 warnings, unchanged).
+All six shipped checkers PASS. Lineage-discipline check PASS.
+
+
 ## v1.181.0 — 2026-09-02 (MAJOR: corrective action enforced structurally, not by external trigger — a real proposal-generation feature built and applied to BRSF's own real gap first)
 
 **Asked directly for course-correction proposals guaranteed by enforcement, not left ad hoc.** The

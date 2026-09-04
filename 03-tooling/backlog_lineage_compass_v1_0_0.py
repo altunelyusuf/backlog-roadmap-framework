@@ -147,6 +147,9 @@ def main():
     ap.add_argument("--propose-corrective", default=None,
                      help="for the single top FOCUS objective, write a proposed corrective PBI "
                           "(RICE-scored, with a cost estimate and a simple projection) to this path")
+    ap.add_argument("--propose-retrospective", default=None,
+                     help="for any objective with 2+ closed corrective attempts and still open, "
+                          "write a proposed RetrospectiveFinding + Out_Abandoned transition to this path")
     args = ap.parse_args()
 
     g = load([TBOX, ABOX, args.register])
@@ -270,6 +273,50 @@ def main():
             print("\n    COMPASS: %s is the real bottleneck -- %s, %.0f%% of its original gap,"
                   % (local(top[1]), worse_word, top[2]["remaining_fraction"] * 100))
             print("    the largest of any open objective. Closure work should aim here first.")
+
+        # --- 5. EXHAUSTED ATTEMPTS -- the reverse-direction check, per ExhaustedCorrectiveAttemptsAdvisoryShape ---
+        print("\n[5] EXHAUSTED ATTEMPTS (reverse compass -- is this trending toward an honest failure, not a fix?)")
+        exhausted = []
+        for goal, obj, st in rows:
+            if st["achieved"] or st["achievement_status"] is not None:
+                continue
+            closed = [w for w in g.objects(obj, BL.metricMovableBy)
+                      if local(g.value(w, BL.hasState)) in ("Done", "Cancelled")]
+            if len(closed) >= 2:
+                exhausted.append((goal, obj, st, closed))
+        if not exhausted:
+            print("    No open objective has 2+ closed corrective attempts. Nothing flagged.")
+        for goal, obj, st, closed in exhausted:
+            print("    %-28s %d closed attempts (%s), still open -- consider Out_Abandoned"
+                  % (local(obj), len(closed), ", ".join(local(w) for w in closed)))
+
+        if args.propose_retrospective and exhausted:
+            goal, obj, st, closed = exhausted[0]
+            finding = URIRef(str(obj) + "_ExhaustionFinding")
+            out = Graph()
+            out.bind("backlog", BL)
+            out.add((finding, RDF.type, BL.RetrospectiveFinding))
+            out.add((finding, BL.hasRootCause, Literal(
+                "PROPOSED by backlog_lineage_compass_v1_0_0, not a finished analysis: %d real corrective "
+                "attempts (%s) reached Done or Cancelled without moving %s to target (current %s, target %s). "
+                "The actual root cause -- whether the objective itself is achievable as stated, whether the "
+                "attempts were poorly scoped, or whether the metric needs redefining -- is for a human "
+                "retrospective to determine; this tool can only see that the pattern exists."
+                % (len(closed), ", ".join(local(w) for w in closed), local(obj), st["current"], st["target"]))))
+            out.add((finding, BL.hasFindingScope, BL.Scope_LineageLocal))
+            out.add((finding, BL.relatesToWorkItem, obj))
+            mis_uri = mission
+            out.add((mis_uri, BL.hasMissionOutcome, BL.Out_Abandoned))
+            out.add((mis_uri, rdflib.RDFS.comment, Literal(
+                "PROPOSED, not applied. %d closed corrective attempts against %s with no target reached. "
+                "Review the RetrospectiveFinding, set a real outcomeRationale, and confirm this is genuinely "
+                "the honest call before publishing -- this tool proposes the option, it does not decide it."
+                % (len(closed), local(obj)))))
+            out.serialize(destination=args.propose_retrospective, format="turtle")
+            print("\n    Proposed retrospective + Out_Abandoned option for %s written to %s"
+                  % (local(obj), args.propose_retrospective))
+            print("    (NOT applied to the register). This is one option surfaced, not a recommendation")
+            print("    to abandon -- review alongside [4] FOCUS before deciding.")
 
         if args.propose_corrective and open_rows:
             goal, obj, st = open_rows[0]

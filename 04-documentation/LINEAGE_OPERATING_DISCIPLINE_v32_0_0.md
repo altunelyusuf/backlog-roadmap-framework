@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v31.0.0
+# Lineage Operating Discipline — v32.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -1338,4 +1338,40 @@ correction this closure required: `fw:Register`'s own asserted state, `Done` sin
 session, no longer matched its real members once a genuinely `Proposed` item existed — corrected to
 `InProgress` rather than left silently wrong, the same derived-state check this whole session has
 relied on throughout catching its own author's assertion this time.
+
+## G61 — A reverse-direction check: real, exhausted corrective attempts can suggest closure-with-failure, never force it
+
+Named directly as a real asymmetry: `G60`'s own enforcement only pulls toward success — an open
+objective with no live corrective action is a `Violation`, but nothing detects when the honest
+answer is that closure is heading toward failure, not success. Agreed and built the missing half,
+deliberately at a different severity: **`Violation` was right for "nothing is being tried"** — a
+missing action is an unambiguous defect. **`Warning` is right for "trying has not worked twice" —**
+whether that means stop, redefine, or try a third time is a real judgement, the identical reasoning
+`G58` already applied to `AchievementStatus`, and forcing it here would repeat the same
+dishonest-fit failure `G43`/`G46`/`G58` all name.
+
+**Built: `ExhaustedCorrectiveAttemptsAdvisoryShape`.** An open objective with 2+ distinct work
+items already asserted via `metricMovableBy` that reached `Done` or `Cancelled` without it hitting
+target is a `Warning`. The threshold (2, not 1) is deliberate and checked against BRSF's own real
+case before shipping: `Obj_RulingsQueryable` has exactly one closed attempt right now, correctly
+below the bar — a single closed attempt is normal, ongoing work, not evidence of a pattern.
+Grounded in a real bug caught while building it: pyshacl's own `sh:sparql` does not resolve `$this`
+correctly inside a nested `SELECT ... GROUP BY` subquery — silently matched nothing rather than
+erroring, found only by testing the identical SPARQL directly against rdflib outside pyshacl and
+comparing. Rewritten to two existentially-bound, distinct work items instead of a nested count;
+re-verified firing exactly once, on exactly the fixture case that should trigger it, not zero and
+not on the others.
+
+**`backlog_lineage_compass` extended with `[5] EXHAUSTED ATTEMPTS` and `--propose-retrospective`.**
+Reports every open objective crossing the threshold; for the first one found, generates a real
+`RetrospectiveFinding` (root cause left honestly unresolved — `RetrospectiveFinding`'s own
+definition already says a finding whose remedy is still open is more honest than one closed to
+fill the field) and a proposed `Out_Abandoned` transition, symmetric to `--emit-closure`'s own
+`Out_Achieved` path and equally never applied automatically. BRSF's own current lineage correctly
+produces nothing to propose — the mechanism exists, and the honest current answer is that
+abandonment is not yet the real question here.
+
+Together, `G60` and `G61` are the double-control asked for: one direction makes inaction structurally
+visible, the other makes a real pattern of failed attempts visible too, and neither one decides the
+outcome for a human.
 

@@ -1,0 +1,39 @@
+# Exhausted corrective attempts — test drive, not a construction.
+#
+# Proves discrimination for ExhaustedCorrectiveAttemptsAdvisoryShape, the
+# reverse-direction half of ObjectiveHasCorrectiveActionShape: not "is
+# someone working this right now" but "have real attempts already failed
+# more than once." Deliberately Warning, not Violation -- whether to keep
+# trying or close with a real RetrospectiveFinding is a judgement this
+# framework will not force.
+#
+# Obj_ZeroClosed: no closed attempts at all -> silent (below threshold,
+#   and ObjectiveHasCorrectiveActionShape's own job, not this one's).
+# Obj_OneClosed: exactly one closed attempt -> silent. Matches BRSF's own
+#   real current state (Obj_RulingsQueryable, one closed attempt) --
+#   deliberately not enough to suggest abandonment after a single try.
+# Obj_TwoClosed: two closed attempts, still open -> fires.
+
+@prefix backlog: <http://example.org/backlog#> .
+@prefix ex:      <http://example.org/exhaustedtest#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+ex:Obj_ZeroClosed a backlog:Objective ;
+    backlog:hasTargetValue "0"^^xsd:decimal ; backlog:hasTargetDirection backlog:Dir_Decrease .
+ex:Obs_ZeroClosed a backlog:MetricObservation ; backlog:observationFor ex:Obj_ZeroClosed ;
+    backlog:hasObservedValue "5"^^xsd:decimal ; backlog:observedAt "2026-09-04T00:00:00Z"^^xsd:dateTime .
+
+ex:Obj_OneClosed a backlog:Objective ;
+    backlog:hasTargetValue "0"^^xsd:decimal ; backlog:hasTargetDirection backlog:Dir_Decrease ;
+    backlog:metricMovableBy ex:Item_A .
+ex:Item_A a backlog:Epic ; backlog:hasState backlog:Done .
+ex:Obs_OneClosed a backlog:MetricObservation ; backlog:observationFor ex:Obj_OneClosed ;
+    backlog:hasObservedValue "5"^^xsd:decimal ; backlog:observedAt "2026-09-04T00:00:00Z"^^xsd:dateTime .
+
+ex:Obj_TwoClosed a backlog:Objective ;
+    backlog:hasTargetValue "0"^^xsd:decimal ; backlog:hasTargetDirection backlog:Dir_Decrease ;
+    backlog:metricMovableBy ex:Item_B , ex:Item_C .
+ex:Item_B a backlog:Epic ; backlog:hasState backlog:Done .
+ex:Item_C a backlog:Story ; backlog:hasState backlog:Cancelled .
+ex:Obs_TwoClosed a backlog:MetricObservation ; backlog:observationFor ex:Obj_TwoClosed ;
+    backlog:hasObservedValue "5"^^xsd:decimal ; backlog:observedAt "2026-09-04T00:00:00Z"^^xsd:dateTime .

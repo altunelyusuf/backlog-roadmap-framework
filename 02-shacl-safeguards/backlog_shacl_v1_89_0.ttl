@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.88.0> ;
-    owl:versionInfo "1.88.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.89.0> ;
+    owl:versionInfo "1.89.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.88.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.87.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.86.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.85.0> ;
@@ -4110,6 +4111,31 @@ backlog:ObjectiveHasCorrectiveActionShape a sh:NodeShape ;
                 ?w backlog:hasState ?ws .
                 FILTER (?ws NOT IN (backlog:Done, backlog:Cancelled))
             }
+        }""" ] .
+
+backlog:ExhaustedCorrectiveAttemptsAdvisoryShape a sh:NodeShape ;
+    sh:targetClass backlog:Objective ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: two or more closed corrective attempts, still open -- consider whether closure-with-failure is the honest call"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: two or more real work items have already been asserted via metricMovableBy for this objective and reached Done or Cancelled, and it is still open. ObjectiveHasCorrectiveActionShape only checks that a live attempt exists right now; it cannot see a pattern of attempts that individually looked live and did not move the metric. Deliberately a Warning, not a Violation: whether to keep trying, redefine the objective, or close the mission Out_Abandoned with a real RetrospectiveFinding is a judgement this framework will not force, the same reasoning G58 already applied to AchievementStatus. backlog_lineage_compass's own --propose-retrospective exists to draft that option, not to make it automatic." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            FILTER NOT EXISTS { $this backlog:hasAchievementStatus ?st }
+            $this backlog:hasTargetValue ?t ; backlog:hasTargetDirection ?d .
+            ?obs backlog:observationFor $this ; backlog:hasObservedValue ?v ; backlog:observedAt ?at .
+            FILTER NOT EXISTS {
+                ?later backlog:observationFor $this ; backlog:observedAt ?lat .
+                FILTER (?lat > ?at)
+            }
+            FILTER ((?d = backlog:Dir_Decrease && ?v > ?t) ||
+                    (?d = backlog:Dir_Increase && ?v < ?t) ||
+                    (?d = backlog:Dir_Hold && ?v != ?t))
+            $this backlog:metricMovableBy ?w1 . ?w1 backlog:hasState ?ws1 .
+            FILTER (?ws1 IN (backlog:Done, backlog:Cancelled))
+            $this backlog:metricMovableBy ?w2 . ?w2 backlog:hasState ?ws2 .
+            FILTER (?ws2 IN (backlog:Done, backlog:Cancelled))
+            FILTER (?w1 != ?w2)
         }""" ] .
 
 backlog:CeremonyLinkAdvisoryShape a sh:NodeShape ;
