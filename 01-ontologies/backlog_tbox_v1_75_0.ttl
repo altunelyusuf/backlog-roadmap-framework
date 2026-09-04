@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.74.0> ;
-    owl:versionInfo "1.74.0" ;
+    owl:versionIRI <http://example.org/backlog/1.75.0> ;
+    owl:versionInfo "1.75.0" ;
+    owl:priorVersion <http://example.org/backlog/1.74.0> ;
     owl:priorVersion <http://example.org/backlog/1.73.0> ;
     owl:priorVersion <http://example.org/backlog/1.72.0> ;
     owl:priorVersion <http://example.org/backlog/1.71.0> ;
@@ -2286,10 +2287,10 @@ backlog:Rebaseline a owl:Class ;
 
 backlog:rebaselines a owl:ObjectProperty ;
     rdfs:domain backlog:Rebaseline ;
-    rdfs:range [ a owl:Class ; owl:unionOf ( backlog:Objective backlog:Milestone ) ] ;
+    rdfs:range [ a owl:Class ; owl:unionOf ( backlog:Objective backlog:Milestone backlog:Iteration ) ] ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "rebaselines"@en ;
-    skos:definition "What was moved."@en .
+    skos:definition "What was moved. Widened to include Iteration: an iteration's own planned window is a goalpost exactly like an objective's target or a milestone's date, and this framework's own real history includes one silently moved without a record before this widening -- the identical failure this class exists to prevent, just on a container this property could not yet name."@en .
 
 backlog:hasPreviousTarget a owl:DatatypeProperty ;
     rdfs:domain backlog:Rebaseline ; rdfs:range xsd:string ;
@@ -3248,6 +3249,18 @@ backlog:isCurrentBaseline a owl:DatatypeProperty , owl:FunctionalProperty ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "is current baseline"@en ;
     skos:definition "True for exactly one baseline per container. Superseded baselines are retained, not deleted, so schedule performance can be reported against the original as well as the current — the number a rebaselined project would rather not show."@en .
+
+backlog:hasBaselineStart a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:PlanBaseline ; rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has baseline start"@en ;
+    skos:definition "The container's own planned start date at the moment this baseline was set. Without a stored value there is nothing for a later, moved date to be compared against -- a baseline that does not itself carry the number it baselines cannot detect a silent move, only assert that one would matter." .
+
+backlog:hasBaselineEnd a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:PlanBaseline ; rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has baseline end"@en ;
+    skos:definition "The container's own planned end date at the moment this baseline was set, the same real gap hasBaselineStart closes for the start date." .
 
 #################################################################
 #  45. Multi-dimensional cost (v1.17.0) — BRF-EP3

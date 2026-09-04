@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.93.0> ;
-    owl:versionInfo "1.93.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.94.0> ;
+    owl:versionInfo "1.94.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.93.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.92.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.91.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.90.0> ;
@@ -2331,6 +2332,36 @@ backlog:PlanBaselineShape a sh:NodeShape ;
             $this backlog:baselineFor ?c ; backlog:isCurrentBaseline true .
             ?other backlog:baselineFor ?c ; backlog:isCurrentBaseline true .
             FILTER (?other != $this)
+        }""" ] .
+
+backlog:OpenIterationBaselineAdvisoryShape a sh:NodeShape ;
+    sh:targetClass backlog:Iteration ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: an open iteration has no plan baseline recorded"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: this iteration has a planned window and is not yet Done or Cancelled, but no PlanBaseline exists for it. Without one, a later change to its own dates has nothing to be checked against -- the exact gap that let this framework's own It12 have its window silently widened once already, before this shape existed. Deliberately Warning, not Violation: closed, historical iterations are not retroactively required to have one (G40's own precedent -- a done lineage's history is left alone), only open work going forward." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:iterationStart ?s ; backlog:iterationEnd ?e .
+            FILTER NOT EXISTS { ?m backlog:memberOfContainer $this ; backlog:hasState backlog:Done }
+            FILTER NOT EXISTS { ?m2 backlog:memberOfContainer $this ; backlog:hasState backlog:Cancelled }
+            FILTER EXISTS { ?any backlog:memberOfContainer $this }
+            FILTER NOT EXISTS { ?b backlog:baselineFor $this }
+        }""" ] .
+
+backlog:SilentContainerRebaselineShape a sh:NodeShape ;
+    sh:targetClass backlog:Iteration ;
+    sh:severity sh:Violation ;
+    rdfs:label "A container's dates match its own baseline, or a real Rebaseline explains why not (L1)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this iteration's own current start or end date disagrees with its baseline's recorded value, and no Rebaseline names this iteration to explain the move. Rebaseline's own real definition: 'a register may move its goalposts; it may not do so invisibly.' Widened this release to cover Iteration windows specifically, not only Objective targets and Milestone dates -- the identical failure, on a container the property could not previously name." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:iterationStart ?cs ; backlog:iterationEnd ?ce .
+            ?b backlog:baselineFor $this ; backlog:isCurrentBaseline true ;
+               backlog:hasBaselineStart ?bs ; backlog:hasBaselineEnd ?be .
+            FILTER (?cs != ?bs || ?ce != ?be)
+            FILTER NOT EXISTS { ?rb backlog:rebaselines $this }
         }""" ] .
 
 #################################################################

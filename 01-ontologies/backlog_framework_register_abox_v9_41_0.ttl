@@ -10,8 +10,10 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.39.0> ;
-    owl:versionInfo "9.39.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.41.0> ;
+    owl:versionInfo "9.41.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.40.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.39.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.38.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.37.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.36.0> ;
@@ -147,7 +149,7 @@ fw:Profile a backlog:AdoptionProfile ;
 fw:Register a backlog:Backlog ;
     backlog:hasIdentifier "BRF-REG" ;
     backlog:hasTitle "backlog-roadmap-framework development register" ;
-    backlog:hasState backlog:InProgress ;
+    backlog:hasState backlog:Done ;
     backlog:appliesDefinitionOfDone backlog:DoD_Baseline ;
     backlog:hasCommitment fw:Commitment_Dev .
 
@@ -254,8 +256,8 @@ fw:Out2_Scope a backlog:StageOutput ;
 #  analysis still supports them.
 #################################################################
 fw:Area_Governance a backlog:ScopeArea ;
-    backlog:areaLocation "LINEAGE_OPERATING_DISCIPLINE_v39_0_0.md" ;
-    backlog:areaMeasure "Governance rulings G1-G68, each a markdown heading with prose. Nothing in the ontology carries them; the lineage-discipline gate checks that claims about ENFORCEMENT match the shapes, and does not check that the rulings themselves exist as anything a query can reach." .
+    backlog:areaLocation "LINEAGE_OPERATING_DISCIPLINE_v41_0_0.md" ;
+    backlog:areaMeasure "Governance rulings G1-G70, each a markdown heading with prose. Nothing in the ontology carries them; the lineage-discipline gate checks that claims about ENFORCEMENT match the shapes, and does not check that the rulings themselves exist as anything a query can reach." .
 fw:Del_OntGovernance backlog:deliverableForArea fw:Area_Governance .
 fw:Area_CodeTables a backlog:ScopeArea ;
     backlog:areaLocation "03-tooling/ — 12 python modules" ;
@@ -4861,9 +4863,9 @@ fw:Obs_NoProseLost_20260903 a backlog:MetricObservation ;
 
 fw:S_RulingsQueryableDecision a backlog:Story ; backlog:hasIdentifier "BRF-S-RQ01" ;
     backlog:hasTitle "Convert governance rulings that name a real enforcing shape into queryable individuals; decision narratives stay human language" ;
-    backlog:hasState backlog:InProgress ; backlog:memberOfContainer fw:Register ;
+    backlog:hasState backlog:Done ; backlog:memberOfContainer fw:Register ;
     backlog:belongsToLineage fw:L_OntologyDriven ;
-    backlog:startedAt "2026-09-04T00:00:00Z"^^xsd:dateTime ;
+    backlog:startedAt "2026-09-04T00:00:00Z"^^xsd:dateTime ; backlog:finishedAt "2026-09-04T12:00:00Z"^^xsd:dateTime ;
     backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
     backlog:pursuesObjective fw:Obj_RulingsQueryable ;
     backlog:hasPriorityScore fw:Score_RulingsQueryableDecision ;
@@ -5087,6 +5089,7 @@ fw:ET_ConvertGovernanceRulings a backlog:ExecutionTask ; backlog:hasIdentifier "
     backlog:startedAt "2026-09-04T08:00:00Z"^^xsd:dateTime ; backlog:finishedAt "2026-09-04T12:00:00Z"^^xsd:dateTime .
 
 fw:AC_RulingsQueryableDecision a backlog:AcceptanceCriterion ;
+    backlog:satisfiedByArtifact "backlog:GovernanceRuling" ;
     backlog:hasGherkinText "Given a governance ruling names exactly one real, currently-live enforcing shape, When it is converted, Then a real GovernanceRuling individual exists carrying its identifier, checkable statement, and that shape -- and a ruling naming no single shape stays honestly prose rather than being forced to satisfy a link it does not have." .
 
 #################################################################
@@ -5179,3 +5182,33 @@ fw:S_RulingsQueryableDecision backlog:hasEvidence fw:Ev_RulingsQueryableDecision
 fw:Find_G68 a backlog:RetrospectiveFinding ; backlog:informsRuling "G68" ; backlog:hasFindingScope backlog:Scope_Methodology ;
     backlog:hasRootCause "A prior pass's own boundary was re-verified rather than trusted, surfacing a real problem: a metric counting only shape-backed conversions could never reach its own target, since genuine process lessons will always exist. A ruling's own real-time authoring adds a new heading no earlier count could have included -- a claim of a final number is stale the moment the ruling describing it is itself written down." ;
     backlog:hasRemedy "RetrospectiveFinding built for all prior non-shape-backed rulings and for this one, closing the metric honestly; hasFindingScope Scope_Methodology throughout." .
+
+fw:Find_G69 a backlog:RetrospectiveFinding ; backlog:informsRuling "G69" ; backlog:hasFindingScope backlog:Scope_Methodology ;
+    backlog:hasRootCause "Investigating why the health check reports many advisory warnings found two real, silent mistakes -- a story never actually marked finished after its underlying work was, and a top-level register still labelled in-progress after everything inside it had genuinely closed -- both caught only because the warnings were read individually rather than trusted as a single count." ;
+    backlog:hasRemedy "Both fixed directly. The remaining warnings sorted honestly: most reflect real, deliberate differences in how this project works rather than defects, and are left alone rather than papered over; one was deliberately left as-is, having checked this project's own prior lesson against inventing a number just to silence a check." .
+
+#################################################################
+#  v1.191.0 -- the Rebaseline gap this session found in its own
+#  history, corrected honestly: It12's own window was widened from
+#  a 2-hour plan to 2 weeks with no record. PlanBaseline captures
+#  what was originally set; Rebaseline records the real move, why,
+#  and that the owner has now reviewed and ratified it after the
+#  fact, per the owner's own direct instruction to fix this.
+#################################################################
+
+fw:PB_It12 a backlog:PlanBaseline ; backlog:baselineFor fw:It12 ; backlog:isCurrentBaseline true ;
+    backlog:baselinedAt "2026-09-04T08:00:00Z"^^xsd:dateTime ;
+    backlog:hasBaselineStart "2026-09-04T08:00:00Z"^^xsd:dateTime ;
+    backlog:hasBaselineEnd "2026-09-04T10:00:00Z"^^xsd:dateTime .
+
+fw:RB_It12 a backlog:Rebaseline ; backlog:rebaselines fw:It12 ;
+    backlog:hasPreviousTarget "2026-09-04T10:00:00Z (original 2-hour plan)" ;
+    backlog:hasNewTarget "2026-09-18T00:00:00Z (widened to 2 weeks)" ;
+    backlog:hasRebaselineRationale "The original 2-hour window was never realistic for the real conversion work it covered and was widened directly in the data with no separate record -- exactly the failure this class exists to prevent, caught only when the owner asked this session to investigate its own advisory warnings individually rather than in aggregate. Recorded retroactively, honestly labelled as such, rather than silently left unrecorded now that the gap is known." ;
+    backlog:decidedBy backlog:Owner .
+
+fw:Ruling_G70 a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G70" ;
+    rdfs:label "A silently-moved iteration window is caught structurally, for every project this framework governs"@en ;
+    backlog:hasRulingStatement "Any open iteration with real work in it and no PlanBaseline is flagged; once a baseline exists, an iteration's own current dates must match it or a real Rebaseline must name the move -- Rebaseline's own reach widened to cover Iteration, not only Objective and Milestone." ;
+    backlog:enforcedByShape backlog:OpenIterationBaselineAdvisoryShape , backlog:SilentContainerRebaselineShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .

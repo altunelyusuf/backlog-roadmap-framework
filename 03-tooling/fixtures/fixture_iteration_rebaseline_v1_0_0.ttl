@@ -1,0 +1,50 @@
+# Iteration plan-baseline enforcement — test drive, not a construction.
+#
+# Proves discrimination for OpenIterationBaselineAdvisoryShape (Warning: an
+# open iteration has no baseline) and SilentContainerRebaselineShape
+# (Violation: a baselined iteration's own dates moved with no Rebaseline
+# naming it) -- the real gap this session's own It12 fell into, closed here.
+#
+# It_NoBaseline: open, has a real member, no PlanBaseline -> advisory fires.
+# It_SilentMove: has a PlanBaseline, current dates disagree with it, no
+#   Rebaseline names it -> violation fires.
+# It_HonestMove: identical disagreement, but a real Rebaseline names it ->
+#   silent -- the move is real, but not invisible.
+# It_Closed: no baseline, but every member is Done -> silent, matching
+#   G40's own precedent that closed history is not retroactively required.
+
+@prefix backlog: <http://example.org/backlog#> .
+@prefix ex:      <http://example.org/rebaselinetest#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+ex:It_NoBaseline a backlog:Iteration ; backlog:hasIdentifier "It_NoBaseline" ;
+    backlog:iterationStart "2026-09-04T00:00:00Z"^^xsd:dateTime ;
+    backlog:iterationEnd "2026-09-18T00:00:00Z"^^xsd:dateTime .
+ex:W_InNoBaseline a backlog:Story ; backlog:hasState backlog:InProgress ; backlog:memberOfContainer ex:It_NoBaseline .
+
+ex:It_SilentMove a backlog:Iteration ; backlog:hasIdentifier "It_SilentMove" ;
+    backlog:iterationStart "2026-09-04T00:00:00Z"^^xsd:dateTime ;
+    backlog:iterationEnd "2026-09-18T00:00:00Z"^^xsd:dateTime .
+ex:W_InSilentMove a backlog:Story ; backlog:hasState backlog:InProgress ; backlog:memberOfContainer ex:It_SilentMove .
+ex:PB_SilentMove a backlog:PlanBaseline ; backlog:baselineFor ex:It_SilentMove ; backlog:isCurrentBaseline true ;
+    backlog:baselinedAt "2026-09-04T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasBaselineStart "2026-09-04T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasBaselineEnd "2026-09-04T02:00:00Z"^^xsd:dateTime .
+
+ex:It_HonestMove a backlog:Iteration ; backlog:hasIdentifier "It_HonestMove" ;
+    backlog:iterationStart "2026-09-04T00:00:00Z"^^xsd:dateTime ;
+    backlog:iterationEnd "2026-09-18T00:00:00Z"^^xsd:dateTime .
+ex:W_InHonestMove a backlog:Story ; backlog:hasState backlog:InProgress ; backlog:memberOfContainer ex:It_HonestMove .
+ex:PB_HonestMove a backlog:PlanBaseline ; backlog:baselineFor ex:It_HonestMove ; backlog:isCurrentBaseline true ;
+    backlog:baselinedAt "2026-09-04T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasBaselineStart "2026-09-04T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasBaselineEnd "2026-09-04T02:00:00Z"^^xsd:dateTime .
+ex:RB_HonestMove a backlog:Rebaseline ; backlog:rebaselines ex:It_HonestMove ;
+    backlog:hasPreviousTarget "2026-09-04T02:00:00Z" ; backlog:hasNewTarget "2026-09-18T00:00:00Z" ;
+    backlog:hasRebaselineRationale "Fixture-only: the work genuinely needed more time." ;
+    backlog:decidedBy backlog:Owner .
+
+ex:It_Closed a backlog:Iteration ; backlog:hasIdentifier "It_Closed" ;
+    backlog:iterationStart "2026-08-01T00:00:00Z"^^xsd:dateTime ;
+    backlog:iterationEnd "2026-08-15T00:00:00Z"^^xsd:dateTime .
+ex:W_InClosed a backlog:Story ; backlog:hasState backlog:Done ; backlog:memberOfContainer ex:It_Closed .
