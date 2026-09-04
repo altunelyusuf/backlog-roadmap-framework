@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v34.0.0
+# Lineage Operating Discipline — v35.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -1466,4 +1466,38 @@ pattern to already be shared before it can be recorded — and a mode proven to 
 proposed for promotion to `Scope_Methodology` the same way `FitGapFinding`'s own methodology-scope
 escalation already works, through the handover/proposal mechanism this ruling's own OE proposal is
 itself an instance of.
+
+## G64 — A real fit-gap analysis: measurement was disconnected from "overall progress," not merely under-analysed
+
+Asked directly to conduct a fit-gap analysis on a specific claim: measurement should be part of
+overall progress, not only analysis. Checked rather than assumed. `backlog_roadmap_report`'s own
+Section 10 — this package's single, official "how is this going" answer — computes cycle time,
+item age, velocity and forecast entirely from `startedAt`/`finishedAt` timestamps.
+`grep -c "MetricObservation"` against the script: zero. A mission can show fast flow, high
+velocity, everything Done, while every real objective that work existed to serve sits still or
+regresses — precisely `fw:Find_EPRulingsIneffective`'s own real story, previously visible only to a
+separate advisory pass, never to the report that answers "progress."
+
+**Built: a real "measurement-confirmed progress" subsection**, not a new mandatory `ReportSection`
+(checked first: zero real `RoadmapReport` individuals exist in this register — that mandatory-
+section machinery is dormant, unexercised infrastructure, and extending it would have been risk
+for no proven benefit). For every finished work item asserted via `metricMovableBy`, reports
+whether its objective's own bracketing observations confirm it actually moved — reusing
+`IneffectiveCorrectiveAttemptAdvisoryShape`'s own exact condition, so the report and the validator
+can never honestly disagree.
+
+**A real bug caught and fixed before shipping, not merely before publishing this ruling.** The
+first version picked the *earliest* observation at or after an item's `finishedAt` as "after" —
+for `EP_Rulings` that meant the `0.0` reading taken moments after it closed, reporting `18.0 -> 0.0`
+as `MOVED`. The honest, current answer is `18.0 -> 38`, `DID NOT MOVE` — the same finding
+`G62` already recorded by hand. Caught by running the new section against BRSF's own real data and
+noticing the disagreement with a ruling already on record, not by inspection alone. Fixed to match
+`IneffectiveCorrectiveAttemptAdvisoryShape`'s own real semantics exactly: the *absolute* latest
+observation, not the first one after closing — a temporary improvement that later regressed must
+read as it currently stands, not as it once did.
+
+Run end to end against BRSF's own real register after the fix: correct on `EP_Rulings`, and it
+surfaced one further real, honest gap unprompted — `fw:S_RulingsQueryableDecision`'s own parent
+`Init_OntologyDrivenConversion` has no bracketing observation at all, reported plainly as
+"flow counted it, nothing confirms it moved" rather than silently passed over.
 

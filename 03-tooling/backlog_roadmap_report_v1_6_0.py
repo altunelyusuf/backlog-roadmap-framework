@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_roadmap_report v1.5.0 — the roadmap, computed.
+"""backlog_roadmap_report v1.6.0 — the roadmap, computed.
 
 A roadmap is this script's output, never a maintained document. The moment a
 computed value is copied into prose it starts decaying, and a report that is
@@ -13,7 +13,9 @@ suite, not just this script):
   1. NEXT under the throughput model
   2. NEXT under the launch-scoped model      <- both printed, always
   3. Full ranked backlog (COMPUTED — see below)
- 10. Flow and forecast (COMPUTED — cycle time, item age, velocity)
+ 10. Flow and forecast (COMPUTED — cycle time, item age, velocity, and
+     measurement-confirmed progress: whether recently finished work actually
+     moved the objective it was for, not only that it finished)
   4. Flagged items (not-yet-scoreable, with reasons)
   5. Silent-gap check                        <- must read zero
   6. Launch readiness by package
@@ -29,7 +31,7 @@ the two answers coincide by construction. The two are never reconciled by
 arithmetic; a disagreement is displayed so a human resolves it knowingly.
 
 Usage:
-  backlog_roadmap_report_v1_5_0.py REGISTER.ttl [--method IRI] [--emit report.ttl]
+  backlog_roadmap_report_v1_6_0.py REGISTER.ttl [--method IRI] [--emit report.ttl]
 """
 
 import argparse
@@ -220,7 +222,7 @@ def main():
     print("roadmap report  : computed %s" % now.isoformat())
     print("register        : %s" % os.path.basename(args.register))
     print("method          : %s" % (args.method or "any"))
-    print("tooling         : rdflib %s, backlog_roadmap_report v1.5.0" % rdflib.__version__)
+    print("tooling         : rdflib %s, backlog_roadmap_report v1.6.0" % rdflib.__version__)
 
     gates = active_gates(g)
     all_rows = ranked(g, method)
@@ -399,6 +401,57 @@ def main():
                      g.value(fc, BL.forecastIterationsObserved)))
             for a in g.objects(fc, BL.forecastAssumption):
                 print("      assumes: %s" % str(a)[:96])
+
+        # Measurement-confirmed progress: cycle time and velocity above answer
+        # "how much work finished." Neither answers "did the thing that work
+        # was for actually move." A mission can show fast flow while every
+        # objective it exists to serve sits still or regresses -- the exact
+        # gap fw:Find_EPRulingsIneffective recorded by hand before this
+        # section existed to compute it. Reuses the identical before/after
+        # comparison IneffectiveCorrectiveAttemptAdvisoryShape checks, so
+        # this prints nothing a validation run would not already flag --
+        # it surfaces it here, next to the flow numbers "progress" usually
+        # means, instead of only in a separate advisory pass.
+        print("\n  measurement-confirmed progress:")
+        finished_attempts = [w for w in set(g.subjects(BL.hasState, None))
+                              if g.value(w, BL.hasState) in (BL.Done, BL.Cancelled)
+                              and g.value(w, BL.startedAt) is not None
+                              and g.value(w, BL.finishedAt) is not None
+                              and any(True for _ in g.subjects(BL.metricMovableBy, w))]
+        if not finished_attempts:
+            print("      no finished work item names a real objective via metricMovableBy")
+            print("      -- flow above is real, but nothing here confirms it moved a metric")
+        for w in sorted(finished_attempts, key=str):
+            started, finished = g.value(w, BL.startedAt), g.value(w, BL.finishedAt)
+            for obj in g.subjects(BL.metricMovableBy, w):
+                direction = g.value(obj, BL.hasTargetDirection)
+                before = after = None
+                for o in g.subjects(BL.observationFor, obj):
+                    oa = g.value(o, BL.observedAt)
+                    if oa is None:
+                        continue
+                    if oa <= started and (before is None or oa > g.value(before, BL.observedAt)):
+                        before = o
+                    # "after" is the ABSOLUTE latest observation, matching
+                    # IneffectiveCorrectiveAttemptAdvisoryShape's own real
+                    # condition exactly (no later observation exists) --
+                    # not the earliest reading right after finishedAt, which
+                    # would honestly report EP_Rulings' own real regression
+                    # (0.0 right after closing, 38 as of the latest reading)
+                    # as "MOVED" when the current truth is the opposite.
+                    if oa >= finished and (after is None or oa > g.value(after, BL.observedAt)):
+                        after = o
+                if before is None or after is None:
+                    print("      %-24s -> %-24s : no bracketing measurement -- flow counted it, nothing confirms it moved"
+                          % (ident(g, w), ident(g, obj)))
+                    continue
+                vb, va = g.value(before, BL.hasObservedValue), g.value(after, BL.hasObservedValue)
+                d = str(direction).split("#")[-1] if direction else ""
+                moved = ((d == "Dir_Decrease" and float(va) < float(vb)) or
+                         (d == "Dir_Increase" and float(va) > float(vb)) or
+                         (d == "Dir_Hold" and float(va) == float(vb)))
+                tag = "MOVED %s -> %s" % (vb, va) if moved else "DID NOT MOVE %s -> %s" % (vb, va)
+                print("      %-24s -> %-24s : %s" % (ident(g, w), ident(g, obj), tag))
 
     print("\n== 4. Flagged items (not yet scoreable) ==")
     flagged = [i for i in g.subjects(BL.notYetScoreable, Literal(True))]

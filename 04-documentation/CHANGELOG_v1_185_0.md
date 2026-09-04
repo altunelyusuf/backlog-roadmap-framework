@@ -1,5 +1,38 @@
 # Changelog
 
+## v1.185.0 — 2026-09-02 (MAJOR: a real fit-gap analysis — measurement was disconnected from "overall progress," not merely under-analysed; a real bug caught and fixed before shipping)
+
+**Asked directly to conduct a fit-gap analysis on a specific claim: measurement should be part of
+overall progress, not only analysis.** Checked rather than assumed: `backlog_roadmap_report`'s own
+Section 10 — this package's single, official "how is this going" answer — computes cycle time,
+item age, velocity and forecast entirely from work-item timestamps. Zero references to
+`MetricObservation` anywhere in the script. A mission could show fast flow and everything Done
+while every real objective sits still or regresses, and the report that answers "progress" would
+never say so.
+
+**Built: a real "measurement-confirmed progress" subsection** (`backlog_roadmap_report_v1_6_0.py`),
+not a new mandatory report section — checked first that the mandatory-section machinery is
+dormant, unexercised infrastructure (zero real `RoadmapReport` individuals exist), so extending it
+would have been risk for no proven benefit. For every finished work item asserted via
+`metricMovableBy`, reports whether its objective's own bracketing observations confirm it actually
+moved, reusing `IneffectiveCorrectiveAttemptAdvisoryShape`'s own exact condition so the report and
+the validator can never honestly disagree.
+
+**A real bug caught and fixed before shipping.** The first version picked the earliest observation
+after an item's `finishedAt` as "after" — for `EP_Rulings` that meant the reading taken moments
+after it closed, reporting a false `MOVED`. Caught by running the new section against BRSF's own
+real data and noticing it disagreed with `fw:Find_EPRulingsIneffective`, already on record. Fixed
+to use the absolute latest observation, matching the SHACL shape's own real semantics exactly.
+
+Run end to end after the fix: correct on `EP_Rulings`, and it surfaced one further real gap
+unprompted — `Init_OntologyDrivenConversion` has no bracketing observation at all, now reported
+plainly rather than silently passed over.
+
+`G64` records the full reasoning. 0 SHACL violations on the real register (77 warnings, unchanged
+— this release extends tooling, not vocabulary). All six shipped checkers PASS. Lineage-discipline
+check PASS.
+
+
 ## v1.184.0 — 2026-09-02 (MAJOR: a real correction of scope — compliance with OE, not migration into it; measurements enforced into analysis; a two-tier catalogue; a real OE compliance investigation and proposal)
 
 **Corrected directly: the prior release misread the request.** The ask was that BRSF's own ontology
