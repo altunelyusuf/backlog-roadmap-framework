@@ -1,0 +1,33 @@
+# Checkpoint re-observation — test drive, not a construction.
+#
+# Proves discrimination for CheckpointObservedShape, closing the autonomous
+# re-measurement gap MetricObservation's own real definition names directly:
+# "Without observations a register can declare any objective and never be
+# shown to have failed one." A live demonstration grounded this shape's own
+# real occasion: Obj_RulingsQueryable's last real observation (after It7)
+# showed 0, but this session alone added 38 more "### G" headings to the
+# discipline document with no re-observation recorded against any of its
+# own 14 passed checkpoints.
+#
+# Obj_Future: checkpoint dated in the future, no observation -> silent
+#   (nothing has come due yet).
+# Obj_PassedUnobserved: checkpoint passed, no observation at or after it
+#   -> fires.
+# Obj_PassedObserved: checkpoint passed, a real observation dated after it
+#   exists -> silent.
+
+@prefix backlog: <http://example.org/backlog#> .
+@prefix ex:      <http://example.org/cptest#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+ex:Obj_Future a backlog:Objective ; backlog:hasCheckpoint ex:CP_Future .
+ex:CP_Future a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2099-01-01T00:00:00Z"^^xsd:dateTime .
+
+ex:Obj_PassedUnobserved a backlog:Objective ; backlog:hasCheckpoint ex:CP_PassedUnobserved .
+ex:CP_PassedUnobserved a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-01-01T00:00:00Z"^^xsd:dateTime .
+
+ex:Obj_PassedObserved a backlog:Objective ; backlog:hasCheckpoint ex:CP_PassedObserved .
+ex:CP_PassedObserved a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-01-01T00:00:00Z"^^xsd:dateTime .
+ex:Obs_PassedObserved a backlog:MetricObservation ; backlog:observationFor ex:Obj_PassedObserved ;
+    backlog:observedAt "2026-02-01T00:00:00Z"^^xsd:dateTime ; backlog:hasObservedValue "0"^^xsd:decimal ;
+    backlog:hasObservationMethod "Fixture-only: dated after the checkpoint it re-verifies." .

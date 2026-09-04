@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.30.0> ;
-    owl:versionInfo "9.30.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.31.0> ;
+    owl:versionInfo "9.31.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.30.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.29.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.28.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.27.0> ;
@@ -245,8 +246,8 @@ fw:Out2_Scope a backlog:StageOutput ;
 #  analysis still supports them.
 #################################################################
 fw:Area_Governance a backlog:ScopeArea ;
-    backlog:areaLocation "LINEAGE_OPERATING_DISCIPLINE_v28_0_0.md" ;
-    backlog:areaMeasure "Governance rulings G1-G57, each a markdown heading with prose. Nothing in the ontology carries them; the lineage-discipline gate checks that claims about ENFORCEMENT match the shapes, and does not check that the rulings themselves exist as anything a query can reach." .
+    backlog:areaLocation "LINEAGE_OPERATING_DISCIPLINE_v29_0_0.md" ;
+    backlog:areaMeasure "Governance rulings G1-G58, each a markdown heading with prose. Nothing in the ontology carries them; the lineage-discipline gate checks that claims about ENFORCEMENT match the shapes, and does not check that the rulings themselves exist as anything a query can reach." .
 fw:Del_OntGovernance backlog:deliverableForArea fw:Area_Governance .
 fw:Area_CodeTables a backlog:ScopeArea ;
     backlog:areaLocation "03-tooling/ — 12 python modules" ;
@@ -3933,9 +3934,8 @@ fw:Ev_MissionRead a backlog:TestEvidence ;
     backlog:verifiedByTool "manual resolution against tbox and shapes" ;
     backlog:attestsCriterion fw:AC_EP_StandardRows_S2 .
 
-fw:Mission_OntologyDriven backlog:hasMissionOutcome backlog:Out_Achieved ;
-    backlog:outcomeRationale "Achieved. Six objectives met outright: governance rulings queryable 18 to 0, classification tables exported 23 to 0, scripts deciding what is valid 3 to 0, rules decided in code 3 to 0, and the two containment ceilings held at 0. The seventh, Obj_RowsUnchecked, carries Ach_Retrospective: its counter reads 15 on a proxy for the mission clause, and each of the fifteen rows was read against the clause itself and found to explain something the ontology already defines and enforces. Every goal is reached or has a status saying why it no longer steers, which is the only condition under which this outcome may be set." ;
-    backlog:retiredAtCommit "pending-commit" .
+fw:Mission_OntologyDriven backlog:hasMissionOutcome backlog:Out_InFlight ;
+    backlog:outcomeRationale "Corrected from a premature Out_Achieved (set 2026-08-27, before this mission's own CheckpointObservedShape existed to catch it). Six of seven objectives held or improved to target. The seventh, Obj_RulingsQueryable, was genuinely at target (0) as of the It7 observation, but Metric_Obj_RulingsQueryable's own counting method ('### G' headings in the discipline document) continued to count every governance ruling authored afterward as part of this mission's own ongoing operation -- not a failure of the original migration, but a live demonstration that the metric and the mission's own continued work are the same activity. Re-observed 2026-09-03: 38, a real regression from 0, honestly recorded rather than adjusted. Neither Ach_Retrospective (the count has not stopped moving; the event it would report is not past) nor Ach_Withdrawn (the measure was not wrong) is an honest fit for this objective's own real status, so the mission stays InFlight rather than forcing either. Obj_RowsUnchecked's own Ach_Retrospective stands unchanged." .
 
 fw:L_OntologyDriven backlog:lineageArchived false .
 
@@ -4811,3 +4811,35 @@ fw:Cost_Init_Tokens a backlog:DimensionalCost ;
     backlog:alongDimension fw:Dim_TokenSpend ;
     backlog:hasQuantity "500000"^^xsd:decimal ;
     backlog:isEstimatedCost true .
+
+#################################################################
+#  v1.182.0 — CheckpointObservedShape, closing the exact gap the
+#  owner named: nothing previously required autonomous
+#  re-measurement at a checkpoint's own due date. Test-driven
+#  honestly against BRSF's own real register: 6 real violations
+#  (3 objectives, 2 checkpoints each) found, not assumed -- the
+#  other 4 objectives already had qualifying later observations.
+#  Closed with three real, dated re-measurements, not a synthetic
+#  pass.
+#################################################################
+
+fw:Obs_RulingsQueryable_20260903 a backlog:MetricObservation ;
+    backlog:observesMetric fw:Metric_Obj_RulingsQueryable ;
+    backlog:observationFor fw:Obj_RulingsQueryable ;
+    backlog:hasObservedValue "38"^^xsd:decimal ;
+    backlog:observedAt "2026-09-03T20:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Counted the same way as the baseline and the It7 reading: headings matching '### G' in LINEAGE_OPERATING_DISCIPLINE_v28_0_0.md (the version current at the moment of counting, before this same release added G58 recording the count itself). Genuine regression from the It7 reading of 0: this session alone added G45 through G57 (13 rulings) to a document that, at last observation, had none outstanding; the full current count (38) includes rulings from sessions between It7 and now. Recorded honestly as a real regression, not adjusted to fit the target." .
+
+fw:Obs_NoNewClasses_20260903 a backlog:MetricObservation ;
+    backlog:observesMetric fw:Metric_Obj_NoNewClasses ;
+    backlog:observationFor fw:Obj_NoNewClasses ;
+    backlog:hasObservedValue "0"^^xsd:decimal ;
+    backlog:observedAt "2026-09-03T20:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "JUDGED, per the objective's own real measurement kind. This session's own work (RegisterSession, RICEScore, ScopeChange, Spike, HumanInteraction, KickOff, EnhancementProposal, Opportunity, Impediment, DimensionalCost, the two new SHACL shapes this release) connected real individuals and properties to classes already present in the TBox; no new owl:Class was authored. Held at the target." .
+
+fw:Obs_NoProseLost_20260903 a backlog:MetricObservation ;
+    backlog:observesMetric fw:Metric_Obj_NoProseLost ;
+    backlog:observationFor fw:Obj_NoProseLost ;
+    backlog:hasObservedValue "0"^^xsd:decimal ;
+    backlog:observedAt "2026-09-03T20:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "This session's own real changes to LINEAGE_OPERATING_DISCIPLINE and the TBox were purely additive (new G-rulings, new class/property/shape definitions with their own real skos:definition prose); no existing explanatory paragraph was removed. Not independently re-run against the v1.104.0 line-count baseline the original observation used -- a judgement of this session's own real diff, disclosed as such rather than presented as the same mechanical count." .

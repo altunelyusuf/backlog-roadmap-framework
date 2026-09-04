@@ -1,5 +1,45 @@
 # Changelog
 
+## v1.179.0 — 2026-09-02 (MAJOR: autonomous re-measurement enforced at checkpoint due dates, not only at authoring — a live regression found and honestly recorded, a premature mission-achieved claim corrected)
+
+**Challenged directly: why isn't re-measurement autonomous, and named as a critical methodological
+gap.** Investigated rather than assumed. `MeasurementKindShape` already requires a shipped query
+for `Meas_Derived` objectives, deliberately not for `Meas_Counted`/`Meas_Judged` ones — a real
+design choice, not an oversight. But nothing, at any measurement kind, required a checkpoint's own
+passed date to be answered by a real observation. `MetricObservation`'s own real definition names
+the exact risk this leaves open: "without observations a register can declare any objective and
+never be shown to have failed one."
+
+**A live demonstration, not a hypothetical.** All 14 checkpoints across this mission's seven real
+objectives had already passed. Running `Obj_RulingsQueryable`'s own real, historical measurement
+method (recovered from a real prior observation's own `hasObservationMethod`, not guessed) against
+the live discipline document found `38` against a target of `0` last confirmed after iteration 7.
+This session's own thirteen new rulings are most of that regression — added with no re-observation
+ever recorded against the checkpoints they passed.
+
+**Built: `CheckpointObservedShape`.** A checkpoint whose own date has passed and whose objective
+carries no `MetricObservation` dated at or after it is now a `Violation`. Proven discriminating
+(`fixture_checkpoint_observed_v1_0_0.ttl`, three cases). Test-driven honestly against BRSF's own
+real register: `6` real violations found — three objectives, two checkpoints each — the other four
+already had qualifying later observations on record, so the shape fired precisely on the genuinely
+stale ones.
+
+**Closed with three real, dated re-measurements**, each disclosing its own method: `Obj_RulingsQueryable`
+(`38`, a genuine regression, recorded as one, not adjusted), `Obj_NoNewClasses` (`0`, judged),
+`Obj_NoProseLost` (`0`, judged, disclosed as a judgement rather than the original mechanical
+method).
+
+**A second real finding this closure surfaced.** Recording the genuine regression tripped a
+pre-existing check: `Mission_OntologyDriven` had been marked `Out_Achieved` before this shape
+existed to catch a later regression. Neither `Ach_Retrospective` nor `Ach_Withdrawn` was an honest
+fit for the objective's own real situation — forcing either would have repeated the exact
+dishonest-fit failure this framework's own discipline already names. Corrected to `Out_InFlight`,
+with the real reasoning recorded in the mission's own `outcomeRationale`.
+
+`G58` records the full finding. 0 SHACL violations on the real register (76 warnings). All six
+shipped checkers PASS. Lineage-discipline check PASS.
+
+
 ## v1.178.0 — 2026-09-02 (MINOR: the cost/risk/prediction set re-investigated properly — four real occasions found, two more disqualified on confirmed infrastructure cost, three genuinely absent)
 
 **Instructed to proceed as far as possible.** The 12 remaining classes from the original 30 —

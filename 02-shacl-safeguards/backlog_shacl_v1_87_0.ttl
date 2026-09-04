@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.86.0> ;
-    owl:versionInfo "1.86.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.87.0> ;
+    owl:versionInfo "1.87.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.86.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.85.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.84.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.83.0> ;
@@ -4064,6 +4065,23 @@ backlog:ObjectiveCheckpointTimingShape a sh:NodeShape ;
             $this a backlog:ObjectiveCheckpoint .
             FILTER NOT EXISTS { $this backlog:checkpointDate ?d }
             FILTER NOT EXISTS { $this backlog:checkpointCondition ?c }
+        }""" ] .
+
+backlog:CheckpointObservedShape a sh:NodeShape ;
+    sh:targetClass backlog:ObjectiveCheckpoint ;
+    sh:severity sh:Violation ;
+    rdfs:label "A passed checkpoint has a real observation dated at or after it (L1/L3)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1/L3: this checkpoint's own date has passed and its objective carries no MetricObservation dated at or after it. A baseline and a target state an intention; only an observation settles whether it held, and a passed checkpoint with none is exactly how a register declares an objective and is never shown to have failed it -- MetricObservation's own real definition names this failure directly. Autonomous re-measurement at the checkpoint, not only at the objective's own authoring, is what this closes." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:checkpointDate ?cd .
+            FILTER (?cd < NOW())
+            ?obj backlog:hasCheckpoint $this .
+            FILTER NOT EXISTS {
+                ?obs a backlog:MetricObservation ; backlog:observationFor ?obj ; backlog:observedAt ?oa .
+                FILTER (?oa >= ?cd)
+            }
         }""" ] .
 
 backlog:CeremonyLinkAdvisoryShape a sh:NodeShape ;

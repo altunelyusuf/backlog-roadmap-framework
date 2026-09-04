@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v28.0.0
+# Lineage Operating Discipline — v29.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -1213,4 +1213,49 @@ same rigor and found, honestly, to have nothing to connect to yet.
 
 `0` violations at every one of the four builds, verified independently after each, not only at the
 end.
+
+## G58 — Autonomous re-measurement enforced at checkpoint due dates, not only at authoring; a live regression found and honestly recorded, not adjusted
+
+Challenged directly: after a manual measurement report, asked why re-measurement isn't autonomous,
+and named it as a critical methodological gap. Investigated rather than assumed. `MeasurementKindShape`
+already requires a shipped query for `Meas_Derived` objectives, deliberately not for `Meas_Counted`
+or `Meas_Judged` ones (a design choice, not an oversight — those are meant to be reproducible by
+direct count or stated judgement). But nothing, at any measurement kind, required a checkpoint's own
+passed date to be answered by a real observation — `MetricObservation`'s own real definition names
+the exact risk: "without observations a register can declare any objective and never be shown to
+have failed one."
+
+**A live demonstration, not a hypothetical.** All 14 checkpoints across this mission's seven real
+objectives had already passed. Running `Obj_RulingsQueryable`'s own real, historical measurement
+method (count `### G` headings in the discipline document — recovered from a real prior
+`MetricObservation`'s own `hasObservationMethod`, not guessed) against the live document found `38`,
+against a target of `0` last confirmed at `0` after iteration 7. This session's own thirteen new
+rulings (`G45`–`G57`) are most of that regression, added with no re-observation ever recorded
+against the checkpoints they passed.
+
+**Built:** `CheckpointObservedShape` — a checkpoint whose own date has passed and whose objective
+carries no `MetricObservation` dated at or after it is now a `Violation`. Proven discriminating
+(`fixture_checkpoint_observed_v1_0_0.ttl`, three cases: a future checkpoint stays silent; a passed,
+unobserved one fires; a passed one with a real later observation is silent). Test-driven honestly
+against BRSF's own real register: `6` real violations found (three objectives, two checkpoints
+each) — the other four objectives already had qualifying later observations on record, so the
+shape fired on exactly the genuinely stale ones, not on everything.
+
+**Closed with three real, dated re-measurements**, each disclosing its own method rather than
+presenting a number with no way to check it: `Obj_RulingsQueryable` (`38`, a genuine regression,
+recorded as one), `Obj_NoNewClasses` (`0`, judged — this session's own real work connected
+existing classes, authored none new), `Obj_NoProseLost` (`0`, judged against this session's own
+purely additive real changes, disclosed as a judgement rather than the original mechanical
+line-count method).
+
+**A second real finding this closure surfaced, not separately searched for.** Recording the
+genuine regression tripped `AchievedOnlyWhenClearShape`, a pre-existing check: `Mission_OntologyDriven`
+had been marked `Out_Achieved` on 2026-08-27, before this shape existed to catch a later
+regression. Neither `Ach_Retrospective` (the count has not stopped moving; there is no past event
+to report) nor `Ach_Withdrawn` (the measure was not wrong) was an honest fit for
+`Obj_RulingsQueryable`'s own real situation — forcing either would have been the identical
+dishonest fit `G43`/`G46` already named. Corrected to `Out_InFlight`, with the real reasoning
+recorded in the mission's own `outcomeRationale`: the metric and the mission's own continued
+operation are the same activity, and a mission that keeps producing the thing its own objective
+counts cannot honestly claim that objective is finished.
 
