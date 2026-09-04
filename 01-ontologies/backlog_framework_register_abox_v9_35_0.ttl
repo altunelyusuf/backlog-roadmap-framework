@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.34.0> ;
-    owl:versionInfo "9.34.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.35.0> ;
+    owl:versionInfo "9.35.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.34.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.33.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.32.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.31.0> ;
@@ -4886,3 +4887,19 @@ fw:Find_EPRulingsIneffective a backlog:RetrospectiveFinding ;
     backlog:relatesToWorkItem fw:EP_Rulings ;
     backlog:hasRootCause "Confirmed by IneffectiveCorrectiveAttemptAdvisoryShape's own real before/after comparison, not asserted: EP_Rulings started when Obj_RulingsQueryable's own metric read 18, finished when it still read (effectively) the same order of magnitude by the same counting method, because the metric's own count includes governance rulings authored after EP_Rulings closed -- work the epic was never scoped to address. Not a failure of EP_Rulings' own real work (the original 18-ruling migration genuinely completed), but confirmation that a corrective action scoped to a point-in-time backlog cannot move a metric that keeps counting new, unrelated growth." ;
     backlog:hasRemedy "fw:S_RulingsQueryableDecision, already built (G60), is the real remedy in progress: decide whether the metric should keep counting ongoing governance growth or be redefined to close honestly. This finding records why EP_Rulings itself could never have been the fix." .
+
+#################################################################
+#  v1.186.0 — closing the gap backlog_roadmap_report_v1_6_0.py's
+#  own new measurement-confirmed progress section surfaced
+#  unprompted: fw:Init_OntologyDrivenConversion had no bracketing
+#  observation for Obj_BRSFConformanceHeld after its own
+#  finishedAt. Recorded honestly, same method as the existing
+#  reading, re-verified immediately before recording (B3).
+#################################################################
+
+fw:Obs_BRSFConformanceHeld_v2 a backlog:MetricObservation ;
+    backlog:observesMetric fw:Metric_BRSFViolationCount ;
+    backlog:observationFor fw:Obj_BRSFConformanceHeld ;
+    backlog:hasObservedValue "0"^^xsd:decimal ;
+    backlog:observedAt "2026-09-04T09:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Direct read of backlog_validate_v1_5_0.py's own results line against this package's own current register (v9_34_0): 0 Violation, 77 Warning. Closes the gap backlog_roadmap_report_v1_6_0.py's own new measurement-confirmed progress section found unprompted -- Init_OntologyDrivenConversion's own finishedAt (2026-09-03T08:30:00Z) had no observation at or after it." .

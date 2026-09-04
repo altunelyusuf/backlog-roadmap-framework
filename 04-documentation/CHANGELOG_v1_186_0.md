@@ -1,5 +1,20 @@
 # Changelog
 
+## v1.186.0 — 2026-09-02 (PATCH: closes the Init_OntologyDrivenConversion measurement gap the roadmap report's own new section surfaced unprompted)
+
+**Continuing from the last release's own real finding.** `backlog_roadmap_report_v1_6_0.py`'s new
+measurement-confirmed progress section reported `Init_OntologyDrivenConversion` as having no
+bracketing observation for `Obj_BRSFConformanceHeld` after its own `finishedAt`. Closed honestly:
+`fw:Obs_BRSFConformanceHeld_v2` records `0` (Violation count), re-verified against this package's
+own current register immediately before recording, per `B3` — not assumed from the prior reading.
+
+The roadmap report now shows `BRF-INIT01 -> Obj_BRSFConformanceHeld : MOVED 0.0 -> 0`, consistent
+with the other `Dir_Hold` objectives already in that same report.
+
+0 SHACL violations on the real register (77 warnings, unchanged). All six shipped checkers PASS.
+Lineage-discipline check PASS.
+
+
 ## v1.185.0 — 2026-09-02 (MAJOR: a real fit-gap analysis — measurement was disconnected from "overall progress," not merely under-analysed; a real bug caught and fixed before shipping)
 
 **Asked directly to conduct a fit-gap analysis on a specific claim: measurement should be part of
