@@ -1,5 +1,38 @@
 # Changelog
 
+## v1.187.0 — 2026-09-02 (MAJOR: asked directly whether enforcement is real for every lineage; checked, found a precise structural gap, closed it)
+
+**Asked directly whether the double-control actually guarantees execution, or only reports it.**
+Checked rather than asserted: built fixtures against the exact scenario the prior release had
+found by hand, and confirmed neither `IneffectiveCorrectiveAttemptAdvisoryShape` nor
+`MeasurementAnalysisRequiredShape` fires when an objective's only observation predates the work
+entirely — both presuppose a bracketing observation exists to compare. The gap
+`backlog_roadmap_report`'s new section found was never structurally enforced; it was found only
+because a script happened to be read.
+
+**Built: `CorrectiveActionMeasuredOnCloseShape`.** A finished corrective action whose objective
+carries no `MetricObservation` dated at or after its own `finishedAt` is now a `Violation`,
+regardless of whether an earlier reading exists. Proven discriminating on three real cases. Test-
+driven against BRSF's own real register: silent, not because the case cannot occur, but because
+the prior release's own two closures already happen to satisfy this stronger, now-structural
+requirement.
+
+**The honest layered picture, stated plainly.** Four real mechanisms now compose:
+`CheckpointObservedShape` (re-measurement by date), `CorrectiveActionMeasuredOnCloseShape`
+(re-measurement by work closing), `IneffectiveCorrectiveAttemptAdvisoryShape` (interprets what a
+bracketing observation shows), `MeasurementAnalysisRequiredShape` (requires that interpretation be
+recorded). The roadmap report's own progress section is now a genuine view of the same underlying
+data — nothing depends on the script being run.
+
+**What is honestly still open, not silently assumed closed.** The two-tier catalogue has no
+enforcement nudging a lineage-local mode toward promotion once it recurs. An objective merely
+off-track but not yet blocking a mission's closure has no equivalent structural pull toward a
+corrective action. Named honestly as the next real candidates, not treated as already covered.
+
+`G65` records the full reasoning. 0 SHACL violations on the real register (77 warnings, unchanged).
+All six shipped checkers PASS. Lineage-discipline check PASS.
+
+
 ## v1.186.0 — 2026-09-02 (PATCH: closes the Init_OntologyDrivenConversion measurement gap the roadmap report's own new section surfaced unprompted)
 
 **Continuing from the last release's own real finding.** `backlog_roadmap_report_v1_6_0.py`'s new

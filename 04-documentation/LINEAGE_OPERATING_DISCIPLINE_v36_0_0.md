@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v35.0.0
+# Lineage Operating Discipline — v36.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -1500,4 +1500,44 @@ Run end to end against BRSF's own real register after the fix: correct on `EP_Ru
 surfaced one further real, honest gap unprompted — `fw:S_RulingsQueryableDecision`'s own parent
 `Init_OntologyDrivenConversion` has no bracketing observation at all, reported plainly as
 "flow counted it, nothing confirms it moved" rather than silently passed over.
+
+## G65 — Asked directly whether enforcement is real for every lineage; checked, found a precise structural gap, closed it
+
+Asked directly whether the double-control actually guarantees execution, or only reports it — and
+whether the current lineage genuinely satisfies it right now. Checked rather than asserted.
+Built two real fixtures against the exact scenario `G64` had already found by hand
+(`Init_OntologyDrivenConversion`, one pre-existing observation, none after closing): neither
+`IneffectiveCorrectiveAttemptAdvisoryShape` nor `MeasurementAnalysisRequiredShape` fires, because
+both presuppose a bracketing observation exists to compare — an objective whose only reading
+predates the work entirely gives neither shape anything to compare against. The gap that
+`backlog_roadmap_report`'s own new section found was never structurally enforced; it was found
+only because a script happened to be read.
+
+**Built: `CorrectiveActionMeasuredOnCloseShape`.** A work item asserted via `metricMovableBy`,
+reached `Done` or `Cancelled`, whose objective carries no `MetricObservation` dated at or after its
+own `finishedAt`, is now a `Violation` — regardless of whether an earlier reading exists. Proven
+discriminating on three real cases (`fixture_corrective_action_measured_v1_0_0.ttl`: no observation
+ever, an observation predating the work entirely, and a real observation dated at or after close —
+only the third stays silent, whatever it shows, since that judgement belongs to the other two
+shapes). Test-driven against BRSF's own real register: silent — not because the case cannot occur,
+but because `G64`'s own two closures (`EP_Rulings`, `Init_OntologyDrivenConversion`) already
+happen to satisfy this stronger, now-structural requirement.
+
+**The honest layered picture, stated plainly rather than left implicit.** Four real mechanisms now
+compose: `CheckpointObservedShape` requires re-measurement at a declared date regardless of whether
+any work closed; `CorrectiveActionMeasuredOnCloseShape` (this ruling) requires it when work closes
+regardless of whether a checkpoint date has arrived; `IneffectiveCorrectiveAttemptAdvisoryShape`
+interprets what a bracketing observation shows once one exists; `MeasurementAnalysisRequiredShape`
+requires that interpretation be recorded, not left as an unread signal. `backlog_roadmap_report`'s
+own measurement-confirmed progress section is a real, useful view of the same underlying data, but
+its role is now genuinely a view — every gap it could find is now also a structural `Violation`,
+so nothing depends on the script being run.
+
+**What is honestly still open, not silently assumed closed.** The two-tier catalogue (`G63`) has no
+enforcement nudging a `Scope_LineageLocal` mode toward promotion once it recurs — a real pattern
+proven twice could sit local indefinitely with nothing structural noticing. `ObjectiveHasCorrectiveActionShape`
+requires a live action only for objectives currently blocking a mission's closure; an objective that
+is merely off-track but not yet the reason a mission cannot close has no equivalent structural pull.
+Neither is built here — named honestly as the next real candidates, not treated as already covered
+by what this ruling closes.
 

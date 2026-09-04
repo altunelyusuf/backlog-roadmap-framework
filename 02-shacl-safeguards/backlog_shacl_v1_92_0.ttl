@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.91.0> ;
-    owl:versionInfo "1.91.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.92.0> ;
+    owl:versionInfo "1.92.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.91.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.90.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.89.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.88.0> ;
@@ -4170,6 +4171,23 @@ backlog:MeasurementAnalysisRequiredShape a sh:NodeShape ;
                     (?d = backlog:Dir_Increase && ?va <= ?vb) ||
                     (?d = backlog:Dir_Hold && ?va != ?vb))
             FILTER NOT EXISTS { ?f backlog:relatesToWorkItem $this ; a backlog:RetrospectiveFinding }
+        }""" ] .
+
+backlog:CorrectiveActionMeasuredOnCloseShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItem ;
+    sh:severity sh:Violation ;
+    rdfs:label "A finished corrective action has a real observation dated at or after it closed (L3)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: this work item is asserted via metricMovableBy as able to shift an objective's metric, has reached Done or Cancelled, and its objective carries no MetricObservation dated at or after this item's own finishedAt. IneffectiveCorrectiveAttemptAdvisoryShape and MeasurementAnalysisRequiredShape both presuppose a bracketing observation exists to compare -- neither can fire on an objective whose earlier reading is the only one it has ever had, which is exactly how Init_OntologyDrivenConversion's own real gap escaped every existing check and was found only by a script nobody is required to run. This closes that: measurement on close is required structurally, for every lineage, not only when this package's own roadmap report happens to be read." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasState ?ws . FILTER (?ws IN (backlog:Done, backlog:Cancelled))
+            $this backlog:finishedAt ?finished .
+            ?obj backlog:metricMovableBy $this .
+            FILTER NOT EXISTS {
+                ?o backlog:observationFor ?obj ; backlog:observedAt ?oa .
+                FILTER (?oa >= ?finished)
+            }
         }""" ] .
 
 backlog:ScopeCreepAdvisoryShape a sh:NodeShape ;

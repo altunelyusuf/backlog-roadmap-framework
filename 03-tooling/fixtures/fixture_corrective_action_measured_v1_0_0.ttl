@@ -1,0 +1,36 @@
+# Corrective action measured on close — test drive, not a construction.
+#
+# The precise gap this shape closes: IneffectiveCorrectiveAttemptAdvisoryShape
+# and MeasurementAnalysisRequiredShape both presuppose a bracketing
+# observation exists to compare against. Neither can fire when an objective's
+# only reading predates the work item entirely -- exactly how
+# Init_OntologyDrivenConversion's own real gap escaped every existing check,
+# found only by backlog_roadmap_report, a script nobody is required to run.
+#
+# Obj_NoObservationAtAll: closed corrective action, objective has zero
+#   observations ever -> fires.
+# Obj_OnlyBeforeObservation: closed corrective action, one real observation,
+#   but dated before the item even started -> fires (the precise real case).
+# Obj_MeasuredOnClose: closed corrective action, a real observation dated at
+#   or after finishedAt exists -> silent, regardless of what it shows (that
+#   is IneffectiveCorrectiveAttemptAdvisoryShape's own job, not this one's).
+
+@prefix backlog: <http://example.org/backlog#> .
+@prefix ex:      <http://example.org/measuredonclosetest#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+ex:Obj_NoObservationAtAll a backlog:Objective ; backlog:metricMovableBy ex:W_NoObs .
+ex:W_NoObs a backlog:Story ; backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-01-01T00:00:00Z"^^xsd:dateTime ; backlog:finishedAt "2026-01-10T00:00:00Z"^^xsd:dateTime .
+
+ex:Obj_OnlyBeforeObservation a backlog:Objective ; backlog:metricMovableBy ex:W_OnlyBefore .
+ex:W_OnlyBefore a backlog:Story ; backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-01-01T00:00:00Z"^^xsd:dateTime ; backlog:finishedAt "2026-01-10T00:00:00Z"^^xsd:dateTime .
+ex:Obs_OnlyBefore a backlog:MetricObservation ; backlog:observationFor ex:Obj_OnlyBeforeObservation ;
+    backlog:hasObservedValue "5"^^xsd:decimal ; backlog:observedAt "2025-12-30T00:00:00Z"^^xsd:dateTime .
+
+ex:Obj_MeasuredOnClose a backlog:Objective ; backlog:metricMovableBy ex:W_Measured .
+ex:W_Measured a backlog:Story ; backlog:hasState backlog:Cancelled ;
+    backlog:startedAt "2026-01-01T00:00:00Z"^^xsd:dateTime ; backlog:finishedAt "2026-01-10T00:00:00Z"^^xsd:dateTime .
+ex:Obs_AfterClose a backlog:MetricObservation ; backlog:observationFor ex:Obj_MeasuredOnClose ;
+    backlog:hasObservedValue "3"^^xsd:decimal ; backlog:observedAt "2026-01-15T00:00:00Z"^^xsd:dateTime .
