@@ -1,5 +1,42 @@
 # Changelog
 
+## v1.180.0 — 2026-09-02 (MINOR: closure readiness, progress, risk and focus computed together — backlog_lineage_compass, never applying its own findings automatically)
+
+**Asked directly to build one real tool**, not separate pieces: automate closure, monitor
+progress, surface risk, and give a grounded direction for where development should focus. Built
+`backlog_lineage_compass_v1_0_0.py`, using only vocabulary and conditions this framework already
+has and already enforces — nothing invented for the tool.
+
+**Closure readiness** runs `AchievedOnlyWhenClearShape`'s own real condition live, reporting
+exactly which objectives block eligibility — this session's own real mission correctly reports
+NOT eligible, naming `Obj_RulingsQueryable` by name.
+
+**Progress** reports each objective's latest real observation against baseline and target, and
+separately flags `CheckpointObservedShape`'s own staleness condition per objective.
+
+**Risk** surfaces real, unresolved `Impediment` and not-yet-pursued `Opportunity` individuals,
+correctly scoped to the lineage being reported. A real bug caught and fixed while building this:
+the first version leaked every lineage's risks into every other lineage's report, and a second
+category (impediments naming no specific lineage, like the register-wide `RegisterPackage` block)
+would have been silently invisible under strict per-lineage scoping — a separate register-wide
+section was added rather than dropping them.
+
+**Focus, the compass itself**, ranks every open objective by the fraction of its *original* gap
+still remaining, using only numbers the register already asserts. Genuine regressions (the
+fraction exceeding 100%) are named as regressions explicitly, not folded into ordinary remaining-
+work phrasing.
+
+**Never applied automatically, by design.** The tool computes and reports; `--emit-closure` writes
+a *proposed* outcome change to a separate file, explicitly labelled `PROPOSED, not applied`, only
+when eligibility genuinely holds — confirmed with both a positive fixture and BRSF's own current
+real (ineligible) state. `G59` records the full reasoning, including why the mechanical check is
+automated but the judgement itself is not.
+
+0 SHACL violations on the real register (76 warnings, unchanged — this release adds tooling, not
+vocabulary). All six shipped checkers PASS, including the script-decision audit against the new
+tool itself. Lineage-discipline check PASS.
+
+
 ## v1.179.0 — 2026-09-02 (MAJOR: autonomous re-measurement enforced at checkpoint due dates, not only at authoring — a live regression found and honestly recorded, a premature mission-achieved claim corrected)
 
 **Challenged directly: why isn't re-measurement autonomous, and named as a critical methodological

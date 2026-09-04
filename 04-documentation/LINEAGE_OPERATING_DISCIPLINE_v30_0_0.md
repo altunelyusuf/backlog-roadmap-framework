@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v29.0.0
+# Lineage Operating Discipline — v30.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -1258,4 +1258,43 @@ dishonest fit `G43`/`G46` already named. Corrected to `Out_InFlight`, with the r
 recorded in the mission's own `outcomeRationale`: the metric and the mission's own continued
 operation are the same activity, and a mission that keeps producing the thing its own objective
 counts cannot honestly claim that objective is finished.
+
+## G59 — Closure readiness, progress, risk and focus computed together (`backlog_lineage_compass`), never applied automatically
+
+Asked directly to automate closure, monitor progress, surface risk, and give a grounded direction
+for where development should focus — not as separate asks, but as one real tool. Built
+`backlog_lineage_compass_v1_0_0.py`, using only vocabulary and conditions this framework already
+has and already enforces, not new concepts invented for the tool:
+
+**Closure readiness** runs `AchievedOnlyWhenClearShape`'s own real condition live in Python (every
+goal's objective at target or carrying an `AchievementStatus`), reporting exactly which objectives
+block eligibility when it doesn't hold — this session's own real `Mission_OntologyDriven` correctly
+reports NOT eligible, naming `Obj_RulingsQueryable` by name.
+
+**Progress** reports each objective's latest real observation against baseline and target, and
+separately flags `CheckpointObservedShape`'s own staleness condition per objective — a checkpoint
+passed with no observation since.
+
+**Risk** surfaces real, unresolved `Impediment` and not-yet-pursued `Opportunity` individuals,
+scoped correctly to the lineage being reported (a real bug caught and fixed while building this:
+the first version leaked every lineage's risks into every other lineage's report, and a second
+category — impediments naming no specific lineage, like the register-wide `RegisterPackage` block
+— would have been silently invisible under strict per-lineage scoping, so a separate register-wide
+section was added rather than dropping them).
+
+**Focus, the compass itself**, ranks every objective not yet settled by the fraction of its
+*original* gap still remaining (`|current-target| / |baseline-target|`, using only numbers the
+register already asserts) — the objective with the largest remaining fraction is named as the real
+bottleneck. Genuine regressions (fraction exceeding 100%, `Obj_RulingsQueryable`'s own current
+real state) are named as regressions explicitly, not folded into the same phrasing as ordinary
+remaining work.
+
+**Never applied automatically, by design.** The tool computes and reports; it does not write to
+the register. `--emit-closure` writes a *proposed* `hasMissionOutcome`/`outcomeRationale` change to
+a separate file, explicitly labelled `PROPOSED, not applied`, only when the register's own
+condition for eligibility genuinely holds — confirmed with both a positive fixture (eligible,
+writes a real proposal) and BRSF's own current real state (ineligible, writes nothing). Setting
+the real outcome, and choosing an honest `AchievementStatus` where one is needed, is a judgement
+`G58` already found neither available label fit cleanly without one — automating the mechanical
+check is real and warranted; automating the judgement itself is not, and this tool does not.
 
