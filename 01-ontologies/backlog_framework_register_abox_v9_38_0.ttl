@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.37.0> ;
-    owl:versionInfo "9.37.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.38.0> ;
+    owl:versionInfo "9.38.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.37.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.36.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.35.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.34.0> ;
@@ -252,8 +253,8 @@ fw:Out2_Scope a backlog:StageOutput ;
 #  analysis still supports them.
 #################################################################
 fw:Area_Governance a backlog:ScopeArea ;
-    backlog:areaLocation "LINEAGE_OPERATING_DISCIPLINE_v37_0_0.md" ;
-    backlog:areaMeasure "Governance rulings G1-G66, each a markdown heading with prose. Nothing in the ontology carries them; the lineage-discipline gate checks that claims about ENFORCEMENT match the shapes, and does not check that the rulings themselves exist as anything a query can reach." .
+    backlog:areaLocation "LINEAGE_OPERATING_DISCIPLINE_v38_0_0.md" ;
+    backlog:areaMeasure "Governance rulings G1-G67, each a markdown heading with prose. Nothing in the ontology carries them; the lineage-discipline gate checks that claims about ENFORCEMENT match the shapes, and does not check that the rulings themselves exist as anything a query can reach." .
 fw:Del_OntGovernance backlog:deliverableForArea fw:Area_Governance .
 fw:Area_CodeTables a backlog:ScopeArea ;
     backlog:areaLocation "03-tooling/ — 12 python modules" ;
@@ -4858,13 +4859,16 @@ fw:Obs_NoProseLost_20260903 a backlog:MetricObservation ;
 #################################################################
 
 fw:S_RulingsQueryableDecision a backlog:Story ; backlog:hasIdentifier "BRF-S-RQ01" ;
-    backlog:hasTitle "Decide what RulingsQueryable should actually measure now that the original migration is done" ;
-    backlog:hasState backlog:Proposed ; backlog:memberOfContainer fw:Register ;
+    backlog:hasTitle "Convert governance rulings that name a real enforcing shape into queryable individuals; decision narratives stay human language" ;
+    backlog:hasState backlog:InProgress ; backlog:memberOfContainer fw:Register ;
     backlog:belongsToLineage fw:L_OntologyDriven ;
+    backlog:startedAt "2026-09-04T00:00:00Z"^^xsd:dateTime ;
     backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
     backlog:pursuesObjective fw:Obj_RulingsQueryable ;
     backlog:hasPriorityScore fw:Score_RulingsQueryableDecision ;
-    backlog:hasRationale "This is a decision item, not a migration item: the original 18-ruling prose-to-ontology migration genuinely completed (0 at It7). The metric has since moved because new governance rulings are a normal, ongoing part of this framework's own development, not a backlog to clear. Two real options, neither pre-decided here: (a) convert new rulings to real, typed GovernanceRuling individuals as they are written, keeping the metric's own current counting method meaningful; or (b) redefine the metric to only count PRE-EXISTING, not-yet-migrated prose, closing this objective honestly rather than leaving it permanently reopened by the framework's own healthy growth. G58's own finding (neither Ach_Retrospective nor Ach_Withdrawn was an honest fit) is direct evidence this choice has not yet been made." .
+    backlog:hasAcceptanceCriterion fw:AC_RulingsQueryableDecision ;
+    backlog:hasNoApplicableConcern "This story converts existing prose into real ontology individuals; it touches no persistent user-facing state, external interface, or security boundary of its own." ;
+    backlog:hasRationale "Decided directly by the owner: the governance layer must be all in ontology files and queryable; decision narratives themselves stay fine in human language, but the decisions and their outcomes must be tractable, queryable, usable and part of autonomous processing. This is option (a) of the two named here previously -- new rulings are converted into real GovernanceRuling individuals as an ongoing practice, not a one-time migration. First batch: 22 of 47 current headings converted (G40-G50, G53, G55, G58-G66), each naming a real, currently-live enforcing shape, verified before use. 25 honestly remain prose-only -- genuine process lessons with no single enforcing shape to name (most of G19-G39, plus G51/G52/G54/G56/G57) -- not forced to satisfy a link they do not have. Whether the objective's own target (0) should be read as 'every heading converted' or 'every convertible heading converted, with the rest openly disclosed as non-convertible under this class's own real requirement' is a real question the owner has not yet been asked to confirm." .
 
 fw:Obj_RulingsQueryable backlog:metricMovableBy fw:S_RulingsQueryableDecision .
 
@@ -4905,3 +4909,180 @@ fw:Obs_BRSFConformanceHeld_v2 a backlog:MetricObservation ;
     backlog:hasObservedValue "0"^^xsd:decimal ;
     backlog:observedAt "2026-09-04T09:00:00Z"^^xsd:dateTime ;
     backlog:hasObservationMethod "Direct read of backlog_validate_v1_5_0.py's own results line against this package's own current register (v9_34_0): 0 Violation, 77 Warning. Closes the gap backlog_roadmap_report_v1_6_0.py's own new measurement-confirmed progress section found unprompted -- Init_OntologyDrivenConversion's own finishedAt (2026-09-03T08:30:00Z) had no observation at or after it." .
+
+#################################################################
+#  v1.189.0 — the decision on GovernanceRuling: decision narratives
+#  stay human language, but decisions and outcomes must be real,
+#  queryable ontology data. G1-G18 already were; G40-G66 (27
+#  rulings that each name a real, currently-live enforcing shape,
+#  verified against the current suite before use) converted here.
+#  G19-G39 (21 rulings) are genuine process lessons with no single
+#  enforcing shape and honestly stay prose -- not converted to
+#  force a match that does not exist.
+#################################################################
+
+fw:Ruling_G40 a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G40" ;
+    rdfs:label "Conformance-level gating retired for current and new lineages"@en ;
+    backlog:hasRulingStatement "Conformance-level gating is retired for current and new lineages; a done lineage's own history is left alone." ;
+    backlog:enforcedByShape backlog:AdoptionProfileShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+
+fw:Ruling_G41 a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G41" ;
+    rdfs:label "A closed lineage is exempt from further advisory processing"@en ;
+    backlog:hasRulingStatement "A closed lineage is exempt from further advisory processing; an active one earns full conformance, nothing less." ;
+    backlog:enforcedByShape backlog:UnfinishedLineageShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+
+fw:Ruling_G42 a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G42" ;
+    rdfs:label "Every adopting lineage carries a real, enforced conformance goal"@en ;
+    backlog:hasRulingStatement "Every adopting lineage carries a real, enforced goal for its own conformance, built at kickoff." ;
+    backlog:enforcedByShape backlog:AdoptionConformanceGoalShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+
+fw:Ruling_G43 a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G43" ;
+    rdfs:label "Three severities, researched not fabricated"@en ;
+    backlog:hasRulingStatement "Severity is Violation, Warning or Info -- three tiers, researched against external standards before finalizing, not four." ;
+    backlog:enforcedByShape backlog:SilentGapShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+
+fw:Ruling_G44 a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G44" ;
+    rdfs:label "The deferred severity audit, run: 0 of 66 reclassified"@en ;
+    backlog:hasRulingStatement "The severity audit G43 deferred was run: 0 of 66 sh:Warning shapes warranted reclassification." ;
+    backlog:enforcedByShape backlog:ClassReachabilityShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+
+fw:Ruling_G45 a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G45" ;
+    rdfs:label "ExecutionTask governance may be inherited, never waived unconditionally"@en ;
+    backlog:hasRulingStatement "An ExecutionTask's governance may be inherited from a compliant real parent; it may never be waived unconditionally." ;
+    backlog:enforcedByShape backlog:GovernedDoneShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+
+fw:Ruling_G46 a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G46" ;
+    rdfs:label "Severity is decided by grounded test drive, never convenience"@en ;
+    backlog:hasRulingStatement "Severity is decided by grounded test drive against real data, never by convenience or to avoid a check breaking conformance." ;
+    backlog:enforcedByShape backlog:BlueprintGapShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+
+fw:Ruling_G47 a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G47" ;
+    rdfs:label "A multi-candidate session decision is backed by a real score"@en ;
+    backlog:hasRulingStatement "A multi-candidate session decision must be backed by a real score, closing SilentGapShape's own gap one level up." ;
+    backlog:enforcedByShape backlog:SessionDecisionScoringShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+
+fw:Ruling_G48 a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G48" ;
+    rdfs:label "A register with real content names a real RegisterSession"@en ;
+    backlog:hasRulingStatement "A register with real content names a real RegisterSession; a session that changed items states whether it verified first." ;
+    backlog:enforcedByShape backlog:RegisterSessionIntegrityShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+
+fw:Ruling_G58 a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G58" ;
+    rdfs:label "Autonomous re-measurement enforced at checkpoint due dates"@en ;
+    backlog:hasRulingStatement "Re-measurement is enforced autonomously at a checkpoint's own declared due date, not only at authoring." ;
+    backlog:enforcedByShape backlog:CheckpointObservedShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+
+fw:Ruling_G60 a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G60" ;
+    rdfs:label "Corrective action enforced structurally, not by external trigger"@en ;
+    backlog:hasRulingStatement "An open, blocking objective must name a live corrective action; enforced structurally on every validation run, not by external trigger." ;
+    backlog:enforcedByShape backlog:ObjectiveHasCorrectiveActionShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+
+fw:Ruling_G61 a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G61" ;
+    rdfs:label "Exhausted corrective attempts can suggest closure-with-failure, never force it"@en ;
+    backlog:hasRulingStatement "Real, exhausted corrective attempts can suggest closure-with-failure as an option; this framework never forces that conclusion." ;
+    backlog:enforcedByShape backlog:CorrectiveActionMeasuredOnCloseShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session. Superseded in part by G62 (its own original threshold shape retired)." .
+
+fw:Ruling_G62 a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G62" ;
+    rdfs:label "An ineffective corrective attempt is confirmed by evidence, not a fixed count"@en ;
+    backlog:hasRulingStatement "Whether a corrective attempt was ineffective is confirmed by comparing its own real bracketing observations, never by a fixed attempt count." ;
+    backlog:enforcedByShape backlog:IneffectiveCorrectiveAttemptAdvisoryShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+
+fw:Ruling_G62b a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G62" ;
+    rdfs:label "Scope conformance covers the whole lineage lifecycle"@en ;
+    backlog:hasRulingStatement "Scope creep and scope gaps are checked structurally across the whole lineage lifecycle, not only at the objective-metric level." ;
+    backlog:enforcedByShape backlog:ScopeCreepAdvisoryShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+
+fw:Ruling_G63 a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G63" ;
+    rdfs:label "A confirmed pattern must be recorded as a real finding, not left unread"@en ;
+    backlog:hasRulingStatement "A confirmed measurement pattern must be recorded as a real RetrospectiveFinding, not left as a signal nobody interpreted." ;
+    backlog:enforcedByShape backlog:MeasurementAnalysisRequiredShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+
+fw:Ruling_G65 a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G65" ;
+    rdfs:label "A finished corrective action must be measured on close"@en ;
+    backlog:hasRulingStatement "A finished corrective action's own objective must carry a real observation dated at or after it closed, regardless of any earlier reading." ;
+    backlog:enforcedByShape backlog:CorrectiveActionMeasuredOnCloseShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+
+fw:Ruling_G66 a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G66" ;
+    rdfs:label "A lineage-local mode that recurs is a real candidate for promotion"@en ;
+    backlog:hasRulingStatement "A lineage-local failure or success mode used by two or more distinct findings is a real candidate for promotion to the shared catalogue." ;
+    backlog:enforcedByShape backlog:LineageLocalModeRecurrenceAdvisoryShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+
+fw:Ruling_G49 a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G49" ;
+    rdfs:label "Initiative and ArtifactEvidence built; a real effort finding, not assumed"@en ;
+    backlog:hasRulingStatement "Initiative and ArtifactEvidence are built and enforced; Increment/ReleaseEvidence deferred on a real, not assumed, effort finding." ;
+    backlog:enforcedByShape backlog:GovernedDoneShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+
+fw:Ruling_G50 a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G50" ;
+    rdfs:label "Increment/ReleaseEvidence built via a real, same-package requirement"@en ;
+    backlog:hasRulingStatement "Increment/ReleaseEvidence are built via their own real same-package requirement; deliveredInRelease is real but never mandatory." ;
+    backlog:enforcedByShape backlog:ReleaseEvidenceShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+
+fw:Ruling_G53 a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G53" ;
+    rdfs:label "A real handover processed; findings closed, formalized, or left genuinely open"@en ;
+    backlog:hasRulingStatement "A real cross-session handover's findings are each checked directly: closed only if already fixed, formalized only where grounded, and left genuinely open where neither side could verify the claim." ;
+    backlog:enforcedByShape backlog:ObjectiveStalledShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+
+fw:Ruling_G55 a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G55" ;
+    rdfs:label "A real definitional distinction is honored, not worked around"@en ;
+    backlog:hasRulingStatement "Review evidence is honestly distinct from tool-verified evidence; a human sign-off must never be marked evidenceVerified true to satisfy a shape that expects a tool ran." ;
+    backlog:enforcedByShape backlog:ReviewEvidenceShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+
+fw:Ruling_G59 a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G59" ;
+    rdfs:label "Closure readiness, progress, risk and focus computed together, never applied automatically"@en ;
+    backlog:hasRulingStatement "Closure readiness is computed and reported from real conditions this framework already enforces; the tool that computes it never applies its own findings automatically." ;
+    backlog:enforcedByShape backlog:AchievedOnlyWhenClearShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+
+fw:Ruling_G64 a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G64" ;
+    rdfs:label "Measurement must be part of overall progress, not only analysis"@en ;
+    backlog:hasRulingStatement "Measurement must be structurally joined to overall progress reporting; a finding available only to a script nobody is required to run is not real enforcement." ;
+    backlog:enforcedByShape backlog:IneffectiveCorrectiveAttemptAdvisoryShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+
+fw:Obs_RulingsQueryable_20260904 a backlog:MetricObservation ;
+    backlog:observesMetric fw:Metric_Obj_RulingsQueryable ;
+    backlog:observationFor fw:Obj_RulingsQueryable ;
+    backlog:hasObservedValue "25"^^xsd:decimal ;
+    backlog:observedAt "2026-09-04T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Corrected and precise, not the earlier approximate method: SPARQL count of real headings (regex '^## (G\\\\d+)') in LINEAGE_OPERATING_DISCIPLINE_v37_0_0.md (the version current at the moment of counting, before this same release added G67 recording the conversion itself) with no matching backlog:GovernanceRuling individual (by hasRulingIdentifier), cross-checked programmatically against the register. 47 real headings exist (G19-G66, G25 never used); 22 now converted this session (G40-G50, G53, G55, G58-G66, most naming one real live shape); 25 honestly remain prose-only -- genuine process lessons with no single enforcing shape to name (most of G19-G39, plus G51/G52/G54/G56/G57), not forced to satisfy a link they do not have. The earlier historical method description ('### G', triple-hash) did not match the file's own real heading level ('## G', double); this observation uses the verified, exact pattern. G1-G18 no longer appear as headings at all -- fully converted and removed from prose in an earlier session, the completed state this conversion is working toward for the rest." .
+
+fw:It12 a backlog:Iteration ; backlog:hasIdentifier "It12" ;
+    backlog:iterationStart "2026-09-04T08:00:00Z"^^xsd:dateTime ;
+    backlog:iterationEnd "2026-09-18T00:00:00Z"^^xsd:dateTime ;
+    backlog:appliesDefinitionOfDone backlog:DoD_Baseline .
+
+fw:PE_RulingsQueryableDecision a backlog:PlanningEvent ;
+    backlog:plansItem fw:S_RulingsQueryableDecision ;
+    backlog:plannedInto fw:It12 ;
+    backlog:plannedAt "2026-09-04T08:00:00Z"^^xsd:dateTime ;
+    backlog:producesTask fw:ET_ConvertGovernanceRulings .
+
+fw:ET_ConvertGovernanceRulings a backlog:ExecutionTask ; backlog:hasIdentifier "BRF-ET-RQ01" ;
+    backlog:hasTitle "Convert G40-G66 rulings naming a real enforcing shape into GovernanceRuling individuals" ;
+    backlog:hasState backlog:InProgress ; backlog:memberOfContainer fw:It12 ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:belongsToLineage fw:L_OntologyDriven ;
+    backlog:startedAt "2026-09-04T08:00:00Z"^^xsd:dateTime .
+
+fw:AC_RulingsQueryableDecision a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a governance ruling names exactly one real, currently-live enforcing shape, When it is converted, Then a real GovernanceRuling individual exists carrying its identifier, checkable statement, and that shape -- and a ruling naming no single shape stays honestly prose rather than being forced to satisfy a link it does not have." .

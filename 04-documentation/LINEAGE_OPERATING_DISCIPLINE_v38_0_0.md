@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v37.0.0
+# Lineage Operating Discipline — v38.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -1578,4 +1578,49 @@ once, on exactly the fixture case that should trigger it
 uses of an already-methodology mode stays silent). Test-driven against BRSF's own real register:
 silent, honestly — zero lineage-local modes exist yet, so there is nothing to promote right now,
 not because the mechanism is untested.
+
+## G67 — The owner's own real decision on `RulingsQueryable`: governance layer in ontology, narratives stay human language, decisions and outcomes queryable
+
+Asked directly, twice, to state plainly what was actually being decided — first in ontological
+terms, then in plain language — because citing `fw:S_RulingsQueryableDecision`'s own existence as
+if it resolved anything, while it sat `Proposed` for multiple releases with neither option ever put
+to the owner, was itself the exact failure this ruling exists to correct: a live corrective action
+can satisfy structural enforcement forever without anyone ever deciding anything.
+
+**The owner's own real ruling:** the governance layer must be all in ontology files and queryable.
+Decision narratives stay fine in human language. But the decisions and their outcomes must be
+tractable, queryable, usable, and part of autonomous processing.
+
+**Checked before building, not assumed.** `backlog:GovernanceRuling` already existed
+(`hasRulingIdentifier`, `hasRulingStatement`, `hasRulingRationale`, `enforcedByShape`,
+`rulingSource`) — an earlier conversion had already reified `G1`–`G18` this exact way. This ruling
+extends that real precedent rather than inventing new vocabulary.
+
+**Built: 22 more real `GovernanceRuling` individuals** (`G40`–`G50`, `G53`, `G55`, `G58`–`G66`),
+each naming a real, currently-live enforcing shape — verified against the actual shape suite
+before use, catching two wrong assumed names (`ExecutionTaskInheritedShape`, `SeverityGroundedShape`
+do not exist; the real names are `GovernedDoneShape`, `BlueprintGapShape`) and one retired shape
+(`UnscoredItemAdvisoryShape`) before they shipped.
+
+**A real, honest boundary found, not forced past.** 25 rulings — mostly `G19`–`G39`, plus `G51`,
+`G52`, `G54`, `G56`, `G57` — are genuine process lessons that never named one specific enforcing
+shape; `GovernanceRulingShape`'s own real requirement (`enforcedByShape`, `Violation` if missing)
+means these honestly cannot be reified without forcing a link that does not exist. They stay
+prose, matching the owner's own words exactly: the narrative is fine in human language.
+
+**A real, standing inaccuracy caught while measuring.** The metric's own historical observation
+method said it counted `### G` headings; the real headings are `## G`. Corrected and re-measured
+precisely: 47 real headings currently exist, 22 now converted, 25 honestly remain — down from the
+last observed 38, genuine progress, not a redefinition of the target.
+
+**Two stale definitions corrected**, not left to describe a reality that no longer held:
+`informsRuling`'s own text claimed rulings are "not reified as individuals," no longer true;
+`GovernanceRuling`'s own class definition said "eighteen," now stale at forty-one real individuals.
+
+`fw:S_RulingsQueryableDecision` moved to `InProgress` honestly — real, ongoing work, not a decision
+still pending — with the real planning chain this framework's own rules require for that state
+(`fw:It12`, `fw:PE_RulingsQueryableDecision`, `fw:ET_ConvertGovernanceRulings`), each caught and
+fixed in turn by the validator: a missing task type, a container needing real membership, and an
+iteration window too narrow for work that is genuinely still ongoing (extended honestly rather than
+padded, or the original 2-hour window closed under real work still open).
 

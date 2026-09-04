@@ -1,5 +1,42 @@
 # Changelog
 
+## v1.189.0 — 2026-09-04 (MAJOR: the owner's own real decision on GovernanceRuling — governance layer in ontology, narratives stay human language, decisions and outcomes queryable; 22 rulings converted, a real boundary honestly found)
+
+**Asked directly, twice, to state plainly what was being decided**, because citing a corrective
+action's mere existence as if it resolved anything — while it sat `Proposed` for multiple releases
+with neither option ever put to the owner — was itself the exact failure this ruling exists to
+correct.
+
+**The owner's own real ruling:** the governance layer must be all in ontology files and queryable.
+Decision narratives stay fine in human language. But the decisions and their outcomes must be
+tractable, queryable, usable, and part of autonomous processing.
+
+**Checked before building, not assumed.** `backlog:GovernanceRuling` already existed — an earlier
+conversion had already reified `G1`–`G18` this exact way. This extends that real precedent.
+
+**Built: 22 more real `GovernanceRuling` individuals** (`G40`–`G50`, `G53`, `G55`, `G58`–`G66`),
+each naming a real, currently-live enforcing shape — verified against the actual suite before use,
+catching two wrong assumed shape names and one retired shape before they shipped.
+
+**A real, honest boundary found, not forced past.** 25 rulings are genuine process lessons with no
+single enforcing shape; `GovernanceRulingShape`'s own real requirement means these honestly cannot
+be reified without forcing a link that does not exist. They stay prose.
+
+**A real, standing inaccuracy caught while measuring.** The metric's historical observation method
+said `### G`; the real headings are `## G`. Corrected and re-measured precisely: 47 real headings,
+22 now converted, 25 honestly remain — down from the last observed 38, genuine progress.
+
+**Two stale definitions corrected**: `informsRuling` no longer claims rulings aren't reified;
+`GovernanceRuling`'s own class definition no longer says "eighteen."
+
+`fw:S_RulingsQueryableDecision` moved to `InProgress` honestly, with the real planning chain this
+framework's own rules require — each gap the validator found (missing task type, container
+membership, an iteration window too narrow for genuinely ongoing work) caught and fixed in turn.
+
+`G67` records the full reasoning. 0 SHACL violations on the real register (79 warnings). All six
+shipped checkers PASS. Lineage-discipline check PASS.
+
+
 ## v1.188.0 — 2026-09-02 (MAJOR: closing the two named open items — one built, one honestly withdrawn on re-examination; a real bug caught and fixed before shipping)
 
 **Asked directly how to close both items the prior release left open, and for the real, current

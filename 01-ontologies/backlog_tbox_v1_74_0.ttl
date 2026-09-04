@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.73.0> ;
-    owl:versionInfo "1.73.0" ;
+    owl:versionIRI <http://example.org/backlog/1.74.0> ;
+    owl:versionInfo "1.74.0" ;
+    owl:priorVersion <http://example.org/backlog/1.73.0> ;
     owl:priorVersion <http://example.org/backlog/1.72.0> ;
     owl:priorVersion <http://example.org/backlog/1.71.0> ;
     owl:priorVersion <http://example.org/backlog/1.70.0> ;
@@ -3074,7 +3075,7 @@ backlog:informsRuling a owl:DatatypeProperty ;
     rdfs:domain backlog:RetrospectiveFinding ; rdfs:range xsd:string ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "informs ruling"@en ;
-    skos:definition "Which standing rule in the lineage or framework discipline this finding fed into, when it already has (for example, a G-ruling identifier). A plain citation string, the same convention this framework already uses everywhere it cites a governance ruling in prose rather than as a graph edge, since rulings are not reified as individuals. Optional: a finding may be real and recorded before any rule has yet been written from it."@en .
+    skos:definition "Which standing rule in the lineage or framework discipline this finding fed into, when it already has (for example, a G-ruling identifier). A plain citation string. Real governance rulings that name a real, live enforcing shape are now reified as GovernanceRuling individuals and queryable directly (G1-G18, and G40 onward where a single shape applies) -- this property remains for the case a finding cites a ruling that is a genuine process lesson with no single enforcing shape (most of G19-G39, and a few later ones), which honestly stays prose rather than being forced into a class whose own shape requires a link this ruling does not have. Optional: a finding may be real and recorded before any rule has yet been written from it."@en .
 
 backlog:escalatedVia a owl:DatatypeProperty ;
     rdfs:domain backlog:RetrospectiveFinding ; rdfs:range xsd:string ;
@@ -5054,8 +5055,8 @@ backlog:GovernanceRuling a owl:Class ;
     rdfs:subClassOf backlog:BacklogConcept ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "Governance Ruling"@en ;
-    skos:definition "A decision about how the framework is governed, recorded so it can be queried rather than read. Eighteen existed as markdown headings in the lineage discipline: enforceable in the sense that shapes implemented them, and unreachable in the sense that no query could return one. A ruling nobody can retrieve cannot be checked against the shapes that claim to enforce it."@en ;
-    dcterms:source "LINEAGE_OPERATING_DISCIPLINE, rulings G1 through G18"@en .
+    skos:definition "A decision about how the framework is governed, recorded so it can be queried rather than read. Eighteen existed as markdown headings in the lineage discipline at first conversion: enforceable in the sense that shapes implemented them, and unreachable in the sense that no query could return one. A ruling nobody can retrieve cannot be checked against the shapes that claim to enforce it. Extended once the owner ruled directly that decisions and their outcomes must be tractable, queryable and usable while the surrounding narrative stays human language: every ruling naming a real, single, currently-live enforcing shape is reified this way; a ruling that is a genuine process lesson with no one shape to name honestly stays prose rather than being forced to satisfy a link it does not have."@en ;
+    dcterms:source "LINEAGE_OPERATING_DISCIPLINE, rulings G1 through G18 (first conversion), extended G40 onward on the owner's own direct ruling that decisions and outcomes must be queryable"@en .
 
 backlog:hasRulingIdentifier a owl:DatatypeProperty , owl:FunctionalProperty ;
     rdfs:domain backlog:GovernanceRuling ; rdfs:range xsd:string ;
