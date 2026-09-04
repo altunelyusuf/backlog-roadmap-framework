@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.31.0> ;
-    owl:versionInfo "9.31.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.32.0> ;
+    owl:versionInfo "9.32.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.31.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.30.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.29.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.28.0> ;
@@ -139,7 +140,7 @@ fw:Profile a backlog:AdoptionProfile ;
 fw:Register a backlog:Backlog ;
     backlog:hasIdentifier "BRF-REG" ;
     backlog:hasTitle "backlog-roadmap-framework development register" ;
-    backlog:hasState backlog:Done ;
+    backlog:hasState backlog:InProgress ;
     backlog:appliesDefinitionOfDone backlog:DoD_Baseline ;
     backlog:hasCommitment fw:Commitment_Dev .
 
@@ -246,8 +247,8 @@ fw:Out2_Scope a backlog:StageOutput ;
 #  analysis still supports them.
 #################################################################
 fw:Area_Governance a backlog:ScopeArea ;
-    backlog:areaLocation "LINEAGE_OPERATING_DISCIPLINE_v30_0_0.md" ;
-    backlog:areaMeasure "Governance rulings G1-G59, each a markdown heading with prose. Nothing in the ontology carries them; the lineage-discipline gate checks that claims about ENFORCEMENT match the shapes, and does not check that the rulings themselves exist as anything a query can reach." .
+    backlog:areaLocation "LINEAGE_OPERATING_DISCIPLINE_v31_0_0.md" ;
+    backlog:areaMeasure "Governance rulings G1-G60, each a markdown heading with prose. Nothing in the ontology carries them; the lineage-discipline gate checks that claims about ENFORCEMENT match the shapes, and does not check that the rulings themselves exist as anything a query can reach." .
 fw:Del_OntGovernance backlog:deliverableForArea fw:Area_Governance .
 fw:Area_CodeTables a backlog:ScopeArea ;
     backlog:areaLocation "03-tooling/ — 12 python modules" ;
@@ -4843,3 +4844,26 @@ fw:Obs_NoProseLost_20260903 a backlog:MetricObservation ;
     backlog:hasObservedValue "0"^^xsd:decimal ;
     backlog:observedAt "2026-09-03T20:00:00Z"^^xsd:dateTime ;
     backlog:hasObservationMethod "This session's own real changes to LINEAGE_OPERATING_DISCIPLINE and the TBox were purely additive (new G-rulings, new class/property/shape definitions with their own real skos:definition prose); no existing explanatory paragraph was removed. Not independently re-run against the v1.104.0 line-count baseline the original observation used -- a judgement of this session's own real diff, disclosed as such rather than presented as the same mechanical count." .
+
+#################################################################
+#  v1.181.0 — ObjectiveHasCorrectiveActionShape, closing BRSF's own
+#  new gap: a real, live corrective action for Obj_RulingsQueryable,
+#  the framework applying its own new rule to itself first, the
+#  same standard G45/G47/G58 already held it to.
+#################################################################
+
+fw:S_RulingsQueryableDecision a backlog:Story ; backlog:hasIdentifier "BRF-S-RQ01" ;
+    backlog:hasTitle "Decide what RulingsQueryable should actually measure now that the original migration is done" ;
+    backlog:hasState backlog:Proposed ; backlog:memberOfContainer fw:Register ;
+    backlog:belongsToLineage fw:L_OntologyDriven ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:pursuesObjective fw:Obj_RulingsQueryable ;
+    backlog:hasPriorityScore fw:Score_RulingsQueryableDecision ;
+    backlog:hasRationale "This is a decision item, not a migration item: the original 18-ruling prose-to-ontology migration genuinely completed (0 at It7). The metric has since moved because new governance rulings are a normal, ongoing part of this framework's own development, not a backlog to clear. Two real options, neither pre-decided here: (a) convert new rulings to real, typed GovernanceRuling individuals as they are written, keeping the metric's own current counting method meaningful; or (b) redefine the metric to only count PRE-EXISTING, not-yet-migrated prose, closing this objective honestly rather than leaving it permanently reopened by the framework's own healthy growth. G58's own finding (neither Ach_Retrospective nor Ach_Withdrawn was an honest fit) is direct evidence this choice has not yet been made." .
+
+fw:Obj_RulingsQueryable backlog:metricMovableBy fw:S_RulingsQueryableDecision .
+
+fw:Score_RulingsQueryableDecision a backlog:RICEScore ; backlog:scoredByMethod backlog:Method_RICE ;
+    backlog:hasReach 1.0 ; backlog:hasImpact 1.5 ; backlog:hasConfidence 0.7 ; backlog:hasEffort 1.0 ;
+    backlog:hasScoreValue 1.05 ;
+    backlog:hasScoreRationale "Re-scored from backlog_lineage_compass_v1_0_0's own low-confidence starting proposal (0.3) now that a real scope statement exists. Reach=1 (this single objective). Impact=1.5 (resolves a standing ambiguity G58 itself flagged, not just one number). Confidence=0.7 (the decision itself is well-scoped even though its answer isn't chosen yet -- deciding between two named options is tractable). Effort=1 (a decision record, not a migration)." .

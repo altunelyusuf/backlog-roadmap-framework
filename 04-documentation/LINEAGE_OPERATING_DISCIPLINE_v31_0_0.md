@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v30.0.0
+# Lineage Operating Discipline — v31.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -1297,4 +1297,45 @@ writes a real proposal) and BRSF's own current real state (ineligible, writes no
 the real outcome, and choosing an honest `AchievementStatus` where one is needed, is a judgement
 `G58` already found neither available label fit cleanly without one — automating the mechanical
 check is real and warranted; automating the judgement itself is not, and this tool does not.
+
+## G60 — Corrective action enforced structurally, not by external trigger; a real proposal-generation feature built and applied to BRSF's own real gap first
+
+Asked directly for course-correction proposals (PBIs, impact analysis, cost-benefit, simulation)
+guaranteed by enforcement, not left ad hoc or dependent on someone remembering to run a script.
+The literal request — a script that runs itself with no trigger — is not something a static
+ontology package can do; SHACL validates data, it does not schedule execution. What this framework
+*can* guarantee, and does: an open, blocking objective with no live corrective action is now a
+structural `Violation`, surfacing on every single validation run this whole session's own
+publishing ceremony already requires before anything ships. That is this framework's own real
+form of "enforced, not ad hoc" — not a background process, a fact the register cannot hide.
+
+**Built: `ObjectiveHasCorrectiveActionShape`.** An objective that is open, whose mission is
+`InFlight`, and whose `metricMovableBy` names no work item with a live state (not `Done` or
+`Cancelled`) is a `Violation`. Grounded in a real, found-not-invented case: `Obj_RulingsQueryable`'s
+own `metricMovableBy` still named `EP_Rulings`, a real epic that had already reached `Done` and so
+could no longer move anything — a corrective action indistinguishable from having none, exactly
+`metricMovableBy`'s own real definition warns against. Proven discriminating
+(`fixture_corrective_action_v1_0_0.ttl`, four cases: no action fires, only-a-closed-action fires,
+a live action is silent, an explained objective is silent).
+
+**`backlog_lineage_compass` extended with `--propose-corrective`.** For the real top FOCUS
+objective, generates a real `Story` skeleton with a `RICEScore` (impact analysis), a
+`DimensionalCost` (cost-benefit, honestly marked estimated), and a plain arithmetic projection
+(what the objective would read if the proposal fully succeeds — a simulation in the literal sense
+of "compute what would happen," not a forecast of real effort). Deliberately low `Confidence`
+(0.3) on the generated score, disclosed as this tool's own starting estimate for a human to
+re-score, not a measured value. Verified end to end, not merely asserted: the generated skeleton,
+once merged, was confirmed to genuinely close the shape's own violation — proven by actually
+merging it into a copy of the register and re-validating, not by reading the code and assuming it
+would.
+
+**Applied to BRSF's own real gap before anything else**, the same standard `G45`/`G47`/`G58`
+already held it to. `fw:S_RulingsQueryableDecision`, a real, complete story (not the tool's own bare
+skeleton) recording the real open question `G58` had already surfaced: whether `RulingsQueryable`
+should keep counting ongoing governance growth or be redefined to close honestly. Re-scored by hand
+once a real scope existed (`1.05`, up from the tool's own starting `0.3`). A second real, honest
+correction this closure required: `fw:Register`'s own asserted state, `Done` since long before this
+session, no longer matched its real members once a genuinely `Proposed` item existed — corrected to
+`InProgress` rather than left silently wrong, the same derived-state check this whole session has
+relied on throughout catching its own author's assertion this time.
 

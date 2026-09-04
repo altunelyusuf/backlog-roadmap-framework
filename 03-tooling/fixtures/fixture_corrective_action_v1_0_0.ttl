@@ -1,0 +1,49 @@
+# Corrective action for a blocking objective — test drive, not a construction.
+#
+# Proves discrimination for ObjectiveHasCorrectiveActionShape. Grounded in a
+# real finding: fw:Obj_RulingsQueryable regressed to 38 (target 0) while its
+# own metricMovableBy still named fw:EP_Rulings, a real epic that had already
+# reached Done -- a corrective action that cannot correct anything, and the
+# shape this fixture proves discriminating correctly flags exactly that case.
+#
+# Obj_NoAction: open, blocking, no metricMovableBy at all -> fires.
+# Obj_OnlyClosedAction: open, blocking, metricMovableBy names only a Done
+#   item -> fires (the real case this shape exists for).
+# Obj_LiveAction: open, blocking, metricMovableBy names a live item -> silent.
+# Obj_Explained: open by the numbers, but carries hasAchievementStatus -> silent
+#   (the same escape AchievedOnlyWhenClearShape already honors).
+
+@prefix backlog: <http://example.org/backlog#> .
+@prefix ex:      <http://example.org/correctivetest#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+ex:Mis a backlog:Mission ; backlog:hasMissionOutcome backlog:Out_InFlight .
+ex:Goal1 a backlog:Goal ; backlog:contributesToMission ex:Mis .
+ex:Goal2 a backlog:Goal ; backlog:contributesToMission ex:Mis .
+ex:Goal3 a backlog:Goal ; backlog:contributesToMission ex:Mis .
+ex:Goal4 a backlog:Goal ; backlog:contributesToMission ex:Mis .
+
+ex:Obj_NoAction a backlog:Objective ; backlog:contributesToGoal ex:Goal1 ;
+    backlog:hasTargetValue "0"^^xsd:decimal ; backlog:hasTargetDirection backlog:Dir_Decrease .
+ex:Obs_NoAction a backlog:MetricObservation ; backlog:observationFor ex:Obj_NoAction ;
+    backlog:hasObservedValue "5"^^xsd:decimal ; backlog:observedAt "2026-09-04T00:00:00Z"^^xsd:dateTime .
+
+ex:Obj_OnlyClosedAction a backlog:Objective ; backlog:contributesToGoal ex:Goal2 ;
+    backlog:hasTargetValue "0"^^xsd:decimal ; backlog:hasTargetDirection backlog:Dir_Decrease ;
+    backlog:metricMovableBy ex:Item_Closed .
+ex:Item_Closed a backlog:Epic ; backlog:hasState backlog:Done .
+ex:Obs_OnlyClosedAction a backlog:MetricObservation ; backlog:observationFor ex:Obj_OnlyClosedAction ;
+    backlog:hasObservedValue "5"^^xsd:decimal ; backlog:observedAt "2026-09-04T00:00:00Z"^^xsd:dateTime .
+
+ex:Obj_LiveAction a backlog:Objective ; backlog:contributesToGoal ex:Goal3 ;
+    backlog:hasTargetValue "0"^^xsd:decimal ; backlog:hasTargetDirection backlog:Dir_Decrease ;
+    backlog:metricMovableBy ex:Item_Live .
+ex:Item_Live a backlog:Epic ; backlog:hasState backlog:InProgress .
+ex:Obs_LiveAction a backlog:MetricObservation ; backlog:observationFor ex:Obj_LiveAction ;
+    backlog:hasObservedValue "5"^^xsd:decimal ; backlog:observedAt "2026-09-04T00:00:00Z"^^xsd:dateTime .
+
+ex:Obj_Explained a backlog:Objective ; backlog:contributesToGoal ex:Goal4 ;
+    backlog:hasTargetValue "0"^^xsd:decimal ; backlog:hasTargetDirection backlog:Dir_Decrease ;
+    backlog:hasAchievementStatus backlog:Ach_Retrospective .
+ex:Obs_Explained a backlog:MetricObservation ; backlog:observationFor ex:Obj_Explained ;
+    backlog:hasObservedValue "5"^^xsd:decimal ; backlog:observedAt "2026-09-04T00:00:00Z"^^xsd:dateTime .

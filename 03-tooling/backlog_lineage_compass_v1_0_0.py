@@ -144,6 +144,9 @@ def main():
     ap.add_argument("register")
     ap.add_argument("--lineage", default=None, help="local name of the Lineage to report on")
     ap.add_argument("--emit-closure", default=None, help="write a proposed (not applied) closure Turtle to this path")
+    ap.add_argument("--propose-corrective", default=None,
+                     help="for the single top FOCUS objective, write a proposed corrective PBI "
+                          "(RICE-scored, with a cost estimate and a simple projection) to this path")
     args = ap.parse_args()
 
     g = load([TBOX, ABOX, args.register])
@@ -267,6 +270,70 @@ def main():
             print("\n    COMPASS: %s is the real bottleneck -- %s, %.0f%% of its original gap,"
                   % (local(top[1]), worse_word, top[2]["remaining_fraction"] * 100))
             print("    the largest of any open objective. Closure work should aim here first.")
+
+        if args.propose_corrective and open_rows:
+            goal, obj, st = open_rows[0]
+            has_live_action = any(
+                (obj, BL.metricMovableBy, w) in g and local(g.value(w, BL.hasState)) not in ("Done", "Cancelled")
+                for w in g.objects(obj, BL.metricMovableBy)
+            )
+            if has_live_action:
+                print("\n    %s already has a live corrective action; no new proposal generated."
+                      % local(obj))
+            else:
+                pid = "PBI_Corrective_%s" % local(obj)
+                pbi = URIRef(str(obj) + "_CorrectivePBI")
+                score = URIRef(str(obj) + "_CorrectiveScore")
+                cost = URIRef(str(obj) + "_CorrectiveCost")
+                dim = URIRef(str(obj) + "_CorrectiveCostDim")
+                out = Graph()
+                out.bind("backlog", BL)
+
+                gap_desc = ("regressed past its original baseline" if st["remaining_fraction"] > 1.0
+                            else "still %.0f%% short of target" % (st["remaining_fraction"] * 100))
+                out.add((pbi, RDF.type, BL.Story))
+                out.add((pbi, BL.hasState, BL.Proposed))
+                out.add((pbi, BL.hasTitle, Literal(
+                    "Move %s back toward target (currently %s, %s)" % (local(obj), st["current"], local(st["direction"])))))
+                out.add((obj, BL.metricMovableBy, pbi))
+                out.add((score, RDF.type, BL.RICEScore))
+                out.add((score, BL.scoredByMethod, BL.Method_RICE))
+                # Reach/Impact/Confidence/Effort disclosed as this tool's own estimate, not measured --
+                # a human proposing or accepting the PBI should re-score with real knowledge of the work.
+                out.add((score, BL.hasReach, Literal(1.0, datatype=XSD.decimal)))
+                out.add((score, BL.hasImpact, Literal(2.0, datatype=XSD.decimal)))
+                out.add((score, BL.hasConfidence, Literal(0.3, datatype=XSD.decimal)))
+                out.add((score, BL.hasEffort, Literal(2.0, datatype=XSD.decimal)))
+                out.add((score, BL.hasScoreValue, Literal(round(1.0 * 2.0 * 0.3 / 2.0, 3), datatype=XSD.decimal)))
+                out.add((score, BL.hasScoreRationale, Literal(
+                    "PROPOSED by backlog_lineage_compass_v1_0_0, not measured. Confidence deliberately low "
+                    "(0.3): this tool knows the objective is blocking and %s, not what the real fix costs or "
+                    "whether one is even the right response (the metric could instead need redefining -- this "
+                    "tool proposes closing the gap, not which of those two is correct). Re-score before "
+                    "committing real effort." % gap_desc)))
+                out.add((pbi, BL.hasPriorityScore, score))
+                out.add((cost, RDF.type, BL.DimensionalCost))
+                out.add((cost, BL.costOfItem, pbi))
+                out.add((cost, BL.alongDimension, dim))
+                out.add((dim, RDF.type, BL.CostDimension))
+                out.add((dim, BL.hasDimensionUnit, Literal("effort, unscoped -- placeholder pending real estimation")))
+                out.add((cost, BL.hasQuantity, Literal(0, datatype=XSD.decimal)))
+                out.add((cost, BL.isEstimatedCost, Literal(True)))
+                if st["target"] is not None and st["baseline"] is not None:
+                    out.add((pbi, rdflib.RDFS.comment, Literal(
+                        "SIMULATION (arithmetic projection only, not a forecast of real effort): if this PBI "
+                        "fully succeeds, %s would read %s (target), a change of %s from its current %s."
+                        % (local(obj), st["target"], abs(float(st["current"]) - float(st["target"])), st["current"]))))
+                out.serialize(destination=args.propose_corrective, format="turtle")
+                print("\n    Proposed corrective PBI for %s written to %s (NOT applied to the register)."
+                      % (local(obj), args.propose_corrective))
+                print("    RICE score %.3f, Confidence deliberately low (0.3) -- this is a starting proposal,"
+                      % (1.0 * 2.0 * 0.3 / 2.0))
+                print("    not a scoped commitment. Re-score once real effort is known.")
+                print("    This is a SKELETON, not a publishable PBI: it still needs a real identifier,")
+                print("    lineage membership, investment category, and a real pursuesObjective before it")
+                print("    would pass this register's own ordinary WorkItem completeness checks -- adding")
+                print("    it alone is enough to close the corrective-action gap this run found, nothing more.")
 
         if args.emit_closure and not blockers and outcome and local(outcome) == "Out_InFlight":
             out = Graph()

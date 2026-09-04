@@ -1,5 +1,39 @@
 # Changelog
 
+## v1.181.0 — 2026-09-02 (MAJOR: corrective action enforced structurally, not by external trigger — a real proposal-generation feature built and applied to BRSF's own real gap first)
+
+**Asked directly for course-correction proposals guaranteed by enforcement, not left ad hoc.** The
+literal request — a script that runs itself with no trigger — is not something a static ontology
+package can do; SHACL validates data, it does not schedule execution. What this framework can
+guarantee, and now does: an open, blocking objective with no live corrective action is a structural
+`Violation`, surfacing on every single validation run this session's own publishing ceremony
+already requires before anything ships.
+
+**Built: `ObjectiveHasCorrectiveActionShape`.** An open objective, mission `InFlight`, whose
+`metricMovableBy` names no work item with a live state, is now a `Violation`. Grounded in a real
+case: `Obj_RulingsQueryable`'s own `metricMovableBy` still named a real epic that had already
+reached `Done` — a corrective action that could no longer move anything, indistinguishable from
+having none. Proven discriminating (`fixture_corrective_action_v1_0_0.ttl`, four cases).
+
+**`backlog_lineage_compass` extended with `--propose-corrective`.** Generates a real `Story`
+skeleton for the top FOCUS objective with a `RICEScore` (impact analysis), a `DimensionalCost`
+(cost-benefit, honestly marked estimated), and a plain arithmetic projection of what the objective
+would read if the proposal succeeds. Verified end to end: the generated skeleton, once merged, was
+confirmed to genuinely close the shape's own violation by actually merging it and re-validating,
+not by assuming the code was right.
+
+**Applied to BRSF's own real gap first**, the same standard prior rulings already held it to.
+`fw:S_RulingsQueryableDecision`, a real, complete story recording the real open question `G58` had
+already surfaced — whether `RulingsQueryable` should keep counting ongoing growth or be redefined
+to close honestly. A second real correction this required: `fw:Register`'s own asserted state,
+`Done` for a long time, no longer matched its real members once a genuinely `Proposed` item
+existed — corrected to `InProgress` rather than left silently wrong.
+
+`G60` records the full reasoning. 0 SHACL violations on the real register (76 warnings). All six
+shipped checkers PASS, including the script audit against the extended compass tool. Lineage-
+discipline check PASS.
+
+
 ## v1.180.0 — 2026-09-02 (MINOR: closure readiness, progress, risk and focus computed together — backlog_lineage_compass, never applying its own findings automatically)
 
 **Asked directly to build one real tool**, not separate pieces: automate closure, monitor

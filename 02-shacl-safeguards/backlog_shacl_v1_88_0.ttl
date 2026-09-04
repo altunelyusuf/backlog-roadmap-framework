@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.87.0> ;
-    owl:versionInfo "1.87.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.88.0> ;
+    owl:versionInfo "1.88.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.87.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.86.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.85.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.84.0> ;
@@ -4081,6 +4082,33 @@ backlog:CheckpointObservedShape a sh:NodeShape ;
             FILTER NOT EXISTS {
                 ?obs a backlog:MetricObservation ; backlog:observationFor ?obj ; backlog:observedAt ?oa .
                 FILTER (?oa >= ?cd)
+            }
+        }""" ] .
+
+backlog:ObjectiveHasCorrectiveActionShape a sh:NodeShape ;
+    sh:targetClass backlog:Objective ;
+    sh:severity sh:Violation ;
+    rdfs:label "An open, blocking objective names a live corrective action (L3)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: this objective is open, blocks its mission's closure, and names no live work item that can actually move it. metricMovableBy's own real definition distinguishes a work item that CAN shift the metric from one that merely claims to pursue it -- and a metricMovableBy item that has itself reached Done or Cancelled cannot move anything going forward, the same as having none. An open, blocking objective with only a closed corrective action is indistinguishable from one nobody is working, and this framework's own compass tool exists to propose a real replacement rather than leave the gap silent." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:contributesToGoal ?g . ?g backlog:contributesToMission ?m .
+            ?m backlog:hasMissionOutcome backlog:Out_InFlight .
+            FILTER NOT EXISTS { $this backlog:hasAchievementStatus ?st }
+            $this backlog:hasTargetValue ?t ; backlog:hasTargetDirection ?d .
+            ?obs backlog:observationFor $this ; backlog:hasObservedValue ?v ; backlog:observedAt ?at .
+            FILTER NOT EXISTS {
+                ?later backlog:observationFor $this ; backlog:observedAt ?lat .
+                FILTER (?lat > ?at)
+            }
+            FILTER ((?d = backlog:Dir_Decrease && ?v > ?t) ||
+                    (?d = backlog:Dir_Increase && ?v < ?t) ||
+                    (?d = backlog:Dir_Hold && ?v != ?t))
+            FILTER NOT EXISTS {
+                $this backlog:metricMovableBy ?w .
+                ?w backlog:hasState ?ws .
+                FILTER (?ws NOT IN (backlog:Done, backlog:Cancelled))
             }
         }""" ] .
 
