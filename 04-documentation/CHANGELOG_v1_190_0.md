@@ -1,5 +1,41 @@
 # Changelog
 
+## v1.190.0 — 2026-09-04 (MAJOR: re-verified rather than trusted the prior release's own boundary; the 27 non-shape-backed rulings given real existence too; Obj_RulingsQueryable genuinely MET)
+
+**Told to proceed. Re-read all 25 rulings the prior release had judged non-convertible, in full,
+not trusted from the summary.** Confirmed: all 25 are genuine process lessons naming no single
+enforcing shape. The boundary held.
+
+**But re-verifying surfaced a real problem the prior release had missed**: under
+`enforcedByShape`-only conversion, `Obj_RulingsQueryable`'s own target (0) could never be reached
+— a genuine process lesson will always exist and genuinely needs no shape, so the target would
+stay permanently open by the framework's own honest design, not by any real remaining defect.
+
+**Built: `RetrospectiveFinding` for all 25**, plus two more of the identical pattern found along
+the way (`G67`, and `G68` itself once writing it down became the 27th case). `RetrospectiveFindingShape`'s
+own real requirement needs no `enforcedByShape` — the right class for a genuine lesson, not a
+workaround.
+
+**The metric corrected to what "queryable" actually means**: a heading is resolved once it has
+either a `GovernanceRuling` (a checkable decision) or a `RetrospectiveFinding` (a real, cited
+lesson). Re-derived directly, not assumed — including a real, recursive catch: an interim count
+was stale the moment the ruling describing it added its own heading, caught and fixed before
+shipping. Final: 49 headings, 22 as `GovernanceRuling`, 27 as `RetrospectiveFinding`, 0 remaining.
+`Obj_RulingsQueryable` is genuinely `MET`.
+
+**The corrective-action story and its task moved to `Done` honestly**, with the real evidence,
+harness, and audit properties this framework's own rules require — each gap the validator found
+caught and fixed in turn.
+
+**A real, significant finding surfaced and disclosed, not acted on unilaterally.**
+`backlog_lineage_compass`, run live: `L_OntologyDriven` is now `ELIGIBLE for Out_Achieved` — every
+objective is at target or carries a real `AchievementStatus`. This release reports that finding; it
+does not close the mission.
+
+`G68` records the full reasoning. 0 SHACL violations on the real register (80 warnings). All six
+shipped checkers PASS. Lineage-discipline check PASS.
+
+
 ## v1.189.0 — 2026-09-04 (MAJOR: the owner's own real decision on GovernanceRuling — governance layer in ontology, narratives stay human language, decisions and outcomes queryable; 22 rulings converted, a real boundary honestly found)
 
 **Asked directly, twice, to state plainly what was being decided**, because citing a corrective

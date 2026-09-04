@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v38.0.0
+# Lineage Operating Discipline — v39.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -1623,4 +1623,45 @@ still pending — with the real planning chain this framework's own rules requir
 fixed in turn by the validator: a missing task type, a container needing real membership, and an
 iteration window too narrow for work that is genuinely still ongoing (extended honestly rather than
 padded, or the original 2-hour window closed under real work still open).
+
+## G68 — Re-verified rather than trusted the prior release's own boundary; the 25 non-shape-backed rulings given real existence too; `Obj_RulingsQueryable` genuinely reached target
+
+Told to proceed. Re-read all 25 rulings `G67` had judged non-convertible in full, not trusted from
+the earlier summary — the same discipline `G51`/`G57` themselves name (a prior pass's own "no
+occasion found" is re-checked, not inherited). Confirmed: all 25 are genuine process lessons naming
+no single enforcing shape; the boundary held.
+
+**But re-verifying surfaced a real problem the prior release had not: under `enforcedByShape`-only
+conversion, `Obj_RulingsQueryable`'s own target (0) could never be reached**, because a genuine
+process lesson will always exist and genuinely needs no shape — the target would stay permanently
+open by the framework's own honest design, not by any real remaining defect. That is not what
+"unreachable by query" was ever meant to measure.
+
+**Built: `RetrospectiveFinding` for all 25**, plus `G67` itself once it became the 26th case of the
+same pattern. `RetrospectiveFindingShape`'s own real requirement (`hasFindingScope`, `hasRootCause`)
+needs no `enforcedByShape` — the right class for a genuine lesson, not a workaround. Each cites its
+own ruling via `informsRuling`, scoped `Scope_Methodology`: real, general lessons this framework
+already distinguishes from lineage-local ones.
+
+**The metric corrected to what "queryable" actually means**: a heading is resolved once it has
+either a `GovernanceRuling` (a checkable decision) or a `RetrospectiveFinding` (a real, cited
+lesson) — both reachable by query, which is the actual target. Re-derived directly against the
+current register, not assumed. A real, recursive catch along the way: an interim count claimed
+"48 headings, 0 remaining," stale the moment this very ruling's own heading was written — its own
+existence added a 49th. `G68` is itself the 27th case of the identical pattern: a real decision
+narrative naming no single shape, given its own `RetrospectiveFinding` rather than left to falsify
+the number describing it. Final, re-verified: 49 headings, 22 as `GovernanceRuling`, 27 as
+`RetrospectiveFinding`, 0 remaining. `Obj_RulingsQueryable` is genuinely `MET`.
+
+`fw:S_RulingsQueryableDecision` and `fw:ET_ConvertGovernanceRulings` moved to `Done` honestly, with
+the real evidence, harness, and audit properties this framework's own rules require for that state
+— each gap the validator found (evidence needed directly on the task, not only inherited; a wrong
+assumed modality name) caught and fixed in turn, the identical discipline `G60`–`G67` already held
+to.
+
+**A real, significant finding surfaced by this work, disclosed and not acted on unilaterally.**
+`backlog_lineage_compass`, run live against the corrected register: `L_OntologyDriven` is now
+`ELIGIBLE for Out_Achieved` — every objective is at target or carries a real `AchievementStatus`.
+This ruling reports that finding; it does not close the mission. `G59`'s own rule holds: closure
+readiness is computed, never applied automatically.
 

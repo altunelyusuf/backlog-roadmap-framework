@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.38.0> ;
-    owl:versionInfo "9.38.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.39.0> ;
+    owl:versionInfo "9.39.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.38.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.37.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.36.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.35.0> ;
@@ -253,8 +254,8 @@ fw:Out2_Scope a backlog:StageOutput ;
 #  analysis still supports them.
 #################################################################
 fw:Area_Governance a backlog:ScopeArea ;
-    backlog:areaLocation "LINEAGE_OPERATING_DISCIPLINE_v38_0_0.md" ;
-    backlog:areaMeasure "Governance rulings G1-G67, each a markdown heading with prose. Nothing in the ontology carries them; the lineage-discipline gate checks that claims about ENFORCEMENT match the shapes, and does not check that the rulings themselves exist as anything a query can reach." .
+    backlog:areaLocation "LINEAGE_OPERATING_DISCIPLINE_v39_0_0.md" ;
+    backlog:areaMeasure "Governance rulings G1-G68, each a markdown heading with prose. Nothing in the ontology carries them; the lineage-discipline gate checks that claims about ENFORCEMENT match the shapes, and does not check that the rulings themselves exist as anything a query can reach." .
 fw:Del_OntGovernance backlog:deliverableForArea fw:Area_Governance .
 fw:Area_CodeTables a backlog:ScopeArea ;
     backlog:areaLocation "03-tooling/ — 12 python modules" ;
@@ -5079,10 +5080,102 @@ fw:PE_RulingsQueryableDecision a backlog:PlanningEvent ;
 
 fw:ET_ConvertGovernanceRulings a backlog:ExecutionTask ; backlog:hasIdentifier "BRF-ET-RQ01" ;
     backlog:hasTitle "Convert G40-G66 rulings naming a real enforcing shape into GovernanceRuling individuals" ;
-    backlog:hasState backlog:InProgress ; backlog:memberOfContainer fw:It12 ;
+    backlog:hasState backlog:Done ; backlog:memberOfContainer fw:It12 ;
     backlog:hasTaskType backlog:Task_Implementation ;
     backlog:belongsToLineage fw:L_OntologyDriven ;
-    backlog:startedAt "2026-09-04T08:00:00Z"^^xsd:dateTime .
+    backlog:hasEvidence fw:Ev_RulingsQueryableDecision_Run ;
+    backlog:startedAt "2026-09-04T08:00:00Z"^^xsd:dateTime ; backlog:finishedAt "2026-09-04T12:00:00Z"^^xsd:dateTime .
 
 fw:AC_RulingsQueryableDecision a backlog:AcceptanceCriterion ;
     backlog:hasGherkinText "Given a governance ruling names exactly one real, currently-live enforcing shape, When it is converted, Then a real GovernanceRuling individual exists carrying its identifier, checkable statement, and that shape -- and a ruling naming no single shape stays honestly prose rather than being forced to satisfy a link it does not have." .
+
+#################################################################
+#  v1.190.0 — the 25 rulings honestly found to have no single
+#  enforcing shape are given real, queryable existence too, as
+#  RetrospectiveFinding (which needs no enforcedByShape) rather
+#  than forced into GovernanceRuling. Closes the real problem
+#  found on re-verification: under the prior definition alone,
+#  Obj_RulingsQueryable's own target (0) could never be reached,
+#  since genuine process lessons will always exist and genuinely
+#  need no shape. The metric is redefined below to count only
+#  headings with NEITHER a GovernanceRuling NOR a RetrospectiveFinding
+#  -- a target that is actually achievable, honestly.
+#################################################################
+
+fw:Find_G19 a backlog:RetrospectiveFinding ; backlog:informsRuling "G19" ; backlog:hasFindingScope backlog:Scope_Methodology ;
+    backlog:hasRootCause "An objective declared to have reached a structural floor was wrong three times in one session, twice the floor vanished entirely on direct test. A floor asserted without naming the experiment that tested it is an argument, not a finding." .
+fw:Find_G20 a backlog:RetrospectiveFinding ; backlog:informsRuling "G20" ; backlog:hasFindingScope backlog:Scope_Methodology ;
+    backlog:hasRootCause "Building a capability and adopting it are separate acts and nothing notices the gap between them; under time pressure the cheapest shape wins every time." .
+fw:Find_G21 a backlog:RetrospectiveFinding ; backlog:informsRuling "G21" ; backlog:hasFindingScope backlog:Scope_Methodology ;
+    backlog:hasRootCause "One TestEvidence attested five criteria across three stories; every clause was satisfied and none asked whether the promised property actually existed. Evidence batched across criteria carries the false one." .
+fw:Find_G22 a backlog:RetrospectiveFinding ; backlog:informsRuling "G22" ; backlog:hasFindingScope backlog:Scope_Methodology ;
+    backlog:hasRootCause "96 of 276 level-gated clauses had never been made to fire by any fixture. A clause nothing fires is indistinguishable from malformed SPARQL returning nothing -- both look identical from a green gate." .
+fw:Find_G23 a backlog:RetrospectiveFinding ; backlog:informsRuling "G23" ; backlog:hasFindingScope backlog:Scope_Methodology ;
+    backlog:hasRootCause "Refusing to verify closed work because backfilling unplanned work is a defect conflates two different acts. Closed does not mean verified; it means nobody looked again." .
+fw:Find_G24 a backlog:RetrospectiveFinding ; backlog:informsRuling "G24" ; backlog:hasFindingScope backlog:Scope_Methodology ;
+    backlog:hasRootCause "hasCommittedEffort was compared against hasCapacity and both were asserted; an iteration held 15 points while declaring 9 and every check passed. A number that agrees with another asserted number proves nothing." .
+fw:Find_G26 a backlog:RetrospectiveFinding ; backlog:informsRuling "G26" ; backlog:hasFindingScope backlog:Scope_Methodology ;
+    backlog:hasRootCause "A two-part Mission draft was rejected on style grounds when the real defect was mechanical: lineageForMission is owl:FunctionalProperty, so two missions would need two lineages. Structural cardinality must be tested before wording." .
+fw:Find_G27 a backlog:RetrospectiveFinding ; backlog:informsRuling "G27" ; backlog:hasFindingScope backlog:Scope_Methodology ;
+    backlog:hasRootCause "A Mission draft treated a foundational document's silence as a scope authority. A theoretical base is not a boundary on current work; silence in an old source is not evidence of exclusion." .
+fw:Find_G28 a backlog:RetrospectiveFinding ; backlog:informsRuling "G28" ; backlog:hasFindingScope backlog:Scope_Methodology ;
+    backlog:hasRootCause "Scope areas were brainstormed by paraphrasing the Mission's own prose rather than built from an external theory's own structure and tested cell by cell -- a domain-blind fit-gap misses the sub-concepts the Mission's own author never named." .
+fw:Find_G29 a backlog:RetrospectiveFinding ; backlog:informsRuling "G29" ; backlog:hasFindingScope backlog:Scope_Methodology ;
+    backlog:hasRootCause "Goal generation is complete by construction once GoalFacing is treated as a closure test: one mission-facing Goal per clause, one scope-facing Goal per Area, one exclusion-facing Goal per Exclusion, verified against a real external adoption." .
+fw:Find_G30 a backlog:RetrospectiveFinding ; backlog:informsRuling "G30" ; backlog:hasFindingScope backlog:Scope_Methodology ;
+    backlog:hasRootCause "A measurement dimension was assigned to a Goal by category default rather than by testing which of the standards-grounded dimensions actually answers that Goal's own failure mode against a real, walked case." .
+fw:Find_G31 a backlog:RetrospectiveFinding ; backlog:informsRuling "G31" ; backlog:hasFindingScope backlog:Scope_Methodology ;
+    backlog:hasRootCause "A calendar deadline was invented for a technical objective whose real timing depends on unpredictable engineering work -- false precision. The honest 'when' is a condition on another artifact's state, recorded directly rather than approximated with a date." .
+fw:Find_G32 a backlog:RetrospectiveFinding ; backlog:informsRuling "G32" ; backlog:hasFindingScope backlog:Scope_Methodology ;
+    backlog:hasRootCause "An Exclusion's rationale cited an external, legacy, unverified authority rather than the lineage's own current Mission text or a checked current fact -- the third case should always prompt re-examination before the exclusion is trusted." .
+fw:Find_G33 a backlog:RetrospectiveFinding ; backlog:informsRuling "G33" ; backlog:hasFindingScope backlog:Scope_Methodology ;
+    backlog:hasRootCause "A WorkItem's state was moved twice on the wrong basis in opposite directions -- once because a ceremony record existed, once reverted because it didn't -- both times testing whether a ceremony happened rather than re-checking the actual evidence." .
+fw:Find_G34 a backlog:RetrospectiveFinding ; backlog:informsRuling "G34" ; backlog:hasFindingScope backlog:Scope_Methodology ;
+    backlog:hasRootCause "Two items were compared pairwise and the winner treated as the overall answer without checking the other twelve-plus already-scored items in the same backlog; a full review found a third item scored far higher than either." .
+fw:Find_G35 a backlog:RetrospectiveFinding ; backlog:informsRuling "G35" ; backlog:hasFindingScope backlog:Scope_Methodology ;
+    backlog:hasRootCause "A ranking's own rationale claimed a specific instruction the owner never gave -- a real, general instruction was extrapolated into a specific claim and recorded as if directly stated." .
+fw:Find_G36 a backlog:RetrospectiveFinding ; backlog:informsRuling "G36" ; backlog:hasFindingScope backlog:Scope_Methodology ;
+    backlog:hasRootCause "A genuinely different activity was bundled under an existing Goal rather than given its own, found only after direct challenge -- a Deliverable joins an existing Goal only if it alone would satisfy that Goal's own stated purpose." .
+fw:Find_G37 a backlog:RetrospectiveFinding ; backlog:informsRuling "G37" ; backlog:hasFindingScope backlog:Scope_Methodology ;
+    backlog:hasRootCause "At least three separate releases shipped without their own changelog entry, caught and backfilled later each time -- the same rigor applied mechanically to manifest regeneration was not applied with the same consistency to the changelog." .
+fw:Find_G38 a backlog:RetrospectiveFinding ; backlog:informsRuling "G38" ; backlog:hasFindingScope backlog:Scope_Methodology ;
+    backlog:hasRootCause "A new control was about to be proposed for a gap that, checked directly, already existed and already worked -- it had simply never fired because the adopting lineage's own declared conformance level gated it out several levels below where the control lived." .
+fw:Find_G39 a backlog:RetrospectiveFinding ; backlog:informsRuling "G39" ; backlog:hasFindingScope backlog:Scope_Methodology ;
+    backlog:hasRootCause "A proposal to track incoming handovers was first drafted as full reified TBox/SHACL provenance for a problem that turned out simpler: whether a file has been read yet is bookkeeping, not domain knowledge warranting new vocabulary." .
+fw:Find_G51 a backlog:RetrospectiveFinding ; backlog:informsRuling "G51" ; backlog:hasFindingScope backlog:Scope_Methodology ;
+    backlog:hasRootCause "another registrant was dismissed as only-educational after checking one file out of its whole ecosystem -- the same shallow-check failure as reading one class definition in isolation and calling it a complete investigation." .
+fw:Find_G52 a backlog:RetrospectiveFinding ; backlog:informsRuling "G52" ; backlog:hasFindingScope backlog:Scope_Methodology ;
+    backlog:hasRootCause "ScopeChange was built next by this framework's own real BP-D10 ranking rather than sequencing convenience; a real archive-vs-active scope targeting mistake was caught by the framework's own checks before publish." .
+fw:Find_G54 a backlog:RetrospectiveFinding ; backlog:informsRuling "G54" ; backlog:hasFindingScope backlog:Scope_Methodology ;
+    backlog:hasRootCause "Enabler's disjointness with Epic, a suspicion carried as Confidence=0.5, was investigated directly and confirmed true -- re-scoring with the confirmed real cost dropped it below every remaining candidate, the discipline BP-D11 itself requires." .
+fw:Find_G56 a backlog:RetrospectiveFinding ; backlog:informsRuling "G56" ; backlog:hasFindingScope backlog:Scope_Methodology ;
+    backlog:hasRootCause "ProblemReport's only real connection property implied a maintenance-kind Initiative this register does not have -- a substantially larger build than the original estimate assumed, found only by tracing the real property chain rather than trusting the class name." .
+fw:Find_G57 a backlog:RetrospectiveFinding ; backlog:informsRuling "G57" ; backlog:hasFindingScope backlog:Scope_Methodology ;
+    backlog:hasRootCause "Twelve classes the earlier pass had checked and found genuinely no occasion for were re-read fresh rather than trusted, since two premature dismissals this same session had already turned out to be the identical failure: closing an investigation at one file or one reading instead of the whole picture." .
+
+fw:Find_G67 a backlog:RetrospectiveFinding ; backlog:informsRuling "G67" ; backlog:hasFindingScope backlog:Scope_Methodology ;
+    backlog:hasRootCause "A corrective action's mere existence was cited as if it resolved anything while it sat Proposed for multiple releases with neither real option ever put to the owner -- the exact failure a live corrective action requirement exists to prevent, caught only once asked directly what was actually being decided." ;
+    backlog:hasRemedy "The owner's own real ruling now governs: governance layer in ontology, narratives stay human language, decisions and outcomes queryable. Applied immediately: 22 rulings converted, 25 (now 26 with this one) given real RetrospectiveFinding existence, two stale definitions corrected." .
+
+fw:Obs_RulingsQueryable_20260904b a backlog:MetricObservation ;
+    backlog:observesMetric fw:Metric_Obj_RulingsQueryable ;
+    backlog:observationFor fw:Obj_RulingsQueryable ;
+    backlog:hasObservedValue "0"^^xsd:decimal ;
+    backlog:observedAt "2026-09-04T12:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "SPARQL count of real headings (regex '^## (G\\\\d+)') in LINEAGE_OPERATING_DISCIPLINE_v38_0_0.md (the version current at the moment of this count) with neither a matching backlog:GovernanceRuling (by hasRulingIdentifier) NOR a matching backlog:RetrospectiveFinding (by informsRuling). Corrected from the prior observation's narrower method, which counted only the first category and so could never reach zero -- a genuine process lesson will always exist and genuinely needs no enforcing shape, but it is still reachable by query once recorded as a real RetrospectiveFinding, which is what 'unreachable by query' actually means. 49 real headings currently exist (including G68 itself): 22 as GovernanceRuling (naming a real, live enforcing shape each), 27 as RetrospectiveFinding (genuine methodology lessons, no shape forced), 0 with neither. Re-verified directly, not assumed: a fresh SPARQL count against this exact register returns an empty remaining set." .
+
+fw:Ev_RulingsQueryableDecision_Run a backlog:TestEvidence ; backlog:evidenceVerified true ;
+    backlog:verifiedByTool "backlog_validate_v1_5_0.py" ;
+    backlog:hasTestSpec "A fresh SPARQL count against this exact register's own real headings: 49 total (including G68, the ruling recording this conversion itself, added after this count's own first draft and corrected before shipping), 22 as GovernanceRuling, 27 as RetrospectiveFinding, 0 remaining -- Obs_RulingsQueryable_20260904b, re-derived directly against the final state, not assumed." ;
+    backlog:attestsCriterion fw:AC_RulingsQueryableDecision .
+
+fw:Harness_RulingsQueryableDecision a backlog:TestHarness ; backlog:harnessFor fw:S_RulingsQueryableDecision ;
+    backlog:hasHarnessEvidence fw:Ev_RulingsQueryableDecision_Run .
+
+fw:S_RulingsQueryableDecision backlog:hasEvidence fw:Ev_RulingsQueryableDecision_Run ;
+    backlog:lastAuditedAt "2026-09-04T12:00:00Z"^^xsd:dateTime ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid .
+
+fw:Find_G68 a backlog:RetrospectiveFinding ; backlog:informsRuling "G68" ; backlog:hasFindingScope backlog:Scope_Methodology ;
+    backlog:hasRootCause "A prior pass's own boundary was re-verified rather than trusted, surfacing a real problem: a metric counting only shape-backed conversions could never reach its own target, since genuine process lessons will always exist. A ruling's own real-time authoring adds a new heading no earlier count could have included -- a claim of a final number is stale the moment the ruling describing it is itself written down." ;
+    backlog:hasRemedy "RetrospectiveFinding built for all prior non-shape-backed rulings and for this one, closing the metric honestly; hasFindingScope Scope_Methodology throughout." .
