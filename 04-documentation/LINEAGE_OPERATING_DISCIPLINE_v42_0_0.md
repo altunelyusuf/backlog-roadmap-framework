@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v41.0.0
+# Lineage Operating Discipline — v42.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -1741,4 +1741,51 @@ subdivide something this project's own real work has never organically needed sp
 different finding from "nothing to connect to yet": this is "checked, and this project's own real
 granularity does not need it," the same standing `ProblemReport` and `FitGapFinding` already hold,
 for a different structural reason.
+
+## G71 — A closure report enforced as a standard part of closure, framework-wide; the mission genuinely closed
+
+Instructed to document this lineage's own development as a report and dashboard, and to enforce
+that report as a standard piece of closure ceremony before the mission itself closes.
+
+**Built: `ClosureReport`, a genuinely new class**, distinct from `RoadmapReport` on purpose —
+`RoadmapReport`'s own definition favours a re-run event over a recalled document; a closure is the
+opposite case, a permanent record written once while the underlying data is still live to check it
+against. Carries `closesForMission`, `reportGeneratedAt`, `hasClosureSummary`,
+`reportsOnObjective`, `citesFinding` (real, already-recorded `RetrospectiveFinding`s, not restated
+history) and `statesBestPractice`.
+
+**Built: `MissionClosureRequiresReportShape`**, a real `Violation` if a mission is marked `Achieved`
+with no `ClosureReport` naming it — enforced structurally, for every lineage this shape suite
+governs, not only as a one-time step for this closure. Proven discriminating on two real cases
+before shipping (`fixture_closure_report_v1_0_0.ttl`).
+
+**A real edge case found and resolved on the first real application, not asserted clean.** Applying
+this shape to BRSF's own current register immediately flagged `Mission_BuildSoftware_v2` — an
+earlier, already-`Achieved` mission from before this rule existed, with no `Goal`/`Objective`
+structure a closure report's own schema could honestly report on. Exempted using the identical,
+already-established precedent `ArchiveOnlyWhenAchievedShape` set: archiving stops active
+governance on purpose, and this earlier lineage is already archived. Not a new, ad hoc exception —
+the same rule applied twice.
+
+**A second real mistake caught and fixed in the same pass.** Marking `Mission_OntologyDriven`
+`Achieved` initially left a stale, conflicting `Out_InFlight` triple asserted elsewhere in the
+register — RDF does not overwrite a functional property's prior value on its own. Found by
+re-running the validator immediately after the change, per this project's own standing discipline,
+not assumed. The superseded outcome's own real narrative (an earlier, honest correction from a
+premature `Out_Achieved`) was preserved as history in a comment rather than deleted, since the old
+record was itself a real, informative part of this lineage's own story.
+
+**A third, deliberate non-action.** Marking the mission `Achieved` was accompanied by an initial,
+reflexive attempt to also mark the lineage archived — reverted directly, once recognised as a
+separate, larger operation (physically moving real data into a real archive file) that was not
+asked for and does not belong bundled silently into closing the mission.
+
+**`fw:CR_OntologyDriven` built and verified against the register's own real, current numbers before
+being written down, not estimated**: 8 objectives (7 at target, 1 with a real, recorded
+`AchievementStatus`), 9 cited findings, 5 stated best practices. A companion, human-readable
+dashboard (`CLOSURE_REPORT_L_OntologyDriven_v1_0_0.md`) renders the same real data for a reader, not
+a second, independently-asserted account of it.
+
+`Mission_OntologyDriven` is now `Out_Achieved`, genuinely, with the report this ruling's own
+enforcement required already in place before the outcome was set.
 

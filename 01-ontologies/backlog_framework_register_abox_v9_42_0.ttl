@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.41.0> ;
-    owl:versionInfo "9.41.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.42.0> ;
+    owl:versionInfo "9.42.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.41.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.40.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.39.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.38.0> ;
@@ -176,7 +177,9 @@ fw:Mission_OntologyDriven a backlog:Mission ;
     backlog:missionFor fw:Register ;
     backlog:hasMissionOrigin backlog:Origin_OwnerStated ;
     backlog:missionSource "Owner, 2026-10-26, verbatim: 'a new mission and a new lineage to reduce the dependency on the prose and source code. I want you to convert the current configuration to be ontology driven by analyzing the prose and source code and identify the possible exports from them to the ontology not just the rules but also the clasesses, relationships, properties, objects/instances, and other ontologic concpepts. Additionally, the governance model should be based on the ontologies and execution of the rules be transferred to the ontology levels from the prose and source codes.' Follows the owner's finding at v1.98.0 that prose is the largest and least verified layer: 7197 lines nothing checks against the ontology, and that every drift in this session occurred in prose nothing could contradict." ;
-    backlog:decidedBy backlog:Owner .
+    backlog:decidedBy backlog:Owner ;
+    backlog:hasMissionOutcome backlog:Out_Achieved ;
+    backlog:outcomeRationale "Achieved. Closure computed by backlog_lineage_compass, not asserted: every one of eight objectives is at target or carries a real AchievementStatus explaining why it no longer steers (Obj_RowsUnchecked: Ach_Retrospective, a confirmed structural floor). fw:CR_OntologyDriven, this mission's own required closure report, records the real measures, cited findings and best practices this lineage's own history produced. Closed by the owner's own direct instruction, with the closure report required to exist first, per MissionClosureRequiresReportShape." .
 
 fw:Out2_Mission a backlog:StageOutput ;
     backlog:outputOfStage backlog:Stage_Mission ;
@@ -256,8 +259,8 @@ fw:Out2_Scope a backlog:StageOutput ;
 #  analysis still supports them.
 #################################################################
 fw:Area_Governance a backlog:ScopeArea ;
-    backlog:areaLocation "LINEAGE_OPERATING_DISCIPLINE_v41_0_0.md" ;
-    backlog:areaMeasure "Governance rulings G1-G70, each a markdown heading with prose. Nothing in the ontology carries them; the lineage-discipline gate checks that claims about ENFORCEMENT match the shapes, and does not check that the rulings themselves exist as anything a query can reach." .
+    backlog:areaLocation "LINEAGE_OPERATING_DISCIPLINE_v42_0_0.md" ;
+    backlog:areaMeasure "Governance rulings G1-G71, each a markdown heading with prose. Nothing in the ontology carries them; the lineage-discipline gate checks that claims about ENFORCEMENT match the shapes, and does not check that the rulings themselves exist as anything a query can reach." .
 fw:Del_OntGovernance backlog:deliverableForArea fw:Area_Governance .
 fw:Area_CodeTables a backlog:ScopeArea ;
     backlog:areaLocation "03-tooling/ — 12 python modules" ;
@@ -3944,10 +3947,23 @@ fw:Ev_MissionRead a backlog:TestEvidence ;
     backlog:verifiedByTool "manual resolution against tbox and shapes" ;
     backlog:attestsCriterion fw:AC_EP_StandardRows_S2 .
 
-fw:Mission_OntologyDriven backlog:hasMissionOutcome backlog:Out_InFlight ;
-    backlog:outcomeRationale "Corrected from a premature Out_Achieved (set 2026-08-27, before this mission's own CheckpointObservedShape existed to catch it). Six of seven objectives held or improved to target. The seventh, Obj_RulingsQueryable, was genuinely at target (0) as of the It7 observation, but Metric_Obj_RulingsQueryable's own counting method ('### G' headings in the discipline document) continued to count every governance ruling authored afterward as part of this mission's own ongoing operation -- not a failure of the original migration, but a live demonstration that the metric and the mission's own continued work are the same activity. Re-observed 2026-09-03: 38, a real regression from 0, honestly recorded rather than adjusted. Neither Ach_Retrospective (the count has not stopped moving; the event it would report is not past) nor Ach_Withdrawn (the measure was not wrong) is an honest fit for this objective's own real status, so the mission stays InFlight rather than forcing either. Obj_RowsUnchecked's own Ach_Retrospective stands unchanged." .
+#  Historical: fw:Mission_OntologyDriven was corrected here (v1.170.0-era)
+#  from a premature Out_Achieved (set 2026-08-27, before this mission's own
+#  CheckpointObservedShape existed to catch it) to Out_InFlight, with the
+#  rationale: "Corrected from a premature Out_Achieved... Six of seven
+#  objectives held or improved to target. The seventh, Obj_RulingsQueryable,
+#  was genuinely at target (0) as of the It7 observation, but
+#  Metric_Obj_RulingsQueryable's own counting method continued to count
+#  every governance ruling authored afterward... Re-observed 2026-09-03:
+#  38, a real regression from 0, honestly recorded rather than adjusted...
+#  the mission stays InFlight rather than forcing either." Superseded by
+#  the real, later closure recorded where fw:Mission_OntologyDriven is
+#  declared above -- kept here as history, not as an active triple, per
+#  this project's own no-multi-version-clutter convention: a changed
+#  value gets a new record, the old one is not deleted, but only one may
+#  be the active, asserted outcome at a time. Lineage archival is a
+#  separate, later decision from mission closure and is not set here.
 
-fw:L_OntologyDriven backlog:lineageArchived false .
 
 #################################################################
 #  v8.2.0 — every container states its scope.
@@ -5211,4 +5227,29 @@ fw:Ruling_G70 a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G70" ;
     rdfs:label "A silently-moved iteration window is caught structurally, for every project this framework governs"@en ;
     backlog:hasRulingStatement "Any open iteration with real work in it and no PlanBaseline is flagged; once a baseline exists, an iteration's own current dates must match it or a real Rebaseline must name the move -- Rebaseline's own reach widened to cover Iteration, not only Objective and Milestone." ;
     backlog:enforcedByShape backlog:OpenIterationBaselineAdvisoryShape , backlog:SilentContainerRebaselineShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+
+#################################################################
+#  v1.192.0 -- the closure report, built and required before this
+#  mission may be marked Achieved, per MissionClosureRequiresReportShape.
+#################################################################
+
+fw:CR_OntologyDriven a backlog:ClosureReport ;
+    backlog:closesForMission fw:Mission_OntologyDriven ;
+    backlog:reportGeneratedAt "2026-09-04T14:00:00Z"^^xsd:dateTime ;
+    backlog:hasClosureSummary "The mission asked that the framework's governance be exported from prose and source code into the ontology itself, and that the governance model run on ontology rather than documentation. Eight objectives were set; seven reached target exactly, and the eighth (Obj_RowsUnchecked) was closed with a real, recorded AchievementStatus rather than forced to zero, after a genuine structural floor was confirmed rather than argued. The lineage's own real history includes two real corrections of its own governance mechanisms mid-flight (G61/G62 replacing an arbitrary attempt-count with evidence-based detection; G69/G70 finding and closing a real gap in how a moved plan gets recorded), a real decision from the owner on what 'ontology-driven' concretely requires (G63/G67), and a real, disclosed finding that a corrective action was left undecided for multiple releases before being surfaced directly. Closure eligibility was computed by this framework's own tooling, not asserted, and this report itself is required to exist before the outcome below is set -- the identical discipline this lineage's own real work spent most of its history building." ;
+    backlog:reportsOnObjective fw:Obj_BRSFConformanceHeld , fw:Obj_RulingsQueryable , fw:Obj_RulesDecidedInCode ,
+        fw:Obj_TablesExported , fw:Obj_RowsUnchecked , fw:Obj_CodeDecisions , fw:Obj_NoNewClasses , fw:Obj_NoProseLost ;
+    backlog:citesFinding fw:Find_G19 , fw:Find_G21 , fw:Find_G24 , fw:Find_G33 , fw:Find_G51 , fw:Find_G57 ,
+        fw:Find_G67 , fw:Find_G68 , fw:Find_G69 ;
+    backlog:statesBestPractice "Re-verify a claim by re-running the actual check immediately before stating it, in the same breath as the claim -- not from memory of an earlier run, however recent. Every 'still 0 violations' in this lineage's own real history that skipped this step was wrong at least once." ,
+        "When a validator's own warning count looks large, read each distinct message individually before deciding whether it matters -- a single grouped number hides real bugs as easily as it hides harmless, deliberate differences in how the work is done." ,
+        "Replace a fixed threshold (a count of attempts, a number of days) with a real, evidence-based comparison wherever the underlying data can support one; a threshold is almost always easier to game than the data it was standing in for." ,
+        "When a class or property looks unused, check its own real definition and this project's own real history individually before dismissing it as 'not needed here' -- several turned out to be already-known, already-named, simply not-yet-acted-on opportunities." ,
+        "A corrective action or open decision that sits unresolved for more than one release is a signal to surface it directly to the person who can actually decide it, not to keep citing its existence as if that settled anything." .
+
+fw:Ruling_G71 a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G71" ;
+    rdfs:label "A closure report is a standard, structurally-enforced part of closing a mission"@en ;
+    backlog:hasRulingStatement "A mission may not be marked Achieved unless a real ClosureReport already names it, naming what it measured, cited and learned; enforced for every lineage this shape suite governs, not only as a one-time step." ;
+    backlog:enforcedByShape backlog:ClosureReportShape , backlog:MissionClosureRequiresReportShape ;
     backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .

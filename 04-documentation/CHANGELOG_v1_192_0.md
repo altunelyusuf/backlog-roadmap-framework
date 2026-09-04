@@ -1,5 +1,44 @@
 # Changelog
 
+## v1.192.0 — 2026-09-04 (MAJOR: a closure report enforced as a standard part of closure ceremony, framework-wide; Mission_OntologyDriven genuinely closed)
+
+**Instructed to document this lineage's own development as a report and dashboard, and to enforce
+that report as a standard piece of closure ceremony before the mission itself closed.**
+
+**Built: `ClosureReport`, a genuinely new class**, distinct from `RoadmapReport` on purpose — a
+closure is a permanent record written once while the underlying data is still live to check it
+against, not an event meant to be re-run. Carries what it closes, when, its summary, the real
+objectives it reports on, the real findings it cites, and the best practices it states.
+
+**Built: `MissionClosureRequiresReportShape`.** A mission may not be marked `Achieved` with no real
+`ClosureReport` naming it — enforced structurally, for every lineage this shape suite governs, not
+only as a one-time step. Proven discriminating before shipping.
+
+**A real edge case found on the very first real application.** This immediately flagged an earlier,
+already-`Achieved` mission from before this rule existed, with no objective structure a report could
+honestly cover. Exempted using the identical, already-established precedent for archived lineages —
+not a new, ad hoc exception.
+
+**Two real mistakes caught and fixed in the same pass.** Marking the mission `Achieved` initially
+left a stale, conflicting prior outcome asserted elsewhere in the register — found by re-running the
+validator immediately after the change, not assumed clean. Its own real, historically informative
+narrative was preserved as a comment rather than deleted. A reflexive attempt to also archive the
+underlying lineage was reverted directly, once recognised as a separate, larger operation not asked
+for.
+
+**The real closure report and its human-readable dashboard companion
+(`CLOSURE_REPORT_L_OntologyDriven_v1_0_0.md`) built and verified against the register's own current
+numbers before being written down**: 8 objectives (7 at target, 1 with a real recorded reason it no
+longer steers), 9 cited findings, 5 stated best practices, 69 real governance rulings across the
+full `G1`–`G70` range (42 as checkable rules, 33 as recorded lessons, 0 unaccounted for).
+
+`Mission_OntologyDriven` is now `Out_Achieved`, genuinely, with the report this release's own
+enforcement required already in place before the outcome was set.
+
+`G71` records the full reasoning. 0 SHACL violations on the real register (79 warnings). All six
+shipped checkers PASS. Lineage-discipline check PASS. Doc-coverage gate PASS.
+
+
 ## v1.191.0 — 2026-09-04 (MAJOR: a real structural gap closed framework-wide, not only in this project's own data — the class meant to record a moved target could not name an iteration's dates at all; two classes never before investigated, checked fresh)
 
 **Challenged directly on the prior release's own shortcut**: fifteen unused vocabulary classes had

@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.75.0> ;
-    owl:versionInfo "1.75.0" ;
+    owl:versionIRI <http://example.org/backlog/1.76.0> ;
+    owl:versionInfo "1.76.0" ;
+    owl:priorVersion <http://example.org/backlog/1.75.0> ;
     owl:priorVersion <http://example.org/backlog/1.74.0> ;
     owl:priorVersion <http://example.org/backlog/1.73.0> ;
     owl:priorVersion <http://example.org/backlog/1.72.0> ;
@@ -2278,6 +2279,48 @@ backlog:milestoneOutcome a owl:ObjectProperty ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "milestone outcome"@en ;
     skos:definition "Derived: met if achieved on or before the target date, missed once the target date has passed with no achievement, pending otherwise."@en .
+
+backlog:ClosureReport a owl:Class ;
+    rdfs:subClassOf core:Artifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Closure Report"@en ;
+    skos:definition "A dated, permanent record of why a lineage's mission was concluded and what it cost, achieved and taught -- distinct from a RoadmapReport, whose own definition deliberately favours a re-run event over a recalled document. A closure is the opposite case: the moment a mission's own real history and register archive, there is nothing left to re-run against, so the record must be the artifact itself, written once, at the point the underlying data was still live to check it against. A mission closed with no report is a decision nobody can later audit."@en .
+
+backlog:closesForMission a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:ClosureReport ; rdfs:range backlog:Mission ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "closes for mission"@en ;
+    skos:definition "Which mission this report closes out. Functional: a closure report that could name two missions could not be checked against either one specifically."@en .
+
+backlog:reportGeneratedAt a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:ClosureReport ; rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "report generated at"@en ;
+    skos:definition "When this report was produced, so a reader can tell whether it was written against the register's own real, current state or reused stale."@en .
+
+backlog:hasClosureSummary a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:ClosureReport ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has closure summary"@en ;
+    skos:definition "The narrative account of how the mission concluded, in human language -- the decision narratives themselves stay prose per this session's own real ruling; the measures, findings and rulings the summary describes are each separately queryable through this report's own object properties, not only asserted in the summary text."@en .
+
+backlog:reportsOnObjective a owl:ObjectProperty ;
+    rdfs:domain backlog:ClosureReport ; rdfs:range backlog:Objective ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "reports on objective"@en ;
+    skos:definition "An objective this closure report's own measures dashboard covers. Required at least once: a closure report naming no objective describes nothing a mission was actually measured against."@en .
+
+backlog:citesFinding a owl:ObjectProperty ;
+    rdfs:domain backlog:ClosureReport ; rdfs:range backlog:RetrospectiveFinding ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "cites finding"@en ;
+    skos:definition "A real, already-recorded RetrospectiveFinding this closure report draws its lessons-learned section from, rather than restating history as fresh prose the underlying findings already stated more precisely."@en .
+
+backlog:statesBestPractice a owl:DatatypeProperty ;
+    rdfs:domain backlog:ClosureReport ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "states best practice"@en ;
+    skos:definition "A practice this lineage's own real history showed was worth keeping, stated as guidance for the next lineage -- distinct from citesFinding, which points at what went wrong or was learned; this states what should be repeated on purpose."@en .
 
 backlog:Rebaseline a owl:Class ;
     rdfs:subClassOf core:Artifact ;

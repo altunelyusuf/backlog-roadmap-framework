@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.94.0> ;
-    owl:versionInfo "1.94.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.95.0> ;
+    owl:versionInfo "1.95.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.94.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.93.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.92.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.91.0> ;
@@ -4989,6 +4990,32 @@ backlog:AchievedOnlyWhenClearShape a sh:NodeShape ;
             FILTER ((?d = backlog:Dir_Decrease && ?v > ?t) ||
                     (?d = backlog:Dir_Increase && ?v < ?t) ||
                     (?d = backlog:Dir_Hold && ?v != ?t))
+        }""" ] .
+
+backlog:ClosureReportShape a sh:NodeShape ;
+    sh:targetClass backlog:ClosureReport ;
+    sh:severity sh:Violation ;
+    rdfs:label "A closure report names its mission, when it ran, and covers real measures (L1)"@en ;
+    sh:property [ sh:path backlog:closesForMission ; sh:minCount 1 ; sh:maxCount 1 ; sh:class backlog:Mission ;
+                  sh:message "L1: a closure report must name exactly one mission it closes." ] ;
+    sh:property [ sh:path backlog:reportGeneratedAt ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:dateTime ;
+                  sh:message "L1: a closure report must record when it was generated." ] ;
+    sh:property [ sh:path backlog:hasClosureSummary ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ;
+                  sh:message "L1: a closure report must carry a real closure summary." ] ;
+    sh:property [ sh:path backlog:reportsOnObjective ; sh:minCount 1 ; sh:class backlog:Objective ;
+                  sh:message "L1: a closure report must report on at least one real objective; a dashboard with no measures is a summary, not a dashboard." ] .
+
+backlog:MissionClosureRequiresReportShape a sh:NodeShape ;
+    sh:targetClass backlog:Mission ;
+    sh:severity sh:Violation ;
+    rdfs:label "A mission is not Achieved without a real closure report naming it (L3)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: this mission is marked Achieved and no real ClosureReport names it via closesForMission. Enforced structurally, for every lineage this shape suite governs, not only as a one-time step: a mission closed with no report is a decision nobody can later audit, the same real gap that let this session's own corrective-action and re-baseline failures sit unrecorded until asked about directly. The report must exist before the outcome is set, not be promised after. Exempts missions whose own lineage is already archived, the identical precedent ArchiveOnlyWhenAchievedShape already established: archiving stops active governance on purpose, and a lineage from before this requirement existed, with no Goal/Objective structure this report's own schema could honestly report on, is not retroactively held to it." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasMissionOutcome backlog:Out_Achieved .
+            FILTER NOT EXISTS { ?r backlog:closesForMission $this }
+            FILTER NOT EXISTS { $this backlog:belongsToLineage ?l . ?l backlog:lineageArchived true }
         }""" ] .
 
 backlog:RetrospectiveObjectiveShape a sh:NodeShape ;
