@@ -9,7 +9,7 @@ the ontology layer.*
 (`backlog_lineage_compass`), not asserted. **Ontology record:** `fw:CR_OntologyDriven`, required to
 exist before this outcome could be set, per `MissionClosureRequiresReportShape` (`G70`).
 
-**Report generated:** 2026-09-04, against `backlog_framework_register_abox_v9_42_0.ttl`.
+**Report generated:** 2026-09-04, against `backlog_framework_register_abox_v9_42_1.ttl`.
 
 ---
 
@@ -126,5 +126,5 @@ close:
 
 ---
 
-*Generated from `backlog_framework_register_abox_v9_42_0.ttl`, re-verified against the live register
+*Generated from `backlog_framework_register_abox_v9_42_1.ttl`, re-verified against the live register
 at generation time, not recalled from memory or an earlier run.*

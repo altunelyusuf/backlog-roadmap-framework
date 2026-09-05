@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.42.0> ;
-    owl:versionInfo "9.42.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.42.1> ;
+    owl:versionInfo "9.42.1" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.42.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.41.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.40.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.39.0> ;
@@ -271,7 +272,7 @@ fw:Area_RuleExecution a backlog:ScopeArea ;
     backlog:areaMeasure "The gate runs 12 named checks. 9 evaluate SHACL and carry no meaning. 3 decide outcomes in code: fixture polarity is inferred from the FILENAME, manifest exemption from a python list, reachability from a python traversal. Those three are rules executing outside the ontology." .
 fw:Del_OntRuleExec backlog:deliverableForArea fw:Area_RuleExecution .
 fw:Area_StandardDoc a backlog:ScopeArea ;
-    backlog:areaLocation "BACKLOG_ROADMAP_FRAMEWORK_STANDARD_v1_48_0.md" ;
+    backlog:areaLocation "BACKLOG_ROADMAP_FRAMEWORK_STANDARD_v1_84_0.md" ;
     backlog:areaMeasure "186 table rows describing classes, levels and constraint behaviour. The doc-coverage gate checks every class is NAMED here; nothing checks that what the table SAYS about a class matches the ontology, so a row can contradict the TBox indefinitely." .
 fw:Del_ProseExplains backlog:deliverableForArea fw:Area_StandardDoc .
 

@@ -1,5 +1,31 @@
 # Changelog
 
+## v1.192.1 — 2026-09-05 (PATCH: full taxonomy-scope audit — every area, deliverable and exclusion checked individually; one dead file pointer found and fixed)
+
+**Asked directly for a health check and confirmation of whether the scope is complete, based on the
+real, taxonomy-based scope definition, checked item by item.** Investigated properly: pulled the
+real `ScopeStatement` (`Scope_Ontology`) and checked each of its 5 real `ScopeArea`s, 5
+`ScopeDeliverable`s and 2 `ScopeExclusion`s individually against the actual register, not
+summarised.
+
+**Every area has a real goal and objective, and every one is closed or honestly explained.** No
+area was found with no goal covering it. Deliverables are artifacts, not work items — their own
+completion is correctly carried by their area's objective, not a separate state field; an initial
+check assuming otherwise was a wrong test, corrected before reporting.
+
+**One real, dead pointer found and fixed.** `Area_CodeTables`'s sibling `Area_StandardDoc` named a
+standard document file that has been deleted for many releases (`v1_48_0`, superseded long ago by
+the file this project actually ships today). Corrected to the real, current filename.
+
+**A real, honest tension surfaced and disclosed, not resolved unilaterally.** One of the two scope
+exclusions (`Ex_NoNewCapability`) exists specifically to refuse new capability during this
+conversion-focused lineage, citing a real precedent where a new shape was built and judged "outside
+the boundary." This session's own recent work built several genuinely new SHACL shapes. Reported to
+the person directly rather than judged silently either way.
+
+0 SHACL violations on the real register (79 warnings). All six shipped checkers PASS.
+
+
 ## v1.192.0 — 2026-09-04 (MAJOR: a closure report enforced as a standard part of closure ceremony, framework-wide; Mission_OntologyDriven genuinely closed)
 
 **Instructed to document this lineage's own development as a report and dashboard, and to enforce
