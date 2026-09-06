@@ -9,8 +9,10 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.97.0> ;
-    owl:versionInfo "1.97.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.99.0> ;
+    owl:versionInfo "1.99.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.98.0> ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.97.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.96.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.95.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.94.0> ;
@@ -5060,6 +5062,64 @@ backlog:AchievedOnlyWhenClearShape a sh:NodeShape ;
             FILTER ((?d = backlog:Dir_Decrease && ?v > ?t) ||
                     (?d = backlog:Dir_Increase && ?v < ?t) ||
                     (?d = backlog:Dir_Hold && ?v != ?t))
+        }""" ] .
+
+backlog:BaselineReferenceShape a sh:NodeShape ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_tool_run_record_v1_0_0.ttl" ;
+    sh:targetClass backlog:BaselineReference ;
+    sh:severity sh:Violation ;
+    rdfs:label "A baseline reference names its tool, its location, and why (L1)"@en ;
+    sh:property [ sh:path backlog:baselineForTool ; sh:minCount 1 ; sh:maxCount 1 ; sh:class backlog:ToolScript ;
+                  sh:message "L1: a baseline reference must name the tool it governs." ] ;
+    sh:property [ sh:path backlog:hasBaselineLocation ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ;
+                  sh:message "L1: a baseline reference must state where the real comparison state lives." ] ;
+    sh:property [ sh:path backlog:hasBaselineRationale ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ;
+                  sh:message "L1: a baseline reference must state why this location is the right one." ] .
+
+backlog:ToolRunRecordShape a sh:NodeShape ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_tool_run_record_v1_0_0.ttl" ;
+    sh:targetClass backlog:ToolRunRecord ;
+    sh:severity sh:Violation ;
+    rdfs:label "A tool run record names its tool and carries both real hashes (L1)"@en ;
+    sh:property [ sh:path backlog:ranTool ; sh:minCount 1 ; sh:maxCount 1 ; sh:class backlog:ToolScript ;
+                  sh:message "L1: a tool run record must name which tool produced it." ] ;
+    sh:property [ sh:path backlog:usedBaselineHash ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ;
+                  sh:message "L1: a tool run record must carry the real hash of what it compared against." ] ;
+    sh:property [ sh:path backlog:comparedAgainstHash ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ;
+                  sh:message "L1: a tool run record must carry the real hash of the file it checked." ] ;
+    sh:property [ sh:path backlog:runConcludedDistinctBaseline ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:boolean ;
+                  sh:message "L1: a tool run record must state what the tool itself concluded about its own baseline." ] .
+
+backlog:NewUnprovenShapeShape a sh:NodeShape ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_new_unproven_shape_v1_0_0.ttl" ;
+    sh:target [ a sh:SPARQLTarget ;
+        sh:select """SELECT ?this WHERE {
+            ?this a <http://www.w3.org/ns/shacl#NodeShape> ;
+                  <http://example.org/backlog#declaredInSnapshot> <http://example.org/backlog#Snapshot_Current> .
+        }""" ] ;
+    sh:severity sh:Violation ;
+    rdfs:label "A shape declared only in the current snapshot, with no provenByFixture, is a real, uncaught new-shape gap (L3)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: this shape is declared in the current snapshot and not in the real baseline snapshot -- genuinely new -- and carries no provenByFixture. The comparison and the pass/fail decision are both computed here, by this SPARQL query itself, not by Python set-difference logic: a loader's only real job is asserting which snapshot each shape was found in; whether that makes a shape new and unproven is a fact this rule reads directly from the graph." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            FILTER NOT EXISTS { $this backlog:declaredInSnapshot backlog:Snapshot_Baseline }
+            FILTER NOT EXISTS { $this backlog:provenByFixture ?f }
+        }""" ] .
+
+backlog:SelfComparisonClaimShape a sh:NodeShape ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_tool_run_record_v1_0_0.ttl" ;
+    sh:targetClass backlog:ToolRunRecord ;
+    sh:severity sh:Violation ;
+    rdfs:label "A run cannot claim a distinct baseline while its own two hashes match (L3)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: this tool run record claims runConcludedDistinctBaseline true, and its own usedBaselineHash equals its own comparedAgainstHash. This is the exact failure this class exists to make unclaimable: a tool comparing a file against itself and reporting the comparison as real. This shape does not verify the tool's own internal logic was correct -- it verifies the tool's own recorded claim is not self-contradicting, which is a narrower, honestly weaker, but real guarantee no printed terminal output alone can offer." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:runConcludedDistinctBaseline true ;
+                  backlog:usedBaselineHash ?u ;
+                  backlog:comparedAgainstHash ?c .
+            FILTER (?u = ?c)
         }""" ] .
 
 backlog:ClosureReportShape a sh:NodeShape ;

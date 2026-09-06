@@ -1,0 +1,36 @@
+# Tool run record integrity — test drive, not a construction.
+#
+# Proves SelfComparisonClaimShape catches the exact bug this session found in
+# its own tooling: a run claiming a real, distinct baseline while its own
+# recorded hashes are identical.
+#
+# TR_Lying: claims runConcludedDistinctBaseline true with matching hashes ->
+#   violation, the exact real bug class.
+# TR_Honest: claims true with genuinely different hashes -> silent.
+# TR_HonestFalse: claims false (no distinct baseline available), matching
+#   hashes -> silent; a tool that honestly reports "could not verify" is not
+#   the failure this shape exists to catch.
+
+@prefix backlog: <http://example.org/backlog#> .
+@prefix ex:      <http://example.org/toolruntest#> .
+
+ex:TS_Fixture a backlog:ToolScript ; backlog:scriptFileName "fixture_tool.py" ; backlog:acceptsGraphPath false .
+
+ex:TR_Lying a backlog:ToolRunRecord ; backlog:ranTool ex:TS_Fixture ;
+    backlog:usedBaselineHash "abc123" ; backlog:comparedAgainstHash "abc123" ;
+    backlog:runConcludedDistinctBaseline true .
+
+ex:TR_Honest a backlog:ToolRunRecord ; backlog:ranTool ex:TS_Fixture ;
+    backlog:usedBaselineHash "abc123" ; backlog:comparedAgainstHash "def456" ;
+    backlog:runConcludedDistinctBaseline true .
+
+ex:TR_HonestFalse a backlog:ToolRunRecord ; backlog:ranTool ex:TS_Fixture ;
+    backlog:usedBaselineHash "abc123" ; backlog:comparedAgainstHash "abc123" ;
+    backlog:runConcludedDistinctBaseline false .
+
+# BaselineReferenceShape: BR_Bad missing its rationale -> fires. BR_Good complete -> silent.
+ex:BR_Bad a backlog:BaselineReference ; backlog:baselineForTool ex:TS_Fixture ;
+    backlog:hasBaselineLocation "https://example.org/fixture-only" .
+ex:BR_Good a backlog:BaselineReference ; backlog:baselineForTool ex:TS_Fixture ;
+    backlog:hasBaselineLocation "https://example.org/fixture-only" ;
+    backlog:hasBaselineRationale "Fixture-only: a complete, real baseline reference." .

@@ -1,5 +1,39 @@
 # Changelog
 
+## v1.196.0 — 2026-09-05 (MAJOR: corrected a real misunderstanding — the new-shape decision itself moved into a real SHACL rule, not merely its configuration)
+
+**Corrected directly**: an earlier claim that "no ontology can reach inside a Python script and
+prove its own logic correct" answered a different, harder question than the one asked. The real
+request was narrower and true: could the comparison and pass/fail decision themselves be expressed
+as real SHACL rules rather than written as Python — not a request to formally verify arbitrary
+code. Confirmed by testing directly, not assumed: SPARQL's own `SHA256()` function works natively
+in this environment.
+
+**Built the actually-declarative version.** `ShapeSnapshot`/`declaredInSnapshot` let a loader assert,
+per shape, which real file it was found in — a mechanical tagging operation, not a decision.
+`NewUnprovenShapeShape`, a real SPARQL rule, then computes both which shapes are genuinely new and
+whether they carry `provenByFixture`, entirely inside the SHACL engine's own evaluation.
+`backlog_shape_snapshot_loader_v1_0_0.py`'s own real job is limited to parsing two files and
+asserting tagging triples — confirmed by this project's own decision-audit checker to contain no
+logic the ontology does not already state.
+
+**Proven against a real, older published baseline.** The rule caught itself honestly (genuinely new,
+initially unproven), a real fixture was built and linked, and the rule then correctly reported PASS
+against real data — the entire verdict computed by the SPARQL rule itself.
+
+**What this does and does not close, stated plainly.** This does not prove the SHACL engine's own
+implementation is bug-free, or that this rule's own text has no logic error. What moved is real and
+narrower: this specific decision is now made by a rule any future run evaluates the same way, not by
+Python code whose correctness depended on careful human reading every time it changed.
+
+`G75` records the full reasoning, including that the earlier tool
+(`backlog_new_shape_proof_v1_2_0.py`) and this new loader currently exist side by side, covering
+different real parts of the same capability — merging them is a real next step, not rushed here.
+
+0 SHACL violations on the real register (112 warnings). All checkers PASS. Lineage-discipline check
+PASS. Doc-coverage gate PASS.
+
+
 ## v1.195.0 — 2026-09-05 (MAJOR: told directly one generic mechanism was not enough; three built, and a real, session-long checker bug found and fixed while building the second)
 
 **Corrected directly**: judging four of five findings as "the system working correctly" had been

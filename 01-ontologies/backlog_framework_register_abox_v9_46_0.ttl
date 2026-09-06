@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.45.0> ;
-    owl:versionInfo "9.45.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.46.0> ;
+    owl:versionInfo "9.46.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.45.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.44.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.43.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.42.1> ;
@@ -263,8 +264,8 @@ fw:Out2_Scope a backlog:StageOutput ;
 #  analysis still supports them.
 #################################################################
 fw:Area_Governance a backlog:ScopeArea ;
-    backlog:areaLocation "LINEAGE_OPERATING_DISCIPLINE_v45_0_0.md" ;
-    backlog:areaMeasure "Governance rulings G1-G74, each a markdown heading with prose. Nothing in the ontology carries them; the lineage-discipline gate checks that claims about ENFORCEMENT match the shapes, and does not check that the rulings themselves exist as anything a query can reach." .
+    backlog:areaLocation "LINEAGE_OPERATING_DISCIPLINE_v46_0_0.md" ;
+    backlog:areaMeasure "Governance rulings G1-G75, each a markdown heading with prose. Nothing in the ontology carries them; the lineage-discipline gate checks that claims about ENFORCEMENT match the shapes, and does not check that the rulings themselves exist as anything a query can reach." .
 fw:Del_OntGovernance backlog:deliverableForArea fw:Area_Governance .
 fw:Area_CodeTables a backlog:ScopeArea ;
     backlog:areaLocation "03-tooling/ — 12 python modules" ;
@@ -4322,8 +4323,7 @@ fw:Ev_ArtefactUseCheck a backlog:TestEvidence ;
     backlog:verifiedByTool "backlog_criterion_resolve" ;
     backlog:attestsCriterion fw:AC_S_Tables_B3 .
 
-fw:TS_backlog_new_shape_proof_v1_1_0 a backlog:ToolScript ;
-    backlog:scriptFileName "backlog_new_shape_proof_v1_1_0.py" ; backlog:acceptsGraphPath false .
+
 
 #################################################################
 #  #4 of the mitigation plan, closed. G25.
@@ -5663,3 +5663,26 @@ fw:Find_G73 a backlog:RetrospectiveFinding ; backlog:informsRuling "G73" ; backl
 fw:Find_G74 a backlog:RetrospectiveFinding ; backlog:informsRuling "G74" ; backlog:hasFindingScope backlog:Scope_Methodology ;
     backlog:hasRootCause "Judging four of five findings as 'the system working correctly' was wrongly treated as meaning no generic protection was needed for those categories -- a narrowing the owner never asked for. Building the fix for the second one then surfaced that the existing shape-proof checker had been silently ineffective all session: its own hardcoded baseline path resolved to the file it was checking, so it reported PASS every time without ever comparing against a real, different snapshot." ;
     backlog:hasRemedy "Three generic mechanisms built: confirmed the existing class-requirements tool already covers the missing-outcome category too; fixed the shape-proof checker to require an explicit, hash-verified-distinct baseline and refuse to report PASS without one, then used it for real to find and fix 9 shapes genuinely missing their provenByFixture link; built awaitingRealVerification plus a query tool for the fixture-only-verified category. The editing-mistake category confirmed, again, as the one finding that was never a gap." .
+
+#################################################################
+#  Ontology-based strengthening (G75), per the owner's own direct
+#  request: configuration and self-check claims become real,
+#  queryable data rather than hardcoded paths or printed text.
+#################################################################
+
+fw:TS_backlog_new_shape_proof_v1_2_0 a backlog:ToolScript ;
+    backlog:scriptFileName "backlog_new_shape_proof_v1_2_0.py" ; backlog:acceptsGraphPath false .
+
+fw:BR_ShapeProof a backlog:BaselineReference ;
+    backlog:baselineForTool fw:TS_backlog_new_shape_proof_v1_2_0 ;
+    backlog:hasBaselineLocation "the project repository#02-shacl-safeguards (the real, public mirror, always behind the working copy by definition, per the framework's own required drift check)" ;
+    backlog:hasBaselineRationale "The public mirror is the one location this project already treats as authoritative for 'what has genuinely shipped' -- backlog_distribution_drift_check_v1_0_0.py already compares the governed copy against it as a standing practice. Reusing it here means the shape-proof baseline is never a second, separately-maintained notion of 'published,' only the one this project already checks elsewhere." .
+
+fw:TS_backlog_shape_snapshot_loader_v1_0_0 a backlog:ToolScript ;
+    backlog:scriptFileName "backlog_shape_snapshot_loader_v1_0_0.py" ; backlog:acceptsGraphPath false .
+
+fw:Ruling_G75 a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G75" ;
+    rdfs:label "The new-shape decision itself is a real SHACL rule, not Python logic; a loader only tags data"@en ;
+    backlog:hasRulingStatement "Whether a shape is genuinely new and lacks provenByFixture is decided entirely by NewUnprovenShapeShape's own SPARQL evaluation; a loader's only real role is asserting which real file each shape declaration was found in." ;
+    backlog:enforcedByShape backlog:NewUnprovenShapeShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .

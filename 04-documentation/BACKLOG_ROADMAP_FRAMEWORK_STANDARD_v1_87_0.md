@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.85.0
+# Backlog & Roadmap Semantic Framework — Standard v1.87.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -153,6 +153,9 @@ level multi-factor ranking, and the orphan/coverage check.
 | `ChangeRequest` — `requestsChangeTo`, `hasChangeDirection`, `hasChangeRequestRationale`, `hasDisposition` | A real, typed request to grow or shrink a scope, existing before any decision is made about it — distinct from `ScopeChange`, which only ever records a decision already made |
 | `ImpactAssessment` — `analyzesRequest`, `hasImpactStatement`, `identifiesAffectedLineage` | A dedicated assessment produced before a `ChangeRequest`'s disposition may move past `Disp_Pending`, explicitly covering risk to other, concurrently active lineages |
 | `ChangeDisposition` (`Disp_Pending`/`Accepted`/`Rejected`/`Deferred`), `ChangeDirection` (`Direction_Grow`/`Shrink`) | The real, three-way outcome a change actually has, plus the waiting state before any decision, and whether the change widens or narrows the boundary — no direction is privileged |
+| `BaselineReference` — `baselineForTool`, `hasBaselineLocation`, `hasBaselineRationale` | Configuration as a real, checkable fact rather than a hardcoded path in a script's own source. A tool queries this instead of assuming where its own comparison baseline lives |
+| `ToolRunRecord` — `ranTool`, `usedBaselineHash`, `comparedAgainstHash`, `runConcludedDistinctBaseline` | A self-check tool's own claim, written back as real data so a shape can independently re-check it — proof a tool's comparison genuinely happened, not proof its internal logic is correct, which no ontology can reach |
+| `ShapeSnapshot` (`Snapshot_Current`/`Snapshot_Baseline`), `declaredInSnapshot` | Which real file a shape declaration was found in, asserted by a loader that makes no decision itself — `NewUnprovenShapeShape` reads this data and decides, entirely in SPARQL, whether a shape is genuinely new and unproven |
 | `ExternalDependency` + `ExternalDependencyType` | Something outside the development, over six types: vendor, upstream component, peer team, regulatory, infrastructure, customer |
 | `requiresExternalEnhancement` | This item needs an external party to change something — triggers the proposal rule |
 | `EnhancementProposal` + `ProposalStatus` | The request to that party; never a work item, never scheduled here |

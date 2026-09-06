@@ -1,0 +1,23 @@
+# New, unproven shape — test drive, not a construction.
+#
+# Proves NewUnprovenShapeShape, a shape whose entire decision (is this new,
+# is it proven) is computed by SPARQL alone -- no Python set-difference or
+# pass/fail logic anywhere. A loader's only real job is asserting
+# declaredInSnapshot; this fixture proves the rule reads that data correctly.
+#
+# Sh_NewNoProof: declared only in Current, no provenByFixture -> fires.
+# Sh_NewWithProof: declared only in Current, has provenByFixture -> silent.
+# Sh_Existing: declared in both Current and Baseline -> silent, whether or
+#   not it has provenByFixture (an already-published shape is grandfathered).
+
+@prefix backlog: <http://example.org/backlog#> .
+@prefix sh:      <http://www.w3.org/ns/shacl#> .
+@prefix ex:      <http://example.org/newshapetest#> .
+
+ex:Sh_NewNoProof a sh:NodeShape ; backlog:declaredInSnapshot backlog:Snapshot_Current .
+
+ex:Sh_NewWithProof a sh:NodeShape ; backlog:declaredInSnapshot backlog:Snapshot_Current ;
+    backlog:provenByFixture "fixture-only: this shape has a real test" .
+
+ex:Sh_Existing a sh:NodeShape ; backlog:declaredInSnapshot backlog:Snapshot_Current ,
+    backlog:Snapshot_Baseline .

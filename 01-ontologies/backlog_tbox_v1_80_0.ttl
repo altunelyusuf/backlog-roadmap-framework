@@ -18,8 +18,10 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.78.0> ;
-    owl:versionInfo "1.78.0" ;
+    owl:versionIRI <http://example.org/backlog/1.80.0> ;
+    owl:versionInfo "1.80.0" ;
+    owl:priorVersion <http://example.org/backlog/1.79.0> ;
+    owl:priorVersion <http://example.org/backlog/1.78.0> ;
     owl:priorVersion <http://example.org/backlog/1.77.0> ;
     owl:priorVersion <http://example.org/backlog/1.76.0> ;
     owl:priorVersion <http://example.org/backlog/1.75.0> ;
@@ -6223,6 +6225,79 @@ backlog:CScope_Framework a owl:NamedIndividual , backlog:ContainerScope ;
 #  rather than trusted — the same discipline CodeTable applied to
 #  classification tables buried in python.
 #################################################################
+
+backlog:ShapeSnapshot a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:Snapshot_Current backlog:Snapshot_Baseline ) ;
+    rdfs:label "Shape Snapshot"@en ;
+    skos:definition "Which of the two real files a shape declaration was found in when comparing a current shapes file against a real baseline -- current work, or the last genuinely published state. Real, minimal, non-deciding data: a loader's own only job is to assert which snapshot each shape it finds belongs to, not to decide whether that shape is new or proven. Built per the owner's own direct challenge, honestly checked and confirmed correct: the comparison and pass/fail decision that were previously computed by Python's own set-difference logic are, once this tagging exists, a real SPARQL SELECT any SHACL engine already evaluates natively -- NewUnprovenShapeShape names it. SPARQL's own SHA256() function, confirmed to work in this environment, closes the analogous gap for hash comparison the same way."@en .
+
+backlog:Snapshot_Current a owl:NamedIndividual , backlog:ShapeSnapshot ;
+    rdfs:label "Current"@en ; skos:definition "The shapes file currently shipping, being checked."@en .
+backlog:Snapshot_Baseline a owl:NamedIndividual , backlog:ShapeSnapshot ;
+    rdfs:label "Baseline"@en ; skos:definition "The last genuinely published shapes file, compared against."@en .
+
+backlog:declaredInSnapshot a owl:ObjectProperty ;
+    rdfs:domain rdfs:Resource ; rdfs:range backlog:ShapeSnapshot ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "declared in snapshot"@en ;
+    skos:definition "Which real snapshot a shape's own declaration was found in. A shape found in both current and baseline carries this property twice; a shape found only in current is genuinely new, a fact a real SPARQL FILTER NOT EXISTS reads directly, not a fact Python decides and reports."@en .
+
+backlog:BaselineReference a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Baseline Reference"@en ;
+    skos:definition "The real, declared answer to 'what counts as the published state a new-shape or new-capability check compares against' -- a fact this register states, not a path a script's own source code hardcodes. A real, session-long bug this session found (G74) was exactly a script's own hardcoded relative path resolving to the wrong thing with no data anywhere to catch it: nothing in the graph asserted what the baseline actually was, so nothing could contradict a script's own wrong assumption about it. A tool that queries this class instead of hardcoding a path has its own configuration become a fact this suite's own rules can check, not a private assumption no rule can reach."@en ;
+    dcterms:source "This session's own real finding (G74): a hardcoded path in backlog_new_shape_proof_v1_0_0.py silently resolved to the file it was meant to compare against, all session, with nothing in the register able to notice."@en .
+
+backlog:baselineForTool a owl:ObjectProperty ;
+    rdfs:domain backlog:BaselineReference ; rdfs:range backlog:ToolScript ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "baseline for tool"@en ;
+    skos:definition "Which tool this baseline declaration governs."@en .
+
+backlog:hasBaselineLocation a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:BaselineReference ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has baseline location"@en ;
+    skos:definition "Where the real, published comparison state lives -- a git remote URL, a tag, or a real, distinct local path -- stated as a fact a tool reads, not a value its own source code assumes."@en .
+
+backlog:hasBaselineRationale a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:BaselineReference ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has baseline rationale"@en ;
+    skos:definition "Why this location is the right one to compare against, stated once so a later reader does not have to reconstruct it from a script's own comments."@en .
+
+backlog:ToolRunRecord a owl:Class ;
+    rdfs:subClassOf core:Artifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Tool Run Record"@en ;
+    skos:definition "A real, structured record of one execution of a self-check tool -- what it compared, the real hash of each side, and what it concluded -- so the claim a tool prints to a terminal becomes a fact this suite's own rules can independently re-check, rather than a trust placed in the tool's own, unverifiable say-so. Distinct from Evidence, which proves a WorkItem is Done; a ToolRunRecord proves nothing about completion, only that a specific comparison actually happened and what its own inputs genuinely were. This does not verify a tool's own internal logic is correct -- no ontology can reach inside arbitrary code and prove its algorithm sound, and claiming otherwise would overstate what this closes. What it closes is narrower and real: a tool cannot silently claim to have checked something against a real, distinct baseline while its own recorded inputs show it compared a thing against itself."@en .
+
+backlog:ranTool a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:ToolRunRecord ; rdfs:range backlog:ToolScript ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "ran tool"@en ;
+    skos:definition "Which tool produced this run record."@en .
+
+backlog:usedBaselineHash a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:ToolRunRecord ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "used baseline hash"@en ;
+    skos:definition "The real content hash of whatever this run actually compared against, computed at run time, not typed by hand -- a hand-typed value could be wrong in exactly the way the tool itself could be."@en .
+
+backlog:comparedAgainstHash a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:ToolRunRecord ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "compared against hash"@en ;
+    skos:definition "The real content hash of the current file this run checked, computed the same way as usedBaselineHash so the two are comparable on equal terms."@en .
+
+backlog:runConcludedDistinctBaseline a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:ToolRunRecord ; rdfs:range xsd:boolean ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "run concluded distinct baseline"@en ;
+    skos:definition "What the tool itself claimed about whether its baseline was real and distinct. Checked against the two real hashes by a real shape, not trusted on its own -- a run claiming true while its own two hashes match is exactly the failure this class exists to make impossible to ship unnoticed."@en .
 
 backlog:ToolScript a owl:Class ;
     rdfs:subClassOf backlog:BacklogConcept ;

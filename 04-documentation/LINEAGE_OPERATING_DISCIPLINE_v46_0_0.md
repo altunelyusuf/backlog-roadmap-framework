@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v45.0.0
+# Lineage Operating Discipline — v46.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -1905,4 +1905,41 @@ future session finds these systematically rather than by searching prose.
 one finding that was never a gap: no generic mechanism is proposed for it beyond restating the
 practice this session already followed and that already caught the one real mistake — re-parse and
 re-validate after every edit, before the next one, every time.
+
+## G75 — Corrected a real misunderstanding, not a drift: the decision logic itself moved into SHACL, not merely its configuration
+
+Challenged directly, and right: claiming "no ontology can reach inside a Python script and prove its
+own logic correct" answered a different, harder question than the one asked. The real request was
+narrower and true: could the comparison and pass/fail decision themselves be expressed as real SHACL
+rules rather than written as Python at all — not a request to formally verify arbitrary code.
+Confirmed directly, not assumed: `SHA256()` is a real, working SPARQL 1.1 function in this exact
+environment, checked by running it before answering.
+
+**Built the actually-declarative version.** `backlog:ShapeSnapshot`
+(`Snapshot_Current`/`Snapshot_Baseline`) and `declaredInSnapshot` let a loader assert, per shape,
+which real file it was found in — a mechanical tagging operation, not a decision. `NewUnprovenShapeShape`,
+a real SPARQL rule targeted via `sh:SPARQLTarget`, then computes *both* which shapes are genuinely new
+and whether they carry `provenByFixture`, entirely inside the SHACL engine's own evaluation — no
+Python `if`, no Python set-difference, anywhere in the decision. `backlog_shape_snapshot_loader_v1_0_0.py`'s
+own real job is limited to parsing two files and asserting tagging triples; `backlog_script_decision_audit_v1_0_0.py`,
+this project's own real check for exactly this kind of thing, confirms it contains no logic the
+ontology does not already state.
+
+**Proven against a real, older published baseline**, not only a fixture: the rule caught itself
+honestly (it is itself a new, unproven shape until given one), a real fixture was built and linked,
+and the rule then correctly reported PASS against the real baseline once proof existed — the entire
+verdict computed by the SPARQL rule, confirmed by reading its own reported source in the results.
+
+**What this does and does not close, stated plainly.** This does not prove `pyshacl`'s own SPARQL
+engine is bug-free, or that this rule's own text has no logic error — no ontology reaches that far,
+and this ruling does not claim otherwise. What moved is real and narrower: the *specific* decision
+this session's own tooling got wrong once (is a shape new, is it proven) is now made by a rule any
+future SHACL run evaluates the same way, not by Python code whose own correctness depended on a
+human reading it carefully every time it changed.
+
+**Left for later, disclosed rather than rushed.** `backlog_new_shape_proof_v1_2_0.py` (ontology-queried
+baseline location, self-recording `ToolRunRecord`) and this new loader (fully declarative new-shape
+decision) currently exist side by side, covering different real parts of the same overall capability.
+Merging them into one tool is a real, reasonable next step, not attempted here to avoid rushing a
+second tool-level change in the same release the first one shipped in.
 
