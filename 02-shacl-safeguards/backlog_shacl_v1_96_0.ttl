@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.95.0> ;
-    owl:versionInfo "1.95.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.96.0> ;
+    owl:versionInfo "1.96.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.95.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.94.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.93.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.92.0> ;
@@ -1624,6 +1625,66 @@ backlog:ScopeMeasurabilityShape a sh:NodeShape ;
         sh:select """SELECT $this WHERE {
             $this backlog:scopeCompletionState backlog:Done .
             FILTER NOT EXISTS { $this backlog:scopeOutcome ?o }
+        }""" ] .
+
+backlog:ChangeRequestShape a sh:NodeShape ;
+    sh:targetClass backlog:ChangeRequest ;
+    sh:severity sh:Violation ;
+    rdfs:label "A change request names its scope, direction, rationale and current disposition (L1)"@en ;
+    sh:property [ sh:path backlog:requestsChangeTo ; sh:minCount 1 ; sh:maxCount 1 ; sh:class backlog:ScopeStatement ;
+                  sh:message "L1: a change request must name the scope it would change." ] ;
+    sh:property [ sh:path backlog:hasChangeDirection ; sh:minCount 1 ; sh:maxCount 1 ; sh:class backlog:ChangeDirection ;
+                  sh:message "L1: a change request must state whether it grows or shrinks the scope." ] ;
+    sh:property [ sh:path backlog:hasChangeRequestRationale ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ;
+                  sh:message "L1: a change request must state why it is being asked for." ] ;
+    sh:property [ sh:path backlog:hasDisposition ; sh:minCount 1 ; sh:maxCount 1 ; sh:class backlog:ChangeDisposition ;
+                  sh:message "L1: a change request must carry a current disposition, even if only Disp_Pending." ] .
+
+backlog:ImpactAssessmentShape a sh:NodeShape ;
+    sh:targetClass backlog:ImpactAssessment ;
+    sh:severity sh:Violation ;
+    rdfs:label "An impact assessment names the request it analyzes and states real impact (L1)"@en ;
+    sh:property [ sh:path backlog:analyzesRequest ; sh:minCount 1 ; sh:maxCount 1 ; sh:class backlog:ChangeRequest ;
+                  sh:message "L1: an impact assessment must name the change request it analyzes." ] ;
+    sh:property [ sh:path backlog:hasImpactStatement ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ;
+                  sh:message "L1: an impact assessment must state what the change would actually affect." ] .
+
+backlog:DispositionRequiresAssessmentShape a sh:NodeShape ;
+    sh:targetClass backlog:ChangeRequest ;
+    sh:severity sh:Violation ;
+    rdfs:label "A disposition past Pending requires a real impact assessment first (L3)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: this change request's own disposition has moved past Pending (accepted, rejected or deferred) and no real ImpactAssessment names it. PMBOK's own real process requires assessment before disposition, not after -- a decision recorded with no assessment behind it is a judgement call wearing the form of an analysis." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasDisposition ?d . FILTER (?d != backlog:Disp_Pending)
+            FILTER NOT EXISTS { ?a backlog:analyzesRequest $this }
+        }""" ] .
+
+backlog:AcceptedRequestNeedsScopeChangeShape a sh:NodeShape ;
+    sh:targetClass backlog:ChangeRequest ;
+    sh:severity sh:Violation ;
+    rdfs:label "An accepted request has a real ScopeChange recording the admission (L3)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: this change request is Disp_Accepted and no real ScopeChange names it as the request it fulfills. Acceptance is a decision; ScopeChange is the record that decision left something real behind, closing the identical loop ScopeChange's own definition already names: scope may grow or shrink, but never invisibly. Checked per request via fulfillsRequest, not per scope -- an earlier version checked only whether some ScopeChange touched the same scope, which a second, unrelated request could satisfy by coincidence; caught by this shape's own fixture before it shipped." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasDisposition backlog:Disp_Accepted .
+            FILTER NOT EXISTS { ?sc backlog:fulfillsRequest $this }
+        }""" ] .
+
+backlog:CrossLineageRiskAdvisoryShape a sh:NodeShape ;
+    sh:targetClass backlog:ImpactAssessment ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: a real risk to another, active lineage was found"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: this impact assessment identified a real risk to another lineage that is not Achieved, Cancelled or archived -- genuinely active, concurrent work this change could interfere with. Surfaced for a human decision, never blocked structurally: the owner's own real ruling is that scope may move in either direction, and this framework does not get to veto that, only to make sure the risk was seen." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:identifiesAffectedLineage ?l .
+            ?l backlog:lineageForMission ?m .
+            FILTER NOT EXISTS { ?m backlog:hasMissionOutcome ?o . FILTER (?o != backlog:Out_InFlight) }
+            FILTER NOT EXISTS { ?l backlog:lineageArchived true }
         }""" ] .
 
 backlog:ScopeChangeShape a sh:NodeShape ;

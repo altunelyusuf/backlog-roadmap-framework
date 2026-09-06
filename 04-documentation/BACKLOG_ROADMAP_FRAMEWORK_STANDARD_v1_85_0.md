@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.84.0
+# Backlog & Roadmap Semantic Framework — Standard v1.85.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -150,6 +150,9 @@ level multi-factor ranking, and the orphan/coverage check.
 | `scopeRealizesObjective` | **Scope → objective.** The reverse, and the record of a lineage whose boundary was drawn around objectives already decided. Kept, because which link a lineage uses *is* the fact worth recording; asserting both records no order at all and is rejected |
 | `scopeCompletionState` / `scopeOutcome` | Derived: is the scoped work finished, and did it work — computed separately, in that order |
 | `ScopeChange` | Owner-decided, rationale-bearing admission of work into a set scope |
+| `ChangeRequest` — `requestsChangeTo`, `hasChangeDirection`, `hasChangeRequestRationale`, `hasDisposition` | A real, typed request to grow or shrink a scope, existing before any decision is made about it — distinct from `ScopeChange`, which only ever records a decision already made |
+| `ImpactAssessment` — `analyzesRequest`, `hasImpactStatement`, `identifiesAffectedLineage` | A dedicated assessment produced before a `ChangeRequest`'s disposition may move past `Disp_Pending`, explicitly covering risk to other, concurrently active lineages |
+| `ChangeDisposition` (`Disp_Pending`/`Accepted`/`Rejected`/`Deferred`), `ChangeDirection` (`Direction_Grow`/`Shrink`) | The real, three-way outcome a change actually has, plus the waiting state before any decision, and whether the change widens or narrows the boundary — no direction is privileged |
 | `ExternalDependency` + `ExternalDependencyType` | Something outside the development, over six types: vendor, upstream component, peer team, regulatory, infrastructure, customer |
 | `requiresExternalEnhancement` | This item needs an external party to change something — triggers the proposal rule |
 | `EnhancementProposal` + `ProposalStatus` | The request to that party; never a work item, never scheduled here |

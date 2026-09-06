@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v42.0.0
+# Lineage Operating Discipline — v43.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -1788,4 +1788,48 @@ a second, independently-asserted account of it.
 
 `Mission_OntologyDriven` is now `Out_Achieved`, genuinely, with the report this ruling's own
 enforcement required already in place before the outcome was set.
+
+## G72 — Lineage 8 (`L_ChangeDiscipline`) built, tested and closed fully autonomously, per the owner's own direct instruction
+
+Instructed to run this framework's own full lifecycle end to end, without interruption, as a test
+drive of its capabilities — Mission through Scope, Goals, Objectives, real vocabulary, execution,
+and closure — while keeping an honest record of where the methodology proves insufficient for
+autonomous execution.
+
+**A new lineage, not a revival**, per the owner's own direct question and this ruling's own answer:
+`supersedesMission` exists specifically for amending a mission *mid-flight*, not for follow-on work
+after a prior mission was already achieved and closed. `L_OntologyDriven`'s own mission was neither
+wrong nor amended; a new, independent lineage is the honest structure.
+
+**Scope built from PMBOK's own real Perform Integrated Change Control taxonomy**, tested cell by
+cell: a real, typed `ChangeRequest` (missing before this lineage), a dedicated `ImpactAssessment`
+(confirmed absent by direct investigation the prior release already ran), real three-way
+`ChangeDisposition` (accepted/rejected/deferred — `ScopeChange` alone could only ever represent the
+accepted branch), and a real cross-lineage risk signal grounded as a specialization of impact
+assessment, not invented free-standing. One area (baseline update) honestly found already served by
+this session's own recent work, not forced to look like a gap.
+
+**Applied to three real decisions**, not fixtures: retroactively converting past `ScopeChange`
+records into the new chain, rejected on the lineage's own declared exclusion; a full, multi-party
+Change Control Board, deferred for lack of a real occasion; a short guidance note for future
+lineages, accepted with a real `ScopeChange` recording the admission.
+
+**A real logic bug in this run's own new shape, caught only by adversarial testing.** The first
+version of the accepted-request rule checked whether *any* `ScopeChange` touched the same scope, not
+whether one specifically fulfilled *this* request — a second, unrelated accepted request could have
+satisfied the first by coincidence. Real data alone, with one request per scope, would never have
+exposed it; a dedicated fixture built to attack the rule's own failure mode did. Fixed with
+`fulfillsRequest`, checked per request.
+
+**Five real methodology gaps logged as they occurred, each with a possible remedy, none resolved
+unilaterally** (`fw:Find_AutoGap1`–`5`): a new mission's own missing default outcome; the six-to-ten
+undiscoverable-up-front requirements for a new goal or objective; a real editing mistake caught
+immediately by this framework's own re-parse discipline, confirming it holds under real,
+unsupervised pressure; the same adversarial-fixture lesson stated as a general finding; and the
+honest limit that a new cross-lineage check could only be proven with a fixture, since no second,
+genuinely active lineage exists today to test the real case against.
+
+`Mission_ChangeDiscipline` is now `Out_Achieved`, genuinely — all 7 objectives at target, its own
+required closure report (`fw:CR_ChangeDiscipline`, `CLOSURE_REPORT_L_ChangeDiscipline_v1_0_0.md`)
+already in place before the outcome was set, run start to finish without interruption.
 

@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.76.0> ;
-    owl:versionInfo "1.76.0" ;
+    owl:versionIRI <http://example.org/backlog/1.77.0> ;
+    owl:versionInfo "1.77.0" ;
+    owl:priorVersion <http://example.org/backlog/1.76.0> ;
     owl:priorVersion <http://example.org/backlog/1.75.0> ;
     owl:priorVersion <http://example.org/backlog/1.74.0> ;
     owl:priorVersion <http://example.org/backlog/1.73.0> ;
@@ -2423,6 +2424,100 @@ backlog:scopeOutcome a owl:ObjectProperty ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "scope outcome"@en ;
     skos:definition "Derived once the scope is complete: met when every objective it realizes was met, missed when any was missed, pending until then. This is where success and failure of a development become a computed fact — the register can report that it delivered everything it promised and still failed, which is the outcome most plans are structurally unable to express."@en .
+
+backlog:ChangeDirection a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:Direction_Grow backlog:Direction_Shrink ) ;
+    rdfs:label "Change Direction"@en ;
+    skos:definition "Whether a requested scope change widens or narrows the boundary. Named as a closed pair deliberately: this discipline has no preferred direction, only a preference for the change being visible either way."@en ;
+    dcterms:source "PMBOK: a change request may increase or decrease project scope; neither is privileged, both require the same control"@en .
+
+backlog:Direction_Grow a owl:NamedIndividual , backlog:ChangeDirection ;
+    rdfs:label "Grow"@en ;
+    skos:definition "The change admits something not previously in scope."@en .
+backlog:Direction_Shrink a owl:NamedIndividual , backlog:ChangeDirection ;
+    rdfs:label "Shrink"@en ;
+    skos:definition "The change removes something previously in scope."@en .
+
+backlog:ChangeDisposition a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:Disp_Pending backlog:Disp_Accepted backlog:Disp_Rejected backlog:Disp_Deferred ) ;
+    rdfs:label "Change Disposition"@en ;
+    skos:definition "The real, three-way outcome a change control board decision actually has, plus the waiting state before any decision. Confirmed absent from this framework before this lineage: ScopeChange alone could only ever represent the accepted branch, so a rejected or deferred request left no trace a query could find."@en ;
+    dcterms:source "PMBOK Perform Integrated Change Control: a change request is approved, rejected, or deferred"@en .
+
+backlog:Disp_Pending a owl:NamedIndividual , backlog:ChangeDisposition ;
+    rdfs:label "Pending"@en ; skos:definition "Raised, not yet decided."@en .
+backlog:Disp_Accepted a owl:NamedIndividual , backlog:ChangeDisposition ;
+    rdfs:label "Accepted"@en ; skos:definition "Decided in favour; a real ScopeChange should follow."@en .
+backlog:Disp_Rejected a owl:NamedIndividual , backlog:ChangeDisposition ;
+    rdfs:label "Rejected"@en ; skos:definition "Decided against. Retained, not deleted -- a rejected request considered again later without record looks like a new idea rather than a repeat one."@en .
+backlog:Disp_Deferred a owl:NamedIndividual , backlog:ChangeDisposition ;
+    rdfs:label "Deferred"@en ; skos:definition "Neither accepted nor rejected; revisited at a stated later point or condition."@en .
+
+backlog:ChangeRequest a owl:Class ;
+    rdfs:subClassOf core:Artifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Change Request"@en ;
+    skos:definition "A real, typed request to grow or shrink a declared scope, existing before any decision is made about it -- the artifact ScopeChange alone could never represent, since ScopeChange only ever recorded a decision already made. Every ChangeRequest starts Disp_Pending and is later joined by a real ImpactAssessment before its disposition may change."@en ;
+    dcterms:source "PMBOK Perform Integrated Change Control: the Change Request artifact, distinct from its own eventual disposition"@en .
+
+backlog:requestsChangeTo a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:ChangeRequest ; rdfs:range backlog:ScopeStatement ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "requests change to"@en ;
+    skos:definition "The scope this request would grow or shrink."@en .
+
+backlog:hasChangeDirection a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:ChangeRequest ; rdfs:range backlog:ChangeDirection ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has change direction"@en ;
+    skos:definition "Whether this request would grow or shrink the named scope."@en .
+
+backlog:hasChangeRequestRationale a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:ChangeRequest ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has change request rationale"@en ;
+    skos:definition "Why the change is being asked for, stated before any assessment of its impact -- the requester's own case, not yet judged."@en .
+
+backlog:hasDisposition a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:ChangeRequest ; rdfs:range backlog:ChangeDisposition ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has disposition"@en ;
+    skos:definition "The real, current outcome of this request. Starts Disp_Pending; required on every ChangeRequest so a request cannot exist with no stated state at all."@en .
+
+backlog:ImpactAssessment a owl:Class ;
+    rdfs:subClassOf core:Artifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Impact Assessment"@en ;
+    skos:definition "A real, dedicated assessment of what a change request would affect, produced before its disposition may move past Disp_Pending -- distinct from folding the same judgement into a decision's own free-text rationale, which this framework did until this lineage's own real fit-gap found the gap. Explicitly covers risk to other, concurrently active lineages, not only to the requesting lineage's own schedule."@en ;
+    dcterms:source "PMBOK Perform Integrated Change Control: impact analysis precedes CCB disposition"@en .
+
+backlog:analyzesRequest a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:ImpactAssessment ; rdfs:range backlog:ChangeRequest ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "analyzes request"@en ;
+    skos:definition "The change request this assessment evaluates."@en .
+
+backlog:hasImpactStatement a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:ImpactAssessment ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has impact statement"@en ;
+    skos:definition "What this change would actually affect within the requesting lineage itself: schedule, cost, other in-flight work."@en .
+
+backlog:identifiesAffectedLineage a owl:ObjectProperty ;
+    rdfs:domain backlog:ImpactAssessment ; rdfs:range backlog:Lineage ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "identifies affected lineage"@en ;
+    skos:definition "A lineage, other than the one requesting this change, that this assessment found genuinely at risk of interference. The real, checkable form of the owner's own named concern for lineage hygiene: not asserted in prose, a real link to the specific lineage put at risk, present only when a real risk was actually found -- most assessments will name none."@en .
+
+backlog:fulfillsRequest a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:ScopeChange ; rdfs:range backlog:ChangeRequest ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "fulfills request"@en ;
+    skos:definition "The specific change request this record admits. Without it, a shape can only check whether some ScopeChange touches the same scope, not whether this specific request was the one recorded -- a real bug this framework's own fixture testing caught before it shipped: a second, unrelated request for the same scope could otherwise satisfy the first one's own requirement by coincidence." .
 
 backlog:ScopeChange a owl:Class ;
     rdfs:subClassOf core:Artifact ;

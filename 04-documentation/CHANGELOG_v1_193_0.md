@@ -1,5 +1,43 @@
 # Changelog
 
+## v1.193.0 — 2026-09-05 (MAJOR: Lineage 8 — scope change discipline — built, tested, and closed fully autonomously, per the owner's own direct instruction)
+
+**Run end to end without interruption**, as a test drive of this framework's own full lifecycle:
+Mission through Scope, Goals, Objectives, real vocabulary, execution, and closure.
+
+**A new lineage, not a revival** of the prior one — `supersedesMission` exists specifically for
+amending a mission mid-flight, not for follow-on work after a prior mission was already achieved.
+
+**Scope built from PMBOK's own real Perform Integrated Change Control taxonomy**, tested cell by
+cell: a real, typed `ChangeRequest` and dedicated `ImpactAssessment` (both confirmed absent by
+direct investigation), real three-way `ChangeDisposition` (`ScopeChange` alone could only ever
+represent the accepted branch), and a real cross-lineage risk signal. One area found already
+served, not forced to look like a gap.
+
+**Applied to three real decisions**, not fixtures: retroactive conversion of past records rejected
+on the lineage's own declared exclusion; a full multi-party Change Control Board deferred for lack
+of real occasion; a short guidance note accepted with a real `ScopeChange` recording it.
+
+**A real logic bug in this run's own new shape, caught only by adversarial testing before it
+shipped** — the accepted-request rule originally checked whether any `ScopeChange` touched the same
+scope, not whether one specifically fulfilled the request being checked. Real data alone would
+never have exposed it. Fixed with `fulfillsRequest`, checked per request.
+
+**Five real methodology gaps logged as they occurred, each with a possible remedy, none resolved
+unilaterally**: a new mission's own missing default outcome; the undiscoverable-up-front
+requirements for a new goal or objective; a real editing mistake caught immediately by this
+framework's own re-parse discipline; the adversarial-fixture lesson restated as a general finding;
+and the honest limit that the new cross-lineage check could only be proven with a fixture, since no
+second, genuinely active lineage exists today.
+
+`Mission_ChangeDiscipline` is now `Out_Achieved`, genuinely — all 7 objectives at target, its own
+required closure report and human-readable dashboard
+(`CLOSURE_REPORT_L_ChangeDiscipline_v1_0_0.md`) already in place before the outcome was set.
+
+`G72` records the full reasoning. 0 SHACL violations on the real register (111 warnings). All six
+shipped checkers PASS. Lineage-discipline check PASS. Doc-coverage gate PASS.
+
+
 ## v1.192.1 — 2026-09-05 (PATCH: full taxonomy-scope audit — every area, deliverable and exclusion checked individually; one dead file pointer found and fixed)
 
 **Asked directly for a health check and confirmation of whether the scope is complete, based on the
