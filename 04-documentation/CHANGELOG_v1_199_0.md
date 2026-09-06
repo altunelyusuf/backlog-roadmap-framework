@@ -1,5 +1,20 @@
 # Changelog
 
+## v1.199.0 — 2026-09-06 (PATCH: challenged directly on "Roadmap"; the real gap was never running the roadmap report, not a missing stage)
+
+Confirmed there is genuinely no `Stage_Roadmap` -- the five real stages remain Mission through
+Backlog. But actually running `backlog_roadmap_report` against `L_ChangeDiscipline`, which the
+prior forensic pass never did, surfaced a real gap: `Obj_CD_NoOutOfScopeWork`'s own declared
+baseline was asserted as a number, never confirmed by a real, dated observation before the work's
+own start. Fixed: a real before-observation recorded, honestly dated as a forensic addition;
+re-run confirms the metric genuinely bracketed.
+
+`G78` records it: a forensic examination of an autonomous lineage is not complete from ontology
+structure alone -- it requires running this framework's own real tools and reading what they say.
+
+0 SHACL violations on the real register (117 warnings). All checkers PASS.
+
+
 ## v1.198.0 — 2026-09-06 (MINOR: forensic examination of L_ChangeDiscipline's own execution against the ceremony)
 
 Requested directly: a full forensic check of whether the autonomously-run lineage actually met this

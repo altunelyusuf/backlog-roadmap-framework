@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v48.0.0
+# Lineage Operating Discipline — v49.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -1996,4 +1996,26 @@ every lineage including this one — not a per-lineage fact that was skipped. Gr
 ontology property anywhere in this framework to record it in at all; that is a gap in the methodology
 itself, present for every lineage this framework has ever run, not something this autonomous
 execution got wrong relative to others.
+
+## G78 — Challenged directly on "Roadmap"; the real gap was never running the roadmap report, not a missing stage
+
+Told plainly that the prior forensic pass looked in the wrong place: checked only `LineageStage`
+individuals and concluded there was no Roadmap concept, without reading this discipline document's
+own extensive real history with `backlog_roadmap_report`, and without ever actually running it
+against `L_ChangeDiscipline`.
+
+**Confirmed there is genuinely no `Stage_Roadmap`** — the five real stages remain Mission through
+Backlog. But running `backlog_roadmap_report` for real, which the earlier forensic pass never did,
+surfaced a real gap immediately: `Obj_CD_NoOutOfScopeWork`'s own declared baseline of 0 was asserted
+as a number, never confirmed by a real, dated observation at or before the work's own start — the
+report correctly printed "no bracketing measurement," the same real failure mode `G64`/`G65` already
+named for a different objective, recurring here because the forensic check never ran the one tool
+built specifically to catch it.
+
+**Fixed**: a real observation recorded at the work's own start time, honestly dated as a forensic
+addition. Re-run: the report now confirms the metric genuinely bracketed, `0 -> 0`.
+
+**The real lesson**: a forensic examination of an autonomous lineage is not complete from reading
+ontology structure alone — it requires running this framework's own real tools against the lineage
+and reading what they say, the same standard `G7` already states for tooling generally.
 

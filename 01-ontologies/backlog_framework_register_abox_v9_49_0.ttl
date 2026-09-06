@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.48.0> ;
-    owl:versionInfo "9.48.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.49.0> ;
+    owl:versionInfo "9.49.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.48.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.47.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.46.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.45.0> ;
@@ -267,8 +268,8 @@ fw:Out2_Scope a backlog:StageOutput ;
 #  analysis still supports them.
 #################################################################
 fw:Area_Governance a backlog:ScopeArea ;
-    backlog:areaLocation "LINEAGE_OPERATING_DISCIPLINE_v48_0_0.md" ;
-    backlog:areaMeasure "Governance rulings G1-G77, each a markdown heading with prose. Nothing in the ontology carries them; the lineage-discipline gate checks that claims about ENFORCEMENT match the shapes, and does not check that the rulings themselves exist as anything a query can reach." .
+    backlog:areaLocation "LINEAGE_OPERATING_DISCIPLINE_v49_0_0.md" ;
+    backlog:areaMeasure "Governance rulings G1-G78, each a markdown heading with prose. Nothing in the ontology carries them; the lineage-discipline gate checks that claims about ENFORCEMENT match the shapes, and does not check that the rulings themselves exist as anything a query can reach." .
 fw:Del_OntGovernance backlog:deliverableForArea fw:Area_Governance .
 fw:Area_CodeTables a backlog:ScopeArea ;
     backlog:areaLocation "03-tooling/ — 12 python modules" ;
@@ -5728,3 +5729,18 @@ fw:Out2_Backlog_CD a backlog:StageOutput ;
 fw:Find_G77 a backlog:RetrospectiveFinding ; backlog:informsRuling "G77" ; backlog:hasFindingScope backlog:Scope_Methodology ;
     backlog:hasRootCause "A full forensic check of L_ChangeDiscipline's own autonomous execution against the real ceremony found two Stage_Objective/Stage_Backlog closure records never written, and the entire pipeline published in one commit rather than one per stage." ;
     backlog:hasRemedy "The two missing StageOutput records were backfilled honestly, dated as a later addition. The single-commit publish cannot be corrected retroactively; disclosed as the real cost of continuous autonomous execution's pull toward one final publish, for future runs to correct against." .
+
+#################################################################
+#  G78: a real gap the roadmap report itself surfaced, only once
+#  actually run against this lineage -- a check the forensic
+#  examination should have included from the start.
+#################################################################
+
+fw:Obs_CD_NoOutOfScopeWork_Before a backlog:MetricObservation ; backlog:observesMetric fw:Metric_CD_NoOutOfScopeWork ;
+    backlog:observationFor fw:Obj_CD_NoOutOfScopeWork ; backlog:hasObservedValue "0"^^xsd:decimal ;
+    backlog:observedAt "2026-09-05T12:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Recorded during forensic re-examination, not at authoring time: the declared hasBaselineValue of 0 was asserted as a number, never confirmed by a real, dated observation at or before S_ChangeGuideDoc's own startedAt -- backlog_roadmap_report's own measurement-confirmed-progress section correctly reported no bracketing measurement until this was added. Direct check at the moment the story started: zero work items belonging to this lineage traced to no real scope area, genuinely true then as now." .
+
+fw:Find_G78 a backlog:RetrospectiveFinding ; backlog:informsRuling "G78" ; backlog:hasFindingScope backlog:Scope_Methodology ;
+    backlog:hasRootCause "A forensic examination checked only ontology structure (LineageStage individuals) and never ran backlog_roadmap_report against the lineage. Running it for real surfaced a genuine, unbacked baseline assertion on Obj_CD_NoOutOfScopeWork the structural check alone never would have found." ;
+    backlog:hasRemedy "Backfilled the missing before-observation, confirmed by re-running the same tool. A forensic pass on any lineage must run this framework's own real tools against it, not read ontology structure alone." .

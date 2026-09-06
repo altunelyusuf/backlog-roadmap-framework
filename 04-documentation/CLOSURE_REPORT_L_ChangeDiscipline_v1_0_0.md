@@ -10,7 +10,7 @@ concern, not an assumed courtesy.*
 full lifecycle without interruption. **Outcome:** `Out_Achieved`, computed by
 `backlog_lineage_compass`, not asserted. **Ontology record:** `fw:CR_ChangeDiscipline`.
 
-**Report generated:** 2026-09-05, against `backlog_framework_register_abox_v9_48_0.ttl`.
+**Report generated:** 2026-09-05, against `backlog_framework_register_abox_v9_49_0.ttl`.
 
 ---
 
@@ -108,5 +108,5 @@ than resolved unilaterally (full text in `fw:Find_AutoGap1`–`5`):
 
 ---
 
-*Generated from `backlog_framework_register_abox_v9_48_0.ttl`, re-verified against the live register
+*Generated from `backlog_framework_register_abox_v9_49_0.ttl`, re-verified against the live register
 at generation time, not recalled from memory or an earlier run.*
