@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.47.0> ;
-    owl:versionInfo "9.47.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.48.0> ;
+    owl:versionInfo "9.48.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.47.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.46.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.45.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.44.0> ;
@@ -266,8 +267,8 @@ fw:Out2_Scope a backlog:StageOutput ;
 #  analysis still supports them.
 #################################################################
 fw:Area_Governance a backlog:ScopeArea ;
-    backlog:areaLocation "LINEAGE_OPERATING_DISCIPLINE_v47_0_0.md" ;
-    backlog:areaMeasure "Governance rulings G1-G76, each a markdown heading with prose. Nothing in the ontology carries them; the lineage-discipline gate checks that claims about ENFORCEMENT match the shapes, and does not check that the rulings themselves exist as anything a query can reach." .
+    backlog:areaLocation "LINEAGE_OPERATING_DISCIPLINE_v48_0_0.md" ;
+    backlog:areaMeasure "Governance rulings G1-G77, each a markdown heading with prose. Nothing in the ontology carries them; the lineage-discipline gate checks that claims about ENFORCEMENT match the shapes, and does not check that the rulings themselves exist as anything a query can reach." .
 fw:Del_OntGovernance backlog:deliverableForArea fw:Area_Governance .
 fw:Area_CodeTables a backlog:ScopeArea ;
     backlog:areaLocation "03-tooling/ — 12 python modules" ;
@@ -5283,8 +5284,8 @@ fw:Mission_ChangeDiscipline a backlog:Mission ;
 
 fw:Out2_Mission_CD a backlog:StageOutput ;
     backlog:outputOfStage backlog:Stage_Mission ;
-    backlog:hasStateDigest "pending-digest" ;
-    backlog:closedAtCommit "pending-commit" ;
+    backlog:hasStateDigest "sha256:2d77741e3f8f6cbb2c389d3825a479589948a7fbb23f19515fddd49bcad5b2ff" ;
+    backlog:closedAtCommit "b48a78749d7ba1e9d0d07b39911a828ac5babcc6" ;
     backlog:belongsToLineage fw:L_ChangeDiscipline ;
     backlog:hasRationale "Digest and commit to be backfilled once the publishing commit exists, the only honest order available when a stage output must name a commit the publish has not yet made (established precedent, this register's own Out2_Mission)." .
 
@@ -5355,8 +5356,8 @@ fw:Ex_CD_NoRetroConversion a backlog:ScopeExclusion ;
 fw:Out2_Scope_CD a backlog:StageOutput ;
     backlog:outputOfStage backlog:Stage_Scope ;
     backlog:consumesOutput fw:Out2_Mission_CD ;
-    backlog:hasStateDigest "pending-digest" ;
-    backlog:closedAtCommit "pending-commit" ;
+    backlog:hasStateDigest "sha256:2d77741e3f8f6cbb2c389d3825a479589948a7fbb23f19515fddd49bcad5b2ff" ;
+    backlog:closedAtCommit "b48a78749d7ba1e9d0d07b39911a828ac5babcc6" ;
     backlog:belongsToLineage fw:L_ChangeDiscipline ;
     backlog:hasRationale "Areas built from PMBOK's own real Perform Integrated Change Control taxonomy (request, impact assessment, disposition, baseline update), tested cell by cell against this register's own real current state rather than paraphrased from the mission -- the domain-blind fit-gap discipline G28 already established. One area (baseline update) found already served; named honestly rather than dropped or forced." .
 
@@ -5471,7 +5472,7 @@ fw:Obj_CD_NoOutOfScopeWork a backlog:Objective ; backlog:hasIntentOrigin backlog
 fw:Out2_Goal_CD a backlog:StageOutput ;
     backlog:outputOfStage backlog:Stage_Goal ;
     backlog:consumesOutput fw:Out2_Scope_CD ;
-    backlog:hasStateDigest "pending-digest" ; backlog:closedAtCommit "pending-commit" ;
+    backlog:hasStateDigest "sha256:2d77741e3f8f6cbb2c389d3825a479589948a7fbb23f19515fddd49bcad5b2ff" ; backlog:closedAtCommit "b48a78749d7ba1e9d0d07b39911a828ac5babcc6" ;
     backlog:belongsToLineage fw:L_ChangeDiscipline ;
     backlog:hasRationale "One scope-facing goal per area (five), plus the required mission-facing and containment-facing goals -- the three-facing closure test G29 already established, applied fresh rather than assumed satisfied." .
 
@@ -5697,3 +5698,33 @@ fw:Ruling_G76 a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G76" ;
     backlog:hasRulingStatement "Whether a remote commit requires real reconciliation is decided entirely by CrossProjectCommitAdvisoryShape reading the commit's own real touched paths against this package's own declared hasSovereignPathPrefix; a loader's only role is recording which paths a commit touched." ;
     backlog:enforcedByShape backlog:CrossProjectCommitAdvisoryShape , backlog:RemoteCommitShape ;
     backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+
+#################################################################
+#  Forensic backfill (G77): Out2_Objective_CD and Out2_Backlog_CD
+#  were never recorded when their own stages actually closed --
+#  a real gap this examination found, not corrected until now.
+#  Their own digest and commit are the same real, single commit
+#  every other stage output in this lineage was also backfilled
+#  to, since the whole chain published in that one commit -- the
+#  honest fact this forensic pass exists to disclose, not hide.
+#################################################################
+
+fw:Out2_Objective_CD a backlog:StageOutput ;
+    backlog:outputOfStage backlog:Stage_Objective ;
+    backlog:consumesOutput fw:Out2_Goal_CD ;
+    backlog:hasStateDigest "sha256:2d77741e3f8f6cbb2c389d3825a479589948a7fbb23f19515fddd49bcad5b2ff" ;
+    backlog:closedAtCommit "b48a78749d7ba1e9d0d07b39911a828ac5babcc6" ;
+    backlog:belongsToLineage fw:L_ChangeDiscipline ;
+    backlog:hasRationale "Recorded during a later forensic examination, not at the time the Objective stage actually closed -- a real gap this review found: seven objectives were built and verified but this stage's own closure record was never written. Backfilled to the real, single commit the whole chain published in, honestly reflecting that no separate, later commit exists to point to instead." .
+
+fw:Out2_Backlog_CD a backlog:StageOutput ;
+    backlog:outputOfStage backlog:Stage_Backlog ;
+    backlog:consumesOutput fw:Out2_Objective_CD ;
+    backlog:hasStateDigest "sha256:2d77741e3f8f6cbb2c389d3825a479589948a7fbb23f19515fddd49bcad5b2ff" ;
+    backlog:closedAtCommit "b48a78749d7ba1e9d0d07b39911a828ac5babcc6" ;
+    backlog:belongsToLineage fw:L_ChangeDiscipline ;
+    backlog:hasRationale "Recorded during a later forensic examination, not at the time the Backlog stage actually closed -- the same real gap as Out2_Objective_CD, for the same reason." .
+
+fw:Find_G77 a backlog:RetrospectiveFinding ; backlog:informsRuling "G77" ; backlog:hasFindingScope backlog:Scope_Methodology ;
+    backlog:hasRootCause "A full forensic check of L_ChangeDiscipline's own autonomous execution against the real ceremony found two Stage_Objective/Stage_Backlog closure records never written, and the entire pipeline published in one commit rather than one per stage." ;
+    backlog:hasRemedy "The two missing StageOutput records were backfilled honestly, dated as a later addition. The single-commit publish cannot be corrected retroactively; disclosed as the real cost of continuous autonomous execution's pull toward one final publish, for future runs to correct against." .

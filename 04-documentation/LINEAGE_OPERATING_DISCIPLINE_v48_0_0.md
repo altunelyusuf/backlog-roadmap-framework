@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v47.0.0
+# Lineage Operating Discipline — v48.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -1973,4 +1973,27 @@ unrelated project's own commit: correctly reported safe to fast-forward. Run aga
 behind by this package's own real commits too: correctly reported that real reconciliation was
 needed. Both verdicts came from the same rule reading the same kind of data, not from two different
 code paths.
+
+## G77 — Forensic examination of L_ChangeDiscipline: two real gaps, one fixed, one disclosed
+
+Requested directly: a full forensic check of whether an autonomously-run lineage actually met this
+framework's own ceremony, to correct future autonomous runs, not only this one.
+
+**Fixed: `Out2_Objective_CD` and `Out2_Backlog_CD` were never recorded.** Both stages' real content
+was built and verified; their own required closure records were not. Backfilled honestly, dated as a
+later forensic addition, not disguised as contemporaneous.
+
+**Disclosed, not fixable: the entire pipeline published in one single commit**, not one per stage as
+the ceremony requires — "each closes in its own commit before the next begins... two stages sharing
+a commit are unordered evidence however they were built." Commit history cannot be rewritten
+honestly. The real lesson for future autonomous runs: continuous execution creates a genuine pull
+toward one final publish instead of publishing per stage, and this is the concrete cost of giving in
+to it — a real StageOutput chain whose own order the commit history cannot corroborate.
+
+**Checked and confirmed NOT gaps**, on direct verification rather than assumption: conformance level
+(`L4_LineageEnforced`) is a real, framework-wide declaration on `fw:Profile`, correctly governing
+every lineage including this one — not a per-lineage fact that was skipped. Granularity has no real
+ontology property anywhere in this framework to record it in at all; that is a gap in the methodology
+itself, present for every lineage this framework has ever run, not something this autonomous
+execution got wrong relative to others.
 

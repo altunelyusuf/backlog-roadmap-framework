@@ -1,5 +1,23 @@
 # Changelog
 
+## v1.198.0 — 2026-09-06 (MINOR: forensic examination of L_ChangeDiscipline's own execution against the ceremony)
+
+Requested directly: a full forensic check of whether the autonomously-run lineage actually met this
+framework's own ceremony. Two real gaps found. `Out2_Objective_CD` and `Out2_Backlog_CD` were never
+recorded when their stages closed -- backfilled now, honestly dated as a later addition. The entire
+pipeline published in one single commit rather than one per stage, as the ceremony requires -- not
+retroactively fixable; disclosed as the real cost of continuous autonomous execution's pull toward
+one final publish, for future runs to correct against.
+
+Checked and confirmed NOT gaps: conformance level (`L4_LineageEnforced`) is a real, framework-wide
+declaration correctly governing this lineage, not a skipped per-lineage fact. Granularity has no
+real ontology property to record it in anywhere in this framework -- a gap in the methodology
+itself, not something this execution got wrong relative to others.
+
+`G77` records the full reasoning. 0 SHACL violations on the real register (117 warnings). All
+checkers PASS.
+
+
 ## v1.197.0 — 2026-09-05 (MAJOR: cross-project remote noise decided declaratively, against a real, declared sovereign path — confirmed by direct investigation, not assumed)
 
 **Challenged to prove or disprove that a parallel session sharing the same repository
