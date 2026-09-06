@@ -1,5 +1,21 @@
 # Changelog
 
+## v1.200.0 — 2026-09-06 (PATCH: session-switch handover filed, per the owner's own direct request)
+
+Repeated, narrow investigation inside one long session was not converging -- each answer found a
+real gap one layer below the previous one, because checks stopped as soon as something was found
+rather than reading the governing documents in full first. The owner requested a session switch
+rather than continuing.
+
+Filed `SESSION_HANDOVER_2026_09_06_v1_0_0.md`: verified state at handover, `L_ChangeDiscipline`'s
+real, confirmed, currently-unfixed gap (no `DeploymentUnit`, no real package, `It_CD1` carrying no
+`hasState`) left for the next session to correct as a dated, honest addition, a summary of what
+this session actually built and verified (`G70`-`G78`), and a direct, unsoftened note on the cause
+of the session switch for the next session to act on.
+
+0 SHACL violations on the real register (117 warnings). All checkers PASS.
+
+
 ## v1.199.0 — 2026-09-06 (PATCH: challenged directly on "Roadmap"; the real gap was never running the roadmap report, not a missing stage)
 
 Confirmed there is genuinely no `Stage_Roadmap` -- the five real stages remain Mission through
