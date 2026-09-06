@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.43.0> ;
-    owl:versionInfo "9.43.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.44.0> ;
+    owl:versionInfo "9.44.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.43.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.42.1> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.42.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.41.0> ;
@@ -261,8 +262,8 @@ fw:Out2_Scope a backlog:StageOutput ;
 #  analysis still supports them.
 #################################################################
 fw:Area_Governance a backlog:ScopeArea ;
-    backlog:areaLocation "LINEAGE_OPERATING_DISCIPLINE_v43_0_0.md" ;
-    backlog:areaMeasure "Governance rulings G1-G72, each a markdown heading with prose. Nothing in the ontology carries them; the lineage-discipline gate checks that claims about ENFORCEMENT match the shapes, and does not check that the rulings themselves exist as anything a query can reach." .
+    backlog:areaLocation "LINEAGE_OPERATING_DISCIPLINE_v44_0_0.md" ;
+    backlog:areaMeasure "Governance rulings G1-G73, each a markdown heading with prose. Nothing in the ontology carries them; the lineage-discipline gate checks that claims about ENFORCEMENT match the shapes, and does not check that the rulings themselves exist as anything a query can reach." .
 fw:Del_OntGovernance backlog:deliverableForArea fw:Area_Governance .
 fw:Area_CodeTables a backlog:ScopeArea ;
     backlog:areaLocation "03-tooling/ — 12 python modules" ;
@@ -5642,3 +5643,18 @@ fw:Mission_ChangeDiscipline backlog:hasMissionOutcome backlog:Out_Achieved ;
 fw:Find_G72 a backlog:RetrospectiveFinding ; backlog:informsRuling "G72" ; backlog:hasFindingScope backlog:Scope_Methodology ;
     backlog:hasRootCause "A full lineage lifecycle was run fully autonomously for the first time, surfacing that the scaffolding required for a new Goal/Objective/Done-ceremony is real and substantial but almost entirely undiscoverable up front, only iteratively via violation messages." ;
     backlog:hasRemedy "Five real gaps recorded (fw:Find_AutoGap1-5) with possible remedies for later discussion. The strongest confirmed practice: adversarial fixture testing caught a real logic bug in new SHACL authored this same run that real data alone would never have exposed." .
+
+#################################################################
+#  A real, generic protective mechanism closing the one genuine
+#  gap this session's own autonomous run surfaced (fw:Find_AutoGap2):
+#  a requirements-introspection tool for ANY class, not scoped
+#  to Goal or Objective specifically.
+#################################################################
+
+fw:TS_backlog_class_requirementsV1_0_0 a backlog:ToolScript ;
+    backlog:scriptFileName "backlog_class_requirements_v1_0_0.py" ;
+    backlog:acceptsGraphPath false .
+
+fw:Find_G73 a backlog:RetrospectiveFinding ; backlog:informsRuling "G73" ; backlog:hasFindingScope backlog:Scope_Methodology ;
+    backlog:hasRootCause "Four of five 'methodology gap' findings from the prior release turned out, on honest re-reading, to be the framework's own enforcement and required practice working correctly -- bundling them alongside one real gap made autonomous execution look shakier than the evidence actually supports." ;
+    backlog:hasRemedy "Built a real, generic requirements-introspection tool (backlog_class_requirements_v1_0_0.py) closing the one genuine gap, scoped to any class this suite governs, not to Goal or Objective specifically. Proven against the exact classes that caused the friction, plus a real empty case and a real error case." .

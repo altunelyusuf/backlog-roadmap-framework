@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v43.0.0
+# Lineage Operating Discipline — v44.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -1832,4 +1832,36 @@ genuinely active lineage exists today to test the real case against.
 `Mission_ChangeDiscipline` is now `Out_Achieved`, genuinely — all 7 objectives at target, its own
 required closure report (`fw:CR_ChangeDiscipline`, `CLOSURE_REPORT_L_ChangeDiscipline_v1_0_0.md`)
 already in place before the outcome was set, run start to finish without interruption.
+
+## G73 — Challenged directly on which of `G72`'s own five findings were real; one was, and a real, generic fix for it, not a case-specific one
+
+Asked directly which of `G72`'s five methodology-gap findings were genuine, and told plainly that
+bundling weak ones alongside a real one reads as drift against trusting autonomous execution.
+Re-examined each honestly rather than defended the list as written.
+
+**Four of the five were not real gaps, on re-reading their own content.** `Find_AutoGap1` (a
+mission's own missing default outcome) and `Find_AutoGap3` (an editing mistake caught by re-parse)
+are both the framework's own enforcement working exactly as designed — evidence *for* autonomous
+execution, not against it. `Find_AutoGap4` (a real bug caught only by adversarial fixture testing)
+confirms the practice this suite already requires is necessary, which is not the same claim as the
+practice being insufficient. `Find_AutoGap5` (the cross-lineage check provable only via fixture) is
+a fact about today's project state — no second active lineage exists — not a defect in anything.
+
+**One was real: `Find_AutoGap2`.** Authoring a new individual of any class means discovering its own
+real requirements one violation at a time, with nothing listing them together up front. Asked
+directly for a fix that is generic, not scoped to Goal or Objective specifically, since the same
+friction would recur for any class this suite governs.
+
+**Built: `backlog_class_requirements_v1_0_0.py`.** Given any class's own local name, walks its real
+`rdfs:subClassOf` chain and reports every `sh:property` and `sh:sparql` constraint any current shape
+imposes on it or an ancestor, always reading the highest-versioned shipped TBox and shape file
+directly rather than a stale copy. Proven against the exact two classes that caused the friction
+this run (`Goal`, `Objective`): every real requirement this run discovered by trial and error is
+reported up front, before authoring begins. Also proven on a class with no shapes and a name that
+does not exist, so both a real empty result and a real error are honest, not silent.
+
+**A general practice, not a one-off**: before authoring the first individual of a class not yet used
+in the current lineage, run this tool for that class first. Not enforced structurally — a script
+cannot compel that it be run before the next edit — but a real, standing recommendation any future
+autonomous run, in this lineage or another, can follow the same way this ruling names it.
 

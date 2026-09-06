@@ -1,5 +1,31 @@
 # Changelog
 
+## v1.194.0 — 2026-09-05 (MINOR: challenged directly on which of the prior release's five findings were real; one was, and a real, generic fix for it — not a case-specific one)
+
+**Asked directly which of the prior release's five methodology-gap findings were genuine**, and
+told plainly that bundling weak ones alongside a real one reads as drift against trusting autonomous
+execution. Re-examined each honestly rather than defended the list as written.
+
+**Four of five were not real gaps, on re-reading their own content.** A mission's own missing
+default outcome and an editing mistake caught by re-parse are both the framework's own enforcement
+working exactly as designed. A real bug caught only by adversarial fixture testing confirms the
+practice this suite already requires is necessary — not that the practice is insufficient. A
+cross-lineage check provable only via fixture is a fact about today's project state, not a defect.
+
+**One was real**: authoring a new individual of any class means discovering its own requirements one
+violation at a time, with nothing listing them together up front — and this recurs for any class,
+not only the two that caused this run's own friction.
+
+**Built: `backlog_class_requirements_v1_0_0.py`**, a real, generic tool. Given any class's own local
+name, walks its real `rdfs:subClassOf` chain and reports every requirement any current shape imposes
+on it or an ancestor, always reading the highest-versioned shipped files directly. Proven against
+the exact two classes that caused this run's own friction, plus a real empty case and a real error
+case — not scoped to Goal or Objective specifically.
+
+`G73` records the full reasoning. 0 SHACL violations on the real register (111 warnings). All six
+shipped checkers PASS. Lineage-discipline check PASS.
+
+
 ## v1.193.0 — 2026-09-05 (MAJOR: Lineage 8 — scope change discipline — built, tested, and closed fully autonomously, per the owner's own direct instruction)
 
 **Run end to end without interruption**, as a test drive of this framework's own full lifecycle:

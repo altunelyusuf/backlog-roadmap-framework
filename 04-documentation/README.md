@@ -11,6 +11,7 @@ prose that drifts. Generalised from an adopting project's product-backlog deposi
 03-tooling/
   backlog_validate_v1_5_0.py                   validator + Gate K (--gate-k), --next selection
   backlog_roadmap_report_v1_6_0.py             the computed roadmap: 8 sections, both NEXT answers
+  backlog_class_requirements_v1_0_0.py         generic requirements introspection: given any class name, lists every real requirement the current shapes impose on it before you author one
   backlog_coverage_gate_v1_1_1.py              BP-D31 primary-source concept coverage
   backlog_evidence_bridge_v1_0_0.py            the only component allowed to assert verification
   backlog_registration_readiness_v1_2_0.py     ORCP pre-submission controls (11, all recomputed)
