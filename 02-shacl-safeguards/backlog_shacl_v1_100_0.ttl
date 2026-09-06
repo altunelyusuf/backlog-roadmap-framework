@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.99.0> ;
-    owl:versionInfo "1.99.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.100.0> ;
+    owl:versionInfo "1.100.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.99.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.98.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.97.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.96.0> ;
@@ -5089,6 +5090,29 @@ backlog:ToolRunRecordShape a sh:NodeShape ;
                   sh:message "L1: a tool run record must carry the real hash of the file it checked." ] ;
     sh:property [ sh:path backlog:runConcludedDistinctBaseline ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:boolean ;
                   sh:message "L1: a tool run record must state what the tool itself concluded about its own baseline." ] .
+
+backlog:RemoteCommitShape a sh:NodeShape ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_cross_project_commit_v1_0_0.ttl" ;
+    sh:targetClass backlog:RemoteCommit ;
+    sh:severity sh:Violation ;
+    rdfs:label "A remote commit record names at least one real touched path (L1)"@en ;
+    sh:property [ sh:path backlog:touchesPath ; sh:minCount 1 ;
+                  sh:message "L1: a remote commit record must name at least one real path it touched, or it asserts nothing checkable." ] .
+
+backlog:CrossProjectCommitAdvisoryShape a sh:NodeShape ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_cross_project_commit_v1_0_0.ttl" ;
+    sh:targetClass backlog:RemoteCommit ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: a remote commit touched this package's own sovereign path and needs real reconciliation"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: this remote commit touched at least one path under this package's own declared sovereign prefix -- real reconciliation is needed before proceeding, not only a fast-forward. Computed entirely by this SPARQL query reading touchesPath against fw:Register's own hasSovereignPathPrefix; a loader's only real job was asserting which paths a commit touched, not judging whether that mattered." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ;
+                      sh:declare [ sh:prefix "fw" ; sh:namespace "http://example.org/backlog-framework-register#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:touchesPath ?p .
+            fw:Register backlog:hasSovereignPathPrefix ?prefix .
+            FILTER (STRSTARTS(?p, ?prefix))
+        }""" ] .
 
 backlog:NewUnprovenShapeShape a sh:NodeShape ;
     backlog:provenByFixture "03-tooling/fixtures/fixture_new_unproven_shape_v1_0_0.ttl" ;

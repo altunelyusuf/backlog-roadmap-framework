@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.46.0> ;
-    owl:versionInfo "9.46.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.47.0> ;
+    owl:versionInfo "9.47.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.46.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.45.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.44.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.43.0> ;
@@ -153,6 +154,7 @@ fw:Profile a backlog:AdoptionProfile ;
                         backlog:RoadmapFacet , backlog:InvariantFacet , backlog:AuditFacet .
 
 fw:Register a backlog:Backlog ;
+    backlog:hasSovereignPathPrefix "backlog-roadmap-framework/" ;
     backlog:hasIdentifier "BRF-REG" ;
     backlog:hasTitle "backlog-roadmap-framework development register" ;
     backlog:hasState backlog:Done ;
@@ -264,8 +266,8 @@ fw:Out2_Scope a backlog:StageOutput ;
 #  analysis still supports them.
 #################################################################
 fw:Area_Governance a backlog:ScopeArea ;
-    backlog:areaLocation "LINEAGE_OPERATING_DISCIPLINE_v46_0_0.md" ;
-    backlog:areaMeasure "Governance rulings G1-G75, each a markdown heading with prose. Nothing in the ontology carries them; the lineage-discipline gate checks that claims about ENFORCEMENT match the shapes, and does not check that the rulings themselves exist as anything a query can reach." .
+    backlog:areaLocation "LINEAGE_OPERATING_DISCIPLINE_v47_0_0.md" ;
+    backlog:areaMeasure "Governance rulings G1-G76, each a markdown heading with prose. Nothing in the ontology carries them; the lineage-discipline gate checks that claims about ENFORCEMENT match the shapes, and does not check that the rulings themselves exist as anything a query can reach." .
 fw:Del_OntGovernance backlog:deliverableForArea fw:Area_Governance .
 fw:Area_CodeTables a backlog:ScopeArea ;
     backlog:areaLocation "03-tooling/ — 12 python modules" ;
@@ -5685,4 +5687,13 @@ fw:Ruling_G75 a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G75" ;
     rdfs:label "The new-shape decision itself is a real SHACL rule, not Python logic; a loader only tags data"@en ;
     backlog:hasRulingStatement "Whether a shape is genuinely new and lacks provenByFixture is decided entirely by NewUnprovenShapeShape's own SPARQL evaluation; a loader's only real role is asserting which real file each shape declaration was found in." ;
     backlog:enforcedByShape backlog:NewUnprovenShapeShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+
+fw:TS_backlog_remote_commit_check_v1_0_0 a backlog:ToolScript ;
+    backlog:scriptFileName "backlog_remote_commit_check_v1_0_0.py" ; backlog:acceptsGraphPath false .
+
+fw:Ruling_G76 a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G76" ;
+    rdfs:label "A shared repository's cross-project noise is decided by a real SPARQL rule against a declared sovereign path, not judged by hand each time"@en ;
+    backlog:hasRulingStatement "Whether a remote commit requires real reconciliation is decided entirely by CrossProjectCommitAdvisoryShape reading the commit's own real touched paths against this package's own declared hasSovereignPathPrefix; a loader's only role is recording which paths a commit touched." ;
+    backlog:enforcedByShape backlog:CrossProjectCommitAdvisoryShape , backlog:RemoteCommitShape ;
     backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .

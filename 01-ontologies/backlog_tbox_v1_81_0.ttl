@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.80.0> ;
-    owl:versionInfo "1.80.0" ;
+    owl:versionIRI <http://example.org/backlog/1.81.0> ;
+    owl:versionInfo "1.81.0" ;
+    owl:priorVersion <http://example.org/backlog/1.80.0> ;
     owl:priorVersion <http://example.org/backlog/1.79.0> ;
     owl:priorVersion <http://example.org/backlog/1.78.0> ;
     owl:priorVersion <http://example.org/backlog/1.77.0> ;
@@ -6225,6 +6226,24 @@ backlog:CScope_Framework a owl:NamedIndividual , backlog:ContainerScope ;
 #  rather than trusted — the same discipline CodeTable applied to
 #  classification tables buried in python.
 #################################################################
+
+backlog:hasSovereignPathPrefix a owl:DatatypeProperty ;
+    rdfs:domain rdfs:Resource ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has sovereign path prefix"@en ;
+    skos:definition "The one real path prefix this package owns inside a shared, multi-project repository. Grounded in this session's own real, confirmed observation: a parallel session (agentic-sdlc) consumes this package as its own declared process methodology but has never, across its full real history, touched a single file under this package's own path -- disjoint directories, not a shared workspace. A remote reporting new commits is not, by itself, evidence of a real conflict; whether any of those commits touched this package's own sovereign prefix is the only fact that decides it, and that fact is checkable, not assumed."@en .
+
+backlog:RemoteCommit a owl:Class ;
+    rdfs:subClassOf core:Artifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Remote Commit"@en ;
+    skos:definition "A real record of one commit found ahead of this session's own local history at fetch time, and the real, distinct file paths it touched -- asserted by a minimal loader whose only job is running the equivalent of git diff --stat and writing down what it found. Whether the commit is safe to fast-forward past or requires real reconciliation is not this loader's own decision -- CrossProjectCommitAdvisoryShape reads the touched paths against this package's own sovereign prefix and decides declaratively, the same real pattern G75 already established for the shape-proof case."@en .
+
+backlog:touchesPath a owl:DatatypeProperty ;
+    rdfs:domain backlog:RemoteCommit ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "touches path"@en ;
+    skos:definition "One real file path this commit changed, added, or removed -- one triple per path, asserted mechanically from the commit's own real diff, not summarised or judged."@en .
 
 backlog:ShapeSnapshot a owl:Class ;
     rdfs:subClassOf backlog:BacklogConcept ;

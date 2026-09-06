@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v46.0.0
+# Lineage Operating Discipline — v47.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -1942,4 +1942,35 @@ baseline location, self-recording `ToolRunRecord`) and this new loader (fully de
 decision) currently exist side by side, covering different real parts of the same overall capability.
 Merging them into one tool is a real, reasonable next step, not attempted here to avoid rushing a
 second tool-level change in the same release the first one shipped in.
+
+## G76 — Confirmed by direct investigation: a parallel session consumes this package, never maintains it; cross-project remote noise is real, and now decided declaratively
+
+Challenged to prove or disprove that a parallel session pushing to the same shared repository
+(`agentic-sdlc`) is unrelated to this package's own development lineage — a consumer of BRSF, not a
+co-maintainer. Investigated directly rather than assumed: that project's own real README states BRSF
+governs it "as the process methodology," and a full search of its own git history — every commit,
+not a sample — found zero that ever touched a file under this package's own path. Confirmed live,
+not only historically: a second real commit from that same project landed on the shared remote
+between the previous release and this one.
+
+**The real risk this creates is narrower than it first appears.** Disjoint directories mean no actual
+file conflict is possible — git's own model already guarantees that. What is real is workflow
+friction: every `git fetch` reporting the remote has moved requires a session to stop and
+investigate, even when the answer is always the same for this specific project. That investigation
+step is exactly what should be a real, checkable fact, not a judgement call repeated by hand.
+
+**Built: `hasSovereignPathPrefix`**, a real, declared fact naming the one path prefix this package
+owns inside the shared repository. **Built: `RemoteCommit` and `touchesPath`**, and
+`CrossProjectCommitAdvisoryShape`, a real SPARQL rule using `STRSTARTS` — confirmed to work natively
+in this exact environment before relying on it — to decide, entirely declaratively, whether any
+changed path falls under this package's own sovereign prefix. `backlog_remote_commit_check_v1_0_0.py`'s
+own only job is running `git diff --name-only` and writing down what changed; the safe/unsafe
+verdict is the SPARQL rule's own conclusion, confirmed by this project's own decision-audit checker
+to contain no logic the ontology does not already state.
+
+**Proven against real, live data, both ways.** Run against a real clone genuinely behind by only the
+unrelated project's own commit: correctly reported safe to fast-forward. Run against a real clone
+behind by this package's own real commits too: correctly reported that real reconciliation was
+needed. Both verdicts came from the same rule reading the same kind of data, not from two different
+code paths.
 

@@ -1,5 +1,36 @@
 # Changelog
 
+## v1.197.0 — 2026-09-05 (MAJOR: cross-project remote noise decided declaratively, against a real, declared sovereign path — confirmed by direct investigation, not assumed)
+
+**Challenged to prove or disprove that a parallel session sharing the same repository
+(`agentic-sdlc`) is unrelated to this package's own development.** Investigated directly: that
+project's own real README states BRSF governs it as its process methodology, and a full search of
+its entire git history — every commit — found zero that ever touched a file under this package's
+own path. Confirmed live: a second real commit from that project landed on the shared remote between
+the previous release and this one.
+
+**The real risk is narrower than it first looks.** Disjoint directories make an actual file conflict
+structurally impossible — git already guarantees that. What's real is workflow friction: every fetch
+reporting the remote has moved requires stopping to investigate, even when the answer is always the
+same for this project.
+
+**Built `hasSovereignPathPrefix`**, a real, declared fact naming the one path this package owns
+inside the shared repository. **Built `RemoteCommit`/`touchesPath` and
+`CrossProjectCommitAdvisoryShape`**, a real SPARQL rule using `STRSTARTS` — confirmed to work
+natively in this environment before relying on it — deciding entirely declaratively whether a
+changed path falls under this package's own prefix. `backlog_remote_commit_check_v1_0_0.py`'s own
+only job is running `git diff --name-only` and writing down what changed — confirmed by this
+project's own decision-audit checker to contain no logic the ontology does not already state.
+
+**Proven against real, live data, both ways**: a real clone behind by only the unrelated project's
+own commit correctly reported safe to fast-forward; a real clone behind by this package's own
+commits too correctly reported real reconciliation was needed. Both verdicts came from the same
+rule.
+
+`G76` records the full reasoning. 0 SHACL violations on the real register (113 warnings). All
+checkers PASS. Lineage-discipline check PASS. Doc-coverage gate PASS.
+
+
 ## v1.196.0 — 2026-09-05 (MAJOR: corrected a real misunderstanding — the new-shape decision itself moved into a real SHACL rule, not merely its configuration)
 
 **Corrected directly**: an earlier claim that "no ontology can reach inside a Python script and
