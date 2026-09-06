@@ -1,5 +1,38 @@
 # Changelog
 
+## v1.195.0 — 2026-09-05 (MAJOR: told directly one generic mechanism was not enough; three built, and a real, session-long checker bug found and fixed while building the second)
+
+**Corrected directly**: judging four of five findings as "the system working correctly" had been
+wrongly treated as meaning no generic protection was needed for those categories. Told plainly that
+narrowing to one mechanism was itself a drift, not a size effect of a long session — the actual
+mistake was answering only the first of two different questions.
+
+**Mechanism one**: confirmed the existing class-requirements tool already covers the
+missing-default-outcome category too — the two earlier findings are one category, not two.
+
+**Mechanism two, and a real bug found while building it.** The existing shape-proof checker's own
+"published baseline" path was hardcoded relative to its own script directory — in this session's
+real environment, where the working copy is the only copy on disk, that path resolved back to the
+exact file being checked. It reported PASS every time this session ran it, all session, without
+ever once comparing against a genuinely different snapshot. Confirmed directly by printing the
+resolved path. Built `backlog_new_shape_proof_v1_1_0.py`, requiring an explicit, hash-verified
+distinct baseline and refusing to report PASS without one. Run for real against an older published
+clone: found 9 real shapes this session had built with real fixtures behind them, never linked via
+`provenByFixture`. Fixed on all nine, re-verified PASS against the same real baseline.
+
+**Mechanism three**: built `awaitingRealVerification`, distinct from `provenByFixture` — proof a
+shape fires is not proof its real-world trigger condition has occurred. Applied to the one shape
+that genuinely needs it, with a small tool to list every such item so a future session finds them
+systematically.
+
+**The editing-mistake category confirmed once more as the one finding that was never a gap** — no
+mechanism proposed beyond the practice that already caught it.
+
+`G74` records the full reasoning. 0 SHACL violations on the real register (111 warnings). Five of
+six shipped checkers PASS (the sixth, shape-proof, now requires an explicit real baseline and is
+verified separately in this same release). Lineage-discipline check PASS. Doc-coverage gate PASS.
+
+
 ## v1.194.0 — 2026-09-05 (MINOR: challenged directly on which of the prior release's five findings were real; one was, and a real, generic fix for it — not a case-specific one)
 
 **Asked directly which of the prior release's five methodology-gap findings were genuine**, and

@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.96.0> ;
-    owl:versionInfo "1.96.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.97.0> ;
+    owl:versionInfo "1.97.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.96.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.95.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.94.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.93.0> ;
@@ -1628,6 +1629,7 @@ backlog:ScopeMeasurabilityShape a sh:NodeShape ;
         }""" ] .
 
 backlog:ChangeRequestShape a sh:NodeShape ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_change_discipline_v1_0_0.ttl" ;
     sh:targetClass backlog:ChangeRequest ;
     sh:severity sh:Violation ;
     rdfs:label "A change request names its scope, direction, rationale and current disposition (L1)"@en ;
@@ -1641,6 +1643,7 @@ backlog:ChangeRequestShape a sh:NodeShape ;
                   sh:message "L1: a change request must carry a current disposition, even if only Disp_Pending." ] .
 
 backlog:ImpactAssessmentShape a sh:NodeShape ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_change_discipline_v1_0_0.ttl" ;
     sh:targetClass backlog:ImpactAssessment ;
     sh:severity sh:Violation ;
     rdfs:label "An impact assessment names the request it analyzes and states real impact (L1)"@en ;
@@ -1650,6 +1653,7 @@ backlog:ImpactAssessmentShape a sh:NodeShape ;
                   sh:message "L1: an impact assessment must state what the change would actually affect." ] .
 
 backlog:DispositionRequiresAssessmentShape a sh:NodeShape ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_change_discipline_v1_0_0.ttl" ;
     sh:targetClass backlog:ChangeRequest ;
     sh:severity sh:Violation ;
     rdfs:label "A disposition past Pending requires a real impact assessment first (L3)"@en ;
@@ -1662,6 +1666,7 @@ backlog:DispositionRequiresAssessmentShape a sh:NodeShape ;
         }""" ] .
 
 backlog:AcceptedRequestNeedsScopeChangeShape a sh:NodeShape ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_change_discipline_v1_0_0.ttl" ;
     sh:targetClass backlog:ChangeRequest ;
     sh:severity sh:Violation ;
     rdfs:label "An accepted request has a real ScopeChange recording the admission (L3)"@en ;
@@ -1674,6 +1679,8 @@ backlog:AcceptedRequestNeedsScopeChangeShape a sh:NodeShape ;
         }""" ] .
 
 backlog:CrossLineageRiskAdvisoryShape a sh:NodeShape ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_change_discipline_v1_0_0.ttl" ;
+    backlog:awaitingRealVerification "A second, genuinely concurrent, InFlight lineage exists at the same time as another real lineage's own real ChangeRequest -- true today for zero pairs of lineages in this register. Re-check this shape's own positive case against real data, not only its fixture, the moment that condition holds." ;
     sh:targetClass backlog:ImpactAssessment ;
     sh:severity sh:Warning ;
     rdfs:label "Advisory: a real risk to another, active lineage was found"@en ;
@@ -2397,6 +2404,7 @@ backlog:PlanBaselineShape a sh:NodeShape ;
         }""" ] .
 
 backlog:OpenIterationBaselineAdvisoryShape a sh:NodeShape ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_iteration_rebaseline_v1_0_0.ttl" ;
     sh:targetClass backlog:Iteration ;
     sh:severity sh:Warning ;
     rdfs:label "Advisory: an open iteration has no plan baseline recorded"@en ;
@@ -2412,6 +2420,7 @@ backlog:OpenIterationBaselineAdvisoryShape a sh:NodeShape ;
         }""" ] .
 
 backlog:SilentContainerRebaselineShape a sh:NodeShape ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_iteration_rebaseline_v1_0_0.ttl" ;
     sh:targetClass backlog:Iteration ;
     sh:severity sh:Violation ;
     rdfs:label "A container's dates match its own baseline, or a real Rebaseline explains why not (L1)"@en ;
@@ -5054,6 +5063,7 @@ backlog:AchievedOnlyWhenClearShape a sh:NodeShape ;
         }""" ] .
 
 backlog:ClosureReportShape a sh:NodeShape ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_closure_report_v1_0_0.ttl" ;
     sh:targetClass backlog:ClosureReport ;
     sh:severity sh:Violation ;
     rdfs:label "A closure report names its mission, when it ran, and covers real measures (L1)"@en ;
@@ -5067,6 +5077,7 @@ backlog:ClosureReportShape a sh:NodeShape ;
                   sh:message "L1: a closure report must report on at least one real objective; a dashboard with no measures is a summary, not a dashboard." ] .
 
 backlog:MissionClosureRequiresReportShape a sh:NodeShape ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_closure_report_v1_0_0.ttl" ;
     sh:targetClass backlog:Mission ;
     sh:severity sh:Violation ;
     rdfs:label "A mission is not Achieved without a real closure report naming it (L3)"@en ;

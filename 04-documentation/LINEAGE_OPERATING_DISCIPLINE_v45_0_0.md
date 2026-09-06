@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v44.0.0
+# Lineage Operating Discipline — v45.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -1864,4 +1864,45 @@ does not exist, so both a real empty result and a real error are honest, not sil
 in the current lineage, run this tool for that class first. Not enforced structurally — a script
 cannot compel that it be run before the next edit — but a real, standing recommendation any future
 autonomous run, in this lineage or another, can follow the same way this ruling names it.
+
+## G74 — Told directly that one generic mechanism was not enough; three built, and a real, session-long tool bug found while building the second
+
+Corrected directly: asked to build generic protective mechanisms for the *categories* `G72`'s five
+findings represented, not only the one judged "real" — and asked plainly whether narrowing to one
+was itself a drift. It was: judging four findings as "the system working correctly" does not mean a
+more robust, generic protection for those categories has no value; that is a different question,
+and answering only the first one was the actual mistake, not the session's size.
+
+**Mechanism one, closing the undiscoverable-requirements category (the real `Find_AutoGap2`,
+confirmed also to cover `Find_AutoGap1`'s own case)**: verified directly that
+`backlog_class_requirements_v1_0_0.py`, already built, reports `Mission`'s own missing-outcome
+requirement exactly as it would have been needed — the two findings are one category, not two, and
+one tool covers both.
+
+**Mechanism two, closing the adversarial-proof category (`Find_AutoGap4`), and a real bug found
+while building it.** `backlog_new_shape_proof_v1_0_0.py`'s own "published baseline" path was a
+hardcoded relative path from its own script directory. In this session's own real environment — the
+working copy is the only copy on disk, every single time — that path resolves back to the exact file
+being checked, so "new since last publish" computed as zero regardless of how many real, unproven
+shapes existed. It reported PASS every time this session ran it, all session, without ever once
+comparing against a genuinely different snapshot. Confirmed directly, not assumed: the path resolves
+to the current working directory, verified by printing it. Built `backlog_new_shape_proof_v1_1_0.py`,
+requiring an explicit `--baseline` and refusing to report PASS when none is given, when the given
+path has no shapes file, or when it hash-matches the current file byte for byte — NOT-VERIFIED is
+printed in every one of those cases, never a silent green. Proven against a real, older published
+clone: found the 9 real shapes this session had built and never linked, `provenByFixture` genuinely
+missing from every one despite real fixtures existing for all nine. Fixed by adding the real link on
+each, verified the corrected checker now reports PASS against the same real baseline.
+
+**Mechanism three, closing the fixture-only-verified category (`Find_AutoGap5`)**: built
+`awaitingRealVerification`, a real property distinct from `provenByFixture` — proof a shape fires is
+not proof its real-world trigger condition has ever occurred. Applied to `CrossLineageRiskAdvisoryShape`,
+stating the exact condition awaited (a second, genuinely concurrent lineage). Built
+`backlog_pending_verification_v1_0_0.py`, listing every shape currently carrying the property, so a
+future session finds these systematically rather than by searching prose.
+
+**The editing-mistake category (`Find_AutoGap3`)** is confirmed, on this closer look too, to be the
+one finding that was never a gap: no generic mechanism is proposed for it beyond restating the
+practice this session already followed and that already caught the one real mistake — re-parse and
+re-validate after every edit, before the next one, every time.
 

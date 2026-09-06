@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.44.0> ;
-    owl:versionInfo "9.44.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.45.0> ;
+    owl:versionInfo "9.45.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.44.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.43.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.42.1> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.42.0> ;
@@ -262,8 +263,8 @@ fw:Out2_Scope a backlog:StageOutput ;
 #  analysis still supports them.
 #################################################################
 fw:Area_Governance a backlog:ScopeArea ;
-    backlog:areaLocation "LINEAGE_OPERATING_DISCIPLINE_v44_0_0.md" ;
-    backlog:areaMeasure "Governance rulings G1-G73, each a markdown heading with prose. Nothing in the ontology carries them; the lineage-discipline gate checks that claims about ENFORCEMENT match the shapes, and does not check that the rulings themselves exist as anything a query can reach." .
+    backlog:areaLocation "LINEAGE_OPERATING_DISCIPLINE_v45_0_0.md" ;
+    backlog:areaMeasure "Governance rulings G1-G74, each a markdown heading with prose. Nothing in the ontology carries them; the lineage-discipline gate checks that claims about ENFORCEMENT match the shapes, and does not check that the rulings themselves exist as anything a query can reach." .
 fw:Del_OntGovernance backlog:deliverableForArea fw:Area_Governance .
 fw:Area_CodeTables a backlog:ScopeArea ;
     backlog:areaLocation "03-tooling/ — 12 python modules" ;
@@ -4321,8 +4322,8 @@ fw:Ev_ArtefactUseCheck a backlog:TestEvidence ;
     backlog:verifiedByTool "backlog_criterion_resolve" ;
     backlog:attestsCriterion fw:AC_S_Tables_B3 .
 
-fw:TS_backlog_new_shape_proof_v1_0_0 a backlog:ToolScript ;
-    backlog:scriptFileName "backlog_new_shape_proof_v1_0_0.py" ; backlog:acceptsGraphPath false .
+fw:TS_backlog_new_shape_proof_v1_1_0 a backlog:ToolScript ;
+    backlog:scriptFileName "backlog_new_shape_proof_v1_1_0.py" ; backlog:acceptsGraphPath false .
 
 #################################################################
 #  #4 of the mitigation plan, closed. G25.
@@ -5658,3 +5659,7 @@ fw:TS_backlog_class_requirementsV1_0_0 a backlog:ToolScript ;
 fw:Find_G73 a backlog:RetrospectiveFinding ; backlog:informsRuling "G73" ; backlog:hasFindingScope backlog:Scope_Methodology ;
     backlog:hasRootCause "Four of five 'methodology gap' findings from the prior release turned out, on honest re-reading, to be the framework's own enforcement and required practice working correctly -- bundling them alongside one real gap made autonomous execution look shakier than the evidence actually supports." ;
     backlog:hasRemedy "Built a real, generic requirements-introspection tool (backlog_class_requirements_v1_0_0.py) closing the one genuine gap, scoped to any class this suite governs, not to Goal or Objective specifically. Proven against the exact classes that caused the friction, plus a real empty case and a real error case." .
+
+fw:Find_G74 a backlog:RetrospectiveFinding ; backlog:informsRuling "G74" ; backlog:hasFindingScope backlog:Scope_Methodology ;
+    backlog:hasRootCause "Judging four of five findings as 'the system working correctly' was wrongly treated as meaning no generic protection was needed for those categories -- a narrowing the owner never asked for. Building the fix for the second one then surfaced that the existing shape-proof checker had been silently ineffective all session: its own hardcoded baseline path resolved to the file it was checking, so it reported PASS every time without ever comparing against a real, different snapshot." ;
+    backlog:hasRemedy "Three generic mechanisms built: confirmed the existing class-requirements tool already covers the missing-outcome category too; fixed the shape-proof checker to require an explicit, hash-verified-distinct baseline and refuse to report PASS without one, then used it for real to find and fix 9 shapes genuinely missing their provenByFixture link; built awaitingRealVerification plus a query tool for the fixture-only-verified category. The editing-mistake category confirmed, again, as the one finding that was never a gap." .

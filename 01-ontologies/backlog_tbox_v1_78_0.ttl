@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.77.0> ;
-    owl:versionInfo "1.77.0" ;
+    owl:versionIRI <http://example.org/backlog/1.78.0> ;
+    owl:versionInfo "1.78.0" ;
+    owl:priorVersion <http://example.org/backlog/1.77.0> ;
     owl:priorVersion <http://example.org/backlog/1.76.0> ;
     owl:priorVersion <http://example.org/backlog/1.75.0> ;
     owl:priorVersion <http://example.org/backlog/1.74.0> ;
@@ -5825,6 +5826,12 @@ backlog:Scen_Absent a owl:NamedIndividual , backlog:ScenarioKind ;
 #  property ships, the checker reads it where present, and the
 #  count of shapes carrying one is reported.
 #################################################################
+
+backlog:awaitingRealVerification a owl:DatatypeProperty ;
+    rdfs:domain rdfs:Resource ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "awaiting real verification"@en ;
+    skos:definition "States the real condition that has not yet occurred, under which this shape's own positive case could be checked against real data rather than only a fixture -- distinct from provenByFixture, which proves a shape fires at all. A shape can be genuinely proven and still be waiting: proof that a rule fires correctly on a constructed case is not the same claim as proof that the real-world condition it exists to catch has ever actually been observed. Required to be re-checked, not merely noted in prose, the moment the stated condition becomes true -- a shape carrying this property forever, long after its own condition has plainly occurred, is itself a finding."@en .
 
 backlog:provenByFixture a owl:DatatypeProperty ;
     rdfs:domain rdfs:Resource ; rdfs:range xsd:string ;
