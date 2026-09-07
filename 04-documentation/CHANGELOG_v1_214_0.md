@@ -4,7 +4,11 @@
 
 Register v9.62.0: `P7Gov_Mission`, `P7Exec_Mission`, `P7Export_Mission`, `P7Prose_Mission`, `P7Code_Mission`
 close the parts' Mission stage (each consuming its part's none output, 2f28bac); digest at
-this commit. Nothing else changes. Expected reading after this release: each part carries one active output post-dating the restart.
+this commit. Also: the first reading after the restart showed the parent as BYPASS with all 38 items --
+retracting the chain un-orders every item, not only the 14 bypassed ones -- so all 38 are now flagged
+pre-lineage; 22 more are assigned to parts by deliverable (execution tasks with their story), and the
+initiative and spike stay with the parent for its combine output. Expected reading after this
+release: each part carries one active output post-dating the restart.
 
 ## v1.213.0 — 2026-09-07 (MINOR: lineage 7 restarted — divide and conquer, five parts by deliverable)
 

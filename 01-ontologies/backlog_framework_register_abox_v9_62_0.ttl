@@ -6179,3 +6179,43 @@ fw:P7Code_Mission a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Mi
     backlog:hasStateDigest "f1787a3b16b53a7e13cbcd781b0d30f616d79aff2af9fe9e826d7b29061c102c" ;
     backlog:closedAtCommit "backlog-roadmap-framework-v1.214.0 (tag; witnessed by git, not asserted)" ;
     backlog:hasRationale "Part Code: Mission_OntologyDriven re-affirmed unchanged for this part (owner-stated; a session does not rewrite it)." .
+
+#################################################################
+#  v9.62.0, second block -- CORRECTION FOUND BY THE FIRST READING.
+#  The restart (v9.61.0) flagged only the 14 bypassed items. The
+#  retraction of lineage 7's chain also un-orders the other 24: the
+#  Backlog output they were ordered against is retracted, so the
+#  order check read the parent as BYPASS (38 items, no active Backlog
+#  output). A restart retracts the chain that ordered EVERY item, so
+#  every item of the restarted lineage is pre-lineage from then on and
+#  re-enters only by admission. Corrected here, before any part output
+#  exists: the 22 items that belong to a deliverable (directly, or as
+#  the execution task of a story that does) go to that deliverable's
+#  part; the initiative and the spike, which pursue the framework-wide
+#  conformance objective and belong to no single deliverable, stay with
+#  the parent and will be admitted by its combine output.
+#################################################################
+fw:EP_CodeTables backlog:belongsToLineage fw:L7_Export ; backlog:preLineageItem true .
+fw:EP_RuleExec backlog:belongsToLineage fw:L7_Exec ; backlog:preLineageItem true .
+fw:EP_Rulings backlog:belongsToLineage fw:L7_Gov ; backlog:preLineageItem true .
+fw:EP_ScriptDecisions backlog:belongsToLineage fw:L7_Code ; backlog:preLineageItem true .
+fw:EP_StandardRows backlog:belongsToLineage fw:L7_Prose ; backlog:preLineageItem true .
+fw:EP_TablesBatch backlog:belongsToLineage fw:L7_Export ; backlog:preLineageItem true .
+fw:S_Tables_B5 backlog:belongsToLineage fw:L7_Export ; backlog:preLineageItem true .
+fw:S_Tables_B6 backlog:belongsToLineage fw:L7_Export ; backlog:preLineageItem true .
+fw:T_EP_CodeTables_S1 backlog:belongsToLineage fw:L7_Export ; backlog:preLineageItem true .
+fw:T_EP_CodeTables_S2 backlog:belongsToLineage fw:L7_Export ; backlog:preLineageItem true .
+fw:T_EP_RuleExec_S1 backlog:belongsToLineage fw:L7_Exec ; backlog:preLineageItem true .
+fw:T_EP_RuleExec_S2 backlog:belongsToLineage fw:L7_Exec ; backlog:preLineageItem true .
+fw:T_EP_Rulings_S1 backlog:belongsToLineage fw:L7_Gov ; backlog:preLineageItem true .
+fw:T_EP_Rulings_S2 backlog:belongsToLineage fw:L7_Gov ; backlog:preLineageItem true .
+fw:T_EP_ScriptDecisions_S1 backlog:belongsToLineage fw:L7_Code ; backlog:preLineageItem true .
+fw:T_EP_StandardRows_S1 backlog:belongsToLineage fw:L7_Prose ; backlog:preLineageItem true .
+fw:T_EP_StandardRows_S2 backlog:belongsToLineage fw:L7_Prose ; backlog:preLineageItem true .
+fw:T_S_Tables_B1 backlog:belongsToLineage fw:L7_Export ; backlog:preLineageItem true .
+fw:T_S_Tables_B2 backlog:belongsToLineage fw:L7_Export ; backlog:preLineageItem true .
+fw:T_S_Tables_B3 backlog:belongsToLineage fw:L7_Export ; backlog:preLineageItem true .
+fw:T_S_Tables_B4 backlog:belongsToLineage fw:L7_Export ; backlog:preLineageItem true .
+fw:ET_ConvertGovernanceRulings backlog:belongsToLineage fw:L7_Gov ; backlog:preLineageItem true .
+fw:Init_OntologyDrivenConversion backlog:preLineageItem true .
+fw:SPK_DomainModelingSeverity backlog:preLineageItem true .
