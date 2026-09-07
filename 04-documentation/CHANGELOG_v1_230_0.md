@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.230.0 — 2026-09-07 (MINOR: second trial, step 2 — TF_S2 and TV_S2 planned after the fact)
+
+Exercise register v1.9.0: an open iteration, a planning event and an execution task per toy, planning
+stories that already existed at `cedf43b`. Expected post-commit reading: toys F and V BYPASS (item
+planned after it existed), each awaiting its second finding.
+
 ## v1.229.0 — 2026-09-07 (MINOR: second trial, step 1 — new work in toys F and V, unplanned)
 
 Exercise register v1.8.0: `TF_S2`, `TV_S2` exist with no planning record. The next commit plans them

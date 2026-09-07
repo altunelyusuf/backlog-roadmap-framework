@@ -8,8 +8,9 @@
 @prefix dcterms: <http://purl.org/dc/terms/> .
 
 <http://example.org/backlog-strategy-exercise> a owl:Ontology ;
-    owl:versionIRI <http://example.org/backlog-strategy-exercise/1.8.0> ;
-    owl:versionInfo "1.8.0" ;
+    owl:versionIRI <http://example.org/backlog-strategy-exercise/1.9.0> ;
+    owl:versionInfo "1.9.0" ;
+    owl:priorVersion <http://example.org/backlog-strategy-exercise/1.8.0> ;
     owl:priorVersion <http://example.org/backlog-strategy-exercise/1.7.0> ;
     owl:priorVersion <http://example.org/backlog-strategy-exercise/1.6.0> ;
     owl:priorVersion <http://example.org/backlog-strategy-exercise/1.5.0> ;
@@ -800,3 +801,33 @@ ex:TV_S2 a backlog:Story ; backlog:hasIdentifier "TV-S-2" ; backlog:hasTitle "Se
     backlog:satisfiesDeliverable ex:TV_D1 .
 ex:TF_S2 backlog:postRestartItem ex:Restart_TF .
 ex:TV_S2 backlog:postRestartItem ex:Restart_TV .
+
+#################################################################
+#  v1.9.0 (2026-09-07, brsf-session) -- SECOND TRIAL, step 2: TF_S2 and
+#  TV_S2 (first in git at cedf43b) are PLANNED NOW, after they existed
+#  -- the item-level escape, done on purpose so that each toy's second
+#  bypass is a real, witnessed finding. Minimal planning records: one
+#  open iteration per toy, one planning event, one execution task.
+#################################################################
+ex:TF_It2 a backlog:Iteration ; backlog:hasIdentifier "TF-IT-2" ; backlog:hasTitle "Second-trial iteration"@en ;
+    backlog:hasState backlog:Proposed ; backlog:iterationStart "2026-09-07T15:00:00Z"^^xsd:dateTime ;
+    backlog:iterationEnd "2026-09-21T15:00:00Z"^^xsd:dateTime ; backlog:hasCapacity 8.0 ;
+    backlog:belongsToLineage ex:TF_Lin ; backlog:appliesDefinitionOfDone ex:DoD_PL .
+ex:TF_Plan_S2 a backlog:PlanningEvent ; backlog:plansItem ex:TF_S2 ; backlog:plannedInto ex:TF_It2 ;
+    backlog:plannedAt "2026-09-07T15:00:00Z"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:producesTask ex:TF_T_S2 ; backlog:belongsToLineage ex:TF_Lin .
+ex:TF_T_S2 a backlog:ExecutionTask ; backlog:hasTaskType backlog:Task_Implementation ; backlog:hasIdentifier "TF-T-S2" ;
+    backlog:hasTitle "Second-trial task"@en ; backlog:hasState backlog:Proposed ; backlog:memberOfContainer ex:BL , ex:TF_It2 ;
+    backlog:belongsToLineage ex:TF_Lin ; backlog:postRestartItem ex:Restart_TF .
+ex:TF_S2 backlog:memberOfContainer ex:TF_It2 .
+ex:TV_It2 a backlog:Iteration ; backlog:hasIdentifier "TV-IT-2" ; backlog:hasTitle "Second-trial iteration"@en ;
+    backlog:hasState backlog:Proposed ; backlog:iterationStart "2026-09-07T15:00:00Z"^^xsd:dateTime ;
+    backlog:iterationEnd "2026-09-21T15:00:00Z"^^xsd:dateTime ; backlog:hasCapacity 8.0 ;
+    backlog:belongsToLineage ex:TV_Lin ; backlog:appliesDefinitionOfDone ex:DoD_PL .
+ex:TV_Plan_S2 a backlog:PlanningEvent ; backlog:plansItem ex:TV_S2 ; backlog:plannedInto ex:TV_It2 ;
+    backlog:plannedAt "2026-09-07T15:00:00Z"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:producesTask ex:TV_T_S2 ; backlog:belongsToLineage ex:TV_Lin .
+ex:TV_T_S2 a backlog:ExecutionTask ; backlog:hasTaskType backlog:Task_Implementation ; backlog:hasIdentifier "TV-T-S2" ;
+    backlog:hasTitle "Second-trial task"@en ; backlog:hasState backlog:Proposed ; backlog:memberOfContainer ex:BL , ex:TV_It2 ;
+    backlog:belongsToLineage ex:TV_Lin ; backlog:postRestartItem ex:Restart_TV .
+ex:TV_S2 backlog:memberOfContainer ex:TV_It2 .
