@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.217.0 — 2026-09-07 (MINOR: lineage 7 rebuild, stage 4 of 5 — Objective, all five parts)
+
+Register v9.65.0: `P7Gov_Objective`, `P7Exec_Objective`, `P7Export_Objective`, `P7Prose_Objective`, `P7Code_Objective`
+close the parts' Objective stage (each consuming its part's Goal output, 5a6894e); digest at
+this commit. Nothing else changes. Expected reading after this release: four per part.
+
 ## v1.216.0 — 2026-09-07 (MINOR: lineage 7 rebuild, stage 3 of 5 — Goal, all five parts)
 
 Register v9.64.0: `P7Gov_Goal`, `P7Exec_Goal`, `P7Export_Goal`, `P7Prose_Goal`, `P7Code_Goal`

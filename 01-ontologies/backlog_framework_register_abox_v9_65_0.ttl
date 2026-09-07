@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.64.0> ;
-    owl:versionInfo "9.64.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.65.0> ;
+    owl:versionInfo "9.65.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.64.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.63.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.62.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.61.0> ;
@@ -6287,3 +6288,36 @@ fw:P7Code_Goal a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Goal 
     backlog:hasStateDigest "89d521d583e91e8834e6a63564a8a0f3b9549e1d3b0100f81515eef2c182ffd0" ;
     backlog:closedAtCommit "backlog-roadmap-framework-v1.216.0 (tag; witnessed by git, not asserted)" ;
     backlog:hasRationale "Part Code: the goal of Scope_Ontology that this deliverable's items pursue, re-affirmed for the part (G13: goals derive from the scope)." .
+
+#################################################################
+#  v9.65.0 (2026-09-07, brsf-session) -- LINEAGE 7 REBUILD, STAGE 4
+#  OF 5: Objective, for all five parts. Parts are independent, so their
+#  stage-4 outputs share one commit; within each part the order is
+#  witnessed (this commit follows the parts' Goal commit 5a6894e).
+#  Digest at this commit (Experiment A), one per stage, register-wide.
+#################################################################
+fw:P7Gov_Objective a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Objective ;
+    backlog:belongsToLineage fw:L7_Gov ; backlog:consumesOutput fw:P7Gov_Goal ;
+    backlog:hasStateDigest "9b71facb70e07e3967d6efb688f705c62dd779034974bc3ad877f3fc4de605f5" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.217.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Part Gov: the objectives beneath that goal, with their metrics, baselines, targets, checkpoints and observations already on record; nothing re-dated or re-measured (G33)." .
+fw:P7Exec_Objective a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Objective ;
+    backlog:belongsToLineage fw:L7_Exec ; backlog:consumesOutput fw:P7Exec_Goal ;
+    backlog:hasStateDigest "9b71facb70e07e3967d6efb688f705c62dd779034974bc3ad877f3fc4de605f5" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.217.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Part Exec: the objectives beneath that goal, with their metrics, baselines, targets, checkpoints and observations already on record; nothing re-dated or re-measured (G33)." .
+fw:P7Export_Objective a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Objective ;
+    backlog:belongsToLineage fw:L7_Export ; backlog:consumesOutput fw:P7Export_Goal ;
+    backlog:hasStateDigest "9b71facb70e07e3967d6efb688f705c62dd779034974bc3ad877f3fc4de605f5" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.217.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Part Export: the objectives beneath that goal, with their metrics, baselines, targets, checkpoints and observations already on record; nothing re-dated or re-measured (G33)." .
+fw:P7Prose_Objective a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Objective ;
+    backlog:belongsToLineage fw:L7_Prose ; backlog:consumesOutput fw:P7Prose_Goal ;
+    backlog:hasStateDigest "9b71facb70e07e3967d6efb688f705c62dd779034974bc3ad877f3fc4de605f5" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.217.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Part Prose: the objectives beneath that goal, with their metrics, baselines, targets, checkpoints and observations already on record; nothing re-dated or re-measured (G33)." .
+fw:P7Code_Objective a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Objective ;
+    backlog:belongsToLineage fw:L7_Code ; backlog:consumesOutput fw:P7Code_Goal ;
+    backlog:hasStateDigest "9b71facb70e07e3967d6efb688f705c62dd779034974bc3ad877f3fc4de605f5" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.217.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Part Code: the objectives beneath that goal, with their metrics, baselines, targets, checkpoints and observations already on record; nothing re-dated or re-measured (G33)." .
