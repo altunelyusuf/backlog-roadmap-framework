@@ -1,5 +1,16 @@
 # Changelog
 
+## v1.213.0 — 2026-09-07 (MINOR: lineage 7 restarted — divide and conquer, five parts by deliverable)
+
+Register v9.61.0: `Restart_L_OntologyDriven_20260907` answers the bypass recorded at v1.212.0
+(`4423fdc`) in its own commit; strategy `Strat_DivideAndConquer`; parts `L7_Gov`, `L7_Exec`,
+`L7_Export`, `L7_Prose`, `L7_Code`, one per deliverable of `Scope_Ontology`; the 14 bypassed items
+placed by the deliverable each satisfies (`S_RulingsQueryableDecision` placed in the governance part
+by its objective's goal, stated as a placement); lineage 7's five outputs retracted; every bypassed
+item flagged pre-lineage. Expected reading after this release: parent DIVIDING, every part
+RESTARTED-equivalent (no output yet); 14 pre-lineage advisories until the parts' Backlog outputs
+admit them.
+
 ## v1.212.0 — 2026-09-07 (MINOR: recovery strategies — the stop condition as a family; late planning is a bypass; lineage 7 found and frozen)
 
 Owner's decisions: (1) build the strategy family, (2) restart lineage 7 with divide and conquer,

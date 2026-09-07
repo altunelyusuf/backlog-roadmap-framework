@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.60.0> ;
-    owl:versionInfo "9.60.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.61.0> ;
+    owl:versionInfo "9.61.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.60.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.59.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.58.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.57.0> ;
@@ -6076,3 +6077,71 @@ fw:Bypass_L_OntologyDriven_20260907 a backlog:LineageBypass ;
     backlog:detectedBy "backlog_lineage_order_check_v1_2_0" ;
     backlog:hasRationale "EP_CodeTables_S1 first appears c2e7625 before Stage_Backlog output planned-late by Plan_EP_CodeTables_S1 (a371325); EP_CodeTables_S2 first appears c2e7625 before Stage_Backlog output planned-late by Plan_EP_CodeTables_S2 (a371325); EP_RuleExec_S1 first appears c2e7625 before Stage_Backlog output planned-late by Plan_EP_RuleExec_S1 (a371325); EP_RuleExec_S2 first appears c2e7625 before Stage_Backlog output planned-late by Plan_EP_RuleExec_S2 (a371325); EP_Rulings_S1 first appears c2e7625 before Stage_Backlog output planned-late by Plan_EP_Rulings_S1 (a371325); EP_Rulings_S2 first appears c2e7625 before Stage_Backlog output planned-late by Plan_EP_Rulings_S2 (a371325); EP_ScriptDecisions_S1 first appears c2e7625 before Stage_Backlog output planned-late by Plan_EP_ScriptDecisions_S1 (a371325); EP_StandardRows_S1 first appears c2e7625 before Stage_Backlog output planned-late by Plan_EP_StandardRows_S1 (a371325); EP_StandardRows_S2 first appears c2e7625 before Stage_Backlog output planned-late by Plan_EP_StandardRows_S2 (a371325); S_Tables_B1 first appears 4ebb37e before Stage_Backlog output planned-late by Plan_S_Tables_B1 (3479bf9); S_Tables_B2 first appears 4ebb37e before Stage_Backlog output planned-late by Plan_S_Tables_B2 (3479bf9); S_Tables_B3 first appears 4ebb37e before Stage_Backlog output planned-late by Plan_S_Tables_B3 (3479bf9); S_Tables_B4 first appears 4ebb37e before Stage_Backlog output planned-late by Plan_S_Tables_B4 (3479bf9); S_RulingsQueryableDecision first appears 5d544af before Stage_Backlog output planned-late by PE_RulingsQueryableDecision (9d2e70a)" .
 fw:L_OntologyDriven backlog:lineageFrozen true ; backlog:frozenBy fw:Bypass_L_OntologyDriven_20260907 .   # found: frozen until a restart answers it, in its own commit
+
+#################################################################
+#  v9.61.0 (2026-09-07, brsf-session) -- LINEAGE 7 RESTARTED, DIVIDE
+#  AND CONQUER. Answers Bypass_L_OntologyDriven_20260907 (recorded at
+#  v9.60.0, commit 4423fdc) in its own commit, as the deliberation
+#  witness requires. Owner's decision: one part per scope deliverable.
+#  The five deliverables of Scope_Ontology become five part lineages;
+#  each of the 14 bypassed items goes to the part of the deliverable it
+#  satisfies (S_RulingsQueryableDecision satisfies none by record; it
+#  pursues Obj_RulingsQueryable, which fills Scope_Ontology through
+#  Goal_GovernanceInOntology, so it is placed in the governance part --
+#  a placement, stated as such, not a discovered link). Lineage 7's
+#  five outputs are retracted (kept); every bypassed item is flagged
+#  pre-lineage and stays flagged until its part's rebuilt Stage_Backlog
+#  output admits it. Each part rebuilds its own five-stage chain, one
+#  stage per commit; the parent's rebuilt Backlog output will combine
+#  the parts' Backlog outputs.
+#################################################################
+fw:Restart_L_OntologyDriven_20260907 a backlog:LineageRestart ;
+    backlog:restartsLineage fw:L_OntologyDriven ;
+    backlog:answersBypass fw:Bypass_L_OntologyDriven_20260907 ;
+    backlog:hasRecoveryStrategy backlog:Strat_DivideAndConquer ;
+    backlog:partLineage fw:L7_Gov , fw:L7_Exec , fw:L7_Export , fw:L7_Prose , fw:L7_Code ;
+    backlog:retractsOutput fw:Out2_Mission , fw:Out2_Scope , fw:Out2_Goal , fw:Out2_Objective , fw:Out2_Backlog ;
+    backlog:restartedAtCommit "backlog-roadmap-framework-v1.213.0 (tag; witnessed by git, not asserted)" ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:hasRationale "Owner's decision, 2026-09-07: restart lineage 7 with divide and conquer, one part per scope deliverable. 38 items, of which 14 were planned after they existed; a single restart would retract and re-admit everything as one block. Five parts, partitioned by the deliverable each item satisfies (G17); each converges or thrashes on its own." ;
+    backlog:belongsToLineage fw:L_OntologyDriven .
+fw:Out2_Mission backlog:outputRetracted true .
+fw:Out2_Scope backlog:outputRetracted true .
+fw:Out2_Goal backlog:outputRetracted true .
+fw:Out2_Objective backlog:outputRetracted true .
+fw:Out2_Backlog backlog:outputRetracted true .
+
+fw:L7_Gov a backlog:Lineage ; rdfs:label "Lineage 7, part Gov (Del_OntGovernance)"@en ;
+    backlog:lineageOrdinal 9 ; backlog:lineageArchived false ;
+    backlog:parentLineage fw:L_OntologyDriven ; backlog:partForDeliverable fw:Del_OntGovernance ;
+    backlog:lineageForMission fw:Mission_OntologyDriven .
+fw:EP_Rulings_S1 backlog:belongsToLineage fw:L7_Gov ; backlog:preLineageItem true .
+fw:EP_Rulings_S2 backlog:belongsToLineage fw:L7_Gov ; backlog:preLineageItem true .
+fw:S_RulingsQueryableDecision backlog:belongsToLineage fw:L7_Gov ; backlog:preLineageItem true .
+fw:L7_Exec a backlog:Lineage ; rdfs:label "Lineage 7, part Exec (Del_OntRuleExec)"@en ;
+    backlog:lineageOrdinal 10 ; backlog:lineageArchived false ;
+    backlog:parentLineage fw:L_OntologyDriven ; backlog:partForDeliverable fw:Del_OntRuleExec ;
+    backlog:lineageForMission fw:Mission_OntologyDriven .
+fw:EP_RuleExec_S1 backlog:belongsToLineage fw:L7_Exec ; backlog:preLineageItem true .
+fw:EP_RuleExec_S2 backlog:belongsToLineage fw:L7_Exec ; backlog:preLineageItem true .
+fw:L7_Export a backlog:Lineage ; rdfs:label "Lineage 7, part Export (Del_OntExport)"@en ;
+    backlog:lineageOrdinal 11 ; backlog:lineageArchived false ;
+    backlog:parentLineage fw:L_OntologyDriven ; backlog:partForDeliverable fw:Del_OntExport ;
+    backlog:lineageForMission fw:Mission_OntologyDriven .
+fw:EP_CodeTables_S1 backlog:belongsToLineage fw:L7_Export ; backlog:preLineageItem true .
+fw:EP_CodeTables_S2 backlog:belongsToLineage fw:L7_Export ; backlog:preLineageItem true .
+fw:S_Tables_B1 backlog:belongsToLineage fw:L7_Export ; backlog:preLineageItem true .
+fw:S_Tables_B2 backlog:belongsToLineage fw:L7_Export ; backlog:preLineageItem true .
+fw:S_Tables_B3 backlog:belongsToLineage fw:L7_Export ; backlog:preLineageItem true .
+fw:S_Tables_B4 backlog:belongsToLineage fw:L7_Export ; backlog:preLineageItem true .
+fw:L7_Prose a backlog:Lineage ; rdfs:label "Lineage 7, part Prose (Del_ProseExplains)"@en ;
+    backlog:lineageOrdinal 12 ; backlog:lineageArchived false ;
+    backlog:parentLineage fw:L_OntologyDriven ; backlog:partForDeliverable fw:Del_ProseExplains ;
+    backlog:lineageForMission fw:Mission_OntologyDriven .
+fw:EP_StandardRows_S1 backlog:belongsToLineage fw:L7_Prose ; backlog:preLineageItem true .
+fw:EP_StandardRows_S2 backlog:belongsToLineage fw:L7_Prose ; backlog:preLineageItem true .
+fw:L7_Code a backlog:Lineage ; rdfs:label "Lineage 7, part Code (Del_CodeExecutes)"@en ;
+    backlog:lineageOrdinal 13 ; backlog:lineageArchived false ;
+    backlog:parentLineage fw:L_OntologyDriven ; backlog:partForDeliverable fw:Del_CodeExecutes ;
+    backlog:lineageForMission fw:Mission_OntologyDriven .
+fw:EP_ScriptDecisions_S1 backlog:belongsToLineage fw:L7_Code ; backlog:preLineageItem true .
