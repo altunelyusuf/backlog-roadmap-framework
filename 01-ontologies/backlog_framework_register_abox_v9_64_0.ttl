@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.63.0> ;
-    owl:versionInfo "9.63.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.64.0> ;
+    owl:versionInfo "9.64.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.63.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.62.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.61.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.60.0> ;
@@ -6253,3 +6254,36 @@ fw:P7Code_Scope a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Scop
     backlog:hasStateDigest "f4f93a9f6939b9ea76de1f0caa63301f44d6c07b18f847afe46b296fd3fa0efe" ;
     backlog:closedAtCommit "backlog-roadmap-framework-v1.215.0 (tag; witnessed by git, not asserted)" ;
     backlog:hasRationale "Part Code: this part's scope is its one deliverable, Del_CodeExecutes, re-read against the mission clause it derives from; the exclusions of Scope_Ontology apply to it unchanged." .
+
+#################################################################
+#  v9.64.0 (2026-09-07, brsf-session) -- LINEAGE 7 REBUILD, STAGE 3
+#  OF 5: Goal, for all five parts. Parts are independent, so their
+#  stage-3 outputs share one commit; within each part the order is
+#  witnessed (this commit follows the parts' Scope commit 8c4f385).
+#  Digest at this commit (Experiment A), one per stage, register-wide.
+#################################################################
+fw:P7Gov_Goal a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Goal ;
+    backlog:belongsToLineage fw:L7_Gov ; backlog:consumesOutput fw:P7Gov_Scope ;
+    backlog:hasStateDigest "89d521d583e91e8834e6a63564a8a0f3b9549e1d3b0100f81515eef2c182ffd0" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.216.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Part Gov: the goal of Scope_Ontology that this deliverable's items pursue, re-affirmed for the part (G13: goals derive from the scope)." .
+fw:P7Exec_Goal a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Goal ;
+    backlog:belongsToLineage fw:L7_Exec ; backlog:consumesOutput fw:P7Exec_Scope ;
+    backlog:hasStateDigest "89d521d583e91e8834e6a63564a8a0f3b9549e1d3b0100f81515eef2c182ffd0" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.216.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Part Exec: the goal of Scope_Ontology that this deliverable's items pursue, re-affirmed for the part (G13: goals derive from the scope)." .
+fw:P7Export_Goal a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Goal ;
+    backlog:belongsToLineage fw:L7_Export ; backlog:consumesOutput fw:P7Export_Scope ;
+    backlog:hasStateDigest "89d521d583e91e8834e6a63564a8a0f3b9549e1d3b0100f81515eef2c182ffd0" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.216.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Part Export: the goal of Scope_Ontology that this deliverable's items pursue, re-affirmed for the part (G13: goals derive from the scope)." .
+fw:P7Prose_Goal a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Goal ;
+    backlog:belongsToLineage fw:L7_Prose ; backlog:consumesOutput fw:P7Prose_Scope ;
+    backlog:hasStateDigest "89d521d583e91e8834e6a63564a8a0f3b9549e1d3b0100f81515eef2c182ffd0" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.216.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Part Prose: the goal of Scope_Ontology that this deliverable's items pursue, re-affirmed for the part (G13: goals derive from the scope)." .
+fw:P7Code_Goal a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Goal ;
+    backlog:belongsToLineage fw:L7_Code ; backlog:consumesOutput fw:P7Code_Scope ;
+    backlog:hasStateDigest "89d521d583e91e8834e6a63564a8a0f3b9549e1d3b0100f81515eef2c182ffd0" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.216.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Part Code: the goal of Scope_Ontology that this deliverable's items pursue, re-affirmed for the part (G13: goals derive from the scope)." .
