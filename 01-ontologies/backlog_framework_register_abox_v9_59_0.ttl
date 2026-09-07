@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.58.0> ;
-    owl:versionInfo "9.58.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.59.0> ;
+    owl:versionInfo "9.59.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.58.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.57.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.56.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.55.0> ;
@@ -6002,3 +6003,20 @@ fw:Out3_Backlog_CD a backlog:StageOutput ;
     backlog:hasRationale "Rebuilt Backlog stage: the two pre-lineage items fw:S_ChangeGuideDoc and fw:ET_ChangeGuideDoc are ADMITTED by this output (admittedByOutput), which is the only way a pre-lineage item enters a restarted chain. Their preLineageItem flag stays: they were built before the chain and the record says so. The retracted Out2_Backlog_CD remains as the record of the earlier claim." .
 fw:S_ChangeGuideDoc backlog:admittedByOutput fw:Out3_Backlog_CD .
 fw:ET_ChangeGuideDoc backlog:admittedByOutput fw:Out3_Backlog_CD .
+
+#################################################################
+#  v9.59.0 (2026-09-07, brsf-session) -- THE PROOF READ, AND THE
+#  OUTCOME RE-AFFIRMED ON THE REBUILT CHAIN. Post-commit reading of
+#  backlog_lineage_order_check_v1_1_1 on v9.58.0 (b6fbcc4):
+#    L_ChangeDiscipline ORDERED outputs=5 items=2 backlog_output=b6fbcc4
+#  git first-appearance: Bypass+Restart 0251509 10:32 < ruling 27472b8
+#  < Out3_Mission 23a514e 11:28 < Scope 6133bcd 11:34 < Goal 4ac5125
+#  11:38 < Objective 97a1340 11:43 < Backlog b6fbcc4 11:48. Pipeline
+#  verifier: all five rebuilt digests reproduce -- the first time this
+#  register's own active chain has ever passed it. Compass: all seven
+#  objectives MET on their recorded observations. Mission outcome
+#  Out_Achieved therefore stands on the rebuilt chain; recorded as a
+#  re-affirmation appended to the closure report, not as a new closure.
+#################################################################
+fw:CR_ChangeDiscipline backlog:citesFinding fw:Bypass_L_ChangeDiscipline_20260907 , fw:Thrash_L_ChangeDiscipline_20260907_1 ;
+    backlog:statesBestPractice "Re-affirmation, 2026-09-07 (brsf-session), after Restart_L_ChangeDiscipline_20260907 and the owner's ruling: the chain this report closed on was rebuilt from Mission in five witnessed commits (23a514e, 6133bcd, 4ac5125, 97a1340, b6fbcc4); every rebuilt digest reproduces; all seven objectives remain MET on the observations already on record; the two items are admitted by Out3_Backlog_CD. Out_Achieved stands. The original closure (2026-09-05) was declared on a chain the git witness later showed to have been written after the work -- that finding and the thrash it led to are cited above, not erased." .

@@ -1,5 +1,17 @@
 # Changelog
 
+## v1.211.0 — 2026-09-07 (PATCH: the proof read; Out_Achieved re-affirmed on the rebuilt chain)
+
+Post-commit reading of `backlog_lineage_order_check_v1_1_1` on v9.58.0: **lineage 8 ORDERED,
+5 active outputs, backlog output `b6fbcc4`, both items admitted, no thrash** — exactly what the
+ceremony predicted at v1.205.0. Git first-appearance, in order: bypass and restart `0251509`
+(10:32), ruling `27472b8`, `Out3_Mission_CD` `23a514e` (11:28), Scope `6133bcd`, Goal `4ac5125`,
+Objective `97a1340`, Backlog `b6fbcc4` (11:48). `backlog_pipeline_verify_v1_1_0`: every rebuilt digest
+reproduces — the first time this register's own active chain has passed the pipeline verifier.
+`backlog_lineage_compass`: all seven objectives MET. Register v9.59.0 appends the re-affirmation to
+`CR_ChangeDiscipline`, citing the bypass and the thrash rather than erasing them. Lineage 7 ORDERED.
+0 violations, 115 warnings.
+
 ## v1.210.0 — 2026-09-07 (MINOR: lineage 8 rebuild, stage 5 of 5 — Backlog)
 
 Register v9.58.0: `Out3_Backlog_CD` closes the rebuilt Backlog stage, consuming `Out3_Objective_CD`
