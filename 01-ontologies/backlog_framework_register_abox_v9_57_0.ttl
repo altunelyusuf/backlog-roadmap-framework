@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.56.0> ;
-    owl:versionInfo "9.56.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.57.0> ;
+    owl:versionInfo "9.57.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.56.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.55.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.54.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.53.0> ;
@@ -5970,3 +5971,17 @@ fw:Out3_Goal_CD a backlog:StageOutput ;
     backlog:hasStateDigest "89d521d583e91e8834e6a63564a8a0f3b9549e1d3b0100f81515eef2c182ffd0" ;
     backlog:closedAtCommit "backlog-roadmap-framework-v1.208.0 (tag; witnessed by git, not asserted)" ;
     backlog:hasRationale "Re-affirmed: fw:Goal_CD_MissionHeld and fw:Goal_CD_NoOutOfScopeWork, derived from the scope (G13, G29: goal generation closes over GoalFacing), each contributing to the mission through the scope. The retracted Out2_Goal_CD remains as the record of the earlier claim." .
+
+#################################################################
+#  v9.57.0 (2026-09-07, brsf-session) -- REBUILD, STAGE 4 OF 5: Objective.
+#  Consumes Out3_Goal_CD (first in git at 4ac5125). This output
+#  is the only substantive change in this release, so its own first
+#  appearance is its own commit. Digest at this commit (Experiment A).
+#################################################################
+fw:Out3_Objective_CD a backlog:StageOutput ;
+    backlog:outputOfStage backlog:Stage_Objective ;
+    backlog:belongsToLineage fw:L_ChangeDiscipline ;
+    backlog:consumesOutput fw:Out3_Goal_CD ;
+    backlog:hasStateDigest "9b71facb70e07e3967d6efb688f705c62dd779034974bc3ad877f3fc4de605f5" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.209.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Re-affirmed: fw:Obj_CD_MissionHeld, fw:Obj_CD_NoOutOfScopeWork and the five objectives beneath them, each with metric, baseline, target, checkpoint and observations already on the record; nothing re-dated, nothing re-measured here (G33: state is grounded in evidence, not in the ceremony having happened). The retracted Out2_Objective_CD remains as the record of the earlier claim." .
