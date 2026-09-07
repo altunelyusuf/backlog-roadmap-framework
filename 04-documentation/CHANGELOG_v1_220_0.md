@@ -8,7 +8,8 @@ ORDERED with five outputs each at `76159bd`; 38 items admitted; no thrash** — 
 strategy converged in one trial. `G84` records the run and the two rules it taught.
 
 - Shapes v1.104.0: `RestartFlagsEveryItemShape` — a restart flags every item of its lineage
-  (retraction un-orders everything; found at v1.214.0). Negative fixture extended (`S0b`).
+  (retraction un-orders everything; found at v1.214.0). Negative fixture extended (`S0b`); the three positive escape fixtures flag their epic
+  (`fixture_lineage_restart_v1_2_0`, `fixture_lineage_thrash_v1_2_0`, `fixture_recovery_strategy`).
 - Standard v1.92.0: the two rules (every item flagged; parts may share a stage commit).
 - Discipline v55.0.0: standing rule, `G84`.
 - Register v9.68.0: re-affirmation appended to `CR_OntologyDriven` — compass reads six of seven

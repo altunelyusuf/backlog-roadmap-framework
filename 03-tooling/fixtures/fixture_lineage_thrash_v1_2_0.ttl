@@ -302,3 +302,5 @@ ex:Q_Backlog a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Backlog
 <http://example.org/lineage-thrash#> backlog:hasExpectedPolarity backlog:Polarity_Positive .
 
 # v1.1.0 (2026-09-07): restarts declare Strat_DecreaseByOne (RestartDeclaresStrategyShape, shapes v1.103.0).
+# v1.2.0 (2026-09-07): the epic is flagged too -- a restart flags EVERY item (RestartFlagsEveryItemShape, v1.104.0) -- and is admitted by the rebuilt Backlog output.
+ex:EP backlog:preLineageItem true ; backlog:admittedByOutput ex:Q_Backlog .
