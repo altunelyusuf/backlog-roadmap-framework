@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.65.0> ;
-    owl:versionInfo "9.65.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.66.0> ;
+    owl:versionInfo "9.66.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.65.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.64.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.63.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.62.0> ;
@@ -6321,3 +6322,73 @@ fw:P7Code_Objective a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_
     backlog:hasStateDigest "9b71facb70e07e3967d6efb688f705c62dd779034974bc3ad877f3fc4de605f5" ;
     backlog:closedAtCommit "backlog-roadmap-framework-v1.217.0 (tag; witnessed by git, not asserted)" ;
     backlog:hasRationale "Part Code: the objectives beneath that goal, with their metrics, baselines, targets, checkpoints and observations already on record; nothing re-dated or re-measured (G33)." .
+
+#################################################################
+#  v9.66.0 (2026-09-07, brsf-session) -- LINEAGE 7 REBUILD, STAGE 5
+#  OF 5: Backlog, for all five parts. Parts are independent, so their
+#  stage-5 outputs share one commit; within each part the order is
+#  witnessed (this commit follows the parts' Objective commit 7a4fee7).
+#  Digest at this commit (Experiment A), one per stage, register-wide.
+#################################################################
+fw:P7Gov_Backlog a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Backlog ;
+    backlog:belongsToLineage fw:L7_Gov ; backlog:consumesOutput fw:P7Gov_Objective ;
+    backlog:hasStateDigest "c69257c535f575f918f331b4f98e5288687e7460f87446454be93531f663c9e4" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.218.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Part Gov: this part's Backlog stage, ADMITTING its pre-lineage items EP_Rulings_S1, EP_Rulings_S2, S_RulingsQueryableDecision -- the only way they enter the restarted lineage. Their preLineageItem flag stays: the record says they were built first." .
+fw:EP_Rulings_S1 backlog:admittedByOutput fw:P7Gov_Backlog .
+fw:EP_Rulings_S2 backlog:admittedByOutput fw:P7Gov_Backlog .
+fw:S_RulingsQueryableDecision backlog:admittedByOutput fw:P7Gov_Backlog .
+fw:P7Exec_Backlog a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Backlog ;
+    backlog:belongsToLineage fw:L7_Exec ; backlog:consumesOutput fw:P7Exec_Objective ;
+    backlog:hasStateDigest "c69257c535f575f918f331b4f98e5288687e7460f87446454be93531f663c9e4" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.218.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Part Exec: this part's Backlog stage, ADMITTING its pre-lineage items EP_RuleExec_S1, EP_RuleExec_S2 -- the only way they enter the restarted lineage. Their preLineageItem flag stays: the record says they were built first." .
+fw:EP_RuleExec_S1 backlog:admittedByOutput fw:P7Exec_Backlog .
+fw:EP_RuleExec_S2 backlog:admittedByOutput fw:P7Exec_Backlog .
+fw:P7Export_Backlog a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Backlog ;
+    backlog:belongsToLineage fw:L7_Export ; backlog:consumesOutput fw:P7Export_Objective ;
+    backlog:hasStateDigest "c69257c535f575f918f331b4f98e5288687e7460f87446454be93531f663c9e4" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.218.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Part Export: this part's Backlog stage, ADMITTING its pre-lineage items EP_CodeTables_S1, EP_CodeTables_S2, S_Tables_B1, S_Tables_B2, S_Tables_B3, S_Tables_B4 -- the only way they enter the restarted lineage. Their preLineageItem flag stays: the record says they were built first." .
+fw:EP_CodeTables_S1 backlog:admittedByOutput fw:P7Export_Backlog .
+fw:EP_CodeTables_S2 backlog:admittedByOutput fw:P7Export_Backlog .
+fw:S_Tables_B1 backlog:admittedByOutput fw:P7Export_Backlog .
+fw:S_Tables_B2 backlog:admittedByOutput fw:P7Export_Backlog .
+fw:S_Tables_B3 backlog:admittedByOutput fw:P7Export_Backlog .
+fw:S_Tables_B4 backlog:admittedByOutput fw:P7Export_Backlog .
+fw:P7Prose_Backlog a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Backlog ;
+    backlog:belongsToLineage fw:L7_Prose ; backlog:consumesOutput fw:P7Prose_Objective ;
+    backlog:hasStateDigest "c69257c535f575f918f331b4f98e5288687e7460f87446454be93531f663c9e4" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.218.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Part Prose: this part's Backlog stage, ADMITTING its pre-lineage items EP_StandardRows_S1, EP_StandardRows_S2 -- the only way they enter the restarted lineage. Their preLineageItem flag stays: the record says they were built first." .
+fw:EP_StandardRows_S1 backlog:admittedByOutput fw:P7Prose_Backlog .
+fw:EP_StandardRows_S2 backlog:admittedByOutput fw:P7Prose_Backlog .
+fw:P7Code_Backlog a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Backlog ;
+    backlog:belongsToLineage fw:L7_Code ; backlog:consumesOutput fw:P7Code_Objective ;
+    backlog:hasStateDigest "c69257c535f575f918f331b4f98e5288687e7460f87446454be93531f663c9e4" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.218.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Part Code: this part's Backlog stage, ADMITTING its pre-lineage items EP_ScriptDecisions_S1 -- the only way they enter the restarted lineage. Their preLineageItem flag stays: the record says they were built first." .
+fw:EP_ScriptDecisions_S1 backlog:admittedByOutput fw:P7Code_Backlog .
+# the 22 items assigned to parts at v9.62.0 are admitted by their part's Backlog output too
+fw:EP_CodeTables backlog:admittedByOutput fw:P7Export_Backlog .
+fw:EP_RuleExec backlog:admittedByOutput fw:P7Exec_Backlog .
+fw:EP_Rulings backlog:admittedByOutput fw:P7Gov_Backlog .
+fw:EP_ScriptDecisions backlog:admittedByOutput fw:P7Code_Backlog .
+fw:EP_StandardRows backlog:admittedByOutput fw:P7Prose_Backlog .
+fw:EP_TablesBatch backlog:admittedByOutput fw:P7Export_Backlog .
+fw:S_Tables_B5 backlog:admittedByOutput fw:P7Export_Backlog .
+fw:S_Tables_B6 backlog:admittedByOutput fw:P7Export_Backlog .
+fw:T_EP_CodeTables_S1 backlog:admittedByOutput fw:P7Export_Backlog .
+fw:T_EP_CodeTables_S2 backlog:admittedByOutput fw:P7Export_Backlog .
+fw:T_EP_RuleExec_S1 backlog:admittedByOutput fw:P7Exec_Backlog .
+fw:T_EP_RuleExec_S2 backlog:admittedByOutput fw:P7Exec_Backlog .
+fw:T_EP_Rulings_S1 backlog:admittedByOutput fw:P7Gov_Backlog .
+fw:T_EP_Rulings_S2 backlog:admittedByOutput fw:P7Gov_Backlog .
+fw:T_EP_ScriptDecisions_S1 backlog:admittedByOutput fw:P7Code_Backlog .
+fw:T_EP_StandardRows_S1 backlog:admittedByOutput fw:P7Prose_Backlog .
+fw:T_EP_StandardRows_S2 backlog:admittedByOutput fw:P7Prose_Backlog .
+fw:T_S_Tables_B1 backlog:admittedByOutput fw:P7Export_Backlog .
+fw:T_S_Tables_B2 backlog:admittedByOutput fw:P7Export_Backlog .
+fw:T_S_Tables_B3 backlog:admittedByOutput fw:P7Export_Backlog .
+fw:T_S_Tables_B4 backlog:admittedByOutput fw:P7Export_Backlog .
+fw:ET_ConvertGovernanceRulings backlog:admittedByOutput fw:P7Gov_Backlog .

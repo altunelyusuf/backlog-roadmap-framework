@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.218.0 — 2026-09-07 (MINOR: lineage 7 rebuild, stage 5 of 5 — Backlog, all five parts)
+
+Register v9.66.0: `P7Gov_Backlog`, `P7Exec_Backlog`, `P7Export_Backlog`, `P7Prose_Backlog`, `P7Code_Backlog`
+close the parts' Backlog stage (each consuming its part's Objective output, 7a4fee7); digest at
+this commit. Nothing else changes. Expected reading after this release: every part ORDERED with all 36 part items admitted (advisories 153 -> 117; the two parent-only items wait for the combine); the parent still DIVIDING until its combine output.
+
 ## v1.217.0 — 2026-09-07 (MINOR: lineage 7 rebuild, stage 4 of 5 — Objective, all five parts)
 
 Register v9.65.0: `P7Gov_Objective`, `P7Exec_Objective`, `P7Export_Objective`, `P7Prose_Objective`, `P7Code_Objective`
