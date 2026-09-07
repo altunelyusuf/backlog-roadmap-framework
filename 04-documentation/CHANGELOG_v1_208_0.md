@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.208.0 — 2026-09-07 (MINOR: lineage 8 rebuild, stage 3 of 5 — Goal)
+
+Register v9.56.0: `Out3_Goal_CD` closes the rebuilt Goal stage, consuming `Out3_Scope_CD`
+(6133bcd); digest at this commit. Nothing else changes. Expected reading after this release:
+lineage 8 three active outputs in pipeline order.
+
 ## v1.207.0 — 2026-09-07 (MINOR: lineage 8 rebuild, stage 2 of 5 — Scope)
 
 Register v9.55.0: `Out3_Scope_CD` closes the rebuilt Scope stage, consuming `Out3_Mission_CD`

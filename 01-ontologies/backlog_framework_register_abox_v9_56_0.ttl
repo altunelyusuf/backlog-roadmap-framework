@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.55.0> ;
-    owl:versionInfo "9.55.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.56.0> ;
+    owl:versionInfo "9.56.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.55.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.54.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.53.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.52.0> ;
@@ -5955,3 +5956,17 @@ fw:Out3_Scope_CD a backlog:StageOutput ;
     backlog:hasStateDigest "f4f93a9f6939b9ea76de1f0caa63301f44d6c07b18f847afe46b296fd3fa0efe" ;
     backlog:closedAtCommit "backlog-roadmap-framework-v1.207.0 (tag; witnessed by git, not asserted)" ;
     backlog:hasRationale "Re-affirmed: fw:Scope_ChangeDiscipline with its exclusion fw:Ex_CD_NoRetroConversion and its deliverables, re-read against the mission clause by clause: each deliverable states what must be true, none is a task, and the exclusion cites the mission (G32). The retracted Out2_Scope_CD remains as the record of the earlier claim." .
+
+#################################################################
+#  v9.56.0 (2026-09-07, brsf-session) -- REBUILD, STAGE 3 OF 5: Goal.
+#  Consumes Out3_Scope_CD (first in git at 6133bcd). This output
+#  is the only substantive change in this release, so its own first
+#  appearance is its own commit. Digest at this commit (Experiment A).
+#################################################################
+fw:Out3_Goal_CD a backlog:StageOutput ;
+    backlog:outputOfStage backlog:Stage_Goal ;
+    backlog:belongsToLineage fw:L_ChangeDiscipline ;
+    backlog:consumesOutput fw:Out3_Scope_CD ;
+    backlog:hasStateDigest "89d521d583e91e8834e6a63564a8a0f3b9549e1d3b0100f81515eef2c182ffd0" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.208.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Re-affirmed: fw:Goal_CD_MissionHeld and fw:Goal_CD_NoOutOfScopeWork, derived from the scope (G13, G29: goal generation closes over GoalFacing), each contributing to the mission through the scope. The retracted Out2_Goal_CD remains as the record of the earlier claim." .
