@@ -8,8 +8,9 @@
 @prefix dcterms: <http://purl.org/dc/terms/> .
 
 <http://example.org/backlog-strategy-exercise> a owl:Ontology ;
-    owl:versionIRI <http://example.org/backlog-strategy-exercise/1.2.0> ;
-    owl:versionInfo "1.2.0" ;
+    owl:versionIRI <http://example.org/backlog-strategy-exercise/1.3.0> ;
+    owl:versionInfo "1.3.0" ;
+    owl:priorVersion <http://example.org/backlog-strategy-exercise/1.2.0> ;
     owl:priorVersion <http://example.org/backlog-strategy-exercise/1.1.0> ;
     owl:priorVersion <http://example.org/backlog-strategy-exercise/1.0.0> ;
     rdfs:label "Strategy-exercise register"@en ;
@@ -685,3 +686,19 @@ ex:Restart_TT a backlog:LineageRestart ; backlog:restartsLineage ex:TT_Lin ; bac
     backlog:hasRationale "Transform, problem reduction: the template is fw:L_ChangeDiscipline, a real lineage of the main register that the order check reads ORDERED; this toy's chain instantiates that shape (Mission..Backlog, one commit per stage) rather than being designed from nothing." .
 ex:TT_S_PL backlog:preLineageItem true .
 ex:TT_EP backlog:preLineageItem true .
+
+#################################################################
+#  v1.3.0 (2026-09-07, brsf-session) -- TOY REBUILD, STAGE 1 OF 5:
+#  Mission, all five toys (independent lineages sharing one commit; each
+#  toy's own order is what the witness measures). Follows 65f6f09.
+#################################################################
+ex:TF_R_Mission a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Mission ; backlog:belongsToLineage ex:TF_Lin ;
+    backlog:hasStateDigest "a979c67e121a0e9375d44d2b094b91e8e4a4d2459ecd0f8b2981ec94b0df3462" ; backlog:closedAtCommit "backlog-roadmap-framework-v1.224.0 (tag; witnessed by git, not asserted)" .
+ex:TV_R_Mission a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Mission ; backlog:belongsToLineage ex:TV_Lin ;
+    backlog:hasStateDigest "a979c67e121a0e9375d44d2b094b91e8e4a4d2459ecd0f8b2981ec94b0df3462" ; backlog:closedAtCommit "backlog-roadmap-framework-v1.224.0 (tag; witnessed by git, not asserted)" .
+ex:TS_R_Mission a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Mission ; backlog:belongsToLineage ex:TS_Lin ;
+    backlog:hasStateDigest "a979c67e121a0e9375d44d2b094b91e8e4a4d2459ecd0f8b2981ec94b0df3462" ; backlog:closedAtCommit "backlog-roadmap-framework-v1.224.0 (tag; witnessed by git, not asserted)" .
+ex:TR_R_Mission a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Mission ; backlog:belongsToLineage ex:TR_Lin ;
+    backlog:hasStateDigest "a979c67e121a0e9375d44d2b094b91e8e4a4d2459ecd0f8b2981ec94b0df3462" ; backlog:closedAtCommit "backlog-roadmap-framework-v1.224.0 (tag; witnessed by git, not asserted)" .
+ex:TT_R_Mission a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Mission ; backlog:belongsToLineage ex:TT_Lin ;
+    backlog:hasStateDigest "a979c67e121a0e9375d44d2b094b91e8e4a4d2459ecd0f8b2981ec94b0df3462" ; backlog:closedAtCommit "backlog-roadmap-framework-v1.224.0 (tag; witnessed by git, not asserted)" .

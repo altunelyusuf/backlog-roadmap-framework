@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.224.0 — 2026-09-07 (MINOR: toy rebuild, stage 1 of 5 — Mission, all five toys)
+
+Exercise register v1.3.0: `TF_R_Mission`, `TV_R_Mission`, `TS_R_Mission`, `TR_R_Mission`, `TT_R_Mission` (each
+consuming its toy's none output, 65f6f09); digest at this commit. 
+
 ## v1.223.0 — 2026-09-07 (MINOR: five toy restarts, one strategy each)
 
 Exercise register v1.2.0: `Restart_TF` (decrease by a constant factor), `Restart_TV` (variable-size
