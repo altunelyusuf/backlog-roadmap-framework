@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.67.0> ;
-    owl:versionInfo "9.67.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.68.0> ;
+    owl:versionInfo "9.68.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.67.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.66.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.65.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.64.0> ;
@@ -6411,3 +6412,19 @@ fw:Out3_Backlog a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Back
     backlog:hasRationale "Combine of the divide-and-conquer rebuild of lineage 7: five parts, each rebuilt Mission..Backlog in its own witnessed sequence (9cb62b6, 8c4f385, 5a6894e, 7a4fee7, 76159bd), each admitting its own items. The retracted Out2_Backlog remains as the record of the earlier chain." .
 fw:Init_OntologyDrivenConversion backlog:admittedByOutput fw:Out3_Backlog .
 fw:SPK_DomainModelingSeverity backlog:admittedByOutput fw:Out3_Backlog .
+
+#################################################################
+#  v9.68.0 (2026-09-07, brsf-session) -- THE DIVIDE-AND-CONQUER PROOF
+#  READ, OUTCOME RE-AFFIRMED. Post-commit reading on v9.67.0 (6a0143c):
+#  L_OntologyDriven ORDERED, backlog output 6a0143c; parts L7_Gov,
+#  L7_Exec, L7_Export, L7_Prose, L7_Code all ORDERED (five outputs each,
+#  Backlog at 76159bd); 38 items admitted; no thrash. Sequence witnessed:
+#  bypass 4423fdc 12:49 < restart 2f28bac 13:11 < Mission 9cb62b6 13:24
+#  < Scope 8c4f385 < Goal 5a6894e < Objective 7a4fee7 < Backlog 76159bd
+#  14:02 < combine 6a0143c 14:13. Compass: six of seven objectives MET,
+#  Obj_RowsUnchecked OPEN at 15 (baseline 186), unchanged from before
+#  the restart. Out_Achieved stands; recorded as a re-affirmation on
+#  the closure report, citing the finding and the restart.
+#################################################################
+fw:CR_OntologyDriven backlog:citesFinding fw:Bypass_L_OntologyDriven_20260907 ;
+    backlog:statesBestPractice "Re-affirmation, 2026-09-07 (brsf-session), after Restart_L_OntologyDriven_20260907 (Strat_DivideAndConquer): the chain this report closed on was rebuilt as five part chains (L7_Gov, L7_Exec, L7_Export, L7_Prose, L7_Code), each Mission..Backlog in witnessed commits (9cb62b6, 8c4f385, 5a6894e, 7a4fee7, 76159bd), combined at 6a0143c; every item admitted; objectives unchanged (six MET, Obj_RowsUnchecked OPEN at 15). Out_Achieved stands. The original closure was declared on a chain under which 14 items had been planned after they existed -- that finding is cited above, not erased." .

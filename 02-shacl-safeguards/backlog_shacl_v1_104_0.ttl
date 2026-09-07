@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.103.0> ;
-    owl:versionInfo "1.103.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.104.0> ;
+    owl:versionInfo "1.104.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.103.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.102.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.101.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.100.1> ;
@@ -5725,4 +5726,21 @@ backlog:SubmittedToOwnInboxShape a sh:NodeShape ;
                 $this backlog:submittedTo ?to .
                 FILTER (!STRSTARTS(STR(?to), "07-handover-inbox/"))
             }
+        }""" ] .
+
+backlog:RestartFlagsEveryItemShape a sh:NodeShape ;
+    sh:targetClass backlog:LineageRestart ;
+    sh:severity sh:Violation ;
+    rdfs:label "A restart flags every item of the lineage it restarts, not only the bypassed ones (L1, v1.104.0)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_recovery_strategy_negative_v1_0_0.ttl" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this restart retracts the chain that ordered EVERY item of its lineage, yet an item of that lineage (or of one of its parts) carries no preLineageItem true. Retraction un-orders the whole lineage, not only the items the bypass named; found by the first reading after lineage 7's restart (v1.214.0). Every item is pre-lineage from the restart on and re-enters only by admission." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:restartsLineage ?l .
+            ?i backlog:belongsToLineage ?l .
+            { ?i a backlog:Story } UNION { ?i a backlog:Epic } UNION { ?i a backlog:ExecutionTask } UNION { ?i a backlog:Initiative } UNION { ?i a backlog:Spike } UNION { ?i a backlog:Task }
+            FILTER NOT EXISTS { ?i backlog:preLineageItem true }
+            # the pre-v1.104.0 restart of lineage 8 flagged its two items; exempt by commit, as RestartDeclaresStrategyShape does
+            FILTER NOT EXISTS { $this backlog:restartedAtCommit ?c . FILTER (CONTAINS(STR(?c), "v1.203.0") || CONTAINS(STR(?c), "0251509")) }
         }""" ] .

@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v54.0.0
+# Lineage Operating Discipline — v55.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -274,6 +274,8 @@ because a fixture existed that exercised the new member, which is G7 applied to 
   `DivideAndConquerShape`, `CombineOutputShape`, `TransformStrategyShape` (v1.103.0) and the order
   check's strategy witnesses. A proposal filed only in this package's own inbox is refused:
   `SubmittedToOwnInboxShape`.
+- **A restart flags every item of its lineage** (`RestartFlagsEveryItemShape`, v1.104.0); parts of a
+  divided lineage may close a stage in one shared commit.
 - **A deployment carries only proven work** — at L4 every deployed item is `Done`, carries
   bridge-verified `Evidence`, and has **every** acceptance criterion attested. That last is coverage
   at release time: a suite can be green while the criterion everyone cared about is untested.
@@ -2248,3 +2250,34 @@ witness map makes the order check refuse a simplify restart whose `ScopeChange` 
 
 **Classified at logging time (L-112):** a gap in G82's generality, not in its correctness — the one
 strategy it had was sound; it was one.
+
+## G84 — Divide and conquer, run on a real lineage: it converged in one trial, and it taught two rules
+
+**The run.** Lineage 7 (`L_OntologyDriven`, 38 items, 14 planned after they existed): bypass recorded
+and lineage frozen at `4423fdc` (12:49); restart, `Strat_DivideAndConquer`, five parts by deliverable,
+at `2f28bac` (13:11); parts' Mission `9cb62b6` (13:24), Scope `8c4f385`, Goal `5a6894e`, Objective
+`7a4fee7`, Backlog `76159bd` (14:02, 36 items admitted); combine `6a0143c` (14:13, initiative and spike
+admitted). Post-commit reading, real git witness: parent ORDERED, backlog output `6a0143c`; all five
+parts ORDERED, each with five outputs at `76159bd`; 38 items admitted; no thrash of any kind. Compass:
+six of seven objectives MET, `Obj_RowsUnchecked` OPEN at 15 (baseline 186) — exactly as recorded
+before the restart. `Mission_OntologyDriven` keeps `Out_Achieved`; re-affirmed on the rebuilt chain.
+
+**What the parts' verdicts did across the run** is the proof that division is real: from the Scope
+stage on, every part read ORDERED while the parent read DIVIDING — five independent chains
+converging, the parent waiting for their combine, no part able to thrash another.
+
+**Rule 1 — a restart flags every item.** The first reading after the restart showed the parent as
+BYPASS with all 38 items. The restart had flagged the 14 the bypass named; retracting the chain
+un-ordered the other 24 as well, because the Backlog output they had been ordered against was now
+retracted. Corrected at v1.214.0 before any part output existed: 22 more placed in parts by
+deliverable (an execution task with its story), the initiative and spike — which pursue the
+framework-wide conformance objective and belong to no single deliverable — kept with the parent for
+its combine output. Now enforced: `RestartFlagsEveryItemShape`.
+
+**Rule 2 — parts share commits.** Five parts closed each stage in one commit. This is not the
+single-commit case G18 warns about: parts are independent, the witness measures order within each
+part, and each part's own sequence Mission → Backlog spans five commits. Stated in the standard so the
+next session does not spend twenty-five commits on what five witness equally well.
+
+**Classified at logging time (L-112):** Rule 1 is a genuine gap in G81's restart mechanism, found by
+the check doing its job on the second real lineage; Rule 2 is a clarification, not a gap.

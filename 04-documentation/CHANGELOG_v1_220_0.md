@@ -1,5 +1,21 @@
 # Changelog
 
+## v1.220.0 — 2026-09-07 (MINOR: the divide-and-conquer proof read; a restart flags every item; Out_Achieved re-affirmed on the rebuilt chain)
+
+Post-commit reading of `backlog_lineage_order_check_v1_2_0` on v9.67.0 (`6a0143c`): **lineage 7
+ORDERED, backlog output `6a0143c`; parts `L7_Gov`, `L7_Exec`, `L7_Export`, `L7_Prose`, `L7_Code` all
+ORDERED with five outputs each at `76159bd`; 38 items admitted; no thrash** — the divide-and-conquer
+strategy converged in one trial. `G84` records the run and the two rules it taught.
+
+- Shapes v1.104.0: `RestartFlagsEveryItemShape` — a restart flags every item of its lineage
+  (retraction un-orders everything; found at v1.214.0). Negative fixture extended (`S0b`).
+- Standard v1.92.0: the two rules (every item flagged; parts may share a stage commit).
+- Discipline v55.0.0: standing rule, `G84`.
+- Register v9.68.0: re-affirmation appended to `CR_OntologyDriven` — compass reads six of seven
+  objectives MET and `Obj_RowsUnchecked` OPEN at 15, unchanged from before the restart;
+  `Out_Achieved` stands on the rebuilt, combined chain; the bypass and the restart are cited, not
+  erased. 0 violations, 115 warnings.
+
 ## v1.219.0 — 2026-09-07 (MINOR: lineage 7 rebuild — combine)
 
 Register v9.67.0: `Out3_Backlog` combines `P7Gov_Backlog`, `P7Exec_Backlog`, `P7Export_Backlog`,

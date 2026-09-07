@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.91.0
+# Backlog & Roadmap Semantic Framework — Standard v1.92.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -756,6 +756,14 @@ the register being non-conformant in between.
 
 An `EnhancementProposal` whose every `submittedTo` points into this package's own
 `07-handover-inbox/` has been sent to no one — `SubmittedToOwnInboxShape` (G80).
+
+Two rules learned by running divide and conquer on a real lineage (G84). **A restart flags every
+item of the lineage**, not only the bypassed ones: retracting the chain un-orders everything it had
+ordered, so everything is pre-lineage from the restart on and re-enters only by admission —
+`RestartFlagsEveryItemShape`. Items that belong to no single deliverable (an initiative, a spike) stay
+with the parent and are admitted by its combine output. **Parts may share one commit per stage**: parts
+are independent, and the git witness measures order *within* each part; five parts closing their
+Scope stage in one commit is five witnessed sequences, not one unwitnessed one.
 
 ### 2.5c-xxii The staged ceremony, one commit per stage
 

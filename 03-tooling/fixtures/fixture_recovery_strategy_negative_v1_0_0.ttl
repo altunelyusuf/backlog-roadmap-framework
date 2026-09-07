@@ -6,6 +6,7 @@
 
 # Recovery strategies -- test drive, not a construction. NEGATIVE. One case per clause:
 #  RestartDeclaresStrategyShape  R0 declares none.
+#  RestartFlagsEveryItemShape    R0's lineage has an unflagged item S0b (v1.104.0).
 #  DecreaseByFactorShape         R_F second restart, reductionObserved 0.25.
 #  VariableDecreaseShape         R_V2 reduction 0.3 after R_V1's 0.6.
 #  DivideAndConquerShape         R_D one part only; part P_bad no parent/deliverable; item S_D in no part.
@@ -17,6 +18,7 @@ ex:L0 a backlog:Lineage ; backlog:lineageOrdinal 1 ; backlog:lineageArchived fal
 ex:B0 a backlog:LineageBypass ; backlog:bypassedLineage ex:L0 ; backlog:hasFailureMode backlog:FM_LineageBypass ; backlog:hasFindingScope backlog:Scope_Methodology ; backlog:hasRootCause "fx" ;
     backlog:bypassedItem ex:S0 ; backlog:itemFirstCommit "S0 c1 1000" ; backlog:chainClosedCommit "absent" ; backlog:detectedAt "2026-09-07T09:00:00Z"^^xsd:dateTime ; backlog:detectedBy "fx" .
 ex:S0 a backlog:Story ; backlog:hasIdentifier "S0" ; backlog:hasState backlog:Proposed ; backlog:belongsToLineage ex:L0 ; backlog:preLineageItem true .
+ex:S0b a backlog:Story ; backlog:hasIdentifier "S0b" ; backlog:hasState backlog:Proposed ; backlog:belongsToLineage ex:L0 .   # unflagged: RestartFlagsEveryItemShape fires on R0
 ex:O0 a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage ex:L0 ; backlog:closedAtCommit "c8" ; backlog:hasStateDigest "x" ; backlog:outputRetracted true .
 ex:R0 a backlog:LineageRestart ; backlog:restartsLineage ex:L0 ; backlog:answersBypass ex:B0 ; backlog:retractsOutput ex:O0 ; backlog:restartedAtCommit "c10" ; backlog:decidedBy backlog:Owner .
 

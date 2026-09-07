@@ -272,3 +272,6 @@ ex:Out_C_Backlog a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Bac
     backlog:combinesOutput ex:P1_Backlog , ex:P2_Backlog ; backlog:closedAtCommit "c16" ; backlog:hasStateDigest "combine" .
 
 <http://example.org/recovery-strategy#> backlog:hasExpectedPolarity backlog:Polarity_Positive .
+# v1.104.0: the epic belongs to the restarted lineage too; a restart flags EVERY item (RestartFlagsEveryItemShape). The epic
+# is admitted by the parent's combine output, as an item that belongs to no single deliverable.
+ex:EP backlog:preLineageItem true ; backlog:admittedByOutput ex:Out_C_Backlog .
