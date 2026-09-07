@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.85.0> ;
-    owl:versionInfo "1.85.0" ;
+    owl:versionIRI <http://example.org/backlog/1.86.0> ;
+    owl:versionInfo "1.86.0" ;
+    owl:priorVersion <http://example.org/backlog/1.85.0> ;
     owl:priorVersion <http://example.org/backlog/1.84.0> ;
     owl:priorVersion <http://example.org/backlog/1.83.0> ;
     owl:priorVersion <http://example.org/backlog/1.82.0> ;
@@ -6650,3 +6651,9 @@ backlog:templateLineage a owl:ObjectProperty , owl:FunctionalProperty ;
     rdfs:domain backlog:LineageRestart ; rdfs:range backlog:Lineage ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "template lineage"@en .
+
+# v1.86.0 (2026-09-07): reductionObserved declares its origin -- the number-origin gate has reported it
+# as undeclared since v1.85.0 (non-strict, so it did not block; found by reading the gate transcript).
+# Derived: admitted / named for the previous restart's bypass, computed by the order check.
+backlog:reductionObserved backlog:numberOrigin backlog:Num_Derived ;
+    backlog:derivationQuery "SELECT ((COUNT(?adm) / COUNT(?i)) AS ?v) WHERE { ?prev backlog:restartsLineage ?l ; backlog:answersBypass ?b . $this backlog:restartsLineage ?l . FILTER (?prev != $this) ?b backlog:bypassedItem ?i . OPTIONAL { ?i backlog:admittedByOutput ?adm . FILTER NOT EXISTS { ?adm backlog:outputRetracted true } } }" .
