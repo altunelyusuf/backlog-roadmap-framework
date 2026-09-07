@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_lineage_order_check v1.1.0 — did the chain come before the work, or after?
+"""backlog_lineage_order_check v1.1.1 — did the chain come before the work, or after?
 
 THE ESCAPE THIS CATCHES. A lineage is Mission -> Scope -> Goal -> Objective -> Backlog,
 one commit per stage, and only then work items (LINEAGE_OPERATING_DISCIPLINE, ceremony
@@ -22,6 +22,8 @@ for every non-archived lineage that has stage outputs:
                from an honest single-commit build. Advisory.
   RESTARTED    a LineageRestart exists and no active (non-retracted) output yet: the
                chain is being rebuilt from Mission. Disclosed, exit 0.
+  v1.1.1: a thrash already recorded as a LineageThrash is settled and not re-raised;
+               a frozen lineage with a frozenRuling is measured normally again.
   PLANNED_LATE (per item, advisory) a PlanningEvent first appears after the item it
                plans: the work existed, then the planning record was written to fit it.
                Reported on every run; not a gate failure in v1.0.0.
@@ -213,6 +215,15 @@ def classify(g, L, witness, prefix):
                 thrash.append(("Thrash_AdmissionLost", b, prior_r[-1] if prior_r else None, lost,
                                f"bypass {local(b)} names admitted items {sorted(lost)}"))
         seen |= names
+    # 3e. v1.1.1: a thrash already RECORDED as a LineageThrash (same lineage, kind and
+    #     repeated bypass) is a settled finding, not a new one. Once the owner has ruled
+    #     (frozenRuling), the register carries the whole story -- finding, freeze, ruling
+    #     -- and raising it again on every run would be the duplicate-screen failure
+    #     (L-71) applied by a tool. Unrecorded thrash is still raised.
+    def recorded(kind, b):
+        return any((t, B.hasThrashKind, URIRef(B + kind)) in g and (t, B.repeatedBypass, b) in g
+                   for t in g.subjects(B.thrashedLineage, L))
+    thrash = [t for t in thrash if not recorded(t[0], t[1])]
     # 4. single-commit case
     commits = {f[0] for f in out_first.values()} | {f[0] for f in item_first.values()}
     fro = g.value(L, B.lineageFrozen)

@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.206.0 — 2026-09-07 (MINOR: lineage 8 rebuild, stage 1 of 5 — Mission; order check v1.1.1)
+
+Register v9.54.0: `Out3_Mission_CD` closes the rebuilt Mission stage — the mission re-affirmed
+unchanged (owner-stated; a session does not rewrite it), digest taken at this commit. Nothing else
+changes in the register. `backlog_lineage_order_check_v1_1_1`: a thrash already recorded as a
+`LineageThrash` is settled and is not re-raised on every run (L-71 applied to the tool); v1.1.0 kept
+reporting lineage 8 as THRASH after the owner had ruled. Expected reading after this release: lineage
+8 carries one active output, post-dating both the restart and the ruling.
+
 ## v1.205.0 — 2026-09-07 (PATCH: owner's ruling recorded — lineage 8 unfrozen; the rebuild that follows is the method's own proof)
 
 Register v9.53.0 records `frozenRuling` on `fw:L_ChangeDiscipline`, verbatim from the owner: explicit
