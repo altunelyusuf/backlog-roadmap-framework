@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.54.0> ;
-    owl:versionInfo "9.54.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.55.0> ;
+    owl:versionInfo "9.55.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.54.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.53.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.52.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.51.0> ;
@@ -5940,3 +5941,17 @@ fw:Out3_Mission_CD a backlog:StageOutput ;
     backlog:closedAtCommit "backlog-roadmap-framework-v1.206.0 (tag; witnessed by git, not asserted)" ;
     backlog:hasRationale "Rebuilt Mission stage after Restart_L_ChangeDiscipline_20260907 and the owner's ruling of 2026-09-07. Re-affirmed: fw:Mission_ChangeDiscipline, unchanged. The retracted Out2_Mission_CD remains as the record of the earlier claim." .
 fw:Mission_ChangeDiscipline backlog:producedByStage fw:Out3_Mission_CD .
+
+#################################################################
+#  v9.55.0 (2026-09-07, brsf-session) -- REBUILD, STAGE 2 OF 5: Scope.
+#  Consumes Out3_Mission_CD (first in git at 23a514e). This output
+#  is the only substantive change in this release, so its own first
+#  appearance is its own commit. Digest at this commit (Experiment A).
+#################################################################
+fw:Out3_Scope_CD a backlog:StageOutput ;
+    backlog:outputOfStage backlog:Stage_Scope ;
+    backlog:belongsToLineage fw:L_ChangeDiscipline ;
+    backlog:consumesOutput fw:Out3_Mission_CD ;
+    backlog:hasStateDigest "f4f93a9f6939b9ea76de1f0caa63301f44d6c07b18f847afe46b296fd3fa0efe" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.207.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Re-affirmed: fw:Scope_ChangeDiscipline with its exclusion fw:Ex_CD_NoRetroConversion and its deliverables, re-read against the mission clause by clause: each deliverable states what must be true, none is a task, and the exclusion cites the mission (G32). The retracted Out2_Scope_CD remains as the record of the earlier claim." .

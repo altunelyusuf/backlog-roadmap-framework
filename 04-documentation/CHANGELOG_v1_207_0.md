@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.207.0 — 2026-09-07 (MINOR: lineage 8 rebuild, stage 2 of 5 — Scope)
+
+Register v9.55.0: `Out3_Scope_CD` closes the rebuilt Scope stage, consuming `Out3_Mission_CD`
+(23a514e); digest at this commit. Nothing else changes. Expected reading after this release:
+lineage 8 two active outputs, Mission then Scope, each in its own commit.
+
 ## v1.206.0 — 2026-09-07 (MINOR: lineage 8 rebuild, stage 1 of 5 — Mission; order check v1.1.1)
 
 Register v9.54.0: `Out3_Mission_CD` closes the rebuilt Mission stage — the mission re-affirmed
