@@ -32,6 +32,11 @@ from the beginning. `G81` records the finding and the design.
 - `LINEAGE_OPERATING_DISCIPLINE_v52_0_0`: ceremony step 2 states that order is witnessed by git;
   standing rule "a bypassed lineage is restarted, never backfilled"; `G81`.
 
+- Item level, same release: the order check also reports PLANNED_LATE -- a PlanningEvent that first
+  appears after the item it plans (agentic-sdlc's handover of 2026-09-06, accepted; it arrived while
+  this release was being built). Measured here: 14 of lineage 7's 38 items were planned after they
+  existed. Advisory in v1.0.0; promotion to a gate failure is the owner's decision.
+
 **Disclosed:** a single-commit lineage remains UNWITNESSED, not a bypass — git cannot order within
 a commit. The `submittedTo` shape candidate from `G80` is still not built.
 

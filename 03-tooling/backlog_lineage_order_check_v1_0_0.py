@@ -22,6 +22,9 @@ for every non-archived lineage that has stage outputs:
                from an honest single-commit build. Advisory.
   RESTARTED    a LineageRestart exists and no active (non-retracted) output yet: the
                chain is being rebuilt from Mission. Disclosed, exit 0.
+  PLANNED_LATE (per item, advisory) a PlanningEvent first appears after the item it
+               plans: the work existed, then the planning record was written to fit it.
+               Reported on every run; not a gate failure in v1.0.0.
   BYPASS       at least one work item first appears BEFORE the lineage's Stage_Backlog
                output does (or that output is absent), or the outputs appear out of
                pipeline order. The chain was closed after the work.
@@ -144,6 +147,21 @@ def classify(g, L, witness, prefix):
             bypassed.append((ln, item_first[ln], "absent"))
         elif item_first[ln][1] < anchor[1]:
             bypassed.append((ln, item_first[ln], anchor[0]))
+    # 3b. item-level: an item planned after it already existed (PlanningEvent first
+    #     appears AFTER the item it plans). The same escape one level down: the work
+    #     is done, then the planning record is written to fit it. Reported as
+    #     PLANNED_LATE per item; it does not by itself make the lineage BYPASS in
+    #     v1.0.0 -- disclosed on every run, promotion to a gate failure is an owner
+    #     decision once the measurement has been read on a real register.
+    planned_late = []
+    for i in items:
+        ln = local(i)
+        if ln not in item_first:
+            continue
+        for pe in g.subjects(B.plansItem, i):
+            pf = witness.first(local(pe), prefix)
+            if pf and pf[1] > item_first[ln][1]:
+                planned_late.append((ln, item_first[ln], local(pe), pf))
     # 4. single-commit case
     commits = {f[0] for f in out_first.values()} | {f[0] for f in item_first.values()}
     if problems or bypassed:
@@ -157,7 +175,8 @@ def classify(g, L, witness, prefix):
     else:
         verdict = "ORDERED"
     return verdict, {"outputs": out_first, "items": item_first, "bypassed": bypassed,
-                     "problems": problems, "restart": restart_at, "all_outputs": [o for v in outs.values() for o in v]}
+                     "problems": problems, "restart": restart_at, "all_outputs": [o for v in outs.values() for o in v],
+                     "planned_late": planned_late}
 
 
 def emit_bypass(g, L, d, prefix_iri):
@@ -225,6 +244,8 @@ def main():
             print(f"      - {p}")
         for ln, f, a in d["bypassed"]:
             print(f"      - {ln} first {f[0]} < Stage_Backlog output {a}")
+        for ln, f, pe, pf in d["planned_late"]:
+            print(f"      - PLANNED_LATE {ln} first {f[0]} < its PlanningEvent {pe} first {pf[0]}")
         if verdict == "BYPASS":
             answered = any((b, B.bypassedLineage, L) in g and any(True for _ in g.subjects(B.answersBypass, b))
                            for b in g.subjects(RDF.type, B.LineageBypass))
