@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.49.0> ;
-    owl:versionInfo "9.49.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.50.0> ;
+    owl:versionInfo "9.50.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.49.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.48.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.47.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.46.0> ;
@@ -5744,3 +5745,82 @@ fw:Obs_CD_NoOutOfScopeWork_Before a backlog:MetricObservation ; backlog:observes
 fw:Find_G78 a backlog:RetrospectiveFinding ; backlog:informsRuling "G78" ; backlog:hasFindingScope backlog:Scope_Methodology ;
     backlog:hasRootCause "A forensic examination checked only ontology structure (LineageStage individuals) and never ran backlog_roadmap_report against the lineage. Running it for real surfaced a genuine, unbacked baseline assertion on Obj_CD_NoOutOfScopeWork the structural check alone never would have found." ;
     backlog:hasRemedy "Backfilled the missing before-observation, confirmed by re-running the same tool. A forensic pass on any lineage must run this framework's own real tools against it, not read ontology structure alone." .
+
+#################################################################
+#  v9.50.0 (2026-09-07, brsf-session) -- dated correction to lineage 8
+#  (L_ChangeDiscipline), appended, never edited in place (L-112).
+#
+#  The 2026-09-06 handover named the gap exactly: fw:It_CD1 carried no
+#  hasState, so L4DeploymentShape (built to catch "a closed iteration
+#  with no DeploymentUnit") had nothing to trigger on; no DeploymentUnit
+#  connected the story to the releases that really shipped it; and
+#  S_ChangeGuideDoc sat in fw:Register rather than a real package -- the
+#  G16 pattern again. Re-verified before writing, not assumed:
+#    - fw:S_ChangeGuideDoc and fw:ET_ChangeGuideDoc are Done in this
+#      register; fw:It_CD1's iterationEnd (2026-09-05T13:00Z) has passed;
+#    - the whole lineage-8 chain first appears in git at commit b48a787,
+#      2026-09-06T07:57:50Z, "backlog-roadmap-framework v1.193.0" -- one
+#      commit for the whole pipeline, as G77 already disclosed -- and was
+#      carried by every release v1.193.0 .. v1.199.0.
+#  The iteration's declared window predates its own commit by ~19 hours:
+#  the work was written on 09-05 and published on 09-06. Both facts are
+#  kept; the deployment date is the commit, because that is the only
+#  externally witnessed moment (G18).
+#################################################################
+fw:It_CD1 backlog:hasState backlog:Done ;
+    backlog:belongsToLineage fw:L_ChangeDiscipline ;
+    backlog:containerScope backlog:CScope_Lineage ;
+    backlog:containerForLineage fw:L_ChangeDiscipline ;
+    backlog:hasObservedDuration 60.0 ;
+    backlog:hasDurationSource "Declared iterationStart/iterationEnd (2026-09-05T12:00Z .. 13:00Z); no publish commit bounds this iteration because the whole lineage was published in one commit (b48a787). Recorded 2026-09-07 as a dated correction." .
+
+fw:Pkg_ChangeDiscipline a backlog:Package ;
+    backlog:hasIdentifier "BRF-PKG-CD" ;
+    backlog:hasTitle "Change-request discipline guidance" ;
+    backlog:hasPackageVersion "1.193.0" ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:targetsIteration fw:It_CD1 ;
+    backlog:pursuesObjective fw:Obj_CD_NoOutOfScopeWork ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "A package is a grouping; its members carry the scores." ;
+    backlog:belongsToLineage fw:L_ChangeDiscipline ;
+    backlog:containerScope backlog:CScope_Lineage ;
+    backlog:containerForLineage fw:L_ChangeDiscipline ;
+    backlog:hasRationale "Releasable on its own: the one story of lineage 8, the guidance note on raising a change request under this discipline, plus the real ChangeRequest/ImpactAssessment/ScopeChange chain it was validated against. Created 2026-09-07 as a dated correction: the package existed in fact from v1.193.0 and the register did not say so (G16)." .
+
+fw:S_ChangeGuideDoc backlog:memberOfContainer fw:Pkg_ChangeDiscipline , fw:Rel_It_CD1 .
+
+fw:Rel_It_CD1 a backlog:DeploymentUnit ;
+    backlog:hasIdentifier "BRF-REL-It_CD1" ;
+    backlog:hasTitle "Change-request guidance shipped" ;
+    backlog:hasState backlog:Done ;
+    backlog:hasDeploymentDate "2026-09-06T07:57:50Z"^^xsd:dateTime ;
+    backlog:deploysFrom fw:It_CD1 ;
+    backlog:deploysItem fw:S_ChangeGuideDoc ;
+    backlog:deliversPackage fw:Pkg_ChangeDiscipline ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:hasSelectionBasis backlog:Sel_Committed ;
+    backlog:belongsToLineage fw:L_ChangeDiscipline ;
+    backlog:containerScope backlog:CScope_Lineage ;
+    backlog:containerForLineage fw:L_ChangeDiscipline ;
+    backlog:hasRationale "Ships what It_CD1 planned and finished. Deployment date is commit b48a787 (v1.193.0), the release that first carried this story; v1.194.0-v1.199.0 carried it unchanged. Recorded 2026-09-07 as a dated correction against a closed lineage (Mission_ChangeDiscipline stays Out_Achieved); the register did not record this deployment when it happened." .
+
+#################################################################
+#  v9.50.0 -- Imp_RegisterPackageDecisions: root cause found and acted
+#  on, impediment NOT resolved. Both EnhancementProposals recorded
+#  submittedTo "07-handover-inbox/pending/..." -- this package's OWN
+#  inbox. They were never delivered to the sessions that could decide
+#  them; the block was self-inflicted. Delivered 2026-09-07 to the OE
+#  inbox (oe-pack/07-handover-inbox/pending/, per OE_Operating_Discipline
+#  v2.5.0 L-113: a proposal to another package goes in THAT package's
+#  inbox). rdodi-ecosystem has no inbox; the another registrant-addressed proposal
+#  went to the OE inbox as the documented fallback, addressed on its
+#  cover. Status stays Prop_Submitted until the addressee decides.
+#################################################################
+fw:EnhProp_RoadmapReportConvention
+    backlog:submittedTo "oe-pack/07-handover-inbox/pending/PROPOSAL_backlog-roadmap-framework_to_OE_roadmap-report-naming-convention_v1_0_0.md (delivered 2026-09-07; the 2026-09-03 submittedTo above named this package's own inbox and reached no one)" .
+fw:EnhProp_RoadmapReportKind
+    backlog:submittedTo "oe-pack/07-handover-inbox/pending/PROPOSAL_backlog-roadmap-framework_to_RDODI_roadmap-report-profile_v1_0_0.md (delivered 2026-09-07 to the OE inbox as fallback: rdodi-ecosystem has no 07-handover-inbox; the 2026-09-03 submittedTo above named this package's own inbox and reached no one)" .
+fw:Imp_RegisterPackageDecisions
+    backlog:hasImpedimentStatement "2026-09-07 addendum: still blocked on the same two decisions, but the cause of four days without an answer was that neither proposal had been delivered -- both were filed in this package's own inbox. Delivered to the OE inbox today; what clears this impediment is unchanged (a ratified configuration:RoadmapReportConvention and a prof:RoadmapReportKind), and the clock on the real wait starts now." .

@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v50.0.0
+# Lineage Operating Discipline — v51.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -2070,3 +2070,37 @@ file and so was never usable either.
 safeguard working. Every one is a gap the safeguards would have caught had they been running, and
 they were not running. The one safeguard that did work is the manifest, which verified 159/159 --
 and which, as B5 says, proves only that the snapshot is undamaged.
+
+## G80 — A proposal filed in your own inbox has been sent to no one
+
+`fw:Imp_RegisterPackageDecisions` was raised 2026-09-03: `RegisterPackage` cannot be honestly built
+until two external decisions are made. Four days later it was still "blocked on two external
+proposals this session cannot resolve unilaterally" -- and the handover carried it forward as a
+standing, unrelated item. Reading the two `EnhancementProposal` individuals showed why nothing had
+happened: both recorded `submittedTo "07-handover-inbox/pending/PROPOSAL_brsf-continuation_..."`.
+That is this package's own inbox. The addressees -- the OE Pack's `configuration_abox` session and
+the another registrant profile session -- had never received anything. The impediment was real; the wait was
+self-inflicted.
+
+This is G39's mechanism read from the wrong side. G39 says: check your own `pending/` at session
+start, because that is where proposals *to* you arrive. It said nothing about where proposals *from*
+you go, and the default -- write the file where you are working -- produced a proposal that
+satisfied every shape (`submittedTo` has `minCount 1`, and a path is a string) while reaching no
+one. OE's discipline now states the direction rule explicitly (v2.5.0, L-113: a proposal to another
+package goes into *that* package's inbox, and only when the target has no inbox does it fall back to
+the sender's own documentation). This framework adopts it as its own standing rule:
+
+**Standing rule.** An `EnhancementProposal`'s `submittedTo` names a location the addressee actually
+reads -- the addressee's own inbox where one exists, and otherwise a location agreed with them. A
+`submittedTo` value under this package's own `07-handover-inbox/` is a filing, not a submission.
+An impediment blocked on an external decision is not "waiting" until the proposal is confirmed
+delivered; before that it is waiting on the sender.
+
+**Classified at logging time (L-112):** a genuine gap, not a safeguard working. No shape or tool
+distinguished a delivered proposal from a filed one, and none could have from the register alone --
+the check that found it was reading the value of `submittedTo` and asking who reads that path.
+A `sh:pattern` refusing `submittedTo` values under the package's own inbox path is cheap and would
+have caught this; it is not built in this release because the addressee's real inbox paths are not
+this package's vocabulary to enumerate (L-64), and a rule that only rejects one wrong answer without
+knowing the right one is a half-check. Left as a candidate for the next session that touches
+`EnhancementProposal`.

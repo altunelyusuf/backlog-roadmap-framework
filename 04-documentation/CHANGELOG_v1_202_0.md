@@ -1,5 +1,38 @@
 # Changelog
 
+## v1.202.0 — 2026-09-07 (MINOR: the handover's three remaining items closed -- inbox triaged, lineage 8 corrected, the blocked impediment traced to its real cause)
+
+**Register v9.50.0** (0 violations, 115 warnings under shapes v1.100.1 -- was 117; the "Done in no
+DeploymentUnit" advisory dropped 9 -> 8 and one metric-coverage advisory cleared). Every line is an
+appended, dated correction; nothing published was edited in place (L-112).
+
+- **Lineage 8 (`L_ChangeDiscipline`), the gap the 2026-09-06 handover named.** Re-verified before
+  writing: story and task Done, `It_CD1`'s window past, the whole chain first in git at `b48a787`
+  (v1.193.0, 2026-09-06T07:57:50Z) and carried by v1.194.0-v1.199.0. Added `It_CD1 hasState Done`
+  (with lineage and scope triples the other iterations carry), `fw:Pkg_ChangeDiscipline` (the real
+  package, version 1.193.0), `fw:Rel_It_CD1` (the real DeploymentUnit, dated at the commit -- the only
+  externally witnessed moment, G18), and `S_ChangeGuideDoc` as member of both. The iteration's
+  declared window predates its own commit by ~19 hours; both facts kept, stated in the rationale.
+  `Mission_ChangeDiscipline` stays `Out_Achieved`. `ET_ChangeGuideDoc`'s `Task_Implementation` typing
+  (the handover's "less certain" item) re-read against all 14 `TaskType` definitions: no better fit;
+  left as is. Confirmed with the framework's own tools, not structure: `backlog_lineage_compass`
+  reports the lineage settled, `backlog_roadmap_report` shows CD-S01's objective bracketed.
+- **`Imp_RegisterPackageDecisions` -- not resolved, but the real cause found.** Both
+  `EnhancementProposal`s recorded `submittedTo "07-handover-inbox/pending/..."` -- this package's
+  own inbox. The proposals had never reached anyone; the block was self-inflicted. Delivered
+  2026-09-07 to `oe-pack/07-handover-inbox/pending/` with cover notes (OE_Operating_Discipline v2.5.0,
+  L-113; `rdodi-ecosystem` has no inbox, so the another registrant one went to OE's as the documented fallback).
+  Register records the delivery on both proposals and an addendum on the impediment; status stays
+  `Prop_Submitted` until the addressees decide. `G80` records the lesson.
+- **Inbox: 14 pending items to 0.** Three were outgoing proposals misfiled in our own inbox
+  (deferred here, delivered there). Eleven were versions v1.0.0-v1.10.0 of the `brsf-continuation`
+  session's own working proposal to itself; every item v1.10.0 says was built has real individuals in
+  the register (counted, not read) -- accepted as already executed, earlier versions kept as history.
+  Every log line states the verification performed.
+
+**Not changed:** the four remaining warning families are by design (see G69); `RegisterPackage` is
+still not built -- it cannot be honestly built until the two conventions are ratified.
+
 ## v1.201.0 — 2026-09-07 (MINOR: the release gate could not run for 48 releases; repaired, and everything it then found)
 
 **Session `brsf-session`, from the 2026-09-06 handover.** First act was to run the shipped gate
