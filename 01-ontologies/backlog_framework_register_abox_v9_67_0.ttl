@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.66.0> ;
-    owl:versionInfo "9.66.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.67.0> ;
+    owl:versionInfo "9.67.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.66.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.65.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.64.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.63.0> ;
@@ -6392,3 +6393,21 @@ fw:T_S_Tables_B2 backlog:admittedByOutput fw:P7Export_Backlog .
 fw:T_S_Tables_B3 backlog:admittedByOutput fw:P7Export_Backlog .
 fw:T_S_Tables_B4 backlog:admittedByOutput fw:P7Export_Backlog .
 fw:ET_ConvertGovernanceRulings backlog:admittedByOutput fw:P7Gov_Backlog .
+
+#################################################################
+#  v9.67.0 (2026-09-07, brsf-session) -- LINEAGE 7 REBUILD, COMBINE.
+#  The parent's rebuilt Stage_Backlog output combines the five parts'
+#  Backlog outputs (all first in git at 76159bd), and admits the two
+#  items that belong to no single deliverable -- the initiative and
+#  the spike, which pursue the framework-wide conformance objective.
+#  This is the combine step of divide and conquer; it consumes no
+#  predecessor stage of its own (CombineOutputShape governs it).
+#################################################################
+fw:Out3_Backlog a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Backlog ;
+    backlog:belongsToLineage fw:L_OntologyDriven ;
+    backlog:combinesOutput fw:P7Gov_Backlog , fw:P7Exec_Backlog , fw:P7Export_Backlog , fw:P7Prose_Backlog , fw:P7Code_Backlog ;
+    backlog:hasStateDigest "c69257c535f575f918f331b4f98e5288687e7460f87446454be93531f663c9e4" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.219.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Combine of the divide-and-conquer rebuild of lineage 7: five parts, each rebuilt Mission..Backlog in its own witnessed sequence (9cb62b6, 8c4f385, 5a6894e, 7a4fee7, 76159bd), each admitting its own items. The retracted Out2_Backlog remains as the record of the earlier chain." .
+fw:Init_OntologyDrivenConversion backlog:admittedByOutput fw:Out3_Backlog .
+fw:SPK_DomainModelingSeverity backlog:admittedByOutput fw:Out3_Backlog .

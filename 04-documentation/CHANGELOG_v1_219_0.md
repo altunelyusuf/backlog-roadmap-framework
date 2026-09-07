@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.219.0 — 2026-09-07 (MINOR: lineage 7 rebuild — combine)
+
+Register v9.67.0: `Out3_Backlog` combines `P7Gov_Backlog`, `P7Exec_Backlog`, `P7Export_Backlog`,
+`P7Prose_Backlog`, `P7Code_Backlog` (all at `76159bd`) and admits the initiative and the spike.
+Expected reading after this release: lineage 7 ORDERED with all five parts ORDERED, 38 items
+admitted, no thrash — the divide-and-conquer strategy converged in one trial. 0 violations,
+115 warnings.
+
 ## v1.218.0 — 2026-09-07 (MINOR: lineage 7 rebuild, stage 5 of 5 — Backlog, all five parts)
 
 Register v9.66.0: `P7Gov_Backlog`, `P7Exec_Backlog`, `P7Export_Backlog`, `P7Prose_Backlog`, `P7Code_Backlog`
