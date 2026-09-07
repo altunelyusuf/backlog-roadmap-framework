@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.227.0 — 2026-09-07 (MINOR: toy rebuild, stage 4 of 5 — Objective, all five toys)
+
+Exercise register v1.6.0: `TF_R_Objective`, `TV_R_Objective`, `TS_R_Objective`, `TR_R_Objective`, `TT_R_Objective` (each
+consuming its toy's Goal output, d8fdf64); digest at this commit. 
+
 ## v1.226.0 — 2026-09-07 (MINOR: toy rebuild, stage 3 of 5 — Goal, all five toys)
 
 Exercise register v1.5.0: `TF_R_Goal`, `TV_R_Goal`, `TS_R_Goal`, `TR_R_Goal`, `TT_R_Goal` (each

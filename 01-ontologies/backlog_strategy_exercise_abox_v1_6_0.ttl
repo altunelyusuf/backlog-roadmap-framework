@@ -8,8 +8,9 @@
 @prefix dcterms: <http://purl.org/dc/terms/> .
 
 <http://example.org/backlog-strategy-exercise> a owl:Ontology ;
-    owl:versionIRI <http://example.org/backlog-strategy-exercise/1.5.0> ;
-    owl:versionInfo "1.5.0" ;
+    owl:versionIRI <http://example.org/backlog-strategy-exercise/1.6.0> ;
+    owl:versionInfo "1.6.0" ;
+    owl:priorVersion <http://example.org/backlog-strategy-exercise/1.5.0> ;
     owl:priorVersion <http://example.org/backlog-strategy-exercise/1.4.0> ;
     owl:priorVersion <http://example.org/backlog-strategy-exercise/1.3.0> ;
     owl:priorVersion <http://example.org/backlog-strategy-exercise/1.2.0> ;
@@ -736,3 +737,19 @@ ex:TR_R_Goal a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Goal ; 
     backlog:hasStateDigest "ceb5050aaa2a83836c91982cd01544c6e57f7a54d1b4f8ac6a6d805edd146297" ; backlog:closedAtCommit "backlog-roadmap-framework-v1.226.0 (tag; witnessed by git, not asserted)" .
 ex:TT_R_Goal a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Goal ; backlog:belongsToLineage ex:TT_Lin ; backlog:consumesOutput ex:TT_R_Scope ;
     backlog:hasStateDigest "ceb5050aaa2a83836c91982cd01544c6e57f7a54d1b4f8ac6a6d805edd146297" ; backlog:closedAtCommit "backlog-roadmap-framework-v1.226.0 (tag; witnessed by git, not asserted)" .
+
+#################################################################
+#  v1.6.0 (2026-09-07, brsf-session) -- TOY REBUILD, STAGE 4 OF 5:
+#  Objective, all five toys (independent lineages sharing one commit; each
+#  toy's own order is what the witness measures). Follows d8fdf64.
+#################################################################
+ex:TF_R_Objective a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Objective ; backlog:belongsToLineage ex:TF_Lin ; backlog:consumesOutput ex:TF_R_Goal ;
+    backlog:hasStateDigest "9e4d7ca9c506daaf16e581e222cac974b99390c2cab332c13fdd6fed2c35b147" ; backlog:closedAtCommit "backlog-roadmap-framework-v1.227.0 (tag; witnessed by git, not asserted)" .
+ex:TV_R_Objective a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Objective ; backlog:belongsToLineage ex:TV_Lin ; backlog:consumesOutput ex:TV_R_Goal ;
+    backlog:hasStateDigest "9e4d7ca9c506daaf16e581e222cac974b99390c2cab332c13fdd6fed2c35b147" ; backlog:closedAtCommit "backlog-roadmap-framework-v1.227.0 (tag; witnessed by git, not asserted)" .
+ex:TS_R_Objective a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Objective ; backlog:belongsToLineage ex:TS_Lin ; backlog:consumesOutput ex:TS_R_Goal ;
+    backlog:hasStateDigest "9e4d7ca9c506daaf16e581e222cac974b99390c2cab332c13fdd6fed2c35b147" ; backlog:closedAtCommit "backlog-roadmap-framework-v1.227.0 (tag; witnessed by git, not asserted)" .
+ex:TR_R_Objective a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Objective ; backlog:belongsToLineage ex:TR_Lin ; backlog:consumesOutput ex:TR_R_Goal ;
+    backlog:hasStateDigest "9e4d7ca9c506daaf16e581e222cac974b99390c2cab332c13fdd6fed2c35b147" ; backlog:closedAtCommit "backlog-roadmap-framework-v1.227.0 (tag; witnessed by git, not asserted)" .
+ex:TT_R_Objective a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Objective ; backlog:belongsToLineage ex:TT_Lin ; backlog:consumesOutput ex:TT_R_Goal ;
+    backlog:hasStateDigest "9e4d7ca9c506daaf16e581e222cac974b99390c2cab332c13fdd6fed2c35b147" ; backlog:closedAtCommit "backlog-roadmap-framework-v1.227.0 (tag; witnessed by git, not asserted)" .
