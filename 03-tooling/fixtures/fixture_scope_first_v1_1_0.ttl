@@ -1,0 +1,275 @@
+# Scope-first lineage — the v3.0.0 ceremony order.
+#
+#   Mission -> ScopeStatement (with exclusions) -> Goal -> Objective
+#
+# The boundary is fixed BEFORE the goals that would test it. Written the other
+# way round a scope is drawn around objectives already decided, so every
+# objective is in scope by construction and the boundary can never refuse
+# anything. Measured on this package's own register: five objectives declared,
+# five admitted, none refused, scope amended twice afterwards to catch up.
+#
+# The order is recorded by the DIRECTION of one link, not by any date.
+# Every link in the chain points from the later-written element to the earlier:
+# Goal -> Mission, Objective -> Goal, and here Objective -> Scope via fillsScope.
+# An objective cannot name a boundary that does not yet exist, so this link is
+# only assertable in a lineage where the scope came first. The opposite property,
+# scopeRealizesObjective, points Scope -> Objective and records the other order.
+# Both are kept; which one a lineage uses IS the fact worth recording.
+@prefix backlog: <http://example.org/backlog#> .
+@prefix core:    <http://example.org/core#> .
+@prefix ex:      <http://example.org/ob#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+ex:P a backlog:AdoptionProfile ; backlog:profileAppliesTo "order B probe" ;
+    backlog:governsBacklog ex:BL ; backlog:hasConformanceLevel backlog:L4_LineageEnforced ;
+    backlog:decidedBy backlog:Owner ; backlog:hasDecisionRationale "probe" ;
+    backlog:adoptsFacet backlog:CoreFacet , backlog:EvidenceFacet , backlog:InvariantFacet , backlog:AuditFacet .
+ex:BL a backlog:Backlog ; backlog:hasIdentifier "BL-B" ; backlog:hasState backlog:Proposed ;
+    backlog:hasScopeStatement ex:Scope ; backlog:hasCommitment ex:C ;
+    backlog:appliesDefinitionOfDone backlog:DoD_Baseline .
+ex:W a backlog:Story ; backlog:hasIdentifier "US-B1" ; backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer ex:BL ; backlog:pursuesObjective ex:O ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:appliesDefinitionOfDone backlog:DoD_Baseline ;
+    backlog:asRole "practitioner" ; backlog:wantsCapability "reset my password" ;
+    backlog:soThat "I regain access unaided" ;
+    backlog:hasAcceptanceCriterion ex:AC ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at the next planning; this fixture demonstrates chain ORDER, not prioritisation." .
+ex:AC a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a locked-out practitioner, When they request a reset, Then recovery completes without a support contact." .
+ex:C a backlog:Commitment ; backlog:commitsToGoal ex:G .
+
+ex:M a backlog:Mission ;
+    backlog:hasMissionOrigin backlog:Origin_OwnerStated ;
+    backlog:missionSource "Fixture: an illustrative mission stated by the fixture's owner. Recorded because a mission with no origin cannot be told apart from a session's summary of work already done." ; rdfs:label "Mission"@en ;
+    backlog:hasMissionStatement "Practitioners recover accounts unaided." ;
+    backlog:missionFor ex:BL ; backlog:decidedBy backlog:Owner .
+ex:G a backlog:Goal ;
+    backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ; rdfs:label "Self-service recovery"@en ;
+    backlog:contributesToMission ex:M ; backlog:decidedBy backlog:Owner .
+ex:Met a core:Metric ; rdfs:label "Unaided recovery share"@en .
+ex:O a backlog:Objective ;
+    backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ; rdfs:label "Recoveries need no support"@en ;
+    backlog:fillsScope ex:Scope ;
+    backlog:contributesToGoal ex:G ; backlog:hasSuccessMetric ex:Met ;
+    backlog:hasBaselineValue 12.0 ; backlog:hasTargetValue 80.0 ;
+    backlog:hasTargetDirection backlog:Dir_Increase ;
+    backlog:hasObjectiveDeadline "2027-01-31T00:00:00"^^xsd:dateTime ;
+    backlog:decidedBy backlog:Owner .
+ex:Obs a backlog:MetricObservation ; backlog:observesMetric ex:Met ;
+    backlog:observationFor ex:O ; backlog:hasObservedValue 12.0 ;
+    backlog:observedAt "2026-08-11T09:00:00"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Baseline reading from support tickets." .
+
+# scope written last, from the objective
+ex:Scope a backlog:ScopeStatement ;
+    backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ;
+    backlog:scopeForMission ex:M ;
+    backlog:hasScopeStatementText "The reset flow and its notifications for practitioner accounts. Fixed before any goal was written." ;
+    backlog:hasScopeExclusion ex:X .
+ex:X a backlog:ScopeExclusion ;
+    backlog:excludesConcern "Administrator recovery." ;
+    backlog:hasExclusionRationale "Different threat model." ;
+    backlog:decidedBy backlog:Owner .
+
+ex:G backlog:derivesFromScope ex:Scope .
+
+ex:O backlog:metricMovableBy ex:W .
+
+ex:Del_Scope a backlog:ScopeDeliverable ;
+    backlog:hasDeliverableText "A practitioner locked out of their account regains access without contacting support." .
+ex:Scope backlog:requiresDeliverable ex:Del_Scope .
+ex:W backlog:satisfiesDeliverable ex:Del_Scope .
+
+# A scope requiring ONE deliverable met by ONE item is that work
+# restated as intent — SingletonDeliverableShape rejects it. A real
+# boundary names more than it has reached: the second deliverable
+# here is unsatisfied, which is the normal healthy state.
+ex:Del2_Scope a backlog:ScopeDeliverable ;
+    backlog:hasDeliverableText "Recovery works when one factor is unavailable." .
+ex:Scope backlog:requiresDeliverable ex:Del2_Scope .
+
+ex:Del_Scope backlog:derivesFromMissionClause "practitioners recover unaided" .
+
+ex:Del2_Scope backlog:derivesFromMissionClause "practitioners recover unaided" .
+
+ex:Area_Scope a backlog:ScopeArea ;
+    backlog:areaLocation "The account recovery service and its identity store." ;
+    backlog:areaMeasure "One sign-in flow, one credential store, two supported second factors." .
+ex:Scope backlog:coversArea ex:Area_Scope .
+
+ex:G backlog:hasGoalFacing backlog:Facing_Mission .
+
+ex:G_Areas_Scope a backlog:Goal ;
+    rdfs:label "Every area the scope names is finished"@en ; backlog:contributesToMission ex:M ;
+    backlog:derivesFromScope ex:Scope ; backlog:hasGoalFacing backlog:Facing_Scope ;
+    backlog:goalCoversArea ex:Area_Scope ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ; backlog:decidedBy backlog:Owner .
+ex:G_Contain_Scope a backlog:Goal ;
+    rdfs:label "No work outside the named areas"@en ; backlog:contributesToMission ex:M ;
+    backlog:derivesFromScope ex:Scope ; backlog:hasGoalFacing backlog:Facing_Containment ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ; backlog:decidedBy backlog:Owner .
+
+ex:Met_G_Areas_Scope a core:Metric ; rdfs:label "Every area the scope names is finished"@en .
+ex:Obj_G_Areas_Scope a backlog:Objective ; rdfs:label "Every area the scope names is finished"@en ;
+    backlog:contributesToGoal ex:G_Areas_Scope ;
+    backlog:hasSuccessMetric ex:Met_G_Areas_Scope ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:hasBaselineValue 2.0 ; backlog:hasTargetValue 0.0 ;
+    backlog:hasTargetDirection backlog:Dir_Decrease ;
+    backlog:hasObjectiveDeadline "2027-06-30T00:00:00"^^xsd:dateTime ;
+    backlog:decidedBy backlog:Owner .
+
+ex:Met_G_Contain_Scope a core:Metric ; rdfs:label "No work outside the named areas"@en .
+ex:Obj_G_Contain_Scope a backlog:Objective ; rdfs:label "No work outside the named areas"@en ;
+    backlog:contributesToGoal ex:G_Contain_Scope ;
+    backlog:hasSuccessMetric ex:Met_G_Contain_Scope ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:hasBaselineValue 2.0 ; backlog:hasTargetValue 0.0 ;
+    backlog:hasTargetDirection backlog:Dir_Decrease ;
+    backlog:hasObjectiveDeadline "2027-06-30T00:00:00"^^xsd:dateTime ;
+    backlog:decidedBy backlog:Owner .
+
+ex:Obj_G_Areas_Scope backlog:fillsScope ex:Scope .
+ex:Obs_Obj_G_Areas_Scope a backlog:MetricObservation ;
+    backlog:observesMetric ex:Met_G_Areas_Scope ;
+    backlog:observationFor ex:Obj_G_Areas_Scope ;
+    backlog:hasObservedValue 2.0 ;
+    backlog:observedAt "2026-08-01T09:00:00"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Baseline taken when the goal was set." .
+
+ex:Obj_G_Contain_Scope backlog:fillsScope ex:Scope .
+ex:Obs_Obj_G_Contain_Scope a backlog:MetricObservation ;
+    backlog:observesMetric ex:Met_G_Contain_Scope ;
+    backlog:observationFor ex:Obj_G_Contain_Scope ;
+    backlog:hasObservedValue 2.0 ;
+    backlog:observedAt "2026-08-01T09:00:00"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Baseline taken when the goal was set." .
+
+ex:Del_Scope backlog:hasScopeLayer backlog:Layer_Product .
+
+ex:Del2_Scope backlog:hasScopeLayer backlog:Layer_Product .
+
+ex:Area_Scope backlog:hasScopeLayer backlog:Layer_Work .
+
+ex:X backlog:hasScopeLayer backlog:Layer_Work .
+
+ex:O backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasCheckpoint ex:CP_O .
+ex:CP_O a backlog:ObjectiveCheckpoint ;
+    backlog:checkpointDate "2026-12-01T00:00:00"^^xsd:dateTime ;
+    backlog:expectedValue 80.0 .
+
+ex:Obj_G_Areas_Scope backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasCheckpoint ex:CP_Obj_G_Areas_Scope .
+ex:CP_Obj_G_Areas_Scope a backlog:ObjectiveCheckpoint ;
+    backlog:checkpointDate "2026-12-01T00:00:00"^^xsd:dateTime ;
+    backlog:expectedValue 0.0 .
+
+ex:Obj_G_Contain_Scope backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasCheckpoint ex:CP_Obj_G_Contain_Scope .
+ex:CP_Obj_G_Contain_Scope a backlog:ObjectiveCheckpoint ;
+    backlog:checkpointDate "2026-12-01T00:00:00"^^xsd:dateTime ;
+    backlog:expectedValue 0.0 .
+
+<http://example.org/ob#P> backlog:hasExpectedPolarity backlog:Polarity_Positive .
+
+ex:M backlog:hasMissionOutcome backlog:Out_InFlight .
+
+# Every work item names the lineage it was created in (v1.130.0).
+<http://example.org/ob#Lin1> a backlog:Lineage ;
+    backlog:lineageForMission <http://example.org/ob#M> ;
+    backlog:lineageOrdinal 1 ;
+    backlog:lineageArchived false .
+<http://example.org/ob#W> backlog:belongsToLineage <http://example.org/ob#Lin1> .
+# Conformance-goal pattern (G42/AdoptionConformanceGoalShape), self-contained,
+# using this package's own already-proven Goal_BRSFConformance/Obj_BRSFConformanceHeld
+# structure as the exact template rather than re-deriving requirements by trial.
+ex:CMission a backlog:Mission ;
+    backlog:hasMissionStatement "Fixture conformance-goal test mission." ;
+    backlog:missionFor ex:BL ; backlog:hasMissionOrigin backlog:IOrigin_OwnerStated ;
+    backlog:hasMissionOutcome backlog:Out_InFlight ; backlog:decidedBy backlog:Owner .
+ex:CDel a backlog:ScopeDeliverable ; backlog:hasDeliverableText "Fixture deliverable." ;
+    backlog:derivesFromMissionClause "Fixture conformance-goal test mission." ;
+    backlog:hasScopeLayer backlog:Layer_Product .
+ex:CScope a backlog:ScopeStatement ;
+    backlog:hasScopeStatementText "Fixture conformance-goal test scope." ;
+    backlog:scopeForMission ex:CMission ; backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ;
+    backlog:requiresDeliverable ex:CDel ; backlog:hasScopeExclusion ex:CExcl ;
+    backlog:coversArea ex:CArea .
+ex:CExcl a backlog:ScopeExclusion ; backlog:excludesConcern "Fixture-only exclusion." ;
+    backlog:hasExclusionRationale "Fixture-only, not a real design decision." ; backlog:decidedBy backlog:Owner ;
+    backlog:hasScopeLayer backlog:Layer_Product .
+ex:CArea a backlog:ScopeArea ; backlog:areaLocation "Fixture-only area, no real location." ;
+    backlog:areaMeasure "0 real measure; fixture-only." ; backlog:hasScopeLayer backlog:Layer_Product .
+ex:CGoal a backlog:Goal ; <http://www.w3.org/2000/01/rdf-schema#label> "Fixture conformance goal" ;
+    backlog:isConformanceGoal true ; backlog:contributesToMission ex:CMission ;
+    backlog:derivesFromScope ex:CScope ; backlog:hasGoalFacing backlog:Facing_Mission ;
+    backlog:goalCoversArea ex:CArea ; backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ;
+    backlog:decidedBy backlog:Owner .
+ex:CGoalScope a backlog:Goal ; <http://www.w3.org/2000/01/rdf-schema#label> "Fixture scope-facing goal" ;
+    backlog:contributesToMission ex:CMission ; backlog:derivesFromScope ex:CScope ;
+    backlog:hasGoalFacing backlog:Facing_Scope ; backlog:goalCoversArea ex:CArea ;
+    backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ; backlog:decidedBy backlog:Owner .
+ex:CGoalContain a backlog:Goal ; <http://www.w3.org/2000/01/rdf-schema#label> "Fixture containment-facing goal" ;
+    backlog:contributesToMission ex:CMission ; backlog:derivesFromScope ex:CScope ;
+    backlog:hasGoalFacing backlog:Facing_Containment ; backlog:goalCoversArea ex:CArea ;
+    backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ; backlog:decidedBy backlog:Owner .
+ex:CObjScope a backlog:Objective ; backlog:contributesToGoal ex:CGoalScope ; backlog:fillsScope ex:CScope ;
+    backlog:hasSuccessMetric ex:CMetricScope ; backlog:hasBaselineValue 0.0 ; backlog:hasTargetValue 0.0 ;
+    backlog:hasTargetDirection backlog:Dir_Hold ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ; backlog:decidedBy backlog:Owner .
+ex:CMetricScope a ex:CLocalMetric .
+ex:CObjContain a backlog:Objective ; backlog:contributesToGoal ex:CGoalContain ; backlog:fillsScope ex:CScope ;
+    backlog:hasSuccessMetric ex:CMetricContain ; backlog:hasBaselineValue 0.0 ; backlog:hasTargetValue 0.0 ;
+    backlog:hasTargetDirection backlog:Dir_Hold ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ; backlog:decidedBy backlog:Owner .
+ex:CMetricContain a ex:CLocalMetric .
+ex:CCPScope a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-12-01T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+ex:CObjScope backlog:hasCheckpoint ex:CCPScope .
+ex:CObsScope a backlog:MetricObservation ; backlog:observesMetric ex:CMetricScope ; backlog:observationFor ex:CObjScope ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-09-02T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+    backlog:hasObservationMethod "Fixture-stated value, not re-derivable." .
+ex:CCPContain a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-12-01T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+ex:CObjContain backlog:hasCheckpoint ex:CCPContain .
+ex:CObsContain a backlog:MetricObservation ; backlog:observesMetric ex:CMetricContain ; backlog:observationFor ex:CObjContain ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-09-02T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+    backlog:hasObservationMethod "Fixture-stated value, not re-derivable." .
+ex:CObj a backlog:Objective ;
+    backlog:contributesToGoal ex:CGoal ; backlog:fillsScope ex:CScope ;
+    backlog:hasSuccessMetric ex:CMetric ; backlog:hasBaselineValue 0.0 ; backlog:hasTargetValue 0.0 ;
+    backlog:hasTargetDirection backlog:Dir_Hold ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ; backlog:decidedBy backlog:Owner .
+ex:CMetric a ex:CLocalMetric .
+ex:CCP a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-12-01T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+ex:CObj backlog:hasCheckpoint ex:CCP .
+ex:CObs a backlog:MetricObservation ; backlog:observesMetric ex:CMetric ; backlog:observationFor ex:CObj ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-09-02T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+    backlog:hasObservationMethod "Fixture-stated value, not re-derivable." .
+
+# Blueprint (G45/domain-modeling handover): register-level completeness only,
+# no epic in this fixture decomposes, so no entity coverage needed.
+ex:CBP a backlog:Blueprint ; backlog:blueprintFor ex:BL .
+
+# ---------------------------------------------------------------------------
+# fixture_scope_first_v1_1_0.ttl (2026-09-07) -- brought back to conformance with shapes shipped after
+# this fixture was last edited: the RegisterSession requirement (v1.169.0, G48) and the live-corrective-action requirement
+# (v1.181.0).
+# This fixture declares Polarity_Positive and was failing on exactly these
+# constraints; the gate could not run at the time (validator pinned to a retired
+# file), so nothing reported it. A known-good fixture that fails certifies
+# nothing (G7). Dates are timezone-less on purpose: shapes v1.100.1 compares
+# lexically, so a legal zone-less xsd:dateTime no longer reads as "passed".
+# ---------------------------------------------------------------------------
+ex:Session_20260907 a backlog:RegisterSession ;
+    rdfs:label "Conformance-restoration session, 7 September"@en ;
+    backlog:sessionFor ex:BL ;
+    backlog:sessionStartedAt "2026-09-07T07:00:00"^^xsd:dateTime ;
+    backlog:sessionEndedAt "2026-09-07T07:30:00"^^xsd:dateTime ;
+    backlog:stateVerifiedAtStart true ;
+    backlog:sessionConductedBy backlog:Builder ;
+    backlog:hasSessionScopeNote "In scope: record this fixture's own maintenance so the register names who last changed it. Deliberately untouched: every item, objective and event above." .
+ex:Obj_G_Areas_Scope backlog:metricMovableBy ex:W .
+ex:Obj_G_Contain_Scope backlog:metricMovableBy ex:W .

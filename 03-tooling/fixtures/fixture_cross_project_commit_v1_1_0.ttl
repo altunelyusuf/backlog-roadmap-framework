@@ -1,0 +1,28 @@
+# Cross-project commit safety — test drive, not a construction.
+#
+# Proves CrossProjectCommitAdvisoryShape decides declaratively, via SPARQL
+# STRSTARTS against fw:Register's own real hasSovereignPathPrefix, with no
+# Python judgement about whether a remote commit is safe.
+#
+# RC_Unrelated: touches only a path outside the sovereign prefix -> silent.
+# RC_Real: touches a path under the sovereign prefix -> fires.
+# RC_Mixed: touches one unrelated path and one real path -> fires (any
+#   touch under the prefix is enough).
+
+@prefix backlog: <http://example.org/backlog#> .
+@prefix fw:      <http://example.org/backlog-framework-register#> .
+@prefix ex:      <http://example.org/committest#> .
+
+fw:Register backlog:hasSovereignPathPrefix "backlog-roadmap-framework/" .
+
+ex:RC_Unrelated a backlog:RemoteCommit ; backlog:touchesPath "agentic-sdlc/foo.ttl" .
+
+ex:RC_Real a backlog:RemoteCommit ; backlog:touchesPath "backlog-roadmap-framework/VERSION.txt" .
+
+ex:RC_Mixed a backlog:RemoteCommit ; backlog:touchesPath "agentic-sdlc/bar.ttl" ,
+    "backlog-roadmap-framework/01-ontologies/backlog_tbox_v1_1_0.ttl" .
+
+# v1.1.0 (2026-09-07) -- expected polarity declared on the fixture itself (TBox v1.82.0
+# dropped the AdoptionProfile-only domain): Positive, because the shape(s) it proves are advisory (Warning); it must validate with no Violation.
+# Until now the gate inferred 'expected pass' from this filename and had no way to be right.
+<http://example.org/committest#> backlog:hasExpectedPolarity backlog:Polarity_Positive .

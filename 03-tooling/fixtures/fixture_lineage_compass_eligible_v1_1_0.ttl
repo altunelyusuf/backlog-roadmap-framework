@@ -1,0 +1,29 @@
+# backlog_lineage_compass_v1_0_0.py -- test drive, not a construction.
+#
+# A minimal graph proving the tool's own closure-eligibility and
+# --emit-closure logic, not a SHACL-conformant register (deliberately
+# thin: no Backlog, no Scope, no full lineage chain -- everything
+# backlog_lineage_compass_v1_0_0.py itself actually reads and nothing
+# else). Not run through backlog_validate_v1_5_0.py; it is not meant to.
+#
+# Lin/Mis/Goal/Obj/Obs: one objective, at target, no blockers -> the tool's
+# own CLOSURE READINESS section reports ELIGIBLE and --emit-closure writes
+# a real, clearly-labelled PROPOSED transition rather than applying it.
+
+@prefix backlog: <http://example.org/backlog#> .
+@prefix ex: <http://example.org/compasstest#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+ex:Lin a backlog:Lineage ; backlog:lineageForMission ex:Mis ; backlog:lineageOrdinal 99 ; backlog:lineageArchived false .
+ex:Mis a backlog:Mission ; backlog:hasMissionOutcome backlog:Out_InFlight .
+ex:Goal a backlog:Goal ; backlog:contributesToMission ex:Mis .
+ex:Obj a backlog:Objective ; backlog:contributesToGoal ex:Goal ;
+    backlog:hasBaselineValue "10"^^xsd:decimal ; backlog:hasTargetValue "0"^^xsd:decimal ;
+    backlog:hasTargetDirection backlog:Dir_Decrease .
+ex:Obs a backlog:MetricObservation ; backlog:observationFor ex:Obj ;
+    backlog:hasObservedValue "0"^^xsd:decimal ; backlog:observedAt "2026-09-04T00:00:00Z"^^xsd:dateTime .
+
+# v1.1.0 (2026-09-07) -- expected polarity declared on the fixture itself (TBox v1.82.0
+# dropped the AdoptionProfile-only domain): Negative, because it exists to make the shape(s) named in its header FIRE; a run of it with no violation would mean that clause no longer fires (Polarity_Negative's own definition).
+# Until now the gate inferred 'expected pass' from this filename and had no way to be right.
+<http://example.org/compasstest#> backlog:hasExpectedPolarity backlog:Polarity_Negative .

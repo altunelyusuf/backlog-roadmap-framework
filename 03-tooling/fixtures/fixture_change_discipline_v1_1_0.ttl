@@ -1,0 +1,61 @@
+# Change-request discipline — test drive, not a construction.
+#
+# Proves discrimination for ChangeRequestShape, ImpactAssessmentShape,
+# DispositionRequiresAssessmentShape, AcceptedRequestNeedsScopeChangeShape,
+# and CrossLineageRiskAdvisoryShape.
+#
+# CR_Bad: missing rationale -> ChangeRequestShape fires.
+# CR_NoAssessment: disposed Accepted with no ImpactAssessment naming it ->
+#   DispositionRequiresAssessmentShape fires.
+# CR_NoScopeChange: Accepted, has an assessment, but no ScopeChange records
+#   the admission -> AcceptedRequestNeedsScopeChangeShape fires.
+# CR_Complete: Accepted, real assessment, real ScopeChange -> both silent.
+# IA_Bad: missing impact statement -> ImpactAssessmentShape fires.
+# IA_RiskActive: identifies a real, still-InFlight lineage -> CrossLineageRiskAdvisoryShape fires.
+# IA_RiskClosed: identifies an Achieved lineage -> stays silent.
+
+@prefix backlog: <http://example.org/backlog#> .
+@prefix ex:      <http://example.org/changetest#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+ex:Scope_Test a backlog:ScopeStatement .
+
+ex:CR_Bad a backlog:ChangeRequest ; backlog:requestsChangeTo ex:Scope_Test ;
+    backlog:hasChangeDirection backlog:Direction_Grow ; backlog:hasDisposition backlog:Disp_Pending .
+
+ex:CR_NoAssessment a backlog:ChangeRequest ; backlog:requestsChangeTo ex:Scope_Test ;
+    backlog:hasChangeDirection backlog:Direction_Grow ;
+    backlog:hasChangeRequestRationale "Fixture-only." ; backlog:hasDisposition backlog:Disp_Accepted .
+
+ex:CR_NoScopeChange a backlog:ChangeRequest ; backlog:requestsChangeTo ex:Scope_Test ;
+    backlog:hasChangeDirection backlog:Direction_Grow ;
+    backlog:hasChangeRequestRationale "Fixture-only." ; backlog:hasDisposition backlog:Disp_Accepted .
+ex:IA_NoScopeChange a backlog:ImpactAssessment ; backlog:analyzesRequest ex:CR_NoScopeChange ;
+    backlog:hasImpactStatement "Fixture-only: real assessment exists, no ScopeChange follows it." .
+
+ex:CR_Complete a backlog:ChangeRequest ; backlog:requestsChangeTo ex:Scope_Test ;
+    backlog:hasChangeDirection backlog:Direction_Grow ;
+    backlog:hasChangeRequestRationale "Fixture-only." ; backlog:hasDisposition backlog:Disp_Accepted .
+ex:IA_Complete a backlog:ImpactAssessment ; backlog:analyzesRequest ex:CR_Complete ;
+    backlog:hasImpactStatement "Fixture-only: complete chain." .
+ex:SC_Complete a backlog:ScopeChange ; backlog:changesScope ex:Scope_Test ;
+    backlog:fulfillsRequest ex:CR_Complete ;
+    backlog:admitsItem ex:W_Complete ; backlog:hasScopeChangeRationale "Fixture-only." ; backlog:decidedBy backlog:Owner .
+ex:W_Complete a backlog:Story .
+
+ex:IA_Bad a backlog:ImpactAssessment ; backlog:analyzesRequest ex:CR_Complete .
+
+ex:Mis_Closed a backlog:Mission ; backlog:hasMissionOutcome backlog:Out_Achieved .
+ex:L_Closed a backlog:Lineage ; backlog:lineageForMission ex:Mis_Closed .
+ex:IA_RiskClosed a backlog:ImpactAssessment ; backlog:analyzesRequest ex:CR_Complete ;
+    backlog:hasImpactStatement "Fixture-only." ; backlog:identifiesAffectedLineage ex:L_Closed .
+
+ex:Mis_Active a backlog:Mission ; backlog:hasMissionOutcome backlog:Out_InFlight .
+ex:L_Active a backlog:Lineage ; backlog:lineageForMission ex:Mis_Active .
+ex:IA_RiskActive a backlog:ImpactAssessment ; backlog:analyzesRequest ex:CR_Complete ;
+    backlog:hasImpactStatement "Fixture-only." ; backlog:identifiesAffectedLineage ex:L_Active .
+
+# v1.1.0 (2026-09-07) -- expected polarity declared on the fixture itself (TBox v1.82.0
+# dropped the AdoptionProfile-only domain): Negative, because it exists to make the shape(s) named in its header FIRE; a run of it with no violation would mean that clause no longer fires (Polarity_Negative's own definition).
+# Until now the gate inferred 'expected pass' from this filename and had no way to be right.
+<http://example.org/changetest#> backlog:hasExpectedPolarity backlog:Polarity_Negative .

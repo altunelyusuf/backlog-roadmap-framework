@@ -1,0 +1,26 @@
+# Mission closure requires a real report — test drive, not a construction.
+#
+# Proves MissionClosureRequiresReportShape and ClosureReportShape together.
+#
+# Mis_NoReport: marked Out_Achieved, no ClosureReport names it -> violation.
+# Mis_Reported: marked Out_Achieved, a real, complete ClosureReport names it
+#   -> silent.
+
+@prefix backlog: <http://example.org/backlog#> .
+@prefix ex:      <http://example.org/closuretest#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+ex:Mis_NoReport a backlog:Mission ; backlog:hasMissionOutcome backlog:Out_Achieved .
+
+ex:Mis_Reported a backlog:Mission ; backlog:hasMissionOutcome backlog:Out_Achieved .
+ex:Goal_Reported a backlog:Goal ; backlog:contributesToMission ex:Mis_Reported .
+ex:Obj_Reported a backlog:Objective ; backlog:contributesToGoal ex:Goal_Reported .
+ex:CR_Reported a backlog:ClosureReport ; backlog:closesForMission ex:Mis_Reported ;
+    backlog:reportGeneratedAt "2026-09-04T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasClosureSummary "Fixture-only: a complete, real closure report." ;
+    backlog:reportsOnObjective ex:Obj_Reported .
+
+# v1.1.0 (2026-09-07) -- expected polarity declared on the fixture itself (TBox v1.82.0
+# dropped the AdoptionProfile-only domain): Negative, because it exists to make the shape(s) named in its header FIRE; a run of it with no violation would mean that clause no longer fires (Polarity_Negative's own definition).
+# Until now the gate inferred 'expected pass' from this filename and had no way to be right.
+<http://example.org/closuretest#> backlog:hasExpectedPolarity backlog:Polarity_Negative .

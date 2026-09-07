@@ -1,0 +1,244 @@
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+# Six items scoring identically — the item-level NEXT tie.
+#
+# Reported by an adopting project as two different answers in three runs. Measured
+# here as FIVE different answers in five fresh runs, because Python randomises
+# string hashing per process, set iteration over URIRef therefore varies, and a
+# stable sort on score alone preserved that arbitrary order among equals.
+#
+# Job sizes are deliberately all different (1, 2, 4, 5, 8, 10) so the fixture
+# proves the secondary key is doing the work: US-004 carries the smallest job and
+# must be first in every run.
+
+@prefix backlog: <http://example.org/backlog#> .
+@prefix ex: <http://example.org/t2#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+ex:P a backlog:AdoptionProfile ; backlog:profileAppliesTo "item tie" ;
+    backlog:governsBacklog ex:BL ; backlog:hasConformanceLevel backlog:L1_Core ;
+    backlog:hasTargetConformanceLevel backlog:L2_EvidenceBound ;
+    backlog:hasLevelReviewDate "2026-12-01T00:00:00"^^xsd:dateTime ;
+    backlog:decidedBy backlog:Owner ; backlog:hasDecisionRationale "probe" ;
+    backlog:adoptsFacet backlog:CoreFacet , backlog:PrioritizationFacet , backlog:EvidenceFacet , backlog:InvariantFacet , backlog:AuditFacet .
+ex:BL a backlog:Backlog ; backlog:hasIdentifier "BL" ; backlog:hasState backlog:Proposed ;
+    backlog:appliesDefinitionOfDone ex:DoD_T2 ; backlog:hasCommitment ex:Commit_T2 .
+ex:DoD_T2 a backlog:DefinitionOfDone .
+ex:Commit_T2 a backlog:Commitment ; backlog:commitsToGoal ex:CGoal .
+ex:Lin_T2 a backlog:Lineage ; backlog:lineageArchived false ; backlog:lineageForMission ex:CMission ; backlog:lineageOrdinal 1 .
+
+ex:US001 a backlog:Story ;
+    backlog:hasApplicableConcern backlog:Concern_Data , backlog:Concern_Security ;
+    backlog:hasIdentifier "US-001" ; backlog:hasState backlog:Ready ;
+    backlog:memberOfContainer ex:BL ;
+    backlog:hasPriorityScore ex:S001 ;
+    backlog:hasAcceptanceCriterion ex:AC001 ; backlog:appliesDefinitionOfDone ex:DoD_T2 ;
+    backlog:belongsToLineage ex:Lin_T2 ; backlog:pursuesObjective ex:CObj ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability .
+ex:AC001 a backlog:AcceptanceCriterion ; backlog:hasGherkinText "Given US-001 is implemented, When the suite runs, Then it passes." ;
+    backlog:satisfiedByArtifact "backlog:AcceptanceCriterion" .
+ex:S001 a backlog:WSJFScore ; backlog:scoredByMethod backlog:Method_WSJF ;
+    backlog:hasScoreValue 1.8 ;
+    backlog:hasUserBusinessValue 9.0 ; backlog:hasTimeCriticality 0.0 ;
+    backlog:hasRiskReductionValue 0.0 ; backlog:hasJobSize 5.0 .
+
+ex:US002 a backlog:Story ;
+    backlog:hasApplicableConcern backlog:Concern_Interaction ;
+    backlog:hasIdentifier "US-002" ; backlog:hasState backlog:Ready ;
+    backlog:memberOfContainer ex:BL ;
+    backlog:hasPriorityScore ex:S002 ;
+    backlog:hasAcceptanceCriterion ex:AC002 ; backlog:appliesDefinitionOfDone ex:DoD_T2 ;
+    backlog:belongsToLineage ex:Lin_T2 ; backlog:pursuesObjective ex:CObj ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability .
+ex:AC002 a backlog:AcceptanceCriterion ; backlog:hasGherkinText "Given US-002 is implemented, When the suite runs, Then it passes." ;
+    backlog:satisfiedByArtifact "backlog:AcceptanceCriterion" .
+ex:S002 a backlog:WSJFScore ; backlog:scoredByMethod backlog:Method_WSJF ;
+    backlog:hasScoreValue 1.8 ;
+    backlog:hasUserBusinessValue 3.6 ; backlog:hasTimeCriticality 0.0 ;
+    backlog:hasRiskReductionValue 0.0 ; backlog:hasJobSize 2.0 .
+
+ex:US003 a backlog:Story ;
+    backlog:hasApplicableConcern backlog:Concern_Interface ;
+    backlog:hasIdentifier "US-003" ; backlog:hasState backlog:Ready ;
+    backlog:memberOfContainer ex:BL ;
+    backlog:hasPriorityScore ex:S003 ;
+    backlog:hasAcceptanceCriterion ex:AC003 ; backlog:appliesDefinitionOfDone ex:DoD_T2 ;
+    backlog:belongsToLineage ex:Lin_T2 ; backlog:pursuesObjective ex:CObj ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability .
+ex:AC003 a backlog:AcceptanceCriterion ; backlog:hasGherkinText "Given US-003 is implemented, When the suite runs, Then it passes." ;
+    backlog:satisfiedByArtifact "backlog:AcceptanceCriterion" .
+ex:S003 a backlog:WSJFScore ; backlog:scoredByMethod backlog:Method_WSJF ;
+    backlog:hasScoreValue 1.8 ;
+    backlog:hasUserBusinessValue 18.0 ; backlog:hasTimeCriticality 0.0 ;
+    backlog:hasRiskReductionValue 0.0 ; backlog:hasJobSize 10.0 .
+
+ex:US004 a backlog:Story ;
+    backlog:hasNoApplicableConcern "Fixture story: no stored state, interface, interaction, structure or authorisation is touched." ;
+    backlog:hasIdentifier "US-004" ; backlog:hasState backlog:Ready ;
+    backlog:memberOfContainer ex:BL ;
+    backlog:hasPriorityScore ex:S004 ;
+    backlog:hasAcceptanceCriterion ex:AC004 ; backlog:appliesDefinitionOfDone ex:DoD_T2 ;
+    backlog:belongsToLineage ex:Lin_T2 ; backlog:pursuesObjective ex:CObj ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability .
+ex:AC004 a backlog:AcceptanceCriterion ; backlog:hasGherkinText "Given US-004 is implemented, When the suite runs, Then it passes." ;
+    backlog:satisfiedByArtifact "backlog:AcceptanceCriterion" .
+ex:S004 a backlog:WSJFScore ; backlog:scoredByMethod backlog:Method_WSJF ;
+    backlog:hasScoreValue 1.8 ;
+    backlog:hasUserBusinessValue 1.8 ; backlog:hasTimeCriticality 0.0 ;
+    backlog:hasRiskReductionValue 0.0 ; backlog:hasJobSize 1.0 .
+
+ex:US005 a backlog:Story ;
+    backlog:hasNoApplicableConcern "Fixture story: no stored state, interface, interaction, structure or authorisation is touched." ;
+    backlog:hasIdentifier "US-005" ; backlog:hasState backlog:Ready ;
+    backlog:memberOfContainer ex:BL ;
+    backlog:hasPriorityScore ex:S005 ;
+    backlog:hasAcceptanceCriterion ex:AC005 ; backlog:appliesDefinitionOfDone ex:DoD_T2 ;
+    backlog:belongsToLineage ex:Lin_T2 ; backlog:pursuesObjective ex:CObj ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability .
+ex:AC005 a backlog:AcceptanceCriterion ; backlog:hasGherkinText "Given US-005 is implemented, When the suite runs, Then it passes." ;
+    backlog:satisfiedByArtifact "backlog:AcceptanceCriterion" .
+ex:S005 a backlog:WSJFScore ; backlog:scoredByMethod backlog:Method_WSJF ;
+    backlog:hasScoreValue 1.8 ;
+    backlog:hasUserBusinessValue 7.2 ; backlog:hasTimeCriticality 0.0 ;
+    backlog:hasRiskReductionValue 0.0 ; backlog:hasJobSize 4.0 .
+
+ex:US006 a backlog:Story ;
+    backlog:hasNoApplicableConcern "Fixture story: no stored state, interface, interaction, structure or authorisation is touched." ;
+    backlog:hasIdentifier "US-006" ; backlog:hasState backlog:Ready ;
+    backlog:memberOfContainer ex:BL ;
+    backlog:hasPriorityScore ex:S006 ;
+    backlog:hasAcceptanceCriterion ex:AC006 ; backlog:appliesDefinitionOfDone ex:DoD_T2 ;
+    backlog:belongsToLineage ex:Lin_T2 ; backlog:pursuesObjective ex:CObj ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability .
+ex:AC006 a backlog:AcceptanceCriterion ; backlog:hasGherkinText "Given US-006 is implemented, When the suite runs, Then it passes." ;
+    backlog:satisfiedByArtifact "backlog:AcceptanceCriterion" .
+ex:S006 a backlog:WSJFScore ; backlog:scoredByMethod backlog:Method_WSJF ;
+    backlog:hasScoreValue 1.8 ;
+    backlog:hasUserBusinessValue 14.4 ; backlog:hasTimeCriticality 0.0 ;
+    backlog:hasRiskReductionValue 0.0 ; backlog:hasJobSize 8.0 .
+
+ex:R_US001_Data a backlog:RefinementEvent ; backlog:refines ex:US001 ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-08-01T09:00:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Analysed for data; approach agreed." ;
+    backlog:refinedBy backlog:Builder .
+
+ex:R_US001_Security a backlog:RefinementEvent ; backlog:refines ex:US001 ;
+    backlog:addressesConcern backlog:Concern_Security ;
+    backlog:refinedAt "2026-08-01T09:00:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Analysed for security; approach agreed." ;
+    backlog:refinedBy backlog:Builder .
+
+ex:R_US002_Interaction a backlog:RefinementEvent ; backlog:refines ex:US002 ;
+    backlog:addressesConcern backlog:Concern_Interaction ;
+    backlog:refinedAt "2026-08-01T09:00:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Analysed for interaction; approach agreed." ;
+    backlog:refinedBy backlog:Builder .
+
+ex:R_US003_Interface a backlog:RefinementEvent ; backlog:refines ex:US003 ;
+    backlog:addressesConcern backlog:Concern_Interface ;
+    backlog:refinedAt "2026-08-01T09:00:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Analysed for interface; approach agreed." ;
+    backlog:refinedBy backlog:Builder .
+
+ex:R_US004 a backlog:RefinementEvent ; backlog:refines ex:US004 ;
+    backlog:refinedAt "2026-08-01T09:00:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "No applicable concern; ready as-is." ;
+    backlog:refinedBy backlog:Builder .
+
+ex:R_US005 a backlog:RefinementEvent ; backlog:refines ex:US005 ;
+    backlog:refinedAt "2026-08-01T09:00:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "No applicable concern; ready as-is." ;
+    backlog:refinedBy backlog:Builder .
+
+ex:R_US006 a backlog:RefinementEvent ; backlog:refines ex:US006 ;
+    backlog:refinedAt "2026-08-01T09:00:00"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "No applicable concern; ready as-is." ;
+    backlog:refinedBy backlog:Builder .
+
+<http://example.org/t2#P> backlog:hasExpectedPolarity backlog:Polarity_Positive .
+
+# Conformance-goal pattern (G42/AdoptionConformanceGoalShape), self-contained,
+# using this package's own already-proven Goal_BRSFConformance/Obj_BRSFConformanceHeld
+# structure as the exact template rather than re-deriving requirements by trial.
+ex:CMission a backlog:Mission ;
+    backlog:hasMissionStatement "Fixture conformance-goal test mission." ;
+    backlog:missionFor ex:BL ; backlog:hasMissionOrigin backlog:IOrigin_OwnerStated ;
+    backlog:hasMissionOutcome backlog:Out_InFlight ; backlog:decidedBy backlog:Owner .
+ex:CDel a backlog:ScopeDeliverable ; backlog:hasDeliverableText "Fixture deliverable." ;
+    backlog:derivesFromMissionClause "Fixture conformance-goal test mission." ;
+    backlog:hasScopeLayer backlog:Layer_Product .
+ex:CScope a backlog:ScopeStatement ;
+    backlog:hasScopeStatementText "Fixture conformance-goal test scope." ;
+    backlog:scopeForMission ex:CMission ; backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ;
+    backlog:requiresDeliverable ex:CDel ; backlog:hasScopeExclusion ex:CExcl ;
+    backlog:coversArea ex:CArea .
+ex:CExcl a backlog:ScopeExclusion ; backlog:excludesConcern "Fixture-only exclusion." ;
+    backlog:hasExclusionRationale "Fixture-only, not a real design decision." ; backlog:decidedBy backlog:Owner ;
+    backlog:hasScopeLayer backlog:Layer_Product .
+ex:CArea a backlog:ScopeArea ; backlog:areaLocation "Fixture-only area, no real location." ;
+    backlog:areaMeasure "0 real measure; fixture-only." ; backlog:hasScopeLayer backlog:Layer_Product .
+ex:CGoal a backlog:Goal ; <http://www.w3.org/2000/01/rdf-schema#label> "Fixture conformance goal" ;
+    backlog:isConformanceGoal true ; backlog:contributesToMission ex:CMission ;
+    backlog:derivesFromScope ex:CScope ; backlog:hasGoalFacing backlog:Facing_Mission ;
+    backlog:goalCoversArea ex:CArea ; backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ;
+    backlog:decidedBy backlog:Owner .
+ex:CGoalScope a backlog:Goal ; <http://www.w3.org/2000/01/rdf-schema#label> "Fixture scope-facing goal" ;
+    backlog:contributesToMission ex:CMission ; backlog:derivesFromScope ex:CScope ;
+    backlog:hasGoalFacing backlog:Facing_Scope ; backlog:goalCoversArea ex:CArea ;
+    backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ; backlog:decidedBy backlog:Owner .
+ex:CGoalContain a backlog:Goal ; <http://www.w3.org/2000/01/rdf-schema#label> "Fixture containment-facing goal" ;
+    backlog:contributesToMission ex:CMission ; backlog:derivesFromScope ex:CScope ;
+    backlog:hasGoalFacing backlog:Facing_Containment ; backlog:goalCoversArea ex:CArea ;
+    backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ; backlog:decidedBy backlog:Owner .
+ex:CObjScope a backlog:Objective ; backlog:contributesToGoal ex:CGoalScope ; backlog:fillsScope ex:CScope ;
+    backlog:hasSuccessMetric ex:CMetricScope ; backlog:hasBaselineValue 0.0 ; backlog:hasTargetValue 0.0 ;
+    backlog:hasTargetDirection backlog:Dir_Hold ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ; backlog:decidedBy backlog:Owner .
+ex:CMetricScope a ex:CLocalMetric .
+ex:CObjContain a backlog:Objective ; backlog:contributesToGoal ex:CGoalContain ; backlog:fillsScope ex:CScope ;
+    backlog:hasSuccessMetric ex:CMetricContain ; backlog:hasBaselineValue 0.0 ; backlog:hasTargetValue 0.0 ;
+    backlog:hasTargetDirection backlog:Dir_Hold ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ; backlog:decidedBy backlog:Owner .
+ex:CMetricContain a ex:CLocalMetric .
+ex:CCPScope a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-12-01T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+ex:CObjScope backlog:hasCheckpoint ex:CCPScope .
+ex:CObsScope a backlog:MetricObservation ; backlog:observesMetric ex:CMetricScope ; backlog:observationFor ex:CObjScope ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-09-02T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+    backlog:hasObservationMethod "Fixture-stated value, not re-derivable." .
+ex:CCPContain a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-12-01T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+ex:CObjContain backlog:hasCheckpoint ex:CCPContain .
+ex:CObsContain a backlog:MetricObservation ; backlog:observesMetric ex:CMetricContain ; backlog:observationFor ex:CObjContain ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-09-02T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+    backlog:hasObservationMethod "Fixture-stated value, not re-derivable." .
+ex:CObj a backlog:Objective ;
+    backlog:contributesToGoal ex:CGoal ; backlog:fillsScope ex:CScope ;
+    backlog:hasSuccessMetric ex:CMetric ; backlog:hasBaselineValue 0.0 ; backlog:hasTargetValue 0.0 ;
+    backlog:hasTargetDirection backlog:Dir_Hold ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ; backlog:decidedBy backlog:Owner .
+ex:CMetric a ex:CLocalMetric .
+ex:CCP a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-12-01T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+ex:CObj backlog:hasCheckpoint ex:CCP ; backlog:metricMovableBy ex:US001 , ex:US002 , ex:US003 , ex:US004 , ex:US005 , ex:US006 .
+ex:CObs a backlog:MetricObservation ; backlog:observesMetric ex:CMetric ; backlog:observationFor ex:CObj ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-09-02T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+    backlog:hasObservationMethod "Fixture-stated value, not re-derivable." .
+
+# Blueprint (G45/domain-modeling handover): register-level completeness only,
+# no epic in this fixture decomposes, so no entity coverage needed.
+ex:CBP a backlog:Blueprint ; backlog:blueprintFor ex:BL .
+
+# ---------------------------------------------------------------------------
+# fixture_item_tie_v1_1_0.ttl (2026-09-07) -- brought back to conformance with shapes shipped after
+# this fixture was last edited: the RegisterSession requirement (v1.169.0, G48).
+# This fixture declares Polarity_Positive and was failing on exactly these
+# constraints; the gate could not run at the time (validator pinned to a retired
+# file), so nothing reported it. A known-good fixture that fails certifies
+# nothing (G7). Dates are timezone-less on purpose: shapes v1.100.1 compares
+# lexically, so a legal zone-less xsd:dateTime no longer reads as "passed".
+# ---------------------------------------------------------------------------
+ex:Session_20260907 a backlog:RegisterSession ;
+    rdfs:label "Conformance-restoration session, 7 September"@en ;
+    backlog:sessionFor ex:BL ;
+    backlog:sessionStartedAt "2026-09-07T07:00:00"^^xsd:dateTime ;
+    backlog:sessionEndedAt "2026-09-07T07:30:00"^^xsd:dateTime ;
+    backlog:stateVerifiedAtStart true ;
+    backlog:sessionConductedBy backlog:Builder ;
+    backlog:hasSessionScopeNote "In scope: record this fixture's own maintenance so the register names who last changed it. Deliberately untouched: every item, objective and event above." .
