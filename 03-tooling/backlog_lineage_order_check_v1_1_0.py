@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_lineage_order_check v1.0.0 — did the chain come before the work, or after?
+"""backlog_lineage_order_check v1.1.0 — did the chain come before the work, or after?
 
 THE ESCAPE THIS CATCHES. A lineage is Mission -> Scope -> Goal -> Objective -> Backlog,
 one commit per stage, and only then work items (LINEAGE_OPERATING_DISCIPLINE, ceremony
@@ -43,7 +43,23 @@ FIXTURE PATH. --witness <json> replaces git with a {local_name: [commit, epoch]}
 fixture with a known answer can exercise all three verdicts (G7) without a repository.
 Both modes run the identical classification code.
 
-Exit: 0 ORDERED/UNWITNESSED only; 2 any BYPASS without an answering restart; 1 on error.
+v1.1.0 -- THE LOOP'S STOP CONDITION, by convergence, never by count (TBox v1.84.0).
+A restart answers a bypass; nothing in v1.0.0 stopped bypass -> restart -> bypass forever,
+and every turn can lose work. Three measurements, from the trials themselves:
+  DELIBERATION  (git) the restart first appears strictly after the bypass it answers, and
+                the rebuilt Stage_Mission output strictly after the restart. Same commit =
+                no separate act of deciding was witnessed -> THRASH (Thrash_NotDeliberated).
+  NOVELTY       (register) a later bypass on a restarted lineage names at least one item no
+                earlier bypass on that lineage named. If not -> THRASH (Thrash_NoNovelty).
+  ADMISSION     (register) an item admitted by an earlier rebuild is named again by a later
+                bypass -> THRASH (Thrash_AdmissionLost). (Retraction without re-admission is
+                RestartKeepsAdmissionsShape's business.)
+A thrash is printed, exit 2, and with --emit written as a backlog:LineageThrash for the
+owner to append; the shapes then require the lineage frozen until the owner rules.
+A frozen lineage (lineageFrozen true, no frozenRuling) is reported FROZEN and not measured
+further -- it is waiting, not failing.
+
+Exit: 0 ORDERED/UNWITNESSED/RESTARTED/FROZEN; 2 BYPASS unanswered or THRASH unrecorded; 1 on error.
 """
 import glob, json, os, re, subprocess, sys, time
 from rdflib import Graph, Namespace, RDF, URIRef
@@ -162,9 +178,49 @@ def classify(g, L, witness, prefix):
             pf = witness.first(local(pe), prefix)
             if pf and pf[1] > item_first[ln][1]:
                 planned_late.append((ln, item_first[ln], local(pe), pf))
+    # 3c. deliberation (v1.1.0): restart after its bypass, rebuilt Mission after restart
+    thrash = []   # (kind, bypass, restart, lost_items, detail)
+    for r in restarts:
+        rf = witness.first(local(r), prefix)
+        for b in g.objects(r, B.answersBypass):
+            bf = witness.first(local(b), prefix)
+            if rf and bf and rf[1] <= bf[1]:
+                thrash.append(("Thrash_NotDeliberated", b, r, [], f"restart {local(r)} first {rf[0]} not after its bypass {local(b)} first {bf[0]}"))
+        mf = out_first.get("Stage_Mission")
+        if rf and mf and mf[1] <= rf[1]:
+            for b in g.objects(r, B.answersBypass):
+                thrash.append(("Thrash_NotDeliberated", b, r, [], f"rebuilt Stage_Mission output first {mf[0]} not after restart {local(r)} first {rf[0]}"))
+    # 3d. novelty + admission across successive bypasses (v1.1.0)
+    all_b = [b for b in g.subjects(B.bypassedLineage, L)]
+    def when(b):
+        v = g.value(b, B.detectedAt); return str(v) if v is not None else ""
+    all_b.sort(key=when)
+    seen = set()
+    for idx, b in enumerate(all_b):
+        names = {local(i) for i in g.objects(b, B.bypassedItem)}
+        answered = [r for r in restarts if (r, B.answersBypass, b) in g]
+        if idx > 0:
+            prior_r = [r for r in restarts if any((r, B.answersBypass, pb) in g for pb in all_b[:idx])]
+            if names and not (names - seen):
+                thrash.append(("Thrash_NoNovelty", b, prior_r[-1] if prior_r else None, [],
+                               f"bypass {local(b)} names {sorted(names)} -- all named by earlier bypasses"))
+            # admitted by the chain that existed when this bypass was measured (its own
+            # bypassedOutput set) and named again: work an earlier rebuild had taken in
+            pre_chain = set(g.objects(b, B.bypassedOutput))
+            lost = sorted({local(i) for i in g.objects(b, B.bypassedItem)
+                           if g.value(i, B.admittedByOutput) in pre_chain})
+            if lost:
+                thrash.append(("Thrash_AdmissionLost", b, prior_r[-1] if prior_r else None, lost,
+                               f"bypass {local(b)} names admitted items {sorted(lost)}"))
+        seen |= names
     # 4. single-commit case
     commits = {f[0] for f in out_first.values()} | {f[0] for f in item_first.values()}
-    if problems or bypassed:
+    fro = g.value(L, B.lineageFrozen)
+    if fro is not None and bool(fro.toPython()) and g.value(L, B.frozenRuling) is None:
+        verdict = "FROZEN"
+    elif thrash:
+        verdict = "THRASH"
+    elif problems or bypassed:
         verdict = "BYPASS"
     elif len(commits) == 1 and out_first and item_first:
         verdict = "UNWITNESSED"
@@ -176,7 +232,7 @@ def classify(g, L, witness, prefix):
         verdict = "ORDERED"
     return verdict, {"outputs": out_first, "items": item_first, "bypassed": bypassed,
                      "problems": problems, "restart": restart_at, "all_outputs": [o for v in outs.values() for o in v],
-                     "planned_late": planned_late}
+                     "planned_late": planned_late, "thrash": thrash}
 
 
 def emit_bypass(g, L, d, prefix_iri):
@@ -198,6 +254,30 @@ def emit_bypass(g, L, d, prefix_iri):
     lines.append(f'    backlog:detectedBy "{TOOL}" ;')
     lines.append('    backlog:hasRationale "' + "; ".join(d["problems"] + [f"{ln} first appears {f[0]} before Stage_Backlog output {a}" for ln, f, a in d["bypassed"]]).replace('"', "'") + '" .')
     return "\n".join(lines)
+
+
+def emit_thrash(g, L, d, fw):
+    out = []
+    for n, (kind, b, r, lost, detail) in enumerate(d["thrash"], 1):
+        name = f"Thrash_{local(L)}_{time.strftime('%Y%m%d')}_{n}"
+        lines = [f"{fw}{name} a backlog:LineageThrash ;",
+                 f"    backlog:thrashedLineage {fw}{local(L)} ;",
+                 f"    backlog:hasFailureMode backlog:FM_LineageThrash ;",
+                 f"    backlog:hasFindingScope backlog:Scope_Methodology ;",
+                 f"    backlog:hasThrashKind backlog:{kind} ;",
+                 f"    backlog:repeatedBypass {fw}{local(b)} ;"]
+        if r is not None:
+            lines.append(f"    backlog:priorRestart {fw}{local(r)} ;")
+        for i in lost:
+            lines.append(f"    backlog:lostItem {fw}{i} ;")
+        lines.append(f'    backlog:hasRootCause "{detail.replace(chr(34), chr(39))}. Successive trials on this lineage are not converging; a further restart would be a turn of the loop, not a correction." ;')
+        lines.append(f'    backlog:detectedAt "{time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}"^^xsd:dateTime ;')
+        lines.append(f'    backlog:detectedBy "{TOOL}" ;')
+        lines.append(f"    backlog:belongsToLineage {fw}{local(L)} .")
+        lines.append(f"{fw}{local(L)} backlog:lineageFrozen true ; backlog:frozenBy {fw}{name} .")
+        lines.append(f"# owner's ruling goes here when made: {fw}{local(L)} backlog:frozenRuling \"...\" ; backlog:decidedBy backlog:Owner .")
+        out.append("\n".join(lines))
+    return "\n\n".join(out)
 
 
 def main():
@@ -246,6 +326,14 @@ def main():
             print(f"      - {ln} first {f[0]} < Stage_Backlog output {a}")
         for ln, f, pe, pf in d["planned_late"]:
             print(f"      - PLANNED_LATE {ln} first {f[0]} < its PlanningEvent {pe} first {pf[0]}")
+        for kind, b, r, lost, detail in d["thrash"]:
+            print(f"      - THRASH {kind}: {detail}")
+        if verdict == "THRASH":
+            recorded = any((t, B.thrashedLineage, L) in g for t in g.subjects(RDF.type, B.LineageThrash))
+            if not recorded:
+                worst = 2
+                if emit:
+                    emitted.append(emit_thrash(g, L, d, prefix))
         if verdict == "BYPASS":
             answered = any((b, B.bypassedLineage, L) in g and any(True for _ in g.subjects(B.answersBypass, b))
                            for b in g.subjects(RDF.type, B.LineageBypass))
@@ -260,7 +348,7 @@ def main():
         print("\n# --- emitted findings (append to the register; the shapes then require a LineageRestart) ---")
         print("\n\n".join(emitted))
     if worst:
-        print("VERDICT     : BYPASS — a live lineage's chain was closed after its work; unfreeze and restart it, do not backfill")
+        print("VERDICT     : FAIL — a live lineage is bypassed without a restart, or its restarts are not converging without a thrash record; see above")
     else:
         print("VERDICT     : PASS — every live lineage's chain is witnessed in order, or its order is unwitnessed and disclosed")
     return worst

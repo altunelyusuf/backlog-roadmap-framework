@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.83.0> ;
-    owl:versionInfo "1.83.0" ;
+    owl:versionIRI <http://example.org/backlog/1.84.0> ;
+    owl:versionInfo "1.84.0" ;
+    owl:priorVersion <http://example.org/backlog/1.83.0> ;
     owl:priorVersion <http://example.org/backlog/1.82.0> ;
     owl:priorVersion <http://example.org/backlog/1.81.0> ;
     owl:priorVersion <http://example.org/backlog/1.80.0> ;
@@ -6399,12 +6400,12 @@ backlog:chainClosedCommit a owl:DatatypeProperty , owl:FunctionalProperty ;
     skos:definition "\"<commit> <unix time>\" at which the lineage's Stage_Backlog output first appeared -- or the literal \"absent\" when no such output exists yet, which is the same escape one step earlier."@en .
 
 backlog:detectedAt a owl:DatatypeProperty , owl:FunctionalProperty ;
-    rdfs:domain backlog:LineageBypass ; rdfs:range xsd:dateTime ;
+    rdfs:domain backlog:RetrospectiveFinding ; rdfs:range xsd:dateTime ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "detected at"@en .
 
 backlog:detectedBy a owl:DatatypeProperty , owl:FunctionalProperty ;
-    rdfs:domain backlog:LineageBypass ; rdfs:range xsd:string ;
+    rdfs:domain backlog:RetrospectiveFinding ; rdfs:range xsd:string ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "detected by"@en ;
     skos:definition "The tool file name and version that produced this finding, so the measurement can be re-run."@en .
@@ -6454,3 +6455,104 @@ backlog:admittedByOutput a owl:ObjectProperty , owl:FunctionalProperty ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "admitted by output"@en ;
     skos:definition "The rebuilt, non-retracted Stage_Backlog output that took this pre-lineage item into the restarted chain. Until it is set, the item is work the lineage does not yet own."@en .
+
+#################################################################
+#  v1.84.0 (2026-09-07) -- LINEAGE THRASH: the stop condition for
+#  restart loops, decided by convergence, never by a count.
+#
+#  A restart answers a bypass. Nothing stops bypass -> restart ->
+#  bypass -> restart forever, and each turn of that loop can lose
+#  work: a second restart retracts the output that admitted an item
+#  the first rebuild had taken in. The register already records
+#  enough to decide, from the trials themselves, whether a further
+#  restart adds anything:
+#    NOVELTY     a new bypass names at least one item that no earlier
+#                bypass on this lineage named. If not, it is the same
+#                finding again (L-71: duplicate-screen), not grounds
+#                for a new restart.
+#    ADMISSION   a new bypass, or a new restart's retraction, must not
+#                undo what the last rebuild admitted: an item admitted
+#                by rebuild N and bypassed or orphaned by N+1 is work
+#                lost in the loop. Measured, not counted.
+#    DELIBERATION the restart first appears in git strictly after its
+#                bypass, and the rebuilt Mission output strictly after
+#                the restart. One commit for finding+restart+rebuild is
+#                the backfill wearing a restart's name; the git witness
+#                that finds bypasses refuses it (tool-side).
+#  When a trial adds nothing the previous one did not, the lineage is
+#  FROZEN under a LineageThrash finding: no further LineageRestart is
+#  accepted, and the owner rules -- Out_Abandoned, a ScopeChange, or
+#  an explicit unfreeze -- never the machine (G61: exhausted attempts
+#  can suggest closure-with-failure, never force it).
+#################################################################
+
+backlog:FM_LineageThrash a owl:NamedIndividual , backlog:FailureMode ;
+    rdfs:label "Lineage thrash"@en ;
+    backlog:hasModeScope backlog:Scope_Methodology ;
+    skos:definition "Successive bypass/restart trials on one lineage are not converging: a new bypass names no item an earlier one did not, or a rebuild's admissions are undone by the next trial, or a restart was not deliberated in a separate commit. Decided from the record of the trials, never from how many there were."@en .
+
+backlog:LineageThrash a owl:Class ;
+    rdfs:subClassOf backlog:RetrospectiveFinding ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Lineage Thrash"@en ;
+    skos:definition "A recorded detection of FM_LineageThrash: which lineage, which bypass repeated an earlier one (or which restart lost admissions), what kind of non-convergence, and which items were lost. Written by backlog_lineage_order_check from the register and git, never by hand. Its existence on a live lineage obliges the lineage to be frozen (lineageFrozen true) until the owner rules; it never decides the ruling."@en .
+
+backlog:thrashedLineage a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:LineageThrash ; rdfs:range backlog:Lineage ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "thrashed lineage"@en .
+
+backlog:repeatedBypass a owl:ObjectProperty ;
+    rdfs:domain backlog:LineageThrash ; rdfs:range backlog:LineageBypass ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "repeated bypass"@en ;
+    skos:definition "The later bypass that added nothing to an earlier one, or that named items a rebuild had admitted."@en .
+
+backlog:priorRestart a owl:ObjectProperty ;
+    rdfs:domain backlog:LineageThrash ; rdfs:range backlog:LineageRestart ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "prior restart"@en ;
+    skos:definition "The restart whose rebuild the repeated bypass shows to have been a fill, or whose admissions were lost."@en .
+
+backlog:lostItem a owl:ObjectProperty ;
+    rdfs:domain backlog:LineageThrash ; rdfs:range backlog:WorkItem ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "lost item"@en ;
+    skos:definition "A work item admitted by an earlier rebuild and bypassed or orphaned again by the next trial -- the lineage activity the loop lost."@en .
+
+backlog:ThrashKind a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:Thrash_NoNovelty backlog:Thrash_AdmissionLost backlog:Thrash_NotDeliberated ) ;
+    rdfs:label "Thrash Kind"@en .
+backlog:Thrash_NoNovelty a owl:NamedIndividual , backlog:ThrashKind ;
+    rdfs:label "No novelty"@en ;
+    skos:definition "Every item the new bypass names was already named by an earlier bypass on the same lineage: the same finding again."@en .
+backlog:Thrash_AdmissionLost a owl:NamedIndividual , backlog:ThrashKind ;
+    rdfs:label "Admission lost"@en ;
+    skos:definition "An item a rebuild admitted is bypassed again, or the output that admitted it is retracted with no re-admission: work lost in the loop."@en .
+backlog:Thrash_NotDeliberated a owl:NamedIndividual , backlog:ThrashKind ;
+    rdfs:label "Not deliberated"@en ;
+    skos:definition "The restart, or the rebuilt Mission output, first appears in git in the same commit as the finding it answers: no separate act of deciding is witnessed."@en .
+
+backlog:hasThrashKind a owl:ObjectProperty ;
+    rdfs:domain backlog:LineageThrash ; rdfs:range backlog:ThrashKind ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has thrash kind"@en .
+
+backlog:lineageFrozen a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:Lineage ; rdfs:range xsd:boolean ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "lineage frozen"@en ;
+    skos:definition "True while a LineageThrash stands against this lineage and the owner has not ruled. A frozen lineage accepts no LineageRestart; it is left as it is until frozenRuling records the owner's decision."@en .
+
+backlog:frozenBy a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:Lineage ; rdfs:range backlog:LineageThrash ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "frozen by"@en .
+
+backlog:frozenRuling a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:Lineage ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "frozen ruling"@en ;
+    skos:definition "The owner's ruling that lifts a freeze: an Out_Abandoned transition on the mission, a ScopeChange, or an explicit unfreeze with its reason. Recorded verbatim, decidedBy Owner on the lineage. Absent while the lineage waits."@en .

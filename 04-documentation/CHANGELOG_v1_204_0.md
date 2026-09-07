@@ -1,5 +1,37 @@
 # Changelog
 
+## v1.204.0 — 2026-09-07 (MINOR: the restart loop's stop condition — convergence, never a count)
+
+**Owner's question after v1.203.0:** what prevents bypass → restart → bypass forever, and the loss
+of lineage activity in each trial, without a preset number? `G82` records the answer.
+
+- TBox v1.84.0: `FM_LineageThrash`; `LineageThrash` (⊑ RetrospectiveFinding) with `thrashedLineage`,
+  `repeatedBypass`, `priorRestart`, `lostItem`, `hasThrashKind` over `ThrashKind`
+  {`Thrash_NoNovelty`, `Thrash_AdmissionLost`, `Thrash_NotDeliberated`}; on `Lineage`:
+  `lineageFrozen`, `frozenBy`, `frozenRuling`. `detectedAt`/`detectedBy` domains widened to
+  `RetrospectiveFinding`.
+- Shapes v1.102.0: `RestartRequiresNoveltyShape`, `RestartKeepsAdmissionsShape`,
+  `ThrashFreezesLineageShape`, `NoRestartOnFrozenLineageShape`, `LineageThrashShape` — all Violation.
+  Proven by `fixture_lineage_thrash_v1_0_0` (converging second trial, 0 violations) and
+  `fixture_lineage_thrash_negative_v1_0_0` (all five fire), each with a witness map.
+- `backlog_lineage_order_check_v1_1_0.py`: deliberation witnessed in git (restart after bypass,
+  rebuilt Mission after restart); novelty and admission compared across successive bypasses;
+  FROZEN lineages reported as waiting; `--emit` writes the `LineageThrash` plus the freeze triples
+  for the owner to append. Admission-loss scoped to the chain that existed when the bypass was
+  measured (`bypassedOutput`), so a rebuild's own later admissions are never counted as loss.
+- `backlog_gate_v1_5_0.sh`: self-proof extended to the thrash pair.
+- Standard v1.90.0 (§2.5c-xxi-c), discipline v53.0.0 (standing rule + `G82`).
+- Register v9.52.0: **the new check caught its own author.** `Bypass_L_ChangeDiscipline_20260907`
+  and `Restart_L_ChangeDiscipline_20260907` both first appear at `0251509` (v1.203.0) — finding and
+  restart in one commit, `Thrash_NotDeliberated` by the rule this release ships. Recorded as measured
+  (`Thrash_L_ChangeDiscipline_20260907_1`), lineage 8 frozen, no ruling assumed: the owner's
+  instruction did precede the commit, but the repository cannot witness a conversation, and the
+  session that wrote the rule gets no exception from it. `frozenRuling` is the owner's. Lineage 7
+  ORDERED. 0 violations, 117 warnings.
+
+**Disclosed:** `backlog_lineage_compass` does not yet surface frozen lineages or propose a ruling;
+the order check does. The `G80` `submittedTo` shape candidate is still not built.
+
 ## v1.203.0 — 2026-09-07 (MINOR: lineage escape caught by the git witness; a bypass is answered by a restart, never a backfill)
 
 **Owner's request, from a parallel session's observation:** lineages are bypassed and the finished

@@ -1,0 +1,74 @@
+@prefix backlog: <http://example.org/backlog#> .
+@prefix ex:      <http://example.org/lineage-thrash-neg#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+# Lineage thrash -- test drive, not a construction. NEGATIVE.
+# Five escapes, one per v1.102.0 shape, on minimal graphs:
+#  1. RestartRequiresNoveltyShape   L1: Restart2 answers Bypass2 which names only S1, already named by Bypass1.
+#  2. RestartKeepsAdmissionsShape   L1: Restart2 retracts R_Backlog which admitted S1; nothing re-admits S1.
+#  3. ThrashFreezesLineageShape     L2: Thrash_L2 stands against it, lineage not frozen, no ruling.
+#  4. NoRestartOnFrozenLineageShape L3: frozen (no ruling) and a NEW Restart_L3 (answering a bypass
+#                                    detected after the freeze) recorded anyway; the restart the thrash
+#                                    judged is the record and is not refused.
+#  5. LineageThrashShape            Thrash_Bad names a bypass of another lineage and no kind.
+# Witness map: Restart1 in the SAME commit as Bypass1 (c9) -> order check reports
+# Thrash_NotDeliberated for L1 and exits 2.
+
+ex:L1 a backlog:Lineage ; backlog:lineageOrdinal 1 ; backlog:lineageArchived false .
+ex:S1 a backlog:Story ; backlog:hasIdentifier "S1" ; backlog:hasState backlog:Proposed ; backlog:belongsToLineage ex:L1 ;
+    backlog:preLineageItem true ; backlog:admittedByOutput ex:R_Backlog .
+ex:O_Backlog a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage ex:L1 ; backlog:closedAtCommit "c8" ; backlog:hasStateDigest "d5" ; backlog:outputRetracted true .
+ex:Bypass1 a backlog:LineageBypass ; backlog:bypassedLineage ex:L1 ; backlog:hasFailureMode backlog:FM_LineageBypass ;
+    backlog:hasFindingScope backlog:Scope_Methodology ; backlog:hasRootCause "fixture" ;
+    backlog:bypassedItem ex:S1 ; backlog:itemFirstCommit "S1 c1 1000" ; backlog:bypassedOutput ex:O_Backlog ; backlog:chainClosedCommit "c8 8000" ;
+    backlog:detectedAt "2026-09-07T09:00:00Z"^^xsd:dateTime ; backlog:detectedBy "fixture" .
+ex:Restart1 a backlog:LineageRestart ; backlog:restartsLineage ex:L1 ; backlog:answersBypass ex:Bypass1 ;
+    backlog:retractsOutput ex:O_Backlog ; backlog:restartedAtCommit "c9" ; backlog:decidedBy backlog:Owner .
+ex:R_Mission a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Mission ; backlog:belongsToLineage ex:L1 ; backlog:closedAtCommit "c9" ; backlog:hasStateDigest "e1" ; backlog:outputRetracted true .
+ex:R_Backlog a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage ex:L1 ; backlog:consumesOutput ex:R_Mission ; backlog:closedAtCommit "c12" ; backlog:hasStateDigest "e5" ; backlog:outputRetracted true .
+# second trial: same finding again, and it drops S1's admission
+ex:Bypass2 a backlog:LineageBypass ; backlog:bypassedLineage ex:L1 ; backlog:hasFailureMode backlog:FM_LineageBypass ;
+    backlog:hasFindingScope backlog:Scope_Methodology ; backlog:hasRootCause "fixture" ;
+    backlog:bypassedItem ex:S1 ; backlog:itemFirstCommit "S1 c1 1000" ; backlog:bypassedOutput ex:R_Mission , ex:R_Backlog ; backlog:chainClosedCommit "c12 12000" ;
+    backlog:detectedAt "2026-09-07T10:00:00Z"^^xsd:dateTime ; backlog:detectedBy "fixture" .
+ex:Restart2 a backlog:LineageRestart ; backlog:restartsLineage ex:L1 ; backlog:answersBypass ex:Bypass2 ;
+    backlog:retractsOutput ex:R_Mission , ex:R_Backlog ; backlog:restartedAtCommit "c13" ; backlog:decidedBy backlog:Owner .
+
+ex:L2 a backlog:Lineage ; backlog:lineageOrdinal 2 ; backlog:lineageArchived false .
+ex:Bypass_L2 a backlog:LineageBypass ; backlog:bypassedLineage ex:L2 ; backlog:hasFailureMode backlog:FM_LineageBypass ;
+    backlog:hasFindingScope backlog:Scope_Methodology ; backlog:hasRootCause "fixture" ;
+    backlog:bypassedItem ex:S2 ; backlog:itemFirstCommit "S2 c1 1000" ; backlog:chainClosedCommit "absent" ;
+    backlog:detectedAt "2026-09-07T09:00:00Z"^^xsd:dateTime ; backlog:detectedBy "fixture" .
+ex:S2 a backlog:Story ; backlog:hasIdentifier "S2" ; backlog:hasState backlog:Proposed ; backlog:belongsToLineage ex:L2 .
+ex:Thrash_L2 a backlog:LineageThrash ; backlog:thrashedLineage ex:L2 ; backlog:hasFailureMode backlog:FM_LineageThrash ;
+    backlog:hasFindingScope backlog:Scope_Methodology ; backlog:hasRootCause "fixture" ;
+    backlog:hasThrashKind backlog:Thrash_NoNovelty ; backlog:repeatedBypass ex:Bypass_L2 ;
+    backlog:detectedAt "2026-09-07T10:00:00Z"^^xsd:dateTime ; backlog:detectedBy "fixture" .
+
+ex:L3 a backlog:Lineage ; backlog:lineageOrdinal 3 ; backlog:lineageArchived false ; backlog:lineageFrozen true ; backlog:frozenBy ex:Thrash_L3 .
+ex:Bypass_L3 a backlog:LineageBypass ; backlog:bypassedLineage ex:L3 ; backlog:hasFailureMode backlog:FM_LineageBypass ;
+    backlog:hasFindingScope backlog:Scope_Methodology ; backlog:hasRootCause "fixture" ;
+    backlog:bypassedItem ex:S3 ; backlog:itemFirstCommit "S3 c1 1000" ; backlog:chainClosedCommit "absent" ;
+    backlog:detectedAt "2026-09-07T09:00:00Z"^^xsd:dateTime ; backlog:detectedBy "fixture" .
+ex:S3 a backlog:Story ; backlog:hasIdentifier "S3" ; backlog:hasState backlog:Proposed ; backlog:belongsToLineage ex:L3 .
+ex:Thrash_L3 a backlog:LineageThrash ; backlog:thrashedLineage ex:L3 ; backlog:hasFailureMode backlog:FM_LineageThrash ;
+    backlog:hasFindingScope backlog:Scope_Methodology ; backlog:hasRootCause "fixture" ;
+    backlog:hasThrashKind backlog:Thrash_AdmissionLost ; backlog:repeatedBypass ex:Bypass_L3 ;
+    backlog:detectedAt "2026-09-07T10:00:00Z"^^xsd:dateTime ; backlog:detectedBy "fixture" .
+ex:Bypass_L3b a backlog:LineageBypass ; backlog:bypassedLineage ex:L3 ; backlog:hasFailureMode backlog:FM_LineageBypass ;
+    backlog:hasFindingScope backlog:Scope_Methodology ; backlog:hasRootCause "fixture" ;
+    backlog:bypassedItem ex:S3 ; backlog:itemFirstCommit "S3 c1 1000" ; backlog:chainClosedCommit "absent" ;
+    backlog:detectedAt "2026-09-07T11:00:00Z"^^xsd:dateTime ; backlog:detectedBy "fixture" .
+# a NEW restart after the freeze, answering a new bypass, with no ruling: refused
+ex:Restart_L3 a backlog:LineageRestart ; backlog:restartsLineage ex:L3 ; backlog:answersBypass ex:Bypass_L3b ;
+    backlog:retractsOutput ex:O3 ; backlog:restartedAtCommit "c30" ; backlog:decidedBy backlog:Owner .
+ex:O3 a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage ex:L3 ; backlog:closedAtCommit "c8" ; backlog:hasStateDigest "x" ; backlog:outputRetracted true .
+
+ex:Thrash_Bad a backlog:LineageThrash ; backlog:thrashedLineage ex:L2 ; backlog:hasFailureMode backlog:FM_LineageThrash ;
+    backlog:hasFindingScope backlog:Scope_Methodology ; backlog:hasRootCause "fixture" ;
+    backlog:repeatedBypass ex:Bypass_L3 ;
+    backlog:detectedAt "2026-09-07T10:00:00Z"^^xsd:dateTime ; backlog:detectedBy "fixture" .
+
+<http://example.org/lineage-thrash-neg#> backlog:hasExpectedPolarity backlog:Polarity_Negative .

@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.89.0
+# Backlog & Roadmap Semantic Framework — Standard v1.90.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -698,6 +698,35 @@ the rebuild off the retracted chain; `PreLineageItemShape` allows an item back i
 ignores retracted outputs. Measured on this package's own register the day it was built: lineage 7
 ORDERED, lineage 8 BYPASS (items at `b48a787`, backlog output at `16633a4`) — restarted in the same
 release.
+
+### 2.5c-xxi-c The restart loop stops by convergence, never by count
+
+A restart answers a bypass; nothing in the previous section stops bypass → restart → bypass
+forever, and every turn of that loop can lose work. The stop condition is decided from the trials
+themselves, not from how many there were — a fixed count would be exactly the ungrounded threshold
+G61 rejected. Three measurements, all computable from what the register and the repository already
+hold:
+
+- **Novelty.** A later bypass on a restarted lineage must name at least one item no earlier bypass on
+  that lineage named. If it does not, it is the same finding again (the duplicate-screen L-71 applies
+  to findings), and a restart on it is a turn of the loop, not a correction —
+  `RestartRequiresNoveltyShape`.
+- **Admission.** What a rebuild admitted is not lost by the next trial: an item admitted by rebuild N
+  and named again by bypass N+1, or orphaned when restart N+1 retracts the output that admitted it
+  with no re-admission, is lineage work lost in the loop — `RestartKeepsAdmissionsShape`.
+- **Deliberation.** The restart first appears in git strictly after the bypass it answers, and the
+  rebuilt `Stage_Mission` output strictly after the restart. Finding, restart and rebuild in one
+  commit is the backfill wearing a restart's name; the git witness refuses it (tool-side, since a
+  shape cannot read commits).
+
+When a trial adds nothing the previous one did not, the tool writes a `LineageThrash` (`ThrashKind`
+`Thrash_NoNovelty`, `Thrash_AdmissionLost` or `Thrash_NotDeliberated`, naming the repeated bypass,
+the prior restart and any `lostItem`), and the lineage is **frozen**: `lineageFrozen true`,
+`frozenBy` the finding. A frozen lineage accepts no further `LineageRestart`
+(`NoRestartOnFrozenLineageShape`, `ThrashFreezesLineageShape`); it waits for `frozenRuling` — the
+owner's decision, recorded verbatim: `Out_Abandoned` on the mission, a `ScopeChange`, or an explicit
+unfreeze with its reason. The machine detects non-convergence and stops; it never chooses the outcome
+(G61).
 
 ### 2.5c-xxii The staged ceremony, one commit per stage
 

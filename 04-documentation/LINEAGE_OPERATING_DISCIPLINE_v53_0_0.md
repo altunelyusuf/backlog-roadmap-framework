@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v52.0.0
+# Lineage Operating Discipline — v53.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -261,6 +261,12 @@ because a fixture existed that exercised the new member, which is G7 applied to 
   chain, the outputs written after the work are retracted (kept, marked, never deleted) and the
   chain starts again from Mission. Enforced by `BypassRequiresRestartShape`, `LineageRestartShape`,
   `RetractedOutputConsumedShape`, `PreLineageItemShape` (v1.101.0) and the lineage-order gate.
+- **A restart loop stops by convergence, never by count.** A second restart must answer a bypass
+  that names something new, must not lose what the last rebuild admitted, and must be witnessed in a
+  commit after its bypass. Otherwise the lineage is frozen under a `LineageThrash` until the owner
+  rules. Enforced by `RestartRequiresNoveltyShape`, `RestartKeepsAdmissionsShape`,
+  `ThrashFreezesLineageShape`, `NoRestartOnFrozenLineageShape`, `LineageThrashShape` (v1.102.0) and
+  the order check's deliberation witness.
 - **A deployment carries only proven work** — at L4 every deployed item is `Done`, carries
   bridge-verified `Evidence`, and has **every** acceptance criterion attested. That last is coverage
   at release time: a suite can be green while the criterion everyone cared about is untested.
@@ -2165,3 +2171,43 @@ its order unprovable, and the check now says so on every run.
 **Classified at logging time (L-112):** a genuine gap. Nothing in the framework could have found
 this from the register; the finding required an external witness the framework had named (G18) but
 never consulted mechanically.
+
+## G82 — A restart loop stops when a trial adds nothing, not when a counter runs out
+
+**Asked directly, after G81 shipped:** bypass → restart → bypass could run forever, and each turn
+might lose lineage activity; a stop condition was wanted, "but not preset numbers". The instinct to
+write `maxRestarts 3` is the fixed-count threshold G61 already rejected as having no objective
+grounding, and G43/G46 name the same dishonest-fit failure for severities.
+
+**What decides instead.** The register after G81 records enough about every trial to judge the next
+one from evidence: which items each bypass named, which outputs each restart retracted, which output
+admitted which item, and — through the git witness — the order in which finding, restart and rebuild
+actually appeared. Three properties of a converging sequence follow, none of them a count:
+**novelty** (a later bypass names something no earlier one did), **admission kept** (nothing the last
+rebuild admitted is lost or re-bypassed), **deliberation** (restart after finding, rebuild after
+restart, in separate commits). A trial that fails any of them is not a correction but a turn of the
+loop, and the loop is stopped there: a `LineageThrash` names the repeated finding, the prior restart
+and the lost items; the lineage is frozen; no further restart is accepted; the owner rules.
+
+**Loss is now measurable, which is the point.** "Lineage activities lost in each trial" was a fear;
+`lostItem` makes it a fact on the record — an item admitted by rebuild N and dropped by N+1. Nothing
+is ever deleted (retraction keeps the chain), so the loss is in ownership, not in bytes, and the
+shape refuses the restart that would cause it unless the same restart's rebuild re-admits the item.
+
+**Frozen is a state, not a verdict.** The machine detects non-convergence and stops. What follows —
+`Out_Abandoned`, a `ScopeChange`, an explicit unfreeze with its reason — is `frozenRuling`, the
+owner's, recorded verbatim; the order check reports a frozen lineage as waiting and measures it no
+further. This is G61's asymmetry kept intact: exhausted attempts can suggest closure-with-failure,
+never force it.
+
+**Proven before shipping (G7).** `fixture_lineage_thrash` (a second trial that converges: novel item,
+admissions kept and extended, deliberated) validates with 0 violations and the check reports ORDERED;
+`fixture_lineage_thrash_negative` makes all five shapes fire and the check report all three thrash
+kinds. Measured on this package's own register, the check's first act was to catch its own author:
+lineage 8's bypass and restart were published in one commit (`0251509`, v1.203.0) —
+`Thrash_NotDeliberated`. The owner's instruction did precede that commit; the repository cannot
+witness a conversation, and the rule is about what the repository witnesses. Recorded, lineage 8
+frozen, the ruling left to the owner. Lineage 7 ORDERED.
+
+**Classified at logging time (L-112):** a genuine gap in G81's own design, found by the owner one
+release later — the restart mechanism had a start and no stop.

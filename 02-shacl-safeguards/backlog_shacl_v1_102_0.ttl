@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.101.0> ;
-    owl:versionInfo "1.101.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.102.0> ;
+    owl:versionInfo "1.102.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.101.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.100.1> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.100.0> ;
     rdfs:comment "v1.100.1 (2026-09-07): CheckpointObservedShape and IterationEndedIncompleteShape compare dates lexically against NOW() so a timezone-less xsd:dateTime no longer reads as already passed; provenByFixture pointers repointed to the fixture versions shipped at package v1.201.0 (pointers describe current state; L-112)."@en ;
@@ -5466,4 +5467,102 @@ backlog:PreLineageItemUnadmittedAdvisoryShape a sh:NodeShape ;
             $this backlog:preLineageItem true ; backlog:belongsToLineage ?l .
             ?r a backlog:LineageRestart ; backlog:restartsLineage ?l .
             FILTER NOT EXISTS { $this backlog:admittedByOutput ?o }
+        }""" ] .
+
+#################################################################
+#  v1.102.0 (2026-09-07) -- lineage thrash: the restart loop's stop
+#  condition, by convergence. Proven by fixture_lineage_thrash (positive)
+#  and fixture_lineage_thrash_negative (negative).
+#################################################################
+
+backlog:RestartRequiresNoveltyShape a sh:NodeShape ;
+    sh:targetClass backlog:LineageRestart ;
+    sh:severity sh:Violation ;
+    rdfs:label "A second restart on a lineage answers a bypass that names something new (L1)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_lineage_thrash_negative_v1_0_0.ttl" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this restart answers a bypass on a lineage that has already been restarted, and every item that bypass names was already named by the earlier restart's bypass. The finding is the same finding again; a restart on it is a turn of the loop, not a correction. Record a LineageThrash (Thrash_NoNovelty), freeze the lineage, and let the owner rule." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:restartsLineage ?l ; backlog:answersBypass ?b2 .
+            ?r1 a backlog:LineageRestart ; backlog:restartsLineage ?l ; backlog:answersBypass ?b1 .
+            FILTER (?r1 != $this && ?b1 != ?b2)
+            ?b1 backlog:detectedAt ?d1 . ?b2 backlog:detectedAt ?d2 . FILTER (STR(?d2) > STR(?d1))
+            FILTER NOT EXISTS {
+                ?b2 backlog:bypassedItem ?novel .
+                FILTER NOT EXISTS { ?b1 backlog:bypassedItem ?novel }
+            }
+        }""" ] .
+
+backlog:RestartKeepsAdmissionsShape a sh:NodeShape ;
+    sh:targetClass backlog:LineageRestart ;
+    sh:severity sh:Violation ;
+    rdfs:label "A restart does not lose what the previous rebuild admitted (L1)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_lineage_thrash_negative_v1_0_0.ttl" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this restart retracts the output that had admitted a pre-lineage item, and no active, rebuilt Stage_Backlog output of the same lineage re-admits that item. Each turn of a restart loop that drops an admission loses lineage work; the item must be re-admitted by this restart's own rebuild or the trial is not converging (Thrash_AdmissionLost)." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:restartsLineage ?l ; backlog:retractsOutput ?o .
+            ?o backlog:outputOfStage backlog:Stage_Backlog .
+            ?i backlog:belongsToLineage ?l ; backlog:preLineageItem true .
+            { ?i backlog:admittedByOutput ?o }
+            UNION
+            { ?i backlog:admittedByOutput ?o0 . ?o0 backlog:outputRetracted true .
+              FILTER NOT EXISTS { ?i backlog:admittedByOutput ?ok . FILTER NOT EXISTS { ?ok backlog:outputRetracted true } } }
+        }""" ] .
+
+backlog:ThrashFreezesLineageShape a sh:NodeShape ;
+    sh:targetClass backlog:Lineage ;
+    sh:severity sh:Violation ;
+    rdfs:label "A thrash finding freezes its lineage until the owner rules (L1)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_lineage_thrash_negative_v1_0_0.ttl" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: a LineageThrash stands against this live lineage and the lineage is not frozen (lineageFrozen true, frozenBy that finding), and no frozenRuling records an owner decision. Non-convergence is the stop condition; it is answered by a freeze and a ruling, not by another restart." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?t a backlog:LineageThrash ; backlog:thrashedLineage $this .
+            FILTER NOT EXISTS { $this backlog:lineageArchived true }
+            FILTER NOT EXISTS { $this backlog:frozenRuling ?ruling }
+            FILTER NOT EXISTS { $this backlog:lineageFrozen true ; backlog:frozenBy ?t }
+        }""" ] .
+
+backlog:NoRestartOnFrozenLineageShape a sh:NodeShape ;
+    sh:targetClass backlog:LineageRestart ;
+    sh:severity sh:Violation ;
+    rdfs:label "No restart on a frozen lineage (L1)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_lineage_thrash_negative_v1_0_0.ttl" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this restart is recorded against a frozen lineage with no owner ruling on the freeze. A frozen lineage waits; only frozenRuling reopens it." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:restartsLineage ?l .
+            ?l backlog:lineageFrozen true ; backlog:frozenBy ?t .
+            FILTER NOT EXISTS { ?l backlog:frozenRuling ?ruling }
+            # the restart the thrash itself judged is the record, not a new act
+            FILTER NOT EXISTS { ?t backlog:priorRestart $this }
+            FILTER NOT EXISTS { ?t backlog:repeatedBypass ?rb . $this backlog:answersBypass ?rb }
+        }""" ] .
+
+backlog:LineageThrashShape a sh:NodeShape ;
+    sh:targetClass backlog:LineageThrash ;
+    sh:severity sh:Violation ;
+    rdfs:label "A thrash finding names its lineage, its kind and what it repeated (L1)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_lineage_thrash_negative_v1_0_0.ttl" ;
+    sh:property [ sh:path backlog:thrashedLineage ; sh:minCount 1 ; sh:maxCount 1 ; sh:class backlog:Lineage ;
+                  sh:message "A thrash finding names exactly one lineage." ] ;
+    sh:property [ sh:path backlog:hasThrashKind ; sh:minCount 1 ;
+                  sh:message "A thrash finding states which non-convergence it measured." ] ;
+    sh:property [ sh:path backlog:repeatedBypass ; sh:minCount 1 ;
+                  sh:message "A thrash finding names the bypass that repeated an earlier one; a thrash with no repeated finding is an opinion." ] ;
+    sh:property [ sh:path backlog:detectedAt ; sh:minCount 1 ; sh:datatype xsd:dateTime ;
+                  sh:message "A thrash finding records when it was measured." ] ;
+    sh:property [ sh:path backlog:detectedBy ; sh:minCount 1 ; sh:datatype xsd:string ;
+                  sh:message "A thrash finding names the tool and version that measured it." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this thrash finding names a repeated bypass that is not a bypass of the lineage it says thrashed." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:thrashedLineage ?l ; backlog:repeatedBypass ?b .
+            FILTER NOT EXISTS { ?b backlog:bypassedLineage ?l }
         }""" ] .

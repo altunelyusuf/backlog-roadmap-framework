@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# backlog_gate v1.4.0 — four-gate release check for the Backlog & Roadmap
+# backlog_gate v1.5.0 — four-gate release check for the Backlog & Roadmap
 # Semantic Framework. Nothing about the package's state is trusted until all
 # four pass, and the SHACL gate refuses to certify anything until it has just
 # demonstrated, in this run, that it can fail a known-bad register.
@@ -11,7 +11,11 @@
 #   +       coverage gate          >= 80% of primary-source concepts (BP-D31)
 #   +       doc-coverage gate      every TBox class named in the standard document
 #
-# Usage: backlog_gate_v1_4_0.sh [REGISTER.ttl ...]
+# Usage: backlog_gate_v1_5_0.sh [REGISTER.ttl ...]
+#
+# v1.5.0 — the lineage-order self-proof also runs the thrash pair: a converging
+# second trial must pass, a non-converging one (no novelty, admission lost, not
+# deliberated) must fail. An unrecorded thrash on a live lineage fails the release.
 #
 # v1.4.0 — lineage-order gate (git witness). A lineage whose work first appears in the
 # governed repository before its own Stage_Backlog output is a bypass; a bypass on a
@@ -401,7 +405,15 @@ if [ -n "$LOC" ]; then
     echo "  ABORT: the known-ordered witness fixture did not pass -- the check is broken, not the register."; exit 3; fi
   if python3 "$LOC" "$FNEG" --witness "$WNEG" >/dev/null 2>&1; then
     echo "  ABORT: the known-bypass witness fixture PASSED -- the check cannot see a bypass and certifies nothing."; exit 3; fi
-  echo "  self-proof: ordered fixture passes, bypass fixture fails."
+  TPOS="$(ls "$HERE"/fixtures/fixture_lineage_thrash_v*.ttl | sort -V | tail -1)"
+  TWPOS="$(ls "$HERE"/fixtures/fixture_lineage_thrash_witness_v*.json | sort -V | tail -1)"
+  TNEG="$(ls "$HERE"/fixtures/fixture_lineage_thrash_negative_v*.ttl | sort -V | tail -1)"
+  TWNEG="$(ls "$HERE"/fixtures/fixture_lineage_thrash_negative_witness_v*.json | sort -V | tail -1)"
+  if python3 "$LOC" "$TPOS" --witness "$TWPOS" >/dev/null 2>&1; then :; else
+    echo "  ABORT: the converging-second-trial fixture did not pass -- the check is broken, not the register."; exit 3; fi
+  if python3 "$LOC" "$TNEG" --witness "$TWNEG" >/dev/null 2>&1; then
+    echo "  ABORT: the thrash fixture PASSED -- the check cannot see a non-converging restart loop."; exit 3; fi
+  echo "  self-proof: ordered fixture passes, bypass fixture fails; converging trial passes, thrash fixture fails."
   REG="$(ls "$PKG"/01-ontologies/backlog_framework_register_abox_v*.ttl 2>/dev/null | sort -V | tail -1 || true)"
   if [ -n "$REG" ]; then
     LOC_OUT="$(python3 "$LOC" "$REG" 2>&1)"; LOC_RC=$?

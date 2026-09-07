@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.51.0> ;
-    owl:versionInfo "9.51.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.52.0> ;
+    owl:versionInfo "9.52.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.51.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.50.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.49.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.48.0> ;
@@ -5876,3 +5877,37 @@ fw:Out2_Objective_CD backlog:outputRetracted true .
 fw:Out2_Backlog_CD backlog:outputRetracted true .
 fw:S_ChangeGuideDoc backlog:preLineageItem true .
 fw:ET_ChangeGuideDoc backlog:preLineageItem true .
+
+# v9.52.0 (2026-09-07, brsf-session): version chain only -- validated against TBox v1.84.0 / shapes v1.102.0 (lineage thrash). No thrash exists in this register today; see CHANGELOG v1.204.0.
+
+#################################################################
+#  v9.52.0 (2026-09-07, brsf-session) -- THE NEW CHECK CAUGHT ITS OWN
+#  AUTHOR. backlog_lineage_order_check_v1_1_0, first run on this
+#  register: Bypass_L_ChangeDiscipline_20260907 and
+#  Restart_L_ChangeDiscipline_20260907 both first appear at commit
+#  0251509 (v1.203.0). Finding and restart in one commit: the git
+#  witness sees no separate act of deciding -- Thrash_NotDeliberated,
+#  by the rule this release ships. The deliberation did happen (the
+#  owner's instruction, in conversation, before the release), but the
+#  rule is about what the repository witnesses, and the same session
+#  that wrote the rule gets no exception from it. Recorded as
+#  measured; the lineage is frozen; the ruling is the owner's:
+#    - an explicit unfreeze ("the restart was owner-instructed before
+#      the commit; the rebuild proceeds"), or
+#    - Out_Abandoned / a ScopeChange.
+#  Until frozenRuling is recorded, lineage 8 waits and no further
+#  restart is accepted.
+#################################################################
+fw:Thrash_L_ChangeDiscipline_20260907_1 a backlog:LineageThrash ;
+    backlog:thrashedLineage fw:L_ChangeDiscipline ;
+    backlog:hasFailureMode backlog:FM_LineageThrash ;
+    backlog:hasFindingScope backlog:Scope_Methodology ;
+    backlog:hasThrashKind backlog:Thrash_NotDeliberated ;
+    backlog:repeatedBypass fw:Bypass_L_ChangeDiscipline_20260907 ;
+    backlog:priorRestart fw:Restart_L_ChangeDiscipline_20260907 ;
+    backlog:hasRootCause "restart Restart_L_ChangeDiscipline_20260907 first 0251509 not after its bypass Bypass_L_ChangeDiscipline_20260907 first 0251509. Successive trials on this lineage are not converging; a further restart would be a turn of the loop, not a correction. Measured by git first-appearance; the deliberation that did occur (owner's instruction in conversation) is not something the repository can witness." ;
+    backlog:detectedAt "2026-09-07T11:20:00Z"^^xsd:dateTime ;
+    backlog:detectedBy "backlog_lineage_order_check_v1_1_0" ;
+    backlog:belongsToLineage fw:L_ChangeDiscipline .
+fw:L_ChangeDiscipline backlog:lineageFrozen true ; backlog:frozenBy fw:Thrash_L_ChangeDiscipline_20260907_1 .
+# owner's ruling goes here when made: fw:L_ChangeDiscipline backlog:frozenRuling "..." ; backlog:decidedBy backlog:Owner .

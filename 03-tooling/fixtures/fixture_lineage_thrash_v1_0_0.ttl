@@ -1,0 +1,302 @@
+# Lineage pipeline — stages built in order, each consuming the last.
+#
+# Experiment A of the v1.85.0 investigation. Every digest reproduces
+# and the chain is a line. Shipped so the passing shape is on record
+# alongside the failing one.
+#
+@prefix backlog: <http://example.org/backlog#> .
+@prefix core: <http://example.org/core#> .
+@prefix ex: <http://example.org/lineage-thrash#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+ex:BL a backlog:Backlog ; backlog:hasIdentifier "BL-PL" ; backlog:hasState backlog:Proposed ;
+    backlog:hasScopeStatement ex:Scope .
+ex:P a backlog:AdoptionProfile ; backlog:profileAppliesTo "pipeline fixture" ;
+    backlog:governsBacklog ex:BL ; backlog:hasConformanceLevel backlog:L1_Core ;
+    backlog:hasTargetConformanceLevel backlog:L2_EvidenceBound ;
+    backlog:hasLevelReviewDate "2027-01-01T00:00:00"^^xsd:dateTime ;
+    backlog:decidedBy backlog:Owner ; backlog:hasDecisionRationale "Core: the pipeline clauses are L1/L2." ;
+    backlog:adoptsFacet backlog:CoreFacet , backlog:EvidenceFacet , backlog:InvariantFacet , backlog:AuditFacet .
+
+ex:M a backlog:Mission ; backlog:hasMissionStatement "Practitioners recover unaided." ;
+    backlog:missionFor ex:BL ; backlog:hasMissionOrigin backlog:Origin_OwnerStated ;
+    backlog:missionSource "Owner, 2026-08-25" ; backlog:decidedBy backlog:Owner ;
+    backlog:hasMissionOutcome backlog:Out_InFlight .
+ex:Scope a backlog:ScopeStatement ; backlog:hasScopeStatementText "Self-service recovery." ;
+    backlog:scopeForMission ex:M ; backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ;
+    backlog:requiresDeliverable ex:D1 , ex:D2 ; backlog:hasScopeExclusion ex:X ;
+    backlog:coversArea ex:Area_PL .
+ex:Area_PL a backlog:ScopeArea ; backlog:areaLocation "Practitioner recovery flow." ;
+    backlog:areaMeasure "2 deliverables, counted." ; backlog:hasScopeLayer backlog:Layer_Product .
+ex:D1 a backlog:ScopeDeliverable ; backlog:hasDeliverableText "Recovery completes unaided." ; backlog:hasScopeLayer backlog:Layer_Product .
+ex:D2 a backlog:ScopeDeliverable ; backlog:hasDeliverableText "Every recovery is auditable." ; backlog:hasScopeLayer backlog:Layer_Product .
+ex:X a backlog:ScopeExclusion ; backlog:excludesConcern "Admin recovery." ;
+    backlog:hasExclusionRationale "Different threat model." ; backlog:decidedBy backlog:Owner ; backlog:hasScopeLayer backlog:Layer_Product .
+ex:G a backlog:Goal ; rdfs:label "Self-service recovery"@en ;
+    backlog:contributesToMission ex:M ; backlog:derivesFromScope ex:Scope ;
+    backlog:hasGoalFacing backlog:Facing_Mission ; backlog:goalCoversArea ex:Area_PL ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ; backlog:decidedBy backlog:Owner .
+ex:GScope a backlog:Goal ; rdfs:label "Fixture scope-facing goal"@en ;
+    backlog:contributesToMission ex:M ; backlog:derivesFromScope ex:Scope ;
+    backlog:hasGoalFacing backlog:Facing_Scope ; backlog:goalCoversArea ex:Area_PL ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ; backlog:decidedBy backlog:Owner .
+ex:GContain a backlog:Goal ; rdfs:label "Fixture containment-facing goal"@en ;
+    backlog:contributesToMission ex:M ; backlog:derivesFromScope ex:Scope ;
+    backlog:hasGoalFacing backlog:Facing_Containment ; backlog:goalCoversArea ex:Area_PL ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ; backlog:decidedBy backlog:Owner .
+ex:OScope a backlog:Objective ; backlog:contributesToGoal ex:GScope ; backlog:fillsScope ex:Scope ;
+    backlog:hasSuccessMetric ex:MetScope ; backlog:hasBaselineValue 0.0 ; backlog:hasTargetValue 0.0 ;
+    backlog:hasTargetDirection backlog:Dir_Hold ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ; backlog:decidedBy backlog:Owner .
+ex:MetScope a core:Metric .
+ex:CPOScope a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-12-01T00:00:00Z"^^xsd:dateTime .
+ex:OScope backlog:hasCheckpoint ex:CPOScope .
+ex:ObsOScope a backlog:MetricObservation ; backlog:observesMetric ex:MetScope ; backlog:observationFor ex:OScope ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-09-02T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Fixture-stated value, not re-derivable." .
+ex:OContain a backlog:Objective ; backlog:contributesToGoal ex:GContain ; backlog:fillsScope ex:Scope ;
+    backlog:hasSuccessMetric ex:MetContain ; backlog:hasBaselineValue 0.0 ; backlog:hasTargetValue 0.0 ;
+    backlog:hasTargetDirection backlog:Dir_Hold ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ; backlog:decidedBy backlog:Owner .
+ex:MetContain a core:Metric .
+ex:CPOContain a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-12-01T00:00:00Z"^^xsd:dateTime .
+ex:OContain backlog:hasCheckpoint ex:CPOContain .
+ex:ObsOContain a backlog:MetricObservation ; backlog:observesMetric ex:MetContain ; backlog:observationFor ex:OContain ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-09-02T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Fixture-stated value, not re-derivable." .
+ex:Met a core:Metric ; rdfs:label "Unaided share"@en .
+ex:O a backlog:Objective ; rdfs:label "Recoveries need no support"@en ;
+    backlog:fillsScope ex:Scope ; backlog:contributesToGoal ex:G ;
+    backlog:hasSuccessMetric ex:Met ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:hasBaselineValue 12.0 ; backlog:hasTargetValue 80.0 ;
+    backlog:hasTargetDirection backlog:Dir_Increase ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:metricMovableBy ex:EP ;
+    backlog:hasObjectiveDeadline "2027-01-31T00:00:00"^^xsd:dateTime ;
+    backlog:decidedBy backlog:Owner .
+ex:CP_O a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-12-01T00:00:00Z"^^xsd:dateTime .
+ex:O backlog:hasCheckpoint ex:CP_O .
+ex:Obs_O a backlog:MetricObservation ; backlog:observesMetric ex:Met ; backlog:observationFor ex:O ;
+    backlog:hasObservedValue 12.0 ; backlog:observedAt "2026-09-02T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Fixture-stated value, not re-derivable." .
+ex:EP a backlog:Epic ; backlog:hasIdentifier "E-1" ; backlog:hasTitle "Recovery" ;
+    backlog:hasState backlog:Proposed ; backlog:memberOfContainer ex:BL ;
+    backlog:pursuesObjective ex:O ; backlog:satisfiesDeliverable ex:D1 ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "probe" ;
+    backlog:appliesDefinitionOfDone ex:DoD_PL ; backlog:belongsToLineage ex:Lin_PL ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ; backlog:decomposesInto ex:S_PL .
+ex:DoD_PL a backlog:DefinitionOfDone ; rdfs:label "Fixture DoD"@en .
+ex:Lin_PL a backlog:Lineage ; backlog:lineageArchived false ; backlog:lineageForMission ex:M ; backlog:lineageOrdinal 1 .
+ex:S_PL a backlog:Story ; backlog:hasIdentifier "S-PL" ; backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer ex:BL ; backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at next planning." ;
+    backlog:belongsToLineage ex:Lin_PL ; backlog:hasInvestmentCategory backlog:Cat_NewCapability .
+
+ex:BL backlog:appliesDefinitionOfDone ex:DoD_PL ; backlog:hasCommitment ex:Commit_PL .
+ex:Commit_PL a backlog:Commitment ; backlog:commitsToGoal ex:G .
+
+ex:Out_Mission a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Mission ;
+    backlog:hasStateDigest "8c65af94ac3276071bb9b029a4ab139a14fd9eb7729433ca282ef040a706dac1" ; backlog:closedAtCommit "fixture-only-1" .
+ex:Out_Scope a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Scope ;
+    backlog:hasStateDigest "ed4cf292cc4e1b1ae3ed0565eb70000538772db0bf15bc7aadbb098baccc0f64" ; backlog:consumesOutput ex:Out_Mission ; backlog:closedAtCommit "fixture-only-2" .
+ex:Out_Goal a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Goal ;
+    backlog:hasStateDigest "3f8c4ef5ba7b3e2d41f0e83e3cdc2df7245edc5c7f4a91afc3f72dd71685eb76" ; backlog:consumesOutput ex:Out_Scope ; backlog:closedAtCommit "fixture-only-3" .
+ex:Out_Objective a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Objective ;
+    backlog:hasStateDigest "708196fe4b6f59f34a9be5b756cdf2e9b2cae02618dc7014b01ad36bd84f0631" ; backlog:consumesOutput ex:Out_Goal ; backlog:closedAtCommit "fixture-only-4" .
+ex:Out_Backlog a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Backlog ;
+    backlog:hasStateDigest "38640a7cf7a6bbd2c5b3495329e9f8da3db2acc9409a23638dc5e83317c34358" ; backlog:consumesOutput ex:Out_Objective ; backlog:closedAtCommit "fixture-only-5" .
+
+ex:D1 backlog:derivesFromMissionClause "practitioners recover unaided" .
+
+ex:D2 backlog:derivesFromMissionClause "practitioners recover unaided" .
+
+
+# Conformance-goal pattern (G42/AdoptionConformanceGoalShape), self-contained,
+# using this package's own already-proven Goal_BRSFConformance/Obj_BRSFConformanceHeld
+# structure as the exact template rather than re-deriving requirements by trial.
+ex:CMission a backlog:Mission ;
+    backlog:hasMissionStatement "Fixture conformance-goal test mission." ;
+    backlog:missionFor ex:BL ; backlog:hasMissionOrigin backlog:IOrigin_OwnerStated ;
+    backlog:hasMissionOutcome backlog:Out_InFlight ; backlog:decidedBy backlog:Owner .
+ex:CDel a backlog:ScopeDeliverable ; backlog:hasDeliverableText "Fixture deliverable." ;
+    backlog:derivesFromMissionClause "Fixture conformance-goal test mission." ;
+    backlog:hasScopeLayer backlog:Layer_Product .
+ex:CScope a backlog:ScopeStatement ;
+    backlog:hasScopeStatementText "Fixture conformance-goal test scope." ;
+    backlog:scopeForMission ex:CMission ; backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ;
+    backlog:requiresDeliverable ex:CDel ; backlog:hasScopeExclusion ex:CExcl ;
+    backlog:coversArea ex:CArea .
+ex:CExcl a backlog:ScopeExclusion ; backlog:excludesConcern "Fixture-only exclusion." ;
+    backlog:hasExclusionRationale "Fixture-only, not a real design decision." ; backlog:decidedBy backlog:Owner ;
+    backlog:hasScopeLayer backlog:Layer_Product .
+ex:CArea a backlog:ScopeArea ; backlog:areaLocation "Fixture-only area, no real location." ;
+    backlog:areaMeasure "0 real measure; fixture-only." ; backlog:hasScopeLayer backlog:Layer_Product .
+ex:CGoal a backlog:Goal ; <http://www.w3.org/2000/01/rdf-schema#label> "Fixture conformance goal" ;
+    backlog:isConformanceGoal true ; backlog:contributesToMission ex:CMission ;
+    backlog:derivesFromScope ex:CScope ; backlog:hasGoalFacing backlog:Facing_Mission ;
+    backlog:goalCoversArea ex:CArea ; backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ;
+    backlog:decidedBy backlog:Owner .
+ex:CGoalScope a backlog:Goal ; <http://www.w3.org/2000/01/rdf-schema#label> "Fixture scope-facing goal" ;
+    backlog:contributesToMission ex:CMission ; backlog:derivesFromScope ex:CScope ;
+    backlog:hasGoalFacing backlog:Facing_Scope ; backlog:goalCoversArea ex:CArea ;
+    backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ; backlog:decidedBy backlog:Owner .
+ex:CGoalContain a backlog:Goal ; <http://www.w3.org/2000/01/rdf-schema#label> "Fixture containment-facing goal" ;
+    backlog:contributesToMission ex:CMission ; backlog:derivesFromScope ex:CScope ;
+    backlog:hasGoalFacing backlog:Facing_Containment ; backlog:goalCoversArea ex:CArea ;
+    backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ; backlog:decidedBy backlog:Owner .
+ex:CObjScope a backlog:Objective ; backlog:contributesToGoal ex:CGoalScope ; backlog:fillsScope ex:CScope ;
+    backlog:hasSuccessMetric ex:CMetricScope ; backlog:hasBaselineValue 0.0 ; backlog:hasTargetValue 0.0 ;
+    backlog:hasTargetDirection backlog:Dir_Hold ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ; backlog:decidedBy backlog:Owner .
+ex:CMetricScope a ex:CLocalMetric .
+ex:CObjContain a backlog:Objective ; backlog:contributesToGoal ex:CGoalContain ; backlog:fillsScope ex:CScope ;
+    backlog:hasSuccessMetric ex:CMetricContain ; backlog:hasBaselineValue 0.0 ; backlog:hasTargetValue 0.0 ;
+    backlog:hasTargetDirection backlog:Dir_Hold ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ; backlog:decidedBy backlog:Owner .
+ex:CMetricContain a ex:CLocalMetric .
+ex:CCPScope a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-12-01T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+ex:CObjScope backlog:hasCheckpoint ex:CCPScope .
+ex:CObsScope a backlog:MetricObservation ; backlog:observesMetric ex:CMetricScope ; backlog:observationFor ex:CObjScope ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-09-02T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+    backlog:hasObservationMethod "Fixture-stated value, not re-derivable." .
+ex:CCPContain a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-12-01T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+ex:CObjContain backlog:hasCheckpoint ex:CCPContain .
+ex:CObsContain a backlog:MetricObservation ; backlog:observesMetric ex:CMetricContain ; backlog:observationFor ex:CObjContain ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-09-02T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+    backlog:hasObservationMethod "Fixture-stated value, not re-derivable." .
+ex:CObj a backlog:Objective ;
+    backlog:contributesToGoal ex:CGoal ; backlog:fillsScope ex:CScope ;
+    backlog:hasSuccessMetric ex:CMetric ; backlog:hasBaselineValue 0.0 ; backlog:hasTargetValue 0.0 ;
+    backlog:hasTargetDirection backlog:Dir_Hold ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ; backlog:decidedBy backlog:Owner .
+ex:CMetric a ex:CLocalMetric .
+ex:CCP a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-12-01T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+ex:CObj backlog:hasCheckpoint ex:CCP .
+ex:CObs a backlog:MetricObservation ; backlog:observesMetric ex:CMetric ; backlog:observationFor ex:CObj ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-09-02T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+    backlog:hasObservationMethod "Fixture-stated value, not re-derivable." .
+
+# Blueprint (G45/domain-modeling handover): register-level completeness plus
+# the epic's own domain-entity coverage, swept across all 4 lifecycle stages
+# (1 real coverage from the epic itself, 3 gaps -- matching the framework's
+# own real usage in fixture_positive_v1_7_0, not invented for this fixture).
+ex:CBP a backlog:Blueprint ; backlog:blueprintFor ex:BL .
+ex:CEntity a backlog:DomainEntity .
+ex:EP backlog:coversEntity ex:CEntity ; backlog:coversStage backlog:Stage_ActiveUse .
+ex:CGap1 a backlog:BlueprintGap ; backlog:gapForEntity ex:CEntity ; backlog:gapForStage backlog:Stage_Creation ;
+    backlog:hasGapReason "Fixture-only: creation stage not modeled." .
+ex:CGap2 a backlog:BlueprintGap ; backlog:gapForEntity ex:CEntity ; backlog:gapForStage backlog:Stage_SuspensionException ;
+    backlog:hasGapReason "Fixture-only: suspension/exception stage not modeled." .
+ex:CGap3 a backlog:BlueprintGap ; backlog:gapForEntity ex:CEntity ; backlog:gapForStage backlog:Stage_Termination ;
+    backlog:hasGapReason "Fixture-only: termination stage not modeled." .
+
+# ---------------------------------------------------------------------------
+# fixture_pipeline_v1_1_0.ttl (2026-09-07) -- brought back to conformance with shapes shipped after
+# this fixture was last edited: the RegisterSession requirement (v1.169.0, G48).
+# This fixture declares Polarity_Positive and was failing on exactly these
+# constraints; the gate could not run at the time (validator pinned to a retired
+# file), so nothing reported it. A known-good fixture that fails certifies
+# nothing (G7). Dates are timezone-less on purpose: shapes v1.100.1 compares
+# lexically, so a legal zone-less xsd:dateTime no longer reads as "passed".
+# ---------------------------------------------------------------------------
+ex:Session_20260907 a backlog:RegisterSession ;
+    rdfs:label "Conformance-restoration session, 7 September"@en ;
+    backlog:sessionFor ex:BL ;
+    backlog:sessionStartedAt "2026-09-07T07:00:00"^^xsd:dateTime ;
+    backlog:sessionEndedAt "2026-09-07T07:30:00"^^xsd:dateTime ;
+    backlog:stateVerifiedAtStart true ;
+    backlog:sessionConductedBy backlog:Builder ;
+    backlog:hasSessionScopeNote "In scope: record this fixture's own maintenance so the register names who last changed it. Deliberately untouched: every item, objective and event above." .
+
+# v1.1.0 (2026-09-07) -- stage digests RE-RECORDED, and why that is honest here and
+# would not be in a real register. At v1.157.0 a second Mission/Scope/Goal/Objective
+# block (the conformance-goal template) was appended to this fixture to satisfy
+# AdoptionConformanceGoalShape; those subjects carry stage types, so every stage
+# digest recorded for the original single-lineage graph stopped reproducing -- the
+# verifier reporting exactly what it exists to report ("elements were added to a
+# closed stage"). The gate could not run at the time and nothing noticed for 43
+# releases. This fixture is a synthetic register whose purpose is to make the
+# verifier PASS on a known-good graph (Experiment A, G18); recomputing its digests
+# from its own current content re-runs that experiment on the graph as it now is.
+# The same operation on a real register would fabricate a closure that never
+# happened (L-112) and is NOT done there: the real register's own five Out2_*
+# digests do not reproduce either, for the same structural reason (the digest is
+# register-wide, and the register now holds eight lineages), and are left as the
+# historical record they are, disclosed in the v1.201.0 changelog.
+
+#################################################################
+#  fixture_lineage_restart v1.0.0 -- lineage escape, POSITIVE.
+#  Built on a copy of fixture_pipeline_v1_1_0 (a conformant register
+#  with one lineage, Lin_PL, five stage outputs and one story S_PL),
+#  so the lineage-escape shapes are exercised on a register that is
+#  otherwise clean (G7: a positive fixture that fails certifies
+#  nothing). Story: the tool found S_PL first appearing before
+#  Out_Backlog (witness map: S_PL at c1, Out_* at c9); the owner
+#  restarted; the chain was rebuilt R_* at c11..c15, one per commit,
+#  and R_Backlog admitted S_PL. Expected: 0 violations; exactly one
+#  FM_LineageBypass advisory would fire if S_PL were unadmitted, and
+#  none fires here. The order check must report ORDERED.
+#################################################################
+ex:Out_Mission backlog:belongsToLineage ex:Lin_PL ; backlog:outputRetracted true .
+ex:Out_Scope backlog:belongsToLineage ex:Lin_PL ; backlog:outputRetracted true .
+ex:Out_Goal backlog:belongsToLineage ex:Lin_PL ; backlog:outputRetracted true .
+ex:Out_Objective backlog:belongsToLineage ex:Lin_PL ; backlog:outputRetracted true .
+ex:Out_Backlog backlog:belongsToLineage ex:Lin_PL ; backlog:outputRetracted true .
+ex:Bypass1 a backlog:LineageBypass ;
+    backlog:bypassedLineage ex:Lin_PL ; backlog:hasFailureMode backlog:FM_LineageBypass ;
+    backlog:hasFindingScope backlog:Scope_Methodology ; backlog:hasRootCause "Chain written after the work (fixture): S_PL first appears at c1, Out_Backlog at c9." ;
+    backlog:bypassedItem ex:S_PL ; backlog:itemFirstCommit "S_PL c1 1000" ;
+    backlog:bypassedOutput ex:Out_Mission , ex:Out_Scope , ex:Out_Goal , ex:Out_Objective , ex:Out_Backlog ;
+    backlog:chainClosedCommit "c9 9000" ;
+    backlog:detectedAt "2026-09-07T09:00:00Z"^^xsd:dateTime ; backlog:detectedBy "backlog_lineage_order_check_v1_0_0" ;
+    backlog:belongsToLineage ex:Lin_PL .
+ex:Restart1 a backlog:LineageRestart ;
+    backlog:restartsLineage ex:Lin_PL ; backlog:answersBypass ex:Bypass1 ;
+    backlog:retractsOutput ex:Out_Mission , ex:Out_Scope , ex:Out_Goal , ex:Out_Objective , ex:Out_Backlog ;
+    backlog:restartedAtCommit "c10" ; backlog:decidedBy backlog:Owner ; backlog:belongsToLineage ex:Lin_PL .
+ex:S_PL backlog:preLineageItem true .
+ex:R_Mission a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Mission ; backlog:belongsToLineage ex:Lin_PL ; backlog:closedAtCommit "c11" ; backlog:hasStateDigest "8c65af94ac3276071bb9b029a4ab139a14fd9eb7729433ca282ef040a706dac1" .
+ex:R_Scope a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Scope ; backlog:belongsToLineage ex:Lin_PL ; backlog:consumesOutput ex:R_Mission ; backlog:closedAtCommit "c12" ; backlog:hasStateDigest "ed4cf292cc4e1b1ae3ed0565eb70000538772db0bf15bc7aadbb098baccc0f64" .
+ex:R_Goal a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Goal ; backlog:belongsToLineage ex:Lin_PL ; backlog:consumesOutput ex:R_Scope ; backlog:closedAtCommit "c13" ; backlog:hasStateDigest "3f8c4ef5ba7b3e2d41f0e83e3cdc2df7245edc5c7f4a91afc3f72dd71685eb76" .
+ex:R_Objective a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Objective ; backlog:belongsToLineage ex:Lin_PL ; backlog:consumesOutput ex:R_Goal ; backlog:closedAtCommit "c14" ; backlog:hasStateDigest "708196fe4b6f59f34a9be5b756cdf2e9b2cae02618dc7014b01ad36bd84f0631" .
+ex:R_Backlog a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage ex:Lin_PL ; backlog:consumesOutput ex:R_Objective ; backlog:closedAtCommit "c15" ; backlog:hasStateDigest "38640a7cf7a6bbd2c5b3495329e9f8da3db2acc9409a23638dc5e83317c34358" .
+
+#################################################################
+#  fixture_lineage_thrash v1.0.0 -- the restart loop CONVERGES, POSITIVE.
+#  Built on fixture_lineage_restart_v1_0_0 (one bypass, one restart,
+#  rebuilt chain R_* admitting S_PL). A SECOND trial: a new story S_PL2
+#  was created after the rebuild (c16) and, again, before a new Backlog
+#  output -- a second bypass (Bypass2) that is NOVEL (names S_PL2, which
+#  Bypass1 never named). Restart2 (c20) answers it, retracts R_* and
+#  rebuilds Q_* (c21..c25) whose Q_Backlog re-admits S_PL (admission
+#  kept) and admits S_PL2. Deliberation witnessed: Bypass2 c17 <
+#  Restart2 c20 < Q_Mission c21. Expected: 0 violations; order check
+#  ORDERED; no thrash.
+#################################################################
+ex:S_PL2 a backlog:Story ; backlog:hasIdentifier "S-PL2" ; backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer ex:BL ; backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at next planning." ;
+    backlog:belongsToLineage ex:Lin_PL ; backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:preLineageItem true ; backlog:admittedByOutput ex:Q_Backlog ; backlog:pursuesObjective ex:O .
+ex:S_PL backlog:admittedByOutput ex:Q_Backlog .
+ex:R_Mission backlog:outputRetracted true . ex:R_Scope backlog:outputRetracted true . ex:R_Goal backlog:outputRetracted true .
+ex:R_Objective backlog:outputRetracted true . ex:R_Backlog backlog:outputRetracted true .
+ex:Bypass2 a backlog:LineageBypass ;
+    backlog:bypassedLineage ex:Lin_PL ; backlog:hasFailureMode backlog:FM_LineageBypass ;
+    backlog:hasFindingScope backlog:Scope_Methodology ; backlog:hasRootCause "Second trial (fixture): S_PL2 first appears at c16 before any active Backlog output." ;
+    backlog:bypassedItem ex:S_PL2 ; backlog:itemFirstCommit "S_PL2 c16 16000" ;
+    backlog:bypassedOutput ex:R_Mission , ex:R_Scope , ex:R_Goal , ex:R_Objective , ex:R_Backlog ;
+    backlog:chainClosedCommit "c15 15000" ;
+    backlog:detectedAt "2026-09-07T10:00:00Z"^^xsd:dateTime ; backlog:detectedBy "backlog_lineage_order_check_v1_1_0" ;
+    backlog:belongsToLineage ex:Lin_PL .
+ex:Restart2 a backlog:LineageRestart ;
+    backlog:restartsLineage ex:Lin_PL ; backlog:answersBypass ex:Bypass2 ;
+    backlog:retractsOutput ex:R_Mission , ex:R_Scope , ex:R_Goal , ex:R_Objective , ex:R_Backlog ;
+    backlog:restartedAtCommit "c20" ; backlog:decidedBy backlog:Owner ; backlog:belongsToLineage ex:Lin_PL .
+ex:Q_Mission a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Mission ; backlog:belongsToLineage ex:Lin_PL ; backlog:closedAtCommit "c21" ; backlog:hasStateDigest "8c65af94ac3276071bb9b029a4ab139a14fd9eb7729433ca282ef040a706dac1" .
+ex:Q_Scope a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Scope ; backlog:belongsToLineage ex:Lin_PL ; backlog:consumesOutput ex:Q_Mission ; backlog:closedAtCommit "c22" ; backlog:hasStateDigest "ed4cf292cc4e1b1ae3ed0565eb70000538772db0bf15bc7aadbb098baccc0f64" .
+ex:Q_Goal a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Goal ; backlog:belongsToLineage ex:Lin_PL ; backlog:consumesOutput ex:Q_Scope ; backlog:closedAtCommit "c23" ; backlog:hasStateDigest "3f8c4ef5ba7b3e2d41f0e83e3cdc2df7245edc5c7f4a91afc3f72dd71685eb76" .
+ex:Q_Objective a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Objective ; backlog:belongsToLineage ex:Lin_PL ; backlog:consumesOutput ex:Q_Goal ; backlog:closedAtCommit "c24" ; backlog:hasStateDigest "708196fe4b6f59f34a9be5b756cdf2e9b2cae02618dc7014b01ad36bd84f0631" .
+ex:Q_Backlog a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage ex:Lin_PL ; backlog:consumesOutput ex:Q_Objective ; backlog:closedAtCommit "c25" ; backlog:hasStateDigest "38640a7cf7a6bbd2c5b3495329e9f8da3db2acc9409a23638dc5e83317c34358" .
+
+<http://example.org/lineage-thrash#> backlog:hasExpectedPolarity backlog:Polarity_Positive .
