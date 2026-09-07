@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.50.0> ;
-    owl:versionInfo "9.50.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.51.0> ;
+    owl:versionInfo "9.51.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.50.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.49.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.48.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.47.0> ;
@@ -5824,3 +5825,54 @@ fw:EnhProp_RoadmapReportKind
     backlog:submittedTo "oe-pack/07-handover-inbox/pending/PROPOSAL_backlog-roadmap-framework_to_RDODI_roadmap-report-profile_v1_0_0.md (delivered 2026-09-07 to the OE inbox as fallback: rdodi-ecosystem has no 07-handover-inbox; the 2026-09-03 submittedTo above named this package's own inbox and reached no one)" .
 fw:Imp_RegisterPackageDecisions
     backlog:hasImpedimentStatement "2026-09-07 addendum: still blocked on the same two decisions, but the cause of four days without an answer was that neither proposal had been delivered -- both were filed in this package's own inbox. Delivered to the OE inbox today; what clears this impediment is unchanged (a ratified configuration:RoadmapReportConvention and a prof:RoadmapReportKind), and the clock on the real wait starts now." .
+
+#################################################################
+#  v9.51.0 (2026-09-07, brsf-session) -- LINEAGE 8 BYPASS DETECTED
+#  AND RESTARTED. The owner's own observation, from a parallel session:
+#  the lineage is bypassed and the finished build is retrospected to
+#  fill it afterwards. Measured here with the git witness
+#  (backlog_lineage_order_check_v1_0_0, first-appearance commits):
+#    S_ChangeGuideDoc, ET_ChangeGuideDoc  first appear at b48a787 (v1.193.0)
+#    Out2_Backlog_CD                       first appears at 16633a4 (v1.198.0)
+#  The Stage_Backlog output was written five releases after the work it
+#  claims to have produced (G77 backfilled it; this session's v9.50.0
+#  correction then added a DeploymentUnit on top of it -- both were
+#  honest about being late, and both were still fills). The answer is a
+#  restart, not another fill: the five outputs are retracted (kept),
+#  the two items are flagged pre-lineage, and the chain is to be rebuilt
+#  from Mission in fresh commits, one per stage, by the owner. What the
+#  rebuilt chain admits, it admits by a new Stage_Backlog output.
+#  Mission_ChangeDiscipline keeps its recorded Out_Achieved: that
+#  outcome rests on seven real observations, not on the chain's order,
+#  and whether it is re-affirmed is decided when the rebuilt chain
+#  closes -- not silently here.
+#################################################################
+fw:Bypass_L_ChangeDiscipline_20260907 a backlog:LineageBypass ;
+    backlog:bypassedLineage fw:L_ChangeDiscipline ;
+    backlog:hasFailureMode backlog:FM_LineageBypass ;
+    backlog:hasFindingScope backlog:Scope_Methodology ;
+    backlog:hasRootCause "The chain was written after the work: S_ChangeGuideDoc and ET_ChangeGuideDoc first appear in the governed repository at b48a787 (v1.193.0) while the lineage's own Stage_Backlog output first appears at 16633a4 (v1.198.0). Measured by git first-appearance, not by the register's own dates. The same single-commit-then-backfill pattern G77 disclosed, now measured rather than confessed." ;
+    backlog:bypassedItem fw:S_ChangeGuideDoc , fw:ET_ChangeGuideDoc ;
+    backlog:itemFirstCommit "S_ChangeGuideDoc b48a787 1788681470" , "ET_ChangeGuideDoc b48a787 1788681470" ;
+    backlog:bypassedOutput fw:Out2_Mission_CD , fw:Out2_Scope_CD , fw:Out2_Goal_CD , fw:Out2_Objective_CD , fw:Out2_Backlog_CD ;
+    backlog:chainClosedCommit "16633a4 1788695684" ;
+    backlog:detectedAt "2026-09-07T09:34:15Z"^^xsd:dateTime ;
+    backlog:detectedBy "backlog_lineage_order_check_v1_0_0" ;
+    backlog:belongsToLineage fw:L_ChangeDiscipline .
+
+fw:Restart_L_ChangeDiscipline_20260907 a backlog:LineageRestart ;
+    backlog:restartsLineage fw:L_ChangeDiscipline ;
+    backlog:answersBypass fw:Bypass_L_ChangeDiscipline_20260907 ;
+    backlog:retractsOutput fw:Out2_Mission_CD , fw:Out2_Scope_CD , fw:Out2_Goal_CD , fw:Out2_Objective_CD , fw:Out2_Backlog_CD ;
+    backlog:restartedAtCommit "backlog-roadmap-framework-v1.203.0 (tag; the commit hash does not exist while this is being written and is witnessed by git, not asserted here)" ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:hasRationale "Owner's own direct instruction, 2026-09-07: when a bypass is caught, unfreeze the lineage and restart from the beginning rather than fill backward. The five retracted outputs stay as the record of what was claimed. The rebuild -- Mission re-affirmed, Scope, Goals and Objectives re-derived from it, each closed in its own commit -- is the owner's work and is not done in this release; until a rebuilt Stage_Backlog output admits them, the two items are work this lineage does not yet own (PreLineageItemUnadmittedAdvisoryShape reports exactly that)." ;
+    backlog:belongsToLineage fw:L_ChangeDiscipline .
+
+fw:Out2_Mission_CD backlog:outputRetracted true .
+fw:Out2_Scope_CD backlog:outputRetracted true .
+fw:Out2_Goal_CD backlog:outputRetracted true .
+fw:Out2_Objective_CD backlog:outputRetracted true .
+fw:Out2_Backlog_CD backlog:outputRetracted true .
+fw:S_ChangeGuideDoc backlog:preLineageItem true .
+fw:ET_ChangeGuideDoc backlog:preLineageItem true .

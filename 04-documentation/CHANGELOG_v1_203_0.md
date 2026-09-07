@@ -1,5 +1,40 @@
 # Changelog
 
+## v1.203.0 — 2026-09-07 (MINOR: lineage escape caught by the git witness; a bypass is answered by a restart, never a backfill)
+
+**Owner's request, from a parallel session's observation:** lineages are bypassed and the finished
+build is retrospected to fill them; catch it, and when caught, unfreeze the lineage and restart
+from the beginning. `G81` records the finding and the design.
+
+- `backlog_lineage_order_check_v1_0_0.py` — measures, from `git log -S` first-appearance commits,
+  whether each live lineage's outputs appeared in pipeline order and before its first work item.
+  Verdicts ORDERED / UNWITNESSED (single commit, G18) / RESTARTED / BYPASS; `--emit` writes the
+  finding as Turtle; `--witness <json>` runs the identical classification on a fixture map (G7).
+  Measured on this register: lineage 7 ORDERED; lineage 8 BYPASS (`S_ChangeGuideDoc` at `b48a787`,
+  `Out2_Backlog_CD` at `16633a4`).
+- TBox v1.83.0 (MINOR): `FM_LineageBypass`; `LineageBypass` (⊑ RetrospectiveFinding) with
+  `bypassedLineage/Item/Output`, `itemFirstCommit`, `chainClosedCommit`, `detectedAt/By`;
+  `LineageRestart` with `restartsLineage`, `answersBypass`, `retractsOutput`, `restartedAtCommit`;
+  `outputRetracted`, `preLineageItem`, `admittedByOutput`.
+- Shapes v1.101.0 (MINOR): `LineageBypassShape`, `BypassRequiresRestartShape`, `LineageRestartShape`,
+  `RetractedOutputConsumedShape`, `PreLineageItemShape` (Violation) and
+  `PreLineageItemUnadmittedAdvisoryShape` (Warning, G46 test drive: a rebuild spans releases).
+  Proven by `fixture_lineage_restart_v1_0_0` (positive: all five silent) and
+  `fixture_lineage_bypass_negative_v1_0_0` (negative: all five fire), each with its witness map.
+- `backlog_pipeline_verify_v1_1_0.py` ignores retracted outputs.
+- `backlog_gate_v1_4_0.sh` — lineage-order gate: self-proof on both witness fixtures, then the
+  register with the real git witness; an unanswered bypass fails the release.
+- Register v9.51.0: `Bypass_L_ChangeDiscipline_20260907` as measured;
+  `Restart_L_ChangeDiscipline_20260907` on the owner's instruction; the five `_CD` outputs
+  retracted (kept); `S_ChangeGuideDoc`, `ET_ChangeGuideDoc` flagged pre-lineage. 0 violations,
+  117 warnings (2 are the two flagged items awaiting admission). The rebuild of lineage 8's chain —
+  one commit per stage, from Mission — is the owner's next work, not this release's.
+- `LINEAGE_OPERATING_DISCIPLINE_v52_0_0`: ceremony step 2 states that order is witnessed by git;
+  standing rule "a bypassed lineage is restarted, never backfilled"; `G81`.
+
+**Disclosed:** a single-commit lineage remains UNWITNESSED, not a bypass — git cannot order within
+a commit. The `submittedTo` shape candidate from `G80` is still not built.
+
 ## v1.202.0 — 2026-09-07 (MINOR: the handover's three remaining items closed -- inbox triaged, lineage 8 corrected, the blocked impediment traced to its real cause)
 
 **Register v9.50.0** (0 violations, 115 warnings under shapes v1.100.1 -- was 117; the "Done in no

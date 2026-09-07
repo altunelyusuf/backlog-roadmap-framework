@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v51.0.0
+# Lineage Operating Discipline — v52.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -43,6 +43,16 @@ remembered from a previous session; this document's own tooling references have 
    deliverables arrived at `90c433b` — after the epics they were meant to constrain.
 
    Validate the chain empty at each stage. A chain that does not validate empty will not validate full.
+
+   **The order is witnessed, not declared (v52.0.0, G81).** `backlog_lineage_order_check` measures,
+   from git first-appearance commits, whether every stage output of a live lineage appeared in
+   pipeline order and before that lineage's first work item. It runs in the release gate. A work
+   item that appears before its lineage's `Stage_Backlog` output is a **LineageBypass**; the gate
+   refuses the release until a **LineageRestart** answers it. A bypass is never repaired by adding
+   the missing outputs later — that is the bypass, formalised. The restart retracts every output
+   the lineage carried, flags the pre-existing items, and the chain is rebuilt from Mission in fresh
+   commits, one per stage; the items are re-admitted by the rebuilt `Stage_Backlog` output or they
+   count for nothing.
 
 3. **State the granularity you are choosing and why.** `Initiative`, `Epic`, `Feature`, `Story`,
    `Task`, `Defect`, `Spike`, `Enabler`. Epic is the **coarsest ordinary choice**, not the neutral
@@ -247,6 +257,10 @@ because a fixture existed that exercised the new member, which is G7 applied to 
   kick-off is accurate information, not a gap to paper over.
 - **Historical records are corrected by appending, never by editing.** A record edited to look right
   was never a record.
+- **A bypassed lineage is restarted, never backfilled.** When the git witness shows work before
+  chain, the outputs written after the work are retracted (kept, marked, never deleted) and the
+  chain starts again from Mission. Enforced by `BypassRequiresRestartShape`, `LineageRestartShape`,
+  `RetractedOutputConsumedShape`, `PreLineageItemShape` (v1.101.0) and the lineage-order gate.
 - **A deployment carries only proven work** — at L4 every deployed item is `Done`, carries
   bridge-verified `Evidence`, and has **every** acceptance criterion attested. That last is coverage
   at release time: a suite can be green while the criterion everyone cared about is untested.
@@ -2104,3 +2118,50 @@ have caught this; it is not built in this release because the addressee's real i
 this package's vocabulary to enumerate (L-64), and a rule that only rejects one wrong answer without
 knowing the right one is a half-check. Left as a candidate for the next session that touches
 `EnhancementProposal`.
+
+## G81 — The chain is witnessed by git, and a bypass is answered by a restart, not a fill
+
+**The owner's observation, from a parallel session:** the lineage is bypassed repeatedly and the
+finished build is retrospected to fill it afterwards. Asked whether this framework can catch that
+and, when it does, unfreeze the lineage and start again rather than fill backward.
+
+**Measured before anything was built.** Every register-side check this framework had — stage
+digests, `consumesOutput` chains, `closedAtCommit`, every shape — is satisfiable from the finished
+graph (G18, experiment C). The one witness the author does not control is the governed repository:
+the commit at which a subject first appears under the register path. Run against this package's
+own register (`backlog_lineage_order_check_v1_0_0`, `git log --reverse -S`): lineage 7 ORDERED —
+five outputs f2f4e0f → c2e7625 in pipeline order, first item at c2e7625. Lineage 8 BYPASS —
+`S_ChangeGuideDoc` and `ET_ChangeGuideDoc` first appear at `b48a787` (v1.193.0); `Out2_Backlog_CD`
+first appears at `16633a4` (v1.198.0), five releases later, when G77 backfilled it. This session's
+own v9.50.0 correction then put a DeploymentUnit on top of that chain. Both were honest about being
+late; both were fills.
+
+**What was built.** `LineageBypass` (a `RetrospectiveFinding` the tool writes from git, never by
+hand: items, their first commits, the chain's first commit, the outputs that existed) and
+`LineageRestart` (the owner's answer: retracts every existing output, flags every pre-existing item
+`preLineageItem`, records the commit it was made at). Five Violation shapes: a bypass on a live
+lineage needs a restart; a restart retracts the whole chain and marks each output; nothing active
+consumes a retracted output; a pre-lineage item is flagged and admitted only by a rebuilt, active
+`Stage_Backlog` output of its own lineage. One Warning: a flagged item not yet admitted counts for
+nothing — Warning by test drive (G46), because the rebuild spans releases and each must stay
+publishable (G10). The pipeline verifier ignores retracted outputs. The gate runs the order check
+after proving it on two witness fixtures — one known ORDERED, one known BYPASS — and fails on an
+unanswered bypass. Archived lineages are exempt (G41): their history is a record.
+
+**Applied to lineage 8 in the same release.** The bypass is recorded as measured; a restart is
+recorded on the owner's instruction; the five `_CD` outputs are retracted; the two items are
+flagged. The rebuild — Mission re-affirmed, Scope, Goals and Objectives re-derived, one commit per
+stage — is not done here: mission analysis is the owner's (G14), and doing it in the same session
+that found the bypass would be the pattern this entry exists to end. `Mission_ChangeDiscipline`
+keeps its recorded `Out_Achieved`; that outcome rests on seven real observations, and whether it
+is re-affirmed is decided when the rebuilt chain closes.
+
+**What the witness cannot see, stated plainly.** Git orders between commits and says nothing
+within one. A lineage built and published in a single commit is UNWITNESSED, reported as such, not
+called a bypass — it cannot be told from an honest one-commit build. The remedy is the ceremony's
+own: one commit per stage. A session that publishes the whole pipeline at once has chosen to leave
+its order unprovable, and the check now says so on every run.
+
+**Classified at logging time (L-112):** a genuine gap. Nothing in the framework could have found
+this from the register; the finding required an external witness the framework had named (G18) but
+never consulted mechanically.

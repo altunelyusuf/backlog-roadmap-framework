@@ -1,0 +1,72 @@
+@prefix backlog: <http://example.org/backlog#> .
+@prefix ex:      <http://example.org/lineage-bypass-neg#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+
+# Lineage escape -- test drive, not a construction.
+#
+# Minimal graph proving the v1.101.0 lineage-escape shapes (LineageBypassShape,
+# BypassRequiresRestartShape, LineageRestartShape, RetractedOutputConsumedShape,
+# PreLineageItemShape, PreLineageItemUnadmittedAdvisoryShape) and the git-witness
+# tool backlog_lineage_order_check (via its --witness map, fixture_*_witness.json,
+# which stands in for `git log -S` first-appearance commits; the classification
+# code is identical). Deliberately NOT a SHACL-complete register: only the
+# lineage-escape subgraph is built, so every other violation here is the
+# expected noise of a minimal graph and the polarity below is about THESE shapes.
+
+ex:L a backlog:Lineage ; rdfs:label "Lineage under test"@en ; backlog:lineageOrdinal 1 ; backlog:lineageArchived false .
+ex:M a backlog:Mission ; backlog:belongsToLineage ex:L .
+ex:S1 a backlog:Story ; backlog:hasIdentifier "S1" ; backlog:hasState backlog:Done ; backlog:belongsToLineage ex:L .
+ex:S2 a backlog:Story ; backlog:hasIdentifier "S2" ; backlog:hasState backlog:Ready ; backlog:belongsToLineage ex:L .
+# the chain, written after the work (witness map: outputs first appear at commit c9, items at c1)
+ex:O_Mission a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Mission ; backlog:belongsToLineage ex:L ; backlog:closedAtCommit "c9" ; backlog:hasStateDigest "d1" .
+ex:O_Scope a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Scope ; backlog:belongsToLineage ex:L ; backlog:consumesOutput ex:O_Mission ; backlog:closedAtCommit "c9" ; backlog:hasStateDigest "d2" .
+ex:O_Goal a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Goal ; backlog:belongsToLineage ex:L ; backlog:consumesOutput ex:O_Scope ; backlog:closedAtCommit "c9" ; backlog:hasStateDigest "d3" .
+ex:O_Objective a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Objective ; backlog:belongsToLineage ex:L ; backlog:consumesOutput ex:O_Goal ; backlog:closedAtCommit "c9" ; backlog:hasStateDigest "d4" .
+ex:O_Backlog a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage ex:L ; backlog:consumesOutput ex:O_Objective ; backlog:closedAtCommit "c9" ; backlog:hasStateDigest "d5" .
+# the finding, as the tool emits it
+ex:Bypass1 a backlog:LineageBypass ;
+    backlog:bypassedLineage ex:L ; backlog:hasFailureMode backlog:FM_LineageBypass ; backlog:hasFindingScope backlog:Scope_Methodology ; backlog:hasRootCause "Chain written after the work (fixture)." ;
+    backlog:bypassedItem ex:S1 , ex:S2 ;
+    backlog:itemFirstCommit "S1 c1 1000" , "S2 c1 1000" ;
+    backlog:bypassedOutput ex:O_Mission , ex:O_Scope , ex:O_Goal , ex:O_Objective , ex:O_Backlog ;
+    backlog:chainClosedCommit "c9 9000" ;
+    backlog:detectedAt "2026-09-07T09:00:00Z"^^xsd:dateTime ;
+    backlog:detectedBy "backlog_lineage_order_check_v1_0_0" .
+
+# FIVE escapes, each one shape's own known-bad case:
+#  1. BypassRequiresRestartShape  -- Bypass1 stands on a live lineage with no restart.
+#  2. LineageRestartShape         -- Restart2 (for a second lineage) names an output it
+#                                    does not mark retracted, and leaves one of the
+#                                    bypassed outputs active.
+#  3. RetractedOutputConsumedShape -- X_Scope consumes the retracted X_Mission; an item
+#                                    claims admission by a retracted output.
+#  4. PreLineageItemShape          -- T1 is named by an answered bypass but unflagged;
+#                                    T2 claims admission by a non-Backlog output.
+#  5. LineageBypassShape           -- Bypass3 names an item outside its lineage and
+#                                    carries no chainClosedCommit.
+ex:L2 a backlog:Lineage ; rdfs:label "Second lineage"@en ; backlog:lineageOrdinal 2 ; backlog:lineageArchived false .
+ex:T1 a backlog:Story ; backlog:hasIdentifier "T1" ; backlog:hasState backlog:Done ; backlog:belongsToLineage ex:L2 .
+ex:T2 a backlog:Story ; backlog:hasIdentifier "T2" ; backlog:hasState backlog:Done ; backlog:belongsToLineage ex:L2 ;
+    backlog:preLineageItem true ; backlog:admittedByOutput ex:X_Scope .
+ex:X_Mission a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Mission ; backlog:belongsToLineage ex:L2 ; backlog:closedAtCommit "c9" ; backlog:hasStateDigest "f1" ; backlog:outputRetracted true .
+ex:X_Scope a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Scope ; backlog:belongsToLineage ex:L2 ; backlog:consumesOutput ex:X_Mission ; backlog:closedAtCommit "c9" ; backlog:hasStateDigest "f2" .
+ex:X_Backlog a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage ex:L2 ; backlog:closedAtCommit "c9" ; backlog:hasStateDigest "f5" .
+ex:Bypass2 a backlog:LineageBypass ;
+    backlog:bypassedLineage ex:L2 ; backlog:hasFindingScope backlog:Scope_Methodology ; backlog:hasRootCause "Chain written after the work (fixture)." ; backlog:bypassedItem ex:T1 ; backlog:itemFirstCommit "T1 c1 1000" ;
+    backlog:bypassedOutput ex:X_Mission , ex:X_Scope , ex:X_Backlog ;
+    backlog:chainClosedCommit "c9 9000" ; backlog:detectedAt "2026-09-07T09:00:00Z"^^xsd:dateTime ; backlog:detectedBy "backlog_lineage_order_check_v1_0_0" .
+ex:Restart2 a backlog:LineageRestart ;
+    backlog:restartsLineage ex:L2 ; backlog:answersBypass ex:Bypass2 ;
+    backlog:retractsOutput ex:X_Mission , ex:X_Scope ;   # X_Scope named but not marked; X_Backlog not retracted at all
+    backlog:restartedAtCommit "c10" ; backlog:decidedBy backlog:Owner .
+ex:Bypass3 a backlog:LineageBypass ;
+    backlog:bypassedLineage ex:L2 ; backlog:hasFindingScope backlog:Scope_Methodology ; backlog:hasRootCause "Chain written after the work (fixture)." ; backlog:bypassedItem ex:S1 ; backlog:itemFirstCommit "S1 c1 1000" ;
+    backlog:detectedAt "2026-09-07T09:00:00Z"^^xsd:dateTime ; backlog:detectedBy "backlog_lineage_order_check_v1_0_0" .
+
+# Polarity: NEGATIVE -- every one of the five Violation shapes must fire. A run of this
+# fixture with no violation from them means the escape is open again. The order check
+# must report BYPASS for ex:L (no restart answers it).
+<http://example.org/lineage-bypass-neg#> backlog:hasExpectedPolarity backlog:Polarity_Negative .

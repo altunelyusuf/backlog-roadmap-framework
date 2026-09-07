@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# backlog_gate v1.3.0 — four-gate release check for the Backlog & Roadmap
+# backlog_gate v1.4.0 — four-gate release check for the Backlog & Roadmap
 # Semantic Framework. Nothing about the package's state is trusted until all
 # four pass, and the SHACL gate refuses to certify anything until it has just
 # demonstrated, in this run, that it can fail a known-bad register.
@@ -11,7 +11,12 @@
 #   +       coverage gate          >= 80% of primary-source concepts (BP-D31)
 #   +       doc-coverage gate      every TBox class named in the standard document
 #
-# Usage: backlog_gate_v1_3_0.sh [REGISTER.ttl ...]
+# Usage: backlog_gate_v1_4_0.sh [REGISTER.ttl ...]
+#
+# v1.4.0 — lineage-order gate (git witness). A lineage whose work first appears in the
+# governed repository before its own Stage_Backlog output is a bypass; a bypass on a
+# live lineage with no LineageRestart answering it FAILS the release. Proven on two
+# witness fixtures (known ORDERED / known BYPASS) before the real register is measured.
 #
 # v1.3.0 — the validator is RESOLVED BY VERSION, never pinned. v1.1.29 and v1.2.0
 # both hard-coded backlog_validate_v1_4_0.py; that file was retired at v1.152.0
@@ -381,6 +386,30 @@ if [ -n "$PIPE" ]; then
   echo "  every pipeline fixture verifies as its name declares it should."
 else
   echo "  NOT RUN — pipeline verifier not found. Not assumed to pass."
+fi
+
+echo
+echo "== Lineage-order gate — did the chain come before the work? (git witness) =="
+LOC="$(ls "$HERE"/backlog_lineage_order_check_v*.py 2>/dev/null | sort -V | tail -1 || true)"
+if [ -n "$LOC" ]; then
+  # self-proof first: the check must pass a known-ordered map and fail a known-bypass map
+  WPOS="$(ls "$HERE"/fixtures/fixture_lineage_restart_witness_v*.json | sort -V | tail -1)"
+  WNEG="$(ls "$HERE"/fixtures/fixture_lineage_bypass_negative_witness_v*.json | sort -V | tail -1)"
+  FPOS="$(ls "$HERE"/fixtures/fixture_lineage_restart_v*.ttl | sort -V | tail -1)"
+  FNEG="$(ls "$HERE"/fixtures/fixture_lineage_bypass_negative_v*.ttl | sort -V | tail -1)"
+  if python3 "$LOC" "$FPOS" --witness "$WPOS" >/dev/null 2>&1; then :; else
+    echo "  ABORT: the known-ordered witness fixture did not pass -- the check is broken, not the register."; exit 3; fi
+  if python3 "$LOC" "$FNEG" --witness "$WNEG" >/dev/null 2>&1; then
+    echo "  ABORT: the known-bypass witness fixture PASSED -- the check cannot see a bypass and certifies nothing."; exit 3; fi
+  echo "  self-proof: ordered fixture passes, bypass fixture fails."
+  REG="$(ls "$PKG"/01-ontologies/backlog_framework_register_abox_v*.ttl 2>/dev/null | sort -V | tail -1 || true)"
+  if [ -n "$REG" ]; then
+    LOC_OUT="$(python3 "$LOC" "$REG" 2>&1)"; LOC_RC=$?
+    printf '%s\n' "$LOC_OUT" | grep -E '^  |^      - |^VERDICT' | sed 's/^/  /'
+    [ "$LOC_RC" -eq 0 ] || { echo "Lineage-order gate FAILED"; FAILED=1; }
+  fi
+else
+  echo "  NOT RUN — order check not found. Not assumed to pass."
 fi
 
 echo

@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.82.0> ;
-    owl:versionInfo "1.82.0" ;
+    owl:versionIRI <http://example.org/backlog/1.83.0> ;
+    owl:versionInfo "1.83.0" ;
+    owl:priorVersion <http://example.org/backlog/1.82.0> ;
     owl:priorVersion <http://example.org/backlog/1.81.0> ;
     owl:priorVersion <http://example.org/backlog/1.80.0> ;
     owl:priorVersion <http://example.org/backlog/1.79.0> ;
@@ -6334,3 +6335,122 @@ backlog:acceptsGraphPath a owl:DatatypeProperty , owl:FunctionalProperty ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "accepts graph path"@en ;
     skos:definition "Whether this checker takes a graph file via CLI argument and must therefore refuse rather than default to empty when given none. False means the checker locates its own data internally and a bare run examining real data is correct, not blind."@en .
+
+#################################################################
+#  v1.83.0 (2026-09-07) -- LINEAGE ESCAPE: detected by git witness,
+#  answered by RESTART, never by backfill.
+#
+#  The failure this names was observed in a parallel session and then
+#  measured in this register: work items are built first and the
+#  Mission -> Scope -> Goal -> Objective -> Backlog chain is written
+#  afterwards to fit them. Every digest reproduces (G18 experiment C:
+#  a digest computed from the finished graph proves nothing about
+#  order), every shape passes, and the lineage is a story told
+#  backwards. The only witness of order the author does not control
+#  is git: the commit at which a subject FIRST APPEARS in the governed
+#  register. When a work item first appears before its lineage's
+#  Stage_Backlog output does, the chain was closed after the work --
+#  a LineageBypass. It cannot be repaired by adding the missing
+#  outputs later (that is the bypass, formalised). It is answered by a
+#  LineageRestart: the outputs written after the fact are retracted
+#  (kept, marked, never deleted -- L-112), the chain is rebuilt from
+#  Mission in fresh commits, and the pre-existing items stay flagged
+#  until a rebuilt Stage_Backlog output admits them.
+#################################################################
+
+backlog:FM_LineageBypass a owl:NamedIndividual , backlog:FailureMode ;
+    rdfs:label "Lineage bypass"@en ;
+    backlog:hasModeScope backlog:Scope_Methodology ;
+    skos:definition "Work items of a lineage first appear in the governed repository before the lineage's own Stage_Backlog output does (or stage outputs appear out of pipeline order), so the chain that claims to have produced the work was written after it. Confirmed by git first-appearance commits, never by the register's own dates, which the author controls. Distinct from the single-commit case, where order is merely unwitnessed."@en .
+
+backlog:LineageBypass a owl:Class ;
+    rdfs:subClassOf backlog:RetrospectiveFinding ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Lineage Bypass"@en ;
+    skos:definition "A recorded detection of FM_LineageBypass on one lineage: which items preceded the chain, at which commit each first appeared, at which commit the chain's Stage_Backlog output first appeared, when and by which tool run it was detected. Data written by backlog_lineage_order_check from git, never asserted by hand. Its existence on a non-archived lineage obliges a LineageRestart; SHACL decides that, the tool only records."@en .
+
+backlog:bypassedLineage a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:LineageBypass ; rdfs:range backlog:Lineage ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "bypassed lineage"@en .
+
+backlog:bypassedItem a owl:ObjectProperty ;
+    rdfs:domain backlog:LineageBypass ; rdfs:range backlog:WorkItem ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "bypassed item"@en ;
+    skos:definition "A work item that first appeared in the governed repository before its lineage's Stage_Backlog output."@en .
+
+backlog:bypassedOutput a owl:ObjectProperty ;
+    rdfs:domain backlog:LineageBypass ; rdfs:range backlog:StageOutput ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "bypassed output"@en ;
+    skos:definition "Every StageOutput the lineage carried when the bypass was measured -- the chain written after the work. A LineageRestart answering this finding must retract each of them."@en .
+
+backlog:itemFirstCommit a owl:DatatypeProperty ;
+    rdfs:domain backlog:LineageBypass ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "item first commit"@en ;
+    skos:definition "\"<item local name> <commit> <unix time>\" -- the commit at which a bypassed item first appeared, one value per item, as measured by git log -S over the register path. Recorded as a string so the measurement is reproducible from the repository alone."@en .
+
+backlog:chainClosedCommit a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:LineageBypass ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "chain closed commit"@en ;
+    skos:definition "\"<commit> <unix time>\" at which the lineage's Stage_Backlog output first appeared -- or the literal \"absent\" when no such output exists yet, which is the same escape one step earlier."@en .
+
+backlog:detectedAt a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:LineageBypass ; rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "detected at"@en .
+
+backlog:detectedBy a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:LineageBypass ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "detected by"@en ;
+    skos:definition "The tool file name and version that produced this finding, so the measurement can be re-run."@en .
+
+backlog:LineageRestart a owl:Class ;
+    rdfs:subClassOf core:Artifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Lineage Restart"@en ;
+    skos:definition "The owner's answer to a LineageBypass: the lineage is unfrozen and its chain rebuilt from Mission, in fresh commits, one per stage. Every StageOutput the lineage carried before the restart is retracted -- marked outputRetracted true, kept in the register as the record of what was claimed (L-112) -- and no rebuilt output may consume a retracted one. Items that existed before the restart keep preLineageItem true until a rebuilt Stage_Backlog output admits them. A restart never edits, re-dates or deletes; it starts again."@en .
+
+backlog:restartsLineage a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:LineageRestart ; rdfs:range backlog:Lineage ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "restarts lineage"@en .
+
+backlog:answersBypass a owl:ObjectProperty ;
+    rdfs:domain backlog:LineageRestart ; rdfs:range backlog:LineageBypass ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "answers bypass"@en .
+
+backlog:retractsOutput a owl:ObjectProperty ;
+    rdfs:domain backlog:LineageRestart ; rdfs:range backlog:StageOutput ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "retracts output"@en ;
+    skos:definition "A StageOutput the restart withdraws. It stays in the register; it may no longer be consumed, and the pipeline verifier ignores it."@en .
+
+backlog:restartedAtCommit a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:LineageRestart ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "restarted at commit"@en ;
+    skos:definition "The commit at which the restart was recorded. Every rebuilt StageOutput must first appear after it -- the same git witness that found the bypass verifies the restart."@en .
+
+backlog:outputRetracted a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:StageOutput ; rdfs:range xsd:boolean ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "output retracted"@en ;
+    skos:definition "True on a StageOutput withdrawn by a LineageRestart. Absent means active."@en .
+
+backlog:preLineageItem a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:WorkItem ; rdfs:range xsd:boolean ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "pre-lineage item"@en ;
+    skos:definition "True on a work item that existed before the chain it now sits under was (re)built. Set by the restart, cleared by nothing: the item is re-admitted, not re-dated, via admittedByOutput."@en .
+
+backlog:admittedByOutput a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:WorkItem ; rdfs:range backlog:StageOutput ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "admitted by output"@en ;
+    skos:definition "The rebuilt, non-retracted Stage_Backlog output that took this pre-lineage item into the restarted chain. Until it is set, the item is work the lineage does not yet own."@en .

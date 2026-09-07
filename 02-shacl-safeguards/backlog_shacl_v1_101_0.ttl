@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.100.1> ;
-    owl:versionInfo "1.100.1" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.101.0> ;
+    owl:versionInfo "1.101.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.100.1> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.100.0> ;
     rdfs:comment "v1.100.1 (2026-09-07): CheckpointObservedShape and IterationEndedIncompleteShape compare dates lexically against NOW() so a timezone-less xsd:dateTime no longer reads as already passed; provenByFixture pointers repointed to the fixture versions shipped at package v1.201.0 (pointers describe current state; L-112)."@en ;
     owl:priorVersion <http://example.org/backlog-shapes/1.98.0> ;
@@ -5331,4 +5332,138 @@ backlog:MissionClauseCitationShape a sh:NodeShape ;
         sh:select """SELECT $this WHERE {
             $this backlog:derivesFromMissionClause ?q .
             FILTER NOT EXISTS { ?m backlog:hasMissionStatement ?s . FILTER CONTAINS(?s, ?q) }
+        }""" ] .
+
+#################################################################
+#  v1.101.0 (2026-09-07) -- lineage escape: bypass detected by git
+#  witness (backlog_lineage_order_check), answered by restart, never
+#  by backfill. Proven by fixture_lineage_restart (positive) and
+#  fixture_lineage_bypass_negative (negative).
+#################################################################
+
+backlog:LineageBypassShape a sh:NodeShape ;
+    sh:targetClass backlog:LineageBypass ;
+    sh:severity sh:Violation ;
+    rdfs:label "A bypass finding carries its measurement (L1)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_lineage_bypass_negative_v1_0_0.ttl" ;
+    sh:property [ sh:path backlog:bypassedLineage ; sh:minCount 1 ; sh:maxCount 1 ; sh:class backlog:Lineage ;
+                  sh:message "A bypass finding names exactly one lineage." ] ;
+    sh:property [ sh:path backlog:bypassedItem ; sh:minCount 1 ;
+                  sh:message "A bypass finding names at least one item that preceded the chain; a bypass with no item is a claim, not a measurement." ] ;
+    sh:property [ sh:path backlog:itemFirstCommit ; sh:minCount 1 ; sh:datatype xsd:string ;
+                  sh:message "A bypass finding records the commit at which each bypassed item first appeared." ] ;
+    sh:property [ sh:path backlog:chainClosedCommit ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ;
+                  sh:message "A bypass finding records the commit at which the chain's Stage_Backlog output first appeared, or 'absent'." ] ;
+    sh:property [ sh:path backlog:detectedAt ; sh:minCount 1 ; sh:datatype xsd:dateTime ;
+                  sh:message "A bypass finding records when it was measured." ] ;
+    sh:property [ sh:path backlog:detectedBy ; sh:minCount 1 ; sh:datatype xsd:string ;
+                  sh:message "A bypass finding names the tool and version that measured it, so it can be re-run." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this bypass finding names an item that does not belong to the lineage it says was bypassed." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:bypassedLineage ?l ; backlog:bypassedItem ?i .
+            FILTER NOT EXISTS { ?i backlog:belongsToLineage ?l }
+        }""" ] .
+
+backlog:BypassRequiresRestartShape a sh:NodeShape ;
+    sh:targetClass backlog:Lineage ;
+    sh:severity sh:Violation ;
+    rdfs:label "A detected bypass on a live lineage is answered by a restart, not a backfill (L1)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_lineage_bypass_negative_v1_0_0.ttl" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this lineage carries a LineageBypass finding -- its work items first appeared in the governed repository before its own Stage_Backlog output did -- and no LineageRestart answers it. The chain written after the work is a story told backwards; adding the missing outputs later is the bypass formalised, not repaired. Unfreeze the lineage: record a LineageRestart that retracts every existing StageOutput of this lineage and rebuild the chain from Mission in fresh commits. An archived lineage is exempt (G41): its history is a record, not a claim." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?b a backlog:LineageBypass ; backlog:bypassedLineage $this .
+            FILTER NOT EXISTS { $this backlog:lineageArchived true }
+            FILTER NOT EXISTS { ?r a backlog:LineageRestart ; backlog:restartsLineage $this ; backlog:answersBypass ?b }
+        }""" ] .
+
+backlog:LineageRestartShape a sh:NodeShape ;
+    sh:targetClass backlog:LineageRestart ;
+    sh:severity sh:Violation ;
+    rdfs:label "A restart retracts the whole pre-existing chain and is witnessed (L1)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_lineage_bypass_negative_v1_0_0.ttl" ;
+    sh:property [ sh:path backlog:restartsLineage ; sh:minCount 1 ; sh:maxCount 1 ; sh:class backlog:Lineage ;
+                  sh:message "A restart names exactly one lineage." ] ;
+    sh:property [ sh:path backlog:answersBypass ; sh:minCount 1 ;
+                  sh:message "A restart answers a recorded bypass; a restart with no finding behind it is an unexplained rewrite." ] ;
+    sh:property [ sh:path backlog:retractsOutput ; sh:minCount 1 ;
+                  sh:message "A restart retracts at least one StageOutput -- the chain it replaces." ] ;
+    sh:property [ sh:path backlog:restartedAtCommit ; sh:minCount 1 ; sh:datatype xsd:string ;
+                  sh:message "A restart records the commit it was recorded at; the git witness that found the bypass verifies the rebuild against it." ] ;
+    sh:property [ sh:path backlog:decidedBy ; sh:minCount 1 ;
+                  sh:message "A restart is an owner decision and says so." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this restart names a StageOutput it retracts, but that output is not marked outputRetracted true. Retraction is a fact on the output, not only a claim on the restart, so that every consumer sees it." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:retractsOutput ?o .
+            FILTER NOT EXISTS { ?o backlog:outputRetracted true }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this restart leaves a StageOutput of the same lineage neither retracted nor rebuilt: the output exists, is not marked retracted, and its closedAtCommit is the commit the bypass measured or earlier. A partial retraction keeps part of the backwards story alive." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:restartsLineage ?l ; backlog:answersBypass ?b .
+            ?b backlog:bypassedOutput ?o .
+            FILTER NOT EXISTS { ?o backlog:outputRetracted true }
+        }""" ] .
+
+backlog:RetractedOutputConsumedShape a sh:NodeShape ;
+    sh:targetClass backlog:StageOutput ;
+    sh:severity sh:Violation ;
+    rdfs:label "No stage is built on a retracted output (L1)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_lineage_bypass_negative_v1_0_0.ttl" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this StageOutput consumes an output a LineageRestart retracted. A rebuilt chain starts from Mission; consuming the retracted chain is the backfill wearing a restart's name." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:consumesOutput ?prev . ?prev backlog:outputRetracted true .
+            FILTER NOT EXISTS { $this backlog:outputRetracted true }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this StageOutput is retracted and yet retracted-and-consumed: a retracted output may remain only as a record; nothing active may point at it." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:outputRetracted true .
+            ?i backlog:admittedByOutput $this .
+        }""" ] .
+
+backlog:PreLineageItemShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItem ;
+    sh:severity sh:Violation ;
+    rdfs:label "A pre-lineage item is re-admitted by a rebuilt Backlog output or does not count (L1)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_lineage_bypass_negative_v1_0_0.ttl" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this item was named by a bypass finding whose lineage has been restarted, and carries no preLineageItem true. The restart flags every bypassed item; an unflagged one is silently re-dated into the new chain." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?b backlog:bypassedItem $this ; backlog:bypassedLineage ?l .
+            ?r a backlog:LineageRestart ; backlog:restartsLineage ?l ; backlog:answersBypass ?b .
+            FILTER NOT EXISTS { $this backlog:preLineageItem true }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this pre-lineage item claims admission by an output that is retracted, not a Stage_Backlog output, or not of its own lineage. Only a rebuilt, active Stage_Backlog output of the restarted lineage can take it in." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:preLineageItem true ; backlog:admittedByOutput ?o ; backlog:belongsToLineage ?l .
+            FILTER ( EXISTS { ?o backlog:outputRetracted true }
+                  || NOT EXISTS { ?o backlog:outputOfStage backlog:Stage_Backlog }
+                  || NOT EXISTS { ?o backlog:belongsToLineage ?l } )
+        }""" ]  .
+
+backlog:PreLineageItemUnadmittedAdvisoryShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItem ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: a pre-lineage item has not been re-admitted by the rebuilt chain"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_lineage_bypass_negative_v1_0_0.ttl" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory (FM_LineageBypass): this pre-lineage item sits under a restarted lineage and no rebuilt Stage_Backlog output has admitted it yet. Until admission it is work the lineage does not own and it counts for nothing here. Warning, not Violation, by test drive (G46): the rebuild spans releases -- one commit per stage -- and every intermediate release must remain publishable (G10); the Violation-severity guard is BypassRequiresRestartShape, which refuses the backfill itself." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:preLineageItem true ; backlog:belongsToLineage ?l .
+            ?r a backlog:LineageRestart ; backlog:restartsLineage ?l .
+            FILTER NOT EXISTS { $this backlog:admittedByOutput ?o }
         }""" ] .

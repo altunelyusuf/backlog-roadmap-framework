@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.88.0
+# Backlog & Roadmap Semantic Framework — Standard v1.89.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -673,6 +673,31 @@ anything — arrive after the work they were meant to constrain. This is G17 wit
 
 Both fire on this package's own register, which is the point: a witness worth having is one that
 reports something inconvenient about the register carrying it.
+
+### 2.5c-xxi-b Work before chain is a bypass, and a bypass is restarted, not filled
+
+The two advisories above read the commits a stage *recorded*. `backlog_lineage_order_check` reads
+the commits git *witnessed*: the commit at which each stage output, and each work item, first appears
+under the register path. The register's own dates are the author's; first appearance in an
+append-only remote is not. For every live (non-archived) lineage it reports one of ORDERED (outputs in
+pipeline order, every item at or after the `Stage_Backlog` output), UNWITNESSED (everything in one
+commit — git orders between commits and says nothing within one), RESTARTED, or **BYPASS**: a work
+item that first appears before its lineage's `Stage_Backlog` output, or outputs out of order. The
+chain was closed after the work — the finished build retrospected to fill the lineage.
+
+A bypass is recorded as a `LineageBypass` (a `RetrospectiveFinding` the tool writes from git, carrying
+`bypassedItem`, `itemFirstCommit`, `bypassedOutput`, `chainClosedCommit`, `detectedAt`, `detectedBy`).
+`BypassRequiresRestartShape` then refuses the release until a `LineageRestart` answers it. **The
+answer is never to add the missing outputs later — that is the bypass, formalised.** A restart
+`retractsOutput` every output the lineage carried (each marked `outputRetracted true`, kept in the
+register as the record of what was claimed), flags every pre-existing item `preLineageItem true`, and
+the chain is rebuilt from Mission in fresh commits, one per stage. `RetractedOutputConsumedShape` keeps
+the rebuild off the retracted chain; `PreLineageItemShape` allows an item back in only through
+`admittedByOutput` naming a rebuilt, active `Stage_Backlog` output of its own lineage; until then
+`PreLineageItemUnadmittedAdvisoryShape` reports that the item counts for nothing. The pipeline verifier
+ignores retracted outputs. Measured on this package's own register the day it was built: lineage 7
+ORDERED, lineage 8 BYPASS (items at `b48a787`, backlog output at `16633a4`) — restarted in the same
+release.
 
 ### 2.5c-xxii The staged ceremony, one commit per stage
 

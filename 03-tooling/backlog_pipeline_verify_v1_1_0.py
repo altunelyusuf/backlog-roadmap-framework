@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_pipeline_verify_v1_0_0.py — the lineage order, checked by reconstruction.
+"""backlog_pipeline_verify_v1_1_0.py — the lineage order, checked by reconstruction.
 
 WHY THIS EXISTS
 
@@ -32,7 +32,7 @@ shortcut cost the same as doing it properly.
 
 Exit 0 when every recorded digest reproduces, 1 otherwise.
 
-Usage: backlog_pipeline_verify_v1_0_0.py <register.ttl> [tbox.ttl]
+Usage: backlog_pipeline_verify_v1_1_0.py <register.ttl> [tbox.ttl]
 """
 
 import hashlib
@@ -97,7 +97,7 @@ def main():
     _tb = sorted(_glob.glob(_os.path.join(_pkg, "01-ontologies", "backlog_tbox_v*.ttl")))[-1]
     STAGE_TYPES = _load_stage_types(_tb)
     if len(sys.argv) < 2:
-        print("usage: backlog_pipeline_verify_v1_0_0.py <register.ttl> [tbox.ttl]")
+        print("usage: backlog_pipeline_verify_v1_1_0.py <register.ttl> [tbox.ttl]")
         return 1
     g = Graph()
     for f in sys.argv[1:]:
@@ -107,6 +107,11 @@ def main():
     for o in g.subjects(RDF.type, URIRef(B + "StageOutput")):
         st = g.value(o, URIRef(B + "outputOfStage"))
         if st is None:
+            continue
+        # v1.1.0: an output withdrawn by a LineageRestart stays in the register as a
+        # record and is not verified -- the rebuilt chain is.
+        ret = g.value(o, URIRef(B + "outputRetracted"))
+        if ret is not None and bool(ret.toPython()):
             continue
         outputs[str(st).split("#")[-1]] = o
 
