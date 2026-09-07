@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.215.0 — 2026-09-07 (MINOR: lineage 7 rebuild, stage 2 of 5 — Scope, all five parts)
+
+Register v9.63.0: `P7Gov_Scope`, `P7Exec_Scope`, `P7Export_Scope`, `P7Prose_Scope`, `P7Code_Scope`
+close the parts' Scope stage (each consuming its part's Mission output, 9cb62b6); digest at
+this commit. Nothing else changes. Expected reading after this release: two per part, in order.
+
 ## v1.214.0 — 2026-09-07 (MINOR: lineage 7 rebuild, stage 1 of 5 — Mission, all five parts)
 
 Register v9.62.0: `P7Gov_Mission`, `P7Exec_Mission`, `P7Export_Mission`, `P7Prose_Mission`, `P7Code_Mission`
