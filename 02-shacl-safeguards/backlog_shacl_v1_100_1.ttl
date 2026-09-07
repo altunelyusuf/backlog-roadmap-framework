@@ -12,6 +12,7 @@
     owl:versionIRI <http://example.org/backlog-shapes/1.100.1> ;
     owl:versionInfo "1.100.1" ;
     owl:priorVersion <http://example.org/backlog-shapes/1.100.0> ;
+    rdfs:comment "v1.100.1 (2026-09-07): CheckpointObservedShape and IterationEndedIncompleteShape compare dates lexically against NOW() so a timezone-less xsd:dateTime no longer reads as already passed; provenByFixture pointers repointed to the fixture versions shipped at package v1.201.0 (pointers describe current state; L-112)."@en ;
     owl:priorVersion <http://example.org/backlog-shapes/1.98.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.97.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.96.0> ;
@@ -1632,7 +1633,7 @@ backlog:ScopeMeasurabilityShape a sh:NodeShape ;
         }""" ] .
 
 backlog:ChangeRequestShape a sh:NodeShape ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_change_discipline_v1_0_0.ttl" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_change_discipline_v1_1_0.ttl" ;
     sh:targetClass backlog:ChangeRequest ;
     sh:severity sh:Violation ;
     rdfs:label "A change request names its scope, direction, rationale and current disposition (L1)"@en ;
@@ -1646,7 +1647,7 @@ backlog:ChangeRequestShape a sh:NodeShape ;
                   sh:message "L1: a change request must carry a current disposition, even if only Disp_Pending." ] .
 
 backlog:ImpactAssessmentShape a sh:NodeShape ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_change_discipline_v1_0_0.ttl" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_change_discipline_v1_1_0.ttl" ;
     sh:targetClass backlog:ImpactAssessment ;
     sh:severity sh:Violation ;
     rdfs:label "An impact assessment names the request it analyzes and states real impact (L1)"@en ;
@@ -1656,7 +1657,7 @@ backlog:ImpactAssessmentShape a sh:NodeShape ;
                   sh:message "L1: an impact assessment must state what the change would actually affect." ] .
 
 backlog:DispositionRequiresAssessmentShape a sh:NodeShape ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_change_discipline_v1_0_0.ttl" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_change_discipline_v1_1_0.ttl" ;
     sh:targetClass backlog:ChangeRequest ;
     sh:severity sh:Violation ;
     rdfs:label "A disposition past Pending requires a real impact assessment first (L3)"@en ;
@@ -1669,7 +1670,7 @@ backlog:DispositionRequiresAssessmentShape a sh:NodeShape ;
         }""" ] .
 
 backlog:AcceptedRequestNeedsScopeChangeShape a sh:NodeShape ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_change_discipline_v1_0_0.ttl" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_change_discipline_v1_1_0.ttl" ;
     sh:targetClass backlog:ChangeRequest ;
     sh:severity sh:Violation ;
     rdfs:label "An accepted request has a real ScopeChange recording the admission (L3)"@en ;
@@ -1682,7 +1683,7 @@ backlog:AcceptedRequestNeedsScopeChangeShape a sh:NodeShape ;
         }""" ] .
 
 backlog:CrossLineageRiskAdvisoryShape a sh:NodeShape ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_change_discipline_v1_0_0.ttl" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_change_discipline_v1_1_0.ttl" ;
     backlog:awaitingRealVerification "A second, genuinely concurrent, InFlight lineage exists at the same time as another real lineage's own real ChangeRequest -- true today for zero pairs of lineages in this register. Re-check this shape's own positive case against real data, not only its fixture, the moment that condition holds." ;
     sh:targetClass backlog:ImpactAssessment ;
     sh:severity sh:Warning ;
@@ -2407,7 +2408,7 @@ backlog:PlanBaselineShape a sh:NodeShape ;
         }""" ] .
 
 backlog:OpenIterationBaselineAdvisoryShape a sh:NodeShape ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_iteration_rebaseline_v1_0_0.ttl" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_iteration_rebaseline_v1_1_0.ttl" ;
     sh:targetClass backlog:Iteration ;
     sh:severity sh:Warning ;
     rdfs:label "Advisory: an open iteration has no plan baseline recorded"@en ;
@@ -2423,7 +2424,7 @@ backlog:OpenIterationBaselineAdvisoryShape a sh:NodeShape ;
         }""" ] .
 
 backlog:SilentContainerRebaselineShape a sh:NodeShape ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_iteration_rebaseline_v1_0_0.ttl" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_iteration_rebaseline_v1_1_0.ttl" ;
     sh:targetClass backlog:Iteration ;
     sh:severity sh:Violation ;
     rdfs:label "A container's dates match its own baseline, or a real Rebaseline explains why not (L1)"@en ;
@@ -2678,7 +2679,7 @@ backlog:L4StoryGranularityShape a sh:NodeShape ;
 backlog:StoryReadyToCloseShape a sh:NodeShape ;
     sh:targetClass backlog:Story ;
     sh:severity sh:Warning ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_sprint_ceremonies_v1_0_0.ttl" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_sprint_ceremonies_v1_1_0.ttl" ;
     backlog:fixtureCaseName "S_ReadyToClose" ;
     rdfs:label "Advisory: this story's tasks are all Done but the story itself is not"@en ;
     sh:sparql [ a sh:SPARQLConstraint ;
@@ -2694,7 +2695,7 @@ backlog:StoryReadyToCloseShape a sh:NodeShape ;
 backlog:IterationEndedIncompleteShape a sh:NodeShape ;
     sh:targetClass backlog:Story ;
     sh:severity sh:Warning ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_sprint_ceremonies_v1_0_0.ttl" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_sprint_ceremonies_v1_1_0.ttl" ;
     backlog:fixtureCaseName "S_Spillover" ;
     rdfs:label "Advisory: this story's iteration has ended and the story is not Done"@en ;
     sh:sparql [ a sh:SPARQLConstraint ;
@@ -2711,7 +2712,7 @@ backlog:IterationEndedIncompleteShape a sh:NodeShape ;
 backlog:BatchCompleteButNotDoneShape a sh:NodeShape ;
     sh:targetClass backlog:WorkItem ;
     sh:severity sh:Warning ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_sprint_ceremonies_v1_0_0.ttl" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_sprint_ceremonies_v1_1_0.ttl" ;
     backlog:fixtureCaseName "WI_BatchDoneNotClosed" ;
     rdfs:label "Advisory: every batch unit is complete but the item itself is not Done"@en ;
     sh:sparql [ a sh:SPARQLConstraint ;
@@ -2726,7 +2727,7 @@ backlog:BatchCompleteButNotDoneShape a sh:NodeShape ;
 backlog:BatchStartedStateStaleShape a sh:NodeShape ;
     sh:targetClass backlog:WorkItem ;
     sh:severity sh:Warning ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_sprint_ceremonies_v1_0_0.ttl" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_sprint_ceremonies_v1_1_0.ttl" ;
     backlog:fixtureCaseName "WI_BatchStartedStale" ;
     rdfs:label "Advisory: real batch progress recorded but the item's own state is still its initial value"@en ;
     sh:sparql [ a sh:SPARQLConstraint ;
@@ -4117,7 +4118,7 @@ backlog:BothLayersShape a sh:NodeShape ;
 backlog:ProductScopeKindShape a sh:NodeShape ;
     sh:targetClass backlog:ScopeStatement ;
     sh:severity sh:Warning ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_productscopekind_v1_0_0.ttl" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_productscopekind_v1_1_0.ttl" ;
     backlog:fixtureCaseName "SCOPE_ONEKIND" ;
     rdfs:label "Advisory: a scope's product deliverables are all one kind"@en ;
     sh:sparql [ a sh:SPARQLConstraint ;
@@ -4353,7 +4354,7 @@ backlog:ScopeGapAdvisoryShape a sh:NodeShape ;
 backlog:CeremonyLinkAdvisoryShape a sh:NodeShape ;
     sh:targetClass backlog:MetricObservation ;
     sh:severity sh:Warning ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_ceremony_link_negative_v1_0_0.ttl" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_ceremony_link_negative_v1_1_0.ttl" ;
     backlog:fixtureCaseName "MO_NoLink" ;
     rdfs:label "Advisory: a reading that could be tied to the review that produced it, isn't"@en ;
     sh:sparql [ a sh:SPARQLConstraint ;
@@ -4370,7 +4371,7 @@ backlog:CeremonyLinkAdvisoryShape a sh:NodeShape ;
 backlog:MeasurementDueAfterReviewShape a sh:NodeShape ;
     sh:targetClass backlog:SprintReviewCeremony ;
     sh:severity sh:Warning ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_measurement_due_v1_0_0.ttl" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_measurement_due_v1_1_0.ttl" ;
     backlog:fixtureCaseName "Review_NoReading" ;
     rdfs:label "Advisory: this review closed metric-moving work with no reading since"@en ;
     sh:sparql [ a sh:SPARQLConstraint ;
@@ -4902,7 +4903,7 @@ backlog:IterationNotCleanedShape a sh:NodeShape ;
 backlog:RetrospectiveNotStartedShape a sh:NodeShape ;
     sh:targetClass backlog:SprintReviewCeremony ;
     sh:severity sh:Warning ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_sprint_ceremonies_v1_0_0.ttl" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_sprint_ceremonies_v1_1_0.ttl" ;
     backlog:fixtureCaseName "REVIEW_NoRetro" ;
     rdfs:label "Advisory: this review made a real decision but no retrospective has started following it"@en ;
     sh:sparql [ a sh:SPARQLConstraint ;
@@ -4948,7 +4949,7 @@ backlog:PackageContentShape a sh:NodeShape ;
 backlog:PackageRegularityShape a sh:NodeShape ;
     sh:targetClass backlog:Package ;
     sh:severity sh:Warning ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_package_regularity_v1_0_0.ttl" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_package_regularity_v1_1_0.ttl" ;
     backlog:fixtureCaseName "Pkg_Odd" ;
     rdfs:label "Advisory: a package's sprint count diverges sharply from its siblings"@en ;
     sh:sparql [ a sh:SPARQLConstraint ;
@@ -5066,7 +5067,7 @@ backlog:AchievedOnlyWhenClearShape a sh:NodeShape ;
         }""" ] .
 
 backlog:BaselineReferenceShape a sh:NodeShape ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_tool_run_record_v1_0_0.ttl" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_tool_run_record_v1_1_0.ttl" ;
     sh:targetClass backlog:BaselineReference ;
     sh:severity sh:Violation ;
     rdfs:label "A baseline reference names its tool, its location, and why (L1)"@en ;
@@ -5078,7 +5079,7 @@ backlog:BaselineReferenceShape a sh:NodeShape ;
                   sh:message "L1: a baseline reference must state why this location is the right one." ] .
 
 backlog:ToolRunRecordShape a sh:NodeShape ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_tool_run_record_v1_0_0.ttl" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_tool_run_record_v1_1_0.ttl" ;
     sh:targetClass backlog:ToolRunRecord ;
     sh:severity sh:Violation ;
     rdfs:label "A tool run record names its tool and carries both real hashes (L1)"@en ;
@@ -5092,7 +5093,7 @@ backlog:ToolRunRecordShape a sh:NodeShape ;
                   sh:message "L1: a tool run record must state what the tool itself concluded about its own baseline." ] .
 
 backlog:RemoteCommitShape a sh:NodeShape ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_cross_project_commit_v1_0_0.ttl" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_cross_project_commit_v1_1_0.ttl" ;
     sh:targetClass backlog:RemoteCommit ;
     sh:severity sh:Violation ;
     rdfs:label "A remote commit record names at least one real touched path (L1)"@en ;
@@ -5100,7 +5101,7 @@ backlog:RemoteCommitShape a sh:NodeShape ;
                   sh:message "L1: a remote commit record must name at least one real path it touched, or it asserts nothing checkable." ] .
 
 backlog:CrossProjectCommitAdvisoryShape a sh:NodeShape ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_cross_project_commit_v1_0_0.ttl" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_cross_project_commit_v1_1_0.ttl" ;
     sh:targetClass backlog:RemoteCommit ;
     sh:severity sh:Warning ;
     rdfs:label "Advisory: a remote commit touched this package's own sovereign path and needs real reconciliation"@en ;
@@ -5115,7 +5116,7 @@ backlog:CrossProjectCommitAdvisoryShape a sh:NodeShape ;
         }""" ] .
 
 backlog:NewUnprovenShapeShape a sh:NodeShape ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_new_unproven_shape_v1_0_0.ttl" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_new_unproven_shape_v1_1_0.ttl" ;
     sh:target [ a sh:SPARQLTarget ;
         sh:select """SELECT ?this WHERE {
             ?this a <http://www.w3.org/ns/shacl#NodeShape> ;
@@ -5132,7 +5133,7 @@ backlog:NewUnprovenShapeShape a sh:NodeShape ;
         }""" ] .
 
 backlog:SelfComparisonClaimShape a sh:NodeShape ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_tool_run_record_v1_0_0.ttl" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_tool_run_record_v1_1_0.ttl" ;
     sh:targetClass backlog:ToolRunRecord ;
     sh:severity sh:Violation ;
     rdfs:label "A run cannot claim a distinct baseline while its own two hashes match (L3)"@en ;
@@ -5147,7 +5148,7 @@ backlog:SelfComparisonClaimShape a sh:NodeShape ;
         }""" ] .
 
 backlog:ClosureReportShape a sh:NodeShape ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_closure_report_v1_0_0.ttl" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_closure_report_v1_1_0.ttl" ;
     sh:targetClass backlog:ClosureReport ;
     sh:severity sh:Violation ;
     rdfs:label "A closure report names its mission, when it ran, and covers real measures (L1)"@en ;
@@ -5161,7 +5162,7 @@ backlog:ClosureReportShape a sh:NodeShape ;
                   sh:message "L1: a closure report must report on at least one real objective; a dashboard with no measures is a summary, not a dashboard." ] .
 
 backlog:MissionClosureRequiresReportShape a sh:NodeShape ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_closure_report_v1_0_0.ttl" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_closure_report_v1_1_0.ttl" ;
     sh:targetClass backlog:Mission ;
     sh:severity sh:Violation ;
     rdfs:label "A mission is not Achieved without a real closure report naming it (L3)"@en ;
