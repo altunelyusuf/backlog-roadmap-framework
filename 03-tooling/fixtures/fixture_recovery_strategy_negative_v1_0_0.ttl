@@ -1,0 +1,80 @@
+@prefix backlog: <http://example.org/backlog#> .
+@prefix ex:      <http://example.org/recovery-strategy-neg#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+# Recovery strategies -- test drive, not a construction. NEGATIVE. One case per clause:
+#  RestartDeclaresStrategyShape  R0 declares none.
+#  DecreaseByFactorShape         R_F second restart, reductionObserved 0.25.
+#  VariableDecreaseShape         R_V2 reduction 0.3 after R_V1's 0.6.
+#  DivideAndConquerShape         R_D one part only; part P_bad no parent/deliverable; item S_D in no part.
+#  CombineOutputShape            C_bad combines a retracted output; misses P_ok's active Backlog output.
+#  TransformStrategyShape        R_S no ScopeChange; R_R bypassed epic undecomposed; R_T template = self.
+#  SubmittedToOwnInboxShape      EP_own submitted only to 07-handover-inbox/pending/...
+# Witness: ScopeChange SC after R_S2 (simplify restart) -> order check problem; L_S2 BYPASS.
+ex:L0 a backlog:Lineage ; backlog:lineageOrdinal 1 ; backlog:lineageArchived false .
+ex:B0 a backlog:LineageBypass ; backlog:bypassedLineage ex:L0 ; backlog:hasFailureMode backlog:FM_LineageBypass ; backlog:hasFindingScope backlog:Scope_Methodology ; backlog:hasRootCause "fx" ;
+    backlog:bypassedItem ex:S0 ; backlog:itemFirstCommit "S0 c1 1000" ; backlog:chainClosedCommit "absent" ; backlog:detectedAt "2026-09-07T09:00:00Z"^^xsd:dateTime ; backlog:detectedBy "fx" .
+ex:S0 a backlog:Story ; backlog:hasIdentifier "S0" ; backlog:hasState backlog:Proposed ; backlog:belongsToLineage ex:L0 ; backlog:preLineageItem true .
+ex:O0 a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage ex:L0 ; backlog:closedAtCommit "c8" ; backlog:hasStateDigest "x" ; backlog:outputRetracted true .
+ex:R0 a backlog:LineageRestart ; backlog:restartsLineage ex:L0 ; backlog:answersBypass ex:B0 ; backlog:retractsOutput ex:O0 ; backlog:restartedAtCommit "c10" ; backlog:decidedBy backlog:Owner .
+
+ex:L_F a backlog:Lineage ; backlog:lineageOrdinal 2 ; backlog:lineageArchived false .
+ex:B_F1 a backlog:LineageBypass ; backlog:bypassedLineage ex:L_F ; backlog:hasFailureMode backlog:FM_LineageBypass ; backlog:hasFindingScope backlog:Scope_Methodology ; backlog:hasRootCause "fx" ;
+    backlog:bypassedItem ex:S_F ; backlog:itemFirstCommit "S_F c1 1000" ; backlog:chainClosedCommit "absent" ; backlog:detectedAt "2026-09-07T09:00:00Z"^^xsd:dateTime ; backlog:detectedBy "fx" .
+ex:B_F2 a backlog:LineageBypass ; backlog:bypassedLineage ex:L_F ; backlog:hasFailureMode backlog:FM_LineageBypass ; backlog:hasFindingScope backlog:Scope_Methodology ; backlog:hasRootCause "fx" ;
+    backlog:bypassedItem ex:S_F2 ; backlog:itemFirstCommit "S_F2 c12 12000" ; backlog:chainClosedCommit "absent" ; backlog:detectedAt "2026-09-07T10:00:00Z"^^xsd:dateTime ; backlog:detectedBy "fx" .
+ex:S_F a backlog:Story ; backlog:hasIdentifier "S_F" ; backlog:hasState backlog:Proposed ; backlog:belongsToLineage ex:L_F ; backlog:preLineageItem true .
+ex:S_F2 a backlog:Story ; backlog:hasIdentifier "S_F2" ; backlog:hasState backlog:Proposed ; backlog:belongsToLineage ex:L_F ; backlog:preLineageItem true .
+ex:O_F a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage ex:L_F ; backlog:closedAtCommit "c8" ; backlog:hasStateDigest "x" ; backlog:outputRetracted true .
+ex:R_F1 a backlog:LineageRestart ; backlog:restartsLineage ex:L_F ; backlog:answersBypass ex:B_F1 ; backlog:hasRecoveryStrategy backlog:Strat_DecreaseByFactor ; backlog:retractsOutput ex:O_F ; backlog:restartedAtCommit "c10" ; backlog:decidedBy backlog:Owner .
+ex:R_F a backlog:LineageRestart ; backlog:restartsLineage ex:L_F ; backlog:answersBypass ex:B_F2 ; backlog:hasRecoveryStrategy backlog:Strat_DecreaseByFactor ; backlog:reductionObserved 0.25 ; backlog:retractsOutput ex:O_F ; backlog:restartedAtCommit "c14" ; backlog:decidedBy backlog:Owner .
+
+ex:L_V a backlog:Lineage ; backlog:lineageOrdinal 3 ; backlog:lineageArchived false .
+ex:B_V1 a backlog:LineageBypass ; backlog:bypassedLineage ex:L_V ; backlog:hasFailureMode backlog:FM_LineageBypass ; backlog:hasFindingScope backlog:Scope_Methodology ; backlog:hasRootCause "fx" ;
+    backlog:bypassedItem ex:S_V ; backlog:itemFirstCommit "S_V c1 1000" ; backlog:chainClosedCommit "absent" ; backlog:detectedAt "2026-09-07T09:00:00Z"^^xsd:dateTime ; backlog:detectedBy "fx" .
+ex:B_V2 a backlog:LineageBypass ; backlog:bypassedLineage ex:L_V ; backlog:hasFailureMode backlog:FM_LineageBypass ; backlog:hasFindingScope backlog:Scope_Methodology ; backlog:hasRootCause "fx" ;
+    backlog:bypassedItem ex:S_V2 ; backlog:itemFirstCommit "S_V2 c12 12000" ; backlog:chainClosedCommit "absent" ; backlog:detectedAt "2026-09-07T10:00:00Z"^^xsd:dateTime ; backlog:detectedBy "fx" .
+ex:S_V a backlog:Story ; backlog:hasIdentifier "S_V" ; backlog:hasState backlog:Proposed ; backlog:belongsToLineage ex:L_V ; backlog:preLineageItem true .
+ex:S_V2 a backlog:Story ; backlog:hasIdentifier "S_V2" ; backlog:hasState backlog:Proposed ; backlog:belongsToLineage ex:L_V ; backlog:preLineageItem true .
+ex:O_V a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage ex:L_V ; backlog:closedAtCommit "c8" ; backlog:hasStateDigest "x" ; backlog:outputRetracted true .
+ex:R_V1 a backlog:LineageRestart ; backlog:restartsLineage ex:L_V ; backlog:answersBypass ex:B_V1 ; backlog:hasRecoveryStrategy backlog:Strat_VariableDecrease ; backlog:reductionObserved 0.6 ; backlog:retractsOutput ex:O_V ; backlog:restartedAtCommit "c10" ; backlog:decidedBy backlog:Owner .
+ex:R_V2 a backlog:LineageRestart ; backlog:restartsLineage ex:L_V ; backlog:answersBypass ex:B_V2 ; backlog:hasRecoveryStrategy backlog:Strat_VariableDecrease ; backlog:reductionObserved 0.3 ; backlog:retractsOutput ex:O_V ; backlog:restartedAtCommit "c14" ; backlog:decidedBy backlog:Owner .
+
+ex:L_D a backlog:Lineage ; backlog:lineageOrdinal 4 ; backlog:lineageArchived false .
+ex:B_D a backlog:LineageBypass ; backlog:bypassedLineage ex:L_D ; backlog:hasFailureMode backlog:FM_LineageBypass ; backlog:hasFindingScope backlog:Scope_Methodology ; backlog:hasRootCause "fx" ;
+    backlog:bypassedItem ex:S_D ; backlog:itemFirstCommit "S_D c1 1000" ; backlog:chainClosedCommit "absent" ; backlog:detectedAt "2026-09-07T09:00:00Z"^^xsd:dateTime ; backlog:detectedBy "fx" .
+ex:S_D a backlog:Story ; backlog:hasIdentifier "S_D" ; backlog:hasState backlog:Proposed ; backlog:belongsToLineage ex:L_D ; backlog:preLineageItem true .
+ex:O_D a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage ex:L_D ; backlog:closedAtCommit "c8" ; backlog:hasStateDigest "x" ; backlog:outputRetracted true .
+ex:P_bad a backlog:Lineage ; backlog:lineageOrdinal 41 ; backlog:lineageArchived false .
+ex:R_D a backlog:LineageRestart ; backlog:restartsLineage ex:L_D ; backlog:answersBypass ex:B_D ; backlog:hasRecoveryStrategy backlog:Strat_DivideAndConquer ; backlog:partLineage ex:P_bad ; backlog:retractsOutput ex:O_D ; backlog:restartedAtCommit "c10" ; backlog:decidedBy backlog:Owner .
+ex:P_ok a backlog:Lineage ; backlog:lineageOrdinal 42 ; backlog:lineageArchived false ; backlog:parentLineage ex:L_D .
+ex:P_ok_Backlog a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage ex:P_ok ; backlog:closedAtCommit "c15" ; backlog:hasStateDigest "x" .
+ex:C_bad a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage ex:L_D ; backlog:combinesOutput ex:O_D ; backlog:closedAtCommit "c16" ; backlog:hasStateDigest "x" .
+
+ex:L_S a backlog:Lineage ; backlog:lineageOrdinal 5 ; backlog:lineageArchived false .
+ex:B_S a backlog:LineageBypass ; backlog:bypassedLineage ex:L_S ; backlog:hasFailureMode backlog:FM_LineageBypass ; backlog:hasFindingScope backlog:Scope_Methodology ; backlog:hasRootCause "fx" ;
+    backlog:bypassedItem ex:E_S ; backlog:itemFirstCommit "E_S c1 1000" ; backlog:chainClosedCommit "absent" ; backlog:detectedAt "2026-09-07T09:00:00Z"^^xsd:dateTime ; backlog:detectedBy "fx" .
+ex:E_S a backlog:Epic ; backlog:hasIdentifier "E_S" ; backlog:hasState backlog:Proposed ; backlog:belongsToLineage ex:L_S ; backlog:preLineageItem true .
+ex:O_S a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage ex:L_S ; backlog:closedAtCommit "c8" ; backlog:hasStateDigest "x" ; backlog:outputRetracted true .
+ex:R_S a backlog:LineageRestart ; backlog:restartsLineage ex:L_S ; backlog:answersBypass ex:B_S ; backlog:hasRecoveryStrategy backlog:Strat_TransformSimplify ; backlog:retractsOutput ex:O_S ; backlog:restartedAtCommit "c10" ; backlog:decidedBy backlog:Owner .
+ex:R_R a backlog:LineageRestart ; backlog:restartsLineage ex:L_S ; backlog:answersBypass ex:B_S ; backlog:hasRecoveryStrategy backlog:Strat_TransformRepresent ; backlog:retractsOutput ex:O_S ; backlog:restartedAtCommit "c10" ; backlog:decidedBy backlog:Owner .
+ex:R_T a backlog:LineageRestart ; backlog:restartsLineage ex:L_S ; backlog:answersBypass ex:B_S ; backlog:hasRecoveryStrategy backlog:Strat_TransformReduce ; backlog:templateLineage ex:L_S ; backlog:retractsOutput ex:O_S ; backlog:restartedAtCommit "c10" ; backlog:decidedBy backlog:Owner .
+
+# git-order case for the tool: simplify restart R_S2 at c10, its ScopeChange SC at c11 (after)
+ex:L_S2 a backlog:Lineage ; backlog:lineageOrdinal 6 ; backlog:lineageArchived false .
+ex:B_S2 a backlog:LineageBypass ; backlog:bypassedLineage ex:L_S2 ; backlog:hasFailureMode backlog:FM_LineageBypass ; backlog:hasFindingScope backlog:Scope_Methodology ; backlog:hasRootCause "fx" ;
+    backlog:bypassedItem ex:S_S2 ; backlog:itemFirstCommit "S_S2 c1 1000" ; backlog:chainClosedCommit "absent" ; backlog:detectedAt "2026-09-07T09:00:00Z"^^xsd:dateTime ; backlog:detectedBy "fx" .
+ex:S_S2 a backlog:Story ; backlog:hasIdentifier "S_S2" ; backlog:hasState backlog:Proposed ; backlog:belongsToLineage ex:L_S2 ; backlog:preLineageItem true .
+ex:O_S2 a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage ex:L_S2 ; backlog:closedAtCommit "c8" ; backlog:hasStateDigest "x" ; backlog:outputRetracted true .
+ex:SC a backlog:ScopeChange .
+ex:R_S2 a backlog:LineageRestart ; backlog:restartsLineage ex:L_S2 ; backlog:answersBypass ex:B_S2 ; backlog:hasRecoveryStrategy backlog:Strat_TransformSimplify ; backlog:simplifiedBy ex:SC ; backlog:retractsOutput ex:O_S2 ; backlog:restartedAtCommit "c10" ; backlog:decidedBy backlog:Owner .
+ex:N_S2 a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage ex:L_S2 ; backlog:closedAtCommit "c12" ; backlog:hasStateDigest "x" .
+
+ex:ExtDep a backlog:ExternalDependency ; backlog:hasExternalDependencyType backlog:Ext_UpstreamComponent ; backlog:hasExternalParty "fixture" .
+ex:EP_own a backlog:EnhancementProposal ; backlog:proposalFor ex:ExtDep ; backlog:hasRequestedChange "fx" ;
+    backlog:submittedTo "07-handover-inbox/pending/PROPOSAL_fixture_v1_0_0.md" ;
+    backlog:proposalRaisedAt "2026-09-07T09:00:00Z"^^xsd:dateTime ; backlog:hasProposalStatus backlog:Prop_Submitted .
+
+<http://example.org/recovery-strategy-neg#> backlog:hasExpectedPolarity backlog:Polarity_Negative .

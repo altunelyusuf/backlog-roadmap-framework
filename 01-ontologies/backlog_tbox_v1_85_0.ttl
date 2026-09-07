@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.84.0> ;
-    owl:versionInfo "1.84.0" ;
+    owl:versionIRI <http://example.org/backlog/1.85.0> ;
+    owl:versionInfo "1.85.0" ;
+    owl:priorVersion <http://example.org/backlog/1.84.0> ;
     owl:priorVersion <http://example.org/backlog/1.83.0> ;
     owl:priorVersion <http://example.org/backlog/1.82.0> ;
     owl:priorVersion <http://example.org/backlog/1.81.0> ;
@@ -6547,7 +6548,7 @@ backlog:lineageFrozen a owl:DatatypeProperty , owl:FunctionalProperty ;
     skos:definition "True while a LineageThrash stands against this lineage and the owner has not ruled. A frozen lineage accepts no LineageRestart; it is left as it is until frozenRuling records the owner's decision."@en .
 
 backlog:frozenBy a owl:ObjectProperty , owl:FunctionalProperty ;
-    rdfs:domain backlog:Lineage ; rdfs:range backlog:LineageThrash ;
+    rdfs:domain backlog:Lineage ; rdfs:range backlog:RetrospectiveFinding ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "frozen by"@en .
 
@@ -6556,3 +6557,96 @@ backlog:frozenRuling a owl:DatatypeProperty , owl:FunctionalProperty ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "frozen ruling"@en ;
     skos:definition "The owner's ruling that lifts a freeze: an Out_Abandoned transition on the mission, a ScopeChange, or an explicit unfreeze with its reason. Recorded verbatim, decidedBy Owner on the lineage. Absent while the lineage waits."@en .
+
+#################################################################
+#  v1.85.0 (2026-09-07) -- RECOVERY STRATEGIES. The v1.84.0 stop
+#  condition was one strategy: decrease-by-one (every restart must
+#  admit at least one more item than the last). The owner named the
+#  rest of the family -- decrease-and-conquer's other variants, divide
+#  and conquer, transform and conquer -- and each has its own
+#  convergence test. A LineageRestart now declares which strategy it
+#  follows; the shapes test the evidence that strategy requires; the
+#  order check measures the strategy's own criterion.
+#
+#  Also: a LineageBypass FREEZES its lineage (frozenBy the bypass)
+#  until a restart answers it. That is the state between "found" and
+#  "decided" -- publishable, so that the finding and the restart can
+#  be witnessed in separate commits (Thrash_NotDeliberated made this
+#  a contradiction at v1.84.0: the shape wanted the restart in the
+#  same release the bypass appeared in, the witness wanted it later).
+#################################################################
+
+backlog:RecoveryStrategy a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:Strat_DecreaseByOne backlog:Strat_DecreaseByFactor backlog:Strat_VariableDecrease
+                backlog:Strat_DivideAndConquer backlog:Strat_TransformSimplify backlog:Strat_TransformRepresent backlog:Strat_TransformReduce ) ;
+    rdfs:label "Recovery Strategy"@en ;
+    skos:definition "How a LineageRestart intends to make the next trial smaller than the last, named after the algorithm-design strategy it instantiates. Each carries its own convergence test; none is a count."@en .
+
+backlog:Strat_DecreaseByOne a owl:NamedIndividual , backlog:RecoveryStrategy ;
+    rdfs:label "Decrease by one"@en ;
+    skos:definition "Each trial admits at least one item the previous trial left unadmitted, and its bypass names at least one item no earlier bypass named. The default; tested by RestartRequiresNoveltyShape and RestartKeepsAdmissionsShape."@en .
+backlog:Strat_DecreaseByFactor a owl:NamedIndividual , backlog:RecoveryStrategy ;
+    rdfs:label "Decrease by a constant factor"@en ;
+    skos:definition "Each trial admits at least half of what the previous trial left unadmitted (reductionObserved >= 0.5, computed by the order check from the register, never hand-written). Converges in logarithmically many trials."@en .
+backlog:Strat_VariableDecrease a owl:NamedIndividual , backlog:RecoveryStrategy ;
+    rdfs:label "Variable-size decrease"@en ;
+    skos:definition "Each trial records the fraction it reduced (reductionObserved); the trial after it must reduce by no less. The reduction is the lineage's own measurement, and a shrinking reduction is the stop -- the same rule IneffectiveCorrectiveAttemptAdvisoryShape applies to objectives."@en .
+backlog:Strat_DivideAndConquer a owl:NamedIndividual , backlog:RecoveryStrategy ;
+    rdfs:label "Divide and conquer"@en ;
+    skos:definition "The bypassed lineage is partitioned into part lineages (parentLineage), one per scope deliverable its items satisfy; each part is rebuilt and converges on its own, a thrash freezes only its part, and the parent's rebuilt Stage_Backlog output combines (combinesOutput) every part's active Stage_Backlog output. Right for a lineage too large to restart as one."@en .
+backlog:Strat_TransformSimplify a owl:NamedIndividual , backlog:RecoveryStrategy ;
+    rdfs:label "Transform: instance simplification"@en ;
+    skos:definition "Before the restart, a ScopeChange (simplifiedBy) removes the deliverables the work never served, so the chain to rebuild is smaller than the chain that failed. The ScopeChange must first appear in git before the restart."@en .
+backlog:Strat_TransformRepresent a owl:NamedIndividual , backlog:RecoveryStrategy ;
+    rdfs:label "Transform: representation change"@en ;
+    skos:definition "Before the restart, every bypassed Epic is decomposed (decomposesInto) so that admission is decided per Story, not per Epic (G1 granularity)."@en .
+backlog:Strat_TransformReduce a owl:NamedIndividual , backlog:RecoveryStrategy ;
+    rdfs:label "Transform: problem reduction"@en ;
+    skos:definition "The restart adopts another lineage's converged chain as its template (templateLineage): a lineage the order check reads as ORDERED, not this one. Rebuilding from nothing is reduced to instantiating a known-good structure."@en .
+
+backlog:hasRecoveryStrategy a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:LineageRestart ; rdfs:range backlog:RecoveryStrategy ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has recovery strategy"@en ;
+    skos:definition "Required on every LineageRestart from v1.85.0. Absent on the two restarts recorded before it (they were decrease-by-one by construction and are left as recorded)."@en .
+
+backlog:reductionObserved a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:LineageRestart ; rdfs:range xsd:decimal ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "reduction observed"@en ;
+    skos:definition "Fraction of the items the PREVIOUS restart's bypass named that its rebuild admitted before this restart was recorded: admitted / named, in [0,1]. Written by backlog_lineage_order_check --emit from the register, never by hand; a shape refuses a hand-written value that the register does not reproduce."@en .
+
+backlog:parentLineage a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:Lineage ; rdfs:range backlog:Lineage ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "parent lineage"@en ;
+    skos:definition "This lineage is a part of the named one, created by a divide-and-conquer restart. It has its own chain, its own items (belongsToLineage), and converges or thrashes on its own."@en .
+
+backlog:partLineage a owl:ObjectProperty ;
+    rdfs:domain backlog:LineageRestart ; rdfs:range backlog:Lineage ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "part lineage"@en .
+
+backlog:partForDeliverable a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:Lineage ; rdfs:range backlog:ScopeDeliverable ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "part for deliverable"@en ;
+    skos:definition "The scope deliverable this part lineage owns; every item the part admits satisfies it. Partitioning by deliverable is partitioning by the scope's own decomposition (G17)."@en .
+
+backlog:combinesOutput a owl:ObjectProperty ;
+    rdfs:domain backlog:StageOutput ; rdfs:range backlog:StageOutput ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "combines output"@en ;
+    skos:definition "A parent lineage's Stage_Backlog output built from its parts' Stage_Backlog outputs -- the combine step of divide and conquer. One value per part; each must be active (not retracted)."@en .
+
+backlog:simplifiedBy a owl:ObjectProperty ;
+    rdfs:domain backlog:LineageRestart ; rdfs:range backlog:ScopeChange ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "simplified by"@en .
+
+backlog:templateLineage a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:LineageRestart ; rdfs:range backlog:Lineage ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "template lineage"@en .

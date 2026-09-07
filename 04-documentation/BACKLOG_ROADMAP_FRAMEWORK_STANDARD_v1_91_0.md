@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.90.0
+# Backlog & Roadmap Semantic Framework — Standard v1.91.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -727,6 +727,35 @@ the prior restart and any `lostItem`), and the lineage is **frozen**: `lineageFr
 owner's decision, recorded verbatim: `Out_Abandoned` on the mission, a `ScopeChange`, or an explicit
 unfreeze with its reason. The machine detects non-convergence and stops; it never chooses the outcome
 (G61).
+
+### 2.5c-xxi-d Recovery strategies: the stop condition is a family, not one rule
+
+The convergence test in the previous section is one strategy — *decrease by one*: each trial admits
+at least one more item and names at least one new one. It is the default, and it is not the only way
+to make the next trial smaller. Every `LineageRestart` declares its `RecoveryStrategy`, and each
+strategy carries its own evidence and its own convergence test; none is a count.
+
+| Strategy | Evidence on the restart | Converges when | Stops when |
+|---|---|---|---|
+| `Strat_DecreaseByOne` | — | novelty and admissions kept | same finding again (`Thrash_NoNovelty`) |
+| `Strat_DecreaseByFactor` | `reductionObserved` (tool-written) | previous trial admitted ≥ ½ of what it named | `reductionObserved` < 0.5 |
+| `Strat_VariableDecrease` | `reductionObserved` | reduction not smaller than the previous restart's | reduction shrinks |
+| `Strat_DivideAndConquer` | `partLineage` ×≥2, each `parentLineage` + `partForDeliverable`; a combine output `combinesOutput` | every part ORDERED and combined | a part thrashes (freezes only that part) |
+| `Strat_TransformSimplify` | `simplifiedBy` a `ScopeChange` first appearing before the restart (git) | smaller chain rebuilt | ScopeChange after the restart |
+| `Strat_TransformRepresent` | every bypassed `Epic` `decomposesInto` stories | admission per story | an undecomposed epic |
+| `Strat_TransformReduce` | `templateLineage` ≠ self, reading ORDERED | the template's shape instantiated | template not ORDERED |
+
+The register-side tests are `RestartDeclaresStrategyShape`, `DecreaseByFactorShape`,
+`VariableDecreaseShape`, `DivideAndConquerShape`, `CombineOutputShape`, `TransformStrategyShape`;
+the git-side ones (ScopeChange order, template state, parts' order) are the order check's.
+`reductionObserved` is computed by the order check from the register — admitted ÷ named for the last
+trial — and printed for the next restart to carry; a hand-written value the register does not
+reproduce is refused. A `LineageBypass` now also **freezes** its lineage (`frozenBy` the bypass) until
+a restart answers it, so the finding and the restart can be witnessed in separate commits without
+the register being non-conformant in between.
+
+An `EnhancementProposal` whose every `submittedTo` points into this package's own
+`07-handover-inbox/` has been sent to no one — `SubmittedToOwnInboxShape` (G80).
 
 ### 2.5c-xxii The staged ceremony, one commit per stage
 

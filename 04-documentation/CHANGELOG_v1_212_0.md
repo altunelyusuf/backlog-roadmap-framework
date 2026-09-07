@@ -1,5 +1,30 @@
 # Changelog
 
+## v1.212.0 — 2026-09-07 (MINOR: recovery strategies — the stop condition as a family; late planning is a bypass; lineage 7 found and frozen)
+
+Owner's decisions: (1) build the strategy family, (2) restart lineage 7 with divide and conquer,
+(3) the G80 shape. `G83` records it.
+
+- TBox v1.85.0: `RecoveryStrategy` {DecreaseByOne, DecreaseByFactor, VariableDecrease,
+  DivideAndConquer, TransformSimplify, TransformRepresent, TransformReduce}; `hasRecoveryStrategy`,
+  `reductionObserved`, `parentLineage`, `partLineage`, `partForDeliverable`, `combinesOutput`,
+  `simplifiedBy`, `templateLineage`; `frozenBy` widened to any finding (a bypass freezes too).
+- Shapes v1.103.0: `RestartDeclaresStrategyShape`, `DecreaseByFactorShape`, `VariableDecreaseShape`,
+  `DivideAndConquerShape`, `CombineOutputShape`, `TransformStrategyShape`, `SubmittedToOwnInboxShape`
+  (G80); `BypassRequiresRestartShape` accepts found-and-frozen; the frozen rule applies to thrash
+  freezes only; novelty applies to decrease-by-one only; combine outputs exempt from the
+  consumes-predecessor rule; part items admitted by their part's output.
+- `backlog_lineage_order_check_v1_2_0.py`: late-planned items are bypassed items; FOUND and DIVIDING
+  verdicts; strategy witnesses (ScopeChange order, template ORDERED, parts' verdicts);
+  `reductionObserved` printed for the next restart; `--emit` writes the freeze with the bypass.
+- Fixtures `fixture_recovery_strategy_v1_0_0` (+witness) and
+  `fixture_recovery_strategy_negative_v1_0_0` (+witness). Gate v1.6.0 self-proves on them.
+- Standard v1.91.0 (§2.5c-xxi-d), discipline v54.0.0 (standing rule, `G83`).
+- Register v9.60.0: `Bypass_L_OntologyDriven_20260907` as measured (14 items planned after they
+  existed, each with its first commit and its PlanningEvent's); lineage 7 frozen by it. The restart
+  — divide and conquer, one part per deliverable — comes in the next release so that finding and
+  decision are witnessed apart. 0 violations.
+
 ## v1.211.0 — 2026-09-07 (PATCH: the proof read; Out_Achieved re-affirmed on the rebuilt chain)
 
 Post-commit reading of `backlog_lineage_order_check_v1_1_1` on v9.58.0: **lineage 8 ORDERED,

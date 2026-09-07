@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.102.0> ;
-    owl:versionInfo "1.102.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.103.0> ;
+    owl:versionInfo "1.103.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.102.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.101.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.100.1> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.100.0> ;
@@ -3727,6 +3728,9 @@ backlog:StageOutputShape a sh:NodeShape ;
         sh:select """SELECT $this WHERE {
             $this backlog:outputOfStage ?st . ?st backlog:stagePredecessor ?pred .
             FILTER NOT EXISTS { $this backlog:consumesOutput ?prev . ?prev backlog:outputOfStage ?pred }
+            # v1.103.0: a combine output (divide and conquer) is built from its parts' Backlog
+            # outputs, not from a predecessor stage of its own; CombineOutputShape governs it
+            FILTER NOT EXISTS { $this backlog:combinesOutput ?part }
         }""" ] .
 
 backlog:StagedElementShape a sh:NodeShape ;
@@ -5379,6 +5383,9 @@ backlog:BypassRequiresRestartShape a sh:NodeShape ;
             ?b a backlog:LineageBypass ; backlog:bypassedLineage $this .
             FILTER NOT EXISTS { $this backlog:lineageArchived true }
             FILTER NOT EXISTS { ?r a backlog:LineageRestart ; backlog:restartsLineage $this ; backlog:answersBypass ?b }
+            # v1.103.0: found-and-frozen is the state between the finding's commit and the
+            # restart's commit -- publishable, so the two can be witnessed apart
+            FILTER NOT EXISTS { $this backlog:lineageFrozen true ; backlog:frozenBy ?b }
         }""" ] .
 
 backlog:LineageRestartShape a sh:NodeShape ;
@@ -5450,6 +5457,8 @@ backlog:PreLineageItemShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             $this backlog:preLineageItem true ; backlog:admittedByOutput ?o ; backlog:belongsToLineage ?l .
+            # v1.103.0: an item of a divided lineage is admitted by its PART's Backlog output
+            FILTER NOT EXISTS { ?part backlog:parentLineage ?l . $this backlog:belongsToLineage ?part }
             FILTER ( EXISTS { ?o backlog:outputRetracted true }
                   || NOT EXISTS { ?o backlog:outputOfStage backlog:Stage_Backlog }
                   || NOT EXISTS { ?o backlog:belongsToLineage ?l } )
@@ -5485,6 +5494,8 @@ backlog:RestartRequiresNoveltyShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             $this backlog:restartsLineage ?l ; backlog:answersBypass ?b2 .
+            # v1.103.0: novelty is decrease-by-one's own test; the other strategies carry theirs
+            FILTER NOT EXISTS { $this backlog:hasRecoveryStrategy ?st . FILTER (?st != backlog:Strat_DecreaseByOne) }
             ?r1 a backlog:LineageRestart ; backlog:restartsLineage ?l ; backlog:answersBypass ?b1 .
             FILTER (?r1 != $this && ?b1 != ?b2)
             ?b1 backlog:detectedAt ?d1 . ?b2 backlog:detectedAt ?d2 . FILTER (STR(?d2) > STR(?d1))
@@ -5538,6 +5549,7 @@ backlog:NoRestartOnFrozenLineageShape a sh:NodeShape ;
         sh:select """SELECT $this WHERE {
             $this backlog:restartsLineage ?l .
             ?l backlog:lineageFrozen true ; backlog:frozenBy ?t .
+            ?t a backlog:LineageThrash .
             FILTER NOT EXISTS { ?l backlog:frozenRuling ?ruling }
             # the restart the thrash itself judged is the record, not a new act
             FILTER NOT EXISTS { ?t backlog:priorRestart $this }
@@ -5565,4 +5577,152 @@ backlog:LineageThrashShape a sh:NodeShape ;
         sh:select """SELECT $this WHERE {
             $this backlog:thrashedLineage ?l ; backlog:repeatedBypass ?b .
             FILTER NOT EXISTS { ?b backlog:bypassedLineage ?l }
+        }""" ] .
+
+#################################################################
+#  v1.103.0 (2026-09-07) -- recovery strategies (each with its own
+#  convergence evidence), bypass-freeze, and the G80 rule. Proven by
+#  fixture_recovery_strategy (positive) and
+#  fixture_recovery_strategy_negative (negative).
+#################################################################
+
+backlog:RestartDeclaresStrategyShape a sh:NodeShape ;
+    sh:targetClass backlog:LineageRestart ;
+    sh:severity sh:Violation ;
+    rdfs:label "A restart declares its recovery strategy (L1)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_recovery_strategy_negative_v1_0_0.ttl" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this restart declares no recovery strategy. A restart states how the next trial will be smaller than the last -- decrease by one, by a factor, by a measured amount, by division, or by transformation -- or its convergence cannot be tested. (The two restarts recorded before v1.85.0 are exempt by their own detectedAt-less history: they carry a restartedAtCommit naming a release below v1.212.0.)" ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            FILTER NOT EXISTS { $this backlog:hasRecoveryStrategy ?s }
+            FILTER NOT EXISTS { $this backlog:restartedAtCommit ?c . FILTER (CONTAINS(STR(?c), "v1.203.0") || CONTAINS(STR(?c), "0251509")) }
+        }""" ] .
+
+backlog:DecreaseByFactorShape a sh:NodeShape ;
+    sh:targetClass backlog:LineageRestart ;
+    sh:severity sh:Violation ;
+    rdfs:label "Decrease by a constant factor: the previous trial admitted at least half (L1)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_recovery_strategy_negative_v1_0_0.ttl" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this restart follows Strat_DecreaseByFactor but records no reductionObserved, or one below 0.5: the previous trial admitted fewer than half of what it set out to admit. Under this strategy that is the stop, not grounds for another trial -- record a LineageThrash." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasRecoveryStrategy backlog:Strat_DecreaseByFactor ; backlog:restartsLineage ?l .
+            ?r1 a backlog:LineageRestart ; backlog:restartsLineage ?l . FILTER (?r1 != $this)
+            FILTER NOT EXISTS { $this backlog:reductionObserved ?x . FILTER (?x >= 0.5) }
+        }""" ] .
+
+backlog:VariableDecreaseShape a sh:NodeShape ;
+    sh:targetClass backlog:LineageRestart ;
+    sh:severity sh:Violation ;
+    rdfs:label "Variable-size decrease: the reduction does not shrink (L1)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_recovery_strategy_negative_v1_0_0.ttl" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this restart follows Strat_VariableDecrease and either records no reductionObserved, or its reduction is smaller than the previous restart's on the same lineage. A shrinking reduction is the stop condition under this strategy -- record a LineageThrash rather than restart again." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasRecoveryStrategy backlog:Strat_VariableDecrease ; backlog:restartsLineage ?l ; backlog:answersBypass ?b2 .
+            ?r1 a backlog:LineageRestart ; backlog:restartsLineage ?l ; backlog:answersBypass ?b1 ; backlog:reductionObserved ?x1 .
+            FILTER (?r1 != $this)
+            ?b1 backlog:detectedAt ?d1 . ?b2 backlog:detectedAt ?d2 . FILTER (STR(?d2) > STR(?d1))
+            FILTER NOT EXISTS { $this backlog:reductionObserved ?x2 . FILTER (?x2 >= ?x1) }
+        }""" ] .
+
+backlog:DivideAndConquerShape a sh:NodeShape ;
+    sh:targetClass backlog:LineageRestart ;
+    sh:severity sh:Violation ;
+    rdfs:label "Divide and conquer: real parts, each owning a deliverable, covering every bypassed item (L1)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_recovery_strategy_negative_v1_0_0.ttl" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this divide-and-conquer restart names fewer than two part lineages. One part is not a division." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasRecoveryStrategy backlog:Strat_DivideAndConquer .
+            FILTER NOT EXISTS { $this backlog:partLineage ?p1 , ?p2 . FILTER (?p1 != ?p2) }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: a part named by this divide-and-conquer restart does not name the restarted lineage as its parentLineage, or owns no scope deliverable (partForDeliverable). Parts are partitioned by the scope's own deliverables (G17), not by convenience." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasRecoveryStrategy backlog:Strat_DivideAndConquer ; backlog:restartsLineage ?l ; backlog:partLineage ?p .
+            FILTER ( NOT EXISTS { ?p backlog:parentLineage ?l } || NOT EXISTS { ?p backlog:partForDeliverable ?d } )
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: an item named by the bypass this divide-and-conquer restart answers belongs to no part lineage. Every bypassed item must fall into exactly one part, by the deliverable it satisfies; an item that falls into none is the loop's leak." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasRecoveryStrategy backlog:Strat_DivideAndConquer ; backlog:answersBypass ?b .
+            ?b backlog:bypassedItem ?i .
+            FILTER NOT EXISTS { $this backlog:partLineage ?p . ?i backlog:belongsToLineage ?p }
+        }""" ] .
+
+backlog:CombineOutputShape a sh:NodeShape ;
+    sh:targetClass backlog:StageOutput ;
+    sh:severity sh:Violation ;
+    rdfs:label "A combine output combines every part's active Backlog output (L1)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_recovery_strategy_negative_v1_0_0.ttl" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this Stage_Backlog output of a divided lineage combines a retracted output, an output that is not a Stage_Backlog output, or one belonging to a lineage that is not its part -- or a part's active Backlog output is missing from it. The combine step takes every part's result, and only results." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage ?l ; backlog:combinesOutput ?po .
+            FILTER NOT EXISTS { $this backlog:outputRetracted true }
+            FILTER ( EXISTS { ?po backlog:outputRetracted true }
+                  || NOT EXISTS { ?po backlog:outputOfStage backlog:Stage_Backlog }
+                  || NOT EXISTS { ?po backlog:belongsToLineage ?p . ?p backlog:parentLineage ?l } )
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: a part of this divided lineage has an active Stage_Backlog output that this combine output does not combine." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage ?l ; backlog:combinesOutput ?any .
+            FILTER NOT EXISTS { $this backlog:outputRetracted true }
+            ?p backlog:parentLineage ?l . ?po backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage ?p .
+            FILTER NOT EXISTS { ?po backlog:outputRetracted true }
+            FILTER NOT EXISTS { $this backlog:combinesOutput ?po }
+        }""" ] .
+
+backlog:TransformStrategyShape a sh:NodeShape ;
+    sh:targetClass backlog:LineageRestart ;
+    sh:severity sh:Violation ;
+    rdfs:label "A transform-and-conquer restart carries its transformation (L1)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_recovery_strategy_negative_v1_0_0.ttl" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this restart follows Strat_TransformSimplify but names no ScopeChange (simplifiedBy) -- the instance was not simplified before the restart." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasRecoveryStrategy backlog:Strat_TransformSimplify .
+            FILTER NOT EXISTS { $this backlog:simplifiedBy ?sc . ?sc a backlog:ScopeChange }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this restart follows Strat_TransformRepresent but a bypassed Epic it answers is not decomposed (decomposesInto) -- the representation was not changed before the restart." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasRecoveryStrategy backlog:Strat_TransformRepresent ; backlog:answersBypass ?b .
+            ?b backlog:bypassedItem ?e . ?e a backlog:Epic .
+            FILTER NOT EXISTS { ?e backlog:decomposesInto ?child }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this restart follows Strat_TransformReduce but names no templateLineage, or names the lineage it restarts. Reduction is to ANOTHER lineage's converged chain; the order check verifies that lineage reads ORDERED." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasRecoveryStrategy backlog:Strat_TransformReduce ; backlog:restartsLineage ?l .
+            FILTER ( NOT EXISTS { $this backlog:templateLineage ?t } || EXISTS { $this backlog:templateLineage ?l } )
+        }""" ] .
+
+backlog:SubmittedToOwnInboxShape a sh:NodeShape ;
+    sh:targetClass backlog:EnhancementProposal ;
+    sh:severity sh:Violation ;
+    rdfs:label "A proposal is submitted somewhere its addressee reads (G80)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_recovery_strategy_negative_v1_0_0.ttl" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1 (G80): every submittedTo value of this proposal points into this package's own 07-handover-inbox/. A proposal filed in your own inbox has been sent to no one; the impediment that waits on it is waiting on you. Name a location the addressee actually reads (their own 07-handover-inbox/pending/ where one exists)." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:submittedTo ?any .
+            FILTER NOT EXISTS {
+                $this backlog:submittedTo ?to .
+                FILTER (!STRSTARTS(STR(?to), "07-handover-inbox/"))
+            }
         }""" ] .

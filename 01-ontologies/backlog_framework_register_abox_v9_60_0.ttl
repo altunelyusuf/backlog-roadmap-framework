@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.59.0> ;
-    owl:versionInfo "9.59.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.60.0> ;
+    owl:versionInfo "9.60.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.59.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.58.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.57.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.56.0> ;
@@ -6020,3 +6021,58 @@ fw:ET_ChangeGuideDoc backlog:admittedByOutput fw:Out3_Backlog_CD .
 #################################################################
 fw:CR_ChangeDiscipline backlog:citesFinding fw:Bypass_L_ChangeDiscipline_20260907 , fw:Thrash_L_ChangeDiscipline_20260907_1 ;
     backlog:statesBestPractice "Re-affirmation, 2026-09-07 (brsf-session), after Restart_L_ChangeDiscipline_20260907 and the owner's ruling: the chain this report closed on was rebuilt from Mission in five witnessed commits (23a514e, 6133bcd, 4ac5125, 97a1340, b6fbcc4); every rebuilt digest reproduces; all seven objectives remain MET on the observations already on record; the two items are admitted by Out3_Backlog_CD. Out_Achieved stands. The original closure (2026-09-05) was declared on a chain the git witness later showed to have been written after the work -- that finding and the thrash it led to are cited above, not erased." .
+
+#################################################################
+#  v9.60.0 (2026-09-07, brsf-session) -- LINEAGE 7 FOUND. Owner's
+#  decision: an item planned after it existed is a bypassed item.
+#  backlog_lineage_order_check_v1_2_0 on v9.59.0, real git witness:
+#  14 of lineage 7's 38 items first appear before their own
+#  PlanningEvent does. Recorded exactly as the tool emitted it; the
+#  lineage is frozen by the finding until a restart answers it -- in
+#  its own commit, so that finding and decision are witnessed apart
+#  (the lesson of v1.204.0). The restart will be divide and conquer,
+#  one part per scope deliverable, by the owner's decision.
+#################################################################
+fw:Bypass_L_OntologyDriven_20260907 a backlog:LineageBypass ;
+    backlog:bypassedLineage fw:L_OntologyDriven ;
+    backlog:hasFailureMode backlog:FM_LineageBypass ;
+    backlog:hasFindingScope backlog:Scope_Methodology ;
+    backlog:hasRootCause "The chain was written after the work: the items below first appear in the governed repository before the lineage's own Stage_Backlog output does. Measured by git first-appearance, not by the register's own dates." ;
+    backlog:bypassedItem fw:EP_CodeTables_S1 ;
+    backlog:itemFirstCommit "EP_CodeTables_S1 c2e7625 1787764473" ;
+    backlog:bypassedItem fw:EP_CodeTables_S2 ;
+    backlog:itemFirstCommit "EP_CodeTables_S2 c2e7625 1787764473" ;
+    backlog:bypassedItem fw:EP_RuleExec_S1 ;
+    backlog:itemFirstCommit "EP_RuleExec_S1 c2e7625 1787764473" ;
+    backlog:bypassedItem fw:EP_RuleExec_S2 ;
+    backlog:itemFirstCommit "EP_RuleExec_S2 c2e7625 1787764473" ;
+    backlog:bypassedItem fw:EP_Rulings_S1 ;
+    backlog:itemFirstCommit "EP_Rulings_S1 c2e7625 1787764473" ;
+    backlog:bypassedItem fw:EP_Rulings_S2 ;
+    backlog:itemFirstCommit "EP_Rulings_S2 c2e7625 1787764473" ;
+    backlog:bypassedItem fw:EP_ScriptDecisions_S1 ;
+    backlog:itemFirstCommit "EP_ScriptDecisions_S1 c2e7625 1787764473" ;
+    backlog:bypassedItem fw:EP_StandardRows_S1 ;
+    backlog:itemFirstCommit "EP_StandardRows_S1 c2e7625 1787764473" ;
+    backlog:bypassedItem fw:EP_StandardRows_S2 ;
+    backlog:itemFirstCommit "EP_StandardRows_S2 c2e7625 1787764473" ;
+    backlog:bypassedItem fw:S_Tables_B1 ;
+    backlog:itemFirstCommit "S_Tables_B1 4ebb37e 1787782401" ;
+    backlog:bypassedItem fw:S_Tables_B2 ;
+    backlog:itemFirstCommit "S_Tables_B2 4ebb37e 1787782401" ;
+    backlog:bypassedItem fw:S_Tables_B3 ;
+    backlog:itemFirstCommit "S_Tables_B3 4ebb37e 1787782401" ;
+    backlog:bypassedItem fw:S_Tables_B4 ;
+    backlog:itemFirstCommit "S_Tables_B4 4ebb37e 1787782401" ;
+    backlog:bypassedItem fw:S_RulingsQueryableDecision ;
+    backlog:itemFirstCommit "S_RulingsQueryableDecision 5d544af 1788506810" ;
+    backlog:bypassedOutput fw:Out2_Backlog ;
+    backlog:bypassedOutput fw:Out2_Goal ;
+    backlog:bypassedOutput fw:Out2_Mission ;
+    backlog:bypassedOutput fw:Out2_Objective ;
+    backlog:bypassedOutput fw:Out2_Scope ;
+    backlog:chainClosedCommit "c2e7625 1787764473" ;
+    backlog:detectedAt "2026-09-07T12:25:02Z"^^xsd:dateTime ;
+    backlog:detectedBy "backlog_lineage_order_check_v1_2_0" ;
+    backlog:hasRationale "EP_CodeTables_S1 first appears c2e7625 before Stage_Backlog output planned-late by Plan_EP_CodeTables_S1 (a371325); EP_CodeTables_S2 first appears c2e7625 before Stage_Backlog output planned-late by Plan_EP_CodeTables_S2 (a371325); EP_RuleExec_S1 first appears c2e7625 before Stage_Backlog output planned-late by Plan_EP_RuleExec_S1 (a371325); EP_RuleExec_S2 first appears c2e7625 before Stage_Backlog output planned-late by Plan_EP_RuleExec_S2 (a371325); EP_Rulings_S1 first appears c2e7625 before Stage_Backlog output planned-late by Plan_EP_Rulings_S1 (a371325); EP_Rulings_S2 first appears c2e7625 before Stage_Backlog output planned-late by Plan_EP_Rulings_S2 (a371325); EP_ScriptDecisions_S1 first appears c2e7625 before Stage_Backlog output planned-late by Plan_EP_ScriptDecisions_S1 (a371325); EP_StandardRows_S1 first appears c2e7625 before Stage_Backlog output planned-late by Plan_EP_StandardRows_S1 (a371325); EP_StandardRows_S2 first appears c2e7625 before Stage_Backlog output planned-late by Plan_EP_StandardRows_S2 (a371325); S_Tables_B1 first appears 4ebb37e before Stage_Backlog output planned-late by Plan_S_Tables_B1 (3479bf9); S_Tables_B2 first appears 4ebb37e before Stage_Backlog output planned-late by Plan_S_Tables_B2 (3479bf9); S_Tables_B3 first appears 4ebb37e before Stage_Backlog output planned-late by Plan_S_Tables_B3 (3479bf9); S_Tables_B4 first appears 4ebb37e before Stage_Backlog output planned-late by Plan_S_Tables_B4 (3479bf9); S_RulingsQueryableDecision first appears 5d544af before Stage_Backlog output planned-late by PE_RulingsQueryableDecision (9d2e70a)" .
+fw:L_OntologyDriven backlog:lineageFrozen true ; backlog:frozenBy fw:Bypass_L_OntologyDriven_20260907 .   # found: frozen until a restart answers it, in its own commit

@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v53.0.0
+# Lineage Operating Discipline — v54.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -267,6 +267,13 @@ because a fixture existed that exercised the new member, which is G7 applied to 
   rules. Enforced by `RestartRequiresNoveltyShape`, `RestartKeepsAdmissionsShape`,
   `ThrashFreezesLineageShape`, `NoRestartOnFrozenLineageShape`, `LineageThrashShape` (v1.102.0) and
   the order check's deliberation witness.
+- **A restart declares its recovery strategy, and its convergence is tested by that strategy's own
+  criterion** — decrease by one / by a factor / by a measured amount, divide and conquer, transform
+  and conquer (simplify, represent, reduce). Late planning of an item is a bypass of that item.
+  Enforced by `RestartDeclaresStrategyShape`, `DecreaseByFactorShape`, `VariableDecreaseShape`,
+  `DivideAndConquerShape`, `CombineOutputShape`, `TransformStrategyShape` (v1.103.0) and the order
+  check's strategy witnesses. A proposal filed only in this package's own inbox is refused:
+  `SubmittedToOwnInboxShape`.
 - **A deployment carries only proven work** — at L4 every deployed item is `Done`, carries
   bridge-verified `Evidence`, and has **every** acceptance criterion attested. That last is coverage
   at release time: a suite can be green while the criterion everyone cared about is untested.
@@ -2211,3 +2218,33 @@ frozen, the ruling left to the owner. Lineage 7 ORDERED.
 
 **Classified at logging time (L-112):** a genuine gap in G81's own design, found by the owner one
 release later — the restart mechanism had a start and no stop.
+
+## G83 — Convergence is a family of strategies; decrease-by-one was only the first
+
+**Named by the owner, correctly:** the G82 stop condition — each trial admits at least one more item
+and names at least one new one — is *decrease by one*, one of the decrease-and-conquer variants, and
+the other algorithm-design strategies each have their own way of making the next trial smaller and
+their own way of knowing when it is not. Built as a family (`RecoveryStrategy`, seven members, each
+with the evidence it must carry and the test that evidence enables), the default unchanged.
+
+Two things changed in the mechanism because of this. **A bypass now freezes its lineage** until a
+restart answers it: at v1.84.0 the shape demanded the restart in the same release the bypass appeared
+in while the git witness demanded it later — the contradiction the check caught its own author with
+(v1.204.0). Found-and-frozen is the publishable state between the two commits. **Late planning is a
+bypass**, by the owner's decision: an item whose `PlanningEvent` first appears after the item is the
+escape one level down, and it is now named in the finding like any other bypassed item. Measured on
+this register the moment it was decided: lineage 7, 14 items, BYPASS.
+
+**The strategy chosen for lineage 7 is divide and conquer**, also the owner's decision: 38 items,
+five scope deliverables; a single restart would retract everything at once and re-admit it as one
+undivided block. Parts are partitioned by the deliverable each item satisfies (G17: the scope's own
+decomposition), each part rebuilds and converges on its own, a part that thrashes freezes only
+itself, and the parent's combine output takes every part's result.
+
+**Proven before shipping (G7):** `fixture_recovery_strategy` (a divided lineage, both parts rebuilt
+in their own commits, combined) validates at 0 violations and reads ORDERED with both parts ORDERED;
+`fixture_recovery_strategy_negative` makes every strategy shape and the G80 shape fire, and the
+witness map makes the order check refuse a simplify restart whose `ScopeChange` came after it.
+
+**Classified at logging time (L-112):** a gap in G82's generality, not in its correctness — the one
+strategy it had was sound; it was one.

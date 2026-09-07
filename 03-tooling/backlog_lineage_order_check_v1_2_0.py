@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_lineage_order_check v1.1.1 — did the chain come before the work, or after?
+"""backlog_lineage_order_check v1.2.0 — did the chain come before the work, or after?
 
 THE ESCAPE THIS CATCHES. A lineage is Mission -> Scope -> Goal -> Objective -> Backlog,
 one commit per stage, and only then work items (LINEAGE_OPERATING_DISCIPLINE, ceremony
@@ -24,9 +24,19 @@ for every non-archived lineage that has stage outputs:
                chain is being rebuilt from Mission. Disclosed, exit 0.
   v1.1.1: a thrash already recorded as a LineageThrash is settled and not re-raised;
                a frozen lineage with a frozenRuling is measured normally again.
-  PLANNED_LATE (per item, advisory) a PlanningEvent first appears after the item it
-               plans: the work existed, then the planning record was written to fit it.
-               Reported on every run; not a gate failure in v1.0.0.
+  PLANNED_LATE (per item) a PlanningEvent first appears after the item it plans: the
+               work existed, then the planning record was written to fit it. v1.2.0, on the
+               owner's decision: a late-planned item IS a bypassed item -- the escape one
+               level down -- and is named in the bypass finding like any other.
+  FOUND        (v1.2.0) a bypass is recorded and the lineage is frozen by it, and no
+               restart answers it yet: the state between the finding's commit and the
+               restart's. Exit 0 -- the restart must come in its own commit.
+  Strategies (v1.2.0): a restart's hasRecoveryStrategy selects extra git checks --
+               Strat_TransformSimplify: its ScopeChange first appears before the restart;
+               Strat_TransformReduce: its templateLineage reads ORDERED;
+               Strat_DivideAndConquer: the parent is ORDERED only when every part is and
+               its combine output is active. --emit also prints, for the NEXT restart, the
+               reductionObserved of the last trial (admitted / named), never hand-written.
   BYPASS       at least one work item first appears BEFORE the lineage's Stage_Backlog
                output does (or that output is absent), or the outputs appear out of
                pipeline order. The chain was closed after the work.
@@ -224,15 +234,58 @@ def classify(g, L, witness, prefix):
         return any((t, B.hasThrashKind, URIRef(B + kind)) in g and (t, B.repeatedBypass, b) in g
                    for t in g.subjects(B.thrashedLineage, L))
     thrash = [t for t in thrash if not recorded(t[0], t[1])]
+    # 3f. v1.2.0: late planning is a bypass of the item (owner's decision, G83)
+    for ln, f, pe, pf in planned_late:
+        if not any(x[0] == ln for x in bypassed):
+            i = next(x for x in items if local(x) == ln)
+            pre = g.value(i, B.preLineageItem)
+            if pre is not None and bool(pre.toPython()):
+                continue
+            bypassed.append((ln, f, f"planned-late by {pe} ({pf[0]})"))
+    # 3g. strategy-specific git checks
+    for r in restarts:
+        st = local(g.value(r, B.hasRecoveryStrategy) or "")
+        rf = witness.first(local(r), prefix)
+        if st == "Strat_TransformSimplify":
+            for sc in g.objects(r, B.simplifiedBy):
+                sf = witness.first(local(sc), prefix)
+                if rf and sf and sf[1] >= rf[1]:
+                    problems.append(f"ScopeChange {local(sc)} ({sf[0]}) does not precede the simplify restart {local(r)} ({rf[0]})")
+        if st == "Strat_TransformReduce":
+            t = g.value(r, B.templateLineage)
+            if t is not None and t != L:
+                tv, _ = classify(g, t, witness, prefix)
+                if tv != "ORDERED":
+                    problems.append(f"template lineage {local(t)} reads {tv}, not ORDERED; it cannot serve as a reduction target")
+    # 3h. divide and conquer: parent is ORDERED only when its parts are and the combine exists
+    parts = [pl for pl in g.subjects(B.parentLineage, L)]
+    dc = [r for r in restarts if local(g.value(r, B.hasRecoveryStrategy) or "") == "Strat_DivideAndConquer"]
+    part_verdicts = {}
+    if dc and parts:
+        for pl in parts:
+            pv_, _ = classify(g, pl, witness, prefix)
+            part_verdicts[local(pl)] = pv_
+        bl_out = [o for o in outs.get("Stage_Backlog", []) if any(True for _ in g.objects(o, B.combinesOutput))]
+        if not bl_out:
+            problems_dc = "no combine output yet"
+        else:
+            problems_dc = None
     # 4. single-commit case
     commits = {f[0] for f in out_first.values()} | {f[0] for f in item_first.values()}
     fro = g.value(L, B.lineageFrozen)
-    if fro is not None and bool(fro.toPython()) and g.value(L, B.frozenRuling) is None:
+    frozen_by = g.value(L, B.frozenBy)
+    frozen = fro is not None and bool(fro.toPython())
+    if frozen and frozen_by is not None and (frozen_by, RDF.type, B.LineageThrash) in g and g.value(L, B.frozenRuling) is None:
         verdict = "FROZEN"
+    elif frozen and frozen_by is not None and (frozen_by, RDF.type, B.LineageBypass) in g \
+            and not any((r, B.answersBypass, frozen_by) in g for r in restarts):
+        verdict = "FOUND"
     elif thrash:
         verdict = "THRASH"
     elif problems or bypassed:
         verdict = "BYPASS"
+    elif dc and parts and (problems_dc or any(v != "ORDERED" for v in part_verdicts.values())):
+        verdict = "DIVIDING"
     elif len(commits) == 1 and out_first and item_first:
         verdict = "UNWITNESSED"
     elif not out_first and restarts:
@@ -243,7 +296,8 @@ def classify(g, L, witness, prefix):
         verdict = "ORDERED"
     return verdict, {"outputs": out_first, "items": item_first, "bypassed": bypassed,
                      "problems": problems, "restart": restart_at, "all_outputs": [o for v in outs.values() for o in v],
-                     "planned_late": planned_late, "thrash": thrash}
+                     "planned_late": planned_late, "thrash": thrash,
+                     "parts": part_verdicts if (dc and parts) else {}, "restarts": restarts}
 
 
 def emit_bypass(g, L, d, prefix_iri):
@@ -264,6 +318,7 @@ def emit_bypass(g, L, d, prefix_iri):
     lines.append(f'    backlog:detectedAt "{time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}"^^xsd:dateTime ;')
     lines.append(f'    backlog:detectedBy "{TOOL}" ;')
     lines.append('    backlog:hasRationale "' + "; ".join(d["problems"] + [f"{ln} first appears {f[0]} before Stage_Backlog output {a}" for ln, f, a in d["bypassed"]]).replace('"', "'") + '" .')
+    lines.append(f"{fw}{local(L)} backlog:lineageFrozen true ; backlog:frozenBy {fw}{name} .   # found: frozen until a restart answers it, in its own commit")
     return "\n".join(lines)
 
 
@@ -339,6 +394,17 @@ def main():
             print(f"      - PLANNED_LATE {ln} first {f[0]} < its PlanningEvent {pe} first {pf[0]}")
         for kind, b, r, lost, detail in d["thrash"]:
             print(f"      - THRASH {kind}: {detail}")
+        for pn, pvv in d["parts"].items():
+            print(f"      - PART {pn}: {pvv}")
+        if emit and d["restarts"]:
+            # reductionObserved for a NEXT restart: of the items the last bypass named, how many are admitted now
+            last_r = d["restarts"][-1]
+            for b in g.objects(last_r, B.answersBypass):
+                named = list(g.objects(b, B.bypassedItem))
+                adm = [i for i in named if g.value(i, B.admittedByOutput) is not None
+                       and not (g.value(g.value(i, B.admittedByOutput), B.outputRetracted) or False)]
+                if named:
+                    print(f"      # reductionObserved for a next restart of {local(L)}: {len(adm)}/{len(named)} = {len(adm)/len(named):.3f}")
         if verdict == "THRASH":
             recorded = any((t, B.thrashedLineage, L) in g for t in g.subjects(RDF.type, B.LineageThrash))
             if not recorded:
@@ -348,6 +414,8 @@ def main():
         if verdict == "BYPASS":
             answered = any((b, B.bypassedLineage, L) in g and any(True for _ in g.subjects(B.answersBypass, b))
                            for b in g.subjects(RDF.type, B.LineageBypass))
+            if d["problems"]:
+                answered = False   # a restart whose own strategy evidence fails the git order answers nothing
             if not answered:
                 worst = 2
                 if emit:
