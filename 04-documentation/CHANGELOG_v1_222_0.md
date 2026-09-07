@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.222.0 — 2026-09-07 (MINOR: five toy bypasses recorded and frozen; the transformations that precede two of the restarts)
+
+Exercise register v1.1.0: `Bypass_TF_Lin`, `Bypass_TV_Lin`, `Bypass_TS_Lin`, `Bypass_TR_Lin`,
+`Bypass_TT_Lin` as the order check emitted them on `dcb5f9b` (items present, Backlog output absent);
+each lineage frozen by its finding. `TS_SC`, the ScopeChange that simplifies toy S before its
+restart. Toy R needs no representation change: its epic is already decomposed, as every epic must
+be here — recorded, not worked around. Expected reading: five FOUND.
+
 ## v1.221.0 — 2026-09-07 (MINOR: the strategy-exercise register — five toy lineages, real witness)
 
 Owner's instruction: with no real lineage left to process (lineages 1-6 archived, 7 and 8 ORDERED),

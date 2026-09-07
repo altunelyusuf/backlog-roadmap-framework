@@ -8,8 +8,9 @@
 @prefix dcterms: <http://purl.org/dc/terms/> .
 
 <http://example.org/backlog-strategy-exercise> a owl:Ontology ;
-    owl:versionIRI <http://example.org/backlog-strategy-exercise/1.0.0> ;
-    owl:versionInfo "1.0.0" ;
+    owl:versionIRI <http://example.org/backlog-strategy-exercise/1.1.0> ;
+    owl:versionInfo "1.1.0" ;
+    owl:priorVersion <http://example.org/backlog-strategy-exercise/1.0.0> ;
     rdfs:label "Strategy-exercise register"@en ;
     rdfs:comment "A second, governed register of this package, holding TOY lineages built to exercise the recovery strategies not yet run on a real lineage (decrease by a constant factor, variable-size decrease, and the three transforms). Owner's instruction, 2026-09-07: if no real lineage is processable, build toy lineages. Toy means the mission is invented; it does NOT mean the witness is faked: every step of every toy lineage is published in its own commit of the governed repository and measured by backlog_lineage_order_check with the real git witness. Each toy lineage is a copy of fixture_pipeline's conformant single-lineage graph (renamed), with its work items present and its chain ABSENT -- a bypass by construction, so that each strategy is exercised from a real finding to a real convergence."@en .
 
@@ -542,3 +543,101 @@ ex:TV_EP backlog:coversEntity ex:CEntity ; backlog:coversStage backlog:Stage_Act
 ex:TS_EP backlog:coversEntity ex:CEntity ; backlog:coversStage backlog:Stage_ActiveUse .
 ex:TR_EP backlog:coversEntity ex:CEntity ; backlog:coversStage backlog:Stage_ActiveUse .
 ex:TT_EP backlog:coversEntity ex:CEntity ; backlog:coversStage backlog:Stage_ActiveUse .
+
+@prefix fw: <http://example.org/backlog-framework-register#> .
+
+#################################################################
+#  v1.1.0 (2026-09-07, brsf-session) -- FIVE BYPASSES, MEASURED. All
+#  five toy lineages first appear in git at dcb5f9b with their items
+#  and no Stage_Backlog output. Findings exactly as the tool emitted
+#  them; each lineage frozen by its finding until a restart answers it
+#  in a later commit. Also in this commit, the transformations that
+#  must PRECEDE a transform-and-conquer restart (the git witness will
+#  refuse a restart that comes before them):
+#    TS: a ScopeChange narrowing TS_Scope to TS_D1 (instance
+#        simplification -- TS_D2 was never served by any item);
+#    TR: nothing to add -- TR_EP already decomposes into TR_S_PL, as
+#        every epic in this framework must (EpicDecomposedShape, L4).
+#        Recorded as a finding: in a conformant register the
+#        representation change is always already done; see G85.
+#    TT: the template is fw:L_ChangeDiscipline, a real lineage of the
+#        main register that reads ORDERED; named on the restart.
+#################################################################
+ex:Bypass_TF_Lin_20260907 a backlog:LineageBypass ;
+    backlog:bypassedLineage ex:TF_Lin ;
+    backlog:hasFailureMode backlog:FM_LineageBypass ;
+    backlog:hasFindingScope backlog:Scope_Methodology ;
+    backlog:hasRootCause "The chain was written after the work: the items below first appear in the governed repository before the lineage's own Stage_Backlog output does. Measured by git first-appearance, not by the register's own dates." ;
+    backlog:bypassedItem ex:TF_EP ;
+    backlog:itemFirstCommit "TF_EP dcb5f9b 1788793264" ;
+    backlog:bypassedItem ex:TF_S_PL ;
+    backlog:itemFirstCommit "TF_S_PL dcb5f9b 1788793264" ;
+    backlog:chainClosedCommit "absent" ;
+    backlog:detectedAt "2026-09-07T15:01:17Z"^^xsd:dateTime ;
+    backlog:detectedBy "backlog_lineage_order_check_v1_2_1" ;
+    backlog:hasRationale "TF_EP first appears dcb5f9b before Stage_Backlog output absent; TF_S_PL first appears dcb5f9b before Stage_Backlog output absent" .
+ex:TF_Lin backlog:lineageFrozen true ; backlog:frozenBy ex:Bypass_TF_Lin_20260907 .   # found: frozen until a restart answers it, in its own commit
+
+ex:Bypass_TR_Lin_20260907 a backlog:LineageBypass ;
+    backlog:bypassedLineage ex:TR_Lin ;
+    backlog:hasFailureMode backlog:FM_LineageBypass ;
+    backlog:hasFindingScope backlog:Scope_Methodology ;
+    backlog:hasRootCause "The chain was written after the work: the items below first appear in the governed repository before the lineage's own Stage_Backlog output does. Measured by git first-appearance, not by the register's own dates." ;
+    backlog:bypassedItem ex:TR_EP ;
+    backlog:itemFirstCommit "TR_EP dcb5f9b 1788793264" ;
+    backlog:bypassedItem ex:TR_S_PL ;
+    backlog:itemFirstCommit "TR_S_PL dcb5f9b 1788793264" ;
+    backlog:chainClosedCommit "absent" ;
+    backlog:detectedAt "2026-09-07T15:01:19Z"^^xsd:dateTime ;
+    backlog:detectedBy "backlog_lineage_order_check_v1_2_1" ;
+    backlog:hasRationale "TR_EP first appears dcb5f9b before Stage_Backlog output absent; TR_S_PL first appears dcb5f9b before Stage_Backlog output absent" .
+ex:TR_Lin backlog:lineageFrozen true ; backlog:frozenBy ex:Bypass_TR_Lin_20260907 .   # found: frozen until a restart answers it, in its own commit
+
+ex:Bypass_TS_Lin_20260907 a backlog:LineageBypass ;
+    backlog:bypassedLineage ex:TS_Lin ;
+    backlog:hasFailureMode backlog:FM_LineageBypass ;
+    backlog:hasFindingScope backlog:Scope_Methodology ;
+    backlog:hasRootCause "The chain was written after the work: the items below first appear in the governed repository before the lineage's own Stage_Backlog output does. Measured by git first-appearance, not by the register's own dates." ;
+    backlog:bypassedItem ex:TS_EP ;
+    backlog:itemFirstCommit "TS_EP dcb5f9b 1788793264" ;
+    backlog:bypassedItem ex:TS_S_PL ;
+    backlog:itemFirstCommit "TS_S_PL dcb5f9b 1788793264" ;
+    backlog:chainClosedCommit "absent" ;
+    backlog:detectedAt "2026-09-07T15:01:21Z"^^xsd:dateTime ;
+    backlog:detectedBy "backlog_lineage_order_check_v1_2_1" ;
+    backlog:hasRationale "TS_EP first appears dcb5f9b before Stage_Backlog output absent; TS_S_PL first appears dcb5f9b before Stage_Backlog output absent" .
+ex:TS_Lin backlog:lineageFrozen true ; backlog:frozenBy ex:Bypass_TS_Lin_20260907 .   # found: frozen until a restart answers it, in its own commit
+
+ex:Bypass_TT_Lin_20260907 a backlog:LineageBypass ;
+    backlog:bypassedLineage ex:TT_Lin ;
+    backlog:hasFailureMode backlog:FM_LineageBypass ;
+    backlog:hasFindingScope backlog:Scope_Methodology ;
+    backlog:hasRootCause "The chain was written after the work: the items below first appear in the governed repository before the lineage's own Stage_Backlog output does. Measured by git first-appearance, not by the register's own dates." ;
+    backlog:bypassedItem ex:TT_EP ;
+    backlog:itemFirstCommit "TT_EP dcb5f9b 1788793264" ;
+    backlog:bypassedItem ex:TT_S_PL ;
+    backlog:itemFirstCommit "TT_S_PL dcb5f9b 1788793264" ;
+    backlog:chainClosedCommit "absent" ;
+    backlog:detectedAt "2026-09-07T15:01:23Z"^^xsd:dateTime ;
+    backlog:detectedBy "backlog_lineage_order_check_v1_2_1" ;
+    backlog:hasRationale "TT_EP first appears dcb5f9b before Stage_Backlog output absent; TT_S_PL first appears dcb5f9b before Stage_Backlog output absent" .
+ex:TT_Lin backlog:lineageFrozen true ; backlog:frozenBy ex:Bypass_TT_Lin_20260907 .   # found: frozen until a restart answers it, in its own commit
+
+ex:Bypass_TV_Lin_20260907 a backlog:LineageBypass ;
+    backlog:bypassedLineage ex:TV_Lin ;
+    backlog:hasFailureMode backlog:FM_LineageBypass ;
+    backlog:hasFindingScope backlog:Scope_Methodology ;
+    backlog:hasRootCause "The chain was written after the work: the items below first appear in the governed repository before the lineage's own Stage_Backlog output does. Measured by git first-appearance, not by the register's own dates." ;
+    backlog:bypassedItem ex:TV_EP ;
+    backlog:itemFirstCommit "TV_EP dcb5f9b 1788793264" ;
+    backlog:bypassedItem ex:TV_S_PL ;
+    backlog:itemFirstCommit "TV_S_PL dcb5f9b 1788793264" ;
+    backlog:chainClosedCommit "absent" ;
+    backlog:detectedAt "2026-09-07T15:01:25Z"^^xsd:dateTime ;
+    backlog:detectedBy "backlog_lineage_order_check_v1_2_1" ;
+    backlog:hasRationale "TV_EP first appears dcb5f9b before Stage_Backlog output absent; TV_S_PL first appears dcb5f9b before Stage_Backlog output absent" .
+ex:TV_Lin backlog:lineageFrozen true ; backlog:frozenBy ex:Bypass_TV_Lin_20260907 .   # found: frozen until a restart answers it, in its own commit
+
+ex:TS_SC a backlog:ScopeChange ; backlog:changesScope ex:TS_Scope ; backlog:admitsItem ex:TS_S_PL ;
+    backlog:hasScopeChangeRationale "Instance simplification before the restart: TS_D2 (auditability) was required by the scope and served by no item; the chain to rebuild is narrowed to TS_D1. Traded: the audit deliverable leaves this lineage's scope and is recorded as superseded here, never deleted (G6)." ;
+    backlog:decidedBy backlog:Owner ; backlog:belongsToLineage ex:TS_Lin .
