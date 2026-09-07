@@ -8,8 +8,9 @@
 @prefix dcterms: <http://purl.org/dc/terms/> .
 
 <http://example.org/backlog-strategy-exercise> a owl:Ontology ;
-    owl:versionIRI <http://example.org/backlog-strategy-exercise/1.7.0> ;
-    owl:versionInfo "1.7.0" ;
+    owl:versionIRI <http://example.org/backlog-strategy-exercise/1.8.0> ;
+    owl:versionInfo "1.8.0" ;
+    owl:priorVersion <http://example.org/backlog-strategy-exercise/1.7.0> ;
     owl:priorVersion <http://example.org/backlog-strategy-exercise/1.6.0> ;
     owl:priorVersion <http://example.org/backlog-strategy-exercise/1.5.0> ;
     owl:priorVersion <http://example.org/backlog-strategy-exercise/1.4.0> ;
@@ -780,3 +781,22 @@ ex:TT_R_Backlog a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Back
     backlog:hasStateDigest "6fcbcf28ed1a82433fc3fc795f3573e5d08aba9a6758ad91b939f25dc1ca1111" ; backlog:closedAtCommit "backlog-roadmap-framework-v1.228.0 (tag; witnessed by git, not asserted)" .
 ex:TT_S_PL backlog:admittedByOutput ex:TT_R_Backlog .
 ex:TT_EP backlog:admittedByOutput ex:TT_R_Backlog .
+
+#################################################################
+#  v1.8.0 (2026-09-07, brsf-session) -- SECOND TRIAL, step 1: new work
+#  appears in toys F and V (TF_S2, TV_S2) with NO planning record. The
+#  next commit will plan them after the fact -- the item-level escape
+#  (an item planned after it existed) -- so that each toy's SECOND
+#  bypass is a real, witnessed finding and its second restart can
+#  exercise the strategy's own convergence test.
+#################################################################
+ex:TF_S2 a backlog:Story ; backlog:hasIdentifier "TF-S-2" ; backlog:hasTitle "Second-trial story"@en ; backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer ex:BL ; backlog:notYetScoreable true ; backlog:hasScoreabilityReason "Scored at next planning." ;
+    backlog:belongsToLineage ex:TF_Lin ; backlog:hasInvestmentCategory backlog:Cat_NewCapability ; backlog:pursuesObjective ex:TF_O ;
+    backlog:satisfiesDeliverable ex:TF_D1 .
+ex:TV_S2 a backlog:Story ; backlog:hasIdentifier "TV-S-2" ; backlog:hasTitle "Second-trial story"@en ; backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer ex:BL ; backlog:notYetScoreable true ; backlog:hasScoreabilityReason "Scored at next planning." ;
+    backlog:belongsToLineage ex:TV_Lin ; backlog:hasInvestmentCategory backlog:Cat_NewCapability ; backlog:pursuesObjective ex:TV_O ;
+    backlog:satisfiesDeliverable ex:TV_D1 .
+ex:TF_S2 backlog:postRestartItem ex:Restart_TF .
+ex:TV_S2 backlog:postRestartItem ex:Restart_TV .

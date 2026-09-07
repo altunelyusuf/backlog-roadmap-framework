@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.105.0> ;
-    owl:versionInfo "1.105.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.106.0> ;
+    owl:versionInfo "1.106.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.105.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.104.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.103.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.102.0> ;
@@ -5748,6 +5749,8 @@ backlog:RestartFlagsEveryItemShape a sh:NodeShape ;
             ?i backlog:belongsToLineage ?l .
             { ?i a backlog:Story } UNION { ?i a backlog:Epic } UNION { ?i a backlog:ExecutionTask } UNION { ?i a backlog:Initiative } UNION { ?i a backlog:Spike } UNION { ?i a backlog:Task }
             FILTER NOT EXISTS { ?i backlog:preLineageItem true }
+            # v1.106.0: work created after the restart is not pre-lineage (postRestartItem; git-verified)
+            FILTER NOT EXISTS { ?i backlog:postRestartItem $this }
             # the pre-v1.104.0 restart of lineage 8 flagged its two items; exempt by commit, as RestartDeclaresStrategyShape does
             FILTER NOT EXISTS { $this backlog:restartedAtCommit ?c . FILTER (CONTAINS(STR(?c), "v1.203.0") || CONTAINS(STR(?c), "0251509")) }
         }""" ] .

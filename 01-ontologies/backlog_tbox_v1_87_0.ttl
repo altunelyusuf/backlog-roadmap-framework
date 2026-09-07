@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.86.0> ;
-    owl:versionInfo "1.86.0" ;
+    owl:versionIRI <http://example.org/backlog/1.87.0> ;
+    owl:versionInfo "1.87.0" ;
+    owl:priorVersion <http://example.org/backlog/1.86.0> ;
     owl:priorVersion <http://example.org/backlog/1.85.0> ;
     owl:priorVersion <http://example.org/backlog/1.84.0> ;
     owl:priorVersion <http://example.org/backlog/1.83.0> ;
@@ -6657,3 +6658,15 @@ backlog:templateLineage a owl:ObjectProperty , owl:FunctionalProperty ;
 # Derived: admitted / named for the previous restart's bypass, computed by the order check.
 backlog:reductionObserved backlog:numberOrigin backlog:Num_Derived ;
     backlog:derivationQuery "SELECT ((COUNT(?adm) / COUNT(?i)) AS ?v) WHERE { ?prev backlog:restartsLineage ?l ; backlog:answersBypass ?b . $this backlog:restartsLineage ?l . FILTER (?prev != $this) ?b backlog:bypassedItem ?i . OPTIONAL { ?i backlog:admittedByOutput ?adm . FILTER NOT EXISTS { ?adm backlog:outputRetracted true } } }" .
+
+# v1.87.0 (2026-09-07): work created AFTER a restart is not pre-lineage. RestartFlagsEveryItemShape
+# (v1.104.0) demanded preLineageItem on every item of a restarted lineage, which is right for the items
+# the retracted chain had ordered and wrong for new work under the rebuilt chain -- found the moment the
+# toy exercise added its second-trial stories. The register asserts postRestartItem; the git witness
+# verifies it (the item must first appear after the restart does), so the assertion cannot be used to
+# smuggle an old item past the flag.
+backlog:postRestartItem a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:WorkItem ; rdfs:range backlog:LineageRestart ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "post-restart item"@en ;
+    skos:definition "This work item was created after the named restart, under the rebuilt chain; it is ordinary work of the lineage, not pre-lineage. Asserted in the register, verified by backlog_lineage_order_check: the item's first appearance in git must follow the restart's, or the assertion is a problem the check reports."@en .

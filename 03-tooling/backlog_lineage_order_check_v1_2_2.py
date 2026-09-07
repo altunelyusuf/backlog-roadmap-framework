@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_lineage_order_check v1.2.1 — did the chain come before the work, or after?
+"""backlog_lineage_order_check v1.2.2 — did the chain come before the work, or after?
 
 THE ESCAPE THIS CATCHES. A lineage is Mission -> Scope -> Goal -> Objective -> Backlog,
 one commit per stage, and only then work items (LINEAGE_OPERATING_DISCIPLINE, ceremony
@@ -249,6 +249,13 @@ def classify(g, L, witness, prefix):
             if pre is not None and bool(pre.toPython()):
                 continue
             bypassed.append((ln, f, f"planned-late by {pe} ({pf[0]})"))
+    # 3f2. v1.2.2: postRestartItem is verified, not trusted -- the item must first appear after its restart
+    for i in items:
+        r = g.value(i, B.postRestartItem)
+        if r is not None:
+            rf = witness.first(local(r), prefix); f = item_first.get(local(i))
+            if rf and f and f[1] <= rf[1]:
+                problems.append(f"{local(i)} claims postRestartItem {local(r)} but first appears at {f[0]}, not after the restart ({rf[0]})")
     # 3g. strategy-specific git checks
     for r in restarts:
         st = local(g.value(r, B.hasRecoveryStrategy) or "")

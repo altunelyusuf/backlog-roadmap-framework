@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.229.0 — 2026-09-07 (MINOR: second trial, step 1 — new work in toys F and V, unplanned)
+
+Exercise register v1.8.0: `TF_S2`, `TV_S2` exist with no planning record. The next commit plans them
+after the fact, producing each toy's second bypass for real.
+TBox v1.87.0 / shapes v1.106.0 / order check v1.2.2: `postRestartItem` — work created after a restart is not
+pre-lineage; asserted in the register, verified by the git witness (the item must first appear after the
+restart). `RestartFlagsEveryItemShape` (v1.104.0) had no way to say this and fired on the new stories.
+
 ## v1.228.0 — 2026-09-07 (MINOR: toy rebuild, stage 5 of 5 — Backlog, all five toys)
 
 Exercise register v1.7.0: `TF_R_Backlog`, `TV_R_Backlog`, `TS_R_Backlog`, `TR_R_Backlog`, `TT_R_Backlog` (each
