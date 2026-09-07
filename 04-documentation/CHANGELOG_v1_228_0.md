@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.228.0 — 2026-09-07 (MINOR: toy rebuild, stage 5 of 5 — Backlog, all five toys)
+
+Exercise register v1.7.0: `TF_R_Backlog`, `TV_R_Backlog`, `TS_R_Backlog`, `TR_R_Backlog`, `TT_R_Backlog` (each
+consuming its toy's Objective output, f346701); digest at this commit. Toy F's Backlog output admits only TF_S_PL, deliberately, so that its second trial's reductionObserved is exactly 0.5.
+
 ## v1.227.0 — 2026-09-07 (MINOR: toy rebuild, stage 4 of 5 — Objective, all five toys)
 
 Exercise register v1.6.0: `TF_R_Objective`, `TV_R_Objective`, `TS_R_Objective`, `TR_R_Objective`, `TT_R_Objective` (each
