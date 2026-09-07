@@ -1,5 +1,16 @@
 # Changelog
 
+## v1.205.0 — 2026-09-07 (PATCH: owner's ruling recorded — lineage 8 unfrozen; the rebuild that follows is the method's own proof)
+
+Register v9.53.0 records `frozenRuling` on `fw:L_ChangeDiscipline`, verbatim from the owner: explicit
+unfreeze; the 2026-09-07 restart stands; the chain is rebuilt from Mission one stage per commit; the
+two pre-lineage items are re-admitted only by the rebuilt `Stage_Backlog` output. This release
+contains nothing else, so the ruling is witnessed in its own commit, after the thrash (`f2ee6f7`).
+The next five releases are the five stages. What the order check must report at each: RESTARTED
+(no active output) → after Mission, a chain whose only output post-dates the restart and ruling →
+… → after Backlog, ORDERED with both items admitted and no thrash of any kind. Any other reading is
+the method failing, and will be published as such.
+
 ## v1.204.0 — 2026-09-07 (MINOR: the restart loop's stop condition — convergence, never a count)
 
 **Owner's question after v1.203.0:** what prevents bypass → restart → bypass forever, and the loss

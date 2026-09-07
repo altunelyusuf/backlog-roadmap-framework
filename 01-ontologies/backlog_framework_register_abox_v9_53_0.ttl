@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.52.0> ;
-    owl:versionInfo "9.52.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.53.0> ;
+    owl:versionInfo "9.53.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.52.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.51.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.50.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.49.0> ;
@@ -5911,3 +5912,13 @@ fw:Thrash_L_ChangeDiscipline_20260907_1 a backlog:LineageThrash ;
     backlog:belongsToLineage fw:L_ChangeDiscipline .
 fw:L_ChangeDiscipline backlog:lineageFrozen true ; backlog:frozenBy fw:Thrash_L_ChangeDiscipline_20260907_1 .
 # owner's ruling goes here when made: fw:L_ChangeDiscipline backlog:frozenRuling "..." ; backlog:decidedBy backlog:Owner .
+
+#################################################################
+#  v9.53.0 (2026-09-07, brsf-session) -- OWNER'S RULING on the freeze.
+#  Recorded verbatim; this is the only act in this release, so the
+#  git witness sees the ruling in its own commit, after the thrash
+#  finding (f2ee6f7) and before any rebuilt output.
+#################################################################
+fw:L_ChangeDiscipline
+    backlog:frozenRuling "Owner, 2026-09-07, verbatim: 'Unfreeze and let's do this appropriately with an additional benefit: prove the new method is working correctly.' Ruling: explicit unfreeze. The restart of 2026-09-07 stands (it was owner-instructed before commit 0251509; the repository could not witness that instruction, which is why the thrash was recorded and is kept). The chain of L_ChangeDiscipline is rebuilt from Mission, one stage per commit, each stage output witnessed after the previous one; the two pre-lineage items are re-admitted only by the rebuilt Stage_Backlog output. The rebuild is itself the proof of the method: at every step the order check must report the lineage in the state the ceremony predicts, and the restart loop must be seen to converge in one trial." ;
+    backlog:decidedBy backlog:Owner .
