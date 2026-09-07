@@ -1,5 +1,24 @@
 # Changelog
 
+## v1.221.0 — 2026-09-07 (MINOR: the strategy-exercise register — five toy lineages, real witness)
+
+Owner's instruction: with no real lineage left to process (lineages 1-6 archived, 7 and 8 ORDERED),
+build toy lineages to exercise the strategies not yet run for real. Toy means the mission is
+invented; the witness is not: every step is a commit of the governed repository.
+
+- `01-ontologies/backlog_strategy_exercise_abox_v1_0_0.ttl` — a second governed register: five
+  copies of `fixture_pipeline`'s conformant single-lineage graph (renamed `TF_`, `TV_`, `TS_`, `TR_`,
+  `TT_`; one shared container, profile and conformance goal), each with its work items present and
+  its chain ABSENT — a bypass by construction, one per strategy: decrease by a constant factor,
+  variable-size decrease, transform-simplify, transform-represent, transform-reduce.
+  0 violations on its own.
+- `backlog_lineage_order_check_v1_2_1.py`: the git prefix is resolved per lineage, so several
+  registers can be measured in one run.
+- `backlog_gate_v1_7_0.sh`: the exercise register is SHACL-validated and measured with the main
+  register in the lineage-order gate.
+- Expected reading after this release: five toy lineages BYPASS (items present, `Stage_Backlog`
+  output absent), each awaiting its finding in the next release.
+
 ## v1.220.0 — 2026-09-07 (MINOR: the divide-and-conquer proof read; a restart flags every item; Out_Achieved re-affirmed on the rebuilt chain)
 
 Post-commit reading of `backlog_lineage_order_check_v1_2_0` on v9.67.0 (`6a0143c`): **lineage 7

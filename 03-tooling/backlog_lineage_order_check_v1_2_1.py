@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_lineage_order_check v1.2.0 — did the chain come before the work, or after?
+"""backlog_lineage_order_check v1.2.1 — did the chain come before the work, or after?
 
 THE ESCAPE THIS CATCHES. A lineage is Mission -> Scope -> Goal -> Objective -> Backlog,
 one commit per stage, and only then work items (LINEAGE_OPERATING_DISCIPLINE, ceremony
@@ -115,8 +115,15 @@ class MapWitness:
         return (v[0], int(v[1])) if v else None
 
 
+def prefix_for(g, L):
+    ns_of = str(L).rsplit("#", 1)[0] + "#" if "#" in str(L) else None
+    return next((p + ":" for p, ns in g.namespaces() if ns_of and str(ns) == ns_of), "fw:")
+
+
 def classify(g, L, witness, prefix):
-    """Returns (verdict, detail dict) for one lineage."""
+    """Returns (verdict, detail dict) for one lineage. v1.2.1: the prefix used for git
+    lookups is the LINEAGE'S own (several registers may be loaded in one graph)."""
+    prefix = prefix_for(g, L)
     outs = {}
     for o in g.subjects(B.belongsToLineage, L):
         if (o, RDF.type, B.StageOutput) not in g:
@@ -378,6 +385,7 @@ def main():
         arch = g.value(L, B.lineageArchived)
         if arch is not None and bool(arch.toPython()):
             continue
+        prefix = prefix_for(g, L)
         verdict, d = classify(g, L, witness, prefix)
         if verdict == "NO_OUTPUTS":
             continue

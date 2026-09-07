@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# backlog_gate v1.6.0 — four-gate release check for the Backlog & Roadmap
+# backlog_gate v1.7.0 — four-gate release check for the Backlog & Roadmap
 # Semantic Framework. Nothing about the package's state is trusted until all
 # four pass, and the SHACL gate refuses to certify anything until it has just
 # demonstrated, in this run, that it can fail a known-bad register.
@@ -11,7 +11,11 @@
 #   +       coverage gate          >= 80% of primary-source concepts (BP-D31)
 #   +       doc-coverage gate      every TBox class named in the standard document
 #
-# Usage: backlog_gate_v1_6_0.sh [REGISTER.ttl ...]
+# Usage: backlog_gate_v1_7_0.sh [REGISTER.ttl ...]
+#
+# v1.7.0 — the strategy-exercise register (01-ontologies/backlog_strategy_exercise_abox_v*.ttl)
+# is SHACL-validated like the main register and measured by the lineage-order check with the
+# real git witness, in the same run. Toy missions, real witness.
 #
 # v1.6.0 — the lineage-order self-proof also runs the recovery-strategy pair
 # (divide-and-conquer rebuilt and combined must pass; missing strategy evidence must fail).
@@ -426,8 +430,14 @@ if [ -n "$LOC" ]; then
     echo "  ABORT: the strategy-evidence fixture PASSED -- the check cannot see a strategy without its evidence."; exit 3; fi
   echo "  self-proof: ordered passes, bypass fails; converging trial passes, thrash fails; divide-and-conquer passes, missing strategy evidence fails."
   REG="$(ls "$PKG"/01-ontologies/backlog_framework_register_abox_v*.ttl 2>/dev/null | sort -V | tail -1 || true)"
+  EXREG="$(ls "$PKG"/01-ontologies/backlog_strategy_exercise_abox_v*.ttl 2>/dev/null | sort -V | tail -1 || true)"
+  if [ -n "$EXREG" ]; then
+    EX_OUT="$(python3 "$VALIDATE" "$EXREG" 2>&1)"; EX_RC=$?
+    printf '%s\n' "$EX_OUT" | grep -E '^results|^VERDICT' | sed 's/^/  exercise register: /'
+    [ "$EX_RC" -eq 0 ] || { echo "  strategy-exercise register is non-conformant"; FAILED=1; }
+  fi
   if [ -n "$REG" ]; then
-    LOC_OUT="$(python3 "$LOC" "$REG" 2>&1)"; LOC_RC=$?
+    LOC_OUT="$(python3 "$LOC" "$REG" $EXREG 2>&1)"; LOC_RC=$?
     printf '%s\n' "$LOC_OUT" | grep -E '^  |^      - |^VERDICT' | sed 's/^/  /'
     [ "$LOC_RC" -eq 0 ] || { echo "Lineage-order gate FAILED"; FAILED=1; }
   fi
