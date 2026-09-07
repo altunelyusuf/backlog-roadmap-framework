@@ -1,5 +1,16 @@
 # Changelog
 
+## v1.223.0 — 2026-09-07 (MINOR: five toy restarts, one strategy each)
+
+Exercise register v1.2.0: `Restart_TF` (decrease by a constant factor), `Restart_TV` (variable-size
+decrease), `Restart_TS` (transform-simplify, `simplifiedBy TS_SC` from `4f97e0a`), `Restart_TR`
+(transform-represent — the epic is already decomposed, G85), `Restart_TT` (transform-reduce,
+template `fw:L_ChangeDiscipline`). Every toy item flagged pre-lineage. Expected reading: five
+RESTARTED; the simplify restart witnessed after its ScopeChange; the template read ORDERED.
+Shapes v1.105.0: `LineageRestartShape` no longer demands `retractsOutput` when the answered bypass names
+no output — work found before any chain existed has nothing to retract; the restart is the chain's first
+beginning. The five toys are exactly that case.
+
 ## v1.222.0 — 2026-09-07 (MINOR: five toy bypasses recorded and frozen; the transformations that precede two of the restarts)
 
 Exercise register v1.1.0: `Bypass_TF_Lin`, `Bypass_TV_Lin`, `Bypass_TS_Lin`, `Bypass_TR_Lin`,

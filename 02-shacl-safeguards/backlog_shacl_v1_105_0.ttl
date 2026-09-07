@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.104.0> ;
-    owl:versionInfo "1.104.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.105.0> ;
+    owl:versionInfo "1.105.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.104.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.103.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.102.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.101.0> ;
@@ -5398,8 +5399,14 @@ backlog:LineageRestartShape a sh:NodeShape ;
                   sh:message "A restart names exactly one lineage." ] ;
     sh:property [ sh:path backlog:answersBypass ; sh:minCount 1 ;
                   sh:message "A restart answers a recorded bypass; a restart with no finding behind it is an unexplained rewrite." ] ;
-    sh:property [ sh:path backlog:retractsOutput ; sh:minCount 1 ;
-                  sh:message "A restart retracts at least one StageOutput -- the chain it replaces." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "A restart retracts at least one StageOutput -- the chain it replaces. (v1.105.0: unless the bypass it answers names no output at all -- work found before ANY chain existed, chainClosedCommit 'absent'; then there is nothing to retract and the restart is the chain's first beginning.)" ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            FILTER NOT EXISTS { $this backlog:retractsOutput ?o }
+            $this backlog:answersBypass ?b .
+            FILTER EXISTS { ?b backlog:bypassedOutput ?any }
+        }""" ] ;
     sh:property [ sh:path backlog:restartedAtCommit ; sh:minCount 1 ; sh:datatype xsd:string ;
                   sh:message "A restart records the commit it was recorded at; the git witness that found the bypass verifies the rebuild against it." ] ;
     sh:property [ sh:path backlog:decidedBy ; sh:minCount 1 ;

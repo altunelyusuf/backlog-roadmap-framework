@@ -8,8 +8,9 @@
 @prefix dcterms: <http://purl.org/dc/terms/> .
 
 <http://example.org/backlog-strategy-exercise> a owl:Ontology ;
-    owl:versionIRI <http://example.org/backlog-strategy-exercise/1.1.0> ;
-    owl:versionInfo "1.1.0" ;
+    owl:versionIRI <http://example.org/backlog-strategy-exercise/1.2.0> ;
+    owl:versionInfo "1.2.0" ;
+    owl:priorVersion <http://example.org/backlog-strategy-exercise/1.1.0> ;
     owl:priorVersion <http://example.org/backlog-strategy-exercise/1.0.0> ;
     rdfs:label "Strategy-exercise register"@en ;
     rdfs:comment "A second, governed register of this package, holding TOY lineages built to exercise the recovery strategies not yet run on a real lineage (decrease by a constant factor, variable-size decrease, and the three transforms). Owner's instruction, 2026-09-07: if no real lineage is processable, build toy lineages. Toy means the mission is invented; it does NOT mean the witness is faked: every step of every toy lineage is published in its own commit of the governed repository and measured by backlog_lineage_order_check with the real git witness. Each toy lineage is a copy of fixture_pipeline's conformant single-lineage graph (renamed), with its work items present and its chain ABSENT -- a bypass by construction, so that each strategy is exercised from a real finding to a real convergence."@en .
@@ -641,3 +642,46 @@ ex:TV_Lin backlog:lineageFrozen true ; backlog:frozenBy ex:Bypass_TV_Lin_2026090
 ex:TS_SC a backlog:ScopeChange ; backlog:changesScope ex:TS_Scope ; backlog:admitsItem ex:TS_S_PL ;
     backlog:hasScopeChangeRationale "Instance simplification before the restart: TS_D2 (auditability) was required by the scope and served by no item; the chain to rebuild is narrowed to TS_D1. Traded: the audit deliverable leaves this lineage's scope and is recorded as superseded here, never deleted (G6)." ;
     backlog:decidedBy backlog:Owner ; backlog:belongsToLineage ex:TS_Lin .
+
+#################################################################
+#  v1.2.0 (2026-09-07, brsf-session) -- FIVE RESTARTS, one strategy each,
+#  in their own commit after the findings (4f97e0a). Every item of
+#  every toy lineage flagged pre-lineage (RestartFlagsEveryItemShape).
+#################################################################
+ex:Restart_TF a backlog:LineageRestart ; backlog:restartsLineage ex:TF_Lin ; backlog:answersBypass ex:Bypass_TF_Lin_20260907 ;
+    backlog:hasRecoveryStrategy backlog:Strat_DecreaseByFactor ;
+    backlog:restartedAtCommit "backlog-roadmap-framework-v1.223.0 (tag; witnessed by git, not asserted)" ;
+    backlog:decidedBy backlog:Owner ; backlog:belongsToLineage ex:TF_Lin ;
+    backlog:hasRationale "Decrease by a constant factor: the first rebuild will deliberately admit only ONE of the two items (TF_S_PL), so that the second trial's reductionObserved sits exactly at the 0.5 boundary the strategy requires -- exercising the boundary, not avoiding it." .
+ex:TF_S_PL backlog:preLineageItem true .
+ex:TF_EP backlog:preLineageItem true .
+ex:Restart_TV a backlog:LineageRestart ; backlog:restartsLineage ex:TV_Lin ; backlog:answersBypass ex:Bypass_TV_Lin_20260907 ;
+    backlog:hasRecoveryStrategy backlog:Strat_VariableDecrease ;
+    backlog:restartedAtCommit "backlog-roadmap-framework-v1.223.0 (tag; witnessed by git, not asserted)" ;
+    backlog:decidedBy backlog:Owner ; backlog:belongsToLineage ex:TV_Lin ;
+    backlog:hasRationale "Variable-size decrease: the first rebuild admits both items; the comparison this strategy tests (reduction not smaller than the previous restart's) needs a third trial, which will be disclosed as the limit reached if the exercise stops at two." .
+ex:TV_S_PL backlog:preLineageItem true .
+ex:TV_EP backlog:preLineageItem true .
+ex:Restart_TS a backlog:LineageRestart ; backlog:restartsLineage ex:TS_Lin ; backlog:answersBypass ex:Bypass_TS_Lin_20260907 ;
+    backlog:hasRecoveryStrategy backlog:Strat_TransformSimplify ;
+    backlog:simplifiedBy ex:TS_SC ;
+    backlog:restartedAtCommit "backlog-roadmap-framework-v1.223.0 (tag; witnessed by git, not asserted)" ;
+    backlog:decidedBy backlog:Owner ; backlog:belongsToLineage ex:TS_Lin ;
+    backlog:hasRationale "Transform, instance simplification: TS_SC (previous commit, 4f97e0a) narrowed the scope to TS_D1 before this restart; the git witness must read the ScopeChange strictly before the restart." .
+ex:TS_S_PL backlog:preLineageItem true .
+ex:TS_EP backlog:preLineageItem true .
+ex:Restart_TR a backlog:LineageRestart ; backlog:restartsLineage ex:TR_Lin ; backlog:answersBypass ex:Bypass_TR_Lin_20260907 ;
+    backlog:hasRecoveryStrategy backlog:Strat_TransformRepresent ;
+    backlog:restartedAtCommit "backlog-roadmap-framework-v1.223.0 (tag; witnessed by git, not asserted)" ;
+    backlog:decidedBy backlog:Owner ; backlog:belongsToLineage ex:TR_Lin ;
+    backlog:hasRationale "Transform, representation change: the bypassed epic TR_EP already decomposes into TR_S_PL because EpicDecomposedShape (L4) forbids an undecomposed epic in any conformant register -- the change this strategy asks for is always already made here (G85). Run to completion anyway; admission is per story." .
+ex:TR_S_PL backlog:preLineageItem true .
+ex:TR_EP backlog:preLineageItem true .
+ex:Restart_TT a backlog:LineageRestart ; backlog:restartsLineage ex:TT_Lin ; backlog:answersBypass ex:Bypass_TT_Lin_20260907 ;
+    backlog:hasRecoveryStrategy backlog:Strat_TransformReduce ;
+    backlog:templateLineage fw:L_ChangeDiscipline ;
+    backlog:restartedAtCommit "backlog-roadmap-framework-v1.223.0 (tag; witnessed by git, not asserted)" ;
+    backlog:decidedBy backlog:Owner ; backlog:belongsToLineage ex:TT_Lin ;
+    backlog:hasRationale "Transform, problem reduction: the template is fw:L_ChangeDiscipline, a real lineage of the main register that the order check reads ORDERED; this toy's chain instantiates that shape (Mission..Backlog, one commit per stage) rather than being designed from nothing." .
+ex:TT_S_PL backlog:preLineageItem true .
+ex:TT_EP backlog:preLineageItem true .
