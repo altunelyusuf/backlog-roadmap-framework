@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.225.0 — 2026-09-07 (MINOR: toy rebuild, stage 2 of 5 — Scope, all five toys)
+
+Exercise register v1.4.0: `TF_R_Scope`, `TV_R_Scope`, `TS_R_Scope`, `TR_R_Scope`, `TT_R_Scope` (each
+consuming its toy's Mission output, ff54779); digest at this commit. 
+
 ## v1.224.0 — 2026-09-07 (MINOR: toy rebuild, stage 1 of 5 — Mission, all five toys)
 
 Exercise register v1.3.0: `TF_R_Mission`, `TV_R_Mission`, `TS_R_Mission`, `TR_R_Mission`, `TT_R_Mission` (each
