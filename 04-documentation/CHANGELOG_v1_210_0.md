@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.210.0 — 2026-09-07 (MINOR: lineage 8 rebuild, stage 5 of 5 — Backlog)
+
+Register v9.58.0: `Out3_Backlog_CD` closes the rebuilt Backlog stage, consuming `Out3_Objective_CD`
+(97a1340); digest at this commit. Nothing else changes. Expected reading after this release:
+lineage 8 ORDERED — five active outputs in pipeline order after the restart and the ruling, both items admitted, no thrash of any kind; the restart loop converged in one trial.
+
 ## v1.209.0 — 2026-09-07 (MINOR: lineage 8 rebuild, stage 4 of 5 — Objective)
 
 Register v9.57.0: `Out3_Objective_CD` closes the rebuilt Objective stage, consuming `Out3_Goal_CD`

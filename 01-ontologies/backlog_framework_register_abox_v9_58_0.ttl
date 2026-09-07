@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.57.0> ;
-    owl:versionInfo "9.57.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.58.0> ;
+    owl:versionInfo "9.58.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.57.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.56.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.55.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.54.0> ;
@@ -5985,3 +5986,19 @@ fw:Out3_Objective_CD a backlog:StageOutput ;
     backlog:hasStateDigest "9b71facb70e07e3967d6efb688f705c62dd779034974bc3ad877f3fc4de605f5" ;
     backlog:closedAtCommit "backlog-roadmap-framework-v1.209.0 (tag; witnessed by git, not asserted)" ;
     backlog:hasRationale "Re-affirmed: fw:Obj_CD_MissionHeld, fw:Obj_CD_NoOutOfScopeWork and the five objectives beneath them, each with metric, baseline, target, checkpoint and observations already on the record; nothing re-dated, nothing re-measured here (G33: state is grounded in evidence, not in the ceremony having happened). The retracted Out2_Objective_CD remains as the record of the earlier claim." .
+
+#################################################################
+#  v9.58.0 (2026-09-07, brsf-session) -- REBUILD, STAGE 5 OF 5: Backlog.
+#  Consumes Out3_Objective_CD (first in git at 97a1340). This output
+#  is the only substantive change in this release, so its own first
+#  appearance is its own commit. Digest at this commit (Experiment A).
+#################################################################
+fw:Out3_Backlog_CD a backlog:StageOutput ;
+    backlog:outputOfStage backlog:Stage_Backlog ;
+    backlog:belongsToLineage fw:L_ChangeDiscipline ;
+    backlog:consumesOutput fw:Out3_Objective_CD ;
+    backlog:hasStateDigest "c69257c535f575f918f331b4f98e5288687e7460f87446454be93531f663c9e4" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.210.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Rebuilt Backlog stage: the two pre-lineage items fw:S_ChangeGuideDoc and fw:ET_ChangeGuideDoc are ADMITTED by this output (admittedByOutput), which is the only way a pre-lineage item enters a restarted chain. Their preLineageItem flag stays: they were built before the chain and the record says so. The retracted Out2_Backlog_CD remains as the record of the earlier claim." .
+fw:S_ChangeGuideDoc backlog:admittedByOutput fw:Out3_Backlog_CD .
+fw:ET_ChangeGuideDoc backlog:admittedByOutput fw:Out3_Backlog_CD .
