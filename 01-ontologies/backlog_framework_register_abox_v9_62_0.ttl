@@ -10,8 +10,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.61.0> ;
-    owl:versionInfo "9.61.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.62.0> ;
+    owl:versionInfo "9.62.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.61.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.60.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.59.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.58.0> ;
@@ -6145,3 +6146,36 @@ fw:L7_Code a backlog:Lineage ; rdfs:label "Lineage 7, part Code (Del_CodeExecute
     backlog:parentLineage fw:L_OntologyDriven ; backlog:partForDeliverable fw:Del_CodeExecutes ;
     backlog:lineageForMission fw:Mission_OntologyDriven .
 fw:EP_ScriptDecisions_S1 backlog:belongsToLineage fw:L7_Code ; backlog:preLineageItem true .
+
+#################################################################
+#  v9.62.0 (2026-09-07, brsf-session) -- LINEAGE 7 REBUILD, STAGE 1
+#  OF 5: Mission, for all five parts. Parts are independent, so their
+#  stage-1 outputs share one commit; within each part the order is
+#  witnessed (this commit follows the parts' none commit 2f28bac).
+#  Digest at this commit (Experiment A), one per stage, register-wide.
+#################################################################
+fw:P7Gov_Mission a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Mission ;
+    backlog:belongsToLineage fw:L7_Gov ;
+    backlog:hasStateDigest "f1787a3b16b53a7e13cbcd781b0d30f616d79aff2af9fe9e826d7b29061c102c" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.214.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Part Gov: Mission_OntologyDriven re-affirmed unchanged for this part (owner-stated; a session does not rewrite it)." .
+fw:P7Exec_Mission a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Mission ;
+    backlog:belongsToLineage fw:L7_Exec ;
+    backlog:hasStateDigest "f1787a3b16b53a7e13cbcd781b0d30f616d79aff2af9fe9e826d7b29061c102c" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.214.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Part Exec: Mission_OntologyDriven re-affirmed unchanged for this part (owner-stated; a session does not rewrite it)." .
+fw:P7Export_Mission a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Mission ;
+    backlog:belongsToLineage fw:L7_Export ;
+    backlog:hasStateDigest "f1787a3b16b53a7e13cbcd781b0d30f616d79aff2af9fe9e826d7b29061c102c" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.214.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Part Export: Mission_OntologyDriven re-affirmed unchanged for this part (owner-stated; a session does not rewrite it)." .
+fw:P7Prose_Mission a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Mission ;
+    backlog:belongsToLineage fw:L7_Prose ;
+    backlog:hasStateDigest "f1787a3b16b53a7e13cbcd781b0d30f616d79aff2af9fe9e826d7b29061c102c" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.214.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Part Prose: Mission_OntologyDriven re-affirmed unchanged for this part (owner-stated; a session does not rewrite it)." .
+fw:P7Code_Mission a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Mission ;
+    backlog:belongsToLineage fw:L7_Code ;
+    backlog:hasStateDigest "f1787a3b16b53a7e13cbcd781b0d30f616d79aff2af9fe9e826d7b29061c102c" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.214.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Part Code: Mission_OntologyDriven re-affirmed unchanged for this part (owner-stated; a session does not rewrite it)." .

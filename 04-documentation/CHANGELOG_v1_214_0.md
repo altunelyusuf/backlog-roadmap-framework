@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.214.0 — 2026-09-07 (MINOR: lineage 7 rebuild, stage 1 of 5 — Mission, all five parts)
+
+Register v9.62.0: `P7Gov_Mission`, `P7Exec_Mission`, `P7Export_Mission`, `P7Prose_Mission`, `P7Code_Mission`
+close the parts' Mission stage (each consuming its part's none output, 2f28bac); digest at
+this commit. Nothing else changes. Expected reading after this release: each part carries one active output post-dating the restart.
+
 ## v1.213.0 — 2026-09-07 (MINOR: lineage 7 restarted — divide and conquer, five parts by deliverable)
 
 Register v9.61.0: `Restart_L_OntologyDriven_20260907` answers the bypass recorded at v1.212.0
