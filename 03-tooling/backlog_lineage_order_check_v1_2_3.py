@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_lineage_order_check v1.2.2 — did the chain come before the work, or after?
+"""backlog_lineage_order_check v1.2.3 — did the chain come before the work, or after?
 
 THE ESCAPE THIS CATCHES. A lineage is Mission -> Scope -> Goal -> Objective -> Backlog,
 one commit per stage, and only then work items (LINEAGE_OPERATING_DISCIPLINE, ceremony
@@ -427,10 +427,18 @@ def main():
                 if emit:
                     emitted.append(emit_thrash(g, L, d, prefix))
         if verdict == "BYPASS":
-            answered = any((b, B.bypassedLineage, L) in g and any(True for _ in g.subjects(B.answersBypass, b))
-                           for b in g.subjects(RDF.type, B.LineageBypass))
-            if d["problems"]:
-                answered = False   # a restart whose own strategy evidence fails the git order answers nothing
+            # v1.2.3: "answered" means every item bypassed NOW is named by a recorded bypass of this
+            # lineage that a restart answers. v1.2.2 asked only whether ANY bypass of the lineage had
+            # ever been answered -- so a second, new bypass on a once-restarted lineage was neither
+            # emitted nor failed. Found on the toy exercise's second trial (only the unrelated
+            # lineage's finding came out of --emit).
+            def named_and_answered(ln):
+                for b in g.subjects(B.bypassedLineage, L):
+                    if any(local(i) == ln for i in g.objects(b, B.bypassedItem)) \
+                            and any(True for _ in g.subjects(B.answersBypass, b)):
+                        return True
+                return False
+            answered = all(named_and_answered(ln) for ln, _, _ in d["bypassed"]) and not d["problems"]
             if not answered:
                 worst = 2
                 if emit:

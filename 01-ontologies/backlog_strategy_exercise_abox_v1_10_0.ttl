@@ -8,8 +8,9 @@
 @prefix dcterms: <http://purl.org/dc/terms/> .
 
 <http://example.org/backlog-strategy-exercise> a owl:Ontology ;
-    owl:versionIRI <http://example.org/backlog-strategy-exercise/1.9.0> ;
-    owl:versionInfo "1.9.0" ;
+    owl:versionIRI <http://example.org/backlog-strategy-exercise/1.10.0> ;
+    owl:versionInfo "1.10.0" ;
+    owl:priorVersion <http://example.org/backlog-strategy-exercise/1.9.0> ;
     owl:priorVersion <http://example.org/backlog-strategy-exercise/1.8.0> ;
     owl:priorVersion <http://example.org/backlog-strategy-exercise/1.7.0> ;
     owl:priorVersion <http://example.org/backlog-strategy-exercise/1.6.0> ;
@@ -831,3 +832,49 @@ ex:TV_T_S2 a backlog:ExecutionTask ; backlog:hasTaskType backlog:Task_Implementa
     backlog:hasTitle "Second-trial task"@en ; backlog:hasState backlog:Proposed ; backlog:memberOfContainer ex:BL , ex:TV_It2 ;
     backlog:belongsToLineage ex:TV_Lin ; backlog:postRestartItem ex:Restart_TV .
 ex:TV_S2 backlog:memberOfContainer ex:TV_It2 .
+
+#################################################################
+#  v1.10.0 (2026-09-08, brsf-session) -- SECOND BYPASSES, MEASURED, for
+#  toys F and V: TF_S2 / TV_S2 (first at cedf43b) planned after they
+#  existed (planning events first at 20bcfeb). Recorded exactly as
+#  backlog_lineage_order_check_v1_2_3 emitted them; each lineage frozen
+#  by its finding until the second restart, in its own commit.
+#  The emitter itself was fixed to produce these: v1.2.2 asked whether
+#  ANY bypass of the lineage had ever been answered and so neither
+#  emitted nor failed a NEW bypass on a once-restarted lineage (G85).
+#################################################################
+ex:Bypass_TF_Lin_20260908 a backlog:LineageBypass ;
+    backlog:bypassedLineage ex:TF_Lin ;
+    backlog:hasFailureMode backlog:FM_LineageBypass ;
+    backlog:hasFindingScope backlog:Scope_Methodology ;
+    backlog:hasRootCause "The chain was written after the work: the items below first appear in the governed repository before the lineage's own Stage_Backlog output does. Measured by git first-appearance, not by the register's own dates." ;
+    backlog:bypassedItem ex:TF_S2 ;
+    backlog:itemFirstCommit "TF_S2 cedf43b 1788803337" ;
+    backlog:bypassedOutput ex:TF_R_Mission ;
+    backlog:bypassedOutput ex:TF_R_Scope ;
+    backlog:bypassedOutput ex:TF_R_Goal ;
+    backlog:bypassedOutput ex:TF_R_Objective ;
+    backlog:bypassedOutput ex:TF_R_Backlog ;
+    backlog:chainClosedCommit "7afa514 1788801618" ;
+    backlog:detectedAt "2026-09-08T06:09:02Z"^^xsd:dateTime ;
+    backlog:detectedBy "backlog_lineage_order_check_v1_2_3" ;
+    backlog:hasRationale "TF_S2 first appears cedf43b before Stage_Backlog output planned-late by TF_Plan_S2 (20bcfeb)" .
+ex:TF_Lin backlog:lineageFrozen true ; backlog:frozenBy ex:Bypass_TF_Lin_20260908 .   # found: frozen until a restart answers it, in its own commit
+
+ex:Bypass_TV_Lin_20260908 a backlog:LineageBypass ;
+    backlog:bypassedLineage ex:TV_Lin ;
+    backlog:hasFailureMode backlog:FM_LineageBypass ;
+    backlog:hasFindingScope backlog:Scope_Methodology ;
+    backlog:hasRootCause "The chain was written after the work: the items below first appear in the governed repository before the lineage's own Stage_Backlog output does. Measured by git first-appearance, not by the register's own dates." ;
+    backlog:bypassedItem ex:TV_S2 ;
+    backlog:itemFirstCommit "TV_S2 cedf43b 1788803337" ;
+    backlog:bypassedOutput ex:TV_R_Mission ;
+    backlog:bypassedOutput ex:TV_R_Scope ;
+    backlog:bypassedOutput ex:TV_R_Goal ;
+    backlog:bypassedOutput ex:TV_R_Objective ;
+    backlog:bypassedOutput ex:TV_R_Backlog ;
+    backlog:chainClosedCommit "7afa514 1788801618" ;
+    backlog:detectedAt "2026-09-08T06:09:40Z"^^xsd:dateTime ;
+    backlog:detectedBy "backlog_lineage_order_check_v1_2_3" ;
+    backlog:hasRationale "TV_S2 first appears cedf43b before Stage_Backlog output planned-late by TV_Plan_S2 (20bcfeb)" .
+ex:TV_Lin backlog:lineageFrozen true ; backlog:frozenBy ex:Bypass_TV_Lin_20260908 .   # found: frozen until a restart answers it, in its own commit

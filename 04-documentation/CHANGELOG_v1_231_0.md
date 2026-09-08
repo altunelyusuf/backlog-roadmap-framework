@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.231.0 — 2026-09-08 (MINOR: second bypasses of toys F and V recorded and frozen; emitter defect fixed)
+
+Exercise register v1.10.0: `Bypass_TF_Lin_20260908`, `Bypass_TV_Lin_20260908` as emitted (the stories
+planned after they existed); F and V frozen by their findings. `backlog_lineage_order_check_v1_2_3`:
+"answered" now means every currently bypassed item is named by a recorded, answered bypass; v1.2.2
+tested whether any bypass had ever been answered and silently passed a new bypass on a restarted
+lineage. Expected reading: F and V FOUND.
+
 ## v1.230.0 — 2026-09-07 (MINOR: second trial, step 2 — TF_S2 and TV_S2 planned after the fact)
 
 Exercise register v1.9.0: an open iteration, a planning event and an execution task per toy, planning
