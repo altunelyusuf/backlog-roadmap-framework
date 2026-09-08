@@ -287,12 +287,16 @@ def classify(g, L, witness, prefix):
     # 4. single-commit case
     commits = {f[0] for f in out_first.values()} | {f[0] for f in item_first.values()}
     fro = g.value(L, B.lineageFrozen)
-    frozen_by = g.value(L, B.frozenBy)
     frozen = fro is not None and bool(fro.toPython())
-    if frozen and frozen_by is not None and (frozen_by, RDF.type, B.LineageThrash) in g and g.value(L, B.frozenRuling) is None:
+    # v1.2.3: a lineage frozen more than once carries several frozenBy values (append-only
+    # register); the CURRENT freeze is any freezing finding not yet answered or ruled
+    frozen_bys = list(g.objects(L, B.frozenBy))
+    thrash_open = any((fb, RDF.type, B.LineageThrash) in g for fb in frozen_bys) and g.value(L, B.frozenRuling) is None
+    bypass_open = any((fb, RDF.type, B.LineageBypass) in g and not any((r, B.answersBypass, fb) in g for r in restarts)
+                      for fb in frozen_bys)
+    if frozen and thrash_open:
         verdict = "FROZEN"
-    elif frozen and frozen_by is not None and (frozen_by, RDF.type, B.LineageBypass) in g \
-            and not any((r, B.answersBypass, frozen_by) in g for r in restarts):
+    elif frozen and bypass_open:
         verdict = "FOUND"
     elif thrash:
         verdict = "THRASH"

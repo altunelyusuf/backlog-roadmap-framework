@@ -6,7 +6,9 @@ Exercise register v1.10.0: `Bypass_TF_Lin_20260908`, `Bypass_TV_Lin_20260908` as
 planned after they existed); F and V frozen by their findings. `backlog_lineage_order_check_v1_2_3`:
 "answered" now means every currently bypassed item is named by a recorded, answered bypass; v1.2.2
 tested whether any bypass had ever been answered and silently passed a new bypass on a restarted
-lineage. Expected reading: F and V FOUND.
+lineage. Also: a lineage frozen more than once carries several `frozenBy` values (append-only); the
+current freeze is any freezing finding not yet answered or ruled — v1.2.2 read only one value and
+missed the second freeze. Expected reading: F and V FOUND.
 
 ## v1.230.0 — 2026-09-07 (MINOR: second trial, step 2 — TF_S2 and TV_S2 planned after the fact)
 
