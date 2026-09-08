@@ -8,8 +8,9 @@
 @prefix dcterms: <http://purl.org/dc/terms/> .
 
 <http://example.org/backlog-strategy-exercise> a owl:Ontology ;
-    owl:versionIRI <http://example.org/backlog-strategy-exercise/1.10.0> ;
-    owl:versionInfo "1.10.0" ;
+    owl:versionIRI <http://example.org/backlog-strategy-exercise/1.11.0> ;
+    owl:versionInfo "1.11.0" ;
+    owl:priorVersion <http://example.org/backlog-strategy-exercise/1.10.0> ;
     owl:priorVersion <http://example.org/backlog-strategy-exercise/1.9.0> ;
     owl:priorVersion <http://example.org/backlog-strategy-exercise/1.8.0> ;
     owl:priorVersion <http://example.org/backlog-strategy-exercise/1.7.0> ;
@@ -878,3 +879,40 @@ ex:Bypass_TV_Lin_20260908 a backlog:LineageBypass ;
     backlog:detectedBy "backlog_lineage_order_check_v1_2_3" ;
     backlog:hasRationale "TV_S2 first appears cedf43b before Stage_Backlog output planned-late by TV_Plan_S2 (20bcfeb)" .
 ex:TV_Lin backlog:lineageFrozen true ; backlog:frozenBy ex:Bypass_TV_Lin_20260908 .   # found: frozen until a restart answers it, in its own commit
+
+#################################################################
+#  v1.11.0 (2026-09-08, brsf-session) -- SECOND RESTARTS of toys F and V,
+#  in their own commit after the findings (1e27ecc). Each carries the
+#  reductionObserved backlog_lineage_order_check_v1_2_3 printed on
+#  20bcfeb -- admitted / named for the first trial's bypass -- never
+#  hand-computed:
+#    TF: 1/2 = 0.500  (the first rebuild admitted TF_S_PL only, by
+#        design; Strat_DecreaseByFactor requires >= 0.5: exercised AT
+#        the boundary, and it holds)
+#    TV: 2/2 = 1.000  (Strat_VariableDecrease compares this with the
+#        previous restart's reduction; Restart_TV carried none, so the
+#        comparison first bites at a THIRD trial -- disclosed as the
+#        limit of this exercise, see G85)
+#  Every item of both lineages flagged (or post-restart); the first
+#  rebuilt chains retracted (kept).
+#################################################################
+ex:Restart2_TF a backlog:LineageRestart ; backlog:restartsLineage ex:TF_Lin ; backlog:answersBypass ex:Bypass_TF_Lin_20260908 ;
+    backlog:hasRecoveryStrategy backlog:Strat_DecreaseByFactor ; backlog:reductionObserved 0.5 ;
+    backlog:retractsOutput ex:TF_R_Mission , ex:TF_R_Scope , ex:TF_R_Goal , ex:TF_R_Objective , ex:TF_R_Backlog ;
+    backlog:restartedAtCommit "backlog-roadmap-framework-v1.232.0 (tag; witnessed by git, not asserted)" ;
+    backlog:decidedBy backlog:Owner ; backlog:belongsToLineage ex:TF_Lin ;
+    backlog:hasRationale "Second trial. reductionObserved 0.5 as computed by the order check on 20bcfeb from the register (admitted / named for Bypass_TF_Lin_20260907)." .
+ex:TF_R_Mission backlog:outputRetracted true . ex:TF_R_Scope backlog:outputRetracted true . ex:TF_R_Goal backlog:outputRetracted true .
+ex:TF_R_Objective backlog:outputRetracted true . ex:TF_R_Backlog backlog:outputRetracted true .
+ex:TF_S2 backlog:preLineageItem true .
+ex:TF_T_S2 backlog:preLineageItem true .
+ex:Restart2_TV a backlog:LineageRestart ; backlog:restartsLineage ex:TV_Lin ; backlog:answersBypass ex:Bypass_TV_Lin_20260908 ;
+    backlog:hasRecoveryStrategy backlog:Strat_VariableDecrease ; backlog:reductionObserved 1.0 ;
+    backlog:retractsOutput ex:TV_R_Mission , ex:TV_R_Scope , ex:TV_R_Goal , ex:TV_R_Objective , ex:TV_R_Backlog ;
+    backlog:restartedAtCommit "backlog-roadmap-framework-v1.232.0 (tag; witnessed by git, not asserted)" ;
+    backlog:decidedBy backlog:Owner ; backlog:belongsToLineage ex:TV_Lin ;
+    backlog:hasRationale "Second trial. reductionObserved 1.0 as computed by the order check on 20bcfeb from the register (admitted / named for Bypass_TV_Lin_20260907)." .
+ex:TV_R_Mission backlog:outputRetracted true . ex:TV_R_Scope backlog:outputRetracted true . ex:TV_R_Goal backlog:outputRetracted true .
+ex:TV_R_Objective backlog:outputRetracted true . ex:TV_R_Backlog backlog:outputRetracted true .
+ex:TV_S2 backlog:preLineageItem true .
+ex:TV_T_S2 backlog:preLineageItem true .

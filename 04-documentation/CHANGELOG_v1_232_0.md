@@ -1,5 +1,18 @@
 # Changelog
 
+## v1.232.0 — 2026-09-08 (MINOR: second restarts of toys F and V, with the tool-computed reductionObserved)
+
+Exercise register v1.11.0: `Restart2_TF` (decrease by a constant factor, `reductionObserved 0.5` — the
+first rebuild admitted one of two by design; the shape's ≥ 0.5 test is exercised at its boundary and
+holds) and `Restart2_TV` (variable-size decrease, `reductionObserved 1.0`; its comparison with the
+previous restart's reduction first bites at a third trial — the limit of this exercise). First rebuilt
+chains retracted; `TF_S2`, `TV_S2` and their tasks flagged. Expected reading: F and V RESTARTED.
+Shapes v1.107.0: the state between a second restart and its rebuild is publishable — an admission by a
+since-retracted output is stale, not lost, until the rebuild has an active Backlog output that does
+not re-admit the item (`RestartKeepsAdmissionsShape`, `PreLineageItemShape`,
+`RetractedOutputConsumedShape`); `DecreaseByFactorShape` asks the number of the later trial only.
+`fixture_lineage_thrash_negative_v1_1_0` keeps the admission-loss case discriminating.
+
 ## v1.231.0 — 2026-09-08 (MINOR: second bypasses of toys F and V recorded and frozen; emitter defect fixed)
 
 Exercise register v1.10.0: `Bypass_TF_Lin_20260908`, `Bypass_TV_Lin_20260908` as emitted (the stories

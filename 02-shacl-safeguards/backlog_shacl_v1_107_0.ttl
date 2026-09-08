@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.106.0> ;
-    owl:versionInfo "1.106.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.107.0> ;
+    owl:versionInfo "1.107.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.106.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.105.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.104.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.103.0> ;
@@ -5446,6 +5447,11 @@ backlog:RetractedOutputConsumedShape a sh:NodeShape ;
         sh:select """SELECT $this WHERE {
             $this backlog:outputRetracted true .
             ?i backlog:admittedByOutput $this .
+            # v1.107.0: the old admission stays as history; it is a live pointer only if the lineage's
+            # rebuild has an active Backlog output that does not re-admit the item
+            $this backlog:belongsToLineage ?l .
+            FILTER EXISTS { ?live backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage ?l . FILTER NOT EXISTS { ?live backlog:outputRetracted true } }
+            FILTER NOT EXISTS { ?i backlog:admittedByOutput ?ok . FILTER NOT EXISTS { ?ok backlog:outputRetracted true } }
         }""" ] .
 
 backlog:PreLineageItemShape a sh:NodeShape ;
@@ -5468,6 +5474,10 @@ backlog:PreLineageItemShape a sh:NodeShape ;
             $this backlog:preLineageItem true ; backlog:admittedByOutput ?o ; backlog:belongsToLineage ?l .
             # v1.103.0: an item of a divided lineage is admitted by its PART's Backlog output
             FILTER NOT EXISTS { ?part backlog:parentLineage ?l . $this backlog:belongsToLineage ?part }
+            # v1.107.0: an admission by a since-retracted output is stale, not wrong, while the rebuild is
+            # under way; it is wrong once an active Backlog output exists and none re-admits the item
+            FILTER NOT EXISTS { $this backlog:admittedByOutput ?ok . ?ok backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage ?l . FILTER NOT EXISTS { ?ok backlog:outputRetracted true } }
+            FILTER ( NOT EXISTS { ?o backlog:outputRetracted true } || EXISTS { ?live backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage ?l . FILTER NOT EXISTS { ?live backlog:outputRetracted true } } )
             FILTER ( EXISTS { ?o backlog:outputRetracted true }
                   || NOT EXISTS { ?o backlog:outputOfStage backlog:Stage_Backlog }
                   || NOT EXISTS { ?o backlog:belongsToLineage ?l } )
@@ -5497,7 +5507,7 @@ backlog:RestartRequiresNoveltyShape a sh:NodeShape ;
     sh:targetClass backlog:LineageRestart ;
     sh:severity sh:Violation ;
     rdfs:label "A second restart on a lineage answers a bypass that names something new (L1)"@en ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_lineage_thrash_negative_v1_0_0.ttl" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_lineage_thrash_negative_v1_1_0.ttl" ;
     sh:sparql [ a sh:SPARQLConstraint ;
         sh:message "L1: this restart answers a bypass on a lineage that has already been restarted, and every item that bypass names was already named by the earlier restart's bypass. The finding is the same finding again; a restart on it is a turn of the loop, not a correction. Record a LineageThrash (Thrash_NoNovelty), freeze the lineage, and let the owner rule." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
@@ -5518,7 +5528,7 @@ backlog:RestartKeepsAdmissionsShape a sh:NodeShape ;
     sh:targetClass backlog:LineageRestart ;
     sh:severity sh:Violation ;
     rdfs:label "A restart does not lose what the previous rebuild admitted (L1)"@en ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_lineage_thrash_negative_v1_0_0.ttl" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_lineage_thrash_negative_v1_1_0.ttl" ;
     sh:sparql [ a sh:SPARQLConstraint ;
         sh:message "L1: this restart retracts the output that had admitted a pre-lineage item, and no active, rebuilt Stage_Backlog output of the same lineage re-admits that item. Each turn of a restart loop that drops an admission loses lineage work; the item must be re-admitted by this restart's own rebuild or the trial is not converging (Thrash_AdmissionLost)." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
@@ -5526,6 +5536,9 @@ backlog:RestartKeepsAdmissionsShape a sh:NodeShape ;
             $this backlog:restartsLineage ?l ; backlog:retractsOutput ?o .
             ?o backlog:outputOfStage backlog:Stage_Backlog .
             ?i backlog:belongsToLineage ?l ; backlog:preLineageItem true .
+            # v1.107.0: a second trial passes through "retracted, not yet rebuilt"; the loss is real only
+            # once the rebuild has reached a Backlog output that does not re-admit the item (G10)
+            FILTER EXISTS { ?live backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage ?l . FILTER NOT EXISTS { ?live backlog:outputRetracted true } }
             { ?i backlog:admittedByOutput ?o }
             UNION
             { ?i backlog:admittedByOutput ?o0 . ?o0 backlog:outputRetracted true .
@@ -5536,7 +5549,7 @@ backlog:ThrashFreezesLineageShape a sh:NodeShape ;
     sh:targetClass backlog:Lineage ;
     sh:severity sh:Violation ;
     rdfs:label "A thrash finding freezes its lineage until the owner rules (L1)"@en ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_lineage_thrash_negative_v1_0_0.ttl" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_lineage_thrash_negative_v1_1_0.ttl" ;
     sh:sparql [ a sh:SPARQLConstraint ;
         sh:message "L1: a LineageThrash stands against this live lineage and the lineage is not frozen (lineageFrozen true, frozenBy that finding), and no frozenRuling records an owner decision. Non-convergence is the stop condition; it is answered by a freeze and a ruling, not by another restart." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
@@ -5551,7 +5564,7 @@ backlog:NoRestartOnFrozenLineageShape a sh:NodeShape ;
     sh:targetClass backlog:LineageRestart ;
     sh:severity sh:Violation ;
     rdfs:label "No restart on a frozen lineage (L1)"@en ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_lineage_thrash_negative_v1_0_0.ttl" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_lineage_thrash_negative_v1_1_0.ttl" ;
     sh:sparql [ a sh:SPARQLConstraint ;
         sh:message "L1: this restart is recorded against a frozen lineage with no owner ruling on the freeze. A frozen lineage waits; only frozenRuling reopens it." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
@@ -5569,7 +5582,7 @@ backlog:LineageThrashShape a sh:NodeShape ;
     sh:targetClass backlog:LineageThrash ;
     sh:severity sh:Violation ;
     rdfs:label "A thrash finding names its lineage, its kind and what it repeated (L1)"@en ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_lineage_thrash_negative_v1_0_0.ttl" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_lineage_thrash_negative_v1_1_0.ttl" ;
     sh:property [ sh:path backlog:thrashedLineage ; sh:minCount 1 ; sh:maxCount 1 ; sh:class backlog:Lineage ;
                   sh:message "A thrash finding names exactly one lineage." ] ;
     sh:property [ sh:path backlog:hasThrashKind ; sh:minCount 1 ;
@@ -5617,8 +5630,10 @@ backlog:DecreaseByFactorShape a sh:NodeShape ;
         sh:message "L1: this restart follows Strat_DecreaseByFactor but records no reductionObserved, or one below 0.5: the previous trial admitted fewer than half of what it set out to admit. Under this strategy that is the stop, not grounds for another trial -- record a LineageThrash." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
-            $this backlog:hasRecoveryStrategy backlog:Strat_DecreaseByFactor ; backlog:restartsLineage ?l .
-            ?r1 a backlog:LineageRestart ; backlog:restartsLineage ?l . FILTER (?r1 != $this)
+            $this backlog:hasRecoveryStrategy backlog:Strat_DecreaseByFactor ; backlog:restartsLineage ?l ; backlog:answersBypass ?b2 .
+            ?r1 a backlog:LineageRestart ; backlog:restartsLineage ?l ; backlog:answersBypass ?b1 . FILTER (?r1 != $this)
+            # v1.107.0: the number belongs to the LATER trial only (the first has nothing to measure)
+            ?b1 backlog:detectedAt ?d1 . ?b2 backlog:detectedAt ?d2 . FILTER (STR(?d2) > STR(?d1))
             FILTER NOT EXISTS { $this backlog:reductionObserved ?x . FILTER (?x >= 0.5) }
         }""" ] .
 

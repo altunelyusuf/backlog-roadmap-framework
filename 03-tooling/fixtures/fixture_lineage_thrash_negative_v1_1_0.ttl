@@ -72,3 +72,7 @@ ex:Thrash_Bad a backlog:LineageThrash ; backlog:thrashedLineage ex:L2 ; backlog:
     backlog:detectedAt "2026-09-07T10:00:00Z"^^xsd:dateTime ; backlog:detectedBy "fixture" .
 
 <http://example.org/lineage-thrash-neg#> backlog:hasExpectedPolarity backlog:Polarity_Negative .
+# v1.1.0 (2026-09-08): shapes v1.107.0 count an admission as LOST only once the rebuild has an active
+# Backlog output that does not re-admit the item; L1 now has one (N1_Backlog, admitting nothing), so
+# RestartKeepsAdmissionsShape still fires on Restart2 here.
+ex:N1_Backlog a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage ex:L1 ; backlog:closedAtCommit "c14" ; backlog:hasStateDigest "n5" .
