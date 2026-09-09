@@ -1,5 +1,18 @@
 # Changelog
 
+## v1.241.0 — 2026-09-09 (MINOR: the first adopter's two findings built; the publisher's deletion repaired; G86)
+
+- `backlog_lineage_order_check_v1_3_0.py`: witness path is the register file's directory
+  (`--register-path` overrides); outputs present but unwitnessed under the path = NOT VERIFIABLE,
+  exit 2 (a refusal); every `closedAtCommit` that is a hash or release tag must be an ancestor of the
+  branch tip — `WITNESS_BROKEN` otherwise; a ref the clone lacks is reported as unverifiable-here.
+- `backlog_gate_v1_9_0.sh`: fetches tags before the witness measures.
+- Discipline v57.0.0: ceremony rule "publish before you rebase; never rewrite commits carrying a live
+  lineage"; `G86`.
+- Inbox: both `vaf-agentic-pipeline` proposals accepted, verified against the tool and the repository,
+  logged. They had been deleted by v1.240.0's publish (`a904c11`) and restored (`9054644`); finding to
+  OE on the publisher's wholesale replace filed separately.
+
 ## v1.240.0 — 2026-09-09 (MINOR: the manifest's digest — the root of a covered set lives outside the set)
 
 Owner's decision 3: no workaround. The v1.239.0 shape asked the manifest artifact for its own

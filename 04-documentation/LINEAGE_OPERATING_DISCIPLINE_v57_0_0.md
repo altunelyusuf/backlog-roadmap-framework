@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v56.0.0
+# Lineage Operating Discipline — v57.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -53,6 +53,14 @@ remembered from a previous session; this document's own tooling references have 
    the lineage carried, flags the pre-existing items, and the chain is rebuilt from Mission in fresh
    commits, one per stage; the items are re-admitted by the rebuilt `Stage_Backlog` output or they
    count for nothing.
+
+   **The witness is a branch, not an object store (v57.0.0, G86).** A commit an output records must
+   remain an *ancestor of the published branch*. A rebase rewrites hashes; the old objects survive
+   locally, so an existence check lies while the witness is gone. Rule: publish before you rebase, and
+   never rewrite commits that carry a live lineage. If it has happened, repoint each `closedAtCommit`
+   to the real post-rebase first-appearance commit and say so on the output (`skos:note`) — never
+   silently. The order check reports an orphaned record as `WITNESS_BROKEN` and a register whose
+   outputs git cannot find under the witness path as NOT VERIFIABLE — a refusal, not a clean result.
 
 3. **State the granularity you are choosing and why.** `Initiative`, `Epic`, `Feature`, `Story`,
    `Task`, `Defect`, `Spike`, `Enabler`. Epic is the **coarsest ordinary choice**, not the neutral
@@ -2340,3 +2348,37 @@ member of the enumeration.
 **Classified at logging time (L-112):** items 2, 4, 5, 6 and 7 are genuine gaps in mechanisms built
 over the previous two days, each found by the next real use; 1 and 8 are limits, disclosed; 3 and the
 final error are this session's own, recorded as such.
+
+## G86 — The first adopter: two gaps in the witness, one deletion by the publisher
+
+**The first package to adopt this framework end to end** (COM8090 `vaf-agentic-pipeline`, 2026-09-09)
+ran the ceremony, closed five stages, measured ORDERED, then pushed — and filed two proposals into
+this inbox the same day, both real, both verified here against the tool and the repository rather
+than the proposal text.
+
+1. **The tool could not see them.** `backlog_lineage_order_check` derived its witness path from its
+   own package directory, so run on any other package's register it looked in the wrong place, found
+   nothing, classified every lineage `NO_OUTPUTS`, and returned exit 0 with a verdict that read like a
+   clean result. Now (v1.3.0) the witness path is the register file's own directory (`--register-path`
+   overrides), and outputs that exist in the register but are not found in git under that path are
+   NOT VERIFIABLE with exit 2 — a refusal. Run on their register through its own path, the tool
+   measured it (it reads THRASH; theirs to handle).
+2. **A rebase orphans the witness.** They rebased before their first push — ordinary collaboration —
+   and every recorded commit became unreachable from the pushed branch while `git cat-file -e` still
+   said EXISTS. Now every `closedAtCommit` that is a hash or a release tag must be an ancestor of the
+   branch tip: an orphan is `WITNESS_BROKEN` (exit 2); a ref the clone does not have is reported as
+   unverifiable-here. The first run of that check flagged every output of this package's own eight
+   lineages — because this clone had never fetched its tags. After fetching, all ORDERED, every
+   recorded release tag an ancestor. The gate now fetches tags before measuring (v1.9.0).
+
+**And this session's own failure, the same day.** The `publish` half of the release runner fetched
+but did not rebase, and the publisher replaces the package directory wholesale from the source
+tree; v1.240.0 (`a904c11`) therefore **deleted both proposals from this inbox**, which had arrived
+between prepare and publish. Restored byte-for-byte from their filing commits (`9054644`); the runner
+now rebases before publish and prints what origin gained under the package. The deeper fix is the
+publisher's: it should refuse when the package directory at origin carries commits absent from the
+source. Filed to OE (B1).
+
+**Classified at logging time (L-112):** gap 1 is a real defect in G81's tool, found by the first use
+outside its home; gap 2 is a real limit in G81's design, found by the first ordinary git workflow
+the ceremony never mentioned; the deletion is this session's own, recorded as such.
