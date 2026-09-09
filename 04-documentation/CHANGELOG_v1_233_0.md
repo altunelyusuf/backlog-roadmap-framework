@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.233.0 — 2026-09-07 (MINOR: second toy rebuild, stage 1 of 5 — Mission, toys F and V)
+
+Exercise register v1.12.0: `TF_R2_Mission`, `TV_R2_Mission` (each
+consuming its toy's none output, ebe3b79); digest at this commit. 
+
 ## v1.232.0 — 2026-09-08 (MINOR: second restarts of toys F and V, with the tool-computed reductionObserved)
 
 Exercise register v1.11.0: `Restart2_TF` (decrease by a constant factor, `reductionObserved 0.5` — the
