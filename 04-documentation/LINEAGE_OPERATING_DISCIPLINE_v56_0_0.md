@@ -2296,7 +2296,7 @@ size decrease) in two, F with `reductionObserved` exactly 0.5 — the ≥ 0.5 bo
 **What the exercise found — eight defects and limits, each fixed or disclosed at the point it was
 measured, none hidden:**
 
-1. **Transform-represent is subsumed here.** `EpicDecomposedShape` (L4) forbids an undecomposed epic
+1. **Transform-represent is subsumed here.** `EpicPlanningShape` (L4) forbids an undecomposed epic
    in any conformant register, so "decompose the bypassed epic before restarting" is always already
    done. The strategy stays in the family for registers at lower levels; in this one it is never the
    thing that makes a trial smaller.
