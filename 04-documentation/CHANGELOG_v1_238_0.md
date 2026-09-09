@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.238.0 — 2026-09-09 (PATCH: correction — the second-trial admissions v1.237.0 claimed were not all written; G85)
+
+**v1.237.0's changelog was wrong.** It said each Backlog output admitted all four items; the
+generator had kept the first trial's list, so `TF_S2` — the item the second bypass named — was not
+admitted, nor `TF_EP`, `TF_T_S2`, `TV_S2`, `TV_T_S2`. The order check reported it on `53ced80`
+("reductionObserved for a next restart of TF_Lin: 0/1"). Exercise register v1.17.0 admits them
+by the same second-rebuild outputs, one commit later, as a dated append. Expected reading: F and V
+ORDERED, `reductionObserved` for any next restart 1/1. Lineage discipline v56.0.0 adds `G85`.
+
 ## v1.237.0 — 2026-09-07 (MINOR: second toy rebuild, stage 5 of 5 — Backlog, toys F and V)
 
 Exercise register v1.16.0: `TF_R2_Backlog`, `TV_R2_Backlog` (each

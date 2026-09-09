@@ -8,8 +8,9 @@
 @prefix dcterms: <http://purl.org/dc/terms/> .
 
 <http://example.org/backlog-strategy-exercise> a owl:Ontology ;
-    owl:versionIRI <http://example.org/backlog-strategy-exercise/1.16.0> ;
-    owl:versionInfo "1.16.0" ;
+    owl:versionIRI <http://example.org/backlog-strategy-exercise/1.17.0> ;
+    owl:versionInfo "1.17.0" ;
+    owl:priorVersion <http://example.org/backlog-strategy-exercise/1.16.0> ;
     owl:priorVersion <http://example.org/backlog-strategy-exercise/1.15.0> ;
     owl:priorVersion <http://example.org/backlog-strategy-exercise/1.14.0> ;
     owl:priorVersion <http://example.org/backlog-strategy-exercise/1.13.0> ;
@@ -975,3 +976,22 @@ ex:TV_R2_Backlog a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Bac
     backlog:hasStateDigest "91a67d3ce7672b1b4d12162edc2d5205aa64d6858f58757b32ae2f43468f02a4" ; backlog:closedAtCommit "backlog-roadmap-framework-v1.237.0 (tag; witnessed by git, not asserted)" .
 ex:TV_S_PL backlog:admittedByOutput ex:TV_R2_Backlog .
 ex:TV_EP backlog:admittedByOutput ex:TV_R2_Backlog .
+
+#################################################################
+#  v1.17.0 (2026-09-09, brsf-session) -- CORRECTION, FOUND BY THE
+#  FINAL READING. The v1.16.0 Backlog outputs were meant to admit all
+#  four items of each toy; the generator that wrote them was edited
+#  wrongly and kept the FIRST trial's admission list (TF: S_PL only;
+#  TV: S_PL and EP). The order check said so plainly on 53ced80:
+#  "reductionObserved for a next restart of TF_Lin: 0/1 = 0.000" --
+#  TF_S2, the very item the second bypass named, was not admitted; the
+#  changelog of v1.237.0 claimed 4/4 and was wrong. Corrected here as
+#  a dated append: the remaining items are admitted by the same
+#  second-rebuild Backlog outputs, one commit later than those
+#  outputs, and the record says so. Nothing is re-dated.
+#################################################################
+ex:TF_EP backlog:admittedByOutput ex:TF_R2_Backlog .
+ex:TF_S2 backlog:admittedByOutput ex:TF_R2_Backlog .
+ex:TF_T_S2 backlog:admittedByOutput ex:TF_R2_Backlog .
+ex:TV_S2 backlog:admittedByOutput ex:TV_R2_Backlog .
+ex:TV_T_S2 backlog:admittedByOutput ex:TV_R2_Backlog .

@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v55.0.0
+# Lineage Operating Discipline — v56.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -2281,3 +2281,62 @@ next session does not spend twenty-five commits on what five witness equally wel
 
 **Classified at logging time (L-112):** Rule 1 is a genuine gap in G81's restart mechanism, found by
 the check doing its job on the second real lineage; Rule 2 is a clarification, not a gap.
+
+## G85 — The strategy family, run on toy lineages with a real witness: what each run taught
+
+**Why toys.** After G84 no live lineage remained to process (1–6 archived, 7 and 8 ORDERED). The
+owner's instruction: build toy lineages to exercise the strategies not yet run for real. A second
+governed register (`backlog_strategy_exercise_abox`) holds five copies of the conformant pipeline
+graph, items present, chains absent — a bypass by construction, one per remaining strategy. The
+missions are invented; the witness is not: 17 commits (`dcb5f9b` … `53ced80`), every step measured
+by `backlog_lineage_order_check` against git. Toy S (transform-simplify), R (transform-represent)
+and T (transform-reduce) converged in one trial; F (decrease by a constant factor) and V (variable-
+size decrease) in two, F with `reductionObserved` exactly 0.5 — the ≥ 0.5 boundary, held.
+
+**What the exercise found — eight defects and limits, each fixed or disclosed at the point it was
+measured, none hidden:**
+
+1. **Transform-represent is subsumed here.** `EpicDecomposedShape` (L4) forbids an undecomposed epic
+   in any conformant register, so "decompose the bypassed epic before restarting" is always already
+   done. The strategy stays in the family for registers at lower levels; in this one it is never the
+   thing that makes a trial smaller.
+2. **Found-before-any-chain has nothing to retract.** `LineageRestartShape` demanded
+   `retractsOutput`; a bypass with `chainClosedCommit "absent"` names no output. Conditioned
+   (v1.105.0).
+3. **`reductionObserved` had no declared origin** from v1.85.0 to v1.86.0; the number-origin gate
+   reported it non-strictly and no one read the transcript until this exercise. Declared
+   `Num_Derived` with its query.
+4. **Post-restart work is not pre-lineage.** `RestartFlagsEveryItemShape` (G84's rule) fired on the
+   second trial's *new* stories. `postRestartItem` (v1.87.0) is asserted in the register and verified
+   by the git witness — the item must first appear after its restart — so it cannot smuggle an old
+   item past the flag.
+5. **The emitter's "answered" test was wrong.** It asked whether *any* bypass of the lineage had ever
+   been answered, so a new bypass on a once-restarted lineage was neither emitted nor failed. Now:
+   every currently bypassed item must be named by a recorded, answered finding (v1.2.3).
+6. **A lineage frozen twice carries two `frozenBy` values** (append-only); the tool read one and
+   missed the second freeze. Now any unanswered or unruled freezing finding is the current freeze.
+7. **The state between a second restart and its rebuild must be publishable** (G10). Three shapes
+   treated the first rebuild's admissions, now pointing at retracted outputs, as loss immediately;
+   they count loss only once the rebuild has an active Backlog output that does not re-admit the
+   item (v1.107.0) — and one of them exempted re-admission in only one of its two branches
+   (v1.108.0). `DecreaseByFactorShape` asked the *first* restart for a number it had nothing to
+   measure; it asks the later trial only.
+8. **Variable-size decrease needs three trials to test its comparison.** Two were run; the shape's
+   test (reduction not smaller than the previous restart's) first bites at the third. Disclosed as
+   the limit of this exercise, not worked around.
+
+**And one error of this session's own, caught by the reading it had promised to take.** v1.237.0's
+changelog said the second rebuild admitted all four items of each toy. The generator had silently
+kept the first trial's list; the order check said "0/1" on `53ced80`; the admissions were appended
+one commit later with the error stated (v1.238.0). The claim was published before the reading —
+the same order the whole discipline exists to refuse — and the record keeps both.
+
+**Standing consequence.** Every strategy in the family has now been run on real commits: decrease
+by one (lineage 8), divide and conquer (lineage 7), and the five above on toys. The gate self-proves
+the family on six witness fixtures before measuring any register. A future strategy is added the
+same way: its evidence property, its shape, its fixture pair, its toy run — never as an untested
+member of the enumeration.
+
+**Classified at logging time (L-112):** items 2, 4, 5, 6 and 7 are genuine gaps in mechanisms built
+over the previous two days, each found by the next real use; 1 and 8 are limits, disclosed; 3 and the
+final error are this session's own, recorded as such.
