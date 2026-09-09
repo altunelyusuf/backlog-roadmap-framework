@@ -8,8 +8,9 @@
 @prefix dcterms: <http://purl.org/dc/terms/> .
 
 <http://example.org/backlog-strategy-exercise> a owl:Ontology ;
-    owl:versionIRI <http://example.org/backlog-strategy-exercise/1.15.0> ;
-    owl:versionInfo "1.15.0" ;
+    owl:versionIRI <http://example.org/backlog-strategy-exercise/1.16.0> ;
+    owl:versionInfo "1.16.0" ;
+    owl:priorVersion <http://example.org/backlog-strategy-exercise/1.15.0> ;
     owl:priorVersion <http://example.org/backlog-strategy-exercise/1.14.0> ;
     owl:priorVersion <http://example.org/backlog-strategy-exercise/1.13.0> ;
     owl:priorVersion <http://example.org/backlog-strategy-exercise/1.12.0> ;
@@ -960,3 +961,17 @@ ex:TF_R2_Objective a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_O
     backlog:hasStateDigest "9e4d7ca9c506daaf16e581e222cac974b99390c2cab332c13fdd6fed2c35b147" ; backlog:closedAtCommit "backlog-roadmap-framework-v1.236.0 (tag; witnessed by git, not asserted)" .
 ex:TV_R2_Objective a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Objective ; backlog:belongsToLineage ex:TV_Lin ; backlog:consumesOutput ex:TV_R2_Goal ;
     backlog:hasStateDigest "9e4d7ca9c506daaf16e581e222cac974b99390c2cab332c13fdd6fed2c35b147" ; backlog:closedAtCommit "backlog-roadmap-framework-v1.236.0 (tag; witnessed by git, not asserted)" .
+
+#################################################################
+#  v1.16.0 (2026-09-07, brsf-session) -- SECOND REBUILD (toys F and V), STAGE 5 OF 5:
+#  Backlog, toys F and V (independent lineages sharing one commit; each
+#  toy's own order is what the witness measures). Follows b84c36c.
+#################################################################
+ex:TF_R2_Backlog a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage ex:TF_Lin ; backlog:consumesOutput ex:TF_R2_Objective ;
+    backlog:hasStateDigest "91a67d3ce7672b1b4d12162edc2d5205aa64d6858f58757b32ae2f43468f02a4" ; backlog:closedAtCommit "backlog-roadmap-framework-v1.237.0 (tag; witnessed by git, not asserted)" .
+ex:TF_S_PL backlog:admittedByOutput ex:TF_R2_Backlog .
+# toy F: TF_EP deliberately NOT admitted by this first rebuild (decrease-by-factor exercise; see rationale on Restart_TF)
+ex:TV_R2_Backlog a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage ex:TV_Lin ; backlog:consumesOutput ex:TV_R2_Objective ;
+    backlog:hasStateDigest "91a67d3ce7672b1b4d12162edc2d5205aa64d6858f58757b32ae2f43468f02a4" ; backlog:closedAtCommit "backlog-roadmap-framework-v1.237.0 (tag; witnessed by git, not asserted)" .
+ex:TV_S_PL backlog:admittedByOutput ex:TV_R2_Backlog .
+ex:TV_EP backlog:admittedByOutput ex:TV_R2_Backlog .

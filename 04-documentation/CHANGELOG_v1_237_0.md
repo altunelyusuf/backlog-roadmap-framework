@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.237.0 — 2026-09-07 (MINOR: second toy rebuild, stage 5 of 5 — Backlog, toys F and V)
+
+Exercise register v1.16.0: `TF_R2_Backlog`, `TV_R2_Backlog` (each
+consuming its toy's Objective output, b84c36c); digest at this commit. Each Backlog output admits all four items of its toy: the second trial closes at 4/4.
+
 ## v1.236.0 — 2026-09-07 (MINOR: second toy rebuild, stage 4 of 5 — Objective, toys F and V)
 
 Exercise register v1.15.0: `TF_R2_Objective`, `TV_R2_Objective` (each
