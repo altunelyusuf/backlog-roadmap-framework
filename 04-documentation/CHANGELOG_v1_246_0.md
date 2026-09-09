@@ -1,5 +1,17 @@
 # Changelog
 
+## v1.246.0 — 2026-09-09 (MINOR: lineage 9, Goal stage — closed owing, and the debt recorded)
+
+Register v9.74.0: three goals across the three facings, derived from `Scope_SDLCObligations`.
+The Goal stage owes the use cases with main and alternative scenarios; an obligation names an
+artifact kind by IRI and this framework's scope excludes minting kinds (`Ex_SDLC_NoNewKinds`, L-64).
+another registrant defines five `doc:ArtifactKindSpec` individuals, all document kinds; four engineering kinds
+(use case, scenario set, behaviour diagram, domain model) were requested from another registrant in the previous
+commit (`1b65620`, their inbox) and are recorded as `EnhProp_SDLCArtifactKinds` /
+`Imp_SDLCArtifactKinds`. The stage closes **owing**, stated on the output: the rule this lineage is
+building will refuse exactly this closure once it ships, and its first catch will be its own Goal
+stage. Status `LS_Goaled`.
+
 ## v1.245.0 — 2026-09-09 (MINOR: lineage 9, Scope stage — and the domain entities and blueprint the stage owes)
 
 Register v9.72.0: `Scope_SDLCObligations` (four deliverables from the four approved points, four

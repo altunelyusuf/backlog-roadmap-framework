@@ -14,8 +14,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.73.0> ;
-    owl:versionInfo "9.73.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.74.0> ;
+    owl:versionInfo "9.74.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.73.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.72.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.70.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.69.0> ;
@@ -2972,3 +2973,76 @@ fw:Out_Scope_SDLC a backlog:StageOutput ;
     backlog:hasStateDigest "a8ad46c68bcdd9d37289f1df8070323c10111887127bbaaf2be715054434e70b" ;
     backlog:closedAtCommit "backlog-roadmap-framework-v1.245.0 (tag; witnessed by git, not asserted)" ;
     backlog:hasRationale "Scope stage of lineage 9: four deliverables, two exclusions, four areas -- and, as this stage will owe from now on, the five domain entities and the blueprint of the stage-obligation domain, with every entity's four lifecycle stages accounted for as gaps the later stages must close. Produced before this output, in this commit." .
+
+#################################################################
+#  v9.74.0 (2026-09-09, brsf-session) -- LINEAGE 9, Goal stage.
+#  Consumes Out_Scope_SDLC (f586f36). Status moves to LS_Goaled.
+#
+#  WHAT THIS STAGE OWES, AND WHY IT IS NOT HERE. Under the obligation
+#  this lineage is building, the Goal stage owes the USE CASES with
+#  their main and alternative SCENARIOS -- the owner's own words. An
+#  obligation names an artifact KIND by IRI, and this framework's scope
+#  excludes minting kinds (Ex_SDLC_NoNewKinds, L-64). another registrant defines
+#  five ArtifactKindSpecs today, all document kinds; none is a use
+#  case, a scenario set, a behaviour diagram or a domain model. Four
+#  were requested from another registrant in the previous commit (1b65620, their
+#  inbox). Until they exist, the use cases cannot be typed, and a
+#  use case written with no kind to point at is exactly the artifact
+#  nobody can check -- the thing this lineage exists to end.
+#  So: the goals are recorded now, the obligation is recorded as an
+#  impediment, and the Goal stage's OWED ARTIFACTS are the first
+#  work of the Objective and Backlog stages once the kinds exist.
+#  Stated, not hidden (G7): this stage closes owing.
+#################################################################
+fw:Goal_SDLC_MissionHeld a backlog:Goal ;
+    rdfs:label "The chain cannot close on words alone: every stage's engineering artifacts exist before its output"@en ;
+    backlog:contributesToMission fw:Mission_SDLCObligations ;
+    backlog:derivesFromScope fw:Scope_SDLCObligations ;
+    backlog:hasGoalFacing backlog:Facing_Mission ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+fw:Goal_SDLC_AreasDone a backlog:Goal ;
+    rdfs:label "Every area the scope names is finished: vocabulary, shapes, witness and fixtures"@en ;
+    backlog:contributesToMission fw:Mission_SDLCObligations ;
+    backlog:derivesFromScope fw:Scope_SDLCObligations ;
+    backlog:hasGoalFacing backlog:Facing_Scope ;
+    backlog:goalCoversArea fw:Area_SDLC_Vocabulary , fw:Area_SDLC_Shapes , fw:Area_SDLC_Witness , fw:Area_SDLC_Fixtures ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+fw:Goal_SDLC_NoOutOfScope a backlog:Goal ;
+    rdfs:label "No artifact kind is minted here, and no closed lineage is retrofitted"@en ;
+    backlog:contributesToMission fw:Mission_SDLCObligations ;
+    backlog:derivesFromScope fw:Scope_SDLCObligations ;
+    backlog:hasGoalFacing backlog:Facing_Containment ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+
+fw:ExtDep_RDODI_Kinds a backlog:ExternalDependency ;
+    backlog:hasExternalDependencyType backlog:Ext_UpstreamComponent ;
+    backlog:hasExternalParty "The session governing rdodi-ecosystem/01-profiles (rdodi_profiles_abox)." ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+fw:EnhProp_SDLCArtifactKinds a backlog:EnhancementProposal ;
+    backlog:proposalFor fw:ExtDep_RDODI_Kinds ;
+    backlog:hasRequestedChange "Add four doc:ArtifactKindSpec individuals -- prof:UseCaseSpecKind, prof:ScenarioSetKind, prof:BehaviourDiagramKind, prof:DomainModelKind -- so that a governed lineage's stage obligations can name the engineering artifacts each stage owes by IRI." ;
+    backlog:submittedTo "rdodi-ecosystem/07-handover-inbox/pending/PROPOSAL_backlog-roadmap-framework_to_RDODI_sdlc-artifact-kinds_v1_0_0.md (delivered 2026-09-09, commit 1b65620)" ;
+    backlog:proposalRaisedAt "2026-09-09T12:00:00Z"^^xsd:dateTime ;
+    backlog:hasProposalStatus backlog:Prop_Submitted ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+fw:Imp_SDLCArtifactKinds a backlog:Impediment ;
+    backlog:impedes fw:Register ;
+    backlog:hasImpedimentStatement "The Goal stage of lineage 9 owes use cases with main and alternative scenarios; an obligation names an artifact kind by IRI, and no kind exists for a use case, a scenario set, a behaviour diagram or a domain model. Four are requested from another registrant (EnhProp_SDLCArtifactKinds). Until they are ratified, the owed artifacts of the Goal, Objective and Backlog stages cannot be typed, and this lineage's Objective stage cannot state the obligations it is building. The goals themselves are not blocked and are recorded." ;
+    backlog:hasImpedimentOwner backlog:Owner ;
+    backlog:raisedAt "2026-09-09T12:05:00Z"^^xsd:dateTime ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+
+fw:L_SDLCObligations backlog:hasLineageStatus backlog:LS_Goaled .
+fw:Out_Goal_SDLC a backlog:StageOutput ;
+    backlog:outputOfStage backlog:Stage_Goal ;
+    backlog:belongsToLineage fw:L_SDLCObligations ;
+    backlog:consumesOutput fw:Out_Scope_SDLC ;
+    backlog:hasStateDigest "29f238be11bfdf323b27fb2952df22ce98cb8414656faa0ac8c865849960c2bb" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.246.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Goal stage of lineage 9: three goals, one per facing, derived from the scope. CLOSED OWING its use-case and scenario artifacts, because the artifact kinds they must be typed with do not exist and are not this framework's to mint; requested from another registrant at 1b65620 and recorded as Imp_SDLCArtifactKinds. The obligation this lineage is building will, once shipped, refuse exactly this closure -- the first thing it will catch is its own Goal stage, and that is the honest order: the rule is built, then applied, and the debt is on the record until it is paid." .

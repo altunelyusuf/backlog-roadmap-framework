@@ -1595,6 +1595,9 @@ backlog:GoalMeasurabilityShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             FILTER NOT EXISTS { ?o backlog:contributesToGoal $this }
+            # v1.110.0 (only passed steps fire): objectives are the Objective stage's work; a goal of a
+            # lineage whose status has not reached LS_Objectived (rank 4) is not yet owed one
+            FILTER NOT EXISTS { $this backlog:belongsToLineage ?lin . ?lin backlog:hasLineageStatus ?ls . ?ls backlog:statusRank ?rk . FILTER (?rk < 4) }
             # A goal whose lineage has not yet reached the Objective stage
             # SHOULD have no objective. THIRD instance of the same conflict:
             # Mission at v1.99.0, Scope at v1.100.0, Goal here. Every clause
