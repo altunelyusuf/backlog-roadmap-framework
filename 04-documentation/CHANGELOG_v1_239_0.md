@@ -1,5 +1,19 @@
 # Changelog
 
+## v1.239.0 — 2026-09-09 (MINOR: the impediment clears — RegisterPackage built; OE's risk-facet adjudication applied)
+
+Register v9.69.0. `Imp_RegisterPackageDecisions` resolved: `configuration:RoadmapReportConvention`
+(OE, `configuration_abox_v2_7_0`) and `prof:RoadmapReportKind` (another registrant, `rdodi_profiles_abox_v1_2_0`)
+both exist, read from the ratifying ABoxes; the two proposals moved to `Prop_Accepted`. The first
+`RegisterPackage` (`fw:RegisterPackage_v1_239_0`) ships four artifacts: register data and profile
+declaration (one file, two roles), the first retained roadmap report run
+(`04-documentation/roadmap_report_run_v1_239_0.md`, written on v9.68.0, kept under the new
+convention), and the manifest — whose own digest cannot be inside a file it covers; recorded as
+the digest of the manifest as published at v1.238.0 (`9a85c64`), stated as such. OE's adjudication
+applied: `fw:QA_Retrospective a quality:QualityAssessment` with `quality:hasFinding` over all
+43 retrospective findings, each multi-typed `quality:Finding`; `risk:hasIdentifiedRisk` not used
+(prospective uncertainty is the wrong model for confirmed findings). Exercise register unchanged.
+
 ## v1.238.0 — 2026-09-09 (PATCH: correction — the second-trial admissions v1.237.0 claimed were not all written; G85)
 
 **v1.237.0's changelog was wrong.** It said each Backlog output admitted all four items; the

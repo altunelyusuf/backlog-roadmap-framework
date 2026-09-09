@@ -7,11 +7,16 @@
 @prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix configuration: <http://example.org/configuration#> .
+@prefix quality: <http://example.org/quality#> .
+@prefix prof:    <http://rdodi.org/profiles#> .
+@prefix report:  <http://example.org/report#> .
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.68.0> ;
-    owl:versionInfo "9.68.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.69.0> ;
+    owl:versionInfo "9.69.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.68.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.67.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.66.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.65.0> ;
@@ -4794,7 +4799,7 @@ fw:EnhProp_RoadmapReportConvention a backlog:EnhancementProposal ;
     backlog:hasRequestedChange "Ratify configuration:RoadmapReportConvention, a new NamingConvention for a roadmap-report-run artifact, matching the pattern this framework's own AuditReportMarkdownConvention already uses for a sibling report type." ;
     backlog:submittedTo "07-handover-inbox/pending/PROPOSAL_brsf-continuation_roadmap-report-naming-convention_v1_0_0.md" ;
     backlog:proposalRaisedAt "2026-09-03T10:00:00Z"^^xsd:dateTime ;
-    backlog:hasProposalStatus backlog:Prop_Submitted .
+    backlog:hasProposalStatus backlog:Prop_Accepted .
 
 fw:ExtDep_RDODI a backlog:ExternalDependency ;
     backlog:hasExternalDependencyType backlog:Ext_UpstreamComponent ;
@@ -4805,7 +4810,7 @@ fw:EnhProp_RoadmapReportKind a backlog:EnhancementProposal ;
     backlog:hasRequestedChange "Add prof:RoadmapReportKind, a real doc:ArtifactKindSpec describing this framework's own real roadmap-report structure, matching another registrant's own real precedent of genre-agnostic profiles." ;
     backlog:submittedTo "07-handover-inbox/pending/PROPOSAL_brsf-continuation_rdodi-roadmap-report-profile_v1_0_0.md" ;
     backlog:proposalRaisedAt "2026-09-03T11:00:00Z"^^xsd:dateTime ;
-    backlog:hasProposalStatus backlog:Prop_Submitted .
+    backlog:hasProposalStatus backlog:Prop_Accepted .
 
 #################################################################
 #  v1.179.0 — Opportunity, second-ranked in the cost/risk/
@@ -6428,3 +6433,183 @@ fw:SPK_DomainModelingSeverity backlog:admittedByOutput fw:Out3_Backlog .
 #################################################################
 fw:CR_OntologyDriven backlog:citesFinding fw:Bypass_L_OntologyDriven_20260907 ;
     backlog:statesBestPractice "Re-affirmation, 2026-09-07 (brsf-session), after Restart_L_OntologyDriven_20260907 (Strat_DivideAndConquer): the chain this report closed on was rebuilt as five part chains (L7_Gov, L7_Exec, L7_Export, L7_Prose, L7_Code), each Mission..Backlog in witnessed commits (9cb62b6, 8c4f385, 5a6894e, 7a4fee7, 76159bd), combined at 6a0143c; every item admitted; objectives unchanged (six MET, Obj_RowsUnchecked OPEN at 15). Out_Achieved stands. The original closure was declared on a chain under which 14 items had been planned after they existed -- that finding is cited above, not erased." .
+
+#################################################################
+#  v9.69.0 (2026-09-09, brsf-session) -- THE IMPEDIMENT CLEARS. The two
+#  external decisions Imp_RegisterPackageDecisions waited on since
+#  2026-09-03 were made once the proposals were delivered (v1.202.0):
+#    configuration:RoadmapReportConvention  -- OE, configuration_abox v2.7.0
+#       (oe-pack v20.59.0; one correction to the proposed parent class,
+#       ProjectMarkdownDocument, not EngineeringArtefact)
+#    prof:RoadmapReportKind                 -- another registrant, rdodi_profiles_abox
+#       v1.2.0 (two corrections of another registrant's own)
+#  Both read directly from the ratifying ABoxes at origin, not from the
+#  log lines. hasProposalStatus is a current-state pointer and is moved
+#  Prop_Submitted -> Prop_Accepted in place (L-112); this note is the
+#  history. The RegisterPackage can now be honestly built, and is.
+#################################################################
+fw:EnhProp_RoadmapReportConvention backlog:hasRationale "Accepted 2026-09-07 by OE (configuration_abox v2.7.0, oe-pack v20.59.0): configuration:RoadmapReportConvention exists, filenamePattern {name}_v{M}_{m}_{p}.md, dcterms:source citing this framework's proposal." .
+fw:EnhProp_RoadmapReportKind backlog:hasRationale "Accepted 2026-09-08 by another registrant (rdodi_profiles_abox v1.2.0): prof:RoadmapReportKind exists as a doc:ArtifactKindSpec." .
+fw:Imp_RegisterPackageDecisions backlog:resolvedAt "2026-09-09T07:30:00Z"^^xsd:dateTime ;
+    backlog:hasImpedimentStatement "2026-09-09 resolution: both decisions ratified by their owners (see the two proposals' rationales). Six days from raise to resolution, four of them with the proposals undelivered in this package's own inbox (G80)." .
+
+#################################################################
+#  THE REGISTER PACKAGE. Built from the ratified conventions:
+#    - register data: this file, under configuration:ABoxFileConvention
+#    - profile declaration: the AdoptionProfile lives in this same file
+#      (one file, two roles; each RegisterArtifact carries one role)
+#    - progress report: the FIRST retained roadmap report run, written
+#      by backlog_roadmap_report_v1_6_0 on register v9.68.0 and kept as
+#      04-documentation/roadmap_report_run_v1_239_0.md under
+#      configuration:RoadmapReportConvention (its kind: prof:RoadmapReportKind)
+#    - manifest: MANIFEST_SHA256.txt. Its own SHA-256 cannot be recorded
+#      inside a file the manifest covers (the register), because the
+#      manifest would then have to cover its own digest -- no fixed
+#      point exists. The value below is the digest of the manifest AS
+#      PUBLISHED at v1.238.0 (commit 9a85c64), a real, checkable
+#      historical digest; the digest of each release's manifest is
+#      carried outside the manifest's coverage by the publisher
+#      (PUBLISH_RECORD.ttl, manifestVerified/manifestTotal) and by the
+#      release tag. Stated, not hidden (G7).
+#################################################################
+fw:RegisterPackage_v1_239_0 a backlog:RegisterPackage ;
+    rdfs:label "backlog-roadmap-framework register package, v1.239.0"@en ;
+    backlog:packageFor fw:Register ;
+    backlog:hasPackageVersion "1.239.0" ;
+    backlog:hasPackageArtifact fw:Art_RegisterData , fw:Art_ProfileDeclaration , fw:Art_ProgressReport_v1_239_0 , fw:Art_Manifest ;
+    backlog:belongsToLineage fw:L_OntologyDriven ;
+    backlog:hasRationale "First RegisterPackage of this register, buildable only once configuration:RoadmapReportConvention and prof:RoadmapReportKind existed (Imp_RegisterPackageDecisions)." .
+fw:Art_RegisterData a backlog:RegisterArtifact ;
+    backlog:hasArtifactRole backlog:Role_RegisterData ;
+    backlog:hasArtifactFileName "01-ontologies/backlog_framework_register_abox_v9_69_0.ttl" ;
+    backlog:conformsToNamingConvention configuration:ABoxFileConvention .
+fw:Art_ProfileDeclaration a backlog:RegisterArtifact ;
+    backlog:hasArtifactRole backlog:Role_ProfileDeclaration ;
+    backlog:hasArtifactFileName "01-ontologies/backlog_framework_register_abox_v9_69_0.ttl" ;
+    backlog:conformsToNamingConvention configuration:ABoxFileConvention ;
+    backlog:hasRationale "The AdoptionProfile (fw:Profile) is declared inside the register data file; this artifact names that role of the same file." .
+fw:Art_ProgressReport_v1_239_0 a backlog:RegisterArtifact ;
+    backlog:hasArtifactRole backlog:Role_ProgressReport ;
+    backlog:hasArtifactFileName "04-documentation/roadmap_report_run_v1_239_0.md" ;
+    backlog:conformsToNamingConvention configuration:RoadmapReportConvention ;
+    dcterms:type prof:RoadmapReportKind .
+fw:Art_Manifest a backlog:RegisterArtifact ;
+    backlog:hasArtifactRole backlog:Role_Manifest ;
+    backlog:hasArtifactFileName "MANIFEST_SHA256.txt" ;
+    backlog:hasManifestSHA256 "512f1c1e5a06eb270f0a67a06089f0c6179e7223264bd457d38de2542be96363 (manifest as published at v1.238.0, commit 9a85c64; see the note above)" .
+report:Run_20260909T073334 a backlog:RoadmapReport ;
+    backlog:hasRunTimestamp "2026-09-09T07:33:34"^^xsd:dateTime ;
+    backlog:hasSection backlog:Section_FlaggedItems,
+        backlog:Section_LaunchReadiness,
+        backlog:Section_LifecycleWorkflow,
+        backlog:Section_NextLaunchScoped,
+        backlog:Section_NextThroughput,
+        backlog:Section_OrphanCoverageCheck,
+        backlog:Section_PackageRanking,
+        backlog:Section_RankedBacklog,
+        backlog:Section_SilentGapCheck ;
+    backlog:reportOf <http://example.org/backlog-framework-register#Register> .
+report:Run_20260909T073334 backlog:reportRunRetainedAs fw:Art_ProgressReport_v1_239_0 ;
+    backlog:belongsToLineage fw:L_OntologyDriven .
+
+#################################################################
+#  OE'S ADJUDICATION ON THE RISK-FACET PROPOSAL, APPLIED (ADJUDICATION_
+#  OE_to_backlog-roadmap-framework_risk-facet-registration_v1_0_0, 2026-09-08).
+#  Not risk:hasIdentifiedRisk (risk = prospective uncertainty; these
+#  findings are confirmed, retrospective facts) but quality:hasFinding
+#  from a quality:QualityAssessment this register mints, each finding
+#  multi-typed quality:Finding alongside its own RetrospectiveFinding
+#  type -- using OE's classes to type our individuals, not minting
+#  OE vocabulary (B1). 43 findings.
+#################################################################
+fw:QA_Retrospective a quality:QualityAssessment ;
+    rdfs:label "backlog-roadmap-framework retrospective assessment"@en ;
+    quality:hasFinding fw:Find_AutoGap1 ,
+        fw:Find_AutoGap2 ,
+        fw:Find_AutoGap3 ,
+        fw:Find_AutoGap4 ,
+        fw:Find_AutoGap5 ,
+        fw:Find_ChangelogHeaderLoss ,
+        fw:Find_EPRulingsIneffective ,
+        fw:Find_G19 ,
+        fw:Find_G20 ,
+        fw:Find_G21 ,
+        fw:Find_G22 ,
+        fw:Find_G23 ,
+        fw:Find_G24 ,
+        fw:Find_G26 ,
+        fw:Find_G27 ,
+        fw:Find_G28 ,
+        fw:Find_G29 ,
+        fw:Find_G30 ,
+        fw:Find_G31 ,
+        fw:Find_G32 ,
+        fw:Find_G33 ,
+        fw:Find_G34 ,
+        fw:Find_G35 ,
+        fw:Find_G36 ,
+        fw:Find_G37 ,
+        fw:Find_G38 ,
+        fw:Find_G39 ,
+        fw:Find_G51 ,
+        fw:Find_G52 ,
+        fw:Find_G54 ,
+        fw:Find_G56 ,
+        fw:Find_G57 ,
+        fw:Find_G67 ,
+        fw:Find_G68 ,
+        fw:Find_G69 ,
+        fw:Find_G72 ,
+        fw:Find_G73 ,
+        fw:Find_G74 ,
+        fw:Find_G77 ,
+        fw:Find_G78 ,
+        fw:Find_MissingFixtureCaseName ,
+        fw:Find_SelfReferentialProofPath ,
+        fw:Find_SymmetricDivergenceRule ;
+    backlog:hasRationale "This register's retrospective process -- FailureMode/SuccessMode findings confirmed by comparing real MetricObservations against what happened -- typed as quality:QualityAssessment per OE's adjudication of 2026-09-08 (ISO/IEC 25040 fit checked by OE against quality_tbox v5.14.1 directly)." .
+fw:Find_AutoGap1 a quality:Finding .
+fw:Find_AutoGap2 a quality:Finding .
+fw:Find_AutoGap3 a quality:Finding .
+fw:Find_AutoGap4 a quality:Finding .
+fw:Find_AutoGap5 a quality:Finding .
+fw:Find_ChangelogHeaderLoss a quality:Finding .
+fw:Find_EPRulingsIneffective a quality:Finding .
+fw:Find_G19 a quality:Finding .
+fw:Find_G20 a quality:Finding .
+fw:Find_G21 a quality:Finding .
+fw:Find_G22 a quality:Finding .
+fw:Find_G23 a quality:Finding .
+fw:Find_G24 a quality:Finding .
+fw:Find_G26 a quality:Finding .
+fw:Find_G27 a quality:Finding .
+fw:Find_G28 a quality:Finding .
+fw:Find_G29 a quality:Finding .
+fw:Find_G30 a quality:Finding .
+fw:Find_G31 a quality:Finding .
+fw:Find_G32 a quality:Finding .
+fw:Find_G33 a quality:Finding .
+fw:Find_G34 a quality:Finding .
+fw:Find_G35 a quality:Finding .
+fw:Find_G36 a quality:Finding .
+fw:Find_G37 a quality:Finding .
+fw:Find_G38 a quality:Finding .
+fw:Find_G39 a quality:Finding .
+fw:Find_G51 a quality:Finding .
+fw:Find_G52 a quality:Finding .
+fw:Find_G54 a quality:Finding .
+fw:Find_G56 a quality:Finding .
+fw:Find_G57 a quality:Finding .
+fw:Find_G67 a quality:Finding .
+fw:Find_G68 a quality:Finding .
+fw:Find_G69 a quality:Finding .
+fw:Find_G72 a quality:Finding .
+fw:Find_G73 a quality:Finding .
+fw:Find_G74 a quality:Finding .
+fw:Find_G77 a quality:Finding .
+fw:Find_G78 a quality:Finding .
+fw:Find_MissingFixtureCaseName a quality:Finding .
+fw:Find_SelfReferentialProofPath a quality:Finding .
+fw:Find_SymmetricDivergenceRule a quality:Finding .
+# the run also names this register's own ReportSection individuals (fw:RS_*, keyed to the same nine sections the tool emits as backlog:Section_*)
+report:Run_20260909T073334 backlog:hasSection fw:RS_NextThroughput , fw:RS_NextLaunchScoped , fw:RS_RankedBacklog , fw:RS_FlaggedItems , fw:RS_SilentGapCheck , fw:RS_LaunchReadiness , fw:RS_PackageRanking , fw:RS_OrphanCoverageCheck , fw:RS_LifecycleWorkflow .
