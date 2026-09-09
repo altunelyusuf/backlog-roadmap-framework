@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.242.0 — 2026-09-09 (MINOR: lineage 9 opens — SDLC obligations, Mission stage)
+
+Register v9.71.0: `fw:L_SDLCObligations` (ordinal 14) and `fw:Mission_SDLCObligations`, owner-stated
+(the finding and the decision of 2026-09-09 quoted verbatim as `missionSource`), `Out_InFlight`;
+`Out_Mission_SDLC` closes the Mission stage with nothing downstream on the record. The lineage that
+makes the SDLC artifacts mandatory at every stage is itself the first to be run under them: Scope
+next, owing the domain-entity inventory and blueprint before its output may close.
+
 ## v1.241.0 — 2026-09-09 (MINOR: the first adopter's two findings built; the publisher's deletion repaired; G86)
 
 - `backlog_lineage_order_check_v1_3_0.py`: witness path is the register file's directory
