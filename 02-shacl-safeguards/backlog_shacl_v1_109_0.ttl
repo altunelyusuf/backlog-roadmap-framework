@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.108.0> ;
-    owl:versionInfo "1.108.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.109.0> ;
+    owl:versionInfo "1.109.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.108.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.107.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.106.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.105.0> ;
@@ -1853,11 +1854,11 @@ backlog:RegisterArtifactShape a sh:NodeShape ;
             FILTER NOT EXISTS { $this backlog:conformsToNamingConvention ?c }
         }""" ] ;
     sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "L1: the manifest artifact must carry its own SHA-256, so the thing that verifies everything else is verifiable in turn." ;
+        sh:message "L1: the manifest artifact must name the manifest-exempt file that carries the manifest's digest (manifestDigestCarriedBy), so the thing that verifies everything else is verifiable in turn -- from outside the set it covers. v1.109.0: this replaces a demand for the digest inside the register, which the manifest covers; that demand had no fixed point. The release gate verifies the carrier is exempt and its digest is current." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             $this backlog:hasArtifactRole backlog:Role_Manifest .
-            FILTER NOT EXISTS { $this backlog:hasManifestSHA256 ?h }
+            FILTER NOT EXISTS { $this backlog:manifestDigestCarriedBy ?f }
         }""" ] .
 
 backlog:ProgressFreshnessShape a sh:NodeShape ;

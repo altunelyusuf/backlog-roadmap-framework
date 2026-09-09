@@ -14,8 +14,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.69.0> ;
-    owl:versionInfo "9.69.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.70.0> ;
+    owl:versionInfo "9.70.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.69.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.68.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.67.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.66.0> ;
@@ -6481,11 +6482,11 @@ fw:RegisterPackage_v1_239_0 a backlog:RegisterPackage ;
     backlog:hasRationale "First RegisterPackage of this register, buildable only once configuration:RoadmapReportConvention and prof:RoadmapReportKind existed (Imp_RegisterPackageDecisions)." .
 fw:Art_RegisterData a backlog:RegisterArtifact ;
     backlog:hasArtifactRole backlog:Role_RegisterData ;
-    backlog:hasArtifactFileName "01-ontologies/backlog_framework_register_abox_v9_69_0.ttl" ;
+    backlog:hasArtifactFileName "01-ontologies/backlog_framework_register_abox_v9_70_0.ttl" ;
     backlog:conformsToNamingConvention configuration:ABoxFileConvention .
 fw:Art_ProfileDeclaration a backlog:RegisterArtifact ;
     backlog:hasArtifactRole backlog:Role_ProfileDeclaration ;
-    backlog:hasArtifactFileName "01-ontologies/backlog_framework_register_abox_v9_69_0.ttl" ;
+    backlog:hasArtifactFileName "01-ontologies/backlog_framework_register_abox_v9_70_0.ttl" ;
     backlog:conformsToNamingConvention configuration:ABoxFileConvention ;
     backlog:hasRationale "The AdoptionProfile (fw:Profile) is declared inside the register data file; this artifact names that role of the same file." .
 fw:Art_ProgressReport_v1_239_0 a backlog:RegisterArtifact ;
@@ -6613,3 +6614,16 @@ fw:Find_SelfReferentialProofPath a quality:Finding .
 fw:Find_SymmetricDivergenceRule a quality:Finding .
 # the run also names this register's own ReportSection individuals (fw:RS_*, keyed to the same nine sections the tool emits as backlog:Section_*)
 report:Run_20260909T073334 backlog:hasSection fw:RS_NextThroughput , fw:RS_NextLaunchScoped , fw:RS_RankedBacklog , fw:RS_FlaggedItems , fw:RS_SilentGapCheck , fw:RS_LaunchReadiness , fw:RS_PackageRanking , fw:RS_OrphanCoverageCheck , fw:RS_LifecycleWorkflow .
+
+#################################################################
+#  v9.70.0 (2026-09-09, brsf-session) -- THE MANIFEST DIGEST, SOLVED
+#  RATHER THAN WORKED AROUND (owner's decision 3). The digest of a
+#  covered set lives outside the set. RELEASE_METRICS.txt is manifest-
+#  exempt and is written from the manifest bytes before any gate runs;
+#  the manifest artifact names it as carrier; the gate verifies the
+#  carrier is exempt and current; the publisher hashes the gate
+#  transcript into the publish record. The v9.69.0 hasManifestSHA256
+#  value stays as the historical record it was declared to be.
+#################################################################
+fw:Art_Manifest backlog:manifestDigestCarriedBy "RELEASE_METRICS.txt" .
+fw:Art_RegisterData backlog:hasRationale "Register data file name is a current-state pointer, moved with each register version (L-112 pointer rule); first recorded at v9.69.0." .

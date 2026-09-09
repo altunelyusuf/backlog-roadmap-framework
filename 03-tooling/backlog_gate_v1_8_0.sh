@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# backlog_gate v1.7.0 — four-gate release check for the Backlog & Roadmap
+# backlog_gate v1.8.0 — four-gate release check for the Backlog & Roadmap
 # Semantic Framework. Nothing about the package's state is trusted until all
 # four pass, and the SHACL gate refuses to certify anything until it has just
 # demonstrated, in this run, that it can fail a known-bad register.
@@ -11,7 +11,10 @@
 #   +       coverage gate          >= 80% of primary-source concepts (BP-D31)
 #   +       doc-coverage gate      every TBox class named in the standard document
 #
-# Usage: backlog_gate_v1_7_0.sh [REGISTER.ttl ...]
+# Usage: backlog_gate_v1_8_0.sh [REGISTER.ttl ...]
+#
+# v1.8.0 — manifest-digest carrier: the register's manifest artifact names a manifest-exempt file
+# that carries the manifest's digest; the gate checks it is exempt and current.
 #
 # v1.7.0 — the strategy-exercise register (01-ontologies/backlog_strategy_exercise_abox_v*.ttl)
 # is SHACL-validated like the main register and measured by the lineage-order check with the
@@ -443,6 +446,25 @@ if [ -n "$LOC" ]; then
   fi
 else
   echo "  NOT RUN — order check not found. Not assumed to pass."
+fi
+
+echo
+echo "== Manifest-digest carrier — the root of the covered set lives outside it =="
+REGC="$(ls "$PKG"/01-ontologies/backlog_framework_register_abox_v*.ttl 2>/dev/null | sort -V | tail -1 || true)"
+CARRIER="$(grep -oE 'backlog:manifestDigestCarriedBy "[^"]+"' "$REGC" 2>/dev/null | head -1 | sed -E 's/.*"([^"]+)"/\1/')"
+if [ -z "$CARRIER" ]; then
+  echo "  no manifestDigestCarriedBy in the register — RegisterArtifactShape reports it; not verified here."
+else
+  MDIG="$(sha256sum "$PKG/MANIFEST_SHA256.txt" | cut -d' ' -f1)"
+  if ! grep -qE "^# EXEMPT $CARRIER " "$PKG/MANIFEST_SHA256.txt"; then
+    echo "  carrier $CARRIER is NOT declared exempt in the manifest — a carrier the manifest covers is the cycle again"; FAILED=1
+  elif [ ! -f "$PKG/$CARRIER" ]; then
+    echo "  carrier $CARRIER does not exist"; FAILED=1
+  elif grep -qE "manifest SHA-256 $MDIG" "$PKG/$CARRIER"; then
+    echo "  carrier $CARRIER is exempt and carries the current manifest digest ${MDIG:0:16}"
+  else
+    echo "  carrier $CARRIER carries a digest that is not the manifest on disk (${MDIG:0:16}); regenerate release metrics"; FAILED=1
+  fi
 fi
 
 echo

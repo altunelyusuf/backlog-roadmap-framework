@@ -1,5 +1,23 @@
 # Changelog
 
+## v1.240.0 — 2026-09-09 (MINOR: the manifest's digest — the root of a covered set lives outside the set)
+
+Owner's decision 3: no workaround. The v1.239.0 shape asked the manifest artifact for its own
+SHA-256 inside the register, which the manifest covers — no fixed point exists. Built instead:
+- TBox v1.88.0: `manifestDigestCarriedBy` (the manifest-exempt file carrying the manifest's current
+  digest); `hasManifestSHA256` deprecated, its recorded value kept as history.
+- Shapes v1.109.0: `RegisterArtifactShape` requires the carrier, not the digest. Positive fixture
+  v1.9.0 names it; negative fixture v1.8.0 lacks it.
+- `backlog_release_metrics_v1_2_0.py`: two-phase write — the digest header goes to
+  `RELEASE_METRICS.txt` before any gate runs, so the carrier is current when the gate reads it.
+- `backlog_gate_v1_8_0.sh`: manifest-digest carrier step — the carrier must be declared exempt in
+  the manifest and must carry the digest of the manifest on disk; the publisher then hashes the gate
+  transcript into `PUBLISH_RECORD.ttl`, where a root can sit.
+- Register v9.70.0: `Art_Manifest manifestDigestCarriedBy "RELEASE_METRICS.txt"`; the register-data
+  artifact's file name moved with the register version (a pointer, L-112).
+A proposal to OE follows separately: the publisher should also record the manifest digest itself in
+the publish record, making the ecosystem-level root explicit rather than transcript-mediated.
+
 ## v1.239.0 — 2026-09-09 (MINOR: the impediment clears — RegisterPackage built; OE's risk-facet adjudication applied)
 
 Register v9.69.0. `Imp_RegisterPackageDecisions` resolved: `configuration:RoadmapReportConvention`

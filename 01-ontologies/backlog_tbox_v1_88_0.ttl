@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.87.0> ;
-    owl:versionInfo "1.87.0" ;
+    owl:versionIRI <http://example.org/backlog/1.88.0> ;
+    owl:versionInfo "1.88.0" ;
+    owl:priorVersion <http://example.org/backlog/1.87.0> ;
     owl:priorVersion <http://example.org/backlog/1.86.0> ;
     owl:priorVersion <http://example.org/backlog/1.85.0> ;
     owl:priorVersion <http://example.org/backlog/1.84.0> ;
@@ -2854,6 +2855,8 @@ backlog:hasPackageVersion a owl:DatatypeProperty , owl:FunctionalProperty ;
 backlog:hasManifestSHA256 a owl:DatatypeProperty ;
     rdfs:domain backlog:RegisterArtifact ; rdfs:range xsd:string ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:deprecated true ;
+    rdfs:comment "v1.88.0: no longer required of the manifest artifact, and never satisfiable as intended. The manifest covers the register; a digest of the manifest written into the register changes the register, hence the manifest, hence the digest -- no fixed point exists. A digest of a covered set lives OUTSIDE the set: see manifestDigestCarriedBy. Values already recorded (a historical digest, stated as such) stay as records."@en ;
     rdfs:label "has manifest SHA-256"@en ;
     skos:definition "The digest of the manifest file itself, so the thing that verifies everything else is verifiable in turn."@en .
 
@@ -6670,3 +6673,10 @@ backlog:postRestartItem a owl:ObjectProperty , owl:FunctionalProperty ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "post-restart item"@en ;
     skos:definition "This work item was created after the named restart, under the rebuilt chain; it is ordinary work of the lineage, not pre-lineage. Asserted in the register, verified by backlog_lineage_order_check: the item's first appearance in git must follow the restart's, or the assertion is a problem the check reports."@en .
+
+# v1.88.0 (2026-09-09): THE ROOT OF A HASH-COVERED SET LIVES OUTSIDE THE SET.
+backlog:manifestDigestCarriedBy a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:RegisterArtifact ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "manifest digest carried by"@en ;
+    skos:definition "On the manifest artifact: the file name, relative to the package root, of the MANIFEST-EXEMPT file that carries the manifest's current SHA-256 -- in this package RELEASE_METRICS.txt, written by backlog_release_metrics from the manifest bytes before any other step runs. The register names the carrier; the release gate verifies (a) the carrier is declared exempt in the manifest, and (b) the digest it carries equals the digest of the manifest on disk. The publisher's record then hashes the gate transcript, so the chain root sits with the release, where a root can sit. This replaces hasManifestSHA256 on the manifest artifact, which asked for a digest inside the set it covers."@en .
