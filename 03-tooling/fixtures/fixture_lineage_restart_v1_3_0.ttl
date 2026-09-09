@@ -6,7 +6,7 @@
 #
 @prefix backlog: <http://example.org/backlog#> .
 @prefix core: <http://example.org/core#> .
-@prefix ex: <http://example.org/pl#> .
+@prefix ex: <http://example.org/lineage-restart#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
@@ -110,7 +110,7 @@ ex:D1 backlog:derivesFromMissionClause "practitioners recover unaided" .
 
 ex:D2 backlog:derivesFromMissionClause "practitioners recover unaided" .
 
-<http://example.org/pl#P> backlog:hasExpectedPolarity backlog:Polarity_Positive .
+
 # Conformance-goal pattern (G42/AdoptionConformanceGoalShape), self-contained,
 # using this package's own already-proven Goal_BRSFConformance/Obj_BRSFConformanceHeld
 # structure as the exact template rather than re-deriving requirements by trial.
@@ -223,3 +223,48 @@ ex:Session_20260907 a backlog:RegisterSession ;
 # digests do not reproduce either, for the same structural reason (the digest is
 # register-wide, and the register now holds eight lineages), and are left as the
 # historical record they are, disclosed in the v1.201.0 changelog.
+
+#################################################################
+#  fixture_lineage_restart v1.0.0 -- lineage escape, POSITIVE.
+#  Built on a copy of fixture_pipeline_v1_1_0 (a conformant register
+#  with one lineage, Lin_PL, five stage outputs and one story S_PL),
+#  so the lineage-escape shapes are exercised on a register that is
+#  otherwise clean (G7: a positive fixture that fails certifies
+#  nothing). Story: the tool found S_PL first appearing before
+#  Out_Backlog (witness map: S_PL at c1, Out_* at c9); the owner
+#  restarted; the chain was rebuilt R_* at c11..c15, one per commit,
+#  and R_Backlog admitted S_PL. Expected: 0 violations; exactly one
+#  FM_LineageBypass advisory would fire if S_PL were unadmitted, and
+#  none fires here. The order check must report ORDERED.
+#################################################################
+ex:Out_Mission backlog:belongsToLineage ex:Lin_PL ; backlog:outputRetracted true .
+ex:Out_Scope backlog:belongsToLineage ex:Lin_PL ; backlog:outputRetracted true .
+ex:Out_Goal backlog:belongsToLineage ex:Lin_PL ; backlog:outputRetracted true .
+ex:Out_Objective backlog:belongsToLineage ex:Lin_PL ; backlog:outputRetracted true .
+ex:Out_Backlog backlog:belongsToLineage ex:Lin_PL ; backlog:outputRetracted true .
+ex:Bypass1 a backlog:LineageBypass ;
+    backlog:bypassedLineage ex:Lin_PL ; backlog:hasFailureMode backlog:FM_LineageBypass ;
+    backlog:hasFindingScope backlog:Scope_Methodology ; backlog:hasRootCause "Chain written after the work (fixture): S_PL first appears at c1, Out_Backlog at c9." ;
+    backlog:bypassedItem ex:S_PL ; backlog:itemFirstCommit "S_PL c1 1000" ;
+    backlog:bypassedOutput ex:Out_Mission , ex:Out_Scope , ex:Out_Goal , ex:Out_Objective , ex:Out_Backlog ;
+    backlog:chainClosedCommit "c9 9000" ;
+    backlog:detectedAt "2026-09-07T09:00:00Z"^^xsd:dateTime ; backlog:detectedBy "backlog_lineage_order_check_v1_0_0" ;
+    backlog:belongsToLineage ex:Lin_PL .
+ex:Restart1 a backlog:LineageRestart ;
+    backlog:restartsLineage ex:Lin_PL ; backlog:answersBypass ex:Bypass1 ;
+    backlog:retractsOutput ex:Out_Mission , ex:Out_Scope , ex:Out_Goal , ex:Out_Objective , ex:Out_Backlog ;
+    backlog:restartedAtCommit "c10" ; backlog:decidedBy backlog:Owner ; backlog:hasRecoveryStrategy backlog:Strat_DecreaseByOne ; backlog:belongsToLineage ex:Lin_PL .
+ex:S_PL backlog:preLineageItem true ; backlog:admittedByOutput ex:R_Backlog .
+ex:R_Mission a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Mission ; backlog:belongsToLineage ex:Lin_PL ; backlog:closedAtCommit "c11" ; backlog:hasStateDigest "8c65af94ac3276071bb9b029a4ab139a14fd9eb7729433ca282ef040a706dac1" .
+ex:R_Scope a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Scope ; backlog:belongsToLineage ex:Lin_PL ; backlog:consumesOutput ex:R_Mission ; backlog:closedAtCommit "c12" ; backlog:hasStateDigest "ed4cf292cc4e1b1ae3ed0565eb70000538772db0bf15bc7aadbb098baccc0f64" .
+ex:R_Goal a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Goal ; backlog:belongsToLineage ex:Lin_PL ; backlog:consumesOutput ex:R_Scope ; backlog:closedAtCommit "c13" ; backlog:hasStateDigest "3f8c4ef5ba7b3e2d41f0e83e3cdc2df7245edc5c7f4a91afc3f72dd71685eb76" .
+ex:R_Objective a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Objective ; backlog:belongsToLineage ex:Lin_PL ; backlog:consumesOutput ex:R_Goal ; backlog:closedAtCommit "c14" ; backlog:hasStateDigest "708196fe4b6f59f34a9be5b756cdf2e9b2cae02618dc7014b01ad36bd84f0631" .
+ex:R_Backlog a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage ex:Lin_PL ; backlog:consumesOutput ex:R_Objective ; backlog:closedAtCommit "c15" ; backlog:hasStateDigest "38640a7cf7a6bbd2c5b3495329e9f8da3db2acc9409a23638dc5e83317c34358" .
+
+<http://example.org/lineage-restart#> backlog:hasExpectedPolarity backlog:Polarity_Positive .
+
+# v1.1.0 (2026-09-07): restarts declare Strat_DecreaseByOne (RestartDeclaresStrategyShape, shapes v1.103.0).
+# v1.2.0 (2026-09-07): the epic is flagged too -- a restart flags EVERY item (RestartFlagsEveryItemShape, v1.104.0) -- and is admitted by the rebuilt Backlog output.
+ex:EP backlog:preLineageItem true ; backlog:admittedByOutput ex:R_Backlog .
+# v1.3.0 (2026-09-09): lineage status stated (TBox v1.89.0, LineageStatusShape); derived from the fixture's own outputs and item states.
+ex:Lin_PL backlog:hasLineageStatus backlog:LS_Backlogged .

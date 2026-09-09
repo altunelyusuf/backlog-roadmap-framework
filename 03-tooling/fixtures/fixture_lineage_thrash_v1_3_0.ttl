@@ -6,7 +6,7 @@
 #
 @prefix backlog: <http://example.org/backlog#> .
 @prefix core: <http://example.org/core#> .
-@prefix ex: <http://example.org/recovery-strategy#> .
+@prefix ex: <http://example.org/lineage-thrash#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
@@ -225,53 +225,84 @@ ex:Session_20260907 a backlog:RegisterSession ;
 # historical record they are, disclosed in the v1.201.0 changelog.
 
 #################################################################
-#  fixture_recovery_strategy v1.0.0 -- DIVIDE AND CONQUER, POSITIVE.
-#  Built on fixture_pipeline_v1_1_0 (conformant, one lineage Lin_PL
-#  with deliverables D1, D2). Story: Bypass1 caught S_PL (satisfies
-#  D1) and S_PL2 (satisfies D2) before the chain; the lineage was
-#  frozen by the bypass (FOUND), then Restart1 (Strat_DivideAndConquer,
-#  a later commit) split it into parts P1 (for D1) and P2 (for D2),
-#  each rebuilt in its own five commits, each admitting its item; the
-#  parent's combine output Out_C_Backlog combines both parts' Backlog
-#  outputs. Expected: 0 violations; order check ORDERED for Lin_PL, P1, P2.
+#  fixture_lineage_restart v1.0.0 -- lineage escape, POSITIVE.
+#  Built on a copy of fixture_pipeline_v1_1_0 (a conformant register
+#  with one lineage, Lin_PL, five stage outputs and one story S_PL),
+#  so the lineage-escape shapes are exercised on a register that is
+#  otherwise clean (G7: a positive fixture that fails certifies
+#  nothing). Story: the tool found S_PL first appearing before
+#  Out_Backlog (witness map: S_PL at c1, Out_* at c9); the owner
+#  restarted; the chain was rebuilt R_* at c11..c15, one per commit,
+#  and R_Backlog admitted S_PL. Expected: 0 violations; exactly one
+#  FM_LineageBypass advisory would fire if S_PL were unadmitted, and
+#  none fires here. The order check must report ORDERED.
 #################################################################
-ex:S_PL backlog:satisfiesDeliverable ex:D1 ; backlog:belongsToLineage ex:P1 ; backlog:preLineageItem true ; backlog:admittedByOutput ex:P1_Backlog .
-ex:S_PL2 a backlog:Story ; backlog:hasIdentifier "S-PL2" ; backlog:hasState backlog:Proposed ;
-    backlog:memberOfContainer ex:BL ; backlog:notYetScoreable true ; backlog:hasScoreabilityReason "Scored at next planning." ;
-    backlog:belongsToLineage ex:Lin_PL , ex:P2 ; backlog:hasInvestmentCategory backlog:Cat_NewCapability ; backlog:pursuesObjective ex:O ;
-    backlog:satisfiesDeliverable ex:D2 ; backlog:preLineageItem true ; backlog:admittedByOutput ex:P2_Backlog .
 ex:Out_Mission backlog:belongsToLineage ex:Lin_PL ; backlog:outputRetracted true .
 ex:Out_Scope backlog:belongsToLineage ex:Lin_PL ; backlog:outputRetracted true .
 ex:Out_Goal backlog:belongsToLineage ex:Lin_PL ; backlog:outputRetracted true .
 ex:Out_Objective backlog:belongsToLineage ex:Lin_PL ; backlog:outputRetracted true .
 ex:Out_Backlog backlog:belongsToLineage ex:Lin_PL ; backlog:outputRetracted true .
-ex:Bypass1 a backlog:LineageBypass ; backlog:bypassedLineage ex:Lin_PL ; backlog:hasFailureMode backlog:FM_LineageBypass ;
-    backlog:hasFindingScope backlog:Scope_Methodology ; backlog:hasRootCause "Chain written after the work (fixture)." ;
-    backlog:bypassedItem ex:S_PL , ex:S_PL2 ; backlog:itemFirstCommit "S_PL c1 1000" , "S_PL2 c1 1000" ;
+ex:Bypass1 a backlog:LineageBypass ;
+    backlog:bypassedLineage ex:Lin_PL ; backlog:hasFailureMode backlog:FM_LineageBypass ;
+    backlog:hasFindingScope backlog:Scope_Methodology ; backlog:hasRootCause "Chain written after the work (fixture): S_PL first appears at c1, Out_Backlog at c9." ;
+    backlog:bypassedItem ex:S_PL ; backlog:itemFirstCommit "S_PL c1 1000" ;
     backlog:bypassedOutput ex:Out_Mission , ex:Out_Scope , ex:Out_Goal , ex:Out_Objective , ex:Out_Backlog ;
-    backlog:chainClosedCommit "c9 9000" ; backlog:detectedAt "2026-09-07T09:00:00Z"^^xsd:dateTime ; backlog:detectedBy "backlog_lineage_order_check_v1_2_0" ;
+    backlog:chainClosedCommit "c9 9000" ;
+    backlog:detectedAt "2026-09-07T09:00:00Z"^^xsd:dateTime ; backlog:detectedBy "backlog_lineage_order_check_v1_0_0" ;
     backlog:belongsToLineage ex:Lin_PL .
-ex:Lin_PL backlog:lineageFrozen true ; backlog:frozenBy ex:Bypass1 .
-ex:P1 a backlog:Lineage ; rdfs:label "Part 1"@en ; backlog:lineageOrdinal 11 ; backlog:lineageArchived false ; backlog:parentLineage ex:Lin_PL ; backlog:partForDeliverable ex:D1 ; backlog:lineageForMission ex:M .
-ex:P2 a backlog:Lineage ; rdfs:label "Part 2"@en ; backlog:lineageOrdinal 12 ; backlog:lineageArchived false ; backlog:parentLineage ex:Lin_PL ; backlog:partForDeliverable ex:D2 ; backlog:lineageForMission ex:M .
-ex:Restart1 a backlog:LineageRestart ; backlog:restartsLineage ex:Lin_PL ; backlog:answersBypass ex:Bypass1 ;
-    backlog:hasRecoveryStrategy backlog:Strat_DivideAndConquer ; backlog:partLineage ex:P1 , ex:P2 ;
+ex:Restart1 a backlog:LineageRestart ;
+    backlog:restartsLineage ex:Lin_PL ; backlog:answersBypass ex:Bypass1 ;
     backlog:retractsOutput ex:Out_Mission , ex:Out_Scope , ex:Out_Goal , ex:Out_Objective , ex:Out_Backlog ;
-    backlog:restartedAtCommit "c10" ; backlog:decidedBy backlog:Owner ; backlog:belongsToLineage ex:Lin_PL .
-ex:P1_Mission a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Mission ; backlog:belongsToLineage ex:P1 ; backlog:closedAtCommit "c11" ; backlog:hasStateDigest "P10" .
-ex:P1_Scope a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Scope ; backlog:belongsToLineage ex:P1 ; backlog:consumesOutput ex:P1_Mission ; backlog:closedAtCommit "c12" ; backlog:hasStateDigest "P11" .
-ex:P1_Goal a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Goal ; backlog:belongsToLineage ex:P1 ; backlog:consumesOutput ex:P1_Scope ; backlog:closedAtCommit "c13" ; backlog:hasStateDigest "P12" .
-ex:P1_Objective a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Objective ; backlog:belongsToLineage ex:P1 ; backlog:consumesOutput ex:P1_Goal ; backlog:closedAtCommit "c14" ; backlog:hasStateDigest "P13" .
-ex:P1_Backlog a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage ex:P1 ; backlog:consumesOutput ex:P1_Objective ; backlog:closedAtCommit "c15" ; backlog:hasStateDigest "P14" .
-ex:P2_Mission a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Mission ; backlog:belongsToLineage ex:P2 ; backlog:closedAtCommit "c11" ; backlog:hasStateDigest "P20" .
-ex:P2_Scope a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Scope ; backlog:belongsToLineage ex:P2 ; backlog:consumesOutput ex:P2_Mission ; backlog:closedAtCommit "c12" ; backlog:hasStateDigest "P21" .
-ex:P2_Goal a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Goal ; backlog:belongsToLineage ex:P2 ; backlog:consumesOutput ex:P2_Scope ; backlog:closedAtCommit "c13" ; backlog:hasStateDigest "P22" .
-ex:P2_Objective a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Objective ; backlog:belongsToLineage ex:P2 ; backlog:consumesOutput ex:P2_Goal ; backlog:closedAtCommit "c14" ; backlog:hasStateDigest "P23" .
-ex:P2_Backlog a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage ex:P2 ; backlog:consumesOutput ex:P2_Objective ; backlog:closedAtCommit "c15" ; backlog:hasStateDigest "P24" .
-ex:Out_C_Backlog a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage ex:Lin_PL ;
-    backlog:combinesOutput ex:P1_Backlog , ex:P2_Backlog ; backlog:closedAtCommit "c16" ; backlog:hasStateDigest "combine" .
+    backlog:restartedAtCommit "c10" ; backlog:decidedBy backlog:Owner ; backlog:hasRecoveryStrategy backlog:Strat_DecreaseByOne ; backlog:belongsToLineage ex:Lin_PL .
+ex:S_PL backlog:preLineageItem true .
+ex:R_Mission a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Mission ; backlog:belongsToLineage ex:Lin_PL ; backlog:closedAtCommit "c11" ; backlog:hasStateDigest "8c65af94ac3276071bb9b029a4ab139a14fd9eb7729433ca282ef040a706dac1" .
+ex:R_Scope a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Scope ; backlog:belongsToLineage ex:Lin_PL ; backlog:consumesOutput ex:R_Mission ; backlog:closedAtCommit "c12" ; backlog:hasStateDigest "ed4cf292cc4e1b1ae3ed0565eb70000538772db0bf15bc7aadbb098baccc0f64" .
+ex:R_Goal a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Goal ; backlog:belongsToLineage ex:Lin_PL ; backlog:consumesOutput ex:R_Scope ; backlog:closedAtCommit "c13" ; backlog:hasStateDigest "3f8c4ef5ba7b3e2d41f0e83e3cdc2df7245edc5c7f4a91afc3f72dd71685eb76" .
+ex:R_Objective a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Objective ; backlog:belongsToLineage ex:Lin_PL ; backlog:consumesOutput ex:R_Goal ; backlog:closedAtCommit "c14" ; backlog:hasStateDigest "708196fe4b6f59f34a9be5b756cdf2e9b2cae02618dc7014b01ad36bd84f0631" .
+ex:R_Backlog a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage ex:Lin_PL ; backlog:consumesOutput ex:R_Objective ; backlog:closedAtCommit "c15" ; backlog:hasStateDigest "38640a7cf7a6bbd2c5b3495329e9f8da3db2acc9409a23638dc5e83317c34358" .
 
-<http://example.org/recovery-strategy#> backlog:hasExpectedPolarity backlog:Polarity_Positive .
-# v1.104.0: the epic belongs to the restarted lineage too; a restart flags EVERY item (RestartFlagsEveryItemShape). The epic
-# is admitted by the parent's combine output, as an item that belongs to no single deliverable.
-ex:EP backlog:preLineageItem true ; backlog:admittedByOutput ex:Out_C_Backlog .
+#################################################################
+#  fixture_lineage_thrash v1.0.0 -- the restart loop CONVERGES, POSITIVE.
+#  Built on fixture_lineage_restart_v1_0_0 (one bypass, one restart,
+#  rebuilt chain R_* admitting S_PL). A SECOND trial: a new story S_PL2
+#  was created after the rebuild (c16) and, again, before a new Backlog
+#  output -- a second bypass (Bypass2) that is NOVEL (names S_PL2, which
+#  Bypass1 never named). Restart2 (c20) answers it, retracts R_* and
+#  rebuilds Q_* (c21..c25) whose Q_Backlog re-admits S_PL (admission
+#  kept) and admits S_PL2. Deliberation witnessed: Bypass2 c17 <
+#  Restart2 c20 < Q_Mission c21. Expected: 0 violations; order check
+#  ORDERED; no thrash.
+#################################################################
+ex:S_PL2 a backlog:Story ; backlog:hasIdentifier "S-PL2" ; backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer ex:BL ; backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at next planning." ;
+    backlog:belongsToLineage ex:Lin_PL ; backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:preLineageItem true ; backlog:admittedByOutput ex:Q_Backlog ; backlog:pursuesObjective ex:O .
+ex:S_PL backlog:admittedByOutput ex:Q_Backlog .
+ex:R_Mission backlog:outputRetracted true . ex:R_Scope backlog:outputRetracted true . ex:R_Goal backlog:outputRetracted true .
+ex:R_Objective backlog:outputRetracted true . ex:R_Backlog backlog:outputRetracted true .
+ex:Bypass2 a backlog:LineageBypass ;
+    backlog:bypassedLineage ex:Lin_PL ; backlog:hasFailureMode backlog:FM_LineageBypass ;
+    backlog:hasFindingScope backlog:Scope_Methodology ; backlog:hasRootCause "Second trial (fixture): S_PL2 first appears at c16 before any active Backlog output." ;
+    backlog:bypassedItem ex:S_PL2 ; backlog:itemFirstCommit "S_PL2 c16 16000" ;
+    backlog:bypassedOutput ex:R_Mission , ex:R_Scope , ex:R_Goal , ex:R_Objective , ex:R_Backlog ;
+    backlog:chainClosedCommit "c15 15000" ;
+    backlog:detectedAt "2026-09-07T10:00:00Z"^^xsd:dateTime ; backlog:detectedBy "backlog_lineage_order_check_v1_1_0" ;
+    backlog:belongsToLineage ex:Lin_PL .
+ex:Restart2 a backlog:LineageRestart ;
+    backlog:restartsLineage ex:Lin_PL ; backlog:answersBypass ex:Bypass2 ;
+    backlog:retractsOutput ex:R_Mission , ex:R_Scope , ex:R_Goal , ex:R_Objective , ex:R_Backlog ;
+    backlog:restartedAtCommit "c20" ; backlog:decidedBy backlog:Owner ; backlog:hasRecoveryStrategy backlog:Strat_DecreaseByOne ; backlog:belongsToLineage ex:Lin_PL .
+ex:Q_Mission a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Mission ; backlog:belongsToLineage ex:Lin_PL ; backlog:closedAtCommit "c21" ; backlog:hasStateDigest "8c65af94ac3276071bb9b029a4ab139a14fd9eb7729433ca282ef040a706dac1" .
+ex:Q_Scope a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Scope ; backlog:belongsToLineage ex:Lin_PL ; backlog:consumesOutput ex:Q_Mission ; backlog:closedAtCommit "c22" ; backlog:hasStateDigest "ed4cf292cc4e1b1ae3ed0565eb70000538772db0bf15bc7aadbb098baccc0f64" .
+ex:Q_Goal a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Goal ; backlog:belongsToLineage ex:Lin_PL ; backlog:consumesOutput ex:Q_Scope ; backlog:closedAtCommit "c23" ; backlog:hasStateDigest "3f8c4ef5ba7b3e2d41f0e83e3cdc2df7245edc5c7f4a91afc3f72dd71685eb76" .
+ex:Q_Objective a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Objective ; backlog:belongsToLineage ex:Lin_PL ; backlog:consumesOutput ex:Q_Goal ; backlog:closedAtCommit "c24" ; backlog:hasStateDigest "708196fe4b6f59f34a9be5b756cdf2e9b2cae02618dc7014b01ad36bd84f0631" .
+ex:Q_Backlog a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage ex:Lin_PL ; backlog:consumesOutput ex:Q_Objective ; backlog:closedAtCommit "c25" ; backlog:hasStateDigest "38640a7cf7a6bbd2c5b3495329e9f8da3db2acc9409a23638dc5e83317c34358" .
+
+<http://example.org/lineage-thrash#> backlog:hasExpectedPolarity backlog:Polarity_Positive .
+
+# v1.1.0 (2026-09-07): restarts declare Strat_DecreaseByOne (RestartDeclaresStrategyShape, shapes v1.103.0).
+# v1.2.0 (2026-09-07): the epic is flagged too -- a restart flags EVERY item (RestartFlagsEveryItemShape, v1.104.0) -- and is admitted by the rebuilt Backlog output.
+ex:EP backlog:preLineageItem true ; backlog:admittedByOutput ex:Q_Backlog .
+# v1.3.0 (2026-09-09): lineage status stated (TBox v1.89.0, LineageStatusShape); derived from the fixture's own outputs and item states.
+ex:Lin_PL backlog:hasLineageStatus backlog:LS_Backlogged .

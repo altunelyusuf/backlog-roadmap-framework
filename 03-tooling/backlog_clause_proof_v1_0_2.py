@@ -140,7 +140,14 @@ def main():
     dec_ok = dec_bad = 0
     for sh, fx in declared:
         case = g.value(sh, BL.fixtureCaseName)
-        path = os.path.join(pkg, fx)
+        # v1.0.2: a provenByFixture value is resolved BY STEM -- "03-tooling/fixtures/fixture_x" or any
+        # versioned name of it -- to the highest version on disk (the G79 rule, finally applied to
+        # fixture pins). A fixture bump no longer forces a shapes bump, which invalidated every
+        # validator cache entry and cost ~10 minutes per release (G88).
+        stem = re.sub(r"(_v\d+_\d+_\d+)?\.ttl$", "", fx)
+        cands = sorted(glob.glob(os.path.join(pkg, stem + "_v*.ttl")),
+                       key=lambda q: [int(x) for x in re.findall(r"_v(\d+)_(\d+)_(\d+)\.", q)[0]])
+        path = cands[-1] if cands else os.path.join(pkg, fx)
         if not os.path.exists(path):
             dec_bad += 1
             print("   DECLARED PROOF MISSING  %-30s -> %s"

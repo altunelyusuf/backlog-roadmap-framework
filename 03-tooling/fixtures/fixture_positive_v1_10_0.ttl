@@ -1167,3 +1167,5 @@ ex:Obs_Q3_Close a backlog:MetricObservation ;
     backlog:hasObservationMethod "Count of bookings with no staff touch divided by all bookings, from the booking log, first day after Rel_Sprint11 deployed." .
 # v1.9.0 (2026-09-09): the manifest artifact names its digest carrier (shapes v1.109.0)
 ex:PA_Manifest backlog:manifestDigestCarriedBy "RELEASE_METRICS.txt" .
+# v1.10.0 (2026-09-09): lineage status stated (TBox v1.89.0, LineageStatusShape); derived from the fixture's own outputs and item states.
+ex:Lin1 backlog:hasLineageStatus backlog:LS_InProgress .
