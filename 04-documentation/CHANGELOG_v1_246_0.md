@@ -10,7 +10,7 @@ another registrant defines five `doc:ArtifactKindSpec` individuals, all document
 commit (`1b65620`, their inbox) and are recorded as `EnhProp_SDLCArtifactKinds` /
 `Imp_SDLCArtifactKinds`. The stage closes **owing**, stated on the output: the rule this lineage is
 building will refuse exactly this closure once it ships, and its first catch will be its own Goal
-stage. Status `LS_Goaled`.
+stage. Status `LS_Goaled`. Shapes v1.110.0: the goal-needs-an-objective rule is stage-conditional too (a goal of a lineage below `LS_Objectived` is not yet owed one) — the third such rule found by building a lineage one stage at a time.
 
 ## v1.245.0 — 2026-09-09 (MINOR: lineage 9, Scope stage — and the domain entities and blueprint the stage owes)
 
