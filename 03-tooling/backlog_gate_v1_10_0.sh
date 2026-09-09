@@ -461,18 +461,7 @@ echo "== Archival finder — achieved lineages are found, and archiving is the n
 ARCH="$(ls "$HERE"/backlog_lineage_archive_v*.py 2>/dev/null | sort -V | tail -1 || true)"
 REGA="$(ls "$PKG"/01-ontologies/backlog_framework_register_abox_v*.ttl 2>/dev/null | sort -V | tail -1 || true)"
 if [ -n "$ARCH" ] && [ -n "$REGA" ]; then
-  FOUND="$(grep -oE '^fw:[A-Za-z0-9_]+ a backlog:Lineage' "$REGA" | sed -E 's/^fw:([A-Za-z0-9_]+) .*/\1/' | while read -r LN; do
-      if grep -qE "^fw:$LN .*hasLineageStatus backlog:LS_(Achieved|Abandoned)|^fw:$LN$" "$REGA" 2>/dev/null; then
-        if ! grep -qE "^fw:$LN .*lineageArchived true" "$REGA"; then echo "$LN"; fi
-      fi
-    done)"
-  if [ -z "$FOUND" ]; then echo "  no achieved lineage is un-archived."
-  else
-    for LN in $FOUND; do
-      python3 "$ARCH" "$REGA" "$LN" 2>&1 | grep -E "ARCHIVABLE|NOT archivable" | sed 's/^/  found: /'
-    done
-    echo "  (advisory; AchievedLineageNotArchivedAdvisoryShape reports the same in the SHACL run)"
-  fi
+  python3 "$ARCH" "$REGA" --find 2>&1 | sed 's/^/ /'
 else
   echo "  NOT RUN — archive tool not found."
 fi

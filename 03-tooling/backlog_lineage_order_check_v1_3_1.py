@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_lineage_order_check v1.3.0 — did the chain come before the work, or after?
+"""backlog_lineage_order_check v1.3.1 — did the chain come before the work, or after?
 
 THE ESCAPE THIS CATCHES. A lineage is Mission -> Scope -> Goal -> Objective -> Backlog,
 one commit per stage, and only then work items (LINEAGE_OPERATING_DISCIPLINE, ceremony
@@ -295,7 +295,10 @@ def classify(g, L, witness, prefix):
                     problems.append(f"ScopeChange {local(sc)} ({sf[0]}) does not precede the simplify restart {local(r)} ({rf[0]})")
         if st == "Strat_TransformReduce":
             t = g.value(r, B.templateLineage)
-            if t is not None and t != L:
+            ta = g.value(t, B.lineageArchived) if t is not None else None
+            if t is not None and ta is not None and bool(ta.toPython()):
+                pass   # v1.3.1: an ARCHIVED template is a finished chain by record (G87); its outputs live in the archive ABox
+            elif t is not None and t != L:
                 tv, _ = classify(g, t, witness, prefix)
                 if tv != "ORDERED":
                     problems.append(f"template lineage {local(t)} reads {tv}, not ORDERED; it cannot serve as a reduction target")

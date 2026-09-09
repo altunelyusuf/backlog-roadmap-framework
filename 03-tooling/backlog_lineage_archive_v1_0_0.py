@@ -117,6 +117,15 @@ def partition(g, lineages):
 def main():
     argv = sys.argv[1:]
     apply = "--apply" in argv; names = [a for a in argv if not a.startswith("--")]
+    if "--find" in argv and len(names) == 1:
+        g = Graph().parse(names[0], format="turtle"); found = 0
+        for L in sorted(g.subjects(RDF.type, B.Lineage), key=local):
+            st = g.value(L, B.hasLineageStatus); a = g.value(L, B.lineageArchived)
+            if st in (B.LS_Achieved, B.LS_Abandoned) and not (a is not None and bool(a.toPython())):
+                found += 1; r = archivable(g, L)
+                print(f"  found: {local(L):22} {'ARCHIVABLE -- run backlog_lineage_archive --apply' if not r else 'NOT archivable: ' + '; '.join(r)}")
+        print("  no achieved lineage is un-archived." if not found else f"  {found} achieved lineage(s) await archival.")
+        return 0
     if len(names) < 2: print(__doc__); return 1
     reg = names[0]; g = Graph().parse(reg, format="turtle")
     lineages = []

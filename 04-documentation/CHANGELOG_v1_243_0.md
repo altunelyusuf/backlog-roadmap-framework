@@ -20,6 +20,13 @@ holds no lineage 9. Recorded for real here; the witnessed commit of the Mission 
 - Register v9.72.0: statuses on all lineages; lineage 9 `LS_Opened` with `Out_Mission_SDLC`.
   0 violations, 48 warnings; validation time 11 s (was ~20 s).
 - Discipline v58.0.0: ceremony rule, `G87`.
+- `backlog_clause_proof_v1_0_2.py`: `provenByFixture` resolved by STEM (highest version on disk);
+  the 58 pins in the shapes are now stems. A fixture bump no longer forces a shapes bump — which
+  invalidated every cache entry and cost ~10 minutes per release (the coupling behind the owner's
+  question about publication being blocked; see the release note in `G87`).
+- `backlog_lineage_order_check_v1_3_1.py`: an archived template lineage is a finished chain by
+  record; `backlog_lineage_archive --find` lists achieved-and-unarchived lineages and the gate
+  calls it.
 
 ## v1.242.0 — 2026-09-09 (MINOR: lineage 9 opens — SDLC obligations, Mission stage)
 
