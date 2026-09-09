@@ -1,5 +1,17 @@
 # Changelog
 
+## v1.244.0 — 2026-09-09 (MINOR: the witness orders by ancestry, not time — the adopter's third finding, built)
+
+- `backlog_lineage_order_check_v1_4_0.py`: first-appearance ordinal = `git rev-list --count` (a rebase
+  cannot collapse it); same-commit = hash equality (G18 as written); two stage outputs of one lineage
+  in one commit read UNWITNESSED; `--expect LINEAGE=VERDICT` for fixture proof. Their register reads
+  ORDERED; ours unchanged.
+- Witness maps `fixture_lineage_restart_witness_epoch_v1_0_0.json` (one epoch, hashes in order →
+  ORDERED) and `..._samecommit_v1_0_0.json` (two stages, one hash → UNWITNESSED); gate v1.11.0
+  self-proves on both.
+- Inbox: the proposal accepted and logged with the verification. Discipline v59.0.0: `G88` (this
+  finding, and the answer to the owner's question about blocked publication).
+
 ## v1.243.0 — 2026-09-09 (MINOR: lineage status, only-passed-steps-fire, the archival activity; lineages 7 and 8 archived; lineage 9's Mission stage recorded for real)
 
 **v1.242.0's entry was false**: its snippet was truncated to zero bytes and the register at `5f8b318`

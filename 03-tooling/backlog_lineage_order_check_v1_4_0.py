@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_lineage_order_check v1.3.1 — did the chain come before the work, or after?
+"""backlog_lineage_order_check v1.4.0 — did the chain come before the work, or after?
 
 THE ESCAPE THIS CATCHES. A lineage is Mission -> Scope -> Goal -> Objective -> Backlog,
 one commit per stage, and only then work items (LINEAGE_OPERATING_DISCIPLINE, ceremony
@@ -84,8 +84,18 @@ v1.3.0 -- two findings from the first adopting package (COM8090 vaf-agentic-pipe
                 as tags. Ceremony rule: publish before you rebase; never rewrite commits that
                 carry a live lineage.
 
+v1.4.0 -- ORDER BY ANCESTRY, NOT BY TIME (third adopter proposal, 2026-09-09). The witness ordinal was
+the committer epoch (%ct); a rebase stamps every replayed commit with one epoch, so four commits in
+strict ancestry read as "same second" = "same commit" and a correct chain read THRASH. The ordinal is
+now `git rev-list --count <hash>` -- the commit's topological position on the current branch, which a
+rebase cannot collapse. "Same commit" is a HASH-equality test, as G18 states it: two stage outputs of
+one lineage first appearing in the same commit are UNWITNESSED within the lineage (disclosed, exit 0);
+parts of a divided lineage sharing a commit remain fine (G84). --expect VERDICT makes a fixture run
+fail unless the named lineage reads exactly that verdict (L-95 proof of the two cases this defect
+had conflated). Witness maps carry [commit, ordinal]; any monotone integer serves.
+
 Exit: 0 ORDERED/UNWITNESSED/RESTARTED/FROZEN; 2 BYPASS unanswered, THRASH unrecorded, WITNESS_BROKEN,
-or NOT VERIFIABLE (outputs exist, none witnessed); 1 on error.
+or NOT VERIFIABLE (outputs exist, none witnessed), or --expect not met; 1 on error.
 """
 import glob, json, os, re, subprocess, sys, time
 from rdflib import Graph, Namespace, RDF, URIRef
@@ -112,10 +122,14 @@ class GitWitness:
         key = prefix + local_name
         if key in self.cache:
             return self.cache[key]
-        r = subprocess.run(["git", "log", "--reverse", "--format=%h %ct", "-S", key + " ", "--", self.rel],
+        r = subprocess.run(["git", "log", "--reverse", "--format=%h", "-S", key + " ", "--", self.rel],
                            cwd=self.root, capture_output=True, text=True)
         line = r.stdout.strip().split("\n")[0] if r.stdout.strip() else ""
-        val = (line.split()[0], int(line.split()[1])) if line else None
+        val = None
+        if line:
+            h = line.split()[0]
+            c = subprocess.run(["git", "rev-list", "--count", h], cwd=self.root, capture_output=True, text=True)
+            val = (h, int(c.stdout.strip() or 0))   # v1.4.0: ordinal = ancestry count, not epoch
         self.cache[key] = val
         return val
 
@@ -327,8 +341,10 @@ def classify(g, L, witness, prefix):
                     unverifiable.append(f"{local(o)} records closedAtCommit {token}, a ref this clone does not have (fetch tags to verify)")
                 elif not anc:
                     broken.append(f"{local(o)} records closedAtCommit {token}, which is not an ancestor of the branch tip (rewritten or never pushed)")
-    # 4. single-commit case
+    # 4. single-commit case -- hash equality, never epoch equality (v1.4.0)
     commits = {f[0] for f in out_first.values()} | {f[0] for f in item_first.values()}
+    stage_hashes = [f[0] for f in out_first.values()]
+    same_stage_commit = len(stage_hashes) != len(set(stage_hashes))
     fro = g.value(L, B.lineageFrozen)
     frozen = fro is not None and bool(fro.toPython())
     # v1.2.3: a lineage frozen more than once carries several frozenBy values (append-only
@@ -349,7 +365,7 @@ def classify(g, L, witness, prefix):
         verdict = "BYPASS"
     elif dc and parts and (problems_dc or any(v != "ORDERED" for v in part_verdicts.values())):
         verdict = "DIVIDING"
-    elif len(commits) == 1 and out_first and item_first:
+    elif (len(commits) == 1 and out_first and item_first) or same_stage_commit:
         verdict = "UNWITNESSED"
     elif not out_first and restarts:
         verdict = "RESTARTED"      # chain retracted, nothing rebuilt yet: disclosed, not silent
@@ -413,7 +429,7 @@ def emit_thrash(g, L, d, fw):
 def main():
     argv = sys.argv[1:]
     witness_path = argv[argv.index("--witness") + 1] if "--witness" in argv else None
-    args = [a for i, a in enumerate(argv) if not a.startswith("--") and (i == 0 or argv[i - 1] not in ("--witness", "--register-path"))]
+    args = [a for i, a in enumerate(argv) if not a.startswith("--") and (i == 0 or argv[i - 1] not in ("--witness", "--register-path", "--expect"))]
     if not args:
         print(__doc__); return 1
     reg = args[0]
@@ -442,7 +458,7 @@ def main():
         witness = GitWitness(root, rel)
         print(f"witness     : git first-appearance under {rel}")
     print(f"register    : {os.path.basename(reg)}")
-    worst = 0; n = 0; unwitnessed_total = 0
+    worst = 0; n = 0; unwitnessed_total = 0; verdicts = {}
     emitted = []
     for L in sorted(g.subjects(RDF.type, B.Lineage), key=local):
         arch = g.value(L, B.lineageArchived)
@@ -454,7 +470,7 @@ def main():
             if d["unwitnessed_outputs"]:
                 unwitnessed_total += d["unwitnessed_outputs"]
             continue
-        n += 1
+        n += 1; verdicts[local(L)] = verdict
         for msg in d["broken"]:
             print(f"      - WITNESS_BROKEN {msg}")
         for msg in d["unverifiable"]:
@@ -507,6 +523,13 @@ def main():
                 worst = 2
                 if emit:
                     emitted.append(emit_bypass(g, L, d, prefix))
+    exp = next((argv[i + 1] for i, a in enumerate(argv) if a == "--expect"), None)
+    if exp:
+        lin, want = exp.split("=")
+        got = verdicts.get(lin)
+        if got != want:
+            print(f"VERDICT     : FAIL — --expect {lin}={want}, read {got}"); return 2
+        print(f"VERDICT     : PASS — {lin} reads {want} as expected"); return 0
     if n == 0 and unwitnessed_total:
         print(f"VERDICT     : NOT VERIFIABLE — {unwitnessed_total} stage output(s) exist in the register but none is found in git under the witness path ({rel if not witness_path else 'fixture map'}); wrong --register-path, or never committed. A refusal, not a clean result.")
         return 2

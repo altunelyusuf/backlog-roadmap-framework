@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v58.0.0
+# Lineage Operating Discipline — v59.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -2420,3 +2420,32 @@ first); both found by the reading that should have preceded the claim.
 **Classified at logging time (L-112):** the archival gap and the finished-chain assumption are
 genuine gaps in the ceremony, found by the first lineage built one stage at a time; the false claim
 is this session's own.
+
+## G88 — Order is ancestry, not time; and a pin that couples files is a cost paid on every release
+
+**The adopter's third finding in one day.** The git witness ordered first appearances by committer
+epoch. A rebase stamps every replayed commit with the moment of the rebase, so four commits in
+strict ancestry read as "same second", which the tool took for "same commit" (the G18 case), and a
+correct chain read THRASH twice over. Measured by them on their register and reproduced here; their
+cheap direct test (B3) was the fix: the ordinal is now `git rev-list --count <hash>`, the commit's
+topological position, which a rebase cannot collapse; "same commit" is a hash-equality test, as G18
+states it; two stage outputs of one lineage first appearing in one commit are UNWITNESSED within the
+lineage (disclosed), while parts of a divided lineage may share a commit (G84). `--expect` lets a
+fixture assert the exact verdict; the gate proves both cases the defect had conflated (L-95). Their
+lineage reads ORDERED under v1.4.0.
+
+**And the owner's question of the same day — why publication kept being prevented.** Three things
+had been indistinguishable from the outside: refusals that were right (a shape pyshacl cannot run; a
+positive fixture a new shape breaks — the suite proving itself before certifying anything, G7); a
+coupling that was wrong — every shape pinned its proving fixture by exact filename, so a fixture bump
+(BP-D7) forced a shapes bump, which invalidated every validator cache entry, roughly ten minutes per
+release, the same defect G79 had removed from tool pins on the first day and never from fixture pins
+(fixed: pins are stems, resolved to the highest version); and retrofits chosen without scoping — "every
+lineage carries a status, none is exempt" made twelve positive fixtures non-conformant at once,
+against this framework's own new exclusion that obligations bind forward. Standing rule from the
+owner's question: a new obligation binds lineages opened after it ships unless the owner says
+otherwise; a fixture-wide retrofit is a decision, not a side effect.
+
+**Classified at logging time (L-112):** the epoch defect is a genuine gap in G81's witness, found by
+an adopter's ordinary workflow; the pin coupling is a genuine defect in this framework's release
+mechanics, found by the owner asking why; the retrofit is this session's own choice, recorded as such.

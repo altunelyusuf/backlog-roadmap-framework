@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# backlog_gate v1.10.0 — four-gate release check for the Backlog & Roadmap
+# backlog_gate v1.11.0 — four-gate release check for the Backlog & Roadmap
 # Semantic Framework. Nothing about the package's state is trusted until all
 # four pass, and the SHACL gate refuses to certify anything until it has just
 # demonstrated, in this run, that it can fail a known-bad register.
@@ -11,7 +11,11 @@
 #   +       coverage gate          >= 80% of primary-source concepts (BP-D31)
 #   +       doc-coverage gate      every TBox class named in the standard document
 #
-# Usage: backlog_gate_v1_10_0.sh [REGISTER.ttl ...]
+# Usage: backlog_gate_v1_11_0.sh [REGISTER.ttl ...]
+#
+# v1.11.0 — the order check orders by ancestry (v1.4.0); self-proof adds the two witness maps that
+# separate 'same epoch' from 'same commit' (one epoch, hashes in order -> ORDERED; two stages in one
+# hash -> UNWITNESSED), via --expect.
 #
 # v1.10.0 — archival finder: every LS_Achieved lineage not yet archived is found and named; the
 # archival activity (backlog_lineage_archive --apply) is the owner's next step, not this gate's.
@@ -437,7 +441,12 @@ if [ -n "$LOC" ]; then
     echo "  ABORT: the divide-and-conquer fixture did not pass -- the check is broken, not the register."; exit 3; fi
   if python3 "$LOC" "$SNEG" --witness "$SWNEG" >/dev/null 2>&1; then
     echo "  ABORT: the strategy-evidence fixture PASSED -- the check cannot see a strategy without its evidence."; exit 3; fi
-  echo "  self-proof: ordered passes, bypass fails; converging trial passes, thrash fails; divide-and-conquer passes, missing strategy evidence fails."
+  RPOS="$(ls "$HERE"/fixtures/fixture_lineage_restart_v*.ttl | sort -V | tail -1)"
+  WEPO="$(ls "$HERE"/fixtures/fixture_lineage_restart_witness_epoch_v*.json | sort -V | tail -1)"
+  WSAME="$(ls "$HERE"/fixtures/fixture_lineage_restart_witness_samecommit_v*.json | sort -V | tail -1)"
+  python3 "$LOC" "$RPOS" --witness "$WEPO" --expect Lin_PL=ORDERED >/dev/null 2>&1 || { echo "  ABORT: one-epoch, hashes-in-order fixture did not read ORDERED -- the witness orders by time again."; exit 3; }
+  python3 "$LOC" "$RPOS" --witness "$WSAME" --expect Lin_PL=UNWITNESSED >/dev/null 2>&1 || { echo "  ABORT: two-stages-one-commit fixture did not read UNWITNESSED -- same-commit is no longer a hash test."; exit 3; }
+  echo "  self-proof: ordered passes, bypass fails; converging trial passes, thrash fails; divide-and-conquer passes, missing strategy evidence fails; one-epoch chain ORDERED, two-stages-one-commit UNWITNESSED."
   # v1.9.0: release tags are the recorded witnesses of this package's outputs; fetch them quietly if a remote exists
   ( cd "$PKG" && git fetch --tags --quiet origin 2>/dev/null || true )
   REG="$(ls "$PKG"/01-ontologies/backlog_framework_register_abox_v*.ttl 2>/dev/null | sort -V | tail -1 || true)"
