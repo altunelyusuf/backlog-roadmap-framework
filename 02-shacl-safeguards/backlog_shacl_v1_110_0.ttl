@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.109.0> ;
-    owl:versionInfo "1.109.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.110.0> ;
+    owl:versionInfo "1.110.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.109.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.108.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.107.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.106.0> ;
@@ -1567,6 +1568,8 @@ backlog:MissionShape a sh:NodeShape ;
         sh:select """SELECT $this WHERE {
             FILTER NOT EXISTS { ?g backlog:contributesToMission $this }
             FILTER NOT EXISTS { $this backlog:belongsToLineage ?l . ?l backlog:lineageArchived true }
+            # v1.110.0: the mission of an archived lineage stays live as the pointer; its closure report went with the work
+            FILTER NOT EXISTS { ?l2 backlog:lineageForMission $this ; backlog:lineageArchived true }
             # A mission whose lineage has not yet reached the Goal stage
             # SHOULD have no goals. Found the first time the v5.0.0 staged
             # ceremony was actually followed: it says the Mission stage closes
@@ -4051,6 +4054,8 @@ backlog:GoalSufficiencyShape a sh:NodeShape ;
         sh:select """SELECT $this WHERE {
             $this backlog:coversArea ?anyarea .
             FILTER NOT EXISTS { ?s backlog:supersedesMission ?m . $this backlog:scopeForMission ?m }
+            # v1.110.0: only passed steps fire -- this rule needs goals, which exist once the lineage's status has reached LS_Goaled (rank 3)
+            FILTER NOT EXISTS { $this backlog:belongsToLineage ?lin . ?lin backlog:hasLineageStatus ?ls . ?ls backlog:statusRank ?rk . FILTER (?rk < 3) }
             FILTER (
               NOT EXISTS { ?g1 backlog:derivesFromScope $this ; backlog:hasGoalFacing backlog:Facing_Mission } ||
               NOT EXISTS { ?g2 backlog:derivesFromScope $this ; backlog:hasGoalFacing backlog:Facing_Scope } ||
@@ -4427,6 +4432,8 @@ backlog:AreaUnmeasuredShape a sh:NodeShape ;
         sh:select """SELECT $this WHERE {
             ?sc backlog:coversArea $this .
             FILTER NOT EXISTS { $this backlog:productViewOf ?src }
+            # v1.110.0: only passed steps fire -- this rule needs objectives, which exist once the lineage's status has reached LS_Objectived (rank 4)
+            FILTER NOT EXISTS { ?sc backlog:belongsToLineage ?lin . ?lin backlog:hasLineageStatus ?ls . ?ls backlog:statusRank ?rk . FILTER (?rk < 4) }
             FILTER NOT EXISTS { ?g backlog:goalCoversArea $this . ?o backlog:contributesToGoal ?g }
             FILTER NOT EXISTS { ?s backlog:supersedesMission ?m . ?sc backlog:scopeForMission ?m }
         }""" ] .
@@ -5185,6 +5192,8 @@ backlog:MissionClosureRequiresReportShape a sh:NodeShape ;
             $this backlog:hasMissionOutcome backlog:Out_Achieved .
             FILTER NOT EXISTS { ?r backlog:closesForMission $this }
             FILTER NOT EXISTS { $this backlog:belongsToLineage ?l . ?l backlog:lineageArchived true }
+            # v1.110.0: the mission of an archived lineage stays live as the pointer; its closure report went with the work
+            FILTER NOT EXISTS { ?l2 backlog:lineageForMission $this ; backlog:lineageArchived true }
         }""" ] .
 
 backlog:RetrospectiveObjectiveShape a sh:NodeShape ;
@@ -5773,4 +5782,73 @@ backlog:RestartFlagsEveryItemShape a sh:NodeShape ;
             FILTER NOT EXISTS { ?i backlog:postRestartItem $this }
             # the pre-v1.104.0 restart of lineage 8 flagged its two items; exempt by commit, as RestartDeclaresStrategyShape does
             FILTER NOT EXISTS { $this backlog:restartedAtCommit ?c . FILTER (CONTAINS(STR(?c), "v1.203.0") || CONTAINS(STR(?c), "0251509")) }
+        }""" ] .
+
+#################################################################
+#  v1.110.0 (2026-09-09) -- lineage status: consistency, and the
+#  archival trigger. Proven by fixture_lineage_status (positive)
+#  and fixture_lineage_status_negative.
+#################################################################
+backlog:LineageStatusShape a sh:NodeShape ;
+    sh:targetClass backlog:Lineage ;
+    sh:severity sh:Violation ;
+    rdfs:label "A live lineage states its status, and the status cannot outrun the register (L1)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_lineage_status_negative_v1_0_0.ttl" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this lineage has no hasLineageStatus. Every lineage opened from v1.89.0 states where it stands, so that rules bind only once the step they need has passed." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            FILTER NOT EXISTS { $this backlog:hasLineageStatus ?s }
+            FILTER NOT EXISTS { $this backlog:lineageArchived true }
+            # lineages opened before v1.89.0 carry their status from this release on; none is exempt
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this lineage claims a stage status (Scoped, Goaled, Objectived, Backlogged) with no active output of that stage. A status is a pointer to the chain, not a wish." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasLineageStatus ?ls .
+            # pyshacl forbids VALUES inside a constraint: the status/stage pairs are a UNION
+            { BIND(backlog:LS_Opened AS ?want) BIND(backlog:Stage_Mission AS ?st) } UNION
+            { BIND(backlog:LS_Scoped AS ?want) BIND(backlog:Stage_Scope AS ?st) } UNION
+            { BIND(backlog:LS_Goaled AS ?want) BIND(backlog:Stage_Goal AS ?st) } UNION
+            { BIND(backlog:LS_Objectived AS ?want) BIND(backlog:Stage_Objective AS ?st) } UNION
+            { BIND(backlog:LS_Backlogged AS ?want) BIND(backlog:Stage_Backlog AS ?st) }
+            FILTER (?ls = ?want)
+            FILTER NOT EXISTS { ?o a backlog:StageOutput ; backlog:outputOfStage ?st ; backlog:belongsToLineage $this . FILTER NOT EXISTS { ?o backlog:outputRetracted true } }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this lineage claims LS_Achieved but its mission is not Out_Achieved, or no closure report closes it." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasLineageStatus backlog:LS_Achieved ; backlog:lineageForMission ?m .
+            FILTER ( NOT EXISTS { ?m backlog:hasMissionOutcome backlog:Out_Achieved } || NOT EXISTS { ?cr backlog:closesForMission ?m } )
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this lineage claims LS_Archived but is not lineageArchived true with an archiveFile -- or is archived without the status." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            { $this backlog:hasLineageStatus backlog:LS_Archived . FILTER NOT EXISTS { $this backlog:lineageArchived true ; backlog:archiveFile ?f } }
+            UNION
+            { $this backlog:lineageArchived true ; backlog:archivedAt ?at . FILTER NOT EXISTS { $this backlog:hasLineageStatus backlog:LS_Archived } }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this lineage's mission is Out_Achieved with a closure report, yet its status is below LS_Achieved (or above without being archived). The status lags the register." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasLineageStatus ?ls ; backlog:lineageForMission ?m .
+            ?m backlog:hasMissionOutcome backlog:Out_Achieved . ?cr backlog:closesForMission ?m .
+            FILTER (?ls NOT IN (backlog:LS_Achieved, backlog:LS_Archived, backlog:LS_Revived))
+        }""" ] .
+
+backlog:AchievedLineageNotArchivedAdvisoryShape a sh:NodeShape ;
+    sh:targetClass backlog:Lineage ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: an achieved lineage found un-archived triggers the archival activity"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_lineage_status_negative_v1_0_0.ttl" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: this lineage is LS_Achieved (or Abandoned) and not archived. Its every individual is still validated, witnessed and reported on every run. Owner's rule 2026-09-09: an achieved lineage found triggers the archival activity -- run backlog_lineage_archive on it (the gate reports it too)." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasLineageStatus ?ls . FILTER (?ls IN (backlog:LS_Achieved, backlog:LS_Abandoned))
+            FILTER NOT EXISTS { $this backlog:lineageArchived true }
         }""" ] .

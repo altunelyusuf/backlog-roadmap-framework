@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# backlog_gate v1.9.0 — four-gate release check for the Backlog & Roadmap
+# backlog_gate v1.10.0 — four-gate release check for the Backlog & Roadmap
 # Semantic Framework. Nothing about the package's state is trusted until all
 # four pass, and the SHACL gate refuses to certify anything until it has just
 # demonstrated, in this run, that it can fail a known-bad register.
@@ -11,7 +11,10 @@
 #   +       coverage gate          >= 80% of primary-source concepts (BP-D31)
 #   +       doc-coverage gate      every TBox class named in the standard document
 #
-# Usage: backlog_gate_v1_9_0.sh [REGISTER.ttl ...]
+# Usage: backlog_gate_v1_10_0.sh [REGISTER.ttl ...]
+#
+# v1.10.0 — archival finder: every LS_Achieved lineage not yet archived is found and named; the
+# archival activity (backlog_lineage_archive --apply) is the owner's next step, not this gate's.
 #
 # v1.9.0 — the order check (v1.3.0) verifies every recorded closedAtCommit is an ancestor of the branch
 # tip; release tags are refs, so the gate makes sure tags are present locally before measuring.
@@ -451,6 +454,27 @@ if [ -n "$LOC" ]; then
   fi
 else
   echo "  NOT RUN — order check not found. Not assumed to pass."
+fi
+
+echo
+echo "== Archival finder — achieved lineages are found, and archiving is the next activity =="
+ARCH="$(ls "$HERE"/backlog_lineage_archive_v*.py 2>/dev/null | sort -V | tail -1 || true)"
+REGA="$(ls "$PKG"/01-ontologies/backlog_framework_register_abox_v*.ttl 2>/dev/null | sort -V | tail -1 || true)"
+if [ -n "$ARCH" ] && [ -n "$REGA" ]; then
+  FOUND="$(grep -oE '^fw:[A-Za-z0-9_]+ a backlog:Lineage' "$REGA" | sed -E 's/^fw:([A-Za-z0-9_]+) .*/\1/' | while read -r LN; do
+      if grep -qE "^fw:$LN .*hasLineageStatus backlog:LS_(Achieved|Abandoned)|^fw:$LN$" "$REGA" 2>/dev/null; then
+        if ! grep -qE "^fw:$LN .*lineageArchived true" "$REGA"; then echo "$LN"; fi
+      fi
+    done)"
+  if [ -z "$FOUND" ]; then echo "  no achieved lineage is un-archived."
+  else
+    for LN in $FOUND; do
+      python3 "$ARCH" "$REGA" "$LN" 2>&1 | grep -E "ARCHIVABLE|NOT archivable" | sed 's/^/  found: /'
+    done
+    echo "  (advisory; AchievedLineageNotArchivedAdvisoryShape reports the same in the SHACL run)"
+  fi
+else
+  echo "  NOT RUN — archive tool not found."
 fi
 
 echo

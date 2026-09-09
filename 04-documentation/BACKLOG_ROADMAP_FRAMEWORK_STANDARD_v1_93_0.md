@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.92.0
+# Backlog & Roadmap Semantic Framework — Standard v1.93.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -764,6 +764,23 @@ ordered, so everything is pre-lineage from the restart on and re-enters only by 
 with the parent and are admitted by its combine output. **Parts may share one commit per stage**: parts
 are independent, and the git witness measures order *within* each part; five parts closing their
 Scope stage in one commit is five witnessed sequences, not one unwitnessed one.
+
+### 2.5c-xxi-e Lineage status: only passed steps fire, and achieved lineages are archived
+
+Every lineage carries a `LineageStatus` — `LS_Opened`, `LS_Scoped`, `LS_Goaled`, `LS_Objectived`,
+`LS_Backlogged`, `LS_InProgress` (chain closed, development ongoing), `LS_Achieved` or `LS_Abandoned`,
+`LS_Archived`, `LS_Revived` — ranked, moved forward in the same commit as the stage output or event
+that justifies it, and checked against the register by `LineageStatusShape`: a status cannot claim a
+stage with no active output, achievement without an achieved mission and a closure report, or
+archival without the archive file. Rules that need a later stage's elements bind only once the status
+has reached that stage, so a lineage built one stage per commit publishes at every stage.
+
+An achieved lineage found un-archived is named by the gate and by
+`AchievedLineageNotArchivedAdvisoryShape`; the archival activity, `backlog_lineage_archive`, checks
+archivability, computes the partition by closure (the lineage's members, everything in no live
+lineage that references or hangs together with them, its closure report), and moves the statements
+verbatim into the archive ABox, leaving the Lineage and its Mission live as the pointer. Archived
+work is loaded by lineage-history checks only, until the owner revives it (`lineageRevivedAt`).
 
 ### 2.5c-xxii The staged ceremony, one commit per stage
 

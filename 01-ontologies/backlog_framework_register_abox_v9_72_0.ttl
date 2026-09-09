@@ -1,0 +1,2869 @@
+@prefix backlog: <http://example.org/backlog#> .
+@prefix skos2:   <http://www.w3.org/2004/02/skos/core#> .
+@prefix core:    <http://example.org/core#> .
+@prefix fw:      <http://example.org/backlog-framework-register#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix configuration: <http://example.org/configuration#> .
+@prefix quality: <http://example.org/quality#> .
+@prefix prof:    <http://rdodi.org/profiles#> .
+@prefix report:  <http://example.org/report#> .
+
+<http://example.org/backlog-framework-register> a owl:Ontology ;
+    rdfs:label "The framework's own development register"@en ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.72.0> ;
+    owl:versionInfo "9.72.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.70.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.69.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.68.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.67.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.66.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.65.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.64.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.63.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.62.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.61.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.60.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.59.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.58.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.57.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.56.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.55.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.54.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.53.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.52.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.51.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.50.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.49.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.48.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.47.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.46.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.45.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.44.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.43.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.42.1> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.42.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.41.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.40.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.39.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.38.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.37.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.36.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.35.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.34.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.33.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.32.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.31.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.30.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.29.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.28.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.27.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.26.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.25.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.24.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.23.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.22.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.21.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.20.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.19.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.18.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.17.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.16.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.15.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.14.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.13.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.12.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.11.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.10.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.9.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.8.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.7.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.6.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.5.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.4.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.3.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/8.2.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/8.1.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/8.0.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/7.11.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/7.8.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/7.7.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/7.6.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/7.5.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/7.4.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/7.3.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/7.2.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/7.1.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/7.0.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/6.9.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/6.8.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/6.7.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/6.6.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/6.5.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/6.4.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/6.3.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/6.2.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/6.1.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/6.0.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/5.9.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/5.8.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/5.7.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/5.6.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/5.5.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/5.4.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/5.3.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/5.2.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/5.1.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/5.0.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/4.8.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/4.7.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/4.6.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/4.5.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/4.4.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/4.3.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/4.2.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/4.1.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/4.0.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/3.9.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/3.8.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/3.7.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/3.6.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/3.5.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/3.4.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/3.3.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/3.2.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/3.1.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/3.0.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/2.5.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/2.4.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/2.3.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/2.2.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/2.1.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/2.0.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/1.19.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/1.18.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/1.17.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/1.16.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/1.15.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/1.14.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/1.13.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/1.12.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/1.11.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/1.10.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/1.9.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/1.8.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/1.7.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/1.6.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/1.5.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/1.4.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/1.3.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/1.2.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/1.1.0> ;
+    owl:priorVersion <http://example.org/backlog-framework-register/1.0.0> ;
+    dcterms:created "2026-08-06T00:00:00"^^xsd:dateTime ;
+    skos:definition "v1.1.0 completes what v1.0.0 called a lineage and was not: scope with five recorded exclusions, a Definition of Done with six executable criteria, and decomposition of the unbuilt epics into stories with acceptance criteria. v1.0.0 shipped as a FIXTURE, in 03-tooling/fixtures, while declaring its own ontology IRI and version — an ontology artifact filed as test data. Promoted here. backlog-roadmap-framework's own maintenance-and-progress work, registered under the framework itself rather than sequenced by opinion. Written because the owner asked for the lineage approach instead of an ad hoc ordering, which is what the previous turn's numbered list actually was. The ordering below is COMPUTED from declared score components, not asserted; where it disagrees with intuition the register wins or the components must be argued with."@en .
+
+#################################################################
+#  ADOPTION PROFILE — owner-decided, reasoned, dated, directional
+#################################################################
+
+
+
+
+#################################################################
+#  DEFINITION OF DONE — the bar this development is held to
+#################################################################
+
+
+#################################################################
+#  DECOMPOSITION — what the remaining epics actually consist of.
+#  Absent from v1.0.0: four scored epics broken into nothing, which
+#  is why a mid-build decision had nowhere to be settled in advance.
+#  Each story is scoreable in its own right; per the framework's own
+#  rule the parent epics carry scores and these do not, so nothing
+#  double-counts. They are notYetScoreable with the reason recorded.
+#################################################################
+
+fw:Mission_OntologyDriven a backlog:Mission ;
+    backlog:producedByStage fw:Out2_Mission ;
+    backlog:hasMissionStatement "The framework is ontology-driven: classes, relationships, properties and instances that today live in prose or in source code are exported to the ontology, the governance model is expressed as ontology rather than as documentation, and rule execution moves from prose and code to the ontology layer. What remains as prose explains; what remains as code executes standard engines. Neither carries meaning that only they define." ;
+    backlog:missionFor fw:Register ;
+    backlog:hasMissionOrigin backlog:Origin_OwnerStated ;
+    backlog:missionSource "Owner, 2026-10-26, verbatim: 'a new mission and a new lineage to reduce the dependency on the prose and source code. I want you to convert the current configuration to be ontology driven by analyzing the prose and source code and identify the possible exports from them to the ontology not just the rules but also the clasesses, relationships, properties, objects/instances, and other ontologic concpepts. Additionally, the governance model should be based on the ontologies and execution of the rules be transferred to the ontology levels from the prose and source codes.' Follows the owner's finding at v1.98.0 that prose is the largest and least verified layer: 7197 lines nothing checks against the ontology, and that every drift in this session occurred in prose nothing could contradict." ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:hasMissionOutcome backlog:Out_Achieved ;
+    backlog:outcomeRationale "Achieved. Closure computed by backlog_lineage_compass, not asserted: every one of eight objectives is at target or carries a real AchievementStatus explaining why it no longer steers (Obj_RowsUnchecked: Ach_Retrospective, a confirmed structural floor). fw:CR_OntologyDriven, this mission's own required closure report, records the real measures, cited findings and best practices this lineage's own history produced. Closed by the owner's own direct instruction, with the closure report required to exist first, per MissionClosureRequiresReportShape." .
+
+
+
+#################################################################
+#  v5.1.0 — STAGE 2: THE SCOPE. Deliverables and exclusions only.
+#
+#  The Mission stage closed at commit f2f4e0f and its digest is
+#  backfilled above from the real commit. This commit closes the
+#  Scope stage: what the boundary REQUIRES, read clause by clause
+#  from the owner's mission, with no goals, no objectives and no
+#  backlog. Those close in later commits.
+#
+#  Five deliverables, each quoting the mission clause it came from
+#  — the check added at v1.90.0 after the previous scope was found
+#  wider than its mission.
+#################################################################
+
+
+
+
+
+
+
+#################################################################
+#  v5.2.0 — STAGE 2 REVISITED. The scope now says WHERE.
+#
+#  OWNER FINDING: the deliverables written at v1.100.0 were the
+#  mission restated — "governance is expressed as ontology" is the
+#  mission's own sentence with the subject changed. A scope must
+#  say what should be DONE and WHERE, and that one did neither.
+#
+#  CAUSE: the framework, not only the session. ScopeDeliverable is
+#  defined as "a deliverable says WHAT MUST BE TRUE". Applied to a
+#  mission already stated as conditions, that definition can only
+#  produce restatement. ScopeArea is added to carry the WHERE.
+#
+#  EXCLUSIONS WITHDRAWN. Ex_NoNarrativeBan, Ex_NoEngineRewrite and
+#  Ex_NoReasonerMandate were written before anyone had established
+#  what the mission needs — narrowing a boundary before knowing
+#  what it must cover. They may all three be right; they were
+#  decided in the wrong order, and an exclusion once written reads
+#  as settled. They return at the Ruling stage if the coverage
+#  analysis still supports them.
+#################################################################
+
+#  Del_CodeExecutes has no area of its own: it is the finish
+#  condition for Area_RuleExecution and Area_CodeTables together,
+#  and inventing a fifth area to give it one would be padding the
+#  scope to make the shape look tidy.
+
+
+#  The L2 clause is right: a boundary with no exclusion refuses
+#  nothing. What was wrong at v1.100.0 was WHICH exclusions and in
+#  what order — three written before any area was known. One is
+#  restored now, because the coverage analysis above establishes it
+#  directly rather than assuming it: the four areas name documents
+#  and modules, and none of them is "all prose everywhere". The
+#  other two return at the Ruling stage or not at all.
+
+#  Scope_Build predates ScopeArea and has none. Its areas are
+#  recorded from what its deliverables actually touched, so the new
+#  clause is satisfied by history rather than by exempting it.
+
+#  The previous lineage's goals, given facings retroactively. Both
+#  are mission-facing: they state conditions about the framework,
+#  not about areas — which is itself the finding, since that lineage
+#  had no scope-facing or containment-facing goal at all and could
+#  not have reported either failure.
+
+
+
+
+
+
+#  The two withdrawn meta-goals, recorded as what they actually are.
+
+#  The product-layer area the audit found missing: what the
+#  framework will DO differently once the work is done.
+
+
+#  ProductScopeKind test-drive (proposed by code-abundance-rdodi, adopted
+#  v1.63.0): the framework's own two Layer_Product deliverables, classified
+#  on their existing text, not reworded to fit. Del_OntGovernance claims a
+#  capability the ontology has (machine-checkable rulings exist); Del_OntRuleExec
+#  claims a reliability guarantee about how rule execution behaves once it does
+#  — a quality, not a new capability. A real mixed result, matching the
+#  proposal's own verification method.
+
+#  Exclusions in BOTH layers, so the scope can refuse a capability
+#  as well as a piece of work.
+
+#  Inverse goals: one per exclusion, measurable by absence.
+
+
+
+
+#################################################################
+#  The previous lineage's objectives, given a measurement kind and
+#  a closing checkpoint retroactively.
+#
+#  Recorded as RETROSPECTIVE: a checkpoint set after the work is
+#  finished cannot predict anything, and the honest thing is to
+#  place it at the deadline with the value that was actually
+#  reached. It makes the objective conformant and it does not
+#  pretend the objective was monitored. That distinction is the
+#  whole point of adding checkpoints, so blurring it here would
+#  undo the release.
+#################################################################
+
+
+
+
+
+
+
+#  The two inverse objectives are movable by every epic, because
+#  each one is a chance to breach them.
+
+
+
+
+
+
+
+
+
+
+
+#################################################################
+#  v5.9.0 — packages, sprint plans and kick-off, before any work.
+#
+#  Measured first: 9 stories, 27 points, and the last closed
+#  iteration declared a capacity of 9. Twenty-seven does not fit
+#  one box, so the work is split across three — G9, and the same
+#  arithmetic that opened It6 last time.
+#
+#  Stories are taken in SCORE ORDER: EP21 at 8.00 before EP22 and
+#  EP23 at 6.00, before EP24 at 4.00 and EP25 at 3.00. The order
+#  falls out of the register rather than being chosen.
+#
+#  Two packages, grouped by capability rather than by time box:
+#  what an adopter can RECEIVE separately.
+#################################################################
+
+
+
+
+
+
+
+#  The nine stories made ready: specification, ordered steps, a
+#  state change, a test case and its data. Nothing here is new
+#  vocabulary — all of it shipped at v1.97.0 and went unused.
+
+
+
+
+
+
+
+
+
+
+#  The state space, declared by analysis rather than invented per
+#  story — the v1.98.0 rule that a state name must come from an
+#  artefact some analysis task produced.
+
+
+#################################################################
+#  v6.1.0 — the owner's grooming model applied.
+#
+#  Tested against what was built and found two deviations plus a
+#  framework gap:
+#
+#   1. Epics carried acceptance criteria and NO Definition of Done
+#      and NO test cases. The stories were therefore written to
+#      satisfy nothing stated at epic level.
+#   2. All nine stories were detailed in one pass at v1.109.0,
+#      three sprints ahead — not per sprint.
+#   3. The framework could not express (2): a RefinementEvent
+#      recorded WHEN grooming happened, never WHICH iteration it
+#      prepared for. Just-in-time grooming could be performed and
+#      never checked.
+#
+#  Each epic now carries a DoD and a test case exercising its
+#  criterion — the target the stories are converted to satisfy.
+#################################################################
+
+#  Grooming attributed to the iteration it prepared for. The nine
+#  refinements written at v1.109.0 are attributed HONESTLY: all
+#  were performed on 27 October, and It9 starts 30 November, so
+#  three of them will raise the ahead-of-time advisory. That is the
+#  correct report — the detail for It9 was written five weeks early
+#  and the register should say so rather than hide it.
+
+#################################################################
+#  The previous lineage's epics, given the DoD and test cases the
+#  owner's model requires.
+#
+#  Not exempted: Mission_BuildSoftware_v2 is LIVE. The lineage is
+#  finished and its mission still stands, so the rule applies and
+#  the epics were genuinely missing what it asks for.
+#
+#  Recorded as RETROACTIVE. Each DoD states what was in fact
+#  required of that epic, and each test case names the fixture that
+#  already attests it — the evidence existed, and what was missing
+#  was the epic-level statement of what the stories were converted
+#  to satisfy.
+#################################################################
+fw:Ruling_G1 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G1" ;
+    rdfs:label "Granularity by momentum"@en ;
+    backlog:hasRulingStatement "The first class reached for becomes the default and is never revisited. One session ran fifteen turns with 29 work items, every one an Epic, and found it only when directly asked to audit. *Surfaced by* LineageDepthAdvisoryShape — which is not level-gated and fires at L1. If it never fired for you, the full shapes file was never run." ;
+    backlog:enforcedByShape backlog:LineageDepthAdvisoryShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+fw:Ruling_G2 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G2" ;
+    rdfs:label "Advisory blindness"@en ;
+    backlog:hasRulingStatement "A warning nobody reads protects nothing. The validator groups advisories by message rather than printing a total, because *'175 Warning'* is a number a reader learns to skip. L4 exists because this boundary is not solvable by better wording." ;
+    backlog:enforcedByShape backlog:AdvisoryVisibilityShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+fw:Ruling_G3 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G3" ;
+    rdfs:label "Permitted is not intended"@en ;
+    backlog:hasRulingStatement "Epic ⊑ ProductBacklogItem is true, and does not license planning an undecomposed epic into an iteration. A subclass relation answers what may be asserted; a definition answers what the term means. Two sessions made this error from opposite ends within a day. *Enforced by* EpicPlanningShape at L2." ;
+    backlog:enforcedByShape backlog:PermittedNotIntendedShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+fw:Ruling_G4 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G4" ;
+    rdfs:label "Completion is not accomplishment"@en ;
+    backlog:hasRulingStatement "Completion is a fact about effort; accomplishment is a fact about the world, and only the second requires a measurement. A register of Done items proves the first and says nothing about the second. *Enforced by* L4MeasuredObjectiveShape: every objective carries a MetricObservation, whatever the reading said." ;
+    backlog:enforcedByShape backlog:CommitmentShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+fw:Ruling_G5 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G5" ;
+    rdfs:label "Why, when, and what are three questions"@en ;
+    backlog:hasRulingStatement "Epic answers why, Iteration answers when, DeploymentUnit answers what users received. Conflating them is the commonest drift observed here: an epic in a sprint looks like planning and commits nothing anyone can finish; an epic in a release names something that cannot ship. *Enforced by* L4GroomingShape." ;
+    backlog:enforcedByShape backlog:IterationMembershipShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+fw:Ruling_G6 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G6" ;
+    rdfs:label "Drift is the default, not the exception"@en ;
+    backlog:hasRulingStatement "Corollary from v3.0.0: drift is *detected* identically whichever order the chain was built in — L4DriftShape fires on an item pursuing an unrealised objective either way, verified by construction on both. What the order changes is when a human notices: scope-first surfaces the conflict while the objective is being written, scope-last surfaces it only once work exists to be rejected. Work" ;
+    backlog:enforcedByShape backlog:EvidenceShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+fw:Ruling_G7 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G7" ;
+    rdfs:label "A tool that refuses is not thereby correct"@en ;
+    backlog:hasRulingStatement "Three defects in this framework's own tooling were plausible refusals or meaningless clean passes: a cumulative flow reading a property that never existed, a burn-down reaching zero over open work, a date comparison reporting future deadlines as passed. Each *looked* like the tool working. *No shape catches this.* The check that does is a fixture whose answer is known in advance." ;
+    backlog:enforcedByShape backlog:ScoreFreshnessShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+fw:Ruling_G18 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G18" ;
+    rdfs:label "The lineage is a pipeline; order is enforced by artifact, not by claim"@en ;
+    backlog:hasRulingStatement "An earlier release concluded that execution order could not be gated. That was wrong on two counts, and the owner named both. The v1.62.0 exclusion forbids requiring a fixed-at *date* and says nothing about enforcing order; and an ontology has dependency relations, through which order can be enforced. The model is another registrant's: each stage consumes the artifact the previous stage produced. A St" ;
+    backlog:enforcedByShape backlog:StageOutputShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+fw:Ruling_G17 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G17" ;
+    rdfs:label "A scope must have content of its own, or the backlog defines it"@en ;
+    backlog:hasRulingStatement "Writing the scope before the goals is not enough. A scope of prose has nothing to measure work against, so coverage is computed over the work that happens to exist — and both sides of the fraction become the backlog. Measured here: Obj_ScopeDelivered counted stories pursuing an objective under the scope and divided by the same set. It read 100% whether the scope was satisfied or merely emp" ;
+    backlog:enforcedByShape backlog:ScopeContentShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+fw:Ruling_G13 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G13" ;
+    rdfs:label "The chain is Mission → Scope → Goals → Objectives, and it reads the same both ways"@en ;
+    backlog:hasRulingStatement "Goals are derived from the scope, not attached to the mission. The scope is built to satisfy the mission; goals are derived from the scope so that *the scope's fit to the mission is what gets tested*; objectives are set to measure the goals. Read downward or upward, the same answer must come out. The failure this prevents was structural and invisible for the whole life of this package: Goal " ;
+    backlog:enforcedByShape backlog:GoalDerivationShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+fw:Ruling_G14 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G14" ;
+    rdfs:label "Every intent element records who authored it, not only the mission"@en ;
+    backlog:hasRulingStatement "MissionOrigin was added at v1.70.0 after a session wrote five missions and attributed them to the owner. It was applied to Mission and nowhere else — so the same failure moved one level down and recurred *in the release that corrected it*: the same session then wrote the scope, the goals and the objectives beneath the corrected mission, and attributed those to the owner too. A fix applie" ;
+    backlog:enforcedByShape backlog:IntentOriginShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+fw:Ruling_G15 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G15" ;
+    rdfs:label "Pursuing an objective and being able to move it are different claims"@en ;
+    backlog:hasRulingStatement "pursuesObjective records intent. metricMovableBy records capability. A register can reach every epic Done with every objective unmet and flag nothing, because no constraint ever asked whether the work beneath an objective could shift its metric. When they disagree, adjust the backlog, not the objective. Re-targeting an objective to meet the work is moving the goalpost to meet the shot." ;
+    backlog:enforcedByShape backlog:MetricReachabilityShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+fw:Ruling_G16 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G16" ;
+    rdfs:label "Development is anchored on packages, not iterations"@en ;
+    backlog:hasRulingStatement "Work reaches users through regularly deployable packages built from the highest-priority items. A register where completion and delivery are separate records measures the first and assumes the second. Measured here: 43 of 47 Done items sat in no package, while the framework shipped 78 real releases its own register never recorded." ;
+    backlog:enforcedByShape backlog:DeploymentCoverageShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+fw:Ruling_G11 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G11" ;
+    rdfs:label "Run at the level you enforce, or the rules are decoration"@en ;
+    backlog:hasRulingStatement "A package that declares a conformance level below the one its own framework enforces exempts itself from the rules it publishes. Measured on this package: 16 of 57 level-gated constraints did not run and 166 violations were invisible, including fourteen forked chains that the L4 rule *written to catch them* could not see. This is the mechanism behind every drift in this package's history. " ;
+    backlog:enforcedByShape backlog:SelfExemptionShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+fw:Ruling_G12 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G12" ;
+    rdfs:label "A superseded lineage is a record, not a claim"@en ;
+    backlog:hasRulingStatement "When a mission is superseded, the chain beneath it stays. Re-pointing goals to remove an inconsistency would assert an intent never held — the fabrication L-112 forbids one level up. Constraints on chain integrity must therefore exempt superseded lineage: the defect is real, stays visible, and must not block a live release. The corollary is the warning: fourteen forks arose because missions were" ;
+    backlog:enforcedByShape backlog:ChainClosureShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+fw:Ruling_G9 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G9" ;
+    rdfs:label "A constant iteration, and stories split to fit it"@en ;
+    backlog:hasRulingStatement "An iteration is a fixed time box. Sizing it to the longest story inverts the control: if its length is set by the work it contains, you always fit, and velocity becomes a tautology that can never tell you that you did not. Assessing iteration length after story-writing fails for the same reason one step later — the next change produces a bigger story and the question reopens. Set the iterati" ;
+    backlog:enforcedByShape backlog:StoryIterationFitShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+fw:Ruling_G10 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G10" ;
+    rdfs:label "Publish each increment, do not batch"@en ;
+    backlog:hasRulingStatement "A release gate that passes and is not then published leaves the governed store behind the work, and two unpublished increments cannot be separated afterwards into the releases they should have been. Publish immediately after each gate PASS, before starting the next increment. Its corollary is easy to miss: a release gate that cannot finish blocks every release. This package's gate grew to " ;
+    backlog:enforcedByShape backlog:DistributionDriftShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+fw:Ruling_G8 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G8" ;
+    rdfs:label "Every rule naming a member of a closed set depends on that set's membership"@en ;
+    backlog:hasRulingStatement "Adding L4_LineageEnforced to a four-member enumeration broke three rules that had tested *'below L3'* by name — they fired on L4, which is above it. *No shape catches this either.* It was caught because a fixture existed that exercised the new member, which is G7 applied to vocabulary. --- - Read the standard in full before the first work item, SHA-verified — not a fragment, not a prior sess" ;
+    backlog:enforcedByShape backlog:DecompositionShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+
+#  The LAYERS table moved to the shared TBox at v1.66.0 -- code-abundance-
+#  rdodi found, by reproducing the failure directly, that this data living
+#  only here left backlog_lineage_completeness_v1_1_0.py unusable by any
+#  adopter, since the tool's own glob only ever searches
+#  01-ontologies/backlog_tbox_v*.ttl. See the current backlog_tbox_v*.ttl for the
+#  18 individuals, MetricObservation's own layerTier corrected from L2 to
+#  L4 in the same move (found and independently re-verified against
+#  MetricObservationShape's real severity, not taken on the finding alone).
+
+
+
+
+
+
+#################################################################
+#  v6.3.0 — It8 re-groomed before building, then delivered.
+#
+#  RE-GROOMING, per the owner's model. It7 taught one thing the
+#  original grooming did not know: a table exported to the ontology
+#  and still present in python counts as NOT exported, because the
+#  script has not changed. That makes story 2 the whole of the
+#  export, not a tidy-up after story 1.
+#
+#  The re-grooming is recorded as a second RefinementEvent rather
+#  than an edit to the first: the earlier analysis was made in good
+#  faith on what was known then, and overwriting it would erase the
+#  fact that the plan changed for a reason.
+#################################################################
+
+
+
+
+
+#  Label and tier now travel with the rest of each layer's definition in
+#  the shared TBox, not as a separate patch here (see the note above).
+
+
+
+
+
+
+#################################################################
+#  v6.4.0 — the table migration re-planned as batches of four.
+#
+#  TEST-DRIVEN, and the baseline is kept rather than overwritten.
+#
+#  BASELINE (recorded, not deleted): one table per story, 3 points
+#  each. 22 tables = 66 points = 7.3 iterations = 15 weeks, ending
+#  late April against a 31 January deadline. Not reachable, which
+#  is what the 30 November checkpoint reported.
+#
+#  RISK, measured rather than asserted. A story is Done or not; the
+#  objective counts tables. A blocked story hides:
+#      batch  1  ->  5%% of the work
+#      batch  4  -> 18%%
+#      batch  8  -> 36%%
+#      batch 11  -> 50%%
+#  Concealment scales linearly with batch size. Four is the knee:
+#  it fits the deadline in two iterations and hides 18 percent
+#  rather than 36 or 50.
+#
+#  Two further risks the probe surfaced, both mitigated rather than
+#  accepted: the It8 fallback trap recurs once per reader changed,
+#  and one RefinementEvent cannot record eight per-table findings
+#  when the LAYERS export produced one. Each batch story therefore
+#  carries a criterion PER TABLE and a refinement of its own.
+#################################################################
+
+
+
+
+
+
+
+
+
+
+#################################################################
+#  A NEW EPIC, not a reopened one.
+#
+#  EP_CodeTables closed at It8 having delivered exactly what it
+#  said: the first table exported and its reader changed. Adding
+#  six stories to it would reopen a Done epic and make its
+#  completion retroactively untrue — the register rejected it, and
+#  the rejection is right. What was learned is that one epic could
+#  not hold 23 tables; that is a new epic, at a new estimate.
+#################################################################
+
+
+
+#################################################################
+#  v6.5.0 — It9 was overfilled and nothing said so.
+#
+#  The re-plan at v1.113.0 put two batch stories into It9 on top of
+#  the three already there: 15 points against a capacity of 9. The
+#  capacity clause passed, because it compares hasCommittedEffort
+#  against hasCapacity and BOTH ARE ASSERTED. Adding stories does
+#  not change the declared commitment.
+#
+#  Same defect as an ungrounded practice, one level along: a number
+#  stated rather than derived, agreeing with another stated number,
+#  and nothing comparing either to the work. It10 was caught last
+#  release only because its DECLARED figure was raised; It9 was not,
+#  because it was not.
+#
+#  CommittedEffortShape now derives the sum from the contents.
+#  Cascaded rather than compressed: the batch stories move one box
+#  later each, and It12 opens. The migration finishes 24 January
+#  instead of 10 January — still inside the 31 January deadline,
+#  and the honest date rather than the one that fitted.
+#################################################################
+
+
+
+#################################################################
+#  v6.6.0 — the calendar was fiction. Re-based on measurement.
+#
+#  OWNER FINDING, and it is exact. Measured from the publish
+#  commits: It7 took 32 minutes and It8 took 28. The register
+#  declared FOURTEEN DAYS each and scheduled the remaining work for
+#  November through January, while the day was the 27th of August.
+#  Overstatement: 667 times.
+#
+#  Nothing caught it. iterationStart and iterationEnd are asserted
+#  dateTimes and no clause compared them to anything that happened
+#  — the same defect as committed effort, one release earlier: a
+#  number stated rather than derived.
+#
+#  Re-based: the two closed iterations carry their MEASURED
+#  durations and their real commit-bounded spans. The four open
+#  iterations run thirty minutes each from now, which is the mean
+#  of what the two closed ones actually took. Objective deadline
+#  moves from 31 January to 08:00 today, and the checkpoints with
+#  it — the whole migration is about two hours of work, not five
+#  months.
+#################################################################
+
+
+#  It1 and It2 predate any measurement. Their durations are
+#  recorded as UNMEASURABLE rather than invented: they closed
+#  before this framework tracked publish commits per iteration, and
+#  writing a plausible figure now would be exactly the fiction this
+#  release removes.
+fw:QM_ClassRichness a backlog:QualityMetric ;
+    backlog:hasMetricName "ClassRichness" ; backlog:isPopulationSensitive true .
+fw:QM_AveragePopulation a backlog:QualityMetric ;
+    backlog:hasMetricName "AveragePopulation" ; backlog:isPopulationSensitive true .
+fw:QM_RelationshipRichness a backlog:QualityMetric ;
+    backlog:hasMetricName "RelationshipRichness" ; backlog:isPopulationSensitive false .
+fw:QM_AttributeRichness a backlog:QualityMetric ;
+    backlog:hasMetricName "AttributeRichness" ; backlog:isPopulationSensitive false .
+fw:QM_InheritanceRichness a backlog:QualityMetric ;
+    backlog:hasMetricName "InheritanceRichness" ; backlog:isPopulationSensitive false .
+
+#################################################################
+#  It9 delivered. Three stories, three findings.
+#################################################################
+
+
+
+
+
+#################################################################
+#  Every timestamp re-based to real time.
+#
+#  Found while measuring It9: the objective baselines were dated
+#  26 OCTOBER — two months in the FUTURE — so a real observation
+#  taken today sorted BEFORE its own baseline and every objective
+#  read at its starting value. Three met became three met by
+#  accident; four unmet were unmeasurable.
+#
+#  The v1.115.0 re-basing corrected the iteration calendar and left
+#  the observation and refinement timestamps in the invented one. A
+#  partial re-basing is worse than none: it puts real and fictional
+#  dates in the same ordering and nothing in a timestamp says which
+#  is which.
+#################################################################
+
+#  Baselines dated to the Objective stage, not to the moment of
+#  re-basing. The blanket substitution put every baseline at 05:50
+#  today — AFTER the It7 and It8 deliveries that moved them — so
+#  two objectives read their own starting value with the delivery
+#  sorted behind it. A baseline is taken when the objective is set,
+#  and the Objective stage closed at commit 0b87c6a.
+
+
+#################################################################
+#  v6.8.0 — the table population, counted and classified.
+#
+#  It10 began by counting what remained and found 26 tables, not
+#  22. The count GREW because this lineage shipped new scripts
+#  carrying new tables — an objective whose denominator moves
+#  cannot be met, and nothing was watching the denominator.
+#
+#  Of the 26, only 14 hold classification knowledge. The rest are
+#  operational: paths, globs, file extensions, which directories a
+#  build drops. Ruled out by three agreeing tests recorded in the
+#  TBox — the decisive one being that exporting them would ADD
+#  classes the exported material does not require, breaching
+#  Obj_NoNewClasses in the act of satisfying Obj_TablesExported.
+#
+#  Every table is registered below with its kind and whether it has
+#  moved, so the objective counts a named population rather than a
+#  regex over capitalised names.
+#################################################################
+fw:Tbl_SCAN_coverage_gate a backlog:CodeTable ;
+    backlog:tableInModule "backlog_coverage_gate_v1_1_1.py" ;
+    backlog:hasTableKind backlog:Table_Operational ;
+    backlog:tableExported false .
+fw:Tbl_PUBLIC_ONLY_distribution_drift_c a backlog:CodeTable ;
+    backlog:tableInModule "backlog_distribution_drift_check_v1_0_0.py" ;
+    backlog:hasTableKind backlog:Table_Operational ;
+    backlog:tableExported false .
+fw:Tbl_VOLATILE_distribution_drift_c a backlog:CodeTable ;
+    backlog:tableInModule "backlog_distribution_drift_check_v1_0_0.py" ;
+    backlog:hasTableKind backlog:Table_Operational ;
+    backlog:tableExported false .
+fw:Tbl_KINDS_evidence_bridge a backlog:CodeTable ;
+    backlog:tableInModule "backlog_evidence_bridge_v1_0_0.py" ;
+    backlog:hasTableKind backlog:Table_Classification ;
+    backlog:tableExported true .
+fw:Tbl_BUILD_ARTIFACTS_manifest_coverage a backlog:CodeTable ;
+    backlog:tableInModule "backlog_manifest_coverage_v1_0_0.py" ;
+    backlog:hasTableKind backlog:Table_Operational ;
+    backlog:tableExported false .
+fw:Tbl_PLACEHOLDERS_package_check a backlog:CodeTable ;
+    backlog:tableInModule "backlog_package_check_v1_0_0.py" ;
+    backlog:hasTableKind backlog:Table_Operational ;
+    backlog:tableExported false .
+fw:Tbl_STAGE_TYPES_pipeline a backlog:CodeTable ;
+    backlog:tableInModule "backlog_pipeline_verify_v1_0_0.py" ;
+    backlog:hasTableKind backlog:Table_Classification ;
+    backlog:tableExported true .
+fw:Tbl_ORDER_pipeline a backlog:CodeTable ;
+    backlog:tableInModule "backlog_pipeline_verify_v1_0_0.py" ;
+    backlog:hasTableKind backlog:Table_Classification ;
+    backlog:tableExported true .
+fw:Tbl_FOREIGN_registration_readine a backlog:CodeTable ;
+    backlog:tableInModule "backlog_registration_readiness_v1_2_0.py" ;
+    backlog:hasTableKind backlog:Table_Classification ;
+    backlog:tableExported true .
+fw:Tbl_DECLARED_PROPOSALS_registration_readine a backlog:CodeTable ;
+    backlog:tableInModule "backlog_registration_readiness_v1_2_0.py" ;
+    backlog:hasTableKind backlog:Table_Classification ;
+    backlog:tableExported true .
+fw:Tbl_SUITES_registration_readine a backlog:CodeTable ;
+    backlog:tableInModule "backlog_registration_readiness_v1_2_0.py" ;
+    backlog:hasTableKind backlog:Table_Classification ;
+    backlog:tableExported true .
+fw:Tbl_SPEC_remediate_l4 a backlog:CodeTable ;
+    backlog:tableInModule "backlog_remediate_l4_v1_0_0.py" ;
+    backlog:hasTableKind backlog:Table_Operational ;
+    backlog:tableExported false .
+fw:Tbl_GENERATED_repoint a backlog:CodeTable ;
+    backlog:tableInModule "backlog_repoint_v1_1_0.py" ;
+    backlog:hasTableKind backlog:Table_Operational ;
+    backlog:tableExported false .
+fw:Tbl_HISTORICAL_repoint a backlog:CodeTable ;
+    backlog:tableInModule "backlog_repoint_v1_1_0.py" ;
+    backlog:hasTableKind backlog:Table_Operational ;
+    backlog:tableExported false .
+fw:Tbl_HISTORICAL_DIRS_repoint a backlog:CodeTable ;
+    backlog:tableInModule "backlog_repoint_v1_1_0.py" ;
+    backlog:hasTableKind backlog:Table_Operational ;
+    backlog:tableExported false .
+fw:Tbl_HISTORICAL_DIR_GLOBS_repoint a backlog:CodeTable ;
+    backlog:tableInModule "backlog_repoint_v1_1_0.py" ;
+    backlog:hasTableKind backlog:Table_Operational ;
+    backlog:tableExported false .
+fw:Tbl_SKIP_DIRS_repoint a backlog:CodeTable ;
+    backlog:tableInModule "backlog_repoint_v1_1_0.py" ;
+    backlog:hasTableKind backlog:Table_Operational ;
+    backlog:tableExported false .
+fw:Tbl_CONTAINER_TYPES_roadmap_report a backlog:CodeTable ;
+    backlog:tableInModule "backlog_roadmap_report_v1_6_0.py" ;
+    backlog:hasTableKind backlog:Table_Classification ;
+    backlog:tableExported true .
+fw:Tbl_SECTIONS_roadmap_report a backlog:CodeTable ;
+    backlog:tableInModule "backlog_roadmap_report_v1_6_0.py" ;
+    backlog:hasTableKind backlog:Table_Classification ;
+    backlog:tableExported true .
+fw:Tbl_PATTERNS_script_decision_audi a backlog:CodeTable ;
+    backlog:tableInModule "backlog_script_decision_audit_v1_0_0.py" ;
+    backlog:hasTableKind backlog:Table_Operational ;
+    backlog:tableExported false .
+fw:Tbl_EXEMPT_build_manifest a backlog:CodeTable ;
+    backlog:tableInModule "build_manifest_v1_4_0.py" ;
+    backlog:hasTableKind backlog:Table_Operational ;
+    backlog:tableExported false .
+fw:Tbl_DROP_DIRS_make_public_distribu a backlog:CodeTable ;
+    backlog:tableInModule "make_public_distribution_v1_2_0.py" ;
+    backlog:hasTableKind backlog:Table_Operational ;
+    backlog:tableExported false .
+fw:Tbl_DROP_FILES_make_public_distribu a backlog:CodeTable ;
+    backlog:tableInModule "make_public_distribution_v1_2_0.py" ;
+    backlog:hasTableKind backlog:Table_Operational ;
+    backlog:tableExported false .
+fw:Tbl_SUBSTITUTIONS_make_public_distribu a backlog:CodeTable ;
+    backlog:tableInModule "make_public_distribution_v1_2_0.py" ;
+    backlog:hasTableKind backlog:Table_Operational ;
+    backlog:tableExported false .
+fw:Tbl_DAMAGE_make_public_distribu a backlog:CodeTable ;
+    backlog:tableInModule "make_public_distribution_v1_2_0.py" ;
+    backlog:hasTableKind backlog:Table_Operational ;
+    backlog:tableExported false .
+fw:Tbl_TEXT_EXT_make_public_distribu a backlog:CodeTable ;
+    backlog:tableInModule "make_public_distribution_v1_2_0.py" ;
+    backlog:hasTableKind backlog:Table_Operational ;
+    backlog:tableExported false .
+
+
+#  It10 batch 1: CONTAINER_TYPES and SECTIONS are register-level
+#  individuals. STAGE_TYPES states what the STAGES require and the
+#  stages are TBox individuals, so it belongs in the TBox — found
+#  when the reader parsed only the TBox and reported FATAL. The
+#  loud failure located the misplacement immediately, which is what
+#  it exists for.
+fw:CR_WorkItemContainer a backlog:ContainerRole ; backlog:containerClass backlog:WorkItemContainer .
+fw:CR_Backlog a backlog:ContainerRole ; backlog:containerClass backlog:Backlog .
+fw:CR_Package a backlog:ContainerRole ; backlog:containerClass backlog:Package .
+fw:CR_Increment a backlog:ContainerRole ; backlog:containerClass backlog:Increment .
+fw:CR_Iteration a backlog:ContainerRole ; backlog:containerClass backlog:Iteration .
+fw:CR_ImplementationProject a backlog:ContainerRole ; backlog:containerClass backlog:ImplementationProject .
+
+
+
+
+#  The batch stories were created with an iteration membership and
+#  no PlanningEvent — the L4 clause caught it when they closed. A
+#  story that appears in an iteration without a planning record has
+#  no statement of who committed it or when, which is the thing the
+#  clause exists to prevent.
+
+
+
+
+#################################################################
+#  It12 WITHDRAWN. The last six tables were never in scope.
+#
+#  Reading the six remaining tables before exporting them: every
+#  one is operational. PATTERNS and SCAN are regex and glob lists,
+#  PLACEHOLDERS validates a template, PUBLIC_ONLY and VOLATILE name
+#  files, SPEC is a completed script's own work list.
+#
+#  The v1.117.0 split sorted by NAME rather than by content —
+#  SCAN and PATTERNS sound like classifications and are not. That
+#  misclassification would have exported six regex lists into an
+#  ontology about backlogs, adding classes the exported material
+#  does not require, which is what Obj_NoNewClasses exists to stop.
+#
+#  Withdrawn rather than deleted: the stories were real, they were
+#  planned and groomed, and the reason they will not be built is a
+#  finding worth keeping.
+#################################################################
+
+
+#  EP_TablesBatch lost its state to a regex that matched more than
+#  it should have. Restored to Done: both its live stories are
+#  Done, its other two are Withdrawn, and the epic has nothing
+#  outstanding.
+
+#  Cancellation rationales. The two stories were real, planned and
+#  groomed; what changed is that reading their content showed the
+#  tables were operational.
+
+#  The epic was groomed once at the batch level; the concern it
+#  declares is addressed by that refinement.
+
+#################################################################
+#  Container states derived, not asserted by preference.
+#
+#  R1a says a container is Done when no member is outside
+#  (Done, Cancelled). It12's four members are all Cancelled, so its
+#  derived state is Done — the iteration is FINISHED, having
+#  delivered nothing, which is a different claim from the iteration
+#  being cancelled. The distinction matters: a cancelled iteration
+#  never closed; this one closed with all its content withdrawn,
+#  and the register should say which happened.
+#################################################################
+
+#################################################################
+#  It12 REMOVED, not marked Done.
+#
+#  The L4 clause is right and it caught the easier answer: an
+#  iteration that is Done must have shipped something, and It12
+#  shipped nothing because all four of its members were cancelled
+#  before it ran.
+#
+#  Marking it Done would have recorded a closed iteration with no
+#  deployment — a cadence entry that never happened. An iteration
+#  whose entire content was withdrawn before it started was never
+#  an iteration, so it is removed and the two cancelled stories
+#  sit outside any time box, which is what they are.
+#
+#  The stories themselves stay Cancelled with their rationale.
+#  They were real, planned and groomed; what changed is that
+#  reading their tables showed the work was out of scope.
+#################################################################
+
+#  The two cancelled tasks go with their planning events. A task
+#  exists because a planning event produced it; with the event
+#  removed the task has no origin, and an orphan task is exactly
+#  what the L1 clause objects to.
+
+#  Header words, exported from the row checker.
+fw:HW_Term a backlog:TableHeaderWord ; backlog:headerWord "Term" .
+fw:HW_Field a backlog:TableHeaderWord ; backlog:headerWord "Field" .
+fw:HW_Property a backlog:TableHeaderWord ; backlog:headerWord "Property" .
+fw:HW_Class a backlog:TableHeaderWord ; backlog:headerWord "Class" .
+fw:HW_Level a backlog:TableHeaderWord ; backlog:headerWord "Level" .
+fw:HW_Kind a backlog:TableHeaderWord ; backlog:headerWord "Kind" .
+fw:HW_Name a backlog:TableHeaderWord ; backlog:headerWord "Name" .
+fw:HW_Value a backlog:TableHeaderWord ; backlog:headerWord "Value" .
+fw:HW_Rule a backlog:TableHeaderWord ; backlog:headerWord "Rule" .
+fw:HW_Stage a backlog:TableHeaderWord ; backlog:headerWord "Stage" .
+fw:HW_Concern a backlog:TableHeaderWord ; backlog:headerWord "Concern" .
+fw:HW_Facet a backlog:TableHeaderWord ; backlog:headerWord "Facet" .
+
+#  Documented abbreviations. The row checker read these as absent
+#  terms because it resolves identifiers literally.
+fw:AB_L1 a backlog:TermAbbreviation ; backlog:abbreviationText "L1" ; backlog:abbreviationOf backlog:L1_Structural .
+fw:AB_L2 a backlog:TermAbbreviation ; backlog:abbreviationText "L2" ; backlog:abbreviationOf backlog:L2_EvidenceBound .
+fw:AB_L3 a backlog:TermAbbreviation ; backlog:abbreviationText "L3" ; backlog:abbreviationOf backlog:L3_Governed .
+fw:AB_L4 a backlog:TermAbbreviation ; backlog:abbreviationText "L4" ; backlog:abbreviationOf backlog:L4_LineageEnforced .
+
+#################################################################
+#  The audit caught its own author, and the row checker its own
+#  limit.
+#################################################################
+
+
+
+
+#################################################################
+#  Every criterion of this lineage names the artefact that makes
+#  it true. Named per criterion, so one that is false cannot be
+#  carried by a claim about its neighbours.
+#################################################################
+
+#################################################################
+#  v7.0.0 — MAJOR. A story was Done and its work was not.
+#
+#  OWNER CHALLENGE, and the audit confirms it. EP_RuleExec_S1
+#  specified an expected-polarity property on every fixture and a
+#  gate reading it instead of the filename. The story was Done, had
+#  a specification with two ordered steps, a test case, test data,
+#  a planned task, evidence marked verified, and a complete
+#  harness. The property did not exist.
+#
+#  ROOT CAUSE: one TestEvidence attested FIVE criteria across three
+#  stories, and its verification method described what the
+#  iteration did as a whole. Every clause in the suite was
+#  satisfied. None asked whether the thing the criterion describes
+#  exists — the framework could say testing HAPPENED and could not
+#  say what testing FOUND, per criterion.
+#
+#  Measured: 24 of 49 evidence records attest more than one
+#  criterion. Batching evidence is how a criterion comes to be
+#  carried by a claim about its neighbours.
+#
+#  SECOND FINDING, from the same audit: the four batch stories
+#  S_Tables_B1..B4 were closed with NO specification, NO test case
+#  and NO test data. They were created during execution, after the
+#  grooming that would have given them any. The ceremony was
+#  followed for the nine stories groomed before the sprint and not
+#  for the four invented during it.
+#################################################################
+
+
+
+
+
+#################################################################
+#  The previous lineage's criteria, given the artefact each was
+#  actually verified against.
+#
+#  Not exempted. Each names the fixture its evidence already cites
+#  — the evidence existed and named a spec; what was missing was
+#  the link from the CRITERION to it, which is exactly the gap that
+#  let one criterion pass on a claim about its neighbours.
+#
+#  A fixture path is a weaker artefact than a term IRI: it proves
+#  the test file exists, not that the term does. Recorded as the
+#  honest best available for work already closed, rather than
+#  backfilling term IRIs this session did not verify at the time.
+#################################################################
+
+#################################################################
+#  v7.1.0 — FIT-GAP against field practice. Five gaps.
+#
+#  MEASURED: 55 Done stories, ONE task each, ONE acceptance
+#  criterion each, and 46 of them carrying NO test case.
+#  44 of 51 tasks are Task_Implementation.
+#
+#  RESEARCHED, not assumed. Field practice decomposes a story until
+#  each task is a few hours' work; developers carry out story
+#  analysis for design while testers perform test analysis and
+#  produce the cases, both inside the sprint; and a story carries a
+#  FULL SET of acceptance tests before it is planned.
+#
+#    practice                                as-is
+#    several small tasks per story           1 task, all 55        GAP
+#    analysis/design distinct from build     44/51 implementation  GAP
+#    test analysis inside the sprint         46/55 no test case    GAP
+#    full set of acceptance tests            1 criterion, all 55   GAP
+#    scenarios per criterion                 1 case where present  GAP
+#    task type taxonomy                      ISO 12207, 14 values  FIT
+#    design concerns drive grooming          5 concerns            FIT
+#    Definition of Done at epic level        every epic            FIT
+#
+#  ROOT CAUSE: the framework could express all five throughout.
+#  TaskType shipped with fourteen values and forty-four tasks chose
+#  Implementation. TestCase and TestData shipped at v1.97.0 and
+#  forty-six stories never used them.
+#
+#  Nothing REQUIRED the decomposition, so the cheapest shape won
+#  every time. A capability that is available and not obligatory is
+#  one that gets skipped under time pressure, and this session was
+#  always under time pressure — which is the general finding, not
+#  an excuse for this instance of it.
+#################################################################
+
+
+
+
+
+
+#################################################################
+#  v7.2.0 — the closed stories re-verified, and the owner was right
+#  to insist.
+#
+#  I ruled at v1.120.0 that the remedy was not retroactive, on the
+#  grounds that backfilling tasks onto closed stories records work
+#  that was never planned. That reasoning was sound and the
+#  conclusion was wrong, because it answered a question nobody
+#  asked: VERIFYING closed work is not backfilling it.
+#
+#  MEASURED, and it is the risk the owner named. Of 276 level-gated
+#  clauses in the suite, 96 have NEVER been made to fire by any
+#  fixture. And of the six clauses THIS lineage's stories built,
+#  SIX OF SIX were unproven.
+#
+#  A clause nothing fires has never been shown to work. It may be
+#  correct; it may be malformed SPARQL returning nothing. Both look
+#  identical from a green gate, and this package has produced two:
+#  a triple pattern inside FILTER at v1.105.0, reporting 0
+#  violations AND 0 warnings; a dateTime subtraction at v1.110.0,
+#  reporting zero on a 34-day gap. Both were caught by accident.
+#
+#  fixture_ontologydriven_negative proves five of the six on
+#  purpose. The sixth case was written knowing it might be silent —
+#  and it was. CodeTable had hasTableKind and NOTHING required it,
+#  while the entire table migration turned on that distinction:
+#  eighteen tables stayed in python because they were operational.
+#  A negative fixture that passes is either a missing clause or a
+#  broken one, and only looking tells you which.
+#################################################################
+
+
+
+#################################################################
+#  v7.3.0 — the floor was not a floor.
+#
+#  I claimed TWICE that reachability could not move to the
+#  ontology: that it is a query over the TBox, and a register
+#  cannot hold a rule about classes that do not exist yet. I
+#  recorded 1 as a structural floor and used it to argue that no
+#  further progress was possible.
+#
+#  I argued it and did not test it. Test-driven now:
+#
+#    1. Read what the python gate decides — skip enumerations,
+#       skip classes with subclasses, skip classes named as a
+#       range, report the rest that also have no instance.
+#    2. Write it as SPARQL over TBox plus register: 25 classes.
+#    3. Write it as a SHACL shape and compare focus nodes against
+#       the query: 25 and 25, EXACT agreement.
+#
+#  The premise was wrong in a specific way. The rule is not about
+#  classes that DO NOT exist; it is about classes that DO exist and
+#  are unreachable, and every one is already a subject in the
+#  shipped graphs. Nothing had to be invented. The graphs carried
+#  what the shape needed the whole time, and I reasoned about the
+#  problem instead of running it.
+#
+#  A floor asserted is not a floor measured. This is the second
+#  time this session an unmet objective was defended as structural
+#  and turned out to be unfinished work.
+#################################################################
+
+
+
+
+#################################################################
+#  The last floor, tested. Partly asserted again.
+#
+#  Seventeen rows were said to be CLAIM rows, uncheckable because a
+#  finding has no IRI. Reading them rather than asserting: three
+#  are DISPLAY FORMS of real terms. "Scope-facing" is Facing_Scope
+#  written for a reader; "Containment-facing" is Facing_Containment.
+#
+#  The abbreviation mechanism added at v1.118.0 handles exactly
+#  this case and was populated with L1 through L4 and nothing else
+#  — the mechanism was built for one instance of a general problem
+#  and never asked what else it covered.
+#################################################################
+
+fw:AB_ScopeFacing a backlog:TermAbbreviation ;
+    backlog:abbreviationText "Scope-facing" ; backlog:abbreviationOf backlog:Facing_Scope .
+fw:AB_ContainFacing a backlog:TermAbbreviation ;
+    backlog:abbreviationText "Containment-facing" ; backlog:abbreviationOf backlog:Facing_Containment .
+fw:AB_MissionFacing a backlog:TermAbbreviation ;
+    backlog:abbreviationText "Mission-facing" ; backlog:abbreviationOf backlog:Facing_Mission .
+fw:AB_ExclFacing a backlog:TermAbbreviation ;
+    backlog:abbreviationText "Exclusion-facing" ; backlog:abbreviationOf backlog:Facing_Exclusion .
+
+
+
+#################################################################
+#  v7.5.0 — A4 built, and it found something on its first run.
+#
+#  The reachability gate reported PASS when run with no arguments.
+#  It parsed nothing, counted zero classes, found zero unreachable,
+#  and returned green. The release gate happens to pass paths, so
+#  it never fired here — but the script SHIPS, and an adopter
+#  running it bare would be told their vocabulary is clean when it
+#  was never read.
+#
+#  A checker that passes on an empty graph is worse than no checker:
+#  it produces the appearance of verification. This is the same
+#  shape as the malformed FILTER that reported zero violations and
+#  zero warnings, and the same shape as evidence attesting five
+#  criteria while one was false — a green result whose greenness
+#  came from nothing having been examined.
+#
+#  Found by writing the self-application step rather than by anyone
+#  looking, which is the argument A4 was scoped on: every previous
+#  self-application finding in this package was noticed BY ACCIDENT.
+#################################################################
+
+
+
+#################################################################
+#  v7.6.0 — A2 built. A shape may name the fixture that proves it.
+#
+#  G22 recurs because a clause and its proof are separate files
+#  with nothing joining them. The clause-proof checker inferred the
+#  link by MATCHING MESSAGE TEXT — fragile by construction: reword
+#  a message and a clause silently becomes unproven, or matches a
+#  different clause and reports proven.
+#
+#  provenByFixture and fixtureCaseName are declared on the shape,
+#  and the checker VERIFIES them: it runs the named fixture and
+#  looks for the named case. That is the difference between a link
+#  and a claim.
+#
+#  FIVE shapes carry a declared proof. NOT 222. Annotating all of
+#  them would assert 217 links nobody checked, which is exactly the
+#  defect G21 names — evidence covering criteria it never examined.
+#  The honest state is five declared and the rest inferred, and the
+#  checker reports the two counts separately so the difference
+#  stays visible rather than averaging into one reassuring number.
+#################################################################
+
+
+
+#################################################################
+#  v7.7.0 — A1 built, and my own ruling was wrong six times.
+#
+#  Eighteen classes shipped with nothing requiring their use.
+#  Package was among them — the class that sat unused for 91
+#  releases while every check passed.
+#
+#  Ruling on each rather than labelling in bulk, I marked six as
+#  ALREADY obliged. Checking rather than trusting that ruling: NONE
+#  of the six had a shape targeting it. Package's apparent hit was
+#  PackageShape targeting RegisterPackage — a DIFFERENT class whose
+#  name contains the first, a substring match reading as a real
+#  obligation.
+#
+#  Six asserted, zero real. That is G19 at the level of a single
+#  ruling: I reasoned about which classes were covered instead of
+#  looking, and was wrong six times out of six. The shapes were
+#  built rather than the ruling softened, because the ruling was
+#  right about what SHOULD be obliged and wrong only about what
+#  already was.
+#
+#  Result: 99 obliged, 12 optional with a stated reason, 0 orphans.
+#  The twelve reasons differ in kind — two abstract parents, five
+#  adopter-facing vocabularies, two documentation conveniences,
+#  three ISO 12207 terms an adopter may fold into ordinary work
+#  items — which is why blanket-labelling would have hidden the six.
+#################################################################
+
+
+
+#################################################################
+#  v7.8.0 — A3 built. Every number says where it came from.
+#
+#  Thirty-six numeric properties, none declaring its provenance.
+#  MeasurementKind did this for Objective and for nothing else.
+#
+#  Classified one by one — the last bulk ruling in this package was
+#  wrong six times out of six — by asking what would have to be
+#  true to recompute each:
+#
+#    3 DERIVED, each shipping its query. hasCommittedEffort is the
+#      one that caused G24. hasScoreValue is WSJF arithmetic this
+#      session got wrong by hand five times in one release.
+#    5 MEASURED: from a clock, a commit, a count outside the
+#      register, and re-takeable by anyone with the same source.
+#   28 ASSERTED, and saying so. Not a failing — a capacity IS a
+#      judgement — but a judgement compared against a judgement
+#      proves nothing, and the framework could not tell a reader
+#      which comparisons those were.
+#
+#  THE FINDING: eight clauses in the shipped suite compare two
+#  ASSERTED properties to each other. hasCapacity against
+#  hasEffortEstimate, hasBaselineValue against hasTargetValue,
+#  hasJobSize against hasTimeCriticality. Each looks like a check
+#  and establishes only that someone wrote both numbers.
+#
+#  Reported rather than failed: several are legitimate — comparing
+#  a baseline to a target is how a direction is checked, and both
+#  SHOULD be judgements. What was missing is that a reader could
+#  not tell those from the one that let an iteration hold fifteen
+#  points while declaring nine.
+#################################################################
+
+
+
+#################################################################
+#  v7.9.0 — the finished lineage set down, in the owner's order.
+#
+#  THE RULE: a lineage with an unreached goal is not retired. The
+#  goal's status changes first, if it is no longer needed.
+#
+#  Goal_BuildContained is unreached and cannot be reached. Its
+#  objective counts work done outside scope during a FINISHED
+#  development — the count is fixed at 1 forever and no future work
+#  can reduce it, because the event already happened. That is not a
+#  goal, which steers; it is a record. It was added retroactively
+#  at v1.102.0 and said so at the time.
+#
+#  Ach_Retrospective, and NOT Ach_Withdrawn. Withdrawn would say
+#  the measure was wrong. It was right: the reachability gate WAS
+#  built while the owner's mission waited, and that finding is the
+#  most useful thing that lineage produced about how this session
+#  behaves. Retrospective keeps the number at 1 permanently rather
+#  than adjusting it to let a mission read Achieved.
+#
+#  Only then is the mission set down.
+#################################################################
+
+
+
+#################################################################
+#  v7.11.0 — the It11 export was claimed and never written.
+#
+#  Found by two checkers disagreeing about the same 25 classes. The
+#  reachability gate reported ForeignNamespace and ShapeSuite as
+#  unreachable; A1 reported zero orphans. Both were right about
+#  different questions, and reconciling them exposed a third thing:
+#  THE INDIVIDUALS DO NOT EXIST.
+#
+#  Ev_It11 states that FOREIGN and SUITES moved to the ontology.
+#  The TBox carries the classes. The register carries no instance
+#  of either — the export was written into a working copy that a
+#  later ceremony overwrote from GitHub, and the evidence survived
+#  because evidence is prose about work rather than the work.
+#
+#  This is exactly the defect satisfiedByArtifact was built to
+#  catch at v1.119.0, and it did not, because AC_S_Tables_B3 names
+#  "backlog:bridgeCoversEvidence" — a PROPERTY that does exist —
+#  while the individuals it was supposed to carry do not. The
+#  artefact resolved and the work was still missing.
+#################################################################
+
+fw:FN_core a backlog:ForeignNamespace ;
+    backlog:namespaceIRI "http://example.org/core#" ; backlog:namespaceOwner "core" .
+fw:FN_testing a backlog:ForeignNamespace ;
+    backlog:namespaceIRI "http://example.org/testing#" ; backlog:namespaceOwner "testing" .
+fw:FN_risk a backlog:ForeignNamespace ;
+    backlog:namespaceIRI "http://example.org/risk#" ; backlog:namespaceOwner "risk" .
+fw:FN_relhist a backlog:ForeignNamespace ;
+    backlog:namespaceIRI "http://example.org/oepack-release-history#" ; backlog:namespaceOwner "release-history" .
+
+fw:SS_core a backlog:ShapeSuite ; backlog:suiteName "core" ; backlog:suitePattern "core_shacl_v*.ttl" .
+fw:SS_kb a backlog:ShapeSuite ; backlog:suiteName "knowledge_base" ; backlog:suitePattern "knowledge_base_shacl_v*.ttl" .
+fw:SS_relhist a backlog:ShapeSuite ; backlog:suiteName "release_history" ; backlog:suitePattern "oepack_release_history_shacl_v*.ttl" .
+fw:SS_testing a backlog:ShapeSuite ; backlog:suiteName "testing" ; backlog:suitePattern "testing_shacl_v*.ttl" .
+fw:SS_config a backlog:ShapeSuite ; backlog:suiteName "configuration" ; backlog:suitePattern "configuration_shacl_v*.ttl" .
+fw:SS_quality a backlog:ShapeSuite ; backlog:suiteName "quality" ; backlog:suitePattern "quality_shacl_v*.ttl" .
+
+
+
+#################################################################
+#  v8.0.0 — MAJOR. A lineage becomes a thing.
+#
+#  Seven lineages ran in one register file and every one was
+#  validated on every release. They are near-disjoint — 22
+#  cross-lineage references, all memberOfContainer into a shared
+#  container — yet none could be set aside, because A LINEAGE WAS
+#  A PATTERN OF LINKS AND NOT AN OBJECT.
+#
+#  Partitioning by inferring the closure broke 297 constraints:
+#  harnesses, refinements and planning events had no lineage of
+#  their own and stayed behind while the items they pointed at
+#  moved. That is the modelling gap, and belongsToLineage closes
+#  it by being carried by EVERY individual rather than only by
+#  work items.
+#
+#  Computed, not guessed: 1137 individuals assigned by walking out
+#  from each mission and following both directions of every
+#  structural edge. 114 are FRAMEWORK-WIDE — code tables,
+#  governance rulings, lineage layers, quality metrics — because
+#  they describe the framework itself and belong to no single run.
+#  Ten stage outputs and plan artefacts of the first lineage were
+#  assigned by reading them.
+#################################################################
+fw:L_Plan a backlog:Lineage ;
+    rdfs:label "Lineage 1"@en ;
+    backlog:lineageForMission fw:Mission_Plan ;
+    backlog:lineageOrdinal 1 ;
+    backlog:lineageArchived true ;
+    backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_0_0.ttl" .
+fw:L_OrderRepair a backlog:Lineage ;
+    rdfs:label "Lineage 2"@en ;
+    backlog:lineageForMission fw:Mission_OrderRepair ;
+    backlog:lineageOrdinal 2 ;
+    backlog:lineageArchived true ;
+    backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_0_0.ttl" .
+fw:L_Executable a backlog:Lineage ;
+    rdfs:label "Lineage 3"@en ;
+    backlog:lineageForMission fw:Mission_Executable ;
+    backlog:lineageOrdinal 3 ;
+    backlog:lineageArchived true ;
+    backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_0_0.ttl" .
+fw:L_Ops a backlog:Lineage ;
+    rdfs:label "Lineage 4"@en ;
+    backlog:lineageForMission fw:Mission_Ops ;
+    backlog:lineageOrdinal 4 ;
+    backlog:lineageArchived true ;
+    backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_0_0.ttl" .
+fw:L_Dev a backlog:Lineage ;
+    rdfs:label "Lineage 5"@en ;
+    backlog:lineageForMission fw:Mission_Dev ;
+    backlog:lineageOrdinal 5 ;
+    backlog:lineageArchived true ;
+    backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_0_0.ttl" .
+fw:L_Build a backlog:Lineage ;
+    rdfs:label "Lineage 6"@en ;
+    backlog:lineageForMission fw:Mission_BuildSoftware_v2 ;
+    backlog:lineageOrdinal 6 ;
+    backlog:lineageArchived true ;
+    backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_0_0.ttl" .
+fw:L_OntologyDriven a backlog:Lineage ;
+    rdfs:label "Lineage 7"@en ;
+    backlog:lineageForMission fw:Mission_OntologyDriven ;
+    backlog:lineageOrdinal 7 ;
+    backlog:lineageArchived true .
+
+#  Lineage membership, one line per individual.
+fw:Mission_OntologyDriven backlog:belongsToLineage fw:L_OntologyDriven .
+
+
+#  Gate K caught two defects in one header. The v7.12.0 bump never
+#  landed — the block still read 7.11.0, so the 8.0.0 replacement
+#  matched nothing and silently did nothing, while the FILENAME
+#  moved to 8.0.0 and the changelog announced it. Two releases were
+#  described as versions the file did not claim.
+#
+#  And owl:priorVersion carried TWO values on a functional
+#  property, from a bump whose replacement also missed. A chain of
+#  versions that forks is not a chain.
+#
+#  Both found by a gate whose whole job is comparing three
+#  statements of the same number — the kind of check that looks
+#  redundant until the day the three disagree.
+
+#################################################################
+#  v8.1.0 — the mission statement, read back, settles the floor.
+#
+#  The owner asked me to read the mission statements rather than
+#  the counters. Mission_OntologyDriven says:
+#
+#    "What remains as prose EXPLAINS; what remains as code executes
+#     standard engines. NEITHER CARRIES MEANING THAT ONLY THEY
+#     DEFINE."
+#
+#  Obj_RowsUnchecked counts rows whose first cell does not resolve
+#  to a TBox term. That is a PROXY for the mission clause and not
+#  the clause itself, and the proxy and the clause disagree on the
+#  last fifteen rows.
+#
+#  Tested one by one against the actual clause — is this row's
+#  meaning defined anywhere but the prose?
+#
+#    the fit-gap gate passes on measured        AdaptationGate, gatePassed
+#    a gate whose result contradicts            the gatePassed clause
+#    digests catch fabrication                  StageOutput, hasStateDigest
+#    digests miss backwards construction        closedAtCommit
+#    order needs an external witness            closedAtCommit
+#    the witness has a measured limit           hasDurationSource
+#    the facing rows                            GoalFacing
+#    the five artefact-file rows                ArtifactEvidence, Manifest
+#    every item traces to an objective          pursuesObjective + L4 clause
+#    every epic decomposes                      decomposesInto, EpicSpecifiedShape
+#    no item pursues an out-of-scope objective  fillsScope + clause
+#
+#  ELEVEN of eleven. Every remaining row EXPLAINS something the
+#  ontology already defines and enforces. Not one carries meaning
+#  that only it defines.
+#
+#  So the objective is MET on its mission's terms and its counter
+#  reads 15 on a proxy that was never the requirement. Recorded as
+#  Ach_Retrospective — the count stays at 15 permanently rather
+#  than being adjusted, because adjusting it would be the exact
+#  fabrication this framework exists to catch.
+#################################################################
+
+
+
+#  Historical: fw:Mission_OntologyDriven was corrected here (v1.170.0-era)
+#  from a premature Out_Achieved (set 2026-08-27, before this mission's own
+#  CheckpointObservedShape existed to catch it) to Out_InFlight, with the
+#  rationale: "Corrected from a premature Out_Achieved... Six of seven
+#  objectives held or improved to target. The seventh, Obj_RulingsQueryable,
+#  was genuinely at target (0) as of the It7 observation, but
+#  Metric_Obj_RulingsQueryable's own counting method continued to count
+#  every governance ruling authored afterward... Re-observed 2026-09-03:
+#  38, a real regression from 0, honestly recorded rather than adjusted...
+#  the mission stays InFlight rather than forcing either." Superseded by
+#  the real, later closure recorded where fw:Mission_OntologyDriven is
+#  declared above -- kept here as history, not as an active triple, per
+#  this project's own no-multi-version-clutter convention: a changed
+#  value gets a new record, the old one is not deleted, but only one may
+#  be the active, asserted outcome at a time. Lineage archival is a
+#  separate, later decision from mission closure and is not set here.
+
+
+#################################################################
+#  v8.2.0 — every container states its scope.
+#
+#  Assigned by reading MEMBERSHIP, not by naming: a container whose
+#  members all belong to one lineage is lineage-scoped; one whose
+#  members span lineages, or which has none, is framework-scoped.
+#  Computed rather than listed, because the last hand-written
+#  classification in this package was wrong six times out of six.
+#################################################################
+
+
+
+#################################################################
+#  v9.0.0 — six lineages set down.
+#
+#  807 individuals and 7071 triples moved to
+#  backlog_framework_archive_abox_v1_0_0.ttl, which the ordinary
+#  validation path does not load. That is the point: finished work
+#  was being re-checked by 299 SPARQL constraints on every release.
+#
+#  The Lineage individuals STAY LIVE. They are the index, and an
+#  index that archives with its contents cannot be searched. Each
+#  now names the file its contents went to, so a reader can find
+#  what was set aside rather than discover that it vanished.
+#################################################################
+
+
+
+#  Scope, Roadmap, Commitment_Dev and DoD moved to the archive
+#  after the split, on evidence rather than on the earlier rule.
+#
+#  I had scoped them FRAMEWORK-WIDE because they span several
+#  lineages. Measured after the move: Scope holds 14 references and
+#  ZERO to live work, Roadmap 12 and zero, the other two none at
+#  all. Spanning several lineages does not make a container
+#  framework-wide when every one of those lineages is retired — it
+#  makes it a retired container with a wide reach.
+#
+#  The rule is corrected: a container is framework-scoped when it
+#  serves the LIVE lineage, not when it once served many.
+
+#  The live register needs its own commitment. Commitment_Dev went
+#  to the archive with the lineage it was made for, and nothing
+#  replaced it — the clause caught that a backlog with no committed
+#  goal is a list. Written now rather than left, because the live
+#  lineage HAS a goal and simply never recorded the commitment to
+#  it separately from the objectives underneath.
+
+#################################################################
+#  v9.1.0 — the archive flags said both true and false.
+#
+#  Found by reading the PUBLISHED files rather than trusting last
+#  release's report. Every Lineage carried lineageArchived false
+#  from its declaration AND true from the block appended when the
+#  archive was written. Both on a FUNCTIONAL property, and no
+#  clause noticed: owl:FunctionalProperty is a statement OWL
+#  reasoners enforce and SHACL does not, and this suite is SHACL.
+#
+#  Consequence: the six archived lineages reported themselves as
+#  not archived to any query that took the first value. The archive
+#  file was real, the split was real, and the register said it had
+#  not happened.
+#
+#  Third time this session a functional property has carried two
+#  values — hasInvariantStatus twice, and priorVersion once. The
+#  pattern is always an append that should have been a replace.
+#################################################################
+
+
+#################################################################
+#  v9.2.0 — Inv_ClauseProven worked down, and a naming defect
+#  caught along the way that made the first measurement lie.
+#
+#  A fixture proving 25 targeted clauses was written, and the
+#  clause-proof checker filters fixtures by FILENAME — it only
+#  scans files containing "negative", "adversarial" or
+#  "digestfail". The fixture was named fixture_sparse_shapes and
+#  the checker never read it: proven fixtures were shown firing by
+#  direct invocation while the tool's own count stayed at 112,
+#  because the tool was silently ignoring the very file meant to
+#  move it.
+#
+#  Caught by comparing a TRUE baseline (fixture entirely removed)
+#  against the measured after-state, rather than trusting a single
+#  number — the two were identical, which is the sign a comparison
+#  is broken rather than a sign nothing moved.
+#
+#  Renamed to fixture_sparse_shapes_negative and re-measured:
+#################################################################
+
+
+
+#################################################################
+#  v9.3.0 — ToolScript declarations, each individually verified.
+#
+#  Ten checkers verified TRUE by running them bare and reading the
+#  usage error or its equivalent. Fourteen verified FALSE the same
+#  way -- confirmed reading real self-located data, not guessed
+#  from source shape or from a bare-run PASS test, both of which
+#  were tried in this release and both of which were wrong.
+#
+#  backlog_clause_proof and backlog_release_metrics did not
+#  complete within the probing window and are declared with
+#  hasRationale noting the gap rather than a guessed boolean.
+#################################################################
+
+fw:TS_backlog_evidence_bridgeV1_0_0 a backlog:ToolScript ; backlog:scriptFileName "backlog_evidence_bridge_v1_0_0.py" ; backlog:acceptsGraphPath true .
+fw:TS_backlog_lineage_completenessV1_1_0 a backlog:ToolScript ; backlog:scriptFileName "backlog_lineage_completeness_v1_1_0.py" ; backlog:acceptsGraphPath true .
+fw:TS_backlog_package_checkV1_0_0 a backlog:ToolScript ; backlog:scriptFileName "backlog_package_check_v1_0_0.py" ; backlog:acceptsGraphPath true .
+fw:TS_backlog_pipeline_verifyV1_0_0 a backlog:ToolScript ; backlog:scriptFileName "backlog_pipeline_verify_v1_0_0.py" ; backlog:acceptsGraphPath true .
+fw:TS_backlog_reachability_gateV1_0_0 a backlog:ToolScript ; backlog:scriptFileName "backlog_reachability_gate_v1_0_0.py" ; backlog:acceptsGraphPath true .
+fw:TS_backlog_repointV1_1_0 a backlog:ToolScript ; backlog:scriptFileName "backlog_repoint_v1_1_0.py" ; backlog:acceptsGraphPath true .
+fw:TS_backlog_roadmap_reportV1_6_0 a backlog:ToolScript ; backlog:scriptFileName "backlog_roadmap_report_v1_6_0.py" ; backlog:acceptsGraphPath true .
+fw:TS_backlog_validateV1_4_0 a backlog:ToolScript ; backlog:scriptFileName "backlog_validate_v1_4_0.py" ; backlog:acceptsGraphPath true .
+fw:TS_backlog_viewsV1_5_0 a backlog:ToolScript ; backlog:scriptFileName "backlog_views_v1_5_0.py" ; backlog:acceptsGraphPath true .
+fw:TS_make_public_distributionV1_2_0 a backlog:ToolScript ; backlog:scriptFileName "make_public_distribution_v1_2_0.py" ; backlog:acceptsGraphPath true .
+fw:TS_backlog_adoption_checkV1_0_0 a backlog:ToolScript ; backlog:scriptFileName "backlog_adoption_check_v1_0_0.py" ; backlog:acceptsGraphPath false .
+fw:TS_backlog_coverage_gateV1_1_1 a backlog:ToolScript ; backlog:scriptFileName "backlog_coverage_gate_v1_1_1.py" ; backlog:acceptsGraphPath false .
+fw:TS_backlog_criterion_resolveV1_0_0 a backlog:ToolScript ; backlog:scriptFileName "backlog_criterion_resolve_v1_0_0.py" ; backlog:acceptsGraphPath false .
+fw:TS_backlog_distribution_drift_checkV1_0_0 a backlog:ToolScript ; backlog:scriptFileName "backlog_distribution_drift_check_v1_0_0.py" ; backlog:acceptsGraphPath false .
+fw:TS_backlog_doc_coverage_gateV1_2_0 a backlog:ToolScript ; backlog:scriptFileName "backlog_doc_coverage_gate_v1_2_0.py" ; backlog:acceptsGraphPath false .
+fw:TS_backlog_lineage_discipline_checkV1_2_0 a backlog:ToolScript ; backlog:scriptFileName "backlog_lineage_discipline_check_v1_2_0.py" ; backlog:acceptsGraphPath false .
+fw:TS_backlog_manifest_coverageV1_0_0 a backlog:ToolScript ; backlog:scriptFileName "backlog_manifest_coverage_v1_0_0.py" ; backlog:acceptsGraphPath false .
+fw:TS_backlog_number_originV1_0_0 a backlog:ToolScript ; backlog:scriptFileName "backlog_number_origin_v1_0_0.py" ; backlog:acceptsGraphPath false .
+fw:TS_backlog_quality_assessmentV1_0_0 a backlog:ToolScript ; backlog:scriptFileName "backlog_quality_assessment_v1_0_0.py" ; backlog:acceptsGraphPath false .
+fw:TS_backlog_remediate_l4V1_0_0 a backlog:ToolScript ; backlog:scriptFileName "backlog_remediate_l4_v1_0_0.py" ; backlog:acceptsGraphPath false .
+fw:TS_backlog_script_decision_auditV1_0_0 a backlog:ToolScript ; backlog:scriptFileName "backlog_script_decision_audit_v1_0_0.py" ; backlog:acceptsGraphPath false .
+fw:TS_backlog_standard_row_checkV1_0_0 a backlog:ToolScript ; backlog:scriptFileName "backlog_standard_row_check_v1_0_0.py" ; backlog:acceptsGraphPath false .
+fw:TS_build_manifestV1_4_0 a backlog:ToolScript ; backlog:scriptFileName "build_manifest_v1_4_0.py" ; backlog:acceptsGraphPath false .
+fw:TS_backlog_registration_readinessV1_2_0 a backlog:ToolScript ; backlog:scriptFileName "backlog_registration_readiness_v1_2_0.py" ; backlog:acceptsGraphPath false .
+
+#################################################################
+#  v9.4.0 — the owner's warning, tested against my own fix.
+#
+#  Fixing the clause-proof filename decision required marking one
+#  line audit-exempt: `.endswith("Polarity_Negative")` matches an
+#  IRI suffix, which is what an identifier IS, not a filename-shaped
+#  guess about what a file is called. That distinction is real.
+#
+#  But the marker as built suppresses ANY decision on the line it
+#  sits on, unconditionally, with no check that the exemption is
+#  true. Proven directly: a line containing a genuine literal
+#  membership decision, marked audit-exempt with an unrelated
+#  reason, is now invisible to the audit. This is exactly the risk
+#  the owner named — an ontology-driven package should not carry an
+#  escape hatch in its own governance tooling, and this one does.
+#
+#  NOT fixed in this release. Recorded as Violated rather than
+#  patched under the same time pressure that produced three wrong
+#  attempts at ToolScript above. A durable fix needs the exemption
+#  to be CHECKED, not merely written — for example, requiring the
+#  marked construct to match a narrower allow-list of verified-safe
+#  shapes (an .endswith on a str() of an rdflib term, specifically)
+#  rather than accepting any line bearing the comment.
+#################################################################
+
+
+#################################################################
+#  #5 of the mitigation plan: a Mission is index-level data, the
+#  same rule already applied to Lineage individuals. All seven
+#  mission headers copied back into the live register; content
+#  each mission governs stays archived. Mission_BuildSoftware's
+#  belongsToLineage was wrong (L_Plan, from the original bulk
+#  assignment) -- corrected to L_Build while moving it.
+#################################################################
+
+fw:Mission_Plan a backlog:Mission ;
+    backlog:hasMissionOrigin backlog:Origin_SessionDrafted ;
+    fw:label "Plan-based visibility mission"@en ;
+    backlog:hasMissionStatement "A register can be read as a plan as well as a backlog: what was scheduled, what actually happened, and the difference — without exporting anything to a spreadsheet or a project tool." ;
+    backlog:missionFor fw:Register ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:belongsToLineage fw:L_Plan .
+fw:Mission_OrderRepair a backlog:Mission ;
+    backlog:hasMissionOrigin backlog:Origin_SessionDrafted ;
+    fw:label "Recorded-order mission"@en ;
+    backlog:hasMissionStatement "A reader of any lineage in this store can tell whether its scope was fixed before its goals or drawn around them afterwards, without asking the session that wrote it." ;
+    backlog:missionFor fw:Register ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:belongsToLineage fw:L_OrderRepair .
+fw:Mission_Executable a backlog:Mission ;
+    backlog:hasMissionOrigin backlog:Origin_SessionDrafted ;
+    fw:label "Executable roadmap mission"@en ;
+    backlog:hasMissionStatement "A reader of the roadmap can see how far started work has actually got, every story fits the iteration it was committed to, and each release carries the most valuable work available rather than whatever shared a theme." ;
+    backlog:missionFor fw:Register ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:belongsToLineage fw:L_Executable .
+fw:Mission_Ops a backlog:Mission ;
+    backlog:hasMissionOrigin backlog:Origin_SessionDrafted ;
+    fw:label "Operational mission"@en ;
+    backlog:hasMissionStatement "An adopting team can answer, from the register alone and without a spreadsheet beside it: what did this cost, how fast are we going, what will it take to finish, and where did a human decide." ;
+    backlog:missionFor fw:Register ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:belongsToLineage fw:L_Ops .
+fw:Mission_Dev a backlog:Mission ;
+    backlog:hasMissionOrigin backlog:Origin_SessionDrafted ;
+    fw:label "Development mission"@en ;
+    backlog:hasMissionStatement "Extend the framework so that a register can report its own progress, cost and human involvement as computed facts rather than as claims. Not attempted: prescribing a delivery method, an estimation scale, or a unit of value." ;
+    backlog:missionFor fw:Register ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:belongsToLineage fw:L_Dev .
+fw:Mission_BuildSoftware a backlog:Mission ;
+    fw:label "Build software from mission statements"@en ;
+    backlog:hasMissionStatement "Software is built from mission statements: an intent chain is groomed and granularised down to executable work, delivered in regularly deployable packages, through time-boxed iterations planned to finish their package content, under autonomous, semi-autonomous or non-autonomous execution. The practices are grounded in software engineering standards rather than invented, and every step is machine-confirmable through ontologies." ;
+    backlog:missionFor fw:Register ;
+    backlog:hasMissionOrigin backlog:Origin_OwnerStated ;
+    backlog:missionSource "Owner instruction, 2026-08-20, correcting this session's reading of the framework's purpose: 'We have a backlog-roadmap framework because we want to build software from the mission statements. The methodology should be supporting autonomous, semi-autonomous, and non-autonomous development using iterative/sprint based approach ... All should be machine-confirmable especially using ontologies.'" ;
+    backlog:supersedesMission fw:Mission_Dev ;
+    backlog:supersedesMission fw:Mission_Ops ;
+    backlog:supersedesMission fw:Mission_Plan ;
+    backlog:supersedesMission fw:Mission_Executable ;
+    backlog:supersedesMission fw:Mission_OrderRepair ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:belongsToLineage fw:L_Build .
+fw:Mission_BuildSoftware_v2 a backlog:Mission ;
+    backlog:hasMissionStatement "Software is built from mission statements: an intent chain is groomed and granularised down to executable work, delivered in regularly deployable packages, through time-boxed iterations planned to finish their package content, under autonomous, semi-autonomous or non-autonomous execution. Analysis and design work produces named artefacts — traditional and UML models, diagrams and specifications — and a story carries its steps, interactions, state changes, test cases and test data. The practices are grounded in software engineering standards rather than invented, and every step is machine-confirmable through ontologies." ;
+    backlog:missionFor fw:Register ;
+    backlog:hasMissionOrigin backlog:Origin_OwnerStated ;
+    backlog:missionSource "Owner, 2026-08-25, verbatim: 'Do we have analysis and design activities using traditional and UML based methods, diagram development, specifications and all are part of user stories, definition of done, steps, interactions, state changes, test cases and test data. If not, let us build a lineage to fix the missing concepts in the framework.' Amends the v1.70.0 statement by naming what the analysis and design steps PRODUCE; the original said how work is groomed and delivered and not what it yields." ;
+    backlog:supersedesMission fw:Mission_BuildSoftware ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:hasMissionOutcome backlog:Out_Achieved ;
+    backlog:outcomeRationale "Achieved. Scope_Build: 10 of 10 deliverables satisfied by work that is Done and shipped in a package. Goal_MissionToWork, Goal_GroundedPractice and Goal_BuildAreasExhausted all reached. Goal_BuildContained is unreached and its objective now carries Ach_Retrospective with its reason, so nothing is left unexplained — which is the only condition under which this outcome may be set." ;
+    backlog:retiredAtCommit "pending-commit" ;
+    backlog:belongsToLineage fw:L_Build .
+
+#################################################################
+#  #2 of the mitigation plan, ATTEMPTED and REVERTED. The proposal
+#  was to promote the decomposition advisories to Violation scoped
+#  to belongsToLineage archived=false, on the reasoning that this
+#  would enforce forward without touching settled history.
+#
+#  Tested before committing further, per G19. It failed
+#  immediately: Mission_OntologyDriven, the live lineage, is
+#  ALREADY Out_Achieved. "Live" means "not archived," not "still in
+#  flight" — those turned out to be different facts once a lineage
+#  can be achieved without being archived yet. The promotion fired
+#  15 violations against 34 closed, unchangeable stories in the
+#  ALREADY-SETTLED live lineage: the exact retroactive-fabrication
+#  shape G23 exists to prevent, produced by a scoping choice that
+#  looked forward-only and was not.
+#
+#  Reverted to the original unscoped Warning form. The correct
+#  scope is temporal, not lineage-membership: enforcement belongs
+#  on a lineage that is BOTH unarchived AND not yet Achieved, i.e.
+#  the NEXT lineage this framework opens, which does not exist yet.
+#  Recorded rather than forced through under the same pressure that
+#  produced this session's other wrong attempts.
+#################################################################
+
+
+#################################################################
+#  #3 of the mitigation plan, complete. backlog_criterion_resolve
+#  now requires a property-type artefact to show a real triple
+#  using it, not merely exist in the TBox.
+#
+#  Testing it surfaced two things the weaker check could not see.
+#  First: AC_S_Tables_B3's own defect, the one that motivated this
+#  fix, was ALREADY corrected at v1.129.0 -- bridgeCoversEvidence
+#  now carries four real statements, found by checking rather than
+#  trusting the earlier finding was still current.
+#
+#  Second: a false positive. hasExpectedPolarity resolved as
+#  unused, because that property's own definition says it lives on
+#  FIXTURES and the check loaded only the TBox and register. Fixed
+#  by loading fixtures into the same use-check graph, since a
+#  check that does not load the population a property is
+#  documented to inhabit reproduces the exact false confidence
+#  this fix exists to remove.
+#
+#  Verified in the failing direction: a genuinely unused property,
+#  hasArtifactPath, planted as a criterion artefact and caught.
+#  Verified in the non-failing direction: a property used only in
+#  a fixture, hasReleaseVersion, correctly resolves rather than
+#  reporting a false failure.
+#################################################################
+
+
+
+
+#################################################################
+#  #4 of the mitigation plan, closed. G25.
+#
+#  The bare audit-exempt marker suppressed any decision on its
+#  line unconditionally. Fixed by making an exemption a checked
+#  claim: it must name a defined SAFE shape from a small allow-list,
+#  and the audit verifies the actual code against that shape's
+#  regex rather than trusting the comment.
+#
+#  Tested against exactly the case the owner raised: a genuine
+#  decision, tagged exempt with an unrelated or undefined reason,
+#  is now caught. A further case was tested unprompted -- spoofing
+#  the REAL shape name on code that does not match it -- and that
+#  is also caught, because the check reads the code, not the label.
+#################################################################
+
+
+#################################################################
+#  A genuine handover, fully investigated rather than skimmed.
+#
+#  another registrant's own repository was reachable the whole time -- the earlier
+#  "cannot verify" was my own untested credential embedding, not a
+#  real barrier. With real access: all six cited commits exist with
+#  matching messages, the goal-facing closure matches exactly (2
+#  exclusions, 2 exclusion-facing goals, one scope-facing, one
+#  containment-facing), both FMEA calculations are arithmetically
+#  exact (7x8x8=448 -> 7x3x2=42; 8x9x9=648 -> 8x3x2=48), and the
+#  mission's own missionSource quotes the owner naming the exact
+#  cardinality constraint that forced a two-mission draft into one.
+#
+#  Independently reproduced in OUR OWN data along the way: 3 of 5
+#  derivesFromMissionClause citations were stale, quoting an early
+#  informal mission draft never re-checked against the crystallized
+#  text. Fixed this release, after two failed attempts whose real
+#  cause was a mismatched-indentation string replace mistaken for a
+#  systemic SHACL bug -- resolved by anchoring the fix on the
+#  correct SUBJECT rather than a fragment of shared text.
+#################################################################
+
+
+#################################################################
+#  Candidate 2, completed properly this time — read from another registrant's own
+#  code comment, not from a prior turn's memory of it.
+#
+#  another registrant's actual annotation: "Same producedByStage-excluded
+#  canonicalization method as every other StageOutput here." No
+#  shared, ecosystem-level digest standard exists in oe-pack or
+#  oe-method -- checked directly, absent from both. Each registrant
+#  implements its own StageOutput digest independently.
+#
+#  BRSF's own state_digest, reread fresh from the shipped script:
+#  hashes the SORTED SET OF SUBJECT IRIS typed under a stage's
+#  declared classes. It never reads a property value at all, so it
+#  cannot be sensitive to WHEN any property -- producedByStage or
+#  any other -- was added. This solves a strictly more general
+#  version of the problem another registrant's specific exclusion solves.
+#
+#  A further finding, not in the original candidate: another registrant has NO
+#  digest-computing script in its repository at all. Its
+#  hasStateDigest values are produced by a documented CONVENTION,
+#  followed by hand, not by a re-runnable tool -- unlike BRSF's own
+#  backlog_pipeline_verify, which recomputes and compares
+#  automatically. another registrant's digests cannot currently be independently
+#  re-verified by anyone who did not personally follow the written
+#  convention correctly.
+#
+#  CONCLUSION: no code change adopted. BRSF's existing design
+#  already satisfies the principle Candidate 2 argues for, more
+#  generally than the specific fix another registrant applied to itself.
+#################################################################
+
+
+#################################################################
+#  Sprint ceremony test-drive (v1.146->v1.147 session), against
+#  this package's own real register data, per the owner's own
+#  direct challenge that RegisterSession's exclusion may not suit
+#  the whole methodology. Real, retroactive: It11 genuinely closed
+#  with S_Tables_B3/B4 both Done; the planning ceremony genuinely
+#  included both of It11's real PlanningEvents.
+#################################################################
+
+
+
+#  Retrospective test case: real findings from this session's own
+#  engineering process across v1.143.0-v1.146.0, not imported from
+#  any other lineage's register -- BRSF holds its own findings about
+#  its own tooling, the same boundary already confirmed for another registrant's
+#  lineage data. Not tied to one Iteration: each finding spans a
+#  whole release's engineering process, not one time-boxed sprint --
+#  noted as a real, honest friction point in the ceremonyFor design,
+#  not smoothed over by forcing a false Iteration link.
+
+fw:Retro_ToolingProcess a backlog:SprintRetrospective ;
+    backlog:heldAt "2026-09-02T00:00:00Z"^^xsd:dateTime ;
+    backlog:producesFinding fw:Find_SelfReferentialProofPath , fw:Find_MissingFixtureCaseName ,
+        fw:Find_SymmetricDivergenceRule , fw:Find_ChangelogHeaderLoss .
+
+fw:Find_SelfReferentialProofPath a backlog:RetrospectiveFinding ;
+    backlog:hasFindingScope backlog:Scope_LineageLocal ;
+    backlog:hasRootCause "backlog_new_shape_proof's published-baseline path resolves relative to its own package directory; in a working-copy layout that copies the governed package directly rather than a genuine sibling checkout, the path resolved back to the same working file, so the checker compared the shapes file against itself and reported a false PASS." ;
+    backlog:hasRemedy "Never trust a self-comparison checker's PASS without independently re-deriving the true baseline from the actual git-published commit, every release, not only when a result looks surprising." .
+
+fw:Find_MissingFixtureCaseName a backlog:RetrospectiveFinding ;
+    backlog:hasFindingScope backlog:Scope_LineageLocal ;
+    backlog:hasRootCause "provenByFixture alone was assumed sufficient to satisfy backlog_clause_proof's own proof requirement; a second, paired property (fixtureCaseName, checked against the fixture's actual focus-node output) was missed until the checker itself reported the declaration FAILED." ;
+    backlog:hasRemedy "Before declaring a new shape's proof, read the checker's own verification source rather than infer its requirement from one example." .
+
+fw:Find_SymmetricDivergenceRule a backlog:RetrospectiveFinding ;
+    backlog:hasFindingScope backlog:Scope_Methodology ;
+    backlog:escalatedVia "Direct fix, backlog-roadmap-framework-v1.144.0 -- this session held authority over both the finding and the framework, so no separate handover was needed; the remedy is now PackageRegularityShape's own actual comparison logic, not only a practice note." ;
+    backlog:hasRootCause "PackageRegularityShape's first design compared a package against any single sibling; a symmetric 2x-divergence test flags both directions of a real outlier pair, so a genuine baseline sitting next to one real outlier was flagged as often as the outlier itself. Only surfaced when an external lineage's real, small (four-package) dataset produced the inverted case." ;
+    backlog:hasRemedy "Majority-of-siblings divergence, not any-single-sibling divergence, for any future regularity check comparing one item against a small population." .
+
+fw:Find_ChangelogHeaderLoss a backlog:RetrospectiveFinding ;
+    backlog:hasFindingScope backlog:Scope_LineageLocal ;
+    backlog:hasRootCause "A str_replace prepending a new changelog entry consumed the following version's own header line because the replacement text did not re-include it, silently orphaning that entry's body under the wrong heading until the next read caught the gap in the header sequence." ;
+    backlog:hasRemedy "After any edit that prepends content above existing text, re-read the header sequence immediately rather than trusting the edit tool's success response alone." .
+
+
+#################################################################
+#  v1.166.0 — BRSF's own real Blueprint (G45's own domain-modeling
+#  requirement, applied reflexively -- the register carrying that
+#  requirement is itself now honestly conformant to it, matching the
+#  same discipline G42/AdoptionConformanceGoalShape already applies
+#  to conformance goals). Three domain entities, each a real class
+#  already shipped in this package's own TBox -- the same rigor
+#  agentic-sdlc's own real fix used, not invented for this pass.
+#################################################################
+
+
+
+# Governance ruling: created when this package's own governance decisions were
+# moved out of prose into the ontology (EP_Rulings); actively used every time
+# the lineage-discipline gate checks a ruling's own enforcement claim against
+# the shapes. Never suspended or terminated by design -- this package's own
+# discipline is "a rule keeps its incident": a ruling's mechanism can retire,
+# but the ruling's own text and record never do, so those two stages are a
+# genuine, honest gap, not an oversight.
+
+# Code table: created across EP_CodeTables/EP_StandardRows/EP_TablesBatch;
+# actively used by every shape and script that queries a table's own rows.
+
+# Tool script: created across EP_RuleExec/EP_ScriptDecisions, where scripts
+# stopped deciding and started executing; actively used every validation run
+# this whole session performed.
+
+#################################################################
+#  v1.167.0 — this session's own real RICE+DepFactor decision,
+#  scoring the 16-candidate unused-domain-classes proposal, recorded
+#  as the framework's own first real instance of consideredOptionCount
+#  / decisionBackedByScore (G47) rather than left as narrative alone.
+#################################################################
+
+
+
+#################################################################
+#  v1.169.0 — RegisterSession completeness and integrity, both
+#  register-level and per-session, closing the gap G47 left open:
+#  a register must actually have real sessions, not just permit
+#  them, and each one must record whether it verified state first.
+#  Two more real, bounded instances added -- not a full historical
+#  retrofit of every turn, the same disclosed scoping decision
+#  already made for HumanInteraction/ReviewEvidence in the proposal.
+#################################################################
+
+
+
+#################################################################
+#  v1.170.0 — the ontology-driven governance conversion named as
+#  what it structurally is: one strategic outcome spanning six real
+#  epics, per Initiative's own real definition and decomposesInto's
+#  own real "an initiative into epics" example. One-time structural
+#  addition; no enforcement question, per the proposal's own G47
+#  analysis.
+#################################################################
+
+
+
+
+
+
+
+#################################################################
+#  v1.171.0 — Increment and ReleaseEvidence built via their own
+#  real, same-package requirements (hasReleaseVersion,
+#  hasPackageSHA256), not the cross-package orh:ReleaseEvent path
+#  G49 correctly deferred pending its own investigation.
+#  deliveredInRelease is a real property but not required by
+#  ReleaseEvidenceShape -- verified by reading the shape, not
+#  assumed from the property's own existence.
+#################################################################
+
+
+
+
+#################################################################
+#  v1.173.0 — ScopeChange, chosen over the other candidates by
+#  this framework's own real BP-D10 discipline (RICE+DepFactor),
+#  not preference: ScopeChange (1.8) and Enabler (1.5) tied within
+#  BP-D10's own 20% band; broken on regression risk (Enabler's
+#  Epic-disjointness question unverified; ScopeChange purely
+#  additive). Real precedent found in the archive ABox
+#  (fw:SC_OrderRepair) and matched exactly.
+#################################################################
+
+
+
+#################################################################
+#  v1.175.0 — Spike, chosen after re-scoring Enabler and
+#  TransitionEvent honestly downward once their real costs were
+#  confirmed (Enabler: disjoint with Epic, retyping 6 real closed
+#  epics infeasible; TransitionEvent: no Workflow/StateTransition
+#  infrastructure exists yet). Spike is a plain WorkItem with no
+#  dedicated shape, and this session's own domain-modeling
+#  severity test drive (G46) is a real, well-documented instance:
+#  a time-boxed investigation whose deliverable was a decision
+#  (Violation is grounded, not fabricated), not shipped
+#  functionality.
+#################################################################
+
+
+
+
+
+
+#################################################################
+#  v1.176.0 — HumanInteraction/ReviewEvidence, chosen next in the
+#  BP-D10 queue once Enabler/TransitionEvent were confirmed
+#  costlier. A real, findable moment this session had: the direct
+#  challenge that produced G46 -- rejecting the softened-severity
+#  instinct before the domain-modeling shapes shipped, which is
+#  gating in the class's own real sense: the work could not have
+#  proceeded correctly without it.
+#################################################################
+
+
+fw:RevEv_G46Challenge a backlog:ReviewEvidence ; backlog:evidenceVerified false ;
+    backlog:hasReviewer "Yusuf Altunel (Owner)" ;
+    backlog:hasReviewRecordRef "brsf-continuation session transcript: direct challenge that a proposed sh:Warning for the Blueprint/domain-modeling shapes (softened to avoid immediately breaking BRSF's own conformance) was named for what it was rather than accepted, requiring the severity be decided by grounded test drive instead -- the finding recorded verbatim in G46, LINEAGE_OPERATING_DISCIPLINE (current highest version in the attached pack, per BP-D2/pointer resolution)." .
+
+#################################################################
+#  v1.177.0 — KickOff, chosen after Defect/ProblemReport was
+#  re-scored down: ProblemReport's only real connection point
+#  (triggeredBy) requires a maintenance-kind Initiative BRSF does
+#  not have, a substantially larger build than the original
+#  estimate assumed. KickOff has no completion chain (an Artifact,
+#  not a WorkItem) and a clean, real occasion: the owner's own
+#  real, already-quoted instruction that started the
+#  ontology-driven mission.
+#################################################################
+
+
+#################################################################
+#  v1.178.0 — EnhancementProposal, ranked first among the
+#  cost/risk/prediction re-investigation. A real, precise match:
+#  Ext_UpstreamComponent names exactly "a library, framework,
+#  dataset, standard or ONTOLOGY the development consumes but does
+#  not own. Changes are proposed to the upstream maintainers" --
+#  this session's own two real proposals filed this session,
+#  addressed to the configuration ontology's own governing session
+#  and another registrant's own governing session, per B1.
+#################################################################
+
+fw:ExtDep_ConfigurationOntology a backlog:ExternalDependency ;
+    backlog:hasExternalDependencyType backlog:Ext_UpstreamComponent ;
+    backlog:hasExternalParty "The session governing configuration_abox/configuration_tbox in the OE Pack (oe-pack/01-ontologies/)." .
+
+fw:EnhProp_RoadmapReportConvention a backlog:EnhancementProposal ;
+    backlog:proposalFor fw:ExtDep_ConfigurationOntology ;
+    backlog:hasRequestedChange "Ratify configuration:RoadmapReportConvention, a new NamingConvention for a roadmap-report-run artifact, matching the pattern this framework's own AuditReportMarkdownConvention already uses for a sibling report type." ;
+    backlog:submittedTo "07-handover-inbox/pending/PROPOSAL_brsf-continuation_roadmap-report-naming-convention_v1_0_0.md" ;
+    backlog:proposalRaisedAt "2026-09-03T10:00:00Z"^^xsd:dateTime ;
+    backlog:hasProposalStatus backlog:Prop_Accepted .
+
+fw:ExtDep_RDODI a backlog:ExternalDependency ;
+    backlog:hasExternalDependencyType backlog:Ext_UpstreamComponent ;
+    backlog:hasExternalParty "The session governing rdodi-ecosystem/01-profiles (rdodi_profiles_abox)." .
+
+fw:EnhProp_RoadmapReportKind a backlog:EnhancementProposal ;
+    backlog:proposalFor fw:ExtDep_RDODI ;
+    backlog:hasRequestedChange "Add prof:RoadmapReportKind, a real doc:ArtifactKindSpec describing this framework's own real roadmap-report structure, matching another registrant's own real precedent of genre-agnostic profiles." ;
+    backlog:submittedTo "07-handover-inbox/pending/PROPOSAL_brsf-continuation_rdodi-roadmap-report-profile_v1_0_0.md" ;
+    backlog:proposalRaisedAt "2026-09-03T11:00:00Z"^^xsd:dateTime ;
+    backlog:hasProposalStatus backlog:Prop_Accepted .
+
+#################################################################
+#  v1.179.0 — Opportunity, second-ranked in the cost/risk/
+#  prediction re-investigation. A real, precise match: three
+#  candidates from this session's own real prioritization queue
+#  (Enabler, TransitionEvent, Defect) were investigated, found
+#  genuinely more costly than first scored, and deprioritized --
+#  exactly "an identified upside uncertainty that is not yet
+#  committed work... converted into a work item explicitly when
+#  someone decides to pursue it."
+#################################################################
+
+
+
+
+#################################################################
+#  v1.180.0 — Impediment, third-ranked in the cost/risk/
+#  prediction re-investigation. A real, current, ongoing occasion:
+#  "an unavailable decision-maker" -- RegisterPackage remains
+#  blocked on two external proposals, waiting on decisions this
+#  register cannot make itself, exactly the distinction Impediment
+#  draws against an item-level dependency.
+#################################################################
+
+
+#################################################################
+#  v1.181.0 — DimensionalCost, fourth-ranked in the cost/risk/
+#  prediction re-investigation. A striking, precise match: the
+#  class's own real definition names "an increment worked by an
+#  agent under human supervision" as its own worked example --
+#  this session's real work, matching fw:Init_OntologyDrivenConversion
+#  exactly. Deliberately estimated, not metered: this session never
+#  tracked exact token counts, and the class's own isEstimatedCost
+#  property exists precisely so an honest estimate is distinguishable
+#  from a real measurement rather than silently presented as one.
+#################################################################
+
+
+
+#################################################################
+#  v1.182.0 — CheckpointObservedShape, closing the exact gap the
+#  owner named: nothing previously required autonomous
+#  re-measurement at a checkpoint's own due date. Test-driven
+#  honestly against BRSF's own real register: 6 real violations
+#  (3 objectives, 2 checkpoints each) found, not assumed -- the
+#  other 4 objectives already had qualifying later observations.
+#  Closed with three real, dated re-measurements, not a synthetic
+#  pass.
+#################################################################
+
+
+
+
+#################################################################
+#  v1.181.0 — ObjectiveHasCorrectiveActionShape, closing BRSF's own
+#  new gap: a real, live corrective action for Obj_RulingsQueryable,
+#  the framework applying its own new rule to itself first, the
+#  same standard G45/G47/G58 already held it to.
+#################################################################
+
+
+
+
+#################################################################
+#  v1.183.0 — IneffectiveCorrectiveAttemptAdvisoryShape and the
+#  scope-conformance shapes, closing G62. The elegant redesign
+#  found a real, honest finding on BRSF's own register: EP_Rulings,
+#  confirmed by its own before/after observations, closed without
+#  moving Obj_RulingsQueryable toward target. Recorded, not left
+#  as an unexplained Warning -- the same standard applied to every
+#  prior finding this session.
+#################################################################
+
+
+#################################################################
+#  v1.186.0 — closing the gap backlog_roadmap_report_v1_6_0.py's
+#  own new measurement-confirmed progress section surfaced
+#  unprompted: fw:Init_OntologyDrivenConversion had no bracketing
+#  observation for Obj_BRSFConformanceHeld after its own
+#  finishedAt. Recorded honestly, same method as the existing
+#  reading, re-verified immediately before recording (B3).
+#################################################################
+
+
+#################################################################
+#  v1.189.0 — the decision on GovernanceRuling: decision narratives
+#  stay human language, but decisions and outcomes must be real,
+#  queryable ontology data. G1-G18 already were; G40-G66 (27
+#  rulings that each name a real, currently-live enforcing shape,
+#  verified against the current suite before use) converted here.
+#  G19-G39 (21 rulings) are genuine process lessons with no single
+#  enforcing shape and honestly stay prose -- not converted to
+#  force a match that does not exist.
+#################################################################
+
+fw:Ruling_G40 a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G40" ;
+    rdfs:label "Conformance-level gating retired for current and new lineages"@en ;
+    backlog:hasRulingStatement "Conformance-level gating is retired for current and new lineages; a done lineage's own history is left alone." ;
+    backlog:enforcedByShape backlog:AdoptionProfileShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+
+fw:Ruling_G41 a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G41" ;
+    rdfs:label "A closed lineage is exempt from further advisory processing"@en ;
+    backlog:hasRulingStatement "A closed lineage is exempt from further advisory processing; an active one earns full conformance, nothing less." ;
+    backlog:enforcedByShape backlog:UnfinishedLineageShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+
+fw:Ruling_G42 a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G42" ;
+    rdfs:label "Every adopting lineage carries a real, enforced conformance goal"@en ;
+    backlog:hasRulingStatement "Every adopting lineage carries a real, enforced goal for its own conformance, built at kickoff." ;
+    backlog:enforcedByShape backlog:AdoptionConformanceGoalShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+
+fw:Ruling_G43 a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G43" ;
+    rdfs:label "Three severities, researched not fabricated"@en ;
+    backlog:hasRulingStatement "Severity is Violation, Warning or Info -- three tiers, researched against external standards before finalizing, not four." ;
+    backlog:enforcedByShape backlog:SilentGapShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+
+fw:Ruling_G44 a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G44" ;
+    rdfs:label "The deferred severity audit, run: 0 of 66 reclassified"@en ;
+    backlog:hasRulingStatement "The severity audit G43 deferred was run: 0 of 66 sh:Warning shapes warranted reclassification." ;
+    backlog:enforcedByShape backlog:ClassReachabilityShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+
+fw:Ruling_G45 a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G45" ;
+    rdfs:label "ExecutionTask governance may be inherited, never waived unconditionally"@en ;
+    backlog:hasRulingStatement "An ExecutionTask's governance may be inherited from a compliant real parent; it may never be waived unconditionally." ;
+    backlog:enforcedByShape backlog:GovernedDoneShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+
+fw:Ruling_G46 a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G46" ;
+    rdfs:label "Severity is decided by grounded test drive, never convenience"@en ;
+    backlog:hasRulingStatement "Severity is decided by grounded test drive against real data, never by convenience or to avoid a check breaking conformance." ;
+    backlog:enforcedByShape backlog:BlueprintGapShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+
+fw:Ruling_G47 a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G47" ;
+    rdfs:label "A multi-candidate session decision is backed by a real score"@en ;
+    backlog:hasRulingStatement "A multi-candidate session decision must be backed by a real score, closing SilentGapShape's own gap one level up." ;
+    backlog:enforcedByShape backlog:SessionDecisionScoringShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+
+fw:Ruling_G48 a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G48" ;
+    rdfs:label "A register with real content names a real RegisterSession"@en ;
+    backlog:hasRulingStatement "A register with real content names a real RegisterSession; a session that changed items states whether it verified first." ;
+    backlog:enforcedByShape backlog:RegisterSessionIntegrityShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+
+fw:Ruling_G58 a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G58" ;
+    rdfs:label "Autonomous re-measurement enforced at checkpoint due dates"@en ;
+    backlog:hasRulingStatement "Re-measurement is enforced autonomously at a checkpoint's own declared due date, not only at authoring." ;
+    backlog:enforcedByShape backlog:CheckpointObservedShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+
+fw:Ruling_G60 a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G60" ;
+    rdfs:label "Corrective action enforced structurally, not by external trigger"@en ;
+    backlog:hasRulingStatement "An open, blocking objective must name a live corrective action; enforced structurally on every validation run, not by external trigger." ;
+    backlog:enforcedByShape backlog:ObjectiveHasCorrectiveActionShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+
+fw:Ruling_G61 a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G61" ;
+    rdfs:label "Exhausted corrective attempts can suggest closure-with-failure, never force it"@en ;
+    backlog:hasRulingStatement "Real, exhausted corrective attempts can suggest closure-with-failure as an option; this framework never forces that conclusion." ;
+    backlog:enforcedByShape backlog:CorrectiveActionMeasuredOnCloseShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session. Superseded in part by G62 (its own original threshold shape retired)." .
+
+fw:Ruling_G62 a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G62" ;
+    rdfs:label "An ineffective corrective attempt is confirmed by evidence, not a fixed count"@en ;
+    backlog:hasRulingStatement "Whether a corrective attempt was ineffective is confirmed by comparing its own real bracketing observations, never by a fixed attempt count." ;
+    backlog:enforcedByShape backlog:IneffectiveCorrectiveAttemptAdvisoryShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+
+fw:Ruling_G62b a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G62" ;
+    rdfs:label "Scope conformance covers the whole lineage lifecycle"@en ;
+    backlog:hasRulingStatement "Scope creep and scope gaps are checked structurally across the whole lineage lifecycle, not only at the objective-metric level." ;
+    backlog:enforcedByShape backlog:ScopeCreepAdvisoryShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+
+fw:Ruling_G63 a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G63" ;
+    rdfs:label "A confirmed pattern must be recorded as a real finding, not left unread"@en ;
+    backlog:hasRulingStatement "A confirmed measurement pattern must be recorded as a real RetrospectiveFinding, not left as a signal nobody interpreted." ;
+    backlog:enforcedByShape backlog:MeasurementAnalysisRequiredShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+
+fw:Ruling_G65 a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G65" ;
+    rdfs:label "A finished corrective action must be measured on close"@en ;
+    backlog:hasRulingStatement "A finished corrective action's own objective must carry a real observation dated at or after it closed, regardless of any earlier reading." ;
+    backlog:enforcedByShape backlog:CorrectiveActionMeasuredOnCloseShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+
+fw:Ruling_G66 a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G66" ;
+    rdfs:label "A lineage-local mode that recurs is a real candidate for promotion"@en ;
+    backlog:hasRulingStatement "A lineage-local failure or success mode used by two or more distinct findings is a real candidate for promotion to the shared catalogue." ;
+    backlog:enforcedByShape backlog:LineageLocalModeRecurrenceAdvisoryShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+
+fw:Ruling_G49 a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G49" ;
+    rdfs:label "Initiative and ArtifactEvidence built; a real effort finding, not assumed"@en ;
+    backlog:hasRulingStatement "Initiative and ArtifactEvidence are built and enforced; Increment/ReleaseEvidence deferred on a real, not assumed, effort finding." ;
+    backlog:enforcedByShape backlog:GovernedDoneShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+
+fw:Ruling_G50 a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G50" ;
+    rdfs:label "Increment/ReleaseEvidence built via a real, same-package requirement"@en ;
+    backlog:hasRulingStatement "Increment/ReleaseEvidence are built via their own real same-package requirement; deliveredInRelease is real but never mandatory." ;
+    backlog:enforcedByShape backlog:ReleaseEvidenceShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+
+fw:Ruling_G53 a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G53" ;
+    rdfs:label "A real handover processed; findings closed, formalized, or left genuinely open"@en ;
+    backlog:hasRulingStatement "A real cross-session handover's findings are each checked directly: closed only if already fixed, formalized only where grounded, and left genuinely open where neither side could verify the claim." ;
+    backlog:enforcedByShape backlog:ObjectiveStalledShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+
+fw:Ruling_G55 a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G55" ;
+    rdfs:label "A real definitional distinction is honored, not worked around"@en ;
+    backlog:hasRulingStatement "Review evidence is honestly distinct from tool-verified evidence; a human sign-off must never be marked evidenceVerified true to satisfy a shape that expects a tool ran." ;
+    backlog:enforcedByShape backlog:ReviewEvidenceShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+
+fw:Ruling_G59 a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G59" ;
+    rdfs:label "Closure readiness, progress, risk and focus computed together, never applied automatically"@en ;
+    backlog:hasRulingStatement "Closure readiness is computed and reported from real conditions this framework already enforces; the tool that computes it never applies its own findings automatically." ;
+    backlog:enforcedByShape backlog:AchievedOnlyWhenClearShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+
+fw:Ruling_G64 a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G64" ;
+    rdfs:label "Measurement must be part of overall progress, not only analysis"@en ;
+    backlog:hasRulingStatement "Measurement must be structurally joined to overall progress reporting; a finding available only to a script nobody is required to run is not real enforcement." ;
+    backlog:enforcedByShape backlog:IneffectiveCorrectiveAttemptAdvisoryShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+
+
+
+
+
+
+#################################################################
+#  v1.190.0 — the 25 rulings honestly found to have no single
+#  enforcing shape are given real, queryable existence too, as
+#  RetrospectiveFinding (which needs no enforcedByShape) rather
+#  than forced into GovernanceRuling. Closes the real problem
+#  found on re-verification: under the prior definition alone,
+#  Obj_RulingsQueryable's own target (0) could never be reached,
+#  since genuine process lessons will always exist and genuinely
+#  need no shape. The metric is redefined below to count only
+#  headings with NEITHER a GovernanceRuling NOR a RetrospectiveFinding
+#  -- a target that is actually achievable, honestly.
+#################################################################
+
+
+
+
+
+
+
+
+
+#################################################################
+#  v1.191.0 -- the Rebaseline gap this session found in its own
+#  history, corrected honestly: It12's own window was widened from
+#  a 2-hour plan to 2 weeks with no record. PlanBaseline captures
+#  what was originally set; Rebaseline records the real move, why,
+#  and that the owner has now reviewed and ratified it after the
+#  fact, per the owner's own direct instruction to fix this.
+#################################################################
+
+
+
+fw:Ruling_G70 a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G70" ;
+    rdfs:label "A silently-moved iteration window is caught structurally, for every project this framework governs"@en ;
+    backlog:hasRulingStatement "Any open iteration with real work in it and no PlanBaseline is flagged; once a baseline exists, an iteration's own current dates must match it or a real Rebaseline must name the move -- Rebaseline's own reach widened to cover Iteration, not only Objective and Milestone." ;
+    backlog:enforcedByShape backlog:OpenIterationBaselineAdvisoryShape , backlog:SilentContainerRebaselineShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+
+#################################################################
+#  v1.192.0 -- the closure report, built and required before this
+#  mission may be marked Achieved, per MissionClosureRequiresReportShape.
+#################################################################
+
+
+fw:Ruling_G71 a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G71" ;
+    rdfs:label "A closure report is a standard, structurally-enforced part of closing a mission"@en ;
+    backlog:hasRulingStatement "A mission may not be marked Achieved unless a real ClosureReport already names it, naming what it measured, cited and learned; enforced for every lineage this shape suite governs, not only as a one-time step." ;
+    backlog:enforcedByShape backlog:ClosureReportShape , backlog:MissionClosureRequiresReportShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+
+#################################################################
+#  Lineage 8 (L_ChangeDiscipline) -- an autonomous test drive of
+#  BRSF's own full lifecycle, run without interruption per the
+#  owner's own direct instruction. Methodology gaps found during
+#  autonomous execution are logged as they occur (see fw:Find_AutoGap*
+#  RetrospectiveFindings) rather than smoothed over.
+#################################################################
+
+fw:L_ChangeDiscipline a backlog:Lineage ; rdfs:label "Lineage 8"@en ;
+    backlog:lineageForMission fw:Mission_ChangeDiscipline ;
+    backlog:lineageOrdinal 8 ;
+    backlog:lineageArchived true .
+
+fw:Mission_ChangeDiscipline a backlog:Mission ;
+    backlog:producedByStage fw:Out2_Mission_CD ;
+    backlog:hasMissionStatement "Scope change is a formal, enforced discipline, not an implicit one: any request to grow or shrink a lineage's own declared scope is proposed, assessed for real impact before any decision, decided explicitly as accepted, rejected or deferred, and recorded either way -- and a lineage's own conduct toward other, concurrently active lineages is itself a first-class, checkable concern, not an assumed courtesy." ;
+    backlog:missionFor fw:Register ;
+    backlog:hasMissionOrigin backlog:Origin_OwnerStated ;
+    backlog:missionSource "Owner, 2026-09-05, verbatim: 'we need to discuss the scope management and formulization of change management as a concept and discipline to keep the hygiene, reduce the risks and possible frictions... scope can get bigger or smaller, there is no rule to set a single direction for that. The only limitation is the mission, the scope in any ways should be based to reach the mission.' Followed by direct instruction to run the full lifecycle autonomously as a test drive of BRSF's own capabilities, logging where the methodology proves insufficient for autonomous execution." ;
+    backlog:decidedBy backlog:Owner .
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+fw:CP_CD_MissionHeld a backlog:ObjectiveCheckpoint ;
+    backlog:checkpointDate "2026-09-05T12:00:00Z"^^xsd:dateTime .
+fw:CP_CD_NoOutOfScopeWork a backlog:ObjectiveCheckpoint ;
+    backlog:checkpointDate "2026-09-05T12:00:00Z"^^xsd:dateTime .
+
+#################################################################
+#  Real test cases exercising the new discipline this lineage
+#  itself just built, applied against this same lineage's own
+#  real scope -- not fabricated fixtures, real decisions.
+#################################################################
+
+
+
+
+
+
+
+
+
+
+
+
+#################################################################
+#  Methodology gaps found during this autonomous, unsupervised
+#  run, per the owner's own direct instruction to keep records
+#  of where BRSF is insufficient for autonomous execution.
+#################################################################
+
+
+
+
+
+
+
+fw:Mission_ChangeDiscipline backlog:hasMissionOutcome backlog:Out_Achieved ;
+    backlog:outcomeRationale "Achieved. Computed by backlog_lineage_compass, not asserted: all 7 objectives at target. fw:CR_ChangeDiscipline, this mission's own required closure report, records the real measures, the real test cases exercised, and five genuine methodology gaps found during this autonomous run, each with a possible remedy for later discussion rather than resolved unilaterally." .
+
+
+#################################################################
+#  A real, generic protective mechanism closing the one genuine
+#  gap this session's own autonomous run surfaced (fw:Find_AutoGap2):
+#  a requirements-introspection tool for ANY class, not scoped
+#  to Goal or Objective specifically.
+#################################################################
+
+fw:TS_backlog_class_requirementsV1_0_0 a backlog:ToolScript ;
+    backlog:scriptFileName "backlog_class_requirements_v1_0_0.py" ;
+    backlog:acceptsGraphPath false .
+
+
+
+#################################################################
+#  Ontology-based strengthening (G75), per the owner's own direct
+#  request: configuration and self-check claims become real,
+#  queryable data rather than hardcoded paths or printed text.
+#################################################################
+
+fw:TS_backlog_new_shape_proof_v1_2_0 a backlog:ToolScript ;
+    backlog:scriptFileName "backlog_new_shape_proof_v1_2_0.py" ; backlog:acceptsGraphPath false .
+
+fw:BR_ShapeProof a backlog:BaselineReference ;
+    backlog:baselineForTool fw:TS_backlog_new_shape_proof_v1_2_0 ;
+    backlog:hasBaselineLocation "the project repository#02-shacl-safeguards (the real, public mirror, always behind the working copy by definition, per the framework's own required drift check)" ;
+    backlog:hasBaselineRationale "The public mirror is the one location this project already treats as authoritative for 'what has genuinely shipped' -- backlog_distribution_drift_check_v1_0_0.py already compares the governed copy against it as a standing practice. Reusing it here means the shape-proof baseline is never a second, separately-maintained notion of 'published,' only the one this project already checks elsewhere." .
+
+fw:TS_backlog_shape_snapshot_loader_v1_0_0 a backlog:ToolScript ;
+    backlog:scriptFileName "backlog_shape_snapshot_loader_v1_0_0.py" ; backlog:acceptsGraphPath false .
+
+fw:Ruling_G75 a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G75" ;
+    rdfs:label "The new-shape decision itself is a real SHACL rule, not Python logic; a loader only tags data"@en ;
+    backlog:hasRulingStatement "Whether a shape is genuinely new and lacks provenByFixture is decided entirely by NewUnprovenShapeShape's own SPARQL evaluation; a loader's only real role is asserting which real file each shape declaration was found in." ;
+    backlog:enforcedByShape backlog:NewUnprovenShapeShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+
+fw:TS_backlog_remote_commit_check_v1_0_0 a backlog:ToolScript ;
+    backlog:scriptFileName "backlog_remote_commit_check_v1_0_0.py" ; backlog:acceptsGraphPath false .
+
+fw:Ruling_G76 a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G76" ;
+    rdfs:label "A shared repository's cross-project noise is decided by a real SPARQL rule against a declared sovereign path, not judged by hand each time"@en ;
+    backlog:hasRulingStatement "Whether a remote commit requires real reconciliation is decided entirely by CrossProjectCommitAdvisoryShape reading the commit's own real touched paths against this package's own declared hasSovereignPathPrefix; a loader's only role is recording which paths a commit touched." ;
+    backlog:enforcedByShape backlog:CrossProjectCommitAdvisoryShape , backlog:RemoteCommitShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
+
+#################################################################
+#  Forensic backfill (G77): Out2_Objective_CD and Out2_Backlog_CD
+#  were never recorded when their own stages actually closed --
+#  a real gap this examination found, not corrected until now.
+#  Their own digest and commit are the same real, single commit
+#  every other stage output in this lineage was also backfilled
+#  to, since the whole chain published in that one commit -- the
+#  honest fact this forensic pass exists to disclose, not hide.
+#################################################################
+
+
+
+
+#################################################################
+#  G78: a real gap the roadmap report itself surfaced, only once
+#  actually run against this lineage -- a check the forensic
+#  examination should have included from the start.
+#################################################################
+
+
+
+#################################################################
+#  v9.50.0 (2026-09-07, brsf-session) -- dated correction to lineage 8
+#  (L_ChangeDiscipline), appended, never edited in place (L-112).
+#
+#  The 2026-09-06 handover named the gap exactly: fw:It_CD1 carried no
+#  hasState, so L4DeploymentShape (built to catch "a closed iteration
+#  with no DeploymentUnit") had nothing to trigger on; no DeploymentUnit
+#  connected the story to the releases that really shipped it; and
+#  S_ChangeGuideDoc sat in fw:Register rather than a real package -- the
+#  G16 pattern again. Re-verified before writing, not assumed:
+#    - fw:S_ChangeGuideDoc and fw:ET_ChangeGuideDoc are Done in this
+#      register; fw:It_CD1's iterationEnd (2026-09-05T13:00Z) has passed;
+#    - the whole lineage-8 chain first appears in git at commit b48a787,
+#      2026-09-06T07:57:50Z, "backlog-roadmap-framework v1.193.0" -- one
+#      commit for the whole pipeline, as G77 already disclosed -- and was
+#      carried by every release v1.193.0 .. v1.199.0.
+#  The iteration's declared window predates its own commit by ~19 hours:
+#  the work was written on 09-05 and published on 09-06. Both facts are
+#  kept; the deployment date is the commit, because that is the only
+#  externally witnessed moment (G18).
+#################################################################
+
+
+
+
+#################################################################
+#  v9.50.0 -- Imp_RegisterPackageDecisions: root cause found and acted
+#  on, impediment NOT resolved. Both EnhancementProposals recorded
+#  submittedTo "07-handover-inbox/pending/..." -- this package's OWN
+#  inbox. They were never delivered to the sessions that could decide
+#  them; the block was self-inflicted. Delivered 2026-09-07 to the OE
+#  inbox (oe-pack/07-handover-inbox/pending/, per OE_Operating_Discipline
+#  v2.5.0 L-113: a proposal to another package goes in THAT package's
+#  inbox). rdodi-ecosystem has no inbox; the another registrant-addressed proposal
+#  went to the OE inbox as the documented fallback, addressed on its
+#  cover. Status stays Prop_Submitted until the addressee decides.
+#################################################################
+fw:EnhProp_RoadmapReportConvention
+    backlog:submittedTo "oe-pack/07-handover-inbox/pending/PROPOSAL_backlog-roadmap-framework_to_OE_roadmap-report-naming-convention_v1_0_0.md (delivered 2026-09-07; the 2026-09-03 submittedTo above named this package's own inbox and reached no one)" .
+fw:EnhProp_RoadmapReportKind
+    backlog:submittedTo "oe-pack/07-handover-inbox/pending/PROPOSAL_backlog-roadmap-framework_to_RDODI_roadmap-report-profile_v1_0_0.md (delivered 2026-09-07 to the OE inbox as fallback: rdodi-ecosystem has no 07-handover-inbox; the 2026-09-03 submittedTo above named this package's own inbox and reached no one)" .
+fw:Imp_RegisterPackageDecisions
+    backlog:hasImpedimentStatement "2026-09-07 addendum: still blocked on the same two decisions, but the cause of four days without an answer was that neither proposal had been delivered -- both were filed in this package's own inbox. Delivered to the OE inbox today; what clears this impediment is unchanged (a ratified configuration:RoadmapReportConvention and a prof:RoadmapReportKind), and the clock on the real wait starts now." .
+
+#################################################################
+#  v9.51.0 (2026-09-07, brsf-session) -- LINEAGE 8 BYPASS DETECTED
+#  AND RESTARTED. The owner's own observation, from a parallel session:
+#  the lineage is bypassed and the finished build is retrospected to
+#  fill it afterwards. Measured here with the git witness
+#  (backlog_lineage_order_check_v1_0_0, first-appearance commits):
+#    S_ChangeGuideDoc, ET_ChangeGuideDoc  first appear at b48a787 (v1.193.0)
+#    Out2_Backlog_CD                       first appears at 16633a4 (v1.198.0)
+#  The Stage_Backlog output was written five releases after the work it
+#  claims to have produced (G77 backfilled it; this session's v9.50.0
+#  correction then added a DeploymentUnit on top of it -- both were
+#  honest about being late, and both were still fills). The answer is a
+#  restart, not another fill: the five outputs are retracted (kept),
+#  the two items are flagged pre-lineage, and the chain is to be rebuilt
+#  from Mission in fresh commits, one per stage, by the owner. What the
+#  rebuilt chain admits, it admits by a new Stage_Backlog output.
+#  Mission_ChangeDiscipline keeps its recorded Out_Achieved: that
+#  outcome rests on seven real observations, not on the chain's order,
+#  and whether it is re-affirmed is decided when the rebuilt chain
+#  closes -- not silently here.
+#################################################################
+
+
+
+# v9.52.0 (2026-09-07, brsf-session): version chain only -- validated against TBox v1.84.0 / shapes v1.102.0 (lineage thrash). No thrash exists in this register today; see CHANGELOG v1.204.0.
+
+#################################################################
+#  v9.52.0 (2026-09-07, brsf-session) -- THE NEW CHECK CAUGHT ITS OWN
+#  AUTHOR. backlog_lineage_order_check_v1_1_0, first run on this
+#  register: Bypass_L_ChangeDiscipline_20260907 and
+#  Restart_L_ChangeDiscipline_20260907 both first appear at commit
+#  0251509 (v1.203.0). Finding and restart in one commit: the git
+#  witness sees no separate act of deciding -- Thrash_NotDeliberated,
+#  by the rule this release ships. The deliberation did happen (the
+#  owner's instruction, in conversation, before the release), but the
+#  rule is about what the repository witnesses, and the same session
+#  that wrote the rule gets no exception from it. Recorded as
+#  measured; the lineage is frozen; the ruling is the owner's:
+#    - an explicit unfreeze ("the restart was owner-instructed before
+#      the commit; the rebuild proceeds"), or
+#    - Out_Abandoned / a ScopeChange.
+#  Until frozenRuling is recorded, lineage 8 waits and no further
+#  restart is accepted.
+#################################################################
+fw:L_ChangeDiscipline backlog:lineageFrozen true ; backlog:frozenBy fw:Thrash_L_ChangeDiscipline_20260907_1 .
+# owner's ruling goes here when made: fw:L_ChangeDiscipline backlog:frozenRuling "..." ; backlog:decidedBy backlog:Owner .
+
+#################################################################
+#  v9.53.0 (2026-09-07, brsf-session) -- OWNER'S RULING on the freeze.
+#  Recorded verbatim; this is the only act in this release, so the
+#  git witness sees the ruling in its own commit, after the thrash
+#  finding (f2ee6f7) and before any rebuilt output.
+#################################################################
+fw:L_ChangeDiscipline
+    backlog:frozenRuling "Owner, 2026-09-07, verbatim: 'Unfreeze and let's do this appropriately with an additional benefit: prove the new method is working correctly.' Ruling: explicit unfreeze. The restart of 2026-09-07 stands (it was owner-instructed before commit 0251509; the repository could not witness that instruction, which is why the thrash was recorded and is kept). The chain of L_ChangeDiscipline is rebuilt from Mission, one stage per commit, each stage output witnessed after the previous one; the two pre-lineage items are re-admitted only by the rebuilt Stage_Backlog output. The rebuild is itself the proof of the method: at every step the order check must report the lineage in the state the ceremony predicts, and the restart loop must be seen to converge in one trial." ;
+    backlog:decidedBy backlog:Owner .
+
+#################################################################
+#  v9.54.0 (2026-09-07, brsf-session) -- REBUILD, STAGE 1 OF 5: Mission.
+#  Mission_ChangeDiscipline is re-affirmed as it stands (owner-stated,
+#  2026-09-05, Origin_OwnerStated; its text is the owner's and is not
+#  rewritten by a session). This output is the only substantive change
+#  in this release, so its first appearance in git is its own commit,
+#  after the ruling (27472b8). Digest computed at this commit over the
+#  Mission-stage subjects of the register as it now is (Experiment A).
+#################################################################
+fw:Mission_ChangeDiscipline backlog:producedByStage fw:Out3_Mission_CD .
+
+#################################################################
+#  v9.55.0 (2026-09-07, brsf-session) -- REBUILD, STAGE 2 OF 5: Scope.
+#  Consumes Out3_Mission_CD (first in git at 23a514e). This output
+#  is the only substantive change in this release, so its own first
+#  appearance is its own commit. Digest at this commit (Experiment A).
+#################################################################
+
+#################################################################
+#  v9.56.0 (2026-09-07, brsf-session) -- REBUILD, STAGE 3 OF 5: Goal.
+#  Consumes Out3_Scope_CD (first in git at 6133bcd). This output
+#  is the only substantive change in this release, so its own first
+#  appearance is its own commit. Digest at this commit (Experiment A).
+#################################################################
+
+#################################################################
+#  v9.57.0 (2026-09-07, brsf-session) -- REBUILD, STAGE 4 OF 5: Objective.
+#  Consumes Out3_Goal_CD (first in git at 4ac5125). This output
+#  is the only substantive change in this release, so its own first
+#  appearance is its own commit. Digest at this commit (Experiment A).
+#################################################################
+
+#################################################################
+#  v9.58.0 (2026-09-07, brsf-session) -- REBUILD, STAGE 5 OF 5: Backlog.
+#  Consumes Out3_Objective_CD (first in git at 97a1340). This output
+#  is the only substantive change in this release, so its own first
+#  appearance is its own commit. Digest at this commit (Experiment A).
+#################################################################
+
+#################################################################
+#  v9.59.0 (2026-09-07, brsf-session) -- THE PROOF READ, AND THE
+#  OUTCOME RE-AFFIRMED ON THE REBUILT CHAIN. Post-commit reading of
+#  backlog_lineage_order_check_v1_1_1 on v9.58.0 (b6fbcc4):
+#    L_ChangeDiscipline ORDERED outputs=5 items=2 backlog_output=b6fbcc4
+#  git first-appearance: Bypass+Restart 0251509 10:32 < ruling 27472b8
+#  < Out3_Mission 23a514e 11:28 < Scope 6133bcd 11:34 < Goal 4ac5125
+#  11:38 < Objective 97a1340 11:43 < Backlog b6fbcc4 11:48. Pipeline
+#  verifier: all five rebuilt digests reproduce -- the first time this
+#  register's own active chain has ever passed it. Compass: all seven
+#  objectives MET on their recorded observations. Mission outcome
+#  Out_Achieved therefore stands on the rebuilt chain; recorded as a
+#  re-affirmation appended to the closure report, not as a new closure.
+#################################################################
+
+#################################################################
+#  v9.60.0 (2026-09-07, brsf-session) -- LINEAGE 7 FOUND. Owner's
+#  decision: an item planned after it existed is a bypassed item.
+#  backlog_lineage_order_check_v1_2_0 on v9.59.0, real git witness:
+#  14 of lineage 7's 38 items first appear before their own
+#  PlanningEvent does. Recorded exactly as the tool emitted it; the
+#  lineage is frozen by the finding until a restart answers it -- in
+#  its own commit, so that finding and decision are witnessed apart
+#  (the lesson of v1.204.0). The restart will be divide and conquer,
+#  one part per scope deliverable, by the owner's decision.
+#################################################################
+fw:L_OntologyDriven backlog:lineageFrozen true ; backlog:frozenBy fw:Bypass_L_OntologyDriven_20260907 .   # found: frozen until a restart answers it, in its own commit
+
+#################################################################
+#  v9.61.0 (2026-09-07, brsf-session) -- LINEAGE 7 RESTARTED, DIVIDE
+#  AND CONQUER. Answers Bypass_L_OntologyDriven_20260907 (recorded at
+#  v9.60.0, commit 4423fdc) in its own commit, as the deliberation
+#  witness requires. Owner's decision: one part per scope deliverable.
+#  The five deliverables of Scope_Ontology become five part lineages;
+#  each of the 14 bypassed items goes to the part of the deliverable it
+#  satisfies (S_RulingsQueryableDecision satisfies none by record; it
+#  pursues Obj_RulingsQueryable, which fills Scope_Ontology through
+#  Goal_GovernanceInOntology, so it is placed in the governance part --
+#  a placement, stated as such, not a discovered link). Lineage 7's
+#  five outputs are retracted (kept); every bypassed item is flagged
+#  pre-lineage and stays flagged until its part's rebuilt Stage_Backlog
+#  output admits it. Each part rebuilds its own five-stage chain, one
+#  stage per commit; the parent's rebuilt Backlog output will combine
+#  the parts' Backlog outputs.
+#################################################################
+
+fw:L7_Gov a backlog:Lineage ; rdfs:label "Lineage 7, part Gov (Del_OntGovernance)"@en ;
+    backlog:lineageOrdinal 9 ; backlog:lineageArchived true ;
+    backlog:parentLineage fw:L_OntologyDriven ; backlog:partForDeliverable fw:Del_OntGovernance ;
+    backlog:lineageForMission fw:Mission_OntologyDriven .
+fw:L7_Exec a backlog:Lineage ; rdfs:label "Lineage 7, part Exec (Del_OntRuleExec)"@en ;
+    backlog:lineageOrdinal 10 ; backlog:lineageArchived true ;
+    backlog:parentLineage fw:L_OntologyDriven ; backlog:partForDeliverable fw:Del_OntRuleExec ;
+    backlog:lineageForMission fw:Mission_OntologyDriven .
+fw:L7_Export a backlog:Lineage ; rdfs:label "Lineage 7, part Export (Del_OntExport)"@en ;
+    backlog:lineageOrdinal 11 ; backlog:lineageArchived true ;
+    backlog:parentLineage fw:L_OntologyDriven ; backlog:partForDeliverable fw:Del_OntExport ;
+    backlog:lineageForMission fw:Mission_OntologyDriven .
+fw:L7_Prose a backlog:Lineage ; rdfs:label "Lineage 7, part Prose (Del_ProseExplains)"@en ;
+    backlog:lineageOrdinal 12 ; backlog:lineageArchived true ;
+    backlog:parentLineage fw:L_OntologyDriven ; backlog:partForDeliverable fw:Del_ProseExplains ;
+    backlog:lineageForMission fw:Mission_OntologyDriven .
+fw:L7_Code a backlog:Lineage ; rdfs:label "Lineage 7, part Code (Del_CodeExecutes)"@en ;
+    backlog:lineageOrdinal 13 ; backlog:lineageArchived true ;
+    backlog:parentLineage fw:L_OntologyDriven ; backlog:partForDeliverable fw:Del_CodeExecutes ;
+    backlog:lineageForMission fw:Mission_OntologyDriven .
+
+#################################################################
+#  v9.62.0 (2026-09-07, brsf-session) -- LINEAGE 7 REBUILD, STAGE 1
+#  OF 5: Mission, for all five parts. Parts are independent, so their
+#  stage-1 outputs share one commit; within each part the order is
+#  witnessed (this commit follows the parts' none commit 2f28bac).
+#  Digest at this commit (Experiment A), one per stage, register-wide.
+#################################################################
+
+#################################################################
+#  v9.62.0, second block -- CORRECTION FOUND BY THE FIRST READING.
+#  The restart (v9.61.0) flagged only the 14 bypassed items. The
+#  retraction of lineage 7's chain also un-orders the other 24: the
+#  Backlog output they were ordered against is retracted, so the
+#  order check read the parent as BYPASS (38 items, no active Backlog
+#  output). A restart retracts the chain that ordered EVERY item, so
+#  every item of the restarted lineage is pre-lineage from then on and
+#  re-enters only by admission. Corrected here, before any part output
+#  exists: the 22 items that belong to a deliverable (directly, or as
+#  the execution task of a story that does) go to that deliverable's
+#  part; the initiative and the spike, which pursue the framework-wide
+#  conformance objective and belong to no single deliverable, stay with
+#  the parent and will be admitted by its combine output.
+#################################################################
+
+#################################################################
+#  v9.63.0 (2026-09-07, brsf-session) -- LINEAGE 7 REBUILD, STAGE 2
+#  OF 5: Scope, for all five parts. Parts are independent, so their
+#  stage-2 outputs share one commit; within each part the order is
+#  witnessed (this commit follows the parts' Mission commit 9cb62b6).
+#  Digest at this commit (Experiment A), one per stage, register-wide.
+#################################################################
+
+#################################################################
+#  v9.64.0 (2026-09-07, brsf-session) -- LINEAGE 7 REBUILD, STAGE 3
+#  OF 5: Goal, for all five parts. Parts are independent, so their
+#  stage-3 outputs share one commit; within each part the order is
+#  witnessed (this commit follows the parts' Scope commit 8c4f385).
+#  Digest at this commit (Experiment A), one per stage, register-wide.
+#################################################################
+
+#################################################################
+#  v9.65.0 (2026-09-07, brsf-session) -- LINEAGE 7 REBUILD, STAGE 4
+#  OF 5: Objective, for all five parts. Parts are independent, so their
+#  stage-4 outputs share one commit; within each part the order is
+#  witnessed (this commit follows the parts' Goal commit 5a6894e).
+#  Digest at this commit (Experiment A), one per stage, register-wide.
+#################################################################
+
+#################################################################
+#  v9.66.0 (2026-09-07, brsf-session) -- LINEAGE 7 REBUILD, STAGE 5
+#  OF 5: Backlog, for all five parts. Parts are independent, so their
+#  stage-5 outputs share one commit; within each part the order is
+#  witnessed (this commit follows the parts' Objective commit 7a4fee7).
+#  Digest at this commit (Experiment A), one per stage, register-wide.
+#################################################################
+# the 22 items assigned to parts at v9.62.0 are admitted by their part's Backlog output too
+
+#################################################################
+#  v9.67.0 (2026-09-07, brsf-session) -- LINEAGE 7 REBUILD, COMBINE.
+#  The parent's rebuilt Stage_Backlog output combines the five parts'
+#  Backlog outputs (all first in git at 76159bd), and admits the two
+#  items that belong to no single deliverable -- the initiative and
+#  the spike, which pursue the framework-wide conformance objective.
+#  This is the combine step of divide and conquer; it consumes no
+#  predecessor stage of its own (CombineOutputShape governs it).
+#################################################################
+
+#################################################################
+#  v9.68.0 (2026-09-07, brsf-session) -- THE DIVIDE-AND-CONQUER PROOF
+#  READ, OUTCOME RE-AFFIRMED. Post-commit reading on v9.67.0 (6a0143c):
+#  L_OntologyDriven ORDERED, backlog output 6a0143c; parts L7_Gov,
+#  L7_Exec, L7_Export, L7_Prose, L7_Code all ORDERED (five outputs each,
+#  Backlog at 76159bd); 38 items admitted; no thrash. Sequence witnessed:
+#  bypass 4423fdc 12:49 < restart 2f28bac 13:11 < Mission 9cb62b6 13:24
+#  < Scope 8c4f385 < Goal 5a6894e < Objective 7a4fee7 < Backlog 76159bd
+#  14:02 < combine 6a0143c 14:13. Compass: six of seven objectives MET,
+#  Obj_RowsUnchecked OPEN at 15 (baseline 186), unchanged from before
+#  the restart. Out_Achieved stands; recorded as a re-affirmation on
+#  the closure report, citing the finding and the restart.
+#################################################################
+
+#################################################################
+#  v9.69.0 (2026-09-09, brsf-session) -- THE IMPEDIMENT CLEARS. The two
+#  external decisions Imp_RegisterPackageDecisions waited on since
+#  2026-09-03 were made once the proposals were delivered (v1.202.0):
+#    configuration:RoadmapReportConvention  -- OE, configuration_abox v2.7.0
+#       (oe-pack v20.59.0; one correction to the proposed parent class,
+#       ProjectMarkdownDocument, not EngineeringArtefact)
+#    prof:RoadmapReportKind                 -- another registrant, rdodi_profiles_abox
+#       v1.2.0 (two corrections of another registrant's own)
+#  Both read directly from the ratifying ABoxes at origin, not from the
+#  log lines. hasProposalStatus is a current-state pointer and is moved
+#  Prop_Submitted -> Prop_Accepted in place (L-112); this note is the
+#  history. The RegisterPackage can now be honestly built, and is.
+#################################################################
+fw:EnhProp_RoadmapReportConvention backlog:hasRationale "Accepted 2026-09-07 by OE (configuration_abox v2.7.0, oe-pack v20.59.0): configuration:RoadmapReportConvention exists, filenamePattern {name}_v{M}_{m}_{p}.md, dcterms:source citing this framework's proposal." .
+fw:EnhProp_RoadmapReportKind backlog:hasRationale "Accepted 2026-09-08 by another registrant (rdodi_profiles_abox v1.2.0): prof:RoadmapReportKind exists as a doc:ArtifactKindSpec." .
+
+#################################################################
+#  THE REGISTER PACKAGE. Built from the ratified conventions:
+#    - register data: this file, under configuration:ABoxFileConvention
+#    - profile declaration: the AdoptionProfile lives in this same file
+#      (one file, two roles; each RegisterArtifact carries one role)
+#    - progress report: the FIRST retained roadmap report run, written
+#      by backlog_roadmap_report_v1_6_0 on register v9.68.0 and kept as
+#      04-documentation/roadmap_report_run_v1_239_0.md under
+#      configuration:RoadmapReportConvention (its kind: prof:RoadmapReportKind)
+#    - manifest: MANIFEST_SHA256.txt. Its own SHA-256 cannot be recorded
+#      inside a file the manifest covers (the register), because the
+#      manifest would then have to cover its own digest -- no fixed
+#      point exists. The value below is the digest of the manifest AS
+#      PUBLISHED at v1.238.0 (commit 9a85c64), a real, checkable
+#      historical digest; the digest of each release's manifest is
+#      carried outside the manifest's coverage by the publisher
+#      (PUBLISH_RECORD.ttl, manifestVerified/manifestTotal) and by the
+#      release tag. Stated, not hidden (G7).
+#################################################################
+
+#################################################################
+#  OE'S ADJUDICATION ON THE RISK-FACET PROPOSAL, APPLIED (ADJUDICATION_
+#  OE_to_backlog-roadmap-framework_risk-facet-registration_v1_0_0, 2026-09-08).
+#  Not risk:hasIdentifiedRisk (risk = prospective uncertainty; these
+#  findings are confirmed, retrospective facts) but quality:hasFinding
+#  from a quality:QualityAssessment this register mints, each finding
+#  multi-typed quality:Finding alongside its own RetrospectiveFinding
+#  type -- using OE's classes to type our individuals, not minting
+#  OE vocabulary (B1). 43 findings.
+#################################################################
+fw:Find_ChangelogHeaderLoss a quality:Finding .
+fw:Find_MissingFixtureCaseName a quality:Finding .
+fw:Find_SelfReferentialProofPath a quality:Finding .
+fw:Find_SymmetricDivergenceRule a quality:Finding .
+# the run also names this register's own ReportSection individuals (fw:RS_*, keyed to the same nine sections the tool emits as backlog:Section_*)
+
+#################################################################
+#  v9.70.0 (2026-09-09, brsf-session) -- THE MANIFEST DIGEST, SOLVED
+#  RATHER THAN WORKED AROUND (owner's decision 3). The digest of a
+#  covered set lives outside the set. RELEASE_METRICS.txt is manifest-
+#  exempt and is written from the manifest bytes before any gate runs;
+#  the manifest artifact names it as carrier; the gate verifies the
+#  carrier is exempt and current; the publisher hashes the gate
+#  transcript into the publish record. The v9.69.0 hasManifestSHA256
+#  value stays as the historical record it was declared to be.
+#################################################################
+
+#################################################################
+#  2026-09-09T12:02:15Z -- ARCHIVAL by backlog_lineage_archive_v1_0_0: 574 subjects of
+#  L_OntologyDriven, L7_Gov, L7_Exec, L7_Export, L7_Prose, L7_Code, L_ChangeDiscipline set down into 01-ontologies/backlog_framework_archive_abox_v1_1_0.ttl; the lineage,
+#  its mission and its closure report stay here as the record that points in.
+#################################################################
+fw:L_OntologyDriven backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_1_0.ttl" ;
+    backlog:archivedAt "2026-09-09T12:02:15Z"^^xsd:dateTime ; backlog:hasLineageStatus backlog:LS_Archived ;
+    backlog:archivalTrigger "Found achieved and un-archived by backlog_lineage_archive_v1_0_0: mission Out_Achieved, closure report present, no item InProgress, not frozen. Owner's rule 2026-09-09: an achieved lineage found triggers the archival activity." .
+fw:L7_Gov backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_1_0.ttl" ;
+    backlog:archivedAt "2026-09-09T12:02:15Z"^^xsd:dateTime ; backlog:hasLineageStatus backlog:LS_Archived ;
+    backlog:archivalTrigger "Found achieved and un-archived by backlog_lineage_archive_v1_0_0: mission Out_Achieved, closure report present, no item InProgress, not frozen. Owner's rule 2026-09-09: an achieved lineage found triggers the archival activity." .
+fw:L7_Exec backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_1_0.ttl" ;
+    backlog:archivedAt "2026-09-09T12:02:15Z"^^xsd:dateTime ; backlog:hasLineageStatus backlog:LS_Archived ;
+    backlog:archivalTrigger "Found achieved and un-archived by backlog_lineage_archive_v1_0_0: mission Out_Achieved, closure report present, no item InProgress, not frozen. Owner's rule 2026-09-09: an achieved lineage found triggers the archival activity." .
+fw:L7_Export backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_1_0.ttl" ;
+    backlog:archivedAt "2026-09-09T12:02:15Z"^^xsd:dateTime ; backlog:hasLineageStatus backlog:LS_Archived ;
+    backlog:archivalTrigger "Found achieved and un-archived by backlog_lineage_archive_v1_0_0: mission Out_Achieved, closure report present, no item InProgress, not frozen. Owner's rule 2026-09-09: an achieved lineage found triggers the archival activity." .
+fw:L7_Prose backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_1_0.ttl" ;
+    backlog:archivedAt "2026-09-09T12:02:15Z"^^xsd:dateTime ; backlog:hasLineageStatus backlog:LS_Archived ;
+    backlog:archivalTrigger "Found achieved and un-archived by backlog_lineage_archive_v1_0_0: mission Out_Achieved, closure report present, no item InProgress, not frozen. Owner's rule 2026-09-09: an achieved lineage found triggers the archival activity." .
+fw:L7_Code backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_1_0.ttl" ;
+    backlog:archivedAt "2026-09-09T12:02:15Z"^^xsd:dateTime ; backlog:hasLineageStatus backlog:LS_Archived ;
+    backlog:archivalTrigger "Found achieved and un-archived by backlog_lineage_archive_v1_0_0: mission Out_Achieved, closure report present, no item InProgress, not frozen. Owner's rule 2026-09-09: an achieved lineage found triggers the archival activity." .
+fw:L_ChangeDiscipline backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_1_0.ttl" ;
+    backlog:archivedAt "2026-09-09T12:02:15Z"^^xsd:dateTime ; backlog:hasLineageStatus backlog:LS_Archived ;
+    backlog:archivalTrigger "Found achieved and un-archived by backlog_lineage_archive_v1_0_0: mission Out_Achieved, closure report present, no item InProgress, not frozen. Owner's rule 2026-09-09: an achieved lineage found triggers the archival activity." .
+
+
+#################################################################
+#  v9.72.0 (2026-09-09, brsf-session) -- LINEAGE STATUS on every
+#  lineage (TBox v1.89.0): archived lineages 1-6 and, from this
+#  release, 7 (with its five parts) and 8 are LS_Archived (the
+#  archive tool stamped the latter). Read from the register, not
+#  asserted from memory.
+#################################################################
+fw:L_Plan backlog:hasLineageStatus backlog:LS_Archived .
+fw:L_OrderRepair backlog:hasLineageStatus backlog:LS_Archived .
+fw:L_Executable backlog:hasLineageStatus backlog:LS_Archived .
+fw:L_Ops backlog:hasLineageStatus backlog:LS_Archived .
+fw:L_Dev backlog:hasLineageStatus backlog:LS_Archived .
+fw:L_Build backlog:hasLineageStatus backlog:LS_Archived .
+
+#################################################################
+#  v9.72.0 -- LINEAGE 9, Mission stage, RECORDED FOR REAL. v1.242.0's
+#  changelog claimed this stage; the snippet that carried it had been
+#  truncated to zero bytes by the session's own script, and the
+#  register at 5f8b318 contains none of it. That claim was false and
+#  is corrected here: the Mission stage's witnessed commit is this
+#  one, not 5f8b318. Nothing is re-dated. Status: LS_Opened.
+#################################################################
+fw:L_SDLCObligations a backlog:Lineage ; rdfs:label "Lineage 9"@en ;
+    backlog:lineageForMission fw:Mission_SDLCObligations ;
+    backlog:lineageOrdinal 14 ;
+    backlog:lineageArchived false ;
+    backlog:hasLineageStatus backlog:LS_Opened .
+fw:Mission_SDLCObligations a backlog:Mission ;
+    backlog:producedByStage fw:Out_Mission_SDLC ;
+    backlog:hasMissionStatement "The lineage is connected to the software development life cycle as its mandatory facilities: each stage of the Mission-Scope-Goal-Objective-Backlog chain declares the engineering artifacts it owes -- domain entities and blueprint at Scope, use cases with main and alternative scenarios at Goal, activity and sequence diagrams at Objective, the domain-class model and blueprint gaps at Backlog, and the ISO 12207 task types' artifacts at execution -- and no stage output closes, no refinement counts, and no item reaches Done without the owed artifacts existing, witnessed by git before the output that claims them. Enforced by shapes and the order check, proven on fixtures, and run first on this lineage itself." ;
+    backlog:missionFor fw:Register ;
+    backlog:hasMissionOrigin backlog:Origin_OwnerStated ;
+    backlog:missionSource "Owner, 2026-09-09, verbatim: 'The lineage had a Mission, Scope, Goals and Objectives -- but no Blueprint and no DomainEntity individuals. The more critical point is that how the domain engineering, analysis, design, implementation, testing, modeling, documentation are connected with the lineage. As far as we have mechanisms for the execution of the lineage steps but cannot force them to build certain artifacts. For example, grooming doesn't have any enforcement to define the use cases, their main and alternative scenarios, drawing activity diagrams, sequence diagrams, discover the domain classes, etc. This means we are not correctly connect the lineage with SDLC to guarantee the related engineering tasks to explore, define, model, and develop specifications for them.' and, on the four-point design: 'SDLC obligation design seems fine for me. Can you build it?'" ;
+    backlog:hasMissionOutcome backlog:Out_InFlight ;
+    backlog:decidedBy backlog:Owner .
+fw:Out_Mission_SDLC a backlog:StageOutput ;
+    backlog:outputOfStage backlog:Stage_Mission ;
+    backlog:belongsToLineage fw:L_SDLCObligations ;
+    backlog:hasStateDigest "c4ef20cf8495bd8d37dc9cca6cdef0247178396a2acdf074e9016e3d241a656c" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.243.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Mission stage of lineage 9 closed with the mission alone on the record. The first attempt to record it (v1.242.0) shipped an empty snippet; this is the real one." .

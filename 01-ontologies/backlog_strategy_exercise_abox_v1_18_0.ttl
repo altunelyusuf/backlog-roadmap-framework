@@ -8,8 +8,9 @@
 @prefix dcterms: <http://purl.org/dc/terms/> .
 
 <http://example.org/backlog-strategy-exercise> a owl:Ontology ;
-    owl:versionIRI <http://example.org/backlog-strategy-exercise/1.17.0> ;
-    owl:versionInfo "1.17.0" ;
+    owl:versionIRI <http://example.org/backlog-strategy-exercise/1.18.0> ;
+    owl:versionInfo "1.18.0" ;
+    owl:priorVersion <http://example.org/backlog-strategy-exercise/1.17.0> ;
     owl:priorVersion <http://example.org/backlog-strategy-exercise/1.16.0> ;
     owl:priorVersion <http://example.org/backlog-strategy-exercise/1.15.0> ;
     owl:priorVersion <http://example.org/backlog-strategy-exercise/1.14.0> ;
@@ -995,3 +996,12 @@ ex:TF_S2 backlog:admittedByOutput ex:TF_R2_Backlog .
 ex:TF_T_S2 backlog:admittedByOutput ex:TF_R2_Backlog .
 ex:TV_S2 backlog:admittedByOutput ex:TV_R2_Backlog .
 ex:TV_T_S2 backlog:admittedByOutput ex:TV_R2_Backlog .
+
+# v1.18.0 (2026-09-09): every toy lineage states its status (TBox v1.89.0). All five chains are closed
+# and no toy item has left Proposed: LS_Backlogged. The exercise is complete (G85); these lineages are
+# not achieved (their missions are invented and were never closed) and so are not archival candidates.
+ex:TF_Lin backlog:hasLineageStatus backlog:LS_Backlogged .
+ex:TV_Lin backlog:hasLineageStatus backlog:LS_Backlogged .
+ex:TS_Lin backlog:hasLineageStatus backlog:LS_Backlogged .
+ex:TR_Lin backlog:hasLineageStatus backlog:LS_Backlogged .
+ex:TT_Lin backlog:hasLineageStatus backlog:LS_Backlogged .

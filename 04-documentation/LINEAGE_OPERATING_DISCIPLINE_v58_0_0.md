@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v57.0.0
+# Lineage Operating Discipline — v58.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -61,6 +61,15 @@ remembered from a previous session; this document's own tooling references have 
    to the real post-rebase first-appearance commit and say so on the output (`skos:note`) — never
    silently. The order check reports an orphaned record as `WITNESS_BROKEN` and a register whose
    outputs git cannot find under the witness path as NOT VERIFIABLE — a refusal, not a clean result.
+
+   **A lineage keeps its status, and only passed steps fire (v58.0.0, G87).** Every lineage carries
+   `hasLineageStatus` — Opened, Scoped, Goaled, Objectived, Backlogged, InProgress, Achieved or
+   Abandoned, Archived, Revived — moved forward in the same commit as the stage output or event that
+   justifies it, and checked against the register (`LineageStatusShape`). A rule that needs a later
+   stage's elements binds only once the status has reached that stage. An achieved lineage found
+   un-archived triggers the archival activity: `backlog_lineage_archive` sets its work down into the
+   archive ABox, verbatim, and only its Lineage and Mission stay live as the pointer. An archived
+   lineage is not processed again unless the owner revives it (`lineageRevivedAt`).
 
 3. **State the granularity you are choosing and why.** `Initiative`, `Epic`, `Feature`, `Story`,
    `Task`, `Defect`, `Spike`, `Enabler`. Epic is the **coarsest ordinary choice**, not the neutral
@@ -2382,3 +2391,32 @@ source. Filed to OE (B1).
 **Classified at logging time (L-112):** gap 1 is a real defect in G81's tool, found by the first use
 outside its home; gap 2 is a real limit in G81's design, found by the first ordinary git workflow
 the ceremony never mentioned; the deletion is this session's own, recorded as such.
+
+## G87 — Closed is not archived; only passed steps fire
+
+**Asked by the owner:** why closed lineages still affected current development. Measured: lineages
+7 (350 subjects) with its five parts (61) and 8 (36) were `Out_Achieved` for a week and still live —
+validated by every shape, re-measured by the git witness (most of a 160-second gate), ranked by the
+report — because *closed* and *archived* were two states with nothing between them. Six early
+lineages had been set down by hand into an archive ABox; nothing did it since.
+
+**Built.** A lineage status (ten members; `LS_InProgress` between the chain's closing and the
+mission's settling, the owner's own request), checked against the register so it cannot outrun the
+chain; three shapes that had assumed a finished chain now bind only once the stage they need has
+passed — the Scope stage of a new lineage can publish before its goals exist, which the ceremony
+prescribes and no real lineage had ever done (every earlier one was published whole or rebuilt over
+existing elements: G77). `backlog_lineage_archive`: archivability checked, the partition computed by
+three closures each forced by a measurement (reference closure, 63 → 18; closure reports go with their
+work, 26 → 12; entity/gap clusters, 4 → 0), the statements moved *verbatim at text level* because an
+rdflib rewrite would have destroyed the register's dated comment history. Applied: 574 subjects of 7,
+its parts and 8 set down; the live register from 5,469 triples to ~1,450, 0 violations; the gate now
+names every achieved-and-un-archived lineage on every run.
+
+**Corrected.** v1.242.0 claimed lineage 9's Mission stage; its snippet had been truncated to zero
+bytes by this session's own script and the register held none of it. Recorded for real at v1.243.0,
+the false claim stated in the register. Two published false claims in three days (G85's was the
+first); both found by the reading that should have preceded the claim.
+
+**Classified at logging time (L-112):** the archival gap and the finished-chain assumption are
+genuine gaps in the ceremony, found by the first lineage built one stage at a time; the false claim
+is this session's own.

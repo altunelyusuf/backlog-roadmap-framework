@@ -1,5 +1,26 @@
 # Changelog
 
+## v1.243.0 — 2026-09-09 (MINOR: lineage status, only-passed-steps-fire, the archival activity; lineages 7 and 8 archived; lineage 9's Mission stage recorded for real)
+
+**v1.242.0's entry was false**: its snippet was truncated to zero bytes and the register at `5f8b318`
+holds no lineage 9. Recorded for real here; the witnessed commit of the Mission stage is this one.
+
+- TBox v1.89.0: `LineageStatus` (Opened, Scoped, Goaled, Objectived, Backlogged, InProgress,
+  Achieved, Abandoned, Archived, Revived; ranked), `hasLineageStatus`, `archivedAt`,
+  `archivalTrigger`, `lineageRevivedAt`.
+- Shapes v1.110.0: `LineageStatusShape` (status checked against active outputs, mission outcome,
+  archive flag), `AchievedLineageNotArchivedAdvisoryShape`; the goal-facing, area-measured and
+  mission-closure shapes bind only once the lineage's status has passed the stage they need, or
+  the lineage is archived. Fixtures `fixture_lineage_status` (0 violations) and
+  `fixture_lineage_status_negative` (every clause fires).
+- `backlog_lineage_archive_v1_0_0.py` — the archival activity (see `G87`). Applied: lineages 7,
+  `L7_*` and 8 set down into `backlog_framework_archive_abox_v1_1_0.ttl` (574 subjects, verbatim);
+  their Lineage and Mission stay live as the pointer; `LS_Archived`.
+- `backlog_gate_v1_10_0.sh`: archival finder.
+- Register v9.72.0: statuses on all lineages; lineage 9 `LS_Opened` with `Out_Mission_SDLC`.
+  0 violations, 48 warnings; validation time 11 s (was ~20 s).
+- Discipline v58.0.0: ceremony rule, `G87`.
+
 ## v1.242.0 — 2026-09-09 (MINOR: lineage 9 opens — SDLC obligations, Mission stage)
 
 Register v9.71.0: `fw:L_SDLCObligations` (ordinal 14) and `fw:Mission_SDLCObligations`, owner-stated

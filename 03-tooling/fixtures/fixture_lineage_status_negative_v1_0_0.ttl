@@ -1,0 +1,23 @@
+@prefix backlog: <http://example.org/backlog#> .
+@prefix ex:      <http://example.org/lineage-status-neg#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+# fixture_lineage_status_negative v1.0.0 -- NEGATIVE. One case per LineageStatusShape clause and the advisory:
+#  L_NoStatus     no hasLineageStatus at all.
+#  L_Outrun       claims LS_Goaled with no active Goal output (only a retracted one).
+#  L_FalseAchieved claims LS_Achieved; mission not Out_Achieved.
+#  L_ArchNoFile   claims LS_Archived; not lineageArchived / no archiveFile.
+#  L_Lagging      mission Out_Achieved with closure report, status still LS_InProgress.
+#  L_Found        LS_Achieved and not archived -> AchievedLineageNotArchivedAdvisoryShape (Warning).
+ex:M1 a backlog:Mission . ex:M2 a backlog:Mission ; backlog:hasMissionOutcome backlog:Out_InFlight .
+ex:M3 a backlog:Mission ; backlog:hasMissionOutcome backlog:Out_Achieved . ex:CR3 a backlog:ClosureReport ; backlog:closesForMission ex:M3 .
+ex:M4 a backlog:Mission ; backlog:hasMissionOutcome backlog:Out_Achieved . ex:CR4 a backlog:ClosureReport ; backlog:closesForMission ex:M4 .
+ex:L_NoStatus a backlog:Lineage ; backlog:lineageOrdinal 1 ; backlog:lineageArchived false ; backlog:lineageForMission ex:M1 .
+ex:L_Outrun a backlog:Lineage ; backlog:lineageOrdinal 2 ; backlog:lineageArchived false ; backlog:lineageForMission ex:M1 ; backlog:hasLineageStatus backlog:LS_Goaled .
+ex:O_G a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Goal ; backlog:belongsToLineage ex:L_Outrun ; backlog:closedAtCommit "c1" ; backlog:hasStateDigest "x" ; backlog:outputRetracted true .
+ex:L_FalseAchieved a backlog:Lineage ; backlog:lineageOrdinal 3 ; backlog:lineageArchived false ; backlog:lineageForMission ex:M2 ; backlog:hasLineageStatus backlog:LS_Achieved .
+ex:L_ArchNoFile a backlog:Lineage ; backlog:lineageOrdinal 4 ; backlog:lineageArchived false ; backlog:lineageForMission ex:M1 ; backlog:hasLineageStatus backlog:LS_Archived .
+ex:L_Lagging a backlog:Lineage ; backlog:lineageOrdinal 5 ; backlog:lineageArchived false ; backlog:lineageForMission ex:M3 ; backlog:hasLineageStatus backlog:LS_InProgress .
+ex:L_Found a backlog:Lineage ; backlog:lineageOrdinal 6 ; backlog:lineageArchived false ; backlog:lineageForMission ex:M4 ; backlog:hasLineageStatus backlog:LS_Achieved .
+<http://example.org/lineage-status-neg#> backlog:hasExpectedPolarity backlog:Polarity_Negative .

@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.88.0> ;
-    owl:versionInfo "1.88.0" ;
+    owl:versionIRI <http://example.org/backlog/1.89.0> ;
+    owl:versionInfo "1.89.0" ;
+    owl:priorVersion <http://example.org/backlog/1.88.0> ;
     owl:priorVersion <http://example.org/backlog/1.87.0> ;
     owl:priorVersion <http://example.org/backlog/1.86.0> ;
     owl:priorVersion <http://example.org/backlog/1.85.0> ;
@@ -6680,3 +6681,43 @@ backlog:manifestDigestCarriedBy a owl:DatatypeProperty , owl:FunctionalProperty 
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "manifest digest carried by"@en ;
     skos:definition "On the manifest artifact: the file name, relative to the package root, of the MANIFEST-EXEMPT file that carries the manifest's current SHA-256 -- in this package RELEASE_METRICS.txt, written by backlog_release_metrics from the manifest bytes before any other step runs. The register names the carrier; the release gate verifies (a) the carrier is declared exempt in the manifest, and (b) the digest it carries equals the digest of the manifest on disk. The publisher's record then hashes the gate transcript, so the chain root sits with the release, where a root can sit. This replaces hasManifestSHA256 on the manifest artifact, which asked for a digest inside the set it covers."@en .
+
+#################################################################
+#  v1.89.0 (2026-09-09) -- LINEAGE STATUS: only passed steps fire;
+#  achieved lineages are found and archived. Owner's rule, this day:
+#  "keep the status of the lineage to prevent misfiring rules when
+#  the matching requirement is not satisfiable. Only passed steps
+#  should fire. Achieved lineages should trigger the archival
+#  activities when found" -- and, asked why no status said the
+#  development was ongoing: LS_InProgress, between the chain's
+#  closing and the mission's settling.
+#################################################################
+backlog:LineageStatus a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:LS_Opened backlog:LS_Scoped backlog:LS_Goaled backlog:LS_Objectived backlog:LS_Backlogged backlog:LS_InProgress backlog:LS_Achieved backlog:LS_Abandoned backlog:LS_Archived backlog:LS_Revived ) ;
+    rdfs:label "Lineage Status"@en ;
+    skos:definition "Where a lineage stands, asserted on the Lineage at each transition and CHECKED against the register (LineageStatusConsistencyShape): a status cannot outrun the active stage outputs, the items, or the mission outcome. Rules that need a later stage's elements bind only when the lineage's status rank has reached that stage -- only passed steps fire."@en .
+backlog:statusRank a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:LineageStatus ; rdfs:range xsd:integer ; rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "status rank"@en .
+backlog:LS_Opened a owl:NamedIndividual , backlog:LineageStatus ; rdfs:label "Opened"@en ; backlog:statusRank 1 ; skos:definition "The Mission stage output is active; nothing downstream."@en .
+backlog:LS_Scoped a owl:NamedIndividual , backlog:LineageStatus ; rdfs:label "Scoped"@en ; backlog:statusRank 2 ; skos:definition "The Scope stage output is active."@en .
+backlog:LS_Goaled a owl:NamedIndividual , backlog:LineageStatus ; rdfs:label "Goaled"@en ; backlog:statusRank 3 ; skos:definition "The Goal stage output is active."@en .
+backlog:LS_Objectived a owl:NamedIndividual , backlog:LineageStatus ; rdfs:label "Objectived"@en ; backlog:statusRank 4 ; skos:definition "The Objective stage output is active."@en .
+backlog:LS_Backlogged a owl:NamedIndividual , backlog:LineageStatus ; rdfs:label "Backlogged"@en ; backlog:statusRank 5 ; skos:definition "The Backlog stage output is active: the chain is closed and work is planned, none of it started."@en .
+backlog:LS_InProgress a owl:NamedIndividual , backlog:LineageStatus ; rdfs:label "In progress"@en ; backlog:statusRank 6 ; skos:definition "The chain is closed and development is ongoing: at least one work item of the lineage has left Proposed/Ready, and the mission outcome is not yet settled. The status the owner asked for by name."@en .
+backlog:LS_Achieved a owl:NamedIndividual , backlog:LineageStatus ; rdfs:label "Achieved"@en ; backlog:statusRank 7 ; skos:definition "The mission outcome is Out_Achieved and a closure report closes it. Found in this status and not archived, the lineage triggers the archival activity."@en .
+backlog:LS_Abandoned a owl:NamedIndividual , backlog:LineageStatus ; rdfs:label "Abandoned"@en ; backlog:statusRank 7 ; skos:definition "The mission outcome is Out_Abandoned. Archivable like Achieved."@en .
+backlog:LS_Archived a owl:NamedIndividual , backlog:LineageStatus ; rdfs:label "Archived"@en ; backlog:statusRank 8 ; skos:definition "Set down into the archive ABox by backlog_lineage_archive; out of every processing path until consciously revived."@en .
+backlog:LS_Revived a owl:NamedIndividual , backlog:LineageStatus ; rdfs:label "Revived"@en ; backlog:statusRank 6 ; skos:definition "An archived lineage consciously brought back by the owner (lineageRevivedAt, decidedBy Owner); processed again as in progress."@en .
+backlog:hasLineageStatus a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:Lineage ; rdfs:range backlog:LineageStatus ; rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "has lineage status"@en ;
+    skos:definition "Current-state pointer (L-112): moved forward at each transition, in the same commit as the stage output or event that justifies it. Functional; the history is the chain of stage outputs and the dated notes."@en .
+backlog:archivedAt a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:Lineage ; rdfs:range xsd:dateTime ; rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "archived at"@en .
+backlog:archivalTrigger a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:Lineage ; rdfs:range xsd:string ; rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "archival trigger"@en ;
+    skos:definition "What found this lineage achieved and un-archived, and on which rule it was set down."@en .
+backlog:lineageRevivedAt a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:Lineage ; rdfs:range xsd:dateTime ; rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "lineage revived at"@en ;
+    skos:definition "The owner's conscious revival of an archived lineage; with it the lineage is processed again."@en .
