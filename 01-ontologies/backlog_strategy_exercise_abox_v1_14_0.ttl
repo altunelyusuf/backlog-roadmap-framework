@@ -8,8 +8,9 @@
 @prefix dcterms: <http://purl.org/dc/terms/> .
 
 <http://example.org/backlog-strategy-exercise> a owl:Ontology ;
-    owl:versionIRI <http://example.org/backlog-strategy-exercise/1.13.0> ;
-    owl:versionInfo "1.13.0" ;
+    owl:versionIRI <http://example.org/backlog-strategy-exercise/1.14.0> ;
+    owl:versionInfo "1.14.0" ;
+    owl:priorVersion <http://example.org/backlog-strategy-exercise/1.13.0> ;
     owl:priorVersion <http://example.org/backlog-strategy-exercise/1.12.0> ;
     owl:priorVersion <http://example.org/backlog-strategy-exercise/1.11.0> ;
     owl:priorVersion <http://example.org/backlog-strategy-exercise/1.10.0> ;
@@ -938,3 +939,13 @@ ex:TF_R2_Scope a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Scope
     backlog:hasStateDigest "00442de09fcbeb488a6e2fcebac3dddb4fb976651ff0f14cd8965a33a375b133" ; backlog:closedAtCommit "backlog-roadmap-framework-v1.234.0 (tag; witnessed by git, not asserted)" .
 ex:TV_R2_Scope a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Scope ; backlog:belongsToLineage ex:TV_Lin ; backlog:consumesOutput ex:TV_R2_Mission ;
     backlog:hasStateDigest "00442de09fcbeb488a6e2fcebac3dddb4fb976651ff0f14cd8965a33a375b133" ; backlog:closedAtCommit "backlog-roadmap-framework-v1.234.0 (tag; witnessed by git, not asserted)" .
+
+#################################################################
+#  v1.14.0 (2026-09-07, brsf-session) -- SECOND REBUILD (toys F and V), STAGE 3 OF 5:
+#  Goal, toys F and V (independent lineages sharing one commit; each
+#  toy's own order is what the witness measures). Follows fc596ab.
+#################################################################
+ex:TF_R2_Goal a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Goal ; backlog:belongsToLineage ex:TF_Lin ; backlog:consumesOutput ex:TF_R2_Scope ;
+    backlog:hasStateDigest "ceb5050aaa2a83836c91982cd01544c6e57f7a54d1b4f8ac6a6d805edd146297" ; backlog:closedAtCommit "backlog-roadmap-framework-v1.235.0 (tag; witnessed by git, not asserted)" .
+ex:TV_R2_Goal a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Goal ; backlog:belongsToLineage ex:TV_Lin ; backlog:consumesOutput ex:TV_R2_Scope ;
+    backlog:hasStateDigest "ceb5050aaa2a83836c91982cd01544c6e57f7a54d1b4f8ac6a6d805edd146297" ; backlog:closedAtCommit "backlog-roadmap-framework-v1.235.0 (tag; witnessed by git, not asserted)" .
