@@ -4,6 +4,9 @@
 
 Exercise register v1.16.0: `TF_R2_Backlog`, `TV_R2_Backlog` (each
 consuming its toy's Objective output, b84c36c); digest at this commit. Each Backlog output admits all four items of its toy: the second trial closes at 4/4.
+Shapes v1.108.0: `RestartKeepsAdmissionsShape` exempts a re-admitted item in both of its branches — v1.107.0
+did so in one, and fired on a second trial that had re-admitted everything the moment its Backlog output
+existed. Found by this release's own dry-validation.
 
 ## v1.236.0 — 2026-09-07 (MINOR: second toy rebuild, stage 4 of 5 — Objective, toys F and V)
 

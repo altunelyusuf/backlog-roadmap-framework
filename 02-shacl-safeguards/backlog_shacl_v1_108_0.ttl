@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.107.0> ;
-    owl:versionInfo "1.107.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.108.0> ;
+    owl:versionInfo "1.108.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.107.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.106.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.105.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.104.0> ;
@@ -5541,8 +5542,11 @@ backlog:RestartKeepsAdmissionsShape a sh:NodeShape ;
             FILTER EXISTS { ?live backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage ?l . FILTER NOT EXISTS { ?live backlog:outputRetracted true } }
             { ?i backlog:admittedByOutput ?o }
             UNION
-            { ?i backlog:admittedByOutput ?o0 . ?o0 backlog:outputRetracted true .
-              FILTER NOT EXISTS { ?i backlog:admittedByOutput ?ok . FILTER NOT EXISTS { ?ok backlog:outputRetracted true } } }
+            { ?i backlog:admittedByOutput ?o0 . ?o0 backlog:outputRetracted true . }
+            # v1.108.0: an item RE-ADMITTED by an active output is kept, whichever branch matched --
+            # v1.107.0 exempted re-admission in the second branch only, so a second trial that
+            # re-admitted everything still fired the moment its Backlog output existed
+            FILTER NOT EXISTS { ?i backlog:admittedByOutput ?ok . FILTER NOT EXISTS { ?ok backlog:outputRetracted true } }
         }""" ] .
 
 backlog:ThrashFreezesLineageShape a sh:NodeShape ;
