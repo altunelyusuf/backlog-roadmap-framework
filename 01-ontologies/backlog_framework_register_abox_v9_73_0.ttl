@@ -14,8 +14,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.72.0> ;
-    owl:versionInfo "9.72.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.73.0> ;
+    owl:versionInfo "9.73.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.72.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.70.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.69.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.68.0> ;
@@ -2867,3 +2868,107 @@ fw:Out_Mission_SDLC a backlog:StageOutput ;
     backlog:hasStateDigest "c4ef20cf8495bd8d37dc9cca6cdef0247178396a2acdf074e9016e3d241a656c" ;
     backlog:closedAtCommit "backlog-roadmap-framework-v1.243.0 (tag; witnessed by git, not asserted)" ;
     backlog:hasRationale "Mission stage of lineage 9 closed with the mission alone on the record. The first attempt to record it (v1.242.0) shipped an empty snippet; this is the real one." .
+
+#################################################################
+#  v9.72.0 (2026-09-09, brsf-session) -- LINEAGE 9, Scope stage.
+#  Consumes Out_Mission_SDLC (6b00dd9). Status moves to LS_Scoped in this commit. Under the obligations this
+#  lineage introduces, the Scope stage owes the DOMAIN ENTITIES and
+#  the BLUEPRINT of its own domain before its output may close --
+#  produced here, in this commit, before Out_Scope_SDLC.
+#################################################################
+fw:Scope_SDLCObligations a backlog:ScopeStatement ;
+    backlog:hasScopeStatementText "Connect the lineage to the SDLC as mandatory facilities, in four parts: (1) stage obligations -- each pipeline stage declares the artifact kinds it owes, drawn from another registrant's artifact-kind specifications; (2) closure requires the owed artifacts, witnessed -- a StageOutput closes only when ArtifactEvidence of every owed kind exists for the lineage and first appears in git before the output; (3) refinement produces or does not count -- a PlanningEvent on an epic or story produces the use-case and scenario artifacts for the items it plans; (4) enforcement at Done -- the owed artifact kinds of an item's task type join its effective Definition of Done. Proven on a positive and a negative fixture, measured by the order check, and run first on this lineage." ;
+    backlog:scopeForMission fw:Mission_SDLCObligations ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out_Scope_SDLC ;
+    backlog:requiresDeliverable fw:Del_StageObligations , fw:Del_WitnessedClosure , fw:Del_RefinementProduces , fw:Del_DoDArtifacts ;
+    backlog:coversArea fw:Area_SDLC_Vocabulary , fw:Area_SDLC_Shapes , fw:Area_SDLC_Witness , fw:Area_SDLC_Fixtures ;
+    backlog:hasScopeExclusion fw:Ex_SDLC_NoNewKinds , fw:Ex_SDLC_NoRetrofit ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+fw:Area_SDLC_Vocabulary a backlog:ScopeArea ; backlog:areaMeasure "Zero stage-obligation properties exist in backlog_tbox_v1_89_0 (grep stageOwes: 0; refinementProduces: 0); ArtifactEvidence exists (v1.8x) with no kind typing from prof:. Counted 2026-09-09." ; backlog:hasScopeLayer backlog:Layer_Product ; backlog:areaLocation "01-ontologies/backlog_tbox -- stageOwesArtifactKind, refinementProduces, artifact-evidence typing" ; backlog:belongsToLineage fw:L_SDLCObligations .
+fw:Area_SDLC_Shapes a backlog:ScopeArea ; backlog:areaMeasure "Zero shapes in backlog_shacl_v1_110_0 condition a StageOutput's closure, a PlanningEvent's validity, or an item's Done on an owed artifact (grep owed/ArtifactKind: 0). EpicPlanningShape is the one artifact obligation that exists (coversEntity). Counted 2026-09-09." ; backlog:hasScopeLayer backlog:Layer_Product ; backlog:areaLocation "02-shacl-safeguards/backlog_shacl -- stage-closure, refinement and DoD obligation shapes" ; backlog:belongsToLineage fw:L_SDLCObligations .
+fw:Area_SDLC_Witness a backlog:ScopeArea ; backlog:areaMeasure "backlog_lineage_order_check_v1_4_0 measures the order of stage outputs and items only; zero artifact-before-output measurements. Counted 2026-09-09." ; backlog:hasScopeLayer backlog:Layer_Product ; backlog:areaLocation "03-tooling/backlog_lineage_order_check -- artifact-before-output measurement" ; backlog:belongsToLineage fw:L_SDLCObligations .
+fw:Area_SDLC_Fixtures a backlog:ScopeArea ; backlog:areaMeasure "Zero fixtures under 03-tooling/fixtures name a stage obligation (grep sdlc_obligation: 0) out of 62 fixtures. Counted 2026-09-09." ; backlog:hasScopeLayer backlog:Layer_Product ; backlog:areaLocation "03-tooling/fixtures -- fixture_sdlc_obligations (positive) and fixture_sdlc_obligations_negative" ; backlog:belongsToLineage fw:L_SDLCObligations .
+fw:Del_StageObligations a backlog:ScopeDeliverable ; backlog:deliverableForArea fw:Area_SDLC_Vocabulary ;
+    backlog:hasScopeLayer backlog:Layer_Product ;
+    backlog:derivesFromMissionClause "each stage of the Mission-Scope-Goal-Objective-Backlog chain declares the engineering artifacts it owes" ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+fw:Del_WitnessedClosure a backlog:ScopeDeliverable ; backlog:deliverableForArea fw:Area_SDLC_Shapes ;
+    backlog:hasScopeLayer backlog:Layer_Product ;
+    backlog:derivesFromMissionClause "no stage output closes ... without the owed artifacts existing, witnessed by git before the output that claims them" ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+fw:Del_RefinementProduces a backlog:ScopeDeliverable ; backlog:deliverableForArea fw:Area_SDLC_Shapes ;
+    backlog:hasScopeLayer backlog:Layer_Product ;
+    backlog:derivesFromMissionClause "no refinement counts ... without the owed artifacts existing" ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+fw:Del_DoDArtifacts a backlog:ScopeDeliverable ; backlog:deliverableForArea fw:Area_SDLC_Shapes ;
+    backlog:hasScopeLayer backlog:Layer_Product ;
+    backlog:derivesFromMissionClause "no item reaches Done without the owed artifacts existing" ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+fw:Ex_SDLC_NoNewKinds a backlog:ScopeExclusion ;
+    backlog:excludesConcern "Minting artifact-kind vocabulary of this framework's own (use case, scenario, activity diagram, sequence diagram, domain model, test specification, ...). another registrant's prof: ArtifactKindSpecs already define these; the stage obligations reference them by IRI. A kind another registrant lacks is proposed to another registrant's inbox, not minted here." ;
+    backlog:hasExclusionRationale "L-64: the vocabulary belongs to the subject that owns it. prof:RoadmapReportKind was obtained exactly this way in Imp_RegisterPackageDecisions; the same road is taken for every kind this lineage needs." ;
+    backlog:decidedBy backlog:Owner ; backlog:hasScopeLayer backlog:Layer_Work ; backlog:belongsToLineage fw:L_SDLCObligations .
+fw:Ex_SDLC_NoRetrofit a backlog:ScopeExclusion ;
+    backlog:excludesConcern "Applying the new obligations to lineages already closed or archived (1-8) and to the toy lineages of the exercise register. Their outputs were closed under the rules in force; a closed chain reopened to produce artifacts it never owed is a backfill." ;
+    backlog:hasExclusionRationale "G41 and L-112: closed history is a record. Obligations bind lineages opened after they ship, and this lineage itself." ;
+    backlog:decidedBy backlog:Owner ; backlog:hasScopeLayer backlog:Layer_Work ; backlog:belongsToLineage fw:L_SDLCObligations .
+
+# --- what the Scope stage OWES under its own rule: the domain entities and the blueprint of this domain ---
+fw:Blueprint_SDLCObligations a backlog:Blueprint ; backlog:blueprintFor fw:Register ;
+    backlog:belongsToLineage fw:L_SDLCObligations ;
+    backlog:hasRationale "Blueprint of the stage-obligation domain: five entities, each to be carried through creation, active use, suspension/exception and termination by the work of this lineage. Produced at the Scope stage because that is what the Scope stage owes (Del_StageObligations, point 1 of the scope)." .
+fw:Entity_StageObligation a backlog:DomainEntity ; rdfs:label "Stage obligation"@en ; rdfs:comment "A pipeline stage's declaration of the artifact kinds it owes before its output may close."@en ; backlog:belongsToLineage fw:L_SDLCObligations .
+fw:Entity_OwedArtifactKind a backlog:DomainEntity ; rdfs:label "Owed artifact kind"@en ; rdfs:comment "An artifact kind (a prof: ArtifactKindSpec) named by a stage obligation or a task-type obligation."@en ; backlog:belongsToLineage fw:L_SDLCObligations .
+fw:Entity_ArtifactEvidence a backlog:DomainEntity ; rdfs:label "Artifact evidence"@en ; rdfs:comment "A produced artifact of an owed kind, tied to a lineage and witnessed by git before the output that claims it."@en ; backlog:belongsToLineage fw:L_SDLCObligations .
+fw:Entity_RefinementProduct a backlog:DomainEntity ; rdfs:label "Refinement product"@en ; rdfs:comment "The use-case and scenario artifacts a PlanningEvent produces for the items it plans."@en ; backlog:belongsToLineage fw:L_SDLCObligations .
+fw:Entity_TaskTypeObligation a backlog:DomainEntity ; rdfs:label "Task-type obligation"@en ; rdfs:comment "The artifact kinds an ISO 12207 task type owes at execution, joining the item's effective Definition of Done."@en ; backlog:belongsToLineage fw:L_SDLCObligations .
+fw:Gap_StageObligation_Creation a backlog:BlueprintGap ; backlog:gapForEntity fw:Entity_StageObligation ; backlog:gapForStage backlog:Stage_Creation ;
+    backlog:hasGapReason "created by this lineage's work items, not yet planned" ; backlog:belongsToLineage fw:L_SDLCObligations .
+fw:Gap_StageObligation_ActiveUse a backlog:BlueprintGap ; backlog:gapForEntity fw:Entity_StageObligation ; backlog:gapForStage backlog:Stage_ActiveUse ;
+    backlog:hasGapReason "used by every lineage opened after this one ships; no item of this lineage names active use" ; backlog:belongsToLineage fw:L_SDLCObligations .
+fw:Gap_StageObligation_SuspensionException a backlog:BlueprintGap ; backlog:gapForEntity fw:Entity_StageObligation ; backlog:gapForStage backlog:Stage_SuspensionException ;
+    backlog:hasGapReason "an obligation waived for a stage is an exception this lineage must decide how to record" ; backlog:belongsToLineage fw:L_SDLCObligations .
+fw:Gap_StageObligation_Termination a backlog:BlueprintGap ; backlog:gapForEntity fw:Entity_StageObligation ; backlog:gapForStage backlog:Stage_Termination ;
+    backlog:hasGapReason "retiring an obligation is a scope change of the framework, out of this lineage's scope" ; backlog:belongsToLineage fw:L_SDLCObligations .
+fw:Gap_OwedArtifactKind_Creation a backlog:BlueprintGap ; backlog:gapForEntity fw:Entity_OwedArtifactKind ; backlog:gapForStage backlog:Stage_Creation ;
+    backlog:hasGapReason "created by this lineage's work items, not yet planned" ; backlog:belongsToLineage fw:L_SDLCObligations .
+fw:Gap_OwedArtifactKind_ActiveUse a backlog:BlueprintGap ; backlog:gapForEntity fw:Entity_OwedArtifactKind ; backlog:gapForStage backlog:Stage_ActiveUse ;
+    backlog:hasGapReason "used by every lineage opened after this one ships; no item of this lineage names active use" ; backlog:belongsToLineage fw:L_SDLCObligations .
+fw:Gap_OwedArtifactKind_SuspensionException a backlog:BlueprintGap ; backlog:gapForEntity fw:Entity_OwedArtifactKind ; backlog:gapForStage backlog:Stage_SuspensionException ;
+    backlog:hasGapReason "an obligation waived for a stage is an exception this lineage must decide how to record" ; backlog:belongsToLineage fw:L_SDLCObligations .
+fw:Gap_OwedArtifactKind_Termination a backlog:BlueprintGap ; backlog:gapForEntity fw:Entity_OwedArtifactKind ; backlog:gapForStage backlog:Stage_Termination ;
+    backlog:hasGapReason "retiring an obligation is a scope change of the framework, out of this lineage's scope" ; backlog:belongsToLineage fw:L_SDLCObligations .
+fw:Gap_ArtifactEvidence_Creation a backlog:BlueprintGap ; backlog:gapForEntity fw:Entity_ArtifactEvidence ; backlog:gapForStage backlog:Stage_Creation ;
+    backlog:hasGapReason "created by this lineage's work items, not yet planned" ; backlog:belongsToLineage fw:L_SDLCObligations .
+fw:Gap_ArtifactEvidence_ActiveUse a backlog:BlueprintGap ; backlog:gapForEntity fw:Entity_ArtifactEvidence ; backlog:gapForStage backlog:Stage_ActiveUse ;
+    backlog:hasGapReason "used by every lineage opened after this one ships; no item of this lineage names active use" ; backlog:belongsToLineage fw:L_SDLCObligations .
+fw:Gap_ArtifactEvidence_SuspensionException a backlog:BlueprintGap ; backlog:gapForEntity fw:Entity_ArtifactEvidence ; backlog:gapForStage backlog:Stage_SuspensionException ;
+    backlog:hasGapReason "an obligation waived for a stage is an exception this lineage must decide how to record" ; backlog:belongsToLineage fw:L_SDLCObligations .
+fw:Gap_ArtifactEvidence_Termination a backlog:BlueprintGap ; backlog:gapForEntity fw:Entity_ArtifactEvidence ; backlog:gapForStage backlog:Stage_Termination ;
+    backlog:hasGapReason "retiring an obligation is a scope change of the framework, out of this lineage's scope" ; backlog:belongsToLineage fw:L_SDLCObligations .
+fw:Gap_RefinementProduct_Creation a backlog:BlueprintGap ; backlog:gapForEntity fw:Entity_RefinementProduct ; backlog:gapForStage backlog:Stage_Creation ;
+    backlog:hasGapReason "created by this lineage's work items, not yet planned" ; backlog:belongsToLineage fw:L_SDLCObligations .
+fw:Gap_RefinementProduct_ActiveUse a backlog:BlueprintGap ; backlog:gapForEntity fw:Entity_RefinementProduct ; backlog:gapForStage backlog:Stage_ActiveUse ;
+    backlog:hasGapReason "used by every lineage opened after this one ships; no item of this lineage names active use" ; backlog:belongsToLineage fw:L_SDLCObligations .
+fw:Gap_RefinementProduct_SuspensionException a backlog:BlueprintGap ; backlog:gapForEntity fw:Entity_RefinementProduct ; backlog:gapForStage backlog:Stage_SuspensionException ;
+    backlog:hasGapReason "an obligation waived for a stage is an exception this lineage must decide how to record" ; backlog:belongsToLineage fw:L_SDLCObligations .
+fw:Gap_RefinementProduct_Termination a backlog:BlueprintGap ; backlog:gapForEntity fw:Entity_RefinementProduct ; backlog:gapForStage backlog:Stage_Termination ;
+    backlog:hasGapReason "retiring an obligation is a scope change of the framework, out of this lineage's scope" ; backlog:belongsToLineage fw:L_SDLCObligations .
+fw:Gap_TaskTypeObligation_Creation a backlog:BlueprintGap ; backlog:gapForEntity fw:Entity_TaskTypeObligation ; backlog:gapForStage backlog:Stage_Creation ;
+    backlog:hasGapReason "created by this lineage's work items, not yet planned" ; backlog:belongsToLineage fw:L_SDLCObligations .
+fw:Gap_TaskTypeObligation_ActiveUse a backlog:BlueprintGap ; backlog:gapForEntity fw:Entity_TaskTypeObligation ; backlog:gapForStage backlog:Stage_ActiveUse ;
+    backlog:hasGapReason "used by every lineage opened after this one ships; no item of this lineage names active use" ; backlog:belongsToLineage fw:L_SDLCObligations .
+fw:Gap_TaskTypeObligation_SuspensionException a backlog:BlueprintGap ; backlog:gapForEntity fw:Entity_TaskTypeObligation ; backlog:gapForStage backlog:Stage_SuspensionException ;
+    backlog:hasGapReason "an obligation waived for a stage is an exception this lineage must decide how to record" ; backlog:belongsToLineage fw:L_SDLCObligations .
+fw:Gap_TaskTypeObligation_Termination a backlog:BlueprintGap ; backlog:gapForEntity fw:Entity_TaskTypeObligation ; backlog:gapForStage backlog:Stage_Termination ;
+    backlog:hasGapReason "retiring an obligation is a scope change of the framework, out of this lineage's scope" ; backlog:belongsToLineage fw:L_SDLCObligations .
+
+fw:L_SDLCObligations backlog:hasLineageStatus backlog:LS_Scoped .
+fw:Out_Scope_SDLC a backlog:StageOutput ;
+    backlog:outputOfStage backlog:Stage_Scope ;
+    backlog:belongsToLineage fw:L_SDLCObligations ;
+    backlog:consumesOutput fw:Out_Mission_SDLC ;
+    backlog:hasStateDigest "a8ad46c68bcdd9d37289f1df8070323c10111887127bbaaf2be715054434e70b" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.245.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Scope stage of lineage 9: four deliverables, two exclusions, four areas -- and, as this stage will owe from now on, the five domain entities and the blueprint of the stage-obligation domain, with every entity's four lifecycle stages accounted for as gaps the later stages must close. Produced before this output, in this commit." .

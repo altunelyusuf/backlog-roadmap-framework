@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.245.0 — 2026-09-09 (MINOR: lineage 9, Scope stage — and the domain entities and blueprint the stage owes)
+
+Register v9.72.0: `Scope_SDLCObligations` (four deliverables from the four approved points, four
+areas, two exclusions: no artifact kinds minted here — another registrant's `prof:` kinds are referenced; no
+retrofit of closed lineages). Under the rule this lineage introduces the Scope stage owes the domain
+entities and the blueprint of its domain: `Blueprint_SDLCObligations`, five `DomainEntity`
+individuals (stage obligation, owed artifact kind, artifact evidence, refinement product, task-type
+obligation) and their twenty lifecycle gaps — produced in this commit, before `Out_Scope_SDLC`.
+
 ## v1.244.0 — 2026-09-09 (MINOR: the witness orders by ancestry, not time — the adopter's third finding, built)
 
 - `backlog_lineage_order_check_v1_4_0.py`: first-appearance ordinal = `git rev-list --count` (a rebase
