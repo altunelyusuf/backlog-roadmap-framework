@@ -1,5 +1,41 @@
 # Changelog
 
+## v1.248.0 — 2026-09-09 (MAJOR: the severity audit finished — 58 advisories were obligations; and what a violation obliges, from the standards)
+
+**The audit `G43` deferred and `G44` ran too shallowly.** `G44` judged 63 of 66 advisories from their
+message text and reported "0 of 66 reclassified". Re-read against their actual SPARQL, under the
+owner's criterion — *a lineage rule is an obligation; a warning is only a risk or an opportunity* —
+**58 of 78 were obligations mis-graded as advisories** and are now `sh:Violation`: grooming linked to
+execution, interaction analysis to specification, design task to model, Done story to test cases,
+criterion coverage across scenario kinds, refinement that produces nothing, deliverable coverage,
+area without goal, exclusion unguarded, deployment coverage, stage-order witness, missed forecast,
+breached WIP limit, scope gap, scope creep, premature exclusion, mis-typed epic kind, and the rest,
+each with its reason inline. **4** became `sh:Info` (opportunities), **16** remain `sh:Warning`:
+seven threshold heuristics whose constants have no source, nine conditions whose obligation has not
+been written yet.
+
+**One promotion reverted on measurement, the same hour.** `ClassReachabilityShape` produced 41 of the
+live register's 54 violations — all of them "this register does not use that framework class", which
+is a property of the vocabulary, not a rule any lineage broke. Reverted to `sh:Warning` with the
+reasoning in the shapes file; reachability is enforced where it belongs, over the TBox.
+
+**What a violation obliges — the owner's decision point, answered from the literature.** SHACL's
+verdict says only that a rule is broken. The disposition says what must now happen, and the standards
+already name the cases: ISO 19011:2018 separates **nonconformity** (a requirement not fulfilled) from
+**observation**; ITIL 4 / ISO/IEC 20000-1 give **known error** — a documented cause deliberately not
+remediated, accepted, owned and monitored, which is exactly "the rule arrived late and the lineage has
+moved"; ISO 31000:2018 gives **risk retention**. TBox v1.91.0 adds `FindingDisposition`
+(`Disp_Nonconformity`, `Disp_KnownError`, `Disp_RiskAccepted`, `Disp_Observation`) and `FindingRecord`
+with `findingFromShape`, `findingOnNode`, `dispositionRationale`, `monitoredBy`,
+`preventiveMechanism`, `dispositionReviewDue`. Shapes v1.112.0 enforce it: **nonconformity is the
+default and needs no record**; a known error without a preventive mechanism, monitoring and a review
+date is refused; an accepted risk without a `risk:Risk`, monitoring and a review date is refused; an
+observation must name the rule that is missing; and a disposition past its review date is refused —
+a permanent exception is a nonconformity with a note attached.
+
+Fixtures `fixture_finding_disposition` (0 violations) and `fixture_finding_disposition_negative`
+(every clause fires).
+
 
 
 ## v1.247.0 — 2026-09-09 (MINOR: SDLC stage obligations — built on this framework's own vocabulary, binding only lineages that adopt them at open)

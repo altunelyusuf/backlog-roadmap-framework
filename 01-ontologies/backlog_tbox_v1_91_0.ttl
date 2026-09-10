@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.90.0> ;
-    owl:versionInfo "1.90.0" ;
+    owl:versionIRI <http://example.org/backlog/1.91.0> ;
+    owl:versionInfo "1.91.0" ;
+    owl:priorVersion <http://example.org/backlog/1.90.0> ;
     owl:priorVersion <http://example.org/backlog/1.89.0> ;
     owl:priorVersion <http://example.org/backlog/1.88.0> ;
     owl:priorVersion <http://example.org/backlog/1.87.0> ;
@@ -6838,3 +6839,96 @@ backlog:adoptionRecordedAtOpen a owl:DatatypeProperty , owl:FunctionalProperty ;
     rdfs:domain backlog:Lineage ; rdfs:range xsd:boolean ;
     rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "adoption recorded at open"@en ;
     skos:definition "Asserted with adoptsObligationSet in the SAME commit as the lineage's Mission stage output, and verified there by the git witness (backlog_lineage_order_check): the adoption's first appearance may not follow the Mission output's. Without it, a lineage past LS_Opened may not adopt."@en .
+
+#################################################################
+#  v1.91.0 (2026-09-09) -- WHAT A VIOLATION MEANS. Owner's decision
+#  point, this day: "Naming the Violations has wider meaning than our
+#  intention. Possibly the violations should be categorized as the
+#  known problems, and those that need to be dealt with. Use the
+#  literature and the standardizations to set a proper mechanism."
+#
+#  SHACL offers three severities and no more; sh:Violation says only
+#  that a rule is broken. What a broken rule OBLIGES is a separate
+#  question, and the standards answer it:
+#
+#  ISO 19011:2018 (auditing) and ISO/IEC 17021-1 separate a
+#  NONCONFORMITY -- a requirement not fulfilled -- from an OBSERVATION,
+#  which records something without asserting a breach. ISO 9001
+#  auditing practice grades nonconformity as MAJOR (the system fails
+#  its purpose) or MINOR (an isolated lapse); this framework refuses
+#  graded severity inside a verdict (G40, G43) and instead records the
+#  grade as the DISPOSITION of the finding, which is a decision with
+#  an owner, not a property of the rule.
+#
+#  ITIL 4 and ISO/IEC 20000-1 give the case the owner named exactly:
+#  an INCIDENT has happened, a PROBLEM is its cause, and a KNOWN ERROR
+#  is a documented cause that is deliberately NOT remediated -- because
+#  the remedy costs more than the fault, or because the state has moved
+#  and the past cannot be reinvented -- and is instead accepted, owned
+#  and MONITORED. "A rule broken because we applied it late, when the
+#  lineage has already moved" is a known error and nothing else.
+#
+#  ISO 31000:2018 (via the OE risk subject) governs the fourth case:
+#  a RISK is the effect of uncertainty, below certainty, treated and
+#  monitored. A risk that has occurred stops being a risk.
+#
+#  So: every sh:Violation this suite reports is a FINDING, and every
+#  finding carries a DISPOSITION. Nonconformity is the default and
+#  needs no declaration; the other three must be declared, owned and
+#  justified, and the release gate refuses an undeclared exception.
+#################################################################
+
+backlog:FindingDisposition a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:Disp_Nonconformity backlog:Disp_KnownError backlog:Disp_RiskAccepted backlog:Disp_Observation ) ;
+    rdfs:label "Finding Disposition"@en ;
+    skos:definition "What a reported finding obliges. The verdict says a rule is broken; the disposition says what must now happen. Four, from the standards named in this block's comment, not from convenience."@en .
+backlog:Disp_Nonconformity a owl:NamedIndividual , backlog:FindingDisposition ;
+    rdfs:label "Nonconformity"@en ;
+    dcterms:source "ISO 19011:2018, 3.21 (nonconformity: non-fulfilment of a requirement)" ;
+    skos:definition "A requirement is not fulfilled and must be. The default disposition of every violation: it needs no declaration, it needs fixing. A finding with no declared disposition is this one."@en .
+backlog:Disp_KnownError a owl:NamedIndividual , backlog:FindingDisposition ;
+    rdfs:label "Known error"@en ;
+    dcterms:source "ITIL 4 / ISO/IEC 20000-1:2018 (known error: a problem with a documented root cause, not remediated, managed and monitored)" ;
+    skos:definition "The rule is broken, the cause is documented, and it is deliberately NOT remediated -- typically because the work has moved on and the past state cannot be reinvented, or because the remedy costs more than the fault. It must name its root cause, the decision to accept it, its owner, and how it is monitored. It is not an excuse: the finding keeps firing, and the record says why it is left standing."@en .
+backlog:Disp_RiskAccepted a owl:NamedIndividual , backlog:FindingDisposition ;
+    rdfs:label "Risk accepted"@en ;
+    dcterms:source "ISO 31000:2018, 6.5.3 (risk retention as a treatment option); risk:RiskRetention" ;
+    skos:definition "The condition is real, the consequence is uncertain, and the owner has retained the risk rather than treating it. Must name a risk:Risk, its treatment decision and its monitoring; residual risk is risk:ResidualRisk."@en .
+backlog:Disp_Observation a owl:NamedIndividual , backlog:FindingDisposition ;
+    rdfs:label "Observation"@en ;
+    dcterms:source "ISO 19011:2018, 6.4.8 (observations recorded without a nonconformity being raised)" ;
+    skos:definition "Recorded because it may matter later; nothing is required of anyone. Reserved for findings whose rule is not yet written -- the case where a condition is certainly true and no obligation exists to breach."@en .
+
+backlog:FindingRecord a owl:Class ;
+    rdfs:subClassOf backlog:RetrospectiveFinding ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Finding Record"@en ;
+    skos:definition "A register entry that gives a reported violation a disposition other than Nonconformity. It names the shape that fired, the node it fired on, why the finding stands, who decided, and how it is monitored. Without such a record every violation is a nonconformity to be fixed -- silence is never an exception."@en .
+backlog:findingFromShape a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:FindingRecord ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "finding from shape"@en ;
+    skos:definition "The local name of the shape whose report this record dispositions. A string, because the shapes graph is not loaded with the register."@en .
+backlog:findingOnNode a owl:ObjectProperty ;
+    rdfs:domain backlog:FindingRecord ; rdfs:range rdfs:Resource ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "finding on node"@en .
+backlog:hasDisposition a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:FindingRecord ; rdfs:range backlog:FindingDisposition ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "has disposition"@en .
+backlog:dispositionRationale a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:FindingRecord ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "disposition rationale"@en ;
+    skos:definition "Why this finding is not simply to be fixed. For a known error: what the root cause is and why remediation is impossible or not worth its cost. For an accepted risk: the consequence retained. For an observation: which rule does not yet exist."@en .
+backlog:monitoredBy a owl:DatatypeProperty ;
+    rdfs:domain backlog:FindingRecord ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "monitored by"@en ;
+    skos:definition "The mechanism that keeps watching this finding -- the gate step, report section or checker that will surface it again, and the review at which it is re-decided. A known error nobody watches is an excuse (ITIL: known errors are managed, not filed)."@en .
+backlog:preventiveMechanism a owl:DatatypeProperty ;
+    rdfs:domain backlog:FindingRecord ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "preventive mechanism"@en ;
+    skos:definition "What stops this from happening AGAIN, even where the instance itself cannot be repaired. The owner's rule of 2026-09-09: a problem that has occurred needs a preventive mechanism, and where none is known it must be monitored until one is."@en .
+backlog:dispositionReviewDue a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:FindingRecord ; rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "disposition review due"@en ;
+    skos:definition "When this disposition is re-decided. A known error accepted forever is a nonconformity nobody wrote down."@en .

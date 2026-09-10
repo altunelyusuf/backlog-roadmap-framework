@@ -1,0 +1,26 @@
+@prefix backlog: <http://example.org/backlog#> .
+@prefix ex:      <http://example.org/finding-disposition-neg#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+# fixture_finding_disposition_negative v1.0.0 -- NEGATIVE. One case per clause:
+#  FR_Bare        no shape, no node, no disposition, no rationale, no decider
+#  FR_Nonconf     dispositions a finding as Nonconformity (the default needs no record)
+#  FR_KE_Unwatched  known error with no monitoring, no preventive mechanism, no review date
+#  FR_Risk_Bare   accepted risk with no risk record, no monitoring, no review date
+#  FR_Obs_Vague   observation whose rationale never says which rule is missing
+#  FR_Stale       review date in the past
+ex:N a backlog:Story ; backlog:hasIdentifier "S-N" ; backlog:hasState backlog:Done .
+ex:FR_Bare a backlog:FindingRecord .
+ex:FR_Nonconf a backlog:FindingRecord ; backlog:findingFromShape "X" ; backlog:findingOnNode ex:N ;
+    backlog:hasDisposition backlog:Disp_Nonconformity ; backlog:dispositionRationale "we will fix it" ; backlog:decidedBy backlog:Owner .
+ex:FR_KE_Unwatched a backlog:FindingRecord ; backlog:findingFromShape "Y" ; backlog:findingOnNode ex:N ;
+    backlog:hasDisposition backlog:Disp_KnownError ; backlog:dispositionRationale "too late to fix" ; backlog:decidedBy backlog:Owner .
+ex:FR_Risk_Bare a backlog:FindingRecord ; backlog:findingFromShape "Z" ; backlog:findingOnNode ex:N ;
+    backlog:hasDisposition backlog:Disp_RiskAccepted ; backlog:dispositionRationale "acceptable" ; backlog:decidedBy backlog:Owner .
+ex:FR_Obs_Vague a backlog:FindingRecord ; backlog:findingFromShape "W" ; backlog:findingOnNode ex:N ;
+    backlog:hasDisposition backlog:Disp_Observation ; backlog:dispositionRationale "just noting it" ; backlog:decidedBy backlog:Owner ;
+    backlog:monitoredBy "nothing" ; backlog:dispositionReviewDue "2027-01-01T00:00:00Z"^^xsd:dateTime .
+ex:FR_Stale a backlog:FindingRecord ; backlog:findingFromShape "V" ; backlog:findingOnNode ex:N ;
+    backlog:hasDisposition backlog:Disp_KnownError ; backlog:dispositionRationale "old" ; backlog:decidedBy backlog:Owner ;
+    backlog:monitoredBy "m" ; backlog:preventiveMechanism "p" ; backlog:dispositionReviewDue "2026-01-01T00:00:00Z"^^xsd:dateTime .
+<http://example.org/finding-disposition-neg#> backlog:hasExpectedPolarity backlog:Polarity_Negative .

@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.94.0
+# Backlog & Roadmap Semantic Framework — Standard v1.95.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -806,6 +806,29 @@ verified there by the git witness. `ObligationAdoptionShape` refuses adoption by
 `LS_Opened`. A running lineage cannot be given new obligations; a closed one is a record; a lineage
 that adopted nothing owes nothing beyond the chain. A stage that must close owing records
 `obligationWaivedBy` with a reason, and the advisory reports it until the debt is paid.
+
+### 2.5c-xxi-g What a violation obliges: the finding's disposition
+
+A `sh:Violation` says a rule is broken. What that obliges is a separate question, and the standards
+answer it. Every reported violation is a finding, and every finding has a **`FindingDisposition`**:
+
+- **`Disp_Nonconformity`** — a requirement is not fulfilled and must be (ISO 19011:2018 §3.21). The
+  **default**: it needs no record, it needs fixing. Recording one is itself refused.
+- **`Disp_KnownError`** — the cause is documented and the instance is deliberately not remediated,
+  typically because the work has moved on and the past state cannot be reinvented (ITIL 4 /
+  ISO/IEC 20000-1). It must name its root cause, its **preventive mechanism** (what stops the next
+  one), its **monitoring**, its decider and a **review date**. A known error nobody watches is an
+  excuse; one accepted forever is a nonconformity with a note attached, and the review-date shape
+  refuses it.
+- **`Disp_RiskAccepted`** — the consequence is uncertain and the owner has retained the risk
+  (ISO 31000:2018 §6.5.3). Must name a `risk:Risk`, its monitoring and its review date.
+- **`Disp_Observation`** — the condition is true and no obligation covers it (ISO 19011 §6.4.8). Its
+  rationale must say **which rule is missing**; writing that rule is backlog work, not a permanent
+  state.
+
+A `FindingRecord` carries `findingFromShape`, `findingOnNode`, `hasDisposition`,
+`dispositionRationale`, `decidedBy`, and the monitoring the disposition requires. Silence is never an
+exception: a violation with no record is a nonconformity to be fixed.
 
 ### 2.5c-xxii The staged ceremony, one commit per stage
 

@@ -1,0 +1,41 @@
+@prefix backlog: <http://example.org/backlog#> .
+@prefix ex:      <http://example.org/finding-disposition#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+# fixture_finding_disposition v1.0.0 -- POSITIVE (2026-09-09). Three well-formed dispositions, one
+# per non-default kind. The nodes a finding fired on are stand-ins (BacklogConcept), because a real
+# Story would trip the item rules this fixture is not about: a known error (cause documented, not remediable, prevented and monitored),
+# an accepted risk (a real risk retained, monitored, reviewed), an observation (no rule exists yet).
+# Expected: 0 violations from the disposition shapes.
+ex:Node1 a backlog:BacklogConcept ; rdfs:label "stand-in for the story a finding fired on"@en .
+ex:Node2 a backlog:BacklogConcept ; rdfs:label "stand-in for the oversized story"@en .
+ex:Node3 a backlog:BacklogConcept ; rdfs:label "stand-in for the intent element"@en .
+ex:FR_KnownError a backlog:FindingRecord ;
+    backlog:findingFromShape "StoryTestAnalysisShape" ; backlog:findingOnNode ex:Node1 ;
+    backlog:hasDisposition backlog:Disp_KnownError ; backlog:decidedBy backlog:Owner ;
+    backlog:hasFindingScope backlog:Scope_Methodology ;
+    backlog:hasRootCause "The rule requiring a test case per Done story was written after this story closed." ;
+    backlog:dispositionRationale "Root cause: the obligation post-dates the work. The story is Done and its iteration closed; writing test cases now would attach evidence to work nobody re-ran, which is reinventing the state rather than recording it." ;
+    backlog:preventiveMechanism "The rule now binds every story that leaves Proposed after the release that shipped it; no future story can close this way." ;
+    backlog:monitoredBy "backlog_release_metrics prints the count of pre-rule Done stories each release; re-read at the next lineage review." ;
+    backlog:dispositionReviewDue "2027-01-01T00:00:00Z"^^xsd:dateTime .
+ex:R1 a backlog:Risk ; rdfs:label "carry-over risk"@en .
+ex:FR_RiskAccepted a backlog:FindingRecord ;
+    backlog:findingFromShape "OversizedStoryAdvisoryShape" ; backlog:findingOnNode ex:Node2 ;
+    backlog:hasDisposition backlog:Disp_RiskAccepted ; backlog:decidedBy backlog:Owner ;
+    backlog:hasFindingScope backlog:Scope_LineageLocal ;
+    backlog:hasRootCause "The story's estimate exceeds the iteration capacity by one point." ;
+    backlog:dispositionRationale "Consequence retained: the story may carry over. Splitting it would separate two changes that must ship together." ;
+    backlog:hasRisk ex:R1 ;
+    backlog:monitoredBy "Iteration review: if it carries over twice, it is split." ;
+    backlog:dispositionReviewDue "2027-01-01T00:00:00Z"^^xsd:dateTime .
+ex:FR_Observation a backlog:FindingRecord ;
+    backlog:findingFromShape "SessionDraftedIntentAdvisoryShape" ; backlog:findingOnNode ex:Node3 ;
+    backlog:hasDisposition backlog:Disp_Observation ; backlog:decidedBy backlog:Owner ;
+    backlog:hasFindingScope backlog:Scope_Methodology ;
+    backlog:hasRootCause "A session drafted this intent element rather than the owner stating it." ;
+    backlog:dispositionRationale "No rule forbids session-drafted intent; the obligation that would make this a nonconformity has not been written, and writing it is backlog work." ;
+    backlog:monitoredBy "Counted in the release metrics; revisited when the intent-origin rule is written." ;
+    backlog:dispositionReviewDue "2027-01-01T00:00:00Z"^^xsd:dateTime .
+<http://example.org/finding-disposition#> backlog:hasExpectedPolarity backlog:Polarity_Positive .
