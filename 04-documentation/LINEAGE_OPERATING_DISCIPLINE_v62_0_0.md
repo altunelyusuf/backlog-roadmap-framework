@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v61.0.0
+# Lineage Operating Discipline — v62.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -70,6 +70,12 @@ remembered from a previous session; this document's own tooling references have 
    un-archived triggers the archival activity: `backlog_lineage_archive` sets its work down into the
    archive ABox, verbatim, and only its Lineage and Mission stay live as the pointer. An archived
    lineage is not processed again unless the owner revives it (`lineageRevivedAt`).
+
+   **A closed lineage retires WHOLE (v62.0.0, G92).** Everything it owns moves to the archive — its
+   items, stage outputs, findings, closure report, its `Mission` and the `Lineage` individual itself.
+   What stays is a `LineageArchiveEntry`: a record, not a lineage, carrying the archived IRIs as
+   strings so no shape can reach them. The partition is by **ownership**, never by reachability, and
+   the **register root** (`isRegisterRoot`) and everything it declares can never be archived.
 
    **A ruling binds only work that had not started when the ruling shipped (v60.0.0, G89).** Stage
    obligations live in a named `ObligationSet`; a lineage owes a set only if it adopted that set at
@@ -2578,3 +2584,52 @@ defined, its overlay shipped and verified, and the register does not declare it.
 and was not applied to the session's own next change. What is on the record now is the general form:
 obligations bind at lineage open, severities bind at register adoption, and neither binds anything
 that did not declare it.
+
+## G92 — Hand-picked exceptions inside an automatic closure produce the opposite of the rule
+
+**The owner's question:** *"A lineage is closed, it should be retired and archived not partially but
+the whole lineage including the mission. Why does such a drift happen?"*
+
+**Measured before answering.** After `G87`'s archival of lineages 7, its five parts and 8:
+
+| | live register | archive |
+|---|---|---|
+| `Lineage` individuals | **14** — including all eight retired ones | **0** |
+| `Mission` individuals | 10 | 6 |
+| `fw:Register`, the register root | **0** | **1** |
+
+Exactly inverted. What had to retire stayed and was still validated on every run — the cost archiving
+exists to remove, still being paid. What can never be archived — the container the register itself
+is, with its identifier, title, sovereign path prefix and Definition of Done — was gone, and the live
+register had had no container since v1.243.0. Nothing detected it for eight releases because nothing
+new had been added to the register in that time; it surfaced when lineage 9's first stories failed
+with "memberOfContainer must point to a real container".
+
+**One cause, two opposite symptoms.** The partition was computed by **reachability** — everything in
+no live lineage that the archived work references — with two hand-picked exceptions kept live, the
+`Lineage` and its `Mission`, "as a pointer into the archive". Connectivity has no notion of *above*
+and *below*. The register root belongs to no lineage, so the closure claimed it; the lineage and
+mission belong *inside* the lineage, so the hand-protection spared exactly what should have gone. A
+closure with exceptions is not a rule, it is a rule plus a list, and the list encodes whatever its
+author happened to picture at the time.
+
+**Built.** `backlog_lineage_archive_v2_0_0` partitions by **ownership**: everything with
+`belongsToLineage` the retired lineage moves, its `Lineage`, `Mission` and closure report included;
+`protected()` computes the register root and everything the root declares and refuses to move any of
+it. `LineageArchiveEntry` (TBox v1.94.0) is what remains — a record, not a lineage, holding the
+archived IRIs as **strings** precisely so that a shape cannot follow them back. `isRegisterRoot`
+makes the root's protection a property of the data rather than a fact the tool remembers.
+
+**And a second over-reach, in the repair itself.** Restoring the root, this session also pulled
+`fw:Scope`, `fw:DoD` and `fw:Commitment_Dev` out of the archive as "the root's declarations". Checked
+at tag `v1.242.0`: all three had **zero statements** in the live register even before any archival —
+they had been archive material since lineages 1-6 were retired by hand, long before this session.
+Returned unchanged, with a note. The lesson repeats one level down: the question is never "does the
+root reference it" but "does the root own it".
+
+**Classified at logging time (L-112):** the session's own design error, found by the owner reading the
+register's behaviour rather than by any safeguard — no shape can ask why a partition was drawn where
+it was. The three root rules that now legitimately have nothing to answer (`no commitment`, `state
+disagrees with members`, `edit history without stage outputs`) are exempt only for a declared root in
+a register that has archived work: what they look for is not missing, it retired, and the entry names
+the file it went to.

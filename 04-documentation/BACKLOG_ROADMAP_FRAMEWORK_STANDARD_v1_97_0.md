@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.96.0
+# Backlog & Roadmap Semantic Framework — Standard v1.97.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -857,6 +857,29 @@ The **Mission-Scope-Goal triangle** is now tested on its agreements, not only as
 `ScopeAreaCoverageShape` requires every area of a lineage to be named by that lineage's scope
 statement, and `GoalTriangleShape` requires a goal's `derivesFromScope` and `contributesToMission` to
 agree through `scopeForMission`, and every `goalCoversArea` to be an area the statement admits.
+
+### 2.5c-xxi-i Retirement: a closed lineage retires whole, and leaves a record
+
+When a lineage is archived, **everything it owns moves** — its items, stage outputs, findings,
+restarts, its closure report, its `Mission`, and the `Lineage` individual itself. What remains in the
+live register is a **`LineageArchiveEntry`**: the archived lineage's IRI and its mission's IRI as
+**strings**, its ordinal, its outcome, the archive file, the date and the trigger. It is deliberately
+neither a `Lineage` nor a `Mission`, and the IRIs are strings rather than references, so no shape
+targeting a lineage, a mission or any stage element finds retired work. That is what makes archiving
+remove cost rather than relabel it: an archived lineage is not a subject of processing until the
+owner consciously revives it.
+
+The partition is by **ownership**, never by reachability. Everything with `belongsToLineage` the
+retired lineage goes; the **register root** — the container the register itself is, marked
+`isRegisterRoot` — and everything the root declares can never be moved, because the root is above
+every lineage and belongs to none. A reachability-based partition takes exactly the wrong things: it
+claims the root, which nothing owns, and spares the lineage and mission if they are hand-protected
+(`G92`).
+
+A rule that asks the register root for something that retired with a lineage — its commitment, its
+scope statement, its stage outputs — is exempt for a declared root in a register that has archived
+work: what it looks for is not missing, it is in the archive file the entry names. Every other
+container, and the root of a register that has archived nothing, still answers.
 
 ### 2.5c-xxii The staged ceremony, one commit per stage
 

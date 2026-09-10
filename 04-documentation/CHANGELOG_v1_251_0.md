@@ -28,7 +28,8 @@ archived IRIs as strings so no shape can find them again) and `isRegisterRoot`;
 `backlog_lineage_archive_v2_0_0` partitions by **ownership** — everything the lineage owns moves, its
 `Lineage` and `Mission` included — and refuses to touch the root or anything the root declares.
 Shapes v1.116.0: three root rules are exempt where what they ask for retired with a lineage — the
-archive file says where it went.
+archive file says where it went. Standard v1.97.0 §2.5c-xxi-i documents retirement; discipline
+v62.0.0 records `G92`.
 
 ## v1.250.0 — 2026-09-10 (MINOR: lineage 9, Objective stage)
 
