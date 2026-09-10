@@ -115,9 +115,27 @@ def pyshacl_version():
         return "unknown"
 
 
+def promoted_overlay(data_files):
+    """v1.248.0: if the DATA declares backlog:adoptsRuleSet backlog:RS_SeverityAudit_20260909, this
+    register is validated against the severity-promotion overlay instead of the base shapes. A change
+    in what a rule REFUSES binds only work that declared it; enforcement never runs before the
+    development in progress has completed (G89, G91)."""
+    for f in data_files:
+        try:
+            txt = open(f, encoding="utf-8", errors="ignore").read()
+        except OSError:
+            continue
+        if "adoptsRuleSet" in txt and "RS_SeverityAudit_20260909" in txt:
+            cands = sorted(glob.glob(os.path.join(PKG, "02-shacl-safeguards", "backlog_shacl_promoted_v*.ttl")))
+            if cands:
+                return cands[-1]
+    return None
+
+
 def _memo_key(data_files):
     h = hashlib.sha256()
-    for p in [os.path.abspath(__file__), TBOX, ABOX, SHAPES, RULES] + sorted(data_files):
+    _ov = promoted_overlay(data_files)
+    for p in [os.path.abspath(__file__), TBOX, ABOX, _ov or SHAPES, RULES] + sorted(data_files):
         h.update(os.path.basename(p).encode()); h.update(open(p, "rb").read())
     return h.hexdigest()
 
@@ -160,6 +178,10 @@ def validate(data_files):
 
 
 def _validate(data_files):
+    global SHAPES
+    _ov = promoted_overlay(data_files)
+    if _ov:
+        SHAPES = _ov
     data_path = serialize(load([TBOX, ABOX] + data_files), ".data.ttl")
     shapes_path = serialize(load([SHAPES, RULES]), ".shapes.ttl")
 

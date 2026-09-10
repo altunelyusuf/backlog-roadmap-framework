@@ -826,6 +826,13 @@ answer it. Every reported violation is a finding, and every finding has a **`Fin
   rationale must say **which rule is missing**; writing that rule is backlog work, not a permanent
   state.
 
+**When a change in severity takes effect.** Promoting shapes is itself a ruling: it changes what the
+suite refuses, and it binds every lineage the register carries. It is therefore adopted by the
+**register**, not by a lineage — a `RuleSet` declared with `backlog:adoptsRuleSet`, owner-decided
+and dated. The promoted severities ship as a shapes overlay generated from the base file; the
+validator loads it only when the register declares the set. Undeclared, the change is recorded and
+inert. (`ObligationSet` is the lineage-level counterpart, adopted when a lineage opens.)
+
 A `FindingRecord` carries `findingFromShape`, `findingOnNode`, `hasDisposition`,
 `dispositionRationale`, `decidedBy`, and the monitoring the disposition requires. Silence is never an
 exception: a violation with no record is a nonconformity to be fixed.

@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.91.0> ;
-    owl:versionInfo "1.91.0" ;
+    owl:versionIRI <http://example.org/backlog/1.92.0> ;
+    owl:versionInfo "1.92.0" ;
+    owl:priorVersion <http://example.org/backlog/1.91.0> ;
     owl:priorVersion <http://example.org/backlog/1.90.0> ;
     owl:priorVersion <http://example.org/backlog/1.89.0> ;
     owl:priorVersion <http://example.org/backlog/1.88.0> ;
@@ -6932,3 +6933,22 @@ backlog:dispositionReviewDue a owl:DatatypeProperty , owl:FunctionalProperty ;
     rdfs:domain backlog:FindingRecord ; rdfs:range xsd:dateTime ;
     rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "disposition review due"@en ;
     skos:definition "When this disposition is re-decided. A known error accepted forever is a nonconformity nobody wrote down."@en .
+
+# v1.92.0 (2026-09-09): A CHANGE IN WHAT A RULE REFUSES IS ITSELF A RULE, and binds only work that
+# declared it. The severity audit promoted 58 advisories to obligations; applied at once it refused
+# finished and in-progress work (G89, third occurrence). The promotion ships as a shapes OVERLAY and
+# a register is validated against it only if it declares adoptsRuleSet -- a declaration the owner
+# makes when the development in progress has completed. Enforcement never runs before completion.
+backlog:RuleSet a owl:Class ; rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "Rule Set"@en ;
+    skos:definition "A named, versioned change to what the suite REFUSES -- a severity promotion, a new family of obligations. Declared by a register when its owner decides the work in progress has completed and the stricter reading may begin. Distinct from ObligationSet, which a lineage adopts at its own opening: a RuleSet is adopted by the register, because a severity binds every lineage the register carries."@en .
+backlog:adoptsRuleSet a owl:ObjectProperty ;
+    rdfs:domain backlog:Backlog ; rdfs:range backlog:RuleSet ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "adopts rule set"@en ;
+    skos:definition "The rule sets this register is validated under. The validator loads the matching shapes overlay only when this is declared; without it the base severities apply. Owner-decided, dated, and never asserted by a session on its own initiative."@en .
+backlog:ruleSetAdoptedAt a owl:DatatypeProperty ;
+    rdfs:domain backlog:Backlog ; rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "rule set adopted at"@en .
+backlog:RS_SeverityAudit_20260909 a owl:NamedIndividual , backlog:RuleSet ;
+    rdfs:label "Severity audit of 2026-09-09"@en ;
+    skos:definition "The audit recorded in 04-documentation/SEVERITY_AUDIT_2026_09_09_v1_0_0.md: 58 advisories that state a broken lineage rule become sh:Violation, 4 become sh:Info, 16 remain sh:Warning. Shipped as 02-shacl-safeguards/backlog_shacl_promoted_v1_0_0.ttl. NOT adopted by this register at v1.248.0: lineage 9 is in progress."@en .

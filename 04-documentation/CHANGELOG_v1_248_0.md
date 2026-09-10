@@ -36,6 +36,24 @@ a permanent exception is a nonconformity with a note attached.
 Fixtures `fixture_finding_disposition` (0 violations) and `fixture_finding_disposition_negative`
 (every clause fires).
 
+**Not applied to anything yet, by the owner's instruction.** The promotion ships as a shapes OVERLAY
+(`02-shacl-safeguards/backlog_shacl_promoted_v1_0_0.ttl`), generated from the base file and identical
+to it but for the audited severities, with `backlog_make_promoted_shapes_v1_0_0.py` refusing if the
+two ever differ in anything else. TBox v1.92.0 adds `RuleSet` / `adoptsRuleSet` /
+`RS_SeverityAudit_20260909`: an `ObligationSet` is adopted by a LINEAGE at its opening, a `RuleSet`
+by the REGISTER, because a severity binds every lineage the register carries.
+`backlog_validate_v1_6_0` loads the overlay only when the register's own data declares the set.
+Measured both ways: without the declaration `backlog_shacl_v1_113_0.ttl`, 0 violations; with it
+`backlog_shacl_promoted_v1_0_0.ttl`, 13. **The register does not declare it** — lineage 9 is in
+progress, and enforcement does not run before the development completes (`G91`).
+
+The first attempt applied the promotions in the base file and broke all fifteen positive fixtures;
+the base severities are restored exactly (62 of them) and every positive fixture, the live register
+and the exercise register are clean. Discipline v61.0.0: `G90` (the audit, and `G44`'s null result
+that was too shallow to support) and `G91` (a severity change is a ruling and binds only work that
+declared it).
+
+
 
 
 ## v1.247.0 — 2026-09-09 (MINOR: SDLC stage obligations — built on this framework's own vocabulary, binding only lineages that adopt them at open)

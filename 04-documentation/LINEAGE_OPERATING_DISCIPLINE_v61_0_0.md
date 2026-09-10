@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v60.0.0
+# Lineage Operating Discipline — v61.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -79,6 +79,13 @@ remembered from a previous session; this document's own tooling references have 
    be given new obligations; a finished one is a record; a lineage that adopted nothing owes nothing
    beyond the chain. This is the general form of the rule, not a rule about obligations: **no new
    ruling is applied to development in progress or to work already closed.**
+
+   **A change in what a rule REFUSES is itself a ruling (v61.0.0, G91).** Promoting a shape's
+   severity, or shipping a family of them, binds every lineage the register carries — so it is
+   adopted by the REGISTER, not by a lineage: `backlog:adoptsRuleSet`, owner-decided and dated. The
+   promoted severities live in a shapes OVERLAY generated from the base file; the validator loads it
+   only when the register's own data declares the set. Undeclared, the audit is recorded and inert.
+   Enforcement never runs before the development in progress has completed.
 
 3. **State the granularity you are choosing and why.** `Initiative`, `Epic`, `Feature`, `Story`,
    `Task`, `Defect`, `Spike`, `Enabler`. Epic is the **coarsest ordinary choice**, not the neutral
@@ -2496,3 +2503,78 @@ otherwise; a fixture-wide retrofit is a decision, not a side effect.
 **Classified at logging time (L-112):** the epoch defect is a genuine gap in G81's witness, found by
 an adopter's ordinary workflow; the pin coupling is a genuine defect in this framework's release
 mechanics, found by the owner asking why; the retrofit is this session's own choice, recorded as such.
+
+## G90 — "Advisory" had become the place to put obligations nobody wanted to enforce
+
+`G43` defined the three severities and deferred the audit. `G44` ran it, judged **63 of 66 shapes
+from their message text alone**, spot-checked three, and reported "0 of 66 reclassified" — recording
+that null result as evidence the framework's severity habits were well calibrated. They were not;
+the check was too shallow to know.
+
+Re-run at the owner's instruction against every shape's actual SPARQL, under a criterion the owner
+made sharper than `G43`'s — *a rule of the lineage is an obligation; a warning is only a risk or an
+opportunity* — **58 of 78 advisories state that a rule is already broken**: grooming analysed with no
+task of the implied type, interaction analysis with no specification, a design task Done with no
+model, a Done story no test case touches, a criterion proven only on the nominal path, a refinement
+that produced nothing, a deliverable no item satisfies, an area no goal answers for, an exclusion no
+goal guards, a Done item in no deployment unit, a consuming stage that cannot be shown to follow its
+predecessor. Fourteen of the 58 were classified as risks in the session's first pass and promoted
+only after the owner challenged it: a passed forecast **has** been missed, a breached WIP limit **is**
+breached, a refinement naming no iteration is missing a datum rather than risking one. The rule the
+owner stated — *100% is an issue, below 100% is a risk, and a risk that belongs to a rule is still an
+obligation* — decided every one of them.
+
+**One promotion was reverted on measurement within the hour.** `ClassReachabilityShape` produced 41
+of the live register's 54 violations, every one of them "this register does not use that framework
+class". Reachability is a property of the vocabulary, checked over the TBox; it is not a rule any
+lineage broke. The audit document records the reversal beside the promotion.
+
+Sixteen shapes remain `sh:Warning`: seven whose condition is an ungrounded numeric threshold (batch
+> 5, evidence over 3 criteria, groomed more than 28 days ahead — constants with no source, which
+`G61` refused as stopping rules and which must be grounded in a measurement or retired rather than
+promoted), and nine whose condition is certainly true and breaks no rule **because the rule has not
+been written**. The second nine are not permanent advisories: writing those rules is backlog work.
+
+**What a violation obliges is now a separate, standards-grounded question** (Standard 2.5c-xxi-g):
+ISO 19011's **nonconformity** (the default — no record, needs fixing) and **observation**; ITIL 4 /
+ISO/IEC 20000-1's **known error**, a documented cause deliberately not remediated because the work
+has moved and the past cannot be reinvented — which must name its preventive mechanism, its
+monitoring, its decider and a review date; ISO 31000's **risk retention**. A disposition past its
+review date is refused: a permanent exception is a nonconformity with a note attached.
+
+**Classified at logging time (L-112):** `G44`'s null result is the failure here — an audit reported
+as complete on a check too shallow to support it, exactly the `B3`/`L-65` pattern of restating a
+figure without measuring it. The correction came from the owner reading the register's behaviour,
+not from any safeguard.
+
+## G91 — A change in what a rule refuses is a ruling, and binds only work that declared it
+
+Having built adoption-gating for the SDLC obligations under `G89`, this session applied `G90`'s 58
+promotions **ungated** in the same file. The result, measured immediately: every one of the fifteen
+positive fixtures failed, 6 to 22 violations each, and the release gate aborted. The session's first
+response was to ask the owner to choose between rewriting fifteen fixtures and weakening `G7`. The
+owner's answer was the rule already agreed: *enforcement should not run before the completion; this
+was agreed in a previous conversation — is it not active?* It was active for 5 shapes out of 306.
+
+**The general principle, now built.** An `ObligationSet` is adopted by a LINEAGE when it opens,
+because it says what that lineage must produce. A **`RuleSet`** is adopted by the **REGISTER**,
+because a severity binds every lineage the register carries. The promotion therefore ships as a
+shapes overlay (`backlog_shacl_promoted_v1_0_0.ttl`), generated from the base file and identical to
+it in every byte but the audited severities, with a checker that refuses if the two ever differ in
+anything else. `backlog_validate` loads the overlay only when the register's own data declares
+`backlog:adoptsRuleSet backlog:RS_SeverityAudit_20260909`. Proven both ways in one minute: without
+the declaration, 0 violations under the base file; with it, 13 under the overlay.
+
+The fixture question dissolved with the fix. Fixtures never declare, so they were never bound, and
+no choice between rewriting them and weakening `G7` was ever necessary — the choice was an artefact
+of the error.
+
+**Not adopted at v1.248.0.** Lineage 9 is in progress; the owner's instruction is explicit — the
+enforcement lineage is not activated before this work finishes. `RS_SeverityAudit_20260909` is
+defined, its overlay shipped and verified, and the register does not declare it.
+
+**Classified at logging time (L-112):** the session's own failure, the third of its kind in one week
+(`G87`'s status retrofit, `G89`'s obligations, this). Each time the mechanism to prevent it existed
+and was not applied to the session's own next change. What is on the record now is the general form:
+obligations bind at lineage open, severities bind at register adoption, and neither binds anything
+that did not declare it.
