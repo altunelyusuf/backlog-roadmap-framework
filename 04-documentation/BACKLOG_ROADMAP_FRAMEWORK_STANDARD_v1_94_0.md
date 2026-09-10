@@ -784,16 +784,16 @@ work is loaded by lineage-history checks only, until the owner revives it (`line
 
 ### 2.5c-xxi-f Stage obligations: what a stage owes, and when a rule may bind
 
-A pipeline stage may **owe** artifacts before its output closes. An obligation names the stage (or an
+A pipeline stage may **owe** artifacts before its output closes. A `StageObligation` names the stage (or an
 ISO/IEC 12207 task type, for obligations that bind at execution), the class of thing owed
 (`owesClass`), optionally the kind it must be of (`owesKind` over the fourteen UML 2.5 `ModelKind`
 individuals, `owesScenarioKind` over the four `ScenarioKind`s), the engineering question the artifact
 answers (`obligationRationale`, mandatory), and whether its absence refuses closure or reports it
-(`obligationSeverity`). Nothing new is minted: `ModelArtifact`, `Specification` with
+(`obligationSeverity`, an `ObligationSeverity`: required refuses closure, advisory reports it). Nothing new is minted: `ModelArtifact`, `Specification` with
 `InteractionStep` and `hasStepActor`, `TestScenario`, `DomainEntity`, `Blueprint`,
 `AcceptanceCriterion`, `TestCase` are this framework's own vocabulary.
 
-The standing set `OS_SDLC_v1`: Scope owes domain entities and a blueprint; Goal owes a specification
+The standing `ObligationSet` `OS_SDLC_v1` (obligations join a set through `inObligationSet`): Scope owes domain entities and a blueprint; Goal owes a specification
 and scenarios of the nominal and rejection kinds (the main and alternative paths), with a use-case
 diagram advisory; Objective owes activity and sequence diagrams; Backlog owes a class diagram and
 acceptance criteria; design and architecture tasks owe a model, verification tasks a test case. A
