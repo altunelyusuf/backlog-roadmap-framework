@@ -1,5 +1,35 @@
 # Changelog
 
+## v1.251.0 — 2026-09-10 (MINOR: lineage 9, Backlog stage — the chain closes)
+
+Register v9.77.0: five Proposed stories, one per objective — open a lineage under `OS_SDLC_v1` and
+carry it to a closed Backlog stage (SDLC-S01); observe each of the thirteen obligations refusing a
+real output (S02); make grooming produce its use case and scenarios in a real register (S03); join
+the task-type obligations to the effective Definition of Done (S04); hold the both-ways proof with a
+gate step rather than with care (S05). Each satisfies a scope deliverable and carries a
+Given/When/Then criterion naming the shape it exercises. Nothing is planned into an iteration here:
+planning is the next act. The chain is closed in five witnessed commits, one per stage — the first
+lineage built that way from an empty start. Status `LS_Backlogged`.
+
+**Not carried, and why:** under `OS_SDLC_v1` a Backlog stage owes a class-diagram `ModelArtifact`.
+Lineage 9 adopted no obligation set, having opened before one existed; adding the artifact because a
+rule this lineage is *building* would demand it is the retroactive binding `G91` forbids. The first
+lineage that owes a class diagram is the one SDLC-S01 opens.
+
+**And the register root, repaired (`G92`).** `backlog_lineage_archive` v1.0.0 partitioned by
+reachability with two hand-picked exceptions; measured afterwards, all 14 `Lineage` individuals and
+10 `Mission`s were still live and being validated while `fw:Register` — the register root, which
+belongs to no lineage — had been swept into the archive. Found when lineage 9's first stories failed
+with "memberOfContainer must point to a real container". The root statement is restored verbatim and
+marked `isRegisterRoot`; three blocks pulled out with it last turn (`fw:Scope`, `fw:DoD`,
+`fw:Commitment_Dev`) were checked at tag v1.242.0, found never to have been live, and returned to the
+archive unchanged. TBox v1.94.0 adds `LineageArchiveEntry` (a record, not a `Lineage`, carrying the
+archived IRIs as strings so no shape can find them again) and `isRegisterRoot`;
+`backlog_lineage_archive_v2_0_0` partitions by **ownership** — everything the lineage owns moves, its
+`Lineage` and `Mission` included — and refuses to touch the root or anything the root declares.
+Shapes v1.116.0: three root rules are exempt where what they ask for retired with a lineage — the
+archive file says where it went.
+
 ## v1.250.0 — 2026-09-10 (MINOR: lineage 9, Objective stage)
 
 Register v9.76.0: five objectives across the three goals — every obligation enforced by a shape and

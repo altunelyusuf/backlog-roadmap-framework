@@ -14,8 +14,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.76.0> ;
-    owl:versionInfo "9.76.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.77.0> ;
+    owl:versionInfo "9.77.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.76.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.75.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.74.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.73.0> ;
@@ -3222,3 +3223,145 @@ fw:Out_Objective_SDLC a backlog:StageOutput ;
     backlog:hasStateDigest "7b9c7ce29c02299c939ac7ee1b40db6818c48170aa95695acadff9a49b79402d" ;
     backlog:closedAtCommit "backlog-roadmap-framework-v1.250.0 (tag; witnessed by git, not asserted)" ;
     backlog:hasRationale "Objective stage of lineage 9: five objectives across the three goals, every baseline counted on the register and shapes as they stand at v1.249.0 and stated so a reader can re-take it. Two objectives HOLD at zero rather than improve -- proven-by-fixture and no-retroactive-binding -- because both are already true and the risk is losing them; the discipline's own reverse-direction rule (G61) says an objective may guard as well as advance. This stage does NOT owe activity and sequence diagrams: lineage 9 adopted no obligation set, having opened before one existed (G91)." .
+
+#################################################################
+#  v9.77.0 (2026-09-10, brsf-session) -- THE REGISTER ROOT RESTORED,
+#  and the archival corrected (G92). backlog_lineage_archive v1.0.0
+#  partitioned by reachability with two hand-picked exceptions; the
+#  register ROOT belongs to no lineage, so the closure took it, and
+#  the live register has had no container since v1.243.0. Measured
+#  when lineage 9's first stories failed with "memberOfContainer must
+#  point to a real container". Restored here verbatim from the
+#  archive -- the ROOT STATEMENT ONLY: fw:Scope, fw:DoD and fw:Commitment_Dev were checked at tag
+#  v1.242.0 and had no statements in the live register even then, having been archive material since
+#  lineages 1-6 were retired by hand; they stay archived, and the root's references into the archive
+#  are references, not dangling edges. Marked
+#  isRegisterRoot so no archival can take it again. Nothing else of
+#  the archive is disturbed.
+#################################################################
+fw:Register a backlog:Backlog ;
+    backlog:hasSovereignPathPrefix "backlog-roadmap-framework/" ;
+    backlog:hasIdentifier "BRF-REG" ;
+    backlog:hasTitle "backlog-roadmap-framework development register" ;
+    backlog:hasState backlog:Done ;
+    backlog:appliesDefinitionOfDone backlog:DoD_Baseline ;
+    backlog:hasCommitment fw:Commitment_Dev .
+fw:Register backlog:hasScopeStatement fw:Scope .
+fw:Register backlog:appliesDefinitionOfDone fw:DoD .
+fw:Register backlog:isRegisterRoot true .
+
+#################################################################
+#  v9.77.0 (2026-09-10, brsf-session) -- LINEAGE 9, Backlog stage.
+#  Consumes Out_Objective_SDLC (276ab48). Status moves to
+#  LS_Backlogged. Five stories, one per objective, all Proposed:
+#  nothing is planned into an iteration in this commit, because
+#  planning is the next act and a story planned in the same breath
+#  as it is written has been groomed by nobody.
+#
+#  What this stage does NOT carry, and why. Under OS_SDLC_v1 a
+#  Backlog stage owes a class-diagram ModelArtifact and acceptance
+#  criteria. Criteria are here. The class diagram is not: lineage 9
+#  adopted no obligation set, having opened before one existed
+#  (G91), and adding an artifact because a rule this lineage is
+#  BUILDING would demand it -- from a lineage that never declared it
+#  -- is precisely the retroactive binding the owner has stopped
+#  three times. The first lineage that owes a class diagram is the
+#  one story SDLC-S01 opens.
+#################################################################
+fw:S_SDLC_FirstAdopter a backlog:Story ; backlog:hasIdentifier "SDLC-S01" ;
+    backlog:hasTitle "Open a lineage under OS_SDLC_v1 and carry it to a closed Backlog stage" ;
+    backlog:asRole "a session running a lineage under this framework" ;
+    backlog:wantsCapability "open a lineage under OS_SDLC_v1 and carry it to a closed Backlog stage" ;
+    backlog:soThat "the SDLC obligations are enforced on real work rather than declared in a vocabulary" ;
+    backlog:hasState backlog:Proposed ; backlog:memberOfContainer fw:Register ;
+    backlog:belongsToLineage fw:L_SDLCObligations ;
+    backlog:pursuesObjective fw:Obj_SDLC_Adopted ;
+    backlog:satisfiesDeliverable fw:Del_StageObligations ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at the planning event that takes it into an iteration; this stage writes the backlog, it does not plan it." ;
+    backlog:hasAcceptanceCriterion fw:AC_SDLC_S01 ;
+    backlog:hasRationale "The obligations are real only when a lineage opened under them produces what they demand. This story opens lineage 10 declaring adoptsObligationSet at its Mission commit, and carries it through Scope (domain entities and blueprint), Goal (specification, nominal and rejection scenarios), Objective (activity and sequence diagrams) and Backlog (class model, criteria) -- each stage refused by StageOutputOwesShape until its artifacts exist." .
+fw:AC_SDLC_S01 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a lineage that declared OS_SDLC_v1 at its Mission commit, when its Scope stage output is written before any DomainEntity or Blueprint of that lineage exists, then StageOutputOwesShape refuses the output; and when the entities and blueprint exist first, then the output validates." .
+fw:S_SDLC_SeenToRefuse a backlog:Story ; backlog:hasIdentifier "SDLC-S02" ;
+    backlog:hasTitle "Observe each of the thirteen obligations refusing a real stage output" ;
+    backlog:asRole "a session running a lineage under this framework" ;
+    backlog:wantsCapability "observe each of the thirteen obligations refusing a real stage output" ;
+    backlog:soThat "the SDLC obligations are enforced on real work rather than declared in a vocabulary" ;
+    backlog:hasState backlog:Proposed ; backlog:memberOfContainer fw:Register ;
+    backlog:belongsToLineage fw:L_SDLCObligations ;
+    backlog:pursuesObjective fw:Obj_SDLC_Enforced ;
+    backlog:satisfiesDeliverable fw:Del_WitnessedClosure ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at the planning event that takes it into an iteration; this stage writes the backlog, it does not plan it." ;
+    backlog:hasAcceptanceCriterion fw:AC_SDLC_S02 ;
+    backlog:hasRationale "Thirteen obligations are declared and none has been seen to refuse anything outside a fixture. G7: a rule never observed refusing is a declaration. This story records, per obligation, the run in which it refused a real output of the adopting lineage before that stage's artifacts were produced." .
+fw:AC_SDLC_S02 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the adopting lineage, when each of the thirteen obligations is unmet in turn at its own stage, then the validator names that obligation in its refusal, and the run is recorded as a MetricObservation moving Metric_SDLC_ObligationsEnforced toward zero." .
+fw:S_SDLC_RefinementProducts a backlog:Story ; backlog:hasIdentifier "SDLC-S03" ;
+    backlog:hasTitle "Make grooming produce its use case and scenarios in the adopting lineage" ;
+    backlog:asRole "a session running a lineage under this framework" ;
+    backlog:wantsCapability "make grooming produce its use case and scenarios in the adopting lineage" ;
+    backlog:soThat "the SDLC obligations are enforced on real work rather than declared in a vocabulary" ;
+    backlog:hasState backlog:Proposed ; backlog:memberOfContainer fw:Register ;
+    backlog:belongsToLineage fw:L_SDLCObligations ;
+    backlog:pursuesObjective fw:Obj_SDLC_Enforced ;
+    backlog:satisfiesDeliverable fw:Del_RefinementProduces ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at the planning event that takes it into an iteration; this stage writes the backlog, it does not plan it." ;
+    backlog:hasAcceptanceCriterion fw:AC_SDLC_S03 ;
+    backlog:hasRationale "RefinementProducesShape reports a planning event that produced nothing. This story exercises the other half: the adopting lineage's planning events carry refinementProduces naming a Specification with interaction steps and actors, and TestScenarios of the nominal and rejection kinds -- the owner's original finding, made concrete in a real register rather than a fixture." .
+fw:AC_SDLC_S03 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a planning event on a story of the adopting lineage, when it records no refinementProduces, then the advisory fires; and when it names a Specification with at least one InteractionStep and TestScenarios of Scen_Nominal and Scen_Rejection, then it is silent." .
+fw:S_SDLC_DoDJoin a backlog:Story ; backlog:hasIdentifier "SDLC-S04" ;
+    backlog:hasTitle "Join the task-type obligations to the effective Definition of Done" ;
+    backlog:asRole "a session running a lineage under this framework" ;
+    backlog:wantsCapability "join the task-type obligations to the effective Definition of Done" ;
+    backlog:soThat "the SDLC obligations are enforced on real work rather than declared in a vocabulary" ;
+    backlog:hasState backlog:Proposed ; backlog:memberOfContainer fw:Register ;
+    backlog:belongsToLineage fw:L_SDLCObligations ;
+    backlog:pursuesObjective fw:Obj_SDLC_Enforced ;
+    backlog:satisfiesDeliverable fw:Del_DoDArtifacts ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at the planning event that takes it into an iteration; this stage writes the backlog, it does not plan it." ;
+    backlog:hasAcceptanceCriterion fw:AC_SDLC_S04 ;
+    backlog:hasRationale "TaskTypeObligationShape refuses a Done task whose type owes an artifact the lineage lacks, but the owed kinds do not yet appear in the item's effectiveDefinitionOfDone, so a reader checking the DoD alone cannot see them. This story makes the join visible where the DoD is read, without adding a second gate." .
+fw:AC_SDLC_S04 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given an execution task of type Task_DesignDefinition in the adopting lineage, when its item's effective Definition of Done is read, then the owed ModelArtifact appears among its conditions; and when the task is Done with no model in its lineage, then TaskTypeObligationShape refuses it." .
+fw:S_SDLC_ProofHeld a backlog:Story ; backlog:hasIdentifier "SDLC-S05" ;
+    backlog:hasTitle "Prove every obligation shape both ways and keep the proof from rotting" ;
+    backlog:asRole "a session running a lineage under this framework" ;
+    backlog:wantsCapability "prove every obligation shape both ways and keep the proof from rotting" ;
+    backlog:soThat "the SDLC obligations are enforced on real work rather than declared in a vocabulary" ;
+    backlog:hasState backlog:Proposed ; backlog:memberOfContainer fw:Register ;
+    backlog:belongsToLineage fw:L_SDLCObligations ;
+    backlog:pursuesObjective fw:Obj_SDLC_Proven ;
+    backlog:satisfiesDeliverable fw:Del_WitnessedClosure ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at the planning event that takes it into an iteration; this stage writes the backlog, it does not plan it." ;
+    backlog:hasAcceptanceCriterion fw:AC_SDLC_S05 ;
+    backlog:hasRationale "Six obligation shapes carry provenByFixture today and the count of unproven ones is zero. The risk is a later obligation shipped without its fixture. This story adds the gate step that refuses an obligation shape with no fixture proving it in both directions, so the zero is held by a check rather than by care." .
+fw:AC_SDLC_S05 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a new shape whose target is StageObligation or StageOutput and which carries no provenByFixture, when the release gate runs, then it fails and names the shape; and given the current suite, then the step passes." .
+
+# Each story is the live work able to move its objective's metric: metricMovableBy is the objective's
+# side of pursuesObjective, and an open objective that blocks its mission's closure must name one
+# (L3). Recorded here, in the same commit as the stories, because the link is a fact about the
+# backlog just written -- not a later addition.
+fw:Obj_SDLC_Adopted backlog:metricMovableBy fw:S_SDLC_FirstAdopter .
+fw:Obj_SDLC_Enforced backlog:metricMovableBy fw:S_SDLC_SeenToRefuse , fw:S_SDLC_RefinementProducts , fw:S_SDLC_DoDJoin .
+fw:Obj_SDLC_Proven backlog:metricMovableBy fw:S_SDLC_ProofHeld .
+
+fw:L_SDLCObligations backlog:hasLineageStatus backlog:LS_Backlogged .
+fw:Out_Backlog_SDLC a backlog:StageOutput ;
+    backlog:outputOfStage backlog:Stage_Backlog ;
+    backlog:belongsToLineage fw:L_SDLCObligations ;
+    backlog:consumesOutput fw:Out_Objective_SDLC ;
+    backlog:hasStateDigest "e86e413dd19d33e01dc33a4c3dd85e4f0144436549347dead939ccaae9f5a775" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.251.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Backlog stage of lineage 9: five Proposed stories, one per objective, each satisfying a scope deliverable and carrying a Given/When/Then criterion that names the shape it will exercise. The chain Mission->Scope->Goal->Objective->Backlog is now closed in five witnessed commits, one per stage -- the first lineage in this framework's history built that way from an empty start. The lineage is LS_Backlogged and not InProgress: no item has left Proposed." .

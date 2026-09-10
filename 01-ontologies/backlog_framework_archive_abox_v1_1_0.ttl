@@ -29,9 +29,6 @@ lineage-history checks, so nothing here is lost — only set aside.
 Roadmap and Scope remain in the live register and hold pointers into this file.
 A pointer into a named archive is a reference, not a dangling edge.""" .
 
-fw:Commitment_Dev a backlog:Commitment ;
-    rdfs:label "Development commitment"@en ;
-    backlog:commitsToGoal fw:Goal_Measurable .
 
 #################################################################
 #  TWO LINEAGES — the pattern this framework documents at 2.5c-ii
@@ -328,9 +325,6 @@ fw:Ex_Modality a backlog:ScopeExclusion ;
     backlog:hasExclusionRationale "Human WORK assigned to a person is a WorkItem with a human execution modality and competes for capacity. Human INTERACTION with work — confirm, review, correct, respond — is an event on that item carrying its own cost and does not compete, or every review needs a score and the backlog fills with process." ;
     backlog:decidedBy backlog:Owner .
 
-fw:DoD a backlog:DefinitionOfDone ;
-    rdfs:label "Definition of Done for framework increments"@en ;
-    backlog:hasDoDCriterion fw:D1 , fw:D2 , fw:D3 , fw:D4 , fw:D5 , fw:D6 .
 
 fw:D1 a backlog:DoDCriterion ;
     rdfs:label "D1 — Vocabulary added carries a skos:definition stating why the t"@en ;
@@ -7519,10 +7513,6 @@ fw:Commitment_Dev backlog:containerScope backlog:CScope_Lineage ;
 fw:Roadmap a backlog:Roadmap ; backlog:roadmapOf fw:Register .
 
 # ---------- S1 PBI / Task ----------
-fw:Scope a backlog:ScopeStatement ;
-    backlog:hasScopeStatementText "Vocabulary, constraints, derivations and report computations that let a register state its own progress, cost and human involvement as computed facts. Delivered as MINOR additions to the backlog subject with fixtures on both sides of every constraint and a gate that proves each can fail." ;
-    backlog:scopeRealizesObjective fw:Obj_Derived , fw:Obj_Adopter ;
-    backlog:hasScopeExclusion fw:Ex_Method , fw:Ex_Scale , fw:Ex_Schedule , fw:Ex_Complexity , fw:Ex_Modality .
 
 fw:Scope backlog:scopeOutcomeDecidedBy backlog:Owner ;
     backlog:hasScopeOutcomeStatement "All six epics admitted to this scope are Done with verified evidence: the product-backlog/execution-task split, derived flow and forecast, multi-dimensional cost, human in and on the loop, the classical views, and the time-phased baseline. The four exclusions held throughout — no estimation scale, no delivery method, no modality-specific predicate, and no baseline schedule until an owner-decided ScopeChange admitted one and recorded why." .
@@ -7576,15 +7566,7 @@ fw:Profile a backlog:AdoptionProfile ;
     backlog:hasDecisionRationale "L2 now, not L3: L3 requires verified evidence and a complete test harness on every Done item, and nothing here is Done yet, so declaring L3 today would claim a discipline no completed work has yet been held to. L3 is the target and the review date is the honest interval." ;
     backlog:adoptsFacet backlog:CoreFacet , backlog:EvidenceFacet , backlog:PrioritizationFacet ,
                         backlog:RoadmapFacet , backlog:InvariantFacet , backlog:AuditFacet .
-fw:Register a backlog:Backlog ;
-    backlog:hasSovereignPathPrefix "backlog-roadmap-framework/" ;
-    backlog:hasIdentifier "BRF-REG" ;
-    backlog:hasTitle "backlog-roadmap-framework development register" ;
-    backlog:hasState backlog:Done ;
-    backlog:appliesDefinitionOfDone backlog:DoD_Baseline ;
-    backlog:hasCommitment fw:Commitment_Dev .
-fw:Register backlog:hasScopeStatement fw:Scope .
-fw:Register backlog:appliesDefinitionOfDone fw:DoD .
+
 fw:Out2_Mission a backlog:StageOutput ;
     backlog:outputOfStage backlog:Stage_Mission ;
     backlog:hasStateDigest "a5d24736308c8ad46fdd1b4230b941757cba52738bde4e5582317ad426b126fb" ;
@@ -11397,3 +11379,16 @@ fw:Find_G78 a quality:Finding .
 report:Run_20260909T073334 backlog:hasSection fw:RS_NextThroughput , fw:RS_NextLaunchScoped , fw:RS_RankedBacklog , fw:RS_FlaggedItems , fw:RS_SilentGapCheck , fw:RS_LaunchReadiness , fw:RS_PackageRanking , fw:RS_OrphanCoverageCheck , fw:RS_LifecycleWorkflow .
 fw:Art_Manifest backlog:manifestDigestCarriedBy "RELEASE_METRICS.txt" .
 fw:Art_RegisterData backlog:hasRationale "Register data file name is a current-state pointer, moved with each register version (L-112 pointer rule); first recorded at v9.69.0." .
+
+# 2026-09-10: three statements briefly pulled out during the register-root repair and returned
+# unchanged -- they were never live; they have been archive material since lineages 1-6 were retired.
+fw:Commitment_Dev a backlog:Commitment ;
+    rdfs:label "Development commitment"@en ;
+    backlog:commitsToGoal fw:Goal_Measurable .
+fw:DoD a backlog:DefinitionOfDone ;
+    rdfs:label "Definition of Done for framework increments"@en ;
+    backlog:hasDoDCriterion fw:D1 , fw:D2 , fw:D3 , fw:D4 , fw:D5 , fw:D6 .
+fw:Scope a backlog:ScopeStatement ;
+    backlog:hasScopeStatementText "Vocabulary, constraints, derivations and report computations that let a register state its own progress, cost and human involvement as computed facts. Delivered as MINOR additions to the backlog subject with fixtures on both sides of every constraint and a gate that proves each can fail." ;
+    backlog:scopeRealizesObjective fw:Obj_Derived , fw:Obj_Adopter ;
+    backlog:hasScopeExclusion fw:Ex_Method , fw:Ex_Scale , fw:Ex_Schedule , fw:Ex_Complexity , fw:Ex_Modality .

@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.93.0> ;
-    owl:versionInfo "1.93.0" ;
+    owl:versionIRI <http://example.org/backlog/1.94.0> ;
+    owl:versionInfo "1.94.0" ;
+    owl:priorVersion <http://example.org/backlog/1.93.0> ;
     owl:priorVersion <http://example.org/backlog/1.92.0> ;
     owl:priorVersion <http://example.org/backlog/1.91.0> ;
     owl:priorVersion <http://example.org/backlog/1.90.0> ;
@@ -7017,3 +7018,50 @@ backlog:Stage_Mission backlog:stageRequiresTypeV2 backlog:Mission .
 backlog:Stage_Scope backlog:stageRequiresTypeV2 backlog:Mission , backlog:ScopeStatement , backlog:ScopeExclusion , backlog:ScopeDeliverable .
 backlog:Stage_Goal backlog:stageRequiresTypeV2 backlog:Mission , backlog:ScopeStatement , backlog:ScopeExclusion , backlog:ScopeDeliverable , backlog:Goal .
 backlog:Stage_Objective backlog:stageRequiresTypeV2 backlog:Mission , backlog:ScopeStatement , backlog:ScopeExclusion , backlog:ScopeDeliverable , backlog:Goal , backlog:Objective .
+
+#################################################################
+#  v1.94.0 (2026-09-10) -- A CLOSED LINEAGE RETIRES WHOLE. Owner's
+#  rule, this day: "A lineage is closed, it should be retired and
+#  archived not partially but the whole lineage including the
+#  mission."
+#
+#  Measured cause of the drift (G92): the archival partition was
+#  built by REACHABILITY -- everything in no live lineage that the
+#  archived work references -- with two hand-picked exceptions kept
+#  live, the Lineage and its Mission, "as a pointer into the archive".
+#  Reachability knows nothing of above and below. The register ROOT
+#  (fw:Register) belongs to no lineage, so the closure claimed it and
+#  the live register was left with no container at all; the lineage
+#  and mission, which belong INSIDE the lineage, were kept, so every
+#  shape targeting Lineage or Mission still fired on retired work --
+#  the exact cost archiving exists to remove. Both errors are one
+#  error: partition by OWNERSHIP, never by connectivity.
+#
+#  So: everything the lineage owns moves, the Lineage and its Mission
+#  included. What stays live is a LineageArchiveEntry -- a RECORD,
+#  not a processable Lineage -- and the register root, which no
+#  archival may ever touch.
+#################################################################
+backlog:LineageArchiveEntry a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Lineage Archive Entry"@en ;
+    skos:definition "The live register's record that a lineage existed, was closed and has been retired whole into an archive file. Deliberately NOT a Lineage and not a Mission: no shape targeting either fires on it, which is what makes archiving remove cost rather than merely relabel it. It carries enough for a reader to find the work -- the archived lineage's IRI, ordinal, outcome, archive file, date and trigger -- and nothing a rule could ask a question of."@en .
+backlog:entryForLineage a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:LineageArchiveEntry ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "entry for lineage"@en ;
+    skos:definition "The archived lineage's IRI, as a STRING. A string and not an IRI reference, because an IRI reference would make the archived lineage a node in the live graph again and shapes would find it -- the mistake this class exists to end."@en .
+backlog:entryForMission a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:LineageArchiveEntry ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "entry for mission"@en .
+backlog:entryOutcome a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:LineageArchiveEntry ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "entry outcome"@en ;
+    skos:definition "How the lineage ended, as recorded at archival: Out_Achieved, Out_Abandoned, or the mission's outcome as it stood."@en .
+backlog:entryOrdinal a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:LineageArchiveEntry ; rdfs:range xsd:integer ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "entry ordinal"@en .
+backlog:isRegisterRoot a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:Backlog ; rdfs:range xsd:boolean ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "is register root"@en ;
+    skos:definition "True on the container the register itself is. The archival tool may never move it or anything it declares: the root is above every lineage and belongs to none, which is precisely why a reachability-based partition swept it away (G92)."@en .

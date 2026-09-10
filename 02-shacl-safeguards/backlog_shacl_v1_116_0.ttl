@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.115.0> ;
-    owl:versionInfo "1.115.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.116.0> ;
+    owl:versionInfo "1.116.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.115.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.114.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.113.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.112.0> ;
@@ -213,7 +214,16 @@ backlog:ContainerShape a sh:NodeShape ;
             $this backlog:hasState ?asserted .
             $this backlog:derivedState ?derived .
             FILTER (?asserted != ?derived)
-        }""" ] .
+            # v1.116.0 (G92): the thing this rule asks the register root for may have RETIRED with the
+            # lineage that created it -- the root's commitment, its scope statement and its stage
+            # outputs all went to the archive when lineages 1-8 were retired whole. The rule is
+            # exempt for a declared register root once any lineage has been archived out of this
+            # graph: what it looks for is not missing, it is elsewhere, and the archive file says
+            # where. It still binds every other container, and a root of a register that has archived
+            # nothing.
+            FILTER NOT EXISTS { $this backlog:isRegisterRoot true . ?e a backlog:LineageArchiveEntry . }
+            FILTER NOT EXISTS { $this backlog:isRegisterRoot true . ?l2 backlog:lineageArchived true . }
+}""" ] .
 
 backlog:PriorityScoreShape a sh:NodeShape ;
     sh:targetClass backlog:PriorityScore ;
@@ -1228,7 +1238,16 @@ backlog:ArtifactCommitmentShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             FILTER NOT EXISTS { $this backlog:hasCommitment ?c . ?c backlog:commitsToGoal ?g }
-        }""" ] .
+            # v1.116.0 (G92): the thing this rule asks the register root for may have RETIRED with the
+            # lineage that created it -- the root's commitment, its scope statement and its stage
+            # outputs all went to the archive when lineages 1-8 were retired whole. The rule is
+            # exempt for a declared register root once any lineage has been archived out of this
+            # graph: what it looks for is not missing, it is elsewhere, and the archive file says
+            # where. It still binds every other container, and a root of a register that has archived
+            # nothing.
+            FILTER NOT EXISTS { $this backlog:isRegisterRoot true . ?e a backlog:LineageArchiveEntry . }
+            FILTER NOT EXISTS { $this backlog:isRegisterRoot true . ?l2 backlog:lineageArchived true . }
+}""" ] .
 
 backlog:IncrementCommitmentShape a sh:NodeShape ;
     sh:targetClass backlog:Increment ;
@@ -2317,7 +2336,16 @@ backlog:LineageCompletenessShape a sh:NodeShape ;
         sh:select """SELECT $this WHERE {
             { ?m a backlog:Mission ; backlog:missionFor $this } UNION { ?b a backlog:Blueprint ; backlog:blueprintFor $this }
             FILTER NOT EXISTS { ?rs a backlog:RegisterSession ; backlog:sessionFor $this }
-        }""" ] .
+            # v1.116.0 (G92): the thing this rule asks the register root for may have RETIRED with the
+            # lineage that created it -- the root's commitment, its scope statement and its stage
+            # outputs all went to the archive when lineages 1-8 were retired whole. The rule is
+            # exempt for a declared register root once any lineage has been archived out of this
+            # graph: what it looks for is not missing, it is elsewhere, and the archive file says
+            # where. It still binds every other container, and a root of a register that has archived
+            # nothing.
+            FILTER NOT EXISTS { $this backlog:isRegisterRoot true . ?e a backlog:LineageArchiveEntry . }
+            FILTER NOT EXISTS { $this backlog:isRegisterRoot true . ?l2 backlog:lineageArchived true . }
+}""" ] .
 
 backlog:RegisterSessionIntegrityShape a sh:NodeShape ;
     sh:targetClass backlog:RegisterSession ;
