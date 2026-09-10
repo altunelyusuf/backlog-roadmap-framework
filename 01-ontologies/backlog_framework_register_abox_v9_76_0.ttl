@@ -14,8 +14,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.75.0> ;
-    owl:versionInfo "9.75.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.76.0> ;
+    owl:versionInfo "9.76.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.75.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.74.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.73.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.72.0> ;
@@ -3082,3 +3083,142 @@ fw:EnhProp_SDLCArtifactKinds backlog:hasProposalStatus backlog:Prop_Withdrawn ;
 fw:Imp_SDLCArtifactKinds backlog:resolvedAt "2026-09-09T14:00:00Z"^^xsd:dateTime ;
     backlog:hasImpedimentStatement "2026-09-09 resolution BY FINDING: nothing was blocked. ModelKind (14 UML 2.5 kinds incl. Kind_UseCaseDiagram, Kind_ActivityDiagram, Kind_SequenceDiagram, Kind_ClassDiagram), Specification with InteractionStep and hasStepActor, TestScenario with four ScenarioKinds, DesignConcern (5), TaskType (14), DomainEntity and Blueprint were all already defined here and already shape-checked. The obligation vocabulary (TBox v1.90.0) names them; nothing was minted." .
 fw:Out_Goal_SDLC backlog:hasRationale "Addendum 2026-09-09: this output's original rationale said the obligations, once shipped, would refuse this closure. They do not, and must not: they bind only lineages that adopt them at open (owner's rule -- no ruling applied to work in progress). The use cases and scenarios this lineage owes are its own work items, produced by its own stages, not enforced retroactively against a stage that closed before the rule existed." .
+
+#################################################################
+#  v9.76.0 (2026-09-10, brsf-session) -- LINEAGE 9, Objective stage.
+#  Consumes Out_Goal_SDLC (629b62f). Status moves to LS_Objectived.
+#
+#  Five objectives, each measuring one of the three goals with a
+#  number taken BEFORE the work (G33: a baseline measured after the
+#  work is not a baseline). Every baseline below was counted on the
+#  register and the shapes file as they stand at v1.249.0, and the
+#  count is stated with the objective so a reader can re-take it.
+#
+#  The obligations this lineage is building already exist as
+#  vocabulary and shapes (TBox v1.90.0, shapes v1.111.0+); what does
+#  NOT yet exist is a lineage that owes them -- OS_SDLC_v1 is adopted
+#  by no one, because a ruling binds only work that declared it at
+#  open (G89, G91). So the measure of this lineage's success is not
+#  "the obligations exist" but "a lineage opened under them produces
+#  what they demand, and one that does not is refused".
+#################################################################
+fw:Metric_SDLC_ObligationsEnforced a core:Metric ;
+    rdfs:label "Stage obligations of OS_SDLC_v1 that no shape enforces"@en .
+fw:Metric_SDLC_AdoptingLineages a core:Metric ;
+    rdfs:label "Lineages that opened under OS_SDLC_v1 and closed a stage owing nothing"@en .
+fw:Metric_SDLC_UnprovenShapes a core:Metric ;
+    rdfs:label "Obligation shapes shipping without a fixture that proves them both ways"@en .
+fw:Metric_SDLC_RetroBinding a core:Metric ;
+    rdfs:label "Lineages or fixtures refused by an obligation they never adopted"@en .
+fw:Metric_SDLC_UnmintedKinds a core:Metric ;
+    rdfs:label "Artifact kinds minted in this package rather than referenced"@en .
+
+fw:Obj_SDLC_Enforced a backlog:Objective ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    rdfs:label "Every obligation in the set is enforced by a shape, not merely declared"@en ;
+    backlog:contributesToGoal fw:Goal_SDLC_MissionHeld ;
+    backlog:fillsScope fw:Scope_SDLCObligations ;
+    backlog:hasSuccessMetric fw:Metric_SDLC_ObligationsEnforced ;
+    backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasBaselineValue "13"^^xsd:decimal ; backlog:hasTargetValue "0"^^xsd:decimal ;
+    backlog:hasTargetDirection backlog:Dir_Decrease ;
+    backlog:hasCheckpoint fw:CP_SDLC_Enforced ;
+    backlog:hasRationale "Counted 2026-09-10 on backlog_abox_v1_4_0: thirteen StageObligation individuals in OS_SDLC_v1. StageOutputOwesShape and TaskTypeObligationShape read owesClass, owesKind and owesScenarioKind generically, so all thirteen are covered in principle -- the baseline is 13 because none has yet been SEEN to refuse a real stage output, and an obligation never observed refusing anything is a declaration (G7)." ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+fw:Obj_SDLC_Adopted a backlog:Objective ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    rdfs:label "At least one lineage opens under the obligations and closes its stages owing nothing"@en ;
+    backlog:contributesToGoal fw:Goal_SDLC_MissionHeld ;
+    backlog:fillsScope fw:Scope_SDLCObligations ;
+    backlog:hasSuccessMetric fw:Metric_SDLC_AdoptingLineages ;
+    backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasBaselineValue "0"^^xsd:decimal ; backlog:hasTargetValue "1"^^xsd:decimal ;
+    backlog:hasTargetDirection backlog:Dir_Increase ;
+    backlog:hasCheckpoint fw:CP_SDLC_Adopted ;
+    backlog:hasRationale "Counted 2026-09-10: no lineage in either register declares adoptsObligationSet. The obligations are real only when a lineage opened under them produces domain entities and a blueprint at Scope, a specification and nominal and rejection scenarios at Goal, activity and sequence diagrams at Objective, and a class model and criteria at Backlog. One such lineage is the whole test." ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+fw:Obj_SDLC_Proven a backlog:Objective ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    rdfs:label "Every obligation shape is proven both ways by a fixture"@en ;
+    backlog:contributesToGoal fw:Goal_SDLC_AreasDone ;
+    backlog:fillsScope fw:Scope_SDLCObligations ;
+    backlog:hasSuccessMetric fw:Metric_SDLC_UnprovenShapes ;
+    backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasBaselineValue "0"^^xsd:decimal ; backlog:hasTargetValue "0"^^xsd:decimal ;
+    backlog:hasTargetDirection backlog:Dir_Hold ;
+    backlog:hasCheckpoint fw:CP_SDLC_Proven ;
+    backlog:hasRationale "Counted 2026-09-10 on backlog_shacl_v1_114_0: the six obligation shapes all carry provenByFixture, and fixture_sdlc_obligations / _negative validate 0 and fire every clause. The baseline is already at target, so this objective HOLDS rather than improves: the risk it guards is a later obligation shipped without its fixture, which is how a suite stops being able to fail (G7, L-95)." ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+fw:Obj_SDLC_NoRetroBinding a backlog:Objective ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    rdfs:label "No obligation ever refuses work that did not adopt it"@en ;
+    backlog:contributesToGoal fw:Goal_SDLC_NoOutOfScope ;
+    backlog:fillsScope fw:Scope_SDLCObligations ;
+    backlog:hasSuccessMetric fw:Metric_SDLC_RetroBinding ;
+    backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasBaselineValue "0"^^xsd:decimal ; backlog:hasTargetValue "0"^^xsd:decimal ;
+    backlog:hasTargetDirection backlog:Dir_Hold ;
+    backlog:hasCheckpoint fw:CP_SDLC_NoRetroBinding ;
+    backlog:hasRationale "Counted 2026-09-10: 0 -- every positive fixture, both registers and all live lineages validate clean, and neither rule set is adopted. The count was 14 when the obligations were first written ungated and 15 positive fixtures failed at once (G89, G91); it is held at 0 by the adoption gate, not by vigilance. This objective exists because the session broke this rule three times in one week." ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+fw:Obj_SDLC_NoMinting a backlog:Objective ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    rdfs:label "No artifact kind is minted here that another subject owns"@en ;
+    backlog:contributesToGoal fw:Goal_SDLC_NoOutOfScope ;
+    backlog:fillsScope fw:Scope_SDLCObligations ;
+    backlog:hasSuccessMetric fw:Metric_SDLC_UnmintedKinds ;
+    backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasBaselineValue "0"^^xsd:decimal ; backlog:hasTargetValue "0"^^xsd:decimal ;
+    backlog:hasTargetDirection backlog:Dir_Hold ;
+    backlog:hasCheckpoint fw:CP_SDLC_NoMinting ;
+    backlog:hasRationale "Counted 2026-09-10: 0. The obligations name this framework's own ModelKind (14 UML 2.5 kinds), Specification/InteractionStep, TestScenario/ScenarioKind (4), DomainEntity, Blueprint, AcceptanceCriterion and TaskType -- all present since long before this lineage. The session did ask another registrant for four kinds that already existed here and withdrew the proposal the same day; that near-miss is why the count is watched rather than assumed." ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+
+
+# The baseline readings themselves, as MetricObservations taken today on the register and the shapes
+# file at v1.249.0 -- an objective with a target and no reading is a target nobody has taken (L4).
+fw:Obs_SDLC_Enforced_Baseline a backlog:MetricObservation ;
+    backlog:observesMetric fw:Metric_SDLC_ObligationsEnforced ;
+    backlog:observationFor fw:Obj_SDLC_Enforced ;
+    backlog:hasObservedValue 13.0 ;
+    backlog:observedAt "2026-09-10T09:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Thirteen StageObligation individuals in backlog_abox_v1_4_0; none has yet been observed refusing a real stage output. Counted by reading the files at package v1.249.0." ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+fw:Obs_SDLC_Adopted_Baseline a backlog:MetricObservation ;
+    backlog:observesMetric fw:Metric_SDLC_AdoptingLineages ;
+    backlog:observationFor fw:Obj_SDLC_Adopted ;
+    backlog:hasObservedValue 0.0 ;
+    backlog:observedAt "2026-09-10T09:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "No lineage in either register declares adoptsObligationSet. Counted by reading the files at package v1.249.0." ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+fw:Obs_SDLC_Proven_Baseline a backlog:MetricObservation ;
+    backlog:observesMetric fw:Metric_SDLC_UnprovenShapes ;
+    backlog:observationFor fw:Obj_SDLC_Proven ;
+    backlog:hasObservedValue 0.0 ;
+    backlog:observedAt "2026-09-10T09:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "All six obligation shapes in backlog_shacl_v1_114_0 carry provenByFixture; fixture_sdlc_obligations validates 0 and its negative fires every clause. Counted by reading the files at package v1.249.0." ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+fw:Obs_SDLC_NoRetroBinding_Baseline a backlog:MetricObservation ;
+    backlog:observesMetric fw:Metric_SDLC_RetroBinding ;
+    backlog:observationFor fw:Obj_SDLC_NoRetroBinding ;
+    backlog:hasObservedValue 0.0 ;
+    backlog:observedAt "2026-09-10T09:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Every positive fixture, both registers and all live lineages validate clean; neither rule set is adopted. Counted by reading the files at package v1.249.0." ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+fw:Obs_SDLC_NoMinting_Baseline a backlog:MetricObservation ;
+    backlog:observesMetric fw:Metric_SDLC_UnmintedKinds ;
+    backlog:observationFor fw:Obj_SDLC_NoMinting ;
+    backlog:hasObservedValue 0.0 ;
+    backlog:observedAt "2026-09-10T09:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Every class and kind the obligations name predates this lineage; the four kinds asked of another registrant were withdrawn the day they were asked for. Counted by reading the files at package v1.249.0." ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+
+fw:CP_SDLC_Enforced a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-10-01T00:00:00Z"^^xsd:dateTime .
+fw:CP_SDLC_Adopted a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-10-01T00:00:00Z"^^xsd:dateTime .
+fw:CP_SDLC_Proven a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-10-01T00:00:00Z"^^xsd:dateTime .
+fw:CP_SDLC_NoRetroBinding a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-10-01T00:00:00Z"^^xsd:dateTime .
+fw:CP_SDLC_NoMinting a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-10-01T00:00:00Z"^^xsd:dateTime .
+
+fw:L_SDLCObligations backlog:hasLineageStatus backlog:LS_Objectived .
+fw:Out_Objective_SDLC a backlog:StageOutput ;
+    backlog:outputOfStage backlog:Stage_Objective ;
+    backlog:belongsToLineage fw:L_SDLCObligations ;
+    backlog:consumesOutput fw:Out_Goal_SDLC ;
+    backlog:hasStateDigest "7b9c7ce29c02299c939ac7ee1b40db6818c48170aa95695acadff9a49b79402d" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.250.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Objective stage of lineage 9: five objectives across the three goals, every baseline counted on the register and shapes as they stand at v1.249.0 and stated so a reader can re-take it. Two objectives HOLD at zero rather than improve -- proven-by-fixture and no-retroactive-binding -- because both are already true and the risk is losing them; the discipline's own reverse-direction rule (G61) says an objective may guard as well as advance. This stage does NOT owe activity and sequence diagrams: lineage 9 adopted no obligation set, having opened before one existed (G91)." .

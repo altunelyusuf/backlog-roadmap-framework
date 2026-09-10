@@ -1,5 +1,19 @@
 # Changelog
 
+## v1.250.0 — 2026-09-10 (MINOR: lineage 9, Objective stage)
+
+Register v9.76.0: five objectives across the three goals — every obligation enforced by a shape and
+seen to refuse something (13 → 0); at least one lineage opened under the obligations closing its
+stages owing nothing (0 → 1); every obligation shape proven both ways by a fixture (hold at 0);
+no obligation ever refusing work that did not adopt it (hold at 0, counted 14 the day the
+obligations were first written ungated); no artifact kind minted here that another subject owns
+(hold at 0). Each baseline counted on the register and shapes at v1.249.0 and stated in the
+objective's rationale so a reader can re-take it. Status `LS_Objectived`.
+Shapes v1.115.0: the "open objective names no live corrective action" rule is stage-conditional
+(binds from `LS_Backlogged`) — live work items are the Backlog stage's content, and the ceremony
+forbids an objective from naming one before that stage runs. The fourth such rule found by building
+a lineage one stage at a time.
+
 ## v1.249.0 — 2026-09-10 (MINOR: three gaps reported by SCAMPS, verified here and closed)
 
 `the maintainer/SCAMPS` — the another registrant Agentic Pipeline register, now its own repository — ran the ceremony
