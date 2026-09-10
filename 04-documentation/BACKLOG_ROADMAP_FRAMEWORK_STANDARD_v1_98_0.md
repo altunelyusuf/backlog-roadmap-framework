@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.97.0
+# Backlog & Roadmap Semantic Framework — Standard v1.98.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -880,6 +880,29 @@ A rule that asks the register root for something that retired with a lineage —
 scope statement, its stage outputs — is exempt for a declared root in a register that has archived
 work: what it looks for is not missing, it is in the archive file the entry names. Every other
 container, and the root of a register that has archived nothing, still answers.
+
+### 2.5c-xxi-j Progressive archive conformance
+
+An archive is not re-validated. Its conformance is a recorded value: an **`ArchiveConformanceRecord`**
+carrying the canonical digest of the archive at the moment it was cleared (`hasArchiveDigest`, over
+sorted N-Triples, so re-serialization and comments cannot move it), the shapes it was cleared under,
+the date, and the lineages the value covers (`includesRetiredLineage`). A check confirms the digest —
+under a tenth of a second — and validates only the lineages that have **arrived** since, in the full
+context of the archive **and the live register**, scoping the report with `focus_nodes` rather than
+shrinking the graph. On success the value advances to include them.
+
+Two rules make this sound rather than merely cheap. **A lineage is never validated out of context:** a
+fragment cut from the archive loses the mission it superseded, the register root it belonged to and
+the deliverables its epics satisfied, and every violation it then reports is an artefact of the cut.
+**The settled archive is never re-judged under current shapes:** work retired under earlier rules was
+gated clean under those rules, and re-deciding it now is the retroactive enforcement §2.5c-xxi-e
+forbids. Where no value exists yet, it is **seeded from the release record** and says so, rather than
+manufactured by a validation that would apply today's rules to yesterday's work.
+
+Alongside it, an **integrity check** answers the structural question at no measurable cost: every
+archive entry resolves to a lineage really present and a file that exists, no retired lineage left
+members behind in the live register, nothing live dangles into what neither file holds, and every
+archived lineage has its mission.
 
 ### 2.5c-xxii The staged ceremony, one commit per stage
 

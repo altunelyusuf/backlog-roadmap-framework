@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.94.0> ;
-    owl:versionInfo "1.94.0" ;
+    owl:versionIRI <http://example.org/backlog/1.95.0> ;
+    owl:versionInfo "1.95.0" ;
+    owl:priorVersion <http://example.org/backlog/1.94.0> ;
     owl:priorVersion <http://example.org/backlog/1.93.0> ;
     owl:priorVersion <http://example.org/backlog/1.92.0> ;
     owl:priorVersion <http://example.org/backlog/1.91.0> ;
@@ -7065,3 +7066,51 @@ backlog:isRegisterRoot a owl:DatatypeProperty , owl:FunctionalProperty ;
     rdfs:domain backlog:Backlog ; rdfs:range xsd:boolean ;
     rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "is register root"@en ;
     skos:definition "True on the container the register itself is. The archival tool may never move it or anything it declares: the root is above every lineage and belongs to none, which is precisely why a reachability-based partition swept it away (G92)."@en .
+
+#################################################################
+#  v1.95.0 (2026-09-10) -- PROGRESSIVE ARCHIVE CONFORMANCE. Owner's
+#  design, test-driven before adoption (G46). The settled archive is
+#  never re-validated: its conformance is a RECORDED VALUE, confirmed
+#  by comparing a canonical digest. Only the newly retired lineage is
+#  validated, in the FULL archive context so nothing is judged out of
+#  the graph it points into, and on success the recorded value
+#  advances to include it.
+#
+#  Measured 2026-09-10 on this package's archive (13 lineages, 11,763
+#  triples): value check 0.09s + focused validation of the arriving
+#  lineage 3.9s = about 4s, against 162.3s to re-validate the archive
+#  whole -- a 40x reduction with the same answer (all 7 violations
+#  fell on the arriving lineage, none elsewhere). A first, WRONG test
+#  drive sliced each lineage out of the archive and validated the
+#  fragments: 247.7s and 994 artefact violations, because a fragment
+#  has lost the context its statements resolve against. The owner
+#  corrected the reading; the numbers are recorded here so the
+#  refuted design is not proposed again.
+#
+#  It also keeps the framework's own rule: the settled archive is
+#  CONFIRMED UNCHANGED, never re-judged under today's shapes, because
+#  a ruling binds only work that declared it (G89, G91).
+#################################################################
+backlog:ArchiveConformanceRecord a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Archive Conformance Record"@en ;
+    skos:definition "The live register's record that an archive file was conformant when each of its lineages retired, and has not changed since. Carries the canonical digest of the archive at the moment it was cleared, the shapes version it was cleared under, the date, and the lineages included. The settled archive is confirmed against this value rather than re-validated."@en .
+backlog:recordForArchiveFile a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:ArchiveConformanceRecord ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "record for archive file"@en .
+backlog:hasArchiveDigest a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:ArchiveConformanceRecord ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "has archive digest"@en ;
+    skos:definition "SHA-256 over the archive's canonical N-Triples serialization -- canonical so that re-serialization, comment changes and statement order cannot alter it, and only a change in what the archive SAYS does."@en .
+backlog:clearedUnderShapes a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:ArchiveConformanceRecord ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "cleared under shapes"@en ;
+    skos:definition "The shapes file version under which the last arriving lineage was validated. Recorded, not enforced later: the archive is never re-judged under newer shapes."@en .
+backlog:clearedAt a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:ArchiveConformanceRecord ; rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "cleared at"@en .
+backlog:includesRetiredLineage a owl:DatatypeProperty ;
+    rdfs:domain backlog:ArchiveConformanceRecord ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "includes retired lineage"@en ;
+    skos:definition "The IRI, as a string, of each lineage whose arrival this value covers. A lineage in the archive but not in this list has never been cleared, and the next check validates it."@en .

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# backlog_gate v1.11.0 — four-gate release check for the Backlog & Roadmap
+# backlog_gate v1.12.0 — four-gate release check for the Backlog & Roadmap
 # Semantic Framework. Nothing about the package's state is trusted until all
 # four pass, and the SHACL gate refuses to certify anything until it has just
 # demonstrated, in this run, that it can fail a known-bad register.
@@ -11,7 +11,7 @@
 #   +       coverage gate          >= 80% of primary-source concepts (BP-D31)
 #   +       doc-coverage gate      every TBox class named in the standard document
 #
-# Usage: backlog_gate_v1_11_0.sh [REGISTER.ttl ...]
+# Usage: backlog_gate_v1_12_0.sh [REGISTER.ttl ...]
 #
 # v1.11.0 — the order check orders by ancestry (v1.4.0); self-proof adds the two witness maps that
 # separate 'same epoch' from 'same commit' (one epoch, hashes in order -> ORDERED; two stages in one
@@ -463,6 +463,19 @@ if [ -n "$LOC" ]; then
   fi
 else
   echo "  NOT RUN — order check not found. Not assumed to pass."
+fi
+
+echo
+echo "== Archive integrity and progressive conformance — retirement lost nothing, and the settled archive is unchanged =="
+INTEG="$(ls "$HERE"/backlog_archive_integrity_v*.py 2>/dev/null | sort -V | tail -1 || true)"
+CONF="$(ls "$HERE"/backlog_archive_conformance_v*.py 2>/dev/null | sort -V | tail -1 || true)"
+if [ -n "$INTEG" ]; then
+  python3 "$INTEG" 2>&1 | grep -E "DEFECT|VERDICT|entries|references" | sed 's/^/ /'
+  python3 "$INTEG" >/dev/null 2>&1 || { echo "  archive integrity FAILED"; FAILED=1; }
+fi
+if [ -n "$CONF" ]; then
+  python3 "$CONF" 2>&1 | grep -E "value|arrivals|validated|VERDICT|^     " | sed 's/^/ /'
+  python3 "$CONF" >/dev/null 2>&1 || { echo "  archive conformance FAILED"; FAILED=1; }
 fi
 
 echo

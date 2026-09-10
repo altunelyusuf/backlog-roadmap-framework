@@ -1,5 +1,42 @@
 # Changelog
 
+## v1.253.0 — 2026-09-10 (MINOR: progressive archive conformance, archive integrity, and lineage 9's planning)
+
+**Progressive archive conformance** (owner's design, test-driven before adoption, `G46`). The settled
+archive is never re-validated: its conformance is a recorded value confirmed by a canonical digest
+(**0.09 s**), and only lineages that arrived since are validated, in the full context, with
+`focus_nodes` scoping the report without shrinking the graph. Steady state **~1 s**, against
+**162.3 s** to re-validate the archive whole.
+
+Three findings from running it rather than reasoning about it, all recorded in the tool's header:
+- A first, wrong test drive **sliced** each lineage out of the archive: 247.7 s and 994 violations,
+  every one an artefact of the cut. The owner corrected the reading.
+- "Full context" includes the **live register**: archive + TBox alone reported 397 violations, all
+  "not a member of a Backlog register" — artefacts of the register root, which never leaves the live
+  file.
+- With the context complete, 193 violations remained, and they come from shapes shipped **after**
+  those lineages closed (`GoalTriangleShape` arrived the same day and fires on chains gated clean
+  days earlier). Validating the settled archive under today's shapes **is** retroactive enforcement
+  (`G89`, `G91`), so the value is **seeded from the release record** — each lineage was gated clean
+  under the shapes of its own day — and says so in `clearedUnderShapes` rather than pretending a
+  fresh validation happened. Every lineage retiring from now on is validated for real first.
+
+**`backlog_archive_integrity_v1_0_0`** — the structural half at ~0 s: entries resolve to a lineage
+and a real file, no retired lineage left members behind, nothing live dangles, every archived
+lineage has its mission. Its first run found that **all 13 `archiveFile` pointers named archive
+files retired when v1.2.0 was written** — every pointer into the archive was broken. Fixed here.
+
+**Lineage 9, planning.** `PE_SDLC_S01` plans SDLC-S01 into iteration `It_SDLC_1` and records
+`refinementProduces` naming a `Specification` with five `InteractionStep`s and their actors — the use
+case in this framework's own vocabulary — and `TestScenario`s of the nominal and rejection kinds.
+Three execution tasks produced (stakeholder needs, implementation, verification); the story is Ready
+with its concerns declared and addressed by the refinement that declared them; lineage status
+`LS_InProgress`, the first time this register has carried one. Nothing here was compelled — lineage 9
+adopted no obligation set — but a lineage building the rule that grooming must produce a use case,
+while grooming its own work without one, would be arguing for a practice it does not keep.
+
+TBox v1.95.0 (`ArchiveConformanceRecord`), gate v1.12.0 (both archive checks), register v9.80.0.
+
 ## v1.252.0 — 2026-09-10 (MAJOR: the thirteen closed lineages retire whole)
 
 Register v9.78.0, archive v1.2.0. Owner's rule (`G92`): a closed lineage is retired and archived not

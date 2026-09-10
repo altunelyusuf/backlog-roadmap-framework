@@ -14,8 +14,8 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.78.0> ;
-    owl:versionInfo "9.78.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.80.0> ;
+    owl:versionInfo "9.80.0" ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.76.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.75.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.74.0> ;
@@ -3081,7 +3081,8 @@ fw:S_SDLC_FirstAdopter a backlog:Story ; backlog:hasIdentifier "SDLC-S01" ;
     backlog:asRole "a session running a lineage under this framework" ;
     backlog:wantsCapability "open a lineage under OS_SDLC_v1 and carry it to a closed Backlog stage" ;
     backlog:soThat "the SDLC obligations are enforced on real work rather than declared in a vocabulary" ;
-    backlog:hasState backlog:Proposed ; backlog:memberOfContainer fw:Register ;
+    backlog:hasState backlog:Ready ;   # moved 2026-09-10 by PE_SDLC_S01 (pointer, L-112)
+    backlog:memberOfContainer fw:Register ;
     backlog:belongsToLineage fw:L_SDLCObligations ;
     backlog:pursuesObjective fw:Obj_SDLC_Adopted ;
     backlog:satisfiesDeliverable fw:Del_StageObligations ;
@@ -3187,7 +3188,7 @@ fw:ArchiveEntry_L7_Code a backlog:LineageArchiveEntry ;
     backlog:entryForMission "http://example.org/backlog-framework-register#Mission_OntologyDriven" ;
     backlog:entryOutcome "Out_Achieved" ;
     backlog:entryOrdinal 13 ;
-    backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_1_0.ttl" ;
+    backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_2_0.ttl" ;
     backlog:archivedAt "2026-09-10T12:00:00Z"^^xsd:dateTime ;
     backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0 (G92): the Lineage and Mission statements this register still carried were moved to the archive with everything else the lineage owns. Previously they stayed live and were validated on every run -- the cost archiving exists to remove." .
 fw:ArchiveEntry_L7_Exec a backlog:LineageArchiveEntry ;
@@ -3195,7 +3196,7 @@ fw:ArchiveEntry_L7_Exec a backlog:LineageArchiveEntry ;
     backlog:entryForMission "http://example.org/backlog-framework-register#Mission_OntologyDriven" ;
     backlog:entryOutcome "Out_Achieved" ;
     backlog:entryOrdinal 10 ;
-    backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_1_0.ttl" ;
+    backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_2_0.ttl" ;
     backlog:archivedAt "2026-09-10T12:00:00Z"^^xsd:dateTime ;
     backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0 (G92): the Lineage and Mission statements this register still carried were moved to the archive with everything else the lineage owns. Previously they stayed live and were validated on every run -- the cost archiving exists to remove." .
 fw:ArchiveEntry_L7_Export a backlog:LineageArchiveEntry ;
@@ -3203,7 +3204,7 @@ fw:ArchiveEntry_L7_Export a backlog:LineageArchiveEntry ;
     backlog:entryForMission "http://example.org/backlog-framework-register#Mission_OntologyDriven" ;
     backlog:entryOutcome "Out_Achieved" ;
     backlog:entryOrdinal 11 ;
-    backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_1_0.ttl" ;
+    backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_2_0.ttl" ;
     backlog:archivedAt "2026-09-10T12:00:00Z"^^xsd:dateTime ;
     backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0 (G92): the Lineage and Mission statements this register still carried were moved to the archive with everything else the lineage owns. Previously they stayed live and were validated on every run -- the cost archiving exists to remove." .
 fw:ArchiveEntry_L7_Gov a backlog:LineageArchiveEntry ;
@@ -3211,7 +3212,7 @@ fw:ArchiveEntry_L7_Gov a backlog:LineageArchiveEntry ;
     backlog:entryForMission "http://example.org/backlog-framework-register#Mission_OntologyDriven" ;
     backlog:entryOutcome "Out_Achieved" ;
     backlog:entryOrdinal 9 ;
-    backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_1_0.ttl" ;
+    backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_2_0.ttl" ;
     backlog:archivedAt "2026-09-10T12:00:00Z"^^xsd:dateTime ;
     backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0 (G92): the Lineage and Mission statements this register still carried were moved to the archive with everything else the lineage owns. Previously they stayed live and were validated on every run -- the cost archiving exists to remove." .
 fw:ArchiveEntry_L7_Prose a backlog:LineageArchiveEntry ;
@@ -3219,7 +3220,7 @@ fw:ArchiveEntry_L7_Prose a backlog:LineageArchiveEntry ;
     backlog:entryForMission "http://example.org/backlog-framework-register#Mission_OntologyDriven" ;
     backlog:entryOutcome "Out_Achieved" ;
     backlog:entryOrdinal 12 ;
-    backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_1_0.ttl" ;
+    backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_2_0.ttl" ;
     backlog:archivedAt "2026-09-10T12:00:00Z"^^xsd:dateTime ;
     backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0 (G92): the Lineage and Mission statements this register still carried were moved to the archive with everything else the lineage owns. Previously they stayed live and were validated on every run -- the cost archiving exists to remove." .
 fw:ArchiveEntry_L_Build a backlog:LineageArchiveEntry ;
@@ -3227,7 +3228,7 @@ fw:ArchiveEntry_L_Build a backlog:LineageArchiveEntry ;
     backlog:entryForMission "http://example.org/backlog-framework-register#Mission_BuildSoftware_v2" ;
     backlog:entryOutcome "Out_Achieved" ;
     backlog:entryOrdinal 6 ;
-    backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_0_0.ttl" ;
+    backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_2_0.ttl" ;
     backlog:archivedAt "2026-09-10T12:00:00Z"^^xsd:dateTime ;
     backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0 (G92): the Lineage and Mission statements this register still carried were moved to the archive with everything else the lineage owns. Previously they stayed live and were validated on every run -- the cost archiving exists to remove." .
 fw:ArchiveEntry_L_ChangeDiscipline a backlog:LineageArchiveEntry ;
@@ -3235,7 +3236,7 @@ fw:ArchiveEntry_L_ChangeDiscipline a backlog:LineageArchiveEntry ;
     backlog:entryForMission "http://example.org/backlog-framework-register#Mission_ChangeDiscipline" ;
     backlog:entryOutcome "Out_Achieved" ;
     backlog:entryOrdinal 8 ;
-    backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_1_0.ttl" ;
+    backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_2_0.ttl" ;
     backlog:archivedAt "2026-09-10T12:00:00Z"^^xsd:dateTime ;
     backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0 (G92): the Lineage and Mission statements this register still carried were moved to the archive with everything else the lineage owns. Previously they stayed live and were validated on every run -- the cost archiving exists to remove." .
 fw:ArchiveEntry_L_Dev a backlog:LineageArchiveEntry ;
@@ -3243,7 +3244,7 @@ fw:ArchiveEntry_L_Dev a backlog:LineageArchiveEntry ;
     backlog:entryForMission "http://example.org/backlog-framework-register#Mission_Dev" ;
     backlog:entryOutcome "unrecorded" ;
     backlog:entryOrdinal 5 ;
-    backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_0_0.ttl" ;
+    backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_2_0.ttl" ;
     backlog:archivedAt "2026-09-10T12:00:00Z"^^xsd:dateTime ;
     backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0 (G92): the Lineage and Mission statements this register still carried were moved to the archive with everything else the lineage owns. Previously they stayed live and were validated on every run -- the cost archiving exists to remove." .
 fw:ArchiveEntry_L_Executable a backlog:LineageArchiveEntry ;
@@ -3251,7 +3252,7 @@ fw:ArchiveEntry_L_Executable a backlog:LineageArchiveEntry ;
     backlog:entryForMission "http://example.org/backlog-framework-register#Mission_Executable" ;
     backlog:entryOutcome "unrecorded" ;
     backlog:entryOrdinal 3 ;
-    backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_0_0.ttl" ;
+    backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_2_0.ttl" ;
     backlog:archivedAt "2026-09-10T12:00:00Z"^^xsd:dateTime ;
     backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0 (G92): the Lineage and Mission statements this register still carried were moved to the archive with everything else the lineage owns. Previously they stayed live and were validated on every run -- the cost archiving exists to remove." .
 fw:ArchiveEntry_L_OntologyDriven a backlog:LineageArchiveEntry ;
@@ -3259,7 +3260,7 @@ fw:ArchiveEntry_L_OntologyDriven a backlog:LineageArchiveEntry ;
     backlog:entryForMission "http://example.org/backlog-framework-register#Mission_OntologyDriven" ;
     backlog:entryOutcome "Out_Achieved" ;
     backlog:entryOrdinal 7 ;
-    backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_1_0.ttl" ;
+    backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_2_0.ttl" ;
     backlog:archivedAt "2026-09-10T12:00:00Z"^^xsd:dateTime ;
     backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0 (G92): the Lineage and Mission statements this register still carried were moved to the archive with everything else the lineage owns. Previously they stayed live and were validated on every run -- the cost archiving exists to remove." .
 fw:ArchiveEntry_L_Ops a backlog:LineageArchiveEntry ;
@@ -3267,7 +3268,7 @@ fw:ArchiveEntry_L_Ops a backlog:LineageArchiveEntry ;
     backlog:entryForMission "http://example.org/backlog-framework-register#Mission_Ops" ;
     backlog:entryOutcome "unrecorded" ;
     backlog:entryOrdinal 4 ;
-    backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_0_0.ttl" ;
+    backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_2_0.ttl" ;
     backlog:archivedAt "2026-09-10T12:00:00Z"^^xsd:dateTime ;
     backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0 (G92): the Lineage and Mission statements this register still carried were moved to the archive with everything else the lineage owns. Previously they stayed live and were validated on every run -- the cost archiving exists to remove." .
 fw:ArchiveEntry_L_OrderRepair a backlog:LineageArchiveEntry ;
@@ -3275,7 +3276,7 @@ fw:ArchiveEntry_L_OrderRepair a backlog:LineageArchiveEntry ;
     backlog:entryForMission "http://example.org/backlog-framework-register#Mission_OrderRepair" ;
     backlog:entryOutcome "unrecorded" ;
     backlog:entryOrdinal 2 ;
-    backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_0_0.ttl" ;
+    backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_2_0.ttl" ;
     backlog:archivedAt "2026-09-10T12:00:00Z"^^xsd:dateTime ;
     backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0 (G92): the Lineage and Mission statements this register still carried were moved to the archive with everything else the lineage owns. Previously they stayed live and were validated on every run -- the cost archiving exists to remove." .
 fw:ArchiveEntry_L_Plan a backlog:LineageArchiveEntry ;
@@ -3283,6 +3284,133 @@ fw:ArchiveEntry_L_Plan a backlog:LineageArchiveEntry ;
     backlog:entryForMission "http://example.org/backlog-framework-register#Mission_Plan" ;
     backlog:entryOutcome "unrecorded" ;
     backlog:entryOrdinal 1 ;
-    backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_0_0.ttl" ;
+    backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_2_0.ttl" ;
     backlog:archivedAt "2026-09-10T12:00:00Z"^^xsd:dateTime ;
     backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0 (G92): the Lineage and Mission statements this register still carried were moved to the archive with everything else the lineage owns. Previously they stayed live and were validated on every run -- the cost archiving exists to remove." .
+
+#################################################################
+#  v9.79.0 (2026-09-10, brsf-session) -- TWO ARCHIVE MECHANISMS, and
+#  a defect one of them found on its first run.
+#
+#  1. The 13 LineageArchiveEntry records named archive files v1_0_0
+#     and v1_1_0, retired when v1_2_0 was written: every pointer into
+#     the archive was broken. Found by backlog_archive_integrity_v1_0_0
+#     in under a second; corrected above.
+#  2. ArchiveConformanceRecord: the settled archive's conformance as a
+#     recorded VALUE (owner's design, test-driven). SEEDED, not
+#     re-validated: measured 2026-09-10, validating the archive under
+#     today's shapes reports 193 violations that come from shapes
+#     shipped AFTER those lineages closed -- GoalTriangleShape arrived
+#     from SCAMPS this same day and fires on chains gated clean days
+#     earlier. Judging retired work under current rules is the
+#     retroactive enforcement this framework refuses (G89, G91). The
+#     ground of the value is the release record: each lineage was
+#     gated clean, under the shapes of its own day, in the release
+#     that closed it. Every lineage that retires from now on is
+#     validated for real before it joins the value.
+#################################################################
+fw:ArchiveConformance_120 a backlog:ArchiveConformanceRecord ;
+    backlog:recordForArchiveFile "01-ontologies/backlog_framework_archive_abox_v1_2_0.ttl" ;
+    backlog:hasArchiveDigest "a732a801947be84c4a3e27146e242d60049b7f3b2391fa752ccd346f306583c5" ;
+    backlog:clearedUnderShapes "seeded from the release record; each lineage was gated under the shapes of its own day" ;
+    backlog:clearedAt "2026-09-10T15:00:00Z"^^xsd:dateTime ;
+    backlog:includesRetiredLineage "http://example.org/backlog-framework-register#L7_Code" ,
+        "http://example.org/backlog-framework-register#L7_Exec" ,
+        "http://example.org/backlog-framework-register#L7_Export" ,
+        "http://example.org/backlog-framework-register#L7_Gov" ,
+        "http://example.org/backlog-framework-register#L7_Prose" ,
+        "http://example.org/backlog-framework-register#L_Build" ,
+        "http://example.org/backlog-framework-register#L_ChangeDiscipline" ,
+        "http://example.org/backlog-framework-register#L_Dev" ,
+        "http://example.org/backlog-framework-register#L_Executable" ,
+        "http://example.org/backlog-framework-register#L_OntologyDriven" ,
+        "http://example.org/backlog-framework-register#L_Ops" ,
+        "http://example.org/backlog-framework-register#L_OrderRepair" ,
+        "http://example.org/backlog-framework-register#L_Plan" .
+
+#################################################################
+#  v9.79.0 (2026-09-10, brsf-session) -- LINEAGE 9, PLANNING. The
+#  first grooming in this framework's history that PRODUCES what the
+#  owner's finding of 2026-09-09 said grooming must produce: a
+#  specification with interaction steps and their actors, and
+#  scenarios of the nominal and rejection kinds -- for real work in
+#  the live register, not in a fixture.
+#
+#  Lineage 9 adopted no obligation set (it opened before one existed,
+#  G91), so nothing here is compelled. It is done because the mission
+#  says the lineage should be connected to the SDLC as its mandatory
+#  facilities, and a lineage that builds that rule while grooming its
+#  own work without a use case would be arguing for a practice it
+#  does not keep.
+#
+#  Iteration It_SDLC_1 is open, and SDLC-S01 -- open a lineage under
+#  OS_SDLC_v1 and carry it to a closed Backlog stage -- is planned
+#  into it. The other four stories stay Proposed: they depend on the
+#  adopting lineage existing, and planning them now would be planning
+#  work whose subject has not been created.
+#################################################################
+fw:It_SDLC_1 a backlog:Iteration ;
+    backlog:hasIdentifier "SDLC-IT-1" ; backlog:hasTitle "First adopting lineage"@en ;
+    backlog:hasState backlog:Proposed ;
+    backlog:iterationStart "2026-09-10T13:00:00Z"^^xsd:dateTime ;
+    backlog:iterationEnd "2026-09-24T13:00:00Z"^^xsd:dateTime ;
+    backlog:hasCapacity 8.0 ;
+    backlog:appliesDefinitionOfDone fw:DoD_Baseline ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+
+fw:PE_SDLC_S01 a backlog:PlanningEvent ;
+    backlog:plansItem fw:S_SDLC_FirstAdopter ;
+    backlog:refines fw:S_SDLC_FirstAdopter ;
+    backlog:plannedInto fw:It_SDLC_1 ;
+    backlog:plannedAt "2026-09-10T13:00:00Z"^^xsd:dateTime ;
+    backlog:plannedBy backlog:Owner ;
+    backlog:producesTask fw:T_SDLC_S01_Analysis , fw:T_SDLC_S01_Implementation , fw:T_SDLC_S01_Verification ;
+    backlog:refinementProduces fw:Spec_SDLC_S01 , fw:Scen_SDLC_S01_Nominal , fw:Scen_SDLC_S01_Rejection ;
+    backlog:addressesConcern backlog:Concern_Interaction , backlog:Concern_Data ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+
+#  THE USE CASE, in this framework's own vocabulary: a Specification whose
+#  InteractionSteps each name the actor that performs them.
+fw:Spec_SDLC_S01 a backlog:Specification ;
+    rdfs:label "Open a lineage under OS_SDLC_v1 and carry it to a closed Backlog stage"@en ;
+    backlog:describesItem fw:S_SDLC_FirstAdopter ;
+    backlog:hasInteractionStep fw:Step_SDLC_1 , fw:Step_SDLC_2 , fw:Step_SDLC_3 , fw:Step_SDLC_4 , fw:Step_SDLC_5 ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+fw:Step_SDLC_1 a backlog:InteractionStep ; backlog:hasStepOrdinal 1 ; backlog:hasStepActor backlog:Owner ;
+    backlog:hasStepAction "The owner states the mission of the new lineage and decides that it opens under OS_SDLC_v1." .
+fw:Step_SDLC_2 a backlog:InteractionStep ; backlog:hasStepOrdinal 2 ; backlog:hasStepActor backlog:Builder ;
+    backlog:hasStepAction "The session writes the Lineage with adoptsObligationSet OS_SDLC_v1 and adoptionRecordedAtOpen true, the Mission, and the Stage_Mission output, in one commit -- adoption is refused after LS_Opened." .
+fw:Step_SDLC_3 a backlog:InteractionStep ; backlog:hasStepOrdinal 3 ; backlog:hasStepActor backlog:Builder ;
+    backlog:hasStepAction "For each stage in turn, the session produces what the stage owes -- domain entities and blueprint at Scope, a specification and nominal and rejection scenarios at Goal, activity and sequence diagrams at Objective, a class model and acceptance criteria at Backlog -- and only then writes that stage's output, in its own commit." .
+fw:Step_SDLC_4 a backlog:InteractionStep ; backlog:hasStepOrdinal 4 ; backlog:hasStepActor backlog:Builder ;
+    backlog:hasStepAction "The release gate validates the register: StageOutputOwesShape refuses any stage output whose owed artifacts are absent, and the git witness confirms each artifact first appears before the output that claims it." .
+fw:Step_SDLC_5 a backlog:InteractionStep ; backlog:hasStepOrdinal 5 ; backlog:hasStepActor backlog:Owner ;
+    backlog:hasStepAction "The owner reads the closed chain and the observations it moved, and decides whether the obligations demanded the right artifacts." .
+
+#  THE SCENARIOS: the main path, and the path where the rule must refuse.
+fw:Scen_SDLC_S01_Nominal a backlog:TestScenario ;
+    backlog:scenarioOf fw:AC_SDLC_S01 ; backlog:scenarioKind backlog:Scen_Nominal ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+fw:Scen_SDLC_S01_Rejection a backlog:TestScenario ;
+    backlog:scenarioOf fw:AC_SDLC_S01 ; backlog:scenarioKind backlog:Scen_Rejection ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+
+#  THE TASKS the planning produced, one per ISO 12207 type the work needs.
+fw:T_SDLC_S01_Analysis a backlog:ExecutionTask ; backlog:hasTaskType backlog:Task_StakeholderNeeds ;
+    backlog:hasIdentifier "SDLC-T01-A" ; backlog:hasTitle "State the adopting lineage's mission and its obligation set"@en ;
+    backlog:hasState backlog:Proposed ; backlog:memberOfContainer fw:Register , fw:It_SDLC_1 ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+fw:T_SDLC_S01_Implementation a backlog:ExecutionTask ; backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:hasIdentifier "SDLC-T01-I" ; backlog:hasTitle "Write the five stages, each producing what it owes before its output"@en ;
+    backlog:hasState backlog:Proposed ; backlog:memberOfContainer fw:Register , fw:It_SDLC_1 ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+fw:T_SDLC_S01_Verification a backlog:ExecutionTask ; backlog:hasTaskType backlog:Task_Verification ;
+    backlog:hasIdentifier "SDLC-T01-V" ; backlog:hasTitle "Show each obligation refusing its stage output before the artifact exists"@en ;
+    backlog:hasState backlog:Proposed ; backlog:memberOfContainer fw:Register , fw:It_SDLC_1 ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+
+fw:S_SDLC_FirstAdopter backlog:memberOfContainer fw:It_SDLC_1 ;
+    backlog:hasApplicableConcern backlog:Concern_Interaction , backlog:Concern_Data .
+fw:L_SDLCObligations backlog:hasLineageStatus backlog:LS_InProgress .
+#  The refinement that makes the story Ready is PE_SDLC_S01 above; the concerns it declares are the
+#  ones that refinement addressed.
