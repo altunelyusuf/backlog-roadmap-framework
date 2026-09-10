@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.95.0
+# Backlog & Roadmap Semantic Framework — Standard v1.96.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -836,6 +836,27 @@ inert. (`ObligationSet` is the lineage-level counterpart, adopted when a lineage
 A `FindingRecord` carries `findingFromShape`, `findingOnNode`, `hasDisposition`,
 `dispositionRationale`, `decidedBy`, and the monitoring the disposition requires. Silence is never an
 exception: a violation with no record is a nonconformity to be fixed.
+
+### 2.5c-xxi-h Revising a chain from an intermediate stage; and what a package delivers
+
+A **`StageRevision`** records the owner's decision to rebuild a lineage from an intermediate stage --
+the goals were guards rather than achievements, the objectives measured the wrong thing -- with
+Mission and Scope standing. It names `revisesLineage`, `revisesFromStage`, `revisionReason`, the
+outputs it `retractsOutput`, its decider and `revisedAtCommit`, and it carries a restart's own
+discipline: the retraction precedes the rebuild in its own commit, each rebuilt output consumes the
+last unretracted upstream output, and items re-enter by admission rather than by being left in place.
+It may never revise from `Stage_Mission`: rebuilding from the mission is a `LineageRestart` and must
+answer a finding.
+
+**`deliversDeliverable`** (Package to ScopeDeliverable) states what of the scope a package's release
+makes true. Asserted intent, never derived: the transitive path through members computes what the
+members happen to touch, and a computed set cannot be compared against an intent nobody stated.
+`PackageDeliveryIntentShape` refuses a package claiming a deliverable none of its members satisfies.
+
+The **Mission-Scope-Goal triangle** is now tested on its agreements, not only asserted:
+`ScopeAreaCoverageShape` requires every area of a lineage to be named by that lineage's scope
+statement, and `GoalTriangleShape` requires a goal's `derivesFromScope` and `contributesToMission` to
+agree through `scopeForMission`, and every `goalCoversArea` to be an area the statement admits.
 
 ### 2.5c-xxii The staged ceremony, one commit per stage
 

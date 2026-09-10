@@ -1,0 +1,29 @@
+@prefix backlog: <http://example.org/backlog#> .
+@prefix ex:      <http://example.org/scope-triangle-neg#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+# fixture_scope_triangle_negative v1.0.0 -- NEGATIVE (2026-09-10), from SCAMPS' own known-bad cases.
+#  ScopeAreaCoverageShape      Area_Stray belongs to the lineage; no statement covers it.
+#  GoalTriangleShape           G_WrongMission derives from Sc1 (mission M1) but contributes to M2;
+#                              G_StrayArea covers Area_Stray, which Sc1 does not name.
+#  StageRevisionShape          Rev_Bare: no lineage, no stage, no reason, no retraction, no decider;
+#                              Rev_FromMission revises from Stage_Mission; Rev_Unmarked retracts an
+#                              output not marked outputRetracted.
+#  PackageDeliveryIntentShape  Pkg_Claim says it delivers D1; no member satisfies it.
+ex:L a backlog:Lineage ; backlog:lineageOrdinal 1 ; backlog:lineageArchived false ; backlog:hasLineageStatus backlog:LS_Scoped .
+ex:M1 a backlog:Mission . ex:M2 a backlog:Mission .
+ex:Sc1 a backlog:ScopeStatement ; backlog:scopeForMission ex:M1 ; backlog:belongsToLineage ex:L ; backlog:coversArea ex:Area_Ok .
+ex:Area_Ok a backlog:ScopeArea ; backlog:belongsToLineage ex:L .
+ex:Area_Stray a backlog:ScopeArea ; backlog:belongsToLineage ex:L .
+ex:G_WrongMission a backlog:Goal ; backlog:derivesFromScope ex:Sc1 ; backlog:contributesToMission ex:M2 .
+ex:G_StrayArea a backlog:Goal ; backlog:derivesFromScope ex:Sc1 ; backlog:contributesToMission ex:M1 ; backlog:goalCoversArea ex:Area_Stray .
+ex:O1 a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Goal ; backlog:belongsToLineage ex:L ; backlog:closedAtCommit "c1" ; backlog:hasStateDigest "x" .
+ex:Rev_Bare a backlog:StageRevision .
+ex:Rev_FromMission a backlog:StageRevision ; backlog:revisesLineage ex:L ; backlog:revisesFromStage backlog:Stage_Mission ;
+    backlog:revisionReason "rewriting everything" ; backlog:retractsOutput ex:O1 ; backlog:decidedBy backlog:Owner .
+ex:Rev_Unmarked a backlog:StageRevision ; backlog:revisesLineage ex:L ; backlog:revisesFromStage backlog:Stage_Goal ;
+    backlog:revisionReason "the goals were guards, not achievements" ; backlog:retractsOutput ex:O1 ; backlog:decidedBy backlog:Owner .
+ex:D1 a backlog:ScopeDeliverable .
+ex:Pkg_Claim a backlog:Package ; backlog:hasPackageVersion "1.0.0" ; backlog:deliversDeliverable ex:D1 .
+<http://example.org/scope-triangle-neg#> backlog:hasExpectedPolarity backlog:Polarity_Negative .

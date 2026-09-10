@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_pipeline_verify_v1_1_0.py — the lineage order, checked by reconstruction.
+"""backlog_pipeline_verify_v1_2_0.py — the lineage order, checked by reconstruction.
 
 WHY THIS EXISTS
 
@@ -32,11 +32,11 @@ shortcut cost the same as doing it properly.
 
 Exit 0 when every recorded digest reproduces, 1 otherwise.
 
-Usage: backlog_pipeline_verify_v1_1_0.py <register.ttl> [tbox.ttl]
+Usage: backlog_pipeline_verify_v1_2_0.py <register.ttl> [tbox.ttl]
 """
 
 import hashlib
-import sys
+import sys, os
 
 from rdflib import Graph, RDF, URIRef
 
@@ -63,7 +63,17 @@ def state_digest(g, stage):
 
 
 
-def _load_stage_types(tbox_path):
+def _table_v2_declared(data_graph_text):
+    """v1.2.0: a register that declares adoptsRuleSet RS_DigestTable_v2 is verified against the v2
+    digest table (stageRequiresTypeV2), which counts Feature, Defect, Enabler, Spike and Task at
+    Stage_Backlog. SCAMPS measured the v1 table's consequence: a register whose items are all
+    Features had a Backlog digest identical to its Objective digest, so an item added to a closed
+    stage could not be detected. The table is a RuleSet because changing it changes every recorded
+    digest: adoption is a stated migration, never silent (G91)."""
+    return "adoptsRuleSet" in data_graph_text and "RS_DigestTable_v2" in data_graph_text
+
+
+def _load_stage_types(tbox_path, v2=False):
     """What each lineage stage must contain, from the ontology.
 
     EXPORTED at v1.117.0. This was a python dictionary that defined the
@@ -95,9 +105,11 @@ def main():
     import os as _os, glob as _glob
     _pkg = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
     _tb = sorted(_glob.glob(_os.path.join(_pkg, "01-ontologies", "backlog_tbox_v*.ttl")))[-1]
-    STAGE_TYPES = _load_stage_types(_tb)
+    _v2 = any(_table_v2_declared(open(f, encoding="utf-8", errors="ignore").read()) for f in sys.argv[1:] if os.path.exists(f))
+    STAGE_TYPES = _load_stage_types(_tb, _v2)
+    print("digest table: %s" % ("v2 (RS_DigestTable_v2 declared)" if _v2 else "v1"))
     if len(sys.argv) < 2:
-        print("usage: backlog_pipeline_verify_v1_1_0.py <register.ttl> [tbox.ttl]")
+        print("usage: backlog_pipeline_verify_v1_2_0.py <register.ttl> [tbox.ttl]")
         return 1
     g = Graph()
     for f in sys.argv[1:]:

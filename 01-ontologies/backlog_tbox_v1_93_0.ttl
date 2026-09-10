@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.92.0> ;
-    owl:versionInfo "1.92.0" ;
+    owl:versionIRI <http://example.org/backlog/1.93.0> ;
+    owl:versionInfo "1.93.0" ;
+    owl:priorVersion <http://example.org/backlog/1.92.0> ;
     owl:priorVersion <http://example.org/backlog/1.91.0> ;
     owl:priorVersion <http://example.org/backlog/1.90.0> ;
     owl:priorVersion <http://example.org/backlog/1.89.0> ;
@@ -6455,6 +6456,7 @@ backlog:outputRetracted a owl:DatatypeProperty , owl:FunctionalProperty ;
     skos:definition "True on a StageOutput withdrawn by a LineageRestart. Absent means active."@en .
 
 backlog:preLineageItem a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:comment "v1.93.0: \"set by the restart\" now reads \"set by the restart OR by a StageRevision\" -- SCAMPS reported that a revision of a closed intermediate stage re-admits items exactly as a restart does, and the definition named only one of the two acts."@en ;
     rdfs:domain backlog:WorkItem ; rdfs:range xsd:boolean ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "pre-lineage item"@en ;
@@ -6952,3 +6954,66 @@ backlog:ruleSetAdoptedAt a owl:DatatypeProperty ;
 backlog:RS_SeverityAudit_20260909 a owl:NamedIndividual , backlog:RuleSet ;
     rdfs:label "Severity audit of 2026-09-09"@en ;
     skos:definition "The audit recorded in 04-documentation/SEVERITY_AUDIT_2026_09_09_v1_0_0.md: 58 advisories that state a broken lineage rule become sh:Violation, 4 become sh:Info, 16 remain sh:Warning. Shipped as 02-shacl-safeguards/backlog_shacl_promoted_v1_0_0.ttl. NOT adopted by this register at v1.248.0: lineage 9 is in progress."@en .
+
+#################################################################
+#  v1.93.0 (2026-09-10) -- THREE GAPS REPORTED BY SCAMPS, VERIFIED
+#  HERE, AND CLOSED. the maintainer/SCAMPS (the another registrant Agentic Pipeline
+#  register) ran the ceremony for real and found what this framework
+#  asserts but never checks. Each was re-measured against this
+#  package's own files before acceptance, never from their text.
+#
+#  1. Revising a closed INTERMEDIATE stage had no typed record. A
+#     LineageRestart must answer a bypass and rebuilds from Mission;
+#     a ScopeChange admits work into scope. Neither types "the goals
+#     were wrong, rebuild Goal->Objective->Backlog with Mission and
+#     Scope untouched", so SCAMPS had to record it as a bare
+#     prov:Activity. StageRevision below.
+#  2. The Mission-Scope-Goal triangle was asserted on three sides and
+#     checked on none of their agreements (their fixture: a stray area
+#     and a cross-statement goal, 0 violations). Shapes v1.114.0.
+#  3. A Package could not say which ScopeDeliverables it delivers:
+#     measured here, Package has exactly two domain properties
+#     (targetsIteration, hasPackageVersion) and nothing ranges from a
+#     package to a deliverable. deliversDeliverable below.
+#################################################################
+
+backlog:StageRevision a owl:Class ;
+    rdfs:subClassOf core:Artifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Stage Revision"@en ;
+    skos:definition "The owner's decision to rebuild a lineage's chain FROM AN INTERMEDIATE STAGE, leaving the stages above it untouched: the goals were wrong, or the objectives measured the wrong thing, and Mission and Scope still stand. Distinct from LineageRestart, which answers a bypass and rebuilds from Mission, and from ScopeChange, which moves the boundary. Reported by SCAMPS 2026-09-10 after doing exactly this with no word for it. The same discipline applies: the retraction precedes the rebuild in its own commit, every rebuilt output consumes the last UNRETRACTED upstream output, and items re-enter by admission -- never by being left in place and re-dated."@en .
+backlog:revisesLineage a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:StageRevision ; rdfs:range backlog:Lineage ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "revises lineage"@en .
+backlog:revisesFromStage a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:StageRevision ; rdfs:range backlog:LineageStage ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "revises from stage"@en ;
+    skos:definition "The earliest stage rebuilt. Never Stage_Mission: rebuilding from the mission is a restart, and calling it a revision would let a lineage rewrite its own reason for existing without answering a finding."@en .
+backlog:revisionReason a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:StageRevision ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "revision reason"@en ;
+    skos:definition "Why the stages below the revision point were wrong. Without it a reader cannot tell a considered revision from an unexplained rewrite -- SCAMPS' own words for the gap."@en .
+backlog:revisedAtCommit a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:StageRevision ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "revised at commit"@en .
+
+backlog:deliversDeliverable a owl:ObjectProperty ;
+    rdfs:domain backlog:Package ; rdfs:range backlog:ScopeDeliverable ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "delivers deliverable"@en ;
+    skos:definition "What of the scope this package's release makes true. Asserted intent, not derived: the transitive path (package -> member -> satisfiesDeliverable) computes what the members happen to touch, and a computed set cannot be compared against an intent nobody stated. Direction is delivery -> scope, later -> earlier, as deliversPackage already reasons. Reported by SCAMPS 2026-09-10: on their register every deliverable was reachable through some package by accident of item membership, and nothing enforced it."@en .
+
+backlog:RS_DigestTable_v2 a owl:NamedIndividual , backlog:RuleSet ;
+    rdfs:label "Stage digest table v2 (item granularities complete)"@en ;
+    skos:definition "Adds Feature, Defect, Enabler, Spike and Task to Stage_Backlog's stageRequiresType. SCAMPS measured the consequence of their absence: a register whose 25 items are all Features had a Backlog-stage digest identical to its Objective-stage digest, so an item added to a closed Backlog stage could not be detected -- the only thing the pipeline verifier exists for. Shipped as a RULE SET and not applied on adoption day, because changing the table changes every recorded digest: a register adopts it and re-records its stage digests as a stated migration, never silently (G91)."@en .
+backlog:stageRequiresTypeV2 a owl:ObjectProperty ;
+    rdfs:domain backlog:LineageStage ; rdfs:range rdfs:Class ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "stage requires type (table v2)"@en ;
+    skos:definition "The v2 digest table. backlog_pipeline_verify reads it INSTEAD of stageRequiresType for a register that declares adoptsRuleSet RS_DigestTable_v2; otherwise the v1 table stands and every recorded digest keeps reproducing."@en .
+backlog:Stage_Backlog backlog:stageRequiresTypeV2
+    backlog:Mission , backlog:ScopeStatement , backlog:ScopeExclusion , backlog:ScopeDeliverable ,
+    backlog:Goal , backlog:Objective , backlog:Initiative , backlog:Epic , backlog:Story ,
+    backlog:Feature , backlog:Defect , backlog:Enabler , backlog:Spike , backlog:Task , backlog:ExecutionTask .
+backlog:Stage_Mission backlog:stageRequiresTypeV2 backlog:Mission .
+backlog:Stage_Scope backlog:stageRequiresTypeV2 backlog:Mission , backlog:ScopeStatement , backlog:ScopeExclusion , backlog:ScopeDeliverable .
+backlog:Stage_Goal backlog:stageRequiresTypeV2 backlog:Mission , backlog:ScopeStatement , backlog:ScopeExclusion , backlog:ScopeDeliverable , backlog:Goal .
+backlog:Stage_Objective backlog:stageRequiresTypeV2 backlog:Mission , backlog:ScopeStatement , backlog:ScopeExclusion , backlog:ScopeDeliverable , backlog:Goal , backlog:Objective .

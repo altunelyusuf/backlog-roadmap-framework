@@ -1,5 +1,29 @@
 # Changelog
 
+## v1.249.0 — 2026-09-10 (MINOR: three gaps reported by SCAMPS, verified here and closed)
+
+`the maintainer/SCAMPS` — the another registrant Agentic Pipeline register, now its own repository — ran the ceremony
+for real and reported three things this framework asserts and never checks. Each was re-measured
+against this package's own files before acceptance.
+
+- **`StageRevision`** (TBox v1.93.0, `StageRevisionShape`): a typed record for rebuilding a chain
+  from an intermediate stage with Mission and Scope standing. Same discipline as a restart;
+  forbidden from `Stage_Mission`, which is a restart and must answer a finding. `preLineageItem`
+  now names both acts.
+- **`ScopeAreaCoverageShape`, `GoalTriangleShape`** (shapes v1.114.0): the Mission–Scope–Goal
+  triangle was asserted on three sides and tested on none of their agreements — their known-bad
+  fixture passed this suite at 0 violations.
+- **`deliversDeliverable` + `PackageDeliveryIntentShape`**: `Package` had exactly two domain
+  properties and no path to a `ScopeDeliverable`; delivery intent was derivable and never
+  assertable, so nothing could compare intent with contents.
+- **`RS_DigestTable_v2`** and `stageRequiresTypeV2`: `Feature`, `Defect`, `Enabler`, `Spike` and
+  `Task` were missing from `Stage_Backlog`'s digest table, so a register of Features had a Backlog
+  digest identical to its Objective digest. Shipped as a **rule set**, not an edit: changing the
+  table changes every recorded digest, so a register adopts it and re-records as a stated
+  migration. `backlog_pipeline_verify_v1_2_0` reads v2 only on declaration — proven both ways.
+- Fixture `fixture_scope_triangle_negative` fires every new clause; the live register stays at
+  0 violations, and neither new rule set is adopted.
+
 ## v1.248.0 — 2026-09-09 (MAJOR: the severity audit finished — 58 advisories were obligations; and what a violation obliges, from the standards)
 
 **The audit `G43` deferred and `G44` ran too shallowly.** `G44` judged 63 of 66 advisories from their

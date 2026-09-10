@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.113.0> ;
-    owl:versionInfo "1.113.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.114.0> ;
+    owl:versionInfo "1.114.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.113.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.112.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.111.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.110.0> ;
@@ -6084,3 +6085,83 @@ backlog:StaleDispositionShape a sh:NodeShape ;
 #  completed. Until then the audit is recorded and inert, and this
 #  file's severities are exactly what they were before it.
 #################################################################
+
+#################################################################
+#  v1.114.0 (2026-09-10) -- SCAMPS' three findings, enforced. The
+#  Mission-Scope-Goal triangle is now checked on its agreements, a
+#  stage revision carries the same discipline as a restart, and a
+#  package can state what of the scope it delivers.
+#################################################################
+backlog:ScopeAreaCoverageShape a sh:NodeShape ;
+    sh:targetClass backlog:ScopeArea ;
+    sh:severity sh:Violation ;
+    rdfs:label "Every area of a lineage is named by that lineage's scope statement (L1)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_scope_triangle_negative" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this scope area belongs to a lineage and no ScopeStatement of that lineage names it with coversArea. The statement is the hub between an area and its mission; an area outside it is unreachable from the mission it is supposed to serve, and a goal covering it answers to nothing. Reported by SCAMPS with a known-bad fixture this suite accepted at 0 violations." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:belongsToLineage ?l .
+            FILTER NOT EXISTS { ?sc a backlog:ScopeStatement ; backlog:belongsToLineage ?l ; backlog:coversArea $this }
+        }""" ] .
+
+backlog:GoalTriangleShape a sh:NodeShape ;
+    sh:targetClass backlog:Goal ;
+    sh:severity sh:Violation ;
+    rdfs:label "A goal's scope, mission and areas agree with each other (L1)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_scope_triangle_negative" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this goal derives from a scope statement whose mission is not the mission the goal contributes to. G13 says the triangle reads the same both ways; until now it was asserted by property and tested by nothing." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:derivesFromScope ?sc ; backlog:contributesToMission ?m .
+            ?sc backlog:scopeForMission ?m2 .
+            FILTER (?m != ?m2)
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this goal covers an area its own scope statement does not name. A goal cannot answer for ground the boundary never admitted." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:derivesFromScope ?sc ; backlog:goalCoversArea ?a .
+            FILTER NOT EXISTS { ?sc backlog:coversArea ?a }
+        }""" ] .
+
+backlog:StageRevisionShape a sh:NodeShape ;
+    sh:targetClass backlog:StageRevision ;
+    sh:severity sh:Violation ;
+    rdfs:label "A stage revision names what it revises, why, and retracts what it replaces (L1)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_scope_triangle_negative" ;
+    sh:property [ sh:path backlog:revisesLineage ; sh:minCount 1 ; sh:maxCount 1 ; sh:class backlog:Lineage ;
+                  sh:message "A stage revision names exactly one lineage." ] ;
+    sh:property [ sh:path backlog:revisesFromStage ; sh:minCount 1 ; sh:maxCount 1 ;
+                  sh:message "A stage revision names the earliest stage it rebuilds." ] ;
+    sh:property [ sh:path backlog:revisionReason ; sh:minCount 1 ; sh:datatype xsd:string ;
+                  sh:message "A stage revision states why the stages below it were wrong; without it a reader cannot tell it from an unexplained rewrite." ] ;
+    sh:property [ sh:path backlog:retractsOutput ; sh:minCount 1 ;
+                  sh:message "A stage revision retracts the outputs it replaces." ] ;
+    sh:property [ sh:path backlog:decidedBy ; sh:minCount 1 ;
+                  sh:message "A stage revision is an owner decision and says so." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this revision revises from Stage_Mission. Rebuilding from the mission is a LineageRestart and must answer a finding; calling it a revision would let a lineage rewrite its own reason for existing with no bypass behind it." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE { $this backlog:revisesFromStage backlog:Stage_Mission . }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this revision names a retracted output that is not marked outputRetracted true. Retraction is a fact on the output, so every consumer sees it -- the same rule LineageRestartShape applies." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:retractsOutput ?o .
+            FILTER NOT EXISTS { ?o backlog:outputRetracted true }
+        }""" ] .
+
+backlog:PackageDeliveryIntentShape a sh:NodeShape ;
+    sh:targetClass backlog:Package ;
+    sh:severity sh:Violation ;
+    rdfs:label "A package's delivery intent agrees with its members (L1)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_scope_triangle_negative" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this package says it delivers a scope deliverable that none of its members satisfies. The intent and the contents disagree, and until deliversDeliverable existed neither could be compared with the other." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:deliversDeliverable ?d .
+            FILTER NOT EXISTS { ?i backlog:memberOfContainer $this ; backlog:satisfiesDeliverable ?d }
+        }""" ] .
