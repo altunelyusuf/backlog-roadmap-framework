@@ -14,8 +14,8 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.77.0> ;
-    owl:versionInfo "9.77.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.78.0> ;
+    owl:versionInfo "9.78.0" ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.76.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.75.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.74.0> ;
@@ -192,15 +192,6 @@
 #  double-counts. They are notYetScoreable with the reason recorded.
 #################################################################
 
-fw:Mission_OntologyDriven a backlog:Mission ;
-    backlog:producedByStage fw:Out2_Mission ;
-    backlog:hasMissionStatement "The framework is ontology-driven: classes, relationships, properties and instances that today live in prose or in source code are exported to the ontology, the governance model is expressed as ontology rather than as documentation, and rule execution moves from prose and code to the ontology layer. What remains as prose explains; what remains as code executes standard engines. Neither carries meaning that only they define." ;
-    backlog:missionFor fw:Register ;
-    backlog:hasMissionOrigin backlog:Origin_OwnerStated ;
-    backlog:missionSource "Owner, 2026-10-26, verbatim: 'a new mission and a new lineage to reduce the dependency on the prose and source code. I want you to convert the current configuration to be ontology driven by analyzing the prose and source code and identify the possible exports from them to the ontology not just the rules but also the clasesses, relationships, properties, objects/instances, and other ontologic concpepts. Additionally, the governance model should be based on the ontologies and execution of the rules be transferred to the ontology levels from the prose and source codes.' Follows the owner's finding at v1.98.0 that prose is the largest and least verified layer: 7197 lines nothing checks against the ontology, and that every drift in this session occurred in prose nothing could contradict." ;
-    backlog:decidedBy backlog:Owner ;
-    backlog:hasMissionOutcome backlog:Out_Achieved ;
-    backlog:outcomeRationale "Achieved. Closure computed by backlog_lineage_compass, not asserted: every one of eight objectives is at target or carries a real AchievementStatus explaining why it no longer steers (Obj_RowsUnchecked: Ach_Retrospective, a confirmed structural floor). fw:CR_OntologyDriven, this mission's own required closure report, records the real measures, cited findings and best practices this lineage's own history produced. Closed by the owner's own direct instruction, with the closure report required to exist first, per MissionClosureRequiresReportShape." .
 
 
 
@@ -1339,50 +1330,8 @@ fw:SS_quality a backlog:ShapeSuite ; backlog:suiteName "quality" ; backlog:suite
 #  Ten stage outputs and plan artefacts of the first lineage were
 #  assigned by reading them.
 #################################################################
-fw:L_Plan a backlog:Lineage ;
-    rdfs:label "Lineage 1"@en ;
-    backlog:lineageForMission fw:Mission_Plan ;
-    backlog:lineageOrdinal 1 ;
-    backlog:lineageArchived true ;
-    backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_0_0.ttl" .
-fw:L_OrderRepair a backlog:Lineage ;
-    rdfs:label "Lineage 2"@en ;
-    backlog:lineageForMission fw:Mission_OrderRepair ;
-    backlog:lineageOrdinal 2 ;
-    backlog:lineageArchived true ;
-    backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_0_0.ttl" .
-fw:L_Executable a backlog:Lineage ;
-    rdfs:label "Lineage 3"@en ;
-    backlog:lineageForMission fw:Mission_Executable ;
-    backlog:lineageOrdinal 3 ;
-    backlog:lineageArchived true ;
-    backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_0_0.ttl" .
-fw:L_Ops a backlog:Lineage ;
-    rdfs:label "Lineage 4"@en ;
-    backlog:lineageForMission fw:Mission_Ops ;
-    backlog:lineageOrdinal 4 ;
-    backlog:lineageArchived true ;
-    backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_0_0.ttl" .
-fw:L_Dev a backlog:Lineage ;
-    rdfs:label "Lineage 5"@en ;
-    backlog:lineageForMission fw:Mission_Dev ;
-    backlog:lineageOrdinal 5 ;
-    backlog:lineageArchived true ;
-    backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_0_0.ttl" .
-fw:L_Build a backlog:Lineage ;
-    rdfs:label "Lineage 6"@en ;
-    backlog:lineageForMission fw:Mission_BuildSoftware_v2 ;
-    backlog:lineageOrdinal 6 ;
-    backlog:lineageArchived true ;
-    backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_0_0.ttl" .
-fw:L_OntologyDriven a backlog:Lineage ;
-    rdfs:label "Lineage 7"@en ;
-    backlog:lineageForMission fw:Mission_OntologyDriven ;
-    backlog:lineageOrdinal 7 ;
-    backlog:lineageArchived true .
 
 #  Lineage membership, one line per individual.
-fw:Mission_OntologyDriven backlog:belongsToLineage fw:L_OntologyDriven .
 
 
 #  Gate K caught two defects in one header. The v7.12.0 bump never
@@ -1626,65 +1575,6 @@ fw:TS_backlog_registration_readinessV1_2_0 a backlog:ToolScript ; backlog:script
 #  assignment) -- corrected to L_Build while moving it.
 #################################################################
 
-fw:Mission_Plan a backlog:Mission ;
-    backlog:hasMissionOrigin backlog:Origin_SessionDrafted ;
-    fw:label "Plan-based visibility mission"@en ;
-    backlog:hasMissionStatement "A register can be read as a plan as well as a backlog: what was scheduled, what actually happened, and the difference — without exporting anything to a spreadsheet or a project tool." ;
-    backlog:missionFor fw:Register ;
-    backlog:decidedBy backlog:Owner ;
-    backlog:belongsToLineage fw:L_Plan .
-fw:Mission_OrderRepair a backlog:Mission ;
-    backlog:hasMissionOrigin backlog:Origin_SessionDrafted ;
-    fw:label "Recorded-order mission"@en ;
-    backlog:hasMissionStatement "A reader of any lineage in this store can tell whether its scope was fixed before its goals or drawn around them afterwards, without asking the session that wrote it." ;
-    backlog:missionFor fw:Register ;
-    backlog:decidedBy backlog:Owner ;
-    backlog:belongsToLineage fw:L_OrderRepair .
-fw:Mission_Executable a backlog:Mission ;
-    backlog:hasMissionOrigin backlog:Origin_SessionDrafted ;
-    fw:label "Executable roadmap mission"@en ;
-    backlog:hasMissionStatement "A reader of the roadmap can see how far started work has actually got, every story fits the iteration it was committed to, and each release carries the most valuable work available rather than whatever shared a theme." ;
-    backlog:missionFor fw:Register ;
-    backlog:decidedBy backlog:Owner ;
-    backlog:belongsToLineage fw:L_Executable .
-fw:Mission_Ops a backlog:Mission ;
-    backlog:hasMissionOrigin backlog:Origin_SessionDrafted ;
-    fw:label "Operational mission"@en ;
-    backlog:hasMissionStatement "An adopting team can answer, from the register alone and without a spreadsheet beside it: what did this cost, how fast are we going, what will it take to finish, and where did a human decide." ;
-    backlog:missionFor fw:Register ;
-    backlog:decidedBy backlog:Owner ;
-    backlog:belongsToLineage fw:L_Ops .
-fw:Mission_Dev a backlog:Mission ;
-    backlog:hasMissionOrigin backlog:Origin_SessionDrafted ;
-    fw:label "Development mission"@en ;
-    backlog:hasMissionStatement "Extend the framework so that a register can report its own progress, cost and human involvement as computed facts rather than as claims. Not attempted: prescribing a delivery method, an estimation scale, or a unit of value." ;
-    backlog:missionFor fw:Register ;
-    backlog:decidedBy backlog:Owner ;
-    backlog:belongsToLineage fw:L_Dev .
-fw:Mission_BuildSoftware a backlog:Mission ;
-    fw:label "Build software from mission statements"@en ;
-    backlog:hasMissionStatement "Software is built from mission statements: an intent chain is groomed and granularised down to executable work, delivered in regularly deployable packages, through time-boxed iterations planned to finish their package content, under autonomous, semi-autonomous or non-autonomous execution. The practices are grounded in software engineering standards rather than invented, and every step is machine-confirmable through ontologies." ;
-    backlog:missionFor fw:Register ;
-    backlog:hasMissionOrigin backlog:Origin_OwnerStated ;
-    backlog:missionSource "Owner instruction, 2026-08-20, correcting this session's reading of the framework's purpose: 'We have a backlog-roadmap framework because we want to build software from the mission statements. The methodology should be supporting autonomous, semi-autonomous, and non-autonomous development using iterative/sprint based approach ... All should be machine-confirmable especially using ontologies.'" ;
-    backlog:supersedesMission fw:Mission_Dev ;
-    backlog:supersedesMission fw:Mission_Ops ;
-    backlog:supersedesMission fw:Mission_Plan ;
-    backlog:supersedesMission fw:Mission_Executable ;
-    backlog:supersedesMission fw:Mission_OrderRepair ;
-    backlog:decidedBy backlog:Owner ;
-    backlog:belongsToLineage fw:L_Build .
-fw:Mission_BuildSoftware_v2 a backlog:Mission ;
-    backlog:hasMissionStatement "Software is built from mission statements: an intent chain is groomed and granularised down to executable work, delivered in regularly deployable packages, through time-boxed iterations planned to finish their package content, under autonomous, semi-autonomous or non-autonomous execution. Analysis and design work produces named artefacts — traditional and UML models, diagrams and specifications — and a story carries its steps, interactions, state changes, test cases and test data. The practices are grounded in software engineering standards rather than invented, and every step is machine-confirmable through ontologies." ;
-    backlog:missionFor fw:Register ;
-    backlog:hasMissionOrigin backlog:Origin_OwnerStated ;
-    backlog:missionSource "Owner, 2026-08-25, verbatim: 'Do we have analysis and design activities using traditional and UML based methods, diagram development, specifications and all are part of user stories, definition of done, steps, interactions, state changes, test cases and test data. If not, let us build a lineage to fix the missing concepts in the framework.' Amends the v1.70.0 statement by naming what the analysis and design steps PRODUCE; the original said how work is groomed and delivered and not what it yields." ;
-    backlog:supersedesMission fw:Mission_BuildSoftware ;
-    backlog:decidedBy backlog:Owner ;
-    backlog:hasMissionOutcome backlog:Out_Achieved ;
-    backlog:outcomeRationale "Achieved. Scope_Build: 10 of 10 deliverables satisfied by work that is Done and shipped in a package. Goal_MissionToWork, Goal_GroundedPractice and Goal_BuildAreasExhausted all reached. Goal_BuildContained is unreached and its objective now carries Ach_Retrospective with its reason, so nothing is left unexplained — which is the only condition under which this outcome may be set." ;
-    backlog:retiredAtCommit "pending-commit" ;
-    backlog:belongsToLineage fw:L_Build .
 
 #################################################################
 #  #2 of the mitigation plan, ATTEMPTED and REVERTED. The proposal
@@ -2320,18 +2210,7 @@ fw:Ruling_G71 a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G71" ;
 #  RetrospectiveFindings) rather than smoothed over.
 #################################################################
 
-fw:L_ChangeDiscipline a backlog:Lineage ; rdfs:label "Lineage 8"@en ;
-    backlog:lineageForMission fw:Mission_ChangeDiscipline ;
-    backlog:lineageOrdinal 8 ;
-    backlog:lineageArchived true .
 
-fw:Mission_ChangeDiscipline a backlog:Mission ;
-    backlog:producedByStage fw:Out2_Mission_CD ;
-    backlog:hasMissionStatement "Scope change is a formal, enforced discipline, not an implicit one: any request to grow or shrink a lineage's own declared scope is proposed, assessed for real impact before any decision, decided explicitly as accepted, rejected or deferred, and recorded either way -- and a lineage's own conduct toward other, concurrently active lineages is itself a first-class, checkable concern, not an assumed courtesy." ;
-    backlog:missionFor fw:Register ;
-    backlog:hasMissionOrigin backlog:Origin_OwnerStated ;
-    backlog:missionSource "Owner, 2026-09-05, verbatim: 'we need to discuss the scope management and formulization of change management as a concept and discipline to keep the hygiene, reduce the risks and possible frictions... scope can get bigger or smaller, there is no rule to set a single direction for that. The only limitation is the mission, the scope in any ways should be based to reach the mission.' Followed by direct instruction to run the full lifecycle autonomously as a test drive of BRSF's own capabilities, logging where the methodology proves insufficient for autonomous execution." ;
-    backlog:decidedBy backlog:Owner .
 
 
 
@@ -2381,8 +2260,6 @@ fw:CP_CD_NoOutOfScopeWork a backlog:ObjectiveCheckpoint ;
 
 
 
-fw:Mission_ChangeDiscipline backlog:hasMissionOutcome backlog:Out_Achieved ;
-    backlog:outcomeRationale "Achieved. Computed by backlog_lineage_compass, not asserted: all 7 objectives at target. fw:CR_ChangeDiscipline, this mission's own required closure report, records the real measures, the real test cases exercised, and five genuine methodology gaps found during this autonomous run, each with a possible remedy for later discussion rather than resolved unilaterally." .
 
 
 #################################################################
@@ -2539,7 +2416,6 @@ fw:Imp_RegisterPackageDecisions
 #  Until frozenRuling is recorded, lineage 8 waits and no further
 #  restart is accepted.
 #################################################################
-fw:L_ChangeDiscipline backlog:lineageFrozen true ; backlog:frozenBy fw:Thrash_L_ChangeDiscipline_20260907_1 .
 # owner's ruling goes here when made: fw:L_ChangeDiscipline backlog:frozenRuling "..." ; backlog:decidedBy backlog:Owner .
 
 #################################################################
@@ -2561,7 +2437,6 @@ fw:L_ChangeDiscipline
 #  after the ruling (27472b8). Digest computed at this commit over the
 #  Mission-stage subjects of the register as it now is (Experiment A).
 #################################################################
-fw:Mission_ChangeDiscipline backlog:producedByStage fw:Out3_Mission_CD .
 
 #################################################################
 #  v9.55.0 (2026-09-07, brsf-session) -- REBUILD, STAGE 2 OF 5: Scope.
@@ -2617,46 +2492,6 @@ fw:Mission_ChangeDiscipline backlog:producedByStage fw:Out3_Mission_CD .
 #  (the lesson of v1.204.0). The restart will be divide and conquer,
 #  one part per scope deliverable, by the owner's decision.
 #################################################################
-fw:L_OntologyDriven backlog:lineageFrozen true ; backlog:frozenBy fw:Bypass_L_OntologyDriven_20260907 .   # found: frozen until a restart answers it, in its own commit
-
-#################################################################
-#  v9.61.0 (2026-09-07, brsf-session) -- LINEAGE 7 RESTARTED, DIVIDE
-#  AND CONQUER. Answers Bypass_L_OntologyDriven_20260907 (recorded at
-#  v9.60.0, commit 4423fdc) in its own commit, as the deliberation
-#  witness requires. Owner's decision: one part per scope deliverable.
-#  The five deliverables of Scope_Ontology become five part lineages;
-#  each of the 14 bypassed items goes to the part of the deliverable it
-#  satisfies (S_RulingsQueryableDecision satisfies none by record; it
-#  pursues Obj_RulingsQueryable, which fills Scope_Ontology through
-#  Goal_GovernanceInOntology, so it is placed in the governance part --
-#  a placement, stated as such, not a discovered link). Lineage 7's
-#  five outputs are retracted (kept); every bypassed item is flagged
-#  pre-lineage and stays flagged until its part's rebuilt Stage_Backlog
-#  output admits it. Each part rebuilds its own five-stage chain, one
-#  stage per commit; the parent's rebuilt Backlog output will combine
-#  the parts' Backlog outputs.
-#################################################################
-
-fw:L7_Gov a backlog:Lineage ; rdfs:label "Lineage 7, part Gov (Del_OntGovernance)"@en ;
-    backlog:lineageOrdinal 9 ; backlog:lineageArchived true ;
-    backlog:parentLineage fw:L_OntologyDriven ; backlog:partForDeliverable fw:Del_OntGovernance ;
-    backlog:lineageForMission fw:Mission_OntologyDriven .
-fw:L7_Exec a backlog:Lineage ; rdfs:label "Lineage 7, part Exec (Del_OntRuleExec)"@en ;
-    backlog:lineageOrdinal 10 ; backlog:lineageArchived true ;
-    backlog:parentLineage fw:L_OntologyDriven ; backlog:partForDeliverable fw:Del_OntRuleExec ;
-    backlog:lineageForMission fw:Mission_OntologyDriven .
-fw:L7_Export a backlog:Lineage ; rdfs:label "Lineage 7, part Export (Del_OntExport)"@en ;
-    backlog:lineageOrdinal 11 ; backlog:lineageArchived true ;
-    backlog:parentLineage fw:L_OntologyDriven ; backlog:partForDeliverable fw:Del_OntExport ;
-    backlog:lineageForMission fw:Mission_OntologyDriven .
-fw:L7_Prose a backlog:Lineage ; rdfs:label "Lineage 7, part Prose (Del_ProseExplains)"@en ;
-    backlog:lineageOrdinal 12 ; backlog:lineageArchived true ;
-    backlog:parentLineage fw:L_OntologyDriven ; backlog:partForDeliverable fw:Del_ProseExplains ;
-    backlog:lineageForMission fw:Mission_OntologyDriven .
-fw:L7_Code a backlog:Lineage ; rdfs:label "Lineage 7, part Code (Del_CodeExecutes)"@en ;
-    backlog:lineageOrdinal 13 ; backlog:lineageArchived true ;
-    backlog:parentLineage fw:L_OntologyDriven ; backlog:partForDeliverable fw:Del_CodeExecutes ;
-    backlog:lineageForMission fw:Mission_OntologyDriven .
 
 #################################################################
 #  v9.62.0 (2026-09-07, brsf-session) -- LINEAGE 7 REBUILD, STAGE 1
@@ -2808,27 +2643,6 @@ fw:Find_SymmetricDivergenceRule a quality:Finding .
 #  L_OntologyDriven, L7_Gov, L7_Exec, L7_Export, L7_Prose, L7_Code, L_ChangeDiscipline set down into 01-ontologies/backlog_framework_archive_abox_v1_1_0.ttl; the lineage,
 #  its mission and its closure report stay here as the record that points in.
 #################################################################
-fw:L_OntologyDriven backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_1_0.ttl" ;
-    backlog:archivedAt "2026-09-09T12:02:15Z"^^xsd:dateTime ; backlog:hasLineageStatus backlog:LS_Archived ;
-    backlog:archivalTrigger "Found achieved and un-archived by backlog_lineage_archive_v1_0_0: mission Out_Achieved, closure report present, no item InProgress, not frozen. Owner's rule 2026-09-09: an achieved lineage found triggers the archival activity." .
-fw:L7_Gov backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_1_0.ttl" ;
-    backlog:archivedAt "2026-09-09T12:02:15Z"^^xsd:dateTime ; backlog:hasLineageStatus backlog:LS_Archived ;
-    backlog:archivalTrigger "Found achieved and un-archived by backlog_lineage_archive_v1_0_0: mission Out_Achieved, closure report present, no item InProgress, not frozen. Owner's rule 2026-09-09: an achieved lineage found triggers the archival activity." .
-fw:L7_Exec backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_1_0.ttl" ;
-    backlog:archivedAt "2026-09-09T12:02:15Z"^^xsd:dateTime ; backlog:hasLineageStatus backlog:LS_Archived ;
-    backlog:archivalTrigger "Found achieved and un-archived by backlog_lineage_archive_v1_0_0: mission Out_Achieved, closure report present, no item InProgress, not frozen. Owner's rule 2026-09-09: an achieved lineage found triggers the archival activity." .
-fw:L7_Export backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_1_0.ttl" ;
-    backlog:archivedAt "2026-09-09T12:02:15Z"^^xsd:dateTime ; backlog:hasLineageStatus backlog:LS_Archived ;
-    backlog:archivalTrigger "Found achieved and un-archived by backlog_lineage_archive_v1_0_0: mission Out_Achieved, closure report present, no item InProgress, not frozen. Owner's rule 2026-09-09: an achieved lineage found triggers the archival activity." .
-fw:L7_Prose backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_1_0.ttl" ;
-    backlog:archivedAt "2026-09-09T12:02:15Z"^^xsd:dateTime ; backlog:hasLineageStatus backlog:LS_Archived ;
-    backlog:archivalTrigger "Found achieved and un-archived by backlog_lineage_archive_v1_0_0: mission Out_Achieved, closure report present, no item InProgress, not frozen. Owner's rule 2026-09-09: an achieved lineage found triggers the archival activity." .
-fw:L7_Code backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_1_0.ttl" ;
-    backlog:archivedAt "2026-09-09T12:02:15Z"^^xsd:dateTime ; backlog:hasLineageStatus backlog:LS_Archived ;
-    backlog:archivalTrigger "Found achieved and un-archived by backlog_lineage_archive_v1_0_0: mission Out_Achieved, closure report present, no item InProgress, not frozen. Owner's rule 2026-09-09: an achieved lineage found triggers the archival activity." .
-fw:L_ChangeDiscipline backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_1_0.ttl" ;
-    backlog:archivedAt "2026-09-09T12:02:15Z"^^xsd:dateTime ; backlog:hasLineageStatus backlog:LS_Archived ;
-    backlog:archivalTrigger "Found achieved and un-archived by backlog_lineage_archive_v1_0_0: mission Out_Achieved, closure report present, no item InProgress, not frozen. Owner's rule 2026-09-09: an achieved lineage found triggers the archival activity." .
 
 
 #################################################################
@@ -2838,12 +2652,6 @@ fw:L_ChangeDiscipline backlog:archiveFile "01-ontologies/backlog_framework_archi
 #  archive tool stamped the latter). Read from the register, not
 #  asserted from memory.
 #################################################################
-fw:L_Plan backlog:hasLineageStatus backlog:LS_Archived .
-fw:L_OrderRepair backlog:hasLineageStatus backlog:LS_Archived .
-fw:L_Executable backlog:hasLineageStatus backlog:LS_Archived .
-fw:L_Ops backlog:hasLineageStatus backlog:LS_Archived .
-fw:L_Dev backlog:hasLineageStatus backlog:LS_Archived .
-fw:L_Build backlog:hasLineageStatus backlog:LS_Archived .
 
 #################################################################
 #  v9.72.0 -- LINEAGE 9, Mission stage, RECORDED FOR REAL. v1.242.0's
@@ -3365,3 +3173,116 @@ fw:Out_Backlog_SDLC a backlog:StageOutput ;
     backlog:hasStateDigest "e86e413dd19d33e01dc33a4c3dd85e4f0144436549347dead939ccaae9f5a775" ;
     backlog:closedAtCommit "backlog-roadmap-framework-v1.251.0 (tag; witnessed by git, not asserted)" ;
     backlog:hasRationale "Backlog stage of lineage 9: five Proposed stories, one per objective, each satisfying a scope deliverable and carrying a Given/When/Then criterion that names the shape it will exercise. The chain Mission->Scope->Goal->Objective->Backlog is now closed in five witnessed commits, one per stage -- the first lineage in this framework's history built that way from an empty start. The lineage is LS_Backlogged and not InProgress: no item has left Proposed." .
+
+#################################################################
+#  v9.78.0 (2026-09-10, brsf-session) -- THE THIRTEEN CLOSED LINEAGES RETIRE
+#  WHOLE (G92, owner's rule). Their Lineage and Mission statements move to
+#  the archive with everything else they own; what remains is one
+#  LineageArchiveEntry each -- a record, not a lineage, carrying the archived
+#  IRIs as strings so no shape targeting Lineage, Mission or any stage element
+#  can reach retired work. The register root is untouched (isRegisterRoot).
+#################################################################
+fw:ArchiveEntry_L7_Code a backlog:LineageArchiveEntry ;
+    backlog:entryForLineage "http://example.org/backlog-framework-register#L7_Code" ;
+    backlog:entryForMission "http://example.org/backlog-framework-register#Mission_OntologyDriven" ;
+    backlog:entryOutcome "Out_Achieved" ;
+    backlog:entryOrdinal 13 ;
+    backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_1_0.ttl" ;
+    backlog:archivedAt "2026-09-10T12:00:00Z"^^xsd:dateTime ;
+    backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0 (G92): the Lineage and Mission statements this register still carried were moved to the archive with everything else the lineage owns. Previously they stayed live and were validated on every run -- the cost archiving exists to remove." .
+fw:ArchiveEntry_L7_Exec a backlog:LineageArchiveEntry ;
+    backlog:entryForLineage "http://example.org/backlog-framework-register#L7_Exec" ;
+    backlog:entryForMission "http://example.org/backlog-framework-register#Mission_OntologyDriven" ;
+    backlog:entryOutcome "Out_Achieved" ;
+    backlog:entryOrdinal 10 ;
+    backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_1_0.ttl" ;
+    backlog:archivedAt "2026-09-10T12:00:00Z"^^xsd:dateTime ;
+    backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0 (G92): the Lineage and Mission statements this register still carried were moved to the archive with everything else the lineage owns. Previously they stayed live and were validated on every run -- the cost archiving exists to remove." .
+fw:ArchiveEntry_L7_Export a backlog:LineageArchiveEntry ;
+    backlog:entryForLineage "http://example.org/backlog-framework-register#L7_Export" ;
+    backlog:entryForMission "http://example.org/backlog-framework-register#Mission_OntologyDriven" ;
+    backlog:entryOutcome "Out_Achieved" ;
+    backlog:entryOrdinal 11 ;
+    backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_1_0.ttl" ;
+    backlog:archivedAt "2026-09-10T12:00:00Z"^^xsd:dateTime ;
+    backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0 (G92): the Lineage and Mission statements this register still carried were moved to the archive with everything else the lineage owns. Previously they stayed live and were validated on every run -- the cost archiving exists to remove." .
+fw:ArchiveEntry_L7_Gov a backlog:LineageArchiveEntry ;
+    backlog:entryForLineage "http://example.org/backlog-framework-register#L7_Gov" ;
+    backlog:entryForMission "http://example.org/backlog-framework-register#Mission_OntologyDriven" ;
+    backlog:entryOutcome "Out_Achieved" ;
+    backlog:entryOrdinal 9 ;
+    backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_1_0.ttl" ;
+    backlog:archivedAt "2026-09-10T12:00:00Z"^^xsd:dateTime ;
+    backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0 (G92): the Lineage and Mission statements this register still carried were moved to the archive with everything else the lineage owns. Previously they stayed live and were validated on every run -- the cost archiving exists to remove." .
+fw:ArchiveEntry_L7_Prose a backlog:LineageArchiveEntry ;
+    backlog:entryForLineage "http://example.org/backlog-framework-register#L7_Prose" ;
+    backlog:entryForMission "http://example.org/backlog-framework-register#Mission_OntologyDriven" ;
+    backlog:entryOutcome "Out_Achieved" ;
+    backlog:entryOrdinal 12 ;
+    backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_1_0.ttl" ;
+    backlog:archivedAt "2026-09-10T12:00:00Z"^^xsd:dateTime ;
+    backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0 (G92): the Lineage and Mission statements this register still carried were moved to the archive with everything else the lineage owns. Previously they stayed live and were validated on every run -- the cost archiving exists to remove." .
+fw:ArchiveEntry_L_Build a backlog:LineageArchiveEntry ;
+    backlog:entryForLineage "http://example.org/backlog-framework-register#L_Build" ;
+    backlog:entryForMission "http://example.org/backlog-framework-register#Mission_BuildSoftware_v2" ;
+    backlog:entryOutcome "Out_Achieved" ;
+    backlog:entryOrdinal 6 ;
+    backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_0_0.ttl" ;
+    backlog:archivedAt "2026-09-10T12:00:00Z"^^xsd:dateTime ;
+    backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0 (G92): the Lineage and Mission statements this register still carried were moved to the archive with everything else the lineage owns. Previously they stayed live and were validated on every run -- the cost archiving exists to remove." .
+fw:ArchiveEntry_L_ChangeDiscipline a backlog:LineageArchiveEntry ;
+    backlog:entryForLineage "http://example.org/backlog-framework-register#L_ChangeDiscipline" ;
+    backlog:entryForMission "http://example.org/backlog-framework-register#Mission_ChangeDiscipline" ;
+    backlog:entryOutcome "Out_Achieved" ;
+    backlog:entryOrdinal 8 ;
+    backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_1_0.ttl" ;
+    backlog:archivedAt "2026-09-10T12:00:00Z"^^xsd:dateTime ;
+    backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0 (G92): the Lineage and Mission statements this register still carried were moved to the archive with everything else the lineage owns. Previously they stayed live and were validated on every run -- the cost archiving exists to remove." .
+fw:ArchiveEntry_L_Dev a backlog:LineageArchiveEntry ;
+    backlog:entryForLineage "http://example.org/backlog-framework-register#L_Dev" ;
+    backlog:entryForMission "http://example.org/backlog-framework-register#Mission_Dev" ;
+    backlog:entryOutcome "unrecorded" ;
+    backlog:entryOrdinal 5 ;
+    backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_0_0.ttl" ;
+    backlog:archivedAt "2026-09-10T12:00:00Z"^^xsd:dateTime ;
+    backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0 (G92): the Lineage and Mission statements this register still carried were moved to the archive with everything else the lineage owns. Previously they stayed live and were validated on every run -- the cost archiving exists to remove." .
+fw:ArchiveEntry_L_Executable a backlog:LineageArchiveEntry ;
+    backlog:entryForLineage "http://example.org/backlog-framework-register#L_Executable" ;
+    backlog:entryForMission "http://example.org/backlog-framework-register#Mission_Executable" ;
+    backlog:entryOutcome "unrecorded" ;
+    backlog:entryOrdinal 3 ;
+    backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_0_0.ttl" ;
+    backlog:archivedAt "2026-09-10T12:00:00Z"^^xsd:dateTime ;
+    backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0 (G92): the Lineage and Mission statements this register still carried were moved to the archive with everything else the lineage owns. Previously they stayed live and were validated on every run -- the cost archiving exists to remove." .
+fw:ArchiveEntry_L_OntologyDriven a backlog:LineageArchiveEntry ;
+    backlog:entryForLineage "http://example.org/backlog-framework-register#L_OntologyDriven" ;
+    backlog:entryForMission "http://example.org/backlog-framework-register#Mission_OntologyDriven" ;
+    backlog:entryOutcome "Out_Achieved" ;
+    backlog:entryOrdinal 7 ;
+    backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_1_0.ttl" ;
+    backlog:archivedAt "2026-09-10T12:00:00Z"^^xsd:dateTime ;
+    backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0 (G92): the Lineage and Mission statements this register still carried were moved to the archive with everything else the lineage owns. Previously they stayed live and were validated on every run -- the cost archiving exists to remove." .
+fw:ArchiveEntry_L_Ops a backlog:LineageArchiveEntry ;
+    backlog:entryForLineage "http://example.org/backlog-framework-register#L_Ops" ;
+    backlog:entryForMission "http://example.org/backlog-framework-register#Mission_Ops" ;
+    backlog:entryOutcome "unrecorded" ;
+    backlog:entryOrdinal 4 ;
+    backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_0_0.ttl" ;
+    backlog:archivedAt "2026-09-10T12:00:00Z"^^xsd:dateTime ;
+    backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0 (G92): the Lineage and Mission statements this register still carried were moved to the archive with everything else the lineage owns. Previously they stayed live and were validated on every run -- the cost archiving exists to remove." .
+fw:ArchiveEntry_L_OrderRepair a backlog:LineageArchiveEntry ;
+    backlog:entryForLineage "http://example.org/backlog-framework-register#L_OrderRepair" ;
+    backlog:entryForMission "http://example.org/backlog-framework-register#Mission_OrderRepair" ;
+    backlog:entryOutcome "unrecorded" ;
+    backlog:entryOrdinal 2 ;
+    backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_0_0.ttl" ;
+    backlog:archivedAt "2026-09-10T12:00:00Z"^^xsd:dateTime ;
+    backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0 (G92): the Lineage and Mission statements this register still carried were moved to the archive with everything else the lineage owns. Previously they stayed live and were validated on every run -- the cost archiving exists to remove." .
+fw:ArchiveEntry_L_Plan a backlog:LineageArchiveEntry ;
+    backlog:entryForLineage "http://example.org/backlog-framework-register#L_Plan" ;
+    backlog:entryForMission "http://example.org/backlog-framework-register#Mission_Plan" ;
+    backlog:entryOutcome "unrecorded" ;
+    backlog:entryOrdinal 1 ;
+    backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_0_0.ttl" ;
+    backlog:archivedAt "2026-09-10T12:00:00Z"^^xsd:dateTime ;
+    backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0 (G92): the Lineage and Mission statements this register still carried were moved to the archive with everything else the lineage owns. Previously they stayed live and were validated on every run -- the cost archiving exists to remove." .

@@ -1,5 +1,29 @@
 # Changelog
 
+## v1.252.0 — 2026-09-10 (MAJOR: the thirteen closed lineages retire whole)
+
+Register v9.78.0, archive v1.2.0. Owner's rule (`G92`): a closed lineage is retired and archived not
+partially but whole, its mission included.
+
+| | before | after |
+|---|---|---|
+| live `Lineage` individuals | 14 | **1** (lineage 9, the only one in flight) |
+| live `Mission` individuals | 10 | **1** |
+| archived `Lineage` / `Mission` | 0 / 6 | **13 / 9** |
+| live register | ~1,450 triples | **1,411**, 0 violations |
+
+What remains of retired work is thirteen `LineageArchiveEntry` records — the archived IRIs as
+strings, so no shape targeting `Lineage`, `Mission` or any stage element can reach them. The register
+root is untouched.
+
+**Three passes, and the second and third are the same error shrinking.** The first moved each lineage
+and *its* `lineageForMission`. That missed `fw:Mission_BuildSoftware`, owned by `L_Build` through
+`belongsToLineage` but never its `lineageForMission` — `Mission_BuildSoftware_v2` had superseded it —
+so ownership had again been read from the shape of a pointer rather than from the data, which is
+`G92`'s own mistake one notch smaller. The second pass read `belongsToLineage` properly and still
+missed it on a text-matching technicality; the third moved it. Recorded in `G92`'s closing note:
+*ownership is a fact in the data; every time it was inferred from a convenient pointer, it was wrong.*
+
 ## v1.251.0 — 2026-09-10 (MINOR: lineage 9, Backlog stage — the chain closes)
 
 Register v9.77.0: five Proposed stories, one per objective — open a lineage under `OS_SDLC_v1` and

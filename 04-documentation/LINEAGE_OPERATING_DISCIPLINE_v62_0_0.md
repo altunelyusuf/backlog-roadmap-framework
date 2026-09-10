@@ -2633,3 +2633,13 @@ it was. The three root rules that now legitimately have nothing to answer (`no c
 disagrees with members`, `edit history without stage outputs`) are exempt only for a declared root in
 a register that has archived work: what they look for is not missing, it retired, and the entry names
 the file it went to.
+
+**Closing note (2026-09-10, added when the retirement was actually performed).** Retiring the thirteen
+closed lineages took three passes. The first moved each `Lineage` and its `lineageForMission`; that
+missed `Mission_BuildSoftware`, which `belongsToLineage L_Build` but was never that lineage's
+`lineageForMission`, having been superseded by `Mission_BuildSoftware_v2`. The second pass read
+ownership from `belongsToLineage` as it should have from the start and still missed the statement on
+a text-matching technicality; the third moved it. The rule this leaves: **ownership is a fact in the
+data.** Every time this session inferred it from a convenient pointer — `lineageForMission` here,
+reachability in the original partition — it inferred it wrongly, and in the same direction: the
+convenient pointer describes what the author was picturing, not what the register says.
