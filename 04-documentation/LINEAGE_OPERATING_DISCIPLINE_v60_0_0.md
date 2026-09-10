@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v59.0.0
+# Lineage Operating Discipline — v60.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -70,6 +70,15 @@ remembered from a previous session; this document's own tooling references have 
    un-archived triggers the archival activity: `backlog_lineage_archive` sets its work down into the
    archive ABox, verbatim, and only its Lineage and Mission stay live as the pointer. An archived
    lineage is not processed again unless the owner revives it (`lineageRevivedAt`).
+
+   **A ruling binds only work that had not started when the ruling shipped (v60.0.0, G89).** Stage
+   obligations live in a named `ObligationSet`; a lineage owes a set only if it adopted that set at
+   the moment it opened — `adoptsObligationSet` with `adoptionRecordedAtOpen`, asserted in the same
+   commit as its Mission stage output and verified there by the git witness.
+   `ObligationAdoptionShape` refuses adoption by a lineage past `LS_Opened`. A running lineage cannot
+   be given new obligations; a finished one is a record; a lineage that adopted nothing owes nothing
+   beyond the chain. This is the general form of the rule, not a rule about obligations: **no new
+   ruling is applied to development in progress or to work already closed.**
 
 3. **State the granularity you are choosing and why.** `Initiative`, `Epic`, `Feature`, `Story`,
    `Task`, `Defect`, `Spike`, `Enabler`. Epic is the **coarsest ordinary choice**, not the neutral
@@ -2420,6 +2429,44 @@ first); both found by the reading that should have preceded the claim.
 **Classified at logging time (L-112):** the archival gap and the finished-chain assumption are
 genuine gaps in the ceremony, found by the first lineage built one stage at a time; the false claim
 is this session's own.
+
+## G89 — A rule that reaches backwards is the failure this framework exists to refuse, and the session committed it twice
+
+**The owner's rule, stated twice.** In an earlier session, and again on 2026-09-09: *"apply the
+rulings only after the completion of the work and the lineage is closed. You should never try to
+apply a new ruling when the development is in progress."*
+
+**What the session did anyway.** The stage obligations (TBox v1.90.0, shapes v1.111.0) were written
+to bind every lineage in the register the moment they existed. Their first run refused
+`Out_Goal_SDLC` — a stage published the previous commit, before the rule was drafted — then four
+fixture lineages and all five toys of the exercise register: fourteen refusals, every one of them
+work finished or in flight under rules that did not exist when it was done. The session had even
+written into that stage output's rationale that the rule "will refuse exactly this closure once it
+ships, and its first catch will be its own Goal stage", and called that the honest order. It was not
+honest; it was retroactive enforcement dressed as rigour. The same session had done it four releases
+earlier with the lineage-status rule, which made twelve positive fixtures non-conformant at once and
+was patched item by item rather than at the root. The owner caught both.
+
+**The root cause, and why an exemption would not have been the fix.** The first instinct was to
+exempt what broke — lineages opened before the release, fixtures, toys. Every such exemption is a
+list someone must remember to extend, and a rule whose reach is a list is a rule nobody can predict.
+The structural answer inverts the default: **a rule applies to nothing until something declares it.**
+Obligations live in a named, versioned `ObligationSet`; a lineage adopts a set only at the moment it
+opens, in its Mission stage's own commit, and the git witness verifies the adoption did not first
+appear later. `ObligationAdoptionShape` refuses adoption by any lineage past `LS_Opened`. After the
+change, every fixture, every toy and the whole live register returned to zero violations — not
+because they were excused but because none of them ever declared, and a rule that was not declared
+does not apply.
+
+**Applied to the lineage that wrote the rule.** Lineage 9 is at `LS_Goaled` — in progress. It does
+NOT adopt its own obligations. It builds them; the first lineage OPENED after they ship is the first
+to owe them. The waiver the session had invented for `Out_Goal_SDLC` is withdrawn and replaced by an
+addendum stating that the earlier rationale was wrong.
+
+**Classified at logging time (L-112):** entirely the session's own failure, twice, against an
+instruction on the record. The safeguards did not catch it — a SHACL suite cannot know when a rule
+was written; the owner did, both times. What is now on the record is the mechanism, so that a future
+session cannot make a rule bind backwards without first declaring it forward.
 
 ## G88 — Order is ancestry, not time; and a pin that couples files is a cost paid on every release
 

@@ -8,8 +8,8 @@
 
 <http://example.org/backlog-abox> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (Reference ABox)"@en ;
-    owl:versionIRI <http://example.org/backlog-abox/1.3.0> ;
-    owl:versionInfo "1.3.0" ;
+    owl:versionIRI <http://example.org/backlog-abox/1.4.0> ;
+    owl:versionInfo "1.4.0" ;
     owl:priorVersion <http://example.org/backlog-abox/1.2.1> ,
                      <http://example.org/backlog-abox/1.2.0> ,
                      <http://example.org/backlog-abox/1.1.0> ,
@@ -360,3 +360,82 @@ backlog:DoD_C7_HarnessProvesCriteria a owl:NamedIndividual , backlog:DoDCriterio
     backlog:hasCheckQuery "ASK { ?i backlog:hasState backlog:Done ; backlog:hasAcceptanceCriterion ?ac . FILTER NOT EXISTS { ?e backlog:attestsCriterion ?ac ; backlog:evidenceVerified true } }" ;
     backlog:hasExpectedResult "false" ;
     backlog:hasCriterionStatus backlog:Holds .
+
+#################################################################
+#  v1.4.0 (2026-09-09) -- THE STANDING STAGE OBLIGATIONS. What each
+#  pipeline stage owes before its output may close, and what each
+#  ISO/IEC 12207 task type owes before its task is Done. Every owed
+#  class and kind is this framework's own vocabulary (TBox v1.90.0
+#  and earlier); nothing is minted here.
+#
+#  These bind ONLY a lineage that ADOPTED OS_SDLC_v1 at the moment it
+#  opened. Owner's rule, 2026-09-09: a ruling is never applied to work
+#  in progress. Lineage 9 is mid-flight and does NOT adopt them; it
+#  builds them, and the first lineage opened after they ship will be
+#  the first to owe them.
+#################################################################
+backlog:Ob_Scope_DomainEntity a backlog:StageObligation ;
+    backlog:inObligationSet backlog:OS_SDLC_v1 ;
+    backlog:obligationOfStage backlog:Stage_Scope ; backlog:owesClass backlog:DomainEntity ;
+    backlog:obligationSeverity backlog:Oblig_Required ;
+    backlog:obligationRationale "What things exist in this domain? A scope that names areas and deliverables without naming the entities the work is about cannot be checked for coverage: the blueprint gap analysis, the epic-covers-entity rule and the launch readiness report all read from DomainEntity. The owner's finding of 2026-09-09 named this absence first: 'a Mission, Scope, Goals and Objectives -- but no Blueprint and no DomainEntity individuals'." .
+backlog:Ob_Scope_Blueprint a backlog:StageObligation ;
+    backlog:inObligationSet backlog:OS_SDLC_v1 ;
+    backlog:obligationOfStage backlog:Stage_Scope ; backlog:owesClass backlog:Blueprint ;
+    backlog:obligationSeverity backlog:Oblig_Required ;
+    backlog:obligationRationale "Which lifecycle stages of those entities does this scope intend to cover? Without a blueprint, 'the scope is complete' is an opinion; with one, the uncovered stages are BlueprintGap individuals a reader can count." .
+backlog:Ob_Goal_Specification a backlog:StageObligation ;
+    backlog:inObligationSet backlog:OS_SDLC_v1 ;
+    backlog:obligationOfStage backlog:Stage_Goal ; backlog:owesClass backlog:Specification ;
+    backlog:obligationSeverity backlog:Oblig_Required ;
+    backlog:obligationRationale "Who does what, and in what order? A goal states an intention; a Specification with InteractionSteps and their actors states what the system will DO to satisfy it -- the use case, in this framework's own vocabulary. The owner's finding: 'grooming doesn't have any enforcement to define the use cases'." .
+backlog:Ob_Goal_ScenarioNominal a backlog:StageObligation ;
+    backlog:inObligationSet backlog:OS_SDLC_v1 ;
+    backlog:obligationOfStage backlog:Stage_Goal ; backlog:owesClass backlog:TestScenario ;
+    backlog:owesScenarioKind backlog:Scen_Nominal ; backlog:obligationSeverity backlog:Oblig_Required ;
+    backlog:obligationRationale "What happens when everything goes right? The main scenario. A specification with no nominal scenario has never been walked through once." .
+backlog:Ob_Goal_ScenarioRejection a backlog:StageObligation ;
+    backlog:inObligationSet backlog:OS_SDLC_v1 ;
+    backlog:obligationOfStage backlog:Stage_Goal ; backlog:owesClass backlog:TestScenario ;
+    backlog:owesScenarioKind backlog:Scen_Rejection ; backlog:obligationSeverity backlog:Oblig_Required ;
+    backlog:obligationRationale "What happens when it must refuse? The alternative scenario the owner asked for, in the kind that fails differently from a boundary or an absent case. Nominal-only coverage reads as fully covered and is not." .
+backlog:Ob_Goal_UseCaseDiagram a backlog:StageObligation ;
+    backlog:inObligationSet backlog:OS_SDLC_v1 ;
+    backlog:obligationOfStage backlog:Stage_Goal ; backlog:owesClass backlog:ModelArtifact ;
+    backlog:owesKind backlog:Kind_UseCaseDiagram ; backlog:obligationSeverity backlog:Oblig_Advisory ;
+    backlog:obligationRationale "Who are the actors and which use cases do they reach? Advisory, not required: a lineage with one actor and one use case can state that in the Specification and be understood, and a diagram demanded for its own sake is the decorative artifact this framework refuses elsewhere (G7)." .
+backlog:Ob_Objective_ActivityDiagram a backlog:StageObligation ;
+    backlog:inObligationSet backlog:OS_SDLC_v1 ;
+    backlog:obligationOfStage backlog:Stage_Objective ; backlog:owesClass backlog:ModelArtifact ;
+    backlog:owesKind backlog:Kind_ActivityDiagram ; backlog:obligationSeverity backlog:Oblig_Required ;
+    backlog:obligationRationale "In what order does the work happen, and where does it branch? An objective is measured against a flow; the activity diagram is that flow. The owner's finding: 'drawing activity diagrams'." .
+backlog:Ob_Objective_SequenceDiagram a backlog:StageObligation ;
+    backlog:inObligationSet backlog:OS_SDLC_v1 ;
+    backlog:obligationOfStage backlog:Stage_Objective ; backlog:owesClass backlog:ModelArtifact ;
+    backlog:owesKind backlog:Kind_SequenceDiagram ; backlog:obligationSeverity backlog:Oblig_Required ;
+    backlog:obligationRationale "Between which participants, in what order, with what messages? The interaction the activity diagram leaves implicit. The owner's finding: 'sequence diagrams'." .
+backlog:Ob_Backlog_ClassDiagram a backlog:StageObligation ;
+    backlog:inObligationSet backlog:OS_SDLC_v1 ;
+    backlog:obligationOfStage backlog:Stage_Backlog ; backlog:owesClass backlog:ModelArtifact ;
+    backlog:owesKind backlog:Kind_ClassDiagram ; backlog:obligationSeverity backlog:Oblig_Required ;
+    backlog:obligationRationale "What are the domain classes, their attributes and their associations? The DomainEntity individuals of the Scope stage are the governed index; the class model is the thing indexed. The owner's finding: 'discover the domain classes'." .
+backlog:Ob_Backlog_Criterion a backlog:StageObligation ;
+    backlog:inObligationSet backlog:OS_SDLC_v1 ;
+    backlog:obligationOfStage backlog:Stage_Backlog ; backlog:owesClass backlog:AcceptanceCriterion ;
+    backlog:obligationSeverity backlog:Oblig_Required ;
+    backlog:obligationRationale "How will anyone know the work is done? A backlog of items with no acceptance criteria can be signed off without anyone able to say what was signed off (the Specification class definition says the same of specifications)." .
+backlog:Ob_Task_Design_Model a backlog:StageObligation ;
+    backlog:inObligationSet backlog:OS_SDLC_v1 ;
+    backlog:obligationOfTaskType backlog:Task_DesignDefinition ; backlog:owesClass backlog:ModelArtifact ;
+    backlog:obligationSeverity backlog:Oblig_Required ;
+    backlog:obligationRationale "A design-definition task that is Done and produced no model has designed nothing that anyone else can read. This joins the item's effective Definition of Done rather than adding a second gate." .
+backlog:Ob_Task_Architecture_Model a backlog:StageObligation ;
+    backlog:inObligationSet backlog:OS_SDLC_v1 ;
+    backlog:obligationOfTaskType backlog:Task_ArchitectureDefinition ; backlog:owesClass backlog:ModelArtifact ;
+    backlog:obligationSeverity backlog:Oblig_Required ;
+    backlog:obligationRationale "As above, for architecture definition: the structure decided must exist as an artifact, not only in the decider's head." .
+backlog:Ob_Task_Verification_TestCase a backlog:StageObligation ;
+    backlog:inObligationSet backlog:OS_SDLC_v1 ;
+    backlog:obligationOfTaskType backlog:Task_Verification ; backlog:owesClass backlog:TestCase ;
+    backlog:obligationSeverity backlog:Oblig_Required ;
+    backlog:obligationRationale "A verification task that is Done and names no test case has verified nothing a reader can disagree with (the TestCase definition's own point)." .

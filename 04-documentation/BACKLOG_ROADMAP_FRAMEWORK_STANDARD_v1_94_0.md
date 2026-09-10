@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.93.0
+# Backlog & Roadmap Semantic Framework — Standard v1.94.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -781,6 +781,31 @@ archivability, computes the partition by closure (the lineage's members, everyth
 lineage that references or hangs together with them, its closure report), and moves the statements
 verbatim into the archive ABox, leaving the Lineage and its Mission live as the pointer. Archived
 work is loaded by lineage-history checks only, until the owner revives it (`lineageRevivedAt`).
+
+### 2.5c-xxi-f Stage obligations: what a stage owes, and when a rule may bind
+
+A pipeline stage may **owe** artifacts before its output closes. An obligation names the stage (or an
+ISO/IEC 12207 task type, for obligations that bind at execution), the class of thing owed
+(`owesClass`), optionally the kind it must be of (`owesKind` over the fourteen UML 2.5 `ModelKind`
+individuals, `owesScenarioKind` over the four `ScenarioKind`s), the engineering question the artifact
+answers (`obligationRationale`, mandatory), and whether its absence refuses closure or reports it
+(`obligationSeverity`). Nothing new is minted: `ModelArtifact`, `Specification` with
+`InteractionStep` and `hasStepActor`, `TestScenario`, `DomainEntity`, `Blueprint`,
+`AcceptanceCriterion`, `TestCase` are this framework's own vocabulary.
+
+The standing set `OS_SDLC_v1`: Scope owes domain entities and a blueprint; Goal owes a specification
+and scenarios of the nominal and rejection kinds (the main and alternative paths), with a use-case
+diagram advisory; Objective owes activity and sequence diagrams; Backlog owes a class diagram and
+acceptance criteria; design and architecture tasks owe a model, verification tasks a test case. A
+`PlanningEvent` on a story or epic that records no `refinementProduces` is reported: grooming that
+produces nothing is attendance.
+
+**When an obligation binds.** Only a lineage that **adopted** its set at the moment it opened —
+`adoptsObligationSet` with `adoptionRecordedAtOpen`, in the same commit as its Mission stage output,
+verified there by the git witness. `ObligationAdoptionShape` refuses adoption by a lineage past
+`LS_Opened`. A running lineage cannot be given new obligations; a closed one is a record; a lineage
+that adopted nothing owes nothing beyond the chain. A stage that must close owing records
+`obligationWaivedBy` with a reason, and the advisory reports it until the debt is paid.
 
 ### 2.5c-xxii The staged ceremony, one commit per stage
 

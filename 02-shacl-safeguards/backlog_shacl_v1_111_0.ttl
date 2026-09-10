@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.110.0> ;
-    owl:versionInfo "1.110.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.111.0> ;
+    owl:versionInfo "1.111.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.110.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.109.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.108.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.107.0> ;
@@ -5854,4 +5855,146 @@ backlog:AchievedLineageNotArchivedAdvisoryShape a sh:NodeShape ;
         sh:select """SELECT $this WHERE {
             $this backlog:hasLineageStatus ?ls . FILTER (?ls IN (backlog:LS_Achieved, backlog:LS_Abandoned))
             FILTER NOT EXISTS { $this backlog:lineageArchived true }
+        }""" ] .
+
+#################################################################
+#  v1.111.0 (2026-09-09) -- STAGE OBLIGATIONS ENFORCED. The SDLC as
+#  the lineage's mandatory facilities (TBox v1.90.0, owner's finding).
+#  Proven by fixture_sdlc_obligations (positive) and
+#  fixture_sdlc_obligations_negative.
+#################################################################
+
+backlog:StageObligationShape a sh:NodeShape ;
+    sh:targetClass backlog:StageObligation ;
+    sh:severity sh:Violation ;
+    rdfs:label "An obligation names its stage or task type, what it owes, and why (L1)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_sdlc_obligations_negative" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this obligation names neither a stage nor a task type; nothing can owe it." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] , [ sh:prefix "rdf" ; sh:namespace "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            FILTER NOT EXISTS { $this backlog:obligationOfStage ?s }
+            FILTER NOT EXISTS { $this backlog:obligationOfTaskType ?t }
+        }""" ] ;
+    sh:property [ sh:path backlog:owesClass ; sh:minCount 1 ; sh:maxCount 1 ;
+                  sh:message "An obligation names the class of thing owed." ] ;
+    sh:property [ sh:path backlog:obligationRationale ; sh:minCount 1 ; sh:datatype xsd:string ;
+                  sh:message "An obligation states the engineering question its artifact answers; a rule nobody can argue with is how a checklist rots." ] ;
+    sh:property [ sh:path backlog:obligationSeverity ; sh:minCount 1 ; sh:maxCount 1 ;
+                  sh:message "An obligation states whether it refuses closure or reports it." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this obligation names owesKind but does not owe ModelArtifact, or names owesScenarioKind but does not owe TestScenario. A kind qualifies the class it belongs to." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] , [ sh:prefix "rdf" ; sh:namespace "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            { $this backlog:owesKind ?k . FILTER NOT EXISTS { $this backlog:owesClass backlog:ModelArtifact } }
+            UNION
+            { $this backlog:owesScenarioKind ?sk . FILTER NOT EXISTS { $this backlog:owesClass backlog:TestScenario } }
+        }""" ] .
+
+backlog:StageOutputOwesShape a sh:NodeShape ;
+    sh:targetClass backlog:StageOutput ;
+    sh:severity sh:Violation ;
+    rdfs:label "A stage output closes only when its stage's required obligations are met, or the waiver is on the record (L1)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_sdlc_obligations_negative" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this stage output closes a stage that owes a required artifact its lineage does not carry -- and no waiver is recorded. The chain cannot close on words alone: the stage owes what its obligation names (owesClass, and owesKind/owesScenarioKind where given). Produce it, or record obligationWaivedBy with an obligationWaiverReason and close owing, on the record." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] , [ sh:prefix "rdf" ; sh:namespace "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:outputOfStage ?st ; backlog:belongsToLineage ?l .
+            FILTER NOT EXISTS { $this backlog:outputRetracted true }
+            ?ob a backlog:StageObligation ; backlog:obligationOfStage ?st ; backlog:owesClass ?cls ;
+                backlog:obligationSeverity backlog:Oblig_Required ; backlog:inObligationSet ?set .
+            # binds only a lineage that ADOPTED the set when it opened (owner's rule: never apply a
+            # ruling to work in progress); a lineage that adopted nothing owes nothing here
+            ?l backlog:adoptsObligationSet ?set .
+            FILTER NOT EXISTS { $this backlog:obligationWaivedBy ?ob }
+            FILTER NOT EXISTS {
+                ?a rdf:type ?cls ; backlog:belongsToLineage ?l .
+                FILTER NOT EXISTS { ?ob backlog:owesKind ?k . FILTER NOT EXISTS { ?a backlog:hasModelKind ?k } }
+                FILTER NOT EXISTS { ?ob backlog:owesScenarioKind ?sk . FILTER NOT EXISTS { ?a backlog:scenarioKind ?sk } }
+            }
+        }""" ] .
+
+backlog:StageOutputOwesAdvisoryShape a sh:NodeShape ;
+    sh:targetClass backlog:StageOutput ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: a stage output closing owing, or an advisory obligation unmet"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_sdlc_obligations_negative" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: this stage output records a waiver (obligationWaivedBy) -- it closed owing an artifact its stage owes. Legitimate and on the record; it stays reported until the debt is paid." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] , [ sh:prefix "rdf" ; sh:namespace "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE { $this backlog:obligationWaivedBy ?ob . }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: this stage output's stage carries an ADVISORY obligation its lineage does not satisfy. Absence can be right here; say why in the output's rationale." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] , [ sh:prefix "rdf" ; sh:namespace "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:outputOfStage ?st ; backlog:belongsToLineage ?l .
+            FILTER NOT EXISTS { $this backlog:outputRetracted true }
+            ?ob a backlog:StageObligation ; backlog:obligationOfStage ?st ; backlog:owesClass ?cls ;
+                backlog:obligationSeverity backlog:Oblig_Advisory ; backlog:inObligationSet ?set .
+            ?l backlog:adoptsObligationSet ?set .
+            FILTER NOT EXISTS { ?a rdf:type ?cls ; backlog:belongsToLineage ?l }
+        }""" ] .
+
+backlog:StageOutputWaiverShape a sh:NodeShape ;
+    sh:targetClass backlog:StageOutput ;
+    sh:severity sh:Violation ;
+    rdfs:label "A waiver states its reason (L1)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_sdlc_obligations_negative" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this stage output waives an obligation and gives no reason. A debt with no explanation is indistinguishable from an oversight." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] , [ sh:prefix "rdf" ; sh:namespace "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:obligationWaivedBy ?ob .
+            FILTER NOT EXISTS { $this backlog:obligationWaiverReason ?r }
+        }""" ] .
+
+backlog:RefinementProducesShape a sh:NodeShape ;
+    sh:targetClass backlog:PlanningEvent ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: grooming that produced nothing"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_sdlc_obligations_negative" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory (owner's finding, 2026-09-09): this planning event plans a story or an epic and records no refinementProduces -- no specification, no scenario, no model artifact. Grooming that produces nothing is attendance. Warning by test drive (G46): a planning event that only schedules already-specified work is legitimate; the shape reports, the reader judges." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] , [ sh:prefix "rdf" ; sh:namespace "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:plansItem ?i .
+            { ?i a backlog:Story } UNION { ?i a backlog:Epic }
+            ?i backlog:belongsToLineage ?l . ?l backlog:adoptsObligationSet ?set .
+            FILTER NOT EXISTS { $this backlog:refinementProduces ?a }
+            FILTER NOT EXISTS { ?i backlog:preLineageItem true }
+        }""" ] .
+
+backlog:TaskTypeObligationShape a sh:NodeShape ;
+    sh:targetClass backlog:ExecutionTask ;
+    sh:severity sh:Violation ;
+    rdfs:label "A Done task of an obliged type carries what its type owes (L1)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_sdlc_obligations_negative" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this execution task is Done and its task type owes an artifact class that nothing in its lineage carries. The owed kinds of an item's task type join its effective Definition of Done: Done without the design, model or test artifact the task type owes is a claim, not a completion." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] , [ sh:prefix "rdf" ; sh:namespace "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasState backlog:Done ; backlog:hasTaskType ?tt ; backlog:belongsToLineage ?l .
+            ?ob a backlog:StageObligation ; backlog:obligationOfTaskType ?tt ; backlog:owesClass ?cls ;
+                backlog:obligationSeverity backlog:Oblig_Required ; backlog:inObligationSet ?set .
+            ?l backlog:adoptsObligationSet ?set .
+            FILTER NOT EXISTS { $this backlog:preLineageItem true }
+            FILTER NOT EXISTS {
+                ?a rdf:type ?cls ; backlog:belongsToLineage ?l .
+                FILTER NOT EXISTS { ?ob backlog:owesKind ?k . FILTER NOT EXISTS { ?a backlog:hasModelKind ?k } }
+            }
+        }""" ] .
+
+backlog:ObligationAdoptionShape a sh:NodeShape ;
+    sh:targetClass backlog:Lineage ;
+    sh:severity sh:Violation ;
+    rdfs:label "An obligation set is adopted when the lineage opens, never later (L1)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_sdlc_obligations_negative" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this lineage adopts an obligation set although it is already past LS_Opened. Owner's rule, 2026-09-09: a ruling is applied to work that has not started, never to development in progress. A lineage adopts at its Mission stage, in the same commit; a running lineage cannot be given new obligations, and a finished one is a record." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:adoptsObligationSet ?set ; backlog:hasLineageStatus ?ls .
+            ?ls backlog:statusRank ?rk . FILTER (?rk > 1)
+            FILTER NOT EXISTS { $this backlog:adoptionRecordedAtOpen true }
         }""" ] .

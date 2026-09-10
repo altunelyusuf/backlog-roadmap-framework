@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.89.0> ;
-    owl:versionInfo "1.89.0" ;
+    owl:versionIRI <http://example.org/backlog/1.90.0> ;
+    owl:versionInfo "1.90.0" ;
+    owl:priorVersion <http://example.org/backlog/1.89.0> ;
     owl:priorVersion <http://example.org/backlog/1.88.0> ;
     owl:priorVersion <http://example.org/backlog/1.87.0> ;
     owl:priorVersion <http://example.org/backlog/1.86.0> ;
@@ -6721,3 +6722,119 @@ backlog:archivalTrigger a owl:DatatypeProperty , owl:FunctionalProperty ;
 backlog:lineageRevivedAt a owl:DatatypeProperty , owl:FunctionalProperty ;
     rdfs:domain backlog:Lineage ; rdfs:range xsd:dateTime ; rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "lineage revived at"@en ;
     skos:definition "The owner's conscious revival of an archived lineage; with it the lineage is processed again."@en .
+
+#################################################################
+#  v1.90.0 (2026-09-09) -- STAGE OBLIGATIONS: the SDLC as the
+#  lineage's mandatory facilities. Owner's finding, 2026-09-09: the
+#  framework enforces THAT stages close and not WHAT they produce --
+#  grooming can finish with no use cases, no scenarios, no diagrams,
+#  no domain classes.
+#
+#  Built on THIS framework's own vocabulary, not on new kinds. The
+#  decision analysis (04-documentation/DECISION_ANALYSIS_sdlc_vocabulary_
+#  placement_v1_0_0.md) established that ModelKind (14 UML 2.5 kinds),
+#  Specification/InteractionStep/hasStepActor, TestScenario/ScenarioKind
+#  (4), DesignConcern (5), TaskType (14), DomainEntity and Blueprint
+#  were all here already; only the OBLIGATION was missing. A proposal
+#  asking another registrant for four kinds was withdrawn the day it was filed.
+#
+#  An obligation is a triple of (stage or task type, a class the work
+#  must produce, an optional kind that class must be of), so that
+#  "the Objective stage owes an activity diagram AND a sequence
+#  diagram" is two obligations over one class and two ModelKinds --
+#  no new artifact vocabulary, and the fourteen kinds already carry
+#  their own definitions.
+#################################################################
+
+backlog:StageObligation a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Stage Obligation"@en ;
+    skos:definition "What a pipeline stage owes before its output may close: a class of thing the register must carry for that lineage, optionally of a named kind, produced and witnessed before the output that claims it. Distinct from stageRequiresType, which the pipeline verifier uses to compute a stage's digest: that says which classes a stage's DIGEST covers, this says which the stage must PRODUCE. A stage may owe nothing (Stage_Mission owes only the mission it is)."@en .
+
+backlog:obligationOfStage a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:StageObligation ; rdfs:range backlog:LineageStage ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "obligation of stage"@en .
+
+backlog:obligationOfTaskType a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:StageObligation ; rdfs:range backlog:TaskType ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "obligation of task type"@en ;
+    skos:definition "For obligations that bind at EXECUTION rather than at a pipeline stage: the ISO/IEC 12207 task type whose tasks owe this artifact before the item they belong to can be Done. Joins the item's effective Definition of Done (EffectiveDoDRule)."@en .
+
+backlog:owesClass a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:StageObligation ; rdfs:range rdfs:Class ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "owes class"@en ;
+    skos:definition "The class of thing owed -- backlog:DomainEntity, backlog:Blueprint, backlog:Specification, backlog:ModelArtifact, backlog:TestScenario, backlog:AcceptanceCriterion. Named as a class so the obligation reuses the vocabulary this framework already defines and enforces."@en .
+
+backlog:owesKind a owl:ObjectProperty ;
+    rdfs:domain backlog:StageObligation ; rdfs:range backlog:ModelKind ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "owes kind"@en ;
+    skos:definition "When the owed class is ModelArtifact, the UML 2.5 kind it must be of (Kind_UseCaseDiagram, Kind_ActivityDiagram, Kind_SequenceDiagram, Kind_ClassDiagram, ...). Absent means any kind satisfies the obligation."@en .
+
+backlog:owesScenarioKind a owl:ObjectProperty ;
+    rdfs:domain backlog:StageObligation ; rdfs:range backlog:ScenarioKind ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "owes scenario kind"@en ;
+    skos:definition "When the owed class is TestScenario, the situation kind that must be covered. The Goal stage owes Scen_Nominal AND at least one of Scen_Boundary/Scen_Rejection/Scen_Absent: a main path with no alternative is the gap the owner named -- 'their main and alternative scenarios'."@en .
+
+backlog:obligationRationale a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:StageObligation ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "obligation rationale"@en ;
+    skos:definition "Why this stage owes this thing -- the engineering question the artifact answers. An obligation without one is a rule nobody can argue with, which is how checklists rot."@en .
+
+backlog:obligationSeverity a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:StageObligation ; rdfs:range backlog:ObligationSeverity ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "obligation severity"@en .
+backlog:ObligationSeverity a owl:Class ; rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:Oblig_Required backlog:Oblig_Advisory ) ; rdfs:label "Obligation Severity"@en .
+backlog:Oblig_Required a owl:NamedIndividual , backlog:ObligationSeverity ; rdfs:label "Required"@en ;
+    skos:definition "The stage output cannot close without it (Violation)."@en .
+backlog:Oblig_Advisory a owl:NamedIndividual , backlog:ObligationSeverity ; rdfs:label "Advisory"@en ;
+    skos:definition "Reported, not refused -- for an obligation whose absence can be legitimate and must then be explained (G46 test drive: severity is earned by watching a rule fire, not assumed)."@en .
+
+backlog:refinementProduces a owl:ObjectProperty ;
+    rdfs:domain backlog:PlanningEvent ; rdfs:range core:Artifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "refinement produces"@en ;
+    skos:definition "What a planning event produced for the items it planned: a Specification, a TestScenario, a ModelArtifact. Grooming that produces nothing is attendance, not refinement -- the owner's finding of 2026-09-09. Enforced by RefinementProducesShape for planning events on stories and epics."@en .
+
+backlog:obligationWaivedBy a owl:ObjectProperty ;
+    rdfs:domain backlog:StageOutput ; rdfs:range backlog:StageObligation ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "obligation waived by"@en ;
+    skos:definition "An obligation this output closes WITHOUT satisfying, together with obligationWaiverReason. The waiver is on the record and the shape still reports it as an advisory: a stage that closes owing says so (the Goal stage of lineage 9 did, before this vocabulary existed)."@en .
+backlog:obligationWaiverReason a owl:DatatypeProperty ;
+    rdfs:domain backlog:StageOutput ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "obligation waiver reason"@en .
+
+#################################################################
+#  v1.90.0, second block -- WHEN AN OBLIGATION BINDS. Owner's rule,
+#  2026-09-09: "apply the rulings only after the completion of the
+#  work and the lineage is closed. Never try to apply a new ruling
+#  when the development is in progress."
+#
+#  A stage obligation therefore binds a lineage ONLY if that lineage
+#  DECLARED it at the moment it opened -- adoptsObligationSet, on the
+#  Lineage, recorded in the same commit as its Mission stage output.
+#  A lineage already past LS_Opened cannot adopt: the shape refuses
+#  it, and the git witness verifies that the adoption first appears
+#  no later than the Mission output. Fixtures, toy lineages and every
+#  lineage opened before an obligation shipped are untouched -- not by
+#  an exemption someone remembers to write, but because they never
+#  declared, and a rule that was not declared does not apply.
+#################################################################
+backlog:ObligationSet a owl:Class ; rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "Obligation Set"@en ;
+    skos:definition "A named, versioned bundle of StageObligations that a lineage adopts at the moment it opens. Named rather than implicit so that a lineage records WHICH rules it was opened under, and so that changing the rules later cannot change what a running lineage owes."@en .
+backlog:inObligationSet a owl:ObjectProperty ;
+    rdfs:domain backlog:StageObligation ; rdfs:range backlog:ObligationSet ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "in obligation set"@en .
+backlog:adoptsObligationSet a owl:ObjectProperty ;
+    rdfs:domain backlog:Lineage ; rdfs:range backlog:ObligationSet ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "adopts obligation set"@en ;
+    skos:definition "The obligation sets this lineage declared at its Mission stage. Only these bind it. A lineage that adopts nothing owes nothing beyond the chain itself -- which is what every lineage opened before v1.247.0 did, and what a fixture does."@en .
+backlog:OS_SDLC_v1 a owl:NamedIndividual , backlog:ObligationSet ;
+    rdfs:label "SDLC stage obligations, set 1"@en ;
+    skos:definition "The standing obligations shipped at package v1.247.0 from the owner's finding of 2026-09-09: domain entities and blueprint at Scope; specification with interaction steps, and nominal and rejection scenarios, at Goal; activity and sequence diagrams at Objective; class diagram and acceptance criteria at Backlog; models for design and architecture tasks and a test case for verification tasks at execution."@en .
+backlog:adoptionRecordedAtOpen a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:Lineage ; rdfs:range xsd:boolean ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "adoption recorded at open"@en ;
+    skos:definition "Asserted with adoptsObligationSet in the SAME commit as the lineage's Mission stage output, and verified there by the git witness (backlog_lineage_order_check): the adoption's first appearance may not follow the Mission output's. Without it, a lineage past LS_Opened may not adopt."@en .

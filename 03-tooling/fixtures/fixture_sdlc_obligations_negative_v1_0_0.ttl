@@ -1,0 +1,32 @@
+@prefix backlog: <http://example.org/backlog#> .
+@prefix ex:      <http://example.org/sdlc-obligations-neg#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+# fixture_sdlc_obligations_negative v1.0.0 -- NEGATIVE. One case per clause:
+#  StageObligationShape      Ob_NoTarget (neither stage nor task type), Ob_NoRationale, Ob_BadKind (owesKind without owesClass ModelArtifact)
+#  StageOutputOwesShape      Out_Scope_Bare closes the Scope stage with no DomainEntity and no Blueprint in its lineage
+#  StageOutputWaiverShape    Out_Goal_Bare waives an obligation and gives no reason
+#  RefinementProducesShape   PE_Bare plans a story and produces nothing (Warning)
+#  TaskTypeObligationShape   T_Design is Done, Task_DesignDefinition, no ModelArtifact in its lineage
+ex:L_Bare a backlog:Lineage ; backlog:lineageOrdinal 1 ; backlog:lineageArchived false ;
+    backlog:lineageForMission ex:M_Bare ; backlog:hasLineageStatus backlog:LS_Scoped .
+ex:M_Bare a backlog:Mission ; backlog:hasMissionOutcome backlog:Out_InFlight .
+ex:Out_Scope_Bare a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Scope ; backlog:belongsToLineage ex:L_Bare ;
+    backlog:closedAtCommit "c1" ; backlog:hasStateDigest "x" .
+ex:Out_Goal_Bare a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Goal ; backlog:belongsToLineage ex:L_Bare ;
+    backlog:closedAtCommit "c2" ; backlog:hasStateDigest "y" ;
+    backlog:obligationWaivedBy backlog:Ob_Goal_Specification .
+ex:S_Bare a backlog:Story ; backlog:hasIdentifier "S-BARE" ; backlog:hasState backlog:Proposed ; backlog:belongsToLineage ex:L_Bare .
+ex:PE_Bare a backlog:PlanningEvent ; backlog:plansItem ex:S_Bare ; backlog:plannedAt "2026-09-09T10:00:00Z"^^xsd:dateTime .
+ex:T_Design a backlog:ExecutionTask ; backlog:hasTaskType backlog:Task_DesignDefinition ; backlog:hasIdentifier "T-D" ;
+    backlog:hasState backlog:Done ; backlog:belongsToLineage ex:L_Bare .
+ex:Ob_NoTarget a backlog:StageObligation ; backlog:owesClass backlog:ModelArtifact ;
+    backlog:obligationRationale "no stage, no task type" ; backlog:obligationSeverity backlog:Oblig_Advisory .
+ex:Ob_NoRationale a backlog:StageObligation ; backlog:obligationOfStage backlog:Stage_Backlog ;
+    backlog:owesClass backlog:TestCase ; backlog:obligationSeverity backlog:Oblig_Advisory .
+ex:Ob_BadKind a backlog:StageObligation ; backlog:obligationOfStage backlog:Stage_Goal ;
+    backlog:owesClass backlog:Specification ; backlog:owesKind backlog:Kind_ClassDiagram ;
+    backlog:obligationRationale "a kind qualifies the class it belongs to" ; backlog:obligationSeverity backlog:Oblig_Advisory .
+ex:L_Bare backlog:adoptsObligationSet backlog:OS_SDLC_v1 .   # adopted at LS_Scoped, no adoptionRecordedAtOpen -> ObligationAdoptionShape fires, and the closure cases stay live
+<http://example.org/sdlc-obligations-neg#> backlog:hasExpectedPolarity backlog:Polarity_Negative .

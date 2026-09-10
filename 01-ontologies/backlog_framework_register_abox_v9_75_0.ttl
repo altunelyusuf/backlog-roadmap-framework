@@ -14,8 +14,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.74.0> ;
-    owl:versionInfo "9.74.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.75.0> ;
+    owl:versionInfo "9.75.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.74.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.73.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.72.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.70.0> ;
@@ -3046,3 +3047,38 @@ fw:Out_Goal_SDLC a backlog:StageOutput ;
     backlog:hasStateDigest "29f238be11bfdf323b27fb2952df22ce98cb8414656faa0ac8c865849960c2bb" ;
     backlog:closedAtCommit "backlog-roadmap-framework-v1.246.0 (tag; witnessed by git, not asserted)" ;
     backlog:hasRationale "Goal stage of lineage 9: three goals, one per facing, derived from the scope. CLOSED OWING its use-case and scenario artifacts, because the artifact kinds they must be typed with do not exist and are not this framework's to mint; requested from another registrant at 1b65620 and recorded as Imp_SDLCArtifactKinds. The obligation this lineage is building will, once shipped, refuse exactly this closure -- the first thing it will catch is its own Goal stage, and that is the honest order: the rule is built, then applied, and the debt is on the record until it is paid." .
+
+#################################################################
+#  v9.75.0 (2026-09-09, brsf-session) -- THE OBLIGATIONS DO NOT BIND
+#  THE LINEAGE THAT BUILDS THEM. Owner's rule, this day: "apply the
+#  rulings only after the completion of the work and the lineage is
+#  closed. You should never try to apply a new ruling when the
+#  development is in progress."
+#
+#  The first draft of shapes v1.111.0 bound every lineage. Its first
+#  run refused fw:Out_Goal_SDLC (published 629b62f) and four fixture
+#  lineages and every toy of the exercise register -- work already
+#  finished or in flight under rules that did not exist when it was
+#  done. That is the same failure the owner named in an earlier
+#  session, and the session repeated it. Corrected before release:
+#  an obligation binds only a lineage that ADOPTED its set at the
+#  moment it opened (adoptsObligationSet + adoptionRecordedAtOpen,
+#  in the Mission stage's own commit), and ObligationAdoptionShape
+#  refuses adoption by a lineage past LS_Opened. Lineage 9 is past
+#  LS_Goaled; it therefore does not adopt and owes nothing new. The
+#  first lineage OPENED after these obligations ship will be the
+#  first to owe them.
+#
+#  Imp_SDLCArtifactKinds is RESOLVED BY FINDING: the four artifact
+#  kinds requested from another registrant (1b65620) already existed in this
+#  framework's own TBox -- ModelKind's fourteen UML 2.5 kinds,
+#  Specification/InteractionStep/hasStepActor, TestScenario's four
+#  ScenarioKinds, DomainEntity, Blueprint. Withdrawn the same day
+#  (3c3dc13); analysis in 04-documentation/DECISION_ANALYSIS_sdlc_
+#  vocabulary_placement_v1_0_0.md.
+#################################################################
+fw:EnhProp_SDLCArtifactKinds backlog:hasProposalStatus backlog:Prop_Withdrawn ;
+    backlog:hasRationale "Withdrawn 2026-09-09 (3c3dc13), the day it was filed: the four kinds already existed in this framework's own TBox. another registrant spent no time on it." .
+fw:Imp_SDLCArtifactKinds backlog:resolvedAt "2026-09-09T14:00:00Z"^^xsd:dateTime ;
+    backlog:hasImpedimentStatement "2026-09-09 resolution BY FINDING: nothing was blocked. ModelKind (14 UML 2.5 kinds incl. Kind_UseCaseDiagram, Kind_ActivityDiagram, Kind_SequenceDiagram, Kind_ClassDiagram), Specification with InteractionStep and hasStepActor, TestScenario with four ScenarioKinds, DesignConcern (5), TaskType (14), DomainEntity and Blueprint were all already defined here and already shape-checked. The obligation vocabulary (TBox v1.90.0) names them; nothing was minted." .
+fw:Out_Goal_SDLC backlog:hasRationale "Addendum 2026-09-09: this output's original rationale said the obligations, once shipped, would refuse this closure. They do not, and must not: they bind only lineages that adopt them at open (owner's rule -- no ruling applied to work in progress). The use cases and scenarios this lineage owes are its own work items, produced by its own stages, not enforced retroactively against a stage that closed before the rule existed." .

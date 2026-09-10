@@ -1,5 +1,34 @@
 # Changelog
 
+
+
+## v1.247.0 — 2026-09-09 (MINOR: SDLC stage obligations — built on this framework's own vocabulary, binding only lineages that adopt them at open)
+
+The owner's finding of 2026-09-09: the framework enforces that stages close, not what they produce —
+grooming can finish with no use cases, no scenarios, no diagrams, no domain classes.
+
+- **TBox v1.90.0**: `StageObligation` (`obligationOfStage` / `obligationOfTaskType`, `owesClass`,
+  `owesKind`, `owesScenarioKind`, mandatory `obligationRationale`, `obligationSeverity`),
+  `refinementProduces`, `obligationWaivedBy`/`Reason`; and the binding rule — `ObligationSet`,
+  `inObligationSet`, `adoptsObligationSet`, `adoptionRecordedAtOpen`.
+- **ABox v1.4.0** — thirteen standing obligations in `OS_SDLC_v1`, all naming vocabulary this
+  framework already owned (see the decision analysis): Scope owes `DomainEntity` + `Blueprint`; Goal
+  owes a `Specification` (interaction steps with actors — the use case) and `TestScenario`s of the
+  nominal and rejection kinds, with a use-case diagram advisory; Objective owes activity and sequence
+  diagrams; Backlog owes a class diagram and acceptance criteria; design and architecture tasks owe a
+  model, verification tasks a test case. Each states the engineering question its artifact answers.
+- **Shapes v1.111.0**: `StageObligationShape`, `StageOutputOwesShape`, `StageOutputWaiverShape`,
+  `TaskTypeObligationShape` (Violation); `StageOutputOwesAdvisoryShape`, `RefinementProducesShape`
+  (Warning); `ObligationAdoptionShape` — adoption only at `LS_Opened`.
+- **`backlog_lineage_order_check_v1_5_0.py`**: verifies `adoptionRecordedAtOpen` against git.
+- Fixtures `fixture_sdlc_obligations` (0 violations) and `fixture_sdlc_obligations_negative`
+  (every clause fires).
+- Register v9.75.0: lineage 9 does **not** adopt (it is in progress); `Imp_SDLCArtifactKinds`
+  resolved by finding; the another registrant proposal withdrawn; `Out_Goal_SDLC`'s earlier rationale corrected.
+- Discipline v60.0.0: **`G89`** — the session made the obligations bind backwards, was caught by the
+  owner for the second time in a week, and the fix is structural: a rule applies to nothing until a
+  lineage declares it at open.
+
 ## v1.246.0 — 2026-09-09 (MINOR: lineage 9, Goal stage — closed owing, and the debt recorded)
 
 Register v9.74.0: three goals across the three facings, derived from `Scope_SDLCObligations`.

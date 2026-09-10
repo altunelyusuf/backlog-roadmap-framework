@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_lineage_order_check v1.4.0 — did the chain come before the work, or after?
+"""backlog_lineage_order_check v1.5.0 — did the chain come before the work, or after?
 
 THE ESCAPE THIS CATCHES. A lineage is Mission -> Scope -> Goal -> Objective -> Backlog,
 one commit per stage, and only then work items (LINEAGE_OPERATING_DISCIPLINE, ceremony
@@ -298,6 +298,13 @@ def classify(g, L, witness, prefix):
             rf = witness.first(local(r), prefix); f = item_first.get(local(i))
             if rf and f and f[1] <= rf[1]:
                 problems.append(f"{local(i)} claims postRestartItem {local(r)} but first appears at {f[0]}, not after the restart ({rf[0]})")
+    # 3f3. v1.5.0: an obligation adoption claimed "at open" must not first appear after the lineage's
+    # Mission output does (owner's rule 2026-09-09: a ruling is never applied to work in progress;
+    # adoptionRecordedAtOpen is asserted in the register and verified here, not trusted)
+    if g.value(L, B.adoptionRecordedAtOpen) is not None and bool(g.value(L, B.adoptionRecordedAtOpen).toPython()):
+        mf = out_first.get("Stage_Mission"); lf = witness.first(local(L), prefix)
+        if mf and lf and lf[1] > mf[1]:
+            problems.append(f"{local(L)} claims adoptionRecordedAtOpen but first appears at {lf[0]}, after its Mission output ({mf[0]})")
     # 3g. strategy-specific git checks
     for r in restarts:
         st = local(g.value(r, B.hasRecoveryStrategy) or "")
