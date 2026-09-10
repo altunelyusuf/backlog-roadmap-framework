@@ -24,6 +24,12 @@ so ownership had again been read from the shape of a pointer rather than from th
 missed it on a text-matching technicality; the third moved it. Recorded in `G92`'s closing note:
 *ownership is a fact in the data; every time it was inferred from a convenient pointer, it was wrong.*
 
+`backlog_lineage_order_check_v1_5_1`: a transform-reduce template pointing at a retired lineage is a
+finished chain by record. A retired lineage no longer carries a `lineageArchived` flag in the live
+graph — it has a `LineageArchiveEntry` naming its IRI as a string — so the v1.5.0 check read toy T's
+template as an unfinished chain and refused the release. Found by the gate, one release after the
+retirement it follows from.
+
 ## v1.251.0 — 2026-09-10 (MINOR: lineage 9, Backlog stage — the chain closes)
 
 Register v9.77.0: five Proposed stories, one per objective — open a lineage under `OS_SDLC_v1` and

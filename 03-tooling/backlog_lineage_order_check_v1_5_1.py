@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_lineage_order_check v1.5.0 — did the chain come before the work, or after?
+"""backlog_lineage_order_check v1.5.1 — did the chain come before the work, or after?
 
 THE ESCAPE THIS CATCHES. A lineage is Mission -> Scope -> Goal -> Objective -> Backlog,
 one commit per stage, and only then work items (LINEAGE_OPERATING_DISCIPLINE, ceremony
@@ -317,7 +317,11 @@ def classify(g, L, witness, prefix):
         if st == "Strat_TransformReduce":
             t = g.value(r, B.templateLineage)
             ta = g.value(t, B.lineageArchived) if t is not None else None
-            if t is not None and ta is not None and bool(ta.toPython()):
+            # v1.5.1 (G92): a retired lineage no longer HAS a lineageArchived flag in the live graph --
+            # it has a LineageArchiveEntry naming its IRI as a string. A template pointing at one is a
+            # finished chain by record, exactly as an archived-but-still-live lineage was.
+            retired = t is not None and any(str(e) == str(t) for e in g.objects(None, B.entryForLineage))
+            if t is not None and (retired or (ta is not None and bool(ta.toPython()))):
                 pass   # v1.3.1: an ARCHIVED template is a finished chain by record (G87); its outputs live in the archive ABox
             elif t is not None and t != L:
                 tv, _ = classify(g, t, witness, prefix)
