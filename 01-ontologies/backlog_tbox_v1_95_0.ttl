@@ -7114,3 +7114,9 @@ backlog:includesRetiredLineage a owl:DatatypeProperty ;
     rdfs:domain backlog:ArchiveConformanceRecord ; rdfs:range xsd:string ;
     rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "includes retired lineage"@en ;
     skos:definition "The IRI, as a string, of each lineage whose arrival this value covers. A lineage in the archive but not in this list has never been cleared, and the next check validates it."@en .
+backlog:RS_LabelConvention a owl:NamedIndividual , backlog:RuleSet ;
+    rdfs:label "Label before identifier"@en ;
+    skos:definition "Every mission, scope statement, area, deliverable, exclusion, goal, objective and lineage carries a one-sentence human label, and reports and discussion use that sentence rather than the identifier. Owner's instruction of 2026-09-10, after a session's answers became unreadable. A RuleSet because it binds every element a register carries: a register adopts it and labels its elements, rather than every fixture and every closed graph being refused the day the rule ships."@en .
+backlog:RS_LineageStatus a owl:NamedIndividual , backlog:RuleSet ;
+    rdfs:label "A lineage states where it stands"@en ;
+    skos:definition "Every lineage carries exactly one status, the status matches the stage outputs the register actually holds, a claim that work is under way requires work that has started, and a live lineage may not reuse a retired lineage's name. A RuleSet because it binds every lineage a register carries: a register adopts it, and minimal test graphs that model one narrow question -- an item tie, a scoring disagreement -- are not obliged to build a whole pipeline to answer it."@en .

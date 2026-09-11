@@ -38,3 +38,7 @@ ex:S_NotStarted a backlog:Story ; backlog:hasIdentifier "S-NS" ; backlog:hasStat
     backlog:belongsToLineage ex:L_NotStarted .
 
 <http://example.org/lineage-status-neg#> backlog:hasExpectedPolarity backlog:Polarity_Negative .
+# The negative fixture ADOPTS the status rule set, so the clauses it exists to prove are in force here
+# even though minimal fixtures elsewhere are untouched by them (G91: a ruling binds what declared it).
+ex:Reg a backlog:Backlog ; rdfs:label "fixture register"@en ; backlog:isRegisterRoot true ;
+    backlog:adoptsRuleSet backlog:RS_LineageStatus , backlog:RS_LabelConvention .

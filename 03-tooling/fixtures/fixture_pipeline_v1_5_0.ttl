@@ -224,4 +224,17 @@ ex:Session_20260907 a backlog:RegisterSession ;
 # register-wide, and the register now holds eight lineages), and are left as the
 # historical record they are, disclosed in the v1.201.0 changelog.
 # v1.2.0 (2026-09-09): lineage status stated (TBox v1.89.0, LineageStatusShape); derived from the fixture's own outputs and item states.
-ex:Lin_PL backlog:hasLineageStatus backlog:LS_InProgress .
+ex:Lin_PL backlog:hasLineageStatus backlog:LS_Backlogged .
+# v1.3.0 (2026-09-10): status corrected from LS_InProgress to LS_Backlogged -- every item here is
+# Proposed, and InProgressNeedsStartedWorkShape now refuses a claim of work under way with no started work.
+# v1.4.0 (2026-09-10): status corrected LS_Backlogged -> LS_Opened, derived from this fixture's own stage
+# outputs and item states. The claim was unsupported by the data it sits in; InProgressNeedsStartedWorkShape
+# and LineageStatusShape now refuse such a claim.
+
+# v(next) 2026-09-10: the stage outputs were never linked to the lineage they close, so no rule
+# could tell which chain they belong to and the status could not be checked against them. Linked here.
+ex:Out_Mission backlog:belongsToLineage ex:Lin_PL .
+ex:Out_Scope backlog:belongsToLineage ex:Lin_PL .
+ex:Out_Goal backlog:belongsToLineage ex:Lin_PL .
+ex:Out_Objective backlog:belongsToLineage ex:Lin_PL .
+ex:Out_Backlog backlog:belongsToLineage ex:Lin_PL .

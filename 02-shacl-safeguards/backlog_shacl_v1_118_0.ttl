@@ -5842,6 +5842,7 @@ backlog:LineageStatusShape a sh:NodeShape ;
         sh:message "L1: this lineage has no hasLineageStatus. Every lineage opened from v1.89.0 states where it stands, so that rules bind only once the step they need has passed." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
+            ?reg backlog:adoptsRuleSet backlog:RS_LineageStatus .
             FILTER NOT EXISTS { $this backlog:hasLineageStatus ?s }
             FILTER NOT EXISTS { $this backlog:lineageArchived true }
             # lineages opened before v1.89.0 carry their status from this release on; none is exempt
@@ -5850,6 +5851,7 @@ backlog:LineageStatusShape a sh:NodeShape ;
         sh:message "L1: this lineage claims a stage status (Scoped, Goaled, Objectived, Backlogged) with no active output of that stage. A status is a pointer to the chain, not a wish." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
+            ?reg backlog:adoptsRuleSet backlog:RS_LineageStatus .
             $this backlog:hasLineageStatus ?ls .
             # pyshacl forbids VALUES inside a constraint: the status/stage pairs are a UNION
             { BIND(backlog:LS_Opened AS ?want) BIND(backlog:Stage_Mission AS ?st) } UNION
@@ -6224,6 +6226,7 @@ backlog:RetiredNameCollisionShape a sh:NodeShape ;
         sh:message "L1: this live lineage's IRI is already recorded by a LineageArchiveEntry as a retired lineage. A retired lineage is gone from the live register but its IRI is still the name of that work in the archive, in every closure report and in every commit message; reusing it makes two different lineages indistinguishable in the record. Choose another name." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
+            ?reg backlog:adoptsRuleSet backlog:RS_LineageStatus .
             ?e a backlog:LineageArchiveEntry ; backlog:entryForLineage ?iri .
             FILTER (STR($this) = STR(?iri))
         }""" ] .
@@ -6237,6 +6240,7 @@ backlog:InProgressNeedsStartedWorkShape a sh:NodeShape ;
         sh:message "L1: this lineage claims LS_InProgress and no work item of it has left Proposed or Ready. InProgress is defined as development ongoing, and a backlog that has been groomed is not a backlog that has been started. Found on 2026-09-10: the session asserted InProgress in the commit where it did the PLANNING, reading the status from its own activity rather than from the register." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
+            ?reg backlog:adoptsRuleSet backlog:RS_LineageStatus .
             $this backlog:hasLineageStatus backlog:LS_InProgress .
             FILTER NOT EXISTS {
                 ?i backlog:belongsToLineage $this ; backlog:hasState ?st .
@@ -6264,6 +6268,8 @@ backlog:IntentElementLabelShape a sh:NodeShape ;
         sh:message "L1: this element has no rdfs:label and no hasTitle, so it can only be referred to by its identifier. An identifier is a handle; a label is what a person reads. Every mission, scope statement, area, deliverable, exclusion, goal, objective and lineage states in one sentence what it is, and every report, changelog and conversation uses that sentence rather than the identifier." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] , [ sh:prefix "rdfs" ; sh:namespace "http://www.w3.org/2000/01/rdf-schema#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
+            # binds only a register that has adopted the convention (G91: a ruling binds what declared it)
+            ?reg backlog:adoptsRuleSet backlog:RS_LabelConvention .
             FILTER NOT EXISTS { $this rdfs:label ?l }
             FILTER NOT EXISTS { $this backlog:hasTitle ?t }
         }""" ] .

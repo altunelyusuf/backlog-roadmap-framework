@@ -3596,3 +3596,9 @@ fw:Del_RefinementProduces rdfs:label "Grooming records what it produced, so a se
 fw:Del_DoDArtifacts rdfs:label "An item cannot be called done while the artifacts its task type owes are missing"@en .
 fw:Ex_SDLC_NoNewKinds rdfs:label "Out of scope: inventing artifact vocabulary that another package already owns"@en .
 fw:Ex_SDLC_NoRetrofit rdfs:label "Out of scope: applying these obligations to work that closed before they existed"@en .
+#  The register adopts the label convention, on the owner's instruction of 2026-09-10. Adoption is a
+#  register-level act because the rule binds every element the register carries; fixtures and closed
+#  graphs that never adopted it are untouched.
+fw:Register backlog:adoptsRuleSet backlog:RS_LabelConvention ;
+    backlog:ruleSetAdoptedAt "2026-09-10T18:00:00Z"^^xsd:dateTime .
+fw:Register backlog:adoptsRuleSet backlog:RS_LineageStatus .

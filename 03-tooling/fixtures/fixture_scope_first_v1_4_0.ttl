@@ -274,4 +274,7 @@ ex:Session_20260907 a backlog:RegisterSession ;
 ex:Obj_G_Areas_Scope backlog:metricMovableBy ex:W .
 ex:Obj_G_Contain_Scope backlog:metricMovableBy ex:W .
 # v1.2.0 (2026-09-09): lineage status stated (TBox v1.89.0, LineageStatusShape); derived from the fixture's own outputs and item states.
-ex:Lin1 backlog:hasLineageStatus backlog:LS_InProgress .
+ex:Lin1 backlog:hasLineageStatus backlog:LS_Opened .
+# v1.3.0 (2026-09-10): status corrected LS_InProgress -> LS_Opened, derived from this fixture's own stage
+# outputs and item states. The claim was unsupported by the data it sits in; InProgressNeedsStartedWorkShape
+# and LineageStatusShape now refuse such a claim.
