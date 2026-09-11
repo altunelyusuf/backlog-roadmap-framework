@@ -8800,3 +8800,33 @@ First release. Domain-neutral generalisation of an adopting project's product-ba
 method-parameterised priority scores, roadmap as a projection, conformance levels L1-L3, a
 self-proving gate, and an execution bridge. Built without access to the governing standard
 document; see the trigger note above.
+
+**Lineage 9, scope amendment through the change ceremony** (register v9.83.0). An owner health check
+found two faults in a Scope stage that had already closed at `f586f36`, so the boundary was amended by
+`CR_SDLCScopeAmend` → `IA_SDLCScopeAmend` (impact measured before disposition) → `SC_SDLCScopeAmend`,
+never by editing the closed stage — the digest it closed on stays reproducible.
+
+- `Area_SDLC_Witness` and `Area_SDLC_Fixtures` carried no deliverable, so the scope named ground that
+  nothing delivered. Both hold real work: the order check learning to measure that an owed artifact
+  first appears in git *before* the output claiming it, and the fixture pairs that prove each
+  obligation fires when it should and stays silent when it should not. Two deliverables added, two
+  stories admitted (SDLC-S06, S07).
+- `Obj_SDLC_NoMinting` and `Obj_SDLC_NoRetroBinding` restated exclusions the scope already carries, had
+  zero `metricMovableBy`, and measured the absence of a forbidden act rather than an achievement.
+  Superseded by **`Obj_SDLC_ScopeMatch`** — deliverables planned but not satisfied by finished work,
+  **6 → 0**, movable by all seven stories — which measures the match between what was planned and what
+  was finished, in both directions. The exclusions themselves stand.
+- A session claim corrected: `areaMeasure` is defined as the count taken **when the scope was drawn**,
+  so a baseline keeping its date is not "stale". Completion is measured by objectives, at completion
+  time. The session had reported staleness; that was a misreading of this framework's own definition.
+
+Also corrected in this release: lineage 9 carried **six `hasLineageStatus` values at once** — the
+pointer appended at each stage instead of moved (L-112) — so every "only passed steps fire" rule was
+gating on whichever value the parser returned. Collapsed to one; `LineageStatusSingleShape` enforces
+`maxCount 1`, since `owl:FunctionalProperty` does not. The status was also `LS_InProgress` while every
+item was Proposed or Ready: claimed from the session's activity rather than read from the register.
+Corrected to `LS_Backlogged`, and `InProgressNeedsStartedWorkShape` now refuses the claim.
+`RetiredNameCollisionShape` refuses a live lineage reusing a retired lineage's IRI. Test drive behind
+the single-pointer design: reading a stored pointer costs 0.005 ms against 0.402 ms to derive the same
+answer from stage outputs, and both agree.
+

@@ -14,8 +14,8 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.80.0> ;
-    owl:versionInfo "9.80.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.83.0> ;
+    owl:versionInfo "9.83.0" ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.76.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.75.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.74.0> ;
@@ -2665,7 +2665,7 @@ fw:L_SDLCObligations a backlog:Lineage ; rdfs:label "Lineage 9"@en ;
     backlog:lineageForMission fw:Mission_SDLCObligations ;
     backlog:lineageOrdinal 14 ;
     backlog:lineageArchived false ;
-    backlog:hasLineageStatus backlog:LS_Opened .
+    backlog:hasLineageStatus backlog:LS_Backlogged .   # moved in place at each stage (L-112); the chain of stage outputs is the history
 fw:Mission_SDLCObligations a backlog:Mission ;
     backlog:producedByStage fw:Out_Mission_SDLC ;
     backlog:hasMissionStatement "The lineage is connected to the software development life cycle as its mandatory facilities: each stage of the Mission-Scope-Goal-Objective-Backlog chain declares the engineering artifacts it owes -- domain entities and blueprint at Scope, use cases with main and alternative scenarios at Goal, activity and sequence diagrams at Objective, the domain-class model and blueprint gaps at Backlog, and the ISO 12207 task types' artifacts at execution -- and no stage output closes, no refinement counts, and no item reaches Done without the owed artifacts existing, witnessed by git before the output that claims them. Enforced by shapes and the order check, proven on fixtures, and run first on this lineage itself." ;
@@ -2776,7 +2776,6 @@ fw:Gap_TaskTypeObligation_SuspensionException a backlog:BlueprintGap ; backlog:g
 fw:Gap_TaskTypeObligation_Termination a backlog:BlueprintGap ; backlog:gapForEntity fw:Entity_TaskTypeObligation ; backlog:gapForStage backlog:Stage_Termination ;
     backlog:hasGapReason "retiring an obligation is a scope change of the framework, out of this lineage's scope" ; backlog:belongsToLineage fw:L_SDLCObligations .
 
-fw:L_SDLCObligations backlog:hasLineageStatus backlog:LS_Scoped .
 fw:Out_Scope_SDLC a backlog:StageOutput ;
     backlog:outputOfStage backlog:Stage_Scope ;
     backlog:belongsToLineage fw:L_SDLCObligations ;
@@ -2849,7 +2848,6 @@ fw:Imp_SDLCArtifactKinds a backlog:Impediment ;
     backlog:raisedAt "2026-09-09T12:05:00Z"^^xsd:dateTime ;
     backlog:belongsToLineage fw:L_SDLCObligations .
 
-fw:L_SDLCObligations backlog:hasLineageStatus backlog:LS_Goaled .
 fw:Out_Goal_SDLC a backlog:StageOutput ;
     backlog:outputOfStage backlog:Stage_Goal ;
     backlog:belongsToLineage fw:L_SDLCObligations ;
@@ -3023,7 +3021,6 @@ fw:CP_SDLC_Proven a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-1
 fw:CP_SDLC_NoRetroBinding a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-10-01T00:00:00Z"^^xsd:dateTime .
 fw:CP_SDLC_NoMinting a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-10-01T00:00:00Z"^^xsd:dateTime .
 
-fw:L_SDLCObligations backlog:hasLineageStatus backlog:LS_Objectived .
 fw:Out_Objective_SDLC a backlog:StageOutput ;
     backlog:outputOfStage backlog:Stage_Objective ;
     backlog:belongsToLineage fw:L_SDLCObligations ;
@@ -3166,7 +3163,6 @@ fw:Obj_SDLC_Adopted backlog:metricMovableBy fw:S_SDLC_FirstAdopter .
 fw:Obj_SDLC_Enforced backlog:metricMovableBy fw:S_SDLC_SeenToRefuse , fw:S_SDLC_RefinementProducts , fw:S_SDLC_DoDJoin .
 fw:Obj_SDLC_Proven backlog:metricMovableBy fw:S_SDLC_ProofHeld .
 
-fw:L_SDLCObligations backlog:hasLineageStatus backlog:LS_Backlogged .
 fw:Out_Backlog_SDLC a backlog:StageOutput ;
     backlog:outputOfStage backlog:Stage_Backlog ;
     backlog:belongsToLineage fw:L_SDLCObligations ;
@@ -3355,8 +3351,7 @@ fw:It_SDLC_1 a backlog:Iteration ;
     backlog:iterationStart "2026-09-10T13:00:00Z"^^xsd:dateTime ;
     backlog:iterationEnd "2026-09-24T13:00:00Z"^^xsd:dateTime ;
     backlog:hasCapacity 8.0 ;
-    backlog:appliesDefinitionOfDone fw:DoD_Baseline ;
-    backlog:belongsToLineage fw:L_SDLCObligations .
+        backlog:belongsToLineage fw:L_SDLCObligations .
 
 fw:PE_SDLC_S01 a backlog:PlanningEvent ;
     backlog:plansItem fw:S_SDLC_FirstAdopter ;
@@ -3411,6 +3406,168 @@ fw:T_SDLC_S01_Verification a backlog:ExecutionTask ; backlog:hasTaskType backlog
 
 fw:S_SDLC_FirstAdopter backlog:memberOfContainer fw:It_SDLC_1 ;
     backlog:hasApplicableConcern backlog:Concern_Interaction , backlog:Concern_Data .
-fw:L_SDLCObligations backlog:hasLineageStatus backlog:LS_InProgress .
 #  The refinement that makes the story Ready is PE_SDLC_S01 above; the concerns it declares are the
 #  ones that refinement addressed.
+
+#################################################################
+#  v9.81.0 (2026-09-10, brsf-session) -- TWO DEFECTS OF THIS SESSION,
+#  both found by checks built this same day.
+#
+#  1. hasLineageStatus is functional and is a current-state pointer:
+#     it was APPENDED at each stage, so lineage 9 carried six values
+#     at once and every "only passed steps fire" rule was reading an
+#     arbitrary one. Collapsed above to the single current value; the
+#     chain of stage outputs is the history, as it always was.
+#  2. It_SDLC_1 named fw:DoD_Baseline, which exists in neither the
+#     live register nor the archive. The previous turn reported it as
+#     a definition inherited from a retired lineage; that was wrong --
+#     it was INVENTED by this session while writing the planning
+#     event. Every DefinitionOfDone in this register retired with its
+#     own lineage, so a live lineage declares its own, below.
+#################################################################
+fw:DoD_SDLC a backlog:DefinitionOfDone ;
+    rdfs:label "Definition of Done, lineage 9"@en ;
+    backlog:hasDoneCondition "The work is recorded in the register and the release gate passes on it, with no violation and no waiver." ;
+    backlog:hasDoneCondition "Every shape the work introduces is proven both ways by a fixture." ;
+    backlog:hasDoneCondition "Every claim the work makes about a measurement is reproducible from the files alone." ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+fw:It_SDLC_1 backlog:appliesDefinitionOfDone fw:DoD_SDLC .
+
+#################################################################
+#  v9.82.0 (2026-09-10, brsf-session) -- THE STATUS CORRECTED BACK TO
+#  LS_Backlogged. Measured on this register: iteration It_SDLC_1 is
+#  Proposed, one story is Ready, four are Proposed, all three
+#  execution tasks are Proposed. Nothing has started. LS_InProgress
+#  is defined as "at least one work item has left Proposed/Ready and
+#  the mission outcome is not settled", and Ready has not left Ready.
+#  The session asserted InProgress in the planning commit because it
+#  had just done planning WORK, not because the register said so --
+#  a status claimed from activity rather than read from the data.
+#  LineageStatusShape gains the clause that would have refused it.
+#################################################################
+
+#################################################################
+#  v9.83.0 (2026-09-10, brsf-session) -- SCOPE AMENDMENT, through the
+#  change ceremony rather than by editing a closed stage. The Scope
+#  stage of lineage 9 closed at f586f36; two faults in it were found
+#  by the owner's health check:
+#
+#  (a) Area_SDLC_Witness and Area_SDLC_Fixtures carry no deliverable,
+#      so the scope names ground that nothing delivers. Both hold real
+#      work: the first is a change to the order-check tool so it
+#      measures that an artifact first appears in git BEFORE the stage
+#      output claiming it; the second is the pair of test graphs that
+#      prove each obligation fires when it should and stays silent
+#      when it should not.
+#  (b) Obj_SDLC_NoMinting and Obj_SDLC_NoRetroBinding restate two
+#      exclusions the scope already carries. A restriction is guarded,
+#      not measured toward a target, and neither has any work that
+#      could move it. The owner's ruling: a containment objective
+#      measures the MATCH between what was planned in scope and what
+#      was finished -- not the absence of a forbidden act.
+#
+#  The area measures themselves are NOT stale: areaMeasure is defined
+#  as the count taken when the scope was drawn, and a baseline is
+#  supposed to keep its date. Completion is measured by objectives,
+#  at the time the work completes. The session had called them stale;
+#  that was a misreading of this framework's own definition.
+#################################################################
+fw:CR_SDLCScopeAmend a backlog:ChangeRequest ;
+    backlog:requestsChangeTo fw:Scope_SDLCObligations ;
+    backlog:hasChangeDirection backlog:Direction_Grow ;   # two deliverables and two stories added; nothing leaves
+    backlog:hasDisposition backlog:Disp_Accepted ;
+    backlog:hasChangeRequestRationale "Owner health check, 2026-09-10: two of the four scope areas have no deliverable, and two objectives restate exclusions instead of measuring achievement. The Scope stage is closed, so the boundary is amended by this request and the ScopeChange that fulfils it, not by editing the closed stage." ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+fw:SC_SDLCScopeAmend a backlog:ScopeChange ;
+    backlog:fulfillsRequest fw:CR_SDLCScopeAmend ;
+    backlog:changesScope fw:Scope_SDLCObligations ;
+    backlog:admitsItem fw:S_SDLC_WitnessMeasure , fw:S_SDLC_FixturePair ;
+    backlog:hasScopeChangeRationale "Adds one deliverable to each of the two areas that had none, and admits the two stories that satisfy them. Traded: nothing leaves the scope; the boundary is the same ground, now with delivery attached to all of it." ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+
+fw:Del_ArtifactOrderMeasured a backlog:ScopeDeliverable ;
+    rdfs:label "The order check measures artifact-before-output"@en ;
+    backlog:deliverableForArea fw:Area_SDLC_Witness ;
+    backlog:hasScopeLayer backlog:Layer_Product ;
+    backlog:derivesFromMissionClause "witnessed by git before the output that claims them" ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+fw:Del_ObligationsProven a backlog:ScopeDeliverable ;
+    rdfs:label "Each obligation is proven to fire and to stay silent"@en ;
+    backlog:deliverableForArea fw:Area_SDLC_Fixtures ;
+    backlog:hasScopeLayer backlog:Layer_Product ;
+    backlog:derivesFromMissionClause "proven on fixtures" ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+fw:Scope_SDLCObligations backlog:requiresDeliverable fw:Del_ArtifactOrderMeasured , fw:Del_ObligationsProven .
+
+fw:S_SDLC_WitnessMeasure a backlog:Story ; backlog:hasIdentifier "SDLC-S06" ;
+    backlog:hasTitle "Measure that each owed artifact first appears before the stage output that claims it" ;
+    backlog:asRole "a session closing a stage under the obligations" ;
+    backlog:wantsCapability "the order check to measure artifact-before-output, not only output order" ;
+    backlog:soThat "an artifact written after the output it is claimed by is caught, as a late-planned item already is" ;
+    backlog:hasState backlog:Proposed ; backlog:memberOfContainer fw:Register ;
+    backlog:belongsToLineage fw:L_SDLCObligations ;
+    backlog:pursuesObjective fw:Obj_SDLC_Enforced ;
+    backlog:satisfiesDeliverable fw:Del_ArtifactOrderMeasured ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "Scored at the planning event that takes it into an iteration." ;
+    backlog:hasAcceptanceCriterion fw:AC_SDLC_S06 ;
+    backlog:hasRationale "Admitted by SC_SDLCScopeAmend: Area_SDLC_Witness held real work in 03-tooling/backlog_lineage_order_check and had no deliverable to carry it." .
+fw:AC_SDLC_S06 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a stage output whose owed artifact first appears in a later commit than the output, when the order check runs, then it names that artifact and refuses; and when the artifact appears first, then it passes." .
+fw:S_SDLC_FixturePair a backlog:Story ; backlog:hasIdentifier "SDLC-S07" ;
+    backlog:hasTitle "Prove each obligation in both directions with a fixture pair" ;
+    backlog:asRole "a reader deciding whether an obligation is enforced or merely declared" ;
+    backlog:wantsCapability "a positive fixture each obligation stays silent on and a negative one it fires on" ;
+    backlog:soThat "no obligation can ship without having been seen to refuse something" ;
+    backlog:hasState backlog:Proposed ; backlog:memberOfContainer fw:Register ;
+    backlog:belongsToLineage fw:L_SDLCObligations ;
+    backlog:pursuesObjective fw:Obj_SDLC_Proven ;
+    backlog:satisfiesDeliverable fw:Del_ObligationsProven ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "Scored at the planning event that takes it into an iteration." ;
+    backlog:hasAcceptanceCriterion fw:AC_SDLC_S07 ;
+    backlog:hasRationale "Admitted by SC_SDLCScopeAmend: Area_SDLC_Fixtures held the work that makes an obligation checkable, and had no deliverable to carry it." .
+fw:AC_SDLC_S07 a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given each obligation of OS_SDLC_v1, when the gate runs its fixture pair, then the positive fixture reports no violation and the negative fixture reports that obligation by name." .
+
+#################################################################
+#  v9.83.0 continued -- THE CONTAINMENT OBJECTIVE, as the owner ruled:
+#  a containment goal is measured by the MATCH between what the scope
+#  planned and what was finished, not by the absence of a forbidden
+#  act. Obj_SDLC_NoMinting and Obj_SDLC_NoRetroBinding are superseded:
+#  each restated an exclusion the scope already carries
+#  (Ex_SDLC_NoNewKinds, Ex_SDLC_NoRetrofit), a restriction is guarded
+#  by a shape rather than driven toward a target, and neither had any
+#  work that could move it. The exclusions stand; only their
+#  duplication as metrics goes.
+#################################################################
+fw:Metric_SDLC_ScopeMatch a core:Metric ;
+    rdfs:label "Scope deliverables planned but not satisfied by finished work"@en .
+fw:Obj_SDLC_ScopeMatch a backlog:Objective ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    rdfs:label "What was finished matches what the scope planned -- no more, no less"@en ;
+    backlog:contributesToGoal fw:Goal_SDLC_NoOutOfScope ;
+    backlog:fillsScope fw:Scope_SDLCObligations ;
+    backlog:hasSuccessMetric fw:Metric_SDLC_ScopeMatch ;
+    backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasBaselineValue "6"^^xsd:decimal ; backlog:hasTargetValue "0"^^xsd:decimal ;
+    backlog:hasTargetDirection backlog:Dir_Decrease ;
+    backlog:hasCheckpoint fw:CP_SDLC_ScopeMatch ;
+    backlog:metricMovableBy fw:S_SDLC_FirstAdopter , fw:S_SDLC_SeenToRefuse , fw:S_SDLC_RefinementProducts , fw:S_SDLC_DoDJoin , fw:S_SDLC_ProofHeld , fw:S_SDLC_WitnessMeasure , fw:S_SDLC_FixturePair ;
+    backlog:hasRationale "Counted 2026-09-10: the scope requires six deliverables and none is yet satisfied by finished work -- every story serving them is Proposed or Ready. The measure is taken per deliverable when the work serving it is Done, so it falls as the lineage completes and reaches zero only when what was finished matches what was planned. It also catches the other direction: work finished that no deliverable required would leave a deliverable unsatisfied while the backlog emptied." ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+fw:CP_SDLC_ScopeMatch a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-10-01T00:00:00Z"^^xsd:dateTime .
+fw:Obs_SDLC_ScopeMatch_Baseline a backlog:MetricObservation ;
+    backlog:observesMetric fw:Metric_SDLC_ScopeMatch ; backlog:observationFor fw:Obj_SDLC_ScopeMatch ;
+    backlog:hasObservedValue 6.0 ; backlog:observedAt "2026-09-10T17:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Counted on register v9.83.0: six requiresDeliverable, zero satisfied by an item in state Done." ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+fw:Obj_SDLC_NoMinting backlog:supersededBy fw:Obj_SDLC_ScopeMatch .
+fw:Obj_SDLC_NoRetroBinding backlog:supersededBy fw:Obj_SDLC_ScopeMatch .
+fw:IA_SDLCScopeAmend a backlog:ImpactAssessment ;
+    backlog:analyzesRequest fw:CR_SDLCScopeAmend ;
+    backlog:identifiesAffectedLineage fw:L_SDLCObligations ;
+    backlog:hasImpactStatement "Measured on register v9.82.0 before disposition. Affected: one lineage, its own, in status LS_Backlogged with no work started -- so no in-flight item changes meaning. Scope grows by two deliverables, from four to six, both in areas the scope already covers; no area is added and none is removed, so the boundary is the same ground. Two objectives are superseded, not deleted: they restated exclusions the scope already carries and had zero metricMovableBy, so nothing depended on them; their goal, Goal_SDLC_NoOutOfScope, is now measured by Obj_SDLC_ScopeMatch, which every story can move. Two stories are admitted, both Proposed, so no iteration commitment changes. The Scope stage output stays closed and is not edited: this is the amendment ceremony, and the digest it was closed on remains reproducible." ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:belongsToLineage fw:L_SDLCObligations .

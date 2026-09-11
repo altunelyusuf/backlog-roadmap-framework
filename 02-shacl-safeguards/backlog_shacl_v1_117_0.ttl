@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.116.0> ;
-    owl:versionInfo "1.116.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.117.0> ;
+    owl:versionInfo "1.117.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.116.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.115.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.114.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.113.0> ;
@@ -6199,4 +6200,45 @@ backlog:PackageDeliveryIntentShape a sh:NodeShape ;
         sh:select """SELECT $this WHERE {
             $this backlog:deliversDeliverable ?d .
             FILTER NOT EXISTS { ?i backlog:memberOfContainer $this ; backlog:satisfiesDeliverable ?d }
+        }""" ] .
+
+#################################################################
+#  v1.117.0 (2026-09-10) -- two rules the register needed and did not
+#  have, both found by this session's own defects on 2026-09-10.
+#################################################################
+backlog:LineageStatusSingleShape a sh:NodeShape ;
+    sh:targetClass backlog:Lineage ;
+    sh:severity sh:Violation ;
+    rdfs:label "A lineage carries exactly one status (L1)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_lineage_status_negative" ;
+    sh:property [ sh:path backlog:hasLineageStatus ; sh:maxCount 1 ;
+                  sh:message "L1: this lineage carries more than one hasLineageStatus. The property is a current-state POINTER and is moved in place at each transition (L-112); appending instead left lineage 9 holding six values at once on 2026-09-10, and every rule that gates on status rank was reading whichever one the parser happened to return. owl:FunctionalProperty does not enforce this -- SHACL must." ] .
+
+backlog:RetiredNameCollisionShape a sh:NodeShape ;
+    sh:targetClass backlog:Lineage ;
+    sh:severity sh:Violation ;
+    rdfs:label "A live lineage may not reuse a retired lineage's name (L1)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_lineage_status_negative" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this live lineage's IRI is already recorded by a LineageArchiveEntry as a retired lineage. A retired lineage is gone from the live register but its IRI is still the name of that work in the archive, in every closure report and in every commit message; reusing it makes two different lineages indistinguishable in the record. Choose another name." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?e a backlog:LineageArchiveEntry ; backlog:entryForLineage ?iri .
+            FILTER (STR($this) = STR(?iri))
+        }""" ] .
+
+backlog:InProgressNeedsStartedWorkShape a sh:NodeShape ;
+    sh:targetClass backlog:Lineage ;
+    sh:severity sh:Violation ;
+    rdfs:label "LS_InProgress means work has actually started (L1)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_lineage_status_negative" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this lineage claims LS_InProgress and no work item of it has left Proposed or Ready. InProgress is defined as development ongoing, and a backlog that has been groomed is not a backlog that has been started. Found on 2026-09-10: the session asserted InProgress in the commit where it did the PLANNING, reading the status from its own activity rather than from the register." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasLineageStatus backlog:LS_InProgress .
+            FILTER NOT EXISTS {
+                ?i backlog:belongsToLineage $this ; backlog:hasState ?st .
+                FILTER (?st NOT IN (backlog:Proposed, backlog:Ready, backlog:Refined, backlog:Cancelled))
+            }
         }""" ] .

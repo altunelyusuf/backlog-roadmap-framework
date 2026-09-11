@@ -20,4 +20,21 @@ ex:L_FalseAchieved a backlog:Lineage ; backlog:lineageOrdinal 3 ; backlog:lineag
 ex:L_ArchNoFile a backlog:Lineage ; backlog:lineageOrdinal 4 ; backlog:lineageArchived false ; backlog:lineageForMission ex:M1 ; backlog:hasLineageStatus backlog:LS_Archived .
 ex:L_Lagging a backlog:Lineage ; backlog:lineageOrdinal 5 ; backlog:lineageArchived false ; backlog:lineageForMission ex:M3 ; backlog:hasLineageStatus backlog:LS_InProgress .
 ex:L_Found a backlog:Lineage ; backlog:lineageOrdinal 6 ; backlog:lineageArchived false ; backlog:lineageForMission ex:M4 ; backlog:hasLineageStatus backlog:LS_Achieved .
+#  LineageStatusSingleShape   L_TwoStatus carries two statuses (the pointer appended, not moved).
+#  RetiredNameCollisionShape  L_Reused has the same IRI as a retired lineage an entry records.
+ex:L_TwoStatus a backlog:Lineage ; backlog:lineageOrdinal 7 ; backlog:lineageArchived false ;
+    backlog:lineageForMission ex:M1 ; backlog:hasLineageStatus backlog:LS_Scoped , backlog:LS_Goaled .
+ex:L_Reused a backlog:Lineage ; backlog:lineageOrdinal 8 ; backlog:lineageArchived false ;
+    backlog:lineageForMission ex:M1 ; backlog:hasLineageStatus backlog:LS_Opened .
+ex:E_Retired a backlog:LineageArchiveEntry ; backlog:entryForLineage "http://example.org/lineage-status-neg#L_Reused" ;
+    backlog:entryForMission "http://example.org/lineage-status-neg#M1" ; backlog:entryOutcome "Out_Achieved" ;
+    backlog:entryOrdinal 3 ; backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_2_0.ttl" ;
+    backlog:archivedAt "2026-09-01T00:00:00Z"^^xsd:dateTime ; backlog:archivalTrigger "fixture" .
+
+#  InProgressNeedsStartedWorkShape  L_NotStarted claims InProgress with every item still Proposed.
+ex:L_NotStarted a backlog:Lineage ; backlog:lineageOrdinal 9 ; backlog:lineageArchived false ;
+    backlog:lineageForMission ex:M2 ; backlog:hasLineageStatus backlog:LS_InProgress .
+ex:S_NotStarted a backlog:Story ; backlog:hasIdentifier "S-NS" ; backlog:hasState backlog:Proposed ;
+    backlog:belongsToLineage ex:L_NotStarted .
+
 <http://example.org/lineage-status-neg#> backlog:hasExpectedPolarity backlog:Polarity_Negative .
