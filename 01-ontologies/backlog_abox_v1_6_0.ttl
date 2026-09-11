@@ -8,8 +8,8 @@
 
 <http://example.org/backlog-abox> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (Reference ABox)"@en ;
-    owl:versionIRI <http://example.org/backlog-abox/1.4.0> ;
-    owl:versionInfo "1.4.0" ;
+    owl:versionIRI <http://example.org/backlog-abox/1.6.0> ;
+    owl:versionInfo "1.6.0" ;
     owl:priorVersion <http://example.org/backlog-abox/1.2.1> ,
                      <http://example.org/backlog-abox/1.2.0> ,
                      <http://example.org/backlog-abox/1.1.0> ,
@@ -400,21 +400,25 @@ backlog:Ob_Goal_ScenarioRejection a backlog:StageObligation ;
     backlog:owesScenarioKind backlog:Scen_Rejection ; backlog:obligationSeverity backlog:Oblig_Required ;
     backlog:obligationRationale "What happens when it must refuse? The alternative scenario the owner asked for, in the kind that fails differently from a boundary or an absent case. Nominal-only coverage reads as fully covered and is not." .
 backlog:Ob_Goal_UseCaseDiagram a backlog:StageObligation ;
+    backlog:owesLevel backlog:Level_Analysis ;
     backlog:inObligationSet backlog:OS_SDLC_v1 ;
     backlog:obligationOfStage backlog:Stage_Goal ; backlog:owesClass backlog:ModelArtifact ;
     backlog:owesKind backlog:Kind_UseCaseDiagram ; backlog:obligationSeverity backlog:Oblig_Advisory ;
     backlog:obligationRationale "Who are the actors and which use cases do they reach? Advisory, not required: a lineage with one actor and one use case can state that in the Specification and be understood, and a diagram demanded for its own sake is the decorative artifact this framework refuses elsewhere (G7)." .
 backlog:Ob_Objective_ActivityDiagram a backlog:StageObligation ;
+    backlog:owesLevel backlog:Level_Analysis ;
     backlog:inObligationSet backlog:OS_SDLC_v1 ;
     backlog:obligationOfStage backlog:Stage_Objective ; backlog:owesClass backlog:ModelArtifact ;
     backlog:owesKind backlog:Kind_ActivityDiagram ; backlog:obligationSeverity backlog:Oblig_Required ;
     backlog:obligationRationale "In what order does the work happen, and where does it branch? An objective is measured against a flow; the activity diagram is that flow. The owner's finding: 'drawing activity diagrams'." .
 backlog:Ob_Objective_SequenceDiagram a backlog:StageObligation ;
+    backlog:owesLevel backlog:Level_Analysis ;
     backlog:inObligationSet backlog:OS_SDLC_v1 ;
     backlog:obligationOfStage backlog:Stage_Objective ; backlog:owesClass backlog:ModelArtifact ;
     backlog:owesKind backlog:Kind_SequenceDiagram ; backlog:obligationSeverity backlog:Oblig_Required ;
     backlog:obligationRationale "Between which participants, in what order, with what messages? The interaction the activity diagram leaves implicit. The owner's finding: 'sequence diagrams'." .
 backlog:Ob_Backlog_ClassDiagram a backlog:StageObligation ;
+    backlog:owesLevel backlog:Level_Analysis ;
     backlog:inObligationSet backlog:OS_SDLC_v1 ;
     backlog:obligationOfStage backlog:Stage_Backlog ; backlog:owesClass backlog:ModelArtifact ;
     backlog:owesKind backlog:Kind_ClassDiagram ; backlog:obligationSeverity backlog:Oblig_Required ;
@@ -439,3 +443,248 @@ backlog:Ob_Task_Verification_TestCase a backlog:StageObligation ;
     backlog:obligationOfTaskType backlog:Task_Verification ; backlog:owesClass backlog:TestCase ;
     backlog:obligationSeverity backlog:Oblig_Required ;
     backlog:obligationRationale "A verification task that is Done and names no test case has verified nothing a reader can disagree with (the TestCase definition's own point)." .
+
+#################################################################
+#  v1.5.0 (2026-09-11) -- OBLIGATION SET 2: EVERY PROCESS OWES WHAT
+#  ITS OWN DEFINITION SAYS IT PRODUCES.
+#
+#  The first set (OS_SDLC_v1) covered three of the corpus's fourteen
+#  ISO/IEC 12207 task types, four of its fourteen UML model kinds and
+#  none of its five design concerns. It was built from the owner's
+#  ILLUSTRATION of the problem -- "use cases, main and alternative
+#  scenarios, activity diagrams, sequence diagrams, domain classes" --
+#  and treated that sentence as the specification instead of reading
+#  the corpus. The owner's correction, 2026-09-11: "Our SDLC corpus is
+#  quite much more than this and it has been already a part of the
+#  methodology. What we need is to enforce the application of them
+#  properly."
+#
+#  So each obligation below is DERIVED, not chosen: the artifact is
+#  what the task type's own definition in this TBox says the process
+#  produces, and the definition is quoted in the rationale so a reader
+#  can check the derivation rather than trust it. Fourteen processes,
+#  all covered; the five design concerns obliged through the
+#  coversTaskType links the corpus already carried and nothing used.
+#
+#  Shipped as a SET a lineage adopts at its opening (G91). OS_SDLC_v1
+#  is not deleted: a lineage that adopted it keeps what it adopted.
+#################################################################
+backlog:OS_SDLC_v2 a owl:NamedIndividual , backlog:ObligationSet ;
+    rdfs:label "Every engineering process owes its own work product"@en ;
+    skos:definition "The complete set: all fourteen ISO/IEC 12207 task types of this corpus owe the artifact their own definition names, the five design concerns oblige the model that records what was analysed, and the pipeline stages keep the obligations of OS_SDLC_v1. Supersedes OS_SDLC_v1 for lineages opened after it ships; a lineage that adopted v1 keeps v1."@en .
+
+backlog:Ob2_MissionAnalysis a backlog:StageObligation ;
+    backlog:inObligationSet backlog:OS_SDLC_v2 ;
+    backlog:obligationOfTaskType backlog:Task_MissionAnalysis ;
+    backlog:owesClass backlog:Specification ;
+    backlog:obligationSeverity backlog:Oblig_Required ;
+    backlog:obligationRationale "6.4.1 establishes what problem is being solved and why, BEFORE any solution is described. A mission-analysis task that is Done and states no problem has described nothing anyone can disagree with; the Specification is where the problem statement and its interaction steps live." .
+backlog:Ob2_StakeholderNeeds a backlog:StageObligation ;
+    backlog:inObligationSet backlog:OS_SDLC_v2 ;
+    backlog:obligationOfTaskType backlog:Task_StakeholderNeeds ;
+    backlog:owesClass backlog:AcceptanceCriterion ;
+    backlog:obligationSeverity backlog:Oblig_Required ;
+    backlog:obligationRationale "6.4.2 turns what people need into STATED stakeholder requirements. A stated requirement that cannot be checked is a wish; in this corpus the checkable form of a stated requirement is an AcceptanceCriterion with its Given/When/Then." .
+backlog:Ob2_RequirementsDefinition a backlog:StageObligation ;
+    backlog:inObligationSet backlog:OS_SDLC_v2 ;
+    backlog:obligationOfTaskType backlog:Task_RequirementsDefinition ;
+    backlog:owesClass backlog:Specification ;
+    backlog:obligationSeverity backlog:Oblig_Required ;
+    backlog:obligationRationale "6.4.3 states what the system must do to meet the stakeholder requirements. The Specification with its InteractionSteps and their actors IS that statement in this corpus." .
+backlog:Ob2_ArchitectureDefinition a backlog:StageObligation ;
+    backlog:owesLevel backlog:Level_Design ;
+    backlog:inObligationSet backlog:OS_SDLC_v2 ;
+    backlog:obligationOfTaskType backlog:Task_ArchitectureDefinition ;
+    backlog:owesClass backlog:ModelArtifact ;
+    backlog:owesKind backlog:Kind_ComponentDiagram ;
+    backlog:obligationSeverity backlog:Oblig_Required ;
+    backlog:obligationRationale "6.4.4 establishes the structure: components, their responsibilities and the boundaries between them. Components and boundaries are what a component diagram shows; the earlier obligation asked only for 'a model', which any diagram satisfied." .
+backlog:Ob2_ArchitectureDeployment a backlog:StageObligation ;
+    backlog:owesLevel backlog:Level_Design ;
+    backlog:inObligationSet backlog:OS_SDLC_v2 ;
+    backlog:obligationOfTaskType backlog:Task_ArchitectureDefinition ;
+    backlog:owesClass backlog:ModelArtifact ;
+    backlog:owesKind backlog:Kind_DeploymentDiagram ;
+    backlog:obligationSeverity backlog:Oblig_Advisory ;
+    backlog:obligationRationale "6.4.4 again: where the components run is part of the structure when the element is deployed at all. Advisory because a library has no deployment topology, and a diagram demanded for its own sake is the decorative artifact this framework refuses (G7)." .
+backlog:Ob2_DesignDefinition a backlog:StageObligation ;
+    backlog:owesLevel backlog:Level_Design ;
+    backlog:inObligationSet backlog:OS_SDLC_v2 ;
+    backlog:obligationOfTaskType backlog:Task_DesignDefinition ;
+    backlog:owesClass backlog:ModelArtifact ;
+    backlog:owesKind backlog:Kind_ClassDiagram ;
+    backlog:obligationSeverity backlog:Oblig_Required ;
+    backlog:obligationRationale "6.4.5 provides detail sufficient to implement, within the architecture. Detail sufficient to implement means the classes, their attributes and their associations." .
+backlog:Ob2_DesignBehaviour a backlog:StageObligation ;
+    backlog:owesLevel backlog:Level_Design ;
+    backlog:inObligationSet backlog:OS_SDLC_v2 ;
+    backlog:obligationOfTaskType backlog:Task_DesignDefinition ;
+    backlog:owesClass backlog:ModelArtifact ;
+    backlog:owesKind backlog:Kind_SequenceDiagram ;
+    backlog:obligationSeverity backlog:Oblig_Required ;
+    backlog:obligationRationale "6.4.5 is also where the five DesignConcerns are analysed, and Concern_Interaction is one of them: the order of messages between participants is not derivable from a class model." .
+backlog:Ob2_SystemAnalysis a backlog:StageObligation ;
+    backlog:inObligationSet backlog:OS_SDLC_v2 ;
+    backlog:obligationOfTaskType backlog:Task_SystemAnalysis ;
+    backlog:owesClass backlog:Evidence ;
+    backlog:obligationSeverity backlog:Oblig_Required ;
+    backlog:obligationRationale "6.4.6 is analytical work SUPPORTING A DECISION -- trade studies, feasibility, performance modelling. An analysis task that is Done and leaves no evidence has supported a decision nobody can re-examine." .
+backlog:Ob2_Implementation a backlog:StageObligation ;
+    backlog:inObligationSet backlog:OS_SDLC_v2 ;
+    backlog:obligationOfTaskType backlog:Task_Implementation ;
+    backlog:owesClass backlog:Evidence ;
+    backlog:obligationSeverity backlog:Oblig_Required ;
+    backlog:obligationRationale "6.4.7 builds the element. Its definition also names the failure this obligation guards: it is 'the task type most registers record and often the only one, which is why a backlog can look full while every other process is empty'. Implementation owes evidence that what was built exists." .
+backlog:Ob2_Integration a backlog:StageObligation ;
+    backlog:inObligationSet backlog:OS_SDLC_v2 ;
+    backlog:obligationOfTaskType backlog:Task_Integration ;
+    backlog:owesClass backlog:TestEvidence ;
+    backlog:obligationSeverity backlog:Oblig_Required ;
+    backlog:obligationRationale "6.4.8 assembles elements into a working whole, and its definition names the failure exactly: 'a set of correct parts that do not compose'. Only evidence from an actual assembly shows composition; unit-level evidence cannot." .
+backlog:Ob2_Verification a backlog:StageObligation ;
+    backlog:inObligationSet backlog:OS_SDLC_v2 ;
+    backlog:obligationOfTaskType backlog:Task_Verification ;
+    backlog:owesClass backlog:TestCase ;
+    backlog:obligationSeverity backlog:Oblig_Required ;
+    backlog:obligationRationale "6.4.9 confirms the element meets its SPECIFIED REQUIREMENTS -- was it built right. A verification task that names no test case has verified nothing a reader can disagree with." .
+backlog:Ob2_VerificationEvidence a backlog:StageObligation ;
+    backlog:inObligationSet backlog:OS_SDLC_v2 ;
+    backlog:obligationOfTaskType backlog:Task_Verification ;
+    backlog:owesClass backlog:TestEvidence ;
+    backlog:obligationSeverity backlog:Oblig_Required ;
+    backlog:obligationRationale "6.4.9 again: a test case that was never run is a plan. The evidence is what distinguishes a run from an intention." .
+backlog:Ob2_Validation a backlog:StageObligation ;
+    backlog:inObligationSet backlog:OS_SDLC_v2 ;
+    backlog:obligationOfTaskType backlog:Task_Validation ;
+    backlog:owesClass backlog:TestScenario ;
+    backlog:owesScenarioKind backlog:Scen_Nominal ;
+    backlog:obligationSeverity backlog:Oblig_Required ;
+    backlog:obligationRationale "6.4.11 confirms the element serves its INTENDED USE in its intended environment -- was the right thing built, 'the other half of testing, and the one skipped'. Intended use is a scenario walked through, not a requirement checked." .
+backlog:Ob2_ValidationEvidence a backlog:StageObligation ;
+    backlog:inObligationSet backlog:OS_SDLC_v2 ;
+    backlog:obligationOfTaskType backlog:Task_Validation ;
+    backlog:owesClass backlog:TestEvidence ;
+    backlog:obligationSeverity backlog:Oblig_Required ;
+    backlog:obligationRationale "6.4.11: as with verification, the evidence separates a validation that happened from one that was planned." .
+backlog:Ob2_Transition a backlog:StageObligation ;
+    backlog:inObligationSet backlog:OS_SDLC_v2 ;
+    backlog:obligationOfTaskType backlog:Task_Transition ;
+    backlog:owesClass backlog:DeploymentUnit ;
+    backlog:obligationSeverity backlog:Oblig_Required ;
+    backlog:obligationRationale "6.4.10 moves the element into operation: deployment, migration, cutover, training. A transition task that is Done and names no deployment unit has moved nothing that can be pointed at." .
+backlog:Ob2_Operation a backlog:StageObligation ;
+    backlog:inObligationSet backlog:OS_SDLC_v2 ;
+    backlog:obligationOfTaskType backlog:Task_Operation ;
+    backlog:owesClass backlog:Evidence ;
+    backlog:obligationSeverity backlog:Oblig_Required ;
+    backlog:obligationRationale "6.4.12 runs the system in service. An operation task owes the record of the running, or the service it claims to provide is unobservable." .
+backlog:Ob2_Maintenance a backlog:StageObligation ;
+    backlog:inObligationSet backlog:OS_SDLC_v2 ;
+    backlog:obligationOfTaskType backlog:Task_MaintenanceTask ;
+    backlog:owesClass backlog:Evidence ;
+    backlog:obligationSeverity backlog:Oblig_Required ;
+    backlog:obligationRationale "6.4.13 sustains the delivered capability. What was sustained, and against what, is evidence or it is unrecorded." .
+backlog:Ob2_Disposal a backlog:StageObligation ;
+    backlog:inObligationSet backlog:OS_SDLC_v2 ;
+    backlog:obligationOfTaskType backlog:Task_Disposal ;
+    backlog:owesClass backlog:Evidence ;
+    backlog:obligationSeverity backlog:Oblig_Required ;
+    backlog:obligationRationale "6.4.14 retires the element and deals with WHAT IT LEAVES BEHIND. The leavings are the point: a disposal with no record of them is the case this obligation exists for." .
+backlog:Ob2_ConcernData a backlog:StageObligation ;
+    backlog:owesLevel backlog:Level_Design ;
+    backlog:inObligationSet backlog:OS_SDLC_v2 ;
+    backlog:obligationOfConcern backlog:Concern_Data ;
+    backlog:owesClass backlog:ModelArtifact ;
+    backlog:owesKind backlog:Kind_ClassDiagram ;
+    backlog:obligationSeverity backlog:Oblig_Required ;
+    backlog:obligationRationale "The corpus already links Concern_Data to Task_DesignDefinition. Analysing for data and producing no data model leaves the analysis unrecorded." .
+backlog:Ob2_ConcernInterface a backlog:StageObligation ;
+    backlog:owesLevel backlog:Level_Design ;
+    backlog:inObligationSet backlog:OS_SDLC_v2 ;
+    backlog:obligationOfConcern backlog:Concern_Interface ;
+    backlog:owesClass backlog:ModelArtifact ;
+    backlog:owesKind backlog:Kind_ComponentDiagram ;
+    backlog:obligationSeverity backlog:Oblig_Required ;
+    backlog:obligationRationale "Concern_Interface is linked to design definition and integration; the boundaries analysed are what a component diagram carries." .
+backlog:Ob2_ConcernInteraction a backlog:StageObligation ;
+    backlog:owesLevel backlog:Level_Design ;
+    backlog:inObligationSet backlog:OS_SDLC_v2 ;
+    backlog:obligationOfConcern backlog:Concern_Interaction ;
+    backlog:owesClass backlog:ModelArtifact ;
+    backlog:owesKind backlog:Kind_SequenceDiagram ;
+    backlog:obligationSeverity backlog:Oblig_Required ;
+    backlog:obligationRationale "Concern_Interaction is linked to design definition and validation; the order of messages is what was analysed." .
+backlog:Ob2_ConcernArchitecture a backlog:StageObligation ;
+    backlog:owesLevel backlog:Level_Design ;
+    backlog:inObligationSet backlog:OS_SDLC_v2 ;
+    backlog:obligationOfConcern backlog:Concern_Architecture ;
+    backlog:owesClass backlog:ModelArtifact ;
+    backlog:owesKind backlog:Kind_ComponentDiagram ;
+    backlog:obligationSeverity backlog:Oblig_Required ;
+    backlog:obligationRationale "Concern_Architecture is linked to architecture definition; the structure analysed is the structure drawn." .
+backlog:Ob2_ConcernSecurity a backlog:StageObligation ;
+    backlog:owesLevel backlog:Level_Design ;
+    backlog:inObligationSet backlog:OS_SDLC_v2 ;
+    backlog:obligationOfConcern backlog:Concern_Security ;
+    backlog:owesClass backlog:ModelArtifact ;
+    backlog:owesKind backlog:Kind_StateMachineDiagram ;
+    backlog:obligationSeverity backlog:Oblig_Required ;
+    backlog:obligationRationale "Concern_Security is linked to design definition and verification; what a system permits and refuses in each state is a state machine, and 'we considered security' without one is the empty claim this obligation guards." .
+# the five pipeline-stage obligations of OS_SDLC_v1 hold in v2 unchanged
+backlog:Ob_Scope_DomainEntity backlog:inObligationSet backlog:OS_SDLC_v2 .
+backlog:Ob_Scope_Blueprint backlog:inObligationSet backlog:OS_SDLC_v2 .
+backlog:Ob_Goal_Specification backlog:inObligationSet backlog:OS_SDLC_v2 .
+backlog:Ob_Goal_ScenarioNominal backlog:inObligationSet backlog:OS_SDLC_v2 .
+backlog:Ob_Goal_ScenarioRejection backlog:inObligationSet backlog:OS_SDLC_v2 .
+backlog:Ob_Goal_UseCaseDiagram backlog:inObligationSet backlog:OS_SDLC_v2 .
+backlog:Ob_Objective_ActivityDiagram backlog:inObligationSet backlog:OS_SDLC_v2 .
+backlog:Ob_Objective_SequenceDiagram backlog:inObligationSet backlog:OS_SDLC_v2 .
+backlog:Ob_Backlog_ClassDiagram backlog:inObligationSet backlog:OS_SDLC_v2 .
+backlog:Ob_Backlog_Criterion backlog:inObligationSet backlog:OS_SDLC_v2 .
+
+#################################################################
+#  v1.6.0 (2026-09-11) -- THE LEVELS SEPARATED, AND THE ANALYSIS WORK
+#  THE FIRST SET NEVER ASKED FOR. Each row below is the analysis-level
+#  counterpart the corpus names beside a design-level artifact the set
+#  already required, or the interface work it ignored entirely.
+#################################################################
+backlog:Ob2_DomainModel a backlog:StageObligation ;
+    backlog:inObligationSet backlog:OS_SDLC_v2 ;
+    backlog:obligationOfTaskType backlog:Task_SystemAnalysis ;
+    backlog:owesClass backlog:ModelArtifact ; backlog:owesKind backlog:Kind_ClassDiagram ;
+    backlog:owesLevel backlog:Level_Analysis ; backlog:obligationSeverity backlog:Oblig_Required ;
+    backlog:obligationRationale "The corpus names Domain Model Class Diagram and Design Class Diagram as different artifacts. The domain model states the classes as the business names them, before any solution; without this obligation the design class diagram satisfied both and the domain was never analysed on its own terms." .
+backlog:Ob2_SystemSequence a backlog:StageObligation ;
+    backlog:inObligationSet backlog:OS_SDLC_v2 ;
+    backlog:obligationOfTaskType backlog:Task_RequirementsDefinition ;
+    backlog:owesClass backlog:ModelArtifact ; backlog:owesKind backlog:Kind_SequenceDiagram ;
+    backlog:owesLevel backlog:Level_Analysis ; backlog:obligationSeverity backlog:Oblig_Required ;
+    backlog:obligationRationale "System Sequence Diagram in the corpus: the actor and the system as a black box, which is what a requirement describes. Distinct from the design-level sequence diagram, where objects exchange messages inside the system." .
+backlog:Ob2_EventTable a backlog:StageObligation ;
+    backlog:inObligationSet backlog:OS_SDLC_v2 ;
+    backlog:obligationOfTaskType backlog:Task_SystemAnalysis ;
+    backlog:owesClass backlog:Evidence ; backlog:obligationSeverity backlog:Oblig_Advisory ;
+    backlog:obligationRationale "Event Table in the corpus: the business events the system must respond to, listed before any state machine is drawn. Advisory because a system with one trigger can say so in its specification, and a table demanded for its own sake is decoration (G7)." .
+backlog:Ob2_SpecBrief a backlog:StageObligation ;
+    backlog:inObligationSet backlog:OS_SDLC_v2 ;
+    backlog:obligationOfTaskType backlog:Task_StakeholderNeeds ;
+    backlog:owesClass backlog:Specification ; backlog:owesDepth backlog:Depth_Brief ;
+    backlog:obligationSeverity backlog:Oblig_Required ;
+    backlog:obligationRationale "Brief Use Case Description in the corpus: a few sentences, enough to size and prioritise, appropriate while the set of use cases is still moving." .
+backlog:Ob2_SpecFullyDeveloped a backlog:StageObligation ;
+    backlog:inObligationSet backlog:OS_SDLC_v2 ;
+    backlog:obligationOfTaskType backlog:Task_Implementation ;
+    backlog:owesClass backlog:Specification ; backlog:owesDepth backlog:Depth_FullyDeveloped ;
+    backlog:obligationSeverity backlog:Oblig_Required ;
+    backlog:obligationRationale "Fully Developed Use Case Description in the corpus: preconditions, trigger, numbered main flow with actors, alternative and exception flows, postconditions. It is what someone builds from, so implementation is where it is owed -- and why a brief must not discharge it." .
+backlog:Ob2_DataModelAnalysis a backlog:StageObligation ;
+    backlog:inObligationSet backlog:OS_SDLC_v2 ;
+    backlog:obligationOfTaskType backlog:Task_SystemAnalysis ;
+    backlog:owesClass backlog:DomainEntity ; backlog:obligationSeverity backlog:Oblig_Required ;
+    backlog:obligationRationale "Entity-Relationship Diagram in the corpus sits at analysis, against Relational Table and Database Schema at design. The register's own DomainEntity individuals are the governed index into the analysis-level data model." .
+backlog:Ob2_ConcernUI a backlog:StageObligation ;
+    backlog:inObligationSet backlog:OS_SDLC_v2 ;
+    backlog:obligationOfConcern backlog:Concern_Interface_UI ;
+    backlog:owesClass backlog:ModelArtifact ; backlog:owesLevel backlog:Level_Design ;
+    backlog:obligationSeverity backlog:Oblig_Required ;
+    backlog:obligationRationale "The corpus treats interface design as first-class -- UI Storyboard, UI Mockup, UI Prototype, UI Design Model, User Interface Dialog -- and the five existing concerns cover none of it. Declaring that the interface was designed and producing nothing that shows the screens and their flow is the empty claim this obligation guards." .

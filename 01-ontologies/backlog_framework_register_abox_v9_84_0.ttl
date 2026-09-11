@@ -2665,7 +2665,7 @@ fw:L_SDLCObligations a backlog:Lineage ; rdfs:label "Lineage 9"@en ;
     backlog:lineageForMission fw:Mission_SDLCObligations ;
     backlog:lineageOrdinal 14 ;
     backlog:lineageArchived false ;
-    backlog:hasLineageStatus backlog:LS_Backlogged .   # moved in place at each stage (L-112); the chain of stage outputs is the history
+    backlog:hasLineageStatus backlog:LS_InProgress .   # moved in place (L-112); earned 2026-09-11 when SDLC-T01-A started, not claimed from activity
 fw:Mission_SDLCObligations a backlog:Mission ;
     backlog:producedByStage fw:Out_Mission_SDLC ;
     backlog:hasMissionStatement "The lineage is connected to the software development life cycle as its mandatory facilities: each stage of the Mission-Scope-Goal-Objective-Backlog chain declares the engineering artifacts it owes -- domain entities and blueprint at Scope, use cases with main and alternative scenarios at Goal, activity and sequence diagrams at Objective, the domain-class model and blueprint gaps at Backlog, and the ISO 12207 task types' artifacts at execution -- and no stage output closes, no refinement counts, and no item reaches Done without the owed artifacts existing, witnessed by git before the output that claims them. Enforced by shapes and the order check, proven on fixtures, and run first on this lineage itself." ;
@@ -3078,7 +3078,7 @@ fw:S_SDLC_FirstAdopter a backlog:Story ; backlog:hasIdentifier "SDLC-S01" ;
     backlog:asRole "a session running a lineage under this framework" ;
     backlog:wantsCapability "open a lineage under OS_SDLC_v1 and carry it to a closed Backlog stage" ;
     backlog:soThat "the SDLC obligations are enforced on real work rather than declared in a vocabulary" ;
-    backlog:hasState backlog:Ready ;   # moved 2026-09-10 by PE_SDLC_S01 (pointer, L-112)
+    backlog:hasState backlog:InProgress ;   # moved 2026-09-10 to Ready by PE_SDLC_S01, to InProgress 2026-09-11 at kick-off (pointer, L-112)
     backlog:memberOfContainer fw:Register ;
     backlog:belongsToLineage fw:L_SDLCObligations ;
     backlog:pursuesObjective fw:Obj_SDLC_Adopted ;
@@ -3347,7 +3347,7 @@ fw:ArchiveConformance_120 a backlog:ArchiveConformanceRecord ;
 #################################################################
 fw:It_SDLC_1 a backlog:Iteration ;
     backlog:hasIdentifier "SDLC-IT-1" ; backlog:hasTitle "First adopting lineage"@en ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:InProgress ;   # kicked off 2026-09-11 (KO_SDLC_It1)
     backlog:iterationStart "2026-09-10T13:00:00Z"^^xsd:dateTime ;
     backlog:iterationEnd "2026-09-24T13:00:00Z"^^xsd:dateTime ;
     backlog:hasCapacity 8.0 ;
@@ -3393,7 +3393,7 @@ fw:Scen_SDLC_S01_Rejection a backlog:TestScenario ;
 #  THE TASKS the planning produced, one per ISO 12207 type the work needs.
 fw:T_SDLC_S01_Analysis a backlog:ExecutionTask ; backlog:hasTaskType backlog:Task_StakeholderNeeds ;
     backlog:hasIdentifier "SDLC-T01-A" ; backlog:hasTitle "State the adopting lineage's mission and its obligation set"@en ;
-    backlog:hasState backlog:Proposed ; backlog:memberOfContainer fw:Register , fw:It_SDLC_1 ;
+    backlog:hasState backlog:InProgress ;   # started 2026-09-11; the first work of the execution phase backlog:memberOfContainer fw:Register , fw:It_SDLC_1 ;
     backlog:belongsToLineage fw:L_SDLCObligations .
 fw:T_SDLC_S01_Implementation a backlog:ExecutionTask ; backlog:hasTaskType backlog:Task_Implementation ;
     backlog:hasIdentifier "SDLC-T01-I" ; backlog:hasTitle "Write the five stages, each producing what it owes before its output"@en ;
@@ -3602,3 +3602,29 @@ fw:Ex_SDLC_NoRetrofit rdfs:label "Out of scope: applying these obligations to wo
 fw:Register backlog:adoptsRuleSet backlog:RS_LabelConvention ;
     backlog:ruleSetAdoptedAt "2026-09-10T18:00:00Z"^^xsd:dateTime .
 fw:Register backlog:adoptsRuleSet backlog:RS_LineageStatus .
+
+#################################################################
+#  v9.85.0 (2026-09-11, brsf-session) -- EXECUTION BEGINS. Everything
+#  until now was planning: the chain closed in five witnessed commits,
+#  the backlog was written, one story was groomed into an iteration.
+#  Nothing had started, and the project's status said so.
+#
+#  This commit kicks the iteration off and starts the first task. The
+#  status moves to "work under way" because a task actually left
+#  Proposed -- the reading the register supports, not a claim made
+#  from the session's activity. The rule added on 2026-09-10 would
+#  have refused the claim before today; from today it is satisfied.
+#################################################################
+fw:KO_SDLC_It1 a backlog:KickOff ;
+    rdfs:label "Kick-off of the first two-week window: open the first project bound by the obligations"@en ;
+    backlog:kickOffFor fw:It_SDLC_1 ;
+    backlog:kickedOffAt "2026-09-11T09:00:00Z"^^xsd:dateTime ;
+    backlog:hasKickOffMode backlog:KickOff_Declared ;
+    backlog:hasKickOffTrigger "Owner instruction, 2026-09-11: the planning phase is complete and the execution phase starts. Every planned date of this window is measured from this moment, and every later slip is computed against it." ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+
+# The task that started needs the definition of done that governs it, and the story it serves moves
+# with it: an iteration's state is derived from its members, so a window holding only proposed work
+# cannot assert that work is under way.
+fw:T_SDLC_S01_Analysis backlog:appliesDefinitionOfDone fw:DoD_SDLC .

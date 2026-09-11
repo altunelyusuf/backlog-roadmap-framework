@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.98.0
+# Backlog & Roadmap Semantic Framework — Standard v1.99.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -903,6 +903,29 @@ Alongside it, an **integrity check** answers the structural question at no measu
 archive entry resolves to a lineage really present and a file that exists, no retired lineage left
 members behind in the live register, nothing live dangles into what neither file holds, and every
 archived lineage has its mission.
+
+### 2.5c-xxi-k Analysis level, design level, and specification depth
+
+The same notation carries different meaning at different points in the work, and a register that does
+not say which one it holds lets a single drawing discharge two obligations. A **`ModelLevel`** on every
+model artifact states whether it describes the problem as the world presents it (**analysis**) or the
+solution as it will be built (**design**); `owesLevel` on an obligation names the level it requires.
+The pairs come from the discipline's own source material: a domain model class diagram is not a design
+class diagram, a system sequence diagram — actor and system as a black box — is not an object sequence
+diagram, an entity-relationship view is not a relational schema, an event table is not a state machine.
+
+A **`SpecificationDepth`** distinguishes a **brief** description — a few sentences, enough to size and
+prioritise, appropriate while the set of use cases is still moving — from a **fully developed** one:
+actor, goal, preconditions, trigger, the numbered main flow with its actors, alternative and exception
+flows, postconditions. The developed form is owed where someone builds from it; a brief does not
+discharge that obligation.
+
+Obligations may bind through a **declared design concern** as well as through a stage or a task type:
+analysing for data owes a data model, for interaction the order of messages, for security what the
+system permits and refuses in each state, for the user interface the screens and their flow. Three
+rules enforce this — a finished task owes its artifact at the named level and depth, a declared concern
+owes the model recording what was analysed, and a model states the level it works at, since an
+obligation naming a level cannot be checked against an artifact that does not.
 
 ### 2.5c-xxii The staged ceremony, one commit per stage
 

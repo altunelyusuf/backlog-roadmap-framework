@@ -8849,3 +8849,42 @@ The same idiom had destroyed a mission snippet earlier in the week. Restored los
 `406d770` and re-applied read-first; no published release was affected. The idiom is retired: read
 into a variable, then write.
 
+## v1.254.0 — 2026-09-11 (MAJOR: the SDLC corpus enforced properly — every process, both levels, and specification depth)
+
+The first obligation set was built from the owner's *illustration* of the problem — "use cases, main
+and alternative scenarios, activity diagrams, sequence diagrams, domain classes" — and treated that
+sentence as the specification. Measured against the corpus it was meant to enforce: **3 of 14** ISO/IEC
+12207 processes owed anything, **4 of 14** model kinds were ever required, and **0 of 5** design
+concerns obliged anything, although the corpus already linked each concern to the processes it implies
+and nothing had ever read that link.
+
+**Obligation set 2 (`OS_SDLC_v2`), 40 obligations, derived not chosen.** Each names the artifact that
+the process's *own definition in this TBox* says it produces, with the definition quoted in the
+rationale so the derivation can be checked: mission analysis owes a stated problem; stakeholder needs
+owes requirements in checkable form; integration owes evidence from an actual assembly, because "a set
+of correct parts that do not compose" is the failure its definition names; validation owes a walked
+scenario, being "the other half of testing, and the one skipped"; disposal owes the record of what it
+leaves behind. All **14 of 14** processes, all **6 of 6** concerns.
+
+**Analysis level and design level separated**, cross-checked against the owner's teaching corpus
+(COM4061 chapters 1–8, 19 files, 560 classes), which pairs the same notation at two levels and names
+both: *Domain Model Class Diagram* against *Design Class Diagram*, *System Sequence Diagram* against
+*Sequence Diagram*, *Entity-Relationship Diagram* against *Relational Table*, *Event Table* against
+*State Machine Diagram*. Before this, one design drawing discharged the obligation to analyse.
+`ModelLevel` on the artifact and `owesLevel` on the obligation make the same notation requirable
+twice and satisfiable only by two different artifacts — 16 obligations now name a level.
+
+**Specification depth**: *brief* — a few sentences, enough to size and prioritise — is owed when
+stakeholder needs become stated requirements; *fully developed* — preconditions, trigger, numbered
+main flow with actors, alternative and exception flows, postconditions — is owed at implementation,
+because it is what someone builds from. A brief no longer discharges the obligation that wanted the
+developed text.
+
+**User interface as a sixth concern**, with the corpus's own progression (storyboard, mockup,
+prototype, design model, dialogue), which the five existing concerns covered not at all.
+
+Enforced by three rules — a finished task owes its artifact at the named level and depth; a declared
+concern owes the model recording what was analysed; a model states the level it works at — proven in
+both directions by the obligation fixtures. Registers and lineages that never adopted set 2 are
+untouched (`G91`).
+

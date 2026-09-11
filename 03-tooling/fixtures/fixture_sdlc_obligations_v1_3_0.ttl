@@ -266,3 +266,21 @@ ex:Out_Scope backlog:belongsToLineage ex:Lin_PL .
 ex:Out_Goal backlog:belongsToLineage ex:Lin_PL .
 ex:Out_Objective backlog:belongsToLineage ex:Lin_PL .
 ex:Out_Backlog backlog:belongsToLineage ex:Lin_PL .
+
+# v(next) 2026-09-11 -- the positive side of level, depth and concern. This lineage adopts obligation
+# set 2 at its opening and carries BOTH levels of the paired notations, the fully developed
+# specification, and the design-level model its declared concern owes. Every new rule stays silent.
+ex:Lin_PL backlog:adoptsObligationSet backlog:OS_SDLC_v2 ; backlog:adoptionRecordedAtOpen true .
+ex:MA_PL_Cls backlog:hasModelLevel backlog:Level_Analysis .
+ex:MA_PL_Act backlog:hasModelLevel backlog:Level_Analysis .
+ex:MA_PL_Seq backlog:hasModelLevel backlog:Level_Analysis .
+ex:MA_PL_DesignCls a backlog:ModelArtifact ; rdfs:label "design class model"@en ;
+    backlog:hasModelKind backlog:Kind_ClassDiagram ; backlog:hasModelLevel backlog:Level_Design ;
+    backlog:describesItem ex:S_PL ; backlog:belongsToLineage ex:Lin_PL .
+ex:MA_PL_DesignSeq a backlog:ModelArtifact ; rdfs:label "object sequence model"@en ;
+    backlog:hasModelKind backlog:Kind_SequenceDiagram ; backlog:hasModelLevel backlog:Level_Design ;
+    backlog:describesItem ex:S_PL ; backlog:belongsToLineage ex:Lin_PL .
+ex:MA_PL_Comp a backlog:ModelArtifact ; rdfs:label "component view"@en ;
+    backlog:hasModelKind backlog:Kind_ComponentDiagram ; backlog:hasModelLevel backlog:Level_Design ;
+    backlog:describesItem ex:S_PL ; backlog:belongsToLineage ex:Lin_PL .
+ex:Spec_PL backlog:hasSpecificationDepth backlog:Depth_FullyDeveloped .

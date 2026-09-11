@@ -9,8 +9,8 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.118.0> ;
-    owl:versionInfo "1.118.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.119.0> ;
+    owl:versionInfo "1.119.0" ;
     owl:priorVersion <http://example.org/backlog-shapes/1.117.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.116.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.115.0> ;
@@ -5917,6 +5917,9 @@ backlog:StageObligationShape a sh:NodeShape ;
         sh:select """SELECT $this WHERE {
             FILTER NOT EXISTS { $this backlog:obligationOfStage ?s }
             FILTER NOT EXISTS { $this backlog:obligationOfTaskType ?t }
+            # v1.119.0: an obligation may also bind through a DECLARED DESIGN CONCERN -- the corpus
+            # already linked each concern to the work it implies, and obligation set 2 uses that link
+            FILTER NOT EXISTS { $this backlog:obligationOfConcern ?c }
         }""" ] ;
     sh:property [ sh:path backlog:owesClass ; sh:minCount 1 ; sh:maxCount 1 ;
                   sh:message "An obligation names the class of thing owed." ] ;
@@ -6272,4 +6275,68 @@ backlog:IntentElementLabelShape a sh:NodeShape ;
             ?reg backlog:adoptsRuleSet backlog:RS_LabelConvention .
             FILTER NOT EXISTS { $this rdfs:label ?l }
             FILTER NOT EXISTS { $this backlog:hasTitle ?t }
+        }""" ] .
+
+#################################################################
+#  v1.119.0 (2026-09-11) -- LEVEL, DEPTH AND CONCERN ENFORCED. An
+#  obligation that names an analysis-level artifact is not satisfied
+#  by a design-level one, a brief does not discharge an obligation
+#  that wanted the fully developed text, and a declared design concern
+#  owes the model that records what was analysed.
+#################################################################
+backlog:TaskTypeObligationLevelShape a sh:NodeShape ;
+    sh:targetClass backlog:ExecutionTask ;
+    sh:severity sh:Violation ;
+    rdfs:label "A finished task owes its artifact at the level and depth the obligation names (L1)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_sdlc_obligations_negative" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this task is finished and its process owes a model at a particular level that its lineage does not carry. The corpus names the same notation twice -- a domain model class diagram is not a design class diagram, a system sequence diagram is not an object sequence diagram -- and one drawing cannot discharge both." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] , [ sh:prefix "rdf" ; sh:namespace "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasState backlog:Done ; backlog:hasTaskType ?tt ; backlog:belongsToLineage ?l .
+            ?ob a backlog:StageObligation ; backlog:obligationOfTaskType ?tt ; backlog:owesClass ?cls ;
+                backlog:obligationSeverity backlog:Oblig_Required ; backlog:inObligationSet ?set .
+            ?l backlog:adoptsObligationSet ?set .
+            FILTER NOT EXISTS { $this backlog:preLineageItem true }
+            FILTER NOT EXISTS {
+                ?a rdf:type ?cls ; backlog:belongsToLineage ?l .
+                FILTER NOT EXISTS { ?ob backlog:owesKind ?k . FILTER NOT EXISTS { ?a backlog:hasModelKind ?k } }
+                FILTER NOT EXISTS { ?ob backlog:owesLevel ?lv . FILTER NOT EXISTS { ?a backlog:hasModelLevel ?lv } }
+                FILTER NOT EXISTS { ?ob backlog:owesDepth ?dp . FILTER NOT EXISTS { ?a backlog:hasSpecificationDepth ?dp } }
+            }
+        }""" ] .
+
+backlog:ConcernObligationShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItem ;
+    sh:severity sh:Violation ;
+    rdfs:label "A declared design concern owes the model that records what was analysed (L1)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_sdlc_obligations_negative" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this item declares a design concern whose obligation its lineage does not satisfy. The corpus already linked each concern to the work it implies and nothing used the link: analysing for data with no data model, for interaction with no message order, for security with nothing showing what the system permits and refuses, is an analysis nobody can read." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] , [ sh:prefix "rdf" ; sh:namespace "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasApplicableConcern ?c ; backlog:belongsToLineage ?l ; backlog:hasState ?st .
+            FILTER (?st NOT IN (backlog:Proposed, backlog:Cancelled))
+            ?ob a backlog:StageObligation ; backlog:obligationOfConcern ?c ; backlog:owesClass ?cls ;
+                backlog:obligationSeverity backlog:Oblig_Required ; backlog:inObligationSet ?set .
+            ?l backlog:adoptsObligationSet ?set .
+            FILTER NOT EXISTS {
+                ?a rdf:type ?cls ; backlog:belongsToLineage ?l .
+                FILTER NOT EXISTS { ?ob backlog:owesKind ?k . FILTER NOT EXISTS { ?a backlog:hasModelKind ?k } }
+                FILTER NOT EXISTS { ?ob backlog:owesLevel ?lv . FILTER NOT EXISTS { ?a backlog:hasModelLevel ?lv } }
+            }
+        }""" ] .
+
+backlog:ModelLevelStatedShape a sh:NodeShape ;
+    sh:targetClass backlog:ModelArtifact ;
+    sh:severity sh:Violation ;
+    rdfs:label "A model says which level it works at (L1)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_sdlc_obligations_negative" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this model artifact states no level, and its lineage has adopted a set whose obligations name one. An obligation that asks for an analysis-level model cannot be checked against an artifact that does not say where it stands." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] , [ sh:prefix "rdf" ; sh:namespace "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:belongsToLineage ?l . ?l backlog:adoptsObligationSet ?set .
+            ?ob a backlog:StageObligation ; backlog:inObligationSet ?set ; backlog:owesLevel ?any .
+            FILTER NOT EXISTS { $this backlog:hasModelLevel ?lv }
         }""" ] .

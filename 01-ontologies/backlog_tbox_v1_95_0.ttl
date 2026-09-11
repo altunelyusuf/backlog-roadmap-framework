@@ -7120,3 +7120,68 @@ backlog:RS_LabelConvention a owl:NamedIndividual , backlog:RuleSet ;
 backlog:RS_LineageStatus a owl:NamedIndividual , backlog:RuleSet ;
     rdfs:label "A lineage states where it stands"@en ;
     skos:definition "Every lineage carries exactly one status, the status matches the stage outputs the register actually holds, a claim that work is under way requires work that has started, and a live lineage may not reuse a retired lineage's name. A RuleSet because it binds every lineage a register carries: a register adopts it, and minimal test graphs that model one narrow question -- an item tie, a scoring disagreement -- are not obliged to build a whole pipeline to answer it."@en .
+
+backlog:obligationOfConcern a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:StageObligation ; rdfs:range backlog:DesignConcern ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "obligation of concern"@en ;
+    skos:definition "For obligations that bind when an item DECLARES a design concern: the concern whose analysis owes this artifact. The corpus already linked each concern to the task types it implies (coversTaskType) and nothing used the link; this is what makes analysing for a concern oblige the record of what was analysed. Added 2026-09-11 with obligation set 2."@en .
+
+#################################################################
+#  v1.96.0 (2026-09-11) -- ANALYSIS LEVEL AND DESIGN LEVEL ARE NOT
+#  THE SAME DRAWING. Cross-checked against the owner's teaching
+#  corpus (COM4061 chapters 1-8, 560 classes): the corpus pairs the
+#  SAME notation at two levels and names both --
+#    Domain Model Class Diagram  vs  Design Class Diagram
+#    System Sequence Diagram     vs  Sequence Diagram
+#    Brief Use Case Description  vs  Fully Developed Use Case Description
+#    Entity-Relationship Diagram vs  Relational Table / Database Schema
+#    Event Table                 vs  State Machine Diagram
+#  and marks the phases themselves (Analysis Phase / Design Phase,
+#  Analysis Artefact / Design Artefact, Analysis Model / Design Model).
+#
+#  The first obligation set ignored the distinction, so "a class
+#  diagram" satisfied both the domain analysis and the design, and one
+#  design drawing could stand in for work that was never done. A level
+#  on the artifact makes the same notation requirable twice and
+#  satisfiable only by two different artifacts.
+#################################################################
+backlog:ModelLevel a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:Level_Analysis backlog:Level_Design ) ;
+    rdfs:label "Model Level"@en ;
+    skos:definition "Whether a model or specification describes the problem as the world presents it (analysis) or the solution as it will be built (design). The owner's teaching corpus names both for the same notation; a register that does not distinguish them lets one design drawing discharge an obligation to analyse."@en .
+backlog:Level_Analysis a owl:NamedIndividual , backlog:ModelLevel ; rdfs:label "Analysis level"@en ;
+    skos:definition "Describes the problem domain as it is, independent of any solution: domain classes as the business names them, the system seen from outside as a black box, business events, the workflow as people perform it."@en .
+backlog:Level_Design a owl:NamedIndividual , backlog:ModelLevel ; rdfs:label "Design level"@en ;
+    skos:definition "Describes the solution as it will be built: software classes with methods, objects exchanging messages inside the system, states the implementation holds, components, packages and schemas."@en .
+backlog:hasModelLevel a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:ModelArtifact ; rdfs:range backlog:ModelLevel ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "has model level"@en ;
+    skos:definition "The level this artifact works at. Required on every model artifact once obligation set 2 is adopted, because an obligation that names a level cannot be checked against an artifact that does not state one."@en .
+backlog:owesLevel a owl:ObjectProperty ;
+    rdfs:domain backlog:StageObligation ; rdfs:range backlog:ModelLevel ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "owes level"@en ;
+    skos:definition "When an obligation names a model kind, the level the artifact must work at. Absent means any level satisfies it."@en .
+
+backlog:SpecificationDepth a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:Depth_Brief backlog:Depth_FullyDeveloped ) ;
+    rdfs:label "Specification Depth"@en ;
+    skos:definition "How far a specification has been taken. The corpus names Brief Use Case Description and Fully Developed Use Case Description as different artifacts of the same use case; a register with one notion of specification lets a one-line brief discharge an obligation that wanted the developed text."@en .
+backlog:Depth_Brief a owl:NamedIndividual , backlog:SpecificationDepth ; rdfs:label "Brief"@en ;
+    skos:definition "A few sentences: who, what and why, enough to size and prioritise. Appropriate during analysis, when the set of use cases is still moving."@en .
+backlog:Depth_FullyDeveloped a owl:NamedIndividual , backlog:SpecificationDepth ; rdfs:label "Fully developed"@en ;
+    skos:definition "Actor, goal, preconditions, trigger, the numbered main flow with its actors, the alternative and exception flows, and postconditions. Appropriate before implementation, because it is what someone builds from."@en .
+backlog:hasSpecificationDepth a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:Specification ; rdfs:range backlog:SpecificationDepth ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "has specification depth"@en .
+backlog:owesDepth a owl:ObjectProperty ;
+    rdfs:domain backlog:StageObligation ; rdfs:range backlog:SpecificationDepth ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "owes depth"@en .
+
+backlog:Concern_Interface_UI a owl:NamedIndividual , backlog:DesignConcern ;
+    rdfs:label "User interface"@en ;
+    skos:definition "How a person sees and drives the system: the screens, their flow, and the dialogue between user and system. Named as a sixth concern because the corpus treats interface design as first-class -- storyboard, mockup, prototype, design model, dialogue -- and the five existing concerns cover none of it."@en ;
+    backlog:coversTaskType backlog:Task_DesignDefinition , backlog:Task_Validation .

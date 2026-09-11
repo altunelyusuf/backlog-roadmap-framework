@@ -30,3 +30,26 @@ ex:Ob_BadKind a backlog:StageObligation ; backlog:obligationOfStage backlog:Stag
     backlog:obligationRationale "a kind qualifies the class it belongs to" ; backlog:obligationSeverity backlog:Oblig_Advisory .
 ex:L_Bare backlog:adoptsObligationSet backlog:OS_SDLC_v1 .   # adopted at LS_Scoped, no adoptionRecordedAtOpen -> ObligationAdoptionShape fires, and the closure cases stay live
 <http://example.org/sdlc-obligations-neg#> backlog:hasExpectedPolarity backlog:Polarity_Negative .
+
+# v1.1.0 (2026-09-11) -- level, depth and concern.
+#  TaskTypeObligationLevelShape  T_DesignDone is a finished design task whose lineage carries a model,
+#                                but at ANALYSIS level, so the design-level obligation is unmet.
+#  ConcernObligationShape        S_Concern declares the data concern and its lineage carries no
+#                                design-level class model.
+#  ModelLevelStatedShape         MA_NoLevel states no level at all in a lineage that adopted the set.
+ex:L_Lvl a backlog:Lineage ; backlog:lineageOrdinal 10 ; backlog:lineageArchived false ;
+    rdfs:label "fixture lineage for level and concern"@en ;
+    backlog:lineageForMission ex:M_Bare ; backlog:hasLineageStatus backlog:LS_Backlogged ;
+    backlog:adoptsObligationSet backlog:OS_SDLC_v2 ; backlog:adoptionRecordedAtOpen true .
+ex:MA_Analysis a backlog:ModelArtifact ; rdfs:label "domain model, analysis level"@en ;
+    backlog:hasModelKind backlog:Kind_ClassDiagram ; backlog:hasModelLevel backlog:Level_Analysis ;
+    backlog:describesItem ex:S_Concern ; backlog:belongsToLineage ex:L_Lvl .
+ex:MA_NoLevel a backlog:ModelArtifact ; rdfs:label "a model that never says where it stands"@en ;
+    backlog:hasModelKind backlog:Kind_ComponentDiagram ;
+    backlog:describesItem ex:S_Concern ; backlog:belongsToLineage ex:L_Lvl .
+ex:T_DesignDone a backlog:ExecutionTask ; backlog:hasTaskType backlog:Task_DesignDefinition ;
+    backlog:hasIdentifier "T-DSG" ; backlog:hasTitle "design task finished with only an analysis model"@en ;
+    backlog:hasState backlog:Done ; backlog:belongsToLineage ex:L_Lvl .
+ex:S_Concern a backlog:Story ; backlog:hasIdentifier "S-CON" ; backlog:hasTitle "a story analysed for data"@en ;
+    backlog:hasState backlog:Ready ; backlog:hasApplicableConcern backlog:Concern_Data ;
+    backlog:belongsToLineage ex:L_Lvl .
