@@ -283,13 +283,24 @@ def classify(g, L, witness, prefix):
         return any((t, B.hasThrashKind, URIRef(B + kind)) in g and (t, B.repeatedBypass, b) in g
                    for t in g.subjects(B.thrashedLineage, L))
     thrash = [t for t in thrash if not recorded(t[0], t[1])]
-    # 3f. v1.2.0: late planning is a bypass of the item (owner's decision, G83)
+    # 3f. late planning is a bypass of the item (owner's decision, G83), NARROWED by
+    # CR_LatePlanningBoundary (2026-09-10, accepted with an impact assessment): the escape is
+    # planning that slips an item into a chain whose BACKLOG STAGE HAD ALREADY CLOSED, with no
+    # ScopeChange admitting it. Planning that follows a closed Backlog stage is the ceremony --
+    # the Backlog stage writes the backlog and planning is the next act -- and measuring the
+    # PlanningEvent against the item's first appearance instead of against the Backlog output's
+    # commit made every conformant lineage a bypass the moment it groomed anything.
+    bl_first = out_first.get("Stage_Backlog")
     for ln, f, pe, pf in planned_late:
         if not any(x[0] == ln for x in bypassed):
             i = next(x for x in items if local(x) == ln)
             pre = g.value(i, B.preLineageItem)
             if pre is not None and bool(pre.toPython()):
                 continue
+            if bl_first and pf[1] >= bl_first[1]:
+                continue          # planned after the Backlog stage closed: the ceremony, not an escape
+            if any(True for _ in g.subjects(B.admitsItem, i)):
+                continue          # admitted by a ScopeChange: the sanctioned way in
             bypassed.append((ln, f, f"planned-late by {pe} ({pf[0]})"))
     # 3f2. v1.2.2: postRestartItem is verified, not trusted -- the item must first appear after its restart
     for i in items:

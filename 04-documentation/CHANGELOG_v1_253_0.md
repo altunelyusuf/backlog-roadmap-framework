@@ -8830,3 +8830,22 @@ Corrected to `LS_Backlogged`, and `InProgressNeedsStartedWorkShape` now refuses 
 the single-pointer design: reading a stored pointer costs 0.005 ms against 0.402 ms to derive the same
 answer from stage outputs, and both agree.
 
+**Human labels on every intent element, and a convention proposed to the ecosystem.** The owner
+stopped a session because the discussion was being conducted in identifiers and could not be followed.
+Measured on the live register: **twelve of twenty-one intent elements carried no human label at all** —
+the mission, the scope statement, all four scope areas and four of six deliverables — so the identifier
+was the only text a reader had. All twelve now carry a one-sentence label, added under the accepted
+scope-amendment request rather than by editing a closed stage. `IntentElementLabelShape`
+(shapes v1.118.0) requires a label on every mission, scope statement, area, deliverable, exclusion,
+goal, objective and lineage from now on. A proposal went to OE for the whole ecosystem: the modelling
+half is a shape any package can adopt; the communication half — that a session answers its owner in
+those sentences and uses an identifier only where one is needed to act — is a discipline rule no shape
+can check.
+
+**A destructive mistake, recorded because it was the second of its kind.** Writing those labels, the
+session opened the register for writing and read it inside the same expression; the write truncated
+the file before the read ran, leaving 2,305 bytes of labels where a 1,500-triple register had been.
+The same idiom had destroyed a mission snippet earlier in the week. Restored losslessly from commit
+`406d770` and re-applied read-first; no published release was affected. The idiom is retired: read
+into a variable, then write.
+

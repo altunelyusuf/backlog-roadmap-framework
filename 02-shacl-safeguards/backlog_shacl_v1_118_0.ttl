@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.117.0> ;
-    owl:versionInfo "1.117.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.118.0> ;
+    owl:versionInfo "1.118.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.117.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.116.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.115.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.114.0> ;
@@ -6241,4 +6242,28 @@ backlog:InProgressNeedsStartedWorkShape a sh:NodeShape ;
                 ?i backlog:belongsToLineage $this ; backlog:hasState ?st .
                 FILTER (?st NOT IN (backlog:Proposed, backlog:Ready, backlog:Refined, backlog:Cancelled))
             }
+        }""" ] .
+
+#################################################################
+#  v1.118.0 (2026-09-10) -- EVERY ELEMENT SAYS WHAT IT IS, IN WORDS.
+#  Owner's instruction, this day: a reader cannot follow a discussion
+#  conducted in identifiers. An identifier is a handle for machines;
+#  a label is the sentence a person reads. Measured when the rule was
+#  written: of lineage 9's twenty-one intent elements, ELEVEN had no
+#  label at all -- the mission, the scope statement, all four areas
+#  and four of six deliverables -- so they could not be spoken about
+#  except by their identifiers, which is exactly the complaint.
+#################################################################
+backlog:IntentElementLabelShape a sh:NodeShape ;
+    sh:targetClass backlog:Mission , backlog:ScopeStatement , backlog:ScopeArea , backlog:ScopeDeliverable ,
+                   backlog:ScopeExclusion , backlog:Goal , backlog:Objective , backlog:Lineage ;
+    sh:severity sh:Violation ;
+    rdfs:label "Every intent element carries a human label (L1)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_lineage_status_negative" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this element has no rdfs:label and no hasTitle, so it can only be referred to by its identifier. An identifier is a handle; a label is what a person reads. Every mission, scope statement, area, deliverable, exclusion, goal, objective and lineage states in one sentence what it is, and every report, changelog and conversation uses that sentence rather than the identifier." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] , [ sh:prefix "rdfs" ; sh:namespace "http://www.w3.org/2000/01/rdf-schema#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            FILTER NOT EXISTS { $this rdfs:label ?l }
+            FILTER NOT EXISTS { $this backlog:hasTitle ?t }
         }""" ] .

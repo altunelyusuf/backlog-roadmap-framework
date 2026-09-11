@@ -14,8 +14,8 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.83.0> ;
-    owl:versionInfo "9.83.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.84.0> ;
+    owl:versionInfo "9.84.0" ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.76.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.75.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.74.0> ;
@@ -3571,3 +3571,28 @@ fw:IA_SDLCScopeAmend a backlog:ImpactAssessment ;
     backlog:hasImpactStatement "Measured on register v9.82.0 before disposition. Affected: one lineage, its own, in status LS_Backlogged with no work started -- so no in-flight item changes meaning. Scope grows by two deliverables, from four to six, both in areas the scope already covers; no area is added and none is removed, so the boundary is the same ground. Two objectives are superseded, not deleted: they restated exclusions the scope already carries and had zero metricMovableBy, so nothing depended on them; their goal, Goal_SDLC_NoOutOfScope, is now measured by Obj_SDLC_ScopeMatch, which every story can move. Two stories are admitted, both Proposed, so no iteration commitment changes. The Scope stage output stays closed and is not edited: this is the amendment ceremony, and the digest it was closed on remains reproducible." ;
     backlog:decidedBy backlog:Owner ;
     backlog:belongsToLineage fw:L_SDLCObligations .
+
+
+#################################################################
+#  v9.84.0 (2026-09-10, brsf-session) -- HUMAN LABELS ON THE INTENT
+#  ELEMENTS THAT HAD NONE. Owner's finding: a discussion conducted in
+#  identifiers cannot be followed, and therefore cannot be judged.
+#  Measured: twelve of this lineage's intent elements carried no
+#  label at all, so the only text a reader had was the identifier.
+#  Added here under CR_SDLCScopeAmend, which is accepted and covers
+#  clarification of the boundary this lineage drew; no element's
+#  meaning changes, and no closed stage output is edited.
+#  Enforced from now on by IntentElementLabelShape (shapes v1.118.0).
+#################################################################
+fw:Mission_SDLCObligations rdfs:label "Connect every planning step to the engineering work it exists for, and refuse to close a step whose artifacts do not exist"@en .
+fw:Scope_SDLCObligations rdfs:label "What this lineage will build: the words for an obligation, the rules that enforce it, the measurement that witnesses it, and the tests that prove it"@en .
+fw:Area_SDLC_Vocabulary rdfs:label "The words: how a planning step says which artifacts it owes"@en .
+fw:Area_SDLC_Shapes rdfs:label "The rules that refuse a step, a grooming session or a finished item when the owed artifact is missing"@en .
+fw:Area_SDLC_Witness rdfs:label "The measurement that an owed artifact was written before the step that claims it, not after"@en .
+fw:Area_SDLC_Fixtures rdfs:label "The test graphs that prove each rule fires when it should and stays silent when it should not"@en .
+fw:Del_StageObligations rdfs:label "Each planning step can declare, in the register, which artifacts it owes"@en .
+fw:Del_WitnessedClosure rdfs:label "A planning step cannot close while an artifact it owes is missing"@en .
+fw:Del_RefinementProduces rdfs:label "Grooming records what it produced, so a session that produced nothing is visible"@en .
+fw:Del_DoDArtifacts rdfs:label "An item cannot be called done while the artifacts its task type owes are missing"@en .
+fw:Ex_SDLC_NoNewKinds rdfs:label "Out of scope: inventing artifact vocabulary that another package already owns"@en .
+fw:Ex_SDLC_NoRetrofit rdfs:label "Out of scope: applying these obligations to work that closed before they existed"@en .
