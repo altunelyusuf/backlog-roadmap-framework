@@ -8888,3 +8888,35 @@ concern owes the model recording what was analysed; a model states the level it 
 both directions by the obligation fixtures. Registers and lineages that never adopted set 2 are
 untouched (`G91`).
 
+## v1.255.0 — 2026-09-11 (MINOR: the test drive closed, its outcome measured, and three rule messages corrected)
+
+**The drive.** A complete project — a library loan desk — was carried from mission to a shipped
+release under the obligations: five planning stages each producing its work before closing, fourteen
+engineering processes each producing what its own definition demands, eight models with the analysis
+and design levels kept distinct. First run: **113 refusals**. Final run: **0, with no rule changed.**
+Every refusal was work the modeller had not done, and the pattern for doing it was already recorded in
+this package's archive, where 164 finished items satisfy the same demands. Closure record,
+planned-versus-actual and fit-gap in `05-test-drives/`.
+
+**The inheritance question, settled by measurement rather than design.** Three variants were built and
+run: each task carrying its own completion facts (53.5 kB, 0 refusals); the task silent and a rule
+looking upward (49.5 kB, 42); the task declaring it is part of the story through the relation the
+framework already has (51.0 kB, 42, and all fourteen tasks resolving through the declared link).
+Only **three of the six** demands refused the tasks — the other three were already inherited. Two
+further tests established from whom: removing the planning event changed nothing; removing the
+**story's** own harness and audit date made the rule fire on all fifteen items. So the framework
+already bears each fact where it belongs — the audit date, the harness and the release anchor with the
+whole; the start point and the evidence with the work that produced it — which is exactly the split
+derived from what each fact is *about*. The vocabulary drafted for this (`CompletionFactBearer`,
+`inheritsCompletionFrom`) was **withdrawn before shipping**: it would have added a second mechanism for
+something already done correctly.
+
+**What was actually wrong: three messages.** They said an execution task "may inherit this from a
+compliant PlanningEvent-linked parent", describing the link rather than the bearer. Corrected to say
+what the rules read, with the measurement that established it.
+
+**Register v9.85.0**: the drive's outcome recorded against the measures it moved — obligations never
+seen to refuse anything falls from 13 to 0, the both-ways proof holds at 0 — and the first task of the
+lineage finished with its evidence and harness. The measure counting adopting projects **stays at
+zero**: a toy adopting the obligations proves the machine works; it does not prove anyone uses it.
+

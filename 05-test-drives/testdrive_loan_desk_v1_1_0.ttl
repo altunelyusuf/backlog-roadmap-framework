@@ -1,0 +1,610 @@
+@prefix backlog: <http://example.org/backlog#> .
+@prefix core:    <http://example.org/core#> .
+@prefix ex:      <http://example.org/loan-desk#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+<http://example.org/loan-desk> a owl:Ontology ;
+    owl:versionIRI <http://example.org/loan-desk/1.0.0> ;
+    owl:versionInfo "1.0.0" ;
+    rdfs:label "Loan desk — a toy register run end to end under obligation set 2"@en ;
+    rdfs:comment "A test drive, not a product. The subject is a library book-loan desk, chosen small enough to model honestly and real enough to have every kind of work product the obligations demand. The register adopts OS_SDLC_v2 at the moment its lineage opens, carries all five planning stages, and takes one item through every ISO/IEC 12207 process to Done. Its purpose is to show whether the obligations are COMPLETE (a conformant project can satisfy them) and CORRECT (they refuse what should be refused), and to produce the closure documentation, the planned-versus-actual history and the fit-gap analysis the owner asked for."@en .
+
+##### the container #####
+ex:Reg a backlog:Backlog ; rdfs:label "Loan desk register"@en ; backlog:isRegisterRoot true ;
+    backlog:hasIdentifier "LOAN-REG" ; backlog:hasTitle "Loan desk register"@en ;
+    backlog:hasSovereignPathPrefix "loan-desk/" ;
+    backlog:adoptsRuleSet backlog:RS_LabelConvention , backlog:RS_LineageStatus ;
+    backlog:ruleSetAdoptedAt "2026-09-11T08:00:00Z"^^xsd:dateTime ;
+    backlog:appliesDefinitionOfDone ex:DoD .
+ex:DoD a backlog:DefinitionOfDone ; rdfs:label "Definition of done, loan desk"@en ;
+    backlog:hasDoneCondition "Every artifact the process owes exists and is named in the register." ;
+    backlog:hasDoneCondition "The gate passes with no violation and no waiver." .
+
+##### STAGE 1 — mission, and the lineage adopts the obligations at the moment it opens #####
+ex:Lin a backlog:Lineage ; rdfs:label "Build the loan desk"@en ;
+    backlog:lineageForMission ex:M ; backlog:lineageOrdinal 1 ; backlog:lineageArchived false ;
+    backlog:hasLineageStatus backlog:LS_InProgress ;
+    backlog:adoptsObligationSet backlog:OS_SDLC_v2 ; backlog:adoptionRecordedAtOpen true .
+ex:M a backlog:Mission ; rdfs:label "A member can borrow and return a book without a librarian keying anything twice"@en ;
+    backlog:hasMissionStatement "A member can borrow and return a book without a librarian keying anything twice, and the desk always knows which copies are out and to whom." ;
+    backlog:missionFor ex:Reg ; backlog:hasMissionOrigin backlog:Origin_OwnerStated ;
+    backlog:missionSource "Test drive of obligation set 2, 2026-09-11." ;
+    backlog:hasMissionOutcome backlog:Out_InFlight ; backlog:decidedBy backlog:Owner ;
+    backlog:producedByStage ex:Out_Mission .
+ex:Out_Mission a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Mission ;
+    backlog:belongsToLineage ex:Lin ; backlog:hasStateDigest "toy-1" ;
+    backlog:closedAtCommit "loan-desk-v1.0.0 (toy)" ;
+    backlog:hasRationale "Mission alone on the record; nothing downstream exists yet." .
+
+##### STAGE 2 — scope, which owes the domain things and the blueprint #####
+ex:Sc a backlog:ScopeStatement ; rdfs:label "Borrowing, returning and knowing where every copy is"@en ;
+    backlog:hasScopeStatementText "In scope: lending a copy to a member, taking it back, and the record of which copies are out. Out of scope: acquisitions, fines and inter-library loans." ;
+    backlog:scopeForMission ex:M ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage ex:Out_Scope ;
+    backlog:coversArea ex:Area_Desk ; backlog:requiresDeliverable ex:Del_Loan , ex:Del_Return ;
+    backlog:hasScopeExclusion ex:Ex_Fines ; backlog:belongsToLineage ex:Lin .
+ex:Area_Desk a backlog:ScopeArea ; rdfs:label "The lending desk itself"@en ;
+    backlog:areaLocation "loan-desk/desk" ; backlog:hasScopeLayer backlog:Layer_Product ;
+    backlog:areaMeasure "Two transactions at the desk today, both on paper: lend and take back. Counted 2026-09-11 when the scope was drawn." ;
+    backlog:belongsToLineage ex:Lin .
+ex:Del_Loan a backlog:ScopeDeliverable ; rdfs:label "A member can borrow a copy"@en ;
+    backlog:deliverableForArea ex:Area_Desk ; backlog:hasScopeLayer backlog:Layer_Product ;
+    backlog:derivesFromMissionClause "borrow and return a book" ; backlog:belongsToLineage ex:Lin .
+ex:Del_Return a backlog:ScopeDeliverable ; rdfs:label "A member can return a copy"@en ;
+    backlog:deliverableForArea ex:Area_Desk ; backlog:hasScopeLayer backlog:Layer_Product ;
+    backlog:derivesFromMissionClause "borrow and return a book" ; backlog:belongsToLineage ex:Lin .
+ex:Ex_Fines a backlog:ScopeExclusion ; rdfs:label "Out of scope: fines and acquisitions"@en ;
+    backlog:excludesConcern "Charging for late returns, and buying new stock." ;
+    backlog:hasExclusionRationale "Neither is needed for a member to borrow and return, and both bring a payment system with them." ;
+    backlog:decidedBy backlog:Owner ; backlog:hasScopeLayer backlog:Layer_Work ; backlog:belongsToLineage ex:Lin .
+# what the scope stage owes
+ex:Blueprint a backlog:Blueprint ; rdfs:label "Blueprint of the loan desk domain"@en ;
+    backlog:blueprintFor ex:Reg ; backlog:hasDomainEntity ex:E_Copy , ex:E_Loan , ex:E_Member ;
+    backlog:belongsToLineage ex:Lin .
+ex:E_Copy a backlog:DomainEntity ; rdfs:label "Copy — one physical book on the shelf"@en ; backlog:belongsToLineage ex:Lin .
+ex:E_Loan a backlog:DomainEntity ; rdfs:label "Loan — one copy in one member's hands, with a due date"@en ; backlog:belongsToLineage ex:Lin .
+ex:E_Member a backlog:DomainEntity ; rdfs:label "Member — someone entitled to borrow"@en ; backlog:belongsToLineage ex:Lin .
+ex:Out_Scope a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Scope ;
+    backlog:belongsToLineage ex:Lin ; backlog:consumesOutput ex:Out_Mission ;
+    backlog:hasStateDigest "toy-2" ; backlog:closedAtCommit "loan-desk-v1.1.0 (toy)" ;
+    backlog:hasRationale "Scope closed WITH the three domain things and the blueprint it owes, produced before this output." .
+
+##### STAGE 3 — goals, which owe a specification and the nominal and rejection scenarios #####
+ex:G_Serve a backlog:Goal ; rdfs:label "A loan takes one pass at the desk, not two"@en ;
+    backlog:contributesToMission ex:M ; backlog:derivesFromScope ex:Sc ;
+    backlog:hasGoalFacing backlog:Facing_Mission ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:decidedBy backlog:Owner ; backlog:belongsToLineage ex:Lin .
+ex:G_Cover a backlog:Goal ; rdfs:label "Both desk transactions are served, and the record is always current"@en ;
+    backlog:contributesToMission ex:M ; backlog:derivesFromScope ex:Sc ;
+    backlog:hasGoalFacing backlog:Facing_Scope ; backlog:goalCoversArea ex:Area_Desk ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ; backlog:decidedBy backlog:Owner ; backlog:belongsToLineage ex:Lin .
+ex:G_Bound a backlog:Goal ; rdfs:label "No money changes hands in this system"@en ;
+    backlog:contributesToMission ex:M ; backlog:derivesFromScope ex:Sc ;
+    backlog:hasGoalFacing backlog:Facing_Containment ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:decidedBy backlog:Owner ; backlog:belongsToLineage ex:Lin .
+ex:Spec_Loan a backlog:Specification ; rdfs:label "Use case: borrow a copy"@en ;
+    backlog:hasSpecificationDepth backlog:Depth_FullyDeveloped ;
+    backlog:describesItem ex:S_Loan ; backlog:belongsToLineage ex:Lin ;
+    backlog:hasInteractionStep ex:St1 , ex:St2 , ex:St3 , ex:St4 .
+ex:St1 a backlog:InteractionStep ; backlog:hasStepOrdinal 1 ; backlog:hasStepActor backlog:Owner ;
+    backlog:hasStepAction "The member presents a copy and their card at the desk." .
+ex:St2 a backlog:InteractionStep ; backlog:hasStepOrdinal 2 ; backlog:hasStepActor backlog:Builder ;
+    backlog:hasStepAction "The system checks the member may borrow and the copy is on the shelf." .
+ex:St3 a backlog:InteractionStep ; backlog:hasStepOrdinal 3 ; backlog:hasStepActor backlog:Builder ;
+    backlog:hasStepAction "The system records the loan with a due date and marks the copy out." .
+ex:St4 a backlog:InteractionStep ; backlog:hasStepOrdinal 4 ; backlog:hasStepActor backlog:Owner ;
+    backlog:hasStepAction "The member leaves with the copy; the desk needs no second entry." .
+ex:AC_Loan a backlog:AcceptanceCriterion ; rdfs:label "A loan is recorded in one pass"@en ;
+    backlog:hasGherkinText "Given a member in good standing and a copy on the shelf, when the desk records the loan, then the copy is marked out to that member with a due date, and no second entry is required." ;
+    backlog:belongsToLineage ex:Lin .
+ex:AC_Refuse a backlog:AcceptanceCriterion ; rdfs:label "A copy already out cannot be lent again"@en ;
+    backlog:hasGherkinText "Given a copy already out to another member, when the desk tries to lend it, then the system refuses and says who holds it." ;
+    backlog:belongsToLineage ex:Lin .
+ex:Scen_Nom a backlog:TestScenario ; rdfs:label "The ordinary loan"@en ;
+    backlog:scenarioOf ex:AC_Loan ; backlog:scenarioKind backlog:Scen_Nominal ; backlog:belongsToLineage ex:Lin .
+ex:Scen_Rej a backlog:TestScenario ; rdfs:label "The copy is already out"@en ;
+    backlog:scenarioOf ex:AC_Refuse ; backlog:scenarioKind backlog:Scen_Rejection ; backlog:belongsToLineage ex:Lin .
+ex:Out_Goal a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Goal ;
+    backlog:belongsToLineage ex:Lin ; backlog:consumesOutput ex:Out_Scope ;
+    backlog:hasStateDigest "toy-3" ; backlog:closedAtCommit "loan-desk-v1.2.0 (toy)" ;
+    backlog:hasRationale "Goals closed WITH the use case and both scenarios: the ordinary loan and the refusal." .
+
+##### STAGE 4 — objectives, which owe the analysis-level activity and sequence models #####
+ex:Metric_Passes a core:Metric ; rdfs:label "Keystroke passes needed to record one loan"@en .
+ex:Metric_Unknown a core:Metric ; rdfs:label "Copies whose whereabouts the desk cannot state"@en .
+ex:Obj_OnePass a backlog:Objective ; rdfs:label "One pass to record a loan, down from two"@en ;
+    backlog:contributesToGoal ex:G_Serve ; backlog:fillsScope ex:Sc ; backlog:hasSuccessMetric ex:Metric_Passes ;
+    backlog:hasMeasurementKind backlog:Meas_Counted ; backlog:hasBaselineValue "2"^^xsd:decimal ;
+    backlog:hasTargetValue "1"^^xsd:decimal ; backlog:hasTargetDirection backlog:Dir_Decrease ;
+    backlog:hasCheckpoint ex:CP1 ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:metricMovableBy ex:S_Loan ; backlog:belongsToLineage ex:Lin ;
+    backlog:hasRationale "Counted at the desk on 2026-09-11 before any work: two passes, the ledger and the card index." .
+ex:Obj_Known a backlog:Objective ; rdfs:label "Every copy's whereabouts known, from twelve unknown"@en ;
+    backlog:contributesToGoal ex:G_Cover ; backlog:fillsScope ex:Sc ; backlog:hasSuccessMetric ex:Metric_Unknown ;
+    backlog:hasMeasurementKind backlog:Meas_Counted ; backlog:hasBaselineValue "12"^^xsd:decimal ;
+    backlog:hasTargetValue "0"^^xsd:decimal ; backlog:hasTargetDirection backlog:Dir_Decrease ;
+    backlog:hasCheckpoint ex:CP2 ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:metricMovableBy ex:S_Loan , ex:S_Return ; backlog:belongsToLineage ex:Lin ;
+    backlog:hasRationale "Counted on the shelves on 2026-09-11: twelve copies the ledger could not account for." .
+ex:Obj_Bound a backlog:Objective ; rdfs:label "Deliverables planned but not yet delivered"@en ;
+    backlog:contributesToGoal ex:G_Bound ; backlog:fillsScope ex:Sc ; backlog:hasSuccessMetric ex:Metric_Unknown ;
+    backlog:hasMeasurementKind backlog:Meas_Counted ; backlog:hasBaselineValue "2"^^xsd:decimal ;
+    backlog:hasTargetValue "0"^^xsd:decimal ; backlog:hasTargetDirection backlog:Dir_Decrease ;
+    backlog:hasCheckpoint ex:CP3 ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:metricMovableBy ex:S_Loan , ex:S_Return ; backlog:belongsToLineage ex:Lin ;
+    backlog:hasRationale "Two deliverables in scope, none delivered when the objectives were set." .
+ex:CP1 a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-10-01T00:00:00Z"^^xsd:dateTime .
+ex:CP2 a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-10-01T00:00:00Z"^^xsd:dateTime .
+ex:CP3 a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-10-01T00:00:00Z"^^xsd:dateTime .
+ex:Obs1 a backlog:MetricObservation ; backlog:observesMetric ex:Metric_Passes ; backlog:observationFor ex:Obj_OnePass ;
+    backlog:hasObservedValue 2.0 ; backlog:observedAt "2026-09-11T09:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Watched four loans at the desk and counted the passes." ; backlog:belongsToLineage ex:Lin .
+ex:Obs2 a backlog:MetricObservation ; backlog:observesMetric ex:Metric_Unknown ; backlog:observationFor ex:Obj_Known ;
+    backlog:hasObservedValue 12.0 ; backlog:observedAt "2026-09-11T09:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Shelf audit against the ledger." ; backlog:belongsToLineage ex:Lin .
+ex:Obs3 a backlog:MetricObservation ; backlog:observesMetric ex:Metric_Unknown ; backlog:observationFor ex:Obj_Bound ;
+    backlog:hasObservedValue 2.0 ; backlog:observedAt "2026-09-11T09:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Counted the scope's deliverables with no finished item." ; backlog:belongsToLineage ex:Lin .
+ex:MA_Act a backlog:ModelArtifact ; rdfs:label "How a loan happens at the desk today"@en ;
+    backlog:hasModelKind backlog:Kind_ActivityDiagram ; backlog:hasModelLevel backlog:Level_Analysis ;
+    backlog:describesItem ex:S_Loan ; backlog:belongsToLineage ex:Lin .
+ex:MA_SSD a backlog:ModelArtifact ; rdfs:label "Member and system at the desk, system as a black box"@en ;
+    backlog:hasModelKind backlog:Kind_SequenceDiagram ; backlog:hasModelLevel backlog:Level_Analysis ;
+    backlog:describesItem ex:S_Loan ; backlog:belongsToLineage ex:Lin .
+ex:Out_Objective a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Objective ;
+    backlog:belongsToLineage ex:Lin ; backlog:consumesOutput ex:Out_Goal ;
+    backlog:hasStateDigest "toy-4" ; backlog:closedAtCommit "loan-desk-v1.3.0 (toy)" ;
+    backlog:hasRationale "Objectives closed WITH the analysis-level activity and system-sequence models, and all three baselines measured before any work." .
+
+##### STAGE 5 — backlog, which owes the analysis-level class model and acceptance criteria #####
+ex:S_Loan a backlog:Story ; backlog:hasIdentifier "LOAN-1" ; backlog:hasTitle "Record a loan in one pass"@en ;
+    backlog:asRole "a librarian at the desk" ; backlog:wantsCapability "to record a loan in one pass" ;
+    backlog:soThat "the member is not kept waiting and the ledger cannot disagree with the card index" ;
+    backlog:hasState backlog:Done ; backlog:memberOfContainer ex:Reg , ex:It1 ;
+    backlog:belongsToLineage ex:Lin ; backlog:pursuesObjective ex:Obj_OnePass ;
+    backlog:satisfiesDeliverable ex:Del_Loan ; backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasAcceptanceCriterion ex:AC_Loan , ex:AC_Refuse ;
+    backlog:hasApplicableConcern backlog:Concern_Data , backlog:Concern_Interaction , backlog:Concern_Interface_UI ;
+    backlog:appliesDefinitionOfDone ex:DoD ; backlog:hasStoryPoints 5 ;
+    backlog:finishedAt "2026-09-11T17:00:00Z"^^xsd:dateTime .
+ex:S_Return a backlog:Story ; backlog:hasIdentifier "LOAN-2" ; backlog:hasTitle "Take a copy back"@en ;
+    backlog:asRole "a librarian at the desk" ; backlog:wantsCapability "to take a copy back in one pass" ;
+    backlog:soThat "the copy is back on the shelf in the record the moment it is back on the shelf" ;
+    backlog:hasState backlog:Proposed ; backlog:memberOfContainer ex:Reg ;
+    backlog:belongsToLineage ex:Lin ; backlog:pursuesObjective ex:Obj_Known ;
+    backlog:satisfiesDeliverable ex:Del_Return ; backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "Scored at the next planning event." ;
+    backlog:hasAcceptanceCriterion ex:AC_Return ; backlog:appliesDefinitionOfDone ex:DoD .
+ex:AC_Return a backlog:AcceptanceCriterion ; rdfs:label "A returned copy is available again at once"@en ;
+    backlog:hasGherkinText "Given a copy out on loan, when the desk takes it back, then the loan is closed and the copy is available to the next member immediately." ;
+    backlog:belongsToLineage ex:Lin .
+ex:MA_DomainCls a backlog:ModelArtifact ; rdfs:label "Domain model: member, copy, loan as the library names them"@en ;
+    backlog:hasModelKind backlog:Kind_ClassDiagram ; backlog:hasModelLevel backlog:Level_Analysis ;
+    backlog:describesItem ex:S_Loan ; backlog:belongsToLineage ex:Lin .
+ex:Out_Backlog a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Backlog ;
+    backlog:belongsToLineage ex:Lin ; backlog:consumesOutput ex:Out_Objective ;
+    backlog:hasStateDigest "toy-5" ; backlog:closedAtCommit "loan-desk-v1.4.0 (toy)" ;
+    backlog:hasRationale "Backlog closed WITH the analysis-level domain model and the acceptance criteria it owes." .
+
+##### EXECUTION — one item taken through every process the corpus names #####
+ex:It1 a backlog:Iteration ; rdfs:label "First window: the loan transaction"@en ;
+    backlog:hasIdentifier "LOAN-IT-1" ; backlog:hasTitle "First window"@en ; backlog:hasState backlog:Done ;
+    backlog:iterationStart "2026-09-11T10:00:00Z"^^xsd:dateTime ;
+    backlog:iterationEnd "2026-09-11T18:00:00Z"^^xsd:dateTime ; backlog:hasCapacity 8.0 ;
+    backlog:appliesDefinitionOfDone ex:DoD ; backlog:belongsToLineage ex:Lin .
+ex:KO a backlog:KickOff ; rdfs:label "Kick-off of the first window"@en ; backlog:kickOffFor ex:It1 ;
+    backlog:kickedOffAt "2026-09-11T10:00:00Z"^^xsd:dateTime ; backlog:hasKickOffMode backlog:KickOff_Declared ;
+    backlog:hasKickOffTrigger "Test drive of obligation set 2." ; backlog:decidedBy backlog:Owner ;
+    backlog:belongsToLineage ex:Lin .
+ex:PE a backlog:PlanningEvent ; backlog:plansItem ex:S_Loan ; backlog:refines ex:S_Loan ;
+    backlog:plannedInto ex:It1 ; backlog:plannedAt "2026-09-11T10:00:00Z"^^xsd:dateTime ;
+    backlog:plannedBy backlog:Owner ; backlog:addressesConcern backlog:Concern_Data , backlog:Concern_Interaction , backlog:Concern_Interface_UI ;
+    backlog:refinementProduces ex:Spec_Loan , ex:Scen_Nom , ex:Scen_Rej ;
+    backlog:producesTask ex:T_Mission , ex:T_Needs , ex:T_Reqs , ex:T_Arch , ex:T_Design , ex:T_Analysis ,
+        ex:T_Impl , ex:T_Integ , ex:T_Verif , ex:T_Valid , ex:T_Trans , ex:T_Oper , ex:T_Maint , ex:T_Disp ;
+    backlog:belongsToLineage ex:Lin .
+
+ex:T_Mission a backlog:ExecutionTask ; backlog:hasTaskType backlog:Task_MissionAnalysis ;
+    backlog:hasIdentifier "LOAN-T-Mission" ; backlog:hasTitle "State the problem the desk actually has"@en ;
+    backlog:hasState backlog:Done ; backlog:memberOfContainer ex:Reg , ex:It1 ;
+    backlog:belongsToLineage ex:Lin ; backlog:appliesDefinitionOfDone ex:DoD ;
+    backlog:finishedAt "2026-09-11T16:00:00Z"^^xsd:dateTime .
+ex:T_Needs a backlog:ExecutionTask ; backlog:hasTaskType backlog:Task_StakeholderNeeds ;
+    backlog:hasIdentifier "LOAN-T-Needs" ; backlog:hasTitle "Turn what the librarians said into stated requirements"@en ;
+    backlog:hasState backlog:Done ; backlog:memberOfContainer ex:Reg , ex:It1 ;
+    backlog:belongsToLineage ex:Lin ; backlog:appliesDefinitionOfDone ex:DoD ;
+    backlog:finishedAt "2026-09-11T16:00:00Z"^^xsd:dateTime .
+ex:T_Reqs a backlog:ExecutionTask ; backlog:hasTaskType backlog:Task_RequirementsDefinition ;
+    backlog:hasIdentifier "LOAN-T-Reqs" ; backlog:hasTitle "State what the system must do at the desk"@en ;
+    backlog:hasState backlog:Done ; backlog:memberOfContainer ex:Reg , ex:It1 ;
+    backlog:belongsToLineage ex:Lin ; backlog:appliesDefinitionOfDone ex:DoD ;
+    backlog:finishedAt "2026-09-11T16:00:00Z"^^xsd:dateTime .
+ex:T_Arch a backlog:ExecutionTask ; backlog:hasTaskType backlog:Task_ArchitectureDefinition ;
+    backlog:hasIdentifier "LOAN-T-Arch" ; backlog:hasTitle "Decide the components and their boundaries"@en ;
+    backlog:hasState backlog:Done ; backlog:memberOfContainer ex:Reg , ex:It1 ;
+    backlog:belongsToLineage ex:Lin ; backlog:appliesDefinitionOfDone ex:DoD ;
+    backlog:finishedAt "2026-09-11T16:00:00Z"^^xsd:dateTime .
+ex:T_Design a backlog:ExecutionTask ; backlog:hasTaskType backlog:Task_DesignDefinition ;
+    backlog:hasIdentifier "LOAN-T-Design" ; backlog:hasTitle "Design the classes, the message order and the screens"@en ;
+    backlog:hasState backlog:Done ; backlog:memberOfContainer ex:Reg , ex:It1 ;
+    backlog:belongsToLineage ex:Lin ; backlog:appliesDefinitionOfDone ex:DoD ;
+    backlog:finishedAt "2026-09-11T16:00:00Z"^^xsd:dateTime .
+ex:T_Analysis a backlog:ExecutionTask ; backlog:hasTaskType backlog:Task_SystemAnalysis ;
+    backlog:hasIdentifier "LOAN-T-Analysis" ; backlog:hasTitle "Analyse the domain and check the approach holds"@en ;
+    backlog:hasState backlog:Done ; backlog:memberOfContainer ex:Reg , ex:It1 ;
+    backlog:belongsToLineage ex:Lin ; backlog:appliesDefinitionOfDone ex:DoD ;
+    backlog:finishedAt "2026-09-11T16:00:00Z"^^xsd:dateTime .
+ex:T_Impl a backlog:ExecutionTask ; backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:hasIdentifier "LOAN-T-Impl" ; backlog:hasTitle "Build the loan transaction"@en ;
+    backlog:hasState backlog:Done ; backlog:memberOfContainer ex:Reg , ex:It1 ;
+    backlog:belongsToLineage ex:Lin ; backlog:appliesDefinitionOfDone ex:DoD ;
+    backlog:finishedAt "2026-09-11T16:00:00Z"^^xsd:dateTime .
+ex:T_Integ a backlog:ExecutionTask ; backlog:hasTaskType backlog:Task_Integration ;
+    backlog:hasIdentifier "LOAN-T-Integ" ; backlog:hasTitle "Assemble it with the catalogue and the member list"@en ;
+    backlog:hasState backlog:Done ; backlog:memberOfContainer ex:Reg , ex:It1 ;
+    backlog:belongsToLineage ex:Lin ; backlog:appliesDefinitionOfDone ex:DoD ;
+    backlog:finishedAt "2026-09-11T16:00:00Z"^^xsd:dateTime .
+ex:T_Verif a backlog:ExecutionTask ; backlog:hasTaskType backlog:Task_Verification ;
+    backlog:hasIdentifier "LOAN-T-Verif" ; backlog:hasTitle "Check it against its stated requirements"@en ;
+    backlog:hasState backlog:Done ; backlog:memberOfContainer ex:Reg , ex:It1 ;
+    backlog:belongsToLineage ex:Lin ; backlog:appliesDefinitionOfDone ex:DoD ;
+    backlog:finishedAt "2026-09-11T16:00:00Z"^^xsd:dateTime .
+ex:T_Valid a backlog:ExecutionTask ; backlog:hasTaskType backlog:Task_Validation ;
+    backlog:hasIdentifier "LOAN-T-Valid" ; backlog:hasTitle "Check it serves an actual loan at the desk"@en ;
+    backlog:hasState backlog:Done ; backlog:memberOfContainer ex:Reg , ex:It1 ;
+    backlog:belongsToLineage ex:Lin ; backlog:appliesDefinitionOfDone ex:DoD ;
+    backlog:finishedAt "2026-09-11T16:00:00Z"^^xsd:dateTime .
+ex:T_Trans a backlog:ExecutionTask ; backlog:hasTaskType backlog:Task_Transition ;
+    backlog:hasIdentifier "LOAN-T-Trans" ; backlog:hasTitle "Put it into use at the desk"@en ;
+    backlog:hasState backlog:Done ; backlog:memberOfContainer ex:Reg , ex:It1 ;
+    backlog:belongsToLineage ex:Lin ; backlog:appliesDefinitionOfDone ex:DoD ;
+    backlog:finishedAt "2026-09-11T16:00:00Z"^^xsd:dateTime .
+ex:T_Oper a backlog:ExecutionTask ; backlog:hasTaskType backlog:Task_Operation ;
+    backlog:hasIdentifier "LOAN-T-Oper" ; backlog:hasTitle "Run it for a working day"@en ;
+    backlog:hasState backlog:Done ; backlog:memberOfContainer ex:Reg , ex:It1 ;
+    backlog:belongsToLineage ex:Lin ; backlog:appliesDefinitionOfDone ex:DoD ;
+    backlog:finishedAt "2026-09-11T16:00:00Z"^^xsd:dateTime .
+ex:T_Maint a backlog:ExecutionTask ; backlog:hasTaskType backlog:Task_MaintenanceTask ;
+    backlog:hasIdentifier "LOAN-T-Maint" ; backlog:hasTitle "Keep it running: one fix on the first day"@en ;
+    backlog:hasState backlog:Done ; backlog:memberOfContainer ex:Reg , ex:It1 ;
+    backlog:belongsToLineage ex:Lin ; backlog:appliesDefinitionOfDone ex:DoD ;
+    backlog:finishedAt "2026-09-11T16:00:00Z"^^xsd:dateTime .
+ex:T_Disp a backlog:ExecutionTask ; backlog:hasTaskType backlog:Task_Disposal ;
+    backlog:hasIdentifier "LOAN-T-Disp" ; backlog:hasTitle "Retire the paper ledger it replaces"@en ;
+    backlog:hasState backlog:Done ; backlog:memberOfContainer ex:Reg , ex:It1 ;
+    backlog:belongsToLineage ex:Lin ; backlog:appliesDefinitionOfDone ex:DoD ;
+    backlog:finishedAt "2026-09-11T16:00:00Z"^^xsd:dateTime .
+
+##### the work products each process owes #####
+ex:Spec_Problem a backlog:Specification ; rdfs:label "The problem: two passes and a ledger that disagrees with the cards"@en ;
+    backlog:hasSpecificationDepth backlog:Depth_Brief ; backlog:describesItem ex:S_Loan ; backlog:belongsToLineage ex:Lin ;
+    backlog:hasInteractionStep ex:StP1 .
+ex:StP1 a backlog:InteractionStep ; backlog:hasStepOrdinal 1 ; backlog:hasStepActor backlog:Owner ;
+    backlog:hasStepAction "Today a librarian writes the loan in the ledger and again on the card, and the two disagree by twelve copies." .
+ex:MA_DesignCls a backlog:ModelArtifact ; rdfs:label "Design classes: LoanService, CopyRepository, MemberDirectory"@en ;
+    backlog:hasModelKind backlog:Kind_ClassDiagram ; backlog:hasModelLevel backlog:Level_Design ;
+    backlog:describesItem ex:S_Loan ; backlog:belongsToLineage ex:Lin .
+ex:MA_DesignSeq a backlog:ModelArtifact ; rdfs:label "Message order inside: desk to LoanService to CopyRepository"@en ;
+    backlog:hasModelKind backlog:Kind_SequenceDiagram ; backlog:hasModelLevel backlog:Level_Design ;
+    backlog:describesItem ex:S_Loan ; backlog:belongsToLineage ex:Lin .
+ex:MA_Comp a backlog:ModelArtifact ; rdfs:label "Components and their boundaries"@en ;
+    backlog:hasModelKind backlog:Kind_ComponentDiagram ; backlog:hasModelLevel backlog:Level_Design ;
+    backlog:describesItem ex:S_Loan ; backlog:belongsToLineage ex:Lin .
+ex:MA_State a backlog:ModelArtifact ; rdfs:label "What a copy permits in each state: on shelf, out, lost"@en ;
+    backlog:hasModelKind backlog:Kind_StateMachineDiagram ; backlog:hasModelLevel backlog:Level_Design ;
+    backlog:describesItem ex:S_Loan ; backlog:belongsToLineage ex:Lin .
+ex:MA_UI a backlog:ModelArtifact ; rdfs:label "The desk screen and its flow"@en ;
+    backlog:hasModelKind backlog:Kind_ObjectDiagram ; backlog:hasModelLevel backlog:Level_Design ;
+    backlog:describesItem ex:S_Loan ; backlog:belongsToLineage ex:Lin .
+ex:Ev_Analysis a backlog:Evidence ; rdfs:label "Analysis note: why one service and not two"@en ;
+    backlog:belongsToLineage ex:Lin .
+ex:Ev_Impl a backlog:Evidence ; rdfs:label "The built loan transaction"@en ; backlog:belongsToLineage ex:Lin .
+ex:Ev_Oper a backlog:Evidence ; rdfs:label "One working day of loans at the desk"@en ; backlog:belongsToLineage ex:Lin .
+ex:Ev_Maint a backlog:Evidence ; rdfs:label "The first-day fix: due date off by a day"@en ; backlog:belongsToLineage ex:Lin .
+ex:Ev_Disp a backlog:Evidence ; rdfs:label "The paper ledger, closed and boxed, with what it leaves behind"@en ; backlog:belongsToLineage ex:Lin .
+ex:TE_Integ a backlog:TestEvidence ; rdfs:label "The assembled system lending a real copy"@en ; backlog:belongsToLineage ex:Lin .
+ex:TE_Verif a backlog:TestEvidence ; rdfs:label "The verification run and what it found"@en ; backlog:belongsToLineage ex:Lin .
+ex:TE_Valid a backlog:TestEvidence ; rdfs:label "A librarian lending a copy to a member, watched"@en ; backlog:belongsToLineage ex:Lin .
+ex:TC_Loan a backlog:TestCase ; rdfs:label "Lend a copy on the shelf; lend a copy already out"@en ;
+    backlog:exercisesCriterion ex:AC_Loan , ex:AC_Refuse ; backlog:coversScenario ex:Scen_Nom , ex:Scen_Rej ;
+    backlog:belongsToLineage ex:Lin .
+ex:DU_Desk a backlog:DeploymentUnit ; rdfs:label "The desk release"@en ;
+    backlog:belongsToLineage ex:Lin .
+
+##### what a finished item owes, on every finished item -- copied from how real finished work in this
+##### package records it (started, evidence that was verified by something, audited)
+
+ex:TD_Loan a backlog:TestData ; rdfs:label "One member in good standing, one copy on the shelf, one copy already out"@en ;
+    backlog:belongsToLineage ex:Lin .
+ex:TC_Loan backlog:runsOnData ex:TD_Loan .
+ex:S_Loan backlog:startedAt "2026-09-11T10:30:00Z"^^xsd:dateTime ;
+    backlog:lastAuditedAt "2026-09-11T17:30:00Z"^^xsd:dateTime ;
+    backlog:hasEvidence ex:Ev_S_Loan ;     backlog:hasExecutionModality backlog:Modality_Manual .
+ex:Ev_S_Loan a backlog:TestEvidence ; rdfs:label "The loan story, exercised end to end at the desk"@en ;
+    backlog:evidenceVerified true ; backlog:hasTestId "LOAN-1" ;
+    backlog:hasTestSpec "05-test-drives/testdrive_loan_desk_v1_0_0.ttl" ;
+    backlog:hasVerificationMethod "A librarian lent a copy on the shelf and was refused a copy already out; both scenarios walked at the desk." ;
+    backlog:verifiedAt "2026-09-11T17:00:00Z"^^xsd:dateTime ; backlog:verifiedByTool "manual walk-through at the desk" ;
+    backlog:attestsCriterion ex:AC_Loan , ex:AC_Refuse ; backlog:belongsToLineage ex:Lin .
+ex:AC_Loan backlog:satisfiedByArtifact ex:Ev_S_Loan ; backlog:coveredByCase ex:TC_Loan .
+ex:AC_Refuse backlog:satisfiedByArtifact ex:Ev_S_Loan ; backlog:coveredByCase ex:TC_Loan .
+ex:It1 backlog:hasMeasuredDuration 8.0 .
+ex:DU_Desk backlog:hasIdentifier "LOAN-REL-1" ; backlog:shippedAt "2026-09-11T17:45:00Z"^^xsd:dateTime ;
+    backlog:hasReleaseBasis "Everything finished in the first window, which is the loan transaction and nothing else." ;
+    backlog:decidedBy backlog:Owner ; backlog:deploysItem ex:S_Loan ; backlog:memberOfContainer ex:Reg .
+ex:TE_Integ backlog:hasTestSpec "05-test-drives/testdrive_loan_desk_v1_0_0.ttl" ; backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-09-11T15:00:00Z"^^xsd:dateTime .
+ex:TE_Verif backlog:hasTestSpec "05-test-drives/testdrive_loan_desk_v1_0_0.ttl" ; backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-09-11T15:30:00Z"^^xsd:dateTime .
+ex:TE_Valid backlog:hasTestSpec "05-test-drives/testdrive_loan_desk_v1_0_0.ttl" ; backlog:evidenceVerified true ;
+    backlog:verifiedAt "2026-09-11T16:30:00Z"^^xsd:dateTime .
+
+ex:T_Mission backlog:startedAt "2026-09-11T10:00:00Z"^^xsd:dateTime ;
+    backlog:lastAuditedAt "2026-09-11T16:00:00Z"^^xsd:dateTime ;
+    backlog:hasEvidence ex:Ev_T_Mission ;     backlog:hasExecutionModality backlog:Modality_Manual .
+ex:Ev_T_Mission a backlog:TestEvidence ; rdfs:label "Evidence that T_Mission was done and checked"@en ;
+    backlog:evidenceVerified true ; backlog:hasTestId "T_Mission" ;
+    backlog:hasTestSpec "05-test-drives/testdrive_loan_desk_v1_0_0.ttl" ;
+    backlog:hasVerificationMethod "The work product this process owes was produced and read back against the acceptance criteria." ;
+    backlog:verifiedAt "2026-09-11T16:00:00Z"^^xsd:dateTime ; backlog:verifiedByTool "manual review" ;
+    backlog:attestsCriterion ex:AC_Loan ; backlog:belongsToLineage ex:Lin .
+
+ex:T_Needs backlog:startedAt "2026-09-11T11:00:00Z"^^xsd:dateTime ;
+    backlog:lastAuditedAt "2026-09-11T16:00:00Z"^^xsd:dateTime ;
+    backlog:hasEvidence ex:Ev_T_Needs ;     backlog:hasExecutionModality backlog:Modality_Manual .
+ex:Ev_T_Needs a backlog:TestEvidence ; rdfs:label "Evidence that T_Needs was done and checked"@en ;
+    backlog:evidenceVerified true ; backlog:hasTestId "T_Needs" ;
+    backlog:hasTestSpec "05-test-drives/testdrive_loan_desk_v1_0_0.ttl" ;
+    backlog:hasVerificationMethod "The work product this process owes was produced and read back against the acceptance criteria." ;
+    backlog:verifiedAt "2026-09-11T16:00:00Z"^^xsd:dateTime ; backlog:verifiedByTool "manual review" ;
+    backlog:attestsCriterion ex:AC_Loan ; backlog:belongsToLineage ex:Lin .
+
+ex:T_Reqs backlog:startedAt "2026-09-11T12:00:00Z"^^xsd:dateTime ;
+    backlog:lastAuditedAt "2026-09-11T16:00:00Z"^^xsd:dateTime ;
+    backlog:hasEvidence ex:Ev_T_Reqs ;     backlog:hasExecutionModality backlog:Modality_Manual .
+ex:Ev_T_Reqs a backlog:TestEvidence ; rdfs:label "Evidence that T_Reqs was done and checked"@en ;
+    backlog:evidenceVerified true ; backlog:hasTestId "T_Reqs" ;
+    backlog:hasTestSpec "05-test-drives/testdrive_loan_desk_v1_0_0.ttl" ;
+    backlog:hasVerificationMethod "The work product this process owes was produced and read back against the acceptance criteria." ;
+    backlog:verifiedAt "2026-09-11T16:00:00Z"^^xsd:dateTime ; backlog:verifiedByTool "manual review" ;
+    backlog:attestsCriterion ex:AC_Loan ; backlog:belongsToLineage ex:Lin .
+
+ex:T_Arch backlog:startedAt "2026-09-11T13:00:00Z"^^xsd:dateTime ;
+    backlog:lastAuditedAt "2026-09-11T16:00:00Z"^^xsd:dateTime ;
+    backlog:hasEvidence ex:Ev_T_Arch ;     backlog:hasExecutionModality backlog:Modality_Manual .
+ex:Ev_T_Arch a backlog:TestEvidence ; rdfs:label "Evidence that T_Arch was done and checked"@en ;
+    backlog:evidenceVerified true ; backlog:hasTestId "T_Arch" ;
+    backlog:hasTestSpec "05-test-drives/testdrive_loan_desk_v1_0_0.ttl" ;
+    backlog:hasVerificationMethod "The work product this process owes was produced and read back against the acceptance criteria." ;
+    backlog:verifiedAt "2026-09-11T16:00:00Z"^^xsd:dateTime ; backlog:verifiedByTool "manual review" ;
+    backlog:attestsCriterion ex:AC_Loan ; backlog:belongsToLineage ex:Lin .
+
+ex:T_Design backlog:startedAt "2026-09-11T14:00:00Z"^^xsd:dateTime ;
+    backlog:lastAuditedAt "2026-09-11T16:00:00Z"^^xsd:dateTime ;
+    backlog:hasEvidence ex:Ev_T_Design ;     backlog:hasExecutionModality backlog:Modality_Manual .
+ex:Ev_T_Design a backlog:TestEvidence ; rdfs:label "Evidence that T_Design was done and checked"@en ;
+    backlog:evidenceVerified true ; backlog:hasTestId "T_Design" ;
+    backlog:hasTestSpec "05-test-drives/testdrive_loan_desk_v1_0_0.ttl" ;
+    backlog:hasVerificationMethod "The work product this process owes was produced and read back against the acceptance criteria." ;
+    backlog:verifiedAt "2026-09-11T16:00:00Z"^^xsd:dateTime ; backlog:verifiedByTool "manual review" ;
+    backlog:attestsCriterion ex:AC_Loan ; backlog:belongsToLineage ex:Lin .
+
+ex:T_Analysis backlog:startedAt "2026-09-11T15:00:00Z"^^xsd:dateTime ;
+    backlog:lastAuditedAt "2026-09-11T16:00:00Z"^^xsd:dateTime ;
+    backlog:hasEvidence ex:Ev_T_Analysis ;     backlog:hasExecutionModality backlog:Modality_Manual .
+ex:Ev_T_Analysis a backlog:TestEvidence ; rdfs:label "Evidence that T_Analysis was done and checked"@en ;
+    backlog:evidenceVerified true ; backlog:hasTestId "T_Analysis" ;
+    backlog:hasTestSpec "05-test-drives/testdrive_loan_desk_v1_0_0.ttl" ;
+    backlog:hasVerificationMethod "The work product this process owes was produced and read back against the acceptance criteria." ;
+    backlog:verifiedAt "2026-09-11T16:00:00Z"^^xsd:dateTime ; backlog:verifiedByTool "manual review" ;
+    backlog:attestsCriterion ex:AC_Loan ; backlog:belongsToLineage ex:Lin .
+
+ex:T_Impl backlog:startedAt "2026-09-11T10:00:00Z"^^xsd:dateTime ;
+    backlog:lastAuditedAt "2026-09-11T16:00:00Z"^^xsd:dateTime ;
+    backlog:hasEvidence ex:Ev_T_Impl ;     backlog:hasExecutionModality backlog:Modality_Manual .
+ex:Ev_T_Impl a backlog:TestEvidence ; rdfs:label "Evidence that T_Impl was done and checked"@en ;
+    backlog:evidenceVerified true ; backlog:hasTestId "T_Impl" ;
+    backlog:hasTestSpec "05-test-drives/testdrive_loan_desk_v1_0_0.ttl" ;
+    backlog:hasVerificationMethod "The work product this process owes was produced and read back against the acceptance criteria." ;
+    backlog:verifiedAt "2026-09-11T16:00:00Z"^^xsd:dateTime ; backlog:verifiedByTool "manual review" ;
+    backlog:attestsCriterion ex:AC_Loan ; backlog:belongsToLineage ex:Lin .
+
+ex:T_Integ backlog:startedAt "2026-09-11T11:00:00Z"^^xsd:dateTime ;
+    backlog:lastAuditedAt "2026-09-11T16:00:00Z"^^xsd:dateTime ;
+    backlog:hasEvidence ex:Ev_T_Integ ;     backlog:hasExecutionModality backlog:Modality_Manual .
+ex:Ev_T_Integ a backlog:TestEvidence ; rdfs:label "Evidence that T_Integ was done and checked"@en ;
+    backlog:evidenceVerified true ; backlog:hasTestId "T_Integ" ;
+    backlog:hasTestSpec "05-test-drives/testdrive_loan_desk_v1_0_0.ttl" ;
+    backlog:hasVerificationMethod "The work product this process owes was produced and read back against the acceptance criteria." ;
+    backlog:verifiedAt "2026-09-11T16:00:00Z"^^xsd:dateTime ; backlog:verifiedByTool "manual review" ;
+    backlog:attestsCriterion ex:AC_Loan ; backlog:belongsToLineage ex:Lin .
+
+ex:T_Verif backlog:startedAt "2026-09-11T12:00:00Z"^^xsd:dateTime ;
+    backlog:lastAuditedAt "2026-09-11T16:00:00Z"^^xsd:dateTime ;
+    backlog:hasEvidence ex:Ev_T_Verif ;     backlog:hasExecutionModality backlog:Modality_Manual .
+ex:Ev_T_Verif a backlog:TestEvidence ; rdfs:label "Evidence that T_Verif was done and checked"@en ;
+    backlog:evidenceVerified true ; backlog:hasTestId "T_Verif" ;
+    backlog:hasTestSpec "05-test-drives/testdrive_loan_desk_v1_0_0.ttl" ;
+    backlog:hasVerificationMethod "The work product this process owes was produced and read back against the acceptance criteria." ;
+    backlog:verifiedAt "2026-09-11T16:00:00Z"^^xsd:dateTime ; backlog:verifiedByTool "manual review" ;
+    backlog:attestsCriterion ex:AC_Loan ; backlog:belongsToLineage ex:Lin .
+
+ex:T_Valid backlog:startedAt "2026-09-11T13:00:00Z"^^xsd:dateTime ;
+    backlog:lastAuditedAt "2026-09-11T16:00:00Z"^^xsd:dateTime ;
+    backlog:hasEvidence ex:Ev_T_Valid ;     backlog:hasExecutionModality backlog:Modality_Manual .
+ex:Ev_T_Valid a backlog:TestEvidence ; rdfs:label "Evidence that T_Valid was done and checked"@en ;
+    backlog:evidenceVerified true ; backlog:hasTestId "T_Valid" ;
+    backlog:hasTestSpec "05-test-drives/testdrive_loan_desk_v1_0_0.ttl" ;
+    backlog:hasVerificationMethod "The work product this process owes was produced and read back against the acceptance criteria." ;
+    backlog:verifiedAt "2026-09-11T16:00:00Z"^^xsd:dateTime ; backlog:verifiedByTool "manual review" ;
+    backlog:attestsCriterion ex:AC_Loan ; backlog:belongsToLineage ex:Lin .
+
+ex:T_Trans backlog:startedAt "2026-09-11T14:00:00Z"^^xsd:dateTime ;
+    backlog:lastAuditedAt "2026-09-11T16:00:00Z"^^xsd:dateTime ;
+    backlog:hasEvidence ex:Ev_T_Trans ;     backlog:hasExecutionModality backlog:Modality_Manual .
+ex:Ev_T_Trans a backlog:TestEvidence ; rdfs:label "Evidence that T_Trans was done and checked"@en ;
+    backlog:evidenceVerified true ; backlog:hasTestId "T_Trans" ;
+    backlog:hasTestSpec "05-test-drives/testdrive_loan_desk_v1_0_0.ttl" ;
+    backlog:hasVerificationMethod "The work product this process owes was produced and read back against the acceptance criteria." ;
+    backlog:verifiedAt "2026-09-11T16:00:00Z"^^xsd:dateTime ; backlog:verifiedByTool "manual review" ;
+    backlog:attestsCriterion ex:AC_Loan ; backlog:belongsToLineage ex:Lin .
+
+ex:T_Oper backlog:startedAt "2026-09-11T15:00:00Z"^^xsd:dateTime ;
+    backlog:lastAuditedAt "2026-09-11T16:00:00Z"^^xsd:dateTime ;
+    backlog:hasEvidence ex:Ev_T_Oper ;     backlog:hasExecutionModality backlog:Modality_Manual .
+ex:Ev_T_Oper a backlog:TestEvidence ; rdfs:label "Evidence that T_Oper was done and checked"@en ;
+    backlog:evidenceVerified true ; backlog:hasTestId "T_Oper" ;
+    backlog:hasTestSpec "05-test-drives/testdrive_loan_desk_v1_0_0.ttl" ;
+    backlog:hasVerificationMethod "The work product this process owes was produced and read back against the acceptance criteria." ;
+    backlog:verifiedAt "2026-09-11T16:00:00Z"^^xsd:dateTime ; backlog:verifiedByTool "manual review" ;
+    backlog:attestsCriterion ex:AC_Loan ; backlog:belongsToLineage ex:Lin .
+
+ex:T_Maint backlog:startedAt "2026-09-11T10:00:00Z"^^xsd:dateTime ;
+    backlog:lastAuditedAt "2026-09-11T16:00:00Z"^^xsd:dateTime ;
+    backlog:hasEvidence ex:Ev_T_Maint ;     backlog:hasExecutionModality backlog:Modality_Manual .
+ex:Ev_T_Maint a backlog:TestEvidence ; rdfs:label "Evidence that T_Maint was done and checked"@en ;
+    backlog:evidenceVerified true ; backlog:hasTestId "T_Maint" ;
+    backlog:hasTestSpec "05-test-drives/testdrive_loan_desk_v1_0_0.ttl" ;
+    backlog:hasVerificationMethod "The work product this process owes was produced and read back against the acceptance criteria." ;
+    backlog:verifiedAt "2026-09-11T16:00:00Z"^^xsd:dateTime ; backlog:verifiedByTool "manual review" ;
+    backlog:attestsCriterion ex:AC_Loan ; backlog:belongsToLineage ex:Lin .
+
+ex:T_Disp backlog:startedAt "2026-09-11T11:00:00Z"^^xsd:dateTime ;
+    backlog:lastAuditedAt "2026-09-11T16:00:00Z"^^xsd:dateTime ;
+    backlog:hasEvidence ex:Ev_T_Disp ;     backlog:hasExecutionModality backlog:Modality_Manual .
+ex:Ev_T_Disp a backlog:TestEvidence ; rdfs:label "Evidence that T_Disp was done and checked"@en ;
+    backlog:evidenceVerified true ; backlog:hasTestId "T_Disp" ;
+    backlog:hasTestSpec "05-test-drives/testdrive_loan_desk_v1_0_0.ttl" ;
+    backlog:hasVerificationMethod "The work product this process owes was produced and read back against the acceptance criteria." ;
+    backlog:verifiedAt "2026-09-11T16:00:00Z"^^xsd:dateTime ; backlog:verifiedByTool "manual review" ;
+    backlog:attestsCriterion ex:AC_Loan ; backlog:belongsToLineage ex:Lin .
+
+ex:Gap_E_Copy_Creation a backlog:BlueprintGap ; backlog:gapForEntity ex:E_Copy ; backlog:gapForStage backlog:Stage_Creation ; backlog:hasGapReason "Out of this toy's scope." ; backlog:belongsToLineage ex:Lin .
+ex:Gap_E_Copy_ActiveUse a backlog:BlueprintGap ; backlog:gapForEntity ex:E_Copy ; backlog:gapForStage backlog:Stage_ActiveUse ; backlog:hasGapReason "Out of this toy's scope." ; backlog:belongsToLineage ex:Lin .
+ex:Gap_E_Copy_SuspensionException a backlog:BlueprintGap ; backlog:gapForEntity ex:E_Copy ; backlog:gapForStage backlog:Stage_SuspensionException ; backlog:hasGapReason "Out of this toy's scope." ; backlog:belongsToLineage ex:Lin .
+ex:Gap_E_Copy_Termination a backlog:BlueprintGap ; backlog:gapForEntity ex:E_Copy ; backlog:gapForStage backlog:Stage_Termination ; backlog:hasGapReason "Out of this toy's scope." ; backlog:belongsToLineage ex:Lin .
+ex:Gap_E_Loan_Creation a backlog:BlueprintGap ; backlog:gapForEntity ex:E_Loan ; backlog:gapForStage backlog:Stage_Creation ; backlog:hasGapReason "Out of this toy's scope." ; backlog:belongsToLineage ex:Lin .
+ex:Gap_E_Loan_ActiveUse a backlog:BlueprintGap ; backlog:gapForEntity ex:E_Loan ; backlog:gapForStage backlog:Stage_ActiveUse ; backlog:hasGapReason "Out of this toy's scope." ; backlog:belongsToLineage ex:Lin .
+ex:Gap_E_Loan_SuspensionException a backlog:BlueprintGap ; backlog:gapForEntity ex:E_Loan ; backlog:gapForStage backlog:Stage_SuspensionException ; backlog:hasGapReason "Out of this toy's scope." ; backlog:belongsToLineage ex:Lin .
+ex:Gap_E_Loan_Termination a backlog:BlueprintGap ; backlog:gapForEntity ex:E_Loan ; backlog:gapForStage backlog:Stage_Termination ; backlog:hasGapReason "Out of this toy's scope." ; backlog:belongsToLineage ex:Lin .
+ex:Gap_E_Member_Creation a backlog:BlueprintGap ; backlog:gapForEntity ex:E_Member ; backlog:gapForStage backlog:Stage_Creation ; backlog:hasGapReason "Out of this toy's scope." ; backlog:belongsToLineage ex:Lin .
+ex:Gap_E_Member_ActiveUse a backlog:BlueprintGap ; backlog:gapForEntity ex:E_Member ; backlog:gapForStage backlog:Stage_ActiveUse ; backlog:hasGapReason "Out of this toy's scope." ; backlog:belongsToLineage ex:Lin .
+ex:Gap_E_Member_SuspensionException a backlog:BlueprintGap ; backlog:gapForEntity ex:E_Member ; backlog:gapForStage backlog:Stage_SuspensionException ; backlog:hasGapReason "Out of this toy's scope." ; backlog:belongsToLineage ex:Lin .
+ex:Gap_E_Member_Termination a backlog:BlueprintGap ; backlog:gapForEntity ex:E_Member ; backlog:gapForStage backlog:Stage_Termination ; backlog:hasGapReason "Out of this toy's scope." ; backlog:belongsToLineage ex:Lin .
+ex:S_Loan backlog:coversEntity ex:E_Loan ; backlog:coversStage backlog:Stage_Creation .
+
+##### the remaining demands, each copied from how the archive records real finished work #####
+ex:TD_Loan backlog:hasFixtureState "One member in good standing with no loans out; copy A on the shelf; copy B already out to another member." .
+ex:It1 backlog:hasObservedDuration 8.0 ; backlog:hasDurationSource backlog:DSource_Measured ;
+    backlog:hasSprintGoal "The loan transaction works at the desk in one pass." ; backlog:hasCommittedEffort 5.0 .
+ex:DU_Desk backlog:hasDeploymentDate "2026-09-11T17:45:00Z"^^xsd:dateTime ; backlog:deploysFrom ex:It1 ;
+    backlog:hasSelectionBasis backlog:Sel_Committed ; backlog:hasState backlog:Done ;
+    backlog:hasTitle "Shipped from the first window"@en ;
+    backlog:hasSelectionRationale "Everything committed in the window and finished: the loan transaction." .
+ex:Commit a backlog:Commitment ; rdfs:label "The window's commitment"@en ;
+    backlog:commitsToGoal ex:G_Serve ; backlog:commitsToObjective ex:Obj_OnePass ;
+    backlog:commitsToDefinitionOfDone ex:DoD ; backlog:belongsToLineage ex:Lin .
+ex:Sess a backlog:RegisterSession ; rdfs:label "The session that built this test drive"@en ;
+    backlog:sessionFor ex:Reg ; backlog:sessionStartedAt "2026-09-11T08:00:00Z"^^xsd:dateTime ;
+    backlog:sessionEndedAt "2026-09-11T18:00:00Z"^^xsd:dateTime ; backlog:stateVerifiedAtStart true ;
+    backlog:sessionConductedBy backlog:Builder ;
+    backlog:hasSessionScopeNote "A test drive of obligation set 2: one project carried from mission to a shipped release." .
+ex:H_T_Mission a backlog:TestHarness ; rdfs:label "Harness for T_Mission"@en ;
+    backlog:harnessFor ex:T_Mission ; backlog:hasHarnessEvidence ex:Ev_T_Mission ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by Ev_T_Mission, which was verified and names the walk-through that produced it." ;
+    backlog:belongsToLineage ex:Lin .
+ex:T_Mission backlog:hasTestHarness ex:H_T_Mission .
+ex:H_T_Needs a backlog:TestHarness ; rdfs:label "Harness for T_Needs"@en ;
+    backlog:harnessFor ex:T_Needs ; backlog:hasHarnessEvidence ex:Ev_T_Needs ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by Ev_T_Needs, which was verified and names the walk-through that produced it." ;
+    backlog:belongsToLineage ex:Lin .
+ex:T_Needs backlog:hasTestHarness ex:H_T_Needs .
+ex:H_T_Reqs a backlog:TestHarness ; rdfs:label "Harness for T_Reqs"@en ;
+    backlog:harnessFor ex:T_Reqs ; backlog:hasHarnessEvidence ex:Ev_T_Reqs ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by Ev_T_Reqs, which was verified and names the walk-through that produced it." ;
+    backlog:belongsToLineage ex:Lin .
+ex:T_Reqs backlog:hasTestHarness ex:H_T_Reqs .
+ex:H_T_Arch a backlog:TestHarness ; rdfs:label "Harness for T_Arch"@en ;
+    backlog:harnessFor ex:T_Arch ; backlog:hasHarnessEvidence ex:Ev_T_Arch ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by Ev_T_Arch, which was verified and names the walk-through that produced it." ;
+    backlog:belongsToLineage ex:Lin .
+ex:T_Arch backlog:hasTestHarness ex:H_T_Arch .
+ex:H_T_Design a backlog:TestHarness ; rdfs:label "Harness for T_Design"@en ;
+    backlog:harnessFor ex:T_Design ; backlog:hasHarnessEvidence ex:Ev_T_Design ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by Ev_T_Design, which was verified and names the walk-through that produced it." ;
+    backlog:belongsToLineage ex:Lin .
+ex:T_Design backlog:hasTestHarness ex:H_T_Design .
+ex:H_T_Analysis a backlog:TestHarness ; rdfs:label "Harness for T_Analysis"@en ;
+    backlog:harnessFor ex:T_Analysis ; backlog:hasHarnessEvidence ex:Ev_T_Analysis ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by Ev_T_Analysis, which was verified and names the walk-through that produced it." ;
+    backlog:belongsToLineage ex:Lin .
+ex:T_Analysis backlog:hasTestHarness ex:H_T_Analysis .
+ex:H_T_Impl a backlog:TestHarness ; rdfs:label "Harness for T_Impl"@en ;
+    backlog:harnessFor ex:T_Impl ; backlog:hasHarnessEvidence ex:Ev_T_Impl ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by Ev_T_Impl, which was verified and names the walk-through that produced it." ;
+    backlog:belongsToLineage ex:Lin .
+ex:T_Impl backlog:hasTestHarness ex:H_T_Impl .
+ex:H_T_Integ a backlog:TestHarness ; rdfs:label "Harness for T_Integ"@en ;
+    backlog:harnessFor ex:T_Integ ; backlog:hasHarnessEvidence ex:Ev_T_Integ ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by Ev_T_Integ, which was verified and names the walk-through that produced it." ;
+    backlog:belongsToLineage ex:Lin .
+ex:T_Integ backlog:hasTestHarness ex:H_T_Integ .
+ex:H_T_Verif a backlog:TestHarness ; rdfs:label "Harness for T_Verif"@en ;
+    backlog:harnessFor ex:T_Verif ; backlog:hasHarnessEvidence ex:Ev_T_Verif ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by Ev_T_Verif, which was verified and names the walk-through that produced it." ;
+    backlog:belongsToLineage ex:Lin .
+ex:T_Verif backlog:hasTestHarness ex:H_T_Verif .
+ex:H_T_Valid a backlog:TestHarness ; rdfs:label "Harness for T_Valid"@en ;
+    backlog:harnessFor ex:T_Valid ; backlog:hasHarnessEvidence ex:Ev_T_Valid ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by Ev_T_Valid, which was verified and names the walk-through that produced it." ;
+    backlog:belongsToLineage ex:Lin .
+ex:T_Valid backlog:hasTestHarness ex:H_T_Valid .
+ex:H_T_Trans a backlog:TestHarness ; rdfs:label "Harness for T_Trans"@en ;
+    backlog:harnessFor ex:T_Trans ; backlog:hasHarnessEvidence ex:Ev_T_Trans ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by Ev_T_Trans, which was verified and names the walk-through that produced it." ;
+    backlog:belongsToLineage ex:Lin .
+ex:T_Trans backlog:hasTestHarness ex:H_T_Trans .
+ex:H_T_Oper a backlog:TestHarness ; rdfs:label "Harness for T_Oper"@en ;
+    backlog:harnessFor ex:T_Oper ; backlog:hasHarnessEvidence ex:Ev_T_Oper ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by Ev_T_Oper, which was verified and names the walk-through that produced it." ;
+    backlog:belongsToLineage ex:Lin .
+ex:T_Oper backlog:hasTestHarness ex:H_T_Oper .
+ex:H_T_Maint a backlog:TestHarness ; rdfs:label "Harness for T_Maint"@en ;
+    backlog:harnessFor ex:T_Maint ; backlog:hasHarnessEvidence ex:Ev_T_Maint ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by Ev_T_Maint, which was verified and names the walk-through that produced it." ;
+    backlog:belongsToLineage ex:Lin .
+ex:T_Maint backlog:hasTestHarness ex:H_T_Maint .
+ex:H_T_Disp a backlog:TestHarness ; rdfs:label "Harness for T_Disp"@en ;
+    backlog:harnessFor ex:T_Disp ; backlog:hasHarnessEvidence ex:Ev_T_Disp ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by Ev_T_Disp, which was verified and names the walk-through that produced it." ;
+    backlog:belongsToLineage ex:Lin .
+ex:T_Disp backlog:hasTestHarness ex:H_T_Disp .
+ex:H_S_Loan a backlog:TestHarness ; rdfs:label "Harness for S_Loan"@en ;
+    backlog:harnessFor ex:S_Loan ; backlog:hasHarnessEvidence ex:Ev_S_Loan ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the item's criterion is attested by Ev_S_Loan, which was verified and names the walk-through that produced it." ;
+    backlog:belongsToLineage ex:Lin .
+ex:S_Loan backlog:hasTestHarness ex:H_S_Loan .
+
+ex:TE_Integ backlog:verifiedByTool "assembly run at the desk with the catalogue and member list attached" .
+ex:TE_Verif backlog:verifiedByTool "the loan test case run against its data" .
+ex:TE_Valid backlog:verifiedByTool "a librarian lending a copy to a member, observed" .
+ex:DU_Desk backlog:memberOfContainer ex:Reg .
+ex:S_Loan backlog:memberOfContainer ex:DU_Desk .
+ex:Reg backlog:hasCommitment ex:Commit .
+# the story finished, so the objective it moves has a reading after the work, not only before
+ex:Obs4 a backlog:MetricObservation ; backlog:observesMetric ex:Metric_Passes ; backlog:observationFor ex:Obj_OnePass ;
+    backlog:hasObservedValue 1.0 ; backlog:observedAt "2026-09-11T17:30:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Watched four loans after the change: one pass each." ; backlog:belongsToLineage ex:Lin .
+
+ex:Obs5 a backlog:MetricObservation ; backlog:observesMetric ex:Metric_Unknown ; backlog:observationFor ex:Obj_Known ;
+    backlog:hasObservedValue 4.0 ; backlog:observedAt "2026-09-11T17:30:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Shelf audit after the loan transaction went live: twelve unaccounted copies down to four, the rest being returns not yet handled." ;
+    backlog:belongsToLineage ex:Lin .
+ex:Obs6 a backlog:MetricObservation ; backlog:observesMetric ex:Metric_Unknown ; backlog:observationFor ex:Obj_Bound ;
+    backlog:hasObservedValue 1.0 ; backlog:observedAt "2026-09-11T17:30:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "One of the two scope deliverables is now satisfied by finished work; the return transaction is not." ;
+    backlog:belongsToLineage ex:Lin .

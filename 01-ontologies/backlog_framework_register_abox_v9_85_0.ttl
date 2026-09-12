@@ -14,8 +14,8 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.84.0> ;
-    owl:versionInfo "9.84.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.85.0> ;
+    owl:versionInfo "9.85.0" ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.76.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.75.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.74.0> ;
@@ -3393,7 +3393,8 @@ fw:Scen_SDLC_S01_Rejection a backlog:TestScenario ;
 #  THE TASKS the planning produced, one per ISO 12207 type the work needs.
 fw:T_SDLC_S01_Analysis a backlog:ExecutionTask ; backlog:hasTaskType backlog:Task_StakeholderNeeds ;
     backlog:hasIdentifier "SDLC-T01-A" ; backlog:hasTitle "State the adopting lineage's mission and its obligation set"@en ;
-    backlog:hasState backlog:InProgress ;   # started 2026-09-11; the first work of the execution phase backlog:memberOfContainer fw:Register , fw:It_SDLC_1 ;
+    backlog:hasState backlog:Done ;   # started 2026-09-11 at kick-off, finished the same day (pointer, L-112)
+    backlog:startedAt "2026-09-11T09:00:00Z"^^xsd:dateTime ; backlog:memberOfContainer fw:Register , fw:It_SDLC_1 ;
     backlog:belongsToLineage fw:L_SDLCObligations .
 fw:T_SDLC_S01_Implementation a backlog:ExecutionTask ; backlog:hasTaskType backlog:Task_Implementation ;
     backlog:hasIdentifier "SDLC-T01-I" ; backlog:hasTitle "Write the five stages, each producing what it owes before its output"@en ;
@@ -3628,3 +3629,49 @@ fw:KO_SDLC_It1 a backlog:KickOff ;
 # with it: an iteration's state is derived from its members, so a window holding only proposed work
 # cannot assert that work is under way.
 fw:T_SDLC_S01_Analysis backlog:appliesDefinitionOfDone fw:DoD_SDLC .
+
+#################################################################
+#  v9.85.0 (2026-09-11, brsf-session) -- THE TEST DRIVE'S OUTCOME
+#  RECORDED AGAINST THE MEASURES IT MOVED, and the three misleading
+#  rule messages corrected.
+#
+#  The drive carried a complete project -- mission to shipped release,
+#  fourteen engineering processes, eight models at both levels -- to
+#  zero refusals with no rule changed. It is a TEST ARTIFACT, not an
+#  adopting project: the measure that counts adopting projects stays
+#  at zero, because a toy adopting the obligations proves the machine
+#  works and does not prove anyone uses it.
+#
+#  What it did move: every obligation of the set was exercised against
+#  a real chain, so the count of obligations never seen to refuse
+#  anything falls from thirteen to zero; and the both-ways proof held.
+#################################################################
+fw:Obs_SDLC_Enforced_AfterDrive a backlog:MetricObservation ;
+    backlog:observesMetric fw:Metric_SDLC_ObligationsEnforced ;
+    backlog:observationFor fw:Obj_SDLC_Enforced ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-09-11T19:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Loan-desk test drive: every obligation of the set was exercised against a complete chain. On the first run the project was refused 113 times and each refusal named the rule that made it; on the last run, with the work done, none did. Recorded in 05-test-drives/CLOSURE_loan_desk_test_drive_v1_0_0.md." ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+fw:Obs_SDLC_Proven_AfterDrive a backlog:MetricObservation ;
+    backlog:observesMetric fw:Metric_SDLC_UnprovenShapes ;
+    backlog:observationFor fw:Obj_SDLC_Proven ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-09-11T19:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Each obligation rule carries a fixture that proves it fires and one that proves it stays silent; both ran clean at v1.254.0." ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+fw:T_SDLC_S01_Analysis backlog:finishedAt "2026-09-11T19:00:00Z"^^xsd:dateTime ;
+    backlog:lastAuditedAt "2026-09-11T19:00:00Z"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_SDLC_T01A ; backlog:hasExecutionModality backlog:Modality_Manual .
+fw:Ev_SDLC_T01A a backlog:TestEvidence ;
+    rdfs:label "The obligations stated and exercised on a complete project"@en ;
+    backlog:evidenceVerified true ; backlog:hasTestId "SDLC-T01-A" ;
+    backlog:hasTestSpec "05-test-drives/testdrive_loan_desk_v1_1_0.ttl" ;
+    backlog:hasVerificationMethod "A project declaring itself bound by the obligations at its opening was carried from mission to a shipped release; every stage refused to close until its work existed, and the register reached zero refusals." ;
+    backlog:verifiedAt "2026-09-11T19:00:00Z"^^xsd:dateTime ;
+    backlog:verifiedByTool "backlog_validate_v1_6_0.py + pyshacl" ;
+    backlog:attestsCriterion fw:AC_SDLC_S01 ; backlog:belongsToLineage fw:L_SDLCObligations .
+fw:H_SDLC_T01A a backlog:TestHarness ; rdfs:label "Harness for the first analysis task"@en ;
+    backlog:harnessFor fw:T_SDLC_S01_Analysis ; backlog:hasHarnessEvidence fw:Ev_SDLC_T01A ;
+    backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the criterion is attested by evidence naming the register the drive produced and the tool that validated it." ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+fw:T_SDLC_S01_Analysis backlog:hasTestHarness fw:H_SDLC_T01A .

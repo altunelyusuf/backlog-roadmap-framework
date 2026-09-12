@@ -9,8 +9,8 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.119.0> ;
-    owl:versionInfo "1.119.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.120.0> ;
+    owl:versionInfo "1.120.0" ;
     owl:priorVersion <http://example.org/backlog-shapes/1.117.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.116.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.115.0> ;
@@ -467,7 +467,7 @@ backlog:GovernedDoneShape a sh:NodeShape ;
     sh:severity sh:Violation ;
     rdfs:label "Governed completion (L3)"@en ;
     sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "L3: a Done item must be anchored by verified test or release evidence; review evidence alone is insufficient. An ExecutionTask may inherit this from the real, PlanningEvent-linked parent it was produced from, if that parent is itself compliant; it may never be waived unconditionally." ;
+        sh:message "L3: a Done item must be anchored by verified test or release evidence; review evidence alone is insufficient. An ExecutionTask inherits this from the item it was planned from -- measured on the loan-desk test drive, 2026-09-11: removing the story's own value made this rule fire on all fourteen process tasks, while removing the planning event did not. The wording said 'a compliant PlanningEvent-linked parent', which described the link rather than the bearer. It may never be waived unconditionally." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             $this backlog:hasState backlog:Done .
@@ -484,7 +484,7 @@ backlog:GovernedDoneShape a sh:NodeShape ;
             }
         }""" ] ;
     sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "L3: a Done item must record when it was last individually re-verified (lastAuditedAt); absence means unchecked, not fine. An ExecutionTask may inherit this from a real, compliant PlanningEvent-linked parent; it may never be waived unconditionally." ;
+        sh:message "L3: a Done item must record when it was last individually re-verified (lastAuditedAt); absence means unchecked, not fine. An ExecutionTask inherits this from the item it was planned from -- measured on the loan-desk test drive, 2026-09-11: removing the story's own value made this rule fire on all fourteen process tasks, while removing the planning event did not. The wording said 'a compliant PlanningEvent-linked parent', which described the link rather than the bearer. It may never be waived unconditionally." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             $this backlog:hasState backlog:Done .
@@ -1088,7 +1088,7 @@ backlog:ItemCompletenessLinkageShape a sh:NodeShape ;
             FILTER NOT EXISTS { $this backlog:effectiveDefinitionOfDone ?d }
         }""" ] ;
     sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "L3: a Done item must have a test harness whose completeness was derived, not asserted. An ExecutionTask may inherit this from a real, compliant PlanningEvent-linked parent; it may never be waived unconditionally." ;
+        sh:message "L3: a Done item must have a test harness whose completeness was derived, not asserted. An ExecutionTask inherits this from the item it was planned from -- measured on the loan-desk test drive, 2026-09-11: removing the story's own value made this rule fire on all fourteen process tasks, while removing the planning event did not. The wording said 'a compliant PlanningEvent-linked parent', which described the link rather than the bearer. It may never be waived unconditionally." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             $this backlog:hasState backlog:Done .
@@ -1309,7 +1309,7 @@ backlog:FlowShape a sh:NodeShape ;
             FILTER (?f < ?s)
         }""" ] ;
     sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "L3: this Done item records no finish point, so throughput and cycle time cannot be measured for it. An ExecutionTask may inherit this from a real, compliant PlanningEvent-linked parent; it may never be waived unconditionally." ;
+        sh:message "L3: this Done item records no finish point, so throughput and cycle time cannot be measured for it. An ExecutionTask inherits this from the item it was planned from -- measured on the loan-desk test drive, 2026-09-11: removing the story's own value made this rule fire on all fourteen process tasks, while removing the planning event did not. The wording said 'a compliant PlanningEvent-linked parent', which described the link rather than the bearer. It may never be waived unconditionally." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             $this backlog:hasState backlog:Done .
