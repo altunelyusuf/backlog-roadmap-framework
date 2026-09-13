@@ -3540,6 +3540,126 @@ fw:Del_ObligationsProven a backlog:ScopeDeliverable ;
     backlog:belongsToLineage fw:L_SDLCObligations .
 fw:Scope_SDLCObligations backlog:requiresDeliverable fw:Del_ArtifactOrderMeasured , fw:Del_ObligationsProven .
 
+# --- Change request 2: admitting the five items the previous session built and never formally scoped ---
+fw:CR_SDLCScopeAmend2 a backlog:ChangeRequest ;
+    backlog:requestsChangeTo fw:Scope_SDLCObligations ;
+    backlog:hasChangeDirection backlog:Direction_Grow ;   # three deliverables added; nothing leaves
+    backlog:hasDisposition backlog:Disp_Accepted ;
+    backlog:hasChangeRequestRationale "Owner session, 2026-09-13: five real, already-shipped things -- OS_SDLC_v2 (40 obligations, all 14 ISO processes, all 6 concerns), the model-level/specification-depth distinction, UI as a sixth design concern, the teaching-corpus cross-check that produced it, and the loan-desk test drive -- were built at the owner's own request (v1.254.0, v1.255.0) but never admitted to this scope through a change ceremony. Checked, not assumed: the vocabulary was never another registrant's to mint (2026-09-09 proposal/withdrawal record; the corpus already belonged to this package), so Ex_SDLC_NoNewKinds was never actually violated -- the real gap is scope BOUNDARY, not vocabulary origin. The teaching-corpus check is the method behind the model-level deliverable, not a deliverable of its own." ;
+    backlog:decidedBy backlog:Owner .
+fw:IA_SDLCScopeAmend2 a backlog:ImpactAssessment ;
+    backlog:analyzesRequest fw:CR_SDLCScopeAmend2 ;
+    backlog:identifiesAffectedLineage fw:L_SDLCObligations ;
+    backlog:hasImpactStatement "Measured on register v9.86.0 before disposition. Affected: one lineage, its own. Scope grows from six deliverables to nine, in three areas the scope already covers (Shapes, Vocabulary, Fixtures) -- no area added, none removed. Three items admitted, all already Done on real evidence shipped before this change request existed (v1.254.0, v1.255.0) -- no in-flight commitment changes, nothing is re-done. Obj_SDLC_ScopeMatch's baseline moves from 6 to 9 unresolved deliverables at the moment the scope grows, then immediately to 3 once these three items' real completion is counted -- both directions measured, not asserted. The Scope stage output stays closed and is not edited: this is the amendment ceremony." ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+fw:SC_SDLCScopeAmend2 a backlog:ScopeChange ;
+    backlog:fulfillsRequest fw:CR_SDLCScopeAmend2 ;
+    backlog:changesScope fw:Scope_SDLCObligations ;
+    backlog:admitsItem fw:S_SDLC_FullProcessCoverage , fw:S_SDLC_LevelDepthVocabulary , fw:S_SDLC_TestDriveProof ;
+    backlog:hasScopeChangeRationale "Adds one deliverable each to Area_SDLC_Shapes and Area_SDLC_Vocabulary, and a second to Area_SDLC_Fixtures alongside Del_ObligationsProven (a fixture pair and a full project test drive are different kinds of proof, not substitutes). Admits the three stories that carry already-finished work, closed on the real evidence that already exists -- nothing re-done." ;
+    backlog:decidedBy backlog:Owner ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+
+fw:Del_FullProcessCoverage a backlog:ScopeDeliverable ;
+    rdfs:label "All 14 ISO/IEC 12207 processes and all 6 design concerns owe their own artifact"@en ;
+    backlog:deliverableForArea fw:Area_SDLC_Shapes ;
+    backlog:hasScopeLayer backlog:Layer_Product ;
+    backlog:derivesFromMissionClause "the ISO 12207 task types' artifacts at execution" ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+fw:Del_LevelDepthVocabulary a backlog:ScopeDeliverable ;
+    rdfs:label "Analysis and design levels, specification depth, and UI as a sixth concern are all owable"@en ;
+    backlog:deliverableForArea fw:Area_SDLC_Vocabulary ;
+    backlog:hasScopeLayer backlog:Layer_Product ;
+    backlog:derivesFromMissionClause "each stage of the Mission-Scope-Goal-Objective-Backlog chain declares the engineering artifacts it owes" ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+fw:Del_TestDriveProof a backlog:ScopeDeliverable ;
+    rdfs:label "A complete real project, not only a fixture pair, has been carried under the obligations"@en ;
+    backlog:deliverableForArea fw:Area_SDLC_Fixtures ;
+    backlog:hasScopeLayer backlog:Layer_Product ;
+    backlog:derivesFromMissionClause "proven on fixtures, and run first on this lineage itself" ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+fw:Scope_SDLCObligations backlog:requiresDeliverable fw:Del_FullProcessCoverage , fw:Del_LevelDepthVocabulary , fw:Del_TestDriveProof .
+
+fw:S_SDLC_FullProcessCoverage a backlog:Task ; backlog:hasIdentifier "SDLC-S08" ;
+    backlog:hasTitle "Obligation set 2: all 14 ISO/IEC 12207 processes, all 6 design concerns, derived from each process's own definition"@en ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-09-11T10:04:29Z"^^xsd:dateTime ; backlog:finishedAt "2026-09-11T12:36:56Z"^^xsd:dateTime ; backlog:lastAuditedAt "2026-09-11T12:36:56Z"^^xsd:dateTime ;
+    backlog:memberOfContainer fw:Register ; backlog:belongsToLineage fw:L_SDLCObligations ;
+    backlog:pursuesObjective fw:Obj_SDLC_Enforced ;
+    backlog:satisfiesDeliverable fw:Del_FullProcessCoverage ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasEvidence fw:Ev_SDLC_OS2 ; backlog:hasExecutionModality backlog:Modality_Manual ;
+    backlog:hasTestHarness fw:H_SDLC_S08 ;
+    backlog:hasRationale "Closed on real evidence already shipped at backlog-roadmap-framework-v1.254.0 (commit 4ec222d, 2026-09-11): each obligation names the artifact the process's own TBox definition says it produces, quoted in the rationale so the derivation is checkable. 3 of 14 -> 14 of 14 processes, 0 of 5 -> 6 of 6 concerns." ;
+    backlog:hasAcceptanceCriterion fw:AC_SDLC_S08 .
+fw:AC_SDLC_S08 a backlog:AcceptanceCriterion ;
+    backlog:satisfiedByArtifact "02-shacl-safeguards/backlog_shacl_v1_120_0.ttl" ;
+    backlog:hasGherkinText "Given each of the 14 ISO/IEC 12207 processes and 6 design concerns, when a finished task under that process or concern closes, then the shape checks it owes the artifact its own TBox definition names; and when that artifact is missing, the shape refuses the close." .
+fw:Ev_SDLC_OS2 a backlog:TestEvidence ; rdfs:label "OS_SDLC_v2, 40 obligations, all 14 processes and 6 concerns"@en ;
+    backlog:evidenceVerified true ; backlog:hasTestId "SDLC-S08" ;
+    backlog:hasTestSpec "02-shacl-safeguards/backlog_shacl_v1_120_0.ttl" ;
+    backlog:hasVerificationMethod "Each obligation names the artifact the process's own TBox definition says it produces; proven in both directions by the obligation fixtures shipped in the same release." ;
+    backlog:verifiedAt "2026-09-11T12:36:56Z"^^xsd:dateTime ;
+    backlog:verifiedByTool "backlog_validate_v1_6_0.py + pyshacl" ;
+    backlog:attestsCriterion fw:AC_SDLC_S08 ;
+    backlog:satisfiedByArtifact "02-shacl-safeguards/backlog_shacl_v1_120_0.ttl" ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+fw:H_SDLC_S08 a backlog:TestHarness ; rdfs:label "Harness for obligation set 2"@en ;
+    backlog:harnessFor fw:S_SDLC_FullProcessCoverage ; backlog:hasHarnessEvidence fw:Ev_SDLC_OS2 ;
+    backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: proven in both directions by the obligation fixtures shipped in the same release." .
+
+fw:S_SDLC_LevelDepthVocabulary a backlog:Task ; backlog:hasIdentifier "SDLC-S09" ;
+    backlog:hasTitle "Analysis/design level split, specification depth, and UI as a sixth design concern, cross-checked against the teaching corpus"@en ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-09-11T10:04:29Z"^^xsd:dateTime ; backlog:finishedAt "2026-09-11T12:36:56Z"^^xsd:dateTime ; backlog:lastAuditedAt "2026-09-11T12:36:56Z"^^xsd:dateTime ;
+    backlog:memberOfContainer fw:Register ; backlog:belongsToLineage fw:L_SDLCObligations ;
+    backlog:pursuesObjective fw:Obj_SDLC_Enforced ;
+    backlog:satisfiesDeliverable fw:Del_LevelDepthVocabulary ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasEvidence fw:Ev_SDLC_LevelDepth ; backlog:hasExecutionModality backlog:Modality_Manual ;
+    backlog:hasTestHarness fw:H_SDLC_S09 ;
+    backlog:hasRationale "Closed on real evidence already shipped at backlog-roadmap-framework-v1.254.0: ModelLevel/owesLevel checked against COM4061 chapters 1-8 (19 files, 560 classes) -- 16 obligations now name a level; specification depth (brief vs fully developed) added; UI added as a sixth concern using the corpus's own storyboard-mockup-prototype-design-model-dialogue progression." ;
+    backlog:hasAcceptanceCriterion fw:AC_SDLC_S09 .
+fw:AC_SDLC_S09 a backlog:AcceptanceCriterion ;
+    backlog:satisfiedByArtifact "01-ontologies/backlog_tbox_v1_95_0.ttl" ;
+    backlog:hasGherkinText "Given an obligation that names a model level, when an artifact at only one level exists, then the obligation for the other level still refuses; and given stakeholder-needs and implementation obligations for the same artifact kind, when only a brief exists, then the fully-developed obligation still refuses." .
+fw:Ev_SDLC_LevelDepth a backlog:TestEvidence ; rdfs:label "Level/depth/UI vocabulary, cross-checked against COM4061"@en ;
+    backlog:evidenceVerified true ; backlog:hasTestId "SDLC-S09" ;
+    backlog:hasTestSpec "01-ontologies/backlog_tbox_v1_95_0.ttl" ;
+    backlog:hasVerificationMethod "ModelLevel/owesLevel checked against COM4061 chapters 1-8 (19 files, 560 classes); enforced by three rules, proven in both directions by the obligation fixtures shipped in the same release." ;
+    backlog:verifiedAt "2026-09-11T12:36:56Z"^^xsd:dateTime ;
+    backlog:verifiedByTool "backlog_validate_v1_6_0.py + pyshacl" ;
+    backlog:attestsCriterion fw:AC_SDLC_S09 ;
+    backlog:satisfiedByArtifact "01-ontologies/backlog_tbox_v1_95_0.ttl" ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+fw:H_SDLC_S09 a backlog:TestHarness ; rdfs:label "Harness for level/depth/UI vocabulary"@en ;
+    backlog:harnessFor fw:S_SDLC_LevelDepthVocabulary ; backlog:hasHarnessEvidence fw:Ev_SDLC_LevelDepth ;
+    backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: enforced by three rules, proven in both directions by the obligation fixtures shipped in the same release." .
+
+fw:S_SDLC_TestDriveProof a backlog:Task ; backlog:hasIdentifier "SDLC-S10" ;
+    backlog:hasTitle "Carry a complete real project under the obligations, not only a fixture pair"@en ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-09-11T12:36:56Z"^^xsd:dateTime ; backlog:finishedAt "2026-09-12T13:06:28Z"^^xsd:dateTime ; backlog:lastAuditedAt "2026-09-12T13:06:28Z"^^xsd:dateTime ;
+    backlog:memberOfContainer fw:Register ; backlog:belongsToLineage fw:L_SDLCObligations ;
+    backlog:pursuesObjective fw:Obj_SDLC_Proven ;
+    backlog:satisfiesDeliverable fw:Del_TestDriveProof ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasEvidence fw:Ev_SDLC_T01A ; backlog:hasExecutionModality backlog:Modality_Manual ;
+    backlog:hasTestHarness fw:H_SDLC_S10 ;
+    backlog:hasRationale "Closed on the same real evidence as SDLC-S01/S08/S09's harness chain: the loan-desk drive (05-test-drives/testdrive_loan_desk_v1_1_0.ttl, CLOSURE_loan_desk_test_drive_v1_0_0.md), 113 refusals on the first run, 0 on the last. This deliverable is distinct from Del_ObligationsProven (SDLC-S07's fixture pair, still Proposed): a full project and a positive/negative pair are different kinds of proof." ;
+    backlog:satisfiedByArtifact "05-test-drives/CLOSURE_loan_desk_test_drive_v1_0_0.md" ;
+    backlog:hasAcceptanceCriterion fw:AC_SDLC_S10 .
+fw:AC_SDLC_S10 a backlog:AcceptanceCriterion ;
+    backlog:satisfiedByArtifact "05-test-drives/CLOSURE_loan_desk_test_drive_v1_0_0.md" ;
+    backlog:hasGherkinText "Given a complete real project declaring itself bound by the obligations at its opening, when it is carried from mission to a shipped release, then every stage refuses to close until its owed work exists; observed: 113 refusals on the first run, 0 on the last." .
+fw:H_SDLC_S10 a backlog:TestHarness ; rdfs:label "Harness for the test-drive-as-proof deliverable"@en ;
+    backlog:harnessFor fw:S_SDLC_TestDriveProof ; backlog:hasHarnessEvidence fw:Ev_SDLC_T01A ;
+    backlog:harnessComplete true ;
+    backlog:hasRationale "Complete on the loan-desk drive's own real, already-recorded outcome." .
+
 fw:S_SDLC_WitnessMeasure a backlog:Story ; backlog:hasIdentifier "SDLC-S06" ;
     backlog:hasTitle "Measure that each owed artifact first appears before the stage output that claims it" ;
     backlog:asRole "a session closing a stage under the obligations" ;
@@ -3602,6 +3722,11 @@ fw:Find_SDLC_S01ScopeMatchNoMove a backlog:RetrospectiveFinding ;
     backlog:relatesToWorkItem fw:S_SDLC_FirstAdopter ;
     backlog:hasRootCause "SDLC-S01 closed 2026-09-13 (real evidence, Ev_SDLC_T01A) but was never one of the six deliverables Obj_SDLC_ScopeMatch counts -- it was never going to move that metric, closed or not. Bookkeeping only, per this shape's own wording: recording that the pattern was seen and considered, not a judgement about what to do next." ;
     backlog:hasRemedy "None decided here. Obj_SDLC_ScopeMatch's real fix is the pending change request admitting the six out-of-scope items (already flagged to the owner); it does not run through S01 or any story metricMovableBy currently names." .
+fw:Obs_SDLC_ScopeMatch_20260913b a backlog:MetricObservation ;
+    backlog:observesMetric fw:Metric_SDLC_ScopeMatch ; backlog:observationFor fw:Obj_SDLC_ScopeMatch ;
+    backlog:hasObservedValue 5.0 ; backlog:observedAt "2026-09-13T14:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Re-counted after SC_SDLCScopeAmend2: scope now requires 9 deliverables (6 original + 3 admitted by this change). Of these, 4 are satisfied by Done work -- Del_StageObligations (SDLC-S01), Del_FullProcessCoverage (SDLC-S08), Del_LevelDepthVocabulary (SDLC-S09), Del_TestDriveProof (SDLC-S10) -- and 5 are not: Del_WitnessedClosure (SDLC-S05, Proposed), Del_RefinementProduces (SDLC-S03, Proposed), Del_DoDArtifacts (SDLC-S04, Proposed), Del_ArtifactOrderMeasured (SDLC-S06, Proposed), Del_ObligationsProven (SDLC-S07, Proposed). 9 - 4 = 5." ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
 fw:Obs_SDLC_ScopeMatch_20260913 a backlog:MetricObservation ;
     backlog:observesMetric fw:Metric_SDLC_ScopeMatch ; backlog:observationFor fw:Obj_SDLC_ScopeMatch ;
     backlog:hasObservedValue 6.0 ; backlog:observedAt "2026-09-13T00:00:00Z"^^xsd:dateTime ;
@@ -3716,6 +3841,7 @@ fw:Ev_SDLC_T01A a backlog:TestEvidence ;
     backlog:hasVerificationMethod "A project declaring itself bound by the obligations at its opening was carried from mission to a shipped release; every stage refused to close until its work existed, and the register reached zero refusals." ;
     backlog:verifiedAt "2026-09-11T19:00:00Z"^^xsd:dateTime ;
     backlog:verifiedByTool "backlog_validate_v1_6_0.py + pyshacl" ;
+    backlog:attestsCriterion fw:AC_SDLC_S01 , fw:AC_SDLC_S10 ;
     backlog:attestsCriterion fw:AC_SDLC_S01 ; backlog:belongsToLineage fw:L_SDLCObligations .
 fw:H_SDLC_T01A a backlog:TestHarness ; rdfs:label "Harness for the first analysis task"@en ;
     backlog:harnessFor fw:T_SDLC_S01_Analysis ; backlog:hasHarnessEvidence fw:Ev_SDLC_T01A ;

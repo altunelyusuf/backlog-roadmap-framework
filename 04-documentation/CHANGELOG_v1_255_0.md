@@ -8969,3 +8969,31 @@ above and still open.
 minutes**. Left disclosed and unfilled through v1.256.0's own publish rather than estimated, because
 the only honest source for it -- the commit that actually closes the iteration -- did not exist
 until that publish did. Register now genuinely conformant: 0 violations.
+
+## v1.257.0 — 2026-09-13 (MINOR: the boundary defect closed — five items admitted, three real deliverables, honestly re-measured)
+
+**A second scope amendment (`CR_SDLCScopeAmend2` / `SC_SDLCScopeAmend2`), the same real mechanism
+used once already this lineage.** Admits the five things the previous session built at the owner's own
+request and never formally scoped: `OS_SDLC_v2` (40 obligations, all 14 ISO/IEC 12207 processes, all 6
+design concerns), the analysis/design model-level split and specification depth, UI as a sixth design
+concern, the teaching-corpus cross-check that produced it (COM4061 ch.1-8), and the loan-desk test
+drive. Checked first, not assumed: the vocabulary exclusion (`Ex_SDLC_NoNewKinds`) was never actually
+violated by any of this — a real, dated 2026-09-09 proposal-and-withdrawal record shows the vocabulary
+was already BRSF's own, never another registrant's to ask for. The real gap was scope boundary, not vocabulary
+origin, and it is what this change closes.
+
+**Three deliverables, three tasks, closed on evidence that already existed** before this change request
+did: `Del_FullProcessCoverage`, `Del_LevelDepthVocabulary`, `Del_TestDriveProof` — nothing re-built,
+nothing re-tested, each traced to the real commit that shipped it (`v1.254.0`, and the loan-desk
+closure commit). The teaching-corpus check is the method behind the model-level deliverable, not a
+deliverable of its own — three, not five.
+
+**A same-session counting mistake, caught and corrected in the open.** Before drafting this, this
+session claimed the scope's deliverable count (4 found vs. 6 recorded) didn't reconcile. It did — a
+second `requiresDeliverable` statement later in the same file was missed on the first pass. No data was
+wrong; the search was incomplete. Corrected before anything was built on it.
+
+**`Obj_SDLC_ScopeMatch` re-measured honestly, not asserted:** 9 deliverables now required (6 + 3), 4
+satisfied by Done work, **5** genuinely still open — down from 6, and for a real reason: one deliverable
+this lineage owed from the start (`Del_StageObligations`) closed alongside the three newly admitted
+ones. Register conformant: 0 violations.
