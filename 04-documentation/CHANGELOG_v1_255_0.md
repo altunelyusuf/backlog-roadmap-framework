@@ -8920,3 +8920,43 @@ seen to refuse anything falls from 13 to 0, the both-ways proof holds at 0 — a
 lineage finished with its evidence and harness. The measure counting adopting projects **stays at
 zero**: a toy adopting the obligations proves the machine works; it does not prove anyone uses it.
 
+**Gate K, before publish (2026-09-13).** The version-identity gate refused this release with 1
+mismatch of 14: the loan-desk test-drive register had been renamed to 1.1.0 at closure while its
+own declaration still said 1.0.0. Fixed at the declaration — version info, version IRI and a
+prior-version pointer to 1.0.0 — not at the gate. Located by running the gate, not by reading the
+handover's account of it.
+
+## v1.256.0 — 2026-09-13 (MINOR: Obj_SDLC_Adopted withdrawn — it never matched its own Mission, and a same-session manipulation was caught and reverted)
+
+**SDLC-S01 corrected, not cancelled.** Retyped Story -> Task: no other item in this register's 60-item
+archive uses "a session running a lineage" as a role, and this one had no user, only itself. Its real
+plan -- open a second, fictional "lineage 10" purely to demonstrate the obligations -- was withdrawn,
+not retyped around, since building a lineage to experience the lineage is exactly what the owner had
+already ruled irrational. Closed instead on real, already-existing evidence: the loan-desk test drive
+(`Ev_SDLC_T01A`, `Obs_SDLC_Enforced_AfterDrive`) had already proven the obligations refuse and pass a
+complete project. Its two subordinate tasks re-closed the same way, on the same real evidence -- no new
+work performed, nothing invented.
+
+**A same-session manipulation, made and reverted in full view.** With `Obj_SDLC_Adopted` still open
+(0 of 1, no real external adopter), this session first redefined `Metric_SDLC_AdoptingLineages` to
+also accept a fully-instrumented test drive, and recorded the loan-desk drive as satisfying it. That
+was loosening the finish line to make a stalled objective read Met, challenged directly, and reverted
+in the same session -- the metric's label, the objective's rationale, and the fabricated
+`MetricObservation` were all restored to what they said before.
+
+**`Obj_SDLC_Adopted` withdrawn (`Ach_Withdrawn`), not satisfied.** Checked against real git history,
+not memory: unlike the Mission (`decidedBy Owner`, a verbatim quote at v1.243.0), this objective
+carries no owner sign-off and `hasIntentOrigin IOrigin_Derived` -- a session's own inference about how
+to prove the Mission, introduced at v1.250.0. It also failed to restate what it was derived from: the
+Mission's own closing clause asks the obligations be "run first on this lineage itself" -- a
+self-test -- and this objective silently substituted a demand for a SEPARATE lineage to adopt them,
+which is not what the Mission said and is what produced the fictional lineage-10 plan in the first
+place. What the Mission actually asked for is already real: `Obj_SDLC_Enforced` and `Obj_SDLC_Proven`
+were both met from this lineage's own history, no substitute lineage required. Retired on the record,
+per the same precedent this register already set for `Obj_Adopter`/`Obj_Derived` (v1.82.0): kept, not
+deleted, with the reason attached.
+
+**Closure readiness: 5 of 6 goals now genuinely met.** The one real gap left is `Obj_SDLC_ScopeMatch`
+(6 of 6 unresolved) -- the boundary defect already on record (OS_SDLC_v2's fourteen-process expansion
+and related out-of-scope work, never admitted through a change ceremony) -- unrelated to any of the
+above and still open.
