@@ -8960,3 +8960,12 @@ deleted, with the reason attached.
 (6 of 6 unresolved) -- the boundary defect already on record (OS_SDLC_v2's fourteen-process expansion
 and related out-of-scope work, never admitted through a change ceremony) -- unrelated to any of the
 above and still open.
+
+## v1.256.1 — 2026-09-13 (PATCH: the iteration's real duration, measured from its own two real commits)
+
+`It_SDLC_1`'s observed duration filled in from the two commits that actually bound it --
+`backlog-roadmap-framework-v1.251.0` (Backlog stage close, opened this iteration) to
+`backlog-roadmap-framework-v1.256.0` (this session's own real publish, closed it): **4212.32
+minutes**. Left disclosed and unfilled through v1.256.0's own publish rather than estimated, because
+the only honest source for it -- the commit that actually closes the iteration -- did not exist
+until that publish did. Register now genuinely conformant: 0 violations.

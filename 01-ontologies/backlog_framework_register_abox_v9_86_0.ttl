@@ -3364,7 +3364,9 @@ fw:ArchiveConformance_120 a backlog:ArchiveConformanceRecord ;
 #################################################################
 fw:It_SDLC_1 a backlog:Iteration ;
     backlog:hasIdentifier "SDLC-IT-1" ; backlog:hasTitle "First adopting lineage"@en ;
-    backlog:hasState backlog:Done ;   # moved 2026-09-13: R1a derives Done once its only member (SDLC-S01, retyped Task) is Done -- was InProgress, kicked off 2026-09-11 (KO_SDLC_It1). DeploymentUnit added below at real publish (v1.256.0); observed duration still owed, requires the actual closing commit hash this draft does not have until it is committed.
+    backlog:hasState backlog:Done ;   # moved 2026-09-13: R1a derives Done once its only member (SDLC-S01, retyped Task) is Done -- was InProgress, kicked off 2026-09-11 (KO_SDLC_It1).
+    backlog:hasObservedDuration 4212.32 ;
+    backlog:hasDurationSource "From backlog-roadmap-framework-v1.251.0 (commit d54ddcd3, 2026-09-10T14:52:46Z, the commit that closed this lineage's Backlog stage and opened the only iteration it has had) to backlog-roadmap-framework-v1.256.0 (commit 126eedd9, 2026-09-13T13:05:05Z, the commit that closed it) -- 4212.32 minutes." ;
 
     backlog:iterationStart "2026-09-10T13:00:00Z"^^xsd:dateTime ;
     backlog:iterationEnd "2026-09-24T13:00:00Z"^^xsd:dateTime ;
