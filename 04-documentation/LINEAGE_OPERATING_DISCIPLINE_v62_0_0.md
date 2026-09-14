@@ -2643,3 +2643,28 @@ a text-matching technicality; the third moved it. The rule this leaves: **owners
 data.** Every time this session inferred it from a convenient pointer — `lineageForMission` here,
 reachability in the original partition — it inferred it wrongly, and in the same direction: the
 convenient pointer describes what the author was picturing, not what the register says.
+
+## G93 — `backlog_lineage_compass`'s FOCUS and `backlog_roadmap_report`'s NEXT answer different questions; that relationship was never stated, so an adopter had to reconstruct it ad hoc
+
+A real handover (an adopting project, an adopting project, 2026-09-14): asked to use "the lineage methodology,
+not ad hoc methods," the session ran this framework's own two real tools and got what looked like two
+disagreeing answers to "what should this lineage do next" — FOCUS named one objective, NEXT named work
+in an unrelated package. Checked directly, not assumed: neither script's CLI references the other;
+G59-G62 and the STANDARD document mention "compass" or "FOCUS" nowhere near "NEXT," `backlog_roadmap_report`,
+or `RankingModel`. The relationship genuinely was never written down.
+
+**Ruling: the two are not required to agree, and that is by design, stated here for the first time.**
+FOCUS (`G59`) is a portfolio-level, periodic-review diagnostic: which objective carries the largest
+remaining fraction of its own original gap, "never applied automatically." NEXT
+(`backlog_roadmap_report`) is the operational, ready-to-pick-up answer, already carrying its own
+owner-decided fork resolution (`hasRankingForkResolution`) where a real ranking disagreement exists. A
+bottleneck objective can have no ready, unblocked `WorkItem` at all, or be served only by work that
+currently scores low under whichever ranking model governs NEXT — divergence between the two is a real
+signal worth an owner's attention, not a defect for a session to silently reconcile its own way. Two
+sessions reasoning independently from the same divergence could reach different, unrecorded
+reconciliations; this ruling is the recorded one.
+
+**Not built:** the handover's own second option — a `--focus-objective` flag connecting the two tools
+structurally — is real, additive, and deliberately not taken up here. This documentation fix is the
+cheaper mechanism doing the same job for now (`G39`'s own preference); the structural option is real,
+undecided scope for later, not dismissed.

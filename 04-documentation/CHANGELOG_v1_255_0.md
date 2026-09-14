@@ -1,4 +1,17 @@
-# Changelog
+#
+## v1.263.0 addendum — G93, a real cross-tool precedence gap ruled on
+
+A second, unrelated handover arrived mid-release (an adopting project): `backlog_lineage_compass`'s FOCUS and
+`backlog_roadmap_report`'s NEXT can name unrelated work with nothing connecting them, and neither
+governing document ever said whether that's expected. Verified independently first: grepped both
+documents in full, confirmed the gap was real, not the reporting session's misreading. Ruled `G93`:
+the two answer different questions by design (portfolio diagnostic vs. operational pick-up), divergence
+is a signal, not a defect -- documentation-only, the cheaper fix; a structural `--focus-objective` flag
+was proposed and deliberately left undecided rather than built now. Caught and fixed a numbering
+mistake in the same pass: an incomplete grep (`G6[0-9]` only) missed that rulings already ran to `G92`;
+renumbered before publishing, not after.
+
+ Changelog
 
 ## v1.253.0 — 2026-09-10 (MINOR: progressive archive conformance, archive integrity, and lineage 9's planning)
 
