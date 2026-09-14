@@ -9043,3 +9043,18 @@ S04 closed — a `RetrospectiveFinding` records that plainly, no movement to cla
 
 **Lesson for this session, stated plainly:** before any ceremony sync that force-overwrites a working
 path, check for uncommitted work first. This is now a standing check, not an assumption.
+
+## v1.260.0 — 2026-09-14 (PATCH: the pending handover closed out — four of five items already done, one real gap recorded, not invented)
+
+Re-read `HANDOVER_brsf-session_to_next-session_state-and-drift_v1_0_0.md` in full against everything
+this session actually did, item by item, rather than assume it was already handled. Four of five real:
+no demonstration lineage opened; the version-identity gate fixed and published; the boundary amended
+by real change request; `SDLC-S04` built by ranking, not preference. The exclusion the handover asked
+to be rewritten needed no rewrite -- independently verified the vocabulary it names was never actually
+minted, so it was never violated.
+
+One item was not done, and is not invented here either: an earlier, separate 18-case refusal
+experiment found 13 refused, 4 stayed silent, 1 mis-run -- real, session-local evidence, now gone.
+Reconstructing it from a five-line description would be fabricating evidence, so it isn't reconstructed;
+the four named defect categories are recorded on `SDLC-S02` instead, so the finding survives this time.
+Handover moved to `accepted/`, logged.
