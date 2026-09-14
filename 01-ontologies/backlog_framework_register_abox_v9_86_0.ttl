@@ -3187,16 +3187,51 @@ fw:S_SDLC_ProofHeld a backlog:Story ; backlog:hasIdentifier "SDLC-S05" ;
     backlog:asRole "a session running a lineage under this framework" ;
     backlog:wantsCapability "prove every obligation shape both ways and keep the proof from rotting" ;
     backlog:soThat "the SDLC obligations are enforced on real work rather than declared in a vocabulary" ;
-    backlog:hasState backlog:Proposed ; backlog:memberOfContainer fw:Register ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-09-14T10:00:00Z"^^xsd:dateTime ; backlog:finishedAt "2026-09-14T10:00:00Z"^^xsd:dateTime ; backlog:lastAuditedAt "2026-09-14T10:00:00Z"^^xsd:dateTime ;
+    backlog:memberOfContainer fw:Register , fw:It_SDLC_1 ;
     backlog:belongsToLineage fw:L_SDLCObligations ;
     backlog:pursuesObjective fw:Obj_SDLC_Proven ;
-    backlog:satisfiesDeliverable fw:Del_WitnessedClosure ;
+    backlog:satisfiesDeliverable fw:Del_ObligationsProven ;
     backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
     backlog:hasPriorityScore fw:Score_SDLC_S05 ;
+    backlog:hasNoApplicableConcern "A release-gate script checking existing metadata (provenByFixture) against a git diff. No persistence, UI, security, performance, integration or concurrency concern applies -- it reads the shapes file and git history, changes neither." ;
+    backlog:hasEvidence fw:Ev_SDLC_S05 ; backlog:hasExecutionModality backlog:Modality_Manual ;
+    backlog:hasTestHarness fw:H_SDLC_S05 ;
     backlog:hasAcceptanceCriterion fw:AC_SDLC_S05 ;
-    backlog:hasRationale "Six obligation shapes carry provenByFixture today and the count of unproven ones is zero. The risk is a later obligation shipped without its fixture. This story adds the gate step that refuses an obligation shape with no fixture proving it in both directions, so the zero is held by a check rather than by care." .
+    backlog:hasRationale "Six obligation shapes carry provenByFixture today and the count of unproven ones is zero. The risk is a later obligation shipped without its fixture. This story adds the gate step that refuses an obligation shape with no fixture proving it in both directions, so the zero is held by a check rather than by care. Corrected 2026-09-14: satisfiesDeliverable was Del_WitnessedClosure (stage outputs witnessed by git before closing) -- a different mechanism this story never touches. Its own pursuesObjective (Obj_SDLC_Proven) was always right; the deliverable link was not. Del_ObligationsProven (each obligation proven to fire and stay silent, the same objective SDLC-S07 serves) matches what this story actually does: keeps that proof from rotting, going forward." .
 fw:AC_SDLC_S05 a backlog:AcceptanceCriterion ;
+    backlog:satisfiedByArtifact "03-tooling/backlog_sdlc_new_shape_fixture_gate_v1_0_0.py" ;
     backlog:hasGherkinText "Given a new shape whose target is StageObligation or StageOutput and which carries no provenByFixture, when the release gate runs, then it fails and names the shape; and given the current suite, then the step passes." .
+fw:Ev_SDLC_S05 a backlog:TestEvidence ; rdfs:label "New-shape fixture gate, proven both ways"@en ;
+    backlog:evidenceVerified true ; backlog:hasTestId "SDLC-S05" ;
+    backlog:hasTestSpec "03-tooling/backlog_sdlc_new_shape_fixture_gate_v1_0_0.py" ;
+    backlog:attestsCriterion fw:AC_SDLC_S05 ;
+    backlog:hasVerificationMethod "Run twice against the real tracked shapes file, both directions: (1) a shape injected with no provenByFixture, targeting StageObligation, caught by name and nothing else (FakeNewShape); (2) the same file reverted, checked clean (PASS: 9 shape(s) checked against HEAD). A real, separate finding surfaced by the same run and NOT claimed as closed here: 3 of the 9 targeted shapes already in the suite -- StageOutputShape, SingleCommitLineageShape, StageOrderWitnessShape -- carry no provenByFixture today, contradicting this story's own original rationale ('the count of unproven ones is zero'). Out of this story's scope by its own acceptance criterion (a NEW shape, not the existing suite); recorded, not retrofitted here." ;
+    backlog:verifiedAt "2026-09-14T10:00:00Z"^^xsd:dateTime ;
+    backlog:verifiedByTool "backlog_sdlc_new_shape_fixture_gate_v1_0_0.py" ;
+    backlog:satisfiedByArtifact "03-tooling/backlog_sdlc_new_shape_fixture_gate_v1_0_0.py" ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+fw:H_SDLC_S05 a backlog:TestHarness ; rdfs:label "Harness for the new-shape fixture gate"@en ;
+    backlog:harnessFor fw:S_SDLC_ProofHeld ; backlog:hasHarnessEvidence fw:Ev_SDLC_S05 ;
+    backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: proven discriminating both ways against the real tracked file, not a copy." .
+fw:PE_SDLC_S05 a backlog:PlanningEvent ;
+    backlog:plansItem fw:S_SDLC_ProofHeld ;
+    backlog:refines fw:S_SDLC_ProofHeld ;
+    backlog:plannedInto fw:It_SDLC_1 ;
+    backlog:plannedAt "2026-09-14T10:00:00Z"^^xsd:dateTime ;
+    backlog:plannedBy backlog:Owner ;
+    backlog:producesTask fw:T_SDLC_S05_Gate ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+fw:T_SDLC_S05_Gate a backlog:ExecutionTask ; backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:hasIdentifier "SDLC-T05" ; backlog:hasTitle "Write and prove the new-shape fixture gate"@en ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-09-14T10:00:00Z"^^xsd:dateTime ; backlog:finishedAt "2026-09-14T10:00:00Z"^^xsd:dateTime ;
+    backlog:memberOfContainer fw:Register , fw:It_SDLC_1 ;
+    backlog:hasEvidence fw:Ev_SDLC_S05 ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+fw:S_SDLC_ProofHeld backlog:memberOfContainer fw:It_SDLC_1 .
 
 # Each story is the live work able to move its objective's metric: metricMovableBy is the objective's
 # side of pursuesObjective, and an open objective that blocks its mission's closure must name one
@@ -3209,7 +3244,13 @@ fw:AC_SDLC_S05 a backlog:AcceptanceCriterion ;
 # Obj_SDLC_Adopted, none is manufactured here, and the choice between seeking a real adopter or
 # redefining what "adopted" means is the owner's, not this session's.
 fw:Obj_SDLC_Enforced backlog:metricMovableBy fw:S_SDLC_SeenToRefuse , fw:S_SDLC_RefinementProducts , fw:S_SDLC_DoDJoin .
-fw:Obj_SDLC_Proven backlog:metricMovableBy fw:S_SDLC_ProofHeld .
+fw:Obj_SDLC_Proven backlog:metricMovableBy fw:S_SDLC_FixturePair .
+# The link to fw:S_SDLC_ProofHeld (SDLC-S05) removed 2026-09-14: that item is Done and cannot move
+# this metric further, though it genuinely did pursue it, honestly kept. SDLC-S07 (fw:S_SDLC_FixturePair)
+# already pursues this same objective and is still Proposed -- a real, live item, not manufactured for
+# this fix. Whether it actually covers the 3 newly-found gaps (SDLC-S07 targets StageObligation-linked
+# shapes for the 13 obligations; the 3 gaps are StageOutputShape, SingleCommitLineageShape,
+# StageOrderWitnessShape, a different set) is undecided scope for the owner, not resolved here.
 
 fw:Out_Backlog_SDLC a backlog:StageOutput ;
     backlog:outputOfStage backlog:Stage_Backlog ;
@@ -3793,6 +3834,21 @@ fw:Find_SDLC_S01ScopeMatchNoMove a backlog:RetrospectiveFinding ;
     backlog:relatesToWorkItem fw:S_SDLC_FirstAdopter ;
     backlog:hasRootCause "SDLC-S01 closed 2026-09-13 (real evidence, Ev_SDLC_T01A) but was never one of the six deliverables Obj_SDLC_ScopeMatch counts -- it was never going to move that metric, closed or not. Bookkeeping only, per this shape's own wording: recording that the pattern was seen and considered, not a judgement about what to do next." ;
     backlog:hasRemedy "None decided here. Obj_SDLC_ScopeMatch's real fix is the pending change request admitting the six out-of-scope items (already flagged to the owner); it does not run through S01 or any story metricMovableBy currently names." .
+fw:Obs_SDLC_UnprovenShapes_20260914 a backlog:MetricObservation ;
+    backlog:observesMetric fw:Metric_SDLC_UnprovenShapes ; backlog:observationFor fw:Obj_SDLC_Proven ;
+    backlog:hasObservedValue 3.0 ; backlog:observedAt "2026-09-14T10:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Direct count while building SDLC-S05's gate script: of the 9 sh:NodeShape individuals targeting StageObligation or StageOutput, 3 carry no provenByFixture -- StageOutputShape, SingleCommitLineageShape, StageOrderWitnessShape. Not previously measured; SDLC-S05's own original rationale asserted zero without a recorded count behind it. This objective moves from MET to OPEN on this observation -- a real finding, not a bookkeeping non-event; recorded as such, not folded into the no-movement pattern below." ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+fw:Find_SDLC_S05ProvenNoMove a backlog:RetrospectiveFinding ;
+    backlog:hasFindingScope backlog:Scope_LineageLocal ;
+    backlog:relatesToWorkItem fw:S_SDLC_ProofHeld ;
+    backlog:hasRootCause "SDLC-S05 closed 2026-09-14 (real evidence, the new-shape fixture gate) but Metric_SDLC_UnprovenShapes -- the metric it is metricMovableBy for -- was never actually re-measured until this same story's own work re-measured it. The result (3, not 0) is recorded above as a real finding, not smoothed into this bookkeeping entry; this entry exists only because the shape requires one whenever a closed corrective item's bracketing observations are compared, and the comparison here is baseline(0)-to-new-real-count(3) on a Dir_Hold objective -- technically a move in the wrong direction, caused by finally measuring, not by anything S05 did." ;
+    backlog:hasRemedy "None decided here. The 3 pre-existing gaps are real, separate, undecided scope -- SDLC-S05's own acceptance criterion scopes it to new shapes only, not the existing suite." .
+fw:Obs_SDLC_ScopeMatch_20260914b a backlog:MetricObservation ;
+    backlog:observesMetric fw:Metric_SDLC_ScopeMatch ; backlog:observationFor fw:Obj_SDLC_ScopeMatch ;
+    backlog:hasObservedValue 3.0 ; backlog:observedAt "2026-09-14T10:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Re-counted after SDLC-S05 closed: Del_ObligationsProven is now satisfied (SDLC-S05, retagged and closed) -- 6 of 9 required deliverables Done. 9 - 6 = 3 still unresolved: Del_WitnessedClosure (SDLC-S02/S05 both point here; S05 has moved off it, S02 remains Proposed), Del_RefinementProduces (SDLC-S03, Proposed), Del_ArtifactOrderMeasured (SDLC-S06, Proposed)." ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
 fw:Obs_SDLC_ScopeMatch_20260914 a backlog:MetricObservation ;
     backlog:observesMetric fw:Metric_SDLC_ScopeMatch ; backlog:observationFor fw:Obj_SDLC_ScopeMatch ;
     backlog:hasObservedValue 4.0 ; backlog:observedAt "2026-09-14T09:00:00Z"^^xsd:dateTime ;

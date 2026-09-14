@@ -9058,3 +9058,30 @@ experiment found 13 refused, 4 stayed silent, 1 mis-run -- real, session-local e
 Reconstructing it from a five-line description would be fabricating evidence, so it isn't reconstructed;
 the four named defect categories are recorded on `SDLC-S02` instead, so the finding survives this time.
 Handover moved to `accepted/`, logged.
+
+## v1.261.0 — 2026-09-14 (MINOR: SDLC-S05 built, and a real gap it found along the way, disclosed not hidden)
+
+**`SDLC-S05` built and closed**, ranked second by `BP-D10`: a real gate script
+(`backlog_sdlc_new_shape_fixture_gate_v1_0_0.py`) refusing a newly-added `StageObligation`/`StageOutput`
+shape shipped with no `provenByFixture`, proven discriminating both ways against the real tracked
+shapes file, not a copy. Its deliverable link was wrong before this closed it -- retagged from
+`Del_WitnessedClosure` (a mechanism it never touches) to `Del_ObligationsProven` (what it actually
+does), with the reasoning on record.
+
+**A real finding surfaced while building it, not smoothed over:** `SDLC-S05`'s own original rationale
+claimed "the count of unproven [obligation shapes] is zero." Checked directly -- it wasn't. 3 of the 9
+`StageObligation`/`StageOutput`-targeting shapes carry no fixture proof today: `StageOutputShape`,
+`SingleCommitLineageShape`, `StageOrderWitnessShape`. `Obj_SDLC_Proven` moves from MET to genuinely
+**OPEN** on this observation. Not this story's to fix -- its own acceptance criterion scopes it to new
+shapes, not the existing suite -- so it isn't retrofitted here; recorded, with `SDLC-S07` (already a
+real, live pursuer of the same objective) left as the metric's own path forward, undecided whether it
+actually covers this specific gap.
+
+**A near-mistake caught in the same pass:** clearing a stale `metricMovableBy` pointer briefly took
+the accurate `pursuesObjective` claim down with it. Restored -- `SDLC-S05` genuinely did pursue this
+objective, even though it alone didn't close the newly-found gap; the fix was finding the real live
+item already pursuing it (`SDLC-S07`), not erasing honest history to force a clean validation.
+
+**`Obj_SDLC_ScopeMatch`: 4 to 3.** `Del_ObligationsProven` is now satisfied. Three deliverables remain:
+`Del_WitnessedClosure` (`SDLC-S02`/`S05`, both now settled -- S05 moved off it, S02 remains open),
+`Del_RefinementProduces` (`SDLC-S03`), `Del_ArtifactOrderMeasured` (`SDLC-S06`).
