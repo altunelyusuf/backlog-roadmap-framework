@@ -9095,3 +9095,25 @@ alone -- work cannot start at the instant it is planned. The state model itself 
 Explicitly not built now: not applied to lineage 9, and not built at all until lineage 9 actually
 closes -- "it is open for a very long time" is itself part of the ruling. Filed to `deferred/`, logged
 with the ruling attached, nothing else touched.
+
+## v1.263.0 — 2026-09-14 (MINOR: SDLC-S02 closed on real evidence, and a stranded finding moved to where it belongs)
+
+**`SDLC-S02` closed**, on the same loan-desk evidence already on record -- checked directly, not
+assumed: its closure record's own five planning steps (mission/scope/goal/objective/backlog) match
+OS_SDLC_v1's stage structure, not only OS_SDLC_v2's separate 14-process expansion. 113 refusals on the
+first run, 0 on the last, each naming its own rule.
+
+**The four-silent-defect finding, misfiled since it was first recorded, moved to where it actually
+belongs.** It was attached to `SDLC-S02` (the original thirteen obligations); re-examined, the four
+named gaps -- backlog-step acceptance criteria, security's state model, interface's screens,
+integration's assembly evidence -- are concern-specific categories that only exist under `SDLC-S08`'s
+six-concern expansion. Moved in substance, not deleted; still real, still unconfirmed, still undecided
+scope.
+
+**`Obj_SDLC_ScopeMatch`: 3 to 2.** `Del_WitnessedClosure` now satisfied. Two deliverables remain:
+`Del_RefinementProduces` (`SDLC-S03`), `Del_ArtifactOrderMeasured` (`SDLC-S06`).
+
+**This work was lost once before this same release, and re-done, not just re-described.** A ceremony
+sync (`git checkout FETCH_HEAD`) overwrote it before it was committed -- the second time this exact
+mistake has happened this session (`v1.258.0` was the first). Re-applied here from the same real
+grounding as the original pass, not reconstructed from a changelog's description of it.

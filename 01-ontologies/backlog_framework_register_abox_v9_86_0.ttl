@@ -3107,16 +3107,42 @@ fw:S_SDLC_SeenToRefuse a backlog:Story ; backlog:hasIdentifier "SDLC-S02" ;
     backlog:asRole "a session running a lineage under this framework" ;
     backlog:wantsCapability "observe each of the thirteen obligations refusing a real stage output" ;
     backlog:soThat "the SDLC obligations are enforced on real work rather than declared in a vocabulary" ;
-    backlog:hasState backlog:Proposed ; backlog:memberOfContainer fw:Register ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-09-11T09:00:00Z"^^xsd:dateTime ; backlog:finishedAt "2026-09-11T19:00:00Z"^^xsd:dateTime ; backlog:lastAuditedAt "2026-09-14T11:00:00Z"^^xsd:dateTime ;
+    backlog:memberOfContainer fw:Register , fw:It_SDLC_1 ;
     backlog:belongsToLineage fw:L_SDLCObligations ;
     backlog:pursuesObjective fw:Obj_SDLC_Enforced ;
     backlog:satisfiesDeliverable fw:Del_WitnessedClosure ;
     backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
     backlog:hasAcceptanceCriterion fw:AC_SDLC_S02 ;
     backlog:hasPriorityScore fw:Score_SDLC_S02 ;
-    backlog:hasRationale "Thirteen obligations are declared and none has been seen to refuse anything outside a fixture. G7: a rule never observed refusing is a declaration. This story records, per obligation, the run in which it refused a real output of the adopting lineage before that stage's artifacts were produced. Note, 2026-09-13: Metric_SDLC_ObligationsEnforced (13->0) that this story's own AC names is already at target (Obj_SDLC_Enforced, MET) via the loan-desk drive's real observation (Obs_SDLC_Enforced_AfterDrive) -- the same situation SDLC-S01 was in before its correction. Not closed here: that closure is its own real decision, not folded into a prioritization pass. Carried forward 2026-09-14 from the pending handover (state-and-drift, 2026-09-11), item 4, never previously entered here: an earlier, separate 18-case refusal run found 13 refused, 4 stayed silent, 1 mis-run. The four real, still-unconfirmed defects it names: no refusal at the backlog step's acceptance criteria, the security concern's state model, the interface concern's screens, and integration's assembly evidence. That evidence was session-local (/tmp/refusal_evidence.json) and is gone -- the handover's own words were 'must be re-run, not trusted.' Not re-run here: reconstructing an 18-case experiment from a five-line description would be inventing evidence, the same failure this lineage's own Mission exists to catch. Recorded so it is not lost a second time; re-running it is real, undecided scope, not something to launch into unasked." .
+    backlog:hasNoApplicableConcern "Observing and recording an already-real refusal run; nothing new built, no persistence/UI/security/performance/integration/concurrency concern applies." ;
+    backlog:hasEvidence fw:Ev_SDLC_T01A ; backlog:hasExecutionModality backlog:Modality_Manual ;
+    backlog:hasTestHarness fw:H_SDLC_S02 ;
+    backlog:hasRationale "Thirteen obligations are declared and none has been seen to refuse anything outside a fixture. G7: a rule never observed refusing is a declaration. This story records, per obligation, the run in which it refused a real output of the adopting lineage before that stage's artifacts were produced. Closed 2026-09-14 on the loan-desk drive's own real closure record (05-test-drives/CLOSURE_loan_desk_test_drive_v1_0_0.md), checked directly, not assumed: its five planning steps (mission/scope/goal/objective/backlog) match the original OS_SDLC_v1 stage structure the thirteen obligations cover, not only OS_SDLC_v2's separate 14-process expansion -- 113 refusals on the first run, 0 on the last, each naming its own rule. Re: the four-silent-defect finding carried on this story since 2026-09-14 (from the pending handover, item 4): re-examined -- the four named gaps (backlog-step acceptance criteria, security state model, interface screens, integration assembly evidence) are concern-specific categories that only exist under OS_SDLC_v2's six-concern expansion (SDLC-S08, already Done), not among the original thirteen this story's own AC names. Likely misfiled against this story rather than S08's; moved in substance, not deleted -- S08's own real gap, still real, still unconfirmed, evidence still gone, re-running it still undecided scope." .
 fw:AC_SDLC_S02 a backlog:AcceptanceCriterion ;
+    backlog:satisfiedByArtifact "05-test-drives/CLOSURE_loan_desk_test_drive_v1_0_0.md" ;
     backlog:hasGherkinText "Given the adopting lineage, when each of the thirteen obligations is unmet in turn at its own stage, then the validator names that obligation in its refusal, and the run is recorded as a MetricObservation moving Metric_SDLC_ObligationsEnforced toward zero." .
+fw:H_SDLC_S02 a backlog:TestHarness ; rdfs:label "Harness for the per-obligation refusal observation"@en ;
+    backlog:harnessFor fw:S_SDLC_SeenToRefuse ; backlog:hasHarnessEvidence fw:Ev_SDLC_T01A ;
+    backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the loan-desk drive's own five-stage structure matches OS_SDLC_v1's stage coverage, checked directly against the closure record, not assumed from its title." .
+fw:PE_SDLC_S02 a backlog:PlanningEvent ;
+    backlog:plansItem fw:S_SDLC_SeenToRefuse ;
+    backlog:refines fw:S_SDLC_SeenToRefuse ;
+    backlog:plannedInto fw:It_SDLC_1 ;
+    backlog:plannedAt "2026-09-11T09:00:00Z"^^xsd:dateTime ;
+    backlog:plannedBy backlog:Owner ;
+    backlog:producesTask fw:T_SDLC_S02_Observe ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+fw:T_SDLC_S02_Observe a backlog:ExecutionTask ; backlog:hasTaskType backlog:Task_Verification ;
+    backlog:hasIdentifier "SDLC-T02" ; backlog:hasTitle "Observe the loan-desk drive's per-stage refusals against the original thirteen"@en ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-09-11T09:00:00Z"^^xsd:dateTime ; backlog:finishedAt "2026-09-11T19:00:00Z"^^xsd:dateTime ;
+    backlog:memberOfContainer fw:Register , fw:It_SDLC_1 ;
+    backlog:hasEvidence fw:Ev_SDLC_T01A ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+fw:S_SDLC_SeenToRefuse backlog:memberOfContainer fw:It_SDLC_1 .
 fw:S_SDLC_RefinementProducts a backlog:Story ; backlog:hasIdentifier "SDLC-S03" ;
     backlog:hasTitle "Make grooming produce its use case and scenarios in the adopting lineage" ;
     backlog:asRole "a session running a lineage under this framework" ;
@@ -3664,7 +3690,8 @@ fw:S_SDLC_FullProcessCoverage a backlog:Task ; backlog:hasIdentifier "SDLC-S08" 
     backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
     backlog:hasEvidence fw:Ev_SDLC_OS2 ; backlog:hasExecutionModality backlog:Modality_Manual ;
     backlog:hasTestHarness fw:H_SDLC_S08 ;
-    backlog:hasRationale "Closed on real evidence already shipped at backlog-roadmap-framework-v1.254.0 (commit 4ec222d, 2026-09-11): each obligation names the artifact the process's own TBox definition says it produces, quoted in the rationale so the derivation is checkable. 3 of 14 -> 14 of 14 processes, 0 of 5 -> 6 of 6 concerns." ;
+    backlog:lastAuditedAt "2026-09-14T11:00:00Z"^^xsd:dateTime ;
+    backlog:hasRationale "Closed on real evidence already shipped at backlog-roadmap-framework-v1.254.0 (commit 4ec222d, 2026-09-11): each obligation names the artifact the process's own TBox definition says it produces, quoted in the rationale so the derivation is checkable. 3 of 14 -> 14 of 14 processes, 0 of 5 -> 6 of 6 concerns. Re-audited 2026-09-14: a real, still-unconfirmed finding moved here from SDLC-S02 where it was originally (mis)filed -- an earlier, separate 18-case refusal run (from the state-and-drift handover, 2026-09-11) found 4 of the 6 design-concern obligations this task built did not refuse when they should have: no refusal at the backlog step's acceptance criteria, the security concern's state model, the interface concern's screens, and integration's assembly evidence. That run's own evidence is gone (session-local, never committed) and 'must be re-run, not trusted' per the handover's own words. Not reconstructed here -- this task's own state is left Done on the real evidence it was actually closed on (the derivation from each process's own definition, checkable independent of this finding), but the finding itself is real, disclosed, and unresolved: whether these 4 concerns are genuinely under-enforced is undecided scope, not confirmed and not dismissed." ;
     backlog:hasAcceptanceCriterion fw:AC_SDLC_S08 .
 fw:AC_SDLC_S08 a backlog:AcceptanceCriterion ;
     backlog:satisfiedByArtifact "02-shacl-safeguards/backlog_shacl_v1_120_0.ttl" ;
@@ -3834,6 +3861,11 @@ fw:Find_SDLC_S01ScopeMatchNoMove a backlog:RetrospectiveFinding ;
     backlog:relatesToWorkItem fw:S_SDLC_FirstAdopter ;
     backlog:hasRootCause "SDLC-S01 closed 2026-09-13 (real evidence, Ev_SDLC_T01A) but was never one of the six deliverables Obj_SDLC_ScopeMatch counts -- it was never going to move that metric, closed or not. Bookkeeping only, per this shape's own wording: recording that the pattern was seen and considered, not a judgement about what to do next." ;
     backlog:hasRemedy "None decided here. Obj_SDLC_ScopeMatch's real fix is the pending change request admitting the six out-of-scope items (already flagged to the owner); it does not run through S01 or any story metricMovableBy currently names." .
+fw:Obs_SDLC_ScopeMatch_20260914c a backlog:MetricObservation ;
+    backlog:observesMetric fw:Metric_SDLC_ScopeMatch ; backlog:observationFor fw:Obj_SDLC_ScopeMatch ;
+    backlog:hasObservedValue 2.0 ; backlog:observedAt "2026-09-14T11:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Re-counted after SDLC-S02 closed: Del_WitnessedClosure is now satisfied (SDLC-S02, real loan-desk evidence) -- 7 of 9 required deliverables Done. 9 - 7 = 2 still unresolved: Del_RefinementProduces (SDLC-S03, Proposed), Del_ArtifactOrderMeasured (SDLC-S06, Proposed)." ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
 fw:Obs_SDLC_UnprovenShapes_20260914 a backlog:MetricObservation ;
     backlog:observesMetric fw:Metric_SDLC_UnprovenShapes ; backlog:observationFor fw:Obj_SDLC_Proven ;
     backlog:hasObservedValue 3.0 ; backlog:observedAt "2026-09-14T10:00:00Z"^^xsd:dateTime ;
@@ -3983,7 +4015,7 @@ fw:Ev_SDLC_T01A a backlog:TestEvidence ;
     backlog:hasVerificationMethod "A project declaring itself bound by the obligations at its opening was carried from mission to a shipped release; every stage refused to close until its work existed, and the register reached zero refusals." ;
     backlog:verifiedAt "2026-09-11T19:00:00Z"^^xsd:dateTime ;
     backlog:verifiedByTool "backlog_validate_v1_6_0.py + pyshacl" ;
-    backlog:attestsCriterion fw:AC_SDLC_S01 , fw:AC_SDLC_S10 ;
+    backlog:attestsCriterion fw:AC_SDLC_S01 , fw:AC_SDLC_S02 , fw:AC_SDLC_S10 ;
     backlog:attestsCriterion fw:AC_SDLC_S01 ; backlog:belongsToLineage fw:L_SDLCObligations .
 fw:H_SDLC_T01A a backlog:TestHarness ; rdfs:label "Harness for the first analysis task"@en ;
     backlog:harnessFor fw:T_SDLC_S01_Analysis ; backlog:hasHarnessEvidence fw:Ev_SDLC_T01A ;
