@@ -9019,3 +9019,27 @@ label) surfaced two disclosed-not-decided findings: `SDLC-S05` is tagged against
 (`Del_WitnessedClosure`) its real content doesn't match, and `SDLC-S02`'s own target metric may already
 be met by the loan-desk drive — the same situation `SDLC-S01` was in before its correction. Both left
 for the owner, not resolved here.
+
+## v1.259.0 — 2026-09-14 (MINOR: v1.258.0's own scoring pass re-applied for real, and SDLC-S04 built)
+
+**A real integrity gap in the previous release, found and fixed, not hidden.** `v1.258.0`'s own
+changelog described a six-item `RICEScore`/`RegisterSession` prioritization pass. It was never
+actually in the file that shipped: a ceremony sync (`git checkout FETCH_HEAD`) overwrote the
+uncommitted edit before it was published, and nobody checked the real published commit against its
+own changelog before this session did. Found by diffing the governed content against the tag directly,
+not by trusting the prose. Re-applied here from the same real grounding as the first attempt (same
+counts, same rationale) — not reconstructed from the changelog's own description of the lost work,
+which would have been trusting a summary of a summary.
+
+**`SDLC-S04` built and closed**, the winner of that ranking: one new `hasDoneCondition` on `DoD_SDLC`
+naming what `TaskTypeObligationShape` already enforces — no second gate, exactly as the story's own
+acceptance criterion required. Real evidence chain, real `PlanningEvent`, real subordinate task.
+
+**Two objectives re-measured on close, both genuinely, because `SDLC-S04` sits in both objectives'
+`metricMovableBy` set** — caught by the validator refusing to pass until both were current, not by
+memory of which objectives an item serves: `Obj_SDLC_Enforced` unchanged (0 of 13, already met before
+S04 closed — a `RetrospectiveFinding` records that plainly, no movement to claim) and
+`Obj_SDLC_ScopeMatch` genuinely improved, 5 to **4** unresolved deliverables.
+
+**Lesson for this session, stated plainly:** before any ceremony sync that force-overwrites a working
+path, check for uncommitted work first. This is now a standing check, not an assumption.
