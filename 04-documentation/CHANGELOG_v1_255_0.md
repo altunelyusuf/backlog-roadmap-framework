@@ -8997,3 +8997,25 @@ wrong; the search was incomplete. Corrected before anything was built on it.
 satisfied by Done work, **5** genuinely still open — down from 6, and for a real reason: one deliverable
 this lineage owed from the start (`Del_StageObligations`) closed alongside the three newly admitted
 ones. Register conformant: 0 violations.
+
+## v1.258.0 — 2026-09-13 (PATCH: which of the six open stories to plan next, decided by BP-D10, not preference)
+
+**Owner's own instruction: no subjective sequencing.** Scored all six open stories on this lineage's
+own backlog (`SDLC-S02` through `SDLC-S07`) using BRSF's real prioritization discipline (`BP-D10`,
+RICE+DepFactor) rather than narrative preference — a real `RegisterSession`/`RICEScore` set, following
+the exact precedent this framework already set for itself (`RS_UnusedClassesPrioritization`).
+
+**Winner: `SDLC-S04`** (score 37.8) — reaches all 14 already-declared ISO/IEC 12207 task types, and its
+underlying refusal rule already exists (`TaskTypeObligationShape`); this story only makes it visible
+where the Definition of Done is read. Full ranking: S04 (37.8) > S05 (17.2) > S02 (7.8) > S06 (4.25) >
+S03 (2.7) > S07 (2.08). DepFactor 1.0 across all six — checked, not assumed: no real prerequisite among
+them blocks another.
+
+**Two mistakes caught in the open while building this, not hidden:** the first scoring pass only found
+five of the six real open items — `SDLC-S02` was missed and its own not-yet-scoreable flag was
+accidentally cleared while writing the others; caught by the validator immediately, restored, then
+scored honestly rather than patched back to unscored. And reading each story's own text (not its
+label) surfaced two disclosed-not-decided findings: `SDLC-S05` is tagged against a deliverable
+(`Del_WitnessedClosure`) its real content doesn't match, and `SDLC-S02`'s own target metric may already
+be met by the loan-desk drive — the same situation `SDLC-S01` was in before its correction. Both left
+for the owner, not resolved here.
