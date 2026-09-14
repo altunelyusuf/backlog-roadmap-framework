@@ -9085,3 +9085,13 @@ item already pursuing it (`SDLC-S07`), not erasing honest history to force a cle
 **`Obj_SDLC_ScopeMatch`: 4 to 3.** `Del_ObligationsProven` is now satisfied. Three deliverables remain:
 `Del_WitnessedClosure` (`SDLC-S02`/`S05`, both now settled -- S05 moved off it, S02 remains open),
 `Del_RefinementProduces` (`SDLC-S03`), `Del_ArtifactOrderMeasured` (`SDLC-S06`).
+
+## v1.262.0 — 2026-09-14 (PATCH: the another registrant governance-divergence handover, ruled on and filed)
+
+Owner's ruling on `HANDOVER_vaf-pipeline-session_..._retrofit-governance-process-divergence_v1_0_0.md`:
+Option C, but keyed to a real elapsed time between a plan and its execution rather than commit count
+alone -- work cannot start at the instant it is planned. The state model itself should grow richer
+(`Todo` after `Planned`, `Done` after `InProgress`, real exception states including `Reverted`).
+Explicitly not built now: not applied to lineage 9, and not built at all until lineage 9 actually
+closes -- "it is open for a very long time" is itself part of the ruling. Filed to `deferred/`, logged
+with the ruling attached, nothing else touched.
