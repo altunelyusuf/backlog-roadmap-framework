@@ -9197,6 +9197,34 @@ required to exist before the outcome was set, not promised after. Not yet archiv
 without archival is a real, flagged advisory, left as a separate, deliberate action rather than folded
 into this release.
 
+## v1.265.1 — 2026-09-15 (PATCH: archived lineages were being judged by today's rules; a real mechanism against exactly that had never been run)
+
+**Owner's own direct question, checked against the tool's own design rather than assumed.** Archiving
+lineage 9 triggered `backlog_archive_conformance_v1_0_0.py` for the first time in a long while, which
+reported 277 violations across the whole settled archive -- old, pre-existing lineages, nothing to do
+with this session's own work. The owner asked directly why archived lineages are subject to current
+controls at all, when this framework has an explicit rule against exactly that (G89/G91, never apply a
+ruling retroactively). Checked: the tool already has a `--seed` mode built for precisely this, grounded
+in the same rule, and it had simply never been run -- so every lineage, thirteen retired long before
+this session and the one just closed, was being freshly validated against today's shapes every single
+gate run.
+
+**Seeded once.** All 14 lineages in the archive are now recorded as cleared by the release that closed
+each of them, not re-validated against rules that postdate their own closure. `VERDICT: CONFORMANT`.
+The 277 findings were almost entirely artefacts of this gap, not real content problems -- confirmed by
+their disappearance once the correct mechanism actually ran, not assumed away.
+
+**A real, separate speed win as a side effect.** This check previously re-validated the entire archive
+(13,130 triples) against current shapes every release, at roughly 200 seconds each time -- part of what
+made recent publishes take as long as they did. With the seed recorded, it now confirms via a single
+digest comparison: 0.07 seconds. Future archivals only need to validate the newly arriving lineage,
+exactly as the tool's own docstring always said it should.
+
+Also fixed in this pass: 14 stale `archiveFile` references (`ArchiveEntry` records from the pre-existing
+13 lineages still pointed at the retired `v1_2_0.ttl` filename after it was deleted) -- the actual,
+recurring release-blocker this whole investigation started from. Checked carefully before fixing: no
+data was lost when the old archive file was retired, only its name needed updating in 14 places.
+
 ## v1.265.0 — 2026-09-15 (MAJOR: Lineage 9 fully, honestly closed and archived; a real archival bug found and fixed along the way)
 
 **Lineage 9 archived for real this time.** The first attempt (last session) used
