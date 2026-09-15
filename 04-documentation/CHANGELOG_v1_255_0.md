@@ -9257,3 +9257,15 @@ across this package's history under one frozen version token -- the same pattern
 `LINEAGE_OPERATING_DISCIPLINE_v62_0_0.md`, and this session added to it three times. Not renamed in
 this release; the ripple cost (every shape reference, the gate script, the manifest) is real and
 deserves its own deliberate pass, not one folded into an already-large closure.
+
+## v1.265.2 — 2026-09-15 (PATCH: item 2 of the outstanding-work audit -- a duplicate handover file and its missing log entry)
+
+Found during the same audit that surfaced lineage 9's archival gap: `HANDOVER_vaf-pipeline-session_..
+._retrofit-governance-process-divergence_v1_0_0.md` existed, byte-identical, in both
+`07-handover-inbox/pending/` and `07-handover-inbox/deferred/` -- confirmed with `diff` before
+touching anything. Its own log entry had never actually been written, despite an earlier changelog
+entry (v1.262.0) claiming it was filed. Removed the stray `pending/` copy, kept the real one in
+`deferred/`, and added the real log entry: the owner's actual ruling (Option C, keyed to real
+elapsed time; a richer work-item state model), explicitly deferred until Lineage 9 closed -- which
+it now has, as of this same release. That design work itself is not started here; this patch only
+fixes the housekeeping gap.
