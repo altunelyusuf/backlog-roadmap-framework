@@ -9130,3 +9130,33 @@ scope.
 sync (`git checkout FETCH_HEAD`) overwrote it before it was committed -- the second time this exact
 mistake has happened this session (`v1.258.0` was the first). Re-applied here from the same real
 grounding as the original pass, not reconstructed from a changelog's description of it.
+
+## v1.264.0 — 2026-09-14 (MAJOR: Lineage 9 achieved -- five of six objectives met, the sixth honestly withdrawn, closed with a real report)
+
+**`SDLC-S03` closed** on the same real evidence pattern already established -- the loan-desk drive's own
+`PlanningEvent` (`ex:PE`) already carries `refinementProduces` naming a `Specification` with four
+`InteractionStep`s and both `Scen_Nominal` and `Scen_Rejection` scenarios, checked by `scenarioKind`
+value, not label text.
+
+**`SDLC-S06` built for real** -- a new companion tool, `backlog_sdlc_artifact_order_check_v1_0_0.py`,
+measuring what `backlog_lineage_order_check` never did: whether the specific artifact a stage output
+owes first appears in git before the output claiming it, not only whether outputs and items are
+ordered among themselves. Proven both ways on a real, purpose-built fixture, not asserted.
+
+**`Obj_SDLC_ScopeMatch` reached target: 9 of 9.**
+
+**The real 3-shape gap `SDLC-S05` found is genuinely closed.** `StageOutputShape`,
+`SingleCommitLineageShape`, `StageOrderWitnessShape` each carried no `provenByFixture`; built one real
+negative fixture triggering all three, confirmed each fires by reading the validator's own output, and
+linked it. `SDLC-S07` corrected in the same pass: it could never have moved this metric -- its own
+acceptance criterion never reached these three structural shapes -- so its stale objective link was
+removed and replaced with the item that actually closed it.
+
+**Lineage 9: `LS_Achieved`.** Closure eligibility computed by `backlog_lineage_compass`, not asserted:
+five of six objectives at target, the sixth (`Obj_SDLC_Adopted`) honestly withdrawn earlier this
+session for demanding proof the Mission's own words never asked for. A real `ClosureReport`
+(`CR_SDLCObligations`) closes the mission, citing every objective, four real findings from this
+lineage's own history, and six concrete best practices this session actually learned the hard way --
+required to exist before the outcome was set, not promised after. Not yet archived: `LS_Achieved`
+without archival is a real, flagged advisory, left as a separate, deliberate action rather than folded
+into this release.

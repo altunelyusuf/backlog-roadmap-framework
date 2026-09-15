@@ -1,0 +1,23 @@
+@prefix backlog: <http://example.org/backlog#> .
+@prefix fx: <http://example.org/fixture-order-shapes#> .
+
+# Triggers StageOutputShape's L3 clause: a stage output with no closedAtCommit at all.
+fx:Out_NoCommit a backlog:StageOutput ;
+    backlog:outputOfStage fx:Stage_A ;
+    backlog:hasStateDigest "deadbeef" .
+
+# Triggers SingleCommitLineageShape: two stage outputs, different stages, same commit.
+fx:Stage_A a backlog:LineageStage .
+fx:Stage_B a backlog:LineageStage .
+fx:Out_Shared1 a backlog:StageOutput ;
+    backlog:outputOfStage fx:Stage_A ; backlog:hasStateDigest "d1" ; backlog:closedAtCommit "c1" .
+fx:Out_Shared2 a backlog:StageOutput ;
+    backlog:outputOfStage fx:Stage_B ; backlog:hasStateDigest "d2" ; backlog:closedAtCommit "c1" .
+
+# Triggers StageOrderWitnessShape: a consuming output records the SAME commit as the one it consumes.
+fx:Stage_C a backlog:LineageStage .
+fx:Out_Consumed a backlog:StageOutput ;
+    backlog:outputOfStage fx:Stage_B ; backlog:hasStateDigest "d3" ; backlog:closedAtCommit "c2" .
+fx:Out_Consumer a backlog:StageOutput ;
+    backlog:outputOfStage fx:Stage_C ; backlog:hasStateDigest "d4" ; backlog:closedAtCommit "c2" ;
+    backlog:consumesOutput fx:Out_Consumed .

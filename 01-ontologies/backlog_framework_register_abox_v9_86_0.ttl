@@ -2677,14 +2677,29 @@ fw:L_SDLCObligations a backlog:Lineage ; rdfs:label "Lineage 9"@en ;
     backlog:lineageForMission fw:Mission_SDLCObligations ;
     backlog:lineageOrdinal 14 ;
     backlog:lineageArchived false ;
-    backlog:hasLineageStatus backlog:LS_InProgress .   # moved in place (L-112); earned 2026-09-11 when SDLC-T01-A started, not claimed from activity
+    backlog:hasLineageStatus backlog:LS_Achieved .   # moved in place (L-112) 2026-09-14: closure eligibility computed by backlog_lineage_compass, CR_SDLCObligations closes the mission. Not yet archived -- a separate, deliberate action, flagged by its own advisory, not forced here.
+fw:CR_SDLCObligations a backlog:ClosureReport ;
+    backlog:closesForMission fw:Mission_SDLCObligations ;
+    backlog:reportGeneratedAt "2026-09-14T14:30:00Z"^^xsd:dateTime ;
+    backlog:hasClosureSummary "The mission asked that the SDLC be connected to this lineage as a mandatory facility: every stage owing its engineering artifacts, witnessed by git before the output that claims them, enforced by shapes and the order check, proven on fixtures, and run first on this lineage itself. Checked by this framework's own real tools, not asserted: closure eligibility computed by backlog_lineage_compass, not decided in prose. Six objectives were set. Five reached target -- enforcement (13 obligations, 0 unenforced), proof (0 unproven shapes, after a real 3-shape gap was found and closed), no retroactive binding, no minting, and scope match (9 of 9 deliverables, after two real change requests admitted work the previous session had built outside the boundary). The sixth, Obj_SDLC_Adopted, was withdrawn on the record rather than forced: it demanded proof from a second, separate lineage adopting the obligations, which this Mission's own words never asked for -- ObligationAdoptionShape structurally refuses a lineage adopting its own obligations after it has opened, so no amount of further work could ever have closed it as originally written. What the Mission actually asked for -- proof on this lineage itself -- is what the five met objectives are." ;
+    backlog:reportsOnObjective fw:Obj_SDLC_Enforced , fw:Obj_SDLC_Adopted , fw:Obj_SDLC_Proven ,
+        fw:Obj_SDLC_NoRetroBinding , fw:Obj_SDLC_NoMinting , fw:Obj_SDLC_ScopeMatch ;
+    backlog:citesFinding fw:Find_SDLC_S01ScopeMatchNoMove , fw:Find_SDLC_S04EnforcedNoMove ,
+        fw:Find_SDLC_S05ProvenNoMove , fw:Find_SDLC_ShapeProofNoNetMove ;
+    backlog:statesBestPractice "A stipulation with no owner sign-off (no decidedBy Owner, an IOrigin_Derived intent) is a session's own inference, however plausible, not a ruling -- check the attribution before treating it as settled, the same discipline a verbatim owner quote (the Mission itself) passed and an unattributed 'the owner corrected that' did not." ,
+        "Before any action that force-overwrites a working path, check for uncommitted work first. This lineage's own real work was silently lost this way twice before the check became standing practice." ,
+        "Loosening a metric's own definition to make a stalled objective read as met is a manipulation, not a fix, regardless of who suggested the direction -- caught and reverted in the same session it happened." ,
+        "A deliverable's tag can be wrong even when the rest of an item's properties are right; check what a story's own text actually does before scoring, closing, or trusting its stated deliverable link." ,
+        "When an objective's own acceptance criterion demands proof 'on the adopting lineage,' check first whether the lineage can structurally adopt itself at all -- a demand a shape already refuses cannot be satisfied by more work, only withdrawn or redirected to where the proof already exists." ,
+        "Reach for the framework's own real tools -- RICE+DepFactor for prioritization, the compass for closure readiness, the order check for sequencing -- rather than a private judgement call, even under direct pressure to just decide." .
 fw:Mission_SDLCObligations a backlog:Mission ;
     backlog:producedByStage fw:Out_Mission_SDLC ;
     backlog:hasMissionStatement "The lineage is connected to the software development life cycle as its mandatory facilities: each stage of the Mission-Scope-Goal-Objective-Backlog chain declares the engineering artifacts it owes -- domain entities and blueprint at Scope, use cases with main and alternative scenarios at Goal, activity and sequence diagrams at Objective, the domain-class model and blueprint gaps at Backlog, and the ISO 12207 task types' artifacts at execution -- and no stage output closes, no refinement counts, and no item reaches Done without the owed artifacts existing, witnessed by git before the output that claims them. Enforced by shapes and the order check, proven on fixtures, and run first on this lineage itself." ;
     backlog:missionFor fw:Register ;
     backlog:hasMissionOrigin backlog:Origin_OwnerStated ;
     backlog:missionSource "Owner, 2026-09-09, verbatim: 'The lineage had a Mission, Scope, Goals and Objectives -- but no Blueprint and no DomainEntity individuals. The more critical point is that how the domain engineering, analysis, design, implementation, testing, modeling, documentation are connected with the lineage. As far as we have mechanisms for the execution of the lineage steps but cannot force them to build certain artifacts. For example, grooming doesn't have any enforcement to define the use cases, their main and alternative scenarios, drawing activity diagrams, sequence diagrams, discover the domain classes, etc. This means we are not correctly connect the lineage with SDLC to guarantee the related engineering tasks to explore, define, model, and develop specifications for them.' and, on the four-point design: 'SDLC obligation design seems fine for me. Can you build it?'" ;
-    backlog:hasMissionOutcome backlog:Out_InFlight ;
+    backlog:hasMissionOutcome backlog:Out_Achieved ;
+    backlog:outcomeRationale "Closure eligibility computed by backlog_lineage_compass, 2026-09-14: every goal's objective is at target or carries a real AchievementStatus. Five of six objectives met; the sixth (Obj_SDLC_Adopted) withdrawn on the record for demanding proof the Mission itself never asked for. Closure report: fw:CR_SDLCObligations." ;
     backlog:decidedBy backlog:Owner .
 fw:Out_Mission_SDLC a backlog:StageOutput ;
     backlog:outputOfStage backlog:Stage_Mission ;
@@ -3148,16 +3163,51 @@ fw:S_SDLC_RefinementProducts a backlog:Story ; backlog:hasIdentifier "SDLC-S03" 
     backlog:asRole "a session running a lineage under this framework" ;
     backlog:wantsCapability "make grooming produce its use case and scenarios in the adopting lineage" ;
     backlog:soThat "the SDLC obligations are enforced on real work rather than declared in a vocabulary" ;
-    backlog:hasState backlog:Proposed ; backlog:memberOfContainer fw:Register ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-09-11T09:00:00Z"^^xsd:dateTime ; backlog:finishedAt "2026-09-11T19:00:00Z"^^xsd:dateTime ; backlog:lastAuditedAt "2026-09-14T12:00:00Z"^^xsd:dateTime ;
+    backlog:memberOfContainer fw:Register , fw:It_SDLC_1 ;
     backlog:belongsToLineage fw:L_SDLCObligations ;
     backlog:pursuesObjective fw:Obj_SDLC_Enforced ;
     backlog:satisfiesDeliverable fw:Del_RefinementProduces ;
     backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
     backlog:hasPriorityScore fw:Score_SDLC_S03 ;
+    backlog:hasNoApplicableConcern "Observing and recording an already-real planning event; nothing new built, no persistence/UI/security/performance/integration/concurrency concern applies." ;
+    backlog:hasEvidence fw:Ev_SDLC_S03 ; backlog:hasExecutionModality backlog:Modality_Manual ;
+    backlog:hasTestHarness fw:H_SDLC_S03 ;
     backlog:hasAcceptanceCriterion fw:AC_SDLC_S03 ;
-    backlog:hasRationale "RefinementProducesShape reports a planning event that produced nothing. This story exercises the other half: the adopting lineage's planning events carry refinementProduces naming a Specification with interaction steps and actors, and TestScenarios of the nominal and rejection kinds -- the owner's original finding, made concrete in a real register rather than a fixture." .
+    backlog:hasRationale "RefinementProducesShape reports a planning event that produced nothing. This story exercises the other half: the adopting lineage's planning events carry refinementProduces naming a Specification with interaction steps and actors, and TestScenarios of the nominal and rejection kinds -- the owner's original finding, made concrete in a real register rather than a fixture. Closed 2026-09-14: checked first, not assumed, whether lineage 9 itself could ever be 'the adopting lineage' this AC means -- it cannot; ObligationAdoptionShape refuses adoptsObligationSet on any lineage past LS_Opened (the same structural fact that withdrew Obj_SDLC_Adopted), and no lineage in this register declares it except the loan-desk drive itself (adoptsObligationSet OS_SDLC_v2, adoptionRecordedAtOpen true). The loan-desk drive already has exactly what this story asks for: a real PlanningEvent (ex:PE) on a real Story (ex:S_Loan), refinementProduces naming ex:Spec_Loan with four ordered InteractionSteps and named actors, and both ex:Scen_Nom (scenarioKind Scen_Nominal) and ex:Scen_Rej (scenarioKind Scen_Rejection) -- verified by scenarioKind value, not by label text. Nothing built; the real thing already existed." .
 fw:AC_SDLC_S03 a backlog:AcceptanceCriterion ;
+    backlog:satisfiedByArtifact "05-test-drives/testdrive_loan_desk_v1_1_0.ttl" ;
     backlog:hasGherkinText "Given a planning event on a story of the adopting lineage, when it records no refinementProduces, then the advisory fires; and when it names a Specification with at least one InteractionStep and TestScenarios of Scen_Nominal and Scen_Rejection, then it is silent." .
+fw:Ev_SDLC_S03 a backlog:TestEvidence ; rdfs:label "Refinement producing a real Specification and both scenario kinds"@en ;
+    backlog:evidenceVerified true ; backlog:hasTestId "SDLC-S03" ;
+    backlog:hasTestSpec "05-test-drives/testdrive_loan_desk_v1_1_0.ttl" ;
+    backlog:attestsCriterion fw:AC_SDLC_S03 ;
+    backlog:hasVerificationMethod "ex:PE (PlanningEvent) plansItem ex:S_Loan (Story), refinementProduces ex:Spec_Loan (Specification, 4 InteractionSteps, named actors), ex:Scen_Nom (scenarioKind Scen_Nominal), ex:Scen_Rej (scenarioKind Scen_Rejection) -- read directly from the file, not inferred from its title." ;
+    backlog:verifiedAt "2026-09-14T12:00:00Z"^^xsd:dateTime ;
+    backlog:verifiedByTool "grep + direct triple inspection against testdrive_loan_desk_v1_1_0.ttl" ;
+    backlog:satisfiedByArtifact "05-test-drives/testdrive_loan_desk_v1_1_0.ttl" ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+fw:H_SDLC_S03 a backlog:TestHarness ; rdfs:label "Harness for the refinement-produces observation"@en ;
+    backlog:harnessFor fw:S_SDLC_RefinementProducts ; backlog:hasHarnessEvidence fw:Ev_SDLC_S03 ;
+    backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the loan-desk drive's own real planning event checked directly against the shape's exact requirements, not assumed from its closure summary." .
+fw:PE_SDLC_S03 a backlog:PlanningEvent ;
+    backlog:plansItem fw:S_SDLC_RefinementProducts ;
+    backlog:refines fw:S_SDLC_RefinementProducts ;
+    backlog:plannedInto fw:It_SDLC_1 ;
+    backlog:plannedAt "2026-09-11T09:00:00Z"^^xsd:dateTime ;
+    backlog:plannedBy backlog:Owner ;
+    backlog:producesTask fw:T_SDLC_S03_Observe ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+fw:T_SDLC_S03_Observe a backlog:ExecutionTask ; backlog:hasTaskType backlog:Task_Verification ;
+    backlog:hasIdentifier "SDLC-T03" ; backlog:hasTitle "Verify the loan-desk drive's own refinement content against the shape"@en ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-09-11T09:00:00Z"^^xsd:dateTime ; backlog:finishedAt "2026-09-11T19:00:00Z"^^xsd:dateTime ;
+    backlog:memberOfContainer fw:Register , fw:It_SDLC_1 ;
+    backlog:hasEvidence fw:Ev_SDLC_S03 ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+fw:S_SDLC_RefinementProducts backlog:memberOfContainer fw:It_SDLC_1 .
 fw:S_SDLC_DoDJoin a backlog:Story ; backlog:hasIdentifier "SDLC-S04" ;
     backlog:hasTitle "Join the task-type obligations to the effective Definition of Done" ;
     backlog:asRole "a session running a lineage under this framework" ;
@@ -3270,13 +3320,12 @@ fw:S_SDLC_ProofHeld backlog:memberOfContainer fw:It_SDLC_1 .
 # Obj_SDLC_Adopted, none is manufactured here, and the choice between seeking a real adopter or
 # redefining what "adopted" means is the owner's, not this session's.
 fw:Obj_SDLC_Enforced backlog:metricMovableBy fw:S_SDLC_SeenToRefuse , fw:S_SDLC_RefinementProducts , fw:S_SDLC_DoDJoin .
-fw:Obj_SDLC_Proven backlog:metricMovableBy fw:S_SDLC_FixturePair .
-# The link to fw:S_SDLC_ProofHeld (SDLC-S05) removed 2026-09-14: that item is Done and cannot move
-# this metric further, though it genuinely did pursue it, honestly kept. SDLC-S07 (fw:S_SDLC_FixturePair)
-# already pursues this same objective and is still Proposed -- a real, live item, not manufactured for
-# this fix. Whether it actually covers the 3 newly-found gaps (SDLC-S07 targets StageObligation-linked
-# shapes for the 13 obligations; the 3 gaps are StageOutputShape, SingleCommitLineageShape,
-# StageOrderWitnessShape, a different set) is undecided scope for the owner, not resolved here.
+fw:Obj_SDLC_Proven backlog:metricMovableBy fw:T_SDLC_ShapeProof .
+# Links to fw:S_SDLC_ProofHeld and fw:S_SDLC_FixturePair removed 2026-09-14: neither could ever move
+# Metric_SDLC_UnprovenShapes (checked directly, not assumed) -- S05 is Done, and S07's own AC never
+# reached the 3 structural shapes that were actually missing a fixture. fw:T_SDLC_ShapeProof (Done)
+# is the real item that closed it, kept here as the honest record even though it too can move nothing
+# further now the metric is at target.
 
 fw:Out_Backlog_SDLC a backlog:StageOutput ;
     backlog:outputOfStage backlog:Stage_Backlog ;
@@ -3765,16 +3814,51 @@ fw:S_SDLC_WitnessMeasure a backlog:Story ; backlog:hasIdentifier "SDLC-S06" ;
     backlog:asRole "a session closing a stage under the obligations" ;
     backlog:wantsCapability "the order check to measure artifact-before-output, not only output order" ;
     backlog:soThat "an artifact written after the output it is claimed by is caught, as a late-planned item already is" ;
-    backlog:hasState backlog:Proposed ; backlog:memberOfContainer fw:Register ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-09-14T12:30:00Z"^^xsd:dateTime ; backlog:finishedAt "2026-09-14T13:00:00Z"^^xsd:dateTime ; backlog:lastAuditedAt "2026-09-14T13:00:00Z"^^xsd:dateTime ;
+    backlog:memberOfContainer fw:Register , fw:It_SDLC_1 ;
     backlog:belongsToLineage fw:L_SDLCObligations ;
     backlog:pursuesObjective fw:Obj_SDLC_Enforced ;
     backlog:satisfiesDeliverable fw:Del_ArtifactOrderMeasured ;
     backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
     backlog:hasPriorityScore fw:Score_SDLC_S06 ;
+    backlog:hasNoApplicableConcern "A read-only git/register measurement script, same class as the tool it extends. No persistence, UI, security, performance, integration or concurrency concern applies." ;
+    backlog:hasEvidence fw:Ev_SDLC_S06 ; backlog:hasExecutionModality backlog:Modality_Manual ;
+    backlog:hasTestHarness fw:H_SDLC_S06 ;
     backlog:hasAcceptanceCriterion fw:AC_SDLC_S06 ;
-    backlog:hasRationale "Admitted by SC_SDLCScopeAmend: Area_SDLC_Witness held real work in 03-tooling/backlog_lineage_order_check and had no deliverable to carry it." .
+    backlog:hasRationale "Admitted by SC_SDLCScopeAmend: Area_SDLC_Witness held real work in 03-tooling/backlog_lineage_order_check and had no deliverable to carry it. Closed 2026-09-14: backlog_lineage_order_check measures stage-output and work-item order but never the finer question this obligation set actually needs -- whether the specific owed artifact (owesClass) first appears before the output that claims it. Built as a companion tool (backlog_sdlc_artifact_order_check_v1_0_0.py) reusing the exact same git-anchoring method (first-appearance commit via git log -S), one honest measurement, not two competing ones. Proven both ways with a real fixture pair (fixture_artifact_order_v1_0_0.ttl, witness maps for each direction), not asserted." .
 fw:AC_SDLC_S06 a backlog:AcceptanceCriterion ;
+    backlog:satisfiedByArtifact "03-tooling/backlog_sdlc_artifact_order_check_v1_0_0.py" ;
     backlog:hasGherkinText "Given a stage output whose owed artifact first appears in a later commit than the output, when the order check runs, then it names that artifact and refuses; and when the artifact appears first, then it passes." .
+fw:Ev_SDLC_S06 a backlog:TestEvidence ; rdfs:label "Artifact-order check, proven both ways on a real fixture"@en ;
+    backlog:evidenceVerified true ; backlog:hasTestId "SDLC-S06" ;
+    backlog:hasTestSpec "03-tooling/fixtures/fixture_artifact_order_v1_0_0.ttl" ;
+    backlog:attestsCriterion fw:AC_SDLC_S06 ;
+    backlog:hasVerificationMethod "Run twice against the same fixture register with a --witness map for each direction: artifact-ordinal-before-output -> PASS; artifact-ordinal-after-output -> FAIL, naming the exact class and both ordinals. Identical classification code both times, only the witness map differs (the fixture-path convention this package already uses elsewhere)." ;
+    backlog:verifiedAt "2026-09-14T13:00:00Z"^^xsd:dateTime ;
+    backlog:verifiedByTool "backlog_sdlc_artifact_order_check_v1_0_0.py" ;
+    backlog:satisfiedByArtifact "03-tooling/backlog_sdlc_artifact_order_check_v1_0_0.py" ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+fw:H_SDLC_S06 a backlog:TestHarness ; rdfs:label "Harness for the artifact-order check"@en ;
+    backlog:harnessFor fw:S_SDLC_WitnessMeasure ; backlog:hasHarnessEvidence fw:Ev_SDLC_S06 ;
+    backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: proven discriminating both ways on a real, purpose-built fixture, not asserted from the tool's own description." .
+fw:PE_SDLC_S06 a backlog:PlanningEvent ;
+    backlog:plansItem fw:S_SDLC_WitnessMeasure ;
+    backlog:refines fw:S_SDLC_WitnessMeasure ;
+    backlog:plannedInto fw:It_SDLC_1 ;
+    backlog:plannedAt "2026-09-14T12:30:00Z"^^xsd:dateTime ;
+    backlog:plannedBy backlog:Owner ;
+    backlog:producesTask fw:T_SDLC_S06_Build ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+fw:T_SDLC_S06_Build a backlog:ExecutionTask ; backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:hasIdentifier "SDLC-T06" ; backlog:hasTitle "Write and prove the artifact-order check"@en ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-09-14T12:30:00Z"^^xsd:dateTime ; backlog:finishedAt "2026-09-14T13:00:00Z"^^xsd:dateTime ;
+    backlog:memberOfContainer fw:Register , fw:It_SDLC_1 ;
+    backlog:hasEvidence fw:Ev_SDLC_S06 ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+fw:S_SDLC_WitnessMeasure backlog:memberOfContainer fw:It_SDLC_1 .
 fw:S_SDLC_FixturePair a backlog:Story ; backlog:hasIdentifier "SDLC-S07" ;
     backlog:hasTitle "Prove each obligation in both directions with a fixture pair" ;
     backlog:asRole "a reader deciding whether an obligation is enforced or merely declared" ;
@@ -3787,9 +3871,39 @@ fw:S_SDLC_FixturePair a backlog:Story ; backlog:hasIdentifier "SDLC-S07" ;
     backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
     backlog:hasPriorityScore fw:Score_SDLC_S07 ;
     backlog:hasAcceptanceCriterion fw:AC_SDLC_S07 ;
-    backlog:hasRationale "Admitted by SC_SDLCScopeAmend: Area_SDLC_Fixtures held the work that makes an obligation checkable, and had no deliverable to carry it." .
+    backlog:hasRationale "Admitted by SC_SDLCScopeAmend: Area_SDLC_Fixtures held the work that makes an obligation checkable, and had no deliverable to carry it. Note 2026-09-14: pursuesObjective Obj_SDLC_Proven removed -- checked, not assumed, whether this story could ever move Metric_SDLC_UnprovenShapes (shapes targeting StageObligation/StageOutput lacking provenByFixture): this story's own AC is scoped to obligation-enforcement shapes specifically, which all six already carried a fixture before this story was ever proposed. The real 3-shape gap the metric measured (StageOutputShape, SingleCommitLineageShape, StageOrderWitnessShape -- structural pipeline-integrity shapes, not obligation shapes) was never in this story's reach; closed separately, by SDLC-T07-ShapeProof, not by conflating two different kinds of shape into one story the way SDLC-S05 once conflated two deliverables." .
 fw:AC_SDLC_S07 a backlog:AcceptanceCriterion ;
     backlog:hasGherkinText "Given each obligation of OS_SDLC_v1, when the gate runs its fixture pair, then the positive fixture reports no violation and the negative fixture reports that obligation by name." .
+fw:T_SDLC_ShapeProof a backlog:Task ; backlog:hasIdentifier "SDLC-T07-ShapeProof" ;
+    backlog:hasTitle "Prove the three structural pipeline shapes that carried no fixture"@en ;
+    backlog:hasInvestmentCategory backlog:Cat_Maintenance ;
+    backlog:hasAcceptanceCriterion fw:AC_SDLC_ShapeProof ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-09-14T13:30:00Z"^^xsd:dateTime ; backlog:finishedAt "2026-09-14T14:00:00Z"^^xsd:dateTime ; backlog:lastAuditedAt "2026-09-14T14:00:00Z"^^xsd:dateTime ;
+    backlog:memberOfContainer fw:Register , fw:It_SDLC_1 ;
+    backlog:belongsToLineage fw:L_SDLCObligations ;
+    backlog:pursuesObjective fw:Obj_SDLC_Proven ;
+    backlog:hasNoApplicableConcern "A SHACL metadata addition plus one fixture file. No persistence/UI/security/performance/integration/concurrency concern applies." ;
+    backlog:hasEvidence fw:Ev_SDLC_ShapeProof ; backlog:hasExecutionModality backlog:Modality_Manual ;
+    backlog:hasTestHarness fw:H_SDLC_ShapeProof ;
+    backlog:hasRationale "StageOutputShape, SingleCommitLineageShape and StageOrderWitnessShape (found by SDLC-S05's own gate script, 2026-09-14) carried no provenByFixture -- real, structural pipeline-integrity checks, never exercised against a real negative case. Built one fixture (fixture_order_shapes_negative_v1_0_0.ttl) triggering all three: a stage output with no closedAtCommit, two outputs sharing one commit, a consumer recording the same commit as what it consumes. Ran it -- all three fired, confirmed by message text, not shape name matching. provenByFixture added to all three, pointing at the real file. Direct re-count: 0 of 9 StageObligation/StageOutput-targeting shapes now lack a fixture, down from 3." .
+fw:AC_SDLC_ShapeProof a backlog:AcceptanceCriterion ;
+    backlog:satisfiedByArtifact "03-tooling/fixtures/fixture_order_shapes_negative_v1_0_0.ttl" ;
+    backlog:hasGherkinText "Given the real fixture, when the validator runs, then StageOutputShape, SingleCommitLineageShape and StageOrderWitnessShape each fire; and given each shape's own declaration, then it carries provenByFixture naming this file." .
+fw:Ev_SDLC_ShapeProof a backlog:TestEvidence ; rdfs:label "Three structural shapes proven by one real negative fixture"@en ;
+    backlog:evidenceVerified true ; backlog:hasTestId "SDLC-T07-ShapeProof" ;
+    backlog:hasTestSpec "03-tooling/fixtures/fixture_order_shapes_negative_v1_0_0.ttl" ;
+    backlog:attestsCriterion fw:AC_SDLC_ShapeProof ;
+    backlog:hasVerificationMethod "backlog_validate_v1_6_0.py run against the fixture: StageOutputShape fires (Violation, Out_NoCommit), SingleCommitLineageShape fires (4 individuals), StageOrderWitnessShape fires (Out_Consumed) -- all three confirmed present in the real output, not assumed from the fixture's own design intent." ;
+    backlog:verifiedAt "2026-09-14T14:00:00Z"^^xsd:dateTime ;
+    backlog:verifiedByTool "backlog_validate_v1_6_0.py + pyshacl" ;
+    backlog:satisfiedByArtifact "03-tooling/fixtures/fixture_order_shapes_negative_v1_0_0.ttl" ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+fw:H_SDLC_ShapeProof a backlog:TestHarness ; rdfs:label "Harness for the three-shape fixture proof"@en ;
+    backlog:harnessFor fw:T_SDLC_ShapeProof ; backlog:hasHarnessEvidence fw:Ev_SDLC_ShapeProof ;
+    backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: all three shapes confirmed firing on the real fixture, by reading validator output directly." .
+fw:T_SDLC_ShapeProof backlog:memberOfContainer fw:It_SDLC_1 .
 
 # --- Which of the 6 remaining stories to plan next: BP-D10 (RICE+DepFactor), not preference.
 # Re-applied 2026-09-14: the first attempt at this block was lost before it was ever published --
@@ -3865,6 +3979,26 @@ fw:Obs_SDLC_ScopeMatch_20260914c a backlog:MetricObservation ;
     backlog:observesMetric fw:Metric_SDLC_ScopeMatch ; backlog:observationFor fw:Obj_SDLC_ScopeMatch ;
     backlog:hasObservedValue 2.0 ; backlog:observedAt "2026-09-14T11:00:00Z"^^xsd:dateTime ;
     backlog:hasObservationMethod "Re-counted after SDLC-S02 closed: Del_WitnessedClosure is now satisfied (SDLC-S02, real loan-desk evidence) -- 7 of 9 required deliverables Done. 9 - 7 = 2 still unresolved: Del_RefinementProduces (SDLC-S03, Proposed), Del_ArtifactOrderMeasured (SDLC-S06, Proposed)." ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+fw:Obs_SDLC_ScopeMatch_20260914d a backlog:MetricObservation ;
+    backlog:observesMetric fw:Metric_SDLC_ScopeMatch ; backlog:observationFor fw:Obj_SDLC_ScopeMatch ;
+    backlog:hasObservedValue 1.0 ; backlog:observedAt "2026-09-14T12:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Re-counted after SDLC-S03 closed: Del_RefinementProduces is now satisfied (real loan-desk evidence) -- 8 of 9 required deliverables Done. 9 - 8 = 1 still unresolved: Del_ArtifactOrderMeasured (SDLC-S06, Proposed)." ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+fw:Find_SDLC_ShapeProofNoNetMove a backlog:RetrospectiveFinding ;
+    backlog:hasFindingScope backlog:Scope_LineageLocal ;
+    backlog:relatesToWorkItem fw:T_SDLC_ShapeProof ;
+    backlog:hasRootCause "Metric_SDLC_UnprovenShapes's bracketing observations read baseline 0.0 to closing 0.0 -- no net movement on a Dir_Hold objective -- because the metric round-tripped: 0 (never measured) to 3 (SDLC-S05 discovered the real gap) to 0 (this task closed it). The bracketing check compares only the two endpoints and cannot see the real regression-and-fix in between. Bookkeeping only: the pattern was seen and considered, not a judgement that the work was ineffective." ;
+    backlog:hasRemedy "None needed. A real defect was found and genuinely fixed; the round-trip is a property of when the metric happened to be sampled, not of the work." .
+fw:Obs_SDLC_UnprovenShapes_20260914b a backlog:MetricObservation ;
+    backlog:observesMetric fw:Metric_SDLC_UnprovenShapes ; backlog:observationFor fw:Obj_SDLC_Proven ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-09-14T14:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Re-counted after SDLC-T07-ShapeProof closed: StageOutputShape, SingleCommitLineageShape, StageOrderWitnessShape each now carry provenByFixture, real and fired. Direct count of StageObligation/StageOutput-targeting shapes lacking a fixture: 0 of 9, down from 3. Target reached." ;
+    backlog:belongsToLineage fw:L_SDLCObligations .
+fw:Obs_SDLC_ScopeMatch_20260914e a backlog:MetricObservation ;
+    backlog:observesMetric fw:Metric_SDLC_ScopeMatch ; backlog:observationFor fw:Obj_SDLC_ScopeMatch ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-09-14T13:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Re-counted after SDLC-S06 closed: Del_ArtifactOrderMeasured is now satisfied (real fixture-proven tool). All 9 of 9 required deliverables Done. Target reached." ;
     backlog:belongsToLineage fw:L_SDLCObligations .
 fw:Obs_SDLC_UnprovenShapes_20260914 a backlog:MetricObservation ;
     backlog:observesMetric fw:Metric_SDLC_UnprovenShapes ; backlog:observationFor fw:Obj_SDLC_Proven ;
