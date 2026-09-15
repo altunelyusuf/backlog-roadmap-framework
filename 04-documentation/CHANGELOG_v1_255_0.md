@@ -9156,6 +9156,17 @@ docstring, which had said `v1.5.1` since before this session touched it -- a sma
 exact version-freezing pattern a parallel session separately reported in `LINEAGE_OPERATING_DISCIPLINE`
 and two `page_regression_check` copies elsewhere, checked and confirmed real, not yet fixed.
 
+**A real bug in the same pass, found by the gate itself, not guessed.** The two fixture files this
+work added (`fixture_artifact_order_v1_0_0.ttl`, `fixture_order_shapes_negative_v1_0_0.ttl`) sat in
+`03-tooling/fixtures/`, the same flat directory every real SHACL fixture lives in -- and the
+fixture-coverage gate globs that whole directory, requiring every `.ttl` there to declare its own
+`hasExpectedPolarity`. Neither of mine did: they were never SHACL fixtures at all, only standalone
+inputs for two standalone Python tools. Moved both to `03-tooling/fixtures/sdlc-tools/`, out of the
+flat glob's reach -- the same way witness `.json` files already avoid it, by not matching the pattern
+the general sweep scans. Every reference updated (register evidence chain, `provenByFixture`
+pointers in the shapes file); both tools re-verified working from the new location before publishing.
+
+
 ## v1.264.0 — 2026-09-14 (MAJOR: Lineage 9 achieved -- five of six objectives met, the sixth honestly withdrawn, closed with a real report)
 
 **`SDLC-S03` closed** on the same real evidence pattern already established -- the loan-desk drive's own

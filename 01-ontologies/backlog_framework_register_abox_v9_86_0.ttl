@@ -3832,7 +3832,7 @@ fw:AC_SDLC_S06 a backlog:AcceptanceCriterion ;
     backlog:hasGherkinText "Given a stage output whose owed artifact first appears in a later commit than the output, when the order check runs, then it names that artifact and refuses; and when the artifact appears first, then it passes." .
 fw:Ev_SDLC_S06 a backlog:TestEvidence ; rdfs:label "Artifact-order check, proven both ways on a real fixture"@en ;
     backlog:evidenceVerified true ; backlog:hasTestId "SDLC-S06" ;
-    backlog:hasTestSpec "03-tooling/fixtures/fixture_artifact_order_v1_0_0.ttl" ;
+    backlog:hasTestSpec "03-tooling/fixtures/sdlc-tools/fixture_artifact_order_v1_0_0.ttl" ;
     backlog:attestsCriterion fw:AC_SDLC_S06 ;
     backlog:hasVerificationMethod "Run twice against the same fixture register with a --witness map for each direction: artifact-ordinal-before-output -> PASS; artifact-ordinal-after-output -> FAIL, naming the exact class and both ordinals. Identical classification code both times, only the witness map differs (the fixture-path convention this package already uses elsewhere)." ;
     backlog:verifiedAt "2026-09-14T13:00:00Z"^^xsd:dateTime ;
@@ -3888,16 +3888,16 @@ fw:T_SDLC_ShapeProof a backlog:Task ; backlog:hasIdentifier "SDLC-T07-ShapeProof
     backlog:hasTestHarness fw:H_SDLC_ShapeProof ;
     backlog:hasRationale "StageOutputShape, SingleCommitLineageShape and StageOrderWitnessShape (found by SDLC-S05's own gate script, 2026-09-14) carried no provenByFixture -- real, structural pipeline-integrity checks, never exercised against a real negative case. Built one fixture (fixture_order_shapes_negative_v1_0_0.ttl) triggering all three: a stage output with no closedAtCommit, two outputs sharing one commit, a consumer recording the same commit as what it consumes. Ran it -- all three fired, confirmed by message text, not shape name matching. provenByFixture added to all three, pointing at the real file. Direct re-count: 0 of 9 StageObligation/StageOutput-targeting shapes now lack a fixture, down from 3." .
 fw:AC_SDLC_ShapeProof a backlog:AcceptanceCriterion ;
-    backlog:satisfiedByArtifact "03-tooling/fixtures/fixture_order_shapes_negative_v1_0_0.ttl" ;
+    backlog:satisfiedByArtifact "03-tooling/fixtures/sdlc-tools/fixture_order_shapes_negative_v1_0_0.ttl" ;
     backlog:hasGherkinText "Given the real fixture, when the validator runs, then StageOutputShape, SingleCommitLineageShape and StageOrderWitnessShape each fire; and given each shape's own declaration, then it carries provenByFixture naming this file." .
 fw:Ev_SDLC_ShapeProof a backlog:TestEvidence ; rdfs:label "Three structural shapes proven by one real negative fixture"@en ;
     backlog:evidenceVerified true ; backlog:hasTestId "SDLC-T07-ShapeProof" ;
-    backlog:hasTestSpec "03-tooling/fixtures/fixture_order_shapes_negative_v1_0_0.ttl" ;
+    backlog:hasTestSpec "03-tooling/fixtures/sdlc-tools/fixture_order_shapes_negative_v1_0_0.ttl" ;
     backlog:attestsCriterion fw:AC_SDLC_ShapeProof ;
     backlog:hasVerificationMethod "backlog_validate_v1_6_0.py run against the fixture: StageOutputShape fires (Violation, Out_NoCommit), SingleCommitLineageShape fires (4 individuals), StageOrderWitnessShape fires (Out_Consumed) -- all three confirmed present in the real output, not assumed from the fixture's own design intent." ;
     backlog:verifiedAt "2026-09-14T14:00:00Z"^^xsd:dateTime ;
     backlog:verifiedByTool "backlog_validate_v1_6_0.py + pyshacl" ;
-    backlog:satisfiedByArtifact "03-tooling/fixtures/fixture_order_shapes_negative_v1_0_0.ttl" ;
+    backlog:satisfiedByArtifact "03-tooling/fixtures/sdlc-tools/fixture_order_shapes_negative_v1_0_0.ttl" ;
     backlog:belongsToLineage fw:L_SDLCObligations .
 fw:H_SDLC_ShapeProof a backlog:TestHarness ; rdfs:label "Harness for the three-shape fixture proof"@en ;
     backlog:harnessFor fw:T_SDLC_ShapeProof ; backlog:hasHarnessEvidence fw:Ev_SDLC_ShapeProof ;
