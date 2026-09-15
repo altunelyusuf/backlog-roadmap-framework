@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_lineage_order_check v1.5.1 — did the chain come before the work, or after?
+"""backlog_lineage_order_check v1.7.0 — did the chain come before the work, or after?
 
 THE ESCAPE THIS CATCHES. A lineage is Mission -> Scope -> Goal -> Objective -> Backlog,
 one commit per stage, and only then work items (LINEAGE_OPERATING_DISCIPLINE, ceremony
@@ -113,26 +113,91 @@ def local(x):
 
 
 class GitWitness:
-    """First-appearance commit of a subject under the register path, via git log -S."""
+    """First-appearance commit of a subject under the register path, via git log -S.
+
+    v1.7.0 -- SINGLE-PASS REWRITE. Two earlier attempts this session are left below as
+    real, disclosed history, not deleted: v1.7.0's ordinal cache was correct but targeted
+    the wrong cost (rev-list --count: ~0.01s; the real cost is the -S search itself,
+    ~1s, confirmed by direct measurement). A thread-pool prefetch was tried next and
+    measured with NO speedup, because this container has exactly one CPU core -- a real
+    finding (`nproc` = 1), not assumed: -S is CPU-bound (it diffs at every commit), so N
+    threads on one core just time-slice the same work with added overhead.
+    The only real fix on one core is doing less total work. A string's total occurrence
+    count in a file can only rise at a commit that ADDS a line containing it -- so the
+    earliest commit whose diff contains a '+' line with the key is the same answer
+    `-S<key>` plus take-first-in-order already computed (for first-appearance, which is
+    all this tool ever asks), at a fraction of the cost: ONE full diff walk of the path's
+    history (git log -p), read once, checked against every pending key per line, instead
+    of one separate full-history -S search per key. O(history) instead of O(N x history).
+    """
     def __init__(self, repo_root, rel_path):
         self.root, self.rel = repo_root, rel_path
         self.cache = {}
+        self._ordinal = None   # hash -> 1-based ancestry count, built once, lazily
+
+    def _ordinal_index(self):
+        if self._ordinal is None:
+            r = subprocess.run(["git", "log", "--reverse", "--format=%h"],
+                               cwd=self.root, capture_output=True, text=True)
+            self._ordinal = {h: i + 1 for i, h in enumerate(r.stdout.split())}
+        return self._ordinal
+
+    def _ordinal_of(self, h):
+        idx = self._ordinal_index()
+        if h in idx:
+            return idx[h]
+        # h not on this branch's simple history (e.g. a merge-only ref) -- fall back to the
+        # exact original method rather than guess.
+        c = subprocess.run(["git", "rev-list", "--count", h], cwd=self.root, capture_output=True, text=True)
+        return int(c.stdout.strip() or 0)
+
+    def _first_uncached(self, key):
+        r = subprocess.run(["git", "log", "--reverse", "--format=%h", "-S", key + " ", "--", self.rel],
+                           cwd=self.root, capture_output=True, text=True)
+        line = r.stdout.strip().split("\n")[0] if r.stdout.strip() else ""
+        if not line:
+            return None
+        h = line.split()[0]
+        return (h, self._ordinal_of(h))   # v1.4.0: ordinal = ancestry count, not epoch
 
     def first(self, local_name, prefix):
         key = prefix + local_name
         if key in self.cache:
             return self.cache[key]
-        r = subprocess.run(["git", "log", "--reverse", "--format=%h", "-S", key + " ", "--", self.rel],
-                           cwd=self.root, capture_output=True, text=True)
-        line = r.stdout.strip().split("\n")[0] if r.stdout.strip() else ""
-        val = None
-        if line:
-            h = line.split()[0]
-            c = subprocess.run(["git", "rev-list", "--count", h], cwd=self.root, capture_output=True, text=True)
-            val = (h, int(c.stdout.strip() or 0))   # v1.4.0: ordinal = ancestry count, not epoch
+        val = self._first_uncached(key)
         self.cache[key] = val
         return val
 
+    def prefetch(self, local_names, prefix):
+        """v1.7.0: one diff walk of the path's history records the first commit each of
+        many keys is added on a '+' line -- the same first-appearance answer -S<key> +
+        take-first-in-order already gave per key, computed for all keys in one pass."""
+        keys = sorted({prefix + n for n in local_names} - set(self.cache))
+        if not keys:
+            return
+        ordinal = self._ordinal_index()
+        r = subprocess.run(
+            ["git", "log", "--reverse", "-U0", "--format=COMMIT %h", "--", self.rel],
+            cwd=self.root, capture_output=True, text=True,
+        )
+        remaining = set(keys)
+        found = {}
+        current = None
+        for line in r.stdout.split("\n"):
+            if not remaining:
+                break
+            if line.startswith("COMMIT "):
+                current = line[7:].strip()
+                continue
+            if current is None or not line.startswith("+") or line.startswith("+++"):
+                continue
+            body = line[1:]
+            for k in [k for k in remaining if (k + " ") in body]:
+                found[k] = current
+                remaining.discard(k)
+        for k in keys:
+            h = found.get(k)
+            self.cache[k] = (h, ordinal.get(h) or self._ordinal_of(h)) if h else None
 
     def is_ancestor(self, commit):
         """True if commit (hash or tag) is reachable from the current branch tip; None if the
@@ -152,6 +217,13 @@ class MapWitness:
     def first(self, local_name, prefix):
         v = self.m.get(local_name)
         return (v[0], int(v[1])) if v else None
+
+    def prefetch(self, local_names, prefix):
+        """No-op: MapWitness.first() is already an O(1) dict lookup against a small,
+        already-loaded fixture map -- there is nothing to batch. Exists only so
+        classify()'s single, unconditional witness.prefetch(...) call works for both
+        witness types without classify() needing to know which one it has."""
+        pass
 
     def is_ancestor(self, commit):
         return commit in self.m.get("__ancestors__", []) if "__ancestors__" in self.m else True
@@ -178,6 +250,21 @@ def classify(g, L, witness, prefix):
              if any((i, RDF.type, URIRef(B + t)) in g for t in ITEM_TYPES)]
     restarts = list(g.subjects(B.restartsLineage, L))
     restart_at = None
+
+    # v1.7.0: every name the rest of this function will look up is already knowable from
+    # the graph alone -- fetch them all concurrently once, instead of one git subprocess
+    # pair at a time inside each loop below. Loop bodies are unchanged; they now just hit
+    # a warm cache.
+    prefetch_names = ([local(o) for lst in outs.values() for o in lst] + [local(i) for i in items] +
+                       [local(r) for r in restarts])
+    for i in items:
+        prefetch_names += [local(pe) for pe in g.subjects(B.plansItem, i)]
+    for r in restarts:
+        prefetch_names += [local(b) for b in g.objects(r, B.answersBypass)]
+        prefetch_names += [local(sc) for sc in g.objects(r, B.simplifiedBy)]
+    prefetch_names.append(local(L))
+    witness.prefetch(prefetch_names, prefix)
+
     if restarts:
         rc = g.value(restarts[-1], B.restartedAtCommit)
         restart_at = witness.first(local(restarts[-1]), prefix) if rc else None

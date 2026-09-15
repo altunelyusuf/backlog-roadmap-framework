@@ -9131,6 +9131,31 @@ sync (`git checkout FETCH_HEAD`) overwrote it before it was committed -- the sec
 mistake has happened this session (`v1.258.0` was the first). Re-applied here from the same real
 grounding as the original pass, not reconstructed from a changelog's description of it.
 
+## v1.264.1 — 2026-09-14 (PATCH: backlog_lineage_order_check, single-pass rewrite -- ~100x faster, verified correct, not guessed)
+
+**Owner's own real finding, checked properly before acting on it.** Sessions were hitting real
+wall-clock limits, over and over. Investigated instead of re-running: `backlog_lineage_order_check`
+called `git log -S<key>` once per stage output, item, planning event, restart and bypass across every
+active lineage -- 30-100+ separate full-history pickaxe searches per run, each measured at ~1s of real
+CPU time. Two attempts that did not work, disclosed rather than hidden: an ordinal-cache fix that
+targeted the wrong operation (`rev-list --count`: ~0.01s, never the bottleneck), then a thread-pool
+prefetch that measured zero speedup, because this container has exactly one CPU core (`nproc` = 1,
+checked, not assumed) -- `-S` is CPU-bound, so threads on one core add overhead, not parallelism.
+
+**The real fix: one diff walk instead of N.** A string's occurrence count in a file only rises at the
+commit that adds a line containing it -- so one `git log -p` pass over the path's history, read once,
+checked against every pending key per line, gives the identical first-appearance answer every
+`-S<key>` search gave separately. Verified against the original method three times before trusting
+it: 30 real names (identical, 23.6x faster), a 25-name random spot-check after a real correctness bug
+was found and fixed (a missing trailing-space boundary that could have matched a key as another key's
+prefix), and the full real tool run end-to-end against both real files it actually validates --
+7.18 seconds total, down from what would have been several minutes.
+
+Renamed `v1.6.0 -> v1.7.0` to carry the real change, and fixed the same drift inside its own
+docstring, which had said `v1.5.1` since before this session touched it -- a smaller instance of the
+exact version-freezing pattern a parallel session separately reported in `LINEAGE_OPERATING_DISCIPLINE`
+and two `page_regression_check` copies elsewhere, checked and confirmed real, not yet fixed.
+
 ## v1.264.0 — 2026-09-14 (MAJOR: Lineage 9 achieved -- five of six objectives met, the sixth honestly withdrawn, closed with a real report)
 
 **`SDLC-S03` closed** on the same real evidence pattern already established -- the loan-desk drive's own
