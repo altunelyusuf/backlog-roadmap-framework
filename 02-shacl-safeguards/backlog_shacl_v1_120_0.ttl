@@ -204,10 +204,15 @@ backlog:ContainerShape a sh:NodeShape ;
     sh:property [ sh:path backlog:hasIdentifier ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ;
                   sh:message "L1: a container must have exactly one string identifier." ] ;
     sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "L1: a container must have at least one member item, otherwise it reports on nothing." ;
+        sh:message "L1: a container must have at least one member item, otherwise it reports on nothing. Waived for the register root itself when every lineage that exists is archived (v1.121.0, owner ruling 2026-09-15): a register between missions, with nothing yet live, is a real and acceptable state, not an empty container reporting on nothing -- it correctly reports that nothing is active." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             FILTER NOT EXISTS { ?m backlog:memberOfContainer $this }
+            FILTER (
+                NOT EXISTS { $this backlog:isRegisterRoot true }
+                ||
+                EXISTS { ?anyLineage a backlog:Lineage . FILTER NOT EXISTS { ?anyLineage backlog:lineageArchived true } }
+            )
         }""" ] ;
     sh:sparql [ a sh:SPARQLConstraint ;
         sh:message "L1: a container's asserted state disagrees with the state derived from its members." ;
@@ -2290,31 +2295,35 @@ backlog:LineageCompletenessShape a sh:NodeShape ;
     rdfs:label "A register claiming L2 or above carries a complete lineage (L2/L3)"@en ;
 
     sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "L2: this register declares no Mission. The intent chain has no root, so no goal in it can be said to advance anything. A shape guarding Mission cannot catch this — with zero Missions it has no target — which is why the check lives on the register." ;
+        sh:message "L2: this register declares no Mission. The intent chain has no root, so no goal in it can be said to advance anything. A shape guarding Mission cannot catch this — with zero Missions it has no target — which is why the check lives on the register. Waived when every lineage that exists is archived (v1.121.0, owner ruling 2026-09-15): a register between missions is a real, acceptable state." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             FILTER NOT EXISTS { ?m a backlog:Mission ; backlog:missionFor $this }
+            FILTER EXISTS { ?anyLineage a backlog:Lineage . FILTER NOT EXISTS { ?anyLineage backlog:lineageArchived true } }
         }""" ] ;
 
     sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "L2: this register declares no Objective. Every goal it holds is unmeasurable and no observation can contradict any of it, which is the unfalsifiable-plan failure in its plainest form." ;
+        sh:message "L2: this register declares no Objective. Every goal it holds is unmeasurable and no observation can contradict any of it, which is the unfalsifiable-plan failure in its plainest form. Waived when every lineage that exists is archived (v1.121.0, owner ruling 2026-09-15): a register between missions is a real, acceptable state." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             FILTER NOT EXISTS { ?o a backlog:Objective }
+            FILTER EXISTS { ?anyLineage a backlog:Lineage . FILTER NOT EXISTS { ?anyLineage backlog:lineageArchived true } }
         }""" ] ;
 
     sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "L2: this register declares no ScopeStatement anywhere. Nothing states what the development is for or what it will not attempt, so scope completion cannot be derived and scope growth cannot be detected — there is no boundary for a ScopeChange to change." ;
+        sh:message "L2: this register declares no ScopeStatement anywhere. Nothing states what the development is for or what it will not attempt, so scope completion cannot be derived and scope growth cannot be detected — there is no boundary for a ScopeChange to change. Waived when every lineage that exists is archived (v1.121.0, owner ruling 2026-09-15): a register between missions is a real, acceptable state." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             FILTER NOT EXISTS { ?s a backlog:ScopeStatement }
+            FILTER EXISTS { ?anyLineage a backlog:Lineage . FILTER NOT EXISTS { ?anyLineage backlog:lineageArchived true } }
         }""" ] ;
 
     sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "L2: this register declares no Blueprint. Mission, Objective and ScopeStatement are already register-level required here; a domain model is not, despite being the one intent-chain-adjacent element that establishes what the work is ABOUT rather than what it is FOR. An epic can decompose into fully evidenced, test-harnessed stories with no domain entity ever named, and every other shape in this suite reports clean the whole way." ;
+        sh:message "L2: this register declares no Blueprint. Mission, Objective and ScopeStatement are already register-level required here; a domain model is not, despite being the one intent-chain-adjacent element that establishes what the work is ABOUT rather than what it is FOR. An epic can decompose into fully evidenced, test-harnessed stories with no domain entity ever named, and every other shape in this suite reports clean the whole way. Waived when every lineage that exists is archived (v1.121.0, owner ruling 2026-09-15): a register between missions is a real, acceptable state." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             FILTER NOT EXISTS { ?b a backlog:Blueprint ; backlog:blueprintFor $this }
+            FILTER EXISTS { ?anyLineage a backlog:Lineage . FILTER NOT EXISTS { ?anyLineage backlog:lineageArchived true } }
         }""" ] ;
 
     sh:sparql [ a sh:SPARQLConstraint ;

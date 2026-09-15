@@ -9196,3 +9196,36 @@ lineage's own history, and six concrete best practices this session actually lea
 required to exist before the outcome was set, not promised after. Not yet archived: `LS_Achieved`
 without archival is a real, flagged advisory, left as a separate, deliberate action rather than folded
 into this release.
+
+## v1.265.0 — 2026-09-15 (MAJOR: Lineage 9 fully, honestly closed and archived; a real archival bug found and fixed along the way)
+
+**Lineage 9 archived for real this time.** The first attempt (last session) used
+`backlog_lineage_archive_v2_0_0.py`, whose archivability check only refused a lineage with an
+`InProgress` item -- `SDLC-S07`, genuinely `Proposed`, sailed through and was archived unfinished.
+Found by checking, per the owner's own direct instruction to look for exactly this. Fixed at the
+tool: `v2.1.0` now refuses archival unless every work item is `Done` or `Cancelled`. Proven both
+ways on real data before trusting it: a scratch copy with `S07` restored to `Proposed` is correctly
+refused; the real, resolved register is correctly accepted.
+
+**`SDLC-S07` resolved honestly, not silently buried a second time.** Restored from the broken
+archive, then cancelled -- disclosed, not dismissed: its own tracked objective was already met by
+different real evidence (`SDLC-T07-ShapeProof`), it was this framework's own lowest-ranked
+remaining item (`BP-D10`, 2.08 of six), and the mission is genuinely complete without it. Real,
+reusable regression fixtures for the original thirteen obligations remain real, wanted, future
+scope -- not built here under time pressure, not forgotten either.
+
+**A second real bug, this one self-inflicted, found and fixed in the same pass.** The owner's own
+ruling -- an empty live register is fine once every lineage is genuinely archived -- was implemented
+first with an inverted boolean (the exemption fired exactly backwards) and, separately, with the new
+clause accidentally pasted outside its own query's `WHERE` block, silently doing nothing. Neither
+was caught by the first self-check; both were found by testing the actual negative case (an active,
+genuinely incomplete lineage) against the real, full merged shapes file, not the isolated shape
+alone -- which had looked correct and was not. Fixed, then verified both directions again on real
+data: an active lineage with no Mission still refuses; the real, fully archived register stays
+silent, `0` violations.
+
+**Disclosed, not fixed here:** `backlog_shacl_v1_120_0.ttl` itself has been content-edited 112 times
+across this package's history under one frozen version token -- the same pattern already found in
+`LINEAGE_OPERATING_DISCIPLINE_v62_0_0.md`, and this session added to it three times. Not renamed in
+this release; the ripple cost (every shape reference, the gate script, the manifest) is real and
+deserves its own deliberate pass, not one folded into an already-large closure.

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_lineage_archive v2.0.0 — set an achieved lineage down, out of every processing path.
+"""backlog_lineage_archive v2.1.0 — set an achieved lineage down, out of every processing path.
 
 WHY. A lineage whose mission is settled keeps costing every run until it is ARCHIVED: the SHACL
 suite validates its every individual, the git witness re-measures its every subject, the roadmap
@@ -21,7 +21,9 @@ register root or anything the root declares.
 
 WHAT IT DOES.  backlog_lineage_archive.py <register.ttl> <LineageLocalName>... [--apply]
   1. Checks the lineage is archivable: hasMissionOutcome Out_Achieved on its mission; a
-     ClosureReport closes that mission; no work item of the lineage is InProgress; not frozen.
+     ClosureReport closes that mission; EVERY work item of the lineage is Done or Cancelled
+     (v2.1.0 -- was InProgress-only; a real, measured gap let a genuinely Proposed item,
+     SDLC-S07, get archived unfinished); not frozen.
      (Whether its chain reads ORDERED is the order check's verdict and is required by the gate,
      not repeated here.)
   2. Computes the ARCHIVAL PARTITION: every subject that belongsToLineage the lineage, plus --
@@ -76,7 +78,15 @@ def archivable(g, L):
             if (fb, RDF.type, B.LineageThrash) in g and g.value(L, B.frozenRuling) is None: reasons.append(f"frozen by thrash {local(fb)} without a ruling")
             if (fb, RDF.type, B.LineageBypass) in g and not any((r, B.answersBypass, fb) in g for r in restarts): reasons.append(f"frozen by bypass {local(fb)} with no answering restart")
     for i in g.subjects(B.belongsToLineage, L):
-        if g.value(i, B.hasState) == B.InProgress: reasons.append(f"{local(i)} is InProgress")
+        st = g.value(i, B.hasState)
+        # v2.1.0 -- was: only InProgress refused. A real gap this measured directly, not
+        # guessed: SDLC-S07, genuinely Proposed (never started), was archived along with
+        # SDLC-S01_SDLCObligations because Proposed passed this check silently. Any
+        # non-terminal state is the same problem InProgress was -- real, unfinished work
+        # buried where it will not be found again without a conscious revival. Only Done
+        # and Cancelled are terminal; everything else refuses archival.
+        if st is not None and st not in (B.Done, B.Cancelled):
+            reasons.append(f"{local(i)} is {local(st)}, not Done or Cancelled")
     return reasons
 
 def register_root(g):
@@ -233,14 +243,14 @@ def main():
     backlog:entryOrdinal {int(ordv) if ordv is not None else 0} ;
     backlog:archiveFile "{rel}" ;
     backlog:archivedAt "{now}"^^xsd:dateTime ;
-    backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0: mission {outcome}, closure report present, no item InProgress, not frozen. Everything the lineage owned -- its Lineage individual, its Mission, its closure report, its stage outputs, findings and items -- moved to the archive file; this entry is the only thing that remains, and it is a record, not a lineage (G92)." .
+    backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0: mission {outcome}, closure report present, every item Done or Cancelled, not frozen. Everything the lineage owned -- its Lineage individual, its Mission, its closure report, its stage outputs, findings and items -- moved to the archive file; this entry is the only thing that remains, and it is a record, not a lineage (G92)." .
 '''
     for L in []:
         # lineageArchived is a functional current-state pointer: the existing 'false' on this lineage's own
         # statement is moved in place (L-112 pointer rule); the dated block below is the history
         pat = re.compile(r"(^" + re.escape(prefix_of(g, L) + local(L)) + r" a backlog:Lineage\b[^\n]*(?:\n[ \t][^\n]*)*?)backlog:lineageArchived false", re.M)
         live_txt, n = pat.subn(lambda m: m.group(1) + "backlog:lineageArchived true", live_txt, count=1)
-        live_txt += f'{prefix_of(g, L)}{local(L)}' + (' backlog:lineageArchived true ;' if n == 0 else '') + f' backlog:archiveFile "{rel}" ;\n    backlog:archivedAt "{now}"^^xsd:dateTime ; backlog:hasLineageStatus backlog:LS_Archived ;\n    backlog:archivalTrigger "Found achieved and un-archived by backlog_lineage_archive_v2_0_0: mission Out_Achieved, closure report present, no item InProgress, not frozen. Owner\'s rule 2026-09-09: an achieved lineage found triggers the archival activity." .\n'
+        live_txt += f'{prefix_of(g, L)}{local(L)}' + (' backlog:lineageArchived true ;' if n == 0 else '') + f' backlog:archiveFile "{rel}" ;\n    backlog:archivedAt "{now}"^^xsd:dateTime ; backlog:hasLineageStatus backlog:LS_Archived ;\n    backlog:archivalTrigger "Found achieved and un-archived by backlog_lineage_archive_v2_1_0: mission Out_Achieved, closure report present, every item Done or Cancelled, not frozen. Owner\'s rule 2026-09-09: an achieved lineage found triggers the archival activity." .\n'
     arch_txt = open(arch_path).read().rstrip("\n")
     olda = ".".join(map(str, semver(arch_path))); newa = ".".join(map(str, semver(new_arch)))
     arch_txt = arch_txt.replace(f'owl:versionInfo "{olda}" ;', f'owl:versionInfo "{newa}" ;', 1)
