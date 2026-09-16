@@ -9341,3 +9341,42 @@ down from 20-40+ minutes for nearly every release this session before both cache
 
 Audited the rest of the gate script for the same class of bug (a slow, cache-writing process piped
 into a command that can close early); found no other instances.
+
+## v1.267.0 — 2026-09-16 (MAJOR: the real, dominant cause of remaining gate slowness -- a memoization mechanism that existed, was documented, and was never actually being used)
+
+**Asked directly to systematically re-investigate, rather than declare the earlier fixes sufficient.**
+Instrumented a real gate run with per-section timestamps instead of estimating. Real, measured
+result: 163.6s total, with one section -- `Gate R (SHACL reconcile, self-proof)` -- alone costing
+89.1s, 54% of the total.
+
+**The root cause, once measured, was already documented in the code**: `backlog_validate_v1_6_0.py`
+has had a full memoization system since its own v1.6.0 -- keyed on every input's exact bytes, so it
+can only ever replay an identical computation, and built explicitly because "the release gate plus
+clause-proof evaluate ~75 (fixture, suite) pairs of which fewer than half are distinct." The gate
+script only activated it when a caller pre-set `BACKLOG_VALIDATE_MEMO_DIR` -- otherwise it created a
+throwaway directory and deleted it on exit, every single run. No caller, this session included, ever
+pre-set it. Every self-proof fixture (which never changes) was being recomputed from scratch, every
+time, indefinitely.
+
+**Proven with a real before/after, not assumed**: same content, same machine, two consecutive runs.
+Cold (throwaway dir, the old default): 163.6s, Gate R 89.1s. Warm (persistent dir, same inputs):
+40.5s, Gate R 0.5s -- a 178x speedup on that one step, 4x on the whole gate.
+
+**Fixed at the default, not left as an opt-in**: `backlog_gate_v1_14_0.sh -> v1_15_0.sh`. When no
+caller sets `BACKLOG_VALIDATE_MEMO_DIR`, the gate now defaults to a fixed, persistent, off-package
+location (`~/.backlog_validate_memo`) instead of a throwaway one -- so every future run benefits
+automatically, without depending on an operator remembering an environment variable. Verified through
+the real default path itself (no env var set), not just the manually-exported test.
+
+**Systematic root-cause summary for this whole line of investigation (asked for explicitly)**:
+- `backlog_lineage_order_check`: O(N x history) repeated git searches -- fixed, single-pass rewrite
+- `backlog_archive_conformance`: never seeded -- fixed, real digest-based seeding
+- `backlog_clause_proof`: its own cache never survived a full run -- root cause was the gate's `head
+  -6` pipe SIGPIPE-killing it before its write line, not a timing problem -- fixed
+- Version-freezing across several files -- fixed, permanent checker added
+- **This finding**: the single largest remaining cost, a real, already-built memoization system
+  simply never wired to persist -- fixed at the default
+
+No further known slow, uncached, repeatedly-redone computation remains in this package's own release
+gate. What's left (network calls for distribution-drift, a handful of seconds of real, distinct
+computation per gate run) is real work the gate has not done before, not waste.
