@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.120.0> ;
-    owl:versionInfo "1.120.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.121.0> ;
+    owl:versionInfo "1.121.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.120.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.117.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.116.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.115.0> ;
@@ -141,7 +142,8 @@
     dcterms:rights "Copyright (c) 2025-2026 İstanbul Kültür Üniversitesi & Yusuf Altunel. Licensed under CC BY 4.0."@en ;
     dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
     prov:wasAttributedTo "Yusuf Altunel" ;
-    skos:definition "Behavioural enforcement for the framework, tiered by the conformance level the adoption profile in the data graph claims. L1 shapes always fire; L2 and L3 shapes fire only when a profile claims that level, so one shapes file serves adopters of different maturity without forking. Advisory checks are separated into their own node shapes carrying node-level sh:severity, because pyshacl ignores severity declared inside sh:sparql blank nodes. Conformance against this suite means zero results at sh:Violation severity, not an empty report."@en .
+    skos:definition "Behavioural enforcement for the framework, tiered by the conformance level the adoption profile in the data graph claims. L1 shapes always fire; L2 and L3 shapes fire only when a profile claims that level, so one shapes file serves adopters of different maturity without forking. Advisory checks are separated into their own node shapes carrying node-level sh:severity, because pyshacl ignores severity declared inside sh:sparql blank nodes. Conformance against this suite means zero results at sh:Violation severity, not an empty report."@en ;
+    skos:changeNote "G94, 2026-09-15: this file was content-edited 112 times across this package's history under the single frozen filename backlog_shacl_v1_120_0.ttl -- a real, checked finding, not assumed. Renamed to 1.121.0 to carry this correction; no attempt made to retroactively assign real version numbers to the 112 historical edits, which would invent a record nobody made at the time. A real, permanent check now exists (backlog_version_freeze_check_v1_0_0.py) comparing every versioned file in this package against its last published release, refusing any future recurrence of this exact pattern."@en .
 
 #################################################################
 #  L1 — structural integrity (always in force)

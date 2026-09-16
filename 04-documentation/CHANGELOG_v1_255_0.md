@@ -9292,3 +9292,33 @@ there, and a redundant duplicate line was caught and removed before it could shi
 
 With both caches warm, this release's own gate run finished in under four minutes, down from
 20-30+ minutes for nearly every release since the archival work began.
+
+## v1.266.0 — 2026-09-16 (MAJOR: item 3 -- the version-freezing pattern fixed, and a real, permanent mechanism built against its recurrence)
+
+**`LINEAGE_OPERATING_DISCIPLINE_v62_0_0.md -> v63_0_0.md`.** Content-edited 67 times across this
+package's history under one frozen filename before anything checked it. `G94` added: the historical
+count disclosed honestly, no retroactive version numbers invented for the 67 edits nobody assigned
+at the time -- one honest bump marking the point discipline actually started.
+
+**`backlog_shacl_v1_120_0.ttl -> v1_121_0.ttl`.** The same pattern, 112 edits, on this package's own
+main shapes file -- including three of this session's own edits. Internal `owl:versionIRI` /
+`owl:versionInfo` corrected to match; the historical count disclosed via a new `skos:changeNote`. A
+real mistake caught and fixed in the same pass: an early attempt at this edit corrupted the file
+mid-literal (a string-slice miscount split a word across two lines) -- caught before publishing,
+fixed properly with a separate triple rather than patched around.
+
+**A real, permanent mechanism built against recurrence: `backlog_version_freeze_check_v1_0_0.py`.**
+Compares every versioned file in the package against the same-named file at the last real published
+git tag. Same name, different content: the version claim is false right now -- refuse. Built
+carefully, not blindly: the first attempt compared against the *public mirror* and produced false
+positives, because the mirror is a derived, transformed distribution, not a byte-for-byte copy of
+the source -- found this the hard way, switched to comparing against the real governed-monorepo tag
+instead. Proven both directions on real data: clean against the current tree, and correctly catches
+`backlog_shacl`'s own historical drift when compared against an earlier release. Wired into the
+release gate permanently (`backlog_gate_v1_12_0.sh -> v1_13_0.sh`) as its own step, so this exact
+pattern is caught automatically on every future release rather than only when someone happens to
+ask about it.
+
+**Not yet fixed, disclosed rather than hidden**: two copies of `page_regression_check_v2_4_0.js`
+(`vaf-agentic-pipeline`, an another registrant project-proposal template) show the same smaller-scale pattern (6
+edits each). Out of scope for this BRSF-focused pass -- different packages, not touched here.

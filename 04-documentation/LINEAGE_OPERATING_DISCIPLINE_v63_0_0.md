@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v62.0.0
+# Lineage Operating Discipline — v63.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -2668,3 +2668,29 @@ reconciliations; this ruling is the recorded one.
 structurally — is real, additive, and deliberately not taken up here. This documentation fix is the
 cheaper mechanism doing the same job for now (`G39`'s own preference); the structural option is real,
 undecided scope for later, not dismissed.
+
+## G94 — This very document had been content-edited 67 times under one frozen version token; the version number is a claim like any other, and it had gone unchecked
+
+A parallel session's real finding, reported directly by the owner, checked before acting on it:
+`git log --follow` on this exact file, across this whole package's history, shows 67 separate commits
+changing its content, from `v1.51.0` through this session's own edits, all under the identical
+`v62.0.0` filename. A smaller instance of the same pattern was found in two copies of
+`page_regression_check_v2_4_0.js` elsewhere (6 edits each). The version in a filename is a real
+BP-D7 claim -- "this content, this version" -- and this document had been making that claim falsely
+for most of its life, silently, because nothing ever checked it.
+
+**What made this hard to notice**: every ceremony this session re-fetches and SHA-hashes this exact
+file fresh, every turn, rather than trusting the filename as a stable pointer -- so real content
+drift was never actually invisible to that specific process. That is incidental, not a defense: a
+reader trusting the filename the way `BP-D7` says everywhere else to trust one would have been
+misled, repeatedly, for a long time.
+
+**Fixed here, not before**: renamed `v62.0.0 -> v63.0.0` to carry this correction. No attempt is made
+to retroactively assign real version numbers to the 67 historical edits -- that would be inventing a
+history nobody recorded at the time, the same failure this whole line of work exists to catch. One
+honest bump, marking the point discipline actually started being enforced, is more truthful than a
+fabricated one pretending it always was.
+
+**Going forward**: any content change to this document, however small, bumps its version. A ruling
+added without a version bump is the same defect as a ruling added without a real reason -- both are
+claims about what happened that the document's own name no longer backs up.

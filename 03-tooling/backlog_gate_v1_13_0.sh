@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# backlog_gate v1.12.0 — four-gate release check for the Backlog & Roadmap
+# backlog_gate v1.13.0 — four-gate release check for the Backlog & Roadmap
 # Semantic Framework. Nothing about the package's state is trusted until all
 # four pass, and the SHACL gate refuses to certify anything until it has just
 # demonstrated, in this run, that it can fail a known-bad register.
@@ -521,6 +521,25 @@ else
   echo "  NOT RUN — coverage checker not found. Not assumed to pass."
 fi
 
+echo
+echo "== Version-freeze gate — did any versioned file's content change under its own frozen name? (G94) =="
+# LINEAGE_OPERATING_DISCIPLINE_v62_0_0.md was content-edited 67 times across this package's
+# history under one filename before anything checked it; backlog_shacl_v1_120_0.ttl, 112 times.
+# A version in a filename is a real claim -- this content, this version -- and nothing was
+# verifying it stayed true. Compares every versioned file against the SAME file at the last real
+# published tag in the governed monorepo (not the derived public mirror -- that transforms and
+# excludes files, which produces false positives on this exact check; found the hard way).
+VFC="$(ls "$HERE"/backlog_version_freeze_check_v*.py 2>/dev/null | sort -V | tail -1 || true)"
+REPO_ROOT="$(git -C "$PKG" rev-parse --show-toplevel 2>/dev/null || true)"
+LAST_TAG="$(git -C "${REPO_ROOT:-$PKG}" tag --list 'backlog-roadmap-framework-v*' 2>/dev/null | sort -V | tail -1 || true)"
+if [ -n "$VFC" ] && [ -n "$REPO_ROOT" ] && [ -n "$LAST_TAG" ]; then
+  PREFIX="$(realpath --relative-to="$REPO_ROOT" "$PKG" 2>/dev/null || true)/"
+  python3 "$VFC" "$PKG" "$LAST_TAG" --repo-root "$REPO_ROOT" --package-prefix "$PREFIX" | sed 's/^/  /'
+  python3 "$VFC" "$PKG" "$LAST_TAG" --repo-root "$REPO_ROOT" --package-prefix "$PREFIX" >/dev/null 2>&1 \
+    || { echo "  Version-freeze gate FAILED"; FAILED=1; }
+else
+  echo "  NOT RUN — checker, repo root, or a prior published tag not found. Not assumed to pass."
+fi
 
 echo
 echo "== Lineage-discipline gate — the document's claims match the suite =="
