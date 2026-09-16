@@ -9322,3 +9322,22 @@ ask about it.
 **Not yet fixed, disclosed rather than hidden**: two copies of `page_regression_check_v2_4_0.js`
 (`vaf-agentic-pipeline`, an another registrant project-proposal template) show the same smaller-scale pattern (6
 edits each). Out of scope for this BRSF-focused pass -- different packages, not touched here.
+
+## v1.266.1 — 2026-09-16 (PATCH: the real, definitive cause of the clause-proof cache never warming -- a SIGPIPE, not a timing problem)
+
+**Found by continuing to look for root causes after being asked to, not by re-running the same thing
+again.** `backlog_gate_v1_13_0.sh` piped `backlog_clause_proof`'s output through `head -6` to keep the
+gate's own log short. `head` closing its end of the pipe after 6 lines sends `SIGPIPE` to the writing
+process on its next print -- killing `clause_proof` before it ever reached its own cache-stamp write.
+This fully explains why the stamp never got written through any gate-driven run this session,
+regardless of how long each was given: it was never a timing problem, the gate was silently killing
+the process every single time.
+
+**Fixed** (`backlog_gate_v1_13_0.sh -> v1_14_0.sh`): redirect the full output to a file first, letting
+the process run to genuine completion and write its stamp, then show a short preview from the saved
+file. Proven twice before trusting it: the exact fixed pattern run standalone (stamp written), then
+the real gate itself run end to end (stamp written, ~5 minutes total for the entire release gate --
+down from 20-40+ minutes for nearly every release this session before both caches were reliably warm).
+
+Audited the rest of the gate script for the same class of bug (a slow, cache-writing process piped
+into a command that can close early); found no other instances.

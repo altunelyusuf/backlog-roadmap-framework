@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# backlog_gate v1.13.0 — four-gate release check for the Backlog & Roadmap
+# backlog_gate v1.14.0 — four-gate release check for the Backlog & Roadmap
 # Semantic Framework. Nothing about the package's state is trusted until all
 # four pass, and the SHACL gate refuses to certify anything until it has just
 # demonstrated, in this run, that it can fail a known-bad register.
@@ -300,7 +300,16 @@ echo "== Clause proof — which constraints has a fixture made fire? =="
 # purpose.
 CP="$(ls "$HERE"/backlog_clause_proof_v*.py 2>/dev/null | sort -V | tail -1 || true)"
 if [ -n "$CP" ]; then
-  python3 "$CP" 2>/dev/null | head -6 | sed 's/^/  /' || true
+  # v1.13.0 -- was: python3 "$CP" | head -6, which let `head` close the pipe after 6
+  # lines and SIGPIPE the python process before it ever reached its own cache-stamp
+  # write. Confirmed the hard way: standalone runs (no pipe) always wrote the stamp;
+  # every run through this gate never did, regardless of how long it was given.
+  # Redirect to a file first so the full run completes and writes its stamp, THEN
+  # show only the first few lines -- decouples display truncation from process life.
+  CP_OUT="$(mktemp)"
+  python3 "$CP" 2>/dev/null > "$CP_OUT" || true
+  head -6 "$CP_OUT" | sed 's/^/  /'
+  rm -f "$CP_OUT"
 else
   echo "  NOT RUN — clause proof checker not found. Not assumed to pass."
 fi
