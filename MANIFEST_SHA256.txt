@@ -1,14 +1,15 @@
-# backlog-roadmap-framework v1.265.2 — SHA-256 Manifest
+# backlog-roadmap-framework v1.265.3 — SHA-256 Manifest
 # Built by build_manifest_v1_4_0.py. Release build.
 
 # EXEMPT MANIFEST_SHA256.txt — a manifest cannot contain its own hash; containment is a physical impossibility
 # EXEMPT RELEASE_METRICS.txt — reports the result of the manifest gate, so covering it creates a generation-order cycle; its integrity rests on regenerating byte-for-byte instead
 # EXEMPT .fixture-suite-stamp — a cache key over the shapes, TBox and fixtures, written by the gate after a passing run; hashing it would change it and it carries no content of its own
+# EXEMPT .clause-proof-stamp — a cache key over the negative fixtures and declared shape proofs, written by backlog_clause_proof after a passing run; same reason as .fixture-suite-stamp -- hashing it would change it and it carries no content of its own
 # EXEMPT PUBLISH_RECORD.ttl — written by the publisher AFTER the manifest, so listing it guarantees a permanent mismatch a reader cannot distinguish from a real one
 
 6ada9f116ce42441773a025491f036168fe20f93d5383769054d88c1d15c7558  .gitignore  (66b)
 bc6c4263f92a7b7b63d35d26eb0e77ac6d17dbacdd773c4a88ba1c6d58ab8e9a  .public-distribution-url  (62b)
-6051559ad9de2050ca59ebcf6f3f6921bf44ac8880f53169a3ef2902b40adfcf  VERSION.txt  (8b)
+02b133b706548ba789da04aaae0c2b36aec6c6854801757c07ff30a168d32646  VERSION.txt  (8b)
 7234be63073c1708cb05bd62f55d79fdc3180982348a48cd9e522cee9062bd2c  01-ontologies/backlog_abox_v1_6_0.ttl  (54982b)
 22744400929ee1a72ea59900b6330b22e749134a4ae98f1da32b796e4a5ebce6  01-ontologies/backlog_alignment_productbacklog_v1_0_0.ttl  (8248b)
 9f0f1d684e8a5e7da5960235983f567462c79a43de9278debbf45fb79b4ffb0c  01-ontologies/backlog_framework_archive_abox_v1_3_0.ttl  (987388b)
@@ -57,7 +58,7 @@ dfea624919843c01706ddd4ec80777ec4a393af4f7a8163c1ea856a5b24fc5c7  03-tooling/bac
 f5e4b0cb3e5d81f58682814af35e91915294d39805563a38eb1cb7cc501cde21  03-tooling/backlog_standard_row_check_v1_0_0.py  (6908b)
 54d2940dc8b3a6cb0dd1fa87d32896271fcfc5e6e53a1a712cfe128d43421afa  03-tooling/backlog_validate_v1_6_0.py  (16609b)
 b59bf4f6e85fc4980897e4d148a612f7377fa13b8edd54c01c34d0325b874460  03-tooling/backlog_views_v1_5_0.py  (22364b)
-ab3c696675622a6ee45a2208e2cca700b58863cbfed24e87ddc60a96b3e3b14a  03-tooling/build_manifest_v1_4_0.py  (4869b)
+268dd8a7bb0dd6cf48a32a7d9eaaf94873a78866ce8ea5e165c7e26b9f96e131  03-tooling/build_manifest_v1_5_0.py  (5151b)
 1aaca78171952ddffe495ee843e8284848a8185789debf03a55fce986e22dadf  03-tooling/make_public_distribution_v1_3_0.py  (10529b)
 73cbfda58b2e82dae51588acb014601f2f50784d7ab82defd492c3b705ff984e  03-tooling/fixtures/fixture_adaptation_negative_v1_0_0.ttl  (3170b)
 391a1195a911cf11eaf21bb4062bcc3e6066a9a29e1bc2a91388ac476f00223c  03-tooling/fixtures/fixture_adversarial_random_v1_0_0.ttl  (6599b)
@@ -136,7 +137,7 @@ ddaea16c7f7b0ae961d5db9d7b48e35f09cd7b82700acf22ff1c8d39b93dc229  03-tooling/fix
 d2374c4eb3d80323a83023c249dd7690ce2aa843e0842d07c66052acfe5817aa  04-documentation/Agile_FitGap_Analysis_v1_0_0.md  (7047b)
 b4a81b2ef9b5b77e3319d0bad44ca104b86516c4ca228c586222279581a7d253  04-documentation/BACKLOG_ROADMAP_FRAMEWORK_STANDARD_v1_99_0.md  (156633b)
 807ff9b685f9c9a706835aafb47051fc006f1b7a4295f964d65e95e9432e63b8  04-documentation/CHANGELOG_v1_190_0.md  (475017b)
-8642ad8a7b55fc9280f27566a69d4dd87794858bd1915dd7e01b8a8886ea7ce3  04-documentation/CHANGELOG_v1_255_0.md  (590619b)
+e370cb30daf564b2e51bdf8a1ee791e4e2630cb35ac3e382ebe39eddb9c92677  04-documentation/CHANGELOG_v1_255_0.md  (592443b)
 510a553b994526c60c7dca091993b6825e4c90955e2f6aaaa0a41ec3fcfdb407  04-documentation/CLOSURE_REPORT_L_ChangeDiscipline_v1_0_0.md  (6445b)
 899799e52c88b5e897342f0e04bfefa575fda7120cda554e60be602ee9292fc2  04-documentation/CLOSURE_REPORT_L_OntologyDriven_v1_0_0.md  (7935b)
 10b7efb7023ece352534efafb04d8b183a81fd6eeee04f759019406182e75747  04-documentation/Concept_Completeness_Audit_v1_0_0.md  (3290b)

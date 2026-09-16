@@ -9269,3 +9269,26 @@ entry (v1.262.0) claiming it was filed. Removed the stray `pending/` copy, kept 
 elapsed time; a richer work-item state model), explicitly deferred until Lineage 9 closed -- which
 it now has, as of this same release. That design work itself is not started here; this patch only
 fixes the housekeeping gap.
+
+## v1.265.3 — 2026-09-15 (PATCH: the clause-proof cache finally allowed to warm; a real, small manifest gap fixed as a result)
+
+**`.clause-proof-stamp` exists for the first time.** `backlog_clause_proof_v1_0_2.py` re-validates
+every negative fixture and every `provenByFixture` declaration independently of the gate's own
+fixture-coverage skip -- roughly 25-30 minutes of real work the first time it genuinely runs to
+completion. It always wrote its own cache correctly at the end; no run had ever survived
+uninterrupted long enough to reach that line. One dedicated, uninterrupted run this session let it
+finish and write its stamp. Real result, disclosed: `REPORTED - 75 clause(s) unproven` -- a real,
+non-blocking finding, plus a secondary gap noted for later (most `provenByFixture`-declared shapes,
+including the three fixed earlier this session, have no matching `fixtureCaseName`, so this stricter
+per-case check can't verify them even though the shapes themselves do fire).
+
+**A real, small manifest gap surfaced and fixed as a direct consequence**: the new stamp file itself
+had no declared exemption, so `Gate 0` correctly refused to publish with an unaccounted-for file.
+Added, in `build_manifest_v1_5_0.py` (renamed from `v1_4_0.py` to carry the real change): 
+`.clause-proof-stamp` exempted for the same reason `.fixture-suite-stamp` already is -- a local cache
+key, not package content. Checked `make_public_distribution` for the same gap on reflex; it already
+correctly excluded this file (confirmed against the last real published release) -- no fix needed
+there, and a redundant duplicate line was caught and removed before it could ship.
+
+With both caches warm, this release's own gate run finished in under four minutes, down from
+20-30+ minutes for nearly every release since the archival work began.

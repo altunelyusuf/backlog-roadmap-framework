@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""build_manifest v1.4.0 — regenerate MANIFEST_SHA256.txt for this package.
+"""build_manifest v1.5.0 — regenerate MANIFEST_SHA256.txt for this package.
 
 Exists because the manifest is the one artifact that must be written last, and
 doing it by hand put a stale hash in the bundle twice: once caught by the
@@ -59,6 +59,10 @@ EXEMPT = {
     ".fixture-suite-stamp":
         "a cache key over the shapes, TBox and fixtures, written by the gate after a "
         "passing run; hashing it would change it and it carries no content of its own",
+    ".clause-proof-stamp":
+        "a cache key over the negative fixtures and declared shape proofs, written by "
+        "backlog_clause_proof after a passing run; same reason as .fixture-suite-stamp -- "
+        "hashing it would change it and it carries no content of its own",
     "PUBLISH_RECORD.ttl":
         "written by the publisher AFTER the manifest, so listing it guarantees a permanent "
         "mismatch a reader cannot distinguish from a real one",
