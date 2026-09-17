@@ -9461,3 +9461,27 @@ legitimate opposite case, stays silent. Confirmed against the live register: 0 n
 and recorded as a retrospective finding, and the remaining four mitigations from this same handover
 plus all five from its companion (`plan-execution-divergence`) -- taken up next, one at a time, as
 directed.
+
+## v1.268.0 — 2026-09-17 (MINOR: lineage profile taxonomy, the "what" before any "how")
+
+**The owner's own direction, built as real, governed vocabulary, not enforcement.** A multi-level
+taxonomy, on two real, orthogonal axes, each individual grounded in a specific, real case from
+this session's own evidence -- nothing invented, nothing gated.
+
+**`LineageDepthLevel`** -- how far down the real intent chain a piece of work needs to start:
+`Discovery` (a wish, not yet a Mission), `MicroTask` (a bounded, testable, well-defined task with
+no chain around it), `StoryDirect` (stories already known; Epic decomposition would be stale),
+`FullChain` (the Mission-through-Task chain Lineage 9 actually used).
+
+**`LineageArtifactDomain`** -- what kind of artifact, because the rigor that fits one does not
+transfer to another: `SourceCode`, `Ontology`, `ContentTransformation`, `Infrastructure`,
+`CrossPackage`. Cross-checked against `pib-hub`'s own real `pib:ArtifactCategory` vocabulary before
+naming these: `SourceCode` and `Ontology` align with PIB's existing `CoreSoftwareDevelopment` and
+`OntologyBasedSystem`/`OntologyDeliverable`; `ContentTransformation` has no existing PIB match and
+is disclosed as a real gap rather than forced into a category that doesn't fit.
+
+**Declaring properties added** (`hasLineageDepthLevel`, `hasLineageArtifactDomain`), both optional
+-- nothing requires them yet, nothing reads them to shorten or lengthen a chain, no new SHACL shape
+enforces anything. The taxonomy exists before any rule depends on it, matching the direction agreed
+before this was built: complete the "what" first, iterate as new real cases arrive, discuss the
+"how" separately once the vocabulary itself is settled.

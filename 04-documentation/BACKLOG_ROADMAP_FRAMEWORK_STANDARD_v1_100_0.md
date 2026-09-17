@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.99.0
+# Backlog & Roadmap Semantic Framework — Standard v1.100.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -926,6 +926,31 @@ system permits and refuses in each state, for the user interface the screens and
 rules enforce this — a finished task owes its artifact at the named level and depth, a declared concern
 owes the model recording what was analysed, and a model states the level it works at, since an
 obligation naming a level cannot be checked against an artifact that does not.
+
+### 2.5c-xxi-l Lineage profile: depth level and artifact domain
+
+Real experience across many lineages showed the standard ceremony fitting some work badly in both
+directions — a small, novel piece of framework design needing the full chain's own drift-catching, and
+a large, repeatable body of content needing none of it below its objectives. Two real, orthogonal
+classes name this rather than leave it implicit.
+
+A **`LineageDepthLevel`** — `Discovery`, `MicroTask`, `StoryDirect`, `FullChain` — states how far down
+the real intent chain a piece of work needs to start from: a request that cannot yet support a Mission
+statement, a single well-defined and tested task needing no chain built around it, work already known
+at story granularity where an Epic-to-Story conversion would be stale, or the standard Mission-through-
+Task chain.
+
+A **`LineageArtifactDomain`** — `SourceCode`, `Ontology`, `ContentTransformation`, `Infrastructure`,
+`CrossPackage` — states what kind of artifact the lineage produces, because the rigor that fits
+structural and behavioural source-code modelling does not transfer to ontology (TBox/ABox/SHACL)
+discipline, content transformation, off-backlog infrastructure work, or work jointly owned across
+package boundaries. `SourceCode` and `Ontology` align with `pib-hub`'s own real `pib:ArtifactCategory`
+vocabulary; `ContentTransformation` is named as a real, disclosed gap that vocabulary does not yet
+cover.
+
+`hasLineageDepthLevel` and `hasLineageArtifactDomain`, both optional, let a lineage declare its profile.
+Neither is enforced yet — the taxonomy is real before any rule depends on it, built to be iterated as
+further real cases arrive, not fixed at four and five values forever.
 
 ### 2.5c-xxii The staged ceremony, one commit per stage
 

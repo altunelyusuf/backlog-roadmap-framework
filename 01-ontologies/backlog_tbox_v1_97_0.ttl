@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.96.0> ;
-    owl:versionInfo "1.96.0" ;
+    owl:versionIRI <http://example.org/backlog/1.97.0> ;
+    owl:versionInfo "1.97.0" ;
+    owl:priorVersion <http://example.org/backlog/1.96.0> ;
     owl:priorVersion <http://example.org/backlog/1.95.0> ;
     owl:priorVersion <http://example.org/backlog/1.94.0> ;
     owl:priorVersion <http://example.org/backlog/1.93.0> ;
@@ -7192,3 +7193,50 @@ backlog:Concern_Interface_UI a owl:NamedIndividual , backlog:DesignConcern ;
     rdfs:label "User interface"@en ;
     skos:definition "How a person sees and drives the system: the screens, their flow, and the dialogue between user and system. Named as a sixth concern because the corpus treats interface design as first-class -- storyboard, mockup, prototype, design model, dialogue -- and the five existing concerns cover none of it."@en ;
     backlog:coversTaskType backlog:Task_DesignDefinition , backlog:Task_Validation .
+
+#################################################################
+#  v1.97.0 -- LINEAGE PROFILE, TWO AXES. Owner's own real instruction, 2026-09-17: a
+#  multi-level taxonomy, built from real experience, expandable as new cases arrive --
+#  the "what" agreed before any "how." Neither axis is required nor gated by anything
+#  yet; declaring a profile is optional until a real enforcement decision follows it.
+#################################################################
+backlog:LineageDepthLevel a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:Depth_Discovery backlog:Depth_MicroTask backlog:Depth_StoryDirect backlog:Depth_FullChain ) ;
+    rdfs:label "Lineage Depth Level"@en ;
+    skos:definition "How far down the real intent chain a piece of work actually needs to start from, before any Mission/Scope/Goal/Objective/Backlog ceremony is built around it. Not a measure of size: real evidence this session showed a small, novel lineage (backlog-roadmap-framework's own SDLC-obligations work) needing the full chain, and a large, repeatable one (a textbook package, 24 chapters) needing none of it below its objectives. Four levels, each named from a real, distinct case rather than a guessed gradient."@en .
+backlog:Depth_Discovery a owl:NamedIndividual , backlog:LineageDepthLevel ; rdfs:label "Discovery"@en ;
+    skos:definition "The request cannot honestly support a Mission statement yet -- what exists is a wish or an expectation, not yet a stated intent. Real comprehensive elicitation work is owed before Mission-writing, not a shortcut through it. Named from the owner's own description, 2026-09-17: cases where 'even the epics cannot be written.'"@en .
+backlog:Depth_MicroTask a owl:NamedIndividual , backlog:LineageDepthLevel ; rdfs:label "Micro-task"@en ;
+    skos:definition "A single, well-defined, testable task or story -- real work, but bounded enough that a Mission/Scope/Goal/Objective/Epic chain around it would outweigh the work itself. Named from the owner's own example, 2026-09-17: an in-line coding request such as listing every rule in a corpus, a limited number of source lines, well-defined and properly tested, not a comprehensive lineage."@en .
+backlog:Depth_StoryDirect a owl:NamedIndividual , backlog:LineageDepthLevel ; rdfs:label "Story-direct"@en ;
+    skos:definition "The work is already known at story granularity -- an Epic-to-Story conversion step would be stale, since the decomposition it exists to produce is already the starting point. Named from the owner's own observation, 2026-09-17: 'if the stories are already available, possibly the epic-story conversion will be stale.'"@en .
+backlog:Depth_FullChain a owl:NamedIndividual , backlog:LineageDepthLevel ; rdfs:label "Full chain"@en ;
+    skos:definition "The standard Mission then Scope then Goal then Objective then Backlog then Epic then Story then Task chain, as this package's own Lineage 9 actually used it -- appropriate when the work is itself a rule other lineages will depend on, or genuinely novel enough that the chain's own drift-catching (retrospective findings, scope amendments) is real, needed value rather than ceremony."@en .
+
+backlog:LineageArtifactDomain a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:Domain_SourceCode backlog:Domain_Ontology backlog:Domain_ContentTransformation backlog:Domain_Infrastructure backlog:Domain_CrossPackage ) ;
+    rdfs:label "Lineage Artifact Domain"@en ;
+    skos:definition "What fundamentally different kind of artifact the lineage produces, because the rigor that fits one kind does not transfer to another. The owner's own words, 2026-09-17: 'in source code we need to know the structural and behavioral details... ontologies require totally different work... converting a corpus into an interactive HTML file is another work.' Cross-checked against pib-hub's own real pib:ArtifactCategory vocabulary before adding this: SourceCode and Ontology map cleanly onto pib:CoreSoftwareDevelopment and pib:OntologyBasedSystem/OntologyDeliverable; ContentTransformation has no existing PIB category and is named here as a real, disclosed gap, not forced into one that does not fit."@en .
+backlog:Domain_SourceCode a owl:NamedIndividual , backlog:LineageArtifactDomain ; rdfs:label "Source code"@en ;
+    skos:definition "Structural and behavioral modelling: domain entities, interfaces, behaviour specifications -- what this package's own full SDLC obligation set (obligation set 2, the fourteen-process, six-concern expansion) was actually built for. Aligns with pib-hub's pib:CoreSoftwareDevelopment."@en .
+backlog:Domain_Ontology a owl:NamedIndividual , backlog:LineageArtifactDomain ; rdfs:label "Ontology"@en ;
+    skos:definition "TBox, ABox and SHACL discipline -- a different rigor entirely from source-code structural/behavioural modelling. What backlog-roadmap-framework and the wider OE discipline use on themselves. Aligns with pib-hub's pib:OntologyBasedSystem and pib:OntologyDeliverable."@en .
+backlog:Domain_ContentTransformation a owl:NamedIndividual , backlog:LineageArtifactDomain ; rdfs:label "Content transformation"@en ;
+    skos:definition "Turning existing content into a different real form -- the owner's own example, a corpus converted into an interactive HTML page -- distinct even from authoring new content, and with no existing pib:ArtifactCategory match at the time this was named (2026-09-17); disclosed as a real gap rather than forced into GamificationProject or CapstoneReport."@en .
+backlog:Domain_Infrastructure a owl:NamedIndividual , backlog:LineageArtifactDomain ; rdfs:label "Infrastructure"@en ;
+    skos:definition "Tooling, gate and pipeline work on the framework's own mechanisms -- real, necessary, and typically moving zero backlog items, the 'off-backlog, declared' case this same session's own real releases (the order-check rewrite, the archive-conformance seeding, the memoization default) demonstrated directly."@en .
+backlog:Domain_CrossPackage a owl:NamedIndividual , backlog:LineageArtifactDomain ; rdfs:label "Cross-package"@en ;
+    skos:definition "Work whose real completion is jointly owned by two or more packages, checkable from neither alone -- named from a real, disclosed case (a deferred handover, 2026-09-16): a deliverable's satisfying artifact moved to a different package with no scope-change recorded on the losing side."@en .
+
+backlog:hasLineageDepthLevel a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:Lineage ; rdfs:range backlog:LineageDepthLevel ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "has lineage depth level"@en ;
+    skos:definition "Which real depth level this lineage declared at open time. Optional: nothing yet requires it, and nothing yet enforces a chain shortcut or expansion from its value -- the taxonomy is named before any enforcement decision follows it, per the owner's own instruction to build iteratively."@en .
+backlog:hasLineageArtifactDomain a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:Lineage ; rdfs:range backlog:LineageArtifactDomain ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "has lineage artifact domain"@en ;
+    skos:definition "Which real artifact domain this lineage produces. Optional, same reason as hasLineageDepthLevel: the vocabulary is real before any rule reads it."@en .
