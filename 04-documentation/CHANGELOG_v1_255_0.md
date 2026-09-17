@@ -9562,3 +9562,15 @@ work distinguished.
 Zero violations across the whole register. This is the first real, lived instance of
 `Profile_StoryDirect_Infrastructure` -- its own construction is now the working precedent the
 taxonomy was built to eventually generalise from.
+
+## v1.272.0 — 2026-09-17 (PATCH: PIB's reply, and its own honest self-correction, processed)
+
+**A real, closed loop.** PIB confirmed another registrant's 12 operators independently, found and fixed a genuine
+defect of its own the proposal surfaced (Repetition individual missing, v1.5.0), then corrected its
+own first answer when the owner challenged the reasoning behind it -- PIB's six-of-twelve is a
+pinned-engine-generation artifact, not the principled design choice first claimed.
+
+**Confirmed directly rather than assumed:** Lineage 15's own Scope carries no another registrant/PIB claim at all
+(trimmed earlier per direct instruction), so nothing needed retracting here. Both real messages
+logged; one useful technical note (k-of-n bounds via Repetition + grouping) carried forward for
+future taxonomy work, not acted on now. PIB now has its own real handover inbox.
