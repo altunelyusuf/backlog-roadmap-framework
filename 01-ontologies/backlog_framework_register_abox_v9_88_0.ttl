@@ -3384,15 +3384,55 @@ fw:Blueprint_GovernanceContinuation a backlog:Blueprint ; backlog:blueprintFor f
 
 fw:ST_Gov_ComparisonLogic a backlog:Story ;
     backlog:hasIdentifier "GOV-S01" ; backlog:hasTitle "Release-to-item comparison logic" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Ready ;
     backlog:memberOfContainer fw:Register ;
     backlog:belongsToLineage fw:L_GovernanceContinuation ;
     backlog:pursuesObjective fw:Obj_Gov_DeliverablesBuilt ;
     backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
     backlog:hasAcceptanceCriterion fw:AC_Gov_ComparisonLogic ;
-    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "First real story of a three-story backlog; RICE scoring deferred to a real grooming pass rather than estimated in the same turn the backlog was written." .
+    backlog:hasReach 1.0 ; backlog:hasImpact 3.0 ; backlog:hasConfidence 0.9 ; backlog:hasEffort 1.0 ;
+    backlog:hasPriorityScore 2.7 ;
+    backlog:hasNoApplicableConcern true ;
+    backlog:appliesDefinitionOfDone fw:DoD_Gov_Infrastructure .
+fw:RE_Gov_ComparisonLogic a backlog:RefinementEvent ; backlog:refines fw:ST_Gov_ComparisonLogic ;
+    backlog:refinedAt "2026-09-17T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "A single script comparing what changed in a release against whether any backlog item actually moved. Reach 1: this package's own release pipeline is the only place it runs today. Impact 3: this closes a real, repeated pattern -- a package shipped fourteen releases of genuine, finished work with not one backlog item ever leaving Proposed, and nothing in the framework noticed. Confidence 0.9: the shape of the fix was already tested on a scratch copy before this story was written. Effort 1: one script, one fixture, nothing more." .
 fw:AC_Gov_ComparisonLogic a backlog:AcceptanceCriterion ;
-    backlog:hasGherkinText "Given a release whose changed artifacts include a package's governed files, When the comparison logic runs against the commits since the last release, Then it reports true if any real WorkItem of that package left Proposed in the same span, and false otherwise." .
+    backlog:hasGherkinText "Given a release that changed one of this package's governed files, When the check looks at what happened to the backlog in that same window, Then it finds a real item that moved out of Proposed -- and if it can't find one, it says so." .
+
+fw:DoD_Gov_Infrastructure a backlog:DefinitionOfDone ; rdfs:label "Definition of Done for Lineage 15's own infrastructure work"@en ;
+    backlog:hasDoDCriterion fw:DGov1 , fw:DGov2 , fw:DGov3 , fw:DGov4 .
+fw:DGov1 a backlog:DoDCriterion ; rdfs:label "DGov1 -- the script refuses a release with nothing to show for it"@en ;
+    backlog:hasCriterionText "A real, planted negative fixture -- a release that moved no item and declared no unplanned work -- is refused, with a real non-zero exit." ;
+    backlog:hasCheckQuery "python3 backlog_release_item_check.py against a fixture with zero item movement." ;
+    backlog:hasExpectedResult "exits non-zero" ;
+    backlog:hasCriterionStatus backlog:NotYetEnforceable .
+fw:DGov2 a backlog:DoDCriterion ; rdfs:label "DGov2 -- the script lets a genuine release through"@en ;
+    backlog:hasCriterionText "A real, planted positive fixture -- a release where a real item actually left Proposed -- passes cleanly." ;
+    backlog:hasCheckQuery "Same script, against a fixture with one real item movement." ;
+    backlog:hasExpectedResult "exits zero" ;
+    backlog:hasCriterionStatus backlog:NotYetEnforceable .
+fw:DGov3 a backlog:DoDCriterion ; rdfs:label "DGov3 -- the check is wired in, not a tool nobody calls"@en ;
+    backlog:hasCriterionText "The comparison is a real step inside backlog_gate itself, not a standalone script the gate never runs." ;
+    backlog:hasCheckQuery "grep the gate script for a call to the new check." ;
+    backlog:hasExpectedResult "found, and the call site actually blocks on failure" ;
+    backlog:hasCriterionStatus backlog:NotYetEnforceable .
+fw:DGov4 a backlog:DoDCriterion ; rdfs:label "DGov4 -- wiring it in breaks nothing already real"@en ;
+    backlog:hasCriterionText "The full release gate still passes end to end once this check is wired in." ;
+    backlog:hasCheckQuery "backlog_gate, full run, after the change." ;
+    backlog:hasExpectedResult "RELEASE GATE: PASS" ;
+    backlog:hasCriterionStatus backlog:NotYetEnforceable .
+
+fw:TD_Gov_NoMovement a backlog:TestData ; rdfs:label "Fixture: release diff with zero item movement, no declaration"@en ;
+    backlog:hasFixtureState "A synthetic package register with two changed governed files since the last tag, every WorkItem still Proposed, no unplanned-work statement anywhere in the release." .
+fw:TD_Gov_OneMoved a backlog:TestData ; rdfs:label "Fixture: release diff with one real item leaving Proposed"@en ;
+    backlog:hasFixtureState "Same package register, one WorkItem moved from Proposed to Done in the commit span the release covers." .
+fw:TC_Gov_Refuses a backlog:TestCase ; rdfs:label "Refuses a release with no item moved and no declaration"@en ;
+    backlog:exercisesCriterion fw:AC_Gov_ComparisonLogic ; backlog:runsOnData fw:TD_Gov_NoMovement ;
+    backlog:hasRationale "Real test design, not yet run: a release diff touching governed files, zero WorkItems leaving Proposed in the same span, no unplanned-work statement present. Expected: non-zero exit. The test harness itself is built once this is actually implemented and the first real run produces real evidence -- not before." .
+fw:TC_Gov_Passes a backlog:TestCase ; rdfs:label "Passes a release where a real item actually moved"@en ;
+    backlog:exercisesCriterion fw:AC_Gov_ComparisonLogic ; backlog:runsOnData fw:TD_Gov_OneMoved ;
+    backlog:hasRationale "Real test design, not yet run: same shape of fixture, one real WorkItem transitioning out of Proposed in the same span. Expected: zero exit." .
 
 fw:ST_Gov_UnplannedDeclaration a backlog:Story ;
     backlog:hasIdentifier "GOV-S02" ; backlog:hasTitle "Unplanned-work declaration escape hatch" ;

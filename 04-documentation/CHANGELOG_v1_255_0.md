@@ -9574,3 +9574,24 @@ pinned-engine-generation artifact, not the principled design choice first claime
 (trimmed earlier per direct instruction), so nothing needed retracting here. Both real messages
 logged; one useful technical note (k-of-n bounds via Repetition + grouping) carried forward for
 future taxonomy work, not acted on now. PIB now has its own real handover inbox.
+
+## v1.273.0 — 2026-09-17 (PATCH: GOV-S01 refined properly, a real defect in inherited DoD found and fixed)
+
+**GOV-S01 moved Proposed to Ready**, with a real refinement event, a real RICE score (2.7 --
+Reach 1, Impact 3, Confidence 0.9, Effort 1), and a corrected rationale: an earlier draft wrongly
+cited Lineage 9's own `G96` finding (commit-ordering) as evidence for this story's impact, when the
+real evidence is a single, specific, unrelated case -- fourteen real releases with zero backlog
+item movement, caught by neither this framework nor any other.
+
+**A real defect found while reviewing, not a style note.** The `DefinitionOfDone` this story was
+inheriting through container resolution is real, but was written for ontology/vocabulary work
+(`skos:definition` on new terms, cost-estimate tracking) -- the wrong shape entirely for a script.
+Built `DoD_Gov_Infrastructure`, four criteria that actually fit infrastructure work: refuses a
+release with nothing to show, passes a genuine one, is actually wired into the gate rather than
+sitting unused, and doesn't break anything already real. Applied directly to GOV-S01.
+
+**Two real test cases designed, not fabricated as passed.** `TC_Gov_Refuses` and `TC_Gov_Passes`,
+each with real fixture-state data, each exercising the real acceptance criterion -- deliberately
+stopped short of creating a `TestHarness` with placeholder evidence, since claiming a test had run
+before the work existed would be exactly the kind of manufactured appearance this lineage exists to
+prevent. The harness comes once real implementation produces a real result.
