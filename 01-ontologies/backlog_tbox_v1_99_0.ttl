@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.98.0> ;
-    owl:versionInfo "1.98.0" ;
+    owl:versionIRI <http://example.org/backlog/1.99.0> ;
+    owl:versionInfo "1.99.0" ;
+    owl:priorVersion <http://example.org/backlog/1.98.0> ;
     owl:priorVersion <http://example.org/backlog/1.97.0> ;
     owl:priorVersion <http://example.org/backlog/1.96.0> ;
     owl:priorVersion <http://example.org/backlog/1.95.0> ;
@@ -285,13 +286,17 @@ backlog:Iteration a owl:Class ;
 backlog:LifecycleState a owl:Class ;
     rdfs:subClassOf backlog:BacklogConcept ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
-    owl:oneOf ( backlog:Proposed backlog:Ready backlog:InProgress backlog:Done backlog:Cancelled ) ;
+    owl:oneOf ( backlog:Proposed backlog:Refined backlog:Ready backlog:InProgress backlog:Done backlog:Cancelled ) ;
     rdfs:label "Lifecycle State"@en ;
-    skos:definition "The state of a work item or container within its delivery lifecycle. A closed enumeration of exactly five individuals — Proposed, Ready, InProgress, Done, Cancelled — so that any other asserted state is a semantic error a reasoner detects rather than free-text a reader must interpret."@en .
+    skos:definition "The state of a work item or container within its delivery lifecycle. A closed enumeration of six individuals — Proposed, Refined, Ready, InProgress, Done, Cancelled — so that any other asserted state is a semantic error a reasoner detects rather than free-text a reader must interpret. Refined added 2026-09-17, G97-era work: two shapes already referenced backlog:Refined as if it were real, and it was dead code since whichever one first assumed it -- named for real, tested against a real, complete case before shipping (see Refined's own definition for what it distinguishes and why it sits where it does)."@en .
 
 backlog:Proposed a owl:NamedIndividual , backlog:LifecycleState ;
     rdfs:label "Proposed"@en ;
     skos:definition "Recorded and prioritisable, but not yet refined to the point where work could start; acceptance criteria may still be absent."@en .
+
+backlog:Refined a owl:NamedIndividual , backlog:LifecycleState ;
+    rdfs:label "Refined"@en ;
+    skos:definition "Decomposed into real Tasks, a genuine checkpoint reached before the full Ready bar, deliberately not after it. Distinct from Ready: Refined says decomposition happened; Ready additionally requires acceptance criteria and a recorded refinement event, ReadinessGateShape's own existing, unchanged bar. Positioned here rather than between Ready and InProgress precisely because InProgress is reachable only through Ready (T_Start is the sole real transition that targets it) -- placing Refined before Ready means every existing Ready-specific check keeps meaning exactly what it already meant, proven on a real fixture both ways before this was written: an exact-match check on hasState=Ready neither gains a false negative for a Refined item that never claimed to be Ready, nor loses coverage of a Ready item that still owes its real requirements."@en .
 
 backlog:Ready a owl:NamedIndividual , backlog:LifecycleState ;
     rdfs:label "Ready"@en ;

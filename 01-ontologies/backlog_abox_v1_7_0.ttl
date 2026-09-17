@@ -8,9 +8,10 @@
 
 <http://example.org/backlog-abox> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (Reference ABox)"@en ;
-    owl:versionIRI <http://example.org/backlog-abox/1.6.0> ;
-    owl:versionInfo "1.6.0" ;
-    owl:priorVersion <http://example.org/backlog-abox/1.2.1> ,
+    owl:versionIRI <http://example.org/backlog-abox/1.7.0> ;
+    owl:versionInfo "1.7.0" ;
+    owl:priorVersion <http://example.org/backlog-abox/1.6.0> ,
+        <http://example.org/backlog-abox/1.2.1> ,
                      <http://example.org/backlog-abox/1.2.0> ,
                      <http://example.org/backlog-abox/1.1.0> ,
                      <http://example.org/backlog-abox/1.0.0> ;
@@ -288,15 +289,28 @@ backlog:DoD_P8_CapacityPolicyComplete a owl:NamedIndividual , backlog:DoDCriteri
 
 backlog:Workflow_Default a owl:NamedIndividual , backlog:Workflow ;
     rdfs:label "Default work-item workflow"@en ;
-    skos:definition "The reusable baseline lifecycle: refine, start, complete, and withdraw, plus the two backward moves real delivery needs. Every state in the closed enumeration is reachable and both terminal states are entered only through a guarded transition."@en ;
+    skos:definition "The reusable baseline lifecycle: refine, start, complete, and withdraw, plus the two backward moves real delivery needs, plus the two 2026-09-17 moves through Refined -- decompose (Proposed to Refined) and confirm-ready (Refined to Ready, unconditional at this level; ReadinessGateShape independently guards Ready's own real bar). Every state in the closed enumeration is reachable and both terminal states are entered only through a guarded transition."@en ;
     backlog:hasTransition backlog:T_Refine , backlog:T_Start , backlog:T_Complete , backlog:T_Return ,
-                          backlog:T_Defer , backlog:T_WithdrawProposed , backlog:T_WithdrawReady , backlog:T_WithdrawInProgress .
+                          backlog:T_Defer , backlog:T_WithdrawProposed , backlog:T_WithdrawReady , backlog:T_WithdrawInProgress ,
+                          backlog:T_Decompose , backlog:T_RefinedToReady .
 
 backlog:T_Refine a owl:NamedIndividual , backlog:StateTransition ;
     rdfs:label "Refine: Proposed to Ready"@en ;
     backlog:fromState backlog:Proposed ; backlog:toState backlog:Ready ;
     backlog:hasTransitionName "refine" ;
     backlog:hasTransitionGuard "ASK { ?i backlog:hasAcceptanceCriterion ?a . ?r backlog:refines ?i } # must return true for the item" .
+
+backlog:T_Decompose a owl:NamedIndividual , backlog:StateTransition ;
+    rdfs:label "Decompose: Proposed to Refined"@en ;
+    backlog:fromState backlog:Proposed ; backlog:toState backlog:Refined ;
+    backlog:hasTransitionName "decompose" ;
+    backlog:hasTransitionGuard "ASK { ?i backlog:decomposesInto ?t . ?t a backlog:ExecutionTask } # at least one real ExecutionTask decomposed from the item must exist" .
+
+backlog:T_RefinedToReady a owl:NamedIndividual , backlog:StateTransition ;
+    rdfs:label "Refined to Ready, unconditional at the transition level"@en ;
+    backlog:fromState backlog:Refined ; backlog:toState backlog:Ready ;
+    backlog:hasTransitionName "confirm-ready" ;
+    backlog:hasTransitionGuard "ASK { true } # unconditional here on purpose: ReadinessGateShape, a separate, already-active SHACL mechanism, independently enforces the real bar (acceptance criteria, a recorded refinement event) the moment hasState:Ready is asserted, regardless of which state preceded it -- no substance moved, only which mechanism checks it" .
 
 backlog:T_Start a owl:NamedIndividual , backlog:StateTransition ;
     rdfs:label "Start: Ready to In Progress"@en ;

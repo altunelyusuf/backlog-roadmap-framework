@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.101.0
+# Backlog & Roadmap Semantic Framework — Standard v1.102.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -80,7 +80,7 @@ confused with `LifecycleState` — the delivery state of a work item. The two ar
 |---|---|
 | `WorkItem` + 8 disjoint kinds | Initiative, Epic, Feature, Story, Task, Defect, Spike, Enabler |
 | `Backlog`, `Package`, `Increment`, `Iteration` | Containers; state derived from members |
-| `LifecycleState` | Closed set: `Proposed`, `Ready`, `InProgress`, `Done`, `Cancelled` |
+| `LifecycleState` | Closed set: `Proposed`, `Refined`, `Ready`, `InProgress`, `Done`, `Cancelled` |
 | `hasState` (functional), `derivedState`, `derivedMilestoneState` | Asserted and computed states |
 | `hasIdentifier`, `hasTitle`, `hasRationale` | Identity, summary, and the reason for withdrawal |
 

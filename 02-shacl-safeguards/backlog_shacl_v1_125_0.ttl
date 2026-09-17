@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.124.0> ;
-    owl:versionInfo "1.124.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.125.0> ;
+    owl:versionInfo "1.125.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.124.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.123.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.122.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.121.0> ;
@@ -905,6 +906,7 @@ backlog:ReadinessGateShape a sh:NodeShape ;
     sh:targetClass backlog:WorkItem ;
     sh:severity sh:Violation ;
     rdfs:label "Ready is earned, not assumed (L2)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_readiness_and_refined" ;
     sh:sparql [ a sh:SPARQLConstraint ;
         sh:message "L2: an item in Ready must carry at least one acceptance criterion; readiness without stated acceptance is an estimate of someone's memory." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;

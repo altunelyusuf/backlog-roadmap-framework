@@ -9507,3 +9507,34 @@ was withdrawn over, not contradicted by it).
 checkable properties on the profile individual; nothing yet reads them to permit or refuse anything
 on a live lineage. One real profile proven correct against lived data comes before any second one is
 guessed, and before either is wired to a rule.
+
+## v1.270.0 — 2026-09-17 (MINOR: Refined, a real sixth LifecycleState -- tested in isolation first, made real only after the test held)
+
+**A real state, tested before it was live.** `backlog:Refined` -- decomposed into real Tasks, a
+genuine checkpoint reached before the full `Ready` bar, not after it -- closes a gap two existing
+shapes had silently assumed for a while: both referenced `backlog:Refined` in an exclusion list
+before it was ever defined, dead code since whichever one first assumed it existed.
+
+**The owner's own design closed a real compatibility risk the isolated test surfaced.** An initial
+test (scratch copies only, nothing live) placing `Refined` between `Ready` and `InProgress` found a
+real cost: `ReadinessGateShape`'s exact-match check on `hasState:Ready` would silently stop applying
+to anything that progressed past `Ready`. The owner's question -- is `InProgress` reachable only via
+`Ready`? -- was checked directly (yes: `T_Start` is the sole real transition that targets it) and
+led to the actual design: `Refined` sits *before* `Ready`, not after, with an unconditional
+transition-level move into `Ready` -- `ReadinessGateShape` itself, a separate, already-active
+mechanism, independently guards Ready's real substance the moment it's asserted, regardless of
+sequence. Re-tested on the corrected ordering: zero compatibility cost, confirmed on a real fixture
+before anything was made live.
+
+**A real correction to something said earlier this session, caught only by actually making the
+change:** the `Workflow`/`StateTransition` mechanism was believed dormant, never adopted. It is not
+-- `Workflow_Default`, a real, live individual, already governs the register's real transitions, and
+adding `Refined` without wiring `T_Decompose`/`T_RefinedToReady` into it produced a real, live
+violation (`Refined` unreachable and unleavable) that the gate correctly caught before this could
+ship. Fixed in the same pass.
+
+**Built:** `Refined` (TBox v1.99.0), two new transitions (`T_Decompose`: Proposed to Refined,
+`T_RefinedToReady`: Refined to Ready, unconditional -- ABox v1.7.0, wired into `Workflow_Default`),
+a new, real fixture (`fixture_readiness_and_refined_v1_0_0.ttl`) proving `ReadinessGateShape`'s
+unchanged behavior and closing its own prior lack of a fixture, and documentation corrected
+(the standard's own closed-set listing had gone stale the moment this shipped).

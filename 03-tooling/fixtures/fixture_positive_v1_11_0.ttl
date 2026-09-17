@@ -398,7 +398,7 @@ ex:Workflow a backlog:Workflow ;
     backlog:workflowFor ex:Backlog ;
     backlog:hasTransition backlog:T_Refine , backlog:T_Start , backlog:T_Complete , backlog:T_Return ,
                           backlog:T_Defer , backlog:T_WithdrawProposed , backlog:T_WithdrawReady ,
-                          backlog:T_WithdrawInProgress .
+                          backlog:T_WithdrawInProgress , backlog:T_Decompose , backlog:T_RefinedToReady .
 
 # packages are placed and ranked on the roadmap, and one depends on the other
 ex:PkgAuth backlog:rankedOnRoadmap ex:Roadmap ;
