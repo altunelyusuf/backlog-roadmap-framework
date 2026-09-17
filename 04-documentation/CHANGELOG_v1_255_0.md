@@ -9380,3 +9380,14 @@ the real default path itself (no env var set), not just the manually-exported te
 No further known slow, uncached, repeatedly-redone computation remains in this package's own release
 gate. What's left (network calls for distribution-drift, a handful of seconds of real, distinct
 computation per gate run) is real work the gate has not done before, not waste.
+
+## v1.267.1 — 2026-09-17 (PATCH: a real handover processed -- a second, self-corrected instance of the report-before-outcome ordering risk)
+
+`vaf-pipeline-session` deposited a real, well-verified finding: closing a mission, it set
+`hasMissionOutcome Out_Achieved` and built the `ClosureReport` in the same commit -- 0 SHACL
+violations throughout, since the shape only checks a report exists, not that it predates the
+outcome. Self-corrected already; no action requested. Verified before accepting: both shape
+messages it quoted checked byte-for-byte against the real shapes file. Accepted, logged, and
+tied explicitly to the richer-lifecycle-states design work already deferred pending Lineage 9's
+closure (now closed) -- that design's real scope should cover Mission/ClosureReport ordering
+too, not only WorkItem state transitions, whenever it is actually taken up.
