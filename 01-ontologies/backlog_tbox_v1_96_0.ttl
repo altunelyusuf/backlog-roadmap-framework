@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.95.0> ;
-    owl:versionInfo "1.95.0" ;
+    owl:versionIRI <http://example.org/backlog/1.96.0> ;
+    owl:versionInfo "1.96.0" ;
+    owl:priorVersion <http://example.org/backlog/1.95.0> ;
     owl:priorVersion <http://example.org/backlog/1.94.0> ;
     owl:priorVersion <http://example.org/backlog/1.93.0> ;
     owl:priorVersion <http://example.org/backlog/1.92.0> ;
@@ -4541,6 +4542,12 @@ backlog:closedAtCommit a owl:DatatypeProperty , owl:FunctionalProperty ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "closed at commit"@en ;
     skos:definition "The governed-repository commit at which this stage closed. THE ONLY EXTERNALLY WITNESSED ANCHOR available: a commit is append-only and held by a remote the author does not control, so a stage claiming to have closed at a commit can be checked against a history nobody can rewrite. Established by experiment — a digest over the register alone is computable from the final state and therefore proves nothing about order, while a commit is not. Its limit is equally real: git witnesses order BETWEEN commits and says nothing about order WITHIN one, so a lineage authored in a single commit is unordered evidence however it was actually built."@en .
+
+backlog:closureCommittedAt a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:ClosureReport ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "closure committed at"@en ;
+    skos:definition "The governed-repository commit at which this closure report was itself committed -- the identical anchor closedAtCommit gives StageOutput, generalised to the one place this lineage's own real discipline had never applied it. A real, self-corrected cross-session finding named the gap directly (vaf-pipeline-session, 2026-09-16): a mission's hasMissionOutcome Out_Achieved and its own ClosureReport were set in the same commit, 0 SHACL violations throughout, because MissionClosureRequiresReportShape only checks a report exists, never that it was committed before the outcome it justifies. This property gives the order-check tool the same real anchor it already uses for stage outputs, so that check can be extended to mission closure rather than staying a structural-existence check alone."@en .
 
 backlog:hasStateDigest a owl:DatatypeProperty , owl:FunctionalProperty ;
     rdfs:domain backlog:StageOutput ; rdfs:range xsd:string ;

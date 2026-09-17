@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.121.0> ;
-    owl:versionInfo "1.121.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.122.0> ;
+    owl:versionInfo "1.122.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.121.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.120.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.117.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.116.0> ;
@@ -5252,6 +5253,18 @@ backlog:MissionClosureRequiresReportShape a sh:NodeShape ;
             FILTER NOT EXISTS { $this backlog:belongsToLineage ?l . ?l backlog:lineageArchived true }
             # v1.110.0: the mission of an archived lineage stays live as the pointer; its closure report went with the work
             FILTER NOT EXISTS { ?l2 backlog:lineageForMission $this ; backlog:lineageArchived true }
+        }""" ] .
+
+backlog:ClosureReportCommitAnchorShape a sh:NodeShape ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_closure_report" ;
+    sh:targetClass backlog:ClosureReport ;
+    sh:severity sh:Violation ;
+    rdfs:label "A closure report records the commit it was itself committed at (L3, G95)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: this closure report records no closureCommittedAt. The identical StageOutputShape principle applies unchanged: a report generated at a timestamp is computable after the fact and proves nothing about whether it preceded the outcome it justifies, while a commit is not. Real, self-corrected finding that named this exact gap (vaf-pipeline-session, 2026-09-16): a mission's Out_Achieved and its own report were set in the same commit, 0 violations throughout this suite, because nothing before this shape ever asked a ClosureReport for the one anchor that could have caught it." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            FILTER NOT EXISTS { $this backlog:closureCommittedAt ?c }
         }""" ] .
 
 backlog:RetrospectiveObjectiveShape a sh:NodeShape ;

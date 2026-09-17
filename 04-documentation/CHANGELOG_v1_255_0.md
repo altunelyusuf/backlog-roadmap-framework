@@ -9391,3 +9391,31 @@ messages it quoted checked byte-for-byte against the real shapes file. Accepted,
 tied explicitly to the richer-lifecycle-states design work already deferred pending Lineage 9's
 closure (now closed) -- that design's real scope should cover Mission/ClosureReport ordering
 too, not only WorkItem state transitions, whenever it is actually taken up.
+
+## v1.267.2 — 2026-09-17 (MINOR: a handover actually processed, not just filed -- G95, corrected directly by the owner)
+
+**The owner caught a real process failure directly**: the previous release accepted and logged a
+real handover but built nothing, framing it as informational despite the handover pointing at
+concrete, closeable scope. Checked this package's own real protocol (OE discipline, L-115) rather
+than defending the earlier call: three real dispositions exist -- `accepted`, `rejected`,
+`deferred` -- and `accepted` means real, proportionate action in the same pass, not a fourth,
+invented state of "accepted and shelved." `G95` records this corrected rule.
+
+**Built, not just logged:** `backlog:closureCommittedAt` (new property, `backlog_tbox_v1_95_0.ttl
+-> v1_96_0.ttl`) -- the identical anchor `closedAtCommit` already gives `StageOutput`, generalised
+to `ClosureReport`. `ClosureReportCommitAnchorShape` (new, L3): a closure report must record the
+commit it was itself committed at. Proven both ways on a real fixture
+(`fixture_closure_report_v1_1_0.ttl -> v1_2_0.ttl`): the existing "complete, correct" example
+completed with a real anchor so it stays silent as originally intended; a new, dedicated negative
+case added and confirmed firing.
+
+**Checked, not assumed, that this doesn't retroactively punish already-settled work**: Lineage 9's
+own real `ClosureReport` predates this rule and lives in the sealed archive. Re-ran the real
+archive-conformance check after adding the new shape -- still `CONFIRMED`, digest unchanged, not
+re-validated. The seeding mechanism built earlier this session protected it exactly as designed.
+
+**Disclosed, not built here:** the deeper git-ordinal comparison (does a report's own first
+appearance actually precede the mission's outcome-setting commit, the way `backlog_lineage_order_
+check` already verifies for stage outputs) is real, valuable, future work. The structural
+anchor-must-exist requirement, built here, is complete and real on its own terms -- the same order
+`StageOutputShape`'s own anchor check preceded the deeper order-check tool historically.

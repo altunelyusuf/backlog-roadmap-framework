@@ -18,7 +18,19 @@ ex:Obj_Reported a backlog:Objective ; backlog:contributesToGoal ex:Goal_Reported
 ex:CR_Reported a backlog:ClosureReport ; backlog:closesForMission ex:Mis_Reported ;
     backlog:reportGeneratedAt "2026-09-04T00:00:00Z"^^xsd:dateTime ;
     backlog:hasClosureSummary "Fixture-only: a complete, real closure report." ;
+    backlog:closureCommittedAt "abc1234" ;
     backlog:reportsOnObjective ex:Obj_Reported .
+
+# v1.2.0 (2026-09-17, G95) -- ClosureReportCommitAnchorShape: a real report that exists and
+# closesForMission correctly, but never recorded the one anchor that could show it preceded
+# the outcome it justifies. A real, self-corrected cross-session finding named exactly this gap.
+ex:Mis_AnchorMissing a backlog:Mission ; backlog:hasMissionOutcome backlog:Out_Achieved .
+ex:Goal_AnchorMissing a backlog:Goal ; backlog:contributesToMission ex:Mis_AnchorMissing .
+ex:Obj_AnchorMissing a backlog:Objective ; backlog:contributesToGoal ex:Goal_AnchorMissing .
+ex:CR_AnchorMissing a backlog:ClosureReport ; backlog:closesForMission ex:Mis_AnchorMissing ;
+    backlog:reportGeneratedAt "2026-09-16T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasClosureSummary "Fixture-only: exists, closes correctly, no commit anchor." ;
+    backlog:reportsOnObjective ex:Obj_AnchorMissing .
 
 # v1.1.0 (2026-09-07) -- expected polarity declared on the fixture itself (TBox v1.82.0
 # dropped the AdoptionProfile-only domain): Negative, because it exists to make the shape(s) named in its header FIRE; a run of it with no violation would mean that clause no longer fires (Polarity_Negative's own definition).

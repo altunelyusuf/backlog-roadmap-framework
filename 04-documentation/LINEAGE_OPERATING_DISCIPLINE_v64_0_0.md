@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v63.0.0
+# Lineage Operating Discipline — v64.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -2694,3 +2694,24 @@ fabricated one pretending it always was.
 **Going forward**: any content change to this document, however small, bumps its version. A ruling
 added without a version bump is the same defect as a ruling added without a real reason -- both are
 claims about what happened that the document's own name no longer backs up.
+
+## G95 — "Accepted" without action is a status that does not exist in this package's own protocol; the owner caught it directly
+
+A real handover (vaf-pipeline-session, 2026-09-16) was filed `accepted`, verified, logged with what
+was checked -- and nothing else. The owner asked directly: accepted and implemented, or just
+accepted? Checked the protocol this package's own inbox runs under (OE discipline, L-115) rather
+than assumed an answer: "On review, the file moves to `accepted/`, `rejected/`, or `deferred/`" --
+three real dispositions, not four, and this package's own precedent for `accepted` (the B7
+label-before-identifier ruling) shows a real rule added in the same action a handover was verified,
+not verified and shelved for later. `deferred` is the real status for a genuine owner-decision still
+pending; this handover had none outstanding.
+
+**The corrected rule, stated plainly:** a handover is `rejected` (verified and found not to hold, or
+not warranting action), `deferred` (real, but a specific decision is genuinely still owed before
+building anything), or `accepted` -- and accepted means the same turn does the real, corresponding
+work, proportionate to what the handover actually asked for. An informational handover with no
+discrete request still gets real action when it evidences a gap this package can close on its own
+terms, as this one did (`closureCommittedAt`, `ClosureReportCommitAnchorShape`). There is no fourth
+status of "accepted, filed, nothing done" -- that was this session's own invention, not the
+protocol's, and produced exactly the appearance of diligence with none of its substance the same way
+L-114 already warns against.
