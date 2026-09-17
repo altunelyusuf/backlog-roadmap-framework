@@ -9595,3 +9595,23 @@ each with real fixture-state data, each exercising the real acceptance criterion
 stopped short of creating a `TestHarness` with placeholder evidence, since claiming a test had run
 before the work existed would be exactly the kind of manufactured appearance this lineage exists to
 prevent. The harness comes once real implementation produces a real result.
+
+## v1.274.0 — 2026-09-17 (MINOR: Lineage 15 formally kicked off -- real planning, real execution, real monitoring confirmed live)
+
+**A real kick off, not a status flip.** `It_Gov_1`, this lineage's first real work window, and
+`Plan_Gov_ComparisonLogic`, the formal `PlanningEvent` committing GOV-S01 to it -- the real
+boundary this framework draws between ordering work and doing it. GOV-S01 and the lineage's own
+status moved to `InProgress` together, in the same real action, exactly what `G97` exists to
+prevent drifting apart.
+
+**A real, honest requirement caught along the way:** a `PlanningEvent` must produce at least one
+real task -- no exception for work small enough that further decomposition felt unnecessary. Built
+`GOV-T01` matching GOV-S01's own real scope rather than inventing artificial sub-tasks.
+
+**Roadmap and monitoring confirmed live, not asserted.** Ran the real tools against the real
+register: `backlog_roadmap_report` correctly tracks GOV-S01 as the oldest active item, correctly
+flags GOV-S02/GOV-S03 as not yet scoreable, reports zero silent gaps, and enumerates the real
+transition workflow including this session's own new `Refined` state. `backlog_lineage_compass`
+correctly reports closure not yet eligible, names `Obj_Gov_GateBlocks` as the real bottleneck to
+close first, and shows `Obj_Gov_Contained` already met -- honestly, since nothing has touched an
+excluded concern yet.

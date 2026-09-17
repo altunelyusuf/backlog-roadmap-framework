@@ -3204,7 +3204,7 @@ fw:L_GovernanceContinuation a backlog:Lineage ; rdfs:label "Lineage 15: Governan
     backlog:lineageForMission fw:Mission_GovernanceContinuation ;
     backlog:lineageOrdinal 15 ;
     backlog:lineageArchived false ;
-    backlog:hasLineageStatus backlog:LS_Backlogged ;
+    backlog:hasLineageStatus backlog:LS_InProgress ;
     backlog:hasLineageDepthLevel backlog:Depth_StoryDirect ;
     backlog:hasLineageArtifactDomain backlog:Domain_Infrastructure .
 
@@ -3384,8 +3384,9 @@ fw:Blueprint_GovernanceContinuation a backlog:Blueprint ; backlog:blueprintFor f
 
 fw:ST_Gov_ComparisonLogic a backlog:Story ;
     backlog:hasIdentifier "GOV-S01" ; backlog:hasTitle "Release-to-item comparison logic" ;
-    backlog:hasState backlog:Ready ;
-    backlog:memberOfContainer fw:Register ;
+    backlog:hasState backlog:InProgress ;
+    backlog:startedAt "2026-09-17T00:00:00Z"^^xsd:dateTime ;
+    backlog:memberOfContainer fw:Register , fw:It_Gov_1 ;
     backlog:belongsToLineage fw:L_GovernanceContinuation ;
     backlog:pursuesObjective fw:Obj_Gov_DeliverablesBuilt ;
     backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
@@ -3465,3 +3466,21 @@ fw:Out_Backlog_GovernanceContinuation a backlog:StageOutput ;
     backlog:hasStateDigest "590090ecfa475b748e15b350637f15a8ca236b9394ca0611627ec42457d1920f" ;
     backlog:closedAtCommit "backlog-roadmap-framework-v1.271.0 (tag; witnessed by git, not asserted)" ;
     backlog:hasRationale "Backlog stage of Lineage 15: three Stories, one per scope deliverable, Story-direct (no Epic layer) per the lineage's own declared profile -- GOV-S01 and GOV-S02 pursue Obj_Gov_DeliverablesBuilt, GOV-S03 pursues Obj_Gov_GateBlocks directly since it is the wiring step the mission-facing goal actually measures." .
+
+fw:It_Gov_1 a backlog:Iteration ; backlog:hasIdentifier "GOV-IT1" ; backlog:hasTitle "Lineage 15, first real work window" ;
+    backlog:hasState backlog:InProgress ;
+    backlog:iterationStart "2026-09-17T00:00:00Z"^^xsd:dateTime ; backlog:iterationEnd "2026-10-01T00:00:00Z"^^xsd:dateTime ;
+    backlog:memberOfContainer fw:Register ; backlog:belongsToLineage fw:L_GovernanceContinuation .
+
+fw:Plan_Gov_ComparisonLogic a backlog:PlanningEvent ; rdfs:label "GOV-S01 formally kicked off"@en ;
+    backlog:plansItem fw:ST_Gov_ComparisonLogic ; backlog:plannedInto fw:It_Gov_1 ;
+    backlog:plannedAt "2026-09-17T00:00:00Z"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:producesTask fw:T_Gov_ComparisonLogic ;
+    backlog:hasRationale "The formal boundary between ordering this work and doing it." .
+fw:T_Gov_ComparisonLogic a backlog:ExecutionTask ; backlog:hasIdentifier "GOV-T01" ;
+    backlog:hasTitle "Write and prove the release-to-item comparison script" ;
+    backlog:hasState backlog:InProgress ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It_Gov_1 ;
+    backlog:belongsToLineage fw:L_GovernanceContinuation ;
+    backlog:hasRationale "One real task, matching the whole of GOV-S01's own scope -- small enough that further decomposition would name nothing real, but the planning event's own rule is honest: a commitment is recorded as a task, not left as an intention." .
