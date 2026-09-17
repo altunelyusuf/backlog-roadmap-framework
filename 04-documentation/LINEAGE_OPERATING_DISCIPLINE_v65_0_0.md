@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v64.0.0
+# Lineage Operating Discipline — v65.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -2715,3 +2715,35 @@ terms, as this one did (`closureCommittedAt`, `ClosureReportCommitAnchorShape`).
 status of "accepted, filed, nothing done" -- that was this session's own invention, not the
 protocol's, and produced exactly the appearance of diligence with none of its substance the same way
 L-114 already warns against.
+
+## G96 — This session built the safeguard against report-before-outcome ordering, and had already violated it in its own real work; found only because the owner asked a second time
+
+Checked directly, not assumed, after the owner asked why the closure report should not precede the
+outcome it justifies: `git show` on the real commit that closed Lineage 9 (`f00d8e0`,
+`backlog-roadmap-framework-v1.264.1`) shows `hasMissionOutcome Out_Achieved` and `CR_SDLCObligations`
+created in the same diff, the same commit -- the identical violation the accepted
+`closure-report-order-violation` handover named in a different package, that `G95` and
+`ClosureReportCommitAnchorShape` were built this same session to catch. The session that wrote the
+safeguard had already made the mistake it protects against, in its own prior, already-published
+work, and did not catch it by re-checking its own history -- only by being asked directly, twice.
+
+**Not fixed by rewriting history.** The commit is real, published, tagged, and referenced by other
+real work built since; rewriting it would violate the exact principle `closedAtCommit` and
+`closureCommittedAt` both exist to protect -- a commit is the one anchor the author does not
+control, and an author who can edit it after the fact has not been anchored at all. The register's
+own real content is not wrong: the mission genuinely was achieved, computed by the compass, not
+asserted. Only the commit SEQUENCE that recorded it violates the principle now named. Disclosed
+here, on the permanent record, rather than quietly left for a future session to rediscover a third
+time.
+
+**What this actually argues for, stated plainly:** the newly-built shape (`ClosureReportCommitAnchorShape`)
+requires a report to record an anchor going forward; it cannot and does not reach backward to grade
+a commit sequence already made. The seeding this session built (`G_archive_seed`-style digest
+comparison) correctly leaves Lineage 9's sealed archive alone -- not because the sequencing was
+fine, but because re-litigating settled history is the exact retroactive-enforcement failure this
+whole line of rulings exists to prevent. The lesson is procedural, for the next real closure, not a
+reason to disturb this one: build the report, commit it, confirm it is live in a real, separate
+commit, THEN set the outcome in a commit that names the report's own hash -- not because a shape
+will refuse otherwise (today's shape only checks existence of the anchor property, not the deeper
+ordinal comparison), but because this session now has direct, first-hand proof of exactly how easy
+it is to get this wrong even while actively building the safeguard against it.

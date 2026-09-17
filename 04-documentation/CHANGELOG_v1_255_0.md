@@ -9419,3 +9419,24 @@ appearance actually precede the mission's outcome-setting commit, the way `backl
 check` already verifies for stage outputs) is real, valuable, future work. The structural
 anchor-must-exist requirement, built here, is complete and real on its own terms -- the same order
 `StageOutputShape`'s own anchor check preceded the deeper order-check tool historically.
+
+## v1.267.3 — 2026-09-17 (PATCH: G96 -- this session had already made the exact mistake it just built a safeguard against)
+
+**The owner asked a direct, real question -- shouldn't the closure report come first? -- and checked
+it produced a real, uncomfortable finding rather than a design discussion.** `git show` on the real
+commit that closed Lineage 9 (`f00d8e0`, `v1.264.1`): `hasMissionOutcome Out_Achieved` and
+`CR_SDLCObligations` created in the same commit, the identical violation `G95` and
+`ClosureReportCommitAnchorShape` were built this same session to catch. Found only because the owner
+asked directly, a second time -- not caught by re-checking this session's own history before
+declaring the safeguard complete.
+
+**Not fixed by rewriting history**, and stated plainly why: the commit is real, published, tagged,
+and referenced by real work since -- rewriting it would violate the exact principle the new anchor
+property exists to protect. The register's own content is correct; only the commit sequence that
+recorded it isn't. Confirmed the archive-conformance seeding correctly leaves this alone -- not
+because the sequencing was fine, but because re-litigating settled history is the retroactive-
+enforcement failure this whole line of work exists to prevent.
+
+**`G96` records this on the permanent disclosure record.** The shape's own message now cites this
+real, first-hand example alongside another registrant's -- proof the gap was never hypothetical, found in the very
+package that built the safeguard against it.
