@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.100.0
+# Backlog & Roadmap Semantic Framework — Standard v1.101.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -951,6 +951,16 @@ cover.
 `hasLineageDepthLevel` and `hasLineageArtifactDomain`, both optional, let a lineage declare its profile.
 Neither is enforced yet — the taxonomy is real before any rule depends on it, built to be iterated as
 further real cases arrive, not fixed at four and five values forever.
+
+A **`LineageProfile`** configures one real `(LineageDepthLevel, LineageArtifactDomain)` combination —
+kept deliberately separate from the declaration itself, so a lineage's own stated facts can never
+silently disagree with which configuration applies to it; a profile is looked up from the pair, not
+carried redundantly on the lineage. `requiresEpicDecomposition` and `requiresObligationSetAdoption`
+name what that combination actually requires. The first, `Profile_FullChain_Ontology`, is configured
+from one complete, real, closed case rather than a guessed template: Lineage 9's own real history,
+checked directly before writing either requirement — no `Epic` layer across its six stories and eight
+tasks, and no `adoptsObligationSet` ever declared on the lineage itself, since its own real work was
+authoring an obligation set, not being bound by one.
 
 ### 2.5c-xxii The staged ceremony, one commit per stage
 

@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.97.0> ;
-    owl:versionInfo "1.97.0" ;
+    owl:versionIRI <http://example.org/backlog/1.98.0> ;
+    owl:versionInfo "1.98.0" ;
+    owl:priorVersion <http://example.org/backlog/1.97.0> ;
     owl:priorVersion <http://example.org/backlog/1.96.0> ;
     owl:priorVersion <http://example.org/backlog/1.95.0> ;
     owl:priorVersion <http://example.org/backlog/1.94.0> ;
@@ -7240,3 +7241,36 @@ backlog:hasLineageArtifactDomain a owl:ObjectProperty , owl:FunctionalProperty ;
     rdfs:domain backlog:Lineage ; rdfs:range backlog:LineageArtifactDomain ;
     rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "has lineage artifact domain"@en ;
     skos:definition "Which real artifact domain this lineage produces. Optional, same reason as hasLineageDepthLevel: the vocabulary is real before any rule reads it."@en .
+
+#################################################################
+#  v1.98.0 -- PROFILE MANAGEMENT, BUILT ON ONE REAL CASE FIRST. Owner's own instruction,
+#  2026-09-17: management and per-element configuration together, proven against one
+#  complete, real profile before generalising to ones only theorised about.
+#################################################################
+backlog:LineageProfile a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Lineage Profile"@en ;
+    skos:definition "A real, checkable configuration for one (LineageDepthLevel, LineageArtifactDomain) combination -- what that combination actually requires, established from real, lived data before any rule enforces it. Deliberately not a property directly on Lineage: a lineage's own hasLineageDepthLevel and hasLineageArtifactDomain stay the source of truth about what it IS; a LineageProfile is looked up FROM that pair, kept separate so declaring a lineage's facts can never silently disagree with which profile configuration applies to it."@en .
+backlog:forDepthLevel a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:LineageProfile ; rdfs:range backlog:LineageDepthLevel ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "for depth level"@en ;
+    skos:definition "Which LineageDepthLevel this profile configures."@en .
+backlog:forArtifactDomain a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:LineageProfile ; rdfs:range backlog:LineageArtifactDomain ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "for artifact domain"@en ;
+    skos:definition "Which LineageArtifactDomain this profile configures."@en .
+backlog:requiresEpicDecomposition a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:LineageProfile ; rdfs:range xsd:boolean ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "requires epic decomposition"@en ;
+    skos:definition "Whether a lineage under this profile is expected to decompose its backlog through an Epic layer before Story, or may go directly from Backlog to Story. Established from real data, not assumed: Lineage 9's own real, closed history (0 Epics across 6 Stories and 8 ExecutionTasks) shows FullChain/Ontology genuinely did not need one at that scale."@en .
+backlog:requiresObligationSetAdoption a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:LineageProfile ; rdfs:range xsd:boolean ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "requires obligation set adoption"@en ;
+    skos:definition "Whether a lineage under this profile is expected to declare adoptsObligationSet on itself. False for FullChain/Ontology, checked directly against Lineage 9's own real history: an ObligationSet is a lineage's own commitment to produce something against a pre-existing standard, and a lineage whose real work IS authoring the obligation set (as Lineage 9's was) is not bound by one -- the same structural fact that withdrew Obj_SDLC_Adopted rather than forced it."@en .
+
+backlog:Profile_FullChain_Ontology a backlog:LineageProfile ;
+    rdfs:label "Full chain, ontology work"@en ;
+    backlog:forDepthLevel backlog:Depth_FullChain ; backlog:forArtifactDomain backlog:Domain_Ontology ;
+    backlog:requiresEpicDecomposition false ; backlog:requiresObligationSetAdoption false ;
+    skos:definition "The first real profile, named from a complete, closed, checked case rather than a guessed template: Lineage 9 (L_SDLCObligations), backlog-roadmap-framework's own SDLC-obligations lineage. Verified directly against its real, sealed archive before writing any requirement here: full five-stage Mission-through-Backlog chain, one commit per stage; a real RICE-scored backlog; Story decomposed directly to ExecutionTask with no Epic layer at any point (0 Epics belonging to the lineage); no adoptsObligationSet ever declared on the lineage itself. Register-level RuleSets (RS_LabelConvention, RS_LineageStatus) applied throughout, but those bind the whole register, not this profile specifically, and are not claimed as part of it."@en .

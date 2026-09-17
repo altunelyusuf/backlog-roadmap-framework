@@ -9485,3 +9485,25 @@ is disclosed as a real gap rather than forced into a category that doesn't fit.
 enforces anything. The taxonomy exists before any rule depends on it, matching the direction agreed
 before this was built: complete the "what" first, iterate as new real cases arrive, discuss the
 "how" separately once the vocabulary itself is settled.
+
+## v1.269.0 — 2026-09-17 (MINOR: profile management, built and proven against one real, complete case first)
+
+**Management and configuration built together, not the container first and content later** -- the
+owner's own correction to the initial sequencing proposal: build both against one real case before
+generalising. `LineageProfile` configures one `(LineageDepthLevel, LineageArtifactDomain)`
+combination, kept deliberately separate from a lineage's own declared facts
+(`hasLineageDepthLevel`/`hasLineageArtifactDomain` stay the source of truth; a profile is looked up
+from the pair, never duplicated onto the lineage, so the two can never silently disagree).
+
+**The first real profile, `Profile_FullChain_Ontology`, configured from Lineage 9's own complete,
+closed, checked history** -- not a guessed template. Verified directly before writing either
+requirement: zero `Epic` individuals across six `Story` and eight `ExecutionTask` items (Epic
+decomposition genuinely unnecessary at that scale), and no `adoptsObligationSet` ever declared on
+the lineage itself (an `ObligationSet` is a commitment to a pre-existing standard; Lineage 9's own
+real work was authoring one, not being bound by one -- the same structural fact `Obj_SDLC_Adopted`
+was withdrawn over, not contradicted by it).
+
+**Still no enforcement.** `requiresEpicDecomposition` and `requiresObligationSetAdoption` are real,
+checkable properties on the profile individual; nothing yet reads them to permit or refuse anything
+on a live lineage. One real profile proven correct against lived data comes before any second one is
+guessed, and before either is wired to a rule.
