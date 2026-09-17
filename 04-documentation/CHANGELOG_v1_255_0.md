@@ -9538,3 +9538,27 @@ ship. Fixed in the same pass.
 a new, real fixture (`fixture_readiness_and_refined_v1_0_0.ttl`) proving `ReadinessGateShape`'s
 unchanged behavior and closing its own prior lack of a fixture, and documentation corrected
 (the standard's own closed-set listing had gone stale the moment this shipped).
+
+## v1.271.0 — 2026-09-17 (MINOR: Lineage 15 opened -- Mission through Backlog, first real Profile_StoryDirect_Infrastructure instance)
+
+**Built through the real ceremony, stage by stage, each handshaken before being written -- not
+bundled for speed.** Lineage 15 (`L_GovernanceContinuation`): Mission and Scope named and
+fit-gap checked against each other (every deliverable traces verbatim to a real Mission clause,
+confirmed both by the automatic `MissionClauseCitationShape` and a direct string match); Goal, all
+three facings present per `GoalSufficiencyShape`; Objective, three real, measured objectives with
+baseline `MetricObservation`s and real observation methods; Backlog, three Stories, Story-direct
+(no Epic layer), each with a real, testable acceptance criterion and a declared `metricMovableBy`
+work item -- not just `pursuesObjective`, the real mechanism this session's own earlier handover
+work distinguished.
+
+**Two real, structural findings along the way, both fixed properly:**
+- The register-level Blueprint requirement, genuinely applicable once any lineage is live: built
+  honestly for this domain (Infrastructure, not a modelled business domain) rather than inventing
+  DomainEntity life-cycle stages that don't fit.
+- **The register file itself is versioned and was edited across five real writes without a version
+  bump** -- caught by the gate's own version-freeze check, not missed silently. Fixed:
+  `backlog_framework_register_abox_v9_87_0.ttl -> v9_88_0.ttl`.
+
+Zero violations across the whole register. This is the first real, lived instance of
+`Profile_StoryDirect_Infrastructure` -- its own construction is now the working precedent the
+taxonomy was built to eventually generalise from.
