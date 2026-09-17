@@ -9440,3 +9440,24 @@ enforcement failure this whole line of work exists to prevent.
 **`G96` records this on the permanent disclosure record.** The shape's own message now cites this
 real, first-hand example alongside another registrant's -- proof the gap was never hypothetical, found in the very
 package that built the safeguard against it.
+
+## v1.267.4 — 2026-09-17 (MINOR: G97 -- the first of two deferred handovers, taken one at a time as the owner directed)
+
+**The owner's ruling on both deferred handovers, 2026-09-17: deal with them one at a time, easiest
+first.** Built `StatusLagsRealWorkShape`, the mirror of the existing `InProgressNeedsStartedWorkShape`
+-- that rule guards a lineage claiming too much (`InProgress` with nothing started); this one guards
+the opposite, a status claiming too little (`Backlogged` or below, with real work already done).
+
+Grounded in a real, independently-found case: three lineages shipped real, substantial completed
+work while their own status never advanced -- one of them all the way to every item `Done`, one
+predating this session entirely and shipping green through every gate for a long time before being
+noticed.
+
+Proven on a real negative case (`fixture_lineage_status_negative_v1_1_0.ttl -> v1_2_0.ttl`): a
+lineage claiming `Backlogged` with one real `Done` item fires; every other individual, including the
+legitimate opposite case, stays silent. Confirmed against the live register: 0 new violations.
+
+**Still open, not decided here**: whether the three named lineages' own statuses are corrected now
+and recorded as a retrospective finding, and the remaining four mitigations from this same handover
+plus all five from its companion (`plan-execution-divergence`) -- taken up next, one at a time, as
+directed.

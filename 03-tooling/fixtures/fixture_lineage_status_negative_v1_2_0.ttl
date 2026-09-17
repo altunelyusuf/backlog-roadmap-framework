@@ -37,6 +37,12 @@ ex:L_NotStarted a backlog:Lineage ; backlog:lineageOrdinal 9 ; backlog:lineageAr
 ex:S_NotStarted a backlog:Story ; backlog:hasIdentifier "S-NS" ; backlog:hasState backlog:Proposed ;
     backlog:belongsToLineage ex:L_NotStarted .
 
+#  StatusLagsRealWorkShape (G97)  L_Understated claims Backlogged while a real item has left Proposed.
+ex:L_Understated a backlog:Lineage ; backlog:lineageOrdinal 10 ; backlog:lineageArchived false ;
+    backlog:lineageForMission ex:M2 ; backlog:hasLineageStatus backlog:LS_Backlogged .
+ex:S_Understated a backlog:Story ; backlog:hasIdentifier "S-US" ; backlog:hasState backlog:Done ;
+    backlog:belongsToLineage ex:L_Understated .
+
 <http://example.org/lineage-status-neg#> backlog:hasExpectedPolarity backlog:Polarity_Negative .
 # The negative fixture ADOPTS the status rule set, so the clauses it exists to prove are in force here
 # even though minimal fixtures elsewhere are untouched by them (G91: a ruling binds what declared it).

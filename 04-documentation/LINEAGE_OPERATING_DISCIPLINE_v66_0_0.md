@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v65.0.0
+# Lineage Operating Discipline — v66.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -2747,3 +2747,31 @@ commit, THEN set the outcome in a commit that names the report's own hash -- not
 will refuse otherwise (today's shape only checks existence of the anchor property, not the deeper
 ordinal comparison), but because this session now has direct, first-hand proof of exactly how easy
 it is to get this wrong even while actively building the safeguard against it.
+
+## G97 — The guard against a false LS_InProgress checked only one direction; a status could understate real, completed work indefinitely and nothing refused it
+
+A real, independently-found case (a different session, 2026-09-16, filed as a handover): three
+lineages shipped real, substantial completed work while their own status never advanced past
+planning -- one of them, `textbook-ontology-toolkit`, all the way to every item `Done` with its status
+still `LS_Opened`, the value it had after its first commit. One of the three predates this session
+entirely and had been shipping green through every gate for a long time before being noticed.
+
+Checked directly: `InProgressNeedsStartedWorkShape` (`G_2026-09-10`) already guards the opposite
+direction -- a lineage cannot claim `InProgress` with nothing started. Nothing guarded the mirror: a
+lineage claiming `Backlogged`, `Opened`, or anything below `InProgress` could have any amount of real,
+completed work underneath it, indefinitely, because nothing ever asked the status to move and nothing
+refused it staying still.
+
+**Built: `StatusLagsRealWorkShape`.** Any lineage whose status ranks below `InProgress`
+(`statusRank < 6`) while a real work item of it has left `Proposed`/`Ready`/`Refined` now refuses,
+naming the same asymmetry the handover found. Proven on a real negative case
+(`fixture_lineage_status_negative_v1_2_0.ttl`): a lineage claiming `Backlogged` with one real `Done`
+item fires; every other fixture individual, including the legitimate opposite case
+(`InProgress` with nothing done), stays silent. Confirmed against the live register: 0 new
+violations -- this package's own current lineages are all archived and have nothing to say.
+
+**Not built in this pass, disclosed rather than folded in silently:** the same handover's companion
+finding -- a register reaching every objective met with its plan (106 items) never touched -- and its
+own proposed mirror of `metricMovableBy`, plus the fabricated-timestamp and cross-package
+deliverable-boundary findings, remain real, open, deferred work. This ruling closes the first,
+narrower, single-shape gap the owner asked to take first; the rest are separate decisions.

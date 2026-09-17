@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.123.0> ;
-    owl:versionInfo "1.123.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.124.0> ;
+    owl:versionInfo "1.124.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.123.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.122.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.121.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.120.0> ;
@@ -6277,6 +6278,22 @@ backlog:InProgressNeedsStartedWorkShape a sh:NodeShape ;
                 ?i backlog:belongsToLineage $this ; backlog:hasState ?st .
                 FILTER (?st NOT IN (backlog:Proposed, backlog:Ready, backlog:Refined, backlog:Cancelled))
             }
+        }""" ] .
+
+backlog:StatusLagsRealWorkShape a sh:NodeShape ;
+    sh:targetClass backlog:Lineage ;
+    sh:severity sh:Violation ;
+    rdfs:label "A status below InProgress means nothing has actually started either (L1, G97)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_lineage_status_negative" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this lineage claims a status below LS_InProgress (Opened/Scoped/Goaled/Objectived/Backlogged) and a real work item of it has already left Proposed, Ready or Refined. The mirror of InProgressNeedsStartedWorkShape: that rule guards against claiming too much, this one against claiming too little. Real, independently-found case (a different session, 2026-09-16): three lineages shipped real, substantial completed work -- one of them all the way to every item Done -- while their own status never advanced past planning, because nothing asked the status to move and nothing refused it staying still. A status is a claim about the register, not a one-time label set at planning and left alone." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?reg backlog:adoptsRuleSet backlog:RS_LineageStatus .
+            $this backlog:hasLineageStatus ?st0 .
+            ?st0 backlog:statusRank ?r . FILTER (?r < 6)
+            ?i backlog:belongsToLineage $this ; backlog:hasState ?st .
+            FILTER (?st NOT IN (backlog:Proposed, backlog:Ready, backlog:Refined, backlog:Cancelled))
         }""" ] .
 
 #################################################################
