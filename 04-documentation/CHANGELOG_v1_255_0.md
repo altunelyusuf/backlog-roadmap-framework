@@ -9814,3 +9814,7 @@ The tool itself is no longer the reason -- the remaining eight lineages' own rea
 genuine, separate decision for the owner: review and promote despite known, disclosed,
 era-appropriate differences, or hold to a stricter bar. `G98` updated with the full real
 resolution.
+
+## v1.282.0 — 2026-09-18 (PATCH: version-freeze correctly caught the archive file's own real content change from the previous release; fixed)
+
+**Unplanned work:** a real, correct G94 catch by version-freeze itself on the real publish attempt: `backlog_framework_archive_abox_v1_4_0.ttl`'s content genuinely changed in v1.281.0's own work (seven lineages promoted, two real gaps fixed) with no version bump. `-> v1_5_0.ttl`, all real references in the register updated, register itself re-versioned for the change.
