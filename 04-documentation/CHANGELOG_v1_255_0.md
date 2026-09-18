@@ -9693,3 +9693,17 @@ renamed with no movement. Both correct.
 evidence still cites `v1.0.0`/`v1.1.0` -- the versions that genuinely ran at the time, on scenarios
 this specific bug never affected. Rewriting them to cite `v1.2.0` would misdescribe what was
 actually verified when.
+
+## v1.278.0 — 2026-09-18 (MINOR: Lineage 15's real ClosureReport -- written and committed before any outcome, exactly the ordering G96 exists to protect)
+
+**The report first, deliberately, not the outcome.** `CR_GovernanceContinuation` -- real, complete,
+reporting on all three objectives, citing two real findings from this lineage's own work (the
+GOV-S03 redundancy, the register-rename bug), stating four real best practices. Mission's own
+outcome stays `Out_InFlight` in this release -- unchanged, on purpose. `closureCommittedAt`
+self-references this exact, deterministic tag, the same real anchor this session's own `G95`/`G96`
+work built for exactly this moment.
+
+**Why this matters concretely, not just as ceremony:** this is the identical ordering mistake
+`G96` found in this package's own history, made while closing Lineage 9. Getting it right here,
+deliberately, on the very next real lineage this package closes, is the actual proof that finding
+mattered -- not just recorded and moved past.

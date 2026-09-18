@@ -14,8 +14,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.90.0> ;
-    owl:versionInfo "9.90.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.91.0> ;
+    owl:versionInfo "9.91.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.90.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.89.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.88.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.87.0> ;
@@ -3631,3 +3632,27 @@ fw:Obs_Gov_DeliverablesBuilt_Third a backlog:MetricObservation ; rdfs:label "All
     backlog:observesMetric fw:Metric_Gov_DeliverablesBuilt ; backlog:observationFor fw:Obj_Gov_DeliverablesBuilt ;
     backlog:hasObservedValue 3.0 ; backlog:observedAt "2026-09-18T00:50:00Z"^^xsd:dateTime ;
     backlog:hasObservationMethod "Checked directly, not assumed: Del_Gov_HardGate's own real artifact is backlog_gate_v1_16_0.sh, already shipped as part of GOV-S01's own DGov3/DGov4 proof, not a separate GOV-S03 artifact. All three of Del_Gov_ComparisonLogic, Del_Gov_UnplannedDeclaration and Del_Gov_HardGate now have real, shipped artifacts." .
+
+fw:Find_Gov_S03Redundant a backlog:RetrospectiveFinding ;
+    backlog:hasFindingScope backlog:Scope_LineageLocal ;
+    backlog:relatesToWorkItem fw:ST_Gov_HardGate ;
+    backlog:hasRootCause "GOV-S03's own real acceptance criterion (hard-blocking wiring, proven both directions) was already fully satisfied while building GOV-S01, whose own DGov3/DGov4 required exactly that wiring and that proof. Not caught until GOV-S03 was checked directly before writing a changelog claim that would have been wrong." ;
+    backlog:hasRemedy "Cancelled rather than built, with the real satisfying artifact named on its own acceptance criterion. No further action -- the underlying capability is real and shipped." .
+fw:Find_Gov_RegisterRenameBug a backlog:RetrospectiveFinding ;
+    backlog:hasFindingScope backlog:Scope_LineageLocal ;
+    backlog:relatesToWorkItem fw:ST_Gov_ComparisonLogic ;
+    backlog:hasRootCause "backlog_release_item_check assumed the register's own filename stays constant across the commit span it checks. The register is itself a versioned file, renamed almost every real publish -- caught only when a real publish attempt tried to read the current filename from an old tag where it never existed." ;
+    backlog:hasRemedy "Fixed: the register's real filename is now resolved independently at the baseline tag via git ls-tree, not assumed to match the working tree's own glob result. Re-tested with the exact real scenario (a rename and a real item movement in the same span) before re-publishing." .
+
+fw:CR_GovernanceContinuation a backlog:ClosureReport ;
+    backlog:closesForMission fw:Mission_GovernanceContinuation ;
+    backlog:reportGeneratedAt "2026-09-18T10:00:00Z"^^xsd:dateTime ;
+    backlog:closureCommittedAt "backlog-roadmap-framework-v1.278.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasClosureSummary "The mission asked for a real, hard-blocking release gate closing a gap evidenced concretely: a package shipping real, finished work with no backlog item ever moving, and nothing noticing. Checked by this framework's own real tools, not asserted: closure eligibility computed by backlog_lineage_compass, not decided in prose. All three objectives reached target -- the gate genuinely blocks an unaccounted release (proven on a real, isolated scratch repository, not merely asserted), all three scope deliverables have real, shipped artifacts, and nothing touched the four excluded concerns. GOV-S03 was cancelled, not built, once its own acceptance criterion turned out already satisfied by GOV-S01's own work -- checked directly rather than assumed, and disclosed rather than silently dropped. A real, separate bug in the comparison tool itself (an assumption that the register's own filename stays constant across a commit span, when it is itself a versioned file renamed almost every release) was caught by a real publish attempt refusing, not by review, and fixed with the same rigor as everything else here." ;
+    backlog:reportsOnObjective fw:Obj_Gov_GateBlocks , fw:Obj_Gov_DeliverablesBuilt , fw:Obj_Gov_Contained ;
+    backlog:citesFinding fw:Find_Gov_S03Redundant , fw:Find_Gov_RegisterRenameBug ;
+    backlog:statesBestPractice
+        "A story's own acceptance criterion can already be satisfied by different, earlier work -- check directly before writing a changelog claim that assumes it still needs building." ,
+        "A versioned file's own filename is not safe to assume constant across a git commit span; resolve it independently at each point in history rather than reusing the current working tree's own glob result." ,
+        "Local git tags can silently fall behind real, already-published remote tags across multiple releases if nothing explicitly re-fetches them -- confirmed the real, current tag before trusting any baseline-tag comparison." ,
+        "A real, isolated scratch git repository, not a mental walkthrough, is what actually catches whether a fix for a renamed-file bug works -- test the exact real scenario, not a simplified one." .
