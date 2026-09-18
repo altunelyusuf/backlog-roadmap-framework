@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_archive_conformance v1.0.0 -- progressive archive conformance.
+"""backlog_archive_conformance v1.3.0 -- progressive archive conformance.
 
 THE OWNER'S DESIGN, test-driven before adoption (G46). The settled archive is never re-validated:
 its conformance is a RECORDED VALUE, confirmed by comparing a canonical digest. Only lineages that
@@ -50,6 +50,7 @@ def main():
     reg_f = latest("01-ontologies", "backlog_framework_register_abox_v*.ttl")
     arc_f = latest("01-ontologies", "backlog_framework_archive_abox_v*.ttl")
     sh_f = latest("02-shacl-safeguards", "backlog_shacl_v*.ttl")
+    ru_f = latest("02-shacl-safeguards", "backlog_rules_v*.ttl")
     tb_f = latest("01-ontologies", "backlog_tbox_v*.ttl")
     ab_f = latest("01-ontologies", "backlog_abox_v*.ttl")
     g, a = Graph().parse(reg_f), Graph().parse(arc_f)
@@ -88,18 +89,49 @@ def main():
         print(f"  seeding     : {len(cleared)} lineage(s) cleared by the release record, not by re-validation "
               f"(each was gated clean in the release that closed it; judging them under today's shapes "
               f"would be retroactive -- G91)")
-    arrivals = [L for L in a.subjects(RDF.type, B.Lineage) if str(L) not in cleared]
+    # Per-lineage confirmation, wired in for real, 2026-09-18 (G98 follow-up): a lineage already
+    # AC_Confirmed was checked, once, against the shapes current at that moment, and found to
+    # hold its own era's standards -- re-validating it here on every later digest change is the
+    # exact retroactive-enforcement mistake this whole mechanism exists to prevent. Excluded from
+    # arrivals regardless of the whole-file digest, which was always the coarser, wrong unit.
+    confirmed = {str(L) for L in a.subjects(RDF.type, B.Lineage)
+                 if a.value(L, B.hasArchivalConfirmationStatus) == B.AC_Confirmed}
+    arrivals = [L for L in a.subjects(RDF.type, B.Lineage) if str(L) not in cleared and str(L) not in confirmed]
     print(f"  arrivals    : {len(arrivals)} lineage(s) to validate " +
           (f"({', '.join(sorted(loc(L) for L in arrivals)[:6])}{'...' if len(arrivals) > 6 else ''})" if arrivals else "-- none"))
     bad = 0
     if arrivals:
         tb, ab = Graph().parse(tb_f), Graph().parse(ab_f)
-        shg = Graph().parse(sh_f)
+        # Real root cause, found 2026-09-18: harnessComplete and every other SHACL-AF-derived
+        # property live in a SEPARATE rules file (backlog_rules), never loaded here before --
+        # backlog_validate correctly combines shapes+rules as the one graph passed to pyshacl;
+        # this tool only ever loaded the shapes half, so every derived property silently never
+        # computed, and every check depending on one fired as if it were simply absent. Confirmed
+        # directly: content that validates clean through backlog_validate was failing here on
+        # exactly this class of check (G98's own finding, now root-caused rather than left as
+        # "unresolved, downgraded to advisory").
+        shg = Graph().parse(sh_f); shg.parse(ru_f)
         focus = set()
         for L in arrivals:
-            focus |= {s for s in a.subjects(B.belongsToLineage, L)} | {L}
+            items = {s for s in a.subjects(B.belongsToLineage, L)}
+            focus |= items | {L}
             m = a.value(L, B.lineageForMission)
             if m is not None: focus.add(m)
+            # Real root cause, found 2026-09-18: focus_nodes was believed (per this tool's own
+            # earlier docstring claim) to scope only the REPORT, not rule execution -- verified
+            # false by direct test: a Done item's own harnessComplete rule never fired when its
+            # TestHarness (which never carries belongsToLineage) sat outside focus, even though
+            # the harness was present in the full data graph passed to pyshacl. Widened one real
+            # hop to the harness and its own evidence, the actual rule-dependency chain a Done
+            # item's derived properties depend on -- not a blanket widening, which would lose the
+            # real performance benefit this scoping exists for.
+            for item in items:
+                for h in a.subjects(B.harnessFor, item):
+                    focus.add(h)
+                    for ev in a.objects(h, B.hasHarnessEvidence):
+                        focus.add(ev)
+                for ev in a.objects(item, B.hasEvidence):
+                    focus.add(ev)
         t0 = time.time()
         # FULL context means the live register too: retired items still reference the register ROOT,
         # which never leaves the live file (G92). Validating archive+TBox alone reported 397

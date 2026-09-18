@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_archive_reconcile v2.0.0 -- per-lineage archival confirmation, deferred by one cycle.
+"""backlog_archive_reconcile v2.1.0 -- per-lineage archival confirmation, deferred by one cycle.
 
 WHY. Two real, separate gaps, both from the owner's own review, 2026-09-18:
 
@@ -34,7 +34,6 @@ Usage: backlog_archive_reconcile_v2_0_0.py <register.ttl> <archive.ttl> [--apply
   violations checked. Without --apply, reports what would happen without writing anything.
 """
 import re
-import subprocess
 import sys
 import os
 
@@ -49,24 +48,65 @@ def block_of(text, local_name):
     return start, end, text[start:end]
 
 
-def run_conformance(archive_path):
-    """Runs the real, existing archive-conformance tool and returns its raw stdout -- the same
-    tool already proven this session to correctly validate the full archive context; reused
-    rather than re-implemented, since a second, parallel validator is a second place to be wrong."""
-    tool_dir = os.path.dirname(os.path.abspath(archive_path)).replace(
-        "01-ontologies", "03-tooling")
-    candidates = [f for f in os.listdir(tool_dir) if f.startswith("backlog_archive_conformance_v")]
-    if not candidates:
+def run_conformance_full(archive_path, register_path):
+    """Computes the REAL, complete violation set directly -- not the archive-conformance tool's
+    own console output, which prints only the first 8 of what can be dozens of real violations
+    (viol[:8] in that tool). A promotion decision this permanent cannot be made from a truncated
+    sample; every real focus node with a real violation must be seen, not just whichever eight
+    happened to print first. Replicates that tool's own, now-fixed (v1.2.0) graph construction --
+    shapes+rules combined, widened focus including each item's own harness and evidence chain --
+    rather than shelling out to it and re-parsing a sample."""
+    tool_dir = os.path.dirname(os.path.abspath(archive_path)).replace("01-ontologies", "03-tooling")
+    shapes_dir = os.path.dirname(os.path.abspath(archive_path)).replace("01-ontologies", "02-shacl-safeguards")
+    def latest(pat, d=tool_dir):
+        c = sorted(f for f in os.listdir(d) if re.match(pat, f))
+        return os.path.join(d, c[-1]) if c else None
+    onto_dir = os.path.dirname(os.path.abspath(archive_path))
+    sh_f = latest(r"backlog_shacl_v.*\.ttl$", shapes_dir)
+    ru_f = latest(r"backlog_rules_v.*\.ttl$", shapes_dir)
+    tb_f = latest(r"backlog_tbox_v.*\.ttl$", onto_dir)
+    ab_f = latest(r"backlog_abox_v.*\.ttl$", onto_dir)
+    if not all([sh_f, ru_f, tb_f, ab_f]):
         return None
-    tool = os.path.join(tool_dir, sorted(candidates)[-1])
-    register_dir = os.path.dirname(archive_path)
-    reg_candidates = [f for f in os.listdir(register_dir)
-                       if f.startswith("backlog_framework_register_abox_v")]
-    if not reg_candidates:
-        return None
-    reg_path = os.path.join(register_dir, sorted(reg_candidates)[-1])
-    r = subprocess.run(["python3", tool, reg_path], capture_output=True, text=True)
-    return r.stdout
+
+    import rdflib
+    import pyshacl
+    B = rdflib.Namespace("http://example.org/backlog#")
+    SH = rdflib.Namespace("http://www.w3.org/ns/shacl#")
+    g, a = rdflib.Graph().parse(register_path), rdflib.Graph().parse(archive_path)
+    tb, ab = rdflib.Graph().parse(tb_f), rdflib.Graph().parse(ab_f)
+    shg = rdflib.Graph().parse(sh_f); shg.parse(ru_f)
+    arrivals = list(a.subjects(rdflib.RDF.type, B.Lineage))
+    focus = set()
+    for L in arrivals:
+        items = {s for s in a.subjects(B.belongsToLineage, L)}
+        focus |= items | {L}
+        m = a.value(L, B.lineageForMission)
+        if m is not None:
+            focus.add(m)
+        for item in items:
+            for h in a.subjects(B.harnessFor, item):
+                focus.add(h)
+                for ev in a.objects(h, B.hasHarnessEvidence):
+                    focus.add(ev)
+            for ev in a.objects(item, B.hasEvidence):
+                focus.add(ev)
+    _, rg, _ = pyshacl.validate(a + g + tb + ab, shacl_graph=shg, advanced=True, inference="none",
+                                 focus_nodes=[str(f) for f in focus])
+    by_lineage = {}
+    for L in arrivals:
+        items = {s for s in a.subjects(B.belongsToLineage, L)} | {L}
+        by_lineage[str(L).split("#")[-1]] = items
+    result = {}
+    for r in rg.subjects(rdflib.RDF.type, SH.ValidationResult):
+        if rg.value(r, SH.resultSeverity) != SH.Violation:
+            continue
+        fn = rg.value(r, SH.focusNode)
+        msg = str(rg.value(r, SH.resultMessage))
+        for lname, items in by_lineage.items():
+            if fn in items:
+                result.setdefault(lname, []).append(f"{str(fn).split('#')[-1]}: {msg}")
+    return result
 
 
 def main():
@@ -115,14 +155,14 @@ def main():
         print("VERDICT: nothing to reconcile")
         return
 
-    conformance_out = None
+    conformance_map = None
     if to_confirm:
-        conformance_out = run_conformance(archive_path)
-        if conformance_out is None:
-            print("  GATE ABORT: could not run backlog_archive_conformance for real validation")
+        conformance_map = run_conformance_full(archive_path, register_path)
+        if conformance_map is None:
+            print("  GATE ABORT: could not compute real conformance for promotion")
             sys.exit(3)
         for name in to_confirm:
-            hits = [l for l in conformance_out.splitlines() if l.strip().startswith(name + ":")]
+            hits = conformance_map.get(name, [])
             if hits:
                 unresolved.append((name, hits))
             else:

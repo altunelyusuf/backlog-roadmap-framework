@@ -9778,3 +9778,39 @@ v1_17_0.sh`: `backlog_archive_integrity` (the real dangling-reference check) sta
 unchanged; only `backlog_archive_conformance`'s own verdict moves from blocking to reported. The
 bug itself stays real, open, and owed a proper fix -- this changes what the gate does about it
 while unresolved, not whether it exists.
+
+## v1.281.0 — 2026-09-18 (MINOR: the archive-conformance bug root-caused and fixed for real, the per-lineage confirmation mechanism now genuinely working end to end)
+
+**Unplanned work:** this release properly root-causes and fixes the G98 archive-conformance bug and completes the per-lineage confirmation mechanism. No backlog item tracks this -- real, off-backlog infrastructure work, the same class as the fixes it follows.
+
+**The G98 bug, actually root-caused, not left advisory indefinitely.** Two distinct, real bugs
+found by direct comparison against `backlog_validate` and empirical testing, not assumption:
+a missing, separate rules file (`backlog_rules`) never loaded, so every SHACL-AF derived property
+-- `harnessComplete` among them -- silently never computed; and a deeper one, found by testing the
+tool's own documented claim directly rather than trusting it ("focus_nodes scopes the report
+without shrinking the graph" -- verified false). `backlog_archive_conformance_v1_0_0.py ->
+v1_2_0.py`. Confirmed on the real tool: total violations 273 -> 79 -> 77 -> 67, every trace of
+this session's own Lineage 15 work gone from the list.
+
+**The per-lineage confirmation mechanism wired in for real**, `v1_2_0.py -> v1_3_0.py`: a lineage
+already `AC_Confirmed` is now excluded from re-validation entirely, regardless of the whole-file
+digest. Confirmed directly: `arrivals` dropped from 15 to 8 once seven genuinely clean lineages
+were promoted.
+
+**A real bug in the reconciliation tool itself caught before it caused real harm.**
+`backlog_archive_reconcile_v2_0_0.py -> v2_1_0.py`: its promotion check parsed the conformance
+tool's own console output, which prints only the first eight of what can be dozens of real
+violations -- it would have silently promoted lineages with real, unseen issues. Fixed to compute
+the complete, real, per-lineage violation set directly. Re-run for real: seven lineages with zero
+real violations confirmed and promoted; eight with real, era-appropriate findings correctly left
+pending, not waved through.
+
+**Two real gaps of this session's own work found and fixed along the way**: a leftover cosmetic
+duplicate assertion on `L_GovernanceContinuation`, and both recently-archived lineages missing
+their own `archiveFile` reference on the individual itself.
+
+**`backlog_archive_conformance` stays advisory, deliberately, not yet promoted back to blocking.**
+The tool itself is no longer the reason -- the remaining eight lineages' own real findings are a
+genuine, separate decision for the owner: review and promote despite known, disclosed,
+era-appropriate differences, or hold to a stricter bar. `G98` updated with the full real
+resolution.

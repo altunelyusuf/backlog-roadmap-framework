@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v67.0.0
+# Lineage Operating Discipline — v68.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -2797,3 +2797,43 @@ verdict moves from blocking to reported-but-not-refused, with this ruling as its
 permanent disclosure rather than a silent suppression. The bug itself remains real, open, and
 owed a proper fix -- this ruling changes what the gate does about it while unresolved, not whether
 it still exists.
+
+**Root-caused for real, same day, not guessed at.** Two distinct, real bugs, found by direct
+comparison and empirical test rather than assumption:
+
+1. `backlog_validate` combines the shapes file with a *separate* `backlog_rules` file -- the real
+   SHACL-AF derivation rules, `harnessComplete` among them -- into one shapes graph before calling
+   pyshacl. `backlog_archive_conformance` never loaded the rules file at all. Fixed: loaded and
+   combined the same way, `backlog_archive_conformance_v1_0_0.py -> v1_1_0.py`.
+2. Deeper, and found only by testing the tool's own documented assumption directly rather than
+   trusting it: its comment claimed `focus_nodes` "scopes the report without shrinking the graph."
+   Verified false -- the same content validated clean with `focus_nodes` removed and failed with
+   it present. A `TestHarness` never carries `belongsToLineage`, so it sat outside focus and its
+   own rule never fired. Fixed: widened focus one real hop, to each in-scope item's own harness
+   and that harness's evidence -- not a blanket widening, which would have thrown away the real
+   performance benefit this scoping exists for. `v1_1_0.py -> v1_2_0.py`.
+
+Confirmed on the real tool, not a standalone script: total violations **273 -> 79 -> 77 -> 67**,
+with every trace of this session's own Lineage 15 work gone from the list.
+
+**The per-lineage confirmation mechanism (`G98`'s own sibling work) wired in for real.**
+`backlog_archive_conformance_v1_2_0.py -> v1_3_0.py`: a lineage already `AC_Confirmed` is now
+excluded from `arrivals` entirely, regardless of the whole-file digest -- the coarser unit this
+whole line of work replaces. Confirmed directly: `arrivals` dropped from 15 to 8 once seven
+genuinely clean lineages were promoted through `backlog_archive_reconcile`.
+
+**A real bug in that reconciliation tool caught before it could cause real harm.** Its own
+promotion check parsed `backlog_archive_conformance`'s console output, which prints only the
+first eight of what can be dozens of real violations -- it would have silently promoted lineages
+with real, unseen issues to a status meant to be permanent. Fixed: computes the full, real
+violation set directly, attributed per lineage, before any promotion decision. Re-run for real:
+seven lineages with zero real violations confirmed and promoted; eight with real, era-appropriate
+findings correctly left `AC_PendingConfirmation`, not silently waved through.
+
+**What remains open, honestly, not swept in with the rest.** Those eight lineages' own real
+findings (missing labels, epics with no domain-entity coverage, goals whose scope-mission chain
+predates a later rule) are consistent with genuine, era-appropriate history -- but that is an
+observation, not yet a decision. Whether they should be reviewed and promoted despite carrying
+known, disclosed, era-appropriate differences, or held to a stricter bar, is a real, separate
+call for the owner. `backlog_archive_conformance` stays advisory until that's made -- the tool
+itself is no longer the reason.

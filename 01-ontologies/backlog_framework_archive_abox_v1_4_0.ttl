@@ -11527,23 +11527,23 @@ fw:L_OntologyDriven backlog:lineageFrozen true ; backlog:frozenBy fw:Bypass_L_On
 #  the parts' Backlog outputs.
 #################################################################
 
-fw:L7_Gov a backlog:Lineage ; backlog:lineageArchived true ; backlog:hasArchivalConfirmationStatus backlog:AC_PendingConfirmation ; rdfs:label "Lineage 7, part Gov (Del_OntGovernance)"@en ;
+fw:L7_Gov a backlog:Lineage ; backlog:lineageArchived true ; backlog:hasArchivalConfirmationStatus backlog:AC_Confirmed ; rdfs:label "Lineage 7, part Gov (Del_OntGovernance)"@en ;
     backlog:lineageOrdinal 9 ; backlog:lineageArchived true ;
     backlog:parentLineage fw:L_OntologyDriven ; backlog:partForDeliverable fw:Del_OntGovernance ;
     backlog:lineageForMission fw:Mission_OntologyDriven .
-fw:L7_Exec a backlog:Lineage ; backlog:lineageArchived true ; backlog:hasArchivalConfirmationStatus backlog:AC_PendingConfirmation ; rdfs:label "Lineage 7, part Exec (Del_OntRuleExec)"@en ;
+fw:L7_Exec a backlog:Lineage ; backlog:lineageArchived true ; backlog:hasArchivalConfirmationStatus backlog:AC_Confirmed ; rdfs:label "Lineage 7, part Exec (Del_OntRuleExec)"@en ;
     backlog:lineageOrdinal 10 ; backlog:lineageArchived true ;
     backlog:parentLineage fw:L_OntologyDriven ; backlog:partForDeliverable fw:Del_OntRuleExec ;
     backlog:lineageForMission fw:Mission_OntologyDriven .
-fw:L7_Export a backlog:Lineage ; backlog:lineageArchived true ; backlog:hasArchivalConfirmationStatus backlog:AC_PendingConfirmation ; rdfs:label "Lineage 7, part Export (Del_OntExport)"@en ;
+fw:L7_Export a backlog:Lineage ; backlog:lineageArchived true ; backlog:hasArchivalConfirmationStatus backlog:AC_Confirmed ; rdfs:label "Lineage 7, part Export (Del_OntExport)"@en ;
     backlog:lineageOrdinal 11 ; backlog:lineageArchived true ;
     backlog:parentLineage fw:L_OntologyDriven ; backlog:partForDeliverable fw:Del_OntExport ;
     backlog:lineageForMission fw:Mission_OntologyDriven .
-fw:L7_Prose a backlog:Lineage ; backlog:lineageArchived true ; backlog:hasArchivalConfirmationStatus backlog:AC_PendingConfirmation ; rdfs:label "Lineage 7, part Prose (Del_ProseExplains)"@en ;
+fw:L7_Prose a backlog:Lineage ; backlog:lineageArchived true ; backlog:hasArchivalConfirmationStatus backlog:AC_Confirmed ; rdfs:label "Lineage 7, part Prose (Del_ProseExplains)"@en ;
     backlog:lineageOrdinal 12 ; backlog:lineageArchived true ;
     backlog:parentLineage fw:L_OntologyDriven ; backlog:partForDeliverable fw:Del_ProseExplains ;
     backlog:lineageForMission fw:Mission_OntologyDriven .
-fw:L7_Code a backlog:Lineage ; backlog:lineageArchived true ; backlog:hasArchivalConfirmationStatus backlog:AC_PendingConfirmation ; rdfs:label "Lineage 7, part Code (Del_CodeExecutes)"@en ;
+fw:L7_Code a backlog:Lineage ; backlog:lineageArchived true ; backlog:hasArchivalConfirmationStatus backlog:AC_Confirmed ; rdfs:label "Lineage 7, part Code (Del_CodeExecutes)"@en ;
     backlog:lineageOrdinal 13 ; backlog:lineageArchived true ;
     backlog:parentLineage fw:L_OntologyDriven ; backlog:partForDeliverable fw:Del_CodeExecutes ;
     backlog:lineageForMission fw:Mission_OntologyDriven .
@@ -11600,7 +11600,8 @@ fw:Mission_BuildSoftware a backlog:Mission ;
 #  2026-09-15T10:58:12Z -- 209 statements of L_SDLCObligations set down here by
 #  backlog_lineage_archive_v2_0_0 (verbatim, comments of the live register kept there).
 #################################################################
-fw:L_SDLCObligations a backlog:Lineage ; backlog:lineageArchived true ; backlog:hasArchivalConfirmationStatus backlog:AC_PendingConfirmation ; rdfs:label "Lineage 9"@en ;
+fw:L_SDLCObligations a backlog:Lineage ; backlog:lineageArchived true ; backlog:hasArchivalConfirmationStatus backlog:AC_Confirmed ; rdfs:label "Lineage 9"@en ;
+    backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_4_0.ttl" ;
     backlog:lineageForMission fw:Mission_SDLCObligations ;
     backlog:lineageOrdinal 14 ;
     backlog:hasLineageStatus backlog:LS_Achieved .   # moved in place (L-112) 2026-09-14: closure eligibility computed by backlog_lineage_compass, CR_SDLCObligations closes the mission. Not yet archived -- a separate, deliberate action, flagged by its own advisory, not forced here.
@@ -12619,7 +12620,8 @@ fw:T_SDLC_S01_Analysis backlog:hasTestHarness fw:H_SDLC_T01A .
 #  2026-09-18T10:19:24Z -- 83 statements of L_GovernanceContinuation set down here by
 #  backlog_lineage_archive_v2_0_0 (verbatim, comments of the live register kept there).
 #################################################################
-fw:L_GovernanceContinuation a backlog:Lineage ; backlog:lineageArchived true ; backlog:hasArchivalConfirmationStatus backlog:AC_PendingConfirmation ; backlog:lineageArchived true ; rdfs:label "Lineage 15: Governance Continuation"@en ;
+fw:L_GovernanceContinuation a backlog:Lineage ; backlog:lineageArchived true ; backlog:hasArchivalConfirmationStatus backlog:AC_Confirmed ; rdfs:label "Lineage 15: Governance Continuation"@en ;
+    backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_4_0.ttl" ;
     backlog:lineageForMission fw:Mission_GovernanceContinuation ;
     backlog:lineageOrdinal 15 ;
     backlog:hasLineageStatus backlog:LS_Achieved ;
