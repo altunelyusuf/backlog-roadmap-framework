@@ -9770,3 +9770,11 @@ check firing even on this session's own Lineage 15 work, already validated clean
 content, historical or otherwise. Checked the first, obvious suspect (`advanced=True` mode) and
 it was already correctly set; the real cause needs proper tracing, not a rushed guess this deep
 into archive-integrity work. Real, separate work, next.
+
+**Owner's ruling, this same turn: downgrade this one check to advisory, not blocking, until
+properly root-caused (`G98`).** Confirmed first, not assumed, that this isn't a rule reaching an
+unclosed lineage -- the register holds zero active lineages right now. `backlog_gate_v1_16_0.sh ->
+v1_17_0.sh`: `backlog_archive_integrity` (the real dangling-reference check) stays a hard gate,
+unchanged; only `backlog_archive_conformance`'s own verdict moves from blocking to reported. The
+bug itself stays real, open, and owed a proper fix -- this changes what the gate does about it
+while unresolved, not whether it exists.

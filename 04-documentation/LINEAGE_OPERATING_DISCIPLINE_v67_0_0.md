@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v66.0.0
+# Lineage Operating Discipline — v67.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -2775,3 +2775,25 @@ finding -- a register reaching every objective met with its plan (106 items) nev
 own proposed mirror of `metricMovableBy`, plus the fabricated-timestamp and cross-package
 deliverable-boundary findings, remain real, open, deferred work. This ruling closes the first,
 narrower, single-shape gap the owner asked to take first; the rest are separate decisions.
+
+## G98 — A real, unresolved bug in the archive-conformance tool's own graph construction, downgraded to advisory rather than left blocking or silently ignored
+
+Confirmed directly, not guessed: `backlog_archive_conformance`'s own full-archive-context
+validation flags settled, already-archived content (Lineage 15's `ST_Gov_ComparisonLogic` among
+them) with violations that don't hold when the same content is checked through `backlog_validate`
+moments earlier. `advanced=True` (SHACL-AF rule execution) was checked first, since it was the
+obvious suspect, and it was already correctly set -- the real cause is still unresolved, somewhere
+in how this one tool's own graph is assembled, not in any content, historical or current.
+
+**Not a rule applied to anything unclosed.** The owner asked directly whether this was the new
+`ArchivalConfirmationStatus` mechanism or the `RetiredNameCollisionShape` fix reaching an active,
+unclosed lineage -- checked and confirmed: the register holds zero active lineages right now.
+This is a separate, real defect in one specific checking tool, not a retroactive rule.
+
+**Owner's ruling, 2026-09-18: downgrade this one check to advisory, not blocking, until properly
+root-caused.** `backlog_archive_integrity` (the real dangling-reference check) stays a hard gate,
+unchanged -- it is correct and has never been implicated. Only `backlog_archive_conformance`'s own
+verdict moves from blocking to reported-but-not-refused, with this ruling as its own real,
+permanent disclosure rather than a silent suppression. The bug itself remains real, open, and
+owed a proper fix -- this ruling changes what the gate does about it while unresolved, not whether
+it still exists.
