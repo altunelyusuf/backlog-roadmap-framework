@@ -14,8 +14,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.91.0> ;
-    owl:versionInfo "9.91.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.92.0> ;
+    owl:versionInfo "9.92.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.91.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.90.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.89.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.88.0> ;
@@ -3207,7 +3208,7 @@ fw:L_GovernanceContinuation a backlog:Lineage ; rdfs:label "Lineage 15: Governan
     backlog:lineageForMission fw:Mission_GovernanceContinuation ;
     backlog:lineageOrdinal 15 ;
     backlog:lineageArchived false ;
-    backlog:hasLineageStatus backlog:LS_InProgress ;
+    backlog:hasLineageStatus backlog:LS_Achieved ;
     backlog:hasLineageDepthLevel backlog:Depth_StoryDirect ;
     backlog:hasLineageArtifactDomain backlog:Domain_Infrastructure .
 
@@ -3216,7 +3217,8 @@ fw:Mission_GovernanceContinuation a backlog:Mission ; rdfs:label "Mission: Gover
     backlog:missionFor fw:Register ;
     backlog:hasMissionOrigin backlog:Origin_OwnerStated ;
     backlog:missionSource "Owner, 2026-09-17, verbatim: 'We have a list of cases actually. We can start with the simplest and easy to run toward the more complex alternatives among those we have discussed. But my advise is to prioritize one matching with our current work so that we can use it to complete the job systematically.' -- the mission statement's own specific wording (log-matching, hard gate, unplanned-work declaration) confirmed directly by the owner across the subsequent handshake turns of the same conversation." ;
-    backlog:hasMissionOutcome backlog:Out_InFlight ;
+    backlog:hasMissionOutcome backlog:Out_Achieved ;
+    backlog:outcomeRationale "All three objectives reached target, confirmed by backlog_lineage_compass, not decided in prose: the release-to-item comparison genuinely blocks an unaccounted release (proven on a real, isolated scratch repository, refuses and passes correctly on real cases); all three scope deliverables have real, shipped artifacts (GOV-S01's own comparison-and-wiring script satisfied Del_Gov_HardGate too, once checked directly, closing GOV-S03 without duplicate work); nothing touched the four excluded concerns. The real closure report was written and committed first, in its own separate publish, before this outcome -- the exact ordering this package's own G96 finding named as a real gap in its prior lineage's history." ;
     backlog:decidedBy backlog:Owner .
 
 fw:Scope_GovernanceContinuation a backlog:ScopeStatement ; rdfs:label "Scope: Governance Continuation"@en ;

@@ -9709,3 +9709,9 @@ work built for exactly this moment.
 `G96` found in this package's own history, made while closing Lineage 9. Getting it right here,
 deliberately, on the very next real lineage this package closes, is the actual proof that finding
 mattered -- not just recorded and moved past.
+
+## v1.279.0 — 2026-09-18 (MINOR: Lineage 15 reaches Out_Achieved -- in its own separate commit, after the report, not with it)
+
+**Unplanned work:** this release sets Mission_GovernanceContinuation's outcome and the lineage's own status. Neither is a WorkItem state transition this package's own release-item-accounting gate tracks -- it checks Story/ExecutionTask movement specifically, and this is Mission- and Lineage-level.
+
+**The real point of this release, stated plainly.** `Out_Achieved`, in a commit that contains no closure-report content at all -- the report was already published, separately, at v1.278.0, and `closureCommittedAt` on that report already names this exact, deterministic tag. This is the precise ordering `G96` found missing in this package's own prior lineage's history: report first, real and committed, the outcome only after. Confirmed by `backlog_lineage_compass` before either was written: all three objectives at target, not decided in prose.
