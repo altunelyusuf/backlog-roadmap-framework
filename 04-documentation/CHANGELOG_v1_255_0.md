@@ -9672,3 +9672,24 @@ it asked for exactly the hard-blocking wiring and both-directions proof `GOV-S01
 criterion was already satisfied rather than building duplicate work. All three scope deliverables
 now have real, shipped artifacts, and all three of this lineage's objectives are confirmed met via
 `backlog_lineage_compass`. The lineage is now genuinely eligible for closure.
+
+## v1.277.0 — 2026-09-18 (PATCH: the release-item-accounting gate correctly caught a real bug in its own tool, during a real publish attempt)
+
+**Caught for real, not in a scratch test.** Attempting to publish `v1.276.0`'s own follow-up, the
+gate refused: `backlog_release_item_check` assumed the register's own filename stays constant
+across the commit span being checked, then tried to read the *current* filename from the *old*
+baseline tag -- where it never existed, since the register is itself a versioned file, renamed
+almost every real publish.
+
+**Fixed properly, not worked around.** `register_path_at_tag()` resolves the register's real
+filename independently at the baseline tag via `git ls-tree`, rather than assuming it matches the
+working tree's own glob result. `backlog_release_item_check_v1_1_0.py -> v1_2_0.py`.
+
+**Re-tested with the exact real scenario, not a simplified one** -- a scratch repository where the
+register is both renamed *and* carries a real item movement in the same span, and a second case
+renamed with no movement. Both correct.
+
+**Historical evidence left untouched, deliberately.** GOV-S01's and GOV-S02's own real test
+evidence still cites `v1.0.0`/`v1.1.0` -- the versions that genuinely ran at the time, on scenarios
+this specific bug never affected. Rewriting them to cite `v1.2.0` would misdescribe what was
+actually verified when.

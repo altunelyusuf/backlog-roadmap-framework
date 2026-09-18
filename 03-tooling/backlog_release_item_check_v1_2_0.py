@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_release_item_check v1.1.0 -- GOV-S01, GOV-S02.
+"""backlog_release_item_check v1.2.0 -- GOV-S01, GOV-S02.
 
 The real, agreed gap: a package can publish a release whose governed files genuinely changed, while
 not one real backlog item moved -- checked and confirmed on automate-python-book-3e (fourteen real
@@ -68,6 +68,24 @@ def register_path(repo_root, package_prefix):
     return p
 
 
+def register_path_at_tag(repo_root, package_prefix, tag):
+    """The register is a versioned file, renamed almost every real publish -- its filename at an
+    old tag is not necessarily the same as the current one. Resolved independently via git
+    ls-tree, not assumed to match the current working tree's own glob result."""
+    rc, out, err = sh(["git", "ls-tree", "-r", "--name-only", tag,
+                        f"{package_prefix}01-ontologies/"], repo_root)
+    if rc != 0:
+        print(f"GATE ABORT: git ls-tree at {tag} failed: {err.strip()}")
+        sys.exit(3)
+    candidates = sorted(
+        l for l in out.splitlines()
+        if re.search(r'backlog_framework_register_abox_v[\d_]+\.ttl$', l))
+    if not candidates:
+        print(f"GATE ABORT: no backlog_framework_register_abox_v*.ttl found at {tag}")
+        sys.exit(3)
+    return candidates[-1]
+
+
 def item_states(ttl_text):
     """Real subjects with a real hasState, by identifier pattern -- deliberately regex-based,
     not rdflib: this must read the register AT AN OLD TAG via git show, where importing the
@@ -133,8 +151,8 @@ def main():
         sys.exit(0)
 
     reg_path = register_path(repo_root, package_prefix)
-    reg_rel = reg_path[len(repo_root) + 1:] if reg_path.startswith(repo_root) else reg_path
-    rc, old_text, err = sh(["git", "show", f"{baseline_tag}:{reg_rel}"], repo_root)
+    reg_rel_at_baseline = register_path_at_tag(repo_root, package_prefix, baseline_tag)
+    rc, old_text, err = sh(["git", "show", f"{baseline_tag}:{reg_rel_at_baseline}"], repo_root)
     if rc != 0:
         print(f"GATE ABORT: could not read register at {baseline_tag}: {err.strip()}")
         sys.exit(3)
