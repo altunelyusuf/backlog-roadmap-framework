@@ -9818,3 +9818,7 @@ resolution.
 ## v1.282.0 — 2026-09-18 (PATCH: version-freeze correctly caught the archive file's own real content change from the previous release; fixed)
 
 **Unplanned work:** a real, correct G94 catch by version-freeze itself on the real publish attempt: `backlog_framework_archive_abox_v1_4_0.ttl`'s content genuinely changed in v1.281.0's own work (seven lineages promoted, two real gaps fixed) with no version bump. `-> v1_5_0.ttl`, all real references in the register updated, register itself re-versioned for the change.
+
+## v1.283.0 — 2026-09-18 (PATCH: handover log corrected -- plan-execution-divergence's own mitigation 1 was already built by Lineage 15, never credited)
+
+**Unplanned work:** returning the two waiting automate-python-book-3e handovers before continuing with the remaining profile work. `HANDOVER_LOG.md` updated: the plan-execution-divergence handover's own mitigation 1 (a shipped release must account for its items, or say so) is exactly what GOV-S01/GOV-S02 built and shipped this session -- credited, moved from "deferred" to "partially accepted (built), remainder deferred," matching the sibling handover's own already-correct entry. No register content changed; no item moved.
