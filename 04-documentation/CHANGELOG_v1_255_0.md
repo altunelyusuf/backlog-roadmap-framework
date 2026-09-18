@@ -9715,3 +9715,38 @@ mattered -- not just recorded and moved past.
 **Unplanned work:** this release sets Mission_GovernanceContinuation's outcome and the lineage's own status. Neither is a WorkItem state transition this package's own release-item-accounting gate tracks -- it checks Story/ExecutionTask movement specifically, and this is Mission- and Lineage-level.
 
 **The real point of this release, stated plainly.** `Out_Achieved`, in a commit that contains no closure-report content at all -- the report was already published, separately, at v1.278.0, and `closureCommittedAt` on that report already names this exact, deterministic tag. This is the precise ordering `G96` found missing in this package's own prior lineage's history: report first, real and committed, the outcome only after. Confirmed by `backlog_lineage_compass` before either was written: all three objectives at target, not decided in prose.
+
+## v1.280.0 — 2026-09-18 (MINOR: per-lineage archival confirmation -- two real bugs found and fixed at the source, a new deferred-confirmation mechanism built and bootstrapped)
+
+**Unplanned work:** this release fixes the archival tooling itself and bootstraps a new
+confirmation mechanism across all fifteen archived lineages. No new backlog item tracks this --
+it is real, off-backlog infrastructure work, matching the same escape hatch GOV-S02 itself
+implements.
+
+**A real, dead-code bug found and fixed at its actual source, not patched around.**
+`backlog_lineage_archive_v2_1_0.py -> v2_2_0.py`: `for L in []:` -- the entire fix-up loop meant
+to flip `lineageArchived` from `false` to `true` on an archived lineage's own copy had never
+executed, ever, since it was written. `lineageArchived` is a real, true fact the moment archiving
+happens -- no commit-witnessing needed, since it's a processing-status claim, not a claim about a
+specific commit. Verified the underlying regex logic was always correct in isolation before
+trusting the one-line fix.
+
+**A new mechanism, built from the owner's own proposal.** Re-validating the whole archive file on
+every digest change forced every already-settled lineage back through today's complete shape
+suite -- the same retroactive-enforcement mistake G89/G91 rules against, applied per file instead
+of per lineage. `ArchivalConfirmationStatus` (`AC_PendingConfirmation`/`AC_Confirmed`) moves the
+exemption unit to one status per lineage: pending at archiving, confirmed only at the next real
+archival, once the previous commit is definitely real -- the same deferred pattern as
+`closedAtCommit`/`closureCommittedAt`.
+
+**Bootstrapped across all fifteen real lineages**, using `backlog_archive_reconcile_v2_0_0.py`.
+Two real bugs in this new tool caught and fixed before trusting it, not after: a first version
+that inserted `lineageArchived true` without removing an existing, contradictory `false`, leaving
+both asserted on the same individual; a second that re-inserted `true` even when already present,
+producing a cosmetically duplicate (confirmed, via rdflib, semantically harmless -- RDF triples
+deduplicate on parse) but genuinely sloppy assertion. Both fixed, the second verified in isolation
+against the exact case that broke it before being trusted again.
+
+**Disclosed, not yet built:** `backlog_archive_conformance` itself does not yet read this new
+status to skip already-confirmed lineages -- the mechanism now exists and is bootstrapped, but the
+tool that would benefit from it hasn't been wired to use it yet. Real, separate work, next.

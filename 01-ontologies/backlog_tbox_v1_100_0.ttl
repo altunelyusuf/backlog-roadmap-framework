@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.99.0> ;
-    owl:versionInfo "1.99.0" ;
+    owl:versionIRI <http://example.org/backlog/1.100.0> ;
+    owl:versionInfo "1.100.0" ;
+    owl:priorVersion <http://example.org/backlog/1.99.0> ;
     owl:priorVersion <http://example.org/backlog/1.98.0> ;
     owl:priorVersion <http://example.org/backlog/1.97.0> ;
     owl:priorVersion <http://example.org/backlog/1.96.0> ;
@@ -7279,3 +7280,28 @@ backlog:Profile_FullChain_Ontology a backlog:LineageProfile ;
     backlog:forDepthLevel backlog:Depth_FullChain ; backlog:forArtifactDomain backlog:Domain_Ontology ;
     backlog:requiresEpicDecomposition false ; backlog:requiresObligationSetAdoption false ;
     skos:definition "The first real profile, named from a complete, closed, checked case rather than a guessed template: Lineage 9 (L_SDLCObligations), backlog-roadmap-framework's own SDLC-obligations lineage. Verified directly against its real, sealed archive before writing any requirement here: full five-stage Mission-through-Backlog chain, one commit per stage; a real RICE-scored backlog; Story decomposed directly to ExecutionTask with no Epic layer at any point (0 Epics belonging to the lineage); no adoptsObligationSet ever declared on the lineage itself. Register-level RuleSets (RS_LabelConvention, RS_LineageStatus) applied throughout, but those bind the whole register, not this profile specifically, and are not claimed as part of it."@en .
+
+#################################################################
+#  v1.100.0 -- PER-LINEAGE ARCHIVAL CONFIRMATION. Owner's own instruction, 2026-09-18: an archived
+#  lineage that holds the standards of its own day is a confirmation, not a fault -- once recorded,
+#  it must never be subject to reconfirmation against later rules. The exemption unit moves from
+#  one whole-archive-file digest to one status per lineage, so a new arrival's own real check never
+#  re-litigates lineages already settled.
+#################################################################
+backlog:ArchivalConfirmationStatus a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:AC_PendingConfirmation backlog:AC_Confirmed ) ;
+    rdfs:label "Archival Confirmation Status"@en ;
+    skos:definition "Whether this archived lineage's own content has been checked, once, against the shapes current at the moment it was confirmed, and found to hold. Deliberately not set at the moment of archiving: confirming a lineage's content requires the archive commit that carries it to already be real and published, the same reason closedAtCommit and closureCommittedAt are self-referencing tags rather than asserted at write time -- confirming in the same breath as archiving would claim a permanent fact before the permanence exists. Set at the next real archival, when the previous commit is definitely already real." .
+backlog:AC_PendingConfirmation a owl:NamedIndividual , backlog:ArchivalConfirmationStatus ;
+    rdfs:label "Pending confirmation"@en ;
+    skos:definition "Archived, but not yet checked against the shapes current at confirmation time -- honest, not wrong: the lineage's own content may well hold, this status only says nobody has checked yet."@en .
+backlog:AC_Confirmed a owl:NamedIndividual , backlog:ArchivalConfirmationStatus ;
+    rdfs:label "Confirmed"@en ;
+    skos:definition "Checked once, against the shapes current at confirmation time, and found to hold its own era's standards. Once set, this lineage is permanently exempt from re-validation against any later rule -- the same principle as G89/G91's ruling that a rule change binds only work that declared it, applied per lineage rather than per file."@en .
+backlog:hasArchivalConfirmationStatus a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:Lineage ; rdfs:range backlog:ArchivalConfirmationStatus ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has archival confirmation status"@en ;
+    skos:definition "Set to AC_PendingConfirmation by the archival tool itself, at the moment a lineage is archived. Promoted to AC_Confirmed only at the next real archival, once this lineage's own real content has been checked against shapes current at that moment and found to hold -- never asserted without that real check having actually run."@en .

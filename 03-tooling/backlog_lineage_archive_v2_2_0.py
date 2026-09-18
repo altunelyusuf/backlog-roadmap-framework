@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_lineage_archive v2.1.0 — set an achieved lineage down, out of every processing path.
+"""backlog_lineage_archive v2.2.0 — set an achieved lineage down, out of every processing path.
 
 WHY. A lineage whose mission is settled keeps costing every run until it is ARCHIVED: the SHACL
 suite validates its every individual, the git witness re-measures its every subject, the roadmap
@@ -245,7 +245,7 @@ def main():
     backlog:archivedAt "{now}"^^xsd:dateTime ;
     backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0: mission {outcome}, closure report present, every item Done or Cancelled, not frozen. Everything the lineage owned -- its Lineage individual, its Mission, its closure report, its stage outputs, findings and items -- moved to the archive file; this entry is the only thing that remains, and it is a record, not a lineage (G92)." .
 '''
-    for L in []:
+    for L in lineages:
         # lineageArchived is a functional current-state pointer: the existing 'false' on this lineage's own
         # statement is moved in place (L-112 pointer rule); the dated block below is the history
         pat = re.compile(r"(^" + re.escape(prefix_of(g, L) + local(L)) + r" a backlog:Lineage\b[^\n]*(?:\n[ \t][^\n]*)*?)backlog:lineageArchived false", re.M)

@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.102.0
+# Backlog & Roadmap Semantic Framework — Standard v1.103.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -947,6 +947,18 @@ discipline, content transformation, off-backlog infrastructure work, or work joi
 package boundaries. `SourceCode` and `Ontology` align with `pib-hub`'s own real `pib:ArtifactCategory`
 vocabulary; `ContentTransformation` is named as a real, disclosed gap that vocabulary does not yet
 cover.
+
+### 2.5c-xxi-m Per-lineage archival confirmation
+
+A whole-archive-file digest, changing whenever any one lineage's content changes, forced every
+already-settled lineage back through the complete current shape suite on every new arrival — the
+exact retroactive-enforcement mistake G89/G91 already rules against, applied per file instead of
+per lineage. `ArchivalConfirmationStatus` (`AC_PendingConfirmation`, `AC_Confirmed`) moves the
+exemption unit to one status per lineage: set to pending by the archival tool itself at the moment
+of archiving, promoted to confirmed only at the *next* real archival — deliberately deferred, the
+same reason `closedAtCommit` and `closureCommittedAt` are self-referencing tags rather than
+asserted at write time — and once confirmed, permanently exempt from re-validation against any
+later rule.
 
 `hasLineageDepthLevel` and `hasLineageArtifactDomain`, both optional, let a lineage declare its profile.
 Neither is enforced yet — the taxonomy is real before any rule depends on it, built to be iterated as
