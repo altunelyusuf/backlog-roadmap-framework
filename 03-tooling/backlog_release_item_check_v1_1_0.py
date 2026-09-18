@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
-"""backlog_release_item_check v1.0.0 -- GOV-S01.
+"""backlog_release_item_check v1.1.0 -- GOV-S01, GOV-S02.
 
 The real, agreed gap: a package can publish a release whose governed files genuinely changed, while
 not one real backlog item moved -- checked and confirmed on automate-python-book-3e (fourteen real
 releases, zero item movement) and on this framework's own earlier, less formal infra fixes. This
-tool closes it for the one direction GOV-S01 owns: detecting whether a real WorkItem left Proposed
-in the same commit span a release's governed files changed in.
-
-Scope, precisely: this checks item MOVEMENT, not the unplanned-work declaration escape hatch --
-that mechanism belongs to GOV-S02, not yet built. --unplanned-reason exists here only as a minimal,
-honest stub so this check can be exercised end to end; GOV-S02 will give it a real, checkable shape.
+tool closes it for both directions the owner agreed to: detecting whether a real WorkItem left
+Proposed in the same commit span a release's governed files changed in (GOV-S01), and, failing
+that, whether the release explicitly declared itself unplanned work in its own permanent record
+(GOV-S02) -- not a throwaway --unplanned-reason flag with nothing behind it, but a real statement
+written into the same changelog every real release in this package already carries.
 
 Method: compares the register's own WorkItem hasState values at the baseline tag against the
 current working tree. A real movement is either an existing item whose hasState differs, or a new
@@ -17,17 +16,25 @@ item introduced already past Proposed. Governed files are 01-ontologies/, 02-sha
 03-tooling/ under the package root -- documentation-only changes (CHANGELOG, README, standard prose)
 never trigger this check, since they carry no claim about backlog-relevant work.
 
-Usage: backlog_release_item_check_v1_0_0.py <package_root> <baseline_tag>
-       [--repo-root <path>] [--package-prefix <rel_path>] [--unplanned-reason <text>]
+Failing that, looks for a real unplanned-work statement: the changelog entry matching the package's
+own current VERSION.txt must contain a line starting with "**Unplanned work:**" -- a specific,
+deliberate marker, not any prose that happens to mention the phrase. A version bump with no matching
+changelog entry, or a changelog entry with no such marker, is read as no declaration at all.
 
-Exit 0 and PASS if nothing governed changed, an unplanned-work reason was given, or a real item
-moved. Exit 1 and FAIL, naming the span checked, if governed files changed and nothing moved.
+Usage: backlog_release_item_check_v1_1_0.py <package_root> <baseline_tag>
+       [--repo-root <path>] [--package-prefix <rel_path>]
+
+Exit 0 and PASS if nothing governed changed, a real item moved, or the changelog carries a real
+unplanned-work marker for the current version. Exit 1 and FAIL, naming the span checked, otherwise.
 """
 import subprocess
 import sys
 import re
+import glob
+import os
 
 GOVERNED_DIRS = ("01-ontologies/", "02-shacl-safeguards/", "03-tooling/")
+UNPLANNED_MARKER = re.compile(r'^\*\*Unplanned work:\*\*\s*(.+)$', re.MULTILINE)
 
 
 def sh(args, cwd):
@@ -77,6 +84,30 @@ def item_states(ttl_text):
     return states
 
 
+def declared_unplanned_reason(package_root, package_prefix, repo_root):
+    """Reads the package's own current VERSION.txt and the changelog, and returns the real
+    unplanned-work statement for that exact version if one is written -- never a runtime flag."""
+    vpath = os.path.join(package_root, "VERSION.txt")
+    if not os.path.exists(vpath):
+        return None
+    with open(vpath) as f:
+        version = f.read().strip()
+    changelogs = glob.glob(os.path.join(package_root, "04-documentation", "CHANGELOG_v*.md"))
+    if not changelogs:
+        return None
+    changelog_path = sorted(changelogs)[-1]
+    with open(changelog_path) as f:
+        text = f.read()
+    # Find the section for this exact version: "## vVERSION —" through the next "## v" or EOF.
+    pattern = re.compile(
+        rf'^## v{re.escape(version)}\b.*?(?=^## v|\Z)', re.MULTILINE | re.DOTALL)
+    m = pattern.search(text)
+    if not m:
+        return None
+    marker = UNPLANNED_MARKER.search(m.group(0))
+    return marker.group(1).strip() if marker else None
+
+
 def main():
     args = sys.argv[1:]
     if len(args) < 2:
@@ -85,15 +116,12 @@ def main():
     package_root, baseline_tag = args[0], args[1]
     repo_root = package_root
     package_prefix = ""
-    unplanned_reason = None
     i = 2
     while i < len(args):
         if args[i] == "--repo-root":
             repo_root = args[i + 1]; i += 2
         elif args[i] == "--package-prefix":
             package_prefix = args[i + 1]; i += 2
-        elif args[i] == "--unplanned-reason":
-            unplanned_reason = args[i + 1]; i += 2
         else:
             i += 1
 
@@ -102,11 +130,6 @@ def main():
     print(f"governed files changed: {len(changed)}")
     if not changed:
         print("VERDICT     : PASS -- no governed file changed since baseline; nothing to account for")
-        sys.exit(0)
-
-    if unplanned_reason:
-        print(f"declared    : unplanned work -- \"{unplanned_reason}\"")
-        print("VERDICT     : PASS -- release declared as unplanned work")
         sys.exit(0)
 
     reg_path = register_path(repo_root, package_prefix)
@@ -138,9 +161,17 @@ def main():
         sys.exit(0)
 
     print("items moved : 0")
-    print("VERDICT     : FAIL -- governed files changed, no item moved, no unplanned-work reason given")
+    reason = declared_unplanned_reason(package_root, package_prefix, repo_root)
+    if reason:
+        print(f"declared    : unplanned work -- \"{reason}\"")
+        print("VERDICT     : PASS -- release's own changelog declares unplanned work")
+        sys.exit(0)
+
+    print("declared    : no unplanned-work marker found in the changelog entry for this version")
+    print("VERDICT     : FAIL -- governed files changed, no item moved, no unplanned-work declared")
     sys.exit(1)
 
 
 if __name__ == "__main__":
     main()
+

@@ -14,8 +14,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.89.0> ;
-    owl:versionInfo "9.89.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.90.0> ;
+    owl:versionInfo "9.90.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.89.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.88.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.87.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.86.0> ;
@@ -3462,26 +3463,40 @@ fw:Ev_Gov_Task a backlog:Evidence , backlog:TestEvidence ;
 
 fw:ST_Gov_UnplannedDeclaration a backlog:Story ;
     backlog:hasIdentifier "GOV-S02" ; backlog:hasTitle "Unplanned-work declaration escape hatch" ;
-    backlog:hasState backlog:Proposed ;
-    backlog:memberOfContainer fw:Register ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-09-18T00:00:00Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-09-18T00:45:00Z"^^xsd:dateTime ;
+    backlog:lastAuditedAt "2026-09-18T00:45:00Z"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_Gov_NoDeclarationRefuses , fw:Ev_Gov_DeclarationPasses , fw:Ev_Gov_LooseMentionRefuses ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:memberOfContainer fw:Register , fw:It_Gov_2 ;
     backlog:belongsToLineage fw:L_GovernanceContinuation ;
     backlog:pursuesObjective fw:Obj_Gov_DeliverablesBuilt ;
     backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
     backlog:hasAcceptanceCriterion fw:AC_Gov_UnplannedDeclaration ;
-    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "Same backlog, same grooming pass still owed." .
+    backlog:hasReach 1.0 ; backlog:hasImpact 2.0 ; backlog:hasConfidence 0.85 ; backlog:hasEffort 1.0 ;
+    backlog:hasPriorityScore 1.7 ;
+    backlog:hasNoApplicableConcern true ;
+    backlog:appliesDefinitionOfDone fw:DoD_Gov_Infrastructure .
+fw:RE_Gov_UnplannedDeclaration a backlog:RefinementEvent ; backlog:refines fw:ST_Gov_UnplannedDeclaration ;
+    backlog:refinedAt "2026-09-18T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Real design, not a bare CLI flag: a runtime --unplanned-reason string has no permanence and nothing forces it to be real. Instead, the check reads the release's own CHANGELOG entry -- already the real, permanent, committed record every publish this session has used -- for an explicit unplanned-work statement naming why. A declaration with nothing behind it but a throwaway flag is not a declaration; one that has to be written into the same permanent record everything else lives in, is." .
 fw:AC_Gov_UnplannedDeclaration a backlog:AcceptanceCriterion ;
-    backlog:hasGherkinText "Given the comparison logic reports false (no item moved), When the release's own publish record carries an explicit unplanned-work statement naming why, Then the gate passes instead of refusing." .
+    backlog:satisfiedByArtifact "03-tooling/backlog_release_item_check_v1_0_0.py" ;
+    backlog:hasGherkinText "Given the comparison finds no item moved, When the release's own changelog entry for this exact version names an explicit unplanned-work statement, Then the gate passes instead of refusing -- and if the changelog says nothing, it still refuses." .
 
 fw:ST_Gov_HardGate a backlog:Story ;
     backlog:hasIdentifier "GOV-S03" ; backlog:hasTitle "Wire the comparison as a hard, blocking release-gate step" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Cancelled ;
     backlog:memberOfContainer fw:Register ;
     backlog:belongsToLineage fw:L_GovernanceContinuation ;
     backlog:pursuesObjective fw:Obj_Gov_GateBlocks ;
     backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
     backlog:hasAcceptanceCriterion fw:AC_Gov_HardGate ;
-    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "Same backlog, same grooming pass still owed; also the story most dependent on the other two landing first." .
+    backlog:hasNoApplicableConcern true ;
+    backlog:hasRationale "Cancelled, not built -- its own real acceptance criterion (wired in, hard-blocking, proven on both a passing and a refused case) was already fully satisfied while building GOV-S01, whose DGov3/DGov4 required exactly this wiring and this proof. Checked directly before closing rather than assumed: backlog_gate_v1_16_0.sh already calls backlog_release_item_check as a real, non-optional, blocking step, confirmed running correctly against real publishes. Building GOV-S03 as separate work would duplicate what already exists." .
 fw:AC_Gov_HardGate a backlog:AcceptanceCriterion ;
+    backlog:satisfiedByArtifact "03-tooling/backlog_gate_v1_16_0.sh" ;
     backlog:hasGherkinText "Given a release with neither an item moved nor an unplanned-work declaration, When the release gate runs, Then the release is refused with a real, non-zero exit and a real fixture proves this on both a passing and a refused case." .
 
 fw:Out_Backlog_GovernanceContinuation a backlog:StageOutput ;
@@ -3535,3 +3550,84 @@ fw:Obs_Gov_DeliverablesBuilt_Real a backlog:MetricObservation ; rdfs:label "One 
 fw:H_Gov_Task a backlog:TestHarness ; backlog:harnessFor fw:T_Gov_ComparisonLogic ;
     backlog:hasHarnessEvidence fw:Ev_Gov_Task ;
     backlog:hasRationale "The task's own harness, distinct from the story's -- a Done ExecutionTask must be anchored by its own verified evidence, not only inherit its parent's." .
+
+fw:It_Gov_2 a backlog:Iteration ; backlog:hasIdentifier "GOV-IT2" ; backlog:hasTitle "Lineage 15, second real work window" ;
+    backlog:hasState backlog:Done ;
+    backlog:iterationStart "2026-09-18T00:00:00Z"^^xsd:dateTime ; backlog:iterationEnd "2026-09-18T00:45:00Z"^^xsd:dateTime ;
+    backlog:hasObservedDuration "PT45M"^^xsd:duration ;
+    backlog:hasDurationSource "startedAt/finishedAt on GOV-S02 and GOV-T02, the only two real items this iteration held." ;
+    backlog:memberOfContainer fw:Register ; backlog:belongsToLineage fw:L_GovernanceContinuation .
+
+fw:Rel_Gov_2 a backlog:DeploymentUnit ; backlog:hasIdentifier "GOV-REL2" ; backlog:hasTitle "Lineage 15's second real release: GOV-S02 shipped"@en ;
+    backlog:hasState backlog:Done ;
+    backlog:hasDeploymentDate "2026-09-18T00:45:00Z"^^xsd:dateTime ;
+    backlog:deploysFrom fw:It_Gov_2 ; backlog:deploysItem fw:ST_Gov_UnplannedDeclaration ;
+    backlog:decidedBy backlog:Owner ; backlog:hasSelectionBasis backlog:Sel_Committed .
+fw:ST_Gov_UnplannedDeclaration backlog:memberOfContainer fw:Rel_Gov_2 .
+
+fw:Obs_Gov_DeliverablesBuilt_Second a backlog:MetricObservation ; rdfs:label "Two of three deliverables now have real, shipped artifacts"@en ;
+    backlog:observesMetric fw:Metric_Gov_DeliverablesBuilt ; backlog:observationFor fw:Obj_Gov_DeliverablesBuilt ;
+    backlog:hasObservedValue 2.0 ; backlog:observedAt "2026-09-18T00:45:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Direct check: backlog_release_item_check_v1_1_0.py now covers both GOV-S01 (item movement) and GOV-S02 (a real, marker-based unplanned-work declaration read from the changelog). Only GOV-S03 (hard-gate wiring) remains." .
+
+fw:Plan_Gov_UnplannedDeclaration a backlog:PlanningEvent ; rdfs:label "GOV-S02 formally kicked off"@en ;
+    backlog:plansItem fw:ST_Gov_UnplannedDeclaration ; backlog:plannedInto fw:It_Gov_2 ;
+    backlog:plannedAt "2026-09-18T00:00:00Z"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:producesTask fw:T_Gov_UnplannedDeclaration ;
+    backlog:hasRationale "The formal boundary between ordering this work and doing it." .
+fw:T_Gov_UnplannedDeclaration a backlog:ExecutionTask ; backlog:hasIdentifier "GOV-T02" ;
+    backlog:hasTitle "Extend the comparison script to read a real unplanned-work statement from the release's own changelog"@en ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-09-18T00:00:00Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-09-18T00:45:00Z"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_Gov_Task2 ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It_Gov_2 ;
+    backlog:belongsToLineage fw:L_GovernanceContinuation ;
+    backlog:hasRationale "One real task, matching the whole of GOV-S02's own scope." .
+
+fw:TD_Gov_NoDeclaration a backlog:TestData ; rdfs:label "Fixture: governed change, no changelog declaration"@en ;
+    backlog:hasFixtureState "A governed file changed since baseline; the changelog entry for the current version contains no unplanned-work marker." .
+fw:TD_Gov_RealDeclaration a backlog:TestData ; rdfs:label "Fixture: governed change, real changelog declaration"@en ;
+    backlog:hasFixtureState "Same governed change; the changelog entry for the current version carries a real '**Unplanned work:**' marker naming a reason." .
+fw:TD_Gov_LooseMention a backlog:TestData ; rdfs:label "Fixture: governed change, loose prose mention only"@en ;
+    backlog:hasFixtureState "Same governed change; the changelog entry mentions the word 'unplanned' in ordinary prose, not the required marker form." .
+
+fw:TC_Gov_NoDeclarationRefuses a backlog:TestCase ; rdfs:label "Refuses when the changelog carries no real declaration"@en ;
+    backlog:exercisesCriterion fw:AC_Gov_UnplannedDeclaration ; backlog:runsOnData fw:TD_Gov_NoDeclaration ;
+    backlog:hasRationale "Expected: non-zero exit." .
+fw:TC_Gov_DeclarationPasses a backlog:TestCase ; rdfs:label "Passes when the changelog carries a real declaration"@en ;
+    backlog:exercisesCriterion fw:AC_Gov_UnplannedDeclaration ; backlog:runsOnData fw:TD_Gov_RealDeclaration ;
+    backlog:hasRationale "Expected: zero exit, the real reason text extracted and reported." .
+fw:TC_Gov_LooseMentionRefuses a backlog:TestCase ; rdfs:label "Refuses a loose prose mention that is not the real marker"@en ;
+    backlog:exercisesCriterion fw:AC_Gov_UnplannedDeclaration ; backlog:runsOnData fw:TD_Gov_LooseMention ;
+    backlog:hasRationale "Proves the marker is a real, specific form, not loosely matched prose -- the exact case this whole mechanism has to get right to avoid becoming a loophole." .
+
+fw:H_Gov_UnplannedDeclaration a backlog:TestHarness ; backlog:harnessFor fw:ST_Gov_UnplannedDeclaration ;
+    backlog:hasHarnessEvidence fw:Ev_Gov_NoDeclarationRefuses , fw:Ev_Gov_DeclarationPasses , fw:Ev_Gov_LooseMentionRefuses ;
+    backlog:hasRationale "Real run, this session: an isolated scratch git repository, three real cases -- refuses with no declaration, passes with a real one, refuses a loose mention that isn't the required marker." .
+fw:Ev_Gov_NoDeclarationRefuses a backlog:Evidence , backlog:TestEvidence ; backlog:attestsCriterion fw:AC_Gov_UnplannedDeclaration ;
+    backlog:hasTestId "TC_Gov_NoDeclarationRefuses" ;
+    backlog:evidenceVerified true ; backlog:verifiedByTool "backlog_release_item_check_v1_1_0.py" ;
+    backlog:hasVerificationMethod "Real run: governed change, no marker in the version's changelog entry. Script exited 1 with 'no unplanned-work marker found', exactly as specified." .
+fw:Ev_Gov_DeclarationPasses a backlog:Evidence , backlog:TestEvidence ; backlog:attestsCriterion fw:AC_Gov_UnplannedDeclaration ;
+    backlog:hasTestId "TC_Gov_DeclarationPasses" ;
+    backlog:evidenceVerified true ; backlog:verifiedByTool "backlog_release_item_check_v1_1_0.py" ;
+    backlog:hasVerificationMethod "Real run: governed change, a real '**Unplanned work:**' marker present. Script exited 0, correctly extracting and reporting the real reason text." .
+fw:Ev_Gov_LooseMentionRefuses a backlog:Evidence , backlog:TestEvidence ; backlog:attestsCriterion fw:AC_Gov_UnplannedDeclaration ;
+    backlog:hasTestId "TC_Gov_LooseMentionRefuses" ;
+    backlog:evidenceVerified true ; backlog:verifiedByTool "backlog_release_item_check_v1_1_0.py" ;
+    backlog:hasVerificationMethod "Real run: governed change, the word 'unplanned' present only in ordinary prose. Script exited 1, confirming the marker is genuinely specific, not loosely matched." .
+fw:Ev_Gov_Task2 a backlog:Evidence , backlog:TestEvidence ;
+    backlog:hasTestSpec "03-tooling/backlog_release_item_check_v1_1_0.py" ;
+    backlog:evidenceVerified true ; backlog:verifiedByTool "backlog_release_item_check_v1_1_0.py" ;
+    backlog:hasVerificationMethod "Direct filesystem check: the extended script exists and produced the three real results recorded on its harness." .
+fw:H_Gov_Task2 a backlog:TestHarness ; backlog:harnessFor fw:T_Gov_UnplannedDeclaration ;
+    backlog:hasHarnessEvidence fw:Ev_Gov_Task2 ;
+    backlog:hasRationale "The task's own harness, distinct from the story's." .
+
+fw:Obs_Gov_DeliverablesBuilt_Third a backlog:MetricObservation ; rdfs:label "All three deliverables now have real, shipped artifacts"@en ;
+    backlog:observesMetric fw:Metric_Gov_DeliverablesBuilt ; backlog:observationFor fw:Obj_Gov_DeliverablesBuilt ;
+    backlog:hasObservedValue 3.0 ; backlog:observedAt "2026-09-18T00:50:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Checked directly, not assumed: Del_Gov_HardGate's own real artifact is backlog_gate_v1_16_0.sh, already shipped as part of GOV-S01's own DGov3/DGov4 proof, not a separate GOV-S03 artifact. All three of Del_Gov_ComparisonLogic, Del_Gov_UnplannedDeclaration and Del_Gov_HardGate now have real, shipped artifacts." .

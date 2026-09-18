@@ -9647,3 +9647,28 @@ now links the iteration to what shipped.
 **Objective `Obj_Gov_GateBlocks` reached its target.** Confirmed live via `backlog_lineage_
 compass`: closure readiness now blocked by exactly one remaining objective, `Obj_Gov_
 DeliverablesBuilt` (1 of 3 built), not three.
+
+## v1.276.0 — 2026-09-18 (MINOR: GOV-S02 built, proven, shipped -- a real, marker-based unplanned-work declaration, not a throwaway flag)
+
+**Refined with a real design, not a bare CLI flag.** The original stub (`--unplanned-reason
+<text>`) had no permanence -- nothing forced it to be real or auditable after the fact. Redesigned
+to read the release's own permanent changelog entry for its exact version, looking for a specific,
+deliberate marker (`**Unplanned work:**`) rather than any prose that happens to mention the phrase.
+
+**Proven on three real cases, not two** -- the third specifically testing that the mechanism can't
+become the loophole it exists to prevent: a governed change with no declaration refuses; one with a
+real, properly-marked declaration passes and correctly extracts the reason; one where "unplanned"
+appears only in ordinary prose still refuses. All three run for real in an isolated scratch
+repository before anything shipped.
+
+**GOV-S02 and GOV-T02 marked Done, with real, bridge-verified evidence** -- three real TestCases,
+a real harness, real evidence naming the tool and method for each. A second real `DeploymentUnit`
+connects this iteration to what actually shipped.
+
+**Progress, confirmed live — and a real correction caught before it shipped as a wrong claim.**
+Checked `GOV-S03`'s own acceptance criterion directly rather than assume it still needed building:
+it asked for exactly the hard-blocking wiring and both-directions proof `GOV-S01`'s own `DGov3`/
+`DGov4` already required and already delivered. Cancelled `GOV-S03`, honestly, naming where its
+criterion was already satisfied rather than building duplicate work. All three scope deliverables
+now have real, shipped artifacts, and all three of this lineage's objectives are confirmed met via
+`backlog_lineage_compass`. The lineage is now genuinely eligible for closure.
