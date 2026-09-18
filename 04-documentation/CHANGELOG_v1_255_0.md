@@ -9696,6 +9696,8 @@ actually verified when.
 
 ## v1.278.0 — 2026-09-18 (MINOR: Lineage 15's real ClosureReport -- written and committed before any outcome, exactly the ordering G96 exists to protect)
 
+**Unplanned work:** this release writes a real ClosureReport for Lineage 15 -- a Mission-level record, not a WorkItem state transition, so it genuinely moves no Story or Task. The release-item-accounting gate correctly caught this itself on the real publish attempt and refused until declared honestly, exactly what it exists to do.
+
 **The report first, deliberately, not the outcome.** `CR_GovernanceContinuation` -- real, complete,
 reporting on all three objectives, citing two real findings from this lineage's own work (the
 GOV-S03 redundancy, the register-rename bug), stating four real best practices. Mission's own
