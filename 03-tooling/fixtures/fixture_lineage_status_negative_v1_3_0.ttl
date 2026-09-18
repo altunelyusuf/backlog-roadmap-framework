@@ -31,6 +31,17 @@ ex:E_Retired a backlog:LineageArchiveEntry ; backlog:entryForLineage "http://exa
     backlog:entryOrdinal 3 ; backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_2_0.ttl" ;
     backlog:archivedAt "2026-09-01T00:00:00Z"^^xsd:dateTime ; backlog:archivalTrigger "fixture" .
 
+#  RetiredNameCollisionShape (real fix, 2026-09-18) -- L_ArchivedSelf has the same IRI its own
+#  entry records too, but it IS the archived original, not a colliding new one -- must stay silent.
+ex:L_ArchivedSelf a backlog:Lineage ; rdfs:label "Archived self, real exemption test"@en ;
+    backlog:lineageOrdinal 9 ; backlog:lineageArchived true ;
+    backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_2_0.ttl" ;
+    backlog:lineageForMission ex:M1 .
+ex:E_ArchivedSelf a backlog:LineageArchiveEntry ; backlog:entryForLineage "http://example.org/lineage-status-neg#L_ArchivedSelf" ;
+    backlog:entryForMission "http://example.org/lineage-status-neg#M1" ; backlog:entryOutcome "Out_Achieved" ;
+    backlog:entryOrdinal 4 ; backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_2_0.ttl" ;
+    backlog:archivedAt "2026-09-01T00:00:00Z"^^xsd:dateTime ; backlog:archivalTrigger "fixture" .
+
 #  InProgressNeedsStartedWorkShape  L_NotStarted claims InProgress with every item still Proposed.
 ex:L_NotStarted a backlog:Lineage ; backlog:lineageOrdinal 9 ; backlog:lineageArchived false ;
     backlog:lineageForMission ex:M2 ; backlog:hasLineageStatus backlog:LS_InProgress .

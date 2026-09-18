@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.125.0> ;
-    owl:versionInfo "1.125.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.126.0> ;
+    owl:versionInfo "1.126.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.125.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.124.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.123.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.122.0> ;
@@ -6263,6 +6264,13 @@ backlog:RetiredNameCollisionShape a sh:NodeShape ;
             ?reg backlog:adoptsRuleSet backlog:RS_LineageStatus .
             ?e a backlog:LineageArchiveEntry ; backlog:entryForLineage ?iri .
             FILTER (STR($this) = STR(?iri))
+            # Real gap, found 2026-09-18: the shape's own label says LIVE lineage, but the
+            # SPARQL never checked that -- it fired on the legitimately archived copy the entry
+            # itself points to, not only on a genuinely colliding new one. lineageArchived true
+            # is the real, checkable fact that distinguishes "this IS the archived original" from
+            # "this reuses its retired name" -- the same fact ArchivalConfirmationStatus now
+            # tracks explicitly for exactly this individual.
+            FILTER NOT EXISTS { $this backlog:lineageArchived true }
         }""" ] .
 
 backlog:InProgressNeedsStartedWorkShape a sh:NodeShape ;

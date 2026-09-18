@@ -9750,3 +9750,23 @@ against the exact case that broke it before being trusted again.
 **Disclosed, not yet built:** `backlog_archive_conformance` itself does not yet read this new
 status to skip already-confirmed lineages -- the mechanism now exists and is bootstrapped, but the
 tool that would benefit from it hasn't been wired to use it yet. Real, separate work, next.
+
+**A real, third bug found and fixed while checking the above.** Running the full-archive-context
+check for real surfaced `RetiredNameCollisionShape` firing on lineages that are the legitimate
+archived originals their own entries point to, not colliding new ones -- its own label says "a
+*live* lineage," but its SPARQL never actually checked that. Fixed: the shape now exempts any
+`Lineage` already carrying `lineageArchived true` -- the same fact `ArchivalConfirmationStatus`
+now tracks explicitly. Proven on a real fixture, both directions: a genuinely colliding case still
+fires; a legitimately archived one, given the identical IRI collision on paper, now correctly
+stays silent. Confirmed the real effect directly, not assumed: re-ran archive-conformance
+end to end, and the false-positive class this shape was causing is completely gone -- 288
+violations down to 273.
+
+**A second, different, real bug found while confirming the fix -- not yet root-caused, disclosed
+rather than guessed at.** The remaining 273 are dominated by a Done-item harness-completeness
+check firing even on this session's own Lineage 15 work, already validated clean elsewhere through
+`backlog_validate` moments earlier -- direct evidence this is a bug in how
+`backlog_archive_conformance` constructs its own validation graph, not a real defect in any
+content, historical or otherwise. Checked the first, obvious suspect (`advanced=True` mode) and
+it was already correctly set; the real cause needs proper tracing, not a rushed guess this deep
+into archive-integrity work. Real, separate work, next.
