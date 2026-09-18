@@ -9615,3 +9615,35 @@ transition workflow including this session's own new `Refined` state. `backlog_l
 correctly reports closure not yet eligible, names `Obj_Gov_GateBlocks` as the real bottleneck to
 close first, and shows `Obj_Gov_Contained` already met -- honestly, since nothing has touched an
 excluded concern yet.
+
+## v1.275.0 — 2026-09-17 (MINOR: GOV-S01 built, proven, and shipped -- the real release-item-accounting gate is live)
+
+**The real script.** `backlog_release_item_check_v1_0_0.py` -- compares a release's changed
+governed files against real backlog item movement in the same commit span, refusing unless
+something moved or the release explicitly declares itself unplanned work. Proven in an isolated
+scratch git repository, all four real paths correct: refuses on nothing moved, passes on real
+movement, passes trivially when nothing governed changed, passes on a declared reason.
+
+**Wired into the real gate** (`backlog_gate_v1_15_0.sh -> v1_16_0.sh`) as a genuine, hard,
+blocking step, immediately after version-freeze. Confirmed running correctly against the real
+package: found real movement (`GOV-S01`, `GOV-T01`: InProgress to Done) once the baseline tag was
+correctly resolved.
+
+**A real, separate bug found and fixed along the way, not related to this story's own scope:**
+this session's local git checkout had silently fallen behind the real published tags since
+`v1.270.0` -- every publish since had gone to the remote correctly, but the local clone never
+fetched the new tags back. That meant `version-freeze` and this new gate step were both silently
+checking against a four-release-old baseline. Fetched properly; both now resolve the real,
+current tag.
+
+**GOV-S01 and GOV-T01 marked Done, with real, bridge-verified evidence** -- caught and fixed
+several real gaps in the process: the correct harness-evidence property name, evidence needing a
+named tool and a real verification method, the acceptance criterion needing to name its own real
+artifact, and a genuinely useful catch -- an `ExecutionTask` needing its *own* evidence and
+harness, not inheriting its parent story's. The iteration's own declared two-week duration was
+corrected to its real, measured span once the work actually finished, and a real `DeploymentUnit`
+now links the iteration to what shipped.
+
+**Objective `Obj_Gov_GateBlocks` reached its target.** Confirmed live via `backlog_lineage_
+compass`: closure readiness now blocked by exactly one remaining objective, `Obj_Gov_
+DeliverablesBuilt` (1 of 3 built), not three.

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# backlog_gate v1.15.0 — four-gate release check for the Backlog & Roadmap
+# backlog_gate v1.16.0 — four-gate release check for the Backlog & Roadmap
 # Semantic Framework. Nothing about the package's state is trusted until all
 # four pass, and the SHACL gate refuses to certify anything until it has just
 # demonstrated, in this run, that it can fail a known-bad register.
@@ -553,6 +553,26 @@ if [ -n "$VFC" ] && [ -n "$REPO_ROOT" ] && [ -n "$LAST_TAG" ]; then
   python3 "$VFC" "$PKG" "$LAST_TAG" --repo-root "$REPO_ROOT" --package-prefix "$PREFIX" | sed 's/^/  /'
   python3 "$VFC" "$PKG" "$LAST_TAG" --repo-root "$REPO_ROOT" --package-prefix "$PREFIX" >/dev/null 2>&1 \
     || { echo "  Version-freeze gate FAILED"; FAILED=1; }
+else
+  echo "  NOT RUN — checker, repo root, or a prior published tag not found. Not assumed to pass."
+fi
+
+echo
+echo "== Release-item-accounting gate — does this release own the items it moved, or say it didn't? (GOV-S01) =="
+# A package can publish a release whose governed files genuinely changed while not one real
+# backlog item moved -- confirmed on automate-python-book-3e (fourteen real releases, zero item
+# movement) and, less formally, in this package's own earlier infra fixes. A hard, blocking gate:
+# refuses unless a real item moved in this span, or the release explicitly declares itself
+# unplanned work. RIC_UNPLANNED_REASON, set by the caller, is the escape hatch's current, minimal
+# form -- GOV-S02 gives it a real, checkable shape; this is not that story.
+RIC="$(ls "$HERE"/backlog_release_item_check_v*.py 2>/dev/null | sort -V | tail -1 || true)"
+if [ -n "$RIC" ] && [ -n "$REPO_ROOT" ] && [ -n "$LAST_TAG" ]; then
+  PREFIX="$(realpath --relative-to="$REPO_ROOT" "$PKG" 2>/dev/null || true)/"
+  RIC_ARGS=("$PKG" "$LAST_TAG" --repo-root "$REPO_ROOT" --package-prefix "$PREFIX")
+  [ -n "${RIC_UNPLANNED_REASON:-}" ] && RIC_ARGS+=(--unplanned-reason "$RIC_UNPLANNED_REASON")
+  python3 "$RIC" "${RIC_ARGS[@]}" | sed 's/^/  /'
+  python3 "$RIC" "${RIC_ARGS[@]}" >/dev/null 2>&1 \
+    || { echo "  Release-item-accounting gate FAILED"; FAILED=1; }
 else
   echo "  NOT RUN — checker, repo root, or a prior published tag not found. Not assumed to pass."
 fi
