@@ -9924,3 +9924,30 @@ gate-script filename dependencies beyond SHACL's own `provenByFixture` (`item_ti
 further real candidates remain in the fixtures directory.
 
 Live register confirmed clean throughout, at every batch, not only at the end.
+
+## v1.289.0 — 2026-09-21 (MINOR: two real handovers processed -- a stale registrant-deposit relocated, a real package-activation gap found and deferred with full evidence)
+
+**Unplanned work:** real, off-backlog handover processing, matching the same escape hatch every
+other governance fix this session has used.
+
+**HANDOVER_OE...relocate-registrant-deposit -- accepted, built.** A 33-file, 684KB snapshot of
+this package's own early registration-round submission, sitting stale in `oe-pack`'s own
+registrant-deposits folder roughly a hundred minor versions behind this package's own current
+work. Verified `oe-pack`'s own structured release-history already carries the durable record
+before relocating anything. Archived a full, faithful copy at
+`06-package-provenance/registrant-deposit-snapshot/`. `oe-pack`'s own copy deliberately left
+untouched -- not this session's package boundary to cross.
+
+**HANDOVER_fizyovibe...package-activation-not-gated-by-containerDependsOn -- deferred, evidence
+verified independently first.** A real, well-evidenced gap: `Package`'s own `derivedState` never
+checks `containerDependsOn` against the dependency's own state, confirmed by reading the actual
+rule and every shape targeting `Package`, and reproduced live on the reporting project's own
+register. Genuinely substantial design work, not a quick patch -- deferred with the real evidence
+preserved, not lost or minimized.
+
+**A real, important finding surfaced while processing these:** the same stale-local-HEAD root
+cause found earlier this session had *also* left this session's own `oe-method` checkout stale --
+this turn's own "ceremony" step had been reading `OE_Operating_Discipline_v2_8_1.md` all along,
+three real minor versions behind the actual current `v2_11_1.md`. Materialized the real, current
+file properly this time; checked its real content for anything targeting this package
+specifically -- none found, general ecosystem governance only.
