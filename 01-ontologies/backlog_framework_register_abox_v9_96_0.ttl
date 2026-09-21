@@ -14,8 +14,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.95.0> ;
-    owl:versionInfo "9.95.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.96.0> ;
+    owl:versionInfo "9.96.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.95.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.94.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.93.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.92.0> ;
@@ -3233,7 +3234,7 @@ fw:L_GovernanceMitigations a backlog:Lineage ; rdfs:label "Lineage 16: Governanc
     backlog:lineageOrdinal 16 ;
     backlog:lineageArchived false ;
     backlog:lineageForMission fw:Mission_GovernanceMitigations ;
-    backlog:hasLineageStatus backlog:LS_Backlogged ;
+    backlog:hasLineageStatus backlog:LS_InProgress ;
     backlog:hasLineageDepthLevel backlog:Depth_StoryDirect ;
     backlog:hasLineageArtifactDomain backlog:Domain_Infrastructure ;
     backlog:memberOfContainer fw:Register .
@@ -3361,15 +3362,44 @@ fw:Obs_GovMit_ContainedBaseline a backlog:MetricObservation ; rdfs:label "Baseli
     backlog:hasObservationMethod "Direct check: no commits made under this lineage yet." .
 
 fw:AC_GovMit_MetricMirror a backlog:AcceptanceCriterion ;
+    backlog:satisfiedByArtifact "02-shacl-safeguards/backlog_shacl_v1_127_0.ttl -- ObjectiveMetricMirrorShape" ;
     backlog:hasGherkinText "Given an objective reaches its target, When the objective is checked, Then it names which real item's movement actually moved it, not merely which items could have -- and if none did, the objective's own metricMovableBy items are flagged, not silently trusted." .
 fw:ST_GovMit_MetricMirror a backlog:Story ; backlog:hasIdentifier "GOVMIT-S01" ; backlog:hasTitle "The metricMovableBy mirror" ;
-    backlog:hasState backlog:Proposed ;
-    backlog:memberOfContainer fw:Register ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-09-21T00:00:00Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-09-21T01:00:00Z"^^xsd:dateTime ;
+    backlog:lastAuditedAt "2026-09-21T01:00:00Z"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_GovMit_Fires , fw:Ev_GovMit_Silent , fw:Ev_GovMit_HoldExempt , fw:Ev_GovMit_FullGate ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:memberOfContainer fw:Register , fw:It_GovMit_1 ;
     backlog:belongsToLineage fw:L_GovernanceMitigations ;
     backlog:pursuesObjective fw:Obj_GovMit_DeliverablesBuilt ;
     backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
     backlog:hasAcceptanceCriterion fw:AC_GovMit_MetricMirror ;
-    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "Backlog stage just opened, grooming pass not yet run." .
+    backlog:hasReach 1.0 ; backlog:hasImpact 3.0 ; backlog:hasConfidence 0.85 ; backlog:hasEffort 1.0 ;
+    backlog:hasPriorityScore 2.55 ;
+    backlog:hasNoApplicableConcern true ;
+    backlog:appliesDefinitionOfDone fw:DoD_GovMit_Infrastructure .
+fw:RE_GovMit_MetricMirror a backlog:RefinementEvent ; backlog:refines fw:ST_GovMit_MetricMirror ;
+    backlog:refinedAt "2026-09-21T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Real design: a pure register-content check, unlike GOV-S01/GOV-S02 which needed real git history -- this is answerable entirely from the register's own graph, so a SHACL shape, not a standalone script, matching how G97 checked lineage-level status lag. For any Objective whose latest real MetricObservation has reached or passed its target (respecting hasTargetDirection -- Increase means at or above, Decrease at or below, Hold means equal), the shape checks whether at least one of its metricMovableBy items has actually left Proposed. None having moved is the exact, real gap the handover named: an objective can read as met while its own plan was never touched." .
+fw:DoD_GovMit_Infrastructure a backlog:DefinitionOfDone ; rdfs:label "Definition of Done for Lineage 16's own infrastructure work"@en ;
+    backlog:hasDoDCriterion fw:DGovMit1 , fw:DGovMit2 , fw:DGovMit3 .
+fw:DGovMit1 a backlog:DoDCriterion ; rdfs:label "DGovMit1 -- the shape fires on a real, planted negative case"@en ;
+    backlog:hasCriterionText "A real, planted negative fixture -- an objective whose latest observation reaches target while every one of its metricMovableBy items stays Proposed -- is flagged." ;
+    backlog:hasCheckQuery "backlog_validate against a fixture built for exactly this case." ;
+    backlog:hasExpectedResult "a real violation on the objective" ;
+    backlog:hasCriterionStatus backlog:Holds .
+fw:DGovMit2 a backlog:DoDCriterion ; rdfs:label "DGovMit2 -- the shape stays silent on a real, planted positive case"@en ;
+    backlog:hasCriterionText "A real, planted positive fixture -- the same shape of objective, but at least one metricMovableBy item has genuinely left Proposed -- passes cleanly." ;
+    backlog:hasCheckQuery "backlog_validate against a fixture built for exactly this case." ;
+    backlog:hasExpectedResult "no violation on the objective" ;
+    backlog:hasCriterionStatus backlog:Holds .
+fw:DGovMit3 a backlog:DoDCriterion ; rdfs:label "DGovMit3 -- the full gate still passes once wired in"@en ;
+    backlog:hasCriterionText "backlog_validate against the real, live register still reports 0 real violations once the shape ships." ;
+    backlog:hasCheckQuery "backlog_validate against the real, current register." ;
+    backlog:hasExpectedResult "0 Violation" ;
+    backlog:hasCriterionStatus backlog:Holds .
 
 fw:AC_GovMit_BatchAdvisory a backlog:AcceptanceCriterion ;
     backlog:hasGherkinText "Given a real item outside any tracked batch leaves Proposed, When the batch-progress advisory runs, Then it reflects that movement -- not just the movement of items it happens to have a batch label for." .
@@ -3437,3 +3467,71 @@ fw:Out_Backlog_GovernanceMitigations a backlog:StageOutput ;
 fw:Blueprint_GovernanceMitigations a backlog:Blueprint ; backlog:blueprintFor fw:Register ;
     backlog:belongsToLineage fw:L_GovernanceMitigations ;
     backlog:hasRationale "Blueprint required at register level once any real lineage is live. This lineage's own domain is Infrastructure, not a modelled business domain with entities and life-cycle stages -- its real conceptual objects are an Objective (whether it names what moved it), a WorkItem outside any tracked batch, a cross-package satisfiedByArtifact link, and a Done item's own timestamp pair, none of which carry a client/practitioner-style life cycle a DomainEntity models. Recorded honestly as a minimal blueprint, matching the register-level requirement without inventing life-cycle stages this domain does not have -- the same real reasoning as Lineage 15's own blueprint." .
+
+fw:It_GovMit_1 a backlog:Iteration ; backlog:hasIdentifier "GOVMIT-IT1" ; backlog:hasTitle "Lineage 16, first real work window" ;
+    backlog:hasState backlog:Done ;
+    backlog:iterationStart "2026-09-21T00:00:00Z"^^xsd:dateTime ; backlog:iterationEnd "2026-09-21T01:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservedDuration "PT1H"^^xsd:duration ;
+    backlog:hasDurationSource "startedAt/finishedAt on GOVMIT-S01 and GOVMIT-T01, the only two real items this iteration held." ;
+    backlog:memberOfContainer fw:Register ; backlog:belongsToLineage fw:L_GovernanceMitigations .
+
+fw:Rel_GovMit_1 a backlog:DeploymentUnit ; backlog:hasIdentifier "GOVMIT-REL1" ; backlog:hasTitle "Lineage 16's first real release: GOVMIT-S01 shipped"@en ;
+    backlog:hasState backlog:Done ;
+    backlog:hasDeploymentDate "2026-09-21T01:00:00Z"^^xsd:dateTime ;
+    backlog:deploysFrom fw:It_GovMit_1 ; backlog:deploysItem fw:ST_GovMit_MetricMirror ;
+    backlog:decidedBy backlog:Owner ; backlog:hasSelectionBasis backlog:Sel_Committed .
+fw:ST_GovMit_MetricMirror backlog:memberOfContainer fw:Rel_GovMit_1 .
+
+fw:Plan_GovMit_MetricMirror a backlog:PlanningEvent ; rdfs:label "GOVMIT-S01 formally kicked off"@en ;
+    backlog:plansItem fw:ST_GovMit_MetricMirror ; backlog:plannedInto fw:It_GovMit_1 ;
+    backlog:plannedAt "2026-09-21T00:00:00Z"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:producesTask fw:T_GovMit_MetricMirror ;
+    backlog:hasRationale "The formal boundary between ordering this work and doing it." .
+fw:T_GovMit_MetricMirror a backlog:ExecutionTask ; backlog:hasIdentifier "GOVMIT-T01" ;
+    backlog:hasTitle "Build and prove the ObjectiveMetricMirrorShape"@en ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-09-21T00:00:00Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-09-21T01:00:00Z"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_GovMit_Task ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It_GovMit_1 ;
+    backlog:belongsToLineage fw:L_GovernanceMitigations ;
+    backlog:hasRationale "One real task, matching the whole of GOVMIT-S01's own scope." .
+
+fw:Ev_GovMit_Fires a backlog:Evidence , backlog:TestEvidence ; backlog:attestsCriterion fw:AC_GovMit_MetricMirror ;
+    backlog:hasTestId "Obj_NothingMoved" ;
+    backlog:evidenceVerified true ; backlog:verifiedByTool "backlog_validate_v1_6_0.py" ;
+    backlog:hasVerificationMethod "Real run against fixture_objective_metric_mirror_v1_0_0.ttl: an objective whose latest observation reaches target (5 >= 5, Dir_Increase) with both metricMovableBy items still Proposed. The new shape fired exactly the expected message; confirmed by direct grep of the real validator output." .
+fw:Ev_GovMit_Silent a backlog:Evidence , backlog:TestEvidence ; backlog:attestsCriterion fw:AC_GovMit_MetricMirror ;
+    backlog:hasTestId "Obj_OneMoved" ;
+    backlog:evidenceVerified true ; backlog:verifiedByTool "backlog_validate_v1_6_0.py" ;
+    backlog:hasVerificationMethod "Real run, same fixture: the identical shape of objective, but one metricMovableBy item genuinely Done. Confirmed silent on this shape -- no false positive once real movement exists." .
+fw:Ev_GovMit_HoldExempt a backlog:Evidence , backlog:TestEvidence ; backlog:attestsCriterion fw:AC_GovMit_MetricMirror ;
+    backlog:hasTestId "Obj_HoldExempt" ;
+    backlog:evidenceVerified true ; backlog:verifiedByTool "backlog_validate_v1_6_0.py" ;
+    backlog:hasVerificationMethod "Real run, same fixture: a Dir_Hold objective, at target from its own baseline, nothing moved. Confirmed silent -- a held metric reaching target trivially is not the real gap this shape exists to catch." .
+fw:Ev_GovMit_FullGate a backlog:Evidence , backlog:TestEvidence ;
+    backlog:hasTestSpec "backlog_validate_v1_6_0.py against the real, live register" ;
+    backlog:evidenceVerified true ; backlog:verifiedByTool "backlog_validate_v1_6_0.py" ;
+    backlog:hasVerificationMethod "Real run against the actual, current register: 0 Violation, confirming the new shape introduces no false positive anywhere in this package's own real content." .
+
+fw:H_GovMit_MetricMirror a backlog:TestHarness ; backlog:harnessFor fw:ST_GovMit_MetricMirror ;
+    backlog:hasHarnessEvidence fw:Ev_GovMit_Fires , fw:Ev_GovMit_Silent , fw:Ev_GovMit_HoldExempt , fw:Ev_GovMit_FullGate ;
+    backlog:hasRationale "Real run, this session: a dedicated fixture proving all three real cases -- fires on genuine non-movement, stays silent once real movement exists, stays silent on an exempt Dir_Hold objective -- plus a real check that the live register itself still passes clean." .
+fw:Ev_GovMit_Task a backlog:Evidence , backlog:TestEvidence ;
+    backlog:hasTestSpec "02-shacl-safeguards/backlog_shacl_v1_127_0.ttl -- ObjectiveMetricMirrorShape" ;
+    backlog:evidenceVerified true ; backlog:verifiedByTool "backlog_validate_v1_6_0.py" ;
+    backlog:hasVerificationMethod "Direct check: the shape exists in the real, current shapes file and produced the four real results recorded on its harness." .
+fw:H_GovMit_Task a backlog:TestHarness ; backlog:harnessFor fw:T_GovMit_MetricMirror ;
+    backlog:hasHarnessEvidence fw:Ev_GovMit_Task ;
+    backlog:hasRationale "The task's own harness, distinct from the story's." .
+
+fw:Obs_GovMit_AfterS01 a backlog:MetricObservation ; rdfs:label "One of four real deliverables now has a real, shipped artifact"@en ;
+    backlog:observesMetric fw:Metric_GovMit_MechanismsBuilt ; backlog:observationFor fw:Obj_GovMit_DeliverablesBuilt ;
+    backlog:hasObservedValue 1.0 ; backlog:observedAt "2026-09-21T01:05:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Direct check: ObjectiveMetricMirrorShape exists in the real, current shapes file, proven on a real fixture in all three directions." .
+fw:Obs_GovMit_GateAfterS01 a backlog:MetricObservation ; rdfs:label "One of four mechanisms now proven on a real fixture"@en ;
+    backlog:observesMetric fw:Metric_GovMit_GateStrength ; backlog:observationFor fw:Obj_GovMit_GateWorks ;
+    backlog:hasObservedValue 1.0 ; backlog:observedAt "2026-09-21T01:05:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Direct check: fixture_objective_metric_mirror_v1_0_0.ttl proves the fires/silent/exempt cases, all three confirmed correct." .

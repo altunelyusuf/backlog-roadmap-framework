@@ -1,0 +1,36 @@
+@prefix backlog: <http://example.org/backlog#> .
+@prefix ex:      <http://example.org/objective-metric-mirror#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+# fixture_objective_metric_mirror v1.0.0 -- NEGATIVE (with one deliberate positive case).
+#  Obj_NothingMoved  target reached (5 >= 5), both metricMovableBy items still Proposed -> fires.
+#  Obj_OneMoved       same shape, one metricMovableBy item genuinely Done -> stays silent.
+#  Obj_HoldExempt     Dir_Hold, at target from baseline, nothing moved -> stays silent (Hold is exempt).
+
+ex:S1_Untouched a backlog:Story ; backlog:hasState backlog:Proposed .
+ex:S2_Untouched a backlog:Story ; backlog:hasState backlog:Proposed .
+ex:S3_Moved a backlog:Story ; backlog:hasState backlog:Done .
+ex:S4_StillProposed a backlog:Story ; backlog:hasState backlog:Proposed .
+
+ex:Obj_NothingMoved a backlog:Objective ;
+    backlog:hasTargetValue 5.0 ; backlog:hasTargetDirection backlog:Dir_Increase ;
+    backlog:metricMovableBy ex:S1_Untouched , ex:S2_Untouched .
+ex:Obs_NothingMoved a backlog:MetricObservation ;
+    backlog:observationFor ex:Obj_NothingMoved ; backlog:hasObservedValue 5.0 ;
+    backlog:observedAt "2026-09-21T00:00:00Z"^^xsd:dateTime .
+
+ex:Obj_OneMoved a backlog:Objective ;
+    backlog:hasTargetValue 5.0 ; backlog:hasTargetDirection backlog:Dir_Increase ;
+    backlog:metricMovableBy ex:S3_Moved , ex:S4_StillProposed .
+ex:Obs_OneMoved a backlog:MetricObservation ;
+    backlog:observationFor ex:Obj_OneMoved ; backlog:hasObservedValue 5.0 ;
+    backlog:observedAt "2026-09-21T00:00:00Z"^^xsd:dateTime .
+
+ex:S5_NeverTouched a backlog:Story ; backlog:hasState backlog:Proposed .
+ex:Obj_HoldExempt a backlog:Objective ;
+    backlog:hasTargetValue 0.0 ; backlog:hasTargetDirection backlog:Dir_Hold ;
+    backlog:metricMovableBy ex:S5_NeverTouched .
+ex:Obs_HoldExempt a backlog:MetricObservation ;
+    backlog:observationFor ex:Obj_HoldExempt ; backlog:hasObservedValue 0.0 ;
+    backlog:observedAt "2026-09-21T00:00:00Z"^^xsd:dateTime .

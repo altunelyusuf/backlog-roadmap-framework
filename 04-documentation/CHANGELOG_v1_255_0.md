@@ -9849,3 +9849,28 @@ built or decided here, matching the real correction that those lineages were nev
 register's own scope to begin with.
 
 **Real, working properties found and used correctly this time, not guessed at** -- contributesToGoal, fillsScope, hasSuccessMetric, hasMeasurementKind, hasTargetDirection, hasCheckpoint, consumesOutput, requiresDeliverable, hasScopeExclusion -- checked directly against Lineage 15's own real, sealed archive before writing a single triple, the same discipline this whole framework asks of everything else.
+
+## v1.286.0 — 2026-09-21 (MINOR: GOVMIT-S01 built, proven, shipped -- the first of four real handover mitigations, ObjectiveMetricMirrorShape)
+
+**The real gap, closed as a SHACL shape, not a script** -- unlike GOV-S01/GOV-S02, this needed no
+git history, purely a register-content question: `ObjectiveMetricMirrorShape` fires when an
+objective's own latest observation has reached its target while every one of its declared
+`metricMovableBy` items is still `Proposed`. `metricMovableBy` records what COULD move a metric;
+this is the first real check for what DID.
+
+**Proven on three real, deliberate cases, not two** -- the third specifically testing the one
+real exemption this mechanism needs: a genuine non-movement case fires; the same shape of
+objective with one item truly `Done` stays silent; a `Dir_Hold` objective at target from its own
+baseline stays silent too, since a held metric trivially meeting target is not the gap this shape
+exists to catch. All three run for real against a dedicated fixture before anything shipped, and
+the live register itself re-confirmed clean afterward.
+
+**GOVMIT-S01 and GOVMIT-T01 marked Done, with real, complete evidence** -- applied every real
+correction learned from GOV-S01's own build: the right harness-evidence property from the start,
+evidence naming its tool and method, the acceptance criterion naming its own real artifact, the
+task's own separate evidence and harness. A real `DeploymentUnit` connects the iteration to what
+shipped.
+
+**Three of four real mitigations remain**: the batch-advisory generalisation, the
+`satisfiedByArtifact` package boundary, and the fabricated-timestamp constraint -- the one already
+flagged as needing the most design care before a build decision.
