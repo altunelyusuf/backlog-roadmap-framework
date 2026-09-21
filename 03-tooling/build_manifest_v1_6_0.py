@@ -73,9 +73,25 @@ def main():
     version = open(os.path.join(PKG, "VERSION.txt")).read().strip()
     note = sys.argv[1] if len(sys.argv) > 1 else "Release build."
     lines = ["# backlog-roadmap-framework v%s — SHA-256 Manifest" % version,
-             "# Built by build_manifest_v1_4_0.py. %s" % note, ""]
-    for name, why in EXEMPT.items():
-        lines.append("# EXEMPT %s — %s" % (name, why))
+             "# Built by build_manifest_v1_5_0.py. %s" % note, ""]
+    exempt_paths = []
+    for dirpath, dirs, files in os.walk(PKG):
+        dirs[:] = sorted(d for d in dirs if d != "__pycache__")
+        for f in sorted(files):
+            if f in EXEMPT:
+                full = os.path.join(dirpath, f)
+                exempt_paths.append(os.path.relpath(full, PKG))
+    # Real bug found and fixed here, 2026-09-21: this used to write one exemption line per
+    # EXEMPT dict KEY (a bare basename), regardless of how many real files on disk actually
+    # carried that name at different paths -- correct for hashing (basename match skips every
+    # instance), wrong for declaring, since the separate coverage tool matches exemptions by
+    # full relative path. Caught when 06-package-provenance/registrant-deposit-snapshot's own
+    # archived RELEASE_METRICS.txt (a second, real file sharing a name with the live one at the
+    # package root) was reported as uncovered and unexplained despite the name being exempt.
+    # Now writes one real, path-qualified exemption line per actual match found on disk.
+    for rel in sorted(exempt_paths):
+        base = os.path.basename(rel)
+        lines.append("# EXEMPT %s — %s" % (rel, EXEMPT[base]))
     lines.append("")
     for dirpath, dirs, files in os.walk(PKG):
         dirs[:] = sorted(d for d in dirs if d != "__pycache__")
@@ -88,7 +104,7 @@ def main():
                                             rel, os.path.getsize(full)))
     open(os.path.join(PKG, "MANIFEST_SHA256.txt"), "w").write("\n".join(lines) + "\n")
     print("manifest: %d files, %d declared exemption(s), version %s"
-          % (len(lines) - 4 - len(EXEMPT), len(EXEMPT), version))
+          % (len(lines) - 4 - len(exempt_paths), len(exempt_paths), version))
 
 if __name__ == "__main__":
     main()

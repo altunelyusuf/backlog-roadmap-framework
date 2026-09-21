@@ -9951,3 +9951,20 @@ this turn's own "ceremony" step had been reading `OE_Operating_Discipline_v2_8_1
 three real minor versions behind the actual current `v2_11_1.md`. Materialized the real, current
 file properly this time; checked its real content for anything targeting this package
 specifically -- none found, general ecosystem governance only.
+
+## v1.290.0 — 2026-09-21 (PATCH: a real, genuine manifest-coverage gap found and fixed at its source -- exemption declarations were basename-only, not path-aware)
+
+**Unplanned work:** the real publish attempt for the handover-processing release found a genuine
+gap, not a false alarm: `06-package-provenance/registrant-deposit-snapshot/RELEASE_METRICS.txt`
+-- the archived deposit's own real file, sharing a name with this package's own live
+`RELEASE_METRICS.txt` -- was reported as uncovered and unexplained by the manifest-coverage gate,
+despite that basename already being a declared exemption.
+
+**Root-caused precisely, not patched around.** `build_manifest`'s own exemption-declaration logic
+wrote exactly one `# EXEMPT` line per dict key, regardless of how many real files on disk shared
+that basename at different paths -- correct for the hashing skip (basename match), wrong for the
+declaration the separate coverage tool actually reads (full relative path match). Fixed at the
+source: now walks the tree once, finds every real file matching an exempt basename, and writes
+one real, path-qualified exemption line per actual match. `build_manifest_v1_5_0.py ->
+v1_6_0.py`. Confirmed directly: `backlog_manifest_coverage` now reports `PASS — every file is
+hashed or explained`, 6 real exemptions instead of 5.
