@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v68.0.0
+# Lineage Operating Discipline — v69.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -2837,3 +2837,61 @@ observation, not yet a decision. Whether they should be reviewed and promoted de
 known, disclosed, era-appropriate differences, or held to a stricter bar, is a real, separate
 call for the owner. `backlog_archive_conformance` stays advisory until that's made -- the tool
 itself is no longer the reason.
+
+## G99 — Technical-debt and maintenance work may proceed as a planned task set, without opening a Lineage, once a real ceremony gap was found rather than assumed away
+
+The owner's own real challenge, 2026-09-21: why does the fixture count keep growing, why does
+every gate re-warm touch all of it, and why hasn't this package used the same configuration
+management the wider OE ecosystem already applies. Checked directly rather than argued from
+principle: `oe-method`'s own most mature subject (governing hundreds of shapes across reliability,
+quality and core) holds three real fixture records total. This package holds seventy-five,
+one per shape, and none of the fixture files are stale duplicates -- the growth is real content,
+not cruft, but the *pattern* is a genuine drift from the ecosystem's own established one TBox,
+one ABox, one SHACL file convention.
+
+**The real, second finding, checked rather than assumed:** the memo key that makes re-validation
+fast hashes the entire shapes file alongside every fixture being checked. Seventy-five separate
+fixture files means seventy-five separate cache entries, all invalidated together by a single new
+shape -- the actual mechanism behind every fifteen-to-twenty-minute re-warm this session has paid,
+repeatedly, on stories smaller than the fix itself.
+
+**Owner's ruling: prioritize the fix, and do not force it through the full lineage ceremony.**
+Checked first, not assumed: no WorkItem in this package's own history has ever proceeded without
+a full Mission-through-Backlog chain, regardless of `InvestmentCategory` -- `Cat_TechnicalDebt`
+and `Cat_Maintenance` already existed as real individuals, but nothing gave them a lighter track.
+That is a real gap, not an existing, unused mechanism.
+
+**The real distinction that licenses this.** A Lineage's own ceremony -- Mission, Scope, Goals,
+Objectives, RICE-scored Backlog -- exists to track work whose *outcome* is genuinely uncertain:
+a Goal states what success would even mean, an Objective measures approach to it, because without
+that scaffolding progress cannot be told from motion. Fixture consolidation has no such
+uncertainty: the outcome is well-defined before a single file moves -- fewer files, every real
+case still proven, the gate genuinely faster -- and forcing Goals and Objectives onto a
+well-defined outcome would manufacture uncertainty that was never real, the same shape of
+dishonesty this package's own `ScopeExclusion` and `RetrospectiveFinding` disciplines exist to
+prevent elsewhere.
+
+**What does NOT relax, precisely because the ceremony is what's being skipped, not the rigor
+the ceremony protects.** Real design, checked against the actual current structure before
+writing a line. Every consolidated fixture proven to still fire its real cases, positive and
+negative, the same as any shape ever built here -- a migration that cannot show its own proof
+is not a migration, it is a hope. Real disclosure of what moved and why, in a real, versioned
+changelog entry, the same honesty this whole package has held itself to throughout.
+
+**A real correction, caught before this ruling shipped rather than after: `belongsToLineage` is
+not optional.** Tested directly, not assumed from the earlier draft of this ruling: a `Story`
+with no `belongsToLineage` fails immediately -- "this work item belongs to no lineage, so
+nothing can say which archive it goes to when its lineage finishes," the exact 297-constraint
+failure this package's own archival tooling was built to prevent. The same test showed advancing
+some real Objective is equally mandatory, directly or through a container. Skipping the Lineage
+entirely is therefore not structurally available, and this ruling does not claim otherwise.
+
+**What this ruling actually licenses is a minimal Lineage, not a Lineage-free WorkItem.** Tested
+the same way: `Scope` is equally mandatory -- a `Goal` with no `derivesFromScope` and an
+`Objective` with no `fillsScope` both fail. All five real stages stay: Mission (why this work
+exists), Scope (one real boundary statement, one real exclusion if any apply), Goal, Objective
+(one each, not three-facing), Backlog. Compressed, not skipped -- terse content per stage where
+the work is a single, well-defined technical fix, and no RICE-scored priority debate the work
+doesn't need. Still real, still checked, still `belongsToLineage` and the objective chain intact
+throughout -- the ceremony's *weight* is what this ruling reduces, not the structural facts the
+ontology itself requires for good reason.
