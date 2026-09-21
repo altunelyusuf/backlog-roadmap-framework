@@ -4,6 +4,10 @@
 @prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
 @prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix crossprojectco: <http://example.org/committest#> .
+@prefix fw: <http://example.org/backlog-framework-register#> .
+@prefix findingdisposi: <http://example.org/finding-disposition#> .
+@prefix moderecurrence: <http://example.org/recurrencetest#> .
 
 # Positive fixture: a minimal register that claims conformance level L3
 # and must validate with ZERO sh:Violation results. Paired with
@@ -1169,3 +1173,126 @@ ex:Obs_Q3_Close a backlog:MetricObservation ;
 ex:PA_Manifest backlog:manifestDigestCarriedBy "RELEASE_METRICS.txt" .
 # v1.10.0 (2026-09-09): lineage status stated (TBox v1.89.0, LineageStatusShape); derived from the fixture's own outputs and item states.
 ex:Lin1 backlog:hasLineageStatus backlog:LS_InProgress .
+
+
+# --- merged from fixture_cross_project_commit_v1_1_0.ttl (crossprojectco) ---
+# Cross-project commit safety — test drive, not a construction.
+#
+# Proves CrossProjectCommitAdvisoryShape decides declaratively, via SPARQL
+# STRSTARTS against fw:Register's own real hasSovereignPathPrefix, with no
+# Python judgement about whether a remote commit is safe.
+#
+# RC_Unrelated: touches only a path outside the sovereign prefix -> silent.
+# RC_Real: touches a path under the sovereign prefix -> fires.
+# RC_Mixed: touches one unrelated path and one real path -> fires (any
+#   touch under the prefix is enough).
+
+
+fw:Register backlog:hasSovereignPathPrefix "backlog-roadmap-framework/" .
+
+crossprojectco:RC_Unrelated a backlog:RemoteCommit ; backlog:touchesPath "agentic-sdlc/foo.ttl" .
+
+crossprojectco:RC_Real a backlog:RemoteCommit ; backlog:touchesPath "backlog-roadmap-framework/VERSION.txt" .
+
+crossprojectco:RC_Mixed a backlog:RemoteCommit ; backlog:touchesPath "agentic-sdlc/bar.ttl" ,
+    "backlog-roadmap-framework/01-ontologies/backlog_tbox_v1_1_0.ttl" .
+
+# v1.1.0 (2026-09-07) -- expected polarity declared on the fixture itself (TBox v1.82.0
+# dropped the AdoptionProfile-only domain): Positive, because the shape(s) it proves are advisory (Warning); it must validate with no Violation.
+# Until now the gate inferred 'expected pass' from this filename and had no way to be right.
+<http://example.org/committest#> backlog:hasExpectedPolarity backlog:Polarity_Positive .
+
+# --- merged from fixture_finding_disposition_v1_0_0.ttl (findingdisposi) ---
+# fixture_finding_disposition v1.0.0 -- POSITIVE (2026-09-09). Three well-formed dispositions, one
+# per non-default kind. The nodes a finding fired on are stand-ins (BacklogConcept), because a real
+# Story would trip the item rules this fixture is not about: a known error (cause documented, not remediable, prevented and monitored),
+# an accepted risk (a real risk retained, monitored, reviewed), an observation (no rule exists yet).
+# Expected: 0 violations from the disposition shapes.
+findingdisposi:Node1 a backlog:BacklogConcept ; rdfs:label "stand-in for the story a finding fired on"@en .
+findingdisposi:Node2 a backlog:BacklogConcept ; rdfs:label "stand-in for the oversized story"@en .
+findingdisposi:Node3 a backlog:BacklogConcept ; rdfs:label "stand-in for the intent element"@en .
+findingdisposi:FR_KnownError a backlog:FindingRecord ;
+    backlog:findingFromShape "StoryTestAnalysisShape" ; backlog:findingOnNode findingdisposi:Node1 ;
+    backlog:hasDisposition backlog:Disp_KnownError ; backlog:decidedBy backlog:Owner ;
+    backlog:hasFindingScope backlog:Scope_Methodology ;
+    backlog:hasRootCause "The rule requiring a test case per Done story was written after this story closed." ;
+    backlog:dispositionRationale "Root cause: the obligation post-dates the work. The story is Done and its iteration closed; writing test cases now would attach evidence to work nobody re-ran, which is reinventing the state rather than recording it." ;
+    backlog:preventiveMechanism "The rule now binds every story that leaves Proposed after the release that shipped it; no future story can close this way." ;
+    backlog:monitoredBy "backlog_release_metrics prints the count of pre-rule Done stories each release; re-read at the next lineage review." ;
+    backlog:dispositionReviewDue "2027-01-01T00:00:00Z"^^xsd:dateTime .
+findingdisposi:R1 a backlog:Risk ; rdfs:label "carry-over risk"@en .
+findingdisposi:FR_RiskAccepted a backlog:FindingRecord ;
+    backlog:findingFromShape "OversizedStoryAdvisoryShape" ; backlog:findingOnNode findingdisposi:Node2 ;
+    backlog:hasDisposition backlog:Disp_RiskAccepted ; backlog:decidedBy backlog:Owner ;
+    backlog:hasFindingScope backlog:Scope_LineageLocal ;
+    backlog:hasRootCause "The story's estimate exceeds the iteration capacity by one point." ;
+    backlog:dispositionRationale "Consequence retained: the story may carry over. Splitting it would separate two changes that must ship together." ;
+    backlog:hasRisk findingdisposi:R1 ;
+    backlog:monitoredBy "Iteration review: if it carries over twice, it is split." ;
+    backlog:dispositionReviewDue "2027-01-01T00:00:00Z"^^xsd:dateTime .
+findingdisposi:FR_Observation a backlog:FindingRecord ;
+    backlog:findingFromShape "SessionDraftedIntentAdvisoryShape" ; backlog:findingOnNode findingdisposi:Node3 ;
+    backlog:hasDisposition backlog:Disp_Observation ; backlog:decidedBy backlog:Owner ;
+    backlog:hasFindingScope backlog:Scope_Methodology ;
+    backlog:hasRootCause "A session drafted this intent element rather than the owner stating it." ;
+    backlog:dispositionRationale "No rule forbids session-drafted intent; the obligation that would make this a nonconformity has not been written, and writing it is backlog work." ;
+    backlog:monitoredBy "Counted in the release metrics; revisited when the intent-origin rule is written." ;
+    backlog:dispositionReviewDue "2027-01-01T00:00:00Z"^^xsd:dateTime .
+<http://example.org/finding-disposition#> backlog:hasExpectedPolarity backlog:Polarity_Positive .
+# v1.12.0 (2026-09-21, G99 batch): merged fixture_cross_project_commit and
+# fixture_finding_disposition, each keeping its own distinct namespace prefix. Real cases
+# reverified: RC_Real/RC_Mixed fire, RC_Unrelated stays silent; the three real dispositions
+# (KnownError, RiskAccepted, plus the third kind) stay clean, matching this file's own
+# 0-violation polarity throughout.
+
+
+# --- merged from fixture_mode_recurrence_v1_1_0.ttl (moderecurrence) ---
+# Lineage-local mode recurrence — test drive, not a construction.
+#
+# Proves discrimination for LineageLocalModeRecurrenceAdvisoryShape, the
+# real evidence-based signal for promotion this session's own G63/G65
+# named but never built: not a fixed count on failures (the mistake G62
+# already corrected), a count on genuine reuse of the same lineage-local
+# catalogue entry.
+#
+# FM_UsedOnce: Scope_LineageLocal, exactly one RetrospectiveFinding typed
+#   against it -> silent (proven once, not yet shown to recur).
+# FM_UsedTwice: Scope_LineageLocal, two distinct RetrospectiveFindings
+#   typed against it -> fires.
+# FM_MethodologyReused: Scope_Methodology, two distinct findings typed
+#   against it -> silent (already shared; nothing to promote).
+
+
+moderecurrence:FM_UsedOnce a backlog:FailureMode ; backlog:hasModeScope backlog:Scope_LineageLocal .
+moderecurrence:Find_Once a backlog:RetrospectiveFinding ; backlog:hasFailureMode moderecurrence:FM_UsedOnce ;
+    backlog:hasFindingScope backlog:Scope_LineageLocal ;
+    backlog:hasRootCause "Fixture-only: a single, real occurrence." .
+
+moderecurrence:FM_UsedTwice a backlog:FailureMode ; backlog:hasModeScope backlog:Scope_LineageLocal .
+moderecurrence:Find_Twice1 a backlog:RetrospectiveFinding ; backlog:hasFailureMode moderecurrence:FM_UsedTwice ;
+    backlog:hasFindingScope backlog:Scope_LineageLocal ;
+    backlog:hasRootCause "Fixture-only: first real occurrence." .
+moderecurrence:Find_Twice2 a backlog:RetrospectiveFinding ; backlog:hasFailureMode moderecurrence:FM_UsedTwice ;
+    backlog:hasFindingScope backlog:Scope_LineageLocal ;
+    backlog:hasRootCause "Fixture-only: second real occurrence -- the recurrence." .
+
+moderecurrence:FM_MethodologyReused a backlog:FailureMode ; backlog:hasModeScope backlog:Scope_Methodology .
+moderecurrence:Find_Method1 a backlog:RetrospectiveFinding ; backlog:hasFailureMode moderecurrence:FM_MethodologyReused ;
+    backlog:hasFindingScope backlog:Scope_Methodology ;
+    backlog:hasRootCause "Fixture-only: already shared, first use." .
+moderecurrence:Find_Method2 a backlog:RetrospectiveFinding ; backlog:hasFailureMode moderecurrence:FM_MethodologyReused ;
+    backlog:hasFindingScope backlog:Scope_Methodology ;
+    backlog:hasRootCause "Fixture-only: already shared, second use -- nothing to promote." .
+
+# v1.1.0 (2026-09-07) -- expected polarity declared on the fixture itself (TBox v1.82.0
+# dropped the AdoptionProfile-only domain): Positive, because the shape(s) it proves are advisory (Warning); it must validate with no Violation.
+# Until now the gate inferred 'expected pass' from this filename and had no way to be right.
+<http://example.org/recurrencetest#> backlog:hasExpectedPolarity backlog:Polarity_Positive .
+
+
+# v1.13.0 (2026-09-21, G99 batch continued): fixture_progress was merged, then reverted -- its
+# own real test purpose requires an independent isConformanceGoal claim that cannot coexist with
+# this file's existing one once in the same graph, a genuine structural incompatibility, not a
+# bug. Restored as its own standalone file rather than compromised. fixture_mode_recurrence's
+# merge stands. Two real hasIdentifier collisions (T-1, T-2, colliding with this file's own
+# pre-existing ResetToken/ResetMail tasks) found and fixed with distinguishing suffixes.

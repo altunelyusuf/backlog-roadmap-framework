@@ -9880,3 +9880,47 @@ flagged as needing the most design care before a build decision.
 **Unplanned work:** the real publish attempt found two genuine issues, neither in the register's own content: fixture_objective_metric_mirror_v1_0_0.ttl never declared hasExpectedPolarity, and this session's own local git HEAD had drifted eleven real releases behind the actual remote tip (v1.274.0 while the remote was at v1.285.0) -- tags were being fetched correctly all along, but the branch pointer itself never advanced, causing lineage-order to correctly report Lineage 16's own real, valid closedAtCommit tags as unwitnessed. Fixed: fixture polarity declared; local HEAD fast-forwarded to the real remote tip, working tree preserved exactly.
 
 **G99, a real ruling on process weight, checked before it shipped rather than after.** The owner's own real challenge: why does the fixture count keep growing (75 files, none stale -- confirmed directly), why does every re-warm touch all of it (the memo key hashes the entire shapes file, so one new shape invalidates all 75 fixtures' cache entries at once), and why hasn't this package used the same configuration management the wider OE ecosystem already applies (confirmed directly: oe-method's own most mature subject holds three fixture records total, not one per shape). Ruling: technical-debt and maintenance work (Cat_TechnicalDebt/Cat_Maintenance) may proceed as a minimal Lineage rather than a full one -- one Goal, one Objective, terse Scope, no RICE debate -- but not Lineage-free: tested directly first, not assumed, that belongsToLineage and a real objective chain (through Scope) are structurally mandatory, and the ruling's own first draft claiming otherwise was caught and corrected before publishing. Real testing and disclosure discipline stays exactly as strict as any lineage work -- the ceremony's weight is what this reduces, not its rigor.
+
+## v1.288.0 — 2026-09-21 (MINOR: G99 fixture consolidation -- 46 of 66 real fixtures merged into the canonical positive/negative trio, manifest cut from 217 to 171 files)
+
+**Unplanned work:** real, off-backlog technical-debt work under G99's own lighter track, not tracked
+by any Story. The owner's own challenge, tested rather than assumed correct at every step.
+
+**46 real, standalone fixture files consolidated** into `fixture_positive`/`fixture_negative`, each
+merged fixture keeping its own distinct namespace prefix to guarantee no subject collision. Every
+real, distinguishing case reverified firing (or correctly staying silent) after each merge, not
+assumed -- including this session's own recent `RetiredNameCollisionShape` cases
+(`L_Reused`/`L_ArchivedSelf`).
+
+**Three real, genuine bug classes found and fixed, not smoothed over:**
+1. A prefix-truncation collision (`fixture_corrective_action` vs `_measured`, both truncating to
+   the same 14-char prefix) -- would have silently corrupted data via Turtle's last-prefix-wins
+   behavior. Fixed, then the merge tooling itself was fixed to detect this class automatically.
+2. A second, subtler indexing bug in that same fix, caught by a parse failure on the very next
+   real use -- rewritten to resolve collisions by content lookup, not fragile list-position
+   alignment.
+3. A systemic gap: renaming subject IRIs does nothing to protect against colliding
+   `hasIdentifier` STRING VALUES across merged fixtures. Found and fixed **eleven** genuine,
+   accidental collisions (`T-1`, `T-2`, `S-1`, `E-1`, `BL`, `BL-NEG`, `BL-POS`, `T-BARE`, `S-OK`,
+   `T-D`, `IT-1`) across multiple batches -- each traced to its real source before fixing, and one
+   apparent duplicate (`N-001`) correctly identified as the file's own *intentional* planted
+   defect and left untouched.
+
+**A real, structural limit found and respected, not forced past.** Every large "full register
+scenario" fixture (a whole Mission-through-Deployment chain in one file) declares its own
+`isConformanceGoal true` -- checked directly across all remaining candidates before attempting
+further merges, not discovered by repeated trial and error. Two real instances
+(`fixture_progress`, then `fixture_l4_conformant`) were merged and reverted before this pattern
+was recognized and confirmed system-wide; `fixture_progress`'s original content was recovered
+from git history and restored exactly, not reconstructed from memory.
+
+**What remains standalone, permanently, for real reasons:** seven fixtures with direct
+gate-script filename dependencies beyond SHACL's own `provenByFixture` (`item_tie`,
+`lineage_bypass_negative`, `lineage_restart`, `lineage_thrash`/`_negative`,
+`recovery_strategy`/`_negative`); nine with the genuine `isConformanceGoal` incompatibility
+(`progress`, `l4_conformant`, `scope_first`, `sdlc_obligations`, `staged_lineage`, `tied_gates`,
+`lineage_status`, `r3_disagreement`, `pipeline`); one tied to this lineage's own still-open work
+(`objective_metric_mirror`). The merge phase is complete -- checked directly, not assumed: no
+further real candidates remain in the fixtures directory.
+
+Live register confirmed clean throughout, at every batch, not only at the end.
