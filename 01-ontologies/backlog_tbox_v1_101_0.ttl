@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.100.0> ;
-    owl:versionInfo "1.100.0" ;
+    owl:versionIRI <http://example.org/backlog/1.101.0> ;
+    owl:versionInfo "1.101.0" ;
+    owl:priorVersion <http://example.org/backlog/1.100.0> ;
     owl:priorVersion <http://example.org/backlog/1.99.0> ;
     owl:priorVersion <http://example.org/backlog/1.98.0> ;
     owl:priorVersion <http://example.org/backlog/1.97.0> ;
@@ -7280,6 +7281,12 @@ backlog:Profile_FullChain_Ontology a backlog:LineageProfile ;
     backlog:forDepthLevel backlog:Depth_FullChain ; backlog:forArtifactDomain backlog:Domain_Ontology ;
     backlog:requiresEpicDecomposition false ; backlog:requiresObligationSetAdoption false ;
     skos:definition "The first real profile, named from a complete, closed, checked case rather than a guessed template: Lineage 9 (L_SDLCObligations), backlog-roadmap-framework's own SDLC-obligations lineage. Verified directly against its real, sealed archive before writing any requirement here: full five-stage Mission-through-Backlog chain, one commit per stage; a real RICE-scored backlog; Story decomposed directly to ExecutionTask with no Epic layer at any point (0 Epics belonging to the lineage); no adoptsObligationSet ever declared on the lineage itself. Register-level RuleSets (RS_LabelConvention, RS_LineageStatus) applied throughout, but those bind the whole register, not this profile specifically, and are not claimed as part of it."@en .
+
+backlog:Profile_StoryDirect_Infrastructure a backlog:LineageProfile ;
+    rdfs:label "Story-direct, infrastructure work"@en ;
+    backlog:forDepthLevel backlog:Depth_StoryDirect ; backlog:forArtifactDomain backlog:Domain_Infrastructure ;
+    backlog:requiresEpicDecomposition false ; backlog:requiresObligationSetAdoption false ;
+    skos:definition "The second real profile, minted the same way as the first, and late: Lineage 15 (L_GovernanceContinuation) ran as its declared first instance from the moment its Mission was opened, but the profile individual itself was never actually built -- only discussed in commentary. Corrected here, verified directly against the lineage's own real, sealed archive rather than trusted from memory: full five-stage Mission-through-Backlog chain; a real, RICE-scored backlog of three Stories, one Cancelled honestly once its own acceptance criterion turned out already satisfied by a sibling story's work, decomposed directly to ExecutionTask with no Epic layer at any point (0 Epics belonging to the lineage); no adoptsObligationSet ever declared on the lineage itself. Fits a small, real, infrastructure-facing mission whose own scope is exhausted by a handful of stories -- a hard-blocking release gate, a tooling fix, a mechanism -- not a large content-production or cross-package effort. Available now for the next lineage of this same shape to declare directly, rather than reinvent." .
 
 #################################################################
 #  v1.100.0 -- PER-LINEAGE ARCHIVAL CONFIRMATION. Owner's own instruction, 2026-09-18: an archived
