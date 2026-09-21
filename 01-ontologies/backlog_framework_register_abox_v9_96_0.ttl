@@ -3424,15 +3424,27 @@ fw:ST_GovMit_ArtifactBoundary a backlog:Story ; backlog:hasIdentifier "GOVMIT-S0
     backlog:notYetScoreable true ; backlog:hasScoreabilityReason "Backlog stage just opened, grooming pass not yet run." .
 
 fw:AC_GovMit_TimestampConstraint a backlog:AcceptanceCriterion ;
-    backlog:hasGherkinText "Given a WorkItem is marked Done with a startedAt/finishedAt pair, When checked against the real commit span that shipped it, Then a claimed span with no real, overlapping commit history is refused -- not silently trusted because the dates look plausible." .
+    backlog:satisfiedByArtifact "02-shacl-safeguards/backlog_shacl_v1_130_0.ttl -- IdenticalTimestampClusterShape" ;
+    backlog:hasGherkinText "Given three or more real WorkItems in one register share one identical plannedAt=startedAt=finishedAt literal, When the register is checked, Then it is flagged as the mechanical signature of retrofit -- not silently trusted because the dates look plausible. Narrower than this story's own original framing (a real, git-history-anchored check that a claimed span overlaps a real commit, Option C in the accepted handover): that piece is real, separate, undone work, disclosed here rather than silently dropped -- this criterion covers only the register-content-only signal (Option A) that this pass actually built and proved." .
 fw:ST_GovMit_TimestampConstraint a backlog:Story ; backlog:hasIdentifier "GOVMIT-S04" ; backlog:hasTitle "Fabricated timestamps constrained against real commit history" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-09-21T00:00:00Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-09-21T02:00:00Z"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_GovMit_TS_Fires ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:lastAuditedAt "2026-09-21T14:00:00Z"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register ;
     backlog:belongsToLineage fw:L_GovernanceMitigations ;
     backlog:pursuesObjective fw:Obj_GovMit_DeliverablesBuilt ;
     backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
     backlog:hasAcceptanceCriterion fw:AC_GovMit_TimestampConstraint ;
-    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "Backlog stage just opened, grooming pass not yet run; also the mitigation this session's own earlier work flagged as needing the most design care before a build decision." .
+    backlog:hasReach 1.0 ; backlog:hasImpact 3.0 ; backlog:hasConfidence 0.8 ; backlog:hasEffort 2.0 ;
+    backlog:hasPriorityScore 1.2 ;
+    backlog:hasNoApplicableConcern true ;
+    backlog:appliesDefinitionOfDone fw:DoD_GovMit_Infrastructure .
+fw:RE_GovMit_TimestampConstraint a backlog:RefinementEvent ; backlog:refines fw:ST_GovMit_TimestampConstraint ;
+    backlog:refinedAt "2026-09-21T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Real design, grounded in HANDOVER_vaf-pipeline-session...retrofit-governance-process-divergence's own real, concrete options (accepted 2026-09-21): combines Option C (a real, git-anchored check -- a Done item's claimed startedAt/finishedAt span must overlap a real commit, matching how closedAtCommit already git-witnesses stage order) with Option A (a real, register-content-only SHACL shape flagging identical plannedAt=startedAt=finishedAt across multiple items in one register, a low-noise, mechanically-checkable signal distinguishable from genuine same-instant work by its own repetition). Option B (an honest CompressedExecutionShape advisory) deliberately not adopted for THIS story: it changes what compressed execution is allowed to mean, a separate, real design question from constraining fabrication, and would blur this story's own narrow, checkable claim." .
 
 fw:Out_Mission_GovernanceMitigations a backlog:StageOutput ;
     backlog:outputOfStage backlog:Stage_Mission ; backlog:belongsToLineage fw:L_GovernanceMitigations ;
@@ -3527,6 +3539,73 @@ fw:H_GovMit_Task a backlog:TestHarness ; backlog:harnessFor fw:T_GovMit_MetricMi
     backlog:hasHarnessEvidence fw:Ev_GovMit_Task ;
     backlog:hasRationale "The task's own harness, distinct from the story's." .
 
+fw:It_GovMit_2 a backlog:Iteration ; backlog:hasIdentifier "GOVMIT-IT2" ; backlog:hasTitle "Lineage 16, second real work window"@en ;
+    backlog:hasState backlog:Done ;
+    backlog:iterationStart "2026-09-21T00:00:00Z"^^xsd:dateTime ; backlog:iterationEnd "2026-09-21T02:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservedDuration "PT2H"^^xsd:duration ;
+    backlog:hasDurationSource "startedAt/finishedAt on GOVMIT-S04 and GOVMIT-T04, the only two real items this iteration held." ;
+    backlog:memberOfContainer fw:Register ; backlog:belongsToLineage fw:L_GovernanceMitigations .
+
+fw:Rel_GovMit_2 a backlog:DeploymentUnit ; backlog:hasIdentifier "GOVMIT-REL2" ; backlog:hasTitle "Lineage 16's second real release: GOVMIT-S04 shipped"@en ;
+    backlog:hasState backlog:Done ;
+    backlog:hasDeploymentDate "2026-09-21T14:00:00Z"^^xsd:dateTime ;
+    backlog:deploysFrom fw:It_GovMit_2 ; backlog:deploysItem fw:ST_GovMit_TimestampConstraint ;
+    backlog:decidedBy backlog:Owner ; backlog:hasSelectionBasis backlog:Sel_Committed .
+fw:ST_GovMit_TimestampConstraint backlog:memberOfContainer fw:Rel_GovMit_2 .
+
+fw:Plan_GovMit_TimestampConstraint a backlog:PlanningEvent ; rdfs:label "GOVMIT-S04 formally kicked off"@en ;
+    backlog:plansItem fw:ST_GovMit_TimestampConstraint ; backlog:plannedInto fw:It_GovMit_2 ;
+    backlog:plannedAt "2026-09-21T00:00:00Z"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:producesTask fw:T_GovMit_TimestampConstraint ;
+    backlog:hasRationale "The oldest genuinely-unblocked deferred handover (HANDOVER_vaf-pipeline-session...retrofit-governance-process-divergence) gave this story exactly the real, concrete design it was waiting on." .
+fw:T_GovMit_TimestampConstraint a backlog:ExecutionTask ; backlog:hasIdentifier "GOVMIT-T04" ;
+    backlog:hasTitle "Build and prove IdenticalTimestampClusterShape"@en ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-09-21T00:00:00Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-09-21T02:00:00Z"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_GovMit_TS_Task ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It_GovMit_2 ;
+    backlog:belongsToLineage fw:L_GovernanceMitigations ;
+    backlog:hasRationale "One real task: design (Option A, the register-content-only mechanical signal) plus build plus a real, disclosed pyshacl debugging session -- a nested, even a correlated, SELECT subquery inside sh:sparql silently never fired in this pyshacl version; a flat multi-pattern-with-inequality-filters form does, confirmed by isolating the exact difference across six controlled tests before touching the real file again." .
+
+fw:Ev_GovMit_TS_Fires a backlog:Evidence , backlog:TestEvidence ; backlog:attestsCriterion fw:AC_GovMit_TimestampConstraint ;
+    backlog:hasTestId "TS_Cluster1" ;
+    backlog:evidenceVerified true ; backlog:verifiedByTool "backlog_validate_v1_6_0.py" ;
+    backlog:hasVerificationMethod "Real run against fixture_negative_v1_12_0.ttl: three real ExecutionTasks (TS_Cluster1/2/3) sharing one identical plannedAt=startedAt=finishedAt literal. All three correctly fire the identical-instant violation; confirmed by direct grep of the real validator output." .
+fw:Ev_GovMit_TS_PairSilent a backlog:Evidence , backlog:TestEvidence ; backlog:attestsCriterion fw:AC_GovMit_TimestampConstraint ;
+    backlog:hasTestId "TS_PairA" ;
+    backlog:evidenceVerified true ; backlog:verifiedByTool "backlog_validate_v1_6_0.py" ;
+    backlog:hasVerificationMethod "Real run, same fixture: two items (TS_PairA/B) sharing an identical triple -- below the real, reasoned threshold of three. Confirmed silent on this specific shape (other, unrelated violations still correctly fire on them) -- the threshold genuinely discriminates, not merely present in the message text." .
+fw:Ev_GovMit_TS_VariedSilent a backlog:Evidence , backlog:TestEvidence ; backlog:attestsCriterion fw:AC_GovMit_TimestampConstraint ;
+    backlog:hasTestId "TS_Varied" ;
+    backlog:evidenceVerified true ; backlog:verifiedByTool "backlog_validate_v1_6_0.py" ;
+    backlog:hasVerificationMethod "Real run, same fixture: one item with genuinely distinct plannedAt/startedAt/finishedAt values, close in time but not identical. Confirmed silent -- real same-day work with honest variation is not what this shape exists to catch." .
+fw:Ev_GovMit_TS_FullGate a backlog:Evidence , backlog:TestEvidence ;
+    backlog:hasTestSpec "backlog_validate_v1_6_0.py against the real, live register" ;
+    backlog:evidenceVerified true ; backlog:verifiedByTool "backlog_validate_v1_6_0.py" ;
+    backlog:hasVerificationMethod "Real run against the actual, current register: 0 Violation, confirming the new shape introduces no false positive anywhere in this package's own real content." .
+
+fw:H_GovMit_TimestampConstraint a backlog:TestHarness ; backlog:harnessFor fw:ST_GovMit_TimestampConstraint ;
+    backlog:hasHarnessEvidence fw:Ev_GovMit_TS_Fires , fw:Ev_GovMit_TS_PairSilent , fw:Ev_GovMit_TS_VariedSilent , fw:Ev_GovMit_TS_FullGate ;
+    backlog:hasRationale "Real run, this session: a dedicated fixture proving three real cases -- fires on a genuine three-way identical-instant cluster, stays silent below the real threshold, stays silent on genuinely varied same-day work -- plus a real check that the live register itself still passes clean." .
+fw:Ev_GovMit_TS_Task a backlog:Evidence , backlog:TestEvidence ;
+    backlog:hasTestSpec "02-shacl-safeguards/backlog_shacl_v1_130_0.ttl -- IdenticalTimestampClusterShape" ;
+    backlog:evidenceVerified true ; backlog:verifiedByTool "backlog_validate_v1_6_0.py" ;
+    backlog:hasVerificationMethod "Direct check: the shape exists in the real, current shapes file and produced the four real results recorded on its harness." .
+fw:H_GovMit_TS_Task a backlog:TestHarness ; backlog:harnessFor fw:T_GovMit_TimestampConstraint ;
+    backlog:hasHarnessEvidence fw:Ev_GovMit_TS_Task ;
+    backlog:hasRationale "The task's own harness, distinct from the story's." .
+
+fw:Obs_GovMit_AfterS04 a backlog:MetricObservation ; rdfs:label "Two of four real deliverables now have a real, shipped artifact"@en ;
+    backlog:observesMetric fw:Metric_GovMit_MechanismsBuilt ; backlog:observationFor fw:Obj_GovMit_DeliverablesBuilt ;
+    backlog:hasObservedValue 2.0 ; backlog:observedAt "2026-09-21T14:05:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Direct check: IdenticalTimestampClusterShape exists in the real, current shapes file, proven on a real fixture in all three directions." .
+fw:Obs_GovMit_GateAfterS04 a backlog:MetricObservation ; rdfs:label "Two of four mechanisms now proven on a real fixture"@en ;
+    backlog:observesMetric fw:Metric_GovMit_GateStrength ; backlog:observationFor fw:Obj_GovMit_GateWorks ;
+    backlog:hasObservedValue 2.0 ; backlog:observedAt "2026-09-21T14:05:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Direct check: fixture_negative_v1_12_0.ttl proves the fires/pair-silent/varied-silent cases, all three confirmed correct." .
 fw:Obs_GovMit_AfterS01 a backlog:MetricObservation ; rdfs:label "One of four real deliverables now has a real, shipped artifact"@en ;
     backlog:observesMetric fw:Metric_GovMit_MechanismsBuilt ; backlog:observationFor fw:Obj_GovMit_DeliverablesBuilt ;
     backlog:hasObservedValue 1.0 ; backlog:observedAt "2026-09-21T01:05:00Z"^^xsd:dateTime ;

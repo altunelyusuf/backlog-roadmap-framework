@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.129.0> ;
-    owl:versionInfo "1.129.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.130.0> ;
+    owl:versionInfo "1.130.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.129.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.128.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.127.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.126.0> ;
@@ -6434,4 +6435,28 @@ backlog:ObjectiveMetricMirrorShape a sh:NodeShape ;
                 ?item backlog:hasState ?state .
                 FILTER (?state != backlog:Proposed)
             }
+        }""" ] .
+
+#################################################################
+#  v1.129.0 -- IdenticalTimestampClusterShape (GOVMIT-S04, Option A). Real, agreed gap, grounded
+#  in a real, reported case: a register can have every WorkItem's plannedAt/startedAt/finishedAt
+#  share the exact same literal value across many items -- a mechanically checkable, low-noise
+#  signal of retrofit (backfilled governance describing work already done), distinguishable from
+#  genuine same-instant completion by its own repetition: real same-day work still shows some
+#  variation; wholesale identical triples do not.
+#################################################################
+backlog:IdenticalTimestampClusterShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItem ;
+    sh:severity sh:Violation ;
+    rdfs:label "Real work does not share one identical planned/started/finished instant across many items (L3)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "TS_Cluster1" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: this item's plannedAt, startedAt and finishedAt are all the identical literal value, and at least two other real items in this register share that exact same triple. A single item completing the instant it was planned is plausible; three or more sharing the identical instant, to the second, is the mechanical signature of a real, reported case where governance was authored after the fact to describe work already done, not as it happened." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:plannedAt ?p ; backlog:startedAt ?p ; backlog:finishedAt ?p .
+            ?other1 backlog:plannedAt ?p ; backlog:startedAt ?p ; backlog:finishedAt ?p .
+            ?other2 backlog:plannedAt ?p ; backlog:startedAt ?p ; backlog:finishedAt ?p .
+            FILTER (?other1 != $this && ?other2 != $this && ?other1 != ?other2)
         }""" ] .

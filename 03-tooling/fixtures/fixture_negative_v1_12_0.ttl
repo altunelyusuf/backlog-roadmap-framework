@@ -1,4 +1,5 @@
 @prefix backlog: <http://example.org/backlog#> .
+@prefix tscluster: <http://example.org/ts-cluster#> .
 @prefix ex:      <http://example.org/fixture-negative#> .
 @prefix owl:     <http://www.w3.org/2002/07/owl#> .
 @prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
@@ -3662,3 +3663,30 @@ l4negative:Rel_NoReason a backlog:DeploymentUnit ;
 # way -- a direct gate-script filename dependency, or a genuine isConformanceGoal structural
 # incompatibility confirmed present in every remaining large "full scenario" fixture before any
 # merge was attempted, not discovered by trial and error each time.
+# --- real test case for IdenticalTimestampClusterShape (GOVMIT-S04) ---
+tscluster:TS_Cluster1 a backlog:ExecutionTask ; backlog:hasState backlog:Done ;
+    backlog:plannedAt "2026-09-14T00:00:00Z"^^xsd:dateTime ;
+    backlog:startedAt "2026-09-14T00:00:00Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-09-14T00:00:00Z"^^xsd:dateTime .
+tscluster:TS_Cluster2 a backlog:ExecutionTask ; backlog:hasState backlog:Done ;
+    backlog:plannedAt "2026-09-14T00:00:00Z"^^xsd:dateTime ;
+    backlog:startedAt "2026-09-14T00:00:00Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-09-14T00:00:00Z"^^xsd:dateTime .
+tscluster:TS_Cluster3 a backlog:ExecutionTask ; backlog:hasState backlog:Done ;
+    backlog:plannedAt "2026-09-14T00:00:00Z"^^xsd:dateTime ;
+    backlog:startedAt "2026-09-14T00:00:00Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-09-14T00:00:00Z"^^xsd:dateTime .
+# real, honest pair -- only two share an identical triple, below the real threshold -> stays silent
+tscluster:TS_PairA a backlog:ExecutionTask ; backlog:hasState backlog:Done ;
+    backlog:plannedAt "2026-09-15T09:00:00Z"^^xsd:dateTime ;
+    backlog:startedAt "2026-09-15T09:00:00Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-09-15T09:00:00Z"^^xsd:dateTime .
+tscluster:TS_PairB a backlog:ExecutionTask ; backlog:hasState backlog:Done ;
+    backlog:plannedAt "2026-09-15T09:00:00Z"^^xsd:dateTime ;
+    backlog:startedAt "2026-09-15T09:00:00Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-09-15T09:00:00Z"^^xsd:dateTime .
+# real, genuinely varied item -- close but not identical -> stays silent
+tscluster:TS_Varied a backlog:ExecutionTask ; backlog:hasState backlog:Done ;
+    backlog:plannedAt "2026-09-15T09:00:00Z"^^xsd:dateTime ;
+    backlog:startedAt "2026-09-15T09:05:00Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-09-15T09:47:00Z"^^xsd:dateTime .

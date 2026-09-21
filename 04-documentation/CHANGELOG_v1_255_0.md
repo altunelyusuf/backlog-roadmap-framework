@@ -9968,3 +9968,44 @@ source: now walks the tree once, finds every real file matching an exempt basena
 one real, path-qualified exemption line per actual match. `build_manifest_v1_5_0.py ->
 v1_6_0.py`. Confirmed directly: `backlog_manifest_coverage` now reports `PASS — every file is
 hashed or explained`, 6 real exemptions instead of 5.
+
+## v1.291.0 — 2026-09-21 (MINOR: GOVMIT-S04 built -- the oldest genuinely-unblocked deferred handover, sitting ready since Lineage 9 closed, finally taken up)
+
+**Unplanned work:** off-backlog handover processing, matching the same escape hatch every other
+governance fix this session has used.
+
+**A real, named prioritization failure, corrected.** `HANDOVER_vaf-pipeline-session...retrofit
+-governance-process-divergence` was explicitly deferred until Lineage 9 closed; Lineage 9 closed
+2026-09-15. It sat ready and unbuilt for longer than it should have -- the owner named this
+directly as a real prioritization failure, not a structural block, and asked for the deferred
+queue to be worked in order rather than displaced by whatever arrived newest.
+
+**Built: `IdenticalTimestampClusterShape` (GOVMIT-S04, Lineage 16).** A real, register-content
+-only mechanical signal: three or more WorkItems sharing one identical
+`plannedAt=startedAt=finishedAt` literal is flagged as the signature of retrofit, distinguishable
+from genuine same-instant work by its own repetition. Proven on a real, dedicated fixture in all
+three directions -- fires on a genuine cluster, stays silent below the real threshold, stays
+silent on genuinely varied same-day work.
+
+**A real, non-trivial pyshacl debugging session, disclosed in full.** The first two versions of
+this shape's SPARQL -- an uncorrelated nested subquery, then a correlated one -- silently never
+fired in this pyshacl version, despite the identical query logic working correctly via plain
+rdflib. Isolated the exact cause across six controlled, incremental tests before touching the
+real file again: nested `SELECT` subqueries inside `sh:sparql` constraints don't reliably fire
+here; a flat multi-pattern form with inequality filters does. The real shapes file was carrying
+a genuinely broken constraint for a period during this work -- caught and fixed before it was
+ever shipped, not after.
+
+**An honest scope correction, made before Done, not discovered after.** `GOVMIT-S04`'s own
+acceptance criterion originally promised the handover's more ambitious Option C -- a real,
+git-history-anchored check that a claimed timestamp span overlaps a real commit. Only the
+narrower Option A (the register-content-only signal) was actually built this pass. Rather than
+mark the story Done against the broader, unmet promise, the AC's own text was rewritten to
+describe exactly what was built, with the git-anchored check and the owner's own further ruling
+on a richer WorkItem state model disclosed as real, separate, undone future work -- not silently
+dropped.
+
+**A real syntax break, self-inflicted and self-caught.** An earlier edit in this same pass
+accidentally deleted a subject line from an unrelated, pre-existing `MetricObservation`,
+orphaning its continuation triples. Caught immediately by re-parsing after the edit, fixed before
+it went any further.
