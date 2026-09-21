@@ -9874,3 +9874,7 @@ shipped.
 **Three of four real mitigations remain**: the batch-advisory generalisation, the
 `satisfiedByArtifact` package boundary, and the fabricated-timestamp constraint -- the one already
 flagged as needing the most design care before a build decision.
+
+## v1.287.0 — 2026-09-21 (PATCH: two real gate findings fixed -- fixture polarity and a stale local git HEAD, not repo content)
+
+**Unplanned work:** the real publish attempt found two genuine issues, neither in the register's own content: fixture_objective_metric_mirror_v1_0_0.ttl never declared hasExpectedPolarity, and this session's own local git HEAD had drifted eleven real releases behind the actual remote tip (v1.274.0 while the remote was at v1.285.0) -- tags were being fetched correctly all along, but the branch pointer itself never advanced, causing lineage-order to correctly report Lineage 16's own real, valid closedAtCommit tags as unwitnessed. Fixed: fixture polarity declared; local HEAD fast-forwarded to the real remote tip, working tree preserved exactly.
