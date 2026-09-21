@@ -9826,3 +9826,26 @@ resolution.
 ## v1.284.0 — 2026-09-18 (PATCH: Profile_StoryDirect_Infrastructure actually built -- it was declared "the first real instance" of a profile that was never actually minted)
 
 **Unplanned work:** the owner asked directly whether the profile was available for reuse, and checking found it genuinely wasn't -- Lineage 15 carries its real classification directly (hasLineageDepthLevel/hasLineageArtifactDomain), but the reusable, named LineageProfile individual itself was only ever discussed in commentary, never written as a real TBox individual, unlike Profile_FullChain_Ontology which was. Built now, the same way the first one was: verified directly against Lineage 15's own real, sealed archive (0 Epics, 3 real Stories decomposed directly to 2 ExecutionTasks, no adoptsObligationSet), not trusted from memory or the earlier commentary. `backlog_tbox_v1_100_0.ttl -> v1_101_0.ttl`. Now genuinely available for the next small, infrastructure-facing lineage to declare directly.
+
+## v1.285.0 — 2026-09-21 (MINOR: Lineage 16 opened -- the four real, deduplicated handover mitigations planned as one real lineage, Profile_StoryDirect_Infrastructure declared directly)
+
+**Unplanned work:** this release plans Lineage 16's own Mission through Backlog. All four real Stories stay Proposed at this stage -- planning itself moves no item past Proposed, and real execution starts next.
+
+**The handover job, closed to a real, checkable backlog.** Four real mitigations, deduplicated
+across two deferred automate-python-book-3e handovers (the metricMovableBy mirror named in both;
+the batch-advisory generalisation; the satisfiedByArtifact package boundary; the fabricated-
+timestamp constraint), planned as one real Mission-through-Backlog chain -- the same discipline
+as every other real lineage here, not a shortcut for being "just" tooling work.
+
+**Profile_StoryDirect_Infrastructure declared directly, not inferred after the fact** -- the
+second real instance of the profile built last turn, proving it genuinely reusable: `hasLineage
+DepthLevel Depth_StoryDirect`, `hasLineageArtifactDomain Domain_Infrastructure` set on the
+lineage from the moment it opened.
+
+**Scoped narrowly, on purpose.** Excludes any decision belonging to automate-python-book-3e's own
+register -- its 24 fabricated timestamps, whether its 106 items close or stay open, and
+ST_CoverageGate/ST_DepthGate's own disposition remain that package's own owner-decision, not
+built or decided here, matching the real correction that those lineages were never in this
+register's own scope to begin with.
+
+**Real, working properties found and used correctly this time, not guessed at** -- contributesToGoal, fillsScope, hasSuccessMetric, hasMeasurementKind, hasTargetDirection, hasCheckpoint, consumesOutput, requiresDeliverable, hasScopeExclusion -- checked directly against Lineage 15's own real, sealed archive before writing a single triple, the same discipline this whole framework asks of everything else.

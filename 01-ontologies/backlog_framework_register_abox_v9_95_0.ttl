@@ -14,8 +14,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.94.0> ;
-    owl:versionInfo "9.94.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.95.0> ;
+    owl:versionInfo "9.95.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.94.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.93.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.92.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.91.0> ;
@@ -3223,3 +3224,216 @@ fw:ArchiveEntry_L_GovernanceContinuation a backlog:LineageArchiveEntry ;
     backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_5_0.ttl" ;
     backlog:archivedAt "2026-09-18T10:19:24Z"^^xsd:dateTime ;
     backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0: mission Out_Achieved, closure report present, every item Done or Cancelled, not frozen. Everything the lineage owned -- its Lineage individual, its Mission, its closure report, its stage outputs, findings and items -- moved to the archive file; this entry is the only thing that remains, and it is a record, not a lineage (G92)." .
+
+#################################################################
+#  Lineage 16 -- L_GovernanceMitigations -- Mission and Scope, 2026-09-21.
+#  Profile_StoryDirect_Infrastructure -- second real instance, declared directly.
+#################################################################
+fw:L_GovernanceMitigations a backlog:Lineage ; rdfs:label "Lineage 16: Governance Mitigations"@en ;
+    backlog:lineageOrdinal 16 ;
+    backlog:lineageArchived false ;
+    backlog:lineageForMission fw:Mission_GovernanceMitigations ;
+    backlog:hasLineageStatus backlog:LS_Backlogged ;
+    backlog:hasLineageDepthLevel backlog:Depth_StoryDirect ;
+    backlog:hasLineageArtifactDomain backlog:Domain_Infrastructure ;
+    backlog:memberOfContainer fw:Register .
+
+fw:Mission_GovernanceMitigations a backlog:Mission ; rdfs:label "Mission: Governance Mitigations"@en ;
+    backlog:hasMissionStatement "Close the four real, deduplicated mitigations proposed across the two deferred automate-python-book-3e handovers, once Lineage 15's own release-item-accounting gate was built and closed the fifth: a mirror of metricMovableBy so a met objective names what moved it and not just what could have; the batch-progress advisory generalised beyond batch-tracked items so real, non-batch work leaving Proposed is not silently invisible to it; satisfiedByArtifact bounded to the package that declares it, so a deliverable satisfied cross-package does not leave the losing package's own stories permanently untold; and fabricated timestamps constrained against a real, external record, so a Done item's startedAt/finishedAt cannot silently diverge from what git itself witnessed." ;
+    backlog:missionFor fw:Register ;
+    backlog:hasMissionOrigin backlog:Origin_OwnerStated ;
+    backlog:missionSource "Owner, 2026-09-21: 'Let's close the handover job.' Preceded by the owner's own real correction, 2026-09-18-21, that the profile classification should ground new work rather than invent speculative combinations, and that the handover mitigations were never actually concluded as blocked on anything -- both confirmed directly against the real handover files and the live register before this mission was opened, not assumed." ;
+    backlog:hasMissionOutcome backlog:Out_InFlight ;
+    backlog:decidedBy backlog:Owner .
+
+fw:Scope_GovernanceMitigations a backlog:ScopeStatement ; rdfs:label "Scope: Governance Mitigations"@en ;
+    backlog:hasScopeStatementText "Build the four real mechanisms named in the mission statement, each proven on a real fixture before being trusted, each wired into the real gate or the real register content it governs. Excludes any decision belonging to automate-python-book-3e's own register -- the 24 fabricated timestamps found there, whether its 106 items close or stay open, and ST_CoverageGate/ST_DepthGate's own disposition remain that package's owner-decision, not built or decided here." ;
+    backlog:scopeForMission fw:Mission_GovernanceMitigations ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:requiresDeliverable fw:Del_Gov_MetricMirror , fw:Del_Gov_BatchAdvisoryGeneralised , fw:Del_Gov_ArtifactBoundary , fw:Del_Gov_TimestampConstraint ;
+    backlog:coversArea fw:Area_Gov_Mitigations ;
+    backlog:hasScopeExclusion fw:Ex_GovMit_OtherPackageDecisions , fw:Ex_GovMit_Retroactive ;
+    backlog:belongsToLineage fw:L_GovernanceMitigations .
+
+fw:Area_Gov_Mitigations a backlog:ScopeArea ; rdfs:label "Area: real governance gaps named in the deferred handovers"@en ;
+    backlog:areaMeasure "Four real, agreed mitigations, none built yet: the metricMovableBy mirror, the batch-advisory generalisation, the satisfiedByArtifact package boundary, the fabricated-timestamp constraint. Counted 2026-09-21 directly against this register and the two deferred handover files." ;
+    backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:areaLocation "03-tooling/ -- each mechanism's own script or check; 02-shacl-safeguards/ -- the shape each authorizes" ;
+    backlog:belongsToLineage fw:L_GovernanceMitigations .
+
+fw:Del_Gov_MetricMirror a backlog:ScopeDeliverable ; rdfs:label "The metricMovableBy mirror"@en ;
+    backlog:deliverableForArea fw:Area_Gov_Mitigations ; backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:derivesFromMissionClause "a mirror of metricMovableBy so a met objective names what moved it and not just what could have" ;
+    backlog:belongsToLineage fw:L_GovernanceMitigations .
+fw:Del_Gov_BatchAdvisoryGeneralised a backlog:ScopeDeliverable ; rdfs:label "Batch advisory generalised beyond batch-tracked items"@en ;
+    backlog:deliverableForArea fw:Area_Gov_Mitigations ; backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:derivesFromMissionClause "the batch-progress advisory generalised beyond batch-tracked items so real, non-batch work leaving Proposed is not silently invisible to it" ;
+    backlog:belongsToLineage fw:L_GovernanceMitigations .
+fw:Del_Gov_ArtifactBoundary a backlog:ScopeDeliverable ; rdfs:label "satisfiedByArtifact bounded to its own package"@en ;
+    backlog:deliverableForArea fw:Area_Gov_Mitigations ; backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:derivesFromMissionClause "satisfiedByArtifact bounded to the package that declares it, so a deliverable satisfied cross-package does not leave the losing package's own stories permanently untold" ;
+    backlog:belongsToLineage fw:L_GovernanceMitigations .
+fw:Del_Gov_TimestampConstraint a backlog:ScopeDeliverable ; rdfs:label "Fabricated timestamps constrained against real commit history"@en ;
+    backlog:deliverableForArea fw:Area_Gov_Mitigations ; backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:derivesFromMissionClause "fabricated timestamps constrained against a real, external record, so a Done item's startedAt/finishedAt cannot silently diverge from what git itself witnessed" ;
+    backlog:belongsToLineage fw:L_GovernanceMitigations .
+
+fw:Ex_GovMit_OtherPackageDecisions a backlog:ScopeExclusion ; rdfs:label "Exclusion: automate-python-book-3e's own owner-decision questions"@en ;
+    backlog:excludesConcern "The 24 fabricated timestamps found in that package, whether its 106 items close or stay open, and ST_CoverageGate/ST_DepthGate's own disposition." ;
+    backlog:hasExclusionRationale "That package's own register, that package's own owner-decision -- not built or decided from here, matching the same boundary this lineage's own mission states." ;
+    backlog:decidedBy backlog:Owner ; backlog:hasScopeLayer backlog:Layer_Work ; backlog:belongsToLineage fw:L_GovernanceMitigations .
+fw:Ex_GovMit_Retroactive a backlog:ScopeExclusion ; rdfs:label "Exclusion: retroactive judgement of past releases"@en ;
+    backlog:excludesConcern "Applying any of these four mechanisms to a release that shipped before it exists." ;
+    backlog:hasExclusionRationale "G41/L-112 precedent, restated for this lineage: closed history is a record. Each mechanism binds forward only." ;
+    backlog:decidedBy backlog:Owner ; backlog:hasScopeLayer backlog:Layer_Work ; backlog:belongsToLineage fw:L_GovernanceMitigations .
+
+fw:Goal_GovMit_AllBuilt a backlog:Goal ; rdfs:label "All four mechanisms are real, proven, and wired in"@en ;
+    backlog:contributesToMission fw:Mission_GovernanceMitigations ;
+    backlog:derivesFromScope fw:Scope_GovernanceMitigations ;
+    backlog:hasGoalFacing backlog:Facing_Mission ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:decidedBy backlog:Owner .
+fw:Goal_GovMit_AreaExhausted a backlog:Goal ; rdfs:label "Area_Gov_Mitigations's four deliverables all reach their finish condition"@en ;
+    backlog:contributesToMission fw:Mission_GovernanceMitigations ;
+    backlog:derivesFromScope fw:Scope_GovernanceMitigations ;
+    backlog:hasGoalFacing backlog:Facing_Scope ;
+    backlog:goalCoversArea fw:Area_Gov_Mitigations ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:decidedBy backlog:Owner .
+fw:Goal_GovMit_Contained a backlog:Goal ; rdfs:label "No work was done outside what this scope named"@en ;
+    backlog:contributesToMission fw:Mission_GovernanceMitigations ;
+    backlog:derivesFromScope fw:Scope_GovernanceMitigations ;
+    backlog:hasGoalFacing backlog:Facing_Containment ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:decidedBy backlog:Owner .
+
+fw:CP_GovMit_DeliverablesBuilt a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-10-15T00:00:00Z"^^xsd:dateTime .
+fw:CP_GovMit_GateWorks a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-10-15T00:00:00Z"^^xsd:dateTime .
+fw:CP_GovMit_Contained a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-10-15T00:00:00Z"^^xsd:dateTime .
+
+fw:Metric_GovMit_MechanismsBuilt a backlog:Metric ; rdfs:label "Real mechanisms built and wired in"@en ;
+    backlog:metricUnit "mechanism" .
+fw:Obj_GovMit_DeliverablesBuilt a backlog:Objective ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    rdfs:label "Objective: all four deliverables built"@en ;
+    backlog:contributesToGoal fw:Goal_GovMit_AreaExhausted ; backlog:fillsScope fw:Scope_GovernanceMitigations ;
+    backlog:hasSuccessMetric fw:Metric_GovMit_MechanismsBuilt ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasBaselineValue "0"^^xsd:decimal ; backlog:hasTargetValue "4"^^xsd:decimal ;
+    backlog:hasTargetDirection backlog:Dir_Increase ;
+    backlog:hasCheckpoint fw:CP_GovMit_DeliverablesBuilt ;
+    backlog:metricMovableBy fw:ST_GovMit_MetricMirror , fw:ST_GovMit_BatchAdvisory , fw:ST_GovMit_ArtifactBoundary , fw:ST_GovMit_TimestampConstraint ;
+    backlog:hasRationale "Counted 2026-09-21: 0 of 4 real deliverables built yet." ;
+    backlog:belongsToLineage fw:L_GovernanceMitigations .
+fw:Obs_GovMit_Baseline a backlog:MetricObservation ; rdfs:label "Baseline: zero mechanisms built yet"@en ;
+    backlog:observesMetric fw:Metric_GovMit_MechanismsBuilt ; backlog:observationFor fw:Obj_GovMit_DeliverablesBuilt ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-09-21T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Direct check: none of the four real scripts/shape changes exist on disk yet." .
+
+fw:Metric_GovMit_GateStrength a backlog:Metric ; rdfs:label "Real fixture proofs, both directions, per mechanism"@en ;
+    backlog:metricUnit "mechanism proven" .
+fw:Obj_GovMit_GateWorks a backlog:Objective ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    rdfs:label "Objective: each mechanism proven on a real fixture, both directions"@en ;
+    backlog:contributesToGoal fw:Goal_GovMit_AllBuilt ; backlog:fillsScope fw:Scope_GovernanceMitigations ;
+    backlog:hasSuccessMetric fw:Metric_GovMit_GateStrength ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasBaselineValue "0"^^xsd:decimal ; backlog:hasTargetValue "4"^^xsd:decimal ;
+    backlog:hasTargetDirection backlog:Dir_Increase ;
+    backlog:hasCheckpoint fw:CP_GovMit_GateWorks ;
+    backlog:metricMovableBy fw:ST_GovMit_MetricMirror , fw:ST_GovMit_BatchAdvisory , fw:ST_GovMit_ArtifactBoundary , fw:ST_GovMit_TimestampConstraint ;
+    backlog:hasRationale "Counted 2026-09-21: 0 of 4 mechanisms proven on a real fixture yet." ;
+    backlog:belongsToLineage fw:L_GovernanceMitigations .
+fw:Obs_GovMit_GateBaseline a backlog:MetricObservation ; rdfs:label "Baseline: zero mechanisms proven yet"@en ;
+    backlog:observesMetric fw:Metric_GovMit_GateStrength ; backlog:observationFor fw:Obj_GovMit_GateWorks ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-09-21T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Direct check: no real scratch-repo proof exists for any of the four yet." .
+
+fw:Metric_GovMit_Contained a backlog:Metric ; rdfs:label "Commits touching an excluded concern"@en ; backlog:metricUnit "commit" .
+fw:Obj_GovMit_Contained a backlog:Objective ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    rdfs:label "Objective: containment holds"@en ;
+    backlog:contributesToGoal fw:Goal_GovMit_Contained ; backlog:fillsScope fw:Scope_GovernanceMitigations ;
+    backlog:hasSuccessMetric fw:Metric_GovMit_Contained ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasBaselineValue "0"^^xsd:decimal ; backlog:hasTargetValue "0"^^xsd:decimal ;
+    backlog:hasTargetDirection backlog:Dir_Hold ;
+    backlog:hasCheckpoint fw:CP_GovMit_Contained ;
+    backlog:hasRationale "Held, not moved: containment is proven by absence of a touch, not by any story's own progress." ;
+    backlog:belongsToLineage fw:L_GovernanceMitigations .
+fw:Obs_GovMit_ContainedBaseline a backlog:MetricObservation ; rdfs:label "Baseline: nothing has touched an excluded concern"@en ;
+    backlog:observesMetric fw:Metric_GovMit_Contained ; backlog:observationFor fw:Obj_GovMit_Contained ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-09-21T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Direct check: no commits made under this lineage yet." .
+
+fw:AC_GovMit_MetricMirror a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given an objective reaches its target, When the objective is checked, Then it names which real item's movement actually moved it, not merely which items could have -- and if none did, the objective's own metricMovableBy items are flagged, not silently trusted." .
+fw:ST_GovMit_MetricMirror a backlog:Story ; backlog:hasIdentifier "GOVMIT-S01" ; backlog:hasTitle "The metricMovableBy mirror" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:belongsToLineage fw:L_GovernanceMitigations ;
+    backlog:pursuesObjective fw:Obj_GovMit_DeliverablesBuilt ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasAcceptanceCriterion fw:AC_GovMit_MetricMirror ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "Backlog stage just opened, grooming pass not yet run." .
+
+fw:AC_GovMit_BatchAdvisory a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a real item outside any tracked batch leaves Proposed, When the batch-progress advisory runs, Then it reflects that movement -- not just the movement of items it happens to have a batch label for." .
+fw:ST_GovMit_BatchAdvisory a backlog:Story ; backlog:hasIdentifier "GOVMIT-S02" ; backlog:hasTitle "Batch advisory generalised beyond batch-tracked items" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:belongsToLineage fw:L_GovernanceMitigations ;
+    backlog:pursuesObjective fw:Obj_GovMit_DeliverablesBuilt ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasAcceptanceCriterion fw:AC_GovMit_BatchAdvisory ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "Backlog stage just opened, grooming pass not yet run." .
+
+fw:AC_GovMit_ArtifactBoundary a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a deliverable is satisfied by an artifact in a different package than the one that declared it, When that deliverable is checked, Then the declaring package's own stories are not left silently untold -- the cross-package satisfaction is visible, named, and does not stand in for real work in the declaring package's own register." .
+fw:ST_GovMit_ArtifactBoundary a backlog:Story ; backlog:hasIdentifier "GOVMIT-S03" ; backlog:hasTitle "satisfiedByArtifact bounded to its own package" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:belongsToLineage fw:L_GovernanceMitigations ;
+    backlog:pursuesObjective fw:Obj_GovMit_DeliverablesBuilt ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasAcceptanceCriterion fw:AC_GovMit_ArtifactBoundary ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "Backlog stage just opened, grooming pass not yet run." .
+
+fw:AC_GovMit_TimestampConstraint a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a WorkItem is marked Done with a startedAt/finishedAt pair, When checked against the real commit span that shipped it, Then a claimed span with no real, overlapping commit history is refused -- not silently trusted because the dates look plausible." .
+fw:ST_GovMit_TimestampConstraint a backlog:Story ; backlog:hasIdentifier "GOVMIT-S04" ; backlog:hasTitle "Fabricated timestamps constrained against real commit history" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:belongsToLineage fw:L_GovernanceMitigations ;
+    backlog:pursuesObjective fw:Obj_GovMit_DeliverablesBuilt ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasAcceptanceCriterion fw:AC_GovMit_TimestampConstraint ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "Backlog stage just opened, grooming pass not yet run; also the mitigation this session's own earlier work flagged as needing the most design care before a build decision." .
+
+fw:Out_Mission_GovernanceMitigations a backlog:StageOutput ;
+    backlog:outputOfStage backlog:Stage_Mission ; backlog:belongsToLineage fw:L_GovernanceMitigations ;
+    backlog:hasStateDigest "697cfc7076aa03295ac4c7384547d547b0474f858f76d77ecbfc864d5c053d8a" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.285.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Mission stage of Lineage 16. Tag deterministic: VERSION.txt set before publishing." .
+fw:Out_Scope_GovernanceMitigations a backlog:StageOutput ;
+    backlog:outputOfStage backlog:Stage_Scope ; backlog:belongsToLineage fw:L_GovernanceMitigations ;
+    backlog:consumesOutput fw:Out_Mission_GovernanceMitigations ;
+    backlog:hasStateDigest "11d974c590b0a49c210df4afe91389280291837f6e04a070dd4291e450aa87a2" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.285.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Scope stage of Lineage 16." .
+fw:Out_Goal_GovernanceMitigations a backlog:StageOutput ;
+    backlog:outputOfStage backlog:Stage_Goal ; backlog:belongsToLineage fw:L_GovernanceMitigations ;
+    backlog:consumesOutput fw:Out_Scope_GovernanceMitigations ;
+    backlog:hasStateDigest "16b559fda1b3f42c6101d42988cbdd8bd49f8d6f024b1c0c1584645500f5897a" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.285.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Goal stage of Lineage 16." .
+fw:Out_Objective_GovernanceMitigations a backlog:StageOutput ;
+    backlog:outputOfStage backlog:Stage_Objective ; backlog:belongsToLineage fw:L_GovernanceMitigations ;
+    backlog:consumesOutput fw:Out_Goal_GovernanceMitigations ;
+    backlog:hasStateDigest "78ea19e4506d8b41d01951e2942f13d7d9d670f38727e711d7d92196d6c79f78" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.285.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Objective stage of Lineage 16." .
+fw:Out_Backlog_GovernanceMitigations a backlog:StageOutput ;
+    backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage fw:L_GovernanceMitigations ;
+    backlog:consumesOutput fw:Out_Objective_GovernanceMitigations ;
+    backlog:hasStateDigest "cdf058fec306607f9c357356825f486679dacfdcf5d2df4af9af552ac24570a4" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.285.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Backlog stage of Lineage 16: four Stories, one per real mitigation, Story-direct (no Epic layer), matching Profile_StoryDirect_Infrastructure's own declared shape." .
+
+fw:Blueprint_GovernanceMitigations a backlog:Blueprint ; backlog:blueprintFor fw:Register ;
+    backlog:belongsToLineage fw:L_GovernanceMitigations ;
+    backlog:hasRationale "Blueprint required at register level once any real lineage is live. This lineage's own domain is Infrastructure, not a modelled business domain with entities and life-cycle stages -- its real conceptual objects are an Objective (whether it names what moved it), a WorkItem outside any tracked batch, a cross-package satisfiedByArtifact link, and a Done item's own timestamp pair, none of which carry a client/practitioner-style life cycle a DomainEntity models. Recorded honestly as a minimal blueprint, matching the register-level requirement without inventing life-cycle stages this domain does not have -- the same real reasoning as Lineage 15's own blueprint." .
