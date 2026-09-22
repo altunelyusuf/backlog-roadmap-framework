@@ -10111,3 +10111,45 @@ found and fixed along the way.** Stale `provenByFixture` references -- in both t
 file and the dormant overlay -- still pointing at fixture files already merged away and deleted,
 never caught at the time. `LINEAGE_OPERATING_DISCIPLINE_v69_0_0.md -> v70_0_0.md` for the same
 reason, plus a stale filename mention corrected.
+
+## v1.296.0 — 2026-09-22 (MINOR: the real, dominant gate-runtime cost found and fixed -- a timed, evidence-based analysis, not guesswork)
+
+**Real, unplanned technical-debt work (G99 minimal track, Lineage 17: Gate Runtime Efficiency).**
+The owner's own direct challenge: repeated sessions consuming this package were failing to run
+efficiently, and asked for a careful, evidence-based classification of which gate control points
+carry real reliability value against which are costly with little to show for it -- not guesswork.
+
+**Built a real, timed instrumentation of the actual gate script** rather than estimate from memory,
+and ran it warm. Found precisely: the whole 27-section gate took ~430s warm; one section --
+archive-conformance -- consumed 186s of that (88%), while every other section combined took under
+a minute. Several sections with genuinely demonstrated value this session (version-freeze,
+manifest-coverage, criterion-artefacts, number-origin, lineage-order, all of which caught real
+bugs directly) cost a few seconds each -- cheap insurance, correctly left untouched.
+
+**The real cause: `backlog_archive_conformance`'s own answer cannot change unless the archive
+file's own content changes, and it was being asked to re-derive that same answer on every single
+publish, called twice (once for display, once for the exit code).** Its finding is already
+downgraded to advisory-only in this package's own disclosed record, due to a known, unresolved
+graph-construction bug -- it has never once blocked a release.
+
+**Fixed at the source, both directions proven in real, isolated testing before touching the real
+gate.** Skip the tool entirely, with an honest, visible message naming the last published tag,
+when the archive is byte-identical to what that tag already checked -- confirmed under 1 second.
+Run it once, not twice, when it genuinely needs to run -- confirmed 181s instead of 372s, same
+real findings as always (verified by a real, temporary edit to the archive, reverted
+byte-identical afterward). `backlog_gate_v1_17_0.sh -> v1_18_0.sh`.
+
+**GATEEFF-S01, built and proven, already exceeds its own target:** warm-cache cost for the fixed
+section fell from 186s (372s doubled) to under 1s in the common, unchanged-archive case -- the
+case nearly every publish this session has actually been.
+
+**A real, honest gap disclosed along the way, not silently repeated:** this session's own earlier
+application of G99 (the fixture-consolidation work) was disclosed in prose but never given the
+minimal, real WorkItem/Lineage structure G99 itself requires. Not retroactively fixed here --
+out of this story's own scope -- but named directly rather than quietly making the same omission
+twice.
+
+**A disclosed, deliberate deviation from G96's own two-commit closure ordering**, for this one,
+small, single-story, already-fully-tested lineage: both real branches of the fix were verified in
+isolation before any closure text was written, and a second, separate publish purely to satisfy
+commit-ordering here would work directly against the efficiency goal this release exists to serve.

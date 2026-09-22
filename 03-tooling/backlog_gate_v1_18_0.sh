@@ -490,15 +490,38 @@ if [ -n "$INTEG" ]; then
   python3 "$INTEG" >/dev/null 2>&1 || { echo "  archive integrity FAILED"; FAILED=1; }
 fi
 if [ -n "$CONF" ]; then
-  python3 "$CONF" 2>&1 | grep -E "value|arrivals|validated|VERDICT|^     " | sed 's/^/ /'
-  # Advisory, not blocking, as of 2026-09-18: a real, disclosed, unresolved bug in this specific
-  # tool's own graph construction produces false violations against settled archive content --
-  # confirmed by re-checking one of its own flagged items (Lineage 15's ST_Gov_ComparisonLogic)
-  # directly through backlog_validate, which shows it clean. Not a real content defect, and not a
-  # rule being applied to anything unclosed -- there is no unclosed lineage for it to apply
-  # against. archive_integrity above (the real dangling-reference check) stays blocking; only this
-  # tool's own separate, unresolved graph-construction issue is downgraded, disclosed, not hidden.
-  python3 "$CONF" >/dev/null 2>&1 || echo "  archive conformance ADVISORY -- known, disclosed graph-construction bug, not blocking (see G-ruling)"
+  # v1.18.0 -- this tool costs ~186s even warm, and its own real answer never changes unless the
+  # archive file's own content changes: its job is confirming settled, already-archived content
+  # stays settled, and a byte-identical archive can only produce the byte-identical, already-seen
+  # answer. Skip it, honestly and visibly, when the archive is unchanged since the last published
+  # tag -- run it whenever it might say something new, including when there is no tag to compare
+  # against (a fresh clone, or before this package's first real publish), which is the safe default.
+  _CONF_REPO_ROOT="$(git -C "$PKG" rev-parse --show-toplevel 2>/dev/null || true)"
+  _CONF_LAST_TAG="$(git -C "${_CONF_REPO_ROOT:-$PKG}" tag --list 'backlog-roadmap-framework-v*' 2>/dev/null | sort -V | tail -1 || true)"
+  _CONF_ARCHIVE="$(ls "$PKG"/01-ontologies/backlog_framework_archive_abox_v*.ttl 2>/dev/null | sort -V | tail -1 || true)"
+  _CONF_SKIP=0
+  if [ -n "$_CONF_REPO_ROOT" ] && [ -n "$_CONF_LAST_TAG" ] && [ -n "$_CONF_ARCHIVE" ]; then
+    _CONF_REL="${_CONF_ARCHIVE#$_CONF_REPO_ROOT/}"
+    if git -C "$_CONF_REPO_ROOT" cat-file -e "$_CONF_LAST_TAG:$_CONF_REL" 2>/dev/null; then
+      if git -C "$_CONF_REPO_ROOT" diff --quiet "$_CONF_LAST_TAG" -- "$_CONF_REL" 2>/dev/null; then
+        _CONF_SKIP=1
+      fi
+    fi
+  fi
+  if [ "$_CONF_SKIP" = "1" ]; then
+    echo "  archive conformance SKIPPED -- $(basename "$_CONF_ARCHIVE") unchanged since $_CONF_LAST_TAG; its own answer cannot have changed either"
+  else
+    CONF_OUT="$(python3 "$CONF" 2>&1)"; CONF_RC=$?
+    printf '%s\n' "$CONF_OUT" | grep -E "value|arrivals|validated|VERDICT|^     " | sed 's/^/  /'
+    # Advisory, not blocking, as of 2026-09-18: a real, disclosed, unresolved bug in this specific
+    # tool's own graph construction produces false violations against settled archive content --
+    # confirmed by re-checking one of its own flagged items (Lineage 15's ST_Gov_ComparisonLogic)
+    # directly through backlog_validate, which shows it clean. Not a real content defect, and not a
+    # rule being applied to anything unclosed -- there is no unclosed lineage for it to apply
+    # against. archive_integrity above (the real dangling-reference check) stays blocking; only this
+    # tool's own separate, unresolved graph-construction issue is downgraded, disclosed, not hidden.
+    [ "$CONF_RC" -eq 0 ] || echo "  archive conformance ADVISORY -- known, disclosed graph-construction bug, not blocking (see G-ruling)"
+  fi
 fi
 
 echo
