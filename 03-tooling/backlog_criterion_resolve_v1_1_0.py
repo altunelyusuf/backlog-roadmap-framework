@@ -44,7 +44,16 @@ def resolve(target, graph_subjects, pkg, reg_graph=None):
                 if not has_use:
                     return False
         return True
-    path, _, symbol = target.partition("#")
+    # Real bug found and fixed here, 2026-09-21: this package's own established convention for
+    # a file-path artefact target is "path -- SymbolName" (matching how this framework's own
+    # changelog entries cite shapes throughout), not a "#"-style URI fragment -- the only
+    # convention this function actually implemented. Nobody had hit this before because
+    # satisfiedByArtifact had never been used with a file-path target until GOVMIT-S01/S04;
+    # every other resolved criterion used a backlog: IRI target instead, the first branch above.
+    if " -- " in target:
+        path, _, symbol = target.partition(" -- ")
+    else:
+        path, _, symbol = target.partition("#")
     full = os.path.join(pkg, path)
     hits = glob.glob(full) or glob.glob(full.replace(".py", "_v*.py"))
     if not hits:

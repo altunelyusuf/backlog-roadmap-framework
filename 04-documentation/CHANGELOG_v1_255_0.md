@@ -10009,3 +10009,23 @@ dropped.
 accidentally deleted a subject line from an unrelated, pre-existing `MetricObservation`,
 orphaning its continuation triples. Caught immediately by re-parsing after the edit, fixed before
 it went any further.
+
+## v1.292.0 — 2026-09-21 (PATCH: a real, previously-latent criterion-resolver bug found and fixed -- file-path artefact targets were never actually checkable)
+
+**Unplanned work:** the real publish attempt for GOVMIT-S04 found a genuine gap in the gate
+itself, not in the register's own content.
+
+**Root-caused precisely.** `backlog_criterion_resolve` split every `satisfiedByArtifact` target
+on `#`, matching only a URI-fragment convention. This package's own real, established convention
+for a file-path artefact target is `"path -- SymbolName"` -- the exact form this session's own
+changelog entries have used throughout to cite shapes. Nobody had hit this before: `GOVMIT-S01`
+and `GOVMIT-S04` are the first two criteria in this register ever to use `satisfiedByArtifact`
+with a file-path target; every other resolved criterion used a `backlog:` IRI instead, a
+different code path entirely. Fixed at the source: `backlog_criterion_resolve_v1_0_0.py ->
+v1_1_0.py`, now splits on the real, established separator for this target style. Confirmed
+directly: all 23 real criteria naming an artefact now resolve, 0 unresolved.
+
+**A separate, real, pre-existing gap checked and correctly left alone:** the same gate run flagged
+`statusRank`/`entryOrdinal` as undeclared-origin numeric properties -- traced directly to this
+package's own archive entries from 2026-09-10, well before this session's own work and entirely
+unrelated to GOVMIT-S04's own scope. Disclosed here, not silently absorbed into this pass.
