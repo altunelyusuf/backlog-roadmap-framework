@@ -10034,3 +10034,20 @@ alone doesn't clear a hard, blocking check. Both are genuinely, honestly `Num_As
 values recorded by hand, not computed by any query -- so the fix is real and accurate, not a
 workaround: `backlog:numberOrigin backlog:Num_Asserted` declared on each, `backlog_tbox_v1_101_0
 .ttl -> v1_102_0.ttl`. Confirmed directly: `backlog_number_origin --strict` now passes clean.
+
+## v1.293.0 — 2026-09-21 (PATCH: a real G94 version-freeze violation, self-introduced across several edits, caught before shipping)
+
+**Unplanned work:** the real publish attempt found a genuine mistake in this session's own
+process, not in any tool.
+
+**Two files were content-edited under already-published, frozen names, across several turns of
+work on GOVMIT-S04 and the number-origin fix.** `backlog_framework_register_abox_v9_96_0.ttl`
+(the GOVMIT-S04 story completion, the criterion-resolve-driven AC correction) and
+`fixture_negative_v1_12_0.ttl` (the TS_Cluster test case) each kept their names across edits that
+changed their real content relative to the last published tag -- exactly what G94 exists to catch.
+The gate caught it correctly, on the first run against the real, current tree; earlier runs this
+session hadn't yet reached this specific check due to the confusing, truncated release-gate output
+of the previous several attempts. Fixed the honest way: renamed both to their real next version
+(`v9_96_0.ttl -> v9_97_0.ttl`, `fixture_negative_v1_12_0.ttl -> v1_13_0.ttl`), confirmed no
+hardcoded references anywhere needed updating (the package resolves every versioned file by
+highest SemVer, not by pinned filename), and reconfirmed the version-freeze gate passes clean.
