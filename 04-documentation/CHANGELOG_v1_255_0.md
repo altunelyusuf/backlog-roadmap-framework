@@ -10025,7 +10025,12 @@ different code path entirely. Fixed at the source: `backlog_criterion_resolve_v1
 v1_1_0.py`, now splits on the real, established separator for this target style. Confirmed
 directly: all 23 real criteria naming an artefact now resolve, 0 unresolved.
 
-**A separate, real, pre-existing gap checked and correctly left alone:** the same gate run flagged
-`statusRank`/`entryOrdinal` as undeclared-origin numeric properties -- traced directly to this
-package's own archive entries from 2026-09-10, well before this session's own work and entirely
-unrelated to GOVMIT-S04's own scope. Disclosed here, not silently absorbed into this pass.
+**A separate, real, pre-existing gap, found blocking rather than merely advisory, and fixed
+properly rather than left disclosed-only.** The same gate run flagged `statusRank`/`entryOrdinal`
+as undeclared-origin numeric properties -- traced to this package's own archive entries from
+2026-09-10, well before this session's own work. First disclosed as out-of-scope and left alone;
+re-checked once the release gate itself refused to ship with it unresolved, since disclosure
+alone doesn't clear a hard, blocking check. Both are genuinely, honestly `Num_Asserted` -- fixed
+values recorded by hand, not computed by any query -- so the fix is real and accurate, not a
+workaround: `backlog:numberOrigin backlog:Num_Asserted` declared on each, `backlog_tbox_v1_101_0
+.ttl -> v1_102_0.ttl`. Confirmed directly: `backlog_number_origin --strict` now passes clean.

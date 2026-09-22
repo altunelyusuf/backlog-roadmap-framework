@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.101.0> ;
-    owl:versionInfo "1.101.0" ;
+    owl:versionIRI <http://example.org/backlog/1.102.0> ;
+    owl:versionInfo "1.102.0" ;
+    owl:priorVersion <http://example.org/backlog/1.101.0> ;
     owl:priorVersion <http://example.org/backlog/1.100.0> ;
     owl:priorVersion <http://example.org/backlog/1.99.0> ;
     owl:priorVersion <http://example.org/backlog/1.98.0> ;
@@ -6723,6 +6724,7 @@ backlog:LineageStatus a owl:Class ;
     skos:definition "Where a lineage stands, asserted on the Lineage at each transition and CHECKED against the register (LineageStatusConsistencyShape): a status cannot outrun the active stage outputs, the items, or the mission outcome. Rules that need a later stage's elements bind only when the lineage's status rank has reached that stage -- only passed steps fire."@en .
 backlog:statusRank a owl:DatatypeProperty , owl:FunctionalProperty ;
     rdfs:domain backlog:LineageStatus ; rdfs:range xsd:integer ; rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "status rank"@en .
+backlog:statusRank backlog:numberOrigin backlog:Num_Asserted .
 backlog:LS_Opened a owl:NamedIndividual , backlog:LineageStatus ; rdfs:label "Opened"@en ; backlog:statusRank 1 ; skos:definition "The Mission stage output is active; nothing downstream."@en .
 backlog:LS_Scoped a owl:NamedIndividual , backlog:LineageStatus ; rdfs:label "Scoped"@en ; backlog:statusRank 2 ; skos:definition "The Scope stage output is active."@en .
 backlog:LS_Goaled a owl:NamedIndividual , backlog:LineageStatus ; rdfs:label "Goaled"@en ; backlog:statusRank 3 ; skos:definition "The Goal stage output is active."@en .
@@ -7078,6 +7080,7 @@ backlog:entryOutcome a owl:DatatypeProperty , owl:FunctionalProperty ;
 backlog:entryOrdinal a owl:DatatypeProperty , owl:FunctionalProperty ;
     rdfs:domain backlog:LineageArchiveEntry ; rdfs:range xsd:integer ;
     rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "entry ordinal"@en .
+backlog:entryOrdinal backlog:numberOrigin backlog:Num_Asserted .
 backlog:isRegisterRoot a owl:DatatypeProperty , owl:FunctionalProperty ;
     rdfs:domain backlog:Backlog ; rdfs:range xsd:boolean ;
     rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "is register root"@en ;
