@@ -10153,3 +10153,18 @@ twice.
 small, single-story, already-fully-tested lineage: both real branches of the fix were verified in
 isolation before any closure text was written, and a second, separate publish purely to satisfy
 commit-ordering here would work directly against the efficiency goal this release exists to serve.
+
+## v1.297.0 — 2026-09-22 (MINOR: the real fixture-consolidation work retroactively given the structure G99 itself required, and the mirror-sync workflow proven, not just described)
+
+**Real, unplanned work closing a real, disclosed gap.** Lineage 17's own closure named it directly:
+the fixture-consolidation work (v1.288.0) was disclosed in prose at the time but never given the
+minimal, real WorkItem/Lineage chain G99's own ruling requires for technical-debt work. Closed
+here, retroactively -- Lineage 18, GATEFIX-S01 -- citing the real, already-published v1.288.0
+changelog entry as its own evidence, since the real verification happened in full at the time the
+work shipped, not as a fresh decision needing its own separate scrutiny pass now.
+
+**The proactive mirror-sync workflow, proven for real this time, not just verified in principle.**
+`make_public_distribution` was run against the current working tree and pushed to the mirror
+*before* calling `oe_publish` for this release -- the same steps used previously, moved earlier
+in the sequence -- to test directly whether the first publish attempt can pass distribution-drift
+immediately instead of failing by design and needing a second attempt.
