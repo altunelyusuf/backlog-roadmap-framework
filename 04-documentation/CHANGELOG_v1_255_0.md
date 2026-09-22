@@ -10083,3 +10083,31 @@ verdict for the first time across this session's several attempts.
 This also closes out `GOVMIT-S04`, the criterion-resolver separator fix, and the
 `statusRank`/`entryOrdinal` number-origin fix from the immediately preceding, still-unpublished
 attempts this session -- all real, validated, and shipping together in this release.
+
+## v1.295.0 — 2026-09-22 (PATCH: a real hasDisposition/FindingRecord domain collision fixed, reported by an adopting session and verified independently before fixing)
+
+**Unplanned work:** handover processing, matching the same escape hatch used throughout this
+session.
+
+**A genuine, confirmed vocabulary defect.** `backlog:hasDisposition` was declared twice with two
+different domains -- `ChangeRequest`/`ChangeDisposition` (original) and
+`FindingRecord`/`FindingDisposition` (a later, real ITIL/ISO-31000-style addition). Under RDFS
+domain inference, any real `ChangeRequest` using the property for its own, original, honest
+purpose was also inferred `FindingRecord`, and `FindingRecordShape` demanded a false provenance
+(`findingFromShape`, `findingOnNode`) no real change decision has. Reproduced independently with
+explicit RDFS inference before trusting the report.
+
+**Fixed by renaming, not by disambiguating shape logic.** `FindingRecord`'s own property renamed
+to `hasFindingDisposition` -- the newer, more specific concept, cleanly eliminating the collision
+rather than papering over it. Applied across all five real files that used either property:
+`backlog_tbox_v1_102_0.ttl -> v1_103_0.ttl`, `backlog_shacl_v1_130_0.ttl -> v1_131_0.ttl`, the
+dormant severity-promotion overlay `backlog_shacl_promoted_v1_0_0.ttl -> v1_1_0.ttl` (would have
+carried the identical bug for anyone who opts in), and both consolidated fixtures. Every usage
+traced to its real class by the disposition values it carried, not assumed. Re-verified the exact
+reported scenario clean afterward.
+
+**Three real, unrelated regressions from this session's own earlier fixture-consolidation work,
+found and fixed along the way.** Stale `provenByFixture` references -- in both the main shapes
+file and the dormant overlay -- still pointing at fixture files already merged away and deleted,
+never caught at the time. `LINEAGE_OPERATING_DISCIPLINE_v69_0_0.md -> v70_0_0.md` for the same
+reason, plus a stale filename mention corrected.

@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v69.0.0
+# Lineage Operating Discipline — v70.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -2565,7 +2565,7 @@ was agreed in a previous conversation — is it not active?* It was active for 5
 **The general principle, now built.** An `ObligationSet` is adopted by a LINEAGE when it opens,
 because it says what that lineage must produce. A **`RuleSet`** is adopted by the **REGISTER**,
 because a severity binds every lineage the register carries. The promotion therefore ships as a
-shapes overlay (`backlog_shacl_promoted_v1_0_0.ttl`), generated from the base file and identical to
+shapes overlay (`backlog_shacl_promoted_v1_1_0.ttl`), generated from the base file and identical to
 it in every byte but the audited severities, with a checker that refuses if the two ever differ in
 anything else. `backlog_validate` loads the overlay only when the register's own data declares
 `backlog:adoptsRuleSet backlog:RS_SeverityAudit_20260909`. Proven both ways in one minute: without

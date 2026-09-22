@@ -1213,7 +1213,7 @@ findingdisposi:Node2 a backlog:BacklogConcept ; rdfs:label "stand-in for the ove
 findingdisposi:Node3 a backlog:BacklogConcept ; rdfs:label "stand-in for the intent element"@en .
 findingdisposi:FR_KnownError a backlog:FindingRecord ;
     backlog:findingFromShape "StoryTestAnalysisShape" ; backlog:findingOnNode findingdisposi:Node1 ;
-    backlog:hasDisposition backlog:Disp_KnownError ; backlog:decidedBy backlog:Owner ;
+    backlog:hasFindingDisposition backlog:Disp_KnownError ; backlog:decidedBy backlog:Owner ;
     backlog:hasFindingScope backlog:Scope_Methodology ;
     backlog:hasRootCause "The rule requiring a test case per Done story was written after this story closed." ;
     backlog:dispositionRationale "Root cause: the obligation post-dates the work. The story is Done and its iteration closed; writing test cases now would attach evidence to work nobody re-ran, which is reinventing the state rather than recording it." ;
@@ -1223,7 +1223,7 @@ findingdisposi:FR_KnownError a backlog:FindingRecord ;
 findingdisposi:R1 a backlog:Risk ; rdfs:label "carry-over risk"@en .
 findingdisposi:FR_RiskAccepted a backlog:FindingRecord ;
     backlog:findingFromShape "OversizedStoryAdvisoryShape" ; backlog:findingOnNode findingdisposi:Node2 ;
-    backlog:hasDisposition backlog:Disp_RiskAccepted ; backlog:decidedBy backlog:Owner ;
+    backlog:hasFindingDisposition backlog:Disp_RiskAccepted ; backlog:decidedBy backlog:Owner ;
     backlog:hasFindingScope backlog:Scope_LineageLocal ;
     backlog:hasRootCause "The story's estimate exceeds the iteration capacity by one point." ;
     backlog:dispositionRationale "Consequence retained: the story may carry over. Splitting it would separate two changes that must ship together." ;
@@ -1232,7 +1232,7 @@ findingdisposi:FR_RiskAccepted a backlog:FindingRecord ;
     backlog:dispositionReviewDue "2027-01-01T00:00:00Z"^^xsd:dateTime .
 findingdisposi:FR_Observation a backlog:FindingRecord ;
     backlog:findingFromShape "SessionDraftedIntentAdvisoryShape" ; backlog:findingOnNode findingdisposi:Node3 ;
-    backlog:hasDisposition backlog:Disp_Observation ; backlog:decidedBy backlog:Owner ;
+    backlog:hasFindingDisposition backlog:Disp_Observation ; backlog:decidedBy backlog:Owner ;
     backlog:hasFindingScope backlog:Scope_Methodology ;
     backlog:hasRootCause "A session drafted this intent element rather than the owner stating it." ;
     backlog:dispositionRationale "No rule forbids session-drafted intent; the obligation that would make this a nonconformity has not been written, and writing it is backlog work." ;
@@ -1296,3 +1296,6 @@ moderecurrence:Find_Method2 a backlog:RetrospectiveFinding ; backlog:hasFailureM
 # bug. Restored as its own standalone file rather than compromised. fixture_mode_recurrence's
 # merge stands. Two real hasIdentifier collisions (T-1, T-2, colliding with this file's own
 # pre-existing ResetToken/ResetMail tasks) found and fixed with distinguishing suffixes.
+# v1.14.0 (2026-09-22, real handover processed): renamed FindingRecord's own hasDisposition
+# usages to hasFindingDisposition, and fixed a stale provenByFixture reference left over from
+# the earlier consolidation pass (fixture_cross_project_commit -> fixture_positive).

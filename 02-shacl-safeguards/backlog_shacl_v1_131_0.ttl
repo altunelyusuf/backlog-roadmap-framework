@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.130.0> ;
-    owl:versionInfo "1.130.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.131.0> ;
+    owl:versionInfo "1.131.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.130.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.129.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.128.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.127.0> ;
@@ -4439,7 +4440,7 @@ backlog:ScopeGapAdvisoryShape a sh:NodeShape ;
 backlog:CeremonyLinkAdvisoryShape a sh:NodeShape ;
     sh:targetClass backlog:MetricObservation ;
     sh:severity sh:Warning ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_ceremony_link_negative" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
     backlog:fixtureCaseName "MO_NoLink" ;
     rdfs:label "Advisory: a reading that could be tied to the review that produced it, isn't"@en ;
     sh:sparql [ a sh:SPARQLConstraint ;
@@ -5180,7 +5181,7 @@ backlog:ToolRunRecordShape a sh:NodeShape ;
                   sh:message "L1: a tool run record must state what the tool itself concluded about its own baseline." ] .
 
 backlog:RemoteCommitShape a sh:NodeShape ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_cross_project_commit" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_positive" ;
     sh:targetClass backlog:RemoteCommit ;
     sh:severity sh:Violation ;
     rdfs:label "A remote commit record names at least one real touched path (L1)"@en ;
@@ -5188,7 +5189,7 @@ backlog:RemoteCommitShape a sh:NodeShape ;
                   sh:message "L1: a remote commit record must name at least one real path it touched, or it asserts nothing checkable." ] .
 
 backlog:CrossProjectCommitAdvisoryShape a sh:NodeShape ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_cross_project_commit" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_positive" ;
     sh:targetClass backlog:RemoteCommit ;
     sh:severity sh:Warning ;
     rdfs:label "Advisory: a remote commit touched this package's own sovereign path and needs real reconciliation"@en ;
@@ -6092,12 +6093,12 @@ backlog:FindingRecordShape a sh:NodeShape ;
     sh:targetClass backlog:FindingRecord ;
     sh:severity sh:Violation ;
     rdfs:label "A finding record names what fired, on what, with which disposition and why (L1)"@en ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_finding_disposition_negative" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
     sh:property [ sh:path backlog:findingFromShape ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ;
                   sh:message "A finding record names the shape whose report it dispositions." ] ;
     sh:property [ sh:path backlog:findingOnNode ; sh:minCount 1 ;
                   sh:message "A finding record names the node the shape fired on; a blanket exception is not a disposition." ] ;
-    sh:property [ sh:path backlog:hasDisposition ; sh:minCount 1 ; sh:maxCount 1 ;
+    sh:property [ sh:path backlog:hasFindingDisposition ; sh:minCount 1 ; sh:maxCount 1 ;
                   sh:message "A finding record states its disposition." ] ;
     sh:property [ sh:path backlog:dispositionRationale ; sh:minCount 1 ; sh:datatype xsd:string ;
                   sh:message "A finding record states why the finding is not simply to be fixed." ] ;
@@ -6106,12 +6107,12 @@ backlog:FindingRecordShape a sh:NodeShape ;
     sh:sparql [ a sh:SPARQLConstraint ;
         sh:message "L1: this record dispositions a finding as Nonconformity. Nonconformity is the DEFAULT and needs no record -- it needs fixing. Recording one either says nothing or hides a fix that was not made." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
-        sh:select """SELECT $this WHERE { $this backlog:hasDisposition backlog:Disp_Nonconformity . }""" ] ;
+        sh:select """SELECT $this WHERE { $this backlog:hasFindingDisposition backlog:Disp_Nonconformity . }""" ] ;
     sh:sparql [ a sh:SPARQLConstraint ;
         sh:message "L1: this known error names no monitoring mechanism, or no preventive mechanism, or no review date. ITIL manages known errors; it does not file them. The instance may be unrepairable -- what stops the NEXT one, and who looks again, and when?" ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
-            $this backlog:hasDisposition backlog:Disp_KnownError .
+            $this backlog:hasFindingDisposition backlog:Disp_KnownError .
             FILTER ( NOT EXISTS { $this backlog:monitoredBy ?m }
                   || NOT EXISTS { $this backlog:preventiveMechanism ?p }
                   || NOT EXISTS { $this backlog:dispositionReviewDue ?d } )
@@ -6120,7 +6121,7 @@ backlog:FindingRecordShape a sh:NodeShape ;
         sh:message "L1: this accepted risk names no risk record, or no monitoring, or no review date. ISO 31000 retention is a treatment decision with an owner and a review, not silence." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
-            $this backlog:hasDisposition backlog:Disp_RiskAccepted .
+            $this backlog:hasFindingDisposition backlog:Disp_RiskAccepted .
             FILTER ( NOT EXISTS { $this backlog:hasRisk ?r }
                   || NOT EXISTS { $this backlog:monitoredBy ?m }
                   || NOT EXISTS { $this backlog:dispositionReviewDue ?d } )
@@ -6129,7 +6130,7 @@ backlog:FindingRecordShape a sh:NodeShape ;
         sh:message "L1: this observation's disposition rationale does not say which rule is missing. An observation is reserved for a condition no obligation covers; if an obligation covers it, the finding is a nonconformity." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
-            $this backlog:hasDisposition backlog:Disp_Observation ; backlog:dispositionRationale ?r .
+            $this backlog:hasFindingDisposition backlog:Disp_Observation ; backlog:dispositionRationale ?r .
             FILTER ( ! CONTAINS(LCASE(?r), "rule") && ! CONTAINS(LCASE(?r), "obligation") )
         }""" ] .
 
@@ -6137,7 +6138,7 @@ backlog:StaleDispositionShape a sh:NodeShape ;
     sh:targetClass backlog:FindingRecord ;
     sh:severity sh:Violation ;
     rdfs:label "A disposition past its review date is undecided, not accepted (L1)"@en ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_finding_disposition_negative" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
     sh:sparql [ a sh:SPARQLConstraint ;
         sh:message "L1: this disposition's review date has passed. A known error or an accepted risk that nobody re-decided has quietly become a permanent exception -- which is a nonconformity with a note attached." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
@@ -6155,7 +6156,7 @@ backlog:StaleDispositionShape a sh:NodeShape ;
 #  and the owner has now stopped three times.
 #
 #  The promotion therefore ships as an OVERLAY:
-#  02-shacl-safeguards/backlog_shacl_promoted_v1_0_0.ttl, generated
+#  02-shacl-safeguards/backlog_shacl_promoted_v1_1_0.ttl, generated
 #  from this file, identical except for the audited severities. A
 #  register is validated against the overlay ONLY if its own data
 #  declares backlog:adoptsRuleSet backlog:RS_SeverityAudit_20260909 --

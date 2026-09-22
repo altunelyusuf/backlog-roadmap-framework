@@ -1706,16 +1706,16 @@ failuresuccess:Goal_Covers a backlog:Goal ; backlog:derivesFromScope failuresucc
 findingdisposi:N a backlog:Story ; backlog:hasIdentifier "S-N" ; backlog:hasState backlog:Done .
 findingdisposi:FR_Bare a backlog:FindingRecord .
 findingdisposi:FR_Nonconf a backlog:FindingRecord ; backlog:findingFromShape "X" ; backlog:findingOnNode findingdisposi:N ;
-    backlog:hasDisposition backlog:Disp_Nonconformity ; backlog:dispositionRationale "we will fix it" ; backlog:decidedBy backlog:Owner .
+    backlog:hasFindingDisposition backlog:Disp_Nonconformity ; backlog:dispositionRationale "we will fix it" ; backlog:decidedBy backlog:Owner .
 findingdisposi:FR_KE_Unwatched a backlog:FindingRecord ; backlog:findingFromShape "Y" ; backlog:findingOnNode findingdisposi:N ;
-    backlog:hasDisposition backlog:Disp_KnownError ; backlog:dispositionRationale "too late to fix" ; backlog:decidedBy backlog:Owner .
+    backlog:hasFindingDisposition backlog:Disp_KnownError ; backlog:dispositionRationale "too late to fix" ; backlog:decidedBy backlog:Owner .
 findingdisposi:FR_Risk_Bare a backlog:FindingRecord ; backlog:findingFromShape "Z" ; backlog:findingOnNode findingdisposi:N ;
-    backlog:hasDisposition backlog:Disp_RiskAccepted ; backlog:dispositionRationale "acceptable" ; backlog:decidedBy backlog:Owner .
+    backlog:hasFindingDisposition backlog:Disp_RiskAccepted ; backlog:dispositionRationale "acceptable" ; backlog:decidedBy backlog:Owner .
 findingdisposi:FR_Obs_Vague a backlog:FindingRecord ; backlog:findingFromShape "W" ; backlog:findingOnNode findingdisposi:N ;
-    backlog:hasDisposition backlog:Disp_Observation ; backlog:dispositionRationale "just noting it" ; backlog:decidedBy backlog:Owner ;
+    backlog:hasFindingDisposition backlog:Disp_Observation ; backlog:dispositionRationale "just noting it" ; backlog:decidedBy backlog:Owner ;
     backlog:monitoredBy "nothing" ; backlog:dispositionReviewDue "2027-01-01T00:00:00Z"^^xsd:dateTime .
 findingdisposi:FR_Stale a backlog:FindingRecord ; backlog:findingFromShape "V" ; backlog:findingOnNode findingdisposi:N ;
-    backlog:hasDisposition backlog:Disp_KnownError ; backlog:dispositionRationale "old" ; backlog:decidedBy backlog:Owner ;
+    backlog:hasFindingDisposition backlog:Disp_KnownError ; backlog:dispositionRationale "old" ; backlog:decidedBy backlog:Owner ;
     backlog:monitoredBy "m" ; backlog:preventiveMechanism "p" ; backlog:dispositionReviewDue "2026-01-01T00:00:00Z"^^xsd:dateTime .
 <http://example.org/finding-disposition-neg#> backlog:hasExpectedPolarity backlog:Polarity_Negative .
 
@@ -3690,3 +3690,7 @@ tscluster:TS_Varied a backlog:ExecutionTask ; backlog:hasState backlog:Done ;
     backlog:plannedAt "2026-09-15T09:00:00Z"^^xsd:dateTime ;
     backlog:startedAt "2026-09-15T09:05:00Z"^^xsd:dateTime ;
     backlog:finishedAt "2026-09-15T09:47:00Z"^^xsd:dateTime .
+# v1.14.0 (2026-09-22, real handover processed): renamed FindingRecord's own hasDisposition
+# usages to hasFindingDisposition (HANDOVER_agentic-sdlc...hasdisposition-collision), and fixed
+# two stale provenByFixture references left over from the earlier consolidation pass
+# (fixture_ceremony_link_negative, fixture_finding_disposition_negative -> fixture_negative).
