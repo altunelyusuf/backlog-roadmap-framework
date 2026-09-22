@@ -10190,3 +10190,20 @@ lines are never silently swallowed.
 genuine bypass -- this fix stops it from blocking unrelated work, it does not answer the bypass
 itself. A real `LineageRestart` remains the framework's own correct path when it's properly
 picked up; this release does not attempt that.
+
+## v1.299.0 — 2026-09-22 (PATCH: the LineageBypass naming critique addressed safely -- a clearer label, not a class rename)
+
+**Real feedback, checked before acting on it.** `LineageBypass`'s own name reads like a
+permission or an action to a first-time reader; it is neither -- it is a detection record,
+the same real kind of thing `RetrospectiveFinding` (its own real superclass) names elsewhere in
+this vocabulary. A full class rename was considered first, not assumed safe: checked directly,
+the class's own local name is used four real times in the sealed archive
+(`backlog_framework_archive_abox`), content this package's own integrity checks require stay
+byte-for-byte unchanged. Renaming the class itself would mean editing frozen, settled data --
+not a safe move, and not attempted.
+
+**Fixed the honest, available way instead:** the class's own `rdfs:label` changed from
+"Lineage Bypass" to "Lineage Bypass Finding", and a real `skos:altLabel` added explaining the
+naming tension directly, in the ontology itself, rather than only in a conversation about it.
+`backlog_tbox_v1_103_0.ttl -> v1_104_0.ttl`. Checked directly before shipping: nothing depends on
+the exact old label text anywhere in the shapes or tooling, so this is a pure, safe clarification.

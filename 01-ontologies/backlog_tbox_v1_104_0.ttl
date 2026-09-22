@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.103.0> ;
-    owl:versionInfo "1.103.0" ;
+    owl:versionIRI <http://example.org/backlog/1.104.0> ;
+    owl:versionInfo "1.104.0" ;
+    owl:priorVersion <http://example.org/backlog/1.103.0> ;
     owl:priorVersion <http://example.org/backlog/1.102.0> ;
     owl:priorVersion <http://example.org/backlog/1.101.0> ;
     owl:priorVersion <http://example.org/backlog/1.100.0> ;
@@ -6398,7 +6399,8 @@ backlog:FM_LineageBypass a owl:NamedIndividual , backlog:FailureMode ;
 backlog:LineageBypass a owl:Class ;
     rdfs:subClassOf backlog:RetrospectiveFinding ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
-    rdfs:label "Lineage Bypass"@en ;
+    rdfs:label "Lineage Bypass Finding"@en ;
+    skos:altLabel "the class's own local name, LineageBypass, reads like a permission or an action to a first-time reader; it is neither. It is a detection RECORD -- what a real, disclosed finding is called elsewhere in this same vocabulary (RetrospectiveFinding, which it subclasses). The label above says so plainly; the local name is kept exactly as it is everywhere real data already uses it, including sealed, archived content this package's own integrity checks require stay byte-for-byte unchanged, so renaming the class itself is not safe to do -- this is the honest, available fix."@en ;
     skos:definition "A recorded detection of FM_LineageBypass on one lineage: which items preceded the chain, at which commit each first appeared, at which commit the chain's Stage_Backlog output first appeared, when and by which tool run it was detected. Data written by backlog_lineage_order_check from git, never asserted by hand. Its existence on a non-archived lineage obliges a LineageRestart; SHACL decides that, the tool only records."@en .
 
 backlog:bypassedLineage a owl:ObjectProperty , owl:FunctionalProperty ;
