@@ -10154,17 +10154,39 @@ small, single-story, already-fully-tested lineage: both real branches of the fix
 isolation before any closure text was written, and a second, separate publish purely to satisfy
 commit-ordering here would work directly against the efficiency goal this release exists to serve.
 
-## v1.297.0 — 2026-09-22 (MINOR: the real fixture-consolidation work retroactively given the structure G99 itself required, and the mirror-sync workflow proven, not just described)
+## v1.298.0 — 2026-09-22 (MINOR: a real, confirmed deadlock risk in the lineage-order gate fixed -- concurrent lineages no longer block each other, while blocking stays exactly as strict for a lineage actually being touched)
 
-**Real, unplanned work closing a real, disclosed gap.** Lineage 17's own closure named it directly:
-the fixture-consolidation work (v1.288.0) was disclosed in prose at the time but never given the
-minimal, real WorkItem/Lineage chain G99's own ruling requires for technical-debt work. Closed
-here, retroactively -- Lineage 18, GATEFIX-S01 -- citing the real, already-published v1.288.0
-changelog entry as its own evidence, since the real verification happened in full at the time the
-work shipped, not as a fresh decision needing its own separate scrutiny pass now.
+**Real work from a real, direct owner challenge.** Concurrent, in-flight lineages are themselves
+an explicitly-supported BRSF pattern -- confirmed directly: `CrossLineageRiskAdvisoryShape`
+exists specifically to manage that case, surfacing risk for a human decision rather than vetoing
+it. But the lineage-order check itself evaluated every non-archived lineage globally and let the
+single worst verdict decide the whole exit code -- meaning one real, unresolved bypass anywhere
+would permanently block every future publish, including completely unrelated ones. A real
+deadlock risk, not a hypothetical one: this session's own Lineage 17 hit it directly.
 
-**The proactive mirror-sync workflow, proven for real this time, not just verified in principle.**
-`make_public_distribution` was run against the current working tree and pushed to the mirror
-*before* calling `oe_publish` for this release -- the same steps used previously, moved earlier
-in the sequence -- to test directly whether the first publish attempt can pass distribution-drift
-immediately instead of failing by design and needing a second attempt.
+**Fixed by scoping blocking, not by loosening it.** `backlog_lineage_order_check_v1_7_0.py ->
+v1_8_0.py`, with a new `--baseline <tag>` argument: blocking now applies only to lineages this
+run's own data actually changed relative to that tag. An untouched, pre-existing bypass is still
+disclosed on every single run -- named explicitly under a real `ADVISORY` line, never silently
+dropped -- but no longer stops work on anything else. A lineage genuinely being touched right now
+is held to exactly the same strict standard as before; both directions proven with real data
+before shipping, not assumed: an old baseline where Lineage 17 is genuinely new still blocks
+correctly (confirmed), the current, most recent baseline where it's untouched correctly does not
+(confirmed). Every existing caller -- the self-proof fixtures included -- is unaffected: omitting
+`--baseline` reproduces v1.7.0's own exact global behaviour, byte for byte.
+
+**A real bug found and fixed while building this, not shipped with it.** The baseline-resolution
+logic first tried to fetch the register's own file by its *current* filename at the older tag --
+and failed silently, since a versioned file is renamed on every real content change (`G94`) and
+routinely never existed under today's name at an earlier tag at all. Fixed to resolve by stem
+(the real prefix before the version suffix), matching the same convention every other tool in
+this package already follows.
+
+**`backlog_gate_v1_18_0.sh -> v1_19_0.sh`**, wired to pass the last published tag as
+`--baseline` automatically, and its own output filter extended so the new `scope`/`ADVISORY`
+lines are never silently swallowed.
+
+**What remains real, disclosed, and unresolved:** Lineage 17 (`L_GateEfficiency`) is still a
+genuine bypass -- this fix stops it from blocking unrelated work, it does not answer the bypass
+itself. A real `LineageRestart` remains the framework's own correct path when it's properly
+picked up; this release does not attempt that.

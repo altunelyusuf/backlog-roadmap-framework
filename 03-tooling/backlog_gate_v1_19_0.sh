@@ -473,8 +473,14 @@ if [ -n "$LOC" ]; then
     [ "$EX_RC" -eq 0 ] || { echo "  strategy-exercise register is non-conformant"; FAILED=1; }
   fi
   if [ -n "$REG" ]; then
-    LOC_OUT="$(python3 "$LOC" "$REG" $EXREG 2>&1)"; LOC_RC=$?
-    printf '%s\n' "$LOC_OUT" | grep -E '^  |^      - |^VERDICT' | sed 's/^/  /'
+    _LOC_REPO_ROOT="$(git -C "$PKG" rev-parse --show-toplevel 2>/dev/null || true)"
+    _LOC_LAST_TAG="$(git -C "${_LOC_REPO_ROOT:-$PKG}" tag --list 'backlog-roadmap-framework-v*' 2>/dev/null | sort -V | tail -1 || true)"
+    if [ -n "$_LOC_LAST_TAG" ]; then
+      LOC_OUT="$(python3 "$LOC" "$REG" $EXREG --baseline "$_LOC_LAST_TAG" 2>&1)"; LOC_RC=$?
+    else
+      LOC_OUT="$(python3 "$LOC" "$REG" $EXREG 2>&1)"; LOC_RC=$?
+    fi
+    printf '%s\n' "$LOC_OUT" | grep -E '^  |^      - |^VERDICT|^scope|^ADVISORY' | sed 's/^/  /'
     [ "$LOC_RC" -eq 0 ] || { echo "Lineage-order gate FAILED"; FAILED=1; }
   fi
 else

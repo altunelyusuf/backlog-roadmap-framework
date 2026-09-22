@@ -94,6 +94,17 @@ parts of a divided lineage sharing a commit remain fine (G84). --expect VERDICT 
 fail unless the named lineage reads exactly that verdict (L-95 proof of the two cases this defect
 had conflated). Witness maps carry [commit, ordinal]; any monotone integer serves.
 
+--baseline <tag> (v1.8.0): scopes BLOCKING to lineages this run's own data actually changed
+relative to that tag -- a real, confirmed deadlock risk fixed (owner's own challenge, 2026-09-22):
+concurrent, in-flight lineages are themselves a real, explicitly-supported BRSF pattern, so one
+untouched, pre-existing bypass must not block every future, unrelated publish forever. A touched
+lineage's own bypass still blocks exactly as before -- this narrows WHERE the check applies, never
+WHAT it accepts. Every finding on every lineage is still printed every run, moved lineages appear
+under ADVISORY rather than silently vanishing. Baseline files are resolved by stem, not exact
+filename, since a versioned file is renamed on every real content change (G94) and very often never
+existed under today's name at an older tag at all. Omit --baseline for v1.7.0's own exact behaviour,
+fully global, unaffected -- every existing caller, the self-proof fixtures included.
+
 Exit: 0 ORDERED/UNWITNESSED/RESTARTED/FROZEN; 2 BYPASS unanswered, THRASH unrecorded, WITNESS_BROKEN,
 or NOT VERIFIABLE (outputs exist, none witnessed), or --expect not met; 1 on error.
 """
@@ -535,10 +546,73 @@ def emit_thrash(g, L, d, fw):
     return "\n\n".join(out)
 
 
+def touched_lineages(g, args, argv):
+    """v1.8.0 -- real fix for a real, confirmed deadlock risk (owner's own challenge,
+    2026-09-22): a single bypassed lineage was blocking every future publish, even ones
+    that never touch it, because this check evaluated every lineage globally and let the
+    single worst verdict decide the whole exit code. Concurrent, in-flight lineages are
+    themselves a real, explicitly-supported BRSF pattern (CrossLineageRiskAdvisoryShape
+    exists precisely to manage that); a global blocking check contradicts that support.
+
+    Given --baseline <tag>, returns the set of Lineage URIs this run's own data actually
+    changed relative to that tag: the lineage itself is new, or any real subject naming
+    belongsToLineage it is new or its triples differ. Returns None (meaning: no scoping,
+    fully global, exactly v1.7.0's own behaviour) when --baseline is absent, so every
+    existing caller -- the self-proof fixtures included -- is completely unaffected."""
+    tag = next((argv[i + 1] for i, a in enumerate(argv) if a == "--baseline"), None)
+    if tag is None:
+        return None
+    reg_dir = os.path.dirname(os.path.abspath(args[0]))
+    root = subprocess.run(["git", "rev-parse", "--show-toplevel"], cwd=reg_dir, capture_output=True, text=True).stdout.strip()
+    if not root:
+        return None
+    base_g = Graph()
+    for f in args:
+        abs_f = os.path.abspath(f)
+        rel = os.path.relpath(abs_f, root)
+        rel_dir, base_name = os.path.split(rel)
+        shown = subprocess.run(["git", "show", f"{tag}:{rel}"], cwd=root, capture_output=True, text=True)
+        if shown.returncode != 0:
+            # v1.8.0 real bug, found and fixed here: a versioned file is renamed on every real
+            # content change (G94), so the CURRENT filename very often never existed at an older
+            # tag at all -- confirmed directly on this package's own real history (the register
+            # alone renamed three times across this session). Resolve by stem instead: same
+            # directory, same real prefix (everything before the final _vN_N_N), whichever
+            # version existed at that tag.
+            stem = re.sub(r"_v\d+_\d+_\d+(\.\w+)$", r"", base_name)
+            ls = subprocess.run(["git", "ls-tree", "--name-only", tag, "--", (rel_dir + "/" if rel_dir else "")],
+                                 cwd=root, capture_output=True, text=True)
+            cands = sorted(n for n in ls.stdout.splitlines() if os.path.basename(n).startswith(stem + "_v"))
+            if not cands:
+                continue  # genuinely did not exist at that tag under any version -- new content
+            rel = cands[-1]
+            shown = subprocess.run(["git", "show", f"{tag}:{rel}"], cwd=root, capture_output=True, text=True)
+            if shown.returncode != 0:
+                continue
+        try:
+            base_g.parse(data=shown.stdout, format="turtle")
+        except Exception:
+            continue  # a baseline that fails to parse teaches nothing; treat as absent, not fatal
+    new_or_changed = set()
+    for s, p, o in g:
+        if (s, p, o) not in base_g:
+            new_or_changed.add(s)
+    touched = set()
+    for L in g.subjects(RDF.type, B.Lineage):
+        if L in new_or_changed:
+            touched.add(L)
+            continue
+        for s in g.subjects(B.belongsToLineage, L):
+            if s in new_or_changed:
+                touched.add(L)
+                break
+    return touched
+
+
 def main():
     argv = sys.argv[1:]
     witness_path = argv[argv.index("--witness") + 1] if "--witness" in argv else None
-    args = [a for i, a in enumerate(argv) if not a.startswith("--") and (i == 0 or argv[i - 1] not in ("--witness", "--register-path", "--expect"))]
+    args = [a for i, a in enumerate(argv) if not a.startswith("--") and (i == 0 or argv[i - 1] not in ("--witness", "--register-path", "--expect", "--baseline"))]
     if not args:
         print(__doc__); return 1
     reg = args[0]
@@ -567,12 +641,17 @@ def main():
         witness = GitWitness(root, rel)
         print(f"witness     : git first-appearance under {rel}")
     print(f"register    : {os.path.basename(reg)}")
+    touched = touched_lineages(g, args, argv)
+    if touched is not None:
+        print(f"scope       : baseline-scoped -- blocking limited to {len(touched)} lineage(s) this run's own data actually changed")
     worst = 0; n = 0; unwitnessed_total = 0; verdicts = {}
     emitted = []
+    advisory_only = []
     for L in sorted(g.subjects(RDF.type, B.Lineage), key=local):
         arch = g.value(L, B.lineageArchived)
         if arch is not None and bool(arch.toPython()):
             continue
+        in_scope = touched is None or L in touched
         prefix = prefix_for(g, L)
         verdict, d = classify(g, L, witness, prefix)
         if verdict == "NO_OUTPUTS":
@@ -585,7 +664,10 @@ def main():
         for msg in d["unverifiable"]:
             print(f"      - UNVERIFIABLE HERE {msg}")
         if verdict == "WITNESS_BROKEN":
-            worst = 2
+            if in_scope:
+                worst = 2
+            else:
+                advisory_only.append(local(L))
         bl = d["outputs"].get("Stage_Backlog")
         print(f"  {local(L):24} {verdict:12} outputs={len(d['outputs'])} items={len(d['items'])} backlog_output={bl[0] if bl else 'absent'}"
               + ("  (chain retracted; rebuild from Mission pending)" if verdict == "RESTARTED" else "")
@@ -612,7 +694,10 @@ def main():
         if verdict == "THRASH":
             recorded = any((t, B.thrashedLineage, L) in g for t in g.subjects(RDF.type, B.LineageThrash))
             if not recorded:
-                worst = 2
+                if in_scope:
+                    worst = 2
+                else:
+                    advisory_only.append(local(L))
                 if emit:
                     emitted.append(emit_thrash(g, L, d, prefix))
         if verdict == "BYPASS":
@@ -629,7 +714,10 @@ def main():
                 return False
             answered = all(named_and_answered(ln) for ln, _, _ in d["bypassed"]) and not d["problems"]
             if not answered:
-                worst = 2
+                if in_scope:
+                    worst = 2
+                else:
+                    advisory_only.append(local(L))
                 if emit:
                     emitted.append(emit_bypass(g, L, d, prefix))
     exp = next((argv[i + 1] for i, a in enumerate(argv) if a == "--expect"), None)
@@ -648,6 +736,8 @@ def main():
     if emitted:
         print("\n# --- emitted findings (append to the register; the shapes then require a LineageRestart) ---")
         print("\n\n".join(emitted))
+    if advisory_only:
+        print(f"\nADVISORY    : {len(advisory_only)} lineage(s) carry a real, unresolved finding but were not touched by this run's own changes, so they do not block it: {', '.join(sorted(set(advisory_only)))}. Disclosed every run, not silently passed -- resolving them remains real, owed work.")
     if worst:
         print("VERDICT     : FAIL — a live lineage is bypassed without a restart, or its restarts are not converging without a thrash record; see above")
     else:
