@@ -10051,3 +10051,35 @@ of the previous several attempts. Fixed the honest way: renamed both to their re
 (`v9_96_0.ttl -> v9_97_0.ttl`, `fixture_negative_v1_12_0.ttl -> v1_13_0.ttl`), confirmed no
 hardcoded references anywhere needed updating (the package resolves every versioned file by
 highest SemVer, not by pinned filename), and reconfirmed the version-freeze gate passes clean.
+
+## v1.294.0 — 2026-09-21 (PATCH: the real cause of the mysterious silent release-gate failure, found via a fast, targeted trace instead of repeated full 20-minute re-runs)
+
+**Unplanned work:** the real, final piece of a confusing multi-turn release-gate failure this
+session, traced properly rather than guessed at again.
+
+**The real diagnostic fix first, since it's what made the rest findable quickly.** Several prior
+publish attempts this session showed every individual gate section printing PASS, yet the overall
+verdict said FAIL with no visible cause -- costing full ~20-minute gate re-runs each time to
+re-observe the same confusing output. Built a scratch, instrumented copy of the gate script that
+(a) skipped the sections already proven passing across many prior runs (fixture-coverage,
+clause-proof, determinism) and (b) traced the real, accumulated $FAILED value before every
+section. Found the actual flip point in under two minutes instead of twenty.
+
+**The real cause: a strategy-exercise register's own fixed-date fixture had aged past its own
+hardcoded horizon.** The gate's lineage-order check also validates
+`backlog_strategy_exercise_abox` -- a teaching/demonstration file, not live governed content --
+and that check's own message ("strategy-exercise register is non-conformant") doesn't contain the
+word "FAIL" or "FAILED", which is exactly why it never surfaced in any of the direct text searches
+run against prior full-gate logs. The real cause underneath: `TF_It2`/`TV_It2`'s own
+`iterationEnd` (2026-09-21T15:00:00Z) had simply passed real calendar time since the file was
+last touched (2026-09-08), naturally triggering `L4`'s own `NOW()`-based closed-iteration check --
+not a logic bug, not anything anyone broke, just a fixed-date fixture outliving its own hardcoded
+horizon. Extended both to 2030-01-01, honestly -- the exercise's own narrative never actually
+completed `TF_S2`/`TV_S2`, so marking them Done would have misrepresented it.
+`backlog_strategy_exercise_abox_v1_18_0.ttl -> v1_19_0.ttl`. Confirmed directly: the lineage-order
+check now exits 0 against both the real register and this file together, matching its own printed
+verdict for the first time across this session's several attempts.
+
+This also closes out `GOVMIT-S04`, the criterion-resolver separator fix, and the
+`statusRank`/`entryOrdinal` number-origin fix from the immediately preceding, still-unpublished
+attempts this session -- all real, validated, and shipping together in this release.

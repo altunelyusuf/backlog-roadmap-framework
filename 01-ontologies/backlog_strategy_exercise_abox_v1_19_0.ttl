@@ -8,8 +8,9 @@
 @prefix dcterms: <http://purl.org/dc/terms/> .
 
 <http://example.org/backlog-strategy-exercise> a owl:Ontology ;
-    owl:versionIRI <http://example.org/backlog-strategy-exercise/1.18.0> ;
-    owl:versionInfo "1.18.0" ;
+    owl:versionIRI <http://example.org/backlog-strategy-exercise/1.19.0> ;
+    owl:versionInfo "1.19.0" ;
+    owl:priorVersion <http://example.org/backlog-strategy-exercise/1.18.0> ;
     owl:priorVersion <http://example.org/backlog-strategy-exercise/1.17.0> ;
     owl:priorVersion <http://example.org/backlog-strategy-exercise/1.16.0> ;
     owl:priorVersion <http://example.org/backlog-strategy-exercise/1.15.0> ;
@@ -820,7 +821,7 @@ ex:TV_S2 backlog:postRestartItem ex:Restart_TV .
 #################################################################
 ex:TF_It2 a backlog:Iteration ; backlog:hasIdentifier "TF-IT-2" ; backlog:hasTitle "Second-trial iteration"@en ;
     backlog:hasState backlog:Proposed ; backlog:iterationStart "2026-09-07T15:00:00Z"^^xsd:dateTime ;
-    backlog:iterationEnd "2026-09-21T15:00:00Z"^^xsd:dateTime ; backlog:hasCapacity 8.0 ;
+    backlog:iterationEnd "2030-01-01T00:00:00Z"^^xsd:dateTime ; backlog:hasCapacity 8.0 ;
     backlog:belongsToLineage ex:TF_Lin ; backlog:appliesDefinitionOfDone ex:DoD_PL .
 ex:TF_Plan_S2 a backlog:PlanningEvent ; backlog:plansItem ex:TF_S2 ; backlog:plannedInto ex:TF_It2 ;
     backlog:plannedAt "2026-09-07T15:00:00Z"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
@@ -831,7 +832,7 @@ ex:TF_T_S2 a backlog:ExecutionTask ; backlog:hasTaskType backlog:Task_Implementa
 ex:TF_S2 backlog:memberOfContainer ex:TF_It2 .
 ex:TV_It2 a backlog:Iteration ; backlog:hasIdentifier "TV-IT-2" ; backlog:hasTitle "Second-trial iteration"@en ;
     backlog:hasState backlog:Proposed ; backlog:iterationStart "2026-09-07T15:00:00Z"^^xsd:dateTime ;
-    backlog:iterationEnd "2026-09-21T15:00:00Z"^^xsd:dateTime ; backlog:hasCapacity 8.0 ;
+    backlog:iterationEnd "2030-01-01T00:00:00Z"^^xsd:dateTime ; backlog:hasCapacity 8.0 ;
     backlog:belongsToLineage ex:TV_Lin ; backlog:appliesDefinitionOfDone ex:DoD_PL .
 ex:TV_Plan_S2 a backlog:PlanningEvent ; backlog:plansItem ex:TV_S2 ; backlog:plannedInto ex:TV_It2 ;
     backlog:plannedAt "2026-09-07T15:00:00Z"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
@@ -1005,3 +1006,14 @@ ex:TV_Lin backlog:hasLineageStatus backlog:LS_Backlogged .
 ex:TS_Lin backlog:hasLineageStatus backlog:LS_Backlogged .
 ex:TR_Lin backlog:hasLineageStatus backlog:LS_Backlogged .
 ex:TT_Lin backlog:hasLineageStatus backlog:LS_Backlogged .
+
+#################################################################
+#  v1.19.0 (2026-09-22, brsf-session) -- a real, previously-unnoticed drift found while tracing
+#  a silent gate failure: TF_It2/TV_It2's own iterationEnd (2026-09-21T15:00:00Z) is a fixed
+#  date that had simply aged into the past since this file was last touched (2026-09-08),
+#  naturally triggering the L4 closed-iteration-still-open check via its own real NOW()
+#  comparison -- not a logic bug, not something anyone broke, just a fixed-date teaching
+#  fixture outliving its own hardcoded horizon. Extended both to 2030-01-01, honestly (the
+#  narrative never actually completed TF_S2/TV_S2, so marking them Done would misrepresent
+#  it) rather than fabricating a false completion. Worth remembering: any fixed-date fixture
+#  in this package can drift the same way, silently, until something checks it against NOW().
