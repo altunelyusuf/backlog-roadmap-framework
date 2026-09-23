@@ -10364,3 +10364,23 @@ check of the profiles themselves:**
 already declared by Lineage 16) is built on a source that no longer passes current standards.**
 Not remediated in this release -- this is exactly the kind of finding that needs the owner's own
 ruling before acting, named directly rather than quietly fixed or quietly ignored.
+
+## v1.307.0 — 2026-09-23 (PATCH: the general-rules-versus-profile-specific-rules standard handed to PIB, per the owner's own ruling that it is an ecosystem-wide concern, not BRSF-local -- plus confirmation the real gap is already live, not merely historical)
+
+**Real, targeted follow-up on the owner's own two direct rulings.** First: Lineage 15 itself
+(closed, archived, its own work done) does not need reviving on its own account -- but checked
+directly whether its real gap reaches current or future work before accepting that as final:
+`--validate-lineage L_GovernanceMitigations` (Lineage 16, currently `InProgress`, which declared
+the same profile as its own template) shows the identical 4 real Violations against the `L3`
+test-harness rule. Confirmed live and active, not merely historical -- Lineage 16 is where this
+needs real attention, not Lineage 15's own closed record.
+
+**Second: the general-versus-profile-specific-rules distinction is handed to PIB, not built ad
+hoc here**, per the owner's own direct instruction that this is a property of the profile pattern
+itself, not of BRSF's own vocabulary -- every real consumer of PIB's shared Profile concept
+(another registrant, RADAR, PAMG, another registrant's own domain-profile mechanism) faces the identical structural gap.
+`HANDOVER_backlog-roadmap-framework_to_PIB_general-vs-profile-specific-rules_v1_0_0.md` delivered
+to OE's own inbox as the documented fallback (PIB has no handover inbox of its own, confirmed
+directly before filing), real commit `a6162de`. BRSF's own current, accidental default --
+everything general, nothing profile-conditional -- stays as the safe interim state while this is
+open; no local, divergent standard built in the meantime.
