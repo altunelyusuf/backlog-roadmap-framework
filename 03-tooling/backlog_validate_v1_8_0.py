@@ -241,14 +241,38 @@ def validate(data_files):
     script's own bytes, the resolved TBox/ABox/shapes/rules bytes and every data
     file's bytes, so no edit to any input can return a stale answer; a cache is
     only ever a replay of an identical computation. Exists because one pyshacl
-    evaluation of this suite costs 20-46 s on one core and the release gate plus
-    clause-proof evaluate ~75 (fixture, suite) pairs of which fewer than half are
-    distinct -- and because the gate must be RESUMABLE: a session's per-call
-    runtime ceiling is below one full gate run (G10), so a caller that keeps the
-    cache directory across calls finishes the same gate in pieces, each piece a
-    real computation, none of them repeated. Replaces backlog_validate_memo (a
-    shell shim that only the gate could reach; clause-proof calls this script
-    directly and was never memoized)."""
+    evaluation of this suite costs 20-46 s on one core AT THIS PACKAGE'S OWN
+    FIXTURE SCALE (133-995 triples) and the release gate plus clause-proof
+    evaluate ~20 (fixture, suite) pairs of which fewer than half are distinct --
+    and because the gate must be RESUMABLE: a session's per-call runtime ceiling
+    is below one full gate run (G10), so a caller that keeps the cache directory
+    across calls finishes the same gate in pieces, each piece a real computation,
+    none of them repeated. Replaces backlog_validate_memo (a shell shim that only
+    the gate could reach; clause-proof calls this script directly and was never
+    memoized).
+
+    REAL ADOPTER SCALE (v1.7.0, per the adopting project's own evidenced handover,
+    backlog_validate-runtime-at-production-scale): the 20-46s figure above
+    describes ONLY this package's own small self-test fixtures. A real, actively-
+    developed adopter register measured directly at 24,770 triples (13,132 in
+    the adopter's own register alone) took 361.5s (~6 min) uncached, confirmed
+    CPU-bound throughout (99.4-99.9%), not I/O-stalled. Confirmed close to
+    LINEAR for a largely-conformant graph (13.7x the triples took 15.1x the
+    time); a violation-heavy graph costs more per triple (enumerating many
+    results is real, separate work). Root cause investigated directly, not
+    guessed: SHACL-AF rules contribute only ~7% of runtime; the cost is real
+    volume -- (shapes x real content scale), e.g. 39 real shapes alone target
+    backlog:WorkItem, and a register with hundreds of real WorkItems means
+    thousands of (shape, node) evaluations from that one target class alone.
+    This is not a defect in any one shape; it is the honest cost of full,
+    every-item validation at that scale. For fast, LOCAL iteration during
+    active development, use validate_focused()/--focus-changed TAG instead: a
+    measured 210x-plus speedup by scoping to only the real subjects that
+    changed since a baseline tag -- but it is explicitly opt-in and
+    POTENTIALLY INCOMPLETE (see its own docstring); a full, unscoped
+    validate() (this function) remains mandatory before any real commit or
+    publish, and memoization here still helps most for exact-repeat calls,
+    not the first call after a real edit, which memoization cannot address."""
     memo_dir = os.environ.get("BACKLOG_VALIDATE_MEMO_DIR")
     if not memo_dir:
         return _validate(data_files)

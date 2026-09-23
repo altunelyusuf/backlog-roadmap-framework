@@ -10299,3 +10299,24 @@ confirmed zero regression) remains mandatory before any real commit or publish. 
 replace full validation; it addresses the real, dominant cost of the *first* uncached call after
 every real edit during active development, which memoization (by design) cannot help and which
 the adopting project's own handover named as the actual, remaining problem.
+
+## v1.304.0 — 2026-09-23 (PATCH: an adopting project handover fully closed -- Option A documentation applied, formal response filed, real closure not left implicit)
+
+**Real closure work, completing what v1.303.0 left unfinished.** v1.303.0 shipped the real,
+structural fix (`--focus-changed`, the ~210x speedup) but never applied the documentation
+clarification (Option A) the original handover explicitly asked for, and never filed a formal
+response closing the loop -- both real, owed steps, done now, not left implicit.
+
+**Option A applied:** `backlog_validate_v1_7_0.py -> v1_8_0.py`'s own `validate()` docstring now
+states plainly that "20-46s" describes this package's own fixture-scale self-test, corrects the
+stale "~75 (fixture, suite) pairs" figure to the real, current ~20 (after this session's own
+earlier fixture-consolidation work), and records the real, measured production-scale numbers
+from the adopting project's own handover directly, including the linear-for-clean-graphs refinement found
+during this session's own investigation.
+
+**A formal, evidenced response filed**:
+`RESPONSE_backlog-roadmap-framework_to_fizyovibe_backlog_validate-runtime-at-production-scale
+_v1_0_0.md`, moved to `accepted/`, real verification steps stated for the adopting project's own
+independent re-confirmation. Explicitly disclosed what this does not claim: the real speedup was
+verified at this package's own largest fixture (3,481 triples) and live register (1,814
+triples), not at the adopting project's own exact 24,770-triple scale.
