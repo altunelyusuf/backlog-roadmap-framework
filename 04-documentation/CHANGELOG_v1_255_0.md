@@ -10234,3 +10234,16 @@ genuinely, rationally still open:** `roadmap-report-naming-convention` and
 inbox -- genuinely awaiting their addressee, not stale. `plan-execution-divergence`'s own log
 updated to reflect that two of its four remaining mitigations were already partially built under
 Lineage 16 (`GOVMIT-S01`, `GOVMIT-S04`) without the log ever being updated to say so.
+
+## v1.301.0 — 2026-09-23 (PATCH: two genuinely generalizable lessons delivered to OEE, per the owner's own standing instruction)
+
+**Real, unplanned handover work.** Of the four candidate lessons deposited last release, two
+were judged genuinely generalizable beyond this registrant -- the global-enforcement-deadlock
+finding and the versioned-baseline-by-stem finding, the second directly relevant to the OE
+ecosystem's own shared rename-on-change versioning convention, not only to this package.
+Delivered formally to OEE governance (`oe-pack/07-handover-inbox/pending/`, commit `32aef5b`),
+following the same real L-84 pipeline that ratified L-107/L-108 from this registrant's own prior
+deposit, per the owner's own direct instruction that this class of submission is standing,
+automated best practice for OEE-governed ontologies, not requiring per-instance confirmation.
+The other two candidate lessons (retroactive-structure-detection, label-not-local-name) judged
+real but closer to this registrant's own specific mechanisms; kept as local record only.
