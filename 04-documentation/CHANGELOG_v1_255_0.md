@@ -10207,3 +10207,30 @@ not a safe move, and not attempted.
 naming tension directly, in the ontology itself, rather than only in a conversation about it.
 `backlog_tbox_v1_103_0.ttl -> v1_104_0.ttl`. Checked directly before shipping: nothing depends on
 the exact old label text anywhere in the shapes or tooling, so this is a pure, safe clarification.
+
+## v1.300.0 — 2026-09-22 (MINOR: the lesson-deposit mechanism refreshed after nearly two months dormant, and a real, unprocessed ratification found and reconciled)
+
+**Real, unplanned tidying, prompted directly by the owner.** The lesson-deposit mechanism
+(`backlog_framework_lesson_deposit`) hadn't been touched since 2026-07-27, despite this whole
+session's own substantial, generalizable findings. Four real candidate lessons deposited,
+duplicate-screened first: retroactive process structure is detected as the exact violation it
+tries to hide (git history cannot be backdated); a globally-evaluated enforcement check deadlocks
+the moment concurrent work is a legitimate pattern; a baseline lookup for a rename-on-change
+versioned file must resolve by stem, not by today's filename; and a naming-clarity regret on a
+class already used in sealed data is fixed in the label, not by renaming the class.
+`backlog_framework_lesson_deposit_v2_1_0.ttl -> v2_2_0.ttl`.
+
+**A real, unprocessed ratification found while reviewing the deferred queue for staleness, as
+asked.** `PROPOSAL_brsf-continuation_risk-facet-registration` had sat marked "deferred (awaiting
+addressee)" for two weeks -- but a real `ADJUDICATION_OE_to_backlog-roadmap-framework_risk-facet
+-registration_v1_0_0.md` had already arrived and was already correctly applied by a prior
+session on 2026-09-08 (`quality:hasFinding`, not `risk:hasIdentifiedRisk` -- BRSF's own findings
+are confirmed, retrospective facts, not prospective uncertainty; 43 findings correctly
+multi-typed). The log entry itself, not the work, was stale. Corrected and moved to `accepted/`.
+
+**The other two outgoing proposals and one incoming handover checked the same way, confirmed
+genuinely, rationally still open:** `roadmap-report-naming-convention` and
+`rdodi-roadmap-report-profile` have no response of any kind yet at either real destination
+inbox -- genuinely awaiting their addressee, not stale. `plan-execution-divergence`'s own log
+updated to reflect that two of its four remaining mitigations were already partially built under
+Lineage 16 (`GOVMIT-S01`, `GOVMIT-S04`) without the log ever being updated to say so.
