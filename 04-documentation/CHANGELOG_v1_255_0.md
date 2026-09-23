@@ -10247,3 +10247,23 @@ deposit, per the owner's own direct instruction that this class of submission is
 automated best practice for OEE-governed ontologies, not requiring per-instance confirmation.
 The other two candidate lessons (retroactive-structure-detection, label-not-local-name) judged
 real but closer to this registrant's own specific mechanisms; kept as local record only.
+
+## v1.302.0 — 2026-09-23 (PATCH: the OEE lesson-submission sequence closed -- both lessons ratified as L-122/L-123, verified independently by OEE, not accepted on this package's own account)
+
+**Real closure, checked directly, not assumed.** `PROPOSAL_backlog-roadmap-framework_to_OE_two
+-generalizable-tooling-lessons` -- confirmed genuinely delivered (real commit `32aef5b`, real
+blob hash verified against the actual remote repository after a real, honest correction of a
+false "stale local artifact" alarm along the way) -- has been ratified by OEE governance
+(`oe-pack v20.79.0`) into the governed catalogue as `L-122` (global enforcement deadlocks
+concurrent work) and `L-123` (rename-on-change baseline resolved by stem, never filename). OEE's
+own ratification record shows real, independent re-verification throughout: the shape confirmed
+to genuinely exist, the fix confirmed present in the real, current tool file, both self-proof
+fixtures confirmed present, the changelog narrative confirmed present -- and the proposal's own
+request (check `oe-pack`'s and `oe-method`'s own shared tooling for the same defect class as
+`L-123`) actually completed, not left pending: no instance found anywhere in the ecosystem's own
+shared tooling.
+
+**The lesson-deposit's own real record updated to reflect this**, matching this package's own
+established convention from L-107/L-108: `backlog_framework_lesson_deposit_v2_2_0.ttl ->
+v2_3_0.ttl`, both candidate entries now carrying `rdfs:seeAlso`/`dcterms:isReplacedBy` to the
+real, governed `L-122`/`L-123` IRIs, and a real outcome note recorded at the file's own head.
