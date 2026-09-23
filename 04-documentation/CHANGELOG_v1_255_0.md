@@ -10332,3 +10332,35 @@ fixture; `--focus` narrows shape evaluation only, not the full-graph parse/seria
 correctness confirmed, not just speed (227 violations agreed both ways, the one focused-run
 finding was a real, pre-existing gap, not a false positive or a miss). Logged in this package's
 own `HANDOVER_LOG.md`. No further action needed from either side.
+
+## v1.306.0 — 2026-09-23 (MINOR: a real safety mechanism for profile derivation -- a historic lineage's own conformance to CURRENT standards is now directly checkable, not assumed from its own day's rules)
+
+**Real work from a real, named risk, checked before any new profile work proceeded.** The owner's
+own direct concern: historic lineages may be non-conformant to current standards, and deriving a
+new LineageProfile from one would risk quietly codifying a weaker requirement into what future
+lineages inherit. Checked directly, not dismissed: `backlog_archive_conformance` only confirms a
+RECORDED conformance value has not been tampered with since a lineage's own closure -- it never
+re-checks that lineage's real content against today's live, current shapes. A real, structural gap.
+
+**Built: `validate_lineage()` / `--validate-lineage NAME`** (`backlog_validate_v1_8_0.py ->
+v1_9_0.py`), reusing `validate_focused()`'s own
+proven `--focus` mechanism, scoped by real lineage membership instead of a git-diff. Finds every
+real subject `belongsToLineage` the named lineage across the given data files and validates ONLY
+those against CURRENT, live shapes -- not the standard in force when the lineage was originally
+closed.
+
+**Immediately run against both existing profile sources, as a real test of the tool and a real
+check of the profiles themselves:**
+- **Lineage 9 (`L_SDLCObligations`, source of `Profile_FullChain_Ontology`): holds clean.** 0
+  Violation, 34 Warning, confirmed once both the live register and the archive were loaded
+  together (cross-referenced containers span both files -- the archive alone under-reports).
+- **Lineage 15 (`L_GovernanceContinuation`, source of `Profile_StoryDirect_Infrastructure`):
+  does NOT hold clean.** 4 real Violations -- a test-harness-completeness rule (`L3`, "derived,
+  not asserted") added as part of Lineage 9's own later work, never satisfied by Lineage 15's own
+  four ExecutionTasks. A real, genuine gap, not a scoping artifact -- reproduced identically with
+  full context loaded.
+
+**This means an already-shipped, already-used profile (`Profile_StoryDirect_Infrastructure`,
+already declared by Lineage 16) is built on a source that no longer passes current standards.**
+Not remediated in this release -- this is exactly the kind of finding that needs the owner's own
+ruling before acting, named directly rather than quietly fixed or quietly ignored.

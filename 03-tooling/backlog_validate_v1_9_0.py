@@ -236,6 +236,76 @@ def validate_focused(data_files, baseline_tag):
     return (2 if counts.get("Violation", 0) else 0), counts
 
 
+def validate_lineage(data_files, lineage_local_name):
+    """v1.8.0: real safety mechanism for profile derivation, built directly from the owner's own
+    named risk -- a historic lineage might be non-conformant to CURRENT standards, and deriving a
+    profile from it would risk quietly codifying a weaker requirement future lineages inherit.
+    backlog_archive_conformance only confirms a RECORDED conformance value has not been tampered
+    with since a lineage's own closure; it never re-checks that lineage's real content against
+    today's live, current shapes. This does exactly that: finds every real subject
+    belongsToLineage <lineage_local_name> across all given data files (the live register AND the
+    archive, when both are passed), and validates ONLY those subjects against the CURRENT, live
+    shapes and rules via pyshacl's own --focus -- reusing validate_focused()'s own proven
+    mechanism, scoped by lineage membership instead of by git-diff. A lineage that does not pass
+    cleanly here is NOT a safe source for a new LineageProfile, regardless of what standard was
+    in force when it was originally closed."""
+    cur = load(data_files)
+    B = rdflib.Namespace("http://example.org/backlog#")
+    L = None
+    for s in cur.subjects(rdflib.RDF.type, B.Lineage):
+        if loc_name(s) == lineage_local_name:
+            L = s
+            break
+    if L is None:
+        print("VALIDATE-LINEAGE: no real Lineage named %s found in the given data files" % lineage_local_name)
+        return 2, {}
+    members = set(cur.subjects(B.belongsToLineage, L))
+    members.add(L)
+    if not members:
+        print("VALIDATE-LINEAGE: %s has no real subjects to check" % lineage_local_name)
+        return 0, {"Violation": 0, "Warning": 0, "Info": 0}
+    _ov = promoted_overlay(data_files)
+    shapes = _ov if _ov else SHAPES
+    shapes_path = serialize(load([shapes, RULES]), ".shapes.ttl")
+    data_path = serialize(load([TBOX, ABOX] + data_files), ".data.ttl")
+    focus_list = ",".join(sorted(str(s) for s in members if not isinstance(s, rdflib.BNode)))
+    proc = subprocess.run(
+        [sys.executable, "-m", "pyshacl", "-s", shapes_path, "-a", "-f", "turtle",
+         "--focus", focus_list, data_path],
+        capture_output=True, text=True,
+    )
+    report = Graph()
+    try:
+        report.parse(data=proc.stdout, format="turtle")
+    except Exception:
+        print(proc.stdout)
+        print(proc.stderr, file=sys.stderr)
+        return 2, {}
+    counts = {"Violation": 0, "Warning": 0, "Info": 0}
+    findings = []
+    for result in report.subjects(rdflib.RDF.type, SH.ValidationResult):
+        sev = report.value(result, SH.resultSeverity)
+        name = str(sev).rsplit("#", 1)[-1] if sev else "Violation"
+        counts[name] = counts.get(name, 0) + 1
+        findings.append((name, str(report.value(result, SH.focusNode)), str(report.value(result, SH.resultMessage))))
+    print("VALIDATE-LINEAGE: %s against CURRENT, live shapes (not its own day's standard)" % lineage_local_name)
+    print("real subjects checked: %d" % len(members))
+    print("counts      : %d Violation, %d Warning, %d Info"
+          % (counts.get("Violation", 0), counts.get("Warning", 0), counts.get("Info", 0)))
+    for name, node, msg in findings:
+        if name == "Violation":
+            print("  - %s %s: %s" % (name, node, msg[:200]))
+    if counts.get("Violation", 0):
+        print("VERDICT     : NOT a safe profile source -- fails CURRENT standards, regardless of its own day's rules")
+    else:
+        print("VERDICT     : safe profile source -- holds clean under CURRENT, live shapes")
+    return (2 if counts.get("Violation", 0) else 0), counts
+
+
+def loc_name(uri):
+    return str(uri).rsplit("#", 1)[-1]
+
+
 def validate(data_files):
     """v1.6.0: memoized when BACKLOG_VALIDATE_MEMO_DIR is set. The key covers this
     script's own bytes, the resolved TBox/ABox/shapes/rules bytes and every data
@@ -447,6 +517,13 @@ def main():
                          "sibling can miss a new violation there, since the sibling is never "
                          "re-checked. For fast, local iteration only; always run a full validation "
                          "(no --focus-changed) before any real commit or publish.")
+    ap.add_argument("--validate-lineage", metavar="NAME",
+                    help="v1.8.0, real safety mechanism for profile derivation: validate ONLY the "
+                         "named lineage's own real subjects against CURRENT, live shapes -- not "
+                         "the standard in force when it was originally closed. A lineage that does "
+                         "not pass cleanly here is not a safe source for a new LineageProfile. Pass "
+                         "both the live register and the archive as data files to check an archived "
+                         "lineage.")
     args = ap.parse_args()
 
     if args.gate_k:
@@ -455,6 +532,9 @@ def main():
         ap.error("no register file given")
     if args.focus_changed:
         code, counts = validate_focused(args.data, args.focus_changed)
+        sys.exit(code)
+    if args.validate_lineage:
+        code, counts = validate_lineage(args.data, args.validate_lineage)
         sys.exit(code)
     if args.polarity:
         for f in args.data:
