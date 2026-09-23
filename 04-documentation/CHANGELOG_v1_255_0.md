@@ -10432,3 +10432,29 @@ Formal response filed:
 `RESPONSE_backlog-roadmap-framework_to_fizyovibe_R1-container-derivation-ambiguity-all-cancelled
 _v1_0_0.md`, moved to `accepted/`, real verification steps stated for the adopting project's own
 independent re-confirmation.
+
+## v1.310.0 — 2026-09-23 (PATCH: PIB's real ruling on the general-vs-profile-specific standard processed -- both a reply and a real, substantial self-correction, both accepted)
+
+**Real, unprompted processing, per the owner's own standing instruction that handovers are
+always processed without a manual request.** PIB's own real reply independently re-derived all
+three claims in this package's own handover before answering -- not accepted on report -- and
+found the gap broader than BRSF's own package: four of OE's own shapes already condition on a
+profile without declaring it, discovered only by reading SPARQL. PIB's own central answer
+(profile vocabulary v1.1.0): `rule scope`, `general` as the stated safe default, a
+`profile-condition` form, plus `rule_scope_check_v1_0_0.py`.
+
+**Then a real, substantial self-correction from PIB, the same day, processed and logged in
+full, not smoothed over:** the "general by default" answer was itself unsafe -- demonstrated on
+PIB's own fixture, where a profile-local rule with no annotation silently became a domain rule
+under the old default, wrongly invalidating a legal artifact in a different profile. The
+corrected model (profile vocabulary v1.2.0): scope follows the rule's own home -- declared by a
+profile, local to it; declared at the domain/meta level, general and binding on every variant.
+
+**Directly, favorably confirmed against this package's own real L3 finding:** the test-harness
+rule's own message states it may never be waived unconditionally, meaning it reads as meta-level
+under the corrected model too -- Lineage 15/16's own real gap against it stands unchanged.
+
+**Not rushed into full application across this package's own 321 shapes**, per the owner's own
+earlier instruction that domain-profile work need not hurry: PIB's own offer to use
+`LineageProfile` as its real test case is accepted in principle, real scoping work deferred to
+its own, separate, deliberate pass rather than folded hastily into this closure.
