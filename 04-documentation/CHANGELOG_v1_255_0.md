@@ -10458,3 +10458,14 @@ under the corrected model too -- Lineage 15/16's own real gap against it stands 
 earlier instruction that domain-profile work need not hurry: PIB's own offer to use
 `LineageProfile` as its real test case is accepted in principle, real scoping work deferred to
 its own, separate, deliberate pass rather than folded hastily into this closure.
+
+## v1.311.0 — 2026-09-23 (PATCH: the adopting project's R1 container-derivation fix closed, both sides -- real, independent re-verification received and logged)
+
+**Real closure, not assumed, processed without a manual request per the owner's own standing
+instruction.** an adopting project filed a real `CLOSURE_` note, independently re-verifying
+`backlog_rules_v1_7_0.ttl`'s own `R1a` fix against its own real, committed register. Confirmed:
+the new clause matches the response's own description exactly; hand-evaluated against
+the adopting project's own real `It13` (the container the whole finding came from), `R1a` no longer fires
+and `R1c` alone derives `Proposed`, matching `It13`'s own already-asserted state exactly. Direct,
+independent confirmation the disclosed workaround was the fix's real, correct answer. Logged in
+this package's own `HANDOVER_LOG.md`. No further action needed from either side.
