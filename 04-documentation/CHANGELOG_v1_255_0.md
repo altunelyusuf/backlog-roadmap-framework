@@ -10384,3 +10384,21 @@ to OE's own inbox as the documented fallback (PIB has no handover inbox of its o
 directly before filing), real commit `a6162de`. BRSF's own current, accidental default --
 everything general, nothing profile-conditional -- stays as the safe interim state while this is
 open; no local, divergent standard built in the meantime.
+
+## v1.308.0 — 2026-09-23 (PATCH: the PIB handover redirected to PIB's own real inbox -- a separate repository, not a subdirectory of this monorepo, discovered from the owner's own direct links)
+
+**Real correction, checked precisely before acting.** The owner reported PIB ready to receive
+handovers directly; a thorough check of `pib-hub` (fresh fetch, every depth, every branch) found
+nothing -- because PIB's own handover inbox lives in an entirely separate repository,
+`the maintainer/PIB`, not inside the `Ontologies` monorepo at all. Confirmed directly from the
+owner's own links, not guessed: `09-handover-inbox/pending/`, `09-handover-inbox/README.md`
+(stating its own real filing convention, which this package's own handover already matched
+exactly), and `13-consumer-registry`.
+
+**Redirected properly, verified at every step, not assumed:** the handover filed to PIB's own
+real repository (`PIB` commit `98799b2`), checked against PIB's own real validation tool
+(`handover_inbox_check_v1_0_0.py` -- PASS) before committing, confirmed present via a fresh clone
+afterward. The fallback copy removed from `oe-pack`'s own inbox in the `Ontologies` monorepo
+(`Ontologies` commit `64b0174`), matching PIB's own README: a fallback is routed as soon as a
+real inbox exists, not left as a parking place. Logged in full in this package's own
+`HANDOVER_LOG.md`, both commits named.
