@@ -10320,3 +10320,15 @@ _v1_0_0.md`, moved to `accepted/`, real verification steps stated for the adopti
 independent re-confirmation. Explicitly disclosed what this does not claim: the real speedup was
 verified at this package's own largest fixture (3,481 triples) and live register (1,814
 triples), not at the adopting project's own exact 24,770-triple scale.
+
+## v1.305.0 — 2026-09-23 (PATCH: the adopting project's handover fully closed, both sides -- real, independent re-verification received and logged)
+
+**Real closure, not assumed.** an adopting project filed a real `CLOSURE_` note, independently
+re-verifying the `v1.303.0`/`v1.304.0` fix against its own real, committed register, not
+accepting this package's own account. Confirmed: docstring changes byte-for-byte; a real ~47x
+speedup on the adopting project's own scale (8.3s focused vs 6m32.6s full), honestly smaller than this
+package's own ~210x and correctly explained why (register ~7x larger than this package's own
+fixture; `--focus` narrows shape evaluation only, not the full-graph parse/serialize cost);
+correctness confirmed, not just speed (227 violations agreed both ways, the one focused-run
+finding was a real, pre-existing gap, not a false positive or a miss). Logged in this package's
+own `HANDOVER_LOG.md`. No further action needed from either side.
