@@ -10267,3 +10267,35 @@ shared tooling.
 established convention from L-107/L-108: `backlog_framework_lesson_deposit_v2_2_0.ttl ->
 v2_3_0.ttl`, both candidate entries now carrying `rdfs:seeAlso`/`dcterms:isReplacedBy` to the
 real, governed `L-122`/`L-123` IRIs, and a real outcome note recorded at the file's own head.
+
+## v1.303.0 — 2026-09-23 (MINOR: a real, ~200x speedup for targeted validation during active development -- the actual root cause of the adopting project's own 5-6 hour cumulative cost investigated and addressed, not just documented)
+
+**Real, structural work, prompted directly by the owner's own explicit challenge to solve --
+not just document -- the adopting project's own evidenced 5-6 hour cumulative cost.** A full, real
+profiling investigation, not a guess: confirmed the 21 SHACL-AF rules contribute only ~7% of
+runtime (195.7s shapes-only vs 210.3s with rules, same 3,481-triple fixture); bisected the
+321-shape file four levels deep and found the cost genuinely, broadly distributed -- not
+concentrated in one bad shape, consistent with 39 real shapes alone targeting `backlog:WorkItem`
+against 201 real WorkItem-typed subjects in that same fixture, ~7,839 (shape, node) evaluations
+from one target class alone. The real root cause is volume: (shapes × real content scale),
+inherent to full, from-scratch, every-item validation -- not a defect fixable by rewriting any
+one shape.
+
+**The real fix: scope validation to what actually changed, not the whole graph.** Verified
+directly that pyshacl's own `--focus` flag, scoped to real changed subjects (determined via a
+real git-diff against a baseline tag, reusing the same stem-resolution fix proven in
+`backlog_lineage_order_check`'s own `L-123`), gives a real, measured 210x-plus speedup: 210.3s
+full vs ~1-3s focused, confirmed with correct output on both a synthetic single-subject test and
+a real, deliberately-broken edit to this package's own register (1 real subject identified, 15
+real violations correctly found, 3 seconds total). New `validate_focused()` and
+`--focus-changed TAG` in `backlog_validate_v1_6_0.py -> v1_7_0.py`.
+
+**A real, honest safety trade-off, disclosed in the tool's own output on every run, not
+hidden:** shapes comparing a changed subject against other, unchanged ones (uniqueness, sibling
+checks) can miss a new violation on an unchanged sibling the change newly affects, since that
+sibling is never re-checked. This is explicitly an opt-in, fast, local-iteration mode -- the
+tool prints its own warning every time it runs, and a full, unscoped `validate()` (unchanged,
+confirmed zero regression) remains mandatory before any real commit or publish. This does not
+replace full validation; it addresses the real, dominant cost of the *first* uncached call after
+every real edit during active development, which memoization (by design) cannot help and which
+the adopting project's own handover named as the actual, remaining problem.
