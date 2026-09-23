@@ -10402,3 +10402,33 @@ afterward. The fallback copy removed from `oe-pack`'s own inbox in the `Ontologi
 (`Ontologies` commit `64b0174`), matching PIB's own README: a fallback is routed as soon as a
 real inbox exists, not left as a parking place. Logged in full in this package's own
 `HANDOVER_LOG.md`, both commits named.
+
+## v1.309.0 — 2026-09-23 (MINOR: a real, genuine R1 container-state-derivation bug found by an adopting project, confirmed independently, and fixed -- an all-Cancelled container no longer derives two contradictory states)
+
+**Real, extraordinarily well-evidenced handover, independently re-verified before acting.**
+the adopting project's own R1a/R1c both fire on a container whose only members are Cancelled, asserting
+`backlog:Done` and `backlog:Proposed` simultaneously -- reproduced first against the real rule
+text, then empirically via `pyshacl`'s own rule engine on a real, minimal test container, before
+any fix was written. Both derivedState triples confirmed present together, matching the
+handover's own claim exactly.
+
+**Fixed: `backlog_rules_v1_6_0.ttl -> v1_7_0.ttl`.** `R1a` ("all members Done") now requires at
+least one member genuinely `Done`, not merely "none excluded from `{Done, Cancelled}`" -- an
+all-Cancelled container correctly falls through to `R1c` alone, deriving `Proposed`. Adopted
+the adopting project's own proposed sketch as-is, because its reasoning held under direct, independent
+verification: a container that produced nothing has not, in a meaningful sense, shipped.
+
+**Proven across the full real test matrix the handover itself specified**, not just the bug
+case: all-Cancelled (fixed, now `Proposed` alone), all-Done (`Done`, unchanged), mixed
+Done+Cancelled (`Done`, unchanged), one InProgress member (`InProgress`, R1b unaffected), all-
+Proposed (`Proposed`, R1c alone unaffected). Zero regression to this package's own live register.
+
+**A real, honest confirmation for the adopting project's own project:** its own disclosed workaround for
+`It13` (asserting `Proposed`, chosen as the option with the fewest real disagreements) matches
+this fix's own derived answer exactly -- direct confirmation the workaround was the correct
+reading, not merely the least-bad of three imperfect options.
+
+Formal response filed:
+`RESPONSE_backlog-roadmap-framework_to_fizyovibe_R1-container-derivation-ambiguity-all-cancelled
+_v1_0_0.md`, moved to `accepted/`, real verification steps stated for the adopting project's own
+independent re-confirmation.
