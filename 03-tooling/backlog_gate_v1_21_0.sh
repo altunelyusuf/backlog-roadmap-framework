@@ -548,7 +548,7 @@ if [ -z "$CARRIER" ]; then
   echo "  no manifestDigestCarriedBy in the register — RegisterArtifactShape reports it; not verified here."
 else
   MDIG="$(sha256sum "$PKG/MANIFEST_SHA256.txt" | cut -d' ' -f1)"
-  if ! grep -qE "^# EXEMPT $CARRIER " "$PKG/MANIFEST_SHA256.txt"; then
+  if ! grep -qE "^# EXEMPT:? $CARRIER " "$PKG/MANIFEST_SHA256.txt"; then
     echo "  carrier $CARRIER is NOT declared exempt in the manifest — a carrier the manifest covers is the cycle again"; FAILED=1
   elif [ ! -f "$PKG/$CARRIER" ]; then
     echo "  carrier $CARRIER does not exist"; FAILED=1

@@ -91,7 +91,9 @@ def main():
     # Now writes one real, path-qualified exemption line per actual match found on disk.
     for rel in sorted(exempt_paths):
         base = os.path.basename(rel)
-        lines.append("# EXEMPT %s — %s" % (rel, EXEMPT[base]))
+        # v1.7.0: the shared ecosystem form "# EXEMPT: <path>" (repo-tooling verify_manifest_v1_1_0),
+        # so the publisher's stowaway check honours this package's own declared exemptions.
+        lines.append("# EXEMPT: %s — %s" % (rel, EXEMPT[base]))
     lines.append("")
     for dirpath, dirs, files in os.walk(PKG):
         dirs[:] = sorted(d for d in dirs if d != "__pycache__")

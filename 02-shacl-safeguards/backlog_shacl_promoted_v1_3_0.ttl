@@ -1,4 +1,4 @@
-# backlog_shacl_promoted v1.2.0 -- GENERATED from backlog_shacl_v1_133_0.ttl by
+# backlog_shacl_promoted v1.3.0 -- GENERATED from backlog_shacl_v1_133_0.ttl by
 # 03-tooling/backlog_make_promoted_shapes_v1_1_0.py, carrying forward the applied severity audit of
 # 2026-09-09 as recorded on each audited shape's own severity line ("# G90 ..."). Shapes with no
 # such line keep their base severity. Identical to the base file in every other byte. Loaded INSTEAD
@@ -16,9 +16,9 @@
 
 <http://example.org/backlog-shapes-promoted> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes-promoted/1.2.0> ;
-    owl:versionInfo "1.2.0" ;
-    owl:priorVersion <http://example.org/backlog-shapes-promoted/1.1.0> ;
+    owl:versionIRI <http://example.org/backlog-shapes-promoted/1.3.0> ;
+    owl:versionInfo "1.3.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes-promoted/1.2.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.132.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.131.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.130.0> ;
@@ -3061,7 +3061,7 @@ backlog:MixedOrderShape a sh:NodeShape ;
 
 backlog:LegacyOrderAdvisoryShape a sh:NodeShape ;
     sh:targetClass backlog:ScopeStatement ;
-    sh:severity sh:Violation ;   # G90 issue (2026-09-09): a scope pointing at its own objectives was written after them; the stage order is already broken.
+    sh:severity sh:Warning ;   # G90 risk (2026-09-24, owner criterion applied): the shape's own message states a scope written after its objectives is a real record and not an error (scope-last is a recognised lineage adaptation); no rule is broken, the risk is a boundary that never refuses anything. First-pass promotion reverted.
     rdfs:label "Advisory: a lineage built scope-last"@en ;
     sh:sparql [ a sh:SPARQLConstraint ;
         sh:message "Advisory: this scope points at its objectives, so it was written after them and its boundary was drawn around work already decided. That is a real record of how this lineage was built and is not an error. It is reported because such a boundary has never refused anything: to change that, fix a scope for the NEXT increment before its goals and link it with fillsScope. Do not re-point the existing links — a boundary re-derived from objectives that already exist is exactly the self-confirming one this reports." ;
@@ -4050,7 +4050,7 @@ backlog:AnalysisArtifactShape a sh:NodeShape ;
 
 backlog:UnfinishedLineageShape a sh:NodeShape ;
     sh:targetClass backlog:Mission ;
-    sh:severity sh:Violation ;   # G90 issue (2026-09-09): a mission with no goal and no Goal-stage output is a lineage that has not met the ceremony's own requirement.
+    sh:severity sh:Warning ;   # G90 risk (2026-09-24, owner criterion applied: non-compliance is a Violation, a probability is a Warning): the shape's own message states a mission without a goal is legitimate mid-construction under the staged ceremony; no rule is broken, the risk is abandonment. First-pass promotion reverted.
     rdfs:label "Advisory: a mission whose lineage stopped part-way"@en ;
     sh:sparql [ a sh:SPARQLConstraint ;
         sh:message "Advisory: this mission has no goal and no Goal-stage output exists, so its lineage is mid-construction. That is legitimate under the staged ceremony and it is reported, because a lineage abandoned after the Mission stage looks exactly the same as one still being built — the difference is whether the next commit comes." ;

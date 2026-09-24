@@ -7,7 +7,7 @@ which judged 63 of 66 shapes from message text alone and reported "0 of 66 recla
 breach is a violation, whatever the consequence. A **risk** is a condition below certainty, or a
 condition certainly true that no rule yet covers. An **opportunity** is neither.
 
-**Result: 58 obligations, 16 risks, 4 opportunities.** Fourteen of the 58 were promoted only after the
+**Result: 55 obligations, 19 risks, 4 opportunities** (v1.1.0, 2026-09-24; first stated 58/16/4 -- one promotion reverted on measurement the same day, two more reverted under the owner's criterion: see the amendment note below). Fourteen of the 58 were promoted only after the
 owner challenged the first classification — a passed forecast has been missed, a breached limit is
 breached, a refinement naming no iteration is missing a datum. One promotion (`ClassReachabilityShape`)
 was reverted on measurement: see the changelog.
@@ -66,29 +66,40 @@ was reverted on measurement: see the changelog.
 | `CrossProjectCommitAdvisoryShape` | Risk / rule-not-yet-written → `sh:Warning` | A remote commit under our prefix risks a conflict needing reconciliation. |
 | `DeliverableIntentionShape` | Risk / rule-not-yet-written → `sh:Warning` | A deliverable met only by open work risks the boundary being met in intention only. |
 | `GroomedAheadShape` | Risk / rule-not-yet-written → `sh:Warning` | Detail written far ahead risks being rewritten. |
-| `HorizonCoherenceAdvisoryShape` | Risk / rule-not-yet-written → `sh:Warning` | A Now-horizon item not yet Ready may still become Ready in time. |
-| `IneffectiveCorrectiveAttemptAdvisoryShape` | Risk / rule-not-yet-written → `sh:Warning` | An attempt that moved nothing risks a second one repeating it. |
-| `JustInTimeGroomingShape` | Risk / rule-not-yet-written → `sh:Warning` | Grooming that names no iteration risks being too early or too late. |
-| `LegacyOrderAdvisoryShape` | Risk / rule-not-yet-written → `sh:Warning` | A scope written after its objectives risks a boundary drawn around decisions already made. |
-| `LineageLocalModeRecurrenceAdvisoryShape` | Risk / rule-not-yet-written → `sh:Warning` | A recurring local mode risks being a general pattern mis-scoped. |
-| `LineageLocalSuccessModeRecurrenceAdvisoryShape` | Risk / rule-not-yet-written → `sh:Warning` | Same, for success modes. |
+| `HorizonCoherenceAdvisoryShape` | Obligation → `sh:Violation` | A Now-horizon item that is not Ready makes the horizon claim false now. *(First pass: risk; promoted on the owner's challenge, G90.)* |
+| `IneffectiveCorrectiveAttemptAdvisoryShape` | Obligation → `sh:Violation` | The attempt has finished and the observation did not move: a recorded fact. *(First pass: risk; promoted on the owner's challenge, G90.)* |
+| `JustInTimeGroomingShape` | Obligation → `sh:Violation` | A refinement that names no iteration is missing a required datum, not risking one. *(First pass: risk; promoted on the owner's challenge, G90.)* |
+| `LegacyOrderAdvisoryShape` | Risk / rule-not-yet-written → `sh:Warning` | A scope written after its objectives risks a boundary drawn around decisions already made. *(2026-09-24: the applied overlay had promoted this; reverted under the owner's criterion -- the shape's own message states the detected state is legitimate, so no rule is broken.)* |
+| `LineageLocalModeRecurrenceAdvisoryShape` | Obligation → `sh:Violation` | Two or more findings already carry this lineage-local mode: the recurrence has happened. *(First pass: risk; promoted on the owner's challenge, G90.)* |
+| `LineageLocalSuccessModeRecurrenceAdvisoryShape` | Obligation → `sh:Violation` | Same, for success modes. *(First pass: risk; promoted on the owner's challenge, G90.)* |
 | `MeasuredBasisAdvisoryShape` | Risk / rule-not-yet-written → `sh:Warning` | A judged estimate inside a launch gate risks being wrong; it is not yet wrong. |
 | `OversizedStoryAdvisoryShape` | Risk / rule-not-yet-written → `sh:Warning` | An oversized story risks not landing; it has not failed. |
 | `PackageRegularityShape` | Risk / rule-not-yet-written → `sh:Warning` | Uneven package sizes risk an unreadable roadmap. |
-| `PbiKindAdvisoryShape` | Risk / rule-not-yet-written → `sh:Warning` | A misplaced kind risks a wrong reading; nothing downstream is yet wrong. |
+| `PbiKindAdvisoryShape` | Obligation → `sh:Violation` | An epic carrying an initiative kind is already mis-typed. *(First pass: risk; promoted on the owner's challenge, G90.)* |
 | `PlannedFromEvidenceShape` | Risk / rule-not-yet-written → `sh:Warning` | A span far above measured durations risks a plan built on hope. |
-| `PrematureExclusionShape` | Risk / rule-not-yet-written → `sh:Warning` | Exclusions before areas risk narrowing before the need is known. |
+| `PrematureExclusionShape` | Obligation → `sh:Violation` | Exclusions recorded before any area breaks the order the scope stage states. *(First pass: risk; promoted on the owner's challenge, G90.)* |
 | `RubberStampAdvisoryShape` | Risk / rule-not-yet-written → `sh:Warning` | A gate that never refused may be working; it risks being decorative. |
-| `ScopeCreepAdvisoryShape` | Risk / rule-not-yet-written → `sh:Warning` | Work outside the scope's derivation risks creep; a ScopeChange may still admit it. |
-| `ScopeGapAdvisoryShape` | Risk / rule-not-yet-written → `sh:Warning` | A boundary no goal derives from risks being unworked. |
+| `ScopeCreepAdvisoryShape` | Obligation → `sh:Violation` | An epic outside the scope's derivation with no ScopeChange admitting it breaks containment now. *(First pass: risk; promoted on the owner's challenge, G90.)* |
+| `ScopeGapAdvisoryShape` | Obligation → `sh:Violation` | A scope statement no goal derives from breaks the scope-to-goal chain now. *(First pass: risk; promoted on the owner's challenge, G90.)* |
 | `ScoringIgnoredAdvisoryShape` | Risk / rule-not-yet-written → `sh:Warning` | Selection on another basis risks the scoring being decorative. |
 | `SessionDraftedIntentAdvisoryShape` | Risk / rule-not-yet-written → `sh:Warning` | Same, for intent elements. |
 | `SessionDraftedMissionAdvisoryShape` | Risk / rule-not-yet-written → `sh:Warning` | A session-drafted mission is legitimate and risks unowned intent. |
-| `StaleForecastAdvisoryShape` | Risk / rule-not-yet-written → `sh:Warning` | A missed forecast risks the commitments built on it. |
+| `StaleForecastAdvisoryShape` | Obligation → `sh:Violation` | The forecast date has passed with work still open -- the forecast HAS been missed, not risks being. *(First pass: risk; promoted on the owner's challenge, G90.)* |
 | `StoryTaskSpreadShape` | Risk / rule-not-yet-written → `sh:Warning` | All-implementation tasks risk analysis and testing being skipped. |
-| `UnfinishedLineageShape` | Risk / rule-not-yet-written → `sh:Warning` | A mid-construction lineage is legitimate under the staged ceremony and risks being abandoned there. |
-| `WipBreachAdvisoryShape` | Risk / rule-not-yet-written → `sh:Warning` | An overrun WIP limit predicts late delivery; nothing is yet late. |
+| `UnfinishedLineageShape` | Risk / rule-not-yet-written → `sh:Warning` | A mid-construction lineage is legitimate under the staged ceremony and risks being abandoned there. *(2026-09-24: the applied overlay had promoted this; reverted under the owner's criterion -- the shape's own message states the detected state is legitimate, so no rule is broken.)* |
+| `WipBreachAdvisoryShape` | Obligation → `sh:Violation` | A DECLARED limit is already exceeded; the limit describes the overrun instead of constraining it. *(First pass: risk; promoted on the owner's challenge, G90.)* |
 | `BothLayersShape` | Opportunity → `sh:Info` | All areas in one layer may be exactly right for the boundary. |
 | `IntentEchoShape` | Opportunity → `sh:Info` | Objective and work being the same set is an observation about redundancy, not a risk. |
 | `MirroredScopeShape` | Opportunity → `sh:Info` | Boundary and backlog mirroring each other exactly is a completeness observation. |
 | `ProductScopeKindShape` | Opportunity → `sh:Info` | One product-scope kind throughout may be exactly right. |
+
+## Amendment, v1.1.0 (2026-09-24)
+
+This document's table had kept the first-pass disposition for fourteen shapes that G90 records as
+promoted on the owner's challenge, while the applied overlay carried the promotions. The two records
+disagreed on thirteen shapes. Resolved by the owner's criterion -- a detected non-compliance is a
+Violation, a possibility with a probability is a Warning -- applied to each shape's own firing
+condition: eleven detect a present breach and are obligations (rows above now say so, the first-pass
+view noted); two (`UnfinishedLineageShape`, `LegacyOrderAdvisoryShape`) detect a state their own
+message declares legitimate, so they are risks, and the overlay's promotion of them is reverted
+(`backlog_shacl_promoted_v1_3_0.ttl`).

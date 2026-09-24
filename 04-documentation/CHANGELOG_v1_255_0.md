@@ -10636,3 +10636,38 @@ succession. Confirmed claim by claim (an adopting project, `promoted-overlay-sta
 **Open to the owner:** the audit document and the applied overlay disagree on 13 shapes (document:
 risk, stays Warning; overlay: Violation, each with its own recorded reason). The applied
 classification was carried forward unchanged pending a ruling.
+
+## v1.317.0 — 2026-09-24 (PATCH: the 13-shape severity conflict resolved by the owner's existing criterion, not by a new ruling)
+
+v1.316.0 found that the severity audit's two in-package records disagreed on 13 shapes and put the
+question to the owner. It should not have: G90 already states the criterion -- *a detected
+non-compliance is a Violation; a possibility with a probability is a Warning* ("100% is an issue,
+below 100% is a risk, and a risk that belongs to a rule is still an obligation") -- and records that
+fourteen first-pass risks were promoted on the owner's challenge. The audit document's table had
+kept those first-pass rows; its own result line and the applied overlay had not.
+
+Applied shape by shape to each firing condition:
+- **Eleven are obligations** -- each detects a present breach (a passed forecast, an exceeded WIP
+  limit, a refinement missing its iteration, a Now item not Ready, a broken scope-to-goal chain, a
+  mis-typed epic, a recurrence that has happened). Table rows corrected; the first-pass view noted.
+- **Two are risks** -- `UnfinishedLineageShape` and `LegacyOrderAdvisoryShape` detect states their
+  own messages declare legitimate (a mission mid-construction under the staged ceremony; a scope
+  written after its objectives, a recognised adaptation). No rule is broken, so the overlay's
+  promotion of them is reverted.
+
+`SEVERITY_AUDIT_2026_09_09_v1_0_0.md -> v1_1_0.md` (table and overlay now agree exactly: 55
+obligations, 19 risks, 4 opportunities); `backlog_shacl_promoted_v1_2_0.ttl -> v1_3_0.ttl`
+(regenerated, gate check CURRENT); `backlog_tbox_v1_106_0.ttl -> v1_107_0.ttl` (the rule set's own
+definition cites the amended audit and no longer pins a stale count or overlay file name).
+
+Also: OE discipline v2.12.1 adopted at ceremony (governance provenance in readable repositories);
+this release is the first published with publisher v1.8.2, which records the governance
+repository's visibility in the publish record as that version requires.
+
+**Also in v1.317.0 -- manifest exemptions in the shared form.** The current publisher (v1.8.2) refuses
+files on disk the manifest does not list unless declared as `# EXEMPT: <path>`, the ecosystem form
+its shared checker (`verify_manifest_v1_1_0.py`) reads. This package wrote `# EXEMPT <path>` (no
+colon), so its six real exemptions were invisible to it and the first dry run was refused.
+`build_manifest_v1_6_0.py -> v1_7_0.py` writes the shared form; `backlog_manifest_coverage_v1_0_0.py
+-> v1_1_0.py` and the gate's manifest-digest-carrier step (`backlog_gate_v1_20_0.sh -> v1_21_0.sh`)
+accept it. The shared checker now passes with no unlisted files.

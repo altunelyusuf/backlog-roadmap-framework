@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_manifest_coverage_v1_0_0.py — nothing sits on disk uncovered and unexplained.
+"""backlog_manifest_coverage_v1_1_0.py — nothing sits on disk uncovered and unexplained.
 
 WHAT GATE 0 ALREADY DOES, AND WHAT IT CANNOT
 
@@ -33,7 +33,7 @@ a builder is not.
 
 Exit 0 when every file is accounted for, 1 otherwise.
 
-Usage: backlog_manifest_coverage_v1_0_0.py [package-root]
+Usage: backlog_manifest_coverage_v1_1_0.py [package-root]
 """
 
 import os
@@ -48,7 +48,7 @@ def read_manifest(path):
     hashed, exempt = set(), {}
     for line in open(path, encoding="utf-8"):
         line = line.rstrip("\n")
-        m = re.match(r"^#\s*EXEMPT\s+(\S+)\s*—\s*(.+)$", line)
+        m = re.match(r"^#\s*EXEMPT:?\s+(\S+)\s*—\s*(.+)$", line)  # v1.1.0: shared "EXEMPT:" form accepted
         if m:
             exempt[m.group(1)] = m.group(2).strip()
             continue

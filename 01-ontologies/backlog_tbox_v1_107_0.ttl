@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.106.0> ;
-    owl:versionInfo "1.106.0" ;
+    owl:versionIRI <http://example.org/backlog/1.107.0> ;
+    owl:versionInfo "1.107.0" ;
+    owl:priorVersion <http://example.org/backlog/1.106.0> ;
     owl:priorVersion <http://example.org/backlog/1.105.0> ;
     owl:priorVersion <http://example.org/backlog/1.104.0> ;
     owl:priorVersion <http://example.org/backlog/1.103.0> ;
@@ -7139,7 +7140,7 @@ backlog:ruleSetAdoptedAt a owl:DatatypeProperty ;
     rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "rule set adopted at"@en .
 backlog:RS_SeverityAudit_20260909 a owl:NamedIndividual , backlog:RuleSet ;
     rdfs:label "Severity audit of 2026-09-09"@en ;
-    skos:definition "The audit recorded in 04-documentation/SEVERITY_AUDIT_2026_09_09_v1_0_0.md: 58 advisories that state a broken lineage rule become sh:Violation, 4 become sh:Info, 16 remain sh:Warning. Shipped as 02-shacl-safeguards/backlog_shacl_promoted_v1_0_0.ttl. NOT adopted by this register at v1.248.0: lineage 9 is in progress."@en .
+    skos:definition "The audit recorded in 04-documentation/SEVERITY_AUDIT_2026_09_09_v1_1_0.md (amended 2026-09-24 under the owner's criterion -- non-compliance is a Violation, a probability is a Warning -- so that its table and the applied overlay agree): the advisories that state a broken lineage rule become sh:Violation, the opportunities sh:Info, and the risks remain sh:Warning. Shipped as the highest 02-shacl-safeguards/backlog_shacl_promoted_v*.ttl, regenerated from the base shapes by 03-tooling/backlog_make_promoted_shapes and refused by the release gate when stale. NOT adopted by this register at v1.248.0: lineage 9 is in progress."@en .
 
 #################################################################
 #  v1.93.0 (2026-09-10) -- THREE GAPS REPORTED BY SCAMPS, VERIFIED
