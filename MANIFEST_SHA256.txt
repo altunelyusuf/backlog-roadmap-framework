@@ -2,6 +2,7 @@
 # Built by build_manifest_v1_5_0.py. Release build.
 
 # EXEMPT .clause-proof-stamp — a cache key over the negative fixtures and declared shape proofs, written by backlog_clause_proof after a passing run; same reason as .fixture-suite-stamp -- hashing it would change it and it carries no content of its own
+# EXEMPT .fixture-suite-stamp — a cache key over the shapes, TBox and fixtures, written by the gate after a passing run; hashing it would change it and it carries no content of its own
 # EXEMPT 06-package-provenance/registrant-deposit-snapshot/RELEASE_METRICS.txt — reports the result of the manifest gate, so covering it creates a generation-order cycle; its integrity rests on regenerating byte-for-byte instead
 # EXEMPT MANIFEST_SHA256.txt — a manifest cannot contain its own hash; containment is a physical impossibility
 # EXEMPT PUBLISH_RECORD.ttl — written by the publisher AFTER the manifest, so listing it guarantees a permanent mismatch a reader cannot distinguish from a real one
