@@ -10748,3 +10748,10 @@ The 2026-09-23 ruling that an all-Cancelled container derives Proposed stands fo
 at closure such a container is resolved by the owner's dissolution. v1.319.0's container carry-over
 (admission and remainder split) is withdrawn one release after it shipped, because the owner's ruling
 decides containers differently; no adopter had used it.
+
+## v1.320.1 — 2026-09-24 (PATCH: a superseded rules file retired)
+
+`backlog_rules_v1_6_0.ttl` had shipped beside its successors since v1.309.0: that release created
+`v1_7_0` as a copy instead of a rename, so the superseded version was never retired. Unused -- every
+tool that loads the rules takes the highest version -- but a superseded version does not stay in the
+package. Found by listing the published tree after v1.320.0.
