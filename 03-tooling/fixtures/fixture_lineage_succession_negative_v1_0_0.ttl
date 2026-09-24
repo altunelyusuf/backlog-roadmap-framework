@@ -1,0 +1,72 @@
+@prefix backlog: <http://example.org/backlog#> .
+@prefix fwneg: <http://example.org/fixture-succession-negative#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# Real, negative proof: each real constraint LineageSuccessionShape/PartialScopeDeclarationShape/
+# LineageReactivationShape enforces, deliberately broken once, one real case per rule.
+
+# 1. Gap declared against a lineage that is still open, not closed.
+fwneg:L_StillOpen a backlog:Lineage ; backlog:lineageOrdinal 1 ;
+    backlog:hasLineageStatus backlog:LS_InProgress ; backlog:lineageArchived false .
+fwneg:Gap_TooEarly a backlog:PartialScopeDeclaration ;
+    backlog:declaresGapFor fwneg:L_StillOpen ;
+    backlog:describesUncoveredScope "Filed before the lineage actually closed." .
+
+# 2. Succession where predecessor and successor are the same lineage.
+fwneg:L_SelfSucc a backlog:Lineage ; backlog:lineageOrdinal 2 ;
+    backlog:hasLineageStatus backlog:LS_Achieved ; backlog:lineageArchived false .
+fwneg:Gap_SelfSucc a backlog:PartialScopeDeclaration ;
+    backlog:declaresGapFor fwneg:L_SelfSucc ; backlog:describesUncoveredScope "Real gap." .
+fwneg:Succ_SelfSucc a backlog:LineageSuccession ;
+    backlog:succeedsLineage fwneg:L_SelfSucc ; backlog:successorLineage fwneg:L_SelfSucc ;
+    backlog:resolvesGap fwneg:Gap_SelfSucc ; backlog:successionRationale "Bad: succeeds itself." ;
+    backlog:decidedBy backlog:Owner .
+
+# 3. Succession where successor's Mission differs from predecessor's.
+fwneg:M_One a backlog:Mission ; backlog:missionFor fwneg:Register .
+fwneg:M_Two a backlog:Mission ; backlog:missionFor fwneg:Register .
+fwneg:L_Pred3 a backlog:Lineage ; backlog:lineageOrdinal 3 ; backlog:lineageForMission fwneg:M_One ;
+    backlog:hasLineageStatus backlog:LS_Achieved ; backlog:lineageArchived false .
+fwneg:L_Succ3 a backlog:Lineage ; backlog:lineageOrdinal 4 ; backlog:lineageForMission fwneg:M_Two ;
+    backlog:hasLineageStatus backlog:LS_InProgress ; backlog:lineageArchived false .
+fwneg:Gap_3 a backlog:PartialScopeDeclaration ;
+    backlog:declaresGapFor fwneg:L_Pred3 ; backlog:describesUncoveredScope "Real gap." .
+fwneg:Succ_3 a backlog:LineageSuccession ;
+    backlog:succeedsLineage fwneg:L_Pred3 ; backlog:successorLineage fwneg:L_Succ3 ;
+    backlog:resolvesGap fwneg:Gap_3 ; backlog:successionRationale "Bad: different mission." ;
+    backlog:decidedBy backlog:Owner .
+
+# 4. Succession where the gap's own declaresGapFor does not match succeedsLineage.
+fwneg:L_Pred4a a backlog:Lineage ; backlog:lineageOrdinal 5 ;
+    backlog:hasLineageStatus backlog:LS_Achieved ; backlog:lineageArchived false .
+fwneg:L_Pred4b a backlog:Lineage ; backlog:lineageOrdinal 6 ;
+    backlog:hasLineageStatus backlog:LS_Achieved ; backlog:lineageArchived false .
+fwneg:L_Succ4 a backlog:Lineage ; backlog:lineageOrdinal 7 ;
+    backlog:hasLineageStatus backlog:LS_InProgress ; backlog:lineageArchived false .
+fwneg:Gap_4 a backlog:PartialScopeDeclaration ;
+    backlog:declaresGapFor fwneg:L_Pred4b ; backlog:describesUncoveredScope "Filed for a different lineage." .
+fwneg:Succ_4 a backlog:LineageSuccession ;
+    backlog:succeedsLineage fwneg:L_Pred4a ; backlog:successorLineage fwneg:L_Succ4 ;
+    backlog:resolvesGap fwneg:Gap_4 ; backlog:successionRationale "Bad: gap filed for the wrong lineage." ;
+    backlog:decidedBy backlog:Owner .
+
+# 5. Succession where the successor's own Objective never resolves the gap structurally.
+fwneg:L_Pred5 a backlog:Lineage ; backlog:lineageOrdinal 8 ;
+    backlog:hasLineageStatus backlog:LS_Achieved ; backlog:lineageArchived false .
+fwneg:L_Succ5 a backlog:Lineage ; backlog:lineageOrdinal 9 ;
+    backlog:hasLineageStatus backlog:LS_InProgress ; backlog:lineageArchived false .
+fwneg:Gap_5 a backlog:PartialScopeDeclaration ;
+    backlog:declaresGapFor fwneg:L_Pred5 ; backlog:describesUncoveredScope "Real gap, never picked up." .
+fwneg:Succ_5 a backlog:LineageSuccession ;
+    backlog:succeedsLineage fwneg:L_Pred5 ; backlog:successorLineage fwneg:L_Succ5 ;
+    backlog:resolvesGap fwneg:Gap_5 ; backlog:successionRationale "Bad: no Objective picks this up." ;
+    backlog:decidedBy backlog:Owner .
+# Note: no Objective anywhere declares resolvesPartialScope fwneg:Gap_5 -- the real violation.
+
+# 6. Reactivation of a lineage that was never actually closed.
+fwneg:L_NeverClosed a backlog:Lineage ; backlog:lineageOrdinal 10 ;
+    backlog:hasLineageStatus backlog:LS_InProgress ; backlog:lineageArchived false .
+fwneg:React_Bad a backlog:LineageReactivation ;
+    backlog:reactivatesLineage fwneg:L_NeverClosed ;
+    backlog:reactivationRationale "Bad: this lineage was never closed." ;
+    backlog:decidedBy backlog:Owner .

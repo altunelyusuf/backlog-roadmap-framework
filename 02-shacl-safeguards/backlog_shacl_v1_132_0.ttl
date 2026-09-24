@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.131.0> ;
-    owl:versionInfo "1.131.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.132.0> ;
+    owl:versionInfo "1.132.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.131.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.130.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.129.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.128.0> ;
@@ -5694,6 +5695,101 @@ backlog:LineageThrashShape a sh:NodeShape ;
         sh:select """SELECT $this WHERE {
             $this backlog:thrashedLineage ?l ; backlog:repeatedBypass ?b .
             FILTER NOT EXISTS { ?b backlog:bypassedLineage ?l }
+        }""" ] .
+
+#################################################################
+#  v1.132.0 -- LineageSuccession, PartialScopeDeclaration, LineageReactivation.
+#  Real, structural answer to the adopting project's own evidenced handover
+#  (no-adaptation-mechanism-for-a-mature-lineage-under-a-new-ruleset): a
+#  mature, in-progress lineage under an evolved RuleSet may wind its
+#  completed scope down honestly and open a successor, without re-judging
+#  closed history or forcing a Divide-and-Conquer restart meant for a
+#  bypass, a different problem. Proven by fixture_lineage_succession
+#  (positive) and fixture_lineage_succession_negative (negative).
+#################################################################
+
+backlog:PartialScopeDeclarationShape a sh:NodeShape ;
+    sh:targetClass backlog:PartialScopeDeclaration ;
+    sh:severity sh:Violation ;
+    rdfs:label "A partial-scope declaration names its lineage and the real remainder (L1)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_lineage_succession" ;
+    sh:property [ sh:path backlog:declaresGapFor ; sh:minCount 1 ; sh:maxCount 1 ; sh:class backlog:Lineage ;
+                  sh:message "A partial-scope declaration names exactly one lineage." ] ;
+    sh:property [ sh:path backlog:describesUncoveredScope ; sh:minCount 1 ; sh:datatype xsd:string ;
+                  sh:message "A partial-scope declaration states the real, genuine remainder in words, not left implicit." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this declaration names a lineage that is neither archived nor recorded Achieved. A partial-scope declaration is filed as part of a lineage's own real closure, not while it is still actively open -- filing one early would let a lineage claim its own gap before the gap is real." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:declaresGapFor ?l .
+            FILTER NOT EXISTS { ?l backlog:lineageArchived true }
+            FILTER NOT EXISTS { ?l backlog:hasLineageStatus backlog:LS_Achieved }
+        }""" ] .
+
+backlog:LineageSuccessionShape a sh:NodeShape ;
+    sh:targetClass backlog:LineageSuccession ;
+    sh:severity sh:Violation ;
+    rdfs:label "A succession names predecessor, successor, the gap it resolves, and an owner rationale (L1)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_lineage_succession" ;
+    sh:property [ sh:path backlog:succeedsLineage ; sh:minCount 1 ; sh:maxCount 1 ; sh:class backlog:Lineage ;
+                  sh:message "A succession names exactly one predecessor lineage." ] ;
+    sh:property [ sh:path backlog:successorLineage ; sh:minCount 1 ; sh:maxCount 1 ; sh:class backlog:Lineage ;
+                  sh:message "A succession names exactly one successor lineage." ] ;
+    sh:property [ sh:path backlog:resolvesGap ; sh:minCount 1 ; sh:maxCount 1 ; sh:class backlog:PartialScopeDeclaration ;
+                  sh:message "A succession resolves exactly one real partial-scope declaration." ] ;
+    sh:property [ sh:path backlog:successionRationale ; sh:minCount 1 ; sh:datatype xsd:string ;
+                  sh:message "A succession states the owner's own real cost/benefit and risk/opportunity reasoning, not a template." ] ;
+    sh:property [ sh:path backlog:decidedBy ; sh:minCount 1 ;
+                  sh:message "A succession is an owner decision and says so." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this succession's own predecessor and successor are the same lineage. A succession opens what comes next; it cannot succeed itself." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:succeedsLineage ?p ; backlog:successorLineage ?s .
+            FILTER (?p = ?s)
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this succession's own successor lineage does not share the predecessor's own lineageForMission. A succession continues one Mission under a new lineage; a different Mission is not a succession, it is a new, unrelated lineage." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:succeedsLineage ?p ; backlog:successorLineage ?s .
+            ?p backlog:lineageForMission ?mp . ?s backlog:lineageForMission ?ms .
+            FILTER (?mp != ?ms)
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this succession's own resolved partial-scope declaration was not filed against the same predecessor lineage this succession names. The declaration and the succession must agree on which lineage's gap this is." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:succeedsLineage ?p ; backlog:resolvesGap ?g .
+            ?g backlog:declaresGapFor ?gp .
+            FILTER (?p != ?gp)
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this succession's own successor lineage has no real Objective that structurally resolves the same partial-scope declaration (resolvesPartialScope). The succession's own prose names the intent; the successor's own chain must carry the real, checkable link -- not merely overlap the gap by coincidence." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:successorLineage ?s ; backlog:resolvesGap ?g .
+            FILTER NOT EXISTS { ?o backlog:belongsToLineage ?s ; backlog:resolvesPartialScope ?g }
+        }""" ] .
+
+backlog:LineageReactivationShape a sh:NodeShape ;
+    sh:targetClass backlog:LineageReactivation ;
+    sh:severity sh:Violation ;
+    rdfs:label "A reactivation names the lineage it reopens and a real, owner-ruled need (L1)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_lineage_succession" ;
+    sh:property [ sh:path backlog:reactivatesLineage ; sh:minCount 1 ; sh:maxCount 1 ; sh:class backlog:Lineage ;
+                  sh:message "A reactivation names exactly one lineage." ] ;
+    sh:property [ sh:path backlog:reactivationRationale ; sh:minCount 1 ; sh:datatype xsd:string ;
+                  sh:message "A reactivation states the real, named need, not a default justification." ] ;
+    sh:property [ sh:path backlog:decidedBy ; sh:minCount 1 ;
+                  sh:message "A reactivation is an owner decision and says so." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this reactivation names a lineage that was never actually closed (neither archived nor Achieved). Reactivation answers a real need to reopen closed work; a still-open lineage has nothing to reactivate." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:reactivatesLineage ?l .
+            FILTER NOT EXISTS { ?l backlog:lineageArchived true }
+            FILTER NOT EXISTS { ?l backlog:hasLineageStatus backlog:LS_Achieved }
         }""" ] .
 
 #################################################################

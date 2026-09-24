@@ -1,0 +1,43 @@
+@prefix backlog: <http://example.org/backlog#> .
+@prefix fwsucc: <http://example.org/fixture-succession#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# Real, minimal, positive proof of LineageSuccession/PartialScopeDeclaration/LineageReactivation.
+# A predecessor lineage, closed Achieved but honestly partial; a successor under the same
+# Mission that structurally resolves the declared gap; a real succession record linking them;
+# a reactivation of a third, separately-closed lineage, for a real, separate need.
+
+fwsucc:M_Shared a backlog:Mission ; backlog:missionFor fwsucc:Register .
+
+fwsucc:L_Predecessor a backlog:Lineage ; backlog:lineageOrdinal 1 ;
+    backlog:lineageForMission fwsucc:M_Shared ; backlog:hasLineageStatus backlog:LS_Achieved ;
+    backlog:lineageArchived false .
+
+fwsucc:Gap_Predecessor a backlog:PartialScopeDeclaration ;
+    backlog:declaresGapFor fwsucc:L_Predecessor ;
+    backlog:describesUncoveredScope "The predecessor closed with its data-migration work genuinely done, but the reporting-dashboard portion of the original scope was never reached." .
+
+fwsucc:L_Successor a backlog:Lineage ; backlog:lineageOrdinal 2 ;
+    backlog:lineageForMission fwsucc:M_Shared ; backlog:hasLineageStatus backlog:LS_InProgress ;
+    backlog:lineageArchived false .
+
+fwsucc:Obj_Successor a backlog:Objective ; backlog:belongsToLineage fwsucc:L_Successor ;
+    backlog:resolvesPartialScope fwsucc:Gap_Predecessor .
+
+fwsucc:Succ_1 a backlog:LineageSuccession ;
+    backlog:succeedsLineage fwsucc:L_Predecessor ;
+    backlog:successorLineage fwsucc:L_Successor ;
+    backlog:resolvesGap fwsucc:Gap_Predecessor ;
+    backlog:successionRationale "Relevance ratio low (5%), most projected violations unrelated backfill; adopting the new RuleSet in place would re-judge closed work G89 forbids. Wind down and continue under a successor." ;
+    backlog:decidedBy backlog:Owner .
+
+# A separately-closed lineage, reactivated for a real, distinct need -- proves
+# LineageReactivation independently of the succession pair above.
+fwsucc:L_ClosedElsewhere a backlog:Lineage ; backlog:lineageOrdinal 3 ;
+    backlog:lineageForMission fwsucc:M_Shared ; backlog:hasLineageStatus backlog:LS_Achieved ;
+    backlog:lineageArchived false .
+
+fwsucc:React_1 a backlog:LineageReactivation ;
+    backlog:reactivatesLineage fwsucc:L_ClosedElsewhere ;
+    backlog:reactivationRationale "A real security defect was found in code this lineage closed; re-validated against current standards before returning to active status." ;
+    backlog:decidedBy backlog:Owner .

@@ -10494,3 +10494,45 @@ mature lineage's completed scope is properly closed and a successor opened under
 RuleSet, and how a Mission's own overall satisfaction is tracked across a chain of successive
 lineages. This release addresses only the one, disclosed, structural bug that would affect any
 such design regardless of its shape.
+
+## v1.313.0 — 2026-09-24 (MINOR: LineageSuccession, PartialScopeDeclaration, LineageReactivation -- the real, structural mechanism designed through direct discussion with the owner, built and proven)
+
+**Real, substantial new mechanism, answering the adopting project's own evidenced handover
+(no-adaptation-mechanism-for-a-mature-lineage-under-a-new-ruleset) directly, not a general
+gesture.** Reached through real, back-and-forth design discussion with the owner across several
+turns, not designed unilaterally: a mature, in-progress lineage under an evolved `RuleSet` may
+now close its genuinely completed scope honestly and open a successor, without either
+re-judging closed history (`G89`) or forcing the entire membership through a
+`LineageRestart`/Divide-and-Conquer meant for a different problem (a detected bypass, not a
+`RuleSet`'s own timing relative to a lineage's maturity).
+
+**The real design, as agreed:**
+- `PartialScopeDeclaration` — the predecessor's own honest record, filed as part of its real
+  closure and never afterward, of what its Objective did not cover. Enforced: only a lineage
+  already archived or recorded `LS_Achieved` may have one filed against it -- a declaration
+  cannot precede the closure it describes.
+- `LineageSuccession` — the owner's own deliberate record of winding down and opening a
+  successor under the *same* Mission. Enforced: predecessor and successor cannot be the same
+  lineage; both real four-factor rationale (relevance ratio, absolute remaining cost, cost of
+  waiting, enforcement value forgone -- informing judgement, not outputting a verdict) and the
+  owner's own `decidedBy` are required; the resolved gap must genuinely belong to the named
+  predecessor.
+- `resolvesPartialScope` — the direct, structural link from the successor's own Objective to
+  the predecessor's real gap, required by the same shape: a succession whose successor has no
+  Objective actually resolving the gap is caught, not merely asserted in prose. Both halves of
+  the owner's own design hold together, exactly as agreed: the predecessor's retrospective
+  declaration and the successor's prospective, checkable resolution.
+- `LineageReactivation` — real, owner-ruled reopening of properly closed work, distinct from a
+  casual reopen: enforced that the named lineage was genuinely closed first.
+
+**Proven, both directions, before shipping**, matching this package's own established discipline:
+`fixture_lineage_succession_v1_0_0.ttl` (a real predecessor/successor/reactivation triad,
+confirmed clean against all three new shapes, isolated from unrelated pre-existing Mission-
+completeness requirements this minimal fixture does not attempt to satisfy) and
+`fixture_lineage_succession_negative_v1_0_0.ttl` (six real, distinct violations, one per real
+constraint, all six confirmed firing correctly). `backlog_tbox_v1_104_0.ttl -> v1_105_0.ttl`,
+`backlog_shacl_v1_131_0.ttl -> v1_132_0.ttl`.
+
+**Deliberately not yet applied to any real, existing lineage.** This release builds and proves
+the mechanism; using it on `Lineage_Main` (the adopting project's own real case) or on any of this
+package's own lineages is real, separate work for its own turn, not folded into this one.
