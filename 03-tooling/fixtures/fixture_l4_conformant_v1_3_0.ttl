@@ -518,3 +518,8 @@ ex:Obj_G_Areas_Scope backlog:metricMovableBy ex:US2 .
 ex:Obj_G_Contain_Scope backlog:metricMovableBy ex:US2 .
 # v1.2.0 (2026-09-09): lineage status stated (TBox v1.89.0, LineageStatusShape); derived from the fixture's own outputs and item states.
 ex:Lin1 backlog:hasLineageStatus backlog:LS_InProgress .
+
+# fixture_l4_conformant_v1_3_0: lineage membership for containers (shapes v1.135.0; the vocabulary defines it on every individual).
+<http://example.org/l4#It1> <http://example.org/backlog#belongsToLineage> <http://example.org/l4#Lin1> .
+<http://example.org/l4#It2> <http://example.org/backlog#belongsToLineage> <http://example.org/l4#Lin1> .
+<http://example.org/l4#Rel1> <http://example.org/backlog#belongsToLineage> <http://example.org/l4#Lin1> .

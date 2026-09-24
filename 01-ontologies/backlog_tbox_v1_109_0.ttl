@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.108.0> ;
-    owl:versionInfo "1.108.0" ;
+    owl:versionIRI <http://example.org/backlog/1.109.0> ;
+    owl:versionInfo "1.109.0" ;
+    owl:priorVersion <http://example.org/backlog/1.108.0> ;
     owl:priorVersion <http://example.org/backlog/1.107.0> ;
     owl:priorVersion <http://example.org/backlog/1.106.0> ;
     owl:priorVersion <http://example.org/backlog/1.105.0> ;
@@ -6489,8 +6490,9 @@ backlog:retractsOutput a owl:ObjectProperty ;
 backlog:PartialScopeDeclaration a owl:Class ;
     rdfs:subClassOf backlog:LineageGap ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
-    rdfs:label "Partial Scope Declaration"@en ;
-    skos:definition "A lineage's own, honest record, filed as part of its own real closure and never afterward, of what its Objective did not cover -- the genuine remainder, named directly rather than left implicit or silently dropped. A lineage closing with one of these is not claiming its Mission is satisfied; it is closing honestly partial, with the remainder's whereabouts on record, not hidden. Exists because closing unsatisfied work as though it were satisfied is not a good practice (the owner's own words) -- the alternative this artifact provides is closing it as truthfully partial instead."@en .
+    rdfs:label "Out-Scoping Declaration (partial scope)"@en ;
+    skos:altLabel "Partial Scope Declaration"@en ;
+    skos:definition "The owner's decision, recorded on a LIVE lineage before it closes, that removes its unfinished work from its scope: the items and containers it names (outScopes) stop counting toward the lineage's own completion, so the lineage can close genuinely complete. Owner's rule: closing unfinished work is not allowed -- unfinished work is out-scoped first, then the finished lineage closes, and its successor takes the out-scoped work in. (v1.109.0: corrects v1.105.0-v1.108.0, which had this record filed only against an already-closed lineage, closing it 'honestly partial' with its unfinished work still inside -- the opposite of the owner's rule, reported by an adopting project.)"@en .
 
 backlog:declaresGapFor a owl:ObjectProperty , owl:FunctionalProperty ;
     rdfs:domain backlog:LineageGap ; rdfs:range backlog:Lineage ;
@@ -6498,17 +6500,29 @@ backlog:declaresGapFor a owl:ObjectProperty , owl:FunctionalProperty ;
     rdfs:label "declares gap for"@en ;
     skos:definition "The lineage this declaration is honestly filed against, as part of that lineage's own real closure."@en .
 
+backlog:outScopes a owl:ObjectProperty ;
+    rdfs:domain backlog:PartialScopeDeclaration ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "out-scopes"@en ;
+    skos:definition "An unfinished work item or container of the declaration's own lineage that the owner removes from that lineage's scope before it closes. It keeps belongsToLineage (the lineage it was created during); the successor takes it in by admission (preLineageItem, admittedByOutput), or, for a container the lineage partly finished, by a remainder container split from it (splitFrom)."@en .
+
+backlog:splitFrom a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:WorkItemContainer ; rdfs:range backlog:WorkItemContainer ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "split from"@en ;
+    skos:definition "On a remainder container created in a successor lineage: the container of the predecessor it was split from. The original keeps its identity and its finished members and closes with its lineage; the remainder, created during the successor, holds the unfinished members moved to it."@en .
+
 backlog:describesUncoveredScope a owl:DatatypeProperty , owl:FunctionalProperty ;
     rdfs:domain backlog:LineageGap ; rdfs:range xsd:string ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "describes uncovered scope"@en ;
-    skos:definition "What the lineage's own Objective did not reach, in the owner's own real words -- not a template, not inferred, the genuine remainder as understood at closure."@en .
+    skos:definition "What is being removed from the lineage's scope and why, in the owner's own real words -- not a template, not inferred."@en .
 
 backlog:LineageSuccession a owl:Class ;
     rdfs:subClassOf core:Artifact ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "Lineage Succession"@en ;
-    skos:definition "The owner's own, deliberate record of winding a mature lineage's completed scope down and opening a successor under the same Mission -- distinct from a LineageRestart, which answers a detected bypass by rebuilding an entire membership from scratch, done and not-done alike. A succession touches nothing already closed; it only opens what comes next. Carries the real, evidenced rationale (relevance ratio, absolute remaining cost, cost of waiting, enforcement value forgone -- the owner's own four-factor frame, informing judgement rather than outputting one) and resolves exactly one real PartialScopeDeclaration, filed as part of the same real closure commit as that declaration, never a separate, later one."@en .
+    skos:definition "The owner's own, deliberate record of winding a mature lineage's completed scope down and opening a successor under the same Mission -- distinct from a LineageRestart, which answers a detected bypass by rebuilding an entire membership from scratch, done and not-done alike. A succession touches nothing already closed; it only opens what comes next. Carries the real, evidenced rationale (relevance ratio, absolute remaining cost, cost of waiting, enforcement value forgone -- the owner's own four-factor frame, informing judgement rather than outputting one) and takes up exactly one out-scoping declaration (PartialScopeDeclaration) recorded on the predecessor while it was still live; the succession itself is filed in the predecessor's closure commit together with the successor's Mission stage."@en .
 
 backlog:succeedsLineage a owl:ObjectProperty , owl:FunctionalProperty ;
     rdfs:domain backlog:LineageSuccession ; rdfs:range backlog:Lineage ;
@@ -6572,13 +6586,13 @@ backlog:LineageGap a owl:Class ;
     rdfs:subClassOf core:Artifact ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "Lineage Gap"@en ;
-    skos:definition "Anything a closed lineage owes but did not deliver, in one of two honest forms: a partial scope declaration (known and declared at closure) or a post-closure finding (discovered afterwards, from evidence). A succession resolves either the same way."@en .
+    skos:definition "Anything a closed lineage owes but did not deliver, in one of two honest forms: an out-scoping declaration (unfinished work removed from a live lineage before it closes) or a post-closure finding (discovered afterwards, from evidence). A succession resolves either the same way."@en .
 
 backlog:PostClosureFinding a owl:Class ;
     rdfs:subClassOf backlog:LineageGap ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "Post-Closure Finding"@en ;
-    skos:definition "A defect, unfinished part or non-conformance discovered in a lineage's work after it closed -- distinct from a partial scope declaration, which may only be filed at closure. It names the closed lineage (declaresGapFor), states what was found (describesUncoveredScope), is typed by scale, dated, and carries the observed evidence it rests on. Its scale decides the proportionate response: isolated to maintenance or a change request, bounded to a descoping succession, systemic to reactivation."@en .
+    skos:definition "A defect, unfinished part or non-conformance discovered in a lineage's work after it closed -- distinct from an out-scoping declaration, which is decided on the live lineage before it closes. It names the closed lineage (declaresGapFor), states what was found (describesUncoveredScope), is typed by scale, dated, and carries the observed evidence it rests on. Its scale decides the proportionate response: isolated to maintenance or a change request, bounded to a descoping succession, systemic to reactivation."@en .
 
 backlog:FindingScale a owl:Class ;
     rdfs:subClassOf backlog:BacklogConcept ;
@@ -6644,13 +6658,13 @@ backlog:outputRetracted a owl:DatatypeProperty , owl:FunctionalProperty ;
 
 backlog:preLineageItem a owl:DatatypeProperty , owl:FunctionalProperty ;
     rdfs:comment "v1.93.0: \"set by the restart\" now reads \"set by the restart OR by a StageRevision\" -- SCAMPS reported that a revision of a closed intermediate stage re-admits items exactly as a restart does, and the definition named only one of the two acts."@en ;
-    rdfs:domain backlog:WorkItem ; rdfs:range xsd:boolean ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:WorkItem backlog:WorkItemContainer ) ] ; rdfs:range xsd:boolean ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "pre-lineage item"@en ;
     skos:definition "True on a work item that existed before the chain that now owns it was built. Set by a restart for the items of the restarted lineage, or (v1.108.0) by a succession for an open item of the predecessor that the successor carries. Cleared by nothing: the item keeps belongsToLineage -- the lineage it was created during -- and is admitted, not re-dated or re-pointed, via admittedByOutput."@en .
 
 backlog:admittedByOutput a owl:ObjectProperty , owl:FunctionalProperty ;
-    rdfs:domain backlog:WorkItem ; rdfs:range backlog:StageOutput ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:WorkItem backlog:WorkItemContainer ) ] ; rdfs:range backlog:StageOutput ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "admitted by output"@en ;
     skos:definition "The active (non-retracted) Stage_Backlog output that took this pre-lineage item in: the rebuilt output of a restarted lineage, the output of a divided lineage's part, or (v1.108.0) the output of the successor a LineageSuccession names for the item's own lineage. Until it is set, the item is work that chain does not yet own."@en .

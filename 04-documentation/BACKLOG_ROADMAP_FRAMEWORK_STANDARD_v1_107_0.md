@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.106.0
+# Backlog & Roadmap Semantic Framework — Standard v1.107.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -974,50 +974,50 @@ checked directly before writing either requirement — no `Epic` layer across it
 tasks, and no `adoptsObligationSet` ever declared on the lineage itself, since its own real work was
 authoring an obligation set, not being bound by one.
 
-### 2.5c-xxi-n LineageSuccession, PartialScopeDeclaration, LineageReactivation: closing a mature lineage honestly, under an evolved standard
+### 2.5c-xxi-n LineageSuccession, out-scoping, LineageReactivation: closing a mature lineage complete, under an evolved standard
 
 A `RuleSet` binds the whole register once declared (2.5c-xxi-o); a mature, in-progress lineage
 facing one that ships after it opened has neither a way to adopt in place without re-judging its
 own already-closed history (G89), nor a reason to force its entire membership -- done and not-done
-alike -- through a `LineageRestart`, which answers a detected bypass, a different problem from a
-`RuleSet`'s own timing relative to a lineage's maturity.
+alike -- through a `LineageRestart`, which answers a detected bypass, a different problem.
 
-A **`PartialScopeDeclaration`** is the honest alternative to either: the predecessor's own record,
-filed as part of its real closure and never afterward, of what its Objective genuinely did not
-cover. `declaresGapFor` names the lineage; `describesUncoveredScope` states the real remainder in
-the owner's own words. Only a lineage already archived or recorded `LS_Achieved` may have one filed
-against it -- the declaration cannot precede the closure it describes, so a lineage cannot claim its
-own gap before the gap is real.
+**The owner's rule: closing unfinished work is not allowed.** Unfinished work is out-scoped first;
+then the lineage, now holding only finished work, closes; then a successor takes the out-scoped work
+in. A lineage recorded Achieved while any item or container created during it is still open and not
+out-scoped is refused.
 
-A **`LineageSuccession`** is the owner's own deliberate record of winding that predecessor down and
-opening a successor under the *same* Mission (`succeedsLineage`, `successorLineage`,
-`lineageForMission` held equal across both). It carries `successionRationale` -- the real
-cost/benefit and risk/opportunity reasoning, not a template -- and `resolvesGap`, naming the exact
-`PartialScopeDeclaration` it addresses; the gap must genuinely belong to the named predecessor. Both
-halves of the design hold together, not one alone: the predecessor's retrospective declaration is
-matched by the successor's prospective, structural pickup -- `resolvesPartialScope`, declared on the
-successor's own Objective, pointing directly at the same declaration. A succession whose successor
-has no Objective actually carrying that link is caught: the intent is asserted in the succession's
-own prose, but the pickup is only real once the successor's own chain carries it.
+**Out-scoping.** A **`PartialScopeDeclaration`** (labelled *out-scoping declaration*) is the owner's
+decision, recorded on the **live** lineage before it closes, naming the unfinished items and
+containers it removes (`outScopes`) and why (`describesUncoveredScope`). It may only out-scope the
+lineage's own work, and carries `decidedBy`. Out-scoped work keeps `belongsToLineage` -- the lineage
+it was created during -- and stops counting toward that lineage's completion. If the lineage closes
+and no succession takes the out-scoped open work, it is refused as orphaned: open the successor with
+it, or cancel it with a reason.
+
+**Containers.** A container the lineage never started on is out-scoped whole and admitted by the
+successor like an item. A container it partly finished is split: the original keeps its identity and
+its finished members and closes with its lineage; a remainder container, created during the
+successor and marked `splitFrom` the original, receives the unfinished members. A remainder in any
+lineage other than the original's successor is refused. Containers carry `belongsToLineage` like
+every individual (the register root excepted).
+
+**Succession.** A **`LineageSuccession`** is the owner's deliberate record of winding the finished
+lineage down and opening a successor under the *same* Mission (`succeedsLineage`,
+`successorLineage`). It carries `successionRationale` -- the real cost/benefit and risk/opportunity
+reasoning -- and `resolvesGap`, naming the out-scoping declaration it takes up. The successor is
+built by the staged ceremony (2.5c-xxii): the first commit carries the predecessor's closure, the
+succession record and the successor's Mission stage; each later stage closes in its own commit. From
+the successor's Objective stage, one of its objectives must structurally resolve the declaration
+(`resolvesPartialScope`). The out-scoped items and whole containers are taken in by the successor's
+active Backlog-stage output (`preLineageItem`, `admittedByOutput`), the same admission a restart or a
+divided lineage's part uses; once that output exists, any open predecessor item or container neither
+taken in nor cancelled is refused as work silently dropped. The predecessor cannot be archived while
+out-scoped work is still open, and the archival activity waits for it.
 
 A **`LineageReactivation`** answers the opposite, rarer case: closed work stays closed until a real
-need appears to reopen it, and reactivation is never casual. `reactivatesLineage` names a lineage
-that must already be genuinely closed (archived or `LS_Achieved`); `reactivationRationale` states the
-real, named need. A reactivated lineage's own content is re-validated against current standards
-before it returns to active status, the same check (`validate_lineage`, 2.5c-xxi-m's own kind of
-per-lineage scoping) a profile's own source case is held to.
-
-**Building the successor, and what it carries.** The successor is built by the staged ceremony like
-any lineage (2.5c-xxii): the first commit carries the predecessor's closure, its partial scope
-declaration, the succession record and the successor's Mission stage -- so nothing of the successor
-exists before the succession that opens it -- and each later stage closes in its own commit. The
-requirement that a successor objective resolve the declared gap binds once the successor has reached
-its Objective stage, not before. The predecessor's still-open items are carried, not re-created or
-re-pointed: each keeps `belongsToLineage` -- the lineage it was created during -- and is taken in by
-the successor's active Backlog-stage output (`preLineageItem`, `admittedByOutput`), the same admission
-a restart or a divided lineage's part uses. Once the successor's Backlog stage has closed, an open
-predecessor item neither carried nor cancelled is refused as work silently dropped. The predecessor
-cannot be archived while carried items are open, and the archival activity waits for them.
+need appears to reopen it, and reactivation is never casual (2.5c-xxi-o states when it applies).
+`reactivatesLineage` names a lineage that must already be closed; `reactivationRationale` states the
+need. Once reactivated, the lineage is bound by the rules in force now.
 
 ### 2.5c-xxi-o Findings against closed work: a response proportionate to their scale
 
@@ -1029,7 +1029,7 @@ A **`PostClosureFinding`** records the discovery: the closed lineage it concerns
 (`findingEvidence`) -- a defect from live use, a failed verification, a failed acceptance check. A
 suspicion is not evidence; it produces a validation task in a live lineage, whose result becomes the
 evidence. A finding may only be raised against a lineage that is actually closed. It is distinct
-from a partial scope declaration, which is known and filed at closure; both are kinds of
+from an out-scoping declaration, which is decided on the live lineage before it closes; both are kinds of
 **`LineageGap`**, and a succession resolves either the same way.
 
 Its **`FindingScale`** decides the response:

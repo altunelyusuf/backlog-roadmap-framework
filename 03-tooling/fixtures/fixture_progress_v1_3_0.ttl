@@ -197,3 +197,6 @@ ex:Session_20260907 a backlog:RegisterSession ;
     backlog:hasSessionScopeNote "In scope: record this fixture's own maintenance so the register names who last changed it. Deliberately untouched: every item, objective and event above." .
 # v1.2.0 (2026-09-09): lineage status stated (TBox v1.89.0, LineageStatusShape); derived from the fixture's own outputs and item states.
 ex:Lin_PG backlog:hasLineageStatus backlog:LS_InProgress .
+
+# fixture_progress_v1_3_0: lineage membership for containers (shapes v1.135.0; the vocabulary defines it on every individual).
+<http://example.org/pg#It_PG> <http://example.org/backlog#belongsToLineage> <http://example.org/pg#Lin_PG> .

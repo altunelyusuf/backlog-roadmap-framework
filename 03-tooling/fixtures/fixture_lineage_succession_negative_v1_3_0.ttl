@@ -5,12 +5,7 @@
 # Real, negative proof: each real constraint LineageSuccessionShape/PartialScopeDeclarationShape/
 # LineageReactivationShape enforces, deliberately broken once, one real case per rule.
 
-# 1. Gap declared against a lineage that is still open, not closed.
-fwneg:L_StillOpen a backlog:Lineage ; backlog:lineageOrdinal 1 ;
-    backlog:hasLineageStatus backlog:LS_InProgress ; backlog:lineageArchived false .
-fwneg:Gap_TooEarly a backlog:PartialScopeDeclaration ;
-    backlog:declaresGapFor fwneg:L_StillOpen ;
-    backlog:describesUncoveredScope "Filed before the lineage actually closed." .
+# (Case 1 removed in v1.3.0: a declaration filed on a live lineage is now the required practice.)
 
 # 2. Succession where predecessor and successor are the same lineage.
 fwneg:L_SelfSucc a backlog:Lineage ; backlog:lineageOrdinal 2 ;
@@ -99,6 +94,8 @@ fwneg:Find_NoEvidence a backlog:PostClosureFinding ; backlog:declaresGapFor fwne
     backlog:describesUncoveredScope "Bad: a suspicion only." ; backlog:hasFindingScale backlog:Scale_Bounded ;
     backlog:findingRaisedAt "2027-01-05T00:00:00Z"^^xsd:dateTime .
 # 11. A finding raised against a lineage that is still open.
+fwneg:L_StillOpen a backlog:Lineage ; backlog:lineageOrdinal 1 ;
+    backlog:hasLineageStatus backlog:LS_InProgress ; backlog:lineageArchived false .
 fwneg:Find_OnOpen a backlog:PostClosureFinding ; backlog:declaresGapFor fwneg:L_StillOpen ;
     backlog:describesUncoveredScope "Bad: the lineage is still open." ; backlog:hasFindingScale backlog:Scale_Bounded ;
     backlog:findingRaisedAt "2027-01-05T00:00:00Z"^^xsd:dateTime ; backlog:findingEvidence fwneg:Ev_Neg .
@@ -151,5 +148,30 @@ fwneg:L_Pred18 a backlog:Lineage ; backlog:lineageOrdinal 17 ;
     backlog:hasLineageStatus backlog:LS_Achieved ; backlog:lineageArchived false .
 fwneg:Succ_18 a backlog:LineageSuccession ; backlog:succeedsLineage fwneg:L_Pred18 ; backlog:successorLineage fwneg:L_Succ16 ;
     backlog:resolvesGap fwneg:Gap_16 ; backlog:successionRationale "Real rationale." ; backlog:decidedBy backlog:Owner .
+
+# v1.135.0 out-scoping and closure defects.
+fwneg:L_Closed19 a backlog:Lineage ; backlog:lineageOrdinal 18 ;
+    backlog:hasLineageStatus backlog:LS_Achieved ; backlog:lineageArchived false .
+# 19. A lineage recorded Achieved with an open item that was never out-scoped.
+fwneg:Item19 a backlog:WorkItem ; backlog:belongsToLineage fwneg:L_Closed19 ; backlog:hasState backlog:InProgress .
+# 20. A declaration out-scoping another lineage's work.
+fwneg:L_Live20 a backlog:Lineage ; backlog:lineageOrdinal 19 ; backlog:hasLineageStatus backlog:LS_InProgress ; backlog:lineageArchived false .
+fwneg:Gap_20 a backlog:PartialScopeDeclaration ; backlog:declaresGapFor fwneg:L_Live20 ; backlog:decidedBy backlog:Owner ;
+    backlog:describesUncoveredScope "Bad: out-scopes an item of another lineage." ; backlog:outScopes fwneg:Item19 .
+# 21. An out-scoping with no owner decision.
+fwneg:Gap_21 a backlog:PartialScopeDeclaration ; backlog:declaresGapFor fwneg:L_Live20 ;
+    backlog:describesUncoveredScope "Bad: nobody decided this." .
+# 22. Out-scoped open work of a closed lineage that no succession takes.
+fwneg:L_Closed22 a backlog:Lineage ; backlog:lineageOrdinal 20 ; backlog:hasLineageStatus backlog:LS_Achieved ; backlog:lineageArchived false .
+fwneg:Item22 a backlog:WorkItem ; backlog:belongsToLineage fwneg:L_Closed22 ; backlog:hasState backlog:Proposed .
+fwneg:Gap_22 a backlog:PartialScopeDeclaration ; backlog:declaresGapFor fwneg:L_Closed22 ; backlog:decidedBy backlog:Owner ;
+    backlog:describesUncoveredScope "Out-scoped, then orphaned." ; backlog:outScopes fwneg:Item22 .
+# 23. An open container of a succeeded predecessor, neither admitted nor split, after the successor's backlog closed.
+fwneg:Pkg23 a backlog:Package ; backlog:belongsToLineage fwneg:L_Pred16 ; backlog:hasState backlog:Proposed .
+# 24. A remainder split into a lineage that is not the original's successor.
+fwneg:Pkg24_Orig a backlog:Package ; backlog:belongsToLineage fwneg:L_Pred16 ; backlog:hasState backlog:Done .
+fwneg:Pkg24_Rem a backlog:Package ; backlog:belongsToLineage fwneg:L_Live20 ; backlog:hasState backlog:Proposed ; backlog:splitFrom fwneg:Pkg24_Orig .
+# 25. A container that belongs to no lineage.
+fwneg:Pkg25 a backlog:Package ; backlog:hasState backlog:Proposed ; backlog:memberOfContainer fwneg:Pkg24_Orig .
 
 <http://example.org/fixture-succession-negative#> backlog:hasExpectedPolarity backlog:Polarity_Negative .

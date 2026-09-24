@@ -230,3 +230,10 @@ ex:Lin_Tied backlog:hasLineageStatus backlog:LS_Opened .
 # v1.3.0 (2026-09-10): status corrected LS_InProgress -> LS_Opened, derived from this fixture's own stage
 # outputs and item states. The claim was unsupported by the data it sits in; InProgressNeedsStartedWorkShape
 # and LineageStatusShape now refuse such a claim.
+
+# fixture_tied_gates_v1_5_0: lineage membership for containers (shapes v1.135.0; the vocabulary defines it on every individual).
+<http://example.org/fixture-tied#GateAlpha> <http://example.org/backlog#belongsToLineage> <http://example.org/fixture-tied#Lin_Tied> .
+<http://example.org/fixture-tied#GateBeta> <http://example.org/backlog#belongsToLineage> <http://example.org/fixture-tied#Lin_Tied> .
+<http://example.org/fixture-tied#GateZulu> <http://example.org/backlog#belongsToLineage> <http://example.org/fixture-tied#Lin_Tied> .
+<http://example.org/fixture-tied#It_Pkg> <http://example.org/backlog#belongsToLineage> <http://example.org/fixture-tied#Lin_Tied> .
+<http://example.org/fixture-tied#PkgLater> <http://example.org/backlog#belongsToLineage> <http://example.org/fixture-tied#Lin_Tied> .

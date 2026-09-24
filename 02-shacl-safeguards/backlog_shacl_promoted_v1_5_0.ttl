@@ -1,4 +1,4 @@
-# backlog_shacl_promoted v1.4.0 -- GENERATED from backlog_shacl_v1_134_0.ttl by
+# backlog_shacl_promoted v1.5.0 -- GENERATED from backlog_shacl_v1_135_0.ttl by
 # 03-tooling/backlog_make_promoted_shapes_v1_1_0.py, carrying forward the applied severity audit of
 # 2026-09-09 as recorded on each audited shape's own severity line ("# G90 ..."). Shapes with no
 # such line keep their base severity. Identical to the base file in every other byte. Loaded INSTEAD
@@ -16,9 +16,10 @@
 
 <http://example.org/backlog-shapes-promoted> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes-promoted/1.4.0> ;
-    owl:versionInfo "1.4.0" ;
-    owl:priorVersion <http://example.org/backlog-shapes-promoted/1.3.0> ;
+    owl:versionIRI <http://example.org/backlog-shapes-promoted/1.5.0> ;
+    owl:versionInfo "1.5.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes-promoted/1.4.0> ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.134.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.133.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.132.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.131.0> ;
@@ -5319,14 +5320,18 @@ backlog:UndeclaredIndividualShape a sh:NodeShape ;
 #################################################################
 
 backlog:LineageMembershipShape a sh:NodeShape ;
-    sh:targetClass backlog:WorkItem ;
+    sh:targetClass backlog:WorkItem , backlog:WorkItemContainer ;
     sh:severity sh:Violation ;
     rdfs:label "A work item names the lineage it was created in (L2)"@en ;
     sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "L2: this work item belongs to no lineage, so nothing can say which archive it goes to when its lineage finishes. Partitioning this register by inferring the closure broke 297 constraints for exactly this reason — harnesses, refinements and planning events stayed behind while the items they pointed at moved." ;
+        sh:message "L2: this work item or container belongs to no lineage, so nothing can say which archive it goes to when its lineage finishes. Partitioning this register by inferring the closure broke 297 constraints for exactly this reason — harnesses, refinements and planning events stayed behind while the items they pointed at moved." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             FILTER NOT EXISTS { $this backlog:belongsToLineage ?l }
+            # v1.135.0: containers too (the vocabulary defines lineage membership on every individual);
+            # the register root itself is the register's, not any lineage's
+            FILTER NOT EXISTS { $this backlog:isRegisterRoot true }
+            FILTER NOT EXISTS { $this a backlog:Backlog . FILTER NOT EXISTS { $this backlog:memberOfContainer ?parent } }
         }""" ] .
 
 backlog:LineageShape a sh:NodeShape ;
@@ -5558,7 +5563,7 @@ backlog:RetractedOutputConsumedShape a sh:NodeShape ;
         }""" ] .
 
 backlog:PreLineageItemShape a sh:NodeShape ;
-    sh:targetClass backlog:WorkItem ;
+    sh:targetClass backlog:WorkItem , backlog:WorkItemContainer ;
     sh:severity sh:Violation ;
     rdfs:label "A pre-lineage item is re-admitted by a rebuilt Backlog output or does not count (L1)"@en ;
     backlog:provenByFixture "03-tooling/fixtures/fixture_lineage_bypass_negative" ;
@@ -5731,13 +5736,14 @@ backlog:PartialScopeDeclarationShape a sh:NodeShape ;
                   sh:message "A partial-scope declaration names exactly one lineage." ] ;
     sh:property [ sh:path backlog:describesUncoveredScope ; sh:minCount 1 ; sh:datatype xsd:string ;
                   sh:message "A partial-scope declaration states the real, genuine remainder in words, not left implicit." ] ;
+    sh:property [ sh:path backlog:decidedBy ; sh:minCount 1 ;
+                  sh:message "L1: out-scoping is an owner decision and says so (v1.135.0)." ] ;
     sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "L1: this declaration names a lineage that is neither archived nor recorded Achieved. A partial-scope declaration is filed as part of a lineage's own real closure, not while it is still actively open -- filing one early would let a lineage claim its own gap before the gap is real." ;
+        sh:message "L1: this declaration out-scopes work that does not belong to the lineage it is filed against. A lineage can only remove its own work from its own scope (v1.135.0)." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
-            $this backlog:declaresGapFor ?l .
-            FILTER NOT EXISTS { ?l backlog:lineageArchived true }
-            FILTER NOT EXISTS { ?l backlog:hasLineageStatus backlog:LS_Achieved }
+            $this backlog:declaresGapFor ?l ; backlog:outScopes ?x .
+            FILTER NOT EXISTS { ?x backlog:belongsToLineage ?l }
         }""" ] .
 
 backlog:LineageSuccessionShape a sh:NodeShape ;
@@ -5895,12 +5901,12 @@ backlog:PostClosureFindingOpenAdvisoryShape a sh:NodeShape ;
         }""" ] .
 
 backlog:SuccessionCarriedItemShape a sh:NodeShape ;
-    sh:targetClass backlog:WorkItem ;
+    sh:targetClass backlog:WorkItem , backlog:WorkItemContainer ;
     sh:severity sh:Violation ;
     rdfs:label "Once the successor's backlog is closed, every open item of the predecessor is carried or cancelled (L1)"@en ;
     backlog:provenByFixture "03-tooling/fixtures/fixture_lineage_succession_negative" ;
     sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "L1: this item belongs to a lineage a succession wound down, is still open, and the successor's Backlog stage has closed without admitting it (preLineageItem true, admittedByOutput the successor's active Stage_Backlog output). Remaining work the succession claims to carry has been silently dropped: carry it, or cancel it with a reason (v1.134.0)." ;
+        sh:message "L1: this item or container belongs to a lineage a succession wound down, is still open, and the successor's Backlog stage has closed without taking it in (preLineageItem true and admittedByOutput the successor's active Stage_Backlog output; or, for a container, a remainder split from it in the successor). Remaining work the succession claims to carry has been silently dropped: carry it, or cancel it with a reason (v1.134.0)." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             $this backlog:belongsToLineage ?l ; backlog:hasState ?st . FILTER (?st NOT IN (backlog:Done, backlog:Cancelled))
@@ -5909,6 +5915,53 @@ backlog:SuccessionCarriedItemShape a sh:NodeShape ;
             FILTER NOT EXISTS { $this backlog:preLineageItem true ; backlog:admittedByOutput ?ao .
                                 ?ao backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage ?s .
                                 FILTER NOT EXISTS { ?ao backlog:outputRetracted true } }
+            # v1.135.0: a container the predecessor partly finished is carried by a remainder split from it
+            FILTER NOT EXISTS { ?rem backlog:splitFrom $this ; backlog:belongsToLineage ?s }
+        }""" ] .
+
+backlog:LineageClosureCompleteShape a sh:NodeShape ;
+    sh:targetClass backlog:Lineage ;
+    sh:severity sh:Violation ;
+    rdfs:label "A lineage closes with no unfinished work inside it (L1)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_lineage_succession_negative" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this lineage is recorded Achieved while a work item or container created during it is still open and not out-scoped. Owner's rule: closing unfinished work is not allowed -- out-scope it first (an out-scoping declaration naming it), then close, and let the successor take it in (v1.135.0)." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasLineageStatus backlog:LS_Achieved .
+            FILTER NOT EXISTS { $this backlog:lineageArchived true }
+            ?x backlog:belongsToLineage $this ; backlog:hasState ?st . FILTER (?st NOT IN (backlog:Done, backlog:Cancelled))
+            ?x a/<http://www.w3.org/2000/01/rdf-schema#subClassOf>* ?c . FILTER (?c IN (backlog:WorkItem, backlog:WorkItemContainer))
+            FILTER NOT EXISTS { ?d backlog:declaresGapFor $this ; backlog:outScopes ?x }
+        }""" ] .
+
+backlog:OutScopedWorkUnownedShape a sh:NodeShape ;
+    sh:targetClass backlog:PartialScopeDeclaration ;
+    sh:severity sh:Violation ;
+    rdfs:label "Out-scoped unfinished work of a closed lineage has a successor to go to (L1)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_lineage_succession_negative" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: the lineage this declaration out-scoped work from has closed, the out-scoped work is still open, and no lineage succession resolves this declaration. Out-scoped work must go somewhere: open the successor with it, or cancel it with a reason (v1.135.0)." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:declaresGapFor ?l ; backlog:outScopes ?x .
+            ?x backlog:hasState ?st . FILTER (?st NOT IN (backlog:Done, backlog:Cancelled))
+            { ?l backlog:hasLineageStatus backlog:LS_Achieved } UNION { ?l backlog:lineageArchived true }
+            FILTER NOT EXISTS { ?sc backlog:resolvesGap $this }
+        }""" ] .
+
+backlog:SplitRemainderShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItemContainer ;
+    sh:severity sh:Violation ;
+    rdfs:label "A remainder container is created in the successor of the lineage it was split from (L1)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_lineage_succession_negative" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this container is split from another, but it does not belong to a successor lineage that a lineage succession opened from the original container's own lineage. A remainder is created in the successor, nowhere else (v1.135.0)." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:splitFrom ?orig .
+            FILTER NOT EXISTS { ?orig backlog:belongsToLineage ?pl . $this backlog:belongsToLineage ?sl .
+                                ?sc backlog:succeedsLineage ?pl ; backlog:successorLineage ?sl }
         }""" ] .
 
 backlog:RevivalRequiresReactivationShape a sh:NodeShape ;

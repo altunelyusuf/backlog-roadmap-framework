@@ -10694,3 +10694,32 @@ overlay check flagged it stale as soon as the base changed); `backlog_tbox_v1_10
 v1_108_0.ttl` (definitions of pre-lineage item and admitting output); standard `v1_105_0 -> v1_106_0`;
 succession fixtures `v1_1_0 -> v1_2_0`. Two an adopting project closure notes (succession mechanism, overlay
 fix) logged; both verified on their side.
+
+## v1.319.0 — 2026-09-24 (MINOR: out-scope unfinished work before closure, never close with it -- the succession design corrected to the owner's rule)
+
+the adopting project's owner caught what this framework had missed: the succession shipped since v1.313.0 closed
+a lineage "honestly partial", its unfinished work still inside. That contradicts this framework's own
+owner, who ruled here that closing unsatisfied work is not a good practice and partial scope is
+recorded **before** closure; v1.313.0 had encoded the opposite (a declaration refused on a live
+lineage). Corrected by the existing rule, not a new one.
+
+- **Out-scoping on the live lineage.** The partial scope declaration becomes the owner's out-scoping
+  decision (`outScopes`, `decidedBy` required), recorded before closure and limited to the lineage's
+  own work.
+- **Closure must be complete** (`LineageClosureCompleteShape`): Achieved with open, un-out-scoped
+  work is a Violation. **Orphaned out-scoped work** (`OutScopedWorkUnownedShape`): a closed lineage's
+  out-scoped open work with no succession taking it is a Violation.
+- **Containers.** Admission (`preLineageItem`, `admittedByOutput`) now covers containers; a partly
+  finished container is split, the remainder created in the successor (`splitFrom`,
+  `SplitRemainderShape`); the carried-work rule covers containers and accepts a split remainder;
+  lineage membership is enforced on containers (register root excepted) -- this register's two
+  deployment units and five positive fixtures corrected.
+- The standard's succession section rewritten; the vocabulary's gap and succession definitions no
+  longer say "at closure".
+
+`backlog_tbox_v1_108_0 -> v1_109_0`, `backlog_shacl_v1_134_0 -> v1_135_0`, overlay `v1_4_0 ->
+v1_5_0`, register `v9_100_0 -> v9_101_0`, standard `v1_106_0 -> v1_107_0`; fixtures: succession
+`v1_2_0 -> v1_3_0` (both), `l4_conformant v1_3_0`, `positive v1_15_0`, `progress v1_3_0`,
+`r3_disagreement v1_6_0`, `tied_gates v1_5_0`. Also found and fixed while building: an edit script
+wrote the new vocabulary to a stray file (a reused loop variable); caught by checking the named terms
+landed, before anything was published.

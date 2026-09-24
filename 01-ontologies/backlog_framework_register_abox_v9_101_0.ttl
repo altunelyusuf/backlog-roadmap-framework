@@ -14,8 +14,9 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.100.0> ;
-    owl:versionInfo "9.100.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.101.0> ;
+    owl:versionInfo "9.101.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-register/9.100.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.98.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.97.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.96.0> ;
@@ -3676,3 +3677,8 @@ fw:L_GateEfficiency backlog:lineageArchived true ; backlog:archiveFile "01-ontol
 fw:L_FixtureConsolidation backlog:lineageArchived true ; backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_6_0.ttl" ;
     backlog:archivedAt "2026-09-24T11:05:06Z"^^xsd:dateTime ; backlog:hasLineageStatus backlog:LS_Archived ;
     backlog:archivalTrigger "Found achieved and un-archived by backlog_lineage_archive_v2_1_0: mission Out_Achieved, closure report present, every item Done or Cancelled, not frozen. Owner's rule 2026-09-09: an achieved lineage found triggers the archival activity." .
+
+# v9.101.0: lineage membership for containers (shapes v1.135.0 -- the vocabulary defines it on every
+# individual). Both deployment units were created during Lineage 16's own work: each ships a story of it.
+fw:Rel_GovMit_1 backlog:belongsToLineage fw:L_GovernanceMitigations .
+fw:Rel_GovMit_2 backlog:belongsToLineage fw:L_GovernanceMitigations .

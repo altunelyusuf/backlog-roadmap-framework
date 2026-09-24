@@ -200,3 +200,8 @@ ex:Lin_R3 backlog:hasLineageStatus backlog:LS_Opened .
 # v1.4.0 (2026-09-10): status corrected LS_InProgress -> LS_Opened, derived from this fixture's own stage
 # outputs and item states. The claim was unsupported by the data it sits in; InProgressNeedsStartedWorkShape
 # and LineageStatusShape now refuse such a claim.
+
+# fixture_r3_disagreement_v1_6_0: lineage membership for containers (shapes v1.135.0; the vocabulary defines it on every individual).
+<http://example.org/fixture-r3#It_Pkg> <http://example.org/backlog#belongsToLineage> <http://example.org/fixture-r3#Lin_R3> .
+<http://example.org/fixture-r3#PkgLater> <http://example.org/backlog#belongsToLineage> <http://example.org/fixture-r3#Lin_R3> .
+<http://example.org/fixture-r3#PkgLaunch> <http://example.org/backlog#belongsToLineage> <http://example.org/fixture-r3#Lin_R3> .

@@ -1299,3 +1299,13 @@ moderecurrence:Find_Method2 a backlog:RetrospectiveFinding ; backlog:hasFailureM
 # v1.14.0 (2026-09-22, real handover processed): renamed FindingRecord's own hasDisposition
 # usages to hasFindingDisposition, and fixed a stale provenByFixture reference left over from
 # the earlier consolidation pass (fixture_cross_project_commit -> fixture_positive).
+
+# fixture_positive_v1_15_0: lineage membership for containers (shapes v1.135.0; the vocabulary defines it on every individual).
+<http://example.org/fixture-positive#Increment1> <http://example.org/backlog#belongsToLineage> <http://example.org/fixture-positive#Lin1> .
+<http://example.org/fixture-positive#PkgAuth> <http://example.org/backlog#belongsToLineage> <http://example.org/fixture-positive#Lin1> .
+<http://example.org/fixture-positive#PkgPlatform> <http://example.org/backlog#belongsToLineage> <http://example.org/fixture-positive#Lin1> .
+<http://example.org/fixture-positive#PkgPointFixes> <http://example.org/backlog#belongsToLineage> <http://example.org/fixture-positive#Lin1> .
+<http://example.org/fixture-positive#Project> <http://example.org/backlog#belongsToLineage> <http://example.org/fixture-positive#Lin1> .
+<http://example.org/fixture-positive#Rel_Sprint11> <http://example.org/backlog#belongsToLineage> <http://example.org/fixture-positive#Lin1> .
+<http://example.org/fixture-positive#Sprint11> <http://example.org/backlog#belongsToLineage> <http://example.org/fixture-positive#Lin1> .
+<http://example.org/fixture-positive#Sprint12> <http://example.org/backlog#belongsToLineage> <http://example.org/fixture-positive#Lin1> .

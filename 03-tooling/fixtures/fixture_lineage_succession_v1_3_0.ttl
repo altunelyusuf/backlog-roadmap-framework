@@ -1,4 +1,4 @@
-# fixture_lineage_succession v1.2.0 -- positive proof of LineageSuccession,
+# fixture_lineage_succession v1.3.0 -- positive proof of LineageSuccession,
 # PartialScopeDeclaration and LineageReactivation, complete against the FULL suite.
 # Built on fixture_lineage_status_v1_1_0's own already-complete register (copied into this
 # fixture's own namespace, the original untouched): its lineage becomes the successor; a
@@ -242,7 +242,7 @@ ex:Out_Objective backlog:belongsToLineage ex:Lin_PL . ex:Out_Backlog backlog:bel
 ex:Lin_Prev a backlog:Lineage ; backlog:lineageArchived false ; backlog:lineageForMission ex:M ;
     backlog:lineageOrdinal 1 ; backlog:hasLineageStatus backlog:LS_Achieved .
 ex:Gap_Prev a backlog:PartialScopeDeclaration ;
-    backlog:declaresGapFor ex:Lin_Prev ;
+    backlog:declaresGapFor ex:Lin_Prev ; backlog:decidedBy backlog:Owner ; backlog:outScopes ex:S_Carried ;
     backlog:describesUncoveredScope "The predecessor's own recovery flow shipped; making every recovery auditable was never reached." .
 ex:Succ_1 a backlog:LineageSuccession ;
     backlog:succeedsLineage ex:Lin_Prev ; backlog:successorLineage ex:Lin_PL ;
