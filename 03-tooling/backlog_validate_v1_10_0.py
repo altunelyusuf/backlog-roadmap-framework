@@ -126,7 +126,9 @@ def promoted_overlay(data_files):
         except OSError:
             continue
         if "adoptsRuleSet" in txt and "RS_SeverityAudit_20260909" in txt:
-            cands = sorted(glob.glob(os.path.join(PKG, "02-shacl-safeguards", "backlog_shacl_promoted_v*.ttl")))
+            # v1.10.0: SemVer order, not lexical -- lexically v1_10_0 sorts before v1_9_0.
+            _sv = lambda p: [int(x) for x in re.findall(r"_v(\d+)_(\d+)_(\d+)\.", p)[0]]
+            cands = sorted(glob.glob(os.path.join(PKG, "02-shacl-safeguards", "backlog_shacl_promoted_v*.ttl")), key=_sv)
             if cands:
                 return cands[-1]
     return None

@@ -684,6 +684,18 @@ echo "== Doc-coverage gate — does the standard still describe the subject? =="
 python3 "$DOCGATE" | grep -E '^classes|^VERDICT'
 python3 "$DOCGATE" >/dev/null 2>&1 || { echo "Doc-coverage gate FAILED"; FAILED=1; }
 
+echo
+echo "== Promoted-overlay gate — is the rule-set overlay an exact regeneration of the base shapes? =="
+# v1.20.0 (an adopting project handover, promoted-overlay-stale-drops-succession-shapes): a register adopting
+# RS_SeverityAudit_20260909 is validated against the overlay INSTEAD of the base; a stale overlay
+# silently drops every shape added since. Refused here, not left to an adopter to discover.
+OVERGEN="$(ls "$HERE"/backlog_make_promoted_shapes_v*.py 2>/dev/null | sort -V | tail -1 || true)"
+if [ -n "$OVERGEN" ]; then
+  OVER_OUT="$(python3 "$OVERGEN" 2>&1)"; OVER_RC=$?
+  printf '%s\n' "$OVER_OUT" | grep -E '^overlay|^unaudited|^DROPPED|^VERDICT' | sed 's/^/  /'
+  [ "$OVER_RC" -eq 0 ] || { echo "  Promoted-overlay gate FAILED"; FAILED=1; }
+fi
+
 if [ "$#" -gt 0 ]; then
   echo
   echo "== Register under test =="

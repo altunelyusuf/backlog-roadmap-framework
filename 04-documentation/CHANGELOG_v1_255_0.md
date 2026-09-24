@@ -10615,3 +10615,24 @@ ruling (without the freeze a restart-bound finding would carry) and archived wit
 the gap travels into the archive as an explicit record rather than disappearing.
 `backlog_framework_register_abox_v9_99_0 -> v9_100_0`, archive `v1_5_0 -> v1_6_0` (a strict
 superset; live archive pointers repointed; archive integrity intact).
+
+## v1.316.0 — 2026-09-24 (MINOR: the rule-set overlay regenerated, regenerable in-package, and gated -- an adopting project handover)
+
+A register that adopts the severity-audit rule set is validated against a promoted overlay *instead*
+of the base shapes. The shipped overlay had been generated from shapes v1_113_0 and was 21 shapes
+behind v1_133_0 -- missing the succession, partial scope, post-closure finding and revival shapes, so
+a successor adopting the rule set as this framework directs would have gone unchecked on its own
+succession. Confirmed claim by claim (an adopting project, `promoted-overlay-stale-drops-succession-shapes`).
+
+- **Regenerated:** `backlog_shacl_promoted_v1_1_0.ttl -> v1_2_0.ttl`, 327 shapes. No severity already
+  in force changed; the 21 added shapes carry base severity, unaudited.
+- **Regenerable:** `backlog_make_promoted_shapes_v1_0_0.py -> v1_1_0.py` now writes the overlay
+  (`--write <version>`) from the base and the applied audit as recorded per shape, and checks exact
+  regeneration; v1.0.0 only checked and named a script that existed off-package.
+- **Gated:** `backlog_gate_v1_19_0.sh -> v1_20_0.sh` refuses a stale overlay; proven both directions.
+- `backlog_validate_v1_9_0.py -> v1_10_0.py`: overlay chosen by version number, not lexically.
+- `backlog_pipeline_verify_v1_3_0.py -> v1_4_0.py`: usage string names its own file.
+
+**Open to the owner:** the audit document and the applied overlay disagree on 13 shapes (document:
+risk, stays Warning; overlay: Violation, each with its own recorded reason). The applied
+classification was carried forward unchanged pending a ruling.

@@ -1,9 +1,10 @@
-# backlog_shacl_promoted v1.0.0 -- GENERATED from backlog_shacl_v1_113_0.ttl by applying the
-# severity audit of 2026-09-09 (SEVERITY_AUDIT_2026_09_09_v1_0_0.md): 58 obligations promoted to
-# sh:Violation, 4 opportunities to sh:Info, 16 risks left as sh:Warning. Identical to the base file
-# in every other byte. Loaded INSTEAD of the base file only for a register whose own data declares
+# backlog_shacl_promoted v1.2.0 -- GENERATED from backlog_shacl_v1_133_0.ttl by
+# 03-tooling/backlog_make_promoted_shapes_v1_1_0.py, carrying forward the applied severity audit of
+# 2026-09-09 as recorded on each audited shape's own severity line ("# G90 ..."). Shapes with no
+# such line keep their base severity. Identical to the base file in every other byte. Loaded INSTEAD
+# of the base file only for a register whose own data declares
 #   fw:Register backlog:adoptsRuleSet backlog:RS_SeverityAudit_20260909 .
-# Do not edit: regenerate with 03-tooling/backlog_make_promoted_shapes_v1_0_0.py.
+# Do not edit: regenerate with the tool above; the release gate refuses a stale overlay.
 @prefix backlog: <http://example.org/backlog#> .
 @prefix sh:      <http://www.w3.org/ns/shacl#> .
 @prefix owl:     <http://www.w3.org/2002/07/owl#> .
@@ -15,9 +16,28 @@
 
 <http://example.org/backlog-shapes-promoted> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes-promoted/1.1.0> ;
-    owl:versionInfo "1.1.0" ;
-    owl:priorVersion <http://example.org/backlog-shapes-promoted/1.0.0> ;
+    owl:versionIRI <http://example.org/backlog-shapes-promoted/1.2.0> ;
+    owl:versionInfo "1.2.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes-promoted/1.1.0> ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.132.0> ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.131.0> ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.130.0> ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.129.0> ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.128.0> ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.127.0> ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.126.0> ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.125.0> ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.124.0> ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.123.0> ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.122.0> ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.121.0> ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.120.0> ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.117.0> ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.116.0> ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.115.0> ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.114.0> ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.113.0> ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.112.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.111.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.110.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.109.0> ;
@@ -142,7 +162,8 @@
     dcterms:rights "Copyright (c) 2025-2026 İstanbul Kültür Üniversitesi & Yusuf Altunel. Licensed under CC BY 4.0."@en ;
     dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
     prov:wasAttributedTo "Yusuf Altunel" ;
-    skos:definition "Behavioural enforcement for the framework, tiered by the conformance level the adoption profile in the data graph claims. L1 shapes always fire; L2 and L3 shapes fire only when a profile claims that level, so one shapes file serves adopters of different maturity without forking. Advisory checks are separated into their own node shapes carrying node-level sh:severity, because pyshacl ignores severity declared inside sh:sparql blank nodes. Conformance against this suite means zero results at sh:Violation severity, not an empty report."@en .
+    skos:definition "Behavioural enforcement for the framework, tiered by the conformance level the adoption profile in the data graph claims. L1 shapes always fire; L2 and L3 shapes fire only when a profile claims that level, so one shapes file serves adopters of different maturity without forking. Advisory checks are separated into their own node shapes carrying node-level sh:severity, because pyshacl ignores severity declared inside sh:sparql blank nodes. Conformance against this suite means zero results at sh:Violation severity, not an empty report."@en ;
+    skos:changeNote "G94, 2026-09-15: this file was content-edited 112 times across this package's history under the single frozen filename backlog_shacl_v1_120_0.ttl -- a real, checked finding, not assumed. Renamed to 1.121.0 to carry this correction; no attempt made to retroactively assign real version numbers to the 112 historical edits, which would invent a record nobody made at the time. A real, permanent check now exists (backlog_version_freeze_check_v1_0_0.py) comparing every versioned file in this package against its last published release, refusing any future recurrence of this exact pattern."@en .
 
 #################################################################
 #  L1 — structural integrity (always in force)
@@ -205,10 +226,15 @@ backlog:ContainerShape a sh:NodeShape ;
     sh:property [ sh:path backlog:hasIdentifier ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ;
                   sh:message "L1: a container must have exactly one string identifier." ] ;
     sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "L1: a container must have at least one member item, otherwise it reports on nothing." ;
+        sh:message "L1: a container must have at least one member item, otherwise it reports on nothing. Waived for the register root itself when every lineage that exists is archived (v1.121.0, owner ruling 2026-09-15): a register between missions, with nothing yet live, is a real and acceptable state, not an empty container reporting on nothing -- it correctly reports that nothing is active." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             FILTER NOT EXISTS { ?m backlog:memberOfContainer $this }
+            FILTER (
+                NOT EXISTS { $this backlog:isRegisterRoot true }
+                ||
+                EXISTS { ?anyLineage a backlog:Lineage . FILTER NOT EXISTS { ?anyLineage backlog:lineageArchived true } }
+            )
         }""" ] ;
     sh:sparql [ a sh:SPARQLConstraint ;
         sh:message "L1: a container's asserted state disagrees with the state derived from its members." ;
@@ -217,7 +243,16 @@ backlog:ContainerShape a sh:NodeShape ;
             $this backlog:hasState ?asserted .
             $this backlog:derivedState ?derived .
             FILTER (?asserted != ?derived)
-        }""" ] .
+            # v1.116.0 (G92): the thing this rule asks the register root for may have RETIRED with the
+            # lineage that created it -- the root's commitment, its scope statement and its stage
+            # outputs all went to the archive when lineages 1-8 were retired whole. The rule is
+            # exempt for a declared register root once any lineage has been archived out of this
+            # graph: what it looks for is not missing, it is elsewhere, and the archive file says
+            # where. It still binds every other container, and a root of a register that has archived
+            # nothing.
+            FILTER NOT EXISTS { $this backlog:isRegisterRoot true . ?e a backlog:LineageArchiveEntry . }
+            FILTER NOT EXISTS { $this backlog:isRegisterRoot true . ?l2 backlog:lineageArchived true . }
+}""" ] .
 
 backlog:PriorityScoreShape a sh:NodeShape ;
     sh:targetClass backlog:PriorityScore ;
@@ -297,7 +332,7 @@ backlog:AdoptionConformanceGoalShape a sh:NodeShape ;
     sh:targetClass backlog:AdoptionProfile ;
     sh:severity sh:Violation ;
     rdfs:label "Every lineage carries a real goal for its own BRSF conformance"@en ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_conformance_goal_negative" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
     backlog:fixtureCaseName "P_NoConformanceGoal" ;
     sh:sparql [ a sh:SPARQLConstraint ;
         sh:message "This lineage carries no conformance goal. Per the default pattern this framework recommends for every adopting lineage (07-handover-inbox/accepted, originally another registrant's own real fix to itself): a Goal with isConformanceGoal true, genuinely Mission-facing, because every claim a mission makes depends on the register carrying that claim being itself honestly conformant to the framework governing it. Never a forced fit onto an existing product goal — that is exactly the dishonest fit this framework's own checks exist to catch elsewhere." ;
@@ -459,7 +494,7 @@ backlog:GovernedDoneShape a sh:NodeShape ;
     sh:severity sh:Violation ;
     rdfs:label "Governed completion (L3)"@en ;
     sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "L3: a Done item must be anchored by verified test or release evidence; review evidence alone is insufficient. An ExecutionTask may inherit this from the real, PlanningEvent-linked parent it was produced from, if that parent is itself compliant; it may never be waived unconditionally." ;
+        sh:message "L3: a Done item must be anchored by verified test or release evidence; review evidence alone is insufficient. An ExecutionTask inherits this from the item it was planned from -- measured on the loan-desk test drive, 2026-09-11: removing the story's own value made this rule fire on all fourteen process tasks, while removing the planning event did not. The wording said 'a compliant PlanningEvent-linked parent', which described the link rather than the bearer. It may never be waived unconditionally." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             $this backlog:hasState backlog:Done .
@@ -476,7 +511,7 @@ backlog:GovernedDoneShape a sh:NodeShape ;
             }
         }""" ] ;
     sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "L3: a Done item must record when it was last individually re-verified (lastAuditedAt); absence means unchecked, not fine. An ExecutionTask may inherit this from a real, compliant PlanningEvent-linked parent; it may never be waived unconditionally." ;
+        sh:message "L3: a Done item must record when it was last individually re-verified (lastAuditedAt); absence means unchecked, not fine. An ExecutionTask inherits this from the item it was planned from -- measured on the loan-desk test drive, 2026-09-11: removing the story's own value made this rule fire on all fourteen process tasks, while removing the planning event did not. The wording said 'a compliant PlanningEvent-linked parent', which described the link rather than the bearer. It may never be waived unconditionally." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             $this backlog:hasState backlog:Done .
@@ -887,6 +922,7 @@ backlog:ReadinessGateShape a sh:NodeShape ;
     sh:targetClass backlog:WorkItem ;
     sh:severity sh:Violation ;
     rdfs:label "Ready is earned, not assumed (L2)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
     sh:sparql [ a sh:SPARQLConstraint ;
         sh:message "L2: an item in Ready must carry at least one acceptance criterion; readiness without stated acceptance is an estimate of someone's memory." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
@@ -1080,7 +1116,7 @@ backlog:ItemCompletenessLinkageShape a sh:NodeShape ;
             FILTER NOT EXISTS { $this backlog:effectiveDefinitionOfDone ?d }
         }""" ] ;
     sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "L3: a Done item must have a test harness whose completeness was derived, not asserted. An ExecutionTask may inherit this from a real, compliant PlanningEvent-linked parent; it may never be waived unconditionally." ;
+        sh:message "L3: a Done item must have a test harness whose completeness was derived, not asserted. An ExecutionTask inherits this from the item it was planned from -- measured on the loan-desk test drive, 2026-09-11: removing the story's own value made this rule fire on all fourteen process tasks, while removing the planning event did not. The wording said 'a compliant PlanningEvent-linked parent', which described the link rather than the bearer. It may never be waived unconditionally." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             $this backlog:hasState backlog:Done .
@@ -1232,7 +1268,16 @@ backlog:ArtifactCommitmentShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             FILTER NOT EXISTS { $this backlog:hasCommitment ?c . ?c backlog:commitsToGoal ?g }
-        }""" ] .
+            # v1.116.0 (G92): the thing this rule asks the register root for may have RETIRED with the
+            # lineage that created it -- the root's commitment, its scope statement and its stage
+            # outputs all went to the archive when lineages 1-8 were retired whole. The rule is
+            # exempt for a declared register root once any lineage has been archived out of this
+            # graph: what it looks for is not missing, it is elsewhere, and the archive file says
+            # where. It still binds every other container, and a root of a register that has archived
+            # nothing.
+            FILTER NOT EXISTS { $this backlog:isRegisterRoot true . ?e a backlog:LineageArchiveEntry . }
+            FILTER NOT EXISTS { $this backlog:isRegisterRoot true . ?l2 backlog:lineageArchived true . }
+}""" ] .
 
 backlog:IncrementCommitmentShape a sh:NodeShape ;
     sh:targetClass backlog:Increment ;
@@ -1292,7 +1337,7 @@ backlog:FlowShape a sh:NodeShape ;
             FILTER (?f < ?s)
         }""" ] ;
     sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "L3: this Done item records no finish point, so throughput and cycle time cannot be measured for it. An ExecutionTask may inherit this from a real, compliant PlanningEvent-linked parent; it may never be waived unconditionally." ;
+        sh:message "L3: this Done item records no finish point, so throughput and cycle time cannot be measured for it. An ExecutionTask inherits this from the item it was planned from -- measured on the loan-desk test drive, 2026-09-11: removing the story's own value made this rule fire on all fourteen process tasks, while removing the planning event did not. The wording said 'a compliant PlanningEvent-linked parent', which described the link rather than the bearer. It may never be waived unconditionally." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             $this backlog:hasState backlog:Done .
@@ -1657,7 +1702,7 @@ backlog:ScopeMeasurabilityShape a sh:NodeShape ;
         }""" ] .
 
 backlog:ChangeRequestShape a sh:NodeShape ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_change_discipline" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
     sh:targetClass backlog:ChangeRequest ;
     sh:severity sh:Violation ;
     rdfs:label "A change request names its scope, direction, rationale and current disposition (L1)"@en ;
@@ -1671,7 +1716,7 @@ backlog:ChangeRequestShape a sh:NodeShape ;
                   sh:message "L1: a change request must carry a current disposition, even if only Disp_Pending." ] .
 
 backlog:ImpactAssessmentShape a sh:NodeShape ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_change_discipline" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
     sh:targetClass backlog:ImpactAssessment ;
     sh:severity sh:Violation ;
     rdfs:label "An impact assessment names the request it analyzes and states real impact (L1)"@en ;
@@ -1681,7 +1726,7 @@ backlog:ImpactAssessmentShape a sh:NodeShape ;
                   sh:message "L1: an impact assessment must state what the change would actually affect." ] .
 
 backlog:DispositionRequiresAssessmentShape a sh:NodeShape ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_change_discipline" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
     sh:targetClass backlog:ChangeRequest ;
     sh:severity sh:Violation ;
     rdfs:label "A disposition past Pending requires a real impact assessment first (L3)"@en ;
@@ -1694,7 +1739,7 @@ backlog:DispositionRequiresAssessmentShape a sh:NodeShape ;
         }""" ] .
 
 backlog:AcceptedRequestNeedsScopeChangeShape a sh:NodeShape ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_change_discipline" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
     sh:targetClass backlog:ChangeRequest ;
     sh:severity sh:Violation ;
     rdfs:label "An accepted request has a real ScopeChange recording the admission (L3)"@en ;
@@ -1707,7 +1752,7 @@ backlog:AcceptedRequestNeedsScopeChangeShape a sh:NodeShape ;
         }""" ] .
 
 backlog:CrossLineageRiskAdvisoryShape a sh:NodeShape ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_change_discipline" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
     backlog:awaitingRealVerification "A second, genuinely concurrent, InFlight lineage exists at the same time as another real lineage's own real ChangeRequest -- true today for zero pairs of lineages in this register. Re-check this shape's own positive case against real data, not only its fixture, the moment that condition holds." ;
     sh:targetClass backlog:ImpactAssessment ;
     sh:severity sh:Warning ;
@@ -2273,31 +2318,35 @@ backlog:LineageCompletenessShape a sh:NodeShape ;
     rdfs:label "A register claiming L2 or above carries a complete lineage (L2/L3)"@en ;
 
     sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "L2: this register declares no Mission. The intent chain has no root, so no goal in it can be said to advance anything. A shape guarding Mission cannot catch this — with zero Missions it has no target — which is why the check lives on the register." ;
+        sh:message "L2: this register declares no Mission. The intent chain has no root, so no goal in it can be said to advance anything. A shape guarding Mission cannot catch this — with zero Missions it has no target — which is why the check lives on the register. Waived when every lineage that exists is archived (v1.121.0, owner ruling 2026-09-15): a register between missions is a real, acceptable state." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             FILTER NOT EXISTS { ?m a backlog:Mission ; backlog:missionFor $this }
+            FILTER EXISTS { ?anyLineage a backlog:Lineage . FILTER NOT EXISTS { ?anyLineage backlog:lineageArchived true } }
         }""" ] ;
 
     sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "L2: this register declares no Objective. Every goal it holds is unmeasurable and no observation can contradict any of it, which is the unfalsifiable-plan failure in its plainest form." ;
+        sh:message "L2: this register declares no Objective. Every goal it holds is unmeasurable and no observation can contradict any of it, which is the unfalsifiable-plan failure in its plainest form. Waived when every lineage that exists is archived (v1.121.0, owner ruling 2026-09-15): a register between missions is a real, acceptable state." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             FILTER NOT EXISTS { ?o a backlog:Objective }
+            FILTER EXISTS { ?anyLineage a backlog:Lineage . FILTER NOT EXISTS { ?anyLineage backlog:lineageArchived true } }
         }""" ] ;
 
     sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "L2: this register declares no ScopeStatement anywhere. Nothing states what the development is for or what it will not attempt, so scope completion cannot be derived and scope growth cannot be detected — there is no boundary for a ScopeChange to change." ;
+        sh:message "L2: this register declares no ScopeStatement anywhere. Nothing states what the development is for or what it will not attempt, so scope completion cannot be derived and scope growth cannot be detected — there is no boundary for a ScopeChange to change. Waived when every lineage that exists is archived (v1.121.0, owner ruling 2026-09-15): a register between missions is a real, acceptable state." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             FILTER NOT EXISTS { ?s a backlog:ScopeStatement }
+            FILTER EXISTS { ?anyLineage a backlog:Lineage . FILTER NOT EXISTS { ?anyLineage backlog:lineageArchived true } }
         }""" ] ;
 
     sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "L2: this register declares no Blueprint. Mission, Objective and ScopeStatement are already register-level required here; a domain model is not, despite being the one intent-chain-adjacent element that establishes what the work is ABOUT rather than what it is FOR. An epic can decompose into fully evidenced, test-harnessed stories with no domain entity ever named, and every other shape in this suite reports clean the whole way." ;
+        sh:message "L2: this register declares no Blueprint. Mission, Objective and ScopeStatement are already register-level required here; a domain model is not, despite being the one intent-chain-adjacent element that establishes what the work is ABOUT rather than what it is FOR. An epic can decompose into fully evidenced, test-harnessed stories with no domain entity ever named, and every other shape in this suite reports clean the whole way. Waived when every lineage that exists is archived (v1.121.0, owner ruling 2026-09-15): a register between missions is a real, acceptable state." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             FILTER NOT EXISTS { ?b a backlog:Blueprint ; backlog:blueprintFor $this }
+            FILTER EXISTS { ?anyLineage a backlog:Lineage . FILTER NOT EXISTS { ?anyLineage backlog:lineageArchived true } }
         }""" ] ;
 
     sh:sparql [ a sh:SPARQLConstraint ;
@@ -2321,7 +2370,16 @@ backlog:LineageCompletenessShape a sh:NodeShape ;
         sh:select """SELECT $this WHERE {
             { ?m a backlog:Mission ; backlog:missionFor $this } UNION { ?b a backlog:Blueprint ; backlog:blueprintFor $this }
             FILTER NOT EXISTS { ?rs a backlog:RegisterSession ; backlog:sessionFor $this }
-        }""" ] .
+            # v1.116.0 (G92): the thing this rule asks the register root for may have RETIRED with the
+            # lineage that created it -- the root's commitment, its scope statement and its stage
+            # outputs all went to the archive when lineages 1-8 were retired whole. The rule is
+            # exempt for a declared register root once any lineage has been archived out of this
+            # graph: what it looks for is not missing, it is elsewhere, and the archive file says
+            # where. It still binds every other container, and a root of a register that has archived
+            # nothing.
+            FILTER NOT EXISTS { $this backlog:isRegisterRoot true . ?e a backlog:LineageArchiveEntry . }
+            FILTER NOT EXISTS { $this backlog:isRegisterRoot true . ?l2 backlog:lineageArchived true . }
+}""" ] .
 
 backlog:RegisterSessionIntegrityShape a sh:NodeShape ;
     sh:targetClass backlog:RegisterSession ;
@@ -2432,7 +2490,7 @@ backlog:PlanBaselineShape a sh:NodeShape ;
         }""" ] .
 
 backlog:OpenIterationBaselineAdvisoryShape a sh:NodeShape ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_iteration_rebaseline" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
     sh:targetClass backlog:Iteration ;
     sh:severity sh:Violation ;   # G90 rule (2026-09-09): An open iteration with a planned window and no PlanBaseline breaks the baseline rule; later change becomes unm
     rdfs:label "Advisory: an open iteration has no plan baseline recorded"@en ;
@@ -2448,7 +2506,7 @@ backlog:OpenIterationBaselineAdvisoryShape a sh:NodeShape ;
         }""" ] .
 
 backlog:SilentContainerRebaselineShape a sh:NodeShape ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_iteration_rebaseline" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
     sh:targetClass backlog:Iteration ;
     sh:severity sh:Violation ;
     rdfs:label "A container's dates match its own baseline, or a real Rebaseline explains why not (L1)"@en ;
@@ -2703,7 +2761,7 @@ backlog:L4StoryGranularityShape a sh:NodeShape ;
 backlog:StoryReadyToCloseShape a sh:NodeShape ;
     sh:targetClass backlog:Story ;
     sh:severity sh:Violation ;   # G90 rule (2026-09-09): Every task Done and the story not moved is a state the register must not hold; the item-level state rule is br
-    backlog:provenByFixture "03-tooling/fixtures/fixture_sprint_ceremonies" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
     backlog:fixtureCaseName "S_ReadyToClose" ;
     rdfs:label "Advisory: this story's tasks are all Done but the story itself is not"@en ;
     sh:sparql [ a sh:SPARQLConstraint ;
@@ -2719,7 +2777,7 @@ backlog:StoryReadyToCloseShape a sh:NodeShape ;
 backlog:IterationEndedIncompleteShape a sh:NodeShape ;
     sh:targetClass backlog:Story ;
     sh:severity sh:Violation ;   # G90 rule (2026-09-09): A story left unfinished in an ended iteration must be carried forward or recovered; leaving it is the rule bro
-    backlog:provenByFixture "03-tooling/fixtures/fixture_sprint_ceremonies" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
     backlog:fixtureCaseName "S_Spillover" ;
     rdfs:label "Advisory: this story's iteration has ended and the story is not Done"@en ;
     sh:sparql [ a sh:SPARQLConstraint ;
@@ -2736,7 +2794,7 @@ backlog:IterationEndedIncompleteShape a sh:NodeShape ;
 backlog:BatchCompleteButNotDoneShape a sh:NodeShape ;
     sh:targetClass backlog:WorkItem ;
     sh:severity sh:Violation ;   # G90 rule (2026-09-09): hasBatchCompleted equal to hasBatchSize with hasState not Done is a contradiction between two asserted facts.
-    backlog:provenByFixture "03-tooling/fixtures/fixture_sprint_ceremonies" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
     backlog:fixtureCaseName "WI_BatchDoneNotClosed" ;
     rdfs:label "Advisory: every batch unit is complete but the item itself is not Done"@en ;
     sh:sparql [ a sh:SPARQLConstraint ;
@@ -2751,7 +2809,7 @@ backlog:BatchCompleteButNotDoneShape a sh:NodeShape ;
 backlog:BatchStartedStateStaleShape a sh:NodeShape ;
     sh:targetClass backlog:WorkItem ;
     sh:severity sh:Violation ;   # G90 rule (2026-09-09): Verified work recorded against an item still Proposed/Ready is the same contradiction one step earlier.
-    backlog:provenByFixture "03-tooling/fixtures/fixture_sprint_ceremonies" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
     backlog:fixtureCaseName "WI_BatchStartedStale" ;
     rdfs:label "Advisory: real batch progress recorded but the item's own state is still its initial value"@en ;
     sh:sparql [ a sh:SPARQLConstraint ;
@@ -3733,6 +3791,7 @@ backlog:StageOutputShape a sh:NodeShape ;
     sh:targetClass backlog:StageOutput ;
     sh:severity sh:Violation ;
     rdfs:label "A stage output names its stage, its digest and its commit (L2)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/sdlc-tools/fixture_order_shapes_negative" ;
     sh:property [ sh:path backlog:outputOfStage ; sh:minCount 1 ; sh:class backlog:LineageStage ;
         sh:message "L2: a stage output must name the stage it closed." ] ;
     sh:property [ sh:path backlog:hasStateDigest ; sh:minCount 1 ;
@@ -3770,6 +3829,7 @@ backlog:SingleCommitLineageShape a sh:NodeShape ;
     sh:targetClass backlog:StageOutput ;
     sh:severity sh:Violation ;   # G90 rule (2026-09-09): Two stages closing in one commit leaves the ceremony's own order unwitnessed (G18); the one-commit-per-stage r
     rdfs:label "Advisory: stages sharing one commit"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/sdlc-tools/fixture_order_shapes_negative" ;
     sh:sparql [ a sh:SPARQLConstraint ;
         sh:message "Advisory: this stage closed at the same commit as another stage. Git witnesses order BETWEEN commits and says nothing about order WITHIN one, so these stages are unordered evidence however they were actually built. This is the measured limit of the pipeline, reported rather than hidden: to make the order witnessed, close each stage in its own commit." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
@@ -3787,6 +3847,7 @@ backlog:StageOrderWitnessShape a sh:NodeShape ;
     sh:targetClass backlog:StageOutput ;
     sh:severity sh:Violation ;   # G90 rule (2026-09-09): A consuming stage that cannot be shown to follow its predecessor breaks the witnessed-order rule (G81).
     rdfs:label "Advisory: a stage closed at a different commit than its successor implies"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/sdlc-tools/fixture_order_shapes_negative" ;
     sh:sparql [ a sh:SPARQLConstraint ;
         sh:message "Advisory: this stage and the one that consumes it record the same commit, or this stage's commit cannot be shown to precede it. The consuming stage was built from an output that was not yet closed, which means the dependency is nominal — the artifact existed as an IRI before it existed as a completed state. Close each stage in its own commit to make the sequence witnessed." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
@@ -4005,7 +4066,7 @@ backlog:UnfinishedLineageShape a sh:NodeShape ;
 #################################################################
 
 backlog:ScopeAreaShape a sh:NodeShape ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_ontologydriven_negative" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
     backlog:fixtureCaseName "AREA_NOLOC" ;
     sh:targetClass backlog:ScopeArea ;
     sh:severity sh:Violation ;
@@ -4147,7 +4208,7 @@ backlog:BothLayersShape a sh:NodeShape ;
 backlog:ProductScopeKindShape a sh:NodeShape ;
     sh:targetClass backlog:ScopeStatement ;
     sh:severity sh:Info ;   # G90 opportunity (2026-09-09): One product-scope kind throughout may be exactly right.
-    backlog:provenByFixture "03-tooling/fixtures/fixture_productscopekind" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
     backlog:fixtureCaseName "SCOPE_ONEKIND" ;
     rdfs:label "Advisory: a scope's product deliverables are all one kind"@en ;
     sh:sparql [ a sh:SPARQLConstraint ;
@@ -4196,7 +4257,7 @@ backlog:MeasurementKindShape a sh:NodeShape ;
 backlog:ObjectiveCheckpointTimingShape a sh:NodeShape ;
     sh:targetClass backlog:ObjectiveCheckpoint ;
     sh:severity sh:Violation ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_checkpoint_condition_negative" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
     backlog:fixtureCaseName "CP_NoTiming" ;
     rdfs:label "L1: a checkpoint states when it applies, by date or by condition"@en ;
     sh:sparql [ a sh:SPARQLConstraint ;
@@ -4250,7 +4311,13 @@ backlog:ObjectiveHasCorrectiveActionShape a sh:NodeShape ;
                 ?w backlog:hasState ?ws .
                 FILTER (?ws NOT IN (backlog:Done, backlog:Cancelled))
             }
-        }""" ] .
+            # v1.115.0 (only passed steps fire, 4th instance): live work items are the BACKLOG
+            # stage's content. An objective of a lineage below LS_Backlogged (rank 5) cannot name a
+            # corrective action because no item exists yet -- the ceremony forbids one. Found on
+            # lineage 9's own Objective stage, which the shape refused for lacking work the next
+            # stage will create.
+            FILTER NOT EXISTS { $this backlog:belongsToLineage ?lin . ?lin backlog:hasLineageStatus ?ls . ?ls backlog:statusRank ?rk . FILTER (?rk < 5) }
+}""" ] .
 
 backlog:IneffectiveCorrectiveAttemptAdvisoryShape a sh:NodeShape ;
     sh:targetClass backlog:WorkItem ;
@@ -4383,7 +4450,7 @@ backlog:ScopeGapAdvisoryShape a sh:NodeShape ;
 backlog:CeremonyLinkAdvisoryShape a sh:NodeShape ;
     sh:targetClass backlog:MetricObservation ;
     sh:severity sh:Violation ;   # G90 rule (2026-09-09): An observation taken at a ceremony that does not say so breaks the ceremony-link rule.
-    backlog:provenByFixture "03-tooling/fixtures/fixture_ceremony_link_negative" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
     backlog:fixtureCaseName "MO_NoLink" ;
     rdfs:label "Advisory: a reading that could be tied to the review that produced it, isn't"@en ;
     sh:sparql [ a sh:SPARQLConstraint ;
@@ -4400,7 +4467,7 @@ backlog:CeremonyLinkAdvisoryShape a sh:NodeShape ;
 backlog:MeasurementDueAfterReviewShape a sh:NodeShape ;
     sh:targetClass backlog:SprintReviewCeremony ;
     sh:severity sh:Violation ;   # G90 rule (2026-09-09): A review closing metric-moving work with no observation breaks the measurement rule.
-    backlog:provenByFixture "03-tooling/fixtures/fixture_measurement_due" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
     backlog:fixtureCaseName "Review_NoReading" ;
     rdfs:label "Advisory: this review closed metric-moving work with no reading since"@en ;
     sh:sparql [ a sh:SPARQLConstraint ;
@@ -4522,7 +4589,7 @@ backlog:GroomedAheadShape a sh:NodeShape ;
 #################################################################
 
 backlog:GovernanceRulingShape a sh:NodeShape ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_ontologydriven_negative" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
     backlog:fixtureCaseName "RUL_NOSHAPE" ;
     sh:targetClass backlog:GovernanceRuling ;
     sh:severity sh:Violation ;
@@ -4539,7 +4606,7 @@ backlog:GovernanceRulingShape a sh:NodeShape ;
         }""" ] .
 
 backlog:LineageLayerShape a sh:NodeShape ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_ontologydriven_negative" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
     backlog:fixtureCaseName "LAY_NOORD" ;
     sh:targetClass backlog:LineageLayer ;
     sh:severity sh:Violation ;
@@ -4745,7 +4812,7 @@ backlog:CriterionCoverageShape a sh:NodeShape ;
         }""" ] .
 
 backlog:ScenarioShape a sh:NodeShape ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_ontologydriven_negative" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
     backlog:fixtureCaseName "SCEN_NOKIND" ;
     sh:targetClass backlog:TestScenario ;
     sh:severity sh:Violation ;
@@ -4783,7 +4850,7 @@ backlog:StoryTestAnalysisShape a sh:NodeShape ;
 #################################################################
 
 backlog:CodeTableShape a sh:NodeShape ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_ontologydriven_negative" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
     backlog:fixtureCaseName "CT_NOKIND" ;
     sh:targetClass backlog:CodeTable ;
     sh:severity sh:Violation ;
@@ -4869,7 +4936,7 @@ backlog:ClassReachabilityShape a sh:NodeShape ;
 backlog:SprintPlanningCeremonyShape a sh:NodeShape ;
     sh:targetClass backlog:SprintPlanningCeremony ;
     sh:severity sh:Violation ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_sprint_ceremonies_negative" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
     backlog:fixtureCaseName "PLAN_NoEvent" ;
     rdfs:label "L1: a planning ceremony names its iteration, when it happened, and what it planned"@en ;
     sh:property [ sh:path backlog:ceremonyFor ; sh:minCount 1 ; sh:maxCount 1 ;
@@ -4882,7 +4949,7 @@ backlog:SprintPlanningCeremonyShape a sh:NodeShape ;
 backlog:SprintReviewCeremonyShape a sh:NodeShape ;
     sh:targetClass backlog:SprintReviewCeremony ;
     sh:severity sh:Violation ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_sprint_ceremonies_negative" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
     backlog:fixtureCaseName "REVIEW_NoDecision" ;
     rdfs:label "L1: a review ceremony names its iteration, when it happened, what it reviewed, and made a decision"@en ;
     sh:property [ sh:path backlog:ceremonyFor ; sh:minCount 1 ; sh:maxCount 1 ;
@@ -4903,7 +4970,7 @@ backlog:SprintReviewCeremonyShape a sh:NodeShape ;
 backlog:ReviewsPlanConsistencyShape a sh:NodeShape ;
     sh:targetClass backlog:SprintReviewCeremony ;
     sh:severity sh:Violation ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_sprint_ceremonies_negative" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
     backlog:fixtureCaseName "REVIEW_WrongPlan" ;
     rdfs:label "L1: a review's own iteration must agree with the plan it reviews"@en ;
     sh:sparql [ a sh:SPARQLConstraint ;
@@ -4918,7 +4985,7 @@ backlog:ReviewsPlanConsistencyShape a sh:NodeShape ;
 backlog:IterationNotCleanedShape a sh:NodeShape ;
     sh:targetClass backlog:SprintReviewCeremony ;
     sh:severity sh:Violation ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_sprint_ceremonies_negative" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
     backlog:fixtureCaseName "REVIEW_DirtyClose" ;
     rdfs:label "L1: closing an iteration requires a disposition for every story in it"@en ;
     sh:sparql [ a sh:SPARQLConstraint ;
@@ -4934,7 +5001,7 @@ backlog:IterationNotCleanedShape a sh:NodeShape ;
 backlog:RetrospectiveNotStartedShape a sh:NodeShape ;
     sh:targetClass backlog:SprintReviewCeremony ;
     sh:severity sh:Violation ;   # G90 rule (2026-09-09): A review that closed work with no retrospective following it breaks the ceremony sequence.
-    backlog:provenByFixture "03-tooling/fixtures/fixture_sprint_ceremonies" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
     backlog:fixtureCaseName "REVIEW_NoRetro" ;
     rdfs:label "Advisory: this review made a real decision but no retrospective has started following it"@en ;
     sh:sparql [ a sh:SPARQLConstraint ;
@@ -4949,7 +5016,7 @@ backlog:RetrospectiveNotStartedShape a sh:NodeShape ;
 backlog:SprintRetrospectiveShape a sh:NodeShape ;
     sh:targetClass backlog:SprintRetrospective ;
     sh:severity sh:Violation ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_sprint_ceremonies_negative" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
     backlog:fixtureCaseName "RETRO_NoFinding" ;
     rdfs:label "L1: a retrospective records when it happened and produced at least one finding"@en ;
     sh:property [ sh:path backlog:heldAt ; sh:minCount 1 ; sh:maxCount 1 ;
@@ -4960,7 +5027,7 @@ backlog:SprintRetrospectiveShape a sh:NodeShape ;
 backlog:RetrospectiveFindingShape a sh:NodeShape ;
     sh:targetClass backlog:RetrospectiveFinding ;
     sh:severity sh:Violation ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_sprint_ceremonies_negative" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
     backlog:fixtureCaseName "FIND_NoRootCause" ;
     rdfs:label "L1: a retrospective finding names its root cause and its scope"@en ;
     sh:property [ sh:path backlog:hasFindingScope ; sh:minCount 1 ; sh:maxCount 1 ;
@@ -4980,7 +5047,7 @@ backlog:PackageContentShape a sh:NodeShape ;
 backlog:PackageRegularityShape a sh:NodeShape ;
     sh:targetClass backlog:Package ;
     sh:severity sh:Warning ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_package_regularity" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
     backlog:fixtureCaseName "Pkg_Odd" ;
     rdfs:label "Advisory: a package's sprint count diverges sharply from its siblings"@en ;
     sh:sparql [ a sh:SPARQLConstraint ;
@@ -5098,7 +5165,7 @@ backlog:AchievedOnlyWhenClearShape a sh:NodeShape ;
         }""" ] .
 
 backlog:BaselineReferenceShape a sh:NodeShape ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_tool_run_record" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
     sh:targetClass backlog:BaselineReference ;
     sh:severity sh:Violation ;
     rdfs:label "A baseline reference names its tool, its location, and why (L1)"@en ;
@@ -5110,7 +5177,7 @@ backlog:BaselineReferenceShape a sh:NodeShape ;
                   sh:message "L1: a baseline reference must state why this location is the right one." ] .
 
 backlog:ToolRunRecordShape a sh:NodeShape ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_tool_run_record" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
     sh:targetClass backlog:ToolRunRecord ;
     sh:severity sh:Violation ;
     rdfs:label "A tool run record names its tool and carries both real hashes (L1)"@en ;
@@ -5124,7 +5191,7 @@ backlog:ToolRunRecordShape a sh:NodeShape ;
                   sh:message "L1: a tool run record must state what the tool itself concluded about its own baseline." ] .
 
 backlog:RemoteCommitShape a sh:NodeShape ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_cross_project_commit" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_positive" ;
     sh:targetClass backlog:RemoteCommit ;
     sh:severity sh:Violation ;
     rdfs:label "A remote commit record names at least one real touched path (L1)"@en ;
@@ -5132,7 +5199,7 @@ backlog:RemoteCommitShape a sh:NodeShape ;
                   sh:message "L1: a remote commit record must name at least one real path it touched, or it asserts nothing checkable." ] .
 
 backlog:CrossProjectCommitAdvisoryShape a sh:NodeShape ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_cross_project_commit" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_positive" ;
     sh:targetClass backlog:RemoteCommit ;
     sh:severity sh:Warning ;
     rdfs:label "Advisory: a remote commit touched this package's own sovereign path and needs real reconciliation"@en ;
@@ -5147,7 +5214,7 @@ backlog:CrossProjectCommitAdvisoryShape a sh:NodeShape ;
         }""" ] .
 
 backlog:NewUnprovenShapeShape a sh:NodeShape ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_new_unproven_shape" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
     sh:target [ a sh:SPARQLTarget ;
         sh:select """SELECT ?this WHERE {
             ?this a <http://www.w3.org/ns/shacl#NodeShape> ;
@@ -5164,7 +5231,7 @@ backlog:NewUnprovenShapeShape a sh:NodeShape ;
         }""" ] .
 
 backlog:SelfComparisonClaimShape a sh:NodeShape ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_tool_run_record" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
     sh:targetClass backlog:ToolRunRecord ;
     sh:severity sh:Violation ;
     rdfs:label "A run cannot claim a distinct baseline while its own two hashes match (L3)"@en ;
@@ -5179,7 +5246,7 @@ backlog:SelfComparisonClaimShape a sh:NodeShape ;
         }""" ] .
 
 backlog:ClosureReportShape a sh:NodeShape ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_closure_report" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
     sh:targetClass backlog:ClosureReport ;
     sh:severity sh:Violation ;
     rdfs:label "A closure report names its mission, when it ran, and covers real measures (L1)"@en ;
@@ -5193,7 +5260,7 @@ backlog:ClosureReportShape a sh:NodeShape ;
                   sh:message "L1: a closure report must report on at least one real objective; a dashboard with no measures is a summary, not a dashboard." ] .
 
 backlog:MissionClosureRequiresReportShape a sh:NodeShape ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_closure_report" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
     sh:targetClass backlog:Mission ;
     sh:severity sh:Violation ;
     rdfs:label "A mission is not Achieved without a real closure report naming it (L3)"@en ;
@@ -5206,6 +5273,18 @@ backlog:MissionClosureRequiresReportShape a sh:NodeShape ;
             FILTER NOT EXISTS { $this backlog:belongsToLineage ?l . ?l backlog:lineageArchived true }
             # v1.110.0: the mission of an archived lineage stays live as the pointer; its closure report went with the work
             FILTER NOT EXISTS { ?l2 backlog:lineageForMission $this ; backlog:lineageArchived true }
+        }""" ] .
+
+backlog:ClosureReportCommitAnchorShape a sh:NodeShape ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    sh:targetClass backlog:ClosureReport ;
+    sh:severity sh:Violation ;
+    rdfs:label "A closure report records the commit it was itself committed at (L3, G95, G96)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: this closure report records no closureCommittedAt. The identical StageOutputShape principle applies unchanged: a report generated at a timestamp is computable after the fact and proves nothing about whether it preceded the outcome it justifies, while a commit is not. Real, self-corrected finding that named this exact gap (vaf-pipeline-session, 2026-09-16): a mission's Out_Achieved and its own report were set in the same commit, 0 violations throughout this suite, because nothing before this shape ever asked a ClosureReport for the one anchor that could have caught it. G96: this package's own real closure of Lineage 9 (commit f00d8e0, v1.264.1) made the identical mistake, found only after this shape already existed -- proof the gap was never hypothetical." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            FILTER NOT EXISTS { $this backlog:closureCommittedAt ?c }
         }""" ] .
 
 backlog:RetrospectiveObjectiveShape a sh:NodeShape ;
@@ -5628,6 +5707,200 @@ backlog:LineageThrashShape a sh:NodeShape ;
         }""" ] .
 
 #################################################################
+#  v1.132.0 -- LineageSuccession, PartialScopeDeclaration, LineageReactivation.
+#  Real, structural answer to the adopting project's own evidenced handover
+#  (no-adaptation-mechanism-for-a-mature-lineage-under-a-new-ruleset): a
+#  mature, in-progress lineage under an evolved RuleSet may wind its
+#  completed scope down honestly and open a successor, without re-judging
+#  closed history or forcing a Divide-and-Conquer restart meant for a
+#  bypass, a different problem. Proven by fixture_lineage_succession
+#  (positive) and fixture_lineage_succession_negative (negative).
+#################################################################
+
+backlog:PartialScopeDeclarationShape a sh:NodeShape ;
+    sh:targetClass backlog:PartialScopeDeclaration ;
+    sh:severity sh:Violation ;
+    rdfs:label "A partial-scope declaration names its lineage and the real remainder (L1)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_lineage_succession" ;
+    sh:property [ sh:path backlog:declaresGapFor ; sh:minCount 1 ; sh:maxCount 1 ; sh:class backlog:Lineage ;
+                  sh:message "A partial-scope declaration names exactly one lineage." ] ;
+    sh:property [ sh:path backlog:describesUncoveredScope ; sh:minCount 1 ; sh:datatype xsd:string ;
+                  sh:message "A partial-scope declaration states the real, genuine remainder in words, not left implicit." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this declaration names a lineage that is neither archived nor recorded Achieved. A partial-scope declaration is filed as part of a lineage's own real closure, not while it is still actively open -- filing one early would let a lineage claim its own gap before the gap is real." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:declaresGapFor ?l .
+            FILTER NOT EXISTS { ?l backlog:lineageArchived true }
+            FILTER NOT EXISTS { ?l backlog:hasLineageStatus backlog:LS_Achieved }
+        }""" ] .
+
+backlog:LineageSuccessionShape a sh:NodeShape ;
+    sh:targetClass backlog:LineageSuccession ;
+    sh:severity sh:Violation ;
+    rdfs:label "A succession names predecessor, successor, the gap it resolves, and an owner rationale (L1)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_lineage_succession" ;
+    sh:property [ sh:path backlog:succeedsLineage ; sh:minCount 1 ; sh:maxCount 1 ; sh:class backlog:Lineage ;
+                  sh:message "A succession names exactly one predecessor lineage." ] ;
+    sh:property [ sh:path backlog:successorLineage ; sh:minCount 1 ; sh:maxCount 1 ; sh:class backlog:Lineage ;
+                  sh:message "A succession names exactly one successor lineage." ] ;
+    sh:property [ sh:path backlog:resolvesGap ; sh:minCount 1 ; sh:maxCount 1 ; sh:class backlog:LineageGap ;
+                  sh:message "A succession resolves exactly one real gap: a partial-scope declaration filed at closure, or a post-closure finding (v1.133.0)." ] ;
+    sh:property [ sh:path backlog:successionRationale ; sh:minCount 1 ; sh:datatype xsd:string ;
+                  sh:message "A succession states the owner's own real cost/benefit and risk/opportunity reasoning, not a template." ] ;
+    sh:property [ sh:path backlog:decidedBy ; sh:minCount 1 ;
+                  sh:message "A succession is an owner decision and says so." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this succession's own predecessor and successor are the same lineage. A succession opens what comes next; it cannot succeed itself." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:succeedsLineage ?p ; backlog:successorLineage ?s .
+            FILTER (?p = ?s)
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this succession's own successor lineage does not share the predecessor's own lineageForMission. A succession continues one Mission under a new lineage; a different Mission is not a succession, it is a new, unrelated lineage." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:succeedsLineage ?p ; backlog:successorLineage ?s .
+            ?p backlog:lineageForMission ?mp . ?s backlog:lineageForMission ?ms .
+            FILTER (?mp != ?ms)
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this succession's own resolved partial-scope declaration was not filed against the same predecessor lineage this succession names. The declaration and the succession must agree on which lineage's gap this is." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:succeedsLineage ?p ; backlog:resolvesGap ?g .
+            ?g backlog:declaresGapFor ?gp .
+            FILTER (?p != ?gp)
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this succession's own successor lineage has no real Objective that structurally resolves the same partial-scope declaration (resolvesPartialScope). The succession's own prose names the intent; the successor's own chain must carry the real, checkable link -- not merely overlap the gap by coincidence." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:successorLineage ?s ; backlog:resolvesGap ?g .
+            FILTER NOT EXISTS { ?o backlog:belongsToLineage ?s ; backlog:resolvesPartialScope ?g }
+        }""" ] .
+
+backlog:LineageReactivationShape a sh:NodeShape ;
+    sh:targetClass backlog:LineageReactivation ;
+    sh:severity sh:Violation ;
+    rdfs:label "A reactivation names the lineage it reopens and a real, owner-ruled need (L1)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_lineage_succession" ;
+    sh:property [ sh:path backlog:reactivatesLineage ; sh:minCount 1 ; sh:maxCount 1 ; sh:class backlog:Lineage ;
+                  sh:message "A reactivation names exactly one lineage." ] ;
+    sh:property [ sh:path backlog:reactivationRationale ; sh:minCount 1 ; sh:datatype xsd:string ;
+                  sh:message "A reactivation states the real, named need, not a default justification." ] ;
+    sh:property [ sh:path backlog:hasReactivationReason ; sh:minCount 1 ;
+                  sh:in ( backlog:Reason_ImproperProcessing backlog:Reason_UnfinishedWork backlog:Reason_NonConformantResult ) ;
+                  sh:message "L1: a reactivation is typed by one of three reasons only -- improper processing result, unfinished work, non-conformant result (v1.133.0, owner's rule)." ] ;
+    sh:property [ sh:path backlog:addressesFinding ; sh:minCount 1 ; sh:class backlog:PostClosureFinding ;
+                  sh:message "L1: a reactivation rests on at least one evidenced post-closure finding; a suspicion is not a reason to reopen closed work (v1.133.0)." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this reactivation addresses a post-closure finding raised against a different lineage than the one it reopens." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:reactivatesLineage ?l ; backlog:addressesFinding ?f .
+            ?f backlog:declaresGapFor ?fl . FILTER (?fl != ?l)
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this reactivation addresses no systemic finding. Isolated defects go to a maintenance task or change request; bounded ones are descoped into a successor. Only systemic non-conformance justifies reopening closed work (v1.133.0, owner's tiered rule)." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:addressesFinding ?any .
+            FILTER NOT EXISTS { $this backlog:addressesFinding ?f . ?f backlog:hasFindingScale backlog:Scale_Systemic }
+        }""" ] ;
+    sh:property [ sh:path backlog:decidedBy ; sh:minCount 1 ;
+                  sh:message "A reactivation is an owner decision and says so." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this reactivation names a lineage that was never actually closed (neither archived nor Achieved). Reactivation answers a real need to reopen closed work; a still-open lineage has nothing to reactivate." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:reactivatesLineage ?l .
+            FILTER NOT EXISTS { ?l backlog:lineageArchived true }
+            FILTER NOT EXISTS { ?l backlog:hasLineageStatus ?st . FILTER (?st IN (backlog:LS_Achieved, backlog:LS_Archived, backlog:LS_Revived)) }
+        }""" ] .
+
+#################################################################
+#  v1.133.0 -- tiered response to findings against closed work (owner
+#  design, 2026-09-24). Proven by fixture_lineage_succession (positive)
+#  and fixture_lineage_succession_negative (negative).
+#################################################################
+
+backlog:PostClosureFindingShape a sh:NodeShape ;
+    sh:targetClass backlog:PostClosureFinding ;
+    sh:severity sh:Violation ;
+    rdfs:label "A post-closure finding names a closed lineage, its scale, when it was raised, and its evidence (L1)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_lineage_succession" ;
+    sh:property [ sh:path backlog:declaresGapFor ; sh:minCount 1 ; sh:maxCount 1 ; sh:class backlog:Lineage ;
+                  sh:message "A post-closure finding names exactly one lineage." ] ;
+    sh:property [ sh:path backlog:describesUncoveredScope ; sh:minCount 1 ; sh:datatype xsd:string ;
+                  sh:message "A post-closure finding states what was found, in words." ] ;
+    sh:property [ sh:path backlog:hasFindingScale ; sh:minCount 1 ; sh:maxCount 1 ;
+                  sh:in ( backlog:Scale_Isolated backlog:Scale_Bounded backlog:Scale_Systemic ) ;
+                  sh:message "A post-closure finding is typed isolated, bounded or systemic; the scale decides the response." ] ;
+    sh:property [ sh:path backlog:findingRaisedAt ; sh:minCount 1 ; sh:datatype xsd:dateTime ;
+                  sh:message "A post-closure finding records when it was raised." ] ;
+    sh:property [ sh:path backlog:findingEvidence ; sh:minCount 1 ; sh:class backlog:Evidence ;
+                  sh:message "L1: a post-closure finding rests on observed evidence -- a defect from live use, a failed verification or acceptance check. A suspicion produces a validation task in a live lineage instead." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this finding is raised against a lineage that is not closed. Work still open is corrected in place, by its own lineage." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:declaresGapFor ?l .
+            FILTER NOT EXISTS { ?l backlog:lineageArchived true }
+            FILTER NOT EXISTS { ?l backlog:hasLineageStatus ?st . FILTER (?st IN (backlog:LS_Achieved, backlog:LS_Archived, backlog:LS_Revived)) }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this isolated finding is answered by a succession or a reactivation. An isolated defect needs only a maintenance task or a change request under a live lineage; reopening or dividing closed work for it is disproportionate." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasFindingScale backlog:Scale_Isolated .
+            { ?r backlog:addressesFinding $this ; a backlog:LineageReactivation } UNION { ?s backlog:resolvesGap $this }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this isolated finding is addressed by a work item that is not in the Maintenance investment category. Isolated defects in closed work are maintenance, and are recorded as such." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasFindingScale backlog:Scale_Isolated .
+            ?w backlog:addressesFinding $this ; a backlog:WorkItem .
+            FILTER NOT EXISTS { ?w backlog:hasInvestmentCategory backlog:Cat_Maintenance }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this finding was raised inside its lineage's observation window, yet is answered by a succession or reactivation. Within the window, findings route to maintenance or a change request." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:declaresGapFor ?l ; backlog:findingRaisedAt ?at .
+            ?l backlog:observationWindowEnds ?end . FILTER (?at <= ?end)
+            { ?r backlog:addressesFinding $this ; a backlog:LineageReactivation } UNION { ?s backlog:resolvesGap $this }
+        }""" ] .
+
+backlog:PostClosureFindingOpenAdvisoryShape a sh:NodeShape ;
+    sh:targetClass backlog:PostClosureFinding ;
+    sh:severity sh:Warning ;
+    rdfs:label "A post-closure finding nothing answers yet is reported (advisory)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_lineage_succession_negative" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: this post-closure finding is not yet addressed by a maintenance task, change request, succession or reactivation. It is open, not settled." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            FILTER NOT EXISTS { ?x backlog:addressesFinding $this }
+            FILTER NOT EXISTS { ?s backlog:resolvesGap $this }
+        }""" ] .
+
+backlog:RevivalRequiresReactivationShape a sh:NodeShape ;
+    sh:targetClass backlog:Lineage ;
+    sh:severity sh:Violation ;
+    rdfs:label "A revived lineage carries the reasoned reactivation that justifies it (L1)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_lineage_succession_negative" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this lineage was revived (lineageRevivedAt) but no lineage reactivation names it. Revival is the act; the reactivation -- typed reason, evidenced systemic finding, owner decision -- is what makes it legitimate (v1.133.0)." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:lineageRevivedAt ?at .
+            FILTER NOT EXISTS { ?r backlog:reactivatesLineage $this }
+        }""" ] .
+
+#################################################################
 #  v1.103.0 (2026-09-07) -- recovery strategies (each with its own
 #  convergence evidence), bypass-freeze, and the G80 rule. Proven by
 #  fixture_recovery_strategy (positive) and
@@ -5805,11 +6078,12 @@ backlog:LineageStatusShape a sh:NodeShape ;
     sh:targetClass backlog:Lineage ;
     sh:severity sh:Violation ;
     rdfs:label "A live lineage states its status, and the status cannot outrun the register (L1)"@en ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_lineage_status_negative" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
     sh:sparql [ a sh:SPARQLConstraint ;
         sh:message "L1: this lineage has no hasLineageStatus. Every lineage opened from v1.89.0 states where it stands, so that rules bind only once the step they need has passed." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
+            ?reg backlog:adoptsRuleSet backlog:RS_LineageStatus .
             FILTER NOT EXISTS { $this backlog:hasLineageStatus ?s }
             FILTER NOT EXISTS { $this backlog:lineageArchived true }
             # lineages opened before v1.89.0 carry their status from this release on; none is exempt
@@ -5818,6 +6092,7 @@ backlog:LineageStatusShape a sh:NodeShape ;
         sh:message "L1: this lineage claims a stage status (Scoped, Goaled, Objectived, Backlogged) with no active output of that stage. A status is a pointer to the chain, not a wish." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
+            ?reg backlog:adoptsRuleSet backlog:RS_LineageStatus .
             $this backlog:hasLineageStatus ?ls .
             # pyshacl forbids VALUES inside a constraint: the status/stage pairs are a UNION
             { BIND(backlog:LS_Opened AS ?want) BIND(backlog:Stage_Mission AS ?st) } UNION
@@ -5829,11 +6104,12 @@ backlog:LineageStatusShape a sh:NodeShape ;
             FILTER NOT EXISTS { ?o a backlog:StageOutput ; backlog:outputOfStage ?st ; backlog:belongsToLineage $this . FILTER NOT EXISTS { ?o backlog:outputRetracted true } }
         }""" ] ;
     sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "L1: this lineage claims LS_Achieved but its mission is not Out_Achieved, or no closure report closes it." ;
+        sh:message "L1: this lineage claims LS_Achieved but its mission is not Out_Achieved, or no closure report closes it. (v1.132.0: exempt when a real LineageSuccession names this lineage as its own succeedsLineage -- its own scope is honestly done even while the shared Mission continues under its successor; the successor, not this lineage, is where the Mission's remaining work is tracked.)" ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             $this backlog:hasLineageStatus backlog:LS_Achieved ; backlog:lineageForMission ?m .
             FILTER ( NOT EXISTS { ?m backlog:hasMissionOutcome backlog:Out_Achieved } || NOT EXISTS { ?cr backlog:closesForMission ?m } )
+            FILTER NOT EXISTS { ?succ backlog:succeedsLineage $this }
         }""" ] ;
     sh:sparql [ a sh:SPARQLConstraint ;
         sh:message "L1: this lineage claims LS_Archived but is not lineageArchived true with an archiveFile -- or is archived without the status." ;
@@ -5856,7 +6132,7 @@ backlog:AchievedLineageNotArchivedAdvisoryShape a sh:NodeShape ;
     sh:targetClass backlog:Lineage ;
     sh:severity sh:Violation ;   # G90 rule (2026-09-09): An achieved lineage not archived breaks the archival rule (G87): archiving is the activity an achieved lineage
     rdfs:label "Advisory: an achieved lineage found un-archived triggers the archival activity"@en ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_lineage_status_negative" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
     sh:sparql [ a sh:SPARQLConstraint ;
         sh:message "Advisory: this lineage is LS_Achieved (or Abandoned) and not archived. Its every individual is still validated, witnessed and reported on every run. Owner's rule 2026-09-09: an achieved lineage found triggers the archival activity -- run backlog_lineage_archive on it (the gate reports it too)." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
@@ -5876,13 +6152,16 @@ backlog:StageObligationShape a sh:NodeShape ;
     sh:targetClass backlog:StageObligation ;
     sh:severity sh:Violation ;
     rdfs:label "An obligation names its stage or task type, what it owes, and why (L1)"@en ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_sdlc_obligations_negative" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
     sh:sparql [ a sh:SPARQLConstraint ;
         sh:message "L1: this obligation names neither a stage nor a task type; nothing can owe it." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] , [ sh:prefix "rdf" ; sh:namespace "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             FILTER NOT EXISTS { $this backlog:obligationOfStage ?s }
             FILTER NOT EXISTS { $this backlog:obligationOfTaskType ?t }
+            # v1.119.0: an obligation may also bind through a DECLARED DESIGN CONCERN -- the corpus
+            # already linked each concern to the work it implies, and obligation set 2 uses that link
+            FILTER NOT EXISTS { $this backlog:obligationOfConcern ?c }
         }""" ] ;
     sh:property [ sh:path backlog:owesClass ; sh:minCount 1 ; sh:maxCount 1 ;
                   sh:message "An obligation names the class of thing owed." ] ;
@@ -5903,7 +6182,7 @@ backlog:StageOutputOwesShape a sh:NodeShape ;
     sh:targetClass backlog:StageOutput ;
     sh:severity sh:Violation ;
     rdfs:label "A stage output closes only when its stage's required obligations are met, or the waiver is on the record (L1)"@en ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_sdlc_obligations_negative" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
     sh:sparql [ a sh:SPARQLConstraint ;
         sh:message "L1: this stage output closes a stage that owes a required artifact its lineage does not carry -- and no waiver is recorded. The chain cannot close on words alone: the stage owes what its obligation names (owesClass, and owesKind/owesScenarioKind where given). Produce it, or record obligationWaivedBy with an obligationWaiverReason and close owing, on the record." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] , [ sh:prefix "rdf" ; sh:namespace "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xsd:anyURI ] ] ;
@@ -5927,7 +6206,7 @@ backlog:StageOutputOwesAdvisoryShape a sh:NodeShape ;
     sh:targetClass backlog:StageOutput ;
     sh:severity sh:Violation ;   # G90 rule (2026-09-09): A waived obligation is a debt against a stated rule; it is reported as owed, and owing is a breach until paid.
     rdfs:label "Advisory: a stage output closing owing, or an advisory obligation unmet"@en ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_sdlc_obligations_negative" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
     sh:sparql [ a sh:SPARQLConstraint ;
         sh:message "Advisory: this stage output records a waiver (obligationWaivedBy) -- it closed owing an artifact its stage owes. Legitimate and on the record; it stays reported until the debt is paid." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] , [ sh:prefix "rdf" ; sh:namespace "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xsd:anyURI ] ] ;
@@ -5948,7 +6227,7 @@ backlog:StageOutputWaiverShape a sh:NodeShape ;
     sh:targetClass backlog:StageOutput ;
     sh:severity sh:Violation ;
     rdfs:label "A waiver states its reason (L1)"@en ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_sdlc_obligations_negative" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
     sh:sparql [ a sh:SPARQLConstraint ;
         sh:message "L1: this stage output waives an obligation and gives no reason. A debt with no explanation is indistinguishable from an oversight." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] , [ sh:prefix "rdf" ; sh:namespace "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xsd:anyURI ] ] ;
@@ -5961,7 +6240,7 @@ backlog:RefinementProducesShape a sh:NodeShape ;
     sh:targetClass backlog:PlanningEvent ;
     sh:severity sh:Violation ;   # G90 rule (2026-09-09): Grooming that produces nothing breaks the refinement rule the owner named on 2026-09-09.
     rdfs:label "Advisory: grooming that produced nothing"@en ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_sdlc_obligations_negative" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
     sh:sparql [ a sh:SPARQLConstraint ;
         sh:message "Advisory (owner's finding, 2026-09-09): this planning event plans a story or an epic and records no refinementProduces -- no specification, no scenario, no model artifact. Grooming that produces nothing is attendance. Warning by test drive (G46): a planning event that only schedules already-specified work is legitimate; the shape reports, the reader judges." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] , [ sh:prefix "rdf" ; sh:namespace "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xsd:anyURI ] ] ;
@@ -5977,7 +6256,7 @@ backlog:TaskTypeObligationShape a sh:NodeShape ;
     sh:targetClass backlog:ExecutionTask ;
     sh:severity sh:Violation ;
     rdfs:label "A Done task of an obliged type carries what its type owes (L1)"@en ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_sdlc_obligations_negative" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
     sh:sparql [ a sh:SPARQLConstraint ;
         sh:message "L1: this execution task is Done and its task type owes an artifact class that nothing in its lineage carries. The owed kinds of an item's task type join its effective Definition of Done: Done without the design, model or test artifact the task type owes is a claim, not a completion." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] , [ sh:prefix "rdf" ; sh:namespace "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xsd:anyURI ] ] ;
@@ -5997,7 +6276,7 @@ backlog:ObligationAdoptionShape a sh:NodeShape ;
     sh:targetClass backlog:Lineage ;
     sh:severity sh:Violation ;
     rdfs:label "An obligation set is adopted when the lineage opens, never later (L1)"@en ;
-    backlog:provenByFixture "03-tooling/fixtures/fixture_sdlc_obligations_negative" ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
     sh:sparql [ a sh:SPARQLConstraint ;
         sh:message "L1: this lineage adopts an obligation set although it is already past LS_Opened. Owner's rule, 2026-09-09: a ruling is applied to work that has not started, never to development in progress. A lineage adopts at its Mission stage, in the same commit; a running lineage cannot be given new obligations, and a finished one is a record." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
@@ -6071,4 +6350,319 @@ backlog:StaleDispositionShape a sh:NodeShape ;
         sh:select """SELECT $this WHERE {
             $this backlog:dispositionReviewDue ?d .
             FILTER (STR(?d) < SUBSTR(STR(NOW()), 1, 19))
+        }""" ] .
+
+#################################################################
+#  v1.113.0 (2026-09-09) -- THE SEVERITY AUDIT IS NOT APPLIED HERE.
+#  The audit (04-documentation/SEVERITY_AUDIT_2026_09_09_v1_0_0.md)
+#  found 58 advisories that are obligations. Applying the promotion in
+#  THIS file bound every register and every fixture at once, refusing
+#  work already finished and work in progress -- the failure G89 names
+#  and the owner has now stopped three times.
+#
+#  The promotion therefore ships as an OVERLAY:
+#  02-shacl-safeguards/backlog_shacl_promoted_v1_1_0.ttl, generated
+#  from this file, identical except for the audited severities. A
+#  register is validated against the overlay ONLY if its own data
+#  declares backlog:adoptsRuleSet backlog:RS_SeverityAudit_20260909 --
+#  a declaration the owner makes when the development in progress has
+#  completed. Until then the audit is recorded and inert, and this
+#  file's severities are exactly what they were before it.
+#################################################################
+
+#################################################################
+#  v1.114.0 (2026-09-10) -- SCAMPS' three findings, enforced. The
+#  Mission-Scope-Goal triangle is now checked on its agreements, a
+#  stage revision carries the same discipline as a restart, and a
+#  package can state what of the scope it delivers.
+#################################################################
+backlog:ScopeAreaCoverageShape a sh:NodeShape ;
+    sh:targetClass backlog:ScopeArea ;
+    sh:severity sh:Violation ;
+    rdfs:label "Every area of a lineage is named by that lineage's scope statement (L1)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this scope area belongs to a lineage and no ScopeStatement of that lineage names it with coversArea. The statement is the hub between an area and its mission; an area outside it is unreachable from the mission it is supposed to serve, and a goal covering it answers to nothing. Reported by SCAMPS with a known-bad fixture this suite accepted at 0 violations." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:belongsToLineage ?l .
+            FILTER NOT EXISTS { ?sc a backlog:ScopeStatement ; backlog:belongsToLineage ?l ; backlog:coversArea $this }
+        }""" ] .
+
+backlog:GoalTriangleShape a sh:NodeShape ;
+    sh:targetClass backlog:Goal ;
+    sh:severity sh:Violation ;
+    rdfs:label "A goal's scope, mission and areas agree with each other (L1)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this goal derives from a scope statement whose mission is not the mission the goal contributes to. G13 says the triangle reads the same both ways; until now it was asserted by property and tested by nothing." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:derivesFromScope ?sc ; backlog:contributesToMission ?m .
+            ?sc backlog:scopeForMission ?m2 .
+            FILTER (?m != ?m2)
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this goal covers an area its own scope statement does not name. A goal cannot answer for ground the boundary never admitted." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:derivesFromScope ?sc ; backlog:goalCoversArea ?a .
+            FILTER NOT EXISTS { ?sc backlog:coversArea ?a }
+        }""" ] .
+
+backlog:StageRevisionShape a sh:NodeShape ;
+    sh:targetClass backlog:StageRevision ;
+    sh:severity sh:Violation ;
+    rdfs:label "A stage revision names what it revises, why, and retracts what it replaces (L1)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    sh:property [ sh:path backlog:revisesLineage ; sh:minCount 1 ; sh:maxCount 1 ; sh:class backlog:Lineage ;
+                  sh:message "A stage revision names exactly one lineage." ] ;
+    sh:property [ sh:path backlog:revisesFromStage ; sh:minCount 1 ; sh:maxCount 1 ;
+                  sh:message "A stage revision names the earliest stage it rebuilds." ] ;
+    sh:property [ sh:path backlog:revisionReason ; sh:minCount 1 ; sh:datatype xsd:string ;
+                  sh:message "A stage revision states why the stages below it were wrong; without it a reader cannot tell it from an unexplained rewrite." ] ;
+    sh:property [ sh:path backlog:retractsOutput ; sh:minCount 1 ;
+                  sh:message "A stage revision retracts the outputs it replaces." ] ;
+    sh:property [ sh:path backlog:decidedBy ; sh:minCount 1 ;
+                  sh:message "A stage revision is an owner decision and says so." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this revision revises from Stage_Mission. Rebuilding from the mission is a LineageRestart and must answer a finding; calling it a revision would let a lineage rewrite its own reason for existing with no bypass behind it." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE { $this backlog:revisesFromStage backlog:Stage_Mission . }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this revision names a retracted output that is not marked outputRetracted true. Retraction is a fact on the output, so every consumer sees it -- the same rule LineageRestartShape applies." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:retractsOutput ?o .
+            FILTER NOT EXISTS { ?o backlog:outputRetracted true }
+        }""" ] .
+
+backlog:PackageDeliveryIntentShape a sh:NodeShape ;
+    sh:targetClass backlog:Package ;
+    sh:severity sh:Violation ;
+    rdfs:label "A package's delivery intent agrees with its members (L1)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this package says it delivers a scope deliverable that none of its members satisfies. The intent and the contents disagree, and until deliversDeliverable existed neither could be compared with the other." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:deliversDeliverable ?d .
+            FILTER NOT EXISTS { ?i backlog:memberOfContainer $this ; backlog:satisfiesDeliverable ?d }
+        }""" ] .
+
+#################################################################
+#  v1.117.0 (2026-09-10) -- two rules the register needed and did not
+#  have, both found by this session's own defects on 2026-09-10.
+#################################################################
+backlog:LineageStatusSingleShape a sh:NodeShape ;
+    sh:targetClass backlog:Lineage ;
+    sh:severity sh:Violation ;
+    rdfs:label "A lineage carries exactly one status (L1)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    sh:property [ sh:path backlog:hasLineageStatus ; sh:maxCount 1 ;
+                  sh:message "L1: this lineage carries more than one hasLineageStatus. The property is a current-state POINTER and is moved in place at each transition (L-112); appending instead left lineage 9 holding six values at once on 2026-09-10, and every rule that gates on status rank was reading whichever one the parser happened to return. owl:FunctionalProperty does not enforce this -- SHACL must." ] .
+
+backlog:RetiredNameCollisionShape a sh:NodeShape ;
+    sh:targetClass backlog:Lineage ;
+    sh:severity sh:Violation ;
+    rdfs:label "A live lineage may not reuse a retired lineage's name (L1)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this live lineage's IRI is already recorded by a LineageArchiveEntry as a retired lineage. A retired lineage is gone from the live register but its IRI is still the name of that work in the archive, in every closure report and in every commit message; reusing it makes two different lineages indistinguishable in the record. Choose another name." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?reg backlog:adoptsRuleSet backlog:RS_LineageStatus .
+            ?e a backlog:LineageArchiveEntry ; backlog:entryForLineage ?iri .
+            FILTER (STR($this) = STR(?iri))
+            # Real gap, found 2026-09-18: the shape's own label says LIVE lineage, but the
+            # SPARQL never checked that -- it fired on the legitimately archived copy the entry
+            # itself points to, not only on a genuinely colliding new one. lineageArchived true
+            # is the real, checkable fact that distinguishes "this IS the archived original" from
+            # "this reuses its retired name" -- the same fact ArchivalConfirmationStatus now
+            # tracks explicitly for exactly this individual.
+            FILTER NOT EXISTS { $this backlog:lineageArchived true }
+        }""" ] .
+
+backlog:InProgressNeedsStartedWorkShape a sh:NodeShape ;
+    sh:targetClass backlog:Lineage ;
+    sh:severity sh:Violation ;
+    rdfs:label "LS_InProgress means work has actually started (L1)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this lineage claims LS_InProgress and no work item of it has left Proposed or Ready. InProgress is defined as development ongoing, and a backlog that has been groomed is not a backlog that has been started. Found on 2026-09-10: the session asserted InProgress in the commit where it did the PLANNING, reading the status from its own activity rather than from the register." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?reg backlog:adoptsRuleSet backlog:RS_LineageStatus .
+            $this backlog:hasLineageStatus backlog:LS_InProgress .
+            FILTER NOT EXISTS {
+                ?i backlog:belongsToLineage $this ; backlog:hasState ?st .
+                FILTER (?st NOT IN (backlog:Proposed, backlog:Ready, backlog:Refined, backlog:Cancelled))
+            }
+        }""" ] .
+
+backlog:StatusLagsRealWorkShape a sh:NodeShape ;
+    sh:targetClass backlog:Lineage ;
+    sh:severity sh:Violation ;
+    rdfs:label "A status below InProgress means nothing has actually started either (L1, G97)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this lineage claims a status below LS_InProgress (Opened/Scoped/Goaled/Objectived/Backlogged) and a real work item of it has already left Proposed, Ready or Refined. The mirror of InProgressNeedsStartedWorkShape: that rule guards against claiming too much, this one against claiming too little. Real, independently-found case (a different session, 2026-09-16): three lineages shipped real, substantial completed work -- one of them all the way to every item Done -- while their own status never advanced past planning, because nothing asked the status to move and nothing refused it staying still. A status is a claim about the register, not a one-time label set at planning and left alone." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?reg backlog:adoptsRuleSet backlog:RS_LineageStatus .
+            $this backlog:hasLineageStatus ?st0 .
+            ?st0 backlog:statusRank ?r . FILTER (?r < 6)
+            ?i backlog:belongsToLineage $this ; backlog:hasState ?st .
+            FILTER (?st NOT IN (backlog:Proposed, backlog:Ready, backlog:Refined, backlog:Cancelled))
+        }""" ] .
+
+#################################################################
+#  v1.118.0 (2026-09-10) -- EVERY ELEMENT SAYS WHAT IT IS, IN WORDS.
+#  Owner's instruction, this day: a reader cannot follow a discussion
+#  conducted in identifiers. An identifier is a handle for machines;
+#  a label is the sentence a person reads. Measured when the rule was
+#  written: of lineage 9's twenty-one intent elements, ELEVEN had no
+#  label at all -- the mission, the scope statement, all four areas
+#  and four of six deliverables -- so they could not be spoken about
+#  except by their identifiers, which is exactly the complaint.
+#################################################################
+backlog:IntentElementLabelShape a sh:NodeShape ;
+    sh:targetClass backlog:Mission , backlog:ScopeStatement , backlog:ScopeArea , backlog:ScopeDeliverable ,
+                   backlog:ScopeExclusion , backlog:Goal , backlog:Objective , backlog:Lineage ;
+    sh:severity sh:Violation ;
+    rdfs:label "Every intent element carries a human label (L1)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this element has no rdfs:label and no hasTitle, so it can only be referred to by its identifier. An identifier is a handle; a label is what a person reads. Every mission, scope statement, area, deliverable, exclusion, goal, objective and lineage states in one sentence what it is, and every report, changelog and conversation uses that sentence rather than the identifier." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] , [ sh:prefix "rdfs" ; sh:namespace "http://www.w3.org/2000/01/rdf-schema#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            # binds only a register that has adopted the convention (G91: a ruling binds what declared it)
+            ?reg backlog:adoptsRuleSet backlog:RS_LabelConvention .
+            FILTER NOT EXISTS { $this rdfs:label ?l }
+            FILTER NOT EXISTS { $this backlog:hasTitle ?t }
+        }""" ] .
+
+#################################################################
+#  v1.119.0 (2026-09-11) -- LEVEL, DEPTH AND CONCERN ENFORCED. An
+#  obligation that names an analysis-level artifact is not satisfied
+#  by a design-level one, a brief does not discharge an obligation
+#  that wanted the fully developed text, and a declared design concern
+#  owes the model that records what was analysed.
+#################################################################
+backlog:TaskTypeObligationLevelShape a sh:NodeShape ;
+    sh:targetClass backlog:ExecutionTask ;
+    sh:severity sh:Violation ;
+    rdfs:label "A finished task owes its artifact at the level and depth the obligation names (L1)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this task is finished and its process owes a model at a particular level that its lineage does not carry. The corpus names the same notation twice -- a domain model class diagram is not a design class diagram, a system sequence diagram is not an object sequence diagram -- and one drawing cannot discharge both." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] , [ sh:prefix "rdf" ; sh:namespace "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasState backlog:Done ; backlog:hasTaskType ?tt ; backlog:belongsToLineage ?l .
+            ?ob a backlog:StageObligation ; backlog:obligationOfTaskType ?tt ; backlog:owesClass ?cls ;
+                backlog:obligationSeverity backlog:Oblig_Required ; backlog:inObligationSet ?set .
+            ?l backlog:adoptsObligationSet ?set .
+            FILTER NOT EXISTS { $this backlog:preLineageItem true }
+            FILTER NOT EXISTS {
+                ?a rdf:type ?cls ; backlog:belongsToLineage ?l .
+                FILTER NOT EXISTS { ?ob backlog:owesKind ?k . FILTER NOT EXISTS { ?a backlog:hasModelKind ?k } }
+                FILTER NOT EXISTS { ?ob backlog:owesLevel ?lv . FILTER NOT EXISTS { ?a backlog:hasModelLevel ?lv } }
+                FILTER NOT EXISTS { ?ob backlog:owesDepth ?dp . FILTER NOT EXISTS { ?a backlog:hasSpecificationDepth ?dp } }
+            }
+        }""" ] .
+
+backlog:ConcernObligationShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItem ;
+    sh:severity sh:Violation ;
+    rdfs:label "A declared design concern owes the model that records what was analysed (L1)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this item declares a design concern whose obligation its lineage does not satisfy. The corpus already linked each concern to the work it implies and nothing used the link: analysing for data with no data model, for interaction with no message order, for security with nothing showing what the system permits and refuses, is an analysis nobody can read." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] , [ sh:prefix "rdf" ; sh:namespace "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasApplicableConcern ?c ; backlog:belongsToLineage ?l ; backlog:hasState ?st .
+            FILTER (?st NOT IN (backlog:Proposed, backlog:Cancelled))
+            ?ob a backlog:StageObligation ; backlog:obligationOfConcern ?c ; backlog:owesClass ?cls ;
+                backlog:obligationSeverity backlog:Oblig_Required ; backlog:inObligationSet ?set .
+            ?l backlog:adoptsObligationSet ?set .
+            FILTER NOT EXISTS {
+                ?a rdf:type ?cls ; backlog:belongsToLineage ?l .
+                FILTER NOT EXISTS { ?ob backlog:owesKind ?k . FILTER NOT EXISTS { ?a backlog:hasModelKind ?k } }
+                FILTER NOT EXISTS { ?ob backlog:owesLevel ?lv . FILTER NOT EXISTS { ?a backlog:hasModelLevel ?lv } }
+            }
+        }""" ] .
+
+backlog:ModelLevelStatedShape a sh:NodeShape ;
+    sh:targetClass backlog:ModelArtifact ;
+    sh:severity sh:Violation ;
+    rdfs:label "A model says which level it works at (L1)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this model artifact states no level, and its lineage has adopted a set whose obligations name one. An obligation that asks for an analysis-level model cannot be checked against an artifact that does not say where it stands." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] , [ sh:prefix "rdf" ; sh:namespace "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:belongsToLineage ?l . ?l backlog:adoptsObligationSet ?set .
+            ?ob a backlog:StageObligation ; backlog:inObligationSet ?set ; backlog:owesLevel ?any .
+            FILTER NOT EXISTS { $this backlog:hasModelLevel ?lv }
+        }""" ] .
+
+#################################################################
+#  v1.126.0 -- ObjectiveMetricMirrorShape (GOVMIT-S01). Real, agreed gap: an objective's own latest
+#  observation can reach its target while every item that could move it stayed Proposed the whole
+#  time -- confirmed on automate-python-book-3e's own real register, then found there is no
+#  register-level rule catching it since this is purely a graph-content question, answerable
+#  entirely from the register itself, no git history needed.
+#################################################################
+backlog:ObjectiveMetricMirrorShape a sh:NodeShape ;
+    sh:targetClass backlog:Objective ;
+    sh:severity sh:Violation ;
+    rdfs:label "An objective at target must name what actually moved it (L3)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_objective_metric_mirror" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: this objective's own latest observation has reached its target, yet every one of its declared metricMovableBy items is still Proposed. metricMovableBy records what COULD move a metric; nothing here shows what DID. An objective can be met on paper while the plan that was supposed to earn it was never touched -- confirmed as a real, live case, not hypothetical." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasTargetValue ?target ; backlog:hasTargetDirection ?dir .
+            FILTER (?dir IN (backlog:Dir_Increase, backlog:Dir_Decrease))
+            FILTER EXISTS { $this backlog:metricMovableBy ?any }
+            {
+                SELECT $this (MAX(?t) AS ?maxT) WHERE {
+                    ?obs a backlog:MetricObservation ; backlog:observationFor $this ; backlog:observedAt ?t .
+                } GROUP BY $this
+            }
+            ?latest a backlog:MetricObservation ; backlog:observationFor $this ;
+                backlog:observedAt ?maxT ; backlog:hasObservedValue ?val .
+            FILTER (
+                (?dir = backlog:Dir_Increase && ?val >= ?target) ||
+                (?dir = backlog:Dir_Decrease && ?val <= ?target)
+            )
+            FILTER NOT EXISTS {
+                $this backlog:metricMovableBy ?item .
+                ?item backlog:hasState ?state .
+                FILTER (?state != backlog:Proposed)
+            }
+        }""" ] .
+
+#################################################################
+#  v1.129.0 -- IdenticalTimestampClusterShape (GOVMIT-S04, Option A). Real, agreed gap, grounded
+#  in a real, reported case: a register can have every WorkItem's plannedAt/startedAt/finishedAt
+#  share the exact same literal value across many items -- a mechanically checkable, low-noise
+#  signal of retrofit (backfilled governance describing work already done), distinguishable from
+#  genuine same-instant completion by its own repetition: real same-day work still shows some
+#  variation; wholesale identical triples do not.
+#################################################################
+backlog:IdenticalTimestampClusterShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItem ;
+    sh:severity sh:Violation ;
+    rdfs:label "Real work does not share one identical planned/started/finished instant across many items (L3)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "TS_Cluster1" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: this item's plannedAt, startedAt and finishedAt are all the identical literal value, and at least two other real items in this register share that exact same triple. A single item completing the instant it was planned is plausible; three or more sharing the identical instant, to the second, is the mechanical signature of a real, reported case where governance was authored after the fact to describe work already done, not as it happened." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:plannedAt ?p ; backlog:startedAt ?p ; backlog:finishedAt ?p .
+            ?other1 backlog:plannedAt ?p ; backlog:startedAt ?p ; backlog:finishedAt ?p .
+            ?other2 backlog:plannedAt ?p ; backlog:startedAt ?p ; backlog:finishedAt ?p .
+            FILTER (?other1 != $this && ?other2 != $this && ?other1 != ?other2)
         }""" ] .

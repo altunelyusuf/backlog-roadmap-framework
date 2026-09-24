@@ -128,7 +128,7 @@ def main():
     STAGE_TYPES = _load_stage_types(_tb, _v2)
     print("digest table: %s" % ("v2 (RS_DigestTable_v2 declared)" if _v2 else "v1"))
     if len(argv) < 1:
-        print("usage: backlog_pipeline_verify_v1_2_0.py <register.ttl> [tbox.ttl] [--lineage NAME]")
+        print("usage: backlog_pipeline_verify_v1_4_0.py <register.ttl> [tbox.ttl] [--lineage NAME]")
         return 1
     g = Graph()
     for f in argv:
