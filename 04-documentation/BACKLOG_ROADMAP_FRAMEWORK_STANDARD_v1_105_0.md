@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.104.0
+# Backlog & Roadmap Semantic Framework — Standard v1.105.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -1006,6 +1006,40 @@ that must already be genuinely closed (archived or `LS_Achieved`); `reactivation
 real, named need. A reactivated lineage's own content is re-validated against current standards
 before it returns to active status, the same check (`validate_lineage`, 2.5c-xxi-m's own kind of
 per-lineage scoping) a profile's own source case is held to.
+
+### 2.5c-xxi-o Findings against closed work: a response proportionate to their scale
+
+Closed work stays closed and committed. When something is found wrong with it afterwards, the
+response is decided by how far the problem reaches, not by how uncomfortable it is.
+
+A **`PostClosureFinding`** records the discovery: the closed lineage it concerns
+(`declaresGapFor`), what was found, when it was raised, and the observed evidence it rests on
+(`findingEvidence`) -- a defect from live use, a failed verification, a failed acceptance check. A
+suspicion is not evidence; it produces a validation task in a live lineage, whose result becomes the
+evidence. A finding may only be raised against a lineage that is actually closed. It is distinct
+from a partial scope declaration, which is known and filed at closure; both are kinds of
+**`LineageGap`**, and a succession resolves either the same way.
+
+Its **`FindingScale`** decides the response:
+
+- **Isolated** -- one small defect. A maintenance task (Maintenance investment category) or a change
+  request under a live lineage, linked by `addressesFinding`. Dividing or reopening closed work for
+  it is refused as disproportionate.
+- **Bounded** -- a substantial but contained piece. Descoped into a successor by the division
+  ceremony (2.5c-xxi-n), the succession resolving the finding as its gap.
+- **Systemic** -- wide non-conformance. The only scale that justifies reactivation.
+
+Reactivation is typed by a **`ReactivationReason`** from a closed set -- improper processing result,
+unfinished work, non-conformant result -- and must address at least one evidenced systemic finding
+raised against the lineage it reopens. The mechanical act of reopening remains the existing revival
+(revived-at timestamp, Revived status, the archive tool's revive option); a revived lineage with no
+reactivation behind it is refused. Once reactivated, the lineage is bound by the rules in force now,
+and because that adaptation may surface many violations, the same four measures a succession
+records apply here too; a reactivation may itself end in a division.
+
+A closed lineage whose work goes into real use may declare `observationWindowEnds`. Until then,
+findings route to maintenance or a change request; answering one inside the window by succession or
+reactivation is refused.
 
 ### 2.5c-xxii The staged ceremony, one commit per stage
 

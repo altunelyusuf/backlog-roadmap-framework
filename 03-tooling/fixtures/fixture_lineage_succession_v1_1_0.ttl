@@ -1,4 +1,4 @@
-# fixture_lineage_succession v1.0.0 -- positive proof of LineageSuccession,
+# fixture_lineage_succession v1.1.0 -- positive proof of LineageSuccession,
 # PartialScopeDeclaration and LineageReactivation, complete against the FULL suite.
 # Built on fixture_lineage_status_v1_1_0's own already-complete register (copied into this
 # fixture's own namespace, the original untouched): its lineage becomes the successor; a
@@ -324,6 +324,20 @@ ex:Lin_Old a backlog:Lineage ; backlog:lineageForMission ex:M_Old ; backlog:line
 ex:React_1 a backlog:LineageReactivation ;
     backlog:reactivatesLineage ex:Lin_Old ;
     backlog:reactivationRationale "A real defect was found in work this lineage closed; re-validated against current standards before returning to active status." ;
+    backlog:hasReactivationReason backlog:Reason_NonConformantResult ;
+    backlog:addressesFinding ex:Finding_Systemic ;
     backlog:decidedBy backlog:Owner .
+# v1.133.0: the reactivation rests on an evidenced, systemic post-closure finding, raised after the
+# closed lineage's own observation window ended.
+ex:Lin_Old backlog:observationWindowEnds "2026-09-15T00:00:00Z"^^xsd:dateTime .
+ex:Finding_Systemic a backlog:PostClosureFinding ;
+    backlog:declaresGapFor ex:Lin_Old ;
+    backlog:describesUncoveredScope "History shows other practitioners' bookings on every view the lineage delivered." ;
+    backlog:hasFindingScale backlog:Scale_Systemic ;
+    backlog:findingRaisedAt "2026-09-20T00:00:00Z"^^xsd:dateTime ;
+    backlog:findingEvidence ex:Ev_LiveDefect .
+ex:Ev_LiveDefect a backlog:Evidence ; backlog:evidenceVerified true ;
+    backlog:verifiedByTool "acceptance test suite, history-view privacy case" ;
+    backlog:hasVerificationMethod "Reproduced from live use: the history-view privacy acceptance case failed on three views, each showing another practitioner's booking." .
 
 <http://example.org/fixture-succession#> backlog:hasExpectedPolarity backlog:Polarity_Positive .

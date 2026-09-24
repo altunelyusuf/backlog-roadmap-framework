@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.132.0> ;
-    owl:versionInfo "1.132.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.133.0> ;
+    owl:versionInfo "1.133.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.132.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.131.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.130.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.129.0> ;
@@ -5735,8 +5736,8 @@ backlog:LineageSuccessionShape a sh:NodeShape ;
                   sh:message "A succession names exactly one predecessor lineage." ] ;
     sh:property [ sh:path backlog:successorLineage ; sh:minCount 1 ; sh:maxCount 1 ; sh:class backlog:Lineage ;
                   sh:message "A succession names exactly one successor lineage." ] ;
-    sh:property [ sh:path backlog:resolvesGap ; sh:minCount 1 ; sh:maxCount 1 ; sh:class backlog:PartialScopeDeclaration ;
-                  sh:message "A succession resolves exactly one real partial-scope declaration." ] ;
+    sh:property [ sh:path backlog:resolvesGap ; sh:minCount 1 ; sh:maxCount 1 ; sh:class backlog:LineageGap ;
+                  sh:message "A succession resolves exactly one real gap: a partial-scope declaration filed at closure, or a post-closure finding (v1.133.0)." ] ;
     sh:property [ sh:path backlog:successionRationale ; sh:minCount 1 ; sh:datatype xsd:string ;
                   sh:message "A succession states the owner's own real cost/benefit and risk/opportunity reasoning, not a template." ] ;
     sh:property [ sh:path backlog:decidedBy ; sh:minCount 1 ;
@@ -5781,6 +5782,25 @@ backlog:LineageReactivationShape a sh:NodeShape ;
                   sh:message "A reactivation names exactly one lineage." ] ;
     sh:property [ sh:path backlog:reactivationRationale ; sh:minCount 1 ; sh:datatype xsd:string ;
                   sh:message "A reactivation states the real, named need, not a default justification." ] ;
+    sh:property [ sh:path backlog:hasReactivationReason ; sh:minCount 1 ;
+                  sh:in ( backlog:Reason_ImproperProcessing backlog:Reason_UnfinishedWork backlog:Reason_NonConformantResult ) ;
+                  sh:message "L1: a reactivation is typed by one of three reasons only -- improper processing result, unfinished work, non-conformant result (v1.133.0, owner's rule)." ] ;
+    sh:property [ sh:path backlog:addressesFinding ; sh:minCount 1 ; sh:class backlog:PostClosureFinding ;
+                  sh:message "L1: a reactivation rests on at least one evidenced post-closure finding; a suspicion is not a reason to reopen closed work (v1.133.0)." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this reactivation addresses a post-closure finding raised against a different lineage than the one it reopens." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:reactivatesLineage ?l ; backlog:addressesFinding ?f .
+            ?f backlog:declaresGapFor ?fl . FILTER (?fl != ?l)
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this reactivation addresses no systemic finding. Isolated defects go to a maintenance task or change request; bounded ones are descoped into a successor. Only systemic non-conformance justifies reopening closed work (v1.133.0, owner's tiered rule)." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:addressesFinding ?any .
+            FILTER NOT EXISTS { $this backlog:addressesFinding ?f . ?f backlog:hasFindingScale backlog:Scale_Systemic }
+        }""" ] ;
     sh:property [ sh:path backlog:decidedBy ; sh:minCount 1 ;
                   sh:message "A reactivation is an owner decision and says so." ] ;
     sh:sparql [ a sh:SPARQLConstraint ;
@@ -5789,7 +5809,87 @@ backlog:LineageReactivationShape a sh:NodeShape ;
         sh:select """SELECT $this WHERE {
             $this backlog:reactivatesLineage ?l .
             FILTER NOT EXISTS { ?l backlog:lineageArchived true }
-            FILTER NOT EXISTS { ?l backlog:hasLineageStatus backlog:LS_Achieved }
+            FILTER NOT EXISTS { ?l backlog:hasLineageStatus ?st . FILTER (?st IN (backlog:LS_Achieved, backlog:LS_Archived, backlog:LS_Revived)) }
+        }""" ] .
+
+#################################################################
+#  v1.133.0 -- tiered response to findings against closed work (owner
+#  design, 2026-09-24). Proven by fixture_lineage_succession (positive)
+#  and fixture_lineage_succession_negative (negative).
+#################################################################
+
+backlog:PostClosureFindingShape a sh:NodeShape ;
+    sh:targetClass backlog:PostClosureFinding ;
+    sh:severity sh:Violation ;
+    rdfs:label "A post-closure finding names a closed lineage, its scale, when it was raised, and its evidence (L1)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_lineage_succession" ;
+    sh:property [ sh:path backlog:declaresGapFor ; sh:minCount 1 ; sh:maxCount 1 ; sh:class backlog:Lineage ;
+                  sh:message "A post-closure finding names exactly one lineage." ] ;
+    sh:property [ sh:path backlog:describesUncoveredScope ; sh:minCount 1 ; sh:datatype xsd:string ;
+                  sh:message "A post-closure finding states what was found, in words." ] ;
+    sh:property [ sh:path backlog:hasFindingScale ; sh:minCount 1 ; sh:maxCount 1 ;
+                  sh:in ( backlog:Scale_Isolated backlog:Scale_Bounded backlog:Scale_Systemic ) ;
+                  sh:message "A post-closure finding is typed isolated, bounded or systemic; the scale decides the response." ] ;
+    sh:property [ sh:path backlog:findingRaisedAt ; sh:minCount 1 ; sh:datatype xsd:dateTime ;
+                  sh:message "A post-closure finding records when it was raised." ] ;
+    sh:property [ sh:path backlog:findingEvidence ; sh:minCount 1 ; sh:class backlog:Evidence ;
+                  sh:message "L1: a post-closure finding rests on observed evidence -- a defect from live use, a failed verification or acceptance check. A suspicion produces a validation task in a live lineage instead." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this finding is raised against a lineage that is not closed. Work still open is corrected in place, by its own lineage." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:declaresGapFor ?l .
+            FILTER NOT EXISTS { ?l backlog:lineageArchived true }
+            FILTER NOT EXISTS { ?l backlog:hasLineageStatus ?st . FILTER (?st IN (backlog:LS_Achieved, backlog:LS_Archived, backlog:LS_Revived)) }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this isolated finding is answered by a succession or a reactivation. An isolated defect needs only a maintenance task or a change request under a live lineage; reopening or dividing closed work for it is disproportionate." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasFindingScale backlog:Scale_Isolated .
+            { ?r backlog:addressesFinding $this ; a backlog:LineageReactivation } UNION { ?s backlog:resolvesGap $this }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this isolated finding is addressed by a work item that is not in the Maintenance investment category. Isolated defects in closed work are maintenance, and are recorded as such." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasFindingScale backlog:Scale_Isolated .
+            ?w backlog:addressesFinding $this ; a backlog:WorkItem .
+            FILTER NOT EXISTS { ?w backlog:hasInvestmentCategory backlog:Cat_Maintenance }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this finding was raised inside its lineage's observation window, yet is answered by a succession or reactivation. Within the window, findings route to maintenance or a change request." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:declaresGapFor ?l ; backlog:findingRaisedAt ?at .
+            ?l backlog:observationWindowEnds ?end . FILTER (?at <= ?end)
+            { ?r backlog:addressesFinding $this ; a backlog:LineageReactivation } UNION { ?s backlog:resolvesGap $this }
+        }""" ] .
+
+backlog:PostClosureFindingOpenAdvisoryShape a sh:NodeShape ;
+    sh:targetClass backlog:PostClosureFinding ;
+    sh:severity sh:Warning ;
+    rdfs:label "A post-closure finding nothing answers yet is reported (advisory)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_lineage_succession_negative" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory: this post-closure finding is not yet addressed by a maintenance task, change request, succession or reactivation. It is open, not settled." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            FILTER NOT EXISTS { ?x backlog:addressesFinding $this }
+            FILTER NOT EXISTS { ?s backlog:resolvesGap $this }
+        }""" ] .
+
+backlog:RevivalRequiresReactivationShape a sh:NodeShape ;
+    sh:targetClass backlog:Lineage ;
+    sh:severity sh:Violation ;
+    rdfs:label "A revived lineage carries the reasoned reactivation that justifies it (L1)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_lineage_succession_negative" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this lineage was revived (lineageRevivedAt) but no lineage reactivation names it. Revival is the act; the reactivation -- typed reason, evidenced systemic finding, owner decision -- is what makes it legitimate (v1.133.0)." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:lineageRevivedAt ?at .
+            FILTER NOT EXISTS { ?r backlog:reactivatesLineage $this }
         }""" ] .
 
 #################################################################

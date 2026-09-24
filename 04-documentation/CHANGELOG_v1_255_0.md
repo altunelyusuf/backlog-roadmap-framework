@@ -10580,3 +10580,38 @@ commit, successor alone adopts the new rule set -- plus the owner's stated expec
 successor must demonstrate. Section 6 (this framework's own register uses implementation-typed tasks
 only) confirmed and recorded as known, with one precision. Not built and said so: a tool computing
 the four succession measures.
+
+## v1.315.0 — 2026-09-24 (MINOR: proportionate response to findings against closed work; Lineages 17 and 18 archived with their bypass findings on record)
+
+**Owner's design, agreed 2026-09-24.** Closed work stays closed and committed; a problem found in it
+afterwards is answered in proportion to how far it reaches:
+- a **post-closure finding** records the discovery against a closed lineage -- what was found, when,
+  its scale, and the observed evidence it rests on (a suspicion produces a validation task instead);
+- **isolated** findings go to a Maintenance-category work item or a change request under a live
+  lineage; dividing or reopening for one is refused;
+- **bounded** findings are descoped into a successor by the division ceremony, the succession
+  resolving the finding as its gap (partial scope declarations and post-closure findings now share
+  one superclass, *lineage gap*);
+- **systemic** findings alone justify reactivation, which must now carry a typed reason (improper
+  processing result, unfinished work, non-conformant result) and address an evidenced systemic
+  finding against the lineage it reopens;
+- an optional **observation window** after closure routes findings to maintenance or change request;
+- the existing revival act (revived-at timestamp, Revived status, the archive tool's revive option)
+  now requires a reactivation behind it. Last release's reactivation record overlapped that act
+  without saying so; it is now its required justification, and the reactivation shape accepts a
+  lineage already set to Revived.
+
+Proven: the positive succession fixture (now carrying an evidenced systemic finding behind its
+reactivation) passes the full suite; the negative fixture fires on every new planted case, one per
+rule. A duplicate case in that fixture (two lineages sharing one ordinal for the same test) was
+removed. `backlog_tbox_v1_105_0.ttl -> v1_106_0.ttl`, `backlog_shacl_v1_132_0.ttl ->
+v1_133_0.ttl`, standard `v1_104_0 -> v1_105_0` (new section 2.5c-xxi-o).
+
+**Lineages 17 (gate efficiency) and 18 (fixture consolidation) archived, per the owner's ruling.**
+Both were Achieved and un-archived, which the owner's 2026-09-09 rule makes the next activity; both
+read BYPASS, their formal chain having been written after the work shipped. No reason for revival
+exists, so neither was restarted: each bypass was recorded as a formal finding carrying the owner's
+ruling (without the freeze a restart-bound finding would carry) and archived with the lineage, so
+the gap travels into the archive as an explicit record rather than disappearing.
+`backlog_framework_register_abox_v9_99_0 -> v9_100_0`, archive `v1_5_0 -> v1_6_0` (a strict
+superset; live archive pointers repointed; archive integrity intact).

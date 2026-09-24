@@ -77,9 +77,55 @@ fwneg:M_Open a backlog:Mission ; backlog:missionFor fwneg:Register ; backlog:has
 fwneg:L_ClaimsDoneAlone a backlog:Lineage ; backlog:lineageOrdinal 11 ; backlog:lineageForMission fwneg:M_Open ;
     backlog:hasLineageStatus backlog:LS_Achieved ; backlog:lineageArchived false .
 
-# 7. The v1.132.0 exemption stays narrow: an Achieved lineage whose Mission is not achieved and
-#    that NO succession names is still caught -- the exemption covers succession only.
-fwneg:L_AchievedNoSucc a backlog:Lineage ; backlog:lineageOrdinal 11 ; backlog:lineageForMission fwneg:M_One ;
-    backlog:hasLineageStatus backlog:LS_Achieved ; backlog:lineageArchived false .
+# v1.133.0 tiered-response defects, one per rule (cases 8-15).
+fwneg:L_Closed8 a backlog:Lineage ; backlog:lineageOrdinal 12 ;
+    backlog:hasLineageStatus backlog:LS_Achieved ; backlog:lineageArchived false ;
+    backlog:observationWindowEnds "2026-12-31T00:00:00Z"^^xsd:dateTime .
+fwneg:Ev_Neg a backlog:Evidence ; backlog:evidenceVerified true ; backlog:hasVerificationMethod "Fixture-internal." .
+# 8. Reactivation with no typed reason and no finding behind it.
+fwneg:React_NoReason a backlog:LineageReactivation ; backlog:reactivatesLineage fwneg:L_Closed8 ;
+    backlog:reactivationRationale "Bad: no reason, no evidence." ; backlog:decidedBy backlog:Owner .
+# 9. Reactivation resting only on an isolated finding (disproportionate).
+fwneg:Find_Isolated a backlog:PostClosureFinding ; backlog:declaresGapFor fwneg:L_Closed8 ;
+    backlog:describesUncoveredScope "One typo in one report label." ; backlog:hasFindingScale backlog:Scale_Isolated ;
+    backlog:findingRaisedAt "2027-01-05T00:00:00Z"^^xsd:dateTime ; backlog:findingEvidence fwneg:Ev_Neg .
+fwneg:React_Isolated a backlog:LineageReactivation ; backlog:reactivatesLineage fwneg:L_Closed8 ;
+    backlog:reactivationRationale "Bad: reopening for a typo." ; backlog:hasReactivationReason backlog:Reason_ImproperProcessing ;
+    backlog:addressesFinding fwneg:Find_Isolated ; backlog:decidedBy backlog:Owner .
+# 10. A finding with no evidence behind it.
+fwneg:Find_NoEvidence a backlog:PostClosureFinding ; backlog:declaresGapFor fwneg:L_Closed8 ;
+    backlog:describesUncoveredScope "Bad: a suspicion only." ; backlog:hasFindingScale backlog:Scale_Bounded ;
+    backlog:findingRaisedAt "2027-01-05T00:00:00Z"^^xsd:dateTime .
+# 11. A finding raised against a lineage that is still open.
+fwneg:Find_OnOpen a backlog:PostClosureFinding ; backlog:declaresGapFor fwneg:L_StillOpen ;
+    backlog:describesUncoveredScope "Bad: the lineage is still open." ; backlog:hasFindingScale backlog:Scale_Bounded ;
+    backlog:findingRaisedAt "2027-01-05T00:00:00Z"^^xsd:dateTime ; backlog:findingEvidence fwneg:Ev_Neg .
+# 12. An isolated finding answered by a succession (disproportionate).
+fwneg:Find_IsolatedDivided a backlog:PostClosureFinding ; backlog:declaresGapFor fwneg:L_Closed8 ;
+    backlog:describesUncoveredScope "One broken link." ; backlog:hasFindingScale backlog:Scale_Isolated ;
+    backlog:findingRaisedAt "2027-01-05T00:00:00Z"^^xsd:dateTime ; backlog:findingEvidence fwneg:Ev_Neg .
+fwneg:L_Succ12 a backlog:Lineage ; backlog:lineageOrdinal 13 ;
+    backlog:hasLineageStatus backlog:LS_InProgress ; backlog:lineageArchived false .
+fwneg:Succ_12 a backlog:LineageSuccession ; backlog:succeedsLineage fwneg:L_Closed8 ; backlog:successorLineage fwneg:L_Succ12 ;
+    backlog:resolvesGap fwneg:Find_IsolatedDivided ; backlog:successionRationale "Bad: dividing for one link." ;
+    backlog:decidedBy backlog:Owner .
+fwneg:Obj_Succ12 a backlog:Objective ; backlog:belongsToLineage fwneg:L_Succ12 ; backlog:resolvesPartialScope fwneg:Find_IsolatedDivided .
+# 13. A systemic finding raised inside the observation window, answered by reactivation.
+fwneg:Find_InWindow a backlog:PostClosureFinding ; backlog:declaresGapFor fwneg:L_Closed8 ;
+    backlog:describesUncoveredScope "Wide failure found during the window." ; backlog:hasFindingScale backlog:Scale_Systemic ;
+    backlog:findingRaisedAt "2026-11-01T00:00:00Z"^^xsd:dateTime ; backlog:findingEvidence fwneg:Ev_Neg .
+fwneg:React_InWindow a backlog:LineageReactivation ; backlog:reactivatesLineage fwneg:L_Closed8 ;
+    backlog:reactivationRationale "Bad: inside the window." ; backlog:hasReactivationReason backlog:Reason_NonConformantResult ;
+    backlog:addressesFinding fwneg:Find_InWindow ; backlog:decidedBy backlog:Owner .
+# 14. An isolated finding addressed by a work item not in the Maintenance category.
+fwneg:Find_IsolatedNonMaint a backlog:PostClosureFinding ; backlog:declaresGapFor fwneg:L_Closed8 ;
+    backlog:describesUncoveredScope "One wrong default." ; backlog:hasFindingScale backlog:Scale_Isolated ;
+    backlog:findingRaisedAt "2027-01-05T00:00:00Z"^^xsd:dateTime ; backlog:findingEvidence fwneg:Ev_Neg .
+fwneg:Task_Fix14 a backlog:WorkItem ; backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:addressesFinding fwneg:Find_IsolatedNonMaint .
+# 15. A lineage revived with no reactivation behind it.
+fwneg:L_RevivedBare a backlog:Lineage ; backlog:lineageOrdinal 14 ;
+    backlog:hasLineageStatus backlog:LS_Revived ; backlog:lineageArchived false ;
+    backlog:lineageRevivedAt "2026-09-24T00:00:00Z"^^xsd:dateTime .
 
 <http://example.org/fixture-succession-negative#> backlog:hasExpectedPolarity backlog:Polarity_Negative .

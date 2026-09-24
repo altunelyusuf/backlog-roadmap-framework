@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.105.0> ;
-    owl:versionInfo "1.105.0" ;
+    owl:versionIRI <http://example.org/backlog/1.106.0> ;
+    owl:versionInfo "1.106.0" ;
+    owl:priorVersion <http://example.org/backlog/1.105.0> ;
     owl:priorVersion <http://example.org/backlog/1.104.0> ;
     owl:priorVersion <http://example.org/backlog/1.103.0> ;
     owl:priorVersion <http://example.org/backlog/1.102.0> ;
@@ -6484,19 +6485,19 @@ backlog:retractsOutput a owl:ObjectProperty ;
 #################################################################
 
 backlog:PartialScopeDeclaration a owl:Class ;
-    rdfs:subClassOf core:Artifact ;
+    rdfs:subClassOf backlog:LineageGap ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "Partial Scope Declaration"@en ;
     skos:definition "A lineage's own, honest record, filed as part of its own real closure and never afterward, of what its Objective did not cover -- the genuine remainder, named directly rather than left implicit or silently dropped. A lineage closing with one of these is not claiming its Mission is satisfied; it is closing honestly partial, with the remainder's whereabouts on record, not hidden. Exists because closing unsatisfied work as though it were satisfied is not a good practice (the owner's own words) -- the alternative this artifact provides is closing it as truthfully partial instead."@en .
 
 backlog:declaresGapFor a owl:ObjectProperty , owl:FunctionalProperty ;
-    rdfs:domain backlog:PartialScopeDeclaration ; rdfs:range backlog:Lineage ;
+    rdfs:domain backlog:LineageGap ; rdfs:range backlog:Lineage ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "declares gap for"@en ;
     skos:definition "The lineage this declaration is honestly filed against, as part of that lineage's own real closure."@en .
 
 backlog:describesUncoveredScope a owl:DatatypeProperty , owl:FunctionalProperty ;
-    rdfs:domain backlog:PartialScopeDeclaration ; rdfs:range xsd:string ;
+    rdfs:domain backlog:LineageGap ; rdfs:range xsd:string ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "describes uncovered scope"@en ;
     skos:definition "What the lineage's own Objective did not reach, in the owner's own real words -- not a template, not inferred, the genuine remainder as understood at closure."@en .
@@ -6520,7 +6521,7 @@ backlog:successorLineage a owl:ObjectProperty , owl:FunctionalProperty ;
     skos:definition "The new lineage this succession opens, under the same lineageForMission as the predecessor it succeeds."@en .
 
 backlog:resolvesGap a owl:ObjectProperty , owl:FunctionalProperty ;
-    rdfs:domain backlog:LineageSuccession ; rdfs:range backlog:PartialScopeDeclaration ;
+    rdfs:domain backlog:LineageSuccession ; rdfs:range backlog:LineageGap ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "resolves gap"@en ;
     skos:definition "The real PartialScopeDeclaration this succession exists to address."@en .
@@ -6532,7 +6533,7 @@ backlog:successionRationale a owl:DatatypeProperty , owl:FunctionalProperty ;
     skos:definition "The owner's own real cost/benefit and risk/opportunity reasoning for winding down rather than adopting in place -- named directly, not a template filled mechanically."@en .
 
 backlog:resolvesPartialScope a owl:ObjectProperty ;
-    rdfs:domain backlog:Objective ; rdfs:range backlog:PartialScopeDeclaration ;
+    rdfs:domain backlog:Objective ; rdfs:range backlog:LineageGap ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "resolves partial scope"@en ;
     skos:definition "The direct, structural link from a successor lineage's own Objective to the predecessor's real gap it exists to fill -- what makes the pickup checkable rather than merely asserted in the succession's own prose. Distinct from LineageSuccession.resolvesGap, which records the owner's own deliberate decision; this property records where the successor's own real work chain actually resolves it."@en .
@@ -6547,13 +6548,85 @@ backlog:reactivatesLineage a owl:ObjectProperty , owl:FunctionalProperty ;
     rdfs:domain backlog:LineageReactivation ; rdfs:range backlog:Lineage ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "reactivates lineage"@en ;
-    skos:definition "The closed lineage this reactivation reopens."@en .
+    skos:definition "The closed lineage this reactivation reopens. The mechanical act of reopening is the existing revival (lineageRevivedAt, status Revived, the archive tool's --revive); this record is the reasoned, evidenced decision that act now requires."@en .
 
 backlog:reactivationRationale a owl:DatatypeProperty , owl:FunctionalProperty ;
     rdfs:domain backlog:LineageReactivation ; rdfs:range xsd:string ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "reactivation rationale"@en ;
     skos:definition "The real, named need that makes reactivation warranted -- the owner's own reasoning, not a default justification."@en .
+
+#################################################################
+#  v1.106.0 -- tiered response to findings against closed work (owner
+#  design, 2026-09-24): an isolated defect goes to a maintenance task or a
+#  change request under a live lineage; a bounded one is descoped into a
+#  successor by the division ceremony; only a systemic one justifies
+#  reactivation. Revival is typed by reason and requires an observed,
+#  evidenced finding -- never a suspicion. An observation window after a
+#  lineage's own closure routes findings to maintenance or change request.
+#################################################################
+
+backlog:LineageGap a owl:Class ;
+    rdfs:subClassOf core:Artifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Lineage Gap"@en ;
+    skos:definition "Anything a closed lineage owes but did not deliver, in one of two honest forms: a partial scope declaration (known and declared at closure) or a post-closure finding (discovered afterwards, from evidence). A succession resolves either the same way."@en .
+
+backlog:PostClosureFinding a owl:Class ;
+    rdfs:subClassOf backlog:LineageGap ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Post-Closure Finding"@en ;
+    skos:definition "A defect, unfinished part or non-conformance discovered in a lineage's work after it closed -- distinct from a partial scope declaration, which may only be filed at closure. It names the closed lineage (declaresGapFor), states what was found (describesUncoveredScope), is typed by scale, dated, and carries the observed evidence it rests on. Its scale decides the proportionate response: isolated to maintenance or a change request, bounded to a descoping succession, systemic to reactivation."@en .
+
+backlog:FindingScale a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Finding Scale"@en ;
+    owl:oneOf ( backlog:Scale_Isolated backlog:Scale_Bounded backlog:Scale_Systemic ) ;
+    skos:definition "How far a post-closure finding reaches, which decides the proportionate response."@en .
+backlog:Scale_Isolated a owl:NamedIndividual , backlog:FindingScale ; rdfs:label "Isolated"@en ;
+    skos:definition "One small defect; a maintenance task or a change request under a live lineage is enough. The closed lineage is not reopened."@en .
+backlog:Scale_Bounded a owl:NamedIndividual , backlog:FindingScale ; rdfs:label "Bounded"@en ;
+    skos:definition "A substantial but contained piece; descoped from the closed lineage into a successor by the division ceremony."@en .
+backlog:Scale_Systemic a owl:NamedIndividual , backlog:FindingScale ; rdfs:label "Systemic"@en ;
+    skos:definition "Wide non-conformance across the lineage's work; the only scale that justifies reactivation, after which the lineage is bound by current rules."@en .
+
+backlog:hasFindingScale a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:PostClosureFinding ; rdfs:range backlog:FindingScale ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "has finding scale"@en .
+
+backlog:findingRaisedAt a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:PostClosureFinding ; rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "finding raised at"@en .
+
+backlog:findingEvidence a owl:ObjectProperty ;
+    rdfs:domain backlog:PostClosureFinding ; rdfs:range backlog:Evidence ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "finding evidence"@en ;
+    skos:definition "The observed signal the finding rests on -- a defect from live use, a failed verification, a failed acceptance check. A suspicion is not evidence; it produces a validation task in a live lineage, whose result becomes the evidence."@en .
+
+backlog:addressesFinding a owl:ObjectProperty ;
+    rdfs:range backlog:PostClosureFinding ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "addresses finding"@en ;
+    skos:definition "Links the response to a post-closure finding: a maintenance work item or change request (isolated), or a reactivation (systemic). A bounded finding is resolved by a succession through resolvesGap."@en .
+
+backlog:ReactivationReason a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Reactivation Reason"@en ;
+    owl:oneOf ( backlog:Reason_ImproperProcessing backlog:Reason_UnfinishedWork backlog:Reason_NonConformantResult ) ;
+    skos:definition "The closed set of reasons that may justify reopening closed work. Anything else is refused."@en .
+backlog:Reason_ImproperProcessing a owl:NamedIndividual , backlog:ReactivationReason ; rdfs:label "Improper processing result"@en .
+backlog:Reason_UnfinishedWork a owl:NamedIndividual , backlog:ReactivationReason ; rdfs:label "Unfinished work"@en .
+backlog:Reason_NonConformantResult a owl:NamedIndividual , backlog:ReactivationReason ; rdfs:label "Non-conformant result"@en .
+
+backlog:hasReactivationReason a owl:ObjectProperty ;
+    rdfs:domain backlog:LineageReactivation ; rdfs:range backlog:ReactivationReason ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "has reactivation reason"@en .
+
+backlog:observationWindowEnds a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:Lineage ; rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "observation window ends"@en ;
+    skos:definition "For a closed lineage whose work goes into real use: until this moment, findings against it route to maintenance or a change request, never to succession or reactivation."@en .
 
 backlog:restartedAtCommit a owl:DatatypeProperty , owl:FunctionalProperty ;
     rdfs:domain backlog:LineageRestart ; rdfs:range xsd:string ;
