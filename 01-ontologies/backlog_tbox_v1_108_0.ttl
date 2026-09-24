@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.107.0> ;
-    owl:versionInfo "1.107.0" ;
+    owl:versionIRI <http://example.org/backlog/1.108.0> ;
+    owl:versionInfo "1.108.0" ;
+    owl:priorVersion <http://example.org/backlog/1.107.0> ;
     owl:priorVersion <http://example.org/backlog/1.106.0> ;
     owl:priorVersion <http://example.org/backlog/1.105.0> ;
     owl:priorVersion <http://example.org/backlog/1.104.0> ;
@@ -6646,13 +6647,13 @@ backlog:preLineageItem a owl:DatatypeProperty , owl:FunctionalProperty ;
     rdfs:domain backlog:WorkItem ; rdfs:range xsd:boolean ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "pre-lineage item"@en ;
-    skos:definition "True on a work item that existed before the chain it now sits under was (re)built. Set by the restart, cleared by nothing: the item is re-admitted, not re-dated, via admittedByOutput."@en .
+    skos:definition "True on a work item that existed before the chain that now owns it was built. Set by a restart for the items of the restarted lineage, or (v1.108.0) by a succession for an open item of the predecessor that the successor carries. Cleared by nothing: the item keeps belongsToLineage -- the lineage it was created during -- and is admitted, not re-dated or re-pointed, via admittedByOutput."@en .
 
 backlog:admittedByOutput a owl:ObjectProperty , owl:FunctionalProperty ;
     rdfs:domain backlog:WorkItem ; rdfs:range backlog:StageOutput ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "admitted by output"@en ;
-    skos:definition "The rebuilt, non-retracted Stage_Backlog output that took this pre-lineage item into the restarted chain. Until it is set, the item is work the lineage does not yet own."@en .
+    skos:definition "The active (non-retracted) Stage_Backlog output that took this pre-lineage item in: the rebuilt output of a restarted lineage, the output of a divided lineage's part, or (v1.108.0) the output of the successor a LineageSuccession names for the item's own lineage. Until it is set, the item is work that chain does not yet own."@en .
 
 #################################################################
 #  v1.84.0 (2026-09-07) -- LINEAGE THRASH: the stop condition for

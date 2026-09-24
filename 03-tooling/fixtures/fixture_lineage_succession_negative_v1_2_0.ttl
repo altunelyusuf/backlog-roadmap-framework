@@ -62,6 +62,8 @@ fwneg:Succ_5 a backlog:LineageSuccession ;
     backlog:resolvesGap fwneg:Gap_5 ; backlog:successionRationale "Bad: no Objective picks this up." ;
     backlog:decidedBy backlog:Owner .
 # Note: no Objective anywhere declares resolvesPartialScope fwneg:Gap_5 -- the real violation.
+# v1.2.0: the successor has reached its Objective stage (an Objective of its own), so the clause binds.
+fwneg:Obj_Succ5_Other a backlog:Objective ; backlog:belongsToLineage fwneg:L_Succ5 .
 
 # 6. Reactivation of a lineage that was never actually closed.
 fwneg:L_NeverClosed a backlog:Lineage ; backlog:lineageOrdinal 10 ;
@@ -127,5 +129,27 @@ fwneg:Task_Fix14 a backlog:WorkItem ; backlog:hasInvestmentCategory backlog:Cat_
 fwneg:L_RevivedBare a backlog:Lineage ; backlog:lineageOrdinal 14 ;
     backlog:hasLineageStatus backlog:LS_Revived ; backlog:lineageArchived false ;
     backlog:lineageRevivedAt "2026-09-24T00:00:00Z"^^xsd:dateTime .
+
+# v1.134.0 carried-item defects.
+fwneg:L_Pred16 a backlog:Lineage ; backlog:lineageOrdinal 15 ;
+    backlog:hasLineageStatus backlog:LS_Achieved ; backlog:lineageArchived false .
+fwneg:L_Succ16 a backlog:Lineage ; backlog:lineageOrdinal 16 ;
+    backlog:hasLineageStatus backlog:LS_InProgress ; backlog:lineageArchived false .
+fwneg:Gap_16 a backlog:PartialScopeDeclaration ; backlog:declaresGapFor fwneg:L_Pred16 ; backlog:describesUncoveredScope "Real gap." .
+fwneg:Succ_16 a backlog:LineageSuccession ; backlog:succeedsLineage fwneg:L_Pred16 ; backlog:successorLineage fwneg:L_Succ16 ;
+    backlog:resolvesGap fwneg:Gap_16 ; backlog:successionRationale "Real rationale." ; backlog:decidedBy backlog:Owner .
+fwneg:Obj_Succ16 a backlog:Objective ; backlog:belongsToLineage fwneg:L_Succ16 ; backlog:resolvesPartialScope fwneg:Gap_16 .
+fwneg:Out_Obj16 a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Objective ; backlog:belongsToLineage fwneg:L_Succ16 .
+fwneg:Out_BL16 a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage fwneg:L_Succ16 .
+# 16. A predecessor item admitted by the successor's Objective-stage output (not a Backlog output).
+fwneg:Item_WrongStage a backlog:WorkItem ; backlog:belongsToLineage fwneg:L_Pred16 ; backlog:hasState backlog:Proposed ;
+    backlog:preLineageItem true ; backlog:admittedByOutput fwneg:Out_Obj16 .
+# 17. An open predecessor item the successor's closed Backlog stage never carried.
+fwneg:Item_Dropped a backlog:WorkItem ; backlog:belongsToLineage fwneg:L_Pred16 ; backlog:hasState backlog:Proposed .
+# 18. The achieved-not-archived exemption stays narrow: a succeeded predecessor with NO open item is still reported.
+fwneg:L_Pred18 a backlog:Lineage ; backlog:lineageOrdinal 17 ;
+    backlog:hasLineageStatus backlog:LS_Achieved ; backlog:lineageArchived false .
+fwneg:Succ_18 a backlog:LineageSuccession ; backlog:succeedsLineage fwneg:L_Pred18 ; backlog:successorLineage fwneg:L_Succ16 ;
+    backlog:resolvesGap fwneg:Gap_16 ; backlog:successionRationale "Real rationale." ; backlog:decidedBy backlog:Owner .
 
 <http://example.org/fixture-succession-negative#> backlog:hasExpectedPolarity backlog:Polarity_Negative .

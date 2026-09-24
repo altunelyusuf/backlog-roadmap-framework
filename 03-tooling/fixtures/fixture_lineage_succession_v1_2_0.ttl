@@ -1,4 +1,4 @@
-# fixture_lineage_succession v1.1.0 -- positive proof of LineageSuccession,
+# fixture_lineage_succession v1.2.0 -- positive proof of LineageSuccession,
 # PartialScopeDeclaration and LineageReactivation, complete against the FULL suite.
 # Built on fixture_lineage_status_v1_1_0's own already-complete register (copied into this
 # fixture's own namespace, the original untouched): its lineage becomes the successor; a
@@ -250,6 +250,13 @@ ex:Succ_1 a backlog:LineageSuccession ;
     backlog:successionRationale "Relevance ratio low, most projected violations unrelated backfill; adopting the new RuleSet in place would re-judge closed work G89 forbids. Wind down and continue under a successor." ;
     backlog:decidedBy backlog:Owner .
 ex:O backlog:belongsToLineage ex:Lin_PL ; backlog:resolvesPartialScope ex:Gap_Prev .
+# v1.2.0: an open item created under the predecessor, carried by the successor -- it keeps
+# belongsToLineage (created during Lin_Prev) and is admitted by the successor's Backlog output.
+ex:S_Carried a backlog:Story ; backlog:hasIdentifier "S-CARRIED" ; backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer ex:BL ; backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at next planning." ;
+    backlog:belongsToLineage ex:Lin_Prev ; backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:pursuesObjective ex:O ; backlog:preLineageItem true ; backlog:admittedByOutput ex:Out_Backlog .
 
 ex:G_OldScope a backlog:Goal ; rdfs:label "Old scope-facing goal"@en ;
     backlog:contributesToMission ex:M_Old ; backlog:derivesFromScope ex:Scope_Old ;

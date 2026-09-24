@@ -10671,3 +10671,26 @@ colon), so its six real exemptions were invisible to it and the first dry run wa
 `build_manifest_v1_6_0.py -> v1_7_0.py` writes the shared form; `backlog_manifest_coverage_v1_0_0.py
 -> v1_1_0.py` and the gate's manifest-digest-carrier step (`backlog_gate_v1_20_0.sh -> v1_21_0.sh`)
 accept it. The shared checker now passes with no unlisted files.
+
+## v1.318.0 — 2026-09-24 (MINOR: a successor built stage by stage, carrying the predecessor's open items -- an adopting project handover)
+
+an adopting project, preparing its owner-ruled succession, asked two questions this framework's files could
+not answer. Both verified against the rules before ruling.
+
+- **Commit shape.** The earlier direction to build the successor's scope, goals and objectives in the
+  closure commit contradicted the staged ceremony (one commit per stage) and is corrected: the
+  closure commit carries the predecessor's closure, gap declaration, succession record and the
+  successor's Mission stage; the remaining stages follow one commit each. The succession shape's
+  successor-objective clause now binds from the successor's Objective stage.
+- **Carried items.** A succeeded predecessor's open items keep `belongsToLineage` (created during) and
+  are admitted by the successor's active Backlog-stage output, extending the divided-lineage
+  exception of the pre-lineage rule. New rule: once that output exists, an open predecessor item
+  neither carried nor cancelled is a Violation (`SuccessionCarriedItemShape`). The achieved-not-
+  archived rule waits while a succeeded predecessor still has open items, since the archive tool
+  cannot archive it.
+
+`backlog_shacl_v1_133_0.ttl -> v1_134_0.ttl`; overlay regenerated `v1_3_0 -> v1_4_0` (the gate's
+overlay check flagged it stale as soon as the base changed); `backlog_tbox_v1_107_0.ttl ->
+v1_108_0.ttl` (definitions of pre-lineage item and admitting output); standard `v1_105_0 -> v1_106_0`;
+succession fixtures `v1_1_0 -> v1_2_0`. Two an adopting project closure notes (succession mechanism, overlay
+fix) logged; both verified on their side.

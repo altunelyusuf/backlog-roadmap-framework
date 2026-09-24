@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.105.0
+# Backlog & Roadmap Semantic Framework — Standard v1.106.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -1006,6 +1006,18 @@ that must already be genuinely closed (archived or `LS_Achieved`); `reactivation
 real, named need. A reactivated lineage's own content is re-validated against current standards
 before it returns to active status, the same check (`validate_lineage`, 2.5c-xxi-m's own kind of
 per-lineage scoping) a profile's own source case is held to.
+
+**Building the successor, and what it carries.** The successor is built by the staged ceremony like
+any lineage (2.5c-xxii): the first commit carries the predecessor's closure, its partial scope
+declaration, the succession record and the successor's Mission stage -- so nothing of the successor
+exists before the succession that opens it -- and each later stage closes in its own commit. The
+requirement that a successor objective resolve the declared gap binds once the successor has reached
+its Objective stage, not before. The predecessor's still-open items are carried, not re-created or
+re-pointed: each keeps `belongsToLineage` -- the lineage it was created during -- and is taken in by
+the successor's active Backlog-stage output (`preLineageItem`, `admittedByOutput`), the same admission
+a restart or a divided lineage's part uses. Once the successor's Backlog stage has closed, an open
+predecessor item neither carried nor cancelled is refused as work silently dropped. The predecessor
+cannot be archived while carried items are open, and the archival activity waits for them.
 
 ### 2.5c-xxi-o Findings against closed work: a response proportionate to their scale
 
