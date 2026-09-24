@@ -77,4 +77,9 @@ fwneg:M_Open a backlog:Mission ; backlog:missionFor fwneg:Register ; backlog:has
 fwneg:L_ClaimsDoneAlone a backlog:Lineage ; backlog:lineageOrdinal 11 ; backlog:lineageForMission fwneg:M_Open ;
     backlog:hasLineageStatus backlog:LS_Achieved ; backlog:lineageArchived false .
 
+# 7. The v1.132.0 exemption stays narrow: an Achieved lineage whose Mission is not achieved and
+#    that NO succession names is still caught -- the exemption covers succession only.
+fwneg:L_AchievedNoSucc a backlog:Lineage ; backlog:lineageOrdinal 11 ; backlog:lineageForMission fwneg:M_One ;
+    backlog:hasLineageStatus backlog:LS_Achieved ; backlog:lineageArchived false .
+
 <http://example.org/fixture-succession-negative#> backlog:hasExpectedPolarity backlog:Polarity_Negative .

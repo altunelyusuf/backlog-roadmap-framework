@@ -10559,3 +10559,13 @@ flight. All 22 shipped fixtures re-checked with the gate's own polarity comparis
 **Deliberately not yet applied to any real, existing lineage.** This release builds and proves
 the mechanism; using it on `Lineage_Main` (the adopting project's own real case) or on any of this
 package's own lineages is real, separate work for its own turn, not folded into this one.
+
+**A real structural tension surfaced while making the positive fixture complete, resolved narrowly
+rather than papered over.** An existing lineage-status rule assumed "a lineage recorded Achieved
+means its Mission is achieved" -- true when one lineage serves one Mission, false once a Mission
+legitimately spans a closed predecessor and a still-working successor. Exempted only where a real
+`LineageSuccession` names the lineage as its predecessor: its own scope is honestly done while the
+Mission's remainder is tracked on the successor. Proven both directions: the fixture's succeeded
+predecessor passes; a new negative case (an Achieved lineage, unfinished Mission, no succession)
+still fires. Both fixtures declare their polarity and pass the gate's own `--each` path
+(positive: 0 Violation; negative: every one of its seven planted defects fires).
