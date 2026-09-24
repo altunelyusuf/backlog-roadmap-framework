@@ -48,17 +48,30 @@ STAGE_TYPES = None  # loaded from the ontology; see _load_stage_types
 ORDER = ["Stage_Mission", "Stage_Scope", "Stage_Goal", "Stage_Objective", "Stage_Backlog"]
 
 
-def state_digest(g, stage):
+def state_digest(g, stage, lineage=None):
     """SHA-256 over the canonical set of subjects a stage may contain.
 
     Subjects only, sorted: the digest must be stable under later annotation of
     an element that already existed. Hashing every triple would change the
     Mission stage's digest the moment a mission gained a label, which would make
     the check fail on correct behaviour and be worse than no check.
-    """
+
+    v1.3.0: real fix for a real, confirmed bug -- the adopting project's own evidenced handover
+    (no-adaptation-mechanism-for-a-mature-lineage-under-a-new-ruleset), section 4's own
+    disclosed finding. Without lineage scoping, a stage's digest covers every subject of
+    that stage's types ANYWHERE in the register, so one lineage's own recorded digest
+    breaks the moment any OTHER, unrelated, still-open lineage adds a new subject of a
+    stage-relevant type -- confirmed directly: this tool's own outputs dict, unfiltered,
+    silently collides when more than one lineage's StageOutput exists for the same stage.
+    When lineage is given (a Lineage URIRef), scope to subjects belongsToLineage it (plus
+    the lineage individual itself, for the Mission stage). Omit lineage for the old, fully
+    global behaviour -- unaffected for any register carrying exactly one lineage's own
+    stage outputs, which is every existing caller and fixture."""
     subs = set()
     for t in STAGE_TYPES[stage]:
-        subs |= set(str(s) for s in g.subjects(RDF.type, URIRef(B + t)))
+        for s in g.subjects(RDF.type, URIRef(B + t)):
+            if lineage is None or s == lineage or (s, URIRef(B + "belongsToLineage"), lineage) in g:
+                subs.add(str(s))
     return hashlib.sha256("\n".join(sorted(subs)).encode("utf-8")).hexdigest()
 
 
@@ -105,15 +118,32 @@ def main():
     import os as _os, glob as _glob
     _pkg = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
     _tb = sorted(_glob.glob(_os.path.join(_pkg, "01-ontologies", "backlog_tbox_v*.ttl")))[-1]
-    _v2 = any(_table_v2_declared(open(f, encoding="utf-8", errors="ignore").read()) for f in sys.argv[1:] if os.path.exists(f))
+    lineage_name = None
+    argv = list(sys.argv[1:])
+    if "--lineage" in argv:
+        idx = argv.index("--lineage")
+        lineage_name = argv[idx + 1]
+        argv = argv[:idx] + argv[idx + 2:]
+    _v2 = any(_table_v2_declared(open(f, encoding="utf-8", errors="ignore").read()) for f in argv if os.path.exists(f))
     STAGE_TYPES = _load_stage_types(_tb, _v2)
     print("digest table: %s" % ("v2 (RS_DigestTable_v2 declared)" if _v2 else "v1"))
-    if len(sys.argv) < 2:
-        print("usage: backlog_pipeline_verify_v1_2_0.py <register.ttl> [tbox.ttl]")
+    if len(argv) < 1:
+        print("usage: backlog_pipeline_verify_v1_2_0.py <register.ttl> [tbox.ttl] [--lineage NAME]")
         return 1
     g = Graph()
-    for f in sys.argv[1:]:
+    for f in argv:
         g.parse(f, format="turtle")
+
+    lineage_uri = None
+    if lineage_name is not None:
+        for s in g.subjects(RDF.type, URIRef(B + "Lineage")):
+            if str(s).rsplit("#", 1)[-1] == lineage_name:
+                lineage_uri = s
+                break
+        if lineage_uri is None:
+            print("ERROR: no real Lineage named %s found" % lineage_name)
+            return 1
+        print("scope       : lineage-scoped to %s -- v1.3.0, real fix for a real, confirmed cross-lineage digest collision" % lineage_name)
 
     outputs = {}
     for o in g.subjects(RDF.type, URIRef(B + "StageOutput")):
@@ -125,9 +155,11 @@ def main():
         ret = g.value(o, URIRef(B + "outputRetracted"))
         if ret is not None and bool(ret.toPython()):
             continue
+        if lineage_uri is not None and (o, URIRef(B + "belongsToLineage"), lineage_uri) not in g:
+            continue
         outputs[str(st).split("#")[-1]] = o
 
-    print("register    : %s" % sys.argv[1].split("/")[-1])
+    print("register    : %s" % argv[0].split("/")[-1])
     print("stage outputs recorded: %d of %d" % (len(outputs), len(ORDER)))
 
     if not outputs:
@@ -145,7 +177,7 @@ def main():
             prev = None
             continue
         recorded = str(g.value(o, URIRef(B + "hasStateDigest")) or "")
-        actual = state_digest(g, stage)
+        actual = state_digest(g, stage, lineage_uri)
         ok = recorded == actual
         print("  %-18s digest %s  %s" % (stage, actual[:16], "reproduces" if ok else "DOES NOT REPRODUCE"))
         if not ok:

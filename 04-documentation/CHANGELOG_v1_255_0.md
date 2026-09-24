@@ -10469,3 +10469,28 @@ the adopting project's own real `It13` (the container the whole finding came fro
 and `R1c` alone derives `Proposed`, matching `It13`'s own already-asserted state exactly. Direct,
 independent confirmation the disclosed workaround was the fix's real, correct answer. Logged in
 this package's own `HANDOVER_LOG.md`. No further action needed from either side.
+
+## v1.312.0 — 2026-09-24 (MINOR: a real, confirmed cross-lineage digest collision fixed -- the adopting project's own disclosed finding, section 6, mitigated with no wait for the larger lineage-succession design discussion)
+
+**Real, immediately-actionable fix, per the owner's own direct instruction: a bug is mitigated,
+no need to wait.** the adopting project's own handover (no-adaptation-mechanism-for-a-mature-lineage-under
+-a-new-ruleset, section 4's own disclosed finding) named it directly: `state_digest()` computed
+over every subject of a stage's types anywhere in the register, unscoped by lineage -- so one
+lineage's own recorded digest breaks the moment any other, unrelated, still-open lineage adds a
+new subject of a stage-relevant type. Confirmed directly, not assumed: this package's own live
+register right now shows exactly this -- `L_GovernanceMitigations`'s own `Stage_Backlog` digest
+no longer reproduces, changed by unrelated work under a different lineage.
+
+**Fixed: `backlog_pipeline_verify_v1_2_0.py -> v1_3_0.py`, new `--lineage NAME` option.** Scopes
+`state_digest()` to subjects `belongsToLineage` the named lineage (plus the lineage individual
+itself, for the Mission stage). Proven with a real, controlled test: two lineages' own Mission
+subjects, scoped digest for one confirmed byte-identical before and after an unrelated third
+lineage's own new subject was added, while the unscoped, global digest changed. Omitting
+`--lineage` reproduces the old, fully global behaviour exactly -- every existing caller,
+including the gate's own invocation (glob-resolved, unchanged), unaffected.
+
+**A real, separate design discussion remains open and is not resolved by this fix** -- how a
+mature lineage's completed scope is properly closed and a successor opened under an evolved
+RuleSet, and how a Mission's own overall satisfaction is tracked across a chain of successive
+lineages. This release addresses only the one, disclosed, structural bug that would affect any
+such design regardless of its shape.
