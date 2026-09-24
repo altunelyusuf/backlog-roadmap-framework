@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.103.0
+# Backlog & Roadmap Semantic Framework — Standard v1.104.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -973,6 +973,39 @@ from one complete, real, closed case rather than a guessed template: Lineage 9's
 checked directly before writing either requirement — no `Epic` layer across its six stories and eight
 tasks, and no `adoptsObligationSet` ever declared on the lineage itself, since its own real work was
 authoring an obligation set, not being bound by one.
+
+### 2.5c-xxi-n LineageSuccession, PartialScopeDeclaration, LineageReactivation: closing a mature lineage honestly, under an evolved standard
+
+A `RuleSet` binds the whole register once declared (2.5c-xxi-o); a mature, in-progress lineage
+facing one that ships after it opened has neither a way to adopt in place without re-judging its
+own already-closed history (G89), nor a reason to force its entire membership -- done and not-done
+alike -- through a `LineageRestart`, which answers a detected bypass, a different problem from a
+`RuleSet`'s own timing relative to a lineage's maturity.
+
+A **`PartialScopeDeclaration`** is the honest alternative to either: the predecessor's own record,
+filed as part of its real closure and never afterward, of what its Objective genuinely did not
+cover. `declaresGapFor` names the lineage; `describesUncoveredScope` states the real remainder in
+the owner's own words. Only a lineage already archived or recorded `LS_Achieved` may have one filed
+against it -- the declaration cannot precede the closure it describes, so a lineage cannot claim its
+own gap before the gap is real.
+
+A **`LineageSuccession`** is the owner's own deliberate record of winding that predecessor down and
+opening a successor under the *same* Mission (`succeedsLineage`, `successorLineage`,
+`lineageForMission` held equal across both). It carries `successionRationale` -- the real
+cost/benefit and risk/opportunity reasoning, not a template -- and `resolvesGap`, naming the exact
+`PartialScopeDeclaration` it addresses; the gap must genuinely belong to the named predecessor. Both
+halves of the design hold together, not one alone: the predecessor's retrospective declaration is
+matched by the successor's prospective, structural pickup -- `resolvesPartialScope`, declared on the
+successor's own Objective, pointing directly at the same declaration. A succession whose successor
+has no Objective actually carrying that link is caught: the intent is asserted in the succession's
+own prose, but the pickup is only real once the successor's own chain carries it.
+
+A **`LineageReactivation`** answers the opposite, rarer case: closed work stays closed until a real
+need appears to reopen it, and reactivation is never casual. `reactivatesLineage` names a lineage
+that must already be genuinely closed (archived or `LS_Achieved`); `reactivationRationale` states the
+real, named need. A reactivated lineage's own content is re-validated against current standards
+before it returns to active status, the same check (`validate_lineage`, 2.5c-xxi-m's own kind of
+per-lineage scoping) a profile's own source case is held to.
 
 ### 2.5c-xxii The staged ceremony, one commit per stage
 

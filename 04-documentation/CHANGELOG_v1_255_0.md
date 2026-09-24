@@ -10533,6 +10533,13 @@ completeness requirements this minimal fixture does not attempt to satisfy) and
 constraint, all six confirmed firing correctly). `backlog_tbox_v1_104_0.ttl -> v1_105_0.ttl`,
 `backlog_shacl_v1_131_0.ttl -> v1_132_0.ttl`.
 
+**Real, substantive documentation added**, not a bare mention to satisfy the gate mechanically:
+a new standard section (2.5c-xxi-n), matching the same prose depth as the neighbouring
+`LineageRestart`/`LineageProfile` sections it sits beside.
+`BACKLOG_ROADMAP_FRAMEWORK_STANDARD_v1_103_0.md -> v1_104_0.md`. Caught by the doc-coverage
+gate itself on the first publish attempt (201 classes declared, 198 named) -- the gate doing
+exactly what it exists for, not a defect in the new mechanism.
+
 **Deliberately not yet applied to any real, existing lineage.** This release builds and proves
 the mechanism; using it on `Lineage_Main` (the adopting project's own real case) or on any of this
 package's own lineages is real, separate work for its own turn, not folded into this one.
