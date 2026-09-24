@@ -10569,3 +10569,14 @@ Mission's remainder is tracked on the successor. Proven both directions: the fix
 predecessor passes; a new negative case (an Achieved lineage, unfinished Mission, no succession)
 still fires. Both fixtures declare their polarity and pass the gate's own `--each` path
 (positive: 0 Violation; negative: every one of its seven planted defects fires).
+
+## v1.314.0 — 2026-09-24 (PATCH: the adopting project's mature-lineage handover answered and moved to accepted)
+
+Formal response filed for `HANDOVER_fizyovibe_to_backlog-roadmap-framework_no-adaptation-mechanism
+-for-a-mature-lineage-under-a-new-ruleset`: the mechanism it asked about exists as of v1.313.0 (and
+its digest finding was fixed at v1.312.0). Directions for the adopting project's own main lineage given in the
+order the owner's design requires -- measure, close honestly partial and open the successor in one
+commit, successor alone adopts the new rule set -- plus the owner's stated expectations for what the
+successor must demonstrate. Section 6 (this framework's own register uses implementation-typed tasks
+only) confirmed and recorded as known, with one precision. Not built and said so: a tool computing
+the four succession measures.
