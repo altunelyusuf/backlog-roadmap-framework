@@ -70,3 +70,11 @@ fwneg:React_Bad a backlog:LineageReactivation ;
     backlog:reactivatesLineage fwneg:L_NeverClosed ;
     backlog:reactivationRationale "Bad: this lineage was never closed." ;
     backlog:decidedBy backlog:Owner .
+
+# 7. The v1.132.0 exemption stays narrow: an LS_Achieved lineage whose Mission is still in
+#    flight, and which NO LineageSuccession names, must still be caught by the original rule.
+fwneg:M_Open a backlog:Mission ; backlog:missionFor fwneg:Register ; backlog:hasMissionOutcome backlog:Out_InFlight .
+fwneg:L_ClaimsDoneAlone a backlog:Lineage ; backlog:lineageOrdinal 11 ; backlog:lineageForMission fwneg:M_Open ;
+    backlog:hasLineageStatus backlog:LS_Achieved ; backlog:lineageArchived false .
+
+<http://example.org/fixture-succession-negative#> backlog:hasExpectedPolarity backlog:Polarity_Negative .

@@ -5996,11 +5996,12 @@ backlog:LineageStatusShape a sh:NodeShape ;
             FILTER NOT EXISTS { ?o a backlog:StageOutput ; backlog:outputOfStage ?st ; backlog:belongsToLineage $this . FILTER NOT EXISTS { ?o backlog:outputRetracted true } }
         }""" ] ;
     sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "L1: this lineage claims LS_Achieved but its mission is not Out_Achieved, or no closure report closes it." ;
+        sh:message "L1: this lineage claims LS_Achieved but its mission is not Out_Achieved, or no closure report closes it. (v1.132.0: exempt when a real LineageSuccession names this lineage as its own succeedsLineage -- its own scope is honestly done even while the shared Mission continues under its successor; the successor, not this lineage, is where the Mission's remaining work is tracked.)" ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             $this backlog:hasLineageStatus backlog:LS_Achieved ; backlog:lineageForMission ?m .
             FILTER ( NOT EXISTS { ?m backlog:hasMissionOutcome backlog:Out_Achieved } || NOT EXISTS { ?cr backlog:closesForMission ?m } )
+            FILTER NOT EXISTS { ?succ backlog:succeedsLineage $this }
         }""" ] ;
     sh:sparql [ a sh:SPARQLConstraint ;
         sh:message "L1: this lineage claims LS_Archived but is not lineageArchived true with an archiveFile -- or is archived without the status." ;

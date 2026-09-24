@@ -10540,6 +10540,22 @@ a new standard section (2.5c-xxi-n), matching the same prose depth as the neighb
 gate itself on the first publish attempt (201 classes declared, 198 named) -- the gate doing
 exactly what it exists for, not a defect in the new mechanism.
 
+**A real structural tension found by building the positive fixture, and resolved narrowly.** An
+existing rule held that a lineage claiming `LS_Achieved` means its Mission is `Out_Achieved` --
+true while one Mission had one lineage, false the moment a Mission legitimately spans a closed
+predecessor and a still-working successor. The rule now exempts exactly one case: a lineage a
+real `LineageSuccession` names as its `succeedsLineage` (its own scope is honestly done; the
+Mission's remainder is tracked under the successor). Proven narrow in both directions: a new
+negative case (an `LS_Achieved` lineage under an in-flight Mission that no succession names) is
+still caught; the genuinely succeeded predecessor is not.
+
+**The positive fixture is complete against the full suite, not only the three new shapes.** Built
+on `fixture_lineage_status_v1_1_0`'s own already-complete register (copied into this fixture's own
+namespace, the original untouched): 0 Violations. The reactivated lineage is modelled honestly --
+archived under its own, separately achieved Mission with a real closure report and a three-facing
+intent chain -- after the suite correctly refused archiving a lineage whose Mission was still in
+flight. All 22 shipped fixtures re-checked with the gate's own polarity comparison: 0 mismatches.
+
 **Deliberately not yet applied to any real, existing lineage.** This release builds and proves
 the mechanism; using it on `Lineage_Main` (the adopting project's own real case) or on any of this
 package's own lineages is real, separate work for its own turn, not folded into this one.
