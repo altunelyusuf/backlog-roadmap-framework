@@ -10723,3 +10723,28 @@ v1_5_0`, register `v9_100_0 -> v9_101_0`, standard `v1_106_0 -> v1_107_0`; fixtu
 `r3_disagreement v1_6_0`, `tied_gates v1_5_0`. Also found and fixed while building: an edit script
 wrote the new vocabulary to a stray file (a reused loop variable); caught by checking the named terms
 landed, before anything was published.
+
+## v1.320.0 — 2026-09-24 (MINOR: containers at succession -- derived state read, owner-decided dissolution, containers not carried)
+
+an adopting project ran v1.319.0 against its register and found, each reproduced here first: the closure and
+carry-over rules read only asserted state, so derived-only packages were invisible; and a container
+could be neither emptied (at-least-one-member) nor cancelled (derivation has no Cancelled outcome).
+Its owner ruled that unfinished packages are dissolved so the successor builds new, cohesive packages.
+
+- **Rules v1.7.0 -> v1.8.0.** R1a-R1c count only members still in scope; new R1d: a dissolved container
+  derives Cancelled.
+- **Vocabulary v1.109.0 -> v1.110.0.** `ContainerDissolution` (`dissolvesContainer`,
+  `dissolutionRationale`); `splitFrom` superseded (`owl:deprecated`); admission is for items only again.
+- **Shapes v1.135.0 -> v1.136.0.** Closure and carry-over read asserted or derived state and treat a
+  container whose every member was out-scoped as open until dissolved; `ContainerDissolutionShape`
+  (owner decision, no hidden open work, no discarded finished work); `CancelledContainerShape` (a
+  container is cancelled only by dissolution); `ContainerCarryRefusedShape` replaces
+  `SplitRemainderShape` (admission or split of a container refused); a dissolved container needs no
+  members.
+- Overlay `v1_5_0 -> v1_6_0`; standard `v1_107_0 -> v1_108_0` (container paragraph rewritten);
+  succession fixtures `v1_3_0 -> v1_4_0`.
+
+The 2026-09-23 ruling that an all-Cancelled container derives Proposed stands for progress reporting;
+at closure such a container is resolved by the owner's dissolution. v1.319.0's container carry-over
+(admission and remainder split) is withdrawn one release after it shipped, because the owner's ruling
+decides containers differently; no adopter had used it.

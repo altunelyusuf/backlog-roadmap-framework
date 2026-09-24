@@ -1,4 +1,4 @@
-# fixture_lineage_succession v1.3.0 -- positive proof of LineageSuccession,
+# fixture_lineage_succession v1.4.0 -- positive proof of LineageSuccession,
 # PartialScopeDeclaration and LineageReactivation, complete against the FULL suite.
 # Built on fixture_lineage_status_v1_1_0's own already-complete register (copied into this
 # fixture's own namespace, the original untouched): its lineage becomes the successor; a
@@ -348,3 +348,9 @@ ex:Ev_LiveDefect a backlog:Evidence ; backlog:evidenceVerified true ;
     backlog:hasVerificationMethod "Reproduced from live use: the history-view privacy acceptance case failed on three views, each showing another practitioner's booking." .
 
 <http://example.org/fixture-succession#> backlog:hasExpectedPolarity backlog:Polarity_Positive .
+
+# v1.4.0: a planned sprint of the closing lineage, dissolved by the owner -- it derives Cancelled.
+ex:It_Dropped a backlog:Iteration ; backlog:hasIdentifier "IT-DROPPED" ; backlog:hasState backlog:Cancelled ;
+    backlog:belongsToLineage ex:Lin_Prev .
+ex:Dz_It a backlog:ContainerDissolution ; backlog:dissolvesContainer ex:It_Dropped ; backlog:decidedBy backlog:Owner ;
+    backlog:dissolutionRationale "Planned by the closing lineage; the successor plans sprints of its own." .

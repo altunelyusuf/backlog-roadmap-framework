@@ -174,4 +174,28 @@ fwneg:Pkg24_Rem a backlog:Package ; backlog:belongsToLineage fwneg:L_Live20 ; ba
 # 25. A container that belongs to no lineage.
 fwneg:Pkg25 a backlog:Package ; backlog:hasState backlog:Proposed ; backlog:memberOfContainer fwneg:Pkg24_Orig .
 
+# v1.136.0 container defects.
+fwneg:L_Closed26 a backlog:Lineage ; backlog:lineageOrdinal 21 ; backlog:hasLineageStatus backlog:LS_Achieved ; backlog:lineageArchived false .
+# 26. A package whose every member was out-scoped, state derived only, never dissolved: its lineage cannot close.
+fwneg:Pkg26 a backlog:Package ; backlog:belongsToLineage fwneg:L_Closed26 .
+fwneg:Item26 a backlog:WorkItem ; backlog:belongsToLineage fwneg:L_Closed26 ; backlog:memberOfContainer fwneg:Pkg26 ; backlog:hasState backlog:Proposed .
+fwneg:Gap_26 a backlog:PartialScopeDeclaration ; backlog:declaresGapFor fwneg:L_Closed26 ; backlog:decidedBy backlog:Owner ;
+    backlog:describesUncoveredScope "Out-scoped item." ; backlog:outScopes fwneg:Item26 .
+# 27. A container asserted Cancelled with no dissolution behind it.
+fwneg:It27 a backlog:Iteration ; backlog:belongsToLineage fwneg:L_Live20 ; backlog:hasState backlog:Cancelled .
+# 28. A dissolution hiding open work.
+fwneg:Pkg28 a backlog:Package ; backlog:belongsToLineage fwneg:L_Live20 .
+fwneg:Item28 a backlog:WorkItem ; backlog:belongsToLineage fwneg:L_Live20 ; backlog:memberOfContainer fwneg:Pkg28 ; backlog:hasState backlog:InProgress .
+fwneg:Dz28 a backlog:ContainerDissolution ; backlog:dissolvesContainer fwneg:Pkg28 ; backlog:decidedBy backlog:Owner ; backlog:dissolutionRationale "Bad: hides open work." .
+# 29. A dissolution of a container that finished work.
+fwneg:Pkg29 a backlog:Package ; backlog:belongsToLineage fwneg:L_Live20 .
+fwneg:Item29 a backlog:WorkItem ; backlog:belongsToLineage fwneg:L_Live20 ; backlog:memberOfContainer fwneg:Pkg29 ; backlog:hasState backlog:Done .
+fwneg:Dz29 a backlog:ContainerDissolution ; backlog:dissolvesContainer fwneg:Pkg29 ; backlog:decidedBy backlog:Owner ; backlog:dissolutionRationale "Bad: discards finished work." .
+# 30. A container carried into a successor by admission.
+fwneg:Pkg30 a backlog:Package ; backlog:belongsToLineage fwneg:L_Pred16 ; backlog:hasState backlog:Proposed ;
+    backlog:preLineageItem true ; backlog:admittedByOutput fwneg:Out_BL16 .
+# 31. A dissolution with no owner decision.
+fwneg:Pkg31 a backlog:Package ; backlog:belongsToLineage fwneg:L_Live20 .
+fwneg:Dz31 a backlog:ContainerDissolution ; backlog:dissolvesContainer fwneg:Pkg31 ; backlog:dissolutionRationale "Bad: nobody decided this." .
+
 <http://example.org/fixture-succession-negative#> backlog:hasExpectedPolarity backlog:Polarity_Negative .

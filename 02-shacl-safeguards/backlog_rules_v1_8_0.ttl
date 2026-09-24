@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-rules> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — Derivation Rules"@en ;
-    owl:versionIRI <http://example.org/backlog-rules/1.7.0> ;
-    owl:versionInfo "1.7.0" ;
+    owl:versionIRI <http://example.org/backlog-rules/1.8.0> ;
+    owl:versionInfo "1.8.0" ;
+    owl:priorVersion <http://example.org/backlog-rules/1.7.0> ;
     owl:priorVersion <http://example.org/backlog-rules/1.6.0> ;
     owl:priorVersion <http://example.org/backlog-rules/1.5.1> ;
     owl:priorVersion <http://example.org/backlog-rules/1.5.0> ;
@@ -52,13 +53,16 @@ backlog:ContainerStateRule a sh:NodeShape ;
         sh:construct """
             CONSTRUCT { $this backlog:derivedState backlog:Done }
             WHERE {
-                FILTER EXISTS { ?m backlog:memberOfContainer $this }
+                FILTER NOT EXISTS { ?dz backlog:dissolvesContainer $this }
+                FILTER EXISTS { ?m backlog:memberOfContainer $this . FILTER NOT EXISTS { ?os_a backlog:outScopes ?m } }
                 FILTER NOT EXISTS {
                     ?m backlog:memberOfContainer $this ; backlog:hasState ?s .
                     FILTER (?s NOT IN (backlog:Done, backlog:Cancelled))
+                    FILTER NOT EXISTS { ?os_b backlog:outScopes ?m }
                 }
                 FILTER EXISTS {
                     ?m2 backlog:memberOfContainer $this ; backlog:hasState backlog:Done .
+                    FILTER NOT EXISTS { ?os_c backlog:outScopes ?m2 }
                 }
             }""" ] ;
 
@@ -69,10 +73,13 @@ backlog:ContainerStateRule a sh:NodeShape ;
         sh:construct """
             CONSTRUCT { $this backlog:derivedState backlog:InProgress }
             WHERE {
+                FILTER NOT EXISTS { ?dz backlog:dissolvesContainer $this }
                 ?m1 backlog:memberOfContainer $this ; backlog:hasState ?s1 .
                 FILTER (?s1 IN (backlog:InProgress, backlog:Done))
+                FILTER NOT EXISTS { ?os_a backlog:outScopes ?m1 }
                 ?m2 backlog:memberOfContainer $this ; backlog:hasState ?s2 .
                 FILTER (?s2 NOT IN (backlog:Done, backlog:Cancelled))
+                FILTER NOT EXISTS { ?os_b backlog:outScopes ?m2 }
             }""" ] ;
 
     # Proposed: members exist but none has started
@@ -82,12 +89,25 @@ backlog:ContainerStateRule a sh:NodeShape ;
         sh:construct """
             CONSTRUCT { $this backlog:derivedState backlog:Proposed }
             WHERE {
-                FILTER EXISTS { ?m backlog:memberOfContainer $this }
+                FILTER NOT EXISTS { ?dz backlog:dissolvesContainer $this }
+                FILTER EXISTS { ?m backlog:memberOfContainer $this . FILTER NOT EXISTS { ?os_a backlog:outScopes ?m } }
                 FILTER NOT EXISTS {
                     ?m backlog:memberOfContainer $this ; backlog:hasState ?s .
                     FILTER (?s IN (backlog:InProgress, backlog:Done))
+                    FILTER NOT EXISTS { ?os_b backlog:outScopes ?m }
                 }
-            }""" ] .
+            }""" ] ;
+
+    # v1.8.0 (an adopting project handover, containers-at-succession; owner's ruling that unfinished packages are
+    # dissolved): R1a-R1c count only members still in scope -- an out-scoped member stops counting toward
+    # its container, as it stops counting toward its lineage -- and skip a dissolved container, which
+    # instead derives Cancelled: the owner's decision is the one way a container ends without finishing.
+    sh:rule [ a sh:SPARQLRule ;
+        rdfs:label "R1d: a dissolved container is Cancelled"@en ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:construct """
+            CONSTRUCT { $this backlog:derivedState backlog:Cancelled }
+            WHERE { ?dz backlog:dissolvesContainer $this . }""" ] .
 
 #################################################################
 #  R2 — milestone state from contributing items

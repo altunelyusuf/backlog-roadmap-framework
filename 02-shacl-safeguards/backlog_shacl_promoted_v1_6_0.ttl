@@ -1,4 +1,4 @@
-# backlog_shacl_promoted v1.5.0 -- GENERATED from backlog_shacl_v1_135_0.ttl by
+# backlog_shacl_promoted v1.6.0 -- GENERATED from backlog_shacl_v1_136_0.ttl by
 # 03-tooling/backlog_make_promoted_shapes_v1_1_0.py, carrying forward the applied severity audit of
 # 2026-09-09 as recorded on each audited shape's own severity line ("# G90 ..."). Shapes with no
 # such line keep their base severity. Identical to the base file in every other byte. Loaded INSTEAD
@@ -16,9 +16,10 @@
 
 <http://example.org/backlog-shapes-promoted> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes-promoted/1.5.0> ;
-    owl:versionInfo "1.5.0" ;
-    owl:priorVersion <http://example.org/backlog-shapes-promoted/1.4.0> ;
+    owl:versionIRI <http://example.org/backlog-shapes-promoted/1.6.0> ;
+    owl:versionInfo "1.6.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes-promoted/1.5.0> ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.135.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.134.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.133.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.132.0> ;
@@ -232,6 +233,7 @@ backlog:ContainerShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             FILTER NOT EXISTS { ?m backlog:memberOfContainer $this }
+            FILTER NOT EXISTS { ?dz backlog:dissolvesContainer $this }  # v1.136.0: a dissolved container has ended
             FILTER (
                 NOT EXISTS { $this backlog:isRegisterRoot true }
                 ||
@@ -5563,7 +5565,7 @@ backlog:RetractedOutputConsumedShape a sh:NodeShape ;
         }""" ] .
 
 backlog:PreLineageItemShape a sh:NodeShape ;
-    sh:targetClass backlog:WorkItem , backlog:WorkItemContainer ;
+    sh:targetClass backlog:WorkItem ;
     sh:severity sh:Violation ;
     rdfs:label "A pre-lineage item is re-admitted by a rebuilt Backlog output or does not count (L1)"@en ;
     backlog:provenByFixture "03-tooling/fixtures/fixture_lineage_bypass_negative" ;
@@ -5903,20 +5905,24 @@ backlog:PostClosureFindingOpenAdvisoryShape a sh:NodeShape ;
 backlog:SuccessionCarriedItemShape a sh:NodeShape ;
     sh:targetClass backlog:WorkItem , backlog:WorkItemContainer ;
     sh:severity sh:Violation ;
-    rdfs:label "Once the successor's backlog is closed, every open item of the predecessor is carried or cancelled (L1)"@en ;
+    rdfs:label "Once the successor's backlog is closed, every open item of the predecessor is carried or cancelled, and every open container dissolved (L1)"@en ;
     backlog:provenByFixture "03-tooling/fixtures/fixture_lineage_succession_negative" ;
     sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "L1: this item or container belongs to a lineage a succession wound down, is still open, and the successor's Backlog stage has closed without taking it in (preLineageItem true and admittedByOutput the successor's active Stage_Backlog output; or, for a container, a remainder split from it in the successor). Remaining work the succession claims to carry has been silently dropped: carry it, or cancel it with a reason (v1.134.0)." ;
+        sh:message "L1: this item or container belongs to a lineage a succession wound down, is still open (asserted or derived state), and the successor's Backlog stage has closed without resolving it. An item is taken in (preLineageItem true, admittedByOutput the successor's active Stage_Backlog output) or cancelled with a reason; a container is dissolved by the owner, never carried -- the successor builds packages and sprints of its own (v1.134.0; containers v1.136.0)." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
-            $this backlog:belongsToLineage ?l ; backlog:hasState ?st . FILTER (?st NOT IN (backlog:Done, backlog:Cancelled))
+            BIND ($this AS ?x)
+            $this backlog:belongsToLineage ?l .
+            FILTER ( EXISTS { ?x backlog:hasState|backlog:derivedState ?st . FILTER (?st NOT IN (backlog:Done, backlog:Cancelled)) }
+                   || ( EXISTS { ?x a/<http://www.w3.org/2000/01/rdf-schema#subClassOf>* backlog:WorkItemContainer }
+                        && EXISTS { ?m0 backlog:memberOfContainer ?x }
+                        && NOT EXISTS { ?m1 backlog:memberOfContainer ?x . FILTER NOT EXISTS { ?o1 backlog:outScopes ?m1 } } ) )
             ?sc backlog:succeedsLineage ?l ; backlog:successorLineage ?s .
             ?bo backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage ?s . FILTER NOT EXISTS { ?bo backlog:outputRetracted true }
             FILTER NOT EXISTS { $this backlog:preLineageItem true ; backlog:admittedByOutput ?ao .
                                 ?ao backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage ?s .
                                 FILTER NOT EXISTS { ?ao backlog:outputRetracted true } }
-            # v1.135.0: a container the predecessor partly finished is carried by a remainder split from it
-            FILTER NOT EXISTS { ?rem backlog:splitFrom $this ; backlog:belongsToLineage ?s }
+            FILTER NOT EXISTS { ?dz backlog:dissolvesContainer $this }
         }""" ] .
 
 backlog:LineageClosureCompleteShape a sh:NodeShape ;
@@ -5925,14 +5931,19 @@ backlog:LineageClosureCompleteShape a sh:NodeShape ;
     rdfs:label "A lineage closes with no unfinished work inside it (L1)"@en ;
     backlog:provenByFixture "03-tooling/fixtures/fixture_lineage_succession_negative" ;
     sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "L1: this lineage is recorded Achieved while a work item or container created during it is still open and not out-scoped. Owner's rule: closing unfinished work is not allowed -- out-scope it first (an out-scoping declaration naming it), then close, and let the successor take it in (v1.135.0)." ;
+        sh:message "L1: this lineage is recorded Achieved while a work item or container created during it is still open -- by its asserted or its derived state, or a container whose every member was out-scoped -- and it is neither out-scoped nor dissolved. Owner's rule: closing unfinished work is not allowed. Out-scope unfinished items; a container keeps what it finished and derives Done, and a container left with nothing finished is dissolved (v1.135.0; derived state and dissolution v1.136.0)." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             $this backlog:hasLineageStatus backlog:LS_Achieved .
             FILTER NOT EXISTS { $this backlog:lineageArchived true }
-            ?x backlog:belongsToLineage $this ; backlog:hasState ?st . FILTER (?st NOT IN (backlog:Done, backlog:Cancelled))
+            ?x backlog:belongsToLineage $this .
             ?x a/<http://www.w3.org/2000/01/rdf-schema#subClassOf>* ?c . FILTER (?c IN (backlog:WorkItem, backlog:WorkItemContainer))
             FILTER NOT EXISTS { ?d backlog:declaresGapFor $this ; backlog:outScopes ?x }
+            FILTER NOT EXISTS { ?dz backlog:dissolvesContainer ?x }
+            FILTER ( EXISTS { ?x backlog:hasState|backlog:derivedState ?st . FILTER (?st NOT IN (backlog:Done, backlog:Cancelled)) }
+                   || ( EXISTS { ?x a/<http://www.w3.org/2000/01/rdf-schema#subClassOf>* backlog:WorkItemContainer }
+                        && EXISTS { ?m0 backlog:memberOfContainer ?x }
+                        && NOT EXISTS { ?m1 backlog:memberOfContainer ?x . FILTER NOT EXISTS { ?o1 backlog:outScopes ?m1 } } ) )
         }""" ] .
 
 backlog:OutScopedWorkUnownedShape a sh:NodeShape ;
@@ -5945,23 +5956,62 @@ backlog:OutScopedWorkUnownedShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             $this backlog:declaresGapFor ?l ; backlog:outScopes ?x .
-            ?x backlog:hasState ?st . FILTER (?st NOT IN (backlog:Done, backlog:Cancelled))
+            ?x backlog:hasState|backlog:derivedState ?st . FILTER (?st NOT IN (backlog:Done, backlog:Cancelled))
+            FILTER NOT EXISTS { ?dz backlog:dissolvesContainer ?x }
             { ?l backlog:hasLineageStatus backlog:LS_Achieved } UNION { ?l backlog:lineageArchived true }
             FILTER NOT EXISTS { ?sc backlog:resolvesGap $this }
         }""" ] .
 
-backlog:SplitRemainderShape a sh:NodeShape ;
+backlog:ContainerCarryRefusedShape a sh:NodeShape ;
     sh:targetClass backlog:WorkItemContainer ;
     sh:severity sh:Violation ;
-    rdfs:label "A remainder container is created in the successor of the lineage it was split from (L1)"@en ;
+    rdfs:label "Containers are dissolved, not carried into a successor (L1)"@en ;
     backlog:provenByFixture "03-tooling/fixtures/fixture_lineage_succession_negative" ;
     sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "L1: this container is split from another, but it does not belong to a successor lineage that a lineage succession opened from the original container's own lineage. A remainder is created in the successor, nowhere else (v1.135.0)." ;
+        sh:message "L1: this container is carried into another lineage -- admitted as a pre-lineage item, or a remainder split from a predecessor's container (splitFrom, superseded). Owner's ruling (2026-09-24): unfinished packages are dissolved so the successor builds new, business-value-oriented, cohesive packages from the out-scoped items; sprints likewise end with their lineage. Dissolve the container instead (v1.136.0)." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
-            $this backlog:splitFrom ?orig .
-            FILTER NOT EXISTS { ?orig backlog:belongsToLineage ?pl . $this backlog:belongsToLineage ?sl .
-                                ?sc backlog:succeedsLineage ?pl ; backlog:successorLineage ?sl }
+            { $this backlog:preLineageItem true } UNION { $this backlog:admittedByOutput ?ao } UNION { $this backlog:splitFrom ?orig }
+        }""" ] .
+
+backlog:ContainerDissolutionShape a sh:NodeShape ;
+    sh:targetClass backlog:ContainerDissolution ;
+    sh:severity sh:Violation ;
+    rdfs:label "A dissolution is the owner's, names its container and reason, and hides no work (L1)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_lineage_succession_negative" ;
+    sh:property [ sh:path backlog:dissolvesContainer ; sh:minCount 1 ; sh:maxCount 1 ; sh:class backlog:WorkItemContainer ;
+                  sh:message "A dissolution names exactly one container." ] ;
+    sh:property [ sh:path backlog:decidedBy ; sh:minCount 1 ;
+                  sh:message "L1: dissolving a container is an owner decision and says so." ] ;
+    sh:property [ sh:path backlog:dissolutionRationale ; sh:minCount 1 ; sh:datatype xsd:string ;
+                  sh:message "A dissolution states why the container ends without finishing." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this dissolution would hide open work: a member of the container is still open and was never out-scoped. Out-scope or cancel it first; dissolution ends the container, not the work in it." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:dissolvesContainer ?k .
+            ?m backlog:memberOfContainer ?k ; backlog:hasState ?st . FILTER (?st NOT IN (backlog:Done, backlog:Cancelled))
+            FILTER NOT EXISTS { ?o backlog:outScopes ?m }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this dissolution names a container that finished work. A container that finished some of its work keeps it and closes: its out-scoped members stop counting and it derives Done from what it finished. Only a container left with nothing finished is dissolved." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:dissolvesContainer ?k .
+            ?m backlog:memberOfContainer ?k ; backlog:hasState backlog:Done .
+        }""" ] .
+
+backlog:CancelledContainerShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItemContainer ;
+    sh:severity sh:Violation ;
+    rdfs:label "A container is cancelled only by the owner's dissolution (L1)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_lineage_succession_negative" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this container asserts Cancelled with no dissolution behind it. A container's state is derived from its members; the one way it ends without finishing is the owner's dissolution, which derives Cancelled (v1.136.0)." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasState backlog:Cancelled .
+            FILTER NOT EXISTS { ?dz backlog:dissolvesContainer $this }
         }""" ] .
 
 backlog:RevivalRequiresReactivationShape a sh:NodeShape ;

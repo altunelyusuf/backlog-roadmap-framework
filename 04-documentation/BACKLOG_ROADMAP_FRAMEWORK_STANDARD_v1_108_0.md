@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.107.0
+# Backlog & Roadmap Semantic Framework — Standard v1.108.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -994,12 +994,18 @@ it was created during -- and stops counting toward that lineage's completion. If
 and no succession takes the out-scoped open work, it is refused as orphaned: open the successor with
 it, or cancel it with a reason.
 
-**Containers.** A container the lineage never started on is out-scoped whole and admitted by the
-successor like an item. A container it partly finished is split: the original keeps its identity and
-its finished members and closes with its lineage; a remainder container, created during the
-successor and marked `splitFrom` the original, receives the unfinished members. A remainder in any
-lineage other than the original's successor is refused. Containers carry `belongsToLineage` like
-every individual (the register root excepted).
+**Containers.** Packages and sprints are not carried into a successor; the successor builds its own,
+grouped for business value and cohesion (owner's ruling). A container's state is derived from its
+members, and an out-scoped member stops counting toward it: a container that finished some of its
+work keeps it and derives Done from what it finished, so it closes with its lineage. A container left
+with nothing finished -- a package all of whose work was out-scoped, a planned sprint the lineage will
+not run, an abandoned sprint -- is ended by a **`ContainerDissolution`**: the owner's decision, naming
+the container (`dissolvesContainer`) and why (`dissolutionRationale`). A dissolved container derives
+Cancelled and needs no members; it may not hide work (every member still open must have been
+out-scoped) and may not discard finished work (a container with a Done member is not dissolved). A
+container is cancelled only this way. The closure and carry-over rules read a container's derived
+state as well as any asserted one. Containers carry `belongsToLineage` like every individual (the
+register root excepted).
 
 **Succession.** A **`LineageSuccession`** is the owner's deliberate record of winding the finished
 lineage down and opening a successor under the *same* Mission (`succeedsLineage`,
@@ -1008,10 +1014,10 @@ reasoning -- and `resolvesGap`, naming the out-scoping declaration it takes up. 
 built by the staged ceremony (2.5c-xxii): the first commit carries the predecessor's closure, the
 succession record and the successor's Mission stage; each later stage closes in its own commit. From
 the successor's Objective stage, one of its objectives must structurally resolve the declaration
-(`resolvesPartialScope`). The out-scoped items and whole containers are taken in by the successor's
+(`resolvesPartialScope`). The out-scoped items are taken in by the successor's
 active Backlog-stage output (`preLineageItem`, `admittedByOutput`), the same admission a restart or a
-divided lineage's part uses; once that output exists, any open predecessor item or container neither
-taken in nor cancelled is refused as work silently dropped. The predecessor cannot be archived while
+divided lineage's part uses; once that output exists, any open predecessor item neither taken in nor
+cancelled, and any open predecessor container not dissolved, is refused as work silently dropped. The predecessor cannot be archived while
 out-scoped work is still open, and the archival activity waits for it.
 
 A **`LineageReactivation`** answers the opposite, rarer case: closed work stays closed until a real
