@@ -10755,3 +10755,20 @@ decides containers differently; no adopter had used it.
 `v1_7_0` as a copy instead of a rename, so the superseded version was never retired. Unused -- every
 tool that loads the rules takes the highest version -- but a superseded version does not stay in the
 package. Found by listing the published tree after v1.320.0.
+
+## v1.321.0 — 2026-09-24 (MINOR: grooming claim not owed by items cancelled before grooming; stalled-objective advisory matches its message; dissolution wording)
+
+an adopting project, cancelling 8 epics by owner decision, found two rules asking for claims nothing honest could
+supply, and one definition that disagreed with its constraint. Each ruled from the rule's own text.
+
+- **`GroomingShape`**: an item cancelled without any refinement event owes no concern claim -- the rule's
+  scope is items reaching Ready, and its sibling constraint already exempted Cancelled. Refined, then
+  cancelled: still owed (new case in `fixture_negative_v1_14_0 -> v1_15_0`).
+- **`ObjectiveStalledShape`** (advisory): its message says every mover is Done, but its query counted
+  Cancelled movers as finished. Now at least one mover must be Done, and an objective with a recorded
+  achievement status is exempt, as `ObjectiveHasCorrectiveActionShape` already treats it.
+- **`ContainerDissolution`**: the definition claimed an exemption from asserted-versus-derived
+  disagreement the constraint rightly never granted; the definition is corrected.
+
+Shapes `v1_136_0 -> v1_137_0`; vocabulary `v1_110_0 -> v1_111_0`; overlay `v1_6_0 -> v1_7_0`. Both rules
+proven both ways on a probe before release.

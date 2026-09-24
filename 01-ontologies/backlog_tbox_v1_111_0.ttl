@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.110.0> ;
-    owl:versionInfo "1.110.0" ;
+    owl:versionIRI <http://example.org/backlog/1.111.0> ;
+    owl:versionInfo "1.111.0" ;
+    owl:priorVersion <http://example.org/backlog/1.110.0> ;
     owl:priorVersion <http://example.org/backlog/1.109.0> ;
     owl:priorVersion <http://example.org/backlog/1.108.0> ;
     owl:priorVersion <http://example.org/backlog/1.107.0> ;
@@ -6518,7 +6519,7 @@ backlog:ContainerDissolution a owl:Class ;
     rdfs:subClassOf core:Artifact ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "Container Dissolution"@en ;
-    skos:definition "The owner's decision that a container ends without finishing: a package whose unfinished work leaves its lineage, an abandoned sprint, a planned sprint the lineage will not run. It names the container (dissolvesContainer) and the reason (dissolutionRationale). A dissolved container derives Cancelled, is exempt from the at-least-one-member rule and from asserted-versus-derived disagreement, and counts as resolved at a succession. It may not hide work: every member still open must have been out-scoped. A container that finished some of its work is not dissolved -- its out-scoped members stop counting and it derives Done from what it finished. A container is cancelled only this way."@en .
+    skos:definition "The owner's decision that a container ends without finishing: a package whose unfinished work leaves its lineage, an abandoned sprint, a planned sprint the lineage will not run. It names the container (dissolvesContainer) and the reason (dissolutionRationale). A dissolved container derives Cancelled, is exempt from the at-least-one-member rule, and counts as resolved at a succession. An asserted state must agree: a dissolved container asserts Cancelled or nothing (v1.111.0: the definition had claimed an exemption from asserted-versus-derived disagreement that the constraint rightly never granted; reported by an adopting project). It may not hide work: every member still open must have been out-scoped. A container that finished some of its work is not dissolved -- its out-scoped members stop counting and it derives Done from what it finished. A container is cancelled only this way."@en .
 
 backlog:dissolvesContainer a owl:ObjectProperty , owl:FunctionalProperty ;
     rdfs:domain backlog:ContainerDissolution ; rdfs:range backlog:WorkItemContainer ;

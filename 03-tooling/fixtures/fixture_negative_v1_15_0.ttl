@@ -3694,3 +3694,11 @@ tscluster:TS_Varied a backlog:ExecutionTask ; backlog:hasState backlog:Done ;
 # usages to hasFindingDisposition (HANDOVER_agentic-sdlc...hasdisposition-collision), and fixed
 # two stale provenByFixture references left over from the earlier consolidation pass
 # (fixture_ceremony_link_negative, fixture_finding_disposition_negative -> fixture_negative).
+
+# v1.15.0 (shapes v1.137.0): the grooming claim stays owed by a story that was refined and then cancelled --
+# the exemption covers only an item cancelled without ever being refined.
+<http://example.org/fixture-negative-grooming#St_RefinedThenCancelled> a <http://example.org/backlog#Story> ;
+    <http://example.org/backlog#hasState> <http://example.org/backlog#Cancelled> .
+<http://example.org/fixture-negative-grooming#Ref_RefinedThenCancelled> a <http://example.org/backlog#RefinementEvent> ;
+    <http://example.org/backlog#refines> <http://example.org/fixture-negative-grooming#St_RefinedThenCancelled> .
+

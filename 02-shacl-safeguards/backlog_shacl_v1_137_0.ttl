@@ -9,8 +9,9 @@
 
 <http://example.org/backlog-shapes> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.136.0> ;
-    owl:versionInfo "1.136.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.137.0> ;
+    owl:versionInfo "1.137.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.136.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.135.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.134.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.133.0> ;
@@ -3403,6 +3404,10 @@ backlog:GroomingShape a sh:NodeShape ;
             FILTER (?st != backlog:Proposed)
             FILTER NOT EXISTS { $this backlog:hasApplicableConcern ?c }
             FILTER NOT EXISTS { $this backlog:hasNoApplicableConcern ?r }
+            # v1.137.0 (an adopting project handover, grooming-claim-on-items-cancelled-before-grooming): an item
+            # cancelled without ever being refined never reached Ready, which is this shape's own scope;
+            # either claim would record an analysis that never happened. Refined, then cancelled: still owed.
+            FILTER NOT EXISTS { $this backlog:hasState backlog:Cancelled . FILTER NOT EXISTS { ?ref backlog:refines $this } }
         }""" ] ;
     sh:sparql [ a sh:SPARQLConstraint ;
         sh:message "L3: this story declares a design concern that no refinement event addressed. One refinement of any kind used to satisfy Ready, so a story with five applicable concerns and a single meeting was indistinguishable from one fully analysed. A concern named and not addressed is the analysis the story was known to need and did not get." ;
@@ -3615,6 +3620,12 @@ backlog:ObjectiveStalledShape a sh:NodeShape ;
             $this backlog:metricMovableBy ?i ; backlog:hasBaselineValue ?base .
             FILTER NOT EXISTS { $this backlog:metricMovableBy ?j . ?j backlog:hasState ?st .
                                 FILTER (?st NOT IN (backlog:Done, backlog:Cancelled)) }
+            # v1.137.0 (same handover): the message claims the work was done, so at least one mover must be
+            # Done -- movers that were only cancelled did no work, a different fact; and an objective whose
+            # outcome is already recorded (hasAchievementStatus, e.g. withdrawn) is settled, as the
+            # corrective-action rule already treats it.
+            FILTER EXISTS { $this backlog:metricMovableBy ?done . ?done backlog:hasState backlog:Done }
+            FILTER NOT EXISTS { $this backlog:hasAchievementStatus ?ach }
             ?obs backlog:observationFor $this ; backlog:hasObservedValue ?v ; backlog:observedAt ?at .
             FILTER NOT EXISTS { ?obs2 backlog:observationFor $this ; backlog:observedAt ?at2 . FILTER (?at2 > ?at) }
             FILTER (?v = ?base)
