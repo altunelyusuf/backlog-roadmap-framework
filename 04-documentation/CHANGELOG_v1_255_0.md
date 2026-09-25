@@ -10796,3 +10796,14 @@ Shapes `v1_137_0 -> v1_138_0`, overlay `v1_7_0 -> v1_8_0`, vocabulary `v1_111_0 
 `v1_108_0 -> v1_109_0`, negative succession fixture `v1_4_0 -> v1_5_0`. While building, the re-grading
 block first landed in the per-lineage validator instead of the main path (it matched an identical code
 pattern there); caught by the probe re-grading nothing, and moved.
+
+## v1.323.0 — 2026-09-25 (MINOR: the staged-element advisory scoped to the element's own lineage)
+
+the adopting project's closure commit recorded its successor's first stage output, and `StagedElementShape` then
+fired on all 19 goals and objectives of its closed, pre-pipeline predecessor: the rule switched on
+register-wide at the first stage output of any lineage. Its own message says a register may legitimately
+not use staged construction; in a register with several lineages that choice belongs to each lineage. The
+rule now fires when the element's own lineage carries a stage output; an element naming no lineage keeps
+the register-wide trigger. The same defect class as L-122 (a register-wide trigger in a register with
+concurrent lineages). Proven on a probe in all four cases. Shapes `v1_138_0 -> v1_139_0`, overlay
+`v1_8_0 -> v1_9_0`. the adopting project's closure note on the previous round logged.
