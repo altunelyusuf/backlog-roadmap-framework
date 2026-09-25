@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.111.0> ;
-    owl:versionInfo "1.111.0" ;
+    owl:versionIRI <http://example.org/backlog/1.112.0> ;
+    owl:versionInfo "1.112.0" ;
+    owl:priorVersion <http://example.org/backlog/1.111.0> ;
     owl:priorVersion <http://example.org/backlog/1.110.0> ;
     owl:priorVersion <http://example.org/backlog/1.109.0> ;
     owl:priorVersion <http://example.org/backlog/1.108.0> ;
@@ -7165,9 +7166,9 @@ backlog:RuleSet a owl:Class ; rdfs:subClassOf backlog:BacklogConcept ;
     rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "Rule Set"@en ;
     skos:definition "A named, versioned change to what the suite REFUSES -- a severity promotion, a new family of obligations. Declared by a register when its owner decides the work in progress has completed and the stricter reading may begin. Distinct from ObligationSet, which a lineage adopts at its own opening: a RuleSet is adopted by the register, because a severity binds every lineage the register carries."@en .
 backlog:adoptsRuleSet a owl:ObjectProperty ;
-    rdfs:domain backlog:Backlog ; rdfs:range backlog:RuleSet ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:Backlog backlog:Lineage ) ] ; rdfs:range backlog:RuleSet ;
     rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "adopts rule set"@en ;
-    skos:definition "The rule sets this register is validated under. The validator loads the matching shapes overlay only when this is declared; without it the base severities apply. Owner-decided, dated, and never asserted by a session on its own initiative."@en .
+    skos:definition "The rule sets work is validated under. Declared on the register, it binds everything the register carries. Declared on a lineage (v1.112.0), it binds only that lineage's own work and the items its Backlog-stage output admitted -- recorded at the lineage's opening, in the same commit as its Mission stage (adoptionRecordedAtOpen), exactly as an obligation set is -- so a successor can adopt a rule set without its predecessor's closed history being re-judged (G89). Without it the base severities apply. Owner-decided, dated, and never asserted by a session on its own initiative."@en .
 backlog:ruleSetAdoptedAt a owl:DatatypeProperty ;
     rdfs:domain backlog:Backlog ; rdfs:range xsd:dateTime ;
     rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "rule set adopted at"@en .

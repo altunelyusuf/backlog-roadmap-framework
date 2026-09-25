@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.108.0
+# Backlog & Roadmap Semantic Framework — Standard v1.109.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -1019,6 +1019,15 @@ active Backlog-stage output (`preLineageItem`, `admittedByOutput`), the same adm
 divided lineage's part uses; once that output exists, any open predecessor item neither taken in nor
 cancelled, and any open predecessor container not dissolved, is refused as work silently dropped. The predecessor cannot be archived while
 out-scoped work is still open, and the archival activity waits for it.
+
+**A successor's rule set and Mission stage.** A successor that should work under a rule set the
+register has not adopted adopts it itself: `adoptsRuleSet` on the lineage, recorded at its opening in
+the same commit as its Mission stage (`adoptionRecordedAtOpen`), exactly as an obligation set is; a
+lineage past its opening cannot adopt one. A lineage-level adoption binds only that lineage's own work
+and the items its Backlog-stage output admitted -- the predecessor's closed history keeps the severities
+it was built under (G89). The successor's Mission-stage output witnesses the lineage itself and the
+Mission it declares it pursues (`lineageForMission`), even though that Mission was created during the
+predecessor.
 
 A **`LineageReactivation`** answers the opposite, rarer case: closed work stays closed until a real
 need appears to reopen it, and reactivation is never casual (2.5c-xxi-o states when it applies).

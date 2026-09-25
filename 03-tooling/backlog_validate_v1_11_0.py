@@ -125,13 +125,47 @@ def promoted_overlay(data_files):
             txt = open(f, encoding="utf-8", errors="ignore").read()
         except OSError:
             continue
-        if "adoptsRuleSet" in txt and "RS_SeverityAudit_20260909" in txt:
+        if "adoptsRuleSet" in txt and "RS_SeverityAudit_20260909" in txt and not lineage_rule_set_adopters(data_files):
             # v1.10.0: SemVer order, not lexical -- lexically v1_10_0 sorts before v1_9_0.
             _sv = lambda p: [int(x) for x in re.findall(r"_v(\d+)_(\d+)_(\d+)\.", p)[0]]
             cands = sorted(glob.glob(os.path.join(PKG, "02-shacl-safeguards", "backlog_shacl_promoted_v*.ttl")), key=_sv)
             if cands:
                 return cands[-1]
     return None
+
+
+def _latest_overlay():
+    _sv = lambda p: [int(x) for x in re.findall(r"_v(\d+)_(\d+)_(\d+)\.", p)[0]]
+    cands = sorted(glob.glob(os.path.join(PKG, "02-shacl-safeguards", "backlog_shacl_promoted_v*.ttl")), key=_sv)
+    return cands[-1] if cands else None
+
+
+def lineage_rule_set_adopters(data_files):
+    """v1.11.0 (an adopting project handover, successor-opening-ruleset-scope-and-mission-digest): the lineages
+    that adopt RS_SeverityAudit_20260909 for themselves. A register-level adoption binds everything the
+    register carries; a lineage-level one binds only that lineage's own work and the items it admitted,
+    so a successor can adopt at its opening without its predecessor's closed history being re-judged
+    (G89). Returns the set of adopting Lineage URIs (empty when adoption, if any, is register-level)."""
+    B_ = rdflib.Namespace("http://example.org/backlog#")
+    g = load(data_files)
+    out = set()
+    for s in g.subjects(B_.adoptsRuleSet, B_.RS_SeverityAudit_20260909):
+        if (s, rdflib.RDF.type, B_.Lineage) in g:
+            out.add(s)
+    return out
+
+
+def _lineage_scope(g, lineages):
+    """The focus nodes a lineage-level adoption binds: the lineage, everything created during it, and
+    the items its own Backlog-stage output admitted (a successor's carried work)."""
+    B_ = rdflib.Namespace("http://example.org/backlog#")
+    nodes = set()
+    for L in lineages:
+        nodes.add(L)
+        nodes.update(g.subjects(B_.belongsToLineage, L))
+        for o in g.subjects(B_.belongsToLineage, L):
+            nodes.update(g.subjects(B_.admittedByOutput, o))
+    return nodes
 
 
 def _memo_key(data_files):
@@ -388,6 +422,25 @@ def _validate(data_files):
         print(proc.stdout)
         print(proc.stderr, file=sys.stderr)
         return 2, {}
+
+    # v1.11.0: a lineage-level rule-set adoption. The overlay differs from the base shapes only in the
+    # severity of named shapes (the release gate refuses any other difference), so the base results are
+    # re-graded: a result whose focus node lies in an adopting lineage takes the overlay's severity.
+    _adopters = lineage_rule_set_adopters(data_files)
+    if _adopters and _latest_overlay():
+        _ovg = Graph(); _ovg.parse(_latest_overlay(), format="turtle")
+        _bsg = Graph(); _bsg.parse(SHAPES, format="turtle")
+        _sev = lambda gg: {s: o for s, o in gg.subject_objects(SH.severity) if isinstance(s, URIRef)}
+        _base_sev, _over_sev = _sev(_bsg), _sev(_ovg)
+        _diff = {s: o for s, o in _over_sev.items() if _base_sev.get(s) != o}
+        _scope = _lineage_scope(load(data_files), _adopters)
+        _regraded = 0
+        for result in list(report.subjects(rdflib.RDF.type, SH.ValidationResult)):
+            src = report.value(result, SH.sourceShape)
+            if report.value(result, SH.focusNode) in _scope and src in _diff:
+                report.set((result, SH.resultSeverity, _diff[src])); _regraded += 1
+        print("rule set    : RS_SeverityAudit_20260909 adopted by lineage(s) %s -- %d result(s) on their own work re-graded to %s; everything else at base severity"
+              % (", ".join(sorted(str(x).rsplit("#", 1)[-1] for x in _adopters)), _regraded, os.path.basename(_latest_overlay())))
 
     counts = {"Violation": 0, "Warning": 0, "Info": 0}
     findings = []

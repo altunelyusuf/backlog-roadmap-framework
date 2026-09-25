@@ -10772,3 +10772,27 @@ supply, and one definition that disagreed with its constraint. Each ruled from t
 
 Shapes `v1_136_0 -> v1_137_0`; vocabulary `v1_110_0 -> v1_111_0`; overlay `v1_6_0 -> v1_7_0`. Both rules
 proven both ways on a probe before release.
+
+## v1.322.0 — 2026-09-24 (MINOR: a successor adopts its rule set for itself; the successor's Mission-stage digest witnesses a real state)
+
+an adopting project, preparing its closure commit, found two things this framework's files could not do; both
+confirmed here first.
+
+- **Rule set scope.** `adoptsRuleSet` was register-wide by domain, so a successor adopting the severity
+  audit at its opening would have re-judged roughly 830 findings of its predecessor's closed work --
+  what G89 forbids. Now (vocabulary v1.112.0) a lineage may adopt a rule set for itself, at opening only
+  (shapes v1.138.0, the obligation-set rule mirrored), binding its own work and the items it admitted.
+  The validator (v1.10.0 -> v1.11.0) re-grades the base results for those focus nodes to the overlay's
+  severities -- sound because the release gate guarantees the overlay differs only in severity.
+  Measured on the succession fixture: register-level adoption 33 Violations, lineage-level 2, both on
+  the successor's own work. Register-level adoption is unchanged.
+- **Mission-stage digest.** Scoped to a lineage, the Mission stage digested only Missions created during
+  that lineage, so a successor under its predecessor's Mission digested the empty string; the v1.3.0
+  docstring's promise to include the lineage individual had never been kept (this framework's error,
+  v1.312.0). Pipeline verifier v1.4.0 -> v1.5.0: the scoped Mission stage witnesses the lineage and its
+  `lineageForMission`.
+
+Shapes `v1_137_0 -> v1_138_0`, overlay `v1_7_0 -> v1_8_0`, vocabulary `v1_111_0 -> v1_112_0`, standard
+`v1_108_0 -> v1_109_0`, negative succession fixture `v1_4_0 -> v1_5_0`. While building, the re-grading
+block first landed in the per-lineage validator instead of the main path (it matched an identical code
+pattern there); caught by the probe re-grading nothing, and moved.

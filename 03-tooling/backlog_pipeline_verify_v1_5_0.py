@@ -72,6 +72,16 @@ def state_digest(g, stage, lineage=None):
         for s in g.subjects(RDF.type, URIRef(B + t)):
             if lineage is None or s == lineage or (s, URIRef(B + "belongsToLineage"), lineage) in g:
                 subs.add(str(s))
+    # v1.5.0 (an adopting project handover, successor-opening-ruleset-scope-and-mission-digest): the v1.3.0
+    # docstring promised the lineage individual for the Mission stage, but the loop above only visits
+    # subjects typed as a Mission-stage type, so it never did. And a successor opened under its
+    # predecessor's Mission owns no Mission of its own, so its scoped Mission digest was the digest of
+    # nothing and reproduced whatever changed. Scoped, the Mission stage witnesses what that stage
+    # establishes: the lineage itself and the Mission it declares it pursues (lineageForMission).
+    if lineage is not None and stage == "Stage_Mission":
+        subs.add(str(lineage))
+        for m in g.objects(lineage, URIRef(B + "lineageForMission")):
+            subs.add(str(m))
     return hashlib.sha256("\n".join(sorted(subs)).encode("utf-8")).hexdigest()
 
 
@@ -128,7 +138,7 @@ def main():
     STAGE_TYPES = _load_stage_types(_tb, _v2)
     print("digest table: %s" % ("v2 (RS_DigestTable_v2 declared)" if _v2 else "v1"))
     if len(argv) < 1:
-        print("usage: backlog_pipeline_verify_v1_4_0.py <register.ttl> [tbox.ttl] [--lineage NAME]")
+        print("usage: backlog_pipeline_verify_v1_5_0.py <register.ttl> [tbox.ttl] [--lineage NAME]")
         return 1
     g = Graph()
     for f in argv:

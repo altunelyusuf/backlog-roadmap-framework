@@ -1,4 +1,4 @@
-# backlog_shacl_promoted v1.7.0 -- GENERATED from backlog_shacl_v1_137_0.ttl by
+# backlog_shacl_promoted v1.8.0 -- GENERATED from backlog_shacl_v1_138_0.ttl by
 # 03-tooling/backlog_make_promoted_shapes_v1_1_0.py, carrying forward the applied severity audit of
 # 2026-09-09 as recorded on each audited shape's own severity line ("# G90 ..."). Shapes with no
 # such line keep their base severity. Identical to the base file in every other byte. Loaded INSTEAD
@@ -16,9 +16,10 @@
 
 <http://example.org/backlog-shapes-promoted> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes-promoted/1.7.0> ;
-    owl:versionInfo "1.7.0" ;
-    owl:priorVersion <http://example.org/backlog-shapes-promoted/1.6.0> ;
+    owl:versionIRI <http://example.org/backlog-shapes-promoted/1.8.0> ;
+    owl:versionInfo "1.8.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes-promoted/1.7.0> ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.137.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.136.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.135.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.134.0> ;
@@ -6424,6 +6425,14 @@ backlog:ObligationAdoptionShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             $this backlog:adoptsObligationSet ?set ; backlog:hasLineageStatus ?ls .
+            ?ls backlog:statusRank ?rk . FILTER (?rk > 1)
+            FILTER NOT EXISTS { $this backlog:adoptionRecordedAtOpen true }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this lineage adopts a rule set although it is already past LS_Opened. The same rule as for obligation sets (owner, 2026-09-09; G89): a lineage adopts a rule set at its Mission stage, in the same commit, recorded by adoptionRecordedAtOpen; a running lineage cannot be re-graded mid-flight, and a finished one is a record (v1.138.0)." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:adoptsRuleSet ?rs ; backlog:hasLineageStatus ?ls .
             ?ls backlog:statusRank ?rk . FILTER (?rk > 1)
             FILTER NOT EXISTS { $this backlog:adoptionRecordedAtOpen true }
         }""" ] .
