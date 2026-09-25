@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.112.0> ;
-    owl:versionInfo "1.112.0" ;
+    owl:versionIRI <http://example.org/backlog/1.113.0> ;
+    owl:versionInfo "1.113.0" ;
+    owl:priorVersion <http://example.org/backlog/1.112.0> ;
     owl:priorVersion <http://example.org/backlog/1.111.0> ;
     owl:priorVersion <http://example.org/backlog/1.110.0> ;
     owl:priorVersion <http://example.org/backlog/1.109.0> ;
@@ -7516,3 +7517,25 @@ backlog:hasArchivalConfirmationStatus a owl:ObjectProperty , owl:FunctionalPrope
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "has archival confirmation status"@en ;
     skos:definition "Set to AC_PendingConfirmation by the archival tool itself, at the moment a lineage is archived. Promoted to AC_Confirmed only at the next real archival, once this lineage's own real content has been checked against shapes current at that moment and found to hold -- never asserted without that real check having actually run."@en .
+
+#################################################################
+#  v1.113.0 -- digest table v3: the artifacts a stage OWES are part of what it closes on (an adopting project handover,
+#  successor-scope-stage-premature-rules-shared-entities-owed-artifacts). A stage output could close owing its
+#  domain entities or blueprint and have the debt paid later with no trace, because the digest covered only the
+#  intent chain. v3 = v2 plus, cumulatively from the stage that owes them: DomainEntity and Blueprint (Scope),
+#  Specification and TestScenario (Goal), ModelArtifact (Objective), AcceptanceCriterion (Backlog) -- the classes
+#  the stage obligations name. Adopted like v2: a register declares adoptsRuleSet RS_DigestTable_v3, because
+#  changing the table changes every recorded digest (G91).
+#################################################################
+backlog:RS_DigestTable_v3 a owl:NamedIndividual , backlog:RuleSet ;
+    rdfs:label "Stage digest table v3 (owed artifacts witnessed)"@en ;
+    skos:definition "Adds to the v2 digest table, cumulatively from the stage that owes them, the classes the stage obligations require: DomainEntity and Blueprint at Scope, Specification and TestScenario at Goal, ModelArtifact at Objective, AcceptanceCriterion at Backlog. A stage output then witnesses what it owed as well as what it stated, so a debt paid after closure changes a recorded digest and is caught."@en .
+backlog:stageRequiresTypeV3 a owl:ObjectProperty ;
+    rdfs:domain backlog:LineageStage ; rdfs:range rdfs:Class ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "stage requires type (table v3)"@en ;
+    skos:definition "The v3 digest table. backlog_pipeline_verify reads it INSTEAD of the v1 or v2 table for a register that declares adoptsRuleSet RS_DigestTable_v3."@en .
+backlog:Stage_Mission backlog:stageRequiresTypeV3 backlog:Mission .
+backlog:Stage_Scope backlog:stageRequiresTypeV3 backlog:Mission , backlog:ScopeStatement , backlog:ScopeExclusion , backlog:ScopeDeliverable , backlog:DomainEntity , backlog:Blueprint .
+backlog:Stage_Goal backlog:stageRequiresTypeV3 backlog:Mission , backlog:ScopeStatement , backlog:ScopeExclusion , backlog:ScopeDeliverable , backlog:Goal , backlog:DomainEntity , backlog:Blueprint , backlog:Specification , backlog:TestScenario .
+backlog:Stage_Objective backlog:stageRequiresTypeV3 backlog:Mission , backlog:ScopeStatement , backlog:ScopeExclusion , backlog:ScopeDeliverable , backlog:Goal , backlog:Objective , backlog:DomainEntity , backlog:Blueprint , backlog:Specification , backlog:TestScenario , backlog:ModelArtifact .
+backlog:Stage_Backlog backlog:stageRequiresTypeV3 backlog:Mission , backlog:ScopeStatement , backlog:ScopeExclusion , backlog:ScopeDeliverable , backlog:Goal , backlog:Objective , backlog:Initiative , backlog:Epic , backlog:Story , backlog:Feature , backlog:Defect , backlog:Enabler , backlog:Spike , backlog:Task , backlog:ExecutionTask , backlog:DomainEntity , backlog:Blueprint , backlog:Specification , backlog:TestScenario , backlog:ModelArtifact , backlog:AcceptanceCriterion .

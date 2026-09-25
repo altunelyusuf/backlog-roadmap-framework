@@ -146,6 +146,11 @@ class GitWitness:
         self.cache = {}
         self._ordinal = None   # hash -> 1-based ancestry count, built once, lazily
 
+    def commit_date(self, h):
+        """v1.9.0: the commit's own date (ISO), for deciding whether work predates a rule."""
+        r = subprocess.run(["git", "show", "-s", "--format=%cI", h], cwd=self.root, capture_output=True, text=True)
+        return r.stdout.strip()[:10] or None
+
     def _ordinal_index(self):
         if self._ordinal is None:
             r = subprocess.run(["git", "log", "--reverse", "--format=%h"],
@@ -225,6 +230,9 @@ class MapWitness:
     def __init__(self, path):
         self.m = json.load(open(path))
 
+    def commit_date(self, h):
+        return None
+
     def first(self, local_name, prefix):
         v = self.m.get(local_name)
         return (v[0], int(v[1])) if v else None
@@ -243,6 +251,10 @@ class MapWitness:
 def prefix_for(g, L):
     ns_of = str(L).rsplit("#", 1)[0] + "#" if "#" in str(L) else None
     return next((p + ":" for p, ns in g.namespaces() if ns_of and str(ns) == ns_of), "fw:")
+
+
+# Discipline v5.0.0, 2026-08-25: ceremony step 2 became a five-stage pipeline, one commit per stage.
+PIPELINE_MANDATORY_FROM = "2026-08-25"
 
 
 def classify(g, L, witness, prefix):
@@ -483,6 +495,17 @@ def classify(g, L, witness, prefix):
         verdict = "THRASH"
     elif problems or bypassed:
         verdict = "BYPASS"
+        # v1.9.0 (an adopting project handover, order-check-judges-a-closed-pre-pipeline-lineage-as-bypass): a lineage with
+        # NO active stage output and no restart, whose earliest witnessed work predates the day the staged pipeline
+        # became mandatory, never bypassed a pipeline -- none was required when it was built. Discipline v5.0.0
+        # (2026-08-25): "every existing lineage was built under the old step and none carries stage outputs; they
+        # are not rewritten, and the advisories report what their history actually shows." Reported, never
+        # blocking. A lineage begun after that date with no chain remains a BYPASS.
+        if not out_first and not restarts and item_first:
+            _earliest = min(item_first.values(), key=lambda f: f[1])
+            _d = witness.commit_date(_earliest[0])
+            if _d and _d < PIPELINE_MANDATORY_FROM:
+                verdict = "PRE_PIPELINE"
     elif dc and parts and (problems_dc or any(v != "ORDERED" for v in part_verdicts.values())):
         verdict = "DIVIDING"
     elif (len(commits) == 1 and out_first and item_first) or same_stage_commit:
@@ -657,6 +680,9 @@ def main():
         if verdict == "NO_OUTPUTS":
             if d["unwitnessed_outputs"]:
                 unwitnessed_total += d["unwitnessed_outputs"]
+            continue
+        if verdict == "PRE_PIPELINE":
+            print(f"  {local(L):24} PRE_PIPELINE outputs=0 items={len(d['items'])} -- work begins before {PIPELINE_MANDATORY_FROM}, when the staged pipeline became mandatory; built under the rule of its day, reported, not judged (G89; discipline v5.0.0)")
             continue
         n += 1; verdicts[local(L)] = verdict
         for msg in d["broken"]:

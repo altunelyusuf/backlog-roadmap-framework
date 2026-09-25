@@ -10807,3 +10807,25 @@ rule now fires when the element's own lineage carries a stage output; an element
 the register-wide trigger. The same defect class as L-122 (a register-wide trigger in a register with
 concurrent lineages). Proven on a probe in all four cases. Shapes `v1_138_0 -> v1_139_0`, overlay
 `v1_8_0 -> v1_9_0`. the adopting project's closure note on the previous round logged.
+
+## v1.324.0 — 2026-09-25 (MINOR: pre-pipeline lineages; later-stage rules gated by status; digest table v3; a dead v2-table flag fixed)
+
+Two an adopting project handovers, both confirmed here first.
+
+- **Pre-pipeline lineages** (`backlog_lineage_order_check_v1_8_0 -> v1_9_0`). The order check read the adopting project's
+  closed predecessor -- work from 2026-07-29, no chain -- as BYPASS. The staged pipeline became mandatory on
+  2026-08-25 (discipline v5.0.0), which ruled that lineages built before it are not rewritten and are only
+  reported. A lineage with no active stage output, no restart, and work predating that date now reads
+  PRE_PIPELINE, never blocking; chainless work begun after it stays BYPASS. Proven on a dated scratch git history.
+- **Only passed steps fire** (shapes `v1_139_0 -> v1_140_0`). Deliverable coverage, unguarded exclusion, scope
+  gap and scope measurability fired on a successor at its Scope stage; each now binds once its lineage reaches
+  the stage it needs (standard 2.5c-xxi-e), using the package's existing gating pattern.
+- **Owed artifacts witnessed** (vocabulary `v1_112_0 -> v1_113_0`, pipeline verifier `v1_5_0 -> v1_6_0`).
+  `RS_DigestTable_v3` adds to each stage's digest the classes its obligations require, so a debt paid after
+  closure no longer reproduces; adopted by declaration, like v2.
+- **Found while building, fixed:** the pipeline verifier accepted the v2-table flag and ignored it -- a register
+  declaring v2 was verified against v1. No register or fixture here declared v2.
+- **Ruled, no code:** shared domain individuals belong to the lineage that created them; the successor refers to
+  them; its own obligations are met by what its work introduces.
+
+Overlay `v1_9_0 -> v1_10_0`; standard `v1_109_0 -> v1_110_0`. the adopting project's closure note on the previous round logged.

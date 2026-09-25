@@ -96,7 +96,7 @@ def _table_v2_declared(data_graph_text):
     return "adoptsRuleSet" in data_graph_text and "RS_DigestTable_v2" in data_graph_text
 
 
-def _load_stage_types(tbox_path, v2=False):
+def _load_stage_types(tbox_path, v2=False, table=None):
     """What each lineage stage must contain, from the ontology.
 
     EXPORTED at v1.117.0. This was a python dictionary that defined the
@@ -112,7 +112,13 @@ def _load_stage_types(tbox_path, v2=False):
     g = Graph()
     g.parse(tbox_path, format="turtle")
     out = {}
-    for st, _, cls in g.triples((None, B.stageRequiresType, None)):
+    # v1.6.0: the table is actually selected. Until now the v2 flag was accepted and ignored, so a register
+    # declaring RS_DigestTable_v2 was verified against the v1 table -- found while adding table v3 (an adopting project
+    # handover, successor-scope-stage-...-owed-artifacts); no register or fixture here declared v2, so nothing
+    # had ever exercised it.
+    table = table or ("v2" if v2 else "v1")
+    prop = {"v1": B.stageRequiresType, "v2": B.stageRequiresTypeV2, "v3": B.stageRequiresTypeV3}[table]
+    for st, _, cls in g.triples((None, prop, None)):
         out.setdefault(str(st).split("#")[-1], []).append(str(cls).split("#")[-1])
     if not out:
         raise SystemExit(
@@ -134,11 +140,14 @@ def main():
         idx = argv.index("--lineage")
         lineage_name = argv[idx + 1]
         argv = argv[:idx] + argv[idx + 2:]
-    _v2 = any(_table_v2_declared(open(f, encoding="utf-8", errors="ignore").read()) for f in argv if os.path.exists(f))
-    STAGE_TYPES = _load_stage_types(_tb, _v2)
-    print("digest table: %s" % ("v2 (RS_DigestTable_v2 declared)" if _v2 else "v1"))
+    _txt = "".join(open(f, encoding="utf-8", errors="ignore").read() for f in argv if os.path.exists(f))
+    _v3 = "adoptsRuleSet" in _txt and "RS_DigestTable_v3" in _txt
+    _v2 = (not _v3) and _table_v2_declared(_txt)
+    _table = "v3" if _v3 else ("v2" if _v2 else "v1")
+    STAGE_TYPES = _load_stage_types(_tb, table=_table)
+    print("digest table: %s" % {"v3": "v3 (RS_DigestTable_v3 declared)", "v2": "v2 (RS_DigestTable_v2 declared)", "v1": "v1"}[_table])
     if len(argv) < 1:
-        print("usage: backlog_pipeline_verify_v1_5_0.py <register.ttl> [tbox.ttl] [--lineage NAME]")
+        print("usage: backlog_pipeline_verify_v1_6_0.py <register.ttl> [tbox.ttl] [--lineage NAME]")
         return 1
     g = Graph()
     for f in argv:

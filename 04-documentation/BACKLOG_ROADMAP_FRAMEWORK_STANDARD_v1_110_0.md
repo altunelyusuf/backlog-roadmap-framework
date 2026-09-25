@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.109.0
+# Backlog & Roadmap Semantic Framework — Standard v1.110.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -659,6 +659,14 @@ exist.
 `backlog_pipeline_verify` recomputes every digest and checks the chain is a line; the release gate runs
 it over both pipeline fixtures and requires each to verify as its name declares.
 
+**What a stage's digest covers.** The v1 table covers the intent chain each stage states. Two opt-in tables
+extend it, each adopted by the register declaring it (`adoptsRuleSet`), because changing a table changes every
+recorded digest: `RS_DigestTable_v2` adds the item granularities at Backlog; `RS_DigestTable_v3` adds, from the
+stage that owes them, the artifacts the stage obligations require -- domain entities and a blueprint at Scope,
+specification and scenarios at Goal, models at Objective, acceptance criteria at Backlog -- so a stage that
+closed owing them, and whose debt was paid afterwards, no longer reproduces. Scoped to a lineage, a digest counts
+only what that lineage created.
+
 ### 2.5c-xxi What the commit witness reports on a real lineage
 
 Two advisories read the commits rather than the graph:
@@ -1028,6 +1036,20 @@ and the items its Backlog-stage output admitted -- the predecessor's closed hist
 it was built under (G89). The successor's Mission-stage output witnesses the lineage itself and the
 Mission it declares it pursues (`lineageForMission`), even though that Mission was created during the
 predecessor.
+
+**Shared domain individuals.** Domain entities, blueprints, scope areas and the Mission describe the domain
+and persist across a predecessor and its successor. They are not duplicated: each belongs to the lineage it was
+created during, and the successor refers to it. A successor's own stage obligations are met by what its work
+introduces -- its own entities and blueprint -- while the shared ones stay where they were made. When the
+predecessor is archived, its shared individuals go with it as records, and the successor's references to them
+remain references (the archive tool reports them; archive integrity requires every reference to resolve);
+the Mission is kept live, as for any archived lineage.
+
+**Pre-pipeline lineages.** The staged pipeline became mandatory on 2026-08-25 (discipline v5.0.0), which said of
+the lineages already built: they are not rewritten, and the advisories report what their history shows. The
+order check therefore reads a lineage with no stage output, no restart, and work whose earliest witnessed commit
+predates that date as PRE_PIPELINE -- reported, never blocking. A lineage begun after that date with work and no
+chain remains a bypass.
 
 A **`LineageReactivation`** answers the opposite, rarer case: closed work stays closed until a real
 need appears to reopen it, and reactivation is never casual (2.5c-xxi-o states when it applies).
