@@ -10829,3 +10829,20 @@ Two an adopting project handovers, both confirmed here first.
   them; its own obligations are met by what its work introduces.
 
 Overlay `v1_9_0 -> v1_10_0`; standard `v1_109_0 -> v1_110_0`. the adopting project's closure note on the previous round logged.
+
+## v1.325.0 — 2026-09-27 (MINOR: three clock-reading rules exempt what their premises exclude; clock-triggered Violations stay)
+
+the adopting project's unchanged register gained a Violation overnight: a story in an iteration cancelled before it ran, and
+out-scoped from a closed lineage, crossed its iteration's end date. Ruled from G90 and existing precedent:
+
+- Clock-triggered Violations stay. G90's own example of a present breach is a passed forecast; a date passing is a
+  real change even when the register is unchanged.
+- `StoryIterationFitShape` exempts a story whose iteration is Cancelled (asserted or derived) or dissolved -- it never
+  ran -- and a story named in an out-scoping declaration, which by rule continues through the successor.
+- `MilestoneOutcomeShape` exempts a milestone that records its own outcome, or whose contributing objectives all
+  carry an achievement status; `CheckpointObservedShape` exempts an objective with an achievement status -- the
+  precedent of `ObjectiveStalledShape` and `ObjectiveHasCorrectiveActionShape`.
+
+Proven both ways on a probe. Shapes `v1_140_0 -> v1_141_0`, overlay `v1_10_0 -> v1_11_0`. Two an adopting project closure
+notes logged. First release from a freshly re-cloned container (environment reset); the bootstrap's steps
+(freshness, tooling manifest, discipline by version, publisher dry run) run in full.
