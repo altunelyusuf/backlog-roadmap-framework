@@ -103,3 +103,19 @@ condition: eleven detect a present breach and are obligations (rows above now sa
 view noted); two (`UnfinishedLineageShape`, `LegacyOrderAdvisoryShape`) detect a state their own
 message declares legitimate, so they are risks, and the overlay's promotion of them is reverted
 (`backlog_shacl_promoted_v1_3_0.ttl`).
+
+## Amendment, v1.2.0 (2026-09-28)
+
+`StageOutputOwesAdvisoryShape` held two constraints under one severity line, and the row above was
+written from the first one's condition: a recorded waiver, a debt until paid. The second constraint -- an
+*advisory* obligation unmet -- was graded with it, and so every adopter of this rule set met a Violation for
+an obligation the framework itself calls optional (an adopting project handover,
+goal-stage-advisory-use-case-diagram-cannot-be-met-or-excused). By the same criterion as the v1.1.0
+amendment, an unmet advisory obligation is a state the obligation declares legitimate, so it is a risk and
+a Warning. The debt reading holds only for a REQUIRED obligation: an advisory one owes nothing, and waiving
+it with a reason is the explanation its severity asks for.
+
+Applied in shapes v1.143.0 and overlay v1.13.0: the advisory constraint is its own shape,
+`AdvisoryObligationUnmetShape`, unaudited and so at its base severity (Warning);
+`StageOutputOwesAdvisoryShape` keeps the row above and now fires only for a waived REQUIRED obligation. The
+row's classification is unchanged; what it applies to is now exactly what its reason describes.

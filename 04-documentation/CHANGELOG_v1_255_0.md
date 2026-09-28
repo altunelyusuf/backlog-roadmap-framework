@@ -10868,3 +10868,29 @@ them, which was this package's error.
 
 TBox `v1_113_0 -> v1_114_0`, shapes `v1_141_0 -> v1_142_0`, overlay `v1_11_0 -> v1_12_0`. the adopting project's closure note
 on v1.325.0 logged.
+
+## v1.327.0 — 2026-09-28 (MINOR: an advisory obligation can be met or explained at the stage that owes it)
+
+**Unplanned work:** handover processing (an adopting project), the same declaration used for handover-driven releases since
+v1.295.0. The span checked starts at v1.325.0 and so also covers v1.326.0, which was handover processing too. The
+v1.326.0 tag could not be pushed from its session because the network gateway refused tag pushes, so the gate
+falls back to the last tag that exists.
+
+the adopting project's Goal stage could neither produce nor excuse the advisory use-case diagram, and the severity-audit
+overlay graded it as a Violation. All four findings were confirmed on a probe.
+
+- **Models before work items:** `ModelArtifactShape`'s `describesItem` now binds from the Backlog stage on
+  (standard 2.5c-xxi-e). The Goal and Objective stages owe models before any item may exist.
+- **Advisory explained:** an advisory obligation named in `obligationWaivedBy` with an `obligationWaiverReason` is
+  explained, and the advisory is silent. No new vocabulary.
+- **Graded apart:** the advisory constraint is split out as `AdvisoryObligationUnmetShape` (Warning, also in the
+  overlay). `StageOutputOwesAdvisoryShape` keeps its audited Violation, but only for a waived required obligation.
+  Severity audit amended (v1.2.0).
+- **Kind honoured:** the advisory query reads `owesKind`/`owesScenarioKind` like the required one, so a class
+  diagram no longer silences a use-case-diagram advisory.
+- Negative fixture v1.17.0 carries both cases. Standard §2.5c-xxi-f states the required/advisory distinction.
+- Candidate lesson to OEE, as an enrichment of L-36: severity is per shape, so constraints of different nature
+  need separate shapes before they are graded.
+
+TBox `v1_114_0 -> v1_115_0`, shapes `v1_142_0 -> v1_143_0`, overlay `v1_12_0 -> v1_13_0`, standard
+`v1_110_0 -> v1_111_0`. the adopting project's closure note on v1.326.0 logged.

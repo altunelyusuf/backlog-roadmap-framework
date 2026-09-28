@@ -3718,3 +3718,23 @@ msslip:S1 a backlog:Story ; backlog:hasIdentifier "MSSLIP-1" ; backlog:hasTitle 
     backlog:hasState backlog:InProgress ;
     backlog:contributesToMilestone msslip:MS_Slipped , msslip:MS_WithdrawnBare .
 <http://example.org/fixture-negative-msslip#> backlog:hasExpectedPolarity backlog:Polarity_Negative .
+
+# fixture_negative_v1_17_0 (shapes v1.143.0, an adopting project handover goal-stage-advisory-use-case-diagram-cannot-be-met-or-excused):
+#  AdvisoryObligationUnmetShape  Out_Goal_AdvKind: the Goal stage advises a use-case diagram; the lineage carries only a
+#                                class diagram, which no longer silences it (owesKind honoured). Warning, named by case.
+#  ModelArtifactShape            MA_NoItem: a model with no described item in a lineage at LS_Backlogged still fires;
+#                                the same model below the Backlog stage would not (standard 2.5c-xxi-e).
+@prefix advunmet: <http://example.org/fixture-negative-advunmet#> .
+advunmet:M a backlog:Mission ; backlog:hasMissionOutcome backlog:Out_InFlight .
+advunmet:L_Goal a backlog:Lineage ; backlog:lineageOrdinal 21 ; backlog:lineageArchived false ;
+    backlog:lineageForMission advunmet:M ; backlog:hasLineageStatus backlog:LS_Goaled ;
+    backlog:adoptsObligationSet backlog:OS_SDLC_v1 ; backlog:adoptionRecordedAtOpen true .
+advunmet:Out_Goal_AdvKind a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Goal ; backlog:belongsToLineage advunmet:L_Goal ;
+    backlog:closedAtCommit "c-adv" ; backlog:hasStateDigest "d-adv" .
+advunmet:MA_ClassOnly a backlog:ModelArtifact ; backlog:hasModelKind backlog:Kind_ClassDiagram ;
+    backlog:hasModelLevel backlog:Level_Analysis ; backlog:belongsToLineage advunmet:L_Goal .
+advunmet:L_Back a backlog:Lineage ; backlog:lineageOrdinal 22 ; backlog:lineageArchived false ;
+    backlog:lineageForMission advunmet:M ; backlog:hasLineageStatus backlog:LS_Backlogged .
+advunmet:MA_NoItem a backlog:ModelArtifact ; backlog:hasModelKind backlog:Kind_UseCaseDiagram ;
+    backlog:belongsToLineage advunmet:L_Back .
+<http://example.org/fixture-negative-advunmet#> backlog:hasExpectedPolarity backlog:Polarity_Negative .

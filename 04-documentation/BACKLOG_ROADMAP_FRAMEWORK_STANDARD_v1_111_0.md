@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.110.0
+# Backlog & Roadmap Semantic Framework — Standard v1.111.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -814,6 +814,14 @@ verified there by the git witness. `ObligationAdoptionShape` refuses adoption by
 `LS_Opened`. A running lineage cannot be given new obligations; a closed one is a record; a lineage
 that adopted nothing owes nothing beyond the chain. A stage that must close owing records
 `obligationWaivedBy` with a reason, and the advisory reports it until the debt is paid.
+
+**Required and advisory, told apart (v1.111.0).** Only a waived **required** obligation is a debt
+(`StageOutputOwesAdvisoryShape`). An **advisory** obligation owes nothing: it is met by an artifact of the owed
+class and, where given, the owed kind, or it is explained by `obligationWaivedBy` naming it with an
+`obligationWaiverReason`. Unmet and unexplained, it is reported as a Warning (`AdvisoryObligationUnmetShape`),
+in the severity-audit overlay too. A model artifact owed at the Goal or Objective stage exists before any work
+item may: `describesItem` binds from the Backlog stage on (§2.5c-xxi-e), and the model is found meanwhile
+through `belongsToLineage`.
 
 ### 2.5c-xxi-g What a violation obliges: the finding's disposition
 

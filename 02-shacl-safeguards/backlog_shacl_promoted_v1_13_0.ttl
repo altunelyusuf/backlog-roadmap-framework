@@ -1,4 +1,4 @@
-# backlog_shacl_promoted v1.12.0 -- GENERATED from backlog_shacl_v1_142_0.ttl by
+# backlog_shacl_promoted v1.13.0 -- GENERATED from backlog_shacl_v1_143_0.ttl by
 # 03-tooling/backlog_make_promoted_shapes_v1_1_0.py, carrying forward the applied severity audit of
 # 2026-09-09 as recorded on each audited shape's own severity line ("# G90 ..."). Shapes with no
 # such line keep their base severity. Identical to the base file in every other byte. Loaded INSTEAD
@@ -16,9 +16,10 @@
 
 <http://example.org/backlog-shapes-promoted> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes-promoted/1.12.0> ;
-    owl:versionInfo "1.12.0" ;
+    owl:versionIRI <http://example.org/backlog-shapes-promoted/1.13.0> ;
+    owl:versionInfo "1.13.0" ;
     owl:priorVersion <http://example.org/backlog-shapes-promoted/1.12.0> ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.142.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.141.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.140.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.139.0> ;
@@ -3964,8 +3965,19 @@ backlog:ModelArtifactShape a sh:NodeShape ;
     rdfs:label "A model artefact names its kind and what it describes (L2)"@en ;
     sh:property [ sh:path backlog:hasModelKind ; sh:minCount 1 ; sh:maxCount 1 ; sh:class backlog:ModelKind ;
         sh:message "L2: a model artefact must name its kind. An artefact recorded without one says something was produced and not what, which is the same gap as a refinement that records attendance." ] ;
-    sh:property [ sh:path backlog:describesItem ; sh:minCount 1 ;
-        sh:message "L2: a model artefact must name the work item it describes. An artefact describing nothing cannot be found by anyone working on the item it was made for." ] .
+    # v1.143.0 (an adopting project handover, goal-stage-advisory-use-case-diagram-cannot-be-met-or-excused): was a
+    # property shape (describesItem minCount 1) that bound at every stage. The framework's own stage
+    # obligations owe model artefacts at the Goal and Objective stages, before any work item may exist, so a
+    # Goal-stage use-case diagram could only be recorded against an unrelated item. Standard 2.5c-xxi-e: a
+    # rule that needs a later stage's elements binds only once the lineage has reached that stage. Work
+    # items are the Backlog stage's content (LS_Backlogged, rank 5).
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L2: a model artefact must name the work item it describes. An artefact describing nothing cannot be found by anyone working on the item it was made for." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            FILTER NOT EXISTS { $this backlog:describesItem ?i }
+            FILTER NOT EXISTS { $this backlog:belongsToLineage ?lin . ?lin backlog:hasLineageStatus ?ls . ?ls backlog:statusRank ?rk . FILTER (?rk < 5) }
+        }""" ] .
 
 backlog:DesignTaskProducesShape a sh:NodeShape ;
     sh:targetClass backlog:ExecutionTask ;
@@ -6392,14 +6404,33 @@ backlog:StageOutputOwesShape a sh:NodeShape ;
 backlog:StageOutputOwesAdvisoryShape a sh:NodeShape ;
     sh:targetClass backlog:StageOutput ;
     sh:severity sh:Violation ;   # G90 rule (2026-09-09): A waived obligation is a debt against a stated rule; it is reported as owed, and owing is a breach until paid.
-    rdfs:label "Advisory: a stage output closing owing, or an advisory obligation unmet"@en ;
+    rdfs:label "Advisory: a stage output closing owing a required artifact, on the record"@en ;
     backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    # v1.143.0 (an adopting project handover, goal-stage-advisory-use-case-diagram-cannot-be-met-or-excused): this shape
+    # carried two constraints under one severity line, and the 2026-09-09 audit graded the shape by the first
+    # one's reason ("a waived obligation is a debt"). The second -- an ADVISORY obligation unmet -- moved to
+    # AdvisoryObligationUnmetShape. The debt reading holds only for a REQUIRED obligation: an advisory one owes
+    # nothing (standard 2.5c-xxi-f: required refuses closure, advisory reports it), so waiving it with a reason
+    # is its explanation, not a debt.
     sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "Advisory: this stage output records a waiver (obligationWaivedBy) -- it closed owing an artifact its stage owes. Legitimate and on the record; it stays reported until the debt is paid." ;
+        sh:message "Advisory: this stage output records a waiver (obligationWaivedBy) of a REQUIRED obligation -- it closed owing an artifact its stage owes. Legitimate and on the record; it stays reported until the debt is paid." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] , [ sh:prefix "rdf" ; sh:namespace "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xsd:anyURI ] ] ;
-        sh:select """SELECT $this WHERE { $this backlog:obligationWaivedBy ?ob . }""" ] ;
+        sh:select """SELECT $this WHERE { $this backlog:obligationWaivedBy ?ob . ?ob backlog:obligationSeverity backlog:Oblig_Required . }""" ] .
+
+backlog:AdvisoryObligationUnmetShape a sh:NodeShape ;
+    sh:targetClass backlog:StageOutput ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: an advisory obligation unmet and unexplained"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "Out_Goal_AdvKind" ;
+    # v1.143.0 (an adopting project handover, goal-stage-advisory-use-case-diagram-cannot-be-met-or-excused): split out of
+    # StageOutputOwesAdvisoryShape. Two corrections. (1) Its message promised an exit ("say why") the query
+    # never read; the explanation is the existing waiver record -- obligationWaivedBy naming the advisory
+    # obligation, with obligationWaiverReason (Oblig_Advisory: absence can be legitimate and must then be
+    # explained). (2) It matched any artifact of the owed class; it now honours owesKind and owesScenarioKind
+    # exactly as StageOutputOwesShape does, so a class diagram no longer silences a use-case-diagram advisory.
     sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "Advisory: this stage output's stage carries an ADVISORY obligation its lineage does not satisfy. Absence can be right here; say why in the output's rationale." ;
+        sh:message "Advisory: this stage output's stage carries an ADVISORY obligation its lineage does not satisfy (owesClass, and owesKind/owesScenarioKind where given). Absence can be right here; say why by recording obligationWaivedBy for that obligation with an obligationWaiverReason." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] , [ sh:prefix "rdf" ; sh:namespace "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             $this backlog:outputOfStage ?st ; backlog:belongsToLineage ?l .
@@ -6407,7 +6438,12 @@ backlog:StageOutputOwesAdvisoryShape a sh:NodeShape ;
             ?ob a backlog:StageObligation ; backlog:obligationOfStage ?st ; backlog:owesClass ?cls ;
                 backlog:obligationSeverity backlog:Oblig_Advisory ; backlog:inObligationSet ?set .
             ?l backlog:adoptsObligationSet ?set .
-            FILTER NOT EXISTS { ?a rdf:type ?cls ; backlog:belongsToLineage ?l }
+            FILTER NOT EXISTS { $this backlog:obligationWaivedBy ?ob ; backlog:obligationWaiverReason ?r }
+            FILTER NOT EXISTS {
+                ?a rdf:type ?cls ; backlog:belongsToLineage ?l .
+                FILTER NOT EXISTS { ?ob backlog:owesKind ?k . FILTER NOT EXISTS { ?a backlog:hasModelKind ?k } }
+                FILTER NOT EXISTS { ?ob backlog:owesScenarioKind ?sk . FILTER NOT EXISTS { ?a backlog:scenarioKind ?sk } }
+            }
         }""" ] .
 
 backlog:StageOutputWaiverShape a sh:NodeShape ;
