@@ -10919,3 +10919,14 @@ was handover processing.
 
 TBox `v1_115_0 -> v1_116_0`, shapes `v1_143_0 -> v1_144_0`, overlay `v1_13_0 -> v1_14_0`, standard
 `v1_111_0 -> v1_112_0`. the adopting project's closure note on v1.327.0 logged.
+
+## v1.328.1 — 2026-09-28 (PATCH: session handover; OEE's disposition of two lessons recorded)
+
+**Unplanned work:** a session switch at the owner's request. The release tags for v1.326.0, v1.327.0 and v1.328.0
+cannot be pushed from this session, so the release-item check still counts from v1.325.0. Every release in that span
+was handover processing.
+
+- `SESSION_HANDOVER_2026_09_28_v1_0_0.md`: first actions for the next session (push the four missing tags), the state
+  at handover, this session's releases, open items and the owner rules it worked under.
+- OEE accepted both lessons in oe-pack v20.89.0: L-124, and an extension of L-36. Logged, and the outcome recorded in
+  lesson deposit v2.6.0.
