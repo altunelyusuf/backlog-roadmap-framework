@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.115.0> ;
-    owl:versionInfo "1.115.0" ;
+    owl:versionIRI <http://example.org/backlog/1.116.0> ;
+    owl:versionInfo "1.116.0" ;
+    owl:priorVersion <http://example.org/backlog/1.115.0> ;
     owl:priorVersion <http://example.org/backlog/1.114.0> ;
     owl:priorVersion <http://example.org/backlog/1.113.0> ;
     owl:priorVersion <http://example.org/backlog/1.112.0> ;
@@ -6544,7 +6545,7 @@ backlog:LineageSuccession a owl:Class ;
     rdfs:subClassOf core:Artifact ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "Lineage Succession"@en ;
-    skos:definition "The owner's own, deliberate record of winding a mature lineage's completed scope down and opening a successor under the same Mission -- distinct from a LineageRestart, which answers a detected bypass by rebuilding an entire membership from scratch, done and not-done alike. A succession touches nothing already closed; it only opens what comes next. Carries the real, evidenced rationale (relevance ratio, absolute remaining cost, cost of waiting, enforcement value forgone -- the owner's own four-factor frame, informing judgement rather than outputting one) and takes up exactly one out-scoping declaration (PartialScopeDeclaration) recorded on the predecessor while it was still live; the succession itself is filed in the predecessor's closure commit together with the successor's Mission stage."@en .
+    skos:definition "The owner's own, deliberate record of winding a mature lineage's completed scope down and opening a successor under the same Mission -- distinct from a LineageRestart, which answers a detected bypass by rebuilding an entire membership from scratch, done and not-done alike. A succession touches nothing already closed; it only opens what comes next. Carries the real, evidenced rationale (relevance ratio, absolute remaining cost, cost of waiting, enforcement value forgone -- the owner's own four-factor frame, informing judgement rather than outputting one) and takes up exactly one gap (resolvesGap): an out-scoping declaration recorded on the predecessor while it was still live, filed in the predecessor's closure commit together with the successor's Mission stage; or (v1.133.0) a bounded post-closure finding, filed when the owner decides it. v1.116.0: each gap is its own succession record, with its own rationale, so a second gap -- a bounded finding raised after the first succession -- is a second LineageSuccession naming the same predecessor and, where the owner decides so, the same already-open successor."@en .
 
 backlog:succeedsLineage a owl:ObjectProperty , owl:FunctionalProperty ;
     rdfs:domain backlog:LineageSuccession ; rdfs:range backlog:Lineage ;
@@ -6562,7 +6563,7 @@ backlog:resolvesGap a owl:ObjectProperty , owl:FunctionalProperty ;
     rdfs:domain backlog:LineageSuccession ; rdfs:range backlog:LineageGap ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "resolves gap"@en ;
-    skos:definition "The real PartialScopeDeclaration this succession exists to address."@en .
+    skos:definition "The one real gap this succession exists to address: a PartialScopeDeclaration, or (v1.133.0) a bounded PostClosureFinding. Functional because each succession is one owner decision with its own rationale; a further gap is a further succession record (v1.116.0)."@en .
 
 backlog:successionRationale a owl:DatatypeProperty , owl:FunctionalProperty ;
     rdfs:domain backlog:LineageSuccession ; rdfs:range xsd:string ;
@@ -7556,3 +7557,36 @@ backlog:Stage_Backlog backlog:stageRequiresTypeV3 backlog:Mission , backlog:Scop
 #  (standard 2.5c-xxi-e); an advisory obligation is explained by a waiver with its reason; only a waived
 #  REQUIRED obligation is a debt. Definitions of describesItem, Oblig_Advisory and obligationWaivedBy updated.
 #################################################################
+
+#################################################################
+#  v1.116.0 -- a goal says where it comes from (an adopting project handover, successor-goal-origin-and-single-gap-succession;
+#  the owner's ruling on a successor's Goal stage: a goal must state whether it closes a subject of the split
+#  lineage or covers something new). IntentOrigin records who wrote a goal; GoalOrigin records what the goal
+#  answers. The link to the answered gap mirrors resolvesPartialScope one stage earlier.
+#################################################################
+backlog:GoalOrigin a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:GoalOrigin_Carried backlog:GoalOrigin_Repair backlog:GoalOrigin_New ) ;
+    rdfs:label "Goal Origin"@en ;
+    skos:definition "What a goal answers, as distinct from who wrote it (IntentOrigin). In a lineage opened by succession every goal either continues work its predecessor out-scoped, repairs something its predecessor closed as done, or covers something the predecessor never had in scope. Stated per goal so that the successor's backlog and roadmap can be traced to why the successor exists."@en .
+backlog:GoalOrigin_Carried a owl:NamedIndividual , backlog:GoalOrigin ;
+    rdfs:label "Carried"@en ;
+    skos:definition "Continues work the predecessor out-scoped before it closed. Names the out-scoping declaration it continues (goalAnswersGap)."@en .
+backlog:GoalOrigin_Repair a owl:NamedIndividual , backlog:GoalOrigin ;
+    rdfs:label "Repair"@en ;
+    skos:definition "Repairs work the predecessor closed as done and was later found defective. Names the post-closure finding it answers (goalAnswersGap)."@en .
+backlog:GoalOrigin_New a owl:NamedIndividual , backlog:GoalOrigin ;
+    rdfs:label "New"@en ;
+    skos:definition "Covers something the predecessor never had in scope -- mentioned before, perhaps, but never part of its work. Names no gap."@en .
+[] a owl:AllDifferent ; owl:distinctMembers ( backlog:GoalOrigin_Carried backlog:GoalOrigin_Repair backlog:GoalOrigin_New ) .
+backlog:hasGoalOrigin a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:Goal ; rdfs:range backlog:GoalOrigin ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has goal origin"@en ;
+    skos:definition "Exactly one origin per goal. Reported when absent on a goal of a lineage opened by succession (SuccessorGoalOriginAdvisoryShape); checked against the gap it names when present (GoalOriginShape). A lineage's conformance goal needs none: G42 requires it in every lineage."@en .
+backlog:goalAnswersGap a owl:ObjectProperty ;
+    rdfs:domain backlog:Goal ; rdfs:range backlog:LineageGap ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "goal answers gap"@en ;
+    skos:definition "The predecessor's gap a Carried or Repair goal answers: an out-scoping declaration, or a post-closure finding. The Goal-stage counterpart of resolvesPartialScope, which links the successor's Objective to the same gap one stage later."@en .

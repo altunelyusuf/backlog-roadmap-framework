@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.111.0
+# Backlog & Roadmap Semantic Framework — Standard v1.112.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -1036,6 +1036,16 @@ divided lineage's part uses; once that output exists, any open predecessor item 
 cancelled, and any open predecessor container not dissolved, is refused as work silently dropped. The predecessor cannot be archived while
 out-scoped work is still open, and the archival activity waits for it.
 
+**More than one gap, and where a successor's goals come from (v1.112.0).** Each succession record takes up one
+gap (`resolvesGap`), with its own rationale. A bounded post-closure finding raised after the first succession is a
+second `LineageSuccession`, naming the same predecessor and, where the owner decides so, the successor already open
+under the same Mission. From the successor's Goal stage each goal states what it answers (`hasGoalOrigin`, a
+`GoalOrigin`): **Carried** continues work the predecessor out-scoped and names that declaration (`goalAnswersGap`);
+**Repair** answers a post-closure finding and names it; **New** covers something the predecessor never had in scope
+and names no gap. `GoalOriginShape` checks what a goal asserts; a successor's goal with no origin is reported as a
+Warning (`SuccessorGoalOriginAdvisoryShape`), since a new requirement does not bind lineages already open (G91). The
+lineage's conformance goal needs no origin: 2.5c-xxxiv requires one in every lineage.
+
 **A successor's rule set and Mission stage.** A successor that should work under a rule set the
 register has not adopted adopts it itself: `adoptsRuleSet` on the lineage, recorded at its opening in
 the same commit as its Mission stage (`adoptionRecordedAtOpen`), exactly as an obligation set is; a
@@ -1395,6 +1405,12 @@ three. A closed lineage's own disclosure remains exactly its `lineageArchived tr
 `archiveFile` pointer — visible, queryable, and not duplicated into a second notice.
 
 ### 2.5c-xxxiv Every adopting lineage carries a default goal for its own conformance, built at kickoff
+
+**Per lineage (v1.112.0).** Every lineage carries its own: from its Goal stage (2.5c-xxi-e) until it closes (G89),
+a lineage needs one conformance goal that `belongsToLineage` it, and at most one. A closed predecessor's
+conformance goal is its own record and satisfies nothing for its successor. A goal that names no lineage counts for
+every lineage, and a register with no lineage at all is read as one. The objective chain beneath a lineage's
+conformance goal binds from its Objective stage.
 
 **Enforced, not merely recommended.** `AdoptionConformanceGoalShape` requires every `AdoptionProfile`
 to carry a real `Goal` (`isConformanceGoal true`, genuinely `Facing_Mission`) whose own `Objective`

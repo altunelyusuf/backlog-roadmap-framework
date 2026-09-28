@@ -202,3 +202,38 @@ fwneg:Dz31 a backlog:ContainerDissolution ; backlog:dissolvesContainer fwneg:Pkg
 fwneg:L_Live20 backlog:adoptsRuleSet backlog:RS_SeverityAudit_20260909 .
 
 <http://example.org/fixture-succession-negative#> backlog:hasExpectedPolarity backlog:Polarity_Negative .
+
+# fixture_lineage_succession_negative_v1_6_0 (TBox v1.116.0, shapes v1.144.0; an adopting project handovers
+# successor-lineage-conformance-goal-counted-register-wide and successor-goal-origin-and-single-gap-succession).
+#  AdoptionConformanceGoalShape      P_SuccNoOwnGoal: the successor L_CgSucc (at its Goal stage) has no conformance
+#                                    goal of its own; the closed predecessor's goal no longer counts for it. L_CgTwo
+#                                    carries two conformance goals of its own.
+#  GoalOriginShape                   G_CarriedNoGap (Carried, no gap); G_NewWithGap (New, names a gap);
+#                                    G_WrongGap (answers a gap of a lineage that is not its predecessor).
+#  SuccessorGoalOriginAdvisoryShape  G_NoOrigin: a goal of a successor lineage with no stated origin (Warning).
+fwneg:P_SuccNoOwnGoal a backlog:AdoptionProfile ; backlog:profileAppliesTo "successor without its own conformance goal" .
+fwneg:M_Cg a backlog:Mission ; backlog:hasMissionOutcome backlog:Out_InFlight .
+fwneg:L_CgPred a backlog:Lineage ; backlog:lineageOrdinal 61 ; backlog:lineageArchived false ;
+    backlog:lineageForMission fwneg:M_Cg ; backlog:hasLineageStatus backlog:LS_Achieved .
+fwneg:L_CgSucc a backlog:Lineage ; backlog:lineageOrdinal 62 ; backlog:lineageArchived false ;
+    backlog:lineageForMission fwneg:M_Cg ; backlog:hasLineageStatus backlog:LS_Goaled .
+fwneg:L_CgOther a backlog:Lineage ; backlog:lineageOrdinal 63 ; backlog:lineageArchived false ;
+    backlog:lineageForMission fwneg:M_Cg ; backlog:hasLineageStatus backlog:LS_Goaled .
+fwneg:L_CgTwo a backlog:Lineage ; backlog:lineageOrdinal 64 ; backlog:lineageArchived false ;
+    backlog:lineageForMission fwneg:M_Cg ; backlog:hasLineageStatus backlog:LS_Goaled .
+fwneg:Gap_Cg a backlog:PartialScopeDeclaration ; backlog:declaresGapFor fwneg:L_CgPred ; backlog:decidedBy backlog:Owner ;
+    backlog:describesUncoveredScope "Fixture-only: work the predecessor out-scoped." .
+fwneg:Gap_Other a backlog:PartialScopeDeclaration ; backlog:declaresGapFor fwneg:L_CgOther ; backlog:decidedBy backlog:Owner ;
+    backlog:describesUncoveredScope "Fixture-only: a gap of an unrelated lineage." .
+fwneg:Succ_Cg a backlog:LineageSuccession ; backlog:succeedsLineage fwneg:L_CgPred ; backlog:successorLineage fwneg:L_CgSucc ;
+    backlog:resolvesGap fwneg:Gap_Cg ; backlog:decidedBy backlog:Owner ;
+    backlog:successionRationale "Fixture-only: continue the mission under a successor." .
+fwneg:G_PredConf a backlog:Goal ; backlog:isConformanceGoal true ; backlog:belongsToLineage fwneg:L_CgPred .
+fwneg:G_TwoA a backlog:Goal ; backlog:isConformanceGoal true ; backlog:belongsToLineage fwneg:L_CgTwo .
+fwneg:G_TwoB a backlog:Goal ; backlog:isConformanceGoal true ; backlog:belongsToLineage fwneg:L_CgTwo .
+fwneg:G_CarriedNoGap a backlog:Goal ; backlog:belongsToLineage fwneg:L_CgSucc ; backlog:hasGoalOrigin backlog:GoalOrigin_Carried .
+fwneg:G_NewWithGap a backlog:Goal ; backlog:belongsToLineage fwneg:L_CgSucc ; backlog:hasGoalOrigin backlog:GoalOrigin_New ;
+    backlog:goalAnswersGap fwneg:Gap_Cg .
+fwneg:G_WrongGap a backlog:Goal ; backlog:belongsToLineage fwneg:L_CgSucc ; backlog:hasGoalOrigin backlog:GoalOrigin_Carried ;
+    backlog:goalAnswersGap fwneg:Gap_Other .
+fwneg:G_NoOrigin a backlog:Goal ; backlog:belongsToLineage fwneg:L_CgSucc .

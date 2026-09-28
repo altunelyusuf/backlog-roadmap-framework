@@ -354,3 +354,29 @@ ex:It_Dropped a backlog:Iteration ; backlog:hasIdentifier "IT-DROPPED" ; backlog
     backlog:belongsToLineage ex:Lin_Prev .
 ex:Dz_It a backlog:ContainerDissolution ; backlog:dissolvesContainer ex:It_Dropped ; backlog:decidedBy backlog:Owner ;
     backlog:dissolutionRationale "Planned by the closing lineage; the successor plans sprints of its own." .
+
+# fixture_lineage_succession_v1_5_0 (TBox v1.116.0, shapes v1.144.0; an adopting project handovers
+# successor-goal-origin-and-single-gap-succession and successor-lineage-conformance-goal-counted-register-wide):
+#  - a bounded post-closure finding raised after the first succession is taken up by a SECOND succession record
+#    naming the same predecessor and the same, already-open successor (resolvesGap stays one gap per record);
+#  - the successor's goals state their origin: Carried names the out-scoping declaration, Repair the finding.
+ex:Finding_Bounded a backlog:PostClosureFinding ;
+    backlog:declaresGapFor ex:Lin_Prev ;
+    backlog:describesUncoveredScope "Recovery codes expire at a fixed hour instead of after the promised interval." ;
+    backlog:hasFindingScale backlog:Scale_Bounded ;
+    backlog:findingRaisedAt "2026-09-22T00:00:00Z"^^xsd:dateTime ;
+    backlog:findingEvidence ex:Ev_Expiry .
+ex:Ev_Expiry a backlog:Evidence ; backlog:evidenceVerified true ;
+    backlog:verifiedByTool "acceptance test suite, recovery-code expiry case" ;
+    backlog:hasVerificationMethod "Reproduced: a code issued at 23:50 expired at 00:00 in the expiry acceptance case." .
+ex:Succ_2 a backlog:LineageSuccession ;
+    backlog:succeedsLineage ex:Lin_Prev ; backlog:successorLineage ex:Lin_PL ;
+    backlog:resolvesGap ex:Finding_Bounded ;
+    backlog:successionRationale "A contained defect found after closure; the successor already open under the same Mission takes it up rather than reopening closed work." ;
+    backlog:decidedBy backlog:Owner .
+ex:O backlog:resolvesPartialScope ex:Finding_Bounded .
+ex:G backlog:belongsToLineage ex:Lin_PL ;
+    backlog:hasGoalOrigin backlog:GoalOrigin_Carried ; backlog:goalAnswersGap ex:Gap_Prev .
+ex:GScope backlog:belongsToLineage ex:Lin_PL ;
+    backlog:hasGoalOrigin backlog:GoalOrigin_Repair ; backlog:goalAnswersGap ex:Finding_Bounded .
+ex:GContain backlog:belongsToLineage ex:Lin_PL ; backlog:hasGoalOrigin backlog:GoalOrigin_New .

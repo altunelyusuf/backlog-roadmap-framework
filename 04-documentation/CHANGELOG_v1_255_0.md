@@ -10894,3 +10894,28 @@ overlay graded it as a Violation. All four findings were confirmed on a probe.
 
 TBox `v1_114_0 -> v1_115_0`, shapes `v1_142_0 -> v1_143_0`, overlay `v1_12_0 -> v1_13_0`, standard
 `v1_110_0 -> v1_111_0`. the adopting project's closure note on v1.326.0 logged.
+
+## v1.328.0 — 2026-09-28 (MINOR: conformance goals counted per lineage; a successor's goals state their origin; a later gap is a further succession)
+
+**Unplanned work:** handover processing (an adopting project, two handovers). The release tags for v1.326.0 and v1.327.0 still
+cannot be pushed from this session, so the release-item check still counts from v1.325.0. Every release in that span
+was handover processing.
+
+- **Conformance goal per lineage:** `AdoptionConformanceGoalShape` counted register-wide, although its label,
+  messages and G42 say "lineage".
+  - Now each lineage is bound from its Goal stage until it closes, and needs one conformance goal that belongs to it,
+    and at most one. The objective chain beneath it binds from the Objective stage.
+  - A goal that names no lineage, and a register with no lineage, keep the old reading.
+  - Results name the lineage.
+  - The declared proof case, which had never fired for this very reason, is repointed to one that isolates it.
+- **Goal origin:** new `GoalOrigin` (Carried, Repair, New), `hasGoalOrigin` and `goalAnswersGap`.
+  - `GoalOriginShape` (Violation) checks that an asserted origin agrees with the gap it names.
+  - `SuccessorGoalOriginAdvisoryShape` (Warning) reports a successor's goal with no origin.
+- **One gap per succession:** `resolvesGap` stays functional. A bounded finding raised later is a further succession
+  record into the already-open successor. The definitions of `LineageSuccession` and `resolvesGap` no longer
+  contradict v1.133.0.
+- **Fixtures:** positive succession v1.5.0 (second succession; goals Carried, Repair and New) and negative succession
+  v1.6.0 (every new case by name). Standard §2.5c-xxi-n and §2.5c-xxxiv describe both rulings.
+
+TBox `v1_115_0 -> v1_116_0`, shapes `v1_143_0 -> v1_144_0`, overlay `v1_13_0 -> v1_14_0`, standard
+`v1_111_0 -> v1_112_0`. the adopting project's closure note on v1.327.0 logged.
