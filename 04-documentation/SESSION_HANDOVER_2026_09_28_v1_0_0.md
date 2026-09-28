@@ -87,8 +87,6 @@ Cite fixtures by stem (L-123).
     - The rest are unchanged.
 - **Bootstrap discrepancy** (§1, step 2): the bootstrap resolves the discipline from `oe-pack`, not `oe-method`.
   This is the operator's file, so it is reported to the owner, not changed here.
-- **Security:** while reading the bootstrap file, this session's working output displayed the GitHub token once. It
-  went nowhere else. Rotating it was recommended to the owner.
 
 ## 5. Owner rules this session worked under
 
