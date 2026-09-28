@@ -42,7 +42,10 @@ ex:Roadmap a backlog:Roadmap ;
 ex:MS1 a backlog:Milestone ;
     backlog:hasIdentifier "MS-1" ;
     backlog:hasTitle "Authentication live" ;
-    backlog:hasTargetDate "2026-09-30T00:00:00"^^xsd:dateTime .
+    # v1.16.0: moved from 2026-09-30. With shapes v1.142.0 a slipped milestone fires again under the rules, and
+    # this milestone has an open contributor (US-002, Ready): the positive fixture would have failed from
+    # 2026-10-01 by wall clock alone. A live plan's date in a fixture that must stay clean is kept in the future.
+    backlog:hasTargetDate "2099-09-30T00:00:00"^^xsd:dateTime .
 
 #################################################################
 #  Item 1 — Done, release-anchored, audited
@@ -1309,3 +1312,15 @@ moderecurrence:Find_Method2 a backlog:RetrospectiveFinding ; backlog:hasFailureM
 <http://example.org/fixture-positive#Rel_Sprint11> <http://example.org/backlog#belongsToLineage> <http://example.org/fixture-positive#Lin1> .
 <http://example.org/fixture-positive#Sprint11> <http://example.org/backlog#belongsToLineage> <http://example.org/fixture-positive#Lin1> .
 <http://example.org/fixture-positive#Sprint12> <http://example.org/backlog#belongsToLineage> <http://example.org/fixture-positive#Lin1> .
+
+# fixture_positive_v1_16_0 (shapes v1.142.0, an adopting project handover milestone-outcome-exemption-met-by-its-own-derived-outcome):
+# a slipped milestone settled by a recorded decision -- asserted Withdrawn with its outcomeRationale -- stays silent
+# with the rules merged, even though its contributor is still open.
+ex:MS_Retired a backlog:Milestone ;
+    backlog:hasIdentifier "MS-RETIRED" ;
+    backlog:hasTitle "Conformance review (purpose retired)" ;
+    backlog:hasTargetDate "2026-06-30T00:00:00"^^xsd:dateTime ;
+    backlog:milestoneOutcome backlog:Ach_Withdrawn ;
+    backlog:outcomeRationale "The review this milestone scheduled was retired with the mechanism it reviewed; it will never be held, so it is withdrawn rather than missed." .
+ex:US002 backlog:contributesToMilestone ex:MS_Retired .
+<http://example.org/fixture-positive#MS_Retired> <http://example.org/backlog#belongsToLineage> <http://example.org/fixture-positive#Lin1> .

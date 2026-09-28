@@ -10846,3 +10846,25 @@ out-scoped from a closed lineage, crossed its iteration's end date. Ruled from G
 Proven both ways on a probe. Shapes `v1_140_0 -> v1_141_0`, overlay `v1_10_0 -> v1_11_0`. Two an adopting project closure
 notes logged. First release from a freshly re-cloned container (environment reset); the bootstrap's steps
 (freshness, tooling manifest, discipline by version, publisher dry run) run in full.
+
+## v1.326.0 — 2026-09-28 (MINOR: a slipped milestone is settled only by a recorded decision, never by its own derived outcome)
+
+an adopting project found that v1.325.0's milestone exemption could never let the rule fire. Rule R10b derives
+`milestoneOutcome Missed` for exactly the milestones `MilestoneOutcomeShape` targets. The validator merges the rules,
+so every slipped milestone was exempt. Confirmed on a probe with the rules merged. The v1.325.0 probe had run without
+them, which was this package's error.
+
+- **Ruled from the vocabulary:** `milestoneOutcome` is derived, and a derived Missed is the finding itself.
+  Following the recorded-outcome precedent, only an asserted `Ach_Withdrawn` with an `outcomeRationale` settles a
+  slipped milestone. An asserted Met without `achievedAt` and a bare Withdrawn still fire.
+- **Vocabulary:** `outcomeRationale` widened to Mission ∪ Milestone. The `milestoneOutcome` definition names the one
+  value that may be asserted.
+- **Regression cases:** negative fixture v1.16.0 (fires with the rules merged) and positive fixture v1.16.0 (a
+  withdrawn milestone with a rationale stays silent). `MilestoneOutcomeShape` names its proof fixture.
+- **Found while building, fixed:** the positive fixture's `MS-1` was due 2026-09-30 with an open contributor. It
+  would have failed the gate on 2026-10-01 by wall clock alone. Moved to 2099.
+- **Candidate lesson to OEE:** an exemption must not read what a rule in the same run derives, and a proof runs the
+  production path.
+
+TBox `v1_113_0 -> v1_114_0`, shapes `v1_141_0 -> v1_142_0`, overlay `v1_11_0 -> v1_12_0`. the adopting project's closure note
+on v1.325.0 logged.

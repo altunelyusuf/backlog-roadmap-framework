@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.113.0> ;
-    owl:versionInfo "1.113.0" ;
+    owl:versionIRI <http://example.org/backlog/1.114.0> ;
+    owl:versionInfo "1.114.0" ;
+    owl:priorVersion <http://example.org/backlog/1.113.0> ;
     owl:priorVersion <http://example.org/backlog/1.112.0> ;
     owl:priorVersion <http://example.org/backlog/1.111.0> ;
     owl:priorVersion <http://example.org/backlog/1.110.0> ;
@@ -2319,7 +2320,7 @@ backlog:milestoneOutcome a owl:ObjectProperty ;
     rdfs:domain backlog:Milestone ; rdfs:range backlog:AchievementStatus ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "milestone outcome"@en ;
-    skos:definition "Derived: met if achieved on or before the target date, missed once the target date has passed with no achievement, pending otherwise."@en .
+    skos:definition "Derived: met if achieved on or before the target date, missed once the target date has passed with no achievement, pending otherwise. v1.114.0: one value may also be ASSERTED -- Withdrawn, with an outcomeRationale, when the milestone's purpose was retired and it will never be reached. No rule derives Withdrawn, so it is a recorded decision, while a derived Met or Missed is the computation itself and settles nothing."@en .
 
 backlog:ClosureReport a owl:Class ;
     rdfs:subClassOf core:Artifact ;
@@ -6134,10 +6135,10 @@ backlog:hasMissionOutcome a owl:ObjectProperty , owl:FunctionalProperty ;
     rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "has mission outcome"@en .
 
 backlog:outcomeRationale a owl:DatatypeProperty ;
-    rdfs:domain backlog:Mission ; rdfs:range xsd:string ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:Mission backlog:Milestone ) ] ; rdfs:range xsd:string ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "outcome rationale"@en ;
-    skos:definition "Why the mission reached this outcome, quoting the evidence. Required for Achieved and Abandoned so that setting a lineage down is an act with a reason rather than a status someone changed."@en .
+    skos:definition "Why the mission reached this outcome, quoting the evidence. Required for Achieved and Abandoned so that setting a lineage down is an act with a reason rather than a status someone changed. v1.114.0: also on a Milestone, where it is required for an asserted Withdrawn outcome -- a retired milestone with no reason is a date that quietly stopped applying."@en .
 
 backlog:retiredAtCommit a owl:DatatypeProperty , owl:FunctionalProperty ;
     rdfs:domain backlog:Mission ; rdfs:range xsd:string ;
@@ -7539,3 +7540,11 @@ backlog:Stage_Scope backlog:stageRequiresTypeV3 backlog:Mission , backlog:ScopeS
 backlog:Stage_Goal backlog:stageRequiresTypeV3 backlog:Mission , backlog:ScopeStatement , backlog:ScopeExclusion , backlog:ScopeDeliverable , backlog:Goal , backlog:DomainEntity , backlog:Blueprint , backlog:Specification , backlog:TestScenario .
 backlog:Stage_Objective backlog:stageRequiresTypeV3 backlog:Mission , backlog:ScopeStatement , backlog:ScopeExclusion , backlog:ScopeDeliverable , backlog:Goal , backlog:Objective , backlog:DomainEntity , backlog:Blueprint , backlog:Specification , backlog:TestScenario , backlog:ModelArtifact .
 backlog:Stage_Backlog backlog:stageRequiresTypeV3 backlog:Mission , backlog:ScopeStatement , backlog:ScopeExclusion , backlog:ScopeDeliverable , backlog:Goal , backlog:Objective , backlog:Initiative , backlog:Epic , backlog:Story , backlog:Feature , backlog:Defect , backlog:Enabler , backlog:Spike , backlog:Task , backlog:ExecutionTask , backlog:DomainEntity , backlog:Blueprint , backlog:Specification , backlog:TestScenario , backlog:ModelArtifact , backlog:AcceptanceCriterion .
+
+#################################################################
+#  v1.114.0 -- a milestone settles only by a recorded decision, never by its own derived outcome (an adopting project
+#  handover, milestone-outcome-exemption-met-by-its-own-derived-outcome). Shapes v1.141.0 exempted any milestone
+#  with a milestoneOutcome; rule R10b derives Missed for exactly the milestones MilestoneOutcomeShape targets, so
+#  with the rules merged no slipped milestone could fire. outcomeRationale widened to Milestone; milestoneOutcome's
+#  definition now names the one assertable value (Withdrawn, with a rationale).
+#################################################################

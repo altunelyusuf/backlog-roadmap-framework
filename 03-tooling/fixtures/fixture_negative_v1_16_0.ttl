@@ -3702,3 +3702,19 @@ tscluster:TS_Varied a backlog:ExecutionTask ; backlog:hasState backlog:Done ;
 <http://example.org/fixture-negative-grooming#Ref_RefinedThenCancelled> a <http://example.org/backlog#RefinementEvent> ;
     <http://example.org/backlog#refines> <http://example.org/fixture-negative-grooming#St_RefinedThenCancelled> .
 
+# fixture_negative_v1_16_0 (shapes v1.142.0, an adopting project handover milestone-outcome-exemption-met-by-its-own-derived-outcome):
+# MilestoneOutcomeShape must fire WITH THE RULES MERGED on a slipped milestone whose contributor is open. Rule R10b
+# derives milestoneOutcome Missed for it; that derived outcome must not exempt it (it did in shapes v1.141.0). A
+# bare asserted Withdrawn with no outcomeRationale must fire too.
+@prefix msslip: <http://example.org/fixture-negative-msslip#> .
+msslip:MS_Slipped a backlog:Milestone ;
+    backlog:hasIdentifier "MS-SLIP" ; backlog:hasTitle "Slipped with open contributor" ;
+    backlog:hasTargetDate "2026-09-01T00:00:00"^^xsd:dateTime .
+msslip:MS_WithdrawnBare a backlog:Milestone ;
+    backlog:hasIdentifier "MS-WDBARE" ; backlog:hasTitle "Withdrawn with no reason" ;
+    backlog:hasTargetDate "2026-09-01T00:00:00"^^xsd:dateTime ;
+    backlog:milestoneOutcome backlog:Ach_Withdrawn .
+msslip:S1 a backlog:Story ; backlog:hasIdentifier "MSSLIP-1" ; backlog:hasTitle "Open contributor" ;
+    backlog:hasState backlog:InProgress ;
+    backlog:contributesToMilestone msslip:MS_Slipped , msslip:MS_WithdrawnBare .
+<http://example.org/fixture-negative-msslip#> backlog:hasExpectedPolarity backlog:Polarity_Negative .
