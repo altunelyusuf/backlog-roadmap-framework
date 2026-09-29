@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.116.0> ;
-    owl:versionInfo "1.116.0" ;
+    owl:versionIRI <http://example.org/backlog/1.117.0> ;
+    owl:versionInfo "1.117.0" ;
+    owl:priorVersion <http://example.org/backlog/1.116.0> ;
     owl:priorVersion <http://example.org/backlog/1.115.0> ;
     owl:priorVersion <http://example.org/backlog/1.114.0> ;
     owl:priorVersion <http://example.org/backlog/1.113.0> ;
@@ -5142,6 +5143,11 @@ backlog:checkpointCondition a owl:ObjectProperty , owl:FunctionalProperty ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "checkpoint condition"@en ;
     skos:definition "The WorkItem whose Done state is what this checkpoint actually waits on, when the real timing is conditional rather than calendar-bound. G31's own distinction made structural here: some checkpoints genuinely are calendar-bound (a regulatory date, an external commitment) and keep checkpointDate; others depend on unpredictable engineering work reaching Done, and inventing a date for those is false precision standing in for a condition. A checkpoint states whichever is honest, not both."@en .
+backlog:checkpointConditionText a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:ObjectiveCheckpoint ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "checkpoint condition text"@en ;
+    skos:definition "The condition a checkpoint waits on, stated in words. It exists because checkpointCondition names a WorkItem, and work items are the Backlog stage's content (standard 2.5c-xxi-e): at the Objective stage the honest condition cannot yet name one, and inventing a date instead is the false precision G31 rules out. The words may name a scope deliverable or a milestone the condition depends on. From the Backlog stage on, a checkpoint with no date must also name its work item through checkpointCondition (CheckpointConditionAnchorShape); the text then says what the item's Done state means. Added v1.117.0 (an adopting project handover, objective-checkpoint-needs-a-work-item-before-any-may-exist)."@en .
 backlog:expectedValue a owl:DatatypeProperty , owl:FunctionalProperty ;
     rdfs:domain backlog:ObjectiveCheckpoint ; rdfs:range xsd:decimal ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
@@ -7590,3 +7596,10 @@ backlog:goalAnswersGap a owl:ObjectProperty ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "goal answers gap"@en ;
     skos:definition "The predecessor's gap a Carried or Repair goal answers: an out-scoping declaration, or a post-closure finding. The Goal-stage counterpart of resolvesPartialScope, which links the successor's Objective to the same gap one stage later."@en .
+
+#################################################################
+#  v1.117.0 -- an objective's checkpoint can state its condition in words before any work item exists (an adopting project
+#  handover, objective-checkpoint-needs-a-work-item-before-any-may-exist). checkpointConditionText added on
+#  ObjectiveCheckpoint; checkpointCondition (WorkItem) is unchanged and is required from the Backlog stage on
+#  for a checkpoint with no date (standard 2.5c-xxi-e).
+#################################################################

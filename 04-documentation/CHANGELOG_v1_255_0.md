@@ -10930,3 +10930,26 @@ was handover processing.
   at handover, this session's releases, open items and the owner rules it worked under.
 - OEE accepted both lessons in oe-pack v20.89.0: L-124, and an extension of L-36. Logged, and the outcome recorded in
   lesson deposit v2.6.0.
+
+## v1.329.0 — 2026-09-29 (MINOR: a checkpoint can state its condition in words until the Backlog stage names the work item)
+
+**Unplanned work:** handover processing (an adopting project), the same declaration used for handover-driven releases since
+v1.295.0. The release tags v1.326.0 to v1.328.1 now exist on the remote, so the span checked starts at v1.328.1.
+
+the adopting project's Objective stage could not state a checkpoint: `checkpointCondition` names a work item, work items are the
+Backlog stage's content, and the alternative was an invented date (G31) or a Violation per objective. Confirmed by
+reading the shapes; the adopter's own probe was not re-run here.
+
+- **Words before items:** new `checkpointConditionText` on `ObjectiveCheckpoint`. `ObjectiveCheckpointTimingShape`
+  accepts a date, a work item or the words.
+- **Item from the Backlog stage:** new `CheckpointConditionAnchorShape` (Violation) requires `checkpointCondition` once
+  the objective's lineage reaches `LS_Backlogged`, unless the checkpoint carries a date (standard 2.5c-xxi-e).
+- **Unchanged:** `ObjectiveMonitorShape` (an objective still needs a checkpoint) and the range of `checkpointCondition`.
+  Widening the range to scope deliverables or milestones was not adopted.
+- New negative fixture `fixture_checkpoint_anchor_negative` v1.0.0 (two fire, four controls silent) and the re-runnable
+  probe `backlog_checkpoint_stage_probe` v1.0.0. Against the v1.144.0 shapes the same fixture fires on four checkpoints.
+  The probe is not wired into the gate.
+- Standard v1.113.0 states the rule after the `checkpointCondition` paragraph.
+
+TBox `v1_116_0 -> v1_117_0`, shapes `v1_144_0 -> v1_145_0`, overlay `v1_14_0 -> v1_15_0`, standard
+`v1_112_0 -> v1_113_0`. the adopting project's response filed in the inbox.

@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.112.0
+# Backlog & Roadmap Semantic Framework — Standard v1.113.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -1319,6 +1319,18 @@ or behind anything. `CheckpointBreachShape`'s own date-comparison logic is unaff
 condition-based checkpoint simply isn't a candidate for a *date* breach, which is correct, not a
 gap: its own condition (a named `WorkItem` reaching `Done`) is a different kind of check nothing
 here yet formalizes, left for whichever lineage needs it to test-drive first.
+
+**A checkpoint before any work item exists (v1.113.0).** `checkpointCondition` names a `WorkItem`, and work items are
+the Backlog stage's content, so a lineage at its Objective stage could state neither a date it does not have nor an
+item that may not exist. Ruled from §2.5c-xxi-e (rules that need a later stage's elements bind only once the status
+has reached that stage) and G31 (a condition, not a fabricated date): `checkpointConditionText` (optional,
+`ObjectiveCheckpoint` -> string) states the condition in words. `ObjectiveCheckpointTimingShape` accepts a date, an
+item or the words. `CheckpointConditionAnchorShape` (Violation, G90) requires the item from the moment the objective's
+lineage reaches `LS_Backlogged`, unless the checkpoint carries a date. An objective must still carry a checkpoint
+(`ObjectiveMonitorShape` is unchanged), and `checkpointCondition`'s range is unchanged, so a scope deliverable or a
+milestone is named in the words and the item that satisfies it becomes the anchor. Proven by
+`fixture_checkpoint_anchor_negative` (two checkpoints fire, four controls stay silent) through
+`03-tooling/backlog_checkpoint_stage_probe`.
 
 ### 2.5c-xxix A layer-tier correction does not touch real measurability, and closing metric-moving work is proposed a reading
 

@@ -1,0 +1,55 @@
+@prefix backlog: <http://example.org/backlog#> .
+@prefix ex:      <http://example.org/checkpoint-anchor-neg#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+# fixture_checkpoint_anchor_negative v1.0.0 (shapes v1.145.0; an adopting project handover,
+# objective-checkpoint-needs-a-work-item-before-any-may-exist). NEGATIVE. A checkpoint may state its condition in
+# words before any work item exists; from the Backlog stage on it must name the item (standard 2.5c-xxi-e).
+#
+#  FIRES    CheckpointConditionAnchorShape   CP_TextOnlyBacklogged  words only, objective's lineage at LS_Backlogged
+#  FIRES    ObjectiveCheckpointTimingShape   CP_NoTimingObjectived   no date, no item, no words, at LS_Objectived
+#  SILENT   (controls, asserted by 03-tooling/backlog_checkpoint_stage_probe)
+#           CP_TextOnlyObjectived    words only at LS_Objectived: the case the adopting project's Objective stage is in
+#           CP_TextAndItemBacklogged words plus the work item at LS_Backlogged
+#           CP_DatedBacklogged       a calendar date at LS_Backlogged needs no anchor
+#           CP_TextOnlyGoaled        words only, lineage at LS_Goaled (below the Objective stage): stays silent
+#  Every checkpoint is reached through its objective and that objective's goal, as production reaches it.
+ex:M a backlog:Mission ; backlog:hasMissionOutcome backlog:Out_InFlight .
+
+ex:L_Objectived a backlog:Lineage ; backlog:lineageOrdinal 31 ; backlog:lineageArchived false ;
+    backlog:lineageForMission ex:M ; backlog:hasLineageStatus backlog:LS_Objectived .
+ex:L_Backlogged a backlog:Lineage ; backlog:lineageOrdinal 32 ; backlog:lineageArchived false ;
+    backlog:lineageForMission ex:M ; backlog:hasLineageStatus backlog:LS_Backlogged .
+ex:L_Goaled a backlog:Lineage ; backlog:lineageOrdinal 33 ; backlog:lineageArchived false ;
+    backlog:lineageForMission ex:M ; backlog:hasLineageStatus backlog:LS_Goaled .
+
+ex:G_Obj a backlog:Goal ; backlog:belongsToLineage ex:L_Objectived .
+ex:G_Back a backlog:Goal ; backlog:belongsToLineage ex:L_Backlogged .
+ex:G_Goal a backlog:Goal ; backlog:belongsToLineage ex:L_Goaled .
+
+ex:WI_Anchor a backlog:Story ; backlog:belongsToLineage ex:L_Backlogged .
+
+ex:O_TextOnlyBacklogged a backlog:Objective ; backlog:contributesToGoal ex:G_Back ; backlog:hasCheckpoint ex:CP_TextOnlyBacklogged .
+ex:CP_TextOnlyBacklogged a backlog:ObjectiveCheckpoint ; backlog:expectedValue 10.0 ;
+    backlog:checkpointConditionText "Every story that satisfies the deliverable is Done" .
+
+ex:O_NoTimingObjectived a backlog:Objective ; backlog:contributesToGoal ex:G_Obj ; backlog:hasCheckpoint ex:CP_NoTimingObjectived .
+ex:CP_NoTimingObjectived a backlog:ObjectiveCheckpoint ; backlog:expectedValue 10.0 .
+
+ex:O_TextOnlyObjectived a backlog:Objective ; backlog:contributesToGoal ex:G_Obj ; backlog:hasCheckpoint ex:CP_TextOnlyObjectived .
+ex:CP_TextOnlyObjectived a backlog:ObjectiveCheckpoint ; backlog:expectedValue 10.0 ;
+    backlog:checkpointConditionText "Every story that satisfies the deliverable is Done" .
+
+ex:O_TextAndItemBacklogged a backlog:Objective ; backlog:contributesToGoal ex:G_Back ; backlog:hasCheckpoint ex:CP_TextAndItemBacklogged .
+ex:CP_TextAndItemBacklogged a backlog:ObjectiveCheckpoint ; backlog:expectedValue 10.0 ;
+    backlog:checkpointConditionText "The anchor story is Done" ; backlog:checkpointCondition ex:WI_Anchor .
+
+ex:O_DatedBacklogged a backlog:Objective ; backlog:contributesToGoal ex:G_Back ; backlog:hasCheckpoint ex:CP_DatedBacklogged .
+ex:CP_DatedBacklogged a backlog:ObjectiveCheckpoint ; backlog:expectedValue 10.0 ;
+    backlog:checkpointConditionText "The release ships" ; backlog:checkpointDate "2027-06-01T00:00:00Z"^^xsd:dateTime .
+
+ex:O_TextOnlyGoaled a backlog:Objective ; backlog:contributesToGoal ex:G_Goal ; backlog:hasCheckpoint ex:CP_TextOnlyGoaled .
+ex:CP_TextOnlyGoaled a backlog:ObjectiveCheckpoint ; backlog:expectedValue 10.0 ;
+    backlog:checkpointConditionText "Every story that satisfies the deliverable is Done" .
+
+<http://example.org/checkpoint-anchor-neg#> backlog:hasExpectedPolarity backlog:Polarity_Negative .
