@@ -10953,3 +10953,25 @@ reading the shapes; the adopter's own probe was not re-run here.
 
 TBox `v1_116_0 -> v1_117_0`, shapes `v1_144_0 -> v1_145_0`, overlay `v1_14_0 -> v1_15_0`, standard
 `v1_112_0 -> v1_113_0`. the adopting project's response filed in the inbox.
+
+## v1.330.0 — 2026-09-30 (MINOR: the automated actor of a task, ordered task-type steps, and a tool-run record for any automated step)
+
+**Unplanned work:** handover processing (rdodi-ecosystem), the same declaration used for handover-driven releases since
+v1.295.0. The tag v1.329.0 exists on the remote, so the span checked starts there.
+
+The rdodi-ecosystem session asked what work by a federation of mostly deterministic agents needs from the framework.
+Its 13 proposed terms were re-verified before use (appendix hashes match, 10/10 claims hold against v1.117.0).
+
+- **Actor (2.1):** new `performedByActor` on `ExecutionTask`, open range, not functional. A team role does not serve.
+- **Steps (2.2):** new `TaskTypeStep`, `hasTaskTypeStep`, `hasTaskTypeStepOrdinal` (proposed as `hasPlaybookStepOrdinal`;
+  the framework has no "playbook") and `checkedByToolScript`. Four new Violation shapes (`TaskTypeStepOrdinalShape`,
+  `TaskTypeStepCheckShape`, `TaskTypeStepOrdinalUniqueShape`, `TaskTypeStepOwnedShape`). New negative fixture
+  `fixture_task_type_step_negative` v1.0.0 (five nodes fire, four controls silent) and re-runnable probe
+  `backlog_task_type_step_probe` v1.0.0. The probe is not wired into the gate; the new-shape proof gate covers the shapes.
+- **Record (2.3):** no new class. `ToolRunRecord`'s definition now covers any automated step that checks one thing
+  against another. A producing step with no baseline is not covered and is deferred until a consumer shows one.
+- **Route (2.4):** deferred, no term. Measured on one repository, the proposer says it has not met a real request.
+- **Reused, unchanged:** refusal as a rejected or deferred change request; independent evidence for unsupervised work.
+
+TBox `v1_117_0 -> v1_118_0`, shapes `v1_145_0 -> v1_146_0`, overlay `v1_15_0 -> v1_16_0`, standard
+`v1_113_0 -> v1_114_0`. Response filed in the inbox.

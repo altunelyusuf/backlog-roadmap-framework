@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.117.0> ;
-    owl:versionInfo "1.117.0" ;
+    owl:versionIRI <http://example.org/backlog/1.118.0> ;
+    owl:versionInfo "1.118.0" ;
+    owl:priorVersion <http://example.org/backlog/1.117.0> ;
     owl:priorVersion <http://example.org/backlog/1.116.0> ;
     owl:priorVersion <http://example.org/backlog/1.115.0> ;
     owl:priorVersion <http://example.org/backlog/1.114.0> ;
@@ -4268,6 +4269,38 @@ backlog:hasTaskType a owl:ObjectProperty , owl:FunctionalProperty ;
     rdfs:label "has task type"@en ;
     skos:definition "Which technical process this task performs. Functional: a task spanning two processes is two tasks, and splitting it is what makes either one estimable."@en .
 
+backlog:performedByActor a owl:ObjectProperty ;
+    rdfs:domain backlog:ExecutionTask ; rdfs:range owl:Thing ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "performed by actor"@en ;
+    skos:definition "The automated actor that carried out this execution task. Open on purpose: the framework does not prescribe an agent vocabulary, and a consumer package names its own actors. Distinct from a team role, which by its own definition says how a team of people is organised, not who did a piece of work. Not functional: a federation may split one task across several actors. Says who did the work; the execution mode says whether it was automated and the supervision mode says who watched, both recorded separately."@en ;
+    dcterms:source "rdodi-ecosystem handover federated-agent-execution-concepts v1.0.5, request 2.1 (argued from the framework's own definitions of execution mode and team role; re-verified 10/10 by the receiving session)."@en .
+
+backlog:TaskTypeStep a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Task-Type Step"@en ;
+    skos:definition "One ordered step that work of a given task type goes through, together with the shipped checker whose acceptance is the condition for leaving it. The task types say what kind of work is owed; a task-type step says in what order the work is done and what stops the chain. Recorded as data on a task type, so the order is not hidden knowledge each adopter re-derives; a run of its checker is a tool-run record."@en ;
+    dcterms:source "rdodi-ecosystem handover federated-agent-execution-concepts v1.0.5, request 2.2; precedent: InteractionStep (an ordinal, not a link to the next step)."@en .
+
+backlog:hasTaskTypeStep a owl:ObjectProperty ;
+    rdfs:domain backlog:TaskType ; rdfs:range backlog:TaskTypeStep ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has task-type step"@en ;
+    skos:definition "A step that work of this task type goes through. A step belongs to one task type."@en .
+
+backlog:hasTaskTypeStepOrdinal a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:TaskTypeStep ; rdfs:range xsd:integer ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has task-type step ordinal"@en ;
+    skos:definition "The position of this step among the steps of its task type, from 1. An ordinal rather than a link to the next step, for the reason hasStepOrdinal gives. Named for the class it belongs to, not 'playbook', which the framework does not otherwise use."@en .
+
+backlog:checkedByToolScript a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:TaskTypeStep ; rdfs:range backlog:ToolScript ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "checked by tool script"@en ;
+    skos:definition "The shipped checker whose acceptance is the condition for leaving this step. Reuses ToolScript, so the check is recorded data and its runs are recorded as tool-run records."@en .
+
 backlog:coversTaskType a owl:ObjectProperty ;
     rdfs:domain backlog:DesignConcern ; rdfs:range backlog:TaskType ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
@@ -6074,6 +6107,7 @@ backlog:hasRoadmapRank backlog:numberOrigin backlog:Num_Asserted .
 backlog:hasScoreValue backlog:numberOrigin backlog:Num_Derived ;
     backlog:derivationQuery "SELECT ((?bv + ?tc + ?rr) / ?js AS ?v) WHERE { $this backlog:hasUserBusinessValue ?bv ; backlog:hasTimeCriticality ?tc ; backlog:hasRiskReductionValue ?rr ; backlog:hasJobSize ?js }" .
 backlog:hasStepOrdinal backlog:numberOrigin backlog:Num_Asserted .
+backlog:hasTaskTypeStepOrdinal backlog:numberOrigin backlog:Num_Asserted .
 backlog:hasTargetShare backlog:numberOrigin backlog:Num_Asserted .
 backlog:hasTargetValue backlog:numberOrigin backlog:Num_Asserted .
 backlog:hasTimeCriticality backlog:numberOrigin backlog:Num_Asserted .
@@ -6345,7 +6379,7 @@ backlog:ToolRunRecord a owl:Class ;
     rdfs:subClassOf core:Artifact ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "Tool Run Record"@en ;
-    skos:definition "A real, structured record of one execution of a self-check tool -- what it compared, the real hash of each side, and what it concluded -- so the claim a tool prints to a terminal becomes a fact this suite's own rules can independently re-check, rather than a trust placed in the tool's own, unverifiable say-so. Distinct from Evidence, which proves a WorkItem is Done; a ToolRunRecord proves nothing about completion, only that a specific comparison actually happened and what its own inputs genuinely were. This does not verify a tool's own internal logic is correct -- no ontology can reach inside arbitrary code and prove its algorithm sound, and claiming otherwise would overstate what this closes. What it closes is narrower and real: a tool cannot silently claim to have checked something against a real, distinct baseline while its own recorded inputs show it compared a thing against itself."@en .
+    skos:definition "A real, structured record of one execution of a shipped checker, by a person, a script or an automated agent (including one step of a federation of agents) -- what it compared, the real hash of each side, and what it concluded -- so the claim a tool prints to a terminal becomes a fact this suite's own rules can independently re-check, rather than a trust placed in the tool's own, unverifiable say-so. Distinct from Evidence, which proves a WorkItem is Done; a ToolRunRecord proves nothing about completion, only that a specific comparison actually happened and what its own inputs genuinely were. This does not verify a tool's own internal logic is correct -- no ontology can reach inside arbitrary code and prove its algorithm sound, and claiming otherwise would overstate what this closes. What it closes is narrower and real: a tool cannot silently claim to have checked something against a real, distinct baseline while its own recorded inputs show it compared a thing against itself. Applies to any automated step that checks one thing against another (an operation whose input digest is compared with the output digest it is meant to preserve, a step whose output is tested against a reference). A step that only produces output and compares nothing has no baseline to be distinct from, so it is not a record of this kind; that case is deferred until a consumer shows a real one."@en .
 
 backlog:ranTool a owl:ObjectProperty , owl:FunctionalProperty ;
     rdfs:domain backlog:ToolRunRecord ; rdfs:range backlog:ToolScript ;

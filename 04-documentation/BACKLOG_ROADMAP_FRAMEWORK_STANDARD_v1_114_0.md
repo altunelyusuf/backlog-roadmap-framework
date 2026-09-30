@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.113.0
+# Backlog & Roadmap Semantic Framework — Standard v1.114.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -1582,6 +1582,31 @@ what was signed off.
 
 `InteractionStep` carries an **ordinal**, not a link to the next step: a linked list makes insertion
 cheap and querying expensive, and the question asked of a specification is what step three is.
+
+**Work done by a federation of automated actors (v1.114.0).** Ruled on the rdodi-ecosystem handover (request numbers
+are the handover's), each from an existing rule, none by a new tier:
+
+- *The actor of a task (2.1).* `performedByActor` (`ExecutionTask` -> any resource, not functional) names the automated
+  actor that carried a task out. It is open on purpose: the framework prescribes no agent vocabulary, and a consumer
+  package names its own actors. A `TeamRole` cannot serve, because its definition is how a team of people is organised.
+  The execution mode still says whether the work was automated and the supervision mode who watched.
+- *Ordered steps per task type (2.2).* `TaskTypeStep` is one ordered step of a task type, joined by `hasTaskTypeStep`
+  (`TaskType` -> `TaskTypeStep`), positioned by `hasTaskTypeStepOrdinal` (an ordinal, not a link to the next step, for
+  the reason `InteractionStep` gives) and stopped by `checkedByToolScript` (`TaskTypeStep` -> `ToolScript`, reused, so a
+  run of the check is a tool-run record). The proposed name `hasPlaybookStepOrdinal` was renamed because the framework
+  has no "playbook". Four Violation shapes, each proven by `fixture_task_type_step_negative`: `TaskTypeStepOrdinalShape`
+  (a position from 1), `TaskTypeStepCheckShape` (a checker is named), `TaskTypeStepOrdinalUniqueShape` (no two steps of
+  one task type share a position) and `TaskTypeStepOwnedShape` (a step belongs to exactly one task type). The same
+  position under another task type is fine. Re-runnable through `03-tooling/backlog_task_type_step_probe`.
+- *A record of one automated step (2.3).* Not a new class (G39, L-110): `ToolRunRecord` is enriched. Its definition now
+  covers any automated step that checks one thing against another, by a person, a script or an agent. A step that only
+  produces output compares nothing and has no baseline to be distinct from, so it is not a record of this kind; that
+  case is deferred until a consumer shows a real one.
+- *The route of a request (2.4).* Deferred, no term added. The evidence is measured on one repository and the proposer
+  states that the design has not met a real request. Revival: a real request routed by structural criteria whose route
+  the framework's existing change-request disposition cannot express. Routing must never relax a rule.
+- *Reuse (handover section 3).* Refusal is a change request with disposition rejected or deferred. Independent evidence
+  for unsupervised work is already required by `requiresIndependentEvidence`. Neither changed.
 
 `StateChange` names a from-state, a to-state and a trigger. States are **free text**, not an
 enumeration — the framework governs registers for any domain and cannot know a domain state machine.
