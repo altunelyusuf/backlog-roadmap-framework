@@ -11087,10 +11087,10 @@ dangling live pointers; 17 scripts name the files and must be repointed.
   the identity `http://example.org/backlog`. Four ontology files now ship where nine did, under two identities (the archive's data
   file keeps its own). The OE structure checker shows this package's two debt lines CLEARED and nothing NEW; the OE session prunes
   its own register, and the return note follows with S06.
-- **Proof:** `backlog_split_proof` v1.1.0 against the previous release: the only statements not found after are three of this lineage's own
-  register, by design (the criterion's artefact names, and the two state changes Ready to Done and Proposed to Done for S01 and its task); every
-  other statement is present. Added: the five terms and 62 audit
-  records described below, and the S01 register entries of this release.
+- **Proof:** `backlog_split_proof` v1.1.0 against the previous release: every statement of the previous release is present, except
+  three of this lineage's own register entries, by design (the criterion's artefact name, and the two state changes Ready to Done
+  and Proposed to Done for S01 and its task). Everything added is one of the declared kinds: the five terms and the 62 audit
+  records described below, and this lineage's S01 entries.
 - **Disclosed differences from what the Mission and the earlier test drive said:**
   1. The severity-promotion overlay is no longer a shipped file. Its 62 promotions were comments (`# G90`); they are now
      `SeverityPromotion` individuals (new class and four properties in the vocabulary, named in Standard v1.117.0), and
@@ -11100,8 +11100,8 @@ dangling live pointers; 17 scripts name the files and must be repointed.
   3. The strategy exercise register is test input, not a fixture (it declares no polarity), so it lives in `03-tooling/exercises/`.
   4. The register now lives inside the data file. Tools that treated the data file as reference only (roadmap report, compass,
      views, quality assessment) now see the live register as part of it; their figures have not been re-measured in this release.
-  5. In the register, `AC_OESC_NothingLost` names the proof and probe by their new file names (v1.1.0). Nothing else in earlier
-     entries was edited.
+  5. In the register, `AC_OESC_NothingLost` now names the proof by its new file name (v1.1.0), in the one-artefact form the criterion
+     resolver reads (the earlier two-artefact wording resolved only by accident). Nothing else in earlier entries was edited.
 - **Tools (versioned, renamed):** validator v1.12.0 (no rules file; the overlay is derived; adoption is read from triples, not text;
   other data gets only the controlled individuals as reference, found when the merge made the positive fixture fail with 17
   Violations), pipeline verifier v1.8.0 (reads the stage table from the data file), `backlog_subject_split` v1.0.0 (the move),

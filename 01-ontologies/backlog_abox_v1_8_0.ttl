@@ -6034,7 +6034,7 @@ fw:It_OESC_1 a backlog:Iteration ; backlog:hasIdentifier "OESC-IT1" ; backlog:ha
     backlog:memberOfContainer fw:Register ; backlog:belongsToLineage fw:L_OEStructureCleanup .
 
 fw:AC_OESC_NothingLost a backlog:AcceptanceCriterion ;
-    backlog:satisfiedByArtifact "03-tooling/backlog_split_proof_v1_1_0.py -- the comparison, and 03-tooling/backlog_split_proof_probe_v1_1_0.py -- its known-bad control" ;
+    backlog:satisfiedByArtifact "03-tooling/backlog_split_proof_v1_1_0.py -- backlog_split_proof" ;
     backlog:hasGherkinText "Given the package's ontology files before the move and after it, When the proof compares every statement by its blank-node-normalised form, Then it reports 0 statements lost and 0 changed, and it fails on a planted file with one statement removed." .
 fw:ST_OESC_NothingLost a backlog:Story ; backlog:hasIdentifier "OESC-S03" ; backlog:hasTitle "Build the before and after proof that no statement changes" ;
     backlog:hasState backlog:Done ;
@@ -6063,7 +6063,7 @@ fw:Plan_OESC_NothingLost a backlog:PlanningEvent ; rdfs:label "OESC-S03 taken in
     backlog:hasRationale "The formal boundary between ordering this work and doing it." .
 
 fw:AC_OESC_LiveSubject a backlog:AcceptanceCriterion ;
-    backlog:satisfiedByArtifact "01-ontologies/backlog_tbox_v1_119_0.ttl, 01-ontologies/backlog_abox_v1_8_0.ttl and 02-shacl-safeguards/backlog_shacl_v1_148_0.ttl -- the three live files; 03-tooling/backlog_subject_split_v1_0_0.py -- the move" ;
+    backlog:satisfiedByArtifact "03-tooling/backlog_subject_split_v1_0_0.py -- backlog_subject_split" ;
     backlog:hasGherkinText "Given the package's live statements, When the live subject is built, Then it ships exactly one vocabulary file, one data file and one rules file sharing the identity backlog, the structure checker reports no mixed or repeated role for it, and the live register validates with 0 violations." .
 fw:ST_OESC_LiveSubject a backlog:Story ; backlog:hasIdentifier "OESC-S01" ; backlog:hasTitle "Build the live subject: one vocabulary, one data and one rules file under the identity backlog" ;
     backlog:hasState backlog:Done ;
