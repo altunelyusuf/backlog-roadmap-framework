@@ -11177,3 +11177,9 @@ dangling live pointers; 17 scripts name the files and must be repointed.
   five held at 0 (containment, statements changed beyond the declared edits, archive statements judged by live rules, files outside the package other than the
   return note, subjects given membership triples before OE asks).
 - **Data file:** `backlog_abox` v1.13.0; lineage status `LS_Objectived`; Objective digest recorded and reproduced. 0 violations.
+
+## v1.345.0 — Lineage 18, Backlog stage (stage output, no work item)
+
+- **Seven stories, one per deliverable,** each with an acceptance criterion, a harness, a plan and a proposed task; one iteration (`It_OC_1`) and a definition of done.
+  Fixtures, live triad, archive folder, nothing lost, tools repointed, ceremony, debt cleared. Every open objective now names the story able to move its metric (`metricMovableBy`).
+- **Data file:** `backlog_abox` v1.14.0; lineage status `LS_Backlogged`; Backlog digest recorded and reproduced. 0 violations.
