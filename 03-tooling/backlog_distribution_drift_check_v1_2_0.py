@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""backlog_distribution_drift_check v1.0.0 — the public copy may not lag.
+"""backlog_distribution_drift_check v1.2.0 (v1.2.0: the deriver is resolved by version, not pinned)
+(was v1.0.0) — the public copy may not lag.
 
 Exists because saying the risk out loud did not prevent it. Two turns after
 writing "two copies of the same vocabulary will drift, and what does not exist
@@ -43,7 +44,16 @@ import subprocess
 import sys
 import tempfile
 
-DERIVER = "make_public_distribution_v1_3_0.py"
+def _latest_deriver():
+    """v1.2.0: the deriver is resolved by version, never pinned (the same mistake the validator pin made, v1.3.0 of the gate)."""
+    import glob as _g, re as _r
+    here = os.path.dirname(os.path.abspath(__file__))
+    c = sorted(_g.glob(os.path.join(here, "make_public_distribution_v*.py")),
+               key=lambda p: [int(x) for x in _r.findall(r"_v(\d+)_(\d+)_(\d+)\.", p)[0]])
+    return os.path.basename(c[-1]) if c else "make_public_distribution_v1_4_0.py"
+
+
+DERIVER = _latest_deriver()
 
 # Files the derivation deliberately does not produce: they are authored for the
 # public copy and live only there. Listed explicitly rather than ignored by

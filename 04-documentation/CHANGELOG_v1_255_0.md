@@ -11106,7 +11106,7 @@ dangling live pointers; 17 scripts name the files and must be repointed.
   other data gets only the controlled individuals as reference, found when the merge made the positive fixture fail with 17
   Violations), pipeline verifier v1.8.0 (reads the stage table from the data file), `backlog_subject_split` v1.0.0 (the move),
   the archive, quality, self-application, remediation, criterion, new-shape, remote-commit and standard-row tools repointed, release
-  item check v1.3.0, public distribution v1.4.0, probe v1.1.0, gate v1.25.0.
+  item check v1.3.0, public distribution v1.4.0, distribution drift check v1.2.0 (resolves the deriver by version instead of pinning its name), probe v1.1.0, gate v1.25.0.
 - **Not done, stated:** OESC-S02 (archive subject) waits for one owner decision: the archive's classes and properties are used only by the
   live register, so the archive needs a data file and a shapes file but no vocabulary of its own (3+2, not 3+3). OESC-S04 stays open:
   two scripts still name an old file prefix on purpose (the migration tool, and the release-item check's fallback for older tags).
