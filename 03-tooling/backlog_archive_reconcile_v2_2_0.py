@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# v2.2.0 (Lineage 17, OESC-S04): follows the package's new layout -- one vocabulary, one data and one shapes file per subject. The rules are in the shapes file.
 """backlog_archive_reconcile v2.1.0 -- per-lineage archival confirmation, deferred by one cycle.
 
 WHY. Two real, separate gaps, both from the owner's own review, 2026-09-18:
@@ -63,10 +64,9 @@ def run_conformance_full(archive_path, register_path):
         return os.path.join(d, c[-1]) if c else None
     onto_dir = os.path.dirname(os.path.abspath(archive_path))
     sh_f = latest(r"backlog_shacl_v.*\.ttl$", shapes_dir)
-    ru_f = latest(r"backlog_rules_v.*\.ttl$", shapes_dir)
     tb_f = latest(r"backlog_tbox_v.*\.ttl$", onto_dir)
     ab_f = latest(r"backlog_abox_v.*\.ttl$", onto_dir)
-    if not all([sh_f, ru_f, tb_f, ab_f]):
+    if not all([sh_f, tb_f, ab_f]):
         return None
 
     import rdflib
@@ -75,7 +75,7 @@ def run_conformance_full(archive_path, register_path):
     SH = rdflib.Namespace("http://www.w3.org/ns/shacl#")
     g, a = rdflib.Graph().parse(register_path), rdflib.Graph().parse(archive_path)
     tb, ab = rdflib.Graph().parse(tb_f), rdflib.Graph().parse(ab_f)
-    shg = rdflib.Graph().parse(sh_f); shg.parse(ru_f)
+    shg = rdflib.Graph().parse(sh_f)
     arrivals = list(a.subjects(rdflib.RDF.type, B.Lineage))
     focus = set()
     for L in arrivals:

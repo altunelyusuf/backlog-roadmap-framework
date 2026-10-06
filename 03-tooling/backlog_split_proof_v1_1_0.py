@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_split_proof v1.0.0 -- a move of statements between files lost nothing and changed nothing.
+"""backlog_split_proof v1.1.0 -- a move of statements between files lost nothing and changed nothing.
 
 WHY THIS EXISTS (Lineage 17, story OESC-S03, deliverable "A before and after proof that no statement changed").
 The Mission says no statement any file makes changes. A split of the package into a live and an archive subject moves
@@ -17,8 +17,15 @@ THE PROOF PROVES ITSELF EVERY RUN (L-95). Before it certifies anything it remove
 side and one statement's object from another, and each must be reported as a difference; if either is not seen the tool
 refuses to certify and exits 3.
 
-Usage: backlog_split_proof_v1_0_0.py BEFORE_PACKAGE_DIR AFTER_PACKAGE_DIR [--ignore-subject IRI ...] [--allow-added]
-  --allow-added   statements only AFTER are reported but do not fail (a release that also adds a lineage's own stages).
+v1.1.0 (OESC-S01, a split that moves files and retires one): the comparison can be told which files left the compared
+directories and where they went, and which added statements are declared.
+Usage: backlog_split_proof_v1_1_0.py BEFORE_PACKAGE_DIR AFTER_PACKAGE_DIR [options]
+  --allow-added                 statements only AFTER are reported but do not fail
+  --allow-added-pattern REGEX   a statement only AFTER passes if it matches REGEX (repeatable); any other added statement fails
+  --exclude-before PATH         leave this file of the BEFORE tree (relative to the package) out of the comparison, e.g. a derived copy
+  --extra-before PATH / --extra-after PATH   also read this file (relative to the package) on that side, e.g. a file that moved to
+                                a directory the comparison does not otherwise read
+  --ignore-subject IRI          leave out the statements about this subject (repeatable)
 Exit 0 identical, 2 differences, 3 the proof could not discriminate, 1 usage.
 """
 import glob, hashlib, os, sys
@@ -28,11 +35,13 @@ from rdflib import Graph, BNode, Literal, RDF, OWL, XSD
 DIRS = ("01-ontologies", "02-shacl-safeguards")
 
 
-def load(pkg):
+def load(pkg, exclude=(), extra=()):
     g = Graph()
     files = []
     for d in DIRS:
         files += sorted(glob.glob(os.path.join(pkg, d, "*.ttl")))
+    ex = {os.path.normpath(os.path.join(pkg, e)) for e in exclude}
+    files = [f for f in files if os.path.normpath(f) not in ex] + [os.path.join(pkg, e) for e in extra]
     for f in files:
         g.parse(f, format="turtle")
     return g, files
@@ -95,7 +104,8 @@ def self_proof(after_sig):
 
 
 def main(argv):
-    ignore, allow_added, pos = [], False, []
+    import re
+    ignore, allow_added, pos, pats, exb, xb, xa = [], False, [], [], [], [], []
     i = 0
     while i < len(argv):
         if argv[i] == "--ignore-subject":
@@ -103,11 +113,19 @@ def main(argv):
             ignore.append(URIRef(argv[i + 1])); i += 2
         elif argv[i] == "--allow-added":
             allow_added = True; i += 1
+        elif argv[i] == "--allow-added-pattern":
+            pats.append(re.compile(argv[i + 1])); i += 2
+        elif argv[i] == "--exclude-before":
+            exb.append(argv[i + 1]); i += 2
+        elif argv[i] == "--extra-before":
+            xb.append(argv[i + 1]); i += 2
+        elif argv[i] == "--extra-after":
+            xa.append(argv[i + 1]); i += 2
         else:
             pos.append(argv[i]); i += 1
     if len(pos) != 2:
         print(__doc__); return 1
-    gb, fb = load(pos[0]); ga, fa = load(pos[1])
+    gb, fb = load(pos[0], exb, xb); ga, fa = load(pos[1], (), xa)
     sb, rb = signature(gb, ignore); sa, ra = signature(ga, ignore)
     print(f"before : {len(fb)} file(s), {len(gb)} statements ({len(sb)} compared)  {pos[0]}")
     print(f"after  : {len(fa)} file(s), {len(ga)} statements ({len(sa)} compared)  {pos[1]}")
@@ -123,7 +141,12 @@ def main(argv):
     print(f"only AFTER  (added or changed): {len(added)}")
     for x in added[:5]:
         print("   +", x[:200])
-    bad = bool(lost) or (bool(added) and not allow_added)
+    undeclared = [x for x in added if not any(p.search(x) for p in pats)] if pats else added
+    if pats:
+        print(f"added statements matching a declared pattern: {len(added) - len(undeclared)}; matching none: {len(undeclared)}")
+        for x in undeclared[:5]:
+            print("   ?", x[:200])
+    bad = bool(lost) or (bool(undeclared) and not allow_added)
     print("VERDICT    : " + ("IDENTICAL -- every statement before is present after, and none was changed" if not bad
                              else "DIFFERENT -- see the lists above"))
     return 2 if bad else 0

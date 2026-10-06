@@ -11078,3 +11078,37 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Gate (1.24.0):** runs the probe on every release and aborts if the proof cannot discriminate.
 - **Register (9.107.0):** `ST_OESC_NothingLost` and its task are Done with evidence, the first iteration is InProgress, the lineage
   moves to `LS_InProgress`, and the objective for statements changed carries an observation after the work (0). 0 violations.
+
+## v1.339.0 — Lineage 17, OESC-S01 done: the live subject is one vocabulary, one data and one shapes file (Work-Item: ST_OESC_LiveSubject)
+
+- **What moved (nothing was reworded):** the vocabulary file `backlog_tbox` v1.119.0 now holds vocabulary only (its 284 controlled
+  individuals went to the data file). The data file `backlog_abox` v1.8.0 holds the controlled individuals, the reference data and
+  the live register. The shapes file `backlog_shacl` v1.148.0 holds the shapes and the former rules file's shapes. All three declare
+  the identity `http://example.org/backlog`. Four ontology files now ship where nine did, under two identities (the archive's data
+  file keeps its own). The OE structure checker shows this package's two debt lines CLEARED and nothing NEW; the OE session prunes
+  its own register, and the return note follows with S06.
+- **Proof:** `backlog_split_proof` v1.1.0 against the previous release: the only statements not found after are three of this lineage's own
+  register, by design (the criterion's artefact names, and the two state changes Ready to Done and Proposed to Done for S01 and its task); every
+  other statement is present. Added: the five terms and 62 audit
+  records described below, and the S01 register entries of this release.
+- **Disclosed differences from what the Mission and the earlier test drive said:**
+  1. The severity-promotion overlay is no longer a shipped file. Its 62 promotions were comments (`# G90`); they are now
+     `SeverityPromotion` individuals (new class and four properties in the vocabulary, named in Standard v1.117.0), and
+     `backlog_make_promoted_shapes` v1.2.0 derives the overlay from the shapes plus those records. Derived equals the old overlay.
+  2. The alignment file was moved to `06-package-provenance/` rather than folded into the vocabulary, because folding it in would
+     have published a private adopter's names in the public copy. It is no longer an ontology file of the package.
+  3. The strategy exercise register is test input, not a fixture (it declares no polarity), so it lives in `03-tooling/exercises/`.
+  4. The register now lives inside the data file. Tools that treated the data file as reference only (roadmap report, compass,
+     views, quality assessment) now see the live register as part of it; their figures have not been re-measured in this release.
+  5. In the register, `AC_OESC_NothingLost` names the proof and probe by their new file names (v1.1.0). Nothing else in earlier
+     entries was edited.
+- **Tools (versioned, renamed):** validator v1.12.0 (no rules file; the overlay is derived; adoption is read from triples, not text;
+  other data gets only the controlled individuals as reference, found when the merge made the positive fixture fail with 17
+  Violations), pipeline verifier v1.8.0 (reads the stage table from the data file), `backlog_subject_split` v1.0.0 (the move),
+  the archive, quality, self-application, remediation, criterion, new-shape, remote-commit and standard-row tools repointed, release
+  item check v1.3.0, public distribution v1.4.0, probe v1.1.0, gate v1.25.0.
+- **Not done, stated:** OESC-S02 (archive subject) waits for one owner decision: the archive's classes and properties are used only by the
+  live register, so the archive needs a data file and a shapes file but no vocabulary of its own (3+2, not 3+3). OESC-S04 stays open:
+  two scripts still name an old file prefix on purpose (the migration tool, and the release-item check's fallback for older tags).
+- **Register (9.108.0):** `ST_OESC_LiveSubject` and its task are Done with evidence and harnesses; `Obj_OESC_FilesDone` observed 2 and
+  `Obj_OESC_MissionMet` observed 4. 0 violations.

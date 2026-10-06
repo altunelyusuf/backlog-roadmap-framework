@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.115.0
+# Backlog & Roadmap Semantic Framework — Standard v1.117.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -845,9 +845,11 @@ answer it. Every reported violation is a finding, and every finding has a **`Fin
 **When a change in severity takes effect.** Promoting shapes is itself a ruling: it changes what the
 suite refuses, and it binds every lineage the register carries. It is therefore adopted by the
 **register**, not by a lineage — a `RuleSet` declared with `backlog:adoptsRuleSet`, owner-decided
-and dated. The promoted severities ship as a shapes overlay generated from the base file; the
-validator loads it only when the register declares the set. Undeclared, the change is recorded and
-inert. (`ObligationSet` is the lineage-level counterpart, adopted when a lineage opens.)
+and dated. The promoted severities are recorded as data: one `SeverityPromotion` individual per promoted
+shape, carrying `promotionInRuleSet` (the set), `promotesShape` (the shape), `promotedSeverity` and
+`promotionRationale`. The overlay is derived from the base shapes and those records and is no longer a shipped
+file; the validator derives and loads it only when the register declares the set. Undeclared, the change is
+recorded and inert. (`ObligationSet` is the lineage-level counterpart, adopted when a lineage opens.)
 
 A `FindingRecord` carries `findingFromShape`, `findingOnNode`, `hasDisposition`,
 `dispositionRationale`, `decidedBy`, and the monitoring the disposition requires. Silence is never an
@@ -2331,6 +2333,16 @@ Backlog stage output and no work item (nothing examined; `--no-empty-pass` exits
 and admitted by an active Backlog output are exempt from the two act-record shapes only (`GroomingShape` constraints 1
 and 2, `L4StoryGranularityShape`); evidence, criterion, harness, `lastAuditedAt`, finish point and modality stay required.
 Ruling G100.
+
+**The safeguard stands in the path of the act (v1.116.0).** Ruled on the owner's instruction after Lineage_2 repeated the
+drift it was opened to end (G101). A lineage's work rule is guarded at four layers: the session start prints the lineage's
+state and the next required act and re-arms the git hooks in the clone; a write to a governed path stops unless the lineage
+is ready; a commit changing governed work must carry a `Work-Item:` trailer naming a ready item, and a push holding one is
+refused; and a continuous-integration range check examines every commit, which a skipped hook cannot avoid. The guard fails
+closed and cannot pass over nothing (an empty path list, a path matching no tracked file, an empty register). A chain with
+no Backlog stage reads INCOMPLETE and fails `--require-complete`. A correction is closed only by a check that fails; a work
+ledger is a view over the register, never a source of work. Installer: `backlog_guard_install`; guide:
+`WORK_GUARD_ADOPTION_GUIDE`; analysis: `ROOT_CAUSE_ANALYSIS_the_lineage_opened_to_end_drift_repeated_it`.
 
 ## 7. Upstream anchoring
 

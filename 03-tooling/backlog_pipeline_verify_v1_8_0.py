@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-"""backlog_pipeline_verify_v1_7_0.py — the lineage order, checked by reconstruction.
+"""backlog_pipeline_verify_v1_8_0.py — the lineage order, checked by reconstruction.
+
+v1.8.0 (Lineage 17, OESC-S01): the stage content table is read from the package's data file as well as the vocabulary, because the controlled
+individuals moved there. No verdict logic changed.
 
 v1.7.0 (ruling G101): a chain that stops before Stage_Backlog is no longer a bare PASS. an adopting project read "4 of 5 outputs,
 Stage_Backlog absent, VERDICT PASS" as compliance while nine releases shipped from a ledger. The verdict now says what it
@@ -115,6 +118,13 @@ def _load_stage_types(tbox_path, v2=False, table=None):
     B = Namespace("http://example.org/backlog#")
     g = Graph()
     g.parse(tbox_path, format="turtle")
+    # v1.8.0 (Lineage 17, OESC-S01): the stage individuals, and the content table each carries, are controlled individuals and now
+    # live in the package's one data file, beside the vocabulary rather than in it.
+    import glob as _g, os as _o, re as _re
+    _ab = sorted(_g.glob(_o.path.join(_o.path.dirname(os.path.abspath(tbox_path)), "backlog_abox_v*.ttl")),
+                 key=lambda p: [int(x) for x in _re.findall(r"_v(\d+)_(\d+)_(\d+)\.", p)[0]])
+    if _ab:
+        g.parse(_ab[-1], format="turtle")
     out = {}
     # v1.6.0: the table is actually selected. Until now the v2 flag was accepted and ignored, so a register
     # declaring RS_DigestTable_v2 was verified against the v1 table -- found while adding table v3 (an adopting project
@@ -153,7 +163,7 @@ def main():
     STAGE_TYPES = _load_stage_types(_tb, table=_table)
     print("digest table: %s" % {"v3": "v3 (RS_DigestTable_v3 declared)", "v2": "v2 (RS_DigestTable_v2 declared)", "v1": "v1"}[_table])
     if len(argv) < 1:
-        print("usage: backlog_pipeline_verify_v1_7_0.py <register.ttl> [tbox.ttl] [--lineage NAME] [--require-complete]")
+        print("usage: backlog_pipeline_verify_v1_8_0.py <register.ttl> [tbox.ttl] [--lineage NAME] [--require-complete]")
         return 1
     g = Graph()
     for f in argv:

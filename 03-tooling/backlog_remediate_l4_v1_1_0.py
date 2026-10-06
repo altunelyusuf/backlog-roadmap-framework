@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# v1.1.0 (Lineage 17, OESC-S04): follows the package's new layout -- one vocabulary, one data and one shapes file per subject. Historic one-shot remediation: names follow the layout; it is not run by the release.
 """remediate_l4.py — bring the framework's own register to L4_LineageEnforced.
 
 Written as a script rather than performed by hand because the first attempt was
@@ -15,7 +16,7 @@ B = "http://example.org/backlog#"
 F = "http://example.org/backlog-framework-register#"
 ROOT = "/home/claude/work/brsf"
 
-p = sorted(glob.glob(ROOT + '/01-ontologies/backlog_framework_register_abox_v*.ttl'))[-1]
+p = sorted(glob.glob(ROOT + '/01-ontologies/backlog_abox_v*.ttl'))[-1]
 g = Graph(); g.parse(p, format='turtle')
 t = open(p, encoding='utf-8').read()
 
@@ -300,5 +301,5 @@ t = t.replace('    backlog:hasInvariantStatus backlog:NotYetEnforceable ;\n    b
               '    backlog:tracksItem fw:Init_SdlcConcepts ;\n    backlog:hasRationale "CLOSED by remediation. This register declared L2')
 
 open(p, 'w', encoding='utf-8').write(t.rstrip() + "\n" + "".join(out))
-os.rename(p, ROOT + '/01-ontologies/backlog_framework_register_abox_v3_0_0.ttl')
+os.rename(p, ROOT + '/01-ontologies/backlog_abox_v3_0_0.ttl')
 print("  remediation written: %d Done items harnessed, %d epics decomposed" % (len(done), len(SPEC)))

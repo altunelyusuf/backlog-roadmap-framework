@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# v1.4.0 (Lineage 17, OESC-S04): follows the package's new layout -- one vocabulary, one data and one shapes file per subject. The register is in the data file; the rules are in the shapes file.
 """backlog_archive_conformance v1.3.0 -- progressive archive conformance.
 
 THE OWNER'S DESIGN, test-driven before adoption (G46). The settled archive is never re-validated:
@@ -47,10 +48,9 @@ def canonical_digest(g):
 def main():
     emit = "--emit" in sys.argv
     seed = "--seed" in sys.argv
-    reg_f = latest("01-ontologies", "backlog_framework_register_abox_v*.ttl")
+    reg_f = latest("01-ontologies", "backlog_abox_v*.ttl")
     arc_f = latest("01-ontologies", "backlog_framework_archive_abox_v*.ttl")
     sh_f = latest("02-shacl-safeguards", "backlog_shacl_v*.ttl")
-    ru_f = latest("02-shacl-safeguards", "backlog_rules_v*.ttl")
     tb_f = latest("01-ontologies", "backlog_tbox_v*.ttl")
     ab_f = latest("01-ontologies", "backlog_abox_v*.ttl")
     g, a = Graph().parse(reg_f), Graph().parse(arc_f)
@@ -103,14 +103,14 @@ def main():
     if arrivals:
         tb, ab = Graph().parse(tb_f), Graph().parse(ab_f)
         # Real root cause, found 2026-09-18: harnessComplete and every other SHACL-AF-derived
-        # property live in a SEPARATE rules file (backlog_rules), never loaded here before --
+        # property live in a SEPARATE rules file (the rules file, since merged into the shapes file), never loaded here before --
         # backlog_validate correctly combines shapes+rules as the one graph passed to pyshacl;
         # this tool only ever loaded the shapes half, so every derived property silently never
         # computed, and every check depending on one fired as if it were simply absent. Confirmed
         # directly: content that validates clean through backlog_validate was failing here on
         # exactly this class of check (G98's own finding, now root-caused rather than left as
         # "unresolved, downgraded to advisory").
-        shg = Graph().parse(sh_f); shg.parse(ru_f)
+        shg = Graph().parse(sh_f)
         focus = set()
         for L in arrivals:
             items = {s for s in a.subjects(B.belongsToLineage, L)}

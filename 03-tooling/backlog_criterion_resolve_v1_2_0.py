@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# v1.2.0 (Lineage 17, OESC-S04): follows the package's new layout -- one vocabulary, one data and one shapes file per subject. The register is in the data file.
 """backlog_criterion_resolve_v1_0_0.py — does the thing a criterion names exist?
 
 Built after a story was closed with its work undone. EP_RuleExec_S1 specified an
@@ -82,7 +83,7 @@ def main():
     pkg = os.path.dirname(here)
     g = Graph()
     for pat in ("01-ontologies/backlog_tbox_v*.ttl",
-                "01-ontologies/backlog_framework_register_abox_v*.ttl"):
+                "01-ontologies/backlog_abox_v*.ttl"):
         g.parse(sorted(glob.glob(os.path.join(pkg, pat)))[-1], format="turtle")
     # #3 of the mitigation plan: the strengthened "is this property actually
     # used" check produced a false positive on hasExpectedPolarity, whose own

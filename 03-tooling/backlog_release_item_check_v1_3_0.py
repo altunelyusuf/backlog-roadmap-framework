@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# v1.3.0 (Lineage 17, OESC-S04): follows the package's new layout. A tag older than the layout still resolves to the register's old file name.
 """backlog_release_item_check v1.2.0 -- GOV-S01, GOV-S02.
 
 The real, agreed gap: a package can publish a release whose governed files genuinely changed, while
@@ -59,11 +60,11 @@ def changed_governed_files(repo_root, package_prefix, baseline_tag):
 
 def register_path(repo_root, package_prefix):
     rc, out, err = sh(["bash", "-c",
-                        f"ls {repo_root}/{package_prefix}01-ontologies/backlog_framework_register_abox_v*.ttl "
+                        f"ls {repo_root}/{package_prefix}01-ontologies/backlog_abox_v*.ttl "
                         f"| sort -V | tail -1"], repo_root)
     p = out.strip()
     if not p:
-        print("GATE ABORT: no backlog_framework_register_abox_v*.ttl resolved")
+        print("GATE ABORT: no backlog_abox_v*.ttl resolved")
         sys.exit(3)
     return p
 
@@ -77,11 +78,14 @@ def register_path_at_tag(repo_root, package_prefix, tag):
     if rc != 0:
         print(f"GATE ABORT: git ls-tree at {tag} failed: {err.strip()}")
         sys.exit(3)
+    # Before v1.339.0 the register was its own file; from then on it is part of the data file. Older tags resolve to the old name.
     candidates = sorted(
         l for l in out.splitlines()
         if re.search(r'backlog_framework_register_abox_v[\d_]+\.ttl$', l))
     if not candidates:
-        print(f"GATE ABORT: no backlog_framework_register_abox_v*.ttl found at {tag}")
+        candidates = sorted(l for l in out.splitlines() if re.search(r'backlog_abox_v[\d_]+\.ttl$', l))
+    if not candidates:
+        print(f"GATE ABORT: no register file (backlog_abox_v*.ttl, or backlog_framework_register_abox_v*.ttl at an older tag) found at {tag}")
         sys.exit(3)
     return candidates[-1]
 

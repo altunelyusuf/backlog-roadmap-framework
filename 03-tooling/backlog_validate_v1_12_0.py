@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
-"""backlog_validate v1.6.0 — conformance validator for the Backlog & Roadmap
+"""backlog_validate v1.12.0 — conformance validator for the Backlog & Roadmap
 Semantic Framework (http://example.org/backlog 1.0.0).
+
+v1.12.0 (Lineage 17, OESC-S01): the package ships one vocabulary, one data and one shapes file per subject. The rules that used to
+ship as a second shapes file are in the shapes file, and the severity-promotion overlay is no longer a shipped file: it is derived
+from the shapes and the audit's own record in the data file (backlog_make_promoted_shapes) whenever a register adopting the audit
+is validated. The memo key hashes the inputs the derivation is a function of (shapes and data file), so it stays stable.
 
 Design points that are not incidental:
 
@@ -83,7 +88,26 @@ def latest(subdir, stem, ext="ttl"):
 TBOX = latest("01-ontologies", "backlog_tbox")
 ABOX = latest("01-ontologies", "backlog_abox")
 SHAPES = latest("02-shacl-safeguards", "backlog_shacl")
-RULES = latest("02-shacl-safeguards", "backlog_rules")
+
+
+_OVERLAY = [None]
+
+
+def _derived_overlay():
+    """The severity-promotion overlay, derived from SHAPES and the audit's SeverityPromotion individuals in ABOX. Written to a
+    throwaway file because pyshacl is handed a path; never shipped."""
+    if _OVERLAY[0] is None:
+        import importlib.util
+        mk = sorted(glob.glob(os.path.join(os.path.dirname(os.path.abspath(__file__)), "backlog_make_promoted_shapes_v*.py")), key=_semver)[-1]
+        spec = importlib.util.spec_from_file_location("backlog_make_promoted_shapes", mk)
+        m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+        g, _unaudited, dropped, bad = m.derive(Graph().parse(SHAPES, format="turtle"), Graph().parse(ABOX, format="turtle"))
+        if dropped or bad:
+            raise SystemExit("the severity audit's record is not derivable: %d dropped, %d malformed (run backlog_make_promoted_shapes)" % (len(dropped), len(bad)))
+        fd, path = tempfile.mkstemp(suffix=".promoted.ttl"); os.close(fd)
+        g.serialize(path, format="turtle")
+        _OVERLAY[0] = path
+    return _OVERLAY[0]
 
 
 def sha256(path):
@@ -98,6 +122,27 @@ def load(paths):
     for triple in list(g.triples((None, rdflib.OWL.imports, None))):
         g.remove(triple)
     return g
+
+
+_REF = {}
+_FW = "http://example.org/backlog-framework-register#"
+
+
+def reference_abox(data_files):
+    """The data file as REFERENCE for validating other data. The package's one data file holds the controlled individuals and, in
+    the framework's own namespace, the live register. When something else is being validated (a fixture, a candidate register), only
+    the controlled individuals may be reference: the live register's adoptions, completions and scores must not judge it. When the
+    data file itself is among the files validated, it is used whole."""
+    if any(os.path.abspath(f) == os.path.abspath(ABOX) for f in data_files):
+        return ABOX
+    if "p" not in _REF:
+        g = Graph().parse(ABOX, format="turtle")
+        for t in [t for t in g if isinstance(t[0], rdflib.URIRef) and str(t[0]).startswith(_FW)]:
+            g.remove(t)
+        fd, path = tempfile.mkstemp(suffix=".reference.ttl"); os.close(fd)
+        g.serialize(path, format="turtle")
+        _REF["p"] = path
+    return _REF["p"]
 
 
 def serialize(graph, suffix):
@@ -119,25 +164,27 @@ def promoted_overlay(data_files):
     """v1.248.0: if the DATA declares backlog:adoptsRuleSet backlog:RS_SeverityAudit_20260909, this
     register is validated against the severity-promotion overlay instead of the base shapes. A change
     in what a rule REFUSES binds only work that declared it; enforcement never runs before the
-    development in progress has completed (G89, G91)."""
-    for f in data_files:
-        try:
-            txt = open(f, encoding="utf-8", errors="ignore").read()
-        except OSError:
-            continue
-        if "adoptsRuleSet" in txt and "RS_SeverityAudit_20260909" in txt and not lineage_rule_set_adopters(data_files):
-            # v1.10.0: SemVer order, not lexical -- lexically v1_10_0 sorts before v1_9_0.
-            _sv = lambda p: [int(x) for x in re.findall(r"_v(\d+)_(\d+)_(\d+)\.", p)[0]]
-            cands = sorted(glob.glob(os.path.join(PKG, "02-shacl-safeguards", "backlog_shacl_promoted_v*.ttl")), key=_sv)
-            if cands:
-                return cands[-1]
+    development in progress has completed (G89, G91).
+
+    v1.12.0: the adoption is read from the data's TRIPLES, not searched for in its text. Until v1.11.0 this looked for the two
+    words in the file's text, which was harmless while the vocabulary and the register lived in different files; once one data
+    file holds the controlled individuals (the audit's own rule set among them) and the register, the two words are always
+    present and every register would have been judged by the promoted severities. Found by validating the merged file: 54
+    violations where the unmerged register had 0."""
+    g = load(data_files)
+    B_ = rdflib.Namespace("http://example.org/backlog#")
+    for s in g.subjects(B_.adoptsRuleSet, B_.RS_SeverityAudit_20260909):
+        if (s, rdflib.RDF.type, B_.Lineage) not in g:
+            return _derived_overlay()
     return None
 
 
 def _latest_overlay():
-    _sv = lambda p: [int(x) for x in re.findall(r"_v(\d+)_(\d+)_(\d+)\.", p)[0]]
-    cands = sorted(glob.glob(os.path.join(PKG, "02-shacl-safeguards", "backlog_shacl_promoted_v*.ttl")), key=_sv)
-    return cands[-1] if cands else None
+    """The derived overlay (a throwaway file), or None when the audit's record is absent from the data file."""
+    try:
+        return _derived_overlay()
+    except SystemExit:
+        raise
 
 
 def lineage_rule_set_adopters(data_files):
@@ -171,7 +218,7 @@ def _lineage_scope(g, lineages):
 def _memo_key(data_files):
     h = hashlib.sha256()
     _ov = promoted_overlay(data_files)
-    for p in [os.path.abspath(__file__), TBOX, ABOX, _ov or SHAPES, RULES] + sorted(data_files):
+    for p in [os.path.abspath(__file__), TBOX, ABOX, SHAPES] + sorted(data_files):
         h.update(os.path.basename(p).encode()); h.update(open(p, "rb").read())
     return h.hexdigest()
 
@@ -241,8 +288,8 @@ def validate_focused(data_files, baseline_tag):
         return 0, {"Violation": 0, "Warning": 0, "Info": 0}
     _ov = promoted_overlay(data_files)
     shapes = _ov if _ov else SHAPES
-    shapes_path = serialize(load([shapes, RULES]), ".shapes.ttl")
-    data_path = serialize(load([TBOX, ABOX] + data_files), ".data.ttl")
+    shapes_path = serialize(load([shapes]), ".shapes.ttl")
+    data_path = serialize(load([TBOX, reference_abox(data_files)] + data_files), ".data.ttl")
     focus_list = ",".join(sorted(str(s) for s in changed if not isinstance(s, rdflib.BNode)))
     proc = subprocess.run(
         [sys.executable, "-m", "pyshacl", "-s", shapes_path, "-a", "-f", "turtle",
@@ -302,8 +349,8 @@ def validate_lineage(data_files, lineage_local_name):
         return 0, {"Violation": 0, "Warning": 0, "Info": 0}
     _ov = promoted_overlay(data_files)
     shapes = _ov if _ov else SHAPES
-    shapes_path = serialize(load([shapes, RULES]), ".shapes.ttl")
-    data_path = serialize(load([TBOX, ABOX] + data_files), ".data.ttl")
+    shapes_path = serialize(load([shapes]), ".shapes.ttl")
+    data_path = serialize(load([TBOX, reference_abox(data_files)] + data_files), ".data.ttl")
     focus_list = ",".join(sorted(str(s) for s in members if not isinstance(s, rdflib.BNode)))
     proc = subprocess.run(
         [sys.executable, "-m", "pyshacl", "-s", shapes_path, "-a", "-f", "turtle",
@@ -408,8 +455,8 @@ def _validate(data_files):
     _ov = promoted_overlay(data_files)
     if _ov:
         SHAPES = _ov
-    data_path = serialize(load([TBOX, ABOX] + data_files), ".data.ttl")
-    shapes_path = serialize(load([SHAPES, RULES]), ".shapes.ttl")
+    data_path = serialize(load([TBOX, reference_abox(data_files)] + data_files), ".data.ttl")
+    shapes_path = serialize(load([SHAPES]), ".shapes.ttl")
 
     proc = subprocess.run(
         [sys.executable, "-m", "pyshacl", "-s", shapes_path, "-a", "-f", "turtle", data_path],
@@ -439,8 +486,8 @@ def _validate(data_files):
             src = report.value(result, SH.sourceShape)
             if report.value(result, SH.focusNode) in _scope and src in _diff:
                 report.set((result, SH.resultSeverity, _diff[src])); _regraded += 1
-        print("rule set    : RS_SeverityAudit_20260909 adopted by lineage(s) %s -- %d result(s) on their own work re-graded to %s; everything else at base severity"
-              % (", ".join(sorted(str(x).rsplit("#", 1)[-1] for x in _adopters)), _regraded, os.path.basename(_latest_overlay())))
+        print("rule set    : RS_SeverityAudit_20260909 adopted by lineage(s) %s -- %d result(s) on their own work re-graded to the severity audit's record in the data file; everything else at base severity"
+              % (", ".join(sorted(str(x).rsplit("#", 1)[-1] for x in _adopters)), _regraded))
 
     counts = {"Violation": 0, "Warning": 0, "Info": 0}
     findings = []
@@ -453,7 +500,6 @@ def _validate(data_files):
                          str(report.value(result, SH.resultMessage))))
 
     print("shapes      : %s (sha256 %s)" % (os.path.basename(SHAPES), sha256(SHAPES)[:16]))
-    print("rules       : %s (sha256 %s)" % (os.path.basename(RULES), sha256(RULES)[:16]))
     print("data        : %s" % ", ".join(os.path.basename(f) for f in data_files))
     print("tooling     : pyshacl %s, rdflib %s, advanced mode ON" % (pyshacl_version(), rdflib.__version__))
 
@@ -492,7 +538,7 @@ def _validate(data_files):
 
 
 def next_item(data_files, method):
-    g = load([TBOX, ABOX] + data_files)
+    g = load([TBOX, reference_abox(data_files)] + data_files)
     query = """
     SELECT ?id ?value WHERE {
       ?item backlog:hasState backlog:Ready ;

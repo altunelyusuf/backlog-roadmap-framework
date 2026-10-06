@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# v1.1.0 (Lineage 17, OESC-S04): follows the package's new layout -- one vocabulary, one data and one shapes file per subject. The register is in the data file.
 """backlog_standard_row_check_v1_0_0.py — standard rows checked against the TBox.
 
 BRF-EP25. The doc-coverage gate checks every class is NAMED in the standard and
@@ -102,7 +103,7 @@ def main():
     tbox = sorted(glob.glob(os.path.join(
         pkg, "01-ontologies", "backlog_tbox_v*.ttl")))[-1]
     reg = sorted(glob.glob(os.path.join(
-        pkg, "01-ontologies", "backlog_framework_register_abox_v*.ttl")))[-1]
+        pkg, "01-ontologies", "backlog_abox_v*.ttl")))[-1]
     headers = _header_words(tbox, reg)
     terms = tbox_terms(tbox, reg)
     rows = rows_of(std)

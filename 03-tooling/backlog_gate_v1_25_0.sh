@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# backlog_gate v1.24.0 — four-gate release check for the Backlog & Roadmap
+# backlog_gate v1.25.0 — four-gate release check for the Backlog & Roadmap
 # Semantic Framework. Nothing about the package's state is trusted until all
 # four pass, and the SHACL gate refuses to certify anything until it has just
 # demonstrated, in this run, that it can fail a known-bad register.
@@ -12,6 +12,10 @@
 #   +       doc-coverage gate      every TBox class named in the standard document
 #
 # Usage: backlog_gate_v1_12_0.sh [REGISTER.ttl ...]
+#
+# v1.25.0 (Lineage 17, OESC-S01 and S04): follows the package's new layout -- the register is part of the data file (backlog_abox), the
+# rules are in the shapes file, the severity-promotion overlay is derived (no shipped overlay file), the strategy exercise register is test input in 03-tooling/exercises/ (not a fixture: it declares no polarity),
+# and the promoted-overlay gate now checks that the audit's record derives an overlay: every promotion names a shape.
 #
 # v1.24.0 (Lineage 17, story OESC-S03): the split proof (every statement before a move is present, unchanged, after it) is proven
 # to discriminate on every run: it certifies an identical tree and refuses a tree with one statement removed or added.
@@ -199,7 +203,7 @@ echo "== Lineage-completeness gate — absence is reported, not assumed away =="
 # worst of that at L2+; this reports every layer at any level, because a register
 # improving toward a level needs to see the gap before it is failed on it.
 LIN="$(ls "$HERE"/backlog_lineage_completeness_v*.py 2>/dev/null | sort -V | tail -1 || true)"
-REG="$(ls "$PKG"/01-ontologies/backlog_framework_register_abox_v*.ttl 2>/dev/null | sort -V | tail -1 || true)"
+REG="$(ls "$PKG"/01-ontologies/backlog_abox_v*.ttl 2>/dev/null | sort -V | tail -1 || true)"
 if [ -n "$LIN" ] && [ -n "$REG" ]; then
   python3 "$LIN" "$REG" | grep -E "^level|^PRESENT|^ABSENT|^decomposition|^VERDICT"
 else
@@ -397,7 +401,7 @@ echo "== Reachability gate — no class the vocabulary cannot point at =="
 REACH="$(ls "$HERE"/backlog_reachability_gate_v*.py 2>/dev/null | sort -V | tail -1 || true)"
 if [ -n "$REACH" ]; then
   RTB="$(ls "$HERE"/../01-ontologies/backlog_tbox_v*.ttl | sort -V | tail -1)"
-  RREG="$(ls "$HERE"/../01-ontologies/backlog_framework_register_abox_v*.ttl | sort -V | tail -1)"
+  RREG="$(ls "$HERE"/../01-ontologies/backlog_abox_v*.ttl | sort -V | tail -1)"
   python3 "$REACH" "$RTB" "$RREG" | sed 's/^/  /' || {
     echo "  Reachability gate reports classes that are neither referenceable nor used."
     echo "  Parked at v1.95.0 by owner ruling: they block nothing and each needs its"
@@ -511,8 +515,8 @@ if [ -n "$LOC" ]; then
   echo "  self-proof: the pipeline verifier refuses a chain with no Backlog stage under --require-complete and accepts a complete chain"
   # v1.9.0: release tags are the recorded witnesses of this package's outputs; fetch them quietly if a remote exists
   ( cd "$PKG" && git fetch --tags --quiet origin 2>/dev/null || true )
-  REG="$(ls "$PKG"/01-ontologies/backlog_framework_register_abox_v*.ttl 2>/dev/null | sort -V | tail -1 || true)"
-  EXREG="$(ls "$PKG"/01-ontologies/backlog_strategy_exercise_abox_v*.ttl 2>/dev/null | sort -V | tail -1 || true)"
+  REG="$(ls "$PKG"/01-ontologies/backlog_abox_v*.ttl 2>/dev/null | sort -V | tail -1 || true)"
+  EXREG="$(ls "$PKG"/03-tooling/exercises/backlog_strategy_exercise_abox_v*.ttl 2>/dev/null | sort -V | tail -1 || true)"
   if [ -n "$EXREG" ]; then
     EX_OUT="$(python3 "$VALIDATE" "$EXREG" 2>&1)"; EX_RC=$?
     printf '%s\n' "$EX_OUT" | grep -E '^results|^VERDICT' | sed 's/^/  exercise register: /'
@@ -579,7 +583,7 @@ fi
 echo
 echo "== Archival finder — achieved lineages are found, and archiving is the next activity =="
 ARCH="$(ls "$HERE"/backlog_lineage_archive_v*.py 2>/dev/null | sort -V | tail -1 || true)"
-REGA="$(ls "$PKG"/01-ontologies/backlog_framework_register_abox_v*.ttl 2>/dev/null | sort -V | tail -1 || true)"
+REGA="$(ls "$PKG"/01-ontologies/backlog_abox_v*.ttl 2>/dev/null | sort -V | tail -1 || true)"
 if [ -n "$ARCH" ] && [ -n "$REGA" ]; then
   python3 "$ARCH" "$REGA" --find 2>&1 | sed 's/^/ /'
 else
@@ -588,7 +592,7 @@ fi
 
 echo
 echo "== Manifest-digest carrier — the root of the covered set lives outside it =="
-REGC="$(ls "$PKG"/01-ontologies/backlog_framework_register_abox_v*.ttl 2>/dev/null | sort -V | tail -1 || true)"
+REGC="$(ls "$PKG"/01-ontologies/backlog_abox_v*.ttl 2>/dev/null | sort -V | tail -1 || true)"
 CARRIER="$(grep -oE 'backlog:manifestDigestCarriedBy "[^"]+"' "$REGC" 2>/dev/null | head -1 | sed -E 's/.*"([^"]+)"/\1/')"
 if [ -z "$CARRIER" ]; then
   echo "  no manifestDigestCarriedBy in the register — RegisterArtifactShape reports it; not verified here."
@@ -731,14 +735,14 @@ python3 "$DOCGATE" | grep -E '^classes|^VERDICT'
 python3 "$DOCGATE" >/dev/null 2>&1 || { echo "Doc-coverage gate FAILED"; FAILED=1; }
 
 echo
-echo "== Promoted-overlay gate — is the rule-set overlay an exact regeneration of the base shapes? =="
+echo "== Promoted-overlay gate — does the severity audit derive an overlay from the shapes? =="
 # v1.20.0 (an adopting project handover, promoted-overlay-stale-drops-succession-shapes): a register adopting
 # RS_SeverityAudit_20260909 is validated against the overlay INSTEAD of the base; a stale overlay
 # silently drops every shape added since. Refused here, not left to an adopter to discover.
 OVERGEN="$(ls "$HERE"/backlog_make_promoted_shapes_v*.py 2>/dev/null | sort -V | tail -1 || true)"
 if [ -n "$OVERGEN" ]; then
   OVER_OUT="$(python3 "$OVERGEN" 2>&1)"; OVER_RC=$?
-  printf '%s\n' "$OVER_OUT" | grep -E '^overlay|^unaudited|^DROPPED|^VERDICT' | sed 's/^/  /'
+  printf '%s\n' "$OVER_OUT" | grep -E '^shapes|^audit|^unaudited|^DROPPED|^MALFORMED|^VERDICT' | sed 's/^/  /'
   [ "$OVER_RC" -eq 0 ] || { echo "  Promoted-overlay gate FAILED"; FAILED=1; }
 fi
 

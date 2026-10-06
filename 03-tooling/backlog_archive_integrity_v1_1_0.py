@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# v1.1.0 (Lineage 17, OESC-S04): follows the package's new layout. The register is in the data file.
 """backlog_archive_integrity v1.0.0 -- did the retired work arrive whole, and does the archive still
 hold together? A STRUCTURAL check, not a conformance one.
 
@@ -38,7 +39,7 @@ def latest(pat): return sorted(glob.glob(os.path.join(PKG, "01-ontologies", pat)
 
 def main():
     argv = sys.argv[1:]
-    reg = next((argv[i + 1] for i, a in enumerate(argv) if a == "--register"), latest("backlog_framework_register_abox_v*.ttl"))
+    reg = next((argv[i + 1] for i, a in enumerate(argv) if a == "--register"), latest("backlog_abox_v*.ttl"))
     arc = next((argv[i + 1] for i, a in enumerate(argv) if a == "--archive"), latest("backlog_framework_archive_abox_v*.ttl"))
     g, a = Graph().parse(reg), Graph().parse(arc)
     print(f"register    : {os.path.basename(reg)} ({len(g)} triples)")

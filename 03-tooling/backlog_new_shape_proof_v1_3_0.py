@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# v1.3.0 (Lineage 17, OESC-S04): follows the package's new layout -- one vocabulary, one data and one shapes file per subject. The register is in the data file.
 """backlog_new_shape_proof v1.2.0 -- every NEWLY authored shape declares its
 proof, checked against a REAL, distinct baseline, with the run's own claim
 written back as real, checkable data -- not only printed to a terminal.
@@ -204,7 +205,7 @@ def clone_shallow(repo_url):
 
 
 def highest_register(pkg):
-    matches = glob.glob(os.path.join(pkg, "01-ontologies", "backlog_framework_register_abox_v*.ttl"))
+    matches = glob.glob(os.path.join(pkg, "01-ontologies", "backlog_abox_v*.ttl"))
     if not matches:
         return None
     import re

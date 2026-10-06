@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# v1.1.0 (Lineage 17, OESC-S04): follows the package's new layout -- one vocabulary, one data and one shapes file per subject. The register is in the data file.
 """backlog_quality_assessment v1.0.0 — structural quality metrics for the subject.
 
 Closes the quality-facet gap the registration round left open, and closes it with
@@ -180,7 +181,7 @@ def main():
         print("  %-22s %8.3f   %s" % (name, value, method))
     global _POP_SENSITIVE
     _tb = sorted(glob.glob(os.path.join(PKG, "01-ontologies", "backlog_tbox_v*.ttl")))[-1]
-    _rg = sorted(glob.glob(os.path.join(PKG, "01-ontologies", "backlog_framework_register_abox_v*.ttl")))[-1]
+    _rg = sorted(glob.glob(os.path.join(PKG, "01-ontologies", "backlog_abox_v*.ttl")))[-1]
     _POP_SENSITIVE = _population_sensitive(_tb, _rg)
     print("\npopulation metrics, second reading with the shipped adopter fixture merged (%s):" % r_used["fixture"])
     for name, value, _ in r_used["metrics"]:

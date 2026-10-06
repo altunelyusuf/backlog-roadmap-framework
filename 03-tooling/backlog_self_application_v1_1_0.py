@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# v1.1.0 (Lineage 17, OESC-S04): follows the package's new layout -- one vocabulary, one data and one shapes file per subject. The register is in the data file.
 """backlog_self_application_v1_0_0.py — every checker runs against this package.
 
 A4 from the lineage discipline. Several findings in this package's history came
@@ -75,7 +76,7 @@ def main():
     me = os.path.basename(__file__)
     tbox = sorted(glob.glob(os.path.join(pkg, "01-ontologies", "backlog_tbox_v*.ttl")))
     reg = sorted(glob.glob(os.path.join(pkg, "01-ontologies",
-                 "backlog_framework_register_abox_v*.ttl")))
+                 "backlog_abox_v*.ttl")))
     if not tbox or not reg:
         raise SystemExit(
             "FATAL: no TBox or register found. This reads acceptsGraphPath "

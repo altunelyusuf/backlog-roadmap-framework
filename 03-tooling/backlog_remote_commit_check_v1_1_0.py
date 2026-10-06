@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# v1.1.0 (Lineage 17, OESC-S04): follows the package's new layout -- one vocabulary, one data and one shapes file per subject. The register is in the data file.
 """backlog_remote_commit_check v1.0.0 -- checks whether the remote has moved
 ahead, and if so, whether any new commit touched this package's own real
 sovereign path -- decided entirely by CrossProjectCommitAdvisoryShape, a
@@ -42,7 +43,7 @@ def main():
     pkg = os.path.dirname(here)
     register = None
     import glob
-    matches = sorted(glob.glob(os.path.join(pkg, "01-ontologies", "backlog_framework_register_abox_v*.ttl")))
+    matches = sorted(glob.glob(os.path.join(pkg, "01-ontologies", "backlog_abox_v*.ttl")))
     if matches:
         register = matches[-1]
 
