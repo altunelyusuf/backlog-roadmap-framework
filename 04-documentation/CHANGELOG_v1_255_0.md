@@ -11132,7 +11132,7 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Proof:** `backlog_split_proof` v1.1.0 against v1.339.0: nothing lost or changed outside this lineage's own register entries for S04 (the
   criterion's artefact names and the two state changes); everything added is this lineage's S04 entries.
 
-## v1.341.0 — Lineage 18, Mission stage: the package ships as one triad; Lineage 17 is set down as superseded (Work-Item: none, stage output)
+## v1.341.0 — Lineage 18, Mission stage: the package ships as one triad; Lineage 17 is set down as superseded (stage output, no work item)
 
 - **Why a successor lineage:** on 2026-10-06 the OE method changed the unit of the ontology file structure from the subject to the package
   (BP-D54, discipline v2.15.0). Lineage 17's Mission asked for two subjects of three files each, which the new rule no longer allows.
@@ -11145,4 +11145,5 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Lineage 18:** `L_OEPackageConsolidation`, status Opened, Mission recorded in the owner's words (quoted from OE's record of the ruling and
   from this package's own work), `supersedesMission` pointing at Lineage 17's. Mission digest recorded; it reproduces.
 - **Data file:** `backlog_abox` v1.10.0 (new version because the register changed). 0 violations.
+- **Tooling note:** the publisher moved to `oe_publish_v1_12_1.sh` (repo-tooling); the release script resolves it by version.
 - **Next, one release each:** Scope, Goal, Objective, Backlog, then the work.
