@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_execution_ready v1.0.0 -- may work start on this lineage, and on this item?  (the positive question)
+"""backlog_execution_ready v1.1.0 -- may work start on this lineage, and on this item?  (the positive question)
 
 WHY THIS EXISTS. Every gate this package ships is negative: it looks for what went wrong among the items that exist.
 A lineage whose work is executed outside the register has no items, so every negative gate passes over the empty set.
@@ -20,7 +20,10 @@ ITEM (--item NAME), the same facts the after-the-fact shapes demand once work ha
   - a Story, Epic or Initiative states its applicable design concerns, or that none applies
   - a Story has been taken in by a PlanningEvent
 
-Usage: backlog_execution_ready_v1_0_0.py REGISTER.ttl [MORE.ttl ...] --lineage NAME [--item NAME]
+v1.1.0: the decision is a function, evaluate(graph, lineage, item, emit), so the work guard asks it without re-parsing the
+register per item. Output and exit codes are unchanged from v1.0.0.
+
+Usage: backlog_execution_ready_v1_1_0.py REGISTER.ttl [MORE.ttl ...] --lineage NAME [--item NAME]
 Exit 0 READY, 2 NOT READY (every failed fact is printed), 1 error. Reads only; asserts nothing; never edits.
 It does not replace the validator or the order check: it is the precondition they cannot be.
 """
@@ -42,33 +45,20 @@ def active(g, o):
     return not (v is not None and bool(v.toPython()))
 
 
-def main(argv):
-    opts = {}
-    files = []
-    it = iter(range(len(argv)))
-    i = 0
-    while i < len(argv):
-        if argv[i] in ("--lineage", "--item"):
-            opts[argv[i]] = argv[i + 1]; i += 2
-        else:
-            files.append(argv[i]); i += 1
-    if not files or "--lineage" not in opts:
-        print(__doc__); return 1
-    g = Graph()
-    for f in files:
-        g.parse(f, format="turtle")
+def evaluate(g, lineage, item=None, emit=print):
+    """Return the list of missing facts (empty = READY). emit receives each printed line."""
     bad = []
 
     def check(ok, msg):
-        print(("  ok    " if ok else "  FAIL  ") + msg)
+        emit(("  ok    " if ok else "  FAIL  ") + msg)
         if not ok:
             bad.append(msg)
 
-    L = find(g, opts["--lineage"])
-    print(f"register    : {', '.join(f.rsplit('/', 1)[-1] for f in files)}")
-    print(f"lineage     : {opts['--lineage']}")
+    L = find(g, lineage)
+    emit(f"lineage     : {lineage}")
     if L is None or (L, RDF.type, B.Lineage) not in g:
-        check(False, "the lineage exists in the register (examined: 0 lineages)"); print("VERDICT     : NOT READY"); return 2
+        check(False, "the lineage exists in the register (examined: 0 lineages)")
+        return bad
     arch = g.value(L, B.lineageArchived)
     check(not (arch is not None and bool(arch.toPython())), "the lineage is not archived")
     fr = g.value(L, B.lineageFrozen)
@@ -80,10 +70,10 @@ def main(argv):
     admitted = {s for s in g.subjects(B.admittedByOutput, None) if any(o in outs["Stage_Backlog"] for o in g.objects(s, B.admittedByOutput))}
     n_items = len(set(items) | admitted)
     check(n_items > 0, f"the lineage holds at least one work item (examined: {n_items})")
-    if "--item" in opts:
-        name = opts["--item"]
+    if item is not None:
+        name = item
         X = find(g, name)
-        print(f"item        : {name}")
+        emit(f"item        : {name}")
         if X is None:
             check(False, "the item exists in the register")
         else:
@@ -99,6 +89,25 @@ def main(argv):
                       "it states its applicable design concerns, or that none applies")
             if "Story" in types:
                 check(any((e, RDF.type, B.PlanningEvent) in g for e in g.subjects(B.plansItem, X)), "a PlanningEvent has taken it in")
+    return bad
+
+
+def main(argv):
+    opts = {}
+    files = []
+    i = 0
+    while i < len(argv):
+        if argv[i] in ("--lineage", "--item"):
+            opts[argv[i]] = argv[i + 1]; i += 2
+        else:
+            files.append(argv[i]); i += 1
+    if not files or "--lineage" not in opts:
+        print(__doc__); return 1
+    g = Graph()
+    for f in files:
+        g.parse(f, format="turtle")
+    print(f"register    : {', '.join(f.rsplit('/', 1)[-1] for f in files)}")
+    bad = evaluate(g, opts["--lineage"], opts.get("--item"))
     print("VERDICT     : " + ("READY" if not bad else f"NOT READY -- {len(bad)} fact(s) missing; work may not start"))
     return 0 if not bad else 2
 

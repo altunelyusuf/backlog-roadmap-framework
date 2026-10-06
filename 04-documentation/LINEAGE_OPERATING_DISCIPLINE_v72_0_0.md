@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v70.0.0
+# Lineage Operating Discipline — v72.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -2895,3 +2895,84 @@ the work is a single, well-defined technical fix, and no RICE-scored priority de
 doesn't need. Still real, still checked, still `belongsToLineage` and the objective chain intact
 throughout -- the ceremony's *weight* is what this ruling reduces, not the structural facts the
 ontology itself requires for good reason.
+
+
+## G100 — A gate that examined nothing passed, and the work it was meant to stop ran outside the register; the recovery is a procedure, not a decision per instance
+
+**What happened.** the adopting project's Lineage_2 had Mission, Scope, Goal and Objective outputs but no Backlog stage
+output and no work item. Every gate passed, because every negative gate passes over an empty set. The
+coordinator then executed 398 ledger rows in nine release streams outside the register, and truthful
+registration afterwards produced 378 violations (224 inherited baseline plus 154 new). an adopting project held all Lineage_2 work and asked
+this package for a recovery strategy rather than deciding per instance. The owner's instruction: prevent it,
+and provide a recovery mechanism instead of ad hoc decisions.
+
+**Classification (L-114).** A genuine gap in the gates (a positive start condition did not exist, and the
+order check read a lineage with no Backlog output and no item as ORDERED), and a gap in the coordinator's
+practice (it started work without asking whether work was permitted). Not a defect in the Backlog rules.
+
+**Why every gate passed.** L-95 again: a gate shown only on good input proves nothing. The order check
+examined zero items and said ORDERED; the shapes examined zero stories and said conforms.
+
+**Prevention built (v1.331.0).**
+- Order check v1_10_0 adds the verdict `AWAITING_BACKLOG`: no Backlog stage output and no work item. It prints
+  that nothing was examined, and `--no-empty-pass` exits 2 on it. Shown to fire on a known-bad fixture.
+- A positive start gate, `backlog_execution_ready_v1_1_0.py`: exit 0 only when the lineage has an active,
+  non-retracted Backlog output and the item (if named) is admitted by it. Coordinators call it before every
+  assignment. Twelve cases probed.
+- Self-proof added to the gate script (three `--expect` checks and the start-gate probe).
+
+**Recovery built (v1.331.0).** `RECOVERY_RUNBOOK_work_executed_outside_the_register_v1_0_0.md`: register
+truthfully, record the bypass (by the tool, from git), freeze, restart by the owner, rebuild one commit per
+stage, admit through the active Backlog output, and verify. Includes the strategy decision table. Items
+admitted by an active Backlog output as `preLineageItem` are exempt from the two act-record shapes only
+(`GroomingShape` constraints 1 and 2, `L4StoryGranularityShape`): the concern declaration and the planning
+event cannot be honestly produced after the fact. The eight fact shapes (evidence, criterion, harness,
+`lastAuditedAt`, finish point, modality and the others) stay required. Probed: carried and fresh stories differ
+by exactly the two exempted act-record shapes' violations (8 versus 10).
+
+**Not decided here.** Restart is the owner's act once a bypass is recorded; Mission re-affirmation is the
+owner's (G14); there is no size threshold for divide-and-conquer, which depends on the partition and not on a count.
+Not re-run: the adopting project's own order-check output (needs their clone). Not measured: how many ledger rows can
+carry a named test and an audit date; that is the adopting project's evidence.
+
+**Rule.** No work starts on a lineage until the start gate says READY. A bypass that has happened is recovered
+by the runbook, not by a per-instance ruling. Related: G77, G84, G90, G97.
+
+
+## G101 — A lineage opened to end work outside the register repeated it, because every safeguard was prose or came after the act; the safeguard now sits in the path of the act and a correction is closed only by a check that fails
+
+**What happened.** Lineage_2 was opened so that work would stop happening outside the register, and then work happened
+outside the register (G100). The owner asked for the root cause and for preventive mechanisms: hooks, rulings,
+enforcement and best practice. The analysis is `ROOT_CAUSE_ANALYSIS_the_lineage_opened_to_end_drift_repeated_it`;
+read it for the evidence. Seven causes: no positive start condition; safeguards that were prose or came after the act;
+a second system of record (a work ledger) that CI even tested; green verdicts read without their examined count; a closed
+stage that names no next act; corrections filed as prose, which decay across sessions and compactions; parallel workers
+whose clones carry no hooks.
+
+**Classification (L-114).** The outcome would have occurred with every existing safeguard in place (398 rows were
+executed with all of them present), so it is a genuine gap, in the gates (this package) and in the project's practice and
+enforcement. It is not a safeguard working.
+
+**Built (v1.332.0).**
+- `backlog_work_guard`: four layers (session start, edit time, commit and push, CI range check) with one rule: no change
+  to governed work without a `Work-Item` that is ready in the register. It fails closed and cannot pass over nothing (an
+  empty work-path list, a path matching no tracked file, an empty register all block). Proven on a real git repository by
+  `backlog_work_guard_probe`: refusals and acceptances at every layer, a `--no-verify` commit caught by the range check, a
+  push refused, a fresh clone re-armed at session start.
+- `backlog_guard_install`: one idempotent command that writes the configuration, the git hooks, the Claude Code hooks and
+  the CI workflow. Installing it, and marking the CI job required, are the project's acts.
+- `backlog_pipeline_verify` v1_7_0: a chain without its Backlog stage prints INCOMPLETE; `--require-complete` exits 2.
+- `backlog_execution_ready` v1_1_0: the decision is a function the guard calls.
+- Gate v1_23_0 proves the guard and the verifier refusal in every release.
+
+**The rule.** (1) The safeguard for a rule about work stands in the path of the act, not after it, and at least one layer
+cannot be skipped by the session being governed (CI). (2) A drift is closed only by a check that fails on the known-bad
+case; a "standing practice" or "standing directive" without one leaves the finding open, and says so. (3) A verdict is read
+with its examined count: INCOMPLETE, AWAITING_BACKLOG and NOT READY are stop signs. (4) A work ledger is a view over the
+register, never a source of work, and a test suite for off-register work is not evidence of conformance.
+
+**Not decided here and not claimed.** Whether Claude Code applies project hooks inside delegated worker sessions is not
+verified; the commit hook (re-armed at session start) and CI do not depend on it. The Bash-write detection is a heuristic.
+The guard cannot judge the quality of grooming: a ready item can still be shallow, and the shapes judge that afterwards.
+No lint over a project's own drift log was built: it is project-specific and clause (2) is the control. Related: G77,
+G84, G90, G97, G100.

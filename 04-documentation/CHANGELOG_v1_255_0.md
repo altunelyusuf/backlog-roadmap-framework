@@ -10988,3 +10988,21 @@ executed outside the register. Ruling G100 (discipline v71_0_0).
 - **Not changed:** TBox stays at v1_118_0. Shapes v1_146_0 -> v1_147_0, overlay v1_16_0 -> v1_17_0, standard v1_114_0 -> v1_115_0.
 - **Not done:** the adopting project's own order-check output not re-run; row-level evidence measurement is the adopting project's.
 - **Unplanned work:** processed the pending an adopting project handover before the OE file-structure clean-up (owner's priority).
+
+## v1.332.0 — The safeguard stands in the path of the act (owner's instruction after the repeat drift)
+
+Lineage_2 was opened to end work outside the register and repeated it. Root-cause analysis and ruling G101 (discipline
+v72_0_0). Evidence read from the consumer's repository: its only hook auto-allows every permission, its CI never reads the
+register (and runs the ledger-driven specs), and twenty drift entries were each answered with prose.
+
+- **Added:** the work guard (`backlog_work_guard`, four layers: session start, edit time, commit and push, CI range check;
+  fails closed, cannot pass over nothing) with a real-repository probe (25 cases: refusals and acceptances at every layer,
+  a `--no-verify` commit caught by the range check, a push refused, a fresh clone re-armed); the installer
+  `backlog_guard_install` and the Claude Code hook `backlog_guard_claude_hook`; fixture `fixture_pipeline_incomplete`;
+  `ROOT_CAUSE_ANALYSIS_the_lineage_opened_to_end_drift_repeated_it`, `WORK_GUARD_ADOPTION_GUIDE`.
+- **Changed:** pipeline verifier v1_6_0 -> v1_7_0 (INCOMPLETE verdict, `--require-complete`); start gate v1_0_0 -> v1_1_0 (decision
+  is a function); gate v1_22_0 -> v1_23_0 (self-proof of the guard and the verifier refusal); recovery runbook v1_0_0 -> v1_1_0.
+- **Not changed:** TBox stays at v1_118_0; shapes stay at v1_147_0; overlay stays at v1_17_0. Standard v1_115_0 -> v1_116_0.
+- **Not claimed:** project hooks inside delegated worker sessions are not verified (the commit hook and CI do not depend
+  on them); Bash-write detection is a heuristic; the guard cannot judge the quality of grooming.
+- **Unplanned work:** the owner's instruction to analyse the root cause and build preventive mechanisms, taken before the OE file-structure clean-up.

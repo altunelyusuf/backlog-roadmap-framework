@@ -1,11 +1,11 @@
-# Recovery runbook — work executed outside the register (v1.0.0)
+# Recovery runbook — work executed outside the register (v1.1.0)
 
 Applies when real work was done on a lineage that had no Backlog stage output or no registered items
 (Lineage_2 at an adopting project is the precedent; ruling G100). Do not decide per instance; follow the steps.
 
 ## Prevention first
-Before every assignment run `backlog_execution_ready_v1_0_0.py REGISTER.ttl --lineage NAME [--item NAME]`
-(exit 0 READY, 2 NOT READY). Run the order check with `--no-empty-pass`; `AWAITING_BACKLOG` exits 2.
+Before every assignment run `backlog_execution_ready_v1_1_0.py REGISTER.ttl --lineage NAME [--item NAME]`
+(exit 0 READY, 2 NOT READY). Run the order check with `--no-empty-pass`; `AWAITING_BACKLOG` exits 2. Install the work guard (`WORK_GUARD_ADOPTION_GUIDE`) so no work commit lands without a ready `Work-Item`; after a restart set `governed_from` to the restart commit.
 
 ## Steps
 1. **Stop.** No further work on the lineage.

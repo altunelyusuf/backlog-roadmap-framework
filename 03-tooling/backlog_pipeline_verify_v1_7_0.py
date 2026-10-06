@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""backlog_pipeline_verify_v1_2_0.py — the lineage order, checked by reconstruction.
+"""backlog_pipeline_verify_v1_7_0.py — the lineage order, checked by reconstruction.
+
+v1.7.0 (ruling G101): a chain that stops before Stage_Backlog is no longer a bare PASS. an adopting project read "4 of 5 outputs,
+Stage_Backlog absent, VERDICT PASS" as compliance while nine releases shipped from a ledger. The verdict now says what it
+did not examine, and --require-complete exits 2 when the Backlog stage is absent (use it wherever work is about to start).
 
 WHY THIS EXISTS
 
@@ -136,6 +140,8 @@ def main():
     _tb = sorted(_glob.glob(_os.path.join(_pkg, "01-ontologies", "backlog_tbox_v*.ttl")))[-1]
     lineage_name = None
     argv = list(sys.argv[1:])
+    require_complete = "--require-complete" in argv
+    argv = [a for a in argv if a != "--require-complete"]
     if "--lineage" in argv:
         idx = argv.index("--lineage")
         lineage_name = argv[idx + 1]
@@ -147,7 +153,7 @@ def main():
     STAGE_TYPES = _load_stage_types(_tb, table=_table)
     print("digest table: %s" % {"v3": "v3 (RS_DigestTable_v3 declared)", "v2": "v2 (RS_DigestTable_v2 declared)", "v1": "v1"}[_table])
     if len(argv) < 1:
-        print("usage: backlog_pipeline_verify_v1_6_0.py <register.ttl> [tbox.ttl] [--lineage NAME]")
+        print("usage: backlog_pipeline_verify_v1_7_0.py <register.ttl> [tbox.ttl] [--lineage NAME] [--require-complete]")
         return 1
     g = Graph()
     for f in argv:
@@ -219,9 +225,16 @@ def main():
                 print("       consumes %s, expected %s — the pipeline is not a line" % (got or "nothing", exp))
         prev = o
 
+    incomplete = (not failed) and ORDER[-1] not in outputs
+    if incomplete:
+        print("\nINCOMPLETE  : %s is absent. Nothing about work items was examined, and a chain without its Backlog" % ORDER[-1])
+        print("              stage has no admitted work: work may not start (backlog_execution_ready).")
     print("\nVERDICT     : %s" % ("PASS — every recorded digest reproduces and the chain is a line"
+                                  + (" (INCOMPLETE: %s absent, nothing about work examined)" % ORDER[-1] if incomplete else "")
                                   if not failed else
                                   "FAIL — a stage claims a state that does not exist"))
+    if incomplete and require_complete:
+        return 2
     return 1 if failed else 0
 
 

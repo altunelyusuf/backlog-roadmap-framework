@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# backlog_gate v1.22.0 — four-gate release check for the Backlog & Roadmap
+# backlog_gate v1.23.0 — four-gate release check for the Backlog & Roadmap
 # Semantic Framework. Nothing about the package's state is trusted until all
 # four pass, and the SHACL gate refuses to certify anything until it has just
 # demonstrated, in this run, that it can fail a known-bad register.
@@ -479,6 +479,24 @@ if [ -n "$LOC" ]; then
   else
     echo "  NOT RUN — start-gate probe not found. Not assumed to pass."
   fi
+  # v1.23.0 (ruling G101, the repeat drift): the safeguard must sit in the path of the act. The work guard is proven on a
+  # real throwaway repository (real commits refused and accepted, the CI range check naming a skipped commit, the Claude
+  # hooks blocking an edit on a lineage with no Backlog stage, a guard over nothing refused); the pipeline verifier must
+  # say INCOMPLETE and --require-complete must refuse a chain with no Backlog stage while accepting a complete one.
+  WGP="$(ls "$HERE"/backlog_work_guard_probe_v*.py 2>/dev/null | sort -V | tail -1 || true)"
+  if [ -n "$WGP" ]; then
+    python3 "$WGP" >/dev/null 2>&1 || { echo "  ABORT: the work guard does not discriminate (backlog_work_guard_probe failed)."; exit 3; }
+    echo "  self-proof: the work guard refuses a work commit with no ready Work-Item, a push holding one, an edit on a lineage with no Backlog stage and a guard over nothing; it accepts groomed work"
+  else
+    echo "  NOT RUN — work-guard probe not found. Not assumed to pass."
+  fi
+  PV="$(ls "$HERE"/backlog_pipeline_verify_v*.py 2>/dev/null | sort -V | tail -1 || true)"
+  PFI="$(ls "$HERE"/fixtures/fixture_pipeline_incomplete_v*.ttl | sort -V | tail -1)"
+  PFC="$(ls "$HERE"/fixtures/fixture_pipeline_v*.ttl | sort -V | tail -1)"
+  if python3 "$PV" "$PFI" --require-complete >/dev/null 2>&1; then
+    echo "  ABORT: a chain with no Backlog stage passed --require-complete -- the verifier passes over the missing stage again."; exit 3; fi
+  python3 "$PV" "$PFC" --require-complete >/dev/null 2>&1 || { echo "  ABORT: a complete chain failed --require-complete -- the check is broken, not the register."; exit 3; }
+  echo "  self-proof: the pipeline verifier refuses a chain with no Backlog stage under --require-complete and accepts a complete chain"
   # v1.9.0: release tags are the recorded witnesses of this package's outputs; fetch them quietly if a remote exists
   ( cd "$PKG" && git fetch --tags --quiet origin 2>/dev/null || true )
   REG="$(ls "$PKG"/01-ontologies/backlog_framework_register_abox_v*.ttl 2>/dev/null | sort -V | tail -1 || true)"
