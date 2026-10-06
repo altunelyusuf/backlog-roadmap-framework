@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_split_proof v1.3.0 -- a move of statements between files lost nothing and changed nothing.
+"""backlog_split_proof v1.4.0 -- a move of statements between files lost nothing and changed nothing.
 
 WHY THIS EXISTS (Lineage 17, story OESC-S03, deliverable "A before and after proof that no statement changed").
 The Mission says no statement any file makes changes. A split of the package into a live and an archive subject moves
@@ -17,6 +17,8 @@ THE PROOF PROVES ITSELF EVERY RUN (L-95). Before it certifies anything it remove
 side and one statement's object from another, and each must be reported as a difference; if either is not seen the tool
 refuses to certify and exits 3.
 
+v1.4.0 (Lineage 18, OC-S04): --show-all prints every difference, not the first five; --ignore-subject now prints how many statements it set aside on each
+side, so a declared exception is counted, never silent.
 v1.3.0 (Lineage 18, OC-S04, a move into the archive folder): the archive folder (01-ontologies/archive/) is read on each side like the folders above it;
 --rewrite OLD=NEW declares that a text pointer (a file path in a literal) was repointed, and applies it to the BEFORE side's literals, COUNTING how many
 statements it touched; --exclude-after PATH leaves out a file that is new (a shapes file written from scratch, which has no BEFORE counterpart).
@@ -26,7 +28,7 @@ is untyped and carries four statements (part-of, identifier, label, version). Th
 aside on the AFTER side and COUNTED and printed. Any other statement on that subject is compared like any other.
 v1.1.0 (OESC-S01, a split that moves files and retires one): the comparison can be told which files left the compared
 directories and where they went, and which added statements are declared.
-Usage: backlog_split_proof_v1_3_0.py BEFORE_PACKAGE_DIR AFTER_PACKAGE_DIR [options]
+Usage: backlog_split_proof_v1_4_0.py BEFORE_PACKAGE_DIR AFTER_PACKAGE_DIR [options]
   --allow-added                 statements only AFTER are reported but do not fail
   --allow-added-pattern REGEX   a statement only AFTER passes if it matches REGEX (repeatable); any other added statement fails
   --exclude-before PATH         leave this file of the BEFORE tree (relative to the package) out of the comparison, e.g. a derived copy
@@ -34,6 +36,7 @@ Usage: backlog_split_proof_v1_3_0.py BEFORE_PACKAGE_DIR AFTER_PACKAGE_DIR [optio
                                 a directory the comparison does not otherwise read
   --rewrite OLD=NEW             a repointed text path: applied to the BEFORE side's literals and counted (repeatable)
   --exclude-after PATH          leave this file of the AFTER tree out of the comparison, e.g. a new file with no BEFORE counterpart
+  --show-all                    print every difference (the default prints the first five of each list)
   --ignore-subject IRI          leave out the statements about this subject (repeatable)
 Exit 0 identical, 2 differences, 3 the proof could not discriminate, 1 usage.
 """
@@ -137,11 +140,14 @@ def main(argv):
     import re
     ignore, allow_added, pos, pats, exb, xb, xa, mods = [], False, [], [], [], [], [], []
     rew, exa = [], []
+    show_all = False
     i = 0
     while i < len(argv):
         if argv[i] == "--ignore-subject":
             from rdflib import URIRef
             ignore.append(URIRef(argv[i + 1])); i += 2
+        elif argv[i] == "--show-all":
+            show_all = True; i += 1
         elif argv[i] == "--rewrite":
             o, n = argv[i + 1].split("=", 1); rew.append((o, n)); i += 2
         elif argv[i] == "--exclude-after":
@@ -168,6 +174,9 @@ def main(argv):
     set_aside = strip_module_records(ga, mods)
     if mods:
         print(f"module records: {len(mods)} declared header(s); {set_aside} statement(s) (part-of, identifier, label, version) set aside on the AFTER side")
+    if ignore:
+        ib = sum(1 for t in gb if t[0] in set(ignore)); ia = sum(1 for t in ga if t[0] in set(ignore))
+        print(f"ignored subjects: {len(ignore)} declared; {ib} statement(s) BEFORE and {ia} AFTER set aside and counted")
     sb, rb = signature(gb, ignore); sa, ra = signature(ga, ignore)
     print(f"before : {len(fb)} file(s), {len(gb)} statements ({len(sb)} compared)  {pos[0]}")
     print(f"after  : {len(fa)} file(s), {len(ga)} statements ({len(sa)} compared)  {pos[1]}")
@@ -178,15 +187,15 @@ def main(argv):
     print("SELF-PROOF : ok -- a planted removal and a planted change are both reported")
     lost, added = compare(sb, sa)
     print(f"only BEFORE (lost or changed): {len(lost)}")
-    for x in lost[:5]:
+    for x in (lost if show_all else lost[:5]):
         print("   -", x[:200])
     print(f"only AFTER  (added or changed): {len(added)}")
-    for x in added[:5]:
+    for x in (added if show_all else added[:5]):
         print("   +", x[:200])
     undeclared = [x for x in added if not any(p.search(x) for p in pats)] if pats else added
     if pats:
         print(f"added statements matching a declared pattern: {len(added) - len(undeclared)}; matching none: {len(undeclared)}")
-        for x in undeclared[:5]:
+        for x in (undeclared if show_all else undeclared[:5]):
             print("   ?", x[:200])
     bad = bool(lost) or (bool(undeclared) and not allow_added)
     print("VERDICT    : " + ("IDENTICAL -- every statement before is present after, and none was changed" if not bad

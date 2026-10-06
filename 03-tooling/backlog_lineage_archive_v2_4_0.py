@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-# v2.3.0 (Lineage 18, OC-S05): follows the archive folder. The archive data file now lives in 01-ontologies/archive/.
-"""backlog_lineage_archive v2.2.0 — set an achieved lineage down, out of every processing path.
+# v2.4.0 (Lineage 18, OC-S06): an abandoned lineage is archivable (its stated reason is its record), and the existing entries follow the archive file to its new version. v2.3.0 (Lineage 18, OC-S05): follows the archive folder. The archive data file now lives in 01-ontologies/archive/.
+"""backlog_lineage_archive v2.4.0 — set an achieved lineage down, out of every processing path.
 
 WHY. A lineage whose mission is settled keeps costing every run until it is ARCHIVED: the SHACL
 suite validates its every individual, the git witness re-measures its every subject, the roadmap
@@ -67,8 +67,14 @@ def archivable(g, L):
     m = g.value(L, B.lineageForMission)
     if m is None: reasons.append("no lineageForMission")
     else:
-        if g.value(m, B.hasMissionOutcome) != B.Out_Achieved: reasons.append(f"mission {local(m)} is not Out_Achieved")
-        if not any(True for cr in g.subjects(B.closesForMission, m)): reasons.append(f"no ClosureReport closes {local(m)}")
+        oc = g.value(m, B.hasMissionOutcome)
+        if oc == B.Out_Abandoned:
+            # v2.4.0 (Lineage 18): an ABANDONED mission is archivable too -- the finder already lists abandoned lineages, and the record of an abandonment is
+            # its stated reason, not a closure report (nothing was achieved to report). The reason must be there.
+            if g.value(m, B.outcomeRationale) is None: reasons.append(f"mission {local(m)} is Out_Abandoned but states no outcomeRationale")
+        else:
+            if oc != B.Out_Achieved: reasons.append(f"mission {local(m)} is neither Out_Achieved nor Out_Abandoned")
+            if not any(True for cr in g.subjects(B.closesForMission, m)): reasons.append(f"no ClosureReport closes {local(m)}")
     a = g.value(L, B.lineageArchived)
     if a is not None and bool(a.toPython()): reasons.append("already archived")
     f = g.value(L, B.lineageFrozen)
@@ -129,6 +135,11 @@ def partition(g, lineages):
     # with everything else it owns; what remains in the live register is a LineageArchiveEntry, built
     # by apply() below. keep_live is now only what the REGISTER owns and no archival may touch.
     keep_live = protected(g)
+    # v2.4.0 (Lineage 18): two things a retired lineage never owns, and the closure below must not sweep. (1) The vocabulary's own individuals (the
+    # backlog# namespace: statuses, outcomes) -- they were swept once their last LIVE user was a retired lineage, which would leave a live register
+    # unable to use them. (2) A live lineage and its mission: a live mission that merely POINTS at a retired one (supersedesMission) is not part of it.
+    keep_live |= {x for x in set(g.subjects()) if isinstance(x, URIRef) and str(x).startswith("http://example.org/backlog#")}
+    keep_live |= live_lin | {g.value(l, B.lineageForMission) for l in live_lin if g.value(l, B.lineageForMission)}
     part |= set(lineages) | {g.value(l, B.lineageForMission) for l in lineages if g.value(l, B.lineageForMission)}
     part |= {cr for l in lineages for cr in g.subjects(B.closesForMission, g.value(l, B.lineageForMission))}
     part -= keep_live
@@ -231,6 +242,9 @@ def main():
     live_txt = live_txt.replace(f'owl:versionInfo "{oldv}" ;', f'owl:versionInfo "{newv}" ;', 1)
     live_txt = re.sub(r"(owl:versionIRI <[^>]*/)" + re.escape(oldv) + ">", lambda m: m.group(1) + newv + ">", live_txt, count=1)
     rel = os.path.relpath(new_arch, PKG)
+    # v2.4.0: every entry already in the live register names the archive file by its path; the archive file just changed version, so they follow it
+    # (the same repointing a person did by hand at the last bump; the split proof counts it as declared).
+    live_txt = live_txt.replace('backlog:archiveFile "%s"' % os.path.relpath(arch_path, PKG), 'backlog:archiveFile "%s"' % rel)
     live_txt = live_txt.rstrip("\n") + f"\n\n#################################################################\n#  {now} -- ARCHIVAL by backlog_lineage_archive_v2_0_0: {len(part)} subjects of\n#  {', '.join(local(L) for L in lineages)} set down into {rel}; the lineage,\n#  its mission and its closure report stay here as the record that points in.\n#################################################################\n"
     live_txt += f"\n# The record each retired lineage leaves in the live register: a LineageArchiveEntry, not a\n# Lineage -- no shape targeting Lineage, Mission or any stage element fires on retired work (G92).\n"
     for L in lineages:
