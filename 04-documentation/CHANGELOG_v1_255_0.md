@@ -11221,3 +11221,10 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Checked on the published state (v1.349.0):** OE's structure checker with OE's debt register v1.9.0 reports 0 violations recorded, 0 new, and the one recorded line for this package CLEARED, verdict PASS. The package reads as 3 Turtle files.
 - **Sent:** a return note naming the cleared line is in OE's inbox (pending). OE's own session removes the line from its register; this session does not edit it.
 - **Register:** OC-S07 and its task are InProgress, not Done: its objective counts recorded debt lines, which stays at 1 until OE removes it, so the story cannot honestly close yet. It closes in the next run after that. `backlog_abox` v1.20.0, 0 violations.
+
+## v1.351.0 — Lineage 18 closed: achieved, with a closure report that names what it leaves
+
+- **Closed:** OE has removed the package's debt line (register v1.10.0), so OC-S07 is Done with evidence, harness and observation (recorded debt lines: 0). The iteration is Done with a measured duration (4 h 12 min, read from the stories' own start and finish times), a release record carries the seven stories, the mission is Achieved with its rationale, and the lineage is Achieved.
+- **Closure report:** it covers the nine objectives and states five defects carried forward to Lineage 19: the public copy cuts modules by an IRI list and skips a missing one silently; the reconcile tool still judges the archive by live rules; the archived copy of a retired lineage is not marked archived; an abandoned mission is accepted without a closure report; one objective (OC-S07) depended on an external register, which was a poor design.
+- **Corrections to earlier entries:** v1.348.0 said a module missing from the deriver is "reported, never silent"; the code skips it silently. v1.349.0 said no script names a moved path; the reconcile tool derives archive folders by string substitution. Both are defects, not facts, and are in Lineage 19.
+- **Data file:** `backlog_abox` v1.21.0; 0 violations; pipeline digests 5 of 5 reproduce.

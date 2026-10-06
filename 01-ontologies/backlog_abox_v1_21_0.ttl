@@ -22,9 +22,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (ABox: controlled individuals, reference data and the live register)"@en ;
-    owl:versionIRI <http://example.org/backlog/abox/1.20.0> ;
-    owl:versionInfo "1.20.0" ;
-    owl:priorVersion <http://example.org/backlog/abox/1.19.0> , <http://example.org/backlog/abox/1.17.0> , <http://example.org/backlog/abox/1.16.0> , <http://example.org/backlog/abox/1.15.0> , <http://example.org/backlog/abox/1.14.0> , <http://example.org/backlog/abox/1.13.0> , <http://example.org/backlog/abox/1.12.0> , <http://example.org/backlog/abox/1.11.0> , <http://example.org/backlog/abox/1.10.0> , <http://example.org/backlog/abox/1.9.0> , <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
+    owl:versionIRI <http://example.org/backlog/abox/1.21.0> ;
+    owl:versionInfo "1.21.0" ;
+    owl:priorVersion <http://example.org/backlog/abox/1.20.0> , <http://example.org/backlog/abox/1.19.0> , <http://example.org/backlog/abox/1.17.0> , <http://example.org/backlog/abox/1.16.0> , <http://example.org/backlog/abox/1.15.0> , <http://example.org/backlog/abox/1.14.0> , <http://example.org/backlog/abox/1.13.0> , <http://example.org/backlog/abox/1.12.0> , <http://example.org/backlog/abox/1.11.0> , <http://example.org/backlog/abox/1.10.0> , <http://example.org/backlog/abox/1.9.0> , <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
         <http://example.org/backlog-abox/1.2.1> ,
                      <http://example.org/backlog-abox/1.2.0> ,
                      <http://example.org/backlog-abox/1.1.0> ,
@@ -5749,7 +5749,7 @@ fw:L_OEPackageConsolidation a backlog:Lineage ; rdfs:label "Lineage 18: OE Packa
     backlog:lineageOrdinal 18 ;
     backlog:lineageArchived false ;
     backlog:lineageForMission fw:Mission_OEPackageConsolidation ;
-    backlog:hasLineageStatus backlog:LS_InProgress ;
+    backlog:hasLineageStatus backlog:LS_Achieved ;
     backlog:hasLineageDepthLevel backlog:Depth_StoryDirect ;
     backlog:hasLineageArtifactDomain backlog:Domain_Infrastructure ;
     backlog:memberOfContainer fw:Register .
@@ -5760,7 +5760,8 @@ fw:Mission_OEPackageConsolidation a backlog:Mission ; rdfs:label "Mission: OE Pa
     backlog:supersedesMission fw:Mission_OEStructureCleanup ;
     backlog:hasMissionOrigin backlog:Origin_OwnerStated ;
     backlog:missionSource "Owner, 2026-10-06, as recorded by the OE governance session in BP-D54: 'No, not per subject. All subjects should be consolidated in one file per concept and at the end we will have just 1 file for A-Box, 1 file for T-Box, and 1 file for SHACL.' Earlier in this package's own work the owner said: 'If you say, we have subject-based files, they should be consolidated under one single file not a multiplicative of 3 per subject.' OE's answers of 2026-10-06 to this package (archive without a vocabulary file is allowed; test input goes to fixtures; provenance records are the archive's modules). Then: 'OK proceed with the same ceremonies on OEE and BRSF lineage strict disciplines.'" ;
-    backlog:hasMissionOutcome backlog:Out_InFlight ;
+    backlog:hasMissionOutcome backlog:Out_Achieved ;
+    backlog:outcomeRationale "Achieved: one T-Box, one A-Box and one shapes file for the package, with the former subjects held as modules and the old files in the archive folder; the seven stories are Done with evidence and the closure report records the five defects carried forward to Lineage 19." ;
     backlog:producedByStage fw:Out_Mission_OEPackageConsolidation ;
     backlog:decidedBy backlog:Owner .
 
@@ -6116,7 +6117,9 @@ fw:Out_Objective_OEPackageConsolidation a backlog:StageOutput ;
 # acceptance criterion, design concerns declared (or none applies), taken in by a planning event that produces one task. Order: S01, S02, S03, S04, S05, S06, S07.
 
 fw:It_OC_1 a backlog:Iteration ; backlog:hasIdentifier "OC-IT1" ; backlog:hasTitle "Lineage 18, first work window" ;
-    backlog:hasState backlog:InProgress ;
+    backlog:hasState backlog:Done ;
+    backlog:hasObservedDuration "PT4H12M"^^xsd:duration ;
+    backlog:hasDurationSource "Earliest startedAt (2026-10-06T16:40:00Z) to latest finishedAt (2026-10-06T20:51:43Z) across the seven ST_OC_* stories." ;
     backlog:memberOfContainer fw:Register ; backlog:belongsToLineage fw:L_OEPackageConsolidation .
 
 fw:AC_OC_Fixtures a backlog:AcceptanceCriterion ;
@@ -6354,9 +6357,13 @@ fw:T_OC_Ceremony a backlog:ExecutionTask ; backlog:hasIdentifier "OC-T06" ;
     backlog:hasRationale "One task matching the whole of its story's scope." .
 
 fw:AC_OC_DebtCleared a backlog:AcceptanceCriterion ;
+    backlog:satisfiedByArtifact "03-tooling/backlog_package_fold_v1_1_0.py -- fold" ;
     backlog:hasGherkinText "Given the new layout is released, When the OE structure checker runs, Then the package's recorded debt line reads CLEARED with no violation new, and a return note naming it is in the OE inbox." .
 fw:ST_OC_DebtCleared a backlog:Story ; backlog:hasIdentifier "OC-S07" ; backlog:hasTitle "Show the package clear and return the note to the OE inbox" ;
-    backlog:hasState backlog:InProgress ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-10-06T18:58:00Z"^^xsd:dateTime ; backlog:finishedAt "2026-10-06T20:51:43Z"^^xsd:dateTime ; backlog:lastAuditedAt "2026-10-06T20:51:43Z"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_OC_DebtCleared ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
     backlog:startedAt "2026-10-06T18:58:00Z"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register ;
     backlog:belongsToLineage fw:L_OEPackageConsolidation ;
@@ -6379,7 +6386,10 @@ fw:Plan_OC_DebtCleared a backlog:PlanningEvent ; rdfs:label "OC-S07 taken in"@en
     backlog:hasRationale "The formal boundary between ordering this work and doing it." .
 fw:T_OC_DebtCleared a backlog:ExecutionTask ; backlog:hasIdentifier "OC-T07" ;
     backlog:hasTitle "Build and prove: DebtCleared"@en ;
-    backlog:hasState backlog:InProgress ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-10-06T18:58:00Z"^^xsd:dateTime ; backlog:finishedAt "2026-10-06T20:51:43Z"^^xsd:dateTime ; backlog:lastAuditedAt "2026-10-06T20:51:43Z"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_OC_DebtCleared_Task ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
     backlog:startedAt "2026-10-06T18:58:00Z"^^xsd:dateTime ;
     backlog:hasTaskType backlog:Task_Implementation ;
     backlog:memberOfContainer fw:Register , fw:It_OC_1 ;
@@ -6551,3 +6561,45 @@ fw:Obs_OC_NoStatementChange_NothingLost a backlog:MetricObservation ; rdfs:label
     backlog:observesMetric fw:Metric_OC_NoStatementChange ; backlog:observationFor fw:Obj_OC_NoStatementChange ;
     backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-10-06T18:38:30Z"^^xsd:dateTime ;
     backlog:hasObservationMethod "Split proof v1.4.0 over the whole lineage: statements only before, beyond the declared edits, 0." .
+
+# DebtCleared done (Lineage 18).
+fw:Ev_OC_DebtCleared a backlog:Evidence , backlog:TestEvidence ; backlog:attestsCriterion fw:AC_OC_DebtCleared ;
+    backlog:hasTestId "debt_line_cleared_and_removed_by_oe" ;
+    backlog:evidenceVerified true ; backlog:verifiedByTool "backlog_validate_v1_12_0.py" ;
+    backlog:hasVerificationMethod "Real run of OE's structure checker (v1.2.1) on the published package state with OE's debt register v1.10.0: 3 files examined, 0 violations, 0 entries recorded for this package, verdict PASS. The one recorded line (one-per-role, data files) was removed by OE's own session after the return note in its inbox; the earlier register v1.9.0 had reported it CLEARED. The story's own criterion (cleared reading, note sent) was met before OE acted; the objective it feeds counts OE's register, which is why it waited." .
+fw:Ev_OC_DebtCleared_Task a backlog:Evidence , backlog:TestEvidence ;
+    backlog:hasTestSpec "03-tooling/backlog_package_fold_v1_1_0.py" ;
+    backlog:evidenceVerified true ; backlog:verifiedByTool "backlog_validate_v1_12_0.py" ;
+    backlog:hasVerificationMethod "Real run of OE's structure checker (v1.2.1) on the published package state with OE's debt register v1.10.0: 3 files examined, 0 violations, 0 entries recorded for this package, verdict PASS. The one recorded line (one-per-role, data files) was removed by OE's own session after the return note in its inbox; the earlier register v1.9.0 had reported it CLEARED. The story's own criterion (cleared reading, note sent) was met before OE acted; the objective it feeds counts OE's register, which is why it waited." .
+fw:H_OC_DebtCleared a backlog:TestHarness ; backlog:harnessFor fw:T_OC_DebtCleared ;
+    backlog:hasHarnessEvidence fw:Ev_OC_DebtCleared_Task ;
+    backlog:hasRationale "The task's own harness, distinct from the story's." .
+fw:H_OC_DebtCleared_Story a backlog:TestHarness ; backlog:harnessFor fw:ST_OC_DebtCleared ;
+    backlog:hasHarnessEvidence fw:Ev_OC_DebtCleared ;
+    backlog:hasRationale "The story's own harness: the real run named in its evidence." .
+fw:Obs_OC_EnforcementDone_DebtCleared a backlog:MetricObservation ; rdfs:label "After OC DebtCleared: measured again"@en ;
+    backlog:observesMetric fw:Metric_OC_EnforcementDone ; backlog:observationFor fw:Obj_OC_EnforcementDone ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-10-06T20:53:43Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "OE debt register v1.10.0 read directly: no line recorded for this package (it held 1 at baseline)." .
+
+# Lineage 18 closes. Its seven stories shipped in the releases v1.346.0 to v1.350.0.
+fw:Rel_OC_1 a backlog:DeploymentUnit ;
+    backlog:hasIdentifier "OC-REL1" ; backlog:hasTitle "Shipped from Lineage 18's first work window" ;
+    backlog:hasState backlog:Done ;
+    backlog:hasDeploymentDate "2026-10-06T20:30:00Z"^^xsd:dateTime ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation ;
+    backlog:deploysFrom fw:It_OC_1 ; backlog:deploysItem fw:ST_OC_Fixtures , fw:ST_OC_LiveTriad , fw:ST_OC_ArchiveFolder , fw:ST_OC_NothingLost , fw:ST_OC_ToolsRepointed , fw:ST_OC_Ceremony , fw:ST_OC_DebtCleared ;
+    backlog:decidedBy backlog:Owner ; backlog:hasSelectionBasis backlog:Sel_Committed .
+fw:ST_OC_Fixtures backlog:memberOfContainer fw:Rel_OC_1 .
+fw:ST_OC_LiveTriad backlog:memberOfContainer fw:Rel_OC_1 .
+fw:ST_OC_ArchiveFolder backlog:memberOfContainer fw:Rel_OC_1 .
+fw:ST_OC_NothingLost backlog:memberOfContainer fw:Rel_OC_1 .
+fw:ST_OC_ToolsRepointed backlog:memberOfContainer fw:Rel_OC_1 .
+fw:ST_OC_Ceremony backlog:memberOfContainer fw:Rel_OC_1 .
+fw:ST_OC_DebtCleared backlog:memberOfContainer fw:Rel_OC_1 .
+fw:CR_OEPackageConsolidation a backlog:ClosureReport ;
+    backlog:closesForMission fw:Mission_OEPackageConsolidation ;
+    backlog:reportGeneratedAt "2026-10-06T21:05:00Z"^^xsd:dateTime ;
+    backlog:closureCommittedAt "backlog-roadmap-framework-v1.351.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasClosureSummary "Done: the package ships as one vocabulary, one data file and one shapes file, each with one ontology header (OE structure checker: 3 files, 0 violations, and OE's debt register holds no line for it). Every former subject is a module record; the archive is a folder of its own with one data file and one shapes file; the test drive and the strategy exercise register are fixtures with declared polarity; Lineage 17 was set down through the archiving ceremony; ten tools follow the new layout. The split proof over the whole lineage read 0 statements lost or changed, 176 added, all declared. Delivered by seven stories in releases v1.346.0 to v1.350.0. Cancelled: nothing in this lineage; its predecessor's three unfinished stories were carried into it (see that lineage's own report). Not done well, found after the work and carried to the next lineage: (1) the public copy cuts seven modules by a list of IRIs in the deriver, and a module that is missing is skipped silently, against what the changelog said; (2) the archive-reconcile tool derives folders by string substitution and is broken by the archive folder, which the story that repointed tools did not catch; (3) the archive tool did not mark the archived copy of a lineage as archived, leaving three warnings; (4) the archive tool accepted an abandoned mission without a closure report, which the owner has ruled wrong; (5) objective OC-O4 counted lines in another party's register, which only that party could change, so its story could not honestly close for hours after its own criterion was met." ;
+    backlog:reportsOnObjective fw:Obj_OC_MissionMet , fw:Obj_OC_FilesDone , fw:Obj_OC_ToolsDone , fw:Obj_OC_EnforcementDone , fw:Obj_OC_Contained , fw:Obj_OC_NoStatementChange , fw:Obj_OC_NoRetroJudging , fw:Obj_OC_NoOtherPackages , fw:Obj_OC_NoModuleMembership .
