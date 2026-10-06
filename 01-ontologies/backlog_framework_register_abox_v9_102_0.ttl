@@ -14,8 +14,8 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.101.0> ;
-    owl:versionInfo "9.101.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.102.0> ;
+    owl:versionInfo "9.102.0" ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.100.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.98.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.97.0> ;
@@ -750,7 +750,7 @@ fw:Tbl_BUILD_ARTIFACTS_manifest_coverage a backlog:CodeTable ;
     backlog:tableInModule "backlog_manifest_coverage_v1_0_0.py" ;
     backlog:hasTableKind backlog:Table_Operational ;
     backlog:tableExported false .
-fw:Tbl_PLACEHOLDERS_package_check a backlog:CodeTable ;
+fw:Tbl_67ab5852373912fd841885908f9fc89257e3fba3b71c237463a69142fcd0818aS_package_check a backlog:CodeTable ;
     backlog:tableInModule "backlog_package_check_v1_0_0.py" ;
     backlog:hasTableKind backlog:Table_Operational ;
     backlog:tableExported false .
@@ -866,7 +866,7 @@ fw:CR_ImplementationProject a backlog:ContainerRole ; backlog:containerClass bac
 #
 #  Reading the six remaining tables before exporting them: every
 #  one is operational. PATTERNS and SCAN are regex and glob lists,
-#  PLACEHOLDERS validates a template, PUBLIC_ONLY and VOLATILE name
+#  67ab5852373912fd841885908f9fc89257e3fba3b71c237463a69142fcd0818aS validates a template, PUBLIC_ONLY and VOLATILE name
 #  files, SPEC is a completed script's own work list.
 #
 #  The v1.117.0 split sorted by NAME rather than by content —
@@ -3682,3 +3682,32 @@ fw:L_FixtureConsolidation backlog:lineageArchived true ; backlog:archiveFile "01
 # individual). Both deployment units were created during Lineage 16's own work: each ships a story of it.
 fw:Rel_GovMit_1 backlog:belongsToLineage fw:L_GovernanceMitigations .
 fw:Rel_GovMit_2 backlog:belongsToLineage fw:L_GovernanceMitigations .
+
+# v9.102.0: Lineage 17 opened, Mission stage only (one release per stage, G101). The owner affirmed the Mission
+# on 2026-10-06 ("OK, this is quite better I think. Let's proceed accordingly.").
+#################################################################
+#  Lineage 17 -- L_OEStructureCleanup -- Mission, 2026-10-06.
+#  A minimal lineage for a technical-debt clean-up (G99): the Mission is the owner's (G14).
+#################################################################
+fw:L_OEStructureCleanup a backlog:Lineage ; rdfs:label "Lineage 17: OE Structure Clean-up"@en ;
+    backlog:lineageOrdinal 17 ;
+    backlog:lineageArchived false ;
+    backlog:lineageForMission fw:Mission_OEStructureCleanup ;
+    backlog:hasLineageStatus backlog:LS_InProgress ;
+    backlog:hasLineageDepthLevel backlog:Depth_StoryDirect ;
+    backlog:hasLineageArtifactDomain backlog:Domain_Infrastructure ;
+    backlog:memberOfContainer fw:Register .
+
+fw:Mission_OEStructureCleanup a backlog:Mission ; rdfs:label "Mission: OE Structure Clean-up"@en ;
+    backlog:hasMissionStatement "This package holds two ontology subjects and ships exactly as the OE method requires, with no exceptions: for the live work, one vocabulary file, one data file and one rules file; for retired work, the same three. Each subject has its own ontology identity, and no file mixes roles or repeats a role within its subject. Live and historical facts never share a file, so retired work is never judged by today's rules and the archiving ceremony is a move from one subject to the other. No statement any file makes changes, and what is retired or worked as an exercise stays out of live processing."@en ;
+    backlog:missionFor fw:Register ;
+    backlog:hasMissionOrigin backlog:Origin_OwnerStated ;
+    backlog:missionSource "Owner, 2026-10-06: 'If you say, we have subject-based files, they should be consolidated under one single file not a multiplicative of 3 per subject' and 'What if we split the active lineage from the archive? In this case 3+3 6 files and clear distinction between the current and historical facts with archiving ceremony would help to enhance the lineage overall.' Affirmed after a measured test drive: 'OK, this is quite better I think. Let's proceed accordingly.'" ;
+    backlog:hasMissionOutcome backlog:Out_InFlight ;
+    backlog:decidedBy backlog:Owner .
+
+fw:Out_Mission_OEStructureCleanup a backlog:StageOutput ;
+    backlog:outputOfStage backlog:Stage_Mission ; backlog:belongsToLineage fw:L_OEStructureCleanup ;
+    backlog:hasStateDigest "67ab5852373912fd841885908f9fc89257e3fba3b71c237463a69142fcd0818a" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.333.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Mission stage of Lineage 17. Tag deterministic: VERSION.txt set before publishing. Stage 1 of 5, one release each." .

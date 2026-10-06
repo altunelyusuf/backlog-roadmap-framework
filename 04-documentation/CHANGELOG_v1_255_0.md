@@ -11006,3 +11006,15 @@ register (and runs the ledger-driven specs), and twenty drift entries were each 
 - **Not claimed:** project hooks inside delegated worker sessions are not verified (the commit hook and CI do not depend
   on them); Bash-write detection is a heuristic; the guard cannot judge the quality of grooming.
 - **Unplanned work:** the owner's instruction to analyse the root cause and build preventive mechanisms, taken before the OE file-structure clean-up.
+
+## v1.333.0 — Lineage 17 (OE structure clean-up) opened: Mission stage only (BP-D53, G99, G101)
+
+The owner affirmed the Mission on 2026-10-06 after a measured test drive of the two-subject layout (live and archive, three
+files each). Measured in scratch, nothing shipped: the split is lossless; the live register validates alone with 0 violations
+in about 45-90 s, versus 89 violations and about 5 min when merged with the archive; the archive shapes run over the whole
+archive in 8 s and find two achieved lineages still marked not archived; the archiving ceremony moves 20 subjects with 0
+dangling live pointers; 17 scripts name the files and must be repointed.
+- **Register (9.102.0):** `L_OEStructureCleanup`, its Mission, and the Mission `StageOutput` (digest reproduces, closed at this
+  release's tag). No Scope, Goal, Objective or Backlog yet: each closes in its own release, and no work starts before the
+  Backlog stage.
+
