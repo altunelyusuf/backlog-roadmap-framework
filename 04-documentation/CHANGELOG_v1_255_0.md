@@ -11112,3 +11112,22 @@ dangling live pointers; 17 scripts name the files and must be repointed.
   two scripts still name an old file prefix on purpose (the migration tool, and the release-item check's fallback for older tags).
 - **Register (9.108.0):** `ST_OESC_LiveSubject` and its task are Done with evidence and harnesses; `Obj_OESC_FilesDone` observed 2 and
   `Obj_OESC_MissionMet` observed 4. 0 violations.
+
+## v1.340.0 — Lineage 17, OESC-S04 done: no script names a retired file prefix (Work-Item: ST_OESC_ToolsRepointed)
+
+- **Tools (versioned, renamed):** release item check v1.4.0 drops its fallback to the register's old file name (the baseline tag now always
+  carries the new layout); quality assessment v1.2.0 leaves the live register out of its structural measurement, so its figures keep
+  their meaning (first reading: 441 individuals, the 379 controlled ones plus the 62 audit records; the v1.339.0 merge had silently
+  lifted it to 785); the one-time migration tool moved to `03-tooling/archive/` (it names the retired prefixes by necessity and is kept
+  as the record of the move). Roadmap report and compass were re-run on the merged data file and agree with the register's own state.
+- **Measured:** scripts naming a retired prefix outside the archive, exercises and fixtures folders: 17 at the baseline, 0 now.
+- **Data file:** `backlog_abox` v1.9.0 (new version because the register entries changed; no statement of the vocabulary or reference
+  data changed). In the register, `AC_OESC_LiveSubject` now cites the migration tool at its archive path.
+- **Register (9.109.0):** `ST_OESC_ToolsRepointed` and its task are Done with evidence and harnesses; `Obj_OESC_ToolsDone` observed 0. 0 violations.
+- **A rule that landed while this work ran:** OE discipline v2.15.0 (BP-D54) changes the structure unit from the subject to the
+  package: one vocabulary, one data and one shapes file for the whole package, former subjects as modules, the archive as one triad in
+  a folder named `archive`. The two-subject layout of v1.339.0 is therefore an intermediate state, not the end state. Mission, Scope
+  and the archive story of Lineage 17 name two subjects and are the owner's text; they are not changed here, and the consolidation
+  waits for the owner's decision on how to carry it (see the return note to the OE inbox).
+- **Proof:** `backlog_split_proof` v1.1.0 against v1.339.0: nothing lost or changed outside this lineage's own register entries for S04 (the
+  criterion's artefact names and the two state changes); everything added is this lineage's S04 entries.

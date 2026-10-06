@@ -20,9 +20,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (ABox: controlled individuals, reference data and the live register)"@en ;
-    owl:versionIRI <http://example.org/backlog/abox/1.8.0> ;
-    owl:versionInfo "1.8.0" ;
-    owl:priorVersion <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
+    owl:versionIRI <http://example.org/backlog/abox/1.9.0> ;
+    owl:versionInfo "1.9.0" ;
+    owl:priorVersion <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
         <http://example.org/backlog-abox/1.2.1> ,
                      <http://example.org/backlog-abox/1.2.0> ,
                      <http://example.org/backlog-abox/1.1.0> ,
@@ -6063,7 +6063,7 @@ fw:Plan_OESC_NothingLost a backlog:PlanningEvent ; rdfs:label "OESC-S03 taken in
     backlog:hasRationale "The formal boundary between ordering this work and doing it." .
 
 fw:AC_OESC_LiveSubject a backlog:AcceptanceCriterion ;
-    backlog:satisfiedByArtifact "03-tooling/backlog_subject_split_v1_0_0.py -- backlog_subject_split" ;
+    backlog:satisfiedByArtifact "03-tooling/archive/backlog_subject_split_v1_0_0.py -- backlog_subject_split" ;
     backlog:hasGherkinText "Given the package's live statements, When the live subject is built, Then it ships exactly one vocabulary file, one data file and one rules file sharing the identity backlog, the structure checker reports no mixed or repeated role for it, and the live register validates with 0 violations." .
 fw:ST_OESC_LiveSubject a backlog:Story ; backlog:hasIdentifier "OESC-S01" ; backlog:hasTitle "Build the live subject: one vocabulary, one data and one rules file under the identity backlog" ;
     backlog:hasState backlog:Done ;
@@ -6117,9 +6117,13 @@ fw:Plan_OESC_ArchiveSubject a backlog:PlanningEvent ; rdfs:label "OESC-S02 taken
     backlog:hasRationale "The formal boundary between ordering this work and doing it." .
 
 fw:AC_OESC_ToolsRepointed a backlog:AcceptanceCriterion ;
+    backlog:satisfiedByArtifact "03-tooling/backlog_gate_v1_25_0.sh -- backlog_abox" ;
     backlog:hasGherkinText "Given the 17 scripts that name a file by its old prefix, When each is repointed, Then a search finds no stale prefix outside vendored, archive and fixture folders, and the release gate passes with the new layout and still fails on its known-bad inputs." .
 fw:ST_OESC_ToolsRepointed a backlog:Story ; backlog:hasIdentifier "OESC-S04" ; backlog:hasTitle "Repoint every tool that names a moved file" ;
-    backlog:hasState backlog:Ready ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-10-06T10:05:00Z"^^xsd:dateTime ; backlog:finishedAt "2026-10-06T12:05:00Z"^^xsd:dateTime ; backlog:lastAuditedAt "2026-10-06T12:05:00Z"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_OESC_Tools , fw:Ev_OESC_ToolsGate ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
     backlog:memberOfContainer fw:Register , fw:It_OESC_1 ;
     backlog:belongsToLineage fw:L_OEStructureCleanup ;
     backlog:producedByStage fw:Out_Backlog_OEStructureCleanup ;
@@ -6243,7 +6247,10 @@ fw:T_OESC_ArchiveSubject a backlog:ExecutionTask ; backlog:hasIdentifier "OESC-T
     backlog:hasRationale "One task matching the whole of its story's scope." .
 fw:T_OESC_ToolsRepointed a backlog:ExecutionTask ; backlog:hasIdentifier "OESC-T04" ;
     backlog:hasTitle "Build and prove: ToolsRepointed"@en ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-10-06T10:05:00Z"^^xsd:dateTime ; backlog:finishedAt "2026-10-06T12:05:00Z"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_OESC_ToolsTask ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
     backlog:hasTaskType backlog:Task_Implementation ;
     backlog:memberOfContainer fw:Register , fw:It_OESC_1 ;
     backlog:belongsToLineage fw:L_OEStructureCleanup ;
@@ -6314,3 +6321,27 @@ fw:Obs_OESC_MissionMet_1 a backlog:MetricObservation ; rdfs:label "After the liv
     backlog:observesMetric fw:Metric_OESC_MissionMet ; backlog:observationFor fw:Obj_OESC_MissionMet ;
     backlog:hasObservedValue 4.0 ; backlog:observedAt "2026-10-06T10:21:40Z"^^xsd:dateTime ;
     backlog:hasObservationMethod "Direct count of *.ttl in 01-ontologies and 02-shacl-safeguards." .
+
+# v9.109.0: OESC-S04 done. No script outside the archive folder names a file by a prefix this lineage retired.
+fw:Ev_OESC_Tools a backlog:Evidence , backlog:TestEvidence ; backlog:attestsCriterion fw:AC_OESC_ToolsRepointed ;
+    backlog:hasTestId "no_script_names_a_retired_prefix" ;
+    backlog:evidenceVerified true ; backlog:verifiedByTool "grep over 03-tooling" ;
+    backlog:hasVerificationMethod "Real search of every script in 03-tooling (the archive, exercises and fixtures folders excluded) for the five retired file prefixes (the register file, the rules file, the promoted overlay, the alignment file, the old reference data file): 0 scripts match, where 17 matched at the baseline. The one-time migration tool, which names them by necessity, is kept in 03-tooling/archive." .
+fw:Ev_OESC_ToolsGate a backlog:Evidence , backlog:TestEvidence ; backlog:attestsCriterion fw:AC_OESC_ToolsRepointed ;
+    backlog:hasTestId "release_gate_passes_new_layout_and_still_fails_bad_inputs" ;
+    backlog:evidenceVerified true ; backlog:verifiedByTool "backlog_gate_v1_25_0.sh" ;
+    backlog:hasVerificationMethod "The release gate passed at v1.339.0 with the new layout (the published record says so), and its own self-proofs, which run a known-bad input through each check and require a refusal, ran in that same pass." .
+fw:Ev_OESC_ToolsTask a backlog:Evidence , backlog:TestEvidence ;
+    backlog:hasTestSpec "03-tooling/backlog_gate_v1_25_0.sh" ;
+    backlog:evidenceVerified true ; backlog:verifiedByTool "backlog_gate_v1_25_0.sh" ;
+    backlog:hasVerificationMethod "The gate run over the repointed tools: Gate 0, P, K, R, coverage, criterion artefacts, version freeze, pipeline and lineage-order all passed." .
+fw:H_OESC_ToolsRepointed a backlog:TestHarness ; backlog:harnessFor fw:T_OESC_ToolsRepointed ;
+    backlog:hasHarnessEvidence fw:Ev_OESC_ToolsTask ;
+    backlog:hasRationale "The task's own harness, distinct from the story's." .
+fw:H_OESC_ToolsRepointed_Story a backlog:TestHarness ; backlog:harnessFor fw:ST_OESC_ToolsRepointed ;
+    backlog:hasHarnessEvidence fw:Ev_OESC_Tools , fw:Ev_OESC_ToolsGate ;
+    backlog:hasRationale "The story's own harness: the search for stale prefixes and the release gate's pass with its self-proofs." .
+fw:Obs_OESC_ToolsDone_1 a backlog:MetricObservation ; rdfs:label "After the tools were repointed: no script names a retired prefix"@en ;
+    backlog:observesMetric fw:Metric_OESC_ToolsDone ; backlog:observationFor fw:Obj_OESC_ToolsDone ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-10-06T12:06:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Search of 03-tooling for the retired file prefixes, excluding archive, exercises and fixture folders." .

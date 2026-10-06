@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# v1.2.0 (Lineage 17, OESC-S04): the live register inside the data file is excluded from the structural measurement, so the figures keep the meaning they had.
 # v1.1.0 (Lineage 17, OESC-S04): follows the package's new layout -- one vocabulary, one data and one shapes file per subject. The register is in the data file.
 """backlog_quality_assessment v1.0.0 — structural quality metrics for the subject.
 
@@ -61,6 +62,10 @@ def measure(with_fixture=False):
     g = Graph()
     g.parse(tbox_path, format="turtle")
     g.parse(abox_path, format="turtle")
+    # v1.2.0: the data file also holds the live register (framework-register namespace). The structural metrics describe the framework's
+    # vocabulary and its controlled individuals, as they did when the register was its own file, so the register is left out here.
+    for t in [t for t in g if str(t[0]).startswith("http://example.org/backlog-framework-register#")]:
+        g.remove(t)
     fixture_path = None
     if with_fixture:
         # population metrics measured on the framework ABox alone understate the
