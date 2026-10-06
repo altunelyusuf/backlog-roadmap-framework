@@ -11018,3 +11018,17 @@ dangling live pointers; 17 scripts name the files and must be repointed.
   release's tag). No Scope, Goal, Objective or Backlog yet: each closes in its own release, and no work starts before the
   Backlog stage.
 
+
+## v1.334.0 — Lineage 17, Scope stage (second of five releases)
+
+- **Register (9.103.0):** the Scope of `L_OEStructureCleanup`: the scope text, three areas (the ontology files, the tools that
+  name them, the structure rule and its debt record), six deliverables each derived from a clause of the Mission, and three
+  exclusions (changing what any statement says, judging retired work by today's rules, other packages' files). The Scope
+  `StageOutput` consumes the Mission output, its digest reproduces under the register's declared digest table (v3), and it is
+  closed at this release's tag. No Goal, Objective or Backlog yet.
+- **Two corrections to what v1.333.0 shipped, stated rather than silently made (L-112):** the lineage status was recorded as
+  `LS_InProgress`, which the register's own rule refuses until a work item has left Proposed or Ready; it is now `LS_Scoped`,
+  the status the staged ceremony defines for this point. The Mission statement carried a language tag that the mission
+  shape's string datatype rejects; the tag is removed and the words are unchanged. The Mission now points to its own stage
+  output (`producedByStage`), which the mission shape reads as "this lineage is still being built". The register validates with
+  0 violations at this stage.

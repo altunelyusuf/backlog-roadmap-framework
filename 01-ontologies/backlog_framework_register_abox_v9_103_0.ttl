@@ -14,8 +14,8 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.102.0> ;
-    owl:versionInfo "9.102.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.103.0> ;
+    owl:versionInfo "9.103.0" ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.100.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.98.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.97.0> ;
@@ -3693,17 +3693,18 @@ fw:L_OEStructureCleanup a backlog:Lineage ; rdfs:label "Lineage 17: OE Structure
     backlog:lineageOrdinal 17 ;
     backlog:lineageArchived false ;
     backlog:lineageForMission fw:Mission_OEStructureCleanup ;
-    backlog:hasLineageStatus backlog:LS_InProgress ;
+    backlog:hasLineageStatus backlog:LS_Scoped ;
     backlog:hasLineageDepthLevel backlog:Depth_StoryDirect ;
     backlog:hasLineageArtifactDomain backlog:Domain_Infrastructure ;
     backlog:memberOfContainer fw:Register .
 
 fw:Mission_OEStructureCleanup a backlog:Mission ; rdfs:label "Mission: OE Structure Clean-up"@en ;
-    backlog:hasMissionStatement "This package holds two ontology subjects and ships exactly as the OE method requires, with no exceptions: for the live work, one vocabulary file, one data file and one rules file; for retired work, the same three. Each subject has its own ontology identity, and no file mixes roles or repeats a role within its subject. Live and historical facts never share a file, so retired work is never judged by today's rules and the archiving ceremony is a move from one subject to the other. No statement any file makes changes, and what is retired or worked as an exercise stays out of live processing."@en ;
+    backlog:hasMissionStatement "This package holds two ontology subjects and ships exactly as the OE method requires, with no exceptions: for the live work, one vocabulary file, one data file and one rules file; for retired work, the same three. Each subject has its own ontology identity, and no file mixes roles or repeats a role within its subject. Live and historical facts never share a file, so retired work is never judged by today's rules and the archiving ceremony is a move from one subject to the other. No statement any file makes changes, and what is retired or worked as an exercise stays out of live processing." ;
     backlog:missionFor fw:Register ;
     backlog:hasMissionOrigin backlog:Origin_OwnerStated ;
     backlog:missionSource "Owner, 2026-10-06: 'If you say, we have subject-based files, they should be consolidated under one single file not a multiplicative of 3 per subject' and 'What if we split the active lineage from the archive? In this case 3+3 6 files and clear distinction between the current and historical facts with archiving ceremony would help to enhance the lineage overall.' Affirmed after a measured test drive: 'OK, this is quite better I think. Let's proceed accordingly.'" ;
     backlog:hasMissionOutcome backlog:Out_InFlight ;
+    backlog:producedByStage fw:Out_Mission_OEStructureCleanup ;
     backlog:decidedBy backlog:Owner .
 
 fw:Out_Mission_OEStructureCleanup a backlog:StageOutput ;
@@ -3711,3 +3712,79 @@ fw:Out_Mission_OEStructureCleanup a backlog:StageOutput ;
     backlog:hasStateDigest "67ab5852373912fd841885908f9fc89257e3fba3b71c237463a69142fcd0818a" ;
     backlog:closedAtCommit "backlog-roadmap-framework-v1.333.0 (tag; witnessed by git, not asserted)" ;
     backlog:hasRationale "Mission stage of Lineage 17. Tag deterministic: VERSION.txt set before publishing. Stage 1 of 5, one release each." .
+
+# v9.103.0: Lineage 17, Scope stage (second of five releases). Scope text, areas, deliverables and exclusions are written
+# here, before any goal, objective or work item. Design decisions measured in the 2026-10-06 test drive are recorded in
+# the deliverables: the strategy exercise register is test input and leaves the live data; the promoted overlay is derived
+# when the rules load; the alignment file folds into the vocabulary's annotations; the live subject keeps the identity
+# `backlog`; the archive is its own subject with its own vocabulary, data and rules.
+fw:Scope_OEStructureCleanup a backlog:ScopeStatement ; rdfs:label "Scope: OE Structure Clean-up"@en ;
+    backlog:hasScopeStatementText "Split this package into exactly two ontology subjects, live and archive, each shipping one vocabulary file, one data file and one rules file under its own ontology identity; move every statement without changing it; repoint every tool that names a moved file; make the archiving ceremony a move from the live subject to the archive subject; and clear the two recorded structure-debt lines with the structure checker showing them cleared and nothing new. Excludes any change to what a statement says, any judgement of retired work by today's rules, and any other package's files." ;
+    backlog:scopeForMission fw:Mission_OEStructureCleanup ;
+    backlog:producedByStage fw:Out_Scope_OEStructureCleanup ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:requiresDeliverable fw:Del_OESC_LiveSubject , fw:Del_OESC_ArchiveSubject , fw:Del_OESC_ToolsRepointed , fw:Del_OESC_NothingLost , fw:Del_OESC_Ceremony , fw:Del_OESC_DebtCleared ;
+    backlog:coversArea fw:Area_OESC_Files , fw:Area_OESC_Tools , fw:Area_OESC_Enforcement ;
+    backlog:hasScopeExclusion fw:Ex_OESC_StatementChange , fw:Ex_OESC_RetroJudging , fw:Ex_OESC_OtherPackages ;
+    backlog:belongsToLineage fw:L_OEStructureCleanup .
+
+fw:Area_OESC_Files a backlog:ScopeArea ; rdfs:label "Area: the package's ontology files"@en ;
+    backlog:areaMeasure "Counted 2026-10-06: 9 ontology identities across 11 files where the live subject should be 3 files and the archive subject 3; 2 files that mix roles or repeat a role." ;
+    backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:areaLocation "01-ontologies/ and 02-shacl-safeguards/" ;
+    backlog:belongsToLineage fw:L_OEStructureCleanup .
+fw:Area_OESC_Tools a backlog:ScopeArea ; rdfs:label "Area: the tools that name those files"@en ;
+    backlog:areaMeasure "Counted 2026-10-06 by search: 17 scripts name a moved file by prefix, the release gate among them." ;
+    backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:areaLocation "03-tooling/" ;
+    backlog:belongsToLineage fw:L_OEStructureCleanup .
+fw:Area_OESC_Enforcement a backlog:ScopeArea ; rdfs:label "Area: the structure rule and its debt record"@en ;
+    backlog:areaMeasure "Counted 2026-10-06: 2 recorded structure-debt lines (rule R1), 0 new." ;
+    backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:areaLocation "OE structure checker and its debt register, return note to the OE inbox" ;
+    backlog:belongsToLineage fw:L_OEStructureCleanup .
+
+fw:Del_OESC_LiveSubject a backlog:ScopeDeliverable ; rdfs:label "The live subject: three files, one identity"@en ;
+    backlog:deliverableForArea fw:Area_OESC_Files ; backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:derivesFromMissionClause "for the live work, one vocabulary file, one data file and one rules file" ;
+    backlog:belongsToLineage fw:L_OEStructureCleanup .
+fw:Del_OESC_ArchiveSubject a backlog:ScopeDeliverable ; rdfs:label "The archive subject: three files, its own identity"@en ;
+    backlog:deliverableForArea fw:Area_OESC_Files ; backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:derivesFromMissionClause "for retired work, the same three. Each subject has its own ontology identity" ;
+    backlog:belongsToLineage fw:L_OEStructureCleanup .
+fw:Del_OESC_ToolsRepointed a backlog:ScopeDeliverable ; rdfs:label "Every tool names the files where they now are"@en ;
+    backlog:deliverableForArea fw:Area_OESC_Tools ; backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:derivesFromMissionClause "Live and historical facts never share a file, so retired work is never judged by today's rules" ;
+    backlog:belongsToLineage fw:L_OEStructureCleanup .
+fw:Del_OESC_NothingLost a backlog:ScopeDeliverable ; rdfs:label "A before and after proof that no statement changed"@en ;
+    backlog:deliverableForArea fw:Area_OESC_Files ; backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:derivesFromMissionClause "No statement any file makes changes" ;
+    backlog:belongsToLineage fw:L_OEStructureCleanup .
+fw:Del_OESC_Ceremony a backlog:ScopeDeliverable ; rdfs:label "The archiving ceremony moves work from the live subject to the archive subject"@en ;
+    backlog:deliverableForArea fw:Area_OESC_Tools ; backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:derivesFromMissionClause "the archiving ceremony is a move from one subject to the other" ;
+    backlog:belongsToLineage fw:L_OEStructureCleanup .
+fw:Del_OESC_DebtCleared a backlog:ScopeDeliverable ; rdfs:label "The structure checker shows the debt cleared and nothing new"@en ;
+    backlog:deliverableForArea fw:Area_OESC_Enforcement ; backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:derivesFromMissionClause "no file mixes roles or repeats a role within its subject" ;
+    backlog:belongsToLineage fw:L_OEStructureCleanup .
+
+fw:Ex_OESC_StatementChange a backlog:ScopeExclusion ; rdfs:label "Exclusion: changing what any statement says"@en ;
+    backlog:excludesConcern "Rewording, correcting or re-judging any statement while moving it. The two achieved lineages still marked not archived are reported, and fixed only as a recorded, separate act." ;
+    backlog:hasExclusionRationale "The Mission says no statement changes; a move that also edits cannot be proven lossless." ;
+    backlog:decidedBy backlog:Owner ; backlog:hasScopeLayer backlog:Layer_Work ; backlog:belongsToLineage fw:L_OEStructureCleanup .
+fw:Ex_OESC_RetroJudging a backlog:ScopeExclusion ; rdfs:label "Exclusion: judging retired work by today's rules"@en ;
+    backlog:excludesConcern "Running the live rules over the archive subject." ;
+    backlog:hasExclusionRationale "G89 and G91: retired work is a record. Measured: merged, it costs 89 violations and about 5 minutes; apart, the live subject validates with 0 violations in about 90 seconds." ;
+    backlog:decidedBy backlog:Owner ; backlog:hasScopeLayer backlog:Layer_Work ; backlog:belongsToLineage fw:L_OEStructureCleanup .
+fw:Ex_OESC_OtherPackages a backlog:ScopeExclusion ; rdfs:label "Exclusion: other packages' files"@en ;
+    backlog:excludesConcern "Any file outside this package, including adopting projects' copies of the live vocabulary." ;
+    backlog:hasExclusionRationale "Adopting projects import only the identity `backlog`, which the live subject keeps; their own registers are theirs." ;
+    backlog:decidedBy backlog:Owner ; backlog:hasScopeLayer backlog:Layer_Work ; backlog:belongsToLineage fw:L_OEStructureCleanup .
+
+fw:Out_Scope_OEStructureCleanup a backlog:StageOutput ;
+    backlog:outputOfStage backlog:Stage_Scope ; backlog:belongsToLineage fw:L_OEStructureCleanup ;
+    backlog:consumesOutput fw:Out_Mission_OEStructureCleanup ;
+    backlog:hasStateDigest "e4188964a49bbb14d71a4fe0805af1f3a05e86dbf55f4db850c3c02d46b6b071" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.334.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Scope stage of Lineage 17: text, three areas, six deliverables and three exclusions, all present before any goal. Stage 2 of 5." .
