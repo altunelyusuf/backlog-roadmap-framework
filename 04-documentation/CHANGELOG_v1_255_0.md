@@ -11183,3 +11183,10 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Seven stories, one per deliverable,** each with an acceptance criterion, a harness, a plan and a proposed task; one iteration (`It_OC_1`) and a definition of done.
   Fixtures, live triad, archive folder, nothing lost, tools repointed, ceremony, debt cleared. Every open objective now names the story able to move its metric (`metricMovableBy`).
 - **Data file:** `backlog_abox` v1.14.0; lineage status `LS_Backlogged`; Backlog digest recorded and reproduced. 0 violations.
+
+## v1.346.0 — Lineage 18, OC-S01: the test drive and the strategy exercise register move into the fixtures folder
+
+- **Moved:** the loan-desk test drive (`05-test-drives/`) and the strategy exercise register (`03-tooling/exercises/`) now live in `03-tooling/fixtures/`. The exercise register is test input (the gate runs it), so OE's answer that it is live data is corrected here by that reason. Each carries one added statement, its declared polarity (test drive negative, as it fails by the clock; exercise register positive).
+- **Checked, not asserted:** the validator's polarity report reads them as declared (3 violations, 0 violations). OE's structure checker examined 13 files before and 11 after; its one-per-role line fell from 10 active data files to 8. The split proof read 0 statements lost, 0 changed; the only difference is the two polarity statements, which sit on the ontology header subjects the proof sets aside.
+- **Tools:** the gate is `backlog_gate` v1.26.0 and reads the exercise register from the fixtures folder; the fold tool `backlog_package_fold` v1.0.0 joins `03-tooling`. The two Done L17 records that cited the gate by path now cite v1.26.0 (the tool that ran them stays named as v1.25.0).
+- **Data file:** `backlog_abox` v1.15.0; OC-S01 Done with evidence, harness and an observation dated after it; iteration `OC-IT1` and the lineage are InProgress. 0 violations.

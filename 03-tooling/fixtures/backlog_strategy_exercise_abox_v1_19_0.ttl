@@ -1017,3 +1017,6 @@ ex:TT_Lin backlog:hasLineageStatus backlog:LS_Backlogged .
 #  narrative never actually completed TF_S2/TV_S2, so marking them Done would misrepresent
 #  it) rather than fabricating a false completion. Worth remembering: any fixed-date fixture
 #  in this package can drift the same way, silently, until something checks it against NOW().
+
+# Lineage 18: this file moved to the fixtures folder, which requires a declared polarity (the one statement added by the move).
+<http://example.org/backlog-strategy-exercise> backlog:hasExpectedPolarity backlog:Polarity_Positive .

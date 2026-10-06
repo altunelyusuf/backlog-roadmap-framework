@@ -20,9 +20,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (ABox: controlled individuals, reference data and the live register)"@en ;
-    owl:versionIRI <http://example.org/backlog/abox/1.14.0> ;
-    owl:versionInfo "1.14.0" ;
-    owl:priorVersion <http://example.org/backlog/abox/1.13.0> , <http://example.org/backlog/abox/1.12.0> , <http://example.org/backlog/abox/1.11.0> , <http://example.org/backlog/abox/1.10.0> , <http://example.org/backlog/abox/1.9.0> , <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
+    owl:versionIRI <http://example.org/backlog/abox/1.15.0> ;
+    owl:versionInfo "1.15.0" ;
+    owl:priorVersion <http://example.org/backlog/abox/1.14.0> , <http://example.org/backlog/abox/1.13.0> , <http://example.org/backlog/abox/1.12.0> , <http://example.org/backlog/abox/1.11.0> , <http://example.org/backlog/abox/1.10.0> , <http://example.org/backlog/abox/1.9.0> , <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
         <http://example.org/backlog-abox/1.2.1> ,
                      <http://example.org/backlog-abox/1.2.0> ,
                      <http://example.org/backlog-abox/1.1.0> ,
@@ -6118,7 +6118,7 @@ fw:Plan_OESC_ArchiveSubject a backlog:PlanningEvent ; rdfs:label "OESC-S02 taken
     backlog:hasRationale "The formal boundary between ordering this work and doing it." .
 
 fw:AC_OESC_ToolsRepointed a backlog:AcceptanceCriterion ;
-    backlog:satisfiedByArtifact "03-tooling/backlog_gate_v1_25_0.sh -- backlog_abox" ;
+    backlog:satisfiedByArtifact "03-tooling/backlog_gate_v1_26_0.sh -- backlog_abox" ;
     backlog:hasGherkinText "Given the 17 scripts that name a file by its old prefix, When each is repointed, Then a search finds no stale prefix outside vendored, archive and fixture folders, and the release gate passes with the new layout and still fails on its known-bad inputs." .
 fw:ST_OESC_ToolsRepointed a backlog:Story ; backlog:hasIdentifier "OESC-S04" ; backlog:hasTitle "Repoint every tool that names a moved file" ;
     backlog:hasState backlog:Done ;
@@ -6333,7 +6333,7 @@ fw:Ev_OESC_ToolsGate a backlog:Evidence , backlog:TestEvidence ; backlog:attests
     backlog:evidenceVerified true ; backlog:verifiedByTool "backlog_gate_v1_25_0.sh" ;
     backlog:hasVerificationMethod "The release gate passed at v1.339.0 with the new layout (the published record says so), and its own self-proofs, which run a known-bad input through each check and require a refusal, ran in that same pass." .
 fw:Ev_OESC_ToolsTask a backlog:Evidence , backlog:TestEvidence ;
-    backlog:hasTestSpec "03-tooling/backlog_gate_v1_25_0.sh" ;
+    backlog:hasTestSpec "03-tooling/backlog_gate_v1_26_0.sh" ;
     backlog:evidenceVerified true ; backlog:verifiedByTool "backlog_gate_v1_25_0.sh" ;
     backlog:hasVerificationMethod "The gate run over the repointed tools: Gate 0, P, K, R, coverage, criterion artefacts, version freeze, pipeline and lineage-order all passed." .
 fw:H_OESC_ToolsRepointed a backlog:TestHarness ; backlog:harnessFor fw:T_OESC_ToolsRepointed ;
@@ -6353,7 +6353,7 @@ fw:L_OEPackageConsolidation a backlog:Lineage ; rdfs:label "Lineage 18: OE Packa
     backlog:lineageOrdinal 18 ;
     backlog:lineageArchived false ;
     backlog:lineageForMission fw:Mission_OEPackageConsolidation ;
-    backlog:hasLineageStatus backlog:LS_Backlogged ;
+    backlog:hasLineageStatus backlog:LS_InProgress ;
     backlog:hasLineageDepthLevel backlog:Depth_StoryDirect ;
     backlog:hasLineageArtifactDomain backlog:Domain_Infrastructure ;
     backlog:memberOfContainer fw:Register .
@@ -6719,13 +6719,17 @@ fw:Out_Objective_OEPackageConsolidation a backlog:StageOutput ;
 # acceptance criterion, design concerns declared (or none applies), taken in by a planning event that produces one task. Order: S01, S02, S03, S04, S05, S06, S07.
 
 fw:It_OC_1 a backlog:Iteration ; backlog:hasIdentifier "OC-IT1" ; backlog:hasTitle "Lineage 18, first work window" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:InProgress ;
     backlog:memberOfContainer fw:Register ; backlog:belongsToLineage fw:L_OEPackageConsolidation .
 
 fw:AC_OC_Fixtures a backlog:AcceptanceCriterion ;
+    backlog:satisfiedByArtifact "03-tooling/backlog_package_fold_v1_0_0.py -- to_fixture" ;
     backlog:hasGherkinText "Given the test drive and the strategy exercise register outside the fixtures folder, When they are moved there with their polarity declared, Then the structure checker counts two fewer active data files, the gate still validates both as it declares, and the split proof reads 0 statements lost and shows the polarity declaration as the only addition." .
 fw:ST_OC_Fixtures a backlog:Story ; backlog:hasIdentifier "OC-S01" ; backlog:hasTitle "Move the test drive and the strategy exercise register into the fixtures folder" ;
-    backlog:hasState backlog:Ready ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-10-06T16:40:00Z"^^xsd:dateTime ; backlog:finishedAt "2026-10-06T17:06:00Z"^^xsd:dateTime ; backlog:lastAuditedAt "2026-10-06T17:06:00Z"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_OC_Fixtures ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
     backlog:memberOfContainer fw:Register ;
     backlog:belongsToLineage fw:L_OEPackageConsolidation ;
     backlog:producedByStage fw:Out_Backlog_OEPackageConsolidation ;
@@ -6748,7 +6752,10 @@ fw:Plan_OC_Fixtures a backlog:PlanningEvent ; rdfs:label "OC-S01 taken in"@en ;
     backlog:hasRationale "The formal boundary between ordering this work and doing it." .
 fw:T_OC_Fixtures a backlog:ExecutionTask ; backlog:hasIdentifier "OC-T01" ;
     backlog:hasTitle "Build and prove: Fixtures"@en ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-10-06T16:40:00Z"^^xsd:dateTime ; backlog:finishedAt "2026-10-06T17:06:00Z"^^xsd:dateTime ; backlog:lastAuditedAt "2026-10-06T17:06:00Z"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_OC_Fixtures_Task ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
     backlog:hasTaskType backlog:Task_Implementation ;
     backlog:memberOfContainer fw:Register , fw:It_OC_1 ;
     backlog:belongsToLineage fw:L_OEPackageConsolidation ;
@@ -6964,3 +6971,23 @@ fw:Out_Backlog_OEPackageConsolidation a backlog:StageOutput ;
     backlog:hasStateDigest "14bfe71e2ef8843ea37d1e76e0e5ccdbec0a82a15a1369c9ca1f03c30911dfaa" ;
     backlog:closedAtCommit "backlog-roadmap-framework-v1.345.0 (tag; witnessed by git, not asserted)" ;
     backlog:hasRationale "Backlog stage of Lineage 18: seven stories, one per deliverable, groomed and ready. Stage 5 of 5." .
+
+# Fixtures done (Lineage 18).
+fw:Ev_OC_Fixtures a backlog:Evidence , backlog:TestEvidence ; backlog:attestsCriterion fw:AC_OC_Fixtures ;
+    backlog:hasTestId "polarity_declared_and_gate_reads_fixtures_path" ;
+    backlog:evidenceVerified true ; backlog:verifiedByTool "backlog_validate_v1_12_0.py" ;
+    backlog:hasVerificationMethod "Real run: the validator's polarity report read the moved test drive as negative (3 violations, as declared) and the exercise register as positive (0 violations); OE's structure checker examined 13 files before and 11 after, and its one-per-role line fell from 10 active data files to 8. The gate now reads the exercise register from the fixtures folder." .
+fw:Ev_OC_Fixtures_Task a backlog:Evidence , backlog:TestEvidence ;
+    backlog:hasTestSpec "03-tooling/backlog_package_fold_v1_0_0.py" ;
+    backlog:evidenceVerified true ; backlog:verifiedByTool "backlog_validate_v1_12_0.py" ;
+    backlog:hasVerificationMethod "Real run: the validator's polarity report read the moved test drive as negative (3 violations, as declared) and the exercise register as positive (0 violations); OE's structure checker examined 13 files before and 11 after, and its one-per-role line fell from 10 active data files to 8. The gate now reads the exercise register from the fixtures folder." .
+fw:H_OC_Fixtures a backlog:TestHarness ; backlog:harnessFor fw:T_OC_Fixtures ;
+    backlog:hasHarnessEvidence fw:Ev_OC_Fixtures_Task ;
+    backlog:hasRationale "The task's own harness, distinct from the story's." .
+fw:H_OC_Fixtures_Story a backlog:TestHarness ; backlog:harnessFor fw:ST_OC_Fixtures ;
+    backlog:hasHarnessEvidence fw:Ev_OC_Fixtures ;
+    backlog:hasRationale "The story's own harness: the real run named in its evidence." .
+fw:Obs_OC_MissionMet_Fixtures a backlog:MetricObservation ; rdfs:label "After OC Fixtures: measured again"@en ;
+    backlog:observesMetric fw:Metric_OC_MissionMet ; backlog:observationFor fw:Obj_OC_MissionMet ;
+    backlog:hasObservedValue 10.0 ; backlog:observedAt "2026-10-06T17:08:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "OE structure checker run on the package before and after, same convention as the baseline: 13 files examined became 11, so the baseline 12 reads 10." .

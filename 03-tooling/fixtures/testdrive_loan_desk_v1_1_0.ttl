@@ -609,3 +609,6 @@ ex:Obs6 a backlog:MetricObservation ; backlog:observesMetric ex:Metric_Unknown ;
     backlog:hasObservedValue 1.0 ; backlog:observedAt "2026-09-11T17:30:00Z"^^xsd:dateTime ;
     backlog:hasObservationMethod "One of the two scope deliverables is now satisfied by finished work; the return transaction is not." ;
     backlog:belongsToLineage ex:Lin .
+
+# Lineage 18: this file moved to the fixtures folder, which requires a declared polarity (the one statement added by the move).
+<http://example.org/loan-desk> backlog:hasExpectedPolarity backlog:Polarity_Negative .

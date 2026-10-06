@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# backlog_gate v1.25.0 — four-gate release check for the Backlog & Roadmap
+# backlog_gate v1.26.0 — four-gate release check for the Backlog & Roadmap
 # Semantic Framework. Nothing about the package's state is trusted until all
 # four pass, and the SHACL gate refuses to certify anything until it has just
 # demonstrated, in this run, that it can fail a known-bad register.
@@ -13,6 +13,7 @@
 #
 # Usage: backlog_gate_v1_12_0.sh [REGISTER.ttl ...]
 #
+# v1.26.0 (Lineage 18, OC-S01): the strategy-exercise register moved into the fixtures folder (declared positive, as test input the gate runs); the gate reads it from there.
 # v1.25.0 (Lineage 17, OESC-S01 and S04): follows the package's new layout -- the register is part of the data file (backlog_abox), the
 # rules are in the shapes file, the severity-promotion overlay is derived (no shipped overlay file), the strategy exercise register is test input in 03-tooling/exercises/ (not a fixture: it declares no polarity),
 # and the promoted-overlay gate now checks that the audit's record derives an overlay: every promotion names a shape.
@@ -516,7 +517,7 @@ if [ -n "$LOC" ]; then
   # v1.9.0: release tags are the recorded witnesses of this package's outputs; fetch them quietly if a remote exists
   ( cd "$PKG" && git fetch --tags --quiet origin 2>/dev/null || true )
   REG="$(ls "$PKG"/01-ontologies/backlog_abox_v*.ttl 2>/dev/null | sort -V | tail -1 || true)"
-  EXREG="$(ls "$PKG"/03-tooling/exercises/backlog_strategy_exercise_abox_v*.ttl 2>/dev/null | sort -V | tail -1 || true)"
+  EXREG="$(ls "$PKG"/03-tooling/fixtures/backlog_strategy_exercise_abox_v*.ttl 2>/dev/null | sort -V | tail -1 || true)"
   if [ -n "$EXREG" ]; then
     EX_OUT="$(python3 "$VALIDATE" "$EXREG" 2>&1)"; EX_RC=$?
     printf '%s\n' "$EX_OUT" | grep -E '^results|^VERDICT' | sed 's/^/  exercise register: /'
