@@ -10975,3 +10975,16 @@ Its 13 proposed terms were re-verified before use (appendix hashes match, 10/10 
 
 TBox `v1_117_0 -> v1_118_0`, shapes `v1_145_0 -> v1_146_0`, overlay `v1_15_0 -> v1_16_0`, standard
 `v1_113_0 -> v1_114_0`. Response filed in the inbox.
+
+## v1.331.0 — Work executed outside the register: prevention and recovery (an adopting project handover)
+
+the adopting project's Lineage_2 had no Backlog stage output and no items; every gate passed over the empty set and 398 rows were
+executed outside the register. Ruling G100 (discipline v71_0_0).
+
+- **Added:** order-check verdict `AWAITING_BACKLOG` (order check v1_10_0, `--no-empty-pass`); positive start gate
+  `backlog_execution_ready_v1_0_0.py` with a 12-case probe; recovery runbook v1_0_0; fixtures for both.
+- **Changed:** `GroomingShape` constraints 1 and 2 and `L4StoryGranularityShape` exempt stories flagged `preLineageItem`
+  and admitted by an active Backlog output (probe: carried 8 violations, fresh 10). Gate script v1_21_0 -> v1_22_0 with self-proof.
+- **Not changed:** TBox stays at v1_118_0. Shapes v1_146_0 -> v1_147_0, overlay v1_16_0 -> v1_17_0, standard v1_114_0 -> v1_115_0.
+- **Not done:** the adopting project's own order-check output not re-run; row-level evidence measurement is the adopting project's.
+- **Unplanned work:** processed the pending an adopting project handover before the OE file-structure clean-up (owner's priority).

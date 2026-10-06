@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_lineage_order_check v1.7.0 — did the chain come before the work, or after?
+"""backlog_lineage_order_check v1.10.0 — did the chain come before the work, or after?
 
 THE ESCAPE THIS CATCHES. A lineage is Mission -> Scope -> Goal -> Objective -> Backlog,
 one commit per stage, and only then work items (LINEAGE_OPERATING_DISCIPLINE, ceremony
@@ -37,6 +37,16 @@ for every non-archived lineage that has stage outputs:
                Strat_DivideAndConquer: the parent is ORDERED only when every part is and
                its combine output is active. --emit also prints, for the NEXT restart, the
                reductionObserved of the last trial (admitted / named), never hand-written.
+  AWAITING_BACKLOG (v1.10.0, an adopting project handover, lineage2-executed-without-backlog-stage) the Objective stage
+               output is active, the Backlog stage output is absent and the lineage holds NO work item: there is
+               nothing to order, so nothing was examined. v1.9.0 read this state as ORDERED and the run as PASS, and
+               a lineage whose work was executed outside the register passed every gate for a week: a green verdict
+               over an empty set is not evidence (a gate that finds nothing must say so). Exit 0, because a lineage
+               legitimately waits here between its Objective and Backlog stages; but it is named in the verdict line
+               and printed with its examined count, and --no-empty-pass turns it into exit 2 for a caller that
+               claims work is under way. It is not a bypass: no item exists to precede the chain. The moment an item
+               is registered it is one, and the shapes then oblige a restart. backlog_execution_ready is the
+               positive question to ask BEFORE work starts.
   BYPASS       at least one work item first appears BEFORE the lineage's Stage_Backlog
                output does (or that output is absent), or the outputs appear out of
                pipeline order. The chain was closed after the work.
@@ -105,7 +115,7 @@ filename, since a versioned file is renamed on every real content change (G94) a
 existed under today's name at an older tag at all. Omit --baseline for v1.7.0's own exact behaviour,
 fully global, unaffected -- every existing caller, the self-proof fixtures included.
 
-Exit: 0 ORDERED/UNWITNESSED/RESTARTED/FROZEN; 2 BYPASS unanswered, THRASH unrecorded, WITNESS_BROKEN,
+Exit: 0 ORDERED/UNWITNESSED/RESTARTED/FROZEN/AWAITING_BACKLOG (2 for AWAITING_BACKLOG under --no-empty-pass); 2 BYPASS unanswered, THRASH unrecorded, WITNESS_BROKEN,
 or NOT VERIFIABLE (outputs exist, none witnessed), or --expect not met; 1 on error.
 """
 import glob, json, os, re, subprocess, sys, time
@@ -514,6 +524,8 @@ def classify(g, L, witness, prefix):
         verdict = "RESTARTED"      # chain retracted, nothing rebuilt yet: disclosed, not silent
     elif not out_first:
         verdict = "NO_OUTPUTS"
+    elif "Stage_Backlog" not in out_first and not item_first:
+        verdict = "AWAITING_BACKLOG"   # v1.10.0: nothing to order, so nothing examined; never ORDERED
     else:
         verdict = "ORDERED"
     return verdict, {"outputs": out_first, "items": item_first, "bypassed": bypassed,
@@ -697,6 +709,7 @@ def main():
         bl = d["outputs"].get("Stage_Backlog")
         print(f"  {local(L):24} {verdict:12} outputs={len(d['outputs'])} items={len(d['items'])} backlog_output={bl[0] if bl else 'absent'}"
               + ("  (chain retracted; rebuild from Mission pending)" if verdict == "RESTARTED" else "")
+              + ("  (nothing examined: no Backlog stage and no work item; work may not start)" if verdict == "AWAITING_BACKLOG" else "")
               + (f" restart={d['restart'][0]}" if d['restart'] else ""))
         for p in d["problems"]:
             print(f"      - {p}")
@@ -717,6 +730,11 @@ def main():
                        and not (g.value(g.value(i, B.admittedByOutput), B.outputRetracted) or False)]
                 if named:
                     print(f"      # reductionObserved for a next restart of {local(L)}: {len(adm)}/{len(named)} = {len(adm)/len(named):.3f}")
+        if verdict == "AWAITING_BACKLOG" and "--no-empty-pass" in argv:
+            if in_scope:
+                worst = 2
+            else:
+                advisory_only.append(local(L))
         if verdict == "THRASH":
             recorded = any((t, B.thrashedLineage, L) in g for t in g.subjects(RDF.type, B.LineageThrash))
             if not recorded:
@@ -765,9 +783,11 @@ def main():
     if advisory_only:
         print(f"\nADVISORY    : {len(advisory_only)} lineage(s) carry a real, unresolved finding but were not touched by this run's own changes, so they do not block it: {', '.join(sorted(set(advisory_only)))}. Disclosed every run, not silently passed -- resolving them remains real, owed work.")
     if worst:
-        print("VERDICT     : FAIL — a live lineage is bypassed without a restart, or its restarts are not converging without a thrash record; see above")
+        print("VERDICT     : FAIL — a live lineage is bypassed without a restart, or its restarts are not converging without a thrash record, or (--no-empty-pass) it awaits a Backlog stage with nothing examined; see above")
     else:
-        print("VERDICT     : PASS — every live lineage's chain is witnessed in order, or its order is unwitnessed and disclosed")
+        waiting = sorted(k for k, v in verdicts.items() if v == "AWAITING_BACKLOG")
+        note = (f"; {len(waiting)} lineage(s) AWAITING_BACKLOG, nothing examined for them: {', '.join(waiting)}" if waiting else "")
+        print("VERDICT     : PASS — every live lineage's chain is witnessed in order, or its order is unwitnessed and disclosed" + note)
     return worst
 
 

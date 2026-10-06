@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# backlog_gate v1.17.0 — four-gate release check for the Backlog & Roadmap
+# backlog_gate v1.22.0 — four-gate release check for the Backlog & Roadmap
 # Semantic Framework. Nothing about the package's state is trusted until all
 # four pass, and the SHACL gate refuses to certify anything until it has just
 # demonstrated, in this run, that it can fail a known-bad register.
@@ -463,6 +463,22 @@ if [ -n "$LOC" ]; then
   python3 "$LOC" "$RPOS" --witness "$WEPO" --expect Lin_PL=ORDERED >/dev/null 2>&1 || { echo "  ABORT: one-epoch, hashes-in-order fixture did not read ORDERED -- the witness orders by time again."; exit 3; }
   python3 "$LOC" "$RPOS" --witness "$WSAME" --expect Lin_PL=UNWITNESSED >/dev/null 2>&1 || { echo "  ABORT: two-stages-one-commit fixture did not read UNWITNESSED -- same-commit is no longer a hash test."; exit 3; }
   echo "  self-proof: ordered passes, bypass fails; converging trial passes, thrash fails; divide-and-conquer passes, missing strategy evidence fails; one-epoch chain ORDERED, two-stages-one-commit UNWITNESSED."
+  # v1.22.0 (an adopting project handover, lineage2-executed-without-backlog-stage): a green verdict over an empty set is not
+  # evidence. The order check must name a lineage that awaits its Backlog stage with nothing to order (v1.9.0 read it
+  # ORDERED), must still read a complete chain ORDERED, and must still read an item registered before any Backlog output a
+  # BYPASS; and the positive start gate must pass the groomed item and refuse every case that lacks a fact.
+  AFX="$(ls "$HERE"/fixtures/fixture_awaiting_backlog_negative_v*.ttl | sort -V | tail -1)"
+  AWT="$(ls "$HERE"/fixtures/fixture_awaiting_backlog_negative_witness_v*.json | sort -V | tail -1)"
+  python3 "$LOC" "$AFX" --witness "$AWT" --expect Lin_Waiting=AWAITING_BACKLOG >/dev/null 2>&1 || { echo "  ABORT: a lineage with no Backlog stage and no item did not read AWAITING_BACKLOG -- the empty set reads green again."; exit 3; }
+  python3 "$LOC" "$AFX" --witness "$AWT" --expect Lin_Ordered=ORDERED >/dev/null 2>&1 || { echo "  ABORT: the complete ordered chain did not read ORDERED."; exit 3; }
+  python3 "$LOC" "$AFX" --witness "$AWT" --expect Lin_Registered=BYPASS >/dev/null 2>&1 || { echo "  ABORT: an item registered before any Backlog output did not read BYPASS."; exit 3; }
+  ERP="$(ls "$HERE"/backlog_execution_ready_probe_v*.py 2>/dev/null | sort -V | tail -1 || true)"
+  if [ -n "$ERP" ]; then
+    python3 "$ERP" >/dev/null 2>&1 || { echo "  ABORT: the start gate does not discriminate (backlog_execution_ready_probe failed)."; exit 3; }
+    echo "  self-proof: a lineage awaiting its Backlog stage reads AWAITING_BACKLOG, not ORDERED; the start gate passes the groomed item and refuses 10 cases that lack a fact"
+  else
+    echo "  NOT RUN — start-gate probe not found. Not assumed to pass."
+  fi
   # v1.9.0: release tags are the recorded witnesses of this package's outputs; fetch them quietly if a remote exists
   ( cd "$PKG" && git fetch --tags --quiet origin 2>/dev/null || true )
   REG="$(ls "$PKG"/01-ontologies/backlog_framework_register_abox_v*.ttl 2>/dev/null | sort -V | tail -1 || true)"
