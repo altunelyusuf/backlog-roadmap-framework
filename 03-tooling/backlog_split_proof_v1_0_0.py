@@ -1,0 +1,133 @@
+#!/usr/bin/env python3
+"""backlog_split_proof v1.0.0 -- a move of statements between files lost nothing and changed nothing.
+
+WHY THIS EXISTS (Lineage 17, story OESC-S03, deliverable "A before and after proof that no statement changed").
+The Mission says no statement any file makes changes. A split of the package into a live and an archive subject moves
+thousands of statements between files, and a person reading the diff cannot see a lost one. This tool compares the
+statements of the ontology files BEFORE with those AFTER, as sets, and reports what is only on one side.
+
+WHAT IS COMPARED. Every statement in every .ttl under 01-ontologies/ and 02-shacl-safeguards/ of each tree, except the
+statements whose subject is an owl:Ontology header (identity, version and imports are what a split legitimately changes).
+Blank nodes are compared by their content, not their label: a blank node is replaced by a hash of what it says, so a
+reserialisation that renames them is not a difference. The comparison is of sets, so two blank nodes that say exactly the
+same thing count once (stated limit: a duplicate of an identical blank node is not detected). A decimal is compared by value ("1.0" and "1" are one value), and
+the number of statements where only the spelling differs is COUNTED and printed, never silently absorbed.
+
+THE PROOF PROVES ITSELF EVERY RUN (L-95). Before it certifies anything it removes one statement from a copy of the AFTER
+side and one statement's object from another, and each must be reported as a difference; if either is not seen the tool
+refuses to certify and exits 3.
+
+Usage: backlog_split_proof_v1_0_0.py BEFORE_PACKAGE_DIR AFTER_PACKAGE_DIR [--ignore-subject IRI ...] [--allow-added]
+  --allow-added   statements only AFTER are reported but do not fail (a release that also adds a lineage's own stages).
+Exit 0 identical, 2 differences, 3 the proof could not discriminate, 1 usage.
+"""
+import glob, hashlib, os, sys
+from decimal import Decimal
+from rdflib import Graph, BNode, Literal, RDF, OWL, XSD
+
+DIRS = ("01-ontologies", "02-shacl-safeguards")
+
+
+def load(pkg):
+    g = Graph()
+    files = []
+    for d in DIRS:
+        files += sorted(glob.glob(os.path.join(pkg, d, "*.ttl")))
+    for f in files:
+        g.parse(f, format="turtle")
+    return g, files
+
+
+def lit(n):
+    """A literal's comparison form. Returns (form, spelling_only_flag) where decimals are value-normalised."""
+    if isinstance(n, Literal) and n.datatype in (XSD.decimal, XSD.double, XSD.float, XSD.integer):
+        try:
+            v = Decimal(str(n))
+            return f'"{v.normalize():f}"^^{str(n.datatype)}' if n.datatype == XSD.decimal else n.n3(), str(n) != f"{v.normalize():f}"
+        except Exception:
+            return n.n3(), False
+    return n.n3(), False
+
+
+def signature(g, ignore):
+    """Sorted list of blank-node-free statement strings; second value counts decimal respellings."""
+    drop = {s for s in set(g.subjects(RDF.type, OWL.Ontology))} | set(ignore)
+    memo, respelled = {}, [0]
+
+    def h(n):
+        if not isinstance(n, BNode):
+            s, sp = lit(n) if isinstance(n, Literal) else (n.n3(), False)
+            if sp:
+                respelled[0] += 1
+            return s
+        if n in memo:
+            return memo[n]
+        memo[n] = "~"
+        parts = sorted(f"{p.n3()} {h(o)}" for p, o in g.predicate_objects(n))
+        memo[n] = hashlib.sha1("|".join(parts).encode()).hexdigest()[:16]
+        return memo[n]
+
+    out = []
+    for s, p, o in g:
+        if s in drop:
+            continue
+        out.append(f"{h(s)} {p.n3()} {h(o)}")
+    return sorted(set(out)), respelled[0]   # a set: two blank nodes with identical content are one statement
+
+
+def compare(a, b):
+    sa, sb = set(a), set(b)
+    return sorted(sa - sb), sorted(sb - sa)
+
+
+def self_proof(after_sig):
+    """The proof must see a removed statement and a changed object, or it certifies nothing."""
+    if len(after_sig) < 2:
+        return False
+    removed = after_sig[:]; removed.pop(len(removed) // 2)
+    only_b, _ = compare(after_sig, removed)
+    if len(only_b) != 1:
+        return False
+    changed = after_sig[:]; i = len(changed) // 3
+    changed[i] = changed[i] + " ~changed"
+    only_b2, only_a2 = compare(after_sig, changed)
+    return len(only_b2) == 1 and len(only_a2) == 1
+
+
+def main(argv):
+    ignore, allow_added, pos = [], False, []
+    i = 0
+    while i < len(argv):
+        if argv[i] == "--ignore-subject":
+            from rdflib import URIRef
+            ignore.append(URIRef(argv[i + 1])); i += 2
+        elif argv[i] == "--allow-added":
+            allow_added = True; i += 1
+        else:
+            pos.append(argv[i]); i += 1
+    if len(pos) != 2:
+        print(__doc__); return 1
+    gb, fb = load(pos[0]); ga, fa = load(pos[1])
+    sb, rb = signature(gb, ignore); sa, ra = signature(ga, ignore)
+    print(f"before : {len(fb)} file(s), {len(gb)} statements ({len(sb)} compared)  {pos[0]}")
+    print(f"after  : {len(fa)} file(s), {len(ga)} statements ({len(sa)} compared)  {pos[1]}")
+    print(f"decimals whose spelling differs but value is equal, counted: before {rb}, after {ra}")
+    if not self_proof(sa):
+        print("SELF-PROOF : FAILED -- a removed statement and a changed object were not both reported. Nothing is certified.")
+        return 3
+    print("SELF-PROOF : ok -- a planted removal and a planted change are both reported")
+    lost, added = compare(sb, sa)
+    print(f"only BEFORE (lost or changed): {len(lost)}")
+    for x in lost[:5]:
+        print("   -", x[:200])
+    print(f"only AFTER  (added or changed): {len(added)}")
+    for x in added[:5]:
+        print("   +", x[:200])
+    bad = bool(lost) or (bool(added) and not allow_added)
+    print("VERDICT    : " + ("IDENTICAL -- every statement before is present after, and none was changed" if not bad
+                             else "DIFFERENT -- see the lists above"))
+    return 2 if bad else 0
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))

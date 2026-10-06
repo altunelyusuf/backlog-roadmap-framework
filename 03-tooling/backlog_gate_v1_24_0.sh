@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# backlog_gate v1.23.0 — four-gate release check for the Backlog & Roadmap
+# backlog_gate v1.24.0 — four-gate release check for the Backlog & Roadmap
 # Semantic Framework. Nothing about the package's state is trusted until all
 # four pass, and the SHACL gate refuses to certify anything until it has just
 # demonstrated, in this run, that it can fail a known-bad register.
@@ -12,6 +12,9 @@
 #   +       doc-coverage gate      every TBox class named in the standard document
 #
 # Usage: backlog_gate_v1_12_0.sh [REGISTER.ttl ...]
+#
+# v1.24.0 (Lineage 17, story OESC-S03): the split proof (every statement before a move is present, unchanged, after it) is proven
+# to discriminate on every run: it certifies an identical tree and refuses a tree with one statement removed or added.
 #
 # v1.11.0 — the order check orders by ancestry (v1.4.0); self-proof adds the two witness maps that
 # separate 'same epoch' from 'same commit' (one epoch, hashes in order -> ORDERED; two stages in one
@@ -489,6 +492,15 @@ if [ -n "$LOC" ]; then
     echo "  self-proof: the work guard refuses a work commit with no ready Work-Item, a push holding one, an edit on a lineage with no Backlog stage and a guard over nothing; it accepts groomed work"
   else
     echo "  NOT RUN — work-guard probe not found. Not assumed to pass."
+  fi
+  # v1.24.0 (Lineage 17, OESC-S03): a move of statements between files is proven lossless by comparison, and the comparison is
+  # itself shown to see a removed and an added statement before it is trusted anywhere.
+  SPP="$(ls "$HERE"/backlog_split_proof_probe_v*.py 2>/dev/null | sort -V | tail -1 || true)"
+  if [ -n "$SPP" ]; then
+    python3 "$SPP" "$PKG" >/dev/null 2>&1 || { echo "  ABORT: the split proof does not discriminate (backlog_split_proof_probe failed)."; exit 3; }
+    echo "  self-proof: the split proof certifies an identical tree and refuses one with a statement removed or added"
+  else
+    echo "  NOT RUN — split-proof probe not found. Not assumed to pass."
   fi
   PV="$(ls "$HERE"/backlog_pipeline_verify_v*.py 2>/dev/null | sort -V | tail -1 || true)"
   PFI="$(ls "$HERE"/fixtures/fixture_pipeline_incomplete_v*.ttl | sort -V | tail -1)"

@@ -14,8 +14,8 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.106.0> ;
-    owl:versionInfo "9.106.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.107.0> ;
+    owl:versionInfo "9.107.0" ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.100.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.98.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.97.0> ;
@@ -3693,7 +3693,7 @@ fw:L_OEStructureCleanup a backlog:Lineage ; rdfs:label "Lineage 17: OE Structure
     backlog:lineageOrdinal 17 ;
     backlog:lineageArchived false ;
     backlog:lineageForMission fw:Mission_OEStructureCleanup ;
-    backlog:hasLineageStatus backlog:LS_Backlogged ;
+    backlog:hasLineageStatus backlog:LS_InProgress ;
     backlog:hasLineageDepthLevel backlog:Depth_StoryDirect ;
     backlog:hasLineageArtifactDomain backlog:Domain_Infrastructure ;
     backlog:memberOfContainer fw:Register .
@@ -4026,13 +4026,17 @@ fw:Out_Objective_OEStructureCleanup a backlog:StageOutput ;
 # S03 (the proof, first), S01, S02, S04, S05, S06.
 
 fw:It_OESC_1 a backlog:Iteration ; backlog:hasIdentifier "OESC-IT1" ; backlog:hasTitle "Lineage 17, first work window" ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:InProgress ;
     backlog:memberOfContainer fw:Register ; backlog:belongsToLineage fw:L_OEStructureCleanup .
 
 fw:AC_OESC_NothingLost a backlog:AcceptanceCriterion ;
+    backlog:satisfiedByArtifact "03-tooling/backlog_split_proof_v1_0_0.py -- the comparison, and 03-tooling/backlog_split_proof_probe_v1_0_0.py -- its known-bad control" ;
     backlog:hasGherkinText "Given the package's ontology files before the move and after it, When the proof compares every statement by its blank-node-normalised form, Then it reports 0 statements lost and 0 changed, and it fails on a planted file with one statement removed." .
 fw:ST_OESC_NothingLost a backlog:Story ; backlog:hasIdentifier "OESC-S03" ; backlog:hasTitle "Build the before and after proof that no statement changes" ;
-    backlog:hasState backlog:Ready ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-10-06T09:29:30Z"^^xsd:dateTime ; backlog:finishedAt "2026-10-06T09:32:54Z"^^xsd:dateTime ; backlog:lastAuditedAt "2026-10-06T09:32:54Z"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_OESC_Fires , fw:Ev_OESC_Silent ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
     backlog:memberOfContainer fw:Register , fw:It_OESC_1 ;
     backlog:belongsToLineage fw:L_OEStructureCleanup ;
     backlog:producedByStage fw:Out_Backlog_OEStructureCleanup ;
@@ -4204,7 +4208,10 @@ fw:Out_Backlog_OEStructureCleanup a backlog:StageOutput ;
     backlog:hasRationale "Backlog stage of Lineage 17: six stories, one per deliverable, groomed and ready. Stage 5 of 5." .
 fw:T_OESC_NothingLost a backlog:ExecutionTask ; backlog:hasIdentifier "OESC-T03" ;
     backlog:hasTitle "Build and prove: NothingLost"@en ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-10-06T09:29:30Z"^^xsd:dateTime ; backlog:finishedAt "2026-10-06T09:32:54Z"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_OESC_Task ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
     backlog:hasTaskType backlog:Task_Implementation ;
     backlog:memberOfContainer fw:Register , fw:It_OESC_1 ;
     backlog:belongsToLineage fw:L_OEStructureCleanup ;
@@ -4244,3 +4251,27 @@ fw:T_OESC_DebtCleared a backlog:ExecutionTask ; backlog:hasIdentifier "OESC-T06"
     backlog:memberOfContainer fw:Register , fw:It_OESC_1 ;
     backlog:belongsToLineage fw:L_OEStructureCleanup ;
     backlog:hasRationale "One task matching the whole of its story's scope." .
+
+# v9.107.0: OESC-S03 done. The proof tool and its probe are in 03-tooling; the gate (v1.24.0) proves the proof discriminates on every run.
+fw:Ev_OESC_Fires a backlog:Evidence , backlog:TestEvidence ; backlog:attestsCriterion fw:AC_OESC_NothingLost ;
+    backlog:hasTestId "split_proof_refuses_removed_statement" ;
+    backlog:evidenceVerified true ; backlog:verifiedByTool "backlog_split_proof_probe_v1_0_0.py" ;
+    backlog:hasVerificationMethod "Real run: a copy of the package with one real statement removed was refused (exit 2) and the removed statement was named; a copy with one statement added was refused unless --allow-added was given. The tool also removes a statement and changes an object in memory before certifying anything, and refuses to certify if either is not seen." .
+fw:Ev_OESC_Silent a backlog:Evidence , backlog:TestEvidence ; backlog:attestsCriterion fw:AC_OESC_NothingLost ;
+    backlog:hasTestId "split_proof_certifies_identical_tree" ;
+    backlog:evidenceVerified true ; backlog:verifiedByTool "backlog_split_proof_probe_v1_0_0.py" ;
+    backlog:hasVerificationMethod "Real run: the package compared with an identical copy of itself reported 0 only-before and 0 only-after statements over 9 files and 30614 compared statements, with the 543 decimal respellings counted on each side." .
+fw:Ev_OESC_Task a backlog:Evidence , backlog:TestEvidence ;
+    backlog:hasTestSpec "03-tooling/backlog_split_proof_probe_v1_0_0.py" ;
+    backlog:evidenceVerified true ; backlog:verifiedByTool "backlog_split_proof_probe_v1_0_0.py" ;
+    backlog:hasVerificationMethod "Direct run of the probe: four cases hold (identical certified; removed refused; added refused; added passes under --allow-added)." .
+fw:H_OESC_NothingLost a backlog:TestHarness ; backlog:harnessFor fw:T_OESC_NothingLost ;
+    backlog:hasHarnessEvidence fw:Ev_OESC_Task ;
+    backlog:hasRationale "The task's own harness, distinct from the story's." .
+fw:H_OESC_NothingLost_Story a backlog:TestHarness ; backlog:harnessFor fw:ST_OESC_NothingLost ;
+    backlog:hasHarnessEvidence fw:Ev_OESC_Fires , fw:Ev_OESC_Silent ;
+    backlog:hasRationale "The story's own harness: the two directions of the proof, a refusal and a certification." .
+fw:Obs_OESC_NoStatementChange_1 a backlog:MetricObservation ; rdfs:label "After the proof was built: no statement lost or changed yet, nothing moved"@en ;
+    backlog:observesMetric fw:Metric_OESC_NoStatementChange ; backlog:observationFor fw:Obj_OESC_NoStatementChange ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-10-06T09:33:51Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "backlog_split_proof run against the package and an identical copy of its previous release: 0 statements only before, 0 only after." .

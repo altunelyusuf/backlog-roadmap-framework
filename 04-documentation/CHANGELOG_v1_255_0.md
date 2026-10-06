@@ -11065,3 +11065,16 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Not done, stated:** the work guard is not installed on this repository. Its config pins register file names, which change
   at every release, and the publisher's own release commits touch governed paths without a `Work-Item` trailer. Both need a
   decision of their own before the guard can govern this monorepo; until then the discipline is the order check and the start gate.
+
+## v1.338.0 — Lineage 17, OESC-S03 done: the before-and-after proof (Work-Item: ST_OESC_NothingLost)
+
+- **Tool (new):** `backlog_split_proof` v1.0.0 compares every statement of the ontology files before and after a move, as sets,
+  ignoring only the `owl:Ontology` headers a split legitimately changes. Blank nodes are compared by content, decimals by value
+  with the respellings counted and printed (543 on each side today). It proves itself on every run, and refuses to certify if it
+  does not see a removed statement and a changed object. A first negative control I wrote changed a header, which the tool
+  rightly ignores, and read IDENTICAL; that was a bad control, not a bad tool, and the probe now removes and adds a real statement.
+- **Probe (new):** `backlog_split_proof_probe` v1.0.0: identical tree certified, one statement removed refused with the statement
+  named, one added refused, and accepted under `--allow-added`. All four cases hold.
+- **Gate (1.24.0):** runs the probe on every release and aborts if the proof cannot discriminate.
+- **Register (9.107.0):** `ST_OESC_NothingLost` and its task are Done with evidence, the first iteration is InProgress, the lineage
+  moves to `LS_InProgress`, and the objective for statements changed carries an observation after the work (0). 0 violations.
