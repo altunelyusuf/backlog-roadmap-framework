@@ -20,9 +20,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (ABox: controlled individuals, reference data and the live register)"@en ;
-    owl:versionIRI <http://example.org/backlog/abox/1.11.0> ;
-    owl:versionInfo "1.11.0" ;
-    owl:priorVersion <http://example.org/backlog/abox/1.10.0> , <http://example.org/backlog/abox/1.9.0> , <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
+    owl:versionIRI <http://example.org/backlog/abox/1.12.0> ;
+    owl:versionInfo "1.12.0" ;
+    owl:priorVersion <http://example.org/backlog/abox/1.11.0> , <http://example.org/backlog/abox/1.10.0> , <http://example.org/backlog/abox/1.9.0> , <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
         <http://example.org/backlog-abox/1.2.1> ,
                      <http://example.org/backlog-abox/1.2.0> ,
                      <http://example.org/backlog-abox/1.1.0> ,
@@ -6353,7 +6353,7 @@ fw:L_OEPackageConsolidation a backlog:Lineage ; rdfs:label "Lineage 18: OE Packa
     backlog:lineageOrdinal 18 ;
     backlog:lineageArchived false ;
     backlog:lineageForMission fw:Mission_OEPackageConsolidation ;
-    backlog:hasLineageStatus backlog:LS_Scoped ;
+    backlog:hasLineageStatus backlog:LS_Goaled ;
     backlog:hasLineageDepthLevel backlog:Depth_StoryDirect ;
     backlog:hasLineageArtifactDomain backlog:Domain_Infrastructure ;
     backlog:memberOfContainer fw:Register .
@@ -6454,3 +6454,93 @@ fw:Out_Scope_OEPackageConsolidation a backlog:StageOutput ;
     backlog:hasStateDigest "06cf7f13389d59143897160984657c1a2608161ee966653845597e2e39fa1fab" ;
     backlog:closedAtCommit "backlog-roadmap-framework-v1.342.0 (tag; witnessed by git, not asserted)" ;
     backlog:hasRationale "Scope stage of Lineage 18: seven deliverables over three areas, four exclusions. Stage 2 of 5." .
+
+# v9.112.0: Lineage 18, Goal stage (third of five releases). One goal faces the mission, one each scope area, one containment,
+# and one inverse goal per exclusion. No objective, metric or work item yet.
+
+fw:Goal_OC_MissionMet a backlog:Goal ; rdfs:label "The package ships as one triad, with its archive and test inputs in their folders, and nothing lost"@en ;
+    backlog:contributesToMission fw:Mission_OEPackageConsolidation ;
+    backlog:derivesFromScope fw:Scope_OEPackageConsolidation ;
+    backlog:hasGoalFacing backlog:Facing_Mission ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out_Goal_OEPackageConsolidation ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation ;
+    backlog:decidedBy backlog:Owner .
+fw:Goal_OC_FilesDone a backlog:Goal ; rdfs:label "Every ontology file is in the one place its role and its history give it"@en ;
+    backlog:contributesToMission fw:Mission_OEPackageConsolidation ;
+    backlog:derivesFromScope fw:Scope_OEPackageConsolidation ;
+    backlog:hasGoalFacing backlog:Facing_Scope ;
+    backlog:goalCoversArea fw:Area_OC_Files ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out_Goal_OEPackageConsolidation ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation ;
+    backlog:decidedBy backlog:Owner .
+fw:Goal_OC_ToolsDone a backlog:Goal ; rdfs:label "Every tool finds the files where they now are"@en ;
+    backlog:contributesToMission fw:Mission_OEPackageConsolidation ;
+    backlog:derivesFromScope fw:Scope_OEPackageConsolidation ;
+    backlog:hasGoalFacing backlog:Facing_Scope ;
+    backlog:goalCoversArea fw:Area_OC_Tools ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out_Goal_OEPackageConsolidation ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation ;
+    backlog:decidedBy backlog:Owner .
+fw:Goal_OC_EnforcementDone a backlog:Goal ; rdfs:label "The structure checker shows the package clear and nothing new"@en ;
+    backlog:contributesToMission fw:Mission_OEPackageConsolidation ;
+    backlog:derivesFromScope fw:Scope_OEPackageConsolidation ;
+    backlog:hasGoalFacing backlog:Facing_Scope ;
+    backlog:goalCoversArea fw:Area_OC_Enforcement ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out_Goal_OEPackageConsolidation ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation ;
+    backlog:decidedBy backlog:Owner .
+fw:Goal_OC_Contained a backlog:Goal ; rdfs:label "No work was done outside what this scope named"@en ;
+    backlog:contributesToMission fw:Mission_OEPackageConsolidation ;
+    backlog:derivesFromScope fw:Scope_OEPackageConsolidation ;
+    backlog:hasGoalFacing backlog:Facing_Containment ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out_Goal_OEPackageConsolidation ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation ;
+    backlog:decidedBy backlog:Owner .
+fw:Goal_OC_NoStatementChange a backlog:Goal ; rdfs:label "No statement was reworded, corrected or re-judged in the move, and no term IRI changed"@en ;
+    backlog:contributesToMission fw:Mission_OEPackageConsolidation ;
+    backlog:derivesFromScope fw:Scope_OEPackageConsolidation ;
+    backlog:hasGoalFacing backlog:Facing_Exclusion ;
+    backlog:guardsExclusion fw:Ex_OC_StatementChange ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out_Goal_OEPackageConsolidation ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation ;
+    backlog:decidedBy backlog:Owner .
+fw:Goal_OC_NoRetroJudging a backlog:Goal ; rdfs:label "Retired work was never run through today's live rules"@en ;
+    backlog:contributesToMission fw:Mission_OEPackageConsolidation ;
+    backlog:derivesFromScope fw:Scope_OEPackageConsolidation ;
+    backlog:hasGoalFacing backlog:Facing_Exclusion ;
+    backlog:guardsExclusion fw:Ex_OC_RetroJudging ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out_Goal_OEPackageConsolidation ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation ;
+    backlog:decidedBy backlog:Owner .
+fw:Goal_OC_NoOtherPackages a backlog:Goal ; rdfs:label "No file outside this package was touched, except the one return note OE asks for"@en ;
+    backlog:contributesToMission fw:Mission_OEPackageConsolidation ;
+    backlog:derivesFromScope fw:Scope_OEPackageConsolidation ;
+    backlog:hasGoalFacing backlog:Facing_Exclusion ;
+    backlog:guardsExclusion fw:Ex_OC_OtherPackages ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out_Goal_OEPackageConsolidation ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation ;
+    backlog:decidedBy backlog:Owner .
+fw:Goal_OC_NoModuleMembership a backlog:Goal ; rdfs:label "No module-membership triples were added before OE asks for them"@en ;
+    backlog:contributesToMission fw:Mission_OEPackageConsolidation ;
+    backlog:derivesFromScope fw:Scope_OEPackageConsolidation ;
+    backlog:hasGoalFacing backlog:Facing_Exclusion ;
+    backlog:guardsExclusion fw:Ex_OC_ModuleMembership ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out_Goal_OEPackageConsolidation ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation ;
+    backlog:decidedBy backlog:Owner .
+
+fw:Out_Goal_OEPackageConsolidation a backlog:StageOutput ;
+    backlog:outputOfStage backlog:Stage_Goal ; backlog:belongsToLineage fw:L_OEPackageConsolidation ;
+    backlog:consumesOutput fw:Out_Scope_OEPackageConsolidation ;
+    backlog:hasStateDigest "3510bc2ba39e82eaad10532061019e3f54953f91f3d26cbb8d82df27c850401b" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.343.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Goal stage of Lineage 18: one mission-facing goal, one per scope area, one containment goal, and one inverse goal per exclusion. Stage 3 of 5." .

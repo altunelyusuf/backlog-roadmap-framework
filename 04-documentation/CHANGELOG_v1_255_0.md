@@ -11163,3 +11163,9 @@ dangling live pointers; 17 scripts name the files and must be repointed.
   names a private adopter). Folding it into the published archive file needs the public-copy leak scan to pass first; if it does not, that file goes to
   the owner and OE as a question, not a guess.
 - **Data file:** `backlog_abox` v1.11.0; lineage status `LS_Scoped`; Scope digest recorded and reproduced. 0 violations.
+
+## v1.343.0 — Lineage 18, Goal stage (stage output, no work item)
+
+- **Nine goals:** one facing the mission, one for each of the three scope areas, one for containment, and one inverse goal for each of the four exclusions
+  (no statement change, no retro-judging, no other packages' files, no module membership before OE asks). Each carries the lineage, so the stage digest sees it.
+- **Data file:** `backlog_abox` v1.12.0; lineage status `LS_Goaled`; Goal digest recorded and reproduced. 0 violations.
