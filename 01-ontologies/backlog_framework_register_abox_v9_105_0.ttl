@@ -14,8 +14,8 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.104.0> ;
-    owl:versionInfo "9.104.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.105.0> ;
+    owl:versionInfo "9.105.0" ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.100.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.98.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.97.0> ;
@@ -3693,7 +3693,7 @@ fw:L_OEStructureCleanup a backlog:Lineage ; rdfs:label "Lineage 17: OE Structure
     backlog:lineageOrdinal 17 ;
     backlog:lineageArchived false ;
     backlog:lineageForMission fw:Mission_OEStructureCleanup ;
-    backlog:hasLineageStatus backlog:LS_Goaled ;
+    backlog:hasLineageStatus backlog:LS_Objectived ;
     backlog:hasLineageDepthLevel backlog:Depth_StoryDirect ;
     backlog:hasLineageArtifactDomain backlog:Domain_Infrastructure ;
     backlog:memberOfContainer fw:Register .
@@ -3729,7 +3729,7 @@ fw:Scope_OEStructureCleanup a backlog:ScopeStatement ; rdfs:label "Scope: OE Str
     backlog:belongsToLineage fw:L_OEStructureCleanup .
 
 fw:Area_OESC_Files a backlog:ScopeArea ; rdfs:label "Area: the package's ontology files"@en ;
-    backlog:areaMeasure "Counted 2026-10-06: 9 ontology identities across 11 files where the live subject should be 3 files and the archive subject 3; 2 files that mix roles or repeat a role." ;
+    backlog:areaMeasure "Counted 2026-10-06: 9 ontology files carrying 9 distinct identities where two subjects of 3 files each are wanted; 2 files that mix roles or repeat a role." ;
     backlog:hasScopeLayer backlog:Layer_Work ;
     backlog:areaLocation "01-ontologies/ and 02-shacl-safeguards/" ;
     backlog:belongsToLineage fw:L_OEStructureCleanup .
@@ -3868,3 +3868,149 @@ fw:Out_Goal_OEStructureCleanup a backlog:StageOutput ;
     backlog:hasStateDigest "920ca15945004e78e9726ef363d044aae63f2a8366cddfdcb3c1148a7132c91d" ;
     backlog:closedAtCommit "backlog-roadmap-framework-v1.335.0 (tag; witnessed by git, not asserted)" ;
     backlog:hasRationale "Goal stage of Lineage 17: one mission-facing goal, one scope-facing goal per area, one containment goal, and one inverse goal per exclusion. Stage 3 of 5." .
+
+# v9.105.0: Lineage 17, Objective stage (fourth of five releases). One objective per goal, each with a counted metric,
+# a baseline observation taken 2026-10-06, a target and a checkpoint. No work item yet, so nothing names what moves a metric.
+
+fw:CP_OESC_MissionMet a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-10-20T00:00:00Z"^^xsd:dateTime .
+fw:Metric_OESC_MissionMet a backlog:Metric ; rdfs:label "Ontology files in the package"@en ; backlog:metricUnit "file" .
+fw:Obj_OESC_MissionMet a backlog:Objective ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    rdfs:label "Objective: Ontology files in the package"@en ;
+    backlog:contributesToGoal fw:Goal_OESC_MissionMet ; backlog:fillsScope fw:Scope_OEStructureCleanup ;
+    backlog:hasSuccessMetric fw:Metric_OESC_MissionMet ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasBaselineValue "9"^^xsd:decimal ; backlog:hasTargetValue "6"^^xsd:decimal ;
+    backlog:hasTargetDirection backlog:Dir_Decrease ;
+    backlog:hasCheckpoint fw:CP_OESC_MissionMet ;
+    backlog:hasRationale "Counted 2026-10-06: 9 ontology files across 01-ontologies and 02-shacl-safeguards; two subjects of three files is 6." ;
+    backlog:producedByStage fw:Out_Objective_OEStructureCleanup ;
+    backlog:belongsToLineage fw:L_OEStructureCleanup .
+fw:Obs_OESC_MissionMet a backlog:MetricObservation ; rdfs:label "Baseline: Ontology files in the package"@en ;
+    backlog:observesMetric fw:Metric_OESC_MissionMet ; backlog:observationFor fw:Obj_OESC_MissionMet ;
+    backlog:hasObservedValue 9.0 ; backlog:observedAt "2026-10-06T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Direct count of *.ttl in 01-ontologies and 02-shacl-safeguards." .
+
+fw:CP_OESC_FilesDone a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-10-20T00:00:00Z"^^xsd:dateTime .
+fw:Metric_OESC_FilesDone a backlog:Metric ; rdfs:label "Ontology identities in the package"@en ; backlog:metricUnit "identity" .
+fw:Obj_OESC_FilesDone a backlog:Objective ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    rdfs:label "Objective: Ontology identities in the package"@en ;
+    backlog:contributesToGoal fw:Goal_OESC_FilesDone ; backlog:fillsScope fw:Scope_OEStructureCleanup ;
+    backlog:hasSuccessMetric fw:Metric_OESC_FilesDone ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasBaselineValue "9"^^xsd:decimal ; backlog:hasTargetValue "2"^^xsd:decimal ;
+    backlog:hasTargetDirection backlog:Dir_Decrease ;
+    backlog:hasCheckpoint fw:CP_OESC_FilesDone ;
+    backlog:hasRationale "Counted 2026-10-06: 9 files carry 9 distinct ontology identities; the live and archive subjects are 2." ;
+    backlog:producedByStage fw:Out_Objective_OEStructureCleanup ;
+    backlog:belongsToLineage fw:L_OEStructureCleanup .
+fw:Obs_OESC_FilesDone a backlog:MetricObservation ; rdfs:label "Baseline: Ontology identities in the package"@en ;
+    backlog:observesMetric fw:Metric_OESC_FilesDone ; backlog:observationFor fw:Obj_OESC_FilesDone ;
+    backlog:hasObservedValue 9.0 ; backlog:observedAt "2026-10-06T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Read owl:versionIRI of each of the 9 files." .
+
+fw:CP_OESC_ToolsDone a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-10-20T00:00:00Z"^^xsd:dateTime .
+fw:Metric_OESC_ToolsDone a backlog:Metric ; rdfs:label "Scripts that name a moved file by its old prefix"@en ; backlog:metricUnit "script" .
+fw:Obj_OESC_ToolsDone a backlog:Objective ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    rdfs:label "Objective: Scripts that name a moved file by its old prefix"@en ;
+    backlog:contributesToGoal fw:Goal_OESC_ToolsDone ; backlog:fillsScope fw:Scope_OEStructureCleanup ;
+    backlog:hasSuccessMetric fw:Metric_OESC_ToolsDone ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasBaselineValue "17"^^xsd:decimal ; backlog:hasTargetValue "0"^^xsd:decimal ;
+    backlog:hasTargetDirection backlog:Dir_Decrease ;
+    backlog:hasCheckpoint fw:CP_OESC_ToolsDone ;
+    backlog:hasRationale "Counted 2026-10-06: 17 scripts outside vendored copies, archive and fixture folders name a file by its old prefix, the release gate among them." ;
+    backlog:producedByStage fw:Out_Objective_OEStructureCleanup ;
+    backlog:belongsToLineage fw:L_OEStructureCleanup .
+fw:Obs_OESC_ToolsDone a backlog:MetricObservation ; rdfs:label "Baseline: Scripts that name a moved file by its old prefix"@en ;
+    backlog:observesMetric fw:Metric_OESC_ToolsDone ; backlog:observationFor fw:Obj_OESC_ToolsDone ;
+    backlog:hasObservedValue 17.0 ; backlog:observedAt "2026-10-06T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Search of 03-tooling for the old file prefixes, excluding vendored, archive and fixture folders." .
+
+fw:CP_OESC_EnforcementDone a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-10-20T00:00:00Z"^^xsd:dateTime .
+fw:Metric_OESC_EnforcementDone a backlog:Metric ; rdfs:label "Recorded structure-debt lines for this package"@en ; backlog:metricUnit "line" .
+fw:Obj_OESC_EnforcementDone a backlog:Objective ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    rdfs:label "Objective: Recorded structure-debt lines for this package"@en ;
+    backlog:contributesToGoal fw:Goal_OESC_EnforcementDone ; backlog:fillsScope fw:Scope_OEStructureCleanup ;
+    backlog:hasSuccessMetric fw:Metric_OESC_EnforcementDone ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasBaselineValue "2"^^xsd:decimal ; backlog:hasTargetValue "0"^^xsd:decimal ;
+    backlog:hasTargetDirection backlog:Dir_Decrease ;
+    backlog:hasCheckpoint fw:CP_OESC_EnforcementDone ;
+    backlog:hasRationale "Counted 2026-10-06: 2 lines (rule R1) in the OE structure-debt register name this package." ;
+    backlog:producedByStage fw:Out_Objective_OEStructureCleanup ;
+    backlog:belongsToLineage fw:L_OEStructureCleanup .
+fw:Obs_OESC_EnforcementDone a backlog:MetricObservation ; rdfs:label "Baseline: Recorded structure-debt lines for this package"@en ;
+    backlog:observesMetric fw:Metric_OESC_EnforcementDone ; backlog:observationFor fw:Obj_OESC_EnforcementDone ;
+    backlog:hasObservedValue 2.0 ; backlog:observedAt "2026-10-06T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "OE structure checker run against the package, compared with the debt register." .
+
+fw:CP_OESC_Contained a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-10-20T00:00:00Z"^^xsd:dateTime .
+fw:Metric_OESC_Contained a backlog:Metric ; rdfs:label "Commits touching an excluded concern"@en ; backlog:metricUnit "commit" .
+fw:Obj_OESC_Contained a backlog:Objective ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    rdfs:label "Objective: Commits touching an excluded concern"@en ;
+    backlog:contributesToGoal fw:Goal_OESC_Contained ; backlog:fillsScope fw:Scope_OEStructureCleanup ;
+    backlog:hasSuccessMetric fw:Metric_OESC_Contained ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasBaselineValue "0"^^xsd:decimal ; backlog:hasTargetValue "0"^^xsd:decimal ;
+    backlog:hasTargetDirection backlog:Dir_Hold ;
+    backlog:hasCheckpoint fw:CP_OESC_Contained ;
+    backlog:hasRationale "Held, not moved: containment is proven by the absence of a touch." ;
+    backlog:producedByStage fw:Out_Objective_OEStructureCleanup ;
+    backlog:belongsToLineage fw:L_OEStructureCleanup .
+fw:Obs_OESC_Contained a backlog:MetricObservation ; rdfs:label "Baseline: Commits touching an excluded concern"@en ;
+    backlog:observesMetric fw:Metric_OESC_Contained ; backlog:observationFor fw:Obj_OESC_Contained ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-10-06T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Direct check: no commit made under this lineage yet." .
+
+fw:CP_OESC_NoStatementChange a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-10-20T00:00:00Z"^^xsd:dateTime .
+fw:Metric_OESC_NoStatementChange a backlog:Metric ; rdfs:label "Statements lost or changed by the move"@en ; backlog:metricUnit "statement" .
+fw:Obj_OESC_NoStatementChange a backlog:Objective ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    rdfs:label "Objective: Statements lost or changed by the move"@en ;
+    backlog:contributesToGoal fw:Goal_OESC_NoStatementChange ; backlog:fillsScope fw:Scope_OEStructureCleanup ;
+    backlog:hasSuccessMetric fw:Metric_OESC_NoStatementChange ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasBaselineValue "0"^^xsd:decimal ; backlog:hasTargetValue "0"^^xsd:decimal ;
+    backlog:hasTargetDirection backlog:Dir_Hold ;
+    backlog:hasCheckpoint fw:CP_OESC_NoStatementChange ;
+    backlog:hasRationale "Held, not moved: the before and after proof counts every statement lost or altered and must read 0." ;
+    backlog:producedByStage fw:Out_Objective_OEStructureCleanup ;
+    backlog:belongsToLineage fw:L_OEStructureCleanup .
+fw:Obs_OESC_NoStatementChange a backlog:MetricObservation ; rdfs:label "Baseline: Statements lost or changed by the move"@en ;
+    backlog:observesMetric fw:Metric_OESC_NoStatementChange ; backlog:observationFor fw:Obj_OESC_NoStatementChange ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-10-06T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Direct check: nothing has been moved yet." .
+
+fw:CP_OESC_NoRetroJudging a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-10-20T00:00:00Z"^^xsd:dateTime .
+fw:Metric_OESC_NoRetroJudging a backlog:Metric ; rdfs:label "Archive statements judged by the live rules"@en ; backlog:metricUnit "statement" .
+fw:Obj_OESC_NoRetroJudging a backlog:Objective ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    rdfs:label "Objective: Archive statements judged by the live rules"@en ;
+    backlog:contributesToGoal fw:Goal_OESC_NoRetroJudging ; backlog:fillsScope fw:Scope_OEStructureCleanup ;
+    backlog:hasSuccessMetric fw:Metric_OESC_NoRetroJudging ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasBaselineValue "0"^^xsd:decimal ; backlog:hasTargetValue "0"^^xsd:decimal ;
+    backlog:hasTargetDirection backlog:Dir_Hold ;
+    backlog:hasCheckpoint fw:CP_OESC_NoRetroJudging ;
+    backlog:hasRationale "Held, not moved: the live rules never read the archive subject." ;
+    backlog:producedByStage fw:Out_Objective_OEStructureCleanup ;
+    backlog:belongsToLineage fw:L_OEStructureCleanup .
+fw:Obs_OESC_NoRetroJudging a backlog:MetricObservation ; rdfs:label "Baseline: Archive statements judged by the live rules"@en ;
+    backlog:observesMetric fw:Metric_OESC_NoRetroJudging ; backlog:observationFor fw:Obj_OESC_NoRetroJudging ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-10-06T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Direct check: the archive is not yet a separate subject; nothing judges it by a separate path." .
+
+fw:CP_OESC_NoOtherPackages a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-10-20T00:00:00Z"^^xsd:dateTime .
+fw:Metric_OESC_NoOtherPackages a backlog:Metric ; rdfs:label "Files outside this package changed"@en ; backlog:metricUnit "file" .
+fw:Obj_OESC_NoOtherPackages a backlog:Objective ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    rdfs:label "Objective: Files outside this package changed"@en ;
+    backlog:contributesToGoal fw:Goal_OESC_NoOtherPackages ; backlog:fillsScope fw:Scope_OEStructureCleanup ;
+    backlog:hasSuccessMetric fw:Metric_OESC_NoOtherPackages ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasBaselineValue "0"^^xsd:decimal ; backlog:hasTargetValue "0"^^xsd:decimal ;
+    backlog:hasTargetDirection backlog:Dir_Hold ;
+    backlog:hasCheckpoint fw:CP_OESC_NoOtherPackages ;
+    backlog:hasRationale "Held, not moved: the OE debt register and the OE inbox are the OE session's own, so this lineage leaves them to it and sends a return note." ;
+    backlog:producedByStage fw:Out_Objective_OEStructureCleanup ;
+    backlog:belongsToLineage fw:L_OEStructureCleanup .
+fw:Obs_OESC_NoOtherPackages a backlog:MetricObservation ; rdfs:label "Baseline: Files outside this package changed"@en ;
+    backlog:observesMetric fw:Metric_OESC_NoOtherPackages ; backlog:observationFor fw:Obj_OESC_NoOtherPackages ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-10-06T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Direct check: no commit made under this lineage touches a file outside the package." .
+
+fw:Out_Objective_OEStructureCleanup a backlog:StageOutput ;
+    backlog:outputOfStage backlog:Stage_Objective ; backlog:belongsToLineage fw:L_OEStructureCleanup ;
+    backlog:consumesOutput fw:Out_Goal_OEStructureCleanup ;
+    backlog:hasStateDigest "37ed80d3b53e2f4de375c832e93d9a0575b6c7ee4218c515cdef8836c5a8831f" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.336.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Objective stage of Lineage 17: eight objectives, one per goal, each counted at a 2026-10-06 baseline. Stage 4 of 5." .

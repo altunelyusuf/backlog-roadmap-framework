@@ -11041,3 +11041,14 @@ dangling live pointers; 17 scripts name the files and must be repointed.
   `belongsToLineage`: a first attempt without it produced a Goal digest identical to the Scope digest, because the digest only
   sees elements that belong to the lineage, so the stage would have been closed on a digest that could not detect a goal being
   added or removed. No Objective or Backlog yet.
+
+## v1.336.0 — Lineage 17, Objective stage (fourth of five releases)
+
+- **Register (9.105.0):** eight objectives of `L_OEStructureCleanup`, one per goal, each with a counted metric, a baseline
+  observation taken 2026-10-06, a target and a checkpoint: ontology files 9 to 6; ontology identities 9 to 2; scripts naming an
+  old file prefix 17 to 0; recorded structure-debt lines 2 to 0; and four held at 0 (commits touching an excluded concern,
+  statements lost or changed, archive statements judged by the live rules, files outside the package changed). The lineage
+  status moves to `LS_Objectived`; the Objective `StageOutput` consumes the Goal output and its digest reproduces.
+- **A correction to the Scope text shipped at v1.334.0:** the area measure said "9 ontology identities across 11 files". The
+  count is 9 files carrying 9 identities (11 was the candidate layout in the scratch test drive). The area measure is
+  corrected; the stage digest is unaffected, because it hashes subjects only.
