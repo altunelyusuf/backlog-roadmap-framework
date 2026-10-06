@@ -20,9 +20,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (ABox: controlled individuals, reference data and the live register)"@en ;
-    owl:versionIRI <http://example.org/backlog/abox/1.12.0> ;
-    owl:versionInfo "1.12.0" ;
-    owl:priorVersion <http://example.org/backlog/abox/1.11.0> , <http://example.org/backlog/abox/1.10.0> , <http://example.org/backlog/abox/1.9.0> , <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
+    owl:versionIRI <http://example.org/backlog/abox/1.13.0> ;
+    owl:versionInfo "1.13.0" ;
+    owl:priorVersion <http://example.org/backlog/abox/1.12.0> , <http://example.org/backlog/abox/1.11.0> , <http://example.org/backlog/abox/1.10.0> , <http://example.org/backlog/abox/1.9.0> , <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
         <http://example.org/backlog-abox/1.2.1> ,
                      <http://example.org/backlog-abox/1.2.0> ,
                      <http://example.org/backlog-abox/1.1.0> ,
@@ -6353,7 +6353,7 @@ fw:L_OEPackageConsolidation a backlog:Lineage ; rdfs:label "Lineage 18: OE Packa
     backlog:lineageOrdinal 18 ;
     backlog:lineageArchived false ;
     backlog:lineageForMission fw:Mission_OEPackageConsolidation ;
-    backlog:hasLineageStatus backlog:LS_Goaled ;
+    backlog:hasLineageStatus backlog:LS_Objectived ;
     backlog:hasLineageDepthLevel backlog:Depth_StoryDirect ;
     backlog:hasLineageArtifactDomain backlog:Domain_Infrastructure ;
     backlog:memberOfContainer fw:Register .
@@ -6544,3 +6544,166 @@ fw:Out_Goal_OEPackageConsolidation a backlog:StageOutput ;
     backlog:hasStateDigest "3510bc2ba39e82eaad10532061019e3f54953f91f3d26cbb8d82df27c850401b" ;
     backlog:closedAtCommit "backlog-roadmap-framework-v1.343.0 (tag; witnessed by git, not asserted)" ;
     backlog:hasRationale "Goal stage of Lineage 18: one mission-facing goal, one per scope area, one containment goal, and one inverse goal per exclusion. Stage 3 of 5." .
+
+# v9.113.0: Lineage 18, Objective stage (fourth of five releases). One objective per goal, each with a counted metric,
+# a baseline observation taken 2026-10-06, a target and a checkpoint. No work item yet, so nothing names what moves a metric.
+
+fw:CP_OC_MissionMet a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-10-20T00:00:00Z"^^xsd:dateTime .
+fw:Metric_OC_MissionMet a backlog:Metric ; rdfs:label "Active ontology files in the package"@en ; backlog:metricUnit "file" .
+fw:Obj_OC_MissionMet a backlog:Objective ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    rdfs:label "Objective: Active ontology files in the package"@en ;
+    backlog:contributesToGoal fw:Goal_OC_MissionMet ; backlog:fillsScope fw:Scope_OEPackageConsolidation ;
+    backlog:hasSuccessMetric fw:Metric_OC_MissionMet ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasBaselineValue "12"^^xsd:decimal ; backlog:hasTargetValue "3"^^xsd:decimal ;
+    backlog:hasTargetDirection backlog:Dir_Decrease ;
+    backlog:hasCheckpoint fw:CP_OC_MissionMet ;
+    backlog:hasRationale "Counted 2026-10-06 with the OE structure checker v1.1.0: 12 active ontology files (1 vocabulary, 10 data, 1 shapes); one triad is 3." ;
+    backlog:producedByStage fw:Out_Objective_OEPackageConsolidation ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation .
+fw:Obs_OC_MissionMet a backlog:MetricObservation ; rdfs:label "Baseline: Active ontology files in the package"@en ;
+    backlog:observesMetric fw:Metric_OC_MissionMet ; backlog:observationFor fw:Obj_OC_MissionMet ;
+    backlog:hasObservedValue 12.0 ; backlog:observedAt "2026-10-06T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "OE structure checker run on the package, active files per role." .
+
+fw:CP_OC_FilesDone a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-10-20T00:00:00Z"^^xsd:dateTime .
+fw:Metric_OC_FilesDone a backlog:Metric ; rdfs:label "Active data files in the package"@en ; backlog:metricUnit "file" .
+fw:Obj_OC_FilesDone a backlog:Objective ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    rdfs:label "Objective: Active data files in the package"@en ;
+    backlog:contributesToGoal fw:Goal_OC_FilesDone ; backlog:fillsScope fw:Scope_OEPackageConsolidation ;
+    backlog:hasSuccessMetric fw:Metric_OC_FilesDone ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasBaselineValue "10"^^xsd:decimal ; backlog:hasTargetValue "1"^^xsd:decimal ;
+    backlog:hasTargetDirection backlog:Dir_Decrease ;
+    backlog:hasCheckpoint fw:CP_OC_FilesDone ;
+    backlog:hasRationale "Counted 2026-10-06: 10 active data files (the register file, the archive's data file, the exercise register, the lesson deposit, the test drive, six provenance records); one is wanted." ;
+    backlog:producedByStage fw:Out_Objective_OEPackageConsolidation ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation .
+fw:Obs_OC_FilesDone a backlog:MetricObservation ; rdfs:label "Baseline: Active data files in the package"@en ;
+    backlog:observesMetric fw:Metric_OC_FilesDone ; backlog:observationFor fw:Obj_OC_FilesDone ;
+    backlog:hasObservedValue 10.0 ; backlog:observedAt "2026-10-06T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "OE structure checker run on the package, active data files." .
+
+fw:CP_OC_ToolsDone a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-10-20T00:00:00Z"^^xsd:dateTime .
+fw:Metric_OC_ToolsDone a backlog:Metric ; rdfs:label "Scripts that name a file by a path it will leave"@en ; backlog:metricUnit "script" .
+fw:Obj_OC_ToolsDone a backlog:Objective ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    rdfs:label "Objective: Scripts that name a file by a path it will leave"@en ;
+    backlog:contributesToGoal fw:Goal_OC_ToolsDone ; backlog:fillsScope fw:Scope_OEPackageConsolidation ;
+    backlog:hasSuccessMetric fw:Metric_OC_ToolsDone ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasBaselineValue "10"^^xsd:decimal ; backlog:hasTargetValue "0"^^xsd:decimal ;
+    backlog:hasTargetDirection backlog:Dir_Decrease ;
+    backlog:hasCheckpoint fw:CP_OC_ToolsDone ;
+    backlog:hasRationale "Counted 2026-10-06 by search of 03-tooling: 10 scripts name the archive data file, the lesson deposit, the provenance records, the test drive or the exercise register by a path that changes." ;
+    backlog:producedByStage fw:Out_Objective_OEPackageConsolidation ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation .
+fw:Obs_OC_ToolsDone a backlog:MetricObservation ; rdfs:label "Baseline: Scripts that name a file by a path it will leave"@en ;
+    backlog:observesMetric fw:Metric_OC_ToolsDone ; backlog:observationFor fw:Obj_OC_ToolsDone ;
+    backlog:hasObservedValue 10.0 ; backlog:observedAt "2026-10-06T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Search of 03-tooling for those paths." .
+
+fw:CP_OC_EnforcementDone a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-10-20T00:00:00Z"^^xsd:dateTime .
+fw:Metric_OC_EnforcementDone a backlog:Metric ; rdfs:label "Recorded structure-debt lines for this package"@en ; backlog:metricUnit "line" .
+fw:Obj_OC_EnforcementDone a backlog:Objective ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    rdfs:label "Objective: Recorded structure-debt lines for this package"@en ;
+    backlog:contributesToGoal fw:Goal_OC_EnforcementDone ; backlog:fillsScope fw:Scope_OEPackageConsolidation ;
+    backlog:hasSuccessMetric fw:Metric_OC_EnforcementDone ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasBaselineValue "1"^^xsd:decimal ; backlog:hasTargetValue "0"^^xsd:decimal ;
+    backlog:hasTargetDirection backlog:Dir_Decrease ;
+    backlog:hasCheckpoint fw:CP_OC_EnforcementDone ;
+    backlog:hasRationale "Counted 2026-10-06: 1 line (rule U1, data files, count 10) in the OE structure-debt register names this package." ;
+    backlog:producedByStage fw:Out_Objective_OEPackageConsolidation ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation .
+fw:Obs_OC_EnforcementDone a backlog:MetricObservation ; rdfs:label "Baseline: Recorded structure-debt lines for this package"@en ;
+    backlog:observesMetric fw:Metric_OC_EnforcementDone ; backlog:observationFor fw:Obj_OC_EnforcementDone ;
+    backlog:hasObservedValue 1.0 ; backlog:observedAt "2026-10-06T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "OE structure checker run against the package, compared with the debt register." .
+
+fw:CP_OC_Contained a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-10-20T00:00:00Z"^^xsd:dateTime .
+fw:Metric_OC_Contained a backlog:Metric ; rdfs:label "Commits touching an excluded concern"@en ; backlog:metricUnit "commit" .
+fw:Obj_OC_Contained a backlog:Objective ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    rdfs:label "Objective: Commits touching an excluded concern"@en ;
+    backlog:contributesToGoal fw:Goal_OC_Contained ; backlog:fillsScope fw:Scope_OEPackageConsolidation ;
+    backlog:hasSuccessMetric fw:Metric_OC_Contained ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasBaselineValue "0"^^xsd:decimal ; backlog:hasTargetValue "0"^^xsd:decimal ;
+    backlog:hasTargetDirection backlog:Dir_Hold ;
+    backlog:hasCheckpoint fw:CP_OC_Contained ;
+    backlog:hasRationale "Held, not moved: containment is proven by the absence of a touch." ;
+    backlog:producedByStage fw:Out_Objective_OEPackageConsolidation ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation .
+fw:Obs_OC_Contained a backlog:MetricObservation ; rdfs:label "Baseline: Commits touching an excluded concern"@en ;
+    backlog:observesMetric fw:Metric_OC_Contained ; backlog:observationFor fw:Obj_OC_Contained ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-10-06T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Direct check: no work commit made under this lineage yet." .
+
+fw:CP_OC_NoStatementChange a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-10-20T00:00:00Z"^^xsd:dateTime .
+fw:Metric_OC_NoStatementChange a backlog:Metric ; rdfs:label "Statements lost or changed by the moves, beyond the declared header and polarity edits"@en ; backlog:metricUnit "statement" .
+fw:Obj_OC_NoStatementChange a backlog:Objective ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    rdfs:label "Objective: Statements lost or changed by the moves, beyond the declared header and polarity edits"@en ;
+    backlog:contributesToGoal fw:Goal_OC_NoStatementChange ; backlog:fillsScope fw:Scope_OEPackageConsolidation ;
+    backlog:hasSuccessMetric fw:Metric_OC_NoStatementChange ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasBaselineValue "0"^^xsd:decimal ; backlog:hasTargetValue "0"^^xsd:decimal ;
+    backlog:hasTargetDirection backlog:Dir_Hold ;
+    backlog:hasCheckpoint fw:CP_OC_NoStatementChange ;
+    backlog:hasRationale "Held, not moved: the before and after proof counts every statement lost or altered and must read 0 apart from the declared edits." ;
+    backlog:producedByStage fw:Out_Objective_OEPackageConsolidation ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation .
+fw:Obs_OC_NoStatementChange a backlog:MetricObservation ; rdfs:label "Baseline: Statements lost or changed by the moves, beyond the declared header and polarity edits"@en ;
+    backlog:observesMetric fw:Metric_OC_NoStatementChange ; backlog:observationFor fw:Obj_OC_NoStatementChange ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-10-06T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Direct check: nothing has been moved yet." .
+
+fw:CP_OC_NoRetroJudging a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-10-20T00:00:00Z"^^xsd:dateTime .
+fw:Metric_OC_NoRetroJudging a backlog:Metric ; rdfs:label "Archive statements judged by the live rules"@en ; backlog:metricUnit "statement" .
+fw:Obj_OC_NoRetroJudging a backlog:Objective ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    rdfs:label "Objective: Archive statements judged by the live rules"@en ;
+    backlog:contributesToGoal fw:Goal_OC_NoRetroJudging ; backlog:fillsScope fw:Scope_OEPackageConsolidation ;
+    backlog:hasSuccessMetric fw:Metric_OC_NoRetroJudging ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasBaselineValue "0"^^xsd:decimal ; backlog:hasTargetValue "0"^^xsd:decimal ;
+    backlog:hasTargetDirection backlog:Dir_Hold ;
+    backlog:hasCheckpoint fw:CP_OC_NoRetroJudging ;
+    backlog:hasRationale "Held, not moved: the live rules never read the archive folder." ;
+    backlog:producedByStage fw:Out_Objective_OEPackageConsolidation ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation .
+fw:Obs_OC_NoRetroJudging a backlog:MetricObservation ; rdfs:label "Baseline: Archive statements judged by the live rules"@en ;
+    backlog:observesMetric fw:Metric_OC_NoRetroJudging ; backlog:observationFor fw:Obj_OC_NoRetroJudging ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-10-06T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Direct check: the archive data file is not read by the live rules today." .
+
+fw:CP_OC_NoOtherPackages a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-10-20T00:00:00Z"^^xsd:dateTime .
+fw:Metric_OC_NoOtherPackages a backlog:Metric ; rdfs:label "Files outside this package changed, other than the return note"@en ; backlog:metricUnit "file" .
+fw:Obj_OC_NoOtherPackages a backlog:Objective ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    rdfs:label "Objective: Files outside this package changed, other than the return note"@en ;
+    backlog:contributesToGoal fw:Goal_OC_NoOtherPackages ; backlog:fillsScope fw:Scope_OEPackageConsolidation ;
+    backlog:hasSuccessMetric fw:Metric_OC_NoOtherPackages ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasBaselineValue "0"^^xsd:decimal ; backlog:hasTargetValue "0"^^xsd:decimal ;
+    backlog:hasTargetDirection backlog:Dir_Hold ;
+    backlog:hasCheckpoint fw:CP_OC_NoOtherPackages ;
+    backlog:hasRationale "Held, not moved: the OE debt register is the OE session's own." ;
+    backlog:producedByStage fw:Out_Objective_OEPackageConsolidation ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation .
+fw:Obs_OC_NoOtherPackages a backlog:MetricObservation ; rdfs:label "Baseline: Files outside this package changed, other than the return note"@en ;
+    backlog:observesMetric fw:Metric_OC_NoOtherPackages ; backlog:observationFor fw:Obj_OC_NoOtherPackages ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-10-06T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Direct check: no work commit made under this lineage touches a file outside the package." .
+
+fw:CP_OC_NoModuleMembership a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-10-20T00:00:00Z"^^xsd:dateTime .
+fw:Metric_OC_NoModuleMembership a backlog:Metric ; rdfs:label "Subjects given module membership triples before OE asks"@en ; backlog:metricUnit "subject" .
+fw:Obj_OC_NoModuleMembership a backlog:Objective ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    rdfs:label "Objective: Subjects given module membership triples before OE asks"@en ;
+    backlog:contributesToGoal fw:Goal_OC_NoModuleMembership ; backlog:fillsScope fw:Scope_OEPackageConsolidation ;
+    backlog:hasSuccessMetric fw:Metric_OC_NoModuleMembership ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasBaselineValue "0"^^xsd:decimal ; backlog:hasTargetValue "0"^^xsd:decimal ;
+    backlog:hasTargetDirection backlog:Dir_Hold ;
+    backlog:hasCheckpoint fw:CP_OC_NoModuleMembership ;
+    backlog:hasRationale "Held, not moved: rule M1 is switched on per package by OE, which has not done so here." ;
+    backlog:producedByStage fw:Out_Objective_OEPackageConsolidation ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation .
+fw:Obs_OC_NoModuleMembership a backlog:MetricObservation ; rdfs:label "Baseline: Subjects given module membership triples before OE asks"@en ;
+    backlog:observesMetric fw:Metric_OC_NoModuleMembership ; backlog:observationFor fw:Obj_OC_NoModuleMembership ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-10-06T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Direct check: no membership triple has been added by this lineage." .
+
+fw:Out_Objective_OEPackageConsolidation a backlog:StageOutput ;
+    backlog:outputOfStage backlog:Stage_Objective ; backlog:belongsToLineage fw:L_OEPackageConsolidation ;
+    backlog:consumesOutput fw:Out_Goal_OEPackageConsolidation ;
+    backlog:hasStateDigest "6d28d71c115f4a86098a75f1de46cb784b7a8cd8ec8e32b416c0afd478e6b5cb" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.344.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Objective stage of Lineage 18: nine objectives, one per goal, each counted at a 2026-10-06 baseline. Stage 4 of 5." .

@@ -11169,3 +11169,11 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Nine goals:** one facing the mission, one for each of the three scope areas, one for containment, and one inverse goal for each of the four exclusions
   (no statement change, no retro-judging, no other packages' files, no module membership before OE asks). Each carries the lineage, so the stage digest sees it.
 - **Data file:** `backlog_abox` v1.12.0; lineage status `LS_Goaled`; Goal digest recorded and reproduced. 0 violations.
+
+## v1.344.0 — Lineage 18, Objective stage (stage output, no work item)
+
+- **Nine objectives, one per goal,** each with a counted metric, a baseline observation dated 2026-10-06, a target and a checkpoint (2026-10-20):
+  active ontology files 12 to 3; active data files 10 to 1; scripts naming a file by a path it will leave 10 to 0; recorded debt lines 1 to 0; and
+  five held at 0 (containment, statements changed beyond the declared edits, archive statements judged by live rules, files outside the package other than the
+  return note, subjects given membership triples before OE asks).
+- **Data file:** `backlog_abox` v1.13.0; lineage status `LS_Objectived`; Objective digest recorded and reproduced. 0 violations.
