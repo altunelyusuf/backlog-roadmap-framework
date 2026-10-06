@@ -14,8 +14,8 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.105.0> ;
-    owl:versionInfo "9.105.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.106.0> ;
+    owl:versionInfo "9.106.0" ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.100.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.98.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.97.0> ;
@@ -3693,7 +3693,7 @@ fw:L_OEStructureCleanup a backlog:Lineage ; rdfs:label "Lineage 17: OE Structure
     backlog:lineageOrdinal 17 ;
     backlog:lineageArchived false ;
     backlog:lineageForMission fw:Mission_OEStructureCleanup ;
-    backlog:hasLineageStatus backlog:LS_Objectived ;
+    backlog:hasLineageStatus backlog:LS_Backlogged ;
     backlog:hasLineageDepthLevel backlog:Depth_StoryDirect ;
     backlog:hasLineageArtifactDomain backlog:Domain_Infrastructure ;
     backlog:memberOfContainer fw:Register .
@@ -3881,6 +3881,7 @@ fw:Obj_OESC_MissionMet a backlog:Objective ; backlog:hasIntentOrigin backlog:IOr
     backlog:hasBaselineValue "9"^^xsd:decimal ; backlog:hasTargetValue "6"^^xsd:decimal ;
     backlog:hasTargetDirection backlog:Dir_Decrease ;
     backlog:hasCheckpoint fw:CP_OESC_MissionMet ;
+    backlog:metricMovableBy fw:ST_OESC_LiveSubject , fw:ST_OESC_ArchiveSubject , fw:ST_OESC_Ceremony ;
     backlog:hasRationale "Counted 2026-10-06: 9 ontology files across 01-ontologies and 02-shacl-safeguards; two subjects of three files is 6." ;
     backlog:producedByStage fw:Out_Objective_OEStructureCleanup ;
     backlog:belongsToLineage fw:L_OEStructureCleanup .
@@ -3898,6 +3899,7 @@ fw:Obj_OESC_FilesDone a backlog:Objective ; backlog:hasIntentOrigin backlog:IOri
     backlog:hasBaselineValue "9"^^xsd:decimal ; backlog:hasTargetValue "2"^^xsd:decimal ;
     backlog:hasTargetDirection backlog:Dir_Decrease ;
     backlog:hasCheckpoint fw:CP_OESC_FilesDone ;
+    backlog:metricMovableBy fw:ST_OESC_LiveSubject , fw:ST_OESC_ArchiveSubject ;
     backlog:hasRationale "Counted 2026-10-06: 9 files carry 9 distinct ontology identities; the live and archive subjects are 2." ;
     backlog:producedByStage fw:Out_Objective_OEStructureCleanup ;
     backlog:belongsToLineage fw:L_OEStructureCleanup .
@@ -3915,6 +3917,7 @@ fw:Obj_OESC_ToolsDone a backlog:Objective ; backlog:hasIntentOrigin backlog:IOri
     backlog:hasBaselineValue "17"^^xsd:decimal ; backlog:hasTargetValue "0"^^xsd:decimal ;
     backlog:hasTargetDirection backlog:Dir_Decrease ;
     backlog:hasCheckpoint fw:CP_OESC_ToolsDone ;
+    backlog:metricMovableBy fw:ST_OESC_ToolsRepointed ;
     backlog:hasRationale "Counted 2026-10-06: 17 scripts outside vendored copies, archive and fixture folders name a file by its old prefix, the release gate among them." ;
     backlog:producedByStage fw:Out_Objective_OEStructureCleanup ;
     backlog:belongsToLineage fw:L_OEStructureCleanup .
@@ -3932,6 +3935,7 @@ fw:Obj_OESC_EnforcementDone a backlog:Objective ; backlog:hasIntentOrigin backlo
     backlog:hasBaselineValue "2"^^xsd:decimal ; backlog:hasTargetValue "0"^^xsd:decimal ;
     backlog:hasTargetDirection backlog:Dir_Decrease ;
     backlog:hasCheckpoint fw:CP_OESC_EnforcementDone ;
+    backlog:metricMovableBy fw:ST_OESC_DebtCleared ;
     backlog:hasRationale "Counted 2026-10-06: 2 lines (rule R1) in the OE structure-debt register name this package." ;
     backlog:producedByStage fw:Out_Objective_OEStructureCleanup ;
     backlog:belongsToLineage fw:L_OEStructureCleanup .
@@ -3966,6 +3970,7 @@ fw:Obj_OESC_NoStatementChange a backlog:Objective ; backlog:hasIntentOrigin back
     backlog:hasBaselineValue "0"^^xsd:decimal ; backlog:hasTargetValue "0"^^xsd:decimal ;
     backlog:hasTargetDirection backlog:Dir_Hold ;
     backlog:hasCheckpoint fw:CP_OESC_NoStatementChange ;
+    backlog:metricMovableBy fw:ST_OESC_NothingLost ;
     backlog:hasRationale "Held, not moved: the before and after proof counts every statement lost or altered and must read 0." ;
     backlog:producedByStage fw:Out_Objective_OEStructureCleanup ;
     backlog:belongsToLineage fw:L_OEStructureCleanup .
@@ -3983,6 +3988,7 @@ fw:Obj_OESC_NoRetroJudging a backlog:Objective ; backlog:hasIntentOrigin backlog
     backlog:hasBaselineValue "0"^^xsd:decimal ; backlog:hasTargetValue "0"^^xsd:decimal ;
     backlog:hasTargetDirection backlog:Dir_Hold ;
     backlog:hasCheckpoint fw:CP_OESC_NoRetroJudging ;
+    backlog:metricMovableBy fw:ST_OESC_ArchiveSubject ;
     backlog:hasRationale "Held, not moved: the live rules never read the archive subject." ;
     backlog:producedByStage fw:Out_Objective_OEStructureCleanup ;
     backlog:belongsToLineage fw:L_OEStructureCleanup .
@@ -4014,3 +4020,227 @@ fw:Out_Objective_OEStructureCleanup a backlog:StageOutput ;
     backlog:hasStateDigest "37ed80d3b53e2f4de375c832e93d9a0575b6c7ee4218c515cdef8836c5a8831f" ;
     backlog:closedAtCommit "backlog-roadmap-framework-v1.336.0 (tag; witnessed by git, not asserted)" ;
     backlog:hasRationale "Objective stage of Lineage 17: eight objectives, one per goal, each counted at a 2026-10-06 baseline. Stage 4 of 5." .
+
+# v9.106.0: Lineage 17, Backlog stage (fifth and last of the five releases). Six stories, one per deliverable, each groomed:
+# acceptance criterion, design concerns declared (or none applies), taken in by a planning event. Work may start from here, in this order:
+# S03 (the proof, first), S01, S02, S04, S05, S06.
+
+fw:It_OESC_1 a backlog:Iteration ; backlog:hasIdentifier "OESC-IT1" ; backlog:hasTitle "Lineage 17, first work window" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ; backlog:belongsToLineage fw:L_OEStructureCleanup .
+
+fw:AC_OESC_NothingLost a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the package's ontology files before the move and after it, When the proof compares every statement by its blank-node-normalised form, Then it reports 0 statements lost and 0 changed, and it fails on a planted file with one statement removed." .
+fw:ST_OESC_NothingLost a backlog:Story ; backlog:hasIdentifier "OESC-S03" ; backlog:hasTitle "Build the before and after proof that no statement changes" ;
+    backlog:hasState backlog:Ready ;
+    backlog:memberOfContainer fw:Register , fw:It_OESC_1 ;
+    backlog:belongsToLineage fw:L_OEStructureCleanup ;
+    backlog:producedByStage fw:Out_Backlog_OEStructureCleanup ;
+    backlog:pursuesObjective fw:Obj_OESC_NoStatementChange ;
+    backlog:satisfiesDeliverable fw:Del_OESC_NothingLost ;
+    backlog:hasInvestmentCategory backlog:Cat_TechnicalDebt ;
+    backlog:hasAcceptanceCriterion fw:AC_OESC_NothingLost ;
+    backlog:hasReach 3.0 ; backlog:hasImpact 3.0 ; backlog:hasConfidence 0.85 ; backlog:hasEffort 1.0 ;
+    backlog:hasPriorityScore 7.65 ;
+    backlog:hasApplicableConcern backlog:Concern_Data ;
+    backlog:appliesDefinitionOfDone fw:DoD_OESC .
+fw:RE_OESC_NothingLost a backlog:RefinementEvent ; backlog:refines fw:ST_OESC_NothingLost ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-10-06T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Build first so every later move is checked by it. The scratch test drive proved the split lossless up to decimal spellings; the proof must treat those as a declared, counted, equal-value class, never as silence." .
+fw:Plan_OESC_NothingLost a backlog:PlanningEvent ; rdfs:label "OESC-S03 taken in"@en ;
+    backlog:plansItem fw:ST_OESC_NothingLost ; backlog:plannedInto fw:It_OESC_1 ;
+    backlog:producesTask fw:T_OESC_NothingLost ;
+    backlog:plannedAt "2026-10-06T00:00:00Z"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:hasRationale "The formal boundary between ordering this work and doing it." .
+
+fw:AC_OESC_LiveSubject a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the package's live statements, When the live subject is built, Then it ships exactly one vocabulary file, one data file and one rules file sharing the identity backlog, the structure checker reports no mixed or repeated role for it, and the live register validates with 0 violations." .
+fw:ST_OESC_LiveSubject a backlog:Story ; backlog:hasIdentifier "OESC-S01" ; backlog:hasTitle "Build the live subject: one vocabulary, one data and one rules file under the identity backlog" ;
+    backlog:hasState backlog:Ready ;
+    backlog:memberOfContainer fw:Register , fw:It_OESC_1 ;
+    backlog:belongsToLineage fw:L_OEStructureCleanup ;
+    backlog:producedByStage fw:Out_Backlog_OEStructureCleanup ;
+    backlog:pursuesObjective fw:Obj_OESC_FilesDone ;
+    backlog:satisfiesDeliverable fw:Del_OESC_LiveSubject ;
+    backlog:hasInvestmentCategory backlog:Cat_TechnicalDebt ;
+    backlog:hasAcceptanceCriterion fw:AC_OESC_LiveSubject ;
+    backlog:hasReach 5.0 ; backlog:hasImpact 3.0 ; backlog:hasConfidence 0.85 ; backlog:hasEffort 3.0 ;
+    backlog:hasPriorityScore 4.25 ;
+    backlog:hasApplicableConcern backlog:Concern_Data , backlog:Concern_Architecture ;
+    backlog:appliesDefinitionOfDone fw:DoD_OESC .
+fw:RE_OESC_LiveSubject a backlog:RefinementEvent ; backlog:refines fw:ST_OESC_LiveSubject ;
+    backlog:addressesConcern backlog:Concern_Data , backlog:Concern_Architecture ;
+    backlog:refinedAt "2026-10-06T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Merges the exercise register out of live data (test input), derives the promoted overlay when rules load, folds the alignment file into vocabulary annotations. Adopting projects import only the identity backlog, which stays." .
+fw:Plan_OESC_LiveSubject a backlog:PlanningEvent ; rdfs:label "OESC-S01 taken in"@en ;
+    backlog:plansItem fw:ST_OESC_LiveSubject ; backlog:plannedInto fw:It_OESC_1 ;
+    backlog:producesTask fw:T_OESC_LiveSubject ;
+    backlog:plannedAt "2026-10-06T00:00:00Z"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:hasRationale "The formal boundary between ordering this work and doing it." .
+
+fw:AC_OESC_ArchiveSubject a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the retired lineages and the archive's own vocabulary, When the archive subject is built, Then it ships one vocabulary file, one data file and one rules file under its own identity, the archive rules run over the whole archive in seconds, and they flag a planted orphaned item." .
+fw:ST_OESC_ArchiveSubject a backlog:Story ; backlog:hasIdentifier "OESC-S02" ; backlog:hasTitle "Build the archive subject: its own vocabulary, data and rules files and identity" ;
+    backlog:hasState backlog:Ready ;
+    backlog:memberOfContainer fw:Register , fw:It_OESC_1 ;
+    backlog:belongsToLineage fw:L_OEStructureCleanup ;
+    backlog:producedByStage fw:Out_Backlog_OEStructureCleanup ;
+    backlog:pursuesObjective fw:Obj_OESC_NoRetroJudging ;
+    backlog:satisfiesDeliverable fw:Del_OESC_ArchiveSubject ;
+    backlog:hasInvestmentCategory backlog:Cat_TechnicalDebt ;
+    backlog:hasAcceptanceCriterion fw:AC_OESC_ArchiveSubject ;
+    backlog:hasReach 5.0 ; backlog:hasImpact 3.0 ; backlog:hasConfidence 0.85 ; backlog:hasEffort 3.0 ;
+    backlog:hasPriorityScore 4.25 ;
+    backlog:hasApplicableConcern backlog:Concern_Data , backlog:Concern_Architecture ;
+    backlog:appliesDefinitionOfDone fw:DoD_OESC .
+fw:RE_OESC_ArchiveSubject a backlog:RefinementEvent ; backlog:refines fw:ST_OESC_ArchiveSubject ;
+    backlog:addressesConcern backlog:Concern_Data , backlog:Concern_Architecture ;
+    backlog:refinedAt "2026-10-06T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "The measured design: archive shapes run over the whole archive in 8 seconds and flagged two achieved lineages still marked not archived; those findings are reported, not silently fixed (exclusion)." .
+fw:Plan_OESC_ArchiveSubject a backlog:PlanningEvent ; rdfs:label "OESC-S02 taken in"@en ;
+    backlog:plansItem fw:ST_OESC_ArchiveSubject ; backlog:plannedInto fw:It_OESC_1 ;
+    backlog:producesTask fw:T_OESC_ArchiveSubject ;
+    backlog:plannedAt "2026-10-06T00:00:00Z"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:hasRationale "The formal boundary between ordering this work and doing it." .
+
+fw:AC_OESC_ToolsRepointed a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the 17 scripts that name a file by its old prefix, When each is repointed, Then a search finds no stale prefix outside vendored, archive and fixture folders, and the release gate passes with the new layout and still fails on its known-bad inputs." .
+fw:ST_OESC_ToolsRepointed a backlog:Story ; backlog:hasIdentifier "OESC-S04" ; backlog:hasTitle "Repoint every tool that names a moved file" ;
+    backlog:hasState backlog:Ready ;
+    backlog:memberOfContainer fw:Register , fw:It_OESC_1 ;
+    backlog:belongsToLineage fw:L_OEStructureCleanup ;
+    backlog:producedByStage fw:Out_Backlog_OEStructureCleanup ;
+    backlog:pursuesObjective fw:Obj_OESC_ToolsDone ;
+    backlog:satisfiesDeliverable fw:Del_OESC_ToolsRepointed ;
+    backlog:hasInvestmentCategory backlog:Cat_TechnicalDebt ;
+    backlog:hasAcceptanceCriterion fw:AC_OESC_ToolsRepointed ;
+    backlog:hasReach 8.0 ; backlog:hasImpact 3.0 ; backlog:hasConfidence 0.85 ; backlog:hasEffort 3.0 ;
+    backlog:hasPriorityScore 6.8 ;
+    backlog:hasApplicableConcern backlog:Concern_Interface ;
+    backlog:appliesDefinitionOfDone fw:DoD_OESC .
+fw:RE_OESC_ToolsRepointed a backlog:RefinementEvent ; backlog:refines fw:ST_OESC_ToolsRepointed ;
+    backlog:addressesConcern backlog:Concern_Interface ;
+    backlog:refinedAt "2026-10-06T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "The archive tool hard-codes the archive file name and the validator globs by prefix; the gate must keep its self-proof." .
+fw:Plan_OESC_ToolsRepointed a backlog:PlanningEvent ; rdfs:label "OESC-S04 taken in"@en ;
+    backlog:plansItem fw:ST_OESC_ToolsRepointed ; backlog:plannedInto fw:It_OESC_1 ;
+    backlog:producesTask fw:T_OESC_ToolsRepointed ;
+    backlog:plannedAt "2026-10-06T00:00:00Z"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:hasRationale "The formal boundary between ordering this work and doing it." .
+
+fw:AC_OESC_Ceremony a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given an archivable lineage in the live data, When the archive tool applies, Then its statements move verbatim to the archive subject, versions bump, the live subject keeps no dangling pointer, and the archive subject's rules still hold." .
+fw:ST_OESC_Ceremony a backlog:Story ; backlog:hasIdentifier "OESC-S05" ; backlog:hasTitle "Make the archiving ceremony a move from the live subject to the archive subject" ;
+    backlog:hasState backlog:Ready ;
+    backlog:memberOfContainer fw:Register , fw:It_OESC_1 ;
+    backlog:belongsToLineage fw:L_OEStructureCleanup ;
+    backlog:producedByStage fw:Out_Backlog_OEStructureCleanup ;
+    backlog:pursuesObjective fw:Obj_OESC_MissionMet ;
+    backlog:satisfiesDeliverable fw:Del_OESC_Ceremony ;
+    backlog:hasInvestmentCategory backlog:Cat_TechnicalDebt ;
+    backlog:hasAcceptanceCriterion fw:AC_OESC_Ceremony ;
+    backlog:hasReach 5.0 ; backlog:hasImpact 3.0 ; backlog:hasConfidence 0.85 ; backlog:hasEffort 2.0 ;
+    backlog:hasPriorityScore 6.38 ;
+    backlog:hasApplicableConcern backlog:Concern_Data , backlog:Concern_Architecture ;
+    backlog:appliesDefinitionOfDone fw:DoD_OESC .
+fw:RE_OESC_Ceremony a backlog:RefinementEvent ; backlog:refines fw:ST_OESC_Ceremony ;
+    backlog:addressesConcern backlog:Concern_Data , backlog:Concern_Architecture ;
+    backlog:refinedAt "2026-10-06T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "The scratch drill moved 20 subjects with 0 dangling live pointers using the old file name; this story re-proves it on the real layout." .
+fw:Plan_OESC_Ceremony a backlog:PlanningEvent ; rdfs:label "OESC-S05 taken in"@en ;
+    backlog:plansItem fw:ST_OESC_Ceremony ; backlog:plannedInto fw:It_OESC_1 ;
+    backlog:producesTask fw:T_OESC_Ceremony ;
+    backlog:plannedAt "2026-10-06T00:00:00Z"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:hasRationale "The formal boundary between ordering this work and doing it." .
+
+fw:AC_OESC_DebtCleared a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the new layout is released, When the OE structure checker runs, Then both recorded debt lines for this package read CLEARED and no violation is new, and a return note naming the cleared lines is in the OE inbox." .
+fw:ST_OESC_DebtCleared a backlog:Story ; backlog:hasIdentifier "OESC-S06" ; backlog:hasTitle "Clear the structure debt and return the note to the OE session" ;
+    backlog:hasState backlog:Ready ;
+    backlog:memberOfContainer fw:Register , fw:It_OESC_1 ;
+    backlog:belongsToLineage fw:L_OEStructureCleanup ;
+    backlog:producedByStage fw:Out_Backlog_OEStructureCleanup ;
+    backlog:pursuesObjective fw:Obj_OESC_EnforcementDone ;
+    backlog:satisfiesDeliverable fw:Del_OESC_DebtCleared ;
+    backlog:hasInvestmentCategory backlog:Cat_TechnicalDebt ;
+    backlog:hasAcceptanceCriterion fw:AC_OESC_DebtCleared ;
+    backlog:hasReach 3.0 ; backlog:hasImpact 3.0 ; backlog:hasConfidence 0.85 ; backlog:hasEffort 1.0 ;
+    backlog:hasPriorityScore 7.65 ;
+    backlog:hasNoApplicableConcern true ;
+    backlog:appliesDefinitionOfDone fw:DoD_OESC .
+fw:RE_OESC_DebtCleared a backlog:RefinementEvent ; backlog:refines fw:ST_OESC_DebtCleared ;
+    backlog:refinedAt "2026-10-06T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "The OE session prunes the debt lines itself; this lineage does not edit the OE register (exclusion)." .
+fw:Plan_OESC_DebtCleared a backlog:PlanningEvent ; rdfs:label "OESC-S06 taken in"@en ;
+    backlog:plansItem fw:ST_OESC_DebtCleared ; backlog:plannedInto fw:It_OESC_1 ;
+    backlog:producesTask fw:T_OESC_DebtCleared ;
+    backlog:plannedAt "2026-10-06T00:00:00Z"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:hasRationale "The formal boundary between ordering this work and doing it." .
+
+fw:DoD_OESC a backlog:DefinitionOfDone ; rdfs:label "Definition of Done for Lineage 17's work"@en ;
+    backlog:hasDoDCriterion fw:DOESC1 , fw:DOESC2 , fw:DOESC3 .
+fw:DOESC1 a backlog:DoDCriterion ; rdfs:label "DOESC1 -- the proof still fires on a known-bad input"@en ;
+    backlog:hasCriterionText "Every check the story touches is shown, in the same run, failing a planted known-bad input and passing the real files." ;
+    backlog:hasCheckQuery "The story's own before and after proof and the release gate's self-proof." ;
+    backlog:hasExpectedResult "known-bad fails, real passes" ;
+    backlog:hasCriterionStatus backlog:Holds .
+fw:DOESC2 a backlog:DoDCriterion ; rdfs:label "DOESC2 -- the live register validates with no violation"@en ;
+    backlog:hasCriterionText "backlog_validate against the live register still reports 0 violations at sh:Violation severity." ;
+    backlog:hasCheckQuery "backlog_validate against the live register." ;
+    backlog:hasExpectedResult "0 Violation" ;
+    backlog:hasCriterionStatus backlog:Holds .
+fw:DOESC3 a backlog:DoDCriterion ; rdfs:label "DOESC3 -- the commit names its work item"@en ;
+    backlog:hasCriterionText "Every commit that changes governed work carries a Work-Item trailer naming a Ready item of this lineage." ;
+    backlog:hasCheckQuery "backlog_work_guard range over the lineage's commits." ;
+    backlog:hasExpectedResult "PASS" ;
+    backlog:hasCriterionStatus backlog:Holds .
+
+fw:Out_Backlog_OEStructureCleanup a backlog:StageOutput ;
+    backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage fw:L_OEStructureCleanup ;
+    backlog:consumesOutput fw:Out_Objective_OEStructureCleanup ;
+    backlog:hasStateDigest "1c50a5b2bf1f15ca6f03e5fd8b66609b76cbbef1d8acfbbe161f965057c9ad45" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.337.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Backlog stage of Lineage 17: six stories, one per deliverable, groomed and ready. Stage 5 of 5." .
+fw:T_OESC_NothingLost a backlog:ExecutionTask ; backlog:hasIdentifier "OESC-T03" ;
+    backlog:hasTitle "Build and prove: NothingLost"@en ;
+    backlog:hasState backlog:Proposed ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It_OESC_1 ;
+    backlog:belongsToLineage fw:L_OEStructureCleanup ;
+    backlog:hasRationale "One task matching the whole of its story's scope." .
+fw:T_OESC_LiveSubject a backlog:ExecutionTask ; backlog:hasIdentifier "OESC-T01" ;
+    backlog:hasTitle "Build and prove: LiveSubject"@en ;
+    backlog:hasState backlog:Proposed ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It_OESC_1 ;
+    backlog:belongsToLineage fw:L_OEStructureCleanup ;
+    backlog:hasRationale "One task matching the whole of its story's scope." .
+fw:T_OESC_ArchiveSubject a backlog:ExecutionTask ; backlog:hasIdentifier "OESC-T02" ;
+    backlog:hasTitle "Build and prove: ArchiveSubject"@en ;
+    backlog:hasState backlog:Proposed ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It_OESC_1 ;
+    backlog:belongsToLineage fw:L_OEStructureCleanup ;
+    backlog:hasRationale "One task matching the whole of its story's scope." .
+fw:T_OESC_ToolsRepointed a backlog:ExecutionTask ; backlog:hasIdentifier "OESC-T04" ;
+    backlog:hasTitle "Build and prove: ToolsRepointed"@en ;
+    backlog:hasState backlog:Proposed ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It_OESC_1 ;
+    backlog:belongsToLineage fw:L_OEStructureCleanup ;
+    backlog:hasRationale "One task matching the whole of its story's scope." .
+fw:T_OESC_Ceremony a backlog:ExecutionTask ; backlog:hasIdentifier "OESC-T05" ;
+    backlog:hasTitle "Build and prove: Ceremony"@en ;
+    backlog:hasState backlog:Proposed ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It_OESC_1 ;
+    backlog:belongsToLineage fw:L_OEStructureCleanup ;
+    backlog:hasRationale "One task matching the whole of its story's scope." .
+fw:T_OESC_DebtCleared a backlog:ExecutionTask ; backlog:hasIdentifier "OESC-T06" ;
+    backlog:hasTitle "Build and prove: DebtCleared"@en ;
+    backlog:hasState backlog:Proposed ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It_OESC_1 ;
+    backlog:belongsToLineage fw:L_OEStructureCleanup ;
+    backlog:hasRationale "One task matching the whole of its story's scope." .

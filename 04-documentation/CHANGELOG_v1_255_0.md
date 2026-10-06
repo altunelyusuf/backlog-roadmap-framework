@@ -11052,3 +11052,16 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **A correction to the Scope text shipped at v1.334.0:** the area measure said "9 ontology identities across 11 files". The
   count is 9 files carrying 9 identities (11 was the candidate layout in the scratch test drive). The area measure is
   corrected; the stage digest is unaffected, because it hashes subjects only.
+
+## v1.337.0 — Lineage 17, Backlog stage (fifth and last of the five releases): work may now start
+
+- **Register (9.106.0):** six stories of `L_OEStructureCleanup`, one per deliverable, in the order the work should run: the
+  before-and-after proof first (OESC-S03), then the live subject (S01), the archive subject (S02), the tool repointing (S04), the
+  archiving ceremony (S05), and the debt clearance with the return note (S06). Each story is Ready: it has an acceptance
+  criterion, its design concerns declared and addressed by a refinement event (or none apply), and a planning event that took it
+  in and produced one execution task. Objectives now name the stories that can move their metrics. The lineage status moves to
+  `LS_Backlogged`. The five stage digests reproduce, the pipeline verifier passes under `--require-complete`, the start gate
+  reads READY for each story, and the register validates with 0 violations.
+- **Not done, stated:** the work guard is not installed on this repository. Its config pins register file names, which change
+  at every release, and the publisher's own release commits touch governed paths without a `Work-Item` trailer. Both need a
+  decision of their own before the guard can govern this monorepo; until then the discipline is the order check and the start gate.
