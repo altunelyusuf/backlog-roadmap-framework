@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_split_proof v1.1.0 -- a move of statements between files lost nothing and changed nothing.
+"""backlog_split_proof v1.2.0 -- a move of statements between files lost nothing and changed nothing.
 
 WHY THIS EXISTS (Lineage 17, story OESC-S03, deliverable "A before and after proof that no statement changed").
 The Mission says no statement any file makes changes. A split of the package into a live and an archive subject moves
@@ -17,9 +17,13 @@ THE PROOF PROVES ITSELF EVERY RUN (L-95). Before it certifies anything it remove
 side and one statement's object from another, and each must be reported as a difference; if either is not seen the tool
 refuses to certify and exits 3.
 
+v1.2.0 (Lineage 18, OC-S04, a fold of a package's files into one): --module-of-header IRI declares that a file's ontology header became a
+module record. The header's own statements were always set aside (they are what a split legitimately changes); the module record that replaces it
+is untyped and carries four statements (part-of, identifier, label, version). Those four, and only those four predicates, on a declared IRI are set
+aside on the AFTER side and COUNTED and printed. Any other statement on that subject is compared like any other.
 v1.1.0 (OESC-S01, a split that moves files and retires one): the comparison can be told which files left the compared
 directories and where they went, and which added statements are declared.
-Usage: backlog_split_proof_v1_1_0.py BEFORE_PACKAGE_DIR AFTER_PACKAGE_DIR [options]
+Usage: backlog_split_proof_v1_2_0.py BEFORE_PACKAGE_DIR AFTER_PACKAGE_DIR [options]
   --allow-added                 statements only AFTER are reported but do not fail
   --allow-added-pattern REGEX   a statement only AFTER passes if it matches REGEX (repeatable); any other added statement fails
   --exclude-before PATH         leave this file of the BEFORE tree (relative to the package) out of the comparison, e.g. a derived copy
@@ -56,6 +60,21 @@ def lit(n):
         except Exception:
             return n.n3(), False
     return n.n3(), False
+
+
+MODULE_PREDICATES = ("http://purl.org/dc/terms/isPartOf", "http://purl.org/dc/terms/identifier",
+                     "http://www.w3.org/2000/01/rdf-schema#label", "http://www.w3.org/2002/07/owl#versionInfo")
+
+
+def strip_module_records(g, iris):
+    """Remove the four module-record predicates from each declared subject; return how many statements were set aside."""
+    from rdflib import URIRef
+    n = 0
+    for iri in iris:
+        for pr in MODULE_PREDICATES:
+            for t in list(g.triples((URIRef(iri), URIRef(pr), None))):
+                g.remove(t); n += 1
+    return n
 
 
 def signature(g, ignore):
@@ -105,12 +124,14 @@ def self_proof(after_sig):
 
 def main(argv):
     import re
-    ignore, allow_added, pos, pats, exb, xb, xa = [], False, [], [], [], [], []
+    ignore, allow_added, pos, pats, exb, xb, xa, mods = [], False, [], [], [], [], [], []
     i = 0
     while i < len(argv):
         if argv[i] == "--ignore-subject":
             from rdflib import URIRef
             ignore.append(URIRef(argv[i + 1])); i += 2
+        elif argv[i] == "--module-of-header":
+            mods.append(argv[i + 1]); i += 2
         elif argv[i] == "--allow-added":
             allow_added = True; i += 1
         elif argv[i] == "--allow-added-pattern":
@@ -126,6 +147,9 @@ def main(argv):
     if len(pos) != 2:
         print(__doc__); return 1
     gb, fb = load(pos[0], exb, xb); ga, fa = load(pos[1], (), xa)
+    set_aside = strip_module_records(ga, mods)
+    if mods:
+        print(f"module records: {len(mods)} declared header(s); {set_aside} statement(s) (part-of, identifier, label, version) set aside on the AFTER side")
     sb, rb = signature(gb, ignore); sa, ra = signature(ga, ignore)
     print(f"before : {len(fb)} file(s), {len(gb)} statements ({len(sb)} compared)  {pos[0]}")
     print(f"after  : {len(fa)} file(s), {len(ga)} statements ({len(sa)} compared)  {pos[1]}")

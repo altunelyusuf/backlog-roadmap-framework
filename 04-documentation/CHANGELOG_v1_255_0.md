@@ -11190,3 +11190,11 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Checked, not asserted:** the validator's polarity report reads them as declared (3 violations, 0 violations). OE's structure checker examined 13 files before and 11 after; its one-per-role line fell from 10 active data files to 8. The split proof read 0 statements lost, 0 changed; the only difference is the two polarity statements, which sit on the ontology header subjects the proof sets aside.
 - **Tools:** the gate is `backlog_gate` v1.26.0 and reads the exercise register from the fixtures folder; the fold tool `backlog_package_fold` v1.0.0 joins `03-tooling`. The two Done L17 records that cited the gate by path now cite v1.26.0 (the tool that ran them stays named as v1.25.0).
 - **Data file:** `backlog_abox` v1.15.0; OC-S01 Done with evidence, harness and an observation dated after it; iteration `OC-IT1` and the lineage are InProgress. 0 violations.
+
+## v1.347.0 — Lineage 18, OC-S02: the lesson deposit joins the live data file as a module
+
+- **Folded:** `05-lesson-deposits/backlog_framework_lesson_deposit_v2_6_0.ttl` is now part of `backlog_abox`. Its ontology header became an untyped module record (`http://example.org/backlog-lesson-deposit`, part of the package data file, with identifier, label and version); the former header text is kept as a comment; every other statement and every term IRI is unchanged. The folder is gone.
+- **Proof:** `backlog_split_proof` v1.2.0 (new option `--module-of-header`, which sets aside the four module-record statements and counts them) read 0 lost, 0 changed over the data file and the deposit before and the data file after, with 4 module-record statements counted. One pointer in an earlier record (the proof's own path) was set aside by name. The probe still shows the proof firing and staying silent.
+- **Structure checker:** the one-per-role line for data files fell from 8 to 7.
+- **Public copy:** the deposit's text now reaches the public file through the deriver's usual scrub, like the rest of the register.
+- **Register:** OC-S02 Done with evidence, harness and an observation; the data-file objective now also names the archive story as able to move it. `backlog_abox` v1.16.0, 0 violations.

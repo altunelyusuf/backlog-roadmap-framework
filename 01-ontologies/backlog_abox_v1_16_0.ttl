@@ -3,8 +3,10 @@
 @prefix core: <http://example.org/core#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix fw: <http://example.org/backlog-framework-register#> .
+@prefix kb: <http://example.org/knowledge-base#> .
 @prefix orh: <http://example.org/oepack-release-history#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix pkg: <http://example.org/backlog-package#> .
 @prefix prof: <http://rdodi.org/profiles#> .
 @prefix prov: <http://www.w3.org/ns/prov#> .
 @prefix quality: <http://example.org/quality#> .
@@ -20,9 +22,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (ABox: controlled individuals, reference data and the live register)"@en ;
-    owl:versionIRI <http://example.org/backlog/abox/1.15.0> ;
-    owl:versionInfo "1.15.0" ;
-    owl:priorVersion <http://example.org/backlog/abox/1.14.0> , <http://example.org/backlog/abox/1.13.0> , <http://example.org/backlog/abox/1.12.0> , <http://example.org/backlog/abox/1.11.0> , <http://example.org/backlog/abox/1.10.0> , <http://example.org/backlog/abox/1.9.0> , <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
+    owl:versionIRI <http://example.org/backlog/abox/1.16.0> ;
+    owl:versionInfo "1.16.0" ;
+    owl:priorVersion <http://example.org/backlog/abox/1.15.0> , <http://example.org/backlog/abox/1.14.0> , <http://example.org/backlog/abox/1.13.0> , <http://example.org/backlog/abox/1.12.0> , <http://example.org/backlog/abox/1.11.0> , <http://example.org/backlog/abox/1.10.0> , <http://example.org/backlog/abox/1.9.0> , <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
         <http://example.org/backlog-abox/1.2.1> ,
                      <http://example.org/backlog-abox/1.2.0> ,
                      <http://example.org/backlog-abox/1.1.0> ,
@@ -6035,7 +6037,7 @@ fw:It_OESC_1 a backlog:Iteration ; backlog:hasIdentifier "OESC-IT1" ; backlog:ha
     backlog:memberOfContainer fw:Register ; backlog:belongsToLineage fw:L_OEStructureCleanup .
 
 fw:AC_OESC_NothingLost a backlog:AcceptanceCriterion ;
-    backlog:satisfiedByArtifact "03-tooling/backlog_split_proof_v1_1_0.py -- backlog_split_proof" ;
+    backlog:satisfiedByArtifact "03-tooling/backlog_split_proof_v1_2_0.py -- backlog_split_proof" ;
     backlog:hasGherkinText "Given the package's ontology files before the move and after it, When the proof compares every statement by its blank-node-normalised form, Then it reports 0 statements lost and 0 changed, and it fails on a planted file with one statement removed." .
 fw:ST_OESC_NothingLost a backlog:Story ; backlog:hasIdentifier "OESC-S03" ; backlog:hasTitle "Build the before and after proof that no statement changes" ;
     backlog:hasState backlog:Done ;
@@ -6579,7 +6581,8 @@ fw:Obj_OC_FilesDone a backlog:Objective ; backlog:hasIntentOrigin backlog:IOrigi
     backlog:hasRationale "Counted 2026-10-06: 10 active data files (the register file, the archive's data file, the exercise register, the lesson deposit, the test drive, six provenance records); one is wanted." ;
     backlog:producedByStage fw:Out_Objective_OEPackageConsolidation ;
     backlog:belongsToLineage fw:L_OEPackageConsolidation ;
-    backlog:metricMovableBy fw:ST_OC_LiveTriad .
+    backlog:metricMovableBy fw:ST_OC_LiveTriad ;
+    backlog:metricMovableBy fw:ST_OC_ArchiveFolder .
 fw:Obs_OC_FilesDone a backlog:MetricObservation ; rdfs:label "Baseline: Active data files in the package"@en ;
     backlog:observesMetric fw:Metric_OC_FilesDone ; backlog:observationFor fw:Obj_OC_FilesDone ;
     backlog:hasObservedValue 10.0 ; backlog:observedAt "2026-10-06T00:00:00Z"^^xsd:dateTime ;
@@ -6762,9 +6765,13 @@ fw:T_OC_Fixtures a backlog:ExecutionTask ; backlog:hasIdentifier "OC-T01" ;
     backlog:hasRationale "One task matching the whole of its story's scope." .
 
 fw:AC_OC_LiveTriad a backlog:AcceptanceCriterion ;
+    backlog:satisfiedByArtifact "03-tooling/backlog_package_fold_v1_0_0.py -- fold" ;
     backlog:hasGherkinText "Given the lesson deposit as a data file of its own, When it is folded into the package's one data file, Then its ontology header becomes an untyped module record carrying isPartOf, identifier, label and version, every other statement is kept, every term keeps its IRI, and the live data still validates with 0 violations." .
 fw:ST_OC_LiveTriad a backlog:Story ; backlog:hasIdentifier "OC-S02" ; backlog:hasTitle "Fold the lesson deposit into the data file as a module" ;
-    backlog:hasState backlog:Ready ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-10-06T17:18:00Z"^^xsd:dateTime ; backlog:finishedAt "2026-10-06T17:26:22Z"^^xsd:dateTime ; backlog:lastAuditedAt "2026-10-06T17:26:22Z"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_OC_LiveTriad ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
     backlog:memberOfContainer fw:Register ;
     backlog:belongsToLineage fw:L_OEPackageConsolidation ;
     backlog:producedByStage fw:Out_Backlog_OEPackageConsolidation ;
@@ -6787,7 +6794,10 @@ fw:Plan_OC_LiveTriad a backlog:PlanningEvent ; rdfs:label "OC-S02 taken in"@en ;
     backlog:hasRationale "The formal boundary between ordering this work and doing it." .
 fw:T_OC_LiveTriad a backlog:ExecutionTask ; backlog:hasIdentifier "OC-T02" ;
     backlog:hasTitle "Build and prove: LiveTriad"@en ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-10-06T17:18:00Z"^^xsd:dateTime ; backlog:finishedAt "2026-10-06T17:26:22Z"^^xsd:dateTime ; backlog:lastAuditedAt "2026-10-06T17:26:22Z"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_OC_LiveTriad_Task ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
     backlog:hasTaskType backlog:Task_Implementation ;
     backlog:memberOfContainer fw:Register , fw:It_OC_1 ;
     backlog:belongsToLineage fw:L_OEPackageConsolidation ;
@@ -6991,3 +7001,151 @@ fw:Obs_OC_MissionMet_Fixtures a backlog:MetricObservation ; rdfs:label "After OC
     backlog:observesMetric fw:Metric_OC_MissionMet ; backlog:observationFor fw:Obj_OC_MissionMet ;
     backlog:hasObservedValue 10.0 ; backlog:observedAt "2026-10-06T17:08:00Z"^^xsd:dateTime ;
     backlog:hasObservationMethod "OE structure checker run on the package before and after, same convention as the baseline: 13 files examined became 11, so the baseline 12 reads 10." .
+
+#################################################################
+#  MODULE backlog framework lesson deposit -- folded in from backlog_framework_lesson_deposit_v2_6_0.ttl (Lineage 18).
+#  The file carried no ontology header; the module IRI below was chosen when it was folded in.
+#################################################################
+<http://example.org/backlog-lesson-deposit> dcterms:isPartOf <http://example.org/backlog> ;
+    dcterms:identifier "backlog_framework_lesson_deposit" ;
+    rdfs:label "backlog framework lesson deposit"@en ;
+    owl:versionInfo "2.6.0" .
+
+# Outcome (2026-09-23): L-cand-D and L-cand-E ratified by OEE governance into the governed
+# catalogue as L-122 (global enforcement deadlocks concurrent work) and L-123 (rename-on-change
+# baseline resolved by stem, never filename) -- oe-pack v20.79.0. Both defects and fixes
+# independently re-verified by OEE before ratifying, not accepted from this package's own account.
+# OEE also completed the proposal's own request to check oe-pack's and oe-method's shared tooling
+# for the same defect class as L-123: no instance found. L-cand-C and L-cand-F, judged closer to
+# this registrant's own specific mechanisms, were not submitted and remain local record only.
+
+# Outcome: both were adopted into the governed catalogue on 2026-07-28 as L-108
+# (conformance level in the data graph) and L-107 (closed-enumeration widening),
+# each carrying dcterms:source attribution back to this deposit. The governed
+# IRIs are authoritative; these individuals are the registrant-side record and
+# point at them by rdfs:seeAlso and dcterms:isReplacedBy.
+
+# ADOPTED 2026-07-28. Retained as the registrant-side proposal record. B1-CLEAN.
+#
+# v2.0.0 (MAJOR: subject IRIs changed). The candidate lessons were previously
+# minted in the OE knowledge-base namespace. The pack's own registration
+# precedent requires a registrant to mint ZERO OE-namespace subjects: the tenth
+# registrant was accepted on exactly that basis, with OEE minting the governed
+# IRIs itself. These individuals are therefore registrant-local and typed with
+# the OE class; the kb: IRIs they relate to appear only as objects of
+# rdfs:seeAlso. If OEE ratifies them, OEE mints the kb: identifiers. Two candidate lessons that emerged while
+# generalising an adopting project backlog deposit into a reusable framework
+# (L-84: record lessons as they emerge). They are deposited here rather
+# than written into knowledge_base_abox because the OE Pack is owned by
+# the governance session, which decides ratification and versioning
+# (L-X7 / B1). Both were duplicate-screened against the 173 definitions
+# in knowledge_base_abox_v2_15_0.ttl before being written (L-71: a
+# duplicate lesson recorded to satisfy a checklist is the opposite
+# failure).
+
+pkg:CandidateLesson_ConformanceLevelBelongsInTheDataGraph a kb:LessonsLearned , owl:NamedIndividual ;
+    rdfs:seeAlso <http://example.org/knowledge-base#Lesson_L_cand_A_ConformanceLevelInDataGraphNotForkedShapes> ;
+    dcterms:isReplacedBy <http://example.org/knowledge-base#Lesson_L_cand_A_ConformanceLevelInDataGraphNotForkedShapes> ;
+    rdfs:label "L-cand-A: a reusable standard states its conformance level in the data graph, so one shape suite serves adopters of different maturity without forking"@en ;
+    dcterms:source "Emerged 2026-07-27 while generalising product-backlog 1.3.0 (an adopting project deposit, OE Pack v20.23.38) into the domain-neutral backlog 1.0.0 subject." ;
+    rdfs:seeAlso kb:BestPractice_BP_X1_ConformanceClaimDisclosureDiscipline , kb:Lesson_L_95_GateMustBeProvenDiscriminating , kb:Lesson_L_98_SHACLConformanceIsZeroViolationsNotZeroResults ;
+    skos:definition "When a governed vocabulary is offered for reuse across several developments, its constraint suite faces two adopters with incompatible needs: a new adopter who cannot yet satisfy evidence-binding, and a mature one who must be prevented from skipping it. Forking the shapes per adopter duplicates the discipline and lets the copies drift; shipping only the strict suite pushes early adopters to disable validation entirely, which is worse than a weaker gate they actually run. The resolution is to make the claimed strength a first-class assertion inside the adopter's own data — a profile individual carrying an enumerated conformance level — and to gate the stricter shapes on that assertion via SPARQL constraints. Conformance then reads as 'passed the L3 suite' rather than as an unqualified adjective, an adopter cannot quietly weaken its own gate without editing a visible claim, and BP-X1's disclosure duty extends naturally: the level claimed is part of the measurement configuration, alongside shape version and imports policy." ;
+    prov:generatedAtTime "2026-07-27T00:00:00"^^xsd:dateTime ;
+    prov:wasAttributedTo "Yusuf Altunel" .
+
+pkg:CandidateLesson_EnumerationWideningBlocksEquivalenceAlignment a kb:LessonsLearned , owl:NamedIndividual ;
+    rdfs:seeAlso <http://example.org/knowledge-base#Lesson_L_cand_B_ClosedEnumWideningBreaksEquivalentClass> ;
+    dcterms:isReplacedBy <http://example.org/knowledge-base#Lesson_L_cand_B_ClosedEnumWideningBreaksEquivalentClass> ;
+    rdfs:label "L-cand-B: widening a closed enumeration during generalisation forbids owl:equivalentClass alignment back to the source; use SKOS matching or the merged graph goes inconsistent"@en ;
+    dcterms:source "Emerged 2026-07-27 aligning backlog 1.0.0 (five-state lifecycle) to product-backlog 1.3.0 (three-state status) in backlog_alignment_productbacklog_v1_0_0.ttl." ;
+    rdfs:seeAlso kb:BestPractice_D19_EquivalentClassDiscipline , kb:Lesson_L_103_SameIriHigherVersionMayBeDivergentScope , kb:Lesson_L_75_OverlapVsDifferenceCannotBeAssumed ;
+    skos:definition "Generalising a subject frequently widens a closed enumeration — a three-state lifecycle becomes five because the general case needs states the originating project never had. The instinct at alignment time is to assert owl:equivalentClass between the old enumerated class and the new one, since they plainly denote 'the same thing'. Under owl:oneOf plus owl:AllDifferent on both sides, that assertion states that three mutually distinct individuals are five mutually distinct individuals, and any consumer that merges both files gets an inconsistency that surfaces far from its cause. The same trap applies one level down: an equivalentProperty on a relation whose range is the widened enumeration forces each old value into the new closed set, so the reasoner must identify it with some new individual and will pick one arbitrarily. The discipline is to reserve OWL equivalence for terms whose extensions genuinely coincide, express widened-enumeration correspondences with SKOS matching properties (closeMatch, broadMatch) that carry no set-theoretic commitment, and record which source values split across which target values in an editorial note so the loss of information is visible rather than inferred wrongly." ;
+    prov:generatedAtTime "2026-07-27T00:00:00"^^xsd:dateTime ;
+    prov:wasAttributedTo "Yusuf Altunel" .
+
+# Four candidate lessons emerged during a real, extended session on this package's own gate
+# and lineage tooling, 2026-09-21/22. Duplicate-screened against knowledge_base_abox_v2_25_0.ttl
+# (the newest copy this package has direct read access to) before being written -- no existing
+# lesson names any of these four specific mechanisms.
+
+pkg:CandidateLesson_RetroactiveStructureIsDetectedNotHidden a kb:LessonsLearned , owl:NamedIndividual ;
+    rdfs:label "L-cand-C: backdating formal process structure onto already-shipped work is detected as the exact violation it tries to hide, because git history cannot be backdated"@en ;
+    dcterms:source "Emerged 2026-09-22 building a retroactive Mission-through-Backlog chain for real, already-published technical-debt work (this package's own Lineage 17): the chain's own StageOutput records, added in a later commit than the real work they describe, were correctly flagged BYPASS by backlog_lineage_order_check once that later commit itself became part of git history." ;
+    rdfs:seeAlso kb:Lesson_L_95_GateMustBeProvenDiscriminating ;
+    skos:definition "A governance mechanism that verifies process order by git-witnessed first-appearance has a real, structural property: at the exact moment a new commit is being decided, that commit's own content has no history yet, so a check comparing 'when did X first appear' against 'when did Y first appear' finds nothing to compare and passes cleanly. Once that commit lands, the same check run again sees real history for the first time and can now detect a genuine ordering violation it could not see before. This means a real bypass -- work committed with no prior formal planning record -- will pass its own originating publish undetected, then surface, correctly, on every later run. Attempting to fix this after the fact by adding the missing planning artifacts in a further, separate commit does not close the gap: from git's own honest perspective this is now visibly two separate events in the wrong order, which is the exact condition the check exists to catch, and it does catch it. The only real fix is prevention, not repair: build the full formal chain and the real work it governs in the same commit, submitted together, so no ordering claim is ever made that git itself cannot honestly support." ;
+    prov:generatedAtTime "2026-09-22T00:00:00"^^xsd:dateTime ;
+    prov:wasAttributedTo "Yusuf Altunel" .
+
+pkg:CandidateLesson_GlobalEnforcementDeadlocksConcurrentWork a kb:LessonsLearned , owl:NamedIndividual ;
+    rdfs:seeAlso <http://example.org/knowledge-base#Lesson_L_122_GlobalEnforcementDeadlocksConcurrentWork> ;
+    dcterms:isReplacedBy <http://example.org/knowledge-base#Lesson_L_122_GlobalEnforcementDeadlocksConcurrentWork> ;
+    rdfs:label "L-cand-D: a governance check that evaluates every tracked unit globally and blocks on the single worst finding will deadlock the moment concurrent, independent units are a legitimate pattern"@en ;
+    dcterms:source "Emerged 2026-09-22: this package's own lineage-order gate evaluated every non-archived lineage on every run and let the single worst verdict decide the whole release's pass/fail, while this same package's own CrossLineageRiskAdvisoryShape explicitly supports concurrent, in-flight lineages as a real, owner-sanctioned pattern. One real, unresolved finding on one lineage was blocking every future, unrelated publish." ;
+    skos:definition "A check built when a system has one thing to verify naturally becomes an all-or-nothing gate: evaluate everything, fail if anything is wrong. This is safe as long as 'everything' is one coherent unit of work. Once the system grows to support multiple, legitimately independent units in flight at once -- concurrent lineages, parallel branches, simultaneous workstreams -- the same global evaluation becomes a structural deadlock risk: any one unit's real, unresolved problem now holds every other, unrelated unit hostage, with no path forward except fixing the one thing blocking everyone, however unrelated it is to what anyone else is doing. The fix is not to weaken what the check accepts, but to narrow what it blocks: scope enforcement to the unit(s) the current change actually touches, and disclose -- visibly, every run, never silently -- any other unit's own unresolved finding as advisory rather than blocking. A unit genuinely being worked on right now stays held to the full, strict standard; a pre-existing, untouched problem elsewhere is named, not hidden, and does not stop unrelated progress." ;
+    prov:generatedAtTime "2026-09-22T00:00:00"^^xsd:dateTime ;
+    prov:wasAttributedTo "Yusuf Altunel" .
+
+pkg:CandidateLesson_VersionedBaselineLookupByStemNotFilename a kb:LessonsLearned , owl:NamedIndividual ;
+    rdfs:seeAlso <http://example.org/knowledge-base#Lesson_L_123_RenameOnChangeBaselineResolvedByStem> , kb:Lesson_L_103_SameIriHigherVersionMayBeDivergentScope ;
+    dcterms:isReplacedBy <http://example.org/knowledge-base#Lesson_L_123_RenameOnChangeBaselineResolvedByStem> ;
+    rdfs:label "L-cand-E: a tool comparing current state against an older tagged state for a versioned, rename-on-change file must resolve the older version by stem, not by the current exact filename"@en ;
+    dcterms:source "Emerged 2026-09-22: a new --baseline lookup fetched an older tag's own copy of this package's own register by today's exact filename, and failed silently -- the register had genuinely been renamed three times since that tag, under this same package's own version-freeze discipline, so no file of that name ever existed there." ;
+    skos:definition "A package convention that renames a versioned file on every real content change (recording its own history in the filename's own version suffix) is structurally incompatible with any tool that looks up that file's own past state by its present name. The failure mode is silent, not an error: git show <tag>:<path> for a path that never existed at that tag returns a clean non-zero exit that a caller can mistake for 'no prior version, treat as new' rather than 'wrong path entirely'. Any tool built to diff current against a tagged baseline, under a rename-on-change convention, must resolve the baseline file by its real, stable identity -- the stem before the version suffix, matched by glob within the same directory at that tag -- never by assuming the filename itself is stable across time. This generalises beyond one tool: any governance mechanism comparing 'now' to 'then' for content under a versioned-rename discipline carries the same risk and needs the same fix." ;
+    prov:generatedAtTime "2026-09-22T00:00:00"^^xsd:dateTime ;
+    prov:wasAttributedTo "Yusuf Altunel" .
+
+pkg:CandidateLesson_ClarifyLabelNotLocalNameOnceDataIsSealed a kb:LessonsLearned , owl:NamedIndividual ;
+    rdfs:label "L-cand-F: once real data has been sealed using a class's local name, fix a naming-clarity regret in the label and definition, not by renaming the class"@en ;
+    dcterms:source "Emerged 2026-09-22: a real naming critique (LineageBypass reads like a permission or an action, not a finding) was checked against actual usage before acting -- the local name appears four real times in this package's own sealed, archived content, which its own integrity checks require stay byte-for-byte unchanged, making a class rename unsafe." ;
+    skos:definition "A class's local name and its rdfs:label/skos:definition serve different audiences and carry different risk when changed. The local name is a stable identifier real data commits to permanently, including data a package's own integrity discipline seals as immutable; changing it breaks or requires editing every commitment ever made under it, sealed data included. The label and definition are metadata about the class, read by a person trying to understand it, and changing them touches no data at all -- they are not part of what any individual asserted by using the class. When a naming choice turns out to read ambiguously or misleadingly after real data already exists under it, the safe, honest fix is improving what a reader sees (the label, the definition, an explicit altLabel naming the ambiguity directly) rather than the identifier itself, reserving an actual rename for classes with no real, especially no sealed, usage yet." ;
+    prov:generatedAtTime "2026-09-22T00:00:00"^^xsd:dateTime ;
+    prov:wasAttributedTo "Yusuf Altunel" .
+
+# v2.4.0 (2026-09-28): one candidate lesson from a real defect found by an adopter (an adopting project) in this package's
+# shapes v1.141.0 and fixed in v1.142.0. Duplicate-screened against knowledge_base_abox_v2_31_0.ttl: L-15 (validate
+# with imports merged) and L-67 (merged-corpus target scoping) are the nearest; neither names a SHACL-AF rule
+# satisfying a constraint's own exemption, or a proof run on a different path than production.
+
+pkg:CandidateLesson_ExemptionMustNotReadWhatARuleDerives a kb:LessonsLearned , owl:NamedIndividual ;
+    rdfs:label "L-cand-G: a constraint's exemption must not read a property that a rule in the same validation run derives, and its proof must run the path production runs"@en ;
+    dcterms:source "Emerged 2026-09-28: shapes v1.141.0 exempted a slipped milestone that carried any milestoneOutcome; rule R10b, merged into the same run, derives milestoneOutcome Missed for exactly the milestones the shape targets, so the shape could never fire. The author's probe ran without the rules and passed both ways. Found by the adopter (an adopting project) on a probe with the rules merged; fixed in backlog-roadmap-framework v1.326.0." ;
+    rdfs:seeAlso kb:OEPACK_Lesson_L15 , kb:Lesson_L_67_ShapeTargetScopingMustConsiderMergedCorpus ;
+    skos:definition "When SHACL-AF rules are merged into the shapes graph (advanced mode), a derived triple is indistinguishable from an asserted one by the time constraints are evaluated. An exemption written as 'unless the node records X' is therefore met whenever any rule derives X, including a rule that derives X from the very condition the constraint reports. An exemption must read only what no rule derives -- a recorded decision -- or name the derived values it excludes. The proof of such a constraint must run the same path production runs (rules merged): a probe without the rules passes both ways and certifies nothing." ;
+    prov:generatedAtTime "2026-09-28T00:00:00"^^xsd:dateTime ;
+    prov:wasAttributedTo "Yusuf Altunel" .
+
+# v2.5.0 (2026-09-28): one candidate lesson, proposed as an enrichment of L-36 (severity is read at the NodeShape
+# level), from a real misgrading found by an adopter (an adopting project) and fixed in backlog-roadmap-framework v1.327.0.
+
+pkg:CandidateLesson_SeverityGradesTheShapeNotTheConstraint a kb:LessonsLearned , owl:NamedIndividual ;
+    rdfs:label "L-cand-H: severity grades a whole NodeShape, so constraints of different nature in one shape must be split before a severity audit grades them"@en ;
+    dcterms:source "Emerged 2026-09-28: StageOutputOwesAdvisoryShape held a 'waived required obligation' constraint and an 'advisory obligation unmet' constraint. A severity audit promoted the shape to Violation on the first one's reason, which made the second -- an obligation the framework calls optional -- a Violation for every adopter. Found by the adopter (an adopting project); fixed in backlog-roadmap-framework v1.327.0 by splitting the shape." ;
+    rdfs:seeAlso kb:Lesson_L_36_PyshaclSeverityMustBeShapeLevel ;
+    skos:definition "Because SHACL severity is effectively declared once per NodeShape (L-36), every constraint inside a shape is graded together. When a shape bundles conditions of different nature -- a present breach and a legitimate-but-reported state -- any audit that re-grades the shape re-grades both, and the reason recorded for the grade describes only one of them. Before grading, check that every constraint in the shape satisfies the grade's stated reason; if not, split the shape so each severity line describes exactly what it grades." ;
+    prov:generatedAtTime "2026-09-28T00:00:00"^^xsd:dateTime ;
+    prov:wasAttributedTo "Yusuf Altunel" .
+
+# Outcome (2026-09-28, oe-pack v20.89.0): L-cand-G ratified as L-124 (an exemption must read only what no rule in
+# the same run derives; proofs run the production path), reproduced by OEE before adopting. L-cand-H adopted as an
+# enrichment of L-36 (severity grades the whole shape), added as a second source, L-36's definition untouched.
+# The governed IRIs are authoritative; the individuals above are the registrant-side record.
+
+# LiveTriad done (Lineage 18).
+fw:Ev_OC_LiveTriad a backlog:Evidence , backlog:TestEvidence ; backlog:attestsCriterion fw:AC_OC_LiveTriad ;
+    backlog:hasTestId "lesson_deposit_folded_nothing_lost" ;
+    backlog:evidenceVerified true ; backlog:verifiedByTool "backlog_split_proof_v1_2_0.py" ;
+    backlog:hasVerificationMethod "Real run: the lesson deposit and the data file before, compared with the data file after by the split proof v1.2.0 with the deposit's header declared as a module record: 0 statements lost, 0 changed, 4 module-record statements set aside and counted; the one other difference is the repointed gate and proof path in two earlier records, set aside by name. The live data validates with 0 violations; the structure checker's data-file line fell from 8 to 7." .
+fw:Ev_OC_LiveTriad_Task a backlog:Evidence , backlog:TestEvidence ;
+    backlog:hasTestSpec "03-tooling/backlog_package_fold_v1_0_0.py" ;
+    backlog:evidenceVerified true ; backlog:verifiedByTool "backlog_split_proof_v1_2_0.py" ;
+    backlog:hasVerificationMethod "Real run: the lesson deposit and the data file before, compared with the data file after by the split proof v1.2.0 with the deposit's header declared as a module record: 0 statements lost, 0 changed, 4 module-record statements set aside and counted; the one other difference is the repointed gate and proof path in two earlier records, set aside by name. The live data validates with 0 violations; the structure checker's data-file line fell from 8 to 7." .
+fw:H_OC_LiveTriad a backlog:TestHarness ; backlog:harnessFor fw:T_OC_LiveTriad ;
+    backlog:hasHarnessEvidence fw:Ev_OC_LiveTriad_Task ;
+    backlog:hasRationale "The task's own harness, distinct from the story's." .
+fw:H_OC_LiveTriad_Story a backlog:TestHarness ; backlog:harnessFor fw:ST_OC_LiveTriad ;
+    backlog:hasHarnessEvidence fw:Ev_OC_LiveTriad ;
+    backlog:hasRationale "The story's own harness: the real run named in its evidence." .
+fw:Obs_OC_FilesDone_LiveTriad a backlog:MetricObservation ; rdfs:label "After OC LiveTriad: measured again"@en ;
+    backlog:observesMetric fw:Metric_OC_FilesDone ; backlog:observationFor fw:Obj_OC_FilesDone ;
+    backlog:hasObservedValue 7.0 ; backlog:observedAt "2026-10-06T17:28:22Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "OE structure checker, one-per-role line for data files: 10 at baseline, 8 after OC-S01, 7 after the lesson deposit joined the data file." .
