@@ -11147,3 +11147,19 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Data file:** `backlog_abox` v1.10.0 (new version because the register changed). 0 violations.
 - **Tooling note:** the publisher moved to `oe_publish_v1_12_1.sh` (repo-tooling); the release script resolves it by version.
 - **Next, one release each:** Scope, Goal, Objective, Backlog, then the work.
+
+## v1.342.0 — Lineage 18, Scope stage (stage output, no work item)
+
+- **Scope:** bring the package to one vocabulary, one data and one shapes file; fold the lesson deposit into the data file as a module; move the
+  test drive and the strategy exercise register to the fixtures folder; give the archive its own folder with one data file (the provenance
+  records as its modules) and one shapes file; move every statement without change and keep every term IRI; repoint the tools; make the
+  archiving ceremony a move to the archive data file; show the package clear in the OE structure checker and return a note.
+- **Three areas, seven deliverables, four exclusions** (statement change, retro-judging, other packages' files except the one return note, and module
+  membership on every subject, which OE has not switched on for this package).
+- **Measured at the baseline (2026-10-06):** 12 active ontology files where 3 are wanted; 10 scripts name a file that moves; 1 recorded debt line.
+- **Declared in advance, so the proof can name them:** each former file's ontology header becomes a module record, and the test input moved to the fixtures
+  folder declares its polarity there. Everything else is moved as it is.
+- **Open point, stated:** the OE answer places five provenance records in the archive; this package holds six (the sixth is the alignment file, which
+  names a private adopter). Folding it into the published archive file needs the public-copy leak scan to pass first; if it does not, that file goes to
+  the owner and OE as a question, not a guess.
+- **Data file:** `backlog_abox` v1.11.0; lineage status `LS_Scoped`; Scope digest recorded and reproduced. 0 violations.

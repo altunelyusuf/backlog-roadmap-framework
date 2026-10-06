@@ -20,9 +20,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (ABox: controlled individuals, reference data and the live register)"@en ;
-    owl:versionIRI <http://example.org/backlog/abox/1.10.0> ;
-    owl:versionInfo "1.10.0" ;
-    owl:priorVersion <http://example.org/backlog/abox/1.9.0> , <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
+    owl:versionIRI <http://example.org/backlog/abox/1.11.0> ;
+    owl:versionInfo "1.11.0" ;
+    owl:priorVersion <http://example.org/backlog/abox/1.10.0> , <http://example.org/backlog/abox/1.9.0> , <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
         <http://example.org/backlog-abox/1.2.1> ,
                      <http://example.org/backlog-abox/1.2.0> ,
                      <http://example.org/backlog-abox/1.1.0> ,
@@ -6353,7 +6353,7 @@ fw:L_OEPackageConsolidation a backlog:Lineage ; rdfs:label "Lineage 18: OE Packa
     backlog:lineageOrdinal 18 ;
     backlog:lineageArchived false ;
     backlog:lineageForMission fw:Mission_OEPackageConsolidation ;
-    backlog:hasLineageStatus backlog:LS_Opened ;
+    backlog:hasLineageStatus backlog:LS_Scoped ;
     backlog:hasLineageDepthLevel backlog:Depth_StoryDirect ;
     backlog:hasLineageArtifactDomain backlog:Domain_Infrastructure ;
     backlog:memberOfContainer fw:Register .
@@ -6373,3 +6373,84 @@ fw:Out_Mission_OEPackageConsolidation a backlog:StageOutput ;
     backlog:hasStateDigest "bea6a6981891c024b7dcd5b4efc0c01f6136ceaa2f2f09996dcd54b8d7f8f85e" ;
     backlog:closedAtCommit "backlog-roadmap-framework-v1.341.0 (tag; witnessed by git, not asserted)" ;
     backlog:hasRationale "Mission stage of Lineage 18. Tag deterministic: VERSION.txt set before publishing. Stage 1 of 5, one release each." .
+
+# v9.111.0: Lineage 18, Scope stage (second of five releases). Scope text, areas, deliverables and exclusions are written here, before any
+# goal, objective or work item. Measured 2026-10-06 with the OE structure checker v1.1.0 and a search of 03-tooling.
+fw:Scope_OEPackageConsolidation a backlog:ScopeStatement ; rdfs:label "Scope: OE Package Consolidation"@en ;
+    backlog:hasScopeStatementText "Bring this package to one vocabulary file, one data file and one shapes file, each with one ontology header and one version: fold the lesson deposit into the data file as a module and move the test drive and the strategy exercise register to the fixtures folder; give the archive its own folder holding one data file, with the provenance records as its modules, and one shapes file; move every statement without changing it and keep every term IRI; repoint every tool that names a moved file; make the archiving ceremony a move from the live data file to the archive data file; and show the package clear in the OE structure checker, with a return note to the OE inbox." ;
+    backlog:scopeForMission fw:Mission_OEPackageConsolidation ;
+    backlog:producedByStage fw:Out_Scope_OEPackageConsolidation ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:requiresDeliverable fw:Del_OC_LiveTriad , fw:Del_OC_FixturesMoved , fw:Del_OC_ArchiveFolder , fw:Del_OC_NothingLost , fw:Del_OC_ToolsRepointed , fw:Del_OC_Ceremony , fw:Del_OC_DebtCleared ;
+    backlog:coversArea fw:Area_OC_Files , fw:Area_OC_Tools , fw:Area_OC_Enforcement ;
+    backlog:hasScopeExclusion fw:Ex_OC_StatementChange , fw:Ex_OC_RetroJudging , fw:Ex_OC_OtherPackages , fw:Ex_OC_ModuleMembership ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation .
+
+fw:Area_OC_Files a backlog:ScopeArea ; rdfs:label "Area: the package's ontology files"@en ;
+    backlog:areaMeasure "Counted 2026-10-06 with the OE structure checker v1.1.0: 12 active ontology files (1 vocabulary, 10 data, 1 shapes) where 3 are wanted; no archive folder; 2 test inputs outside the fixtures folder." ;
+    backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:areaLocation "01-ontologies/, 02-shacl-safeguards/, 03-tooling/exercises/, 05-lesson-deposits/, 05-test-drives/, 06-package-provenance/" ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation .
+fw:Area_OC_Tools a backlog:ScopeArea ; rdfs:label "Area: the tools that name those files"@en ;
+    backlog:areaMeasure "Counted 2026-10-06 by search: 10 scripts name a file that moves, the release gate among them." ;
+    backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:areaLocation "03-tooling/" ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation .
+fw:Area_OC_Enforcement a backlog:ScopeArea ; rdfs:label "Area: the structure rule and its debt record"@en ;
+    backlog:areaMeasure "Counted 2026-10-06: 1 recorded structure-debt line for this package (rule U1, data files, count 10), 0 new." ;
+    backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:areaLocation "OE structure checker and its debt register, return note to the OE inbox" ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation .
+
+fw:Del_OC_LiveTriad a backlog:ScopeDeliverable ; rdfs:label "The live triad: one vocabulary, one data and one shapes file"@en ;
+    backlog:deliverableForArea fw:Area_OC_Files ; backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:derivesFromMissionClause "one vocabulary file, one data file and one shapes file for the whole package" ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation .
+fw:Del_OC_FixturesMoved a backlog:ScopeDeliverable ; rdfs:label "Test inputs sit in the fixtures folder"@en ;
+    backlog:deliverableForArea fw:Area_OC_Files ; backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:derivesFromMissionClause "test inputs sit in the fixtures folder" ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation .
+fw:Del_OC_ArchiveFolder a backlog:ScopeDeliverable ; rdfs:label "The archive folder: one data file and one shapes file"@en ;
+    backlog:deliverableForArea fw:Area_OC_Files ; backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:derivesFromMissionClause "retired work lives in a folder named archive as one data file and one shapes file" ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation .
+fw:Del_OC_NothingLost a backlog:ScopeDeliverable ; rdfs:label "A before and after proof that no statement changed and every term kept its IRI"@en ;
+    backlog:deliverableForArea fw:Area_OC_Files ; backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:derivesFromMissionClause "No statement any file makes changes, and every term keeps its IRI" ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation .
+fw:Del_OC_ToolsRepointed a backlog:ScopeDeliverable ; rdfs:label "Every tool names the files where they now are"@en ;
+    backlog:deliverableForArea fw:Area_OC_Tools ; backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:derivesFromMissionClause "retired work is never judged by today's rules" ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation .
+fw:Del_OC_Ceremony a backlog:ScopeDeliverable ; rdfs:label "The archiving ceremony moves work from the live data file to the archive data file"@en ;
+    backlog:deliverableForArea fw:Area_OC_Tools ; backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:derivesFromMissionClause "the archiving ceremony is a move from the live data file to the archive data file" ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation .
+fw:Del_OC_DebtCleared a backlog:ScopeDeliverable ; rdfs:label "The structure checker shows the package clear"@en ;
+    backlog:deliverableForArea fw:Area_OC_Enforcement ; backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:derivesFromMissionClause "ships exactly as the OE method requires, with no exceptions" ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation .
+
+fw:Ex_OC_StatementChange a backlog:ScopeExclusion ; rdfs:label "Exclusion: changing what any statement says"@en ;
+    backlog:excludesConcern "Rewording, correcting or re-judging any statement while moving it, and changing any term IRI. The two achieved lineages still marked not archived are reported, and fixed only as a recorded, separate act. The only edits are the ones a move requires: each former file's ontology header becomes a module record, and the test input that is moved to the fixtures folder declares its polarity there." ;
+    backlog:hasExclusionRationale "The Mission says no statement changes; a move that also edits cannot be proven lossless. The two exceptions are declared so the proof can name them." ;
+    backlog:decidedBy backlog:Owner ; backlog:hasScopeLayer backlog:Layer_Work ; backlog:belongsToLineage fw:L_OEPackageConsolidation .
+fw:Ex_OC_RetroJudging a backlog:ScopeExclusion ; rdfs:label "Exclusion: judging retired work by today's rules"@en ;
+    backlog:excludesConcern "Running the live rules over the archive folder's files." ;
+    backlog:hasExclusionRationale "G89 and G91: retired work is a record. Measured in Lineage 17: merged with the live data it costs 89 violations and about 5 minutes; apart, the live data validates with 0 violations in about 90 seconds." ;
+    backlog:decidedBy backlog:Owner ; backlog:hasScopeLayer backlog:Layer_Work ; backlog:belongsToLineage fw:L_OEPackageConsolidation .
+fw:Ex_OC_OtherPackages a backlog:ScopeExclusion ; rdfs:label "Exclusion: other packages' files"@en ;
+    backlog:excludesConcern "Any file outside this package, except the one return note OE's own discipline asks for in its handover inbox. Including adopting projects' copies of the vocabulary." ;
+    backlog:hasExclusionRationale "Adopting projects import the package's ontology identity, which stays; their own registers are theirs. OE's debt register is the OE session's own." ;
+    backlog:decidedBy backlog:Owner ; backlog:hasScopeLayer backlog:Layer_Work ; backlog:belongsToLineage fw:L_OEPackageConsolidation .
+fw:Ex_OC_ModuleMembership a backlog:ScopeExclusion ; rdfs:label "Exclusion: module membership on every named subject"@en ;
+    backlog:excludesConcern "Adding dcterms:isPartOf to every named subject (OE rule M1)." ;
+    backlog:hasExclusionRationale "OE switches M1 on per package by a register line and has not done so for this package; nothing is required now, and the work waits for that instruction." ;
+    backlog:decidedBy backlog:Owner ; backlog:hasScopeLayer backlog:Layer_Work ; backlog:belongsToLineage fw:L_OEPackageConsolidation .
+
+fw:Out_Scope_OEPackageConsolidation a backlog:StageOutput ;
+    backlog:outputOfStage backlog:Stage_Scope ; backlog:belongsToLineage fw:L_OEPackageConsolidation ;
+    backlog:consumesOutput fw:Out_Mission_OEPackageConsolidation ;
+    backlog:hasStateDigest "06cf7f13389d59143897160984657c1a2608161ee966653845597e2e39fa1fab" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.342.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Scope stage of Lineage 18: seven deliverables over three areas, four exclusions. Stage 2 of 5." .
