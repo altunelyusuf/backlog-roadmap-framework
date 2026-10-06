@@ -1,0 +1,1022 @@
+@prefix backlog: <http://example.org/backlog#> .
+@prefix core:    <http://example.org/core#> .
+@prefix ex:      <http://example.org/backlog-strategy-exercise#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+<http://example.org/backlog-strategy-exercise> a owl:Ontology ;
+    owl:versionIRI <http://example.org/backlog-strategy-exercise/1.19.0> ;
+    owl:versionInfo "1.19.0" ;
+    owl:priorVersion <http://example.org/backlog-strategy-exercise/1.18.0> ;
+    owl:priorVersion <http://example.org/backlog-strategy-exercise/1.17.0> ;
+    owl:priorVersion <http://example.org/backlog-strategy-exercise/1.16.0> ;
+    owl:priorVersion <http://example.org/backlog-strategy-exercise/1.15.0> ;
+    owl:priorVersion <http://example.org/backlog-strategy-exercise/1.14.0> ;
+    owl:priorVersion <http://example.org/backlog-strategy-exercise/1.13.0> ;
+    owl:priorVersion <http://example.org/backlog-strategy-exercise/1.12.0> ;
+    owl:priorVersion <http://example.org/backlog-strategy-exercise/1.11.0> ;
+    owl:priorVersion <http://example.org/backlog-strategy-exercise/1.10.0> ;
+    owl:priorVersion <http://example.org/backlog-strategy-exercise/1.9.0> ;
+    owl:priorVersion <http://example.org/backlog-strategy-exercise/1.8.0> ;
+    owl:priorVersion <http://example.org/backlog-strategy-exercise/1.7.0> ;
+    owl:priorVersion <http://example.org/backlog-strategy-exercise/1.6.0> ;
+    owl:priorVersion <http://example.org/backlog-strategy-exercise/1.5.0> ;
+    owl:priorVersion <http://example.org/backlog-strategy-exercise/1.4.0> ;
+    owl:priorVersion <http://example.org/backlog-strategy-exercise/1.3.0> ;
+    owl:priorVersion <http://example.org/backlog-strategy-exercise/1.2.0> ;
+    owl:priorVersion <http://example.org/backlog-strategy-exercise/1.1.0> ;
+    owl:priorVersion <http://example.org/backlog-strategy-exercise/1.0.0> ;
+    rdfs:label "Strategy-exercise register"@en ;
+    rdfs:comment "A second, governed register of this package, holding TOY lineages built to exercise the recovery strategies not yet run on a real lineage (decrease by a constant factor, variable-size decrease, and the three transforms). Owner's instruction, 2026-09-07: if no real lineage is processable, build toy lineages. Toy means the mission is invented; it does NOT mean the witness is faked: every step of every toy lineage is published in its own commit of the governed repository and measured by backlog_lineage_order_check with the real git witness. Each toy lineage is a copy of fixture_pipeline's conformant single-lineage graph (renamed), with its work items present and its chain ABSENT -- a bypass by construction, so that each strategy is exercised from a real finding to a real convergence."@en .
+
+
+########## Toy lineage F -- Strat_DecreaseByFactor ##########
+ex:BL a backlog:Backlog ; backlog:hasIdentifier "TF-BL-PL" ; backlog:hasState backlog:Proposed ;
+    backlog:hasScopeStatement ex:TF_Scope .
+ex:P a backlog:AdoptionProfile ; backlog:profileAppliesTo "pipeline fixture" ;
+    backlog:governsBacklog ex:BL ; backlog:hasConformanceLevel backlog:L1_Core ;
+    backlog:hasTargetConformanceLevel backlog:L2_EvidenceBound ;
+    backlog:hasLevelReviewDate "2027-01-01T00:00:00"^^xsd:dateTime ;
+    backlog:decidedBy backlog:Owner ; backlog:hasDecisionRationale "Core: the pipeline clauses are L1/L2." ;
+    backlog:adoptsFacet backlog:CoreFacet , backlog:EvidenceFacet , backlog:InvariantFacet , backlog:AuditFacet .
+
+ex:TF_M a backlog:Mission ; backlog:hasMissionStatement "Toy lineage F: decrease by a constant factor -- invented mission: practitioners recover unaided (toy copy)." ;
+    backlog:missionFor ex:BL ; backlog:hasMissionOrigin backlog:Origin_OwnerStated ;
+    backlog:missionSource "Owner, 2026-08-25" ; backlog:decidedBy backlog:Owner ;
+    backlog:hasMissionOutcome backlog:Out_InFlight .
+ex:TF_Scope a backlog:ScopeStatement ; backlog:hasScopeStatementText "Self-service recovery." ;
+    backlog:scopeForMission ex:TF_M ; backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ;
+    backlog:requiresDeliverable ex:TF_D1 , ex:TF_D2 ; backlog:hasScopeExclusion ex:TF_X ;
+    backlog:coversArea ex:TF_Area_PL .
+ex:TF_Area_PL a backlog:ScopeArea ; backlog:areaLocation "Practitioner recovery flow." ;
+    backlog:areaMeasure "2 deliverables, counted." ; backlog:hasScopeLayer backlog:Layer_Product .
+ex:TF_D1 a backlog:ScopeDeliverable ; backlog:hasDeliverableText "Recovery completes unaided." ; backlog:hasScopeLayer backlog:Layer_Product .
+ex:TF_D2 a backlog:ScopeDeliverable ; backlog:hasDeliverableText "Every recovery is auditable." ; backlog:hasScopeLayer backlog:Layer_Product .
+ex:TF_X a backlog:ScopeExclusion ; backlog:excludesConcern "Admin recovery." ;
+    backlog:hasExclusionRationale "Different threat model." ; backlog:decidedBy backlog:Owner ; backlog:hasScopeLayer backlog:Layer_Product .
+ex:TF_G a backlog:Goal ; rdfs:label "Self-service recovery"@en ;
+    backlog:contributesToMission ex:TF_M ; backlog:derivesFromScope ex:TF_Scope ;
+    backlog:hasGoalFacing backlog:Facing_Mission ; backlog:goalCoversArea ex:TF_Area_PL ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ; backlog:decidedBy backlog:Owner .
+ex:TF_GScope a backlog:Goal ; rdfs:label "Fixture scope-facing goal"@en ;
+    backlog:contributesToMission ex:TF_M ; backlog:derivesFromScope ex:TF_Scope ;
+    backlog:hasGoalFacing backlog:Facing_Scope ; backlog:goalCoversArea ex:TF_Area_PL ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ; backlog:decidedBy backlog:Owner .
+ex:TF_GContain a backlog:Goal ; rdfs:label "Fixture containment-facing goal"@en ;
+    backlog:contributesToMission ex:TF_M ; backlog:derivesFromScope ex:TF_Scope ;
+    backlog:hasGoalFacing backlog:Facing_Containment ; backlog:goalCoversArea ex:TF_Area_PL ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ; backlog:decidedBy backlog:Owner .
+ex:TF_OScope a backlog:Objective ; backlog:contributesToGoal ex:TF_GScope ; backlog:fillsScope ex:TF_Scope ;
+    backlog:hasSuccessMetric ex:TF_MetScope ; backlog:hasBaselineValue 0.0 ; backlog:hasTargetValue 0.0 ;
+    backlog:hasTargetDirection backlog:Dir_Hold ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ; backlog:decidedBy backlog:Owner .
+ex:TF_MetScope a core:Metric .
+ex:CPOScope a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-12-01T00:00:00Z"^^xsd:dateTime .
+ex:TF_OScope backlog:hasCheckpoint ex:CPOScope .
+ex:TF_ObsOScope a backlog:MetricObservation ; backlog:observesMetric ex:TF_MetScope ; backlog:observationFor ex:TF_OScope ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-09-02T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Fixture-stated value, not re-derivable." .
+ex:TF_OContain a backlog:Objective ; backlog:contributesToGoal ex:TF_GContain ; backlog:fillsScope ex:TF_Scope ;
+    backlog:hasSuccessMetric ex:TF_MetContain ; backlog:hasBaselineValue 0.0 ; backlog:hasTargetValue 0.0 ;
+    backlog:hasTargetDirection backlog:Dir_Hold ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ; backlog:decidedBy backlog:Owner .
+ex:TF_MetContain a core:Metric .
+ex:CPOContain a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-12-01T00:00:00Z"^^xsd:dateTime .
+ex:TF_OContain backlog:hasCheckpoint ex:CPOContain .
+ex:TF_ObsOContain a backlog:MetricObservation ; backlog:observesMetric ex:TF_MetContain ; backlog:observationFor ex:TF_OContain ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-09-02T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Fixture-stated value, not re-derivable." .
+ex:TF_Met a core:Metric ; rdfs:label "Unaided share"@en .
+ex:TF_O a backlog:Objective ; rdfs:label "Recoveries need no support"@en ;
+    backlog:fillsScope ex:TF_Scope ; backlog:contributesToGoal ex:TF_G ;
+    backlog:hasSuccessMetric ex:TF_Met ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:hasBaselineValue 12.0 ; backlog:hasTargetValue 80.0 ;
+    backlog:hasTargetDirection backlog:Dir_Increase ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:metricMovableBy ex:TF_EP ;
+    backlog:hasObjectiveDeadline "2027-01-31T00:00:00"^^xsd:dateTime ;
+    backlog:decidedBy backlog:Owner .
+ex:CP_O a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-12-01T00:00:00Z"^^xsd:dateTime .
+ex:TF_O backlog:hasCheckpoint ex:CP_O .
+ex:TF_Obs_O a backlog:MetricObservation ; backlog:observesMetric ex:TF_Met ; backlog:observationFor ex:TF_O ;
+    backlog:hasObservedValue 12.0 ; backlog:observedAt "2026-09-02T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Fixture-stated value, not re-derivable." .
+ex:TF_EP a backlog:Epic ; backlog:hasIdentifier "TF-E-1" ; backlog:hasTitle "Recovery" ;
+    backlog:hasState backlog:Proposed ; backlog:memberOfContainer ex:BL ;
+    backlog:pursuesObjective ex:TF_O ; backlog:satisfiesDeliverable ex:TF_D1 ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "probe" ;
+    backlog:appliesDefinitionOfDone ex:DoD_PL ; backlog:belongsToLineage ex:TF_Lin ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ; backlog:decomposesInto ex:TF_S_PL .
+ex:DoD_PL a backlog:DefinitionOfDone ; rdfs:label "Fixture DoD"@en .
+ex:TF_S_PL a backlog:Story ; backlog:hasIdentifier "TF-S-PL" ; backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer ex:BL ; backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at next planning." ;
+    backlog:belongsToLineage ex:TF_Lin ; backlog:hasInvestmentCategory backlog:Cat_NewCapability .
+
+ex:BL backlog:appliesDefinitionOfDone ex:DoD_PL ; backlog:hasCommitment ex:TF_Commit_PL .
+ex:TF_Commit_PL a backlog:Commitment ; backlog:commitsToGoal ex:TF_G .
+
+ex:TF_D1 backlog:derivesFromMissionClause "practitioners recover unaided" .
+
+ex:TF_D2 backlog:derivesFromMissionClause "practitioners recover unaided" .
+
+ex:CMission a backlog:Mission ;
+    backlog:hasMissionStatement "Fixture conformance-goal test mission." ;
+    backlog:missionFor ex:BL ; backlog:hasMissionOrigin backlog:IOrigin_OwnerStated ;
+    backlog:hasMissionOutcome backlog:Out_InFlight ; backlog:decidedBy backlog:Owner .
+ex:CDel a backlog:ScopeDeliverable ; backlog:hasDeliverableText "Fixture deliverable." ;
+    backlog:derivesFromMissionClause "Fixture conformance-goal test mission." ;
+    backlog:hasScopeLayer backlog:Layer_Product .
+ex:CScope a backlog:ScopeStatement ;
+    backlog:hasScopeStatementText "Fixture conformance-goal test scope." ;
+    backlog:scopeForMission ex:CMission ; backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ;
+    backlog:requiresDeliverable ex:CDel ; backlog:hasScopeExclusion ex:CExcl ;
+    backlog:coversArea ex:CArea .
+ex:CExcl a backlog:ScopeExclusion ; backlog:excludesConcern "Fixture-only exclusion." ;
+    backlog:hasExclusionRationale "Fixture-only, not a real design decision." ; backlog:decidedBy backlog:Owner ;
+    backlog:hasScopeLayer backlog:Layer_Product .
+ex:CArea a backlog:ScopeArea ; backlog:areaLocation "Fixture-only area, no real location." ;
+    backlog:areaMeasure "0 real measure; fixture-only." ; backlog:hasScopeLayer backlog:Layer_Product .
+ex:CGoal a backlog:Goal ; <http://www.w3.org/2000/01/rdf-schema#label> "Fixture conformance goal" ;
+    backlog:isConformanceGoal true ; backlog:contributesToMission ex:CMission ;
+    backlog:derivesFromScope ex:CScope ; backlog:hasGoalFacing backlog:Facing_Mission ;
+    backlog:goalCoversArea ex:CArea ; backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ;
+    backlog:decidedBy backlog:Owner .
+ex:CGoalScope a backlog:Goal ; <http://www.w3.org/2000/01/rdf-schema#label> "Fixture scope-facing goal" ;
+    backlog:contributesToMission ex:CMission ; backlog:derivesFromScope ex:CScope ;
+    backlog:hasGoalFacing backlog:Facing_Scope ; backlog:goalCoversArea ex:CArea ;
+    backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ; backlog:decidedBy backlog:Owner .
+ex:CGoalContain a backlog:Goal ; <http://www.w3.org/2000/01/rdf-schema#label> "Fixture containment-facing goal" ;
+    backlog:contributesToMission ex:CMission ; backlog:derivesFromScope ex:CScope ;
+    backlog:hasGoalFacing backlog:Facing_Containment ; backlog:goalCoversArea ex:CArea ;
+    backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ; backlog:decidedBy backlog:Owner .
+ex:CObjScope a backlog:Objective ; backlog:contributesToGoal ex:CGoalScope ; backlog:fillsScope ex:CScope ;
+    backlog:hasSuccessMetric ex:CMetricScope ; backlog:hasBaselineValue 0.0 ; backlog:hasTargetValue 0.0 ;
+    backlog:hasTargetDirection backlog:Dir_Hold ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ; backlog:decidedBy backlog:Owner .
+ex:CMetricScope a ex:CLocalMetric .
+ex:CObjContain a backlog:Objective ; backlog:contributesToGoal ex:CGoalContain ; backlog:fillsScope ex:CScope ;
+    backlog:hasSuccessMetric ex:CMetricContain ; backlog:hasBaselineValue 0.0 ; backlog:hasTargetValue 0.0 ;
+    backlog:hasTargetDirection backlog:Dir_Hold ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ; backlog:decidedBy backlog:Owner .
+ex:CMetricContain a ex:CLocalMetric .
+ex:CCPScope a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-12-01T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+ex:CObjScope backlog:hasCheckpoint ex:CCPScope .
+ex:CObsScope a backlog:MetricObservation ; backlog:observesMetric ex:CMetricScope ; backlog:observationFor ex:CObjScope ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-09-02T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+    backlog:hasObservationMethod "Fixture-stated value, not re-derivable." .
+ex:CCPContain a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-12-01T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+ex:CObjContain backlog:hasCheckpoint ex:CCPContain .
+ex:CObsContain a backlog:MetricObservation ; backlog:observesMetric ex:CMetricContain ; backlog:observationFor ex:CObjContain ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-09-02T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+    backlog:hasObservationMethod "Fixture-stated value, not re-derivable." .
+ex:CObj a backlog:Objective ;
+    backlog:contributesToGoal ex:CGoal ; backlog:fillsScope ex:CScope ;
+    backlog:hasSuccessMetric ex:CMetric ; backlog:hasBaselineValue 0.0 ; backlog:hasTargetValue 0.0 ;
+    backlog:hasTargetDirection backlog:Dir_Hold ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ; backlog:decidedBy backlog:Owner .
+ex:CMetric a ex:CLocalMetric .
+ex:CCP a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-12-01T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+ex:CObj backlog:hasCheckpoint ex:CCP .
+ex:CObs a backlog:MetricObservation ; backlog:observesMetric ex:CMetric ; backlog:observationFor ex:CObj ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-09-02T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+    backlog:hasObservationMethod "Fixture-stated value, not re-derivable." .
+
+ex:CBP a backlog:Blueprint ; backlog:blueprintFor ex:BL .
+ex:CEntity a backlog:DomainEntity .
+ex:TF_EP backlog:coversEntity ex:CEntity ; backlog:coversStage backlog:Stage_ActiveUse .
+ex:CGap1 a backlog:BlueprintGap ; backlog:gapForEntity ex:CEntity ; backlog:gapForStage backlog:Stage_Creation ;
+    backlog:hasGapReason "Fixture-only: creation stage not modeled." .
+ex:CGap2 a backlog:BlueprintGap ; backlog:gapForEntity ex:CEntity ; backlog:gapForStage backlog:Stage_SuspensionException ;
+    backlog:hasGapReason "Fixture-only: suspension/exception stage not modeled." .
+ex:CGap3 a backlog:BlueprintGap ; backlog:gapForEntity ex:CEntity ; backlog:gapForStage backlog:Stage_Termination ;
+    backlog:hasGapReason "Fixture-only: termination stage not modeled." .
+
+ex:TF_Session_20260907 a backlog:RegisterSession ;
+    rdfs:label "Conformance-restoration session, 7 September"@en ;
+    backlog:sessionFor ex:BL ;
+    backlog:sessionStartedAt "2026-09-07T07:00:00"^^xsd:dateTime ;
+    backlog:sessionEndedAt "2026-09-07T07:30:00"^^xsd:dateTime ;
+    backlog:stateVerifiedAtStart true ;
+    backlog:sessionConductedBy backlog:Builder ;
+    backlog:hasSessionScopeNote "In scope: record this fixture's own maintenance so the register names who last changed it. Deliberately untouched: every item, objective and event above." .
+ex:TF_Lin a backlog:Lineage ; rdfs:label "Toy lineage F: decrease by a constant factor"@en ; backlog:lineageArchived false ; backlog:lineageForMission ex:TF_M ; backlog:lineageOrdinal 100 .
+
+
+########## Toy lineage V -- Strat_VariableDecrease ##########
+ex:TV_M a backlog:Mission ; backlog:hasMissionStatement "Toy lineage V: variable-size decrease -- invented mission: practitioners recover unaided (toy copy)." ;
+    backlog:missionFor ex:BL ; backlog:hasMissionOrigin backlog:Origin_OwnerStated ;
+    backlog:missionSource "Owner, 2026-08-25" ; backlog:decidedBy backlog:Owner ;
+    backlog:hasMissionOutcome backlog:Out_InFlight .
+ex:TV_Scope a backlog:ScopeStatement ; backlog:hasScopeStatementText "Self-service recovery." ;
+    backlog:scopeForMission ex:TV_M ; backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ;
+    backlog:requiresDeliverable ex:TV_D1 , ex:TV_D2 ; backlog:hasScopeExclusion ex:TV_X ;
+    backlog:coversArea ex:TV_Area_PL .
+ex:TV_Area_PL a backlog:ScopeArea ; backlog:areaLocation "Practitioner recovery flow." ;
+    backlog:areaMeasure "2 deliverables, counted." ; backlog:hasScopeLayer backlog:Layer_Product .
+ex:TV_D1 a backlog:ScopeDeliverable ; backlog:hasDeliverableText "Recovery completes unaided." ; backlog:hasScopeLayer backlog:Layer_Product .
+ex:TV_D2 a backlog:ScopeDeliverable ; backlog:hasDeliverableText "Every recovery is auditable." ; backlog:hasScopeLayer backlog:Layer_Product .
+ex:TV_X a backlog:ScopeExclusion ; backlog:excludesConcern "Admin recovery." ;
+    backlog:hasExclusionRationale "Different threat model." ; backlog:decidedBy backlog:Owner ; backlog:hasScopeLayer backlog:Layer_Product .
+ex:TV_G a backlog:Goal ; rdfs:label "Self-service recovery"@en ;
+    backlog:contributesToMission ex:TV_M ; backlog:derivesFromScope ex:TV_Scope ;
+    backlog:hasGoalFacing backlog:Facing_Mission ; backlog:goalCoversArea ex:TV_Area_PL ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ; backlog:decidedBy backlog:Owner .
+ex:TV_GScope a backlog:Goal ; rdfs:label "Fixture scope-facing goal"@en ;
+    backlog:contributesToMission ex:TV_M ; backlog:derivesFromScope ex:TV_Scope ;
+    backlog:hasGoalFacing backlog:Facing_Scope ; backlog:goalCoversArea ex:TV_Area_PL ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ; backlog:decidedBy backlog:Owner .
+ex:TV_GContain a backlog:Goal ; rdfs:label "Fixture containment-facing goal"@en ;
+    backlog:contributesToMission ex:TV_M ; backlog:derivesFromScope ex:TV_Scope ;
+    backlog:hasGoalFacing backlog:Facing_Containment ; backlog:goalCoversArea ex:TV_Area_PL ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ; backlog:decidedBy backlog:Owner .
+ex:TV_OScope a backlog:Objective ; backlog:contributesToGoal ex:TV_GScope ; backlog:fillsScope ex:TV_Scope ;
+    backlog:hasSuccessMetric ex:TV_MetScope ; backlog:hasBaselineValue 0.0 ; backlog:hasTargetValue 0.0 ;
+    backlog:hasTargetDirection backlog:Dir_Hold ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ; backlog:decidedBy backlog:Owner .
+ex:TV_MetScope a core:Metric .
+ex:CPOScope a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-12-01T00:00:00Z"^^xsd:dateTime .
+ex:TV_OScope backlog:hasCheckpoint ex:CPOScope .
+ex:TV_ObsOScope a backlog:MetricObservation ; backlog:observesMetric ex:TV_MetScope ; backlog:observationFor ex:TV_OScope ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-09-02T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Fixture-stated value, not re-derivable." .
+ex:TV_OContain a backlog:Objective ; backlog:contributesToGoal ex:TV_GContain ; backlog:fillsScope ex:TV_Scope ;
+    backlog:hasSuccessMetric ex:TV_MetContain ; backlog:hasBaselineValue 0.0 ; backlog:hasTargetValue 0.0 ;
+    backlog:hasTargetDirection backlog:Dir_Hold ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ; backlog:decidedBy backlog:Owner .
+ex:TV_MetContain a core:Metric .
+ex:CPOContain a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-12-01T00:00:00Z"^^xsd:dateTime .
+ex:TV_OContain backlog:hasCheckpoint ex:CPOContain .
+ex:TV_ObsOContain a backlog:MetricObservation ; backlog:observesMetric ex:TV_MetContain ; backlog:observationFor ex:TV_OContain ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-09-02T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Fixture-stated value, not re-derivable." .
+ex:TV_Met a core:Metric ; rdfs:label "Unaided share"@en .
+ex:TV_O a backlog:Objective ; rdfs:label "Recoveries need no support"@en ;
+    backlog:fillsScope ex:TV_Scope ; backlog:contributesToGoal ex:TV_G ;
+    backlog:hasSuccessMetric ex:TV_Met ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:hasBaselineValue 12.0 ; backlog:hasTargetValue 80.0 ;
+    backlog:hasTargetDirection backlog:Dir_Increase ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:metricMovableBy ex:TV_EP ;
+    backlog:hasObjectiveDeadline "2027-01-31T00:00:00"^^xsd:dateTime ;
+    backlog:decidedBy backlog:Owner .
+ex:CP_O a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-12-01T00:00:00Z"^^xsd:dateTime .
+ex:TV_O backlog:hasCheckpoint ex:CP_O .
+ex:TV_Obs_O a backlog:MetricObservation ; backlog:observesMetric ex:TV_Met ; backlog:observationFor ex:TV_O ;
+    backlog:hasObservedValue 12.0 ; backlog:observedAt "2026-09-02T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Fixture-stated value, not re-derivable." .
+ex:TV_EP a backlog:Epic ; backlog:hasIdentifier "TV-E-1" ; backlog:hasTitle "Recovery" ;
+    backlog:hasState backlog:Proposed ; backlog:memberOfContainer ex:BL ;
+    backlog:pursuesObjective ex:TV_O ; backlog:satisfiesDeliverable ex:TV_D1 ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "probe" ;
+    backlog:appliesDefinitionOfDone ex:DoD_PL ; backlog:belongsToLineage ex:TV_Lin ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ; backlog:decomposesInto ex:TV_S_PL .
+ex:DoD_PL a backlog:DefinitionOfDone ; rdfs:label "Fixture DoD"@en .
+ex:TV_S_PL a backlog:Story ; backlog:hasIdentifier "TV-S-PL" ; backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer ex:BL ; backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at next planning." ;
+    backlog:belongsToLineage ex:TV_Lin ; backlog:hasInvestmentCategory backlog:Cat_NewCapability .
+
+ex:TV_D1 backlog:derivesFromMissionClause "practitioners recover unaided" .
+
+ex:TV_D2 backlog:derivesFromMissionClause "practitioners recover unaided" .
+
+ex:TV_Session_20260907 a backlog:RegisterSession ;
+    rdfs:label "Conformance-restoration session, 7 September"@en ;
+    backlog:sessionFor ex:BL ;
+    backlog:sessionStartedAt "2026-09-07T07:00:00"^^xsd:dateTime ;
+    backlog:sessionEndedAt "2026-09-07T07:30:00"^^xsd:dateTime ;
+    backlog:stateVerifiedAtStart true ;
+    backlog:sessionConductedBy backlog:Builder ;
+    backlog:hasSessionScopeNote "In scope: record this fixture's own maintenance so the register names who last changed it. Deliberately untouched: every item, objective and event above." .
+ex:TV_Lin a backlog:Lineage ; rdfs:label "Toy lineage V: variable-size decrease"@en ; backlog:lineageArchived false ; backlog:lineageForMission ex:TV_M ; backlog:lineageOrdinal 101 .
+
+
+########## Toy lineage S -- Strat_TransformSimplify ##########
+ex:TS_M a backlog:Mission ; backlog:hasMissionStatement "Toy lineage S: transform, instance simplification -- invented mission: practitioners recover unaided (toy copy)." ;
+    backlog:missionFor ex:BL ; backlog:hasMissionOrigin backlog:Origin_OwnerStated ;
+    backlog:missionSource "Owner, 2026-08-25" ; backlog:decidedBy backlog:Owner ;
+    backlog:hasMissionOutcome backlog:Out_InFlight .
+ex:TS_Scope a backlog:ScopeStatement ; backlog:hasScopeStatementText "Self-service recovery." ;
+    backlog:scopeForMission ex:TS_M ; backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ;
+    backlog:requiresDeliverable ex:TS_D1 , ex:TS_D2 ; backlog:hasScopeExclusion ex:TS_X ;
+    backlog:coversArea ex:TS_Area_PL .
+ex:TS_Area_PL a backlog:ScopeArea ; backlog:areaLocation "Practitioner recovery flow." ;
+    backlog:areaMeasure "2 deliverables, counted." ; backlog:hasScopeLayer backlog:Layer_Product .
+ex:TS_D1 a backlog:ScopeDeliverable ; backlog:hasDeliverableText "Recovery completes unaided." ; backlog:hasScopeLayer backlog:Layer_Product .
+ex:TS_D2 a backlog:ScopeDeliverable ; backlog:hasDeliverableText "Every recovery is auditable." ; backlog:hasScopeLayer backlog:Layer_Product .
+ex:TS_X a backlog:ScopeExclusion ; backlog:excludesConcern "Admin recovery." ;
+    backlog:hasExclusionRationale "Different threat model." ; backlog:decidedBy backlog:Owner ; backlog:hasScopeLayer backlog:Layer_Product .
+ex:TS_G a backlog:Goal ; rdfs:label "Self-service recovery"@en ;
+    backlog:contributesToMission ex:TS_M ; backlog:derivesFromScope ex:TS_Scope ;
+    backlog:hasGoalFacing backlog:Facing_Mission ; backlog:goalCoversArea ex:TS_Area_PL ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ; backlog:decidedBy backlog:Owner .
+ex:TS_GScope a backlog:Goal ; rdfs:label "Fixture scope-facing goal"@en ;
+    backlog:contributesToMission ex:TS_M ; backlog:derivesFromScope ex:TS_Scope ;
+    backlog:hasGoalFacing backlog:Facing_Scope ; backlog:goalCoversArea ex:TS_Area_PL ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ; backlog:decidedBy backlog:Owner .
+ex:TS_GContain a backlog:Goal ; rdfs:label "Fixture containment-facing goal"@en ;
+    backlog:contributesToMission ex:TS_M ; backlog:derivesFromScope ex:TS_Scope ;
+    backlog:hasGoalFacing backlog:Facing_Containment ; backlog:goalCoversArea ex:TS_Area_PL ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ; backlog:decidedBy backlog:Owner .
+ex:TS_OScope a backlog:Objective ; backlog:contributesToGoal ex:TS_GScope ; backlog:fillsScope ex:TS_Scope ;
+    backlog:hasSuccessMetric ex:TS_MetScope ; backlog:hasBaselineValue 0.0 ; backlog:hasTargetValue 0.0 ;
+    backlog:hasTargetDirection backlog:Dir_Hold ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ; backlog:decidedBy backlog:Owner .
+ex:TS_MetScope a core:Metric .
+ex:CPOScope a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-12-01T00:00:00Z"^^xsd:dateTime .
+ex:TS_OScope backlog:hasCheckpoint ex:CPOScope .
+ex:TS_ObsOScope a backlog:MetricObservation ; backlog:observesMetric ex:TS_MetScope ; backlog:observationFor ex:TS_OScope ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-09-02T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Fixture-stated value, not re-derivable." .
+ex:TS_OContain a backlog:Objective ; backlog:contributesToGoal ex:TS_GContain ; backlog:fillsScope ex:TS_Scope ;
+    backlog:hasSuccessMetric ex:TS_MetContain ; backlog:hasBaselineValue 0.0 ; backlog:hasTargetValue 0.0 ;
+    backlog:hasTargetDirection backlog:Dir_Hold ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ; backlog:decidedBy backlog:Owner .
+ex:TS_MetContain a core:Metric .
+ex:CPOContain a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-12-01T00:00:00Z"^^xsd:dateTime .
+ex:TS_OContain backlog:hasCheckpoint ex:CPOContain .
+ex:TS_ObsOContain a backlog:MetricObservation ; backlog:observesMetric ex:TS_MetContain ; backlog:observationFor ex:TS_OContain ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-09-02T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Fixture-stated value, not re-derivable." .
+ex:TS_Met a core:Metric ; rdfs:label "Unaided share"@en .
+ex:TS_O a backlog:Objective ; rdfs:label "Recoveries need no support"@en ;
+    backlog:fillsScope ex:TS_Scope ; backlog:contributesToGoal ex:TS_G ;
+    backlog:hasSuccessMetric ex:TS_Met ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:hasBaselineValue 12.0 ; backlog:hasTargetValue 80.0 ;
+    backlog:hasTargetDirection backlog:Dir_Increase ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:metricMovableBy ex:TS_EP ;
+    backlog:hasObjectiveDeadline "2027-01-31T00:00:00"^^xsd:dateTime ;
+    backlog:decidedBy backlog:Owner .
+ex:CP_O a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-12-01T00:00:00Z"^^xsd:dateTime .
+ex:TS_O backlog:hasCheckpoint ex:CP_O .
+ex:TS_Obs_O a backlog:MetricObservation ; backlog:observesMetric ex:TS_Met ; backlog:observationFor ex:TS_O ;
+    backlog:hasObservedValue 12.0 ; backlog:observedAt "2026-09-02T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Fixture-stated value, not re-derivable." .
+ex:TS_EP a backlog:Epic ; backlog:hasIdentifier "TS-E-1" ; backlog:hasTitle "Recovery" ;
+    backlog:hasState backlog:Proposed ; backlog:memberOfContainer ex:BL ;
+    backlog:pursuesObjective ex:TS_O ; backlog:satisfiesDeliverable ex:TS_D1 ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "probe" ;
+    backlog:appliesDefinitionOfDone ex:DoD_PL ; backlog:belongsToLineage ex:TS_Lin ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ; backlog:decomposesInto ex:TS_S_PL .
+ex:DoD_PL a backlog:DefinitionOfDone ; rdfs:label "Fixture DoD"@en .
+ex:TS_S_PL a backlog:Story ; backlog:hasIdentifier "TS-S-PL" ; backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer ex:BL ; backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at next planning." ;
+    backlog:belongsToLineage ex:TS_Lin ; backlog:hasInvestmentCategory backlog:Cat_NewCapability .
+
+ex:TS_D1 backlog:derivesFromMissionClause "practitioners recover unaided" .
+
+ex:TS_D2 backlog:derivesFromMissionClause "practitioners recover unaided" .
+
+ex:TS_Session_20260907 a backlog:RegisterSession ;
+    rdfs:label "Conformance-restoration session, 7 September"@en ;
+    backlog:sessionFor ex:BL ;
+    backlog:sessionStartedAt "2026-09-07T07:00:00"^^xsd:dateTime ;
+    backlog:sessionEndedAt "2026-09-07T07:30:00"^^xsd:dateTime ;
+    backlog:stateVerifiedAtStart true ;
+    backlog:sessionConductedBy backlog:Builder ;
+    backlog:hasSessionScopeNote "In scope: record this fixture's own maintenance so the register names who last changed it. Deliberately untouched: every item, objective and event above." .
+ex:TS_Lin a backlog:Lineage ; rdfs:label "Toy lineage S: transform, instance simplification"@en ; backlog:lineageArchived false ; backlog:lineageForMission ex:TS_M ; backlog:lineageOrdinal 102 .
+
+
+########## Toy lineage R -- Strat_TransformRepresent ##########
+ex:TR_M a backlog:Mission ; backlog:hasMissionStatement "Toy lineage R: transform, representation change -- invented mission: practitioners recover unaided (toy copy)." ;
+    backlog:missionFor ex:BL ; backlog:hasMissionOrigin backlog:Origin_OwnerStated ;
+    backlog:missionSource "Owner, 2026-08-25" ; backlog:decidedBy backlog:Owner ;
+    backlog:hasMissionOutcome backlog:Out_InFlight .
+ex:TR_Scope a backlog:ScopeStatement ; backlog:hasScopeStatementText "Self-service recovery." ;
+    backlog:scopeForMission ex:TR_M ; backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ;
+    backlog:requiresDeliverable ex:TR_D1 , ex:TR_D2 ; backlog:hasScopeExclusion ex:TR_X ;
+    backlog:coversArea ex:TR_Area_PL .
+ex:TR_Area_PL a backlog:ScopeArea ; backlog:areaLocation "Practitioner recovery flow." ;
+    backlog:areaMeasure "2 deliverables, counted." ; backlog:hasScopeLayer backlog:Layer_Product .
+ex:TR_D1 a backlog:ScopeDeliverable ; backlog:hasDeliverableText "Recovery completes unaided." ; backlog:hasScopeLayer backlog:Layer_Product .
+ex:TR_D2 a backlog:ScopeDeliverable ; backlog:hasDeliverableText "Every recovery is auditable." ; backlog:hasScopeLayer backlog:Layer_Product .
+ex:TR_X a backlog:ScopeExclusion ; backlog:excludesConcern "Admin recovery." ;
+    backlog:hasExclusionRationale "Different threat model." ; backlog:decidedBy backlog:Owner ; backlog:hasScopeLayer backlog:Layer_Product .
+ex:TR_G a backlog:Goal ; rdfs:label "Self-service recovery"@en ;
+    backlog:contributesToMission ex:TR_M ; backlog:derivesFromScope ex:TR_Scope ;
+    backlog:hasGoalFacing backlog:Facing_Mission ; backlog:goalCoversArea ex:TR_Area_PL ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ; backlog:decidedBy backlog:Owner .
+ex:TR_GScope a backlog:Goal ; rdfs:label "Fixture scope-facing goal"@en ;
+    backlog:contributesToMission ex:TR_M ; backlog:derivesFromScope ex:TR_Scope ;
+    backlog:hasGoalFacing backlog:Facing_Scope ; backlog:goalCoversArea ex:TR_Area_PL ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ; backlog:decidedBy backlog:Owner .
+ex:TR_GContain a backlog:Goal ; rdfs:label "Fixture containment-facing goal"@en ;
+    backlog:contributesToMission ex:TR_M ; backlog:derivesFromScope ex:TR_Scope ;
+    backlog:hasGoalFacing backlog:Facing_Containment ; backlog:goalCoversArea ex:TR_Area_PL ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ; backlog:decidedBy backlog:Owner .
+ex:TR_OScope a backlog:Objective ; backlog:contributesToGoal ex:TR_GScope ; backlog:fillsScope ex:TR_Scope ;
+    backlog:hasSuccessMetric ex:TR_MetScope ; backlog:hasBaselineValue 0.0 ; backlog:hasTargetValue 0.0 ;
+    backlog:hasTargetDirection backlog:Dir_Hold ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ; backlog:decidedBy backlog:Owner .
+ex:TR_MetScope a core:Metric .
+ex:CPOScope a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-12-01T00:00:00Z"^^xsd:dateTime .
+ex:TR_OScope backlog:hasCheckpoint ex:CPOScope .
+ex:TR_ObsOScope a backlog:MetricObservation ; backlog:observesMetric ex:TR_MetScope ; backlog:observationFor ex:TR_OScope ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-09-02T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Fixture-stated value, not re-derivable." .
+ex:TR_OContain a backlog:Objective ; backlog:contributesToGoal ex:TR_GContain ; backlog:fillsScope ex:TR_Scope ;
+    backlog:hasSuccessMetric ex:TR_MetContain ; backlog:hasBaselineValue 0.0 ; backlog:hasTargetValue 0.0 ;
+    backlog:hasTargetDirection backlog:Dir_Hold ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ; backlog:decidedBy backlog:Owner .
+ex:TR_MetContain a core:Metric .
+ex:CPOContain a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-12-01T00:00:00Z"^^xsd:dateTime .
+ex:TR_OContain backlog:hasCheckpoint ex:CPOContain .
+ex:TR_ObsOContain a backlog:MetricObservation ; backlog:observesMetric ex:TR_MetContain ; backlog:observationFor ex:TR_OContain ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-09-02T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Fixture-stated value, not re-derivable." .
+ex:TR_Met a core:Metric ; rdfs:label "Unaided share"@en .
+ex:TR_O a backlog:Objective ; rdfs:label "Recoveries need no support"@en ;
+    backlog:fillsScope ex:TR_Scope ; backlog:contributesToGoal ex:TR_G ;
+    backlog:hasSuccessMetric ex:TR_Met ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:hasBaselineValue 12.0 ; backlog:hasTargetValue 80.0 ;
+    backlog:hasTargetDirection backlog:Dir_Increase ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:metricMovableBy ex:TR_EP ;
+    backlog:hasObjectiveDeadline "2027-01-31T00:00:00"^^xsd:dateTime ;
+    backlog:decidedBy backlog:Owner .
+ex:CP_O a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-12-01T00:00:00Z"^^xsd:dateTime .
+ex:TR_O backlog:hasCheckpoint ex:CP_O .
+ex:TR_Obs_O a backlog:MetricObservation ; backlog:observesMetric ex:TR_Met ; backlog:observationFor ex:TR_O ;
+    backlog:hasObservedValue 12.0 ; backlog:observedAt "2026-09-02T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Fixture-stated value, not re-derivable." .
+ex:TR_EP a backlog:Epic ; backlog:hasIdentifier "TR-E-1" ; backlog:hasTitle "Recovery" ;
+    backlog:hasState backlog:Proposed ; backlog:memberOfContainer ex:BL ;
+    backlog:pursuesObjective ex:TR_O ; backlog:satisfiesDeliverable ex:TR_D1 ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "probe" ;
+    backlog:appliesDefinitionOfDone ex:DoD_PL ; backlog:belongsToLineage ex:TR_Lin ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ; backlog:decomposesInto ex:TR_S_PL .
+ex:DoD_PL a backlog:DefinitionOfDone ; rdfs:label "Fixture DoD"@en .
+ex:TR_S_PL a backlog:Story ; backlog:hasIdentifier "TR-S-PL" ; backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer ex:BL ; backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at next planning." ;
+    backlog:belongsToLineage ex:TR_Lin ; backlog:hasInvestmentCategory backlog:Cat_NewCapability .
+
+ex:TR_D1 backlog:derivesFromMissionClause "practitioners recover unaided" .
+
+ex:TR_D2 backlog:derivesFromMissionClause "practitioners recover unaided" .
+
+ex:TR_Session_20260907 a backlog:RegisterSession ;
+    rdfs:label "Conformance-restoration session, 7 September"@en ;
+    backlog:sessionFor ex:BL ;
+    backlog:sessionStartedAt "2026-09-07T07:00:00"^^xsd:dateTime ;
+    backlog:sessionEndedAt "2026-09-07T07:30:00"^^xsd:dateTime ;
+    backlog:stateVerifiedAtStart true ;
+    backlog:sessionConductedBy backlog:Builder ;
+    backlog:hasSessionScopeNote "In scope: record this fixture's own maintenance so the register names who last changed it. Deliberately untouched: every item, objective and event above." .
+ex:TR_Lin a backlog:Lineage ; rdfs:label "Toy lineage R: transform, representation change"@en ; backlog:lineageArchived false ; backlog:lineageForMission ex:TR_M ; backlog:lineageOrdinal 103 .
+
+
+########## Toy lineage T -- Strat_TransformReduce ##########
+ex:TT_M a backlog:Mission ; backlog:hasMissionStatement "Toy lineage T: transform, problem reduction -- invented mission: practitioners recover unaided (toy copy)." ;
+    backlog:missionFor ex:BL ; backlog:hasMissionOrigin backlog:Origin_OwnerStated ;
+    backlog:missionSource "Owner, 2026-08-25" ; backlog:decidedBy backlog:Owner ;
+    backlog:hasMissionOutcome backlog:Out_InFlight .
+ex:TT_Scope a backlog:ScopeStatement ; backlog:hasScopeStatementText "Self-service recovery." ;
+    backlog:scopeForMission ex:TT_M ; backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ;
+    backlog:requiresDeliverable ex:TT_D1 , ex:TT_D2 ; backlog:hasScopeExclusion ex:TT_X ;
+    backlog:coversArea ex:TT_Area_PL .
+ex:TT_Area_PL a backlog:ScopeArea ; backlog:areaLocation "Practitioner recovery flow." ;
+    backlog:areaMeasure "2 deliverables, counted." ; backlog:hasScopeLayer backlog:Layer_Product .
+ex:TT_D1 a backlog:ScopeDeliverable ; backlog:hasDeliverableText "Recovery completes unaided." ; backlog:hasScopeLayer backlog:Layer_Product .
+ex:TT_D2 a backlog:ScopeDeliverable ; backlog:hasDeliverableText "Every recovery is auditable." ; backlog:hasScopeLayer backlog:Layer_Product .
+ex:TT_X a backlog:ScopeExclusion ; backlog:excludesConcern "Admin recovery." ;
+    backlog:hasExclusionRationale "Different threat model." ; backlog:decidedBy backlog:Owner ; backlog:hasScopeLayer backlog:Layer_Product .
+ex:TT_G a backlog:Goal ; rdfs:label "Self-service recovery"@en ;
+    backlog:contributesToMission ex:TT_M ; backlog:derivesFromScope ex:TT_Scope ;
+    backlog:hasGoalFacing backlog:Facing_Mission ; backlog:goalCoversArea ex:TT_Area_PL ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ; backlog:decidedBy backlog:Owner .
+ex:TT_GScope a backlog:Goal ; rdfs:label "Fixture scope-facing goal"@en ;
+    backlog:contributesToMission ex:TT_M ; backlog:derivesFromScope ex:TT_Scope ;
+    backlog:hasGoalFacing backlog:Facing_Scope ; backlog:goalCoversArea ex:TT_Area_PL ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ; backlog:decidedBy backlog:Owner .
+ex:TT_GContain a backlog:Goal ; rdfs:label "Fixture containment-facing goal"@en ;
+    backlog:contributesToMission ex:TT_M ; backlog:derivesFromScope ex:TT_Scope ;
+    backlog:hasGoalFacing backlog:Facing_Containment ; backlog:goalCoversArea ex:TT_Area_PL ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ; backlog:decidedBy backlog:Owner .
+ex:TT_OScope a backlog:Objective ; backlog:contributesToGoal ex:TT_GScope ; backlog:fillsScope ex:TT_Scope ;
+    backlog:hasSuccessMetric ex:TT_MetScope ; backlog:hasBaselineValue 0.0 ; backlog:hasTargetValue 0.0 ;
+    backlog:hasTargetDirection backlog:Dir_Hold ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ; backlog:decidedBy backlog:Owner .
+ex:TT_MetScope a core:Metric .
+ex:CPOScope a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-12-01T00:00:00Z"^^xsd:dateTime .
+ex:TT_OScope backlog:hasCheckpoint ex:CPOScope .
+ex:TT_ObsOScope a backlog:MetricObservation ; backlog:observesMetric ex:TT_MetScope ; backlog:observationFor ex:TT_OScope ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-09-02T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Fixture-stated value, not re-derivable." .
+ex:TT_OContain a backlog:Objective ; backlog:contributesToGoal ex:TT_GContain ; backlog:fillsScope ex:TT_Scope ;
+    backlog:hasSuccessMetric ex:TT_MetContain ; backlog:hasBaselineValue 0.0 ; backlog:hasTargetValue 0.0 ;
+    backlog:hasTargetDirection backlog:Dir_Hold ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ; backlog:decidedBy backlog:Owner .
+ex:TT_MetContain a core:Metric .
+ex:CPOContain a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-12-01T00:00:00Z"^^xsd:dateTime .
+ex:TT_OContain backlog:hasCheckpoint ex:CPOContain .
+ex:TT_ObsOContain a backlog:MetricObservation ; backlog:observesMetric ex:TT_MetContain ; backlog:observationFor ex:TT_OContain ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-09-02T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Fixture-stated value, not re-derivable." .
+ex:TT_Met a core:Metric ; rdfs:label "Unaided share"@en .
+ex:TT_O a backlog:Objective ; rdfs:label "Recoveries need no support"@en ;
+    backlog:fillsScope ex:TT_Scope ; backlog:contributesToGoal ex:TT_G ;
+    backlog:hasSuccessMetric ex:TT_Met ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:hasBaselineValue 12.0 ; backlog:hasTargetValue 80.0 ;
+    backlog:hasTargetDirection backlog:Dir_Increase ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:metricMovableBy ex:TT_EP ;
+    backlog:hasObjectiveDeadline "2027-01-31T00:00:00"^^xsd:dateTime ;
+    backlog:decidedBy backlog:Owner .
+ex:CP_O a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-12-01T00:00:00Z"^^xsd:dateTime .
+ex:TT_O backlog:hasCheckpoint ex:CP_O .
+ex:TT_Obs_O a backlog:MetricObservation ; backlog:observesMetric ex:TT_Met ; backlog:observationFor ex:TT_O ;
+    backlog:hasObservedValue 12.0 ; backlog:observedAt "2026-09-02T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Fixture-stated value, not re-derivable." .
+ex:TT_EP a backlog:Epic ; backlog:hasIdentifier "TT-E-1" ; backlog:hasTitle "Recovery" ;
+    backlog:hasState backlog:Proposed ; backlog:memberOfContainer ex:BL ;
+    backlog:pursuesObjective ex:TT_O ; backlog:satisfiesDeliverable ex:TT_D1 ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "probe" ;
+    backlog:appliesDefinitionOfDone ex:DoD_PL ; backlog:belongsToLineage ex:TT_Lin ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ; backlog:decomposesInto ex:TT_S_PL .
+ex:DoD_PL a backlog:DefinitionOfDone ; rdfs:label "Fixture DoD"@en .
+ex:TT_S_PL a backlog:Story ; backlog:hasIdentifier "TT-S-PL" ; backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer ex:BL ; backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at next planning." ;
+    backlog:belongsToLineage ex:TT_Lin ; backlog:hasInvestmentCategory backlog:Cat_NewCapability .
+
+ex:TT_D1 backlog:derivesFromMissionClause "practitioners recover unaided" .
+
+ex:TT_D2 backlog:derivesFromMissionClause "practitioners recover unaided" .
+
+ex:TT_Session_20260907 a backlog:RegisterSession ;
+    rdfs:label "Conformance-restoration session, 7 September"@en ;
+    backlog:sessionFor ex:BL ;
+    backlog:sessionStartedAt "2026-09-07T07:00:00"^^xsd:dateTime ;
+    backlog:sessionEndedAt "2026-09-07T07:30:00"^^xsd:dateTime ;
+    backlog:stateVerifiedAtStart true ;
+    backlog:sessionConductedBy backlog:Builder ;
+    backlog:hasSessionScopeNote "In scope: record this fixture's own maintenance so the register names who last changed it. Deliberately untouched: every item, objective and event above." .
+ex:TT_Lin a backlog:Lineage ; rdfs:label "Toy lineage T: transform, problem reduction"@en ; backlog:lineageArchived false ; backlog:lineageForMission ex:TT_M ; backlog:lineageOrdinal 104 .
+
+# every toy's epic covers the shared domain entity at the active-use stage (the base graph did this once, inside the shared block)
+ex:TV_EP backlog:coversEntity ex:CEntity ; backlog:coversStage backlog:Stage_ActiveUse .
+ex:TS_EP backlog:coversEntity ex:CEntity ; backlog:coversStage backlog:Stage_ActiveUse .
+ex:TR_EP backlog:coversEntity ex:CEntity ; backlog:coversStage backlog:Stage_ActiveUse .
+ex:TT_EP backlog:coversEntity ex:CEntity ; backlog:coversStage backlog:Stage_ActiveUse .
+
+@prefix fw: <http://example.org/backlog-framework-register#> .
+
+#################################################################
+#  v1.1.0 (2026-09-07, brsf-session) -- FIVE BYPASSES, MEASURED. All
+#  five toy lineages first appear in git at dcb5f9b with their items
+#  and no Stage_Backlog output. Findings exactly as the tool emitted
+#  them; each lineage frozen by its finding until a restart answers it
+#  in a later commit. Also in this commit, the transformations that
+#  must PRECEDE a transform-and-conquer restart (the git witness will
+#  refuse a restart that comes before them):
+#    TS: a ScopeChange narrowing TS_Scope to TS_D1 (instance
+#        simplification -- TS_D2 was never served by any item);
+#    TR: nothing to add -- TR_EP already decomposes into TR_S_PL, as
+#        every epic in this framework must (EpicDecomposedShape, L4).
+#        Recorded as a finding: in a conformant register the
+#        representation change is always already done; see G85.
+#    TT: the template is fw:L_ChangeDiscipline, a real lineage of the
+#        main register that reads ORDERED; named on the restart.
+#################################################################
+ex:Bypass_TF_Lin_20260907 a backlog:LineageBypass ;
+    backlog:bypassedLineage ex:TF_Lin ;
+    backlog:hasFailureMode backlog:FM_LineageBypass ;
+    backlog:hasFindingScope backlog:Scope_Methodology ;
+    backlog:hasRootCause "The chain was written after the work: the items below first appear in the governed repository before the lineage's own Stage_Backlog output does. Measured by git first-appearance, not by the register's own dates." ;
+    backlog:bypassedItem ex:TF_EP ;
+    backlog:itemFirstCommit "TF_EP dcb5f9b 1788793264" ;
+    backlog:bypassedItem ex:TF_S_PL ;
+    backlog:itemFirstCommit "TF_S_PL dcb5f9b 1788793264" ;
+    backlog:chainClosedCommit "absent" ;
+    backlog:detectedAt "2026-09-07T15:01:17Z"^^xsd:dateTime ;
+    backlog:detectedBy "backlog_lineage_order_check_v1_2_1" ;
+    backlog:hasRationale "TF_EP first appears dcb5f9b before Stage_Backlog output absent; TF_S_PL first appears dcb5f9b before Stage_Backlog output absent" .
+ex:TF_Lin backlog:lineageFrozen true ; backlog:frozenBy ex:Bypass_TF_Lin_20260907 .   # found: frozen until a restart answers it, in its own commit
+
+ex:Bypass_TR_Lin_20260907 a backlog:LineageBypass ;
+    backlog:bypassedLineage ex:TR_Lin ;
+    backlog:hasFailureMode backlog:FM_LineageBypass ;
+    backlog:hasFindingScope backlog:Scope_Methodology ;
+    backlog:hasRootCause "The chain was written after the work: the items below first appear in the governed repository before the lineage's own Stage_Backlog output does. Measured by git first-appearance, not by the register's own dates." ;
+    backlog:bypassedItem ex:TR_EP ;
+    backlog:itemFirstCommit "TR_EP dcb5f9b 1788793264" ;
+    backlog:bypassedItem ex:TR_S_PL ;
+    backlog:itemFirstCommit "TR_S_PL dcb5f9b 1788793264" ;
+    backlog:chainClosedCommit "absent" ;
+    backlog:detectedAt "2026-09-07T15:01:19Z"^^xsd:dateTime ;
+    backlog:detectedBy "backlog_lineage_order_check_v1_2_1" ;
+    backlog:hasRationale "TR_EP first appears dcb5f9b before Stage_Backlog output absent; TR_S_PL first appears dcb5f9b before Stage_Backlog output absent" .
+ex:TR_Lin backlog:lineageFrozen true ; backlog:frozenBy ex:Bypass_TR_Lin_20260907 .   # found: frozen until a restart answers it, in its own commit
+
+ex:Bypass_TS_Lin_20260907 a backlog:LineageBypass ;
+    backlog:bypassedLineage ex:TS_Lin ;
+    backlog:hasFailureMode backlog:FM_LineageBypass ;
+    backlog:hasFindingScope backlog:Scope_Methodology ;
+    backlog:hasRootCause "The chain was written after the work: the items below first appear in the governed repository before the lineage's own Stage_Backlog output does. Measured by git first-appearance, not by the register's own dates." ;
+    backlog:bypassedItem ex:TS_EP ;
+    backlog:itemFirstCommit "TS_EP dcb5f9b 1788793264" ;
+    backlog:bypassedItem ex:TS_S_PL ;
+    backlog:itemFirstCommit "TS_S_PL dcb5f9b 1788793264" ;
+    backlog:chainClosedCommit "absent" ;
+    backlog:detectedAt "2026-09-07T15:01:21Z"^^xsd:dateTime ;
+    backlog:detectedBy "backlog_lineage_order_check_v1_2_1" ;
+    backlog:hasRationale "TS_EP first appears dcb5f9b before Stage_Backlog output absent; TS_S_PL first appears dcb5f9b before Stage_Backlog output absent" .
+ex:TS_Lin backlog:lineageFrozen true ; backlog:frozenBy ex:Bypass_TS_Lin_20260907 .   # found: frozen until a restart answers it, in its own commit
+
+ex:Bypass_TT_Lin_20260907 a backlog:LineageBypass ;
+    backlog:bypassedLineage ex:TT_Lin ;
+    backlog:hasFailureMode backlog:FM_LineageBypass ;
+    backlog:hasFindingScope backlog:Scope_Methodology ;
+    backlog:hasRootCause "The chain was written after the work: the items below first appear in the governed repository before the lineage's own Stage_Backlog output does. Measured by git first-appearance, not by the register's own dates." ;
+    backlog:bypassedItem ex:TT_EP ;
+    backlog:itemFirstCommit "TT_EP dcb5f9b 1788793264" ;
+    backlog:bypassedItem ex:TT_S_PL ;
+    backlog:itemFirstCommit "TT_S_PL dcb5f9b 1788793264" ;
+    backlog:chainClosedCommit "absent" ;
+    backlog:detectedAt "2026-09-07T15:01:23Z"^^xsd:dateTime ;
+    backlog:detectedBy "backlog_lineage_order_check_v1_2_1" ;
+    backlog:hasRationale "TT_EP first appears dcb5f9b before Stage_Backlog output absent; TT_S_PL first appears dcb5f9b before Stage_Backlog output absent" .
+ex:TT_Lin backlog:lineageFrozen true ; backlog:frozenBy ex:Bypass_TT_Lin_20260907 .   # found: frozen until a restart answers it, in its own commit
+
+ex:Bypass_TV_Lin_20260907 a backlog:LineageBypass ;
+    backlog:bypassedLineage ex:TV_Lin ;
+    backlog:hasFailureMode backlog:FM_LineageBypass ;
+    backlog:hasFindingScope backlog:Scope_Methodology ;
+    backlog:hasRootCause "The chain was written after the work: the items below first appear in the governed repository before the lineage's own Stage_Backlog output does. Measured by git first-appearance, not by the register's own dates." ;
+    backlog:bypassedItem ex:TV_EP ;
+    backlog:itemFirstCommit "TV_EP dcb5f9b 1788793264" ;
+    backlog:bypassedItem ex:TV_S_PL ;
+    backlog:itemFirstCommit "TV_S_PL dcb5f9b 1788793264" ;
+    backlog:chainClosedCommit "absent" ;
+    backlog:detectedAt "2026-09-07T15:01:25Z"^^xsd:dateTime ;
+    backlog:detectedBy "backlog_lineage_order_check_v1_2_1" ;
+    backlog:hasRationale "TV_EP first appears dcb5f9b before Stage_Backlog output absent; TV_S_PL first appears dcb5f9b before Stage_Backlog output absent" .
+ex:TV_Lin backlog:lineageFrozen true ; backlog:frozenBy ex:Bypass_TV_Lin_20260907 .   # found: frozen until a restart answers it, in its own commit
+
+ex:TS_SC a backlog:ScopeChange ; backlog:changesScope ex:TS_Scope ; backlog:admitsItem ex:TS_S_PL ;
+    backlog:hasScopeChangeRationale "Instance simplification before the restart: TS_D2 (auditability) was required by the scope and served by no item; the chain to rebuild is narrowed to TS_D1. Traded: the audit deliverable leaves this lineage's scope and is recorded as superseded here, never deleted (G6)." ;
+    backlog:decidedBy backlog:Owner ; backlog:belongsToLineage ex:TS_Lin .
+
+#################################################################
+#  v1.2.0 (2026-09-07, brsf-session) -- FIVE RESTARTS, one strategy each,
+#  in their own commit after the findings (4f97e0a). Every item of
+#  every toy lineage flagged pre-lineage (RestartFlagsEveryItemShape).
+#################################################################
+ex:Restart_TF a backlog:LineageRestart ; backlog:restartsLineage ex:TF_Lin ; backlog:answersBypass ex:Bypass_TF_Lin_20260907 ;
+    backlog:hasRecoveryStrategy backlog:Strat_DecreaseByFactor ;
+    backlog:restartedAtCommit "backlog-roadmap-framework-v1.223.0 (tag; witnessed by git, not asserted)" ;
+    backlog:decidedBy backlog:Owner ; backlog:belongsToLineage ex:TF_Lin ;
+    backlog:hasRationale "Decrease by a constant factor: the first rebuild will deliberately admit only ONE of the two items (TF_S_PL), so that the second trial's reductionObserved sits exactly at the 0.5 boundary the strategy requires -- exercising the boundary, not avoiding it." .
+ex:TF_S_PL backlog:preLineageItem true .
+ex:TF_EP backlog:preLineageItem true .
+ex:Restart_TV a backlog:LineageRestart ; backlog:restartsLineage ex:TV_Lin ; backlog:answersBypass ex:Bypass_TV_Lin_20260907 ;
+    backlog:hasRecoveryStrategy backlog:Strat_VariableDecrease ;
+    backlog:restartedAtCommit "backlog-roadmap-framework-v1.223.0 (tag; witnessed by git, not asserted)" ;
+    backlog:decidedBy backlog:Owner ; backlog:belongsToLineage ex:TV_Lin ;
+    backlog:hasRationale "Variable-size decrease: the first rebuild admits both items; the comparison this strategy tests (reduction not smaller than the previous restart's) needs a third trial, which will be disclosed as the limit reached if the exercise stops at two." .
+ex:TV_S_PL backlog:preLineageItem true .
+ex:TV_EP backlog:preLineageItem true .
+ex:Restart_TS a backlog:LineageRestart ; backlog:restartsLineage ex:TS_Lin ; backlog:answersBypass ex:Bypass_TS_Lin_20260907 ;
+    backlog:hasRecoveryStrategy backlog:Strat_TransformSimplify ;
+    backlog:simplifiedBy ex:TS_SC ;
+    backlog:restartedAtCommit "backlog-roadmap-framework-v1.223.0 (tag; witnessed by git, not asserted)" ;
+    backlog:decidedBy backlog:Owner ; backlog:belongsToLineage ex:TS_Lin ;
+    backlog:hasRationale "Transform, instance simplification: TS_SC (previous commit, 4f97e0a) narrowed the scope to TS_D1 before this restart; the git witness must read the ScopeChange strictly before the restart." .
+ex:TS_S_PL backlog:preLineageItem true .
+ex:TS_EP backlog:preLineageItem true .
+ex:Restart_TR a backlog:LineageRestart ; backlog:restartsLineage ex:TR_Lin ; backlog:answersBypass ex:Bypass_TR_Lin_20260907 ;
+    backlog:hasRecoveryStrategy backlog:Strat_TransformRepresent ;
+    backlog:restartedAtCommit "backlog-roadmap-framework-v1.223.0 (tag; witnessed by git, not asserted)" ;
+    backlog:decidedBy backlog:Owner ; backlog:belongsToLineage ex:TR_Lin ;
+    backlog:hasRationale "Transform, representation change: the bypassed epic TR_EP already decomposes into TR_S_PL because EpicDecomposedShape (L4) forbids an undecomposed epic in any conformant register -- the change this strategy asks for is always already made here (G85). Run to completion anyway; admission is per story." .
+ex:TR_S_PL backlog:preLineageItem true .
+ex:TR_EP backlog:preLineageItem true .
+ex:Restart_TT a backlog:LineageRestart ; backlog:restartsLineage ex:TT_Lin ; backlog:answersBypass ex:Bypass_TT_Lin_20260907 ;
+    backlog:hasRecoveryStrategy backlog:Strat_TransformReduce ;
+    backlog:templateLineage fw:L_ChangeDiscipline ;
+    backlog:restartedAtCommit "backlog-roadmap-framework-v1.223.0 (tag; witnessed by git, not asserted)" ;
+    backlog:decidedBy backlog:Owner ; backlog:belongsToLineage ex:TT_Lin ;
+    backlog:hasRationale "Transform, problem reduction: the template is fw:L_ChangeDiscipline, a real lineage of the main register that the order check reads ORDERED; this toy's chain instantiates that shape (Mission..Backlog, one commit per stage) rather than being designed from nothing." .
+ex:TT_S_PL backlog:preLineageItem true .
+ex:TT_EP backlog:preLineageItem true .
+
+#################################################################
+#  v1.3.0 (2026-09-07, brsf-session) -- TOY REBUILD, STAGE 1 OF 5:
+#  Mission, all five toys (independent lineages sharing one commit; each
+#  toy's own order is what the witness measures). Follows 65f6f09.
+#################################################################
+ex:TF_R_Mission a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Mission ; backlog:belongsToLineage ex:TF_Lin ;
+    backlog:hasStateDigest "a979c67e121a0e9375d44d2b094b91e8e4a4d2459ecd0f8b2981ec94b0df3462" ; backlog:closedAtCommit "backlog-roadmap-framework-v1.224.0 (tag; witnessed by git, not asserted)" .
+ex:TV_R_Mission a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Mission ; backlog:belongsToLineage ex:TV_Lin ;
+    backlog:hasStateDigest "a979c67e121a0e9375d44d2b094b91e8e4a4d2459ecd0f8b2981ec94b0df3462" ; backlog:closedAtCommit "backlog-roadmap-framework-v1.224.0 (tag; witnessed by git, not asserted)" .
+ex:TS_R_Mission a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Mission ; backlog:belongsToLineage ex:TS_Lin ;
+    backlog:hasStateDigest "a979c67e121a0e9375d44d2b094b91e8e4a4d2459ecd0f8b2981ec94b0df3462" ; backlog:closedAtCommit "backlog-roadmap-framework-v1.224.0 (tag; witnessed by git, not asserted)" .
+ex:TR_R_Mission a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Mission ; backlog:belongsToLineage ex:TR_Lin ;
+    backlog:hasStateDigest "a979c67e121a0e9375d44d2b094b91e8e4a4d2459ecd0f8b2981ec94b0df3462" ; backlog:closedAtCommit "backlog-roadmap-framework-v1.224.0 (tag; witnessed by git, not asserted)" .
+ex:TT_R_Mission a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Mission ; backlog:belongsToLineage ex:TT_Lin ;
+    backlog:hasStateDigest "a979c67e121a0e9375d44d2b094b91e8e4a4d2459ecd0f8b2981ec94b0df3462" ; backlog:closedAtCommit "backlog-roadmap-framework-v1.224.0 (tag; witnessed by git, not asserted)" .
+
+#################################################################
+#  v1.4.0 (2026-09-07, brsf-session) -- TOY REBUILD, STAGE 2 OF 5:
+#  Scope, all five toys (independent lineages sharing one commit; each
+#  toy's own order is what the witness measures). Follows ff54779.
+#################################################################
+ex:TF_R_Scope a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Scope ; backlog:belongsToLineage ex:TF_Lin ; backlog:consumesOutput ex:TF_R_Mission ;
+    backlog:hasStateDigest "00442de09fcbeb488a6e2fcebac3dddb4fb976651ff0f14cd8965a33a375b133" ; backlog:closedAtCommit "backlog-roadmap-framework-v1.225.0 (tag; witnessed by git, not asserted)" .
+ex:TV_R_Scope a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Scope ; backlog:belongsToLineage ex:TV_Lin ; backlog:consumesOutput ex:TV_R_Mission ;
+    backlog:hasStateDigest "00442de09fcbeb488a6e2fcebac3dddb4fb976651ff0f14cd8965a33a375b133" ; backlog:closedAtCommit "backlog-roadmap-framework-v1.225.0 (tag; witnessed by git, not asserted)" .
+ex:TS_R_Scope a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Scope ; backlog:belongsToLineage ex:TS_Lin ; backlog:consumesOutput ex:TS_R_Mission ;
+    backlog:hasStateDigest "00442de09fcbeb488a6e2fcebac3dddb4fb976651ff0f14cd8965a33a375b133" ; backlog:closedAtCommit "backlog-roadmap-framework-v1.225.0 (tag; witnessed by git, not asserted)" .
+ex:TR_R_Scope a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Scope ; backlog:belongsToLineage ex:TR_Lin ; backlog:consumesOutput ex:TR_R_Mission ;
+    backlog:hasStateDigest "00442de09fcbeb488a6e2fcebac3dddb4fb976651ff0f14cd8965a33a375b133" ; backlog:closedAtCommit "backlog-roadmap-framework-v1.225.0 (tag; witnessed by git, not asserted)" .
+ex:TT_R_Scope a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Scope ; backlog:belongsToLineage ex:TT_Lin ; backlog:consumesOutput ex:TT_R_Mission ;
+    backlog:hasStateDigest "00442de09fcbeb488a6e2fcebac3dddb4fb976651ff0f14cd8965a33a375b133" ; backlog:closedAtCommit "backlog-roadmap-framework-v1.225.0 (tag; witnessed by git, not asserted)" .
+
+#################################################################
+#  v1.5.0 (2026-09-07, brsf-session) -- TOY REBUILD, STAGE 3 OF 5:
+#  Goal, all five toys (independent lineages sharing one commit; each
+#  toy's own order is what the witness measures). Follows 3d86722.
+#################################################################
+ex:TF_R_Goal a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Goal ; backlog:belongsToLineage ex:TF_Lin ; backlog:consumesOutput ex:TF_R_Scope ;
+    backlog:hasStateDigest "ceb5050aaa2a83836c91982cd01544c6e57f7a54d1b4f8ac6a6d805edd146297" ; backlog:closedAtCommit "backlog-roadmap-framework-v1.226.0 (tag; witnessed by git, not asserted)" .
+ex:TV_R_Goal a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Goal ; backlog:belongsToLineage ex:TV_Lin ; backlog:consumesOutput ex:TV_R_Scope ;
+    backlog:hasStateDigest "ceb5050aaa2a83836c91982cd01544c6e57f7a54d1b4f8ac6a6d805edd146297" ; backlog:closedAtCommit "backlog-roadmap-framework-v1.226.0 (tag; witnessed by git, not asserted)" .
+ex:TS_R_Goal a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Goal ; backlog:belongsToLineage ex:TS_Lin ; backlog:consumesOutput ex:TS_R_Scope ;
+    backlog:hasStateDigest "ceb5050aaa2a83836c91982cd01544c6e57f7a54d1b4f8ac6a6d805edd146297" ; backlog:closedAtCommit "backlog-roadmap-framework-v1.226.0 (tag; witnessed by git, not asserted)" .
+ex:TR_R_Goal a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Goal ; backlog:belongsToLineage ex:TR_Lin ; backlog:consumesOutput ex:TR_R_Scope ;
+    backlog:hasStateDigest "ceb5050aaa2a83836c91982cd01544c6e57f7a54d1b4f8ac6a6d805edd146297" ; backlog:closedAtCommit "backlog-roadmap-framework-v1.226.0 (tag; witnessed by git, not asserted)" .
+ex:TT_R_Goal a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Goal ; backlog:belongsToLineage ex:TT_Lin ; backlog:consumesOutput ex:TT_R_Scope ;
+    backlog:hasStateDigest "ceb5050aaa2a83836c91982cd01544c6e57f7a54d1b4f8ac6a6d805edd146297" ; backlog:closedAtCommit "backlog-roadmap-framework-v1.226.0 (tag; witnessed by git, not asserted)" .
+
+#################################################################
+#  v1.6.0 (2026-09-07, brsf-session) -- TOY REBUILD, STAGE 4 OF 5:
+#  Objective, all five toys (independent lineages sharing one commit; each
+#  toy's own order is what the witness measures). Follows d8fdf64.
+#################################################################
+ex:TF_R_Objective a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Objective ; backlog:belongsToLineage ex:TF_Lin ; backlog:consumesOutput ex:TF_R_Goal ;
+    backlog:hasStateDigest "9e4d7ca9c506daaf16e581e222cac974b99390c2cab332c13fdd6fed2c35b147" ; backlog:closedAtCommit "backlog-roadmap-framework-v1.227.0 (tag; witnessed by git, not asserted)" .
+ex:TV_R_Objective a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Objective ; backlog:belongsToLineage ex:TV_Lin ; backlog:consumesOutput ex:TV_R_Goal ;
+    backlog:hasStateDigest "9e4d7ca9c506daaf16e581e222cac974b99390c2cab332c13fdd6fed2c35b147" ; backlog:closedAtCommit "backlog-roadmap-framework-v1.227.0 (tag; witnessed by git, not asserted)" .
+ex:TS_R_Objective a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Objective ; backlog:belongsToLineage ex:TS_Lin ; backlog:consumesOutput ex:TS_R_Goal ;
+    backlog:hasStateDigest "9e4d7ca9c506daaf16e581e222cac974b99390c2cab332c13fdd6fed2c35b147" ; backlog:closedAtCommit "backlog-roadmap-framework-v1.227.0 (tag; witnessed by git, not asserted)" .
+ex:TR_R_Objective a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Objective ; backlog:belongsToLineage ex:TR_Lin ; backlog:consumesOutput ex:TR_R_Goal ;
+    backlog:hasStateDigest "9e4d7ca9c506daaf16e581e222cac974b99390c2cab332c13fdd6fed2c35b147" ; backlog:closedAtCommit "backlog-roadmap-framework-v1.227.0 (tag; witnessed by git, not asserted)" .
+ex:TT_R_Objective a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Objective ; backlog:belongsToLineage ex:TT_Lin ; backlog:consumesOutput ex:TT_R_Goal ;
+    backlog:hasStateDigest "9e4d7ca9c506daaf16e581e222cac974b99390c2cab332c13fdd6fed2c35b147" ; backlog:closedAtCommit "backlog-roadmap-framework-v1.227.0 (tag; witnessed by git, not asserted)" .
+
+#################################################################
+#  v1.7.0 (2026-09-07, brsf-session) -- TOY REBUILD, STAGE 5 OF 5:
+#  Backlog, all five toys (independent lineages sharing one commit; each
+#  toy's own order is what the witness measures). Follows f346701.
+#################################################################
+ex:TF_R_Backlog a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage ex:TF_Lin ; backlog:consumesOutput ex:TF_R_Objective ;
+    backlog:hasStateDigest "6fcbcf28ed1a82433fc3fc795f3573e5d08aba9a6758ad91b939f25dc1ca1111" ; backlog:closedAtCommit "backlog-roadmap-framework-v1.228.0 (tag; witnessed by git, not asserted)" .
+ex:TF_S_PL backlog:admittedByOutput ex:TF_R_Backlog .
+# toy F: TF_EP deliberately NOT admitted by this first rebuild (decrease-by-factor exercise; see rationale on Restart_TF)
+ex:TV_R_Backlog a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage ex:TV_Lin ; backlog:consumesOutput ex:TV_R_Objective ;
+    backlog:hasStateDigest "6fcbcf28ed1a82433fc3fc795f3573e5d08aba9a6758ad91b939f25dc1ca1111" ; backlog:closedAtCommit "backlog-roadmap-framework-v1.228.0 (tag; witnessed by git, not asserted)" .
+ex:TV_S_PL backlog:admittedByOutput ex:TV_R_Backlog .
+ex:TV_EP backlog:admittedByOutput ex:TV_R_Backlog .
+ex:TS_R_Backlog a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage ex:TS_Lin ; backlog:consumesOutput ex:TS_R_Objective ;
+    backlog:hasStateDigest "6fcbcf28ed1a82433fc3fc795f3573e5d08aba9a6758ad91b939f25dc1ca1111" ; backlog:closedAtCommit "backlog-roadmap-framework-v1.228.0 (tag; witnessed by git, not asserted)" .
+ex:TS_S_PL backlog:admittedByOutput ex:TS_R_Backlog .
+ex:TS_EP backlog:admittedByOutput ex:TS_R_Backlog .
+ex:TR_R_Backlog a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage ex:TR_Lin ; backlog:consumesOutput ex:TR_R_Objective ;
+    backlog:hasStateDigest "6fcbcf28ed1a82433fc3fc795f3573e5d08aba9a6758ad91b939f25dc1ca1111" ; backlog:closedAtCommit "backlog-roadmap-framework-v1.228.0 (tag; witnessed by git, not asserted)" .
+ex:TR_S_PL backlog:admittedByOutput ex:TR_R_Backlog .
+ex:TR_EP backlog:admittedByOutput ex:TR_R_Backlog .
+ex:TT_R_Backlog a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage ex:TT_Lin ; backlog:consumesOutput ex:TT_R_Objective ;
+    backlog:hasStateDigest "6fcbcf28ed1a82433fc3fc795f3573e5d08aba9a6758ad91b939f25dc1ca1111" ; backlog:closedAtCommit "backlog-roadmap-framework-v1.228.0 (tag; witnessed by git, not asserted)" .
+ex:TT_S_PL backlog:admittedByOutput ex:TT_R_Backlog .
+ex:TT_EP backlog:admittedByOutput ex:TT_R_Backlog .
+
+#################################################################
+#  v1.8.0 (2026-09-07, brsf-session) -- SECOND TRIAL, step 1: new work
+#  appears in toys F and V (TF_S2, TV_S2) with NO planning record. The
+#  next commit will plan them after the fact -- the item-level escape
+#  (an item planned after it existed) -- so that each toy's SECOND
+#  bypass is a real, witnessed finding and its second restart can
+#  exercise the strategy's own convergence test.
+#################################################################
+ex:TF_S2 a backlog:Story ; backlog:hasIdentifier "TF-S-2" ; backlog:hasTitle "Second-trial story"@en ; backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer ex:BL ; backlog:notYetScoreable true ; backlog:hasScoreabilityReason "Scored at next planning." ;
+    backlog:belongsToLineage ex:TF_Lin ; backlog:hasInvestmentCategory backlog:Cat_NewCapability ; backlog:pursuesObjective ex:TF_O ;
+    backlog:satisfiesDeliverable ex:TF_D1 .
+ex:TV_S2 a backlog:Story ; backlog:hasIdentifier "TV-S-2" ; backlog:hasTitle "Second-trial story"@en ; backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer ex:BL ; backlog:notYetScoreable true ; backlog:hasScoreabilityReason "Scored at next planning." ;
+    backlog:belongsToLineage ex:TV_Lin ; backlog:hasInvestmentCategory backlog:Cat_NewCapability ; backlog:pursuesObjective ex:TV_O ;
+    backlog:satisfiesDeliverable ex:TV_D1 .
+ex:TF_S2 backlog:postRestartItem ex:Restart_TF .
+ex:TV_S2 backlog:postRestartItem ex:Restart_TV .
+
+#################################################################
+#  v1.9.0 (2026-09-07, brsf-session) -- SECOND TRIAL, step 2: TF_S2 and
+#  TV_S2 (first in git at cedf43b) are PLANNED NOW, after they existed
+#  -- the item-level escape, done on purpose so that each toy's second
+#  bypass is a real, witnessed finding. Minimal planning records: one
+#  open iteration per toy, one planning event, one execution task.
+#################################################################
+ex:TF_It2 a backlog:Iteration ; backlog:hasIdentifier "TF-IT-2" ; backlog:hasTitle "Second-trial iteration"@en ;
+    backlog:hasState backlog:Proposed ; backlog:iterationStart "2026-09-07T15:00:00Z"^^xsd:dateTime ;
+    backlog:iterationEnd "2030-01-01T00:00:00Z"^^xsd:dateTime ; backlog:hasCapacity 8.0 ;
+    backlog:belongsToLineage ex:TF_Lin ; backlog:appliesDefinitionOfDone ex:DoD_PL .
+ex:TF_Plan_S2 a backlog:PlanningEvent ; backlog:plansItem ex:TF_S2 ; backlog:plannedInto ex:TF_It2 ;
+    backlog:plannedAt "2026-09-07T15:00:00Z"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:producesTask ex:TF_T_S2 ; backlog:belongsToLineage ex:TF_Lin .
+ex:TF_T_S2 a backlog:ExecutionTask ; backlog:hasTaskType backlog:Task_Implementation ; backlog:hasIdentifier "TF-T-S2" ;
+    backlog:hasTitle "Second-trial task"@en ; backlog:hasState backlog:Proposed ; backlog:memberOfContainer ex:BL , ex:TF_It2 ;
+    backlog:belongsToLineage ex:TF_Lin ; backlog:postRestartItem ex:Restart_TF .
+ex:TF_S2 backlog:memberOfContainer ex:TF_It2 .
+ex:TV_It2 a backlog:Iteration ; backlog:hasIdentifier "TV-IT-2" ; backlog:hasTitle "Second-trial iteration"@en ;
+    backlog:hasState backlog:Proposed ; backlog:iterationStart "2026-09-07T15:00:00Z"^^xsd:dateTime ;
+    backlog:iterationEnd "2030-01-01T00:00:00Z"^^xsd:dateTime ; backlog:hasCapacity 8.0 ;
+    backlog:belongsToLineage ex:TV_Lin ; backlog:appliesDefinitionOfDone ex:DoD_PL .
+ex:TV_Plan_S2 a backlog:PlanningEvent ; backlog:plansItem ex:TV_S2 ; backlog:plannedInto ex:TV_It2 ;
+    backlog:plannedAt "2026-09-07T15:00:00Z"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:producesTask ex:TV_T_S2 ; backlog:belongsToLineage ex:TV_Lin .
+ex:TV_T_S2 a backlog:ExecutionTask ; backlog:hasTaskType backlog:Task_Implementation ; backlog:hasIdentifier "TV-T-S2" ;
+    backlog:hasTitle "Second-trial task"@en ; backlog:hasState backlog:Proposed ; backlog:memberOfContainer ex:BL , ex:TV_It2 ;
+    backlog:belongsToLineage ex:TV_Lin ; backlog:postRestartItem ex:Restart_TV .
+ex:TV_S2 backlog:memberOfContainer ex:TV_It2 .
+
+#################################################################
+#  v1.10.0 (2026-09-08, brsf-session) -- SECOND BYPASSES, MEASURED, for
+#  toys F and V: TF_S2 / TV_S2 (first at cedf43b) planned after they
+#  existed (planning events first at 20bcfeb). Recorded exactly as
+#  backlog_lineage_order_check_v1_2_3 emitted them; each lineage frozen
+#  by its finding until the second restart, in its own commit.
+#  The emitter itself was fixed to produce these: v1.2.2 asked whether
+#  ANY bypass of the lineage had ever been answered and so neither
+#  emitted nor failed a NEW bypass on a once-restarted lineage (G85).
+#################################################################
+ex:Bypass_TF_Lin_20260908 a backlog:LineageBypass ;
+    backlog:bypassedLineage ex:TF_Lin ;
+    backlog:hasFailureMode backlog:FM_LineageBypass ;
+    backlog:hasFindingScope backlog:Scope_Methodology ;
+    backlog:hasRootCause "The chain was written after the work: the items below first appear in the governed repository before the lineage's own Stage_Backlog output does. Measured by git first-appearance, not by the register's own dates." ;
+    backlog:bypassedItem ex:TF_S2 ;
+    backlog:itemFirstCommit "TF_S2 cedf43b 1788803337" ;
+    backlog:bypassedOutput ex:TF_R_Mission ;
+    backlog:bypassedOutput ex:TF_R_Scope ;
+    backlog:bypassedOutput ex:TF_R_Goal ;
+    backlog:bypassedOutput ex:TF_R_Objective ;
+    backlog:bypassedOutput ex:TF_R_Backlog ;
+    backlog:chainClosedCommit "7afa514 1788801618" ;
+    backlog:detectedAt "2026-09-08T06:09:02Z"^^xsd:dateTime ;
+    backlog:detectedBy "backlog_lineage_order_check_v1_2_3" ;
+    backlog:hasRationale "TF_S2 first appears cedf43b before Stage_Backlog output planned-late by TF_Plan_S2 (20bcfeb)" .
+ex:TF_Lin backlog:lineageFrozen true ; backlog:frozenBy ex:Bypass_TF_Lin_20260908 .   # found: frozen until a restart answers it, in its own commit
+
+ex:Bypass_TV_Lin_20260908 a backlog:LineageBypass ;
+    backlog:bypassedLineage ex:TV_Lin ;
+    backlog:hasFailureMode backlog:FM_LineageBypass ;
+    backlog:hasFindingScope backlog:Scope_Methodology ;
+    backlog:hasRootCause "The chain was written after the work: the items below first appear in the governed repository before the lineage's own Stage_Backlog output does. Measured by git first-appearance, not by the register's own dates." ;
+    backlog:bypassedItem ex:TV_S2 ;
+    backlog:itemFirstCommit "TV_S2 cedf43b 1788803337" ;
+    backlog:bypassedOutput ex:TV_R_Mission ;
+    backlog:bypassedOutput ex:TV_R_Scope ;
+    backlog:bypassedOutput ex:TV_R_Goal ;
+    backlog:bypassedOutput ex:TV_R_Objective ;
+    backlog:bypassedOutput ex:TV_R_Backlog ;
+    backlog:chainClosedCommit "7afa514 1788801618" ;
+    backlog:detectedAt "2026-09-08T06:09:40Z"^^xsd:dateTime ;
+    backlog:detectedBy "backlog_lineage_order_check_v1_2_3" ;
+    backlog:hasRationale "TV_S2 first appears cedf43b before Stage_Backlog output planned-late by TV_Plan_S2 (20bcfeb)" .
+ex:TV_Lin backlog:lineageFrozen true ; backlog:frozenBy ex:Bypass_TV_Lin_20260908 .   # found: frozen until a restart answers it, in its own commit
+
+#################################################################
+#  v1.11.0 (2026-09-08, brsf-session) -- SECOND RESTARTS of toys F and V,
+#  in their own commit after the findings (1e27ecc). Each carries the
+#  reductionObserved backlog_lineage_order_check_v1_2_3 printed on
+#  20bcfeb -- admitted / named for the first trial's bypass -- never
+#  hand-computed:
+#    TF: 1/2 = 0.500  (the first rebuild admitted TF_S_PL only, by
+#        design; Strat_DecreaseByFactor requires >= 0.5: exercised AT
+#        the boundary, and it holds)
+#    TV: 2/2 = 1.000  (Strat_VariableDecrease compares this with the
+#        previous restart's reduction; Restart_TV carried none, so the
+#        comparison first bites at a THIRD trial -- disclosed as the
+#        limit of this exercise, see G85)
+#  Every item of both lineages flagged (or post-restart); the first
+#  rebuilt chains retracted (kept).
+#################################################################
+ex:Restart2_TF a backlog:LineageRestart ; backlog:restartsLineage ex:TF_Lin ; backlog:answersBypass ex:Bypass_TF_Lin_20260908 ;
+    backlog:hasRecoveryStrategy backlog:Strat_DecreaseByFactor ; backlog:reductionObserved 0.5 ;
+    backlog:retractsOutput ex:TF_R_Mission , ex:TF_R_Scope , ex:TF_R_Goal , ex:TF_R_Objective , ex:TF_R_Backlog ;
+    backlog:restartedAtCommit "backlog-roadmap-framework-v1.232.0 (tag; witnessed by git, not asserted)" ;
+    backlog:decidedBy backlog:Owner ; backlog:belongsToLineage ex:TF_Lin ;
+    backlog:hasRationale "Second trial. reductionObserved 0.5 as computed by the order check on 20bcfeb from the register (admitted / named for Bypass_TF_Lin_20260907)." .
+ex:TF_R_Mission backlog:outputRetracted true . ex:TF_R_Scope backlog:outputRetracted true . ex:TF_R_Goal backlog:outputRetracted true .
+ex:TF_R_Objective backlog:outputRetracted true . ex:TF_R_Backlog backlog:outputRetracted true .
+ex:TF_S2 backlog:preLineageItem true .
+ex:TF_T_S2 backlog:preLineageItem true .
+ex:Restart2_TV a backlog:LineageRestart ; backlog:restartsLineage ex:TV_Lin ; backlog:answersBypass ex:Bypass_TV_Lin_20260908 ;
+    backlog:hasRecoveryStrategy backlog:Strat_VariableDecrease ; backlog:reductionObserved 1.0 ;
+    backlog:retractsOutput ex:TV_R_Mission , ex:TV_R_Scope , ex:TV_R_Goal , ex:TV_R_Objective , ex:TV_R_Backlog ;
+    backlog:restartedAtCommit "backlog-roadmap-framework-v1.232.0 (tag; witnessed by git, not asserted)" ;
+    backlog:decidedBy backlog:Owner ; backlog:belongsToLineage ex:TV_Lin ;
+    backlog:hasRationale "Second trial. reductionObserved 1.0 as computed by the order check on 20bcfeb from the register (admitted / named for Bypass_TV_Lin_20260907)." .
+ex:TV_R_Mission backlog:outputRetracted true . ex:TV_R_Scope backlog:outputRetracted true . ex:TV_R_Goal backlog:outputRetracted true .
+ex:TV_R_Objective backlog:outputRetracted true . ex:TV_R_Backlog backlog:outputRetracted true .
+ex:TV_S2 backlog:preLineageItem true .
+ex:TV_T_S2 backlog:preLineageItem true .
+
+#################################################################
+#  v1.12.0 (2026-09-07, brsf-session) -- SECOND REBUILD (toys F and V), STAGE 1 OF 5:
+#  Mission, toys F and V (independent lineages sharing one commit; each
+#  toy's own order is what the witness measures). Follows ebe3b79.
+#################################################################
+ex:TF_R2_Mission a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Mission ; backlog:belongsToLineage ex:TF_Lin ;
+    backlog:hasStateDigest "a979c67e121a0e9375d44d2b094b91e8e4a4d2459ecd0f8b2981ec94b0df3462" ; backlog:closedAtCommit "backlog-roadmap-framework-v1.233.0 (tag; witnessed by git, not asserted)" .
+ex:TV_R2_Mission a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Mission ; backlog:belongsToLineage ex:TV_Lin ;
+    backlog:hasStateDigest "a979c67e121a0e9375d44d2b094b91e8e4a4d2459ecd0f8b2981ec94b0df3462" ; backlog:closedAtCommit "backlog-roadmap-framework-v1.233.0 (tag; witnessed by git, not asserted)" .
+
+#################################################################
+#  v1.13.0 (2026-09-07, brsf-session) -- SECOND REBUILD (toys F and V), STAGE 2 OF 5:
+#  Scope, toys F and V (independent lineages sharing one commit; each
+#  toy's own order is what the witness measures). Follows e097e5c.
+#################################################################
+ex:TF_R2_Scope a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Scope ; backlog:belongsToLineage ex:TF_Lin ; backlog:consumesOutput ex:TF_R2_Mission ;
+    backlog:hasStateDigest "00442de09fcbeb488a6e2fcebac3dddb4fb976651ff0f14cd8965a33a375b133" ; backlog:closedAtCommit "backlog-roadmap-framework-v1.234.0 (tag; witnessed by git, not asserted)" .
+ex:TV_R2_Scope a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Scope ; backlog:belongsToLineage ex:TV_Lin ; backlog:consumesOutput ex:TV_R2_Mission ;
+    backlog:hasStateDigest "00442de09fcbeb488a6e2fcebac3dddb4fb976651ff0f14cd8965a33a375b133" ; backlog:closedAtCommit "backlog-roadmap-framework-v1.234.0 (tag; witnessed by git, not asserted)" .
+
+#################################################################
+#  v1.14.0 (2026-09-07, brsf-session) -- SECOND REBUILD (toys F and V), STAGE 3 OF 5:
+#  Goal, toys F and V (independent lineages sharing one commit; each
+#  toy's own order is what the witness measures). Follows fc596ab.
+#################################################################
+ex:TF_R2_Goal a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Goal ; backlog:belongsToLineage ex:TF_Lin ; backlog:consumesOutput ex:TF_R2_Scope ;
+    backlog:hasStateDigest "ceb5050aaa2a83836c91982cd01544c6e57f7a54d1b4f8ac6a6d805edd146297" ; backlog:closedAtCommit "backlog-roadmap-framework-v1.235.0 (tag; witnessed by git, not asserted)" .
+ex:TV_R2_Goal a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Goal ; backlog:belongsToLineage ex:TV_Lin ; backlog:consumesOutput ex:TV_R2_Scope ;
+    backlog:hasStateDigest "ceb5050aaa2a83836c91982cd01544c6e57f7a54d1b4f8ac6a6d805edd146297" ; backlog:closedAtCommit "backlog-roadmap-framework-v1.235.0 (tag; witnessed by git, not asserted)" .
+
+#################################################################
+#  v1.15.0 (2026-09-07, brsf-session) -- SECOND REBUILD (toys F and V), STAGE 4 OF 5:
+#  Objective, toys F and V (independent lineages sharing one commit; each
+#  toy's own order is what the witness measures). Follows 844dd20.
+#################################################################
+ex:TF_R2_Objective a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Objective ; backlog:belongsToLineage ex:TF_Lin ; backlog:consumesOutput ex:TF_R2_Goal ;
+    backlog:hasStateDigest "9e4d7ca9c506daaf16e581e222cac974b99390c2cab332c13fdd6fed2c35b147" ; backlog:closedAtCommit "backlog-roadmap-framework-v1.236.0 (tag; witnessed by git, not asserted)" .
+ex:TV_R2_Objective a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Objective ; backlog:belongsToLineage ex:TV_Lin ; backlog:consumesOutput ex:TV_R2_Goal ;
+    backlog:hasStateDigest "9e4d7ca9c506daaf16e581e222cac974b99390c2cab332c13fdd6fed2c35b147" ; backlog:closedAtCommit "backlog-roadmap-framework-v1.236.0 (tag; witnessed by git, not asserted)" .
+
+#################################################################
+#  v1.16.0 (2026-09-07, brsf-session) -- SECOND REBUILD (toys F and V), STAGE 5 OF 5:
+#  Backlog, toys F and V (independent lineages sharing one commit; each
+#  toy's own order is what the witness measures). Follows b84c36c.
+#################################################################
+ex:TF_R2_Backlog a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage ex:TF_Lin ; backlog:consumesOutput ex:TF_R2_Objective ;
+    backlog:hasStateDigest "91a67d3ce7672b1b4d12162edc2d5205aa64d6858f58757b32ae2f43468f02a4" ; backlog:closedAtCommit "backlog-roadmap-framework-v1.237.0 (tag; witnessed by git, not asserted)" .
+ex:TF_S_PL backlog:admittedByOutput ex:TF_R2_Backlog .
+# toy F: TF_EP deliberately NOT admitted by this first rebuild (decrease-by-factor exercise; see rationale on Restart_TF)
+ex:TV_R2_Backlog a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage ex:TV_Lin ; backlog:consumesOutput ex:TV_R2_Objective ;
+    backlog:hasStateDigest "91a67d3ce7672b1b4d12162edc2d5205aa64d6858f58757b32ae2f43468f02a4" ; backlog:closedAtCommit "backlog-roadmap-framework-v1.237.0 (tag; witnessed by git, not asserted)" .
+ex:TV_S_PL backlog:admittedByOutput ex:TV_R2_Backlog .
+ex:TV_EP backlog:admittedByOutput ex:TV_R2_Backlog .
+
+#################################################################
+#  v1.17.0 (2026-09-09, brsf-session) -- CORRECTION, FOUND BY THE
+#  FINAL READING. The v1.16.0 Backlog outputs were meant to admit all
+#  four items of each toy; the generator that wrote them was edited
+#  wrongly and kept the FIRST trial's admission list (TF: S_PL only;
+#  TV: S_PL and EP). The order check said so plainly on 53ced80:
+#  "reductionObserved for a next restart of TF_Lin: 0/1 = 0.000" --
+#  TF_S2, the very item the second bypass named, was not admitted; the
+#  changelog of v1.237.0 claimed 4/4 and was wrong. Corrected here as
+#  a dated append: the remaining items are admitted by the same
+#  second-rebuild Backlog outputs, one commit later than those
+#  outputs, and the record says so. Nothing is re-dated.
+#################################################################
+ex:TF_EP backlog:admittedByOutput ex:TF_R2_Backlog .
+ex:TF_S2 backlog:admittedByOutput ex:TF_R2_Backlog .
+ex:TF_T_S2 backlog:admittedByOutput ex:TF_R2_Backlog .
+ex:TV_S2 backlog:admittedByOutput ex:TV_R2_Backlog .
+ex:TV_T_S2 backlog:admittedByOutput ex:TV_R2_Backlog .
+
+# v1.18.0 (2026-09-09): every toy lineage states its status (TBox v1.89.0). All five chains are closed
+# and no toy item has left Proposed: LS_Backlogged. The exercise is complete (G85); these lineages are
+# not achieved (their missions are invented and were never closed) and so are not archival candidates.
+ex:TF_Lin backlog:hasLineageStatus backlog:LS_Backlogged .
+ex:TV_Lin backlog:hasLineageStatus backlog:LS_Backlogged .
+ex:TS_Lin backlog:hasLineageStatus backlog:LS_Backlogged .
+ex:TR_Lin backlog:hasLineageStatus backlog:LS_Backlogged .
+ex:TT_Lin backlog:hasLineageStatus backlog:LS_Backlogged .
+
+#################################################################
+#  v1.19.0 (2026-09-22, brsf-session) -- a real, previously-unnoticed drift found while tracing
+#  a silent gate failure: TF_It2/TV_It2's own iterationEnd (2026-09-21T15:00:00Z) is a fixed
+#  date that had simply aged into the past since this file was last touched (2026-09-08),
+#  naturally triggering the L4 closed-iteration-still-open check via its own real NOW()
+#  comparison -- not a logic bug, not something anyone broke, just a fixed-date teaching
+#  fixture outliving its own hardcoded horizon. Extended both to 2030-01-01, honestly (the
+#  narrative never actually completed TF_S2/TV_S2, so marking them Done would misrepresent
+#  it) rather than fabricating a false completion. Worth remembering: any fixed-date fixture
+#  in this package can drift the same way, silently, until something checks it against NOW().
+
+# Lineage 18: this file moved to the fixtures folder, which requires a declared polarity (the one statement added by the move).
+<http://example.org/backlog-strategy-exercise> backlog:hasExpectedPolarity backlog:Polarity_Positive .

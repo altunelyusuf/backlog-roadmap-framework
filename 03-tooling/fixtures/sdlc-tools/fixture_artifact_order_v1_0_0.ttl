@@ -1,0 +1,11 @@
+@prefix backlog: <http://example.org/backlog#> .
+@prefix fx: <http://example.org/fixture-artifact-order#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+fx:Lin a backlog:Lineage ; backlog:adoptsObligationSet fx:Set ; backlog:adoptionRecordedAtOpen true .
+fx:Set a backlog:ObligationSet .
+fx:Stage a backlog:Stage .
+fx:Ob a backlog:StageObligation ; backlog:obligationOfStage fx:Stage ; backlog:owesClass backlog:DomainEntity ;
+    backlog:obligationSeverity backlog:Oblig_Required ; backlog:inObligationSet fx:Set .
+fx:Out a backlog:StageOutput ; backlog:outputOfStage fx:Stage ; backlog:belongsToLineage fx:Lin .
+fx:Art a backlog:DomainEntity ; backlog:belongsToLineage fx:Lin .

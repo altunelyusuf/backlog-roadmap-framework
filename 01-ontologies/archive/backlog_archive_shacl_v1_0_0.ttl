@@ -1,0 +1,23 @@
+@prefix backlog: <http://example.org/backlog#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://example.org/backlog-archive> a owl:Ontology ;
+    owl:versionIRI <http://example.org/backlog-archive/1.0.0> ; owl:versionInfo "1.0.0" ;
+    rdfs:label "backlog archive SHACL: what a retired record must still hold"@en .
+
+backlog:ArchivedItemLineageShape a sh:NodeShape ;
+    rdfs:label "an archived item names a lineage that is in the archive"@en ;
+    sh:targetSubjectsOf backlog:belongsToLineage ;
+    sh:sparql [ a sh:SPARQLConstraint ; sh:severity sh:Violation ;
+        sh:message "this archived item belongs to a lineage the archive does not hold, so retirement lost its owner" ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE { $this backlog:belongsToLineage ?l . FILTER NOT EXISTS { ?l a backlog:Lineage } }""" ] .
+
+backlog:ArchivedLineageMarkedShape a sh:NodeShape ;
+    rdfs:label "an archived lineage is marked archived"@en ;
+    sh:targetClass backlog:Lineage ;
+    sh:property [ sh:path backlog:lineageArchived ; sh:hasValue true ; sh:severity sh:Warning ;
+        sh:message "a lineage held in the archive is not marked archived, so a tool cannot tell it is retired (a warning, not a violation: two lineages set down earlier are still unmarked in this file, and Lineage 18 changes no statement; the live register already marks them archived)" ] .

@@ -1,0 +1,2380 @@
+# Backlog & Roadmap Semantic Framework — Standard v1.116.0
+
+**Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
+**Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
+**Governed by:** OE Operating Discipline v2.2.0
+
+*This document states the subject's version, which is what it describes. It deliberately pins
+neither the distribution package's version nor the OE Pack release it was last verified against:
+both move independently of the vocabulary and would go stale here by construction. For the package
+version see `VERSION.txt`; for every measured figure see `RELEASE_METRICS.txt`, which is generated
+and regenerable (L-91: prose points at the authoritative field rather than restating it).*
+**Primary source:** `BACKLOG_ROADMAP_STANDARD_v1_0_0.md` (adopted 2026-07-27), SHA-256 `a58a6c89…`
+**Coverage against that source: 36/36 concepts = 100%** (BP-D31 gate, threshold 80%)
+
+---
+
+## 1. What this standardises
+
+Every development that ships anything maintains four claims: what we intend to build, where each
+piece stands, what proves the finished ones are finished, and what to do next. In prose those
+claims drift apart within weeks. This framework makes them machine-checkable, project-independently,
+so a second development adopts the same discipline without re-deriving it.
+
+Ten commitments carry the design. The first five are structural, the second five govern the
+methodology around the register.
+
+1. **Three layers stay distinct.** A *blueprint* models what the domain is; a *backlog* registers
+   scoped work against it; a *roadmap* is the computed view of that backlog. A roadmap document
+   decays the moment the register moves — the fix is structural, not a reminder to update it.
+2. **Done is a constrained fact.** At conformance level L2 and above an item cannot hold `Done`
+   without Evidence whose `evidenceVerified` flag was set true by a bridge that checked the real
+   workspace. The ontology cannot read a filesystem, so that fact must come from outside the graph.
+3. **Roll-ups are derived.** Container and milestone states come from members and contributors by
+   rule; an asserted state disagreeing with the derived one is a violation.
+4. **The roadmap projects the backlog.** An item on a horizon or against a milestone must exist in
+   a register. The roadmap cannot introduce scope.
+5. **Priority carries its method.** Scores are reified individuals naming their method and the
+   moment they were computed.
+6. **Two prioritisation models, never conflated.** Throughput ranking answers what the best next
+   increment of capacity is; launch readiness answers what must be complete before first
+   deployment and is an owner declaration, never computed. Rule R3 keeps them apart and prints
+   both answers, so a disagreement is displayed rather than silently resolved.
+7. **Gap discipline is binary.** Every open item is either scored or explicitly flagged
+   not-yet-scoreable with a written reason. An item that is neither is a *silent gap* — a defect
+   in the register, driven to zero by tooling rather than by judgement in conversation.
+8. **A dependency said out loud is an edge.** A dependency stated in prose or in a cost-benefit
+   judgement must exist as `dependsOn`; an undisclosed-but-real dependency is worse than no
+   dependency modelling at all, because the register looks resolved.
+9. **Completion is not deployability.** A container whose members are all Done but which has an
+   unresolved external blocker is not ready; completeness is one input to job size, not a
+   substitute for checking real dependency edges.
+10. **A rule keeps its incident.** Every methodology rule records the disagreement it closes, its
+    exact logic, and the concrete failure that produced it. A rule stripped of its incident is a
+    convention nobody can argue with or retire.
+
+---
+
+## 2. Concept dictionary
+
+### 2.1 Blueprint layer
+
+| Term | Meaning |
+|---|---|
+| `Blueprint` | The domain model a backlog is scoped against (`blueprintFor` one `Backlog`) |
+| `DomainEntity` | A first-class thing the product is about |
+| `EntityLifecycleStage` | Closed set: `Stage_Creation`, `Stage_ActiveUse`, `Stage_SuspensionException`, `Stage_Termination` |
+| `ComplianceObligation` | A duty the domain imposes independently of any feature request |
+| `BlueprintGap` | An explicitly recorded absence of coverage — a defect, not a silence |
+| `CapabilityClass` | A first-class business concern (e.g. business continuity), owned rather than scattered |
+| `EnforcementDomain` | How a capability's correctness is enforced; the scheme belongs to the adopter |
+| `coversEntity` / `coversStage` / `coversObligation` | What a work item covers |
+| `verifiedAgainstCode` + `hasCodeVerificationNote` | The coverage claim was checked against running code, and what that found |
+
+The stage name is `EntityLifecycleStage`, deliberately not `LifecycleStage`, so it cannot be
+confused with `LifecycleState` — the delivery state of a work item. The two are unrelated.
+
+### 2.2 Work items, containers, lifecycle
+
+| Term | Meaning |
+|---|---|
+| `WorkItem` + 8 disjoint kinds | Initiative, Epic, Feature, Story, Task, Defect, Spike, Enabler |
+| `Backlog`, `Package`, `Increment`, `Iteration` | Containers; state derived from members |
+| `LifecycleState` | Closed set: `Proposed`, `Refined`, `Ready`, `InProgress`, `Done`, `Cancelled` |
+| `hasState` (functional), `derivedState`, `derivedMilestoneState` | Asserted and computed states |
+| `hasIdentifier`, `hasTitle`, `hasRationale` | Identity, summary, and the reason for withdrawal |
+
+### 2.3 Evidence and Definition of Done
+
+| Term | Meaning |
+|---|---|
+| `Evidence` ⊂ `core:Artifact` | `TestEvidence`, `ReleaseEvidence`, `ArtifactEvidence`, `ReviewEvidence` |
+| `evidenceVerified`, `verifiedAt`, `hasVerificationMethod` | The bridge's world-check, its time and its method |
+| `DefinitionOfDone`, `DoDCriterion` | Each clause carries `hasCheckQuery`, `hasExpectedResult`, `hasCriterionStatus` |
+| `AcceptanceCriterion` | Per-item Given/When/Then held on the item |
+
+The shipped baseline Definition of Done has six executable criteria: evidence exists, evidence is
+verified, acceptance criteria are present, no Done item depends on unfinished work, no open item is
+a silent gap, and every launch gate is an owner decision with a rationale.
+
+### 2.4 Prioritisation and the two models
+
+| Term | Meaning |
+|---|---|
+| `PrioritizationMethod` (open) | Six shipped: WSJF, RICE, RICE+DepFactor, MoSCoW, Cost of Delay, Value/Effort |
+| `PriorityScore`, `WSJFScore`, `RICEScore` | Reified scores retaining their components |
+| `isAveragedFromMembers` | Rejected on container scores — averaging re-uses numbers computed for unrelated reasons |
+| `rankedOnRoadmap`, `hasRoadmapRank` | Placement and order on a roadmap, for **work items and containers alike** — an epic may be ranked, not only a package. Ranks are **unique per roadmap**: a rank that does not order is not a rank. Contrast the launch model below; the difference is that launch priority orders gates that must *all* clear, while a roadmap rank answers *what next*, and a tie there leaves unanswered the question the rank exists to answer |
+| **NEXT ties** | When startable items share the top score, NEXT names one **and prints the whole tied set**. The order is a total one — score, then `hasJobSize` ascending, then identifier — so the same register always yields the same answer; the tie itself is **not resolved**, because equal value per cost is a real answer and promoting one item by its sort position would present an accident of ordering as a decision. The same convention as R3, which prints both models' answers and resolves neither |
+| **two rank rules, different defaults** | `WorkItemRoadmapRankShape` (targets `WorkItem`) never objects to an item having **no** rank — a rank answers "what next", and an unanswered question is not itself a defect at item level. The roadmap-placement clause in `ContainerLinkageShape` (targets `WorkItemContainer`) **requires** a rank on any launch-gated container at L2. Same vocabulary, opposite default for absence, and the two shapes sit about a thousand lines apart. An adopting session read the first, applied it to eight launch-gated containers, and left eight real violations standing for a full register pass. Each shape now carries an `rdfs:comment` pointing at the other |
+| `isLaunchGate`, `hasLaunchPriority` | The owner-declared launch model. Priorities may **tie**: co-equal mandatory preconditions are real, and every gate tied at the lowest open priority is unioned into the launch-scoped scope rather than one being chosen. Unlike `hasRoadmapRank`, ties are deliberately not forbidden — forcing an owner to invent a sequence that does not exist is the fabrication the framework refuses elsewhere |
+| `Role` (`Owner`, `Builder`), `decidedBy`, `hasDecisionRationale` | Who may decide what, and why they decided it |
+| `RankingModel` (`ThroughputRanking`, `LaunchScopedRanking`) | Which question a ranking answers |
+| `hasRankingForkResolution` | The model an owner has decided governs pickup when the two disagree, recorded once with `decidedBy` and `hasDecisionRationale`. Printed **beside** the disagreement, never instead of it; absent is the default and means the fork keeps asking |
+| `notYetScoreable`, `hasScoreabilityReason` | The honest alternative to a fabricated number |
+| `isBusinessCapability` | False marks a real but non-shippable grouping, excluded from capability ranking |
+| `DependencyDisclosure`, `hasExternalBlocker` | Prose dependencies made into edges; completion versus deployability |
+
+### 2.5 Roadmap, reports, documents
+
+| Term | Meaning |
+|---|---|
+| `Roadmap`, `RoadmapHorizon` (`Now`/`Next`/`Later`), `Milestone` | The projection and its bands |
+| `RoadmapReport`, `ReportSection`, `hasRunTimestamp` | A report is a run, not a document |
+| `ClosureReport` — `closesForMission`, `reportGeneratedAt`, `hasClosureSummary`, `reportsOnObjective`, `citesFinding`, `statesBestPractice` | The opposite case from `RoadmapReport`: a closure is a permanent, one-time record written once at the moment the underlying data is still live to check it against, not an event to re-run. Required to exist before a `Mission` may be marked `Out_Achieved` (`MissionClosureRequiresReportShape`) — a mission closed with no report is a decision nobody can later audit |
+| `derivedInReport`, `underRankingModel` | A recommendation points at the run and model that produced it |
+| `GovernedDocument`, `DocumentStatus` (`Live`/`Superseded`), `supersededBy`, `hasSupersessionReason` | Retirement marked in place, never deleted |
+
+The eight mandatory report sections: NEXT under throughput, NEXT under launch scope, full ranked
+backlog, flagged items, silent-gap check (must read zero), launch readiness by package, package
+level multi-factor ranking, and the orphan/coverage check.
+
+### 2.5b Linkage between concepts (v1.3.0)
+
+| Term | Meaning |
+|---|---|
+| `containerDependsOn` / `derivedContainerDependency` | Declared package-to-package dependency, and the one computed from member edges; a disagreement between them is reported |
+| `rankedOnRoadmap`, `hasRoadmapRank` | A container's place and declared order on a roadmap; ranks are unique, launch gates must be placed |
+| `attestsCriterion` | The acceptance criterion a piece of evidence proves |
+| `TestHarness`, `harnessComplete` | The checks proving one item; completeness is derived when every criterion is attested by verified evidence |
+| `effectiveDefinitionOfDone` | The DoD governing an item, derived from the item or an owning container |
+| `Workflow`, `StateTransition`, `TransitionEvent` | Which moves between lifecycle states are permitted, under what guard, and which moves actually happened |
+
+### 2.5c Intent chain, scope boundary and external parties (v1.6.0)
+
+| Term | Meaning |
+|---|---|
+| `Mission` | Why the development exists; owner-declared root of the intent chain |
+| `contributesToMission` | Goal → mission; goals must in turn carry measurable objectives |
+| `fillsScope` | **Objective → scope.** The link a scope-first lineage uses: an objective cannot name a boundary that does not yet exist, so asserting it is only possible where the scope was fixed first. Direction records the order — no date needed |
+| `scopeRealizesObjective` | **Scope → objective.** The reverse, and the record of a lineage whose boundary was drawn around objectives already decided. Kept, because which link a lineage uses *is* the fact worth recording; asserting both records no order at all and is rejected |
+| `scopeCompletionState` / `scopeOutcome` | Derived: is the scoped work finished, and did it work — computed separately, in that order |
+| `ScopeChange` | Owner-decided, rationale-bearing admission of work into a set scope |
+| `ChangeRequest` — `requestsChangeTo`, `hasChangeDirection`, `hasChangeRequestRationale`, `hasDisposition` | A real, typed request to grow or shrink a scope, existing before any decision is made about it — distinct from `ScopeChange`, which only ever records a decision already made |
+| `ImpactAssessment` — `analyzesRequest`, `hasImpactStatement`, `identifiesAffectedLineage` | A dedicated assessment produced before a `ChangeRequest`'s disposition may move past `Disp_Pending`, explicitly covering risk to other, concurrently active lineages |
+| `ChangeDisposition` (`Disp_Pending`/`Accepted`/`Rejected`/`Deferred`), `ChangeDirection` (`Direction_Grow`/`Shrink`) | The real, three-way outcome a change actually has, plus the waiting state before any decision, and whether the change widens or narrows the boundary — no direction is privileged |
+| `BaselineReference` — `baselineForTool`, `hasBaselineLocation`, `hasBaselineRationale` | Configuration as a real, checkable fact rather than a hardcoded path in a script's own source. A tool queries this instead of assuming where its own comparison baseline lives |
+| `ToolRunRecord` — `ranTool`, `usedBaselineHash`, `comparedAgainstHash`, `runConcludedDistinctBaseline` | A self-check tool's own claim, written back as real data so a shape can independently re-check it — proof a tool's comparison genuinely happened, not proof its internal logic is correct, which no ontology can reach |
+| `ShapeSnapshot` (`Snapshot_Current`/`Snapshot_Baseline`), `declaredInSnapshot` | Which real file a shape declaration was found in, asserted by a loader that makes no decision itself — `NewUnprovenShapeShape` reads this data and decides, entirely in SPARQL, whether a shape is genuinely new and unproven |
+| `RemoteCommit` — `touchesPath`, plus `hasSovereignPathPrefix` on `fw:Register` | Whether a remote commit needs real reconciliation, decided declaratively (`STRSTARTS`) by whether any touched path falls under this package's own declared prefix — a loader only records what changed, never judges whether it matters |
+| `ExternalDependency` + `ExternalDependencyType` | Something outside the development, over six types: vendor, upstream component, peer team, regulatory, infrastructure, customer |
+| `requiresExternalEnhancement` | This item needs an external party to change something — triggers the proposal rule |
+| `EnhancementProposal` + `ProposalStatus` | The request to that party; never a work item, never scheduled here |
+| `RegisterSession` | Provenance of register edits: verified before changing, and what was left alone |
+
+### 2.5c-i Intent, scope, refinement, cost and investment mix (subject v1.2.0)
+
+**Build order: `Mission` → `ScopeStatement` with its exclusions → `Goal` → `Objective`.** Scope
+precedes goals and objectives rather than summarising them. Written last, a boundary is drawn around
+objectives already fixed, so every objective is inside it by construction and it can never refuse
+anything — the step reads like a check while being structurally incapable of failing.
+
+The layer that explains *why* a register looks the way it does. Without it a backlog can be
+delivered in full and deliver nothing.
+
+| Term | Meaning |
+|---|---|
+| `Goal` | A durable outcome the product exists to achieve; owner-decided, measured through its objectives |
+| `Objective` | A measurable, time-bounded target advancing a goal — metric, baseline, target, deadline. An objective without a metric cannot be missed |
+| `Benefit` | A specific improvement expected from completing work, owned by a `core:Stakeholder`; a realisation claim needs verified evidence, exactly like a Done claim |
+| `Opportunity` | Identified upside not yet committed as work, converted into an item explicitly when someone decides to pursue it |
+| `FailureMode` / `SuccessMode` | A named, reusable pattern by which real progress can go wrong or be confirmed, checkable structurally rather than asserted — a `RetrospectiveFinding` may be typed against one via `hasFailureMode`/`hasSuccessMode`. Membership is earned by a real check that can detect the pattern from data, not by a name alone |
+| `ScopeStatement` / `ScopeExclusion` | The declared boundary and the owner-decided things deliberately outside it, each with a rationale |
+| `RefinementEvent` | The dated act that makes an item Ready — readiness is done to an item, not drifted into |
+| `EstimationBasisKind` — `hasBasisKind`, `basisObservation`, `analogousTo` | Whether an estimate or score was **Measured**, **Analogous** or **Judged**. `hasCostBasis` records *what* a figure rested on; this records whether that basis was **run**. A Measured claim must name the `MetricObservation` that produced it, an Analogous one the completed item it was drawn from. Judgement is legitimate and is the majority case — what is refused is a judgement being indistinguishable from a measurement. An advisory fires where measuring pays best: a judged estimate on an item inside a launch gate |
+| `CostEstimate` | Unit-neutral estimate carrying its basis and confidence; a naked number fails |
+| `InvestmentCategory` | New capability / maintenance / technical debt / compliance — because a score cannot arbitrate between categories that answer to different arguments |
+| `ProductLifecyclePhase` | Pre-launch / live / sunsetting; the phase decides which prioritisation question governs |
+| `PortfolioPolicy` + `CapacityAllocation` | Declared capacity shares that must sum to one, so no capacity is allocated by default |
+| `ImplementationProject` | The funded, bounded effort the project-level Definition of Done applies to |
+
+Three structural umbrellas hold the vocabulary together: `BacklogConcept` (everything this subject
+introduces, under `core:Concept`), `WorkItemContainer` (any grouping whose state is derived from its
+members), and `RoadmapElement` (everything in the time-facing projection).
+
+### 2.5c-ii Two lineages: development and operational (worked example)
+
+Raised by an adopting project that carried six goals without an objective for weeks, each with a
+locally-reasonable rationale of the form *"no real number exists to set a target against yet"*.
+
+**The failure is undecidability, not inconvenience.** A lineage whose objectives require real
+operational data cannot be decided during development, because the deciding fact cannot exist until
+the development it would govern has shipped and been used. The register is not merely awkward to
+fill in; it is unclosable by construction, and an unclosable register stops being consulted.
+
+**The resolution is two lineages, not one deferred claim.** They run in parallel, each complete in
+its own terms, and the framework expresses both today — nothing limits a register to one `Mission`,
+and none of `contributesToMission`, `contributesToGoal` or `pursuesObjective` is functional.
+
+| | root | objectives measure | satisfied by | closable |
+|---|---|---|---|---|
+| **Development lineage** | the development's own mission — *why this is being built* | that the development did what it set out to do | test data driven through the real system, automated test suites, a count computed over the register's own structure | **before** launch |
+| **Operational lineage** | the operational mission — *what the running product must achieve* | the business consequence | real measurement of real usage | **after** real usage exists |
+
+**The bridge, which is the load-bearing part.** Where the operational lineage names a measure that
+does not yet exist, that measure becomes a **development objective**: build the instrument, test it,
+and return its results. The development lineage's own objectives therefore include *"the operational
+measure exists, is wired to the real path, and has been exercised"* — and satisfying them is
+precisely what makes the operational lineage satisfiable later. The operational lineage is not
+parked; it is being *constructed* by the development lineage, one measure at a time.
+
+This is the same shape the framework already uses for `CrossCuttingInvariant`: a check declared with
+`hasCheckQuery`, reported `NotYetEnforceable`, and `tracksItem` naming the work that would make it
+runnable. An operational objective awaiting its instrument is that pattern applied to measurement
+rather than to enforcement.
+
+**Where the development lineage gets its facts.** Test data driven through the **real** creation path
+— with authorisation, validation and audit engaged rather than bypassed — produces real facts about
+the real system even though its input is synthetic. That is the empirical standard any test already
+relies on, applied to volume and behaviour instead of correctness alone.
+
+**`Benefit` remains the place for the business claim itself**, attached via `benefitFor` with
+`benefitRealized` left `false` until verified `Evidence` of real usage arrives. Recording a business
+figure that does not exist yet as an `Objective` baseline is fabrication; recording it as an
+unrealised `Benefit`, with a development objective building the instrument that will eventually
+measure it, is a plan.
+
+**The line, and an honest note about it.** A synthetic measurement may satisfy a development
+objective. It must never satisfy a `Benefit`'s `benefitRealized`, which is gated on real usage by
+definition. **The framework cannot currently enforce that line** — `Evidence` carries a verification
+method and a tool but nothing distinguishing synthetic input from real, so a suite handed a load-test
+artifact as benefit-realisation evidence will not object. It is a discipline the adopter keeps, not a
+constraint the suite applies, and it is said here rather than left to be discovered.
+
+### 2.5c-iii Product backlog items versus execution tasks (subject v1.13.0)
+
+| Term | Meaning |
+|---|---|
+| `ProductBacklogItem` | Work carrying value in its own right, ordered against other work. All eight original kinds are these — **including `Task`**, whose definition has always said it must be *tracked, prioritised and evidenced like any other work item*. `Task` is non-user-facing product work, **not** a sprint task, and was deliberately not repurposed |
+| `ExecutionTask` | A step produced by planning a backlog item into an iteration. Subordinate by construction: **not scored, not ranked**, existing only as part of its parent. Scoring it would double-count the parent's value — the error the framework already refuses for decomposed parents and children |
+| `PlanningEvent` — `plansItem`, `plannedInto`, `producesTask`, `plannedAt`, `plannedBy` | The dated act of taking an item into an iteration and breaking it into tasks. The boundary between ordering work and doing it |
+
+An `ExecutionTask` is **excluded from eight product-backlog constraints** — scoreability, silent-gap,
+objective traceability, investment category, acceptance criteria on leaving Proposed. Without that
+exclusion the suite is jointly unsatisfiable for any task: one constraint forbids a score, another
+requires one. A backlog item may not be `Done` while a task planned from it is still open.
+
+### 2.5c-iv Flow, velocity and forecast (subject v1.14.0)
+
+**Almost nothing here is stored.** Cycle time, item age, throughput and velocity are **computed by
+the report** from `startedAt`, `finishedAt` and the iteration period. Recording them as triples would
+duplicate a derivable fact, which could then disagree with its own inputs — the defect L-91 names,
+one level down.
+
+Only two things could not be derived:
+
+| Term | Why it must be stored |
+|---|---|
+| `iterationStart`, `iterationEnd` | Velocity is work completed **per iteration**; without a period there is no denominator and the measure cannot exist |
+| `Forecast` — `forecastFor`, `forecastMadeAt`, `forecastCompletion`, `forecastAssumption`, `forecastObservedVelocity`, `forecastIterationsObserved` | A forecast is a **claim about the future**. At least one assumption is required: a forecast presented without them asks to be believed rather than checked, and when it misses there is nothing to point at as the thing that failed. The velocity and the iteration count are required so the arithmetic is checkable and so a forecast built on one iteration is distinguishable from one built on a settled average |
+
+The report prints remaining-work arithmetic and says explicitly that **it is arithmetic, not a
+`Forecast`** — the projection is free, the claim carries obligations. An advisory fires when a
+forecast's date passes with work still open.
+
+### 2.5c-v Lineage completeness — why absence needs its own check
+
+**`sh:targetClass` cannot see absence.** A shape guarding `ScopeStatement` has no target in a
+register containing zero of them, so the constraints written to govern a layer are exactly the ones
+that go silent when the layer is omitted entirely. This is a structural property of SHACL, not a gap
+in any particular suite.
+
+The consequence is not hypothetical. This framework's own development register declared **L2**,
+reported **zero violations**, and contained no scope, no exclusions, no Definition of Done, no
+decomposition and nothing below epic level. It was called a lineage; it was four epics and a sentence
+each. The same pattern was reported independently in parallel sessions.
+
+**`LineageCompletenessShape` targets the register itself** — the one node guaranteed to exist — and at
+L2 refuses a register with no `Mission`, no `Objective`, no `ScopeStatement`, or no
+`DefinitionOfDone`. At L3 it refuses scored `Epic`s that decompose into nothing: an epic is by
+definition delivered across multiple features or stories, so one with no children is an estimate with
+no plan behind it. Advisories cover thinness rather than absence — epics with no work beneath them, a
+scope statement with no exclusion.
+
+**`backlog_lineage_completeness_v1_1_0.py`** complements the shape rather than duplicating it: it
+reports at **any** level, names every absent layer, and states what each omission costs — so a
+register can be improved before it is failed. It runs inside the release gate.
+
+The division is deliberate. The shape is the gate; the reporter is the map. A register climbing
+toward a level needs to see the gap before the gap fails it.
+
+### 2.5c-v The plan alongside the roadmap (subject v1.15.0)
+
+A **roadmap orders**; a **plan dates**. They now coexist and are deliberately different artifacts —
+horizons stay ordinal, `hasRoadmapRank` stays an ordering, and neither acquired a date.
+
+| Term | Purpose |
+|---|---|
+| `KickOff` — `kickedOffAt`, `hasKickOffMode` / `KickOffMode` (`Declared`/`Triggered`), `hasKickOffTrigger` | Day zero. A baseline of dates anchors to nothing without it. A declared kick-off must name who; a triggered one must name the trigger, so a start that was *claimed* is distinguishable from one that was *recorded* |
+| `plannedStart`, `plannedFinish` | The baseline. Kept distinct from `startedAt`/`finishedAt`: the gap between them **is** schedule variance, and collapsing them would make every plan appear met |
+| `hasDuration` | Elapsed days, **not** effort — two people for a day and one for two days share an effort and differ in duration. A critical path is the longest chain of durations |
+| `PlanBaseline` — `baselinedAt`, `isCurrentBaseline` | Moving a plan is a recorded `Rebaseline`, not an edit. Superseded baselines are **retained**, so performance stays computable against the original as well as the current — the figure a rebaselined project would rather not show |
+
+`backlog_views` derives **Gantt, burn-down, cumulative flow, network/AON and earned value** from these
+plus facts already recorded. **Nothing is stored.** Where a view needs day zero and no `KickOff`
+exists it **refuses and says so** rather than defaulting to today, which would make every plan appear
+on schedule on the day it is read.
+
+**This reverses a standing scope exclusion.** `Ex_Schedule` refused a time-phased baseline; it is
+**not deleted** — it records a decision that was true when taken. A `ScopeChange` supersedes it and
+both stay readable.
+
+### 2.5c-vi Multi-dimensional cost (subject v1.17.0)
+
+An increment worked by an automated agent under human supervision has a **token** cost *and* a
+**compute** cost *and* a **human** cost. Collapsing them into one effort figure loses the fact that
+they trade off against each other.
+
+| Term | Purpose |
+|---|---|
+| `CostDimension` — `hasDimensionUnit`, `hasDimensionRate`, `hasRateCurrency` | A named axis with its own unit. **Deliberately open**: tokens, compute, review time and assessed complexity are *instances*, not predicates. A property called `tokenCost` would privilege LLM-driven development the way a story-point property would privilege one estimation practice |
+| `DimensionalCost` — `costOfItem`, `alongDimension`, `hasQuantity`, `isEstimatedCost` | One quantity of one dimension for one item, reified so an item can carry several at once. `isEstimatedCost` keeps forecast and observed separable — a total mixing them without saying so reads as measurement |
+| `Budget` — `budgetFor`, `budgetDimension`, `hasBudgetCeiling` | Per-dimension, not per-project-total: an aggregate budget cannot say *which* thing overran, and unpriced dimensions have no aggregate to belong to |
+
+A rate is **optional**. An unpriced dimension is reported separately and contributes to no monetary
+total — a choice, not an omission, because some costs are constraints rather than bills.
+
+**Roll-up is derived, never asserted.** Recording a cost on a parent *and* its decomposition child
+along the same dimension is rejected: it double-counts, exactly as a parent and child both carrying
+priority scores would.
+
+### 2.5c-vii Human in the loop and on the loop (subject v1.18.0)
+
+A register of automated development that cannot say **where a person decided** is not auditable
+afterwards — every item looks the same.
+
+| Term | Purpose |
+|---|---|
+| `ExecutionModality` — `Human` / `Automated` / `Hybrid` | Who produced the output. `Human` work **competes for capacity**; hiding it over-commits the one resource that does not scale. `Hybrid` means a person materially changed the output, which is a different answer to *who is answerable* than automated-with-review |
+| `SupervisionMode` — `Sup_InTheLoop` / `Sup_OnTheLoop` / `Sup_None` | **A fact about gating, not attitude.** In-the-loop: the work *cannot advance* until a person acts. On-the-loop: it advances and a person may intervene. *"We review everything"* and *"nothing proceeds without review"* are different systems that sound identical in prose |
+| `HumanInteraction` — `interactsWith`, `hasInteractionKind`, `interactedAt`, `interactedBy`, `gatesTransition` | An **event**, deliberately not a work item: per the governing scope exclusion, human *interaction with* work does not compete for capacity, or every review needs a score and the backlog fills with process. Its cost rides the same dimensional machinery, so review time is **budgetable without being schedulable** |
+| `InteractionKind` — Confirm, Reject, Correct, Propose, Review, Respond | Confirm and Reject **gate**; the rest inform. A vocabulary with only *"review"* cannot distinguish a person who approved from one who merely looked |
+
+**Supervision claims are checkable, not declarative.** Claiming in-the-loop with nothing recorded as
+gating is rejected — the claim would describe an intention rather than a mechanism. Claiming no
+supervision while a person gated it is rejected. Correcting an output while claiming `Automated` is
+rejected.
+
+An **advisory** fires where gating confirmations exist and no rejection ever has: *a check never
+observed to fail has not been shown to be a check* — the same reasoning this framework applies to its
+own gates, turned on human ones.
+
+### 2.5c-viii Epics are decomposed before they are planned
+
+The type system says `Epic ⊑ ProductBacklogItem` and `plansItem` ranges on `ProductBacklogItem`, so a
+`PlanningEvent` **may be asserted** over an Epic. The **definitions** say otherwise:
+
+- an **Epic** is *"a large body of work decomposed into, or delivered across, **multiple** features or
+  stories; its completion **typically derived from the completion of its constituent work**"*
+- a **Story** is *"small enough to be **completed within one iteration**"*
+- an **Iteration** is *"a fixed-length time box"*
+
+An epic with no children committed to one time box can neither fit it nor derive a completion from
+anything. `EpicPlanningShape` rejects it at L2. **Decompose first, then plan the parts.**
+
+The gap is worth naming because a subclass relation answers *what may be asserted* and a definition
+answers *what the term means* — different questions, and reading only the first is how this
+arrangement came to be described as permitted.
+
+### 2.5c-ix A story fits its iteration; a deployment says how it chose
+
+**`StoryIterationFitShape` (L4)** — a story planned into more than one iteration, or still open after
+its iteration closed, is rejected. Each message names **splitting** as the remedy and says not to
+widen the iteration: *a box sized by what it contains always fits, and its velocity can then never
+report a miss.* Splitting needs no new relation — `decomposesInto` already reads *"a feature into
+stories"*.
+
+**`SelectionBasis` — `Sel_HighestScored` / `Sel_Dependency` / `Sel_Committed` / `Sel_Opportunistic`**,
+with `passedOver` and `hasSelectionRationale`. At L4 a `DeploymentUnit` must say on what basis its
+contents were chosen; a release grouped by theme and a release of the most valuable available work are
+otherwise indistinguishable, and only one is a prioritisation decision.
+
+**This is not a rule that a release must always take the top score.** An ordering is a model and is
+sometimes wrong, and a rule with no exception path is bypassed the first time it is. What is enforced
+is that the departure is **visible**: claim `Sel_HighestScored` while a higher-scored deliverable item
+waits, and it must be named in `passedOver` with a reason. `Sel_Opportunistic` is a legitimate answer;
+not answering is not.
+
+### 2.5c-x Adapting a lineage to scope-first, under gates
+
+`LineageAdaptation` converts one scope-last boundary, through four ordered stages —
+**Assess → Fit-gap → Ruling → Re-link** — each controlled by an `AdaptationGate` carrying an
+executable check, an expected result and an observed one. `AdaptationStage` and `AdaptationOutcome`
+are the closed sets; `FitGapFinding` names each item found outside the boundary, with a reason.
+
+| Rule | Why |
+|---|---|
+| The fit-gap gate passes on having **measured**, not on the boundary being intact | A gate that only passed when it found nothing would report its own preferred answer |
+| `Adapt_BoundaryHolds` is rejected if any finding exists | It is the outcome an inspection reaches by default — a boundary drawn around past work fits that work by construction |
+| `Adapt_BoundaryRewritten` requires a **new** `ScopeStatement` and a `ScopeChange` | The old boundary records what was believed at the time; editing it erases the reason the adaptation was needed |
+| `Stage_Relink` requires a recorded outcome | Re-linking before the ruling **is** the in-place conversion the procedure exists to prevent |
+| A gate marked passed whose observed result contradicts its expectation is rejected | Otherwise the verdict is whatever the author wanted |
+
+### 2.5c-xi Initiative kind, and the version increment that decides it
+
+`InitiativeKind` classifies the **Initiative** — portfolio granularity — never an epic or a story. An
+epic is a theme *within* an initiative and inherits its classification; an advisory fires if one
+carries a kind of its own.
+
+**Project scale — forces a MAJOR increment**
+
+| Kind | What it is |
+|---|---|
+| `Kind_InitialDevelopment` | The first build. No installed base, no compatibility to preserve — decisions are unconstrained in a way they never are again |
+| `Kind_EvolutionaryDevelopment` | A new version after an earlier one is complete. Still a project, still a major, but constrained: something exists and is in use |
+| `Kind_Migration` | Same capability, new environment or platform. A distinct ISO 14764 process |
+| `Kind_Retirement` | Withdrawal from service. Ends a version line rather than advancing it |
+
+**Maintenance scale — a MINOR or PATCH, never a major.** `VersionIncrement` carries that movement. Maintenance is classified on the ISO 14764 grid, whose axes are `MaintenanceTiming` and `MaintenanceGoal` and whose derived cell is `MaintenanceCategory`:
+
+| | **Correction** | **Enhancement** |
+|---|---|---|
+| **Reactive** | `Maint_Corrective` | `Maint_Adaptive` |
+| **Proactive** | `Maint_Preventive` | `Maint_Perfective` / `Maint_Additive` |
+
+**The version increment is the discriminator, and it is enforced.** *"Does this create new
+capability"* is a judgement; *"did this force a major"* is a fact about what shipped. So:
+
+- maintenance producing a **major** is rejected — that is evolutionary development mislabelled,
+  which is the commonest miscategorisation and happens because the work touched an existing product
+- initial or evolutionary development producing anything **less than a major** is rejected — if the
+  increment is right, the kind is wrong
+- retirement producing a versioned increment is rejected
+- at L3 an initiative must state both its kind and its increment
+
+`ModificationRequest` and `ProblemReport` are 14764's terms for what arrives and triggers maintenance;
+at L3 reactive maintenance must name one, because reactive work answers something that arrived and its
+scope has no other source.
+
+### 2.5c-xii A mission says where its words came from
+
+`MissionOrigin` — `Origin_OwnerStated` / `Origin_SessionDrafted` / `Origin_Derived` — with
+`missionSource` and `supersedesMission`.
+
+`decidedBy` records who is **accountable** for a mission. Nothing recorded who **authored** it, and
+the two diverge silently when a session drafts a statement and attributes it to the owner. That
+divergence is not hypothetical: this package's own register carried five missions marked
+`decidedBy Owner` that a session had written, each after the work it described, each narrower than
+the last.
+
+**It is the scope-first failure one level higher.** A mission written after the work summarises that
+work, and a summary cannot contradict its source — so the mission stops being able to refuse anything,
+exactly as a scope drawn around fixed objectives does.
+
+At **L2** a mission must state its origin. At **L3** an owner-stated or derived mission must name its
+source, because *"the owner said so"* with no pointer to a dated instruction or document is
+indistinguishable from a session's paraphrase. An advisory reports a session-drafted mission; another
+reports a mission no goal advances. Superseded missions are **retained**, since the distance between a
+drifted mission and its correction is the most useful record the drift leaves.
+
+### 2.5c-xiii The intent chain closes
+
+```
+Mission ← scopeForMission ← ScopeStatement ← fillsScope ← Objective
+   ↑                                                          ↑
+   └── contributesToMission ← Goal ← contributesToGoal ────────┘
+                                                               ↑
+                          WorkItem ── pursuesObjective ────────┘
+                          Roadmap  ── roadmapRealises ─────────┘
+```
+
+Every link points from the later-written element to the earlier, so the chain records its own build
+order and can be walked in one query.
+
+**`scopeForMission` closed the gap that mattered.** The ceremony order is Mission → Scope → Goal →
+Objective, and the step it puts *second* was the one the vocabulary never recorded: a scope hung off
+its container, the mission hung off the same container, and the two met only through a join on what
+they shared. With more than one mission on a container — this package's own register had **six
+missions and four scopes** — which scope served which was unanswerable, and no rule could check that
+work sat inside the right boundary.
+
+**`roadmapRealises`** puts the roadmap on the chain. Without it a roadmap connects to its backlog and
+nothing above: the ordering can be read, and what the ordering is *for* cannot.
+
+| Level | Rule |
+|---|---|
+| L2 | A scope names the mission it serves |
+| L3 | An objective reaches a Mission through a Goal — an objective advancing no goal measures something nothing has a stated reason to want |
+| L4 | **No forked chain**: an objective filling a scope drawn for one mission while its goal advances another is rejected. The boundary that admitted the work and the purpose it serves must agree, or every downstream figure is computed over two different intents |
+| advisory | A roadmap naming no objective |
+
+### 2.5c-xiv Grooming: what a story was analysed for
+
+`DesignConcern` — `Concern_Data` / `Interface` / `Interaction` / `Architecture` / `Security` — from
+the design activities in **Satzinger, Jackson & Burd, ch.6**. Adopted as *concerns* rather than
+activities: the framework governs the register a method produces, so what it can check is whether a
+story was analysed against the dimensions that apply to it, never whether a team performed a named
+activity in a named order.
+
+`RefinementEvent` already carried an outcome, a time and an actor, and **one event of any kind
+satisfied Ready** — so a story with five applicable concerns and a single meeting was indistinguishable
+from one fully analysed. `addressesConcern` records what a refinement looked at.
+
+`hasApplicableConcern` is **declared per story, not derived**: whether a story touches persistent state
+is a judgement about the work, and no query can make it. The declaration is what makes grooming
+checkable at all.
+
+`hasNoApplicableConcern` requires a **written reason** rather than allowing silence, because a story
+that was never groomed and one that genuinely needs no design analysis are otherwise identical in the
+data — and the first is the common case.
+
+At L3: a story past Proposed must declare concerns or state that none apply; every declared concern
+must have a refinement addressing it. At L1, claiming both is rejected. An advisory reports a
+refinement naming no concern — it still counts as a refinement and can count toward nothing.
+
+### 2.5c-xv Task types: which technical process a task performs
+
+`TaskType`, from **ISO/IEC/IEEE 12207 clause 6.4**, taken whole rather than sampled:
+
+| | |
+|---|---|
+| `Task_MissionAnalysis` | 6.4.1 — what problem, and why. Domain engineering |
+| `Task_StakeholderNeeds` | 6.4.2 — what people need, as stated requirements |
+| `Task_RequirementsDefinition` | 6.4.3 — what the system must therefore do |
+| `Task_ArchitectureDefinition` | 6.4.4 — structure, and what cannot change cheaply later |
+| `Task_DesignDefinition` | 6.4.5 — detail sufficient to implement |
+| `Task_SystemAnalysis` | 6.4.6 — trade studies and feasibility. Technical analysis |
+| `Task_Implementation` | 6.4.7 — builds the element |
+| `Task_Integration` | 6.4.8 — correct parts that do not compose |
+| `Task_Verification` | 6.4.9 — was it built right |
+| `Task_Validation` | 6.4.11 — was the right thing built |
+| `Task_Transition` | 6.4.10 — into operation. Deployment |
+| `Task_Operation` · `Task_MaintenanceTask` · `Task_Disposal` | 6.4.12–14 |
+
+`ExecutionTask` previously carried **no properties of its own** — a task could say what it was called
+and not what kind of work it was. `hasTaskType` is functional: a task spanning two processes is two
+tasks, and splitting it is what makes either estimable.
+
+**`coversTaskType` is the join between grooming and execution.** A design concern implies work of
+particular kinds — Data implies design definition, Architecture implies architecture definition,
+Interaction implies validation. A story groomed for a concern whose implied task type never appears
+among its tasks was **analysed and then not acted on**, which is the state where grooming becomes
+ceremony. Reported as an advisory.
+
+A second advisory fires on a register holding implementation tasks and neither verification nor
+validation: a backlog can look full while every process other than building is invisible.
+
+**Not a workflow.** The framework records what kind of work a task was, never that the processes were
+performed in a prescribed order.
+
+### 2.5c-xvi Iteration capacity, and the roles the framework ships
+
+**`hasCommittedEffort` is recorded, not derived.** Derived would be the sum of what is planned in
+*now*, which moves as work is added — and a number that moves cannot report an over-commitment. The
+question the discipline asks is what was committed **at commitment**, against the capacity known then.
+
+At L3 an iteration committing beyond its capacity is rejected: an iteration is a fixed time box, and
+committing beyond capacity means the box was sized by the work rather than the work by the box.
+
+At L4 **a deployment carrying an item its iteration never planned is rejected.** A package shipped
+from an iteration is what that iteration committed to and finished; work entering by another route
+makes the iteration's record of itself untrue and cadence stops being measurable.
+
+**Six `TeamRole` individuals ship**, each naming its source: systems analyst and design authority
+(Satzinger et al.), architect (ISO/IEC/IEEE 42010), HCI researcher (ISO 9241-210), tester and test
+manager (ISO/IEC/IEEE 29119-3).
+
+`TeamRole` is **open**, so this prescribes nothing — a register using none stays conformant, and one
+needing a role not listed adds it. `hasRoleSource` is checked on the **framework namespace only**:
+the framework must defend its own vocabulary, and cannot demand a citation for a role an adopter
+needs locally.
+
+### 2.5c-xvii Four mechanisms against intent drift
+
+**`IntentOrigin`** — `IOrigin_OwnerStated` / `IOrigin_SessionDrafted` / `IOrigin_Derived` — on
+`ScopeStatement`, `Goal` and `Objective`, alongside `MissionOrigin` on `Mission`. `decidedBy` records
+who is accountable; nothing recorded who authored. Applying the fix to the mission alone moved the
+blind spot one level down rather than closing it.
+
+**`derivesFromScope`** (Goal → ScopeStatement) — the chain is **Mission → Scope → Goals →
+Objectives**, and goals are derived from the scope so that the scope's fit to the mission is what gets
+tested. Without it, `Goal` carried only `contributesToMission` and the scope sat outside the path
+between a goal and its mission. At L4 a goal serving a mission its scope was not drawn for is rejected:
+the chain must read the same in both directions.
+
+**`metricMovableBy`** (Objective → WorkItem) — `pursuesObjective` records *intent*; this records
+*capability*. An epic can pursue an objective and be unable to shift its metric by construction, which
+is how a register reaches every epic Done with its objectives untouched. When the two disagree,
+**adjust the backlog, not the objective**.
+
+**Deployment coverage** — an advisory on any Done item in no `DeploymentUnit`. Work reaches users
+through regularly deployable packages; a register where completion and delivery are separate records
+measures the first and assumes the second.
+
+### 2.5c-xviii Every shipped term declares its provenance
+
+`Ex_InventedPractice` says no practice the framework **requires** may lack a named external source. It
+was a scope exclusion a reader had to honour, with **nothing checking it** — so two ungrounded
+practices sat in the framework for twenty releases while the objective measuring them never moved.
+
+`PracticeGroundingShape` makes it checkable: every term the framework ships in its own namespace must
+carry either a `dcterms:source` or an `isFrameworkOriginal` declaration.
+
+**`isFrameworkOriginal` requires a written reason**, not a flag. A practice nobody sourced and a
+practice deliberately invented are otherwise identical in the data — and the first is the common case.
+`Sel_Opportunistic` is the framework's one declared original: release-planning literature names value,
+dependency and commitment, and does not name a category for a release that was not a prioritisation
+decision at all.
+
+The point is not that every term has a citation. It is that **no term is silent about its provenance**.
+
+### 2.5c-xix A scope enumerates what it requires
+
+`ScopeDeliverable` with `requiresDeliverable` (Scope → Deliverable) and `satisfiesDeliverable`
+(WorkItem → Deliverable).
+
+**A scope of prose has nothing to measure work against.** Coverage then gets computed over the work
+that happens to exist, and both sides of the fraction are the backlog — so the figure reads complete
+whether the scope was satisfied or merely emptied. Whatever the epics deliver becomes the definition of
+what the scope wanted.
+
+A deliverable states **what must be true**, not what someone will do, and is enumerated when the scope
+is written — before any goal, epic or story. `satisfiesDeliverable` points from work to requirement, so
+work cannot name a deliverable that does not yet exist.
+
+At L3 a scope enumerating nothing is rejected. Advisories report a deliverable nothing satisfies, and
+an epic satisfying no deliverable — work the scope never asked for.
+
+**The test of a real boundary is that its coverage figure can fall.** Add a deliverable nothing
+satisfies and it drops immediately; a figure that cannot fall is not measuring anything.
+
+### 2.5c-xx The lineage as a pipeline
+
+`LineageStage` — Mission → Scope → Goal → Objective → Backlog, chained by `stagePredecessor`. Each
+stage closes with a `StageOutput` carrying `hasStateDigest` and `closedAtCommit`; the next stage's
+output `consumesOutput` the previous. Elements reference their stage via `producedByStage`.
+
+**The dependency is an artifact, not a claim.** An element cannot reference an output that does not
+exist.
+
+**What is enforceable, established by experiment rather than argument:**
+
+| | |
+|---|---|
+| Digests **catch fabrication** | A backwards lineage with invented digests fails recomputation on every stage |
+| Digests **do not catch careful backwards construction** | An author who computes each digest by restricting the *final* graph per stage passes every check — a digest over the register is computable at the end |
+| Order needs an **external witness** | `closedAtCommit` names a commit: append-only, held by a remote the author does not control |
+| The witness has a **measured limit** | Git orders *between* commits, not *within* one. A lineage authored in a single commit is unordered evidence however it was built — reported by advisory |
+
+`backlog_pipeline_verify` recomputes every digest and checks the chain is a line; the release gate runs
+it over both pipeline fixtures and requires each to verify as its name declares.
+
+**What a stage's digest covers.** The v1 table covers the intent chain each stage states. Two opt-in tables
+extend it, each adopted by the register declaring it (`adoptsRuleSet`), because changing a table changes every
+recorded digest: `RS_DigestTable_v2` adds the item granularities at Backlog; `RS_DigestTable_v3` adds, from the
+stage that owes them, the artifacts the stage obligations require -- domain entities and a blueprint at Scope,
+specification and scenarios at Goal, models at Objective, acceptance criteria at Backlog -- so a stage that
+closed owing them, and whose debt was paid afterwards, no longer reproduces. Scoped to a lineage, a digest counts
+only what that lineage created.
+
+### 2.5c-xxi What the commit witness reports on a real lineage
+
+Two advisories read the commits rather than the graph:
+
+`StageOrderWitnessShape` — a stage and the stage consuming it recording the **same** commit. The
+consuming stage was built from an output not yet closed, so the dependency is nominal: the artifact
+existed as an IRI before it existed as a completed state.
+
+`ScopeContentLateShape` — the scope stage recording a **later** commit than the backlog stage. A
+boundary's text may be written early while its **deliverables** — the content that lets it refuse
+anything — arrive after the work they were meant to constrain. This is G17 with a commit attached.
+
+Both fire on this package's own register, which is the point: a witness worth having is one that
+reports something inconvenient about the register carrying it.
+
+### 2.5c-xxi-b Work before chain is a bypass, and a bypass is restarted, not filled
+
+The two advisories above read the commits a stage *recorded*. `backlog_lineage_order_check` reads
+the commits git *witnessed*: the commit at which each stage output, and each work item, first appears
+under the register path. The register's own dates are the author's; first appearance in an
+append-only remote is not. For every live (non-archived) lineage it reports one of ORDERED (outputs in
+pipeline order, every item at or after the `Stage_Backlog` output), UNWITNESSED (everything in one
+commit — git orders between commits and says nothing within one), RESTARTED, or **BYPASS**: a work
+item that first appears before its lineage's `Stage_Backlog` output, or outputs out of order. The
+chain was closed after the work — the finished build retrospected to fill the lineage.
+
+A bypass is recorded as a `LineageBypass` (a `RetrospectiveFinding` the tool writes from git, carrying
+`bypassedItem`, `itemFirstCommit`, `bypassedOutput`, `chainClosedCommit`, `detectedAt`, `detectedBy`).
+`BypassRequiresRestartShape` then refuses the release until a `LineageRestart` answers it. **The
+answer is never to add the missing outputs later — that is the bypass, formalised.** A restart
+`retractsOutput` every output the lineage carried (each marked `outputRetracted true`, kept in the
+register as the record of what was claimed), flags every pre-existing item `preLineageItem true`, and
+the chain is rebuilt from Mission in fresh commits, one per stage. `RetractedOutputConsumedShape` keeps
+the rebuild off the retracted chain; `PreLineageItemShape` allows an item back in only through
+`admittedByOutput` naming a rebuilt, active `Stage_Backlog` output of its own lineage; until then
+`PreLineageItemUnadmittedAdvisoryShape` reports that the item counts for nothing. The pipeline verifier
+ignores retracted outputs. Measured on this package's own register the day it was built: lineage 7
+ORDERED, lineage 8 BYPASS (items at `b48a787`, backlog output at `16633a4`) — restarted in the same
+release.
+
+### 2.5c-xxi-c The restart loop stops by convergence, never by count
+
+A restart answers a bypass; nothing in the previous section stops bypass → restart → bypass
+forever, and every turn of that loop can lose work. The stop condition is decided from the trials
+themselves, not from how many there were — a fixed count would be exactly the ungrounded threshold
+G61 rejected. Three measurements, all computable from what the register and the repository already
+hold:
+
+- **Novelty.** A later bypass on a restarted lineage must name at least one item no earlier bypass on
+  that lineage named. If it does not, it is the same finding again (the duplicate-screen L-71 applies
+  to findings), and a restart on it is a turn of the loop, not a correction —
+  `RestartRequiresNoveltyShape`.
+- **Admission.** What a rebuild admitted is not lost by the next trial: an item admitted by rebuild N
+  and named again by bypass N+1, or orphaned when restart N+1 retracts the output that admitted it
+  with no re-admission, is lineage work lost in the loop — `RestartKeepsAdmissionsShape`.
+- **Deliberation.** The restart first appears in git strictly after the bypass it answers, and the
+  rebuilt `Stage_Mission` output strictly after the restart. Finding, restart and rebuild in one
+  commit is the backfill wearing a restart's name; the git witness refuses it (tool-side, since a
+  shape cannot read commits).
+
+When a trial adds nothing the previous one did not, the tool writes a `LineageThrash` (`ThrashKind`
+`Thrash_NoNovelty`, `Thrash_AdmissionLost` or `Thrash_NotDeliberated`, naming the repeated bypass,
+the prior restart and any `lostItem`), and the lineage is **frozen**: `lineageFrozen true`,
+`frozenBy` the finding. A frozen lineage accepts no further `LineageRestart`
+(`NoRestartOnFrozenLineageShape`, `ThrashFreezesLineageShape`); it waits for `frozenRuling` — the
+owner's decision, recorded verbatim: `Out_Abandoned` on the mission, a `ScopeChange`, or an explicit
+unfreeze with its reason. The machine detects non-convergence and stops; it never chooses the outcome
+(G61).
+
+### 2.5c-xxi-d Recovery strategies: the stop condition is a family, not one rule
+
+The convergence test in the previous section is one strategy — *decrease by one*: each trial admits
+at least one more item and names at least one new one. It is the default, and it is not the only way
+to make the next trial smaller. Every `LineageRestart` declares its `RecoveryStrategy`, and each
+strategy carries its own evidence and its own convergence test; none is a count.
+
+| Strategy | Evidence on the restart | Converges when | Stops when |
+|---|---|---|---|
+| `Strat_DecreaseByOne` | — | novelty and admissions kept | same finding again (`Thrash_NoNovelty`) |
+| `Strat_DecreaseByFactor` | `reductionObserved` (tool-written) | previous trial admitted ≥ ½ of what it named | `reductionObserved` < 0.5 |
+| `Strat_VariableDecrease` | `reductionObserved` | reduction not smaller than the previous restart's | reduction shrinks |
+| `Strat_DivideAndConquer` | `partLineage` ×≥2, each `parentLineage` + `partForDeliverable`; a combine output `combinesOutput` | every part ORDERED and combined | a part thrashes (freezes only that part) |
+| `Strat_TransformSimplify` | `simplifiedBy` a `ScopeChange` first appearing before the restart (git) | smaller chain rebuilt | ScopeChange after the restart |
+| `Strat_TransformRepresent` | every bypassed `Epic` `decomposesInto` stories | admission per story | an undecomposed epic |
+| `Strat_TransformReduce` | `templateLineage` ≠ self, reading ORDERED | the template's shape instantiated | template not ORDERED |
+
+The register-side tests are `RestartDeclaresStrategyShape`, `DecreaseByFactorShape`,
+`VariableDecreaseShape`, `DivideAndConquerShape`, `CombineOutputShape`, `TransformStrategyShape`;
+the git-side ones (ScopeChange order, template state, parts' order) are the order check's.
+`reductionObserved` is computed by the order check from the register — admitted ÷ named for the last
+trial — and printed for the next restart to carry; a hand-written value the register does not
+reproduce is refused. A `LineageBypass` now also **freezes** its lineage (`frozenBy` the bypass) until
+a restart answers it, so the finding and the restart can be witnessed in separate commits without
+the register being non-conformant in between.
+
+An `EnhancementProposal` whose every `submittedTo` points into this package's own
+`07-handover-inbox/` has been sent to no one — `SubmittedToOwnInboxShape` (G80).
+
+Two rules learned by running divide and conquer on a real lineage (G84). **A restart flags every
+item of the lineage**, not only the bypassed ones: retracting the chain un-orders everything it had
+ordered, so everything is pre-lineage from the restart on and re-enters only by admission —
+`RestartFlagsEveryItemShape`. Items that belong to no single deliverable (an initiative, a spike) stay
+with the parent and are admitted by its combine output. **Parts may share one commit per stage**: parts
+are independent, and the git witness measures order *within* each part; five parts closing their
+Scope stage in one commit is five witnessed sequences, not one unwitnessed one.
+
+### 2.5c-xxi-e Lineage status: only passed steps fire, and achieved lineages are archived
+
+Every lineage carries a `LineageStatus` — `LS_Opened`, `LS_Scoped`, `LS_Goaled`, `LS_Objectived`,
+`LS_Backlogged`, `LS_InProgress` (chain closed, development ongoing), `LS_Achieved` or `LS_Abandoned`,
+`LS_Archived`, `LS_Revived` — ranked, moved forward in the same commit as the stage output or event
+that justifies it, and checked against the register by `LineageStatusShape`: a status cannot claim a
+stage with no active output, achievement without an achieved mission and a closure report, or
+archival without the archive file. Rules that need a later stage's elements bind only once the status
+has reached that stage, so a lineage built one stage per commit publishes at every stage.
+
+An achieved lineage found un-archived is named by the gate and by
+`AchievedLineageNotArchivedAdvisoryShape`; the archival activity, `backlog_lineage_archive`, checks
+archivability, computes the partition by closure (the lineage's members, everything in no live
+lineage that references or hangs together with them, its closure report), and moves the statements
+verbatim into the archive ABox, leaving the Lineage and its Mission live as the pointer. Archived
+work is loaded by lineage-history checks only, until the owner revives it (`lineageRevivedAt`).
+
+### 2.5c-xxi-f Stage obligations: what a stage owes, and when a rule may bind
+
+A pipeline stage may **owe** artifacts before its output closes. A `StageObligation` names the stage (or an
+ISO/IEC 12207 task type, for obligations that bind at execution), the class of thing owed
+(`owesClass`), optionally the kind it must be of (`owesKind` over the fourteen UML 2.5 `ModelKind`
+individuals, `owesScenarioKind` over the four `ScenarioKind`s), the engineering question the artifact
+answers (`obligationRationale`, mandatory), and whether its absence refuses closure or reports it
+(`obligationSeverity`, an `ObligationSeverity`: required refuses closure, advisory reports it). Nothing new is minted: `ModelArtifact`, `Specification` with
+`InteractionStep` and `hasStepActor`, `TestScenario`, `DomainEntity`, `Blueprint`,
+`AcceptanceCriterion`, `TestCase` are this framework's own vocabulary.
+
+The standing `ObligationSet` `OS_SDLC_v1` (obligations join a set through `inObligationSet`): Scope owes domain entities and a blueprint; Goal owes a specification
+and scenarios of the nominal and rejection kinds (the main and alternative paths), with a use-case
+diagram advisory; Objective owes activity and sequence diagrams; Backlog owes a class diagram and
+acceptance criteria; design and architecture tasks owe a model, verification tasks a test case. A
+`PlanningEvent` on a story or epic that records no `refinementProduces` is reported: grooming that
+produces nothing is attendance.
+
+**When an obligation binds.** Only a lineage that **adopted** its set at the moment it opened —
+`adoptsObligationSet` with `adoptionRecordedAtOpen`, in the same commit as its Mission stage output,
+verified there by the git witness. `ObligationAdoptionShape` refuses adoption by a lineage past
+`LS_Opened`. A running lineage cannot be given new obligations; a closed one is a record; a lineage
+that adopted nothing owes nothing beyond the chain. A stage that must close owing records
+`obligationWaivedBy` with a reason, and the advisory reports it until the debt is paid.
+
+**Required and advisory, told apart (v1.111.0).** Only a waived **required** obligation is a debt
+(`StageOutputOwesAdvisoryShape`). An **advisory** obligation owes nothing: it is met by an artifact of the owed
+class and, where given, the owed kind, or it is explained by `obligationWaivedBy` naming it with an
+`obligationWaiverReason`. Unmet and unexplained, it is reported as a Warning (`AdvisoryObligationUnmetShape`),
+in the severity-audit overlay too. A model artifact owed at the Goal or Objective stage exists before any work
+item may: `describesItem` binds from the Backlog stage on (§2.5c-xxi-e), and the model is found meanwhile
+through `belongsToLineage`.
+
+### 2.5c-xxi-g What a violation obliges: the finding's disposition
+
+A `sh:Violation` says a rule is broken. What that obliges is a separate question, and the standards
+answer it. Every reported violation is a finding, and every finding has a **`FindingDisposition`**:
+
+- **`Disp_Nonconformity`** — a requirement is not fulfilled and must be (ISO 19011:2018 §3.21). The
+  **default**: it needs no record, it needs fixing. Recording one is itself refused.
+- **`Disp_KnownError`** — the cause is documented and the instance is deliberately not remediated,
+  typically because the work has moved on and the past state cannot be reinvented (ITIL 4 /
+  ISO/IEC 20000-1). It must name its root cause, its **preventive mechanism** (what stops the next
+  one), its **monitoring**, its decider and a **review date**. A known error nobody watches is an
+  excuse; one accepted forever is a nonconformity with a note attached, and the review-date shape
+  refuses it.
+- **`Disp_RiskAccepted`** — the consequence is uncertain and the owner has retained the risk
+  (ISO 31000:2018 §6.5.3). Must name a `risk:Risk`, its monitoring and its review date.
+- **`Disp_Observation`** — the condition is true and no obligation covers it (ISO 19011 §6.4.8). Its
+  rationale must say **which rule is missing**; writing that rule is backlog work, not a permanent
+  state.
+
+**When a change in severity takes effect.** Promoting shapes is itself a ruling: it changes what the
+suite refuses, and it binds every lineage the register carries. It is therefore adopted by the
+**register**, not by a lineage — a `RuleSet` declared with `backlog:adoptsRuleSet`, owner-decided
+and dated. The promoted severities ship as a shapes overlay generated from the base file; the
+validator loads it only when the register declares the set. Undeclared, the change is recorded and
+inert. (`ObligationSet` is the lineage-level counterpart, adopted when a lineage opens.)
+
+A `FindingRecord` carries `findingFromShape`, `findingOnNode`, `hasDisposition`,
+`dispositionRationale`, `decidedBy`, and the monitoring the disposition requires. Silence is never an
+exception: a violation with no record is a nonconformity to be fixed.
+
+### 2.5c-xxi-h Revising a chain from an intermediate stage; and what a package delivers
+
+A **`StageRevision`** records the owner's decision to rebuild a lineage from an intermediate stage --
+the goals were guards rather than achievements, the objectives measured the wrong thing -- with
+Mission and Scope standing. It names `revisesLineage`, `revisesFromStage`, `revisionReason`, the
+outputs it `retractsOutput`, its decider and `revisedAtCommit`, and it carries a restart's own
+discipline: the retraction precedes the rebuild in its own commit, each rebuilt output consumes the
+last unretracted upstream output, and items re-enter by admission rather than by being left in place.
+It may never revise from `Stage_Mission`: rebuilding from the mission is a `LineageRestart` and must
+answer a finding.
+
+**`deliversDeliverable`** (Package to ScopeDeliverable) states what of the scope a package's release
+makes true. Asserted intent, never derived: the transitive path through members computes what the
+members happen to touch, and a computed set cannot be compared against an intent nobody stated.
+`PackageDeliveryIntentShape` refuses a package claiming a deliverable none of its members satisfies.
+
+The **Mission-Scope-Goal triangle** is now tested on its agreements, not only asserted:
+`ScopeAreaCoverageShape` requires every area of a lineage to be named by that lineage's scope
+statement, and `GoalTriangleShape` requires a goal's `derivesFromScope` and `contributesToMission` to
+agree through `scopeForMission`, and every `goalCoversArea` to be an area the statement admits.
+
+### 2.5c-xxi-i Retirement: a closed lineage retires whole, and leaves a record
+
+When a lineage is archived, **everything it owns moves** — its items, stage outputs, findings,
+restarts, its closure report, its `Mission`, and the `Lineage` individual itself. What remains in the
+live register is a **`LineageArchiveEntry`**: the archived lineage's IRI and its mission's IRI as
+**strings**, its ordinal, its outcome, the archive file, the date and the trigger. It is deliberately
+neither a `Lineage` nor a `Mission`, and the IRIs are strings rather than references, so no shape
+targeting a lineage, a mission or any stage element finds retired work. That is what makes archiving
+remove cost rather than relabel it: an archived lineage is not a subject of processing until the
+owner consciously revives it.
+
+The partition is by **ownership**, never by reachability. Everything with `belongsToLineage` the
+retired lineage goes; the **register root** — the container the register itself is, marked
+`isRegisterRoot` — and everything the root declares can never be moved, because the root is above
+every lineage and belongs to none. A reachability-based partition takes exactly the wrong things: it
+claims the root, which nothing owns, and spares the lineage and mission if they are hand-protected
+(`G92`).
+
+A rule that asks the register root for something that retired with a lineage — its commitment, its
+scope statement, its stage outputs — is exempt for a declared root in a register that has archived
+work: what it looks for is not missing, it is in the archive file the entry names. Every other
+container, and the root of a register that has archived nothing, still answers.
+
+### 2.5c-xxi-j Progressive archive conformance
+
+An archive is not re-validated. Its conformance is a recorded value: an **`ArchiveConformanceRecord`**
+carrying the canonical digest of the archive at the moment it was cleared (`hasArchiveDigest`, over
+sorted N-Triples, so re-serialization and comments cannot move it), the shapes it was cleared under,
+the date, and the lineages the value covers (`includesRetiredLineage`). A check confirms the digest —
+under a tenth of a second — and validates only the lineages that have **arrived** since, in the full
+context of the archive **and the live register**, scoping the report with `focus_nodes` rather than
+shrinking the graph. On success the value advances to include them.
+
+Two rules make this sound rather than merely cheap. **A lineage is never validated out of context:** a
+fragment cut from the archive loses the mission it superseded, the register root it belonged to and
+the deliverables its epics satisfied, and every violation it then reports is an artefact of the cut.
+**The settled archive is never re-judged under current shapes:** work retired under earlier rules was
+gated clean under those rules, and re-deciding it now is the retroactive enforcement §2.5c-xxi-e
+forbids. Where no value exists yet, it is **seeded from the release record** and says so, rather than
+manufactured by a validation that would apply today's rules to yesterday's work.
+
+Alongside it, an **integrity check** answers the structural question at no measurable cost: every
+archive entry resolves to a lineage really present and a file that exists, no retired lineage left
+members behind in the live register, nothing live dangles into what neither file holds, and every
+archived lineage has its mission.
+
+### 2.5c-xxi-k Analysis level, design level, and specification depth
+
+The same notation carries different meaning at different points in the work, and a register that does
+not say which one it holds lets a single drawing discharge two obligations. A **`ModelLevel`** on every
+model artifact states whether it describes the problem as the world presents it (**analysis**) or the
+solution as it will be built (**design**); `owesLevel` on an obligation names the level it requires.
+The pairs come from the discipline's own source material: a domain model class diagram is not a design
+class diagram, a system sequence diagram — actor and system as a black box — is not an object sequence
+diagram, an entity-relationship view is not a relational schema, an event table is not a state machine.
+
+A **`SpecificationDepth`** distinguishes a **brief** description — a few sentences, enough to size and
+prioritise, appropriate while the set of use cases is still moving — from a **fully developed** one:
+actor, goal, preconditions, trigger, the numbered main flow with its actors, alternative and exception
+flows, postconditions. The developed form is owed where someone builds from it; a brief does not
+discharge that obligation.
+
+Obligations may bind through a **declared design concern** as well as through a stage or a task type:
+analysing for data owes a data model, for interaction the order of messages, for security what the
+system permits and refuses in each state, for the user interface the screens and their flow. Three
+rules enforce this — a finished task owes its artifact at the named level and depth, a declared concern
+owes the model recording what was analysed, and a model states the level it works at, since an
+obligation naming a level cannot be checked against an artifact that does not.
+
+### 2.5c-xxi-l Lineage profile: depth level and artifact domain
+
+Real experience across many lineages showed the standard ceremony fitting some work badly in both
+directions — a small, novel piece of framework design needing the full chain's own drift-catching, and
+a large, repeatable body of content needing none of it below its objectives. Two real, orthogonal
+classes name this rather than leave it implicit.
+
+A **`LineageDepthLevel`** — `Discovery`, `MicroTask`, `StoryDirect`, `FullChain` — states how far down
+the real intent chain a piece of work needs to start from: a request that cannot yet support a Mission
+statement, a single well-defined and tested task needing no chain built around it, work already known
+at story granularity where an Epic-to-Story conversion would be stale, or the standard Mission-through-
+Task chain.
+
+A **`LineageArtifactDomain`** — `SourceCode`, `Ontology`, `ContentTransformation`, `Infrastructure`,
+`CrossPackage` — states what kind of artifact the lineage produces, because the rigor that fits
+structural and behavioural source-code modelling does not transfer to ontology (TBox/ABox/SHACL)
+discipline, content transformation, off-backlog infrastructure work, or work jointly owned across
+package boundaries. `SourceCode` and `Ontology` align with `pib-hub`'s own real `pib:ArtifactCategory`
+vocabulary; `ContentTransformation` is named as a real, disclosed gap that vocabulary does not yet
+cover.
+
+### 2.5c-xxi-m Per-lineage archival confirmation
+
+A whole-archive-file digest, changing whenever any one lineage's content changes, forced every
+already-settled lineage back through the complete current shape suite on every new arrival — the
+exact retroactive-enforcement mistake G89/G91 already rules against, applied per file instead of
+per lineage. `ArchivalConfirmationStatus` (`AC_PendingConfirmation`, `AC_Confirmed`) moves the
+exemption unit to one status per lineage: set to pending by the archival tool itself at the moment
+of archiving, promoted to confirmed only at the *next* real archival — deliberately deferred, the
+same reason `closedAtCommit` and `closureCommittedAt` are self-referencing tags rather than
+asserted at write time — and once confirmed, permanently exempt from re-validation against any
+later rule.
+
+`hasLineageDepthLevel` and `hasLineageArtifactDomain`, both optional, let a lineage declare its profile.
+Neither is enforced yet — the taxonomy is real before any rule depends on it, built to be iterated as
+further real cases arrive, not fixed at four and five values forever.
+
+A **`LineageProfile`** configures one real `(LineageDepthLevel, LineageArtifactDomain)` combination —
+kept deliberately separate from the declaration itself, so a lineage's own stated facts can never
+silently disagree with which configuration applies to it; a profile is looked up from the pair, not
+carried redundantly on the lineage. `requiresEpicDecomposition` and `requiresObligationSetAdoption`
+name what that combination actually requires. The first, `Profile_FullChain_Ontology`, is configured
+from one complete, real, closed case rather than a guessed template: Lineage 9's own real history,
+checked directly before writing either requirement — no `Epic` layer across its six stories and eight
+tasks, and no `adoptsObligationSet` ever declared on the lineage itself, since its own real work was
+authoring an obligation set, not being bound by one.
+
+### 2.5c-xxi-n LineageSuccession, out-scoping, LineageReactivation: closing a mature lineage complete, under an evolved standard
+
+A `RuleSet` binds the whole register once declared (2.5c-xxi-o); a mature, in-progress lineage
+facing one that ships after it opened has neither a way to adopt in place without re-judging its
+own already-closed history (G89), nor a reason to force its entire membership -- done and not-done
+alike -- through a `LineageRestart`, which answers a detected bypass, a different problem.
+
+**The owner's rule: closing unfinished work is not allowed.** Unfinished work is out-scoped first;
+then the lineage, now holding only finished work, closes; then a successor takes the out-scoped work
+in. A lineage recorded Achieved while any item or container created during it is still open and not
+out-scoped is refused.
+
+**Out-scoping.** A **`PartialScopeDeclaration`** (labelled *out-scoping declaration*) is the owner's
+decision, recorded on the **live** lineage before it closes, naming the unfinished items and
+containers it removes (`outScopes`) and why (`describesUncoveredScope`). It may only out-scope the
+lineage's own work, and carries `decidedBy`. Out-scoped work keeps `belongsToLineage` -- the lineage
+it was created during -- and stops counting toward that lineage's completion. If the lineage closes
+and no succession takes the out-scoped open work, it is refused as orphaned: open the successor with
+it, or cancel it with a reason.
+
+**Containers.** Packages and sprints are not carried into a successor; the successor builds its own,
+grouped for business value and cohesion (owner's ruling). A container's state is derived from its
+members, and an out-scoped member stops counting toward it: a container that finished some of its
+work keeps it and derives Done from what it finished, so it closes with its lineage. A container left
+with nothing finished -- a package all of whose work was out-scoped, a planned sprint the lineage will
+not run, an abandoned sprint -- is ended by a **`ContainerDissolution`**: the owner's decision, naming
+the container (`dissolvesContainer`) and why (`dissolutionRationale`). A dissolved container derives
+Cancelled and needs no members; it may not hide work (every member still open must have been
+out-scoped) and may not discard finished work (a container with a Done member is not dissolved). A
+container is cancelled only this way. The closure and carry-over rules read a container's derived
+state as well as any asserted one. Containers carry `belongsToLineage` like every individual (the
+register root excepted).
+
+**Succession.** A **`LineageSuccession`** is the owner's deliberate record of winding the finished
+lineage down and opening a successor under the *same* Mission (`succeedsLineage`,
+`successorLineage`). It carries `successionRationale` -- the real cost/benefit and risk/opportunity
+reasoning -- and `resolvesGap`, naming the out-scoping declaration it takes up. The successor is
+built by the staged ceremony (2.5c-xxii): the first commit carries the predecessor's closure, the
+succession record and the successor's Mission stage; each later stage closes in its own commit. From
+the successor's Objective stage, one of its objectives must structurally resolve the declaration
+(`resolvesPartialScope`). The out-scoped items are taken in by the successor's
+active Backlog-stage output (`preLineageItem`, `admittedByOutput`), the same admission a restart or a
+divided lineage's part uses; once that output exists, any open predecessor item neither taken in nor
+cancelled, and any open predecessor container not dissolved, is refused as work silently dropped. The predecessor cannot be archived while
+out-scoped work is still open, and the archival activity waits for it.
+
+**More than one gap, and where a successor's goals come from (v1.112.0).** Each succession record takes up one
+gap (`resolvesGap`), with its own rationale. A bounded post-closure finding raised after the first succession is a
+second `LineageSuccession`, naming the same predecessor and, where the owner decides so, the successor already open
+under the same Mission. From the successor's Goal stage each goal states what it answers (`hasGoalOrigin`, a
+`GoalOrigin`): **Carried** continues work the predecessor out-scoped and names that declaration (`goalAnswersGap`);
+**Repair** answers a post-closure finding and names it; **New** covers something the predecessor never had in scope
+and names no gap. `GoalOriginShape` checks what a goal asserts; a successor's goal with no origin is reported as a
+Warning (`SuccessorGoalOriginAdvisoryShape`), since a new requirement does not bind lineages already open (G91). The
+lineage's conformance goal needs no origin: 2.5c-xxxiv requires one in every lineage.
+
+**A successor's rule set and Mission stage.** A successor that should work under a rule set the
+register has not adopted adopts it itself: `adoptsRuleSet` on the lineage, recorded at its opening in
+the same commit as its Mission stage (`adoptionRecordedAtOpen`), exactly as an obligation set is; a
+lineage past its opening cannot adopt one. A lineage-level adoption binds only that lineage's own work
+and the items its Backlog-stage output admitted -- the predecessor's closed history keeps the severities
+it was built under (G89). The successor's Mission-stage output witnesses the lineage itself and the
+Mission it declares it pursues (`lineageForMission`), even though that Mission was created during the
+predecessor.
+
+**Shared domain individuals.** Domain entities, blueprints, scope areas and the Mission describe the domain
+and persist across a predecessor and its successor. They are not duplicated: each belongs to the lineage it was
+created during, and the successor refers to it. A successor's own stage obligations are met by what its work
+introduces -- its own entities and blueprint -- while the shared ones stay where they were made. When the
+predecessor is archived, its shared individuals go with it as records, and the successor's references to them
+remain references (the archive tool reports them; archive integrity requires every reference to resolve);
+the Mission is kept live, as for any archived lineage.
+
+**Pre-pipeline lineages.** The staged pipeline became mandatory on 2026-08-25 (discipline v5.0.0), which said of
+the lineages already built: they are not rewritten, and the advisories report what their history shows. The
+order check therefore reads a lineage with no stage output, no restart, and work whose earliest witnessed commit
+predates that date as PRE_PIPELINE -- reported, never blocking. A lineage begun after that date with work and no
+chain remains a bypass.
+
+A **`LineageReactivation`** answers the opposite, rarer case: closed work stays closed until a real
+need appears to reopen it, and reactivation is never casual (2.5c-xxi-o states when it applies).
+`reactivatesLineage` names a lineage that must already be closed; `reactivationRationale` states the
+need. Once reactivated, the lineage is bound by the rules in force now.
+
+### 2.5c-xxi-o Findings against closed work: a response proportionate to their scale
+
+Closed work stays closed and committed. When something is found wrong with it afterwards, the
+response is decided by how far the problem reaches, not by how uncomfortable it is.
+
+A **`PostClosureFinding`** records the discovery: the closed lineage it concerns
+(`declaresGapFor`), what was found, when it was raised, and the observed evidence it rests on
+(`findingEvidence`) -- a defect from live use, a failed verification, a failed acceptance check. A
+suspicion is not evidence; it produces a validation task in a live lineage, whose result becomes the
+evidence. A finding may only be raised against a lineage that is actually closed. It is distinct
+from an out-scoping declaration, which is decided on the live lineage before it closes; both are kinds of
+**`LineageGap`**, and a succession resolves either the same way.
+
+Its **`FindingScale`** decides the response:
+
+- **Isolated** -- one small defect. A maintenance task (Maintenance investment category) or a change
+  request under a live lineage, linked by `addressesFinding`. Dividing or reopening closed work for
+  it is refused as disproportionate.
+- **Bounded** -- a substantial but contained piece. Descoped into a successor by the division
+  ceremony (2.5c-xxi-n), the succession resolving the finding as its gap.
+- **Systemic** -- wide non-conformance. The only scale that justifies reactivation.
+
+Reactivation is typed by a **`ReactivationReason`** from a closed set -- improper processing result,
+unfinished work, non-conformant result -- and must address at least one evidenced systemic finding
+raised against the lineage it reopens. The mechanical act of reopening remains the existing revival
+(revived-at timestamp, Revived status, the archive tool's revive option); a revived lineage with no
+reactivation behind it is refused. Once reactivated, the lineage is bound by the rules in force now,
+and because that adaptation may surface many violations, the same four measures a succession
+records apply here too; a reactivation may itself end in a division.
+
+A closed lineage whose work goes into real use may declare `observationWindowEnds`. Until then,
+findings route to maintenance or a change request; answering one inside the window by succession or
+reactivation is refused.
+
+### 2.5c-xxii The staged ceremony, one commit per stage
+
+The lineage is built as five stages, **each closing in its own commit**:
+
+```
+1 Mission   2 Scope (text, exclusions AND deliverables)   3 Goal   4 Objective   5 Backlog
+```
+
+Closing a stage means writing its elements, validating, committing, then recording a `StageOutput`
+naming the stage, the digest of the state it closed on, and the commit it closed at. The next stage's
+output `consumesOutput` that one.
+
+**The digest must be taken at the stage's commit, not from the finished register.** A digest computed
+by restricting the final graph is computable at the end and proves nothing about order — established
+by experiment. Taken per commit, it records a state that genuinely existed.
+
+**The scope stage is not closed until its deliverables exist.** Text alone is a boundary that can
+refuse nothing.
+
+**Measured on a real staged drive** (five commits, digests taken at 1, 5, 6, 7 and 8 subjects): every
+digest reproduces, the chain is a line, and **zero order advisories fire at L4 with nothing
+suppressed**. The same checks on a lineage whose stages shared commits fire.
+
+### 2.5c-xxiii A boundary fails in both directions
+
+`derivesFromMissionClause` — each `ScopeDeliverable` **quotes** the words of the mission it was read
+from. Quoted, not referenced: a citation can point at a mission that has since changed, while a
+quotation can be compared against the current text.
+
+At L3 a deliverable quoting nothing is rejected. The scope then requires something the mission does not
+say, and **nothing downstream can notice** — work satisfying it traces cleanly to a scope, a goal and a
+mission while answering to none of them.
+
+This is the mirror of a scope with no content. **A boundary fails in both directions**: too narrow, and
+the backlog defines it; too wide, and it asks for what was never wanted. Only the first was checked
+before.
+
+The remedy when a deliverable has no clause is to **amend the mission**, recording the owner's words as
+its source — not to drop the deliverable, if the owner asked for it, and not to let the gap stand.
+
+### 2.5c-xxiv A package is identified, then delivered
+
+`Package` is the deployable business function — a coherent capability releasable on its own.
+`DeploymentUnit` is the **record that it shipped**. They are different objects at different times, and
+`deliversPackage` joins them.
+
+**The class existed for 91 releases with zero instances**, because nothing in the vocabulary pointed at
+it: a `Package` could be declared and never referred to. The consequence showed up as a false
+conclusion — asked to identify packages, a session wrote `DeploymentUnit`s describing what iterations
+*would* ship, the L4 clauses correctly rejected them, and the inference drawn was that packages cannot
+exist before the work is done. The concept existed and was unused.
+
+`targetsIteration` is deliberately **not** functional. A package whose content does not fit one time box
+targets two — splitting the package across iterations rather than stretching the box is what G9 looks
+like at package level.
+
+`hasPackageVersion` is recorded at identification, so the increment is a decision taken with the content
+in view rather than a label applied afterwards.
+
+**Packages are grouped by what they deliver, not by which iteration holds them.** An iteration is a
+time box; a package is a capability; conflating them is how a release becomes "whatever finished this
+fortnight".
+
+### 2.5c-xxv A roadmap of wildly uneven releases is usually unexamined, not deliberate
+
+**A package's own well-formedness says nothing about whether it fits the sequence it ships in.**
+`PackageContentShape` checks one package at a time; nothing checked whether a roadmap's releases hold
+together as a *sequence* of comparable size — until an adopting lineage disclosed the gap directly: a
+package built as one large, unevenly-sized release next to its siblings, corrected by hand only
+because an owner noticed.
+
+`PackageRegularityShape` reports a package whose sprint count (`targetsIteration`) diverges by 2x or
+more from a **majority** of its siblings in the same `Lineage`, with no `hasDecisionRationale`
+recorded — majority, not any single sibling, because a pairwise test would flag the normal releases
+too whenever one release is a genuine outlier. `RoadmapOverrideShape`'s own precedent supplies the
+escape hatch: a package outside the normal range may carry a rationale, the same way a roadmap rank
+that departs from score order already must.
+
+**Deliberately scoped to sprint count, not total committed size.** Size would need summing
+`hasJobSize` across every member, and `hasJobSize` exists only on a `WSJFScore` — a signal this
+framework cannot yet compute for a package whose members are scored by another method. An
+incomplete measure asserted as complete is worse than an absent one; size-based regularity is left
+for whichever lineage tests it against a real case first.
+
+### 2.5c-xxv Automated-run ceremony coverage, not ceremony modeling
+
+**`RegisterSession` draws a deliberate boundary: it does not model planning meetings, reviews or
+retrospectives, which remain outside this framework.** That boundary stands. What a direct coverage
+check found is narrower and more concrete: several *automated-run* functions that a Planning,
+Review or Retrospective ceremony would produce as byproducts had no vocabulary at all, independent
+of whether any meeting ever happens.
+
+**Planning** already covers item selection and breakdown (`Ready` state, `PlanningEvent`,
+`producesTask`) but had no way to state a whole-iteration goal distinct from its individual items.
+`hasSprintGoal` is a single optional string on `Iteration` — deliberately unstructured, for the
+same reason `hasScoreRationale` is: forcing a template risks producing theater rather than a real
+answer. Deliberately optional: an `Iteration` without one is not itself a defect.
+
+**Review** already has a real, but *passive*, check — the existing DoD/dependency shapes correctly
+refuse an incorrect `Done` claim, proven by catching a real drift in a lineage's own practice — but
+nothing *proposed* the two decisions a review actually makes. `StoryReadyToCloseShape` reports a
+story whose `PlanningEvent` produced only `Done` tasks while the story itself has not moved;
+`IterationEndedIncompleteShape` reports a story whose iteration has already ended
+(`iterationEnd < now`) while the story is not `Done` — the moment a spillover decision is needed,
+made visible rather than found only by someone happening to check.
+
+**Batch tracking** gets its own pair, found real in a lineage's own practice: a batch-tracked
+`WorkItem` (`hasBatchSize`/`hasBatchCompleted`) can drift from its own `hasState` across several
+turns with nothing noticing until a terminal check finally runs.
+`BatchCompleteButNotDoneShape` reports `hasBatchCompleted` reaching `hasBatchSize` while `hasState`
+is still not `Done`; `BatchStartedStateStaleShape` reports real, verified progress
+(`hasBatchCompleted` > 0) sitting under a `hasState` that still reads `Ready` or `Proposed`, as
+though no work had begun.
+
+**Retrospective was, at this pass, left correctly out of scope** — no `RootCause`, `Remedy`, or
+similar vocabulary was added, and modeling the output of a lineage's own forensic practice was
+named as a real, larger design question deserving its own test-drive rather than a rushed
+addition. That test-drive happened the same session, on direct challenge: see §2.5c-xxvi.
+
+### 2.5c-xxvi Sprint ceremonies, test-driven against this package's own real history
+
+**`RegisterSession`'s own boundary is about `RegisterSession`, not about the whole methodology —
+and what is right for a narrowly-scoped provenance class is not automatically right for the rest
+of it.** Challenged directly on exactly this point, this framework test-drove modeling the
+ceremonies themselves: not the meeting's human conduct (attendance, duration, what was discussed
+and not acted on stays out of scope, unchanged), but the ceremony as a dated record of a real
+planning, review, or retrospective decision — the same way `PlanningEvent` already models a
+per-item commitment rather than the conversation that produced it.
+
+`SprintCeremony` is an abstract parent (`adoptionRationale`-exempt, same as `BacklogConcept`) with
+three children. `SprintPlanningCeremony` records that a whole iteration's scope was decided
+together (`ceremonyFor`, `heldAt`, and `includesPlanningEvent` linking the individual
+`PlanningEvent`s that happened within it) — required to include at least one, since a planning
+ceremony that planned nothing recorded a meeting, not a plan. `SprintReviewCeremony` records the
+actual decision a review makes, `closesStory` or `flagsForCarryOver`, distinct from the advisory
+shapes that only propose it — required to make at least one such decision. `SprintRetrospective`
+records that real problems were found and gives that output — previously a loose `.md` file — a
+first-class, queryable `RetrospectiveFinding` (`hasRootCause` required, `hasRemedy` deliberately
+optional: naming a fix before one is genuinely known produces false closure).
+
+**One real design point the test-drive itself surfaced, not smoothed over**: `SprintCeremony`'s
+common `ceremonyFor` (an `Iteration`) is required on Planning and Review, where it fits naturally,
+but deliberately *not* required on `SprintRetrospective`. Populating this package's own register
+with real retrospective findings from its own recent engineering process (a self-referential
+proof-path bug, a missed paired-declaration requirement, a symmetric-divergence design error, a
+changelog-editing mistake — all real, all from this lineage's own history, none imported from
+another lineage's register) showed that a retrospective's real content spans a release's whole
+engineering process, not one time-boxed iteration. The requirement was shaped by that finding, not
+decided in advance of it.
+
+**Retrospectives cannot be made to happen — the ontology cannot make a meeting happen, the same
+limit named throughout this framework — but a review that decided something real can be proposed
+one, the same way `StoryReadyToCloseShape` proposes a closing decision rather than making it.**
+`followsReview` (optional, on `SprintRetrospective`) names the review a retrospective was prompted
+by, when it was one review specifically. `RetrospectiveNotStartedShape` reports a
+`SprintReviewCeremony` that closed or carried over at least one story while no retrospective's
+`followsReview` names it yet — advisory, not required, since not every review's decision needs its
+own dedicated reflection. Verified against this package's own real, un-retrofitted history:
+`Review_It11`, retroactively modeled earlier in this same pass, genuinely never had a retrospective
+follow it, and the shape reports exactly that, honestly, rather than being satisfied by a
+fabricated link added only to silence it.
+
+**Ceremonies now chain to each other structurally, not only by shared timing.** A review's real
+job is to review what was planned, not independently re-derive which sprint it concerns:
+`reviewsCeremony` (required, `SprintReviewCeremony` -> `SprintPlanningCeremony`) names the plan, and
+`ReviewsPlanConsistencyShape` checks that the review's own `ceremonyFor` agrees with that plan's —
+a review naming one iteration while reviewing another's plan is reviewing the wrong sprint.
+`closesIteration` records the act that formally ends a sprint, distinct from `ceremonyFor`, which
+only says the review concerns it; once asserted, `IterationNotCleanedShape` requires every story
+still a member of that iteration to be either `Done` or named in the same review's own
+`flagsForCarryOver` — the environment is clean, in the sense that matters, when nothing is left
+with no disposition, not when every item happened to finish. `carriesOverFrom` (optional, on
+`PlanningEvent`) closes the loop on the other side: the later planning event that re-plans a
+spillover can say which review's own flag it answers.
+
+**A retrospective's findings are reusable, not only recorded.** `hasFindingScope` (required, on
+`RetrospectiveFinding`) names whether a finding's remedy is this lineage's own practice
+(`Scope_LineageLocal`) or a real gap in the shared methodology (`Scope_Methodology`) — the two
+individuals `FindingScope` is closed to, the same distinction this framework's own real handover exchanges with adopting lineages already draw
+informally, made structured. `informsRuling` and `escalatedVia` (both optional strings, the same
+plain-citation convention this framework already uses for governance rulings, since they are not
+reified as graph individuals) record what a finding actually became: a standing rule, or a
+methodology change put to the framework directly. Test-driven against this package's own real
+findings, not asserted as a category split in the abstract: of the four retrospective findings this
+package's own recent engineering process produced, three were genuinely lineage-local — practice
+recommendations, not framework changes — and one, the `PackageRegularityShape` divergence-rule
+correction, was genuinely methodology-scope, because its remedy is now that shape's own actual
+logic, not only a note for next time.
+
+### 2.5c-xxvii The LAYERS table lives in the shared TBox, and a checkpoint's timing can be a condition
+
+**Two real findings from the handover inbox, both grounded in G31, both verified independently
+before acting.** `backlog_lineage_completeness`'s own 18-individual LAYERS table was shipped only
+in this package's internal register, not the shared TBox its own tool glob searches — reproduced
+directly: the tool is `FATAL` for any adopter with nothing but the shared TBox loaded, and works
+only once the 18 individuals are manually copied in, which no adopter has reason to know to do.
+Moved to the shared TBox, where `DesignConcern`'s and `TaskType`'s own enumerated members already
+live — shared vocabulary belongs in the shared TBox, not this package's own private data.
+`MetricObservation`'s own `layerTier` corrected from `L2` to `L4` in the same move, independently
+re-verified against `MetricObservationShape`'s real severity before correcting, not taken on the
+finding alone. The other 17 tiers travel unchanged: a full audit of each against its own real
+enforcing shape is separate, real work this pass did not do, disclosed rather than implied.
+
+**`checkpointCondition`** (optional, `ObjectiveCheckpoint` -> `WorkItem`) gives `G31`'s own
+distinction — a condition, not a fabricated date, unless the timing is genuinely calendar-bound —
+a structural alternative to `checkpointDate` rather than leaving it to prose. `ObjectiveCheckpointTimingShape`
+requires at least one of the two: a checkpoint stating neither cannot be reported ahead, on track,
+or behind anything. `CheckpointBreachShape`'s own date-comparison logic is unaffected — a
+condition-based checkpoint simply isn't a candidate for a *date* breach, which is correct, not a
+gap: its own condition (a named `WorkItem` reaching `Done`) is a different kind of check nothing
+here yet formalizes, left for whichever lineage needs it to test-drive first.
+
+**A checkpoint before any work item exists (v1.113.0).** `checkpointCondition` names a `WorkItem`, and work items are
+the Backlog stage's content, so a lineage at its Objective stage could state neither a date it does not have nor an
+item that may not exist. Ruled from §2.5c-xxi-e (rules that need a later stage's elements bind only once the status
+has reached that stage) and G31 (a condition, not a fabricated date): `checkpointConditionText` (optional,
+`ObjectiveCheckpoint` -> string) states the condition in words. `ObjectiveCheckpointTimingShape` accepts a date, an
+item or the words. `CheckpointConditionAnchorShape` (Violation, G90) requires the item from the moment the objective's
+lineage reaches `LS_Backlogged`, unless the checkpoint carries a date. An objective must still carry a checkpoint
+(`ObjectiveMonitorShape` is unchanged), and `checkpointCondition`'s range is unchanged, so a scope deliverable or a
+milestone is named in the words and the item that satisfies it becomes the anchor. Proven by
+`fixture_checkpoint_anchor_negative` (two checkpoints fire, four controls stay silent) through
+`03-tooling/backlog_checkpoint_stage_probe`.
+
+### 2.5c-xxix A layer-tier correction does not touch real measurability, and closing metric-moving work is proposed a reading
+
+**The `MetricObservation` layer-tier correction (v1.67.0) is reporting metadata, not
+enforcement.** `layerTier` is read by exactly one script, the completeness reporter; no SHACL
+shape references it at all, and `MetricObservationShape`'s own real severity was `L4` both before
+and after the correction — only the printed label was wrong. Confirmed directly, not asserted: the
+governed register's own real validation result is byte-identical between the commit before the
+correction and the one after it, real `MetricObservation`s already present both times. A register
+that was already measuring stayed measuring; a register that would have been told the wrong level
+to expect a reading at is now told correctly.
+
+**`MeasurementDueAfterReviewShape`** proposes a reading at exactly the point closing real,
+metric-moving work makes one cheap and meaningful — the same limit as everywhere else in this
+framework: the ontology cannot take a measurement any more than it can hold a meeting or start a
+session, so this proposes, it does not create. Deliberately anchored to `metricMovableBy`, the
+capability link, not the weaker `pursuesObjective`: this framework's own governance ruling already
+names the exact failure this shape would reopen if it used intent instead of capability — every
+epic reaching `Done` with every objective unmet, flagged nowhere. Fires when a review closes a
+story `metricMovableBy` names for some objective and no `MetricObservation` for that objective was
+taken at or after the review; a reading taken *before* the closing work still counts as due, not
+as evidence the work moved anything. Test-driven against a dedicated fixture, not this package's
+own real register: BRSF's own `metricMovableBy` assertions currently sit at the Epic level, not
+the Story level a `SprintReviewCeremony` actually closes, so the shape correctly stays silent
+against real data today — disclosed rather than smoothed into a false positive test.
+
+### 2.5c-xxx Conformance-level gating is retired
+
+**Levels graded which constraints applied; every constraint now applies to every current and new
+lineage.** A real, scoped bug — `L3_Governed`'s own facet requirements never applying to
+`L4_LineageEnforced`, because two shapes tested for an exact level match rather than "at or above"
+— was traced during a direct cost comparison of L2 versus L3 versus L4. Challenged on whether the
+tiering itself was worth its own cost, not just this one asymmetry: most of this framework's own
+real, valuable advisory shapes were already ungated, firing at every level regardless — the
+tiering machine was protecting a minority of its own shapes while adding a surface area a bug like
+this one could recur on indefinitely.
+
+The true scope was found before anything was removed: over 90 distinct SPARQL blocks referenced
+`hasConformanceLevel`, not the ~24 the `L4`-labelled shapes alone suggested. Removed across an
+explicit multi-pass plan rather than one sweeping edit. Level-gating logic stripped from every
+content-checking shape. Five shapes whose entire subject was the level mechanism itself —
+`AdoptionRampShape`, `ConformanceDowngradeShape`, `StaleLevelReviewAdvisoryShape`,
+`SelfExemptionShape`, `ConformanceDeclarationShape` — retired outright, each with its historical
+incident comment preserved rather than deleted. `AdoptionProfileShape` no longer requires
+declaring a level; all four facets (Core, Evidence, Invariant, Audit) are now unconditionally
+required, which also resolves the original asymmetry as a side effect.
+
+`hasConformanceLevel`, `ConformanceLevel`, and the four level-management properties
+(`hasTargetConformanceLevel`, `hasLevelReviewDate`, `hasPriorConformanceLevel`,
+`hasDowngradeRationale`) are kept, not deleted — a done lineage's own asserted level is left
+exactly as recorded, honestly marked historical rather than silently orphaned. No new or currently
+active lineage declares a level; every constraint this framework ships is unconditional for all of
+them.
+
+**Real follow-up disclosed, not absorbed.** Making every constraint unconditional broke several
+previously-clean positive fixtures, each built to be minimally complete for whatever level it once
+declared. The ones load-bearing for a shape's own proof or Gate R's self-proof triad were repaired
+this pass; the rest remain real, tracked work for a future one, alongside a handful of tooling
+scripts that still reference conformance levels for reporting rather than enforcement.
+
+### 2.5c-xxxii A closed lineage is exempt from further advisory processing; an active one is not
+
+**Asked to differentiate lineage-specific gaps from methodology gaps, and to build the methodology
+to enforce full conformance — nothing less — while disclosing closed lineages as exempt from
+further processing.** Investigated rather than assumed: of the register's own advisory warnings,
+only three shapes' worth actually concerned a mission whose entire lineage had already been marked
+`lineageArchived true` — `SessionDraftedMissionAdvisoryShape`, `MissionReachShape`, and
+`UnfinishedLineageShape`, together 13 warnings across the five long-superseded missions
+(`Mission_Dev`, `Mission_Executable`, `Mission_Ops`, `Mission_OrderRepair`, `Mission_BuildSoftware`)
+and the current one mid-retirement (`Mission_BuildSoftware_v2`, whose own `Out_Achieved` outcome and
+`retiredAtCommit` are already consistent with its lineage's own already-`true` archived flag).
+Every other remaining warning was checked and confirmed to belong to `L_OntologyDriven`, this
+package's own still-active lineage — genuinely open, not eligible for exemption under the same
+criterion, and left fully, strictly enforced rather than quietly softened alongside the ones that
+were.
+
+**No new mechanism was invented.** `Lineage`, `belongsToLineage`, and `lineageArchived` already
+existed and already carried the disclosure the request asked for — six of seven lineages were
+already marked archived, the framework's own comment already noting they "sat validated on every
+run" without being respected by any shape. The fix was making the shapes that fire on a `Mission`
+check the flag that was already there, not building a new one: `FILTER NOT EXISTS { $this
+backlog:belongsToLineage ?lin . ?lin backlog:lineageArchived true }`, added identically to all
+three. A closed lineage's own disclosure remains exactly its `lineageArchived true` assertion and
+`archiveFile` pointer — visible, queryable, and not duplicated into a second notice.
+
+### 2.5c-xxxiv Every adopting lineage carries a default goal for its own conformance, built at kickoff
+
+**Per lineage (v1.112.0).** Every lineage carries its own: from its Goal stage (2.5c-xxi-e) until it closes (G89),
+a lineage needs one conformance goal that `belongsToLineage` it, and at most one. A closed predecessor's
+conformance goal is its own record and satisfies nothing for its successor. A goal that names no lineage counts for
+every lineage, and a register with no lineage at all is read as one. The objective chain beneath a lineage's
+conformance goal binds from its Objective stage.
+
+**Enforced, not merely recommended.** `AdoptionConformanceGoalShape` requires every `AdoptionProfile`
+to carry a real `Goal` (`isConformanceGoal true`, genuinely `Facing_Mission`) whose own `Objective`
+names a success metric, a checkpoint, and at least one real measurement — the same chain (goal,
+objective, metric, time to measure) this framework already requires of every product claim,
+applied reflexively to the register's own trustworthiness. Originally another registrant's own real fix to
+itself (`07-handover-inbox/accepted`): `WI_L4ConformanceGapClosure`, the item tracking that
+lineage's real conformance work, had nowhere honest to attach, because no product `Objective` was
+honestly about the register's own state. Archived at the owner's own direct suggestion that this
+become the standard default, not rediscovered independently by every adopter under time pressure.
+
+**Built at lineage kickoff, not reactively.** The handover's own revision (v1.1.0), following a
+direct request to specify exactly when each measure should be taken, makes the case precisely:
+this goal is a standing property of the whole lineage from day one, not a fix built only once a
+gap is found. A lineage that waits until conformance work is actually needed to build this goal
+has already lost the ability to honestly attach that work anywhere.
+
+BRSF's own register carries `Goal_BRSFConformance` / `Obj_BRSFConformanceHeld` as its own real
+instance of the pattern — `Dir_Hold`, not `Dir_Increase`: unlike another registrant's own real backlog of 22
+categories to close, this package's own violation count has genuinely never moved from zero
+across this session's work, so the honest objective is proving it keeps not moving, not closing a
+gap that does not exist.
+
+### 2.5c-xxxv A reading belongs to the ceremony that produced it, and can now say so
+
+**`observedDuringCeremony`** (optional, `MetricObservation` → `SprintReviewCeremony`) lets a
+`MetricObservation` name which review it was actually taken during, when it was taken at one.
+Advisory-only by design (`CeremonyLinkAdvisoryShape`, `sh:Warning`): nothing here can verify a
+claimed timing was honest the way `closedAtCommit` verifies stage order from git history, so the
+property lets a lineage that *does* discipline itself to real-time measurement say so
+structurally, rather than asserting that a lineage without the link is lying. Grounded in another registrant's
+own real incident: three closed reviews, only the third even attempting a same-session reading,
+and that attempt still landing 34 minutes before the ceremony's own `heldAt` — a plausible-looking
+but wrong moment that `MetricObservationShape` cannot catch, because *what* was measured was
+correct throughout; only *when* was wrong, and nothing in the vocabulary said when until now.
+
+### 2.5c-xxxvi When each real measure belongs, as a recommended pattern rather than a SHACL check
+
+The same handover proposes a starting table for exactly which event each property belongs to,
+built from another registrant's own real history of getting this wrong at three separate points: a baseline
+declared as a disclosed placeholder rather than a real reading taken at objective authorship, a
+`MetricObservation` taken in a later reporting pass rather than at the review that closed the
+work, and evidence typed generically rather than as `TestEvidence` at the moment a real test ran.
+**Deliberately not encoded as SHACL** — the handover's own argument, grounded in `G7` ("a tool
+that refuses is not thereby correct"), is that "was this the right moment" is a judgement no
+git-commit-ordered chain can verify the way stage order can, and a temporal check nobody can
+fixture honestly is worse than no check. Offered as documentation:
+
+| Real measure / property | Real event it belongs to |
+|---|---|
+| `Mission.hasMissionStatement` | Stage 1 commit (Mission authored) |
+| `Mission.hasMissionOutcome` | Mission superseded or lineage closed — never at authorship |
+| Scope-stage properties (`derivesFromMissionClause`, `coversArea`, `hasScopeLayer`) | Stage 2 commit, before any `WorkItem` exists |
+| `Goal.hasGoalFacing`, `derivesFromScope` | Stage 3 commit, once the scope it derives from is closed |
+| `Objective.hasBaselineValue` | Stage 4 commit — a real, as-of-now reading, not a placeholder deferred to later |
+| `Objective.hasMeasurementKind`, `hasCheckpoint`, `metricMovableBy` | Same commit as the objective itself |
+| `WorkItem.pursuesObjective`, `hasInvestmentCategory`, applicable concerns | Backlog grooming, before the item leaves `Proposed` |
+| `PlanningEvent`, `producesTask` | The Sprint Planning ceremony that actually makes the commitment |
+| `WorkItem.startedAt` | The real moment work begins, distinct from the planning moment |
+| Evidence properties, `TestEvidence` typing | The moment the real check actually runs, not reconstructed later |
+| `WorkItem.finishedAt`, `hasState Done` | The real moment work genuinely completes |
+| `TestHarness`, `harnessComplete`, `attestsCriterion` | The `Done` transition itself — they gate it, not follow it |
+| `WorkItem.lastAuditedAt` | Any real, recurring re-verification pass, distinct from `finishedAt` |
+| `MetricObservation` | **The `SprintReviewCeremony` that closes metric-moving work — at or immediately after, never a later pass** |
+| `RetrospectiveFinding` | The `SprintRetrospective` that follows the review, not before |
+| `ReleaseEvidence.deliveredInRelease`, `DeploymentUnit.decidedBy` | The real release/deploy event |
+| The conformance goal pattern (2.5c-xxxiv above) | Lineage kickoff, alongside everything else set once at the start |
+
+### 2.5c-xxxvii Three severities, not four, and what each one means
+
+**Asked to discipline what counts as a violation, a warning, and an opportunity, and whether a
+fourth category exists — researched against external standards before finalizing, not designed
+from this framework's own prior habit alone.** Two independent standard families converge on the
+same three-tier structure. SHACL 1.2 Core itself defines exactly three severities —
+`sh:Violation`, `sh:Warning`, `sh:Info` — with `sh:Info` explicitly documented as not signalling a
+problem at all. Separately, and without reference to SHACL, ISO 9001/13485/14001/45001 audit
+practice converges on the identical three-way split: a **Nonconformity** (a requirement is
+breached), an **Observation** (*"a concern or risk... that does not breach a specific requirement.
+No mandatory response required, but best practice is to address it"*), and an **Opportunity for
+Improvement** (*"a suggestion for how you might enhance your system. No response required"*). No
+external standard checked names a fourth tier as a distinct severity level; ISO audit practice
+subdivides Nonconformity into Major/Minor, but that is a subdivision of one tier's own consequence
+(does certification stay at risk), not a fourth kind of finding, and this framework has just
+removed the one graded-severity mechanism (`hasConformanceLevel`) it had — reintroducing grading
+inside `sh:Violation` itself would undo that in miniature.
+
+**The standing definition, both severities SHACL already ships and one this framework had used
+only once before now:**
+
+| Severity | External anchor | This framework's own definition | Consequence |
+|---|---|---|---|
+| `sh:Violation` | ISO Nonconformity; the SHACL default | A stated rule is broken. What the framework requires did not happen. | `sh:conforms` is false; blocks conformance |
+| `sh:Warning` | ISO Observation | No rule is broken, but a real risk exists that one will be, or that the register's own claim is weaker than it looks. | Reported, never blocks conformance |
+| `sh:Info` | ISO Opportunity for Improvement | Nothing is wrong and nothing is at risk; a genuine opportunity exists to make the register more complete, precise, or useful than it is required to be. | Reported, never blocks conformance, never phrased as a problem |
+
+**The one shape this taxonomy was first applied to failed it, and was retired rather than
+relabelled.** `UnscoredItemAdvisoryShape`, the single `sh:Info` shape this framework had before
+this ruling, was checked against the standing definition and found not to qualify at all: its
+condition (unscored, unflagged, `Proposed`/`Ready`) is identical to `SilentGapShape`'s own real
+`sh:Violation` a few lines below it in the same file — something *was* already wrong there, and a
+real rule already said so. Calling it an opportunity would have been the dishonest fit this same
+ruling exists to prevent. Retired, its historical comment kept, per the same practice `G40`
+already established for retired mechanisms. `sh:Info` currently governs zero shapes in this
+framework's own suite — an honest starting point for the audit below, not a gap to paper over.
+
+**Not retroactively re-graded across the whole suite when this ruling was first made, and the
+first-pass audit against it is now recorded here.** At the time `G43` was written, 65 shapes
+carried `sh:Warning` under the older two-tier habit, unchecked against the new definition. Since
+then two more `sh:Warning` shapes were added (`MeasurementDueAfterReviewShape`,
+`CeremonyLinkAdvisoryShape`, per `G42`), bringing the real count to **66** — itself worth
+recording, since restating the stale "65" would have been exactly the kind of unverified figure
+`L-65`/`B3` exist to catch. Every one of the 66 shapes' own advisory message was read against the
+standing definition (risk the register's claim is wrong or weaker than it looks, versus a pure,
+risk-free opportunity). Three that read as the strongest candidates for reclassification from
+message text alone — `ClassReachabilityShape`, `PbiKindAdvisoryShape`, `BothLayersShape` — were
+checked against their full `sh:sparql` definition, not the message alone, the same depth applied
+to `UnscoredItemAdvisoryShape` above. All three held: `ClassReachabilityShape`'s own message names
+a real, documented incident (an unreachable class went unnoticed for 91 releases and produced a
+wrong conclusion drawn in good faith); `PbiKindAdvisoryShape` names a mistake this package itself
+made and withdrew; `BothLayersShape` flags precisely the "claim weaker than it looks" pattern `G43`
+defines. **Finding: 0 of 66 warrant reclassification.** This framework's severities were already
+well-calibrated before the taxonomy was formalized enough to check them against — a result worth
+recording plainly rather than treated as an audit that found nothing because it wasn't thorough.
+The 63 shapes not individually checked against their full definition were judged from message text
+only, a lighter standard than the three spot-checks; a future pass that finds new evidence (a
+shape's real-world firing rate, an adopter's report) is not foreclosed by this one.
+
+carrying `sh:Warning` were written under a two-tier habit, not against this three-tier definition,
+and a systematic pass checking each against "risk" versus "opportunity" is real, separate audit
+work — this ruling establishes the standard to audit against, not a claim that the audit is done.
+
+### 2.5c-xxxvii Model artefacts
+
+`ModelArtifact` records **that** a model exists, its kind, and what it describes — never its content. A
+register holding diagrams becomes a modelling tool; the framework governs records about work.
+
+`ModelKind` carries the **14 UML 2.5 diagram kinds**, and `ModelCategory` the structure/behaviour split
+as a **separate property**, so asking for every behaviour artefact does not mean listing seven kinds and
+silently missing one when an eighth appears.
+
+**`Diagram` is not a class.** A diagram is a `ModelArtifact` whose kind is a diagram kind; a separate
+class would force every query to union two.
+
+`producesModelArtifact` has domain `ExecutionTask` **or** `RefinementEvent`: a design task produces
+artefacts during execution, a refinement produces them during grooming. The second is what makes
+grooming say what it *yielded* rather than only that it happened.
+
+At L2 an artefact must name its kind and the item it describes. An advisory reports a Done
+design-definition task producing nothing — a design task may legitimately conclude no model is needed,
+but a task that produced nothing and a task nobody recorded must not look identical.
+
+### 2.5c-xxvi What a story carries
+
+`Specification` — what a story **does**, distinct from an acceptance criterion, which says whether it
+is **done**. A story with criteria and no specification can be signed off without anyone able to say
+what was signed off.
+
+`InteractionStep` carries an **ordinal**, not a link to the next step: a linked list makes insertion
+cheap and querying expensive, and the question asked of a specification is what step three is.
+
+**Work done by a federation of automated actors (v1.114.0).** Ruled on the rdodi-ecosystem handover (request numbers
+are the handover's), each from an existing rule, none by a new tier:
+
+- *The actor of a task (2.1).* `performedByActor` (`ExecutionTask` -> any resource, not functional) names the automated
+  actor that carried a task out. It is open on purpose: the framework prescribes no agent vocabulary, and a consumer
+  package names its own actors. A `TeamRole` cannot serve, because its definition is how a team of people is organised.
+  The execution mode still says whether the work was automated and the supervision mode who watched.
+- *Ordered steps per task type (2.2).* `TaskTypeStep` is one ordered step of a task type, joined by `hasTaskTypeStep`
+  (`TaskType` -> `TaskTypeStep`), positioned by `hasTaskTypeStepOrdinal` (an ordinal, not a link to the next step, for
+  the reason `InteractionStep` gives) and stopped by `checkedByToolScript` (`TaskTypeStep` -> `ToolScript`, reused, so a
+  run of the check is a tool-run record). The proposed name `hasPlaybookStepOrdinal` was renamed because the framework
+  has no "playbook". Four Violation shapes, each proven by `fixture_task_type_step_negative`: `TaskTypeStepOrdinalShape`
+  (a position from 1), `TaskTypeStepCheckShape` (a checker is named), `TaskTypeStepOrdinalUniqueShape` (no two steps of
+  one task type share a position) and `TaskTypeStepOwnedShape` (a step belongs to exactly one task type). The same
+  position under another task type is fine. Re-runnable through `03-tooling/backlog_task_type_step_probe`.
+- *A record of one automated step (2.3).* Not a new class (G39, L-110): `ToolRunRecord` is enriched. Its definition now
+  covers any automated step that checks one thing against another, by a person, a script or an agent. A step that only
+  produces output compares nothing and has no baseline to be distinct from, so it is not a record of this kind; that
+  case is deferred until a consumer shows a real one.
+- *The route of a request (2.4).* Deferred, no term added. The evidence is measured on one repository and the proposer
+  states that the design has not met a real request. Revival: a real request routed by structural criteria whose route
+  the framework's existing change-request disposition cannot express. Routing must never relax a rule.
+- *Reuse (handover section 3).* Refusal is a change request with disposition rejected or deferred. Independent evidence
+  for unsupervised work is already required by `requiresIndependentEvidence`. Neither changed.
+
+`StateChange` names a from-state, a to-state and a trigger. States are **free text**, not an
+enumeration — the framework governs registers for any domain and cannot know a domain state machine.
+What it can check is that a change actually changes something.
+
+`TestCase` and `TestData`: a case is a named check that could fail; data is the fixture state it runs
+against, **described rather than contained**. Evidence previously pointed at a fixture path and a
+verdict; a case lets a reader disagree with the check rather than only with the claim.
+
+`TestCase` carries both `exercisesCriterion` and `coveredByCase` so it is **named as a range** — a
+class no property points at is one nobody uses.
+
+At L1: two steps claiming one position, or a change from a state to itself. At L2: a step without its
+position or action, a change without its states. At L3: a case exercising no criterion or naming no
+data. An advisory reports a story groomed for Interaction that carries no specification.
+
+### 2.5c-xxvii States come from domain analysis
+
+`declaredByArtifact` (StateChange → ModelArtifact) and `declaresState` (ModelArtifact → literal).
+
+The framework does **not** need to know a domain's states. It needs to know **where they came from** —
+and the lineage already carries that: `Task_MissionAnalysis` is domain engineering,
+`Task_RequirementsDefinition` is business analysis, and `Kind_StateMachineDiagram` is the artefact they
+produce.
+
+A state name stays free text, because the name is a domain word. What is checked is that the name was
+**declared by an artefact some analysis task produced**. Without it, two stories can name the same
+state meaning different things and nothing notices.
+
+At L3 a state change must name its declaring artefact. At L4 a change using a state the artefact does
+not list is rejected — either the analysis is incomplete or the story invented a state, and the
+register reports that they disagree rather than guessing which.
+
+### 2.5c-xxviii Grooming applies at every PBI level
+
+`GroomingShape` targets `Story`, `Epic` **and** `Initiative`. It previously targeted `Story` alone, so
+a container could reach Done with no analysis at all — **the level where a boundary decision is most
+consequential was the level nothing checked**.
+
+An epic's analysis is not its stories' analysis summed: an epic decides what the theme requires, a
+story decides how a slice is built.
+
+### 2.5c-xxix A scope says WHERE, not only what must be true
+
+`ScopeArea` names a place the work must reach — files, modules, a body of material — with
+`areaLocation` (precise enough to open) and `areaMeasure` (**counted**, not described).
+`deliverableForArea` binds a finish condition to a place.
+
+**Why this was needed.** `ScopeDeliverable` says *what must be true*. Applied to a mission already
+stated as conditions, that definition can only produce **restatement**: "governance is expressed as
+ontology" is the mission's own sentence with the subject changed. Such a scope has content, its
+coverage figure can fall, and it is still the mission said twice — the v1.83.0 fix does not catch it,
+because nothing was missing, only misplaced.
+
+A scope of deliverables alone cannot be acted on: it names no place. A scope of areas alone is a task
+list with no finish condition. **Both are needed**, and the framework had only one.
+
+At L3 a scope enumerating deliverables and naming no area is rejected.
+
+**`PrematureExclusionShape`** reports a scope carrying exclusions while naming no area: what is being
+excluded was decided before anyone established what the mission needs. Narrowing a boundary before
+knowing what it must cover removes work nobody has shown to be unnecessary — and an exclusion, once
+written, reads as settled.
+
+### 2.5c-xxx Goals face two ways
+
+`GoalFacing` — `Facing_Mission`, `Facing_Scope`, `Facing_Containment`. A lineage needs **all three**,
+and they are not interchangeable. What is missing decides how the lineage fails:
+
+| Missing | Failure it cannot report |
+|---|---|
+| Mission-facing | Every area finishes and the mission is still unreached — **the boundary was insufficient**, and the boundary is what was being measured |
+| Scope-facing | The mission's condition holds while half the areas are untouched: a general condition does not notice which half was skipped |
+| Containment-facing | Both hold while effort went somewhere the scope never named — **no measure that counts what was required can see what was not** |
+
+At L3 a goal must declare its facing. At L4 a live scope must have goals covering all three.
+`goalCoversArea` is required of scope-facing goals so an area answerable to nothing is visible.
+
+### 2.5c-xxxi Scope has two layers, and an outside
+
+**PMBOK separates product scope — the features and functions delivered — from project scope, the work
+required to produce them.** `ScopeLayer` carries the distinction on every area, deliverable and
+exclusion, because the two fail differently: a product-layer error ships the wrong capability, a
+work-layer error spends effort in the wrong place.
+
+A capability may be in the product scope while the work to build it sits outside this project's work
+scope — bought, inherited, or deferred. A framework with one layer cannot say that.
+
+**`Facing_Exclusion` is an inverse goal**: met by absence, naming the specific exclusion it keeps via
+`guardsExclusion`. Distinct from containment-facing, which asks whether work stayed inside the areas.
+PMBOK treats explicit exclusions as the principal safeguard against scope creep — and **an exclusion
+nothing measures is a sentence, not a safeguard**.
+
+At L3 a boundary statement must declare its layer. At L2 an exclusion-facing goal must name its
+exclusion. Advisories report an exclusion no inverse goal guards, and a scope stated in one layer only.
+
+### 2.5c-xxxi Within product scope, a second axis: what it does, and how well
+
+**ScopeLayer says what a boundary is about; `ProductScopeKind` says, within the product layer, what
+kind of claim a deliverable is making.** ISO/IEC 25010 separates functional suitability from its other
+quality characteristics, and the two fail as differently as product and work scope already do: a
+`Kind_Functional` error ships the wrong capability, a `Kind_NonFunctional` error ships the right
+capability unreliably, opaquely, or unsafely.
+
+`hasProductScopeKind` is narrower than `hasScopeLayer`'s own three-class domain, deliberately — only a
+`ScopeDeliverable` makes a capability-or-quality claim; a `ScopeArea` names a place and a
+`ScopeExclusion` names a work-boundary, neither of which is itself functional or non-functional.
+
+`ProductScopeKindShape` mirrors the layer advisory exactly: it reports when every product-scope
+deliverable of a scope names the same kind, for the same reason a single-layer scope is reported — the
+commoner cause is that the other kind of failure was never considered, and a scope silent on
+reliability, transparency or safety cannot later say those were out of scope rather than simply
+unexamined.
+
+### 2.5c-xxxii An objective that can be monitored
+
+`ObjectiveCheckpoint` carries `expectedValue` at a `checkpointDate` — **what turns a measure into a
+monitor**. Progress was always computable from dated observations; prediction was not, because nothing
+stated what value was *expected* by a date. An objective could only read met or unmet, and only at the
+deadline. An advisory now reports an objective behind its own checkpoint, which is the only point at
+which the information can still change the outcome.
+
+`MeasurementKind` — `Meas_Counted`, `Meas_Derived`, `Meas_Judged`. The three carry different weight: a
+count anyone can reproduce, a derivation that depends on a query being right, a judgement that can only
+be agreed with. **A derived objective must ship its query**, or it is a judged figure wearing better
+clothes.
+
+`Dir_Hold` is for an **inverse goal**, whose objective is a *ceiling* rather than a trajectory: the
+count of things that should not happen must stay where it is. Distinct from `Dir_Decrease` with a
+target already reached, which claims an improvement that never occurred.
+
+### 2.5c-xxxiii Governance as ontology
+
+`GovernanceRuling` carries `hasRulingIdentifier`, `hasRulingStatement`, `hasRulingRationale`,
+`rulingSource` and `enforcedByShape`.
+
+Eighteen rulings existed as markdown headings: **enforceable**, in that shapes implemented them, and
+**unreachable**, in that no query could return one. A ruling nobody can retrieve cannot be checked
+against the shape that claims to enforce it — previously a reader compared a heading against a suite by
+hand, and nothing objected when a ruling lost its shape.
+
+The statement is separate from the rationale because **the decision has to be checkable against a shape
+and the reasoning must not be**.
+
+`LineageLayer` is the first exported code table: `layerClass`, `layerOrdinal`, `layerAbsenceCost`. The
+ordinal is an integer rather than list position, so the order survives being queried in any sequence — a
+list's meaning depends on nothing reordering it.
+
+### 2.5c-xxxiv Quality metrics, and what a script may decide
+
+`QualityMetric` with `hasMetricName` and `isPopulationSensitive` names the OntoQA measures and says
+which of them respond to individuals being added.
+
+It exists because the quality assessor held `if name in ("ClassRichness", "AveragePopulation")` —
+written twice. That is a statement **about the metrics**, not about the script, and an adopter adding
+their own measure could not register it as population-sensitive without editing a tuple they do not
+ship.
+
+The framework ABox holds framework-level individuals only, so population-sensitive metrics understate
+by design and are read twice: once alone, once with an adopter fixture merged. Both readings are
+reported rather than the flattering one.
+
+**`backlog_script_decision_audit`** scans for the *shape* of a decision — literal membership, filename
+decisions, polarity by name — rather than a list of known offenders, which goes stale the moment
+someone writes a new one. It parses rather than greps, because an audit that cannot tell a docstring
+from a decision reports its own success as a failure.
+
+**`backlog_standard_row_check`** resolves table rows against the TBox rather than requiring hand
+annotation. It reports rows naming a term the TBox lacks, and states its own limit: a row whose first
+cell is a *claim* rather than an identifier cannot be checked, and those are reported rather than
+excluded — a longer exclusion list would make the checker agree with the document by construction.
+
+### 2.5c-xxxv Which tables belong in the ontology
+
+`TableKind` — `Table_Classification` or `Table_Operational`. A classification table states what
+something **is**; an operational table states how the tooling **runs**.
+
+The distinction decides whether a table belongs in the ontology. Exporting operational configuration
+would put build settings in an ontology about backlogs and **add classes the exported material does not
+require**, which is what a containment objective is held at zero to prevent — the migration would
+breach one goal in the act of satisfying another.
+
+`CodeTable` records the population by name, because a count of capitalised assignments **moved from 23
+to 26 during the migration**: the work itself shipped scripts carrying new tables, and an objective
+whose denominator moves cannot be met.
+
+**Sort by content, not by name.** `SCAN` and `PATTERNS` sound like classifications and are regex lists.
+Reading each table rather than its identifier moved six more into the operational set — the honest
+denominator was eight, not 23.
+
+`stageRequiresType` carries what each lineage stage must contain. It was a python dictionary defining
+the ceremony this framework **enforces**, which no query could reach: an adopter following the published
+ceremony and one checked by the verifier were reading two different specifications.
+
+`bridgeCoversEvidence` is the sharpest split. The source list paired an evidence **class** with a python
+function checking it — which kinds are covered is a domain statement and moved; how each is checked is
+the script's behaviour and stayed.
+
+### 2.5c-xxxvi Three more exported classifications
+
+`ContainerRole` names the classes the reporting tools treat as containers of work, so an adopter
+defining their own container is counted by the reports without editing them.
+
+`ForeignNamespace` names the namespaces this package uses and does not own — a governance statement
+rather than a lookup, since an adopter must not assume a term from one of these is theirs to change.
+
+`ShapeSuite` names the SHACL suites a register is expected to satisfy. Its filename glob is kept beside
+the name deliberately: separating them would leave the ontology naming suites nothing could find.
+
+### 2.5c-xxxvii Header words and documented abbreviations
+
+`TableHeaderWord` names the first-cell values that head a column rather than name a term.
+`TermAbbreviation` records the short forms the documentation uses — `L2` for `L2_EvidenceBound`.
+
+Both were found by tools catching their own author. The script-decision audit shipped reporting zero
+and then reported **the checker written beside it in the same iteration**. An audit that passes once is
+a measurement; one that keeps passing is a constraint.
+
+The abbreviation case is a checker defect, not a document defect: a checker resolving identifiers
+literally reads a documented short form as an absent term. **The fix is to teach the checker, not to
+rewrite the document or exclude the row** — either of those makes the checker agree with the document
+by construction.
+
+Some rows remain uncheckable and that is a property of prose. A row whose first cell is a *finding* has
+no IRI to check against, and the three ways out are: invent individuals so a checker passes, exclude
+the rows, or state the limit. Only the third leaves the measure meaning anything.
+
+### 2.5c-xxxviii A criterion names the artefact that satisfies it
+
+`satisfiedByArtifact` on `AcceptanceCriterion` names the thing whose existence makes it true — a term
+IRI, or a path with a symbol in it. `CriterionSatisfaction` records what a check **found**, per
+criterion, as distinct from `TestEvidence` which records that testing **happened**.
+
+**Why both are needed.** A story can be Done with a specification, ordered steps, a test case, test
+data, a planned task, verified evidence and a complete harness — and the thing it promised can not
+exist. Every clause in the suite passes because none asks whether the artefact is there.
+
+It passes when **one evidence record attests several criteria** and its verification method describes
+the iteration as a whole. A criterion then rides on a claim about its neighbours. An advisory reports
+evidence attesting more than three.
+
+`artifactResolved false` is a legitimate value: a criterion looked for and not found was previously
+unsayable.
+
+`FixturePolarity` replaces inference from a filename. A file with "negative" in its name was expected
+to fail, so a rename changed what the suite expected of a file without changing the file — and a
+negative fixture that starts **passing** is the dangerous direction, because the clause it exists to
+prove has stopped firing.
+
+### 2.5c-xxxix A criterion is tested in more than one situation
+
+`TestScenario` names the situation a case exercises, with `ScenarioKind` — nominal, boundary,
+rejection, absent. Four, because they fail differently: the nominal path proves the feature works, a
+boundary proves it stops where it should, a rejection proves it refuses what it must, and an absent
+case proves it **fails loudly rather than silently returning nothing**.
+
+That last one is not academic. A malformed FILTER once reported zero violations *and* zero warnings,
+and only the second number gave it away.
+
+**A criterion with one test case has been tested in one situation and reads as fully covered.** The
+count of cases says how much testing happened; the count of scenario kinds says how much of the
+criterion it reached.
+
+Three advisories accompany this: a story whose every task is implementation, a criterion reaching fewer
+than two scenario kinds, and a Done story with no test case at all.
+
+They are advisories rather than violations for a measured reason. Making them L3 would fail 55 stories
+already closed, and **a rule that fires 55 times on its first run gets suppressed; one that reports 55
+times gets worked down.** That is how deployment coverage, self-exemption and grooming depth were
+actually corrected.
+
+### 2.5c-xl A floor is measured, not argued
+
+`ClassReachabilityShape` reports a class that no property names as a range and no individual is of.
+That decision lived in python, and was twice declared **unable** to move to the ontology on the
+grounds that a register cannot hold a rule about classes that do not exist.
+
+**The premise was wrong in a specific way.** The rule is not about classes that do not exist; it is
+about classes that **do** exist and are unreachable, and every one is already a subject in the shipped
+graphs.
+
+Established by three experiments rather than by argument: read what the code decides, write it as
+SPARQL (25 classes), write it as a shape and compare **element-wise** against the query (25 and 25,
+identical sets). Element-wise, because two wrong answers of the same size agree on a count.
+
+Twice in this framework's history an objective has been defended as having reached a structural floor
+and turned out to be unfinished work — this, and the belief that packages could not exist before
+delivery. **A floor asserted is not a floor measured**, and an objective stalled on an argument
+deserves an experiment before it is accepted.
+
+### 2.5c-xli No verdict about a graph nobody read
+
+`backlog_self_application` runs every input-taking checker with **no arguments** and fails if any
+returns a verdict.
+
+It found one on its first run. The reachability gate parsed nothing, counted zero classes, found zero
+unreachable, and reported **PASS**. The release gate happens to pass paths so it never fired there —
+but the script ships, and an adopter running it bare would be told their vocabulary is clean when it
+was never read.
+
+**A checker that passes on an empty graph is worse than no checker**: it produces the appearance of
+verification.
+
+This is the third variant of one failure in this framework's history — a clause returning no rows, an
+evidence record covering a criterion it never checked, and a checker reading no file. Each time the
+result was green, and the greenness came from nothing having been examined.
+
+Every previous self-application finding here was noticed **by accident**. This one was found by asking.
+
+### 2.5c-xlii A shape names the fixture that proves it
+
+`provenByFixture` and `fixtureCaseName` declare, on the shape, which fixture demonstrates it fires and
+which case inside that fixture triggers it.
+
+**Why declared rather than inferred.** The clause-proof checker matched message text, which is fragile
+by construction: reword a message and a clause silently becomes unproven — or matches a *different*
+clause and reports proven.
+
+A declared link can be **verified**: run the named fixture, look for the named case. That is the
+difference between a link and a claim, and the checker does exactly that.
+
+**Five shapes carry a declared proof, not 222.** Annotating all of them would assert 217 links nobody
+checked, which is the defect of evidence covering criteria it never examined. The checker reports
+declared and inferred counts **separately**, so the difference stays visible rather than averaging into
+one reassuring number.
+
+### 2.5c-xliii A capability names what obliges its use
+
+`obligedBy` names the shape that makes a term obligatory. `adoptionRationale` states, for a term that
+is **deliberately** optional, why.
+
+Both exist because *optional by decision* and *optional by omission* look identical, and the second is
+what left `Package` unused for 91 releases while every check passed. `TaskType` shipped with fourteen
+values and 44 of 51 tasks chose one; `TestCase` shipped and 46 of 55 stories never used it.
+
+**A capability and the constraint that requires it are otherwise separate objects with nothing joining
+them.** `backlog_adoption_check` reports three states — obliged, optional-with-reason, and **orphan** —
+kept separate because they mean different things.
+
+### 2.5c-xliv Every number says where it came from
+
+`NumberOrigin` — `Num_Derived`, `Num_Asserted`, `Num_Measured` — declared on the **property**, because a
+property is derived or asserted by its nature. A derived property must ship its `derivationQuery`, or
+it is an assertion wearing a derivation's clothes.
+
+**Why it matters.** `hasCommittedEffort` was compared against `hasCapacity` and both were assertions: an
+iteration held 15 points while declaring 9 and every check passed. Iteration dates were asserted and
+compared to nothing — 32 and 28 real minutes declared as fourteen days.
+
+**Two numbers agreeing prove only that someone wrote both.**
+
+Eight clauses in the shipped suite compare two asserted properties to each other. Several are
+legitimate — comparing a baseline to a target is how a direction is checked, and both *should* be
+judgements. What was missing is that a reader could not tell those from the one that let an iteration
+overfill in silence. They are reported, not failed.
+
+### 2.5c-xlv A lineage is set down, not left running
+
+`MissionOutcome` — `Out_InFlight`, `Out_Achieved`, `Out_Abandoned`. **Superseding is not an outcome**:
+it replaces a statement of intent with a better one and the intent continues. These three are what
+happens to the intent itself.
+
+Without them a mission that was achieved and one still running are indistinguishable, so a finished
+lineage stays in scope of every query forever.
+
+**A mission may not be Achieved while a goal is unreached and unexplained.** A lineage carrying a live
+unmet goal is not finished, it is stalled, and retiring it would bury the reason. The goal's status
+changes first, with a rationale, or the mission stays in flight.
+
+`Ach_Retrospective` is that change and it is narrower than `Ach_Withdrawn`. **Withdrawn says the
+measure was wrong; retrospective says it was right and the event it counts already happened.** A
+retrospective objective keeps its number permanently — adjusting it so a mission can read Achieved is
+the failure such an objective exists to detect.
+
+`retiredAtCommit` is an external witness, as `closedAtCommit` is for a stage: without it a retirement
+date is an assertion, and this framework has already learned what asserted dates are worth.
+
+### 2.5c-xlvi A lineage is a thing, not a pattern of links
+
+`Lineage` with `belongsToLineage`, `lineageForMission`, `lineageOrdinal`, `lineageArchived` and
+`archiveFile`.
+
+**Instantiated as individuals, not generated as a class per lineage.** Seven lineages would otherwise
+mean seven classes, every new run a TBox change, and the ontology growing with the work rather than
+governing it. Standard OWL 2 DL — no metaclasses, no OWL Full. The framework already puns this way:
+`stageRequiresType` points from an individual to a class.
+
+**Why it was needed.** Seven lineages shared one register and every one was validated on every run.
+They are near-disjoint — 22 cross-lineage references, all `memberOfContainer` — yet none could be set
+aside, because a lineage was a pattern of links and patterns cannot be picked up.
+
+Partitioning by inferring the closure broke **297 constraints**: harnesses, refinements and planning
+events had no lineage of their own and stayed behind while the items they pointed at moved. So
+`belongsToLineage` is carried by **every** individual, not only work items, and is required at L2.
+
+Some individuals are **framework-wide** — code tables, governance rulings, quality metrics, and the
+`Lineage` individuals themselves, which are the index. An index that archives with its contents cannot
+be searched.
+
+### 2.5c-xlvii A container serves one lineage, or says it doesn't
+
+`containerForLineage` names the lineage a container serves; `ContainerScope` states whether it is
+lineage-scoped or framework-scoped.
+
+**Stated rather than inferred** from whether `containerForLineage` happens to be present, because
+absent-by-decision and absent-by-omission look identical — a distinction this framework has had to
+learn more than once.
+
+Assigned by reading what a container's members and references belong to, not by naming it: 31 of 33
+serve exactly one lineage and archive with it.
+
+Two genuinely span lineages. A `Roadmap` that ranks work across runs spans them by its nature, and so
+does a `Scope` that drew boundaries for several. Both stay live and retain pointers into the archive —
+**a pointer into a named archive file is a reference, not a dangling edge**, which is why an archived
+lineage must name its `archiveFile`.
+
+The `Register` is the case that forces framework scope to exist: a register that archives with its
+contents cannot be read.
+
+### 2.5c-xlviii Whether a checker accepts a graph is declared, not guessed
+
+`ToolScript` with `acceptsGraphPath`, verified against real observed behaviour rather than trusted.
+
+**The owner's challenge, and three wrong attempts before this one.** The clause-proof fixture filter
+decided by testing filenames for `"negative"`, `"adversarial"`, `"digestfail"` — a plain Python string
+check in a package whose mission is that the ontology decides, not the script. It escaped the
+script-decision audit because the shape (`any(k in name for k in (tuple,))`) matched none of the
+audit's existing patterns.
+
+Fixed by reading `hasExpectedPolarity`, already declared on every fixture since v1.119.0 for the
+identical reason. Verified against the ontology directly: 15 of 15, exact match.
+
+The audit gained a fourth pattern and immediately found a **second** instance — the same shape in
+`backlog_self_application`'s `TAKES_INPUT` tuple. Replacing it took three attempts: a source-shape guess
+(wrong — misclassified `backlog_validate`, which uses argparse rather than raw `sys.argv`), a behavioural
+bare-run test (wrong — misclassified six checkers that legitimately locate their own data via internal
+glob and report real, clean results), and finally a declared fact, verified individually against each
+script's actual behaviour.
+
+**A known gap, stated rather than hidden.** The audit's `audit-exempt` marker — added to exempt one
+genuine false positive — suppresses *any* decision on the line it sits on, unconditionally, with no
+check that the exemption is true. Proven directly rather than assumed: a planted decision marked exempt
+with an unrelated reason went uncaught. Recorded as `Inv_AuditExemptionUnchecked`, Violated.
+
+### 2.5c-xlix A2, scaled forward, and G25 — an exemption is a checked claim
+
+`backlog_new_shape_proof` compares the current shapes file against the last **published** copy: any
+shape new since then must declare `provenByFixture`, or it ships unproven the way every earlier one did.
+Backfilling the 232 existing shapes was rejected — it would assert links never checked at authoring
+time, the defect `G21` names. This is forward-only and permanent: once a shape is published it is
+grandfathered, and only the next one is asked to prove itself.
+
+**G25.** The `audit-exempt` marker used to suppress any decision on its line, unconditionally, once a
+comment carried that string. It now names a **defined, narrow SAFE_EXEMPTIONS shape**, and the audit
+checks the actual code against that shape's regex rather than the comment's claim.
+
+Verified against three cases: the real exemption still passes; a genuine decision tagged with an
+unrelated or undefined reason is caught; and — tested unprompted — a decision tagged with the **real**
+shape name, on code that does not match it, is also caught. The check reads the code, not the label.
+
+### 2.5d Decomposition, commitments, dependency kinds, impediments, flow, team (subject v1.4.0)
+
+| Term | Meaning |
+|---|---|
+| `decomposesInto` / `partOf` | The epic-feature-story ladder as a part-whole relation; non-transitive so roll-up cannot double-count. A parent may not be Done over an open child, and parent and children may not both carry scores |
+| `decompositionState` | The state a parent's children support, derived by rule R8 |
+| `Commitment` + `commitsToGoal` / `commitsToObjective` / `commitsToDefinitionOfDone` | What an artifact commits to: a backlog to a goal, an iteration to an objective, an increment to a Definition of Done |
+| `Dependency` + `DependencyKind` | Reified dependency over a closed set — knowledge, task, resource — because the kind determines what would release it |
+| `Impediment` | An obstacle that is not a dependency: cleared by someone acting outside the register, not by finishing work. Unresolved ones must be owned |
+| `startedAt` / `finishedAt`, `WipLimit` | The well-defined points every flow measure is defined against, and work-in-progress as a *policy* distinct from the measure |
+| `Team`, `TeamRole` (open), `hasCapacity` | Who delivers. `Role` stays closed at Owner/Builder because it governs who may *decide*; team organisation is the adopting method's business |
+| `asRole` / `wantsCapability` / `soThat` | The canonical user-story clauses, with an advisory when the "so that" is missing |
+
+### 2.5e Falsifiability — how a register can be wrong (subject v1.5.0)
+
+Added after an adversarial register — arbitrary scores, "asserted" verification, an unobserved
+objective past its deadline, Gherkin-shaped noise — validated at L3 with **zero** violations. Every
+term here exists so that a plan can fail visibly.
+
+| Term | Meaning |
+|---|---|
+| `MetricObservation` | A dated, method-bearing measurement of a metric — the missing half of an objective |
+| `hasTargetDirection`, `MetricDirection` | Which way the metric must move; without it a target cannot be contradicted |
+| `objectiveOutcome`, `milestoneOutcome`, `AchievementStatus` | Derived Met / Missed / Pending — **Missed** is a first-class computed outcome |
+| `Rebaseline` | Owner-decided target moves, previous value retained, rationale required — the control against quietly editing the target until the outcome matches |
+| `hasActualEffort` | Required on completed estimated work, so an estimate can be shown to have been wrong |
+| `verifiedByTool` | Required at L3; closes the loophole that let a human write `evidenceVerified true` with the method "asserted" |
+
+Enforcement added with them: WSJF and RICE values checked against their own components; scores
+predating the last completion rejected at L3 (BP-D11); objectives whose target equals their baseline
+rejected; Gherkin-shaped but empty acceptance criteria rejected; items tracing to no objective
+rejected at L3; a roadmap rank contradicting the score order required to carry a rationale.
+
+### 2.5f Register packaging (subject v1.7.0)
+
+| Term | Meaning |
+|---|---|
+| `RegisterPackage` | The shippable unit of an adopter's governance data: version, manifest, and the artifacts below |
+| `RegisterArtifact` + `ArtifactRole` | Closed five-role set: register data, progress report run, evidence index, manifest, profile declaration |
+| `conformsToNamingConvention` | Points at a `configuration:NamingConvention` **by IRI**; patterns are never copied, and the package checker reads them from the pack at check time |
+| `hasManifestSHA256`, `reportRunRetainedAs` | The manifest carries its own digest; progress runs survive the terminal |
+
+**Which convention governs which file** — settled under the conventions as ruled, no local minting:
+
+| Role | Convention | Basis |
+|---|---|---|
+| Register data (`.ttl`) | `configuration:ABoxFileConvention` | Ruled at OE Pack v20.23.41: that convention governs governance-register data |
+| Progress report run (`.ttl`) | `configuration:ABoxFileConvention` | A retained run is register data in the same sense; follows the pattern exactly, no form divergence, so L-110 says enrich rather than mint |
+| Progress report run (`.md`) | `configuration:AuditReportMarkdownConvention` | Follows `{name}_v{M}_{m}_{p}.md` exactly; again no form divergence |
+| Profile declaration, evidence index (`.ttl`) | `configuration:ABoxFileConvention` | Instance data of this subject |
+| Manifest | none | Not an ontology artifact; named `MANIFEST_SHA256.txt` by pack practice |
+
+### 2.6 Governance
+
+| Term | Meaning |
+|---|---|
+| `MethodologyRule` | `hasRuleLogic` + `closesDisagreement` + `hasMotivatingIncident`, all required |
+| `ReleaseGate` | Gate 0 (manifest), Gate P (parse), Gate K (version identity), Gate R (SHACL reconcile) |
+| `CrossCuttingInvariant`, `InvariantStatus` | Executable standing checks with an honest third value. `NotYetEnforceable` + `tracksItem` is the framework's record that **a mechanism is disclosed broken and the work that would fix it is named** — and at L1 that record now carries two obligations: the tracked fix cannot reach `Done` without Evidence, and the invariant cannot stay `NotYetEnforceable` once every item it tracks is `Done`. The trigger is **derived from the invariant**, never self-declared, so it catches the case whether or not anyone remembers to flag it |
+| `AdoptionProfile`, `ConformanceLevel`, `FrameworkFacet` | The reuse mechanism |
+| `lastAuditedAt`, `hasAuditNote` | Per-item re-verification; absence means unchecked |
+
+---
+
+## 3. Conformance levels
+
+| Level | Enforced |
+|---|---|
+| **L1 Core** | Unique identifiers, one state, well-typed references, no dependency cycles, rationale on cancellation, one live score per method, containers non-empty and consistent with their derived state, roadmap items present in a register, milestones dated and backed by work, launch gates owner-decided with a priority, launch priority only on declared launch gates, container scores judged not averaged, scoreability flags carrying reasons, disclosures matching edges, gaps and rules and reports and documents well-formed |
+| **L2 Evidence-Bound** | L1 + Done requires at least one verified Evidence; a Done item may not depend on unfinished work; **no silent gaps**; profile must adopt the Evidence facet |
+| **L3 Governed** | L2 + Done anchored by verified test or release evidence; `lastAuditedAt` recorded; **full life-cycle sweep per domain entity**, every stage covered or explicitly gapped; profile must adopt Invariant and Audit facets |
+
+**The rule that generates the split**, stated because a careful reader had to ask for it: **L1
+constrains the well-formedness of what you author; L2 and above require that you author it.** If a
+register declares an `Objective`, an L1 shape insists it carry a metric, a baseline and a target —
+authoring a half-built one is a structural defect at any level. Whether the register must *have* an
+objective at all, whether a scope must *realise* one, whether every item must *trace* to one: those
+are claims about coverage, and they arrive with the conformance level that promises them.
+
+This is why, for example, `ScopeMeasurabilityShape` is silent below L2. An L1 adopter has claimed
+structural integrity and nothing about intent, so demanding that its scope statements name objectives
+would fail it against a promise it never made. The same reasoning places `GoalMeasurabilityShape`,
+`IntentTraceabilityShape` and the mission-coverage constraint above L1, while `GoalShape`,
+`BenefitShape`, `ScopeExclusionShape`, `CostEstimateShape` and their siblings stay unconditional.
+
+L2 and L3 shapes fire only when an `AdoptionProfile` claims that level.
+
+**L4_LineageEnforced** is the fourth level, for a register that must **prove a mission was
+accomplished** rather than report that work was done — the difference being that completion is a fact
+about effort and accomplishment is a fact about the world, and only the second requires a
+measurement. At L4 the checks that are advisory below become **violations**:
+
+| L4 requires | Why |
+|---|---|
+| Every item traces to an objective | An item nothing can measure the value of has a completion but no accomplishment |
+| Every objective carries a `MetricObservation` | A target with no reading is an intention; a mission cannot be shown accomplished from intentions, however many are Done |
+| Every epic decomposes | Ungroomed it schedules nothing and can be picked up by no one |
+| **No epic in an Iteration** | An iteration is a time box; an epic is delivered *across* stories. Putting a theme in a sprint looks like planning and commits nothing anyone can finish |
+| **No epic in a `DeploymentUnit`** | A deployment answers *what users received*; an epic answers *why* |
+| Stories reaching execution passed through a `PlanningEvent` | Work that reached execution without planning has no recorded commitment behind it |
+| A closed iteration connects to a `DeploymentUnit` via `deploysFrom` | Otherwise an iteration closing and a release shipping are unrelated events, and a slipped iteration cannot be connected to a delayed release |
+| **Every deployed item is Done, carries bridge-verified Evidence, and has every acceptance criterion attested** | A release is the claim work reached users. Carrying unfinished or unproven work makes that claim false for part of what shipped, and nothing downstream can tell which part. The criterion check is **coverage at release time**: a suite can be green while the thing everyone cared about is untested |
+| **A deployment records who released it** | Shipping is an act someone performed; a release nobody authorised cannot be questioned afterwards |
+| No item pursues an objective the scope does not realise | Scope drift in its literal form: either record a `ScopeChange`, or the work does not belong here |
+
+**Test coverage is not new vocabulary.** `TestHarness.harnessComplete` is derived true only when
+**every** acceptance criterion of an item is attested by a bridge-verified evidence artifact — that
+*is* per-item coverage, and it existed long before L4. What was missing was consulting it at release
+time: a deployment could ship an item that was `InProgress`, carried no evidence and had no attested
+criterion, and nothing objected.
+
+`DeploymentUnit` is new and exists to separate three things this framework has repeatedly seen
+conflated: **what shipped** (deployment), **when it was worked** (iteration), and **why** (epic).
+
+**A companion discipline document ships with the package.**
+`04-documentation/LINEAGE_OPERATING_DISCIPLINE_v*.md` states the six boundaries the shapes cannot
+reach — granularity by momentum, advisory blindness, permitted-is-not-intended, completion-is-not-
+accomplishment, the why/when/what conflation, and drift as the default — each with the shape that
+catches it where one can. It governs building a lineage; the OE Operating Discipline governs building
+and releasing the ontology, and where both apply the OE ceremony runs first. **Its enforcement claims
+are themselves gated**: `backlog_lineage_discipline_check` fails the release if a shape the document
+names has been renamed, softened, or re-levelled, because a discipline document whose claims have
+drifted is believed.
+
+**L4 is a separate level, not a promotion inside L3.** Promoting checks inside an existing level
+would silently break every adopter who made a different claim, and a level is a claim an adopter
+makes rather than one imposed on them.
+
+**The declaration is itself governed, and those constraints are never level-gated.** Declaring
+`L1_Core` suppresses every level-gated constraint at once — on the shipped negative fixture,
+changing that one token removes most of the violations without changing another byte. The figures
+are in `RELEASE_METRICS.txt` and on every validator run; they are not restated here, because a
+number in prose goes stale the moment the suite changes. Every other opt-out in this
+framework — `notYetScoreable`, `ScopeExclusion`, `Rebaseline`, `ScopeChange`, an accepted risk, a
+ranking-fork resolution — already requires a written rationale, and four require an owner decision.
+The conformance level suppressed more than all of them combined and required neither.
+
+The tier mechanism is an **adoption ramp**: a framework demanding everything on day one is adopted
+by nobody. Its misuse is as **permanent shelter** — a ramp used as a parking space. So the framework
+does not forbid a low level. It requires the choice to be:
+
+| | |
+|---|---|
+| **owner-decided** | `decidedBy backlog:Owner` — the largest opt-out cannot be made by nobody in particular |
+| **reasoned** | `hasDecisionRationale` — why this level and not a higher one |
+| **directional** | `hasTargetConformanceLevel` — a ramp with no destination is a parking space; a target equal to the current level is rejected as standstill encoded as ambition |
+| **dated** | `hasLevelReviewDate` — not a deadline to reach the target, a date on which someone must look again; an advisory fires once it passes |
+| **irreversible-in-the-open** | `hasPriorConformanceLevel` + `hasDowngradeRationale` — downgrading is permitted, downgrading silently is not |
+
+**Wiring the ramp into the work — a recommended pattern, not a requirement.** `hasTargetConformanceLevel`
+names a direction; it does not by itself create any work that would get you there. An adopting project
+carried a declared L2 target for over a week while the work that would satisfy it proceeded as
+separately-motivated casework, with no goal anywhere in the register naming *"reach L2"* as what it
+was for — so advancing the level took a dedicated conversation rather than falling out of the
+register's own priority computation.
+
+The pattern that closed it uses vocabulary the framework already ships: a `Goal` for the governance
+maturity, an `Objective` whose metric is the target level's **own SHACL violation count measured by
+declaring it in a trial run** — falsifiable, re-runnable, and not a number anyone invented — and
+`WorkItem`s that `pursuesObjective` it, scored like everything else. The ramp then competes for
+capacity on the same terms as feature work instead of losing to it by default.
+
+**But note the framework's own answer to that competition**, which is stronger than scoring meta-work
+higher: `PortfolioPolicy` and `CapacityAllocation` exist precisely so categories that answer to
+different arguments are not arbitrated by one score. Governance maturity, technical debt and new
+capability compete badly on a single ranking; an allocated share is the instrument for that, and a
+declared target with no allocation behind it will lose whatever its score says.
+
+**The formal link does not exist, deliberately.** `hasTargetConformanceLevel` is on `AdoptionProfile`,
+which is a `BacklogConcept` and cannot carry `pursuesObjective` — so the connection between a declared
+target and the objective pursuing it is narrative, not a checked triple. A property closing that gap
+was flagged by the reporting project and **not requested by it**, on the grounds that one producer's
+evidence is not enough (L-110). That judgement is accepted and recorded here so a second adopter
+meeting the same wall finds the option already on the table.
+
+Every run also reports the **suppression cost** on its own `level:` line — how many level-gated
+constraints did not run, computed from the suite at run time rather than written down. A clean
+result at a low level and a clean result at a high level previously printed identically. They are
+not the same claim.
+
+**None of this stops a determined party**, and the framework does not pretend otherwise: the
+register is authored by the same people who declare its level. What these constraints do is make
+the choice attributable, reasoned and dated — which is the whole of what governance can do about a
+self-declaration, and considerably more than nothing. Conformance means zero
+results at `sh:Violation` severity; advisory results never constitute failure. Every verdict is
+printed with the shapes file, its hash, the tool versions and the mode.
+
+---
+
+## 4. Adoption
+
+```bash
+pip install rdflib pyshacl --break-system-packages
+
+# 1. Declare adoption (namespace, level, facets) — see the positive fixture
+# 2. Write the register: blueprint, items, containers, evidence
+# 3. Verify evidence against the real workspace
+python3 03-tooling/backlog_evidence_bridge_v1_0_0.py my_register.ttl \
+        --workspace /path/to/repo --test-command 'npx playwright test {spec} --grep {id}'
+
+# 4. Compute the roadmap — never write one by hand
+python3 03-tooling/backlog_roadmap_report_v1_6_0.py my_register.ttl --emit report.ttl
+
+# 5. Run the four-gate release check (self-proving)
+bash 03-tooling/backlog_gate_v1_1_27.sh my_register.ttl
+```
+
+Start at L1, move to L2 once a bridge exists, and to L3 when releases carry manifest hashes and the
+blueprint sweep is real. Raising the level is a one-line edit to the profile.
+
+---
+
+## 5. What the gates prove, and what they do not
+
+`backlog_gate_v1_1_27.sh` runs Gate 0 (manifest self-verify), Gate P (every Turtle file parses),
+Gate K (`versionInfo` == `versionIRI` token == filename token), Gate R (SHACL reconcile), and the
+BP-D31 coverage gate. Gate R first validates a positive fixture that must pass and a negative
+fixture that must fail, and aborts if either outcome inverts: a suite never shown to reject a
+known-bad register verifies nothing about a good one.
+
+**Measured figures are not restated here.** Every number the gates produce — fixture violation
+counts, planted-defect totals, version-identity checks, source and documentation coverage — lives in
+`RELEASE_METRICS.txt`, which is generated by `backlog_release_metrics_v1_1_0.py`, records the
+manifest SHA-256 it was produced against, and regenerates byte-identically from any directory.
+
+That is L-91 applied: prose that duplicates a machine-readable fact goes stale the moment the fact
+moves, and the discipline is to point at the field rather than mirror it. This document previously
+mirrored a fixture measurement and was three releases out of date before a reader caught it — the
+gates all passed throughout, because none of them compared a stated number with a computed one.
+`backlog_doc_coverage_gate_v1_2_0.py` now refuses any restated measurement in this document.
+
+What does not go stale, and is therefore stated here: the gate runs **three** mandatory fixtures —
+a positive one that must pass, a negative one that must fail, and an adversarial register that must
+be rejected — and aborts if any outcome inverts.
+
+Two of these deserve emphasis because they test the tester: one planted defect (a container
+asserting Done over an in-progress member) is detectable only if the derivation rules executed,
+and the R3 fixture exists because a rule whose disagreement branch has never been seen firing is a
+branch nobody has tested.
+
+---
+
+## 6. Extending without forking
+
+- **New item kind, capability class, enforcement domain, or prioritisation method:** create it in
+  your own namespace. These classes are open for exactly this.
+- **Project-specific constraints:** ship your own shapes importing `http://example.org/backlog`;
+  run both suites.
+- **Never widen the closed enumerations** (`LifecycleState`, `RoadmapHorizon`, `InvariantStatus`,
+  `ConformanceLevel`, `FrameworkFacet`, `EntityLifecycleStage`, `Role`, `RankingModel`,
+  `DocumentStatus`) locally — adding an individual to an `owl:oneOf` class from outside makes the
+  merged graph inconsistent rather than richer. Propose a MINOR version of this subject instead.
+- **Never re-declare framework classes** in your file; reference the IRIs.
+
+---
+
+**Work executed outside the register: prevention and recovery (v1.115.0).** Ruled on an adopting project handover (Lineage_2
+executed without its Backlog stage). Prevention: the order check reports `AWAITING_BACKLOG` for a lineage with no
+Backlog stage output and no work item (nothing examined; `--no-empty-pass` exits 2), and the positive start gate
+`backlog_execution_ready` must say READY before work starts. Recovery: a documented procedure
+(`RECOVERY_RUNBOOK_work_executed_outside_the_register`), not a per-instance decision. Stories flagged `preLineageItem`
+and admitted by an active Backlog output are exempt from the two act-record shapes only (`GroomingShape` constraints 1
+and 2, `L4StoryGranularityShape`); evidence, criterion, harness, `lastAuditedAt`, finish point and modality stay required.
+Ruling G100.
+
+**The safeguard stands in the path of the act (v1.116.0).** Ruled on the owner's instruction after Lineage_2 repeated the
+drift it was opened to end (G101). A lineage's work rule is guarded at four layers: the session start prints the lineage's
+state and the next required act and re-arms the git hooks in the clone; a write to a governed path stops unless the lineage
+is ready; a commit changing governed work must carry a `Work-Item:` trailer naming a ready item, and a push holding one is
+refused; and a continuous-integration range check examines every commit, which a skipped hook cannot avoid. The guard fails
+closed and cannot pass over nothing (an empty path list, a path matching no tracked file, an empty register). A chain with
+no Backlog stage reads INCOMPLETE and fails `--require-complete`. A correction is closed only by a check that fails; a work
+ledger is a view over the register, never a source of work. Installer: `backlog_guard_install`; guide:
+`WORK_GUARD_ADOPTION_GUIDE`; analysis: `ROOT_CAUSE_ANALYSIS_the_lineage_opened_to_end_drift_repeated_it`.
+
+## 7. Upstream anchoring
+
+Scrum Guide 2020 (Backlog, Increment, Definition of Done); SAFe 6.0 (Epic/Feature/Story ladder,
+WSJF, Enabler); Intercom RICE; DSDM MoSCoW; Now/Next/Later roadmap practice; Reinertsen on cost of
+delay; W3C OWL 2, SHACL and SHACL-AF; OE Pack subjects (`core:Artifact`, `core:Concept`,
+`testing:Test`, `orh:ReleaseEvent`); and the primary source named above for the methodology layer
+— the launch model, gap discipline, report sections, gates, rule provenance and role split.
+
+---
+
+## 8. Non-goals
+
+Not an issue-tracker
+replacement, not a workflow engine, and it carries no project data: the shipped ABox holds
+framework-level individuals only.
+
+---
+
+## 9. Honest disclosures
+
+- **v1.0.0 covered 22.2% of this document and passed every intrinsic gate while doing so.** It was
+  built from an adopting project deposit because the source was unreachable (HTTP 404). The deposit
+  encodes the register; the document encodes the methodology governing it, which is most of what
+  was missing. The full measurement is in `Coverage_Report_v1_1_0.md`.
+- **Coverage measures representation, not modelling quality.** A probe proves a concept is present
+  as vocabulary, constraint or tooling; it does not prove the modelling is the best available.
+- **`EnforcementDomain` ships unpopulated** by design — the source anchors it to another project's
+  classification, and importing that would drag foreign vocabulary into a project-neutral subject.
+- **No HermiT attestation.** Validation is SHACL (pyshacl 0.40.0, advanced mode) plus rdflib
+  parsing. No OWL 2 DL consistency claim is made. The design avoids the two usual traps — no
+  irreflexive or asymmetric characteristic on the transitive `dependsOn`, and no OWL equivalence
+  across enumerations of different cardinality — but avoidance by design is not an attestation.
+- **An adopting project deposit was not modified.** Supersession of `product-backlog` 1.3.0 is proposed
+  in the mapping report, not asserted; the owning session decides.
+- **One candidate lesson was rejected as a duplicate** during this release rather than recorded to
+  satisfy a checklist; see the changelog.

@@ -1,0 +1,795 @@
+#!/usr/bin/env python3
+"""backlog_lineage_order_check v1.10.0 — did the chain come before the work, or after?
+
+THE ESCAPE THIS CATCHES. A lineage is Mission -> Scope -> Goal -> Objective -> Backlog,
+one commit per stage, and only then work items (LINEAGE_OPERATING_DISCIPLINE, ceremony
+step 2). Observed in a parallel session and then measured in this package's own register:
+the work is built first and the chain is written afterwards to fit it. Every stage digest
+reproduces (G18 experiment C -- a digest computed from the finished graph proves nothing
+about order), every shape passes, and the lineage is a story told backwards.
+
+THE WITNESS. The register's own dates are the author's. The one anchor the author does not
+control is the governed repository: the commit at which a subject FIRST APPEARS under the
+register path (`git log --reverse -S<local name> -- 01-ontologies`). This tool measures,
+for every non-archived lineage that has stage outputs:
+
+  ORDERED      every stage output first appears in pipeline order, each strictly before
+               the next, and every work item first appears at or after Stage_Backlog's
+               output.
+  UNWITNESSED  the outputs and the items all first appear in ONE commit. Git orders
+               between commits and says nothing within one (G18); this is exactly what
+               G77 disclosed for lineage 8. Reported, not a bypass -- it cannot be told
+               from an honest single-commit build. Advisory.
+  RESTARTED    a LineageRestart exists and no active (non-retracted) output yet: the
+               chain is being rebuilt from Mission. Disclosed, exit 0.
+  v1.1.1: a thrash already recorded as a LineageThrash is settled and not re-raised;
+               a frozen lineage with a frozenRuling is measured normally again.
+  PLANNED_LATE (per item) a PlanningEvent first appears after the item it plans: the
+               work existed, then the planning record was written to fit it. v1.2.0, on the
+               owner's decision: a late-planned item IS a bypassed item -- the escape one
+               level down -- and is named in the bypass finding like any other.
+  FOUND        (v1.2.0) a bypass is recorded and the lineage is frozen by it, and no
+               restart answers it yet: the state between the finding's commit and the
+               restart's. Exit 0 -- the restart must come in its own commit.
+  Strategies (v1.2.0): a restart's hasRecoveryStrategy selects extra git checks --
+               Strat_TransformSimplify: its ScopeChange first appears before the restart;
+               Strat_TransformReduce: its templateLineage reads ORDERED;
+               Strat_DivideAndConquer: the parent is ORDERED only when every part is and
+               its combine output is active. --emit also prints, for the NEXT restart, the
+               reductionObserved of the last trial (admitted / named), never hand-written.
+  AWAITING_BACKLOG (v1.10.0, an adopting project handover, lineage2-executed-without-backlog-stage) the Objective stage
+               output is active, the Backlog stage output is absent and the lineage holds NO work item: there is
+               nothing to order, so nothing was examined. v1.9.0 read this state as ORDERED and the run as PASS, and
+               a lineage whose work was executed outside the register passed every gate for a week: a green verdict
+               over an empty set is not evidence (a gate that finds nothing must say so). Exit 0, because a lineage
+               legitimately waits here between its Objective and Backlog stages; but it is named in the verdict line
+               and printed with its examined count, and --no-empty-pass turns it into exit 2 for a caller that
+               claims work is under way. It is not a bypass: no item exists to precede the chain. The moment an item
+               is registered it is one, and the shapes then oblige a restart. backlog_execution_ready is the
+               positive question to ask BEFORE work starts.
+  BYPASS       at least one work item first appears BEFORE the lineage's Stage_Backlog
+               output does (or that output is absent), or the outputs appear out of
+               pipeline order. The chain was closed after the work.
+
+WHAT IT DOES WITH A BYPASS. Prints it, exits 2, and with --emit writes the finding as
+Turtle (`backlog:LineageBypass`, TBox v1.83.0) for the owner to append to the register.
+It never appends anything itself and never decides what follows: the shapes do
+(BypassRequiresRestartShape -- a bypass on a live lineage obliges a LineageRestart).
+
+WHAT IT DOES AFTER A RESTART. Outputs marked outputRetracted are ignored; the rebuilt
+outputs must first appear AFTER the restart itself does; items flagged preLineageItem
+are the restart's business (admitted or not, the shapes decide) and are not measured
+again -- they are older than the rebuilt chain by definition.
+
+FIXTURE PATH. --witness <json> replaces git with a {local_name: [commit, epoch]} map so a
+fixture with a known answer can exercise all three verdicts (G7) without a repository.
+Both modes run the identical classification code.
+
+v1.1.0 -- THE LOOP'S STOP CONDITION, by convergence, never by count (TBox v1.84.0).
+A restart answers a bypass; nothing in v1.0.0 stopped bypass -> restart -> bypass forever,
+and every turn can lose work. Three measurements, from the trials themselves:
+  DELIBERATION  (git) the restart first appears strictly after the bypass it answers, and
+                the rebuilt Stage_Mission output strictly after the restart. Same commit =
+                no separate act of deciding was witnessed -> THRASH (Thrash_NotDeliberated).
+  NOVELTY       (register) a later bypass on a restarted lineage names at least one item no
+                earlier bypass on that lineage named. If not -> THRASH (Thrash_NoNovelty).
+  ADMISSION     (register) an item admitted by an earlier rebuild is named again by a later
+                bypass -> THRASH (Thrash_AdmissionLost). (Retraction without re-admission is
+                RestartKeepsAdmissionsShape's business.)
+A thrash is printed, exit 2, and with --emit written as a backlog:LineageThrash for the
+owner to append; the shapes then require the lineage frozen until the owner rules.
+A frozen lineage (lineageFrozen true, no frozenRuling) is reported FROZEN and not measured
+further -- it is waiting, not failing.
+
+v1.3.0 -- two findings from the first adopting package (COM8090 vaf-agentic-pipeline, 2026-09-09):
+  WITNESS PATH  the git witness now looks under the directory of the REGISTER FILE given, not
+                under this tool's own package; --register-path overrides. A register whose
+                lineages carry outputs that git cannot find under the witness path is refused
+                (NOT VERIFIABLE, exit 2) -- distinct from a register with no outputs at all.
+  WITNESS BROKEN  every closedAtCommit that looks like a commit hash must be an ANCESTOR of the
+                current branch tip. A rebase rewrites hashes; the objects survive locally, so an
+                existence check lies. An orphaned hash is WITNESS_BROKEN (exit 2): repoint it to
+                the real post-rebase first-appearance commit and say why (skos:note), never
+                silently. Non-hash values (release tags, as this package records) are checked
+                as tags. Ceremony rule: publish before you rebase; never rewrite commits that
+                carry a live lineage.
+
+v1.4.0 -- ORDER BY ANCESTRY, NOT BY TIME (third adopter proposal, 2026-09-09). The witness ordinal was
+the committer epoch (%ct); a rebase stamps every replayed commit with one epoch, so four commits in
+strict ancestry read as "same second" = "same commit" and a correct chain read THRASH. The ordinal is
+now `git rev-list --count <hash>` -- the commit's topological position on the current branch, which a
+rebase cannot collapse. "Same commit" is a HASH-equality test, as G18 states it: two stage outputs of
+one lineage first appearing in the same commit are UNWITNESSED within the lineage (disclosed, exit 0);
+parts of a divided lineage sharing a commit remain fine (G84). --expect VERDICT makes a fixture run
+fail unless the named lineage reads exactly that verdict (L-95 proof of the two cases this defect
+had conflated). Witness maps carry [commit, ordinal]; any monotone integer serves.
+
+--baseline <tag> (v1.8.0): scopes BLOCKING to lineages this run's own data actually changed
+relative to that tag -- a real, confirmed deadlock risk fixed (owner's own challenge, 2026-09-22):
+concurrent, in-flight lineages are themselves a real, explicitly-supported BRSF pattern, so one
+untouched, pre-existing bypass must not block every future, unrelated publish forever. A touched
+lineage's own bypass still blocks exactly as before -- this narrows WHERE the check applies, never
+WHAT it accepts. Every finding on every lineage is still printed every run, moved lineages appear
+under ADVISORY rather than silently vanishing. Baseline files are resolved by stem, not exact
+filename, since a versioned file is renamed on every real content change (G94) and very often never
+existed under today's name at an older tag at all. Omit --baseline for v1.7.0's own exact behaviour,
+fully global, unaffected -- every existing caller, the self-proof fixtures included.
+
+Exit: 0 ORDERED/UNWITNESSED/RESTARTED/FROZEN/AWAITING_BACKLOG (2 for AWAITING_BACKLOG under --no-empty-pass); 2 BYPASS unanswered, THRASH unrecorded, WITNESS_BROKEN,
+or NOT VERIFIABLE (outputs exist, none witnessed), or --expect not met; 1 on error.
+"""
+import glob, json, os, re, subprocess, sys, time
+from rdflib import Graph, Namespace, RDF, URIRef
+
+B = Namespace("http://example.org/backlog#")
+ORDER = ["Stage_Mission", "Stage_Scope", "Stage_Goal", "Stage_Objective", "Stage_Backlog"]
+ITEM_TYPES = ["Story", "Epic", "ExecutionTask", "Initiative", "Spike", "Task", "Defect", "Feature", "Enabler"]
+HERE = os.path.dirname(os.path.abspath(__file__))
+PKG = os.path.dirname(HERE)
+TOOL = os.path.basename(__file__).replace(".py", "")
+
+
+def local(x):
+    return str(x).split("#")[-1]
+
+
+class GitWitness:
+    """First-appearance commit of a subject under the register path, via git log -S.
+
+    v1.7.0 -- SINGLE-PASS REWRITE. Two earlier attempts this session are left below as
+    real, disclosed history, not deleted: v1.7.0's ordinal cache was correct but targeted
+    the wrong cost (rev-list --count: ~0.01s; the real cost is the -S search itself,
+    ~1s, confirmed by direct measurement). A thread-pool prefetch was tried next and
+    measured with NO speedup, because this container has exactly one CPU core -- a real
+    finding (`nproc` = 1), not assumed: -S is CPU-bound (it diffs at every commit), so N
+    threads on one core just time-slice the same work with added overhead.
+    The only real fix on one core is doing less total work. A string's total occurrence
+    count in a file can only rise at a commit that ADDS a line containing it -- so the
+    earliest commit whose diff contains a '+' line with the key is the same answer
+    `-S<key>` plus take-first-in-order already computed (for first-appearance, which is
+    all this tool ever asks), at a fraction of the cost: ONE full diff walk of the path's
+    history (git log -p), read once, checked against every pending key per line, instead
+    of one separate full-history -S search per key. O(history) instead of O(N x history).
+    """
+    def __init__(self, repo_root, rel_path):
+        self.root, self.rel = repo_root, rel_path
+        self.cache = {}
+        self._ordinal = None   # hash -> 1-based ancestry count, built once, lazily
+
+    def commit_date(self, h):
+        """v1.9.0: the commit's own date (ISO), for deciding whether work predates a rule."""
+        r = subprocess.run(["git", "show", "-s", "--format=%cI", h], cwd=self.root, capture_output=True, text=True)
+        return r.stdout.strip()[:10] or None
+
+    def _ordinal_index(self):
+        if self._ordinal is None:
+            r = subprocess.run(["git", "log", "--reverse", "--format=%h"],
+                               cwd=self.root, capture_output=True, text=True)
+            self._ordinal = {h: i + 1 for i, h in enumerate(r.stdout.split())}
+        return self._ordinal
+
+    def _ordinal_of(self, h):
+        idx = self._ordinal_index()
+        if h in idx:
+            return idx[h]
+        # h not on this branch's simple history (e.g. a merge-only ref) -- fall back to the
+        # exact original method rather than guess.
+        c = subprocess.run(["git", "rev-list", "--count", h], cwd=self.root, capture_output=True, text=True)
+        return int(c.stdout.strip() or 0)
+
+    def _first_uncached(self, key):
+        r = subprocess.run(["git", "log", "--reverse", "--format=%h", "-S", key + " ", "--", self.rel],
+                           cwd=self.root, capture_output=True, text=True)
+        line = r.stdout.strip().split("\n")[0] if r.stdout.strip() else ""
+        if not line:
+            return None
+        h = line.split()[0]
+        return (h, self._ordinal_of(h))   # v1.4.0: ordinal = ancestry count, not epoch
+
+    def first(self, local_name, prefix):
+        key = prefix + local_name
+        if key in self.cache:
+            return self.cache[key]
+        val = self._first_uncached(key)
+        self.cache[key] = val
+        return val
+
+    def prefetch(self, local_names, prefix):
+        """v1.7.0: one diff walk of the path's history records the first commit each of
+        many keys is added on a '+' line -- the same first-appearance answer -S<key> +
+        take-first-in-order already gave per key, computed for all keys in one pass."""
+        keys = sorted({prefix + n for n in local_names} - set(self.cache))
+        if not keys:
+            return
+        ordinal = self._ordinal_index()
+        r = subprocess.run(
+            ["git", "log", "--reverse", "-U0", "--format=COMMIT %h", "--", self.rel],
+            cwd=self.root, capture_output=True, text=True,
+        )
+        remaining = set(keys)
+        found = {}
+        current = None
+        for line in r.stdout.split("\n"):
+            if not remaining:
+                break
+            if line.startswith("COMMIT "):
+                current = line[7:].strip()
+                continue
+            if current is None or not line.startswith("+") or line.startswith("+++"):
+                continue
+            body = line[1:]
+            for k in [k for k in remaining if (k + " ") in body]:
+                found[k] = current
+                remaining.discard(k)
+        for k in keys:
+            h = found.get(k)
+            self.cache[k] = (h, ordinal.get(h) or self._ordinal_of(h)) if h else None
+
+    def is_ancestor(self, commit):
+        """True if commit (hash or tag) is reachable from the current branch tip; None if the
+        ref does not exist in this clone at all (a tag not fetched) -- unverifiable here, which
+        is reported as such rather than as broken."""
+        v = subprocess.run(["git", "rev-parse", "--verify", "--quiet", commit + "^{commit}"], cwd=self.root, capture_output=True, text=True)
+        if v.returncode != 0:
+            return None
+        r = subprocess.run(["git", "merge-base", "--is-ancestor", commit, "HEAD"], cwd=self.root, capture_output=True, text=True)
+        return r.returncode == 0
+
+
+class MapWitness:
+    def __init__(self, path):
+        self.m = json.load(open(path))
+
+    def commit_date(self, h):
+        return None
+
+    def first(self, local_name, prefix):
+        v = self.m.get(local_name)
+        return (v[0], int(v[1])) if v else None
+
+    def prefetch(self, local_names, prefix):
+        """No-op: MapWitness.first() is already an O(1) dict lookup against a small,
+        already-loaded fixture map -- there is nothing to batch. Exists only so
+        classify()'s single, unconditional witness.prefetch(...) call works for both
+        witness types without classify() needing to know which one it has."""
+        pass
+
+    def is_ancestor(self, commit):
+        return commit in self.m.get("__ancestors__", []) if "__ancestors__" in self.m else True
+
+
+def prefix_for(g, L):
+    ns_of = str(L).rsplit("#", 1)[0] + "#" if "#" in str(L) else None
+    return next((p + ":" for p, ns in g.namespaces() if ns_of and str(ns) == ns_of), "fw:")
+
+
+# Discipline v5.0.0, 2026-08-25: ceremony step 2 became a five-stage pipeline, one commit per stage.
+PIPELINE_MANDATORY_FROM = "2026-08-25"
+
+
+def classify(g, L, witness, prefix):
+    """Returns (verdict, detail dict) for one lineage. v1.2.1: the prefix used for git
+    lookups is the LINEAGE'S own (several registers may be loaded in one graph)."""
+    prefix = prefix_for(g, L)
+    outs = {}
+    for o in g.subjects(B.belongsToLineage, L):
+        if (o, RDF.type, B.StageOutput) not in g:
+            continue
+        if g.value(o, B.outputRetracted) is not None and bool(g.value(o, B.outputRetracted).toPython()):
+            continue
+        st = local(g.value(o, B.outputOfStage))
+        outs.setdefault(st, []).append(o)
+    items = [i for i in g.subjects(B.belongsToLineage, L)
+             if any((i, RDF.type, URIRef(B + t)) in g for t in ITEM_TYPES)]
+    restarts = list(g.subjects(B.restartsLineage, L))
+    restart_at = None
+
+    # v1.7.0: every name the rest of this function will look up is already knowable from
+    # the graph alone -- fetch them all concurrently once, instead of one git subprocess
+    # pair at a time inside each loop below. Loop bodies are unchanged; they now just hit
+    # a warm cache.
+    prefetch_names = ([local(o) for lst in outs.values() for o in lst] + [local(i) for i in items] +
+                       [local(r) for r in restarts])
+    for i in items:
+        prefetch_names += [local(pe) for pe in g.subjects(B.plansItem, i)]
+    for r in restarts:
+        prefetch_names += [local(b) for b in g.objects(r, B.answersBypass)]
+        prefetch_names += [local(sc) for sc in g.objects(r, B.simplifiedBy)]
+    prefetch_names.append(local(L))
+    witness.prefetch(prefetch_names, prefix)
+
+    if restarts:
+        rc = g.value(restarts[-1], B.restartedAtCommit)
+        restart_at = witness.first(local(restarts[-1]), prefix) if rc else None
+
+    out_first = {}
+    for st in ORDER:
+        for o in outs.get(st, []):
+            f = witness.first(local(o), prefix)
+            if f and (st not in out_first or f[1] < out_first[st][1]):
+                out_first[st] = f
+    item_first = {}
+    for i in items:
+        f = witness.first(local(i), prefix)
+        if f:
+            item_first[local(i)] = f
+
+    problems = []
+    # 1. stage order between outputs
+    prev = None
+    for st in ORDER:
+        if st in out_first:
+            if prev and out_first[st][1] < out_first[prev][1]:
+                problems.append(f"{st} output first appears ({out_first[st][0]}) before {prev}'s ({out_first[prev][0]})")
+            prev = st
+    # 2. rebuilt outputs must post-date the restart
+    if restart_at:
+        for st, f in out_first.items():
+            if f[1] < restart_at[1]:
+                problems.append(f"{st} output ({f[0]}) predates the restart ({restart_at[0]}) and is not retracted")
+    # 3. items vs Stage_Backlog output
+    backlog_first = out_first.get("Stage_Backlog")
+    bypassed = []
+    for i in items:
+        ln = local(i)
+        if ln not in item_first:
+            continue
+        pre = g.value(i, B.preLineageItem)
+        if pre is not None and bool(pre.toPython()):
+            # owned by a restart: older than the rebuilt chain by definition. Admission
+            # (or its absence) is the shapes' business, not a second bypass finding.
+            continue
+        anchor = backlog_first
+        if anchor is None:
+            bypassed.append((ln, item_first[ln], "absent"))
+        elif item_first[ln][1] < anchor[1]:
+            bypassed.append((ln, item_first[ln], anchor[0]))
+    # 3b. item-level: an item planned after it already existed (PlanningEvent first
+    #     appears AFTER the item it plans). The same escape one level down: the work
+    #     is done, then the planning record is written to fit it. Reported as
+    #     PLANNED_LATE per item; it does not by itself make the lineage BYPASS in
+    #     v1.0.0 -- disclosed on every run, promotion to a gate failure is an owner
+    #     decision once the measurement has been read on a real register.
+    planned_late = []
+    for i in items:
+        ln = local(i)
+        if ln not in item_first:
+            continue
+        for pe in g.subjects(B.plansItem, i):
+            pf = witness.first(local(pe), prefix)
+            if pf and pf[1] > item_first[ln][1]:
+                planned_late.append((ln, item_first[ln], local(pe), pf))
+    # 3c. deliberation (v1.1.0): restart after its bypass, rebuilt Mission after restart
+    thrash = []   # (kind, bypass, restart, lost_items, detail)
+    for r in restarts:
+        rf = witness.first(local(r), prefix)
+        for b in g.objects(r, B.answersBypass):
+            bf = witness.first(local(b), prefix)
+            if rf and bf and rf[1] <= bf[1]:
+                thrash.append(("Thrash_NotDeliberated", b, r, [], f"restart {local(r)} first {rf[0]} not after its bypass {local(b)} first {bf[0]}"))
+        mf = out_first.get("Stage_Mission")
+        if rf and mf and mf[1] <= rf[1]:
+            for b in g.objects(r, B.answersBypass):
+                thrash.append(("Thrash_NotDeliberated", b, r, [], f"rebuilt Stage_Mission output first {mf[0]} not after restart {local(r)} first {rf[0]}"))
+    # 3d. novelty + admission across successive bypasses (v1.1.0)
+    all_b = [b for b in g.subjects(B.bypassedLineage, L)]
+    def when(b):
+        v = g.value(b, B.detectedAt); return str(v) if v is not None else ""
+    all_b.sort(key=when)
+    seen = set()
+    for idx, b in enumerate(all_b):
+        names = {local(i) for i in g.objects(b, B.bypassedItem)}
+        answered = [r for r in restarts if (r, B.answersBypass, b) in g]
+        if idx > 0:
+            prior_r = [r for r in restarts if any((r, B.answersBypass, pb) in g for pb in all_b[:idx])]
+            if names and not (names - seen):
+                thrash.append(("Thrash_NoNovelty", b, prior_r[-1] if prior_r else None, [],
+                               f"bypass {local(b)} names {sorted(names)} -- all named by earlier bypasses"))
+            # admitted by the chain that existed when this bypass was measured (its own
+            # bypassedOutput set) and named again: work an earlier rebuild had taken in
+            pre_chain = set(g.objects(b, B.bypassedOutput))
+            lost = sorted({local(i) for i in g.objects(b, B.bypassedItem)
+                           if g.value(i, B.admittedByOutput) in pre_chain})
+            if lost:
+                thrash.append(("Thrash_AdmissionLost", b, prior_r[-1] if prior_r else None, lost,
+                               f"bypass {local(b)} names admitted items {sorted(lost)}"))
+        seen |= names
+    # 3e. v1.1.1: a thrash already RECORDED as a LineageThrash (same lineage, kind and
+    #     repeated bypass) is a settled finding, not a new one. Once the owner has ruled
+    #     (frozenRuling), the register carries the whole story -- finding, freeze, ruling
+    #     -- and raising it again on every run would be the duplicate-screen failure
+    #     (L-71) applied by a tool. Unrecorded thrash is still raised.
+    def recorded(kind, b):
+        return any((t, B.hasThrashKind, URIRef(B + kind)) in g and (t, B.repeatedBypass, b) in g
+                   for t in g.subjects(B.thrashedLineage, L))
+    thrash = [t for t in thrash if not recorded(t[0], t[1])]
+    # 3f. late planning is a bypass of the item (owner's decision, G83), NARROWED by
+    # CR_LatePlanningBoundary (2026-09-10, accepted with an impact assessment): the escape is
+    # planning that slips an item into a chain whose BACKLOG STAGE HAD ALREADY CLOSED, with no
+    # ScopeChange admitting it. Planning that follows a closed Backlog stage is the ceremony --
+    # the Backlog stage writes the backlog and planning is the next act -- and measuring the
+    # PlanningEvent against the item's first appearance instead of against the Backlog output's
+    # commit made every conformant lineage a bypass the moment it groomed anything.
+    bl_first = out_first.get("Stage_Backlog")
+    for ln, f, pe, pf in planned_late:
+        if not any(x[0] == ln for x in bypassed):
+            i = next(x for x in items if local(x) == ln)
+            pre = g.value(i, B.preLineageItem)
+            if pre is not None and bool(pre.toPython()):
+                continue
+            if bl_first and pf[1] >= bl_first[1]:
+                continue          # planned after the Backlog stage closed: the ceremony, not an escape
+            if any(True for _ in g.subjects(B.admitsItem, i)):
+                continue          # admitted by a ScopeChange: the sanctioned way in
+            bypassed.append((ln, f, f"planned-late by {pe} ({pf[0]})"))
+    # 3f2. v1.2.2: postRestartItem is verified, not trusted -- the item must first appear after its restart
+    for i in items:
+        r = g.value(i, B.postRestartItem)
+        if r is not None:
+            rf = witness.first(local(r), prefix); f = item_first.get(local(i))
+            if rf and f and f[1] <= rf[1]:
+                problems.append(f"{local(i)} claims postRestartItem {local(r)} but first appears at {f[0]}, not after the restart ({rf[0]})")
+    # 3f3. v1.5.0: an obligation adoption claimed "at open" must not first appear after the lineage's
+    # Mission output does (owner's rule 2026-09-09: a ruling is never applied to work in progress;
+    # adoptionRecordedAtOpen is asserted in the register and verified here, not trusted)
+    if g.value(L, B.adoptionRecordedAtOpen) is not None and bool(g.value(L, B.adoptionRecordedAtOpen).toPython()):
+        mf = out_first.get("Stage_Mission"); lf = witness.first(local(L), prefix)
+        if mf and lf and lf[1] > mf[1]:
+            problems.append(f"{local(L)} claims adoptionRecordedAtOpen but first appears at {lf[0]}, after its Mission output ({mf[0]})")
+    # 3g. strategy-specific git checks
+    for r in restarts:
+        st = local(g.value(r, B.hasRecoveryStrategy) or "")
+        rf = witness.first(local(r), prefix)
+        if st == "Strat_TransformSimplify":
+            for sc in g.objects(r, B.simplifiedBy):
+                sf = witness.first(local(sc), prefix)
+                if rf and sf and sf[1] >= rf[1]:
+                    problems.append(f"ScopeChange {local(sc)} ({sf[0]}) does not precede the simplify restart {local(r)} ({rf[0]})")
+        if st == "Strat_TransformReduce":
+            t = g.value(r, B.templateLineage)
+            ta = g.value(t, B.lineageArchived) if t is not None else None
+            # v1.5.1 (G92): a retired lineage no longer HAS a lineageArchived flag in the live graph --
+            # it has a LineageArchiveEntry naming its IRI as a string. A template pointing at one is a
+            # finished chain by record, exactly as an archived-but-still-live lineage was.
+            retired = t is not None and any(str(e) == str(t) for e in g.objects(None, B.entryForLineage))
+            if t is not None and (retired or (ta is not None and bool(ta.toPython()))):
+                pass   # v1.3.1: an ARCHIVED template is a finished chain by record (G87); its outputs live in the archive ABox
+            elif t is not None and t != L:
+                tv, _ = classify(g, t, witness, prefix)
+                if tv != "ORDERED":
+                    problems.append(f"template lineage {local(t)} reads {tv}, not ORDERED; it cannot serve as a reduction target")
+    # 3h. divide and conquer: parent is ORDERED only when its parts are and the combine exists
+    parts = [pl for pl in g.subjects(B.parentLineage, L)]
+    dc = [r for r in restarts if local(g.value(r, B.hasRecoveryStrategy) or "") == "Strat_DivideAndConquer"]
+    part_verdicts = {}
+    if dc and parts:
+        for pl in parts:
+            pv_, _ = classify(g, pl, witness, prefix)
+            part_verdicts[local(pl)] = pv_
+        bl_out = [o for o in outs.get("Stage_Backlog", []) if any(True for _ in g.objects(o, B.combinesOutput))]
+        if not bl_out:
+            problems_dc = "no combine output yet"
+        else:
+            problems_dc = None
+    # 3i. v1.3.0: recorded commits must still be ancestors of the branch tip (a rebase orphans them)
+    broken = []; unverifiable = []
+    for st, olist in outs.items():
+        for o in olist:
+            c = str(g.value(o, B.closedAtCommit) or "").strip()
+            token = c.split()[0] if c else ""
+            if re.fullmatch(r"[0-9a-f]{7,40}", token) or token.startswith("backlog-roadmap-framework-v"):
+                anc = witness.is_ancestor(token)
+                if anc is None:
+                    unverifiable.append(f"{local(o)} records closedAtCommit {token}, a ref this clone does not have (fetch tags to verify)")
+                elif not anc:
+                    broken.append(f"{local(o)} records closedAtCommit {token}, which is not an ancestor of the branch tip (rewritten or never pushed)")
+    # 4. single-commit case -- hash equality, never epoch equality (v1.4.0)
+    commits = {f[0] for f in out_first.values()} | {f[0] for f in item_first.values()}
+    stage_hashes = [f[0] for f in out_first.values()]
+    same_stage_commit = len(stage_hashes) != len(set(stage_hashes))
+    fro = g.value(L, B.lineageFrozen)
+    frozen = fro is not None and bool(fro.toPython())
+    # v1.2.3: a lineage frozen more than once carries several frozenBy values (append-only
+    # register); the CURRENT freeze is any freezing finding not yet answered or ruled
+    frozen_bys = list(g.objects(L, B.frozenBy))
+    thrash_open = any((fb, RDF.type, B.LineageThrash) in g for fb in frozen_bys) and g.value(L, B.frozenRuling) is None
+    bypass_open = any((fb, RDF.type, B.LineageBypass) in g and not any((r, B.answersBypass, fb) in g for r in restarts)
+                      for fb in frozen_bys)
+    if broken:
+        verdict = "WITNESS_BROKEN"
+    elif frozen and thrash_open:
+        verdict = "FROZEN"
+    elif frozen and bypass_open:
+        verdict = "FOUND"
+    elif thrash:
+        verdict = "THRASH"
+    elif problems or bypassed:
+        verdict = "BYPASS"
+        # v1.9.0 (an adopting project handover, order-check-judges-a-closed-pre-pipeline-lineage-as-bypass): a lineage with
+        # NO active stage output and no restart, whose earliest witnessed work predates the day the staged pipeline
+        # became mandatory, never bypassed a pipeline -- none was required when it was built. Discipline v5.0.0
+        # (2026-08-25): "every existing lineage was built under the old step and none carries stage outputs; they
+        # are not rewritten, and the advisories report what their history actually shows." Reported, never
+        # blocking. A lineage begun after that date with no chain remains a BYPASS.
+        if not out_first and not restarts and item_first:
+            _earliest = min(item_first.values(), key=lambda f: f[1])
+            _d = witness.commit_date(_earliest[0])
+            if _d and _d < PIPELINE_MANDATORY_FROM:
+                verdict = "PRE_PIPELINE"
+    elif dc and parts and (problems_dc or any(v != "ORDERED" for v in part_verdicts.values())):
+        verdict = "DIVIDING"
+    elif (len(commits) == 1 and out_first and item_first) or same_stage_commit:
+        verdict = "UNWITNESSED"
+    elif not out_first and restarts:
+        verdict = "RESTARTED"      # chain retracted, nothing rebuilt yet: disclosed, not silent
+    elif not out_first:
+        verdict = "NO_OUTPUTS"
+    elif "Stage_Backlog" not in out_first and not item_first:
+        verdict = "AWAITING_BACKLOG"   # v1.10.0: nothing to order, so nothing examined; never ORDERED
+    else:
+        verdict = "ORDERED"
+    return verdict, {"outputs": out_first, "items": item_first, "bypassed": bypassed,
+                     "problems": problems, "restart": restart_at, "all_outputs": [o for v in outs.values() for o in v],
+                     "planned_late": planned_late, "thrash": thrash,
+                     "parts": part_verdicts if (dc and parts) else {}, "restarts": restarts, "broken": broken, "unverifiable": unverifiable,
+                     "unwitnessed_outputs": sum(len(v) for v in outs.values()) - sum(1 for st in outs for o in outs[st] if witness.first(local(o), prefix))}
+
+
+def emit_bypass(g, L, d, prefix_iri):
+    fw = prefix_iri
+    name = f"Bypass_{local(L)}_{time.strftime('%Y%m%d')}"
+    lines = [f"{fw}{name} a backlog:LineageBypass ;",
+             f"    backlog:bypassedLineage {fw}{local(L)} ;",
+             f"    backlog:hasFailureMode backlog:FM_LineageBypass ;",
+             f"    backlog:hasFindingScope backlog:Scope_Methodology ;",
+             f'    backlog:hasRootCause "The chain was written after the work: the items below first appear in the governed repository before the lineage\'s own Stage_Backlog output does. Measured by git first-appearance, not by the register\'s own dates." ;']
+    for ln, f, anchor in d["bypassed"]:
+        lines.append(f"    backlog:bypassedItem {fw}{ln} ;")
+        lines.append(f'    backlog:itemFirstCommit "{ln} {f[0]} {f[1]}" ;')
+    for o in d["all_outputs"]:
+        lines.append(f"    backlog:bypassedOutput {fw}{local(o)} ;")
+    bf = d["outputs"].get("Stage_Backlog")
+    lines.append(f'    backlog:chainClosedCommit "{bf[0] + " " + str(bf[1]) if bf else "absent"}" ;')
+    lines.append(f'    backlog:detectedAt "{time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}"^^xsd:dateTime ;')
+    lines.append(f'    backlog:detectedBy "{TOOL}" ;')
+    lines.append('    backlog:hasRationale "' + "; ".join(d["problems"] + [f"{ln} first appears {f[0]} before Stage_Backlog output {a}" for ln, f, a in d["bypassed"]]).replace('"', "'") + '" .')
+    lines.append(f"{fw}{local(L)} backlog:lineageFrozen true ; backlog:frozenBy {fw}{name} .   # found: frozen until a restart answers it, in its own commit")
+    return "\n".join(lines)
+
+
+def emit_thrash(g, L, d, fw):
+    out = []
+    for n, (kind, b, r, lost, detail) in enumerate(d["thrash"], 1):
+        name = f"Thrash_{local(L)}_{time.strftime('%Y%m%d')}_{n}"
+        lines = [f"{fw}{name} a backlog:LineageThrash ;",
+                 f"    backlog:thrashedLineage {fw}{local(L)} ;",
+                 f"    backlog:hasFailureMode backlog:FM_LineageThrash ;",
+                 f"    backlog:hasFindingScope backlog:Scope_Methodology ;",
+                 f"    backlog:hasThrashKind backlog:{kind} ;",
+                 f"    backlog:repeatedBypass {fw}{local(b)} ;"]
+        if r is not None:
+            lines.append(f"    backlog:priorRestart {fw}{local(r)} ;")
+        for i in lost:
+            lines.append(f"    backlog:lostItem {fw}{i} ;")
+        lines.append(f'    backlog:hasRootCause "{detail.replace(chr(34), chr(39))}. Successive trials on this lineage are not converging; a further restart would be a turn of the loop, not a correction." ;')
+        lines.append(f'    backlog:detectedAt "{time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}"^^xsd:dateTime ;')
+        lines.append(f'    backlog:detectedBy "{TOOL}" ;')
+        lines.append(f"    backlog:belongsToLineage {fw}{local(L)} .")
+        lines.append(f"{fw}{local(L)} backlog:lineageFrozen true ; backlog:frozenBy {fw}{name} .")
+        lines.append(f"# owner's ruling goes here when made: {fw}{local(L)} backlog:frozenRuling \"...\" ; backlog:decidedBy backlog:Owner .")
+        out.append("\n".join(lines))
+    return "\n\n".join(out)
+
+
+def touched_lineages(g, args, argv):
+    """v1.8.0 -- real fix for a real, confirmed deadlock risk (owner's own challenge,
+    2026-09-22): a single bypassed lineage was blocking every future publish, even ones
+    that never touch it, because this check evaluated every lineage globally and let the
+    single worst verdict decide the whole exit code. Concurrent, in-flight lineages are
+    themselves a real, explicitly-supported BRSF pattern (CrossLineageRiskAdvisoryShape
+    exists precisely to manage that); a global blocking check contradicts that support.
+
+    Given --baseline <tag>, returns the set of Lineage URIs this run's own data actually
+    changed relative to that tag: the lineage itself is new, or any real subject naming
+    belongsToLineage it is new or its triples differ. Returns None (meaning: no scoping,
+    fully global, exactly v1.7.0's own behaviour) when --baseline is absent, so every
+    existing caller -- the self-proof fixtures included -- is completely unaffected."""
+    tag = next((argv[i + 1] for i, a in enumerate(argv) if a == "--baseline"), None)
+    if tag is None:
+        return None
+    reg_dir = os.path.dirname(os.path.abspath(args[0]))
+    root = subprocess.run(["git", "rev-parse", "--show-toplevel"], cwd=reg_dir, capture_output=True, text=True).stdout.strip()
+    if not root:
+        return None
+    base_g = Graph()
+    for f in args:
+        abs_f = os.path.abspath(f)
+        rel = os.path.relpath(abs_f, root)
+        rel_dir, base_name = os.path.split(rel)
+        shown = subprocess.run(["git", "show", f"{tag}:{rel}"], cwd=root, capture_output=True, text=True)
+        if shown.returncode != 0:
+            # v1.8.0 real bug, found and fixed here: a versioned file is renamed on every real
+            # content change (G94), so the CURRENT filename very often never existed at an older
+            # tag at all -- confirmed directly on this package's own real history (the register
+            # alone renamed three times across this session). Resolve by stem instead: same
+            # directory, same real prefix (everything before the final _vN_N_N), whichever
+            # version existed at that tag.
+            stem = re.sub(r"_v\d+_\d+_\d+(\.\w+)$", r"", base_name)
+            ls = subprocess.run(["git", "ls-tree", "--name-only", tag, "--", (rel_dir + "/" if rel_dir else "")],
+                                 cwd=root, capture_output=True, text=True)
+            cands = sorted(n for n in ls.stdout.splitlines() if os.path.basename(n).startswith(stem + "_v"))
+            if not cands:
+                continue  # genuinely did not exist at that tag under any version -- new content
+            rel = cands[-1]
+            shown = subprocess.run(["git", "show", f"{tag}:{rel}"], cwd=root, capture_output=True, text=True)
+            if shown.returncode != 0:
+                continue
+        try:
+            base_g.parse(data=shown.stdout, format="turtle")
+        except Exception:
+            continue  # a baseline that fails to parse teaches nothing; treat as absent, not fatal
+    new_or_changed = set()
+    for s, p, o in g:
+        if (s, p, o) not in base_g:
+            new_or_changed.add(s)
+    touched = set()
+    for L in g.subjects(RDF.type, B.Lineage):
+        if L in new_or_changed:
+            touched.add(L)
+            continue
+        for s in g.subjects(B.belongsToLineage, L):
+            if s in new_or_changed:
+                touched.add(L)
+                break
+    return touched
+
+
+def main():
+    argv = sys.argv[1:]
+    witness_path = argv[argv.index("--witness") + 1] if "--witness" in argv else None
+    args = [a for i, a in enumerate(argv) if not a.startswith("--") and (i == 0 or argv[i - 1] not in ("--witness", "--register-path", "--expect", "--baseline"))]
+    if not args:
+        print(__doc__); return 1
+    reg = args[0]
+    emit = "--emit" in sys.argv
+    g = Graph()
+    for f in args:
+        g.parse(f, format="turtle")
+    # the register's own namespace prefix, for names in git and in emitted Turtle
+    # the prefix is the one bound to the namespace the lineages themselves live in;
+    # rdflib binds dozens of defaults, so "first non-standard prefix" is a guess
+    lin = next(iter(g.subjects(RDF.type, B.Lineage)), None)
+    ns_of = str(lin).rsplit("#", 1)[0] + "#" if lin is not None and "#" in str(lin) else None
+    prefix = next((p + ":" for p, ns in g.namespaces() if ns_of and str(ns) == ns_of), "fw:")
+    if witness_path:
+        witness = MapWitness(witness_path)
+        print(f"witness     : {os.path.basename(witness_path)} (fixture map)")
+    else:
+        reg_dir = os.path.dirname(os.path.abspath(reg))
+        rp = next((argv[i + 1] for i, a in enumerate(argv) if a == "--register-path"), None)
+        if rp:
+            reg_dir = os.path.abspath(rp)
+        root = subprocess.run(["git", "rev-parse", "--show-toplevel"], cwd=reg_dir, capture_output=True, text=True).stdout.strip()
+        if not root:
+            print(f"ERROR: {reg_dir} is not inside a git repository; no witness is available"); return 1
+        rel = os.path.relpath(reg_dir, root)
+        witness = GitWitness(root, rel)
+        print(f"witness     : git first-appearance under {rel}")
+    print(f"register    : {os.path.basename(reg)}")
+    touched = touched_lineages(g, args, argv)
+    if touched is not None:
+        print(f"scope       : baseline-scoped -- blocking limited to {len(touched)} lineage(s) this run's own data actually changed")
+    worst = 0; n = 0; unwitnessed_total = 0; verdicts = {}
+    emitted = []
+    advisory_only = []
+    for L in sorted(g.subjects(RDF.type, B.Lineage), key=local):
+        arch = g.value(L, B.lineageArchived)
+        if arch is not None and bool(arch.toPython()):
+            continue
+        in_scope = touched is None or L in touched
+        prefix = prefix_for(g, L)
+        verdict, d = classify(g, L, witness, prefix)
+        if verdict == "NO_OUTPUTS":
+            if d["unwitnessed_outputs"]:
+                unwitnessed_total += d["unwitnessed_outputs"]
+            continue
+        if verdict == "PRE_PIPELINE":
+            print(f"  {local(L):24} PRE_PIPELINE outputs=0 items={len(d['items'])} -- work begins before {PIPELINE_MANDATORY_FROM}, when the staged pipeline became mandatory; built under the rule of its day, reported, not judged (G89; discipline v5.0.0)")
+            continue
+        n += 1; verdicts[local(L)] = verdict
+        for msg in d["broken"]:
+            print(f"      - WITNESS_BROKEN {msg}")
+        for msg in d["unverifiable"]:
+            print(f"      - UNVERIFIABLE HERE {msg}")
+        if verdict == "WITNESS_BROKEN":
+            if in_scope:
+                worst = 2
+            else:
+                advisory_only.append(local(L))
+        bl = d["outputs"].get("Stage_Backlog")
+        print(f"  {local(L):24} {verdict:12} outputs={len(d['outputs'])} items={len(d['items'])} backlog_output={bl[0] if bl else 'absent'}"
+              + ("  (chain retracted; rebuild from Mission pending)" if verdict == "RESTARTED" else "")
+              + ("  (nothing examined: no Backlog stage and no work item; work may not start)" if verdict == "AWAITING_BACKLOG" else "")
+              + (f" restart={d['restart'][0]}" if d['restart'] else ""))
+        for p in d["problems"]:
+            print(f"      - {p}")
+        for ln, f, a in d["bypassed"]:
+            print(f"      - {ln} first {f[0]} < Stage_Backlog output {a}")
+        for ln, f, pe, pf in d["planned_late"]:
+            print(f"      - PLANNED_LATE {ln} first {f[0]} < its PlanningEvent {pe} first {pf[0]}")
+        for kind, b, r, lost, detail in d["thrash"]:
+            print(f"      - THRASH {kind}: {detail}")
+        for pn, pvv in d["parts"].items():
+            print(f"      - PART {pn}: {pvv}")
+        if emit and d["restarts"]:
+            # reductionObserved for a NEXT restart: of the items the last bypass named, how many are admitted now
+            last_r = d["restarts"][-1]
+            for b in g.objects(last_r, B.answersBypass):
+                named = list(g.objects(b, B.bypassedItem))
+                adm = [i for i in named if g.value(i, B.admittedByOutput) is not None
+                       and not (g.value(g.value(i, B.admittedByOutput), B.outputRetracted) or False)]
+                if named:
+                    print(f"      # reductionObserved for a next restart of {local(L)}: {len(adm)}/{len(named)} = {len(adm)/len(named):.3f}")
+        if verdict == "AWAITING_BACKLOG" and "--no-empty-pass" in argv:
+            if in_scope:
+                worst = 2
+            else:
+                advisory_only.append(local(L))
+        if verdict == "THRASH":
+            recorded = any((t, B.thrashedLineage, L) in g for t in g.subjects(RDF.type, B.LineageThrash))
+            if not recorded:
+                if in_scope:
+                    worst = 2
+                else:
+                    advisory_only.append(local(L))
+                if emit:
+                    emitted.append(emit_thrash(g, L, d, prefix))
+        if verdict == "BYPASS":
+            # v1.2.3: "answered" means every item bypassed NOW is named by a recorded bypass of this
+            # lineage that a restart answers. v1.2.2 asked only whether ANY bypass of the lineage had
+            # ever been answered -- so a second, new bypass on a once-restarted lineage was neither
+            # emitted nor failed. Found on the toy exercise's second trial (only the unrelated
+            # lineage's finding came out of --emit).
+            def named_and_answered(ln):
+                for b in g.subjects(B.bypassedLineage, L):
+                    if any(local(i) == ln for i in g.objects(b, B.bypassedItem)) \
+                            and any(True for _ in g.subjects(B.answersBypass, b)):
+                        return True
+                return False
+            answered = all(named_and_answered(ln) for ln, _, _ in d["bypassed"]) and not d["problems"]
+            if not answered:
+                if in_scope:
+                    worst = 2
+                else:
+                    advisory_only.append(local(L))
+                if emit:
+                    emitted.append(emit_bypass(g, L, d, prefix))
+    exp = next((argv[i + 1] for i, a in enumerate(argv) if a == "--expect"), None)
+    if exp:
+        lin, want = exp.split("=")
+        got = verdicts.get(lin)
+        if got != want:
+            print(f"VERDICT     : FAIL — --expect {lin}={want}, read {got}"); return 2
+        print(f"VERDICT     : PASS — {lin} reads {want} as expected"); return 0
+    if n == 0 and unwitnessed_total:
+        print(f"VERDICT     : NOT VERIFIABLE — {unwitnessed_total} stage output(s) exist in the register but none is found in git under the witness path ({rel if not witness_path else 'fixture map'}); wrong --register-path, or never committed. A refusal, not a clean result.")
+        return 2
+    if n == 0:
+        print("VERDICT     : NOT VERIFIABLE — no non-archived lineage carries stage outputs")
+        return 0
+    if emitted:
+        print("\n# --- emitted findings (append to the register; the shapes then require a LineageRestart) ---")
+        print("\n\n".join(emitted))
+    if advisory_only:
+        print(f"\nADVISORY    : {len(advisory_only)} lineage(s) carry a real, unresolved finding but were not touched by this run's own changes, so they do not block it: {', '.join(sorted(set(advisory_only)))}. Disclosed every run, not silently passed -- resolving them remains real, owed work.")
+    if worst:
+        print("VERDICT     : FAIL — a live lineage is bypassed without a restart, or its restarts are not converging without a thrash record, or (--no-empty-pass) it awaits a Backlog stage with nothing examined; see above")
+    else:
+        waiting = sorted(k for k, v in verdicts.items() if v == "AWAITING_BACKLOG")
+        note = (f"; {len(waiting)} lineage(s) AWAITING_BACKLOG, nothing examined for them: {', '.join(waiting)}" if waiting else "")
+        print("VERDICT     : PASS — every live lineage's chain is witnessed in order, or its order is unwitnessed and disclosed" + note)
+    return worst
+
+
+if __name__ == "__main__":
+    sys.exit(main())
