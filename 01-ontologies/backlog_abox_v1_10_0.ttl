@@ -20,9 +20,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (ABox: controlled individuals, reference data and the live register)"@en ;
-    owl:versionIRI <http://example.org/backlog/abox/1.9.0> ;
-    owl:versionInfo "1.9.0" ;
-    owl:priorVersion <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
+    owl:versionIRI <http://example.org/backlog/abox/1.10.0> ;
+    owl:versionInfo "1.10.0" ;
+    owl:priorVersion <http://example.org/backlog/abox/1.9.0> , <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
         <http://example.org/backlog-abox/1.2.1> ,
                      <http://example.org/backlog-abox/1.2.0> ,
                      <http://example.org/backlog-abox/1.1.0> ,
@@ -5697,7 +5697,7 @@ fw:L_OEStructureCleanup a backlog:Lineage ; rdfs:label "Lineage 17: OE Structure
     backlog:lineageOrdinal 17 ;
     backlog:lineageArchived false ;
     backlog:lineageForMission fw:Mission_OEStructureCleanup ;
-    backlog:hasLineageStatus backlog:LS_InProgress ;
+    backlog:hasLineageStatus backlog:LS_Abandoned ;
     backlog:hasLineageDepthLevel backlog:Depth_StoryDirect ;
     backlog:hasLineageArtifactDomain backlog:Domain_Infrastructure ;
     backlog:memberOfContainer fw:Register .
@@ -5707,7 +5707,8 @@ fw:Mission_OEStructureCleanup a backlog:Mission ; rdfs:label "Mission: OE Struct
     backlog:missionFor fw:Register ;
     backlog:hasMissionOrigin backlog:Origin_OwnerStated ;
     backlog:missionSource "Owner, 2026-10-06: 'If you say, we have subject-based files, they should be consolidated under one single file not a multiplicative of 3 per subject' and 'What if we split the active lineage from the archive? In this case 3+3 6 files and clear distinction between the current and historical facts with archiving ceremony would help to enhance the lineage overall.' Affirmed after a measured test drive: 'OK, this is quite better I think. Let's proceed accordingly.'" ;
-    backlog:hasMissionOutcome backlog:Out_InFlight ;
+    backlog:hasMissionOutcome backlog:Out_Abandoned ;
+    backlog:outcomeRationale "Superseded, not failed. On 2026-10-06 the OE method changed the unit of the ontology file structure from the subject to the package (BP-D54, discipline v2.15.0): one vocabulary, one data and one shapes file for the whole package, former subjects as modules, retired work in a folder named archive. This mission asked for two subjects of three files each, which the new rule no longer allows. Evidence: three of its six stories were finished and published (the before-and-after proof, the live subject, the repointed tools; v1.338.0 to v1.340.0), and the live files they built are the base of the successor, Lineage 18, which pursues the new rule. The remaining three stories (archive subject, archiving ceremony, debt clearance) are carried forward there in the new form, not dropped." ;
     backlog:producedByStage fw:Out_Mission_OEStructureCleanup ;
     backlog:decidedBy backlog:Owner .
 
@@ -6345,3 +6346,30 @@ fw:Obs_OESC_ToolsDone_1 a backlog:MetricObservation ; rdfs:label "After the tool
     backlog:observesMetric fw:Metric_OESC_ToolsDone ; backlog:observationFor fw:Obj_OESC_ToolsDone ;
     backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-10-06T12:06:00Z"^^xsd:dateTime ;
     backlog:hasObservationMethod "Search of 03-tooling for the retired file prefixes, excluding archive, exercises and fixture folders." .
+
+# v9.110.0: Lineage 18, Mission stage (first of five releases). Lineage 17 is set down above as superseded by the OE ruling of
+# 2026-10-06 (package, not subject, is the unit); this lineage pursues the new rule. One release per stage from here.
+fw:L_OEPackageConsolidation a backlog:Lineage ; rdfs:label "Lineage 18: OE Package Consolidation"@en ;
+    backlog:lineageOrdinal 18 ;
+    backlog:lineageArchived false ;
+    backlog:lineageForMission fw:Mission_OEPackageConsolidation ;
+    backlog:hasLineageStatus backlog:LS_Opened ;
+    backlog:hasLineageDepthLevel backlog:Depth_StoryDirect ;
+    backlog:hasLineageArtifactDomain backlog:Domain_Infrastructure ;
+    backlog:memberOfContainer fw:Register .
+
+fw:Mission_OEPackageConsolidation a backlog:Mission ; rdfs:label "Mission: OE Package Consolidation"@en ;
+    backlog:hasMissionStatement "This package ships exactly as the OE method requires, with no exceptions: one vocabulary file, one data file and one shapes file for the whole package, each with one ontology header and one version, with former subjects held as modules inside them; retired work lives in a folder named archive as one data file and one shapes file, and needs no vocabulary file because it uses the package's own; test inputs sit in the fixtures folder. Live and historical facts never share a file, so retired work is never judged by today's rules and the archiving ceremony is a move from the live data file to the archive data file. No statement any file makes changes, and every term keeps its IRI." ;
+    backlog:missionFor fw:Register ;
+    backlog:supersedesMission fw:Mission_OEStructureCleanup ;
+    backlog:hasMissionOrigin backlog:Origin_OwnerStated ;
+    backlog:missionSource "Owner, 2026-10-06, as recorded by the OE governance session in BP-D54: 'No, not per subject. All subjects should be consolidated in one file per concept and at the end we will have just 1 file for A-Box, 1 file for T-Box, and 1 file for SHACL.' Earlier in this package's own work the owner said: 'If you say, we have subject-based files, they should be consolidated under one single file not a multiplicative of 3 per subject.' OE's answers of 2026-10-06 to this package (archive without a vocabulary file is allowed; test input goes to fixtures; provenance records are the archive's modules). Then: 'OK proceed with the same ceremonies on OEE and BRSF lineage strict disciplines.'" ;
+    backlog:hasMissionOutcome backlog:Out_InFlight ;
+    backlog:producedByStage fw:Out_Mission_OEPackageConsolidation ;
+    backlog:decidedBy backlog:Owner .
+
+fw:Out_Mission_OEPackageConsolidation a backlog:StageOutput ;
+    backlog:outputOfStage backlog:Stage_Mission ; backlog:belongsToLineage fw:L_OEPackageConsolidation ;
+    backlog:hasStateDigest "bea6a6981891c024b7dcd5b4efc0c01f6136ceaa2f2f09996dcd54b8d7f8f85e" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.341.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Mission stage of Lineage 18. Tag deterministic: VERSION.txt set before publishing. Stage 1 of 5, one release each." .

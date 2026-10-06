@@ -11131,3 +11131,18 @@ dangling live pointers; 17 scripts name the files and must be repointed.
   waits for the owner's decision on how to carry it (see the return note to the OE inbox).
 - **Proof:** `backlog_split_proof` v1.1.0 against v1.339.0: nothing lost or changed outside this lineage's own register entries for S04 (the
   criterion's artefact names and the two state changes); everything added is this lineage's S04 entries.
+
+## v1.341.0 — Lineage 18, Mission stage: the package ships as one triad; Lineage 17 is set down as superseded (Work-Item: none, stage output)
+
+- **Why a successor lineage:** on 2026-10-06 the OE method changed the unit of the ontology file structure from the subject to the package
+  (BP-D54, discipline v2.15.0). Lineage 17's Mission asked for two subjects of three files each, which the new rule no longer allows.
+  The vocabulary describes an amended mission as the same lineage under a better statement; here the pipeline beneath the mission (scope,
+  goals, objectives, stories) is rebuilt around a different end state, so a successor with `supersedesMission` is the honest structure
+  (G72: a new lineage, not a revival; G12: the superseded chain stays as a record).
+- **Lineage 17:** mission outcome `Out_Abandoned` with its rationale (superseded, not failed; three of six stories finished and
+  published, the rest carried forward), lineage status `LS_Abandoned`. Nothing else of it changed. It is not archived yet: archiving
+  it is a ceremony the new lineage will perform.
+- **Lineage 18:** `L_OEPackageConsolidation`, status Opened, Mission recorded in the owner's words (quoted from OE's record of the ruling and
+  from this package's own work), `supersedesMission` pointing at Lineage 17's. Mission digest recorded; it reproduces.
+- **Data file:** `backlog_abox` v1.10.0 (new version because the register changed). 0 violations.
+- **Next, one release each:** Scope, Goal, Objective, Backlog, then the work.
