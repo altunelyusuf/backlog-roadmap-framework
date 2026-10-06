@@ -11032,3 +11032,12 @@ dangling live pointers; 17 scripts name the files and must be repointed.
   shape's string datatype rejects; the tag is removed and the words are unchanged. The Mission now points to its own stage
   output (`producedByStage`), which the mission shape reads as "this lineage is still being built". The register validates with
   0 violations at this stage.
+
+## v1.335.0 — Lineage 17, Goal stage (third of five releases)
+
+- **Register (9.104.0):** eight goals of `L_OEStructureCleanup`: one facing the mission, one facing the scope for each of its
+  three areas, one for containment, and one inverse goal guarding each of the three exclusions. The lineage status moves to
+  `LS_Goaled`. The Goal `StageOutput` consumes the Scope output and its digest reproduces. Each goal also carries
+  `belongsToLineage`: a first attempt without it produced a Goal digest identical to the Scope digest, because the digest only
+  sees elements that belong to the lineage, so the stage would have been closed on a digest that could not detect a goal being
+  added or removed. No Objective or Backlog yet.

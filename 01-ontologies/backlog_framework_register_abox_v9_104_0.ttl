@@ -14,8 +14,8 @@
 
 <http://example.org/backlog-framework-register> a owl:Ontology ;
     rdfs:label "The framework's own development register"@en ;
-    owl:versionIRI <http://example.org/backlog-framework-register/9.103.0> ;
-    owl:versionInfo "9.103.0" ;
+    owl:versionIRI <http://example.org/backlog-framework-register/9.104.0> ;
+    owl:versionInfo "9.104.0" ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.100.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.98.0> ;
     owl:priorVersion <http://example.org/backlog-framework-register/9.97.0> ;
@@ -3693,7 +3693,7 @@ fw:L_OEStructureCleanup a backlog:Lineage ; rdfs:label "Lineage 17: OE Structure
     backlog:lineageOrdinal 17 ;
     backlog:lineageArchived false ;
     backlog:lineageForMission fw:Mission_OEStructureCleanup ;
-    backlog:hasLineageStatus backlog:LS_Scoped ;
+    backlog:hasLineageStatus backlog:LS_Goaled ;
     backlog:hasLineageDepthLevel backlog:Depth_StoryDirect ;
     backlog:hasLineageArtifactDomain backlog:Domain_Infrastructure ;
     backlog:memberOfContainer fw:Register .
@@ -3788,3 +3788,83 @@ fw:Out_Scope_OEStructureCleanup a backlog:StageOutput ;
     backlog:hasStateDigest "e4188964a49bbb14d71a4fe0805af1f3a05e86dbf55f4db850c3c02d46b6b071" ;
     backlog:closedAtCommit "backlog-roadmap-framework-v1.334.0 (tag; witnessed by git, not asserted)" ;
     backlog:hasRationale "Scope stage of Lineage 17: text, three areas, six deliverables and three exclusions, all present before any goal. Stage 2 of 5." .
+
+# v9.104.0: Lineage 17, Goal stage (third of five releases). Five goals face the mission, the scope (one per area) and
+# containment, and three inverse goals each guard one exclusion. No objective, metric or work item yet.
+fw:Goal_OESC_MissionMet a backlog:Goal ; rdfs:label "The package ships as two subjects of three files each, with nothing lost"@en ;
+    backlog:contributesToMission fw:Mission_OEStructureCleanup ;
+    backlog:derivesFromScope fw:Scope_OEStructureCleanup ;
+    backlog:hasGoalFacing backlog:Facing_Mission ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out_Goal_OEStructureCleanup ;
+    backlog:belongsToLineage fw:L_OEStructureCleanup ;
+    backlog:decidedBy backlog:Owner .
+fw:Goal_OESC_FilesDone a backlog:Goal ; rdfs:label "Every ontology file is in the one place its role and subject give it"@en ;
+    backlog:contributesToMission fw:Mission_OEStructureCleanup ;
+    backlog:derivesFromScope fw:Scope_OEStructureCleanup ;
+    backlog:hasGoalFacing backlog:Facing_Scope ;
+    backlog:goalCoversArea fw:Area_OESC_Files ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out_Goal_OEStructureCleanup ;
+    backlog:belongsToLineage fw:L_OEStructureCleanup ;
+    backlog:decidedBy backlog:Owner .
+fw:Goal_OESC_ToolsDone a backlog:Goal ; rdfs:label "Every tool finds the files where they now are"@en ;
+    backlog:contributesToMission fw:Mission_OEStructureCleanup ;
+    backlog:derivesFromScope fw:Scope_OEStructureCleanup ;
+    backlog:hasGoalFacing backlog:Facing_Scope ;
+    backlog:goalCoversArea fw:Area_OESC_Tools ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out_Goal_OEStructureCleanup ;
+    backlog:belongsToLineage fw:L_OEStructureCleanup ;
+    backlog:decidedBy backlog:Owner .
+fw:Goal_OESC_EnforcementDone a backlog:Goal ; rdfs:label "The structure checker shows the debt cleared and nothing new"@en ;
+    backlog:contributesToMission fw:Mission_OEStructureCleanup ;
+    backlog:derivesFromScope fw:Scope_OEStructureCleanup ;
+    backlog:hasGoalFacing backlog:Facing_Scope ;
+    backlog:goalCoversArea fw:Area_OESC_Enforcement ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out_Goal_OEStructureCleanup ;
+    backlog:belongsToLineage fw:L_OEStructureCleanup ;
+    backlog:decidedBy backlog:Owner .
+fw:Goal_OESC_Contained a backlog:Goal ; rdfs:label "No work was done outside what this scope named"@en ;
+    backlog:contributesToMission fw:Mission_OEStructureCleanup ;
+    backlog:derivesFromScope fw:Scope_OEStructureCleanup ;
+    backlog:hasGoalFacing backlog:Facing_Containment ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out_Goal_OEStructureCleanup ;
+    backlog:belongsToLineage fw:L_OEStructureCleanup ;
+    backlog:decidedBy backlog:Owner .
+fw:Goal_OESC_NoStatementChange a backlog:Goal ; rdfs:label "No statement was reworded, corrected or re-judged in the move"@en ;
+    backlog:contributesToMission fw:Mission_OEStructureCleanup ;
+    backlog:derivesFromScope fw:Scope_OEStructureCleanup ;
+    backlog:hasGoalFacing backlog:Facing_Exclusion ;
+    backlog:guardsExclusion fw:Ex_OESC_StatementChange ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out_Goal_OEStructureCleanup ;
+    backlog:belongsToLineage fw:L_OEStructureCleanup ;
+    backlog:decidedBy backlog:Owner .
+fw:Goal_OESC_NoRetroJudging a backlog:Goal ; rdfs:label "Retired work was never run through today's live rules"@en ;
+    backlog:contributesToMission fw:Mission_OEStructureCleanup ;
+    backlog:derivesFromScope fw:Scope_OEStructureCleanup ;
+    backlog:hasGoalFacing backlog:Facing_Exclusion ;
+    backlog:guardsExclusion fw:Ex_OESC_RetroJudging ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out_Goal_OEStructureCleanup ;
+    backlog:belongsToLineage fw:L_OEStructureCleanup ;
+    backlog:decidedBy backlog:Owner .
+fw:Goal_OESC_NoOtherPackages a backlog:Goal ; rdfs:label "No file outside this package was touched"@en ;
+    backlog:contributesToMission fw:Mission_OEStructureCleanup ;
+    backlog:derivesFromScope fw:Scope_OEStructureCleanup ;
+    backlog:hasGoalFacing backlog:Facing_Exclusion ;
+    backlog:guardsExclusion fw:Ex_OESC_OtherPackages ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out_Goal_OEStructureCleanup ;
+    backlog:belongsToLineage fw:L_OEStructureCleanup ;
+    backlog:decidedBy backlog:Owner .
+
+fw:Out_Goal_OEStructureCleanup a backlog:StageOutput ;
+    backlog:outputOfStage backlog:Stage_Goal ; backlog:belongsToLineage fw:L_OEStructureCleanup ;
+    backlog:consumesOutput fw:Out_Scope_OEStructureCleanup ;
+    backlog:hasStateDigest "920ca15945004e78e9726ef363d044aae63f2a8366cddfdcb3c1148a7132c91d" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.335.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Goal stage of Lineage 17: one mission-facing goal, one scope-facing goal per area, one containment goal, and one inverse goal per exclusion. Stage 3 of 5." .
