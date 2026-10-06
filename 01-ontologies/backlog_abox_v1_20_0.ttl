@@ -22,9 +22,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (ABox: controlled individuals, reference data and the live register)"@en ;
-    owl:versionIRI <http://example.org/backlog/abox/1.19.0> ;
-    owl:versionInfo "1.19.0" ;
-    owl:priorVersion <http://example.org/backlog/abox/1.17.0> , <http://example.org/backlog/abox/1.16.0> , <http://example.org/backlog/abox/1.15.0> , <http://example.org/backlog/abox/1.14.0> , <http://example.org/backlog/abox/1.13.0> , <http://example.org/backlog/abox/1.12.0> , <http://example.org/backlog/abox/1.11.0> , <http://example.org/backlog/abox/1.10.0> , <http://example.org/backlog/abox/1.9.0> , <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
+    owl:versionIRI <http://example.org/backlog/abox/1.20.0> ;
+    owl:versionInfo "1.20.0" ;
+    owl:priorVersion <http://example.org/backlog/abox/1.19.0> , <http://example.org/backlog/abox/1.17.0> , <http://example.org/backlog/abox/1.16.0> , <http://example.org/backlog/abox/1.15.0> , <http://example.org/backlog/abox/1.14.0> , <http://example.org/backlog/abox/1.13.0> , <http://example.org/backlog/abox/1.12.0> , <http://example.org/backlog/abox/1.11.0> , <http://example.org/backlog/abox/1.10.0> , <http://example.org/backlog/abox/1.9.0> , <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
         <http://example.org/backlog-abox/1.2.1> ,
                      <http://example.org/backlog-abox/1.2.0> ,
                      <http://example.org/backlog-abox/1.1.0> ,
@@ -6356,7 +6356,8 @@ fw:T_OC_Ceremony a backlog:ExecutionTask ; backlog:hasIdentifier "OC-T06" ;
 fw:AC_OC_DebtCleared a backlog:AcceptanceCriterion ;
     backlog:hasGherkinText "Given the new layout is released, When the OE structure checker runs, Then the package's recorded debt line reads CLEARED with no violation new, and a return note naming it is in the OE inbox." .
 fw:ST_OC_DebtCleared a backlog:Story ; backlog:hasIdentifier "OC-S07" ; backlog:hasTitle "Show the package clear and return the note to the OE inbox" ;
-    backlog:hasState backlog:Ready ;
+    backlog:hasState backlog:InProgress ;
+    backlog:startedAt "2026-10-06T18:58:00Z"^^xsd:dateTime ;
     backlog:memberOfContainer fw:Register ;
     backlog:belongsToLineage fw:L_OEPackageConsolidation ;
     backlog:producedByStage fw:Out_Backlog_OEPackageConsolidation ;
@@ -6378,7 +6379,8 @@ fw:Plan_OC_DebtCleared a backlog:PlanningEvent ; rdfs:label "OC-S07 taken in"@en
     backlog:hasRationale "The formal boundary between ordering this work and doing it." .
 fw:T_OC_DebtCleared a backlog:ExecutionTask ; backlog:hasIdentifier "OC-T07" ;
     backlog:hasTitle "Build and prove: DebtCleared"@en ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:InProgress ;
+    backlog:startedAt "2026-10-06T18:58:00Z"^^xsd:dateTime ;
     backlog:hasTaskType backlog:Task_Implementation ;
     backlog:memberOfContainer fw:Register , fw:It_OC_1 ;
     backlog:belongsToLineage fw:L_OEPackageConsolidation ;
