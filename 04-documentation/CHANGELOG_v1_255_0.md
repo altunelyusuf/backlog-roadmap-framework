@@ -11247,3 +11247,9 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 
 - **Goals:** one facing the mission (the five defects closed), one per scope area (reports, marking, audience, archive rules, lesson, proof), one containment goal, and one inverse goal per exclusion (no earlier statement reworded, no live rules over the archive, no file outside the package, no change to what the public copy contains). No objective, metric or work item yet.
 - **Stage 3 of 5.** Data file: `backlog_abox` v1.24.0.
+
+## v1.355.0 — Lineage 19, Objective stage: twelve counted objectives
+
+- **Objectives:** one per goal, each with a counted metric, a 2026-10-07 baseline observation, a target and a checkpoint (2026-10-21). Baselines: 5 defects open; 12 closure gaps (2 ended missions without a report, 10 cancelled items named by none); 3 unmarked archived records; 7 modules with no declared audience; 1 tool judging the archive by the live rules; 0 findings on objective design; and six held-at-zero containment and proof objectives.
+- **Design rule applied, from Lineage 18's lesson:** every objective counts something this package controls. None counts a line in a register another session owns.
+- **Stage 4 of 5.** Data file: `backlog_abox` v1.25.0.
