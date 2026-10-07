@@ -1,6 +1,13 @@
 #!/usr/bin/env python3
-"""backlog_validate v1.12.0 — conformance validator for the Backlog & Roadmap
+"""backlog_validate v1.13.0 — conformance validator for the Backlog & Roadmap
 Semantic Framework (http://example.org/backlog 1.0.0).
+
+v1.13.0 (G99 release A, speed only): one validation is split over the machine's cores. Every shard loads the same shapes and data and runs
+EVERY rule first (rules can add statements other shapes read), then judges its own share of the top-level shapes (named shapes sorted by IRI,
+dealt out in turn; unnamed shapes go to shard 0). Shapes that other shapes point to are still resolved in full inside each shard. The parent merges
+the shard reports and REFUSES the run if the shards do not together judge exactly the shapes there are (each shard reports "mine of total").
+Nothing is skipped or loosened: backlog_validate_shard_probe proves, on a register that violates, that the sharded report equals the unsharded
+one result for result. BACKLOG_VALIDATE_SHARDS=1 gives the old single-process run; the default is the core count, at most 4.
 
 v1.12.0 (Lineage 17, OESC-S01): the package ships one vocabulary, one data and one shapes file per subject. The rules that used to
 ship as a second shapes file are in the shapes file, and the severity-promotion overlay is no longer a shipped file: it is derived
@@ -450,6 +457,62 @@ def validate(data_files):
     return code, counts
 
 
+def _shard_count():
+    v = os.environ.get("BACKLOG_VALIDATE_SHARDS")
+    try:
+        n = int(v) if v else min(os.cpu_count() or 1, 4)
+    except ValueError:
+        n = 1
+    return max(1, n)
+
+
+def shard_worker(k, n, shapes_path, data_path):
+    """One shard: the same graph, every rule, and the k-th share of the top-level shapes. Prints the turtle report; reports its share on stderr."""
+    import pyshacl
+    from pyshacl.shapes_graph import ShapesGraph
+    orig, seen = ShapesGraph.shapes, {}
+
+    def shapes(self):
+        allsh = list(orig.fget(self))
+        named = sorted((s for s in allsh if isinstance(s.node, URIRef)), key=lambda s: str(s.node))
+        mine = [s for i, s in enumerate(named) if i % n == k]
+        if k == 0:
+            mine += [s for s in allsh if not isinstance(s.node, URIRef)]
+        if os.environ.get("BACKLOG_VALIDATE_SHARD_FAULT") == "drop" and k == n - 1:
+            mine = mine[:len(mine) // 2]     # test seam for the probe's self-proof: a share lost, honestly reported
+        seen["total"], seen["mine"] = len(allsh), len(mine)
+        return mine
+    ShapesGraph.shapes = property(shapes)
+    _ok, g, _txt = pyshacl.validate(data_path, shacl_graph=shapes_path, data_graph_format="turtle", shacl_graph_format="turtle", advanced=True)
+    sys.stdout.write(g.serialize(format="turtle"))
+    sys.stderr.write("SHARD %d %d %d %d\n" % (k, n, seen.get("mine", -1), seen.get("total", -2)))
+
+
+def _run_pyshacl(shapes_path, data_path):
+    """Return (list of turtle reports, list of stderr texts). n=1 is the plain pyshacl run; n>1 runs shards at once and refuses unless
+    the shards together judged exactly all the shapes (a share lost or counted twice is an error, never a quiet pass)."""
+    n = _shard_count()
+    if n == 1:
+        proc = subprocess.run([sys.executable, "-m", "pyshacl", "-s", shapes_path, "-a", "-f", "turtle", data_path], capture_output=True, text=True)
+        return [proc.stdout], [proc.stderr]
+    files, procs = [], []
+    for k in range(n):
+        fo, fe = tempfile.TemporaryFile("w+"), tempfile.TemporaryFile("w+")
+        files.append((fo, fe))
+        procs.append(subprocess.Popen([sys.executable, os.path.abspath(__file__), "--shard-worker", str(k), str(n), shapes_path, data_path],
+                                      stdout=fo, stderr=fe, text=True))
+    outs, errs, mine, totals = [], [], 0, set()
+    for p, (fo, fe) in zip(procs, files):
+        p.wait(); fo.seek(0); fe.seek(0); outs.append(fo.read()); e = fe.read(); errs.append(e)
+        m = re.search(r"^SHARD (\d+) (\d+) (-?\d+) (-?\d+)$", e, re.M)
+        if p.returncode != 0 or not m:
+            print("SHARD REFUSED: a shard failed or reported nothing:\n" + e[-400:], file=sys.stderr); return None, errs
+        mine += int(m.group(3)); totals.add(int(m.group(4)))
+    if len(totals) != 1 or mine != totals.copy().pop():
+        print("SHARD REFUSED: the shards judged %d of %s shapes" % (mine, sorted(totals)), file=sys.stderr); return None, errs
+    return outs, errs
+
+
 def _validate(data_files):
     global SHAPES
     _ov = promoted_overlay(data_files)
@@ -458,16 +521,16 @@ def _validate(data_files):
     data_path = serialize(load([TBOX, reference_abox(data_files)] + data_files), ".data.ttl")
     shapes_path = serialize(load([SHAPES]), ".shapes.ttl")
 
-    proc = subprocess.run(
-        [sys.executable, "-m", "pyshacl", "-s", shapes_path, "-a", "-f", "turtle", data_path],
-        capture_output=True, text=True,
-    )
+    outs, errs = _run_pyshacl(shapes_path, data_path)
+    if outs is None:
+        return 2, {}
     report = Graph()
     try:
-        report.parse(data=proc.stdout, format="turtle")
+        for o in outs:
+            report.parse(data=o, format="turtle")
     except Exception:
-        print(proc.stdout)
-        print(proc.stderr, file=sys.stderr)
+        print("\n".join(outs))
+        print("\n".join(errs), file=sys.stderr)
         return 2, {}
 
     # v1.11.0: a lineage-level rule-set adoption. The overlay differs from the base shapes only in the
@@ -592,6 +655,8 @@ def gate_k():
 
 
 def main():
+    if sys.argv[1:2] == ["--shard-worker"]:
+        shard_worker(int(sys.argv[2]), int(sys.argv[3]), sys.argv[4], sys.argv[5]); sys.exit(0)
     ap = argparse.ArgumentParser(description="Validate a register against the backlog framework.")
     ap.add_argument("data", nargs="*", help="register Turtle file(s)")
     ap.add_argument("--gate-k", action="store_true", help="run Gate K version-identity check and exit")

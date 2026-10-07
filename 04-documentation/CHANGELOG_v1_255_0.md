@@ -11260,6 +11260,17 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.364.0 — G99 release A (speed only): the gate halves, and the release steps become a tool
+
+Planned task set under G99 (maintenance with a well-defined outcome; no lineage). Release A of two; release B carries the `priorVersion` fix, the tag check and the ordinal clean-up.
+
+- **Where the time went (measured, cold cache, 2 cores):** the gate took 755 s; 509 s of it was Gate R, and 438 s of that one validation of the negative fixture (the validator judges 354 shapes one after another). Everything else was under 2 minutes per section.
+- **`backlog_validate` v1.13.0:** one validation is split over the cores. Every shard runs every rule first, then judges its share of the top-level shapes; the parent merges the reports and refuses the run unless the shards together judged exactly all the shapes. `BACKLOG_VALIDATE_SHARDS=1` gives the old run. Negative fixture: 438 s → 273 s; adversarial fixture 34 s → 14 s; reports identical line for line.
+- **`backlog_validate_shard_probe` v1.0.0 (new, runs in gate v1.31.0 before Gate R):** the split report equals the single-process report on a register that violates; self-proof: a report missing a line differs, and a split that drops shapes is refused. A pass is stored once per set of bytes (validator, rules, data, T-Box, fixture, probe); a planted byte changes the key and the probe runs again (shown).
+- **`backlog_release_tool` v1.0.0 (new) and `backlog_release_tool_probe` v1.0.0:** header bump of any versioned file and of the data file, bytecode clean-up, push with retry on transient server errors only, the whole release path and the republish, each step time-limited and timed; refuses a version with no changelog entry. Probe: nine cases, each failing case really fails. A real gap found by the probe (a missing file crashed instead of being refused) was fixed. Still done by hand: finishing a story's evidence records and the stage-digest filling (lineage work, not release work).
+- **Gate v1.31.0:** adds the split proof section and the release-tool probe. No check removed or loosened.
+- **Measured:** cold gate 755 s → 376 s (the remaining failure is the expected distribution-drift check of a pending version).
+
 ## v1.363.0 — the six pending archive confirmations confirmed
 
 - `backlog_archive_reconcile` v3.0.0 run for real after v1.362.0 made the archive commits real: six archived lineages (Lineage 16, the gate-efficiency lineage, the OE structure cleanup, Lineage 18, Lineage 19, and the fixture consolidation) went from pending to confirmed, judged by the archive's own shapes (0 violations). Archive data file v1.14.0; 27 live pointers follow it; live data file v1.34.0.
