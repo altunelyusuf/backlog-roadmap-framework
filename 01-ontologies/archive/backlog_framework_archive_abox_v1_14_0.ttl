@@ -18,9 +18,9 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 <http://example.org/backlog-framework-archive> a owl:Ontology ;
-    owl:versionIRI <http://example.org/backlog-framework-archive/1.13.0> ;
-    owl:versionInfo "1.13.0" ;
-    owl:priorVersion <http://example.org/backlog-framework-archive/1.12.0> , <http://example.org/backlog-framework-archive/1.11.0> , <http://example.org/backlog-framework-archive/1.10.0> , <http://example.org/backlog-framework-archive/1.9.0> , <http://example.org/backlog-framework-archive/1.8.0> , <http://example.org/backlog-framework-archive/1.6.0> ;
+    owl:versionIRI <http://example.org/backlog-framework-archive/1.14.0> ;
+    owl:versionInfo "1.14.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-archive/1.13.0> , <http://example.org/backlog-framework-archive/1.12.0> , <http://example.org/backlog-framework-archive/1.11.0> , <http://example.org/backlog-framework-archive/1.10.0> , <http://example.org/backlog-framework-archive/1.9.0> , <http://example.org/backlog-framework-archive/1.8.0> , <http://example.org/backlog-framework-archive/1.6.0> ;
     rdfs:label "backlog-roadmap-framework — archived lineages"@en ;
     rdfs:comment """Six finished lineages, set down.
 
@@ -13046,7 +13046,7 @@ fw:CR_GovernanceContinuation a backlog:ClosureReport ;
 #  2026-09-24T11:05:06Z -- 41 statements of L_GateEfficiency, L_FixtureConsolidation set down here by
 #  backlog_lineage_archive_v2_0_0 (verbatim, comments of the live register kept there).
 #################################################################
-fw:L_GateEfficiency a backlog:Lineage ; backlog:hasArchivalConfirmationStatus backlog:AC_PendingConfirmation ; rdfs:label "Lineage 17: Gate Runtime Efficiency"@en ;
+fw:L_GateEfficiency a backlog:Lineage ; backlog:hasArchivalConfirmationStatus backlog:AC_Confirmed ; rdfs:label "Lineage 17: Gate Runtime Efficiency"@en ;
     backlog:lineageOrdinal 17 ; backlog:lineageArchived true ;
     backlog:lineageForMission fw:M_GateEfficiency ; backlog:hasLineageStatus backlog:LS_Achieved .
 fw:M_GateEfficiency a backlog:Mission ; backlog:missionFor fw:Register ;
@@ -13137,7 +13137,7 @@ fw:CR_GateEfficiency a backlog:ClosureReport ;
     backlog:closureCommittedAt "backlog-roadmap-framework-v1.296.0" ;
     backlog:hasClosureSummary "One real story, built, proven both directions, and already exceeding its own target: the fixed section's warm-cache cost fell from 186s (372s doubled) to under 1s in the common case, and the whole-gate objective (<=60s) is met by this alone. A disclosed, deliberate deviation from G96's own two-commit closure ordering: both real branches of the fix were tested in isolation, directly, before any of this closure text was written -- the verification G96 exists to protect happened first, not assumed -- and this session's own stated goal is reducing publish overhead, so a second, separate publish purely to satisfy commit-ordering for a single-story, already-proven lineage would work against the very thing being fixed." ;
     backlog:reportsOnObjective fw:Obj_GateEfficiency .
-fw:L_FixtureConsolidation a backlog:Lineage ; backlog:hasArchivalConfirmationStatus backlog:AC_PendingConfirmation ; rdfs:label "Lineage 18: Fixture Consolidation"@en ;
+fw:L_FixtureConsolidation a backlog:Lineage ; backlog:hasArchivalConfirmationStatus backlog:AC_Confirmed ; rdfs:label "Lineage 18: Fixture Consolidation"@en ;
     backlog:lineageOrdinal 18 ; backlog:lineageArchived true ;
     backlog:lineageForMission fw:M_FixtureConsolidation ; backlog:hasLineageStatus backlog:LS_Achieved .
 fw:M_FixtureConsolidation a backlog:Mission ; backlog:missionFor fw:Register ;
@@ -13264,7 +13264,7 @@ fw:Bypass_L_GateEfficiency_20260924 a backlog:LineageBypass ;
 #  2026-10-06T18:35:07Z -- 118 statements of L_OEStructureCleanup set down here by
 #  backlog_lineage_archive_v2_0_0 (verbatim, comments of the live register kept there).
 #################################################################
-fw:L_OEStructureCleanup a backlog:Lineage ; backlog:hasArchivalConfirmationStatus backlog:AC_PendingConfirmation ; rdfs:label "Lineage 17: OE Structure Clean-up"@en ;
+fw:L_OEStructureCleanup a backlog:Lineage ; backlog:hasArchivalConfirmationStatus backlog:AC_Confirmed ; rdfs:label "Lineage 17: OE Structure Clean-up"@en ;
     backlog:lineageOrdinal 17 ;
     backlog:lineageArchived true ;
     backlog:lineageForMission fw:Mission_OEStructureCleanup ;
@@ -13913,7 +13913,7 @@ fw:CR_GovernanceContinuation backlog:reportsCancelledItem fw:ST_Gov_HardGate .
 #################################################################
 fw:L_OEPackageConsolidation a backlog:Lineage ; rdfs:label "Lineage 18: OE Package Consolidation"@en ;
     backlog:lineageOrdinal 18 ;
-    backlog:lineageArchived true ; backlog:hasArchivalConfirmationStatus backlog:AC_PendingConfirmation ;
+    backlog:lineageArchived true ; backlog:hasArchivalConfirmationStatus backlog:AC_Confirmed ;
     backlog:lineageForMission fw:Mission_OEPackageConsolidation ;
     backlog:hasLineageStatus backlog:LS_Achieved ;
     backlog:hasLineageDepthLevel backlog:Depth_StoryDirect ;
@@ -14693,7 +14693,7 @@ fw:CR_OEPackageConsolidation a backlog:ClosureReport ;
     backlog:reportsOnObjective fw:Obj_OC_MissionMet , fw:Obj_OC_FilesDone , fw:Obj_OC_ToolsDone , fw:Obj_OC_EnforcementDone , fw:Obj_OC_Contained , fw:Obj_OC_NoStatementChange , fw:Obj_OC_NoRetroJudging , fw:Obj_OC_NoOtherPackages , fw:Obj_OC_NoModuleMembership .
 fw:L_RecordsTellTruth a backlog:Lineage ; rdfs:label "Lineage 19: Records That Tell the Truth"@en ;
     backlog:lineageOrdinal 19 ;
-    backlog:lineageArchived true ; backlog:hasArchivalConfirmationStatus backlog:AC_PendingConfirmation ;
+    backlog:lineageArchived true ; backlog:hasArchivalConfirmationStatus backlog:AC_Confirmed ;
     backlog:lineageForMission fw:Mission_RecordsTellTruth ;
     backlog:hasLineageStatus backlog:LS_Achieved ;
     backlog:hasLineageDepthLevel backlog:Depth_StoryDirect ;
@@ -15602,7 +15602,7 @@ fw:CR_RecordsTellTruth a backlog:ClosureReport ;
 #################################################################
 fw:L_GovernanceMitigations a backlog:Lineage ; rdfs:label "Lineage 16: Governance Mitigations"@en ;
     backlog:lineageOrdinal 16 ;
-    backlog:lineageArchived true ; backlog:hasArchivalConfirmationStatus backlog:AC_PendingConfirmation ;
+    backlog:lineageArchived true ; backlog:hasArchivalConfirmationStatus backlog:AC_Confirmed ;
     backlog:lineageForMission fw:Mission_GovernanceMitigations ;
     backlog:hasLineageStatus backlog:LS_Achieved ;
     backlog:hasLineageDepthLevel backlog:Depth_StoryDirect ;

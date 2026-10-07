@@ -11260,6 +11260,12 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.363.0 — the six pending archive confirmations confirmed
+
+- `backlog_archive_reconcile` v3.0.0 run for real after v1.362.0 made the archive commits real: six archived lineages (Lineage 16, the gate-efficiency lineage, the OE structure cleanup, Lineage 18, Lineage 19, and the fixture consolidation) went from pending to confirmed, judged by the archive's own shapes (0 violations). Archive data file v1.14.0; 27 live pointers follow it; live data file v1.34.0.
+- Every archived lineage record is now confirmed; none is pending.
+- `backlog_archive_reconcile` v3.0.1: the superseded version's IRI added to `priorVersion` lost its slash in v3.0.0 (caught on this run and corrected in the file).
+
 ## v1.362.0 — Lineage 16 finished and archived: GOVMIT-S02 and GOVMIT-S03
 
 - **Checked first:** the two stories open since 2026-09-21 were compared with the current code before building, because three lineages had passed. Neither was overtaken: no rule covered an item that records a start while still Proposed or Ready unless it was batch-tracked, and the criterion resolver joined any path to the package root, `..` included.

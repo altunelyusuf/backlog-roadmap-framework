@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-"""backlog_archive_reconcile v3.0.0 -- per-lineage archival confirmation, judged by the archive's own shapes (Lineage 19, DC-S03 and DC-S05).
+"""backlog_archive_reconcile v3.0.1 (v3.0.1: the superseded version's IRI in priorVersion kept its slash; v3.0.0 dropped it)
+
+v3.0.0 -- per-lineage archival confirmation, judged by the archive's own shapes (Lineage 19, DC-S03 and DC-S05).
 
 WHAT IT DOES. For every LineageArchiveEntry in the live data file whose archive copy sits in the archive folder:
   - the archive copy says lineageArchived false, or has no confirmation status -> it is marked archived (lineageArchived true) and set pending;
@@ -16,7 +18,7 @@ register is the highest live data file, the archive is the highest data file in 
 nothing derives a folder by substitution. The live rules never read the archive (G89, G91).
 
 Exit 0 reconcilable or applied, 2 violations keep some lineage pending, 3 the tool could not do its job.
-Usage: backlog_archive_reconcile_v3_0_0.py [--apply]
+Usage: backlog_archive_reconcile_v3_0_1.py [--apply]
 """
 import glob, importlib.util, os, re, sys
 
@@ -122,7 +124,7 @@ def main():
     newv = "%d.%d.0" % (M, m_ + 1); oldv = "%d.%d.%d" % (M, m_, p)
     new = new.replace('owl:versionInfo "%s" ;' % oldv, 'owl:versionInfo "%s" ;' % newv, 1)
     new = re.sub(r"(owl:versionIRI <[^>]*/)" + re.escape(oldv) + ">", lambda mm: mm.group(1) + newv + ">", new, count=1)
-    new = re.sub(r"owl:priorVersion (<[^>]*/)", lambda mm: "owl:priorVersion " + mm.group(1)[:-1] + oldv + "> , " + mm.group(1), new, count=1)  # the version this one supersedes joins the chain
+    new = re.sub(r"owl:priorVersion (<[^>]*/)", lambda mm: "owl:priorVersion " + mm.group(1) + oldv + "> , " + mm.group(1), new, count=1)  # the version this one supersedes joins the chain
     new_path = os.path.join(ARC, "backlog_framework_archive_abox_v%d_%d_0.ttl" % (M, m_ + 1))
     open(new_path, "w", encoding="utf-8").write(new); os.remove(arc_path)
     reg2 = reg.replace('backlog:archiveFile "%s"' % arc_rel, 'backlog:archiveFile "%s"' % os.path.relpath(new_path, PKG))
