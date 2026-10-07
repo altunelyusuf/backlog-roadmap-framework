@@ -22,9 +22,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (ABox: controlled individuals, reference data and the live register)"@en ;
-    owl:versionIRI <http://example.org/backlog/abox/1.22.0> ;
-    owl:versionInfo "1.22.0" ;
-    owl:priorVersion <http://example.org/backlog/abox/1.21.0> , <http://example.org/backlog/abox/1.20.0> , <http://example.org/backlog/abox/1.19.0> , <http://example.org/backlog/abox/1.17.0> , <http://example.org/backlog/abox/1.16.0> , <http://example.org/backlog/abox/1.15.0> , <http://example.org/backlog/abox/1.14.0> , <http://example.org/backlog/abox/1.13.0> , <http://example.org/backlog/abox/1.12.0> , <http://example.org/backlog/abox/1.11.0> , <http://example.org/backlog/abox/1.10.0> , <http://example.org/backlog/abox/1.9.0> , <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
+    owl:versionIRI <http://example.org/backlog/abox/1.23.0> ;
+    owl:versionInfo "1.23.0" ;
+    owl:priorVersion <http://example.org/backlog/abox/1.22.0> , <http://example.org/backlog/abox/1.21.0> , <http://example.org/backlog/abox/1.20.0> , <http://example.org/backlog/abox/1.19.0> , <http://example.org/backlog/abox/1.17.0> , <http://example.org/backlog/abox/1.16.0> , <http://example.org/backlog/abox/1.15.0> , <http://example.org/backlog/abox/1.14.0> , <http://example.org/backlog/abox/1.13.0> , <http://example.org/backlog/abox/1.12.0> , <http://example.org/backlog/abox/1.11.0> , <http://example.org/backlog/abox/1.10.0> , <http://example.org/backlog/abox/1.9.0> , <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
         <http://example.org/backlog-abox/1.2.1> ,
                      <http://example.org/backlog-abox/1.2.0> ,
                      <http://example.org/backlog-abox/1.1.0> ,
@@ -6629,3 +6629,97 @@ fw:Out_Mission_RecordsTellTruth a backlog:StageOutput ;
     backlog:hasStateDigest "f1f072db0eb9e360db526f9aa2045b44510bf3d6535ffc576741289127e64668" ;
     backlog:closedAtCommit "backlog-roadmap-framework-v1.352.0 (tag; witnessed by git, not asserted)" ;
     backlog:hasRationale "Mission stage of Lineage 19. Tag deterministic: VERSION.txt set before publishing. Stage 1 of 5, one release each." .
+
+# v9.116.0: Lineage 19, Scope stage (second of five releases). Scope text, areas, deliverables and exclusions are written here, before any
+# goal, objective or work item. Measured 2026-10-07 by reading the live and archive data files and the tools.
+fw:Scope_RecordsTellTruth a backlog:ScopeStatement ; rdfs:label "Scope: Records That Tell the Truth"@en ;
+    backlog:hasScopeStatementText "Make a closure report required for every ended mission, abandoned as well as achieved, and let it name the items delivered and the items cancelled; write the reports that are missing (Lineage 17's, abandoned, and the first-built lineage's, achieved) and add the cancelled and delivered items to the existing ones; mark the three archived records that are not marked archived, through the confirmation step built for it, which is repaired and pointed at the archive folder; add a module audience that each module declares and make the public copy follow it and stop with an error when a declared module cannot be found; give the archive's own shapes the three rules the live rules now carry, and make no tool judge the archive by the live rules or find its folders by string substitution; record the lesson about designing an objective as a finding; and prove nothing earlier was reworded and the public copy is unchanged apart from the declared edits." ;
+    backlog:scopeForMission fw:Mission_RecordsTellTruth ;
+    backlog:producedByStage fw:Out_Scope_RecordsTellTruth ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:requiresDeliverable fw:Del_DC_AbandonedReport , fw:Del_DC_CancelledReported , fw:Del_DC_ArchiveMarked , fw:Del_DC_AudienceDeclared , fw:Del_DC_ArchiveOwnRules , fw:Del_DC_ObjectiveLesson , fw:Del_DC_NothingLostAgain ;
+    backlog:coversArea fw:Area_DC_Reports , fw:Area_DC_Marking , fw:Area_DC_Audience , fw:Area_DC_ArchiveRules , fw:Area_DC_Lesson , fw:Area_DC_Proof ;
+    backlog:hasScopeExclusion fw:Ex_DC_StatementChange , fw:Ex_DC_RetroJudging , fw:Ex_DC_OtherPackages , fw:Ex_DC_PublicContent ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth .
+
+fw:Area_DC_Reports a backlog:ScopeArea ; rdfs:label "Area: the closure reports"@en ;
+    backlog:areaMeasure "Counted 2026-10-07 over the live and archive data files: 10 missions have an outcome; 2 ended missions have no closure report (Lineage 17, abandoned; the first-built lineage, achieved) and 10 cancelled items (6 in Lineage 17, 2 in the ontology-driven lineage, 1 each in two others) are named by no report." ;
+    backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:areaLocation "01-ontologies/ (live and archive data files), 02-shacl-safeguards/" ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth .
+fw:Area_DC_Marking a backlog:ScopeArea ; rdfs:label "Area: the archived marker"@en ;
+    backlog:areaMeasure "Counted 2026-10-07: 3 archived lineage records (the gate-efficiency, the fixture-consolidation and the OE structure clean-up lineages) carry lineageArchived false in the archive. Also noticed, not in scope: lineage ordinals 17 and 18 are each carried by two lineages across the live and archive files." ;
+    backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:areaLocation "01-ontologies/archive/, 03-tooling/backlog_archive_reconcile" ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth .
+fw:Area_DC_Audience a backlog:ScopeArea ; rdfs:label "Area: who may read each module"@en ;
+    backlog:areaMeasure "Counted 2026-10-07: 7 modules (1 in the live data file, 6 in the archive) and 0 declare an audience; the public copy names 7 module IRIs in a list inside the deriver and skips a listed module it cannot find without a word." ;
+    backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:areaLocation "01-ontologies/, 03-tooling/make_public_distribution, 03-tooling/backlog_package_fold" ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth .
+fw:Area_DC_ArchiveRules a backlog:ScopeArea ; rdfs:label "Area: the archive's own rules"@en ;
+    backlog:areaMeasure "Counted 2026-10-07 by search of 03-tooling: 1 tool (the archive reconcile) judges the archive by the live rules and finds its folders by replacing a folder name in a path; the archive's shapes file holds 2 node shapes." ;
+    backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:areaLocation "01-ontologies/archive/ shapes file, 03-tooling/" ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth .
+fw:Area_DC_Lesson a backlog:ScopeArea ; rdfs:label "Area: the lesson about objectives"@en ;
+    backlog:areaMeasure "Counted 2026-10-07: 0 recorded findings about how an objective is designed; the lesson was learned in Lineage 18, whose last objective counted a line in a register another session owns." ;
+    backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:areaLocation "01-ontologies/ (live data file)" ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth .
+fw:Area_DC_Proof a backlog:ScopeArea ; rdfs:label "Area: the before-and-after proof"@en ;
+    backlog:areaMeasure "Counted 2026-10-07: the split proof and the public-copy drift check exist; 0 proofs yet cover the changes this lineage makes." ;
+    backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:areaLocation "03-tooling/" ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth .
+fw:Del_DC_AbandonedReport a backlog:ScopeDeliverable ; rdfs:label "An abandoned mission has a closure report, and the rule says so"@en ;
+    backlog:deliverableForArea fw:Area_DC_Reports ; backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:derivesFromMissionClause "a mission that ends, achieved or abandoned, has a closure report" ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth .
+fw:Del_DC_CancelledReported a backlog:ScopeDeliverable ; rdfs:label "A closure report names what was delivered and what was cancelled"@en ;
+    backlog:deliverableForArea fw:Area_DC_Reports ; backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:derivesFromMissionClause "names every item it delivered and every item it cancelled" ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth .
+fw:Del_DC_ArchiveMarked a backlog:ScopeDeliverable ; rdfs:label "The record of a retired lineage is marked archived, by the confirmation step built for it"@en ;
+    backlog:deliverableForArea fw:Area_DC_Marking ; backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:derivesFromMissionClause "the record of a retired lineage is marked archived" ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth .
+fw:Del_DC_AudienceDeclared a backlog:ScopeDeliverable ; rdfs:label "Each module says who may read it, and the public copy is cut by that and stops when a declared module is missing"@en ;
+    backlog:deliverableForArea fw:Area_DC_Audience ; backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:derivesFromMissionClause "each module of the data file declares who may read it" ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth .
+fw:Del_DC_ArchiveOwnRules a backlog:ScopeDeliverable ; rdfs:label "The archive is judged by its own rules, by tools that read the archive folder"@en ;
+    backlog:deliverableForArea fw:Area_DC_ArchiveRules ; backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:derivesFromMissionClause "the archive is judged only by the archive's own rules" ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth .
+fw:Del_DC_ObjectiveLesson a backlog:ScopeDeliverable ; rdfs:label "What the package learned about designing an objective is recorded as a finding"@en ;
+    backlog:deliverableForArea fw:Area_DC_Lesson ; backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:derivesFromMissionClause "recorded as a finding" ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth .
+fw:Del_DC_NothingLostAgain a backlog:ScopeDeliverable ; rdfs:label "A before and after proof that no earlier statement was reworded and the public copy is unchanged apart from the declared edits"@en ;
+    backlog:deliverableForArea fw:Area_DC_Proof ; backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:derivesFromMissionClause "No earlier statement is reworded" ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth .
+fw:Ex_DC_StatementChange a backlog:ScopeExclusion ; rdfs:label "Exclusion: changing what an earlier statement says"@en ;
+    backlog:excludesConcern "Rewording or re-judging any statement already in the live or archive data files. The only edits are the three archive markers flipped by the confirmation step, the confirmation status that goes with them, and statements added." ;
+    backlog:hasExclusionRationale "The Mission says no earlier statement is reworded; additions and the three markers are declared so the proof can name them." ;
+    backlog:decidedBy backlog:Owner ; backlog:hasScopeLayer backlog:Layer_Work ; backlog:belongsToLineage fw:L_RecordsTellTruth .
+fw:Ex_DC_RetroJudging a backlog:ScopeExclusion ; rdfs:label "Exclusion: judging retired work by today's live rules"@en ;
+    backlog:excludesConcern "Running the live rules over the archive folder's files, or adding a live rule that fires on the archive." ;
+    backlog:hasExclusionRationale "G89 and G91: retired work is a record; the archive's rules are its own." ;
+    backlog:decidedBy backlog:Owner ; backlog:hasScopeLayer backlog:Layer_Work ; backlog:belongsToLineage fw:L_RecordsTellTruth .
+fw:Ex_DC_OtherPackages a backlog:ScopeExclusion ; rdfs:label "Exclusion: files outside this package"@en ;
+    backlog:excludesConcern "Any file outside this package, except a note to OE's inbox if one is needed." ;
+    backlog:hasExclusionRationale "Adopting projects' registers are theirs; OE's registers are OE's own." ;
+    backlog:decidedBy backlog:Owner ; backlog:hasScopeLayer backlog:Layer_Work ; backlog:belongsToLineage fw:L_RecordsTellTruth .
+fw:Ex_DC_PublicContent a backlog:ScopeExclusion ; rdfs:label "Exclusion: changing what the public copy contains"@en ;
+    backlog:excludesConcern "Changing which material is published: the set of modules cut from the public copy stays the seven it is today, and nothing else in the copy changes except the declared module-audience statements and the new version." ;
+    backlog:hasExclusionRationale "The change is how the cut is decided, not what is cut." ;
+    backlog:decidedBy backlog:Owner ; backlog:hasScopeLayer backlog:Layer_Work ; backlog:belongsToLineage fw:L_RecordsTellTruth .
+
+fw:Out_Scope_RecordsTellTruth a backlog:StageOutput ;
+    backlog:outputOfStage backlog:Stage_Scope ; backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:consumesOutput fw:Out_Mission_RecordsTellTruth ;
+    backlog:hasStateDigest "8b5470829070658a42e2e3ba8f9ee6776b1d946115f3c93d8c2766b8b9a1a0a8" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.353.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Scope stage of Lineage 19: seven deliverables over six areas, four exclusions. Stage 2 of 5." .

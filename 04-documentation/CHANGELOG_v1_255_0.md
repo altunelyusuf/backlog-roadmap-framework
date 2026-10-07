@@ -11234,3 +11234,11 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Opened:** Lineage 19, a new lineage that follows the achieved Lineage 18 (not a revival). Its mission: a mission that ends has a closure report naming what it delivered and what it cancelled; a retired lineage's record is marked archived; each module declares its audience and the public copy is cut by that declaration and stops when a declared module is missing; the archive is judged only by its own rules; the lesson about designing an objective is recorded. No earlier statement is reworded.
 - **Stage 1 of 5:** mission only; scope, goals, objectives and work items follow, one release each.
 - **Data file:** `backlog_abox` v1.22.0.
+
+## v1.353.0 — Lineage 19, Scope stage: seven deliverables over six areas
+
+- **Scope:** closure reports required for every ended mission and naming what was delivered and cancelled; the three unmarked archived records marked through the confirmation step built for it (which is repaired); a module audience that each module declares, with the public copy cut by it and stopping when a declared module is missing; the archive's own rules and tools; the objective-design lesson recorded; a before-and-after proof.
+- **Counted baselines (2026-10-07):** 2 ended missions without a closure report and 10 cancelled items named by none; 3 unmarked archived records; 7 modules with no declared audience; 1 tool judging the archive by the live rules; 0 findings on objective design.
+- **Found on the way, not in scope:** lineage ordinals 17 and 18 are each carried by two lineages across the live and archive files. Reported here; changing an ordinal changes an earlier statement, which the exclusions forbid in this lineage.
+- **Four exclusions:** no earlier statement reworded (beyond the three markers and additions); no live rules over the archive; no file outside the package; the set of modules cut from the public copy stays the seven it is.
+- **Stage 2 of 5.** Data file: `backlog_abox` v1.23.0.
