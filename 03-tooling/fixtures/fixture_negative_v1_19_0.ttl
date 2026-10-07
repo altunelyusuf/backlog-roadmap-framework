@@ -3753,3 +3753,18 @@ advunmet:L_Back a backlog:Lineage ; backlog:lineageOrdinal 22 ; backlog:lineageA
 advunmet:MA_NoItem a backlog:ModelArtifact ; backlog:hasModelKind backlog:Kind_UseCaseDiagram ;
     backlog:belongsToLineage advunmet:L_Back .
 <http://example.org/fixture-negative-advunmet#> backlog:hasExpectedPolarity backlog:Polarity_Negative .
+
+# v1.19.0 (Lineage 16, GOVMIT-S02): ItemStartedStateStaleShape -- the batch-progress advisory generalised to items with no batch counter.
+# WI_ItemStartedStale: a start is recorded, state still Proposed, no batch counter -> fires.
+# WI_ItemNotStarted: Proposed, no start -> silent (nothing has moved).
+# WI_ItemStartedInProgress: a start and state InProgress -> silent (state reflects the work).
+# WI_ItemStartedBatchTracked: a start, state Ready, but batch-tracked -> silent on THIS shape (BatchStartedStateStaleShape owns it).
+sprintceremona:WI_ItemStartedStale a backlog:Story ; backlog:hasIdentifier "WI-ITEMSTARTEDSTALE" ;
+    backlog:startedAt "2026-10-07T09:00:00Z"^^xsd:dateTime ; backlog:hasState backlog:Proposed .
+sprintceremona:WI_ItemNotStarted a backlog:Story ; backlog:hasIdentifier "WI-ITEMNOTSTARTED" ;
+    backlog:hasState backlog:Proposed .
+sprintceremona:WI_ItemStartedInProgress a backlog:Story ; backlog:hasIdentifier "WI-ITEMSTARTEDINPROGRESS" ;
+    backlog:startedAt "2026-10-07T09:00:00Z"^^xsd:dateTime ; backlog:hasState backlog:InProgress .
+sprintceremona:WI_ItemStartedBatchTracked a backlog:Story ; backlog:hasIdentifier "WI-ITEMSTARTEDBATCHTRACKED" ;
+    backlog:startedAt "2026-10-07T09:00:00Z"^^xsd:dateTime ; backlog:hasState backlog:Ready ;
+    backlog:hasBatchSize 10 ; backlog:hasBatchCompleted 2 .

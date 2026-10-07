@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
+# v1.3.0 (Lineage 16, GOVMIT-S03): an artefact path that leads outside the package is reported as OUTSIDE ITS PACKAGE, named, counted, and never resolves -- a path joined to the package root used to follow '..' or an absolute path silently, so a criterion satisfied by another package's file read as satisfied here.
 # v1.2.0 (Lineage 17, OESC-S04): follows the package's new layout -- one vocabulary, one data and one shapes file per subject. The register is in the data file.
-"""backlog_criterion_resolve_v1_0_0.py — does the thing a criterion names exist?
+"""backlog_criterion_resolve_v1_3_0.py — does the thing a criterion names exist?
 
 Built after a story was closed with its work undone. EP_RuleExec_S1 specified an
 expected-polarity property on every fixture and a gate reading it instead of the
@@ -21,7 +22,20 @@ Reports every criterion it cannot resolve. Exit 1 under --strict.
 """
 import sys, os, glob
 
+def outside_package(target, pkg):
+    """True when a file-path target leads outside the package (a '..' segment, an absolute path, or a link that leaves it).
+    A backlog: IRI or http target names no file and is never outside. Versioned citations are judged on the path as written."""
+    if target.startswith("backlog:") or target.startswith("http"):
+        return False
+    path = target.partition(" -- ")[0] if " -- " in target else target.partition("#")[0]
+    root = os.path.realpath(pkg)
+    full = os.path.realpath(os.path.join(pkg, path))
+    return not (full == root or full.startswith(root + os.sep))
+
+
 def resolve(target, graph_subjects, pkg, reg_graph=None):
+    if outside_package(target, pkg):
+        return False
     if target.startswith("backlog:") or target.startswith("http"):
         iri = target.replace("backlog:", "http://example.org/backlog#")
         if iri not in graph_subjects:
@@ -97,15 +111,19 @@ def main():
         except Exception:
             pass
     subjects = {str(s) for s in set(g.subjects())}
-    named = unresolved = 0
+    named = unresolved = outside = 0
     for ac, _, target in g.triples((None, B.satisfiedByArtifact, None)):
         named += 1
+        if outside_package(str(target), pkg):
+            outside += 1; unresolved += 1
+            print("   OUTSIDE ITS PACKAGE  %-30s -> %s" % (str(ac).split("#")[-1], target))
+            continue
         if not resolve(str(target), subjects, pkg, reg_graph=g):
             unresolved += 1
             print("   UNRESOLVED  %-30s -> %s"
                   % (str(ac).split("#")[-1], target))
     print("criteria naming an artefact : %d" % named)
-    print("unresolved                  : %d" % unresolved)
+    print("unresolved                  : %d  (of which outside the package: %d)" % (unresolved, outside))
     print("VERDICT     : %s" % (
         "PASS - every named artefact resolves" if not unresolved else
         "FAIL - %d criterion artefact(s) do not exist" % unresolved))

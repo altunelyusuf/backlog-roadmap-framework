@@ -11260,6 +11260,16 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.362.0 — Lineage 16 finished and archived: GOVMIT-S02 and GOVMIT-S03
+
+- **Checked first:** the two stories open since 2026-09-21 were compared with the current code before building, because three lineages had passed. Neither was overtaken: no rule covered an item that records a start while still Proposed or Ready unless it was batch-tracked, and the criterion resolver joined any path to the package root, `..` included.
+- **GOVMIT-S02 (shapes v1.151.0):** new advisory `ItemStartedStateStaleShape` — an item with a start recorded and state still Proposed or Ready, with no batch counter. The older batch rule keeps its own items. Negative fixture v1.19.0 carries four cases (fires, never started, in progress, batch-tracked).
+- **GOVMIT-S03 (`backlog_criterion_resolve` v1.3.0):** an artefact path that leaves the package (a `..` segment, an absolute path, a link out) is named OUTSIDE ITS PACKAGE, counted separately, and never resolves. The real register has none.
+- **Proof:** `backlog_governance_mitigations_probe` (twelve cases: each mechanism fires on its fault and is silent on its twin, a link out of the package is caught); runs in gate v1.30.0.
+- **Lineage 16 closed and set down:** iteration three Done (PT45M), `Rel_GovMit_3` carries the two stories, the mission is Achieved, `CR_GovernanceMitigations` names the four delivered stories (none cancelled) and reports on all three objectives; the lineage was archived with the repaired tool (91 subjects; archive data file v1.13.0, live data file v1.33.0). The live file now holds no lineage but the records pointing into the archive.
+- **Known, not caused here:** the pipeline verifier cannot reproduce Lineage 16's five recorded stage digests (it could not before this release either); the lineage is archived, so it is no longer read.
+- Data file: `backlog_abox` v1.33.0.
+
 ## v1.361.0 — Lineages 18 and 19 archived
 
 - **Archive ceremony, run for real with the repaired tool (v2.5.0):** both lineages were Achieved with a closure report and every item Done, so both were set down together: 314 subjects moved to the archive data file (v1.12.0), 339 statements out of the live data file (v1.31.0); each lineage, mission and closure report stays live as the record that points into the archive. Archive's own shapes: 0 violations. The archived records carry the archived marker and are pending confirmation, to be confirmed by the next reconcile run once this release exists.
