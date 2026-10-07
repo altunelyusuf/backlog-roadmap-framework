@@ -11260,6 +11260,15 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.359.0 — Lineage 19, DC-S03 and DC-S05: the archive is judged by its own rules, and an archived record says it is archived
+
+- **Archive shapes v1.1.0:** the marker rule (an archived record must say `lineageArchived true` and carry a confirmation status) is a Violation again; new rules require a closed mission's report, a report naming every cancelled item, and a declared audience on every module — all judged inside the archive folder, never by the live rules.
+- **Archive shapes check v1.1.0:** five planted faults on small synthetic graphs, each flagged; the real archive reports 0 violations (it reported 3 before the repair).
+- **Reconcile v3.0.0:** takes no path argument, finds the highest live data file, the highest archive data file and the shapes beside it, and derives no folder by replacing a name. It marks, then confirms after judging by the archive's own shapes. v2.2.0 judged the archive by the live rules and could not be run at all; it is removed.
+- **Used for real:** `--apply` marked the three unmarked records (Lineages 15, 16 and 17 set down in earlier lineages), confirmed 8 pending ones, left 7 alone; archive data file v1.11.0, 21 live pointers follow.
+- **Measured:** unmarked archived records 3 to 0; archive tools breaking the rule 1 to 0; Lineage 18's open defects 2 to 0.
+- **Done:** DC-S03 and DC-S05. Data file: `backlog_abox` v1.29.0.
+
 ## v1.358.0 — Lineage 19, DC-S04: each module declares who may read it, and the public copy follows
 
 - **Vocabulary v1.121.0 and rule v1.150.0:** a module record must declare exactly one audience, public or private; a new rule fires on a module with none.

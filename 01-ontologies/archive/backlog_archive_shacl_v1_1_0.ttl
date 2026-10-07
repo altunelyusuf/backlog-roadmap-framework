@@ -1,0 +1,49 @@
+@prefix backlog: <http://example.org/backlog#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://example.org/backlog-archive> a owl:Ontology ;
+    owl:versionIRI <http://example.org/backlog-archive/1.1.0> ; owl:versionInfo "1.1.0" ;
+    owl:priorVersion <http://example.org/backlog-archive/1.0.0> ;
+    rdfs:label "backlog archive SHACL: what a retired record must still hold"@en .
+
+backlog:ArchivedItemLineageShape a sh:NodeShape ;
+    rdfs:label "an archived item names a lineage that is in the archive"@en ;
+    sh:targetSubjectsOf backlog:belongsToLineage ;
+    sh:sparql [ a sh:SPARQLConstraint ; sh:severity sh:Violation ;
+        sh:message "this archived item belongs to a lineage the archive does not hold, so retirement lost its owner" ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE { $this backlog:belongsToLineage ?l . FILTER NOT EXISTS { ?l a backlog:Lineage } }""" ] .
+
+backlog:ArchivedLineageMarkedShape a sh:NodeShape ;
+    rdfs:label "an archived lineage is marked archived"@en ;
+    sh:targetClass backlog:Lineage ;
+    sh:property [ sh:path backlog:lineageArchived ; sh:hasValue true ; sh:severity sh:Violation ;
+        sh:message "a lineage held in the archive is not marked archived, so a tool cannot tell it is retired (v1.1.0: a violation again, now that the confirmation step has marked the three records that were not)" ] .
+
+backlog:ArchivedMissionReportedShape a sh:NodeShape ;
+    rdfs:label "an ended mission held in the archive has a closure report"@en ;
+    sh:targetClass backlog:Mission ;
+    sh:sparql [ a sh:SPARQLConstraint ; sh:severity sh:Violation ;
+        sh:message "this archived mission is Achieved or Abandoned and no closure report closes it: the report proves what was done, and an archive without it holds a conclusion nobody can check" ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE { $this backlog:hasMissionOutcome ?o . FILTER (?o IN (backlog:Out_Achieved, backlog:Out_Abandoned))
+            FILTER NOT EXISTS { ?r backlog:closesForMission $this } }""" ] .
+
+backlog:ArchivedCancellationReportedShape a sh:NodeShape ;
+    rdfs:label "a cancelled item held in the archive is named by its lineage's closure report"@en ;
+    sh:targetClass backlog:Mission ;
+    sh:sparql [ a sh:SPARQLConstraint ; sh:severity sh:Violation ;
+        sh:message "this archived mission has ended and its closure report does not name an item its lineage cancelled (reportsCancelledItem)" ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE { $this backlog:hasMissionOutcome ?o . FILTER (?o IN (backlog:Out_Achieved, backlog:Out_Abandoned))
+            ?l backlog:lineageForMission $this . ?item backlog:belongsToLineage ?l ; backlog:hasState backlog:Cancelled .
+            ?r backlog:closesForMission $this . FILTER NOT EXISTS { ?r backlog:reportsCancelledItem ?item } }""" ] .
+
+backlog:ArchivedModuleAudienceShape a sh:NodeShape ;
+    rdfs:label "a module held in the archive declares its audience"@en ;
+    sh:targetSubjectsOf <http://purl.org/dc/terms/isPartOf> ;
+    sh:property [ sh:path backlog:moduleAudience ; sh:minCount 1 ; sh:maxCount 1 ; sh:severity sh:Violation ;
+        sh:message "this module record declares no audience, or declares more than one; the public copy is cut by the declaration" ] .
