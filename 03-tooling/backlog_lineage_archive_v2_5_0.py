@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
+# v2.5.0 (Lineage 19, DC-S01 and DC-S03): an abandoned mission needs a closure report too, and every cancelled item of the lineage must be named by it (reportsCancelledItem); the archived copy of the lineage is marked archived with its confirmation pending, at the moment it is moved, so no later step has to find it. v2.4.0 accepted an abandoned mission with only its stated reason, which the owner has ruled is not enough.
 # v2.4.0 (Lineage 18, OC-S06): an abandoned lineage is archivable (its stated reason is its record), and the existing entries follow the archive file to its new version. v2.3.0 (Lineage 18, OC-S05): follows the archive folder. The archive data file now lives in 01-ontologies/archive/.
-"""backlog_lineage_archive v2.4.0 — set an achieved lineage down, out of every processing path.
+"""backlog_lineage_archive v2.5.0 — set an achieved lineage down, out of every processing path.
 
 WHY. A lineage whose mission is settled keeps costing every run until it is ARCHIVED: the SHACL
 suite validates its every individual, the git witness re-measures its every subject, the roadmap
@@ -69,12 +70,18 @@ def archivable(g, L):
     else:
         oc = g.value(m, B.hasMissionOutcome)
         if oc == B.Out_Abandoned:
-            # v2.4.0 (Lineage 18): an ABANDONED mission is archivable too -- the finder already lists abandoned lineages, and the record of an abandonment is
-            # its stated reason, not a closure report (nothing was achieved to report). The reason must be there.
+            # v2.5.0 (Lineage 19): an abandoned mission is archivable only with its stated reason AND a closure report that proves what was done
+            # and names what was cancelled. v2.4.0 accepted the reason alone.
             if g.value(m, B.outcomeRationale) is None: reasons.append(f"mission {local(m)} is Out_Abandoned but states no outcomeRationale")
+        elif oc != B.Out_Achieved:
+            reasons.append(f"mission {local(m)} is neither Out_Achieved nor Out_Abandoned")
+        reports = list(g.subjects(B.closesForMission, m))
+        if not reports: reasons.append(f"no ClosureReport closes {local(m)}")
         else:
-            if oc != B.Out_Achieved: reasons.append(f"mission {local(m)} is neither Out_Achieved nor Out_Abandoned")
-            if not any(True for cr in g.subjects(B.closesForMission, m)): reasons.append(f"no ClosureReport closes {local(m)}")
+            named = {x for r in reports for x in g.objects(r, B.reportsCancelledItem)}
+            for i in g.subjects(B.belongsToLineage, L):
+                if g.value(i, B.hasState) == B.Cancelled and i not in named:
+                    reasons.append(f"cancelled item {local(i)} is named by no closure report (reportsCancelledItem)")
     a = g.value(L, B.lineageArchived)
     if a is not None and bool(a.toPython()): reasons.append("already archived")
     f = g.value(L, B.lineageFrozen)
@@ -236,6 +243,15 @@ def main():
             out_arch.extend(lines[i:j + 1]); moved += 1; i = j + 1
         else:
             out_live.append(ln); i += 1
+    # v2.5.0: the archived copy of each lineage says it is archived, with its confirmation pending (the confirmation step promotes it later). Edited in place on
+    # the lineage's own statement; a copy already carrying true is left alone.
+    arch_joined = "\n".join(out_arch)
+    for L in lineages:
+        pat_a = re.compile(r"(^" + re.escape(prefix_of(g, L) + local(L)) + r" a backlog:Lineage\b[^\n]*(?:\n[ \t][^\n]*)*?)backlog:lineageArchived false", re.M)
+        arch_joined, na = pat_a.subn(lambda m: m.group(1) + "backlog:lineageArchived true ; backlog:hasArchivalConfirmationStatus backlog:AC_PendingConfirmation", arch_joined, count=1)
+        if na != 1:
+            print(f"  GATE ABORT: could not mark the archived copy of {local(L)} (its statement does not carry lineageArchived false on the first line)"); return 3
+    out_arch = arch_joined.split("\n")
     now = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
     oldv = ".".join(map(str, semver(reg))); newv = ".".join(map(str, semver(new_reg)))
     live_txt = "\n".join(out_live)

@@ -18,9 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.119.0> ;
-    owl:versionInfo "1.119.0" ;
-    owl:priorVersion <http://example.org/backlog/1.118.0> , <http://example.org/backlog/1.117.0> ;
+    owl:versionIRI <http://example.org/backlog/1.120.0> ;
+    owl:versionInfo "1.120.0" ;
+    owl:priorVersion <http://example.org/backlog/1.119.0> , <http://example.org/backlog/1.118.0> , <http://example.org/backlog/1.117.0> ;
     owl:priorVersion <http://example.org/backlog/1.116.0> ;
     owl:priorVersion <http://example.org/backlog/1.115.0> ;
     owl:priorVersion <http://example.org/backlog/1.114.0> ;
@@ -6723,3 +6723,18 @@ backlog:promotedSeverity a owl:ObjectProperty ; rdfs:domain backlog:SeverityProm
 backlog:promotionRationale a owl:DatatypeProperty ; rdfs:domain backlog:SeverityPromotion ; rdfs:range xsd:string ;
     rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "promotion rationale"@en ;
     skos:definition "Why the audit gave the shape this severity, as recorded on the shape's severity line when the audit was applied."@en .
+
+#################################################################
+#  v1.120.0 (Lineage 19) -- a closure report names what a mission delivered and what it cancelled
+#  A mission that ends, achieved or abandoned, has a closure report. The report already says how the mission concluded; it now also
+#  names the items the lineage delivered and the items it cancelled, so a cancellation is a record and not a gap.
+#################################################################
+backlog:reportsDeliveredItem a owl:ObjectProperty ;
+    rdfs:domain backlog:ClosureReport ; rdfs:range backlog:WorkItem ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "reports delivered item"@en ;
+    skos:definition "A work item of the closed lineage that was finished and shipped, named by the closure report that proves the completion. Optional: a report may describe what was delivered in its summary, and names items here when a reader should be able to query them."@en .
+backlog:reportsCancelledItem a owl:ObjectProperty ;
+    rdfs:domain backlog:ClosureReport ; rdfs:range backlog:WorkItem ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "reports cancelled item"@en ;
+    skos:definition "A work item of the closed lineage that was cancelled, named by the closure report with the reason the item itself carries (hasRationale). Required for every cancelled item of a lineage whose mission has ended: a cancellation that no report names leaves the reader to find it by accident."@en .
+

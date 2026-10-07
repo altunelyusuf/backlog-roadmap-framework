@@ -9,9 +9,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog/shacl/1.148.0> ;
-    owl:versionInfo "1.148.0" ;
-    owl:priorVersion <http://example.org/backlog-shapes/1.147.0> , <http://example.org/backlog-shapes/1.146.0> ;
+    owl:versionIRI <http://example.org/backlog/shacl/1.149.0> ;
+    owl:versionInfo "1.149.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.148.0> , <http://example.org/backlog-shapes/1.147.0> , <http://example.org/backlog-shapes/1.146.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.145.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.144.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.143.0> ;
@@ -5471,12 +5471,13 @@ backlog:MissionClosureRequiresReportShape a sh:NodeShape ;
     backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
     sh:targetClass backlog:Mission ;
     sh:severity sh:Violation ;
-    rdfs:label "A mission is not Achieved without a real closure report naming it (L3)"@en ;
+    rdfs:label "A mission is not Achieved or Abandoned without a real closure report naming it (L3)"@en ;
     sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "L3: this mission is marked Achieved and no real ClosureReport names it via closesForMission. Enforced structurally, for every lineage this shape suite governs, not only as a one-time step: a mission closed with no report is a decision nobody can later audit, the same real gap that let this session's own corrective-action and re-baseline failures sit unrecorded until asked about directly. The report must exist before the outcome is set, not be promised after. Exempts missions whose own lineage is already archived, the identical precedent ArchiveOnlyWhenAchievedShape already established: archiving stops active governance on purpose, and a lineage from before this requirement existed, with no Goal/Objective structure this report's own schema could honestly report on, is not retroactively held to it." ;
+        sh:message "L3: this mission is marked Achieved or Abandoned and no real ClosureReport names it via closesForMission (v1.149.0: an abandoned mission is reported too, because the report proves what was done and what was set down, and that is the only account a later reader has). Enforced structurally, for every lineage this shape suite governs, not only as a one-time step: a mission closed with no report is a decision nobody can later audit, the same real gap that let this session's own corrective-action and re-baseline failures sit unrecorded until asked about directly. The report must exist before the outcome is set, not be promised after. Exempts missions whose own lineage is already archived, the identical precedent ArchiveOnlyWhenAchievedShape already established: archiving stops active governance on purpose, and a lineage from before this requirement existed, with no Goal/Objective structure this report's own schema could honestly report on, is not retroactively held to it." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
-            $this backlog:hasMissionOutcome backlog:Out_Achieved .
+            $this backlog:hasMissionOutcome ?o .
+            FILTER (?o IN (backlog:Out_Achieved, backlog:Out_Abandoned))
             FILTER NOT EXISTS { ?r backlog:closesForMission $this }
             FILTER NOT EXISTS { $this backlog:belongsToLineage ?l . ?l backlog:lineageArchived true }
             # v1.110.0: the mission of an archived lineage stays live as the pointer; its closure report went with the work
@@ -7487,3 +7488,22 @@ backlog:ScopeCompletionRule a sh:NodeShape ;
                 ?o backlog:objectiveOutcome backlog:Ach_Missed .
             }""" ] .
 
+#################################################################
+#  v1.149.0 (Lineage 19) -- an abandoned mission is reported too, and a closure report names what the mission cancelled
+#################################################################
+backlog:ClosureReportNamesCancelledShape a sh:NodeShape ;
+    sh:targetClass backlog:Mission ;
+    sh:severity sh:Violation ;
+    rdfs:label "A closure report names every item its lineage cancelled (L3)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: this mission has ended and its closure report does not name an item its lineage cancelled (reportsCancelledItem). A cancellation no report names is a gap a reader finds by accident; the item carries its own reason, and the report is where it is gathered." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasMissionOutcome ?o .
+            FILTER (?o IN (backlog:Out_Achieved, backlog:Out_Abandoned))
+            ?l backlog:lineageForMission $this .
+            ?item backlog:belongsToLineage ?l ; backlog:hasState backlog:Cancelled .
+            ?r backlog:closesForMission $this .
+            FILTER NOT EXISTS { ?r backlog:reportsCancelledItem ?item }
+            FILTER NOT EXISTS { ?l backlog:lineageArchived true }
+        }""" ] .

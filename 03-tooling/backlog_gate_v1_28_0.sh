@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# backlog_gate v1.27.0 — four-gate release check for the Backlog & Roadmap
+# backlog_gate v1.28.0 — four-gate release check for the Backlog & Roadmap
 # Semantic Framework. Nothing about the package's state is trusted until all
 # four pass, and the SHACL gate refuses to certify anything until it has just
 # demonstrated, in this run, that it can fail a known-bad register.
@@ -13,6 +13,7 @@
 #
 # Usage: backlog_gate_v1_12_0.sh [REGISTER.ttl ...]
 #
+# v1.28.0 (Lineage 19, DC-S01 and DC-S02): two probes run every time: the closure-report rules are shown firing on planted faults and silent on corrected twins (backlog_closure_shapes_probe), and the archive tool's refusals are drilled on planted lineages (backlog_archive_drill). A probe that cannot be found stops the gate.
 # v1.27.0 (Lineage 18, OC-S03 and S05): follows the archive folder -- the archive data file is read from 01-ontologies/archive/, and the archive's own shapes judge it (backlog_archive_shapes_check, which plants an orphan first).
 # v1.26.0 (Lineage 18, OC-S01): the strategy-exercise register moved into the fixtures folder (declared positive, as test input the gate runs); the gate reads it from there.
 # v1.25.0 (Lineage 17, OESC-S01 and S04): follows the package's new layout -- the register is part of the data file (backlog_abox), the
@@ -556,6 +557,15 @@ else
 fi
 # v1.27.0: the progressive conformance tool (it judged the archive by the LIVE shapes, advisory since 2026-09-18 on a known graph-construction bug, ~300 s) is retired
 # to 03-tooling/archive/; the archive folder's own shapes judge the archive above (about 12 s), so the live rules no longer read it.
+
+echo
+echo "== Lineage 19 probes — each rule fires on a planted fault and each refusal holds =="
+for PROBE in backlog_closure_shapes_probe backlog_archive_drill; do
+  PF="$(ls "$HERE"/${PROBE}_v*.py 2>/dev/null | sort -V | tail -1 || true)"
+  if [ -z "$PF" ]; then echo "  ABORT: $PROBE not found. A probe that is missing proves nothing."; exit 3; fi
+  python3 "$PF" 2>&1 | grep -E "VERDICT" | sed "s/^/  $PROBE /"
+  python3 "$PF" >/dev/null 2>&1 || { echo "  $PROBE FAILED"; FAILED=1; }
+done
 
 echo
 echo "== Archival finder — achieved lineages are found, and archiving is the next activity =="

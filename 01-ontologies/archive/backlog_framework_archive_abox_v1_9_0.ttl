@@ -18,9 +18,9 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 <http://example.org/backlog-framework-archive> a owl:Ontology ;
-    owl:versionIRI <http://example.org/backlog-framework-archive/1.8.0> ;
-    owl:versionInfo "1.8.0" ;
-    owl:priorVersion <http://example.org/backlog-framework-archive/1.6.0> ;
+    owl:versionIRI <http://example.org/backlog-framework-archive/1.9.0> ;
+    owl:versionInfo "1.9.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-archive/1.8.0> , <http://example.org/backlog-framework-archive/1.6.0> ;
     rdfs:label "backlog-roadmap-framework — archived lineages"@en ;
     rdfs:comment """Six finished lineages, set down.
 
@@ -13883,3 +13883,26 @@ fw:Rel_OESC_1 a backlog:DeploymentUnit ;
 fw:ST_OESC_LiveSubject backlog:memberOfContainer fw:Rel_OESC_1 .
 fw:ST_OESC_NothingLost backlog:memberOfContainer fw:Rel_OESC_1 .
 fw:ST_OESC_ToolsRepointed backlog:memberOfContainer fw:Rel_OESC_1 .
+
+#################################################################
+#  2026-10-07 (Lineage 19, DC-S02): closure reports added to the archive. Additions only; nothing above is changed.
+#  Two reports were missing (the abandoned clean-up lineage and the first-built lineage) and four reports did not name the cancelled items of their lineage.
+#################################################################
+fw:CR_OEStructureCleanup a backlog:ClosureReport ;
+    backlog:closesForMission fw:Mission_OEStructureCleanup ;
+    backlog:reportGeneratedAt "2026-10-07T12:00:00Z"^^xsd:dateTime ;
+    backlog:closureCommittedAt "backlog-roadmap-framework-v1.357.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasClosureSummary "Lineage 17 was set down as Abandoned on 2026-10-06, and this report was written afterwards (2026-10-07) because an abandoned mission needs one: it proves what was done and names what was cancelled. What it set out to do: give each subject of the package one vocabulary, one data and one shapes file. The owner then ruled that the package, not the subject, is the unit, so the per-subject shape of the work was wrong and the lineage ended. Done and shipped before that (releases v1.339.0 and v1.340.0): Build the live subject: one vocabulary, one data and one rules file under the identity backlog; Build the before and after proof that no statement changes; Repoint every tool that names a moved file. Cancelled and carried forward to Lineage 18: Build the archive subject: its own vocabulary, data and rules files and identity; Make the archiving ceremony a move from the live subject to the archive subject; Clear the structure debt and return the note to the OE session; Build and prove: ArchiveSubject; Build and prove: Ceremony; Build and prove: DebtCleared; each carries its own reason. The mission's recorded rationale: Superseded, not failed. On 2026-10-06 the OE method changed the unit of the ontology file structure from the subject to the package (BP-D54, discipline v2.15.0): one vocabulary, one data and one shapes file for the whole package, former subjects as modules, retired work in a folder named archive. This mission asked for two subjects of three files each, which the new rule no longer allows. Evidence: three of its six stories were finished and published (the before-and-after proof, the live subject, the repointed tools; v1.338.0 to v1.340.0), and the live files they built are the base of the successor, Lineage 18, which pursues the new rule. The remaining three stories (archive subject, archiving ceremony, debt clearance) are carried forward there in the new form, not dropped." ;
+    backlog:reportsOnObjective fw:Obj_OESC_Contained , fw:Obj_OESC_EnforcementDone , fw:Obj_OESC_FilesDone , fw:Obj_OESC_MissionMet , fw:Obj_OESC_NoOtherPackages , fw:Obj_OESC_NoRetroJudging , fw:Obj_OESC_NoStatementChange , fw:Obj_OESC_ToolsDone ;
+    backlog:reportsDeliveredItem fw:ST_OESC_LiveSubject , fw:ST_OESC_NothingLost , fw:ST_OESC_ToolsRepointed ;
+    backlog:reportsCancelledItem fw:ST_OESC_ArchiveSubject , fw:ST_OESC_Ceremony , fw:ST_OESC_DebtCleared , fw:T_OESC_ArchiveSubject , fw:T_OESC_Ceremony , fw:T_OESC_DebtCleared .
+fw:CR_BuildSoftware a backlog:ClosureReport ;
+    backlog:closesForMission fw:Mission_BuildSoftware_v2 ;
+    backlog:reportGeneratedAt "2026-10-07T12:00:00Z"^^xsd:dateTime ;
+    backlog:closureCommittedAt "backlog-roadmap-framework-v1.357.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasClosureSummary "RETROACTIVE. This lineage was closed before closure reports existed, and the archive rule that every ended mission has one found it missing; this report was written on 2026-10-07 from the lineage's own records and adds nothing the records do not hold. 16 stories were Done and none was cancelled. The mission's recorded rationale: Achieved. Scope_Build: 10 of 10 deliverables satisfied by work that is Done and shipped in a package. Goal_MissionToWork, Goal_GroundedPractice and Goal_BuildAreasExhausted all reached. Goal_BuildContained is unreached and its objective now carries Ach_Retrospective with its reason, so nothing is left unexplained — which is the only condition under which this outcome may be set." ;
+    backlog:reportsOnObjective fw:Obj_BuildAreasExhausted , fw:Obj_BuildContained , fw:Obj_Grounded , fw:Obj_IntentToWork , fw:Obj_Modelling , fw:Obj_ScopeDelivered ;
+    backlog:reportsDeliveredItem fw:EP_Grooming_S1 , fw:EP_Grooming_S2 , fw:EP_IterationCapacity_S1 , fw:EP_Model_S1 , fw:EP_Model_S2 , fw:EP_Model_S3 , fw:EP_Reach_S1 , fw:EP_Spec_S1 , fw:EP_Spec_S2 , fw:EP_TaskTypes_S1 , fw:EP_TaskTypes_S2 , fw:EP_TeamRoles_S1 , fw:EP_TestSpec_S1 , fw:EP_TestSpec_S2 , fw:S_GroundIteration , fw:S_GroundSelection .
+fw:CR_OntologyDriven backlog:reportsCancelledItem fw:S_Tables_B5 , fw:S_Tables_B6 .
+fw:CR_SDLCObligations backlog:reportsCancelledItem fw:S_SDLC_FixturePair .
+fw:CR_GovernanceContinuation backlog:reportsCancelledItem fw:ST_Gov_HardGate .

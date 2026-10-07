@@ -1459,6 +1459,21 @@ closurereport:CR_AnchorMissing a backlog:ClosureReport ; backlog:closesForMissio
     backlog:hasClosureSummary "Fixture-only: exists, closes correctly, no commit anchor." ;
     backlog:reportsOnObjective closurereport:Obj_AnchorMissing .
 
+# v1.18.0 (Lineage 19, DC-S01 and DC-S02): an ABANDONED mission needs a closure report too, and a report names the items its lineage cancelled.
+# Mis_AbandonedNoReport: marked Out_Abandoned with its reason, no ClosureReport names it -> MissionClosureRequiresReportShape fires.
+# Mis_CancelledUnnamed: ended, reported, but its lineage cancelled an item the report does not name -> ClosureReportNamesCancelledShape fires.
+closurereport:Mis_AbandonedNoReport a backlog:Mission ; backlog:hasMissionOutcome backlog:Out_Abandoned ; backlog:outcomeRationale "Fixture-only: abandoned with a reason and no report." .
+closurereport:Mis_CancelledUnnamed a backlog:Mission ; backlog:hasMissionOutcome backlog:Out_Achieved .
+closurereport:Lin_CancelledUnnamed a backlog:Lineage ; backlog:lineageForMission closurereport:Mis_CancelledUnnamed .
+closurereport:Item_CancelledUnnamed a backlog:Story ; backlog:belongsToLineage closurereport:Lin_CancelledUnnamed ; backlog:hasState backlog:Cancelled .
+closurereport:Goal_CancelledUnnamed a backlog:Goal ; backlog:contributesToMission closurereport:Mis_CancelledUnnamed .
+closurereport:Obj_CancelledUnnamed a backlog:Objective ; backlog:contributesToGoal closurereport:Goal_CancelledUnnamed .
+closurereport:CR_CancelledUnnamed a backlog:ClosureReport ; backlog:closesForMission closurereport:Mis_CancelledUnnamed ;
+    backlog:reportGeneratedAt "2026-10-07T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasClosureSummary "Fixture-only: reported, but a cancelled item of its lineage is not named." ;
+    backlog:closureCommittedAt "abc1234" ;
+    backlog:reportsOnObjective closurereport:Obj_CancelledUnnamed .
+
 # v1.1.0 (2026-09-07) -- expected polarity declared on the fixture itself (TBox v1.82.0
 # dropped the AdoptionProfile-only domain): Negative, because it exists to make the shape(s) named in its header FIRE; a run of it with no violation would mean that clause no longer fires (Polarity_Negative's own definition).
 # Until now the gate inferred 'expected pass' from this filename and had no way to be right.
