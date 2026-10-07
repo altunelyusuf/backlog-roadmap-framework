@@ -1,15 +1,16 @@
 #!/usr/bin/env python3
-"""backlog_closure_shapes_probe v1.0.0 -- each rule of Lineage 19 is shown firing on a planted fault and silent on its corrected twin.
+"""backlog_closure_shapes_probe v1.1.0 (v1.1.0, DC-S04: the module-audience rule is probed too) -- each rule of Lineage 19 is shown firing on a planted fault and silent on its corrected twin.
 
 A rule that has never been seen to fail proves nothing (L-95). This builds small graphs in memory and runs the package's own shapes file over them:
   1. an abandoned mission with no closure report                       -> MissionClosureRequiresReportShape fires; with a report, silent
   2. an ended mission whose report omits a cancelled item of its lineage -> ClosureReportNamesCancelledShape fires; naming the item, silent
+  3. a module record with no audience                                    -> ModuleAudienceDeclaredShape fires; with an audience, silent
 Exit 0 when every rule fires on its fault and is silent on its twin; 3 otherwise.
-Usage: backlog_closure_shapes_probe_v1_0_0.py
+Usage: backlog_closure_shapes_probe_v1_1_0.py
 """
 import glob, os, re, sys
 from rdflib import Graph, Namespace, URIRef, Literal, RDF
-from rdflib.namespace import XSD
+from rdflib.namespace import XSD, DCTERMS
 
 PKG = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 B = Namespace("http://example.org/backlog#")
@@ -65,6 +66,11 @@ def main():
     results.append(("report omits a cancelled item: rule fires", fired(shapes, g, "does not name an item its lineage cancelled", P.Mission), True))
     g = base(B.Out_Achieved); add_lineage_with_cancelled(g); add_report(g, [P.Item])
     results.append(("report names the cancelled item: rule silent", fired(shapes, g, "does not name an item its lineage cancelled", P.Mission), False))
+    # 3 module record without an audience
+    g = Graph(); g.add((P.Module, DCTERMS.isPartOf, URIRef("http://example.org/probe")))
+    results.append(("module record, no audience: rule fires", fired(shapes, g, "declares no audience", P.Module), True))
+    g.add((P.Module, B.moduleAudience, B.Aud_Private))
+    results.append(("module record with an audience: rule silent", fired(shapes, g, "declares no audience", P.Module), False))
     bad = 0
     for label, got, want in results:
         ok = got == want

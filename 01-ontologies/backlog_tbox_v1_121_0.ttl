@@ -18,9 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.120.0> ;
-    owl:versionInfo "1.120.0" ;
-    owl:priorVersion <http://example.org/backlog/1.119.0> , <http://example.org/backlog/1.118.0> , <http://example.org/backlog/1.117.0> ;
+    owl:versionIRI <http://example.org/backlog/1.121.0> ;
+    owl:versionInfo "1.121.0" ;
+    owl:priorVersion <http://example.org/backlog/1.120.0> , <http://example.org/backlog/1.119.0> , <http://example.org/backlog/1.118.0> , <http://example.org/backlog/1.117.0> ;
     owl:priorVersion <http://example.org/backlog/1.116.0> ;
     owl:priorVersion <http://example.org/backlog/1.115.0> ;
     owl:priorVersion <http://example.org/backlog/1.114.0> ;
@@ -6738,3 +6738,15 @@ backlog:reportsCancelledItem a owl:ObjectProperty ;
     rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "reports cancelled item"@en ;
     skos:definition "A work item of the closed lineage that was cancelled, named by the closure report with the reason the item itself carries (hasRationale). Required for every cancelled item of a lineage whose mission has ended: a cancellation that no report names leaves the reader to find it by accident."@en .
 
+#################################################################
+#  v1.121.0 (Lineage 19, DC-S04) -- a module says who may read it
+#  A module of a data file declares its audience, so what a public copy leaves out is read from the data instead of from a list inside a script.
+#################################################################
+backlog:ModuleAudience a owl:Class ; rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "module audience"@en ;
+    skos:definition "Who may read a module of a data file: Aud_Public (it may be published) or Aud_Private (it is correspondence, an adopter's own material or a retired record, and a public copy leaves it out)."@en ;
+    owl:oneOf ( backlog:Aud_Public backlog:Aud_Private ) .
+backlog:moduleAudience a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:range backlog:ModuleAudience ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "module audience"@en ;
+    skos:definition "The audience a module record declares for the statements between its banner and its END MODULE line. Required on every module record; the public copy is cut by it, and a derivation that cannot find a module declared private stops with an error."@en .

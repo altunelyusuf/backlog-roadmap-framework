@@ -9,9 +9,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog/shacl/1.149.0> ;
-    owl:versionInfo "1.149.0" ;
-    owl:priorVersion <http://example.org/backlog-shapes/1.148.0> , <http://example.org/backlog-shapes/1.147.0> , <http://example.org/backlog-shapes/1.146.0> ;
+    owl:versionIRI <http://example.org/backlog/shacl/1.150.0> ;
+    owl:versionInfo "1.150.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.149.0> , <http://example.org/backlog-shapes/1.148.0> , <http://example.org/backlog-shapes/1.147.0> , <http://example.org/backlog-shapes/1.146.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.145.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.144.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.143.0> ;
@@ -7507,3 +7507,13 @@ backlog:ClosureReportNamesCancelledShape a sh:NodeShape ;
             FILTER NOT EXISTS { ?r backlog:reportsCancelledItem ?item }
             FILTER NOT EXISTS { ?l backlog:lineageArchived true }
         }""" ] .
+
+#################################################################
+#  v1.150.0 (Lineage 19, DC-S04) -- a module declares its audience
+#################################################################
+backlog:ModuleAudienceDeclaredShape a sh:NodeShape ;
+    sh:targetSubjectsOf dcterms:isPartOf ;
+    sh:severity sh:Violation ;
+    rdfs:label "A module record declares its audience (L3)"@en ;
+    sh:property [ sh:path backlog:moduleAudience ; sh:minCount 1 ; sh:maxCount 1 ; sh:in ( backlog:Aud_Public backlog:Aud_Private ) ;
+        sh:message "L3: this module record declares no audience, or declares more than one. The public copy is cut by the declaration; a module that says nothing would be published or withheld by a list nobody can read in the data." ] .

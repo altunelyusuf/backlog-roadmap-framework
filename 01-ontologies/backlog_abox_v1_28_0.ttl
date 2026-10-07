@@ -22,9 +22,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (ABox: controlled individuals, reference data and the live register)"@en ;
-    owl:versionIRI <http://example.org/backlog/abox/1.27.0> ;
-    owl:versionInfo "1.27.0" ;
-    owl:priorVersion <http://example.org/backlog/abox/1.26.0> , <http://example.org/backlog/abox/1.25.0> , <http://example.org/backlog/abox/1.24.0> , <http://example.org/backlog/abox/1.23.0> , <http://example.org/backlog/abox/1.22.0> , <http://example.org/backlog/abox/1.21.0> , <http://example.org/backlog/abox/1.20.0> , <http://example.org/backlog/abox/1.19.0> , <http://example.org/backlog/abox/1.17.0> , <http://example.org/backlog/abox/1.16.0> , <http://example.org/backlog/abox/1.15.0> , <http://example.org/backlog/abox/1.14.0> , <http://example.org/backlog/abox/1.13.0> , <http://example.org/backlog/abox/1.12.0> , <http://example.org/backlog/abox/1.11.0> , <http://example.org/backlog/abox/1.10.0> , <http://example.org/backlog/abox/1.9.0> , <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
+    owl:versionIRI <http://example.org/backlog/abox/1.28.0> ;
+    owl:versionInfo "1.28.0" ;
+    owl:priorVersion <http://example.org/backlog/abox/1.27.0> , <http://example.org/backlog/abox/1.26.0> , <http://example.org/backlog/abox/1.25.0> , <http://example.org/backlog/abox/1.24.0> , <http://example.org/backlog/abox/1.23.0> , <http://example.org/backlog/abox/1.22.0> , <http://example.org/backlog/abox/1.21.0> , <http://example.org/backlog/abox/1.20.0> , <http://example.org/backlog/abox/1.19.0> , <http://example.org/backlog/abox/1.17.0> , <http://example.org/backlog/abox/1.16.0> , <http://example.org/backlog/abox/1.15.0> , <http://example.org/backlog/abox/1.14.0> , <http://example.org/backlog/abox/1.13.0> , <http://example.org/backlog/abox/1.12.0> , <http://example.org/backlog/abox/1.11.0> , <http://example.org/backlog/abox/1.10.0> , <http://example.org/backlog/abox/1.9.0> , <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
         <http://example.org/backlog-abox/1.2.1> ,
                      <http://example.org/backlog-abox/1.2.0> ,
                      <http://example.org/backlog-abox/1.1.0> ,
@@ -1038,6 +1038,13 @@ backlog:Out_Achieved a owl:NamedIndividual , backlog:MissionOutcome ;
 backlog:Out_Abandoned a owl:NamedIndividual , backlog:MissionOutcome ;
     rdfs:label "Abandoned"@en ;
     skos:definition "Work stopped without the goals being reached, and the reason is recorded. Named so that abandonment is a decision with an author rather than a lineage that quietly stopped being mentioned."@en .
+
+backlog:Aud_Public a owl:NamedIndividual , backlog:ModuleAudience ;
+    rdfs:label "Public"@en ;
+    skos:definition "The module may be published: a public copy of the package keeps it."@en .
+backlog:Aud_Private a owl:NamedIndividual , backlog:ModuleAudience ;
+    rdfs:label "Private"@en ;
+    skos:definition "The module is correspondence, an adopter's own material or a retired record: a public copy of the package leaves it out."@en .
 
 backlog:CScope_Lineage a owl:NamedIndividual , backlog:ContainerScope ;
     rdfs:label "Lineage-scoped"@en ;
@@ -4879,7 +4886,7 @@ fw:ArchiveEntry_L7_Code a backlog:LineageArchiveEntry ;
     backlog:entryForMission "http://example.org/backlog-framework-register#Mission_OntologyDriven" ;
     backlog:entryOutcome "Out_Achieved" ;
     backlog:entryOrdinal 13 ;
-    backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_9_0.ttl" ;
+    backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_10_0.ttl" ;
     backlog:archivedAt "2026-09-10T12:00:00Z"^^xsd:dateTime ;
     backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0 (G92): the Lineage and Mission statements this register still carried were moved to the archive with everything else the lineage owns. Previously they stayed live and were validated on every run -- the cost archiving exists to remove." .
 fw:ArchiveEntry_L7_Exec a backlog:LineageArchiveEntry ;
@@ -4887,7 +4894,7 @@ fw:ArchiveEntry_L7_Exec a backlog:LineageArchiveEntry ;
     backlog:entryForMission "http://example.org/backlog-framework-register#Mission_OntologyDriven" ;
     backlog:entryOutcome "Out_Achieved" ;
     backlog:entryOrdinal 10 ;
-    backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_9_0.ttl" ;
+    backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_10_0.ttl" ;
     backlog:archivedAt "2026-09-10T12:00:00Z"^^xsd:dateTime ;
     backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0 (G92): the Lineage and Mission statements this register still carried were moved to the archive with everything else the lineage owns. Previously they stayed live and were validated on every run -- the cost archiving exists to remove." .
 fw:ArchiveEntry_L7_Export a backlog:LineageArchiveEntry ;
@@ -4895,7 +4902,7 @@ fw:ArchiveEntry_L7_Export a backlog:LineageArchiveEntry ;
     backlog:entryForMission "http://example.org/backlog-framework-register#Mission_OntologyDriven" ;
     backlog:entryOutcome "Out_Achieved" ;
     backlog:entryOrdinal 11 ;
-    backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_9_0.ttl" ;
+    backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_10_0.ttl" ;
     backlog:archivedAt "2026-09-10T12:00:00Z"^^xsd:dateTime ;
     backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0 (G92): the Lineage and Mission statements this register still carried were moved to the archive with everything else the lineage owns. Previously they stayed live and were validated on every run -- the cost archiving exists to remove." .
 fw:ArchiveEntry_L7_Gov a backlog:LineageArchiveEntry ;
@@ -4903,7 +4910,7 @@ fw:ArchiveEntry_L7_Gov a backlog:LineageArchiveEntry ;
     backlog:entryForMission "http://example.org/backlog-framework-register#Mission_OntologyDriven" ;
     backlog:entryOutcome "Out_Achieved" ;
     backlog:entryOrdinal 9 ;
-    backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_9_0.ttl" ;
+    backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_10_0.ttl" ;
     backlog:archivedAt "2026-09-10T12:00:00Z"^^xsd:dateTime ;
     backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0 (G92): the Lineage and Mission statements this register still carried were moved to the archive with everything else the lineage owns. Previously they stayed live and were validated on every run -- the cost archiving exists to remove." .
 fw:ArchiveEntry_L7_Prose a backlog:LineageArchiveEntry ;
@@ -4911,7 +4918,7 @@ fw:ArchiveEntry_L7_Prose a backlog:LineageArchiveEntry ;
     backlog:entryForMission "http://example.org/backlog-framework-register#Mission_OntologyDriven" ;
     backlog:entryOutcome "Out_Achieved" ;
     backlog:entryOrdinal 12 ;
-    backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_9_0.ttl" ;
+    backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_10_0.ttl" ;
     backlog:archivedAt "2026-09-10T12:00:00Z"^^xsd:dateTime ;
     backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0 (G92): the Lineage and Mission statements this register still carried were moved to the archive with everything else the lineage owns. Previously they stayed live and were validated on every run -- the cost archiving exists to remove." .
 fw:ArchiveEntry_L_Build a backlog:LineageArchiveEntry ;
@@ -4919,7 +4926,7 @@ fw:ArchiveEntry_L_Build a backlog:LineageArchiveEntry ;
     backlog:entryForMission "http://example.org/backlog-framework-register#Mission_BuildSoftware_v2" ;
     backlog:entryOutcome "Out_Achieved" ;
     backlog:entryOrdinal 6 ;
-    backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_9_0.ttl" ;
+    backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_10_0.ttl" ;
     backlog:archivedAt "2026-09-10T12:00:00Z"^^xsd:dateTime ;
     backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0 (G92): the Lineage and Mission statements this register still carried were moved to the archive with everything else the lineage owns. Previously they stayed live and were validated on every run -- the cost archiving exists to remove." .
 fw:ArchiveEntry_L_ChangeDiscipline a backlog:LineageArchiveEntry ;
@@ -4927,7 +4934,7 @@ fw:ArchiveEntry_L_ChangeDiscipline a backlog:LineageArchiveEntry ;
     backlog:entryForMission "http://example.org/backlog-framework-register#Mission_ChangeDiscipline" ;
     backlog:entryOutcome "Out_Achieved" ;
     backlog:entryOrdinal 8 ;
-    backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_9_0.ttl" ;
+    backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_10_0.ttl" ;
     backlog:archivedAt "2026-09-10T12:00:00Z"^^xsd:dateTime ;
     backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0 (G92): the Lineage and Mission statements this register still carried were moved to the archive with everything else the lineage owns. Previously they stayed live and were validated on every run -- the cost archiving exists to remove." .
 fw:ArchiveEntry_L_Dev a backlog:LineageArchiveEntry ;
@@ -4935,7 +4942,7 @@ fw:ArchiveEntry_L_Dev a backlog:LineageArchiveEntry ;
     backlog:entryForMission "http://example.org/backlog-framework-register#Mission_Dev" ;
     backlog:entryOutcome "unrecorded" ;
     backlog:entryOrdinal 5 ;
-    backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_9_0.ttl" ;
+    backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_10_0.ttl" ;
     backlog:archivedAt "2026-09-10T12:00:00Z"^^xsd:dateTime ;
     backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0 (G92): the Lineage and Mission statements this register still carried were moved to the archive with everything else the lineage owns. Previously they stayed live and were validated on every run -- the cost archiving exists to remove." .
 fw:ArchiveEntry_L_Executable a backlog:LineageArchiveEntry ;
@@ -4943,7 +4950,7 @@ fw:ArchiveEntry_L_Executable a backlog:LineageArchiveEntry ;
     backlog:entryForMission "http://example.org/backlog-framework-register#Mission_Executable" ;
     backlog:entryOutcome "unrecorded" ;
     backlog:entryOrdinal 3 ;
-    backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_9_0.ttl" ;
+    backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_10_0.ttl" ;
     backlog:archivedAt "2026-09-10T12:00:00Z"^^xsd:dateTime ;
     backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0 (G92): the Lineage and Mission statements this register still carried were moved to the archive with everything else the lineage owns. Previously they stayed live and were validated on every run -- the cost archiving exists to remove." .
 fw:ArchiveEntry_L_OntologyDriven a backlog:LineageArchiveEntry ;
@@ -4951,7 +4958,7 @@ fw:ArchiveEntry_L_OntologyDriven a backlog:LineageArchiveEntry ;
     backlog:entryForMission "http://example.org/backlog-framework-register#Mission_OntologyDriven" ;
     backlog:entryOutcome "Out_Achieved" ;
     backlog:entryOrdinal 7 ;
-    backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_9_0.ttl" ;
+    backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_10_0.ttl" ;
     backlog:archivedAt "2026-09-10T12:00:00Z"^^xsd:dateTime ;
     backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0 (G92): the Lineage and Mission statements this register still carried were moved to the archive with everything else the lineage owns. Previously they stayed live and were validated on every run -- the cost archiving exists to remove." .
 fw:ArchiveEntry_L_Ops a backlog:LineageArchiveEntry ;
@@ -4959,7 +4966,7 @@ fw:ArchiveEntry_L_Ops a backlog:LineageArchiveEntry ;
     backlog:entryForMission "http://example.org/backlog-framework-register#Mission_Ops" ;
     backlog:entryOutcome "unrecorded" ;
     backlog:entryOrdinal 4 ;
-    backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_9_0.ttl" ;
+    backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_10_0.ttl" ;
     backlog:archivedAt "2026-09-10T12:00:00Z"^^xsd:dateTime ;
     backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0 (G92): the Lineage and Mission statements this register still carried were moved to the archive with everything else the lineage owns. Previously they stayed live and were validated on every run -- the cost archiving exists to remove." .
 fw:ArchiveEntry_L_OrderRepair a backlog:LineageArchiveEntry ;
@@ -4967,7 +4974,7 @@ fw:ArchiveEntry_L_OrderRepair a backlog:LineageArchiveEntry ;
     backlog:entryForMission "http://example.org/backlog-framework-register#Mission_OrderRepair" ;
     backlog:entryOutcome "unrecorded" ;
     backlog:entryOrdinal 2 ;
-    backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_9_0.ttl" ;
+    backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_10_0.ttl" ;
     backlog:archivedAt "2026-09-10T12:00:00Z"^^xsd:dateTime ;
     backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0 (G92): the Lineage and Mission statements this register still carried were moved to the archive with everything else the lineage owns. Previously they stayed live and were validated on every run -- the cost archiving exists to remove." .
 fw:ArchiveEntry_L_Plan a backlog:LineageArchiveEntry ;
@@ -4975,7 +4982,7 @@ fw:ArchiveEntry_L_Plan a backlog:LineageArchiveEntry ;
     backlog:entryForMission "http://example.org/backlog-framework-register#Mission_Plan" ;
     backlog:entryOutcome "unrecorded" ;
     backlog:entryOrdinal 1 ;
-    backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_9_0.ttl" ;
+    backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_10_0.ttl" ;
     backlog:archivedAt "2026-09-10T12:00:00Z"^^xsd:dateTime ;
     backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0 (G92): the Lineage and Mission statements this register still carried were moved to the archive with everything else the lineage owns. Previously they stayed live and were validated on every run -- the cost archiving exists to remove." .
 
@@ -5210,7 +5217,7 @@ fw:ArchiveEntry_L_SDLCObligations a backlog:LineageArchiveEntry ;
     backlog:entryForMission "http://example.org/backlog-framework-register#Mission_SDLCObligations" ;
     backlog:entryOutcome "Out_Achieved" ;
     backlog:entryOrdinal 14 ;
-    backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_9_0.ttl" ;
+    backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_10_0.ttl" ;
     backlog:archivedAt "2026-09-15T10:58:12Z"^^xsd:dateTime ;
     backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0: mission Out_Achieved, closure report present, every item Done or Cancelled, not frozen. Everything the lineage owned -- its Lineage individual, its Mission, its closure report, its stage outputs, findings and items -- moved to the archive file; this entry is the only thing that remains, and it is a record, not a lineage (G92)." .
 
@@ -5232,7 +5239,7 @@ fw:ArchiveEntry_L_GovernanceContinuation a backlog:LineageArchiveEntry ;
     backlog:entryForMission "http://example.org/backlog-framework-register#Mission_GovernanceContinuation" ;
     backlog:entryOutcome "Out_Achieved" ;
     backlog:entryOrdinal 15 ;
-    backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_9_0.ttl" ;
+    backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_10_0.ttl" ;
     backlog:archivedAt "2026-09-18T10:19:24Z"^^xsd:dateTime ;
     backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0: mission Out_Achieved, closure report present, every item Done or Cancelled, not frozen. Everything the lineage owned -- its Lineage individual, its Mission, its closure report, its stage outputs, findings and items -- moved to the archive file; this entry is the only thing that remains, and it is a record, not a lineage (G92)." .
 
@@ -5666,7 +5673,7 @@ fw:ArchiveEntry_L_GateEfficiency a backlog:LineageArchiveEntry ;
     backlog:entryForMission "http://example.org/backlog-framework-register#M_GateEfficiency" ;
     backlog:entryOutcome "Out_Achieved" ;
     backlog:entryOrdinal 17 ;
-    backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_9_0.ttl" ;
+    backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_10_0.ttl" ;
     backlog:archivedAt "2026-09-24T11:05:06Z"^^xsd:dateTime ;
     backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0: mission Out_Achieved, closure report present, every item Done or Cancelled, not frozen. Everything the lineage owned -- its Lineage individual, its Mission, its closure report, its stage outputs, findings and items -- moved to the archive file; this entry is the only thing that remains, and it is a record, not a lineage (G92)." .
 fw:ArchiveEntry_L_FixtureConsolidation a backlog:LineageArchiveEntry ;
@@ -5674,13 +5681,13 @@ fw:ArchiveEntry_L_FixtureConsolidation a backlog:LineageArchiveEntry ;
     backlog:entryForMission "http://example.org/backlog-framework-register#M_FixtureConsolidation" ;
     backlog:entryOutcome "Out_Achieved" ;
     backlog:entryOrdinal 18 ;
-    backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_9_0.ttl" ;
+    backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_10_0.ttl" ;
     backlog:archivedAt "2026-09-24T11:05:06Z"^^xsd:dateTime ;
     backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0: mission Out_Achieved, closure report present, every item Done or Cancelled, not frozen. Everything the lineage owned -- its Lineage individual, its Mission, its closure report, its stage outputs, findings and items -- moved to the archive file; this entry is the only thing that remains, and it is a record, not a lineage (G92)." .
-fw:L_GateEfficiency backlog:lineageArchived true ; backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_9_0.ttl" ;
+fw:L_GateEfficiency backlog:lineageArchived true ; backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_10_0.ttl" ;
     backlog:archivedAt "2026-09-24T11:05:06Z"^^xsd:dateTime ; backlog:hasLineageStatus backlog:LS_Archived ;
     backlog:archivalTrigger "Found achieved and un-archived by backlog_lineage_archive_v2_1_0: mission Out_Achieved, closure report present, every item Done or Cancelled, not frozen. Owner's rule 2026-09-09: an achieved lineage found triggers the archival activity." .
-fw:L_FixtureConsolidation backlog:lineageArchived true ; backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_9_0.ttl" ;
+fw:L_FixtureConsolidation backlog:lineageArchived true ; backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_10_0.ttl" ;
     backlog:archivedAt "2026-09-24T11:05:06Z"^^xsd:dateTime ; backlog:hasLineageStatus backlog:LS_Archived ;
     backlog:archivalTrigger "Found achieved and un-archived by backlog_lineage_archive_v2_1_0: mission Out_Achieved, closure report present, every item Done or Cancelled, not frozen. Owner's rule 2026-09-09: an achieved lineage found triggers the archival activity." .
 
@@ -6504,7 +6511,7 @@ fw:Obs_OC_ToolsDone_ToolsRepointed a backlog:MetricObservation ; rdfs:label "Aft
 
 #################################################################
 #  2026-10-06T18:35:07Z -- ARCHIVAL by backlog_lineage_archive_v2_0_0: 115 subjects of
-#  L_OEStructureCleanup set down into 01-ontologies/archive/backlog_framework_archive_abox_v1_9_0.ttl; the lineage,
+#  L_OEStructureCleanup set down into 01-ontologies/archive/backlog_framework_archive_abox_v1_10_0.ttl; the lineage,
 #  its mission and its closure report stay here as the record that points in.
 #################################################################
 
@@ -6515,10 +6522,10 @@ fw:ArchiveEntry_L_OEStructureCleanup a backlog:LineageArchiveEntry ;
     backlog:entryForMission "http://example.org/backlog-framework-register#Mission_OEStructureCleanup" ;
     backlog:entryOutcome "Out_Abandoned" ;
     backlog:entryOrdinal 17 ;
-    backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_9_0.ttl" ;
+    backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_10_0.ttl" ;
     backlog:archivedAt "2026-10-06T18:35:07Z"^^xsd:dateTime ;
     backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0: mission Out_Abandoned, closure report present, every item Done or Cancelled, not frozen. Everything the lineage owned -- its Lineage individual, its Mission, its closure report, its stage outputs, findings and items -- moved to the archive file; this entry is the only thing that remains, and it is a record, not a lineage (G92)." .
-fw:L_OEStructureCleanup backlog:lineageArchived true ; backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_9_0.ttl" ;
+fw:L_OEStructureCleanup backlog:lineageArchived true ; backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_10_0.ttl" ;
     backlog:archivedAt "2026-10-06T18:35:07Z"^^xsd:dateTime ; backlog:hasLineageStatus backlog:LS_Archived ;
     backlog:archivalTrigger "Found achieved and un-archived by backlog_lineage_archive_v2_1_0: mission Out_Achieved, closure report present, every item Done or Cancelled, not frozen. Owner's rule 2026-09-09: an achieved lineage found triggers the archival activity." .
 
@@ -7173,9 +7180,13 @@ fw:T_DC_ArchiveMarked a backlog:ExecutionTask ; backlog:hasIdentifier "DC-T03" ;
     backlog:hasRationale "One task matching the whole of its story's scope." .
 
 fw:AC_DC_AudienceDeclared a backlog:AcceptanceCriterion ;
+    backlog:satisfiedByArtifact "03-tooling/make_public_distribution_v1_6_0.py -- cut_modules" ;
     backlog:hasGherkinText "Given seven module records with no declared audience, When each declares one and the public copy is derived, Then the seven modules cut are the same seven as at the last release, a module declared not public whose END line is missing stops the derivation with an error naming it, and the fold tool writes the audience on every module it creates." .
 fw:ST_DC_AudienceDeclared a backlog:Story ; backlog:hasIdentifier "DC-S04" ; backlog:hasTitle "Each module declares who may read it; the public copy follows and stops when a declared module is missing" ;
-    backlog:hasState backlog:Ready ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-10-07T10:10:00Z"^^xsd:dateTime ; backlog:finishedAt "2026-10-07T10:35:00Z"^^xsd:dateTime ; backlog:lastAuditedAt "2026-10-07T10:35:00Z"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_DC_AudienceDeclared ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
     backlog:memberOfContainer fw:Register ;
     backlog:belongsToLineage fw:L_RecordsTellTruth ;
     backlog:producedByStage fw:Out_Backlog_RecordsTellTruth ;
@@ -7198,7 +7209,10 @@ fw:Plan_DC_AudienceDeclared a backlog:PlanningEvent ; rdfs:label "DC-S04 taken i
     backlog:hasRationale "The formal boundary between ordering this work and doing it." .
 fw:T_DC_AudienceDeclared a backlog:ExecutionTask ; backlog:hasIdentifier "DC-T04" ;
     backlog:hasTitle "Build and prove: AudienceDeclared"@en ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-10-07T10:10:00Z"^^xsd:dateTime ; backlog:finishedAt "2026-10-07T10:35:00Z"^^xsd:dateTime ; backlog:lastAuditedAt "2026-10-07T10:35:00Z"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_DC_AudienceDeclared_Task ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
     backlog:hasTaskType backlog:Task_Implementation ;
     backlog:memberOfContainer fw:Register , fw:It_DC_1 ;
     backlog:belongsToLineage fw:L_RecordsTellTruth ;
@@ -7409,3 +7423,27 @@ fw:Obs_DC_Reports_CancelledReported a backlog:MetricObservation ; rdfs:label "Af
     backlog:observesMetric fw:Metric_DC_Reports ; backlog:observationFor fw:Obj_DC_Reports ;
     backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-10-07T10:05:30Z"^^xsd:dateTime ;
     backlog:hasObservationMethod "backlog_record_measures closure_gaps: 0 (was 12: 2 ended missions without a report and 10 cancelled items named by none)." .
+
+# AudienceDeclared done (Lineage 19).
+fw:Ev_DC_AudienceDeclared a backlog:Evidence , backlog:TestEvidence ; backlog:attestsCriterion fw:AC_DC_AudienceDeclared ;
+    backlog:hasTestId "DC-S04-cut-probe" ;
+    backlog:evidenceVerified true ; backlog:verifiedByTool "backlog_public_cut_probe_v1_0_0.py" ;
+    backlog:hasVerificationMethod "backlog_public_cut_probe: six checks pass, including that the package's own data files cut exactly the seven modules declared private (the same seven as at v1.351.0); backlog_closure_shapes_probe v1.1.0: the audience rule fires on a module record with no audience and is silent with one." .
+fw:Ev_DC_AudienceDeclared_Task a backlog:Evidence , backlog:TestEvidence ;
+    backlog:hasTestSpec "03-tooling/make_public_distribution_v1_6_0.py" ;
+    backlog:evidenceVerified true ; backlog:verifiedByTool "backlog_public_cut_probe_v1_0_0.py" ;
+    backlog:hasVerificationMethod "backlog_public_cut_probe: six checks pass, including that the package's own data files cut exactly the seven modules declared private (the same seven as at v1.351.0); backlog_closure_shapes_probe v1.1.0: the audience rule fires on a module record with no audience and is silent with one." .
+fw:H_DC_AudienceDeclared a backlog:TestHarness ; backlog:harnessFor fw:T_DC_AudienceDeclared ;
+    backlog:hasHarnessEvidence fw:Ev_DC_AudienceDeclared_Task ;
+    backlog:hasRationale "The task's own harness, distinct from the story's." .
+fw:H_DC_AudienceDeclared_Story a backlog:TestHarness ; backlog:harnessFor fw:ST_DC_AudienceDeclared ;
+    backlog:hasHarnessEvidence fw:Ev_DC_AudienceDeclared ;
+    backlog:hasRationale "The story's own harness: the real run named in its evidence." .
+fw:Obs_DC_Audience_AudienceDeclared a backlog:MetricObservation ; rdfs:label "After DC AudienceDeclared: measured again"@en ;
+    backlog:observesMetric fw:Metric_DC_Audience ; backlog:observationFor fw:Obj_DC_Audience ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-10-07T10:36:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "backlog_record_measures: modules with no declared audience 7 to 0; the public-copy IRI list is removed and the deriver stops on a missing declaration." .
+fw:Obs_DC_MissionMet_AudienceDeclared a backlog:MetricObservation ; rdfs:label "After DC AudienceDeclared: measured again"@en ;
+    backlog:observesMetric fw:Metric_DC_MissionMet ; backlog:observationFor fw:Obj_DC_MissionMet ;
+    backlog:hasObservedValue 2.0 ; backlog:observedAt "2026-10-07T10:36:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Lineage 18's five defects re-checked: the public copy cut list is now declared by the modules themselves; two remain: the reconcile tool judged by live rules and the unmarked archived copies." .

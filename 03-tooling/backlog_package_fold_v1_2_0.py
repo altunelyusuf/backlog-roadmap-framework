@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_package_fold v1.1.0 -- fold data files into the package's data files as modules, and move test inputs to the fixtures folder.
+"""backlog_package_fold v1.2.0 -- fold data files into the package's data files as modules, and move test inputs to the fixtures folder.
 
 WHY THIS EXISTS (Lineage 18). The OE method (BP-D54) lets a package ship ONE vocabulary file, ONE data file and ONE shapes file, each with one
 ontology header; what used to be a file of its own becomes a MODULE inside one of them. This tool does that move at the text level, so every
@@ -10,10 +10,11 @@ same IRI carrying dcterms:isPartOf (the target's ontology IRI), dcterms:identifi
 above it as a comment, as written. Every other statement is appended unchanged. A file moved to the fixtures folder gains one statement, its
 declared polarity, because that folder requires it. The before and after proof (backlog_split_proof) names exactly these two kinds of edit.
 
+v1.2.0 (Lineage 19, DC-S04): --audience public|private is required with --fold, and the module record it writes declares it (backlog:moduleAudience), because the public copy is cut by that declaration and a module that says nothing stops the derivation.
 v1.1.0: each folded module now ends with a line '#  END MODULE <IRI>', so a tool can tell where a module stops (the public copy leaves some modules out whole).
 
-Usage: backlog_package_fold_v1_1_0.py --target TARGET.ttl --fold SRC.ttl [--fold SRC2.ttl ...] [--module-iri SRCNAME=IRI] [--apply]
-       backlog_package_fold_v1_1_0.py --fixture SRC.ttl --polarity positive|negative [--apply]
+Usage: backlog_package_fold_v1_2_0.py --target TARGET.ttl --fold SRC.ttl [--fold SRC2.ttl ...] --audience public|private [--module-iri SRCNAME=IRI] [--apply]
+       backlog_package_fold_v1_2_0.py --fixture SRC.ttl --polarity positive|negative [--apply]
 Dry run unless --apply. With --apply the folded sources are deleted (they live on in git history and the release tags).
 """
 import argparse, os, re, sys
@@ -92,7 +93,7 @@ def ontology_iri(path):
     return [str(s) for s in g.subjects(RDF.type, OWL.Ontology)], g
 
 
-def module_block(src_path, src_text, package_iri, forced_iri):
+def module_block(src_path, src_text, package_iri, forced_iri, audience):
     iris, g = ontology_iri(src_path)
     name = os.path.basename(src_path)
     stem = re.sub(r"_v\d+_\d+_\d+\.ttl$", "", name)
@@ -114,13 +115,13 @@ def module_block(src_path, src_text, package_iri, forced_iri):
         cm += ["#  Its former ontology header, kept as it was written:"] + ["#    " + l for l in hdr]
     else:
         cm += ["#  The file carried no ontology header; the module IRI below was chosen when it was folded in."]
-    rec = ('<%s> dcterms:isPartOf <%s> ;\n    dcterms:identifier "%s" ;\n    rdfs:label "%s"@en ;\n    owl:versionInfo "%s" .'
-           % (iri, package_iri, ident.replace('"', "'"), label.replace('"', "'"), vi))
+    rec = ('<%s> dcterms:isPartOf <%s> ;\n    backlog:moduleAudience backlog:Aud_%s ;\n    dcterms:identifier "%s" ;\n    rdfs:label "%s"@en ;\n    owl:versionInfo "%s" .'
+           % (iri, package_iri, audience.capitalize(), ident.replace('"', "'"), label.replace('"', "'"), vi))
     bar = "#" * 65
     return iri, bar + "\n" + "\n".join(cm) + "\n" + bar + "\n" + rec + "\n\n" + without_prefixes(body).strip("\n") + "\n#  END MODULE <%s>\n" % iri
 
 
-def fold(target, srcs, forced):
+def fold(target, srcs, forced, audience):
     ttext = open(target, encoding="utf-8").read()
     tiris, _ = ontology_iri(target)
     if len(tiris) != 1:
@@ -129,7 +130,7 @@ def fold(target, srcs, forced):
     pfx = merged_prefixes(ttext, *texts)
     blocks = []
     for s, t in zip(srcs, texts):
-        iri, blk = module_block(s, t, tiris[0], forced.get(os.path.basename(s)))
+        iri, blk = module_block(s, t, tiris[0], forced.get(os.path.basename(s)), audience)
         blocks.append((s, iri, blk))
     head = "\n".join(l for l in ttext.split("\n") if not l.startswith("@prefix")).strip("\n")
     return pfx + "\n\n" + head + "\n\n" + "\n".join(b for _, _, b in blocks), blocks
@@ -150,11 +151,13 @@ def to_fixture(src, polarity):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--target"); ap.add_argument("--fold", action="append", default=[]); ap.add_argument("--module-iri", action="append", default=[])
-    ap.add_argument("--fixture"); ap.add_argument("--polarity", choices=["positive", "negative"]); ap.add_argument("--apply", action="store_true")
+    ap.add_argument("--audience", choices=["public", "private"]); ap.add_argument("--fixture"); ap.add_argument("--polarity", choices=["positive", "negative"]); ap.add_argument("--apply", action="store_true")
     a = ap.parse_args()
     if a.target:
+        if not a.audience:
+            raise SystemExit("--audience public|private is required: say who may read what is folded in")
         forced = dict(x.split("=", 1) for x in a.module_iri)
-        new, blocks = fold(a.target, a.fold, forced)
+        new, blocks = fold(a.target, a.fold, forced, a.audience)
         for s, iri, blk in blocks:
             print("fold %-60s -> module %s" % (os.path.relpath(s, PKG), iri))
         if a.apply:

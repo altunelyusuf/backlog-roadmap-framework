@@ -11260,6 +11260,17 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.358.0 — Lineage 19, DC-S04: each module declares who may read it, and the public copy follows
+
+- **Vocabulary v1.121.0 and rule v1.150.0:** a module record must declare exactly one audience, public or private; a new rule fires on a module with none.
+- **Public-copy deriver v1.6.0:** the cut list of module IRIs is gone; the deriver cuts the modules declared private and stops with an error naming the module when a declared module has no audience, a record has no END line, an END line has no record, or a private module has no banner. It also removes itself from the public copy.
+- **Fold tool v1.2.0:** `--audience public|private` is required and written on the module record.
+- **Data:** the seven existing module records declare their audience (one live, six in the archive; archive data file v1.10.0, the live pointers repointed). The same seven are cut as at v1.351.0.
+- **Proof:** `backlog_public_cut_probe` (six checks, including that the real data files cut exactly the seven) and `backlog_closure_shapes_probe` v1.1.0 (audience rule fires and is silent on its twin); both run in gate v1.29.0.
+- **Measured:** modules without a declared audience 7 to 0; Lineage 18's open defects 3 to 2.
+- **Standard v1.118.0:** describes the new `ModuleAudience` class and the two closure rules (the doc-coverage gate stopped the first attempt at this release, rightly).
+- **Done:** DC-S04. Data file: `backlog_abox` v1.28.0.
+
 ## v1.357.0 — Lineage 19, DC-S01, DC-S02 and DC-S06: an abandoned mission is reported, and a report names what was cancelled
 
 - **Rule (shapes v1.149.0):** a mission is not Achieved or Abandoned without a closure report (it fired only on Achieved), and a new rule requires the report to name every item its lineage cancelled. Vocabulary v1.120.0 adds `reportsDeliveredItem` and `reportsCancelledItem` to the closure report.

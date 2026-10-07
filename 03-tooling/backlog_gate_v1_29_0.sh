@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# backlog_gate v1.28.0 — four-gate release check for the Backlog & Roadmap
+# backlog_gate v1.29.0 — four-gate release check for the Backlog & Roadmap
 # Semantic Framework. Nothing about the package's state is trusted until all
 # four pass, and the SHACL gate refuses to certify anything until it has just
 # demonstrated, in this run, that it can fail a known-bad register.
@@ -13,6 +13,7 @@
 #
 # Usage: backlog_gate_v1_12_0.sh [REGISTER.ttl ...]
 #
+# v1.29.0 (Lineage 19, DC-S04): a third probe runs every time: the public copy is cut by each module's declared audience and stops with an error when it cannot be sure (backlog_public_cut_probe).
 # v1.28.0 (Lineage 19, DC-S01 and DC-S02): two probes run every time: the closure-report rules are shown firing on planted faults and silent on corrected twins (backlog_closure_shapes_probe), and the archive tool's refusals are drilled on planted lineages (backlog_archive_drill). A probe that cannot be found stops the gate.
 # v1.27.0 (Lineage 18, OC-S03 and S05): follows the archive folder -- the archive data file is read from 01-ontologies/archive/, and the archive's own shapes judge it (backlog_archive_shapes_check, which plants an orphan first).
 # v1.26.0 (Lineage 18, OC-S01): the strategy-exercise register moved into the fixtures folder (declared positive, as test input the gate runs); the gate reads it from there.
@@ -560,7 +561,7 @@ fi
 
 echo
 echo "== Lineage 19 probes — each rule fires on a planted fault and each refusal holds =="
-for PROBE in backlog_closure_shapes_probe backlog_archive_drill; do
+for PROBE in backlog_closure_shapes_probe backlog_archive_drill backlog_public_cut_probe; do
   PF="$(ls "$HERE"/${PROBE}_v*.py 2>/dev/null | sort -V | tail -1 || true)"
   if [ -z "$PF" ]; then echo "  ABORT: $PROBE not found. A probe that is missing proves nothing."; exit 3; fi
   python3 "$PF" 2>&1 | grep -E "VERDICT" | sed "s/^/  $PROBE /"
