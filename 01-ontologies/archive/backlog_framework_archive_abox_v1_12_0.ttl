@@ -18,9 +18,9 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 <http://example.org/backlog-framework-archive> a owl:Ontology ;
-    owl:versionIRI <http://example.org/backlog-framework-archive/1.11.0> ;
-    owl:versionInfo "1.11.0" ;
-    owl:priorVersion <http://example.org/backlog-framework-archive/1.10.0> , <http://example.org/backlog-framework-archive/1.9.0> , <http://example.org/backlog-framework-archive/1.8.0> , <http://example.org/backlog-framework-archive/1.6.0> ;
+    owl:versionIRI <http://example.org/backlog-framework-archive/1.12.0> ;
+    owl:versionInfo "1.12.0" ;
+    owl:priorVersion <http://example.org/backlog-framework-archive/1.11.0> , <http://example.org/backlog-framework-archive/1.10.0> , <http://example.org/backlog-framework-archive/1.9.0> , <http://example.org/backlog-framework-archive/1.8.0> , <http://example.org/backlog-framework-archive/1.6.0> ;
     rdfs:label "backlog-roadmap-framework — archived lineages"@en ;
     rdfs:comment """Six finished lineages, set down.
 
@@ -13906,3 +13906,1692 @@ fw:CR_BuildSoftware a backlog:ClosureReport ;
 fw:CR_OntologyDriven backlog:reportsCancelledItem fw:S_Tables_B5 , fw:S_Tables_B6 .
 fw:CR_SDLCObligations backlog:reportsCancelledItem fw:S_SDLC_FixturePair .
 fw:CR_GovernanceContinuation backlog:reportsCancelledItem fw:ST_Gov_HardGate .
+
+#################################################################
+#  2026-10-07T12:54:09Z -- 339 statements of L_OEPackageConsolidation, L_RecordsTellTruth set down here by
+#  backlog_lineage_archive_v2_0_0 (verbatim, comments of the live register kept there).
+#################################################################
+fw:L_OEPackageConsolidation a backlog:Lineage ; rdfs:label "Lineage 18: OE Package Consolidation"@en ;
+    backlog:lineageOrdinal 18 ;
+    backlog:lineageArchived true ; backlog:hasArchivalConfirmationStatus backlog:AC_PendingConfirmation ;
+    backlog:lineageForMission fw:Mission_OEPackageConsolidation ;
+    backlog:hasLineageStatus backlog:LS_Achieved ;
+    backlog:hasLineageDepthLevel backlog:Depth_StoryDirect ;
+    backlog:hasLineageArtifactDomain backlog:Domain_Infrastructure ;
+    backlog:memberOfContainer fw:Register .
+fw:Mission_OEPackageConsolidation a backlog:Mission ; rdfs:label "Mission: OE Package Consolidation"@en ;
+    backlog:hasMissionStatement "This package ships exactly as the OE method requires, with no exceptions: one vocabulary file, one data file and one shapes file for the whole package, each with one ontology header and one version, with former subjects held as modules inside them; retired work lives in a folder named archive as one data file and one shapes file, and needs no vocabulary file because it uses the package's own; test inputs sit in the fixtures folder. Live and historical facts never share a file, so retired work is never judged by today's rules and the archiving ceremony is a move from the live data file to the archive data file. No statement any file makes changes, and every term keeps its IRI." ;
+    backlog:missionFor fw:Register ;
+    backlog:supersedesMission fw:Mission_OEStructureCleanup ;
+    backlog:hasMissionOrigin backlog:Origin_OwnerStated ;
+    backlog:missionSource "Owner, 2026-10-06, as recorded by the OE governance session in BP-D54: 'No, not per subject. All subjects should be consolidated in one file per concept and at the end we will have just 1 file for A-Box, 1 file for T-Box, and 1 file for SHACL.' Earlier in this package's own work the owner said: 'If you say, we have subject-based files, they should be consolidated under one single file not a multiplicative of 3 per subject.' OE's answers of 2026-10-06 to this package (archive without a vocabulary file is allowed; test input goes to fixtures; provenance records are the archive's modules). Then: 'OK proceed with the same ceremonies on OEE and BRSF lineage strict disciplines.'" ;
+    backlog:hasMissionOutcome backlog:Out_Achieved ;
+    backlog:outcomeRationale "Achieved: one T-Box, one A-Box and one shapes file for the package, with the former subjects held as modules and the old files in the archive folder; the seven stories are Done with evidence and the closure report records the five defects carried forward to Lineage 19." ;
+    backlog:producedByStage fw:Out_Mission_OEPackageConsolidation ;
+    backlog:decidedBy backlog:Owner .
+fw:Out_Mission_OEPackageConsolidation a backlog:StageOutput ;
+    backlog:outputOfStage backlog:Stage_Mission ; backlog:belongsToLineage fw:L_OEPackageConsolidation ;
+    backlog:hasStateDigest "bea6a6981891c024b7dcd5b4efc0c01f6136ceaa2f2f09996dcd54b8d7f8f85e" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.341.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Mission stage of Lineage 18. Tag deterministic: VERSION.txt set before publishing. Stage 1 of 5, one release each." .
+fw:Scope_OEPackageConsolidation a backlog:ScopeStatement ; rdfs:label "Scope: OE Package Consolidation"@en ;
+    backlog:hasScopeStatementText "Bring this package to one vocabulary file, one data file and one shapes file, each with one ontology header and one version: fold the lesson deposit into the data file as a module and move the test drive and the strategy exercise register to the fixtures folder; give the archive its own folder holding one data file, with the provenance records as its modules, and one shapes file; move every statement without changing it and keep every term IRI; repoint every tool that names a moved file; make the archiving ceremony a move from the live data file to the archive data file; and show the package clear in the OE structure checker, with a return note to the OE inbox." ;
+    backlog:scopeForMission fw:Mission_OEPackageConsolidation ;
+    backlog:producedByStage fw:Out_Scope_OEPackageConsolidation ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:requiresDeliverable fw:Del_OC_LiveTriad , fw:Del_OC_FixturesMoved , fw:Del_OC_ArchiveFolder , fw:Del_OC_NothingLost , fw:Del_OC_ToolsRepointed , fw:Del_OC_Ceremony , fw:Del_OC_DebtCleared ;
+    backlog:coversArea fw:Area_OC_Files , fw:Area_OC_Tools , fw:Area_OC_Enforcement ;
+    backlog:hasScopeExclusion fw:Ex_OC_StatementChange , fw:Ex_OC_RetroJudging , fw:Ex_OC_OtherPackages , fw:Ex_OC_ModuleMembership ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation .
+fw:Area_OC_Files a backlog:ScopeArea ; rdfs:label "Area: the package's ontology files"@en ;
+    backlog:areaMeasure "Counted 2026-10-06 with the OE structure checker v1.1.0: 12 active ontology files (1 vocabulary, 10 data, 1 shapes) where 3 are wanted; no archive folder; 2 test inputs outside the fixtures folder." ;
+    backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:areaLocation "01-ontologies/, 02-shacl-safeguards/, 03-tooling/exercises/, 05-lesson-deposits/, 05-test-drives/, 06-package-provenance/" ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation .
+fw:Area_OC_Tools a backlog:ScopeArea ; rdfs:label "Area: the tools that name those files"@en ;
+    backlog:areaMeasure "Counted 2026-10-06 by search: 10 scripts name a file that moves, the release gate among them." ;
+    backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:areaLocation "03-tooling/" ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation .
+fw:Area_OC_Enforcement a backlog:ScopeArea ; rdfs:label "Area: the structure rule and its debt record"@en ;
+    backlog:areaMeasure "Counted 2026-10-06: 1 recorded structure-debt line for this package (rule U1, data files, count 10), 0 new." ;
+    backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:areaLocation "OE structure checker and its debt register, return note to the OE inbox" ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation .
+fw:Del_OC_LiveTriad a backlog:ScopeDeliverable ; rdfs:label "The live triad: one vocabulary, one data and one shapes file"@en ;
+    backlog:deliverableForArea fw:Area_OC_Files ; backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:derivesFromMissionClause "one vocabulary file, one data file and one shapes file for the whole package" ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation .
+fw:Del_OC_FixturesMoved a backlog:ScopeDeliverable ; rdfs:label "Test inputs sit in the fixtures folder"@en ;
+    backlog:deliverableForArea fw:Area_OC_Files ; backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:derivesFromMissionClause "test inputs sit in the fixtures folder" ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation .
+fw:Del_OC_ArchiveFolder a backlog:ScopeDeliverable ; rdfs:label "The archive folder: one data file and one shapes file"@en ;
+    backlog:deliverableForArea fw:Area_OC_Files ; backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:derivesFromMissionClause "retired work lives in a folder named archive as one data file and one shapes file" ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation .
+fw:Del_OC_NothingLost a backlog:ScopeDeliverable ; rdfs:label "A before and after proof that no statement changed and every term kept its IRI"@en ;
+    backlog:deliverableForArea fw:Area_OC_Files ; backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:derivesFromMissionClause "No statement any file makes changes, and every term keeps its IRI" ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation .
+fw:Del_OC_ToolsRepointed a backlog:ScopeDeliverable ; rdfs:label "Every tool names the files where they now are"@en ;
+    backlog:deliverableForArea fw:Area_OC_Tools ; backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:derivesFromMissionClause "retired work is never judged by today's rules" ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation .
+fw:Del_OC_Ceremony a backlog:ScopeDeliverable ; rdfs:label "The archiving ceremony moves work from the live data file to the archive data file"@en ;
+    backlog:deliverableForArea fw:Area_OC_Tools ; backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:derivesFromMissionClause "the archiving ceremony is a move from the live data file to the archive data file" ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation .
+fw:Del_OC_DebtCleared a backlog:ScopeDeliverable ; rdfs:label "The structure checker shows the package clear"@en ;
+    backlog:deliverableForArea fw:Area_OC_Enforcement ; backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:derivesFromMissionClause "ships exactly as the OE method requires, with no exceptions" ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation .
+fw:Ex_OC_StatementChange a backlog:ScopeExclusion ; rdfs:label "Exclusion: changing what any statement says"@en ;
+    backlog:excludesConcern "Rewording, correcting or re-judging any statement while moving it, and changing any term IRI. The two achieved lineages still marked not archived are reported, and fixed only as a recorded, separate act. The only edits are the ones a move requires: each former file's ontology header becomes a module record, and the test input that is moved to the fixtures folder declares its polarity there." ;
+    backlog:hasExclusionRationale "The Mission says no statement changes; a move that also edits cannot be proven lossless. The two exceptions are declared so the proof can name them." ;
+    backlog:decidedBy backlog:Owner ; backlog:hasScopeLayer backlog:Layer_Work ; backlog:belongsToLineage fw:L_OEPackageConsolidation .
+fw:Ex_OC_RetroJudging a backlog:ScopeExclusion ; rdfs:label "Exclusion: judging retired work by today's rules"@en ;
+    backlog:excludesConcern "Running the live rules over the archive folder's files." ;
+    backlog:hasExclusionRationale "G89 and G91: retired work is a record. Measured in Lineage 17: merged with the live data it costs 89 violations and about 5 minutes; apart, the live data validates with 0 violations in about 90 seconds." ;
+    backlog:decidedBy backlog:Owner ; backlog:hasScopeLayer backlog:Layer_Work ; backlog:belongsToLineage fw:L_OEPackageConsolidation .
+fw:Ex_OC_OtherPackages a backlog:ScopeExclusion ; rdfs:label "Exclusion: other packages' files"@en ;
+    backlog:excludesConcern "Any file outside this package, except the one return note OE's own discipline asks for in its handover inbox. Including adopting projects' copies of the vocabulary." ;
+    backlog:hasExclusionRationale "Adopting projects import the package's ontology identity, which stays; their own registers are theirs. OE's debt register is the OE session's own." ;
+    backlog:decidedBy backlog:Owner ; backlog:hasScopeLayer backlog:Layer_Work ; backlog:belongsToLineage fw:L_OEPackageConsolidation .
+fw:Ex_OC_ModuleMembership a backlog:ScopeExclusion ; rdfs:label "Exclusion: module membership on every named subject"@en ;
+    backlog:excludesConcern "Adding dcterms:isPartOf to every named subject (OE rule M1)." ;
+    backlog:hasExclusionRationale "OE switches M1 on per package by a register line and has not done so for this package; nothing is required now, and the work waits for that instruction." ;
+    backlog:decidedBy backlog:Owner ; backlog:hasScopeLayer backlog:Layer_Work ; backlog:belongsToLineage fw:L_OEPackageConsolidation .
+fw:Out_Scope_OEPackageConsolidation a backlog:StageOutput ;
+    backlog:outputOfStage backlog:Stage_Scope ; backlog:belongsToLineage fw:L_OEPackageConsolidation ;
+    backlog:consumesOutput fw:Out_Mission_OEPackageConsolidation ;
+    backlog:hasStateDigest "06cf7f13389d59143897160984657c1a2608161ee966653845597e2e39fa1fab" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.342.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Scope stage of Lineage 18: seven deliverables over three areas, four exclusions. Stage 2 of 5." .
+fw:Goal_OC_MissionMet a backlog:Goal ; rdfs:label "The package ships as one triad, with its archive and test inputs in their folders, and nothing lost"@en ;
+    backlog:contributesToMission fw:Mission_OEPackageConsolidation ;
+    backlog:derivesFromScope fw:Scope_OEPackageConsolidation ;
+    backlog:hasGoalFacing backlog:Facing_Mission ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out_Goal_OEPackageConsolidation ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation ;
+    backlog:decidedBy backlog:Owner .
+fw:Goal_OC_FilesDone a backlog:Goal ; rdfs:label "Every ontology file is in the one place its role and its history give it"@en ;
+    backlog:contributesToMission fw:Mission_OEPackageConsolidation ;
+    backlog:derivesFromScope fw:Scope_OEPackageConsolidation ;
+    backlog:hasGoalFacing backlog:Facing_Scope ;
+    backlog:goalCoversArea fw:Area_OC_Files ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out_Goal_OEPackageConsolidation ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation ;
+    backlog:decidedBy backlog:Owner .
+fw:Goal_OC_ToolsDone a backlog:Goal ; rdfs:label "Every tool finds the files where they now are"@en ;
+    backlog:contributesToMission fw:Mission_OEPackageConsolidation ;
+    backlog:derivesFromScope fw:Scope_OEPackageConsolidation ;
+    backlog:hasGoalFacing backlog:Facing_Scope ;
+    backlog:goalCoversArea fw:Area_OC_Tools ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out_Goal_OEPackageConsolidation ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation ;
+    backlog:decidedBy backlog:Owner .
+fw:Goal_OC_EnforcementDone a backlog:Goal ; rdfs:label "The structure checker shows the package clear and nothing new"@en ;
+    backlog:contributesToMission fw:Mission_OEPackageConsolidation ;
+    backlog:derivesFromScope fw:Scope_OEPackageConsolidation ;
+    backlog:hasGoalFacing backlog:Facing_Scope ;
+    backlog:goalCoversArea fw:Area_OC_Enforcement ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out_Goal_OEPackageConsolidation ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation ;
+    backlog:decidedBy backlog:Owner .
+fw:Goal_OC_Contained a backlog:Goal ; rdfs:label "No work was done outside what this scope named"@en ;
+    backlog:contributesToMission fw:Mission_OEPackageConsolidation ;
+    backlog:derivesFromScope fw:Scope_OEPackageConsolidation ;
+    backlog:hasGoalFacing backlog:Facing_Containment ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out_Goal_OEPackageConsolidation ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation ;
+    backlog:decidedBy backlog:Owner .
+fw:Goal_OC_NoStatementChange a backlog:Goal ; rdfs:label "No statement was reworded, corrected or re-judged in the move, and no term IRI changed"@en ;
+    backlog:contributesToMission fw:Mission_OEPackageConsolidation ;
+    backlog:derivesFromScope fw:Scope_OEPackageConsolidation ;
+    backlog:hasGoalFacing backlog:Facing_Exclusion ;
+    backlog:guardsExclusion fw:Ex_OC_StatementChange ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out_Goal_OEPackageConsolidation ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation ;
+    backlog:decidedBy backlog:Owner .
+fw:Goal_OC_NoRetroJudging a backlog:Goal ; rdfs:label "Retired work was never run through today's live rules"@en ;
+    backlog:contributesToMission fw:Mission_OEPackageConsolidation ;
+    backlog:derivesFromScope fw:Scope_OEPackageConsolidation ;
+    backlog:hasGoalFacing backlog:Facing_Exclusion ;
+    backlog:guardsExclusion fw:Ex_OC_RetroJudging ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out_Goal_OEPackageConsolidation ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation ;
+    backlog:decidedBy backlog:Owner .
+fw:Goal_OC_NoOtherPackages a backlog:Goal ; rdfs:label "No file outside this package was touched, except the one return note OE asks for"@en ;
+    backlog:contributesToMission fw:Mission_OEPackageConsolidation ;
+    backlog:derivesFromScope fw:Scope_OEPackageConsolidation ;
+    backlog:hasGoalFacing backlog:Facing_Exclusion ;
+    backlog:guardsExclusion fw:Ex_OC_OtherPackages ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out_Goal_OEPackageConsolidation ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation ;
+    backlog:decidedBy backlog:Owner .
+fw:Goal_OC_NoModuleMembership a backlog:Goal ; rdfs:label "No module-membership triples were added before OE asks for them"@en ;
+    backlog:contributesToMission fw:Mission_OEPackageConsolidation ;
+    backlog:derivesFromScope fw:Scope_OEPackageConsolidation ;
+    backlog:hasGoalFacing backlog:Facing_Exclusion ;
+    backlog:guardsExclusion fw:Ex_OC_ModuleMembership ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out_Goal_OEPackageConsolidation ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation ;
+    backlog:decidedBy backlog:Owner .
+fw:Out_Goal_OEPackageConsolidation a backlog:StageOutput ;
+    backlog:outputOfStage backlog:Stage_Goal ; backlog:belongsToLineage fw:L_OEPackageConsolidation ;
+    backlog:consumesOutput fw:Out_Scope_OEPackageConsolidation ;
+    backlog:hasStateDigest "3510bc2ba39e82eaad10532061019e3f54953f91f3d26cbb8d82df27c850401b" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.343.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Goal stage of Lineage 18: one mission-facing goal, one per scope area, one containment goal, and one inverse goal per exclusion. Stage 3 of 5." .
+fw:CP_OC_MissionMet a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-10-20T00:00:00Z"^^xsd:dateTime .
+fw:Metric_OC_MissionMet a backlog:Metric ; rdfs:label "Active ontology files in the package"@en ; backlog:metricUnit "file" .
+fw:Obj_OC_MissionMet a backlog:Objective ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    rdfs:label "Objective: Active ontology files in the package"@en ;
+    backlog:contributesToGoal fw:Goal_OC_MissionMet ; backlog:fillsScope fw:Scope_OEPackageConsolidation ;
+    backlog:hasSuccessMetric fw:Metric_OC_MissionMet ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasBaselineValue "12"^^xsd:decimal ; backlog:hasTargetValue "3"^^xsd:decimal ;
+    backlog:hasTargetDirection backlog:Dir_Decrease ;
+    backlog:hasCheckpoint fw:CP_OC_MissionMet ;
+    backlog:hasRationale "Counted 2026-10-06 with the OE structure checker v1.1.0: 12 active ontology files (1 vocabulary, 10 data, 1 shapes); one triad is 3." ;
+    backlog:producedByStage fw:Out_Objective_OEPackageConsolidation ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation ;
+    backlog:metricMovableBy fw:ST_OC_Fixtures ;
+    backlog:metricMovableBy fw:ST_OC_Ceremony .
+fw:Obs_OC_MissionMet a backlog:MetricObservation ; rdfs:label "Baseline: Active ontology files in the package"@en ;
+    backlog:observesMetric fw:Metric_OC_MissionMet ; backlog:observationFor fw:Obj_OC_MissionMet ;
+    backlog:hasObservedValue 12.0 ; backlog:observedAt "2026-10-06T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "OE structure checker run on the package, active files per role." .
+fw:CP_OC_FilesDone a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-10-20T00:00:00Z"^^xsd:dateTime .
+fw:Metric_OC_FilesDone a backlog:Metric ; rdfs:label "Active data files in the package"@en ; backlog:metricUnit "file" .
+fw:Obj_OC_FilesDone a backlog:Objective ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    rdfs:label "Objective: Active data files in the package"@en ;
+    backlog:contributesToGoal fw:Goal_OC_FilesDone ; backlog:fillsScope fw:Scope_OEPackageConsolidation ;
+    backlog:hasSuccessMetric fw:Metric_OC_FilesDone ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasBaselineValue "10"^^xsd:decimal ; backlog:hasTargetValue "1"^^xsd:decimal ;
+    backlog:hasTargetDirection backlog:Dir_Decrease ;
+    backlog:hasCheckpoint fw:CP_OC_FilesDone ;
+    backlog:hasRationale "Counted 2026-10-06: 10 active data files (the register file, the archive's data file, the exercise register, the lesson deposit, the test drive, six provenance records); one is wanted." ;
+    backlog:producedByStage fw:Out_Objective_OEPackageConsolidation ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation ;
+    backlog:metricMovableBy fw:ST_OC_LiveTriad ;
+    backlog:metricMovableBy fw:ST_OC_ArchiveFolder .
+fw:Obs_OC_FilesDone a backlog:MetricObservation ; rdfs:label "Baseline: Active data files in the package"@en ;
+    backlog:observesMetric fw:Metric_OC_FilesDone ; backlog:observationFor fw:Obj_OC_FilesDone ;
+    backlog:hasObservedValue 10.0 ; backlog:observedAt "2026-10-06T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "OE structure checker run on the package, active data files." .
+fw:CP_OC_ToolsDone a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-10-20T00:00:00Z"^^xsd:dateTime .
+fw:Metric_OC_ToolsDone a backlog:Metric ; rdfs:label "Scripts that name a file by a path it will leave"@en ; backlog:metricUnit "script" .
+fw:Obj_OC_ToolsDone a backlog:Objective ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    rdfs:label "Objective: Scripts that name a file by a path it will leave"@en ;
+    backlog:contributesToGoal fw:Goal_OC_ToolsDone ; backlog:fillsScope fw:Scope_OEPackageConsolidation ;
+    backlog:hasSuccessMetric fw:Metric_OC_ToolsDone ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasBaselineValue "10"^^xsd:decimal ; backlog:hasTargetValue "0"^^xsd:decimal ;
+    backlog:hasTargetDirection backlog:Dir_Decrease ;
+    backlog:hasCheckpoint fw:CP_OC_ToolsDone ;
+    backlog:hasRationale "Counted 2026-10-06 by search of 03-tooling: 10 scripts name the archive data file, the lesson deposit, the provenance records, the test drive or the exercise register by a path that changes." ;
+    backlog:producedByStage fw:Out_Objective_OEPackageConsolidation ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation ;
+    backlog:metricMovableBy fw:ST_OC_ToolsRepointed .
+fw:Obs_OC_ToolsDone a backlog:MetricObservation ; rdfs:label "Baseline: Scripts that name a file by a path it will leave"@en ;
+    backlog:observesMetric fw:Metric_OC_ToolsDone ; backlog:observationFor fw:Obj_OC_ToolsDone ;
+    backlog:hasObservedValue 10.0 ; backlog:observedAt "2026-10-06T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Search of 03-tooling for those paths." .
+fw:CP_OC_EnforcementDone a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-10-20T00:00:00Z"^^xsd:dateTime .
+fw:Metric_OC_EnforcementDone a backlog:Metric ; rdfs:label "Recorded structure-debt lines for this package"@en ; backlog:metricUnit "line" .
+fw:Obj_OC_EnforcementDone a backlog:Objective ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    rdfs:label "Objective: Recorded structure-debt lines for this package"@en ;
+    backlog:contributesToGoal fw:Goal_OC_EnforcementDone ; backlog:fillsScope fw:Scope_OEPackageConsolidation ;
+    backlog:hasSuccessMetric fw:Metric_OC_EnforcementDone ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasBaselineValue "1"^^xsd:decimal ; backlog:hasTargetValue "0"^^xsd:decimal ;
+    backlog:hasTargetDirection backlog:Dir_Decrease ;
+    backlog:hasCheckpoint fw:CP_OC_EnforcementDone ;
+    backlog:hasRationale "Counted 2026-10-06: 1 line (rule U1, data files, count 10) in the OE structure-debt register names this package." ;
+    backlog:producedByStage fw:Out_Objective_OEPackageConsolidation ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation ;
+    backlog:metricMovableBy fw:ST_OC_DebtCleared .
+fw:Obs_OC_EnforcementDone a backlog:MetricObservation ; rdfs:label "Baseline: Recorded structure-debt lines for this package"@en ;
+    backlog:observesMetric fw:Metric_OC_EnforcementDone ; backlog:observationFor fw:Obj_OC_EnforcementDone ;
+    backlog:hasObservedValue 1.0 ; backlog:observedAt "2026-10-06T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "OE structure checker run against the package, compared with the debt register." .
+fw:CP_OC_Contained a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-10-20T00:00:00Z"^^xsd:dateTime .
+fw:Metric_OC_Contained a backlog:Metric ; rdfs:label "Commits touching an excluded concern"@en ; backlog:metricUnit "commit" .
+fw:Obj_OC_Contained a backlog:Objective ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    rdfs:label "Objective: Commits touching an excluded concern"@en ;
+    backlog:contributesToGoal fw:Goal_OC_Contained ; backlog:fillsScope fw:Scope_OEPackageConsolidation ;
+    backlog:hasSuccessMetric fw:Metric_OC_Contained ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasBaselineValue "0"^^xsd:decimal ; backlog:hasTargetValue "0"^^xsd:decimal ;
+    backlog:hasTargetDirection backlog:Dir_Hold ;
+    backlog:hasCheckpoint fw:CP_OC_Contained ;
+    backlog:hasRationale "Held, not moved: containment is proven by the absence of a touch." ;
+    backlog:producedByStage fw:Out_Objective_OEPackageConsolidation ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation .
+fw:Obs_OC_Contained a backlog:MetricObservation ; rdfs:label "Baseline: Commits touching an excluded concern"@en ;
+    backlog:observesMetric fw:Metric_OC_Contained ; backlog:observationFor fw:Obj_OC_Contained ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-10-06T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Direct check: no work commit made under this lineage yet." .
+fw:CP_OC_NoStatementChange a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-10-20T00:00:00Z"^^xsd:dateTime .
+fw:Metric_OC_NoStatementChange a backlog:Metric ; rdfs:label "Statements lost or changed by the moves, beyond the declared header and polarity edits"@en ; backlog:metricUnit "statement" .
+fw:Obj_OC_NoStatementChange a backlog:Objective ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    rdfs:label "Objective: Statements lost or changed by the moves, beyond the declared header and polarity edits"@en ;
+    backlog:contributesToGoal fw:Goal_OC_NoStatementChange ; backlog:fillsScope fw:Scope_OEPackageConsolidation ;
+    backlog:hasSuccessMetric fw:Metric_OC_NoStatementChange ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasBaselineValue "0"^^xsd:decimal ; backlog:hasTargetValue "0"^^xsd:decimal ;
+    backlog:hasTargetDirection backlog:Dir_Hold ;
+    backlog:hasCheckpoint fw:CP_OC_NoStatementChange ;
+    backlog:hasRationale "Held, not moved: the before and after proof counts every statement lost or altered and must read 0 apart from the declared edits." ;
+    backlog:producedByStage fw:Out_Objective_OEPackageConsolidation ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation ;
+    backlog:metricMovableBy fw:ST_OC_NothingLost .
+fw:Obs_OC_NoStatementChange a backlog:MetricObservation ; rdfs:label "Baseline: Statements lost or changed by the moves, beyond the declared header and polarity edits"@en ;
+    backlog:observesMetric fw:Metric_OC_NoStatementChange ; backlog:observationFor fw:Obj_OC_NoStatementChange ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-10-06T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Direct check: nothing has been moved yet." .
+fw:CP_OC_NoRetroJudging a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-10-20T00:00:00Z"^^xsd:dateTime .
+fw:Metric_OC_NoRetroJudging a backlog:Metric ; rdfs:label "Archive statements judged by the live rules"@en ; backlog:metricUnit "statement" .
+fw:Obj_OC_NoRetroJudging a backlog:Objective ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    rdfs:label "Objective: Archive statements judged by the live rules"@en ;
+    backlog:contributesToGoal fw:Goal_OC_NoRetroJudging ; backlog:fillsScope fw:Scope_OEPackageConsolidation ;
+    backlog:hasSuccessMetric fw:Metric_OC_NoRetroJudging ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasBaselineValue "0"^^xsd:decimal ; backlog:hasTargetValue "0"^^xsd:decimal ;
+    backlog:hasTargetDirection backlog:Dir_Hold ;
+    backlog:hasCheckpoint fw:CP_OC_NoRetroJudging ;
+    backlog:hasRationale "Held, not moved: the live rules never read the archive folder." ;
+    backlog:producedByStage fw:Out_Objective_OEPackageConsolidation ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation ;
+    backlog:metricMovableBy fw:ST_OC_ArchiveFolder .
+fw:Obs_OC_NoRetroJudging a backlog:MetricObservation ; rdfs:label "Baseline: Archive statements judged by the live rules"@en ;
+    backlog:observesMetric fw:Metric_OC_NoRetroJudging ; backlog:observationFor fw:Obj_OC_NoRetroJudging ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-10-06T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Direct check: the archive data file is not read by the live rules today." .
+fw:CP_OC_NoOtherPackages a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-10-20T00:00:00Z"^^xsd:dateTime .
+fw:Metric_OC_NoOtherPackages a backlog:Metric ; rdfs:label "Files outside this package changed, other than the return note"@en ; backlog:metricUnit "file" .
+fw:Obj_OC_NoOtherPackages a backlog:Objective ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    rdfs:label "Objective: Files outside this package changed, other than the return note"@en ;
+    backlog:contributesToGoal fw:Goal_OC_NoOtherPackages ; backlog:fillsScope fw:Scope_OEPackageConsolidation ;
+    backlog:hasSuccessMetric fw:Metric_OC_NoOtherPackages ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasBaselineValue "0"^^xsd:decimal ; backlog:hasTargetValue "0"^^xsd:decimal ;
+    backlog:hasTargetDirection backlog:Dir_Hold ;
+    backlog:hasCheckpoint fw:CP_OC_NoOtherPackages ;
+    backlog:hasRationale "Held, not moved: the OE debt register is the OE session's own." ;
+    backlog:producedByStage fw:Out_Objective_OEPackageConsolidation ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation .
+fw:Obs_OC_NoOtherPackages a backlog:MetricObservation ; rdfs:label "Baseline: Files outside this package changed, other than the return note"@en ;
+    backlog:observesMetric fw:Metric_OC_NoOtherPackages ; backlog:observationFor fw:Obj_OC_NoOtherPackages ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-10-06T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Direct check: no work commit made under this lineage touches a file outside the package." .
+fw:CP_OC_NoModuleMembership a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-10-20T00:00:00Z"^^xsd:dateTime .
+fw:Metric_OC_NoModuleMembership a backlog:Metric ; rdfs:label "Subjects given module membership triples before OE asks"@en ; backlog:metricUnit "subject" .
+fw:Obj_OC_NoModuleMembership a backlog:Objective ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    rdfs:label "Objective: Subjects given module membership triples before OE asks"@en ;
+    backlog:contributesToGoal fw:Goal_OC_NoModuleMembership ; backlog:fillsScope fw:Scope_OEPackageConsolidation ;
+    backlog:hasSuccessMetric fw:Metric_OC_NoModuleMembership ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasBaselineValue "0"^^xsd:decimal ; backlog:hasTargetValue "0"^^xsd:decimal ;
+    backlog:hasTargetDirection backlog:Dir_Hold ;
+    backlog:hasCheckpoint fw:CP_OC_NoModuleMembership ;
+    backlog:hasRationale "Held, not moved: rule M1 is switched on per package by OE, which has not done so here." ;
+    backlog:producedByStage fw:Out_Objective_OEPackageConsolidation ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation .
+fw:Obs_OC_NoModuleMembership a backlog:MetricObservation ; rdfs:label "Baseline: Subjects given module membership triples before OE asks"@en ;
+    backlog:observesMetric fw:Metric_OC_NoModuleMembership ; backlog:observationFor fw:Obj_OC_NoModuleMembership ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-10-06T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Direct check: no membership triple has been added by this lineage." .
+fw:Out_Objective_OEPackageConsolidation a backlog:StageOutput ;
+    backlog:outputOfStage backlog:Stage_Objective ; backlog:belongsToLineage fw:L_OEPackageConsolidation ;
+    backlog:consumesOutput fw:Out_Goal_OEPackageConsolidation ;
+    backlog:hasStateDigest "6d28d71c115f4a86098a75f1de46cb784b7a8cd8ec8e32b416c0afd478e6b5cb" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.344.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Objective stage of Lineage 18: nine objectives, one per goal, each counted at a 2026-10-06 baseline. Stage 4 of 5." .
+fw:It_OC_1 a backlog:Iteration ; backlog:hasIdentifier "OC-IT1" ; backlog:hasTitle "Lineage 18, first work window" ;
+    backlog:hasState backlog:Done ;
+    backlog:hasObservedDuration "PT4H12M"^^xsd:duration ;
+    backlog:hasDurationSource "Earliest startedAt (2026-10-06T16:40:00Z) to latest finishedAt (2026-10-06T20:51:43Z) across the seven ST_OC_* stories." ;
+    backlog:memberOfContainer fw:Register ; backlog:belongsToLineage fw:L_OEPackageConsolidation .
+fw:AC_OC_Fixtures a backlog:AcceptanceCriterion ;
+    backlog:satisfiedByArtifact "03-tooling/backlog_package_fold_v1_1_0.py -- to_fixture" ;
+    backlog:hasGherkinText "Given the test drive and the strategy exercise register outside the fixtures folder, When they are moved there with their polarity declared, Then the structure checker counts two fewer active data files, the gate still validates both as it declares, and the split proof reads 0 statements lost and shows the polarity declaration as the only addition." .
+fw:ST_OC_Fixtures a backlog:Story ; backlog:hasIdentifier "OC-S01" ; backlog:hasTitle "Move the test drive and the strategy exercise register into the fixtures folder" ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-10-06T16:40:00Z"^^xsd:dateTime ; backlog:finishedAt "2026-10-06T17:06:00Z"^^xsd:dateTime ; backlog:lastAuditedAt "2026-10-06T17:06:00Z"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_OC_Fixtures ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation ;
+    backlog:producedByStage fw:Out_Backlog_OEPackageConsolidation ;
+    backlog:pursuesObjective fw:Obj_OC_MissionMet ;
+    backlog:satisfiesDeliverable fw:Del_OC_FixturesMoved ;
+    backlog:hasInvestmentCategory backlog:Cat_TechnicalDebt ;
+    backlog:hasAcceptanceCriterion fw:AC_OC_Fixtures ;
+    backlog:hasReach 3.0 ; backlog:hasImpact 3.0 ; backlog:hasConfidence 0.85 ; backlog:hasEffort 1.0 ;
+    backlog:hasPriorityScore 7.65 ;
+    backlog:hasApplicableConcern backlog:Concern_Data ;
+    backlog:appliesDefinitionOfDone fw:DoD_OC .
+fw:RE_OC_Fixtures a backlog:RefinementEvent ; backlog:refines fw:ST_OC_Fixtures ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-10-06T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "The exercise register is test input (the gate runs it as input to the strategy-exercise check), so OE's answer that it is live data is corrected here with that reason; the fixtures folder requires a declared polarity, so one statement is added to each moved file, declared in advance." .
+fw:Plan_OC_Fixtures a backlog:PlanningEvent ; rdfs:label "OC-S01 taken in"@en ;
+    backlog:plansItem fw:ST_OC_Fixtures ; backlog:plannedInto fw:It_OC_1 ;
+    backlog:producesTask fw:T_OC_Fixtures ;
+    backlog:plannedAt "2026-10-06T00:00:00Z"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:hasRationale "The formal boundary between ordering this work and doing it." .
+fw:T_OC_Fixtures a backlog:ExecutionTask ; backlog:hasIdentifier "OC-T01" ;
+    backlog:hasTitle "Build and prove: Fixtures"@en ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-10-06T16:40:00Z"^^xsd:dateTime ; backlog:finishedAt "2026-10-06T17:06:00Z"^^xsd:dateTime ; backlog:lastAuditedAt "2026-10-06T17:06:00Z"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_OC_Fixtures_Task ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It_OC_1 ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation ;
+    backlog:hasRationale "One task matching the whole of its story's scope." .
+fw:AC_OC_LiveTriad a backlog:AcceptanceCriterion ;
+    backlog:satisfiedByArtifact "03-tooling/backlog_package_fold_v1_1_0.py -- fold" ;
+    backlog:hasGherkinText "Given the lesson deposit as a data file of its own, When it is folded into the package's one data file, Then its ontology header becomes an untyped module record carrying isPartOf, identifier, label and version, every other statement is kept, every term keeps its IRI, and the live data still validates with 0 violations." .
+fw:ST_OC_LiveTriad a backlog:Story ; backlog:hasIdentifier "OC-S02" ; backlog:hasTitle "Fold the lesson deposit into the data file as a module" ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-10-06T17:18:00Z"^^xsd:dateTime ; backlog:finishedAt "2026-10-06T17:26:22Z"^^xsd:dateTime ; backlog:lastAuditedAt "2026-10-06T17:26:22Z"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_OC_LiveTriad ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation ;
+    backlog:producedByStage fw:Out_Backlog_OEPackageConsolidation ;
+    backlog:pursuesObjective fw:Obj_OC_FilesDone ;
+    backlog:satisfiesDeliverable fw:Del_OC_LiveTriad ;
+    backlog:hasInvestmentCategory backlog:Cat_TechnicalDebt ;
+    backlog:hasAcceptanceCriterion fw:AC_OC_LiveTriad ;
+    backlog:hasReach 5.0 ; backlog:hasImpact 3.0 ; backlog:hasConfidence 0.85 ; backlog:hasEffort 2.0 ;
+    backlog:hasPriorityScore 6.38 ;
+    backlog:hasApplicableConcern backlog:Concern_Data , backlog:Concern_Architecture ;
+    backlog:appliesDefinitionOfDone fw:DoD_OC .
+fw:RE_OC_LiveTriad a backlog:RefinementEvent ; backlog:refines fw:ST_OC_LiveTriad ;
+    backlog:addressesConcern backlog:Concern_Data , backlog:Concern_Architecture ;
+    backlog:refinedAt "2026-10-06T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "One header per file (H1): the former header cannot stay as an ontology. The module record is the shape BP-D54 prescribes. The deposit's content is lessons offered to OE, so the live validator's result is the check that folding it in costs nothing." .
+fw:Plan_OC_LiveTriad a backlog:PlanningEvent ; rdfs:label "OC-S02 taken in"@en ;
+    backlog:plansItem fw:ST_OC_LiveTriad ; backlog:plannedInto fw:It_OC_1 ;
+    backlog:producesTask fw:T_OC_LiveTriad ;
+    backlog:plannedAt "2026-10-06T00:00:00Z"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:hasRationale "The formal boundary between ordering this work and doing it." .
+fw:T_OC_LiveTriad a backlog:ExecutionTask ; backlog:hasIdentifier "OC-T02" ;
+    backlog:hasTitle "Build and prove: LiveTriad"@en ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-10-06T17:18:00Z"^^xsd:dateTime ; backlog:finishedAt "2026-10-06T17:26:22Z"^^xsd:dateTime ; backlog:lastAuditedAt "2026-10-06T17:26:22Z"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_OC_LiveTriad_Task ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It_OC_1 ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation ;
+    backlog:hasRationale "One task matching the whole of its story's scope." .
+fw:AC_OC_ArchiveFolder a backlog:AcceptanceCriterion ;
+    backlog:satisfiedByArtifact "03-tooling/backlog_archive_shapes_check_v1_1_0.py -- main" ;
+    backlog:hasGherkinText "Given the archive data file and the six provenance records, When the archive folder is built, Then it holds one data file (the existing archive data with each record as a module) and one shapes file that targets the live vocabulary without declaring it, the archive shapes run over the whole archive in seconds and flag a planted orphaned item, and the live rules never read the folder." .
+fw:ST_OC_ArchiveFolder a backlog:Story ; backlog:hasIdentifier "OC-S03" ; backlog:hasTitle "Build the archive folder: one data file with the provenance records as modules, and one shapes file" ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-10-06T17:30:00Z"^^xsd:dateTime ; backlog:finishedAt "2026-10-06T17:57:18Z"^^xsd:dateTime ; backlog:lastAuditedAt "2026-10-06T17:57:18Z"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_OC_ArchiveFolder ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation ;
+    backlog:producedByStage fw:Out_Backlog_OEPackageConsolidation ;
+    backlog:pursuesObjective fw:Obj_OC_NoRetroJudging ;
+    backlog:satisfiesDeliverable fw:Del_OC_ArchiveFolder ;
+    backlog:hasInvestmentCategory backlog:Cat_TechnicalDebt ;
+    backlog:hasAcceptanceCriterion fw:AC_OC_ArchiveFolder ;
+    backlog:hasReach 5.0 ; backlog:hasImpact 3.0 ; backlog:hasConfidence 0.85 ; backlog:hasEffort 3.0 ;
+    backlog:hasPriorityScore 4.25 ;
+    backlog:hasApplicableConcern backlog:Concern_Data , backlog:Concern_Architecture ;
+    backlog:appliesDefinitionOfDone fw:DoD_OC .
+fw:RE_OC_ArchiveFolder a backlog:RefinementEvent ; backlog:refines fw:ST_OC_ArchiveFolder ;
+    backlog:addressesConcern backlog:Concern_Data , backlog:Concern_Architecture ;
+    backlog:refinedAt "2026-10-06T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Measured in Lineage 17: archive shapes ran over the whole archive in 8 seconds and found two achieved lineages still marked not archived, which are reported and not fixed here (exclusion). The alignment record names a private adopter: the public-copy leak scan decides whether it may sit in the published file." .
+fw:Plan_OC_ArchiveFolder a backlog:PlanningEvent ; rdfs:label "OC-S03 taken in"@en ;
+    backlog:plansItem fw:ST_OC_ArchiveFolder ; backlog:plannedInto fw:It_OC_1 ;
+    backlog:producesTask fw:T_OC_ArchiveFolder ;
+    backlog:plannedAt "2026-10-06T00:00:00Z"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:hasRationale "The formal boundary between ordering this work and doing it." .
+fw:T_OC_ArchiveFolder a backlog:ExecutionTask ; backlog:hasIdentifier "OC-T03" ;
+    backlog:hasTitle "Build and prove: ArchiveFolder"@en ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-10-06T17:30:00Z"^^xsd:dateTime ; backlog:finishedAt "2026-10-06T17:57:18Z"^^xsd:dateTime ; backlog:lastAuditedAt "2026-10-06T17:57:18Z"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_OC_ArchiveFolder_Task ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It_OC_1 ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation ;
+    backlog:hasRationale "One task matching the whole of its story's scope." .
+fw:AC_OC_NothingLost a backlog:AcceptanceCriterion ;
+    backlog:satisfiedByArtifact "03-tooling/backlog_split_proof_v1_4_0.py -- backlog_split_proof" ;
+    backlog:hasGherkinText "Given the package before and after all the moves, When the split proof compares every statement, Then it reports 0 statements only before, apart from the declared header conversions, and every added statement matches a declared pattern (module records, polarity declarations, this lineage's own register entries)." .
+fw:ST_OC_NothingLost a backlog:Story ; backlog:hasIdentifier "OC-S04" ; backlog:hasTitle "Prove every move: nothing lost, nothing changed but the declared edits" ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-10-06T17:20:00Z"^^xsd:dateTime ; backlog:finishedAt "2026-10-06T18:36:30Z"^^xsd:dateTime ; backlog:lastAuditedAt "2026-10-06T18:36:30Z"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_OC_NothingLost ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation ;
+    backlog:producedByStage fw:Out_Backlog_OEPackageConsolidation ;
+    backlog:pursuesObjective fw:Obj_OC_NoStatementChange ;
+    backlog:satisfiesDeliverable fw:Del_OC_NothingLost ;
+    backlog:hasInvestmentCategory backlog:Cat_TechnicalDebt ;
+    backlog:hasAcceptanceCriterion fw:AC_OC_NothingLost ;
+    backlog:hasReach 3.0 ; backlog:hasImpact 3.0 ; backlog:hasConfidence 0.85 ; backlog:hasEffort 1.0 ;
+    backlog:hasPriorityScore 7.65 ;
+    backlog:hasApplicableConcern backlog:Concern_Data ;
+    backlog:appliesDefinitionOfDone fw:DoD_OC .
+fw:RE_OC_NothingLost a backlog:RefinementEvent ; backlog:refines fw:ST_OC_NothingLost ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-10-06T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "The proof tool exists (Lineage 17) and already ignores headers and accepts declared patterns; this story runs it per move and once over the whole, and records each result." .
+fw:Plan_OC_NothingLost a backlog:PlanningEvent ; rdfs:label "OC-S04 taken in"@en ;
+    backlog:plansItem fw:ST_OC_NothingLost ; backlog:plannedInto fw:It_OC_1 ;
+    backlog:producesTask fw:T_OC_NothingLost ;
+    backlog:plannedAt "2026-10-06T00:00:00Z"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:hasRationale "The formal boundary between ordering this work and doing it." .
+fw:T_OC_NothingLost a backlog:ExecutionTask ; backlog:hasIdentifier "OC-T04" ;
+    backlog:hasTitle "Build and prove: NothingLost"@en ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-10-06T17:20:00Z"^^xsd:dateTime ; backlog:finishedAt "2026-10-06T18:36:30Z"^^xsd:dateTime ; backlog:lastAuditedAt "2026-10-06T18:36:30Z"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_OC_NothingLost_Task ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It_OC_1 ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation ;
+    backlog:hasRationale "One task matching the whole of its story's scope." .
+fw:AC_OC_ToolsRepointed a backlog:AcceptanceCriterion ;
+    backlog:satisfiedByArtifact "03-tooling/backlog_repoint_v1_2_0.py -- HISTORICAL_DIRS" ;
+    backlog:hasGherkinText "Given the 10 scripts that name a moved file by its old path, When each is repointed, Then a search finds none outside the archive tooling folder, and the release gate passes with the new layout and still fails on its known-bad inputs." .
+fw:ST_OC_ToolsRepointed a backlog:Story ; backlog:hasIdentifier "OC-S05" ; backlog:hasTitle "Repoint every tool that names a file by a path it leaves" ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-10-06T17:40:00Z"^^xsd:dateTime ; backlog:finishedAt "2026-10-06T17:58:27Z"^^xsd:dateTime ; backlog:lastAuditedAt "2026-10-06T17:58:27Z"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_OC_ToolsRepointed ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation ;
+    backlog:producedByStage fw:Out_Backlog_OEPackageConsolidation ;
+    backlog:pursuesObjective fw:Obj_OC_ToolsDone ;
+    backlog:satisfiesDeliverable fw:Del_OC_ToolsRepointed ;
+    backlog:hasInvestmentCategory backlog:Cat_TechnicalDebt ;
+    backlog:hasAcceptanceCriterion fw:AC_OC_ToolsRepointed ;
+    backlog:hasReach 8.0 ; backlog:hasImpact 3.0 ; backlog:hasConfidence 0.85 ; backlog:hasEffort 3.0 ;
+    backlog:hasPriorityScore 6.8 ;
+    backlog:hasApplicableConcern backlog:Concern_Interface ;
+    backlog:appliesDefinitionOfDone fw:DoD_OC .
+fw:RE_OC_ToolsRepointed a backlog:RefinementEvent ; backlog:refines fw:ST_OC_ToolsRepointed ;
+    backlog:addressesConcern backlog:Concern_Interface ;
+    backlog:refinedAt "2026-10-06T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "The gate's exercise-register step, the archive tools' fixed archive file name, the registration and metrics tools and the public-copy deriver all name paths that change." .
+fw:Plan_OC_ToolsRepointed a backlog:PlanningEvent ; rdfs:label "OC-S05 taken in"@en ;
+    backlog:plansItem fw:ST_OC_ToolsRepointed ; backlog:plannedInto fw:It_OC_1 ;
+    backlog:producesTask fw:T_OC_ToolsRepointed ;
+    backlog:plannedAt "2026-10-06T00:00:00Z"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:hasRationale "The formal boundary between ordering this work and doing it." .
+fw:T_OC_ToolsRepointed a backlog:ExecutionTask ; backlog:hasIdentifier "OC-T05" ;
+    backlog:hasTitle "Build and prove: ToolsRepointed"@en ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-10-06T17:40:00Z"^^xsd:dateTime ; backlog:finishedAt "2026-10-06T17:58:27Z"^^xsd:dateTime ; backlog:lastAuditedAt "2026-10-06T17:58:27Z"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_OC_ToolsRepointed_Task ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It_OC_1 ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation ;
+    backlog:hasRationale "One task matching the whole of its story's scope." .
+fw:AC_OC_Ceremony a backlog:AcceptanceCriterion ;
+    backlog:satisfiedByArtifact "03-tooling/backlog_lineage_archive_v2_4_0.py -- archivable" ;
+    backlog:hasGherkinText "Given an archivable lineage in the live data file, When the archive tool applies, Then its statements move verbatim into the archive data file in the archive folder, versions bump, the live data keeps no dangling pointer, and the archive shapes still hold." .
+fw:ST_OC_Ceremony a backlog:Story ; backlog:hasIdentifier "OC-S06" ; backlog:hasTitle "Make the archiving ceremony a move from the live data file to the archive data file" ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-10-06T18:10:00Z"^^xsd:dateTime ; backlog:finishedAt "2026-10-06T18:34:16Z"^^xsd:dateTime ; backlog:lastAuditedAt "2026-10-06T18:34:16Z"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_OC_Ceremony ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation ;
+    backlog:producedByStage fw:Out_Backlog_OEPackageConsolidation ;
+    backlog:pursuesObjective fw:Obj_OC_MissionMet ;
+    backlog:satisfiesDeliverable fw:Del_OC_Ceremony ;
+    backlog:hasInvestmentCategory backlog:Cat_TechnicalDebt ;
+    backlog:hasAcceptanceCriterion fw:AC_OC_Ceremony ;
+    backlog:hasReach 5.0 ; backlog:hasImpact 3.0 ; backlog:hasConfidence 0.85 ; backlog:hasEffort 2.0 ;
+    backlog:hasPriorityScore 6.38 ;
+    backlog:hasApplicableConcern backlog:Concern_Data , backlog:Concern_Architecture ;
+    backlog:appliesDefinitionOfDone fw:DoD_OC .
+fw:RE_OC_Ceremony a backlog:RefinementEvent ; backlog:refines fw:ST_OC_Ceremony ;
+    backlog:addressesConcern backlog:Concern_Data , backlog:Concern_Architecture ;
+    backlog:refinedAt "2026-10-06T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Lineage 17's scratch drill moved 20 subjects with 0 dangling live pointers using the old file name; this re-proves it on the real layout, and archives Lineage 17 itself as its first real use, which is a ceremony the owner has already asked for in effect." .
+fw:Plan_OC_Ceremony a backlog:PlanningEvent ; rdfs:label "OC-S06 taken in"@en ;
+    backlog:plansItem fw:ST_OC_Ceremony ; backlog:plannedInto fw:It_OC_1 ;
+    backlog:producesTask fw:T_OC_Ceremony ;
+    backlog:plannedAt "2026-10-06T00:00:00Z"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:hasRationale "The formal boundary between ordering this work and doing it." .
+fw:T_OC_Ceremony a backlog:ExecutionTask ; backlog:hasIdentifier "OC-T06" ;
+    backlog:hasTitle "Build and prove: Ceremony"@en ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-10-06T18:10:00Z"^^xsd:dateTime ; backlog:finishedAt "2026-10-06T18:34:16Z"^^xsd:dateTime ; backlog:lastAuditedAt "2026-10-06T18:34:16Z"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_OC_Ceremony_Task ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It_OC_1 ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation ;
+    backlog:hasRationale "One task matching the whole of its story's scope." .
+fw:AC_OC_DebtCleared a backlog:AcceptanceCriterion ;
+    backlog:satisfiedByArtifact "03-tooling/backlog_package_fold_v1_1_0.py -- fold" ;
+    backlog:hasGherkinText "Given the new layout is released, When the OE structure checker runs, Then the package's recorded debt line reads CLEARED with no violation new, and a return note naming it is in the OE inbox." .
+fw:ST_OC_DebtCleared a backlog:Story ; backlog:hasIdentifier "OC-S07" ; backlog:hasTitle "Show the package clear and return the note to the OE inbox" ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-10-06T18:58:00Z"^^xsd:dateTime ; backlog:finishedAt "2026-10-06T20:51:43Z"^^xsd:dateTime ; backlog:lastAuditedAt "2026-10-06T20:51:43Z"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_OC_DebtCleared ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:startedAt "2026-10-06T18:58:00Z"^^xsd:dateTime ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation ;
+    backlog:producedByStage fw:Out_Backlog_OEPackageConsolidation ;
+    backlog:pursuesObjective fw:Obj_OC_EnforcementDone ;
+    backlog:satisfiesDeliverable fw:Del_OC_DebtCleared ;
+    backlog:hasInvestmentCategory backlog:Cat_TechnicalDebt ;
+    backlog:hasAcceptanceCriterion fw:AC_OC_DebtCleared ;
+    backlog:hasReach 3.0 ; backlog:hasImpact 3.0 ; backlog:hasConfidence 0.85 ; backlog:hasEffort 1.0 ;
+    backlog:hasPriorityScore 7.65 ;
+    backlog:hasNoApplicableConcern true ;
+    backlog:appliesDefinitionOfDone fw:DoD_OC .
+fw:RE_OC_DebtCleared a backlog:RefinementEvent ; backlog:refines fw:ST_OC_DebtCleared ;
+    backlog:refinedAt "2026-10-06T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "The OE session prunes its own register; this lineage does not edit it (exclusion)." .
+fw:Plan_OC_DebtCleared a backlog:PlanningEvent ; rdfs:label "OC-S07 taken in"@en ;
+    backlog:plansItem fw:ST_OC_DebtCleared ; backlog:plannedInto fw:It_OC_1 ;
+    backlog:producesTask fw:T_OC_DebtCleared ;
+    backlog:plannedAt "2026-10-06T00:00:00Z"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:hasRationale "The formal boundary between ordering this work and doing it." .
+fw:T_OC_DebtCleared a backlog:ExecutionTask ; backlog:hasIdentifier "OC-T07" ;
+    backlog:hasTitle "Build and prove: DebtCleared"@en ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-10-06T18:58:00Z"^^xsd:dateTime ; backlog:finishedAt "2026-10-06T20:51:43Z"^^xsd:dateTime ; backlog:lastAuditedAt "2026-10-06T20:51:43Z"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_OC_DebtCleared_Task ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:startedAt "2026-10-06T18:58:00Z"^^xsd:dateTime ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It_OC_1 ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation ;
+    backlog:hasRationale "One task matching the whole of its story's scope." .
+fw:DoD_OC a backlog:DefinitionOfDone ; rdfs:label "Definition of Done for Lineage 18's work"@en ;
+    backlog:hasDoDCriterion fw:DOC1 , fw:DOC2 .
+fw:DOC1 a backlog:DoDCriterion ; rdfs:label "DOC1 -- the proof still fires on a known-bad input"@en ;
+    backlog:hasCriterionText "Every check the story touches is shown, in the same run, failing a planted known-bad input and passing the real files." ;
+    backlog:hasCheckQuery "The story's own before and after proof and the release gate's self-proof." ;
+    backlog:hasExpectedResult "known-bad fails, real passes" ;
+    backlog:hasCriterionStatus backlog:Holds .
+fw:DOC2 a backlog:DoDCriterion ; rdfs:label "DOC2 -- the live data validates with no violation"@en ;
+    backlog:hasCriterionText "backlog_validate against the live data file still reports 0 violations at sh:Violation severity." ;
+    backlog:hasCheckQuery "backlog_validate against the live data file." ;
+    backlog:hasExpectedResult "0 Violation" ;
+    backlog:hasCriterionStatus backlog:Holds .
+fw:Out_Backlog_OEPackageConsolidation a backlog:StageOutput ;
+    backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage fw:L_OEPackageConsolidation ;
+    backlog:consumesOutput fw:Out_Objective_OEPackageConsolidation ;
+    backlog:hasStateDigest "14bfe71e2ef8843ea37d1e76e0e5ccdbec0a82a15a1369c9ca1f03c30911dfaa" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.345.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Backlog stage of Lineage 18: seven stories, one per deliverable, groomed and ready. Stage 5 of 5." .
+fw:Ev_OC_Fixtures a backlog:Evidence , backlog:TestEvidence ; backlog:attestsCriterion fw:AC_OC_Fixtures ;
+    backlog:hasTestId "polarity_declared_and_gate_reads_fixtures_path" ;
+    backlog:evidenceVerified true ; backlog:verifiedByTool "backlog_validate_v1_12_0.py" ;
+    backlog:hasVerificationMethod "Real run: the validator's polarity report read the moved test drive as negative (3 violations, as declared) and the exercise register as positive (0 violations); OE's structure checker examined 13 files before and 11 after, and its one-per-role line fell from 10 active data files to 8. The gate now reads the exercise register from the fixtures folder." .
+fw:Ev_OC_Fixtures_Task a backlog:Evidence , backlog:TestEvidence ;
+    backlog:hasTestSpec "03-tooling/backlog_package_fold_v1_1_0.py" ;
+    backlog:evidenceVerified true ; backlog:verifiedByTool "backlog_validate_v1_12_0.py" ;
+    backlog:hasVerificationMethod "Real run: the validator's polarity report read the moved test drive as negative (3 violations, as declared) and the exercise register as positive (0 violations); OE's structure checker examined 13 files before and 11 after, and its one-per-role line fell from 10 active data files to 8. The gate now reads the exercise register from the fixtures folder." .
+fw:H_OC_Fixtures a backlog:TestHarness ; backlog:harnessFor fw:T_OC_Fixtures ;
+    backlog:hasHarnessEvidence fw:Ev_OC_Fixtures_Task ;
+    backlog:hasRationale "The task's own harness, distinct from the story's." .
+fw:H_OC_Fixtures_Story a backlog:TestHarness ; backlog:harnessFor fw:ST_OC_Fixtures ;
+    backlog:hasHarnessEvidence fw:Ev_OC_Fixtures ;
+    backlog:hasRationale "The story's own harness: the real run named in its evidence." .
+fw:Obs_OC_MissionMet_Fixtures a backlog:MetricObservation ; rdfs:label "After OC Fixtures: measured again"@en ;
+    backlog:observesMetric fw:Metric_OC_MissionMet ; backlog:observationFor fw:Obj_OC_MissionMet ;
+    backlog:hasObservedValue 10.0 ; backlog:observedAt "2026-10-06T17:08:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "OE structure checker run on the package before and after, same convention as the baseline: 13 files examined became 11, so the baseline 12 reads 10." .
+fw:Ev_OC_LiveTriad a backlog:Evidence , backlog:TestEvidence ; backlog:attestsCriterion fw:AC_OC_LiveTriad ;
+    backlog:hasTestId "lesson_deposit_folded_nothing_lost" ;
+    backlog:evidenceVerified true ; backlog:verifiedByTool "backlog_split_proof_v1_2_0.py" ;
+    backlog:hasVerificationMethod "Real run: the lesson deposit and the data file before, compared with the data file after by the split proof v1.2.0 with the deposit's header declared as a module record: 0 statements lost, 0 changed, 4 module-record statements set aside and counted; the one other difference is the repointed gate and proof path in two earlier records, set aside by name. The live data validates with 0 violations; the structure checker's data-file line fell from 8 to 7." .
+fw:Ev_OC_LiveTriad_Task a backlog:Evidence , backlog:TestEvidence ;
+    backlog:hasTestSpec "03-tooling/backlog_package_fold_v1_1_0.py" ;
+    backlog:evidenceVerified true ; backlog:verifiedByTool "backlog_split_proof_v1_2_0.py" ;
+    backlog:hasVerificationMethod "Real run: the lesson deposit and the data file before, compared with the data file after by the split proof v1.2.0 with the deposit's header declared as a module record: 0 statements lost, 0 changed, 4 module-record statements set aside and counted; the one other difference is the repointed gate and proof path in two earlier records, set aside by name. The live data validates with 0 violations; the structure checker's data-file line fell from 8 to 7." .
+fw:H_OC_LiveTriad a backlog:TestHarness ; backlog:harnessFor fw:T_OC_LiveTriad ;
+    backlog:hasHarnessEvidence fw:Ev_OC_LiveTriad_Task ;
+    backlog:hasRationale "The task's own harness, distinct from the story's." .
+fw:H_OC_LiveTriad_Story a backlog:TestHarness ; backlog:harnessFor fw:ST_OC_LiveTriad ;
+    backlog:hasHarnessEvidence fw:Ev_OC_LiveTriad ;
+    backlog:hasRationale "The story's own harness: the real run named in its evidence." .
+fw:Obs_OC_FilesDone_LiveTriad a backlog:MetricObservation ; rdfs:label "After OC LiveTriad: measured again"@en ;
+    backlog:observesMetric fw:Metric_OC_FilesDone ; backlog:observationFor fw:Obj_OC_FilesDone ;
+    backlog:hasObservedValue 7.0 ; backlog:observedAt "2026-10-06T17:28:22Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "OE structure checker, one-per-role line for data files: 10 at baseline, 8 after OC-S01, 7 after the lesson deposit joined the data file." .
+fw:Ev_OC_ArchiveFolder a backlog:Evidence , backlog:TestEvidence ; backlog:attestsCriterion fw:AC_OC_ArchiveFolder ;
+    backlog:hasTestId "archive_folder_built_and_judged_by_own_shapes" ;
+    backlog:evidenceVerified true ; backlog:verifiedByTool "backlog_archive_shapes_check_v1_1_0.py" ;
+    backlog:hasVerificationMethod "Real run: the archive folder holds one data file (the archive with six provenance records folded in as modules) and one shapes file; the check plants an orphaned item first and requires it flagged, then reports the real archive: 0 violations, 2 warnings (two earlier lineages unmarked, named), in 11.9 s over 14,432 triples. OE's structure checker now examines 3 files in the package, none from the archive folder, and its one-per-role line is gone. The public copy cuts the seven modules that were correspondence or one adopter's alignment, as the folders that held them were cut." .
+fw:Ev_OC_ArchiveFolder_Task a backlog:Evidence , backlog:TestEvidence ;
+    backlog:hasTestSpec "03-tooling/backlog_archive_shapes_check_v1_1_0.py" ;
+    backlog:evidenceVerified true ; backlog:verifiedByTool "backlog_archive_shapes_check_v1_1_0.py" ;
+    backlog:hasVerificationMethod "Real run: the archive folder holds one data file (the archive with six provenance records folded in as modules) and one shapes file; the check plants an orphaned item first and requires it flagged, then reports the real archive: 0 violations, 2 warnings (two earlier lineages unmarked, named), in 11.9 s over 14,432 triples. OE's structure checker now examines 3 files in the package, none from the archive folder, and its one-per-role line is gone. The public copy cuts the seven modules that were correspondence or one adopter's alignment, as the folders that held them were cut." .
+fw:H_OC_ArchiveFolder a backlog:TestHarness ; backlog:harnessFor fw:T_OC_ArchiveFolder ;
+    backlog:hasHarnessEvidence fw:Ev_OC_ArchiveFolder_Task ;
+    backlog:hasRationale "The task's own harness, distinct from the story's." .
+fw:H_OC_ArchiveFolder_Story a backlog:TestHarness ; backlog:harnessFor fw:ST_OC_ArchiveFolder ;
+    backlog:hasHarnessEvidence fw:Ev_OC_ArchiveFolder ;
+    backlog:hasRationale "The story's own harness: the real run named in its evidence." .
+fw:Obs_OC_NoRetroJudging_ArchiveFolder a backlog:MetricObservation ; rdfs:label "After OC ArchiveFolder: measured again"@en ;
+    backlog:observesMetric fw:Metric_OC_NoRetroJudging ; backlog:observationFor fw:Obj_OC_NoRetroJudging ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-10-06T18:01:18Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "The gate's archive step now runs only the archive folder's own shapes; the retired conformance tool, which judged the archive by the live shapes, no longer runs. OE's structure checker reads 3 files, none in the archive folder." .
+fw:Obs_OC_FilesDone_ArchiveFolder a backlog:MetricObservation ; rdfs:label "After OC ArchiveFolder: measured again"@en ;
+    backlog:observesMetric fw:Metric_OC_FilesDone ; backlog:observationFor fw:Obj_OC_FilesDone ;
+    backlog:hasObservedValue 1.0 ; backlog:observedAt "2026-10-06T18:01:18Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "OE structure checker: 3 files examined (one vocabulary, one data, one shapes); the one-per-role line for data files, 10 at baseline, no longer appears." .
+fw:Ev_OC_ToolsRepointed a backlog:Evidence , backlog:TestEvidence ; backlog:attestsCriterion fw:AC_OC_ToolsRepointed ;
+    backlog:hasTestId "scripts_name_no_old_path_and_run_on_new_layout" ;
+    backlog:evidenceVerified true ; backlog:verifiedByTool "scan of 03-tooling code lines" ;
+    backlog:hasVerificationMethod "Real scan of every script and shell file in 03-tooling (archive and fixtures folders excluded), code lines only: none names a path it left (the test drive and exercise folders, the lesson-deposit folder, the six provenance files, the archive file at its old place); one stale declared-proposal tag remains in the registration-readiness tool, named in the changelog. Each repointed tool was then run directly on the new layout: archive integrity INTACT (17 lineages, 0 dangling), archive shapes check conformant, the split proof IDENTICAL, the public-copy deriver cut the seven modules and its output parses, the registration-readiness tool read its controls from the data files. Nine tools changed version, one was retired and one was added." .
+fw:Ev_OC_ToolsRepointed_Task a backlog:Evidence , backlog:TestEvidence ;
+    backlog:hasTestSpec "03-tooling/backlog_repoint_v1_2_0.py" ;
+    backlog:evidenceVerified true ; backlog:verifiedByTool "scan of 03-tooling code lines" ;
+    backlog:hasVerificationMethod "Real scan of every script and shell file in 03-tooling (archive and fixtures folders excluded), code lines only: none names a path it left (the test drive and exercise folders, the lesson-deposit folder, the six provenance files, the archive file at its old place); one stale declared-proposal tag remains in the registration-readiness tool, named in the changelog. Each repointed tool was then run directly on the new layout: archive integrity INTACT (17 lineages, 0 dangling), archive shapes check conformant, the split proof IDENTICAL, the public-copy deriver cut the seven modules and its output parses, the registration-readiness tool read its controls from the data files. Nine tools changed version, one was retired and one was added." .
+fw:H_OC_ToolsRepointed a backlog:TestHarness ; backlog:harnessFor fw:T_OC_ToolsRepointed ;
+    backlog:hasHarnessEvidence fw:Ev_OC_ToolsRepointed_Task ;
+    backlog:hasRationale "The task's own harness, distinct from the story's." .
+fw:H_OC_ToolsRepointed_Story a backlog:TestHarness ; backlog:harnessFor fw:ST_OC_ToolsRepointed ;
+    backlog:hasHarnessEvidence fw:Ev_OC_ToolsRepointed ;
+    backlog:hasRationale "The story's own harness: the real run named in its evidence." .
+fw:Obs_OC_ToolsDone_ToolsRepointed a backlog:MetricObservation ; rdfs:label "After OC ToolsRepointed: measured again"@en ;
+    backlog:observesMetric fw:Metric_OC_ToolsDone ; backlog:observationFor fw:Obj_OC_ToolsDone ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-10-06T18:01:27Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Scan of 03-tooling code lines for the paths the files left: 10 scripts at baseline, 0 now." .
+fw:Ev_OC_Ceremony a backlog:Evidence , backlog:TestEvidence ; backlog:attestsCriterion fw:AC_OC_Ceremony ;
+    backlog:hasTestId "ceremony_archived_lineage_17_nothing_dangling" ;
+    backlog:evidenceVerified true ; backlog:verifiedByTool "backlog_lineage_archive_v2_4_0.py" ;
+    backlog:hasVerificationMethod "Real run: Lineage 17, abandoned with its reason stated, was found archivable and applied: 115 subjects set down verbatim into the archive data file (v1.8.0), the live data file (v1.19.0) kept a lineage archive entry and 1 pointer into the archive (the successor lineage's supersedes link), archive integrity INTACT with 18 lineages and 0 dangling references, and the archive shapes check conformant (0 violations) with its planted-orphan self-proof firing. Its three unfinished stories and tasks were cancelled as carried forward to Lineage 18, its iteration closed with a release record for the three finished stories. The tool gained two things a first real run showed it needed: it accepts an abandoned mission, and it no longer sweeps the vocabulary's own individuals or a live lineage that merely points at a retired one (a first trial pulled this lineage into the archive; caught before applying)." .
+fw:Ev_OC_Ceremony_Task a backlog:Evidence , backlog:TestEvidence ;
+    backlog:hasTestSpec "03-tooling/backlog_lineage_archive_v2_4_0.py" ;
+    backlog:evidenceVerified true ; backlog:verifiedByTool "backlog_lineage_archive_v2_4_0.py" ;
+    backlog:hasVerificationMethod "Real run: Lineage 17, abandoned with its reason stated, was found archivable and applied: 115 subjects set down verbatim into the archive data file (v1.8.0), the live data file (v1.19.0) kept a lineage archive entry and 1 pointer into the archive (the successor lineage's supersedes link), archive integrity INTACT with 18 lineages and 0 dangling references, and the archive shapes check conformant (0 violations) with its planted-orphan self-proof firing. Its three unfinished stories and tasks were cancelled as carried forward to Lineage 18, its iteration closed with a release record for the three finished stories. The tool gained two things a first real run showed it needed: it accepts an abandoned mission, and it no longer sweeps the vocabulary's own individuals or a live lineage that merely points at a retired one (a first trial pulled this lineage into the archive; caught before applying)." .
+fw:H_OC_Ceremony a backlog:TestHarness ; backlog:harnessFor fw:T_OC_Ceremony ;
+    backlog:hasHarnessEvidence fw:Ev_OC_Ceremony_Task ;
+    backlog:hasRationale "The task's own harness, distinct from the story's." .
+fw:H_OC_Ceremony_Story a backlog:TestHarness ; backlog:harnessFor fw:ST_OC_Ceremony ;
+    backlog:hasHarnessEvidence fw:Ev_OC_Ceremony ;
+    backlog:hasRationale "The story's own harness: the real run named in its evidence." .
+fw:Obs_OC_MissionMet_Ceremony a backlog:MetricObservation ; rdfs:label "After OC Ceremony: measured again"@en ;
+    backlog:observesMetric fw:Metric_OC_MissionMet ; backlog:observationFor fw:Obj_OC_MissionMet ;
+    backlog:hasObservedValue 3.0 ; backlog:observedAt "2026-10-06T18:36:16Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "OE structure checker on the package after the ceremony: 3 files examined (vocabulary, data, shapes), against 13 at the baseline convention." .
+fw:Ev_OC_NothingLost a backlog:Evidence , backlog:TestEvidence ; backlog:attestsCriterion fw:AC_OC_NothingLost ;
+    backlog:hasTestId "proof_over_all_moves_zero_lost_declared_additions_only" ;
+    backlog:evidenceVerified true ; backlog:verifiedByTool "backlog_split_proof_v1_4_0.py" ;
+    backlog:hasVerificationMethod "Real run of the split proof v1.4.0 over the whole of Lineage 18: the package at release v1.345.0 (its first state) against the package after every move, with the files that left the compared folders named, 7 header-to-module conversions declared (28 module-record statements counted), 3 repointed paths declared (22 statements counted), and 28 register subjects whose work state changed declared and counted (309 before, 367 after): 0 statements only before, 0 changed; 176 statements only after, every one matching a declared pattern (this lineage's own register entries and the archive entry of the retired lineage), 0 matching none. The proof refused to certify until its own planted removal and change were both seen, and its probe shows it firing on a removal and an addition and staying silent on an identical tree." .
+fw:Ev_OC_NothingLost_Task a backlog:Evidence , backlog:TestEvidence ;
+    backlog:hasTestSpec "03-tooling/backlog_split_proof_v1_4_0.py" ;
+    backlog:evidenceVerified true ; backlog:verifiedByTool "backlog_split_proof_v1_4_0.py" ;
+    backlog:hasVerificationMethod "Real run of the split proof v1.4.0 over the whole of Lineage 18: the package at release v1.345.0 (its first state) against the package after every move, with the files that left the compared folders named, 7 header-to-module conversions declared (28 module-record statements counted), 3 repointed paths declared (22 statements counted), and 28 register subjects whose work state changed declared and counted (309 before, 367 after): 0 statements only before, 0 changed; 176 statements only after, every one matching a declared pattern (this lineage's own register entries and the archive entry of the retired lineage), 0 matching none. The proof refused to certify until its own planted removal and change were both seen, and its probe shows it firing on a removal and an addition and staying silent on an identical tree." .
+fw:H_OC_NothingLost a backlog:TestHarness ; backlog:harnessFor fw:T_OC_NothingLost ;
+    backlog:hasHarnessEvidence fw:Ev_OC_NothingLost_Task ;
+    backlog:hasRationale "The task's own harness, distinct from the story's." .
+fw:H_OC_NothingLost_Story a backlog:TestHarness ; backlog:harnessFor fw:ST_OC_NothingLost ;
+    backlog:hasHarnessEvidence fw:Ev_OC_NothingLost ;
+    backlog:hasRationale "The story's own harness: the real run named in its evidence." .
+fw:Obs_OC_NoStatementChange_NothingLost a backlog:MetricObservation ; rdfs:label "After OC NothingLost: measured again"@en ;
+    backlog:observesMetric fw:Metric_OC_NoStatementChange ; backlog:observationFor fw:Obj_OC_NoStatementChange ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-10-06T18:38:30Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Split proof v1.4.0 over the whole lineage: statements only before, beyond the declared edits, 0." .
+fw:Ev_OC_DebtCleared a backlog:Evidence , backlog:TestEvidence ; backlog:attestsCriterion fw:AC_OC_DebtCleared ;
+    backlog:hasTestId "debt_line_cleared_and_removed_by_oe" ;
+    backlog:evidenceVerified true ; backlog:verifiedByTool "backlog_validate_v1_12_0.py" ;
+    backlog:hasVerificationMethod "Real run of OE's structure checker (v1.2.1) on the published package state with OE's debt register v1.10.0: 3 files examined, 0 violations, 0 entries recorded for this package, verdict PASS. The one recorded line (one-per-role, data files) was removed by OE's own session after the return note in its inbox; the earlier register v1.9.0 had reported it CLEARED. The story's own criterion (cleared reading, note sent) was met before OE acted; the objective it feeds counts OE's register, which is why it waited." .
+fw:Ev_OC_DebtCleared_Task a backlog:Evidence , backlog:TestEvidence ;
+    backlog:hasTestSpec "03-tooling/backlog_package_fold_v1_1_0.py" ;
+    backlog:evidenceVerified true ; backlog:verifiedByTool "backlog_validate_v1_12_0.py" ;
+    backlog:hasVerificationMethod "Real run of OE's structure checker (v1.2.1) on the published package state with OE's debt register v1.10.0: 3 files examined, 0 violations, 0 entries recorded for this package, verdict PASS. The one recorded line (one-per-role, data files) was removed by OE's own session after the return note in its inbox; the earlier register v1.9.0 had reported it CLEARED. The story's own criterion (cleared reading, note sent) was met before OE acted; the objective it feeds counts OE's register, which is why it waited." .
+fw:H_OC_DebtCleared a backlog:TestHarness ; backlog:harnessFor fw:T_OC_DebtCleared ;
+    backlog:hasHarnessEvidence fw:Ev_OC_DebtCleared_Task ;
+    backlog:hasRationale "The task's own harness, distinct from the story's." .
+fw:H_OC_DebtCleared_Story a backlog:TestHarness ; backlog:harnessFor fw:ST_OC_DebtCleared ;
+    backlog:hasHarnessEvidence fw:Ev_OC_DebtCleared ;
+    backlog:hasRationale "The story's own harness: the real run named in its evidence." .
+fw:Obs_OC_EnforcementDone_DebtCleared a backlog:MetricObservation ; rdfs:label "After OC DebtCleared: measured again"@en ;
+    backlog:observesMetric fw:Metric_OC_EnforcementDone ; backlog:observationFor fw:Obj_OC_EnforcementDone ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-10-06T20:53:43Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "OE debt register v1.10.0 read directly: no line recorded for this package (it held 1 at baseline)." .
+fw:Rel_OC_1 a backlog:DeploymentUnit ;
+    backlog:hasIdentifier "OC-REL1" ; backlog:hasTitle "Shipped from Lineage 18's first work window" ;
+    backlog:hasState backlog:Done ;
+    backlog:hasDeploymentDate "2026-10-06T20:30:00Z"^^xsd:dateTime ;
+    backlog:belongsToLineage fw:L_OEPackageConsolidation ;
+    backlog:deploysFrom fw:It_OC_1 ; backlog:deploysItem fw:ST_OC_Fixtures , fw:ST_OC_LiveTriad , fw:ST_OC_ArchiveFolder , fw:ST_OC_NothingLost , fw:ST_OC_ToolsRepointed , fw:ST_OC_Ceremony , fw:ST_OC_DebtCleared ;
+    backlog:decidedBy backlog:Owner ; backlog:hasSelectionBasis backlog:Sel_Committed .
+fw:ST_OC_Fixtures backlog:memberOfContainer fw:Rel_OC_1 .
+fw:ST_OC_LiveTriad backlog:memberOfContainer fw:Rel_OC_1 .
+fw:ST_OC_ArchiveFolder backlog:memberOfContainer fw:Rel_OC_1 .
+fw:ST_OC_NothingLost backlog:memberOfContainer fw:Rel_OC_1 .
+fw:ST_OC_ToolsRepointed backlog:memberOfContainer fw:Rel_OC_1 .
+fw:ST_OC_Ceremony backlog:memberOfContainer fw:Rel_OC_1 .
+fw:ST_OC_DebtCleared backlog:memberOfContainer fw:Rel_OC_1 .
+fw:CR_OEPackageConsolidation a backlog:ClosureReport ;
+    backlog:closesForMission fw:Mission_OEPackageConsolidation ;
+    backlog:reportGeneratedAt "2026-10-06T21:05:00Z"^^xsd:dateTime ;
+    backlog:closureCommittedAt "backlog-roadmap-framework-v1.351.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasClosureSummary "Done: the package ships as one vocabulary, one data file and one shapes file, each with one ontology header (OE structure checker: 3 files, 0 violations, and OE's debt register holds no line for it). Every former subject is a module record; the archive is a folder of its own with one data file and one shapes file; the test drive and the strategy exercise register are fixtures with declared polarity; Lineage 17 was set down through the archiving ceremony; ten tools follow the new layout. The split proof over the whole lineage read 0 statements lost or changed, 176 added, all declared. Delivered by seven stories in releases v1.346.0 to v1.350.0. Cancelled: nothing in this lineage; its predecessor's three unfinished stories were carried into it (see that lineage's own report). Not done well, found after the work and carried to the next lineage: (1) the public copy cuts seven modules by a list of IRIs in the deriver, and a module that is missing is skipped silently, against what the changelog said; (2) the archive-reconcile tool derives folders by string substitution and is broken by the archive folder, which the story that repointed tools did not catch; (3) the archive tool did not mark the archived copy of a lineage as archived, leaving three warnings; (4) the archive tool accepted an abandoned mission without a closure report, which the owner has ruled wrong; (5) objective OC-O4 counted lines in another party's register, which only that party could change, so its story could not honestly close for hours after its own criterion was met." ;
+    backlog:reportsOnObjective fw:Obj_OC_MissionMet , fw:Obj_OC_FilesDone , fw:Obj_OC_ToolsDone , fw:Obj_OC_EnforcementDone , fw:Obj_OC_Contained , fw:Obj_OC_NoStatementChange , fw:Obj_OC_NoRetroJudging , fw:Obj_OC_NoOtherPackages , fw:Obj_OC_NoModuleMembership .
+fw:L_RecordsTellTruth a backlog:Lineage ; rdfs:label "Lineage 19: Records That Tell the Truth"@en ;
+    backlog:lineageOrdinal 19 ;
+    backlog:lineageArchived true ; backlog:hasArchivalConfirmationStatus backlog:AC_PendingConfirmation ;
+    backlog:lineageForMission fw:Mission_RecordsTellTruth ;
+    backlog:hasLineageStatus backlog:LS_Achieved ;
+    backlog:hasLineageDepthLevel backlog:Depth_StoryDirect ;
+    backlog:hasLineageArtifactDomain backlog:Domain_Infrastructure ;
+    backlog:memberOfContainer fw:Register .
+fw:Mission_RecordsTellTruth a backlog:Mission ; rdfs:label "Mission: Records That Tell the Truth"@en ;
+    backlog:hasMissionStatement "Everything this package records about ended work and everything it publishes says what is true, and a tool that cannot find what it was told to handle stops and says so instead of carrying on. A mission that ends, achieved or abandoned, has a closure report that proves what was done and names every item it delivered and every item it cancelled; the record of a retired lineage is marked archived; each module of the data file declares who may read it, and the public copy is cut by that declaration and refuses to build when a declared module is missing; the archive is judged only by the archive's own rules, by tools that read the archive folder; and what the package learned about designing an objective is recorded as a finding. No earlier statement is reworded: earlier records change only by additions and by the three archive markers, each declared in advance." ;
+    backlog:missionFor fw:Register ;
+    backlog:hasMissionOrigin backlog:Origin_OwnerStated ;
+    backlog:missionSource "Owner, 2026-10-06 23:51 and 2026-10-07 10:06: 'Abandoned lineage can have it closure report, cancellation should be reported. Closure report proves the completion of the work and provides details.' 'Can we make corrections and fill missing concepts to remedy the issues? What do we need to deal with the live rules over archive application problems? Why the story closure is dependent on an external object? Is this a well-designed story?' 'OK, open the Lineage 19 to fix the defects.' The defects are the five named in Lineage 18's closure report." ;
+    backlog:hasMissionOutcome backlog:Out_Achieved ;
+    backlog:outcomeRationale "Achieved: the five defects Lineage 18 left are closed and each was re-measured from the package's own files and tools (open defects 5 to 0); an abandoned or achieved mission needs a closure report and one that names every cancelled item, each module declares its audience and the public copy follows, the archive is judged by its own rules and the records of retired work say they are retired, and the lesson about objectives on another register is recorded. The seven stories are Done with evidence; the closure report records one reported deviation (eight pending confirmations promoted)." ;
+    backlog:producedByStage fw:Out_Mission_RecordsTellTruth ;
+    backlog:decidedBy backlog:Owner .
+fw:Out_Mission_RecordsTellTruth a backlog:StageOutput ;
+    backlog:outputOfStage backlog:Stage_Mission ; backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:hasStateDigest "f1f072db0eb9e360db526f9aa2045b44510bf3d6535ffc576741289127e64668" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.352.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Mission stage of Lineage 19. Tag deterministic: VERSION.txt set before publishing. Stage 1 of 5, one release each." .
+fw:Scope_RecordsTellTruth a backlog:ScopeStatement ; rdfs:label "Scope: Records That Tell the Truth"@en ;
+    backlog:hasScopeStatementText "Make a closure report required for every ended mission, abandoned as well as achieved, and let it name the items delivered and the items cancelled; write the reports that are missing (Lineage 17's, abandoned, and the first-built lineage's, achieved) and add the cancelled and delivered items to the existing ones; mark the three archived records that are not marked archived, through the confirmation step built for it, which is repaired and pointed at the archive folder; add a module audience that each module declares and make the public copy follow it and stop with an error when a declared module cannot be found; give the archive's own shapes the three rules the live rules now carry, and make no tool judge the archive by the live rules or find its folders by string substitution; record the lesson about designing an objective as a finding; and prove nothing earlier was reworded and the public copy is unchanged apart from the declared edits." ;
+    backlog:scopeForMission fw:Mission_RecordsTellTruth ;
+    backlog:producedByStage fw:Out_Scope_RecordsTellTruth ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:requiresDeliverable fw:Del_DC_AbandonedReport , fw:Del_DC_CancelledReported , fw:Del_DC_ArchiveMarked , fw:Del_DC_AudienceDeclared , fw:Del_DC_ArchiveOwnRules , fw:Del_DC_ObjectiveLesson , fw:Del_DC_NothingLostAgain ;
+    backlog:coversArea fw:Area_DC_Reports , fw:Area_DC_Marking , fw:Area_DC_Audience , fw:Area_DC_ArchiveRules , fw:Area_DC_Lesson , fw:Area_DC_Proof ;
+    backlog:hasScopeExclusion fw:Ex_DC_StatementChange , fw:Ex_DC_RetroJudging , fw:Ex_DC_OtherPackages , fw:Ex_DC_PublicContent ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth .
+fw:Area_DC_Reports a backlog:ScopeArea ; rdfs:label "Area: the closure reports"@en ;
+    backlog:areaMeasure "Counted 2026-10-07 over the live and archive data files: 10 missions have an outcome; 2 ended missions have no closure report (Lineage 17, abandoned; the first-built lineage, achieved) and 10 cancelled items (6 in Lineage 17, 2 in the ontology-driven lineage, 1 each in two others) are named by no report." ;
+    backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:areaLocation "01-ontologies/ (live and archive data files), 02-shacl-safeguards/" ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth .
+fw:Area_DC_Marking a backlog:ScopeArea ; rdfs:label "Area: the archived marker"@en ;
+    backlog:areaMeasure "Counted 2026-10-07: 3 archived lineage records (the gate-efficiency, the fixture-consolidation and the OE structure clean-up lineages) carry lineageArchived false in the archive. Also noticed, not in scope: lineage ordinals 17 and 18 are each carried by two lineages across the live and archive files." ;
+    backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:areaLocation "01-ontologies/archive/, 03-tooling/backlog_archive_reconcile" ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth .
+fw:Area_DC_Audience a backlog:ScopeArea ; rdfs:label "Area: who may read each module"@en ;
+    backlog:areaMeasure "Counted 2026-10-07: 7 modules (1 in the live data file, 6 in the archive) and 0 declare an audience; the public copy names 7 module IRIs in a list inside the deriver and skips a listed module it cannot find without a word." ;
+    backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:areaLocation "01-ontologies/, 03-tooling/make_public_distribution, 03-tooling/backlog_package_fold" ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth .
+fw:Area_DC_ArchiveRules a backlog:ScopeArea ; rdfs:label "Area: the archive's own rules"@en ;
+    backlog:areaMeasure "Counted 2026-10-07 by search of 03-tooling: 1 tool (the archive reconcile) judges the archive by the live rules and finds its folders by replacing a folder name in a path; the archive's shapes file holds 2 node shapes." ;
+    backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:areaLocation "01-ontologies/archive/ shapes file, 03-tooling/" ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth .
+fw:Area_DC_Lesson a backlog:ScopeArea ; rdfs:label "Area: the lesson about objectives"@en ;
+    backlog:areaMeasure "Counted 2026-10-07: 0 recorded findings about how an objective is designed; the lesson was learned in Lineage 18, whose last objective counted a line in a register another session owns." ;
+    backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:areaLocation "01-ontologies/ (live data file)" ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth .
+fw:Area_DC_Proof a backlog:ScopeArea ; rdfs:label "Area: the before-and-after proof"@en ;
+    backlog:areaMeasure "Counted 2026-10-07: the split proof and the public-copy drift check exist; 0 proofs yet cover the changes this lineage makes." ;
+    backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:areaLocation "03-tooling/" ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth .
+fw:Del_DC_AbandonedReport a backlog:ScopeDeliverable ; rdfs:label "An abandoned mission has a closure report, and the rule says so"@en ;
+    backlog:deliverableForArea fw:Area_DC_Reports ; backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:derivesFromMissionClause "a mission that ends, achieved or abandoned, has a closure report" ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth .
+fw:Del_DC_CancelledReported a backlog:ScopeDeliverable ; rdfs:label "A closure report names what was delivered and what was cancelled"@en ;
+    backlog:deliverableForArea fw:Area_DC_Reports ; backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:derivesFromMissionClause "names every item it delivered and every item it cancelled" ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth .
+fw:Del_DC_ArchiveMarked a backlog:ScopeDeliverable ; rdfs:label "The record of a retired lineage is marked archived, by the confirmation step built for it"@en ;
+    backlog:deliverableForArea fw:Area_DC_Marking ; backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:derivesFromMissionClause "the record of a retired lineage is marked archived" ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth .
+fw:Del_DC_AudienceDeclared a backlog:ScopeDeliverable ; rdfs:label "Each module says who may read it, and the public copy is cut by that and stops when a declared module is missing"@en ;
+    backlog:deliverableForArea fw:Area_DC_Audience ; backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:derivesFromMissionClause "each module of the data file declares who may read it" ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth .
+fw:Del_DC_ArchiveOwnRules a backlog:ScopeDeliverable ; rdfs:label "The archive is judged by its own rules, by tools that read the archive folder"@en ;
+    backlog:deliverableForArea fw:Area_DC_ArchiveRules ; backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:derivesFromMissionClause "the archive is judged only by the archive's own rules" ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth .
+fw:Del_DC_ObjectiveLesson a backlog:ScopeDeliverable ; rdfs:label "What the package learned about designing an objective is recorded as a finding"@en ;
+    backlog:deliverableForArea fw:Area_DC_Lesson ; backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:derivesFromMissionClause "recorded as a finding" ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth .
+fw:Del_DC_NothingLostAgain a backlog:ScopeDeliverable ; rdfs:label "A before and after proof that no earlier statement was reworded and the public copy is unchanged apart from the declared edits"@en ;
+    backlog:deliverableForArea fw:Area_DC_Proof ; backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:derivesFromMissionClause "No earlier statement is reworded" ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth .
+fw:Ex_DC_StatementChange a backlog:ScopeExclusion ; rdfs:label "Exclusion: changing what an earlier statement says"@en ;
+    backlog:excludesConcern "Rewording or re-judging any statement already in the live or archive data files. The only edits are the three archive markers flipped by the confirmation step, the confirmation status that goes with them, and statements added." ;
+    backlog:hasExclusionRationale "The Mission says no earlier statement is reworded; additions and the three markers are declared so the proof can name them." ;
+    backlog:decidedBy backlog:Owner ; backlog:hasScopeLayer backlog:Layer_Work ; backlog:belongsToLineage fw:L_RecordsTellTruth .
+fw:Ex_DC_RetroJudging a backlog:ScopeExclusion ; rdfs:label "Exclusion: judging retired work by today's live rules"@en ;
+    backlog:excludesConcern "Running the live rules over the archive folder's files, or adding a live rule that fires on the archive." ;
+    backlog:hasExclusionRationale "G89 and G91: retired work is a record; the archive's rules are its own." ;
+    backlog:decidedBy backlog:Owner ; backlog:hasScopeLayer backlog:Layer_Work ; backlog:belongsToLineage fw:L_RecordsTellTruth .
+fw:Ex_DC_OtherPackages a backlog:ScopeExclusion ; rdfs:label "Exclusion: files outside this package"@en ;
+    backlog:excludesConcern "Any file outside this package, except a note to OE's inbox if one is needed." ;
+    backlog:hasExclusionRationale "Adopting projects' registers are theirs; OE's registers are OE's own." ;
+    backlog:decidedBy backlog:Owner ; backlog:hasScopeLayer backlog:Layer_Work ; backlog:belongsToLineage fw:L_RecordsTellTruth .
+fw:Ex_DC_PublicContent a backlog:ScopeExclusion ; rdfs:label "Exclusion: changing what the public copy contains"@en ;
+    backlog:excludesConcern "Changing which material is published: the set of modules cut from the public copy stays the seven it is today, and nothing else in the copy changes except the declared module-audience statements and the new version." ;
+    backlog:hasExclusionRationale "The change is how the cut is decided, not what is cut." ;
+    backlog:decidedBy backlog:Owner ; backlog:hasScopeLayer backlog:Layer_Work ; backlog:belongsToLineage fw:L_RecordsTellTruth .
+fw:Out_Scope_RecordsTellTruth a backlog:StageOutput ;
+    backlog:outputOfStage backlog:Stage_Scope ; backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:consumesOutput fw:Out_Mission_RecordsTellTruth ;
+    backlog:hasStateDigest "8b5470829070658a42e2e3ba8f9ee6776b1d946115f3c93d8c2766b8b9a1a0a8" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.353.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Scope stage of Lineage 19: seven deliverables over six areas, four exclusions. Stage 2 of 5." .
+fw:Goal_DC_MissionMet a backlog:Goal ; rdfs:label "The five defects Lineage 18 left are closed"@en ;
+    backlog:contributesToMission fw:Mission_RecordsTellTruth ;
+    backlog:derivesFromScope fw:Scope_RecordsTellTruth ;
+    backlog:hasGoalFacing backlog:Facing_Mission ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out_Goal_RecordsTellTruth ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:decidedBy backlog:Owner .
+fw:Goal_DC_Reports a backlog:Goal ; rdfs:label "Every ended mission has a closure report that names what it delivered and what it cancelled"@en ;
+    backlog:contributesToMission fw:Mission_RecordsTellTruth ;
+    backlog:derivesFromScope fw:Scope_RecordsTellTruth ;
+    backlog:hasGoalFacing backlog:Facing_Scope ;
+    backlog:goalCoversArea fw:Area_DC_Reports ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out_Goal_RecordsTellTruth ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:decidedBy backlog:Owner .
+fw:Goal_DC_Marking a backlog:Goal ; rdfs:label "Every retired lineage's record is marked archived"@en ;
+    backlog:contributesToMission fw:Mission_RecordsTellTruth ;
+    backlog:derivesFromScope fw:Scope_RecordsTellTruth ;
+    backlog:hasGoalFacing backlog:Facing_Scope ;
+    backlog:goalCoversArea fw:Area_DC_Marking ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out_Goal_RecordsTellTruth ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:decidedBy backlog:Owner .
+fw:Goal_DC_Audience a backlog:Goal ; rdfs:label "Every module declares who may read it and the public copy follows that"@en ;
+    backlog:contributesToMission fw:Mission_RecordsTellTruth ;
+    backlog:derivesFromScope fw:Scope_RecordsTellTruth ;
+    backlog:hasGoalFacing backlog:Facing_Scope ;
+    backlog:goalCoversArea fw:Area_DC_Audience ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out_Goal_RecordsTellTruth ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:decidedBy backlog:Owner .
+fw:Goal_DC_ArchiveRules a backlog:Goal ; rdfs:label "The archive is judged only by its own rules and its own tools"@en ;
+    backlog:contributesToMission fw:Mission_RecordsTellTruth ;
+    backlog:derivesFromScope fw:Scope_RecordsTellTruth ;
+    backlog:hasGoalFacing backlog:Facing_Scope ;
+    backlog:goalCoversArea fw:Area_DC_ArchiveRules ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out_Goal_RecordsTellTruth ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:decidedBy backlog:Owner .
+fw:Goal_DC_Lesson a backlog:Goal ; rdfs:label "The lesson about designing an objective is on record"@en ;
+    backlog:contributesToMission fw:Mission_RecordsTellTruth ;
+    backlog:derivesFromScope fw:Scope_RecordsTellTruth ;
+    backlog:hasGoalFacing backlog:Facing_Scope ;
+    backlog:goalCoversArea fw:Area_DC_Lesson ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out_Goal_RecordsTellTruth ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:decidedBy backlog:Owner .
+fw:Goal_DC_Proof a backlog:Goal ; rdfs:label "No earlier statement was reworded and the public copy is unchanged apart from declared edits"@en ;
+    backlog:contributesToMission fw:Mission_RecordsTellTruth ;
+    backlog:derivesFromScope fw:Scope_RecordsTellTruth ;
+    backlog:hasGoalFacing backlog:Facing_Scope ;
+    backlog:goalCoversArea fw:Area_DC_Proof ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out_Goal_RecordsTellTruth ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:decidedBy backlog:Owner .
+fw:Goal_DC_Contained a backlog:Goal ; rdfs:label "No work was done outside what this scope named"@en ;
+    backlog:contributesToMission fw:Mission_RecordsTellTruth ;
+    backlog:derivesFromScope fw:Scope_RecordsTellTruth ;
+    backlog:hasGoalFacing backlog:Facing_Containment ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out_Goal_RecordsTellTruth ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:decidedBy backlog:Owner .
+fw:Goal_DC_NoStatementChange a backlog:Goal ; rdfs:label "No earlier statement was reworded, beyond the declared markers and additions"@en ;
+    backlog:contributesToMission fw:Mission_RecordsTellTruth ;
+    backlog:derivesFromScope fw:Scope_RecordsTellTruth ;
+    backlog:hasGoalFacing backlog:Facing_Exclusion ;
+    backlog:guardsExclusion fw:Ex_DC_StatementChange ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out_Goal_RecordsTellTruth ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:decidedBy backlog:Owner .
+fw:Goal_DC_NoRetroJudging a backlog:Goal ; rdfs:label "The archive was never run through the live rules"@en ;
+    backlog:contributesToMission fw:Mission_RecordsTellTruth ;
+    backlog:derivesFromScope fw:Scope_RecordsTellTruth ;
+    backlog:hasGoalFacing backlog:Facing_Exclusion ;
+    backlog:guardsExclusion fw:Ex_DC_RetroJudging ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out_Goal_RecordsTellTruth ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:decidedBy backlog:Owner .
+fw:Goal_DC_NoOtherPackages a backlog:Goal ; rdfs:label "No file outside this package was touched"@en ;
+    backlog:contributesToMission fw:Mission_RecordsTellTruth ;
+    backlog:derivesFromScope fw:Scope_RecordsTellTruth ;
+    backlog:hasGoalFacing backlog:Facing_Exclusion ;
+    backlog:guardsExclusion fw:Ex_DC_OtherPackages ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out_Goal_RecordsTellTruth ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:decidedBy backlog:Owner .
+fw:Goal_DC_NoPublicContentChange a backlog:Goal ; rdfs:label "What the public copy contains did not change"@en ;
+    backlog:contributesToMission fw:Mission_RecordsTellTruth ;
+    backlog:derivesFromScope fw:Scope_RecordsTellTruth ;
+    backlog:hasGoalFacing backlog:Facing_Exclusion ;
+    backlog:guardsExclusion fw:Ex_DC_PublicContent ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out_Goal_RecordsTellTruth ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:decidedBy backlog:Owner .
+fw:Out_Goal_RecordsTellTruth a backlog:StageOutput ;
+    backlog:outputOfStage backlog:Stage_Goal ; backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:consumesOutput fw:Out_Scope_RecordsTellTruth ;
+    backlog:hasStateDigest "0be223debe81b0a5109251b34dcafbff2b16f497e8204ca7892713575b2b2653" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.354.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Goal stage of Lineage 19: one mission-facing goal, one per scope area, one containment goal, and one inverse goal per exclusion. Stage 3 of 5." .
+fw:CP_DC_MissionMet a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-10-21T00:00:00Z"^^xsd:dateTime .
+fw:Metric_DC_MissionMet a backlog:Metric ; rdfs:label "Defects named in Lineage 18's closure report still open"@en ; backlog:metricUnit "defect" .
+fw:Obj_DC_MissionMet a backlog:Objective ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    rdfs:label "Objective: Defects named in Lineage 18's closure report still open"@en ;
+    backlog:contributesToGoal fw:Goal_DC_MissionMet ; backlog:fillsScope fw:Scope_RecordsTellTruth ;
+    backlog:hasSuccessMetric fw:Metric_DC_MissionMet ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasBaselineValue "5"^^xsd:decimal ; backlog:hasTargetValue "0"^^xsd:decimal ;
+    backlog:hasTargetDirection backlog:Dir_Decrease ;
+    backlog:hasCheckpoint fw:CP_DC_MissionMet ;
+    backlog:hasRationale "Counted 2026-10-07: the report names five (public copy cuts by a list and skips silently; reconcile tool broken by the archive folder; archived copy not marked; abandoned mission accepted without a report; the objective that depended on another session's register)." ;
+    backlog:producedByStage fw:Out_Objective_RecordsTellTruth ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth .
+fw:Obs_DC_MissionMet a backlog:MetricObservation ; rdfs:label "Baseline: Defects named in Lineage 18's closure report still open"@en ;
+    backlog:observesMetric fw:Metric_DC_MissionMet ; backlog:observationFor fw:Obj_DC_MissionMet ;
+    backlog:hasObservedValue 5.0 ; backlog:observedAt "2026-10-07T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Read of Lineage 18's closure summary against the repaired tools and records." .
+fw:CP_DC_Reports a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-10-21T00:00:00Z"^^xsd:dateTime .
+fw:Metric_DC_Reports a backlog:Metric ; rdfs:label "Closure gaps: ended missions with no closure report plus cancelled items no report names"@en ; backlog:metricUnit "gap" .
+fw:Obj_DC_Reports a backlog:Objective ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    rdfs:label "Objective: Closure gaps: ended missions with no closure report plus cancelled items no report names"@en ;
+    backlog:contributesToGoal fw:Goal_DC_Reports ; backlog:fillsScope fw:Scope_RecordsTellTruth ;
+    backlog:hasSuccessMetric fw:Metric_DC_Reports ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasBaselineValue "12"^^xsd:decimal ; backlog:hasTargetValue "0"^^xsd:decimal ;
+    backlog:hasTargetDirection backlog:Dir_Decrease ;
+    backlog:hasCheckpoint fw:CP_DC_Reports ;
+    backlog:hasRationale "Counted 2026-10-07 over the live and archive data files: 2 ended missions without a report and 10 cancelled items named by none." ;
+    backlog:producedByStage fw:Out_Objective_RecordsTellTruth ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth .
+fw:Obs_DC_Reports a backlog:MetricObservation ; rdfs:label "Baseline: Closure gaps: ended missions with no closure report plus cancelled items no report names"@en ;
+    backlog:observesMetric fw:Metric_DC_Reports ; backlog:observationFor fw:Obj_DC_Reports ;
+    backlog:hasObservedValue 12.0 ; backlog:observedAt "2026-10-07T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Query over both data files: ended missions without a closesForMission report, plus cancelled items of a lineage whose report does not name them." .
+fw:CP_DC_Marking a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-10-21T00:00:00Z"^^xsd:dateTime .
+fw:Metric_DC_Marking a backlog:Metric ; rdfs:label "Archived lineage records not marked archived"@en ; backlog:metricUnit "record" .
+fw:Obj_DC_Marking a backlog:Objective ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    rdfs:label "Objective: Archived lineage records not marked archived"@en ;
+    backlog:contributesToGoal fw:Goal_DC_Marking ; backlog:fillsScope fw:Scope_RecordsTellTruth ;
+    backlog:hasSuccessMetric fw:Metric_DC_Marking ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasBaselineValue "3"^^xsd:decimal ; backlog:hasTargetValue "0"^^xsd:decimal ;
+    backlog:hasTargetDirection backlog:Dir_Decrease ;
+    backlog:hasCheckpoint fw:CP_DC_Marking ;
+    backlog:hasRationale "Counted 2026-10-07 in the archive data file: 3 records carry lineageArchived false." ;
+    backlog:producedByStage fw:Out_Objective_RecordsTellTruth ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth .
+fw:Obs_DC_Marking a backlog:MetricObservation ; rdfs:label "Baseline: Archived lineage records not marked archived"@en ;
+    backlog:observesMetric fw:Metric_DC_Marking ; backlog:observationFor fw:Obj_DC_Marking ;
+    backlog:hasObservedValue 3.0 ; backlog:observedAt "2026-10-07T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Query over the archive data file for lineage records with lineageArchived false." .
+fw:CP_DC_Audience a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-10-21T00:00:00Z"^^xsd:dateTime .
+fw:Metric_DC_Audience a backlog:Metric ; rdfs:label "Modules with no declared audience"@en ; backlog:metricUnit "module" .
+fw:Obj_DC_Audience a backlog:Objective ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    rdfs:label "Objective: Modules with no declared audience"@en ;
+    backlog:contributesToGoal fw:Goal_DC_Audience ; backlog:fillsScope fw:Scope_RecordsTellTruth ;
+    backlog:hasSuccessMetric fw:Metric_DC_Audience ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasBaselineValue "7"^^xsd:decimal ; backlog:hasTargetValue "0"^^xsd:decimal ;
+    backlog:hasTargetDirection backlog:Dir_Decrease ;
+    backlog:hasCheckpoint fw:CP_DC_Audience ;
+    backlog:hasRationale "Counted 2026-10-07: 7 modules (1 live, 6 archived), none declares an audience." ;
+    backlog:producedByStage fw:Out_Objective_RecordsTellTruth ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth .
+fw:Obs_DC_Audience a backlog:MetricObservation ; rdfs:label "Baseline: Modules with no declared audience"@en ;
+    backlog:observesMetric fw:Metric_DC_Audience ; backlog:observationFor fw:Obj_DC_Audience ;
+    backlog:hasObservedValue 7.0 ; backlog:observedAt "2026-10-07T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Query over both data files for module records without a declared audience." .
+fw:CP_DC_ArchiveRules a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-10-21T00:00:00Z"^^xsd:dateTime .
+fw:Metric_DC_ArchiveRules a backlog:Metric ; rdfs:label "Tools that judge the archive by the live rules or find archive folders by string substitution"@en ; backlog:metricUnit "tool" .
+fw:Obj_DC_ArchiveRules a backlog:Objective ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    rdfs:label "Objective: Tools that judge the archive by the live rules or find archive folders by string substitution"@en ;
+    backlog:contributesToGoal fw:Goal_DC_ArchiveRules ; backlog:fillsScope fw:Scope_RecordsTellTruth ;
+    backlog:hasSuccessMetric fw:Metric_DC_ArchiveRules ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasBaselineValue "1"^^xsd:decimal ; backlog:hasTargetValue "0"^^xsd:decimal ;
+    backlog:hasTargetDirection backlog:Dir_Decrease ;
+    backlog:hasCheckpoint fw:CP_DC_ArchiveRules ;
+    backlog:hasRationale "Counted 2026-10-07 by search of 03-tooling: the archive reconcile tool, both ways." ;
+    backlog:producedByStage fw:Out_Objective_RecordsTellTruth ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth .
+fw:Obs_DC_ArchiveRules a backlog:MetricObservation ; rdfs:label "Baseline: Tools that judge the archive by the live rules or find archive folders by string substitution"@en ;
+    backlog:observesMetric fw:Metric_DC_ArchiveRules ; backlog:observationFor fw:Obj_DC_ArchiveRules ;
+    backlog:hasObservedValue 1.0 ; backlog:observedAt "2026-10-07T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Search of 03-tooling for the live validator or a folder-name replacement applied to an archive path." .
+fw:CP_DC_Lesson a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-10-21T00:00:00Z"^^xsd:dateTime .
+fw:Metric_DC_Lesson a backlog:Metric ; rdfs:label "Recorded findings about designing an objective"@en ; backlog:metricUnit "finding" .
+fw:Obj_DC_Lesson a backlog:Objective ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    rdfs:label "Objective: Recorded findings about designing an objective"@en ;
+    backlog:contributesToGoal fw:Goal_DC_Lesson ; backlog:fillsScope fw:Scope_RecordsTellTruth ;
+    backlog:hasSuccessMetric fw:Metric_DC_Lesson ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasBaselineValue "0"^^xsd:decimal ; backlog:hasTargetValue "1"^^xsd:decimal ;
+    backlog:hasTargetDirection backlog:Dir_Increase ;
+    backlog:hasCheckpoint fw:CP_DC_Lesson ;
+    backlog:hasRationale "Counted 2026-10-07: none recorded." ;
+    backlog:producedByStage fw:Out_Objective_RecordsTellTruth ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth .
+fw:Obs_DC_Lesson a backlog:MetricObservation ; rdfs:label "Baseline: Recorded findings about designing an objective"@en ;
+    backlog:observesMetric fw:Metric_DC_Lesson ; backlog:observationFor fw:Obj_DC_Lesson ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-10-07T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Query over the live data file for retrospective findings about objective design." .
+fw:CP_DC_Proof a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-10-21T00:00:00Z"^^xsd:dateTime .
+fw:Metric_DC_Proof a backlog:Metric ; rdfs:label "Statements lost or changed by this lineage beyond the declared markers and additions"@en ; backlog:metricUnit "statement" .
+fw:Obj_DC_Proof a backlog:Objective ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    rdfs:label "Objective: Statements lost or changed by this lineage beyond the declared markers and additions"@en ;
+    backlog:contributesToGoal fw:Goal_DC_Proof ; backlog:fillsScope fw:Scope_RecordsTellTruth ;
+    backlog:hasSuccessMetric fw:Metric_DC_Proof ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasBaselineValue "0"^^xsd:decimal ; backlog:hasTargetValue "0"^^xsd:decimal ;
+    backlog:hasTargetDirection backlog:Dir_Hold ;
+    backlog:hasCheckpoint fw:CP_DC_Proof ;
+    backlog:hasRationale "Held, not moved: the split proof must read 0 apart from the declared edits, and the public copy must differ from the v1.351.0 copy only by the declared edits." ;
+    backlog:producedByStage fw:Out_Objective_RecordsTellTruth ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth .
+fw:Obs_DC_Proof a backlog:MetricObservation ; rdfs:label "Baseline: Statements lost or changed by this lineage beyond the declared markers and additions"@en ;
+    backlog:observesMetric fw:Metric_DC_Proof ; backlog:observationFor fw:Obj_DC_Proof ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-10-07T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Direct check: nothing has been changed yet." .
+fw:CP_DC_Contained a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-10-21T00:00:00Z"^^xsd:dateTime .
+fw:Metric_DC_Contained a backlog:Metric ; rdfs:label "Commits touching an excluded concern"@en ; backlog:metricUnit "commit" .
+fw:Obj_DC_Contained a backlog:Objective ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    rdfs:label "Objective: Commits touching an excluded concern"@en ;
+    backlog:contributesToGoal fw:Goal_DC_Contained ; backlog:fillsScope fw:Scope_RecordsTellTruth ;
+    backlog:hasSuccessMetric fw:Metric_DC_Contained ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasBaselineValue "0"^^xsd:decimal ; backlog:hasTargetValue "0"^^xsd:decimal ;
+    backlog:hasTargetDirection backlog:Dir_Hold ;
+    backlog:hasCheckpoint fw:CP_DC_Contained ;
+    backlog:hasRationale "Held, not moved: containment is proven by the absence of a touch." ;
+    backlog:producedByStage fw:Out_Objective_RecordsTellTruth ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth .
+fw:Obs_DC_Contained a backlog:MetricObservation ; rdfs:label "Baseline: Commits touching an excluded concern"@en ;
+    backlog:observesMetric fw:Metric_DC_Contained ; backlog:observationFor fw:Obj_DC_Contained ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-10-07T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Direct check: no work commit made under this lineage yet." .
+fw:CP_DC_NoStatementChange a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-10-21T00:00:00Z"^^xsd:dateTime .
+fw:Metric_DC_NoStatementChange a backlog:Metric ; rdfs:label "Earlier statements reworded"@en ; backlog:metricUnit "statement" .
+fw:Obj_DC_NoStatementChange a backlog:Objective ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    rdfs:label "Objective: Earlier statements reworded"@en ;
+    backlog:contributesToGoal fw:Goal_DC_NoStatementChange ; backlog:fillsScope fw:Scope_RecordsTellTruth ;
+    backlog:hasSuccessMetric fw:Metric_DC_NoStatementChange ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasBaselineValue "0"^^xsd:decimal ; backlog:hasTargetValue "0"^^xsd:decimal ;
+    backlog:hasTargetDirection backlog:Dir_Hold ;
+    backlog:hasCheckpoint fw:CP_DC_NoStatementChange ;
+    backlog:hasRationale "Held, not moved." ;
+    backlog:producedByStage fw:Out_Objective_RecordsTellTruth ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth .
+fw:Obs_DC_NoStatementChange a backlog:MetricObservation ; rdfs:label "Baseline: Earlier statements reworded"@en ;
+    backlog:observesMetric fw:Metric_DC_NoStatementChange ; backlog:observationFor fw:Obj_DC_NoStatementChange ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-10-07T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Direct check: nothing has been changed yet." .
+fw:CP_DC_NoRetroJudging a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-10-21T00:00:00Z"^^xsd:dateTime .
+fw:Metric_DC_NoRetroJudging a backlog:Metric ; rdfs:label "Archive statements judged by the live rules"@en ; backlog:metricUnit "statement" .
+fw:Obj_DC_NoRetroJudging a backlog:Objective ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    rdfs:label "Objective: Archive statements judged by the live rules"@en ;
+    backlog:contributesToGoal fw:Goal_DC_NoRetroJudging ; backlog:fillsScope fw:Scope_RecordsTellTruth ;
+    backlog:hasSuccessMetric fw:Metric_DC_NoRetroJudging ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasBaselineValue "0"^^xsd:decimal ; backlog:hasTargetValue "0"^^xsd:decimal ;
+    backlog:hasTargetDirection backlog:Dir_Hold ;
+    backlog:hasCheckpoint fw:CP_DC_NoRetroJudging ;
+    backlog:hasRationale "Held, not moved: the live rules do not read the archive folder today." ;
+    backlog:producedByStage fw:Out_Objective_RecordsTellTruth ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth .
+fw:Obs_DC_NoRetroJudging a backlog:MetricObservation ; rdfs:label "Baseline: Archive statements judged by the live rules"@en ;
+    backlog:observesMetric fw:Metric_DC_NoRetroJudging ; backlog:observationFor fw:Obj_DC_NoRetroJudging ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-10-07T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Direct check: the archive data file is not read by the live rules today." .
+fw:CP_DC_NoOtherPackages a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-10-21T00:00:00Z"^^xsd:dateTime .
+fw:Metric_DC_NoOtherPackages a backlog:Metric ; rdfs:label "Files outside this package changed"@en ; backlog:metricUnit "file" .
+fw:Obj_DC_NoOtherPackages a backlog:Objective ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    rdfs:label "Objective: Files outside this package changed"@en ;
+    backlog:contributesToGoal fw:Goal_DC_NoOtherPackages ; backlog:fillsScope fw:Scope_RecordsTellTruth ;
+    backlog:hasSuccessMetric fw:Metric_DC_NoOtherPackages ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasBaselineValue "0"^^xsd:decimal ; backlog:hasTargetValue "0"^^xsd:decimal ;
+    backlog:hasTargetDirection backlog:Dir_Hold ;
+    backlog:hasCheckpoint fw:CP_DC_NoOtherPackages ;
+    backlog:hasRationale "Held, not moved." ;
+    backlog:producedByStage fw:Out_Objective_RecordsTellTruth ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth .
+fw:Obs_DC_NoOtherPackages a backlog:MetricObservation ; rdfs:label "Baseline: Files outside this package changed"@en ;
+    backlog:observesMetric fw:Metric_DC_NoOtherPackages ; backlog:observationFor fw:Obj_DC_NoOtherPackages ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-10-07T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Direct check: no work commit made under this lineage touches a file outside the package." .
+fw:CP_DC_NoPublicContentChange a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-10-21T00:00:00Z"^^xsd:dateTime .
+fw:Metric_DC_NoPublicContentChange a backlog:Metric ; rdfs:label "Modules whose publication changed"@en ; backlog:metricUnit "module" .
+fw:Obj_DC_NoPublicContentChange a backlog:Objective ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    rdfs:label "Objective: Modules whose publication changed"@en ;
+    backlog:contributesToGoal fw:Goal_DC_NoPublicContentChange ; backlog:fillsScope fw:Scope_RecordsTellTruth ;
+    backlog:hasSuccessMetric fw:Metric_DC_NoPublicContentChange ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasBaselineValue "0"^^xsd:decimal ; backlog:hasTargetValue "0"^^xsd:decimal ;
+    backlog:hasTargetDirection backlog:Dir_Hold ;
+    backlog:hasCheckpoint fw:CP_DC_NoPublicContentChange ;
+    backlog:hasRationale "Held, not moved: the seven modules cut from the public copy stay the seven." ;
+    backlog:producedByStage fw:Out_Objective_RecordsTellTruth ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth .
+fw:Obs_DC_NoPublicContentChange a backlog:MetricObservation ; rdfs:label "Baseline: Modules whose publication changed"@en ;
+    backlog:observesMetric fw:Metric_DC_NoPublicContentChange ; backlog:observationFor fw:Obj_DC_NoPublicContentChange ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-10-07T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Direct check: the public derivation cuts the same seven modules at v1.351.0." .
+fw:Out_Objective_RecordsTellTruth a backlog:StageOutput ;
+    backlog:outputOfStage backlog:Stage_Objective ; backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:consumesOutput fw:Out_Goal_RecordsTellTruth ;
+    backlog:hasStateDigest "6d557040b29c7a610a55dea8e09160735ad4e144515835dd22fac157e4d99814" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.355.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Objective stage of Lineage 19: twelve objectives, one per goal, each counted at a 2026-10-07 baseline; every one is measured by something this package controls. Stage 4 of 5." .
+fw:It_DC_1 a backlog:Iteration ; backlog:hasIdentifier "DC-IT1" ; backlog:hasTitle "Lineage 19, first work window" ;
+    backlog:hasState backlog:Done ;
+    backlog:hasObservedDuration "PT2H30M"^^xsd:duration ;
+    backlog:hasDurationSource "Earliest startedAt (2026-10-07T09:20:00Z) to latest finishedAt (2026-10-07T11:50:00Z) across the seven ST_DC_* stories." ;
+    backlog:memberOfContainer fw:Register ; backlog:belongsToLineage fw:L_RecordsTellTruth .
+fw:AC_DC_AbandonedReport a backlog:AcceptanceCriterion ;
+    backlog:satisfiedByArtifact "03-tooling/backlog_lineage_archive_v2_5_0.py -- archivable" ;
+    backlog:hasGherkinText "Given a mission that is Abandoned and has no closure report, When the live validator runs, Then it reports a violation naming the mission, the archive tool refuses to move that lineage, and the same data with a closure report passes both." .
+fw:ST_DC_AbandonedReport a backlog:Story ; backlog:hasIdentifier "DC-S01" ; backlog:hasTitle "An abandoned mission needs a closure report: the rule, the archive tool and the archive's own rule" ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-10-07T09:25:00Z"^^xsd:dateTime ; backlog:finishedAt "2026-10-07T09:55:00Z"^^xsd:dateTime ; backlog:lastAuditedAt "2026-10-07T09:55:00Z"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_DC_AbandonedReport ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:producedByStage fw:Out_Backlog_RecordsTellTruth ;
+    backlog:pursuesObjective fw:Obj_DC_MissionMet ;
+    backlog:satisfiesDeliverable fw:Del_DC_AbandonedReport ;
+    backlog:hasInvestmentCategory backlog:Cat_TechnicalDebt ;
+    backlog:hasAcceptanceCriterion fw:AC_DC_AbandonedReport ;
+    backlog:hasReach 3.0 ; backlog:hasImpact 3.0 ; backlog:hasConfidence 0.85 ; backlog:hasEffort 2.0 ;
+    backlog:hasPriorityScore 3.82 ;
+    backlog:hasApplicableConcern backlog:Concern_Data , backlog:Concern_Interface ;
+    backlog:appliesDefinitionOfDone fw:DoD_DC .
+fw:RE_DC_AbandonedReport a backlog:RefinementEvent ; backlog:refines fw:ST_DC_AbandonedReport ;
+    backlog:addressesConcern backlog:Concern_Data , backlog:Concern_Interface ;
+    backlog:refinedAt "2026-10-07T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Lineage 18 chose to accept an abandoned mission without a report; the owner has ruled that a report proves the work and is wanted for abandoned work too. The mission-closure rule currently fires only on Out_Achieved, so one line changes and a planted abandoned mission proves it." .
+fw:Plan_DC_AbandonedReport a backlog:PlanningEvent ; rdfs:label "DC-S01 taken in"@en ;
+    backlog:plansItem fw:ST_DC_AbandonedReport ; backlog:plannedInto fw:It_DC_1 ;
+    backlog:producesTask fw:T_DC_AbandonedReport ;
+    backlog:plannedAt "2026-10-07T00:00:00Z"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:hasRationale "The formal boundary between ordering this work and doing it." .
+fw:T_DC_AbandonedReport a backlog:ExecutionTask ; backlog:hasIdentifier "DC-T01" ;
+    backlog:hasTitle "Build and prove: AbandonedReport"@en ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-10-07T09:25:00Z"^^xsd:dateTime ; backlog:finishedAt "2026-10-07T09:55:00Z"^^xsd:dateTime ; backlog:lastAuditedAt "2026-10-07T09:55:00Z"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_DC_AbandonedReport_Task ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It_DC_1 ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:hasRationale "One task matching the whole of its story's scope." .
+fw:AC_DC_CancelledReported a backlog:AcceptanceCriterion ;
+    backlog:satisfiedByArtifact "02-shacl-safeguards/backlog_shacl_v1_149_0.ttl -- ClosureReportNamesCancelledShape" ;
+    backlog:hasGherkinText "Given a lineage whose mission has ended and which has cancelled items, When its closure report does not name each cancelled item, Then the validator reports a violation naming the item, and after the two missing reports are written and the existing ones completed the count of closure gaps over both data files reads 0." .
+fw:ST_DC_CancelledReported a backlog:Story ; backlog:hasIdentifier "DC-S02" ; backlog:hasTitle "A closure report names what was delivered and what was cancelled; write the two missing reports and complete the others" ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-10-07T09:35:00Z"^^xsd:dateTime ; backlog:finishedAt "2026-10-07T10:02:00Z"^^xsd:dateTime ; backlog:lastAuditedAt "2026-10-07T10:02:00Z"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_DC_CancelledReported ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:producedByStage fw:Out_Backlog_RecordsTellTruth ;
+    backlog:pursuesObjective fw:Obj_DC_Reports ;
+    backlog:satisfiesDeliverable fw:Del_DC_CancelledReported ;
+    backlog:hasInvestmentCategory backlog:Cat_TechnicalDebt ;
+    backlog:hasAcceptanceCriterion fw:AC_DC_CancelledReported ;
+    backlog:hasReach 8.0 ; backlog:hasImpact 3.0 ; backlog:hasConfidence 0.85 ; backlog:hasEffort 5.0 ;
+    backlog:hasPriorityScore 4.08 ;
+    backlog:hasApplicableConcern backlog:Concern_Data , backlog:Concern_Architecture ;
+    backlog:appliesDefinitionOfDone fw:DoD_DC .
+fw:RE_DC_CancelledReported a backlog:RefinementEvent ; backlog:refines fw:ST_DC_CancelledReported ;
+    backlog:addressesConcern backlog:Concern_Data , backlog:Concern_Architecture ;
+    backlog:refinedAt "2026-10-07T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Two concepts are missing from the vocabulary: a report names the items it delivered and the items it cancelled. The two missing reports are written from facts already in the register (objectives, deliverables, cancellations); the first-built lineage's is retroactive and says so." .
+fw:Plan_DC_CancelledReported a backlog:PlanningEvent ; rdfs:label "DC-S02 taken in"@en ;
+    backlog:plansItem fw:ST_DC_CancelledReported ; backlog:plannedInto fw:It_DC_1 ;
+    backlog:producesTask fw:T_DC_CancelledReported ;
+    backlog:plannedAt "2026-10-07T00:00:00Z"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:hasRationale "The formal boundary between ordering this work and doing it." .
+fw:T_DC_CancelledReported a backlog:ExecutionTask ; backlog:hasIdentifier "DC-T02" ;
+    backlog:hasTitle "Build and prove: CancelledReported"@en ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-10-07T09:35:00Z"^^xsd:dateTime ; backlog:finishedAt "2026-10-07T10:02:00Z"^^xsd:dateTime ; backlog:lastAuditedAt "2026-10-07T10:02:00Z"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_DC_CancelledReported_Task ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It_DC_1 ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:hasRationale "One task matching the whole of its story's scope." .
+fw:AC_DC_ArchiveMarked a backlog:AcceptanceCriterion ;
+    backlog:satisfiedByArtifact "03-tooling/backlog_archive_reconcile_v3_0_0.py -- main" ;
+    backlog:hasGherkinText "Given three archived lineage records marked not archived, When the repaired confirmation step runs against the archive folder, Then each is marked archived with its confirmation recorded, the marker rule is a violation again, and a planted unmarked record is flagged." .
+fw:ST_DC_ArchiveMarked a backlog:Story ; backlog:hasIdentifier "DC-S03" ; backlog:hasTitle "Repair the confirmation step and mark the three archived records" ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-10-07T10:50:00Z"^^xsd:dateTime ; backlog:finishedAt "2026-10-07T11:12:00Z"^^xsd:dateTime ; backlog:lastAuditedAt "2026-10-07T11:12:00Z"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_DC_ArchiveMarked ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:producedByStage fw:Out_Backlog_RecordsTellTruth ;
+    backlog:pursuesObjective fw:Obj_DC_Marking ;
+    backlog:satisfiesDeliverable fw:Del_DC_ArchiveMarked ;
+    backlog:hasInvestmentCategory backlog:Cat_TechnicalDebt ;
+    backlog:hasAcceptanceCriterion fw:AC_DC_ArchiveMarked ;
+    backlog:hasReach 5.0 ; backlog:hasImpact 3.0 ; backlog:hasConfidence 0.85 ; backlog:hasEffort 3.0 ;
+    backlog:hasPriorityScore 4.25 ;
+    backlog:hasApplicableConcern backlog:Concern_Interface ;
+    backlog:appliesDefinitionOfDone fw:DoD_DC .
+fw:RE_DC_ArchiveMarked a backlog:RefinementEvent ; backlog:refines fw:ST_DC_ArchiveMarked ;
+    backlog:addressesConcern backlog:Concern_Interface ;
+    backlog:refinedAt "2026-10-07T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "The reconcile tool was built for exactly this (mark after the archive commit is real) and was left pointing at the layout before the archive folder; it also judged the archive by the live rules, which took minutes." .
+fw:Plan_DC_ArchiveMarked a backlog:PlanningEvent ; rdfs:label "DC-S03 taken in"@en ;
+    backlog:plansItem fw:ST_DC_ArchiveMarked ; backlog:plannedInto fw:It_DC_1 ;
+    backlog:producesTask fw:T_DC_ArchiveMarked ;
+    backlog:plannedAt "2026-10-07T00:00:00Z"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:hasRationale "The formal boundary between ordering this work and doing it." .
+fw:T_DC_ArchiveMarked a backlog:ExecutionTask ; backlog:hasIdentifier "DC-T03" ;
+    backlog:hasTitle "Build and prove: ArchiveMarked"@en ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-10-07T10:50:00Z"^^xsd:dateTime ; backlog:finishedAt "2026-10-07T11:12:00Z"^^xsd:dateTime ; backlog:lastAuditedAt "2026-10-07T11:12:00Z"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_DC_ArchiveMarked_Task ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It_DC_1 ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:hasRationale "One task matching the whole of its story's scope." .
+fw:AC_DC_AudienceDeclared a backlog:AcceptanceCriterion ;
+    backlog:satisfiedByArtifact "03-tooling/make_public_distribution_v1_6_0.py -- cut_modules" ;
+    backlog:hasGherkinText "Given seven module records with no declared audience, When each declares one and the public copy is derived, Then the seven modules cut are the same seven as at the last release, a module declared not public whose END line is missing stops the derivation with an error naming it, and the fold tool writes the audience on every module it creates." .
+fw:ST_DC_AudienceDeclared a backlog:Story ; backlog:hasIdentifier "DC-S04" ; backlog:hasTitle "Each module declares who may read it; the public copy follows and stops when a declared module is missing" ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-10-07T10:10:00Z"^^xsd:dateTime ; backlog:finishedAt "2026-10-07T10:35:00Z"^^xsd:dateTime ; backlog:lastAuditedAt "2026-10-07T10:35:00Z"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_DC_AudienceDeclared ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:producedByStage fw:Out_Backlog_RecordsTellTruth ;
+    backlog:pursuesObjective fw:Obj_DC_Audience ;
+    backlog:satisfiesDeliverable fw:Del_DC_AudienceDeclared ;
+    backlog:hasInvestmentCategory backlog:Cat_TechnicalDebt ;
+    backlog:hasAcceptanceCriterion fw:AC_DC_AudienceDeclared ;
+    backlog:hasReach 8.0 ; backlog:hasImpact 3.0 ; backlog:hasConfidence 0.85 ; backlog:hasEffort 5.0 ;
+    backlog:hasPriorityScore 4.08 ;
+    backlog:hasApplicableConcern backlog:Concern_Data , backlog:Concern_Interface , backlog:Concern_Architecture ;
+    backlog:appliesDefinitionOfDone fw:DoD_DC .
+fw:RE_DC_AudienceDeclared a backlog:RefinementEvent ; backlog:refines fw:ST_DC_AudienceDeclared ;
+    backlog:addressesConcern backlog:Concern_Data , backlog:Concern_Interface , backlog:Concern_Architecture ;
+    backlog:refinedAt "2026-10-07T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "The cut list is a list of IRIs inside the deriver, so what is published is decided by code a reader of the data cannot see, and a missing module is skipped silently, which the changelog wrongly called reported. The declaration moves the decision into the data and the check into the tool." .
+fw:Plan_DC_AudienceDeclared a backlog:PlanningEvent ; rdfs:label "DC-S04 taken in"@en ;
+    backlog:plansItem fw:ST_DC_AudienceDeclared ; backlog:plannedInto fw:It_DC_1 ;
+    backlog:producesTask fw:T_DC_AudienceDeclared ;
+    backlog:plannedAt "2026-10-07T00:00:00Z"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:hasRationale "The formal boundary between ordering this work and doing it." .
+fw:T_DC_AudienceDeclared a backlog:ExecutionTask ; backlog:hasIdentifier "DC-T04" ;
+    backlog:hasTitle "Build and prove: AudienceDeclared"@en ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-10-07T10:10:00Z"^^xsd:dateTime ; backlog:finishedAt "2026-10-07T10:35:00Z"^^xsd:dateTime ; backlog:lastAuditedAt "2026-10-07T10:35:00Z"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_DC_AudienceDeclared_Task ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It_DC_1 ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:hasRationale "One task matching the whole of its story's scope." .
+fw:AC_DC_ArchiveOwnRules a backlog:AcceptanceCriterion ;
+    backlog:satisfiedByArtifact "03-tooling/backlog_archive_shapes_check_v1_1_0.py -- judge" ;
+    backlog:hasGherkinText "Given the archive's shapes file with two shapes, When it gains the closure-report, cancelled-item and module-audience rules, Then a planted archive record that breaks each rule is flagged, the real archive passes, and a search of the tools finds none that applies the live validator to the archive or derives an archive folder by replacing a folder name." .
+fw:ST_DC_ArchiveOwnRules a backlog:Story ; backlog:hasIdentifier "DC-S05" ; backlog:hasTitle "Give the archive's shapes its own rules; no tool judges the archive by the live rules or finds its folders by string substitution" ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-10-07T10:40:00Z"^^xsd:dateTime ; backlog:finishedAt "2026-10-07T11:05:00Z"^^xsd:dateTime ; backlog:lastAuditedAt "2026-10-07T11:05:00Z"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_DC_ArchiveOwnRules ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:producedByStage fw:Out_Backlog_RecordsTellTruth ;
+    backlog:pursuesObjective fw:Obj_DC_ArchiveRules ;
+    backlog:satisfiesDeliverable fw:Del_DC_ArchiveOwnRules ;
+    backlog:hasInvestmentCategory backlog:Cat_TechnicalDebt ;
+    backlog:hasAcceptanceCriterion fw:AC_DC_ArchiveOwnRules ;
+    backlog:hasReach 5.0 ; backlog:hasImpact 3.0 ; backlog:hasConfidence 0.85 ; backlog:hasEffort 3.0 ;
+    backlog:hasPriorityScore 4.25 ;
+    backlog:hasApplicableConcern backlog:Concern_Interface , backlog:Concern_Architecture ;
+    backlog:appliesDefinitionOfDone fw:DoD_DC .
+fw:RE_DC_ArchiveOwnRules a backlog:RefinementEvent ; backlog:refines fw:ST_DC_ArchiveOwnRules ;
+    backlog:addressesConcern backlog:Concern_Interface , backlog:Concern_Architecture ;
+    backlog:refinedAt "2026-10-07T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "The archive's rules are its own (G89, G91): the live rules cannot be asked to judge it, so each rule that matters must be written for the archive in its own shapes file, and proven with a planted fault." .
+fw:Plan_DC_ArchiveOwnRules a backlog:PlanningEvent ; rdfs:label "DC-S05 taken in"@en ;
+    backlog:plansItem fw:ST_DC_ArchiveOwnRules ; backlog:plannedInto fw:It_DC_1 ;
+    backlog:producesTask fw:T_DC_ArchiveOwnRules ;
+    backlog:plannedAt "2026-10-07T00:00:00Z"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:hasRationale "The formal boundary between ordering this work and doing it." .
+fw:T_DC_ArchiveOwnRules a backlog:ExecutionTask ; backlog:hasIdentifier "DC-T05" ;
+    backlog:hasTitle "Build and prove: ArchiveOwnRules"@en ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-10-07T10:40:00Z"^^xsd:dateTime ; backlog:finishedAt "2026-10-07T11:05:00Z"^^xsd:dateTime ; backlog:lastAuditedAt "2026-10-07T11:05:00Z"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_DC_ArchiveOwnRules_Task ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It_DC_1 ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:hasRationale "One task matching the whole of its story's scope." .
+fw:AC_DC_ObjectiveLesson a backlog:AcceptanceCriterion ;
+    backlog:satisfiedByArtifact "03-tooling/backlog_record_measures_v1_0_0.py -- findings" ;
+    backlog:hasGherkinText "Given Lineage 18's last objective counted a line in a register another session owns, When the lesson is recorded, Then the live data holds a retrospective finding with the root cause, the remedy and the rule of thumb that an objective is measured by what this package controls, and external confirmations are tracked as handovers." .
+fw:ST_DC_ObjectiveLesson a backlog:Story ; backlog:hasIdentifier "DC-S06" ; backlog:hasTitle "Record the lesson about designing an objective as a finding" ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-10-07T09:20:00Z"^^xsd:dateTime ; backlog:finishedAt "2026-10-07T09:45:00Z"^^xsd:dateTime ; backlog:lastAuditedAt "2026-10-07T09:45:00Z"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_DC_ObjectiveLesson ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:producedByStage fw:Out_Backlog_RecordsTellTruth ;
+    backlog:pursuesObjective fw:Obj_DC_Lesson ;
+    backlog:satisfiesDeliverable fw:Del_DC_ObjectiveLesson ;
+    backlog:hasInvestmentCategory backlog:Cat_TechnicalDebt ;
+    backlog:hasAcceptanceCriterion fw:AC_DC_ObjectiveLesson ;
+    backlog:hasReach 2.0 ; backlog:hasImpact 3.0 ; backlog:hasConfidence 0.85 ; backlog:hasEffort 1.0 ;
+    backlog:hasPriorityScore 5.1 ;
+    backlog:hasApplicableConcern backlog:Concern_Data ;
+    backlog:appliesDefinitionOfDone fw:DoD_DC .
+fw:RE_DC_ObjectiveLesson a backlog:RefinementEvent ; backlog:refines fw:ST_DC_ObjectiveLesson ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-10-07T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "The owner asked why a story's closure depended on an external object. The honest answer is a design error, not a rule: the objective belonged to the other session. A recorded finding is how the next lineage meets the lesson." .
+fw:Plan_DC_ObjectiveLesson a backlog:PlanningEvent ; rdfs:label "DC-S06 taken in"@en ;
+    backlog:plansItem fw:ST_DC_ObjectiveLesson ; backlog:plannedInto fw:It_DC_1 ;
+    backlog:producesTask fw:T_DC_ObjectiveLesson ;
+    backlog:plannedAt "2026-10-07T00:00:00Z"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:hasRationale "The formal boundary between ordering this work and doing it." .
+fw:T_DC_ObjectiveLesson a backlog:ExecutionTask ; backlog:hasIdentifier "DC-T06" ;
+    backlog:hasTitle "Build and prove: ObjectiveLesson"@en ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-10-07T09:20:00Z"^^xsd:dateTime ; backlog:finishedAt "2026-10-07T09:45:00Z"^^xsd:dateTime ; backlog:lastAuditedAt "2026-10-07T09:45:00Z"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_DC_ObjectiveLesson_Task ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It_DC_1 ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:hasRationale "One task matching the whole of its story's scope." .
+fw:AC_DC_NothingLostAgain a backlog:AcceptanceCriterion ;
+    backlog:satisfiedByArtifact "03-tooling/backlog_declared_change_proof_v1_0_0.py -- classify" ;
+    backlog:hasGherkinText "Given the live and archive data files before and after this lineage, When the split proof compares every statement, Then it reports 0 statements only before apart from the declared markers, every added statement matches a declared pattern, and the public copy derived now differs from the v1.351.0 copy only by the module-audience statements and the version." .
+fw:ST_DC_NothingLostAgain a backlog:Story ; backlog:hasIdentifier "DC-S07" ; backlog:hasTitle "Prove nothing earlier was reworded and the public copy is unchanged apart from the declared edits" ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-10-07T11:20:00Z"^^xsd:dateTime ; backlog:finishedAt "2026-10-07T11:50:00Z"^^xsd:dateTime ; backlog:lastAuditedAt "2026-10-07T11:50:00Z"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_DC_NothingLostAgain ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:producedByStage fw:Out_Backlog_RecordsTellTruth ;
+    backlog:pursuesObjective fw:Obj_DC_Proof ;
+    backlog:satisfiesDeliverable fw:Del_DC_NothingLostAgain ;
+    backlog:hasInvestmentCategory backlog:Cat_TechnicalDebt ;
+    backlog:hasAcceptanceCriterion fw:AC_DC_NothingLostAgain ;
+    backlog:hasReach 3.0 ; backlog:hasImpact 3.0 ; backlog:hasConfidence 0.85 ; backlog:hasEffort 1.0 ;
+    backlog:hasPriorityScore 7.65 ;
+    backlog:hasApplicableConcern backlog:Concern_Data ;
+    backlog:appliesDefinitionOfDone fw:DoD_DC .
+fw:RE_DC_NothingLostAgain a backlog:RefinementEvent ; backlog:refines fw:ST_DC_NothingLostAgain ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-10-07T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "The proof tools exist; this story runs them over this lineage's changes and adds the public-copy comparison." .
+fw:Plan_DC_NothingLostAgain a backlog:PlanningEvent ; rdfs:label "DC-S07 taken in"@en ;
+    backlog:plansItem fw:ST_DC_NothingLostAgain ; backlog:plannedInto fw:It_DC_1 ;
+    backlog:producesTask fw:T_DC_NothingLostAgain ;
+    backlog:plannedAt "2026-10-07T00:00:00Z"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:hasRationale "The formal boundary between ordering this work and doing it." .
+fw:T_DC_NothingLostAgain a backlog:ExecutionTask ; backlog:hasIdentifier "DC-T07" ;
+    backlog:hasTitle "Build and prove: NothingLostAgain"@en ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-10-07T11:20:00Z"^^xsd:dateTime ; backlog:finishedAt "2026-10-07T11:50:00Z"^^xsd:dateTime ; backlog:lastAuditedAt "2026-10-07T11:50:00Z"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_DC_NothingLostAgain_Task ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It_DC_1 ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:hasRationale "One task matching the whole of its story's scope." .
+fw:Obj_DC_MissionMet backlog:metricMovableBy fw:ST_DC_AbandonedReport .
+fw:Obj_DC_MissionMet backlog:metricMovableBy fw:ST_DC_ArchiveMarked .
+fw:Obj_DC_MissionMet backlog:metricMovableBy fw:ST_DC_AudienceDeclared .
+fw:Obj_DC_MissionMet backlog:metricMovableBy fw:ST_DC_ArchiveOwnRules .
+fw:Obj_DC_MissionMet backlog:metricMovableBy fw:ST_DC_ObjectiveLesson .
+fw:Obj_DC_Reports backlog:metricMovableBy fw:ST_DC_CancelledReported .
+fw:Obj_DC_Marking backlog:metricMovableBy fw:ST_DC_ArchiveMarked .
+fw:Obj_DC_Audience backlog:metricMovableBy fw:ST_DC_AudienceDeclared .
+fw:Obj_DC_ArchiveRules backlog:metricMovableBy fw:ST_DC_ArchiveOwnRules .
+fw:Obj_DC_Lesson backlog:metricMovableBy fw:ST_DC_ObjectiveLesson .
+fw:Obj_DC_Proof backlog:metricMovableBy fw:ST_DC_NothingLostAgain .
+fw:DoD_DC a backlog:DefinitionOfDone ; rdfs:label "Definition of Done for Lineage 19's work"@en ;
+    backlog:hasDoDCriterion fw:DCC1 , fw:DCC2 .
+fw:DCC1 a backlog:DoDCriterion ; rdfs:label "DCC1 -- the proof still fires on a known-bad input"@en ;
+    backlog:hasCriterionText "Every check the story touches is shown, in the same run, failing a planted known-bad input and passing the real files." ;
+    backlog:hasCheckQuery "The story's own before and after proof and the release gate's self-proof." ;
+    backlog:hasExpectedResult "known-bad fails, real passes" ;
+    backlog:hasCriterionStatus backlog:Holds .
+fw:DCC2 a backlog:DoDCriterion ; rdfs:label "DCC2 -- the live data validates with no violation"@en ;
+    backlog:hasCriterionText "backlog_validate against the live data file still reports 0 violations at sh:Violation severity." ;
+    backlog:hasCheckQuery "backlog_validate against the live data file." ;
+    backlog:hasExpectedResult "0 Violation" ;
+    backlog:hasCriterionStatus backlog:Holds .
+fw:Out_Backlog_RecordsTellTruth a backlog:StageOutput ;
+    backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:consumesOutput fw:Out_Objective_RecordsTellTruth ;
+    backlog:hasStateDigest "6ccd9345e2df3dd5e6bd60f0d0c535ec1f4c5848924c35e13bab630c5e5abd52" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.356.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Backlog stage of Lineage 19: seven stories, one per deliverable, groomed and ready. Stage 5 of 5." .
+fw:Ev_DC_ObjectiveLesson a backlog:Evidence , backlog:TestEvidence ; backlog:attestsCriterion fw:AC_DC_ObjectiveLesson ;
+    backlog:hasTestId "DC-S06-measures" ;
+    backlog:evidenceVerified true ; backlog:verifiedByTool "backlog_record_measures_v1_0_0.py" ;
+    backlog:hasVerificationMethod "python3 03-tooling/backlog_record_measures_v1_0_0.py --rows: findings 0 before, 1 after, Find_ObjectiveOnExternalRegister (root cause, remedy, methodology scope); the live validator reads 0 violations." .
+fw:Ev_DC_ObjectiveLesson_Task a backlog:Evidence , backlog:TestEvidence ;
+    backlog:hasTestSpec "03-tooling/backlog_record_measures_v1_0_0.py" ;
+    backlog:evidenceVerified true ; backlog:verifiedByTool "backlog_record_measures_v1_0_0.py" ;
+    backlog:hasVerificationMethod "python3 03-tooling/backlog_record_measures_v1_0_0.py --rows: findings 0 before, 1 after, Find_ObjectiveOnExternalRegister (root cause, remedy, methodology scope); the live validator reads 0 violations." .
+fw:H_DC_ObjectiveLesson a backlog:TestHarness ; backlog:harnessFor fw:T_DC_ObjectiveLesson ;
+    backlog:hasHarnessEvidence fw:Ev_DC_ObjectiveLesson_Task ;
+    backlog:hasRationale "The task's own harness, distinct from the story's." .
+fw:H_DC_ObjectiveLesson_Story a backlog:TestHarness ; backlog:harnessFor fw:ST_DC_ObjectiveLesson ;
+    backlog:hasHarnessEvidence fw:Ev_DC_ObjectiveLesson ;
+    backlog:hasRationale "The story's own harness: the real run named in its evidence." .
+fw:Obs_DC_Lesson_ObjectiveLesson a backlog:MetricObservation ; rdfs:label "After DC ObjectiveLesson: measured again"@en ;
+    backlog:observesMetric fw:Metric_DC_Lesson ; backlog:observationFor fw:Obj_DC_Lesson ;
+    backlog:hasObservedValue 1.0 ; backlog:observedAt "2026-10-07T10:05:30Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "backlog_record_measures findings: 1 (Find_ObjectiveOnExternalRegister)." .
+fw:Obs_DC_MissionMet_ObjectiveLesson a backlog:MetricObservation ; rdfs:label "After DC ObjectiveLesson: measured again"@en ;
+    backlog:observesMetric fw:Metric_DC_MissionMet ; backlog:observationFor fw:Obj_DC_MissionMet ;
+    backlog:hasObservedValue 4.0 ; backlog:observedAt "2026-10-07T10:05:30Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Lineage 18's five defects, each re-checked in the package's own files and tools (backlog_record_measures for the counted ones): the objective-design defect is closed (the lesson is a recorded finding); four remain." .
+fw:Ev_DC_AbandonedReport a backlog:Evidence , backlog:TestEvidence ; backlog:attestsCriterion fw:AC_DC_AbandonedReport ;
+    backlog:hasTestId "DC-S01-drill" ;
+    backlog:evidenceVerified true ; backlog:verifiedByTool "backlog_archive_drill_v1_0_0.py" ;
+    backlog:hasVerificationMethod "backlog_archive_drill: 6 cases pass on v2.5.0 and 2 fail on v2.4.0 (abandoned with a reason only; report omitting a cancelled item); backlog_closure_shapes_probe: the abandoned-mission rule fires on a planted fault and is silent once a report exists; the negative fixture trips it on its new abandoned mission; the live validator reads 0 violations." .
+fw:Ev_DC_AbandonedReport_Task a backlog:Evidence , backlog:TestEvidence ;
+    backlog:hasTestSpec "03-tooling/backlog_lineage_archive_v2_5_0.py" ;
+    backlog:evidenceVerified true ; backlog:verifiedByTool "backlog_archive_drill_v1_0_0.py" ;
+    backlog:hasVerificationMethod "backlog_archive_drill: 6 cases pass on v2.5.0 and 2 fail on v2.4.0 (abandoned with a reason only; report omitting a cancelled item); backlog_closure_shapes_probe: the abandoned-mission rule fires on a planted fault and is silent once a report exists; the negative fixture trips it on its new abandoned mission; the live validator reads 0 violations." .
+fw:H_DC_AbandonedReport a backlog:TestHarness ; backlog:harnessFor fw:T_DC_AbandonedReport ;
+    backlog:hasHarnessEvidence fw:Ev_DC_AbandonedReport_Task ;
+    backlog:hasRationale "The task's own harness, distinct from the story's." .
+fw:H_DC_AbandonedReport_Story a backlog:TestHarness ; backlog:harnessFor fw:ST_DC_AbandonedReport ;
+    backlog:hasHarnessEvidence fw:Ev_DC_AbandonedReport ;
+    backlog:hasRationale "The story's own harness: the real run named in its evidence." .
+fw:Obs_DC_MissionMet_AbandonedReport a backlog:MetricObservation ; rdfs:label "After DC AbandonedReport: measured again"@en ;
+    backlog:observesMetric fw:Metric_DC_MissionMet ; backlog:observationFor fw:Obj_DC_MissionMet ;
+    backlog:hasObservedValue 3.0 ; backlog:observedAt "2026-10-07T10:05:30Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Lineage 18's five defects, each re-checked in the package's own files and tools: the abandoned-without-a-report defect is closed (rule, archive tool and drill); three remain: the public copy cut list, the reconcile tool, the unmarked archived copies." .
+fw:Ev_DC_CancelledReported a backlog:Evidence , backlog:TestEvidence ; backlog:attestsCriterion fw:AC_DC_CancelledReported ;
+    backlog:hasTestId "DC-S02-measures" ;
+    backlog:evidenceVerified true ; backlog:verifiedByTool "backlog_record_measures_v1_0_0.py" ;
+    backlog:hasVerificationMethod "backlog_record_measures: closure_gaps 12 before, 0 after (two reports written, cancelled items named by four reports); backlog_closure_shapes_probe: the cancelled-item rule fires on a planted omission and is silent once the item is named; the negative fixture trips it on its new case; the live validator reads 0 violations." .
+fw:Ev_DC_CancelledReported_Task a backlog:Evidence , backlog:TestEvidence ;
+    backlog:hasTestSpec "02-shacl-safeguards/backlog_shacl_v1_149_0.ttl" ;
+    backlog:evidenceVerified true ; backlog:verifiedByTool "backlog_record_measures_v1_0_0.py" ;
+    backlog:hasVerificationMethod "backlog_record_measures: closure_gaps 12 before, 0 after (two reports written, cancelled items named by four reports); backlog_closure_shapes_probe: the cancelled-item rule fires on a planted omission and is silent once the item is named; the negative fixture trips it on its new case; the live validator reads 0 violations." .
+fw:H_DC_CancelledReported a backlog:TestHarness ; backlog:harnessFor fw:T_DC_CancelledReported ;
+    backlog:hasHarnessEvidence fw:Ev_DC_CancelledReported_Task ;
+    backlog:hasRationale "The task's own harness, distinct from the story's." .
+fw:H_DC_CancelledReported_Story a backlog:TestHarness ; backlog:harnessFor fw:ST_DC_CancelledReported ;
+    backlog:hasHarnessEvidence fw:Ev_DC_CancelledReported ;
+    backlog:hasRationale "The story's own harness: the real run named in its evidence." .
+fw:Obs_DC_Reports_CancelledReported a backlog:MetricObservation ; rdfs:label "After DC CancelledReported: measured again"@en ;
+    backlog:observesMetric fw:Metric_DC_Reports ; backlog:observationFor fw:Obj_DC_Reports ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-10-07T10:05:30Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "backlog_record_measures closure_gaps: 0 (was 12: 2 ended missions without a report and 10 cancelled items named by none)." .
+fw:Ev_DC_AudienceDeclared a backlog:Evidence , backlog:TestEvidence ; backlog:attestsCriterion fw:AC_DC_AudienceDeclared ;
+    backlog:hasTestId "DC-S04-cut-probe" ;
+    backlog:evidenceVerified true ; backlog:verifiedByTool "backlog_public_cut_probe_v1_0_0.py" ;
+    backlog:hasVerificationMethod "backlog_public_cut_probe: six checks pass, including that the package's own data files cut exactly the seven modules declared private (the same seven as at v1.351.0); backlog_closure_shapes_probe v1.1.0: the audience rule fires on a module record with no audience and is silent with one." .
+fw:Ev_DC_AudienceDeclared_Task a backlog:Evidence , backlog:TestEvidence ;
+    backlog:hasTestSpec "03-tooling/make_public_distribution_v1_6_0.py" ;
+    backlog:evidenceVerified true ; backlog:verifiedByTool "backlog_public_cut_probe_v1_0_0.py" ;
+    backlog:hasVerificationMethod "backlog_public_cut_probe: six checks pass, including that the package's own data files cut exactly the seven modules declared private (the same seven as at v1.351.0); backlog_closure_shapes_probe v1.1.0: the audience rule fires on a module record with no audience and is silent with one." .
+fw:H_DC_AudienceDeclared a backlog:TestHarness ; backlog:harnessFor fw:T_DC_AudienceDeclared ;
+    backlog:hasHarnessEvidence fw:Ev_DC_AudienceDeclared_Task ;
+    backlog:hasRationale "The task's own harness, distinct from the story's." .
+fw:H_DC_AudienceDeclared_Story a backlog:TestHarness ; backlog:harnessFor fw:ST_DC_AudienceDeclared ;
+    backlog:hasHarnessEvidence fw:Ev_DC_AudienceDeclared ;
+    backlog:hasRationale "The story's own harness: the real run named in its evidence." .
+fw:Obs_DC_Audience_AudienceDeclared a backlog:MetricObservation ; rdfs:label "After DC AudienceDeclared: measured again"@en ;
+    backlog:observesMetric fw:Metric_DC_Audience ; backlog:observationFor fw:Obj_DC_Audience ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-10-07T10:36:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "backlog_record_measures: modules with no declared audience 7 to 0; the public-copy IRI list is removed and the deriver stops on a missing declaration." .
+fw:Obs_DC_MissionMet_AudienceDeclared a backlog:MetricObservation ; rdfs:label "After DC AudienceDeclared: measured again"@en ;
+    backlog:observesMetric fw:Metric_DC_MissionMet ; backlog:observationFor fw:Obj_DC_MissionMet ;
+    backlog:hasObservedValue 2.0 ; backlog:observedAt "2026-10-07T10:36:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Lineage 18's five defects re-checked: the public copy cut list is now declared by the modules themselves; two remain: the reconcile tool judged by live rules and the unmarked archived copies." .
+fw:Ev_DC_ArchiveOwnRules a backlog:Evidence , backlog:TestEvidence ; backlog:attestsCriterion fw:AC_DC_ArchiveOwnRules ;
+    backlog:hasTestId "DC-S05-shapes-check" ;
+    backlog:evidenceVerified true ; backlog:verifiedByTool "backlog_archive_shapes_check_v1_1_0.py" ;
+    backlog:hasVerificationMethod "backlog_archive_shapes_check: five planted faults (a mission closed without a report, a cancelled item unnamed, a module with no audience, an unmarked archived record, a missing confirmation) each flagged by the archive's own shapes on a synthetic graph; the real archive v1.11.0 reports 0 violations; backlog_archive_reconcile v3.0.0 takes no path argument, judges by the archive's own shapes and derives no folder by replacement, and no tool applies the live validator to the archive." .
+fw:Ev_DC_ArchiveOwnRules_Task a backlog:Evidence , backlog:TestEvidence ;
+    backlog:hasTestSpec "03-tooling/backlog_archive_shapes_check_v1_1_0.py" ;
+    backlog:evidenceVerified true ; backlog:verifiedByTool "backlog_archive_shapes_check_v1_1_0.py" ;
+    backlog:hasVerificationMethod "backlog_archive_shapes_check: five planted faults (a mission closed without a report, a cancelled item unnamed, a module with no audience, an unmarked archived record, a missing confirmation) each flagged by the archive's own shapes on a synthetic graph; the real archive v1.11.0 reports 0 violations; backlog_archive_reconcile v3.0.0 takes no path argument, judges by the archive's own shapes and derives no folder by replacement, and no tool applies the live validator to the archive." .
+fw:H_DC_ArchiveOwnRules a backlog:TestHarness ; backlog:harnessFor fw:T_DC_ArchiveOwnRules ;
+    backlog:hasHarnessEvidence fw:Ev_DC_ArchiveOwnRules_Task ;
+    backlog:hasRationale "The task's own harness, distinct from the story's." .
+fw:H_DC_ArchiveOwnRules_Story a backlog:TestHarness ; backlog:harnessFor fw:ST_DC_ArchiveOwnRules ;
+    backlog:hasHarnessEvidence fw:Ev_DC_ArchiveOwnRules ;
+    backlog:hasRationale "The story's own harness: the real run named in its evidence." .
+fw:Obs_DC_ArchiveRules_ArchiveOwnRules a backlog:MetricObservation ; rdfs:label "After DC ArchiveOwnRules: measured again"@en ;
+    backlog:observesMetric fw:Metric_DC_ArchiveRules ; backlog:observationFor fw:Obj_DC_ArchiveRules ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-10-07T11:14:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "backlog_record_measures: archive tools that judge by live rules or derive a folder by substitution 1 to 0." .
+fw:Obs_DC_MissionMet_ArchiveOwnRules a backlog:MetricObservation ; rdfs:label "After DC ArchiveOwnRules: measured again"@en ;
+    backlog:observesMetric fw:Metric_DC_MissionMet ; backlog:observationFor fw:Obj_DC_MissionMet ;
+    backlog:hasObservedValue 1.0 ; backlog:observedAt "2026-10-07T11:13:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Lineage 18's five defects re-checked: the reconcile tool is repaired and the archive is judged by its own rules; one remains: the archived copies unmarked." .
+fw:Ev_DC_ArchiveMarked a backlog:Evidence , backlog:TestEvidence ; backlog:attestsCriterion fw:AC_DC_ArchiveMarked ;
+    backlog:hasTestId "DC-S03-reconcile-apply" ;
+    backlog:evidenceVerified true ; backlog:verifiedByTool "backlog_archive_reconcile_v3_0_0.py" ;
+    backlog:hasVerificationMethod "backlog_archive_reconcile --apply on the real tree: 3 records marked archived and set pending, 8 confirmed, 0 stayed pending, archive data file v1.11.0 and 21 live pointers follow; backlog_archive_shapes_check: marker rule is a Violation, the real archive reports 0 violations, a planted unmarked record is flagged; backlog_archive_drill covers the move-time marking." .
+fw:Ev_DC_ArchiveMarked_Task a backlog:Evidence , backlog:TestEvidence ;
+    backlog:hasTestSpec "03-tooling/backlog_archive_reconcile_v3_0_0.py" ;
+    backlog:evidenceVerified true ; backlog:verifiedByTool "backlog_archive_reconcile_v3_0_0.py" ;
+    backlog:hasVerificationMethod "backlog_archive_reconcile --apply on the real tree: 3 records marked archived and set pending, 8 confirmed, 0 stayed pending, archive data file v1.11.0 and 21 live pointers follow; backlog_archive_shapes_check: marker rule is a Violation, the real archive reports 0 violations, a planted unmarked record is flagged; backlog_archive_drill covers the move-time marking." .
+fw:H_DC_ArchiveMarked a backlog:TestHarness ; backlog:harnessFor fw:T_DC_ArchiveMarked ;
+    backlog:hasHarnessEvidence fw:Ev_DC_ArchiveMarked_Task ;
+    backlog:hasRationale "The task's own harness, distinct from the story's." .
+fw:H_DC_ArchiveMarked_Story a backlog:TestHarness ; backlog:harnessFor fw:ST_DC_ArchiveMarked ;
+    backlog:hasHarnessEvidence fw:Ev_DC_ArchiveMarked ;
+    backlog:hasRationale "The story's own harness: the real run named in its evidence." .
+fw:Obs_DC_Marking_ArchiveMarked a backlog:MetricObservation ; rdfs:label "After DC ArchiveMarked: measured again"@en ;
+    backlog:observesMetric fw:Metric_DC_Marking ; backlog:observationFor fw:Obj_DC_Marking ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-10-07T11:14:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "backlog_record_measures: archived lineage records marked not archived 3 to 0." .
+fw:Obs_DC_MissionMet_ArchiveMarked a backlog:MetricObservation ; rdfs:label "After DC ArchiveMarked: measured again"@en ;
+    backlog:observesMetric fw:Metric_DC_MissionMet ; backlog:observationFor fw:Obj_DC_MissionMet ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-10-07T11:14:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Lineage 18's five defects re-checked in the package's own files and tools: none remains open." .
+fw:Ev_DC_NothingLostAgain a backlog:Evidence , backlog:TestEvidence ; backlog:attestsCriterion fw:AC_DC_NothingLostAgain ;
+    backlog:hasTestId "DC-S07-declared-change-proof" ;
+    backlog:evidenceVerified true ; backlog:verifiedByTool "backlog_declared_change_proof_v1_0_0.py" ;
+    backlog:hasVerificationMethod "backlog_declared_change_proof run over the v1.351.0 tag and the working tree, data files and shapes: 22 statements only before and 1379 only after, every one in a declared category and none undeclared; the same run over the public copy derived from each side: 22 and 1372, none undeclared, the seven cut modules unchanged (29 module-audience statements public against 36 live); a planted undeclared statement is refused on each side by the tool's own self-proof." .
+fw:Ev_DC_NothingLostAgain_Task a backlog:Evidence , backlog:TestEvidence ;
+    backlog:hasTestSpec "03-tooling/backlog_declared_change_proof_v1_0_0.py" ;
+    backlog:evidenceVerified true ; backlog:verifiedByTool "backlog_declared_change_proof_v1_0_0.py" ;
+    backlog:hasVerificationMethod "backlog_declared_change_proof run over the v1.351.0 tag and the working tree, data files and shapes: 22 statements only before and 1379 only after, every one in a declared category and none undeclared; the same run over the public copy derived from each side: 22 and 1372, none undeclared, the seven cut modules unchanged (29 module-audience statements public against 36 live); a planted undeclared statement is refused on each side by the tool's own self-proof." .
+fw:H_DC_NothingLostAgain a backlog:TestHarness ; backlog:harnessFor fw:T_DC_NothingLostAgain ;
+    backlog:hasHarnessEvidence fw:Ev_DC_NothingLostAgain_Task ;
+    backlog:hasRationale "The task's own harness, distinct from the story's." .
+fw:H_DC_NothingLostAgain_Story a backlog:TestHarness ; backlog:harnessFor fw:ST_DC_NothingLostAgain ;
+    backlog:hasHarnessEvidence fw:Ev_DC_NothingLostAgain ;
+    backlog:hasRationale "The story's own harness: the real run named in its evidence." .
+fw:Obs_DC_Proof_NothingLostAgain a backlog:MetricObservation ; rdfs:label "After DC NothingLostAgain: measured again"@en ;
+    backlog:observesMetric fw:Metric_DC_Proof ; backlog:observationFor fw:Obj_DC_Proof ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-10-07T11:52:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "backlog_declared_change_proof: statements lost or changed beyond the declared markers and additions, live and archive data and shapes 0; the public copy derived now against the one derived at v1.351.0 0." .
+fw:Obs_DC_Contained_NothingLostAgain a backlog:MetricObservation ; rdfs:label "After DC NothingLostAgain: measured again"@en ;
+    backlog:observesMetric fw:Metric_DC_Contained ; backlog:observationFor fw:Obj_DC_Contained ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-10-07T11:52:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "git: the eight Lineage 19 releases touched no file outside this package, and the four exclusions are measured separately below, each at 0." .
+fw:Obs_DC_NoStatementChange_NothingLostAgain a backlog:MetricObservation ; rdfs:label "After DC NothingLostAgain: measured again"@en ;
+    backlog:observesMetric fw:Metric_DC_NoStatementChange ; backlog:observationFor fw:Obj_DC_NoStatementChange ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-10-07T11:52:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "backlog_declared_change_proof: no earlier record reworded. Before-only statements 22, all declared: 11 belong to the two shapes this lineage was chartered to change, 3 are the markers flipped, 8 are the confirmations of already-pending archive records (the confirmation step's designed output; the exclusion's text named the three markers' own status, so this is reported in the closure report, not hidden)." .
+fw:Obs_DC_NoRetroJudging_NothingLostAgain a backlog:MetricObservation ; rdfs:label "After DC NothingLostAgain: measured again"@en ;
+    backlog:observesMetric fw:Metric_DC_NoRetroJudging ; backlog:observationFor fw:Obj_DC_NoRetroJudging ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-10-07T11:52:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "backlog_record_measures archive_tools 0; the live rules still do not read the archive folder, and the archive is judged only by its own shapes (backlog_archive_shapes_check, 0 violations)." .
+fw:Obs_DC_NoOtherPackages_NothingLostAgain a backlog:MetricObservation ; rdfs:label "After DC NothingLostAgain: measured again"@en ;
+    backlog:observesMetric fw:Metric_DC_NoOtherPackages ; backlog:observationFor fw:Obj_DC_NoOtherPackages ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-10-07T11:52:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "git: the files changed outside this package by the eight Lineage 19 release commits, none." .
+fw:Obs_DC_NoPublicContentChange_NothingLostAgain a backlog:MetricObservation ; rdfs:label "After DC NothingLostAgain: measured again"@en ;
+    backlog:observesMetric fw:Metric_DC_NoPublicContentChange ; backlog:observationFor fw:Obj_DC_NoPublicContentChange ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-10-07T11:52:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "backlog_public_cut_probe: the data files cut exactly the seven modules declared private, the same seven as at v1.351.0; backlog_declared_change_proof over both public copies finds only declared differences." .
+fw:Rel_DC_1 a backlog:DeploymentUnit ;
+    backlog:hasIdentifier "DC-REL1" ; backlog:hasTitle "Shipped from Lineage 19's first work window" ;
+    backlog:hasState backlog:Done ;
+    backlog:hasDeploymentDate "2026-10-07T12:30:00Z"^^xsd:dateTime ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:deploysFrom fw:It_DC_1 ; backlog:deploysItem fw:ST_DC_AbandonedReport , fw:ST_DC_CancelledReported , fw:ST_DC_ArchiveMarked , fw:ST_DC_AudienceDeclared , fw:ST_DC_ArchiveOwnRules , fw:ST_DC_ObjectiveLesson , fw:ST_DC_NothingLostAgain ;
+    backlog:decidedBy backlog:Owner ; backlog:hasSelectionBasis backlog:Sel_Committed .
+fw:ST_DC_AbandonedReport backlog:memberOfContainer fw:Rel_DC_1 .
+fw:ST_DC_CancelledReported backlog:memberOfContainer fw:Rel_DC_1 .
+fw:ST_DC_ArchiveMarked backlog:memberOfContainer fw:Rel_DC_1 .
+fw:ST_DC_AudienceDeclared backlog:memberOfContainer fw:Rel_DC_1 .
+fw:ST_DC_ArchiveOwnRules backlog:memberOfContainer fw:Rel_DC_1 .
+fw:ST_DC_ObjectiveLesson backlog:memberOfContainer fw:Rel_DC_1 .
+fw:ST_DC_NothingLostAgain backlog:memberOfContainer fw:Rel_DC_1 .
+fw:CR_RecordsTellTruth a backlog:ClosureReport ;
+    backlog:closesForMission fw:Mission_RecordsTellTruth ;
+    backlog:reportGeneratedAt "2026-10-07T12:30:00Z"^^xsd:dateTime ;
+    backlog:closureCommittedAt "backlog-roadmap-framework-v1.360.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasClosureSummary "Done: the five defects Lineage 18's closure report named are closed, each re-measured: an abandoned mission is reported and a report names what was cancelled (rule v1.150.0, archive tool v2.5.0, 12 gaps to 0, two missing reports written from the lineage's own records); each module declares its audience and the public copy follows the declaration and stops on a missing one (7 undeclared to 0, the same seven modules cut as at v1.351.0); the archive is judged by its own shapes v1.1.0 and the reconcile tool v3.0.0 runs (archive 3 violations to 0); the three unmarked archived records say they are archived; the lesson about an objective that counted another session's register is recorded as a finding. Proof: backlog_declared_change_proof over v1.351.0 and now, data and shapes, then the public copy derived from each side: every difference is declared and none other. Reported, not hidden: the confirmation step also promoted eight already-pending archive records to confirmed, which is its designed output; the exclusion's text named only the three records' status, so this goes beyond the letter of it. Open facts outside this lineage: two lineage ordinals (17 and 18) are each carried by two lineages across live and archive; the v1.351.0 tag was missing from the remote for a time." ;
+    backlog:reportsDeliveredItem fw:ST_DC_AbandonedReport , fw:ST_DC_CancelledReported , fw:ST_DC_ArchiveMarked , fw:ST_DC_AudienceDeclared , fw:ST_DC_ArchiveOwnRules , fw:ST_DC_ObjectiveLesson , fw:ST_DC_NothingLostAgain ;
+    backlog:reportsOnObjective fw:Obj_DC_MissionMet , fw:Obj_DC_Reports , fw:Obj_DC_Marking , fw:Obj_DC_Audience , fw:Obj_DC_ArchiveRules , fw:Obj_DC_Lesson , fw:Obj_DC_Proof , fw:Obj_DC_Contained , fw:Obj_DC_NoStatementChange , fw:Obj_DC_NoRetroJudging , fw:Obj_DC_NoOtherPackages , fw:Obj_DC_NoPublicContentChange .

@@ -11260,6 +11260,12 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.361.0 — Lineages 18 and 19 archived
+
+- **Archive ceremony, run for real with the repaired tool (v2.5.0):** both lineages were Achieved with a closure report and every item Done, so both were set down together: 314 subjects moved to the archive data file (v1.12.0), 339 statements out of the live data file (v1.31.0); each lineage, mission and closure report stays live as the record that points into the archive. Archive's own shapes: 0 violations. The archived records carry the archived marker and are pending confirmation, to be confirmed by the next reconcile run once this release exists.
+- Lineage 16 is untouched: its mission is still in flight with two stories Proposed; its remaining scope is under discussion with the owner.
+- Header version chains of both data files completed by hand (the archive tool does not add the superseded version to `priorVersion`; the reconcile tool does).
+
 ## v1.360.0 — Lineage 19, DC-S07, and Lineage 19 closed: the proof, and the closure
 
 - **New tool `backlog_declared_change_proof` v1.0.0:** reads the same statements as the split proof, sorts every difference between two package trees into a declared category and fails on any that fits none; it refuses a planted undeclared statement on each side before it certifies.
