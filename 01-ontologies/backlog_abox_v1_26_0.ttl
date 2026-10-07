@@ -22,9 +22,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (ABox: controlled individuals, reference data and the live register)"@en ;
-    owl:versionIRI <http://example.org/backlog/abox/1.25.0> ;
-    owl:versionInfo "1.25.0" ;
-    owl:priorVersion <http://example.org/backlog/abox/1.24.0> , <http://example.org/backlog/abox/1.23.0> , <http://example.org/backlog/abox/1.22.0> , <http://example.org/backlog/abox/1.21.0> , <http://example.org/backlog/abox/1.20.0> , <http://example.org/backlog/abox/1.19.0> , <http://example.org/backlog/abox/1.17.0> , <http://example.org/backlog/abox/1.16.0> , <http://example.org/backlog/abox/1.15.0> , <http://example.org/backlog/abox/1.14.0> , <http://example.org/backlog/abox/1.13.0> , <http://example.org/backlog/abox/1.12.0> , <http://example.org/backlog/abox/1.11.0> , <http://example.org/backlog/abox/1.10.0> , <http://example.org/backlog/abox/1.9.0> , <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
+    owl:versionIRI <http://example.org/backlog/abox/1.26.0> ;
+    owl:versionInfo "1.26.0" ;
+    owl:priorVersion <http://example.org/backlog/abox/1.25.0> , <http://example.org/backlog/abox/1.24.0> , <http://example.org/backlog/abox/1.23.0> , <http://example.org/backlog/abox/1.22.0> , <http://example.org/backlog/abox/1.21.0> , <http://example.org/backlog/abox/1.20.0> , <http://example.org/backlog/abox/1.19.0> , <http://example.org/backlog/abox/1.17.0> , <http://example.org/backlog/abox/1.16.0> , <http://example.org/backlog/abox/1.15.0> , <http://example.org/backlog/abox/1.14.0> , <http://example.org/backlog/abox/1.13.0> , <http://example.org/backlog/abox/1.12.0> , <http://example.org/backlog/abox/1.11.0> , <http://example.org/backlog/abox/1.10.0> , <http://example.org/backlog/abox/1.9.0> , <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
         <http://example.org/backlog-abox/1.2.1> ,
                      <http://example.org/backlog-abox/1.2.0> ,
                      <http://example.org/backlog-abox/1.1.0> ,
@@ -7054,3 +7054,266 @@ fw:Out_Objective_RecordsTellTruth a backlog:StageOutput ;
     backlog:hasStateDigest "6d557040b29c7a610a55dea8e09160735ad4e144515835dd22fac157e4d99814" ;
     backlog:closedAtCommit "backlog-roadmap-framework-v1.355.0 (tag; witnessed by git, not asserted)" ;
     backlog:hasRationale "Objective stage of Lineage 19: twelve objectives, one per goal, each counted at a 2026-10-07 baseline; every one is measured by something this package controls. Stage 4 of 5." .
+
+# v9.119.0: Lineage 19, Backlog stage (fifth and last of the five releases). Seven stories, one per deliverable, each groomed:
+# acceptance criterion, design concerns declared, taken in by a planning event that produces one task. Order: S06, S01, S02, S04, S05, S03, S07.
+
+fw:It_DC_1 a backlog:Iteration ; backlog:hasIdentifier "DC-IT1" ; backlog:hasTitle "Lineage 19, first work window" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ; backlog:belongsToLineage fw:L_RecordsTellTruth .
+
+fw:AC_DC_AbandonedReport a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a mission that is Abandoned and has no closure report, When the live validator runs, Then it reports a violation naming the mission, the archive tool refuses to move that lineage, and the same data with a closure report passes both." .
+fw:ST_DC_AbandonedReport a backlog:Story ; backlog:hasIdentifier "DC-S01" ; backlog:hasTitle "An abandoned mission needs a closure report: the rule, the archive tool and the archive's own rule" ;
+    backlog:hasState backlog:Ready ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:producedByStage fw:Out_Backlog_RecordsTellTruth ;
+    backlog:pursuesObjective fw:Obj_DC_MissionMet ;
+    backlog:satisfiesDeliverable fw:Del_DC_AbandonedReport ;
+    backlog:hasInvestmentCategory backlog:Cat_TechnicalDebt ;
+    backlog:hasAcceptanceCriterion fw:AC_DC_AbandonedReport ;
+    backlog:hasReach 3.0 ; backlog:hasImpact 3.0 ; backlog:hasConfidence 0.85 ; backlog:hasEffort 2.0 ;
+    backlog:hasPriorityScore 3.82 ;
+    backlog:hasApplicableConcern backlog:Concern_Data , backlog:Concern_Interface ;
+    backlog:appliesDefinitionOfDone fw:DoD_DC .
+fw:RE_DC_AbandonedReport a backlog:RefinementEvent ; backlog:refines fw:ST_DC_AbandonedReport ;
+    backlog:addressesConcern backlog:Concern_Data , backlog:Concern_Interface ;
+    backlog:refinedAt "2026-10-07T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Lineage 18 chose to accept an abandoned mission without a report; the owner has ruled that a report proves the work and is wanted for abandoned work too. The mission-closure rule currently fires only on Out_Achieved, so one line changes and a planted abandoned mission proves it." .
+fw:Plan_DC_AbandonedReport a backlog:PlanningEvent ; rdfs:label "DC-S01 taken in"@en ;
+    backlog:plansItem fw:ST_DC_AbandonedReport ; backlog:plannedInto fw:It_DC_1 ;
+    backlog:producesTask fw:T_DC_AbandonedReport ;
+    backlog:plannedAt "2026-10-07T00:00:00Z"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:hasRationale "The formal boundary between ordering this work and doing it." .
+fw:T_DC_AbandonedReport a backlog:ExecutionTask ; backlog:hasIdentifier "DC-T01" ;
+    backlog:hasTitle "Build and prove: AbandonedReport"@en ;
+    backlog:hasState backlog:Proposed ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It_DC_1 ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:hasRationale "One task matching the whole of its story's scope." .
+
+fw:AC_DC_CancelledReported a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a lineage whose mission has ended and which has cancelled items, When its closure report does not name each cancelled item, Then the validator reports a violation naming the item, and after the two missing reports are written and the existing ones completed the count of closure gaps over both data files reads 0." .
+fw:ST_DC_CancelledReported a backlog:Story ; backlog:hasIdentifier "DC-S02" ; backlog:hasTitle "A closure report names what was delivered and what was cancelled; write the two missing reports and complete the others" ;
+    backlog:hasState backlog:Ready ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:producedByStage fw:Out_Backlog_RecordsTellTruth ;
+    backlog:pursuesObjective fw:Obj_DC_Reports ;
+    backlog:satisfiesDeliverable fw:Del_DC_CancelledReported ;
+    backlog:hasInvestmentCategory backlog:Cat_TechnicalDebt ;
+    backlog:hasAcceptanceCriterion fw:AC_DC_CancelledReported ;
+    backlog:hasReach 8.0 ; backlog:hasImpact 3.0 ; backlog:hasConfidence 0.85 ; backlog:hasEffort 5.0 ;
+    backlog:hasPriorityScore 4.08 ;
+    backlog:hasApplicableConcern backlog:Concern_Data , backlog:Concern_Architecture ;
+    backlog:appliesDefinitionOfDone fw:DoD_DC .
+fw:RE_DC_CancelledReported a backlog:RefinementEvent ; backlog:refines fw:ST_DC_CancelledReported ;
+    backlog:addressesConcern backlog:Concern_Data , backlog:Concern_Architecture ;
+    backlog:refinedAt "2026-10-07T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Two concepts are missing from the vocabulary: a report names the items it delivered and the items it cancelled. The two missing reports are written from facts already in the register (objectives, deliverables, cancellations); the first-built lineage's is retroactive and says so." .
+fw:Plan_DC_CancelledReported a backlog:PlanningEvent ; rdfs:label "DC-S02 taken in"@en ;
+    backlog:plansItem fw:ST_DC_CancelledReported ; backlog:plannedInto fw:It_DC_1 ;
+    backlog:producesTask fw:T_DC_CancelledReported ;
+    backlog:plannedAt "2026-10-07T00:00:00Z"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:hasRationale "The formal boundary between ordering this work and doing it." .
+fw:T_DC_CancelledReported a backlog:ExecutionTask ; backlog:hasIdentifier "DC-T02" ;
+    backlog:hasTitle "Build and prove: CancelledReported"@en ;
+    backlog:hasState backlog:Proposed ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It_DC_1 ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:hasRationale "One task matching the whole of its story's scope." .
+
+fw:AC_DC_ArchiveMarked a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given three archived lineage records marked not archived, When the repaired confirmation step runs against the archive folder, Then each is marked archived with its confirmation recorded, the marker rule is a violation again, and a planted unmarked record is flagged." .
+fw:ST_DC_ArchiveMarked a backlog:Story ; backlog:hasIdentifier "DC-S03" ; backlog:hasTitle "Repair the confirmation step and mark the three archived records" ;
+    backlog:hasState backlog:Ready ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:producedByStage fw:Out_Backlog_RecordsTellTruth ;
+    backlog:pursuesObjective fw:Obj_DC_Marking ;
+    backlog:satisfiesDeliverable fw:Del_DC_ArchiveMarked ;
+    backlog:hasInvestmentCategory backlog:Cat_TechnicalDebt ;
+    backlog:hasAcceptanceCriterion fw:AC_DC_ArchiveMarked ;
+    backlog:hasReach 5.0 ; backlog:hasImpact 3.0 ; backlog:hasConfidence 0.85 ; backlog:hasEffort 3.0 ;
+    backlog:hasPriorityScore 4.25 ;
+    backlog:hasApplicableConcern backlog:Concern_Interface ;
+    backlog:appliesDefinitionOfDone fw:DoD_DC .
+fw:RE_DC_ArchiveMarked a backlog:RefinementEvent ; backlog:refines fw:ST_DC_ArchiveMarked ;
+    backlog:addressesConcern backlog:Concern_Interface ;
+    backlog:refinedAt "2026-10-07T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "The reconcile tool was built for exactly this (mark after the archive commit is real) and was left pointing at the layout before the archive folder; it also judged the archive by the live rules, which took minutes." .
+fw:Plan_DC_ArchiveMarked a backlog:PlanningEvent ; rdfs:label "DC-S03 taken in"@en ;
+    backlog:plansItem fw:ST_DC_ArchiveMarked ; backlog:plannedInto fw:It_DC_1 ;
+    backlog:producesTask fw:T_DC_ArchiveMarked ;
+    backlog:plannedAt "2026-10-07T00:00:00Z"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:hasRationale "The formal boundary between ordering this work and doing it." .
+fw:T_DC_ArchiveMarked a backlog:ExecutionTask ; backlog:hasIdentifier "DC-T03" ;
+    backlog:hasTitle "Build and prove: ArchiveMarked"@en ;
+    backlog:hasState backlog:Proposed ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It_DC_1 ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:hasRationale "One task matching the whole of its story's scope." .
+
+fw:AC_DC_AudienceDeclared a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given seven module records with no declared audience, When each declares one and the public copy is derived, Then the seven modules cut are the same seven as at the last release, a module declared not public whose END line is missing stops the derivation with an error naming it, and the fold tool writes the audience on every module it creates." .
+fw:ST_DC_AudienceDeclared a backlog:Story ; backlog:hasIdentifier "DC-S04" ; backlog:hasTitle "Each module declares who may read it; the public copy follows and stops when a declared module is missing" ;
+    backlog:hasState backlog:Ready ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:producedByStage fw:Out_Backlog_RecordsTellTruth ;
+    backlog:pursuesObjective fw:Obj_DC_Audience ;
+    backlog:satisfiesDeliverable fw:Del_DC_AudienceDeclared ;
+    backlog:hasInvestmentCategory backlog:Cat_TechnicalDebt ;
+    backlog:hasAcceptanceCriterion fw:AC_DC_AudienceDeclared ;
+    backlog:hasReach 8.0 ; backlog:hasImpact 3.0 ; backlog:hasConfidence 0.85 ; backlog:hasEffort 5.0 ;
+    backlog:hasPriorityScore 4.08 ;
+    backlog:hasApplicableConcern backlog:Concern_Data , backlog:Concern_Interface , backlog:Concern_Architecture ;
+    backlog:appliesDefinitionOfDone fw:DoD_DC .
+fw:RE_DC_AudienceDeclared a backlog:RefinementEvent ; backlog:refines fw:ST_DC_AudienceDeclared ;
+    backlog:addressesConcern backlog:Concern_Data , backlog:Concern_Interface , backlog:Concern_Architecture ;
+    backlog:refinedAt "2026-10-07T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "The cut list is a list of IRIs inside the deriver, so what is published is decided by code a reader of the data cannot see, and a missing module is skipped silently, which the changelog wrongly called reported. The declaration moves the decision into the data and the check into the tool." .
+fw:Plan_DC_AudienceDeclared a backlog:PlanningEvent ; rdfs:label "DC-S04 taken in"@en ;
+    backlog:plansItem fw:ST_DC_AudienceDeclared ; backlog:plannedInto fw:It_DC_1 ;
+    backlog:producesTask fw:T_DC_AudienceDeclared ;
+    backlog:plannedAt "2026-10-07T00:00:00Z"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:hasRationale "The formal boundary between ordering this work and doing it." .
+fw:T_DC_AudienceDeclared a backlog:ExecutionTask ; backlog:hasIdentifier "DC-T04" ;
+    backlog:hasTitle "Build and prove: AudienceDeclared"@en ;
+    backlog:hasState backlog:Proposed ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It_DC_1 ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:hasRationale "One task matching the whole of its story's scope." .
+
+fw:AC_DC_ArchiveOwnRules a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the archive's shapes file with two shapes, When it gains the closure-report, cancelled-item and module-audience rules, Then a planted archive record that breaks each rule is flagged, the real archive passes, and a search of the tools finds none that applies the live validator to the archive or derives an archive folder by replacing a folder name." .
+fw:ST_DC_ArchiveOwnRules a backlog:Story ; backlog:hasIdentifier "DC-S05" ; backlog:hasTitle "Give the archive's shapes its own rules; no tool judges the archive by the live rules or finds its folders by string substitution" ;
+    backlog:hasState backlog:Ready ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:producedByStage fw:Out_Backlog_RecordsTellTruth ;
+    backlog:pursuesObjective fw:Obj_DC_ArchiveRules ;
+    backlog:satisfiesDeliverable fw:Del_DC_ArchiveOwnRules ;
+    backlog:hasInvestmentCategory backlog:Cat_TechnicalDebt ;
+    backlog:hasAcceptanceCriterion fw:AC_DC_ArchiveOwnRules ;
+    backlog:hasReach 5.0 ; backlog:hasImpact 3.0 ; backlog:hasConfidence 0.85 ; backlog:hasEffort 3.0 ;
+    backlog:hasPriorityScore 4.25 ;
+    backlog:hasApplicableConcern backlog:Concern_Interface , backlog:Concern_Architecture ;
+    backlog:appliesDefinitionOfDone fw:DoD_DC .
+fw:RE_DC_ArchiveOwnRules a backlog:RefinementEvent ; backlog:refines fw:ST_DC_ArchiveOwnRules ;
+    backlog:addressesConcern backlog:Concern_Interface , backlog:Concern_Architecture ;
+    backlog:refinedAt "2026-10-07T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "The archive's rules are its own (G89, G91): the live rules cannot be asked to judge it, so each rule that matters must be written for the archive in its own shapes file, and proven with a planted fault." .
+fw:Plan_DC_ArchiveOwnRules a backlog:PlanningEvent ; rdfs:label "DC-S05 taken in"@en ;
+    backlog:plansItem fw:ST_DC_ArchiveOwnRules ; backlog:plannedInto fw:It_DC_1 ;
+    backlog:producesTask fw:T_DC_ArchiveOwnRules ;
+    backlog:plannedAt "2026-10-07T00:00:00Z"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:hasRationale "The formal boundary between ordering this work and doing it." .
+fw:T_DC_ArchiveOwnRules a backlog:ExecutionTask ; backlog:hasIdentifier "DC-T05" ;
+    backlog:hasTitle "Build and prove: ArchiveOwnRules"@en ;
+    backlog:hasState backlog:Proposed ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It_DC_1 ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:hasRationale "One task matching the whole of its story's scope." .
+
+fw:AC_DC_ObjectiveLesson a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given Lineage 18's last objective counted a line in a register another session owns, When the lesson is recorded, Then the live data holds a retrospective finding with the root cause, the remedy and the rule of thumb that an objective is measured by what this package controls, and external confirmations are tracked as handovers." .
+fw:ST_DC_ObjectiveLesson a backlog:Story ; backlog:hasIdentifier "DC-S06" ; backlog:hasTitle "Record the lesson about designing an objective as a finding" ;
+    backlog:hasState backlog:Ready ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:producedByStage fw:Out_Backlog_RecordsTellTruth ;
+    backlog:pursuesObjective fw:Obj_DC_Lesson ;
+    backlog:satisfiesDeliverable fw:Del_DC_ObjectiveLesson ;
+    backlog:hasInvestmentCategory backlog:Cat_TechnicalDebt ;
+    backlog:hasAcceptanceCriterion fw:AC_DC_ObjectiveLesson ;
+    backlog:hasReach 2.0 ; backlog:hasImpact 3.0 ; backlog:hasConfidence 0.85 ; backlog:hasEffort 1.0 ;
+    backlog:hasPriorityScore 5.1 ;
+    backlog:hasApplicableConcern backlog:Concern_Data ;
+    backlog:appliesDefinitionOfDone fw:DoD_DC .
+fw:RE_DC_ObjectiveLesson a backlog:RefinementEvent ; backlog:refines fw:ST_DC_ObjectiveLesson ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-10-07T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "The owner asked why a story's closure depended on an external object. The honest answer is a design error, not a rule: the objective belonged to the other session. A recorded finding is how the next lineage meets the lesson." .
+fw:Plan_DC_ObjectiveLesson a backlog:PlanningEvent ; rdfs:label "DC-S06 taken in"@en ;
+    backlog:plansItem fw:ST_DC_ObjectiveLesson ; backlog:plannedInto fw:It_DC_1 ;
+    backlog:producesTask fw:T_DC_ObjectiveLesson ;
+    backlog:plannedAt "2026-10-07T00:00:00Z"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:hasRationale "The formal boundary between ordering this work and doing it." .
+fw:T_DC_ObjectiveLesson a backlog:ExecutionTask ; backlog:hasIdentifier "DC-T06" ;
+    backlog:hasTitle "Build and prove: ObjectiveLesson"@en ;
+    backlog:hasState backlog:Proposed ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It_DC_1 ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:hasRationale "One task matching the whole of its story's scope." .
+
+fw:AC_DC_NothingLostAgain a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the live and archive data files before and after this lineage, When the split proof compares every statement, Then it reports 0 statements only before apart from the declared markers, every added statement matches a declared pattern, and the public copy derived now differs from the v1.351.0 copy only by the module-audience statements and the version." .
+fw:ST_DC_NothingLostAgain a backlog:Story ; backlog:hasIdentifier "DC-S07" ; backlog:hasTitle "Prove nothing earlier was reworded and the public copy is unchanged apart from the declared edits" ;
+    backlog:hasState backlog:Ready ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:producedByStage fw:Out_Backlog_RecordsTellTruth ;
+    backlog:pursuesObjective fw:Obj_DC_Proof ;
+    backlog:satisfiesDeliverable fw:Del_DC_NothingLostAgain ;
+    backlog:hasInvestmentCategory backlog:Cat_TechnicalDebt ;
+    backlog:hasAcceptanceCriterion fw:AC_DC_NothingLostAgain ;
+    backlog:hasReach 3.0 ; backlog:hasImpact 3.0 ; backlog:hasConfidence 0.85 ; backlog:hasEffort 1.0 ;
+    backlog:hasPriorityScore 7.65 ;
+    backlog:hasApplicableConcern backlog:Concern_Data ;
+    backlog:appliesDefinitionOfDone fw:DoD_DC .
+fw:RE_DC_NothingLostAgain a backlog:RefinementEvent ; backlog:refines fw:ST_DC_NothingLostAgain ;
+    backlog:addressesConcern backlog:Concern_Data ;
+    backlog:refinedAt "2026-10-07T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "The proof tools exist; this story runs them over this lineage's changes and adds the public-copy comparison." .
+fw:Plan_DC_NothingLostAgain a backlog:PlanningEvent ; rdfs:label "DC-S07 taken in"@en ;
+    backlog:plansItem fw:ST_DC_NothingLostAgain ; backlog:plannedInto fw:It_DC_1 ;
+    backlog:producesTask fw:T_DC_NothingLostAgain ;
+    backlog:plannedAt "2026-10-07T00:00:00Z"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
+    backlog:hasRationale "The formal boundary between ordering this work and doing it." .
+fw:T_DC_NothingLostAgain a backlog:ExecutionTask ; backlog:hasIdentifier "DC-T07" ;
+    backlog:hasTitle "Build and prove: NothingLostAgain"@en ;
+    backlog:hasState backlog:Proposed ;
+    backlog:hasTaskType backlog:Task_Implementation ;
+    backlog:memberOfContainer fw:Register , fw:It_DC_1 ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:hasRationale "One task matching the whole of its story's scope." .
+
+
+fw:Obj_DC_MissionMet backlog:metricMovableBy fw:ST_DC_AbandonedReport .
+fw:Obj_DC_MissionMet backlog:metricMovableBy fw:ST_DC_ArchiveMarked .
+fw:Obj_DC_MissionMet backlog:metricMovableBy fw:ST_DC_AudienceDeclared .
+fw:Obj_DC_MissionMet backlog:metricMovableBy fw:ST_DC_ArchiveOwnRules .
+fw:Obj_DC_MissionMet backlog:metricMovableBy fw:ST_DC_ObjectiveLesson .
+fw:Obj_DC_Reports backlog:metricMovableBy fw:ST_DC_CancelledReported .
+fw:Obj_DC_Marking backlog:metricMovableBy fw:ST_DC_ArchiveMarked .
+fw:Obj_DC_Audience backlog:metricMovableBy fw:ST_DC_AudienceDeclared .
+fw:Obj_DC_ArchiveRules backlog:metricMovableBy fw:ST_DC_ArchiveOwnRules .
+fw:Obj_DC_Lesson backlog:metricMovableBy fw:ST_DC_ObjectiveLesson .
+fw:Obj_DC_Proof backlog:metricMovableBy fw:ST_DC_NothingLostAgain .
+fw:DoD_DC a backlog:DefinitionOfDone ; rdfs:label "Definition of Done for Lineage 19's work"@en ;
+    backlog:hasDoDCriterion fw:DCC1 , fw:DCC2 .
+fw:DCC1 a backlog:DoDCriterion ; rdfs:label "DCC1 -- the proof still fires on a known-bad input"@en ;
+    backlog:hasCriterionText "Every check the story touches is shown, in the same run, failing a planted known-bad input and passing the real files." ;
+    backlog:hasCheckQuery "The story's own before and after proof and the release gate's self-proof." ;
+    backlog:hasExpectedResult "known-bad fails, real passes" ;
+    backlog:hasCriterionStatus backlog:Holds .
+fw:DCC2 a backlog:DoDCriterion ; rdfs:label "DCC2 -- the live data validates with no violation"@en ;
+    backlog:hasCriterionText "backlog_validate against the live data file still reports 0 violations at sh:Violation severity." ;
+    backlog:hasCheckQuery "backlog_validate against the live data file." ;
+    backlog:hasExpectedResult "0 Violation" ;
+    backlog:hasCriterionStatus backlog:Holds .
+
+fw:Out_Backlog_RecordsTellTruth a backlog:StageOutput ;
+    backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:consumesOutput fw:Out_Objective_RecordsTellTruth ;
+    backlog:hasStateDigest "6ccd9345e2df3dd5e6bd60f0d0c535ec1f4c5848924c35e13bab630c5e5abd52" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.356.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Backlog stage of Lineage 19: seven stories, one per deliverable, groomed and ready. Stage 5 of 5." .

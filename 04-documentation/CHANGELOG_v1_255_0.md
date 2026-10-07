@@ -11253,3 +11253,9 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Objectives:** one per goal, each with a counted metric, a 2026-10-07 baseline observation, a target and a checkpoint (2026-10-21). Baselines: 5 defects open; 12 closure gaps (2 ended missions without a report, 10 cancelled items named by none); 3 unmarked archived records; 7 modules with no declared audience; 1 tool judging the archive by the live rules; 0 findings on objective design; and six held-at-zero containment and proof objectives.
 - **Design rule applied, from Lineage 18's lesson:** every objective counts something this package controls. None counts a line in a register another session owns.
 - **Stage 4 of 5.** Data file: `backlog_abox` v1.25.0.
+
+## v1.356.0 — Lineage 19, Backlog stage: seven stories, ready
+
+- **Stories (one per deliverable), each with an acceptance criterion in Given/When/Then form, declared design concerns, a refinement, and a planning event that takes it into the first work window and produces one task:** an abandoned mission needs a closure report; a closure report names what was delivered and cancelled (and writes the two missing reports); the archive's confirmation step is repaired and marks the three archived records; each module declares its audience and the public copy follows and stops when it cannot be sure; the archive gets its own rules and no tool judges it by the live rules; the objective-design lesson is recorded; a before-and-after proof. Order of work: lesson, abandoned report, cancelled reported, audience, archive rules, marker, proof.
+- **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
+- **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
