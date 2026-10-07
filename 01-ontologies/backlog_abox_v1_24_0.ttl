@@ -22,9 +22,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (ABox: controlled individuals, reference data and the live register)"@en ;
-    owl:versionIRI <http://example.org/backlog/abox/1.23.0> ;
-    owl:versionInfo "1.23.0" ;
-    owl:priorVersion <http://example.org/backlog/abox/1.22.0> , <http://example.org/backlog/abox/1.21.0> , <http://example.org/backlog/abox/1.20.0> , <http://example.org/backlog/abox/1.19.0> , <http://example.org/backlog/abox/1.17.0> , <http://example.org/backlog/abox/1.16.0> , <http://example.org/backlog/abox/1.15.0> , <http://example.org/backlog/abox/1.14.0> , <http://example.org/backlog/abox/1.13.0> , <http://example.org/backlog/abox/1.12.0> , <http://example.org/backlog/abox/1.11.0> , <http://example.org/backlog/abox/1.10.0> , <http://example.org/backlog/abox/1.9.0> , <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
+    owl:versionIRI <http://example.org/backlog/abox/1.24.0> ;
+    owl:versionInfo "1.24.0" ;
+    owl:priorVersion <http://example.org/backlog/abox/1.23.0> , <http://example.org/backlog/abox/1.22.0> , <http://example.org/backlog/abox/1.21.0> , <http://example.org/backlog/abox/1.20.0> , <http://example.org/backlog/abox/1.19.0> , <http://example.org/backlog/abox/1.17.0> , <http://example.org/backlog/abox/1.16.0> , <http://example.org/backlog/abox/1.15.0> , <http://example.org/backlog/abox/1.14.0> , <http://example.org/backlog/abox/1.13.0> , <http://example.org/backlog/abox/1.12.0> , <http://example.org/backlog/abox/1.11.0> , <http://example.org/backlog/abox/1.10.0> , <http://example.org/backlog/abox/1.9.0> , <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
         <http://example.org/backlog-abox/1.2.1> ,
                      <http://example.org/backlog-abox/1.2.0> ,
                      <http://example.org/backlog-abox/1.1.0> ,
@@ -6723,3 +6723,120 @@ fw:Out_Scope_RecordsTellTruth a backlog:StageOutput ;
     backlog:hasStateDigest "8b5470829070658a42e2e3ba8f9ee6776b1d946115f3c93d8c2766b8b9a1a0a8" ;
     backlog:closedAtCommit "backlog-roadmap-framework-v1.353.0 (tag; witnessed by git, not asserted)" ;
     backlog:hasRationale "Scope stage of Lineage 19: seven deliverables over six areas, four exclusions. Stage 2 of 5." .
+
+# v9.117.0: Lineage 19, Goal stage (third of five releases). One goal faces the mission, one each scope area, one containment,
+# and one inverse goal per exclusion. No objective, metric or work item yet.
+
+fw:Goal_DC_MissionMet a backlog:Goal ; rdfs:label "The five defects Lineage 18 left are closed"@en ;
+    backlog:contributesToMission fw:Mission_RecordsTellTruth ;
+    backlog:derivesFromScope fw:Scope_RecordsTellTruth ;
+    backlog:hasGoalFacing backlog:Facing_Mission ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out_Goal_RecordsTellTruth ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:decidedBy backlog:Owner .
+fw:Goal_DC_Reports a backlog:Goal ; rdfs:label "Every ended mission has a closure report that names what it delivered and what it cancelled"@en ;
+    backlog:contributesToMission fw:Mission_RecordsTellTruth ;
+    backlog:derivesFromScope fw:Scope_RecordsTellTruth ;
+    backlog:hasGoalFacing backlog:Facing_Scope ;
+    backlog:goalCoversArea fw:Area_DC_Reports ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out_Goal_RecordsTellTruth ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:decidedBy backlog:Owner .
+fw:Goal_DC_Marking a backlog:Goal ; rdfs:label "Every retired lineage's record is marked archived"@en ;
+    backlog:contributesToMission fw:Mission_RecordsTellTruth ;
+    backlog:derivesFromScope fw:Scope_RecordsTellTruth ;
+    backlog:hasGoalFacing backlog:Facing_Scope ;
+    backlog:goalCoversArea fw:Area_DC_Marking ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out_Goal_RecordsTellTruth ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:decidedBy backlog:Owner .
+fw:Goal_DC_Audience a backlog:Goal ; rdfs:label "Every module declares who may read it and the public copy follows that"@en ;
+    backlog:contributesToMission fw:Mission_RecordsTellTruth ;
+    backlog:derivesFromScope fw:Scope_RecordsTellTruth ;
+    backlog:hasGoalFacing backlog:Facing_Scope ;
+    backlog:goalCoversArea fw:Area_DC_Audience ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out_Goal_RecordsTellTruth ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:decidedBy backlog:Owner .
+fw:Goal_DC_ArchiveRules a backlog:Goal ; rdfs:label "The archive is judged only by its own rules and its own tools"@en ;
+    backlog:contributesToMission fw:Mission_RecordsTellTruth ;
+    backlog:derivesFromScope fw:Scope_RecordsTellTruth ;
+    backlog:hasGoalFacing backlog:Facing_Scope ;
+    backlog:goalCoversArea fw:Area_DC_ArchiveRules ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out_Goal_RecordsTellTruth ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:decidedBy backlog:Owner .
+fw:Goal_DC_Lesson a backlog:Goal ; rdfs:label "The lesson about designing an objective is on record"@en ;
+    backlog:contributesToMission fw:Mission_RecordsTellTruth ;
+    backlog:derivesFromScope fw:Scope_RecordsTellTruth ;
+    backlog:hasGoalFacing backlog:Facing_Scope ;
+    backlog:goalCoversArea fw:Area_DC_Lesson ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out_Goal_RecordsTellTruth ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:decidedBy backlog:Owner .
+fw:Goal_DC_Proof a backlog:Goal ; rdfs:label "No earlier statement was reworded and the public copy is unchanged apart from declared edits"@en ;
+    backlog:contributesToMission fw:Mission_RecordsTellTruth ;
+    backlog:derivesFromScope fw:Scope_RecordsTellTruth ;
+    backlog:hasGoalFacing backlog:Facing_Scope ;
+    backlog:goalCoversArea fw:Area_DC_Proof ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out_Goal_RecordsTellTruth ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:decidedBy backlog:Owner .
+fw:Goal_DC_Contained a backlog:Goal ; rdfs:label "No work was done outside what this scope named"@en ;
+    backlog:contributesToMission fw:Mission_RecordsTellTruth ;
+    backlog:derivesFromScope fw:Scope_RecordsTellTruth ;
+    backlog:hasGoalFacing backlog:Facing_Containment ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out_Goal_RecordsTellTruth ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:decidedBy backlog:Owner .
+fw:Goal_DC_NoStatementChange a backlog:Goal ; rdfs:label "No earlier statement was reworded, beyond the declared markers and additions"@en ;
+    backlog:contributesToMission fw:Mission_RecordsTellTruth ;
+    backlog:derivesFromScope fw:Scope_RecordsTellTruth ;
+    backlog:hasGoalFacing backlog:Facing_Exclusion ;
+    backlog:guardsExclusion fw:Ex_DC_StatementChange ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out_Goal_RecordsTellTruth ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:decidedBy backlog:Owner .
+fw:Goal_DC_NoRetroJudging a backlog:Goal ; rdfs:label "The archive was never run through the live rules"@en ;
+    backlog:contributesToMission fw:Mission_RecordsTellTruth ;
+    backlog:derivesFromScope fw:Scope_RecordsTellTruth ;
+    backlog:hasGoalFacing backlog:Facing_Exclusion ;
+    backlog:guardsExclusion fw:Ex_DC_RetroJudging ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out_Goal_RecordsTellTruth ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:decidedBy backlog:Owner .
+fw:Goal_DC_NoOtherPackages a backlog:Goal ; rdfs:label "No file outside this package was touched"@en ;
+    backlog:contributesToMission fw:Mission_RecordsTellTruth ;
+    backlog:derivesFromScope fw:Scope_RecordsTellTruth ;
+    backlog:hasGoalFacing backlog:Facing_Exclusion ;
+    backlog:guardsExclusion fw:Ex_DC_OtherPackages ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out_Goal_RecordsTellTruth ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:decidedBy backlog:Owner .
+fw:Goal_DC_NoPublicContentChange a backlog:Goal ; rdfs:label "What the public copy contains did not change"@en ;
+    backlog:contributesToMission fw:Mission_RecordsTellTruth ;
+    backlog:derivesFromScope fw:Scope_RecordsTellTruth ;
+    backlog:hasGoalFacing backlog:Facing_Exclusion ;
+    backlog:guardsExclusion fw:Ex_DC_PublicContent ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out_Goal_RecordsTellTruth ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:decidedBy backlog:Owner .
+
+fw:Out_Goal_RecordsTellTruth a backlog:StageOutput ;
+    backlog:outputOfStage backlog:Stage_Goal ; backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:consumesOutput fw:Out_Scope_RecordsTellTruth ;
+    backlog:hasStateDigest "0be223debe81b0a5109251b34dcafbff2b16f497e8204ca7892713575b2b2653" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.354.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Goal stage of Lineage 19: one mission-facing goal, one per scope area, one containment goal, and one inverse goal per exclusion. Stage 3 of 5." .

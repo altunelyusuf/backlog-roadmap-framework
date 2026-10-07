@@ -11242,3 +11242,8 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Found on the way, not in scope:** lineage ordinals 17 and 18 are each carried by two lineages across the live and archive files. Reported here; changing an ordinal changes an earlier statement, which the exclusions forbid in this lineage.
 - **Four exclusions:** no earlier statement reworded (beyond the three markers and additions); no live rules over the archive; no file outside the package; the set of modules cut from the public copy stays the seven it is.
 - **Stage 2 of 5.** Data file: `backlog_abox` v1.23.0.
+
+## v1.354.0 — Lineage 19, Goal stage: twelve goals
+
+- **Goals:** one facing the mission (the five defects closed), one per scope area (reports, marking, audience, archive rules, lesson, proof), one containment goal, and one inverse goal per exclusion (no earlier statement reworded, no live rules over the archive, no file outside the package, no change to what the public copy contains). No objective, metric or work item yet.
+- **Stage 3 of 5.** Data file: `backlog_abox` v1.24.0.
