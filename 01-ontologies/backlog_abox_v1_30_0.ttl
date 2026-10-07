@@ -22,9 +22,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (ABox: controlled individuals, reference data and the live register)"@en ;
-    owl:versionIRI <http://example.org/backlog/abox/1.29.0> ;
-    owl:versionInfo "1.29.0" ;
-    owl:priorVersion <http://example.org/backlog/abox/1.28.0> , <http://example.org/backlog/abox/1.27.0> , <http://example.org/backlog/abox/1.26.0> , <http://example.org/backlog/abox/1.25.0> , <http://example.org/backlog/abox/1.24.0> , <http://example.org/backlog/abox/1.23.0> , <http://example.org/backlog/abox/1.22.0> , <http://example.org/backlog/abox/1.21.0> , <http://example.org/backlog/abox/1.20.0> , <http://example.org/backlog/abox/1.19.0> , <http://example.org/backlog/abox/1.17.0> , <http://example.org/backlog/abox/1.16.0> , <http://example.org/backlog/abox/1.15.0> , <http://example.org/backlog/abox/1.14.0> , <http://example.org/backlog/abox/1.13.0> , <http://example.org/backlog/abox/1.12.0> , <http://example.org/backlog/abox/1.11.0> , <http://example.org/backlog/abox/1.10.0> , <http://example.org/backlog/abox/1.9.0> , <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
+    owl:versionIRI <http://example.org/backlog/abox/1.30.0> ;
+    owl:versionInfo "1.30.0" ;
+    owl:priorVersion <http://example.org/backlog/abox/1.29.0> , <http://example.org/backlog/abox/1.28.0> , <http://example.org/backlog/abox/1.27.0> , <http://example.org/backlog/abox/1.26.0> , <http://example.org/backlog/abox/1.25.0> , <http://example.org/backlog/abox/1.24.0> , <http://example.org/backlog/abox/1.23.0> , <http://example.org/backlog/abox/1.22.0> , <http://example.org/backlog/abox/1.21.0> , <http://example.org/backlog/abox/1.20.0> , <http://example.org/backlog/abox/1.19.0> , <http://example.org/backlog/abox/1.17.0> , <http://example.org/backlog/abox/1.16.0> , <http://example.org/backlog/abox/1.15.0> , <http://example.org/backlog/abox/1.14.0> , <http://example.org/backlog/abox/1.13.0> , <http://example.org/backlog/abox/1.12.0> , <http://example.org/backlog/abox/1.11.0> , <http://example.org/backlog/abox/1.10.0> , <http://example.org/backlog/abox/1.9.0> , <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
         <http://example.org/backlog-abox/1.2.1> ,
                      <http://example.org/backlog-abox/1.2.0> ,
                      <http://example.org/backlog-abox/1.1.0> ,
@@ -6617,7 +6617,7 @@ fw:L_RecordsTellTruth a backlog:Lineage ; rdfs:label "Lineage 19: Records That T
     backlog:lineageOrdinal 19 ;
     backlog:lineageArchived false ;
     backlog:lineageForMission fw:Mission_RecordsTellTruth ;
-    backlog:hasLineageStatus backlog:LS_InProgress ;
+    backlog:hasLineageStatus backlog:LS_Achieved ;
     backlog:hasLineageDepthLevel backlog:Depth_StoryDirect ;
     backlog:hasLineageArtifactDomain backlog:Domain_Infrastructure ;
     backlog:memberOfContainer fw:Register .
@@ -6627,7 +6627,8 @@ fw:Mission_RecordsTellTruth a backlog:Mission ; rdfs:label "Mission: Records Tha
     backlog:missionFor fw:Register ;
     backlog:hasMissionOrigin backlog:Origin_OwnerStated ;
     backlog:missionSource "Owner, 2026-10-06 23:51 and 2026-10-07 10:06: 'Abandoned lineage can have it closure report, cancellation should be reported. Closure report proves the completion of the work and provides details.' 'Can we make corrections and fill missing concepts to remedy the issues? What do we need to deal with the live rules over archive application problems? Why the story closure is dependent on an external object? Is this a well-designed story?' 'OK, open the Lineage 19 to fix the defects.' The defects are the five named in Lineage 18's closure report." ;
-    backlog:hasMissionOutcome backlog:Out_InFlight ;
+    backlog:hasMissionOutcome backlog:Out_Achieved ;
+    backlog:outcomeRationale "Achieved: the five defects Lineage 18 left are closed and each was re-measured from the package's own files and tools (open defects 5 to 0); an abandoned or achieved mission needs a closure report and one that names every cancelled item, each module declares its audience and the public copy follows, the archive is judged by its own rules and the records of retired work say they are retired, and the lesson about objectives on another register is recorded. The seven stories are Done with evidence; the closure report records one reported deviation (eight pending confirmations promoted)." ;
     backlog:producedByStage fw:Out_Mission_RecordsTellTruth ;
     backlog:decidedBy backlog:Owner .
 
@@ -7066,7 +7067,9 @@ fw:Out_Objective_RecordsTellTruth a backlog:StageOutput ;
 # acceptance criterion, design concerns declared, taken in by a planning event that produces one task. Order: S06, S01, S02, S04, S05, S03, S07.
 
 fw:It_DC_1 a backlog:Iteration ; backlog:hasIdentifier "DC-IT1" ; backlog:hasTitle "Lineage 19, first work window" ;
-    backlog:hasState backlog:InProgress ;
+    backlog:hasState backlog:Done ;
+    backlog:hasObservedDuration "PT2H30M"^^xsd:duration ;
+    backlog:hasDurationSource "Earliest startedAt (2026-10-07T09:20:00Z) to latest finishedAt (2026-10-07T11:50:00Z) across the seven ST_DC_* stories." ;
     backlog:memberOfContainer fw:Register ; backlog:belongsToLineage fw:L_RecordsTellTruth .
 
 fw:AC_DC_AbandonedReport a backlog:AcceptanceCriterion ;
@@ -7304,9 +7307,13 @@ fw:T_DC_ObjectiveLesson a backlog:ExecutionTask ; backlog:hasIdentifier "DC-T06"
     backlog:hasRationale "One task matching the whole of its story's scope." .
 
 fw:AC_DC_NothingLostAgain a backlog:AcceptanceCriterion ;
+    backlog:satisfiedByArtifact "03-tooling/backlog_declared_change_proof_v1_0_0.py -- classify" ;
     backlog:hasGherkinText "Given the live and archive data files before and after this lineage, When the split proof compares every statement, Then it reports 0 statements only before apart from the declared markers, every added statement matches a declared pattern, and the public copy derived now differs from the v1.351.0 copy only by the module-audience statements and the version." .
 fw:ST_DC_NothingLostAgain a backlog:Story ; backlog:hasIdentifier "DC-S07" ; backlog:hasTitle "Prove nothing earlier was reworded and the public copy is unchanged apart from the declared edits" ;
-    backlog:hasState backlog:Ready ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-10-07T11:20:00Z"^^xsd:dateTime ; backlog:finishedAt "2026-10-07T11:50:00Z"^^xsd:dateTime ; backlog:lastAuditedAt "2026-10-07T11:50:00Z"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_DC_NothingLostAgain ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
     backlog:memberOfContainer fw:Register ;
     backlog:belongsToLineage fw:L_RecordsTellTruth ;
     backlog:producedByStage fw:Out_Backlog_RecordsTellTruth ;
@@ -7329,7 +7336,10 @@ fw:Plan_DC_NothingLostAgain a backlog:PlanningEvent ; rdfs:label "DC-S07 taken i
     backlog:hasRationale "The formal boundary between ordering this work and doing it." .
 fw:T_DC_NothingLostAgain a backlog:ExecutionTask ; backlog:hasIdentifier "DC-T07" ;
     backlog:hasTitle "Build and prove: NothingLostAgain"@en ;
-    backlog:hasState backlog:Proposed ;
+    backlog:hasState backlog:Done ;
+    backlog:startedAt "2026-10-07T11:20:00Z"^^xsd:dateTime ; backlog:finishedAt "2026-10-07T11:50:00Z"^^xsd:dateTime ; backlog:lastAuditedAt "2026-10-07T11:50:00Z"^^xsd:dateTime ;
+    backlog:hasEvidence fw:Ev_DC_NothingLostAgain_Task ;
+    backlog:hasExecutionModality backlog:Mode_Hybrid ;
     backlog:hasTaskType backlog:Task_Implementation ;
     backlog:memberOfContainer fw:Register , fw:It_DC_1 ;
     backlog:belongsToLineage fw:L_RecordsTellTruth ;
@@ -7509,3 +7519,66 @@ fw:Obs_DC_MissionMet_ArchiveMarked a backlog:MetricObservation ; rdfs:label "Aft
     backlog:observesMetric fw:Metric_DC_MissionMet ; backlog:observationFor fw:Obj_DC_MissionMet ;
     backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-10-07T11:14:00Z"^^xsd:dateTime ;
     backlog:hasObservationMethod "Lineage 18's five defects re-checked in the package's own files and tools: none remains open." .
+
+# NothingLostAgain done (Lineage 19).
+fw:Ev_DC_NothingLostAgain a backlog:Evidence , backlog:TestEvidence ; backlog:attestsCriterion fw:AC_DC_NothingLostAgain ;
+    backlog:hasTestId "DC-S07-declared-change-proof" ;
+    backlog:evidenceVerified true ; backlog:verifiedByTool "backlog_declared_change_proof_v1_0_0.py" ;
+    backlog:hasVerificationMethod "backlog_declared_change_proof run over the v1.351.0 tag and the working tree, data files and shapes: 22 statements only before and 1379 only after, every one in a declared category and none undeclared; the same run over the public copy derived from each side: 22 and 1372, none undeclared, the seven cut modules unchanged (29 module-audience statements public against 36 live); a planted undeclared statement is refused on each side by the tool's own self-proof." .
+fw:Ev_DC_NothingLostAgain_Task a backlog:Evidence , backlog:TestEvidence ;
+    backlog:hasTestSpec "03-tooling/backlog_declared_change_proof_v1_0_0.py" ;
+    backlog:evidenceVerified true ; backlog:verifiedByTool "backlog_declared_change_proof_v1_0_0.py" ;
+    backlog:hasVerificationMethod "backlog_declared_change_proof run over the v1.351.0 tag and the working tree, data files and shapes: 22 statements only before and 1379 only after, every one in a declared category and none undeclared; the same run over the public copy derived from each side: 22 and 1372, none undeclared, the seven cut modules unchanged (29 module-audience statements public against 36 live); a planted undeclared statement is refused on each side by the tool's own self-proof." .
+fw:H_DC_NothingLostAgain a backlog:TestHarness ; backlog:harnessFor fw:T_DC_NothingLostAgain ;
+    backlog:hasHarnessEvidence fw:Ev_DC_NothingLostAgain_Task ;
+    backlog:hasRationale "The task's own harness, distinct from the story's." .
+fw:H_DC_NothingLostAgain_Story a backlog:TestHarness ; backlog:harnessFor fw:ST_DC_NothingLostAgain ;
+    backlog:hasHarnessEvidence fw:Ev_DC_NothingLostAgain ;
+    backlog:hasRationale "The story's own harness: the real run named in its evidence." .
+fw:Obs_DC_Proof_NothingLostAgain a backlog:MetricObservation ; rdfs:label "After DC NothingLostAgain: measured again"@en ;
+    backlog:observesMetric fw:Metric_DC_Proof ; backlog:observationFor fw:Obj_DC_Proof ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-10-07T11:52:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "backlog_declared_change_proof: statements lost or changed beyond the declared markers and additions, live and archive data and shapes 0; the public copy derived now against the one derived at v1.351.0 0." .
+fw:Obs_DC_Contained_NothingLostAgain a backlog:MetricObservation ; rdfs:label "After DC NothingLostAgain: measured again"@en ;
+    backlog:observesMetric fw:Metric_DC_Contained ; backlog:observationFor fw:Obj_DC_Contained ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-10-07T11:52:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "git: the eight Lineage 19 releases touched no file outside this package, and the four exclusions are measured separately below, each at 0." .
+fw:Obs_DC_NoStatementChange_NothingLostAgain a backlog:MetricObservation ; rdfs:label "After DC NothingLostAgain: measured again"@en ;
+    backlog:observesMetric fw:Metric_DC_NoStatementChange ; backlog:observationFor fw:Obj_DC_NoStatementChange ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-10-07T11:52:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "backlog_declared_change_proof: no earlier record reworded. Before-only statements 22, all declared: 11 belong to the two shapes this lineage was chartered to change, 3 are the markers flipped, 8 are the confirmations of already-pending archive records (the confirmation step's designed output; the exclusion's text named the three markers' own status, so this is reported in the closure report, not hidden)." .
+fw:Obs_DC_NoRetroJudging_NothingLostAgain a backlog:MetricObservation ; rdfs:label "After DC NothingLostAgain: measured again"@en ;
+    backlog:observesMetric fw:Metric_DC_NoRetroJudging ; backlog:observationFor fw:Obj_DC_NoRetroJudging ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-10-07T11:52:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "backlog_record_measures archive_tools 0; the live rules still do not read the archive folder, and the archive is judged only by its own shapes (backlog_archive_shapes_check, 0 violations)." .
+fw:Obs_DC_NoOtherPackages_NothingLostAgain a backlog:MetricObservation ; rdfs:label "After DC NothingLostAgain: measured again"@en ;
+    backlog:observesMetric fw:Metric_DC_NoOtherPackages ; backlog:observationFor fw:Obj_DC_NoOtherPackages ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-10-07T11:52:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "git: the files changed outside this package by the eight Lineage 19 release commits, none." .
+fw:Obs_DC_NoPublicContentChange_NothingLostAgain a backlog:MetricObservation ; rdfs:label "After DC NothingLostAgain: measured again"@en ;
+    backlog:observesMetric fw:Metric_DC_NoPublicContentChange ; backlog:observationFor fw:Obj_DC_NoPublicContentChange ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-10-07T11:52:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "backlog_public_cut_probe: the data files cut exactly the seven modules declared private, the same seven as at v1.351.0; backlog_declared_change_proof over both public copies finds only declared differences." .
+
+# Lineage 19 closes. Its seven stories shipped in the releases v1.357.0 to v1.360.0.
+fw:Rel_DC_1 a backlog:DeploymentUnit ;
+    backlog:hasIdentifier "DC-REL1" ; backlog:hasTitle "Shipped from Lineage 19's first work window" ;
+    backlog:hasState backlog:Done ;
+    backlog:hasDeploymentDate "2026-10-07T12:30:00Z"^^xsd:dateTime ;
+    backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:deploysFrom fw:It_DC_1 ; backlog:deploysItem fw:ST_DC_AbandonedReport , fw:ST_DC_CancelledReported , fw:ST_DC_ArchiveMarked , fw:ST_DC_AudienceDeclared , fw:ST_DC_ArchiveOwnRules , fw:ST_DC_ObjectiveLesson , fw:ST_DC_NothingLostAgain ;
+    backlog:decidedBy backlog:Owner ; backlog:hasSelectionBasis backlog:Sel_Committed .
+fw:ST_DC_AbandonedReport backlog:memberOfContainer fw:Rel_DC_1 .
+fw:ST_DC_CancelledReported backlog:memberOfContainer fw:Rel_DC_1 .
+fw:ST_DC_ArchiveMarked backlog:memberOfContainer fw:Rel_DC_1 .
+fw:ST_DC_AudienceDeclared backlog:memberOfContainer fw:Rel_DC_1 .
+fw:ST_DC_ArchiveOwnRules backlog:memberOfContainer fw:Rel_DC_1 .
+fw:ST_DC_ObjectiveLesson backlog:memberOfContainer fw:Rel_DC_1 .
+fw:ST_DC_NothingLostAgain backlog:memberOfContainer fw:Rel_DC_1 .
+fw:CR_RecordsTellTruth a backlog:ClosureReport ;
+    backlog:closesForMission fw:Mission_RecordsTellTruth ;
+    backlog:reportGeneratedAt "2026-10-07T12:30:00Z"^^xsd:dateTime ;
+    backlog:closureCommittedAt "backlog-roadmap-framework-v1.360.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasClosureSummary "Done: the five defects Lineage 18's closure report named are closed, each re-measured: an abandoned mission is reported and a report names what was cancelled (rule v1.150.0, archive tool v2.5.0, 12 gaps to 0, two missing reports written from the lineage's own records); each module declares its audience and the public copy follows the declaration and stops on a missing one (7 undeclared to 0, the same seven modules cut as at v1.351.0); the archive is judged by its own shapes v1.1.0 and the reconcile tool v3.0.0 runs (archive 3 violations to 0); the three unmarked archived records say they are archived; the lesson about an objective that counted another session's register is recorded as a finding. Proof: backlog_declared_change_proof over v1.351.0 and now, data and shapes, then the public copy derived from each side: every difference is declared and none other. Reported, not hidden: the confirmation step also promoted eight already-pending archive records to confirmed, which is its designed output; the exclusion's text named only the three records' status, so this goes beyond the letter of it. Open facts outside this lineage: two lineage ordinals (17 and 18) are each carried by two lineages across live and archive; the v1.351.0 tag was missing from the remote for a time." ;
+    backlog:reportsDeliveredItem fw:ST_DC_AbandonedReport , fw:ST_DC_CancelledReported , fw:ST_DC_ArchiveMarked , fw:ST_DC_AudienceDeclared , fw:ST_DC_ArchiveOwnRules , fw:ST_DC_ObjectiveLesson , fw:ST_DC_NothingLostAgain ;
+    backlog:reportsOnObjective fw:Obj_DC_MissionMet , fw:Obj_DC_Reports , fw:Obj_DC_Marking , fw:Obj_DC_Audience , fw:Obj_DC_ArchiveRules , fw:Obj_DC_Lesson , fw:Obj_DC_Proof , fw:Obj_DC_Contained , fw:Obj_DC_NoStatementChange , fw:Obj_DC_NoRetroJudging , fw:Obj_DC_NoOtherPackages , fw:Obj_DC_NoPublicContentChange .

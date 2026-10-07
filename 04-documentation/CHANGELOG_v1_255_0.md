@@ -11260,6 +11260,14 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.360.0 — Lineage 19, DC-S07, and Lineage 19 closed: the proof, and the closure
+
+- **New tool `backlog_declared_change_proof` v1.0.0:** reads the same statements as the split proof, sorts every difference between two package trees into a declared category and fails on any that fits none; it refuses a planted undeclared statement on each side before it certifies.
+- **Result, v1.351.0 against now (data and shapes):** 22 statements only before and 1379 only after, every one declared; the public copy derived from each side: 22 and 1372, every one declared, the same seven modules cut.
+- **Reported deviation:** the repaired confirmation step also promoted eight already-pending archive records to confirmed. That is its designed output, but the exclusion's text named only the three records' status; it is recorded in the closure report.
+- **Lineage 19 closed:** the iteration is Done (PT2H30M, from the stories' own timestamps), `Rel_DC_1` carries the seven stories, the mission is Achieved with its reason, and `CR_RecordsTellTruth` names the seven delivered stories (none cancelled) and reports on all twelve objectives. Data file: `backlog_abox` v1.30.0.
+- **Measured at close:** open Lineage 18 defects 5 to 0; closure gaps 12 to 0; unmarked archived records 3 to 0; modules without an audience 7 to 0; archive tools breaking the rule 1 to 0; objective-design lessons recorded 0 to 1.
+
 ## v1.359.0 — Lineage 19, DC-S03 and DC-S05: the archive is judged by its own rules, and an archived record says it is archived
 
 - **Archive shapes v1.1.0:** the marker rule (an archived record must say `lineageArchived true` and carry a confirmation status) is a Violation again; new rules require a closed mission's report, a report naming every cancelled item, and a declared audience on every module — all judged inside the archive folder, never by the live rules.
