@@ -22,9 +22,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (ABox: controlled individuals, reference data and the live register)"@en ;
-    owl:versionIRI <http://example.org/backlog/abox/1.21.0> ;
-    owl:versionInfo "1.21.0" ;
-    owl:priorVersion <http://example.org/backlog/abox/1.20.0> , <http://example.org/backlog/abox/1.19.0> , <http://example.org/backlog/abox/1.17.0> , <http://example.org/backlog/abox/1.16.0> , <http://example.org/backlog/abox/1.15.0> , <http://example.org/backlog/abox/1.14.0> , <http://example.org/backlog/abox/1.13.0> , <http://example.org/backlog/abox/1.12.0> , <http://example.org/backlog/abox/1.11.0> , <http://example.org/backlog/abox/1.10.0> , <http://example.org/backlog/abox/1.9.0> , <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
+    owl:versionIRI <http://example.org/backlog/abox/1.22.0> ;
+    owl:versionInfo "1.22.0" ;
+    owl:priorVersion <http://example.org/backlog/abox/1.21.0> , <http://example.org/backlog/abox/1.20.0> , <http://example.org/backlog/abox/1.19.0> , <http://example.org/backlog/abox/1.17.0> , <http://example.org/backlog/abox/1.16.0> , <http://example.org/backlog/abox/1.15.0> , <http://example.org/backlog/abox/1.14.0> , <http://example.org/backlog/abox/1.13.0> , <http://example.org/backlog/abox/1.12.0> , <http://example.org/backlog/abox/1.11.0> , <http://example.org/backlog/abox/1.10.0> , <http://example.org/backlog/abox/1.9.0> , <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
         <http://example.org/backlog-abox/1.2.1> ,
                      <http://example.org/backlog-abox/1.2.0> ,
                      <http://example.org/backlog-abox/1.1.0> ,
@@ -6603,3 +6603,29 @@ fw:CR_OEPackageConsolidation a backlog:ClosureReport ;
     backlog:closureCommittedAt "backlog-roadmap-framework-v1.351.0 (tag; witnessed by git, not asserted)" ;
     backlog:hasClosureSummary "Done: the package ships as one vocabulary, one data file and one shapes file, each with one ontology header (OE structure checker: 3 files, 0 violations, and OE's debt register holds no line for it). Every former subject is a module record; the archive is a folder of its own with one data file and one shapes file; the test drive and the strategy exercise register are fixtures with declared polarity; Lineage 17 was set down through the archiving ceremony; ten tools follow the new layout. The split proof over the whole lineage read 0 statements lost or changed, 176 added, all declared. Delivered by seven stories in releases v1.346.0 to v1.350.0. Cancelled: nothing in this lineage; its predecessor's three unfinished stories were carried into it (see that lineage's own report). Not done well, found after the work and carried to the next lineage: (1) the public copy cuts seven modules by a list of IRIs in the deriver, and a module that is missing is skipped silently, against what the changelog said; (2) the archive-reconcile tool derives folders by string substitution and is broken by the archive folder, which the story that repointed tools did not catch; (3) the archive tool did not mark the archived copy of a lineage as archived, leaving three warnings; (4) the archive tool accepted an abandoned mission without a closure report, which the owner has ruled wrong; (5) objective OC-O4 counted lines in another party's register, which only that party could change, so its story could not honestly close for hours after its own criterion was met." ;
     backlog:reportsOnObjective fw:Obj_OC_MissionMet , fw:Obj_OC_FilesDone , fw:Obj_OC_ToolsDone , fw:Obj_OC_EnforcementDone , fw:Obj_OC_Contained , fw:Obj_OC_NoStatementChange , fw:Obj_OC_NoRetroJudging , fw:Obj_OC_NoOtherPackages , fw:Obj_OC_NoModuleMembership .
+
+# v9.115.0: Lineage 19, Mission stage (first of five releases). Lineage 18 is closed above as achieved, with a closure report that names
+# five defects it leaves. This is a new lineage (G72), not a revival: it pursues those defects. One release per stage from here.
+fw:L_RecordsTellTruth a backlog:Lineage ; rdfs:label "Lineage 19: Records That Tell the Truth"@en ;
+    backlog:lineageOrdinal 19 ;
+    backlog:lineageArchived false ;
+    backlog:lineageForMission fw:Mission_RecordsTellTruth ;
+    backlog:hasLineageStatus backlog:LS_Opened ;
+    backlog:hasLineageDepthLevel backlog:Depth_StoryDirect ;
+    backlog:hasLineageArtifactDomain backlog:Domain_Infrastructure ;
+    backlog:memberOfContainer fw:Register .
+
+fw:Mission_RecordsTellTruth a backlog:Mission ; rdfs:label "Mission: Records That Tell the Truth"@en ;
+    backlog:hasMissionStatement "Everything this package records about ended work and everything it publishes says what is true, and a tool that cannot find what it was told to handle stops and says so instead of carrying on. A mission that ends, achieved or abandoned, has a closure report that proves what was done and names every item it delivered and every item it cancelled; the record of a retired lineage is marked archived; each module of the data file declares who may read it, and the public copy is cut by that declaration and refuses to build when a declared module is missing; the archive is judged only by the archive's own rules, by tools that read the archive folder; and what the package learned about designing an objective is recorded as a finding. No earlier statement is reworded: earlier records change only by additions and by the three archive markers, each declared in advance." ;
+    backlog:missionFor fw:Register ;
+    backlog:hasMissionOrigin backlog:Origin_OwnerStated ;
+    backlog:missionSource "Owner, 2026-10-06 23:51 and 2026-10-07 10:06: 'Abandoned lineage can have it closure report, cancellation should be reported. Closure report proves the completion of the work and provides details.' 'Can we make corrections and fill missing concepts to remedy the issues? What do we need to deal with the live rules over archive application problems? Why the story closure is dependent on an external object? Is this a well-designed story?' 'OK, open the Lineage 19 to fix the defects.' The defects are the five named in Lineage 18's closure report." ;
+    backlog:hasMissionOutcome backlog:Out_InFlight ;
+    backlog:producedByStage fw:Out_Mission_RecordsTellTruth ;
+    backlog:decidedBy backlog:Owner .
+
+fw:Out_Mission_RecordsTellTruth a backlog:StageOutput ;
+    backlog:outputOfStage backlog:Stage_Mission ; backlog:belongsToLineage fw:L_RecordsTellTruth ;
+    backlog:hasStateDigest "f1f072db0eb9e360db526f9aa2045b44510bf3d6535ffc576741289127e64668" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.352.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Mission stage of Lineage 19. Tag deterministic: VERSION.txt set before publishing. Stage 1 of 5, one release each." .

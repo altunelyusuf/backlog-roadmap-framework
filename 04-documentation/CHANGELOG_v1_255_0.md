@@ -11228,3 +11228,9 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Closure report:** it covers the nine objectives and states five defects carried forward to Lineage 19: the public copy cuts modules by an IRI list and skips a missing one silently; the reconcile tool still judges the archive by live rules; the archived copy of a retired lineage is not marked archived; an abandoned mission is accepted without a closure report; one objective (OC-S07) depended on an external register, which was a poor design.
 - **Corrections to earlier entries:** v1.348.0 said a module missing from the deriver is "reported, never silent"; the code skips it silently. v1.349.0 said no script names a moved path; the reconcile tool derives archive folders by string substitution. Both are defects, not facts, and are in Lineage 19.
 - **Data file:** `backlog_abox` v1.21.0; 0 violations; pipeline digests 5 of 5 reproduce.
+
+## v1.352.0 — Lineage 19, Mission stage: records that tell the truth
+
+- **Opened:** Lineage 19, a new lineage that follows the achieved Lineage 18 (not a revival). Its mission: a mission that ends has a closure report naming what it delivered and what it cancelled; a retired lineage's record is marked archived; each module declares its audience and the public copy is cut by that declaration and stops when a declared module is missing; the archive is judged only by its own rules; the lesson about designing an objective is recorded. No earlier statement is reworded.
+- **Stage 1 of 5:** mission only; scope, goals, objectives and work items follow, one release each.
+- **Data file:** `backlog_abox` v1.22.0.
