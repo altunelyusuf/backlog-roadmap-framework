@@ -11260,6 +11260,50 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.371.0 — G99 root-cause analysis: this session's own four "no lineage" releases were the wrong reading of G99, and the register-side gate meant to catch exactly that had never once worked
+
+**Unplanned work:** a direct root-cause analysis the owner asked for, and the real gate defect found while
+writing it (G101-pattern enforcement; no lineage -- the retroactive register structure for v1.367.0-v1.370.0's
+own work is deliberately not built in this release; see below).
+
+**Why asked.** The owner, reviewing v1.367.0-v1.370.0: "Why did you skip G99 requirements? How to prevent such
+things to happen again?"
+
+**What was found, not assumed.** `ROOT_CAUSE_ANALYSIS_g99_shipped_four_releases_without_the_minimal_lineage_it_requires_v1_0_0.md`
+(new): G99's own text requires a minimal Lineage, never a Lineage-free WorkItem -- re-read directly from the
+discipline file, not from this session's own carried-over summary, which had compressed the ruling lossily
+("may proceed without a lineage") and dropped the one word that makes it non-optional. The same gap happened once
+before, 2026-09-22, disclosed in this very changelog and later closed by opening `L_OEStructureCleanup` across
+five dedicated releases -- this session wrote the same "no lineage" framing four times without checking for that
+precedent first. **A second, independent, and older defect, found only by asking why the register-side gate did
+not catch any of this either:** `backlog_release_item_check` (GOV-S01) exists specifically to refuse a release
+whose governed files changed with no item moved and no declared unplanned-work marker. Replayed directly against
+the real v1.368.0 -> v1.369.0 span and against the real saved gate log from that actual release: both say
+"governed files changed: 0, PASS" -- because the tool compared `{baseline}..HEAD`, and HEAD is always still the
+baseline at the moment this gate runs, before the release it is gating is ever committed. The same empty result
+reproduces on an unrelated earlier release's own saved log (v1.350.0) -- **this gate has examined nothing and
+passed on every release in this package's history**, not only this session's four.
+
+**Fixed, with proof.** `backlog_release_item_check_v1_5_0.py`: compares `{baseline_tag}` against the real
+working tree (not a commit range that is always empty at gate time), unioned with `git ls-files --others
+--exclude-standard` (a second, compounding defect: `git diff` alone never lists a file nothing has `git add`ed
+yet, which is most of what a real release actually introduces -- of the 11 real governed files in the replayed
+span, 4 were modified-tracked and 7 were new and untracked). `backlog_release_item_check_probe_v1_0_0.py` (new,
+this tool had none): six cases on a real throwaway git repository, including the exact historical bug (a
+modified-but-uncommitted and a brand-new-untracked governed file, both previously invisible), item movement, a
+real unplanned-work marker, and prose that merely mentions "unplanned" without the real marker.
+
+**Recovery of the four releases' own gap: proposed, not performed here.** The package's own
+`RECOVERY_RUNBOOK_work_executed_outside_the_register_v1_1_0.md` (G100) governs exactly this shape of gap and
+reserves its restart act and Mission re-affirmation to the owner by name (steps 5-6, G14) -- not a decision this
+session makes unilaterally. The RCA names the proposed next step: one Lineage covering v1.367.0-v1.370.0's real
+work, admitted via the runbook's own `preLineageItem`/`admittedByOutput` mechanism once a Backlog stage output
+exists, carrying every required fact shape and exempt only from the two act-record shapes the runbook names.
+
+**Still open, named directly, not quietly carried again:** causes 1 (the lossy carried-over summary) and 2
+(nothing yet ties a changelog's ruling citation to a required register change) are evidenced in the RCA but not
+closed by this release -- see its "What is not claimed" section.
+
 ## v1.370.0 — G99 release E: the owner's Merkle-root idea, mixed with the over-processing findings -- every step is stamped on its own leaves, not on one flat hash a whole section shared
 
 Maintenance, no lineage (G99). The owner asked to mix the parked Merkle idea with the over-processing findings of release D and solve what that combination reaches, rather than deferring it again.

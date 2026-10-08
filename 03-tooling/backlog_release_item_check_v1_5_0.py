@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-# v1.4.0 (Lineage 17, OESC-S04): the fallback to the register's old file name is gone; the baseline tag now always carries the new layout.
-"""backlog_release_item_check v1.2.0 -- GOV-S01, GOV-S02.
+# v1.5.0 (G99 RCA): the release-time comparison examined a span that could never contain the release being gated -- fixed to the working tree, and to include files never git-added.
+"""backlog_release_item_check v1.5.0 -- GOV-S01, GOV-S02.
 
 The real, agreed gap: a package can publish a release whose governed files genuinely changed, while
 not one real backlog item moved -- checked and confirmed on automate-python-book-3e (fourteen real
@@ -10,6 +10,24 @@ Proposed in the same commit span a release's governed files changed in (GOV-S01)
 that, whether the release explicitly declared itself unplanned work in its own permanent record
 (GOV-S02) -- not a throwaway --unplanned-reason flag with nothing behind it, but a real statement
 written into the same changelog every real release in this package already carries.
+
+**v1.5.0, the real defect found while writing the G99 root-cause analysis.** This gate runs from
+inside `backlog_release_tool`, which calls it BEFORE the release it is gating is ever committed --
+the commit is the publisher's own later act. `v1.4.0 and every version before it asked git for
+"{baseline_tag}..HEAD"`, and HEAD at that moment is still the baseline: the two sides of that range
+were always the same commit, so the diff was always empty and the gate always printed "governed
+files changed: 0" -- a true statement about the wrong span, not a check of the release in flight.
+Reproduced directly: replaying the exact v1.368.0 -> v1.369.0 release gate this package already ran
+shows "governed files changed: 0, PASS" (the live log), while the same baseline against a git
+worktree carrying that release's real, uncommitted edits shows 11 governed files, and even that
+undercounts (see below) -- this gate has examined nothing and passed on every release in this
+package's history, not only the four this RCA is about (confirmed on v1.350.0's own saved gate log,
+an unrelated earlier release, same empty result). A second, compounding defect in the same method:
+`git diff` never lists a file that was never `git add`ed, so even comparing against the true working
+tree (dropping `..HEAD`) still misses every brand-new governed file a release introduces before the
+publisher stages it -- reproduced directly: 4 of the 11 real governed files in that same replay were
+modified-tracked (caught once `..HEAD` is dropped) and 7 were new and untracked (still missed until
+`git ls-files --others --exclude-standard` is unioned in). Fixed both ways below.
 
 Method: compares the register's own WorkItem hasState values at the baseline tag against the
 current working tree. A real movement is either an existing item whose hasState differs, or a new
@@ -22,7 +40,7 @@ own current VERSION.txt must contain a line starting with "**Unplanned work:**" 
 deliberate marker, not any prose that happens to mention the phrase. A version bump with no matching
 changelog entry, or a changelog entry with no such marker, is read as no declaration at all.
 
-Usage: backlog_release_item_check_v1_1_0.py <package_root> <baseline_tag>
+Usage: backlog_release_item_check_v1_5_0.py <package_root> <baseline_tag>
        [--repo-root <path>] [--package-prefix <rel_path>]
 
 Exit 0 and PASS if nothing governed changed, a real item moved, or the changelog carries a real
@@ -44,18 +62,26 @@ def sh(args, cwd):
 
 
 def changed_governed_files(repo_root, package_prefix, baseline_tag):
-    rc, out, err = sh(["git", "diff", "--name-only", f"{baseline_tag}..HEAD"], repo_root)
+    """v1.5.0: the release being gated is never committed yet when this runs, so the comparison
+    must be BASELINE vs the real working tree (tracked changes, staged or not) UNIONED with every
+    file git does not know about yet (untracked, not git-added) -- "baseline..HEAD" and a bare
+    tracked-only diff both examine a span or a file set that cannot hold the release in flight."""
+    rc, out, err = sh(["git", "diff", "--name-only", baseline_tag], repo_root)
     if rc != 0:
         print(f"GATE ABORT: git diff against {baseline_tag} failed: {err.strip()}")
         sys.exit(3)
+    rc2, out2, err2 = sh(["git", "ls-files", "--others", "--exclude-standard"], repo_root)
+    if rc2 != 0:
+        print(f"GATE ABORT: git ls-files --others failed: {err2.strip()}")
+        sys.exit(3)
     changed = []
-    for line in out.splitlines():
+    for line in out.splitlines() + out2.splitlines():
         if not line.startswith(package_prefix):
             continue
         rel = line[len(package_prefix):]
-        if any(rel.startswith(d) for d in GOVERNED_DIRS):
+        if any(rel.startswith(d) for d in GOVERNED_DIRS) and rel not in changed:
             changed.append(rel)
-    return changed
+    return sorted(set(changed))
 
 
 def register_path(repo_root, package_prefix):
