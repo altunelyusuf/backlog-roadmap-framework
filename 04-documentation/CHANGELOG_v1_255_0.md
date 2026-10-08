@@ -11260,6 +11260,34 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.373.0 — the adopting project's package-activation classifier: two more named cases (mistaken link, wrong direction), no lineage
+
+**Unplanned work:** the owner's direct follow-up ruling on an adopting project package-dependency handover, 2026-10-08,
+naming two more cases and asking whether similar cases exist elsewhere in this package's own history.
+
+**Two more cases, named by the owner, added to `backlog_package_activation_drift_classifier` (v1.1.0):**
+- **MistakenDependency** -- "maybe there is no reason but mistakenly a dependency is set between the packages."
+  No real member-level `dependsOn` edge exists between the two packages in EITHER direction, so the
+  `containerDependsOn` edge has no basis at all. Remedy, as stated: remove the `containerDependsOn` edge, then
+  re-run the order check / start gate to see whether a replan is now needed.
+- **WrongDirection** -- "or direction of the link is incorrect." No real edge runs from the drifted (already-
+  active) package to the still-open one, but a real edge runs the OTHER way. Remedy, as stated: flip the
+  `containerDependsOn` edge, and the two packages' position in the lineage/roadmap, to match the real direction.
+- Classification order is now: MistakenDependency (no basis either way) -> WrongDirection (basis only the other
+  way) -> PackageScopePlanning (basis the claimed way, timing signature matches) -> UNCLASSIFIED (basis the
+  claimed way, signature does not match -- an owner-named case not yet in this tool's hands). Proved on five
+  throwaway cases (one per outcome, plus the no-drift case), each checked for both its classification label and
+  the exact remedy text.
+
+**"Maybe you can find similar cases" (2026-10-08), checked directly, not assumed:** grepped this package's own
+`CHANGELOG` and `LINEAGE_OPERATING_DISCIPLINE` for a prior phantom- or reversed-container-dependency finding.
+One real precedent exists -- `ContainerLinkageShape`'s own origin (`backlog-shapes` 1.3.0): "phantom container
+dependencies" were already named and refused at L2, which is exactly case 1's own precondition (a
+`containerDependsOn` edge with no real basis is refused there, not merely advised here) -- consistent with, not
+contradicting, `MistakenDependency`'s remedy. No prior finding named a reversed-direction container dependency,
+or an activation-timing drift specifically; those two remain new to this package, evidenced by their absence
+across both documents, not assumed absent.
+
 ## v1.372.0 — the adopting project's package-activation handover: detection and a one-case root-cause classifier, no lineage, per the owner's ruling
 
 **Unplanned work:** the owner's direct ruling on an adopting project package-dependency handover, 2026-10-08.

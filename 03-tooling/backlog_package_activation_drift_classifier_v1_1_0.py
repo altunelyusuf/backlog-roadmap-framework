@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_package_activation_drift_classifier v1.0.0 -- the owner's ruling (2026-10-08) on the adopting project's package-
+"""backlog_package_activation_drift_classifier v1.1.0 -- the owner's ruling (2026-10-08) on the adopting project's package-
 activation handover: a dependent package should not be activated before what it depends on is resolved; correct
 planning should make that unreachable; if it IS reached, that is a drift, and a root-cause classification should
 run -- not a per-instance decision -- before any remedy.
@@ -7,21 +7,30 @@ run -- not a per-instance decision -- before any remedy.
 Detection is PackageActivationOrderAdvisoryShape (backlog_shacl, FM_PackageActivationDrift): fires on a Package
 whose derivedState is InProgress/Done while a package it containerDependsOn is neither Done nor Cancelled. This
 tool runs AFTER that advisory has already identified a drifted package, and answers the question the owner asked
-next: which case produced it.
+next: which case produced it. Checked in this order, each on the same real member-level dependsOn edges
+ContainerLinkageShape already requires as the dependency's basis:
 
-Classified here (the one case the owner named explicitly, 2026-10-08): "package scope planning, i.e. a pre-PBI
-is added to a later package" -- a real member-level dependsOn edge exists from an item in the drifted (already-
-active) package to an item in the still-open dependency package, AND that dependency package's own planned
-start (earliest targetsIteration -> iterationStart) is no earlier than the drifted package's -- i.e. the
-prerequisite was scheduled to arrive no sooner than the work that needs it, not before it. Remedy for this case,
-per the owner's ruling: dissolve and repack the two packages so the prerequisite lands in a package sequenced
-before its dependents.
+1. **MistakenDependency** (owner, 2026-10-08): "maybe there is no reason but mistakenly a dependency is set
+   between the packages." No real dependsOn edge exists in EITHER direction between the two packages' members --
+   the containerDependsOn edge has no basis at all. Remedy: remove the containerDependsOn edge, then re-run the
+   order check / start gate to see whether a replan is now needed.
+2. **WrongDirection** (owner, 2026-10-08): "or direction of the link is incorrect." No real dependsOn edge runs
+   from the drifted (dependent) package to the still-open one, but a real edge runs the OTHER way -- an item in
+   the still-open package actually depends on an item in the already-active one. The containerDependsOn edge
+   points backwards relative to its own real basis. Remedy: flip the containerDependsOn edge (and the two
+   packages' position in the lineage/roadmap) to match the real, evidenced direction.
+3. **PackageScopePlanning** (owner, 2026-10-08): "a pre-PBI is added to a later package." A real dependsOn edge
+   runs the claimed direction (drifted package's member depends on the still-open package's member), AND the
+   still-open package's own earliest planned start (targetsIteration -> iterationStart) is no earlier than the
+   drifted package's own -- the prerequisite was scheduled to arrive no sooner than the work that needs it.
+   Remedy: dissolve and repack so the prerequisite lands in a package sequenced before its dependents.
 
-Any flagged package whose real dependsOn basis does not fit this signature is reported UNCLASSIFIED, by design:
-the owner has stated other cases exist with their own clear methods, not yet in this tool's hands, and this
-probe does not guess at them.
+A real edge runs the claimed direction, but the timing signature does not match case 3, is reported
+UNCLASSIFIED: the owner has said other cases exist beyond these three with their own clear methods; this tool
+does not guess at them, and "maybe you can find similar cases" (2026-10-08) is answered in the changelog entry,
+not invented here as a fourth code path without a named method behind it.
 
-Usage: backlog_package_activation_drift_classifier_v1_0_0.py REGISTER.ttl [REGISTER2.ttl ...]
+Usage: backlog_package_activation_drift_classifier_v1_1_0.py REGISTER.ttl [REGISTER2.ttl ...]
 Exit 0 and prints one block per drifted package (classified or not); exit 0 with "no drift found" if the
 advisory shape finds nothing on this register; exit 2 on a file/parse error.
 """
@@ -81,19 +90,33 @@ def dependency_basis(g, dependent_pkg, dependency_pkg):
 
 
 def classify(g, drifted, dependency):
-    basis = dependency_basis(g, drifted, dependency)
-    if not basis:
-        return "UNCLASSIFIED", "no real member-level dependsOn edge found backing the containerDependsOn edge -- the advisory's own precondition for a real (non-phantom) dependency is not met by this tool's own check either; verify ContainerLinkageShape's own finding before trusting this containerDependsOn edge at all."
+    forward = dependency_basis(g, drifted, dependency)
+    reverse = dependency_basis(g, dependency, drifted)
+
+    if not forward and not reverse:
+        return "MistakenDependency", (
+            "no real member-level dependsOn edge exists between these two packages in EITHER direction -- the "
+            "containerDependsOn edge has no basis at all. Remedy (owner, 2026-10-08): remove the containerDependsOn "
+            "edge, then re-run the order check / start gate to see whether a replan is now needed.")
+
+    if not forward and reverse:
+        names = ", ".join("%s -> %s" % (label(g, a), label(g, b)) for a, b in reverse)
+        return "WrongDirection", (
+            "no real dependsOn edge runs from the drifted package to the still-open one, but a real edge runs "
+            "the OTHER way (%s) -- the containerDependsOn edge points backwards relative to its own evidenced "
+            "basis. Remedy (owner, 2026-10-08): flip the containerDependsOn edge (and the two packages' position "
+            "in the lineage/roadmap) to match the real direction." % names)
+
     s_drifted, s_dependency = earliest_start(g, drifted), earliest_start(g, dependency)
     if s_drifted is not None and s_dependency is not None and s_dependency >= s_drifted:
-        names = ", ".join("%s -> %s" % (label(g, a), label(g, b)) for a, b in basis)
+        names = ", ".join("%s -> %s" % (label(g, a), label(g, b)) for a, b in forward)
         return "PackageScopePlanning", (
             "a real dependency basis exists (%s), and the dependency package's own earliest planned start "
             "(%s) is not before the drifted package's (%s) -- the prerequisite was scheduled to arrive no "
             "sooner than the work that needs it. Remedy (owner's ruling): dissolve and repack so the "
             "prerequisite item moves into a package sequenced before its dependents." % (names, s_dependency, s_drifted))
     return "UNCLASSIFIED", (
-        "a real dependency basis exists, but it does not fit the one named case's timing signature "
+        "a real dependency basis exists in the claimed direction, but it does not fit case 3's timing signature "
         "(dependency start=%s, drifted start=%s) -- this may be one of the owner's other named cases, not yet "
         "built into this tool." % (s_dependency, s_drifted))
 

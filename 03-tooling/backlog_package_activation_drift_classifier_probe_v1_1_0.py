@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""backlog_package_activation_drift_classifier_probe v1.0.0 -- shown on four throwaway cases:
-  1 no drift at all                                                         -> "no drift found"
-  2 the named case (real dependency basis, dependency starts no earlier)    -> PackageScopePlanning, dissolve-and-repack
-  3 a drift with NO real member-level dependsOn basis                       -> UNCLASSIFIED (phantom dependency)
-  4 a drift with a real basis but the dependency already started earlier   -> UNCLASSIFIED (not this named case)
+"""backlog_package_activation_drift_classifier_probe v1.1.0 -- shown on six throwaway cases:
+  1 no drift at all                                                           -> "no drift found"
+  2 real basis, claimed direction, dependency starts no earlier (the owner's first-named case) -> PackageScopePlanning, dissolve-and-repack
+  3 NO real dependsOn edge in either direction                               -> MistakenDependency, remove the edge
+  4 real basis, but the dependency already started earlier -- not case 2     -> UNCLASSIFIED
+  5 real basis running the OTHER way only (the direction is backwards)       -> WrongDirection, flip the edge
 Exit 0 all hold; 1 a case did not.
 """
 import glob, os, re, subprocess, sys, tempfile
@@ -55,14 +56,14 @@ ex:tB2 a backlog:Task ; backlog:hasState backlog:InProgress ; backlog:memberOfCo
 """)
 check("2 the named case classifies as PackageScopePlanning", code == 0 and "classification: PackageScopePlanning" in out and "dissolve and repack" in out)
 
-# 3: a drift with no real dependsOn basis at all -- phantom
+# 3: a drift with no real dependsOn basis in either direction -- mistaken link
 code, out = run("""
 ex:A3 a backlog:Package . ex:tA3 a backlog:Task ; backlog:hasState backlog:Proposed ; backlog:memberOfContainer ex:A3 .
 ex:B3 a backlog:Package ; backlog:containerDependsOn ex:A3 . ex:tB3 a backlog:Task ; backlog:hasState backlog:InProgress ; backlog:memberOfContainer ex:B3 .
 """)
-check("3 a drift with no real basis is UNCLASSIFIED, named as a phantom dependency", code == 0 and "classification: UNCLASSIFIED" in out and "phantom" in out)
+check("3 no real basis in either direction is MistakenDependency, remedy names removing the edge", code == 0 and "classification: MistakenDependency" in out and "remove the containerDependsOn" in out)
 
-# 4: a real basis, but the dependency package started EARLIER than the drifted one -- not this named case
+# 4: a real basis in the claimed direction, but the dependency package started EARLIER than the drifted one -- not case 2
 code, out = run("""
 ex:IterEarly4 a backlog:Iteration ; backlog:iterationStart "2026-01-01T00:00:00"^^xsd:dateTime .
 ex:IterLate4 a backlog:Iteration ; backlog:iterationStart "2026-03-01T00:00:00"^^xsd:dateTime .
@@ -71,7 +72,15 @@ ex:tA4 a backlog:Task ; backlog:hasState backlog:Proposed ; backlog:memberOfCont
 ex:B4 a backlog:Package ; backlog:containerDependsOn ex:A4 ; backlog:targetsIteration ex:IterLate4 .
 ex:tB4 a backlog:Task ; backlog:hasState backlog:InProgress ; backlog:memberOfContainer ex:B4 ; backlog:dependsOn ex:tA4 .
 """)
-check("4 a real basis with the dependency already started earlier is UNCLASSIFIED, not the named case", code == 0 and "classification: UNCLASSIFIED" in out and "does not fit" in out)
+check("4 a real basis with the dependency already started earlier is UNCLASSIFIED, not case 2", code == 0 and "classification: UNCLASSIFIED" in out and "does not fit" in out)
+
+# 5: a real basis running the OTHER way only -- the containerDependsOn direction is backwards
+code, out = run("""
+ex:A5 a backlog:Package ; backlog:containerDependsOn ex:B5 .
+ex:tA5 a backlog:Task ; backlog:hasState backlog:InProgress ; backlog:memberOfContainer ex:A5 .
+ex:B5 a backlog:Package . ex:tB5 a backlog:Task ; backlog:hasState backlog:Proposed ; backlog:memberOfContainer ex:B5 ; backlog:dependsOn ex:tA5 .
+""")
+check("5 a real basis running only the other way is WrongDirection, remedy names flipping the edge", code == 0 and "classification: WrongDirection" in out and "flip the containerDependsOn" in out)
 
 print("VERDICT : " + ("ALL HOLD" if not bad else "FAILED -- " + "; ".join(bad)))
 sys.exit(0 if not bad else 1)
