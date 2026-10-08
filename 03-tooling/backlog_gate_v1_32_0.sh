@@ -15,6 +15,7 @@
 #
 # v1.29.0 (Lineage 19, DC-S04): a third probe runs every time: the public copy is cut by each module's declared audience and stops with an error when it cannot be sure (backlog_public_cut_probe).
 # v1.28.0 (Lineage 19, DC-S01 and DC-S02): two probes run every time: the closure-report rules are shown firing on planted faults and silent on corrected twins (backlog_closure_shapes_probe), and the archive tool's refusals are drilled on planted lineages (backlog_archive_drill). A probe that cannot be found stops the gate.
+# v1.32.0 (G99 release A2, speed only): the validation proof section is now the per-shape cache probe (backlog_validate_cache_probe: cached and split runs equal the plain run on a small register with a rule, planted shape, data and rule changes miss as they must, a lost share is refused); it replaces the split probe of v1.31.0.
 # v1.31.0 (G99 release A, speed only): a "Validation split proof" section before Gate R proves the split validation (backlog_validate v1.13.0) reports exactly what the single-process run reports on a register that violates, with its own self-proof; the Lineage 19 probes section also runs backlog_release_tool_probe (the release tool refuses what it must).
 # v1.30.0 (Lineage 16, GOVMIT-S02 and S03): the Lineage 19 probes section also runs backlog_governance_mitigations_probe (the generalised state advisory and the artefact boundary each fire on a fault and stay silent on a twin).
 # v1.27.0 (Lineage 18, OC-S03 and S05): follows the archive folder -- the archive data file is read from 01-ontologies/archive/, and the archive's own shapes judge it (backlog_archive_shapes_check, which plants an orphan first).
@@ -164,13 +165,13 @@ echo "$_K" | tail -1
 [ $_KR -eq 0 ] || { echo "Gate K FAILED"; FAILED=1; }
 
 echo
-echo "== Validation split proof — the split validation reports exactly what the single-process validation reports =="
-SPLITPROBE="$(ls "$HERE"/backlog_validate_shard_probe_v*.py 2>/dev/null | sort -V | tail -1 || true)"
-if [ -n "$SPLITPROBE" ]; then
-  python3 "$SPLITPROBE" 2>&1 | sed 's/^/  /'; _SPR=${PIPESTATUS[0]}
-  [ "$_SPR" -eq 0 ] || { echo "  ABORT: the split validation differs from the single run, or the probe cannot tell them apart."; exit 3; }
+echo "== Validation cache proof — the per-shape cache and the split change no verdict =="
+CACHEPROBE="$(ls "$HERE"/backlog_validate_cache_probe_v*.py 2>/dev/null | sort -V | tail -1 || true)"
+if [ -n "$CACHEPROBE" ]; then
+  python3 "$CACHEPROBE" 2>&1 | sed 's/^/  /'; _SPR=${PIPESTATUS[0]}
+  [ "$_SPR" -eq 0 ] || { echo "  ABORT: the cached or split validation differs from the plain run, or the probe cannot tell them apart."; exit 3; }
 else
-  echo "  ABORT: backlog_validate_shard_probe not found; a split verdict is not trusted without it."; exit 3
+  echo "  ABORT: backlog_validate_cache_probe not found; a cached verdict is not trusted without it."; exit 3
 fi
 
 echo

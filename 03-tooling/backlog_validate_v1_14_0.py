@@ -1,12 +1,19 @@
 #!/usr/bin/env python3
-"""backlog_validate v1.13.0 — conformance validator for the Backlog & Roadmap
+"""backlog_validate v1.14.0 — conformance validator for the Backlog & Roadmap
 Semantic Framework (http://example.org/backlog 1.0.0).
+
+v1.14.0 (G99 release A2, speed only): a result is kept PER SHAPE. The judgement of one top-level shape is a pure function of that shape's definition (and the shapes it
+points to, and the prefix and function declarations), of the data after the rules have run, and of the pyshacl version; pyshacl itself loops over the shapes and
+judges each against the same graph. So the key of a shape's result is the hash of exactly those inputs, and a release that changes one shape judges that
+shape again and replays the rest. A changed byte of any data file, T-Box, rule, declaration or of this tool changes the data key and judges every shape
+again. Nothing is skipped: backlog_validate_cache_probe proves equality with the uncached run and that each planted change misses.
+BACKLOG_VALIDATE_NOSHAPECACHE=1 gives the v1.13.0 run; the memo dir (BACKLOG_VALIDATE_MEMO_DIR, or BACKLOG_VALIDATE_SHAPE_DIR when set) holds the shape results as shape_<key>.ttl.
 
 v1.13.0 (G99 release A, speed only): one validation is split over the machine's cores. Every shard loads the same shapes and data and runs
 EVERY rule first (rules can add statements other shapes read), then judges its own share of the top-level shapes (named shapes sorted by IRI,
 dealt out in turn; unnamed shapes go to shard 0). Shapes that other shapes point to are still resolved in full inside each shard. The parent merges
 the shard reports and REFUSES the run if the shards do not together judge exactly the shapes there are (each shard reports "mine of total").
-Nothing is skipped or loosened: backlog_validate_shard_probe proves, on a register that violates, that the sharded report equals the unsharded
+Nothing is skipped or loosened: backlog_validate_cache_probe proves, on a register that violates, that the sharded report equals the unsharded
 one result for result. BACKLOG_VALIDATE_SHARDS=1 gives the old single-process run; the default is the core count, at most 4.
 
 v1.12.0 (Lineage 17, OESC-S01): the package ships one vocabulary, one data and one shapes file per subject. The rules that used to
@@ -94,7 +101,7 @@ def latest(subdir, stem, ext="ttl"):
 
 TBOX = latest("01-ontologies", "backlog_tbox")
 ABOX = latest("01-ontologies", "backlog_abox")
-SHAPES = latest("02-shacl-safeguards", "backlog_shacl")
+SHAPES = os.environ.get("BACKLOG_VALIDATE_SHAPES") or latest("02-shacl-safeguards", "backlog_shacl")
 
 
 _OVERLAY = [None]
@@ -466,51 +473,186 @@ def _shard_count():
     return max(1, n)
 
 
-def shard_worker(k, n, shapes_path, data_path):
-    """One shard: the same graph, every rule, and the k-th share of the top-level shapes. Prints the turtle report; reports its share on stderr."""
+_SHNS = "http://www.w3.org/ns/shacl#"
+_NOFOLLOW = {str(rdflib.RDF.type), _SHNS + "targetClass", _SHNS + "targetNode", _SHNS + "targetSubjectsOf", _SHNS + "targetObjectsOf", _SHNS + "prefixes"}
+
+
+def _term(g, t, seen=()):
+    """Canonical text of a term; a blank node is its own structure (labels differ between parses)."""
+    if isinstance(t, rdflib.BNode):
+        if t in seen:
+            return "[cycle]"
+        return "[" + ";".join(sorted(p.n3() + " " + _term(g, o, seen + (t,)) for p, o in g.predicate_objects(t))) + "]"
+    return t.n3()
+
+
+def _flat(g, node):
+    return ("<%s>" % node if isinstance(node, URIRef) else "_") + "{" + ";".join(sorted(p.n3() + " " + _term(g, o) for p, o in g.predicate_objects(node))) + "}"
+
+
+def _is_shape_like(g, n):
+    return isinstance(n, URIRef) and any(str(p).startswith(_SHNS) for p in g.predicates(n, None))
+
+
+def _reach(g, node):
+    """The shape and every shape-like node it can lead to (through any non-target predicate, also inside blank nodes and lists)."""
+    R, todo = set(), [node]
+    while todo:
+        x = todo.pop()
+        if x in R:
+            continue
+        R.add(x)
+        stack = [x]
+        inner = set()
+        while stack:                                   # walk blank nodes hanging from x
+            y = stack.pop()
+            for p, o in g.predicate_objects(y):
+                if str(p) in _NOFOLLOW:
+                    continue
+                if isinstance(o, rdflib.BNode) and o not in inner:
+                    inner.add(o); stack.append(o)
+                elif _is_shape_like(g, o) and o not in R:
+                    todo.append(o)
+    return R
+
+
+def _digest_of(g, nodes):
+    h = hashlib.sha256()
+    for t in sorted(_flat(g, n) for n in nodes):
+        h.update(t.encode("utf-8")); h.update(b"\n")
+    return h.hexdigest()
+
+
+def shape_digests(g, nodes):
+    """([(shape id, digest)] in the order of NODES, rules digest). A shape's digest covers its reach and the global declarations; the rules digest covers every
+    node that carries a rule (with its reach) and the same declarations, because rules change the graph every shape is judged on."""
+    glob_nodes = set(g.subjects(rdflib.RDF.type, URIRef(_SHNS + "SPARQLFunction"))) | set(g.subjects(rdflib.RDF.type, URIRef(_SHNS + "JSFunction")))
+    glob_nodes |= set(g.subjects(rdflib.RDF.type, URIRef(_SHNS + "SPARQLTarget"))) | set(g.subjects(rdflib.RDF.type, URIRef(_SHNS + "SPARQLTargetType")))
+    decl = sorted(_term(g, o) for o in g.objects(None, URIRef(_SHNS + "declare")))
+    gd = hashlib.sha256((_digest_of(g, glob_nodes) + "|".join(decl)).encode()).hexdigest()
+    out = []
+    for n in nodes:
+        d = hashlib.sha256((gd + _digest_of(g, _reach(g, n))).encode()).hexdigest()
+        out.append((str(n) if isinstance(n, URIRef) else "bnode:" + d, d))
+    rule_nodes = set()
+    for n in set(g.subjects(URIRef(_SHNS + "rule"), None)):
+        rule_nodes |= _reach(g, n)
+    return out, hashlib.sha256((gd + _digest_of(g, rule_nodes)).encode()).hexdigest()
+
+
+def _list_shapes(shapes_path):
     import pyshacl
     from pyshacl.shapes_graph import ShapesGraph
-    orig, seen = ShapesGraph.shapes, {}
+    g = Graph().parse(shapes_path, format="turtle")
+    sg = ShapesGraph(g)
+    nodes = [s.node for s in sg.shapes]
+    d, rules = shape_digests(g, nodes)
+    sys.stdout.write(json.dumps({"digests": [x[1] for x in d], "rules": rules}))
+
+
+def shard_worker(k, n, shapes_path, data_path, want_path, data_digest, outdir):
+    """One shard: the same graph, every rule, and the k-th share of the WANTED top-level shapes. Each judged shape's report is written to outdir
+    as <key>.ttl; the share is reported on stderr."""
+    import pyshacl
+    from pyshacl.shapes_graph import ShapesGraph
+    from pyshacl.shape import Shape
+    from pyshacl.validator import Validator
+    want = sorted(json.load(open(want_path)))
+    orig, seen, caps, depth = ShapesGraph.shapes, {}, {}, [0]
 
     def shapes(self):
-        allsh = list(orig.fget(self))
-        named = sorted((s for s in allsh if isinstance(s.node, URIRef)), key=lambda s: str(s.node))
-        mine = [s for i, s in enumerate(named) if i % n == k]
-        if k == 0:
-            mine += [s for s in allsh if not isinstance(s.node, URIRef)]
-        if os.environ.get("BACKLOG_VALIDATE_SHARD_FAULT") == "drop" and k == n - 1:
-            mine = mine[:len(mine) // 2]     # test seam for the probe's self-proof: a share lost, honestly reported
-        seen["total"], seen["mine"] = len(allsh), len(mine)
-        return mine
+        if "mine" not in seen:
+            allsh = list(orig.fget(self))
+            dg, _r = shape_digests(self.graph, [s.node for s in allsh])
+            keyed = {hashlib.sha256((d + data_digest).encode()).hexdigest(): s for s, (_sid, d) in zip(allsh, dg)}
+            mine_keys = [key for i, key in enumerate(want) if i % n == k]
+            mine = [keyed[key] for key in mine_keys if key in keyed]
+            if os.environ.get("BACKLOG_VALIDATE_SHARD_FAULT") == "drop" and k == n - 1:
+                mine = mine[:len(mine) // 2]     # test seam for the probe's self-proof: a share lost, honestly reported
+            seen["asked"], seen["mine"] = len(mine_keys), mine
+            seen["keys"] = {id(s): key for key, s in keyed.items()}
+        return seen["mine"]
     ShapesGraph.shapes = property(shapes)
-    _ok, g, _txt = pyshacl.validate(data_path, shacl_graph=shapes_path, data_graph_format="turtle", shacl_graph_format="turtle", advanced=True)
-    sys.stdout.write(g.serialize(format="turtle"))
-    sys.stderr.write("SHARD %d %d %d %d\n" % (k, n, seen.get("mine", -1), seen.get("total", -2)))
+    ov = Shape.validate
+
+    def val(self, executor, target_graph, focus=None, _evaluation_path=None):
+        top = depth[0] == 0
+        depth[0] += 1
+        try:
+            r = ov(self, executor, target_graph, focus, _evaluation_path)
+        finally:
+            depth[0] -= 1
+        if top:
+            caps[id(self)] = (r[0], r[1], self.sg)
+        return r
+    Shape.validate = val
+    pyshacl.validate(data_path, shacl_graph=shapes_path, data_graph_format="turtle", shacl_graph_format="turtle", advanced=True)
+    done = 0
+    for sid, (conf, reps, sg) in caps.items():
+        key = seen["keys"][sid]
+        vg, _t = Validator.create_validation_report(sg, conf, reps)
+        tmp = os.path.join(outdir, key + ".tmp")
+        vg.serialize(tmp, format="turtle"); os.replace(tmp, os.path.join(outdir, key + ".ttl")); done += 1
+    sys.stderr.write("SHARD %d %d %d %d\n" % (k, n, done, seen.get("asked", -1)))
 
 
-def _run_pyshacl(shapes_path, data_path):
-    """Return (list of turtle reports, list of stderr texts). n=1 is the plain pyshacl run; n>1 runs shards at once and refuses unless
-    the shards together judged exactly all the shapes (a share lost or counted twice is an error, never a quiet pass)."""
+def _bytes_digest(paths):
+    h = hashlib.sha256()
+    for p in sorted(paths, key=lambda x: os.path.basename(x)):
+        h.update(os.path.basename(p).encode()); h.update(open(p, "rb").read())
+    return h.hexdigest()
+
+
+def _run_shapes(shapes_path, data_path, input_files):
+    """Per-shape cached run. Returns (list of turtle reports, list of notes) or (None, notes) when it must be refused."""
+    cache = os.environ.get("BACKLOG_VALIDATE_SHAPE_DIR") or os.environ.get("BACKLOG_VALIDATE_MEMO_DIR") or tempfile.mkdtemp(prefix="shapecache_")
+    os.makedirs(cache, exist_ok=True)
+    lp = subprocess.run([sys.executable, os.path.abspath(__file__), "--list-shapes", shapes_path], capture_output=True, text=True)
+    try:
+        info = json.loads(lp.stdout)
+    except Exception:
+        return None, [lp.stderr[-400:]]
+    data_digest = hashlib.sha256((info["rules"] + _bytes_digest(input_files + [os.path.abspath(__file__)]) + pyshacl_version()).encode()).hexdigest()
+    keys = {hashlib.sha256((d + data_digest).encode()).hexdigest() for d in info["digests"]}
+    path = lambda k: os.path.join(cache, "shape_" + k + ".ttl")
+    want = sorted(k for k in keys if not os.path.exists(path(k)))
+    notes = ["SHAPECACHE hits=%d ran=%d of %d" % (len(keys) - len(want), len(want), len(keys))]
+    if want:
+        n = max(1, min(_shard_count(), len(want)))
+        out = tempfile.mkdtemp(prefix="shapeout_")
+        wp = os.path.join(out, "want.json"); json.dump(want, open(wp, "w"))
+        procs = []
+        for k in range(n):
+            fe = tempfile.TemporaryFile("w+")
+            procs.append((subprocess.Popen([sys.executable, os.path.abspath(__file__), "--shard-worker", str(k), str(n), shapes_path, data_path, wp, data_digest, out],
+                                           stdout=subprocess.DEVNULL, stderr=fe, text=True), fe))
+        asked = done = 0
+        for p, fe in procs:
+            p.wait(); fe.seek(0); e = fe.read()
+            m = re.search(r"^SHARD (\d+) (\d+) (\d+) (-?\d+)$", e, re.M)
+            if p.returncode != 0 or not m:
+                return None, ["SHARD REFUSED: a shard failed or reported nothing:\n" + e[-400:]]
+            done += int(m.group(3)); asked += int(m.group(4))
+        got = {f[:-4] for f in os.listdir(out) if f.endswith(".ttl")}
+        if got != set(want) or done != len(want) or asked != len(want):
+            return None, ["SHARD REFUSED: the shards judged %d of the %d shapes asked for" % (len(got), len(want))]
+        for k in want:
+            os.replace(os.path.join(out, k + ".ttl"), path(k))
+    return [open(path(k), encoding="utf-8").read() for k in sorted(keys)], notes
+
+
+def _run_pyshacl(shapes_path, data_path, input_files=()):
+    """Return (list of turtle reports, list of stderr texts); (None, notes) is a refusal. BACKLOG_VALIDATE_NOSHAPECACHE=1 is the v1.13.0 run."""
+    if not os.environ.get("BACKLOG_VALIDATE_NOSHAPECACHE") and input_files:
+        outs, notes = _run_shapes(shapes_path, data_path, list(input_files))
+        for x in notes:
+            print(x, file=sys.stderr)
+        return outs, notes
     n = _shard_count()
-    if n == 1:
+    if n == 1 or os.environ.get("BACKLOG_VALIDATE_NOSHAPECACHE") == "single":
         proc = subprocess.run([sys.executable, "-m", "pyshacl", "-s", shapes_path, "-a", "-f", "turtle", data_path], capture_output=True, text=True)
         return [proc.stdout], [proc.stderr]
-    files, procs = [], []
-    for k in range(n):
-        fo, fe = tempfile.TemporaryFile("w+"), tempfile.TemporaryFile("w+")
-        files.append((fo, fe))
-        procs.append(subprocess.Popen([sys.executable, os.path.abspath(__file__), "--shard-worker", str(k), str(n), shapes_path, data_path],
-                                      stdout=fo, stderr=fe, text=True))
-    outs, errs, mine, totals = [], [], 0, set()
-    for p, (fo, fe) in zip(procs, files):
-        p.wait(); fo.seek(0); fe.seek(0); outs.append(fo.read()); e = fe.read(); errs.append(e)
-        m = re.search(r"^SHARD (\d+) (\d+) (-?\d+) (-?\d+)$", e, re.M)
-        if p.returncode != 0 or not m:
-            print("SHARD REFUSED: a shard failed or reported nothing:\n" + e[-400:], file=sys.stderr); return None, errs
-        mine += int(m.group(3)); totals.add(int(m.group(4)))
-    if len(totals) != 1 or mine != totals.copy().pop():
-        print("SHARD REFUSED: the shards judged %d of %s shapes" % (mine, sorted(totals)), file=sys.stderr); return None, errs
-    return outs, errs
+    return None, ["no shards without the cache are shipped; use BACKLOG_VALIDATE_NOSHAPECACHE=single"]
 
 
 def _validate(data_files):
@@ -521,7 +663,7 @@ def _validate(data_files):
     data_path = serialize(load([TBOX, reference_abox(data_files)] + data_files), ".data.ttl")
     shapes_path = serialize(load([SHAPES]), ".shapes.ttl")
 
-    outs, errs = _run_pyshacl(shapes_path, data_path)
+    outs, errs = _run_pyshacl(shapes_path, data_path, [TBOX, ABOX] + list(data_files))
     if outs is None:
         return 2, {}
     report = Graph()
@@ -656,7 +798,9 @@ def gate_k():
 
 def main():
     if sys.argv[1:2] == ["--shard-worker"]:
-        shard_worker(int(sys.argv[2]), int(sys.argv[3]), sys.argv[4], sys.argv[5]); sys.exit(0)
+        shard_worker(int(sys.argv[2]), int(sys.argv[3]), sys.argv[4], sys.argv[5], sys.argv[6], sys.argv[7], sys.argv[8]); sys.exit(0)
+    if sys.argv[1:2] == ["--list-shapes"]:
+        _list_shapes(sys.argv[2]); sys.exit(0)
     ap = argparse.ArgumentParser(description="Validate a register against the backlog framework.")
     ap.add_argument("data", nargs="*", help="register Turtle file(s)")
     ap.add_argument("--gate-k", action="store_true", help="run Gate K version-identity check and exit")

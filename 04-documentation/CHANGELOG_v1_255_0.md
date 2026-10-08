@@ -11260,6 +11260,15 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.365.0 — G99 release A2 (speed only): a result is kept per shape
+
+Second speed-only release of the G99 task set, after the owner's direction that a release must not take hours.
+
+- **Idea tested first (owner's Merkle question):** judging groups of nodes against the whole graph adds up exactly to the whole run once the rules have run over the whole graph (3,398 of 3,398 results; without that, 2 false violations where a rule-derived fact flows between nodes). Cold cost is linear in the nodes judged, so a hierarchy alone saves nothing; edits are local (four single-fact removals changed the verdict of 1 or 2 of 2,077 nodes). The saving is in not judging again what has not changed. The second axis, the shape, is exact by construction: pyshacl judges each top-level shape against the same graph.
+- **`backlog_validate` v1.14.0:** the key of one shape's result is the hash of the shape's definition and the shapes it points to, the prefix and function declarations, and the data key (T-Box, data file bytes, the rules, the pyshacl version and this tool's bytes). A release that changes one shape judges it again and replays the rest; any change of data, rules or the tool judges everything. The shards judge only the shapes asked for and the parent refuses the run unless exactly those were judged. `BACKLOG_VALIDATE_NOSHAPECACHE=single` is the plain run. Measured: adversarial fixture cold 13 s, replay 2.7 s, one planted shape change 4 s (2 of 613 judged); the negative fixture cold 221 s (was 438 s and 304 s on the plain run), output identical to the plain run line for line.
+- **`backlog_validate_cache_probe` v1.0.0 (replaces the split probe, in gate v1.32.0):** seven cases on its own small register (a rule whose derived fact another shape needs): cached and split runs equal the plain run; a planted shape change is judged again alone; a planted data change and a planted rule change judge every shape again; a shard that drops shapes is refused. 25 s, stored once per set of bytes.
+- No check removed or loosened. Open: the recorded-reads tree (owner's hierarchy idea) as a later lineage with content-bound receipts.
+
 ## v1.364.0 — G99 release A (speed only): the gate halves, and the release steps become a tool
 
 Planned task set under G99 (maintenance with a well-defined outcome; no lineage). Release A of two; release B carries the `priorVersion` fix, the tag check and the ordinal clean-up.
