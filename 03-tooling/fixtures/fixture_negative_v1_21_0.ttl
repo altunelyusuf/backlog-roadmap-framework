@@ -3781,3 +3781,27 @@ ordinaldup:Lin_OrdinalDeclA a backlog:Lineage ; backlog:lineageOrdinal 96 ; back
 ordinaldup:Lin_OrdinalDeclB a backlog:Lineage ; backlog:lineageOrdinal 96 ; backlog:lineageArchived false .
 ordinaldup:Decl_96 a backlog:OrdinalSharingDeclaration ; backlog:declaredOrdinal 96 ;
     backlog:sharedByLineage ordinaldup:Lin_OrdinalDeclA , ordinaldup:Lin_OrdinalDeclB .
+
+# v1.21.0 (PackageActivationOrderAdvisoryShape, an adopting project handover, owner's ruling 2026-10-08):
+# Pkg_UpstreamOpen is not yet finished; Pkg_Drifted containerDependsOn it and is already InProgress -> fires on Pkg_Drifted.
+# Pkg_UpstreamDone is finished; Pkg_OnTime containerDependsOn it and is InProgress -> silent (the dependency is resolved).
+@prefix pkgactdrift: <http://example.org/pkgactdrift#> .
+pkgactdrift:Pkg_UpstreamOpen a backlog:Package ; backlog:hasIdentifier "PKG-UPSTREAM-OPEN" .
+pkgactdrift:T_UpstreamOpen a backlog:Task ; backlog:hasIdentifier "T-UPSTREAM-OPEN" ; backlog:hasState backlog:Proposed ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "placeholder" ;
+    backlog:memberOfContainer pkgactdrift:Pkg_UpstreamOpen .
+pkgactdrift:Pkg_Drifted a backlog:Package ; backlog:hasIdentifier "PKG-DRIFTED" ;
+    backlog:containerDependsOn pkgactdrift:Pkg_UpstreamOpen .
+pkgactdrift:T_DriftedStarted a backlog:Task ; backlog:hasIdentifier "T-DRIFTED-STARTED" ; backlog:hasState backlog:InProgress ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "placeholder" ;
+    backlog:memberOfContainer pkgactdrift:Pkg_Drifted .
+
+pkgactdrift:Pkg_UpstreamDone a backlog:Package ; backlog:hasIdentifier "PKG-UPSTREAM-DONE" .
+pkgactdrift:T_UpstreamDone a backlog:Task ; backlog:hasIdentifier "T-UPSTREAM-DONE" ; backlog:hasState backlog:Done ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "placeholder" ;
+    backlog:memberOfContainer pkgactdrift:Pkg_UpstreamDone .
+pkgactdrift:Pkg_OnTime a backlog:Package ; backlog:hasIdentifier "PKG-ONTIME" ;
+    backlog:containerDependsOn pkgactdrift:Pkg_UpstreamDone .
+pkgactdrift:T_OnTimeStarted a backlog:Task ; backlog:hasIdentifier "T-ONTIME-STARTED" ; backlog:hasState backlog:InProgress ;
+    backlog:notYetScoreable true ; backlog:hasScoreabilityReason "placeholder" ;
+    backlog:memberOfContainer pkgactdrift:Pkg_OnTime .

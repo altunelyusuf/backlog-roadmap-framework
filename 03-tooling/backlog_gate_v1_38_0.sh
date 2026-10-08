@@ -648,7 +648,7 @@ echo "== Lineage 19 probes — each rule fires on a planted fault and each refus
 # v1.37.0: each probe prints its own --deps (it alone knows what it reads) and is stamped on exactly that; one that
 # never changed does not re-run just because something ELSEWHERE in the gate did. A run that does happen runs ONCE
 # (v1.36.0 and earlier ran every probe twice here: once piping to grep, once thrown away for its exit code).
-for PROBE in backlog_closure_shapes_probe backlog_archive_drill backlog_public_cut_probe backlog_governance_mitigations_probe backlog_release_tool_probe backlog_stamp_key_probe backlog_sparql_memo_probe backlog_ordinal_check_probe backlog_archived_digest_check_probe; do
+for PROBE in backlog_closure_shapes_probe backlog_archive_drill backlog_public_cut_probe backlog_governance_mitigations_probe backlog_release_tool_probe backlog_stamp_key_probe backlog_sparql_memo_probe backlog_ordinal_check_probe backlog_archived_digest_check_probe backlog_release_item_check_probe backlog_package_activation_drift_classifier_probe; do
   PF="$(ls "$HERE"/${PROBE}_v*.py 2>/dev/null | sort -V | tail -1 || true)"
   if [ -z "$PF" ]; then echo "  ABORT: $PROBE not found. A probe that is missing proves nothing."; exit 3; fi
   PKEY="$(python3 "$MERKLE" key $(python3 "$PF" --deps))"

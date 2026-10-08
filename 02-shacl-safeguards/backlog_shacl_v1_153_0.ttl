@@ -9,9 +9,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog/shacl/1.152.0> ;
-    owl:versionInfo "1.152.0" ;
-    owl:priorVersion <http://example.org/backlog-shapes/1.151.0> , <http://example.org/backlog-shapes/1.150.0> , <http://example.org/backlog-shapes/1.149.0> , <http://example.org/backlog-shapes/1.148.0> , <http://example.org/backlog-shapes/1.147.0> , <http://example.org/backlog-shapes/1.146.0> ;
+    owl:versionIRI <http://example.org/backlog/shacl/1.153.0> ;
+    owl:versionInfo "1.153.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.152.0> , <http://example.org/backlog-shapes/1.151.0> , <http://example.org/backlog-shapes/1.150.0> , <http://example.org/backlog-shapes/1.149.0> , <http://example.org/backlog-shapes/1.148.0> , <http://example.org/backlog-shapes/1.147.0> , <http://example.org/backlog-shapes/1.146.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.145.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.144.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.143.0> ;
@@ -5307,6 +5307,21 @@ backlog:PackageRegularityShape a sh:NodeShape ;
         }
         GROUP BY $this ?n
         HAVING (COUNT(DISTINCT ?tot) > 0 && COUNT(DISTINCT ?farSib) * 2 > COUNT(DISTINCT ?tot))""" ] .
+
+backlog:PackageActivationOrderAdvisoryShape a sh:NodeShape ;
+    sh:targetClass backlog:Package ;
+    sh:severity sh:Warning ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "Pkg_Drifted" ;
+    rdfs:label "Advisory: a package is active while a package it depends on has not finished (an adopting project handover; owner's ruling 2026-10-08)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory (FM_PackageActivationDrift): this package's derived state is InProgress or Done while a package it containerDependsOn has a derived state that is neither Done nor Cancelled. Correct planning keeps this unreachable -- a dependent package should not start before what it depends on is resolved -- so a real instance is a drift, not a style preference. R1 (derivedState) is a pure function of a container's own members and never reads containerDependsOn, so nothing before this shape ever compared the two states against each other; disclosure alone (ContainerLinkageShape, UndeclaredContainerDependencyAdvisoryShape) is not this check, since a correctly-disclosed dependency can still be a live drift. Advisory, not a block: a package can legitimately start work that is not itself blocked by the open dependency. The owner's ruling: a real occurrence triggers a root-cause classification (which case produced the drift), not a per-instance decision; one named case (a pre-requisite item scoped into a later package) is remedied by dissolving and repacking." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:derivedState ?s . FILTER (?s IN (backlog:InProgress, backlog:Done))
+            $this backlog:containerDependsOn ?dep .
+            ?dep backlog:derivedState ?ds . FILTER (?ds NOT IN (backlog:Done, backlog:Cancelled))
+        }""" ] .
 
 backlog:TestDataShape a sh:NodeShape ;
     sh:targetClass backlog:TestData ;

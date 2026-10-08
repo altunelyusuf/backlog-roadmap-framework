@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_release_item_check_probe v1.0.0 -- GOV-S01/GOV-S02 shown to fire on real known-bad trees and stay silent on known-good
+"""backlog_release_item_check_probe v1.1.0 -- GOV-S01/GOV-S02 shown to fire on real known-bad trees and stay silent on known-good
 ones, on a real throwaway git repository (this tool had no self-proof before v1.5.0 -- G100/G101's own lesson: "a gate shown
 only on good input proves nothing" applied to this gate itself, found while writing the G99 root-cause analysis).
 
@@ -18,6 +18,10 @@ import glob, os, re, shutil, subprocess, sys, tempfile
 HERE = os.path.dirname(os.path.abspath(__file__))
 TOOL = sorted(glob.glob(os.path.join(HERE, "backlog_release_item_check_v*.py")),
               key=lambda p: [int(x) for x in re.findall(r"_v(\d+)_(\d+)_(\d+)\.", p)[0]])[-1]
+
+if sys.argv[1:] == ["--deps"]:
+    print(os.path.abspath(__file__)); print(TOOL)
+    sys.exit(0)
 
 bad = []
 

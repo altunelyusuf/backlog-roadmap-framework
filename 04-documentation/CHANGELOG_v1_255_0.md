@@ -11260,6 +11260,44 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.372.0 — the adopting project's package-activation handover: detection and a one-case root-cause classifier, no lineage, per the owner's ruling
+
+**Unplanned work:** the owner's direct ruling on an adopting project package-dependency handover, 2026-10-08.
+
+**The ruling, applied as stated.** A dependent package should not be activated before what it depends on is
+resolved; correct planning should make that unreachable. If it IS reached, that is a drift, and the response is
+an automated root-cause classification -- not a per-instance decision -- with a known remedy per case. The owner
+named one case explicitly ("package scope planning, i.e. a pre-PBI is added to a later package" -> dissolve and
+repack) and said other cases have their own clear methods already explained. This release builds the detection
+and the one named classifier; it does not invent the other cases.
+
+**Detection (`PackageActivationOrderAdvisoryShape`, shapes v1.153.0, FM_PackageActivationDrift).** Re-verified
+directly against this package's own current `ContainerStateRule` (R1) before building anything: `containerDependsOn`
+never appears in any of R1's three branches, so a package's `derivedState` is still, today, a pure function of its
+own members alone -- the exact gap the adopting project's handover described, confirmed against the current shapes file, not
+assumed from the old handover text. Advisory, not a block, matching the owner's own framing ("if it is started,
+this indicates a drift" -- detection after the fact, not a structural `Blocked` state): fires when a Package's
+derived state is InProgress or Done while a package it `containerDependsOn` has a derived state that is neither
+Done nor Cancelled. Fixture (`fixture_negative` v1.21.0): `Pkg_Drifted` (containerDependsOn an open package, itself
+InProgress) fires; `Pkg_OnTime` (same shape, dependency already Done) is silent -- shown directly on the real
+validator, both ways.
+
+**Classifier (`backlog_package_activation_drift_classifier_v1.0.0` + its probe).** Takes a register, finds every
+drifted package the advisory above would flag, and for each checks the one named case's real signature: a real
+member-level `dependsOn` edge from an item in the drifted package to an item in the still-open dependency package
+(the same basis `ContainerLinkageShape` already requires for the dependency to be real, not a phantom), AND the
+dependency package's own earliest planned start (`targetsIteration` -> `iterationStart`) is no earlier than the
+drifted package's own -- the prerequisite was scheduled to arrive no sooner than the work that needs it. Classified
+as `PackageScopePlanning`, remedy named: dissolve and repack so the prerequisite lands in a package sequenced
+before its dependents. Any flagged package not fitting that signature is reported `UNCLASSIFIED` by design, naming
+either a missing real dependency basis (phantom) or simply that it does not fit this one case -- not guessed at.
+Proved on four throwaway cases: no drift; the named case; a phantom dependency; a real dependency that already
+started earlier (not this case).
+
+**Not done, stated directly:** the other case(s) the owner says have already been explained are not built here --
+this release does not have their method in hand and does not invent one. the adopting project's own repository is untouched;
+this is framework-side tooling only, as the handover itself asked for.
+
 ## v1.371.0 — G99 root-cause analysis: this session's own four "no lineage" releases were the wrong reading of G99, and the register-side gate meant to catch exactly that had never once worked
 
 **Unplanned work:** a direct root-cause analysis the owner asked for, and the real gate defect found while
