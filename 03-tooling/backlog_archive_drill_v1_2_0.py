@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_archive_drill v1.1.0 -- the archive tool's refusals are shown on planted lineages (Lineage 19, DC-S01).
+"""backlog_archive_drill v1.2.0 -- the archive tool's refusals are shown on planted lineages (Lineage 19, DC-S01).
 
 The archive tool (backlog_lineage_archive) decides whether a lineage may be set down. This drill builds small lineages in memory and requires:
   1. an achieved lineage with a closure report                       -> archivable
@@ -39,6 +39,10 @@ def lineage(outcome, report=True, cancelled=False, names_cancelled=False):
         if names_cancelled:
             g.add((P.R, B.reportsCancelledItem, P.S2))
     return g
+
+
+if sys.argv[1:] == ["--deps"]:
+    print(os.path.abspath(__file__)); print(tool()[1] and sorted(glob.glob(os.path.join(HERE, "backlog_lineage_archive_v*.py")), key=lambda x: [int(n) for n in re.findall(r"_v(\d+)_(\d+)_(\d+)\.", x)[0]])[-1]); sys.exit(0)
 
 
 def main():

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_sparql_memo_probe v1.0.0 -- the SPARQL parse cache changes no result, and it really saves the parsing (G99).
+"""backlog_sparql_memo_probe v1.1.0 -- the SPARQL parse cache changes no result, and it really saves the parsing (G99).
 
 Runs pyshacl twice on the same small register and the same shapes (a SPARQL constraint, a SPARQL rule, and a constraint that must give DIFFERENT answers for different
 focus nodes), once without the cache and once with it:
@@ -13,7 +13,11 @@ Exit 0 all hold; 2 a case failed. An optional first argument names a memo module
 import glob, importlib.util, os, re, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-PATH = sys.argv[1] if len(sys.argv) > 1 else sorted(glob.glob(os.path.join(HERE, "backlog_sparql_memo_v*.py")), key=lambda p: [int(x) for x in re.findall(r"_v(\d+)_(\d+)_(\d+)\.", p)[0]])[-1]
+_ARGS = [a for a in sys.argv[1:] if a != "--deps"]
+PATH = _ARGS[0] if _ARGS else sorted(glob.glob(os.path.join(HERE, "backlog_sparql_memo_v*.py")), key=lambda p: [int(x) for x in re.findall(r"_v(\d+)_(\d+)_(\d+)\.", p)[0]])[-1]
+if sys.argv[1:] == ["--deps"]:
+    print(os.path.abspath(__file__)); print(PATH)
+    sys.exit(0)
 spec = importlib.util.spec_from_file_location("backlog_sparql_memo_under_test", PATH)
 memo = importlib.util.module_from_spec(spec); spec.loader.exec_module(memo)
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_closure_shapes_probe v1.1.0 (v1.1.0, DC-S04: the module-audience rule is probed too) -- each rule of Lineage 19 is shown firing on a planted fault and silent on its corrected twin.
+"""backlog_closure_shapes_probe v1.2.0 (v1.1.0, DC-S04: the module-audience rule is probed too) -- each rule of Lineage 19 is shown firing on a planted fault and silent on its corrected twin.
 
 A rule that has never been seen to fail proves nothing (L-95). This builds small graphs in memory and runs the package's own shapes file over them:
   1. an abandoned mission with no closure report                       -> MissionClosureRequiresReportShape fires; with a report, silent
@@ -51,6 +51,10 @@ def add_report(g, named=()):
 def add_lineage_with_cancelled(g):
     g.add((P.Lineage, RDF.type, B.Lineage)); g.add((P.Lineage, B.lineageForMission, P.Mission))
     g.add((P.Item, RDF.type, B.Story)); g.add((P.Item, B.belongsToLineage, P.Lineage)); g.add((P.Item, B.hasState, B.Cancelled))
+
+
+if sys.argv[1:] == ["--deps"]:
+    print(os.path.abspath(__file__)); print(latest("02-shacl-safeguards", "backlog_shacl_v*.ttl")); sys.exit(0)
 
 
 def main():

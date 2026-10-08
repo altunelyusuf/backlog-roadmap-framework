@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_release_tool_probe v1.2.0 -- the release tool refuses what it must refuse and does what it says (G99 release A; OE rule R4).
+"""backlog_release_tool_probe v1.3.0 -- the release tool refuses what it must refuse and does what it says (G99 release A; OE rule R4).
 
 Each case is a fact about backlog_release_tool, shown on a throwaway folder, and each failing case must really fail:
   1 a header bump renames the file and moves versionInfo, versionIRI and priorVersion (the old version is added to the prior list);
@@ -29,6 +29,11 @@ def check(name, cond):
 
 HDR = ('<http://example.org/backlog> a owl:Ontology ;\n    owl:versionIRI <http://example.org/x/shacl/1.2.0> ;\n    owl:versionInfo "1.2.0" ;\n'
        '    owl:priorVersion <http://example.org/x-shapes/1.1.0> .\n')
+
+
+if sys.argv[1:] == ["--deps"]:
+    print(os.path.abspath(__file__)); print(RT.__file__)
+    sys.exit(0)
 
 
 def main():
@@ -80,12 +85,13 @@ def main():
         import time as _t
         d2 = os.path.join(d2, "cache"); os.makedirs(d2)
         old_t = _t.time() - 40 * 86400
-        names = {"shape_" + "a" * 64 + ".ttl": True, "b" * 64 + ".json": True, "cacheproof_" + "c" * 8 + ".ok": True, "archdigest_" + "e" * 64 + ".json": True}
+        names = {"shape_" + "a" * 64 + ".ttl": True, "b" * 64 + ".json": True, "cacheproof_" + "c" * 8 + ".ok": True, "archdigest_" + "e" * 64 + ".json": True,
+                 "stamp_fixture_fixture_negative_v1_20_0.ttl.key": True}
         for n in names:
             open(os.path.join(d2, n), "w").write("x"); os.utime(os.path.join(d2, n), (old_t, old_t))
         open(os.path.join(d2, "shape_" + "d" * 64 + ".ttl"), "w").write("recent"); open(os.path.join(d2, "notes.txt"), "w").write("keep"); os.utime(os.path.join(d2, "notes.txt"), (old_t, old_t))
         rem, kept = RT.prune_cache(d2, 14)
-        check("7 prune removes the old cache files only", rem == 4 and kept == 1 and sorted(os.listdir(d2)) == ["notes.txt", "shape_" + "d" * 64 + ".ttl"])
+        check("7 prune removes the old cache files only", rem == 5 and kept == 1 and sorted(os.listdir(d2)) == ["notes.txt", "shape_" + "d" * 64 + ".ttl"])
     check("8 the release path never removes the fixture-suite stamp", "os.remove(stamp)" not in open(RT.__file__).read())
 
     ver = os.path.join(RT.PKG, "VERSION.txt"); before = open(ver).read() if os.path.exists(ver) else None

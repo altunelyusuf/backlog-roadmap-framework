@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_governance_mitigations_probe v1.0.0 -- the two mechanisms of Lineage 16's last stories, each shown firing on a planted fault and silent on its twin.
+"""backlog_governance_mitigations_probe v1.1.0 -- the two mechanisms of Lineage 16's last stories, each shown firing on a planted fault and silent on its twin.
 
   GOVMIT-S02  an item that records a start while its state is still Proposed or Ready, with no batch counter  -> ItemStartedStateStaleShape fires;
               with the state moved, with no start, or batch-tracked (the older rule owns it)                   -> silent
@@ -34,6 +34,11 @@ def item(state, started=True, batch=False):
     if batch:
         g.add((P.Item, B.hasBatchSize, Literal(10))); g.add((P.Item, B.hasBatchCompleted, Literal(2)))
     return g
+
+
+if sys.argv[1:] == ["--deps"]:
+    print(os.path.abspath(__file__)); print(latest("02-shacl-safeguards", "backlog_shacl_v*.ttl")); print(latest("03-tooling", "backlog_criterion_resolve_v*.py"))
+    sys.exit(0)
 
 
 def main():

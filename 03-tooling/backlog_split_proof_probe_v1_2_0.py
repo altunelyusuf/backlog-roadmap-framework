@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_split_proof_probe v1.1.0 -- the split proof, shown to fire on a known-bad tree and stay silent on a known-good one.
+"""backlog_split_proof_probe v1.2.0 -- the split proof, shown to fire on a known-bad tree and stay silent on a known-good one.
 
 Builds, from the real package, two throwaway trees: one identical to it, one with a single real statement removed. Asserts that
 backlog_split_proof certifies the first (exit 0) and refuses the second (exit 2) naming the removed statement, and that a tree
@@ -11,7 +11,8 @@ import os, shutil, subprocess, sys, tempfile
 from rdflib import Graph, RDF, OWL, URIRef, Literal
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-PKG = os.path.abspath(sys.argv[1]) if len(sys.argv) > 1 else os.path.dirname(HERE)
+_ARGS = [a for a in sys.argv[1:] if a != "--deps"]
+PKG = os.path.abspath(_ARGS[0]) if _ARGS else os.path.dirname(HERE)
 PROOF = sorted(__import__("glob").glob(os.path.join(HERE, "backlog_split_proof_v*.py")), key=lambda p: [int(x) for x in __import__("re").findall(r"_v(\d+)_(\d+)_(\d+)\.", p)[0]])[-1]
 
 
@@ -33,6 +34,15 @@ def mutate(root, fn):
     fn(g, t)
     g.serialize(path, format="turtle")
     return t
+
+
+if sys.argv[1:] == ["--deps"]:
+    print(os.path.abspath(__file__)); print(PROOF)
+    import glob as _g
+    for d in ("01-ontologies", "02-shacl-safeguards"):
+        for f in sorted(_g.glob(os.path.join(PKG, d, "**", "*.ttl"), recursive=True)):
+            print(f)
+    sys.exit(0)
 
 
 def main():

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_public_cut_probe v1.0.0 -- the public copy is cut by each module's declared audience, and stops when it cannot be sure (Lineage 19, DC-S04).
+"""backlog_public_cut_probe v1.1.0 -- the public copy is cut by each module's declared audience, and stops when it cannot be sure (Lineage 19, DC-S04).
 
 Runs the deriver's cut over small planted texts and requires:
   1. a module declared private is cut, banner to END line, and the text around it is kept;
@@ -43,6 +43,14 @@ def raises(fn):
     except SystemExit as e:
         return str(e.code) if e.code else "exit"
     return None
+
+
+if sys.argv[1:] == ["--deps"]:
+    print(os.path.abspath(__file__))
+    print(sorted(glob.glob(os.path.join(HERE, "make_public_distribution_v*.py")), key=lambda x: [int(n) for n in re.findall(r"_v(\d+)_(\d+)_(\d+)\.", x)[0]])[-1])
+    for f in sorted(glob.glob(os.path.join(PKG, "01-ontologies", "**", "*.ttl"), recursive=True)):
+        print(f)
+    sys.exit(0)
 
 
 def main():

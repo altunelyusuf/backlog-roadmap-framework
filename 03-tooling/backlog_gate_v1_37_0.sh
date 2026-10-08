@@ -15,6 +15,12 @@
 #
 # v1.29.0 (Lineage 19, DC-S04): a third probe runs every time: the public copy is cut by each module's declared audience and stops with an error when it cannot be sure (backlog_public_cut_probe).
 # v1.28.0 (Lineage 19, DC-S01 and DC-S02): two probes run every time: the closure-report rules are shown firing on planted faults and silent on corrected twins (backlog_closure_shapes_probe), and the archive tool's refusals are drilled on planted lineages (backlog_archive_drill). A probe that cannot be found stops the gate.
+# v1.37.0 (G99, release E, the owner's Merkle-root idea mixed with over-processing): backlog_merkle_cache gives every step
+# its own key, built from its own named leaves, instead of one flat hash a whole section shared. The fixture-coverage gate
+# now stamps EACH fixture on (TBox, shapes, validator, memo, that fixture) -- touching one fixture no longer forces all 13
+# to be re-validated. The start-gate, work-guard and split-proof self-proofs, and the nine probes in the probes loop, are
+# stamped on exactly the inputs each one's own --deps declares. The probes loop also stopped running every probe twice
+# (once for its text, once thrown away for its exit code) -- one run now serves both.
 # v1.36.0 (G99, release D, cold-run speed): the SPARQL query memo (backlog_sparql_memo) is part of the fixture-suite key and the clause-proof key, and its probe runs with the others. The validator prepares each distinct query once instead of re-parsing it for every focus node (results proven identical); the clause proof starts the validator once per fixture file.
 # v1.35.0 (G99, release C): the gate prunes the validation cache by itself at its start (files unused for 14 days; rebuilt on demand), runs backlog_archived_digest_check (a ratchet over the archived lineages' recorded stage digests) and its probe.
 # v1.34.0 (G99, ordinal rule): a section after the archive checks runs backlog_ordinal_check on the real live and archive data (every lineage holds its own ordinal; the check proves itself on planted cases first), and the probes loop runs backlog_ordinal_check_probe.
@@ -97,6 +103,16 @@ fi
 # v1.35.0: the cache bounds itself. Entries older than 14 days are removed (a cache file only ever replays identical bytes, so removing one costs a rebuild, never a wrong result).
 RELTOOL="$(ls "$HERE"/backlog_release_tool_v*.py 2>/dev/null | sort -V | tail -1 || true)"
 if [ -n "$RELTOOL" ]; then python3 -B "$RELTOOL" prune-cache "$BACKLOG_VALIDATE_MEMO_DIR" --days 14 2>&1 | sed 's/^/validation cache: /'; fi
+# v1.37.0 (G99 release E, the owner's Merkle-root idea mixed with over-processing): a step's cache key is composed from
+# its own named leaves, not from one flat hash over everything a WHOLE SECTION reads. Touching one fixture no longer
+# forces every sibling fixture to be re-validated, and a probe whose own declared inputs are unchanged is not re-run just
+# because something ELSEWHERE in the gate changed. backlog_merkle_cache holds the mechanics (leaf/key/root/Stamp, proven
+# on throwaway files by its own probe); it lives in the same off-package memo directory as the validation cache, so it
+# needs no gitignore or manifest entry and is pruned by the same 14-day sweep (prune_cache now also matches its files).
+MERKLE="$(ls "$HERE"/backlog_merkle_cache_v*.py 2>/dev/null | sort -V | tail -1 || true)"
+[ -n "$MERKLE" ] || { echo "GATE ABORT: no backlog_merkle_cache_v*.py resolved -- stamps cannot be composed without it."; exit 3; }
+STAMPED() { python3 "$MERKLE" check "$1" "$2" "$BACKLOG_VALIDATE_MEMO_DIR" >/dev/null 2>&1; }
+RECORD() { python3 "$MERKLE" record "$1" "$2" "$BACKLOG_VALIDATE_MEMO_DIR" >/dev/null 2>&1; }
 COVERAGE="$(ls "$HERE"/backlog_coverage_gate_v*.py | sort -V | tail -1)"
 DOCGATE="$(ls "$HERE"/backlog_doc_coverage_gate_v*.py | sort -V | tail -1)"
 # fixtures resolved by pattern, not pinned filename: a fixture version bump
@@ -235,28 +251,36 @@ else
   echo "  NOT RUN — reporter or register not found. Not assumed to pass."
 fi
 
-# --- fixture-suite skip, and why it is sound -------------------------------
+# --- fixture-coverage, Merkle-stamped per fixture (G99 release E) ----------
 # The fixture suite is 13 registers x 205 SPARQL constraints and dominates the
-# gate's runtime; the gate had grown past the publisher's window again, which
-# under G10 blocks every release.
-#
-# The suite proves one thing: that the SHAPES reject what they should and
-# accept what they should. Its result is a function of the shapes, the TBox and
-# the fixtures — nothing else. So when all three are byte-identical to the last
-# run that passed, re-running them cannot produce a different answer.
-#
-# The stamp records the SHA-256 of every input. Any change to any of them, and
-# the suite runs in full. This is a cache keyed on the whole input, not a
-# trust-the-author flag: there is no way to skip the suite by asserting it
-# passed, only by not having changed anything it reads.
-FIXSTAMP="$PKG/.fixture-suite-stamp"
-FIXKEY="$( { cat "$HERE"/../01-ontologies/backlog_tbox_v*.ttl \
-                 "$HERE"/../02-shacl-safeguards/backlog_shacl_v*.ttl \
-                 "$HERE"/fixtures/*.ttl "$HERE"/backlog_validate_v*.py "$HERE"/backlog_sparql_memo_v*.py ; } 2>/dev/null | sha256sum | cut -d' ' -f1)"
-SKIP_FIXTURES=0
-if [ -f "$FIXSTAMP" ] && [ "$(cat "$FIXSTAMP")" = "$FIXKEY" ]; then
-  SKIP_FIXTURES=1
-fi
+# gate's runtime. v1.35.0 skipped the WHOLE suite when one flat hash over the
+# TBox, every shapes file, every fixture, the validator and the memo matched a
+# prior passing run -- sound, but coarse: touching ONE fixture (the common
+# case while writing a new one) invalidated that single hash and forced all
+# 13 back through the validator, because the key never said which file a
+# change was IN, only that something somewhere had moved. v1.37.0 gives each
+# fixture its OWN key: the four files every fixture shares (TBox, shapes,
+# validator, memo) plus that fixture alone. A fixture's own key cannot change
+# because a DIFFERENT fixture changed (backlog_merkle_cache_probe proves this
+# property directly), so only the fixture(s) whose key actually moved are
+# re-validated; the rest keep the verdict their own, unchanged, inputs already
+# earned. A change to a SHARED file (TBox, shapes, validator, memo) still
+# moves every fixture's key, so the suite still runs in full exactly when it
+# must -- nothing here skips on an assertion, only on unchanged bytes, the
+# same rule the old flat stamp kept, just named at the grain that is actually
+# true.
+BASE_LEAVES=("$HERE"/../01-ontologies/backlog_tbox_v*.ttl "$HERE"/../02-shacl-safeguards/backlog_shacl_v*.ttl "$HERE"/backlog_validate_v*.py "$HERE"/backlog_sparql_memo_v*.py)
+declare -A FXKEY
+TO_RUN=()
+ALL_FX=("$HERE"/fixtures/*.ttl)
+for FX in "${ALL_FX[@]}"; do
+  BASE="$(basename "$FX")"
+  K="$(python3 "$MERKLE" key "${BASE_LEAVES[@]}" "$FX")"
+  FXKEY["$BASE"]="$K"
+  if ! STAMPED "fixture:$BASE" "$K"; then
+    TO_RUN+=("$FX")
+  fi
+done
 
 echo
 echo "== Fixture-coverage gate — every shipped fixture is exercised =="
@@ -264,46 +288,47 @@ echo "== Fixture-coverage gate — every shipped fixture is exercised =="
 # shipped and unvalidated for several releases and accumulated six violations
 # from constraints added meanwhile; nothing noticed, because nothing ran it.
 UNRUN=0
-# One process, one file at a time inside it. The TBox and shapes are re-parsed and
-# re-inferred per invocation, and this loop ran the validator once per fixture, so
-# the gate grew slower than the publisher's runtime and the package became
-# unpublishable — a release gate that cannot finish blocks every release.
-# --each validates each fixture independently and reports a verdict per file;
-# nothing is skipped and no fixture shares a graph with another.
-if [ "$SKIP_FIXTURES" -eq 1 ]; then
-  echo "  SKIPPED — shapes, TBox and all 13 fixtures are byte-identical to the last"
-  echo "  passing run (sha ${FIXKEY:0:12}). The suite's result is a function of exactly"
-  echo "  those inputs, so re-running cannot change the answer. Touch any of them and"
-  echo "  it runs in full; there is no way to skip it by asserting it passed."
+if [ "${#TO_RUN[@]}" -eq 0 ]; then
+  echo "  SKIPPED every one of ${#ALL_FX[@]} fixtures — each one's own leaves (TBox, shapes,"
+  echo "  validator, memo, and that fixture alone) are byte-identical to its last passing"
+  echo "  run. A fixture's key cannot move because a DIFFERENT fixture changed; touch any"
+  echo "  shared file or the fixture itself and it is validated again."
 else
-EACH_OUT="$(python3 "$VALIDATE" --each "$HERE"/fixtures/*.ttl 2>/dev/null | grep '^EACH ')"
-# v1.3.0: the expectation comes from the FIXTURE'S OWN DECLARATION (hasExpectedPolarity),
-# never from its filename. The filename rule read 21 discriminating fixtures -- built to
-# make a shape fire -- as expected-to-pass, and would have failed every one of them the
-# first time this gate actually ran. A fixture that declares nothing is a FAIL: a fixture
-# whose answer is not known in advance verifies nothing (G7).
-POL_OUT="$(python3 "$VALIDATE" --polarity "$HERE"/fixtures/*.ttl 2>/dev/null | grep '^POLARITY ')"
-for FX in "$HERE"/fixtures/*.ttl; do
-  BASE="$(basename "$FX")"
-  DECL="$(printf '%s\n' "$POL_OUT" | awk -v b="$BASE" '$2==b {print $3}')"
-  case "$DECL" in
-    positive) EXPECT=pass ;;
-    negative) EXPECT=fail ;;
-    *) EXPECT="declared-polarity" ;;
-  esac
-  GOT="$(printf '%s\n' "$EACH_OUT" | awk -v b="$BASE" '$2==b {print tolower($3)}')"
-  [ -z "$GOT" ] && GOT=missing
-  if [ "$GOT" != "$EXPECT" ]; then
-    echo "  $BASE: expected $EXPECT, got $GOT"; UNRUN=1
+  if [ "${#TO_RUN[@]}" -lt "${#ALL_FX[@]}" ]; then
+    echo "  running ${#TO_RUN[@]} of ${#ALL_FX[@]} fixtures — the rest are unchanged since their"
+    echo "  last passing run and keep that verdict."
   fi
-done
-if [ "$UNRUN" -eq 0 ]; then
-  echo "  every shipped fixture validates as it declares it should ($(printf '%s\n' "$POL_OUT" | grep -c .) declared)."
-  printf '%s' "$FIXKEY" > "$FIXSTAMP"
-else
-  echo "  Fixture-coverage gate FAILED"; FAILED=1
-  rm -f "$FIXSTAMP"
-fi
+  # --each validates each fixture independently and reports a verdict per file;
+  # nothing is skipped and no fixture shares a graph with another.
+  EACH_OUT="$(python3 "$VALIDATE" --each "${TO_RUN[@]}" 2>/dev/null | grep '^EACH ')"
+  # v1.3.0: the expectation comes from the FIXTURE'S OWN DECLARATION (hasExpectedPolarity),
+  # never from its filename. The filename rule read 21 discriminating fixtures -- built to
+  # make a shape fire -- as expected-to-pass, and would have failed every one of them the
+  # first time this gate actually ran. A fixture that declares nothing is a FAIL: a fixture
+  # whose answer is not known in advance verifies nothing (G7).
+  POL_OUT="$(python3 "$VALIDATE" --polarity "${TO_RUN[@]}" 2>/dev/null | grep '^POLARITY ')"
+  RAN_OK=0
+  for FX in "${TO_RUN[@]}"; do
+    BASE="$(basename "$FX")"
+    DECL="$(printf '%s\n' "$POL_OUT" | awk -v b="$BASE" '$2==b {print $3}')"
+    case "$DECL" in
+      positive) EXPECT=pass ;;
+      negative) EXPECT=fail ;;
+      *) EXPECT="declared-polarity" ;;
+    esac
+    GOT="$(printf '%s\n' "$EACH_OUT" | awk -v b="$BASE" '$2==b {print tolower($3)}')"
+    [ -z "$GOT" ] && GOT=missing
+    if [ "$GOT" != "$EXPECT" ]; then
+      echo "  $BASE: expected $EXPECT, got $GOT"; UNRUN=1
+    else
+      RECORD "fixture:$BASE" "${FXKEY[$BASE]}"; RAN_OK=$((RAN_OK + 1))
+    fi
+  done
+  if [ "$UNRUN" -eq 0 ]; then
+    echo "  every shipped fixture validates as it declares it should (${#ALL_FX[@]} declared, $RAN_OK freshly run)."
+  else
+    echo "  Fixture-coverage gate FAILED"; FAILED=1
+  fi
 fi
 
 # --- ordering note, learned by this gate failing on itself ------------------
@@ -506,8 +531,14 @@ if [ -n "$LOC" ]; then
   python3 "$LOC" "$AFX" --witness "$AWT" --expect Lin_Registered=BYPASS >/dev/null 2>&1 || { echo "  ABORT: an item registered before any Backlog output did not read BYPASS."; exit 3; }
   ERP="$(ls "$HERE"/backlog_execution_ready_probe_v*.py 2>/dev/null | sort -V | tail -1 || true)"
   if [ -n "$ERP" ]; then
-    python3 "$ERP" >/dev/null 2>&1 || { echo "  ABORT: the start gate does not discriminate (backlog_execution_ready_probe failed)."; exit 3; }
-    echo "  self-proof: a lineage awaiting its Backlog stage reads AWAITING_BACKLOG, not ORDERED; the start gate passes the groomed item and refuses 10 cases that lack a fact"
+    ERPKEY="$(python3 "$MERKLE" key $(python3 "$ERP" --deps))"
+    if STAMPED "probe:execution_ready" "$ERPKEY"; then
+      echo "  SKIPPED — backlog_execution_ready_probe's own declared inputs are unchanged since it last held."
+    else
+      python3 "$ERP" >/dev/null 2>&1 || { echo "  ABORT: the start gate does not discriminate (backlog_execution_ready_probe failed)."; exit 3; }
+      RECORD "probe:execution_ready" "$ERPKEY"
+      echo "  self-proof: a lineage awaiting its Backlog stage reads AWAITING_BACKLOG, not ORDERED; the start gate passes the groomed item and refuses 10 cases that lack a fact"
+    fi
   else
     echo "  NOT RUN — start-gate probe not found. Not assumed to pass."
   fi
@@ -517,8 +548,14 @@ if [ -n "$LOC" ]; then
   # say INCOMPLETE and --require-complete must refuse a chain with no Backlog stage while accepting a complete one.
   WGP="$(ls "$HERE"/backlog_work_guard_probe_v*.py 2>/dev/null | sort -V | tail -1 || true)"
   if [ -n "$WGP" ]; then
-    python3 "$WGP" >/dev/null 2>&1 || { echo "  ABORT: the work guard does not discriminate (backlog_work_guard_probe failed)."; exit 3; }
-    echo "  self-proof: the work guard refuses a work commit with no ready Work-Item, a push holding one, an edit on a lineage with no Backlog stage and a guard over nothing; it accepts groomed work"
+    WGPKEY="$(python3 "$MERKLE" key $(python3 "$WGP" --deps))"
+    if STAMPED "probe:work_guard" "$WGPKEY"; then
+      echo "  SKIPPED — backlog_work_guard_probe's own declared inputs are unchanged since it last held."
+    else
+      python3 "$WGP" >/dev/null 2>&1 || { echo "  ABORT: the work guard does not discriminate (backlog_work_guard_probe failed)."; exit 3; }
+      RECORD "probe:work_guard" "$WGPKEY"
+      echo "  self-proof: the work guard refuses a work commit with no ready Work-Item, a push holding one, an edit on a lineage with no Backlog stage and a guard over nothing; it accepts groomed work"
+    fi
   else
     echo "  NOT RUN — work-guard probe not found. Not assumed to pass."
   fi
@@ -526,8 +563,14 @@ if [ -n "$LOC" ]; then
   # itself shown to see a removed and an added statement before it is trusted anywhere.
   SPP="$(ls "$HERE"/backlog_split_proof_probe_v*.py 2>/dev/null | sort -V | tail -1 || true)"
   if [ -n "$SPP" ]; then
-    python3 "$SPP" "$PKG" >/dev/null 2>&1 || { echo "  ABORT: the split proof does not discriminate (backlog_split_proof_probe failed)."; exit 3; }
-    echo "  self-proof: the split proof certifies an identical tree and refuses one with a statement removed or added"
+    SPPKEY="$(python3 "$MERKLE" key $(python3 "$SPP" --deps))"
+    if STAMPED "probe:split_proof" "$SPPKEY"; then
+      echo "  SKIPPED — backlog_split_proof_probe's own declared inputs are unchanged since it last held."
+    else
+      python3 "$SPP" "$PKG" >/dev/null 2>&1 || { echo "  ABORT: the split proof does not discriminate (backlog_split_proof_probe failed)."; exit 3; }
+      RECORD "probe:split_proof" "$SPPKEY"
+      echo "  self-proof: the split proof certifies an identical tree and refuses one with a statement removed or added"
+    fi
   else
     echo "  NOT RUN — split-proof probe not found. Not assumed to pass."
   fi
@@ -602,11 +645,24 @@ fi
 
 echo
 echo "== Lineage 19 probes — each rule fires on a planted fault and each refusal holds =="
+# v1.37.0: each probe prints its own --deps (it alone knows what it reads) and is stamped on exactly that; one that
+# never changed does not re-run just because something ELSEWHERE in the gate did. A run that does happen runs ONCE
+# (v1.36.0 and earlier ran every probe twice here: once piping to grep, once thrown away for its exit code).
 for PROBE in backlog_closure_shapes_probe backlog_archive_drill backlog_public_cut_probe backlog_governance_mitigations_probe backlog_release_tool_probe backlog_stamp_key_probe backlog_sparql_memo_probe backlog_ordinal_check_probe backlog_archived_digest_check_probe; do
   PF="$(ls "$HERE"/${PROBE}_v*.py 2>/dev/null | sort -V | tail -1 || true)"
   if [ -z "$PF" ]; then echo "  ABORT: $PROBE not found. A probe that is missing proves nothing."; exit 3; fi
-  python3 "$PF" 2>&1 | grep -E "VERDICT" | sed "s/^/  $PROBE /"
-  python3 "$PF" >/dev/null 2>&1 || { echo "  $PROBE FAILED"; FAILED=1; }
+  PKEY="$(python3 "$MERKLE" key $(python3 "$PF" --deps))"
+  if STAMPED "probe:$PROBE" "$PKEY"; then
+    echo "  $PROBE SKIPPED — its own declared inputs are unchanged since it last held."
+    continue
+  fi
+  OUT="$(python3 "$PF" 2>&1)"; RC=$?
+  printf '%s\n' "$OUT" | grep -E "VERDICT" | sed "s/^/  $PROBE /"
+  if [ "$RC" -eq 0 ]; then
+    RECORD "probe:$PROBE" "$PKEY"
+  else
+    echo "  $PROBE FAILED"; FAILED=1
+  fi
 done
 
 echo

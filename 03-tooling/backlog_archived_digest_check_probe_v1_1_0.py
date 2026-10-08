@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_archived_digest_check_probe v1.0.0 -- the ratchet holds in both directions, run as a program (G99).
+"""backlog_archived_digest_check_probe v1.1.0 -- the ratchet holds in both directions, run as a program (G99).
 
 On the pipeline fixture as a one-lineage archive, and a copy of it with one recorded digest tampered:
   1 reproducing chain, empty baseline         -> exit 0
@@ -21,6 +21,11 @@ def run(*args):
 
 
 FIX = sorted(glob.glob(os.path.join(HERE, "fixtures", "fixture_pipeline_v*.ttl")), key=lambda p: [int(x) for x in re.findall(r"_v(\d+)_(\d+)_(\d+)\.", p)[0]])[-1]
+if sys.argv[1:] == ["--deps"]:
+    print(os.path.abspath(__file__)); print(TOOL); print(FIX)
+    sys.exit(0)
+
+
 bad = []
 with tempfile.TemporaryDirectory() as d:
     txt = open(FIX).read()

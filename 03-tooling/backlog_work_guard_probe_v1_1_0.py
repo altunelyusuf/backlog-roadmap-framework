@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_work_guard_probe v1.0.0 -- proof that the work guard discriminates and cannot pass over nothing (L-95).
+"""backlog_work_guard_probe v1.1.0 -- proof that the work guard discriminates and cannot pass over nothing (L-95).
 
 Builds a real throwaway git repository, installs the guard with backlog_guard_install, and drives REAL git commits and
 the REAL Claude hook script against fixtures/fixture_execution_ready_negative (cite by stem, L-123), where the lineage
@@ -45,6 +45,13 @@ def commit(d, msg, path="app/main.py", extra=(), noverify=False):
     open(os.path.join(d, path), "a").write("x\n")
     sh(d, "git", "add", "-A")
     return sh(d, "git", "commit", "-q", *(["--no-verify"] if noverify else []), "-m", msg, *extra)
+
+
+if sys.argv[1:] == ["--deps"]:
+    print(os.path.abspath(__file__)); print(fx)
+    for t in TOOLS:
+        print(sorted(glob.glob(os.path.join(HERE, t + "_v*.py")), key=sv)[-1])
+    sys.exit(0)
 
 
 d, r = fresh()

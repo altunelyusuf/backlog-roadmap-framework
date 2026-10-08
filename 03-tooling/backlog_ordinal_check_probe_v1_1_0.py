@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_ordinal_check_probe v1.0.0 -- the ordinal check is proven end to end, as a program, on throwaway live and archive files (G99 ordinal rule).
+"""backlog_ordinal_check_probe v1.1.0 -- the ordinal check is proven end to end, as a program, on throwaway live and archive files (G99 ordinal rule).
 
 Seven cases, each run through the real tool with --live and --archive pointing at small files:
   1 distinct ordinals across live and archive            -> exit 0
@@ -32,6 +32,11 @@ def run(live, arch, *extra):
         open(a, "w").write(HEAD + live); open(b, "w").write(HEAD + arch)
         r = subprocess.run([sys.executable, "-B", TOOL, "--live", a, "--archive", b] + list(extra), capture_output=True, text=True)
         return r.returncode, r.stdout
+
+
+if sys.argv[1:] == ["--deps"]:
+    print(os.path.abspath(__file__)); print(TOOL)
+    sys.exit(0)
 
 
 bad = []

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_execution_ready_probe v1.0.0 -- proof that the start gate discriminates (L-95), both halves.
+"""backlog_execution_ready_probe v1.1.0 -- proof that the start gate discriminates (L-95), both halves.
 
 Runs backlog_execution_ready on fixtures/fixture_execution_ready_negative and asserts the exit code and the missing fact
 for every case: the groomed item and its lineage are READY (exit 0); every other case is NOT READY (exit 2) and names
@@ -11,6 +11,11 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sv = lambda p: [int(x) for x in re.findall(r"_v(\d+)_(\d+)_(\d+)\.", p)[0]]
 tool = sorted(glob.glob(os.path.join(HERE, "backlog_execution_ready_v*.py")), key=sv)[-1]
 fx = sorted(glob.glob(os.path.join(HERE, "fixtures", "fixture_execution_ready_negative_v*.ttl")), key=sv)[-1]
+if sys.argv[1:] == ["--deps"]:
+    print(os.path.abspath(__file__)); print(tool); print(fx)
+    sys.exit(0)
+
+
 CASES = [  # (args, exit, text that must appear in the output)
     (["--lineage", "Lin_Ready"], 0, "VERDICT     : READY"),
     (["--lineage", "Lin_Ready", "--item", "S_Groomed"], 0, "VERDICT     : READY"),

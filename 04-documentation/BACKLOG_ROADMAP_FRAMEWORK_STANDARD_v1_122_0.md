@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.121.0
+# Backlog & Roadmap Semantic Framework — Standard v1.122.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -2149,6 +2149,16 @@ per lineage", and the live gate never reads the archive. Nothing was bypassed; t
 ### 2.5h Validation speed: queries are prepared once
 
 The validator prepares each distinct SPARQL constraint text once per process (`backlog_sparql_memo`) instead of letting the rule engine re-parse it for every focus node. This changes speed only: results are identical, proven by `backlog_sparql_memo_probe` and by a row-by-row comparison on the fixtures. The memo module is an input to both stamps, so a changed memo re-runs the suite and the clause proof. `BACKLOG_SPARQL_MEMO=0` turns it off for a reference run.
+
+
+### 2.5i Cache keys are composed from named leaves, never from one flat hash over a whole section
+
+A step's cache key (a fixture's own validation, a probe's self-proof) is composed from the exact files that step declares it reads -- its own bytes plus whatever
+tool, fixture or shapes file it resolves -- never from concatenating everything a whole SECTION of the gate happens to touch. `backlog_merkle_cache` holds the
+mechanics: a leaf is one file's hash; a step's key is the hash of its own sorted (name, leaf) pairs; a root composes many steps' keys into one receipt. The
+property this buys, proven by `backlog_merkle_cache_probe` and by `backlog_stamp_key_probe` on the real fixture key: a leaf a step did not name can change freely
+without moving that step's key. A change to a shared file still moves every step that declares it, exactly as a flat hash would -- this names the grain a check
+is sound at, it does not loosen which bytes a pass is a function of.
 
 ### 2.6 Governance
 
