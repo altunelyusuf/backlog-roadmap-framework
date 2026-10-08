@@ -9,9 +9,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog/shacl/1.151.0> ;
-    owl:versionInfo "1.151.0" ;
-    owl:priorVersion <http://example.org/backlog-shapes/1.150.0> , <http://example.org/backlog-shapes/1.149.0> , <http://example.org/backlog-shapes/1.148.0> , <http://example.org/backlog-shapes/1.147.0> , <http://example.org/backlog-shapes/1.146.0> ;
+    owl:versionIRI <http://example.org/backlog/shacl/1.152.0> ;
+    owl:versionInfo "1.152.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.151.0> , <http://example.org/backlog-shapes/1.150.0> , <http://example.org/backlog-shapes/1.149.0> , <http://example.org/backlog-shapes/1.148.0> , <http://example.org/backlog-shapes/1.147.0> , <http://example.org/backlog-shapes/1.146.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.145.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.144.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.143.0> ;
@@ -2954,6 +2954,22 @@ backlog:ItemStartedStateStaleShape a sh:NodeShape ;
             $this backlog:startedAt ?s ; backlog:hasState ?st .
             FILTER (?st IN (backlog:Ready, backlog:Proposed))
             FILTER NOT EXISTS { $this backlog:hasBatchCompleted ?c }
+        }""" ] .
+
+backlog:LineageOrdinalUniqueShape a sh:NodeShape ;
+    sh:targetClass backlog:Lineage ;
+    sh:severity sh:Violation ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "Lin_OrdinalDupA" ;
+    rdfs:label "A lineage holds its own place in the sequence: no other lineage carries its ordinal unless the owner declared the pair"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: another lineage carries this lineage's ordinal, so the sequence of runs is ambiguous. This shape sees the lineages of the data it is given; backlog_ordinal_check counts the live register and the archive together. If this lineage is yours and not yet archived, give it the next free number (backlog_ordinal_check next). Never renumber an archived lineage; hand the pair to the framework owner, who declares it (a declared shared ordinal) or renumbers." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:lineageOrdinal ?n .
+            ?other a backlog:Lineage ; backlog:lineageOrdinal ?n .
+            FILTER (?other != $this)
+            FILTER NOT EXISTS { ?d a backlog:OrdinalSharingDeclaration ; backlog:declaredOrdinal ?n ; backlog:sharedByLineage $this , ?other }
         }""" ] .
 
 backlog:L4DeploymentShape a sh:NodeShape ;

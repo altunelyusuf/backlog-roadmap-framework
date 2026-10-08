@@ -18,9 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.121.0> ;
-    owl:versionInfo "1.121.0" ;
-    owl:priorVersion <http://example.org/backlog/1.120.0> , <http://example.org/backlog/1.119.0> , <http://example.org/backlog/1.118.0> , <http://example.org/backlog/1.117.0> ;
+    owl:versionIRI <http://example.org/backlog/1.122.0> ;
+    owl:versionInfo "1.122.0" ;
+    owl:priorVersion <http://example.org/backlog/1.121.0> , <http://example.org/backlog/1.120.0> , <http://example.org/backlog/1.119.0> , <http://example.org/backlog/1.118.0> , <http://example.org/backlog/1.117.0> ;
     owl:priorVersion <http://example.org/backlog/1.116.0> ;
     owl:priorVersion <http://example.org/backlog/1.115.0> ;
     owl:priorVersion <http://example.org/backlog/1.114.0> ;
@@ -5487,6 +5487,24 @@ backlog:lineageOrdinal a owl:DatatypeProperty , owl:FunctionalProperty ;
     rdfs:label "lineage ordinal"@en ;
     skos:definition "Where this lineage falls in the sequence of runs. Recorded so that history has an order independent of dates, which this framework has already found to be unreliable."@en ;
     backlog:numberOrigin backlog:Num_Asserted .
+
+backlog:OrdinalSharingDeclaration a owl:Class ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "declared shared ordinal"@en ;
+    skos:definition "An owner-declared record that exactly the named lineages share one lineage ordinal. Two lineages normally never carry the same ordinal, counted over the live register and the archive together; this record is the only excuse, it covers exactly the lineages it names (never a third), and it is added to the live data file because archived records are not changed."@en .
+
+backlog:declaredOrdinal a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:OrdinalSharingDeclaration ; rdfs:range xsd:integer ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "declared ordinal"@en ;
+    skos:definition "The lineage ordinal that the named lineages are declared to share."@en ;
+    backlog:numberOrigin backlog:Num_Asserted .
+
+backlog:sharedByLineage a owl:ObjectProperty ;
+    rdfs:domain backlog:OrdinalSharingDeclaration ; rdfs:range backlog:Lineage ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "shared by lineage"@en ;
+    skos:definition "A lineage that carries the declared shared ordinal. The declaration names every lineage that shares it; the lineage itself lives in the live data file or in the archive."@en .
 
 backlog:lineageArchived a owl:DatatypeProperty , owl:FunctionalProperty ;
     rdfs:domain backlog:Lineage ; rdfs:range xsd:boolean ;

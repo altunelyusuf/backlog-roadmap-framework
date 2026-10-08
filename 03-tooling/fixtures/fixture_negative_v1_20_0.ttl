@@ -3768,3 +3768,16 @@ sprintceremona:WI_ItemStartedInProgress a backlog:Story ; backlog:hasIdentifier 
 sprintceremona:WI_ItemStartedBatchTracked a backlog:Story ; backlog:hasIdentifier "WI-ITEMSTARTEDBATCHTRACKED" ;
     backlog:startedAt "2026-10-07T09:00:00Z"^^xsd:dateTime ; backlog:hasState backlog:Ready ;
     backlog:hasBatchSize 10 ; backlog:hasBatchCompleted 2 .
+
+# v1.20.0 (G99, ordinal rule): LineageOrdinalUniqueShape -- two lineages on one ordinal.
+# Lin_OrdinalDupA and Lin_OrdinalDupB: both ordinal 97 -> fires (on each).
+# Lin_OrdinalOwn: ordinal 98, alone -> silent.
+# Lin_OrdinalDeclA and Lin_OrdinalDeclB: both ordinal 96 and a declaration naming exactly those two -> silent.
+@prefix ordinaldup: <http://example.org/ordinaldup#> .
+ordinaldup:Lin_OrdinalDupA a backlog:Lineage ; backlog:lineageOrdinal 97 ; backlog:lineageArchived false .
+ordinaldup:Lin_OrdinalDupB a backlog:Lineage ; backlog:lineageOrdinal 97 ; backlog:lineageArchived false .
+ordinaldup:Lin_OrdinalOwn a backlog:Lineage ; backlog:lineageOrdinal 98 ; backlog:lineageArchived false .
+ordinaldup:Lin_OrdinalDeclA a backlog:Lineage ; backlog:lineageOrdinal 96 ; backlog:lineageArchived false .
+ordinaldup:Lin_OrdinalDeclB a backlog:Lineage ; backlog:lineageOrdinal 96 ; backlog:lineageArchived false .
+ordinaldup:Decl_96 a backlog:OrdinalSharingDeclaration ; backlog:declaredOrdinal 96 ;
+    backlog:sharedByLineage ordinaldup:Lin_OrdinalDeclA , ordinaldup:Lin_OrdinalDeclB .

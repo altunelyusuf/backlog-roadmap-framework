@@ -22,9 +22,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (ABox: controlled individuals, reference data and the live register)"@en ;
-    owl:versionIRI <http://example.org/backlog/abox/1.34.0> ;
-    owl:versionInfo "1.34.0" ;
-    owl:priorVersion <http://example.org/backlog/abox/1.33.0> , <http://example.org/backlog/abox/1.32.0> , <http://example.org/backlog/abox/1.31.0> , <http://example.org/backlog/abox/1.30.0> , <http://example.org/backlog/abox/1.29.0> , <http://example.org/backlog/abox/1.28.0> , <http://example.org/backlog/abox/1.27.0> , <http://example.org/backlog/abox/1.26.0> , <http://example.org/backlog/abox/1.25.0> , <http://example.org/backlog/abox/1.24.0> , <http://example.org/backlog/abox/1.23.0> , <http://example.org/backlog/abox/1.22.0> , <http://example.org/backlog/abox/1.21.0> , <http://example.org/backlog/abox/1.20.0> , <http://example.org/backlog/abox/1.19.0> , <http://example.org/backlog/abox/1.17.0> , <http://example.org/backlog/abox/1.16.0> , <http://example.org/backlog/abox/1.15.0> , <http://example.org/backlog/abox/1.14.0> , <http://example.org/backlog/abox/1.13.0> , <http://example.org/backlog/abox/1.12.0> , <http://example.org/backlog/abox/1.11.0> , <http://example.org/backlog/abox/1.10.0> , <http://example.org/backlog/abox/1.9.0> , <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
+    owl:versionIRI <http://example.org/backlog/abox/1.35.0> ;
+    owl:versionInfo "1.35.0" ;
+    owl:priorVersion <http://example.org/backlog/abox/1.34.0> , <http://example.org/backlog/abox/1.33.0> , <http://example.org/backlog/abox/1.32.0> , <http://example.org/backlog/abox/1.31.0> , <http://example.org/backlog/abox/1.30.0> , <http://example.org/backlog/abox/1.29.0> , <http://example.org/backlog/abox/1.28.0> , <http://example.org/backlog/abox/1.27.0> , <http://example.org/backlog/abox/1.26.0> , <http://example.org/backlog/abox/1.25.0> , <http://example.org/backlog/abox/1.24.0> , <http://example.org/backlog/abox/1.23.0> , <http://example.org/backlog/abox/1.22.0> , <http://example.org/backlog/abox/1.21.0> , <http://example.org/backlog/abox/1.20.0> , <http://example.org/backlog/abox/1.19.0> , <http://example.org/backlog/abox/1.17.0> , <http://example.org/backlog/abox/1.16.0> , <http://example.org/backlog/abox/1.15.0> , <http://example.org/backlog/abox/1.14.0> , <http://example.org/backlog/abox/1.13.0> , <http://example.org/backlog/abox/1.12.0> , <http://example.org/backlog/abox/1.11.0> , <http://example.org/backlog/abox/1.10.0> , <http://example.org/backlog/abox/1.9.0> , <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
         <http://example.org/backlog-abox/1.2.1> ,
                      <http://example.org/backlog-abox/1.2.0> ,
                      <http://example.org/backlog-abox/1.1.0> ,
@@ -5594,3 +5594,16 @@ fw:ArchiveEntry_L_GovernanceMitigations a backlog:LineageArchiveEntry ;
 fw:L_GovernanceMitigations backlog:lineageArchived true ; backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_14_0.ttl" ;
     backlog:archivedAt "2026-10-07T14:05:07Z"^^xsd:dateTime ; backlog:hasLineageStatus backlog:LS_Archived ;
     backlog:archivalTrigger "Found achieved and un-archived by backlog_lineage_archive_v2_1_0: mission Out_Achieved, closure report present, every item Done or Cancelled, not frozen. Owner's rule 2026-09-09: an achieved lineage found triggers the archival activity." .
+
+# ---- Declared shared ordinals (G99 ordinal rule, 2026-10-08) -------------------------------------------------------------------------------------------
+# Ordinals 17 and 18 were each given to two lineages: the first pair was archived on 2026-09-24, and two new lineages took the same numbers on 2026-10-06
+# because nothing compared the live register with the archive. The owner ruled on 2026-10-08 (after asking why it happened and whether it skipped a rule)
+# that the archived records stay as written and that the two pairs are recorded here, once. A declaration covers exactly the lineages it names.
+fw:Declared_Ordinal_17 a backlog:OrdinalSharingDeclaration ;
+    rdfs:label "Ordinal 17 shared by Gate Runtime Efficiency and OE Structure Clean-up"@en ;
+    backlog:declaredOrdinal 17 ;
+    backlog:sharedByLineage fw:L_GateEfficiency , fw:L_OEStructureCleanup .
+fw:Declared_Ordinal_18 a backlog:OrdinalSharingDeclaration ;
+    rdfs:label "Ordinal 18 shared by Fixture Consolidation and OE Package Consolidation"@en ;
+    backlog:declaredOrdinal 18 ;
+    backlog:sharedByLineage fw:L_FixtureConsolidation , fw:L_OEPackageConsolidation .

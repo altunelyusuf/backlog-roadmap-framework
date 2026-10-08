@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.118.0
+# Backlog & Roadmap Semantic Framework — Standard v1.119.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -2121,6 +2121,29 @@ rejected at L3; a roadmap rank contradicting the score order required to carry a
 | Progress report run (`.md`) | `configuration:AuditReportMarkdownConvention` | Follows `{name}_v{M}_{m}_{p}.md` exactly; again no form divergence |
 | Profile declaration, evidence index (`.ttl`) | `configuration:ABoxFileConvention` | Instance data of this subject |
 | Manifest | none | Not an ontology artifact; named `MANIFEST_SHA256.txt` by pack practice |
+
+### 2.5g Lineage ordinals: one lineage per place in the sequence
+
+A lineage's ordinal (`lineageOrdinal`) says where it falls in the sequence of runs. Two lineages on one number make that
+order ambiguous, so **an ordinal is carried by one lineage, counted over the live register and the archive together.**
+The gap this closes was found, not assumed: ordinals 17 and 18 were each given to two lineages (the first pair archived on
+2026-09-24, two new lineages numbered the same on 2026-10-06) because the only rule on the ordinal was "exactly one value
+per lineage", and the live gate never reads the archive. Nothing was bypassed; the rule did not exist.
+
+- **The rule.** `LineageOrdinalUniqueShape` (Violation) fires in whatever data it is given when another lineage carries the same ordinal.
+  `03-tooling/backlog_ordinal_check` counts the live data file and the archive data file together on every gate run, and proves
+  itself first on planted cases (a collision is flagged, a declared pair is excused, a third lineage on a declared number is
+  flagged, a declaration naming a lineage on another number is flagged). `backlog_ordinal_check_probe` runs the tool as a program on seven cases.
+- **The only excuse.** `OrdinalSharingDeclaration`: an owner-declared record in the live data file that names the ordinal and exactly the
+  lineages sharing it (`declaredOrdinal`, `sharedByLineage`). It never covers a third lineage. Two exist, for ordinals 17 and 18; the archived records
+  they describe are untouched.
+- **Before opening a lineage:** run `backlog_ordinal_check next`. It prints the next free ordinal, counting the archive.
+- **If a collision is reported (for any session that consumes this framework):**
+  1. Never change an archived lineage's ordinal; archived records are settled history.
+  2. If the colliding lineage is yours and not yet archived, give it the number `next` prints and run the check again. That corrects your own record.
+  3. If both lineages are archived, or the other one is not yours, do not renumber. Hand the two lineage labels and the number to the framework owner as a handover; the owner declares the pair or renumbers.
+  4. Never loosen the check or delete a declaration to make a run pass.
+- **What it does not do.** The shape cannot see the archive; only the tool counts both files, so a package that runs the shape without the tool is only half covered.
 
 ### 2.6 Governance
 

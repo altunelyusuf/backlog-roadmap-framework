@@ -11260,6 +11260,16 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.367.0 — G99: a lineage ordinal is carried by one lineage, live and archive together; two pairs declared, no archived record changed
+
+Maintenance, no lineage (G99). The owner asked, on seeing the proposed clean-up of ordinals 17 and 18, why it was needed, whether it skirted an enforcement rule, and why it happened; re-checked from the files, not from memory.
+
+- **Why it happened:** the only rule on the ordinal was "exactly one value per lineage" (`LineageShape`, `LineageOnceShape`). No shape, tool or standard text required it to differ from another lineage's, and the live gate never reads the archive. Ordinals 17 and 18 were given on 2026-09-24 to two lineages that were then archived; on 2026-10-06 two new lineages took the same numbers because the live register no longer showed them. No rule was bypassed: the rule did not exist.
+- **The rule:** `LineageOrdinalUniqueShape` (Violation, proven by a planted pair in `fixture_negative` v1.20.0) and `backlog_ordinal_check` v1.0.0, which counts the live data file and the archive together on every gate run, proves itself on planted cases first (collision flagged, declared pair excused, third lineage flagged, wrong declaration flagged) and prints what to do on a collision. `next` prints the next free ordinal. `backlog_ordinal_check_probe` runs it as a program on seven cases.
+- **The only excuse:** new class `OrdinalSharingDeclaration` (`declaredOrdinal`, `sharedByLineage`), owner-declared, in the live data file, covering exactly the lineages it names. Two are recorded, for 17 and 18. The archived records are not touched.
+- **For sessions consuming the framework:** the collision guide is in the standard (2.5g) and in the tool's own failure text: never renumber an archived lineage; renumber your own unarchived one with `next`; hand a pair that is archived or not yours to the framework owner; never loosen the check.
+- **Versions:** T-Box 1.122.0, shapes 1.152.0, data file 1.35.0, standard 1.119.0, gate 1.34.0, fixture_negative 1.20.0. No check removed or loosened; one added.
+
 ## v1.366.0 — G99 release B: the stamps stand on every input, the release tool stops wasting the publisher's gate, the archive tool keeps the version chain
 
 Last release of the G99 task set (maintenance, no lineage). Found by measuring release 1.365.0 end to end (gate 421 s, publisher 554 s):
