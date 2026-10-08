@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
+# v2.6.0 (G99 release B): the version a new live or archive file supersedes joins the header's owl:priorVersion chain (it was added by hand each time; move_header does it, and refuses a header that has no chain to extend).
 # v2.5.0 (Lineage 19, DC-S01 and DC-S03): an abandoned mission needs a closure report too, and every cancelled item of the lineage must be named by it (reportsCancelledItem); the archived copy of the lineage is marked archived with its confirmation pending, at the moment it is moved, so no later step has to find it. v2.4.0 accepted an abandoned mission with only its stated reason, which the owner has ruled is not enough.
 # v2.4.0 (Lineage 18, OC-S06): an abandoned lineage is archivable (its stated reason is its record), and the existing entries follow the archive file to its new version. v2.3.0 (Lineage 18, OC-S05): follows the archive folder. The archive data file now lives in 01-ontologies/archive/.
-"""backlog_lineage_archive v2.5.0 — set an achieved lineage down, out of every processing path.
+"""backlog_lineage_archive v2.6.0 — set an achieved lineage down, out of every processing path.
 
 WHY. A lineage whose mission is settled keeps costing every run until it is ARCHIVED: the SHACL
 suite validates its every individual, the git witness re-measures its every subject, the roadmap
@@ -185,6 +186,20 @@ def partition(g, lineages):
                 part.add(s); cand.discard(s); changed = True
     return part, keep_live
 
+def move_header(txt, oldv, newv):
+    """Move a data file's header from OLDV to NEWV: versionInfo, versionIRI, and the superseded version joins owl:priorVersion at the front.
+    Returns (text, None), or (None, reason) when the header does not read OLDV or has no priorVersion to extend."""
+    if f'owl:versionInfo "{oldv}" ;' not in txt:
+        return None, f"the header does not read versionInfo {oldv}"
+    if not re.search(r"owl:priorVersion <[^>]*/", txt):
+        return None, "the header has no owl:priorVersion to extend"
+    txt = txt.replace(f'owl:versionInfo "{oldv}" ;', f'owl:versionInfo "{newv}" ;', 1)
+    txt = re.sub(r"(owl:versionIRI <[^>]*/)" + re.escape(oldv) + ">", lambda m: m.group(1) + newv + ">", txt, count=1)
+    if not re.search(r"owl:priorVersion <[^>]*/" + re.escape(oldv) + ">", txt):
+        txt = re.sub(r"owl:priorVersion (<[^>]*/)", lambda mm: "owl:priorVersion " + mm.group(1) + oldv + "> , " + mm.group(1), txt, count=1)
+    return txt, None
+
+
 def main():
     argv = sys.argv[1:]
     apply = "--apply" in argv; names = [a for a in argv if not a.startswith("--")]
@@ -255,8 +270,9 @@ def main():
     now = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
     oldv = ".".join(map(str, semver(reg))); newv = ".".join(map(str, semver(new_reg)))
     live_txt = "\n".join(out_live)
-    live_txt = live_txt.replace(f'owl:versionInfo "{oldv}" ;', f'owl:versionInfo "{newv}" ;', 1)
-    live_txt = re.sub(r"(owl:versionIRI <[^>]*/)" + re.escape(oldv) + ">", lambda m: m.group(1) + newv + ">", live_txt, count=1)
+    live_txt, why = move_header(live_txt, oldv, newv)
+    if live_txt is None:
+        print(f"  GATE ABORT: the live data file header: {why}"); return 3
     rel = os.path.relpath(new_arch, PKG)
     # v2.4.0: every entry already in the live register names the archive file by its path; the archive file just changed version, so they follow it
     # (the same repointing a person did by hand at the last bump; the split proof counts it as declared).
@@ -284,8 +300,9 @@ def main():
         live_txt += f'{prefix_of(g, L)}{local(L)}' + (' backlog:lineageArchived true ;' if n == 0 else '') + f' backlog:archiveFile "{rel}" ;\n    backlog:archivedAt "{now}"^^xsd:dateTime ; backlog:hasLineageStatus backlog:LS_Archived ;\n    backlog:archivalTrigger "Found achieved and un-archived by backlog_lineage_archive_v2_1_0: mission Out_Achieved, closure report present, every item Done or Cancelled, not frozen. Owner\'s rule 2026-09-09: an achieved lineage found triggers the archival activity." .\n'
     arch_txt = open(arch_path).read().rstrip("\n")
     olda = ".".join(map(str, semver(arch_path))); newa = ".".join(map(str, semver(new_arch)))
-    arch_txt = arch_txt.replace(f'owl:versionInfo "{olda}" ;', f'owl:versionInfo "{newa}" ;', 1)
-    arch_txt = re.sub(r"(owl:versionIRI <[^>]*/)" + re.escape(olda) + ">", lambda m: m.group(1) + newa + ">", arch_txt, count=1)
+    arch_txt, why = move_header(arch_txt, olda, newa)
+    if arch_txt is None:
+        print(f"  GATE ABORT: the archive data file header: {why}"); return 3
     # prefixes the moved statements need
     need = {m.group(1) for ln in out_arch for m in re.finditer(r"\b([A-Za-z_]\w*):[A-Za-z_]", ln)}
     have = set(re.findall(r"@prefix\s+(\w+):", arch_txt))

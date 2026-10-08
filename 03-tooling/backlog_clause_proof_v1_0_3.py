@@ -34,10 +34,13 @@ def _key(pkg):
     """
     import hashlib
     h = hashlib.sha256()
-    for pat in ("02-shacl-safeguards/backlog_shacl_v*.ttl",
-                "03-tooling/fixtures/*.ttl"):
+    # v1.0.3: the proof is a function of the CHECKER too -- the validator and this file are part of the key, and so is the T-Box the validator
+    # judges against. A stamp keyed on the shapes and fixtures alone said "unchanged" over a changed validator.
+    for pat in ("02-shacl-safeguards/backlog_shacl_v*.ttl", "01-ontologies/backlog_tbox_v*.ttl",
+                "03-tooling/fixtures/*.ttl", "03-tooling/backlog_validate_v*.py"):
         for p in sorted(glob.glob(os.path.join(pkg, pat))):
-            h.update(open(p, "rb").read())
+            h.update(os.path.basename(p).encode()); h.update(open(p, "rb").read())
+    h.update(open(os.path.abspath(__file__), "rb").read())
     return h.hexdigest()
 
 

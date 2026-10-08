@@ -11260,6 +11260,17 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.366.0 — G99 release B: the stamps stand on every input, the release tool stops wasting the publisher's gate, the archive tool keeps the version chain
+
+Last release of the G99 task set (maintenance, no lineage). Found by measuring release 1.365.0 end to end (gate 421 s, publisher 554 s):
+
+- **The publisher's gate re-run took 9 minutes because the release tool deleted the fixture-suite stamp.** The stamp is git-ignored and manifest-exempt; deleting it made the publisher redo every fixture cold. `backlog_release_tool` v1.1.0 keeps it, cleans bytecode before and after the publisher, passes `--delete PATH` as the publisher's `--expect-delete` (release 1.365.0 needed it by hand once), and gains `prune-cache` (the validation cache had grown to 115 MB, 19,000 files).
+- **The stamps did not stand on every input.** The fixture-suite stamp was keyed on shapes, T-Box and fixtures but not the validator, so in 1.365.0 the suite was skipped over a changed validator; the clause-proof stamp lacked the T-Box, the validator and itself. Gate v1.33.0 and `backlog_clause_proof` v1.0.3 add them. `backlog_stamp_key_probe` v1.0.0 (new, in the gate) builds a throwaway layout and shows that both keys change with the shapes, T-Box, a fixture and the validator (the clause proof also with itself); run against the v1.32.0 gate it fails on the validator, which is the defect.
+- **`backlog_lineage_archive` v2.6.0:** the version a new live or archive file supersedes joins the header's `owl:priorVersion` chain (added by hand at every archiving until now); a header that does not read the old version or has no chain is refused. `backlog_archive_drill` v1.1.0 shows the move, the single extension of a chain and both refusals.
+- **Release tags:** v1.351.0 to v1.365.0 all exist on the remote; none missing.
+- **Not done, needs the owner:** the ordinal clean-up (ordinals 17 and 18 are each carried by two lineages across live and archive). It rewrites archived records, so it waits for the owner's explicit approval and a declared exception in the proof tool.
+- No check removed or loosened; three keys tightened.
+
 ## v1.365.0 — G99 release A2 (speed only): a result is kept per shape
 
 Second speed-only release of the G99 task set, after the owner's direction that a release must not take hours.

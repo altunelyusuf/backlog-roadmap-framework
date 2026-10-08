@@ -15,6 +15,8 @@
 #
 # v1.29.0 (Lineage 19, DC-S04): a third probe runs every time: the public copy is cut by each module's declared audience and stops with an error when it cannot be sure (backlog_public_cut_probe).
 # v1.28.0 (Lineage 19, DC-S01 and DC-S02): two probes run every time: the closure-report rules are shown firing on planted faults and silent on corrected twins (backlog_closure_shapes_probe), and the archive tool's refusals are drilled on planted lineages (backlog_archive_drill). A probe that cannot be found stops the gate.
+# v1.33.0 (G99 release B): the Lineage 19 probes section also runs backlog_stamp_key_probe (both stamps change with every input, the validator included).
+# v1.33.0 (G99 release B, keys): the fixture-suite stamp's key now includes the validator (backlog_validate_v*.py); it covered the shapes, T-Box and fixtures but not the checker, so a changed validator was skipped over. The clause-proof stamp is keyed on the validator too (backlog_clause_proof v1.0.3).
 # v1.32.0 (G99 release A2, speed only): the validation proof section is now the per-shape cache probe (backlog_validate_cache_probe: cached and split runs equal the plain run on a small register with a rule, planted shape, data and rule changes miss as they must, a lost share is refused); it replaces the split probe of v1.31.0.
 # v1.31.0 (G99 release A, speed only): a "Validation split proof" section before Gate R proves the split validation (backlog_validate v1.13.0) reports exactly what the single-process run reports on a register that violates, with its own self-proof; the Lineage 19 probes section also runs backlog_release_tool_probe (the release tool refuses what it must).
 # v1.30.0 (Lineage 16, GOVMIT-S02 and S03): the Lineage 19 probes section also runs backlog_governance_mitigations_probe (the generalised state advisory and the artefact boundary each fire on a fault and stay silent on a twin).
@@ -244,7 +246,7 @@ fi
 FIXSTAMP="$PKG/.fixture-suite-stamp"
 FIXKEY="$( { cat "$HERE"/../01-ontologies/backlog_tbox_v*.ttl \
                  "$HERE"/../02-shacl-safeguards/backlog_shacl_v*.ttl \
-                 "$HERE"/fixtures/*.ttl ; } 2>/dev/null | sha256sum | cut -d' ' -f1)"
+                 "$HERE"/fixtures/*.ttl "$HERE"/backlog_validate_v*.py ; } 2>/dev/null | sha256sum | cut -d' ' -f1)"
 SKIP_FIXTURES=0
 if [ -f "$FIXSTAMP" ] && [ "$(cat "$FIXSTAMP")" = "$FIXKEY" ]; then
   SKIP_FIXTURES=1
@@ -574,7 +576,7 @@ fi
 
 echo
 echo "== Lineage 19 probes — each rule fires on a planted fault and each refusal holds =="
-for PROBE in backlog_closure_shapes_probe backlog_archive_drill backlog_public_cut_probe backlog_governance_mitigations_probe backlog_release_tool_probe; do
+for PROBE in backlog_closure_shapes_probe backlog_archive_drill backlog_public_cut_probe backlog_governance_mitigations_probe backlog_release_tool_probe backlog_stamp_key_probe; do
   PF="$(ls "$HERE"/${PROBE}_v*.py 2>/dev/null | sort -V | tail -1 || true)"
   if [ -z "$PF" ]; then echo "  ABORT: $PROBE not found. A probe that is missing proves nothing."; exit 3; fi
   python3 "$PF" 2>&1 | grep -E "VERDICT" | sed "s/^/  $PROBE /"

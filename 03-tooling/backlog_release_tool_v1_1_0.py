@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_release_tool v1.0.0 -- the release steps a session used to do by hand, as one tested tool (G99 release A; OE rule R4).
+"""backlog_release_tool v1.1.0 -- the release steps a session used to do by hand, as one tested tool (G99 release A; OE rule R4).
 
 Subcommands (each prints what it did and exits non-zero on any refusal):
   bump-data NEWVER                      rename the package data file to the new version and move its header (versionInfo, versionIRI, priorVersion)
@@ -10,11 +10,15 @@ Subcommands (each prints what it did and exits non-zero on any refusal):
   push-retry REPO_DIR [--tries N] [--delay S]
                                         git push origin HEAD:main, retried when the remote answers with a server error (a transient HTTP 5xx); a
                                         rejection that is not transient (non-fast-forward, permission) is NOT retried
-  release VERSION [--dry-run] [--step-timeout S]
+  release VERSION [--dry-run] [--step-timeout S] [--delete PATH ...]
                                         the whole path for a version whose changelog entry is already written: backup, VERSION.txt, manifest,
                                         gate, public copy and its push, the publisher, then the tag check. Every step is time-limited and prints its
                                         duration; --dry-run prints the plan and the refusals it already knows (missing changelog entry) and runs nothing
+  prune-cache [DIR] [--days N]          remove cache files (shape_*.ttl, memo *.json, stamps) older than N days (default 14) from the validation cache; they are rebuilt on demand
   republish VERSION                     only the publisher and the tag check (after a transient failure of the public push)
+v1.1.0: the fixture-suite stamp is KEPT (v1.0.0 deleted it, so the publisher's own gate re-run redid the whole fixture suite cold, about 9 minutes; the stamp is git-ignored and
+manifest-exempt, and the gate keys it on every input including the validator); bytecode is cleaned before AND after the publisher; --delete PATH (repeatable) names a
+file the release removes, passed to the publisher as --expect-delete; prune-cache removes validation cache files older than N days.
 Nothing here loosens a check: the gate and the publisher run unchanged; the tool only removes the hand-work around them.
 Environment: BRSF_PUBCOPY (the public copy's clone), BRSF_PUBLISHER_DIR (where oe_publish_v*.sh lives), BRSF_WORK (scratch), GH_TOKEN, OE_SESSION,
 RELEASE_COMMIT_TRAILER (text appended to the public-copy commit message).
@@ -160,10 +164,50 @@ class Steps:
         return p
 
 
-def cmd_release(args, only_publish=False):
-    dry, limit, pos, i = False, None, [], 0
+def deletion_args(paths, work):
+    """['--expect-delete', FILE] with the package-relative PATHS one per line, or [] when nothing is deleted."""
+    if not paths:
+        return []
+    f = os.path.join(work, "deletions.txt")
+    open(f, "w").write("".join(p.strip() + "\n" for p in paths))
+    return ["--expect-delete", f]
+
+
+def prune_cache(cache_dir, days=14.0, now=None):
+    """Remove validation cache files not written for DAYS days; returns (removed, kept). Only the cache's own file kinds are touched."""
+    now = now or time.time(); removed = kept = 0
+    for f in os.listdir(cache_dir):
+        if not re.fullmatch(r"(shape_[0-9a-f]+\.ttl|[0-9a-f]{64}\.json|(shardproof|cacheproof)_[0-9a-f]+\.ok)", f):
+            continue
+        p = os.path.join(cache_dir, f)
+        if now - os.path.getmtime(p) > days * 86400:
+            os.remove(p); removed += 1
+        else:
+            kept += 1
+    return removed, kept
+
+
+def cmd_prune(args):
+    days, pos, i = 14.0, [], 0
     while i < len(args):
-        if args[i] == "--dry-run":
+        if args[i] == "--days":
+            days = float(args[i + 1]); i += 2
+        else:
+            pos.append(args[i]); i += 1
+    d = pos[0] if pos else os.environ.get("BACKLOG_VALIDATE_MEMO_DIR") or os.path.join(os.environ.get("HOME", "/tmp"), ".backlog_validate_memo")
+    if not os.path.isdir(d):
+        die("no cache folder at %s" % d)
+    r, k = prune_cache(d, days)
+    print("pruned %s: %d removed, %d kept (older than %g days)" % (d, r, k, days))
+
+
+
+def cmd_release(args, only_publish=False):
+    dry, limit, pos, i, deletes = False, None, [], 0, []
+    while i < len(args):
+        if args[i] == "--delete":
+            deletes.append(args[i + 1]); i += 2
+        elif args[i] == "--dry-run":
             dry = True; i += 1
         elif args[i] == "--step-timeout":
             limit = int(args[i + 1]); i += 2
@@ -211,10 +255,6 @@ def cmd_release(args, only_publish=False):
         bad = [l for l in text.splitlines() if re.search(r"FAILED|VERDICT *: *FAIL|ABORT", l)]
         if bad:
             die("the gate fails (other than the drift check a pending version always shows): " + bad[0][:160] + "  (log %s)" % glog)
-        try:
-            os.remove(stamp)
-        except OSError:
-            pass
         clean_bytecode(P)
         derive = newest(os.path.join(HERE, "make_public_distribution_v*.py"))
         pd = os.path.join(work, "pd"); shutil.rmtree(pd, ignore_errors=True)
@@ -246,8 +286,14 @@ def cmd_release(args, only_publish=False):
     pw = os.path.join(work, "pub"); os.makedirs(pw, exist_ok=True)
     plog = os.path.join(work, "pub_%s.log" % v)
     env = dict(os.environ, OE_SESSION=os.environ.get("OE_SESSION", "brsf-session"))
-    with open(plog, "w") as fh:
-        st.run("publisher", ["bash", publisher, os.environ.get("GH_TOKEN", ""), P, PKGNAME], limit=limit or 3600, cwd=pw, env=env, stdout=fh, stderr=subprocess.STDOUT)
+    clean_bytecode(P)
+    cmd = ["bash", publisher, os.environ.get("GH_TOKEN", ""), P, PKGNAME] + deletion_args(deletes, work)
+    env["PYTHONDONTWRITEBYTECODE"] = "1"
+    try:
+        with open(plog, "w") as fh:
+            st.run("publisher", cmd, limit=limit or 3600, cwd=pw, env=env, stdout=fh, stderr=subprocess.STDOUT)
+    finally:
+        clean_bytecode(P)
     ptext = open(plog, encoding="utf-8", errors="replace").read()
     print("  " + " | ".join(ptext.strip().splitlines()[-3:])[:300])
     if not re.search(r"^published:", ptext, re.M):
@@ -270,6 +316,7 @@ def main(argv):
     elif c == "bump": cmd_bump(a)
     elif c == "clean-bytecode": print("removed %d __pycache__ folder(s)" % clean_bytecode(a[0] if a else PKG))
     elif c == "push-retry": cmd_push_retry(a)
+    elif c == "prune-cache": cmd_prune(a)
     elif c == "release": cmd_release(a)
     elif c == "republish": cmd_release(a, only_publish=True)
     else: print(__doc__); return 1
