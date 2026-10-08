@@ -15,6 +15,7 @@
 #
 # v1.29.0 (Lineage 19, DC-S04): a third probe runs every time: the public copy is cut by each module's declared audience and stops with an error when it cannot be sure (backlog_public_cut_probe).
 # v1.28.0 (Lineage 19, DC-S01 and DC-S02): two probes run every time: the closure-report rules are shown firing on planted faults and silent on corrected twins (backlog_closure_shapes_probe), and the archive tool's refusals are drilled on planted lineages (backlog_archive_drill). A probe that cannot be found stops the gate.
+# v1.35.0 (G99, release C): the gate prunes the validation cache by itself at its start (files unused for 14 days; rebuilt on demand), runs backlog_archived_digest_check (a ratchet over the archived lineages' recorded stage digests) and its probe.
 # v1.34.0 (G99, ordinal rule): a section after the archive checks runs backlog_ordinal_check on the real live and archive data (every lineage holds its own ordinal; the check proves itself on planted cases first), and the probes loop runs backlog_ordinal_check_probe.
 # v1.33.0 (G99 release B): the Lineage 19 probes section also runs backlog_stamp_key_probe (both stamps change with every input, the validator included).
 # v1.33.0 (G99 release B, keys): the fixture-suite stamp's key now includes the validator (backlog_validate_v*.py); it covered the shapes, T-Box and fixtures but not the checker, so a changed validator was skipped over. The clause-proof stamp is keyed on the validator too (backlog_clause_proof v1.0.3).
@@ -92,6 +93,9 @@ if [ -z "${BACKLOG_VALIDATE_MEMO_DIR:-}" ]; then
   export BACKLOG_VALIDATE_MEMO_DIR="${HOME:-/tmp}/.backlog_validate_memo"
   mkdir -p "$BACKLOG_VALIDATE_MEMO_DIR"
 fi
+# v1.35.0: the cache bounds itself. Entries older than 14 days are removed (a cache file only ever replays identical bytes, so removing one costs a rebuild, never a wrong result).
+RELTOOL="$(ls "$HERE"/backlog_release_tool_v*.py 2>/dev/null | sort -V | tail -1 || true)"
+if [ -n "$RELTOOL" ]; then python3 -B "$RELTOOL" prune-cache "$BACKLOG_VALIDATE_MEMO_DIR" --days 14 2>&1 | sed 's/^/validation cache: /'; fi
 COVERAGE="$(ls "$HERE"/backlog_coverage_gate_v*.py | sort -V | tail -1)"
 DOCGATE="$(ls "$HERE"/backlog_doc_coverage_gate_v*.py | sort -V | tail -1)"
 # fixtures resolved by pattern, not pinned filename: a fixture version bump
@@ -586,8 +590,18 @@ else
 fi
 
 echo
+echo "== Archived lineages — recorded stage digests: no unseen failure (ratchet) =="
+ADC="$(ls "$HERE"/backlog_archived_digest_check_v*.py 2>/dev/null | sort -V | tail -1 || true)"
+if [ -n "$ADC" ]; then
+  python3 -B "$ADC" 2>&1 | grep -E "SELF-PROOF|archived lineages|NEW FAILURE|NOTE|VERDICT" | sed 's/^/ /'
+  python3 -B "$ADC" >/dev/null 2>&1 || { echo "  archived digest check FAILED"; FAILED=1; }
+else
+  echo "  NOT RUN — archived digest check not found. Not assumed to pass."; FAILED=1
+fi
+
+echo
 echo "== Lineage 19 probes — each rule fires on a planted fault and each refusal holds =="
-for PROBE in backlog_closure_shapes_probe backlog_archive_drill backlog_public_cut_probe backlog_governance_mitigations_probe backlog_release_tool_probe backlog_stamp_key_probe backlog_ordinal_check_probe; do
+for PROBE in backlog_closure_shapes_probe backlog_archive_drill backlog_public_cut_probe backlog_governance_mitigations_probe backlog_release_tool_probe backlog_stamp_key_probe backlog_ordinal_check_probe backlog_archived_digest_check_probe; do
   PF="$(ls "$HERE"/${PROBE}_v*.py 2>/dev/null | sort -V | tail -1 || true)"
   if [ -z "$PF" ]; then echo "  ABORT: $PROBE not found. A probe that is missing proves nothing."; exit 3; fi
   python3 "$PF" 2>&1 | grep -E "VERDICT" | sed "s/^/  $PROBE /"

@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.119.0
+# Backlog & Roadmap Semantic Framework — Standard v1.120.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -2404,3 +2404,8 @@ framework-level individuals only.
   in the mapping report, not asserted; the owning session decides.
 - **One candidate lesson was rejected as a duplicate** during this release rather than recorded to
   satisfy a checklist; see the changelog.
+- **Recorded stage digests of archived lineages (measured 2026-10-08).** The pipeline verifier recomputes the digest each closed stage recorded. The gate used to run it
+  only on fixtures, never on the real lineages. Measured on all 21 archived lineages: 3 reproduce, 11 do not, 7 record no stage outputs. The cause has not been established
+  lineage by lineage (the table version was ruled out; the digest covers the subjects of each stage's element types, so later additions to a closed lineage change it).
+  `backlog_archived_digest_check` now runs the verifier unchanged over every archived lineage and keeps a ratchet: the 11 are listed in `archived_digest_baseline`, a lineage that
+  fails and is not listed fails the gate, a listed lineage that starts to pass is reported so it can be removed. This records the finding; it does not explain or repair the 11.

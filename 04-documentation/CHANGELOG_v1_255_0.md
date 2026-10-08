@@ -11260,6 +11260,15 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.368.0 — G99 release C: the inbox is tidied, the archived stage digests are measured and ratcheted, the validation cache bounds itself
+
+Maintenance, no lineage (G99). Three items the last release left open, all automatable.
+
+- **Inbox:** the notice that v1.351.0 had no tag is filed (the tag exists now, and every tag v1.351.0 to v1.367.0 does); the two outgoing proposals that sat as "deferred, awaiting addressee" are closed, since both addressees accepted them (oe-pack v20.59.0, rdodi-ecosystem v1.99.0). Four handovers stay deferred and are listed with reasons in the log; none was changed.
+- **Archived stage digests:** the earlier note named one lineage (Lineage 16). Measured across all 21 archived lineages the scope is wider: 3 reproduce, 11 do not, 7 record no stage outputs. New `backlog_archived_digest_check` runs the verifier, unchanged, over every archived lineage (in parallel, result kept on identical bytes) and keeps a ratchet: the 11 are listed in `archived_digest_baseline`; a lineage that fails and is not listed fails the gate. It proves itself first (a reproducing chain classifies PASS, one tampered digest classifies FAIL); `backlog_archived_digest_check_probe` runs four ratchet cases. The cause of the 11 is not established; this records and bounds the finding, it does not repair it. (Found on the way: the verifier merges every file named on its command line into the graph it measures, so naming the T-Box there changes the result; the new tool names none.)
+- **Cache bound:** the gate prunes the validation cache at its start (files unused for 14 days; rebuilt on demand) through `backlog_release_tool` v1.2.0, whose prune also covers the new result files.
+- **Versions:** gate 1.35.0, release tool and its probe 1.2.0, standard 1.120.0. No check removed or loosened; two added.
+
 ## v1.367.0 — G99: a lineage ordinal is carried by one lineage, live and archive together; two pairs declared, no archived record changed
 
 Maintenance, no lineage (G99). The owner asked, on seeing the proposed clean-up of ordinals 17 and 18, why it was needed, whether it skirted an enforcement rule, and why it happened; re-checked from the files, not from memory.

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_release_tool v1.1.0 -- the release steps a session used to do by hand, as one tested tool (G99 release A; OE rule R4).
+"""backlog_release_tool v1.2.0 -- the release steps a session used to do by hand, as one tested tool (G99 release A; OE rule R4).
 
 Subcommands (each prints what it did and exits non-zero on any refusal):
   bump-data NEWVER                      rename the package data file to the new version and move its header (versionInfo, versionIRI, priorVersion)
@@ -16,6 +16,7 @@ Subcommands (each prints what it did and exits non-zero on any refusal):
                                         duration; --dry-run prints the plan and the refusals it already knows (missing changelog entry) and runs nothing
   prune-cache [DIR] [--days N]          remove cache files (shape_*.ttl, memo *.json, stamps) older than N days (default 14) from the validation cache; they are rebuilt on demand
   republish VERSION                     only the publisher and the tag check (after a transient failure of the public push)
+v1.2.0: prune-cache also removes the archived-digest result files (archdigest_*.json); the gate now runs it by itself at its start (entries unused for 14 days go; every entry is rebuilt on demand).
 v1.1.0: the fixture-suite stamp is KEPT (v1.0.0 deleted it, so the publisher's own gate re-run redid the whole fixture suite cold, about 9 minutes; the stamp is git-ignored and
 manifest-exempt, and the gate keys it on every input including the validator); bytecode is cleaned before AND after the publisher; --delete PATH (repeatable) names a
 file the release removes, passed to the publisher as --expect-delete; prune-cache removes validation cache files older than N days.
@@ -177,7 +178,7 @@ def prune_cache(cache_dir, days=14.0, now=None):
     """Remove validation cache files not written for DAYS days; returns (removed, kept). Only the cache's own file kinds are touched."""
     now = now or time.time(); removed = kept = 0
     for f in os.listdir(cache_dir):
-        if not re.fullmatch(r"(shape_[0-9a-f]+\.ttl|[0-9a-f]{64}\.json|(shardproof|cacheproof)_[0-9a-f]+\.ok)", f):
+        if not re.fullmatch(r"(shape_[0-9a-f]+\.ttl|[0-9a-f]{64}\.json|(shardproof|cacheproof)_[0-9a-f]+\.ok|archdigest_[0-9a-f]+\.json)", f):
             continue
         p = os.path.join(cache_dir, f)
         if now - os.path.getmtime(p) > days * 86400:
