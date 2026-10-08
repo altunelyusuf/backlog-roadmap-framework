@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_clause_proof_v1_0_0.py — which clauses has a fixture proven fire?
+"""backlog_clause_proof_v1_0_4.py — which clauses has a fixture proven fire?
 
 A constraint that no fixture makes fire has never been shown to work. It may be
 correct; it may be malformed SPARQL returning nothing. Both look identical from
@@ -37,7 +37,7 @@ def _key(pkg):
     # v1.0.3: the proof is a function of the CHECKER too -- the validator and this file are part of the key, and so is the T-Box the validator
     # judges against. A stamp keyed on the shapes and fixtures alone said "unchanged" over a changed validator.
     for pat in ("02-shacl-safeguards/backlog_shacl_v*.ttl", "01-ontologies/backlog_tbox_v*.ttl",
-                "03-tooling/fixtures/*.ttl", "03-tooling/backlog_validate_v*.py"):
+                "03-tooling/fixtures/*.ttl", "03-tooling/backlog_validate_v*.py", "03-tooling/backlog_sparql_memo_v*.py"):
         for p in sorted(glob.glob(os.path.join(pkg, pat))):
             h.update(os.path.basename(p).encode()); h.update(open(p, "rb").read())
     h.update(open(os.path.abspath(__file__), "rb").read())
@@ -101,11 +101,21 @@ def main():
     validate = sorted(glob.glob(os.path.join(here, "backlog_validate_v*.py")))[-1]
     fixtures = _negative_fixtures(os.path.join(here, "fixtures"))
     fired = set()
+    # v1.0.4: one validator run per distinct fixture file. The declared-proof loop below used to start the validator again for every shape that names a fixture
+    # (109 shapes, 13 fixtures: 122 launches, about 0.3 s each even when the answer was kept); the answer for one file does not change within a run.
+    _ran = {}
+
+    def run_validator(path):
+        if path not in _ran:
+            try:
+                _ran[path] = subprocess.run([sys.executable, validate, path], capture_output=True, text=True, timeout=90).stdout
+            except Exception:
+                _ran[path] = None
+        return _ran[path]
+
     for f in fixtures:
-        try:
-            out = subprocess.run([sys.executable, validate, f],
-                                 capture_output=True, text=True, timeout=90).stdout
-        except Exception:
+        out = run_validator(f)
+        if out is None:
             continue
         for m in re.findall(r"L[1-4]: [^\"\n]{0,50}", out):
             fired.add(m.strip())
@@ -156,12 +166,7 @@ def main():
             print("   DECLARED PROOF MISSING  %-30s -> %s"
                   % (str(sh).split("#")[-1], fx))
             continue
-        try:
-            out = subprocess.run([sys.executable, validate, path],
-                                 capture_output=True, text=True,
-                                 timeout=90).stdout
-        except Exception:
-            out = ""
+        out = run_validator(path) or ""
         if case is not None and str(case) in out:
             dec_ok += 1
         else:

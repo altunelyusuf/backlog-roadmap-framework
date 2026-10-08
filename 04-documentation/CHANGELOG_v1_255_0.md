@@ -11260,6 +11260,17 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.369.0 — G99 release D: the cold run halves; each distinct query is parsed once, not once per focus node
+
+Maintenance, no lineage (G99). The owner asked for the cold run, not only the warm one, and for the whole process to be looked at for over-processing.
+
+- **Root cause (about half of cold time):** pyshacl runs a SPARQL constraint once per focus node, and rdflib re-parses and re-translates the query text on every call. Profile of one live-register validation: 21.6 s, of which 16.1 s parsing and 3.0 s translating; 783 executions; evaluation about 0.2 s.
+- **Fix:** `backlog_sparql_memo` v1.0.0 prepares each distinct (query text, namespaces) once and reuses it; `backlog_validate` v1.15.0 loads it. Results checked row by row (focus, component, message, severity, value) against the unmemoized run on three fixtures (3,429, 73 and 105 results): identical. `backlog_sparql_memo_probe` (new, in the gate) shows identical results with one violating focus node among three (no binding leakage), fewer parses, malformed queries still raising, one text over two graphs giving two answers, and the off switch honoured. Cold validation of the live register 13.9 s to 5.7 s; heaviest fixture 333 s to 22 s.
+- **Clause proof 1.0.4:** starts the validator once per fixture file (it was 122 launches for 13 files).
+- **Keys:** the memo module is part of the fixture-suite key (gate 1.36.0) and the clause-proof key; `backlog_stamp_key_probe` 1.1.0 shows both change when it changes.
+- **Found, not yet done:** 75 of 109 shapes that declare a fixture proof name no case, so those proofs are not verified (reported, not failing); probes of unchanged tools re-run every time; the unchanged base is re-judged in every fixture run.
+- **Versions:** gate 1.36.0, validator 1.15.0, clause proof 1.0.4, stamp-key probe 1.1.0, standard 1.121.0. No check removed or loosened; one added.
+
 ## v1.368.0 — G99 release C: the inbox is tidied, the archived stage digests are measured and ratcheted, the validation cache bounds itself
 
 Maintenance, no lineage (G99). Three items the last release left open, all automatable.

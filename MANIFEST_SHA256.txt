@@ -1,4 +1,4 @@
-# backlog-roadmap-framework v1.368.0 — SHA-256 Manifest
+# backlog-roadmap-framework v1.369.0 — SHA-256 Manifest
 # Built by build_manifest_v1_5_0.py. Release build.
 
 # EXEMPT: .clause-proof-stamp — a cache key over the negative fixtures and declared shape proofs, written by backlog_clause_proof after a passing run; same reason as .fixture-suite-stamp -- hashing it would change it and it carries no content of its own
@@ -10,7 +10,7 @@
 
 6ada9f116ce42441773a025491f036168fe20f93d5383769054d88c1d15c7558  .gitignore  (66b)
 bc6c4263f92a7b7b63d35d26eb0e77ac6d17dbacdd773c4a88ba1c6d58ab8e9a  .public-distribution-url  (62b)
-9b1ac3a0846f62ecfe0a30b0eeaacc4daa3fa0562d9ee540805f40525e0b1206  VERSION.txt  (8b)
+d6e8888695eab21bf478617bcfe0e024a18ef5c279238d9f70402c25345283d0  VERSION.txt  (8b)
 09b169cef7805b41bcb17646d8ddfcb3ae5e54713a5ccb5d458efb55d0cdd2c2  01-ontologies/backlog_abox_v1_35_0.ttl  (421004b)
 3532122c3ae10a73f857d7a2f79be5ccd945bb8d48173db8f39bfa3927368a30  01-ontologies/backlog_tbox_v1_122_0.ttl  (519924b)
 18a3104c53e3f138a2b2d2b99423e6e5af679dcd1960ee7009aaf09f4682bad4  01-ontologies/archive/backlog_archive_shacl_v1_1_0.ttl  (3735b)
@@ -27,7 +27,7 @@ e15616f06b87a5fd8bbd8ab3bd11e8e11f6790253e3413958d1c08d6e824a3bc  03-tooling/bac
 32f9fb4f4602686de0c8a391fd25c0326568eb203ef787896964dd74d0b6105e  03-tooling/backlog_archived_digest_check_v1_0_0.py  (6562b)
 bb79f358e41a8a3d70e5f588a4cdbeb85f426552eca50737cf7c0d732669b6a6  03-tooling/backlog_checkpoint_stage_probe_v1_0_0.py  (1864b)
 d9c11bb4c9f0f9f7f8fac4d966611fe3bbe55063f4ed567a94ff016e57c7f18c  03-tooling/backlog_class_requirements_v1_0_0.py  (5776b)
-38dbf1309f98dab85dc0d9ab7d0e6a9ed9f9886885812e880366c37c1b3c93ca  03-tooling/backlog_clause_proof_v1_0_3.py  (9373b)
+ab988744b490fead450fa4fb585decf73ab9ac4f8907eeaf2df80bf757a68f94  03-tooling/backlog_clause_proof_v1_0_4.py  (9696b)
 31a564a3f108a3f0e46e57221c16620203023d628cb3be3910acc192252f3a46  03-tooling/backlog_closure_shapes_probe_v1_1_0.py  (4459b)
 dca20dfabc55b44eef25a3dcf37faf945cb0fe45fb4acebb4392c61400e2b08a  03-tooling/backlog_coverage_gate_v1_1_1.py  (2851b)
 56f07e6451ad218fbd5debef56e10149783e9982464533320b40156a35b852c8  03-tooling/backlog_criterion_resolve_v1_3_0.py  (7127b)
@@ -37,7 +37,7 @@ b17bdd5cd212d3e24f1ce7e58916bb55e85a9ae3e2e47b408fafba975e1e3759  03-tooling/bac
 9e6878ceb9b943718d7b984218642a5951c3ad1440de99d3d62560a3c89f935b  03-tooling/backlog_evidence_bridge_v1_0_0.py  (6356b)
 fbfe54239ab634ab90b8ae6d41d0aaaa285a151124f540c66573d104405e5225  03-tooling/backlog_execution_ready_probe_v1_0_0.py  (2540b)
 f6aaa2ae778f399d5fbff6890f526fa610512564af462cadb49b0e8214835c6d  03-tooling/backlog_execution_ready_v1_1_0.py  (6306b)
-5d2ed5c8ba8fa908042cb470a9a0c8a662fd27f2241e263a6cc23ec1fd190865  03-tooling/backlog_gate_v1_35_0.sh  (50065b)
+67f83bba8a77d1e11527f563e3f9a6a38933ab4b71618c77c5e82fb58c5fafd3  03-tooling/backlog_gate_v1_36_0.sh  (50491b)
 4757dcda7516eaca679d88e1e70759821184df0c3218fc5fa8b5ca9a578268d8  03-tooling/backlog_governance_mitigations_probe_v1_0_0.py  (4826b)
 f82b451791d17ca513a9419a686787d1bffab190f80e8b0caeb2e48fdeac7d37  03-tooling/backlog_guard_claude_hook_v1_0_0.py  (4131b)
 849fcb0c75e9d79c9dc2ea76ac39be0eb85f1d251d25cd82da8e4eec7c545917  03-tooling/backlog_guard_install_v1_0_0.py  (6427b)
@@ -74,13 +74,15 @@ dfea624919843c01706ddd4ec80777ec4a393af4f7a8163c1ea856a5b24fc5c7  03-tooling/bac
 0fe600e74075652bd023d2aae583e0261e18d06fbf1695ffc849f9251b7735ef  03-tooling/backlog_sdlc_new_shape_fixture_gate_v1_0_0.py  (2985b)
 e89be1d0ae7d000e58e32886d63764943aa301b62f64c9536b68897d08c2d8fa  03-tooling/backlog_self_application_v1_1_0.py  (5371b)
 85f0f31d91253638273d2325888aebf01c6de2b4b2261d86a299698f4a6a1165  03-tooling/backlog_shape_snapshot_loader_v1_0_0.py  (4246b)
+6ee7e7c1e143eeccf4278f38508ad3233cba4741141c92c5a3f90396e53f6288  03-tooling/backlog_sparql_memo_probe_v1_0_0.py  (5199b)
+df228a17ce9f2d7fe3af2144b8b7b68d2b49b99e78fc46469c51183f37e5ba83  03-tooling/backlog_sparql_memo_v1_0_0.py  (2780b)
 25ff605128cc93490463d9c2920dafcac617f39dda499e09b9dd1e2b47bcfe84  03-tooling/backlog_split_proof_probe_v1_1_0.py  (2956b)
 892ec9bf33dfce8f950b5b46c21245acf588133a693a93998d3d3fffd694d06f  03-tooling/backlog_split_proof_v1_4_0.py  (11205b)
-f34a7a9038ab724f1593fdbd8f80ef8160af828bc0980ca7e17fc5ff2af008a6  03-tooling/backlog_stamp_key_probe_v1_0_0.py  (3839b)
+72f6f9e1918c1940a55eb2b018015af7c5295b38e894473ab063a5574f15bf4b  03-tooling/backlog_stamp_key_probe_v1_1_0.py  (3957b)
 97df44d38e4a84711e89f47a422b62fe4dff8390d11f287e0c22b8e1fd8c095f  03-tooling/backlog_standard_row_check_v1_1_0.py  (7050b)
 052fecec25fb385e2f0fca19928d3b1ec93253e98a3f7e6220f666596ca2918a  03-tooling/backlog_task_type_step_probe_v1_0_0.py  (1675b)
 6f5d4b88e9f9670eccac487d1428f9ef3fc9efbd847122cbe46d390346153396  03-tooling/backlog_validate_cache_probe_v1_0_0.py  (7490b)
-ec1efffe6e61db9941e5d450a41e8fe9e2f21453082190e644a575046be37ef7  03-tooling/backlog_validate_v1_14_0.py  (46447b)
+46e7b3c2ea45e4c43ee1be64aaab652a6dd70bf9f7c4883457da2f0dbc14ecb5  03-tooling/backlog_validate_v1_15_0.py  (47593b)
 45b461c81b88da8311e6875986720b31545cccfde8850b6c18cdf06fcda745bf  03-tooling/backlog_version_freeze_check_v1_0_0.py  (3939b)
 b59bf4f6e85fc4980897e4d148a612f7377fa13b8edd54c01c34d0325b874460  03-tooling/backlog_views_v1_5_0.py  (22364b)
 a4b161ebd7e82368f749bef0562e1e2bd8f93aa7d82b208e10328056c0f17251  03-tooling/backlog_work_guard_probe_v1_0_0.py  (9157b)
@@ -132,9 +134,9 @@ d754b1f950a1cfdb95d7c27c108c04dd44942c2357ef33d2c5a42a3ee926fa98  03-tooling/fix
 ddaea16c7f7b0ae961d5db9d7b48e35f09cd7b82700acf22ff1c8d39b93dc229  03-tooling/fixtures/sdlc-tools/fixture_order_shapes_negative_v1_0_0.ttl  (1211b)
 d2374c4eb3d80323a83023c249dd7690ce2aa843e0842d07c66052acfe5817aa  04-documentation/Agile_FitGap_Analysis_v1_0_0.md  (7047b)
 a1776b79e872f9cb77add443fc65de31690bf72c61ad12dd1411775a45f97a20  04-documentation/BACKLOG_ROADMAP_FRAMEWORK_STANDARD_v1_116_0.md  (176889b)
-ad5d37132fbe58307d83c2e30a43b31fe69461c3efe19f9e82eb8f5550f08e01  04-documentation/BACKLOG_ROADMAP_FRAMEWORK_STANDARD_v1_120_0.md  (181013b)
+18cc0c6b0459fa2c0c4663afa32ff2047a32df62e98e3250479c2cc1da3fd0aa  04-documentation/BACKLOG_ROADMAP_FRAMEWORK_STANDARD_v1_121_0.md  (181533b)
 807ff9b685f9c9a706835aafb47051fc006f1b7a4295f964d65e95e9432e63b8  04-documentation/CHANGELOG_v1_190_0.md  (475017b)
-26ff41d7b432b3f3ff980517869b19a1d4264d34e0c2428c9e196743e2c7700b  04-documentation/CHANGELOG_v1_255_0.md  (778278b)
+10d09324ebc2e47fcff24076fed3915a849f0e62a911502000456000926c79a6  04-documentation/CHANGELOG_v1_255_0.md  (780157b)
 510a553b994526c60c7dca091993b6825e4c90955e2f6aaaa0a41ec3fcfdb407  04-documentation/CLOSURE_REPORT_L_ChangeDiscipline_v1_0_0.md  (6445b)
 899799e52c88b5e897342f0e04bfefa575fda7120cda554e60be602ee9292fc2  04-documentation/CLOSURE_REPORT_L_OntologyDriven_v1_0_0.md  (7935b)
 10b7efb7023ece352534efafb04d8b183a81fd6eeee04f759019406182e75747  04-documentation/Concept_Completeness_Audit_v1_0_0.md  (3290b)

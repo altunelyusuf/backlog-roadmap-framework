@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.120.0
+# Backlog & Roadmap Semantic Framework — Standard v1.121.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -2144,6 +2144,11 @@ per lineage", and the live gate never reads the archive. Nothing was bypassed; t
   3. If both lineages are archived, or the other one is not yours, do not renumber. Hand the two lineage labels and the number to the framework owner as a handover; the owner declares the pair or renumbers.
   4. Never loosen the check or delete a declaration to make a run pass.
 - **What it does not do.** The shape cannot see the archive; only the tool counts both files, so a package that runs the shape without the tool is only half covered.
+
+
+### 2.5h Validation speed: queries are prepared once
+
+The validator prepares each distinct SPARQL constraint text once per process (`backlog_sparql_memo`) instead of letting the rule engine re-parse it for every focus node. This changes speed only: results are identical, proven by `backlog_sparql_memo_probe` and by a row-by-row comparison on the fixtures. The memo module is an input to both stamps, so a changed memo re-runs the suite and the clause proof. `BACKLOG_SPARQL_MEMO=0` turns it off for a reference run.
 
 ### 2.6 Governance
 

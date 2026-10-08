@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
-"""backlog_validate v1.14.0 — conformance validator for the Backlog & Roadmap
+"""backlog_validate v1.15.0 — conformance validator for the Backlog & Roadmap
 Semantic Framework (http://example.org/backlog 1.0.0).
+
+v1.15.0 (G99 release D, speed only): each SPARQL query text is parsed once per process, not once per focus node (backlog_sparql_memo). Measured on one validation of the live register: 21.6 s, of which rdflib's parser and translator took 19.1 s; with the parse kept, 3.8 s. Results compared one by one on three fixtures: identical. The memo module is named in every cache key.
 
 v1.14.0 (G99 release A2, speed only): a result is kept PER SHAPE. The judgement of one top-level shape is a pure function of that shape's definition (and the shapes it
 points to, and the prefix and function declarations), of the data after the rules have run, and of the pyshacl version; pyshacl itself loops over the shapes and
@@ -102,6 +104,17 @@ def latest(subdir, stem, ext="ttl"):
 TBOX = latest("01-ontologies", "backlog_tbox")
 ABOX = latest("01-ontologies", "backlog_abox")
 SHAPES = os.environ.get("BACKLOG_VALIDATE_SHAPES") or latest("02-shacl-safeguards", "backlog_shacl")
+
+
+# v1.15.0: parse each SPARQL query text once per process, not once per focus node (backlog_sparql_memo; measured 21.6 s -> 3.8 s on one validation, identical results).
+# The module is part of every cache key below, because a cache must name every file the computation reads (OE rule R9).
+SPARQL_MEMO = None
+_memo_hits = sorted(glob.glob(os.path.join(os.path.dirname(os.path.abspath(__file__)), "backlog_sparql_memo_v*.py")), key=_semver)
+if _memo_hits:
+    SPARQL_MEMO = _memo_hits[-1]
+    import importlib.util as _ilu
+    _spec = _ilu.spec_from_file_location("backlog_sparql_memo", SPARQL_MEMO)
+    _mod = _ilu.module_from_spec(_spec); _spec.loader.exec_module(_mod); _mod.install()
 
 
 _OVERLAY = [None]
@@ -232,7 +245,7 @@ def _lineage_scope(g, lineages):
 def _memo_key(data_files):
     h = hashlib.sha256()
     _ov = promoted_overlay(data_files)
-    for p in [os.path.abspath(__file__), TBOX, ABOX, SHAPES] + sorted(data_files):
+    for p in [os.path.abspath(__file__), TBOX, ABOX, SHAPES] + ([SPARQL_MEMO] if SPARQL_MEMO else []) + sorted(data_files):
         h.update(os.path.basename(p).encode()); h.update(open(p, "rb").read())
     return h.hexdigest()
 
@@ -612,7 +625,7 @@ def _run_shapes(shapes_path, data_path, input_files):
         info = json.loads(lp.stdout)
     except Exception:
         return None, [lp.stderr[-400:]]
-    data_digest = hashlib.sha256((info["rules"] + _bytes_digest(input_files + [os.path.abspath(__file__)]) + pyshacl_version()).encode()).hexdigest()
+    data_digest = hashlib.sha256((info["rules"] + _bytes_digest(input_files + [os.path.abspath(__file__)] + ([SPARQL_MEMO] if SPARQL_MEMO else [])) + pyshacl_version()).encode()).hexdigest()
     keys = {hashlib.sha256((d + data_digest).encode()).hexdigest() for d in info["digests"]}
     path = lambda k: os.path.join(cache, "shape_" + k + ".ttl")
     want = sorted(k for k in keys if not os.path.exists(path(k)))

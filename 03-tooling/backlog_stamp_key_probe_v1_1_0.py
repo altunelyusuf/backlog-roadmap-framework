@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_stamp_key_probe v1.0.0 -- a stamp that says "unchanged" must change when anything it stands on changes (G99 release B; OE rule R9).
+"""backlog_stamp_key_probe v1.1.0 -- a stamp that says "unchanged" must change when anything it stands on changes (G99 release B; OE rule R9).
 
 The gate skips the fixture suite, and the clause proof skips its run, when a stamp equals a key over their inputs. A key that leaves out an input says
 "unchanged" over a changed checker. This probe builds a throwaway package layout and shows, for BOTH keys (the gate's FIXKEY, taken from the gate's own text
@@ -39,7 +39,7 @@ def layout(d):
     for sub in ("01-ontologies", "02-shacl-safeguards", "03-tooling/fixtures"):
         os.makedirs(os.path.join(d, sub), exist_ok=True)
     for rel, txt in (("01-ontologies/backlog_tbox_v1_0_0.ttl", "tbox"), ("02-shacl-safeguards/backlog_shacl_v1_0_0.ttl", "shapes"),
-                     ("03-tooling/fixtures/f1.ttl", "fixture"), ("03-tooling/backlog_validate_v1_0_0.py", "validator")):
+                     ("03-tooling/fixtures/f1.ttl", "fixture"), ("03-tooling/backlog_validate_v1_0_0.py", "validator"), ("03-tooling/backlog_sparql_memo_v1_0_0.py", "memo")):
         open(os.path.join(d, rel), "w").write(txt)
     shutil.copy(CP, os.path.join(d, "03-tooling", os.path.basename(CP)))
 
@@ -61,7 +61,7 @@ with tempfile.TemporaryDirectory() as d:
         base = keyf(d)
         check("%s: the same bytes give the same key" % label, bool(base) and keyf(d) == base)
         for rel, what in (("02-shacl-safeguards/backlog_shacl_v1_0_0.ttl", "shapes"), ("01-ontologies/backlog_tbox_v1_0_0.ttl", "T-Box"),
-                          ("03-tooling/fixtures/f1.ttl", "a fixture"), ("03-tooling/backlog_validate_v1_0_0.py", "the VALIDATOR")):
+                          ("03-tooling/fixtures/f1.ttl", "a fixture"), ("03-tooling/backlog_validate_v1_0_0.py", "the VALIDATOR"), ("03-tooling/backlog_sparql_memo_v1_0_0.py", "the QUERY MEMO")):
             p = os.path.join(d, rel); old = open(p).read()
             if label.startswith("gate") and what == "T-Box":
                 pass
