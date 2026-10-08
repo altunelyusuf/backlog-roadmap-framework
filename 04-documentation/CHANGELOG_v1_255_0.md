@@ -11260,6 +11260,38 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.374.0 — Two handovers processed: another registrant's maturity-gate addenda reconciled, and a lineage-file versioning collision ruled (G102)
+
+**Unplanned work:** two handovers landed together, 2026-10-08; both processed in this release.
+
+**`VAF_HANDOVER_maturity-gate_v1_0_0.md`, moved deferred -> accepted (its hard ask stays deferred, named).** Its
+two addenda had never been cross-referenced to this file, checked directly rather than assumed resolved: addendum
+1's `hasStatedGoal` ask was already built, under a different handover's credit (`hasSprintGoal`,
+`VAF_CEREMONY_COVERAGE_CHECK_v1_0_0.md`, v1.146.0-148.0); its `dependsOn`-on-SDLC-tasks note was already correct
+as written, needing no action. Addendum 2's `PackageRegularityShape` edge case (sprint counts 1,2,2,1, two
+disclosed exceptions outnumbering the real baseline) is already resolved by the shape's own current SPARQL --
+reproduced directly on the handover's own described scenario before crediting it: `Package_2`/`Package_3` silent,
+`Package_1`/`Package_4` excused, exactly as asked. The one real, net-new action: the handover's smaller,
+immediately-adoptable recommendation -- split a system-affecting `Done` claim into `hasBatchSize`/
+`hasBatchCompleted` build+integrate sub-claims -- had never been written down as a named practice; now in the
+standard, §2.5j (also records the already-correct `dependsOn`-on-SDLC-tasks note so it is not proposed twice).
+The hard ask (task-type-completeness-by-claim-detection) stays explicitly deferred: a real natural-language
+problem, no test cases offered, needs its own G30 test-drive, per the handover's own disposition request.
+
+**A living-lineage-file-versioning handover, ruled directly (G102), lineage discipline v73.0.0.** An adopting
+project's lineage register, renamed on every task by BP-D7, cost 185-193 files per release -- almost all citation
+repoints with no change of meaning. Checked against this package's own register history before ruling anything:
+this package's own register HAS been renamed on every real content change throughout its life (five Lineage 17
+stage releases, v1.367.0's own rename) -- no exemption from BP-D7 exists or is proposed. What actually kept that
+rename cheap here, measured directly: v1.367.0's rename touched 12 files, not a chain, because zero files in this
+package cite the register by its pinned exact filename -- every citation resolves the highest-versioned match of
+a name pattern, already this package's own standing practice and already the OE ecosystem's own named convention
+one level up ("Pointer resolution — version-independent," `OE_Operating_Discipline` v2.2.0). Ruled: the lineage
+file stays inside BP-D7 in full (no versioning exemption); citing files should resolve by pattern, never pin a
+filename (generalising this package's own practice); the re-score-before-rename gap is a sequencing fix in the
+sending project's own release script, not a new BRSF shape; and this ruling itself is the explicit statement the
+handover's fourth question asked for.
+
 ## v1.373.0 — the adopting project's package-activation classifier: two more named cases (mistaken link, wrong direction), no lineage
 
 **Unplanned work:** the owner's direct follow-up ruling on an adopting project package-dependency handover, 2026-10-08,

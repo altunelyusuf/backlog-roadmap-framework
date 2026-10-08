@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.122.0
+# Backlog & Roadmap Semantic Framework — Standard v1.123.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -2159,6 +2159,26 @@ mechanics: a leaf is one file's hash; a step's key is the hash of its own sorted
 property this buys, proven by `backlog_merkle_cache_probe` and by `backlog_stamp_key_probe` on the real fixture key: a leaf a step did not name can change freely
 without moving that step's key. A change to a shared file still moves every step that declares it, exactly as a flat hash would -- this names the grain a check
 is sound at, it does not loosen which bytes a pass is a function of.
+
+### 2.5j Recommended practice: split a system-affecting Done claim into countable sub-claims
+
+another registrant's own maturity-gate handover found a real pattern worth naming here, not as a new shape (it needs no new
+vocabulary) but as a recommended way to USE the vocabulary this package already ships. A `WorkItem` whose
+`Done` claim actually covers two distinct things -- building a piece of logic, and wiring it into the running
+system it is meant to affect -- is one `Done` covering two separate chances to be wrong. `hasBatchSize`/
+`hasBatchCompleted` already exist for exactly this: a story of eight is eight chances to be wrong, verified by
+one acceptance criterion. Declaring `hasBatchSize 2` (build + integrate) with `hasBatchCompleted 1` on such an
+item makes a real integration gap visible in the register's own data the moment it happens -- caught by
+`BatchCompleteButNotDoneShape`/`BatchStartedStateStaleShape`, already enforced -- instead of three sessions
+later, on direct challenge. Adoptable immediately, by any lineage, with no framework change: this is a
+practice recommendation, not a conformance requirement.
+
+A related, already-available practice from the same handover: `dependsOn`'s domain and range are both
+`WorkItem`, and `ExecutionTask rdfs:subClassOf WorkItem` — a real Sprint Plan can already declare
+`Task_Implementation dependsOn Task_SystemAnalysis, Task_ArchitectureDefinition, Task_DesignDefinition` etc.,
+so that implementation work is structurally blocked until the SDLC-stage tasks it depends on are Done. Also
+not a framework gap; existing vocabulary, a practice worth naming so it is not proposed twice as if it needed
+inventing.
 
 ### 2.6 Governance
 

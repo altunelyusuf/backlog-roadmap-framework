@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v72.0.0
+# Lineage Operating Discipline — v73.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -2976,3 +2976,56 @@ verified; the commit hook (re-armed at session start) and CI do not depend on it
 The guard cannot judge the quality of grooming: a ready item can still be shallow, and the shapes judge that afterwards.
 No lint over a project's own drift log was built: it is project-specific and clause (2) is the control. Related: G77,
 G84, G90, G97, G100.
+
+
+## G102 — A ledger that is edited every task and a rule that every changed file gets a new name do not collide; naming the file by a pattern, never pinning it, is what keeps them from colliding
+
+An adopting project's handover, 2026-10-08: a lineage register renamed by BP-D7 on every task (a work item moves,
+evidence is added, scores are re-run) forced 185-193 files per release, almost all citation repoints with no change
+of meaning, and asked whether the lineage file should be exempted from versioning, cited by a stable identifier
+instead of its name, batched, or have its naming regime stated explicitly.
+
+**Checked directly against this package's own register, not assumed.** This package's own register file has been
+renamed on every real content change throughout its history -- confirmed across the five Lineage 17 stage releases
+(`backlog_framework_register_abox_v9.102.0` through `v9.106.0`, one rename per release) and again at v1.367.0
+(`backlog_abox_v1_34_0.ttl` -> `v1_35_0.ttl`). **No exemption from BP-D7 exists or is proposed here**: a changed
+register is a changed file, and reusing its version would be the exact dishonesty BP-D7 exists to refuse. The
+owner's existing exemption for lineage/governance/archive ontologies is a FILE-STRUCTURE exemption (which files a
+package's own three-file rule requires, and how a retired state is held) — a different axis from versioning, and
+this ruling does not conflate them.
+
+**What actually prevented the cascade, checked by counting real files changed:** the v1.367.0 rename above touched
+12 files total, not a chain -- because nothing in this package's own tooling, shapes, or documentation cites the
+register (or any other versioned artifact) by its exact filename. Every citation resolves the highest-versioned
+match of a NAME PATTERN at the moment it is needed (`ls name_v*.ttl | sort -V | tail -1` in the bash gate,
+`sorted(glob.glob(...), key=...)[-1]` in every Python tool and probe this package ships) -- confirmed directly:
+grepped this package's own `03-tooling`, `02-shacl-safeguards` and `04-documentation` for the register's own
+current exact filename; zero hits outside the changelog's own historical narrative. This is not a new mechanism
+invented for this ruling: it is this package's own standing practice, applied uniformly, and it is also already
+the OE ecosystem's own named convention one level up (`OE_Operating_Discipline`, "Pointer resolution —
+version-independent", v2.2.0: "all artifact references... are patterns, not pinned filenames"). The collision the
+handover measured is what happens when that convention is NOT followed for one file, not a defect in BP-D7 or in
+having a living ledger.
+
+**Rulings, one per question asked.**
+1. The lineage file is not exempted from versioning. It stays inside BP-D7 like any other artifact; a real content
+   change earns a real new version, full stop.
+2. Yes: every file that cites the lineage register should resolve it by the highest-versioned match of its name
+   pattern, never by a pinned exact filename -- the standing convention above, generalised to the sending project's
+   own tooling. A rename then touches exactly the files whose own content changed (the register itself, and
+   whatever generated artifact's content genuinely depends on the new bytes), never the files that merely point at
+   it.
+3. Batching is a release-discipline practice, not a new mechanism: do the lineage edits a task set actually
+   requires, then release once. The re-score gap named (L3: a completion obliges re-scoring open items, found only
+   after a second cycle) is answered by running that check BEFORE the rename rather than after -- which is a
+   sequencing fix inside the sending project's own release script, not a new BRSF shape; this package's own
+   release path already orders its gate steps so a check that would force a second pass runs before the one that
+   would be paid for twice.
+4. Yes, and this ruling is that statement: a lineage register file follows BP-D7 (versioned like any other
+   artifact) and is cited everywhere by pattern, never by pinned filename — now explicit rather than merely
+   practiced.
+
+**What is not claimed.** This ruling does not build a new gate or shape; nothing here required one. It does not
+audit the sending project's own tooling for every place it pins a filename — that project's own repoint, not this
+package's. The L3 re-score-before-rename sequencing is named as the right shape of fix, not verified against the
+sending project's own release script, which this session has not read. Related: BP-D7, BP-D2, G94.
