@@ -3089,6 +3089,21 @@ toolrunrecord:TR_HonestFalse a backlog:ToolRunRecord ; backlog:ranTool toolrunre
     backlog:usedBaselineHash "abc123" ; backlog:comparedAgainstHash "abc123" ;
     backlog:runConcludedDistinctBaseline false .
 
+# ToolRunRecordShape (v1.22.0, correctness fix): TR_Lying/TR_Honest/TR_HonestFalse above
+# all carry every required field, so none of them ever exercised this shape's own
+# minCount checks -- they prove SelfComparisonClaimShape instead. TR_Incomplete, missing
+# ranTool, is the real missing case: found by backlog_clause_proof's declared-case check
+# once its own false "case None" alarms were fixed, and genuine, not a naming mistake.
+toolrunrecord:TR_Incomplete a backlog:ToolRunRecord ;
+    backlog:usedBaselineHash "abc123" ; backlog:comparedAgainstHash "def456" ;
+    backlog:runConcludedDistinctBaseline true .
+
+# RemoteCommitShape (v1.22.0, correctness fix): the shape's own declared proof pointed at
+# fixture_positive, which by design never carries a Violation (0 Violation is its own
+# polarity contract) -- so a minCount1 violation on touchesPath could never fire there.
+# Moved here and proven for real: ex:RC_NoPath names no touched path at all.
+ex:RC_NoPath a backlog:RemoteCommit .
+
 # BaselineReferenceShape: BR_Bad missing its rationale -> fires. BR_Good complete -> silent.
 toolrunrecord:BR_Bad a backlog:BaselineReference ; backlog:baselineForTool toolrunrecord:TS_Fixture ;
     backlog:hasBaselineLocation "https://example.org/fixture-only" .

@@ -36,7 +36,7 @@ ex:Bypass1 a backlog:LineageBypass ;
     backlog:detectedAt "2026-09-07T09:00:00Z"^^xsd:dateTime ;
     backlog:detectedBy "backlog_lineage_order_check_v1_0_0" .
 
-# FIVE escapes, each one shape's own known-bad case:
+# SIX escapes, each one shape's own known-bad case:
 #  1. BypassRequiresRestartShape  -- Bypass1 stands on a live lineage with no restart.
 #  2. LineageRestartShape         -- Restart2 (for a second lineage) names an output it
 #                                    does not mark retracted, and leaves one of the
@@ -47,10 +47,22 @@ ex:Bypass1 a backlog:LineageBypass ;
 #                                    T2 claims admission by a non-Backlog output.
 #  5. LineageBypassShape           -- Bypass3 names an item outside its lineage and
 #                                    carries no chainClosedCommit.
+#  6. PreLineageItemUnadmittedAdvisoryShape (v1.1.0, correctness fix) -- T3 is flagged
+#                                    preLineageItem true under L2's own restart and
+#                                    carries no admittedByOutput at all; distinct from
+#                                    T2 (already admitted) and T1 (not yet flagged, the
+#                                    different, Violation-severity gap). Before this,
+#                                    the shape's declared proof pointed at this same
+#                                    fixture but nothing in it exercised the unadmitted
+#                                    case -- a real gap, not a naming mistake, found by
+#                                    backlog_clause_proof's declared-case check once its
+#                                    own false "case None" alarms were fixed.
 ex:L2 a backlog:Lineage ; rdfs:label "Second lineage"@en ; backlog:lineageOrdinal 2 ; backlog:lineageArchived false .
 ex:T1 a backlog:Story ; backlog:hasIdentifier "T1" ; backlog:hasState backlog:Done ; backlog:belongsToLineage ex:L2 .
 ex:T2 a backlog:Story ; backlog:hasIdentifier "T2" ; backlog:hasState backlog:Done ; backlog:belongsToLineage ex:L2 ;
     backlog:preLineageItem true ; backlog:admittedByOutput ex:X_Scope .
+ex:T3 a backlog:Story ; backlog:hasIdentifier "T3" ; backlog:hasState backlog:Done ; backlog:belongsToLineage ex:L2 ;
+    backlog:preLineageItem true .
 ex:X_Mission a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Mission ; backlog:belongsToLineage ex:L2 ; backlog:closedAtCommit "c9" ; backlog:hasStateDigest "f1" ; backlog:outputRetracted true .
 ex:X_Scope a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Scope ; backlog:belongsToLineage ex:L2 ; backlog:consumesOutput ex:X_Mission ; backlog:closedAtCommit "c9" ; backlog:hasStateDigest "f2" .
 ex:X_Backlog a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage ex:L2 ; backlog:closedAtCommit "c9" ; backlog:hasStateDigest "f5" .
@@ -66,7 +78,8 @@ ex:Bypass3 a backlog:LineageBypass ;
     backlog:bypassedLineage ex:L2 ; backlog:hasFindingScope backlog:Scope_Methodology ; backlog:hasRootCause "Chain written after the work (fixture)." ; backlog:bypassedItem ex:S1 ; backlog:itemFirstCommit "S1 c1 1000" ;
     backlog:detectedAt "2026-09-07T09:00:00Z"^^xsd:dateTime ; backlog:detectedBy "backlog_lineage_order_check_v1_0_0" .
 
-# Polarity: NEGATIVE -- every one of the five Violation shapes must fire. A run of this
+# Polarity: NEGATIVE -- every one of the five Violation shapes, and the one Warning-severity
+# advisory (PreLineageItemUnadmittedAdvisoryShape, case T3), must fire. A run of this
 # fixture with no violation from them means the escape is open again. The order check
 # must report BYPASS for ex:L (no restart answers it).
 <http://example.org/lineage-bypass-neg#> backlog:hasExpectedPolarity backlog:Polarity_Negative .

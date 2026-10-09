@@ -11260,7 +11260,26 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
-## v1.374.0 — Two handovers processed: another registrant's maturity-gate addenda reconciled, and a lineage-file versioning collision ruled (G102)
+## v1.375.0 — correctness: the declared clause-proof linkage was 68% false-failing; fixed, 110/110 now verified, plus the stale an adopting project handover log entry
+
+**Unplanned work:** owner-directed, not tied to any WorkItem -- "What is still waiting if any. Let's work on further enhancement opportunities both the correctness and efficiency." Two findings, both closed this release; neither moves a Story or Task.
+
+**1. The handover log itself was stale.** `HANDOVER_fizyovibe_to_backlog-roadmap-framework_package-activation-not-gated-by-containerDependsOn_v1_0_0.md` was still filed `deferred` in `HANDOVER_LOG.md`, even though its underlying finding was fully resolved by the owner's direct ruling and the v1.372.0/v1.373.0 build (`PackageActivationOrderAdvisoryShape` + the three-case classifier). Moved to `07-handover-inbox/accepted/`; the log entry corrected to name the actual resolution rather than sit inconsistent with reality.
+
+**2. `backlog_clause_proof`'s own declared-proof check was reporting 75 of 110 declared proofs as `DECLARED CASE DID NOT FIRE` — almost all of it false.** Root-caused by direct inspection, not assumption:
+
+- **68 shapes** had `provenByFixture` set but no `backlog:fixtureCaseName` at all. The checker's own logic (`case is not None and str(case) in out`) trivially fails when `case` is `None` — these were never actually checked against their fixture output, just unconditionally reported as failed. Resolved by running each shape's fixture, confirming the declared clause's message genuinely fires, and recording the real focus-node name that proves it (38 unambiguous; for 30 where several real nodes share the message, the alphabetically-first firing node is recorded as the exemplar — a documented, reproducible convention, not a cherry-pick).
+- **4 shapes** (`PartialScopeDeclarationShape`, `LineageSuccessionShape`, `LineageReactivationShape`, `PostClosureFindingShape`) had `provenByFixture` literally pointing at `fixture_lineage_succession` (the *positive* fixture, 0 Violation by design) instead of `fixture_lineage_succession_negative`, where these Violation-severity clauses actually fire. A plain missing-suffix mistake, not a tooling gap. Fixed by pointing at the real fixture and recording the real case (`Gap_20`, `Succ_SelfSucc`, `React_Bad`, `Find_OnOpen`).
+- **3 shapes** had a genuine, no-fixture-covers-this gap, confirmed by exhaustive search (no file anywhere in `03-tooling/fixtures/` contains the needed case):
+  - `ToolRunRecordShape` — every existing `ToolRunRecord` fixture individual carried all four required fields (they prove `SelfComparisonClaimShape` instead); added `TR_Incomplete` (missing `ranTool`) to `fixture_negative` (now v1.22.0).
+  - `RemoteCommitShape` — its own declared fixture was `fixture_positive`, which by its own polarity contract never carries a Violation; a minCount1 violation could never fire there. Moved the declaration to `fixture_negative` and added `RC_NoPath` (a `RemoteCommit` naming no `touchesPath`) there.
+  - `PreLineageItemUnadmittedAdvisoryShape` — the fixture's one `preLineageItem true` individual (`T2`) was already admitted; added `T3` (flagged, unadmitted, under the same restarted lineage `L2`) to `fixture_lineage_bypass_negative` (now v1.1.0).
+
+**Verified:** `backlog_clause_proof` now reports `shapes declaring a proof: 110 / declaration verified: 110 / declaration FAILED: 0` (was 35 verified / 75 FAILED). The separate, much larger inference-based "never proven to fire" count (clauses with no declared link at all) moved from 77 to 75 as an incidental side effect of the two new fixture individuals; closing that list is real, substantial, separate work and is not claimed here.
+
+**What is not claimed:** this release does not touch the ~300-Python-process gate cost or the per-fixture base-TBox re-judging efficiency gap identified in the prior segment; those remain open, named explicitly so the next release can pick either up directly rather than re-discovering them.
+
+
 
 **Unplanned work:** two handovers landed together, 2026-10-08; both processed in this release.
 
