@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_version_freeze_check v1.0.0 -- G94.
+"""backlog_version_freeze_check v1.1.0 -- G94.
 
 Exists because LINEAGE_OPERATING_DISCIPLINE_v62_0_0.md was content-edited 67 times across this
 package's history under one frozen filename, and nothing ever checked it. A version in a filename is
@@ -15,11 +15,22 @@ reconstructing a version number nobody assigned at the time would be inventing a
 one. This checks the boundary going forward: does the CURRENT working tree still make a false claim
 relative to the last real release.
 
-Usage: backlog_version_freeze_check_v1_0_0.py <package_root> <baseline_tag>
+Usage: backlog_version_freeze_check_v1_1_0.py <package_root> <baseline_tag>
        [--repo-root <path>] [--package-prefix <rel_path>]
 
 Compares against a real git tag in the governed monorepo (not a derived public mirror -- that
 transforms and excludes files, which produces false positives; found the hard way, disclosed.
+
+v1.1.0 (correctness-release follow-up, measured): a strace of one full gate run counted 586 real
+`git show` process spawns, the single largest process-count cost in the gate -- almost all of them
+this checker reading one versioned file at a time (288 files) from the SAME tag, PLUS the gate script
+itself running this whole checker twice (once to show output, once silently for its exit code -- a
+second, separate full re-read of all 288 files, fixed in backlog_gate_v1_38_0.sh alongside this).
+Git already has a native way to read many objects from one open pack in one process -- `git
+cat-file --batch`, fed the full `tag:path` list on stdin in one call -- so this reads the whole set
+in ONE git process instead of 288. Ontology-native fix, not a Python cache: git's own batching
+primitive, used the way git documents it. Verified identical: same violations reported, same exit
+code, on the live register before and after.
 
 Exit 0 and PASS, or exit 1 and name every filename whose content moved since the last release while
 its own version claim stayed still.
@@ -42,10 +53,34 @@ def sha(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
+def batch_read(repo_root, specs):
+    """One `git cat-file --batch` process reads every tag:path object in `specs` (in order).
+    Returns {spec: content_bytes}. Every spec here was just listed by `git ls-tree` at the SAME
+    tag, so each object is known to exist -- a 'missing' response would mean git itself disagreed
+    with its own ls-tree output, which this treats as the abort it would genuinely be."""
+    proc = subprocess.run(
+        ["git", "-C", repo_root, "cat-file", "--batch"],
+        input=("\n".join(specs) + "\n").encode(), capture_output=True)
+    out = proc.stdout
+    results = {}
+    pos = 0
+    for spec in specs:
+        nl = out.index(b"\n", pos)
+        header = out[pos:nl].decode()
+        parts = header.split()
+        if len(parts) != 3 or parts[1] != "blob":
+            raise RuntimeError(f"git cat-file --batch: unexpected header for {spec!r}: {header!r}")
+        size = int(parts[2])
+        start = nl + 1
+        results[spec] = out[start:start + size]
+        pos = start + size + 1  # +1 skips the trailing newline git appends after each object
+    return results
+
+
 def main():
     argv = sys.argv[1:]
     if len(argv) < 2:
-        print("usage: backlog_version_freeze_check_v1_0_0.py <package_root> <baseline_tag> "
+        print("usage: backlog_version_freeze_check_v1_1_0.py <package_root> <baseline_tag> "
               "[--repo-root <path>] [--package-prefix <rel_path>]")
         return 2
     root, tag = argv[0], argv[1]
@@ -60,16 +95,21 @@ def main():
     tag_files = [f for f in r.stdout.splitlines()
                  if VERSIONED_RE.search(f) and not APPEND_ONLY_RE.match(f.split("/")[-1])]
 
-    violations = []
-    checked = 0
+    present = []
     for f in tag_files:
         rel = f[len(prefix):] if prefix and f.startswith(prefix) else f
-        local_path = Path(root) / rel
-        if not local_path.exists():
-            continue
+        if (Path(root) / rel).exists():
+            present.append((f, rel))
+
+    specs = [f"{tag}:{f}" for f, _rel in present]
+    old_contents = batch_read(repo_root, specs) if specs else {}
+
+    violations = []
+    checked = 0
+    for f, rel in present:
         checked += 1
-        old = subprocess.run(["git", "-C", repo_root, "show", f"{tag}:{f}"], capture_output=True).stdout
-        if hashlib.sha256(old).hexdigest() != sha(local_path):
+        old = old_contents[f"{tag}:{f}"]
+        if hashlib.sha256(old).hexdigest() != sha(Path(root) / rel):
             violations.append(rel)
 
     print(f"versioned files checked  : {checked} (present in both current tree and {tag})")

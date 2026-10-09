@@ -15,6 +15,13 @@
 #
 # v1.29.0 (Lineage 19, DC-S04): a third probe runs every time: the public copy is cut by each module's declared audience and stops with an error when it cannot be sure (backlog_public_cut_probe).
 # v1.28.0 (Lineage 19, DC-S01 and DC-S02): two probes run every time: the closure-report rules are shown firing on planted faults and silent on corrected twins (backlog_closure_shapes_probe), and the archive tool's refusals are drilled on planted lineages (backlog_archive_drill). A probe that cannot be found stops the gate.
+# v1.39.0 (efficiency, measured by strace -f -e trace=execve over a full gate run): the version-freeze
+# gate used to run backlog_version_freeze_check TWICE -- once to show its output, once silently for
+# its exit code -- a second full re-read of every versioned file against the baseline tag for no new
+# information. One run now; its own exit code is the gate's. Paired with backlog_version_freeze_check
+# v1.1.0's own fix (one `git cat-file --batch` instead of one `git show` per file), this collapsed the
+# single largest process-count cost the trace found: 586 `git show` spawns, almost all from this one
+# gate step and its duplicate run.
 # v1.37.0 (G99, release E, the owner's Merkle-root idea mixed with over-processing): backlog_merkle_cache gives every step
 # its own key, built from its own named leaves, instead of one flat hash a whole section shared. The fixture-coverage gate
 # now stamps EACH fixture on (TBox, shapes, validator, memo, that fixture) -- touching one fixture no longer forces all 13
@@ -721,9 +728,12 @@ REPO_ROOT="$(git -C "$PKG" rev-parse --show-toplevel 2>/dev/null || true)"
 LAST_TAG="$(git -C "${REPO_ROOT:-$PKG}" tag --list 'backlog-roadmap-framework-v*' 2>/dev/null | sort -V | tail -1 || true)"
 if [ -n "$VFC" ] && [ -n "$REPO_ROOT" ] && [ -n "$LAST_TAG" ]; then
   PREFIX="$(realpath --relative-to="$REPO_ROOT" "$PKG" 2>/dev/null || true)/"
-  python3 "$VFC" "$PKG" "$LAST_TAG" --repo-root "$REPO_ROOT" --package-prefix "$PREFIX" | sed 's/^/  /'
-  python3 "$VFC" "$PKG" "$LAST_TAG" --repo-root "$REPO_ROOT" --package-prefix "$PREFIX" >/dev/null 2>&1 \
-    || { echo "  Version-freeze gate FAILED"; FAILED=1; }
+  # v1.38.1 (efficiency, measured): this used to run the checker TWICE -- once for display, once
+  # silently for its exit code -- a second full re-read of every versioned file against the tag
+  # for no new information. One run now; its own exit code is the gate's.
+  VFC_OUT="$(python3 "$VFC" "$PKG" "$LAST_TAG" --repo-root "$REPO_ROOT" --package-prefix "$PREFIX")"; VFC_STATUS=$?
+  printf '%s\n' "$VFC_OUT" | sed 's/^/  /'
+  [ "$VFC_STATUS" -ne 0 ] && { echo "  Version-freeze gate FAILED"; FAILED=1; }
 else
   echo "  NOT RUN — checker, repo root, or a prior published tag not found. Not assumed to pass."
 fi

@@ -11260,6 +11260,19 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.376.0 — efficiency: the version-freeze gate's 586 `git show` process spawns (the largest single process-count cost measured) collapsed to one batched read, and a duplicate full run removed
+
+**Unplanned work:** owner-directed continuation of the same "further enhancement opportunities" request, specifically the efficiency half parked at the end of v1.375.0 with hard numbers in hand rather than a vague estimate. Neither moves a Story or Task.
+
+A full gate run was traced with `strace -f -e trace=execve` (prior release) to replace the long-standing "~300 Python processes" park-note with real measurement: 1,101 real process spawns total, of which **666 were `git`**, not Python -- and of those, **586 were individual `git show <tag>:<path>` calls**, one per versioned file, from `backlog_version_freeze_check` (G94). Two compounding causes, both fixed:
+
+1. **`backlog_version_freeze_check`** (v1.0.0 -> v1.1.0) read one file at a time from the baseline tag with its own `git show` subprocess per file (288 files = 288 processes). Rewritten to read the whole set with one `git cat-file --batch` call fed every `tag:path` spec on stdin -- git's own native batching primitive, not a Python-side cache, per the standing rule to be ontology/tooling-native first. Verified byte-for-byte identical: same SHA-256 per file, same violations list, same exit code, before and after, against the live tag.
+2. **`backlog_gate` itself ran that whole checker twice** -- once to print its output, once more, silently, only to read the exit code -- doubling the 288 reads to ~576 for no new information. Collapsed to one run whose own exit code the gate now uses directly (`backlog_gate_v1_38_0.sh` -> `v1_39_0.sh`).
+
+**Verified:** re-ran the full gate after both fixes; version-freeze gate still PASSes (290 files checked, 0 violations -- matching the prior run before these changes), every other gate unchanged. The dominant process-count cost this measurement found is closed.
+
+**What is not claimed:** the remaining ~80 `git` calls (`rev-parse`, `merge-base`, `log`, `ls-tree`, `ls-files`, `diff`) and the ~186 python3 process spawns were not profiled individually in this pass; nothing here claims they are free of the same pattern, only that the one cost large enough to dominate the trace is gone.
+
 ## v1.375.0 — correctness: the declared clause-proof linkage was 68% false-failing; fixed, 110/110 now verified, plus the stale an adopting project handover log entry
 
 **Unplanned work:** owner-directed, not tied to any WorkItem -- "What is still waiting if any. Let's work on further enhancement opportunities both the correctness and efficiency." Two findings, both closed this release; neither moves a Story or Task.
