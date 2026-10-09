@@ -68,6 +68,18 @@ fwneg:React_Bad a backlog:LineageReactivation ;
     backlog:reactivationRationale "Bad: this lineage was never closed." ;
     backlog:decidedBy backlog:Owner .
 
+# v1.7.0 (owner's ruling 2026-10-09: closing backlog_clause_proof's never-proven-clause
+# backlog): a reactivation whose addressesFinding points at a finding raised against a
+# DIFFERENT lineage than the one reactivatesLineage names. Reuses Find_InWindow (declared
+# below, against L_Closed8, Scale_Systemic) so this individual exercises nothing but the
+# cross-lineage mismatch clause itself.
+fwneg:React_WrongLineage a backlog:LineageReactivation ;
+    backlog:reactivatesLineage fwneg:L_NeverClosed ;
+    backlog:reactivationRationale "Bad: the finding behind this belongs to a different lineage." ;
+    backlog:hasReactivationReason backlog:Reason_NonConformantResult ;
+    backlog:addressesFinding fwneg:Find_InWindow ;
+    backlog:decidedBy backlog:Owner .
+
 # 7. The v1.132.0 exemption stays narrow: an LS_Achieved lineage whose Mission is still in
 #    flight, and which NO LineageSuccession names, must still be caught by the original rule.
 fwneg:M_Open a backlog:Mission ; backlog:missionFor fwneg:Register ; backlog:hasMissionOutcome backlog:Out_InFlight .

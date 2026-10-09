@@ -11260,6 +11260,50 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.378.0 — correctness: all 75 never-proven level-gated SHACL clauses closed; `backlog_clause_proof` reports PASS for the first time
+
+**Unplanned work:** working down the tracked, accepted backlog item that `backlog_clause_proof` reports rather
+than fails -- 75 of 439 level-gated clauses had no negative fixture individual that was ever shown to fire them,
+a pre-existing gap, not a regression. Owner's ruling: "Yes, start working it down now." Neither moves a Story or
+Task.
+
+**Method, per the precedent G103's own work just set:** for each of the 75, built a real fixture individual
+matching the clause's exact `sh:property`/`sh:sparql` pattern, then ran `backlog_validate` directly on the
+fixture and grepped for the exact expected message -- never inferred "should fire" from reading the SPARQL.
+Two kinds of gap found this way, not by reasoning about the shapes in advance:
+
+- **Same-shape message collision.** Several shapes already had a declared, A2-proven fixture individual
+  (`BR_Bad`, `CR_Bad`, `IA_Bad`, `CT_NOKIND`, `LAY_NOORD`, `RUL_NOSHAPE`, `SCEN_NOKIND`, `PLAN_NoEvent`,
+  `RETRO_NoFinding`, `REVIEW_NoDecision`, `TR_Incomplete`) that proves its OWN declared proof but leaves sibling
+  `sh:property` clauses on the SAME shape unproven, because each exemplar individual was deliberately built to
+  isolate exactly one missing field. Closed with new sibling individuals, each missing exactly the one field its
+  neighbour already carries.
+- **Register-wide absence clauses cannot be proven inside a flat fixture file.** `LineageCompletenessShape`'s
+  "no `Objective` anywhere" / "no `ScopeStatement` anywhere" and `PlannedDateShape`'s "no `KickOff` anywhere"
+  clauses are `FILTER NOT EXISTS` over the WHOLE merged graph -- `fixture_negative.ttl` already carries both
+  types and several real `KickOff` individuals in service of dozens of other shapes, so these three clauses
+  could never fire there regardless of what else was added. Closed with two new, deliberately bare, isolated
+  fixture files (`fixture_lineage_completeness_negative_v1_0_0.ttl`, `fixture_planned_date_kickoff_negative_v1_0_0.ttl`):
+  per `reference_abox()`, a standalone file is validated against the TBox plus itself alone, so an isolated
+  file's own emptiness is what the register-wide query actually sees.
+- **A fixture in a subdirectory is invisible to the unproven sweep.** `StageOutputShape`'s declared fixture
+  (`sdlc-tools/fixture_order_shapes_negative`) sits under a subfolder `backlog_clause_proof`'s own
+  `_negative_fixtures()` never globs (`fixtures_dir/*.ttl` is not recursive) -- so proving its one remaining
+  unproven clause (`outputOfStage` missing) had to go into a top-level fixtures file instead; a fix placed in
+  that subfolder would have been silently inert for this specific check. Not fixed here (out of scope of the
+  owner's "work it down" instruction, which named the clauses, not the sweep's own recursion), but recorded so
+  the next session does not repeat the same dead end.
+
+**Fixtures changed:** `fixture_negative` v1.23.0 → v1.24.0 (one new `clz:` block covering ~50 of the 75
+clauses across ~40 shapes); `fixture_lineage_succession_negative` v1.6.0 → v1.7.0 (`React_WrongLineage`, proving
+`LineageReactivationShape`'s cross-lineage-finding clause); two new fixture files (above).
+
+**Verified:** `backlog_clause_proof_v1_0_4.py` run directly — `proven to fire: 439`, `NEVER proven to fire: 0`,
+`VERDICT: PASS` (was 364/439, reporting rather than failing, before this release). Declared-proof check
+unaffected: still 111/111.
+
+Fixtures negative v1.24.0, lineage-succession-negative v1.7.0.
+
 ## v1.377.0 — G103: a lineage ledger may carry an ontology header, on this package's own abox pattern; seven undeclared SPARQL prefixes fixed
 
 **Unplanned work:** a handover arrived mid-session from a consumer package that keeps a lineage ledger under this

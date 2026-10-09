@@ -1,0 +1,17 @@
+@prefix backlog: <http://example.org/backlog#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix pdk: <http://example.org/fixture-planned-date-kickoff#> .
+
+# Proves PlannedDateShape's "L2: this item carries planned dates but its register records no
+# KickOff" clause (v1.24.0, owner's ruling 2026-10-09: closing backlog_clause_proof's
+# never-proven-clause backlog).
+#
+# That clause is "FILTER NOT EXISTS { ?k a backlog:KickOff }" -- unscoped, over the whole
+# merged graph. fixture_negative_v1_24_0.ttl cannot prove it: that file already carries
+# several real backlog:KickOff individuals (ex:N_KO, ex:N_KO2, sparseshapesne:KO_BARE) in
+# service of KickOffShape's own fixtures, so the clause can never fire there. Per
+# reference_abox(), validating this file alone strips the live register's own namespace
+# content first, so this file's own emptiness of any KickOff is what the query sees.
+pdk:WI_PlannedNoKickOff a backlog:WorkItem ; backlog:plannedStart "2026-09-01T00:00:00Z"^^xsd:dateTime .
+
+pdk:WI_PlannedNoKickOff backlog:hasExpectedPolarity backlog:Polarity_Negative .

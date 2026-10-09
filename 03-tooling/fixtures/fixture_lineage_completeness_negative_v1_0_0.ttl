@@ -1,0 +1,24 @@
+@prefix backlog: <http://example.org/backlog#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix lc: <http://example.org/fixture-lineage-completeness#> .
+
+# Proves LineageCompletenessShape's register-wide "no Objective anywhere" and "no
+# ScopeStatement anywhere" clauses (v1.24.0, owner's ruling 2026-10-09: closing
+# backlog_clause_proof's never-proven-clause backlog).
+#
+# These two clauses are FILTER NOT EXISTS over the WHOLE merged graph, not over
+# anything scoped to $this -- so they can only be proven by an ISOLATED fixture file
+# that contains no backlog:Objective and no backlog:ScopeStatement anywhere at all.
+# fixture_negative_v1_24_0.ttl cannot prove them: it already carries both types in
+# service of dozens of other shapes' own fixtures. Per reference_abox(), validating
+# this file alone strips the live register's own namespace content before merging,
+# so this file's own emptiness is what the query actually sees.
+#
+# A bare register with one real, non-archived Lineage: the v1.121.0 waiver
+# ("waived when every lineage that exists is archived") only applies once every
+# lineage is archived, so this active lineage keeps both clauses live rather than
+# waived.
+lc:Bl_Bare a backlog:Backlog .
+lc:Lin_Active a backlog:Lineage ; backlog:lineageArchived false .
+
+lc:Bl_Bare backlog:hasExpectedPolarity backlog:Polarity_Negative .

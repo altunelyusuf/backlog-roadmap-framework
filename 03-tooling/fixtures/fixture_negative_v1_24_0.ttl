@@ -3827,3 +3827,271 @@ pkgactdrift:T_OnTimeStarted a backlog:Task ; backlog:hasIdentifier "T-ONTIME-STA
 ex:Hdr_Mismatch a owl:Ontology ;
     owl:versionIRI <http://example.org/fixture-negative/ledger/2.0.0> ;
     owl:versionInfo "1.9.0" .
+
+#################################################################
+# v1.24.0 (owner's ruling 2026-10-09: "start working it down now") --
+# closing clauses backlog_clause_proof reports as never-proven by any
+# existing negative fixture's own message text. Each individual below
+# is built, then run directly through the validator and grepped for
+# its exact expected message before being counted as proof -- the
+# precedent this session's own G103 bugs established (build, then run
+# the real gate, never just reason about SPARQL).
+#################################################################
+@prefix clz: <http://example.org/clause75#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+# RoadmapOverrideShape: ranked ahead of a higher score, no rationale.
+clz:Rm1 a backlog:Roadmap .
+clz:Score_Lo a backlog:PriorityScore ; backlog:hasScoreValue 3 .
+clz:Score_Hi a backlog:PriorityScore ; backlog:hasScoreValue 9 .
+clz:Pkg_LoRank a backlog:Package ; backlog:rankedOnRoadmap clz:Rm1 ; backlog:hasRoadmapRank 1 ; backlog:hasPriorityScore clz:Score_Lo .
+clz:Pkg_HiRank a backlog:Package ; backlog:rankedOnRoadmap clz:Rm1 ; backlog:hasRoadmapRank 2 ; backlog:hasPriorityScore clz:Score_Hi .
+
+# ObjectiveFalsifiabilityShape: target equals baseline (no Dir_Hold).
+clz:Obj_SameTB a backlog:Objective ; backlog:hasBaselineValue 5 ; backlog:hasTargetValue 5 ;
+    backlog:hasTargetDirection backlog:Dir_Increase .
+
+# EvidenceBoundDoneShape: Done depends on work that is not Done.
+clz:Ev_Dep1 a backlog:Evidence ; backlog:evidenceVerified true .
+clz:WI_DoneDep a backlog:WorkItem ; backlog:hasState backlog:Done ; backlog:hasEvidence clz:Ev_Dep1 ;
+    backlog:dependsOn clz:WI_NotDone .
+clz:WI_NotDone a backlog:WorkItem ; backlog:hasState backlog:Proposed .
+
+# ChangeRequestShape: CR_Bad (existing) already carries requestsChangeTo, hasChangeDirection and
+# hasDisposition -- none of its three property clauses fire. Three siblings, each missing exactly
+# one of those three fields.
+clz:Scope_X a backlog:ScopeStatement .
+clz:CR_NoScope a backlog:ChangeRequest ; backlog:hasChangeDirection backlog:Direction_Grow ;
+    backlog:hasDisposition backlog:Disp_Pending ; backlog:hasChangeRequestRationale "Fixture-only." .
+clz:CR_NoDirection a backlog:ChangeRequest ; backlog:requestsChangeTo clz:Scope_X ;
+    backlog:hasDisposition backlog:Disp_Pending ; backlog:hasChangeRequestRationale "Fixture-only." .
+clz:CR_NoDisposition a backlog:ChangeRequest ; backlog:requestsChangeTo clz:Scope_X ;
+    backlog:hasChangeDirection backlog:Direction_Grow ; backlog:hasChangeRequestRationale "Fixture-only." .
+
+# ClosureReportShape: missing closesForMission (CR3 elsewhere proves the other three fields).
+clz:Obj_ForReport a backlog:Objective .
+clz:CRpt_NoMission a backlog:ClosureReport ; backlog:reportGeneratedAt "2026-09-01T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasClosureSummary "Fixture-only." ; backlog:reportsOnObjective clz:Obj_ForReport .
+
+# RankingForkResolutionShape: decidedBy-missing and rationale-missing are two different
+# individuals -- neither property implies the other.
+clz:Bl_ForkNoOwner a backlog:Backlog ; backlog:hasRankingForkResolution "modelA" ;
+    backlog:hasDecisionRationale "Fixture-only." .
+clz:Bl_ForkNoRationale a backlog:Backlog ; backlog:hasRankingForkResolution "modelB" ;
+    backlog:decidedBy backlog:Owner .
+
+# RegisterPackageShape: missing packageFor (the other three artifact-role clauses stay silent).
+clz:Art_Manifest a backlog:RegisterArtifact ; backlog:hasArtifactRole backlog:Role_Manifest .
+clz:Art_Data a backlog:RegisterArtifact ; backlog:hasArtifactRole backlog:Role_RegisterData .
+clz:Art_Profile a backlog:RegisterArtifact ; backlog:hasArtifactRole backlog:Role_ProfileDeclaration .
+clz:Art_Progress a backlog:RegisterArtifact ; backlog:hasArtifactRole backlog:Role_ProgressReport .
+clz:RPkg_NoFor a backlog:RegisterPackage ; backlog:hasPackageVersion "1.0.0" ;
+    backlog:hasPackageArtifact clz:Art_Manifest , clz:Art_Data , clz:Art_Profile , clz:Art_Progress .
+
+# SprintPlanningCeremonyShape: PLAN_NoEvent (existing) already carries ceremonyFor and heldAt --
+# neither property clause fires from it. Two siblings, each missing one of those two fields.
+clz:It_Y a backlog:Iteration .
+clz:PE1 a backlog:PlanningEvent .
+clz:Plan_NoIter a backlog:SprintPlanningCeremony ; backlog:heldAt "2026-09-01T00:00:00Z"^^xsd:dateTime ;
+    backlog:includesPlanningEvent clz:PE1 .
+clz:Plan_NoDate a backlog:SprintPlanningCeremony ; backlog:ceremonyFor clz:It_Y ;
+    backlog:includesPlanningEvent clz:PE1 .
+
+# SprintRetrospectiveShape: RETRO_NoFinding (existing) already carries heldAt -- missing-heldAt
+# needs its own sibling.
+clz:Find_X a backlog:RetrospectiveFinding .
+clz:Retro_NoDate a backlog:SprintRetrospective ; backlog:producesFinding clz:Find_X .
+
+# SprintReviewCeremonyShape: REVIEW_NoDecision (existing) already carries heldAt -- missing-heldAt
+# needs its own sibling.
+clz:Review_NoDate a backlog:SprintReviewCeremony ; backlog:ceremonyFor clz:It_Y ;
+    backlog:reviewsCeremony clz:Plan_NoIter ; backlog:closesStory clz:St_Dummy .
+clz:St_Dummy a backlog:Story .
+
+# ToolRunRecordShape: TR_Incomplete (existing) already carries usedBaselineHash,
+# comparedAgainstHash and runConcludedDistinctBaseline -- none of those three property clauses
+# fire from it. One sibling missing a hash, one missing the concluded flag.
+clz:Tool_X a backlog:ToolScript .
+clz:TR_NoHash a backlog:ToolRunRecord ; backlog:ranTool clz:Tool_X ; backlog:comparedAgainstHash "def456" ;
+    backlog:runConcludedDistinctBaseline true .
+clz:TR_NoConcluded a backlog:ToolRunRecord ; backlog:ranTool clz:Tool_X ; backlog:usedBaselineHash "aaa" ;
+    backlog:comparedAgainstHash "bbb" .
+
+# KickOffShape: a triggered kick-off naming no trigger.
+clz:Container_X a backlog:WorkItemContainer .
+clz:KO_NoTrigger a backlog:KickOff ; backlog:kickOffFor clz:Container_X ;
+    backlog:kickedOffAt "2026-09-01T00:00:00Z"^^xsd:dateTime ; backlog:hasKickOffMode backlog:KickOff_Triggered .
+
+# AdaptationStageOrderShape: missing adaptsScope (Stage_Assess carries no FitGap/Ruling/Relink
+# clause of its own, so this fires only the property shape).
+clz:Adapt_NoScope a backlog:LineageAdaptation ; backlog:hasAdaptationStage backlog:Stage_Assess .
+
+# ImpactAssessmentShape: missing analyzesRequest (IA_Bad elsewhere proves hasImpactStatement).
+clz:IA_NoRequest a backlog:ImpactAssessment ; backlog:hasImpactStatement "Fixture-only." .
+
+# HumanInteractionShape: missing interactsWith.
+clz:Role_X a backlog:Role .
+clz:HI_NoTarget a backlog:HumanInteraction ; backlog:hasInteractionKind backlog:Int_Confirm ;
+    backlog:interactedAt "2026-09-01T00:00:00Z"^^xsd:dateTime ; backlog:interactedBy clz:Role_X .
+
+# PlannedDateShape: a planned finish with no planned start (the existing finish-before-start
+# pair at ex:... carries both dates, so this is a distinct case).
+clz:WI_FinishNoStart a backlog:WorkItem ; backlog:plannedFinish "2026-09-01T00:00:00Z"^^xsd:dateTime .
+
+# MaintenanceClassificationShape: a category asserted with none of its own axes set, for each
+# of the four categories, plus Development-with-category and reactive-with-no-trigger.
+clz:Init_Corrective a backlog:Initiative ; backlog:hasMaintenanceCategory backlog:Maint_Corrective .
+clz:Init_Preventive a backlog:Initiative ; backlog:hasMaintenanceCategory backlog:Maint_Preventive .
+clz:Init_Adaptive a backlog:Initiative ; backlog:hasMaintenanceCategory backlog:Maint_Adaptive .
+clz:Init_Perfective a backlog:Initiative ; backlog:hasMaintenanceCategory backlog:Maint_Perfective .
+clz:Init_DevWithCat a backlog:Initiative ; backlog:hasInitiativeKind backlog:Kind_Development ;
+    backlog:hasMaintenanceCategory backlog:Maint_Corrective .
+clz:Init_ReactiveNoTrigger a backlog:Initiative ; backlog:hasMaintenanceTiming backlog:Timing_Reactive .
+
+# InitiativeScaleShape: no kind at all, and no increment at all.
+clz:Init_NoKind a backlog:Initiative ; backlog:producesIncrement backlog:Ver_Minor .
+clz:Init_NoIncrement a backlog:Initiative ; backlog:hasInitiativeKind backlog:Kind_Maintenance .
+
+# MissionProvenanceShape: claims an owner-stated origin and names no source.
+clz:Mis_NoSource a backlog:Mission ; backlog:hasMissionOrigin backlog:Origin_OwnerStated .
+
+# AutonomyEvidenceShape: Done, unsupervised, no verified evidence attesting any criterion.
+clz:Sup_ReqEvidence a backlog:SupervisionMode ; backlog:requiresIndependentEvidence true .
+clz:WI_Autonomous a backlog:WorkItem ; backlog:hasState backlog:Done ; backlog:hasSupervisionMode clz:Sup_ReqEvidence .
+
+# AchievedOnlyWhenClearShape: Achieved mission, a goal's objective short of target, no later
+# observation, no achievement status explaining why it no longer steers.
+clz:Mis_AchievedButStalled a backlog:Mission ; backlog:hasMissionOutcome backlog:Out_Achieved ;
+    backlog:outcomeRationale "Fixture-only." .
+clz:Goal_Stalled a backlog:Goal ; backlog:contributesToMission clz:Mis_AchievedButStalled .
+clz:Obj_Stalled a backlog:Objective ; backlog:contributesToGoal clz:Goal_Stalled ;
+    backlog:hasTargetValue 10 ; backlog:hasTargetDirection backlog:Dir_Increase .
+clz:Obs_Stalled a backlog:MetricObservation ; backlog:observationFor clz:Obj_Stalled ;
+    backlog:hasObservedValue 2 ; backlog:observedAt "2026-09-01T00:00:00Z"^^xsd:dateTime .
+
+# ModuleAudienceDeclaredShape: a subject of dcterms:isPartOf that declares no audience.
+clz:Mod_NoAudience dcterms:isPartOf clz:SomeWhole .
+
+# MeasurementKindShape: a derived objective that ships no query.
+clz:Obj_DerivedNoQuery a backlog:Objective ; backlog:hasMeasurementKind backlog:Meas_Derived .
+
+# ProgressFreshnessShape: a retained report run that predates a later transition, with no
+# later-run report covering that transition.
+clz:File_Rpt1 a backlog:RegisterArtifact .
+clz:Rpt_Stale a backlog:RoadmapReport ; backlog:reportRunRetainedAs clz:File_Rpt1 ;
+    backlog:hasRunTimestamp "2026-01-01T00:00:00Z"^^xsd:dateTime .
+clz:Ev_LaterTransition a backlog:StateChange ; backlog:transitionedAt "2026-06-01T00:00:00Z"^^xsd:dateTime .
+
+# GoalSufficiencyShape: a live scope covering an area whose derived goals miss at least one
+# of the three required facings (none declared here at all).
+clz:Sc_Insufficient a backlog:ScopeStatement .
+clz:Area_ForGoalSuff a backlog:ScopeArea .
+clz:Sc_Insufficient backlog:coversArea clz:Area_ForGoalSuff .
+
+# ObjectiveChainShape: fills a scope drawn for one mission while its goal advances another,
+# with neither mission superseded.
+clz:Mis_ForkA a backlog:Mission .
+clz:Mis_ForkB a backlog:Mission .
+clz:Sc_ForkA a backlog:ScopeStatement ; backlog:scopeForMission clz:Mis_ForkA .
+clz:Goal_ForkB a backlog:Goal ; backlog:contributesToMission clz:Mis_ForkB .
+clz:Obj_Fork a backlog:Objective ; backlog:fillsScope clz:Sc_ForkA ; backlog:contributesToGoal clz:Goal_ForkB .
+
+# StateProvenanceShape: a state change using a state its own declaring artefact does not list.
+clz:Art_StateDecl a backlog:ModelArtifact ; backlog:declaresState backlog:Proposed .
+clz:SChange_OutOfSpace a backlog:StateChange ; backlog:declaredByArtifact clz:Art_StateDecl ;
+    backlog:hasFromState backlog:InProgress .
+
+# ScopeMeasurabilityShape: scope's work is complete but no outcome was derived.
+clz:Sc_DoneNoOutcome a backlog:ScopeStatement ; backlog:scopeCompletionState backlog:Done .
+
+# UnresolvedArtifactShape: a satisfaction record whose artefact was not found, on Done work.
+clz:AC_ForUnresolved a backlog:AcceptanceCriterion .
+clz:WI_DoneUnresolved a backlog:WorkItem ; backlog:hasState backlog:Done ;
+    backlog:hasAcceptanceCriterion clz:AC_ForUnresolved .
+clz:Sat_NotFound a backlog:CriterionSatisfaction ; backlog:artifactResolved false ;
+    backlog:satisfiesCriterion clz:AC_ForUnresolved .
+
+# AreaUnmeasuredShape: an area no objective measures and that is not a product view of one.
+clz:Sc_ForAreaUnmeasured a backlog:ScopeStatement .
+clz:Area_Unmeasured a backlog:ScopeArea .
+clz:Sc_ForAreaUnmeasured backlog:coversArea clz:Area_Unmeasured .
+
+# InverseGoalShape: an exclusion-facing goal naming no exclusion.
+clz:Goal_ExclusionNoTarget a backlog:Goal ; backlog:hasGoalFacing backlog:Facing_Exclusion .
+
+# ObservedDurationShape: a reported duration with no stated source.
+clz:It_DurationNoSource a backlog:Iteration ; backlog:hasObservedDuration "PT30M"^^xsd:dayTimeDuration .
+
+# CommittedEffortShape: a declared commitment that disagrees with its members' summed effort.
+clz:It_EffortMismatch a backlog:Iteration ; backlog:hasCommittedEffort 9 .
+clz:WI_EffortMember a backlog:WorkItem ; backlog:memberOfContainer clz:It_EffortMismatch ;
+    backlog:hasEffortEstimate 15 .
+
+# BatchShape: more completed than the batch holds; Done with the batch unfinished; a batch
+# size with no completed count at all.
+clz:St_BatchOver a backlog:Story ; backlog:hasBatchSize 5 ; backlog:hasBatchCompleted 7 .
+clz:St_BatchDoneEarly a backlog:Story ; backlog:hasState backlog:Done ; backlog:hasBatchSize 5 ;
+    backlog:hasBatchCompleted 3 .
+clz:St_BatchNoCompleted a backlog:Story ; backlog:hasBatchSize 5 .
+
+# LineageLayerShape: a layer naming no class, with a position that collides with nothing else.
+clz:Lay_NoClass a backlog:LineageLayer ; backlog:layerOrdinal 97531 .
+
+# GovernanceRulingShape: identifier-missing and statement-missing are two different
+# individuals (RUL_NOSHAPE elsewhere already carries both, proving only the enforcedByShape clause).
+clz:Rul_NoId a backlog:GovernanceRuling ; backlog:hasRulingStatement "Fixture-only decision." ;
+    backlog:enforcedByShape backlog:BaselineReferenceShape .
+clz:Rul_NoStatement a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "GY" ;
+    backlog:enforcedByShape backlog:BaselineReferenceShape .
+
+# ScenarioShape: scenarioOf missing (SCEN_NOKIND elsewhere already carries it, proving only
+# the scenarioKind clause).
+clz:Scen_NoCriterion a backlog:TestScenario ; backlog:scenarioKind backlog:Kind_Nominal .
+
+# CodeTableShape: tableInModule missing (CT_NOKIND elsewhere already carries it, proving only
+# the hasTableKind clause).
+clz:CT_NoModule a backlog:CodeTable ; backlog:hasTableKind backlog:TableKind_Classification .
+
+# ContainerRoleShape / ForeignNamespaceShape / QualityMetricShape / ShapeSuiteShape /
+# ToolScriptShape / TestDataShape / InteractionStepShape / StateChangeShape: bare individuals
+# each missing one or both of their own required properties.
+clz:CRole_NoClass a backlog:ContainerRole .
+clz:FNS_NoIRI a backlog:ForeignNamespace ; backlog:namespaceOwner "Someone Else" .
+clz:FNS_NoOwner a backlog:ForeignNamespace ; backlog:namespaceIRI "http://example.org/foreign#" .
+clz:QM_NoName a backlog:QualityMetric ; backlog:isPopulationSensitive false .
+clz:QM_NoPopSens a backlog:QualityMetric ; backlog:hasMetricName "Fixture metric" .
+clz:Suite_NoName a backlog:ShapeSuite ; backlog:suitePattern "**/*.ttl" .
+clz:Suite_NoPattern a backlog:ShapeSuite ; backlog:suiteName "Fixture suite" .
+clz:TS_NoFile a backlog:ToolScript ; backlog:acceptsGraphPath true .
+clz:TS_NoAcceptsFlag a backlog:ToolScript ; backlog:scriptFileName "fixture_tool.py" .
+clz:TD_NoFixtureState a backlog:TestData .
+clz:IStep_NoOrdinal a backlog:InteractionStep ; backlog:hasStepAction "Fixture action." .
+clz:IStep_NoAction a backlog:InteractionStep ; backlog:hasStepOrdinal 1 .
+clz:SC_NoFrom a backlog:StateChange ; backlog:hasToState backlog:InProgress .
+clz:SC_NoTo a backlog:StateChange ; backlog:hasFromState backlog:Proposed .
+
+# LineageCompletenessShape: an Epic, scored, that decomposes into nothing.
+clz:Bl_WithEpic a backlog:Backlog .
+clz:Score_Epic a backlog:PriorityScore ; backlog:hasScoreValue 1 .
+clz:Epic_NoChildren a backlog:Epic ; backlog:memberOfContainer clz:Bl_WithEpic ; backlog:hasPriorityScore clz:Score_Epic .
+
+clz:Rm1 backlog:hasExpectedPolarity backlog:Polarity_Negative .
+
+# BaselineReferenceShape: missing baselineForTool (BR_Bad elsewhere already carries it, proving
+# only the hasBaselineRationale clause).
+clz:BR_NoTool a backlog:BaselineReference ; backlog:hasBaselineLocation "https://example.org/fixture-only" ;
+    backlog:hasBaselineRationale "Fixture-only." .
+
+# IterationPeriodShape: an iteration recording an end but no start.
+clz:It_EndNoStart a backlog:Iteration ; backlog:iterationEnd "2026-09-01T00:00:00Z"^^xsd:dateTime .
+
+# MixedOrderShape: a scope and one of its objectives pointing at each other both ways.
+clz:Sc_Mixed a backlog:ScopeStatement .
+clz:Obj_Mixed a backlog:Objective ; backlog:fillsScope clz:Sc_Mixed .
+clz:Sc_Mixed backlog:scopeRealizesObjective clz:Obj_Mixed .
+
+# StageOutputShape: missing outputOfStage entirely. The sdlc-tools/ subfolder fixture that
+# proves this shape's two sh:sparql clauses sits in a subdirectory _negative_fixtures() never
+# globs (fixtures_dir/*.ttl is not recursive), so its own Out_NoCommit individual -- which
+# already carries outputOfStage -- was never going to prove this property clause either way.
+clz:Out_NoStage a backlog:StageOutput ; backlog:hasStateDigest "cafef00d" .
