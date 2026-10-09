@@ -3820,3 +3820,10 @@ pkgactdrift:Pkg_OnTime a backlog:Package ; backlog:hasIdentifier "PKG-ONTIME" ;
 pkgactdrift:T_OnTimeStarted a backlog:Task ; backlog:hasIdentifier "T-ONTIME-STARTED" ; backlog:hasState backlog:InProgress ;
     backlog:notYetScoreable true ; backlog:hasScoreabilityReason "placeholder" ;
     backlog:memberOfContainer pkgactdrift:Pkg_OnTime .
+
+# v1.23.0 (G103, consumer-package handover, owner's ruling 2026-10-09): OntologyHeaderVersionConsistencyShape --
+# an owl:Ontology header whose owl:versionInfo disagrees with the version segment of its own owl:versionIRI.
+# ex:Hdr_Mismatch: versionIRI ends in ".../2.0.0", versionInfo says "1.9.0" -> fires (header disagrees with itself).
+ex:Hdr_Mismatch a owl:Ontology ;
+    owl:versionIRI <http://example.org/fixture-negative/ledger/2.0.0> ;
+    owl:versionInfo "1.9.0" .

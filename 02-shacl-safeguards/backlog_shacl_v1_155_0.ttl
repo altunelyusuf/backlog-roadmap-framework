@@ -9,9 +9,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog/shacl/1.154.0> ;
-    owl:versionInfo "1.154.0" ;
-    owl:priorVersion <http://example.org/backlog-shapes/1.153.0> , <http://example.org/backlog-shapes/1.152.0> , <http://example.org/backlog-shapes/1.151.0> , <http://example.org/backlog-shapes/1.150.0> , <http://example.org/backlog-shapes/1.149.0> , <http://example.org/backlog-shapes/1.148.0> , <http://example.org/backlog-shapes/1.147.0> , <http://example.org/backlog-shapes/1.146.0> ;
+    owl:versionIRI <http://example.org/backlog/shacl/1.155.0> ;
+    owl:versionInfo "1.155.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.154.0> , <http://example.org/backlog-shapes/1.153.0> , <http://example.org/backlog-shapes/1.152.0> , <http://example.org/backlog-shapes/1.151.0> , <http://example.org/backlog-shapes/1.150.0> , <http://example.org/backlog-shapes/1.149.0> , <http://example.org/backlog-shapes/1.148.0> , <http://example.org/backlog-shapes/1.147.0> , <http://example.org/backlog-shapes/1.146.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.145.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.144.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.143.0> ;
@@ -810,7 +810,8 @@ backlog:DependencyDisclosureShape a sh:NodeShape ;
         }""" ] ;
     sh:sparql [ a sh:SPARQLConstraint ;
         sh:message "A disclosure must name a work item or a container, not something else." ;
-        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ,
+                                  [ sh:prefix "rdfs" ; sh:namespace "http://www.w3.org/2000/01/rdf-schema#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             $this backlog:disclosesDependencyOn ?dep .
             FILTER NOT EXISTS { ?dep a ?ci . ?ci rdfs:subClassOf* backlog:WorkItem }
@@ -1957,7 +1958,8 @@ backlog:EnhancementProposalShape a sh:NodeShape ;
                   sh:message "A proposal must carry a status." ] ;
     sh:sparql [ a sh:SPARQLConstraint ;
         sh:message "An enhancement proposal may not also be a work item: a work item is something this development can decide to do, and this is not." ;
-        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ,
+                                  [ sh:prefix "rdfs" ; sh:namespace "http://www.w3.org/2000/01/rdf-schema#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE { $this a ?c . ?c rdfs:subClassOf* backlog:WorkItem }""" ] .
 
 backlog:RegisterSessionShape a sh:NodeShape ;
@@ -2313,7 +2315,8 @@ backlog:ExecutionTaskShape a sh:NodeShape ;
         sh:select """SELECT $this WHERE { $this backlog:rankedOnRoadmap ?r }""" ] ;
     sh:sparql [ a sh:SPARQLConstraint ;
         sh:message "L1: this execution task is not part of any product backlog item. A task exists only as a step of the item it came from; one belonging to nothing has no value to inherit and no completion that means anything." ;
-        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ,
+                                  [ sh:prefix "rdfs" ; sh:namespace "http://www.w3.org/2000/01/rdf-schema#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             FILTER NOT EXISTS { ?p backlog:decomposesInto $this . ?p a/rdfs:subClassOf* backlog:ProductBacklogItem }
             FILTER NOT EXISTS { ?e backlog:producesTask $this }
@@ -4822,7 +4825,8 @@ backlog:GroomedAheadShape a sh:NodeShape ;
     rdfs:label "Advisory: a story groomed more than one iteration ahead"@en ;
     sh:sparql [ a sh:SPARQLConstraint ;
         sh:message "Advisory: this refinement grooms for an iteration that starts more than 28 days after the grooming. Detail written that far ahead of the work is written against assumptions the work has not tested yet — and it will be rewritten or, worse, followed." ;
-        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ,
+                                  [ sh:prefix "xsd" ; sh:namespace "http://www.w3.org/2001/XMLSchema#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             $this backlog:groomsForIteration ?it ; backlog:refinedAt ?ra .
             ?it backlog:iterationStart ?is .
@@ -4973,7 +4977,8 @@ backlog:PlannedFromEvidenceShape a sh:NodeShape ;
     rdfs:label "Advisory: a planned span far from measured experience"@en ;
     sh:sparql [ a sh:SPARQLConstraint ;
         sh:message "Advisory: this open iteration declares a span more than ten times the longest duration any closed iteration actually recorded. Planning far above measured experience is how a schedule becomes decorative — the dates stop describing the work and start describing a cadence borrowed from somewhere else." ;
-        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ,
+                                  [ sh:prefix "xsd" ; sh:namespace "http://www.w3.org/2001/XMLSchema#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             $this backlog:iterationStart ?s ; backlog:iterationEnd ?e .
             FILTER NOT EXISTS { $this backlog:hasState backlog:Done }
@@ -5140,7 +5145,9 @@ backlog:ClassReachabilityShape a sh:NodeShape ;
     rdfs:label "Advisory: a class the vocabulary cannot reach"@en ;
     sh:sparql [ a sh:SPARQLConstraint ;
         sh:message "Advisory: no property names this class as a range and no individual is of this type, so nothing in the vocabulary can point at it and nothing uses it. Package sat unused for 91 releases in exactly this state, and the cost was a wrong conclusion drawn in good faith — packages were believed impossible before delivery when the concept had existed all along. Advisory rather than violation because 25 such classes exist today and a rule that fires 25 times on its first run gets suppressed." ;
-        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ,
+                                  [ sh:prefix "owl" ; sh:namespace "http://www.w3.org/2002/07/owl#"^^xsd:anyURI ] ,
+                                  [ sh:prefix "rdfs" ; sh:namespace "http://www.w3.org/2000/01/rdf-schema#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             FILTER STRSTARTS(STR($this), "http://example.org/backlog#")
             FILTER NOT EXISTS { $this owl:oneOf ?l }
@@ -5581,7 +5588,8 @@ backlog:UndeclaredIndividualShape a sh:NodeShape ;
     rdfs:label "Advisory: an individual outside its class's own closed enumeration"@en ;
     sh:sparql [ a sh:SPARQLConstraint ;
         sh:message "Advisory: some individual is typed as this class and is not a member of its own owl:oneOf list. A closed enumeration with individuals outside it is a contradiction the ontology states and nothing evaluates — Ach_Withdrawn sat in exactly this state from v1.82.0 to v1.128.0, used twice and declared nowhere; GoalFacing's Facing_Exclusion sat in the identical state, found by generalizing this check rather than trusting the narrow, single-class version that fixed only the first instance." ;
-        sh:prefixes [ sh:declare [ sh:prefix "rdf" ; sh:namespace "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xsd:anyURI ] ] ;
+        sh:prefixes [ sh:declare [ sh:prefix "rdf" ; sh:namespace "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xsd:anyURI ] ,
+                                  [ sh:prefix "owl" ; sh:namespace "http://www.w3.org/2002/07/owl#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             $this owl:oneOf ?list .
             ?member a $this .
@@ -7638,3 +7646,35 @@ backlog:ModuleAudienceDeclaredShape a sh:NodeShape ;
     rdfs:label "A module record declares its audience (L3)"@en ;
     sh:property [ sh:path backlog:moduleAudience ; sh:minCount 1 ; sh:maxCount 1 ; sh:in ( backlog:Aud_Public backlog:Aud_Private ) ;
         sh:message "L3: this module record declares no audience, or declares more than one. The public copy is cut by the declaration; a module that says nothing would be published or withheld by a list nobody can read in the data." ] .
+
+#################################################################
+#  v1.155.0 (G103, consumer-package handover, owner's ruling 2026-10-09) --
+#  an ontology header's declared version agrees with its own version IRI.
+#
+#  Answers handover question 3 (enforcement) for the GRAPH-INTERNAL half only:
+#  that owl:versionInfo names the same version owl:versionIRI's own path already
+#  names. The OTHER half of BP-D7 alignment -- that this version also matches the
+#  FILENAME on disk -- has no graph to read a filename from, so it is not and
+#  cannot be a SHACL shape; Gate K (backlog_validate gate_k()) already checks that
+#  half generically, for any versioned .ttl file carrying this header, with no
+#  change needed here. This shape and Gate K are deliberately two mechanisms, one
+#  each for the two things a SHACL graph can and cannot see.
+#################################################################
+backlog:OntologyHeaderVersionConsistencyShape a sh:NodeShape ;
+    sh:targetClass owl:Ontology ;
+    sh:severity sh:Violation ;
+    rdfs:label "An ontology header's declared version agrees with its own version IRI (L1)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this ontology's owl:versionInfo does not match the version segment of its own owl:versionIRI, for any pairing of the two the graph carries. The header disagrees with itself about which version this is -- the one disagreement BP-D7 exists to rule out, now checked on the header the same way it is checked on the filename. (Checks for at least one self-consistent pair rather than requiring every declared pair agree: once several files that share one ontology IRI are merged for validation -- this package's own TBox, shapes and abox all declare <http://example.org/backlog> -- a SPARQL query has no way to keep a versionIRI paired with the versionInfo from its OWN file; that pairing is lost the moment file boundaries are. A shared IRI with each file's own consistent pair intact stays silent; one with no consistent pair at all -- a true header contradiction -- still fires.)" ;
+        sh:prefixes [ sh:declare [ sh:prefix "owl" ; sh:namespace "http://www.w3.org/2002/07/owl#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT DISTINCT $this WHERE {
+            { $this owl:versionIRI ?x } UNION { $this owl:versionInfo ?x }
+            FILTER NOT EXISTS {
+                $this owl:versionIRI ?iri .
+                $this owl:versionInfo ?info .
+                BIND(REPLACE(STR(?iri), "^.*/", "") AS ?tail)
+                FILTER (?tail = STR(?info))
+            }
+        }""" ] ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "Hdr_Mismatch" .

@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v73.0.0
+# Lineage Operating Discipline — v74.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -3029,3 +3029,69 @@ having a living ledger.
 audit the sending project's own tooling for every place it pins a filename — that project's own repoint, not this
 package's. The L3 re-score-before-rename sequencing is named as the right shape of fix, not verified against the
 sending project's own release script, which this session has not read. Related: BP-D7, BP-D2, G94.
+
+## G103 — A ledger may carry the same owl:Ontology header this package already carries on its own register, and the two halves of that header's alignment split cleanly between a shape and a gate because only one of them can see a filename
+
+A consumer package's handover, 2026-10-09, carrying its own lineage ledger under this framework: the ledger is
+plain data — no `owl:Ontology`, no `owl:versionIRI`, no `owl:versionInfo`, no `owl:priorVersion` — found by G102's
+filename-pattern resolution. The owner's standing rule, added since G102, asks every piece of ontology/tooling work
+to be ontology-native first, built on common standards, with scripting only where no standard capability fits.
+Filename-pattern resolution is exactly the one step in finding the ledger that is not ontology-native: the standard
+way to say "which version of this is current" is the version chain (`owl:versionIRI`, `owl:priorVersion`), queried
+with SPARQL, not read off a path string. The handover asked five questions; this rules on all five.
+
+**Checked directly against this package's own current files, not the handover's vendored copy.** The handover's own
+test (header added to a copy of the ledger, checked against vendored T-Box v1.95.0 and shapes v1.121.0: 2,137
+results either way) explicitly disclosed it had not tried anything released after v1.121.0. This package is now at
+shapes v1.155.0. Re-checked here, independently, against the CURRENT files:
+- **Precedent already exists.** This package's own register ABox (`01-ontologies/backlog_abox_v1_35_0.ttl`) already
+  carries exactly the header the handover proposes: an `owl:Ontology` node with `owl:versionIRI`, `owl:versionInfo`,
+  and an `owl:priorVersion` chain, on instance data, not schema. The question is not whether a ledger may carry this
+  header; this package's own ledger-equivalent already does.
+- **No shape targets `owl:Ontology`**, confirmed by direct query of the current shapes file before this ruling's own
+  shape was added. The two shapes the handover named as a possible conflict (`UndeclaredIndividualShape`,
+  `ClassReachabilityShape`) target `owl:Class` and query instance data reachable from a class (`?member a $this`,
+  `?i a $this`) — neither fires on a node merely typed `owl:Ontology`. No interaction found, now checked against
+  current rather than vendored.
+- **Gate K is already generic enough.** `backlog_validate`'s `gate_k()` does not special-case "ontology files" versus
+  "data files" — it walks every shipped `.ttl` file whose name carries a version token, finds every `owl:Ontology`
+  declaration inside it, and checks `owl:versionInfo` and the version segment of `owl:versionIRI` against the
+  filename's own token. The moment a ledger carries this header, Gate K enforces the filename half automatically.
+  Zero change to Gate K was needed for that half.
+- **A SHACL shape cannot do the other half.** A shape sees only the RDF graph pyshacl was handed; it has no access to
+  the path the file was read from. It can check that a header agrees with ITSELF (`owl:versionInfo` names the same
+  version `owl:versionIRI`'s own path names) but never that the header agrees with the FILENAME — that is
+  structurally Gate K's job, or the adopter's own equivalent, not something to ask a shape to do.
+
+**Rulings, one per question asked.**
+1. **Permission.** Granted. A ledger may be declared `owl:Ontology`, on the same terms this package's own register
+   already uses it: instance data, not schema, carrying the version chain alongside whatever else it records. There
+   is no native, pure-data alternative to recommend instead — the version chain IS the native mechanism, which is
+   why this is granted rather than redirected.
+2. **Header contract.** Accepted as proposed, unchanged: one `owl:Ontology` node per ledger file; a stable ontology
+   IRI with the version appended after `/` as the version IRI; `owl:versionInfo` equal to the filename's version
+   token (the existing BP-D7 alignment rule, now stated of the header too); `owl:priorVersion` naming the previous
+   version IRI, absent only on the first version. This is this package's own abox pattern, not a new one invented
+   for the occasion.
+3. **Enforcement.** A shape is added to this release: `OntologyHeaderVersionConsistencyShape`
+   (`02-shacl-safeguards`, targets `owl:Ontology`), checking the graph-internal half — that `owl:versionInfo` agrees
+   with the version segment of the node's own `owl:versionIRI`. It is proven by a planted case
+   (`Hdr_Mismatch`, `fixture_negative`) and declares that proof (`backlog:provenByFixture`,
+   `backlog:fixtureCaseName`), per this package's own A2 practice. The filename-alignment half is **not** a new
+   shape — it cannot be one — and is already covered, with no change, by Gate K's existing generic walk; an adopter
+   without an equivalent gate should add one rather than ask this framework for a SHACL shape that cannot do that
+   job.
+4. **Three-file rule.** Confirmed: the header lives inside the ledger file itself. It does not split the ledger into
+   a separate ontology-declaration file and a data file, and creates no such obligation — same answer G102 already
+   gave for the ledger's name: one axis (file structure) is exempted by the owner's standing exemption for
+   lineage/governance/archive files, a different axis (header/version content) is not, and carrying a header inside
+   the one ledger file changes neither.
+5. **Interaction.** None found, checked against this package's CURRENT shapes (v1.155.0), not the vendored v1.121.0
+   the handover's own test used. `OntologyHeaderVersionConsistencyShape` is the only shape now targeting
+   `owl:Ontology`; nothing else reads that type.
+
+**What is not claimed.** This does not require every adopter's ledger to add the header — it is permission and a
+contract, not a mandate; a consumer that prefers to stay pure data and resolve purely by filename pattern, as G102
+already allows, may keep doing that. It does not build or endorse any filename-alignment SHACL shape, because none
+can exist; an adopter without its own Gate-K-equivalent needs one, and that is the adopter's own tooling, not this
+package's. Related: G102, BP-D7, A2 (provenByFixture).

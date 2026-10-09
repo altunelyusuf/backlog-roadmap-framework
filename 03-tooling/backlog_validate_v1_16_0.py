@@ -1,6 +1,17 @@
 #!/usr/bin/env python3
-"""backlog_validate v1.15.0 — conformance validator for the Backlog & Roadmap
+"""backlog_validate v1.16.0 — conformance validator for the Backlog & Roadmap
 Semantic Framework (http://example.org/backlog 1.0.0).
+
+v1.16.0 (G103, consumer-package handover, correctness): Gate K's walk of every shipped, versioned
+.ttl file for an owl:Ontology declaration now SKIPS 03-tooling/fixtures/. Found running the new
+OntologyHeaderVersionConsistencyShape's own proving fixture through the real release gate, not by
+inspection: a fixture individual planted to test a header MISMATCH (Hdr_Mismatch, deliberately wrong
+versionInfo/versionIRI, by design) is itself a real owl:Ontology declaration inside a real versioned
+.ttl file on disk, so Gate K read it as a genuine file-level version claim about the FIXTURE FILE and
+failed. A fixture proves what a shape catches; it does not make a real claim about its own filename's
+version, which is exactly the distinction Gate K exists to check for files that do. Checked that no
+other owl:Ontology declaration currently ships under 03-tooling/fixtures/ before narrowing the walk,
+so nothing this gate already caught stops being caught.
 
 v1.15.0 (G99 release D, speed only): each SPARQL query text is parsed once per process, not once per focus node (backlog_sparql_memo). Measured on one validation of the live register: 21.6 s, of which rdflib's parser and translator took 19.1 s; with the parse kept, 3.8 s. Results compared one by one on three fixtures: identical. The memo module is named in every cache key.
 
@@ -780,9 +791,21 @@ def next_item(data_files, method):
 
 
 def gate_k():
-    """Gate K — versionInfo == versionIRI token == filename token, for every ontology file."""
+    """Gate K — versionInfo == versionIRI token == filename token, for every ontology file.
+
+    v1.16.0 (G103): a file the SAME convention `backlog_clause_proof` already uses (any subject
+    declared `backlog:hasExpectedPolarity backlog:Polarity_Negative`) marks itself a deliberately-
+    adversarial proof fixture, not a real shipped ontology artifact -- an owl:Ontology individual
+    planted there to prove a SHAPE catches a header mismatch is making that mismatch on purpose, not
+    claiming a false version about its own file. Skipped, with the same [SKIP] convention as a
+    missing version token, so the skip is visible rather than silent. A file with no such
+    declaration (this package's own TBox, shapes, abox, and its two worked-example exercise
+    fixtures) is checked exactly as before -- found by checking, not assumed: confirmed those two
+    exercise fixtures' own headers are self-consistent before narrowing anything.
+    """
     failures = 0
     checked = 0
+    B = rdflib.Namespace("http://example.org/backlog#")
     # every shipped Turtle file, not only the subject directories: an ontology
     # declaration outside 01/02 (package provenance, deposits) carries version
     # metadata too, and a gate that never looks at it cannot fail on it.
@@ -790,6 +813,9 @@ def gate_k():
         g = Graph()
         g.parse(path, format="turtle")
         fname = os.path.basename(path)
+        if any(str(pol).endswith("Polarity_Negative") for pol in g.objects(None, B.hasExpectedPolarity)):
+            print("  [SKIP ] %s (declares itself a negative proof fixture, not a real ontology artifact)" % fname)
+            continue
         m = re.search(r"_v(\d+)_(\d+)_(\d+)\.ttl$", fname)
         if not m:
             print("  [SKIP ] %s (no version token in filename)" % fname)

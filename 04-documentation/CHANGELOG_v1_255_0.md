@@ -11260,6 +11260,47 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.377.0 — G103: a lineage ledger may carry an ontology header, on this package's own abox pattern; seven undeclared SPARQL prefixes fixed
+
+**Unplanned work:** a handover arrived mid-session from a consumer package that keeps a lineage ledger under this
+framework, asking whether the ledger may carry an `owl:Ontology` header (`owl:versionIRI`/`owl:versionInfo`/
+`owl:priorVersion`) instead of being found purely by filename pattern, per the owner's standing rule to be
+ontology-native first. Neither moves a Story or Task.
+
+**Checked directly against this package's own current files, not the handover's vendored T-Box v1.95.0/shapes
+v1.121.0 test, which it disclosed had not tried anything released since.** Re-verified against shapes v1.155.0:
+no shape targets `owl:Ontology`; this package's own register abox (`backlog_abox_v1_35_0.ttl`) already carries
+exactly the proposed header, on instance data; Gate K (`backlog_validate`'s `gate_k()`) is already generic across
+any versioned `.ttl` file carrying such a header, with zero change needed for the filename-alignment half.
+
+**Ruled G103** (`LINEAGE_OPERATING_DISCIPLINE_v74_0_0.md`): permission granted; header contract accepted as
+proposed, unchanged; enforcement split cleanly between what a SHACL shape can see (the header agreeing with
+itself) and what it structurally cannot (the header agreeing with the filename, which has no path to read from
+inside a graph) — the first gets a new shape here, the second stays Gate K's job (or the adopter's own
+equivalent); three-file rule confirmed, header lives inside the ledger file, no split; no interaction found with
+any current shape.
+
+**Built:** `OntologyHeaderVersionConsistencyShape` (`02-shacl-safeguards`, targets `owl:Ontology`, Violation) —
+fires when a node's `owl:versionInfo` disagrees with the version segment of its own `owl:versionIRI`. Proven on a
+planted case (`Hdr_Mismatch`, `fixture_negative` now v1.23.0) and declares its own proof
+(`backlog:provenByFixture`, `backlog:fixtureCaseName`), per this package's A2 practice from the first commit, not
+added retroactively. `backlog_clause_proof` now reports 111/111 declared proofs verified (was 110/110 before this
+shape existed).
+
+**Also fixed, same handover's section 5:** seven SPARQL constraints in the shapes file used a prefix inside their
+`sh:select` body that `sh:prefixes` never declared — tolerated by pySHACL, refused by a strict SHACL engine.
+Independently re-verified by rdflib query over every shape's `sh:select` text against its own `sh:prefixes`
+declarations (not taken on the handover's word), and the one prefix the handover itself had not identified
+(`ExecutionTaskShape`'s third `sh:sparql` block) resolved to `rdfs`. Fixed: `GroomedAheadShape`,
+`PlannedFromEvidenceShape` (`xsd`); `EnhancementProposalShape`, `DependencyDisclosureShape`'s second block
+(`rdfs`); `UndeclaredIndividualShape` (`owl`, alongside its existing `rdf`); `ClassReachabilityShape` (`owl` and
+`rdfs`); `ExecutionTaskShape`'s third block (`rdfs`). Verified zero shapes with an undeclared prefix remain.
+
+**Response:** `RESPONSE_backlog-roadmap-framework_to_consumer-package_lineage-ontology-header_v1_0_0.md`, filed
+with the handover in `07-handover-inbox/accepted/`.
+
+Shapes v1.155.0, fixtures negative v1.23.0, lineage discipline v74.0.0.
+
 ## v1.376.0 — efficiency: the version-freeze gate's 586 `git show` process spawns (the largest single process-count cost measured) collapsed to one batched read, and a duplicate full run removed
 
 **Unplanned work:** owner-directed continuation of the same "further enhancement opportunities" request, specifically the efficiency half parked at the end of v1.375.0 with hard numbers in hand rather than a vague estimate. Neither moves a Story or Task.
