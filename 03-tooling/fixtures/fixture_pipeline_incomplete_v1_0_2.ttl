@@ -1,12 +1,11 @@
 # Lineage pipeline — stages built in order, each consuming the last.
 #
-# Experiment A of the v1.85.0 investigation. Every digest reproduces
-# and the chain is a line. Shipped so the passing shape is on record
-# alongside the failing one.
+# The same pipeline with its Backlog stage output removed (ruling G101): every digest still reproduces and the chain is
+# a line, so the verifier passes it, and --require-complete refuses it. This is the Lineage_2 state at an adopting project.
 #
 @prefix backlog: <http://example.org/backlog#> .
 @prefix core: <http://example.org/core#> .
-@prefix ex: <http://example.org/recovery-strategy#> .
+@prefix ex: <http://example.org/pl#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
@@ -103,14 +102,12 @@ ex:Out_Goal a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Goal ;
     backlog:hasStateDigest "3f8c4ef5ba7b3e2d41f0e83e3cdc2df7245edc5c7f4a91afc3f72dd71685eb76" ; backlog:consumesOutput ex:Out_Scope ; backlog:closedAtCommit "fixture-only-3" .
 ex:Out_Objective a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Objective ;
     backlog:hasStateDigest "708196fe4b6f59f34a9be5b756cdf2e9b2cae02618dc7014b01ad36bd84f0631" ; backlog:consumesOutput ex:Out_Goal ; backlog:closedAtCommit "fixture-only-4" .
-ex:Out_Backlog a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Backlog ;
-    backlog:hasStateDigest "38640a7cf7a6bbd2c5b3495329e9f8da3db2acc9409a23638dc5e83317c34358" ; backlog:consumesOutput ex:Out_Objective ; backlog:closedAtCommit "fixture-only-5" .
 
 ex:D1 backlog:derivesFromMissionClause "practitioners recover unaided" .
 
 ex:D2 backlog:derivesFromMissionClause "practitioners recover unaided" .
 
-
+<http://example.org/pl#P> backlog:hasExpectedPolarity backlog:Polarity_Positive .
 # Conformance-goal pattern (G42/AdoptionConformanceGoalShape), self-contained,
 # using this package's own already-proven Goal_BRSFConformance/Obj_BRSFConformanceHeld
 # structure as the exact template rather than re-deriving requirements by trial.
@@ -223,65 +220,26 @@ ex:Session_20260907 a backlog:RegisterSession ;
 # digests do not reproduce either, for the same structural reason (the digest is
 # register-wide, and the register now holds eight lineages), and are left as the
 # historical record they are, disclosed in the v1.201.0 changelog.
-
-#################################################################
-#  fixture_recovery_strategy v1.0.0 -- DIVIDE AND CONQUER, POSITIVE.
-#  Built on fixture_pipeline_v1_1_0 (conformant, one lineage Lin_PL
-#  with deliverables D1, D2). Story: Bypass1 caught S_PL (satisfies
-#  D1) and S_PL2 (satisfies D2) before the chain; the lineage was
-#  frozen by the bypass (FOUND), then Restart1 (Strat_DivideAndConquer,
-#  a later commit) split it into parts P1 (for D1) and P2 (for D2),
-#  each rebuilt in its own five commits, each admitting its item; the
-#  parent's combine output Out_C_Backlog combines both parts' Backlog
-#  outputs. Expected: 0 violations; order check ORDERED for Lin_PL, P1, P2.
-#################################################################
-ex:S_PL backlog:satisfiesDeliverable ex:D1 ; backlog:belongsToLineage ex:P1 ; backlog:preLineageItem true ; backlog:admittedByOutput ex:P1_Backlog .
-ex:S_PL2 a backlog:Story ; backlog:hasIdentifier "S-PL2" ; backlog:hasState backlog:Proposed ;
-    backlog:memberOfContainer ex:BL ; backlog:notYetScoreable true ; backlog:hasScoreabilityReason "Scored at next planning." ;
-    backlog:belongsToLineage ex:Lin_PL , ex:P2 ; backlog:hasInvestmentCategory backlog:Cat_NewCapability ; backlog:pursuesObjective ex:O ;
-    backlog:satisfiesDeliverable ex:D2 ; backlog:preLineageItem true ; backlog:admittedByOutput ex:P2_Backlog .
-ex:Out_Mission backlog:belongsToLineage ex:Lin_PL ; backlog:outputRetracted true .
-ex:Out_Scope backlog:belongsToLineage ex:Lin_PL ; backlog:outputRetracted true .
-ex:Out_Goal backlog:belongsToLineage ex:Lin_PL ; backlog:outputRetracted true .
-ex:Out_Objective backlog:belongsToLineage ex:Lin_PL ; backlog:outputRetracted true .
-ex:Out_Backlog backlog:belongsToLineage ex:Lin_PL ; backlog:outputRetracted true .
-ex:Bypass1 a backlog:LineageBypass ; backlog:bypassedLineage ex:Lin_PL ; backlog:hasFailureMode backlog:FM_LineageBypass ;
-    backlog:hasFindingScope backlog:Scope_Methodology ; backlog:hasRootCause "Chain written after the work (fixture)." ;
-    backlog:bypassedItem ex:S_PL , ex:S_PL2 ; backlog:itemFirstCommit "S_PL c1 1000" , "S_PL2 c1 1000" ;
-    backlog:bypassedOutput ex:Out_Mission , ex:Out_Scope , ex:Out_Goal , ex:Out_Objective , ex:Out_Backlog ;
-    backlog:chainClosedCommit "c9 9000" ; backlog:detectedAt "2026-09-07T09:00:00Z"^^xsd:dateTime ; backlog:detectedBy "backlog_lineage_order_check_v1_2_0" ;
-    backlog:belongsToLineage ex:Lin_PL .
-ex:Lin_PL backlog:lineageFrozen true ; backlog:frozenBy ex:Bypass1 .
-ex:P1 a backlog:Lineage ; rdfs:label "Part 1"@en ; backlog:lineageOrdinal 11 ; backlog:lineageArchived false ; backlog:parentLineage ex:Lin_PL ; backlog:partForDeliverable ex:D1 ; backlog:lineageForMission ex:M .
-ex:P2 a backlog:Lineage ; rdfs:label "Part 2"@en ; backlog:lineageOrdinal 12 ; backlog:lineageArchived false ; backlog:parentLineage ex:Lin_PL ; backlog:partForDeliverable ex:D2 ; backlog:lineageForMission ex:M .
-ex:Restart1 a backlog:LineageRestart ; backlog:restartsLineage ex:Lin_PL ; backlog:answersBypass ex:Bypass1 ;
-    backlog:hasRecoveryStrategy backlog:Strat_DivideAndConquer ; backlog:partLineage ex:P1 , ex:P2 ;
-    backlog:retractsOutput ex:Out_Mission , ex:Out_Scope , ex:Out_Goal , ex:Out_Objective , ex:Out_Backlog ;
-    backlog:restartedAtCommit "c10" ; backlog:decidedBy backlog:Owner ; backlog:belongsToLineage ex:Lin_PL .
-ex:P1_Mission a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Mission ; backlog:belongsToLineage ex:P1 ; backlog:closedAtCommit "c11" ; backlog:hasStateDigest "P10" .
-ex:P1_Scope a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Scope ; backlog:belongsToLineage ex:P1 ; backlog:consumesOutput ex:P1_Mission ; backlog:closedAtCommit "c12" ; backlog:hasStateDigest "P11" .
-ex:P1_Goal a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Goal ; backlog:belongsToLineage ex:P1 ; backlog:consumesOutput ex:P1_Scope ; backlog:closedAtCommit "c13" ; backlog:hasStateDigest "P12" .
-ex:P1_Objective a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Objective ; backlog:belongsToLineage ex:P1 ; backlog:consumesOutput ex:P1_Goal ; backlog:closedAtCommit "c14" ; backlog:hasStateDigest "P13" .
-ex:P1_Backlog a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage ex:P1 ; backlog:consumesOutput ex:P1_Objective ; backlog:closedAtCommit "c15" ; backlog:hasStateDigest "P14" .
-ex:P2_Mission a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Mission ; backlog:belongsToLineage ex:P2 ; backlog:closedAtCommit "c11" ; backlog:hasStateDigest "P20" .
-ex:P2_Scope a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Scope ; backlog:belongsToLineage ex:P2 ; backlog:consumesOutput ex:P2_Mission ; backlog:closedAtCommit "c12" ; backlog:hasStateDigest "P21" .
-ex:P2_Goal a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Goal ; backlog:belongsToLineage ex:P2 ; backlog:consumesOutput ex:P2_Scope ; backlog:closedAtCommit "c13" ; backlog:hasStateDigest "P22" .
-ex:P2_Objective a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Objective ; backlog:belongsToLineage ex:P2 ; backlog:consumesOutput ex:P2_Goal ; backlog:closedAtCommit "c14" ; backlog:hasStateDigest "P23" .
-ex:P2_Backlog a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage ex:P2 ; backlog:consumesOutput ex:P2_Objective ; backlog:closedAtCommit "c15" ; backlog:hasStateDigest "P24" .
-ex:Out_C_Backlog a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage ex:Lin_PL ;
-    backlog:combinesOutput ex:P1_Backlog , ex:P2_Backlog ; backlog:closedAtCommit "c16" ; backlog:hasStateDigest "combine" .
-
-<http://example.org/recovery-strategy#> backlog:hasExpectedPolarity backlog:Polarity_Positive .
-# v1.104.0: the epic belongs to the restarted lineage too; a restart flags EVERY item (RestartFlagsEveryItemShape). The epic
-# is admitted by the parent's combine output, as an item that belongs to no single deliverable.
-ex:EP backlog:preLineageItem true ; backlog:admittedByOutput ex:Out_C_Backlog .
-# v1.1.0 (2026-09-09): lineage status stated (TBox v1.89.0, LineageStatusShape); derived from the fixture's own outputs and item states.
+# v1.2.0 (2026-09-09): lineage status stated (TBox v1.89.0, LineageStatusShape); derived from the fixture's own outputs and item states.
 ex:Lin_PL backlog:hasLineageStatus backlog:LS_Backlogged .
-ex:P1 backlog:hasLineageStatus backlog:LS_Backlogged .
-ex:P2 backlog:hasLineageStatus backlog:LS_Backlogged .
+# v1.3.0 (2026-09-10): status corrected from LS_InProgress to LS_Backlogged -- every item here is
+# Proposed, and InProgressNeedsStartedWorkShape now refuses a claim of work under way with no started work.
+# v1.4.0 (2026-09-10): status corrected LS_Backlogged -> LS_Opened, derived from this fixture's own stage
+# outputs and item states. The claim was unsupported by the data it sits in; InProgressNeedsStartedWorkShape
+# and LineageStatusShape now refuse such a claim.
 
-# auto-fix (v1.123.0 Executor work): mandatory backlog:responsible for 3 pre-existing in-scope WorkItem(s); a single shared default Executor_IndividualHuman, since an individual responsible is always permitted whether the item is atomic or complex.
-<http://example.org/fixture-autofix#DefaultExecutor> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/backlog#Executor_IndividualHuman> .
-<http://example.org/recovery-strategy#EP> <http://example.org/backlog#responsible> <http://example.org/fixture-autofix#DefaultExecutor> .
-<http://example.org/recovery-strategy#S_PL> <http://example.org/backlog#responsible> <http://example.org/fixture-autofix#DefaultExecutor> .
-<http://example.org/recovery-strategy#S_PL2> <http://example.org/backlog#responsible> <http://example.org/fixture-autofix#DefaultExecutor> .
+# v(next) 2026-09-10: the stage outputs were never linked to the lineage they close, so no rule
+# could tell which chain they belong to and the status could not be checked against them. Linked here.
+ex:Out_Mission backlog:belongsToLineage ex:Lin_PL .
+ex:Out_Scope backlog:belongsToLineage ex:Lin_PL .
+ex:Out_Goal backlog:belongsToLineage ex:Lin_PL .
+ex:Out_Objective backlog:belongsToLineage ex:Lin_PL .
+ex:Out_Backlog backlog:belongsToLineage ex:Lin_PL .
+
+# auto-fix (v1.123.0 Executor work): mandatory backlog:responsible for 2 pre-existing in-scope WorkItem(s); a single shared default Executor, since an individual responsible is always permitted whether the item is atomic or complex.
+# relabelled (v1.380.0, owner-directed "set yourself as the default executor"): the same IRI, now typed Executor_SingleAgent and carrying its own label/definition -- Claude, the AI agent, consolidated in place per L-119 rather than duplicated as a second individual.
+<http://example.org/fixture-autofix#DefaultExecutor> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/backlog#Executor_SingleAgent> .
+<http://example.org/fixture-autofix#DefaultExecutor> <http://www.w3.org/2000/01/rdf-schema#label> "Claude \u2014 default AI-agent executor"@en .
+<http://example.org/fixture-autofix#DefaultExecutor> <http://www.w3.org/2004/02/skos/core#definition> "The one default Executor this framework currently attributes AI-agent-performed work in this package to: Claude, the AI agent carrying out BRSF's own ontology-engineering sessions, typed backlog:Executor_SingleAgent because it is one non-human executing party with no standing team membership and no human identity behind it. First planted, untyped beyond a bare Executor_IndividualHuman triple, as a throwaway stand-in when backlog:responsible became mandatory and sixteen pre-existing fixture/reference files each needed one filled in; relabelled here in place, same IRI, per L-119 (consolidate rather than duplicate) once the owner ruled the framework should name its own executing party honestly rather than misclassify an AI agent as a human."@en .
+<http://example.org/pl#EP> <http://example.org/backlog#responsible> <http://example.org/fixture-autofix#DefaultExecutor> .
+<http://example.org/pl#S_PL> <http://example.org/backlog#responsible> <http://example.org/fixture-autofix#DefaultExecutor> .

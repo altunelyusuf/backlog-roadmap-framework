@@ -1349,9 +1349,10 @@ ex:EP001 backlog:responsible ex:Team_Good .
 
 # ExecutorResponsibilityShape clause 1 (mandatory presence) and clause 2 (atomic items keep an
 # individual or single-agent responsible): the remaining pre-existing in-scope items all take an
-# individual human.
-ex:T_ResetMail backlog:responsible ex:Ex_Alice .
-ex:T_ResetToken backlog:responsible ex:Ex_Alice .
+# individual human, except T_ResetMail and T_ResetToken -- reassigned further down to the default
+# Executor_SingleAgent (owner follow-up, "set yourself as the default executor") so the real
+# default-executor CompetencyMatchShape proof has two already-clean atomic items to attach to,
+# rather than inventing new ones that would each need this fixture's full compliance bar.
 ex:US005 backlog:responsible ex:Ex_Alice .
 ex:US006 backlog:responsible ex:Ex_Alice .
 
@@ -1382,3 +1383,39 @@ ex:FR_Good a backlog:FailureRecord ;
     backlog:recordedAt "2026-01-01T00:00:00Z"^^xsd:dateTime ;
     backlog:failureExpiresAt "2026-04-01T00:00:00Z"^^xsd:dateTime .
 ex:Prof_Alice backlog:hasFailureRecord ex:FR_Good .
+
+# fixture_positive_v1_18_0 (shapes v1.156.0, owner follow-up on v1.379.0's Executor/competency
+# work -- "set yourself as the default executor" and "match the task competency requirements
+# with abilities of executors"): the generic Ex_Alice proof above already shows the shape logic
+# works in the abstract; this grounds the same proof in the REAL individual the framework will
+# actually attribute AI-agent work to -- the same IRI, <http://example.org/fixture-autofix#
+# DefaultExecutor>, that the sixteen auto-fixed reference files already share, now relabelled
+# Executor_SingleAgent and given an honest CompetencyProfile rather than left untyped-in-effect.
+# Capabilities chosen to reflect what this agent has actually been doing in THIS package this
+# session (conceptual modelling and requirements reading, SHACL authoring and clause-proving,
+# tool scripting and running, release management and backlog stewardship) -- a considered subset
+# of the closed 24, not the whole vocabulary, per the owner's own caution against over-claiming.
+<http://example.org/fixture-autofix#DefaultExecutor> backlog:hasCompetencyProfile ex:Prof_DefaultExecutor .
+ex:Prof_DefaultExecutor a backlog:CompetencyProfile ;
+    backlog:hasCapability backlog:Comp_OntologyModeling , backlog:Comp_ConceptualDataModeling ,
+        backlog:Comp_RequirementsElicitation , backlog:Comp_ShaclAuthoring , backlog:Comp_ClauseProof ,
+        backlog:Comp_ToolScripting , backlog:Comp_ToolRunOperation , backlog:Comp_ReleaseManagement ,
+        backlog:Comp_BacklogStewardship .
+
+# CompetencyMatchShape, the real-default-executor covered case: issuing and expiring reset
+# tokens is tool-scripting work, which the profile above already lists -- passes with no override.
+ex:T_ResetToken backlog:responsible <http://example.org/fixture-autofix#DefaultExecutor> ;
+    backlog:requiresCompetency backlog:Comp_ToolScripting .
+
+# CompetencyMatchShape, the real-default-executor gap-with-recorded-override case: sending mail
+# through the shared dispatcher is application coding, which the profile above does NOT list --
+# a real gap, silenced exactly as US004's is, by a GovernanceRuling naming this shape and this
+# item, proving the override path works end to end on real data, not only on abstract logic.
+ex:T_ResetMail backlog:responsible <http://example.org/fixture-autofix#DefaultExecutor> ;
+    backlog:requiresCompetency backlog:Comp_Coding .
+ex:Rul_DefExecOverride a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "GY-EXR-2" ;
+    backlog:hasRulingStatement "The default executor (Claude) is assigned to T_ResetMail despite the coding-competency gap." ;
+    backlog:hasRulingRationale "Fixture-only: proves the gate-with-override path on the real default-executor individual, not only on a generic stand-in." ;
+    backlog:enforcedByShape backlog:CompetencyMatchShape ;
+    backlog:overrideAppliesToWorkItem ex:T_ResetMail .

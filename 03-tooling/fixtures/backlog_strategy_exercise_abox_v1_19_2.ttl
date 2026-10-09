@@ -8,8 +8,9 @@
 @prefix dcterms: <http://purl.org/dc/terms/> .
 
 <http://example.org/backlog-strategy-exercise> a owl:Ontology ;
-    owl:versionIRI <http://example.org/backlog-strategy-exercise/1.19.1> ;
-    owl:versionInfo "1.19.1" ;
+    owl:versionIRI <http://example.org/backlog-strategy-exercise/1.19.2> ;
+    owl:versionInfo "1.19.2" ;
+    owl:priorVersion <http://example.org/backlog-strategy-exercise/1.19.1> ;
     owl:priorVersion <http://example.org/backlog-strategy-exercise/1.19.0> ;
     owl:priorVersion <http://example.org/backlog-strategy-exercise/1.18.0> ;
     owl:priorVersion <http://example.org/backlog-strategy-exercise/1.17.0> ;
@@ -1022,8 +1023,11 @@ ex:TT_Lin backlog:hasLineageStatus backlog:LS_Backlogged .
 # Lineage 18: this file moved to the fixtures folder, which requires a declared polarity (the one statement added by the move).
 <http://example.org/backlog-strategy-exercise> backlog:hasExpectedPolarity backlog:Polarity_Positive .
 
-# auto-fix (v1.123.0 Executor work): mandatory backlog:responsible for 14 pre-existing in-scope WorkItem(s); a single shared default Executor_IndividualHuman, since an individual responsible is always permitted whether the item is atomic or complex.
-<http://example.org/fixture-autofix#DefaultExecutor> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/backlog#Executor_IndividualHuman> .
+# auto-fix (v1.123.0 Executor work): mandatory backlog:responsible for 14 pre-existing in-scope WorkItem(s); a single shared default Executor, since an individual responsible is always permitted whether the item is atomic or complex.
+# relabelled (v1.380.0, owner-directed "set yourself as the default executor"): the same IRI, now typed Executor_SingleAgent and carrying its own label/definition -- Claude, the AI agent, consolidated in place per L-119 rather than duplicated as a second individual.
+<http://example.org/fixture-autofix#DefaultExecutor> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/backlog#Executor_SingleAgent> .
+<http://example.org/fixture-autofix#DefaultExecutor> <http://www.w3.org/2000/01/rdf-schema#label> "Claude \u2014 default AI-agent executor"@en .
+<http://example.org/fixture-autofix#DefaultExecutor> <http://www.w3.org/2004/02/skos/core#definition> "The one default Executor this framework currently attributes AI-agent-performed work in this package to: Claude, the AI agent carrying out BRSF's own ontology-engineering sessions, typed backlog:Executor_SingleAgent because it is one non-human executing party with no standing team membership and no human identity behind it. First planted, untyped beyond a bare Executor_IndividualHuman triple, as a throwaway stand-in when backlog:responsible became mandatory and sixteen pre-existing fixture/reference files each needed one filled in; relabelled here in place, same IRI, per L-119 (consolidate rather than duplicate) once the owner ruled the framework should name its own executing party honestly rather than misclassify an AI agent as a human."@en .
 <http://example.org/backlog-strategy-exercise#TF_EP> <http://example.org/backlog#responsible> <http://example.org/fixture-autofix#DefaultExecutor> .
 <http://example.org/backlog-strategy-exercise#TF_S2> <http://example.org/backlog#responsible> <http://example.org/fixture-autofix#DefaultExecutor> .
 <http://example.org/backlog-strategy-exercise#TF_S_PL> <http://example.org/backlog#responsible> <http://example.org/fixture-autofix#DefaultExecutor> .

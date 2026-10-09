@@ -1,3 +1,9 @@
+# fixture_lineage_succession v1.4.0 -- positive proof of LineageSuccession,
+# PartialScopeDeclaration and LineageReactivation, complete against the FULL suite.
+# Built on fixture_lineage_status_v1_1_0's own already-complete register (copied into this
+# fixture's own namespace, the original untouched): its lineage becomes the successor; a
+# predecessor, honestly partial, is added beneath the same Mission; a separately archived
+# lineage is reactivated for a real, distinct need.
 # Lineage pipeline — stages built in order, each consuming the last.
 #
 # Experiment A of the v1.85.0 investigation. Every digest reproduces
@@ -6,7 +12,7 @@
 #
 @prefix backlog: <http://example.org/backlog#> .
 @prefix core: <http://example.org/core#> .
-@prefix ex: <http://example.org/lineage-restart#> .
+@prefix ex: <http://example.org/fixture-succession#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
@@ -86,7 +92,7 @@ ex:EP a backlog:Epic ; backlog:hasIdentifier "E-1" ; backlog:hasTitle "Recovery"
     backlog:appliesDefinitionOfDone ex:DoD_PL ; backlog:belongsToLineage ex:Lin_PL ;
     backlog:hasInvestmentCategory backlog:Cat_NewCapability ; backlog:decomposesInto ex:S_PL .
 ex:DoD_PL a backlog:DefinitionOfDone ; rdfs:label "Fixture DoD"@en .
-ex:Lin_PL a backlog:Lineage ; backlog:lineageArchived false ; backlog:lineageForMission ex:M ; backlog:lineageOrdinal 1 .
+ex:Lin_PL a backlog:Lineage ; backlog:lineageArchived false ; backlog:lineageForMission ex:M ; backlog:lineageOrdinal 2 .
 ex:S_PL a backlog:Story ; backlog:hasIdentifier "S-PL" ; backlog:hasState backlog:Proposed ;
     backlog:memberOfContainer ex:BL ; backlog:notYetScoreable true ;
     backlog:hasScoreabilityReason "Scored at next planning." ;
@@ -224,52 +230,162 @@ ex:Session_20260907 a backlog:RegisterSession ;
 # register-wide, and the register now holds eight lineages), and are left as the
 # historical record they are, disclosed in the v1.201.0 changelog.
 
-#################################################################
-#  fixture_lineage_restart v1.0.0 -- lineage escape, POSITIVE.
-#  Built on a copy of fixture_pipeline_v1_1_0 (a conformant register
-#  with one lineage, Lin_PL, five stage outputs and one story S_PL),
-#  so the lineage-escape shapes are exercised on a register that is
-#  otherwise clean (G7: a positive fixture that fails certifies
-#  nothing). Story: the tool found S_PL first appearing before
-#  Out_Backlog (witness map: S_PL at c1, Out_* at c9); the owner
-#  restarted; the chain was rebuilt R_* at c11..c15, one per commit,
-#  and R_Backlog admitted S_PL. Expected: 0 violations; exactly one
-#  FM_LineageBypass advisory would fire if S_PL were unadmitted, and
-#  none fires here. The order check must report ORDERED.
-#################################################################
-ex:Out_Mission backlog:belongsToLineage ex:Lin_PL ; backlog:outputRetracted true .
-ex:Out_Scope backlog:belongsToLineage ex:Lin_PL ; backlog:outputRetracted true .
-ex:Out_Goal backlog:belongsToLineage ex:Lin_PL ; backlog:outputRetracted true .
-ex:Out_Objective backlog:belongsToLineage ex:Lin_PL ; backlog:outputRetracted true .
-ex:Out_Backlog backlog:belongsToLineage ex:Lin_PL ; backlog:outputRetracted true .
-ex:Bypass1 a backlog:LineageBypass ;
-    backlog:bypassedLineage ex:Lin_PL ; backlog:hasFailureMode backlog:FM_LineageBypass ;
-    backlog:hasFindingScope backlog:Scope_Methodology ; backlog:hasRootCause "Chain written after the work (fixture): S_PL first appears at c1, Out_Backlog at c9." ;
-    backlog:bypassedItem ex:S_PL ; backlog:itemFirstCommit "S_PL c1 1000" ;
-    backlog:bypassedOutput ex:Out_Mission , ex:Out_Scope , ex:Out_Goal , ex:Out_Objective , ex:Out_Backlog ;
-    backlog:chainClosedCommit "c9 9000" ;
-    backlog:detectedAt "2026-09-07T09:00:00Z"^^xsd:dateTime ; backlog:detectedBy "backlog_lineage_order_check_v1_0_0" ;
-    backlog:belongsToLineage ex:Lin_PL .
-ex:Restart1 a backlog:LineageRestart ;
-    backlog:restartsLineage ex:Lin_PL ; backlog:answersBypass ex:Bypass1 ;
-    backlog:retractsOutput ex:Out_Mission , ex:Out_Scope , ex:Out_Goal , ex:Out_Objective , ex:Out_Backlog ;
-    backlog:restartedAtCommit "c10" ; backlog:decidedBy backlog:Owner ; backlog:hasRecoveryStrategy backlog:Strat_DecreaseByOne ; backlog:belongsToLineage ex:Lin_PL .
-ex:S_PL backlog:preLineageItem true ; backlog:admittedByOutput ex:R_Backlog .
-ex:R_Mission a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Mission ; backlog:belongsToLineage ex:Lin_PL ; backlog:closedAtCommit "c11" ; backlog:hasStateDigest "8c65af94ac3276071bb9b029a4ab139a14fd9eb7729433ca282ef040a706dac1" .
-ex:R_Scope a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Scope ; backlog:belongsToLineage ex:Lin_PL ; backlog:consumesOutput ex:R_Mission ; backlog:closedAtCommit "c12" ; backlog:hasStateDigest "ed4cf292cc4e1b1ae3ed0565eb70000538772db0bf15bc7aadbb098baccc0f64" .
-ex:R_Goal a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Goal ; backlog:belongsToLineage ex:Lin_PL ; backlog:consumesOutput ex:R_Scope ; backlog:closedAtCommit "c13" ; backlog:hasStateDigest "3f8c4ef5ba7b3e2d41f0e83e3cdc2df7245edc5c7f4a91afc3f72dd71685eb76" .
-ex:R_Objective a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Objective ; backlog:belongsToLineage ex:Lin_PL ; backlog:consumesOutput ex:R_Goal ; backlog:closedAtCommit "c14" ; backlog:hasStateDigest "708196fe4b6f59f34a9be5b756cdf2e9b2cae02618dc7014b01ad36bd84f0631" .
-ex:R_Backlog a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage ex:Lin_PL ; backlog:consumesOutput ex:R_Objective ; backlog:closedAtCommit "c15" ; backlog:hasStateDigest "38640a7cf7a6bbd2c5b3495329e9f8da3db2acc9409a23638dc5e83317c34358" .
-
-<http://example.org/lineage-restart#> backlog:hasExpectedPolarity backlog:Polarity_Positive .
-
-# v1.1.0 (2026-09-07): restarts declare Strat_DecreaseByOne (RestartDeclaresStrategyShape, shapes v1.103.0).
-# v1.2.0 (2026-09-07): the epic is flagged too -- a restart flags EVERY item (RestartFlagsEveryItemShape, v1.104.0) -- and is admitted by the rebuilt Backlog output.
-ex:EP backlog:preLineageItem true ; backlog:admittedByOutput ex:R_Backlog .
-# v1.3.0 (2026-09-09): lineage status stated (TBox v1.89.0, LineageStatusShape); derived from the fixture's own outputs and item states.
+# fixture_lineage_status v1.0.0 -- POSITIVE (2026-09-09). The conformant pipeline lineage Lin_PL, whose
+# five stage outputs are all active and whose story S_PL is Proposed, states LS_Backlogged: the chain is
+# closed and no work has started. Every LineageStatusShape clause is satisfied; the achieved-not-archived
+# advisory is silent. Expected: 0 violations.
 ex:Lin_PL backlog:hasLineageStatus backlog:LS_Backlogged .
+ex:Out_Mission backlog:belongsToLineage ex:Lin_PL . ex:Out_Scope backlog:belongsToLineage ex:Lin_PL . ex:Out_Goal backlog:belongsToLineage ex:Lin_PL .
+ex:Out_Objective backlog:belongsToLineage ex:Lin_PL . ex:Out_Backlog backlog:belongsToLineage ex:Lin_PL .
 
-# auto-fix (v1.123.0 Executor work): mandatory backlog:responsible for 2 pre-existing in-scope WorkItem(s); a single shared default Executor_IndividualHuman, since an individual responsible is always permitted whether the item is atomic or complex.
-<http://example.org/fixture-autofix#DefaultExecutor> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/backlog#Executor_IndividualHuman> .
-<http://example.org/lineage-restart#EP> <http://example.org/backlog#responsible> <http://example.org/fixture-autofix#DefaultExecutor> .
-<http://example.org/lineage-restart#S_PL> <http://example.org/backlog#responsible> <http://example.org/fixture-autofix#DefaultExecutor> .
+# --- succession content -------------------------------------------------------------------
+ex:Lin_Prev a backlog:Lineage ; backlog:lineageArchived false ; backlog:lineageForMission ex:M ;
+    backlog:lineageOrdinal 1 ; backlog:hasLineageStatus backlog:LS_Achieved .
+ex:Gap_Prev a backlog:PartialScopeDeclaration ;
+    backlog:declaresGapFor ex:Lin_Prev ; backlog:decidedBy backlog:Owner ; backlog:outScopes ex:S_Carried ;
+    backlog:describesUncoveredScope "The predecessor's own recovery flow shipped; making every recovery auditable was never reached." .
+ex:Succ_1 a backlog:LineageSuccession ;
+    backlog:succeedsLineage ex:Lin_Prev ; backlog:successorLineage ex:Lin_PL ;
+    backlog:resolvesGap ex:Gap_Prev ;
+    backlog:successionRationale "Relevance ratio low, most projected violations unrelated backfill; adopting the new RuleSet in place would re-judge closed work G89 forbids. Wind down and continue under a successor." ;
+    backlog:decidedBy backlog:Owner .
+ex:O backlog:belongsToLineage ex:Lin_PL ; backlog:resolvesPartialScope ex:Gap_Prev .
+# v1.2.0: an open item created under the predecessor, carried by the successor -- it keeps
+# belongsToLineage (created during Lin_Prev) and is admitted by the successor's Backlog output.
+ex:S_Carried a backlog:Story ; backlog:hasIdentifier "S-CARRIED" ; backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer ex:BL ; backlog:notYetScoreable true ;
+    backlog:hasScoreabilityReason "Scored at next planning." ;
+    backlog:belongsToLineage ex:Lin_Prev ; backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:pursuesObjective ex:O ; backlog:preLineageItem true ; backlog:admittedByOutput ex:Out_Backlog .
+
+ex:G_OldScope a backlog:Goal ; rdfs:label "Old scope-facing goal"@en ;
+    backlog:contributesToMission ex:M_Old ; backlog:derivesFromScope ex:Scope_Old ;
+    backlog:hasGoalFacing backlog:Facing_Scope ; backlog:goalCoversArea ex:Area_Old ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ; backlog:decidedBy backlog:Owner .
+ex:Met_OldScope a core:Metric .
+ex:O_OldScope a backlog:Objective ; backlog:contributesToGoal ex:G_OldScope ; backlog:fillsScope ex:Scope_Old ;
+    backlog:belongsToLineage ex:Lin_Old ;
+    backlog:hasSuccessMetric ex:Met_OldScope ; backlog:hasBaselineValue 0.0 ; backlog:hasTargetValue 0.0 ;
+    backlog:hasTargetDirection backlog:Dir_Hold ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ; backlog:decidedBy backlog:Owner ;
+    backlog:hasCheckpoint ex:CP_OldScope .
+ex:CP_OldScope a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-08-15T00:00:00Z"^^xsd:dateTime .
+ex:Obs_OldScope a backlog:MetricObservation ; backlog:observesMetric ex:Met_OldScope ; backlog:observationFor ex:O_OldScope ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-08-30T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Fixture-stated value, not re-derivable." .
+ex:G_OldContain a backlog:Goal ; rdfs:label "Old contain-facing goal"@en ;
+    backlog:contributesToMission ex:M_Old ; backlog:derivesFromScope ex:Scope_Old ;
+    backlog:hasGoalFacing backlog:Facing_Containment ; backlog:goalCoversArea ex:Area_Old ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ; backlog:decidedBy backlog:Owner .
+ex:Met_OldContain a core:Metric .
+ex:O_OldContain a backlog:Objective ; backlog:contributesToGoal ex:G_OldContain ; backlog:fillsScope ex:Scope_Old ;
+    backlog:belongsToLineage ex:Lin_Old ;
+    backlog:hasSuccessMetric ex:Met_OldContain ; backlog:hasBaselineValue 0.0 ; backlog:hasTargetValue 0.0 ;
+    backlog:hasTargetDirection backlog:Dir_Hold ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ; backlog:decidedBy backlog:Owner ;
+    backlog:hasCheckpoint ex:CP_OldContain .
+ex:CP_OldContain a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-08-15T00:00:00Z"^^xsd:dateTime .
+ex:Obs_OldContain a backlog:MetricObservation ; backlog:observesMetric ex:Met_OldContain ; backlog:observationFor ex:O_OldContain ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-08-30T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Fixture-stated value, not re-derivable." .
+
+# --- reactivation content: a separately archived lineage, reopened for a real need --------
+ex:M_Old a backlog:Mission ; backlog:hasMissionStatement "Practitioners can see their own booking history." ;
+    backlog:missionFor ex:BL ; backlog:hasMissionOrigin backlog:Origin_OwnerStated ;
+    backlog:missionSource "Owner, fixture-internal" ; backlog:decidedBy backlog:Owner ;
+    backlog:hasMissionOutcome backlog:Out_Achieved ;
+    backlog:outcomeRationale "Its own lineage closed and was archived; fixture-internal." .
+ex:CR_Old a backlog:ClosureReport ; backlog:closesForMission ex:M_Old ;
+    backlog:reportGeneratedAt "2026-09-01T00:00:00Z"^^xsd:dateTime ;
+    backlog:closureCommittedAt "fixture-internal, no real tag" ;
+    backlog:hasClosureSummary "Booking history shipped; fixture-internal." ;
+    backlog:reportsOnObjective ex:O_Old .
+ex:Scope_Old a backlog:ScopeStatement ; backlog:hasScopeStatementText "Booking history view." ;
+    backlog:scopeForMission ex:M_Old ; backlog:hasIntentOrigin backlog:IOrigin_OwnerStated ;
+    backlog:requiresDeliverable ex:D_Old ; backlog:hasScopeExclusion ex:X_Old ; backlog:coversArea ex:Area_Old .
+ex:Area_Old a backlog:ScopeArea ; backlog:areaLocation "Practitioner booking history." ;
+    backlog:areaMeasure "1 deliverable, counted." ; backlog:hasScopeLayer backlog:Layer_Product .
+ex:D_Old a backlog:ScopeDeliverable ; backlog:hasDeliverableText "History visible to the practitioner." ;
+    backlog:hasScopeLayer backlog:Layer_Product ; backlog:derivesFromMissionClause "see their own booking history" .
+ex:X_Old a backlog:ScopeExclusion ; backlog:excludesConcern "Other practitioners' history." ;
+    backlog:hasExclusionRationale "Privacy." ; backlog:decidedBy backlog:Owner ; backlog:hasScopeLayer backlog:Layer_Product .
+ex:G_Old a backlog:Goal ; rdfs:label "Own booking history visible"@en ;
+    backlog:contributesToMission ex:M_Old ; backlog:derivesFromScope ex:Scope_Old ;
+    backlog:hasGoalFacing backlog:Facing_Mission ; backlog:goalCoversArea ex:Area_Old ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ; backlog:decidedBy backlog:Owner .
+ex:Met_Old a core:Metric ; rdfs:label "History views available"@en .
+ex:O_Old a backlog:Objective ; rdfs:label "History available"@en ;
+    backlog:fillsScope ex:Scope_Old ; backlog:contributesToGoal ex:G_Old ; backlog:belongsToLineage ex:Lin_Old ;
+    backlog:hasSuccessMetric ex:Met_Old ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:hasBaselineValue 0.0 ; backlog:hasTargetValue 1.0 ;
+    backlog:hasTargetDirection backlog:Dir_Increase ; backlog:hasMeasurementKind backlog:Meas_Counted ;
+    backlog:hasCheckpoint ex:CP_Old ; backlog:decidedBy backlog:Owner .
+ex:CP_Old a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-08-15T00:00:00Z"^^xsd:dateTime .
+ex:Obs_Old a backlog:MetricObservation ; backlog:observesMetric ex:Met_Old ; backlog:observationFor ex:O_Old ;
+    backlog:hasObservedValue 1.0 ; backlog:observedAt "2026-08-30T00:00:00Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Fixture-stated value, not re-derivable." .
+ex:Lin_Old a backlog:Lineage ; backlog:lineageForMission ex:M_Old ; backlog:lineageOrdinal 3 ;
+    backlog:lineageArchived true ; backlog:hasLineageStatus backlog:LS_Archived ;
+    backlog:archiveFile "fixture-internal-archive.ttl" ;
+    backlog:archivedAt "2026-09-01T00:00:00Z"^^xsd:dateTime .
+ex:React_1 a backlog:LineageReactivation ;
+    backlog:reactivatesLineage ex:Lin_Old ;
+    backlog:reactivationRationale "A real defect was found in work this lineage closed; re-validated against current standards before returning to active status." ;
+    backlog:hasReactivationReason backlog:Reason_NonConformantResult ;
+    backlog:addressesFinding ex:Finding_Systemic ;
+    backlog:decidedBy backlog:Owner .
+# v1.133.0: the reactivation rests on an evidenced, systemic post-closure finding, raised after the
+# closed lineage's own observation window ended.
+ex:Lin_Old backlog:observationWindowEnds "2026-09-15T00:00:00Z"^^xsd:dateTime .
+ex:Finding_Systemic a backlog:PostClosureFinding ;
+    backlog:declaresGapFor ex:Lin_Old ;
+    backlog:describesUncoveredScope "History shows other practitioners' bookings on every view the lineage delivered." ;
+    backlog:hasFindingScale backlog:Scale_Systemic ;
+    backlog:findingRaisedAt "2026-09-20T00:00:00Z"^^xsd:dateTime ;
+    backlog:findingEvidence ex:Ev_LiveDefect .
+ex:Ev_LiveDefect a backlog:Evidence ; backlog:evidenceVerified true ;
+    backlog:verifiedByTool "acceptance test suite, history-view privacy case" ;
+    backlog:hasVerificationMethod "Reproduced from live use: the history-view privacy acceptance case failed on three views, each showing another practitioner's booking." .
+
+<http://example.org/fixture-succession#> backlog:hasExpectedPolarity backlog:Polarity_Positive .
+
+# v1.4.0: a planned sprint of the closing lineage, dissolved by the owner -- it derives Cancelled.
+ex:It_Dropped a backlog:Iteration ; backlog:hasIdentifier "IT-DROPPED" ; backlog:hasState backlog:Cancelled ;
+    backlog:belongsToLineage ex:Lin_Prev .
+ex:Dz_It a backlog:ContainerDissolution ; backlog:dissolvesContainer ex:It_Dropped ; backlog:decidedBy backlog:Owner ;
+    backlog:dissolutionRationale "Planned by the closing lineage; the successor plans sprints of its own." .
+
+# fixture_lineage_succession_v1_5_0 (TBox v1.116.0, shapes v1.144.0; an adopting project handovers
+# successor-goal-origin-and-single-gap-succession and successor-lineage-conformance-goal-counted-register-wide):
+#  - a bounded post-closure finding raised after the first succession is taken up by a SECOND succession record
+#    naming the same predecessor and the same, already-open successor (resolvesGap stays one gap per record);
+#  - the successor's goals state their origin: Carried names the out-scoping declaration, Repair the finding.
+ex:Finding_Bounded a backlog:PostClosureFinding ;
+    backlog:declaresGapFor ex:Lin_Prev ;
+    backlog:describesUncoveredScope "Recovery codes expire at a fixed hour instead of after the promised interval." ;
+    backlog:hasFindingScale backlog:Scale_Bounded ;
+    backlog:findingRaisedAt "2026-09-22T00:00:00Z"^^xsd:dateTime ;
+    backlog:findingEvidence ex:Ev_Expiry .
+ex:Ev_Expiry a backlog:Evidence ; backlog:evidenceVerified true ;
+    backlog:verifiedByTool "acceptance test suite, recovery-code expiry case" ;
+    backlog:hasVerificationMethod "Reproduced: a code issued at 23:50 expired at 00:00 in the expiry acceptance case." .
+ex:Succ_2 a backlog:LineageSuccession ;
+    backlog:succeedsLineage ex:Lin_Prev ; backlog:successorLineage ex:Lin_PL ;
+    backlog:resolvesGap ex:Finding_Bounded ;
+    backlog:successionRationale "A contained defect found after closure; the successor already open under the same Mission takes it up rather than reopening closed work." ;
+    backlog:decidedBy backlog:Owner .
+ex:O backlog:resolvesPartialScope ex:Finding_Bounded .
+ex:G backlog:belongsToLineage ex:Lin_PL ;
+    backlog:hasGoalOrigin backlog:GoalOrigin_Carried ; backlog:goalAnswersGap ex:Gap_Prev .
+ex:GScope backlog:belongsToLineage ex:Lin_PL ;
+    backlog:hasGoalOrigin backlog:GoalOrigin_Repair ; backlog:goalAnswersGap ex:Finding_Bounded .
+ex:GContain backlog:belongsToLineage ex:Lin_PL ; backlog:hasGoalOrigin backlog:GoalOrigin_New .
+
+# auto-fix (v1.123.0 Executor work): mandatory backlog:responsible for 3 pre-existing in-scope WorkItem(s); a single shared default Executor, since an individual responsible is always permitted whether the item is atomic or complex.
+# relabelled (v1.380.0, owner-directed "set yourself as the default executor"): the same IRI, now typed Executor_SingleAgent and carrying its own label/definition -- Claude, the AI agent, consolidated in place per L-119 rather than duplicated as a second individual.
+<http://example.org/fixture-autofix#DefaultExecutor> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/backlog#Executor_SingleAgent> .
+<http://example.org/fixture-autofix#DefaultExecutor> <http://www.w3.org/2000/01/rdf-schema#label> "Claude \u2014 default AI-agent executor"@en .
+<http://example.org/fixture-autofix#DefaultExecutor> <http://www.w3.org/2004/02/skos/core#definition> "The one default Executor this framework currently attributes AI-agent-performed work in this package to: Claude, the AI agent carrying out BRSF's own ontology-engineering sessions, typed backlog:Executor_SingleAgent because it is one non-human executing party with no standing team membership and no human identity behind it. First planted, untyped beyond a bare Executor_IndividualHuman triple, as a throwaway stand-in when backlog:responsible became mandatory and sixteen pre-existing fixture/reference files each needed one filled in; relabelled here in place, same IRI, per L-119 (consolidate rather than duplicate) once the owner ruled the framework should name its own executing party honestly rather than misclassify an AI agent as a human."@en .
+<http://example.org/fixture-succession#EP> <http://example.org/backlog#responsible> <http://example.org/fixture-autofix#DefaultExecutor> .
+<http://example.org/fixture-succession#S_Carried> <http://example.org/backlog#responsible> <http://example.org/fixture-autofix#DefaultExecutor> .
+<http://example.org/fixture-succession#S_PL> <http://example.org/backlog#responsible> <http://example.org/fixture-autofix#DefaultExecutor> .

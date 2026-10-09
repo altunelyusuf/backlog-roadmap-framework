@@ -4121,3 +4121,26 @@ clz:FED_HASCTRL a backlog:Executor_AgentFederation ; backlog:hasController clz:E
 clz:FAIL_BADEXP a backlog:FailureRecord ;
     backlog:recordedAt "2026-05-01T00:00:00Z"^^xsd:dateTime ;
     backlog:failureExpiresAt "2026-04-01T00:00:00Z"^^xsd:dateTime .
+
+# fixture_negative_v1_26_0 (shapes v1.156.0, owner follow-up on v1.379.0's Executor/competency
+# work -- "match the task competency requirements with abilities of executors"): CPM_GAP above
+# already proves the raw shape fires, but on a throwaway Ex_GapExec invented solely to prove the
+# clause once. This grounds the same raw-gap proof in the REAL individual the framework will
+# actually attribute AI-agent work to -- the same IRI, <http://example.org/fixture-autofix#
+# DefaultExecutor>, that fixture_positive gives a real CompetencyProfile and that the sixteen
+# auto-fixed reference files share -- with the identical profile, so the two fixtures' claims
+# about what this individual can and cannot do never disagree with each other.
+<http://example.org/fixture-autofix#DefaultExecutor> a backlog:Executor_SingleAgent ;
+    backlog:hasCompetencyProfile clz:Prof_DefaultExecutor .
+clz:Prof_DefaultExecutor a backlog:CompetencyProfile ;
+    backlog:hasCapability backlog:Comp_OntologyModeling , backlog:Comp_ConceptualDataModeling ,
+        backlog:Comp_RequirementsElicitation , backlog:Comp_ShaclAuthoring , backlog:Comp_ClauseProof ,
+        backlog:Comp_ToolScripting , backlog:Comp_ToolRunOperation , backlog:Comp_ReleaseManagement ,
+        backlog:Comp_BacklogStewardship .
+
+# CompetencyMatchShape, the real-default-executor gap case, no override recorded: application
+# coding is not in the profile above (it is the same gap fixture_positive's T_ResetMail carries,
+# there silenced by Rul_DefExecOverride) -- here, with no override, the shape must still fire.
+clz:CPM_GAP_DEFEXEC a backlog:Task ; backlog:hasState backlog:InProgress ;
+    backlog:responsible <http://example.org/fixture-autofix#DefaultExecutor> ;
+    backlog:requiresCompetency backlog:Comp_Coding .

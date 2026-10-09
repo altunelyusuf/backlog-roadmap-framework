@@ -11260,6 +11260,81 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.380.0 — owner follow-up: a default Claude executor, and competency-matching proven on it
+
+**Unplanned work:** same class as v1.379.0 -- two owner directions, verbatim, continuing that release rather than tracking a Story or Task: "Set yourself as the default executor. And if necessary the historic data, which is currently correct. We need to match the task competency requirements with abilities of executors." No TBox, SHACL or live-register change: every class, property and shape this needed already exists from v1.379.0. All three points are ABox/fixture work, moving no register item.
+
+**Point 1 -- the default executor is Claude, consolidated in place (`L-119`).** v1.379.0's mandatory-
+`responsible` retrofit planted one shared stand-in individual,
+`<http://example.org/fixture-autofix#DefaultExecutor>`, typed `Executor_IndividualHuman` with no
+label or definition, across sixteen pre-existing fixture/reference files that each needed a
+`backlog:responsible` once the property became mandatory
+(`backlog_strategy_exercise_abox`, `fixture_item_tie`, `fixture_l4_conformant`,
+`fixture_lineage_restart`, `fixture_lineage_status`, `fixture_lineage_succession`,
+`fixture_lineage_thrash`, `fixture_pipeline`, `fixture_pipeline_incomplete`, `fixture_progress`,
+`fixture_r3_disagreement`, `fixture_recovery_strategy`, `fixture_scope_first`,
+`fixture_sdlc_obligations`, `fixture_staged_lineage`, `fixture_tied_gates`). Relabelled here, same
+IRI, in every one of those sixteen files: now `Executor_SingleAgent` (one non-human executing
+party, no standing team membership -- the class the taxonomy already names for exactly this case),
+carrying an `rdfs:label` ("Claude — default AI-agent executor") and a `skos:definition` stating
+plainly that this is the AI agent carrying out BRSF's own ontology-engineering sessions, not a
+human. No second individual invented: the owner's instruction to "set yourself as the default
+executor" names the party this IRI already stood in for, so the correct move is to say so in
+place, not to add a `Executor_Claude` alongside the existing stand-in.
+
+**Point 2 -- the historic data, re-verified.** The live register (`backlog_abox`) was re-checked,
+not recalled: zero individuals of `WorkItem` or any of its subclasses (`Initiative`, `Epic`,
+`Story`, `Task`, `Enabler`, `Feature`, `Defect`, `Spike`, `ExecutionTask`) exist in it today --
+confirmed by a direct count, not an assumption that last report's answer still holds. `backlog:
+responsible` does not appear in the file at all. There is therefore nothing to backfill on real
+data, additively or otherwise, and the register's own validation stays `CONFORMANT (0 violations)`.
+Checked, as the owner scoped it ("only if clearly in-scope/trivial"), against the rest of the
+monorepo: every other package that vendors BRSF vocabulary pins a historical `backlog_tbox`/
+`backlog_shacl` snapshot from v1.11.0–v1.19.0, all published long before `Executor`, `responsible`
+or `CompetencyMatchShape` existed (v1.123.0/v1.156.0) -- none of them is exposed to these shapes
+under its current pin, so none needed checking at the individual level, and none got touched.
+
+**Point 3 -- competency-matching exercised against the real default executor, not a stand-in.**
+`CompetencyMatchShape` already had a firing proof (`CPM_GAP`, a throwaway `Ex_GapExec`) and a
+passing proof (`US002`/`US004`, `Ex_Alice`) from v1.379.0, but neither used the individual this
+framework will actually attribute AI-agent work to. Given here: `ex:Prof_DefaultExecutor` /
+`clz:Prof_DefaultExecutor`, a real `CompetencyProfile` on the real `DefaultExecutor` IRI, with
+`hasCapability` set to a considered nine-leaf subset of the closed 24 -- `Comp_OntologyModeling`,
+`Comp_ConceptualDataModeling`, `Comp_RequirementsElicitation`, `Comp_ShaclAuthoring`,
+`Comp_ClauseProof`, `Comp_ToolScripting`, `Comp_ToolRunOperation`, `Comp_ReleaseManagement`,
+`Comp_BacklogStewardship` -- chosen for what this agent has actually been doing in this package
+this session (reading requirements into a plan, modelling Executor/Competency conceptually,
+authoring and proving SHACL clauses, scripting and running tools, managing releases and the
+backlog) and nothing wider; the other fifteen leaves are deliberately left uncredited rather than
+assigning all 24.
+
+**Fixtures changed (both A2-declared from first commit, same house style as v1.379.0's own):**
+`fixture_positive` v1.17.0 → v1.18.0 -- `T_ResetToken` and `T_ResetMail`, the two atomic
+`ExecutionTask`s v1.379.0 left assigned to `Ex_Alice` with no `requiresCompetency`, are reassigned
+to the real `DefaultExecutor` and each given one: `T_ResetToken` requires `Comp_ToolScripting`
+(covered -- passes with no override, proving the clean path on real data); `T_ResetMail` requires
+`Comp_Coding` (not covered -- a real gap, silenced by a new `GovernanceRuling`,
+`ex:Rul_DefExecOverride`, naming `CompetencyMatchShape` and the item, proving the gate-with-
+override path end to end on real data rather than only in the abstract). `fixture_negative` v1.25.0
+→ v1.26.0 -- one new individual, `clz:CPM_GAP_DEFEXEC`, the identical `Comp_Coding` gap on the
+identical `DefaultExecutor` profile, with no override: fires `CompetencyMatchShape` exactly as
+`CPM_GAP` already does, proving the raw gate still catches the real individual's own gaps, not only
+a generic stand-in's.
+
+**Documentation.** `BACKLOG_ROADMAP_FRAMEWORK_STANDARD` unchanged -- it documents the closed TBox
+vocabulary (classes, properties, `owl:oneOf` members), not fixture-level ABox individuals, and
+nothing in this release adds to that vocabulary; `DefaultExecutor` was never, and is still not,
+documented there, for the same reason `Ex_Alice` and `Ex_GapExec` never were.
+
+**Verified in this session, not asserted:** all eighteen changed `.ttl` files parse; `backlog_
+validate` on the rebuilt positive fixture reports `CONFORMANT (0 violations)`; on the rebuilt
+negative fixture, `CPM_GAP_DEFEXEC` fires `CompetencyMatchShape` alongside the five cases v1.379.0
+already proved; `backlog_clause_proof_v1_0_4.py --strict` reports `115/115` declared proofs
+verified and `444/444` level-gated clauses proven to fire, `VERDICT: PASS` -- unchanged from
+v1.379.0, because no new shape or clause was added, only a new individual proving an existing one;
+`backlog_doc_coverage_gate_v1_2_0.py` reports `222/222` classes named, `VERDICT: PASS` -- unchanged,
+because no class was added either.
+
 ## v1.379.0 — owner-directed: the Executor taxonomy, mandatory responsibility, and competency-matching
 
 **Unplanned work:** a new, owner-directed capability, not a tracked Story or Task and not moving any
