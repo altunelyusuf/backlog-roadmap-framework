@@ -523,3 +523,12 @@ ex:Lin1 backlog:hasLineageStatus backlog:LS_InProgress .
 <http://example.org/l4#It1> <http://example.org/backlog#belongsToLineage> <http://example.org/l4#Lin1> .
 <http://example.org/l4#It2> <http://example.org/backlog#belongsToLineage> <http://example.org/l4#Lin1> .
 <http://example.org/l4#Rel1> <http://example.org/backlog#belongsToLineage> <http://example.org/l4#Lin1> .
+
+# auto-fix (v1.123.0 Executor work): mandatory backlog:responsible for 6 pre-existing in-scope WorkItem(s); a single shared default Executor_IndividualHuman, since an individual responsible is always permitted whether the item is atomic or complex.
+<http://example.org/fixture-autofix#DefaultExecutor> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/backlog#Executor_IndividualHuman> .
+<http://example.org/l4#EP> <http://example.org/backlog#responsible> <http://example.org/fixture-autofix#DefaultExecutor> .
+<http://example.org/l4#T3> <http://example.org/backlog#responsible> <http://example.org/fixture-autofix#DefaultExecutor> .
+<http://example.org/l4#US2> <http://example.org/backlog#responsible> <http://example.org/fixture-autofix#DefaultExecutor> .
+<http://example.org/l4#US_Big> <http://example.org/backlog#responsible> <http://example.org/fixture-autofix#DefaultExecutor> .
+<http://example.org/l4#US_Split1> <http://example.org/backlog#responsible> <http://example.org/fixture-autofix#DefaultExecutor> .
+<http://example.org/l4#US_Split2> <http://example.org/backlog#responsible> <http://example.org/fixture-autofix#DefaultExecutor> .

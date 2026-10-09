@@ -1324,3 +1324,61 @@ ex:MS_Retired a backlog:Milestone ;
     backlog:outcomeRationale "The review this milestone scheduled was retired with the mechanism it reviewed; it will never be held, so it is withdrawn rather than missed." .
 ex:US002 backlog:contributesToMilestone ex:MS_Retired .
 <http://example.org/fixture-positive#MS_Retired> <http://example.org/backlog#belongsToLineage> <http://example.org/fixture-positive#Lin1> .
+
+# fixture_positive_v1_17_0 (shapes v1.156.0, owner-directed Executor/responsible/competency work):
+# rather than add brand-new WorkItem individuals (which would each need the full, unrelated
+# compliance bar this fixture already holds every WorkItem to -- identifier, DoD, acceptance
+# criteria, objective, investment category -- before they could stay silent), every new
+# Executor/competency property below is attached to WorkItems this fixture ALREADY carries
+# fully clean. The one exception is ex:US001: already Done, already clean, and already lacking
+# backlog:responsible -- left exactly as it was, because that is itself the proof the
+# Done/Cancelled scope exclusion genuinely works (an in-scope item missing it would fire).
+
+ex:Ex_Alice a backlog:Executor_IndividualHuman .
+ex:Ex_Bob a backlog:Executor_IndividualHuman .
+ex:Prof_Alice a backlog:CompetencyProfile ; backlog:hasCapability backlog:Comp_Coding .
+ex:Ex_Alice backlog:hasCompetencyProfile ex:Prof_Alice .
+
+# ExecutorResponsibilityShape clause 2 (complex item, collective responsible, hasExecutorMember
+# nesting recursively): EP001 already decomposesInto US001 and US002, so it is a real complex
+# item, not a fixture invented for the purpose.
+ex:Team_Nested a backlog:Executor_HumanTeam ; backlog:hasExecutorMember ex:Ex_Bob .
+ex:Team_Good a backlog:Executor_HumanTeam ; backlog:hasExecutorMember ex:Ex_Alice , ex:Team_Nested ;
+    backlog:hasController ex:Ex_Alice .
+ex:EP001 backlog:responsible ex:Team_Good .
+
+# ExecutorResponsibilityShape clause 1 (mandatory presence) and clause 2 (atomic items keep an
+# individual or single-agent responsible): the remaining pre-existing in-scope items all take an
+# individual human.
+ex:T_ResetMail backlog:responsible ex:Ex_Alice .
+ex:T_ResetToken backlog:responsible ex:Ex_Alice .
+ex:US005 backlog:responsible ex:Ex_Alice .
+ex:US006 backlog:responsible ex:Ex_Alice .
+
+# CompetencyMatchShape, the covered case: US002 already pursues Obj_SelfService and is otherwise
+# fully clean; its required competency is one Alice's own profile already lists.
+ex:US002 backlog:responsible ex:Ex_Alice ; backlog:requiresCompetency backlog:Comp_Coding .
+
+# CompetencyMatchShape, the gap-with-recorded-override case: US004 requires a competency Alice's
+# profile does NOT list (a real gap), silenced by a GovernanceRuling the way GovernanceRulingShape
+# already requires every ruling to be identified, stated and shape-enforced -- the gate-with-
+# override pattern the owner accepted, built on the existing class rather than a new one.
+ex:US004 backlog:responsible ex:Ex_Alice ; backlog:requiresCompetency backlog:Comp_OntologyModeling .
+ex:Rul_CompOverride a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "GY-EXR-1" ;
+    backlog:hasRulingStatement "Alice is assigned to US004 despite the ontology-modelling gap." ;
+    backlog:hasRulingRationale "Fixture-only: the owner accepted the risk for this one item rather than reassigning it." ;
+    backlog:enforcedByShape backlog:CompetencyMatchShape ;
+    backlog:overrideAppliesToWorkItem ex:US004 .
+
+# FederationControllerShape: a federation that, correctly, asserts no controller at all.
+ex:Fed_Good a backlog:Executor_AgentFederation ; backlog:hasExecutorMember ex:Ex_Alice .
+
+# FailureRecordTemporalShape: an expiry genuinely after the recording, wired into the profile
+# through hasExperienceRecord/hasFailureRecord so those links are exercised by a real case too.
+ex:FR_Good a backlog:FailureRecord ;
+    backlog:concernsWorkItem ex:US002 ; backlog:concernsCompetency backlog:Comp_Coding ;
+    backlog:hasOutcome "Fixture-only: a real, bounded negative outcome, since recorded." ;
+    backlog:recordedAt "2026-01-01T00:00:00Z"^^xsd:dateTime ;
+    backlog:failureExpiresAt "2026-04-01T00:00:00Z"^^xsd:dateTime .
+ex:Prof_Alice backlog:hasFailureRecord ex:FR_Good .

@@ -4095,3 +4095,29 @@ clz:Sc_Mixed backlog:scopeRealizesObjective clz:Obj_Mixed .
 # globs (fixtures_dir/*.ttl is not recursive), so its own Out_NoCommit individual -- which
 # already carries outputOfStage -- was never going to prove this property clause either way.
 clz:Out_NoStage a backlog:StageOutput ; backlog:hasStateDigest "cafef00d" .
+
+# fixture_negative_v1_25_0 (shapes v1.156.0, owner-directed Executor/responsible/competency work):
+# one firing case per new clause, each individual named for the shape's own declared fixtureCaseName.
+
+# ExecutorResponsibilityShape clause 1: an in-scope, atomic item with no backlog:responsible at all.
+clz:EXR_NORESP a backlog:Task ; backlog:hasState backlog:InProgress .
+
+# ExecutorResponsibilityShape clause 2: an atomic item (no decomposesInto) whose responsible is a
+# collective Executor -- permitted only once an item has been decomposed.
+clz:Team_BadAtomic a backlog:Executor_HumanTeam .
+clz:EXR_ATOMICCOLLECTIVE a backlog:Task ; backlog:hasState backlog:InProgress ; backlog:responsible clz:Team_BadAtomic .
+
+# CompetencyMatchShape: a required competency the responsible Executor's profile does not cover,
+# with no recorded override.
+clz:Prof_GapExec a backlog:CompetencyProfile ; backlog:hasCapability backlog:Comp_Coding .
+clz:Ex_GapExec a backlog:Executor_IndividualHuman ; backlog:hasCompetencyProfile clz:Prof_GapExec .
+clz:CPM_GAP a backlog:Task ; backlog:hasState backlog:InProgress ; backlog:responsible clz:Ex_GapExec ;
+    backlog:requiresCompetency backlog:Comp_IncidentResponse .
+
+# FederationControllerShape: a federation directly contradicting its own definition by asserting a controller.
+clz:FED_HASCTRL a backlog:Executor_AgentFederation ; backlog:hasController clz:Ex_GapExec .
+
+# FailureRecordTemporalShape: an expiry at or before the recording.
+clz:FAIL_BADEXP a backlog:FailureRecord ;
+    backlog:recordedAt "2026-05-01T00:00:00Z"^^xsd:dateTime ;
+    backlog:failureExpiresAt "2026-04-01T00:00:00Z"^^xsd:dateTime .

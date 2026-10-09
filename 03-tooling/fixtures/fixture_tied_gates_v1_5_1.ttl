@@ -237,3 +237,10 @@ ex:Lin_Tied backlog:hasLineageStatus backlog:LS_Opened .
 <http://example.org/fixture-tied#GateZulu> <http://example.org/backlog#belongsToLineage> <http://example.org/fixture-tied#Lin_Tied> .
 <http://example.org/fixture-tied#It_Pkg> <http://example.org/backlog#belongsToLineage> <http://example.org/fixture-tied#Lin_Tied> .
 <http://example.org/fixture-tied#PkgLater> <http://example.org/backlog#belongsToLineage> <http://example.org/fixture-tied#Lin_Tied> .
+
+# auto-fix (v1.123.0 Executor work): mandatory backlog:responsible for 4 pre-existing in-scope WorkItem(s); a single shared default Executor_IndividualHuman, since an individual responsible is always permitted whether the item is atomic or complex.
+<http://example.org/fixture-autofix#DefaultExecutor> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/backlog#Executor_IndividualHuman> .
+<http://example.org/fixture-tied#InAlpha> <http://example.org/backlog#responsible> <http://example.org/fixture-autofix#DefaultExecutor> .
+<http://example.org/fixture-tied#InBeta> <http://example.org/backlog#responsible> <http://example.org/fixture-autofix#DefaultExecutor> .
+<http://example.org/fixture-tied#InZulu> <http://example.org/backlog#responsible> <http://example.org/fixture-autofix#DefaultExecutor> .
+<http://example.org/fixture-tied#Outside> <http://example.org/backlog#responsible> <http://example.org/fixture-autofix#DefaultExecutor> .

@@ -1,8 +1,7 @@
 # Lineage pipeline — stages built in order, each consuming the last.
 #
-# Experiment A of the v1.85.0 investigation. Every digest reproduces
-# and the chain is a line. Shipped so the passing shape is on record
-# alongside the failing one.
+# The same pipeline with its Backlog stage output removed (ruling G101): every digest still reproduces and the chain is
+# a line, so the verifier passes it, and --require-complete refuses it. This is the Lineage_2 state at an adopting project.
 #
 @prefix backlog: <http://example.org/backlog#> .
 @prefix core: <http://example.org/core#> .
@@ -103,8 +102,6 @@ ex:Out_Goal a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Goal ;
     backlog:hasStateDigest "3f8c4ef5ba7b3e2d41f0e83e3cdc2df7245edc5c7f4a91afc3f72dd71685eb76" ; backlog:consumesOutput ex:Out_Scope ; backlog:closedAtCommit "fixture-only-3" .
 ex:Out_Objective a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Objective ;
     backlog:hasStateDigest "708196fe4b6f59f34a9be5b756cdf2e9b2cae02618dc7014b01ad36bd84f0631" ; backlog:consumesOutput ex:Out_Goal ; backlog:closedAtCommit "fixture-only-4" .
-ex:Out_Backlog a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Backlog ;
-    backlog:hasStateDigest "38640a7cf7a6bbd2c5b3495329e9f8da3db2acc9409a23638dc5e83317c34358" ; backlog:consumesOutput ex:Out_Objective ; backlog:closedAtCommit "fixture-only-5" .
 
 ex:D1 backlog:derivesFromMissionClause "practitioners recover unaided" .
 
@@ -238,3 +235,8 @@ ex:Out_Scope backlog:belongsToLineage ex:Lin_PL .
 ex:Out_Goal backlog:belongsToLineage ex:Lin_PL .
 ex:Out_Objective backlog:belongsToLineage ex:Lin_PL .
 ex:Out_Backlog backlog:belongsToLineage ex:Lin_PL .
+
+# auto-fix (v1.123.0 Executor work): mandatory backlog:responsible for 2 pre-existing in-scope WorkItem(s); a single shared default Executor_IndividualHuman, since an individual responsible is always permitted whether the item is atomic or complex.
+<http://example.org/fixture-autofix#DefaultExecutor> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/backlog#Executor_IndividualHuman> .
+<http://example.org/pl#EP> <http://example.org/backlog#responsible> <http://example.org/fixture-autofix#DefaultExecutor> .
+<http://example.org/pl#S_PL> <http://example.org/backlog#responsible> <http://example.org/fixture-autofix#DefaultExecutor> .

@@ -11260,6 +11260,82 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.379.0 — owner-directed: the Executor taxonomy, mandatory responsibility, and competency-matching
+
+**Unplanned work:** a new, owner-directed capability, not a tracked Story or Task and not moving any
+existing register item. The owner asked for a closed taxonomy of "who or what executes a WorkItem" --
+something this framework had never named: `Role` is a decision-authority slot (closed at `Owner`/
+`Builder`), `ExecutionModality` records only whether a human or a machine was in the execution path,
+and neither points at a concrete executing party.
+
+**Added (TBox v1.123.0).** `Executor` and its five closed, disjoint subclasses --
+`Executor_IndividualHuman`, `Executor_HumanTeam`, `Executor_SingleAgent` (a standing agent, a single
+automated pipeline run and an ephemeral LLM-prompt session alike -- the taxonomy only cares about
+"one executing party, no standing identity required"), `Executor_AgentTeam`, `Executor_AgentFederation`.
+`hasExecutorMember` composes a Team or a Federation recursively out of any `Executor` (named distinctly
+from the pre-existing `hasMember`, the inverse of `memberOfContainer`, so the two unrelated kinds of
+containment are never conflated). `hasController` documents a Team's single controller somewhere in its
+own nesting; a Federation never asserts it, which is the one structural half of "no single controller"
+this release actually enforces (the stronger claim, a Team's controller being reachable through an
+arbitrarily deep open nesting, is not mechanically checkable and is documented, not forced, per `L-119`'s
+own caution against over-building a check nobody can fixture honestly). `backlog:responsible`
+(functional, mandatory on every in-scope `WorkItem`) and `backlog:supportedBy` (RASCI Support, 0..n).
+A closed, two-level `CompetencyCategory`/`Competency` taxonomy (six categories, twenty-four leaves,
+`skos:broader` leaf-to-category -- new machinery for this package, since nothing here modelled a
+two-level CLOSED hierarchy before), `CompetencyProfile` (one per `Executor`, `hasCapability`/
+`hasExperienceRecord`/`hasFailureRecord`), `ExperienceRecord` and its `FailureRecord` subclass
+(`recordedAt`/`failureExpiresAt` -- the owner's explicit ruling that a failure record decays and is not
+permanent; whether one is still live is a query-time read against the clock, left alone exactly as
+`observedDuringCeremony` (`G42`) already leaves a temporal judgement nobody can fixture honestly), and
+`requiresCompetency` on `WorkItem`.
+
+**Added (SHACL v1.156.0), all `sh:Violation`, all A2-declared with a firing fixture case from first
+commit.** `ExecutorResponsibilityShape` -- every in-scope `WorkItem` carries `backlog:responsible`
+(found via the existing `decomposesInto`/`partOf` decomposition vocabulary per `BP-D52`: no new
+atomic/complex machinery was built), and an atomic item's responsible may never be a collective type.
+`CompetencyMatchShape` -- a required competency not covered by the responsible Executor's own profile
+fires unless a `GovernanceRuling` (`enforcedByShape` this shape, `overrideAppliesToWorkItem` the item)
+records the owner's override: the same gate-with-recorded-override pattern `AutonomyEvidenceShape`
+already uses, with a recorded decision in place of verified evidence as the escape, reusing
+`GovernanceRuling` itself rather than a new waiver class. `FederationControllerShape` -- a federation
+asserting `hasController` contradicts its own definition. `FailureRecordTemporalShape` -- a sanity check
+that never depends on today's date: `failureExpiresAt` must be after `recordedAt`.
+
+**Scope (owner's explicit, final ruling, applied to every shape above).** Archived and completed
+lineages/work items are permanently out of scope -- no `responsible` backfill, no competency-match
+enforcement -- for anything `Done`, `Cancelled`, or belonging to a lineage carrying `lineageArchived
+true`. The same `FILTER NOT EXISTS` scoping this package already uses for the identical reason (e.g.
+`DeliverableCoverageShape`'s own lineage-stage gating).
+
+**Flagged for the owner to confirm (`B2b`, no existing convention settled either):** the recorded
+override is scoped to the whole `WorkItem` (it silences every `requiresCompetency` gap on that item at
+once), not per missing competency -- the brief did not specify the granularity, and whole-item is the
+more conservative reading of "the owner accepted this assignment despite the gap." `ExperienceRecord.
+hasOutcome` is free text, not a further closed vocabulary -- the owner stipulated only that
+`FailureRecord`'s outcome is negative (the subclass split itself), not a coded `Outcome` value set, and
+adding one unasked would be exactly the unflagged policy invention `B2b` warns against.
+
+**Fixtures changed (both A2-declared from first commit, one firing case per clause, named for the
+shape's own declared `fixtureCaseName`):** `fixture_positive` v1.16.0 → v1.17.0 -- every new property is
+attached to `WorkItem`s the fixture already carries fully clean (`EP001`, already `decomposesInto
+US001`/`US002`, takes a real collective `responsible`; `US002`/`US004` take `requiresCompetency`, one
+covered, one gapped-and-overridden; `US001`, already `Done` and already missing `responsible`, is left
+untouched as the existing proof that the scope exclusion holds) rather than inventing new `WorkItem`
+individuals that would each need this fixture's full, unrelated compliance bar (identifier, DoD,
+acceptance criteria, objective, investment category) before they could stay silent.
+`fixture_negative` v1.24.0 → v1.25.0 -- one new `clz:` block, five individuals, one per new clause.
+
+**Documentation.** `BACKLOG_ROADMAP_FRAMEWORK_STANDARD` v1.123.0 → v1.124.0: a new section for the
+eleven new classes (doc-coverage gate was run and found them undocumented before this was added).
+
+**Verified in this session, not asserted:** all five files parse; `backlog_validate` on the rebuilt
+positive fixture reports `CONFORMANT (0 violations)`; on the negative fixture every one of the five new
+individuals (`EXR_NORESP`, `EXR_ATOMICCOLLECTIVE`, `CPM_GAP`, `FED_HASCTRL`, `FAIL_BADEXP`) fires exactly
+the clause it was built to prove; `backlog_clause_proof_v1_0_4.py` reports `115/115` declared proofs
+verified and `444/444` level-gated clauses proven to fire, `VERDICT: PASS` (was `111/111` / `439/439`
+before this release); `backlog_doc_coverage_gate_v1_2_0.py` reports `222/222` classes named, `VERDICT:
+PASS`.
+
 ## v1.378.0 — correctness: all 75 never-proven level-gated SHACL clauses closed; `backlog_clause_proof` reports PASS for the first time
 
 **Unplanned work:** working down the tracked, accepted backlog item that `backlog_clause_proof` reports rather

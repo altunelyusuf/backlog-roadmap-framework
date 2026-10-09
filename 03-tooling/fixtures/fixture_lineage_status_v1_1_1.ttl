@@ -232,3 +232,8 @@ ex:Lin_PL backlog:hasLineageStatus backlog:LS_Backlogged .
 ex:Out_Mission backlog:belongsToLineage ex:Lin_PL . ex:Out_Scope backlog:belongsToLineage ex:Lin_PL . ex:Out_Goal backlog:belongsToLineage ex:Lin_PL .
 ex:Out_Objective backlog:belongsToLineage ex:Lin_PL . ex:Out_Backlog backlog:belongsToLineage ex:Lin_PL .
 <http://example.org/lineage-status#> backlog:hasExpectedPolarity backlog:Polarity_Positive .
+
+# auto-fix (v1.123.0 Executor work): mandatory backlog:responsible for 2 pre-existing in-scope WorkItem(s); a single shared default Executor_IndividualHuman, since an individual responsible is always permitted whether the item is atomic or complex.
+<http://example.org/fixture-autofix#DefaultExecutor> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/backlog#Executor_IndividualHuman> .
+<http://example.org/lineage-status#EP> <http://example.org/backlog#responsible> <http://example.org/fixture-autofix#DefaultExecutor> .
+<http://example.org/lineage-status#S_PL> <http://example.org/backlog#responsible> <http://example.org/fixture-autofix#DefaultExecutor> .

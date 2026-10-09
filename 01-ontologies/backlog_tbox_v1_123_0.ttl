@@ -18,8 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.122.0> ;
-    owl:versionInfo "1.122.0" ;
+    owl:versionIRI <http://example.org/backlog/1.123.0> ;
+    owl:versionInfo "1.123.0" ;
+    owl:priorVersion <http://example.org/backlog/1.122.0> ;
     owl:priorVersion <http://example.org/backlog/1.121.0> , <http://example.org/backlog/1.120.0> , <http://example.org/backlog/1.119.0> , <http://example.org/backlog/1.118.0> , <http://example.org/backlog/1.117.0> ;
     owl:priorVersion <http://example.org/backlog/1.116.0> ;
     owl:priorVersion <http://example.org/backlog/1.115.0> ;
@@ -6768,3 +6769,232 @@ backlog:moduleAudience a owl:ObjectProperty , owl:FunctionalProperty ;
     rdfs:range backlog:ModuleAudience ;
     rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "module audience"@en ;
     skos:definition "The audience a module record declares for the statements between its banner and its END MODULE line. Required on every module record; the public copy is cut by it, and a derivation that cannot find a module declared private stops with an error."@en .
+
+#################################################################
+#  v1.123.0 (owner-directed) -- Executor taxonomy, responsibility and
+#  competency-matching (BRF-EP, "who or what executes a WorkItem")
+#
+#  BRF already named WHO MAY DECIDE (Role, closed at Owner/Builder),
+#  WHETHER a human or a machine carried out the work (ExecutionModality),
+#  and HOW a person stands in relation to automated work (SupervisionMode,
+#  InteractionKind/HumanInteraction). None of these names a concrete
+#  executing party: Role is a decision-authority slot, not an actor;
+#  ExecutionModality is a fact about the item, not a link to who did it.
+#  Executor fills that gap: a closed five-member taxonomy of the concrete
+#  party that carried a WorkItem out, with recursive team/federation
+#  composition, a mandatory (and cardinality-shaped) responsible link,
+#  an optional supportedBy link (RASCI's Support, distinct from the
+#  executing party), and a competency-matching layer (a closed
+#  Competency/CompetencyCategory vocabulary, a per-Executor
+#  CompetencyProfile, and an Experience/FailureRecord ledger) that a new
+#  SHACL shape gates against, with a recorded-override escape built on
+#  the existing GovernanceRuling pattern rather than a new mechanism.
+#
+#  Scope (owner's explicit, final ruling): archived and completed
+#  lineages/WorkItems are permanently out of scope for every constraint
+#  this section adds -- no responsible backfill, no competency-match
+#  enforcement, on anything already Done, Cancelled, or belonging to a
+#  lineage carrying lineageArchived true. See the SHACL file's own
+#  comment on ExecutorResponsibilityShape and CompetencyMatchShape for
+#  the exact scoping query, which reuses the FILTER NOT EXISTS pattern
+#  this package already applies for the identical reason elsewhere
+#  (e.g. ProgressFreshnessShape, the lineage-completeness waiver).
+#################################################################
+
+backlog:Executor a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Executor"@en ;
+    skos:definition "The concrete party that carries out a WorkItem: a closed taxonomy of five kinds, because the framework already distinguishes WHO MAY DECIDE (Role) and WHETHER a human or a machine was in the execution path (ExecutionModality) but names nobody concrete who did the work. An Executor is always exactly one of its five disjoint subclasses; which one is itself the fact a register needs to answer 'who, specifically, is on the hook for this.'"@en .
+
+backlog:Executor_IndividualHuman a owl:Class ;
+    rdfs:subClassOf backlog:Executor ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Executor — individual human"@en ;
+    skos:definition "One named person, acting alone, as the executing party for a WorkItem. The smallest unit of human accountability the taxonomy offers."@en .
+
+backlog:Executor_HumanTeam a owl:Class ;
+    rdfs:subClassOf backlog:Executor ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Executor — human team"@en ;
+    skos:definition "A named group of people acting as one executing party. Composed of other Executors through hasExecutorMember, recursively (a team may contain another team, an individual, an agent, an agent team or a federation). A human team's defining trait, as distinct from an agent federation, is that it has a single controller somewhere in its own nesting -- someone who is answerable above the team, however many layers down the actual work sits; see hasController's own definition for what is and is not formalised about this."@en .
+
+backlog:Executor_SingleAgent a owl:Class ;
+    rdfs:subClassOf backlog:Executor ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Executor — single agent"@en ;
+    skos:definition "One executing party that is not a person: a standing autonomous agent, a single automated pipeline run, or an ephemeral LLM-prompt session, treated alike here because all three share what this taxonomy actually cares about -- a single point of execution with no internal membership and no standing human identity required. A development adopting this framework that wants to distinguish a long-lived agent from a one-off prompt session does so with its own further typing outside this closed set; the taxonomy itself stops at 'one, non-human, executing party.'"@en .
+
+backlog:Executor_AgentTeam a owl:Class ;
+    rdfs:subClassOf backlog:Executor ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Executor — agent team"@en ;
+    skos:definition "A named group of non-human executing parties, coordinated under a single controller, composed recursively through hasExecutorMember exactly as Executor_HumanTeam is. The human/agent distinction is about WHO is in the group, not about whether the group has a controller -- both team kinds have one; a federation, of either kind of member, does not."@en .
+
+backlog:Executor_AgentFederation a owl:Class ;
+    rdfs:subClassOf backlog:Executor ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Executor — agent federation"@en ;
+    skos:definition "A named group of executing parties, composed recursively through hasExecutorMember exactly as the two team classes are, but carrying no single controller anywhere in its own nesting -- that absence is the defining trait, not an omission. 'No single controller' is not cleanly formalisable as a hard OWL/SHACL constraint over an arbitrarily deep, open nesting, so this is documented rather than enforced as a positive requirement; what IS checked (FederationControllerShape) is the one half that is cleanly checkable -- a federation asserting hasController directly contradicts its own definition."@en .
+
+[] a owl:AllDisjointClasses ;
+   owl:members ( backlog:Executor_IndividualHuman backlog:Executor_HumanTeam backlog:Executor_SingleAgent
+                 backlog:Executor_AgentTeam backlog:Executor_AgentFederation ) .
+
+backlog:hasExecutorMember a owl:ObjectProperty ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:Executor_HumanTeam backlog:Executor_AgentTeam backlog:Executor_AgentFederation ) ] ;
+    rdfs:range backlog:Executor ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has executor member"@en ;
+    skos:definition "Relates a Team or a Federation to an Executor it contains, recursively -- the member may itself be another Team, another Federation, a single agent or an individual human. Named distinctly from the pre-existing backlog:hasMember (the inverse of memberOfContainer, relating a WorkItemContainer to its WorkItems) so the two unrelated kinds of containment are never conflated: one groups work, this one groups the parties who do it."@en .
+
+backlog:hasController a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:Executor_HumanTeam backlog:Executor_AgentTeam ) ] ;
+    rdfs:range backlog:Executor ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has controller"@en ;
+    skos:definition "The Executor that holds final decision authority over this Team, which may be the Team itself, a member, or an Executor found deeper in its nesting -- the property is deliberately NOT required to be asserted at every level, only to be findable somewhere above the team when the owner wants to state it. A Team is modelled as having one controller somewhere in its own nesting, however deep; a Federation never asserts this property at all, which is the structural half of 'no single controller' this framework actually enforces (FederationControllerShape) -- the stronger claim, that every Team really does have a reachable controller through an arbitrarily deep open nesting, is not mechanically enforced here and is left as a documented modelling intent, not a gap papered over as a check."@en .
+
+backlog:responsible a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:WorkItem ;
+    rdfs:range backlog:Executor ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "responsible"@en ;
+    skos:definition "The single Executor who executes this WorkItem -- mandatory on every in-scope WorkItem (see ExecutorResponsibilityShape) and functional, because the framework's cardinality rule is always exactly one: an atomic, undecomposed WorkItem must name an Executor_IndividualHuman or Executor_SingleAgent (never a collective -- a single leaf of work has one party on the hook for it); a decomposable WorkItem may instead name a collective Executor (Executor_HumanTeam, Executor_AgentTeam or Executor_AgentFederation), and doing so is itself the signal that the item is being treated as composite. Distinct from supportedBy, RASCI's Support role, which carries no execution accountability and is not cardinality-constrained."@en .
+
+backlog:supportedBy a owl:ObjectProperty ;
+    rdfs:domain backlog:WorkItem ;
+    rdfs:range backlog:Executor ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "supported by"@en ;
+    skos:definition "Zero or more Executors who support this WorkItem without being the executing party -- RASCI's Support role. Optional and unconstrained in count, and deliberately not conflated with responsible: a WorkItem can be fully supported and still have nobody executing it, which is a different, and more diagnosable, gap than having no support at all."@en .
+
+#################################################################
+#  v1.123.0 continued -- closed Competency taxonomy and the
+#  per-Executor CompetencyProfile / Experience / FailureRecord ledger
+#
+#  CLOSED, like Role, unlike the open TeamRole: the owner's explicit
+#  choice (TeamRole answers how an adopting method organises itself,
+#  which is the method's business; Competency answers what a
+#  WorkItem's requirements demand and what an Executor can cover,
+#  which this framework is prepared to enumerate and gate on).
+#
+#  Two-level closed hierarchy using skos:broader from leaf Competency
+#  to its CompetencyCategory. New machinery for this package: no
+#  existing BRSF vocabulary models a two-level CLOSED enumeration (the
+#  framework's other hierarchies -- WorkItem's Initiative/Epic/.../
+#  Enabler, or LifecycleState -- are one level). skos:broader is used
+#  rather than inventing a bespoke "hasCategory" property because the
+#  pack already uses the SKOS namespace throughout (skos:definition)
+#  and skos:broader states exactly this relation with no new term.
+#################################################################
+
+backlog:CompetencyCategory a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:Comp_Analysis backlog:Comp_Design backlog:Comp_Implementation
+                backlog:Comp_Verification backlog:Comp_Governance backlog:Comp_Operations ) ;
+    rdfs:label "Competency Category"@en ;
+    skos:definition "The top level of the closed competency taxonomy: six categories spanning the work this framework itself recognises across a software development's lifecycle, from analysis through to operations. Closed, like Role and unlike TeamRole, because what a WorkItem can require and what an Executor can be credited with is the framework's own business to enumerate, not an adopting method's."@en .
+
+backlog:Competency a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:Comp_RequirementsElicitation backlog:Comp_ConceptualDataModeling backlog:Comp_ImpactAssessment backlog:Comp_ScopeDefinition
+                backlog:Comp_SoftwareArchitecture backlog:Comp_OntologyModeling backlog:Comp_APIDesign backlog:Comp_UXDesign
+                backlog:Comp_Coding backlog:Comp_ToolScripting backlog:Comp_DataMigration backlog:Comp_IntegrationBuild
+                backlog:Comp_ShaclAuthoring backlog:Comp_TestDesign backlog:Comp_ClauseProof backlog:Comp_QualityReview
+                backlog:Comp_BacklogStewardship backlog:Comp_RankingDecision backlog:Comp_GovernanceRuling backlog:Comp_LineageDiscipline
+                backlog:Comp_ReleaseManagement backlog:Comp_ToolRunOperation backlog:Comp_IncidentResponse backlog:Comp_RetrospectiveFacilitation ) ;
+    rdfs:label "Competency"@en ;
+    skos:definition "The leaf level of the closed competency taxonomy: twenty-four named skills, each skos:broader to exactly one CompetencyCategory. Closed for the same reason the category level is: an open competency vocabulary could never be gated against by CompetencyMatchShape, because 'covered' would be unfalsifiable against a set that can always grow a new entry matching whatever was asserted."@en .
+
+backlog:CompetencyProfile a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Competency Profile"@en ;
+    skos:definition "The one-to-one record, per Executor, of what that Executor can do (hasCapability) and what has actually happened when it has tried (hasExperienceRecord, hasFailureRecord). Modelled as a separate individual rather than as properties directly on Executor so the profile can be queried, versioned and reasoned about on its own, the same separation of concerns the framework already applies between a WorkItem and its Evidence."@en .
+
+backlog:hasCompetencyProfile a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:Executor ;
+    rdfs:range backlog:CompetencyProfile ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has competency profile"@en ;
+    skos:definition "The single CompetencyProfile belonging to this Executor. Not asserted mandatory by any shape in this release -- an Executor with no profile simply covers nothing, which CompetencyMatchShape already treats correctly as a gap rather than requiring the profile's existence as a separate, redundant rule."@en .
+
+backlog:hasCapability a owl:ObjectProperty ;
+    rdfs:domain backlog:CompetencyProfile ;
+    rdfs:range backlog:Competency ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has capability"@en ;
+    skos:definition "A Competency this profile's Executor is credited with. The set CompetencyMatchShape checks a WorkItem's requiresCompetency against."@en .
+
+backlog:hasExperienceRecord a owl:ObjectProperty ;
+    rdfs:domain backlog:CompetencyProfile ;
+    rdfs:range backlog:ExperienceRecord ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has experience record"@en .
+
+backlog:hasFailureRecord a owl:ObjectProperty ;
+    rdfs:domain backlog:CompetencyProfile ;
+    rdfs:range backlog:FailureRecord ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has failure record"@en .
+
+backlog:ExperienceRecord a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Experience Record"@en ;
+    skos:definition "One recorded instance of an Executor exercising a Competency against a WorkItem, carrying what happened (hasOutcome). The general case; FailureRecord is its subclass for the specific, negative outcome that this framework singles out for decay (see FailureRecord's own definition)."@en .
+
+backlog:FailureRecord a owl:Class ;
+    rdfs:subClassOf backlog:ExperienceRecord ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Failure Record"@en ;
+    skos:definition "An ExperienceRecord whose outcome was negative, carrying recordedAt and failureExpiresAt because the owner's explicit ruling is that a failure record decays and is not a permanent mark: once failureExpiresAt has passed, the record no longer counts as a live parameter for any future assignment decision. That 'still live' evaluation is a query-time concern read against the clock at query time, not something this release forces into a SHACL shape -- a temporal check nobody can fixture honestly (because the fixture's own clock keeps moving) is worse than no check, the same reasoning this package already applies to observedDuringCeremony (G42). What IS checked structurally (FailureRecordTemporalShape) is the one sanity fact that never depends on today's date: failureExpiresAt must be after recordedAt, whenever both are asserted."@en .
+
+backlog:concernsWorkItem a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:ExperienceRecord ;
+    rdfs:range backlog:WorkItem ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "concerns work item"@en .
+
+backlog:concernsCompetency a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:ExperienceRecord ;
+    rdfs:range backlog:Competency ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "concerns competency"@en .
+
+backlog:hasOutcome a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:ExperienceRecord ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has outcome"@en ;
+    skos:definition "What happened, in one sentence. Free text rather than a further closed vocabulary: the owner stipulated only that FailureRecord's outcome is negative (which is what distinguishes the subclass itself, not a further coded value), and did not ask for a closed Outcome enumeration -- adding one unasked would be exactly the unflagged policy invention B2b warns against, so this release keeps it as a string and flags the choice here rather than deciding it silently."@en .
+
+backlog:recordedAt a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:FailureRecord ;
+    rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "recorded at"@en .
+
+backlog:failureExpiresAt a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:FailureRecord ;
+    rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "failure expires at"@en ;
+    skos:definition "When this failure record stops counting as a live assignment parameter. Owner's explicit ruling: failure records decay, they are not permanent."@en .
+
+backlog:requiresCompetency a owl:ObjectProperty ;
+    rdfs:domain backlog:WorkItem ;
+    rdfs:range backlog:Competency ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "requires competency"@en ;
+    skos:definition "A Competency this WorkItem's own task characteristics demand. What CompetencyMatchShape checks the responsible Executor's CompetencyProfile against, per in-scope WorkItem."@en .
+
+backlog:overrideAppliesToWorkItem a owl:ObjectProperty ;
+    rdfs:domain backlog:GovernanceRuling ;
+    rdfs:range backlog:WorkItem ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "override applies to work item"@en ;
+    skos:definition "Names the WorkItem a GovernanceRuling's competency-match override covers, when that ruling's enforcedByShape is CompetencyMatchShape. Reuses the existing GovernanceRuling class and its hasRulingIdentifier/hasRulingStatement/hasRulingRationale/enforcedByShape properties exactly as GovernanceRulingShape already requires them, rather than inventing a bespoke waiver or exception class -- the one new link needed is this pointer from a ruling to the specific WorkItem it excuses. Flagged as a conservative, owner-should-confirm scoping choice: the override is recorded at WORK-ITEM granularity (it silences CompetencyMatchShape for every requiresCompetency gap on that item at once), not at the finer per-missing-competency granularity, because the brief that asked for 'a recorded override' did not specify which, and whole-item is the simpler, more conservative reading of a business decision to proceed with this assignment despite the gap."@en .

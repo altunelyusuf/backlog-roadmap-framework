@@ -9,8 +9,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog/shacl/1.155.0> ;
-    owl:versionInfo "1.155.0" ;
+    owl:versionIRI <http://example.org/backlog/shacl/1.156.0> ;
+    owl:versionInfo "1.156.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.155.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.154.0> , <http://example.org/backlog-shapes/1.153.0> , <http://example.org/backlog-shapes/1.152.0> , <http://example.org/backlog-shapes/1.151.0> , <http://example.org/backlog-shapes/1.150.0> , <http://example.org/backlog-shapes/1.149.0> , <http://example.org/backlog-shapes/1.148.0> , <http://example.org/backlog-shapes/1.147.0> , <http://example.org/backlog-shapes/1.146.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.145.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.144.0> ;
@@ -7678,3 +7679,80 @@ backlog:OntologyHeaderVersionConsistencyShape a sh:NodeShape ;
         }""" ] ;
     backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
     backlog:fixtureCaseName "Hdr_Mismatch" .
+
+#################################################################
+#  v1.156.0 (owner-directed) -- Executor responsibility and
+#  competency-matching. Scoped out: archived lineage and completed
+#  (Done/Cancelled) WorkItems, per the owner's explicit final ruling
+#  (TBox v1.123.0's own banner comment) -- the same FILTER NOT EXISTS
+#  pattern this file already uses for the identical reason (see e.g.
+#  the scoping clauses on DeliverableCoverageShape and the various
+#  belongsToLineage/lineageArchived filters throughout this file).
+#################################################################
+
+backlog:ExecutorResponsibilityShape a sh:NodeShape ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "EXR_NORESP" ;
+    sh:targetClass backlog:WorkItem ;
+    sh:severity sh:Violation ;
+    rdfs:label "Every in-scope work item names its executing party (L2)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L2: this work item carries no backlog:responsible. Archived-lineage and Done/Cancelled items are out of scope by the owner's own ruling and never reach this clause; everything else must name the Executor on the hook for it." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            FILTER NOT EXISTS { $this backlog:responsible ?r }
+            FILTER NOT EXISTS { $this backlog:hasState ?st . FILTER (?st IN (backlog:Done, backlog:Cancelled)) }
+            FILTER NOT EXISTS { $this backlog:belongsToLineage ?lin . ?lin backlog:lineageArchived true }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: this work item is atomic -- it decomposes into no child -- and its backlog:responsible is a collective Executor (a human team, an agent team or an agent federation). An atomic, undecomposed leaf of work has exactly one party on the hook for it; a collective responsible is only meaningful, and only permitted, once an item has itself been decomposed, where naming a collective IS the signal that the item is being treated as composite." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:responsible ?r .
+            FILTER NOT EXISTS { $this backlog:decomposesInto ?child }
+            ?r a ?rt . FILTER (?rt IN (backlog:Executor_HumanTeam, backlog:Executor_AgentTeam, backlog:Executor_AgentFederation))
+            FILTER NOT EXISTS { $this backlog:hasState ?st . FILTER (?st IN (backlog:Done, backlog:Cancelled)) }
+            FILTER NOT EXISTS { $this backlog:belongsToLineage ?lin . ?lin backlog:lineageArchived true }
+        }""" ] .
+
+backlog:CompetencyMatchShape a sh:NodeShape ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "CPM_GAP" ;
+    sh:targetClass backlog:WorkItem ;
+    sh:severity sh:Violation ;
+    rdfs:label "A required competency is covered by the responsible Executor, or the gap is overridden (L3)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L3: this work item requires a Competency its responsible Executor's own CompetencyProfile does not list as a capability, and the gap carries no recorded override. Mirrors AutonomyEvidenceShape's own pattern -- a check that normally fires unless something that could have failed says otherwise -- except the escape here is a recorded owner decision rather than verified evidence: a GovernanceRuling whose enforcedByShape is this shape and whose overrideAppliesToWorkItem names this item silences it, exactly as GovernanceRulingShape already requires every ruling to be identified, stated and shape-enforced." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:requiresCompetency ?c ; backlog:responsible ?r .
+            FILTER NOT EXISTS { ?r backlog:hasCompetencyProfile ?cp . ?cp backlog:hasCapability ?c }
+            FILTER NOT EXISTS { ?rul a backlog:GovernanceRuling ; backlog:enforcedByShape backlog:CompetencyMatchShape ; backlog:overrideAppliesToWorkItem $this }
+            FILTER NOT EXISTS { $this backlog:hasState ?st . FILTER (?st IN (backlog:Done, backlog:Cancelled)) }
+            FILTER NOT EXISTS { $this backlog:belongsToLineage ?lin . ?lin backlog:lineageArchived true }
+        }""" ] .
+
+backlog:FederationControllerShape a sh:NodeShape ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "FED_HASCTRL" ;
+    sh:targetClass backlog:Executor_AgentFederation ;
+    sh:severity sh:Violation ;
+    rdfs:label "A federation asserts no controller (L2)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L2: this Executor_AgentFederation asserts backlog:hasController. A federation's defining trait is that it has no single controller anywhere in its own nesting; asserting one directly contradicts the class it was typed into. (The stronger claim -- that a Team genuinely has a reachable controller through an arbitrarily deep open nesting -- is not mechanically checkable the same way and is documented, not enforced, per hasController's own TBox definition.)" ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE { $this backlog:hasController ?c }""" ] .
+
+backlog:FailureRecordTemporalShape a sh:NodeShape ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "FAIL_BADEXP" ;
+    sh:targetClass backlog:FailureRecord ;
+    sh:severity sh:Violation ;
+    rdfs:label "A failure record's expiry follows its recording (L1)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this FailureRecord's failureExpiresAt is not after its recordedAt. The owner's ruling that failure records decay presupposes an expiry in the future of the recording; a record that expires at or before it was made cannot be evaluated as 'currently live' by any query, which is the one sanity fact this shape checks -- whether a given reading is still live, as opposed to merely well-formed, is a query-time concern this shape deliberately leaves alone (see FailureRecord's own TBox definition)." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:recordedAt ?r ; backlog:failureExpiresAt ?e .
+            FILTER (?e <= ?r)
+        }""" ] .

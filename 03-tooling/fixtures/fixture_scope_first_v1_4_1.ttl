@@ -278,3 +278,7 @@ ex:Lin1 backlog:hasLineageStatus backlog:LS_Opened .
 # v1.3.0 (2026-09-10): status corrected LS_InProgress -> LS_Opened, derived from this fixture's own stage
 # outputs and item states. The claim was unsupported by the data it sits in; InProgressNeedsStartedWorkShape
 # and LineageStatusShape now refuse such a claim.
+
+# auto-fix (v1.123.0 Executor work): mandatory backlog:responsible for 1 pre-existing in-scope WorkItem(s); a single shared default Executor_IndividualHuman, since an individual responsible is always permitted whether the item is atomic or complex.
+<http://example.org/fixture-autofix#DefaultExecutor> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/backlog#Executor_IndividualHuman> .
+<http://example.org/ob#W> <http://example.org/backlog#responsible> <http://example.org/fixture-autofix#DefaultExecutor> .

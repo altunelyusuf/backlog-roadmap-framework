@@ -22,8 +22,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (ABox: controlled individuals, reference data and the live register)"@en ;
-    owl:versionIRI <http://example.org/backlog/abox/1.35.0> ;
-    owl:versionInfo "1.35.0" ;
+    owl:versionIRI <http://example.org/backlog/abox/1.36.0> ;
+    owl:versionInfo "1.36.0" ;
+    owl:priorVersion <http://example.org/backlog/abox/1.35.0> ;
     owl:priorVersion <http://example.org/backlog/abox/1.34.0> , <http://example.org/backlog/abox/1.33.0> , <http://example.org/backlog/abox/1.32.0> , <http://example.org/backlog/abox/1.31.0> , <http://example.org/backlog/abox/1.30.0> , <http://example.org/backlog/abox/1.29.0> , <http://example.org/backlog/abox/1.28.0> , <http://example.org/backlog/abox/1.27.0> , <http://example.org/backlog/abox/1.26.0> , <http://example.org/backlog/abox/1.25.0> , <http://example.org/backlog/abox/1.24.0> , <http://example.org/backlog/abox/1.23.0> , <http://example.org/backlog/abox/1.22.0> , <http://example.org/backlog/abox/1.21.0> , <http://example.org/backlog/abox/1.20.0> , <http://example.org/backlog/abox/1.19.0> , <http://example.org/backlog/abox/1.17.0> , <http://example.org/backlog/abox/1.16.0> , <http://example.org/backlog/abox/1.15.0> , <http://example.org/backlog/abox/1.14.0> , <http://example.org/backlog/abox/1.13.0> , <http://example.org/backlog/abox/1.12.0> , <http://example.org/backlog/abox/1.11.0> , <http://example.org/backlog/abox/1.10.0> , <http://example.org/backlog/abox/1.9.0> , <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
         <http://example.org/backlog-abox/1.2.1> ,
                      <http://example.org/backlog-abox/1.2.0> ,
@@ -5607,3 +5608,154 @@ fw:Declared_Ordinal_18 a backlog:OrdinalSharingDeclaration ;
     rdfs:label "Ordinal 18 shared by Fixture Consolidation and OE Package Consolidation"@en ;
     backlog:declaredOrdinal 18 ;
     backlog:sharedByLineage fw:L_FixtureConsolidation , fw:L_OEPackageConsolidation .
+
+#################################################################
+#  v1.123.0 (owner-directed, Executor/responsible/competency work) --
+#  the closed CompetencyCategory and Competency vocabulary. Six
+#  categories, twenty-four leaves, each leaf skos:broader to exactly
+#  one category. Closed like Role; see TBox v1.123.0 for why.
+#################################################################
+
+backlog:Comp_Analysis a owl:NamedIndividual , backlog:CompetencyCategory ;
+    rdfs:label "Analysis"@en ;
+    skos:definition "Understanding and bounding what a development must do before it is built: eliciting requirements, modelling the data conceptually, assessing impact, defining scope."@en .
+
+backlog:Comp_Design a owl:NamedIndividual , backlog:CompetencyCategory ;
+    rdfs:label "Design"@en ;
+    skos:definition "Deciding the shape of a solution before it is built: software architecture, ontology modelling, API design, UX design."@en .
+
+backlog:Comp_Implementation a owl:NamedIndividual , backlog:CompetencyCategory ;
+    rdfs:label "Implementation"@en ;
+    skos:definition "Building the thing: coding, tool scripting, data migration, integration build."@en .
+
+backlog:Comp_Verification a owl:NamedIndividual , backlog:CompetencyCategory ;
+    rdfs:label "Verification"@en ;
+    skos:definition "Checking that what was built is right: SHACL authoring, test design, clause proof, quality review."@en .
+
+backlog:Comp_Governance a owl:NamedIndividual , backlog:CompetencyCategory ;
+    rdfs:label "Governance"@en ;
+    skos:definition "Deciding and maintaining how the development is run: backlog stewardship, ranking decisions, governance rulings, lineage discipline."@en .
+
+backlog:Comp_Operations a owl:NamedIndividual , backlog:CompetencyCategory ;
+    rdfs:label "Operations"@en ;
+    skos:definition "Keeping a released development running and improving: release management, tool-run operation, incident response, retrospective facilitation."@en .
+
+backlog:Comp_RequirementsElicitation a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Requirements elicitation"@en ;
+    skos:definition "Drawing out what stakeholders actually need, as distinct from what they first say."@en ;
+    skos:broader backlog:Comp_Analysis .
+
+backlog:Comp_ConceptualDataModeling a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Conceptual data modelling"@en ;
+    skos:definition "Modelling the entities and relations a domain involves, independent of any storage technology."@en ;
+    skos:broader backlog:Comp_Analysis .
+
+backlog:Comp_ImpactAssessment a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Impact assessment"@en ;
+    skos:definition "Working out what a proposed change touches and what it breaks before it is made."@en ;
+    skos:broader backlog:Comp_Analysis .
+
+backlog:Comp_ScopeDefinition a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Scope definition"@en ;
+    skos:definition "Stating what a piece of work does and does not cover, with content specific enough to be checked against later."@en ;
+    skos:broader backlog:Comp_Analysis .
+
+backlog:Comp_SoftwareArchitecture a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Software architecture"@en ;
+    skos:definition "Deciding the major structural parts of a system and how they relate."@en ;
+    skos:broader backlog:Comp_Design .
+
+backlog:Comp_OntologyModeling a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Ontology modelling"@en ;
+    skos:definition "Designing classes, properties and closed or open vocabularies that state what a domain's terms actually mean."@en ;
+    skos:broader backlog:Comp_Design .
+
+backlog:Comp_APIDesign a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "API design"@en ;
+    skos:definition "Designing the interface a piece of software exposes to its callers."@en ;
+    skos:broader backlog:Comp_Design .
+
+backlog:Comp_UXDesign a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "UX design"@en ;
+    skos:definition "Designing how a person experiences and operates a piece of software."@en ;
+    skos:broader backlog:Comp_Design .
+
+backlog:Comp_Coding a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Coding"@en ;
+    skos:definition "Writing the source code that implements a designed solution."@en ;
+    skos:broader backlog:Comp_Implementation .
+
+backlog:Comp_ToolScripting a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Tool scripting"@en ;
+    skos:definition "Writing the scripts and small tools a development runs on itself, as distinct from the product it ships."@en ;
+    skos:broader backlog:Comp_Implementation .
+
+backlog:Comp_DataMigration a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Data migration"@en ;
+    skos:definition "Moving data from one representation or store to another without losing or corrupting it."@en ;
+    skos:broader backlog:Comp_Implementation .
+
+backlog:Comp_IntegrationBuild a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Integration build"@en ;
+    skos:definition "Connecting separately-built components or systems so they work together."@en ;
+    skos:broader backlog:Comp_Implementation .
+
+backlog:Comp_ShaclAuthoring a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "SHACL authoring"@en ;
+    skos:definition "Writing SHACL shapes that check a graph against a stated rule, in this framework's own house style."@en ;
+    skos:broader backlog:Comp_Verification .
+
+backlog:Comp_TestDesign a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Test design"@en ;
+    skos:definition "Designing a test, or a test case, that actually exercises the behaviour it claims to check."@en ;
+    skos:broader backlog:Comp_Verification .
+
+backlog:Comp_ClauseProof a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Clause proof"@en ;
+    skos:definition "Writing the positive and negative fixtures that prove a constraint actually fires and actually stays silent on a correct twin."@en ;
+    skos:broader backlog:Comp_Verification .
+
+backlog:Comp_QualityReview a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Quality review"@en ;
+    skos:definition "Reviewing a finished piece of work against a stated quality bar before it is accepted."@en ;
+    skos:broader backlog:Comp_Verification .
+
+backlog:Comp_BacklogStewardship a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Backlog stewardship"@en ;
+    skos:definition "Keeping a backlog's own register accurate, groomed and consistent with what is actually true."@en ;
+    skos:broader backlog:Comp_Governance .
+
+backlog:Comp_RankingDecision a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Ranking decision"@en ;
+    skos:definition "Making or arbitrating a multi-factor priority judgement with a written rationale."@en ;
+    skos:broader backlog:Comp_Governance .
+
+backlog:Comp_GovernanceRuling a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Governance ruling"@en ;
+    skos:definition "Deciding a policy question for a framework or register and recording it as a checkable GovernanceRuling."@en ;
+    skos:broader backlog:Comp_Governance .
+
+backlog:Comp_LineageDiscipline a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Lineage discipline"@en ;
+    skos:definition "Building and maintaining a lineage's Mission-to-Backlog chain in the order and ceremony this framework requires."@en ;
+    skos:broader backlog:Comp_Governance .
+
+backlog:Comp_ReleaseManagement a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Release management"@en ;
+    skos:definition "Taking a change through its gate, manifest, publish and tag steps to a real, verified release."@en ;
+    skos:broader backlog:Comp_Operations .
+
+backlog:Comp_ToolRunOperation a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Tool-run operation"@en ;
+    skos:definition "Running this framework's own tooling correctly and reading what it reports."@en ;
+    skos:broader backlog:Comp_Operations .
+
+backlog:Comp_IncidentResponse a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Incident response"@en ;
+    skos:definition "Diagnosing and resolving a live problem once a development is in production."@en ;
+    skos:broader backlog:Comp_Operations .
+
+backlog:Comp_RetrospectiveFacilitation a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Retrospective facilitation"@en ;
+    skos:definition "Running a retrospective that produces a real RetrospectiveFinding with a root cause, not a formality."@en ;
+    skos:broader backlog:Comp_Operations .

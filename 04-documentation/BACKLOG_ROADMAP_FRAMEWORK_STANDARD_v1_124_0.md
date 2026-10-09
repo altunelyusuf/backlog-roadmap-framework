@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.123.0
+# Backlog & Roadmap Semantic Framework — Standard v1.124.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -2444,3 +2444,61 @@ framework-level individuals only.
   lineage by lineage (the table version was ruled out; the digest covers the subjects of each stage's element types, so later additions to a closed lineage change it).
   `backlog_archived_digest_check` now runs the verifier unchanged over every archived lineage and keeps a ratchet: the 11 are listed in `archived_digest_baseline`, a lineage that
   fails and is not listed fails the gate, a listed lineage that starts to pass is reported so it can be removed. This records the finding; it does not explain or repair the 11.
+
+## Executor taxonomy, responsibility and competency-matching (v1.124.0, owner-directed)
+
+BRSF already named WHO MAY DECIDE (`Role`, closed at `Owner`/`Builder`) and WHETHER a human or a
+machine carried out a work item (`ExecutionModality`), but named nobody concrete who did the work.
+This section adds that concrete party.
+
+- **`Executor`** — the concrete party that carries out a `WorkItem`: a closed taxonomy of five
+  disjoint subclasses, because nothing else in the framework names a specific executing party.
+- **`Executor_IndividualHuman`** — one named person, acting alone.
+- **`Executor_HumanTeam`** — a named group of people acting as one executing party, composed of
+  other `Executor`s through `hasExecutorMember`, recursively; has a single controller somewhere in
+  its own nesting (`hasController`), which is what distinguishes a team from a federation.
+- **`Executor_SingleAgent`** — one non-human executing party: a standing autonomous agent, a single
+  automated pipeline run, or an ephemeral LLM-prompt session, treated alike because all three share
+  what this taxonomy cares about — a single point of execution, no internal membership, no standing
+  human identity required.
+- **`Executor_AgentTeam`** — a named group of non-human executing parties, composed and controlled
+  exactly as `Executor_HumanTeam` is.
+- **`Executor_AgentFederation`** — a named group of executing parties, composed recursively like
+  the two team classes, but carrying no single controller anywhere in its own nesting — that
+  absence is the defining trait. `FederationControllerShape` checks the one half of this that is
+  mechanically checkable: a federation must never assert `hasController`.
+- **`backlog:responsible`** — the single `Executor` who executes a `WorkItem`. Mandatory on every
+  in-scope item (`ExecutorResponsibilityShape`) and functional: an atomic, undecomposed item must
+  name an `Executor_IndividualHuman` or `Executor_SingleAgent`; a decomposable item may instead name
+  a collective `Executor`, and doing so is itself the signal that the item is composite.
+- **`backlog:supportedBy`** — zero or more `Executor`s who support a `WorkItem` without being the
+  executing party (RASCI's Support role); optional and uncounted, distinct from `responsible`.
+- **`CompetencyCategory`** / **`Competency`** — a closed, two-level taxonomy (six categories, each
+  with a closed set of leaf competencies, `skos:broader` from leaf to category) of what a
+  `WorkItem` can require (`requiresCompetency`) and what an `Executor` can be credited with
+  (`CompetencyProfile.hasCapability`). Closed like `Role`, unlike the open `TeamRole`, because what
+  this framework is prepared to gate on is its own business to enumerate.
+- **`CompetencyProfile`** — the one-to-one record, per `Executor`, of its capabilities
+  (`hasCapability`) and what has actually happened when it has tried (`hasExperienceRecord`,
+  `hasFailureRecord`).
+- **`ExperienceRecord`** / **`FailureRecord`** — one recorded instance of an `Executor` exercising a
+  `Competency` against a `WorkItem`. `FailureRecord` is the negative-outcome subclass and carries
+  `recordedAt`/`failureExpiresAt`: failure records decay and are not permanent; whether a given one
+  is still live is evaluated at query time against the clock, not forced into a SHACL shape.
+- **`CompetencyMatchShape`** — flags a `WorkItem` whose `requiresCompetency` its `responsible`
+  Executor's own `CompetencyProfile` does not cover, unless the gap carries a recorded override: a
+  `GovernanceRuling` whose `enforcedByShape` is this shape and whose `overrideAppliesToWorkItem`
+  names the item. The same gate-with-recorded-override pattern `AutonomyEvidenceShape` already uses,
+  with a recorded owner decision in place of verified evidence as the escape.
+- **Scope (owner's explicit, final ruling).** Archived and completed lineages/work items are
+  permanently out of scope for every constraint this section adds — no `responsible` backfill, no
+  competency-match enforcement — for anything Done, Cancelled, or belonging to a lineage carrying
+  `lineageArchived true`. The same `FILTER NOT EXISTS` pattern this framework already uses for the
+  identical reason elsewhere.
+- **Flagged for the owner to confirm, per the governing discipline's B2b:** the override above is
+  recorded at whole-work-item granularity (it silences `CompetencyMatchShape` for every
+  `requiresCompetency` gap on that item at once), not per missing competency, because the brief that
+  asked for a recorded override did not specify which, and whole-item is the more conservative
+  reading of a business decision to proceed with an assignment despite a gap. `ExperienceRecord`'s
+  own `hasOutcome` is free text rather than a further closed vocabulary, for the same reason: the
+  owner stipulated only that `FailureRecord`'s outcome is negative, not a coded value set.
