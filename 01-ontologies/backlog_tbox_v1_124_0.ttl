@@ -18,9 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.123.0> ;
-    owl:versionInfo "1.123.0" ;
-    owl:priorVersion <http://example.org/backlog/1.122.0> ;
+    owl:versionIRI <http://example.org/backlog/1.124.0> ;
+    owl:versionInfo "1.124.0" ;
+    owl:priorVersion <http://example.org/backlog/1.123.0> , <http://example.org/backlog/1.122.0> ;
     owl:priorVersion <http://example.org/backlog/1.121.0> , <http://example.org/backlog/1.120.0> , <http://example.org/backlog/1.119.0> , <http://example.org/backlog/1.118.0> , <http://example.org/backlog/1.117.0> ;
     owl:priorVersion <http://example.org/backlog/1.116.0> ;
     owl:priorVersion <http://example.org/backlog/1.115.0> ;
@@ -6860,7 +6860,7 @@ backlog:responsible a owl:ObjectProperty , owl:FunctionalProperty ;
     rdfs:range backlog:Executor ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "responsible"@en ;
-    skos:definition "The single Executor who executes this WorkItem -- mandatory on every in-scope WorkItem (see ExecutorResponsibilityShape) and functional, because the framework's cardinality rule is always exactly one: an atomic, undecomposed WorkItem must name an Executor_IndividualHuman or Executor_SingleAgent (never a collective -- a single leaf of work has one party on the hook for it); a decomposable WorkItem may instead name a collective Executor (Executor_HumanTeam, Executor_AgentTeam or Executor_AgentFederation), and doing so is itself the signal that the item is being treated as composite. Distinct from supportedBy, RASCI's Support role, which carries no execution accountability and is not cardinality-constrained."@en .
+    skos:definition "The single Executor who executes this WorkItem -- mandatory on every in-scope WorkItem (see ExecutorResponsibilityShape) and functional, because the framework's cardinality rule is always exactly one: an atomic, undecomposed WorkItem must name an Executor_IndividualHuman or Executor_SingleAgent (never a collective -- a single leaf of work has one party on the hook for it); a decomposable WorkItem may instead name a collective Executor (Executor_HumanTeam, Executor_AgentTeam or Executor_AgentFederation), and doing so is itself the signal that the item is being treated as composite. Distinct from supportedBy, RASCI's Support role, which carries no execution accountability and is not cardinality-constrained. OWNER RULING (2026-10-11), 'collective works directly': naming a collective Executor responsible for a complex WorkItem is never a commitment to decompose it on any schedule, and decomposition is never forced -- the Team or Federation named responsible may work the item directly as a single unit of effort, and add or extend its own decomposesInto children only when, and if, it chooses to at its own discretion. This framework's own ExecutorResponsibilityShape checks a structural consistency fact at whatever moment it is asked (an item with a collective responsible must show at least one decomposesInto child by then), never a requirement about WHEN that child must appear relative to when work on the parent began -- the same way the chain's own order checks (see the Lineage Operating Discipline, G18) witness order between commits without dictating a schedule. This resolves what v1.379.0 left as this property's own cardinality rule without saying so explicitly; nothing about the rule itself changed."@en .
 
 backlog:supportedBy a owl:ObjectProperty ;
     rdfs:domain backlog:WorkItem ;
@@ -6965,12 +6965,19 @@ backlog:concernsCompetency a owl:ObjectProperty , owl:FunctionalProperty ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "concerns competency"@en .
 
-backlog:hasOutcome a owl:DatatypeProperty , owl:FunctionalProperty ;
+backlog:Outcome a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:Outcome_Success backlog:Outcome_PartialSuccess backlog:Outcome_Failure ) ;
+    rdfs:label "Outcome"@en ;
+    skos:definition "What happened when an Executor exercised a Competency against a WorkItem, closed at three values. OWNER RULING (2026-10-11), resolving what v1.379.0 left as free text: hasOutcome now names one of this closed set rather than a one-sentence string, for the same reason Role and Competency are closed -- 'what happened' is this framework's own business to enumerate so it can be queried and compared across ExperienceRecords, not an open narrative that can never be the same fact twice. Closed at exactly the three values the owner asked for; FailureRecord, whose own defining trait is a negative outcome, is the subclass whose hasOutcome is Outcome_Failure (see FailureRecord's own definition) -- Outcome_PartialSuccess and Outcome_Success describe the plain ExperienceRecord cases that are not failures."@en .
+
+backlog:hasOutcome a owl:ObjectProperty , owl:FunctionalProperty ;
     rdfs:domain backlog:ExperienceRecord ;
-    rdfs:range xsd:string ;
+    rdfs:range backlog:Outcome ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "has outcome"@en ;
-    skos:definition "What happened, in one sentence. Free text rather than a further closed vocabulary: the owner stipulated only that FailureRecord's outcome is negative (which is what distinguishes the subclass itself, not a further coded value), and did not ask for a closed Outcome enumeration -- adding one unasked would be exactly the unflagged policy invention B2b warns against, so this release keeps it as a string and flags the choice here rather than deciding it silently."@en .
+    skos:definition "What happened, named from the closed Outcome set. Changed (owner ruling, 2026-10-11) from v1.379.0's free-text string once the owner was asked directly and confirmed a closed vocabulary was in fact wanted -- a coded value that can be queried and compared across every ExperienceRecord, exactly like Role and Competency, rather than a one-sentence narrative that can never be the same fact twice. A free-text elaboration of what happened still belongs wherever the record's own narrative properties carry prose; this property names only the one closed fact a query can act on."@en .
 
 backlog:recordedAt a owl:DatatypeProperty , owl:FunctionalProperty ;
     rdfs:domain backlog:FailureRecord ;
@@ -6997,4 +7004,11 @@ backlog:overrideAppliesToWorkItem a owl:ObjectProperty ;
     rdfs:range backlog:WorkItem ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "override applies to work item"@en ;
-    skos:definition "Names the WorkItem a GovernanceRuling's competency-match override covers, when that ruling's enforcedByShape is CompetencyMatchShape. Reuses the existing GovernanceRuling class and its hasRulingIdentifier/hasRulingStatement/hasRulingRationale/enforcedByShape properties exactly as GovernanceRulingShape already requires them, rather than inventing a bespoke waiver or exception class -- the one new link needed is this pointer from a ruling to the specific WorkItem it excuses. Flagged as a conservative, owner-should-confirm scoping choice: the override is recorded at WORK-ITEM granularity (it silences CompetencyMatchShape for every requiresCompetency gap on that item at once), not at the finer per-missing-competency granularity, because the brief that asked for 'a recorded override' did not specify which, and whole-item is the simpler, more conservative reading of a business decision to proceed with this assignment despite the gap."@en .
+    skos:definition "Names the WorkItem a GovernanceRuling's competency-match override covers, when that ruling's enforcedByShape is CompetencyMatchShape. Reuses the existing GovernanceRuling class and its hasRulingIdentifier/hasRulingStatement/hasRulingRationale/enforcedByShape properties exactly as GovernanceRulingShape already requires them, rather than inventing a bespoke waiver or exception class. OWNER RULING (2026-10-11), overturning v1.379.0's whole-item reading: naming a WorkItem alone is no longer sufficient by itself to silence CompetencyMatchShape -- the ruling must ALSO carry overridesCompetency, naming the one specific Competency gap it excuses. A ruling that names this WorkItem but a different Competency does not cover the gap it was not written for; see overridesCompetency's own definition for the resolved, per-competency mechanism."@en .
+
+backlog:overridesCompetency a owl:ObjectProperty ;
+    rdfs:domain backlog:GovernanceRuling ;
+    rdfs:range backlog:Competency ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "overrides competency"@en ;
+    skos:definition "Names the one specific Competency a GovernanceRuling's competency-match override excuses, when that ruling's enforcedByShape is CompetencyMatchShape. OWNER RULING (2026-10-11), resolving the granularity v1.379.0 flagged and left open: an override is scoped per missing Competency, never to a whole WorkItem at once -- a single recorded GovernanceRuling must never silently clear every requiresCompetency gap a WorkItem carries. CompetencyMatchShape now requires, for each specific gap, a GovernanceRuling whose overrideAppliesToWorkItem names this WorkItem AND whose overridesCompetency names this exact missing Competency; a ruling covering the same item but a different Competency does not satisfy a gap it was never written against, so a WorkItem requiring several Competencies not covered by its responsible Executor needs its own excusing fact per gap -- either one GovernanceRuling naming every one of those Competencies via a repeated overridesCompetency (the property carries no maxCount), or a separate ruling per gap, whichever the owner's own decision record actually was. Builds on the existing GovernanceRuling class exactly as overrideAppliesToWorkItem already does, rather than a new waiver class, per L-119 (consolidate before creating)."@en .

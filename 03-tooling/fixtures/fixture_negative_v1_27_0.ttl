@@ -4144,3 +4144,26 @@ clz:Prof_DefaultExecutor a backlog:CompetencyProfile ;
 clz:CPM_GAP_DEFEXEC a backlog:Task ; backlog:hasState backlog:InProgress ;
     backlog:responsible <http://example.org/fixture-autofix#DefaultExecutor> ;
     backlog:requiresCompetency backlog:Comp_Coding .
+
+# CompetencyMatchShape, per-competency override (owner ruling, 2026-10-11, overturning v1.379.0's
+# whole-item reading): the identical coding gap as CPM_GAP_DEFEXEC above, but this time a
+# GovernanceRuling IS recorded against this exact item -- naming the WRONG Competency
+# (Comp_ToolScripting, which DefaultExecutor's profile already covers and gains nothing by
+# "excusing") rather than the real gap, Comp_Coding. Proves the new per-competency match: a ruling
+# that overrides a different Competency than the one actually missing does NOT satisfy the gate --
+# the shape must still fire, exactly as if no ruling existed at all.
+clz:CPM_GAP_WRONGOVERRIDE a backlog:Task ; backlog:hasState backlog:InProgress ;
+    backlog:responsible <http://example.org/fixture-autofix#DefaultExecutor> ;
+    backlog:requiresCompetency backlog:Comp_Coding .
+clz:Rul_WrongOverride a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "GY-EXR-3-NEG" ;
+    backlog:hasRulingStatement "Fixture-only: names CPM_GAP_WRONGOVERRIDE but overrides a competency it does not actually lack." ;
+    backlog:hasRulingRationale "Fixture-only: proves a mismatched override cannot silence CompetencyMatchShape's real gap." ;
+    backlog:enforcedByShape backlog:CompetencyMatchShape ;
+    backlog:overrideAppliesToWorkItem clz:CPM_GAP_WRONGOVERRIDE ;
+    backlog:overridesCompetency backlog:Comp_ToolScripting .
+
+# ExperienceOutcomeClosedShape: hasOutcome pointing at something outside the closed three-member
+# Outcome set (owner ruling, 2026-10-11, closing v1.379.0's free-text hasOutcome).
+clz:EXR_BADOUTCOME a backlog:ExperienceRecord ;
+    backlog:hasOutcome clz:NotAClosedOutcome .

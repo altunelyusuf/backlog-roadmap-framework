@@ -11260,6 +11260,102 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.381.0 — owner rulings: closing the four owner-ruled gaps from the Executor Taxonomy follow-up
+
+**Unplanned work:** same class as v1.379.0/v1.380.0 -- the owner ruled on the four open points those
+two releases flagged (two explicitly, as B2b-flagged granularity/vocabulary choices; two as named
+follow-up work -- real Executor individuals). One coherent release per R6 ("one release, one nameable
+change" -- the four rulings share a cause, closing BRSF's own Executor Taxonomy follow-up, even though
+their content is independent).
+
+**Ruling 1 -- decomposition trigger, resolved "collective works directly."** Documented, not newly
+enforced (none of either direction was enforced before, and none is now): a Team or Federation named
+`backlog:responsible` on a complex `WorkItem` may work it directly and add its own `decomposesInto`
+children only when, and if, it chooses -- decomposition is never forced. `backlog:responsible`'s own
+TBox definition (v1.124.0) and `ExecutorResponsibilityShape`'s clause-2 `sh:message` (shapes v1.157.0)
+both carry the ruling, explicitly; the clause's own SPARQL is untouched -- it already checked a
+structural fact at whatever moment it is asked, never a schedule, and the task here was to say so, not
+to build machinery for a rule that forbids forcing anything.
+
+**Ruling 2 -- override granularity, resolved "per-competency override," overturning v1.379.0's
+whole-item reading.** New property `backlog:overridesCompetency` (domain `GovernanceRuling`, range
+`Competency`; TBox v1.124.0) names the one specific `Competency` a ruling's override excuses, reusing
+the existing `GovernanceRuling` class exactly as `overrideAppliesToWorkItem` already does (L-119:
+nothing else in the register lets a `GovernanceRuling` scope itself to one competency, so this is new,
+not consolidated from something existing). `CompetencyMatchShape` (shapes v1.157.0) now requires a
+`GovernanceRuling` whose `overrideAppliesToWorkItem` names the item **and** whose `overridesCompetency`
+names the exact missing `Competency` -- a ruling naming the item but a different competency no longer
+silences the gate. Fixtures: `fixture_positive` v1.18.0 -> v1.19.0 adds `overridesCompetency` to both
+existing override rulings (`ex:Rul_CompOverride` -> `Comp_OntologyModeling`, `ex:Rul_DefExecOverride` ->
+`Comp_Coding`), proving the right-competency case still passes. `fixture_negative` v1.26.0 -> v1.27.0
+adds `clz:CPM_GAP_WRONGOVERRIDE` (the same coding gap, with a ruling naming the item but overriding
+`Comp_ToolScripting` instead) -- proves a mismatched override does NOT satisfy the gate; `CPM_GAP` and
+`CPM_GAP_DEFEXEC` (no override at all) are unchanged and still fire.
+
+**Ruling 3 -- `ExperienceRecord.hasOutcome`, resolved: closed vocabulary.** New class `backlog:Outcome`
+(`owl:oneOf`, same pattern as `Role`; TBox v1.124.0), three members --
+`Outcome_Success`/`Outcome_PartialSuccess`/`Outcome_Failure` -- declared in the live ABox (v1.37.0) the
+same way `Owner`/`Builder` and the `Comp_*` individuals already are. `hasOutcome` changes from
+`owl:DatatypeProperty`/`xsd:string` to `owl:ObjectProperty`/range `Outcome`. New shape
+`ExperienceOutcomeClosedShape` (shapes v1.157.0, `sh:in` over the three members, the same closure
+pattern `moduleAudience` already uses) catches a value outside the set -- genuinely new enforcement,
+since the owner's ruling this time was for an actually closed, gated vocabulary, not documentation of an
+already-unenforced choice. Fixtures: `fixture_positive`'s `ex:FR_Good` now carries
+`backlog:Outcome_Failure` instead of a free-text string; `fixture_negative` adds `clz:EXR_BADOUTCOME`
+(an `ExperienceRecord` with `hasOutcome` pointing outside the closed set) to prove the new shape fires.
+
+**Ruling 4 -- real Executor individuals, all six the owner named.** First time this package's own live
+register (`backlog_abox` v1.37.0) carries any `Executor` individual at all -- `DefaultExecutor` and its
+`CompetencyProfile` existed only inside sixteen fixture/reference files until now (nothing outside
+fixtures ever needed a `responsible`). Consolidated per L-119 rather than triplicated:
+`DefaultExecutor`'s own IRI (`http://example.org/fixture-autofix#DefaultExecutor`) is reused, unchanged,
+as the **Claude Code** session identity -- this session IS a Claude Code session, and the IRI's own
+fixture-carried definition already said as much; no second "Claude Code" individual was invented, and
+the sixteen existing fixture files are left untouched (self-contained test input whose existing
+declarations already agree with this one; touching sixteen already-versioned files for a prose
+clarification would be exactly the disproportionate churn L-119 warns against). Added, all
+`Executor_SingleAgent` unless noted, each with an honest `CompetencyProfile` drawn from the closed
+24-leaf vocabulary:
+- **Claude Code — default AI-agent executor"** (`DefaultExecutor`, reused) -- unchanged 9-leaf profile
+  (ontology/conceptual modelling, requirements, SHACL authoring, clause proof, tool scripting/running,
+  release management, backlog stewardship), now declared in the live register for the first time.
+- **"Claude Desktop — AI assistant session executor"** (`Executor_ClaudeDesktop`, new) -- modest:
+  requirements elicitation, tool scripting. Distinct from Claude Code's specialised profile.
+- **"GitHub Copilot — IDE coding assistant"** (`Executor_GitHubCopilot`, new) -- coding, tool
+  scripting, integration build.
+- **"BRSF release & gate automation — CI/CD pipeline executor"** (`Executor_ReleasePipeline`, new) --
+  release management, tool-run operation; modelled on this package's own `backlog_release_tool`/
+  `backlog_gate`, the pipeline concretely in evidence here.
+- **"Yusuf Altunel"** (`Executor_YusufAltunel`, `Executor_IndividualHuman`, new -- checked first: no
+  individual existed for him under any name) -- requirements elicitation, software architecture,
+  ontology modelling, governance ruling, backlog stewardship: evidence-based from this package's own
+  history, deliberately excluding leaves (e.g. SHACL authoring) this package's own record credits to
+  Claude Code acting on his instruction, not to him directly.
+- **"an adopting project co-owner (family member)"** (`Executor_FizyoVibeCoOwner`, `Executor_IndividualHuman`,
+  new, named generically per the owner's own instruction -- no name invented) -- no `CompetencyProfile`:
+  no individual-level evidence exists, and none is guessed at.
+- **"an adopting project"** (`Executor_FizyoVibeTeam`, `Executor_HumanTeam`, new) -- `hasExecutorMember` both
+  individuals above, `hasController` Yusuf Altunel specifically (the Team-must-have-a-controller
+  convention from v1.379.0); `CompetencyProfile` minimal and business-appropriate, `Comp_BacklogStewardship`
+  only, per the owner's own caution against over-claiming.
+None carries a `WorkItem`; confirmed directly (not assumed) that none trips `ExecutorResponsibilityShape`
+or `CompetencyMatchShape` (both `sh:targetClass backlog:WorkItem`, so no `Executor` individual is ever
+`$this`) or `FederationControllerShape` (none is an `Executor_AgentFederation`) by re-running the gate.
+
+**Documentation.** `BACKLOG_ROADMAP_FRAMEWORK_STANDARD` v1.124.0 -> v1.125.0: `responsible`'s entry
+carries Ruling 1; a new `Outcome` bullet and `CompetencyMatchShape`'s entry carry Ruling 2 and 3; a new
+bullet lists the Ruling 4 individuals. Doc-coverage gate re-run: 223/223 classes named (was 222;
+`Outcome` is the one addition), `VERDICT: PASS`.
+
+**Verified in this session, not asserted:** all five changed/renamed `.ttl` files parse; `backlog_validate`
+on the rebuilt positive fixture (v1.19.0) reports `CONFORMANT (0 violations)`; on the rebuilt negative
+fixture (v1.27.0), `CPM_GAP_WRONGOVERRIDE` and `EXR_BADOUTCOME` each fire exactly the clause built to
+prove, alongside every case v1.379.0/v1.380.0 already proved, and `Rul_WrongOverride` trips no other
+shape; `backlog_clause_proof_v1_0_4.py --strict` reports `116/116` declared proofs verified and
+`445/445` level-gated clauses proven to fire, `VERDICT: PASS` (was `115/115`/`444/444` -- the new
+`ExperienceOutcomeClosedShape` is the one addition); the full release gate (`backlog_gate_v1_39_0.sh`)
+passes end to end.
+
 ## v1.380.0 — owner follow-up: a default Claude executor, and competency-matching proven on it
 
 **Unplanned work:** same class as v1.379.0 -- two owner directions, verbatim, continuing that release rather than tracking a Story or Task: "Set yourself as the default executor. And if necessary the historic data, which is currently correct. We need to match the task competency requirements with abilities of executors." No TBox, SHACL or live-register change: every class, property and shape this needed already exists from v1.379.0. All three points are ABox/fixture work, moving no register item.

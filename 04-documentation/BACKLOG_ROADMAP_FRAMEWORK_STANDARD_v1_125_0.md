@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.124.0
+# Backlog & Roadmap Semantic Framework — Standard v1.125.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -2470,7 +2470,11 @@ This section adds that concrete party.
 - **`backlog:responsible`** — the single `Executor` who executes a `WorkItem`. Mandatory on every
   in-scope item (`ExecutorResponsibilityShape`) and functional: an atomic, undecomposed item must
   name an `Executor_IndividualHuman` or `Executor_SingleAgent`; a decomposable item may instead name
-  a collective `Executor`, and doing so is itself the signal that the item is composite.
+  a collective `Executor`, and doing so is itself the signal that the item is composite. **Resolved
+  (owner ruling, "collective works directly", 2026-10-11):** naming a collective responsible is
+  never a commitment to decompose on any schedule — the Team or Federation may work the item
+  directly and add its own `decomposesInto` children only when, and if, it chooses; decomposition
+  is never forced.
 - **`backlog:supportedBy`** — zero or more `Executor`s who support a `WorkItem` without being the
   executing party (RASCI's Support role); optional and uncounted, distinct from `responsible`.
 - **`CompetencyCategory`** / **`Competency`** — a closed, two-level taxonomy (six categories, each
@@ -2485,20 +2489,34 @@ This section adds that concrete party.
   `Competency` against a `WorkItem`. `FailureRecord` is the negative-outcome subclass and carries
   `recordedAt`/`failureExpiresAt`: failure records decay and are not permanent; whether a given one
   is still live is evaluated at query time against the clock, not forced into a SHACL shape.
+- **`Outcome`** — **resolved (owner ruling, 2026-10-11),** closing what was free text: a closed,
+  three-member vocabulary (`Outcome_Success`, `Outcome_PartialSuccess`, `Outcome_Failure`), the same
+  `owl:oneOf` pattern as `Role`. `ExperienceRecord.hasOutcome` now ranges over `Outcome` rather than
+  `xsd:string`; `ExperienceOutcomeClosedShape` enforces membership. A `FailureRecord`'s `hasOutcome`
+  is `Outcome_Failure`, the negative value its own class definition already names as its defining
+  trait.
 - **`CompetencyMatchShape`** — flags a `WorkItem` whose `requiresCompetency` its `responsible`
-  Executor's own `CompetencyProfile` does not cover, unless the gap carries a recorded override: a
-  `GovernanceRuling` whose `enforcedByShape` is this shape and whose `overrideAppliesToWorkItem`
-  names the item. The same gate-with-recorded-override pattern `AutonomyEvidenceShape` already uses,
-  with a recorded owner decision in place of verified evidence as the escape.
+  Executor's own `CompetencyProfile` does not cover, unless that **specific** gap carries a recorded
+  override: a `GovernanceRuling` whose `enforcedByShape` is this shape, whose
+  `overrideAppliesToWorkItem` names the item, **and** whose `overridesCompetency` names the exact
+  missing `Competency`. **Resolved (owner ruling, "per-competency override", 2026-10-11), overturning
+  v1.379.0's whole-item reading:** a single `GovernanceRuling` no longer silently clears every
+  `requiresCompetency` gap on a `WorkItem` at once — a ruling that names the item but overrides a
+  different `Competency` does not satisfy this gate. `backlog:overridesCompetency` (domain
+  `GovernanceRuling`, range `Competency`) is the new property this required; everything else reuses
+  the existing `GovernanceRuling` class exactly as `overrideAppliesToWorkItem` already did. The same
+  gate-with-recorded-override pattern `AutonomyEvidenceShape` already uses, with a recorded owner
+  decision in place of verified evidence as the escape.
 - **Scope (owner's explicit, final ruling).** Archived and completed lineages/work items are
   permanently out of scope for every constraint this section adds — no `responsible` backfill, no
   competency-match enforcement — for anything Done, Cancelled, or belonging to a lineage carrying
   `lineageArchived true`. The same `FILTER NOT EXISTS` pattern this framework already uses for the
   identical reason elsewhere.
-- **Flagged for the owner to confirm, per the governing discipline's B2b:** the override above is
-  recorded at whole-work-item granularity (it silences `CompetencyMatchShape` for every
-  `requiresCompetency` gap on that item at once), not per missing competency, because the brief that
-  asked for a recorded override did not specify which, and whole-item is the more conservative
-  reading of a business decision to proceed with an assignment despite a gap. `ExperienceRecord`'s
-  own `hasOutcome` is free text rather than a further closed vocabulary, for the same reason: the
-  owner stipulated only that `FailureRecord`'s outcome is negative, not a coded value set.
+- **Real Executor individuals (owner follow-up, 2026-10-11).** This package's own live register now
+  carries real `Executor` individuals for the first time: `DefaultExecutor` (reused in place, same
+  IRI, now explicitly the Claude Code session identity) and a new sibling for Claude Desktop
+  sessions, one for GitHub Copilot / IDE assistants, one for this package's own release-pipeline
+  automation (`backlog_release_tool`/`backlog_gate`), one `Executor_IndividualHuman` for the owner
+  (Yusuf Altunel) and one for his an adopting project co-owner, and one `Executor_HumanTeam`, `an adopting project`,
+  composed of the two with the owner as its `hasController`. None carries a `WorkItem` yet; each
+  carries a `CompetencyProfile` scaled to the evidence actually in hand for it.

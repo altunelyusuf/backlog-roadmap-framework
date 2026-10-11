@@ -9,9 +9,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog/shacl/1.156.0> ;
-    owl:versionInfo "1.156.0" ;
-    owl:priorVersion <http://example.org/backlog-shapes/1.155.0> ;
+    owl:versionIRI <http://example.org/backlog/shacl/1.157.0> ;
+    owl:versionInfo "1.157.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.154.0> , <http://example.org/backlog-shapes/1.153.0> , <http://example.org/backlog-shapes/1.152.0> , <http://example.org/backlog-shapes/1.151.0> , <http://example.org/backlog-shapes/1.150.0> , <http://example.org/backlog-shapes/1.149.0> , <http://example.org/backlog-shapes/1.148.0> , <http://example.org/backlog-shapes/1.147.0> , <http://example.org/backlog-shapes/1.146.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.145.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.144.0> ;
@@ -7705,7 +7705,7 @@ backlog:ExecutorResponsibilityShape a sh:NodeShape ;
             FILTER NOT EXISTS { $this backlog:belongsToLineage ?lin . ?lin backlog:lineageArchived true }
         }""" ] ;
     sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "L3: this work item is atomic -- it decomposes into no child -- and its backlog:responsible is a collective Executor (a human team, an agent team or an agent federation). An atomic, undecomposed leaf of work has exactly one party on the hook for it; a collective responsible is only meaningful, and only permitted, once an item has itself been decomposed, where naming a collective IS the signal that the item is being treated as composite." ;
+        sh:message "L3: this work item is atomic -- it decomposes into no child -- and its backlog:responsible is a collective Executor (a human team, an agent team or an agent federation). An atomic, undecomposed leaf of work has exactly one party on the hook for it; a collective responsible is only meaningful, and only permitted, once an item has itself been decomposed, where naming a collective IS the signal that the item is being treated as composite. This checks a structural fact at whatever moment it is asked, never a schedule: a collective named responsible for a complex item may work it directly and add its decomposesInto children whenever it chooses (owner ruling, 2026-10-11, 'collective works directly' -- see backlog:responsible's own definition); decomposition itself is never forced." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             $this backlog:responsible ?r .
@@ -7720,14 +7720,14 @@ backlog:CompetencyMatchShape a sh:NodeShape ;
     backlog:fixtureCaseName "CPM_GAP" ;
     sh:targetClass backlog:WorkItem ;
     sh:severity sh:Violation ;
-    rdfs:label "A required competency is covered by the responsible Executor, or the gap is overridden (L3)"@en ;
+    rdfs:label "A required competency is covered by the responsible Executor, or that specific gap is overridden (L3)"@en ;
     sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "L3: this work item requires a Competency its responsible Executor's own CompetencyProfile does not list as a capability, and the gap carries no recorded override. Mirrors AutonomyEvidenceShape's own pattern -- a check that normally fires unless something that could have failed says otherwise -- except the escape here is a recorded owner decision rather than verified evidence: a GovernanceRuling whose enforcedByShape is this shape and whose overrideAppliesToWorkItem names this item silences it, exactly as GovernanceRulingShape already requires every ruling to be identified, stated and shape-enforced." ;
+        sh:message "L3: this work item requires a Competency its responsible Executor's own CompetencyProfile does not list as a capability, and this specific gap carries no recorded override. Mirrors AutonomyEvidenceShape's own pattern -- a check that normally fires unless something that could have failed says otherwise -- except the escape here is a recorded owner decision rather than verified evidence: a GovernanceRuling whose enforcedByShape is this shape, whose overrideAppliesToWorkItem names this item AND whose overridesCompetency names this exact missing Competency silences it, exactly as GovernanceRulingShape already requires every ruling to be identified, stated and shape-enforced. PER-COMPETENCY since owner ruling 2026-10-11 (overturning v1.379.0's whole-item reading): a ruling that names this item but overrides a DIFFERENT Competency does not silence this gap -- one ruling no longer clears every requiresCompetency gap on a WorkItem at once." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             $this backlog:requiresCompetency ?c ; backlog:responsible ?r .
             FILTER NOT EXISTS { ?r backlog:hasCompetencyProfile ?cp . ?cp backlog:hasCapability ?c }
-            FILTER NOT EXISTS { ?rul a backlog:GovernanceRuling ; backlog:enforcedByShape backlog:CompetencyMatchShape ; backlog:overrideAppliesToWorkItem $this }
+            FILTER NOT EXISTS { ?rul a backlog:GovernanceRuling ; backlog:enforcedByShape backlog:CompetencyMatchShape ; backlog:overrideAppliesToWorkItem $this ; backlog:overridesCompetency ?c }
             FILTER NOT EXISTS { $this backlog:hasState ?st . FILTER (?st IN (backlog:Done, backlog:Cancelled)) }
             FILTER NOT EXISTS { $this backlog:belongsToLineage ?lin . ?lin backlog:lineageArchived true }
         }""" ] .
@@ -7756,3 +7756,22 @@ backlog:FailureRecordTemporalShape a sh:NodeShape ;
             $this backlog:recordedAt ?r ; backlog:failureExpiresAt ?e .
             FILTER (?e <= ?r)
         }""" ] .
+
+#################################################################
+#  v1.157.0 (owner follow-up on v1.379.0/v1.380.0, 2026-10-11) --
+#  closing the four owner-ruled Executor Taxonomy gaps. The Outcome
+#  closure (below) is the one genuinely new piece of enforcement
+#  this release adds; the other three rulings (per-competency
+#  override above, the decomposition-trigger documentation on
+#  ExecutorResponsibilityShape above, and the new Executor
+#  individuals) change no other shape's SPARQL.
+#################################################################
+
+backlog:ExperienceOutcomeClosedShape a sh:NodeShape ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "EXR_BADOUTCOME" ;
+    sh:targetClass backlog:ExperienceRecord ;
+    sh:severity sh:Violation ;
+    rdfs:label "An outcome, when asserted, is one of the closed Outcome set (L1)"@en ;
+    sh:property [ sh:path backlog:hasOutcome ; sh:in ( backlog:Outcome_Success backlog:Outcome_PartialSuccess backlog:Outcome_Failure ) ;
+        sh:message "L1: this ExperienceRecord's hasOutcome is not one of the three closed Outcome individuals. Owner ruling (2026-10-11): hasOutcome moved from v1.379.0's free text to this closed vocabulary precisely so 'what happened' is always one of a fixed, queryable set, the same reason Role and Competency are closed; a value outside the set is as malformed as an unrecognised Role would be." ] .

@@ -22,9 +22,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (ABox: controlled individuals, reference data and the live register)"@en ;
-    owl:versionIRI <http://example.org/backlog/abox/1.36.0> ;
-    owl:versionInfo "1.36.0" ;
-    owl:priorVersion <http://example.org/backlog/abox/1.35.0> ;
+    owl:versionIRI <http://example.org/backlog/abox/1.37.0> ;
+    owl:versionInfo "1.37.0" ;
+    owl:priorVersion <http://example.org/backlog/abox/1.36.0> , <http://example.org/backlog/abox/1.35.0> ;
     owl:priorVersion <http://example.org/backlog/abox/1.34.0> , <http://example.org/backlog/abox/1.33.0> , <http://example.org/backlog/abox/1.32.0> , <http://example.org/backlog/abox/1.31.0> , <http://example.org/backlog/abox/1.30.0> , <http://example.org/backlog/abox/1.29.0> , <http://example.org/backlog/abox/1.28.0> , <http://example.org/backlog/abox/1.27.0> , <http://example.org/backlog/abox/1.26.0> , <http://example.org/backlog/abox/1.25.0> , <http://example.org/backlog/abox/1.24.0> , <http://example.org/backlog/abox/1.23.0> , <http://example.org/backlog/abox/1.22.0> , <http://example.org/backlog/abox/1.21.0> , <http://example.org/backlog/abox/1.20.0> , <http://example.org/backlog/abox/1.19.0> , <http://example.org/backlog/abox/1.17.0> , <http://example.org/backlog/abox/1.16.0> , <http://example.org/backlog/abox/1.15.0> , <http://example.org/backlog/abox/1.14.0> , <http://example.org/backlog/abox/1.13.0> , <http://example.org/backlog/abox/1.12.0> , <http://example.org/backlog/abox/1.11.0> , <http://example.org/backlog/abox/1.10.0> , <http://example.org/backlog/abox/1.9.0> , <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
         <http://example.org/backlog-abox/1.2.1> ,
                      <http://example.org/backlog-abox/1.2.0> ,
@@ -5759,3 +5759,122 @@ backlog:Comp_RetrospectiveFacilitation a owl:NamedIndividual , backlog:Competenc
     rdfs:label "Retrospective facilitation"@en ;
     skos:definition "Running a retrospective that produces a real RetrospectiveFinding with a root cause, not a formality."@en ;
     skos:broader backlog:Comp_Operations .
+
+#################################################################
+#  v1.37.0 (owner follow-up on v1.379.0/v1.380.0, 2026-10-11) --
+#  closing two of the four owner-ruled Executor Taxonomy gaps.
+#
+#  Ruling 3: Outcome, a closed vocabulary, same owl:oneOf pattern
+#  as Role (TBox v1.124.0's own Outcome class carries the member
+#  list; these three individuals are its members' real declarations,
+#  the same split this package already uses for Role/Owner/Builder
+#  and for Competency/Comp_*).
+#################################################################
+
+backlog:Outcome_Success a owl:NamedIndividual , backlog:Outcome ;
+    rdfs:label "Success"@en ;
+    skos:definition "The Executor fully achieved what the Competency was exercised for, with nothing left unresolved."@en .
+
+backlog:Outcome_PartialSuccess a owl:NamedIndividual , backlog:Outcome ;
+    rdfs:label "Partial success"@en ;
+    skos:definition "The Executor achieved some, but not all, of what the Competency was exercised for -- real progress, with a real remainder."@en .
+
+backlog:Outcome_Failure a owl:NamedIndividual , backlog:Outcome ;
+    rdfs:label "Failure"@en ;
+    skos:definition "The Executor did not achieve what the Competency was exercised for. The negative outcome FailureRecord's own TBox definition names as its defining trait; a FailureRecord's hasOutcome is this individual."@en .
+
+#################################################################
+#  Ruling 4 (owner follow-up, 2026-10-11): real Executor individuals
+#  the owner named specifically, none yet carrying any WorkItem (none
+#  needed one; these just need to exist, correctly typed and
+#  conformant). First time this package's own live register carries
+#  any Executor individual at all -- until now DefaultExecutor and its
+#  CompetencyProfile existed only inside fixture/reference files
+#  (16 of them; see backlog_strategy_exercise_abox's own comment and
+#  the v1.380.0 changelog entry), because nothing outside fixtures
+#  needed a responsible party. Consolidated per L-119 rather than
+#  triplicated: DefaultExecutor's own IRI is reused here, unchanged,
+#  rather than inventing a second "Claude Code" individual that would
+#  denote the exact same real-world party -- this session IS a Claude
+#  Code session, and DefaultExecutor's own fixture-carried definition
+#  already said as much ("Claude, the AI agent carrying out BRSF's own
+#  ontology-engineering sessions"). Its first live-register
+#  declaration below makes that identity explicit; the sixteen
+#  existing fixture files are left untouched (each is self-contained
+#  test input validated on its own, their existing type+label[+
+#  definition] triples already agree with this one and needed no
+#  edit, and touching sixteen already-versioned fixtures for a prose
+#  clarification would be exactly the disproportionate churn L-119
+#  warns against when the cheaper path -- documenting the choice once,
+#  here -- settles the same question).
+#################################################################
+
+<http://example.org/fixture-autofix#DefaultExecutor> a owl:NamedIndividual , backlog:Executor_SingleAgent ;
+    rdfs:label "Claude Code — default AI-agent executor"@en ;
+    skos:definition "The Claude Code session identity: this package's own default AI-agent Executor, the one this framework currently attributes AI-agent-performed work on BRSF itself to when no more specific identity applies. First planted as a throwaway, untyped stand-in across sixteen fixture/reference files when backlog:responsible became mandatory (v1.123.0); relabelled in place at v1.380.0 once the owner ruled the framework should name its own executing party honestly; given its first live-register declaration here (v1.37.0) once the owner asked to differentiate it from Executor_ClaudeDesktop as a distinct, reusable identity -- same IRI throughout, never duplicated." ;
+    backlog:hasCompetencyProfile backlog:CP_DefaultExecutor .
+
+backlog:CP_DefaultExecutor a owl:NamedIndividual , backlog:CompetencyProfile ;
+    rdfs:label "Claude Code's competency profile"@en ;
+    skos:definition "The capabilities this package's own sessions have actually exercised: conceptual and ontology modelling, requirements reading, SHACL authoring and clause-proving, tool scripting and running, release management and backlog stewardship -- the same nine-leaf subset of the closed 24 that fixture_positive's own ex:Prof_DefaultExecutor already proves this individual against, carried here into the live register for the first time."@en ;
+    backlog:hasCapability backlog:Comp_OntologyModeling , backlog:Comp_ConceptualDataModeling ,
+        backlog:Comp_RequirementsElicitation , backlog:Comp_ShaclAuthoring , backlog:Comp_ClauseProof ,
+        backlog:Comp_ToolScripting , backlog:Comp_ToolRunOperation , backlog:Comp_ReleaseManagement ,
+        backlog:Comp_BacklogStewardship .
+
+backlog:Executor_ClaudeDesktop a owl:NamedIndividual , backlog:Executor_SingleAgent ;
+    rdfs:label "Claude Desktop — AI assistant session executor"@en ;
+    skos:definition "The Claude Desktop session identity, distinct from Claude Code's (DefaultExecutor): a single non-human executing party with no standing team membership, used when the owner works with Claude through the desktop application rather than through this package's own Claude Code sessions. Owner-directed differentiation, 2026-10-11: until this release the framework's one AI-agent identity (DefaultExecutor) stood in for any Claude session; this gives the desktop surface its own reusable identity rather than overloading Claude Code's."@en ;
+    backlog:hasCompetencyProfile backlog:CP_ClaudeDesktop .
+
+backlog:CP_ClaudeDesktop a owl:NamedIndividual , backlog:CompetencyProfile ;
+    rdfs:label "Claude Desktop's competency profile"@en ;
+    skos:definition "Modest and general, not this package's own specialised ontology-engineering set: requirements reading and tool scripting, the kind of drafting and planning assistance a desktop chat session actually performs, without crediting the SHACL-authoring/clause-proof/release-management skills Claude Code's own profile carries from doing that specific work in this specific package."@en ;
+    backlog:hasCapability backlog:Comp_RequirementsElicitation , backlog:Comp_ToolScripting .
+
+backlog:Executor_GitHubCopilot a owl:NamedIndividual , backlog:Executor_SingleAgent ;
+    rdfs:label "GitHub Copilot — IDE coding assistant"@en ;
+    skos:definition "The IDE-integrated coding-assistant identity the owner named specifically: a single non-human executing party, distinct from both Claude identities, for work actually done inline in an editor rather than in a chat or CLI session."@en ;
+    backlog:hasCompetencyProfile backlog:CP_GitHubCopilot .
+
+backlog:CP_GitHubCopilot a owl:NamedIndividual , backlog:CompetencyProfile ;
+    rdfs:label "GitHub Copilot's competency profile"@en ;
+    skos:definition "Coding- and implementation-leaning, per the owner's own characterisation: writing and completing application code, scripting, and integration work, the three leaves this kind of inline IDE assistant actually performs -- no analysis, governance or operations leaves credited, since an IDE assistant does not do that work."@en ;
+    backlog:hasCapability backlog:Comp_Coding , backlog:Comp_ToolScripting , backlog:Comp_IntegrationBuild .
+
+backlog:Executor_ReleasePipeline a owl:NamedIndividual , backlog:Executor_SingleAgent ;
+    rdfs:label "BRSF release & gate automation — CI/CD pipeline executor"@en ;
+    skos:definition "The owner's own named example ('a release pipeline, a test runner') modelled as one pipeline-class identity, grounded in the one concretely in evidence inside this very package: backlog_release_tool and backlog_gate, the automation that actually runs this package's own gate, manifest, publish and tag steps end to end with no person driving each step by hand. One non-human executing party, no standing team membership -- the taxonomy's own Executor_SingleAgent reading of 'a single automated pipeline run', here standing for the whole repeatable run rather than one throwaway invocation."@en ;
+    backlog:hasCompetencyProfile backlog:CP_ReleasePipeline .
+
+backlog:CP_ReleasePipeline a owl:NamedIndividual , backlog:CompetencyProfile ;
+    rdfs:label "the release pipeline's competency profile"@en ;
+    skos:definition "Exactly the two Operations leaves this automation actually performs on every run: taking a change through gate, manifest, publish and tag to a real release, and running this framework's own tooling and reading what it reports. No other leaf credited -- the pipeline does not analyse, design, decide or govern."@en ;
+    backlog:hasCapability backlog:Comp_ReleaseManagement , backlog:Comp_ToolRunOperation .
+
+backlog:Executor_YusufAltunel a owl:NamedIndividual , backlog:Executor_IndividualHuman ;
+    rdfs:label "Yusuf Altunel"@en ;
+    skos:definition "The framework's own owner: an IT R&D manager and ontology engineer, PhD in Computer Engineering, who rules every governance question this package records as a GovernanceRuling and has directed this package's own development throughout. No Executor_IndividualHuman individual existed for him under any name before this release (checked directly against the live register before adding one, per L-119)."@en ;
+    backlog:hasCompetencyProfile backlog:CP_YusufAltunel .
+
+backlog:CP_YusufAltunel a owl:NamedIndividual , backlog:CompetencyProfile ;
+    rdfs:label "Yusuf Altunel's competency profile"@en ;
+    skos:definition "Modest and evidence-based, grounded in what this package's own history actually shows him doing, not an IT R&D manager's full possible range: eliciting and stating requirements (every owner-directed feature this changelog records began as his own stated requirement), software architecture, ontology modelling (his own PhD subject and this framework's own method), governance ruling (every GovernanceRuling this package reifies is his), and backlog stewardship (directing this package's own roadmap release after release). Deliberately leaves out leaves this package has no direct evidence for, such as SHACL authoring or tool scripting, which this package's own history credits to Claude Code (DefaultExecutor) doing the work on his instruction, not to him doing it directly."@en ;
+    backlog:hasCapability backlog:Comp_RequirementsElicitation , backlog:Comp_SoftwareArchitecture ,
+        backlog:Comp_OntologyModeling , backlog:Comp_GovernanceRuling , backlog:Comp_BacklogStewardship .
+
+backlog:Executor_FizyoVibeCoOwner a owl:NamedIndividual , backlog:Executor_IndividualHuman ;
+    rdfs:label "an adopting project co-owner (family member)"@en ;
+    skos:definition "The owner's co-owner of an adopting project, a physiotherapy and Pilates wellness studio in Ataköy that the owner co-owns alongside him. Named generically per the owner's own instruction -- no name is on record for this person, and none is invented here. Carries no CompetencyProfile: this package holds no direct evidence of this person's own individual competencies (as distinct from the FizyoVibeTeam's collective ones, below), and guessing one would be exactly the unevidenced claim the owner's own instruction warned against; hasCompetencyProfile is optional on every Executor (see its own TBox definition) and an Executor with none simply covers nothing, which is the honest state here."@en .
+
+backlog:Executor_FizyoVibeTeam a owl:NamedIndividual , backlog:Executor_HumanTeam ;
+    rdfs:label "an adopting project"@en ;
+    skos:definition "The wellness-studio business itself, modelled as the human team its two owners jointly constitute: a named group of people acting as one executing party. hasController names Yusuf Altunel specifically (not the co-owner), consistent with this package's own Team-must-have-a-controller convention from the v1.379.0 Executor-taxonomy work, and with his own role as the framework's owner and the adopting project's primary point of business decision."@en ;
+    backlog:hasExecutorMember backlog:Executor_YusufAltunel , backlog:Executor_FizyoVibeCoOwner ;
+    backlog:hasController backlog:Executor_YusufAltunel ;
+    backlog:hasCompetencyProfile backlog:CP_FizyoVibeTeam .
+
+backlog:CP_FizyoVibeTeam a owl:NamedIndividual , backlog:CompetencyProfile ;
+    rdfs:label "the adopting project's competency profile"@en ;
+    skos:definition "Minimal and business-appropriate rather than technical, per the owner's own caution against over-claiming: backlog stewardship, the one leaf a wellness-studio business genuinely exercises in keeping its own register of work accurate and groomed. No analysis, design, verification or technical operations leaf is credited -- this package holds no evidence an adopting project itself (as opposed to the framework built for it) performs that kind of work, and none is guessed at to fill the profile out further."@en ;
+    backlog:hasCapability backlog:Comp_BacklogStewardship .
