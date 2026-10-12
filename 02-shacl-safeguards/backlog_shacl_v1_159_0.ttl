@@ -9,9 +9,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog/shacl/1.158.0> ;
-    owl:versionInfo "1.158.0" ;
-    owl:priorVersion <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
+    owl:versionIRI <http://example.org/backlog/shacl/1.159.0> ;
+    owl:versionInfo "1.159.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.154.0> , <http://example.org/backlog-shapes/1.153.0> , <http://example.org/backlog-shapes/1.152.0> , <http://example.org/backlog-shapes/1.151.0> , <http://example.org/backlog-shapes/1.150.0> , <http://example.org/backlog-shapes/1.149.0> , <http://example.org/backlog-shapes/1.148.0> , <http://example.org/backlog-shapes/1.147.0> , <http://example.org/backlog-shapes/1.146.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.145.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.144.0> ;
@@ -7825,4 +7825,40 @@ backlog:UnconnectedActiveLineagesShape a sh:NodeShape ;
                       | (^backlog:belongsToLineage / backlog:dependsOn / backlog:belongsToLineage)
                       | (^backlog:belongsToLineage / ^backlog:dependsOn / backlog:belongsToLineage) )+ ?other
             }
+        }""" ] .
+
+#################################################################
+#  v1.159.0 (G107, automate-python-book-3e handovers, deferred
+#  since 2026-09-17) -- work that is verifiably done must not still
+#  say it has not started.
+#
+#  The handover's second mitigation: the batch advisory sees "real
+#  work happened and the item never moved" only for batch-tracked
+#  items; generalised, it is any item whose work is demonstrably
+#  there while the item sits at Proposed. "Demonstrably" is what the
+#  evidence bridge already establishes: an Evidence record with
+#  evidenceVerified true, which the bridge sets only after finding
+#  the test passing, the hash matching or the artifact present. So
+#  the rule needs no new vocabulary and no knowledge of the
+#  repository: an item in Proposed, Ready or Refined that carries
+#  verified evidence of its own contradicts itself. Evidence of a
+#  parent is not counted (a parent's evidence may cover children).
+#  Behind a RuleSet, as a rule that binds only work that declared it
+#  (G89, G91).
+#################################################################
+
+backlog:EvidencedWorkStillUnstartedShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItem ;
+    sh:severity sh:Violation ;
+    rdfs:label "Work with verified evidence cannot still be unstarted (G107)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "EVID_UNSTARTED" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G107: this work item is still Proposed, Ready or Refined and carries evidence the bridge verified (evidenceVerified true): a test that passed, a hash that matched or an artifact that exists. The work is there and the item says it has not started, so the register describes a process that did not happen. Move the item to the state it is really in with its real start time, or, if the evidence belongs to other work, remove it from this item." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?reg backlog:adoptsRuleSet backlog:RS_StateReflectsEvidence .
+            $this backlog:hasState ?st ; backlog:hasEvidence ?e .
+            FILTER (?st IN (backlog:Proposed, backlog:Ready, backlog:Refined))
+            ?e backlog:evidenceVerified true .
         }""" ] .

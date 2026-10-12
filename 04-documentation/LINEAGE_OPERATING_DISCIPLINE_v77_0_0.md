@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v76.0.0
+# Lineage Operating Discipline — v77.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -3242,3 +3242,34 @@ in the manifest and refused the ceremony.
 **What is not claimed.** The derivation was shown to pass its own check and to refuse a drifted file and an undefined member; it was not run against a consumer ledger
 (the consumer's own diagnostic of 96 individuals reached 111 residual violations, which are the newer shapes catching real faults in its ledger,
 not vocabulary). The archive tool was proved on a planted consumer ledger, not on the consumer's own. Related: G92, G99, G104, L-112, L-115.
+
+## G107 — Work that is done cannot say it has not started, and a finish time cannot precede its evidence: the last of the two deferred plan-versus-execution handovers
+
+Ruled 2026-10-12, closing the two handovers of 2026-09-16 (no kick-off; a plan replaced by its own measurements) whose remainder was deferred
+on 2026-09-17/18. Eight mitigations were proposed between them; five were built earlier (G97 status lag both ways; the release gate that refuses
+an increment with no item moved and no unplanned-work statement; the objective-metric mirror; the identical-timestamp cluster rule). Each remaining
+one was tested against a single question: what can a register, a tool or the repository actually see.
+
+**Built.**
+- *Generalise the batch advisory.* `EvidencedWorkStillUnstartedShape`, behind the rule set "a work item's state reflects the evidence it carries":
+  an item still Proposed, Ready or Refined that carries evidence the evidence bridge verified is contradicting itself. "Demonstrably done" is what the
+  bridge already establishes, so the rule needs no new vocabulary and does not read the repository. Evidence of a parent is not counted. It binds only
+  registers that adopted it (G89, G91); a register whose items were never moved adopts it when the owner decides to correct them forward.
+- *Bound an artifact to its package.* Measured: the bridge joined any recorded path to the workspace, so an absolute path, `..` or a link verified a
+  file of another package (the probe fails on v1.0.0 for all three). v1.1.0 verifies only what resolves inside the workspace it is given. The
+  string that names an artifact on a deliverable stays a string; the move of a deliverable to another package is a scope change on the losing side
+  (ChangeRequest, ScopeChange, or out-scoping), which this framework already requires and now cannot be bypassed by a path.
+- *Constrain invented dates where a record exists.* `backlog_timeline_witness`: a Done item whose finishedAt is earlier than the first commit of its
+  evidence artifact is contradicted by the repository. Only that is claimed. A later time proves nothing either way, a path with no history is reported
+  as not measured, and the identical-timestamp rule remains the register-only half.
+
+**Not built, with reasons.**
+- *A separate execution kick-off advisory.* The case it names (a lineage whose chain is complete, status still Backlogged or below, work shipped) is
+  already refused by the status-lag rule and the release gate together; a third rule on the same fact is not the cheaper mechanism (G39).
+- *A per-objective flag that its metric is only partial.* A flag the author must remember to set is the same omission it is meant to catch, and the
+  handover's own evidence shows what did catch the gap: the coverage measure, and the backlog. Stipulated, not built (L-116). Revival condition: a
+  register whose objective declared completeness and was later found partial by a measure.
+
+**What stays with the sender.** The decisions about the third-edition package's own register (the 24 invented times, the 106 items, the two
+deliverables that moved to the toolkit) are about that register and its owner. The tools above are what that session runs to settle them from facts.
+Related: G89, G91, G97, G99, G105, L-112, L-116.

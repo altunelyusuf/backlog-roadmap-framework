@@ -3209,7 +3209,7 @@ lineagestatusn:S_Understated a backlog:Story ; backlog:hasIdentifier "S-US" ; ba
 # The negative fixture ADOPTS the status rule set, so the clauses it exists to prove are in force here
 # even though minimal fixtures elsewhere are untouched by them (G91: a ruling binds what declared it).
 lineagestatusn:Reg a backlog:Backlog ; rdfs:label "fixture register"@en ; backlog:isRegisterRoot true ;
-    backlog:adoptsRuleSet backlog:RS_LineageStatus , backlog:RS_LabelConvention , backlog:RS_ConcurrentLineages .
+    backlog:adoptsRuleSet backlog:RS_LineageStatus , backlog:RS_LabelConvention , backlog:RS_ConcurrentLineages , backlog:RS_StateReflectsEvidence .
 
 
 # --- merged from fixture_sprint_ceremonies_negative_v1_0_0.ttl (sprintceremoni) ---
@@ -4177,3 +4177,9 @@ clz:EXR_BADOUTCOME a backlog:ExperienceRecord ;
 #   transitive) cannot live in a fixture this crowded and are proven by backlog_lineage_concurrency_probe.
 ex:LIN_UNCONNECTED_A a backlog:Lineage ; backlog:hasLineageStatus backlog:LS_InProgress .
 ex:LIN_UNCONNECTED_B a backlog:Lineage ; backlog:hasLineageStatus backlog:LS_InProgress .
+
+# v1.29.0 (G107): EvidencedWorkStillUnstartedShape -- an item still Proposed that carries evidence the bridge verified.
+# lineagestatusn:Reg adopts RS_StateReflectsEvidence. ex:EVID_UNSTARTED is Proposed with verified evidence -> fires.
+# The silent controls (not adopted, started item, unverified evidence, no evidence) are in backlog_state_evidence_probe.
+ex:EVID_UNSTARTED a backlog:Task ; backlog:hasState backlog:Proposed ; backlog:hasEvidence ex:EVID_UNSTARTED_E .
+ex:EVID_UNSTARTED_E a backlog:ArtifactEvidence ; backlog:evidenceVerified true .

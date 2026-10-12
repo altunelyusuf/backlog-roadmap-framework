@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_evidence_bridge v1.0.0 — the one component allowed to assert
+"""backlog_evidence_bridge v1.1.0 (G107: a recorded path that resolves outside the workspace is not verified; v1.0.0 joined any path to the workspace, so an absolute path or ".." verified a file of another package) — the one component allowed to assert
 backlog:evidenceVerified.
 
 The ontology cannot read a filesystem, so every claim that an item is Done
@@ -21,7 +21,7 @@ Checks by evidence kind:
                    a reference no one can retrieve is not evidence
 
 Usage:
-  backlog_evidence_bridge_v1_0_0.py REGISTER.ttl --workspace DIR [-o OUT.ttl]
+  backlog_evidence_bridge_v1_1_0.py REGISTER.ttl --workspace DIR [-o OUT.ttl]
                                     [--test-command 'npx playwright test {spec} --grep {id}']
 """
 
@@ -61,12 +61,22 @@ def find_by_hash(root, digest):
     return None
 
 
+def inside(workspace, rel):
+    """The real path of REL under WORKSPACE, or None when it resolves outside it (an absolute path, '..', or a link that leaves).
+    v1.1.0 (G107): evidence that lives outside the workspace being checked is not evidence of this workspace's work."""
+    root = os.path.realpath(workspace)
+    full = os.path.realpath(os.path.join(root, str(rel)))
+    return full if os.path.commonpath([root, full]) == root else None
+
+
 def check_test(g, ev, workspace, test_command):
     spec = g.value(ev, BL.hasTestSpec)
     test_id = g.value(ev, BL.hasTestId)
     if spec is None:
         return False, "no test spec recorded"
-    path = os.path.join(workspace, str(spec))
+    path = inside(workspace, spec)
+    if path is None:
+        return False, "test spec %s lies outside the workspace" % spec
     if not os.path.isfile(path):
         return False, "spec not found at %s" % path
     if not test_command:
@@ -92,7 +102,9 @@ def check_artifact(g, ev, workspace):
     path = g.value(ev, BL.hasArtifactPath)
     if path is None:
         return False, "no artifact path recorded"
-    full = os.path.join(workspace, str(path))
+    full = inside(workspace, path)
+    if full is None:
+        return False, "artifact %s lies outside the workspace" % path
     if not os.path.isfile(full):
         return False, "artifact not found at %s" % full
     digest = g.value(ev, BL.hasArtifactSHA256)
@@ -108,7 +120,9 @@ def check_review(g, ev, workspace):
     ref = g.value(ev, BL.hasReviewRecordRef)
     if ref is None:
         return False, "no review record reference recorded"
-    candidate = os.path.join(workspace, str(ref).split("#", 1)[0])
+    candidate = inside(workspace, str(ref).split("#", 1)[0])
+    if candidate is None:
+        return False, "review record %s lies outside the workspace" % ref
     if os.path.exists(candidate):
         return True, "review record resolved at %s" % candidate
     return False, "review record reference does not resolve to a retrievable file"

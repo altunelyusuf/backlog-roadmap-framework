@@ -22,9 +22,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (ABox: controlled individuals, reference data and the live register)"@en ;
-    owl:versionIRI <http://example.org/backlog/abox/1.38.0> ;
-    owl:versionInfo "1.38.0" ;
-    owl:priorVersion <http://example.org/backlog/abox/1.37.0> , <http://example.org/backlog/abox/1.36.0> , <http://example.org/backlog/abox/1.35.0> ;
+    owl:versionIRI <http://example.org/backlog/abox/1.39.0> ;
+    owl:versionInfo "1.39.0" ;
+    owl:priorVersion <http://example.org/backlog/abox/1.38.0> , <http://example.org/backlog/abox/1.37.0> , <http://example.org/backlog/abox/1.36.0> , <http://example.org/backlog/abox/1.35.0> ;
     owl:priorVersion <http://example.org/backlog/abox/1.34.0> , <http://example.org/backlog/abox/1.33.0> , <http://example.org/backlog/abox/1.32.0> , <http://example.org/backlog/abox/1.31.0> , <http://example.org/backlog/abox/1.30.0> , <http://example.org/backlog/abox/1.29.0> , <http://example.org/backlog/abox/1.28.0> , <http://example.org/backlog/abox/1.27.0> , <http://example.org/backlog/abox/1.26.0> , <http://example.org/backlog/abox/1.25.0> , <http://example.org/backlog/abox/1.24.0> , <http://example.org/backlog/abox/1.23.0> , <http://example.org/backlog/abox/1.22.0> , <http://example.org/backlog/abox/1.21.0> , <http://example.org/backlog/abox/1.20.0> , <http://example.org/backlog/abox/1.19.0> , <http://example.org/backlog/abox/1.17.0> , <http://example.org/backlog/abox/1.16.0> , <http://example.org/backlog/abox/1.15.0> , <http://example.org/backlog/abox/1.14.0> , <http://example.org/backlog/abox/1.13.0> , <http://example.org/backlog/abox/1.12.0> , <http://example.org/backlog/abox/1.11.0> , <http://example.org/backlog/abox/1.10.0> , <http://example.org/backlog/abox/1.9.0> , <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
         <http://example.org/backlog-abox/1.2.1> ,
                      <http://example.org/backlog-abox/1.2.0> ,
@@ -1204,6 +1204,10 @@ backlog:RS_LabelConvention a owl:NamedIndividual , backlog:RuleSet ;
 backlog:RS_ConcurrentLineages a owl:NamedIndividual , backlog:RuleSet ;
     rdfs:label "At most one active lineage unless they are connected"@en ;
     skos:definition "Two lineages may be active at once (status Scoped to InProgress, or Revived) only when connected: a divide-and-conquer part and its parent (parentLineage), or a work item of one that dependsOn a work item of the other, followed transitively. Otherwise one runs and the other waits as a lineage at LS_Opened, the native queue, and advances only after the running lineage is Achieved. The owner's rule of 2026-10-12 (G104). A RuleSet because it binds every lineage a register carries: the register adopts it when its owner decides the work in progress has completed, and registers, fixtures and closed graphs that never adopted it are untouched (G89, G91)."@en .
+
+backlog:RS_StateReflectsEvidence a owl:NamedIndividual , backlog:RuleSet ;
+    rdfs:label "A work item's state reflects the evidence it carries"@en ;
+    skos:definition "A work item that still reads Proposed, Ready or Refined may not carry evidence the bridge has verified (a test that passed, a hash that matched, an artifact that exists): the work is there and the register says it has not started. A RuleSet because it binds only registers that declared it, so a register whose items were never moved is not judged retroactively (G89, G91). This package's own register does not adopt it."@en .
 
 backlog:RS_LineageStatus a owl:NamedIndividual , backlog:RuleSet ;
     rdfs:label "A lineage states where it stands"@en ;
@@ -2761,7 +2765,7 @@ fw:Tbl_VOLATILE_distribution_drift_c a backlog:CodeTable ;
     backlog:hasTableKind backlog:Table_Operational ;
     backlog:tableExported false .
 fw:Tbl_KINDS_evidence_bridge a backlog:CodeTable ;
-    backlog:tableInModule "backlog_evidence_bridge_v1_0_0.py" ;
+    backlog:tableInModule "backlog_evidence_bridge_v1_1_0.py" ;
     backlog:hasTableKind backlog:Table_Classification ;
     backlog:tableExported true .
 fw:Tbl_BUILD_ARTIFACTS_manifest_coverage a backlog:CodeTable ;
@@ -3549,6 +3553,7 @@ fw:SS_quality a backlog:ShapeSuite ; backlog:suiteName "quality" ; backlog:suite
 #################################################################
 
 fw:TS_backlog_evidence_bridgeV1_0_0 a backlog:ToolScript ; backlog:scriptFileName "backlog_evidence_bridge_v1_0_0.py" ; backlog:acceptsGraphPath true .
+fw:TS_backlog_evidence_bridgeV1_1_0 a backlog:ToolScript ; backlog:scriptFileName "backlog_evidence_bridge_v1_1_0.py" ; backlog:acceptsGraphPath true .
 fw:TS_backlog_lineage_completenessV1_1_0 a backlog:ToolScript ; backlog:scriptFileName "backlog_lineage_completeness_v1_1_0.py" ; backlog:acceptsGraphPath true .
 fw:TS_backlog_package_checkV1_0_0 a backlog:ToolScript ; backlog:scriptFileName "backlog_package_check_v1_0_0.py" ; backlog:acceptsGraphPath true .
 fw:TS_backlog_pipeline_verifyV1_0_0 a backlog:ToolScript ; backlog:scriptFileName "backlog_pipeline_verify_v1_0_0.py" ; backlog:acceptsGraphPath true .

@@ -17,7 +17,7 @@ prose that drifts. Generalised from an adopting project's product-backlog deposi
   backlog_remote_commit_check_v1_0_0.py        whether a remote commit needs real reconciliation, decided by CrossProjectCommitAdvisoryShape against this package's own declared sovereign path -- not judged by hand each fetch
   backlog_pending_verification_v1_0_0.py       lists every shape currently awaiting real-world verification beyond its own fixture
   backlog_coverage_gate_v1_1_1.py              BP-D31 primary-source concept coverage
-  backlog_evidence_bridge_v1_0_0.py            the only component allowed to assert verification
+  backlog_evidence_bridge_v1_1_0.py            the only component allowed to assert verification
   backlog_registration_readiness_v1_2_0.py     ORCP pre-submission controls (11, all recomputed)
   backlog_package_check_v1_0_0.py              register package vs the pack's own naming conventions
   backlog_doc_coverage_gate_v1_2_0.py          every TBox class named in the standard; no restated measurements

@@ -11260,6 +11260,17 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.386.0 — 2026-10-12 (MINOR: the deferred plan-versus-execution mitigations, closed — G107)
+
+The two deferred handovers of 2026-09-16 are dispositioned in full. Built: `EvidencedWorkStillUnstartedShape` behind the new rule set "a work item's
+state reflects the evidence it carries" (shapes v1.159.0, register data v1.39.0, fixture case EVID_UNSTARTED, probe `backlog_state_evidence_probe`);
+`backlog_evidence_bridge` v1.1.0 (a path resolving outside the workspace is no longer verified; probe `backlog_evidence_bridge_probe`, which fails on
+v1.0.0); `backlog_timeline_witness` (a finish time earlier than the evidence artifact's first commit is contradicted; probe
+`backlog_timeline_witness_probe`). Gate v1.42.0 runs the three probes. Two mitigations are stipulated, not built, with reasons and a revival condition.
+Discipline v77.0.0 (G107). Both handovers move to `accepted/`.
+
+**Unplanned work:** closing the two deferred handovers of 2026-09-16 at the owner's request; no backlog item of this package covers it.
+
 ## v1.385.0 — 2026-10-12 (PATCH-level, documentation only: two OE notices recorded)
 
 The OE governance session's two notices about this inbox (a landing place; the manifest after filings) were answered by v1.384.0; this release records them in `HANDOVER_LOG.md`. Nothing else changes.
