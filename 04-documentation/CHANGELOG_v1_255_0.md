@@ -11260,6 +11260,15 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.382.0 — handover disposition: a lifted scope exclusion is a ScopeChange, not a new status pattern
+
+**Unplanned work:** the sen0414-slides-lineage session proposed `ScopeExclusionStatus`, `hasScopeExclusionStatus`, `liftedBy` and `hasLiftRationale` after the owner lifted two exclusions. Documentation only; no ontology, shape or register file changes.
+
+- **Ruling (rejected, answered):** the gap it found is real in the three cited ranges, but `ScopeChange` already records an owner-decided widening of scope, with rationale, decider and admitted items, enforced by `ScopeChangeShape`. v1.15.0 handled `Ex_Schedule` the same way: the exclusion stayed as the record of the earlier decision (L-112) and a `ScopeChange` superseded it.
+- **Consequence for the sender:** record the lift as a `ScopeChange`; remove the dated amendments it appended to the exclusions' rationale strings.
+- **Not built:** a typed link from a `ScopeChange` to the exclusion it lifts. Revival: a consumer that needs the query and shows the admitted-items route insufficient.
+- **Also:** the 2026-10-12 session handover and the arrived handover are now listed in the manifest (the ceremony had refused on both as unlisted).
+
 ## v1.381.0 — owner rulings: closing the four owner-ruled gaps from the Executor Taxonomy follow-up
 
 **Unplanned work:** same class as v1.379.0/v1.380.0 -- the owner ruled on the four open points those
