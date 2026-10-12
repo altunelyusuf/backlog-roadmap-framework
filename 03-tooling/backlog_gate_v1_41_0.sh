@@ -15,7 +15,7 @@
 #
 # v1.29.0 (Lineage 19, DC-S04): a third probe runs every time: the public copy is cut by each module's declared audience and stops with an error when it cannot be sure (backlog_public_cut_probe).
 # v1.28.0 (Lineage 19, DC-S01 and DC-S02): two probes run every time: the closure-report rules are shown firing on planted faults and silent on corrected twins (backlog_closure_shapes_probe), and the archive tool's refusals are drilled on planted lineages (backlog_archive_drill). A probe that cannot be found stops the gate.
-# v1.41.0 (G106): the Lineage 19 probes loop also runs backlog_consumer_archive_probe (a consumer ledger archives into its own archive file and the package archive stays byte-identical) and backlog_vocabulary_probe (the vocabulary file equals the individuals the T-Box lists in its owl:oneOf lists; a drifted file or a member the A-box does not define is refused).
+# v1.41.0 (G106): the Lineage 19 probes loop also runs backlog_consumer_archive_probe (a consumer ledger archives into its own archive file and the package archive stays byte-identical) and backlog_vocabulary_probe (the derived vocabulary equals the individuals the T-Box lists in its owl:oneOf lists; a drifted file or a member the A-box does not define is refused).
 # v1.40.0 (G104): the Lineage 19 probes loop also runs backlog_lineage_concurrency_probe (UnconnectedActiveLineagesShape fires on two unconnected active lineages and stays silent on a dependency link, a part and its parent, a queued mission, a finished lineage and a transitive chain).
 # v1.39.0 (efficiency, measured by strace -f -e trace=execve over a full gate run): the version-freeze
 # gate used to run backlog_version_freeze_check TWICE -- once to show its output, once silently for

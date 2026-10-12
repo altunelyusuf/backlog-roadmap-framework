@@ -11260,13 +11260,14 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
-## v1.384.0 — 2026-10-12 (MINOR: consumer archival, the controlled vocabulary as a file, an inbox landing place)
+## v1.384.0 — 2026-10-12 (MINOR: consumer archival, the controlled vocabulary derived, an inbox landing place)
 
-A consumer's handover (archive its lineages; load the controlled vocabulary) was verified on this package's files and accepted (G106).
-`backlog_lineage_archive` v2.7.0 takes `--archive-file`, with a default beside a non-package ledger; `backlog_vocabulary_v1_0_0.ttl` is the 279
-members of the T-Box's `owl:oneOf` lists, derived by `backlog_vocabulary_derive` and held against drift by `backlog_vocabulary_probe`; a second
-probe, `backlog_consumer_archive_probe`, proves a consumer ledger archives into its own file with the package archive byte-identical. Gate v1.41.0
-runs both probes. `07-handover-inbox/pending/` added (the delivery had landed at the root and refused the ceremony). Discipline v76.0.0 (G106).
+A consumer's handover (archive its lineages; load the controlled vocabulary) was verified on this package's files and accepted in part (G106).
+`backlog_lineage_archive` v2.7.0 takes `--archive-file`, with a default beside a non-package ledger. The vocabulary (the 279 members of the T-Box's
+`owl:oneOf` lists) is delivered as a tool, `backlog_vocabulary_derive`, not a file: the release gate refused a second A-box file in the package (U1).
+`backlog_vocabulary_probe` holds the derivation against drift and an undefined member; `backlog_consumer_archive_probe` proves a consumer ledger
+archives into its own file with the package archive byte-identical. Gate v1.41.0 runs both. `07-handover-inbox/pending/` added (the delivery had
+landed at the root and refused the ceremony). Discipline v76.0.0 (G106).
 
 **Unplanned work:** a consumer's handover (archival and vocabulary loading) arrived mid-day and was answered in this release; no backlog item of this package covers it.
 
