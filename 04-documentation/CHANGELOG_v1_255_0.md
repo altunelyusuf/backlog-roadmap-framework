@@ -11268,8 +11268,9 @@ A consumer's handover (archive its lineages; load the controlled vocabulary) was
 `backlog_vocabulary_probe` holds the derivation against drift and an undefined member; `backlog_consumer_archive_probe` proves a consumer ledger
 archives into its own file with the package archive byte-identical. Gate v1.41.0 runs both. `07-handover-inbox/pending/` added (the delivery had
 landed at the root and refused the ceremony). Discipline v76.0.0 (G106).
+A second handover (agentic-sdlc, its decision on the competency proposal) arrived while this was being released and was accepted as information; nothing else changed for it.
 
-**Unplanned work:** a consumer's handover (archival and vocabulary loading) arrived mid-day and was answered in this release; no backlog item of this package covers it.
+**Unplanned work:** two handovers (a consumer's archival and vocabulary loading; agentic-sdlc's competency decision) arrived mid-day and were answered in this release; no backlog item of this package covers it.
 
 ## v1.383.0 — G104: active lineages coexist only when connected; G105: finished-but-unplanned work is recorded by out-scoping and succession
 
