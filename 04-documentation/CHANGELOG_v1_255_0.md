@@ -11268,6 +11268,8 @@ members of the T-Box's `owl:oneOf` lists, derived by `backlog_vocabulary_derive`
 probe, `backlog_consumer_archive_probe`, proves a consumer ledger archives into its own file with the package archive byte-identical. Gate v1.41.0
 runs both probes. `07-handover-inbox/pending/` added (the delivery had landed at the root and refused the ceremony). Discipline v76.0.0 (G106).
 
+**Unplanned work:** a consumer's handover (archival and vocabulary loading) arrived mid-day and was answered in this release; no backlog item of this package covers it.
+
 ## v1.383.0 — G104: active lineages coexist only when connected; G105: finished-but-unplanned work is recorded by out-scoping and succession
 
 **Unplanned work:** two handovers filed 2026-10-12, one quoting the owner's rule on concurrent lineages, one on SEN0414 chapters built before they were planned.
