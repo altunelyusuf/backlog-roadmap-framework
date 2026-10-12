@@ -11260,6 +11260,12 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.385.0 — 2026-10-12 (PATCH-level, documentation only: two OE notices recorded)
+
+The OE governance session's two notices about this inbox (a landing place; the manifest after filings) were answered by v1.384.0; this release records them in `HANDOVER_LOG.md`. Nothing else changes.
+
+**Unplanned work:** recording the disposition of two notices from the OE governance session; no backlog item of this package covers it.
+
 ## v1.384.0 — 2026-10-12 (MINOR: consumer archival, the controlled vocabulary derived, an inbox landing place)
 
 A consumer's handover (archive its lineages; load the controlled vocabulary) was verified on this package's files and accepted in part (G106).
