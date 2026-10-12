@@ -11260,6 +11260,16 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.383.0 — G104: active lineages coexist only when connected; G105: finished-but-unplanned work is recorded by out-scoping and succession
+
+**Unplanned work:** two handovers filed 2026-10-12, one quoting the owner's rule on concurrent lineages, one on SEN0414 chapters built before they were planned.
+
+- **Shapes v1.158.0:** `UnconnectedActiveLineagesShape` (Violation), two active lineages (status Scoped to InProgress, or Revived) with nothing connecting them, reported once per pair. "Connected" uses vocabulary that already exists: `parentLineage`, or a cross-lineage work-item `dependsOn`, followed transitively. A different mission waits as a lineage at `LS_Opened`. The consumer's proposed new lineage-to-lineage property was refused: a bare link can be asserted without substance.
+- **Register data v1.38.0:** `RS_ConcurrentLineages` (RuleSet). The shape binds only a register that adopted it (G89, G91). This package's own register does not adopt it and carries no lineage.
+- **Proof:** `fixture_negative` v1.28.0 case `LIN_UNCONNECTED_B`; `backlog_lineage_concurrency_probe` v1.0.0 builds seven small registers (fires on an unconnected pair, silent when not adopted, on a cross-lineage dependency, a part and its parent, a queued lineage, a finished lineage and a chain). Wired into gate v1.40.0.
+- **Discipline v75.0.0:** G104 (six questions answered: concurrency, connected, queue, requirement versus mission, current-state order, cross-lineage view) and G105 (the runbook's trigger is absent for items admitted but never planned; out-scoping then succession; what evidence stays required). No change to the T-Box.
+- **Responses filed** for both senders; both handovers moved to `accepted/`.
+
 ## v1.382.0 — handover disposition: a lifted scope exclusion is a ScopeChange, not a new status pattern
 
 **Unplanned work:** the sen0414-slides-lineage session proposed `ScopeExclusionStatus`, `hasScopeExclusionStatus`, `liftedBy` and `hasLiftRationale` after the owner lifted two exclusions. Documentation only; no ontology, shape or register file changes.
