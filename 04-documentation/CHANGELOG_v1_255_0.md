@@ -11267,6 +11267,7 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Ruling (rejected, answered):** the gap it found is real in the three cited ranges, but `ScopeChange` already records an owner-decided widening of scope, with rationale, decider and admitted items, enforced by `ScopeChangeShape`. v1.15.0 handled `Ex_Schedule` the same way: the exclusion stayed as the record of the earlier decision (L-112) and a `ScopeChange` superseded it.
 - **Consequence for the sender:** record the lift as a `ScopeChange`; remove the dated amendments it appended to the exclusions' rationale strings.
 - **Not built:** a typed link from a `ScopeChange` to the exclusion it lifts. Revival: a consumer that needs the query and shows the admitted-items route insufficient.
+- **Second disposition, same release:** agentic-sdlc's two questions on this package's 2026-10-11 proposal. The proposal's second premise (a property and a T-Box v0.6.0) exists in no published file, so that gap is withdrawn; its first stands as a stipulation for agentic-sdlc to rule on. Structure work needs no scope deliverable (the two advisories are Warnings); admitting one is the owner's choice, via ChangeRequest and ScopeChange.
 - **Also:** the 2026-10-12 session handover and the arrived handover are now listed in the manifest (the ceremony had refused on both as unlisted).
 
 ## v1.381.0 — owner rulings: closing the four owner-ruled gaps from the Executor Taxonomy follow-up
