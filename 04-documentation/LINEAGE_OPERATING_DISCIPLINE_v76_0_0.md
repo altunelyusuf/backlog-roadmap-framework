@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v75.0.0
+# Lineage Operating Discipline — v76.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -3210,3 +3210,34 @@ story still `Proposed` with artefacts that exist for it, is a stipulation (L-116
 already refuses such a story when asked, and a detector would have to read the course repository, which no register
 can. Revival condition: a second adopter whose stories stay `Proposed` while their artefacts exist in the same register.
 Related: G89, G99, G100, G101, L-112, L-114, L-116.
+
+## G106 — A consumer archives into its own archive file, and pins the controlled vocabulary as a file of its own
+
+Ruled 2026-10-12 on a consumer's two questions after G104 (v1.384.0). Both rest on measurements of this package's files.
+
+**Archival belongs to the ledger it archives.** `backlog_lineage_archive` up to v2.6.0 always wrote into this package's archive file, so a consumer
+ledger would have put its subjects into the framework's record. From v2.7.0 the archive file is a parameter: `--archive-file PATH`, created at its
+first version when it does not exist; without the flag a register inside this package keeps the package archive, and any other register gets
+`<its folder>/archive/<its name>_archive_vX_Y_Z.ttl`, so the archive sits next to the ledger it belongs to. The first archival creates the archive at
+`_v1_0_0` and the tool then moves it to the next version in the same run, like the live file. Each retired lineage leaves a `LineageArchiveEntry`
+in the live ledger naming the archive file (relative to the ledger). The SHACL suite reads only the live ledger: it never loads the archive. The
+tools that check lineage history (ordinal, integrity, digest) take the archive as a parameter; a consumer passes its own file.
+Archival does not depend on a rule set: `archivable` reads facts (mission outcome achieved or abandoned, a closure report, every item Done or
+Cancelled, not frozen), so it may precede adoption. What the move changes for the consumer's own tools that count items of every lineage is the
+consumer's to handle, and the entry plus the archive file are what they read to keep counting.
+
+**The vocabulary is the T-Box's own enumeration lists.** The T-Box names each closed enumeration in an `owl:oneOf` list and defines no member; the
+members are in the A-box beside the framework's own register. Measured: 68 enumerations, 279 members, 1,305 statements, every member defined in
+the A-box and none pointing at a subject outside the set. `backlog_vocabulary_vX_Y_Z.ttl` is that set, derived by
+`backlog_vocabulary_derive` and compared with a fresh derivation by the gate probe, so it cannot drift from either source. A consumer pins the
+T-Box, the shapes and this file, and never the A-box (which carries this package's register). The file is made for the T-Box named in its header
+comment; a T-Box that adds or changes a member brings a new vocabulary file in the same release (the changed file takes a new name, BP-D7).
+`sh:class` targets stay where they are: the shapes were right, the individuals were not delivered.
+
+**The handover inbox has one landing place.** `07-handover-inbox/pending/` holds anything not yet decided (L-115); it exists in this package as of
+this release because git holds no empty folder and a sender had nowhere to deliver. Measured 2026-10-12: a delivery at the inbox root sat unlisted
+in the manifest and refused the ceremony.
+
+**What is not claimed.** The vocabulary file was shown equal to its derivation and refused when drifted; it was not run against a consumer ledger
+(the consumer's own diagnostic of 96 individuals reached 111 residual violations, which are the newer shapes catching real faults in its ledger,
+not vocabulary). The archive tool was proved on a planted consumer ledger, not on the consumer's own. Related: G92, G99, G104, L-112, L-115.

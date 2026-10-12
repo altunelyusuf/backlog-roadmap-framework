@@ -15,6 +15,7 @@
 #
 # v1.29.0 (Lineage 19, DC-S04): a third probe runs every time: the public copy is cut by each module's declared audience and stops with an error when it cannot be sure (backlog_public_cut_probe).
 # v1.28.0 (Lineage 19, DC-S01 and DC-S02): two probes run every time: the closure-report rules are shown firing on planted faults and silent on corrected twins (backlog_closure_shapes_probe), and the archive tool's refusals are drilled on planted lineages (backlog_archive_drill). A probe that cannot be found stops the gate.
+# v1.41.0 (G106): the Lineage 19 probes loop also runs backlog_consumer_archive_probe (a consumer ledger archives into its own archive file and the package archive stays byte-identical) and backlog_vocabulary_probe (the vocabulary file equals the individuals the T-Box lists in its owl:oneOf lists; a drifted file or a member the A-box does not define is refused).
 # v1.40.0 (G104): the Lineage 19 probes loop also runs backlog_lineage_concurrency_probe (UnconnectedActiveLineagesShape fires on two unconnected active lineages and stays silent on a dependency link, a part and its parent, a queued mission, a finished lineage and a transitive chain).
 # v1.39.0 (efficiency, measured by strace -f -e trace=execve over a full gate run): the version-freeze
 # gate used to run backlog_version_freeze_check TWICE -- once to show its output, once silently for
@@ -656,7 +657,7 @@ echo "== Lineage 19 probes — each rule fires on a planted fault and each refus
 # v1.37.0: each probe prints its own --deps (it alone knows what it reads) and is stamped on exactly that; one that
 # never changed does not re-run just because something ELSEWHERE in the gate did. A run that does happen runs ONCE
 # (v1.36.0 and earlier ran every probe twice here: once piping to grep, once thrown away for its exit code).
-for PROBE in backlog_closure_shapes_probe backlog_archive_drill backlog_public_cut_probe backlog_governance_mitigations_probe backlog_release_tool_probe backlog_stamp_key_probe backlog_sparql_memo_probe backlog_ordinal_check_probe backlog_archived_digest_check_probe backlog_release_item_check_probe backlog_package_activation_drift_classifier_probe backlog_lineage_concurrency_probe; do
+for PROBE in backlog_closure_shapes_probe backlog_archive_drill backlog_public_cut_probe backlog_governance_mitigations_probe backlog_release_tool_probe backlog_stamp_key_probe backlog_sparql_memo_probe backlog_ordinal_check_probe backlog_archived_digest_check_probe backlog_release_item_check_probe backlog_package_activation_drift_classifier_probe backlog_lineage_concurrency_probe backlog_consumer_archive_probe backlog_vocabulary_probe; do
   PF="$(ls "$HERE"/${PROBE}_v*.py 2>/dev/null | sort -V | tail -1 || true)"
   if [ -z "$PF" ]; then echo "  ABORT: $PROBE not found. A probe that is missing proves nothing."; exit 3; fi
   PKEY="$(python3 "$MERKLE" key $(python3 "$PF" --deps))"

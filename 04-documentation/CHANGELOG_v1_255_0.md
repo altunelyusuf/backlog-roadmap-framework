@@ -11260,6 +11260,14 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.384.0 — 2026-10-12 (MINOR: consumer archival, the controlled vocabulary as a file, an inbox landing place)
+
+A consumer's handover (archive its lineages; load the controlled vocabulary) was verified on this package's files and accepted (G106).
+`backlog_lineage_archive` v2.7.0 takes `--archive-file`, with a default beside a non-package ledger; `backlog_vocabulary_v1_0_0.ttl` is the 279
+members of the T-Box's `owl:oneOf` lists, derived by `backlog_vocabulary_derive` and held against drift by `backlog_vocabulary_probe`; a second
+probe, `backlog_consumer_archive_probe`, proves a consumer ledger archives into its own file with the package archive byte-identical. Gate v1.41.0
+runs both probes. `07-handover-inbox/pending/` added (the delivery had landed at the root and refused the ceremony). Discipline v76.0.0 (G106).
+
 ## v1.383.0 — G104: active lineages coexist only when connected; G105: finished-but-unplanned work is recorded by out-scoping and succession
 
 **Unplanned work:** two handovers filed 2026-10-12, one quoting the owner's rule on concurrent lineages, one on SEN0414 chapters built before they were planned.

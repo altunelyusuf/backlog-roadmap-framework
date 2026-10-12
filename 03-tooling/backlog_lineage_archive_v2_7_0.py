@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
+# v2.7.0 (G106, consumer archival): the archive file is a parameter. --archive-file PATH names it (created at its first version when it does not exist yet); without the flag a register inside this package keeps using the package archive, and a register anywhere else gets its own archive beside it, in <register folder>/archive/<register name>_archive_vX_Y_Z.ttl. v2.6.0 always wrote into this package's archive, so a consumer ledger would have written its subjects into the framework's record.
 # v2.6.0 (G99 release B): the version a new live or archive file supersedes joins the header's owl:priorVersion chain (it was added by hand each time; move_header does it, and refuses a header that has no chain to extend).
 # v2.5.0 (Lineage 19, DC-S01 and DC-S03): an abandoned mission needs a closure report too, and every cancelled item of the lineage must be named by it (reportsCancelledItem); the archived copy of the lineage is marked archived with its confirmation pending, at the moment it is moved, so no later step has to find it. v2.4.0 accepted an abandoned mission with only its stated reason, which the owner has ruled is not enough.
 # v2.4.0 (Lineage 18, OC-S06): an abandoned lineage is archivable (its stated reason is its record), and the existing entries follow the archive file to its new version. v2.3.0 (Lineage 18, OC-S05): follows the archive folder. The archive data file now lives in 01-ontologies/archive/.
-"""backlog_lineage_archive v2.6.0 — set an achieved lineage down, out of every processing path.
+"""backlog_lineage_archive v2.7.0 — set an achieved lineage down, out of every processing path.
 
 WHY. A lineage whose mission is settled keeps costing every run until it is ARCHIVED: the SHACL
 suite validates its every individual, the git witness re-measures its every subject, the roadmap
@@ -22,7 +23,7 @@ lineage owns moves, its Lineage and Mission included -- leaves a LineageArchiveE
 a Lineage, so no shape targeting Lineage or Mission fires on retired work), and REFUSES to move the
 register root or anything the root declares.
 
-WHAT IT DOES.  backlog_lineage_archive.py <register.ttl> <LineageLocalName>... [--apply]
+WHAT IT DOES.  backlog_lineage_archive.py <register.ttl> <LineageLocalName>... [--apply] [--archive-file PATH]
   1. Checks the lineage is archivable: hasMissionOutcome Out_Achieved on its mission; a
      ClosureReport closes that mission; EVERY work item of the lineage is Done or Cancelled
      (v2.1.0 -- was InProgress-only; a real, measured gap let a genuinely Proposed item,
@@ -103,6 +104,31 @@ def archivable(g, L):
         if st is not None and st not in (B.Done, B.Cancelled):
             reasons.append(f"{local(i)} is {local(st)}, not Done or Cancelled")
     return reasons
+
+def archive_target(reg, flag, g):
+    """The archive data file a register is archived into, and whether it has to be created: (path, exists).
+    --archive-file wins; a register inside this package uses the package archive; any other register gets <its folder>/archive/<its name>_archive_v*.ttl."""
+    if flag:
+        return flag, os.path.isfile(flag)
+    inside = os.path.abspath(reg).startswith(os.path.join(PKG, "01-ontologies") + os.sep)
+    if inside:
+        return sorted(glob.glob(os.path.join(PKG, "01-ontologies", "archive", "backlog_framework_archive_abox_v*.ttl")), key=semver)[-1], True
+    folder = os.path.join(os.path.dirname(os.path.abspath(reg)), "archive")
+    stem = re.sub(r"_v\d+_\d+_\d+\.ttl$", "", os.path.basename(reg))
+    have = sorted(glob.glob(os.path.join(folder, stem + "_archive_v*.ttl")), key=semver)
+    return (have[-1], True) if have else (os.path.join(folder, stem + "_archive_v1_0_0.ttl"), False)
+
+
+def first_archive_text(g, path):
+    """The header of a consumer's first archive file: its ontology IRI is the register's, with -archive."""
+    from rdflib import OWL
+    onto = next(iter(g.subjects(RDF.type, OWL.Ontology)), None)
+    base = (str(onto).rstrip("/#") if onto is not None else "http://example.org/consumer") + "-archive"
+    return ("@prefix owl: <http://www.w3.org/2002/07/owl#> .\n@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n\n"
+            f"<{base}> a owl:Ontology ;\n    owl:versionIRI <{base}/1.0.0> ;\n    owl:versionInfo \"1.0.0\" ;\n"
+            "    rdfs:label \"archived lineages\"@en ;\n"
+            "    rdfs:comment \"Lineages of this ledger that were set down by backlog_lineage_archive. Not loaded by the ordinary validation path; loaded for lineage-history checks.\" .\n")
+
 
 def register_root(g):
     """The container the register itself is: isRegisterRoot true, or -- for a register written before
@@ -186,13 +212,16 @@ def partition(g, lineages):
                 part.add(s); cand.discard(s); changed = True
     return part, keep_live
 
-def move_header(txt, oldv, newv):
+def move_header(txt, oldv, newv, first_chain_ok=False):
     """Move a data file's header from OLDV to NEWV: versionInfo, versionIRI, and the superseded version joins owl:priorVersion at the front.
     Returns (text, None), or (None, reason) when the header does not read OLDV or has no priorVersion to extend."""
     if f'owl:versionInfo "{oldv}" ;' not in txt:
         return None, f"the header does not read versionInfo {oldv}"
     if not re.search(r"owl:priorVersion <[^>]*/", txt):
-        return None, "the header has no owl:priorVersion to extend"
+        m0 = re.search(r"owl:versionIRI <([^>]*/)" + re.escape(oldv) + r">[^\n]*\n", txt)
+        if not (first_chain_ok and m0):
+            return None, "the header has no owl:priorVersion to extend"
+        txt = txt[:m0.end()] + f"    owl:priorVersion <{m0.group(1)}{oldv}> ;\n" + txt[m0.end():]
     txt = txt.replace(f'owl:versionInfo "{oldv}" ;', f'owl:versionInfo "{newv}" ;', 1)
     txt = re.sub(r"(owl:versionIRI <[^>]*/)" + re.escape(oldv) + ">", lambda m: m.group(1) + newv + ">", txt, count=1)
     if not re.search(r"owl:priorVersion <[^>]*/" + re.escape(oldv) + ">", txt):
@@ -202,7 +231,12 @@ def move_header(txt, oldv, newv):
 
 def main():
     argv = sys.argv[1:]
-    apply = "--apply" in argv; names = [a for a in argv if not a.startswith("--")]
+    apply = "--apply" in argv; aflag = None
+    if "--archive-file" in argv:
+        k = argv.index("--archive-file")
+        if k + 1 >= len(argv): print("ERROR: --archive-file needs a path"); return 1
+        aflag = argv[k + 1]; argv = argv[:k] + argv[k + 2:]
+    names = [a for a in argv if not a.startswith("--")]
     if "--find" in argv and len(names) == 1:
         g = Graph().parse(names[0], format="turtle"); found = 0
         for L in sorted(g.subjects(RDF.type, B.Lineage), key=local):
@@ -231,7 +265,13 @@ def main():
     print(f"  live pointers into the archive after the move: {len(live_refs)} (references, not dangling edges)")
     if not apply:
         print("VERDICT     : ARCHIVABLE — re-run with --apply to move the partition into the archive ABox"); return 0
-    arch_path = sorted(glob.glob(os.path.join(PKG, "01-ontologies", "archive", "backlog_framework_archive_abox_v*.ttl")), key=semver)[-1]
+    arch_path, arch_exists = archive_target(reg, aflag, g)
+    if not arch_exists:
+        if not semver(arch_path)[0] and semver(arch_path) == [0, 0, 0]:
+            print(f"  ERROR: a new archive file needs a versioned name (..._archive_v1_0_0.ttl), got {arch_path}"); return 1
+        os.makedirs(os.path.dirname(os.path.abspath(arch_path)), exist_ok=True)
+        open(arch_path, "w").write(first_archive_text(g, arch_path))
+        print(f"  archive     : {os.path.relpath(arch_path)} does not exist; created at its first version")
     new_arch = bump(arch_path); new_reg = bump(reg)
     # TEXT-LEVEL MOVE. The register is a record: its dated comment blocks ARE the history (L-112), and
     # an rdflib re-serialization would drop every one of them. Statements are moved verbatim: a
@@ -273,10 +313,10 @@ def main():
     live_txt, why = move_header(live_txt, oldv, newv)
     if live_txt is None:
         print(f"  GATE ABORT: the live data file header: {why}"); return 3
-    rel = os.path.relpath(new_arch, PKG)
+    rel = os.path.relpath(new_arch, PKG) if os.path.abspath(new_arch).startswith(PKG + os.sep) else os.path.relpath(new_arch, os.path.dirname(os.path.abspath(reg)))
     # v2.4.0: every entry already in the live register names the archive file by its path; the archive file just changed version, so they follow it
     # (the same repointing a person did by hand at the last bump; the split proof counts it as declared).
-    live_txt = live_txt.replace('backlog:archiveFile "%s"' % os.path.relpath(arch_path, PKG), 'backlog:archiveFile "%s"' % rel)
+    live_txt = live_txt.replace('backlog:archiveFile "%s"' % (os.path.relpath(arch_path, PKG) if os.path.abspath(arch_path).startswith(PKG + os.sep) else os.path.relpath(arch_path, os.path.dirname(os.path.abspath(reg)))), 'backlog:archiveFile "%s"' % rel)
     live_txt = live_txt.rstrip("\n") + f"\n\n#################################################################\n#  {now} -- ARCHIVAL by backlog_lineage_archive_v2_0_0: {len(part)} subjects of\n#  {', '.join(local(L) for L in lineages)} set down into {rel}; the lineage,\n#  its mission and its closure report stay here as the record that points in.\n#################################################################\n"
     live_txt += f"\n# The record each retired lineage leaves in the live register: a LineageArchiveEntry, not a\n# Lineage -- no shape targeting Lineage, Mission or any stage element fires on retired work (G92).\n"
     for L in lineages:
@@ -300,7 +340,7 @@ def main():
         live_txt += f'{prefix_of(g, L)}{local(L)}' + (' backlog:lineageArchived true ;' if n == 0 else '') + f' backlog:archiveFile "{rel}" ;\n    backlog:archivedAt "{now}"^^xsd:dateTime ; backlog:hasLineageStatus backlog:LS_Archived ;\n    backlog:archivalTrigger "Found achieved and un-archived by backlog_lineage_archive_v2_1_0: mission Out_Achieved, closure report present, every item Done or Cancelled, not frozen. Owner\'s rule 2026-09-09: an achieved lineage found triggers the archival activity." .\n'
     arch_txt = open(arch_path).read().rstrip("\n")
     olda = ".".join(map(str, semver(arch_path))); newa = ".".join(map(str, semver(new_arch)))
-    arch_txt, why = move_header(arch_txt, olda, newa)
+    arch_txt, why = move_header(arch_txt, olda, newa, first_chain_ok=True)
     if arch_txt is None:
         print(f"  GATE ABORT: the archive data file header: {why}"); return 3
     # prefixes the moved statements need
