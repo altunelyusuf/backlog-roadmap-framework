@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v77.0.0
+# Lineage Operating Discipline — v78.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -3273,3 +3273,34 @@ one was tested against a single question: what can a register, a tool or the rep
 **What stays with the sender.** The decisions about the third-edition package's own register (the 24 invented times, the 106 items, the two
 deliverables that moved to the toolkit) are about that register and its owner. The tools above are what that session runs to settle them from facts.
 Related: G89, G91, G97, G99, G105, L-112, L-116.
+
+## G108 — A lineage that predates the stage-output model is bypassed by construction; the recovery runbook applies as written, and the work guard waits for READY
+
+An adopting project's question, 2026-10-13: its register holds one lineage with 69 work items (finished except the one running), a Mission, five Scopes, six Goals,
+fifteen Objectives, a Backlog and a Roadmap with the owner's stated intent, but no stage output at all (the register predates the model). Installing the work guard
+would refuse every governed commit. Is such a lineage bypassed, is there an adoption path that is neither restart nor backfill, and may the guard run while the
+lineage is not READY? Answered from the tools, not from the text alone.
+
+**Q1 — it is bypassed, and the finding is the tool's to make.** Measured on a planted register of the same shape (a live lineage, items, no stage output):
+`backlog_lineage_order_check` reads BYPASS ("outputs=0, items=2, Stage_Backlog output absent"); `backlog_execution_ready` reads NOT READY with the five stage
+facts missing. "No recorded bypass witness" means the order check has not been run with the finding emitted, not that the lineage is exempt: the witness is git,
+and git holds the first commit of every item. There is no grandfathering; archived lineages alone are exempt (G41). The path that admits existing items through
+a Stage_Backlog output is the runbook's own (steps 5 to 7), and it runs through a restart: only a restart flags the items `preLineageItem`, and only an item so
+flagged may be admitted by an output that first appears after the restart. A Backlog output written without the restart is the bypass, formalised.
+
+**Q2 — the acts, and whose they are.** The runbook's trigger ("no Backlog stage output or no registered items") covers this case, and the restart of a
+lineage with no chain has nothing to retract (G85, point 2). In order: (1) run the order check with the real git witness and `--emit`, so the tool writes the
+bypass finding, and append it with the lineage frozen, in a commit of its own; (2) the restart, in a later commit of its own, by the owner of the adopting
+package; (3) flag every item `preLineageItem`; (4) rebuild Mission, Scope, Goal, Objective and Backlog, one commit each, the Mission re-affirmed by the owner (G14);
+(5) the Backlog output admits all items (`admittedByOutput`); (6) set the guard's `governed_from` to the restart commit and install it. The restart and the
+re-affirmation are the adopting package's owner's acts; this package rules nothing about that register. Admission exempts only the concern declaration and the
+planning event; the other six fact shapes (evidence, criterion, harness, last-audited date, finish point, modality) apply to the finished items, and the
+validator will say which of them lack them. The strategy is the default (decrease by one) unless the owner chooses another from the runbook's table.
+
+**Q3 — no.** The guard has one rule and no weaker mode. Its edit and commit layers ask the start gate and refuse when the lineage is not READY; `governed_from`
+only excludes older commits from the CI range check and does not relax the other layers; a configuration over nothing fails closed. A guard that runs on a lineage
+that is not READY would either refuse everything or be configured to pass over something, and the second is the failure G101 exists to prevent. Until READY,
+the correct state is no guard installed, the finding open (G101 clause 2), and the start gate and order check run by hand before each story.
+
+**What is not claimed.** No tool was changed. The planted register proves the verdicts of the two checks, not the whole recovery on that project's data.
+Related: G41, G81, G85, G100, G101, L-112.

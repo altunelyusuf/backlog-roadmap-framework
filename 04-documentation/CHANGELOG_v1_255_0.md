@@ -11260,6 +11260,12 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.387.0 — 2026-10-13 (PATCH-level, documentation only: G108)
+
+A handover asked how a lineage that predates the stage-output model adopts the work guard. Ruled from the tools: such a lineage is bypassed by construction (verified on a planted register), the recovery runbook applies as written and runs through the owner's restart, and the guard has no weaker mode. No tool, shape or vocabulary changed. Discipline v78.0.0 (G108).
+
+**Unplanned work:** answering one handover from an adopting project; no backlog item of this package covers it.
+
 ## v1.386.0 — 2026-10-12 (MINOR: the deferred plan-versus-execution mitigations, closed — G107)
 
 The two deferred handovers of 2026-09-16 are dispositioned in full. Built: `EvidencedWorkStillUnstartedShape` behind the new rule set "a work item's
