@@ -22,9 +22,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (ABox: controlled individuals, reference data and the live register)"@en ;
-    owl:versionIRI <http://example.org/backlog/abox/1.40.0> ;
-    owl:versionInfo "1.40.0" ;
-    owl:priorVersion <http://example.org/backlog/abox/1.39.0> , <http://example.org/backlog/abox/1.38.0> , <http://example.org/backlog/abox/1.37.0> , <http://example.org/backlog/abox/1.36.0> , <http://example.org/backlog/abox/1.35.0> ;
+    owl:versionIRI <http://example.org/backlog/abox/1.41.0> ;
+    owl:versionInfo "1.41.0" ;
+    owl:priorVersion <http://example.org/backlog/abox/1.40.0> , <http://example.org/backlog/abox/1.39.0> , <http://example.org/backlog/abox/1.38.0> , <http://example.org/backlog/abox/1.37.0> , <http://example.org/backlog/abox/1.36.0> , <http://example.org/backlog/abox/1.35.0> ;
     owl:priorVersion <http://example.org/backlog/abox/1.34.0> , <http://example.org/backlog/abox/1.33.0> , <http://example.org/backlog/abox/1.32.0> , <http://example.org/backlog/abox/1.31.0> , <http://example.org/backlog/abox/1.30.0> , <http://example.org/backlog/abox/1.29.0> , <http://example.org/backlog/abox/1.28.0> , <http://example.org/backlog/abox/1.27.0> , <http://example.org/backlog/abox/1.26.0> , <http://example.org/backlog/abox/1.25.0> , <http://example.org/backlog/abox/1.24.0> , <http://example.org/backlog/abox/1.23.0> , <http://example.org/backlog/abox/1.22.0> , <http://example.org/backlog/abox/1.21.0> , <http://example.org/backlog/abox/1.20.0> , <http://example.org/backlog/abox/1.19.0> , <http://example.org/backlog/abox/1.17.0> , <http://example.org/backlog/abox/1.16.0> , <http://example.org/backlog/abox/1.15.0> , <http://example.org/backlog/abox/1.14.0> , <http://example.org/backlog/abox/1.13.0> , <http://example.org/backlog/abox/1.12.0> , <http://example.org/backlog/abox/1.11.0> , <http://example.org/backlog/abox/1.10.0> , <http://example.org/backlog/abox/1.9.0> , <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
         <http://example.org/backlog-abox/1.2.1> ,
                      <http://example.org/backlog-abox/1.2.0> ,
@@ -5625,7 +5625,7 @@ fw:Declared_Ordinal_18 a backlog:OrdinalSharingDeclaration ;
 #################################################################
 #  v1.123.0 (owner-directed, Executor/responsible/competency work) --
 #  the closed CompetencyCategory and Competency vocabulary. Six
-#  categories, twenty-five leaves (six finer skills below one of them since v1.125.0), each leaf skos:broader to exactly
+#  categories, thirty-three leaves (sixteen finer skills below five of them since v1.125.0 and v1.126.0), each leaf skos:broader to exactly
 #  one category. Closed like Role; see TBox v1.123.0 for why.
 #################################################################
 
@@ -5817,6 +5817,116 @@ backlog:Comp_ModelChangeControl a owl:NamedIndividual , backlog:Competency ;
     skos:definition "Treating a change to a model like a change to any other controlled item: identified, assessed, approved and recorded against the version it alters."@en ;
     dcterms:source "Own formulation of the practice concept corpus of the Ontology for Software Engineering material (CC BY 4.0), concept 25.8.19 (Model change control): the corpus defines the concept for practice; this entry names the skill of working with it."@en ;
     skos:broader backlog:Comp_SystemModelling .
+
+# ---- v1.126.0 (G110): eighteen skills supplied and sourced by the agentic-sdlc project: eight new skills, ten finer skills (seven under skills held before, two under Retirement management, one under Product derivation).
+
+backlog:Comp_CommonalityVariabilityAnalysis a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Commonality and variability analysis"@en ;
+    skos:definition "Finding what the members of a family of systems share and where they differ, and stating each difference as a variation point with its alternatives."@en ;
+    dcterms:source "Own formulation of the practice concept corpus of the Ontology for Software Engineering material (CC BY 4.0), concepts 25.3.1, 25.3.4, 25.3.5, 25.3.9: the corpus defines each concept for practice; this entry names the skill of working with them. Supplied by the agentic-sdlc project, 2026-10-13."@en ;
+    skos:broader backlog:Comp_Analysis .
+
+backlog:Comp_DomainModelling a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Domain modelling"@en ;
+    skos:definition "Describing the concepts, rules and boundary of a field of activity so that systems built for it start from one shared understanding. Distinct from conceptual data modelling, which stops at the entities and relations of one system's data."@en ;
+    dcterms:source "Own formulation of the practice concept corpus of the Ontology for Software Engineering material (CC BY 4.0), concepts 25.2.1, 25.2.4, 25.2.5, 25.8.10: the corpus defines each concept for practice; this entry names the skill of working with them. Supplied by the agentic-sdlc project, 2026-10-13."@en ;
+    skos:broader backlog:Comp_Analysis .
+
+backlog:Comp_ReusableAssetStewardship a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Reusable asset stewardship"@en ;
+    skos:definition "Keeping a set of reusable parts fit for reuse by recording their fitness, evolving them and acting on feedback from those who reuse them."@en ;
+    dcterms:source "Own formulation of the practice concept corpus of the Ontology for Software Engineering material (CC BY 4.0), concepts 25.4.1, 25.4.2, 25.4.5, 25.4.6, 25.4.7: the corpus defines each concept for practice; this entry names the skill of working with them. Supplied by the agentic-sdlc project, 2026-10-13."@en ;
+    skos:broader backlog:Comp_Governance .
+
+backlog:Comp_ProductDerivation a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Product derivation"@en ;
+    skos:definition "Producing one member of a family by selecting variants, adapting assets and checking the result against the family's choice constraints."@en ;
+    dcterms:source "Own formulation of the practice concept corpus of the Ontology for Software Engineering material (CC BY 4.0), concepts 25.5.1, 25.5.2, 25.5.5, 25.4.3, 25.4.4: the corpus defines each concept for practice; this entry names the skill of working with them. Supplied by the agentic-sdlc project, 2026-10-13."@en ;
+    skos:broader backlog:Comp_Implementation .
+
+backlog:Comp_ProductSpecificExtension a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Product-specific extension"@en ;
+    skos:definition "Building what one customer needs that the shared assets do not cover, and recording the coverage gap it fills."@en ;
+    dcterms:source "Own formulation of the practice concept corpus of the Ontology for Software Engineering material (CC BY 4.0), concepts 25.5.3, 25.5.4, 25.5.7: the corpus defines each concept for practice; this entry names the skill of working with them. Supplied by the agentic-sdlc project, 2026-10-13."@en ;
+    skos:broader backlog:Comp_ProductDerivation .
+
+backlog:Comp_IntegrationStrategy a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Integration strategy"@en ;
+    skos:definition "Choosing the order and increments in which parts are combined and the stand-ins used while some parts are missing."@en ;
+    dcterms:source "Own formulation of the practice concept corpus of the Ontology for Software Engineering material (CC BY 4.0), concepts 25.9.1, 25.9.3, 25.9.12, 25.9.14: the corpus defines each concept for practice; this entry names the skill of working with them. Supplied by the agentic-sdlc project, 2026-10-13."@en ;
+    skos:broader backlog:Comp_IntegrationBuild .
+
+backlog:Comp_InterfaceAgreementManagement a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Interface agreement management"@en ;
+    skos:definition "Agreeing and recording the interfaces between parts, and resolving the mismatches found when parts meet."@en ;
+    dcterms:source "Own formulation of the practice concept corpus of the Ontology for Software Engineering material (CC BY 4.0), concepts 25.9.2, 25.9.9, 25.15.5: the corpus defines each concept for practice; this entry names the skill of working with them. Supplied by the agentic-sdlc project, 2026-10-13."@en ;
+    skos:broader backlog:Comp_IntegrationBuild .
+
+backlog:Comp_RepeatableBuild a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Repeatable build"@en ;
+    skos:definition "Producing the same artifact, with the same identity, from the same source baseline on demand."@en ;
+    dcterms:source "Own formulation of the practice concept corpus of the Ontology for Software Engineering material (CC BY 4.0), concepts 25.9.4, 25.9.5, 25.9.8, 25.9.11: the corpus defines each concept for practice; this entry names the skill of working with them. Supplied by the agentic-sdlc project, 2026-10-13."@en ;
+    skos:broader backlog:Comp_IntegrationBuild .
+
+backlog:Comp_DeliveryPipelineEngineering a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Delivery pipeline engineering"@en ;
+    skos:definition "Defining as code the stages and gates through which a change travels from source to a releasable state."@en ;
+    dcterms:source "Own formulation of the practice concept corpus of the Ontology for Software Engineering material (CC BY 4.0), concepts 25.10.1, 25.10.2, 25.10.3, 25.10.6: the corpus defines each concept for practice; this entry names the skill of working with them. Supplied by the agentic-sdlc project, 2026-10-13."@en ;
+    skos:broader backlog:Comp_IntegrationBuild .
+
+backlog:Comp_ReleaseReadinessAssessment a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Release readiness assessment"@en ;
+    skos:definition "Judging, against stated acceptance conditions, whether a release candidate may go out."@en ;
+    dcterms:source "Own formulation of the practice concept corpus of the Ontology for Software Engineering material (CC BY 4.0), concepts 25.11.1, 25.11.2, 25.6.6: the corpus defines each concept for practice; this entry names the skill of working with them. Supplied by the agentic-sdlc project, 2026-10-13."@en ;
+    skos:broader backlog:Comp_ReleaseManagement .
+
+backlog:Comp_DeploymentExposureControl a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Deployment and exposure control"@en ;
+    skos:definition "Putting a release into a target environment in a controlled way: staged exposure, cutover and a defined way back."@en ;
+    dcterms:source "Own formulation of the practice concept corpus of the Ontology for Software Engineering material (CC BY 4.0), concepts 25.11.3, 25.11.4, 25.11.5, 25.11.6, 25.11.16: the corpus defines each concept for practice; this entry names the skill of working with them. Supplied by the agentic-sdlc project, 2026-10-13."@en ;
+    skos:broader backlog:Comp_ReleaseManagement .
+
+backlog:Comp_OperationalHandover a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Operational handover"@en ;
+    skos:definition "Passing a released system to those who run it together with what they need to know and be able to do."@en ;
+    dcterms:source "Own formulation of the practice concept corpus of the Ontology for Software Engineering material (CC BY 4.0), concepts 25.11.8, 25.11.10: the corpus defines each concept for practice; this entry names the skill of working with them. Supplied by the agentic-sdlc project, 2026-10-13."@en ;
+    skos:broader backlog:Comp_ReleaseManagement .
+
+backlog:Comp_RetirementManagement a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Retirement management"@en ;
+    skos:definition "Deciding and planning the end of life of a system and seeing its residual obligations through."@en ;
+    dcterms:source "Own formulation of the practice concept corpus of the Ontology for Software Engineering material (CC BY 4.0), concepts 25.12.1, 25.12.2, 25.12.7: the corpus defines each concept for practice; this entry names the skill of working with them. Supplied by the agentic-sdlc project, 2026-10-13."@en ;
+    skos:broader backlog:Comp_Operations .
+
+backlog:Comp_DataDisposition a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Data disposition"@en ;
+    skos:definition "Choosing and carrying out what happens to the data and information items of a retiring system: keep, transfer, archive or destroy. Distinct from data migration, which moves data into a new system."@en ;
+    dcterms:source "Own formulation of the practice concept corpus of the Ontology for Software Engineering material (CC BY 4.0), concepts 25.12.3, 25.12.13: the corpus defines each concept for practice; this entry names the skill of working with them. Supplied by the agentic-sdlc project, 2026-10-13."@en ;
+    skos:broader backlog:Comp_RetirementManagement .
+
+backlog:Comp_DependencyUnwinding a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Dependency unwinding"@en ;
+    skos:definition "Removing what still relies on a retiring system, or moving it to a successor."@en ;
+    dcterms:source "Own formulation of the practice concept corpus of the Ontology for Software Engineering material (CC BY 4.0), concepts 25.12.4, 25.12.8: the corpus defines each concept for practice; this entry names the skill of working with them. Supplied by the agentic-sdlc project, 2026-10-13."@en ;
+    skos:broader backlog:Comp_RetirementManagement .
+
+backlog:Comp_OperationalScenarioDefinition a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Operational scenario definition"@en ;
+    skos:definition "Describing how a system will be used, in which modes and within which boundary, so that requirements can be checked against use."@en ;
+    dcterms:source "Own formulation of the practice concept corpus of the Ontology for Software Engineering material (CC BY 4.0), concepts 25.16.3, 25.16.5, 25.16.6: the corpus defines each concept for practice; this entry names the skill of working with them. Supplied by the agentic-sdlc project, 2026-10-13."@en ;
+    skos:broader backlog:Comp_Analysis .
+
+backlog:Comp_RequirementsQualityAssurance a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Requirements quality assurance"@en ;
+    skos:definition "Checking that requirements are well formed, free of conflict and consistent as a set before they are baselined."@en ;
+    dcterms:source "Own formulation of the practice concept corpus of the Ontology for Software Engineering material (CC BY 4.0), concepts 25.6.3, 25.6.5, 25.15.7, 25.15.8: the corpus defines each concept for practice; this entry names the skill of working with them. Supplied by the agentic-sdlc project, 2026-10-13."@en ;
+    skos:broader backlog:Comp_Verification .
+
+backlog:Comp_TradeOffAnalysis a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Trade-off analysis"@en ;
+    skos:definition "Comparing candidate solutions against the criteria that matter, with the estimates and risks behind the comparison written down."@en ;
+    dcterms:source "Own formulation of the practice concept corpus of the Ontology for Software Engineering material (CC BY 4.0), concepts 25.7.2, 25.7.4, 25.7.5, 25.7.8: the corpus defines each concept for practice; this entry names the skill of working with them. Supplied by the agentic-sdlc project, 2026-10-13."@en ;
+    skos:broader backlog:Comp_Analysis .
 
 
 #################################################################

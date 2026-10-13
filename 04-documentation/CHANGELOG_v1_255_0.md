@@ -11260,6 +11260,17 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.389.0 — 2026-10-13 (MINOR: eighteen supplied skills join the competency tree — G110)
+
+The adopting project answered G109 with eighteen sourced skills. Entered as supplied: eight new skills (commonality and variability analysis, domain modelling, reusable asset stewardship, product derivation, retirement management, operational scenario definition, requirements quality assurance, trade-off analysis) and ten finer skills (four under Integration build, three under Release management, two under Retirement management, one under Product derivation). The closed tree is now 33 skills and 16 finer skills.
+
+- **Vocabulary (T-Box v1.126.0, data v1.41.0):** the 18 individuals, each with a definition and a source naming its corpus concepts; the closed list and its definition updated.
+- **Check:** `backlog_competency_tree_probe` (every skill listed and defined, one parent each, three levels at most, a source on every skill added since v1.125.0; five planted faults each caught). Runs in gate v1.44.0. No shape changed.
+- **Rulings (G110):** domain modelling is a separate skill from conceptual data modelling; agent role types wait for the owner's definition and source; a tool is not an independent verifier. Measured by the project: the new rules raise nothing on a register that did not adopt them.
+- **Handover:** answered and filed as accepted; discipline v80.0.0.
+
+**Unplanned work:** the adopting project's handover answering G109; no backlog item of this package covers it.
+
 ## v1.388.0 — 2026-10-13 (MINOR: a third competency level starting with modelling, independent verification, and a preview of what closing owes — G109)
 
 A design request asked for an Agentic SDLC profile that sets the lineage roles and for granular work types assigned to the right agents, teams or federations. The framework already assigns work by competency, so the request was met inside that mechanism rather than beside it.

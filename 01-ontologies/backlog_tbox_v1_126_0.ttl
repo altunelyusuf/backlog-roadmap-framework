@@ -18,9 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.125.0> ;
-    owl:versionInfo "1.125.0" ;
-    owl:priorVersion <http://example.org/backlog/1.124.0> , <http://example.org/backlog/1.123.0> , <http://example.org/backlog/1.122.0> ;
+    owl:versionIRI <http://example.org/backlog/1.126.0> ;
+    owl:versionInfo "1.126.0" ;
+    owl:priorVersion <http://example.org/backlog/1.125.0> , <http://example.org/backlog/1.124.0> , <http://example.org/backlog/1.123.0> , <http://example.org/backlog/1.122.0> ;
     owl:priorVersion <http://example.org/backlog/1.121.0> , <http://example.org/backlog/1.120.0> , <http://example.org/backlog/1.119.0> , <http://example.org/backlog/1.118.0> , <http://example.org/backlog/1.117.0> ;
     owl:priorVersion <http://example.org/backlog/1.116.0> ;
     owl:priorVersion <http://example.org/backlog/1.115.0> ;
@@ -6915,9 +6915,10 @@ backlog:Competency a owl:Class ;
                 backlog:Comp_BacklogStewardship backlog:Comp_RankingDecision backlog:Comp_GovernanceRuling backlog:Comp_LineageDiscipline
                 backlog:Comp_ReleaseManagement backlog:Comp_ToolRunOperation backlog:Comp_IncidentResponse backlog:Comp_RetrospectiveFacilitation
                 backlog:Comp_SystemModelling backlog:Comp_StructuralModelling backlog:Comp_BehaviouralModelling backlog:Comp_ModelConsistencyChecking
-                backlog:Comp_ModelValidation backlog:Comp_Simulation backlog:Comp_ModelChangeControl ) ;
+                backlog:Comp_ModelValidation backlog:Comp_Simulation backlog:Comp_ModelChangeControl
+                backlog:Comp_CommonalityVariabilityAnalysis backlog:Comp_DomainModelling backlog:Comp_ReusableAssetStewardship backlog:Comp_ProductDerivation backlog:Comp_ProductSpecificExtension backlog:Comp_IntegrationStrategy backlog:Comp_InterfaceAgreementManagement backlog:Comp_RepeatableBuild backlog:Comp_DeliveryPipelineEngineering backlog:Comp_ReleaseReadinessAssessment backlog:Comp_DeploymentExposureControl backlog:Comp_OperationalHandover backlog:Comp_RetirementManagement backlog:Comp_DataDisposition backlog:Comp_DependencyUnwinding backlog:Comp_OperationalScenarioDefinition backlog:Comp_RequirementsQualityAssurance backlog:Comp_TradeOffAnalysis ) ;
     rdfs:label "Competency"@en ;
-    skos:definition "The closed competency taxonomy below its categories: twenty-five named skills, each skos:broader to exactly one CompetencyCategory, and finer skills (v1.125.0: six, under System modelling) each skos:broader to exactly one of those skills. A requirement of a skill is met by the skill itself or by any finer skill under it; a requirement of a finer skill is met only by that skill (CompetencyMatchShape). Closed for the same reason the category level is: an open competency vocabulary could never be gated against by CompetencyMatchShape, because 'covered' would be unfalsifiable against a set that can always grow a new entry matching whatever was asserted."@en .
+    skos:definition "The closed competency taxonomy below its categories: thirty-three named skills, each skos:broader to exactly one CompetencyCategory, and sixteen finer skills (System modelling, Product derivation, Integration build, Release management and Retirement management each carry some) each skos:broader to exactly one of those skills. A finer skill never sits below another finer skill: the tree has three levels. A requirement of a skill is met by the skill itself or by any finer skill under it; a requirement of a finer skill is met only by that skill (CompetencyMatchShape). Closed for the same reason the category level is: an open competency vocabulary could never be gated against by CompetencyMatchShape, because 'covered' would be unfalsifiable against a set that can always grow a new entry matching whatever was asserted."@en .
 
 backlog:CompetencyProfile a owl:Class ;
     rdfs:subClassOf backlog:BacklogConcept ;

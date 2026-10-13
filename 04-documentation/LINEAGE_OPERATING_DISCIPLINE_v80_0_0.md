@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v79.0.0
+# Lineage Operating Discipline — v80.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -3321,3 +3321,20 @@ Related: G41, G81, G85, G100, G101, L-112.
 
 **What is not claimed.** The agent role types, the executor levels of an agentic community, and decomposition mechanisms are not modelled: no sourced definitions were supplied and the executor model already expresses mixed teams. The skill tree covers modelling only. Each new probe fails on the previous release (competency inheritance on 2 of 8 scenarios, verifier independence on 5 of 11).
 Related: G39, G89, G91, G107, L-116.
+
+---
+
+## G110 — Supplied skills enter the tree on their sources, and the tree stays three levels deep
+
+*(Opened by the adopting project's answer to G109: eighteen skills with sources, the agent role question, and the first measurement of the new rules on a real register.)*
+
+**Q1 — what enters.** A skill supplied with a source in the corpus the owner holds enters the closed tree as supplied, after the cited concepts are found in that corpus (all 18 were). A skill goes in as a finer skill when it is a part of an existing skill's work (integration strategy under Integration build, release readiness under Release management) and as a new skill when it is not. The tree has three levels at most: a finer skill never sits below another finer skill (a skill supplied as one under a finer parent is made a skill). The check is `backlog_competency_tree_probe`, which also proves it discriminates on five planted faults.
+
+**Q2 — Domain modelling is its own skill.** Conceptual data modelling stops at the entities and relations of one system's data; domain modelling describes the concepts, rules and boundary of a field that several systems start from. Each definition now says what the other is not. Data disposition is likewise distinct from data migration.
+
+**Q3 — agent role types.** Nothing is entered. A role needs a definition and a source, and the only definitions offered are placeholders; the framework does not fix a definition from its own side. They enter when the owner states one with its source. The independence a role would need is already expressed by the verifier rule without naming any role.
+
+**Q4 — a tool is not an independent verifier.** A verification run by an automated tool owned by the executing session is that session's own work: a tool is not an Executor, and the rule counts only an Executor outside the executing party. Unchanged, and now stated.
+
+**What the measurement showed.** The new rules do not break a register that did not adopt them (0 violations, same warnings, on a register of 128 Done items). Adopting the verifier rule raised 128 violations, one per Done item with no verifier: the rule says what it was built to say, that those items were checked by the party that produced them. A register adopts it going forward and does not back-fill; no tool back-fills it either.
+Related: G39, G89, G91, G109.
