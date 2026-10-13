@@ -9,8 +9,8 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog/shacl/1.160.0> ;
-    owl:versionInfo "1.160.0" ;
+    owl:versionIRI <http://example.org/backlog/shacl/1.161.0> ;
+    owl:versionInfo "1.161.0" ;
     owl:priorVersion <http://example.org/backlog-shapes/1.159.0> , <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.154.0> , <http://example.org/backlog-shapes/1.153.0> , <http://example.org/backlog-shapes/1.152.0> , <http://example.org/backlog-shapes/1.151.0> , <http://example.org/backlog-shapes/1.150.0> , <http://example.org/backlog-shapes/1.149.0> , <http://example.org/backlog-shapes/1.148.0> , <http://example.org/backlog-shapes/1.147.0> , <http://example.org/backlog-shapes/1.146.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.145.0> ;
@@ -7892,4 +7892,40 @@ backlog:DoneWithoutVerifierShape a sh:NodeShape ;
             ?reg backlog:adoptsRuleSet backlog:RS_IndependentVerification .
             $this backlog:hasState backlog:Done .
             FILTER NOT EXISTS { $this backlog:verifiedBy ?v }
+        }""" ] .
+
+# v1.161.0 (G111): two opt-in rules for the agent roles. Both bind only a register that adopted the rule set (G89, G91).
+# HumanOverseerShape: an overseer is a person or a human team. ManagerialIndependenceShape: a verifier shares no controlling party with the executor.
+backlog:HumanOverseerShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItem ;
+    sh:severity sh:Violation ;
+    rdfs:label "In an adopting register the overseer of work is a person or a human team (G111)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "ROLE_OVERSEER_AGENT" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G111: the Executor named as overseer of this work item is not an individual human or a human team, in a register that adopted RS_HumanOversight. The authority to refuse, override or stop work stays with people: name a person or a human team." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?reg backlog:adoptsRuleSet backlog:RS_HumanOversight .
+            $this backlog:overseenBy ?o .
+            FILTER NOT EXISTS { ?o a ?k . FILTER ( ?k IN ( backlog:Executor_IndividualHuman , backlog:Executor_HumanTeam ) ) }
+        }""" ] .
+
+backlog:ManagerialIndependenceShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItem ;
+    sh:severity sh:Violation ;
+    rdfs:label "In an adopting register a verifier answers to a different controller (G111)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "ROLE_MANAGERIAL" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G111: the verifier of this work item shares a controlling party with its responsible Executor (the same controller, or one is the other's controller), in a register that adopted RS_ManagerialIndependence. A team that answers to the same head as the producer is not independent of it: name a verifier under another controller." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?reg backlog:adoptsRuleSet backlog:RS_ManagerialIndependence .
+            $this backlog:responsible ?r ; backlog:verifiedBy ?v .
+            OPTIONAL { ?r backlog:hasController ?rc }
+            OPTIONAL { ?v backlog:hasController ?vc }
+            BIND ( COALESCE ( ?rc , ?r ) AS ?a )
+            BIND ( COALESCE ( ?vc , ?v ) AS ?b )
+            FILTER ( ?a = ?b || ?a = ?v || ?b = ?r )
         }""" ] .

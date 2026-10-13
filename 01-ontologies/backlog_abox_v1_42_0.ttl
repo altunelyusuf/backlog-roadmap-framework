@@ -22,8 +22,8 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (ABox: controlled individuals, reference data and the live register)"@en ;
-    owl:versionIRI <http://example.org/backlog/abox/1.41.0> ;
-    owl:versionInfo "1.41.0" ;
+    owl:versionIRI <http://example.org/backlog/abox/1.42.0> ;
+    owl:versionInfo "1.42.0" ;
     owl:priorVersion <http://example.org/backlog/abox/1.40.0> , <http://example.org/backlog/abox/1.39.0> , <http://example.org/backlog/abox/1.38.0> , <http://example.org/backlog/abox/1.37.0> , <http://example.org/backlog/abox/1.36.0> , <http://example.org/backlog/abox/1.35.0> ;
     owl:priorVersion <http://example.org/backlog/abox/1.34.0> , <http://example.org/backlog/abox/1.33.0> , <http://example.org/backlog/abox/1.32.0> , <http://example.org/backlog/abox/1.31.0> , <http://example.org/backlog/abox/1.30.0> , <http://example.org/backlog/abox/1.29.0> , <http://example.org/backlog/abox/1.28.0> , <http://example.org/backlog/abox/1.27.0> , <http://example.org/backlog/abox/1.26.0> , <http://example.org/backlog/abox/1.25.0> , <http://example.org/backlog/abox/1.24.0> , <http://example.org/backlog/abox/1.23.0> , <http://example.org/backlog/abox/1.22.0> , <http://example.org/backlog/abox/1.21.0> , <http://example.org/backlog/abox/1.20.0> , <http://example.org/backlog/abox/1.19.0> , <http://example.org/backlog/abox/1.17.0> , <http://example.org/backlog/abox/1.16.0> , <http://example.org/backlog/abox/1.15.0> , <http://example.org/backlog/abox/1.14.0> , <http://example.org/backlog/abox/1.13.0> , <http://example.org/backlog/abox/1.12.0> , <http://example.org/backlog/abox/1.11.0> , <http://example.org/backlog/abox/1.10.0> , <http://example.org/backlog/abox/1.9.0> , <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
         <http://example.org/backlog-abox/1.2.1> ,
@@ -1212,6 +1212,15 @@ backlog:RS_StateReflectsEvidence a owl:NamedIndividual , backlog:RuleSet ;
 backlog:RS_IndependentVerification a owl:NamedIndividual , backlog:RuleSet ;
     rdfs:label "Done work is verified by a party other than its executor"@en ;
     skos:definition "Every work item that reads Done names, through verifiedBy, an Executor that is independent of the one that produced it (not the responsible Executor, not a member of it, not a collective that contains it). A RuleSet because it binds only registers that declared it, so a register whose items were closed without a verifier is not judged retroactively (G89, G91). The independence of a verifier that is named is checked everywhere, adopted or not (VerifierIndependenceShape). This package's own register does not adopt it."@en .
+
+backlog:RS_HumanOversight a owl:NamedIndividual , backlog:RuleSet ;
+    rdfs:label "Oversight of agent work is held by people"@en ;
+    skos:definition "Every Executor named through overseenBy is an individual human or a human team. A RuleSet because it binds only registers that declared it, so a register whose overseers were named before the rule is not judged retroactively (G89, G91). This package's own register does not adopt it."@en .
+
+backlog:RS_ManagerialIndependence a owl:NamedIndividual , backlog:RuleSet ;
+    rdfs:label "A verifier answers to a different controller"@en ;
+    skos:definition "The verifier of a work item does not share a controlling party with its responsible Executor: the controller of one (or the Executor itself when it has none) is neither the controller of the other nor the other Executor. Adds managerial independence to the membership independence that VerifierIndependenceShape checks everywhere. A RuleSet because it binds only registers that declared it (G89, G91). Technical and financial independence are not modelled. This package's own register does not adopt it."@en ;
+    dcterms:source "Independent verification and validation as described by NASA: independence is technical, managerial and financial (NASA IV&V Program overview); here only the managerial part, decidable from the controller link."@en .
 
 backlog:RS_LineageStatus a owl:NamedIndividual , backlog:RuleSet ;
     rdfs:label "A lineage states where it stands"@en ;
@@ -6047,3 +6056,50 @@ backlog:CP_FizyoVibeTeam a owl:NamedIndividual , backlog:CompetencyProfile ;
     rdfs:label "the adopting project's competency profile"@en ;
     skos:definition "Minimal and business-appropriate rather than technical, per the owner's own caution against over-claiming: backlog stewardship, the one leaf a wellness-studio business genuinely exercises in keeping its own register of work accurate and groomed. No analysis, design, verification or technical operations leaf is credited -- this package holds no evidence an adopting project itself (as opposed to the framework built for it) performs that kind of work, and none is guessed at to fill the profile out further."@en ;
     backlog:hasCapability backlog:Comp_BacklogStewardship .
+
+#################################################################
+#  v1.390.0 (G111) -- the agent role types, as a sourced vocabulary.
+#  Roles are relations of an Executor to a WorkItem, not a layer of
+#  their own; each concept says which relation realises it.
+#################################################################
+
+backlog:AgentRoleScheme a skos:ConceptScheme ;
+    rdfs:label "Agent role types"@en ;
+    skos:definition "Six roles an executor plays in relation to a work item, each defined from sources and each realised by a relation the framework already has or adds. Specialist is deliberately absent: a specialist is an executor whose competency profile covers a skill, which the competency mechanism already records (G39)."@en .
+
+backlog:AgentRole_Orchestrator a skos:Concept ; skos:inScheme backlog:AgentRoleScheme ;
+    rdfs:label "Orchestrator"@en ;
+    skos:definition "Plans a piece of work, divides it among other executors, directs them, follows progress, merges their results and corrects course when needed."@en ;
+    skos:scopeNote "Realised as the collective responsible Executor of a work item that decomposes into child items, with its team controller. Not the same as Supervisor, which can halt and override rather than divide work."@en ;
+    dcterms:source "Magentic-One documentation (lead agent: task decomposition and planning, directs the other agents, tracks progress, corrects course); Anthropic, Building effective agents (orchestrator-workers: a central call breaks tasks down, delegates and synthesizes results)."@en .
+
+backlog:AgentRole_Implementer a skos:Concept ; skos:inScheme backlog:AgentRoleScheme ;
+    rdfs:label "Implementer"@en ;
+    skos:definition "Produces the work product it is assigned (code, a model, a document) to its specification and checks it with its own tests before handing it on."@en ;
+    skos:scopeNote "Realised as the responsible Executor of an atomic work item."@en ;
+    dcterms:source "MetaGPT, arXiv 2308.00352 (Engineer role); Magentic-One documentation (Coder agent)."@en .
+
+backlog:AgentRole_Reviewer a skos:Concept ; skos:inScheme backlog:AgentRoleScheme ;
+    rdfs:label "Reviewer"@en ;
+    skos:definition "Examines a work product against stated criteria and returns findings to its producer, who decides what to change. May belong to the same party as the producer, which separates it from a verifier."@en ;
+    skos:scopeNote "Realised by reviewedBy."@en ;
+    dcterms:source "Anthropic, Building effective agents (evaluator-optimizer); MetaGPT, arXiv 2308.00352 (QA Engineer)."@en .
+
+backlog:AgentRole_Verifier a skos:Concept ; skos:inScheme backlog:AgentRoleScheme ;
+    rdfs:label "Verifier"@en ;
+    skos:definition "Checks a result it did not produce, independent of the producer; its attestation is what lets the work count as Done."@en ;
+    skos:scopeNote "Realised by verifiedBy. Membership independence is checked everywhere; managerial independence only behind RS_ManagerialIndependence; technical and financial independence are not checked. A tool is not a verifier (G110)."@en ;
+    dcterms:source "NASA IV&V Program overview and the JDN description of independence (technical, managerial, financial); agentic-systems v0.34.2 independent attestation."@en .
+
+backlog:AgentRole_Supervisor a skos:Concept ; skos:inScheme backlog:AgentRoleScheme ;
+    rdfs:label "Supervisor"@en ;
+    skos:definition "A person, or group of people, who understand what an agent can and cannot do, watch its work, read its results correctly, and may refuse its output, override it, or stop it."@en ;
+    skos:scopeNote "Realised by overseenBy; behind RS_HumanOversight the overseer must be a person or a human team."@en ;
+    dcterms:source "Regulation (EU) 2024/1689 Article 14(4)(a) to (e)."@en .
+
+backlog:AgentRole_Explainer a skos:Concept ; skos:inScheme backlog:AgentRoleScheme ;
+    rdfs:label "Explainer"@en ;
+    skos:definition "Puts a result that has already been produced and checked into words for a human reader. It decides nothing, and its text counts only after a deterministic check finds every number and name of the text in the record it explains."@en ;
+    skos:scopeNote "Needs no relation of its own: it is the responsible Executor of a communication work item. Whether small models explain faithfully is recorded in its source as not yet measured."@en ;
+    dcterms:source "agentic-systems ontology, explainer agent (records the owner's direction of 2026-09-30)."@en .
+

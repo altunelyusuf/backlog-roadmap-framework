@@ -3209,7 +3209,7 @@ lineagestatusn:S_Understated a backlog:Story ; backlog:hasIdentifier "S-US" ; ba
 # The negative fixture ADOPTS the status rule set, so the clauses it exists to prove are in force here
 # even though minimal fixtures elsewhere are untouched by them (G91: a ruling binds what declared it).
 lineagestatusn:Reg a backlog:Backlog ; rdfs:label "fixture register"@en ; backlog:isRegisterRoot true ;
-    backlog:adoptsRuleSet backlog:RS_LineageStatus , backlog:RS_LabelConvention , backlog:RS_ConcurrentLineages , backlog:RS_StateReflectsEvidence , backlog:RS_IndependentVerification .
+    backlog:adoptsRuleSet backlog:RS_LineageStatus , backlog:RS_LabelConvention , backlog:RS_ConcurrentLineages , backlog:RS_StateReflectsEvidence , backlog:RS_IndependentVerification , backlog:RS_HumanOversight , backlog:RS_ManagerialIndependence .
 
 
 # --- merged from fixture_sprint_ceremonies_negative_v1_0_0.ttl (sprintceremoni) ---
@@ -4191,3 +4191,13 @@ ex:EVID_UNSTARTED_E a backlog:ArtifactEvidence ; backlog:evidenceVerified true .
 ex:VER_SELF_EX a backlog:Executor_IndividualHuman .
 ex:VER_SELF a backlog:Task ; backlog:hasState backlog:InProgress ; backlog:responsible ex:VER_SELF_EX ; backlog:verifiedBy ex:VER_SELF_EX .
 ex:VER_MISSING a backlog:Task ; backlog:hasState backlog:Done .
+
+# v1.31.0 (G111): the agent roles. ROLE_OVERSEER_AGENT is overseen by a single agent -> HumanOverseerShape fires (the register adopts RS_HumanOversight).
+# ROLE_MANAGERIAL is built by a team and verified by another team because both teams answer to the same head
+# -> ManagerialIndependenceShape fires. The silent controls are in backlog_agent_roles_probe.
+ex:ROLE_AGENT_EX a backlog:Executor_SingleAgent .
+ex:ROLE_OVERSEER_AGENT a backlog:Task ; backlog:hasState backlog:InProgress ; backlog:responsible ex:VER_SELF_EX ; backlog:overseenBy ex:ROLE_AGENT_EX .
+ex:ROLE_HEAD a backlog:Executor_IndividualHuman .
+ex:ROLE_TEAM_A a backlog:Executor_HumanTeam ; backlog:hasController ex:ROLE_HEAD ; backlog:hasExecutorMember ex:ROLE_HEAD .
+ex:ROLE_TEAM_B a backlog:Executor_HumanTeam ; backlog:hasController ex:ROLE_HEAD ; backlog:hasExecutorMember ex:ROLE_HEAD .
+ex:ROLE_MANAGERIAL a backlog:Task ; backlog:hasState backlog:InProgress ; backlog:responsible ex:ROLE_TEAM_A ; backlog:verifiedBy ex:ROLE_TEAM_B .

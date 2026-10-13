@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v80.0.0
+# Lineage Operating Discipline — v81.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -3338,3 +3338,20 @@ Related: G39, G89, G91, G107, L-116.
 
 **What the measurement showed.** The new rules do not break a register that did not adopt them (0 violations, same warnings, on a register of 128 Done items). Adopting the verifier rule raised 128 violations, one per Done item with no verifier: the rule says what it was built to say, that those items were checked by the party that produced them. A register adopts it going forward and does not back-fill; no tool back-fills it either.
 Related: G39, G89, G91, G109.
+
+---
+
+## G111 — Agent roles are relations to work, defined from sources, and two independence rules are opt-in
+
+*(Opened by the owner's instruction to build the proposal for the seven agent role types from the literature and open sources, and his acceptance of its recommendations. Each rule was tested on planted registers before it was built.)*
+
+**Q1 — roles are relations, not a layer.** An Orchestrator is the collective responsible Executor of an item that decomposes, with its controller; an Implementer is the responsible Executor of an atomic item; a Verifier is the `verifiedBy` Executor (G109); a Supervisor is the `overseenBy` Executor; a Reviewer is the `reviewedBy` Executor; an Explainer is the responsible Executor of a communication item. Only the last two relations are new (`reviewedBy`, `overseenBy`). Six sourced concepts in `AgentRoleScheme` carry the definitions and say which relation realises each. A team-role entry would say what a team is, not who holds the role on which item.
+
+**Q2 — Orchestrator and Supervisor stay two roles.** In the sources "supervisor" often means what is called orchestrator here (the agentic-systems supervisor pattern does). The two are kept apart: orchestrating divides work; supervising can refuse, override and stop it.
+
+**Q3 — Specialist is not a role.** It is an executor whose competency profile covers a skill, and the competency mechanism already records that. A second mechanism would break G39.
+
+**Q4 — two opt-in rules.** `RS_HumanOversight`: every overseer is an individual human or a human team (Article 14 of the EU AI Act speaks of natural persons; the authority to stop work must not pass to an agent by accident). `RS_ManagerialIndependence`: a verifier shares no controlling party with the responsible Executor (the controller of one, or the Executor itself when it has none, is not the controller of the other and not the other). Both bind only a register that adopted them (G89, G91). Technical and financial independence are not modelled: they cannot be decided from the links the framework holds.
+
+**What is not claimed.** The sources are the Magentic-One documentation, Anthropic's Building effective agents, MetaGPT (arXiv 2308.00352), Article 14 of Regulation (EU) 2024/1689, the NASA IV&V description of independence and the agentic-systems ontology; the CrewAI, A2A and Google ADK pages were not opened. Using Article 14 as a general definition of a supervisor is this framework's choice, not the Act's. A human team made only of agents would pass `HumanOverseerShape`: the rule reads the class of the Executor, not its members. `backlog_agent_roles_probe` fails on v1.389.0 (6 of 12 scenarios and all 6 concepts).
+Related: G39, G89, G91, G109, G110.

@@ -11260,6 +11260,18 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.390.0 — 2026-10-13 (MINOR: agent roles as relations to work, with two opt-in independence rules — G111)
+
+The owner asked for the seven agent role types to be built from the literature and open sources, reviewed the proposal and accepted its recommendations. Most roles were already relations between an executor and a work item; only two relations were missing.
+
+- **Vocabulary (T-Box v1.127.0, data v1.42.0):** `reviewedBy` and `overseenBy` (work item to executor), each with a source; the rule sets `RS_HumanOversight` and `RS_ManagerialIndependence`; `AgentRoleScheme` with six sourced role concepts (Orchestrator, Implementer, Reviewer, Verifier, Supervisor, Explainer), each saying which relation realises it. Specialist is not a role (G39).
+- **Rules (shapes v1.161.0):** `HumanOverseerShape` (an overseer is a person or a human team) and `ManagerialIndependenceShape` (a verifier shares no controlling party with the executor), both only in a register that adopted the rule set. Negative fixture v1.31.0 cases `ROLE_OVERSEER_AGENT` and `ROLE_MANAGERIAL`.
+- **Proof:** `backlog_agent_roles_probe` (12 planted registers and the six concepts); on v1.389.0 it fails 6 of 12 scenarios and all 6 concepts, and passes now. Runs in gate v1.45.0.
+- **Not done:** technical and financial independence (not decidable from the links held); a check that a human team contains a person.
+- **Handover:** answered and filed; discipline v81.0.0 (G111).
+
+**Unplanned work:** the owner's instruction to build the role proposal and to proceed on its recommendations; no backlog item of this package covers it.
+
 ## v1.389.0 — 2026-10-13 (MINOR: eighteen supplied skills join the competency tree — G110)
 
 The adopting project answered G109 with eighteen sourced skills. Entered as supplied: eight new skills (commonality and variability analysis, domain modelling, reusable asset stewardship, product derivation, retirement management, operational scenario definition, requirements quality assurance, trade-off analysis) and ten finer skills (four under Integration build, three under Release management, two under Retirement management, one under Product derivation). The closed tree is now 33 skills and 16 finer skills.

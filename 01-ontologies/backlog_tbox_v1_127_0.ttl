@@ -18,8 +18,8 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.126.0> ;
-    owl:versionInfo "1.126.0" ;
+    owl:versionIRI <http://example.org/backlog/1.127.0> ;
+    owl:versionInfo "1.127.0" ;
     owl:priorVersion <http://example.org/backlog/1.125.0> , <http://example.org/backlog/1.124.0> , <http://example.org/backlog/1.123.0> , <http://example.org/backlog/1.122.0> ;
     owl:priorVersion <http://example.org/backlog/1.121.0> , <http://example.org/backlog/1.120.0> , <http://example.org/backlog/1.119.0> , <http://example.org/backlog/1.118.0> , <http://example.org/backlog/1.117.0> ;
     owl:priorVersion <http://example.org/backlog/1.116.0> ;
@@ -6876,6 +6876,22 @@ backlog:verifiedBy a owl:ObjectProperty ;
     rdfs:label "verified by"@en ;
     skos:definition "An Executor who checked this WorkItem's result and is not the party that produced it. Independence is structural: the verifier is neither the responsible Executor, nor a member (at any depth) of a collective responsible Executor, nor a collective that contains the responsible Executor (VerifierIndependenceShape). A register that adopts RS_IndependentVerification also requires one on every Done item. Added for the owner's chronic problem of missed work: a party that executed a task cannot also be the one who says nothing was missed. The pattern is the one a federation already follows when it requires independent attestation, here stated at WorkItem level so it binds any executor kind."@en ;
     dcterms:source "Framework-original rule at WorkItem level; the same independence as the agentic federation's requiresIndependentAttestation (agentic-systems v0.34.2, attestation), and the verification/validation separation of ISO/IEC/IEEE 12207:2017 clause 6.4 (verification and validation as processes distinct from implementation)."@en .
+
+backlog:reviewedBy a owl:ObjectProperty ;
+    rdfs:domain backlog:WorkItem ;
+    rdfs:range backlog:Executor ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "reviewed by"@en ;
+    skos:definition "An Executor who examined this WorkItem's result against stated criteria and returned findings to its producer, who decides what to change. Unlike verifiedBy it demands no independence: a reviewer may belong to the same party as the producer, which is exactly what separates a review (feedback inside a loop) from a verification (a check by a party that did not produce the work). Optional, and not required for Done."@en ;
+    dcterms:source "Anthropic, Building effective agents (evaluator-optimizer workflow: one call generates, another evaluates and gives feedback in a loop); MetaGPT, arXiv 2308.00352 (QA Engineer role)."@en .
+
+backlog:overseenBy a owl:ObjectProperty ;
+    rdfs:domain backlog:WorkItem ;
+    rdfs:range backlog:Executor ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "overseen by"@en ;
+    skos:definition "An Executor who watches this WorkItem's execution and may refuse its output, override it or stop it: the supervisor of the work. Optional by default. A register that adopts RS_HumanOversight also requires every named overseer to be a person or a human team, so that the authority to stop an agent's work cannot be handed to an agent by accident (HumanOverseerShape)."@en ;
+    dcterms:source "Regulation (EU) 2024/1689 (AI Act) Article 14(4)(a) to (e): understand capacities and limitations and monitor, stay aware of over-reliance, interpret the output, decide not to use or to disregard, override or reverse the output, intervene or interrupt with a stop. The Act states this for natural persons overseeing high-risk systems; using it as a general definition of a supervisor is this framework's choice."@en .
 
 #################################################################
 #  v1.123.0 continued -- closed Competency taxonomy and the
