@@ -18,9 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.124.0> ;
-    owl:versionInfo "1.124.0" ;
-    owl:priorVersion <http://example.org/backlog/1.123.0> , <http://example.org/backlog/1.122.0> ;
+    owl:versionIRI <http://example.org/backlog/1.125.0> ;
+    owl:versionInfo "1.125.0" ;
+    owl:priorVersion <http://example.org/backlog/1.124.0> , <http://example.org/backlog/1.123.0> , <http://example.org/backlog/1.122.0> ;
     owl:priorVersion <http://example.org/backlog/1.121.0> , <http://example.org/backlog/1.120.0> , <http://example.org/backlog/1.119.0> , <http://example.org/backlog/1.118.0> , <http://example.org/backlog/1.117.0> ;
     owl:priorVersion <http://example.org/backlog/1.116.0> ;
     owl:priorVersion <http://example.org/backlog/1.115.0> ;
@@ -6869,6 +6869,14 @@ backlog:supportedBy a owl:ObjectProperty ;
     rdfs:label "supported by"@en ;
     skos:definition "Zero or more Executors who support this WorkItem without being the executing party -- RASCI's Support role. Optional and unconstrained in count, and deliberately not conflated with responsible: a WorkItem can be fully supported and still have nobody executing it, which is a different, and more diagnosable, gap than having no support at all."@en .
 
+backlog:verifiedBy a owl:ObjectProperty ;
+    rdfs:domain backlog:WorkItem ;
+    rdfs:range backlog:Executor ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "verified by"@en ;
+    skos:definition "An Executor who checked this WorkItem's result and is not the party that produced it. Independence is structural: the verifier is neither the responsible Executor, nor a member (at any depth) of a collective responsible Executor, nor a collective that contains the responsible Executor (VerifierIndependenceShape). A register that adopts RS_IndependentVerification also requires one on every Done item. Added for the owner's chronic problem of missed work: a party that executed a task cannot also be the one who says nothing was missed. The pattern is the one a federation already follows when it requires independent attestation, here stated at WorkItem level so it binds any executor kind."@en ;
+    dcterms:source "Framework-original rule at WorkItem level; the same independence as the agentic federation's requiresIndependentAttestation (agentic-systems v0.34.2, attestation), and the verification/validation separation of ISO/IEC/IEEE 12207:2017 clause 6.4 (verification and validation as processes distinct from implementation)."@en .
+
 #################################################################
 #  v1.123.0 continued -- closed Competency taxonomy and the
 #  per-Executor CompetencyProfile / Experience / FailureRecord ledger
@@ -6905,9 +6913,11 @@ backlog:Competency a owl:Class ;
                 backlog:Comp_Coding backlog:Comp_ToolScripting backlog:Comp_DataMigration backlog:Comp_IntegrationBuild
                 backlog:Comp_ShaclAuthoring backlog:Comp_TestDesign backlog:Comp_ClauseProof backlog:Comp_QualityReview
                 backlog:Comp_BacklogStewardship backlog:Comp_RankingDecision backlog:Comp_GovernanceRuling backlog:Comp_LineageDiscipline
-                backlog:Comp_ReleaseManagement backlog:Comp_ToolRunOperation backlog:Comp_IncidentResponse backlog:Comp_RetrospectiveFacilitation ) ;
+                backlog:Comp_ReleaseManagement backlog:Comp_ToolRunOperation backlog:Comp_IncidentResponse backlog:Comp_RetrospectiveFacilitation
+                backlog:Comp_SystemModelling backlog:Comp_StructuralModelling backlog:Comp_BehaviouralModelling backlog:Comp_ModelConsistencyChecking
+                backlog:Comp_ModelValidation backlog:Comp_Simulation backlog:Comp_ModelChangeControl ) ;
     rdfs:label "Competency"@en ;
-    skos:definition "The leaf level of the closed competency taxonomy: twenty-four named skills, each skos:broader to exactly one CompetencyCategory. Closed for the same reason the category level is: an open competency vocabulary could never be gated against by CompetencyMatchShape, because 'covered' would be unfalsifiable against a set that can always grow a new entry matching whatever was asserted."@en .
+    skos:definition "The closed competency taxonomy below its categories: twenty-five named skills, each skos:broader to exactly one CompetencyCategory, and finer skills (v1.125.0: six, under System modelling) each skos:broader to exactly one of those skills. A requirement of a skill is met by the skill itself or by any finer skill under it; a requirement of a finer skill is met only by that skill (CompetencyMatchShape). Closed for the same reason the category level is: an open competency vocabulary could never be gated against by CompetencyMatchShape, because 'covered' would be unfalsifiable against a set that can always grow a new entry matching whatever was asserted."@en .
 
 backlog:CompetencyProfile a owl:Class ;
     rdfs:subClassOf backlog:BacklogConcept ;

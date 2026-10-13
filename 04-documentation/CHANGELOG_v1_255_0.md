@@ -11260,6 +11260,18 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.388.0 — 2026-10-13 (MINOR: a third competency level starting with modelling, independent verification, and a preview of what closing owes — G109)
+
+A design request asked for an Agentic SDLC profile that sets the lineage roles and for granular work types assigned to the right agents, teams or federations. The framework already assigns work by competency, so the request was met inside that mechanism rather than beside it.
+
+- **Vocabulary (T-Box v1.125.0, data v1.40.0):** the closed competency set gains System modelling and six finer skills (structural, behavioural, consistency checking, validation, simulation, model change control), each sourced to a concept of the owner's practice corpus; `verifiedBy` (work item to executor); the rule set `RS_IndependentVerification`.
+- **Rules (shapes v1.160.0):** the competency match is met by the skill or any finer skill under it (it only removes violations); `VerifierIndependenceShape` (everywhere) and `DoneWithoutVerifierShape` (only in a register that adopted the rule set). Negative fixture v1.30.0 cases `VER_SELF` and `VER_MISSING`.
+- **Tools:** `backlog_close_preview` lists everything closing an item owes in one run; three probes (`backlog_competency_inheritance_probe`, `backlog_verifier_independence_probe`, `backlog_close_preview_probe`) run in gate v1.43.0.
+- **Proof:** the inheritance and independence probes fail on v1.387.0 (2 of 8 and 5 of 11 scenarios) and pass now; the preview listed 7 requirements in one run on a planted open item and left the register byte-identical. Decision between a flat list and three levels taken on a test drive of four modelling work items.
+- **Not done:** agent role types, the community tier of executors and decomposition mechanisms (no sourced definitions yet); skills for areas other than modelling (waiting for their sources). Discipline v79.0.0 (G109).
+
+**Unplanned work:** a design request from an adopting project and the owner's direct instruction to proceed on test drives; no backlog item of this package covers it.
+
 ## v1.387.0 — 2026-10-13 (PATCH-level, documentation only: G108)
 
 A handover asked how a lineage that predates the stage-output model adopts the work guard. Ruled from the tools: such a lineage is bypassed by construction (verified on a planted register), the recovery runbook applies as written and runs through the owner's restart, and the guard has no weaker mode. No tool, shape or vocabulary changed. Discipline v78.0.0 (G108).

@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v78.0.0
+# Lineage Operating Discipline — v79.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -3304,3 +3304,20 @@ the correct state is no guard installed, the finding open (G101 clause 2), and t
 
 **What is not claimed.** No tool was changed. The planted register proves the verdicts of the two checks, not the whole recovery on that project's data.
 Related: G41, G81, G85, G100, G101, L-112.
+
+---
+
+## G109 — Who does granular work is decided by a closed skill tree, and nobody verifies their own work
+
+*(Opened by a design request from a project that sets lineage roles for development in which AI agents do part of the work. Tested on planted registers before it was built, on the question "three levels or a longer flat list?".)*
+
+**Q1 — granular work types.** The fourteen task types stay coarse and closed: they are an index whose value is what an imbalance shows (fifty implementation tasks and no validation task). Granularity belongs one layer below, in the competency set that already assigns work to executors, not in a new layer beside it (G39). The set stays closed, now in three levels: category, skill, finer skill. A finer skill is listed in the T-Box's closed enumeration, is `skos:broader` to exactly one skill, and carries a source. Modelling is the first worked case (System modelling and six finer skills, each sourced to a concept of the owner's practice corpus). Other areas wait for their own sourced skills; none is invented here.
+
+**Q2 — the match rule is monotone.** A requirement of a skill is met by the skill itself or by any finer skill under it; a requirement of a finer skill is met only by that skill. Tested both ways: a flat list forces the planner to name a specific skill at epic or story level, when it is not yet known; three levels with the old exact-match rule flags an executor who covers part of a general requirement. The new rule only ever removes a violation the old rule raised, so no register that passed before can fail now.
+
+**Q3 — nobody verifies their own work.** `verifiedBy` names an Executor outside the executing party: not the responsible Executor, not a member of it at any depth, not a collective that contains it. That holds in every register. A register that adopts `RS_IndependentVerification` also requires one on every Done item (G89, G91: a rule binds only work that declared it). This is the answer to missed work that the executor reports as complete: the party that produced it cannot be the party that says nothing was missed. This package's own register does not adopt it.
+
+**Q4 — one list of what closing owes.** `backlog_close_preview` validates the register as it is, then a copy in which the item reads Done, and prints every violation the second run has that the first did not. The Done rules fire only when an item reads Done, so each gate run revealed the next layer; the preview asks once. It supplies nothing: a measurement that only the future can give is listed as owed.
+
+**What is not claimed.** The agent role types, the executor levels of an agentic community, and decomposition mechanisms are not modelled: no sourced definitions were supplied and the executor model already expresses mixed teams. The skill tree covers modelling only. Each new probe fails on the previous release (competency inheritance on 2 of 8 scenarios, verifier independence on 5 of 11).
+Related: G39, G89, G91, G107, L-116.

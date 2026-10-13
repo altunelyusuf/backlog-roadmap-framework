@@ -3209,7 +3209,7 @@ lineagestatusn:S_Understated a backlog:Story ; backlog:hasIdentifier "S-US" ; ba
 # The negative fixture ADOPTS the status rule set, so the clauses it exists to prove are in force here
 # even though minimal fixtures elsewhere are untouched by them (G91: a ruling binds what declared it).
 lineagestatusn:Reg a backlog:Backlog ; rdfs:label "fixture register"@en ; backlog:isRegisterRoot true ;
-    backlog:adoptsRuleSet backlog:RS_LineageStatus , backlog:RS_LabelConvention , backlog:RS_ConcurrentLineages , backlog:RS_StateReflectsEvidence .
+    backlog:adoptsRuleSet backlog:RS_LineageStatus , backlog:RS_LabelConvention , backlog:RS_ConcurrentLineages , backlog:RS_StateReflectsEvidence , backlog:RS_IndependentVerification .
 
 
 # --- merged from fixture_sprint_ceremonies_negative_v1_0_0.ttl (sprintceremoni) ---
@@ -4183,3 +4183,11 @@ ex:LIN_UNCONNECTED_B a backlog:Lineage ; backlog:hasLineageStatus backlog:LS_InP
 # The silent controls (not adopted, started item, unverified evidence, no evidence) are in backlog_state_evidence_probe.
 ex:EVID_UNSTARTED a backlog:Task ; backlog:hasState backlog:Proposed ; backlog:hasEvidence ex:EVID_UNSTARTED_E .
 ex:EVID_UNSTARTED_E a backlog:ArtifactEvidence ; backlog:evidenceVerified true .
+
+# v1.30.0 (G109): independent verification. VER_SELF names the responsible Executor as its own verifier -> VerifierIndependenceShape fires.
+# VER_MISSING is Done in a register that adopts RS_IndependentVerification (the adopting register above) and names no verifier -> DoneWithoutVerifierShape fires
+# (it fires on every other Done item in this crowded fixture too). The silent controls (a verifier outside the executing party, a team over its own member,
+# a member under its team, a register that did not adopt) are in backlog_verifier_independence_probe.
+ex:VER_SELF_EX a backlog:Executor_IndividualHuman .
+ex:VER_SELF a backlog:Task ; backlog:hasState backlog:InProgress ; backlog:responsible ex:VER_SELF_EX ; backlog:verifiedBy ex:VER_SELF_EX .
+ex:VER_MISSING a backlog:Task ; backlog:hasState backlog:Done .

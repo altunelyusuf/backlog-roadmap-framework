@@ -9,9 +9,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog/shacl/1.159.0> ;
-    owl:versionInfo "1.159.0" ;
-    owl:priorVersion <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
+    owl:versionIRI <http://example.org/backlog/shacl/1.160.0> ;
+    owl:versionInfo "1.160.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.159.0> , <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.154.0> , <http://example.org/backlog-shapes/1.153.0> , <http://example.org/backlog-shapes/1.152.0> , <http://example.org/backlog-shapes/1.151.0> , <http://example.org/backlog-shapes/1.150.0> , <http://example.org/backlog-shapes/1.149.0> , <http://example.org/backlog-shapes/1.148.0> , <http://example.org/backlog-shapes/1.147.0> , <http://example.org/backlog-shapes/1.146.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.145.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.144.0> ;
@@ -7722,11 +7722,11 @@ backlog:CompetencyMatchShape a sh:NodeShape ;
     sh:severity sh:Violation ;
     rdfs:label "A required competency is covered by the responsible Executor, or that specific gap is overridden (L3)"@en ;
     sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "L3: this work item requires a Competency its responsible Executor's own CompetencyProfile does not list as a capability, and this specific gap carries no recorded override. Mirrors AutonomyEvidenceShape's own pattern -- a check that normally fires unless something that could have failed says otherwise -- except the escape here is a recorded owner decision rather than verified evidence: a GovernanceRuling whose enforcedByShape is this shape, whose overrideAppliesToWorkItem names this item AND whose overridesCompetency names this exact missing Competency silences it, exactly as GovernanceRulingShape already requires every ruling to be identified, stated and shape-enforced. PER-COMPETENCY since owner ruling 2026-10-11 (overturning v1.379.0's whole-item reading): a ruling that names this item but overrides a DIFFERENT Competency does not silence this gap -- one ruling no longer clears every requiresCompetency gap on a WorkItem at once." ;
-        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:message "L3: this work item requires a Competency its responsible Executor's own CompetencyProfile does not list as a capability (nor any finer skill under it, v1.125.0: a requirement of a skill is met by the skill or by any skill below it; a requirement of a finer skill is met only by that skill), and this specific gap carries no recorded override. Mirrors AutonomyEvidenceShape's own pattern -- a check that normally fires unless something that could have failed says otherwise -- except the escape here is a recorded owner decision rather than verified evidence: a GovernanceRuling whose enforcedByShape is this shape, whose overrideAppliesToWorkItem names this item AND whose overridesCompetency names this exact missing Competency silences it, exactly as GovernanceRulingShape already requires every ruling to be identified, stated and shape-enforced. PER-COMPETENCY since owner ruling 2026-10-11 (overturning v1.379.0's whole-item reading): a ruling that names this item but overrides a DIFFERENT Competency does not silence this gap -- one ruling no longer clears every requiresCompetency gap on a WorkItem at once." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] , [ sh:prefix "skos" ; sh:namespace "http://www.w3.org/2004/02/skos/core#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             $this backlog:requiresCompetency ?c ; backlog:responsible ?r .
-            FILTER NOT EXISTS { ?r backlog:hasCompetencyProfile ?cp . ?cp backlog:hasCapability ?c }
+            FILTER NOT EXISTS { ?r backlog:hasCompetencyProfile ?cp . ?cp backlog:hasCapability ?cap . ?cap skos:broader* ?c }
             FILTER NOT EXISTS { ?rul a backlog:GovernanceRuling ; backlog:enforcedByShape backlog:CompetencyMatchShape ; backlog:overrideAppliesToWorkItem $this ; backlog:overridesCompetency ?c }
             FILTER NOT EXISTS { $this backlog:hasState ?st . FILTER (?st IN (backlog:Done, backlog:Cancelled)) }
             FILTER NOT EXISTS { $this backlog:belongsToLineage ?lin . ?lin backlog:lineageArchived true }
@@ -7861,4 +7861,35 @@ backlog:EvidencedWorkStillUnstartedShape a sh:NodeShape ;
             $this backlog:hasState ?st ; backlog:hasEvidence ?e .
             FILTER (?st IN (backlog:Proposed, backlog:Ready, backlog:Refined))
             ?e backlog:evidenceVerified true .
+        }""" ] .
+
+# v1.160.0 (G109): independent verification. VerifierIndependenceShape holds everywhere (a verifier that is the executor, inside it or over it is
+# never independent, adopted or not); DoneWithoutVerifierShape binds only registers that adopted RS_IndependentVerification (G89, G91).
+backlog:VerifierIndependenceShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItem ;
+    sh:severity sh:Violation ;
+    rdfs:label "A verifier is independent of the executor (G109)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "VER_SELF" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G109: the Executor named as verifier of this work item is the responsible Executor, a member of it at some depth, or a collective that contains it. A party that produced the work cannot be the one who says nothing was missed. Name a verifier outside the executing party." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:responsible ?r ; backlog:verifiedBy ?v .
+            FILTER ( ?v = ?r || EXISTS { ?r backlog:hasExecutorMember+ ?v } || EXISTS { ?v backlog:hasExecutorMember+ ?r } )
+        }""" ] .
+
+backlog:DoneWithoutVerifierShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItem ;
+    sh:severity sh:Violation ;
+    rdfs:label "Done work in an adopting register names a verifier (G109)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "VER_MISSING" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G109: this work item is Done in a register that adopted RS_IndependentVerification and names no verifiedBy. Done work has to be checked by a party other than its executor: name that Executor, or move the item out of Done until it has been checked." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?reg backlog:adoptsRuleSet backlog:RS_IndependentVerification .
+            $this backlog:hasState backlog:Done .
+            FILTER NOT EXISTS { $this backlog:verifiedBy ?v }
         }""" ] .

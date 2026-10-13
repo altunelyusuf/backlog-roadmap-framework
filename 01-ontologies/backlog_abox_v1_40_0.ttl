@@ -22,9 +22,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (ABox: controlled individuals, reference data and the live register)"@en ;
-    owl:versionIRI <http://example.org/backlog/abox/1.39.0> ;
-    owl:versionInfo "1.39.0" ;
-    owl:priorVersion <http://example.org/backlog/abox/1.38.0> , <http://example.org/backlog/abox/1.37.0> , <http://example.org/backlog/abox/1.36.0> , <http://example.org/backlog/abox/1.35.0> ;
+    owl:versionIRI <http://example.org/backlog/abox/1.40.0> ;
+    owl:versionInfo "1.40.0" ;
+    owl:priorVersion <http://example.org/backlog/abox/1.39.0> , <http://example.org/backlog/abox/1.38.0> , <http://example.org/backlog/abox/1.37.0> , <http://example.org/backlog/abox/1.36.0> , <http://example.org/backlog/abox/1.35.0> ;
     owl:priorVersion <http://example.org/backlog/abox/1.34.0> , <http://example.org/backlog/abox/1.33.0> , <http://example.org/backlog/abox/1.32.0> , <http://example.org/backlog/abox/1.31.0> , <http://example.org/backlog/abox/1.30.0> , <http://example.org/backlog/abox/1.29.0> , <http://example.org/backlog/abox/1.28.0> , <http://example.org/backlog/abox/1.27.0> , <http://example.org/backlog/abox/1.26.0> , <http://example.org/backlog/abox/1.25.0> , <http://example.org/backlog/abox/1.24.0> , <http://example.org/backlog/abox/1.23.0> , <http://example.org/backlog/abox/1.22.0> , <http://example.org/backlog/abox/1.21.0> , <http://example.org/backlog/abox/1.20.0> , <http://example.org/backlog/abox/1.19.0> , <http://example.org/backlog/abox/1.17.0> , <http://example.org/backlog/abox/1.16.0> , <http://example.org/backlog/abox/1.15.0> , <http://example.org/backlog/abox/1.14.0> , <http://example.org/backlog/abox/1.13.0> , <http://example.org/backlog/abox/1.12.0> , <http://example.org/backlog/abox/1.11.0> , <http://example.org/backlog/abox/1.10.0> , <http://example.org/backlog/abox/1.9.0> , <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
         <http://example.org/backlog-abox/1.2.1> ,
                      <http://example.org/backlog-abox/1.2.0> ,
@@ -1208,6 +1208,10 @@ backlog:RS_ConcurrentLineages a owl:NamedIndividual , backlog:RuleSet ;
 backlog:RS_StateReflectsEvidence a owl:NamedIndividual , backlog:RuleSet ;
     rdfs:label "A work item's state reflects the evidence it carries"@en ;
     skos:definition "A work item that still reads Proposed, Ready or Refined may not carry evidence the bridge has verified (a test that passed, a hash that matched, an artifact that exists): the work is there and the register says it has not started. A RuleSet because it binds only registers that declared it, so a register whose items were never moved is not judged retroactively (G89, G91). This package's own register does not adopt it."@en .
+
+backlog:RS_IndependentVerification a owl:NamedIndividual , backlog:RuleSet ;
+    rdfs:label "Done work is verified by a party other than its executor"@en ;
+    skos:definition "Every work item that reads Done names, through verifiedBy, an Executor that is independent of the one that produced it (not the responsible Executor, not a member of it, not a collective that contains it). A RuleSet because it binds only registers that declared it, so a register whose items were closed without a verifier is not judged retroactively (G89, G91). The independence of a verifier that is named is checked everywhere, adopted or not (VerifierIndependenceShape). This package's own register does not adopt it."@en .
 
 backlog:RS_LineageStatus a owl:NamedIndividual , backlog:RuleSet ;
     rdfs:label "A lineage states where it stands"@en ;
@@ -5621,7 +5625,7 @@ fw:Declared_Ordinal_18 a backlog:OrdinalSharingDeclaration ;
 #################################################################
 #  v1.123.0 (owner-directed, Executor/responsible/competency work) --
 #  the closed CompetencyCategory and Competency vocabulary. Six
-#  categories, twenty-four leaves, each leaf skos:broader to exactly
+#  categories, twenty-five leaves (six finer skills below one of them since v1.125.0), each leaf skos:broader to exactly
 #  one category. Closed like Role; see TBox v1.123.0 for why.
 #################################################################
 
@@ -5768,6 +5772,52 @@ backlog:Comp_RetrospectiveFacilitation a owl:NamedIndividual , backlog:Competenc
     rdfs:label "Retrospective facilitation"@en ;
     skos:definition "Running a retrospective that produces a real RetrospectiveFinding with a root cause, not a formality."@en ;
     skos:broader backlog:Comp_Operations .
+
+# ---- v1.125.0 (G109): System modelling and the six finer skills under it, the first third level of the closed competency set.
+# The finer skills are listed in the T-Box's owl:oneOf for Competency, so the set stays closed. A profile that lists a finer skill covers a
+# requirement of System modelling; a profile that lists only System modelling does not cover a requirement of a finer skill.
+backlog:Comp_SystemModelling a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "System modelling"@en ;
+    skos:definition "Building and keeping models of a system for a stated purpose: choosing what to leave out, the level of abstraction and the viewpoints, so that the model answers the questions it was made for. A requirement of this skill is met by any of the finer modelling skills below it."@en ;
+    dcterms:source "Own formulation of the practice concept corpus of the Ontology for Software Engineering material (CC BY 4.0), concept 25.8.1 (Model), 25.8.2 to 25.8.4: the corpus defines the concept for practice; this entry names the skill of working with it."@en ;
+    skos:broader backlog:Comp_Analysis .
+
+backlog:Comp_StructuralModelling a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Structural modelling"@en ;
+    skos:definition "Depicting the parts of a system and how they are related."@en ;
+    dcterms:source "Own formulation of the practice concept corpus of the Ontology for Software Engineering material (CC BY 4.0), concept 25.8.7 (Structural view): the corpus defines the concept for practice; this entry names the skill of working with it."@en ;
+    skos:broader backlog:Comp_SystemModelling .
+
+backlog:Comp_BehaviouralModelling a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Behavioural modelling"@en ;
+    skos:definition "Depicting how a system acts over time or in response to stimuli."@en ;
+    dcterms:source "Own formulation of the practice concept corpus of the Ontology for Software Engineering material (CC BY 4.0), concept 25.8.8 (Behavioural view): the corpus defines the concept for practice; this entry names the skill of working with it."@en ;
+    skos:broader backlog:Comp_SystemModelling .
+
+backlog:Comp_ModelConsistencyChecking a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Model consistency checking"@en ;
+    skos:definition "Finding contradictions between the parts or views of a model, or between a model and the things it refers to."@en ;
+    dcterms:source "Own formulation of the practice concept corpus of the Ontology for Software Engineering material (CC BY 4.0), concept 25.8.5 (Model consistency): the corpus defines the concept for practice; this entry names the skill of working with it."@en ;
+    skos:broader backlog:Comp_SystemModelling .
+
+backlog:Comp_ModelValidation a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Model validation"@en ;
+    skos:definition "Judging whether a model gives answers that hold for the real situation it stands for."@en ;
+    dcterms:source "Own formulation of the practice concept corpus of the Ontology for Software Engineering material (CC BY 4.0), concept 25.8.6 (Model validity): the corpus defines the concept for practice; this entry names the skill of working with it."@en ;
+    skos:broader backlog:Comp_SystemModelling .
+
+backlog:Comp_Simulation a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Simulation"@en ;
+    skos:definition "Running a model with prepared data and a prepared environment to observe behaviour that cannot be reached by inspection, and judging the results against what is expected."@en ;
+    dcterms:source "Own formulation of the practice concept corpus of the Ontology for Software Engineering material (CC BY 4.0), concept 25.8.14 (Simulation): the corpus defines the concept for practice; this entry names the skill of working with it."@en ;
+    skos:broader backlog:Comp_SystemModelling .
+
+backlog:Comp_ModelChangeControl a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Model change control"@en ;
+    skos:definition "Treating a change to a model like a change to any other controlled item: identified, assessed, approved and recorded against the version it alters."@en ;
+    dcterms:source "Own formulation of the practice concept corpus of the Ontology for Software Engineering material (CC BY 4.0), concept 25.8.19 (Model change control): the corpus defines the concept for practice; this entry names the skill of working with it."@en ;
+    skos:broader backlog:Comp_SystemModelling .
+
 
 #################################################################
 #  v1.37.0 (owner follow-up on v1.379.0/v1.380.0, 2026-10-11) --
