@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.125.0
+# Backlog & Roadmap Semantic Framework — Standard v1.126.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -2520,3 +2520,8 @@ This section adds that concrete party.
   (Yusuf Altunel) and one for his an adopting project co-owner, and one `Executor_HumanTeam`, `an adopting project`,
   composed of the two with the owner as its `hasController`. None carries a `WorkItem` yet; each
   carries a `CompetencyProfile` scaled to the evidence actually in hand for it.
+
+
+## Scope, risk and flow points of the item-level rule sets (v1.391.0, G112)
+
+A rule set adopted by a register binds the whole register, from `ruleSetAdoptedAt` on when it states one; adopted by a lineage it binds only that lineage's work and the items its output admitted. `RS_IndependentVerification` may state a `verificationThreshold`, and then only Done items whose `integrityLevel` reaches it need an independent verifier; a Done item without a level is refused. `RS_FlowPointsRecorded` requires a Done item to carry `startedAt` and `finishedAt` (or a `flowPointAbsenceReason`), and a flow point written as midnight to state its `FlowPointPrecision` (Instant or Date). The agent roles (v1.390.0) are the six concepts of `AgentRoleScheme`, realised by `responsible`, `reviewedBy`, `verifiedBy` and `overseenBy`.
