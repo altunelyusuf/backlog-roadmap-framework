@@ -3209,7 +3209,7 @@ lineagestatusn:S_Understated a backlog:Story ; backlog:hasIdentifier "S-US" ; ba
 # The negative fixture ADOPTS the status rule set, so the clauses it exists to prove are in force here
 # even though minimal fixtures elsewhere are untouched by them (G91: a ruling binds what declared it).
 lineagestatusn:Reg a backlog:Backlog ; rdfs:label "fixture register"@en ; backlog:isRegisterRoot true ;
-    backlog:adoptsRuleSet backlog:RS_LineageStatus , backlog:RS_LabelConvention , backlog:RS_ConcurrentLineages , backlog:RS_StateReflectsEvidence , backlog:RS_IndependentVerification , backlog:RS_HumanOversight , backlog:RS_ManagerialIndependence .
+    backlog:adoptsRuleSet backlog:RS_LineageStatus , backlog:RS_LabelConvention , backlog:RS_ConcurrentLineages , backlog:RS_StateReflectsEvidence , backlog:RS_IndependentVerification , backlog:RS_HumanOversight , backlog:RS_ManagerialIndependence , backlog:RS_FlowPointsRecorded .
 
 
 # --- merged from fixture_sprint_ceremonies_negative_v1_0_0.ttl (sprintceremoni) ---
@@ -4201,3 +4201,11 @@ ex:ROLE_HEAD a backlog:Executor_IndividualHuman .
 ex:ROLE_TEAM_A a backlog:Executor_HumanTeam ; backlog:hasController ex:ROLE_HEAD ; backlog:hasExecutorMember ex:ROLE_HEAD .
 ex:ROLE_TEAM_B a backlog:Executor_HumanTeam ; backlog:hasController ex:ROLE_HEAD ; backlog:hasExecutorMember ex:ROLE_HEAD .
 ex:ROLE_MANAGERIAL a backlog:Task ; backlog:hasState backlog:InProgress ; backlog:responsible ex:ROLE_TEAM_A ; backlog:verifiedBy ex:ROLE_TEAM_B .
+
+# v1.32.0 (G112): scope and risk. VER_LIN is a lineage that adopts RS_IndependentVerification with a verification threshold of 3; VER_UNCLASSIFIED belongs to it, is Done and has
+# no integrity level -> UnclassifiedDoneShape fires. FLOW_MISSING is Done with no flow points (register adopts RS_FlowPointsRecorded) -> FlowPointsMissingShape fires.
+# FLOW_DATE_AS_MOMENT starts at exactly midnight and does not say it is a date -> FlowPointPrecisionShape fires. The silent controls are in backlog_verification_scope_probe.
+ex:VER_LIN a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_IndependentVerification ; backlog:verificationThreshold 3 .
+ex:VER_UNCLASSIFIED a backlog:Task ; backlog:hasState backlog:Done ; backlog:belongsToLineage ex:VER_LIN .
+ex:FLOW_MISSING a backlog:Task ; backlog:hasState backlog:Done .
+ex:FLOW_DATE_AS_MOMENT a backlog:Task ; backlog:hasState backlog:InProgress ; backlog:startedAt "2026-10-01T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .

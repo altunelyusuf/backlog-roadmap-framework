@@ -18,8 +18,8 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.127.0> ;
-    owl:versionInfo "1.127.0" ;
+    owl:versionIRI <http://example.org/backlog/1.128.0> ;
+    owl:versionInfo "1.128.0" ;
     owl:priorVersion <http://example.org/backlog/1.125.0> , <http://example.org/backlog/1.124.0> , <http://example.org/backlog/1.123.0> , <http://example.org/backlog/1.122.0> ;
     owl:priorVersion <http://example.org/backlog/1.121.0> , <http://example.org/backlog/1.120.0> , <http://example.org/backlog/1.119.0> , <http://example.org/backlog/1.118.0> , <http://example.org/backlog/1.117.0> ;
     owl:priorVersion <http://example.org/backlog/1.116.0> ;
@@ -1997,7 +1997,7 @@ backlog:startedAt a owl:DatatypeProperty , owl:FunctionalProperty ;
     rdfs:domain backlog:WorkItem ; rdfs:range xsd:dateTime ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "started at"@en ;
-    skos:definition "The moment work on this item began. Every flow measure is defined against a well-defined start and finish point, so recording them is what makes work-in-progress, item age, cycle time and throughput computable at all rather than estimated from status changes."@en ;
+    skos:definition "The moment work on this item began (stated with its flowPointPrecision where it is only a date). Every flow measure is defined against a well-defined start and finish point, so recording them is what makes work-in-progress, item age, cycle time and throughput computable at all rather than estimated from status changes."@en ;
     dcterms:source "The Kanban Pocket Guide, ch. 6 (basic metrics of flow); Kanban Guide for Scrum Teams."@en .
 
 backlog:finishedAt a owl:DatatypeProperty , owl:FunctionalProperty ;
@@ -6389,7 +6389,8 @@ backlog:adoptsRuleSet a owl:ObjectProperty ;
     skos:definition "The rule sets work is validated under. Declared on the register, it binds everything the register carries. Declared on a lineage (v1.112.0), it binds only that lineage's own work and the items its Backlog-stage output admitted -- recorded at the lineage's opening, in the same commit as its Mission stage (adoptionRecordedAtOpen), exactly as an obligation set is -- so a successor can adopt a rule set without its predecessor's closed history being re-judged (G89). Without it the base severities apply. Owner-decided, dated, and never asserted by a session on its own initiative."@en .
 backlog:ruleSetAdoptedAt a owl:DatatypeProperty ;
     rdfs:domain backlog:Backlog ; rdfs:range xsd:dateTime ;
-    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "rule set adopted at"@en .
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "rule set adopted at"@en ;
+    skos:definition "The moment a register adopted its rule sets. For the item-level rule sets (G112) it is also the line before which finished work is not judged: an item whose finishedAt is earlier is exempt, so a register can adopt a rule for work finished from a stated moment on. An item with no finishedAt cannot be shown to precede it and stays in scope; a register that must exempt such work adopts at lineage level instead."@en .
 
 #################################################################
 #  v1.93.0 (2026-09-10) -- THREE GAPS REPORTED BY SCAMPS, VERIFIED
@@ -6893,6 +6894,41 @@ backlog:overseenBy a owl:ObjectProperty ;
     skos:definition "An Executor who watches this WorkItem's execution and may refuse its output, override it or stop it: the supervisor of the work. Optional by default. A register that adopts RS_HumanOversight also requires every named overseer to be a person or a human team, so that the authority to stop an agent's work cannot be handed to an agent by accident (HumanOverseerShape)."@en ;
     dcterms:source "Regulation (EU) 2024/1689 (AI Act) Article 14(4)(a) to (e): understand capacities and limitations and monitor, stay aware of over-reliance, interpret the output, decide not to use or to disregard, override or reverse the output, intervene or interrupt with a stop. The Act states this for natural persons overseeing high-risk systems; using it as a general definition of a supervisor is this framework's choice."@en .
 
+backlog:integrityLevel a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:WorkItem ;
+    rdfs:range xsd:integer ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "integrity level"@en ;
+    skos:definition "How severe the consequence is if this work item's result is wrong, as a whole number on the adopter's own scale (a higher number is more severe; 1 is the lowest). It lets a register say which Done work must be verified independently: a rule set that states a verificationThreshold requires a verifier only on items at or above it. The framework fixes no number of levels and no assignment rule; the adopter states both, and an item without a level cannot be Done under a stated threshold (UnclassifiedDoneShape), so an unclassified item is never silently exempt."@en ;
+    dcterms:source "IEEE 1012 (verification and validation of systems, software and hardware): requirements for the verification and validation process are specified for different integrity levels. The level count and the assignment are not taken from the standard, whose text was not available to this framework's authors."@en .
+
+backlog:verificationThreshold a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:Backlog backlog:Lineage ) ] ;
+    rdfs:range xsd:integer ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "verification threshold"@en ;
+    skos:definition "Stated by a register or lineage that adopted RS_IndependentVerification: the lowest integrityLevel at which a Done item must name an independent verifier. Without it, every Done item in scope needs one. Set by a cost, benefit and risk analysis of the adopter; the framework does not choose the number."@en .
+
+backlog:FlowPointPrecision a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Flow point precision"@en ;
+    skos:definition "How exactly a start or finish was recorded: an instant (a moment taken from a clock when the event happened) or a date (the day only, written into a moment field as midnight). A duration computed from a date is exact to the day at best, so a reconstruction is not mistaken for a measurement."@en .
+
+backlog:flowPointPrecision a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:WorkItem ;
+    rdfs:range backlog:FlowPointPrecision ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "flow point precision"@en ;
+    skos:definition "The precision of this item's startedAt and finishedAt. Where RS_FlowPointsRecorded is adopted, a flow point written as midnight must state that it is a date; an item that states Instant and is not at midnight needs nothing more."@en .
+
+backlog:flowPointAbsenceReason a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:WorkItem ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "flow point absence reason"@en ;
+    skos:definition "Why this Done item records no start or no finish. Where RS_FlowPointsRecorded is adopted, a Done item must carry both flow points or this reason, so an absence is a statement and not an omission."@en .
+
 #################################################################
 #  v1.123.0 continued -- closed Competency taxonomy and the
 #  per-Executor CompetencyProfile / Experience / FailureRecord ledger
@@ -6932,9 +6968,10 @@ backlog:Competency a owl:Class ;
                 backlog:Comp_ReleaseManagement backlog:Comp_ToolRunOperation backlog:Comp_IncidentResponse backlog:Comp_RetrospectiveFacilitation
                 backlog:Comp_SystemModelling backlog:Comp_StructuralModelling backlog:Comp_BehaviouralModelling backlog:Comp_ModelConsistencyChecking
                 backlog:Comp_ModelValidation backlog:Comp_Simulation backlog:Comp_ModelChangeControl
-                backlog:Comp_CommonalityVariabilityAnalysis backlog:Comp_DomainModelling backlog:Comp_ReusableAssetStewardship backlog:Comp_ProductDerivation backlog:Comp_ProductSpecificExtension backlog:Comp_IntegrationStrategy backlog:Comp_InterfaceAgreementManagement backlog:Comp_RepeatableBuild backlog:Comp_DeliveryPipelineEngineering backlog:Comp_ReleaseReadinessAssessment backlog:Comp_DeploymentExposureControl backlog:Comp_OperationalHandover backlog:Comp_RetirementManagement backlog:Comp_DataDisposition backlog:Comp_DependencyUnwinding backlog:Comp_OperationalScenarioDefinition backlog:Comp_RequirementsQualityAssurance backlog:Comp_TradeOffAnalysis ) ;
+                backlog:Comp_CommonalityVariabilityAnalysis backlog:Comp_DomainModelling backlog:Comp_ReusableAssetStewardship backlog:Comp_ProductDerivation backlog:Comp_ProductSpecificExtension backlog:Comp_IntegrationStrategy backlog:Comp_InterfaceAgreementManagement backlog:Comp_RepeatableBuild backlog:Comp_DeliveryPipelineEngineering backlog:Comp_ReleaseReadinessAssessment backlog:Comp_DeploymentExposureControl backlog:Comp_OperationalHandover backlog:Comp_RetirementManagement backlog:Comp_DataDisposition backlog:Comp_DependencyUnwinding backlog:Comp_OperationalScenarioDefinition backlog:Comp_RequirementsQualityAssurance backlog:Comp_TradeOffAnalysis
+                backlog:Comp_ProductFamilyAdoptionPlanning backlog:Comp_AssetGovernance backlog:Comp_DeliveryPerformanceMeasurement backlog:Comp_EnvironmentProvisioning backlog:Comp_SecretHandling backlog:Comp_PipelineSecurityEngineering backlog:Comp_VulnerabilityResponse backlog:Comp_BlamelessIncidentReview backlog:Comp_IncidentTrendAnalysis backlog:Comp_RecoveryRehearsal backlog:Comp_CustomerAcceptanceCoordination backlog:Comp_TransitionPlanning backlog:Comp_KnowledgePreservation backlog:Comp_EnvironmentDecommissioning backlog:Comp_BusinessNeedAnalysis backlog:Comp_RequirementRefinementAllocation backlog:Comp_TraceabilityManagement backlog:Comp_AssuranceArgumentConstruction backlog:Comp_ProcessTailoring backlog:Comp_ModelBasedVerification ) ;
     rdfs:label "Competency"@en ;
-    skos:definition "The closed competency taxonomy below its categories: thirty-three named skills, each skos:broader to exactly one CompetencyCategory, and sixteen finer skills (System modelling, Product derivation, Integration build, Release management and Retirement management each carry some) each skos:broader to exactly one of those skills. A finer skill never sits below another finer skill: the tree has three levels. A requirement of a skill is met by the skill itself or by any finer skill under it; a requirement of a finer skill is met only by that skill (CompetencyMatchShape). Closed for the same reason the category level is: an open competency vocabulary could never be gated against by CompetencyMatchShape, because 'covered' would be unfalsifiable against a set that can always grow a new entry matching whatever was asserted."@en .
+    skos:definition "The closed competency taxonomy below its categories: forty-six named skills, each skos:broader to exactly one CompetencyCategory, and twenty-three finer skills (System modelling, Product derivation, Integration build, Release management, Retirement management and Incident response each carry some) each skos:broader to exactly one of those skills. A finer skill never sits below another finer skill: the tree has three levels. A requirement of a skill is met by the skill itself or by any finer skill under it; a requirement of a finer skill is met only by that skill (CompetencyMatchShape). Closed for the same reason the category level is: an open competency vocabulary could never be gated against by CompetencyMatchShape, because 'covered' would be unfalsifiable against a set that can always grow a new entry matching whatever was asserted."@en .
 
 backlog:CompetencyProfile a owl:Class ;
     rdfs:subClassOf backlog:BacklogConcept ;

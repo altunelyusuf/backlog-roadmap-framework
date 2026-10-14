@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v81.0.0
+# Lineage Operating Discipline — v82.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -3355,3 +3355,24 @@ Related: G39, G89, G91, G109.
 
 **What is not claimed.** The sources are the Magentic-One documentation, Anthropic's Building effective agents, MetaGPT (arXiv 2308.00352), Article 14 of Regulation (EU) 2024/1689, the NASA IV&V description of independence and the agentic-systems ontology; the CrewAI, A2A and Google ADK pages were not opened. Using Article 14 as a general definition of a supervisor is this framework's choice, not the Act's. A human team made only of agents would pass `HumanOverseerShape`: the rule reads the class of the Executor, not its members. `backlog_agent_roles_probe` fails on v1.389.0 (6 of 12 scenarios and all 6 concepts).
 Related: G39, G89, G91, G109, G110.
+
+---
+
+## G112 — An adoption binds the scope it was declared for, verification follows risk, and a flow point says how exact it is
+
+*(Opened by two handovers of a consuming project, relaying the owner's instruction of 2026-10-14: verifying everything is not feasible and its scope must follow the scope of the released work and a cost, benefit and risk analysis; and start times of finished work are missing or only dates. Each claim was checked on planted registers before anything was built.)*
+
+**Q1 — the finding is right, and it is wider than reported.** `DoneWithoutVerifierShape` asked whether ANY register or lineage in the graph adopted `RS_IndependentVerification`; nothing tied the item to the adopter. A lineage adoption therefore bound every Done item in the graph, and "forward only" was not what the shape did. The same reading was in the other item-level rule-set shapes (`HumanOverseerShape`, `ManagerialIndependenceShape`, which this package wrote in v1.390.0, and `EvidencedWorkStillUnstartedShape` of G107). On a planted graph the old shapes fired for an item of another lineage and for an item in no lineage (v1.390.0: 9 of 25 scenarios of `backlog_verification_scope_probe` fail). The lineage-level adoption that G89 and v1.112.0 describe was implemented only for the severity overlay, in the validator's code; the SPARQL rule sets never had it. The statement made earlier in G109 that adoption leaves earlier work alone held only for a register adopting before any item was Done.
+
+**Q2 — the scope is now read from the data.** An item is in the scope of an adoption when (a) a register (an adopter that is not a lineage) adopts, and, if the register states `ruleSetAdoptedAt`, the item did not finish before that moment; or (b) a lineage adopts and the item belongs to it or was admitted by an output of an item of it. An item with no `finishedAt` cannot be shown to precede the moment and stays in scope; a register that must exempt such work adopts at lineage level. The four shapes above read it. The other rule-set shapes target lineages and labels, not items, and are unchanged.
+
+**Q3 — verification follows risk, and an unclassified item is never exempt.** `integrityLevel` (a whole number on the adopter's scale, higher is more severe) on a work item, and `verificationThreshold` on the adopting register or lineage. With a threshold, only a Done item at or above it needs a verifier; a Done item with no level is refused (`UnclassifiedDoneShape`), so a missed classification cannot hide a missed verification. Without a threshold nothing changes: every Done item in scope needs a verifier. The framework fixes no number of levels and no assignment rule: the adopter's cost, benefit and risk analysis sets both. The consumer's suggestion to tie the intensity to an integrity level follows IEEE 1012, whose abstract (read) says that the verification and validation requirements are specified for different integrity levels; the standard's text was not available, so its level count and its independence by level are not taken. "Release scope" is not a separate property: an item in the released work is given its level by the adopter.
+
+**Q4 — why a start point was optional and imprecise.** Checked in the changelog, the vocabulary and the rulings: `startedAt` and `finishedAt` came in v1.4.0 "so flow is measurable", with one rule (a finish needs a start; a finish may not precede its start) and one rule at the highest level (a Done item has a finish, which an execution task may inherit). No ruling records a reason for leaving a Done item without a start, or for not checking precision; G31 concerns objectives. It was not decided: the rule checked that a pair is well formed, not that it exists, and no cost was weighed. It is decided now: a duration computed from a missing or date-only start is not a meaningful measure.
+
+**Q5 — what was built for flow points.** `RS_FlowPointsRecorded`, adopted by a register or a lineage: a Done item in scope carries both flow points or a `flowPointAbsenceReason` (`FlowPointsMissingShape`); a flow point written as exactly midnight states `flowPointPrecision Date` (`FlowPointPrecisionShape`). Not built: tying the start to the commit that first sets the state to in progress. That event lives in the consumer's repository history, which this framework's data cannot read; a consumer that takes the instant from that commit states it with precision Instant. Equal start and finish instants were not made an error: a task done within a second is possible, and the retrofit signature of G107-era shapes already catches the identical triple.
+
+**Q6 — the second skill batch.** Twenty skills entered as supplied (thirteen new, seven finer; 46 skills and 23 finer in all), each with its corpus concepts as source. The supplied note that one concept rests on its supplier's own judgement is kept in that skill's source.
+
+**What is not claimed.** No register of a consumer was changed or measured. The new rule sets have not been adopted anywhere. A register that adopts at a moment still re-judges its unfinished and undated items.
+Related: G39, G89, G91, G107, G109, G110, G111.

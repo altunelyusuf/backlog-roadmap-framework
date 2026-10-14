@@ -11260,6 +11260,20 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.391.0 — 2026-10-14 (MINOR: an adoption binds only its own scope, verification follows risk, flow points say how exact they are, twenty more skills — G112)
+
+Two handovers of a consuming project, one relaying the owner's instruction that verifying everything is not feasible and that start times are missing. The first finding was checked on planted graphs and is right: a rule set adopted by one lineage bound every Done item in the graph.
+
+- **Scope (shapes v1.162.0):** the four item-level rule-set shapes now ask who adopted: a register (from `ruleSetAdoptedAt` on, when stated) or the lineage the item belongs to or was admitted into. This corrects the shapes of v1.390.0 and of G107 as well; adoption is now what G89 said it was.
+- **Risk:** `integrityLevel` on a work item and `verificationThreshold` on the adopter (vocabulary v1.128.0); with a threshold only items at or above it need a verifier, and `UnclassifiedDoneShape` refuses a Done item without a level.
+- **Flow points:** `RS_FlowPointsRecorded` with `FlowPointsMissingShape` and `FlowPointPrecisionShape`; `flowPointPrecision` (Instant or Date) and `flowPointAbsenceReason`. The reason a start was never required is answered in G112: it was not decided.
+- **Skills (data v1.43.0):** twenty sourced skills entered as supplied (13 new, 7 finer); 46 skills and 23 finer.
+- **Proof:** `backlog_verification_scope_probe` (25 planted graphs); on v1.390.0 it fails 9 of 25, and passes now. Negative fixture v1.32.0 cases `VER_UNCLASSIFIED`, `FLOW_MISSING`, `FLOW_DATE_AS_MOMENT`. Runs in gate v1.46.0.
+- **Not done:** start tied to the first in-progress commit (the event is in the consumer's history, not in the framework's data); a catalogue of integrity levels.
+- **Handovers:** both answered and filed; discipline v82.0.0 (G112).
+
+**Unplanned work:** two handovers of a consuming project; no backlog item of this package covers them.
+
 ## v1.390.0 — 2026-10-13 (MINOR: agent roles as relations to work, with two opt-in independence rules — G111)
 
 The owner asked for the seven agent role types to be built from the literature and open sources, reviewed the proposal and accepted its recommendations. Most roles were already relations between an executor and a work item; only two relations were missing.

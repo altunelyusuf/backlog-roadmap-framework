@@ -22,8 +22,8 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (ABox: controlled individuals, reference data and the live register)"@en ;
-    owl:versionIRI <http://example.org/backlog/abox/1.42.0> ;
-    owl:versionInfo "1.42.0" ;
+    owl:versionIRI <http://example.org/backlog/abox/1.43.0> ;
+    owl:versionInfo "1.43.0" ;
     owl:priorVersion <http://example.org/backlog/abox/1.40.0> , <http://example.org/backlog/abox/1.39.0> , <http://example.org/backlog/abox/1.38.0> , <http://example.org/backlog/abox/1.37.0> , <http://example.org/backlog/abox/1.36.0> , <http://example.org/backlog/abox/1.35.0> ;
     owl:priorVersion <http://example.org/backlog/abox/1.34.0> , <http://example.org/backlog/abox/1.33.0> , <http://example.org/backlog/abox/1.32.0> , <http://example.org/backlog/abox/1.31.0> , <http://example.org/backlog/abox/1.30.0> , <http://example.org/backlog/abox/1.29.0> , <http://example.org/backlog/abox/1.28.0> , <http://example.org/backlog/abox/1.27.0> , <http://example.org/backlog/abox/1.26.0> , <http://example.org/backlog/abox/1.25.0> , <http://example.org/backlog/abox/1.24.0> , <http://example.org/backlog/abox/1.23.0> , <http://example.org/backlog/abox/1.22.0> , <http://example.org/backlog/abox/1.21.0> , <http://example.org/backlog/abox/1.20.0> , <http://example.org/backlog/abox/1.19.0> , <http://example.org/backlog/abox/1.17.0> , <http://example.org/backlog/abox/1.16.0> , <http://example.org/backlog/abox/1.15.0> , <http://example.org/backlog/abox/1.14.0> , <http://example.org/backlog/abox/1.13.0> , <http://example.org/backlog/abox/1.12.0> , <http://example.org/backlog/abox/1.11.0> , <http://example.org/backlog/abox/1.10.0> , <http://example.org/backlog/abox/1.9.0> , <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
         <http://example.org/backlog-abox/1.2.1> ,
@@ -1211,7 +1211,7 @@ backlog:RS_StateReflectsEvidence a owl:NamedIndividual , backlog:RuleSet ;
 
 backlog:RS_IndependentVerification a owl:NamedIndividual , backlog:RuleSet ;
     rdfs:label "Done work is verified by a party other than its executor"@en ;
-    skos:definition "Every work item that reads Done names, through verifiedBy, an Executor that is independent of the one that produced it (not the responsible Executor, not a member of it, not a collective that contains it). A RuleSet because it binds only registers that declared it, so a register whose items were closed without a verifier is not judged retroactively (G89, G91). The independence of a verifier that is named is checked everywhere, adopted or not (VerifierIndependenceShape). This package's own register does not adopt it."@en .
+    skos:definition "Every work item that reads Done names, through verifiedBy, an Executor that is independent of the one that produced it (not the responsible Executor, not a member of it, not a collective that contains it). A register or one lineage may adopt it; a lineage adoption binds only that lineage's work and the items its output admitted, and a register adoption may state ruleSetAdoptedAt, before which finished items are exempt (G112). The adopter may state a verificationThreshold, and then only Done items whose integrityLevel reaches it need a verifier (an unclassified Done item is refused, UnclassifiedDoneShape). A RuleSet because it binds only what declared it, so closed work outside the scope is not judged retroactively (G89, G91). The independence of a verifier that is named is checked everywhere, adopted or not (VerifierIndependenceShape). This package's own register does not adopt it."@en .
 
 backlog:RS_HumanOversight a owl:NamedIndividual , backlog:RuleSet ;
     rdfs:label "Oversight of agent work is held by people"@en ;
@@ -1221,6 +1221,19 @@ backlog:RS_ManagerialIndependence a owl:NamedIndividual , backlog:RuleSet ;
     rdfs:label "A verifier answers to a different controller"@en ;
     skos:definition "The verifier of a work item does not share a controlling party with its responsible Executor: the controller of one (or the Executor itself when it has none) is neither the controller of the other nor the other Executor. Adds managerial independence to the membership independence that VerifierIndependenceShape checks everywhere. A RuleSet because it binds only registers that declared it (G89, G91). Technical and financial independence are not modelled. This package's own register does not adopt it."@en ;
     dcterms:source "Independent verification and validation as described by NASA: independence is technical, managerial and financial (NASA IV&V Program overview); here only the managerial part, decidable from the controller link."@en .
+
+backlog:RS_FlowPointsRecorded a owl:NamedIndividual , backlog:RuleSet ;
+    rdfs:label "Done work records when it started and finished, and how exactly"@en ;
+    skos:definition "Every Done item in scope carries startedAt and finishedAt, or says through flowPointAbsenceReason why it does not, and a flow point written as midnight states flowPointPrecision Date. Adopted by a register or by one lineage (G112); a lineage adoption binds only that lineage's work and the items it admitted, so it can start at a stated moment without judging earlier work. A RuleSet because it binds only what declared it (G89, G91). This package's own register does not adopt it."@en ;
+    dcterms:source "Kanban flow measures need a well-defined start and finish point (The Kanban Pocket Guide, ch. 6); ISO/IEC/IEEE 12207:2026 measurement process: a measure is to be verifiable, meaningful, actionable, timely and cost-effective. The detail standard ISO/IEC/IEEE 15939 was not read."@en .
+
+backlog:Precision_Instant a owl:NamedIndividual , backlog:FlowPointPrecision ;
+    rdfs:label "Instant"@en ;
+    skos:definition "The flow point is a moment taken from a clock when the event happened."@en .
+
+backlog:Precision_Date a owl:NamedIndividual , backlog:FlowPointPrecision ;
+    rdfs:label "Date"@en ;
+    skos:definition "The flow point is only a day, written as midnight; a duration computed from it is exact to the day at best."@en .
 
 backlog:RS_LineageStatus a owl:NamedIndividual , backlog:RuleSet ;
     rdfs:label "A lineage states where it stands"@en ;
@@ -5634,7 +5647,7 @@ fw:Declared_Ordinal_18 a backlog:OrdinalSharingDeclaration ;
 #################################################################
 #  v1.123.0 (owner-directed, Executor/responsible/competency work) --
 #  the closed CompetencyCategory and Competency vocabulary. Six
-#  categories, thirty-three leaves (sixteen finer skills below five of them since v1.125.0 and v1.126.0), each leaf skos:broader to exactly
+#  categories, forty-six leaves (twenty-three finer skills below six of them since v1.125.0, v1.126.0 and v1.391.0), each leaf skos:broader to exactly
 #  one category. Closed like Role; see TBox v1.123.0 for why.
 #################################################################
 
@@ -6056,6 +6069,132 @@ backlog:CP_FizyoVibeTeam a owl:NamedIndividual , backlog:CompetencyProfile ;
     rdfs:label "the adopting project's competency profile"@en ;
     skos:definition "Minimal and business-appropriate rather than technical, per the owner's own caution against over-claiming: backlog stewardship, the one leaf a wellness-studio business genuinely exercises in keeping its own register of work accurate and groomed. No analysis, design, verification or technical operations leaf is credited -- this package holds no evidence an adopting project itself (as opposed to the framework built for it) performs that kind of work, and none is guessed at to fill the profile out further."@en ;
     backlog:hasCapability backlog:Comp_BacklogStewardship .
+
+#################################################################
+#  v1.391.0 (G112) -- the second batch of sourced skills, entered as
+#  supplied by the agentic-sdlc project, 2026-10-14.
+#################################################################
+
+backlog:Comp_ProductFamilyAdoptionPlanning a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Product family adoption planning"@en ;
+    skos:definition "Planning how an organization moves to building products from shared assets: the route taken, the scope covered and the business case that justifies it."@en ;
+    dcterms:source "Own formulation of the practice concept corpus of the Ontology for Software Engineering material (CC BY 4.0), concepts 25.18.1, 25.18.2, 25.18.3, 25.4.8: the corpus defines each concept for practice; this entry names the skill of working with them. Items rest on a public presentation of the Software Engineering Institute on software product lines. Supplied by the agentic-sdlc project, 2026-10-14."@en ;
+    skos:broader backlog:Comp_Governance .
+
+backlog:Comp_AssetGovernance a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Asset governance"@en ;
+    skos:definition "Deciding what enters, changes or leaves a set of shared assets, who pays for it and how the demands of several products are settled."@en ;
+    dcterms:source "Own formulation of the practice concept corpus of the Ontology for Software Engineering material (CC BY 4.0), concepts 25.18.6, 25.18.5, 25.4.5: the corpus defines each concept for practice; this entry names the skill of working with them. Items rest on a public presentation of the Software Engineering Institute on software product lines. Concept 25.18.6 is the supplying project's own judgement and the concept says so. Supplied by the agentic-sdlc project, 2026-10-14."@en ;
+    skos:broader backlog:Comp_Governance .
+
+backlog:Comp_DeliveryPerformanceMeasurement a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Delivery performance measurement"@en ;
+    skos:definition "Measuring how quickly changes reach production and how often they fail or need urgent repair, and reading the two together."@en ;
+    dcterms:source "Own formulation of the practice concept corpus of the Ontology for Software Engineering material (CC BY 4.0), concepts 25.19.1, 25.19.2, 25.10.4: the corpus defines each concept for practice; this entry names the skill of working with them. Open works read for the concepts: the DORA research site, the OWASP DevSecOps Guideline, NIST SP 800-218 and the Google SRE book. Supplied by the agentic-sdlc project, 2026-10-14."@en ;
+    skos:broader backlog:Comp_Operations .
+
+backlog:Comp_EnvironmentProvisioning a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Environment provisioning"@en ;
+    skos:definition "Describing machines, networks and settings as versioned files and creating, changing and rebuilding environments from them."@en ;
+    dcterms:source "Own formulation of the practice concept corpus of the Ontology for Software Engineering material (CC BY 4.0), concepts 25.19.3, 25.9.10, 25.11.14: the corpus defines each concept for practice; this entry names the skill of working with them. Open works read for the concepts: the DORA research site, the OWASP DevSecOps Guideline, NIST SP 800-218 and the Google SRE book. Supplied by the agentic-sdlc project, 2026-10-14."@en ;
+    skos:broader backlog:Comp_Operations .
+
+backlog:Comp_SecretHandling a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Secret handling"@en ;
+    skos:definition "Keeping credentials and keys out of source and artifacts, supplying them only when needed and detecting leaks."@en ;
+    dcterms:source "Own formulation of the practice concept corpus of the Ontology for Software Engineering material (CC BY 4.0), concepts 25.19.4: the corpus defines each concept for practice; this entry names the skill of working with them. Open works read for the concepts: the DORA research site, the OWASP DevSecOps Guideline, NIST SP 800-218 and the Google SRE book. Supplied by the agentic-sdlc project, 2026-10-14."@en ;
+    skos:broader backlog:Comp_Operations .
+
+backlog:Comp_PipelineSecurityEngineering a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Pipeline security engineering"@en ;
+    skos:definition "Building security checks into the stages of the delivery flow, each with a stated pass criterion, and releasing software whose default settings are safe."@en ;
+    dcterms:source "Own formulation of the practice concept corpus of the Ontology for Software Engineering material (CC BY 4.0), concepts 25.19.5, 25.19.6, 25.10.8: the corpus defines each concept for practice; this entry names the skill of working with them. Open works read for the concepts: the DORA research site, the OWASP DevSecOps Guideline, NIST SP 800-218 and the Google SRE book. Supplied by the agentic-sdlc project, 2026-10-14."@en ;
+    skos:broader backlog:Comp_Verification .
+
+backlog:Comp_VulnerabilityResponse a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Vulnerability response"@en ;
+    skos:definition "Finding, ranking and fixing weaknesses in released software on an ongoing basis and analysing their causes."@en ;
+    dcterms:source "Own formulation of the practice concept corpus of the Ontology for Software Engineering material (CC BY 4.0), concepts 25.19.7: the corpus defines each concept for practice; this entry names the skill of working with them. Open works read for the concepts: the DORA research site, the OWASP DevSecOps Guideline, NIST SP 800-218 and the Google SRE book. Supplied by the agentic-sdlc project, 2026-10-14."@en ;
+    skos:broader backlog:Comp_Operations .
+
+backlog:Comp_BlamelessIncidentReview a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Blameless incident review"@en ;
+    skos:definition "Examining an incident for what in the system led to it, on the assumption that people acted in good faith, and agreeing follow-up actions that can be tested."@en ;
+    dcterms:source "Own formulation of the practice concept corpus of the Ontology for Software Engineering material (CC BY 4.0), concepts 25.19.8, 25.19.9: the corpus defines each concept for practice; this entry names the skill of working with them. Open works read for the concepts: the DORA research site, the OWASP DevSecOps Guideline, NIST SP 800-218 and the Google SRE book. Supplied by the agentic-sdlc project, 2026-10-14."@en ;
+    skos:broader backlog:Comp_IncidentResponse .
+
+backlog:Comp_IncidentTrendAnalysis a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Incident trend analysis"@en ;
+    skos:definition "Pooling the reviews of many incidents to see recurring causes and recovery times so reliability work goes where it matters."@en ;
+    dcterms:source "Own formulation of the practice concept corpus of the Ontology for Software Engineering material (CC BY 4.0), concepts 25.19.10: the corpus defines each concept for practice; this entry names the skill of working with them. Open works read for the concepts: the DORA research site, the OWASP DevSecOps Guideline, NIST SP 800-218 and the Google SRE book. Supplied by the agentic-sdlc project, 2026-10-14."@en ;
+    skos:broader backlog:Comp_IncidentResponse .
+
+backlog:Comp_RecoveryRehearsal a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Recovery rehearsal"@en ;
+    skos:definition "Practising recovery on purpose to check that the planned way back works and that people know it."@en ;
+    dcterms:source "Own formulation of the practice concept corpus of the Ontology for Software Engineering material (CC BY 4.0), concepts 25.19.11, 25.11.5: the corpus defines each concept for practice; this entry names the skill of working with them. Open works read for the concepts: the DORA research site, the OWASP DevSecOps Guideline, NIST SP 800-218 and the Google SRE book. Supplied by the agentic-sdlc project, 2026-10-14."@en ;
+    skos:broader backlog:Comp_IncidentResponse .
+
+backlog:Comp_CustomerAcceptanceCoordination a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Customer acceptance coordination"@en ;
+    skos:definition "Agreeing the acceptance conditions with the customer and obtaining their acceptance of what is delivered."@en ;
+    dcterms:source "Own formulation of the practice concept corpus of the Ontology for Software Engineering material (CC BY 4.0), concepts 25.11.11, 25.6.6: the corpus defines each concept for practice; this entry names the skill of working with them. Supplied by the agentic-sdlc project, 2026-10-14."@en ;
+    skos:broader backlog:Comp_ReleaseManagement .
+
+backlog:Comp_TransitionPlanning a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Transition planning"@en ;
+    skos:definition "Choosing how a system goes into use, within the constraints that apply, before the release is made."@en ;
+    dcterms:source "Own formulation of the practice concept corpus of the Ontology for Software Engineering material (CC BY 4.0), concepts 25.11.13, 25.11.17: the corpus defines each concept for practice; this entry names the skill of working with them. Supplied by the agentic-sdlc project, 2026-10-14."@en ;
+    skos:broader backlog:Comp_ReleaseManagement .
+
+backlog:Comp_KnowledgePreservation a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Knowledge preservation"@en ;
+    skos:definition "Keeping what is known about a retiring system (decisions, design, operating experience) where it can still be found."@en ;
+    dcterms:source "Own formulation of the practice concept corpus of the Ontology for Software Engineering material (CC BY 4.0), concepts 25.12.5: the corpus defines each concept for practice; this entry names the skill of working with them. Supplied by the agentic-sdlc project, 2026-10-14."@en ;
+    skos:broader backlog:Comp_RetirementManagement .
+
+backlog:Comp_EnvironmentDecommissioning a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Environment decommissioning"@en ;
+    skos:definition "Shutting down and removing the environments a retired system ran in, in an order that leaves nothing orphaned."@en ;
+    dcterms:source "Own formulation of the practice concept corpus of the Ontology for Software Engineering material (CC BY 4.0), concepts 25.12.6: the corpus defines each concept for practice; this entry names the skill of working with them. Supplied by the agentic-sdlc project, 2026-10-14."@en ;
+    skos:broader backlog:Comp_RetirementManagement .
+
+backlog:Comp_BusinessNeedAnalysis a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Business need analysis"@en ;
+    skos:definition "Stating the gap or opportunity that justifies a change, the value expected from it and the context it will happen in."@en ;
+    dcterms:source "Own formulation of the practice concept corpus of the Ontology for Software Engineering material (CC BY 4.0), concepts 25.1.1, 25.1.2, 25.1.5: the corpus defines each concept for practice; this entry names the skill of working with them. Supplied by the agentic-sdlc project, 2026-10-14."@en ;
+    skos:broader backlog:Comp_Analysis .
+
+backlog:Comp_RequirementRefinementAllocation a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Requirement refinement and allocation"@en ;
+    skos:definition "Turning a requirement at one level into requirements at the level below and assigning each to the part of the solution that will satisfy it."@en ;
+    dcterms:source "Own formulation of the practice concept corpus of the Ontology for Software Engineering material (CC BY 4.0), concepts 25.15.1, 25.15.2, 25.15.3: the corpus defines each concept for practice; this entry names the skill of working with them. Supplied by the agentic-sdlc project, 2026-10-14."@en ;
+    skos:broader backlog:Comp_Analysis .
+
+backlog:Comp_TraceabilityManagement a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Traceability management"@en ;
+    skos:definition "Keeping the links between needs, requirements, design, tests and decisions so that any one can be followed to the others."@en ;
+    dcterms:source "Own formulation of the practice concept corpus of the Ontology for Software Engineering material (CC BY 4.0), concepts 25.13.4: the corpus defines each concept for practice; this entry names the skill of working with them. Supplied by the agentic-sdlc project, 2026-10-14."@en ;
+    skos:broader backlog:Comp_Governance .
+
+backlog:Comp_AssuranceArgumentConstruction a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Assurance argument construction"@en ;
+    skos:definition "Assembling the evidence for a claim about a product into an argument that a reviewer can follow and challenge."@en ;
+    dcterms:source "Own formulation of the practice concept corpus of the Ontology for Software Engineering material (CC BY 4.0), concepts 25.13.5, 25.13.1: the corpus defines each concept for practice; this entry names the skill of working with them. Supplied by the agentic-sdlc project, 2026-10-14."@en ;
+    skos:broader backlog:Comp_Verification .
+
+backlog:Comp_ProcessTailoring a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Process tailoring"@en ;
+    skos:definition "Adapting a life cycle model and the work approach to the size, risk and nature of one project, and recording what was changed."@en ;
+    dcterms:source "Own formulation of the practice concept corpus of the Ontology for Software Engineering material (CC BY 4.0), concepts 25.14.1, 25.14.5: the corpus defines each concept for practice; this entry names the skill of working with them. Supplied by the agentic-sdlc project, 2026-10-14."@en ;
+    skos:broader backlog:Comp_Governance .
+
+backlog:Comp_ModelBasedVerification a owl:NamedIndividual , backlog:Competency ;
+    rdfs:label "Model-based verification"@en ;
+    skos:definition "Checking a design or a product against its requirements by means of models, so that the checks can be prepared early and repeated when the design changes."@en ;
+    dcterms:source "Own formulation of the practice concept corpus of the Ontology for Software Engineering material (CC BY 4.0), concepts 25.8.16: the corpus defines each concept for practice; this entry names the skill of working with them. Supplied by the agentic-sdlc project, 2026-10-14."@en ;
+    skos:broader backlog:Comp_Verification .
+
 
 #################################################################
 #  v1.390.0 (G111) -- the agent role types, as a sourced vocabulary.
