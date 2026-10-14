@@ -11260,6 +11260,19 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.392.0 — 2026-10-14 (MINOR: every status change is an obligation, and work can be suspended — G113)
+
+The owner asked whether starting an item enforces recording its start, and instructed that all status changes be recorded (start, stop, in progress, suspend, any others). The honest finding: the record of moves existed for a long time but was never mandatory, and there was no state for paused work.
+
+- **Vocabulary (T-Box v1.129.0, data v1.44.0):** `Suspended` state (an `OptionalLifecycleState`) with moves suspend, resume and withdraw-from-suspended in the default workflow; `statusHistoryAbsenceReason`; the rule set `RS_StatusHistoryRecorded`.
+- **Rules (shapes v1.163.0):** `StatusUnrecordedShape`, `StartNotRecordedShape`, `StatusGapShape`, `StatusMomentShape`, `FlowPointsMatchHistoryShape` (scoped as in G112); `WorkflowShape` skips optional states. Negative fixture v1.33.0 cases `STATUS_UNRECORDED`, `STATUS_NO_START`, `STATUS_GAP`, `STATUS_DATE_AS_MOMENT`, `STATUS_FLOW_MISMATCH`.
+- **Adopted here:** this package's own register adopts the status-history and flow-point rule sets (0 violations before and after; its finished items predate the adoption line).
+- **Proof:** `backlog_status_history_probe` (21 planted graphs); on v1.391.0 it fails 9 of 21, and passes now. Runs in gate v1.47.0.
+- **Not done:** proving that an instant was taken when the move happened (the framework can check presence, precision and consistency, not the clock); the first in-progress commit as anchor (it lives in the consumer's history).
+- **Discipline:** v83.0.0 (G113).
+
+**Unplanned work:** the owner's instruction on status changes; no backlog item of this package covers it.
+
 ## v1.391.0 — 2026-10-14 (MINOR: an adoption binds only its own scope, verification follows risk, flow points say how exact they are, twenty more skills — G112)
 
 Two handovers of a consuming project, one relaying the owner's instruction that verifying everything is not feasible and that start times are missing. The first finding was checked on planted graphs and is right: a rule set adopted by one lineage bound every Done item in the graph.

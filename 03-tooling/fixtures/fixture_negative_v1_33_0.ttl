@@ -3209,7 +3209,7 @@ lineagestatusn:S_Understated a backlog:Story ; backlog:hasIdentifier "S-US" ; ba
 # The negative fixture ADOPTS the status rule set, so the clauses it exists to prove are in force here
 # even though minimal fixtures elsewhere are untouched by them (G91: a ruling binds what declared it).
 lineagestatusn:Reg a backlog:Backlog ; rdfs:label "fixture register"@en ; backlog:isRegisterRoot true ;
-    backlog:adoptsRuleSet backlog:RS_LineageStatus , backlog:RS_LabelConvention , backlog:RS_ConcurrentLineages , backlog:RS_StateReflectsEvidence , backlog:RS_IndependentVerification , backlog:RS_HumanOversight , backlog:RS_ManagerialIndependence , backlog:RS_FlowPointsRecorded .
+    backlog:adoptsRuleSet backlog:RS_LineageStatus , backlog:RS_LabelConvention , backlog:RS_ConcurrentLineages , backlog:RS_StateReflectsEvidence , backlog:RS_IndependentVerification , backlog:RS_HumanOversight , backlog:RS_ManagerialIndependence , backlog:RS_FlowPointsRecorded , backlog:RS_StatusHistoryRecorded .
 
 
 # --- merged from fixture_sprint_ceremonies_negative_v1_0_0.ttl (sprintceremoni) ---
@@ -4209,3 +4209,18 @@ ex:VER_LIN a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_IndependentVerif
 ex:VER_UNCLASSIFIED a backlog:Task ; backlog:hasState backlog:Done ; backlog:belongsToLineage ex:VER_LIN .
 ex:FLOW_MISSING a backlog:Task ; backlog:hasState backlog:Done .
 ex:FLOW_DATE_AS_MOMENT a backlog:Task ; backlog:hasState backlog:InProgress ; backlog:startedAt "2026-10-01T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+
+# v1.33.0 (G113): every status change is an obligation (the register adopts RS_StatusHistoryRecorded). STATUS_UNRECORDED is In Progress with no recorded move.
+# STATUS_NO_START is Done with only the move into Done. STATUS_GAP records a move to Refined and then a Start that leaves Ready. STATUS_DATE_AS_MOMENT has a move stamped
+# at midnight. STATUS_FLOW_MISMATCH has a startedAt that is not the instant of its recorded start. The silent controls are in backlog_status_history_probe.
+ex:STATUS_UNRECORDED a backlog:Task ; backlog:hasState backlog:InProgress .
+ex:STATUS_NO_START a backlog:Task ; backlog:hasState backlog:Done .
+ex:ST_1 a backlog:TransitionEvent ; backlog:transitionedItem ex:STATUS_NO_START ; backlog:viaTransition backlog:T_Complete ; backlog:transitionedAt "2026-10-14T09:30:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+ex:STATUS_GAP a backlog:Task ; backlog:hasState backlog:InProgress .
+ex:ST_2 a backlog:TransitionEvent ; backlog:transitionedItem ex:STATUS_GAP ; backlog:viaTransition backlog:T_Decompose ; backlog:transitionedAt "2026-10-14T08:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+ex:ST_3 a backlog:TransitionEvent ; backlog:transitionedItem ex:STATUS_GAP ; backlog:viaTransition backlog:T_Start ; backlog:transitionedAt "2026-10-14T09:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+ex:STATUS_DATE_AS_MOMENT a backlog:Task ; backlog:hasState backlog:Ready .
+ex:ST_4 a backlog:TransitionEvent ; backlog:transitionedItem ex:STATUS_DATE_AS_MOMENT ; backlog:viaTransition backlog:T_Refine ; backlog:transitionedAt "2026-10-14T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+ex:STATUS_FLOW_MISMATCH a backlog:Task ; backlog:hasState backlog:InProgress ; backlog:startedAt "2026-10-14T07:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+ex:ST_5 a backlog:TransitionEvent ; backlog:transitionedItem ex:STATUS_FLOW_MISMATCH ; backlog:viaTransition backlog:T_Refine ; backlog:transitionedAt "2026-10-14T08:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+ex:ST_6 a backlog:TransitionEvent ; backlog:transitionedItem ex:STATUS_FLOW_MISMATCH ; backlog:viaTransition backlog:T_Start ; backlog:transitionedAt "2026-10-14T09:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .

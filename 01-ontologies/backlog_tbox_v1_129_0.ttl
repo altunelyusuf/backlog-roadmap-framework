@@ -18,8 +18,8 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.128.0> ;
-    owl:versionInfo "1.128.0" ;
+    owl:versionIRI <http://example.org/backlog/1.129.0> ;
+    owl:versionInfo "1.129.0" ;
     owl:priorVersion <http://example.org/backlog/1.125.0> , <http://example.org/backlog/1.124.0> , <http://example.org/backlog/1.123.0> , <http://example.org/backlog/1.122.0> ;
     owl:priorVersion <http://example.org/backlog/1.121.0> , <http://example.org/backlog/1.120.0> , <http://example.org/backlog/1.119.0> , <http://example.org/backlog/1.118.0> , <http://example.org/backlog/1.117.0> ;
     owl:priorVersion <http://example.org/backlog/1.116.0> ;
@@ -306,9 +306,9 @@ backlog:Iteration a owl:Class ;
 backlog:LifecycleState a owl:Class ;
     rdfs:subClassOf backlog:BacklogConcept ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
-    owl:oneOf ( backlog:Proposed backlog:Refined backlog:Ready backlog:InProgress backlog:Done backlog:Cancelled ) ;
+    owl:oneOf ( backlog:Proposed backlog:Refined backlog:Ready backlog:InProgress backlog:Done backlog:Cancelled backlog:Suspended ) ;
     rdfs:label "Lifecycle State"@en ;
-    skos:definition "The state of a work item or container within its delivery lifecycle. A closed enumeration of six individuals — Proposed, Refined, Ready, InProgress, Done, Cancelled — so that any other asserted state is a semantic error a reasoner detects rather than free-text a reader must interpret. Refined added 2026-09-17, G97-era work: two shapes already referenced backlog:Refined as if it were real, and it was dead code since whichever one first assumed it -- named for real, tested against a real, complete case before shipping (see Refined's own definition for what it distinguishes and why it sits where it does)."@en .
+    skos:definition "The state of a work item or container within its delivery lifecycle. A closed enumeration of seven individuals — Proposed, Refined, Ready, InProgress, Done, Cancelled and Suspended (a deliberate pause of work that has started, added v1.392.0) — so that any other asserted state is a semantic error a reasoner detects rather than free-text a reader must interpret. Refined added 2026-09-17, G97-era work: two shapes already referenced backlog:Refined as if it were real, and it was dead code since whichever one first assumed it -- named for real, tested against a real, complete case before shipping (see Refined's own definition for what it distinguishes and why it sits where it does)."@en .
 
 
 
@@ -1764,6 +1764,19 @@ backlog:Workflow a owl:Class ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "Workflow"@en ;
     skos:definition "The set of state transitions a register permits, making the lifecycle a graph someone can inspect rather than five words that appear in reports. A closed state enumeration says which states exist; a workflow says which moves between them are legal, under what guard, and by whom — the difference between a status field and a process."@en .
+
+backlog:OptionalLifecycleState a owl:Class ;
+    rdfs:subClassOf backlog:LifecycleState ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Optional Lifecycle State"@en ;
+    skos:definition "A lifecycle state that a workflow is not obliged to enter or leave. Added after workflows existed (Suspended, v1.392.0), so that a workflow written before the state does not become inconsistent with the enumeration by the addition (WorkflowShape skips these)."@en .
+
+backlog:statusHistoryAbsenceReason a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:WorkItem ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "status history absence reason"@en ;
+    skos:definition "Why this item, which has left Proposed, has no recorded moves into its states. Where RS_StatusHistoryRecorded is adopted, an item's status changes are an obligation; this is the visible, auditable way to say that an item moved before the obligation began, and it excuses no move made after."@en .
 
 backlog:StateTransition a owl:Class ;
     rdfs:subClassOf backlog:BacklogConcept ;

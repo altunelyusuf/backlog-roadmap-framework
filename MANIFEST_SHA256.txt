@@ -1,7 +1,6 @@
-# backlog-roadmap-framework v1.391.0 — SHA-256 Manifest
+# backlog-roadmap-framework v1.392.0 — SHA-256 Manifest
 # Built by build_manifest_v1_5_0.py. Release build.
 
-# EXEMPT: .clause-proof-stamp — a cache key over the negative fixtures and declared shape proofs, written by backlog_clause_proof after a passing run; same reason as .fixture-suite-stamp -- hashing it would change it and it carries no content of its own
 # EXEMPT: 06-package-provenance/registrant-deposit-snapshot/RELEASE_METRICS.txt — reports the result of the manifest gate, so covering it creates a generation-order cycle; its integrity rests on regenerating byte-for-byte instead
 # EXEMPT: MANIFEST_SHA256.txt — a manifest cannot contain its own hash; containment is a physical impossibility
 # EXEMPT: PUBLISH_RECORD.ttl — written by the publisher AFTER the manifest, so listing it guarantees a permanent mismatch a reader cannot distinguish from a real one
@@ -9,12 +8,12 @@
 
 6ada9f116ce42441773a025491f036168fe20f93d5383769054d88c1d15c7558  .gitignore  (66b)
 bc6c4263f92a7b7b63d35d26eb0e77ac6d17dbacdd773c4a88ba1c6d58ab8e9a  .public-distribution-url  (62b)
-15a4f20bfc67bd92dc02b7ecf885e291ea6aa72117dc5b660263004bff5aaf53  VERSION.txt  (8b)
-9408b69f83a3df4c580b59a95a1c78f6340d8e1a1706ce136c504cdcfca4590d  01-ontologies/backlog_abox_v1_43_0.ttl  (483407b)
-7ece5832104d947ac38938a5950e22839b305df1faba8a7385e4f4347d502903  01-ontologies/backlog_tbox_v1_128_0.ttl  (552636b)
+7f162092baf9b047f09b92182043996ca1e0730a6351414fc01bfcb98c4146f1  VERSION.txt  (8b)
+6b4e86e7e0e53421d916a93db47e4f597c0011263f239df0b12729df99dd32e6  01-ontologies/backlog_abox_v1_44_0.ttl  (486676b)
+0380689ccdcb586d2c72fe639a05d82c16ebdb9537ecff043a46038f41b03a11  01-ontologies/backlog_tbox_v1_129_0.ttl  (553780b)
 18a3104c53e3f138a2b2d2b99423e6e5af679dcd1960ee7009aaf09f4682bad4  01-ontologies/archive/backlog_archive_shacl_v1_1_0.ttl  (3735b)
 1206df658af601b425b77283ac9f3167c9b5a494d3bf222a8e1974d40153c6d0  01-ontologies/archive/backlog_framework_archive_abox_v1_14_0.ttl  (1426359b)
-3a377d3705d1acd58a0eaa9023f52bdcd7a7124ae82e9a1f627a7d37af4c515e  02-shacl-safeguards/backlog_shacl_v1_162_0.ttl  (589147b)
+23998733ddf971186b91fb38f59793511a8fd8d0901e49ac62eb683bb90e4f48  02-shacl-safeguards/backlog_shacl_v1_163_0.ttl  (598586b)
 f44bbf4b858bb99076d03d133b8c03e77fa9d2f9ba8693088bb68b37729d9f84  03-tooling/archived_digest_baseline_v1_0_0.txt  (725b)
 8a3e9c22caf774b0b64927170cb92982e537e28061fee58a3e72c0cc72a8222f  03-tooling/backlog_admitted_prelineage_probe_v1_0_0.py  (2979b)
 a8f3b560bfa181e7775f03e1ad161a3d3bf0c4995510001db38c04d6ada5696a  03-tooling/backlog_adoption_check_v1_0_0.py  (3181b)
@@ -43,7 +42,7 @@ b17bdd5cd212d3e24f1ce7e58916bb55e85a9ae3e2e47b408fafba975e1e3759  03-tooling/bac
 af9f2c26ac3954c2cc7b608c7cf73b62b984b072c7ffc3d3a2bc90bda124e851  03-tooling/backlog_evidence_bridge_v1_1_0.py  (7239b)
 fc68b76984b4d2891816906a3e26708eaa6c58e751a546e180ab8b0ab45383ba  03-tooling/backlog_execution_ready_probe_v1_1_0.py  (2650b)
 f6aaa2ae778f399d5fbff6890f526fa610512564af462cadb49b0e8214835c6d  03-tooling/backlog_execution_ready_v1_1_0.py  (6306b)
-f5e64e1653d519f0a1f072eff22a3ed33b7d6770fb02bcc5c0e4957ac17febd4  03-tooling/backlog_gate_v1_46_0.sh  (57831b)
+0b9b04b930ab56398b215d28c90adf2f1986b82c190c098af2e9b928de4965e0  03-tooling/backlog_gate_v1_47_0.sh  (58124b)
 2c2e417ba755bfd6a791616e940cb334d1d92c7851bd550f08bc69b9143f657a  03-tooling/backlog_governance_mitigations_probe_v1_1_0.py  (5038b)
 f82b451791d17ca513a9419a686787d1bffab190f80e8b0caeb2e48fdeac7d37  03-tooling/backlog_guard_claude_hook_v1_0_0.py  (4131b)
 849fcb0c75e9d79c9dc2ea76ac39be0eb85f1d251d25cd82da8e4eec7c545917  03-tooling/backlog_guard_install_v1_0_0.py  (6427b)
@@ -93,6 +92,7 @@ df228a17ce9f2d7fe3af2144b8b7b68d2b49b99e78fc46469c51183f37e5ba83  03-tooling/bac
 ea673a120a31c82823464b9727fab2e6f4d38432ac0127bd0fbb6f5cf527bd5c  03-tooling/backlog_stamp_key_probe_v1_3_0.py  (5913b)
 97df44d38e4a84711e89f47a422b62fe4dff8390d11f287e0c22b8e1fd8c095f  03-tooling/backlog_standard_row_check_v1_1_0.py  (7050b)
 58f193592938940f57fff83ad72d93732a5f74321912939a62d2598d9308089d  03-tooling/backlog_state_evidence_probe_v1_0_0.py  (2987b)
+b5e38a99113022a39ca7a22b37834f3167b798eb0b8cdb52f92d2601778a60a1  03-tooling/backlog_status_history_probe_v1_0_0.py  (7227b)
 052fecec25fb385e2f0fca19928d3b1ec93253e98a3f7e6220f666596ca2918a  03-tooling/backlog_task_type_step_probe_v1_0_0.py  (1675b)
 342075f230785e59da6c0ba6ba9b54d51e1ae2b2d24d4f44db865925bdc4ee04  03-tooling/backlog_timeline_witness_probe_v1_0_0.py  (2656b)
 f4be97c2a711013b46768f4bcfceae3e66437ce7252542bd8b14744be478b718  03-tooling/backlog_timeline_witness_v1_0_0.py  (2756b)
@@ -133,7 +133,7 @@ c006cbb95e36f2ca481728f656dfff91c6d5f59f5ac9adbb73570d475f9e3a14  03-tooling/fix
 d128870abefac482087bd455be27ef85f3da6a22ac9d4fc55f63cb03cf6d8f9e  03-tooling/fixtures/fixture_lineage_thrash_negative_witness_v1_1_0.json  (505b)
 df7d708a54d741a8ec6d942ed48e75041ab8ef2e64d1e756488410fec4d57508  03-tooling/fixtures/fixture_lineage_thrash_v1_3_2.ttl  (28098b)
 a014366b019c3d3b3472b71fbd28b2f594b56c5fcce99aef680ed6ea2eea536f  03-tooling/fixtures/fixture_lineage_thrash_witness_v1_3_0.json  (778b)
-c3f77506ed2ba039fc3731e2aa0a781bf93806bf9724f580be22f69ac72cd855  03-tooling/fixtures/fixture_negative_v1_32_0.ttl  (269163b)
+d0d4b3ff1fc89e03ac3c66149ba63fa24561449c297bf191fd411631d785656c  03-tooling/fixtures/fixture_negative_v1_33_0.ttl  (271444b)
 0fa85874613350aa5ffb2f7b7c0295bdbc9bea56fd2a2b39dc94e54363820eac  03-tooling/fixtures/fixture_objective_metric_mirror_v1_0_0.ttl  (2175b)
 d43ae12b160e56baf1d3fb9a75e193d4cabcd75b03eeb49ca251c2ad1d66cd22  03-tooling/fixtures/fixture_pipeline_incomplete_v1_0_2.ttl  (20653b)
 0ffa3d4e5a191d81e17f8215ddaafecba2f958e3de0ed4aa6f36a4dd6188dde8  03-tooling/fixtures/fixture_pipeline_v1_5_2.ttl  (20851b)
@@ -155,9 +155,9 @@ d754b1f950a1cfdb95d7c27c108c04dd44942c2357ef33d2c5a42a3ee926fa98  03-tooling/fix
 ddaea16c7f7b0ae961d5db9d7b48e35f09cd7b82700acf22ff1c8d39b93dc229  03-tooling/fixtures/sdlc-tools/fixture_order_shapes_negative_v1_0_0.ttl  (1211b)
 d2374c4eb3d80323a83023c249dd7690ce2aa843e0842d07c66052acfe5817aa  04-documentation/Agile_FitGap_Analysis_v1_0_0.md  (7047b)
 a1776b79e872f9cb77add443fc65de31690bf72c61ad12dd1411775a45f97a20  04-documentation/BACKLOG_ROADMAP_FRAMEWORK_STANDARD_v1_116_0.md  (176889b)
-265df11fe9bb043546f0e27782e557df7dcaeacea1d0e14ecad8be3890e94ba8  04-documentation/BACKLOG_ROADMAP_FRAMEWORK_STANDARD_v1_126_0.md  (191458b)
+f29a71f66de347e9752767de8c84d8a5673e3e0b12c3ade77376f35651e59e9d  04-documentation/BACKLOG_ROADMAP_FRAMEWORK_STANDARD_v1_127_0.md  (192382b)
 807ff9b685f9c9a706835aafb47051fc006f1b7a4295f964d65e95e9432e63b8  04-documentation/CHANGELOG_v1_190_0.md  (475017b)
-c078c6185b0526aeb0ac7dabb68b33864d1e76a6154488baea0cf4aae0d572c1  04-documentation/CHANGELOG_v1_255_0.md  (844187b)
+3a9b4e7a54eeb7bab453df1ffe507c1b036c1bb6bc1121ba6449c371de8c5d92  04-documentation/CHANGELOG_v1_255_0.md  (845871b)
 510a553b994526c60c7dca091993b6825e4c90955e2f6aaaa0a41ec3fcfdb407  04-documentation/CLOSURE_REPORT_L_ChangeDiscipline_v1_0_0.md  (6445b)
 899799e52c88b5e897342f0e04bfefa575fda7120cda554e60be602ee9292fc2  04-documentation/CLOSURE_REPORT_L_OntologyDriven_v1_0_0.md  (7935b)
 10b7efb7023ece352534efafb04d8b183a81fd6eeee04f759019406182e75747  04-documentation/Concept_Completeness_Audit_v1_0_0.md  (3290b)
@@ -167,7 +167,7 @@ d6ba3f5eb8a823cec6a4df06b9590b87bd795442bc3baf5bf7caf53bd20fb12d  04-documentati
 06b89f61b6fb67b810a65eac5ed0fc3489f933aaba0d28c944254fbd8c320bf6  04-documentation/Discipline_Ceremony_Record_v1_0_0.md  (42624b)
 6ef0863ad6bfb89b9ba6f8d740d177764bf526f4064f90f7ae929782f2b63089  04-documentation/Falsifiability_Audit_v1_0_0.md  (5347b)
 b6fc17edc90f9dde724fb62a3188fa42f356d48d38ac778f9b10fd6fe478257d  04-documentation/LINEAGE_OPERATING_DISCIPLINE_v71_0_0.md  (219124b)
-11376ea240af5676460ee166cc4ab3576c08741e6013e70a50eb046a6f0f844a  04-documentation/LINEAGE_OPERATING_DISCIPLINE_v82_0_0.md  (268446b)
+1708fb0c3ea9f32a03e1ea63ad633dd9cda8f1212e624c486ddb29a116a238e2  04-documentation/LINEAGE_OPERATING_DISCIPLINE_v83_0_0.md  (271688b)
 457e58d22ea915fc26b42a3c82b2cffb36ea3c04ec5d3123a9b4e67c1ec689a3  04-documentation/Linkage_Audit_v1_0_0.md  (4052b)
 fd989d7cb2403b9587ce926a95d4a4e8aee13f82ee46a91c68694abc68d32ca2  04-documentation/Mapping_ProductBacklog_To_Backlog_v1_0_0.md  (8097b)
 e9323b7ec6842ab825d8f9df398cae1f3a456aed64d75212acec0910f45f12c6  04-documentation/Naming_Decision_Record_v1_0_1.md  (7525b)

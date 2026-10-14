@@ -9,8 +9,8 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog/shacl/1.162.0> ;
-    owl:versionInfo "1.162.0" ;
+    owl:versionIRI <http://example.org/backlog/shacl/1.163.0> ;
+    owl:versionInfo "1.163.0" ;
     owl:priorVersion <http://example.org/backlog-shapes/1.159.0> , <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.154.0> , <http://example.org/backlog-shapes/1.153.0> , <http://example.org/backlog-shapes/1.152.0> , <http://example.org/backlog-shapes/1.151.0> , <http://example.org/backlog-shapes/1.150.0> , <http://example.org/backlog-shapes/1.149.0> , <http://example.org/backlog-shapes/1.148.0> , <http://example.org/backlog-shapes/1.147.0> , <http://example.org/backlog-shapes/1.146.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.145.0> ;
@@ -1274,6 +1274,7 @@ backlog:WorkflowShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             ?state a backlog:LifecycleState .
+            FILTER NOT EXISTS { ?state a backlog:OptionalLifecycleState }
             FILTER NOT EXISTS { $this backlog:hasTransition ?t . ?t backlog:toState ?state }
             FILTER NOT EXISTS { $this backlog:hasTransition ?t2 . ?t2 backlog:fromState ?state }
         }""" ] .
@@ -8024,4 +8025,126 @@ backlog:FlowPointPrecisionShape a sh:NodeShape ;
             { $this backlog:startedAt ?p } UNION { $this backlog:finishedAt ?p }
             FILTER ( REGEX ( STR ( ?p ) , "T00:00:00([.]0+)?(Z|[+-][0-9:]+)?$" ) )
             FILTER NOT EXISTS { $this backlog:flowPointPrecision backlog:Precision_Date }
+        }""" ] .
+
+# v1.163.0 (G113): every status change is an obligation, behind RS_StatusHistoryRecorded. Scope as in G112 (register from ruleSetAdoptedAt, or one lineage).
+
+backlog:StatusUnrecordedShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItem ;
+    sh:severity sh:Violation ;
+    rdfs:label "An item that left Proposed has a recorded move into its current state (G113)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "STATUS_UNRECORDED" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G113: this work item has left Proposed but no recorded move (TransitionEvent) enters its current state, in the scope of an adoption of RS_StatusHistoryRecorded. A state with no history is indistinguishable from a value someone typed: record the move with its instant, or, for an item that moved before the obligation began, state statusHistoryAbsenceReason." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            { ?reg backlog:adoptsRuleSet backlog:RS_StatusHistoryRecorded .
+              FILTER NOT EXISTS { ?reg a backlog:Lineage }
+              OPTIONAL { ?reg backlog:ruleSetAdoptedAt ?at }
+              FILTER ( !BOUND(?at) || NOT EXISTS { $this backlog:finishedAt ?fin . FILTER ( ?fin < ?at ) } ) }
+            UNION
+            { ?reg a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_StatusHistoryRecorded .
+              { $this backlog:belongsToLineage ?reg } UNION { $this backlog:admittedByOutput ?o . ?o backlog:belongsToLineage ?reg } }
+            $this backlog:hasState ?st .
+            FILTER ( ?st != backlog:Proposed )
+            FILTER NOT EXISTS { $this backlog:statusHistoryAbsenceReason ?why }
+            FILTER NOT EXISTS { ?ev backlog:transitionedItem $this ; backlog:viaTransition ?tr . ?tr backlog:toState ?st }
+        }""" ] .
+
+backlog:StartNotRecordedShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItem ;
+    sh:severity sh:Violation ;
+    rdfs:label "Work that started has a recorded move into In Progress (G113)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "STATUS_NO_START" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G113: this work item is In Progress, Suspended or Done but no recorded move enters In Progress, in the scope of an adoption of RS_StatusHistoryRecorded. The start is the move that makes cycle time and age measurable: record it at the moment work begins." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            { ?reg backlog:adoptsRuleSet backlog:RS_StatusHistoryRecorded .
+              FILTER NOT EXISTS { ?reg a backlog:Lineage }
+              OPTIONAL { ?reg backlog:ruleSetAdoptedAt ?at }
+              FILTER ( !BOUND(?at) || NOT EXISTS { $this backlog:finishedAt ?fin . FILTER ( ?fin < ?at ) } ) }
+            UNION
+            { ?reg a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_StatusHistoryRecorded .
+              { $this backlog:belongsToLineage ?reg } UNION { $this backlog:admittedByOutput ?o . ?o backlog:belongsToLineage ?reg } }
+            $this backlog:hasState ?st .
+            FILTER ( ?st IN ( backlog:InProgress , backlog:Suspended , backlog:Done ) )
+            FILTER NOT EXISTS { $this backlog:statusHistoryAbsenceReason ?why }
+            FILTER NOT EXISTS { ?ev backlog:transitionedItem $this ; backlog:viaTransition ?tr . ?tr backlog:toState backlog:InProgress }
+        }""" ] .
+
+backlog:StatusGapShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItem ;
+    sh:severity sh:Violation ;
+    rdfs:label "The recorded moves of an item chain without a gap (G113)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "STATUS_GAP" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G113: a recorded move of this work item leaves a state that the previous recorded move did not enter, in the scope of an adoption of RS_StatusHistoryRecorded. A move between them went unrecorded: record it, with the instant it happened." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            { ?reg backlog:adoptsRuleSet backlog:RS_StatusHistoryRecorded .
+              FILTER NOT EXISTS { ?reg a backlog:Lineage }
+              OPTIONAL { ?reg backlog:ruleSetAdoptedAt ?at }
+              FILTER ( !BOUND(?at) || NOT EXISTS { $this backlog:finishedAt ?fin . FILTER ( ?fin < ?at ) } ) }
+            UNION
+            { ?reg a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_StatusHistoryRecorded .
+              { $this backlog:belongsToLineage ?reg } UNION { $this backlog:admittedByOutput ?o . ?o backlog:belongsToLineage ?reg } }
+            ?e2 backlog:transitionedItem $this ; backlog:transitionedAt ?t2 ; backlog:viaTransition ?tr2 .
+            ?tr2 backlog:fromState ?f .
+            ?e1 backlog:transitionedItem $this ; backlog:transitionedAt ?t1 ; backlog:viaTransition ?tr1 .
+            ?tr1 backlog:toState ?x .
+            FILTER ( ?t1 < ?t2 && ?x != ?f )
+            FILTER NOT EXISTS { ?e3 backlog:transitionedItem $this ; backlog:transitionedAt ?t3 . FILTER ( ?t3 > ?t1 && ?t3 < ?t2 ) }
+        }""" ] .
+
+backlog:StatusMomentShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItem ;
+    sh:severity sh:Violation ;
+    rdfs:label "A recorded move is stamped with an instant, not a date (G113)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "STATUS_DATE_AS_MOMENT" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G113: a recorded move of this work item is stamped exactly midnight, in the scope of an adoption of RS_StatusHistoryRecorded. A day written as a moment makes a duration wrong by up to a day: stamp the instant the move happened, taken from a clock at that moment." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            { ?reg backlog:adoptsRuleSet backlog:RS_StatusHistoryRecorded .
+              FILTER NOT EXISTS { ?reg a backlog:Lineage }
+              OPTIONAL { ?reg backlog:ruleSetAdoptedAt ?at }
+              FILTER ( !BOUND(?at) || NOT EXISTS { $this backlog:finishedAt ?fin . FILTER ( ?fin < ?at ) } ) }
+            UNION
+            { ?reg a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_StatusHistoryRecorded .
+              { $this backlog:belongsToLineage ?reg } UNION { $this backlog:admittedByOutput ?o . ?o backlog:belongsToLineage ?reg } }
+            ?ev backlog:transitionedItem $this ; backlog:transitionedAt ?p .
+            FILTER ( REGEX ( STR ( ?p ) , "T00:00:00([.]0+)?(Z|[+-][0-9:]+)?$" ) )
+        }""" ] .
+
+backlog:FlowPointsMatchHistoryShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItem ;
+    sh:severity sh:Violation ;
+    rdfs:label "The flow points are the moments of the recorded moves (G113)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "STATUS_FLOW_MISMATCH" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G113: this work item's startedAt is missing or differs from the instant of its first recorded move into In Progress, or its finishedAt is missing or differs from the instant of its last recorded move into Done, in the scope of an adoption of RS_StatusHistoryRecorded. The flow points are the record's moments, not a second typing of them." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            { ?reg backlog:adoptsRuleSet backlog:RS_StatusHistoryRecorded .
+              FILTER NOT EXISTS { ?reg a backlog:Lineage }
+              OPTIONAL { ?reg backlog:ruleSetAdoptedAt ?at }
+              FILTER ( !BOUND(?at) || NOT EXISTS { $this backlog:finishedAt ?fin . FILTER ( ?fin < ?at ) } ) }
+            UNION
+            { ?reg a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_StatusHistoryRecorded .
+              { $this backlog:belongsToLineage ?reg } UNION { $this backlog:admittedByOutput ?o . ?o backlog:belongsToLineage ?reg } }
+            { ?ev backlog:transitionedItem $this ; backlog:viaTransition ?tr ; backlog:transitionedAt ?t . ?tr backlog:toState backlog:InProgress .
+              FILTER NOT EXISTS { ?ev2 backlog:transitionedItem $this ; backlog:viaTransition ?tr2 ; backlog:transitionedAt ?t2 . ?tr2 backlog:toState backlog:InProgress . FILTER ( ?t2 < ?t ) }
+              OPTIONAL { $this backlog:startedAt ?s }
+              FILTER ( !BOUND ( ?s ) || ?s != ?t ) }
+            UNION
+            { ?ev backlog:transitionedItem $this ; backlog:viaTransition ?tr ; backlog:transitionedAt ?t . ?tr backlog:toState backlog:Done .
+              FILTER NOT EXISTS { ?ev2 backlog:transitionedItem $this ; backlog:viaTransition ?tr2 ; backlog:transitionedAt ?t2 . ?tr2 backlog:toState backlog:Done . FILTER ( ?t2 > ?t ) }
+              OPTIONAL { $this backlog:finishedAt ?s }
+              FILTER ( !BOUND ( ?s ) || ?s != ?t ) }
         }""" ] .

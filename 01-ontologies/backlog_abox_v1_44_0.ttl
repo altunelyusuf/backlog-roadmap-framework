@@ -22,8 +22,8 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (ABox: controlled individuals, reference data and the live register)"@en ;
-    owl:versionIRI <http://example.org/backlog/abox/1.43.0> ;
-    owl:versionInfo "1.43.0" ;
+    owl:versionIRI <http://example.org/backlog/abox/1.44.0> ;
+    owl:versionInfo "1.44.0" ;
     owl:priorVersion <http://example.org/backlog/abox/1.40.0> , <http://example.org/backlog/abox/1.39.0> , <http://example.org/backlog/abox/1.38.0> , <http://example.org/backlog/abox/1.37.0> , <http://example.org/backlog/abox/1.36.0> , <http://example.org/backlog/abox/1.35.0> ;
     owl:priorVersion <http://example.org/backlog/abox/1.34.0> , <http://example.org/backlog/abox/1.33.0> , <http://example.org/backlog/abox/1.32.0> , <http://example.org/backlog/abox/1.31.0> , <http://example.org/backlog/abox/1.30.0> , <http://example.org/backlog/abox/1.29.0> , <http://example.org/backlog/abox/1.28.0> , <http://example.org/backlog/abox/1.27.0> , <http://example.org/backlog/abox/1.26.0> , <http://example.org/backlog/abox/1.25.0> , <http://example.org/backlog/abox/1.24.0> , <http://example.org/backlog/abox/1.23.0> , <http://example.org/backlog/abox/1.22.0> , <http://example.org/backlog/abox/1.21.0> , <http://example.org/backlog/abox/1.20.0> , <http://example.org/backlog/abox/1.19.0> , <http://example.org/backlog/abox/1.17.0> , <http://example.org/backlog/abox/1.16.0> , <http://example.org/backlog/abox/1.15.0> , <http://example.org/backlog/abox/1.14.0> , <http://example.org/backlog/abox/1.13.0> , <http://example.org/backlog/abox/1.12.0> , <http://example.org/backlog/abox/1.11.0> , <http://example.org/backlog/abox/1.10.0> , <http://example.org/backlog/abox/1.9.0> , <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
         <http://example.org/backlog-abox/1.2.1> ,
@@ -72,6 +72,10 @@ backlog:Done a owl:NamedIndividual , backlog:LifecycleState ;
 backlog:Cancelled a owl:NamedIndividual , backlog:LifecycleState ;
     rdfs:label "Cancelled"@en ;
     skos:definition "Withdrawn without delivery. A terminal state that carries no evidence obligation but must record a rationale, so abandoned scope stays visible instead of silently disappearing from the register."@en .
+
+backlog:Suspended a owl:NamedIndividual , backlog:LifecycleState , backlog:OptionalLifecycleState ;
+    rdfs:label "Suspended"@en ;
+    skos:definition "Work that had started and was deliberately paused, to be resumed or withdrawn. Distinct from an impediment (something outside the work stands in the way) and from Ready (work that has not started): a suspended item keeps its start point, and the pause and its end are recorded moves like any other."@en .
 
 backlog:Now a owl:NamedIndividual , backlog:RoadmapHorizon ;
     rdfs:label "Now"@en ;
@@ -1235,6 +1239,11 @@ backlog:Precision_Date a owl:NamedIndividual , backlog:FlowPointPrecision ;
     rdfs:label "Date"@en ;
     skos:definition "The flow point is only a day, written as midnight; a duration computed from it is exact to the day at best."@en .
 
+backlog:RS_StatusHistoryRecorded a owl:NamedIndividual , backlog:RuleSet ;
+    rdfs:label "Every status change is recorded, with its moment"@en ;
+    skos:definition "An item that has left Proposed has a recorded move into its current state; one that has started has a recorded move into In Progress; the recorded moves of an item chain without a gap (each move leaves the state the previous one entered); every move is stamped with an instant, not a date written as midnight; and startedAt and finishedAt, when the item is In Progress or Done, equal the moment of the first move into In Progress and of the last move into Done. Suspension and resumption are moves like any other. Adopted by a register or by one lineage (G112 scoping); an item that moved before the adoption says so through statusHistoryAbsenceReason, and nothing excuses a move after it. A RuleSet because it binds only what declared it (G89, G91)."@en ;
+    dcterms:source "Kanban flow measures need a well-defined start and finish point (The Kanban Pocket Guide, ch. 6); the framework's own TransitionEvent, whose definition says a state with no history cannot be audited."@en .
+
 backlog:RS_LineageStatus a owl:NamedIndividual , backlog:RuleSet ;
     rdfs:label "A lineage states where it stands"@en ;
     skos:definition "Every lineage carries exactly one status, the status matches the stage outputs the register actually holds, a claim that work is under way requires work that has started, and a live lineage may not reuse a retired lineage's name. A RuleSet because it binds every lineage a register carries: a register adopts it, and minimal test graphs that model one narrow question -- an item tie, a scoring disagreement -- are not obliged to build a whole pipeline to answer it."@en .
@@ -1631,7 +1640,7 @@ backlog:Workflow_Default a owl:NamedIndividual , backlog:Workflow ;
     skos:definition "The reusable baseline lifecycle: refine, start, complete, and withdraw, plus the two backward moves real delivery needs, plus the two 2026-09-17 moves through Refined -- decompose (Proposed to Refined) and confirm-ready (Refined to Ready, unconditional at this level; ReadinessGateShape independently guards Ready's own real bar). Every state in the closed enumeration is reachable and both terminal states are entered only through a guarded transition."@en ;
     backlog:hasTransition backlog:T_Refine , backlog:T_Start , backlog:T_Complete , backlog:T_Return ,
                           backlog:T_Defer , backlog:T_WithdrawProposed , backlog:T_WithdrawReady , backlog:T_WithdrawInProgress ,
-                          backlog:T_Decompose , backlog:T_RefinedToReady .
+                          backlog:T_Decompose , backlog:T_RefinedToReady , backlog:T_Suspend , backlog:T_Resume , backlog:T_WithdrawSuspended .
 
 backlog:T_Refine a owl:NamedIndividual , backlog:StateTransition ;
     rdfs:label "Refine: Proposed to Ready"@en ;
@@ -1690,6 +1699,24 @@ backlog:T_WithdrawReady a owl:NamedIndividual , backlog:StateTransition ;
 backlog:T_WithdrawInProgress a owl:NamedIndividual , backlog:StateTransition ;
     rdfs:label "Withdraw: In Progress to Cancelled"@en ;
     backlog:fromState backlog:InProgress ; backlog:toState backlog:Cancelled ;
+    backlog:hasTransitionName "withdraw" ;
+    backlog:hasTransitionGuard "ASK { ?i backlog:hasRationale ?r } # must return true for the item" .
+
+backlog:T_Suspend a owl:NamedIndividual , backlog:StateTransition ;
+    rdfs:label "Suspend: In Progress to Suspended"@en ;
+    backlog:fromState backlog:InProgress ; backlog:toState backlog:Suspended ;
+    backlog:hasTransitionName "suspend" ;
+    backlog:hasTransitionGuard "ASK { ?i backlog:hasRationale ?r } # must return true for the item: a pause says why" .
+
+backlog:T_Resume a owl:NamedIndividual , backlog:StateTransition ;
+    rdfs:label "Resume: Suspended to In Progress"@en ;
+    backlog:fromState backlog:Suspended ; backlog:toState backlog:InProgress ;
+    backlog:hasTransitionName "resume" ;
+    backlog:hasTransitionGuard "ASK { true } # unconditional on purpose: the pause already said why; resuming needs only to be recorded" .
+
+backlog:T_WithdrawSuspended a owl:NamedIndividual , backlog:StateTransition ;
+    rdfs:label "Withdraw: Suspended to Cancelled"@en ;
+    backlog:fromState backlog:Suspended ; backlog:toState backlog:Cancelled ;
     backlog:hasTransitionName "withdraw" ;
     backlog:hasTransitionGuard "ASK { ?i backlog:hasRationale ?r } # must return true for the item" .
 
@@ -5205,6 +5232,10 @@ fw:RS_SDLC_NextStoryPrioritization a backlog:RegisterSession ; backlog:sessionFo
 fw:Register backlog:adoptsRuleSet backlog:RS_LabelConvention ;
     backlog:ruleSetAdoptedAt "2026-09-10T18:00:00Z"^^xsd:dateTime .
 fw:Register backlog:adoptsRuleSet backlog:RS_LineageStatus .
+#  The register adopts the status-history and flow-point obligations, on the owner's instruction of 2026-10-14 ("all status changes should be
+#  recorded including start, stop, in progress, suspend"). Its adoption date above (2026-09-10) is the line before which finished items are exempt;
+#  from now on an item of this register that moves records the move, with its instant (G113).
+fw:Register backlog:adoptsRuleSet backlog:RS_StatusHistoryRecorded , backlog:RS_FlowPointsRecorded .
 
 #################################################################
 #  v9.85.0 (2026-09-11, brsf-session) -- EXECUTION BEGINS. Everything

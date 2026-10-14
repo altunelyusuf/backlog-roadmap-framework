@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v82.0.0
+# Lineage Operating Discipline — v83.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -3376,3 +3376,20 @@ Related: G39, G89, G91, G109, G110.
 
 **What is not claimed.** No register of a consumer was changed or measured. The new rule sets have not been adopted anywhere. A register that adopts at a moment still re-judges its unfinished and undated items.
 Related: G39, G89, G91, G107, G109, G110, G111.
+
+---
+
+## G113 — Every status change is an obligation, and suspension is a state
+
+*(Opened by the owner's instruction of 2026-10-14: "all status changes should be recorded including start, stop, in progress, suspend, any others", after the question whether a start time was enforced when an item starts. Tested on planted graphs before it was built.)*
+
+**Q1 — what was true.** The framework has carried a timestamped record of every move (`TransitionEvent`) and a check that the current state is the destination of the last recorded move (`StateHistoryShape`) since its early releases. The check fired only when an event existed: an item with no events passed every rule, so recording moves was never an obligation. G112 (v1.391.0) added a rule that a Done item carries both flow points, which is an obligation at the end, not when work starts. Neither made the start an obligation. That is the gap the owner named, and it is a design failure, not a choice: the definition of the event says a state with no history cannot be audited.
+
+**Q2 — the obligation.** `RS_StatusHistoryRecorded`, scoped as in G112 (a register, from `ruleSetAdoptedAt`; or one lineage and what its output admitted): (a) an item that has left Proposed has a recorded move into its current state; (b) an item In Progress, Suspended or Done has a recorded move into In Progress; (c) the recorded moves chain: a move leaves the state the previous move entered; (d) every move carries an instant, not exactly midnight; (e) `startedAt` and `finishedAt` are the instants of the first move into In Progress and the last move into Done, and missing is a violation. An item that moved before the obligation began states `statusHistoryAbsenceReason`; it excuses no move made after. Five shapes, each with a negative fixture case and a probe scenario; the probe fails on v1.391.0 (9 of 21 scenarios).
+
+**Q3 — suspension.** There was no state for paused work: the six states were Proposed, Refined, Ready, In Progress, Done, Cancelled, and an impediment is something outside the work, not a decision to pause it. `Suspended` is added with the moves suspend (needs a rationale), resume and withdraw-from-suspended. It is an optional state, so a workflow written before it is not made inconsistent by the enumeration growing (the lesson of G110 and of closed enumerations in general).
+
+**Q4 — adoption.** This package's own register adopts `RS_StatusHistoryRecorded` and `RS_FlowPointsRecorded` from the owner's instruction of 2026-10-14; the register's adoption date of 2026-09-10 is the line before which finished items are exempt, and no item of the register is judged differently (0 violations before and after). A consuming register or lineage adopts them by its own act.
+
+**What is not claimed.** The record is typed by the session that does the work: nothing in the framework can prove that an instant was taken at the moment of the move, only that it is present, precise and consistent with the flow points and the chain. The clock of the executing session is the source; the first in-progress commit of a repository would be a stronger anchor but lives in the consumer's history. Moves made before a register adopted are not reconstructed.
+Related: G89, G91, G112.
