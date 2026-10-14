@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.127.0
+# Backlog & Roadmap Semantic Framework — Standard v1.128.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -670,17 +670,15 @@ only what that lineage created.
 
 ### 2.5c-xxi What the commit witness reports on a real lineage
 
-Two advisories read the commits rather than the graph:
+One advisory reads the commits rather than the graph (a second was retired, see below):
 
 `StageOrderWitnessShape` — a stage and the stage consuming it recording the **same** commit. The
 consuming stage was built from an output not yet closed, so the dependency is nominal: the artifact
 existed as an IRI before it existed as a completed state.
 
-`ScopeContentLateShape` — the scope stage recording a **later** commit than the backlog stage. A
-boundary's text may be written early while its **deliverables** — the content that lets it refuse
-anything — arrive after the work they were meant to constrain. This is G17 with a commit attached.
+The order of two stages is not judged from the text of two commit names: `ScopeContentLateShape` did so with `!=` and was retired in v1.393.0 (G114). The git history is the witness, and `backlog_lineage_order_check` reads it.
 
-Both fire on this package's own register, which is the point: a witness worth having is one that
+The shape above fires on this package's own register, which is the point: a witness worth having is one that
 reports something inconvenient about the register carrying it.
 
 ### 2.5c-xxi-b Work before chain is a bypass, and a bypass is restarted, not filled

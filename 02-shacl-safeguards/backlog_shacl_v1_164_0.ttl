@@ -9,8 +9,8 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog/shacl/1.163.0> ;
-    owl:versionInfo "1.163.0" ;
+    owl:versionIRI <http://example.org/backlog/shacl/1.164.0> ;
+    owl:versionInfo "1.164.0" ;
     owl:priorVersion <http://example.org/backlog-shapes/1.159.0> , <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.154.0> , <http://example.org/backlog-shapes/1.153.0> , <http://example.org/backlog-shapes/1.152.0> , <http://example.org/backlog-shapes/1.151.0> , <http://example.org/backlog-shapes/1.150.0> , <http://example.org/backlog-shapes/1.149.0> , <http://example.org/backlog-shapes/1.148.0> , <http://example.org/backlog-shapes/1.147.0> , <http://example.org/backlog-shapes/1.146.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.145.0> ;
@@ -4067,19 +4067,9 @@ backlog:StageOrderWitnessShape a sh:NodeShape ;
             FILTER (?cp = ?cn)
         }""" ] .
 
-backlog:ScopeContentLateShape a sh:NodeShape ;
-    sh:targetClass backlog:ScopeStatement ;
-    sh:severity sh:Warning ;
-    rdfs:label "Advisory: a boundary whose content arrived after the work"@en ;
-    sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "Advisory: the scope stage records a later commit than the backlog stage. The boundary's TEXT may have been written early, but its DELIVERABLES — the content that lets it refuse anything — arrived after the work they were meant to constrain. This is the G17 defect with a commit attached: a scope whose content post-dates its backlog was, in the only witnessed sense, drawn around what already existed." ;
-        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
-        sh:select """SELECT $this WHERE {
-            ?so backlog:outputOfStage backlog:Stage_Scope ; backlog:closedAtCommit ?cs .
-            ?bo backlog:outputOfStage backlog:Stage_Backlog ; backlog:closedAtCommit ?cb .
-            FILTER (?cs != ?cb)
-            FILTER EXISTS { $this backlog:requiresDeliverable ?d }
-        }""" ] .
+# v1.164.0 (G114): ScopeContentLateShape is retired. It claimed to report a scope stage recorded at a LATER commit than the backlog stage, but compared the two commit
+# names with != (true whenever they differ) and tied neither output to the statement's lineage. A commit name cannot be ordered from its text: the order of stages is
+# judged by backlog_lineage_order_check, which reads the git history (first appearance), and by StageOrderWitnessShape for the one case the data can show (the same commit).
 
 #################################################################
 #  v1.45.0 — a deliverable is met by delivery, not by intention

@@ -22,8 +22,8 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (ABox: controlled individuals, reference data and the live register)"@en ;
-    owl:versionIRI <http://example.org/backlog/abox/1.44.0> ;
-    owl:versionInfo "1.44.0" ;
+    owl:versionIRI <http://example.org/backlog/abox/1.45.0> ;
+    owl:versionInfo "1.45.0" ;
     owl:priorVersion <http://example.org/backlog/abox/1.40.0> , <http://example.org/backlog/abox/1.39.0> , <http://example.org/backlog/abox/1.38.0> , <http://example.org/backlog/abox/1.37.0> , <http://example.org/backlog/abox/1.36.0> , <http://example.org/backlog/abox/1.35.0> ;
     owl:priorVersion <http://example.org/backlog/abox/1.34.0> , <http://example.org/backlog/abox/1.33.0> , <http://example.org/backlog/abox/1.32.0> , <http://example.org/backlog/abox/1.31.0> , <http://example.org/backlog/abox/1.30.0> , <http://example.org/backlog/abox/1.29.0> , <http://example.org/backlog/abox/1.28.0> , <http://example.org/backlog/abox/1.27.0> , <http://example.org/backlog/abox/1.26.0> , <http://example.org/backlog/abox/1.25.0> , <http://example.org/backlog/abox/1.24.0> , <http://example.org/backlog/abox/1.23.0> , <http://example.org/backlog/abox/1.22.0> , <http://example.org/backlog/abox/1.21.0> , <http://example.org/backlog/abox/1.20.0> , <http://example.org/backlog/abox/1.19.0> , <http://example.org/backlog/abox/1.17.0> , <http://example.org/backlog/abox/1.16.0> , <http://example.org/backlog/abox/1.15.0> , <http://example.org/backlog/abox/1.14.0> , <http://example.org/backlog/abox/1.13.0> , <http://example.org/backlog/abox/1.12.0> , <http://example.org/backlog/abox/1.11.0> , <http://example.org/backlog/abox/1.10.0> , <http://example.org/backlog/abox/1.9.0> , <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
         <http://example.org/backlog-abox/1.2.1> ,
@@ -2170,9 +2170,6 @@ backlog:SeverityPromotion_SingleCommitLineageShape a backlog:SeverityPromotion ;
 backlog:SeverityPromotion_StageOrderWitnessShape a backlog:SeverityPromotion ; rdfs:label "Severity promotion: StageOrderWitnessShape"@en ;
     backlog:promotionInRuleSet backlog:RS_SeverityAudit_20260909 ; backlog:promotesShape backlog:StageOrderWitnessShape ;
     backlog:promotedSeverity sh:Violation ; backlog:promotionRationale "G90 rule (2026-09-09): A consuming stage that cannot be shown to follow its predecessor breaks the witnessed-order rule (G81)." .
-backlog:SeverityPromotion_ScopeContentLateShape a backlog:SeverityPromotion ; rdfs:label "Severity promotion: ScopeContentLateShape"@en ;
-    backlog:promotionInRuleSet backlog:RS_SeverityAudit_20260909 ; backlog:promotesShape backlog:ScopeContentLateShape ;
-    backlog:promotedSeverity sh:Violation ; backlog:promotionRationale "G90 rule (2026-09-09): Scope deliverables recorded after the backlog stage breaks the stage order itself." .
 backlog:SeverityPromotion_DesignTaskProducesShape a backlog:SeverityPromotion ; rdfs:label "Severity promotion: DesignTaskProducesShape"@en ;
     backlog:promotionInRuleSet backlog:RS_SeverityAudit_20260909 ; backlog:promotesShape backlog:DesignTaskProducesShape ;
     backlog:promotedSeverity sh:Violation ; backlog:promotionRationale "G90 rule (2026-09-09): A design/architecture task Done with no model breaks the task-type obligation the framework states." .

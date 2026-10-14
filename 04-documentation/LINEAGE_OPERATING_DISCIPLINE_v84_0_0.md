@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v83.0.0
+# Lineage Operating Discipline — v84.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -3393,3 +3393,16 @@ Related: G39, G89, G91, G107, G109, G110, G111.
 
 **What is not claimed.** The record is typed by the session that does the work: nothing in the framework can prove that an instant was taken at the moment of the move, only that it is present, precise and consistent with the flow points and the chain. The clock of the executing session is the source; the first in-progress commit of a repository would be a stronger anchor but lives in the consumer's history. Moves made before a register adopted are not reconstructed.
 Related: G89, G91, G112.
+
+---
+
+## G114 — A shape does not judge order from the text of two commit names
+
+*(Opened by a handover of a consuming project. Reproduced on a planted graph before anything was changed.)*
+
+**Q1 — the finding is right.** `ScopeContentLateShape` (retired by this ruling) was described as reporting a scope stage recorded at a later commit than the backlog stage. Its query compared the two commit names with `!=`, true whenever they differ, and tied neither stage output to the scope statement's lineage. On a graph with the scope output at one commit name and the backlog output at another, in the correct order and in no common lineage, it fired (`backlog_scope_order_probe`, which fails on v1.392.0). A commit name cannot be ordered from its text; the order of two stages is known only from the git history. The advisory was promoted to a violation in registers that adopted the severity audit, so the false report was an obligation there.
+
+**Q2 — retired, not repaired.** The test cannot be made correct from the data: the data holds the names, the witness is the history. That witness already exists, `backlog_lineage_order_check` (first appearance of each stage output in git), and `StageOrderWitnessShape` reports the one case the data can show (two stages at the same commit). Tying the outputs to a lineage would have kept a shape that fires on anything that differs. The shape and its severity promotion are removed (the promotions are now 61); the Standard says so.
+
+**What is not claimed.** No consumer's register was re-run after the removal. The measured example is the reporter's planted graph and the unchanged behaviour of the order check. A defect the shape was meant to catch (deliverables recorded after the work) is caught by the order check where the history shows it, and is not caught where no history is available.
+Related: G17, G81, G90.
