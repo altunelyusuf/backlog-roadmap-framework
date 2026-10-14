@@ -4234,3 +4234,6 @@ ex:FLOW_UNSTARTED a backlog:Task ; backlog:hasState backlog:Proposed ; backlog:s
 ex:FLOW_TWO_VALUES a backlog:Task ; backlog:hasState backlog:Done ; backlog:startedAt "2026-10-14T09:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
     backlog:finishedAt "2026-10-14T10:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> , "2026-10-14T11:30:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
 ex:FLOW_EQUAL_SPAN a backlog:Task ; backlog:hasState backlog:Done ; backlog:startedAt "2026-10-14T09:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ; backlog:finishedAt "2026-10-14T09:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+
+# v1.35.0 (G116): ORG_NOT_TEAM is an individual that claims to be an organisation -> OrganisationIsTeamShape. The silent controls are in backlog_human_actor_kinds_probe.
+ex:ORG_NOT_TEAM a backlog:Executor_IndividualHuman ; backlog:isOrganisation true .

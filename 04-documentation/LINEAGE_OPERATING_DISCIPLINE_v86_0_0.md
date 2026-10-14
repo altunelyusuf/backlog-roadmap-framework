@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v85.0.0
+# Lineage Operating Discipline — v86.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -3389,7 +3389,7 @@ Related: G39, G89, G91, G107, G109, G110, G111.
 
 **Q3 — suspension.** There was no state for paused work: the six states were Proposed, Refined, Ready, In Progress, Done, Cancelled, and an impediment is something outside the work, not a decision to pause it. `Suspended` is added with the moves suspend (needs a rationale), resume and withdraw-from-suspended. It is an optional state, so a workflow written before it is not made inconsistent by the enumeration growing (the lesson of G110 and of closed enumerations in general).
 
-**Q4 — adoption.** This package's own register adopts `RS_StatusHistoryRecorded` and `RS_FlowPointsRecorded` from the owner's instruction of 2026-10-14; the register's adoption date of 2026-09-10 is the line before which finished items are exempt, and no item of the register is judged differently (0 violations before and after). A consuming register or lineage adopts them by its own act.
+**Q4 — adoption (superseded by G116: the shipped data file no longer adopts; each of this package's own lineages does).** This package's register adopted `RS_StatusHistoryRecorded` and `RS_FlowPointsRecorded` from the owner's instruction of 2026-10-14; the register's adoption date of 2026-09-10 is the line before which finished items are exempt, and no item of the register is judged differently (0 violations before and after). A consuming register or lineage adopts them by its own act.
 
 **What is not claimed.** The record is typed by the session that does the work: nothing in the framework can prove that an instant was taken at the moment of the move, only that it is present, precise and consistent with the flow points and the chain. The clock of the executing session is the source; the first in-progress commit of a repository would be a stronger anchor but lives in the consumer's history. Moves made before a register adopted are not reconstructed.
 Related: G89, G91, G112.
@@ -3433,3 +3433,20 @@ Related: G17, G81, G90.
 
 **What is not claimed.** A git author date is the working session's clock: it shows an impossible date, never a true one. The proposals are the reporter's; the choice between them is this ruling. Other live projects cannot be identified from this package, so the notice to consuming projects is a statement in the Standard and the changelog and the tool itself, not a list of recipients. The reporter's script stopped on instants without a zone; that is reported to it.
 Related: G89, G112, G113, G114.
+
+---
+
+## G116 — The shipped data file binds nobody who did not adopt; an organisation is a human team; a person holds a role
+
+*(Opened by two handovers of the agentic-sdlc session, 2026-10-14. The leak was reproduced here before anything was changed.)*
+
+**Q1 — the finding is a defect, not the intended scope.** A register-level adoption binds every item of the graph that holds the register (G112), by design: the register is the adopter. What was wrong is that v1.392.0 put one into the data file every consumer may load. Validating a consumer item together with the whole file on v1.394.0 gave the item three results of the recording rules that the same item did not get with the framework register's triples removed (the consumer measured 131 history and 129 flow-point results on its register). The shipped validator was not affected: when it validates other data it drops the framework register's triples from the reference data (`reference_abox`); a consumer that loaded the file whole was.
+
+**Q2 — fixed where it arose.** The register-level adoption of `RS_StatusHistoryRecorded` and `RS_FlowPointsRecorded` is removed from the data file. The package's own commitment is kept where it can bind only its own work: each lineage of this package adopts both rule sets itself when it opens, which the start gate (G115, `backlog_execution_ready` v1.2.0) requires. Nothing of the package's own is left unjudged by the removal: the data file holds no live lineage, and its one item is the register itself. An item-to-register tie was considered and not built: it would oblige every existing register to link every item, to guard against a leak that arose only from a file that no longer carries an adoption. `backlog_abox_neutrality_probe` holds the line: no non-lineage adopts any rule set that an item-level shape consults (six today), and a consumer graph that breaks every recording and verification rule gets no result when loaded with the whole file, but does under a register of its own that adopts (it fails on v1.394.0).
+
+**Q3 — an organisation is a human team.** The owner's instruction to the reporter: a human actor may be an individual, a human team or an organisation. An organisation has the structure of a human team (a group composed through `hasExecutorMember` with a controller somewhere in its nesting) and no rule of the taxonomy differs for it, so it is not a sixth kind. A subclass was built first and rejected by probe: the shapes name the five classes and read no subclass, so an organisation typed as one was treated as neither team nor individual (the collective-on-atomic rule did not fire; the overseer rule refused it). The qualifier `isOrganisation` (boolean, on `Executor_HumanTeam`) carries the meaning without that risk; `OrganisationIsTeamShape` refuses it on anything that is not a human team. Source: ISO 9000:2015, 3.2.1, as quoted in a terminology database (the standard itself was not read).
+
+**Q4 — a person holds a role.** `holdsRole` (Executor to Role) ties the party to Owner or Builder; decisions keep carrying the role, and the holders are found through it. It states the present holding only: who held a role when an earlier decision was made is not modelled. The framework's own owner individual now holds Owner. `backlog_human_actor_kinds_probe` shows an organisation treated exactly as a team (responsible for an atomic item, overseer under `RS_HumanOversight`), `holdsRole` raising nothing, and the flag refused on an individual.
+
+**What is not claimed.** The other register-level adoptions in the data file (`RS_LabelConvention`, `RS_LineageStatus`) are read the same way by construction; they bind intent elements and lineages rather than work items, the file's own content depends on them, and they were not measured against a consumer graph or changed. A consumer that loads the file whole should load the reference part (what the validator derives) instead. The reporter's register was not run.
+Related: G89, G112, G113, G115.

@@ -18,9 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.130.0> ;
-    owl:versionInfo "1.130.0" ;
-    owl:priorVersion <http://example.org/backlog/1.129.0> , <http://example.org/backlog/1.125.0> , <http://example.org/backlog/1.124.0> , <http://example.org/backlog/1.123.0> , <http://example.org/backlog/1.122.0> ;
+    owl:versionIRI <http://example.org/backlog/1.131.0> ;
+    owl:versionInfo "1.131.0" ;
+    owl:priorVersion <http://example.org/backlog/1.130.0> , <http://example.org/backlog/1.129.0> , <http://example.org/backlog/1.125.0> , <http://example.org/backlog/1.124.0> , <http://example.org/backlog/1.123.0> , <http://example.org/backlog/1.122.0> ;
     owl:priorVersion <http://example.org/backlog/1.121.0> , <http://example.org/backlog/1.120.0> , <http://example.org/backlog/1.119.0> , <http://example.org/backlog/1.118.0> , <http://example.org/backlog/1.117.0> ;
     owl:priorVersion <http://example.org/backlog/1.116.0> ;
     owl:priorVersion <http://example.org/backlog/1.115.0> ;
@@ -6821,7 +6821,7 @@ backlog:Executor a owl:Class ;
     rdfs:subClassOf backlog:BacklogConcept ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "Executor"@en ;
-    skos:definition "The concrete party that carries out a WorkItem: a closed taxonomy of five kinds, because the framework already distinguishes WHO MAY DECIDE (Role) and WHETHER a human or a machine was in the execution path (ExecutionModality) but names nobody concrete who did the work. An Executor is always exactly one of its five disjoint subclasses; which one is itself the fact a register needs to answer 'who, specifically, is on the hook for this.'"@en .
+    skos:definition "The concrete party that carries out a WorkItem: a closed taxonomy of five kinds (an organisation is a human team that says so through isOrganisation, not a sixth kind), because the framework already distinguishes WHO MAY DECIDE (Role) and WHETHER a human or a machine was in the execution path (ExecutionModality) but names nobody concrete who did the work. An Executor is always exactly one of its five disjoint subclasses; which one is itself the fact a register needs to answer 'who, specifically, is on the hook for this.'"@en .
 
 backlog:Executor_IndividualHuman a owl:Class ;
     rdfs:subClassOf backlog:Executor ;
@@ -7116,3 +7116,22 @@ backlog:recordingRuleSetsDeclinedReason a owl:DatatypeProperty , owl:FunctionalP
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "recording rule sets declined reason"@en ;
     skos:definition "Why this lineage, which has not started work, adopts neither RS_StatusHistoryRecorded nor RS_FlowPointsRecorded (itself or through its register). The start gate refuses a lineage that begins work without recording its status changes and its start and finish unless it states this; the refusal is a statement, not a veto, and binds only lineages whose work has not started (G89)."@en .
+
+#################################################################
+#  v1.131.0 (G116) -- an organisation is a human team (isOrganisation); a person holds a role
+#################################################################
+
+backlog:isOrganisation a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:Executor_HumanTeam ;
+    rdfs:range xsd:boolean ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "is organisation"@en ;
+    skos:definition "True when this human team is an organisation: a person or group of people with its own functions, responsibilities, authorities and relationships, constituted to achieve its objectives and existing independently of any one piece of work; its members are individuals, teams or other organisations. A qualifier of a human team, not a sixth kind of Executor and not a subclass: the structure the taxonomy cares about is the same (a group composed through hasExecutorMember with a single controller somewhere in its nesting, such as its board or its head), every rule about a human team applies to it unchanged, and the closed set of five stays closed. (A subclass was tried and rejected: the shapes name the five classes and read no subclass, so the rules would have silently skipped organisations -- probed.) A human actor is therefore an individual (Executor_IndividualHuman), a team (Executor_HumanTeam) or an organisation (Executor_HumanTeam with isOrganisation true). OrganisationIsTeamShape refuses the flag on anything that is not a human team."@en ;
+    dcterms:source "ISO 9000:2015, 3.2.1, organization: person or group of people that has its own functions with responsibilities, authorities and relationships to achieve its objectives (the wording is as quoted in a terminology database; the standard itself was not read)."@en .
+
+backlog:holdsRole a owl:ObjectProperty ;
+    rdfs:domain backlog:Executor ;
+    rdfs:range backlog:Role ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "holds role"@en ;
+    skos:definition "The Role (Owner, Builder) this Executor holds: who is entitled to make the decisions that name the role. Decisions, refinement events and transitions carry a Role, never a person; this relation is what turns a role into the parties behind it. It states the present holding only: who held the role when an earlier decision was made is not modelled, so a decision recorded under a role is traced to its holders as they stand now. An Executor may hold both roles and a role may be held by several Executors (a person, a team or an organisation)."@en .

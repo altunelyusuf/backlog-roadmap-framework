@@ -22,9 +22,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (ABox: controlled individuals, reference data and the live register)"@en ;
-    owl:versionIRI <http://example.org/backlog/abox/1.46.0> ;
-    owl:versionInfo "1.46.0" ;
-    owl:priorVersion <http://example.org/backlog/abox/1.45.0> , <http://example.org/backlog/abox/1.40.0> , <http://example.org/backlog/abox/1.39.0> , <http://example.org/backlog/abox/1.38.0> , <http://example.org/backlog/abox/1.37.0> , <http://example.org/backlog/abox/1.36.0> , <http://example.org/backlog/abox/1.35.0> ;
+    owl:versionIRI <http://example.org/backlog/abox/1.47.0> ;
+    owl:versionInfo "1.47.0" ;
+    owl:priorVersion <http://example.org/backlog/abox/1.46.0> , <http://example.org/backlog/abox/1.45.0> , <http://example.org/backlog/abox/1.40.0> , <http://example.org/backlog/abox/1.39.0> , <http://example.org/backlog/abox/1.38.0> , <http://example.org/backlog/abox/1.37.0> , <http://example.org/backlog/abox/1.36.0> , <http://example.org/backlog/abox/1.35.0> ;
     owl:priorVersion <http://example.org/backlog/abox/1.34.0> , <http://example.org/backlog/abox/1.33.0> , <http://example.org/backlog/abox/1.32.0> , <http://example.org/backlog/abox/1.31.0> , <http://example.org/backlog/abox/1.30.0> , <http://example.org/backlog/abox/1.29.0> , <http://example.org/backlog/abox/1.28.0> , <http://example.org/backlog/abox/1.27.0> , <http://example.org/backlog/abox/1.26.0> , <http://example.org/backlog/abox/1.25.0> , <http://example.org/backlog/abox/1.24.0> , <http://example.org/backlog/abox/1.23.0> , <http://example.org/backlog/abox/1.22.0> , <http://example.org/backlog/abox/1.21.0> , <http://example.org/backlog/abox/1.20.0> , <http://example.org/backlog/abox/1.19.0> , <http://example.org/backlog/abox/1.17.0> , <http://example.org/backlog/abox/1.16.0> , <http://example.org/backlog/abox/1.15.0> , <http://example.org/backlog/abox/1.14.0> , <http://example.org/backlog/abox/1.13.0> , <http://example.org/backlog/abox/1.12.0> , <http://example.org/backlog/abox/1.11.0> , <http://example.org/backlog/abox/1.10.0> , <http://example.org/backlog/abox/1.9.0> , <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
         <http://example.org/backlog-abox/1.2.1> ,
                      <http://example.org/backlog-abox/1.2.0> ,
@@ -1228,7 +1228,7 @@ backlog:RS_ManagerialIndependence a owl:NamedIndividual , backlog:RuleSet ;
 
 backlog:RS_FlowPointsRecorded a owl:NamedIndividual , backlog:RuleSet ;
     rdfs:label "Done work records when it started and finished, and how exactly"@en ;
-    skos:definition "Every Done item in scope carries startedAt and finishedAt, or says through flowPointAbsenceReason why it does not; a flow point written as midnight states flowPointPrecision Date; a Proposed item carries no startedAt and only a Done or Cancelled one carries a finishedAt (G115); startedAt and finishedAt each have one value (a correction replaces, never adds); and a start equal to the finish, or closer than the adopter's shortSpanThreshold, carries a shortSpanExplanation (an equal pair is the signature of an item registered after the work). Adopted by a register or by one lineage (G112); a lineage adoption binds only that lineage's work and the items it admitted, so it can start at a stated moment without judging earlier work. A RuleSet because it binds only what declared it (G89, G91). This package's own register adopts it."@en ;
+    skos:definition "Every Done item in scope carries startedAt and finishedAt, or says through flowPointAbsenceReason why it does not; a flow point written as midnight states flowPointPrecision Date; a Proposed item carries no startedAt and only a Done or Cancelled one carries a finishedAt (G115); startedAt and finishedAt each have one value (a correction replaces, never adds); and a start equal to the finish, or closer than the adopter's shortSpanThreshold, carries a shortSpanExplanation (an equal pair is the signature of an item registered after the work). Adopted by a register or by one lineage (G112); a lineage adoption binds only that lineage's work and the items it admitted, so it can start at a stated moment without judging earlier work. A RuleSet because it binds only what declared it (G89, G91). This package's own lineages adopt it themselves; the shipped data file does not adopt it for a register (G116)."@en ;
     dcterms:source "Kanban flow measures need a well-defined start and finish point (The Kanban Pocket Guide, ch. 6); ISO/IEC/IEEE 12207:2026 measurement process: a measure is to be verifiable, meaningful, actionable, timely and cost-effective. The detail standard ISO/IEC/IEEE 15939 was not read."@en .
 
 backlog:Precision_Instant a owl:NamedIndividual , backlog:FlowPointPrecision ;
@@ -5229,10 +5229,10 @@ fw:RS_SDLC_NextStoryPrioritization a backlog:RegisterSession ; backlog:sessionFo
 fw:Register backlog:adoptsRuleSet backlog:RS_LabelConvention ;
     backlog:ruleSetAdoptedAt "2026-09-10T18:00:00Z"^^xsd:dateTime .
 fw:Register backlog:adoptsRuleSet backlog:RS_LineageStatus .
-#  The register adopts the status-history and flow-point obligations, on the owner's instruction of 2026-10-14 ("all status changes should be
-#  recorded including start, stop, in progress, suspend"). Its adoption date above (2026-09-10) is the line before which finished items are exempt;
-#  from now on an item of this register that moves records the move, with its instant (G113).
-fw:Register backlog:adoptsRuleSet backlog:RS_StatusHistoryRecorded , backlog:RS_FlowPointsRecorded .
+#  The status-history and flow-point obligations are NOT adopted here (G116). A register-level adoption in this shipped data file binds every item of
+#  any graph that loads this file whole (a consumer's register, a fixture) -- measured on v1.394.0 by a consumer: 131 results of the history rules and 129 of the
+#  flow-point rules on items that were never this register's. This package's own commitment (owner's instruction of 2026-10-14) is kept where it can bind only
+#  its own work: each lineage of this package adopts both rule sets itself when it opens, which the start gate (backlog_execution_ready v1.2.0, G115) requires.
 
 #################################################################
 #  v9.85.0 (2026-09-11, brsf-session) -- EXECUTION BEGINS. Everything
@@ -6073,6 +6073,7 @@ backlog:CP_ReleasePipeline a owl:NamedIndividual , backlog:CompetencyProfile ;
 
 backlog:Executor_YusufAltunel a owl:NamedIndividual , backlog:Executor_IndividualHuman ;
     rdfs:label "Yusuf Altunel"@en ;
+    backlog:holdsRole backlog:Owner ;
     skos:definition "The framework's own owner: an IT R&D manager and ontology engineer, PhD in Computer Engineering, who rules every governance question this package records as a GovernanceRuling and has directed this package's own development throughout. No Executor_IndividualHuman individual existed for him under any name before this release (checked directly against the live register before adding one, per L-119)."@en ;
     backlog:hasCompetencyProfile backlog:CP_YusufAltunel .
 

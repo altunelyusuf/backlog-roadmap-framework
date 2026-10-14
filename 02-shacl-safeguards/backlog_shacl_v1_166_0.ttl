@@ -9,9 +9,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog/shacl/1.165.0> ;
-    owl:versionInfo "1.165.0" ;
-    owl:priorVersion <http://example.org/backlog-shapes/1.164.0> , <http://example.org/backlog-shapes/1.159.0> , <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
+    owl:versionIRI <http://example.org/backlog/shacl/1.166.0> ;
+    owl:versionInfo "1.166.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.165.0> , <http://example.org/backlog-shapes/1.164.0> , <http://example.org/backlog-shapes/1.159.0> , <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.154.0> , <http://example.org/backlog-shapes/1.153.0> , <http://example.org/backlog-shapes/1.152.0> , <http://example.org/backlog-shapes/1.151.0> , <http://example.org/backlog-shapes/1.150.0> , <http://example.org/backlog-shapes/1.149.0> , <http://example.org/backlog-shapes/1.148.0> , <http://example.org/backlog-shapes/1.147.0> , <http://example.org/backlog-shapes/1.146.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.145.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.144.0> ;
@@ -8232,4 +8232,19 @@ backlog:EqualSpanShape a sh:NodeShape ;
             FILTER ( ?f = ?s || ( BOUND ( ?th ) && ?f > ?s && ?s + ?th > ?f ) )
             FILTER NOT EXISTS { $this backlog:shortSpanExplanation ?x }
             FILTER NOT EXISTS { $this backlog:flowPointAbsenceReason ?y }
+        }""" ] .
+
+# v1.166.0 (G116): an organisation is a human team that says so; the flag is refused on anything else.
+backlog:OrganisationIsTeamShape a sh:NodeShape ;
+    sh:targetSubjectsOf backlog:isOrganisation ;
+    sh:severity sh:Violation ;
+    rdfs:label "isOrganisation is stated only on a human team (G116)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "ORG_NOT_TEAM" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G116: isOrganisation is stated on something that is not an Executor_HumanTeam. An organisation is a human team (a group of people composed through hasExecutorMember with a controller somewhere in its nesting); an individual, an agent or a federation is not one. Type it as a human team, or remove the flag." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:isOrganisation ?o .
+            FILTER NOT EXISTS { $this a backlog:Executor_HumanTeam }
         }""" ] .

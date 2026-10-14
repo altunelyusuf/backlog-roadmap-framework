@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.129.0
+# Backlog & Roadmap Semantic Framework — Standard v1.130.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -2539,3 +2539,10 @@ Behind the two recording rule sets (so only what adopted them is bound, G89):
 - The status-gap message names the skipped states.
 
 The start gate (`backlog_execution_ready` v1.2.0) asks a lineage no item of which has started whether it adopts both rule sets (itself or through its register) or states `recordingRuleSetsDeclinedReason`; a lineage already under way is not asked. An instant cannot be bounded from inside the data (the bound would be typed by the same author): the witness is the repository history, `backlog_flow_point_git_trace`, which reports finishes later than the commit that first recorded the item Done, items with two values, a finish not after its start, very short spans and midnight points, and the state paths items took in the commits. Run it on any register that has history, before adopting the rule sets and at every release; a consumer with history can find its own cases in minutes. Practice that follows: register the item when it is planned; move it with an instant read from a clock when it happens; replace, never add; explain an equal pair before committing. Analysis: `ROOT_CAUSE_ANALYSIS_an_item_registered_at_completion_with_its_times_typed_afterwards`.
+
+## The shipped data file binds nobody; organisations; roles held (v1.395.0, G116)
+
+The data file this package ships (`backlog_abox`) holds controlled individuals and the framework's own register. It adopts no item-level rule set: a register-level adoption binds every item of any graph that holds the register, so one in a file consumers load would bind their items (a consumer measured it on v1.394.0). This package's own lineages adopt `RS_StatusHistoryRecorded` and `RS_FlowPointsRecorded` themselves, which the start gate requires. `backlog_abox_neutrality_probe` holds this. A consumer that loads the file whole should load the reference part: the validator derives it by dropping the framework register's triples.
+
+A human actor is an individual (`Executor_IndividualHuman`), a team (`Executor_HumanTeam`) or an organisation (`Executor_HumanTeam` with `isOrganisation` true); `OrganisationIsTeamShape` refuses the flag on anything else. The five Executor kinds stay five: every rule about a team applies to an organisation unchanged. `holdsRole` ties an Executor to a Role (Owner, Builder); decisions carry the role, and the holders are found through it, as they stand now.
+

@@ -11260,6 +11260,16 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.395.0 — 2026-10-14 (MINOR: the shipped data file binds nobody who did not adopt; an organisation is a human team; a person holds a role — G116)
+
+Two handovers of the agentic-sdlc session. One measured that this package's own register adoption of the two recording rule sets, shipped in the data file, bound the items of a consumer that loaded the file whole (131 and 129 results). Reproduced: three results on one item.
+
+- **Rules (shapes v1.166.0, T-Box v1.131.0, data v1.47.0):** the register-level adoption is removed from the data file; this package's lineages adopt for themselves (the start gate requires it). `isOrganisation` (a boolean on a human team) and `OrganisationIsTeamShape`; `holdsRole` from Executor to Role, the framework's owner holding Owner. A subclass for organisations was built first and rejected by probe (the shapes read no subclass, so the rules skipped it).
+- **Proof:** `backlog_abox_neutrality_probe` (fails on v1.394.0) and `backlog_human_actor_kinds_probe` (fails on v1.394.0), in gate v1.50.0; one new negative-fixture case (`ORG_NOT_TEAM`).
+- **Handovers:** both answered and filed; discipline v86.0.0 (G116); Standard v1.130.0.
+
+**Unplanned work:** a consuming project's two handovers; no backlog item of this package covers them.
+
 ## v1.394.0 — 2026-10-14 (MINOR: the routes a typed history can still take are closed, and recording is part of whether work may start — G115)
 
 A handover of the agentic-systems session measured that, with both recording rule sets adopted, an item could still go from Proposed to Done by typing a plausible `T_Start` and `T_Complete`, carry a start while Proposed, hold two finishes, have an equal start and finish, and date a finish years ahead. Its register had 55 of 83 items only ever committed as Done.
