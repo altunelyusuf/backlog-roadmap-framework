@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v84.0.0
+# Lineage Operating Discipline — v85.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -3406,3 +3406,30 @@ Related: G89, G91, G112.
 
 **What is not claimed.** No consumer's register was re-run after the removal. The measured example is the reporter's planted graph and the unchanged behaviour of the order check. A defect the shape was meant to catch (deliverables recorded after the work) is caught by the order check where the history shows it, and is not caught where no history is available.
 Related: G17, G81, G90.
+
+---
+
+## G115 — The routes a typed history can still take are closed, and recording is part of whether work may start
+
+*(Opened by a handover of the agentic-systems session, 2026-10-14, measured on its own register and on planted copies of it. Probes C, F, H and I were reproduced here on v1.393.0 (`backlog_recording_integrity_probe` fails there) before anything was built; analysis in `ROOT_CAUSE_ANALYSIS_an_item_registered_at_completion_with_its_times_typed_afterwards_v1_0_0.md`.)*
+
+**Q1 — what was true.** With `RS_StatusHistoryRecorded` and `RS_FlowPointsRecorded` adopted, G113 refused an item with no moves and a chain with a gap. It did not refuse: a first move that leaves Ready (a plausible `T_Start` and `T_Complete` made Proposed jump to Done, probe C); a Proposed item carrying a start and a finish (H); two `finishedAt` on one item when no move disagreed (I); an equal start and finish, which G112 Q5 had left unremarked (F); a finish or start in 2031 (G, L). Two further facts: the rule sets were opt-in, so a lineage could open and work for a month without them; and the gap message said that "a move" went unrecorded without saying which.
+
+**Q2 — closed, behind the rule sets that already exist (G89: nothing binds a register or lineage that did not adopt them).**
+1. `FirstMoveLeavesProposedShape` (`RS_StatusHistoryRecorded`): the earliest recorded move leaves Proposed, unless `statusHistoryAbsenceReason` says the item was under way when registered. This makes the Ready gate unskippable for any item with a history, and an item created already In Progress is possible only with a stated reason. Closes C.
+2. `FlowPointsOnlyWhenStartedShape` (`RS_FlowPointsRecorded`): a Proposed item carries no `startedAt`; only a Done or Cancelled item carries a `finishedAt`. A Ready or Refined item may keep `startedAt` after a return (`T_Return`), so that case is not refused. Closes H.
+3. `SingleValuedFlowPointShape` (`RS_FlowPointsRecorded`): two different values of `startedAt` or of `finishedAt` are a violation on their own (one instant written in two zones is one value). A correction replaces a value; it does not add one. Closes I independently of moves.
+4. `EqualSpanShape` (`RS_FlowPointsRecorded`): an equal start and finish, or a span shorter than the adopter's `shortSpanThreshold` (a duration; none is fixed by the framework), needs `shortSpanExplanation` or `flowPointAbsenceReason`. G112 Q5's reasoning stands (a task done within a second is possible); what changes is that the equal pair can no longer pass unexplained. Closes F.
+5. The gap message names the skipped states ("leaves X, but the previous recorded move entered Y").
+6. Start gate: `backlog_execution_ready` v1.2.0 asks, for a lineage no item of which has started, whether it adopts both recording rule sets (itself or through its register) or states `recordingRuleSetsDeclinedReason`. Behind the gate rather than the validator because a rule set binds only what adopted it; a lineage that has begun work is not asked (no retroactive block). This is the default for new work the handover asked for: a lineage cannot start its first item without having decided.
+
+**Q3 — considered and not built as a shape.**
+- *State derived from moves (their option 2).* Already so where the rule set is adopted: `StatusUnrecordedShape` requires a move into any state other than Proposed, and `StateHistoryShape` (L2) makes the state equal the destination of the last move. An item with no moves is therefore Proposed and nothing else; the probes show A and B caught.
+- *A closed table of permitted moves (option 8).* The `StateTransition` table already is that; a move not in it is not a `StateTransition`, and a move that leaves a state the previous one did not enter is the gap rule. What was missing was the first move (done) and the message (done).
+
+**Q4 — the clock bound is declined as a shape, and answered by the history.** The proposal bounds an instant by the latest `RegisterSession` instant or a stated "register read at" instant. Both are values typed by the same session that types the other instants: a session that types 2031 on a finish types the same on the bound, and the check then holds a typed number against a typed number. A bound that the author can move proves nothing. The witness that does not depend on the author is the git history: the author date of the commit that first recorded the item Done is the latest instant the finish can have, whatever the session believed. `backlog_flow_point_git_trace` v1.0.0 (from the handover's comparison script; instants without a zone are read as UTC where the script stopped on them) reports finishes later than that commit, items with two values, a finish not after its start, spans under two minutes and midnight points, plus the state paths items took in the commits. It runs as a gate over this package's own registers (no finish later than its commit; no two values; the other classes are signals, printed) and as a tool for any consumer with history; `--strict` makes the signals fail too. Probe `backlog_flow_point_git_trace_probe` builds a throw-away repository with known commit dates. Closes G and L where a history exists; where none exists the fault stays unseen, and the tool says it was not run.
+
+**Q5 — what the second case shows.** The package's own archive register (298 items): 288 first seen in a commit as Done, 10 as Cancelled, none finished after its commit, none with two values, 7 with a finish not after its start (5 equal), 11 midnights. The comparison is a lower bound for the first cause (the archive was assembled in bulk). The class is not specific to one project, and the package's own register was not free of it.
+
+**What is not claimed.** A git author date is the working session's clock: it shows an impossible date, never a true one. The proposals are the reporter's; the choice between them is this ruling. Other live projects cannot be identified from this package, so the notice to consuming projects is a statement in the Standard and the changelog and the tool itself, not a list of recipients. The reporter's script stopped on instants without a zone; that is reported to it.
+Related: G89, G112, G113, G114.

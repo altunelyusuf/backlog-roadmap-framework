@@ -2,7 +2,8 @@
 @prefix ex:      <http://example.org/execution-ready-neg#> .
 @prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
 
-# fixture_execution_ready_negative v1.0.0 (backlog_execution_ready v1.0.0; an adopting project handover,
+# fixture_execution_ready_negative v1.1.0 (backlog_execution_ready v1.2.0, G115: the recording rule sets are part of the start question;
+# v1.0.0 was backlog_execution_ready v1.0.0; an adopting project handover,
 # lineage2-executed-without-backlog-stage). NEGATIVE: a minimal graph, not a SHACL-complete register.
 # The start gate is positive: it passes only when the facts that must exist before work starts do exist.
 #
@@ -16,7 +17,7 @@
 #  Lin_Retracted  the Backlog output is retracted                                         NOT READY
 #  Lin_Frozen     five active outputs, an item, frozen by an unanswered finding           NOT READY
 ex:M a backlog:Mission .
-ex:Lin_Ready a backlog:Lineage ; rdfs:label "Lin_Ready"@en ; backlog:lineageOrdinal 1 ; backlog:lineageArchived false .
+ex:Lin_Ready a backlog:Lineage ; rdfs:label "Lin_Ready"@en ; backlog:lineageOrdinal 1 ; backlog:lineageArchived false ; backlog:adoptsRuleSet backlog:RS_StatusHistoryRecorded , backlog:RS_FlowPointsRecorded .
 ex:O_Lin_Ready_Mission a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Mission ; backlog:belongsToLineage ex:Lin_Ready ; backlog:closedAtCommit "c" ; backlog:hasStateDigest "dLin_ReadyMission" .
 ex:O_Lin_Ready_Scope a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Scope ; backlog:belongsToLineage ex:Lin_Ready ; backlog:consumesOutput ex:O_Lin_Ready_Mission ; backlog:closedAtCommit "c" ; backlog:hasStateDigest "dLin_ReadyScope" .
 ex:O_Lin_Ready_Goal a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Goal ; backlog:belongsToLineage ex:Lin_Ready ; backlog:consumesOutput ex:O_Lin_Ready_Scope ; backlog:closedAtCommit "c" ; backlog:hasStateDigest "dLin_ReadyGoal" .
@@ -60,3 +61,35 @@ ex:AC_S_F a backlog:AcceptanceCriterion .
 ex:PE_S_F a backlog:PlanningEvent ; backlog:plansItem ex:S_F .
 
 <http://example.org/execution-ready-neg#> backlog:hasExpectedPolarity backlog:Polarity_Negative .
+
+#  v1.1.0 (G115): the recording rule sets. Lin_Ready adopts both (so it stays READY). The three below each hold one Ready, groomed item.
+#  Lin_Unrecorded  adopts neither, states no reason, no item has started   NOT READY (both rule sets named, adopted by: nobody)
+#  Lin_Declined    adopts neither, states recordingRuleSetsDeclinedReason  READY
+#  Lin_Underway    adopts neither, an item is already In Progress          READY (not retroactively blocked)
+ex:Lin_Unrecorded a backlog:Lineage ; rdfs:label "Lin_Unrecorded"@en ; backlog:lineageOrdinal 5 ; backlog:lineageArchived false .
+ex:O_Lin_Unrecorded_Mission a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Mission ; backlog:belongsToLineage ex:Lin_Unrecorded ; backlog:closedAtCommit "c" ; backlog:hasStateDigest "dLin_UnrecordedMission" .
+ex:O_Lin_Unrecorded_Scope a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Scope ; backlog:belongsToLineage ex:Lin_Unrecorded ; backlog:consumesOutput ex:O_Lin_Unrecorded_Mission ; backlog:closedAtCommit "c" ; backlog:hasStateDigest "dLin_UnrecordedScope" .
+ex:O_Lin_Unrecorded_Goal a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Goal ; backlog:belongsToLineage ex:Lin_Unrecorded ; backlog:consumesOutput ex:O_Lin_Unrecorded_Scope ; backlog:closedAtCommit "c" ; backlog:hasStateDigest "dLin_UnrecordedGoal" .
+ex:O_Lin_Unrecorded_Objective a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Objective ; backlog:belongsToLineage ex:Lin_Unrecorded ; backlog:consumesOutput ex:O_Lin_Unrecorded_Goal ; backlog:closedAtCommit "c" ; backlog:hasStateDigest "dLin_UnrecordedObjective" .
+ex:O_Lin_Unrecorded_Backlog a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage ex:Lin_Unrecorded ; backlog:consumesOutput ex:O_Lin_Unrecorded_Objective ; backlog:closedAtCommit "c" ; backlog:hasStateDigest "dLin_UnrecordedBacklog" .
+ex:S_Lin_Unrecorded a backlog:Story ; backlog:hasIdentifier "S_Lin_Unrecorded" ; backlog:hasState backlog:Ready ; backlog:belongsToLineage ex:Lin_Unrecorded ; backlog:hasAcceptanceCriterion ex:AC_S_Lin_Unrecorded ; backlog:hasNoApplicableConcern "None applies: fixture." .
+ex:AC_S_Lin_Unrecorded a backlog:AcceptanceCriterion .
+ex:PE_S_Lin_Unrecorded a backlog:PlanningEvent ; backlog:plansItem ex:S_Lin_Unrecorded .
+ex:Lin_Declined a backlog:Lineage ; rdfs:label "Lin_Declined"@en ; backlog:lineageOrdinal 6 ; backlog:lineageArchived false ; backlog:recordingRuleSetsDeclinedReason "A one-off migration; its times come from the migration log." .
+ex:O_Lin_Declined_Mission a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Mission ; backlog:belongsToLineage ex:Lin_Declined ; backlog:closedAtCommit "c" ; backlog:hasStateDigest "dLin_DeclinedMission" .
+ex:O_Lin_Declined_Scope a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Scope ; backlog:belongsToLineage ex:Lin_Declined ; backlog:consumesOutput ex:O_Lin_Declined_Mission ; backlog:closedAtCommit "c" ; backlog:hasStateDigest "dLin_DeclinedScope" .
+ex:O_Lin_Declined_Goal a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Goal ; backlog:belongsToLineage ex:Lin_Declined ; backlog:consumesOutput ex:O_Lin_Declined_Scope ; backlog:closedAtCommit "c" ; backlog:hasStateDigest "dLin_DeclinedGoal" .
+ex:O_Lin_Declined_Objective a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Objective ; backlog:belongsToLineage ex:Lin_Declined ; backlog:consumesOutput ex:O_Lin_Declined_Goal ; backlog:closedAtCommit "c" ; backlog:hasStateDigest "dLin_DeclinedObjective" .
+ex:O_Lin_Declined_Backlog a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage ex:Lin_Declined ; backlog:consumesOutput ex:O_Lin_Declined_Objective ; backlog:closedAtCommit "c" ; backlog:hasStateDigest "dLin_DeclinedBacklog" .
+ex:S_Lin_Declined a backlog:Story ; backlog:hasIdentifier "S_Lin_Declined" ; backlog:hasState backlog:Ready ; backlog:belongsToLineage ex:Lin_Declined ; backlog:hasAcceptanceCriterion ex:AC_S_Lin_Declined ; backlog:hasNoApplicableConcern "None applies: fixture." .
+ex:AC_S_Lin_Declined a backlog:AcceptanceCriterion .
+ex:PE_S_Lin_Declined a backlog:PlanningEvent ; backlog:plansItem ex:S_Lin_Declined .
+ex:Lin_Underway a backlog:Lineage ; rdfs:label "Lin_Underway"@en ; backlog:lineageOrdinal 7 ; backlog:lineageArchived false .
+ex:O_Lin_Underway_Mission a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Mission ; backlog:belongsToLineage ex:Lin_Underway ; backlog:closedAtCommit "c" ; backlog:hasStateDigest "dLin_UnderwayMission" .
+ex:O_Lin_Underway_Scope a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Scope ; backlog:belongsToLineage ex:Lin_Underway ; backlog:consumesOutput ex:O_Lin_Underway_Mission ; backlog:closedAtCommit "c" ; backlog:hasStateDigest "dLin_UnderwayScope" .
+ex:O_Lin_Underway_Goal a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Goal ; backlog:belongsToLineage ex:Lin_Underway ; backlog:consumesOutput ex:O_Lin_Underway_Scope ; backlog:closedAtCommit "c" ; backlog:hasStateDigest "dLin_UnderwayGoal" .
+ex:O_Lin_Underway_Objective a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Objective ; backlog:belongsToLineage ex:Lin_Underway ; backlog:consumesOutput ex:O_Lin_Underway_Goal ; backlog:closedAtCommit "c" ; backlog:hasStateDigest "dLin_UnderwayObjective" .
+ex:O_Lin_Underway_Backlog a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage ex:Lin_Underway ; backlog:consumesOutput ex:O_Lin_Underway_Objective ; backlog:closedAtCommit "c" ; backlog:hasStateDigest "dLin_UnderwayBacklog" .
+ex:S_Lin_Underway a backlog:Story ; backlog:hasIdentifier "S_Lin_Underway" ; backlog:hasState backlog:InProgress ; backlog:belongsToLineage ex:Lin_Underway ; backlog:hasAcceptanceCriterion ex:AC_S_Lin_Underway ; backlog:hasNoApplicableConcern "None applies: fixture." .
+ex:AC_S_Lin_Underway a backlog:AcceptanceCriterion .
+ex:PE_S_Lin_Underway a backlog:PlanningEvent ; backlog:plansItem ex:S_Lin_Underway .

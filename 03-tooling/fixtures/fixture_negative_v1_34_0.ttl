@@ -4224,3 +4224,13 @@ ex:ST_4 a backlog:TransitionEvent ; backlog:transitionedItem ex:STATUS_DATE_AS_M
 ex:STATUS_FLOW_MISMATCH a backlog:Task ; backlog:hasState backlog:InProgress ; backlog:startedAt "2026-10-14T07:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
 ex:ST_5 a backlog:TransitionEvent ; backlog:transitionedItem ex:STATUS_FLOW_MISMATCH ; backlog:viaTransition backlog:T_Refine ; backlog:transitionedAt "2026-10-14T08:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
 ex:ST_6 a backlog:TransitionEvent ; backlog:transitionedItem ex:STATUS_FLOW_MISMATCH ; backlog:viaTransition backlog:T_Start ; backlog:transitionedAt "2026-10-14T09:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+
+# v1.34.0 (G115): the routes G113 left open. STATUS_FIRST_MOVE has a history that begins with T_Start (Ready to In Progress): the item was never Ready -> FirstMoveLeavesProposedShape.
+# FLOW_UNSTARTED is Proposed and carries a startedAt -> FlowPointsOnlyWhenStartedShape. FLOW_TWO_VALUES has two different finishedAt -> SingleValuedFlowPointShape.
+# FLOW_EQUAL_SPAN starts and finishes at one instant and states no cause -> EqualSpanShape. The silent controls are in backlog_recording_integrity_probe.
+ex:STATUS_FIRST_MOVE a backlog:Task ; backlog:hasState backlog:InProgress ; backlog:startedAt "2026-10-14T09:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+ex:ST_7 a backlog:TransitionEvent ; backlog:transitionedItem ex:STATUS_FIRST_MOVE ; backlog:viaTransition backlog:T_Start ; backlog:transitionedAt "2026-10-14T09:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+ex:FLOW_UNSTARTED a backlog:Task ; backlog:hasState backlog:Proposed ; backlog:startedAt "2026-10-14T09:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+ex:FLOW_TWO_VALUES a backlog:Task ; backlog:hasState backlog:Done ; backlog:startedAt "2026-10-14T09:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+    backlog:finishedAt "2026-10-14T10:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> , "2026-10-14T11:30:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+ex:FLOW_EQUAL_SPAN a backlog:Task ; backlog:hasState backlog:Done ; backlog:startedAt "2026-10-14T09:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ; backlog:finishedAt "2026-10-14T09:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .

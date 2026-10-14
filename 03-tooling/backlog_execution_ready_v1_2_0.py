@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_execution_ready v1.1.0 -- may work start on this lineage, and on this item?  (the positive question)
+"""backlog_execution_ready v1.2.0 -- may work start on this lineage, and on this item?  (the positive question)
 
 WHY THIS EXISTS. Every gate this package ships is negative: it looks for what went wrong among the items that exist.
 A lineage whose work is executed outside the register has no items, so every negative gate passes over the empty set.
@@ -13,6 +13,8 @@ LINEAGE (always):
   - it is not frozen by an unanswered bypass or thrash
   - every stage output Mission..Backlog exists and none is retracted        (examined: the outputs)
   - it holds at least one work item                                         (examined: the item count, printed)
+  - while no item of it has started, it records its work: RS_StatusHistoryRecorded and RS_FlowPointsRecorded are adopted by
+    the lineage or by its register, or the lineage states recordingRuleSetsDeclinedReason   (G115; examined: the adopters)
 ITEM (--item NAME), the same facts the after-the-fact shapes demand once work has happened, asked before it does:
   - the item belongs to this lineage, or a rebuilt active Backlog output admits it as pre-lineage
   - its state is Ready or InProgress (Ready is what grooming earns)
@@ -20,6 +22,10 @@ ITEM (--item NAME), the same facts the after-the-fact shapes demand once work ha
   - a Story, Epic or Initiative states its applicable design concerns, or that none applies
   - a Story has been taken in by a PlanningEvent
 
+v1.2.0 (G115): a lineage that has not started work either adopts the two recording rule sets (itself or through its register) or
+states why not. It is the start gate, not the validator, that asks: the rule sets bind only what adopted them (G89), so a lineage
+that never adopted them is not wrong afterwards, but it must not BEGIN work without having decided. A lineage with an item already
+In Progress, Suspended or Done is not asked (it is not retroactively blocked); it can still adopt at a stated moment (G112).
 v1.1.0: the decision is a function, evaluate(graph, lineage, item, emit), so the work guard asks it without re-parsing the
 register per item. Output and exit codes are unchanged from v1.0.0.
 
@@ -70,6 +76,23 @@ def evaluate(g, lineage, item=None, emit=print):
     admitted = {s for s in g.subjects(B.admittedByOutput, None) if any(o in outs["Stage_Backlog"] for o in g.objects(s, B.admittedByOutput))}
     n_items = len(set(items) | admitted)
     check(n_items > 0, f"the lineage holds at least one work item (examined: {n_items})")
+    everyone = set(items) | admitted
+    started = [s for s in everyone if g.value(s, B.hasState) in (B.InProgress, B.Suspended, B.Done)]
+    if started:
+        emit(f"  ok    recording rule sets: not asked, work has already started (examined: {len(started)} started item(s); G89 -- no retroactive block)")
+    else:
+        why = g.value(L, B.recordingRuleSetsDeclinedReason)
+        registers = [r for r in set(g.subjects(B.adoptsRuleSet, None)) if (r, RDF.type, B.Lineage) not in g]
+        for rs in (B.RS_StatusHistoryRecorded, B.RS_FlowPointsRecorded):
+            by = []
+            if (L, B.adoptsRuleSet, rs) in g:
+                by.append("the lineage")
+            if any((r, B.adoptsRuleSet, rs) in g for r in registers):
+                by.append("its register")
+            check(bool(by) or why is not None,
+                  f"{str(rs).rsplit('#', 1)[-1]} is adopted by the lineage or its register, or the lineage states recordingRuleSetsDeclinedReason "
+                  f"(adopted by: {', '.join(by) or 'nobody'}; declined: {'yes' if why is not None else 'no'}). Work that begins unrecorded cannot "
+                  f"be dated afterwards: adopt the rule set before the first item starts, or say why not (G115)")
     if item is not None:
         name = item
         X = find(g, name)

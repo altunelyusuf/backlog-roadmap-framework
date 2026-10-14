@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.128.0
+# Backlog & Roadmap Semantic Framework — Standard v1.129.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -2527,3 +2527,15 @@ A rule set adopted by a register binds the whole register, from `ruleSetAdoptedA
 ## Status changes are an obligation (v1.392.0, G113)
 
 Every move of a work item is a `TransitionEvent` with the instant it happened. `RS_StatusHistoryRecorded`, adopted by a register or a lineage, requires an item that has left Proposed to have a recorded move into its current state, an item that has started to have a recorded move into In Progress, the moves of an item to chain without a gap, every move to be stamped with an instant (not a date written as midnight), and `startedAt` and `finishedAt` to be the moments of the first move into In Progress and the last move into Done. `Suspended` is a lifecycle state of the work that has started and was deliberately paused (an `OptionalLifecycleState`, so a workflow written before it stays consistent), entered by `T_Suspend` and left by `T_Resume` or `T_WithdrawSuspended`. An item that moved before the obligation began says so through `statusHistoryAbsenceReason`.
+
+## Recording: the routes a typed history can still take, and the start gate (v1.394.0, G115)
+
+Behind the two recording rule sets (so only what adopted them is bound, G89):
+
+- `FirstMoveLeavesProposedShape` (`RS_StatusHistoryRecorded`): the earliest recorded move of an item leaves Proposed, unless `statusHistoryAbsenceReason` says the item was under way when it was registered. An item cannot jump from Proposed to In Progress by typing a plausible `T_Start`.
+- `FlowPointsOnlyWhenStartedShape` (`RS_FlowPointsRecorded`): a Proposed item carries no `startedAt`; only a Done or Cancelled item carries a `finishedAt` (a Ready item may keep `startedAt` after `T_Return`).
+- `SingleValuedFlowPointShape`: `startedAt` and `finishedAt` have one value each. A correction replaces a value; it never adds one beside it.
+- `EqualSpanShape`: a start equal to the finish, or closer than the adopter's `shortSpanThreshold` (a duration; none is fixed by the framework), needs `shortSpanExplanation` or `flowPointAbsenceReason`. An equal pair is a signal to find the cause, never to pass.
+- The status-gap message names the skipped states.
+
+The start gate (`backlog_execution_ready` v1.2.0) asks a lineage no item of which has started whether it adopts both rule sets (itself or through its register) or states `recordingRuleSetsDeclinedReason`; a lineage already under way is not asked. An instant cannot be bounded from inside the data (the bound would be typed by the same author): the witness is the repository history, `backlog_flow_point_git_trace`, which reports finishes later than the commit that first recorded the item Done, items with two values, a finish not after its start, very short spans and midnight points, and the state paths items took in the commits. Run it on any register that has history, before adopting the rule sets and at every release; a consumer with history can find its own cases in minutes. Practice that follows: register the item when it is planned; move it with an instant read from a clock when it happens; replace, never add; explain an equal pair before committing. Analysis: `ROOT_CAUSE_ANALYSIS_an_item_registered_at_completion_with_its_times_typed_afterwards`.

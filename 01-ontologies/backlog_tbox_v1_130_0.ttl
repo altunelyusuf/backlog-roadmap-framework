@@ -18,9 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.129.0> ;
-    owl:versionInfo "1.129.0" ;
-    owl:priorVersion <http://example.org/backlog/1.125.0> , <http://example.org/backlog/1.124.0> , <http://example.org/backlog/1.123.0> , <http://example.org/backlog/1.122.0> ;
+    owl:versionIRI <http://example.org/backlog/1.130.0> ;
+    owl:versionInfo "1.130.0" ;
+    owl:priorVersion <http://example.org/backlog/1.129.0> , <http://example.org/backlog/1.125.0> , <http://example.org/backlog/1.124.0> , <http://example.org/backlog/1.123.0> , <http://example.org/backlog/1.122.0> ;
     owl:priorVersion <http://example.org/backlog/1.121.0> , <http://example.org/backlog/1.120.0> , <http://example.org/backlog/1.119.0> , <http://example.org/backlog/1.118.0> , <http://example.org/backlog/1.117.0> ;
     owl:priorVersion <http://example.org/backlog/1.116.0> ;
     owl:priorVersion <http://example.org/backlog/1.115.0> ;
@@ -7091,3 +7091,28 @@ backlog:overridesCompetency a owl:ObjectProperty ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "overrides competency"@en ;
     skos:definition "Names the one specific Competency a GovernanceRuling's competency-match override excuses, when that ruling's enforcedByShape is CompetencyMatchShape. OWNER RULING (2026-10-11), resolving the granularity v1.379.0 flagged and left open: an override is scoped per missing Competency, never to a whole WorkItem at once -- a single recorded GovernanceRuling must never silently clear every requiresCompetency gap a WorkItem carries. CompetencyMatchShape now requires, for each specific gap, a GovernanceRuling whose overrideAppliesToWorkItem names this WorkItem AND whose overridesCompetency names this exact missing Competency; a ruling covering the same item but a different Competency does not satisfy a gap it was never written against, so a WorkItem requiring several Competencies not covered by its responsible Executor needs its own excusing fact per gap -- either one GovernanceRuling naming every one of those Competencies via a repeated overridesCompetency (the property carries no maxCount), or a separate ruling per gap, whichever the owner's own decision record actually was. Builds on the existing GovernanceRuling class exactly as overrideAppliesToWorkItem already does, rather than a new waiver class, per L-119 (consolidate before creating)."@en .
+
+#################################################################
+#  v1.130.0 (G115) -- explanations that an equal or very short span, and a lineage that records nothing, must carry
+#################################################################
+
+backlog:shortSpanExplanation a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:WorkItem ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "short span explanation"@en ;
+    skos:definition "Why this item's startedAt equals its finishedAt, or lies closer to it than the adopter's shortSpanThreshold. Where RS_FlowPointsRecorded is adopted, an equal or very short span is a signal to find the cause, not a value to pass: an equal pair is the signature of an item registered after the work with one instant typed twice. State what happened, or the item is refused."@en .
+
+backlog:shortSpanThreshold a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:Backlog backlog:Lineage ) ] ;
+    rdfs:range xsd:dayTimeDuration ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "short span threshold"@en ;
+    skos:definition "A duration, stated by a register or lineage that adopts RS_FlowPointsRecorded: an item in its scope whose start and finish lie closer than this needs shortSpanExplanation. Without it only an exactly equal pair needs one. The framework fixes no value: what is too short is the adopter's knowledge of its own work."@en .
+
+backlog:recordingRuleSetsDeclinedReason a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:Lineage ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "recording rule sets declined reason"@en ;
+    skos:definition "Why this lineage, which has not started work, adopts neither RS_StatusHistoryRecorded nor RS_FlowPointsRecorded (itself or through its register). The start gate refuses a lineage that begins work without recording its status changes and its start and finish unless it states this; the refusal is a statement, not a veto, and binds only lineages whose work has not started (G89)."@en .

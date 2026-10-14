@@ -16,6 +16,7 @@
 # v1.29.0 (Lineage 19, DC-S04): a third probe runs every time: the public copy is cut by each module's declared audience and stops with an error when it cannot be sure (backlog_public_cut_probe).
 # v1.28.0 (Lineage 19, DC-S01 and DC-S02): two probes run every time: the closure-report rules are shown firing on planted faults and silent on corrected twins (backlog_closure_shapes_probe), and the archive tool's refusals are drilled on planted lineages (backlog_archive_drill). A probe that cannot be found stops the gate.
 # v1.44.0 (G110): the Lineage 19 probes loop also runs backlog_competency_tree_probe (the closed competency tree: every skill listed and defined, one parent each, three levels at most, a source on every skill added since v1.125.0; five planted faults each caught).
+# v1.49.0 (G115): the Lineage 19 probes loop also runs backlog_recording_integrity_probe (a first move leaves Proposed, flow points belong to started work, one value each, an equal pair is explained) and backlog_flow_point_git_trace_probe; a new section compares this package's own registers with the commits that recorded them (no finish later than its commit, no two values for one point).
 # v1.48.0 (G114): the Lineage 19 probes loop also runs backlog_scope_order_probe (no shape judges the order of two stages from the text of two commit names).
 # v1.47.0 (G113): the Lineage 19 probes loop also runs backlog_status_history_probe (every status change is a recorded move with an instant, the chain has no gap, the flow points are the moments of the moves; a workflow written before Suspended stays consistent).
 # v1.46.0 (G112): the Lineage 19 probes loop also runs backlog_verification_scope_probe (an adoption binds the scope it was declared for: the register, or one lineage and the items its output admitted; a verification threshold by integrity level; the flow-point rule set).
@@ -664,7 +665,7 @@ echo "== Lineage 19 probes — each rule fires on a planted fault and each refus
 # v1.37.0: each probe prints its own --deps (it alone knows what it reads) and is stamped on exactly that; one that
 # never changed does not re-run just because something ELSEWHERE in the gate did. A run that does happen runs ONCE
 # (v1.36.0 and earlier ran every probe twice here: once piping to grep, once thrown away for its exit code).
-for PROBE in backlog_closure_shapes_probe backlog_archive_drill backlog_public_cut_probe backlog_governance_mitigations_probe backlog_release_tool_probe backlog_stamp_key_probe backlog_sparql_memo_probe backlog_ordinal_check_probe backlog_archived_digest_check_probe backlog_release_item_check_probe backlog_package_activation_drift_classifier_probe backlog_lineage_concurrency_probe backlog_consumer_archive_probe backlog_vocabulary_probe backlog_state_evidence_probe backlog_evidence_bridge_probe backlog_timeline_witness_probe backlog_competency_inheritance_probe backlog_verifier_independence_probe backlog_close_preview_probe backlog_competency_tree_probe backlog_agent_roles_probe backlog_verification_scope_probe backlog_status_history_probe backlog_scope_order_probe; do
+for PROBE in backlog_closure_shapes_probe backlog_archive_drill backlog_public_cut_probe backlog_governance_mitigations_probe backlog_release_tool_probe backlog_stamp_key_probe backlog_sparql_memo_probe backlog_ordinal_check_probe backlog_archived_digest_check_probe backlog_release_item_check_probe backlog_package_activation_drift_classifier_probe backlog_lineage_concurrency_probe backlog_consumer_archive_probe backlog_vocabulary_probe backlog_state_evidence_probe backlog_evidence_bridge_probe backlog_timeline_witness_probe backlog_competency_inheritance_probe backlog_verifier_independence_probe backlog_close_preview_probe backlog_competency_tree_probe backlog_agent_roles_probe backlog_verification_scope_probe backlog_status_history_probe backlog_scope_order_probe backlog_recording_integrity_probe backlog_flow_point_git_trace_probe; do
   PF="$(ls "$HERE"/${PROBE}_v*.py 2>/dev/null | sort -V | tail -1 || true)"
   if [ -z "$PF" ]; then echo "  ABORT: $PROBE not found. A probe that is missing proves nothing."; exit 3; fi
   PKEY="$(python3 "$MERKLE" key $(python3 "$PF" --deps))"
@@ -680,6 +681,29 @@ for PROBE in backlog_closure_shapes_probe backlog_archive_drill backlog_public_c
     echo "  $PROBE FAILED"; FAILED=1
   fi
 done
+
+echo
+echo "== Flow points against the commits that recorded them (G115) =="
+# A commit time is the latest instant a change can have been made; a finish later than the commit that first recorded the item Done is impossible, and two values for
+# one point are a correction that added instead of replaced. Neither can be seen in the data alone, so the witness is the history (backlog_flow_point_git_trace).
+GTR="$(ls "$HERE"/backlog_flow_point_git_trace_v*.py 2>/dev/null | sort -V | tail -1 || true)"
+GROOT="$(git -C "$PKG" rev-parse --show-toplevel 2>/dev/null || true)"
+if [ -z "$GTR" ]; then echo "  ABORT: backlog_flow_point_git_trace not found."; exit 3; fi
+if [ -z "$GROOT" ]; then
+  echo "  NOT RUN — this copy is not a git work tree, so there is no history to compare with."
+else
+  PKGREL="$(python3 -c 'import os,sys;print(os.path.relpath(sys.argv[1],sys.argv[2]))' "$PKG" "$GROOT")"
+  for REGF in "$PKG"/01-ontologies/backlog_abox_v*.ttl "$PKG"/01-ontologies/archive/backlog_framework_archive_abox_v*.ttl; do
+    [ -f "$REGF" ] || continue
+    REL="$(python3 -c 'import os,sys;print(os.path.relpath(sys.argv[1],sys.argv[2]))' "$REGF" "$GROOT")"
+    # the history is read under the newest name git knows at HEAD (a release renames the file before it is committed)
+    HEADREL="$(git -C "$GROOT" ls-tree -r --name-only HEAD -- "$(dirname "$REL")" 2>/dev/null | grep -E "/$(basename "$REGF" | sed -E 's/_v[0-9]+_[0-9]+_[0-9]+\.ttl$//')_v[0-9]+_[0-9]+_[0-9]+\.ttl$" | sort -V | tail -1 || true)"
+    [ -n "$HEADREL" ] || HEADREL="$REL"
+    OUT="$(python3 "$GTR" "$GROOT" "$HEADREL" "$REGF" 2>&1)"; RC=$?
+    printf '%s\n' "$OUT" | grep -E "^(future_finish|two_values|VERDICT)" | sed "s|^|  $(basename "$REGF") |"
+    if [ "$RC" -ne 0 ]; then echo "  FAILED — $(basename "$REGF") has a finish later than the commit that recorded it Done, or two values for one flow point."; FAILED=1; fi
+  done
+fi
 
 echo
 echo "== Archival finder — achieved lineages are found, and archiving is the next activity =="

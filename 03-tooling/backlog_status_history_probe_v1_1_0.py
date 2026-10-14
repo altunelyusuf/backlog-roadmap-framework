@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_status_history_probe v1.0.0 -- re-runnable proof of the status-history obligation (shapes v1.163.0, G113).
+"""backlog_status_history_probe v1.1.0 -- re-runnable proof of the status-history obligation (shapes v1.163.0, G113).
 
 Each scenario is a tiny graph judged by the CURRENT validator; the probe reads only the named shape's own message.
   Unrecorded     fires: In Progress with no recorded move; Suspended with no recorded move   silent: Proposed with no move; a stated absence reason; recorded move into the current state
@@ -10,6 +10,7 @@ Each scenario is a tiny graph judged by the CURRENT validator; the probe reads o
                  silent: both equal the moves
   Scope          silent: the rule set not adopted; a lineage adopts and the item belongs to another lineage
   Workflow       silent: a workflow written before Suspended (it covers the six old states only) is not made inconsistent by the new state
+v1.1.0 (G115): the gap message names the skipped states (leaves X, previous move entered Y); the probe asserts the names.
 Exit 0 when every expectation holds, 1 otherwise.
 """
 import glob, os, re, subprocess, sys, tempfile
@@ -38,7 +39,7 @@ def item(state, start=None, fin=None, why=None, lineage=None):
     return t + " .\n"
 UN, NS, GAP, MOM, MIS = "no recorded move (TransitionEvent) enters its current state", "no recorded move enters In Progress", "leaves a state that the previous recorded move did not enter", "is stamped exactly midnight", "differs from the instant of its first recorded move into In Progress, or its finishedAt"
 UN, MIS = "G113: this work item has left Proposed", "G113: this work item's startedAt is missing"
-NS, GAP, MOM = "G113: this work item is In Progress, Suspended or Done but no recorded move", "G113: a recorded move of this work item leaves a state", "G113: a recorded move of this work item is stamped exactly midnight"
+NS, GAP, MOM = "G113: this work item is In Progress, Suspended or Done but no recorded move", "G113: a recorded move of this work item leaves http://example.org/backlog#Ready, but the previous recorded move entered http://example.org/backlog#Refined", "G113: a recorded move of this work item is stamped exactly midnight"
 S1, S2, S3, S4 = D("08:00:00"), D("09:30:00"), D("11:00:00"), D("13:00:00")
 CHAIN_START = ev(1, "T_Refine", S1) + ev(3, "T_Start", S3)
 WF = "x:Wf a backlog:Workflow ; backlog:hasTransition backlog:T_Refine , backlog:T_RefinedToReady , backlog:T_Start , backlog:T_Complete , backlog:T_Return , backlog:T_Defer , backlog:T_WithdrawProposed , backlog:T_WithdrawReady , backlog:T_WithdrawInProgress , backlog:T_Decompose .\n"

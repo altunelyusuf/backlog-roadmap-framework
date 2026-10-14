@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_release_tool_probe v1.3.0 -- the release tool refuses what it must refuse and does what it says (G99 release A; OE rule R4).
+"""backlog_release_tool_probe v1.3.1 -- the release tool refuses what it must refuse and does what it says (G99 release A; OE rule R4).
 
 Each case is a fact about backlog_release_tool, shown on a throwaway folder, and each failing case must really fail:
   1 a header bump renames the file and moves versionInfo, versionIRI and priorVersion (the old version is added to the prior list);
@@ -11,6 +11,7 @@ Each case is a fact about backlog_release_tool, shown on a throwaway folder, and
   6 (v1.1.0) deletion_args writes the named paths one per line behind --expect-delete, and nothing when no path is named;
   7 (v1.1.0, v1.2.0 adds the archived-digest result files) prune-cache removes only cache-kind files older than the limit, keeps recent ones and leaves every other file alone;
   8 (v1.1.0) the release path does not remove the fixture-suite stamp.
+  9 (v1.3.1) gate_failures does not read "declaration FAILED : 0" as a failure, still reads a non-zero count, a VERDICT: FAIL and an ABORT, and drops the drift section.
 Exit 0 all hold; 2 a case failed.
 """
 import importlib.util, os, subprocess, sys, tempfile, glob
@@ -93,6 +94,11 @@ def main():
         rem, kept = RT.prune_cache(d2, 14)
         check("7 prune removes the old cache files only", rem == 5 and kept == 1 and sorted(os.listdir(d2)) == ["notes.txt", "shape_" + "d" * 64 + ".ttl"])
     check("8 the release path never removes the fixture-suite stamp", "os.remove(stamp)" not in open(RT.__file__).read())
+
+    gf = RT.gate_failures
+    check("9 a zero count of failures is not a failure", gf("  declaration verified    : 134\n  declaration FAILED      : 0\n") == [])
+    check("9 a non-zero count, a failed verdict and an abort are failures", len(gf("  declaration FAILED      : 2\nVERDICT   : FAIL\nABORT: x\n")) == 3)
+    check("9 the drift section is dropped", gf("== Distribution-drift gate -- x\nVERDICT   : FAIL\nDistribution-drift gate FAILED\n\n== Next ==\nok\n") == [])
 
     ver = os.path.join(RT.PKG, "VERSION.txt"); before = open(ver).read() if os.path.exists(ver) else None
     p = subprocess.run([sys.executable, os.path.join(HERE, os.path.basename(RT.__file__)), "release", "99.99.99", "--dry-run"], capture_output=True, text=True)

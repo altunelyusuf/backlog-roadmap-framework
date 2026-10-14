@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_execution_ready_probe v1.1.0 -- proof that the start gate discriminates (L-95), both halves.
+"""backlog_execution_ready_probe v1.2.0 -- proof that the start gate discriminates (L-95), both halves.
 
 Runs backlog_execution_ready on fixtures/fixture_execution_ready_negative and asserts the exit code and the missing fact
 for every case: the groomed item and its lineage are READY (exit 0); every other case is NOT READY (exit 2) and names
@@ -29,6 +29,12 @@ CASES = [  # (args, exit, text that must appear in the output)
     (["--lineage", "Lin_Retracted"], 2, "FAIL  Stage_Backlog has an active output (examined: 0)"),
     (["--lineage", "Lin_Frozen"], 2, "FAIL  the lineage is not frozen"),
     (["--lineage", "Lin_Nowhere"], 2, "FAIL  the lineage exists"),
+    # v1.2.0 (G115): the recording rule sets are part of the start question
+    (["--lineage", "Lin_Unrecorded"], 2, "FAIL  RS_StatusHistoryRecorded is adopted by the lineage or its register"),
+    (["--lineage", "Lin_Unrecorded"], 2, "FAIL  RS_FlowPointsRecorded is adopted by the lineage or its register"),
+    (["--lineage", "Lin_Unrecorded", "--item", "S_Lin_Unrecorded"], 2, "adopted by: nobody"),
+    (["--lineage", "Lin_Declined", "--item", "S_Lin_Declined"], 0, "VERDICT     : READY"),
+    (["--lineage", "Lin_Underway"], 0, "not asked, work has already started"),
 ]
 bad = []
 for args, want, text in CASES:
@@ -36,5 +42,15 @@ for args, want, text in CASES:
     ok = r.returncode == want and text in r.stdout
     print(("PASS  " if ok else "FAIL  ") + " ".join(args) + f"  -> exit {r.returncode}")
     if not ok: bad.append(" ".join(args))
+# the register route: a register (not a Lineage) that adopts both rule sets satisfies the question for a lineage that adopts none
+import tempfile
+with tempfile.TemporaryDirectory() as d:
+    extra = os.path.join(d, "reg.ttl")
+    open(extra, "w").write("@prefix backlog: <http://example.org/backlog#> .\n@prefix ex: <http://example.org/execution-ready-neg#> .\n"
+                           "ex:Reg a backlog:Backlog ; backlog:adoptsRuleSet backlog:RS_StatusHistoryRecorded , backlog:RS_FlowPointsRecorded .\n")
+    r = subprocess.run([sys.executable, tool, fx, extra, "--lineage", "Lin_Unrecorded"], capture_output=True, text=True, timeout=120)
+    ok = r.returncode == 0 and "adopted by: its register" in r.stdout
+    print(("PASS  " if ok else "FAIL  ") + "Lin_Unrecorded with a register that adopts both  -> exit %d" % r.returncode)
+    if not ok: bad.append("register route")
 print("VERDICT   :", "PASS" if not bad else "FAIL"); [print("  ", b) for b in bad]
 sys.exit(1 if bad else 0)

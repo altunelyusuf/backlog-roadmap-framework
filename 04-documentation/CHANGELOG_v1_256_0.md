@@ -11260,6 +11260,20 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.394.0 — 2026-10-14 (MINOR: the routes a typed history can still take are closed, and recording is part of whether work may start — G115)
+
+A handover of the agentic-systems session measured that, with both recording rule sets adopted, an item could still go from Proposed to Done by typing a plausible `T_Start` and `T_Complete`, carry a start while Proposed, hold two finishes, have an equal start and finish, and date a finish years ahead. Its register had 55 of 83 items only ever committed as Done.
+
+- **Rules (shapes v1.165.0, T-Box v1.130.0, data v1.46.0):** `FirstMoveLeavesProposedShape`, `FlowPointsOnlyWhenStartedShape`, `SingleValuedFlowPointShape`, `EqualSpanShape` (with `shortSpanExplanation` and the adopter's `shortSpanThreshold`), all behind the existing rule sets (G89); the status-gap message names the skipped states.
+- **Start gate:** `backlog_execution_ready` v1.2.0 asks a lineage whose work has not started to adopt the two recording rule sets or state `recordingRuleSetsDeclinedReason`. A lineage already under way is not asked.
+- **History witness:** `backlog_flow_point_git_trace` v1.0.0 compares each item's flow points with the commits that recorded it, reads instants without a zone as UTC, and runs as a gate over this package's registers. The clock bound proposed inside the data is declined with its reason (G115 Q4).
+- **Second case:** this package's archive register (298 items): 288 first seen as Done, none finished after its commit, 7 with a finish not after the start, 11 midnights.
+- **Proof:** `backlog_recording_integrity_probe` (25 scenarios, fails on v1.393.0), `backlog_flow_point_git_trace_probe`, `backlog_execution_ready_probe` v1.2.0 and `backlog_status_history_probe` v1.1.0, in gate v1.49.0; four new negative-fixture cases.
+- **Release tool v1.3.1:** a gate line that only reports a zero count of failures (`declaration FAILED : 0`, printed whenever the clause proof runs instead of being skipped) is no longer read as a failure; the first release that changed a shape stopped at it. Real failures still stop it (`backlog_release_tool_probe` v1.3.1, case 9).
+- **Handover:** answered and filed; discipline v85.0.0 (G115) with a root-cause analysis; Standard v1.129.0.
+
+**Unplanned work:** a consuming project's handover; no backlog item of this package covers it.
+
 ## v1.393.0 — 2026-10-14 (MINOR: a shape that judged stage order from the text of two commit names is retired — G114)
 
 A consuming project reported that `ScopeContentLateShape` fires on a correctly ordered lineage. Reproduced: it compared the two commit names with `!=` and tied neither stage output to a lineage.
