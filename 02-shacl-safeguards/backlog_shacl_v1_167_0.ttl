@@ -9,9 +9,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog/shacl/1.166.0> ;
-    owl:versionInfo "1.166.0" ;
-    owl:priorVersion <http://example.org/backlog-shapes/1.165.0> , <http://example.org/backlog-shapes/1.164.0> , <http://example.org/backlog-shapes/1.159.0> , <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
+    owl:versionIRI <http://example.org/backlog/shacl/1.167.0> ;
+    owl:versionInfo "1.167.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.166.0> , <http://example.org/backlog-shapes/1.165.0> , <http://example.org/backlog-shapes/1.164.0> , <http://example.org/backlog-shapes/1.159.0> , <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.154.0> , <http://example.org/backlog-shapes/1.153.0> , <http://example.org/backlog-shapes/1.152.0> , <http://example.org/backlog-shapes/1.151.0> , <http://example.org/backlog-shapes/1.150.0> , <http://example.org/backlog-shapes/1.149.0> , <http://example.org/backlog-shapes/1.148.0> , <http://example.org/backlog-shapes/1.147.0> , <http://example.org/backlog-shapes/1.146.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.145.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.144.0> ;
@@ -7689,7 +7689,7 @@ backlog:ExecutorResponsibilityShape a sh:NodeShape ;
     rdfs:label "Every in-scope work item names its executing party (L2)"@en ;
     sh:sparql [ a sh:SPARQLConstraint ;
         sh:message "L2: this work item carries no backlog:responsible. Archived-lineage and Done/Cancelled items are out of scope by the owner's own ruling and never reach this clause; everything else must name the Executor on the hook for it." ;
-        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] , [ sh:prefix "rdfs" ; sh:namespace "http://www.w3.org/2000/01/rdf-schema#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             FILTER NOT EXISTS { $this backlog:responsible ?r }
             FILTER NOT EXISTS { $this backlog:hasState ?st . FILTER (?st IN (backlog:Done, backlog:Cancelled)) }
@@ -7701,7 +7701,7 @@ backlog:ExecutorResponsibilityShape a sh:NodeShape ;
         sh:select """SELECT $this WHERE {
             $this backlog:responsible ?r .
             FILTER NOT EXISTS { $this backlog:decomposesInto ?child }
-            ?r a ?rt . FILTER (?rt IN (backlog:Executor_HumanTeam, backlog:Executor_AgentTeam, backlog:Executor_AgentFederation))
+            ?r a/rdfs:subClassOf* ?rt . FILTER (?rt IN (backlog:Executor_HumanTeam, backlog:Executor_AgentTeam, backlog:Executor_AgentFederation))
             FILTER NOT EXISTS { $this backlog:hasState ?st . FILTER (?st IN (backlog:Done, backlog:Cancelled)) }
             FILTER NOT EXISTS { $this backlog:belongsToLineage ?lin . ?lin backlog:lineageArchived true }
         }""" ] .
@@ -7910,7 +7910,7 @@ backlog:HumanOverseerShape a sh:NodeShape ;
     backlog:fixtureCaseName "ROLE_OVERSEER_AGENT" ;
     sh:sparql [ a sh:SPARQLConstraint ;
         sh:message "G111: the Executor named as overseer of this work item is not an individual human or a human team, in a register that adopted RS_HumanOversight. The authority to refuse, override or stop work stays with people: name a person or a human team." ;
-        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] , [ sh:prefix "rdfs" ; sh:namespace "http://www.w3.org/2000/01/rdf-schema#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             { ?reg backlog:adoptsRuleSet backlog:RS_HumanOversight .
               FILTER NOT EXISTS { ?reg a backlog:Lineage }
@@ -7920,7 +7920,7 @@ backlog:HumanOverseerShape a sh:NodeShape ;
             { ?reg a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_HumanOversight .
               { $this backlog:belongsToLineage ?reg } UNION { $this backlog:admittedByOutput ?o . ?o backlog:belongsToLineage ?reg } }
             $this backlog:overseenBy ?o .
-            FILTER NOT EXISTS { ?o a ?k . FILTER ( ?k IN ( backlog:Executor_IndividualHuman , backlog:Executor_HumanTeam ) ) }
+            FILTER NOT EXISTS { ?o a/rdfs:subClassOf* ?k . FILTER ( ?k IN ( backlog:Executor_IndividualHuman , backlog:Executor_HumanTeam ) ) }
         }""" ] .
 
 backlog:ManagerialIndependenceShape a sh:NodeShape ;
@@ -8243,8 +8243,8 @@ backlog:OrganisationIsTeamShape a sh:NodeShape ;
     backlog:fixtureCaseName "ORG_NOT_TEAM" ;
     sh:sparql [ a sh:SPARQLConstraint ;
         sh:message "G116: isOrganisation is stated on something that is not an Executor_HumanTeam. An organisation is a human team (a group of people composed through hasExecutorMember with a controller somewhere in its nesting); an individual, an agent or a federation is not one. Type it as a human team, or remove the flag." ;
-        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] , [ sh:prefix "rdfs" ; sh:namespace "http://www.w3.org/2000/01/rdf-schema#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             $this backlog:isOrganisation ?o .
-            FILTER NOT EXISTS { $this a backlog:Executor_HumanTeam }
+            FILTER NOT EXISTS { $this a/rdfs:subClassOf* backlog:Executor_HumanTeam }
         }""" ] .

@@ -55,8 +55,13 @@ STAGE_TYPES = None  # loaded from the ontology; see _load_stage_types
 ORDER = ["Stage_Mission", "Stage_Scope", "Stage_Goal", "Stage_Objective", "Stage_Backlog"]
 
 
-def state_digest(g, stage, lineage=None):
-    """SHA-256 over the canonical set of subjects a stage may contain.
+def state_digest(g, stage, lineage=None, admitted=False):
+    """v1.9.0 (sen0401 handover, planning-after-the-backlog-stage-closed): under table v4 the Backlog digest
+    excludes ExecutionTask (a task is produced by planning an item into an iteration and is subordinate by
+    construction, so planning is not an addition to a closed stage) and includes the pre-lineage items the
+    lineage's own Backlog output admitted. An epic, story or other item added to the closed stage still moves it.
+
+    SHA-256 over the canonical set of subjects a stage may contain.
 
     Subjects only, sorted: the digest must be stable under later annotation of
     an element that already existed. Hashing every triple would change the
@@ -79,6 +84,12 @@ def state_digest(g, stage, lineage=None):
         for s in g.subjects(RDF.type, URIRef(B + t)):
             if lineage is None or s == lineage or (s, URIRef(B + "belongsToLineage"), lineage) in g:
                 subs.add(str(s))
+            elif admitted and stage == "Stage_Backlog":
+                # v1.9.0 (table v4): an item the lineage's own Backlog output admitted (a pre-lineage item
+                # carried in by succession or restart) is part of what that output closed on.
+                for ao in g.objects(s, URIRef(B + "admittedByOutput")):
+                    if (ao, URIRef(B + "belongsToLineage"), lineage) in g:
+                        subs.add(str(s))
     # v1.5.0 (an adopting project handover, successor-opening-ruleset-scope-and-mission-digest): the v1.3.0
     # docstring promised the lineage individual for the Mission stage, but the loop above only visits
     # subjects typed as a Mission-stage type, so it never did. And a successor opened under its
@@ -131,7 +142,7 @@ def _load_stage_types(tbox_path, v2=False, table=None):
     # handover, successor-scope-stage-...-owed-artifacts); no register or fixture here declared v2, so nothing
     # had ever exercised it.
     table = table or ("v2" if v2 else "v1")
-    prop = {"v1": B.stageRequiresType, "v2": B.stageRequiresTypeV2, "v3": B.stageRequiresTypeV3}[table]
+    prop = {"v1": B.stageRequiresType, "v2": B.stageRequiresTypeV2, "v3": B.stageRequiresTypeV3, "v4": B.stageRequiresTypeV4}[table]
     for st, _, cls in g.triples((None, prop, None)):
         out.setdefault(str(st).split("#")[-1], []).append(str(cls).split("#")[-1])
     if not out:
@@ -157,13 +168,14 @@ def main():
         lineage_name = argv[idx + 1]
         argv = argv[:idx] + argv[idx + 2:]
     _txt = "".join(open(f, encoding="utf-8", errors="ignore").read() for f in argv if os.path.exists(f))
-    _v3 = "adoptsRuleSet" in _txt and "RS_DigestTable_v3" in _txt
-    _v2 = (not _v3) and _table_v2_declared(_txt)
-    _table = "v3" if _v3 else ("v2" if _v2 else "v1")
+    _v4 = "adoptsRuleSet" in _txt and "RS_DigestTable_v4" in _txt
+    _v3 = (not _v4) and "adoptsRuleSet" in _txt and "RS_DigestTable_v3" in _txt
+    _v2 = (not _v4) and (not _v3) and _table_v2_declared(_txt)
+    _table = "v4" if _v4 else ("v3" if _v3 else ("v2" if _v2 else "v1"))
     STAGE_TYPES = _load_stage_types(_tb, table=_table)
-    print("digest table: %s" % {"v3": "v3 (RS_DigestTable_v3 declared)", "v2": "v2 (RS_DigestTable_v2 declared)", "v1": "v1"}[_table])
+    print("digest table: %s" % {"v4": "v4 (RS_DigestTable_v4 declared: planning after the close is not stage content; admitted items are)", "v3": "v3 (RS_DigestTable_v3 declared)", "v2": "v2 (RS_DigestTable_v2 declared)", "v1": "v1"}[_table])
     if len(argv) < 1:
-        print("usage: backlog_pipeline_verify_v1_8_0.py <register.ttl> [tbox.ttl] [--lineage NAME] [--require-complete]")
+        print("usage: backlog_pipeline_verify_v1_9_0.py <register.ttl> [tbox.ttl] [--lineage NAME] [--require-complete]")
         return 1
     g = Graph()
     for f in argv:
@@ -212,7 +224,7 @@ def main():
             prev = None
             continue
         recorded = str(g.value(o, URIRef(B + "hasStateDigest")) or "")
-        actual = state_digest(g, stage, lineage_uri)
+        actual = state_digest(g, stage, lineage_uri, admitted=(_table == 'v4'))
         ok = recorded == actual
         print("  %-18s digest %s  %s" % (stage, actual[:16], "reproduces" if ok else "DOES NOT REPRODUCE"))
         if not ok:

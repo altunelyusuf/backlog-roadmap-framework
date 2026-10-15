@@ -11260,6 +11260,16 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.396.0 — 2026-10-15 (MINOR: planning after a Backlog stage closed is not an addition to it; the executor rules see subclasses — G117)
+
+- Digest table v4 (`RS_DigestTable_v4`, `stageRequiresTypeV4`): the v3 table without `ExecutionTask`; the Backlog digest also covers the pre-lineage items the lineage's own Backlog output admitted. `backlog_pipeline_verify` v1.9.0 reads it from the register's adoption. Adopted as a stated migration (G91).
+- Shapes v1.167.0: the collective-responsible rule, the human-overseer rule and `OrganisationIsTeamShape` follow `rdfs:subClassOf*`.
+- New probes: `backlog_pipeline_verify_probe` (6 cases) and `backlog_executor_subclass_probe` (7 cases; fails against shapes v1.166.0). Gate v1.51.0 runs both.
+- **Proof:** both probes above; `backlog_pipeline_verify_probe` reproduces the handover's cases on a built graph.
+- **Handover:** the SEN0401 handover answered and filed; discipline v87.0.0 (G117); Standard v1.131.0; data v1.48.0, T-Box v1.132.0.
+
+**Unplanned work:** a consuming project's handover and the owner's review request of 2026-10-15; no backlog item of this package covers them.
+
 ## v1.395.0 — 2026-10-14 (MINOR: the shipped data file binds nobody who did not adopt; an organisation is a human team; a person holds a role — G116)
 
 Two handovers of the agentic-sdlc session. One measured that this package's own register adoption of the two recording rule sets, shipped in the data file, bound the items of a consumer that loaded the file whole (131 and 129 results). Reproduced: three results on one item.

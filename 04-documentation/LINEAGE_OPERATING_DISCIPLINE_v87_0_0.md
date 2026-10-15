@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v86.0.0
+# Lineage Operating Discipline — v87.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -3450,3 +3450,17 @@ Related: G89, G112, G113, G114.
 
 **What is not claimed.** The other register-level adoptions in the data file (`RS_LabelConvention`, `RS_LineageStatus`) are read the same way by construction; they bind intent elements and lineages rather than work items, the file's own content depends on them, and they were not measured against a consumer graph or changed. A consumer that loads the file whole should load the reference part (what the validator derives) instead. The reporter's register was not run.
 Related: G89, G112, G113, G115.
+
+## G117 — Planning after a Backlog stage closed is not an addition to it; the executor rules see subclasses
+
+*(Opened by the sen0401 slides lineage's handover of 2026-10-15 and by the review of running a lineage with agents, same day. The digest behaviour was reproduced here before anything was changed.)*
+
+**Q1 — how a lineage plans further items after its Backlog stage closed.** By taking admitted items into an iteration. A task is created when an item the stage already admitted is taken into an iteration; it is subordinate by construction (`ExecutionTask`) and carries no value of its own. Planning is therefore not an addition to the closed stage and needs no change request. The route is the one the course already used: tasks in the successor's own iteration, none in the closed lineage's container. What is an addition is a story, epic or other item that the stage did not admit; that still needs the change route, and still moves the digest.
+
+**Q2 — what the Backlog digest witnesses.** A stated rule set, `RS_DigestTable_v4` (the v3 table without `ExecutionTask`). Under it the Backlog digest also covers the pre-lineage items the lineage's own Backlog output admitted (`admittedByOutput`), so a story or epic slipped into the closed stage after the close is caught, and one admitted at the close is witnessed. `backlog_pipeline_verify` v1.9.0 selects the table from the register's own adoption. `backlog_pipeline_verify_probe` shows six cases: a task added after the close leaves the digest, the same task moves it under v3, a story added moves it under v4, an admitted item is in the digest and an item admitted by another lineage's output is not. Adopting a table changes every recorded digest, so a register adopts it and re-records as a stated migration (G91).
+
+**Q3 — the first lineage.** The recorded digests of a lineage that never reproduced have no sanctioned status of their own: a digest that does not reproduce stays a failure, and nothing here marks it otherwise. What exists is the migration: a register adopts v4 and re-records the digests of the lineage. That re-recording witnesses the state at the re-recording and not the state at the original close, and the register says so in the re-recording's own note. Why the first lineage's digests differ was not found by the reporter and was not investigated here; it is not claimed to be explained.
+
+**The executor rules and subclasses.** Three queries named executor kinds positively and read no subclass: the collective-responsible rule, the human-overseer rule and `OrganisationIsTeamShape`. An agent class of another package declared a subclass of an executor kind therefore escaped them (a multi-agent system responsible for an atomic item did not fire; a subclass of a human team named as overseer fired). They now follow `rdfs:subClassOf*`. `backlog_executor_subclass_probe` shows seven cases and fails against the previous shapes.
+
+Related: G91, G111, G112, G116.

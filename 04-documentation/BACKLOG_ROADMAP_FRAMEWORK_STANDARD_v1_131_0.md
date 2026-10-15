@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.130.0
+# Backlog & Roadmap Semantic Framework — Standard v1.131.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -2546,3 +2546,8 @@ The data file this package ships (`backlog_abox`) holds controlled individuals a
 
 A human actor is an individual (`Executor_IndividualHuman`), a team (`Executor_HumanTeam`) or an organisation (`Executor_HumanTeam` with `isOrganisation` true); `OrganisationIsTeamShape` refuses the flag on anything else. The five Executor kinds stay five: every rule about a team applies to an organisation unchanged. `holdsRole` ties an Executor to a Role (Owner, Builder); decisions carry the role, and the holders are found through it, as they stand now.
 
+
+## Digest table v4 and subclasses of the executor kinds (v1.396.0, G117)
+
+- `RS_DigestTable_v4` is the v3 table without `ExecutionTask`. Under it, planning an admitted item into an iteration does not move the Backlog stage digest; an item added to the closed stage does. The Backlog digest also covers the pre-lineage items the lineage's own Backlog output admitted. A register adopts the table and re-records its digests as a stated migration.
+- The collective-responsible rule, the human-overseer rule and `OrganisationIsTeamShape` apply to subclasses of the five executor kinds.
