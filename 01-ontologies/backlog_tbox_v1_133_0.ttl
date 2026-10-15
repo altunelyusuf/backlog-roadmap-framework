@@ -18,9 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.132.0> ;
-    owl:versionInfo "1.132.0" ;
-    owl:priorVersion <http://example.org/backlog/1.131.0> , <http://example.org/backlog/1.130.0> , <http://example.org/backlog/1.129.0> , <http://example.org/backlog/1.125.0> , <http://example.org/backlog/1.124.0> , <http://example.org/backlog/1.123.0> , <http://example.org/backlog/1.122.0> ;
+    owl:versionIRI <http://example.org/backlog/1.133.0> ;
+    owl:versionInfo "1.133.0" ;
+    owl:priorVersion <http://example.org/backlog/1.132.0> , <http://example.org/backlog/1.131.0> , <http://example.org/backlog/1.130.0> , <http://example.org/backlog/1.129.0> , <http://example.org/backlog/1.125.0> , <http://example.org/backlog/1.124.0> , <http://example.org/backlog/1.123.0> , <http://example.org/backlog/1.122.0> ;
     owl:priorVersion <http://example.org/backlog/1.121.0> , <http://example.org/backlog/1.120.0> , <http://example.org/backlog/1.119.0> , <http://example.org/backlog/1.118.0> , <http://example.org/backlog/1.117.0> ;
     owl:priorVersion <http://example.org/backlog/1.116.0> ;
     owl:priorVersion <http://example.org/backlog/1.115.0> ;
@@ -5351,6 +5351,7 @@ backlog:derivationQuery a owl:DatatypeProperty ;
 
 backlog:integrityLevel backlog:numberOrigin backlog:Num_Asserted .
 backlog:verificationThreshold backlog:numberOrigin backlog:Num_Asserted .
+backlog:humanApprovalLevel backlog:numberOrigin backlog:Num_Asserted .
 backlog:expectedValue backlog:numberOrigin backlog:Num_Asserted .
 backlog:forecastIterationsObserved backlog:numberOrigin backlog:Num_Measured .
 backlog:forecastObservedVelocity backlog:numberOrigin backlog:Num_Measured .
@@ -7140,3 +7141,137 @@ backlog:holdsRole a owl:ObjectProperty ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "holds role"@en ;
     skos:definition "The Role (Owner, Builder) this Executor holds: who is entitled to make the decisions that name the role. Decisions, refinement events and transitions carry a Role, never a person; this relation is what turns a role into the parties behind it. It states the present holding only: who held the role when an earlier decision was made is not modelled, so a decision recorded under a role is traced to its holders as they stand now. An Executor may hold both roles and a role may be held by several Executors (a person, a team or an organisation)."@en .
+
+#################################################################
+#  v1.133.0 (G118) -- agents under configuration management: a run is an instance of a definition, a team is assembled
+#  by a recorded act, every status move names who made it, and work is overseen, controlled and approved by different
+#  parties. All of it is opt-in through RS_AgentAccountability; the vocabulary alone binds nobody.
+#################################################################
+
+backlog:ExecutorInstance a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Executor instance"@en ;
+    skos:definition "One run of an agent: an Executor that was created at a stated time from a stated version of a definition (instanceOf), the way an object is created from a class. The definition is the standing agent or team as it was specified; the instance is the party that actually did, reviewed, verified, oversaw or approved a piece of work, so a record can say which version of which definition acted and when, and two instances of one definition can be told apart. An instance is also an Executor of the same kind as its definition (a run of a single agent is a single agent), declared on the individual itself. Humans are not instantiated: a person or a human team is named directly."@en ;
+    dcterms:source "Configuration management of items under control: ISO 10007:2017 (configuration management guidelines: identification, status accounting); the agentic-systems model in which an agent specification is built into an agent and each run is timestamped."@en .
+
+backlog:instanceOf a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:ExecutorInstance ; rdfs:range backlog:Executor ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "instance of"@en ;
+    skos:definition "The definition this run was created from: a standing agent, agent team or agent federation. Its kind must be the kind of the instance, and it is not itself an instance."@en .
+
+backlog:instantiatedFromVersion a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:ExecutorInstance ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "instantiated from version"@en ;
+    skos:definition "The version of the definition this run was created from, as the definition's own record states it. A run that cannot say which version of its definition it is cannot be reproduced or held to account."@en .
+
+backlog:instantiatedAt a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:ExecutorInstance ; rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "instantiated at"@en ;
+    skos:definition "The instant the run was created."@en .
+
+backlog:retiredAt a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:ExecutorInstance ; rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "retired at"@en ;
+    skos:definition "The instant the run ended. A run without it is still active."@en .
+
+backlog:instantiatedBy a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:ExecutorInstance ; rdfs:range backlog:Executor ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "instantiated by"@en ;
+    skos:definition "The party that commissioned the run: a person, or another instance that spawned it."@en .
+
+backlog:SeatFunction a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:Seat_Does backlog:Seat_Reviews backlog:Seat_Verifies backlog:Seat_Oversees backlog:Seat_Approves ) ;
+    rdfs:label "Seat function"@en ;
+    skos:definition "What a member of an assembled team is there to do, as a closed set of five that mirror the relations of a work item: do the work (responsible), review it, verify it (control), oversee it, approve it. Distinct from Role, which says who may make a decision for the business."@en .
+
+backlog:TeamAssembly a owl:Class ;
+    rdfs:subClassOf core:Artifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Team assembly"@en ;
+    skos:definition "The recorded act of building a team or federation of agents for a piece of work: which team instance was built (assemblesTeam), for what (assembledFor: a work item or a lineage), when, by whom, and which run sits in which seat. A team that did work without such a record cannot say who was in it, and independence between its members cannot be checked."@en .
+
+backlog:Seat a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Seat"@en ;
+    skos:definition "One place in an assembled team: a function (seatFunction) held by one run (heldBy)."@en .
+
+backlog:assemblesTeam a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:TeamAssembly ; rdfs:range backlog:ExecutorInstance ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "assembles team"@en ;
+    skos:definition "The agent team or federation instance this act built."@en .
+
+backlog:assembledFor a owl:ObjectProperty ;
+    rdfs:domain backlog:TeamAssembly ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "assembled for"@en ;
+    skos:definition "The work item or lineage the team was built for."@en .
+
+backlog:assembledAt a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:TeamAssembly ; rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "assembled at"@en ;
+    skos:definition "The instant the team was built."@en .
+
+backlog:assembledBy a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:TeamAssembly ; rdfs:range backlog:Executor ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "assembled by"@en ;
+    skos:definition "The party that built the team."@en .
+
+backlog:hasSeat a owl:ObjectProperty ;
+    rdfs:domain backlog:TeamAssembly ; rdfs:range backlog:Seat ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has seat"@en ;
+    skos:definition "A place in the assembled team."@en .
+
+backlog:seatFunction a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:Seat ; rdfs:range backlog:SeatFunction ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "seat function"@en ;
+    skos:definition "What the seat is for."@en .
+
+backlog:heldBy a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:Seat ; rdfs:range backlog:ExecutorInstance ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "held by"@en ;
+    skos:definition "The run that sits in the seat."@en .
+
+backlog:approvedBy a owl:ObjectProperty ;
+    rdfs:domain backlog:WorkItem ; rdfs:range backlog:Executor ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "approved by"@en ;
+    skos:definition "An Executor who accepted this work item's result as meeting its purpose, after it was verified. Approval is a different act from doing (responsible), watching (overseenBy), checking against criteria (verifiedBy) and commenting (reviewedBy); a register that adopts RS_AgentAccountability requires the parties of these acts to be different."@en .
+
+backlog:humanApprovalLevel a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:Backlog backlog:Lineage ) ] ; rdfs:range xsd:integer ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "human approval level"@en ;
+    skos:definition "Stated by an adopter of RS_AgentAccountability: the lowest integrityLevel at which a Done item must be approved by a person or a human team. Below it, approval may be given by an independent agent run. It is how people stay on the loop without being assigned to every task."@en .
+
+backlog:transitionedByExecutor a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:TransitionEvent ; rdfs:range backlog:Executor ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "transitioned by executor"@en ;
+    skos:definition "The party that made the move: a person, a human team, or, for an agent, the run (ExecutorInstance) and never the standing definition. transitionedBy names the Role that was entitled to make it; this names who did."@en .
+
+backlog:delegatedLineage a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:WorkItem ; rdfs:range backlog:Lineage ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "delegated lineage"@en ;
+    skos:definition "The lineage in which the responsible executor plans and carries out this item. The parent plan stays coarse; the executor makes its own plan, at the grain of its own work, inside the child lineage."@en .
+
+backlog:spawnedBy a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:Lineage ; rdfs:range backlog:ExecutorInstance ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "spawned by"@en ;
+    skos:definition "The run that opened this lineage for itself. For a delegated lineage it is the executor responsible for the item that delegated it, or a member of that executor."@en .

@@ -9,9 +9,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog/shacl/1.167.0> ;
-    owl:versionInfo "1.167.0" ;
-    owl:priorVersion <http://example.org/backlog-shapes/1.166.0> , <http://example.org/backlog-shapes/1.165.0> , <http://example.org/backlog-shapes/1.164.0> , <http://example.org/backlog-shapes/1.159.0> , <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
+    owl:versionIRI <http://example.org/backlog/shacl/1.168.0> ;
+    owl:versionInfo "1.168.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.167.0> , <http://example.org/backlog-shapes/1.166.0> , <http://example.org/backlog-shapes/1.165.0> , <http://example.org/backlog-shapes/1.164.0> , <http://example.org/backlog-shapes/1.159.0> , <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.154.0> , <http://example.org/backlog-shapes/1.153.0> , <http://example.org/backlog-shapes/1.152.0> , <http://example.org/backlog-shapes/1.151.0> , <http://example.org/backlog-shapes/1.150.0> , <http://example.org/backlog-shapes/1.149.0> , <http://example.org/backlog-shapes/1.148.0> , <http://example.org/backlog-shapes/1.147.0> , <http://example.org/backlog-shapes/1.146.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.145.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.144.0> ;
@@ -8248,3 +8248,285 @@ backlog:OrganisationIsTeamShape a sh:NodeShape ;
             $this backlog:isOrganisation ?o .
             FILTER NOT EXISTS { $this a/rdfs:subClassOf* backlog:Executor_HumanTeam }
         }""" ] .
+
+#################################################################
+# v1.168.0 (G118): agents under configuration management. Every item-level shape below binds only an adopter of RS_AgentAccountability (G89, G91, G112);
+# the shapes on the new classes bind only individuals of those classes. Silent controls are in backlog_agent_accountability_probe.
+#################################################################
+
+backlog:AgentRunIsInstanceShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItem ;
+    sh:severity sh:Violation ;
+    rdfs:label "An agent named for work is a run, not a definition (G118)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "ACC_DEFINITION_NAMED" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G118: an agent, agent team or agent federation is named for this work item (responsible, verifiedBy, overseenBy, approvedBy, reviewedBy or supportedBy) as a standing definition, not as a run, in the scope of an adoption of RS_AgentAccountability. Name the ExecutorInstance that acted: it says which version of the definition was created, when, and by whom." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] , [ sh:prefix "rdfs" ; sh:namespace "http://www.w3.org/2000/01/rdf-schema#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            { ?reg backlog:adoptsRuleSet backlog:RS_AgentAccountability .
+              FILTER NOT EXISTS { ?reg a backlog:Lineage }
+              OPTIONAL { ?reg backlog:ruleSetAdoptedAt ?at }
+              FILTER ( !BOUND(?at) || NOT EXISTS { $this backlog:finishedAt ?fin . FILTER ( ?fin < ?at ) } ) }
+            UNION
+            { ?reg a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_AgentAccountability .
+              { $this backlog:belongsToLineage ?reg } UNION { $this backlog:admittedByOutput ?o . ?o backlog:belongsToLineage ?reg } }
+            $this ?p ?x . FILTER ( ?p IN ( backlog:responsible, backlog:verifiedBy, backlog:overseenBy, backlog:approvedBy, backlog:reviewedBy, backlog:supportedBy ) )
+            ?x a/rdfs:subClassOf* ?k . FILTER ( ?k IN ( backlog:Executor_SingleAgent, backlog:Executor_AgentTeam, backlog:Executor_AgentFederation ) )
+            FILTER NOT EXISTS { ?x a backlog:ExecutorInstance }
+        }""" ] .
+
+backlog:TransitionNamesWhoShape a sh:NodeShape ;
+    sh:targetClass backlog:TransitionEvent ;
+    sh:severity sh:Violation ;
+    rdfs:label "A status move names who made it (G118)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "ACC_MOVE_ANON" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G118: this recorded move of a work item names no transitionedByExecutor, in the scope of an adoption of RS_AgentAccountability. A status change whose maker is not recorded cannot be audited: name the person, or for an agent the run." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] , [ sh:prefix "rdfs" ; sh:namespace "http://www.w3.org/2000/01/rdf-schema#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:transitionedItem ?item .
+            { ?reg backlog:adoptsRuleSet backlog:RS_AgentAccountability .
+              FILTER NOT EXISTS { ?reg a backlog:Lineage }
+              OPTIONAL { ?reg backlog:ruleSetAdoptedAt ?at }
+              FILTER ( !BOUND(?at) || NOT EXISTS { ?item backlog:finishedAt ?fin . FILTER ( ?fin < ?at ) } ) }
+            UNION
+            { ?reg a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_AgentAccountability .
+              { ?item backlog:belongsToLineage ?reg } UNION { ?item backlog:admittedByOutput ?o . ?o backlog:belongsToLineage ?reg } }
+            FILTER NOT EXISTS { $this backlog:transitionedByExecutor ?e }
+        }""" ] .
+
+backlog:TransitionByRunShape a sh:NodeShape ;
+    sh:targetClass backlog:TransitionEvent ;
+    sh:severity sh:Violation ;
+    rdfs:label "An agent makes a status move as a run (G118)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "ACC_MOVE_BY_DEFINITION" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G118: this recorded move was made by an agent, agent team or agent federation named as a standing definition and not as a run (ExecutorInstance), in the scope of an adoption of RS_AgentAccountability." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] , [ sh:prefix "rdfs" ; sh:namespace "http://www.w3.org/2000/01/rdf-schema#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:transitionedItem ?item .
+            { ?reg backlog:adoptsRuleSet backlog:RS_AgentAccountability .
+              FILTER NOT EXISTS { ?reg a backlog:Lineage }
+              OPTIONAL { ?reg backlog:ruleSetAdoptedAt ?at }
+              FILTER ( !BOUND(?at) || NOT EXISTS { ?item backlog:finishedAt ?fin . FILTER ( ?fin < ?at ) } ) }
+            UNION
+            { ?reg a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_AgentAccountability .
+              { ?item backlog:belongsToLineage ?reg } UNION { ?item backlog:admittedByOutput ?o . ?o backlog:belongsToLineage ?reg } }
+            $this backlog:transitionedByExecutor ?e .
+            ?e a/rdfs:subClassOf* ?k . FILTER ( ?k IN ( backlog:Executor_SingleAgent, backlog:Executor_AgentTeam, backlog:Executor_AgentFederation ) )
+            FILTER NOT EXISTS { ?e a backlog:ExecutorInstance }
+        }""" ] .
+
+backlog:SeparateDutiesShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItem ;
+    sh:severity sh:Violation ;
+    rdfs:label "The parties that do, oversee, verify and approve one item are different (G118)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "ACC_SAME_PARTY" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G118: two of the parties that do (responsible), oversee (overseenBy), verify (verifiedBy) or approve (approvedBy) this work item are the same party, one contains the other, or they are runs of one definition, in the scope of an adoption of RS_AgentAccountability. Work that one definition produced and the same definition then checked has been checked by nobody else: name a party outside it for each function." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] , [ sh:prefix "rdfs" ; sh:namespace "http://www.w3.org/2000/01/rdf-schema#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            { ?reg backlog:adoptsRuleSet backlog:RS_AgentAccountability .
+              FILTER NOT EXISTS { ?reg a backlog:Lineage }
+              OPTIONAL { ?reg backlog:ruleSetAdoptedAt ?at }
+              FILTER ( !BOUND(?at) || NOT EXISTS { $this backlog:finishedAt ?fin . FILTER ( ?fin < ?at ) } ) }
+            UNION
+            { ?reg a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_AgentAccountability .
+              { $this backlog:belongsToLineage ?reg } UNION { $this backlog:admittedByOutput ?o . ?o backlog:belongsToLineage ?reg } }
+            $this ?p1 ?a . $this ?p2 ?b .
+            FILTER ( ( ?p1 = backlog:responsible && ?p2 IN ( backlog:overseenBy, backlog:verifiedBy, backlog:approvedBy ) ) || ( ?p1 = backlog:overseenBy && ?p2 IN ( backlog:verifiedBy, backlog:approvedBy ) ) || ( ?p1 = backlog:verifiedBy && ?p2 = backlog:approvedBy ) )
+            FILTER ( ?a = ?b || EXISTS { ?a backlog:instanceOf ?d . ?b backlog:instanceOf ?d } || EXISTS { ?a backlog:instanceOf ?b } || EXISTS { ?b backlog:instanceOf ?a }
+                     || EXISTS { ?a backlog:hasExecutorMember+ ?b } || EXISTS { ?b backlog:hasExecutorMember+ ?a } )
+        }""" ] .
+
+backlog:DoneUnaccountedShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItem ;
+    sh:severity sh:Violation ;
+    rdfs:label "Done work was overseen, verified and approved (G118)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "ACC_DONE_UNACCOUNTED" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G118: this work item is Done in the scope of an adoption of RS_AgentAccountability and lacks overseenBy, verifiedBy or approvedBy. All work is overseen, controlled (verified) and approved, by different parties; name the missing ones, or move the item out of Done." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] , [ sh:prefix "rdfs" ; sh:namespace "http://www.w3.org/2000/01/rdf-schema#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            { ?reg backlog:adoptsRuleSet backlog:RS_AgentAccountability .
+              FILTER NOT EXISTS { ?reg a backlog:Lineage }
+              OPTIONAL { ?reg backlog:ruleSetAdoptedAt ?at }
+              FILTER ( !BOUND(?at) || NOT EXISTS { $this backlog:finishedAt ?fin . FILTER ( ?fin < ?at ) } ) }
+            UNION
+            { ?reg a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_AgentAccountability .
+              { $this backlog:belongsToLineage ?reg } UNION { $this backlog:admittedByOutput ?o . ?o backlog:belongsToLineage ?reg } }
+            $this backlog:hasState backlog:Done .
+            FILTER ( NOT EXISTS { $this backlog:overseenBy ?o1 } || NOT EXISTS { $this backlog:verifiedBy ?v1 } || NOT EXISTS { $this backlog:approvedBy ?a1 } )
+        }""" ] .
+
+backlog:HumanApprovalAboveLevelShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItem ;
+    sh:severity sh:Violation ;
+    rdfs:label "Work at or above the human approval level is approved by a person (G118)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "ACC_HUMAN_APPROVAL" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G118: this work item is Done at or above the humanApprovalLevel of its adopter (or has no integrity level) and no person or human team approved it. Below the level an independent agent run may approve; above it people stay on the loop." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] , [ sh:prefix "rdfs" ; sh:namespace "http://www.w3.org/2000/01/rdf-schema#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            { ?reg backlog:adoptsRuleSet backlog:RS_AgentAccountability .
+              FILTER NOT EXISTS { ?reg a backlog:Lineage }
+              OPTIONAL { ?reg backlog:ruleSetAdoptedAt ?at }
+              FILTER ( !BOUND(?at) || NOT EXISTS { $this backlog:finishedAt ?fin . FILTER ( ?fin < ?at ) } ) }
+            UNION
+            { ?reg a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_AgentAccountability .
+              { $this backlog:belongsToLineage ?reg } UNION { $this backlog:admittedByOutput ?o . ?o backlog:belongsToLineage ?reg } }
+            ?reg backlog:humanApprovalLevel ?t .
+            $this backlog:hasState backlog:Done .
+            OPTIONAL { $this backlog:integrityLevel ?l }
+            FILTER ( !BOUND(?l) || ?l >= ?t )
+            FILTER NOT EXISTS { $this backlog:approvedBy ?h . ?h a/rdfs:subClassOf* ?hk . FILTER ( ?hk IN ( backlog:Executor_IndividualHuman, backlog:Executor_HumanTeam ) ) }
+        }""" ] .
+
+backlog:CollectiveNeedsAssemblyShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItem ;
+    sh:severity sh:Violation ;
+    rdfs:label "An agent team named for work was assembled by a recorded act (G118)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "ACC_NO_ASSEMBLY" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G118: an agent team or federation run is named for this work item, in the scope of an adoption of RS_AgentAccountability, and no TeamAssembly records that it was built. A team that cannot say who sat in it cannot be checked for independence: record the assembly with its seats." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] , [ sh:prefix "rdfs" ; sh:namespace "http://www.w3.org/2000/01/rdf-schema#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            { ?reg backlog:adoptsRuleSet backlog:RS_AgentAccountability .
+              FILTER NOT EXISTS { ?reg a backlog:Lineage }
+              OPTIONAL { ?reg backlog:ruleSetAdoptedAt ?at }
+              FILTER ( !BOUND(?at) || NOT EXISTS { $this backlog:finishedAt ?fin . FILTER ( ?fin < ?at ) } ) }
+            UNION
+            { ?reg a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_AgentAccountability .
+              { $this backlog:belongsToLineage ?reg } UNION { $this backlog:admittedByOutput ?o . ?o backlog:belongsToLineage ?reg } }
+            $this ?p ?x . FILTER ( ?p IN ( backlog:responsible, backlog:verifiedBy, backlog:overseenBy, backlog:approvedBy, backlog:reviewedBy, backlog:supportedBy ) )
+            ?x a backlog:ExecutorInstance , ?k . FILTER ( ?k IN ( backlog:Executor_AgentTeam, backlog:Executor_AgentFederation ) )
+            FILTER NOT EXISTS { ?asm backlog:assemblesTeam ?x }
+        }""" ] .
+
+backlog:DelegatedLineageSpawnerShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItem ;
+    sh:severity sh:Violation ;
+    rdfs:label "A delegated lineage is spawned by the executor of the item (G118)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "ACC_DELEGATE_WRONG" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G118: this work item delegates a lineage that was not spawned by the executor responsible for the item (or a member of it). The executor that plans the work inside is the one that carries it." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] , [ sh:prefix "rdfs" ; sh:namespace "http://www.w3.org/2000/01/rdf-schema#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:delegatedLineage ?l ; backlog:responsible ?r .
+            FILTER NOT EXISTS { ?l backlog:spawnedBy ?s . FILTER ( ?s = ?r || EXISTS { ?r backlog:hasExecutorMember+ ?s } ) }
+        }""" ] .
+
+backlog:InstanceKindShape a sh:NodeShape ;
+    sh:targetClass backlog:ExecutorInstance ;
+    sh:severity sh:Violation ;
+    rdfs:label "A run is of the kind of its definition, and its definition is not a run (G118)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "ACC_INSTANCE_KIND" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G118: this executor instance is not of the kind of its definition, or its definition is itself an instance. A run of a single agent is a single agent; a run of a team is a team." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] , [ sh:prefix "rdfs" ; sh:namespace "http://www.w3.org/2000/01/rdf-schema#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:instanceOf ?d .
+            { FILTER EXISTS { ?d a backlog:ExecutorInstance } }
+            UNION
+            { $this a/rdfs:subClassOf* ?k . FILTER ( ?k IN ( backlog:Executor_IndividualHuman, backlog:Executor_HumanTeam, backlog:Executor_SingleAgent, backlog:Executor_AgentTeam, backlog:Executor_AgentFederation ) )
+              FILTER NOT EXISTS { ?d a/rdfs:subClassOf* ?k } }
+        }""" ] .
+
+backlog:InstanceClockShape a sh:NodeShape ;
+    sh:targetClass backlog:ExecutorInstance ;
+    sh:severity sh:Violation ;
+    rdfs:label "A run ended after it began (G118)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "ACC_INSTANCE_CLOCK" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G118: this executor instance retired before it was instantiated." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] , [ sh:prefix "rdfs" ; sh:namespace "http://www.w3.org/2000/01/rdf-schema#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:instantiatedAt ?a ; backlog:retiredAt ?b . FILTER ( ?b < ?a )
+        }""" ] .
+
+backlog:AssemblyMembersSeatedShape a sh:NodeShape ;
+    sh:targetClass backlog:TeamAssembly ;
+    sh:severity sh:Violation ;
+    rdfs:label "Every agent member of an assembled team holds a seat (G118)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "ACC_MEMBER_UNSEATED" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G118: an agent member of the assembled team is not a run, or holds no seat in this assembly." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] , [ sh:prefix "rdfs" ; sh:namespace "http://www.w3.org/2000/01/rdf-schema#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:assemblesTeam ?t . ?t backlog:hasExecutorMember ?m .
+            ?m a/rdfs:subClassOf* ?k . FILTER ( ?k IN ( backlog:Executor_SingleAgent, backlog:Executor_AgentTeam, backlog:Executor_AgentFederation ) )
+            FILTER ( NOT EXISTS { ?m a backlog:ExecutorInstance } || NOT EXISTS { $this backlog:hasSeat ?s . ?s backlog:heldBy ?m } )
+        }""" ] .
+
+backlog:AssemblySeatsIndependentShape a sh:NodeShape ;
+    sh:targetClass backlog:TeamAssembly ;
+    sh:severity sh:Violation ;
+    rdfs:label "The seats that check are not held by runs of the definition that does (G118)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "ACC_SEAT_SAME_DEFINITION" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G118: a seat that verifies, oversees or approves is held by a run of the same definition as a seat that does the work. Build the checking seats from a different definition." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] , [ sh:prefix "rdfs" ; sh:namespace "http://www.w3.org/2000/01/rdf-schema#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasSeat ?s1 , ?s2 .
+            ?s1 backlog:seatFunction backlog:Seat_Does ; backlog:heldBy ?h1 .
+            ?s2 backlog:seatFunction ?f2 ; backlog:heldBy ?h2 .
+            FILTER ( ?f2 IN ( backlog:Seat_Verifies, backlog:Seat_Oversees, backlog:Seat_Approves ) )
+            ?h1 backlog:instanceOf ?d . ?h2 backlog:instanceOf ?d .
+        }""" ] .
+
+backlog:AssemblyHasWorkerShape a sh:NodeShape ;
+    sh:targetClass backlog:TeamAssembly ;
+    sh:severity sh:Violation ;
+    rdfs:label "An assembled team has a seat that does the work (G118)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "ACC_NO_WORKER" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G118: this team assembly has no seat that does the work." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] , [ sh:prefix "rdfs" ; sh:namespace "http://www.w3.org/2000/01/rdf-schema#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            FILTER NOT EXISTS { $this backlog:hasSeat ?s . ?s backlog:seatFunction backlog:Seat_Does }
+        }""" ] .
+
+backlog:AgentInstanceRecordShape a sh:NodeShape ;
+    sh:targetClass backlog:ExecutorInstance ;
+    sh:severity sh:Violation ;
+    rdfs:label "A run states its definition, the definition's version and when it was created (G118)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "ACC_INSTANCE_BARE" ;
+    sh:property [ sh:path backlog:instanceOf ; sh:minCount 1 ; sh:message "G118: an executor instance names the definition it is a run of (instanceOf)." ] ;
+    sh:property [ sh:path backlog:instantiatedFromVersion ; sh:minCount 1 ; sh:message "G118: an executor instance states the version of its definition (instantiatedFromVersion)." ] ;
+    sh:property [ sh:path backlog:instantiatedAt ; sh:minCount 1 ; sh:message "G118: an executor instance states when it was created (instantiatedAt)." ] .
+
+backlog:TeamAssemblyRecordShape a sh:NodeShape ;
+    sh:targetClass backlog:TeamAssembly ;
+    sh:severity sh:Violation ;
+    rdfs:label "A team assembly states what was built, for what, when, by whom and the seats (G118)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "ACC_ASSEMBLY_BARE" ;
+    sh:property [ sh:path backlog:assemblesTeam ; sh:minCount 1 ; sh:message "G118: a team assembly names the team it built (assemblesTeam)." ] ;
+    sh:property [ sh:path backlog:assembledFor ; sh:minCount 1 ; sh:message "G118: a team assembly names what the team was built for (assembledFor)." ] ;
+    sh:property [ sh:path backlog:assembledAt ; sh:minCount 1 ; sh:message "G118: a team assembly states when it was built (assembledAt)." ] ;
+    sh:property [ sh:path backlog:assembledBy ; sh:minCount 1 ; sh:message "G118: a team assembly names who built it (assembledBy)." ] ;
+    sh:property [ sh:path backlog:hasSeat ; sh:minCount 1 ; sh:message "G118: a team assembly has seats (hasSeat)." ] .
+
+backlog:SeatRecordShape a sh:NodeShape ;
+    sh:targetClass backlog:Seat ;
+    sh:severity sh:Violation ;
+    rdfs:label "A seat has a function and a holder (G118)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "ACC_SEAT_BARE" ;
+    sh:property [ sh:path backlog:seatFunction ; sh:minCount 1 ; sh:maxCount 1 ; sh:message "G118: a seat has exactly one function (seatFunction)." ] ;
+    sh:property [ sh:path backlog:heldBy ; sh:minCount 1 ; sh:maxCount 1 ; sh:message "G118: a seat is held by exactly one run (heldBy)." ] .
+

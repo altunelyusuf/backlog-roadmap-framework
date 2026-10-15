@@ -22,9 +22,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (ABox: controlled individuals, reference data and the live register)"@en ;
-    owl:versionIRI <http://example.org/backlog/abox/1.48.0> ;
-    owl:versionInfo "1.48.0" ;
-    owl:priorVersion <http://example.org/backlog/abox/1.47.0> , <http://example.org/backlog/abox/1.46.0> , <http://example.org/backlog/abox/1.45.0> , <http://example.org/backlog/abox/1.40.0> , <http://example.org/backlog/abox/1.39.0> , <http://example.org/backlog/abox/1.38.0> , <http://example.org/backlog/abox/1.37.0> , <http://example.org/backlog/abox/1.36.0> , <http://example.org/backlog/abox/1.35.0> ;
+    owl:versionIRI <http://example.org/backlog/abox/1.49.0> ;
+    owl:versionInfo "1.49.0" ;
+    owl:priorVersion <http://example.org/backlog/abox/1.48.0> , <http://example.org/backlog/abox/1.47.0> , <http://example.org/backlog/abox/1.46.0> , <http://example.org/backlog/abox/1.45.0> , <http://example.org/backlog/abox/1.40.0> , <http://example.org/backlog/abox/1.39.0> , <http://example.org/backlog/abox/1.38.0> , <http://example.org/backlog/abox/1.37.0> , <http://example.org/backlog/abox/1.36.0> , <http://example.org/backlog/abox/1.35.0> ;
     owl:priorVersion <http://example.org/backlog/abox/1.34.0> , <http://example.org/backlog/abox/1.33.0> , <http://example.org/backlog/abox/1.32.0> , <http://example.org/backlog/abox/1.31.0> , <http://example.org/backlog/abox/1.30.0> , <http://example.org/backlog/abox/1.29.0> , <http://example.org/backlog/abox/1.28.0> , <http://example.org/backlog/abox/1.27.0> , <http://example.org/backlog/abox/1.26.0> , <http://example.org/backlog/abox/1.25.0> , <http://example.org/backlog/abox/1.24.0> , <http://example.org/backlog/abox/1.23.0> , <http://example.org/backlog/abox/1.22.0> , <http://example.org/backlog/abox/1.21.0> , <http://example.org/backlog/abox/1.20.0> , <http://example.org/backlog/abox/1.19.0> , <http://example.org/backlog/abox/1.17.0> , <http://example.org/backlog/abox/1.16.0> , <http://example.org/backlog/abox/1.15.0> , <http://example.org/backlog/abox/1.14.0> , <http://example.org/backlog/abox/1.13.0> , <http://example.org/backlog/abox/1.12.0> , <http://example.org/backlog/abox/1.11.0> , <http://example.org/backlog/abox/1.10.0> , <http://example.org/backlog/abox/1.9.0> , <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
         <http://example.org/backlog-abox/1.2.1> ,
                      <http://example.org/backlog-abox/1.2.0> ,
@@ -1220,6 +1220,21 @@ backlog:RS_IndependentVerification a owl:NamedIndividual , backlog:RuleSet ;
 backlog:RS_HumanOversight a owl:NamedIndividual , backlog:RuleSet ;
     rdfs:label "Oversight of agent work is held by people"@en ;
     skos:definition "Every Executor named through overseenBy is an individual human or a human team. A RuleSet because it binds only registers that declared it, so a register whose overseers were named before the rule is not judged retroactively (G89, G91). This package's own register does not adopt it."@en .
+
+backlog:RS_AgentAccountability a owl:NamedIndividual , backlog:RuleSet ;
+    rdfs:label "Agent work is accounted for"@en ;
+    skos:definition "Within the adopter's scope: an agent named for any function of a work item is a run (ExecutorInstance) of a definition, not the definition; every status move names who made it (transitionedByExecutor); the parties that do, oversee, verify and approve one item are four different parties, and agent runs of one definition count as one party; a Done item is overseen, verified and approved; an item at or above the adopter's humanApprovalLevel is approved by a person or a human team; an agent team or federation named for an item was assembled by a recorded act with its seats held by runs; a delegated lineage is spawned by the executor responsible for the item that delegated it. A RuleSet because it binds only an adopter (G89, G91). This package's own register does not adopt it."@en .
+
+backlog:Seat_Does a owl:NamedIndividual , backlog:SeatFunction ;
+    rdfs:label "Does the work"@en ; skos:definition "The seat of the party responsible for the item."@en .
+backlog:Seat_Reviews a owl:NamedIndividual , backlog:SeatFunction ;
+    rdfs:label "Reviews the work"@en ; skos:definition "The seat of a party that examines the result and returns findings to its producer."@en .
+backlog:Seat_Verifies a owl:NamedIndividual , backlog:SeatFunction ;
+    rdfs:label "Verifies the work (control)"@en ; skos:definition "The seat of a party that checks the result against its criteria and did not produce it."@en .
+backlog:Seat_Oversees a owl:NamedIndividual , backlog:SeatFunction ;
+    rdfs:label "Oversees the work"@en ; skos:definition "The seat of a party that watches the execution and may refuse, override or stop it."@en .
+backlog:Seat_Approves a owl:NamedIndividual , backlog:SeatFunction ;
+    rdfs:label "Approves the work"@en ; skos:definition "The seat of a party that accepts the verified result."@en .
 
 backlog:RS_ManagerialIndependence a owl:NamedIndividual , backlog:RuleSet ;
     rdfs:label "A verifier answers to a different controller"@en ;

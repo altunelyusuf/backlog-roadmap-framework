@@ -4237,3 +4237,35 @@ ex:FLOW_EQUAL_SPAN a backlog:Task ; backlog:hasState backlog:Done ; backlog:star
 
 # v1.35.0 (G116): ORG_NOT_TEAM is an individual that claims to be an organisation -> OrganisationIsTeamShape. The silent controls are in backlog_human_actor_kinds_probe.
 ex:ORG_NOT_TEAM a backlog:Executor_IndividualHuman ; backlog:isOrganisation true .
+
+# v1.36.0 (G118): agents under configuration management. ACC_LIN is a lineage that adopts RS_AgentAccountability with a human approval level of 3; the ACC_ items belong to it.
+# Each ACC_ case is the focus node of the shape named in its comment. The silent controls are in backlog_agent_accountability_probe.
+ex:ACC_LIN a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_AgentAccountability ; backlog:humanApprovalLevel 3 .
+ex:ACC_DEF_A a backlog:Executor_SingleAgent .
+ex:ACC_DEF_B a backlog:Executor_SingleAgent .
+ex:ACC_DEF_TEAM a backlog:Executor_AgentTeam ; backlog:hasController ex:VER_SELF_EX ; backlog:hasExecutorMember ex:ACC_DEF_A .
+ex:ACC_RUN_A a backlog:ExecutorInstance , backlog:Executor_SingleAgent ; backlog:instanceOf ex:ACC_DEF_A ; backlog:instantiatedFromVersion "1.0.0" ; backlog:instantiatedAt "2026-10-15T08:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+ex:ACC_RUN_A2 a backlog:ExecutorInstance , backlog:Executor_SingleAgent ; backlog:instanceOf ex:ACC_DEF_A ; backlog:instantiatedFromVersion "1.0.0" ; backlog:instantiatedAt "2026-10-15T08:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+ex:ACC_RUN_B a backlog:ExecutorInstance , backlog:Executor_SingleAgent ; backlog:instanceOf ex:ACC_DEF_B ; backlog:instantiatedFromVersion "1.0.0" ; backlog:instantiatedAt "2026-10-15T08:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+ex:ACC_RUN_TEAM a backlog:ExecutorInstance , backlog:Executor_AgentTeam ; backlog:instanceOf ex:ACC_DEF_TEAM ; backlog:instantiatedFromVersion "1.0.0" ; backlog:instantiatedAt "2026-10-15T08:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ; backlog:hasExecutorMember ex:ACC_RUN_A .
+ex:ACC_DEFINITION_NAMED a backlog:Task ; backlog:hasState backlog:InProgress ; backlog:belongsToLineage ex:ACC_LIN ; backlog:responsible ex:ACC_DEF_A .
+ex:ACC_SAME_PARTY a backlog:Task ; backlog:hasState backlog:InProgress ; backlog:belongsToLineage ex:ACC_LIN ; backlog:responsible ex:ACC_RUN_A ; backlog:verifiedBy ex:ACC_RUN_A2 .
+ex:ACC_DONE_UNACCOUNTED a backlog:Task ; backlog:hasState backlog:Done ; backlog:belongsToLineage ex:ACC_LIN ; backlog:responsible ex:ACC_RUN_A ; backlog:integrityLevel 1 .
+ex:ACC_HUMAN_APPROVAL a backlog:Task ; backlog:hasState backlog:Done ; backlog:belongsToLineage ex:ACC_LIN ; backlog:responsible ex:ACC_RUN_A ; backlog:overseenBy ex:ACC_RUN_B ; backlog:integrityLevel 4 ; backlog:approvedBy ex:ACC_RUN_B .
+ex:ACC_NO_ASSEMBLY a backlog:Task ; backlog:hasState backlog:InProgress ; backlog:belongsToLineage ex:ACC_LIN ; backlog:responsible ex:ACC_RUN_TEAM .
+ex:ACC_DELEGATE_WRONG a backlog:Task ; backlog:hasState backlog:InProgress ; backlog:responsible ex:ACC_RUN_A ; backlog:delegatedLineage ex:ACC_CHILD_LIN .
+ex:ACC_CHILD_LIN a backlog:Lineage ; backlog:spawnedBy ex:ACC_RUN_B .
+ex:ACC_MOVE_ANON a backlog:TransitionEvent ; backlog:transitionedItem ex:ACC_SAME_PARTY .
+ex:ACC_MOVE_BY_DEFINITION a backlog:TransitionEvent ; backlog:transitionedItem ex:ACC_SAME_PARTY ; backlog:transitionedByExecutor ex:ACC_DEF_A .
+ex:ACC_INSTANCE_KIND a backlog:ExecutorInstance , backlog:Executor_AgentTeam ; backlog:instanceOf ex:ACC_DEF_A ; backlog:instantiatedFromVersion "1.0.0" ; backlog:instantiatedAt "2026-10-15T08:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+ex:ACC_INSTANCE_CLOCK a backlog:ExecutorInstance , backlog:Executor_SingleAgent ; backlog:instanceOf ex:ACC_DEF_B ; backlog:instantiatedFromVersion "1.0.0" ; backlog:instantiatedAt "2026-10-15T08:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ; backlog:retiredAt "2026-10-14T08:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+ex:ACC_INSTANCE_BARE a backlog:ExecutorInstance , backlog:Executor_SingleAgent .
+ex:ACC_MEMBER_UNSEATED a backlog:TeamAssembly ; backlog:assemblesTeam ex:ACC_RUN_TEAM ; backlog:assembledFor ex:ACC_NO_ASSEMBLY ; backlog:assembledAt "2026-10-15T08:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ; backlog:assembledBy ex:VER_SELF_EX ; backlog:hasSeat ex:ACC_SEAT_B .
+ex:ACC_SEAT_B a backlog:Seat ; backlog:seatFunction backlog:Seat_Does ; backlog:heldBy ex:ACC_RUN_B .
+ex:ACC_SEAT_SAME_DEFINITION a backlog:TeamAssembly ; backlog:assemblesTeam ex:ACC_RUN_TEAM ; backlog:assembledFor ex:ACC_NO_ASSEMBLY ; backlog:assembledAt "2026-10-15T08:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ; backlog:assembledBy ex:VER_SELF_EX ; backlog:hasSeat ex:ACC_SEAT_DOES , ex:ACC_SEAT_VERIFIES .
+ex:ACC_SEAT_DOES a backlog:Seat ; backlog:seatFunction backlog:Seat_Does ; backlog:heldBy ex:ACC_RUN_A .
+ex:ACC_SEAT_VERIFIES a backlog:Seat ; backlog:seatFunction backlog:Seat_Verifies ; backlog:heldBy ex:ACC_RUN_A2 .
+ex:ACC_NO_WORKER a backlog:TeamAssembly ; backlog:assemblesTeam ex:ACC_RUN_TEAM ; backlog:assembledFor ex:ACC_NO_ASSEMBLY ; backlog:assembledAt "2026-10-15T08:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ; backlog:assembledBy ex:VER_SELF_EX ; backlog:hasSeat ex:ACC_SEAT_REVIEWS .
+ex:ACC_SEAT_REVIEWS a backlog:Seat ; backlog:seatFunction backlog:Seat_Reviews ; backlog:heldBy ex:ACC_RUN_B .
+ex:ACC_ASSEMBLY_BARE a backlog:TeamAssembly .
+ex:ACC_SEAT_BARE a backlog:Seat .

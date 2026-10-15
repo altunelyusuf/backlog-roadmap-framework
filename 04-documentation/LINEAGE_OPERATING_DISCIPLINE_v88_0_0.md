@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v87.0.0
+# Lineage Operating Discipline — v88.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -3464,3 +3464,21 @@ Related: G89, G112, G113, G115.
 **The executor rules and subclasses.** Three queries named executor kinds positively and read no subclass: the collective-responsible rule, the human-overseer rule and `OrganisationIsTeamShape`. An agent class of another package declared a subclass of an executor kind therefore escaped them (a multi-agent system responsible for an atomic item did not fire; a subclass of a human team named as overseer fired). They now follow `rdfs:subClassOf*`. `backlog_executor_subclass_probe` shows seven cases and fails against the previous shapes.
 
 Related: G91, G111, G112, G116.
+
+## G118 — Agents under configuration management: a run is an instance of a definition, a team is assembled, work is accounted for
+
+*(Opened by the owner's question of 2026-10-15 about running a lineage with agents, after the review that found the gaps. Each rule below was shown to fire on a planted case and to stay silent on its control before it was kept.)*
+
+**Q1 — two levels of planning.** The lineage plan stays high level: objectives, stages, acceptance. An agent or agent system plans its own work at its own grain. For a complex task it opens a lineage of its own: `delegatedLineage` ties the coarse item to that lineage, `spawnedBy` names the run that opened it, and `DelegatedLineageSpawnerShape` requires that run to be the executor responsible for the item or a member of it. Planning inside the child lineage after its Backlog stage closed is covered by G117.
+
+**Q2 — agents under configuration management.** The standing agent (the definition) is not the party that acted. `ExecutorInstance` is one run: it names its definition (`instanceOf`), the definition's version (`instantiatedFromVersion`), when it was created and, when it ended, when it retired. A run is also an Executor of its definition's kind. `InstanceKindShape` and `InstanceClockShape` check that; `AgentInstanceRecordShape` requires the three facts. Humans are named directly and are not instantiated.
+
+**Q3 — team building.** `TeamAssembly` is the recorded act of building an agent team or federation for an item or a lineage: the team run, what it was built for, when, by whom, and its seats (`Seat`, with a `SeatFunction` of five: does, reviews, verifies, oversees, approves, each held by one run). `AssemblyMembersSeatedShape`, `AssemblySeatsIndependentShape` (a checking seat is not held by a run of the definition that does) and `AssemblyHasWorkerShape` check it. The constructing tool that creates the runs from a definition is not part of this package and is not claimed: this package records and checks the instantiation; the system that performs it writes these records.
+
+**Q4 — oversight, control and approval without human assignment.** `RS_AgentAccountability` is the rule set (opt-in, by register or by one lineage, G112). Within its scope: an agent named for any function is a run (`AgentRunIsInstanceShape`); every recorded status move names who made it (`transitionedByExecutor`, `TransitionNamesWhoShape`, `TransitionByRunShape`); the parties that do, oversee, verify and approve one item are four different parties, and runs of one definition count as one party (`SeparateDutiesShape`); a Done item is overseen, verified and approved (`DoneUnaccountedShape`); an agent team named for an item was assembled (`CollectiveNeedsAssemblyShape`). Overseers need not be people here: the adopter that also wants people as overseers adopts `RS_HumanOversight` as well. People stay on the loop through `humanApprovalLevel`: a Done item at or above the level, or with no integrity level, is approved by a person or a human team (`HumanApprovalAboveLevelShape`); below it an independent run may approve. A person is therefore asked about the items that carry risk, not assigned to every task.
+
+**Q5 — the monitoring report.** `backlog_agent_monitor` v1.0.0 computes what a person has to look at: the runs and the moves each made, moves with no maker or made by a definition, items In Progress with nothing recorded for a stated time, Done items missing an overseer, a verifier or an approver, items that need a person, and teams with no recorded assembly. It is read-only, stamped with its own run time, and exits 1 when the escalation list is not empty. It complements the roadmap report, which orders the work.
+
+**What is not claimed.** Nothing here verifies that the run named in a record is the process that really acted: the records are as honest as the system writing them. Two parties are independent here by identity and by definition, not by the model, data or prompts behind them. No budget, parallelism or untrusted-input rule was added. This package's own register does not adopt the rule set.
+
+Related: G91, G109, G111, G112, G116, G117.

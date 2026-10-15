@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.131.0
+# Backlog & Roadmap Semantic Framework — Standard v1.132.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -2551,3 +2551,11 @@ A human actor is an individual (`Executor_IndividualHuman`), a team (`Executor_H
 
 - `RS_DigestTable_v4` is the v3 table without `ExecutionTask`. Under it, planning an admitted item into an iteration does not move the Backlog stage digest; an item added to the closed stage does. The Backlog digest also covers the pre-lineage items the lineage's own Backlog output admitted. A register adopts the table and re-records its digests as a stated migration.
 - The collective-responsible rule, the human-overseer rule and `OrganisationIsTeamShape` apply to subclasses of the five executor kinds.
+
+## Agents under configuration management (v1.397.0, G118)
+
+- **Executor instance** (`ExecutorInstance`). One run of an agent, agent team or agent federation definition: it names its definition, the definition's version and when it was created, and is an Executor of its definition's kind. Humans are not instantiated.
+- **Team assembly and seat** (`TeamAssembly`, `Seat`, `SeatFunction`). The recorded act of building an agent team for an item or a lineage, with its seats. A seat has one seat function (does, reviews, verifies, oversees, approves) and is held by one run.
+- **Agent accountability rule set.** Opt-in. Within its scope agents are named as runs, every status move names who made it, the parties that do, oversee, verify and approve one item are different, Done work is overseen, verified and approved, and work at or above the human approval level is approved by a person.
+- **Delegated lineage.** A coarse item can delegate its detail to a lineage opened by the executor responsible for it.
+- **Agent monitor.** `backlog_agent_monitor` reports what a person has to look at; it is read-only and exits 1 when anything needs a person.

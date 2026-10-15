@@ -11260,6 +11260,15 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.397.0 — 2026-10-15 (MINOR: agents under configuration management; oversight, control and approval without assigning people — G118)
+
+- **Vocabulary (T-Box v1.133.0, data v1.49.0):** `ExecutorInstance` (a run of a definition, with its version and clock), `TeamAssembly`, `Seat`, `SeatFunction` (five individuals), `approvedBy`, `humanApprovalLevel`, `transitionedByExecutor`, `delegatedLineage`, `spawnedBy`; the rule set `RS_AgentAccountability`.
+- **Rules (shapes v1.168.0):** fifteen shapes, seven of them bound to an adopter only; the others bind individuals of the new classes. Fixture v1.36.0 proves each (`ACC_` cases).
+- **Tools:** `backlog_agent_monitor` v1.0.0 (the report of what a person has to look at) with its probe; `backlog_agent_accountability_probe` (32 expectations). Gate v1.52.0 runs both.
+- **Not claimed:** that the run named in a record is the process that acted; independence by model; budgets, parallelism, untrusted input; the system that performs the instantiation. Discipline v88.0.0 (G118); Standard v1.132.0.
+
+**Unplanned work:** the owner's design questions of 2026-10-15 about running a lineage with agents; no backlog item of this package covers them.
+
 ## v1.396.0 — 2026-10-15 (MINOR: planning after a Backlog stage closed is not an addition to it; the executor rules see subclasses — G117)
 
 - Digest table v4 (`RS_DigestTable_v4`, `stageRequiresTypeV4`): the v3 table without `ExecutionTask`; the Backlog digest also covers the pre-lineage items the lineage's own Backlog output admitted. `backlog_pipeline_verify` v1.9.0 reads it from the register's adoption. Adopted as a stated migration (G91).
