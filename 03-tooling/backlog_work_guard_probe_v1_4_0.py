@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_work_guard_probe v1.3.0 -- proof that the work guard discriminates and cannot pass over nothing (L-95).
+"""backlog_work_guard_probe v1.4.0 -- proof that the work guard discriminates and cannot pass over nothing (L-95).
 
 Builds a real throwaway git repository, installs the guard with backlog_guard_install, and drives REAL git commits and
 the REAL Claude hook script against fixtures/fixture_execution_ready_negative (cite by stem, L-123), where the lineage
@@ -74,13 +74,13 @@ r = commit(d, "docs only, no item needed", path="docs/a.md")
 expect("ACCEPTED: a commit that touches no governed work needs no item", r.returncode == 0)
 r = commit(d, "skipped the hook", noverify=True)
 expect("a --no-verify commit gets in locally (the hook alone can be skipped)", r.returncode == 0)
-g = os.path.join(d, "tools", "backlog_work_guard_v1_2_0.py")
-r = sh(d, sys.executable, g, "range", "HEAD~3..HEAD")
+g = os.path.join(d, "tools", "backlog_work_guard_v1_3_0.py")
+r = sh(d, sys.executable, g, "range", "HEAD~2..HEAD")
 expect("REFUSED by the CI layer: the range check names the skipped commit",
        r.returncode == 2 and "names no Work-Item" in r.stdout and "examined" in r.stdout)
 r = sh(d, sys.executable, g, "range", "HEAD~2..HEAD~1")
 expect("ACCEPTED by the CI layer: a range holding only compliant commits", r.returncode == 0 and "VERDICT: PASS" in r.stdout)
-hook = os.path.join(d, "tools", "backlog_guard_claude_hook_v1_0_0.py")
+hook = os.path.join(d, "tools", "backlog_guard_claude_hook_v1_1_0.py")
 ev = lambda **k: json.dumps(dict({"cwd": d, "hook_event_name": "PreToolUse"}, **k))
 r = sh(d, sys.executable, hook, inp=ev(tool_name="Edit", tool_input={"file_path": os.path.join(d, "app", "main.py")}))
 expect("ACCEPTED at edit time: lineage ready", r.returncode == 0)
@@ -93,7 +93,7 @@ sh(d5, "git", "config", "user.email", "p@x"); sh(d5, "git", "config", "user.name
 r = commit(d5, "work in a fresh clone, hooks not armed yet")
 expect("a fresh clone has no git hooks (they do not travel): the commit gets in", r.returncode == 0)
 sh(d5, "git", "reset", "-q", "--hard", "HEAD~1")
-r = sh(d5, sys.executable, os.path.join(d5, "tools", "backlog_guard_claude_hook_v1_0_0.py"), inp=json.dumps({"cwd": d5, "hook_event_name": "SessionStart"}))
+r = sh(d5, sys.executable, os.path.join(d5, "tools", "backlog_guard_claude_hook_v1_1_0.py"), inp=json.dumps({"cwd": d5, "hook_event_name": "SessionStart"}))
 expect("SessionStart re-arms the git hooks in the clone", r.returncode == 0 and "re-armed" in r.stdout)
 r = commit(d5, "work in a fresh clone after the session start")
 expect("REFUSED in the fresh clone once the session start has re-armed the hooks", r.returncode != 0 and "names no `Work-Item" in r.stdout + r.stderr)
@@ -111,7 +111,7 @@ expect("ACCEPTED at push: a range of compliant commits", r.returncode == 0)
 shutil.rmtree(bare, ignore_errors=True); shutil.rmtree(bare4, ignore_errors=True); shutil.rmtree(d4, ignore_errors=True)
 
 d2, r = fresh("Lin_Waiting")
-hook2 = os.path.join(d2, "tools", "backlog_guard_claude_hook_v1_0_0.py")
+hook2 = os.path.join(d2, "tools", "backlog_guard_claude_hook_v1_1_0.py")
 ev2 = lambda **k: json.dumps(dict({"cwd": d2, "hook_event_name": "PreToolUse"}, **k))
 r = sh(d2, sys.executable, hook2, inp=ev2(tool_name="Write", tool_input={"file_path": os.path.join(d2, "app", "new.py")}))
 expect("REFUSED at edit time: lineage has no Backlog stage (the Lineage_2 state)",
@@ -139,7 +139,7 @@ def committed():
     d, r = fresh()
     sh(d, "git", "add", "-A"); sh(d, "git", "commit", "-q", "--no-verify", "-m", "commit the installed guard files")
     return d
-gv = lambda d: os.path.join(d, "tools", "backlog_work_guard_v1_2_0.py")
+gv = lambda d: os.path.join(d, "tools", "backlog_work_guard_v1_3_0.py")
 head = lambda d: sh(d, "git", "rev-parse", "HEAD").stdout.strip()
 
 d6 = committed(); base = head(d6)
@@ -162,7 +162,7 @@ c["exempt_paths"] = [".githooks/**", ".backlog-guard.json", "tools/**"]; json.du
 sh(d7, "git", "add", "-A"); sh(d7, "git", "commit", "-q", "--no-verify", "-m", "exempt the guard files")
 r = commit(d7, "edit a hook, no item", path=".githooks/commit-msg")
 expect("REFUSED: no exempt path releases the guard's own files", r.returncode != 0 and "names no `Work-Item" in r.stdout + r.stderr)
-r = commit(d7, "edit the vendored guard, no item", path="tools/backlog_work_guard_v1_2_0.py")
+r = commit(d7, "edit the vendored guard, no item", path="tools/backlog_work_guard_v1_3_0.py")
 expect("REFUSED: the vendored tooling directory is governed work", r.returncode != 0 and "names no `Work-Item" in r.stdout + r.stderr)
 
 d8 = committed(); base8 = head(d8)
@@ -195,14 +195,74 @@ for x in (d6, d7, d8, d9): shutil.rmtree(x, ignore_errors=True)
 
 # G122: the session-start status carries the brief, and does not stop speaking when the brief is absent
 dB, _ = fresh()
-r = sh(dB, sys.executable, os.path.join(dB, "tools", "backlog_work_guard_v1_2_0.py"), "--config", ".backlog-guard.json", "status")
+r = sh(dB, sys.executable, os.path.join(dB, "tools", "backlog_work_guard_v1_3_0.py"), "--config", ".backlog-guard.json", "status")
 expect("the status prints the brief (focus, items in progress, checkpoints due, what a close needs)",
        r.returncode == 0 and all(k in r.stdout for k in ("FOCUS", "IN PROGRESS", "DUE", "TO CLOSE")) and "NEXT REQUIRED ACT" in r.stdout)
 os.remove(os.path.join(dB, "tools", "backlog_session_brief_v1_0_0.py"))
-r = sh(dB, sys.executable, os.path.join(dB, "tools", "backlog_work_guard_v1_2_0.py"), "--config", ".backlog-guard.json", "status")
+r = sh(dB, sys.executable, os.path.join(dB, "tools", "backlog_work_guard_v1_3_0.py"), "--config", ".backlog-guard.json", "status")
 expect("without the brief tool the status still speaks and says what is missing",
        r.returncode == 0 and "NEXT REQUIRED ACT" in r.stdout and "BRIEF" in r.stdout and "not shown" in r.stdout)
 shutil.rmtree(dB, ignore_errors=True)
+
+
+# ---- v1.3.0 (G123): register by pattern, the guard-install commit, no rdflib needed to decide, the Bash write test ----
+dP, _ = fresh("Lin_Waiting")
+os.makedirs(os.path.join(dP, "registers"))
+sh(dP, "git", "mv", "register.ttl", "registers/r_v1_0_0.ttl") if False else shutil.move(os.path.join(dP, "register.ttl"), os.path.join(dP, "registers", "r_v1_0_0.ttl"))
+cp_ = os.path.join(dP, ".backlog-guard.json"); c = json.load(open(cp_)); c["register"] = ["registers/r_v*.ttl"]; json.dump(c, open(cp_, "w"), indent=2)
+sh(dP, "git", "add", "-A"); sh(dP, "git", "commit", "-q", "--no-verify", "-m", "setup: the register cited by pattern and the guard committed")
+gP = os.path.join(dP, "tools", "backlog_work_guard_v1_3_0.py")
+r = sh(dP, sys.executable, gP, "status")
+expect("a register cited by pattern is read (the lineage state is reported)", r.returncode == 0 and "NOT READY" in r.stdout)
+shutil.move(os.path.join(dP, "registers", "r_v1_0_0.ttl"), os.path.join(dP, "registers", "r_v1_1_0.ttl"))
+sh(dP, "git", "add", "-A"); r = sh(dP, "git", "commit", "-q", "-m", "BP-D7: the register gets a new version, the configuration is untouched")
+expect("ACCEPTED while NOT READY: renaming a register cited by pattern touches only the register", r.returncode == 0)
+r = sh(dP, sys.executable, gP, "status")
+expect("the renamed register is the one read", r.returncode == 0 and "NOT READY" in r.stdout)
+r = sh(dP, sys.executable, gP, "range", "HEAD~1..HEAD")
+expect("the range check resolves the register at each revision", r.returncode == 0 and "VERDICT: PASS" in r.stdout)
+
+# the guard-install commit
+tf = os.path.join(dP, "tools", "backlog_work_guard_v1_3_0.py")
+open(tf, "a").write("# re-vendored\n"); sh(dP, "git", "add", "-A")
+r = sh(dP, "git", "commit", "-q", "-m", "re-vendor the guard, no marker")
+expect("REFUSED while NOT READY: guard files changed with neither a Work-Item nor Guard-Install", r.returncode != 0 and "names no `Work-Item" in r.stdout + r.stderr)
+r = sh(dP, "git", "commit", "-q", "-m", "re-vendor the guard\n\nGuard-Install: v1.3.0 vendored")
+expect("ACCEPTED while NOT READY: a commit of only the guard's own files that states Guard-Install", r.returncode == 0)
+open(tf, "a").write("# again\n"); open(os.path.join(dP, "app", "main.py"), "a").write("x\n"); sh(dP, "git", "add", "-A")
+r = sh(dP, "git", "commit", "-q", "-m", "guard files with work mixed in\n\nGuard-Install: sneaked")
+expect("REFUSED: Guard-Install does not release governed work committed beside the guard files", r.returncode != 0)
+sh(dP, "git", "reset", "-q", "--hard", "HEAD")
+open(os.path.join(dP, ".backlog-guard.json"), "a").write("\n"); sh(dP, "git", "add", "-A")
+r = sh(dP, "git", "commit", "-q", "-m", "configuration under the install marker\n\nGuard-Install: sneaked")
+expect("REFUSED: Guard-Install does not cover the configuration", r.returncode != 0)
+sh(dP, "git", "reset", "-q", "--hard", "HEAD")
+r = sh(dP, sys.executable, gP, "range", "HEAD~2..HEAD")
+expect("the range check lists the guard-install commit without judging it by readiness", r.returncode == 0 and "guard-install commit" in r.stdout)
+
+# no rdflib: python3 -S sees no site-packages
+hP = os.path.join(dP, "tools", "backlog_guard_claude_hook_v1_1_0.py")
+evP = lambda **k: json.dumps(dict({"cwd": dP, "hook_event_name": "PreToolUse"}, **k))
+bash = lambda c: sh(dP, sys.executable, "-S", hP, inp=evP(tool_name="Bash", tool_input={"command": c}))
+r = bash("python3 -m pip install rdflib pyshacl")
+expect("ACCEPTED without rdflib: the command that installs rdflib", r.returncode == 0)
+r = sh(dP, sys.executable, "-S", hP, inp=evP(tool_name="Write", tool_input={"file_path": os.path.join(dP, "app", "n.py")}))
+expect("REFUSED without rdflib: a governed edit, and the reason names rdflib", r.returncode == 2 and "rdflib" in r.stderr)
+r = sh(dP, sys.executable, "-S", hP, inp=json.dumps({"cwd": dP, "hook_event_name": "SessionStart"}))
+expect("the session starts without rdflib and says the lineage state is not shown", r.returncode == 0 and "not shown" in r.stdout)
+
+# the Bash write test
+r = bash("grep -rn foo app > /tmp/guardprobe_out")
+expect("ACCEPTED: a read of a governed directory whose redirect writes elsewhere", r.returncode == 0)
+r = bash("echo x > app/new.py")
+expect("REFUSED: a redirect into a governed path", r.returncode == 2)
+r = bash("cp app/main.py /tmp/guardprobe_copy")
+expect("ACCEPTED: copying a governed file OUT of the governed paths", r.returncode == 0)
+r = bash("cp /tmp/guardprobe_copy app/main.py")
+expect("REFUSED: copying INTO a governed path", r.returncode == 2)
+r = bash("sed -i s/1/2/ app/main.py")
+expect("REFUSED: sed -i on a governed file", r.returncode == 2)
+shutil.rmtree(dP, ignore_errors=True)
 
 print("VERDICT   :", "PASS" if not bad else "FAIL"); [print("  ", b) for b in bad]
 sys.exit(1 if bad else 0)

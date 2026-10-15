@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_session_brief_probe v1.0.0 -- the brief says what the register holds, both ways (G122).
+"""backlog_session_brief_probe v1.1.0 -- the brief says what the register holds, both ways (G122).
 
 Plants a register with two objectives (one far from target, one near), an overdue checkpoint, one checkpoint due in five days, an
 item In Progress and two iterations (one missing a duration and a deployment unit, one complete), then reads the brief. Also checks
@@ -48,9 +48,9 @@ expect("a mission with no objectives is not called ready to close", "no objectiv
 expect("an unknown lineage is reported, not guessed", br.brief(g2, "Nope", 7, now, out=lambda s: None) == 1)
 d = tempfile.mkdtemp(prefix="briefprobe_"); v = os.path.join(d, "vend"); p = os.path.join(d, "pkg", "03-tooling"); os.makedirs(v); os.makedirs(p)
 open(os.path.join(v, "backlog_work_guard_v1_1_0.py"), "w").write("#"); open(os.path.join(v, "backlog_session_brief_v1_0_0.py"), "w").write("#")
-open(os.path.join(p, "backlog_work_guard_v1_2_0.py"), "w").write("#"); open(os.path.join(p, "backlog_session_brief_v1_0_0.py"), "w").write("#")
+open(os.path.join(p, "backlog_work_guard_v1_3_0.py"), "w").write("#"); open(os.path.join(p, "backlog_session_brief_v1_0_0.py"), "w").write("#")
 o = []; rc = br.vendored(v, os.path.dirname(p), out=o.append)
-expect("an old vendored copy is named with the version that replaces it", rc == 1 and "backlog_work_guard_v1_1_0.py -> backlog_work_guard_v1_2_0.py" in o[0] and "session_brief" not in o[0])
+expect("an old vendored copy is named with the version that replaces it", rc == 1 and "backlog_work_guard_v1_1_0.py -> backlog_work_guard_v1_3_0.py" in o[0] and "session_brief" not in o[0])
 shutil.rmtree(d, ignore_errors=True)
 print("VERDICT   : " + ("FAIL -- " + "; ".join(bad) if bad else "PASS"))
 sys.exit(1 if bad else 0)

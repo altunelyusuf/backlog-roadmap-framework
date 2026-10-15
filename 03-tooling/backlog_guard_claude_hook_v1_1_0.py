@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_guard_claude_hook v1.0.0 -- Claude Code hook dispatcher for the work guard (ruling G101).
+"""backlog_guard_claude_hook v1.1.0 -- Claude Code hook dispatcher for the work guard (ruling G101).
 
 Registered by backlog_guard_install in .claude/settings.json for:
   SessionStart  re-arms the git hooks in this clone (they do not travel with a clone), then prints the lineage's start-gate state and the NEXT REQUIRED ACT into the session's context, so the rule
@@ -8,6 +8,11 @@ Registered by backlog_guard_install in .claude/settings.json for:
                 lineage is READY. Bash: a command that writes a governed work path (redirect, sed -i, tee, cp, mv, rm,
                 patch, git apply) is blocked the same way. The Bash test is a heuristic, a best effort; the
                 commit-msg hook and the CI range check are the backstop that cannot be argued with.
+
+v1.1.0 (G123): the hook decides whether a call touches a governed path from the configuration alone; rdflib is needed only
+when a governed path is touched or the session starts, so the command that installs rdflib is never blocked by its absence.
+The Bash test judges the targets of redirects and the operands of the write commands, not every word of a command that
+happens to contain a redirect: `grep -rn x app > /tmp/o` writes /tmp/o, not app.
 
 Fails CLOSED: any error inside the guard blocks (exit 2) with the reason; a hook that fails open is the drift itself.
 Claude Code protocol: JSON on stdin; exit 2 blocks and stderr is returned to the model; stdout of SessionStart is added
@@ -29,6 +34,32 @@ def load_guard():
 
 
 WRITE = re.compile(r"(>>?\s*\S+|\bsed\s+-i|\btee\b|\bcp\b|\bmv\b|\brm\b|\bpatch\b|\bgit\s+apply\b|\btouch\b)")
+REDIR = re.compile(r"(?<![0-9&<])\d?>>?(?!&)\s*([^\s;&|<>]+)")
+WCMD = {"tee", "mv", "rm", "patch", "touch", "cp", "sed", "install", "ln", "truncate", "dd"}
+
+
+def written_tokens(cmd):
+    """The words of CMD that are written: redirect targets, and the operands of the write commands (cp: its last operand;
+    sed only with -i; git apply: its operands). Read-only words that name a governed path are not written."""
+    out = [m.group(1).strip("\"'") for m in REDIR.finditer(cmd)]
+    for seg in re.split(r"&&|\|\||[;|\n]", cmd):
+        seg = re.sub(r"\d?>>?\s*[^\s;&|<>]+|<\s*[^\s;&|<>]+", " ", seg)
+        w = seg.split()
+        while w and (w[0] in ("sudo", "env", "command", "time", "nohup") or "=" in w[0].split("/")[0]):
+            w = w[1:]
+        if not w:
+            continue
+        c = os.path.basename(w[0])
+        args = [a.strip("\"'") for a in w[1:]]
+        if c == "git" and args[:1] == ["apply"]:
+            out += [a for a in args[1:] if not a.startswith("-")]
+        elif c == "sed":
+            if any(a == "-i" or a.startswith("-i") or a == "--in-place" for a in args):
+                out += [a for a in args if not a.startswith("-")][1:]
+        elif c in WCMD:
+            ops = [a for a in args if not a.startswith("-")]
+            out += ops[-1:] if c == "cp" else ops
+    return out
 
 
 def main():
@@ -51,7 +82,10 @@ def main():
                 if cur != ".githooks":
                     subprocess.run(["git", "-C", top, "config", "core.hooksPath", ".githooks"])
                     print("BACKLOG GUARD: git hooks re-armed in this clone (core.hooksPath = .githooks).")
-            m.cmd_status(gd, out=lambda s: print(s))
+            try:
+                m.cmd_status(gd, out=lambda s: print(s))
+            except SystemExit as e:     # the session must be able to start and install what the guard needs
+                print(f"BACKLOG GUARD: the lineage state is not shown: {e}")
             return 0
         tool, ti = ev.get("tool_name", ""), ev.get("tool_input", {}) or {}
         paths = []
@@ -60,7 +94,7 @@ def main():
         elif tool == "Bash":
             cmd = ti.get("command", "")
             if WRITE.search(cmd):
-                for tok in re.findall(r"[\w./@+-]+", cmd):
+                for tok in written_tokens(cmd):
                     rel = os.path.relpath(os.path.join(cwd, tok), top)
                     if not rel.startswith("..") and gd.is_work(rel):
                         paths.append(tok)

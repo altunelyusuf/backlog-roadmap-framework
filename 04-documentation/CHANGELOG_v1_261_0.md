@@ -11260,6 +11260,13 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.400.0 — 2026-10-15 (MINOR: the work guard no longer blocks its own prerequisites; the register is cited by pattern — G123)
+
+- **Tools:** work guard v1.3.0 (register cited by `name_v*.ttl`; the guard-install commit; rdflib needed only to read the register) and Claude hook v1.1.0 (the install command is never blocked; the Bash write test judges what is written). Probe v1.4.0 (56 expectations).
+- **Handovers:** an adopting project handover answered and filed; discipline v91.0.0 (G123); adoption guide v1.3.0.
+
+**Unplanned work:** one consuming project's handover; no backlog item of this package covers it.
+
 ## v1.399.0 — 2026-10-15 (MINOR: the history of an amended mission; the closure anchor binds adopters; a session's brief — G121, G122)
 
 - **Rule sets (data v1.50.0):** `RS_MissionHistory` and `RS_ClosureCommitAnchor`.

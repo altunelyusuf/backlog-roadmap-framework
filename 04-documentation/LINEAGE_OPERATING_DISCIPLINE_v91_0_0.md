@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v90.0.0
+# Lineage Operating Discipline — v91.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -3537,3 +3537,19 @@ Related: G91, G101, G113, G115, G117, G118.
 
 Related: G91, G101, G104, G117, G119, G120.
 
+
+## G123 — The work guard must not block what it needs in order to work, and must not pin what the discipline says is never pinned
+
+*(Opened by a handover of an adopting project session, 2026-10-15: three findings measured on the guard of v1.399.0.)*
+
+**Ruled and built: the register is cited by pattern (finding 1).** G102 says a register follows BP-D7 and is cited by pattern, never pinned; the guard's configuration pinned it by exact path, and since G119 the configuration is a protected path, so every new register version needed a ready Work-Item that the recovery runbook cannot yet have. `.backlog-guard.json` may now cite `name_v*.ttl`; the highest version at the examined revision is the register. An exact path still works.
+
+**Ruled and built: the guard-install commit (finding 1, second question).** A lineage that is not ready cannot name a ready item, yet the guard has to be vendored or refreshed before anything else changes (G108, G122). A commit that changes only the guard's own files and states `Guard-Install: REASON` is accepted, and the range check lists it with its files. The configuration is deliberately outside this route: it is where a guard is loosened. This is a visibility rule, not a prevention: a guard-install commit can replace the guard with a weaker one, and the only protection is that every such commit is named in the range output and nothing else may ride with it.
+
+**Ruled and built: nothing needs rdflib to decide that a call is not governed (finding 2).** The guard builds without rdflib and loads the start gate only when a register must be read; the hook decides on the configuration alone. The command that installs rdflib is no longer blocked by its absence, a session starts without it, and a governed edit is still refused (fail closed) with the missing module named. rdflib and pyshacl are listed as prerequisites in the adoption guide.
+
+**Ruled and built: the Bash write test judges what is written (finding 3).** Redirect targets and the operands of the write commands, not every word of a command that contains a redirect. It stays a heuristic (G101); the commit hook and the range check are the backstop.
+
+**Not claimed.** A consumer whose configuration still pins the register path cannot move to the pattern while its lineage is not ready, because the configuration is a protected path and is outside the guard-install route; that one change is made by the owner with the restart. The test is run on a planted register and a throw-away repository, not on the adopting project's. Whether the owner's vendored copy (v1.332.0) upgrades cleanly is the consumer's step: refresh the vendored files, then re-run the installer.
+
+Related: G101, G102, G108, G119, G122.

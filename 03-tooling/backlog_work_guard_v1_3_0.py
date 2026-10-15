@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_work_guard v1.2.0 -- the safeguard that sits IN THE PATH of the act, not after it.
+"""backlog_work_guard v1.3.0 -- the safeguard that sits IN THE PATH of the act, not after it.
 
 WHY THIS EXISTS (ruling G101). an adopting project opened Lineage_2 to stop work happening outside the register, closed its
 Mission..Objective stages, never built the Backlog stage, and shipped nine releases from a work ledger. Every safeguard
@@ -31,6 +31,15 @@ CONFIG  (.backlog-guard.json at the repository root, or --config PATH)
   .claude/settings.json, the CI workflow and the vendored tooling directory ("tooling_dir"). Changing the guard needs a
   ready Work-Item like any other work. The installer writes them; a configuration without the key gets the defaults.
 
+v1.3.0 (G123):
+  - a register entry may name the register by pattern, `dir/name_v*.ttl`: the highest version present at the examined
+    revision is the register (G102: a register follows BP-D7 and is cited by pattern, never pinned). An exact path still
+    works. A register rename then touches only the register, not the configuration.
+  - the guard's own files (tooling_dir, .githooks, .claude/settings.json, the CI workflow; NOT the configuration) may be
+    changed while the lineage is not ready by a commit that changes nothing else and carries `Guard-Install: REASON`. The
+    range check lists every such commit and its files; it does not judge them by readiness, it shows them.
+  - rdflib is needed only to read the register: building the guard and deciding that a path is not governed need none.
+
 THE GUARD MUST NOT BE ABLE TO PASS OVER NOTHING (the failure it exists to prevent):
   - a work_path glob matching no tracked file fails the run: a guard configured over nothing proves nothing
   - an empty work_paths list fails; a missing register fails; an unparseable register fails (fail closed, exit 2)
@@ -43,6 +52,7 @@ import fnmatch, glob, importlib.util, json, os, re, subprocess, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 TRAILER = re.compile(r"^Work-Item:\s*([A-Za-z0-9_.:-]+)\s*$", re.M)
+INSTALL = re.compile(r"^Guard-Install:\s*\S+", re.M)
 
 
 def _ready_module():
@@ -99,7 +109,44 @@ class Guard:
                 prot.append(self.cfg["tooling_dir"].strip("/") + "/**")
         self.protected = [glob_re(p) for p in prot]
         self.lineage = self.cfg.get("active_lineage")
-        self.ready = _ready_module()
+        inst = [".githooks/**", ".claude/settings.json", ".github/workflows/backlog-work-guard.yml"]
+        if self.cfg.get("tooling_dir"):
+            inst.append(self.cfg["tooling_dir"].strip("/") + "/**")
+        self.install = [glob_re(p) for p in inst]
+        self._ready = None
+
+    @property
+    def ready(self):
+        if self._ready is None:
+            try:
+                self._ready = _ready_module()
+            except ImportError as e:
+                raise SystemExit(f"GUARD BLOCKS: cannot read the register without {e.name or 'a Python module'}: install rdflib and pyshacl (python3 -m pip install rdflib pyshacl)")
+        return self._ready
+
+    def is_install_only(self, files):
+        """True when every changed file is one of the guard's own files (the configuration is not among them)."""
+        return bool(files) and all(any(r.match(re.sub(r"^\./", "", f)) for r in self.install) for f in files)
+
+    def register_files(self, rev=None):
+        """The register files at REV: an entry with * in its file name resolves to the highest _vX_Y_Z version present."""
+        sv = lambda p: [int(x) for x in re.findall(r"_v(\d+)_(\d+)_(\d+)\.", p)[0]]
+        out = []
+        for rel in self.cfg.get("register", []):
+            if "*" not in rel:
+                out.append(rel); continue
+            d, pat = os.path.split(rel)
+            if rev:
+                try:
+                    names = git(self.root, "ls-tree", "--name-only", rev, (d + "/") if d else "").splitlines()
+                except RuntimeError:
+                    names = []
+                names = [os.path.basename(n) for n in names]
+            else:
+                names = os.listdir(os.path.join(self.root, d or "."))
+            c = sorted((n for n in names if fnmatch.fnmatch(n, pat) and re.search(r"_v\d+_\d+_\d+\.", n)), key=sv)
+            out.append(os.path.join(d, c[-1]) if c else rel)
+        return out
 
     def is_work(self, path):
         path = re.sub(r"^\./", "", path)
@@ -130,9 +177,12 @@ class Guard:
     def graph(self, rev=None, tolerant=False):
         """The register at REV (the working tree when None). tolerant: return None instead of stopping when the register
         did not exist or could not be read at REV (a commit before the register was committed judges nothing ready)."""
-        from rdflib import Graph
+        try:
+            from rdflib import Graph
+        except ImportError as e:
+            raise SystemExit(f"GUARD BLOCKS: cannot read the register without {e.name}: install rdflib and pyshacl (python3 -m pip install rdflib pyshacl)")
         g = Graph()
-        for rel in self.cfg.get("register", []):
+        for rel in self.register_files(rev):
             try:
                 if rev:
                     data = git(self.root, "show", f"{rev}:{rel}")
@@ -152,7 +202,7 @@ class Guard:
     def blob_key(self, rev):
         """Identity of the register files at REV, so one parse serves every commit that sees the same bytes."""
         out = []
-        for rel in self.cfg.get("register", []):
+        for rel in self.register_files(rev):
             try:
                 out.append(git(self.root, "rev-parse", f"{rev}:{rel}").strip())
             except RuntimeError:
@@ -244,6 +294,9 @@ def cmd_edit(gd, path, out=print):
     rel = os.path.relpath(os.path.abspath(path), root) if os.path.isabs(path) or os.path.exists(path) else path
     if not gd.is_work(rel):
         return 0
+    if gd.is_install_only([rel]):
+        out(f"guard: {rel} is one of the guard's own files; the commit must change only such files and carry `Guard-Install: REASON` (or name a ready Work-Item)")
+        return 0
     g = gd.graph()
     lines = []
     miss = gd.ready.evaluate(g, gd.lineage, None, emit=lines.append)
@@ -269,6 +322,9 @@ def cmd_commit_msg(gd, msgfile, out=print):
         return 0
     msg = open(msgfile).read()
     items = TRAILER.findall(msg)
+    if not items and INSTALL.search(msg) and gd.is_install_only(work) and len(work) == len(files):
+        out("guard: a guard-install commit (only the guard's own files, `Guard-Install:` stated); it is listed by the range check")
+        return 0
     if not items:
         out("GUARD BLOCKS this commit: it changes governed work but names no `Work-Item: NAME` trailer.")
         out("  work files: " + ", ".join(work[:5]) + (" ..." if len(work) > 5 else ""))
@@ -307,7 +363,7 @@ def cmd_range(gd, rng, out=print, strict_base=False):
     touched = 0
     bad = []
     named = set()
-    graphs, verdicts, readied = {}, {}, []
+    graphs, verdicts, readied, installs = {}, {}, [], []
     g_base = gd.graph(base, tolerant=True)
     def at(rev):
         k = gd.blob_key(rev)
@@ -322,6 +378,9 @@ def cmd_range(gd, rng, out=print, strict_base=False):
         touched += 1
         msg = git(gd.root, "log", "-1", "--format=%B", r)
         items = TRAILER.findall(msg)
+        if not items and INSTALL.search(msg) and len(work) == len(files) and gd.is_install_only(work):
+            installs.append((r[:9], work))
+            continue
         if not items:
             bad.append(f"{r[:9]} changes governed work ({work[0]}{' ...' if len(work) > 1 else ''}) and names no Work-Item")
             continue
@@ -339,6 +398,8 @@ def cmd_range(gd, rng, out=print, strict_base=False):
             elif g_base is None or gd.item_problem(g_base, i):
                 readied.append((r[:9], i))
     out(f"guard range {rng}: examined {len(revs)} commit(s), {touched} touch governed work, {len(named)} item(s) named")
+    for r9, fl in installs:
+        out(f"  NOTE  {r9} guard-install commit, not judged by readiness: " + ", ".join(fl[:6]) + (" ..." if len(fl) > 6 else ""))
     for r9, i in readied:
         out(f"  NOTE  {r9} Work-Item {i} was not ready at {base}; it became ready inside this range" + (" (a failure under --strict-base)" if strict_base else ""))
         if strict_base:

@@ -1,4 +1,4 @@
-# Work guard — adoption guide (v1.2.0)
+# Work guard — adoption guide (v1.3.0)
 
 Rule: **no change to governed work without a registered, groomed, admitted item.** Four layers, because each alone has
 been argued past. Ruling G101.
@@ -54,3 +54,10 @@ Bash-write detection is a heuristic. The guard cannot judge the quality of groom
 - **The session-start status carries a brief.** Vendor `backlog_session_brief` beside the guard and the status prints, after the next required act, the objective to work toward, the items in progress, the checkpoints falling due and what each open iteration needs to close. Without it the status says the brief is not shown.
 - **Install the guard before any work in a restarted lineage.** A restart ends with the guard installed; the order matters: nothing governed is changed in the restarted lineage until it is, otherwise the work has to be written into the register afterwards from git, with starts stated as estimates (G120).
 - **Keep the vendored tools current.** `backlog_session_brief --vendored TOOLS_DIR --package PACKAGE_DIR` lists every vendored tool a newer version has replaced.
+
+## What v1.3.0 changes (G123)
+
+- **Prerequisites.** The guard reads the register with `rdflib` and the start gate with `pyshacl`: `python3 -m pip install rdflib pyshacl`. Install them before the hooks are active. If they are missing, a call that touches no governed path still goes through (so the install command is never blocked), the session start says the lineage state is not shown, and a governed edit is refused with the module named.
+- **Cite the register by pattern.** In `.backlog-guard.json` write `"register": ["path/name_v*.ttl"]`. The highest version present at the examined revision is the register, so a new register version (BP-D7, G102) touches only the register file and not the configuration. An exact path still works, but then every rename needs a configuration change, which needs a ready Work-Item.
+- **Changing the guard's own files while the lineage is not ready.** A commit that changes only the guard's own files (the vendored tooling directory, `.githooks/**`, `.claude/settings.json`, the CI workflow) and carries a `Guard-Install: REASON` line is accepted by the commit hook. The range check lists it and the files it changed, and does not judge it by readiness. The configuration is not covered: changing it needs a ready Work-Item. The commit must contain nothing else; mixed with governed work it is refused.
+- **The Bash write test looks at what is written.** Redirect targets and the operands of `tee`, `mv`, `rm`, `patch`, `touch`, `sed -i`, `git apply` and the destination of `cp` are judged. A command that only reads a governed path and redirects elsewhere is not refused.
