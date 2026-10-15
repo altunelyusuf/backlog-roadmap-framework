@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v91.0.0
+# Lineage Operating Discipline — v92.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -3553,3 +3553,15 @@ Related: G91, G101, G104, G117, G119, G120.
 **Not claimed.** A consumer whose configuration still pins the register path cannot move to the pattern while its lineage is not ready, because the configuration is a protected path and is outside the guard-install route; that one change is made by the owner with the restart. The test is run on a planted register and a throw-away repository, not on the adopting project's. Whether the owner's vendored copy (v1.332.0) upgrades cleanly is the consumer's step: refresh the vendored files, then re-run the installer.
 
 Related: G101, G102, G108, G119, G122.
+
+## G124 — The shapes are written so that more than one query engine reads them, and a consumer drops the framework's own register from the reference data
+
+*(Opened by a note of the another registrant session, 2026-10-15.)*
+
+**Built: the shapes text reads in the fast-path engine.** SPARQL allows a space between a function name and its bracket; the engine a consumer uses as its fast path refuses it. Every built-in function in the shapes is now written with its bracket closed up (shapes v1.171.0, 7 places in 5 queries), and `backlog_shape_syntax_probe` fails on any that is not. Meaning is unchanged, so no fixture case was added; the engine was run against the closed form and accepts it.
+
+**Documented: the reference data holds the framework's own register.** The data file carries the lifecycle states, investment categories and rule sets that a consumer wants as reference data, and also the framework's own register (its missions, lineages and items). A consumer that loads the whole file and validates it is judged against that register: no mission, an empty container. The validator's `reference_abox` drops those subjects; a consumer that loads the data file must do the same, by keeping only the vocabulary individuals (states, categories, rule sets, scales) and leaving out every individual that belongs to a lineage of this package.
+
+**Fixed: the release tool.** v1.3.2 takes `04-documentation/README.md` of the public copy from the derivation whenever the derivation has one. Before, the older public one was kept and the drift check failed after any change to it. Not covered by a probe case; the fault shows only in a release that changes that README.
+
+Related: G102, G121, G123.

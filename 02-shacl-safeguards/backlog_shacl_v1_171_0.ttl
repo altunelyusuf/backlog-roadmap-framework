@@ -9,9 +9,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog/shacl/1.170.0> ;
-    owl:versionInfo "1.170.0" ;
-    owl:priorVersion <http://example.org/backlog-shapes/1.169.0> , <http://example.org/backlog-shapes/1.168.0> , <http://example.org/backlog-shapes/1.167.0> , <http://example.org/backlog-shapes/1.166.0> , <http://example.org/backlog-shapes/1.165.0> , <http://example.org/backlog-shapes/1.164.0> , <http://example.org/backlog-shapes/1.159.0> , <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
+    owl:versionIRI <http://example.org/backlog/shacl/1.171.0> ;
+    owl:versionInfo "1.171.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.170.0> , <http://example.org/backlog-shapes/1.169.0> , <http://example.org/backlog-shapes/1.168.0> , <http://example.org/backlog-shapes/1.167.0> , <http://example.org/backlog-shapes/1.166.0> , <http://example.org/backlog-shapes/1.165.0> , <http://example.org/backlog-shapes/1.164.0> , <http://example.org/backlog-shapes/1.159.0> , <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.154.0> , <http://example.org/backlog-shapes/1.153.0> , <http://example.org/backlog-shapes/1.152.0> , <http://example.org/backlog-shapes/1.151.0> , <http://example.org/backlog-shapes/1.150.0> , <http://example.org/backlog-shapes/1.149.0> , <http://example.org/backlog-shapes/1.148.0> , <http://example.org/backlog-shapes/1.147.0> , <http://example.org/backlog-shapes/1.146.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.145.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.144.0> ;
@@ -7959,8 +7959,8 @@ backlog:ManagerialIndependenceShape a sh:NodeShape ;
             $this backlog:responsible ?r ; backlog:verifiedBy ?v .
             OPTIONAL { ?r backlog:hasController ?rc }
             OPTIONAL { ?v backlog:hasController ?vc }
-            BIND ( COALESCE ( ?rc , ?r ) AS ?a )
-            BIND ( COALESCE ( ?vc , ?v ) AS ?b )
+            BIND ( COALESCE(?rc, ?r) AS ?a )
+            BIND ( COALESCE(?vc, ?v) AS ?b )
             FILTER ( ?a = ?b || ?a = ?v || ?b = ?r )
         }""" ] .
 
@@ -8029,7 +8029,7 @@ backlog:FlowPointPrecisionShape a sh:NodeShape ;
             { ?reg a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_FlowPointsRecorded .
               { $this backlog:belongsToLineage ?reg } UNION { $this backlog:admittedByOutput ?o . ?o backlog:belongsToLineage ?reg } }
             { $this backlog:startedAt ?p } UNION { $this backlog:finishedAt ?p }
-            FILTER ( REGEX ( STR ( ?p ) , "T00:00:00([.]0+)?(Z|[+-][0-9:]+)?$" ) )
+            FILTER ( REGEX( STR( ?p ) , "T00:00:00([.]0+)?(Z|[+-][0-9:]+)?$" ) )
             FILTER NOT EXISTS { $this backlog:flowPointPrecision backlog:Precision_Date }
         }""" ] .
 
@@ -8124,7 +8124,7 @@ backlog:StatusMomentShape a sh:NodeShape ;
             { ?reg a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_StatusHistoryRecorded .
               { $this backlog:belongsToLineage ?reg } UNION { $this backlog:admittedByOutput ?o . ?o backlog:belongsToLineage ?reg } }
             ?ev backlog:transitionedItem $this ; backlog:transitionedAt ?p .
-            FILTER ( REGEX ( STR ( ?p ) , "T00:00:00([.]0+)?(Z|[+-][0-9:]+)?$" ) )
+            FILTER ( REGEX( STR( ?p ) , "T00:00:00([.]0+)?(Z|[+-][0-9:]+)?$" ) )
         }""" ] .
 
 backlog:FlowPointsMatchHistoryShape a sh:NodeShape ;
@@ -8147,12 +8147,12 @@ backlog:FlowPointsMatchHistoryShape a sh:NodeShape ;
             { ?ev backlog:transitionedItem $this ; backlog:viaTransition ?tr ; backlog:transitionedAt ?t . ?tr backlog:toState backlog:InProgress .
               FILTER NOT EXISTS { ?ev2 backlog:transitionedItem $this ; backlog:viaTransition ?tr2 ; backlog:transitionedAt ?t2 . ?tr2 backlog:toState backlog:InProgress . FILTER ( ?t2 < ?t ) }
               OPTIONAL { $this backlog:startedAt ?s }
-              FILTER ( !BOUND ( ?s ) || ?s != ?t ) }
+              FILTER ( !BOUND( ?s ) || ?s != ?t ) }
             UNION
             { ?ev backlog:transitionedItem $this ; backlog:viaTransition ?tr ; backlog:transitionedAt ?t . ?tr backlog:toState backlog:Done .
               FILTER NOT EXISTS { ?ev2 backlog:transitionedItem $this ; backlog:viaTransition ?tr2 ; backlog:transitionedAt ?t2 . ?tr2 backlog:toState backlog:Done . FILTER ( ?t2 > ?t ) }
               OPTIONAL { $this backlog:finishedAt ?s }
-              FILTER ( !BOUND ( ?s ) || ?s != ?t ) }
+              FILTER ( !BOUND( ?s ) || ?s != ?t ) }
         }""" ] .
 
 # v1.165.0 (G115): the routes the agentic-systems register measured stayed open after G113 -- a first move that skips Proposed, flow points on work that has not started, two values for one point, an equal pair with no cause.
@@ -8245,7 +8245,7 @@ backlog:EqualSpanShape a sh:NodeShape ;
               { $this backlog:belongsToLineage ?reg } UNION { $this backlog:admittedByOutput ?o . ?o backlog:belongsToLineage ?reg } }
             $this backlog:startedAt ?s ; backlog:finishedAt ?f .
             OPTIONAL { ?reg backlog:shortSpanThreshold ?th }
-            FILTER ( ?f = ?s || ( BOUND ( ?th ) && ?f > ?s && ?s + ?th > ?f ) )
+            FILTER ( ?f = ?s || ( BOUND( ?th ) && ?f > ?s && ?s + ?th > ?f ) )
             FILTER NOT EXISTS { $this backlog:shortSpanExplanation ?x }
             FILTER NOT EXISTS { $this backlog:flowPointAbsenceReason ?y }
         }""" ] .

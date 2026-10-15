@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_release_tool v1.3.1 -- the release steps a session used to do by hand, as one tested tool (G99 release A; OE rule R4).
+"""backlog_release_tool v1.3.2 -- the release steps a session used to do by hand, as one tested tool (G99 release A; OE rule R4).
 
 Subcommands (each prints what it did and exits non-zero on any refusal):
   bump-data NEWVER                      rename the package data file to the new version and move its header (versionInfo, versionIRI, priorVersion)
@@ -16,6 +16,7 @@ Subcommands (each prints what it did and exits non-zero on any refusal):
                                         duration; --dry-run prints the plan and the refusals it already knows (missing changelog entry) and runs nothing
   prune-cache [DIR] [--days N]          remove cache files (shape_*.ttl, memo *.json, stamps) older than N days (default 14) from the validation cache; they are rebuilt on demand
   republish VERSION                     only the publisher and the tag check (after a transient failure of the public push)
+v1.3.2 (G124): the public copy keeps its own README.md, DISTRIBUTION.md and LICENSE, but 04-documentation/README.md is taken from the derivation whenever the derivation has one, so a changed README no longer needs a hand fix in the public copy.
 v1.3.1 (G115): a gate line that only REPORTS a zero count of failures ("declaration FAILED : 0", printed by the clause proof whenever it runs rather than being skipped) is no longer read as a failure; before, the first release that changed a shape stopped at that line. Real failures (a non-zero count, a VERDICT: FAIL, an ABORT) still stop it. The public copy step keeps README.md, DISTRIBUTION.md, LICENSE and 04-documentation/README.md only when the public copy has them (it stopped with FileNotFoundError on a public copy that holds none).
 v1.3.0: prune-cache also removes the Merkle-cache per-fixture and per-probe stamp files (stamp_*.key, G99 release E -- they live in the same off-package memo directory, so retiring a removed fixture or probe's stamp needs no gitignore or manifest change).
 v1.2.0: prune-cache also removes the archived-digest result files (archdigest_*.json); the gate now runs it by itself at its start (entries unused for 14 days go; every entry is rebuilt on demand).
@@ -273,6 +274,9 @@ def cmd_release(args, only_publish=False):
         subprocess.run(["git", "fetch", "-q"], cwd=pubcopy); subprocess.run(["git", "reset", "-q", "--hard", "origin/main"], cwd=pubcopy)
         keep = {}
         for f in ("README.md", "DISTRIBUTION.md", "LICENSE", os.path.join("04-documentation", "README.md")):
+            # v1.3.2 (G124): 04-documentation/README.md is DERIVED; the public copy's older one was kept and then failed the drift check.
+            if f == os.path.join("04-documentation", "README.md") and os.path.exists(os.path.join(pd, f)):
+                continue
             if os.path.exists(os.path.join(pubcopy, f)):
                 keep[f] = open(os.path.join(pubcopy, f), "rb").read()
         for e in os.listdir(pubcopy):
