@@ -18,9 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.133.0> ;
-    owl:versionInfo "1.133.0" ;
-    owl:priorVersion <http://example.org/backlog/1.132.0> , <http://example.org/backlog/1.131.0> , <http://example.org/backlog/1.130.0> , <http://example.org/backlog/1.129.0> , <http://example.org/backlog/1.125.0> , <http://example.org/backlog/1.124.0> , <http://example.org/backlog/1.123.0> , <http://example.org/backlog/1.122.0> ;
+    owl:versionIRI <http://example.org/backlog/1.134.0> ;
+    owl:versionInfo "1.134.0" ;
+    owl:priorVersion <http://example.org/backlog/1.133.0> , <http://example.org/backlog/1.132.0> , <http://example.org/backlog/1.131.0> , <http://example.org/backlog/1.130.0> , <http://example.org/backlog/1.129.0> , <http://example.org/backlog/1.125.0> , <http://example.org/backlog/1.124.0> , <http://example.org/backlog/1.123.0> , <http://example.org/backlog/1.122.0> ;
     owl:priorVersion <http://example.org/backlog/1.121.0> , <http://example.org/backlog/1.120.0> , <http://example.org/backlog/1.119.0> , <http://example.org/backlog/1.118.0> , <http://example.org/backlog/1.117.0> ;
     owl:priorVersion <http://example.org/backlog/1.116.0> ;
     owl:priorVersion <http://example.org/backlog/1.115.0> ;
@@ -3934,7 +3934,7 @@ backlog:derivesFromScope a owl:ObjectProperty ;
     skos:definition "The boundary this goal was derived from. THE MISSING LINK: Goal previously carried exactly one property, contributesToMission, so goals attached straight to the mission and the scope sat outside the path between them. Goals are derived from the scope precisely so that the scope's fit to the mission is what gets tested — a goal reaching the mission without passing through a boundary tests nothing, and a goal serving a mission the scope never admitted raises no objection."@en .
 
 backlog:metricMovableBy a owl:ObjectProperty ;
-    rdfs:domain backlog:Objective ; rdfs:range backlog:WorkItem ;
+    rdfs:domain backlog:Objective ; rdfs:range [ a owl:Class ; owl:unionOf ( backlog:WorkItem backlog:RecurringActivity ) ] ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "metric movable by"@en ;
     skos:definition "A work item that can actually shift this objective's measured value. Distinct from pursuesObjective, which records what work CLAIMS to serve an objective: an epic can pursue an objective and be incapable of moving its metric by construction, which is how a register reaches every epic Done with its objectives untouched and nothing flagged. Asserting movability is a claim someone can be wrong about, and being wrong about it is visible when the metric does not move."@en .
@@ -7275,3 +7275,46 @@ backlog:spawnedBy a owl:ObjectProperty , owl:FunctionalProperty ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "spawned by"@en ;
     skos:definition "The run that opened this lineage for itself. For a delegated lineage it is the executor responsible for the item that delegated it, or a member of that executor."@en .
+
+#################################################################
+#  v1.134.0 (G120) -- standing responsibilities and starts that were not witnessed
+#  (agentic-sdlc handover of 2026-10-15). A responsibility that repeats is not an item that never finishes: it is a definition
+#  whose occurrences are finite items. A start that nobody witnessed is stated as an estimate and kept out of measured flow.
+#################################################################
+
+backlog:RecurringActivity a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Recurring activity"@en ;
+    skos:definition "A responsibility that repeats at a stated interval, such as re-reading the goals against the present state each time the register is touched or a monthly audit. It is not a work item: it has no state, is never In Progress and never finishes. Each time it is carried out, a finite work item is registered as one occurrence of it (occurrenceOf), and that item starts and finishes like any other. The activity ends only by the owner's decision (recurrenceEndedAt). An objective whose measure the activity keeps in check names it through metricMovableBy for as long as it has not ended."@en .
+
+backlog:recurrenceInterval a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:RecurringActivity ; rdfs:range xsd:duration ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "recurrence interval"@en ;
+    skos:definition "The longest the owner accepts between the start of one occurrence and the start of the next, as an ISO 8601 duration (P7D, P1M). A stated bound, not a schedule: the monitor reports an activity whose latest occurrence began longer ago than this."@en ;
+    dcterms:source "ISO 8601-1:2019, 3.2.2 (duration)."@en .
+
+backlog:recurrenceEndedAt a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:RecurringActivity ; rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "recurrence ended at"@en ;
+    skos:definition "When the owner ended the activity. An activity without it is live."@en .
+
+backlog:occurrenceOf a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:WorkItem ; rdfs:range backlog:RecurringActivity ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "occurrence of"@en ;
+    skos:definition "This finite work item is one carrying-out of a recurring activity."@en .
+
+backlog:startedAtIsEstimate a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:WorkItem ; rdfs:range xsd:boolean ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "started at is estimate"@en ;
+    skos:definition "True when the item's startedAt is not a witnessed instant but the best estimate of when the work began, stated so that an item known to have been In Progress can be finished although its start was never recorded. The estimate names its basis (startEstimateBasis) and is kept out of the measured cycle time of the roadmap report."@en .
+
+backlog:startEstimateBasis a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:WorkItem ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "start estimate basis"@en ;
+    skos:definition "What an estimated start was taken from, and what outside the register bounds it, so a reader can judge it."@en .

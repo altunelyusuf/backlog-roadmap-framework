@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v88.0.0
+# Lineage Operating Discipline — v89.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -3482,3 +3482,29 @@ Related: G91, G111, G112, G116.
 **What is not claimed.** Nothing here verifies that the run named in a record is the process that really acted: the records are as honest as the system writing them. Two parties are independent here by identity and by definition, not by the model, data or prompts behind them. No budget, parallelism or untrusted-input rule was added. This package's own register does not adopt the rule set.
 
 Related: G91, G109, G111, G112, G116, G117.
+
+## G119 — The work guard's range check judges a range by what was in force before it
+
+*(Opened by a handover of the agentic-systems session, 2026-10-15, from an independent review in a fresh clone of the consumer. Both paths were reproduced here before anything was changed.)*
+
+**Q1 — the configuration.** Read at the base of the range. A commit that adds an exempt path or raises `governed_from` took effect in its own range under v1.0.0, because the check read the configuration from the working tree. Now it governs the next range. The CI file runs the guard tool as it was at the base (`git archive`), so a commit that edits the vendored tools cannot judge itself; a range that installs the guard is judged by the tip's files, and says so.
+
+**Q2 — the register.** Each commit's Work-Items are judged against the register at that commit's parent, which is what the commit-msg hook judges locally. The reviewer's repro (a register edit that readies an item, then work naming it) passes under that reading and is meant to: at the later commit the item really was ready, and grooming is a register edit. What the tip reading let through was the reverse, work committed before its item was ready and rescued by a later edit; that is now refused. For an adopter that wants readiness established before the range began, `range --strict-base` fails on an item that became ready inside the range; the default reports it as a note. Whether a readying edit was honest is judged by the history rules (a recorded move names who made it and when, G113 and G118), not by the guard.
+
+**Q3 — the guard's own files.** The consumer made the configuration, hooks, CI file, session settings and vendored tools work paths by hand. The installer now writes `tooling_dir` and `protected_paths`, and `is_work` treats them as governed whatever the exempt list says; interpreter bytecode is never work. `backlog_work_guard_probe` v1.2.0 shows the cases and fails against v1.0.0.
+
+## G120 — A responsibility that repeats is a definition whose occurrences are items; a start nobody witnessed is stated as an estimate
+
+*(Opened by a handover of the agentic-sdlc session, 2026-10-15, four questions.)*
+
+**Q1 — recurring work.** Registering each pass as a finite task is the intended move, and there is now a place to say that the passes belong together: `RecurringActivity`, with `recurrenceInterval` (the longest accepted time between the start of one occurrence and the next) and `recurrenceEndedAt` (the owner ends it). It is not a work item: it has no state, is never In Progress and never finishes (`RecurringActivityRecordShape`). A pass is an item with `occurrenceOf`, and a pass cannot start after the activity was ended (`OccurrenceOfActivityShape`). `backlog_agent_monitor` v1.1.0 reports a live activity whose latest occurrence began longer ago than its interval, or that has none.
+
+**Q2 — closing an item with no recorded start.** The finish needs a start (`FlowShape`), so an item known to have been In Progress needs one. The move the consumer made is right in substance and now has a name: `startedAtIsEstimate true` with `startEstimateBasis` saying what it was taken from and what outside the register bounds it (`StartEstimateBasisShape`). The roadmap report (v1.7.0) keeps estimated starts out of the measured cycle time and counts them. A task closed without start or finish under `flowPointAbsenceReason` while its parent has a finish is already allowed. The reporter's earliest outside record (a commit holding the story In Progress) is exactly the kind of basis to state.
+
+**Q3 — an objective whose mover closes.** Recording the pass's findings and then a re-read that meets the target is the convention for retiring an objective whose target is reached, and stays correct. For an objective that is kept in check by a repeating activity, the activity itself can be the mover: `metricMovableBy` accepts a `RecurringActivity`, and `ObjectiveHasCorrectiveActionShape` counts a live one (not ended) as a live corrective action. Closing the pass no longer leaves the objective without one. The objective carries no closing state of its own; it is retired by meeting its target, by the owner's re-baselining, or by the owner ending the activity.
+
+**Q4 — the Backlog container.** A container's state is derived from its members and an asserted state that disagrees with the derived one is a violation, so a container left In Progress with every member Done either has a member that is not Done or is asserted against its derivation; the consumer's report of 0 violations means its derivation gives In Progress, which this package cannot see from the handover and did not verify. On the worry itself: closing a stage does not make later work impossible. The digest is fixed when the stage output is written, not when the container closes, and since G117 (table v4) planning tasks for admitted items do not move it. Items the stage did not admit arrive through a successor lineage or the change route, not by leaving the container open.
+
+**What is not claimed.** The estimate is the author's statement, not a witness. The interval is a bound the owner accepts, not a schedule the framework enforces. Nothing was run against the consumer's register.
+
+Related: G91, G101, G113, G115, G117, G118.

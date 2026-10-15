@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_agent_monitor v1.0.0 -- the report that lets people stay on the loop without being assigned to tasks (G118).
+"""backlog_agent_monitor v1.1.0 -- the report that lets people stay on the loop without being assigned to tasks (G118).
 
 Read-only. It reads a register and computes, at the instant it is run (or --now), what a person has to look at:
 
@@ -9,10 +9,12 @@ Read-only. It reads a register and computes, at the instant it is run (or --now)
   4. Accountability  Done items without an overseer, a verifier or an approver; Done items at or above a humanApprovalLevel with no person approving.
   5. Teams       agent team or federation runs named for an item with no recorded assembly.
 
-Sections 3 to 5 are the ESCALATION list: the only things a person is asked to act on. Exit 0 when it is empty, 1 otherwise. A register that does not
+  6. Recurring   live recurring activities whose latest occurrence began longer ago than their recurrenceInterval, or that have no occurrence (v1.1.0, G120).
+
+Sections 3 to 6 are the ESCALATION list: the only things a person is asked to act on. Exit 0 when it is empty, 1 otherwise. A register that does not
 use ExecutorInstance simply reports nothing under 1, 2 and 5 -- the report states what it found, not what it was told to look for.
 
-Usage: backlog_agent_monitor_v1_0_0.py REGISTER.ttl [--now 2026-10-15T09:00:00Z] [--stall-hours 24] [--lineage NAME]
+Usage: backlog_agent_monitor_v1_1_0.py REGISTER.ttl [--now 2026-10-15T09:00:00Z] [--stall-hours 24] [--lineage NAME]
 """
 import datetime, sys
 from rdflib import Graph, URIRef, RDF
@@ -122,6 +124,31 @@ def main(argv):
         named = any(True for p in FUN.replace("backlog:", "").split(", ") for it in g.subjects(URIRef(B + p), x) if ok(it))
         if named and g.value(None, URIRef(B + "assemblesTeam"), x) is None:
             print("  %-34s named for work, no recorded assembly" % label(g, x)); esc.append("%s is named for work and has no recorded assembly" % label(g, x)); n += 1
+    if not n: print("  none")
+
+    print("\n-- 6. Recurring activities --")
+    n = 0
+    for ra in sorted(g.subjects(RDF.type, URIRef(B + "RecurringActivity")), key=str):
+        if g.value(ra, URIRef(B + "recurrenceEndedAt")) is not None: continue
+        iv = g.value(ra, URIRef(B + "recurrenceInterval"))
+        if iv is None: continue
+        last = None
+        for occ in g.subjects(URIRef(B + "occurrenceOf"), ra):
+            t = when(g.value(occ, URIRef(B + "startedAt")))
+            if t and (last is None or t > last): last = t
+        td = iv.toPython()
+        if isinstance(td, datetime.timedelta):
+            days, secs = td.days, td.seconds
+        else:
+            # an xsd:duration with years or months is read as 365 / 30 days: a bound, not a calendar
+            tdl = getattr(td, "tdelta", datetime.timedelta(0))
+            days = int(getattr(td, "years", 0)) * 365 + int(getattr(td, "months", 0)) * 30 + tdl.days
+            secs = tdl.seconds
+        limit = datetime.timedelta(days=days, seconds=secs)
+        if last is None:
+            print("  %-34s no occurrence started yet (accepted interval %s)" % (label(g, ra), iv)); esc.append("%s has had no occurrence" % label(g, ra)); n += 1
+        elif now - last > limit:
+            print("  %-34s last occurrence began %.1f d ago (accepted interval %s)" % (label(g, ra), (now - last).total_seconds() / 86400.0, iv)); esc.append("%s is overdue: its last occurrence began %.1f days ago" % (label(g, ra), (now - last).total_seconds() / 86400.0)); n += 1
     if not n: print("  none")
 
     print("\n== Escalation: %d thing(s) for a person ==" % len(esc))

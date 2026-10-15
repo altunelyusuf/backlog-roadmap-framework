@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_roadmap_report v1.6.0 — the roadmap, computed.
+"""backlog_roadmap_report v1.7.0 — the roadmap, computed.
 
 A roadmap is this script's output, never a maintained document. The moment a
 computed value is copied into prose it starts decaying, and a report that is
@@ -31,7 +31,7 @@ the two answers coincide by construction. The two are never reconciled by
 arithmetic; a disagreement is displayed so a human resolves it knowingly.
 
 Usage:
-  backlog_roadmap_report_v1_6_0.py REGISTER.ttl [--method IRI] [--emit report.ttl]
+  backlog_roadmap_report_v1_7_0.py REGISTER.ttl [--method IRI] [--emit report.ttl]
 """
 
 import argparse
@@ -222,7 +222,7 @@ def main():
     print("roadmap report  : computed %s" % now.isoformat())
     print("register        : %s" % os.path.basename(args.register))
     print("method          : %s" % (args.method or "any"))
-    print("tooling         : rdflib %s, backlog_roadmap_report v1.6.0" % rdflib.__version__)
+    print("tooling         : rdflib %s, backlog_roadmap_report v1.7.0" % rdflib.__version__)
 
     gates = active_gates(g)
     all_rows = ranked(g, method)
@@ -327,8 +327,15 @@ def main():
         now = _DT.now(_TZ.utc).replace(tzinfo=None)
 
         cycles = []
+        estimated = 0
         for it in sorted(set(g.subjects(BL.finishedAt, None)), key=str):
             a, b = _dt(g.value(it, BL.startedAt)), _dt(g.value(it, BL.finishedAt))
+            # v1.7.0 (G120): a start that was not witnessed (startedAtIsEstimate) says when the work probably began, not when it
+            # did; it is kept out of the measured cycle time and counted instead.
+            est = g.value(it, BL.startedAtIsEstimate)
+            if est is not None and bool(est.toPython()):
+                estimated += 1
+                continue
             if a and b and b >= a:
                 cycles.append(((b - a).total_seconds() / 86400.0, it))
         if cycles:
@@ -337,7 +344,9 @@ def main():
             print("  cycle time    : %d finished item(s); median %.2f d, range %.2f-%.2f d"
                   % (len(vals), mid, vals[0], vals[-1]))
         else:
-            print("  cycle time    : no item records both a start and a finish point")
+            print("  cycle time    : no item records both a witnessed start and a finish point")
+        if estimated:
+            print("  not measured  : %d finished item(s) state an estimated start (startedAtIsEstimate); their cycle time is not computed" % estimated)
 
         ages = []
         for it in sorted(set(g.subjects(BL.startedAt, None)), key=str):

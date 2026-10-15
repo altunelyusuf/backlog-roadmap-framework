@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_work_guard v1.0.0 -- the safeguard that sits IN THE PATH of the act, not after it.
+"""backlog_work_guard v1.1.0 -- the safeguard that sits IN THE PATH of the act, not after it.
 
 WHY THIS EXISTS (ruling G101). an adopting project opened Lineage_2 to stop work happening outside the register, closed its
 Mission..Objective stages, never built the Backlog stage, and shipped nine releases from a work ledger. Every safeguard
@@ -12,8 +12,12 @@ Four entry points, one rule: no work-path change without a registered, groomed, 
   edit FILE              before a file is written: if FILE is a work path, the lineage must be READY (start gate)
   commit-msg MSGFILE     before a commit: if the staged files include a work path, the message must carry
                          `Work-Item: NAME` trailers and each named item must be READY in the register
-  range A..B             after the fact, for CI: the same check over every non-merge commit in the range, against the
-                         register as it is at B. This is the layer `git commit --no-verify` cannot skip.
+  range A..B             after the fact, for CI: the same check over every non-merge commit in the range. This is the
+                         layer `git commit --no-verify` cannot skip. v1.1.0 (G119): the CONFIGURATION is read at A, so a
+                         commit that loosens it takes effect only in the next range; each commit's Work-Items are judged
+                         against the register at THAT COMMIT'S PARENT (ready before the commit, as the commit-msg hook
+                         judges it), and an item that became ready inside the range is reported. --strict-base turns that
+                         report into a failure for an adopter that wants readiness established before the range.
 
 CONFIG  (.backlog-guard.json at the repository root, or --config PATH)
   {"register": ["packages/X/register.ttl"], "active_lineage": "Lineage_2",
@@ -21,6 +25,9 @@ CONFIG  (.backlog-guard.json at the repository root, or --config PATH)
   governed_from: commits that are ancestors of it (inclusive) predate the guard and are not examined by `range`; the
   installer sets it to the commit at install time, a restart sets it to the restart commit.
   A work path is a glob (`**` crosses directories, `*` does not). Everything else is not governed work.
+  protected_paths (v1.1.0): always governed, and no exempt path can release them: the configuration, .githooks/**,
+  .claude/settings.json, the CI workflow and the vendored tooling directory ("tooling_dir"). Changing the guard needs a
+  ready Work-Item like any other work. The installer writes them; a configuration without the key gets the defaults.
 
 THE GUARD MUST NOT BE ABLE TO PASS OVER NOTHING (the failure it exists to prevent):
   - a work_path glob matching no tracked file fails the run: a guard configured over nothing proves nothing
@@ -72,19 +79,32 @@ def git(root, *args):
 
 
 class Guard:
-    def __init__(self, config_path, root=None):
+    def __init__(self, config_path, root=None, cfg=None):
         self.root = root or os.path.dirname(os.path.abspath(config_path))
-        try:
-            self.cfg = json.load(open(config_path))
-        except Exception as e:
-            raise SystemExit(f"GUARD BLOCKS: cannot read config {config_path}: {e}")
+        self.config_path = config_path
+        if cfg is None:
+            try:
+                cfg = json.load(open(config_path))
+            except Exception as e:
+                raise SystemExit(f"GUARD BLOCKS: cannot read config {config_path}: {e}")
+        self.cfg = cfg
         self.work = [glob_re(p) for p in self.cfg.get("work_paths", [])]
         self.exempt = [glob_re(p) for p in self.cfg.get("exempt_paths", [])]
+        prot = self.cfg.get("protected_paths")
+        if prot is None:
+            prot = [os.path.relpath(os.path.abspath(config_path), self.root), ".githooks/**", ".claude/settings.json", ".github/workflows/backlog-work-guard.yml"]
+            if self.cfg.get("tooling_dir"):
+                prot.append(self.cfg["tooling_dir"].strip("/") + "/**")
+        self.protected = [glob_re(p) for p in prot]
         self.lineage = self.cfg.get("active_lineage")
         self.ready = _ready_module()
 
     def is_work(self, path):
         path = re.sub(r"^\./", "", path)
+        if re.search(r"(^|/)__pycache__/", path) or path.endswith(".pyc"):
+            return False        # interpreter bytecode is never work; running the tools writes it into their own directory
+        if any(r.match(path) for r in self.protected):
+            return True
         return any(r.match(path) for r in self.work) and not any(r.match(path) for r in self.exempt)
 
     def self_check(self):
@@ -105,7 +125,9 @@ class Guard:
                 errs.append(f"work path '{pat}' matches no tracked file (a guard configured over nothing)")
         return errs
 
-    def graph(self, rev=None):
+    def graph(self, rev=None, tolerant=False):
+        """The register at REV (the working tree when None). tolerant: return None instead of stopping when the register
+        did not exist or could not be read at REV (a commit before the register was committed judges nothing ready)."""
         from rdflib import Graph
         g = Graph()
         for rel in self.cfg.get("register", []):
@@ -116,10 +138,32 @@ class Guard:
                 else:
                     g.parse(os.path.join(self.root, rel), format="turtle")
             except Exception as e:
+                if tolerant:
+                    return None
                 raise SystemExit(f"GUARD BLOCKS: cannot read the register {rel}: {str(e)[:200]}")
         if len(g) == 0:
+            if tolerant:
+                return None
             raise SystemExit("GUARD BLOCKS: the register is empty (examined: 0 triples)")
         return g
+
+    def blob_key(self, rev):
+        """Identity of the register files at REV, so one parse serves every commit that sees the same bytes."""
+        out = []
+        for rel in self.cfg.get("register", []):
+            try:
+                out.append(git(self.root, "rev-parse", f"{rev}:{rel}").strip())
+            except RuntimeError:
+                out.append("absent")
+        return tuple(out)
+
+    def item_problem(self, g, name):
+        """None when NAME is ready in G, else the sentence saying why not."""
+        lin = self.item_lineage(g, name)
+        if lin is None:
+            return f"Work-Item {name}: not found in the register, or it belongs to no lineage"
+        miss = self.ready.evaluate(g, lin, name, emit=lambda *_: None)
+        return f"Work-Item {name} (lineage {lin}) is not ready: " + "; ".join(miss) if miss else None
 
     def item_lineage(self, g, name):
         from rdflib import URIRef
@@ -222,22 +266,41 @@ def cmd_commit_msg(gd, msgfile, out=print):
     return 2 if bad else 0
 
 
-def cmd_range(gd, rng, out=print):
+def cmd_range(gd, rng, out=print, strict_base=False):
+    base, tip = (re.split(r"\.{2,3}", rng, maxsplit=1) + [""])[:2] if ".." in rng else ("", rng)
+    base, tip = base or "HEAD", tip or "HEAD"
+    # v1.1.0 (G119): the configuration that judges a range is the one in force BEFORE it. A commit in the range that
+    # loosens it (adds an exempt path, raises governed_from) takes effect in the next range, not in this one.
+    rel_cfg = os.path.relpath(os.path.abspath(gd.config_path), gd.root)
+    try:
+        base_cfg = json.loads(git(gd.root, "show", f"{base}:{rel_cfg}"))
+    except Exception:
+        base_cfg = None
+    if base_cfg is None:
+        out(f"guard range {rng}: no configuration at {base}; the configuration at the tip is used (this range installs the guard)")
+    elif base_cfg != gd.cfg:
+        out(f"guard range {rng}: the configuration changed inside this range; it was read at {base}, so the change governs the next range")
+        gd = Guard(gd.config_path, gd.root, cfg=base_cfg)
     errs = gd.self_check()
     if errs:
         for e in errs:
             out("GUARD FAILS: " + e)
         return 2
-    tip = rng.split("..")[-1] or "HEAD"
-    cmd = ["rev-list", "--no-merges", rng]
+    cmd = ["rev-list", "--no-merges", "--reverse", rng]
     gf = gd.cfg.get("governed_from")
     if gf:
         cmd.append(f"^{gf}")
     revs = git(gd.root, *cmd).split()
-    g = gd.graph(tip)
     touched = 0
     bad = []
-    cache = {}
+    named = set()
+    graphs, verdicts, readied = {}, {}, []
+    g_base = gd.graph(base, tolerant=True)
+    def at(rev):
+        k = gd.blob_key(rev)
+        if k not in graphs:
+            graphs[k] = gd.graph(rev, tolerant=True)
+        return k, graphs[k]
     for r in revs:
         files = git(gd.root, "diff-tree", "--no-commit-id", "--name-only", "-r", "--root", r).splitlines()
         work = [f for f in files if gd.is_work(f)]
@@ -249,11 +312,24 @@ def cmd_range(gd, rng, out=print):
         if not items:
             bad.append(f"{r[:9]} changes governed work ({work[0]}{' ...' if len(work) > 1 else ''}) and names no Work-Item")
             continue
-        for b in gd.check_items(g, [i for i in items if i not in cache], lambda *_: None):
-            bad.append(f"{r[:9]} {b}")
+        has_parent = subprocess.run(["git", "-C", gd.root, "rev-parse", "-q", "--verify", f"{r}^"], capture_output=True).returncode == 0
+        k, g = at(f"{r}^") if has_parent else (("root",), None)
         for i in items:
-            cache[i] = True
-    out(f"guard range {rng}: examined {len(revs)} commit(s), {touched} touch governed work, {len(set(cache))} item(s) named")
+            named.add(i)
+            if g is None:
+                bad.append(f"{r[:9]} Work-Item {i}: there was no register before this commit")
+                continue
+            if (k, i) not in verdicts:
+                verdicts[(k, i)] = gd.item_problem(g, i)
+            if verdicts[(k, i)]:
+                bad.append(f"{r[:9]} {verdicts[(k, i)]}")
+            elif g_base is None or gd.item_problem(g_base, i):
+                readied.append((r[:9], i))
+    out(f"guard range {rng}: examined {len(revs)} commit(s), {touched} touch governed work, {len(named)} item(s) named")
+    for r9, i in readied:
+        out(f"  NOTE  {r9} Work-Item {i} was not ready at {base}; it became ready inside this range" + (" (a failure under --strict-base)" if strict_base else ""))
+        if strict_base:
+            bad.append(f"{r9} Work-Item {i} was not ready before the range began")
     for b in bad:
         out("  FAIL  " + b)
     out("VERDICT: " + ("PASS" if not bad else f"FAIL -- {len(bad)} work commit(s) outside the register"))
@@ -263,6 +339,8 @@ def cmd_range(gd, rng, out=print):
 def main(argv):
     cfg = None
     args = list(argv)
+    strict = "--strict-base" in args
+    args = [a for a in args if a != "--strict-base"]
     if "--config" in args:
         i = args.index("--config"); cfg = args[i + 1]; del args[i:i + 2]
     if not args or args[0] not in ("status", "edit", "commit-msg", "range"):
@@ -276,7 +354,9 @@ def main(argv):
         return cmd_status(gd)
     if len(args) < 2:
         print(__doc__); return 1
-    return {"edit": cmd_edit, "commit-msg": cmd_commit_msg, "range": cmd_range}[cmd](gd, args[1])
+    if cmd == "range":
+        return cmd_range(gd, args[1], strict_base=strict)
+    return {"edit": cmd_edit, "commit-msg": cmd_commit_msg}[cmd](gd, args[1])
 
 
 if __name__ == "__main__":

@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.132.0
+# Backlog & Roadmap Semantic Framework — Standard v1.133.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -2327,7 +2327,7 @@ python3 03-tooling/backlog_evidence_bridge_v1_0_0.py my_register.ttl \
         --workspace /path/to/repo --test-command 'npx playwright test {spec} --grep {id}'
 
 # 4. Compute the roadmap — never write one by hand
-python3 03-tooling/backlog_roadmap_report_v1_6_0.py my_register.ttl --emit report.ttl
+python3 03-tooling/backlog_roadmap_report_v1_7_0.py my_register.ttl --emit report.ttl
 
 # 5. Run the four-gate release check (self-proving)
 bash 03-tooling/backlog_gate_v1_1_27.sh my_register.ttl
@@ -2559,3 +2559,9 @@ A human actor is an individual (`Executor_IndividualHuman`), a team (`Executor_H
 - **Agent accountability rule set.** Opt-in. Within its scope agents are named as runs, every status move names who made it, the parties that do, oversee, verify and approve one item are different, Done work is overseen, verified and approved, and work at or above the human approval level is approved by a person.
 - **Delegated lineage.** A coarse item can delegate its detail to a lineage opened by the executor responsible for it.
 - **Agent monitor.** `backlog_agent_monitor` reports what a person has to look at; it is read-only and exits 1 when anything needs a person.
+
+## Recurring activities, estimated starts and the work guard's range (v1.398.0, G119, G120)
+
+- **Recurring activity** (`RecurringActivity`). A responsibility that repeats: it has an interval (`recurrenceInterval`), no state, and ends only by the owner (`recurrenceEndedAt`). Each carrying-out is a finite item that is an occurrence of it (`occurrenceOf`). A live recurring activity counts as a mover of the metric of an objective (`metricMovableBy`).
+- **Estimated start.** `startedAtIsEstimate` with `startEstimateBasis` states that a start was not witnessed; the roadmap report keeps such items out of the measured cycle time.
+- **Work guard range check.** The range is judged by the configuration read at its base and by the register at each commit's parent; items that became ready inside the range are reported (`--strict-base` fails them); the guard's own files are always governed work.

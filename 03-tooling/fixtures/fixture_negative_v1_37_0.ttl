@@ -4269,3 +4269,10 @@ ex:ACC_NO_WORKER a backlog:TeamAssembly ; backlog:assemblesTeam ex:ACC_RUN_TEAM 
 ex:ACC_SEAT_REVIEWS a backlog:Seat ; backlog:seatFunction backlog:Seat_Reviews ; backlog:heldBy ex:ACC_RUN_B .
 ex:ACC_ASSEMBLY_BARE a backlog:TeamAssembly .
 ex:ACC_SEAT_BARE a backlog:Seat .
+
+# v1.37.0 (G120): standing responsibilities and starts that were not witnessed. REC_NO_INTERVAL is a recurring activity with no interval and a state.
+# REC_ESTIMATE_NO_BASIS says its start is an estimate and names no basis. REC_OCCURRENCE_OF_ENDED starts after the activity it belongs to was ended.
+ex:REC_NO_INTERVAL a backlog:RecurringActivity ; backlog:hasState backlog:InProgress .
+ex:REC_ESTIMATE_NO_BASIS a backlog:Task ; backlog:hasState backlog:Done ; backlog:startedAtIsEstimate true ; backlog:startedAt "2026-09-05T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+ex:REC_ENDED a backlog:RecurringActivity ; backlog:recurrenceInterval "P7D"^^<http://www.w3.org/2001/XMLSchema#duration> ; backlog:recurrenceEndedAt "2026-10-01T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+ex:REC_OCCURRENCE_OF_ENDED a backlog:Task ; backlog:hasState backlog:InProgress ; backlog:occurrenceOf ex:REC_ENDED ; backlog:startedAt "2026-10-10T08:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .

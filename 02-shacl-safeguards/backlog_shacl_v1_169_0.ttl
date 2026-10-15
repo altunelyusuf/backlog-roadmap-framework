@@ -9,9 +9,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog/shacl/1.168.0> ;
-    owl:versionInfo "1.168.0" ;
-    owl:priorVersion <http://example.org/backlog-shapes/1.167.0> , <http://example.org/backlog-shapes/1.166.0> , <http://example.org/backlog-shapes/1.165.0> , <http://example.org/backlog-shapes/1.164.0> , <http://example.org/backlog-shapes/1.159.0> , <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
+    owl:versionIRI <http://example.org/backlog/shacl/1.169.0> ;
+    owl:versionInfo "1.169.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.168.0> , <http://example.org/backlog-shapes/1.167.0> , <http://example.org/backlog-shapes/1.166.0> , <http://example.org/backlog-shapes/1.165.0> , <http://example.org/backlog-shapes/1.164.0> , <http://example.org/backlog-shapes/1.159.0> , <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.154.0> , <http://example.org/backlog-shapes/1.153.0> , <http://example.org/backlog-shapes/1.152.0> , <http://example.org/backlog-shapes/1.151.0> , <http://example.org/backlog-shapes/1.150.0> , <http://example.org/backlog-shapes/1.149.0> , <http://example.org/backlog-shapes/1.148.0> , <http://example.org/backlog-shapes/1.147.0> , <http://example.org/backlog-shapes/1.146.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.145.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.144.0> ;
@@ -4553,6 +4553,12 @@ backlog:ObjectiveHasCorrectiveActionShape a sh:NodeShape ;
                 ?w backlog:hasState ?ws .
                 FILTER (?ws NOT IN (backlog:Done, backlog:Cancelled))
             }
+            # v1.169.0 (G120): a live recurring activity moves the metric for as long as the owner has not ended it.
+            FILTER NOT EXISTS {
+                $this backlog:metricMovableBy ?ra .
+                ?ra a backlog:RecurringActivity .
+                FILTER NOT EXISTS { ?ra backlog:recurrenceEndedAt ?ended }
+            }
             # v1.115.0 (only passed steps fire, 4th instance): live work items are the BACKLOG
             # stage's content. An objective of a lineage below LS_Backlogged (rank 5) cannot name a
             # corrective action because no item exists yet -- the ceremony forbids one. Found on
@@ -8530,3 +8536,45 @@ backlog:SeatRecordShape a sh:NodeShape ;
     sh:property [ sh:path backlog:seatFunction ; sh:minCount 1 ; sh:maxCount 1 ; sh:message "G118: a seat has exactly one function (seatFunction)." ] ;
     sh:property [ sh:path backlog:heldBy ; sh:minCount 1 ; sh:maxCount 1 ; sh:message "G118: a seat is held by exactly one run (heldBy)." ] .
 
+
+
+#################################################################
+# v1.169.0 (G120): standing responsibilities and starts that were not witnessed.
+#################################################################
+backlog:RecurringActivityRecordShape a sh:NodeShape ;
+    sh:targetClass backlog:RecurringActivity ;
+    sh:severity sh:Violation ;
+    rdfs:label "A recurring activity states its interval and is not a work item (G120)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "REC_NO_INTERVAL" ;
+    sh:property [ sh:path backlog:recurrenceInterval ; sh:minCount 1 ; sh:message "G120: a recurring activity states the longest accepted interval between occurrences (recurrenceInterval)." ] ;
+    sh:property [ sh:path backlog:hasState ; sh:maxCount 0 ; sh:message "G120: a recurring activity has no state: it is never In Progress and never finishes. Register each carrying-out as a finite item that is an occurrence of it." ] .
+
+backlog:StartEstimateBasisShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItem ;
+    sh:severity sh:Violation ;
+    rdfs:label "An estimated start names its basis (G120)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "REC_ESTIMATE_NO_BASIS" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G120: this work item states that its start is an estimate (startedAtIsEstimate) and does not say what it was taken from (startEstimateBasis), or it states a basis without a start. An estimate nobody can judge is a typed time." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            { $this backlog:startedAtIsEstimate true . FILTER NOT EXISTS { $this backlog:startEstimateBasis ?b } }
+            UNION
+            { $this backlog:startEstimateBasis ?b . FILTER NOT EXISTS { $this backlog:startedAt ?s } }
+        }""" ] .
+
+backlog:OccurrenceOfActivityShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItem ;
+    sh:severity sh:Violation ;
+    rdfs:label "An occurrence is a finite item of a live activity (G120)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "REC_OCCURRENCE_OF_ENDED" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G120: this work item is a new occurrence of a recurring activity that the owner has ended (recurrenceEndedAt) before the occurrence was started. An ended activity has no further occurrences." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:occurrenceOf ?ra ; backlog:startedAt ?s .
+            ?ra backlog:recurrenceEndedAt ?e . FILTER ( ?s > ?e )
+        }""" ] .

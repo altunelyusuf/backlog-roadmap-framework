@@ -1,11 +1,11 @@
-# Work guard — adoption guide (v1.0.0)
+# Work guard — adoption guide (v1.1.0)
 
 Rule: **no change to governed work without a registered, groomed, admitted item.** Four layers, because each alone has
 been argued past. Ruling G101.
 
 ## Install (one command, idempotent)
 ```
-python3 <tools>/backlog_guard_install_v1_0_0.py REPO --tooling-dir <tools relative to REPO> \
+python3 <tools>/backlog_guard_install_v1_1_0.py REPO --tooling-dir <tools relative to REPO> \
     --register <register.ttl relative to REPO> --lineage <active lineage> \
     --work-path 'app/**' [--work-path ...] [--exempt-path 'app/README.md']
 ```
@@ -40,3 +40,11 @@ nothing is the failure it exists to stop.
 ## Limits
 Hook behaviour inside delegated worker sessions is not verified here; the commit hook and CI do not depend on it. The
 Bash-write detection is a heuristic. The guard cannot judge the quality of grooming: a ready item can still be shallow.
+
+## What v1.1.0 changes (G119)
+
+- **The range is judged by what was in force before it.** The configuration is read at the base of the range, so a commit that adds an exempt path or raises `governed_from` governs the next range, not its own. The CI file runs the guard tool as it was at the base (`git archive`), so a commit that edits the vendored tools cannot judge itself. A range that installs the guard is judged by the tip's files.
+- **Each commit's Work-Items are judged against the register at that commit's parent.** Ready means ready before the commit, as the commit-msg hook judges it. Work committed before its item was ready is no longer rescued by a later register edit.
+- **Items readied inside the range are reported.** `NOTE ... became ready inside this range` is information for the reviewer. `range --strict-base A..B` makes it a failure, for an adopter who wants readiness established before the range began. Grooming and work in one range stays possible by default, because grooming is a register edit.
+- **The guard's own files are governed work.** The configuration, `.githooks/**`, `.claude/settings.json`, the CI file and the vendored tooling directory need a ready Work-Item to change, and no exempt path releases them. The installer writes `tooling_dir` and `protected_paths`; a configuration without them gets the defaults. Re-run the installer with the new tools to refresh the hooks and the CI file.
+- **Not claimed:** a register edit that readies an item inside the range is legitimate grooming; whether it was honest is judged by the recorded history rules (dated moves that name who made them), not by the guard.

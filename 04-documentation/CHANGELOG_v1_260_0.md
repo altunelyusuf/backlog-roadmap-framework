@@ -11260,6 +11260,16 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.398.0 — 2026-10-15 (MINOR: the work guard judges a range by what was in force before it; recurring activities and estimated starts — G119, G120)
+
+- **Work guard v1.1.0 and installer v1.1.0 (G119):** the range check reads the configuration at the base of the range, judges each commit's Work-Items against the register at its parent, reports items that became ready inside the range (`--strict-base` fails them), treats the guard's own files as governed work no exempt path releases, and the CI file runs the guard as it was at the base. Probe v1.2.0 (33 expectations, the new ones fail against v1.0.0). Adoption guide v1.1.0.
+- **Vocabulary (T-Box v1.134.0):** `RecurringActivity`, `recurrenceInterval`, `recurrenceEndedAt`, `occurrenceOf`, `startedAtIsEstimate`, `startEstimateBasis`; `metricMovableBy` accepts a recurring activity.
+- **Rules (shapes v1.169.0):** `RecurringActivityRecordShape`, `StartEstimateBasisShape`, `OccurrenceOfActivityShape`; `ObjectiveHasCorrectiveActionShape` counts a live recurring activity. Fixture v1.37.0 proves each (`REC_` cases).
+- **Tools:** roadmap report v1.7.0 keeps estimated starts out of cycle time; agent monitor v1.1.0 reports overdue recurring activities; `backlog_standing_items_probe` (14 expectations). Gate v1.53.0.
+- **Handovers:** the agentic-systems and agentic-sdlc handovers answered and filed; discipline v89.0.0 (G119, G120); Standard v1.133.0.
+
+**Unplanned work:** two consuming projects' handovers; no backlog item of this package covers them.
+
 ## v1.397.0 — 2026-10-15 (MINOR: agents under configuration management; oversight, control and approval without assigning people — G118)
 
 - **Vocabulary (T-Box v1.133.0, data v1.49.0):** `ExecutorInstance` (a run of a definition, with its version and clock), `TeamAssembly`, `Seat`, `SeatFunction` (five individuals), `approvedBy`, `humanApprovalLevel`, `transitionedByExecutor`, `delegatedLineage`, `spawnedBy`; the rule set `RS_AgentAccountability`.

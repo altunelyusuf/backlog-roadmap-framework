@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """backlog_guard_install v1.0.0 -- put the work guard in the path of the act, in one command (ruling G101).
 
-  backlog_guard_install_v1_0_0.py REPO --tooling-dir DIR --register FILE --lineage NAME --work-path GLOB [...]
+  backlog_guard_install_v1_1_0.py REPO --tooling-dir DIR --register FILE --lineage NAME --work-path GLOB [...]
                                        [--exempt-path GLOB ...]
 
   REPO         the consumer repository (a git work tree)
@@ -20,7 +20,7 @@ import json, os, stat, subprocess, sys
 
 COMMIT_MSG = """#!/bin/sh
 # installed by backlog_guard_install: a commit that changes governed work must name a ready Work-Item.
-exec python3 "$(git rev-parse --show-toplevel)/{tools}/backlog_work_guard_v1_0_0.py" commit-msg "$1"
+exec python3 "$(git rev-parse --show-toplevel)/{tools}/{guard}" commit-msg "$1"
 """
 PRE_PUSH = """#!/bin/sh
 # installed by backlog_guard_install: no push of a range containing work outside the register.
@@ -30,7 +30,7 @@ while read lref lsha rref rsha; do
   [ "$lsha" = "$ZERO" ] && continue
   if [ "$rsha" = "$ZERO" ]; then base="$(git merge-base "$lsha" origin/main 2>/dev/null || git merge-base "$lsha" origin/master 2>/dev/null || echo)"; else base="$rsha"; fi
   if [ -z "$base" ]; then rng="$lsha"; else rng="$base..$lsha"; fi
-  python3 "$TOP/{tools}/backlog_work_guard_v1_0_0.py" range "$rng" || exit 1
+  python3 "$TOP/{tools}/{guard}" range "$rng" || exit 1
 done
 exit 0
 """
@@ -55,14 +55,27 @@ jobs:
           if [ "${{{{ github.event_name }}}}" = "pull_request" ]; then RANGE="${{{{ github.event.pull_request.base.sha }}}}..${{{{ github.sha }}}}"
           else RANGE="${{{{ github.event.before }}}}..${{{{ github.sha }}}}"; fi
           case "$RANGE" in 000000*) RANGE="${{{{ github.sha }}}}";; esac
-          python3 {tools}/backlog_work_guard_v1_0_0.py range "$RANGE"
+          # v1.1.0 (G119): the guard that judges a range is the one that was in the repository BEFORE it, so a commit that
+          # edits the vendored tools cannot judge itself. A range that installs the guard is judged by the tip's.
+          BASE="${{RANGE%%..*}}"; TOOL="{tools}/{guard}"
+          if [ "$BASE" != "$RANGE" ] && git cat-file -e "$BASE:{tools}/{guard}" 2>/dev/null; then
+            mkdir -p ../guardbase && git archive "$BASE" {tools} | tar -x -C ../guardbase && TOOL="../guardbase/{tools}/{guard}"
+          fi
+          python3 "$TOOL" --config .backlog-guard.json range "$RANGE"
 """
 
 
-def merge_hooks(path, tools):
+def newest(repo, tools, stem):
+    import glob, re
+    c = [f for f in glob.glob(os.path.join(repo, tools, stem + "_v*.py")) if "probe" not in os.path.basename(f)]
+    c.sort(key=lambda q: [int(x) for x in re.findall(r"_v(\d+)_(\d+)_(\d+)\.", q)[0]])
+    return os.path.basename(c[-1]) if c else None
+
+
+def merge_hooks(path, tools, hook):
     cur = json.load(open(path)) if os.path.exists(path) else {}
     hooks = cur.setdefault("hooks", {})
-    cmd = f'python3 "$CLAUDE_PROJECT_DIR/{tools}/backlog_guard_claude_hook_v1_0_0.py"'
+    cmd = f'python3 "$CLAUDE_PROJECT_DIR/{tools}/{hook}"'
     want = {"SessionStart": {"matcher": "", "hooks": [{"type": "command", "command": cmd}]},
             "PreToolUse": {"matcher": "Edit|Write|MultiEdit|NotebookEdit|Bash", "hooks": [{"type": "command", "command": cmd}]}}
     for ev, entry in want.items():
@@ -84,8 +97,9 @@ def main(a):
     reg, lin, work, ex = opt("--register", True), opt("--lineage"), opt("--work-path", True), opt("--exempt-path", True)
     if not (tools and reg and lin and work):
         print(__doc__); return 1
-    if not os.path.isfile(os.path.join(repo, tools, "backlog_work_guard_v1_0_0.py")):
-        print(f"the tools are not vendored at {tools}: backlog_work_guard_v1_0_0.py is not there"); return 1
+    guard, hook = newest(repo, tools, "backlog_work_guard"), newest(repo, tools, "backlog_guard_claude_hook")
+    if not guard or not hook:
+        print(f"the tools are not vendored at {tools}: backlog_work_guard_v*.py or backlog_guard_claude_hook_v*.py is not there"); return 1
     for r in reg:
         if not os.path.isfile(os.path.join(repo, r)):
             print(f"register not found: {r}"); return 1
@@ -94,17 +108,20 @@ def main(a):
     cfg = json.load(open(cfgp)) if os.path.exists(cfgp) else {}
     cfg.update({"register": reg, "active_lineage": lin, "work_paths": work, "exempt_paths": ex or cfg.get("exempt_paths", [])})
     cfg.setdefault("governed_from", head)
+    # v1.1.0 (G119): the guard's own files are always governed work and no exempt path releases them.
+    cfg["tooling_dir"] = tools
+    cfg["protected_paths"] = [".backlog-guard.json", ".githooks/**", ".claude/settings.json", ".github/workflows/backlog-work-guard.yml", tools + "/**"]
     json.dump(cfg, open(cfgp, "w"), indent=2)
     for name, body in (("commit-msg", COMMIT_MSG), ("pre-push", PRE_PUSH)):
         p = os.path.join(repo, ".githooks", name)
         os.makedirs(os.path.dirname(p), exist_ok=True)
-        open(p, "w").write(body.format(tools=tools))
+        open(p, "w").write(body.format(tools=tools, guard=guard))
         os.chmod(p, os.stat(p).st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
     subprocess.run(["git", "-C", repo, "config", "core.hooksPath", ".githooks"], check=True)
-    merge_hooks(os.path.join(repo, ".claude", "settings.json"), tools)
+    merge_hooks(os.path.join(repo, ".claude", "settings.json"), tools, hook)
     wf = os.path.join(repo, ".github", "workflows", "backlog-work-guard.yml")
     os.makedirs(os.path.dirname(wf), exist_ok=True)
-    open(wf, "w").write(WORKFLOW.format(tools=tools))
+    open(wf, "w").write(WORKFLOW.format(tools=tools, guard=guard))
     print(f"installed: .backlog-guard.json (governed_from {cfg['governed_from'][:9]}), .githooks/, .claude/settings.json hooks, CI workflow")
     print("still owed by a person: mark the CI job 'Backlog work guard' as a required status check, and commit these files.")
     return 0
