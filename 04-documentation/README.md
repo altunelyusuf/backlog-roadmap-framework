@@ -10,7 +10,7 @@ prose that drifts. Generalised from an adopting project's product-backlog deposi
   backlog_rules_v1_1_0.ttl                     SHACL-AF derivations + R3/R4 + next-item query
 03-tooling/
   backlog_validate_v1_5_0.py                   validator + Gate K (--gate-k), --next selection
-  backlog_roadmap_report_v1_6_0.py             the computed roadmap: 8 sections, both NEXT answers
+  backlog_roadmap_report_v1_7_0.py             the computed roadmap: 8 sections, both NEXT answers
   backlog_class_requirements_v1_0_0.py         generic requirements introspection: given any class name, lists every real requirement the current shapes impose on it before you author one
   backlog_new_shape_proof_v1_2_0.py             every new shape declares real proof; baseline is queried from the register's own BaselineReference, not hardcoded, and every run writes back a real ToolRunRecord
   backlog_shape_snapshot_loader_v1_0_0.py       the same decision made entirely by a real SHACL rule (NewUnprovenShapeShape); this script only tags which file each shape came from, no pass/fail logic in Python
@@ -63,7 +63,7 @@ MANIFEST_SHA256.txt, VERSION.txt
 pip install rdflib pyshacl --break-system-packages
 bash 03-tooling/backlog_gate_v1_1_27.sh                      # four gates + self-proof + coverage
 bash 03-tooling/backlog_gate_v1_1_27.sh my_register.ttl      # ... plus a register
-python3 03-tooling/backlog_roadmap_report_v1_6_0.py my_register.ttl
+python3 03-tooling/backlog_roadmap_report_v1_7_0.py my_register.ttl
 ```
 
 Read `04-documentation/BACKLOG_ROADMAP_FRAMEWORK_STANDARD_v1_99_0.md` first; section 4 is the
