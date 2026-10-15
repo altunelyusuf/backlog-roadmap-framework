@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
+# v2.8.0 (G121): the earlier statements of an archived lineage's mission (supersedesMission, however long the chain) are its mission history and move with it, up to a statement another lineage pursues; before, they stayed live ownerless and pointed into the archive.
 # v2.7.0 (G106, consumer archival): the archive file is a parameter. --archive-file PATH names it (created at its first version when it does not exist yet); without the flag a register inside this package keeps using the package archive, and a register anywhere else gets its own archive beside it, in <register folder>/archive/<register name>_archive_vX_Y_Z.ttl. v2.6.0 always wrote into this package's archive, so a consumer ledger would have written its subjects into the framework's record.
 # v2.6.0 (G99 release B): the version a new live or archive file supersedes joins the header's owl:priorVersion chain (it was added by hand each time; move_header does it, and refuses a header that has no chain to extend).
 # v2.5.0 (Lineage 19, DC-S01 and DC-S03): an abandoned mission needs a closure report too, and every cancelled item of the lineage must be named by it (reportsCancelledItem); the archived copy of the lineage is marked archived with its confirmation pending, at the moment it is moved, so no later step has to find it. v2.4.0 accepted an abandoned mission with only its stated reason, which the owner has ruled is not enough.
 # v2.4.0 (Lineage 18, OC-S06): an abandoned lineage is archivable (its stated reason is its record), and the existing entries follow the archive file to its new version. v2.3.0 (Lineage 18, OC-S05): follows the archive folder. The archive data file now lives in 01-ontologies/archive/.
-"""backlog_lineage_archive v2.7.0 — set an achieved lineage down, out of every processing path.
+"""backlog_lineage_archive v2.8.0 — set an achieved lineage down, out of every processing path.
 
 WHY. A lineage whose mission is settled keeps costing every run until it is ARCHIVED: the SHACL
 suite validates its every individual, the git witness re-measures its every subject, the roadmap
@@ -176,6 +177,15 @@ def partition(g, lineages):
     keep_live |= live_lin | {g.value(l, B.lineageForMission) for l in live_lin if g.value(l, B.lineageForMission)}
     part |= set(lineages) | {g.value(l, B.lineageForMission) for l in lineages if g.value(l, B.lineageForMission)}
     part |= {cr for l in lineages for cr in g.subjects(B.closesForMission, g.value(l, B.lineageForMission))}
+    # v2.8.0 (G121): a mission amended mid-flight is the same lineage under a better statement (G104), so the statements it replaced are that lineage's mission
+    # history, not records of nobody. They go with the lineage, with their closure reports, up to a statement another lineage pursues (that one is its own).
+    others = {g.value(l, B.lineageForMission) for l in g.subjects(RDF.type, B.Lineage) if l not in lineages and g.value(l, B.lineageForMission) is not None}
+    todo = [g.value(l, B.lineageForMission) for l in lineages if g.value(l, B.lineageForMission) is not None]
+    while todo:
+        cur = todo.pop()
+        for pre in g.objects(cur, B.supersedesMission):
+            if pre in others or pre in part: continue
+            part.add(pre); part |= set(g.subjects(B.closesForMission, pre)); todo.append(pre)
     part -= keep_live
     changed, rounds = True, 0
     while changed and rounds < 20:

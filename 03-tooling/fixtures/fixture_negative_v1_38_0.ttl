@@ -3209,7 +3209,7 @@ lineagestatusn:S_Understated a backlog:Story ; backlog:hasIdentifier "S-US" ; ba
 # The negative fixture ADOPTS the status rule set, so the clauses it exists to prove are in force here
 # even though minimal fixtures elsewhere are untouched by them (G91: a ruling binds what declared it).
 lineagestatusn:Reg a backlog:Backlog ; rdfs:label "fixture register"@en ; backlog:isRegisterRoot true ;
-    backlog:adoptsRuleSet backlog:RS_LineageStatus , backlog:RS_LabelConvention , backlog:RS_ConcurrentLineages , backlog:RS_StateReflectsEvidence , backlog:RS_IndependentVerification , backlog:RS_HumanOversight , backlog:RS_ManagerialIndependence , backlog:RS_FlowPointsRecorded , backlog:RS_StatusHistoryRecorded .
+    backlog:adoptsRuleSet backlog:RS_LineageStatus , backlog:RS_LabelConvention , backlog:RS_ConcurrentLineages , backlog:RS_StateReflectsEvidence , backlog:RS_IndependentVerification , backlog:RS_HumanOversight , backlog:RS_ManagerialIndependence , backlog:RS_FlowPointsRecorded , backlog:RS_StatusHistoryRecorded , backlog:RS_ClosureCommitAnchor , backlog:RS_MissionHistory .
 
 
 # --- merged from fixture_sprint_ceremonies_negative_v1_0_0.ttl (sprintceremoni) ---
@@ -4276,3 +4276,10 @@ ex:REC_NO_INTERVAL a backlog:RecurringActivity ; backlog:hasState backlog:InProg
 ex:REC_ESTIMATE_NO_BASIS a backlog:Task ; backlog:hasState backlog:Done ; backlog:startedAtIsEstimate true ; backlog:startedAt "2026-09-05T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
 ex:REC_ENDED a backlog:RecurringActivity ; backlog:recurrenceInterval "P7D"^^<http://www.w3.org/2001/XMLSchema#duration> ; backlog:recurrenceEndedAt "2026-10-01T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
 ex:REC_OCCURRENCE_OF_ENDED a backlog:Task ; backlog:hasState backlog:InProgress ; backlog:occurrenceOf ex:REC_ENDED ; backlog:startedAt "2026-10-10T08:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+
+# v1.38.0 (G121): the history of an amended mission. MH_OUTSIDE is pursued by no lineage and replaced by nothing. MH_SUPERSEDED_INFLIGHT was
+# replaced by MH_NEWER, which a lineage pursues, so it is inside (no violation of the first kind) and still says it is in flight.
+ex:MH_OUTSIDE a backlog:Mission ; backlog:hasMissionStatement "A mission stated before any lineage and never replaced." ; backlog:decidedBy backlog:Owner .
+ex:MH_SUPERSEDED_INFLIGHT a backlog:Mission ; backlog:hasMissionStatement "An earlier statement." ; backlog:decidedBy backlog:Owner ; backlog:hasMissionOutcome backlog:Out_InFlight .
+ex:MH_NEWER a backlog:Mission ; backlog:hasMissionStatement "The better statement." ; backlog:decidedBy backlog:Owner ; backlog:supersedesMission ex:MH_SUPERSEDED_INFLIGHT .
+ex:MH_LIN a backlog:Lineage ; backlog:lineageForMission ex:MH_NEWER ; backlog:lineageOrdinal 99 .

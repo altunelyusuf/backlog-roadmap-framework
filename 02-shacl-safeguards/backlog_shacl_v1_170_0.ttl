@@ -9,9 +9,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog/shacl/1.169.0> ;
-    owl:versionInfo "1.169.0" ;
-    owl:priorVersion <http://example.org/backlog-shapes/1.168.0> , <http://example.org/backlog-shapes/1.167.0> , <http://example.org/backlog-shapes/1.166.0> , <http://example.org/backlog-shapes/1.165.0> , <http://example.org/backlog-shapes/1.164.0> , <http://example.org/backlog-shapes/1.159.0> , <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
+    owl:versionIRI <http://example.org/backlog/shacl/1.170.0> ;
+    owl:versionInfo "1.170.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.169.0> , <http://example.org/backlog-shapes/1.168.0> , <http://example.org/backlog-shapes/1.167.0> , <http://example.org/backlog-shapes/1.166.0> , <http://example.org/backlog-shapes/1.165.0> , <http://example.org/backlog-shapes/1.164.0> , <http://example.org/backlog-shapes/1.159.0> , <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.154.0> , <http://example.org/backlog-shapes/1.153.0> , <http://example.org/backlog-shapes/1.152.0> , <http://example.org/backlog-shapes/1.151.0> , <http://example.org/backlog-shapes/1.150.0> , <http://example.org/backlog-shapes/1.149.0> , <http://example.org/backlog-shapes/1.148.0> , <http://example.org/backlog-shapes/1.147.0> , <http://example.org/backlog-shapes/1.146.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.145.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.144.0> ;
@@ -5564,6 +5564,16 @@ backlog:ClosureReportCommitAnchorShape a sh:NodeShape ;
         sh:message "L3: this closure report records no closureCommittedAt. The identical StageOutputShape principle applies unchanged: a report generated at a timestamp is computable after the fact and proves nothing about whether it preceded the outcome it justifies, while a commit is not. Real, self-corrected finding that named this exact gap (vaf-pipeline-session, 2026-09-16): a mission's Out_Achieved and its own report were set in the same commit, 0 violations throughout this suite, because nothing before this shape ever asked a ClosureReport for the one anchor that could have caught it. G96: this package's own real closure of Lineage 9 (commit f00d8e0, v1.264.1) made the identical mistake, found only after this shape already existed -- proof the gap was never hypothetical." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
+            # v1.170.0 (G121): binds only an adopter. The anchor cannot be supplied for a report made before the field existed, and a value
+            # computed afterwards is what the field exists to refuse; G96 said the shape asks for it going forward, and ungated it asked backwards.
+            { ?reg backlog:adoptsRuleSet backlog:RS_ClosureCommitAnchor .
+              FILTER NOT EXISTS { ?reg a backlog:Lineage }
+              OPTIONAL { ?reg backlog:ruleSetAdoptedAt ?at }
+              OPTIONAL { $this backlog:reportGeneratedAt ?gen }
+              FILTER ( !BOUND(?at) || !BOUND(?gen) || ?gen >= ?at ) }
+            UNION
+            { ?reg a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_ClosureCommitAnchor .
+              { $this backlog:belongsToLineage ?reg } UNION { $this backlog:closesForMission ?m . ?reg backlog:lineageForMission ?m } }
             FILTER NOT EXISTS { $this backlog:closureCommittedAt ?c }
         }""" ] .
 
@@ -8577,4 +8587,42 @@ backlog:OccurrenceOfActivityShape a sh:NodeShape ;
         sh:select """SELECT $this WHERE {
             $this backlog:occurrenceOf ?ra ; backlog:startedAt ?s .
             ?ra backlog:recurrenceEndedAt ?e . FILTER ( ?s > ?e )
+        }""" ] .
+
+#################################################################
+#  v1.170.0 (G121, a handover of the another registrant session, 2026-10-15) -- the
+#  history of an amended mission, and the mission that was replaced
+#  while it still said it was in flight. Behind a RuleSet (G89, G91).
+#################################################################
+
+backlog:MissionOutsideLineageShape a sh:NodeShape ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "MH_OUTSIDE" ;
+    sh:targetClass backlog:Mission ;
+    sh:severity sh:Violation ;
+    rdfs:label "A mission belongs to a lineage, directly or as its replaced history (L1)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this mission is pursued by no lineage and is not an earlier statement of one that is. A mission amended mid-flight is the same lineage under a better statement (G104), so a replaced mission needs no lineage of its own; a mission that nothing replaced and no lineage pursues is intent with no place to be governed, archived or closed. Open the lineage, or record the mission that replaced this one." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?reg backlog:adoptsRuleSet backlog:RS_MissionHistory .
+            FILTER NOT EXISTS { ?reg a backlog:Lineage }
+            FILTER NOT EXISTS { ?l backlog:lineageForMission $this }
+            FILTER NOT EXISTS { ?later backlog:supersedesMission+ $this . ?l2 backlog:lineageForMission ?later }
+        }""" ] .
+
+backlog:SupersededMissionInFlightShape a sh:NodeShape ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "MH_SUPERSEDED_INFLIGHT" ;
+    sh:targetClass backlog:Mission ;
+    sh:severity sh:Warning ;
+    rdfs:label "A mission that was replaced is not still in flight (L3)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory L3: this mission was replaced by another and still says it is in flight. Nothing is working toward a replaced statement, so the claim is false; and the outcomes offered are Achieved and Abandoned, which would claim a closure that never happened or the opposite of what did. A replaced mission states no outcome: it is replaced, which supersedesMission already says. Remove the outcome, or close the mission with its report if it was in fact finished before it was replaced." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?reg backlog:adoptsRuleSet backlog:RS_MissionHistory .
+            FILTER NOT EXISTS { ?reg a backlog:Lineage }
+            ?later backlog:supersedesMission $this .
+            $this backlog:hasMissionOutcome backlog:Out_InFlight .
         }""" ] .

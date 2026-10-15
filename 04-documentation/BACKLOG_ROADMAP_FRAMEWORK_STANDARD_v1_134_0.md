@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.133.0
+# Backlog & Roadmap Semantic Framework — Standard v1.134.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -2565,3 +2565,10 @@ A human actor is an individual (`Executor_IndividualHuman`), a team (`Executor_H
 - **Recurring activity** (`RecurringActivity`). A responsibility that repeats: it has an interval (`recurrenceInterval`), no state, and ends only by the owner (`recurrenceEndedAt`). Each carrying-out is a finite item that is an occurrence of it (`occurrenceOf`). A live recurring activity counts as a mover of the metric of an objective (`metricMovableBy`).
 - **Estimated start.** `startedAtIsEstimate` with `startEstimateBasis` states that a start was not witnessed; the roadmap report keeps such items out of the measured cycle time.
 - **Work guard range check.** The range is judged by the configuration read at its base and by the register at each commit's parent; items that became ready inside the range are reported (`--strict-base` fails them); the guard's own files are always governed work.
+
+## The history of an amended mission, and a session's brief (v1.399.0, G121, G122)
+
+- **Mission history** (rule set `RS_MissionHistory`). A mission amended while the work runs is the same lineage under a better statement, so the statements it replaced (`supersedesMission`, however long the chain) are that lineage's mission history and need no lineage of their own. A register that adopts the rule set is refused a mission that no lineage pursues and no pursued mission replaced (`MissionOutsideLineageShape`), and is told when a replaced mission still says it is in flight (`SupersededMissionInFlightShape`). A replaced mission states no outcome; it is replaced.
+- **Closure anchor** (rule set `RS_ClosureCommitAnchor`). The commit a closure report was made at (`closureCommittedAt`) is asked for only of an adopter: a register (reports generated before `ruleSetAdoptedAt` are exempt) or a lineage (the reports of its own mission). `ClosureReportCommitAnchorShape` no longer binds a register that adopted nothing.
+- **Archival.** `backlog_lineage_archive` v2.8.0 moves the replaced statements of an archived lineage's mission, with their closure reports and the records that point at them, up to a statement another lineage pursues.
+- **Session brief.** `backlog_session_brief` prints the objective with most of its gap still open, the items in progress, the checkpoints falling due, and what each open iteration still needs to close; `--vendored DIR --package DIR` names vendored tools that a newer version has replaced. The work guard's status prints it at session start.

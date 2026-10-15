@@ -11260,6 +11260,15 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.399.0 — 2026-10-15 (MINOR: the history of an amended mission; the closure anchor binds adopters; a session's brief — G121, G122)
+
+- **Rule sets (data v1.50.0):** `RS_MissionHistory` and `RS_ClosureCommitAnchor`.
+- **Rules (shapes v1.170.0):** `MissionOutsideLineageShape` and `SupersededMissionInFlightShape`, for an adopting register; `ClosureReportCommitAnchorShape` now binds only an adopter (a register, with reports generated before `ruleSetAdoptedAt` exempt, or a lineage, for its own mission's reports). Fixture v1.38.0 proves the new shapes (`MH_` cases).
+- **Tools:** `backlog_lineage_archive` v2.8.0 archives the statements a mission replaced with its lineage; `backlog_session_brief` v1.0.0; work guard v1.2.0 prints the brief in its status. Probes: `backlog_mission_history_probe` (14), `backlog_archive_mission_history_probe` (the old tool fails it), `backlog_session_brief_probe` (8), work guard probe v1.3.0 (35). Gate v1.54.0.
+- **Handovers:** the another registrant and agentic-systems handovers answered and filed; discipline v90.0.0 (G121, G122); Standard v1.134.0; adoption guide v1.2.0.
+
+**Unplanned work:** two consuming projects' handovers; no backlog item of this package covers them.
+
 ## v1.398.0 — 2026-10-15 (MINOR: the work guard judges a range by what was in force before it; recurring activities and estimated starts — G119, G120)
 
 - **Work guard v1.1.0 and installer v1.1.0 (G119):** the range check reads the configuration at the base of the range, judges each commit's Work-Items against the register at its parent, reports items that became ready inside the range (`--strict-base` fails them), treats the guard's own files as governed work no exempt path releases, and the CI file runs the guard as it was at the base. Probe v1.2.0 (33 expectations, the new ones fail against v1.0.0). Adoption guide v1.1.0.

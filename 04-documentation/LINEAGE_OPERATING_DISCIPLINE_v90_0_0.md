@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v89.0.0
+# Lineage Operating Discipline — v90.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -3508,3 +3508,32 @@ Related: G91, G109, G111, G112, G116, G117.
 **What is not claimed.** The estimate is the author's statement, not a witness. The interval is a bound the owner accepts, not a schedule the framework enforces. Nothing was run against the consumer's register.
 
 Related: G91, G101, G113, G115, G117, G118.
+
+## G121 — The statements a mission replaced are its lineage's history; the closure anchor binds those who adopted it; a replaced mission states no outcome
+
+*(Opened by a handover of the another registrant session, 2026-10-15, from a measurement of a consumer ledger: 79 missions with no lineage, 75 of them owned by nothing, 78 linked into one chain by `supersedesMission`. The shapes and the archive tool were run here on planted registers; the consumer's own ledger was not run.)*
+
+**A1 — a path for the ownerless history: none is needed, and none is a restart or a backfill.** A mission amended while the work runs is the same lineage under a better statement (G104, G72), so the statements it replaced are that lineage's mission history by the framework's own definition. Nothing is asserted or re-dated: the ownership is read from `supersedesMission`. Option (a) of the handover is therefore right, with no new lineage; (b) invents lineages and (c) leaves records pointing into an archive. Where another lineage pursues a link of the chain, the chain from there on is that lineage's. The tool that performs it is `backlog_lineage_archive` v2.8.0: the replaced statements move with the lineage, with their closure reports and the records that point at them, up to a statement another lineage pursues (`backlog_archive_mission_history_probe`; the previous version fails it). Two honest limits. The chain as measured is a series of missions each closed before the next was opened, which is the follow-on case G72 says is a new lineage and not an amendment; it is history, it is not rewritten, and the chain reads as the pursued mission's history only through this ruling. And a replaced statement of a lineage that is still running moves only when that lineage does. The finished iterations that belong to no lineage may name the lineage that owns the mission they hang from (`belongsToLineage`): it states a place, not a date, and the order check reads the first commit of items, not of containers. That last reading was not run against the consumer's register; run the order check after.
+
+**A2 — a closure report that predates `closureCommittedAt`.** `ClosureReportCommitAnchorShape` was written (G95) to ask for the anchor going forward and was shipped binding every register, so it asked backwards, which is what G89 and G91 refuse. It now binds only an adopter, through `RS_ClosureCommitAnchor`: a register (reports generated before its `ruleSetAdoptedAt` are exempt) or a lineage (the reports of its own mission). A register that adopted nothing is refused nothing; this loosens what a consumer that never adopted was held to, and the changelog says so. No value is computed after the fact.
+
+**A3 — a replaced mission that was never closed.** It states no outcome. `MissionOutcomeShape` already exempts a mission another replaced from stating one, so the five in flight are valid as they are, and a new register version can drop the claim (the history keeps what was said). `Out_Achieved` would claim a report and criteria that never existed; `Out_Abandoned` the opposite of what happened; a fourth outcome "superseded" would be a second place to say what `supersedesMission` says and could disagree with it.
+
+**B1, B2.** `MissionOutsideLineageShape` refuses a mission that no lineage pursues and no pursued mission replaced; `SupersededMissionInFlightShape` (a Warning, G46) reports a replaced mission that says it is in flight. Both ship behind `RS_MissionHistory`. It binds every mission of the register that adopts it, so a register with ownerless missions adopts it after the history is archived or owned, which is the owner's rule (G89), not before.
+**B3.** `RS_LineageStatus` and `RS_ConcurrentLineages` read lineages, not missions, and are not changed. With `RS_MissionHistory` every mission is a lineage's or its history, so the concurrency rule reaches all of them.
+**B4.** No hook refuses opening a mission while the previous one is neither closed nor replaced. A second mission opened under `RS_MissionHistory` is a lineage, and a lineage opened while another is active is queued by `RS_ConcurrentLineages` (G104). A start-gate refusal of the opening itself is not built.
+
+**What is not claimed.** The consumer's ledger was not run: the 86 violations were not reproduced, and the quick query engine that "cannot read one of the newer shapes" was not reproduced either (the shape was not named). The chain analysis is the consumer's measurement.
+
+## G122 — A session is told what to work toward, what falls due and what a close will need, from facts the register already holds
+
+*(Opened by a handover of the agentic-systems session, 2026-10-15: ten findings on how a session did not follow its lineage, seven of them asking whether a tool should help and where.)*
+
+**Built: the brief.** `backlog_session_brief` v1.0.0 prints, from the register alone, the objective with the largest share of its gap still open and how many objectives still block the mission (finding 1), the items in progress, the checkpoints falling due within a week or already passed with no reading (finding 6, so readings are taken on time and not in a batch) and, for each open iteration, the facts its close will ask for that it does not carry yet (finding 8: a measured duration with its source, a deployment unit that deploys from it). The work guard v1.2.0 prints it with the start-gate state at session start. It needs nothing beside it; without it the status says so.
+**Built: stale vendored tools (finding 4).** `backlog_session_brief --vendored DIR --package DIR` names every vendored tool that a newer version has replaced. A consumer repository does not hold the package, so the comparison needs the path to a checkout; it cannot be made from the register alone.
+**Documented: the guard before the work (finding 2).** The adoption guide now says that after a restart the guard is installed before anything governed is changed in the lineage.
+**Answered, not built.** Finding 3 and 9 are G117, G119 and G120. Finding 10 (the hooks write bytecode): G119 already makes bytecode never work, and the hooks run the tools; running them with `-B` is the consumer's configuration. Finding 7: the register-shaped files a package ships are checked by that package's own gate with the validator; this package's gate does the same for its own, and a general finder of such files is not built.
+**Not built.** Finding 1's second half (the commit hook noting that the named item does not serve the top objective): the register does say which items can move an objective (`metricMovableBy`), so it is derivable, but a hook that second-guesses the owner's choice of work is a rule the owner has not asked for. Finding 5 (an index of rulings by the situation they answer): every ruling's heading states its situation, so a tool could read them; it is not built, and the brief does not claim it.
+
+Related: G91, G101, G104, G117, G119, G120.
+

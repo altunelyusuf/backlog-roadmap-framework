@@ -1,4 +1,4 @@
-# Work guard — adoption guide (v1.1.0)
+# Work guard — adoption guide (v1.2.0)
 
 Rule: **no change to governed work without a registered, groomed, admitted item.** Four layers, because each alone has
 been argued past. Ruling G101.
@@ -48,3 +48,9 @@ Bash-write detection is a heuristic. The guard cannot judge the quality of groom
 - **Items readied inside the range are reported.** `NOTE ... became ready inside this range` is information for the reviewer. `range --strict-base A..B` makes it a failure, for an adopter who wants readiness established before the range began. Grooming and work in one range stays possible by default, because grooming is a register edit.
 - **The guard's own files are governed work.** The configuration, `.githooks/**`, `.claude/settings.json`, the CI file and the vendored tooling directory need a ready Work-Item to change, and no exempt path releases them. The installer writes `tooling_dir` and `protected_paths`; a configuration without them gets the defaults. Re-run the installer with the new tools to refresh the hooks and the CI file.
 - **Not claimed:** a register edit that readies an item inside the range is legitimate grooming; whether it was honest is judged by the recorded history rules (dated moves that name who made them), not by the guard.
+
+## What v1.2.0 changes (G122)
+
+- **The session-start status carries a brief.** Vendor `backlog_session_brief` beside the guard and the status prints, after the next required act, the objective to work toward, the items in progress, the checkpoints falling due and what each open iteration needs to close. Without it the status says the brief is not shown.
+- **Install the guard before any work in a restarted lineage.** A restart ends with the guard installed; the order matters: nothing governed is changed in the restarted lineage until it is, otherwise the work has to be written into the register afterwards from git, with starts stated as estimates (G120).
+- **Keep the vendored tools current.** `backlog_session_brief --vendored TOOLS_DIR --package PACKAGE_DIR` lists every vendored tool a newer version has replaced.

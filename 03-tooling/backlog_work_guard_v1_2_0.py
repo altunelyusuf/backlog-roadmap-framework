@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_work_guard v1.1.0 -- the safeguard that sits IN THE PATH of the act, not after it.
+"""backlog_work_guard v1.2.0 -- the safeguard that sits IN THE PATH of the act, not after it.
 
 WHY THIS EXISTS (ruling G101). an adopting project opened Lineage_2 to stop work happening outside the register, closed its
 Mission..Objective stages, never built the Backlog stage, and shipped nine releases from a work ledger. Every safeguard
@@ -8,7 +8,9 @@ it had was either prose (a "standing practice" written after each of ~20 earlier
 
 Four entry points, one rule: no work-path change without a registered, groomed, admitted item.
   status                 print the lineage's start-gate facts and the NEXT REQUIRED ACT (put in front of the session at
-                         start, so it does not depend on what a compacted conversation remembers)
+                         start, so it does not depend on what a compacted conversation remembers). v1.2.0 (G122): when
+                         backlog_session_brief is beside the guard, it also prints the brief: the objective to work toward, the
+                         items In Progress, the checkpoints falling due, and what each open iteration still needs to close
   edit FILE              before a file is written: if FILE is a work path, the lineage must be READY (start gate)
   commit-msg MSGFILE     before a commit: if the staged files include a work path, the message must carry
                          `Work-Item: NAME` trailers and each named item must be READY in the register
@@ -223,6 +225,17 @@ def cmd_status(gd, out=print):
     for e in errs:
         out("  GUARD CONFIG: " + e)
     out("Work paths are governed: " + ", ".join(gd.cfg.get("work_paths", [])) + ". Every work commit needs `Work-Item:` trailers.")
+    try:
+        sv = lambda p: [int(x) for x in re.findall(r"_v(\d+)_(\d+)_(\d+)\.", p)[0]]
+        bc = sorted(glob.glob(os.path.join(HERE, "backlog_session_brief_v*.py")), key=sv)
+        if bc:
+            spec = importlib.util.spec_from_file_location("backlog_session_brief", bc[-1])
+            m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+            m.brief(g, gd.lineage, out=out)
+        else:
+            out("BRIEF        not shown: backlog_session_brief is not beside the guard (vendor it to see the focus, due checkpoints and close needs)")
+    except Exception as e:      # the brief informs; it must never stop the gate from speaking
+        out(f"BRIEF        could not be computed ({type(e).__name__}); the gate facts above stand")
     return 0
 
 

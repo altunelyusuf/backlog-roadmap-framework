@@ -22,9 +22,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (ABox: controlled individuals, reference data and the live register)"@en ;
-    owl:versionIRI <http://example.org/backlog/abox/1.49.0> ;
-    owl:versionInfo "1.49.0" ;
-    owl:priorVersion <http://example.org/backlog/abox/1.48.0> , <http://example.org/backlog/abox/1.47.0> , <http://example.org/backlog/abox/1.46.0> , <http://example.org/backlog/abox/1.45.0> , <http://example.org/backlog/abox/1.40.0> , <http://example.org/backlog/abox/1.39.0> , <http://example.org/backlog/abox/1.38.0> , <http://example.org/backlog/abox/1.37.0> , <http://example.org/backlog/abox/1.36.0> , <http://example.org/backlog/abox/1.35.0> ;
+    owl:versionIRI <http://example.org/backlog/abox/1.50.0> ;
+    owl:versionInfo "1.50.0" ;
+    owl:priorVersion <http://example.org/backlog/abox/1.49.0> , <http://example.org/backlog/abox/1.48.0> , <http://example.org/backlog/abox/1.47.0> , <http://example.org/backlog/abox/1.46.0> , <http://example.org/backlog/abox/1.45.0> , <http://example.org/backlog/abox/1.40.0> , <http://example.org/backlog/abox/1.39.0> , <http://example.org/backlog/abox/1.38.0> , <http://example.org/backlog/abox/1.37.0> , <http://example.org/backlog/abox/1.36.0> , <http://example.org/backlog/abox/1.35.0> ;
     owl:priorVersion <http://example.org/backlog/abox/1.34.0> , <http://example.org/backlog/abox/1.33.0> , <http://example.org/backlog/abox/1.32.0> , <http://example.org/backlog/abox/1.31.0> , <http://example.org/backlog/abox/1.30.0> , <http://example.org/backlog/abox/1.29.0> , <http://example.org/backlog/abox/1.28.0> , <http://example.org/backlog/abox/1.27.0> , <http://example.org/backlog/abox/1.26.0> , <http://example.org/backlog/abox/1.25.0> , <http://example.org/backlog/abox/1.24.0> , <http://example.org/backlog/abox/1.23.0> , <http://example.org/backlog/abox/1.22.0> , <http://example.org/backlog/abox/1.21.0> , <http://example.org/backlog/abox/1.20.0> , <http://example.org/backlog/abox/1.19.0> , <http://example.org/backlog/abox/1.17.0> , <http://example.org/backlog/abox/1.16.0> , <http://example.org/backlog/abox/1.15.0> , <http://example.org/backlog/abox/1.14.0> , <http://example.org/backlog/abox/1.13.0> , <http://example.org/backlog/abox/1.12.0> , <http://example.org/backlog/abox/1.11.0> , <http://example.org/backlog/abox/1.10.0> , <http://example.org/backlog/abox/1.9.0> , <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
         <http://example.org/backlog-abox/1.2.1> ,
                      <http://example.org/backlog-abox/1.2.0> ,
@@ -1220,6 +1220,14 @@ backlog:RS_IndependentVerification a owl:NamedIndividual , backlog:RuleSet ;
 backlog:RS_HumanOversight a owl:NamedIndividual , backlog:RuleSet ;
     rdfs:label "Oversight of agent work is held by people"@en ;
     skos:definition "Every Executor named through overseenBy is an individual human or a human team. A RuleSet because it binds only registers that declared it, so a register whose overseers were named before the rule is not judged retroactively (G89, G91). This package's own register does not adopt it."@en .
+
+backlog:RS_ClosureCommitAnchor a owl:NamedIndividual , backlog:RuleSet ;
+    rdfs:label "A closure report records the commit it was made at"@en ;
+    skos:definition "Within the adopter's scope, every closure report records closureCommittedAt, the commit it was itself committed at. A report generated at a timestamp is computable after the fact; a commit is the one anchor its author does not control (G95, G96). A RuleSet because the anchor cannot be supplied for a report made before the field existed, and a value computed afterwards is exactly what the field exists to refuse: a register adopts it for the reports made from then on and may state ruleSetAdoptedAt, before which reports generated are exempt; a lineage that adopts it binds the reports of its own mission (G89, G91, G112). This package's own register does not adopt it."@en .
+
+backlog:RS_MissionHistory a owl:NamedIndividual , backlog:RuleSet ;
+    rdfs:label "Every mission belongs to a lineage, and a replaced mission is not in flight"@en ;
+    skos:definition "Within the adopting register: a mission is pursued by a lineage, or is a statement that a mission a lineage pursues replaced, directly or through a chain of replacements (supersedesMission); a mission that was replaced does not state that it is still in flight. A mission amended mid-flight is the same lineage under a better statement (G104), so the earlier statements are that lineage's mission history and need no lineage of their own. A RuleSet because a register whose missions were stated before lineages existed is not judged retroactively (G89, G91). This package's own register does not adopt it."@en .
 
 backlog:RS_AgentAccountability a owl:NamedIndividual , backlog:RuleSet ;
     rdfs:label "Agent work is accounted for"@en ;

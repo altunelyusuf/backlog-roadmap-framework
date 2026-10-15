@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_work_guard_probe v1.2.0 -- proof that the work guard discriminates and cannot pass over nothing (L-95).
+"""backlog_work_guard_probe v1.3.0 -- proof that the work guard discriminates and cannot pass over nothing (L-95).
 
 Builds a real throwaway git repository, installs the guard with backlog_guard_install, and drives REAL git commits and
 the REAL Claude hook script against fixtures/fixture_execution_ready_negative (cite by stem, L-123), where the lineage
@@ -10,7 +10,7 @@ import glob, json, os, re, shutil, subprocess, sys, tempfile
 HERE = os.path.dirname(os.path.abspath(__file__))
 sv = lambda p: [int(x) for x in re.findall(r"_v(\d+)_(\d+)_(\d+)\.", p)[0]]
 fx = sorted(glob.glob(os.path.join(HERE, "fixtures", "fixture_execution_ready_negative_v*.ttl")), key=sv)[-1]
-TOOLS = ["backlog_work_guard", "backlog_execution_ready", "backlog_guard_claude_hook", "backlog_guard_install"]
+TOOLS = ["backlog_work_guard", "backlog_session_brief", "backlog_execution_ready", "backlog_guard_claude_hook", "backlog_guard_install"]
 bad = []
 
 
@@ -74,7 +74,7 @@ r = commit(d, "docs only, no item needed", path="docs/a.md")
 expect("ACCEPTED: a commit that touches no governed work needs no item", r.returncode == 0)
 r = commit(d, "skipped the hook", noverify=True)
 expect("a --no-verify commit gets in locally (the hook alone can be skipped)", r.returncode == 0)
-g = os.path.join(d, "tools", "backlog_work_guard_v1_1_0.py")
+g = os.path.join(d, "tools", "backlog_work_guard_v1_2_0.py")
 r = sh(d, sys.executable, g, "range", "HEAD~3..HEAD")
 expect("REFUSED by the CI layer: the range check names the skipped commit",
        r.returncode == 2 and "names no Work-Item" in r.stdout and "examined" in r.stdout)
@@ -139,7 +139,7 @@ def committed():
     d, r = fresh()
     sh(d, "git", "add", "-A"); sh(d, "git", "commit", "-q", "--no-verify", "-m", "commit the installed guard files")
     return d
-gv = lambda d: os.path.join(d, "tools", "backlog_work_guard_v1_1_0.py")
+gv = lambda d: os.path.join(d, "tools", "backlog_work_guard_v1_2_0.py")
 head = lambda d: sh(d, "git", "rev-parse", "HEAD").stdout.strip()
 
 d6 = committed(); base = head(d6)
@@ -162,7 +162,7 @@ c["exempt_paths"] = [".githooks/**", ".backlog-guard.json", "tools/**"]; json.du
 sh(d7, "git", "add", "-A"); sh(d7, "git", "commit", "-q", "--no-verify", "-m", "exempt the guard files")
 r = commit(d7, "edit a hook, no item", path=".githooks/commit-msg")
 expect("REFUSED: no exempt path releases the guard's own files", r.returncode != 0 and "names no `Work-Item" in r.stdout + r.stderr)
-r = commit(d7, "edit the vendored guard, no item", path="tools/backlog_work_guard_v1_1_0.py")
+r = commit(d7, "edit the vendored guard, no item", path="tools/backlog_work_guard_v1_2_0.py")
 expect("REFUSED: the vendored tooling directory is governed work", r.returncode != 0 and "names no `Work-Item" in r.stdout + r.stderr)
 
 d8 = committed(); base8 = head(d8)
@@ -192,6 +192,17 @@ wf = open(os.path.join(d9, ".github", "workflows", "backlog-work-guard.yml")).re
 expect("the CI file runs the guard as it was BEFORE the range (git archive of the base), so a commit cannot edit the judge",
        "git archive" in wf and "--config .backlog-guard.json" in wf)
 for x in (d6, d7, d8, d9): shutil.rmtree(x, ignore_errors=True)
+
+# G122: the session-start status carries the brief, and does not stop speaking when the brief is absent
+dB, _ = fresh()
+r = sh(dB, sys.executable, os.path.join(dB, "tools", "backlog_work_guard_v1_2_0.py"), "--config", ".backlog-guard.json", "status")
+expect("the status prints the brief (focus, items in progress, checkpoints due, what a close needs)",
+       r.returncode == 0 and all(k in r.stdout for k in ("FOCUS", "IN PROGRESS", "DUE", "TO CLOSE")) and "NEXT REQUIRED ACT" in r.stdout)
+os.remove(os.path.join(dB, "tools", "backlog_session_brief_v1_0_0.py"))
+r = sh(dB, sys.executable, os.path.join(dB, "tools", "backlog_work_guard_v1_2_0.py"), "--config", ".backlog-guard.json", "status")
+expect("without the brief tool the status still speaks and says what is missing",
+       r.returncode == 0 and "NEXT REQUIRED ACT" in r.stdout and "BRIEF" in r.stdout and "not shown" in r.stdout)
+shutil.rmtree(dB, ignore_errors=True)
 
 print("VERDICT   :", "PASS" if not bad else "FAIL"); [print("  ", b) for b in bad]
 sys.exit(1 if bad else 0)
