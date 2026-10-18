@@ -11260,6 +11260,14 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.406.0 — 2026-10-19 (MINOR: a carried item keeps its exemption while a revision is under way, and may be handed on down a chain of successors — G129)
+
+- **Shapes v1.172.0:** the planning-event and two concern obligations stay exempt for a carried item while its admitting output is retracted and the lineage has no active Backlog output yet; an item may be taken in by the output of any successor in the chain, in the admission rule and the carried-item rule. Only removes findings.
+- **Tools:** `backlog_carried_item_probe` v1.0.0 (7 expectations; fails against shapes v1.171.0); gate v1.59.0.
+- **Handovers:** the SEN0401 slides handover on successor re-admission and single-step revision answered and filed (G129). Discipline v97.0.0.
+
+**Unplanned work:** one consuming project's handover; no backlog item of this package covers it.
+
 ## v1.405.0 — 2026-10-18 (PATCH: a probe with no record of what it reads is measured — G128)
 
 - **Tools:** gate v1.58.0 (a probe with no record is run traced even when its declared stamp holds); `backlog_probe_inputs` v1.1.0 (`has`; an untraced run is not exported) and its probe (22 expectations). Release 1.404.0 had measured the three probes whose declared inputs changed in that run, which is how the gap showed.

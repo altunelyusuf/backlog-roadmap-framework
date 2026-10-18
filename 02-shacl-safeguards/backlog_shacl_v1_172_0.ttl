@@ -9,9 +9,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog/shacl/1.171.0> ;
-    owl:versionInfo "1.171.0" ;
-    owl:priorVersion <http://example.org/backlog-shapes/1.170.0> , <http://example.org/backlog-shapes/1.169.0> , <http://example.org/backlog-shapes/1.168.0> , <http://example.org/backlog-shapes/1.167.0> , <http://example.org/backlog-shapes/1.166.0> , <http://example.org/backlog-shapes/1.165.0> , <http://example.org/backlog-shapes/1.164.0> , <http://example.org/backlog-shapes/1.159.0> , <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
+    owl:versionIRI <http://example.org/backlog/shacl/1.172.0> ;
+    owl:versionInfo "1.172.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.171.0> , <http://example.org/backlog-shapes/1.170.0> , <http://example.org/backlog-shapes/1.169.0> , <http://example.org/backlog-shapes/1.168.0> , <http://example.org/backlog-shapes/1.167.0> , <http://example.org/backlog-shapes/1.166.0> , <http://example.org/backlog-shapes/1.165.0> , <http://example.org/backlog-shapes/1.164.0> , <http://example.org/backlog-shapes/1.159.0> , <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.154.0> , <http://example.org/backlog-shapes/1.153.0> , <http://example.org/backlog-shapes/1.152.0> , <http://example.org/backlog-shapes/1.151.0> , <http://example.org/backlog-shapes/1.150.0> , <http://example.org/backlog-shapes/1.149.0> , <http://example.org/backlog-shapes/1.148.0> , <http://example.org/backlog-shapes/1.147.0> , <http://example.org/backlog-shapes/1.146.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.145.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.144.0> ;
@@ -2890,6 +2890,12 @@ backlog:L4StoryGranularityShape a sh:NodeShape ;
             FILTER NOT EXISTS { $this backlog:preLineageItem true ; backlog:admittedByOutput ?ao .
                 ?ao backlog:outputOfStage backlog:Stage_Backlog .
                 FILTER NOT EXISTS { ?ao backlog:outputRetracted true } }
+            # v1.172.0 (SEN0401 handover, G129): while a revision or restart is under way (the admitting output retracted, the lineage not yet holding an
+            # active Backlog output) the admission is stale, not wrong (v1.107.0 said so for a restart). The exemption holds then too; it lapses when the
+            # rebuilt Backlog output exists and does not re-admit the item.
+            FILTER NOT EXISTS { $this backlog:preLineageItem true ; backlog:admittedByOutput ?ro .
+                ?ro backlog:outputOfStage backlog:Stage_Backlog ; backlog:outputRetracted true ; backlog:belongsToLineage ?rl .
+                FILTER NOT EXISTS { ?live backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage ?rl . FILTER NOT EXISTS { ?live backlog:outputRetracted true } } }
         }""" ] .
 
 backlog:StoryReadyToCloseShape a sh:NodeShape ;
@@ -3591,6 +3597,12 @@ backlog:GroomingShape a sh:NodeShape ;
             FILTER NOT EXISTS { $this backlog:preLineageItem true ; backlog:admittedByOutput ?ao .
                 ?ao backlog:outputOfStage backlog:Stage_Backlog .
                 FILTER NOT EXISTS { ?ao backlog:outputRetracted true } }
+            # v1.172.0 (SEN0401 handover, G129): while a revision or restart is under way (the admitting output retracted, the lineage not yet holding an
+            # active Backlog output) the admission is stale, not wrong (v1.107.0 said so for a restart). The exemption holds then too; it lapses when the
+            # rebuilt Backlog output exists and does not re-admit the item.
+            FILTER NOT EXISTS { $this backlog:preLineageItem true ; backlog:admittedByOutput ?ro .
+                ?ro backlog:outputOfStage backlog:Stage_Backlog ; backlog:outputRetracted true ; backlog:belongsToLineage ?rl .
+                FILTER NOT EXISTS { ?live backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage ?rl . FILTER NOT EXISTS { ?live backlog:outputRetracted true } } }
         }""" ] ;
     sh:sparql [ a sh:SPARQLConstraint ;
         sh:message "L3: this story declares a design concern that no refinement event addressed. One refinement of any kind used to satisfy Ready, so a story with five applicable concerns and a single meeting was indistinguishable from one fully analysed. A concern named and not addressed is the analysis the story was known to need and did not get." ;
@@ -3608,6 +3620,12 @@ backlog:GroomingShape a sh:NodeShape ;
             FILTER NOT EXISTS { $this backlog:preLineageItem true ; backlog:admittedByOutput ?ao .
                 ?ao backlog:outputOfStage backlog:Stage_Backlog .
                 FILTER NOT EXISTS { ?ao backlog:outputRetracted true } }
+            # v1.172.0 (SEN0401 handover, G129): while a revision or restart is under way (the admitting output retracted, the lineage not yet holding an
+            # active Backlog output) the admission is stale, not wrong (v1.107.0 said so for a restart). The exemption holds then too; it lapses when the
+            # rebuilt Backlog output exists and does not re-admit the item.
+            FILTER NOT EXISTS { $this backlog:preLineageItem true ; backlog:admittedByOutput ?ro .
+                ?ro backlog:outputOfStage backlog:Stage_Backlog ; backlog:outputRetracted true ; backlog:belongsToLineage ?rl .
+                FILTER NOT EXISTS { ?live backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage ?rl . FILTER NOT EXISTS { ?live backlog:outputRetracted true } } }
         }""" ] ;
     sh:sparql [ a sh:SPARQLConstraint ;
         sh:message "L1: this story both declares applicable concerns and states that none applies. The two claims contradict; one of them is wrong and the register cannot say which." ;
@@ -5880,6 +5898,10 @@ backlog:PreLineageItemShape a sh:NodeShape ;
             FILTER NOT EXISTS { ?sc backlog:succeedsLineage ?l ; backlog:successorLineage ?s .
                                 ?o backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage ?s .
                                 FILTER NOT EXISTS { ?o backlog:outputRetracted true } }
+            # v1.172.0 (G129): a carried item may be handed on: the output of any successor in the chain takes it in, not only the first
+            FILTER NOT EXISTS { ?l (^backlog:succeedsLineage/backlog:successorLineage)+ ?s2 .
+                                ?o backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage ?s2 .
+                                FILTER NOT EXISTS { ?o backlog:outputRetracted true } }
             # v1.107.0: an admission by a since-retracted output is stale, not wrong, while the rebuild is
             # under way; it is wrong once an active Backlog output exists and none re-admits the item
             FILTER NOT EXISTS { $this backlog:admittedByOutput ?ok . ?ok backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage ?l . FILTER NOT EXISTS { ?ok backlog:outputRetracted true } }
@@ -6226,6 +6248,11 @@ backlog:SuccessionCarriedItemShape a sh:NodeShape ;
             FILTER NOT EXISTS { $this backlog:preLineageItem true ; backlog:admittedByOutput ?ao .
                                 ?ao backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage ?s .
                                 FILTER NOT EXISTS { ?ao backlog:outputRetracted true } }
+            # v1.172.0 (G129): carried further by a later successor in the chain is carried
+            FILTER NOT EXISTS { $this backlog:preLineageItem true ; backlog:admittedByOutput ?ao2 .
+                                ?ao2 backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage ?t .
+                                ?l (^backlog:succeedsLineage/backlog:successorLineage)+ ?t .
+                                FILTER NOT EXISTS { ?ao2 backlog:outputRetracted true } }
             FILTER NOT EXISTS { ?dz backlog:dissolvesContainer $this }
         }""" ] .
 
