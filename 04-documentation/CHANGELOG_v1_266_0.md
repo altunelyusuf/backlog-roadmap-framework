@@ -11260,6 +11260,14 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.404.0 — 2026-10-18 (MINOR: a probe is stamped on what it was measured to read; a deliverable added to a closed scope statement is a revision from the Scope stage — G127, G128)
+
+- **Handovers:** the another registrant handover on stage digests after scope changes answered and filed (G127): a deliverable is part of the scope statement, not a scope change, so it is a revision from the Scope stage; a recorded scope change leaves the digests not reproducing until the stage is closed again, once for all the changes; table v4 and the verifier are the consumer's decision. Documentation only. Discipline v95.0.0.
+- **Tools:** `backlog_probe_inputs` v1.0.0 (a probe is run under a system-call trace; the files, directories and absent paths it touched are its measured inputs) and its probe (20 expectations); gate v1.57.0 (stamps a probe on the measured key where a usable record exists; `06-package-provenance/PROBE_INPUTS.json`); release tool v1.3.4 (exports the records; the public-copy keep rule is a function with four expectations) and its probe.
+- **Measured before:** 39 probes traced, 35 usable; 16 declared their inputs without a module they import, 4 without a data file, 1 without a tool; 21 read the shapes (the slow ones), 14 do not.
+
+**Unplanned work:** one consuming project's handover, and the two items G126 left unbuilt (measured inputs, the README rule's test), on the owner's direction of 2026-10-18; no backlog item of this package covers them.
+
 ## v1.403.0 — 2026-10-18 (MINOR: a proof that passed is remembered in the package; the validation cache is one file per data key — G126)
 
 - **Tools:** gate v1.56.0 (recorded stamps honoured; the probes that must run go two at a time; a summary of what was honoured and what ran); merkle cache v1.2.0 (keys relative to the package, recorded stamps, `BACKLOG_COLD=1`); validator v1.17.0 (one shape bundle per data key); release tool v1.3.3 (exports the stamps after a passing gate, `--cold`, `prune-cache --legacy`). `backlog_proof_stamps_probe` (12 expectations); merkle probe v1.2.0 (30).

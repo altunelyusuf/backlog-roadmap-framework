@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_release_tool_probe v1.3.1 -- the release tool refuses what it must refuse and does what it says (G99 release A; OE rule R4).
+"""backlog_release_tool_probe v1.3.4 -- the release tool refuses what it must refuse and does what it says (G99 release A; OE rule R4).
 
 Each case is a fact about backlog_release_tool, shown on a throwaway folder, and each failing case must really fail:
   1 a header bump renames the file and moves versionInfo, versionIRI and priorVersion (the old version is added to the prior list);
@@ -12,6 +12,9 @@ Each case is a fact about backlog_release_tool, shown on a throwaway folder, and
   7 (v1.1.0, v1.2.0 adds the archived-digest result files) prune-cache removes only cache-kind files older than the limit, keeps recent ones and leaves every other file alone;
   8 (v1.1.0) the release path does not remove the fixture-suite stamp.
   9 (v1.3.1) gate_failures does not read "declaration FAILED : 0" as a failure, still reads a non-zero count, a VERDICT: FAIL and an ABORT, and drops the drift section.
+  10 (v1.3.4) public_keep: the derived 04-documentation/README.md is not overwritten by the public copy's older one, while the root README, DISTRIBUTION and LICENSE are kept;
+     when the derivation did not produce it the public copy's own is kept; a file the public copy does not have is not invented.
+  11 (v1.3.4) the release path exports the measured probe inputs beside the proof stamps.
 Exit 0 all hold; 2 a case failed.
 """
 import importlib.util, os, subprocess, sys, tempfile, glob
@@ -99,6 +102,25 @@ def main():
     check("9 a zero count of failures is not a failure", gf("  declaration verified    : 134\n  declaration FAILED      : 0\n") == [])
     check("9 a non-zero count, a failed verdict and an abort are failures", len(gf("  declaration FAILED      : 2\nVERDICT   : FAIL\nABORT: x\n")) == 3)
     check("9 the drift section is dropped", gf("== Distribution-drift gate -- x\nVERDICT   : FAIL\nDistribution-drift gate FAILED\n\n== Next ==\nok\n") == [])
+
+    with tempfile.TemporaryDirectory() as d:
+        pd, pc = os.path.join(d, "pd"), os.path.join(d, "pc")
+        for base in (pd, pc):
+            os.makedirs(os.path.join(base, "04-documentation"))
+        w = lambda path, t: open(path, "w").write(t)
+        w(os.path.join(pd, "04-documentation", "README.md"), "derived new")
+        w(os.path.join(pc, "04-documentation", "README.md"), "older public")
+        w(os.path.join(pc, "README.md"), "root"); w(os.path.join(pc, "DISTRIBUTION.md"), "dist"); w(os.path.join(pc, "LICENSE"), "lic")
+        k = RT.public_keep(pd, pc)
+        check("10 the derived 04-documentation README is not replaced by the public copy's older one", os.path.join("04-documentation", "README.md") not in k)
+        check("10 the root README, DISTRIBUTION and LICENSE of the public copy are kept", sorted(k) == ["DISTRIBUTION.md", "LICENSE", "README.md"] and k["README.md"] == b"root")
+        os.remove(os.path.join(pd, "04-documentation", "README.md"))
+        k = RT.public_keep(pd, pc)
+        check("10 without a derived one the public copy's own is kept", k.get(os.path.join("04-documentation", "README.md")) == b"older public")
+        os.remove(os.path.join(pc, "LICENSE"))
+        check("10 a file the public copy lacks is not invented", "LICENSE" not in RT.public_keep(pd, pc))
+    src = open(RT.__file__).read()
+    check("11 the release path exports the measured probe inputs", "backlog_probe_inputs_v*.py" in src and "PROBE_INPUTS.json" in src and '"export", memo, pi' in src)
 
     ver = os.path.join(RT.PKG, "VERSION.txt"); before = open(ver).read() if os.path.exists(ver) else None
     p = subprocess.run([sys.executable, os.path.join(HERE, os.path.basename(RT.__file__)), "release", "99.99.99", "--dry-run"], capture_output=True, text=True)

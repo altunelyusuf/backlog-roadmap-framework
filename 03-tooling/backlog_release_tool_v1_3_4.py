@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_release_tool v1.3.3 -- the release steps a session used to do by hand, as one tested tool (G99 release A; OE rule R4).
+"""backlog_release_tool v1.3.4 -- the release steps a session used to do by hand, as one tested tool (G99 release A; OE rule R4).
 
 Subcommands (each prints what it did and exits non-zero on any refusal):
   bump-data NEWVER                      rename the package data file to the new version and move its header (versionInfo, versionIRI, priorVersion)
@@ -16,6 +16,7 @@ Subcommands (each prints what it did and exits non-zero on any refusal):
                                         duration; --dry-run prints the plan and the refusals it already knows (missing changelog entry) and runs nothing
   prune-cache [DIR] [--days N] [--legacy]          remove cache files (shape_*.ttl, memo *.json, stamps) older than N days (default 14) from the validation cache; they are rebuilt on demand
   republish VERSION                     only the publisher and the tag check (after a transient failure of the public push)
+v1.3.4 (G128): after the proof stamps the measured probe inputs are exported to 06-package-provenance/PROBE_INPUTS.json; `public_keep` (the files the public copy keeps) is a function of its own and has a test.
 v1.3.3 (G126): `release --cold` runs every gate step (BACKLOG_COLD=1); after a passing gate the proof stamps are exported to 06-package-provenance/PROOF_STAMPS.json and the manifest is rebuilt; prune-cache --legacy removes the one-file-per-shape cache and prunes the shape bundles.
 v1.3.2 (G124): the public copy keeps its own README.md, DISTRIBUTION.md and LICENSE, but 04-documentation/README.md is taken from the derivation whenever the derivation has one, so a changed README no longer needs a hand fix in the public copy.
 v1.3.1 (G115): a gate line that only REPORTS a zero count of failures ("declaration FAILED : 0", printed by the clause proof whenever it runs rather than being skipped) is no longer read as a failure; before, the first release that changed a shape stopped at that line. Real failures (a non-zero count, a VERDICT: FAIL, an ABORT) still stop it. The public copy step keeps README.md, DISTRIBUTION.md, LICENSE and 04-documentation/README.md only when the public copy has them (it stopped with FileNotFoundError on a public copy that holds none).
@@ -100,6 +101,20 @@ def cmd_bump(args):
 
 
 # ---------------------------------------------------------------- bytecode, push
+def public_keep(pd, pubcopy):
+    """The files the public copy keeps from its own previous state when the derived distribution is copied over it (v1.3.4 gives this its own test).
+    v1.3.2 (G124): 04-documentation/README.md is DERIVED, so the derived one wins when the derivation produced it; the public copy's older one was kept and then
+    failed the drift check. The root README, DISTRIBUTION and LICENSE are the public copy's own and are always kept."""
+    keep = {}
+    derived = os.path.join("04-documentation", "README.md")
+    for f in ("README.md", "DISTRIBUTION.md", "LICENSE", derived):
+        if f == derived and os.path.exists(os.path.join(pd, f)):
+            continue
+        if os.path.exists(os.path.join(pubcopy, f)):
+            keep[f] = open(os.path.join(pubcopy, f), "rb").read()
+    return keep
+
+
 def clean_bytecode(root):
     n = 0
     for dp, dn, _ in os.walk(root):
@@ -278,6 +293,10 @@ def cmd_release(args, only_publish=False):
         if True:
             p = st.run("proof stamps", [sys.executable, merkle, "export", memo, ps, "package=" + v, "gate=" + os.path.basename(gate)], capture_output=True, text=True)
             print("  " + (p.stdout.strip().splitlines() or [""])[-1])
+            pinp = newest(os.path.join(HERE, "backlog_probe_inputs_v*.py"))
+            pi = os.path.join(P, "06-package-provenance", "PROBE_INPUTS.json")
+            p = st.run("probe inputs", [sys.executable, pinp, "export", memo, pi], capture_output=True, text=True)
+            print("  " + (p.stdout.strip().splitlines() or [""])[-1])
             p = st.run("manifest (with the stamps)", [sys.executable, mf], cwd=P, capture_output=True, text=True)
             print("  " + (p.stdout.strip().splitlines() or [""])[-1])
         clean_bytecode(P)
@@ -287,13 +306,7 @@ def cmd_release(args, only_publish=False):
         if not os.path.exists(os.path.join(pd, "VERSION.txt")):
             die("the public derivation produced nothing", 5)
         subprocess.run(["git", "fetch", "-q"], cwd=pubcopy); subprocess.run(["git", "reset", "-q", "--hard", "origin/main"], cwd=pubcopy)
-        keep = {}
-        for f in ("README.md", "DISTRIBUTION.md", "LICENSE", os.path.join("04-documentation", "README.md")):
-            # v1.3.2 (G124): 04-documentation/README.md is DERIVED; the public copy's older one was kept and then failed the drift check.
-            if f == os.path.join("04-documentation", "README.md") and os.path.exists(os.path.join(pd, f)):
-                continue
-            if os.path.exists(os.path.join(pubcopy, f)):
-                keep[f] = open(os.path.join(pubcopy, f), "rb").read()
+        keep = public_keep(pd, pubcopy)
         for e in os.listdir(pubcopy):
             if e != ".git":
                 q = os.path.join(pubcopy, e); shutil.rmtree(q) if os.path.isdir(q) else os.remove(q)
