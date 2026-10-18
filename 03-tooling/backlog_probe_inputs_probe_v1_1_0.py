@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_probe_inputs_probe v1.0.0 -- the measured inputs of a probe are measured, and a stamp built on them moves exactly when they do (G128).
+"""backlog_probe_inputs_probe v1.1.0 -- the measured inputs of a probe are measured, and a stamp built on them moves exactly when they do (G128).
 
 Builds a throwaway package, runs small probes in it under backlog_probe_inputs, and shows: what is read is listed; a changed input changes the key and an unread
 file does not; a file added to a listed directory, an absent file appearing, and a new version of a tool the probe read each change it; a run that read outside the
@@ -100,6 +100,14 @@ out = subprocess.run([sys.executable, TOOL, "key", "writer", pkg, memo, repo], c
 expect("an exported record that is not usable offers no key", out.returncode == 1 and not out.stdout.strip())
 w("03-tooling/reader_v1_0_0.py", "import tool_v1_0_0, os, sys\n")
 expect("a changed probe changes its own key (the script is one of its inputs)", pin.key_of(doc["probes"]["reader"], pkg) != key_after)
+
+has = lambda n, m, r=None: subprocess.run([sys.executable, TOOL, 'has', n, m] + ([r] if r else []), capture_output=True).returncode
+nm = os.path.join(work, "memo2"); rf2 = os.path.join(work, "inputs2.json")
+expect("has: a probe with no record in the session or the file has none", has("reader", nm, rf2) == 1)
+rc, rec = run("quiet2", "print('x')\n", env={"BACKLOG_NO_TRACE": "1"})
+doc2 = pin.cmd_export(memo, os.path.join(work, "inputs3.json"))
+expect("has: the repo file holds a record after the export, and a probe that was only run untraced is not in it",
+       has("reader", nm, repo) == 0 and "quiet2" not in json.load(open(os.path.join(work, "inputs3.json")))["probes"])
 
 shutil.rmtree(work, ignore_errors=True)
 print("VERDICT: %s" % ("PASS -- %d expectations hold" % COUNT[0] if not bad else "FAIL -- " + "; ".join(bad)))

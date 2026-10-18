@@ -19,6 +19,7 @@
 # v1.50.0 (G116): the Lineage 19 probes loop also runs backlog_abox_neutrality_probe (the shipped data file binds no consumer item: no register-level adoption of an item-level rule set, and a consumer graph loaded with the whole file gets no recording or verification result) and backlog_human_actor_kinds_probe (an organisation is a human team; a person holds a role).
 # v1.51.0 (G117): the same loop also runs backlog_executor_subclass_probe (the executor rules see subclasses of the five kinds) and backlog_pipeline_verify_probe (digest table v4: planning after a Backlog stage closed is not stage content).
 # v1.52.0 (G118): the same loop also runs backlog_agent_accountability_probe (RS_AgentAccountability: runs of a definition, recorded team assembly, who made each move, different parties for doing, overseeing, verifying and approving, a person above the human approval level, delegated lineages) and backlog_agent_monitor_probe (the report of what a person has to look at).
+# v1.58.0 (G128): a probe with no record of what it reads (neither this session's nor the package's file) is run traced even when its declared stamp holds, so the measured lists complete themselves instead of waiting for each probe's declared inputs to change. Probe backlog_probe_inputs_probe v1.1.0.
 # v1.57.0 (G128): a probe is stamped on what it was MEASURED to read (backlog_probe_inputs: the run is traced), not on what it declares; the measured lists are kept in 06-package-provenance/PROBE_INPUTS.json. A probe with no usable record keeps its declared inputs. Probes: backlog_probe_inputs_probe.
 # v1.56.0 (G126): proof stamps recorded in the package are honoured; the probes that must run go two at a time; the validator keeps one bundle per data key (v1.17.0). Probe backlog_proof_stamps_probe.
 # v1.54.0 (G121, G122): the same loop also runs backlog_mission_history_probe (missions inside a lineage or its replaced history, a replaced mission still in flight, the closure anchor for adopters only), backlog_session_brief_probe (focus, items in progress, checkpoints due, what a close needs, vendored tools out of date) and backlog_archive_mission_history_probe (the statements a mission replaced are archived with its lineage). The work guard probe is v1.3.0.
@@ -694,7 +695,10 @@ for PROBE in $PROBE_LIST; do
   # v1.57.0: the key is built on what the probe was measured to read when it last ran; with no usable record it is built on what the probe declares
   PKEY=""; [ -n "$PIN" ] && PKEY="$(python3 "$PIN" key "$PROBE" "$PKG" "$BACKLOG_VALIDATE_MEMO_DIR" "$PROBE_INPUTS" 2>/dev/null)"
   [ -n "$PKEY" ] || PKEY="$(python3 "$MERKLE" key $(python3 "$PF" --deps))"
-  if STAMPED "probe:$PROBE" "$PKEY"; then
+  UNMEASURED=0
+  if [ -n "$PIN" ] && [ "$PROBE" != "backlog_probe_inputs_probe" ] && ! python3 "$PIN" has "$PROBE" "$BACKLOG_VALIDATE_MEMO_DIR" "$PROBE_INPUTS" 2>/dev/null; then UNMEASURED=1; fi
+  [ "$UNMEASURED" -eq 1 ] && STEPS_RUN=$((STEPS_RUN + 1))
+  if [ "$UNMEASURED" -eq 0 ] && STAMPED "probe:$PROBE" "$PKEY"; then
     echo "  $PROBE SKIPPED — its inputs are unchanged since it last held."
     continue
   fi

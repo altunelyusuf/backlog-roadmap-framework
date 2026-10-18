@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_probe_inputs v1.0.0 -- what a probe really reads, measured, and a stamp key built on that (G128).
+"""backlog_probe_inputs v1.1.0 -- what a probe really reads, measured, and a stamp key built on that (G128).
 
 A proof stamp (G126) skips a step when the SHA of the files the step DECLARES equals the one recorded at its last pass. A probe declares its inputs by hand through
 its own `--deps`, and the declaration is a hope: it can name more than the probe reads (the probe then reruns for a change it never sees) or fewer (it is then skipped
@@ -19,9 +19,13 @@ directory is not derivable). Otherwise the caller keeps the declared inputs, as 
 The key is the SHA over the sorted lines `F:path:sha256`, `D:path:sha256(names)`, `A:path:absent|PRESENT`, `Y:family:sha256(names)`. A record whose probe now reads
 something else is not trusted: the key is built from the OLD list, so a changed input changes the key, the probe reruns, and the rerun writes a new record.
 
+v1.1.0 (G128): `has` tells the gate whether any record exists, so a probe with none is measured even when its declared stamp holds (otherwise a probe is only ever measured when its declared inputs happen
+to change, and an under-declared one stays unsound); an untraced run's record is never exported.
+
 Commands:
   run SCRIPT PKG MEMODIR OUT      run SCRIPT (python) under strace from PKG's script directory, stdout+stderr to OUT, exit with its code; writes the record
   key NAME PKG MEMODIR [REPOFILE] print the key built on the record of NAME (memo first, then REPOFILE); exit 1 and print nothing when there is no usable record
+  has NAME MEMODIR [REPOFILE]     exit 0 when a record exists (usable or not) in the session or in REPOFILE, 1 when there is none
   export MEMODIR REPOFILE         write the usable records of MEMODIR to REPOFILE (sorted)
   audit NAME PKG MEMODIR          print the measured files and, for a probe with --deps, the declared ones that were not read and the read ones that were not declared
 """
@@ -259,6 +263,12 @@ def cmd_key(name, pkg, memo, repofile=None):
     return 0
 
 
+def cmd_has(name, memo, repofile=None):
+    if os.environ.get("BACKLOG_NO_TRACE") == "1":
+        return 0
+    return 0 if load(name, memo, repofile) is not None else 1
+
+
 def cmd_export(memo, repofile):
     recs = {}
     try:
@@ -272,7 +282,7 @@ def cmd_export(memo, repofile):
                     r = json.load(open(os.path.join(memo, f)))
                 except Exception:
                     continue
-                if r.get("rc") == 0:
+                if r.get("rc") == 0 and r.get("unusable_because") != ["not traced"]:
                     recs[r["probe"]] = r
     doc = {"format": 1, "note": "What each probe read when it last passed, measured by backlog_probe_inputs; keys of proof stamps are built on these lists. A record that is not usable is kept so that an older usable one is not revived.",
            "probes": dict(sorted(recs.items()))}
@@ -305,6 +315,8 @@ def main(argv):
         return cmd_run(*argv[1:5])
     if c == "key":
         return cmd_key(*argv[1:5])
+    if c == "has":
+        return cmd_has(*argv[1:4])
     if c == "export":
         return cmd_export(argv[1], argv[2])
     if c == "audit":

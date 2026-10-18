@@ -11260,6 +11260,13 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.405.0 — 2026-10-18 (PATCH: a probe with no record of what it reads is measured — G128)
+
+- **Tools:** gate v1.58.0 (a probe with no record is run traced even when its declared stamp holds); `backlog_probe_inputs` v1.1.0 (`has`; an untraced run is not exported) and its probe (22 expectations). Release 1.404.0 had measured the three probes whose declared inputs changed in that run, which is how the gap showed.
+- **Handovers:** none.
+
+**Unplanned work:** completes the measured inputs of release 1.404.0, on the owner's direction of 2026-10-18; no backlog item of this package covers it.
+
 ## v1.404.0 — 2026-10-18 (MINOR: a probe is stamped on what it was measured to read; a deliverable added to a closed scope statement is a revision from the Scope stage — G127, G128)
 
 - **Handovers:** the another registrant handover on stage digests after scope changes answered and filed (G127): a deliverable is part of the scope statement, not a scope change, so it is a revision from the Scope stage; a recorded scope change leaves the digests not reproducing until the stage is closed again, once for all the changes; table v4 and the verifier are the consumer's decision. Documentation only. Discipline v95.0.0.
