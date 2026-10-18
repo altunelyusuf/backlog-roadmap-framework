@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v92.0.0
+# Lineage Operating Discipline — v93.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -3565,3 +3565,20 @@ Related: G101, G102, G108, G119, G122.
 **Fixed: the release tool.** v1.3.2 takes `04-documentation/README.md` of the public copy from the derivation whenever the derivation has one. Before, the older public one was kept and the drift check failed after any change to it. Not covered by a probe case; the fault shows only in a release that changes that README.
 
 Related: G102, G121, G123.
+
+## G125 — Work on the deliverable of a Done story is a story of its own; in a lineage whose Backlog stage is closed the Backlog is revised, or a successor takes it
+
+*(Opened by a handover of the sen0401 slides session, 2026-10-16, which measured the digest behaviour on a copy of its register. The reading of the digest below is from the verifier's own text, not run on that register.)*
+
+**The test.** A Done story stays Done, and the record of what it was is not edited to match a later wish (L-112). Work done after it on its deliverable (a link pass over decks or pages that were finished and accepted) has its own criterion, so it is a story. Where the Done story's own criterion already required what the pass delivers, the story was not finished when it was marked Done, and the register says so in a dated note; it does not reopen the story. A task cannot carry it (G117: a task is subordinate to an admitted item taken into an iteration), and the start gate and the work guard take a story that is Ready or In Progress.
+
+**The route.** The lineage's Backlog stage is closed, and a story the stage did not admit moves its digest (G117 Q2, which is the intended behaviour: the digest exists to catch an addition nobody recorded). So the addition is recorded, and the stage is closed again:
+1. If the work is something the mission already says, a `ChangeRequest`, an `ImpactAssessment` and an owner-decided `ScopeChange` (G104 4a), each dated when it is made.
+2. While the lineage's mission still stands unachieved, a `StageRevision` with `revisesFromStage` the Backlog stage (never the Mission), a reason, and its own commit that retracts the old Backlog output. The new Backlog output admits the existing stories (the Done ones by `admittedByOutput`, as in G105) and the new stories. The new digest is recorded at that close under `RS_DigestTable_v4` and reproduces with `backlog_pipeline_verify` v1.9.0, the verifier that already reads the register's adoption.
+3. If the lineage is achieved or about to close, the new stories are not added to it: they are out-scoped by a `PartialScopeDeclaration`, the lineage closes, and a `LineageSuccession` under the same mission opens a successor whose Backlog output admits them (G105 Q2).
+Work already done before the story exists is admitted as finished work (G105 Q3: evidence, criterion, harness, `lastAuditedAt`, flow points, modality); its dates are the real ones from git.
+
+**The four options asked.** (1) Evidence on the existing Done story: right only for correcting a defect against the story's own criterion; it adds no subject to the stage, so the digest does not move (the digest is the set of subjects of the stage's types, stable under annotation). The old evidence of a rebuilt file no longer verifies against it and stays as the dated record; one verified evidence is what a Done item needs, so the new one carries it. It cannot carry new work, because nothing gates work on a Done story. (2) Planning the Done stories again: refused. A Done story is not planned, and no rule here lets it leave Done. (3) A successor lineage: the route when the lineage closes, as above. (4) A new digest rule for post-close additions: not built. The digest's purpose is to make a silent addition fail, a table that excuses additions with a record would leave the record as the only witness, and a new table changes every recorded digest (G91).
+
+**Not claimed.** The `StageRevision` from the Backlog stage with the Done stories re-admitted was not run on a planted register here; it follows from the definitions (retraction first, every rebuilt output consumes the last unretracted upstream output, items re-enter by admission). Its cost is real: every story of the lineage is re-admitted. If that cost is not worth the two passes, route 3 is the cheaper one when the lineage is near its close.
+Related: G91, G104, G105, G117, L-112.

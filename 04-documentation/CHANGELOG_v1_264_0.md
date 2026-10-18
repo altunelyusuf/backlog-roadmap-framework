@@ -11260,6 +11260,12 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.402.0 — 2026-10-18 (PATCH: the route for a new story after a Backlog stage closed — G125, documentation only)
+
+- **Handovers:** the sen0401 slides handover answered and filed; discipline v93.0.0 (G125). No rule, term or tool changed.
+
+**Unplanned work:** one consuming project's handover; no backlog item of this package covers it.
+
 ## v1.401.0 — 2026-10-15 (PATCH: shapes readable by a second query engine; release tool keeps the derived README — G124)
 
 - **Rules (shapes v1.171.0):** function calls written `NAME(` in five queries; no change of meaning. `backlog_shape_syntax_probe` v1.0.0. Gate v1.55.0.
