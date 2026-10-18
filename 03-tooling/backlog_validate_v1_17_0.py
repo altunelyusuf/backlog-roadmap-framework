@@ -13,6 +13,12 @@ version, which is exactly the distinction Gate K exists to check for files that 
 other owl:Ontology declaration currently ships under 03-tooling/fixtures/ before narrowing the walk,
 so nothing this gate already caught stops being caught.
 
+v1.17.0 (G126, resources only): the per-shape results are kept in ONE bundle file per data key (`shapes_<data key>.json`, shape key -> report), not one file per shape. The
+cache directory of this package's own gate held 1,371,528 files, 460 MB of data and 5.7 GB of disk, because every file takes a whole disk block and a data change writes
+about 475 of them. A bundle is read once, a missing shape is judged and added, and the bundle is rewritten whole (re-read and merged first, so two runs lose at most their
+own new entries, never a wrong one). The key of a shape result is unchanged, so a bundle can only replay an identical computation. A bundle keeps at most 4,000 entries
+(oldest dropped). Results are compared one by one with the per-file run in backlog_validate_cache_probe.
+
 v1.15.0 (G99 release D, speed only): each SPARQL query text is parsed once per process, not once per focus node (backlog_sparql_memo). Measured on one validation of the live register: 21.6 s, of which rdflib's parser and translator took 19.1 s; with the parse kept, 3.8 s. Results compared one by one on three fixtures: identical. The memo module is named in every cache key.
 
 v1.14.0 (G99 release A2, speed only): a result is kept PER SHAPE. The judgement of one top-level shape is a pure function of that shape's definition (and the shapes it
@@ -80,6 +86,7 @@ import hashlib
 import json
 import os
 import re
+import shutil
 import glob
 import subprocess
 import sys
@@ -627,6 +634,31 @@ def _bytes_digest(paths):
     return h.hexdigest()
 
 
+BUNDLE_MAX = 4000
+
+
+def _bundle_read(path):
+    try:
+        d = json.load(open(path, encoding="utf-8"))
+        return d if isinstance(d, dict) else {}
+    except Exception:
+        return {}
+
+
+def _bundle_write(path, fresh):
+    """Merge FRESH into whatever the bundle holds NOW (another run may have added to it), keep the newest BUNDLE_MAX, replace atomically. Returns the merged bundle."""
+    cur = _bundle_read(path)
+    for k, v in fresh.items():
+        cur.pop(k, None); cur[k] = v
+    while len(cur) > BUNDLE_MAX:
+        cur.pop(next(iter(cur)))
+    tmp = path + ".%d.tmp" % os.getpid()
+    with open(tmp, "w", encoding="utf-8") as fh:
+        json.dump(cur, fh)
+    os.replace(tmp, path)
+    return cur
+
+
 def _run_shapes(shapes_path, data_path, input_files):
     """Per-shape cached run. Returns (list of turtle reports, list of notes) or (None, notes) when it must be refused."""
     cache = os.environ.get("BACKLOG_VALIDATE_SHAPE_DIR") or os.environ.get("BACKLOG_VALIDATE_MEMO_DIR") or tempfile.mkdtemp(prefix="shapecache_")
@@ -638,8 +670,9 @@ def _run_shapes(shapes_path, data_path, input_files):
         return None, [lp.stderr[-400:]]
     data_digest = hashlib.sha256((info["rules"] + _bytes_digest(input_files + [os.path.abspath(__file__)] + ([SPARQL_MEMO] if SPARQL_MEMO else [])) + pyshacl_version()).encode()).hexdigest()
     keys = {hashlib.sha256((d + data_digest).encode()).hexdigest() for d in info["digests"]}
-    path = lambda k: os.path.join(cache, "shape_" + k + ".ttl")
-    want = sorted(k for k in keys if not os.path.exists(path(k)))
+    bundle_path = os.path.join(cache, "shapes_" + data_digest + ".json")
+    bundle = _bundle_read(bundle_path)
+    want = sorted(k for k in keys if k not in bundle)
     notes = ["SHAPECACHE hits=%d ran=%d of %d" % (len(keys) - len(want), len(want), len(keys))]
     if want:
         n = max(1, min(_shard_count(), len(want)))
@@ -660,9 +693,11 @@ def _run_shapes(shapes_path, data_path, input_files):
         got = {f[:-4] for f in os.listdir(out) if f.endswith(".ttl")}
         if got != set(want) or done != len(want) or asked != len(want):
             return None, ["SHARD REFUSED: the shards judged %d of the %d shapes asked for" % (len(got), len(want))]
-        for k in want:
-            os.replace(os.path.join(out, k + ".ttl"), path(k))
-    return [open(path(k), encoding="utf-8").read() for k in sorted(keys)], notes
+        fresh = {k: open(os.path.join(out, k + ".ttl"), encoding="utf-8").read() for k in want}
+        shutil.rmtree(out, ignore_errors=True)
+        bundle = _bundle_write(bundle_path, fresh)
+        bundle.update(fresh)
+    return [bundle[k] for k in sorted(keys)], notes
 
 
 def _run_pyshacl(shapes_path, data_path, input_files=()):

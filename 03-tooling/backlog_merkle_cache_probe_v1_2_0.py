@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_merkle_cache_probe v1.1.0 -- the leaf/key/root/Stamp mechanics are shown to hold, on throwaway files (G99 release E).
+"""backlog_merkle_cache_probe v1.2.0 -- the leaf/key/root/Stamp mechanics are shown to hold, on throwaway files (G99 release E).
 
   1  the same leaf set, asked for twice, gives the same key
   2  changing the bytes of ONE file in the set changes the key
@@ -86,6 +86,30 @@ with tempfile.TemporaryDirectory() as d:
     check("7 the Stamp object sees the same record the CLI wrote", mc.Stamp(sd2).check("n", "k1") is True)
     mc.Stamp(sd2).record("n", "k2")
     check("7 a Stamp-object record is visible to the CLI", cli("check", "n", "k2", sd2) == 0 and cli("check", "n", "k1", sd2) == 1)
+
+    # ---- v1.2.0 (G126): keys are portable, and a recorded stamp is honoured from the repository ----
+    def tree(root):
+        os.makedirs(os.path.join(root, "03-tooling"), exist_ok=True)
+        f = os.path.join(root, "03-tooling", "x.txt"); open(f, "w").write("same bytes"); return f
+    os.environ["BACKLOG_MERKLE_ROOT"] = os.path.join(d, "cloneA"); fa = tree(os.environ["BACKLOG_MERKLE_ROOT"]); ka = mc.key(fa)
+    os.environ["BACKLOG_MERKLE_ROOT"] = os.path.join(d, "cloneB"); fb = tree(os.environ["BACKLOG_MERKLE_ROOT"]); kb = mc.key(fb)
+    check("8 the same bytes at the same package-relative path give the same key in two different directories", ka == kb)
+    open(fb, "w").write("other bytes"); check("8 other bytes at that path give another key", mc.key(fb) != ka)
+    del os.environ["BACKLOG_MERKLE_ROOT"]
+    sdir, repo = os.path.join(d, "memo"), os.path.join(d, "stamps.json")
+    mc.Stamp(sdir).record("probe:one", "kk1"); mc.Stamp(sdir).record("probe:two", "kk2")
+    run = lambda *a, env=None: subprocess.run([sys.executable, PATH, *a], capture_output=True, text=True, env=dict(os.environ, **(env or {})))
+    check("9 export writes every named stamp", run("export", sdir, repo, "package=1.0.0").stdout.strip() == "exported 2 stamp(s)")
+    empty = os.path.join(d, "emptymemo")
+    r = run("check", "probe:one", "kk1", empty, repo)
+    check("9 a fresh directory with the recorded file answers repo for the right key", r.returncode == 0 and r.stdout.strip() == "repo")
+    check("9 a recorded stamp does not answer for another key", run("check", "probe:one", "kk9", empty, repo).returncode == 1)
+    check("9 nor for another name", run("check", "probe:three", "kk1", empty, repo).returncode == 1)
+    check("9 BACKLOG_COLD=1 refuses the recorded stamp", run("check", "probe:one", "kk1", empty, repo, env={"BACKLOG_COLD": "1"}).returncode == 1)
+    check("9 BACKLOG_COLD=1 refuses a memo stamp too", run("check", "probe:one", "kk1", sdir, repo, env={"BACKLOG_COLD": "1"}).returncode == 1)
+    check("9 a memo stamp answers memo", run("check", "probe:one", "kk1", sdir, repo).stdout.strip() == "memo")
+    check("9 a missing or broken recorded file refuses, never passes", run("check", "probe:one", "kk1", empty, os.path.join(d, "none.json")).returncode == 1)
+    open(repo, "w").write("not json"); check("9 a broken recorded file refuses", run("check", "probe:one", "kk1", empty, repo).returncode == 1)
 
 print("VERDICT : " + ("ALL HOLD" if not bad else "FAILED -- " + "; ".join(bad)))
 sys.exit(0 if not bad else 2)

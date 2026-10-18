@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_release_tool v1.3.2 -- the release steps a session used to do by hand, as one tested tool (G99 release A; OE rule R4).
+"""backlog_release_tool v1.3.3 -- the release steps a session used to do by hand, as one tested tool (G99 release A; OE rule R4).
 
 Subcommands (each prints what it did and exits non-zero on any refusal):
   bump-data NEWVER                      rename the package data file to the new version and move its header (versionInfo, versionIRI, priorVersion)
@@ -14,8 +14,9 @@ Subcommands (each prints what it did and exits non-zero on any refusal):
                                         the whole path for a version whose changelog entry is already written: backup, VERSION.txt, manifest,
                                         gate, public copy and its push, the publisher, then the tag check. Every step is time-limited and prints its
                                         duration; --dry-run prints the plan and the refusals it already knows (missing changelog entry) and runs nothing
-  prune-cache [DIR] [--days N]          remove cache files (shape_*.ttl, memo *.json, stamps) older than N days (default 14) from the validation cache; they are rebuilt on demand
+  prune-cache [DIR] [--days N] [--legacy]          remove cache files (shape_*.ttl, memo *.json, stamps) older than N days (default 14) from the validation cache; they are rebuilt on demand
   republish VERSION                     only the publisher and the tag check (after a transient failure of the public push)
+v1.3.3 (G126): `release --cold` runs every gate step (BACKLOG_COLD=1); after a passing gate the proof stamps are exported to 06-package-provenance/PROOF_STAMPS.json and the manifest is rebuilt; prune-cache --legacy removes the one-file-per-shape cache and prunes the shape bundles.
 v1.3.2 (G124): the public copy keeps its own README.md, DISTRIBUTION.md and LICENSE, but 04-documentation/README.md is taken from the derivation whenever the derivation has one, so a changed README no longer needs a hand fix in the public copy.
 v1.3.1 (G115): a gate line that only REPORTS a zero count of failures ("declaration FAILED : 0", printed by the clause proof whenever it runs rather than being skipped) is no longer read as a failure; before, the first release that changed a shape stopped at that line. Real failures (a non-zero count, a VERDICT: FAIL, an ABORT) still stop it. The public copy step keeps README.md, DISTRIBUTION.md, LICENSE and 04-documentation/README.md only when the public copy has them (it stopped with FileNotFoundError on a public copy that holds none).
 v1.3.0: prune-cache also removes the Merkle-cache per-fixture and per-probe stamp files (stamp_*.key, G99 release E -- they live in the same off-package memo directory, so retiring a removed fixture or probe's stamp needs no gitignore or manifest change).
@@ -177,14 +178,14 @@ def deletion_args(paths, work):
     return ["--expect-delete", f]
 
 
-def prune_cache(cache_dir, days=14.0, now=None):
+def prune_cache(cache_dir, days=14.0, now=None, legacy=False):
     """Remove validation cache files not written for DAYS days; returns (removed, kept). Only the cache's own file kinds are touched."""
     now = now or time.time(); removed = kept = 0
     for f in os.listdir(cache_dir):
-        if not re.fullmatch(r"(shape_[0-9a-f]+\.ttl|[0-9a-f]{64}\.json|(shardproof|cacheproof)_[0-9a-f]+\.ok|archdigest_[0-9a-f]+\.json|stamp_[A-Za-z0-9_.-]+\.key)", f):
+        if not re.fullmatch(r"(shape_[0-9a-f]+\.ttl|shapes_[0-9a-f]+\.json|[0-9a-f]{64}\.json|(shardproof|cacheproof)_[0-9a-f]+\.ok|archdigest_[0-9a-f]+\.json|stamp_[A-Za-z0-9_.-]+\.key)", f):
             continue
         p = os.path.join(cache_dir, f)
-        if now - os.path.getmtime(p) > days * 86400:
+        if (legacy and f.startswith("shape_") and f.endswith(".ttl")) or now - os.path.getmtime(p) > days * 86400:
             os.remove(p); removed += 1
         else:
             kept += 1
@@ -192,16 +193,18 @@ def prune_cache(cache_dir, days=14.0, now=None):
 
 
 def cmd_prune(args):
-    days, pos, i = 14.0, [], 0
+    days, pos, i, legacy = 14.0, [], 0, False
     while i < len(args):
         if args[i] == "--days":
             days = float(args[i + 1]); i += 2
+        elif args[i] == "--legacy":
+            legacy = True; i += 1
         else:
             pos.append(args[i]); i += 1
     d = pos[0] if pos else os.environ.get("BACKLOG_VALIDATE_MEMO_DIR") or os.path.join(os.environ.get("HOME", "/tmp"), ".backlog_validate_memo")
     if not os.path.isdir(d):
         die("no cache folder at %s" % d)
-    r, k = prune_cache(d, days)
+    r, k = prune_cache(d, days, legacy=legacy)
     print("pruned %s: %d removed, %d kept (older than %g days)" % (d, r, k, days))
 
 
@@ -220,12 +223,14 @@ def cmd_release(args, only_publish=False):
             deletes.append(args[i + 1]); i += 2
         elif args[i] == "--dry-run":
             dry = True; i += 1
+        elif args[i] == "--cold":
+            os.environ["BACKLOG_COLD"] = "1"; i += 1
         elif args[i] == "--step-timeout":
             limit = int(args[i + 1]); i += 2
         else:
             pos.append(args[i]); i += 1
     if len(pos) != 1 or not re.fullmatch(r"\d+\.\d+\.\d+", pos[0]):
-        die("usage: release VERSION [--dry-run] [--step-timeout S]")
+        die("usage: release VERSION [--dry-run] [--cold] [--step-timeout S]")
     v = pos[0]
     work = os.environ.get("BRSF_WORK", "/tmp/brsf_release")
     pubcopy = os.environ.get("BRSF_PUBCOPY", "/home/claude/pubcopy")
@@ -265,6 +270,16 @@ def cmd_release(args, only_publish=False):
         bad = gate_failures(text)
         if bad:
             die("the gate fails (other than the drift check a pending version always shows): " + bad[0][:160] + "  (log %s)" % glog)
+        # v1.3.3 (G126): the gate passed whole, so the keys of the steps it ran or replayed are written into the package, where a later session or a fresh container
+        # honours them (backlog_merkle_cache check). The manifest is rebuilt because the package now holds the file.
+        merkle = newest(os.path.join(HERE, "backlog_merkle_cache_v*.py"))
+        memo = os.environ.get("BACKLOG_VALIDATE_MEMO_DIR") or os.path.join(os.environ.get("HOME", "/tmp"), ".backlog_validate_memo")
+        ps = os.path.join(P, "06-package-provenance", "PROOF_STAMPS.json")
+        if True:
+            p = st.run("proof stamps", [sys.executable, merkle, "export", memo, ps, "package=" + v, "gate=" + os.path.basename(gate)], capture_output=True, text=True)
+            print("  " + (p.stdout.strip().splitlines() or [""])[-1])
+            p = st.run("manifest (with the stamps)", [sys.executable, mf], cwd=P, capture_output=True, text=True)
+            print("  " + (p.stdout.strip().splitlines() or [""])[-1])
         clean_bytecode(P)
         derive = newest(os.path.join(HERE, "make_public_distribution_v*.py"))
         pd = os.path.join(work, "pd"); shutil.rmtree(pd, ignore_errors=True)

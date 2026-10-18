@@ -11260,6 +11260,14 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.403.0 — 2026-10-18 (MINOR: a proof that passed is remembered in the package; the validation cache is one file per data key — G126)
+
+- **Tools:** gate v1.56.0 (recorded stamps honoured; the probes that must run go two at a time; a summary of what was honoured and what ran); merkle cache v1.2.0 (keys relative to the package, recorded stamps, `BACKLOG_COLD=1`); validator v1.17.0 (one shape bundle per data key); release tool v1.3.3 (exports the stamps after a passing gate, `--cold`, `prune-cache --legacy`). `backlog_proof_stamps_probe` (12 expectations); merkle probe v1.2.0 (30).
+- **Measured before:** cold gate 1,303 s, unchanged 110 to 180 s; validation cache 1,371,528 files, 5.7 GB.
+- **Handovers:** none.
+
+**Unplanned work:** the owner's direction of 2026-10-18 (the speed and resource question); no backlog item of this package covers it.
+
 ## v1.402.0 — 2026-10-18 (PATCH: the route for a new story after a Backlog stage closed — G125, documentation only)
 
 - **Handovers:** the sen0401 slides handover answered and filed; discipline v93.0.0 (G125). No rule, term or tool changed.

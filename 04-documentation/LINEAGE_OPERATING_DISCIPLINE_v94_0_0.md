@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v93.0.0
+# Lineage Operating Discipline — v94.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -3582,3 +3582,16 @@ Work already done before the story exists is admitted as finished work (G105 Q3:
 
 **Not claimed.** The `StageRevision` from the Backlog stage with the Done stories re-admitted was not run on a planted register here; it follows from the definitions (retraction first, every rebuilt output consumes the last unretracted upstream output, items re-enter by admission). Its cost is real: every story of the lineage is re-admitted. If that cost is not worth the two passes, route 3 is the cheaper one when the lineage is near its close.
 Related: G91, G104, G105, G117, L-112.
+
+## G126 — A proof that passed is remembered by the SHA of what it read, in the package, so a new session does not repeat it; the validation cache is one file per data key
+
+*(Opened by the owner's observation of 2026-10-18 that a gate run on unchanged files costs minutes and a cold one about twenty, and his proposal to record a proof with a SHA and check it on return. Measured before anything was changed.)*
+
+**What was measured.** A cold gate took 1,303 s; a re-run on unchanged files 110 to 180 s. 878 s of the cold run were the roughly 45 proof runs, 163 s the check that every shipped fixture is exercised. The mechanism the owner proposed already existed inside a session (`backlog_merkle_cache`: a step is skipped when the SHA of the files it declares equals the one recorded at its last pass). It did not survive a new session, for two reasons found: it lived in the session's container only, and its key contained the absolute path of each file, so even a copy of the stamps would not have matched in another directory. The validation cache held 1,371,528 files for 460 MB of data (5.7 GB of disk), because each shape result was its own file.
+
+**Built.** (1) A key names each file by its path relative to the package, so the same bytes give the same key anywhere. (2) After a gate run that passed whole, the release writes every step's key into `06-package-provenance/PROOF_STAMPS.json` (by name, sorted) and rebuilds the manifest. A later gate, in any container, skips a step whose key equals the recorded one, and prints how many steps were honoured from the file, how many from the session, and how many ran. A key that differs, a name that is not recorded, a missing or broken file, or `BACKLOG_COLD=1` (`release --cold`) runs the step. (3) The probes that must run go two at a time, each into its own file, read in a fixed order, and stamped only if each passed. (4) The validator keeps one bundle per data key instead of a file per shape; its key per shape is unchanged. `prune-cache --legacy` removes the old files. `backlog_proof_stamps_probe` and the merkle probe show each of these.
+
+**The trust, stated.** A recorded stamp is a claim made by an earlier session that the step passed on exactly those bytes. It is accepted on the same ground as a stamp made earlier in the same session, and it is checked the same way: by the SHA of the declared inputs. It is only as good as each step's declaration of what it reads; a step that reads a file it does not declare would be wrongly skipped, which was already true within a session. The owner accepted recorded stamps on 2026-10-18. Each gate run says how many it honoured, and a full run can always be forced.
+
+**Not claimed.** The speed of a fresh container was measured only after the release that introduced the file, and the figure is in the changelog of the release that used it. Two runs share the bundle without a lock: the loser of a race loses its own new entries, never a wrong one. Deriving each probe's inputs automatically (so a rule change reruns only the probes that read that rule) is not built.
+Related: G99, G115.

@@ -19,6 +19,7 @@
 # v1.50.0 (G116): the Lineage 19 probes loop also runs backlog_abox_neutrality_probe (the shipped data file binds no consumer item: no register-level adoption of an item-level rule set, and a consumer graph loaded with the whole file gets no recording or verification result) and backlog_human_actor_kinds_probe (an organisation is a human team; a person holds a role).
 # v1.51.0 (G117): the same loop also runs backlog_executor_subclass_probe (the executor rules see subclasses of the five kinds) and backlog_pipeline_verify_probe (digest table v4: planning after a Backlog stage closed is not stage content).
 # v1.52.0 (G118): the same loop also runs backlog_agent_accountability_probe (RS_AgentAccountability: runs of a definition, recorded team assembly, who made each move, different parties for doing, overseeing, verifying and approving, a person above the human approval level, delegated lineages) and backlog_agent_monitor_probe (the report of what a person has to look at).
+# v1.56.0 (G126): proof stamps recorded in the package are honoured; the probes that must run go two at a time; the validator keeps one bundle per data key (v1.17.0). Probe backlog_proof_stamps_probe.
 # v1.54.0 (G121, G122): the same loop also runs backlog_mission_history_probe (missions inside a lineage or its replaced history, a replaced mission still in flight, the closure anchor for adopters only), backlog_session_brief_probe (focus, items in progress, checkpoints due, what a close needs, vendored tools out of date) and backlog_archive_mission_history_probe (the statements a mission replaced are archived with its lineage). The work guard probe is v1.3.0.
 # v1.55.0 (G123, G124): the same loop also runs backlog_shape_syntax_probe (no built-in function in the shapes is called with a space before its bracket, so the text reads in more than one query engine). The work guard probe is v1.4.0.
 # v1.53.0 (G120): the same loop also runs backlog_standing_items_probe (recurring activities, estimated starts, the mover of an objective). The monitor probe is v1.1.0 (recurring activities).
@@ -125,7 +126,7 @@ if [ -z "${BACKLOG_VALIDATE_MEMO_DIR:-}" ]; then
 fi
 # v1.35.0: the cache bounds itself. Entries older than 14 days are removed (a cache file only ever replays identical bytes, so removing one costs a rebuild, never a wrong result).
 RELTOOL="$(ls "$HERE"/backlog_release_tool_v*.py 2>/dev/null | sort -V | tail -1 || true)"
-if [ -n "$RELTOOL" ]; then python3 -B "$RELTOOL" prune-cache "$BACKLOG_VALIDATE_MEMO_DIR" --days 14 2>&1 | sed 's/^/validation cache: /'; fi
+if [ -n "$RELTOOL" ]; then python3 -B "$RELTOOL" prune-cache "$BACKLOG_VALIDATE_MEMO_DIR" --days 14 --legacy 2>&1 | sed 's/^/validation cache: /'; fi
 # v1.37.0 (G99 release E, the owner's Merkle-root idea mixed with over-processing): a step's cache key is composed from
 # its own named leaves, not from one flat hash over everything a WHOLE SECTION reads. Touching one fixture no longer
 # forces every sibling fixture to be re-validated, and a probe whose own declared inputs are unchanged is not re-run just
@@ -134,7 +135,15 @@ if [ -n "$RELTOOL" ]; then python3 -B "$RELTOOL" prune-cache "$BACKLOG_VALIDATE_
 # needs no gitignore or manifest entry and is pruned by the same 14-day sweep (prune_cache now also matches its files).
 MERKLE="$(ls "$HERE"/backlog_merkle_cache_v*.py 2>/dev/null | sort -V | tail -1 || true)"
 [ -n "$MERKLE" ] || { echo "GATE ABORT: no backlog_merkle_cache_v*.py resolved -- stamps cannot be composed without it."; exit 3; }
-STAMPED() { python3 "$MERKLE" check "$1" "$2" "$BACKLOG_VALIDATE_MEMO_DIR" >/dev/null 2>&1; }
+# v1.56.0 (G126, the owner's proof-and-SHA idea): a step whose key equals the one a EARLIER passing gate run recorded in the package
+# (06-package-provenance/PROOF_STAMPS.json) is skipped as if this session had run it. BACKLOG_COLD=1 refuses every stamp and runs everything.
+PROOF_STAMPS="$PKG/06-package-provenance/PROOF_STAMPS.json"
+STAMPS_MEMO=0; STAMPS_REPO=0; STEPS_RUN=0
+STAMPED() {
+  local src; src="$(python3 "$MERKLE" check "$1" "$2" "$BACKLOG_VALIDATE_MEMO_DIR" "$PROOF_STAMPS" 2>/dev/null)" || { STEPS_RUN=$((STEPS_RUN + 1)); return 1; }
+  if [ "$src" = "repo" ]; then STAMPS_REPO=$((STAMPS_REPO + 1)); else STAMPS_MEMO=$((STAMPS_MEMO + 1)); fi
+  return 0
+}
 RECORD() { python3 "$MERKLE" record "$1" "$2" "$BACKLOG_VALIDATE_MEMO_DIR" >/dev/null 2>&1; }
 COVERAGE="$(ls "$HERE"/backlog_coverage_gate_v*.py | sort -V | tail -1)"
 DOCGATE="$(ls "$HERE"/backlog_doc_coverage_gate_v*.py | sort -V | tail -1)"
@@ -671,7 +680,12 @@ echo "== Lineage 19 probes — each rule fires on a planted fault and each refus
 # v1.37.0: each probe prints its own --deps (it alone knows what it reads) and is stamped on exactly that; one that
 # never changed does not re-run just because something ELSEWHERE in the gate did. A run that does happen runs ONCE
 # (v1.36.0 and earlier ran every probe twice here: once piping to grep, once thrown away for its exit code).
-for PROBE in backlog_closure_shapes_probe backlog_archive_drill backlog_public_cut_probe backlog_governance_mitigations_probe backlog_release_tool_probe backlog_shape_syntax_probe backlog_stamp_key_probe backlog_sparql_memo_probe backlog_ordinal_check_probe backlog_archived_digest_check_probe backlog_release_item_check_probe backlog_package_activation_drift_classifier_probe backlog_lineage_concurrency_probe backlog_consumer_archive_probe backlog_vocabulary_probe backlog_state_evidence_probe backlog_evidence_bridge_probe backlog_timeline_witness_probe backlog_competency_inheritance_probe backlog_verifier_independence_probe backlog_close_preview_probe backlog_competency_tree_probe backlog_agent_roles_probe backlog_verification_scope_probe backlog_status_history_probe backlog_scope_order_probe backlog_recording_integrity_probe backlog_flow_point_git_trace_probe backlog_abox_neutrality_probe backlog_human_actor_kinds_probe backlog_executor_subclass_probe backlog_pipeline_verify_probe backlog_agent_accountability_probe backlog_agent_monitor_probe backlog_standing_items_probe backlog_mission_history_probe backlog_session_brief_probe backlog_archive_mission_history_probe; do
+PROBE_LIST="backlog_closure_shapes_probe backlog_archive_drill backlog_public_cut_probe backlog_governance_mitigations_probe backlog_release_tool_probe backlog_proof_stamps_probe backlog_shape_syntax_probe backlog_stamp_key_probe backlog_sparql_memo_probe backlog_ordinal_check_probe backlog_archived_digest_check_probe backlog_release_item_check_probe backlog_package_activation_drift_classifier_probe backlog_lineage_concurrency_probe backlog_consumer_archive_probe backlog_vocabulary_probe backlog_state_evidence_probe backlog_evidence_bridge_probe backlog_timeline_witness_probe backlog_competency_inheritance_probe backlog_verifier_independence_probe backlog_close_preview_probe backlog_competency_tree_probe backlog_agent_roles_probe backlog_verification_scope_probe backlog_status_history_probe backlog_scope_order_probe backlog_recording_integrity_probe backlog_flow_point_git_trace_probe backlog_abox_neutrality_probe backlog_human_actor_kinds_probe backlog_executor_subclass_probe backlog_pipeline_verify_probe backlog_agent_accountability_probe backlog_agent_monitor_probe backlog_standing_items_probe backlog_mission_history_probe backlog_session_brief_probe backlog_archive_mission_history_probe"
+# v1.56.0: the probes that must run are run TWO (BACKLOG_GATE_JOBS) AT A TIME, each into its own file; the verdicts are then read in the fixed order and each
+# probe is stamped only if it passed. A probe still runs once, with the same inputs, and nothing is skipped that was not skipped before.
+JOBS="${BACKLOG_GATE_JOBS:-$(nproc 2>/dev/null || echo 1)}"; [ "$JOBS" -gt 4 ] && JOBS=4; [ "$JOBS" -lt 1 ] && JOBS=1
+PTMP="$(mktemp -d)"; QUEUE=(); declare -A PFILE PKEYS
+for PROBE in $PROBE_LIST; do
   PF="$(ls "$HERE"/${PROBE}_v*.py 2>/dev/null | sort -V | tail -1 || true)"
   if [ -z "$PF" ]; then echo "  ABORT: $PROBE not found. A probe that is missing proves nothing."; exit 3; fi
   PKEY="$(python3 "$MERKLE" key $(python3 "$PF" --deps))"
@@ -679,14 +693,24 @@ for PROBE in backlog_closure_shapes_probe backlog_archive_drill backlog_public_c
     echo "  $PROBE SKIPPED — its own declared inputs are unchanged since it last held."
     continue
   fi
-  OUT="$(python3 "$PF" 2>&1)"; RC=$?
-  printf '%s\n' "$OUT" | grep -E "VERDICT" | sed "s/^/  $PROBE /"
+  PFILE[$PROBE]="$PF"; PKEYS[$PROBE]="$PKEY"; QUEUE+=("$PROBE")
+done
+for PROBE in "${QUEUE[@]}"; do
+  while [ "$(jobs -rp | wc -l)" -ge "$JOBS" ]; do wait -n; done
+  ( python3 "${PFILE[$PROBE]}" > "$PTMP/$PROBE.out" 2>&1; echo $? > "$PTMP/$PROBE.rc" ) &
+done
+wait
+for PROBE in "${QUEUE[@]}"; do
+  RC="$(cat "$PTMP/$PROBE.rc" 2>/dev/null || echo 1)"
+  grep -E "VERDICT" "$PTMP/$PROBE.out" | sed "s/^/  $PROBE /"
   if [ "$RC" -eq 0 ]; then
-    RECORD "probe:$PROBE" "$PKEY"
+    RECORD "probe:$PROBE" "${PKEYS[$PROBE]}"
   else
     echo "  $PROBE FAILED"; FAILED=1
   fi
 done
+rm -rf "$PTMP"
+echo "  probes: ${#QUEUE[@]} run ($JOBS at a time), the rest skipped on unchanged inputs"
 
 echo
 echo "== Flow points against the commits that recorded them (G115) =="
@@ -896,6 +920,7 @@ fi
 
 echo
 if [ "$FAILED" -eq 0 ]; then
+  echo "proof stamps: $STAMPS_REPO honoured from the recorded file, $STAMPS_MEMO from this session, $STEPS_RUN steps run (BACKLOG_COLD=1 runs everything)"
   echo "RELEASE GATE: PASS — Gate 0, Gate P, Gate K, Gate R and the coverage gate all clear."
   exit 0
 fi
