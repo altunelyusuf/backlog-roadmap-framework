@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_lineage_order_check v1.10.0 — did the chain come before the work, or after?
+"""backlog_lineage_order_check v1.11.0 — did the chain come before the work, or after?
 
 THE ESCAPE THIS CATCHES. A lineage is Mission -> Scope -> Goal -> Objective -> Backlog,
 one commit per stage, and only then work items (LINEAGE_OPERATING_DISCIPLINE, ceremony
@@ -296,6 +296,14 @@ def classify(g, L, witness, prefix):
         prefetch_names += [local(b) for b in g.objects(r, B.answersBypass)]
         prefetch_names += [local(sc) for sc in g.objects(r, B.simplifiedBy)]
     prefetch_names.append(local(L))
+    # v1.11.0 (G130): the Backlog outputs that a StageRevision of this lineage retracts
+    revoked = []
+    for rv in g.subjects(B.revisesLineage, L):
+        for ro in g.objects(rv, B.retractsOutput):
+            rr = g.value(ro, B.outputRetracted)
+            if (ro, B.belongsToLineage, L) in g and g.value(ro, B.outputOfStage) == B.Stage_Backlog and rr is not None and bool(rr.toPython()):
+                revoked.append(ro)
+    prefetch_names += [local(ro) for ro in revoked]
     witness.prefetch(prefetch_names, prefix)
 
     if restarts:
@@ -329,6 +337,16 @@ def classify(g, L, witness, prefix):
                 problems.append(f"{st} output ({f[0]}) predates the restart ({restart_at[0]}) and is not retracted")
     # 3. items vs Stage_Backlog output
     backlog_first = out_first.get("Stage_Backlog")
+    # v1.11.0 (G130): a revision rebuilds the Backlog output above work that already exists. An item that the
+    # rebuilt (active) output admits is measured against the first Backlog output the lineage ever had, the one
+    # the revision retracted, so a revision from the Backlog stage reads as the chain it is. An item that first
+    # appeared before THAT output is still a bypass.
+    rev_first = None
+    for ro in revoked:
+        f = witness.first(local(ro), prefix)
+        if f and (rev_first is None or f[1] < rev_first[1]):
+            rev_first = f
+    active_backlog = set(outs.get("Stage_Backlog", []))
     bypassed = []
     for i in items:
         ln = local(i)
@@ -340,6 +358,8 @@ def classify(g, L, witness, prefix):
             # (or its absence) is the shapes' business, not a second bypass finding.
             continue
         anchor = backlog_first
+        if rev_first is not None and anchor is not None and item_first[ln][1] >= rev_first[1] and g.value(i, B.admittedByOutput) in active_backlog:
+            continue
         if anchor is None:
             bypassed.append((ln, item_first[ln], "absent"))
         elif item_first[ln][1] < anchor[1]:

@@ -11260,11 +11260,11 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
-## v1.406.0 — 2026-10-19 (MINOR: a carried item keeps its exemption while a revision is under way, and may be handed on down a chain of successors — G129)
+## v1.406.0 — 2026-10-19 (MINOR: a carried item keeps its exemption while a revision is under way and may be handed on down a chain of successors; a stage revision from the Backlog stage reads ordered — G129, G130)
 
 - **Shapes v1.172.0:** the planning-event and two concern obligations stay exempt for a carried item while its admitting output is retracted and the lineage has no active Backlog output yet; an item may be taken in by the output of any successor in the chain, in the admission rule and the carried-item rule. Only removes findings.
-- **Tools:** `backlog_carried_item_probe` v1.0.0 (7 expectations; fails against shapes v1.171.0); gate v1.59.0.
-- **Handovers:** the SEN0401 slides handover on successor re-admission and single-step revision answered and filed (G129). Discipline v97.0.0.
+- **Tools:** `backlog_carried_item_probe` v1.0.0 (7 expectations; fails against shapes v1.171.0); `backlog_lineage_order_check` v1.11.0 (an item that the rebuilt Backlog output admits is measured against the first Backlog output the lineage had, when a StageRevision of that lineage retracts it; `backlog_order_revision_probe` v1.0.0, 5 expectations, fails against v1.10.0 at two); gate v1.60.0.
+- **Handovers:** the SEN0401 slides handover on successor re-admission and single-step revision answered and filed (G129); a handover on how a stage revision reads in the order check and where the next occurrence of a recurring activity lives answered and filed (G130). Discipline v97.0.0.
 
 **Unplanned work:** one consuming project's handover; no backlog item of this package covers it.
 
