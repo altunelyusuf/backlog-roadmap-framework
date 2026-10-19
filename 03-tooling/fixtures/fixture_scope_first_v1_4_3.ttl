@@ -13,8 +13,8 @@
 # Goal -> Mission, Objective -> Goal, and here Objective -> Scope via fillsScope.
 # An objective cannot name a boundary that does not yet exist, so this link is
 # only assertable in a lineage where the scope came first. The opposite property,
-# scopeRealizesObjective, points Scope -> Objective and records the other order.
-# Both are kept; which one a lineage uses IS the fact worth recording.
+# scopeRealizesObjective, points Scope -> Objective and recorded the other order;
+# that link is retired (G132) and is no longer read, so this link alone records the order.
 @prefix backlog: <http://example.org/backlog#> .
 @prefix core:    <http://example.org/core#> .
 @prefix ex:      <http://example.org/ob#> .

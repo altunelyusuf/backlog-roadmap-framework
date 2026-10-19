@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
-"""backlog_scope_outcome_probe v1.0.0 -- the scope outcome is derived for a scope built first and for a scope built last (shapes v1.173.0, G131).
+"""backlog_scope_outcome_probe v1.1.0 -- the scope outcome is derived from the objectives that name the scope they fill, and only from those (shapes v1.174.0, G131, G132).
 
 One small planted register per case: a backlog that holds the scope, one story Done (so the completion rule derives the scope Done), and one or two objectives.
 The rules are run (SHACL advanced mode, in place) and the derived scope outcome is read back.
   1 the objective names the scope it fills (fillsScope, scope first) and its target is reached:      Ach_Met
-  2 the scope names the objective (scopeRealizesObjective, the retired order) and its target is reached: Ach_Met
+  2 the scope names the objective (scopeRealizesObjective, retired by G132) and its target is reached:  no outcome derived (the retired link is not read)
   3 scope first, deadline passed, observed short of the target:                                         Ach_Missed
   4 scope first, no observation yet (the honest third state):                                          Ach_Pending
   5 scope first, one objective met and one with no observation:                                        Ach_Pending (a met objective does not hide an open one)
   6 scope first, one objective met and one missed:                                                    Ach_Missed
-  7 the same objective named from both sides:                                                        Ach_Met, and only that
+  7 the objective names the scope AND the scope carries the retired link:                             Ach_Met, and only that
   8 no objective at all:                                                                              no outcome derived
   9 the scope is not complete (a story still open) though its objective is met:                        no outcome derived
-Run with --shapes FILE to judge another version of the shapes (the shipped one before this release fails cases 1, 3, 4, 5 and 6).
+Run with --shapes FILE to judge another version of the shapes (shapes v1.172.0 fail cases 1, 3, 4, 5 and 6; shapes v1.173.0 fail case 2).
 Exit 0 when every expectation holds, 1 otherwise."""
 import glob, os, re, sys
 HERE = os.path.dirname(os.path.abspath(__file__)); PKG = os.path.dirname(HERE)
@@ -57,12 +57,12 @@ def expect(name, got, want):
         bad.append(name)
 
 expect("1 scope first, target reached", outcomes(HEAD + STORY("Done") + objective("O", "fills", observed=12.0)), ["Ach_Met"])
-expect("2 retired order, target reached", outcomes(HEAD + STORY("Done") + objective("O", "realizes", observed=12.0)), ["Ach_Met"])
+expect("2 retired link only: not read", outcomes(HEAD + STORY("Done") + objective("O", "realizes", observed=12.0)), [])
 expect("3 scope first, deadline passed, short of target", outcomes(HEAD + STORY("Done") + objective("O", "fills", observed=3.0, past=True)), ["Ach_Missed"])
 expect("4 scope first, no observation: too early to tell", outcomes(HEAD + STORY("Done") + objective("O", "fills")), ["Ach_Pending"])
 expect("5 scope first, one met and one open: pending", outcomes(HEAD + STORY("Done") + objective("O", "fills", observed=12.0) + objective("P", "fills")), ["Ach_Pending"])
 expect("6 scope first, one met and one missed: missed", outcomes(HEAD + STORY("Done") + objective("O", "fills", observed=12.0) + objective("M", "fills", observed=3.0, past=True)), ["Ach_Missed"])
-expect("7 named from both sides: met, once", outcomes(HEAD + STORY("Done") + objective("O", "both", observed=12.0)), ["Ach_Met"])
+expect("7 retired link beside the ruled one: met, once", outcomes(HEAD + STORY("Done") + objective("O", "both", observed=12.0)), ["Ach_Met"])
 expect("8 no objective: nothing derived", outcomes(HEAD + STORY("Done")), [])
 expect("9 scope not complete: nothing derived", outcomes(HEAD + STORY("InProgress") + objective("O", "fills", observed=12.0)), [])
 print("VERDICT: %s" % ("PASS -- 9 expectations hold" if not bad else "FAIL -- " + "; ".join(bad)))

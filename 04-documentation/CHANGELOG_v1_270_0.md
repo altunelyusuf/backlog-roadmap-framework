@@ -11260,6 +11260,15 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.408.0 — 2026-10-19 (MINOR: the scope-to-objective link is retired; the order is stated by fillsScope alone — G132)
+
+- **T-Box v1.135.0:** `scopeRealizesObjective` is deprecated and defined as retired; it stays declared so records of lineages built before the ruling of 2026-08-11 remain readable. The definition of `fillsScope` no longer says both links are kept. Standard v1.135.0.
+- **Shapes v1.174.0:** the scope outcome rules, the scope measurability shape and the fit-gap read `fillsScope` only; the mixed-order shape is removed; the legacy-order advisory is a Warning that the link is retired and derives nothing.
+- **Tools:** `backlog_scope_outcome_probe` v1.1.0 (the retired link alone derives no outcome); gate v1.62.0; the negative fixture no longer holds the retired link in two scopes or the mixed-order case and holds one scope for the advisory.
+- **Effect on other registers:** the LCW L4 remediation A-Box and the another registrant handover-response lineage A-Box assert the retired link. Vendored copies of earlier shapes keep behaving as they did; a register that takes these shapes loses a derived scope outcome that came only from the retired link and gets the finding that its scope realises no objective, until its objectives name the scope with `fillsScope`. Discipline v99.0.0.
+
+**Unplanned work:** the owner's ruling of this session; no backlog item of this package covers it.
+
 ## v1.407.0 — 2026-10-19 (MINOR: the scope outcome is derived for a scope built first as well as for a scope built last — G131)
 
 - **Shapes v1.173.0:** the rules that derive the scope outcome (met, missed, too early to tell) read the objectives of a scope by `scopeRealizesObjective` or the inverse of `fillsScope`; before, a scope built in the ruled order got no outcome and the shape that demands one could not be satisfied. Derives where nothing was derived; adds no obligation.

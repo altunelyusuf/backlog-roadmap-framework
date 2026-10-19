@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.134.0
+# Backlog & Roadmap Semantic Framework — Standard v1.135.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -148,7 +148,7 @@ level multi-factor ranking, and the orphan/coverage check.
 | `Mission` | Why the development exists; owner-declared root of the intent chain |
 | `contributesToMission` | Goal → mission; goals must in turn carry measurable objectives |
 | `fillsScope` | **Objective → scope.** The link a scope-first lineage uses: an objective cannot name a boundary that does not yet exist, so asserting it is only possible where the scope was fixed first. Direction records the order — no date needed |
-| `scopeRealizesObjective` | **Scope → objective.** The reverse, and the record of a lineage whose boundary was drawn around objectives already decided. Kept, because which link a lineage uses *is* the fact worth recording; asserting both records no order at all and is rejected |
+| `scopeRealizesObjective` | **Retired (G132).** Scope → objective, the record of a lineage whose boundary was drawn around objectives already decided. The framework records one order only, stated by `fillsScope`. The term stays declared, deprecated, so that records of lineages built before the ruling of 2026-08-11 remain readable; no rule or shape reads it, and a scope that carries it receives an advisory |
 | `scopeCompletionState` / `scopeOutcome` | Derived: is the scoped work finished, and did it work — computed separately, in that order |
 | `ScopeChange` | Owner-decided, rationale-bearing admission of work into a set scope |
 | `ChangeRequest` — `requestsChangeTo`, `hasChangeDirection`, `hasChangeRequestRationale`, `hasDisposition` | A real, typed request to grow or shrink a scope, existing before any decision is made about it — distinct from `ScopeChange`, which only ever records a decision already made |

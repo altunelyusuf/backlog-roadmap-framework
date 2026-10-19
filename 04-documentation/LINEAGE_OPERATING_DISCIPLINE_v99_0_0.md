@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v98.0.0
+# Lineage Operating Discipline — v99.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -3667,3 +3667,18 @@ Related: G89, G117, G120, G125, G129.
 
 **Not claimed.** The consumer's register was not run. A register that asserted a scope outcome by hand to clear the violation would, with these rules, carry that outcome and the derived one; remove the asserted one. Whether the derived outcome of a scope-first lineage is what its owner expects is read from the objectives' own outcomes, which these rules do not change.
 Related: G89, G129, G130, and the entry of 2026-08-11 (v3.1.0) that ruled the order.
+
+## G132 — The scope-to-objective link is retired; the order is stated by `fillsScope` alone
+
+*(Opened by the owner, 2026-10-19: the scope-last order was dropped at the ruling of 2026-08-11, and keeping its link readable in the rules confuses and drifts. "Retire it now.")*
+
+**Q1 — what is retired? The link, not the past.** `scopeRealizesObjective` is marked deprecated in the T-Box (v1.135.0) and defined as retired. It stays declared so that a lineage built before the ruling of 2026-08-11 stays readable as the record it is (v3.0.0: existing lineages are not rewritten); it is not asserted in a lineage opened from now on, and no past lineage is re-pointed.
+
+**Q2 — what stops reading it?** Shapes v1.174.0: the three rules that derive the scope outcome (R12a, R12b, R12c) read the objectives that name the scope (`fillsScope`) only; the shape that asks a scope to realise an objective and the fit-gap shape no longer accept the retired link as an alternative; the mixed-order shape is removed with the link it compared. `LegacyOrderAdvisoryShape` keeps its name (the register's severity-promotion record refers to it) and is a Warning that says the link is retired and derives nothing. This supersedes the reading of G131 that the rules read both directions: G131's defect (a scope built in the ruled order got no outcome) stays fixed, and the retired direction is no longer part of the fix.
+
+**Q3 — who is bound (G89).** No refusal is added: the one shape that reads the retired link is a Warning. A register that carried only the retired link and takes these shapes now loses its derived scope outcome and receives the L2 finding that its scope realises no objective; a register is moved to these shapes by vendoring them, so a running lineage keeps the shapes it was opened under. Two registers in this repository assert the retired link (the LCW L4 remediation A-Box and the another registrant handover-response lineage A-Box); they are told by this entry and by the changelog, and nothing else is done to them.
+
+**Proof.** `backlog_scope_outcome_probe` v1.1.0 (9 expectations): the retired link alone derives no outcome; the objective-names-scope cases derive met, missed and pending; it fails case 2 against shapes v1.173.0. The negative fixture carries a scope with the retired link for the advisory and no longer carries the mixed-order case.
+
+**Not claimed.** The adaptation procedure for lineages built scope-last is kept as the record of what to do with such a lineage; it was not rewritten. The vendored copies of earlier versions in other packages are not touched.
+Related: G89, G131, and the entry of 2026-08-11 (v3.0.0, v3.1.0).

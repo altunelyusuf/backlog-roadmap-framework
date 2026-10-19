@@ -995,7 +995,6 @@ adaptneg:Profile a backlog:AdoptionProfile ;
 adaptneg:Backlog a backlog:Backlog ; backlog:hasIdentifier "BL-AN" ; backlog:hasState backlog:InProgress .
 adaptneg:Scope a backlog:ScopeStatement ;
     backlog:hasScopeStatementText "A boundary." ;
-    backlog:scopeRealizesObjective adaptneg:O ;
     backlog:hasScopeExclusion adaptneg:X .
 adaptneg:X a backlog:ScopeExclusion ; backlog:excludesConcern "Something." ;
     backlog:hasExclusionRationale "Reason." ; backlog:decidedBy backlog:Owner .
@@ -3494,7 +3493,6 @@ l4negative:Obs a backlog:MetricObservation ; rdfs:label "First reading, attached
 
 l4negative:Scope a backlog:ScopeStatement ;
     backlog:hasScopeStatementText "Self-service recovery for practitioner accounts: the reset flow and its notifications." ;
-    backlog:scopeRealizesObjective l4negative:Objective ;
     backlog:hasScopeExclusion l4negative:Excl .
 l4negative:Excl a backlog:ScopeExclusion ;
     backlog:excludesConcern "Recovery for administrator accounts, which carries a different identity check." ;
@@ -4085,11 +4083,6 @@ clz:BR_NoTool a backlog:BaselineReference ; backlog:hasBaselineLocation "https:/
 # IterationPeriodShape: an iteration recording an end but no start.
 clz:It_EndNoStart a backlog:Iteration ; backlog:iterationEnd "2026-09-01T00:00:00Z"^^xsd:dateTime .
 
-# MixedOrderShape: a scope and one of its objectives pointing at each other both ways.
-clz:Sc_Mixed a backlog:ScopeStatement .
-clz:Obj_Mixed a backlog:Objective ; backlog:fillsScope clz:Sc_Mixed .
-clz:Sc_Mixed backlog:scopeRealizesObjective clz:Obj_Mixed .
-
 # StageOutputShape: missing outputOfStage entirely. The sdlc-tools/ subfolder fixture that
 # proves this shape's two sh:sparql clauses sits in a subdirectory _negative_fixtures() never
 # globs (fixtures_dir/*.ttl is not recursive), so its own Out_NoCommit individual -- which
@@ -4283,3 +4276,7 @@ ex:MH_OUTSIDE a backlog:Mission ; backlog:hasMissionStatement "A mission stated 
 ex:MH_SUPERSEDED_INFLIGHT a backlog:Mission ; backlog:hasMissionStatement "An earlier statement." ; backlog:decidedBy backlog:Owner ; backlog:hasMissionOutcome backlog:Out_InFlight .
 ex:MH_NEWER a backlog:Mission ; backlog:hasMissionStatement "The better statement." ; backlog:decidedBy backlog:Owner ; backlog:supersedesMission ex:MH_SUPERSEDED_INFLIGHT .
 ex:MH_LIN a backlog:Lineage ; backlog:lineageForMission ex:MH_NEWER ; backlog:lineageOrdinal 99 .
+
+# LegacyOrderAdvisoryShape: a scope that carries the retired link (G132); the link is only recorded, nothing reads it.
+clz:Sc_Retired a backlog:ScopeStatement ; backlog:scopeRealizesObjective clz:Obj_Retired .
+clz:Obj_Retired a backlog:Objective .

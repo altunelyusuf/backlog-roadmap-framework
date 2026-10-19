@@ -9,9 +9,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog/shacl/1.173.0> ;
-    owl:versionInfo "1.173.0" ;
-    owl:priorVersion <http://example.org/backlog-shapes/1.172.0> , <http://example.org/backlog-shapes/1.171.0> , <http://example.org/backlog-shapes/1.170.0> , <http://example.org/backlog-shapes/1.169.0> , <http://example.org/backlog-shapes/1.168.0> , <http://example.org/backlog-shapes/1.167.0> , <http://example.org/backlog-shapes/1.166.0> , <http://example.org/backlog-shapes/1.165.0> , <http://example.org/backlog-shapes/1.164.0> , <http://example.org/backlog-shapes/1.159.0> , <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
+    owl:versionIRI <http://example.org/backlog/shacl/1.174.0> ;
+    owl:versionInfo "1.174.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.173.0> , <http://example.org/backlog-shapes/1.172.0> , <http://example.org/backlog-shapes/1.171.0> , <http://example.org/backlog-shapes/1.170.0> , <http://example.org/backlog-shapes/1.169.0> , <http://example.org/backlog-shapes/1.168.0> , <http://example.org/backlog-shapes/1.167.0> , <http://example.org/backlog-shapes/1.166.0> , <http://example.org/backlog-shapes/1.165.0> , <http://example.org/backlog-shapes/1.164.0> , <http://example.org/backlog-shapes/1.159.0> , <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.154.0> , <http://example.org/backlog-shapes/1.153.0> , <http://example.org/backlog-shapes/1.152.0> , <http://example.org/backlog-shapes/1.151.0> , <http://example.org/backlog-shapes/1.150.0> , <http://example.org/backlog-shapes/1.149.0> , <http://example.org/backlog-shapes/1.148.0> , <http://example.org/backlog-shapes/1.147.0> , <http://example.org/backlog-shapes/1.146.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.145.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.144.0> ;
@@ -1791,7 +1791,6 @@ backlog:ScopeMeasurabilityShape a sh:NodeShape ;
         sh:message "L2: this scope realises no objective, so completing it proves nothing and its success cannot be evaluated." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
-            FILTER NOT EXISTS { $this backlog:scopeRealizesObjective ?o }
             FILTER NOT EXISTS { ?o2 backlog:fillsScope $this }
             # A scope whose lineage has not yet reached the Objective stage
             # SHOULD have no objective. Second instance of the same conflict
@@ -3029,7 +3028,6 @@ backlog:L4DriftShape a sh:NodeShape ;
             # one reports work correctly governed by another as drift. Found by
             # running the fit-gap on this package's own register, where it flagged
             # two epics that were exactly where they belonged.
-            FILTER NOT EXISTS { ?any backlog:scopeRealizesObjective ?o }
             FILTER NOT EXISTS { ?o backlog:fillsScope ?any2 }
         }""" ] .
 
@@ -3219,34 +3217,23 @@ backlog:ScopeFirstOrderShape a sh:NodeShape ;
     sh:severity sh:Violation ;
     rdfs:label "L4: an objective names the scope it fills"@en ;
     sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "L4: this objective names no scope it fills. An objective cannot reference a boundary that does not yet exist, so asserting fillsScope is only possible where the scope was fixed first — which is why the link, and not a date, is what records the order. A lineage built the other way round should say so by keeping scopeRealizesObjective and declaring a lower level, not by leaving the question open." ;
+        sh:message "L4: this objective names no scope it fills. An objective cannot reference a boundary that does not yet exist, so asserting fillsScope is only possible where the scope was fixed first — which is why the link, and not a date, is what records the order. The order is recorded by this link alone; scopeRealizesObjective is retired (G132) and does not state it." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             FILTER NOT EXISTS { $this backlog:fillsScope ?sc }
         }""" ] .
 
-backlog:MixedOrderShape a sh:NodeShape ;
-    sh:targetClass backlog:ScopeStatement ;
-    sh:severity sh:Violation ;
-    rdfs:label "A lineage is built in one order or the other, not both (L1)"@en ;
-    sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "L1: this scope and one of its objectives point at each other — the scope realises the objective AND the objective fills the scope. Only one can be true of how the lineage was built: either the boundary existed and the objective was written to fill it, or the objectives existed and the boundary was drawn round them. Asserting both records no order at all, which is worse than recording the old one honestly." ;
-        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
-        sh:select """SELECT $this WHERE {
-            $this backlog:scopeRealizesObjective ?o .
-            ?o backlog:fillsScope $this .
-        }""" ] .
-
+# v1.174.0 (G132): the retired order is not read. The mixed-order shape (a scope and an objective pointing at each other) is gone with the link it compared;
+# the advisory keeps its name (the register's severity-promotion record refers to it) and now says that the link is retired.
 backlog:LegacyOrderAdvisoryShape a sh:NodeShape ;
     sh:targetClass backlog:ScopeStatement ;
     sh:severity sh:Warning ;
-    rdfs:label "Advisory: a lineage built scope-last"@en ;
+    rdfs:label "Advisory: a scope carries the retired link to its objectives"@en ;
     sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "Advisory: this scope points at its objectives, so it was written after them and its boundary was drawn around work already decided. That is a real record of how this lineage was built and is not an error. It is reported because such a boundary has never refused anything: to change that, fix a scope for the NEXT increment before its goals and link it with fillsScope. Do not re-point the existing links — a boundary re-derived from objectives that already exist is exactly the self-confirming one this reports." ;
+        sh:message "Advisory: this scope carries scopeRealizesObjective, a link retired by ruling G132. No rule reads it any more, so it records a past order and derives nothing (no scope outcome). The order is stated by the objectives: each names the scope it fills with fillsScope. A past lineage is not re-pointed (that would fabricate intent); a lineage opened from now on does not assert the retired link." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             $this backlog:scopeRealizesObjective ?o .
-            FILTER NOT EXISTS { ?o2 backlog:fillsScope $this }
         }""" ] .
 
 #################################################################
@@ -7611,12 +7598,11 @@ backlog:ScopeCompletionRule a sh:NodeShape ;
             CONSTRUCT { $this backlog:scopeOutcome backlog:Ach_Met }
             WHERE {
                 $this backlog:scopeCompletionState backlog:Done .
-            # v1.173.0 (agentic-sdlc handover, G131): the objectives a scope realises are read in both directions of the order -- the scope names the objective
-            # (scopeRealizesObjective, the retired order) or the objective names the scope it fills (fillsScope, scope first). Before this the outcome was
-            # derivable only for the retired order.
-                FILTER EXISTS { $this (backlog:scopeRealizesObjective|^backlog:fillsScope) ?o }
+            # v1.174.0 (G132): the objectives a scope realises are the objectives that name it (fillsScope), the one order the framework records.
+            # scopeRealizesObjective is retired; the rules do not read it, so a scope that only carries it derives no outcome (and says so, see the retired-link shape).
+                FILTER EXISTS { $this ^backlog:fillsScope ?o }
                 FILTER NOT EXISTS {
-                    $this (backlog:scopeRealizesObjective|^backlog:fillsScope) ?o2 .
+                    $this ^backlog:fillsScope ?o2 .
                     FILTER NOT EXISTS { ?o2 backlog:objectiveOutcome backlog:Ach_Met }
                 }
             }""" ] ;
@@ -7627,7 +7613,7 @@ backlog:ScopeCompletionRule a sh:NodeShape ;
             CONSTRUCT { $this backlog:scopeOutcome backlog:Ach_Pending }
             WHERE {
                 $this backlog:scopeCompletionState backlog:Done .
-                FILTER EXISTS { $this (backlog:scopeRealizesObjective|^backlog:fillsScope) ?o }
+                FILTER EXISTS { $this ^backlog:fillsScope ?o }
                 # Keyed on ABSENCE of a derived outcome, not on a Pending
                 # state: no rule derives objectiveOutcome Pending, so an
                 # objective whose deadline has not arrived and whose target is
@@ -7636,11 +7622,11 @@ backlog:ScopeCompletionRule a sh:NodeShape ;
                 # could produce — unsatisfiable unless someone fabricated one,
                 # which is what the constraint exists to prevent.
                 FILTER EXISTS {
-                    $this (backlog:scopeRealizesObjective|^backlog:fillsScope) ?op .
+                    $this ^backlog:fillsScope ?op .
                     FILTER NOT EXISTS { ?op backlog:objectiveOutcome ?any }
                 }
                 FILTER NOT EXISTS {
-                    $this (backlog:scopeRealizesObjective|^backlog:fillsScope) ?om .
+                    $this ^backlog:fillsScope ?om .
                     ?om backlog:objectiveOutcome backlog:Ach_Missed .
                 }
             }""" ] ;
@@ -7651,7 +7637,7 @@ backlog:ScopeCompletionRule a sh:NodeShape ;
             CONSTRUCT { $this backlog:scopeOutcome backlog:Ach_Missed }
             WHERE {
                 $this backlog:scopeCompletionState backlog:Done .
-                $this (backlog:scopeRealizesObjective|^backlog:fillsScope) ?o .
+                $this ^backlog:fillsScope ?o .
                 ?o backlog:objectiveOutcome backlog:Ach_Missed .
             }""" ] .
 

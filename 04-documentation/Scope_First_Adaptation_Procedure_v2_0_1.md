@@ -1,4 +1,6 @@
-# Adapting a lineage built scope-last — v2.0.0
+# Adapting a lineage built scope-last — v2.0.1
+
+> **Note (G132, 2026-10-19):** `scopeRealizesObjective` is retired. No rule or shape reads it; the link remains only as the record of a lineage built before the ruling of 2026-08-11. This procedure describes what to do about such a record.
 
 For a lineage whose `ScopeStatement` points at its objectives via `scopeRealizesObjective`. That
 direction records that the boundary was drawn **after** the objectives existed, and it is an accurate

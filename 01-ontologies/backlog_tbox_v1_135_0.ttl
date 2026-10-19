@@ -18,9 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.134.0> ;
-    owl:versionInfo "1.134.0" ;
-    owl:priorVersion <http://example.org/backlog/1.133.0> , <http://example.org/backlog/1.132.0> , <http://example.org/backlog/1.131.0> , <http://example.org/backlog/1.130.0> , <http://example.org/backlog/1.129.0> , <http://example.org/backlog/1.125.0> , <http://example.org/backlog/1.124.0> , <http://example.org/backlog/1.123.0> , <http://example.org/backlog/1.122.0> ;
+    owl:versionIRI <http://example.org/backlog/1.135.0> ;
+    owl:versionInfo "1.135.0" ;
+    owl:priorVersion <http://example.org/backlog/1.134.0> , <http://example.org/backlog/1.133.0> , <http://example.org/backlog/1.132.0> , <http://example.org/backlog/1.131.0> , <http://example.org/backlog/1.130.0> , <http://example.org/backlog/1.129.0> , <http://example.org/backlog/1.125.0> , <http://example.org/backlog/1.124.0> , <http://example.org/backlog/1.123.0> , <http://example.org/backlog/1.122.0> ;
     owl:priorVersion <http://example.org/backlog/1.121.0> , <http://example.org/backlog/1.120.0> , <http://example.org/backlog/1.119.0> , <http://example.org/backlog/1.118.0> , <http://example.org/backlog/1.117.0> ;
     owl:priorVersion <http://example.org/backlog/1.116.0> ;
     owl:priorVersion <http://example.org/backlog/1.115.0> ;
@@ -2331,8 +2331,10 @@ backlog:missionFor a owl:ObjectProperty ;
 backlog:scopeRealizesObjective a owl:ObjectProperty ;
     rdfs:domain backlog:ScopeStatement ; rdfs:range backlog:Objective ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:deprecated true ;
+    rdfs:comment "v1.135.0 (G132): retired. The framework records one order, scope first, stated by the objective naming the scope it fills (fillsScope). The scope-to-objective link recorded the opposite order, which the framework dropped at the scope-first ruling of 2026-08-11 and no longer builds; no rule or shape reads it. It stays declared only so that the records of lineages built before the ruling remain readable as what they are; it is not asserted in a lineage opened from now on, and no past lineage is re-pointed."@en ;
     rdfs:label "scope realizes objective"@en ;
-    skos:definition "The objective this scope exists to achieve. The link that makes scope completion a testable event rather than a checklist ending: when the scoped work is finished, the objectives named here are what decide whether it worked."@en .
+    skos:definition "RETIRED (G132), see the comment. The objective this scope exists to achieve. The link that makes scope completion a testable event rather than a checklist ending: when the scoped work is finished, the objectives named here are what decide whether it worked."@en .
 
 backlog:scopeCompletionState a owl:ObjectProperty ;
     rdfs:domain backlog:ScopeStatement ; rdfs:range backlog:LifecycleState ;
@@ -3444,7 +3446,7 @@ backlog:fillsScope a owl:ObjectProperty ;
     rdfs:domain backlog:Objective ; rdfs:range backlog:ScopeStatement ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "fills scope"@en ;
-    skos:definition "The scope boundary this objective was written to fill. The direction is the whole point: an objective cannot name a scope that does not yet exist, so asserting this link is only possible in a lineage where the boundary was fixed first. Every other link in the intent chain already works this way — a Goal points at its Mission, an Objective at its Goal, each from the later-written element to the earlier — and the order is therefore readable from the graph without any element carrying a date. scopeRealizesObjective points the other way and encodes the opposite order; both are kept, because which one a lineage uses is exactly the fact worth recording. NOT declared owl:inverseOf scopeRealizesObjective: a reasoner materialising either from the other would erase the distinction and make every lineage look like both."@en .
+    skos:definition "The scope boundary this objective was written to fill. The direction is the whole point: an objective cannot name a scope that does not yet exist, so asserting this link is only possible in a lineage where the boundary was fixed first. Every other link in the intent chain already works this way — a Goal points at its Mission, an Objective at its Goal, each from the later-written element to the earlier — and the order is therefore readable from the graph without any element carrying a date. scopeRealizesObjective pointed the other way and encoded the opposite order; it is retired (G132) and this link is the only one that records the order. NOT declared owl:inverseOf scopeRealizesObjective: a reasoner materialising either from the other would make every past lineage look scope-first."@en .
 
 #################################################################
 #  50. Gated adaptation of a lineage to scope-first (v1.22.0)
@@ -7318,3 +7320,9 @@ backlog:startEstimateBasis a owl:DatatypeProperty , owl:FunctionalProperty ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "start estimate basis"@en ;
     skos:definition "What an estimated start was taken from, and what outside the register bounds it, so a reader can judge it."@en .
+
+#################################################################
+#  v1.135.0 (G132) -- the retired scope-to-objective link is retired in the vocabulary
+#################################################################
+# scopeRealizesObjective is marked deprecated and its definition says so (see the property). Nothing else in the vocabulary changes: the order
+# is stated by fillsScope alone, and the scope outcome, the scope shapes and the fit-gap read fillsScope only (shapes v1.174.0).
