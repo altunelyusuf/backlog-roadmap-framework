@@ -22,9 +22,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (ABox: controlled individuals, reference data and the live register)"@en ;
-    owl:versionIRI <http://example.org/backlog/abox/1.50.0> ;
-    owl:versionInfo "1.50.0" ;
-    owl:priorVersion <http://example.org/backlog/abox/1.49.0> , <http://example.org/backlog/abox/1.48.0> , <http://example.org/backlog/abox/1.47.0> , <http://example.org/backlog/abox/1.46.0> , <http://example.org/backlog/abox/1.45.0> , <http://example.org/backlog/abox/1.40.0> , <http://example.org/backlog/abox/1.39.0> , <http://example.org/backlog/abox/1.38.0> , <http://example.org/backlog/abox/1.37.0> , <http://example.org/backlog/abox/1.36.0> , <http://example.org/backlog/abox/1.35.0> ;
+    owl:versionIRI <http://example.org/backlog/abox/1.51.0> ;
+    owl:versionInfo "1.51.0" ;
+    owl:priorVersion <http://example.org/backlog/abox/1.50.0> , <http://example.org/backlog/abox/1.49.0> , <http://example.org/backlog/abox/1.48.0> , <http://example.org/backlog/abox/1.47.0> , <http://example.org/backlog/abox/1.46.0> , <http://example.org/backlog/abox/1.45.0> , <http://example.org/backlog/abox/1.40.0> , <http://example.org/backlog/abox/1.39.0> , <http://example.org/backlog/abox/1.38.0> , <http://example.org/backlog/abox/1.37.0> , <http://example.org/backlog/abox/1.36.0> , <http://example.org/backlog/abox/1.35.0> ;
     owl:priorVersion <http://example.org/backlog/abox/1.34.0> , <http://example.org/backlog/abox/1.33.0> , <http://example.org/backlog/abox/1.32.0> , <http://example.org/backlog/abox/1.31.0> , <http://example.org/backlog/abox/1.30.0> , <http://example.org/backlog/abox/1.29.0> , <http://example.org/backlog/abox/1.28.0> , <http://example.org/backlog/abox/1.27.0> , <http://example.org/backlog/abox/1.26.0> , <http://example.org/backlog/abox/1.25.0> , <http://example.org/backlog/abox/1.24.0> , <http://example.org/backlog/abox/1.23.0> , <http://example.org/backlog/abox/1.22.0> , <http://example.org/backlog/abox/1.21.0> , <http://example.org/backlog/abox/1.20.0> , <http://example.org/backlog/abox/1.19.0> , <http://example.org/backlog/abox/1.17.0> , <http://example.org/backlog/abox/1.16.0> , <http://example.org/backlog/abox/1.15.0> , <http://example.org/backlog/abox/1.14.0> , <http://example.org/backlog/abox/1.13.0> , <http://example.org/backlog/abox/1.12.0> , <http://example.org/backlog/abox/1.11.0> , <http://example.org/backlog/abox/1.10.0> , <http://example.org/backlog/abox/1.9.0> , <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
         <http://example.org/backlog-abox/1.2.1> ,
                      <http://example.org/backlog-abox/1.2.0> ,
@@ -1142,9 +1142,9 @@ backlog:LS_Backlogged a owl:NamedIndividual , backlog:LineageStatus ; rdfs:label
 
 backlog:LS_InProgress a owl:NamedIndividual , backlog:LineageStatus ; rdfs:label "In progress"@en ; backlog:statusRank 6 ; skos:definition "The chain is closed and development is ongoing: at least one work item of the lineage has left Proposed/Ready, and the mission outcome is not yet settled. The status the owner asked for by name."@en .
 
-backlog:LS_Achieved a owl:NamedIndividual , backlog:LineageStatus ; rdfs:label "Achieved"@en ; backlog:statusRank 7 ; skos:definition "The mission outcome is Out_Achieved and a closure report closes it. Found in this status and not archived, the lineage triggers the archival activity."@en .
+backlog:LS_Achieved a owl:NamedIndividual , backlog:LineageStatus ; backlog:statusForOutcome backlog:Out_Achieved ; rdfs:label "Achieved"@en ; backlog:statusRank 7 ; skos:definition "The mission outcome is Out_Achieved and a closure report closes it. Found in this status and not archived, the lineage triggers the archival activity."@en .
 
-backlog:LS_Abandoned a owl:NamedIndividual , backlog:LineageStatus ; rdfs:label "Abandoned"@en ; backlog:statusRank 7 ; skos:definition "The mission outcome is Out_Abandoned. Archivable like Achieved."@en .
+backlog:LS_Abandoned a owl:NamedIndividual , backlog:LineageStatus ; backlog:statusForOutcome backlog:Out_Abandoned ; rdfs:label "Abandoned"@en ; backlog:statusRank 7 ; skos:definition "The mission outcome is Out_Abandoned. Archivable like Achieved."@en .
 
 backlog:LS_Archived a owl:NamedIndividual , backlog:LineageStatus ; rdfs:label "Archived"@en ; backlog:statusRank 8 ; skos:definition "Set down into the archive ABox by backlog_lineage_archive; out of every processing path until consciously revived."@en .
 

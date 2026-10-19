@@ -6195,6 +6195,9 @@ backlog:LineageStatus a owl:Class ;
 backlog:statusRank a owl:DatatypeProperty , owl:FunctionalProperty ;
     rdfs:domain backlog:LineageStatus ; rdfs:range xsd:integer ; rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "status rank"@en .
 backlog:statusRank backlog:numberOrigin backlog:Num_Asserted .
+backlog:statusForOutcome a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:LineageStatus ; rdfs:range backlog:MissionOutcome ; rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "status for outcome"@en ;
+    skos:definition "The mission outcome whose recording puts a lineage into this status, stated as a link and not left in the status's text. Only the two closing statuses carry it (achieved, abandoned); the other statuses follow a stage, not an outcome. (v1.135.0, G132)"@en .
 backlog:hasLineageStatus a owl:ObjectProperty , owl:FunctionalProperty ;
     rdfs:domain backlog:Lineage ; rdfs:range backlog:LineageStatus ; rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "has lineage status"@en ;
     skos:definition "Current-state pointer (L-112): moved forward at each transition, in the same commit as the stage output or event that justifies it. Functional; the history is the chain of stage outputs and the dated notes."@en .
