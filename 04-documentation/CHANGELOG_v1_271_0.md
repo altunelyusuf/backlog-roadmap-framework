@@ -11260,6 +11260,13 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.409.0 — 2026-10-19 (MINOR, documentation only: a rule added after a story is Done does not reach into it; the repair is a change-routed story — G133)
+
+- **Discipline v100.0.0:** G133 answers the SEN0401 slides handover on repairing Done deliverables that a later rule of the method makes fail: new work, one change request and one impact assessment naming all the files, one story with a criterion and a satisfaction per file, the replaced versions kept as the record. No shape, tool or ontology changes.
+- **Handovers:** the SEN0401 slides handover filed and answered (G133).
+
+**Unplanned work:** one consuming project's handover; no backlog item of this package covers it.
+
 ## v1.408.0 — 2026-10-19 (MINOR: the scope-to-objective link is retired; the order is stated by fillsScope alone — G132)
 
 - **T-Box v1.135.0:** `scopeRealizesObjective` is deprecated and defined as retired; it stays declared so records of lineages built before the ruling of 2026-08-11 remain readable. The definition of `fillsScope` no longer says both links are kept. Standard v1.135.0.

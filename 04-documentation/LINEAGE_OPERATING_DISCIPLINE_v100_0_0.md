@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v99.0.0
+# Lineage Operating Discipline — v100.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -3682,3 +3682,16 @@ Related: G89, G129, G130, and the entry of 2026-08-11 (v3.1.0) that ruled the or
 
 **Not claimed.** The adaptation procedure for lineages built scope-last is kept as the record of what to do with such a lineage; it was not rewritten. The vendored copies of earlier versions in other packages are not touched.
 Related: G89, G131, and the entry of 2026-08-11 (v3.0.0, v3.1.0).
+
+## G133 — A rule the method adds after a story is Done does not reach into that story; repairing its deliverable is new work taken by the change route
+
+*(Opened by a handover of the SEN0401 slides session, 2026-10-19: two rules of the OE discipline (v2.18.0 and v2.19.0, shipped the same day) make fifteen Done research deliverables fail. The reading below is from the discipline's text and the vocabulary, not run on that register.)*
+
+**Q(a) — defect or new work? New work.** G125 draws the line: a pass is a defect against a Done story only where the story's own criterion already required what the pass delivers. A criterion that names the discipline's gates names them as they stood when the story was accepted; a gate that did not exist then is not in it, and reading it in afterwards is applying a new ruling to work already closed, which G89 refuses (a finished story is a record, L-112). The two rules were added after those stories were Done, so the repair is not a correction of the story: it is work with a criterion of its own (G125: it is a story), and G125 option 1 (dated evidence on the Done story) is not the route.
+
+**Q(b) — one story or fifteen? One change request, one impact assessment, one story with one acceptance criterion per file.** The route is G125's first and second: the change request and the impact assessment each name all fifteen files and are dated when made, and an owner-decided scope change records it where the mission does not already say it. The story carries one acceptance criterion per file (the file measures zero islands and zero classes standing alone), and each criterion has its own criterion satisfaction (`satisfiesCriterion`) with its own result, so one file that does not yet pass is visible without a story per file. The Backlog digest moves once, when the story is admitted and the stage is closed again (G125, G127: once for all the changes). Split the story only where files are accepted on different dates; then one story per acceptance date, because a story is Done as a whole.
+
+**Q(c) — new versions as evidence? Yes, on the new story; the old stay as the record.** A repaired T-Box is a new file under a new name (the structure rule); the replaced version is kept under its own name, so the evidence recorded for it still verifies against it and is not edited. The new story's satisfactions and evidence name the new versions. Nothing is added to the Done stories.
+
+**Not claimed.** The story with fifteen criteria and the second close of the Backlog stage were not run on a planted register here, and no rule of this package names a count of similar items; the choice of one story rests on the digest moving per story and on a satisfaction being kept per criterion. Whether the files must be repaired at all is the owner's decision in your register, not a ruling of this package.
+Related: G89, G125, G127, L-112.
