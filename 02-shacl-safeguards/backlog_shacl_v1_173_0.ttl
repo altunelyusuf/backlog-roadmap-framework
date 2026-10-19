@@ -9,9 +9,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog/shacl/1.172.0> ;
-    owl:versionInfo "1.172.0" ;
-    owl:priorVersion <http://example.org/backlog-shapes/1.171.0> , <http://example.org/backlog-shapes/1.170.0> , <http://example.org/backlog-shapes/1.169.0> , <http://example.org/backlog-shapes/1.168.0> , <http://example.org/backlog-shapes/1.167.0> , <http://example.org/backlog-shapes/1.166.0> , <http://example.org/backlog-shapes/1.165.0> , <http://example.org/backlog-shapes/1.164.0> , <http://example.org/backlog-shapes/1.159.0> , <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
+    owl:versionIRI <http://example.org/backlog/shacl/1.173.0> ;
+    owl:versionInfo "1.173.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.172.0> , <http://example.org/backlog-shapes/1.171.0> , <http://example.org/backlog-shapes/1.170.0> , <http://example.org/backlog-shapes/1.169.0> , <http://example.org/backlog-shapes/1.168.0> , <http://example.org/backlog-shapes/1.167.0> , <http://example.org/backlog-shapes/1.166.0> , <http://example.org/backlog-shapes/1.165.0> , <http://example.org/backlog-shapes/1.164.0> , <http://example.org/backlog-shapes/1.159.0> , <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.154.0> , <http://example.org/backlog-shapes/1.153.0> , <http://example.org/backlog-shapes/1.152.0> , <http://example.org/backlog-shapes/1.151.0> , <http://example.org/backlog-shapes/1.150.0> , <http://example.org/backlog-shapes/1.149.0> , <http://example.org/backlog-shapes/1.148.0> , <http://example.org/backlog-shapes/1.147.0> , <http://example.org/backlog-shapes/1.146.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.145.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.144.0> ;
@@ -7611,9 +7611,12 @@ backlog:ScopeCompletionRule a sh:NodeShape ;
             CONSTRUCT { $this backlog:scopeOutcome backlog:Ach_Met }
             WHERE {
                 $this backlog:scopeCompletionState backlog:Done .
-                FILTER EXISTS { $this backlog:scopeRealizesObjective ?o }
+            # v1.173.0 (agentic-sdlc handover, G131): the objectives a scope realises are read in both directions of the order -- the scope names the objective
+            # (scopeRealizesObjective, the retired order) or the objective names the scope it fills (fillsScope, scope first). Before this the outcome was
+            # derivable only for the retired order.
+                FILTER EXISTS { $this (backlog:scopeRealizesObjective|^backlog:fillsScope) ?o }
                 FILTER NOT EXISTS {
-                    $this backlog:scopeRealizesObjective ?o2 .
+                    $this (backlog:scopeRealizesObjective|^backlog:fillsScope) ?o2 .
                     FILTER NOT EXISTS { ?o2 backlog:objectiveOutcome backlog:Ach_Met }
                 }
             }""" ] ;
@@ -7624,7 +7627,7 @@ backlog:ScopeCompletionRule a sh:NodeShape ;
             CONSTRUCT { $this backlog:scopeOutcome backlog:Ach_Pending }
             WHERE {
                 $this backlog:scopeCompletionState backlog:Done .
-                FILTER EXISTS { $this backlog:scopeRealizesObjective ?o }
+                FILTER EXISTS { $this (backlog:scopeRealizesObjective|^backlog:fillsScope) ?o }
                 # Keyed on ABSENCE of a derived outcome, not on a Pending
                 # state: no rule derives objectiveOutcome Pending, so an
                 # objective whose deadline has not arrived and whose target is
@@ -7633,11 +7636,11 @@ backlog:ScopeCompletionRule a sh:NodeShape ;
                 # could produce — unsatisfiable unless someone fabricated one,
                 # which is what the constraint exists to prevent.
                 FILTER EXISTS {
-                    $this backlog:scopeRealizesObjective ?op .
+                    $this (backlog:scopeRealizesObjective|^backlog:fillsScope) ?op .
                     FILTER NOT EXISTS { ?op backlog:objectiveOutcome ?any }
                 }
                 FILTER NOT EXISTS {
-                    $this backlog:scopeRealizesObjective ?om .
+                    $this (backlog:scopeRealizesObjective|^backlog:fillsScope) ?om .
                     ?om backlog:objectiveOutcome backlog:Ach_Missed .
                 }
             }""" ] ;
@@ -7648,7 +7651,7 @@ backlog:ScopeCompletionRule a sh:NodeShape ;
             CONSTRUCT { $this backlog:scopeOutcome backlog:Ach_Missed }
             WHERE {
                 $this backlog:scopeCompletionState backlog:Done .
-                $this backlog:scopeRealizesObjective ?o .
+                $this (backlog:scopeRealizesObjective|^backlog:fillsScope) ?o .
                 ?o backlog:objectiveOutcome backlog:Ach_Missed .
             }""" ] .
 

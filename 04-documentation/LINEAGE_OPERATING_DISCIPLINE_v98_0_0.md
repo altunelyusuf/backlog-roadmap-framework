@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v97.0.0
+# Lineage Operating Discipline — v98.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -3652,3 +3652,18 @@ Related: G91, G105, G117, G125, L-112.
 
 **Not claimed.** The consumer's register was not run. The standing item is a use of existing rules, not a new class: no shape requires or recognises it, and the framework does not stop a standing item from being set Done. A shape that refuses an occurrence under a Done parent is not built (it would bind registers that never adopted it, G89).
 Related: G89, G117, G120, G125, G129.
+
+## G131 — The scope outcome is derived for a scope built first as well as for a scope built last
+
+*(Opened by a handover of a consumer lineage, 2026-10-19: its scope was Done, its 21 objectives named the scope they fill, and the shape "this scope's work is complete but its outcome has not been derived" reported a violation that nothing could clear. Reproduced here on a planted register before anything was changed.)*
+
+**Q1 — is the scope outcome meant to be derived for a scope-first lineage? Yes; the three rules had a defect.** The entry of 2026-08-11 (v3.1.0) makes the scope come first and records the order with `fillsScope` (the objective names the scope it fills); `scopeRealizesObjective` (the scope names the objective) is the retired order. The shapes followed that for the shape that asks a scope to realise an objective, the fit-gap, the mixed-order shape and the advisory, but the three rules that derive the scope outcome (R12a met, R12b missed, R12c too early to tell) read `scopeRealizesObjective` only. For a scope built in the ruled order they derived nothing, and the shape that demands an outcome of a complete scope could be satisfied only by writing the retired link or by asserting an outcome by hand, which is what the rules exist to prevent. Shapes v1.173.0: the three rules read the objectives of a scope by the path `scopeRealizesObjective` or the inverse of `fillsScope`. Nothing else in the rules changed: a scope is still complete only when every scoped work item is Done or Cancelled (R11), one missed objective makes the outcome Missed, one objective with no observation (and none missed) makes it Pending, and Met needs every objective met. An objective named from both sides counts once, and the mixed-order shape (L1) still refuses a register that does both.
+
+**Q2 — the workaround.** Do not assert `scopeRealizesObjective` (it records the retired order and L1 refuses it beside `fillsScope`) and do not assert an outcome by hand. Vendor shapes v1.173.0 and the outcome follows.
+
+**Q3 — who is bound.** No one. The change derives an outcome where the rules derived none and removes the violation that followed; it adds no obligation, so it is not held back by G89 and needs no adoption.
+
+**Proof.** `backlog_scope_outcome_probe` v1.0.0 plants small registers and reads the derived outcome back (9 expectations: met, missed, too early to tell, one met beside one open, one met beside one missed, the same objective named from both sides, no objective, a scope not yet complete, and the retired order); it fails five of them against shapes v1.172.0 and passes all nine against v1.173.0.
+
+**Not claimed.** The consumer's register was not run. A register that asserted a scope outcome by hand to clear the violation would, with these rules, carry that outcome and the derived one; remove the asserted one. Whether the derived outcome of a scope-first lineage is what its owner expects is read from the objectives' own outcomes, which these rules do not change.
+Related: G89, G129, G130, and the entry of 2026-08-11 (v3.1.0) that ruled the order.

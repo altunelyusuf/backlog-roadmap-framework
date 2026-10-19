@@ -11260,6 +11260,14 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.407.0 — 2026-10-19 (MINOR: the scope outcome is derived for a scope built first as well as for a scope built last — G131)
+
+- **Shapes v1.173.0:** the rules that derive the scope outcome (met, missed, too early to tell) read the objectives of a scope by `scopeRealizesObjective` or the inverse of `fillsScope`; before, a scope built in the ruled order got no outcome and the shape that demands one could not be satisfied. Derives where nothing was derived; adds no obligation.
+- **Tools:** `backlog_scope_outcome_probe` v1.0.0 (9 expectations; fails five against shapes v1.172.0); gate v1.61.0.
+- **Handovers:** the agentic-sdlc handover on the scope outcome rules answered and filed (G131). Discipline v98.0.0.
+
+**Unplanned work:** one consuming project's handover; no backlog item of this package covers it.
+
 ## v1.406.0 — 2026-10-19 (MINOR: a carried item keeps its exemption while a revision is under way and may be handed on down a chain of successors; a stage revision from the Backlog stage reads ordered — G129, G130)
 
 - **Shapes v1.172.0:** the planning-event and two concern obligations stay exempt for a carried item while its admitting output is retracted and the lineage has no active Backlog output yet; an item may be taken in by the output of any successor in the chain, in the admission rule and the carried-item rule. Only removes findings.
