@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
+# v2.9.0 (G134): an entry names its lineage, mission and outcome by LINKS (never text); a mission or outcome that is not recorded is left out, not written as a blank or as the word unrecorded
 # v2.8.0 (G121): the earlier statements of an archived lineage's mission (supersedesMission, however long the chain) are its mission history and move with it, up to a statement another lineage pursues; before, they stayed live ownerless and pointed into the archive.
 # v2.7.0 (G106, consumer archival): the archive file is a parameter. --archive-file PATH names it (created at its first version when it does not exist yet); without the flag a register inside this package keeps using the package archive, and a register anywhere else gets its own archive beside it, in <register folder>/archive/<register name>_archive_vX_Y_Z.ttl. v2.6.0 always wrote into this package's archive, so a consumer ledger would have written its subjects into the framework's record.
 # v2.6.0 (G99 release B): the version a new live or archive file supersedes joins the header's owl:priorVersion chain (it was added by hand each time; move_header does it, and refuses a header that has no chain to extend).
 # v2.5.0 (Lineage 19, DC-S01 and DC-S03): an abandoned mission needs a closure report too, and every cancelled item of the lineage must be named by it (reportsCancelledItem); the archived copy of the lineage is marked archived with its confirmation pending, at the moment it is moved, so no later step has to find it. v2.4.0 accepted an abandoned mission with only its stated reason, which the owner has ruled is not enough.
 # v2.4.0 (Lineage 18, OC-S06): an abandoned lineage is archivable (its stated reason is its record), and the existing entries follow the archive file to its new version. v2.3.0 (Lineage 18, OC-S05): follows the archive folder. The archive data file now lives in 01-ontologies/archive/.
-"""backlog_lineage_archive v2.8.0 — set an achieved lineage down, out of every processing path.
+"""backlog_lineage_archive v2.9.0 — set an achieved lineage down, out of every processing path.
 
 WHY. A lineage whose mission is settled keeps costing every run until it is ARCHIVED: the SHACL
 suite validates its every individual, the git witness re-measures its every subject, the roadmap
@@ -334,10 +335,8 @@ def main():
         outcome = local(g.value(m, B.hasMissionOutcome)) if m is not None and g.value(m, B.hasMissionOutcome) else "unrecorded"
         ordv = g.value(L, B.lineageOrdinal)
         live_txt += f'''{prefix_of(g, L)}ArchiveEntry_{local(L)} a backlog:LineageArchiveEntry ;
-    backlog:entryForLineage "{str(L)}" ;
-    backlog:entryForMission "{str(m) if m is not None else ""}" ;
-    backlog:entryOutcome "{outcome}" ;
-    backlog:entryOrdinal {int(ordv) if ordv is not None else 0} ;
+    backlog:entryForLineage <{str(L)}> ;
+{("    backlog:entryForMission <" + str(m) + "> ;" + chr(10)) if m is not None else ""}{("    backlog:entryOutcome backlog:" + outcome + " ;" + chr(10)) if outcome != "unrecorded" else ""}    backlog:entryOrdinal {int(ordv) if ordv is not None else 0} ;
     backlog:archiveFile "{rel}" ;
     backlog:archivedAt "{now}"^^xsd:dateTime ;
     backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0: mission {outcome}, closure report present, every item Done or Cancelled, not frozen. Everything the lineage owned -- its Lineage individual, its Mission, its closure report, its stage outputs, findings and items -- moved to the archive file; this entry is the only thing that remains, and it is a record, not a lineage (G92)." .

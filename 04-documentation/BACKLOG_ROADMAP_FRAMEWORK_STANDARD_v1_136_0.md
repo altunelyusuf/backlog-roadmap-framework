@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.135.0
+# Backlog & Roadmap Semantic Framework — Standard v1.136.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -122,6 +122,7 @@ a silent gap, and every launch gate is an owner decision with a rationale.
 | `Roadmap`, `RoadmapHorizon` (`Now`/`Next`/`Later`), `Milestone` | The projection and its bands |
 | `RoadmapReport`, `ReportSection`, `hasRunTimestamp` | A report is a run, not a document |
 | `ClosureReport` — `closesForMission`, `reportGeneratedAt`, `hasClosureSummary`, `reportsOnObjective`, `citesFinding`, `statesBestPractice` | The opposite case from `RoadmapReport`: a closure is a permanent, one-time record written once at the moment the underlying data is still live to check it against, not an event to re-run. Required to exist before a `Mission` may be marked `Out_Achieved` or `Out_Abandoned` (`MissionClosureRequiresReportShape`), and to name every cancelled item of its lineage with `reportsCancelledItem` (`ClosureReportNamesCancelledShape`); `reportsDeliveredItem` names what it delivered — a mission closed with no report is a decision nobody can later audit |
+| `ModuleRecord` | The record of one module of a data file: the node that says which ontology it is part of and who may read it (`moduleAudience`). Declared in v1.136.0 as the domain of `moduleAudience`; existing records are not retyped. |
 | `ModuleAudience` — `Aud_Public`, `Aud_Private`; `moduleAudience` | Who may read a module folded into a package's single data file. Every module record (`dcterms:isPartOf` the package) declares exactly one (`ModuleAudienceDeclaredShape`); the public-copy deriver cuts the modules declared private and stops, naming the module, when one declares nothing or its markers are broken — so the cut list lives in the data, not in a tool |
 | `derivedInReport`, `underRankingModel` | A recommendation points at the run and model that produced it |
 | `GovernedDocument`, `DocumentStatus` (`Live`/`Superseded`), `supersededBy`, `hasSupersessionReason` | Retirement marked in place, never deleted |
@@ -903,7 +904,7 @@ container, and the root of a register that has archived nothing, still answers.
 An archive is not re-validated. Its conformance is a recorded value: an **`ArchiveConformanceRecord`**
 carrying the canonical digest of the archive at the moment it was cleared (`hasArchiveDigest`, over
 sorted N-Triples, so re-serialization and comments cannot move it), the shapes it was cleared under,
-the date, and the lineages the value covers (`includesRetiredLineage`). A check confirms the digest —
+the date, and the lineages the value covers (`includesRetiredLineage`, links to the lineages and not text, G134). A check confirms the digest —
 under a tenth of a second — and validates only the lineages that have **arrived** since, in the full
 context of the archive **and the live register**, scoping the report with `focus_nodes` rather than
 shrinking the graph. On success the value advances to include them.

@@ -11260,6 +11260,16 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.410.0 — 2026-10-20 (MINOR: a connection is a link, never text — G134)
+
+- **T-Box v1.136.0:** `entryForLineage`, `entryForMission`, `entryOutcome`, `includesRetiredLineage` and `tableInModule` are object properties with a range; seven properties gain the domain or range their definitions named; new links `successMirrorOf`, `horizonExpectsState`, `initiativeLevelCounterpart`, `concernsStage`, `readAgainstRegister` and the class `ModuleRecord`; the retired manifest digest property is linked to the one that replaces it. Standard v1.136.0.
+- **A-Box v1.52.0:** the archive entries, the conformance records and the code tables name what they record by links; the stated relationships of eight reference individuals are links. High-trust text references 17 to 8.
+- **Shapes v1.175.0:** three Warnings for text where a link belongs.
+- **Tools:** `backlog_links_not_text_probe` v1.0.0; archive tool v2.9.0, reconcile v3.0.2 and conformance v1.5.0 read and write links; gate v1.63.0; the negative fixture v1.40.0.
+- **Discipline v101.0.0:** G134.
+
+**Unplanned work:** the owner's ruling of 2026-10-19; no backlog item of this package covers it.
+
 ## v1.409.0 — 2026-10-19 (MINOR, documentation only: a rule added after a story is Done does not reach into it; the repair is a change-routed story — G133)
 
 - **Discipline v100.0.0:** G133 answers the SEN0401 slides handover on repairing Done deliverables that a later rule of the method makes fail: new work, one change request and one impact assessment naming all the files, one story with a criterion and a satisfaction per file, the replaced versions kept as the record. No shape, tool or ontology changes.

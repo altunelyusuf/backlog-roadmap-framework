@@ -2348,7 +2348,7 @@ ontologydriven:AREA_NOLOC a backlog:ScopeArea ;
 
 # CT-NOKIND: a code table with no kind. No clause requires one.
 ontologydriven:CT_NOKIND a backlog:CodeTable ;
-    backlog:tableInModule "some_module.py" ;
+    backlog:tableInModule <http://example.org/clause75#TS_some_module> ;
     backlog:tableExported false .
 
 # --- merged from fixture_package_regularity_v1_1_0.ttl (packageregular) ---
@@ -3176,8 +3176,8 @@ lineagestatusn:L_TwoStatus a backlog:Lineage ; backlog:lineageOrdinal 7 ; backlo
     backlog:lineageForMission lineagestatusn:M1 ; backlog:hasLineageStatus backlog:LS_Scoped , backlog:LS_Goaled .
 lineagestatusn:L_Reused a backlog:Lineage ; backlog:lineageOrdinal 8 ; backlog:lineageArchived false ;
     backlog:lineageForMission lineagestatusn:M1 ; backlog:hasLineageStatus backlog:LS_Opened .
-lineagestatusn:E_Retired a backlog:LineageArchiveEntry ; backlog:entryForLineage "http://example.org/lineage-status-neg#L_Reused" ;
-    backlog:entryForMission "http://example.org/lineage-status-neg#M1" ; backlog:entryOutcome "Out_Achieved" ;
+lineagestatusn:E_Retired a backlog:LineageArchiveEntry ; backlog:entryForLineage <http://example.org/lineage-status-neg#L_Reused> ;
+    backlog:entryForMission <http://example.org/lineage-status-neg#M1> ; backlog:entryOutcome backlog:Out_Achieved ;
     backlog:entryOrdinal 3 ; backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_2_0.ttl" ;
     backlog:archivedAt "2026-09-01T00:00:00Z"^^xsd:dateTime ; backlog:archivalTrigger "fixture" .
 
@@ -3187,8 +3187,8 @@ lineagestatusn:L_ArchivedSelf a backlog:Lineage ; rdfs:label "Archived self, rea
     backlog:lineageOrdinal 9 ; backlog:lineageArchived true ;
     backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_2_0.ttl" ;
     backlog:lineageForMission lineagestatusn:M1 .
-lineagestatusn:E_ArchivedSelf a backlog:LineageArchiveEntry ; backlog:entryForLineage "http://example.org/lineage-status-neg#L_ArchivedSelf" ;
-    backlog:entryForMission "http://example.org/lineage-status-neg#M1" ; backlog:entryOutcome "Out_Achieved" ;
+lineagestatusn:E_ArchivedSelf a backlog:LineageArchiveEntry ; backlog:entryForLineage <http://example.org/lineage-status-neg#L_ArchivedSelf> ;
+    backlog:entryForMission <http://example.org/lineage-status-neg#M1> ; backlog:entryOutcome backlog:Out_Achieved ;
     backlog:entryOrdinal 4 ; backlog:archiveFile "01-ontologies/backlog_framework_archive_abox_v1_2_0.ttl" ;
     backlog:archivedAt "2026-09-01T00:00:00Z"^^xsd:dateTime ; backlog:archivalTrigger "fixture" .
 
@@ -4280,3 +4280,6 @@ ex:MH_LIN a backlog:Lineage ; backlog:lineageForMission ex:MH_NEWER ; backlog:li
 # LegacyOrderAdvisoryShape: a scope that carries the retired link (G132); the link is only recorded, nothing reads it.
 clz:Sc_Retired a backlog:ScopeStatement ; backlog:scopeRealizesObjective clz:Obj_Retired .
 clz:Obj_Retired a backlog:Objective .
+
+# CodeTableShape / tableInModule (G134): the table names its tool script by a link.
+clz:TS_some_module a backlog:ToolScript ; backlog:scriptFileName "some_module.py" .

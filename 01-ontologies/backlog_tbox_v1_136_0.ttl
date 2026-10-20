@@ -18,9 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.135.0> ;
-    owl:versionInfo "1.135.0" ;
-    owl:priorVersion <http://example.org/backlog/1.134.0> , <http://example.org/backlog/1.133.0> , <http://example.org/backlog/1.132.0> , <http://example.org/backlog/1.131.0> , <http://example.org/backlog/1.130.0> , <http://example.org/backlog/1.129.0> , <http://example.org/backlog/1.125.0> , <http://example.org/backlog/1.124.0> , <http://example.org/backlog/1.123.0> , <http://example.org/backlog/1.122.0> ;
+    owl:versionIRI <http://example.org/backlog/1.136.0> ;
+    owl:versionInfo "1.136.0" ;
+    owl:priorVersion <http://example.org/backlog/1.135.0> , <http://example.org/backlog/1.134.0> , <http://example.org/backlog/1.133.0> , <http://example.org/backlog/1.132.0> , <http://example.org/backlog/1.131.0> , <http://example.org/backlog/1.130.0> , <http://example.org/backlog/1.129.0> , <http://example.org/backlog/1.125.0> , <http://example.org/backlog/1.124.0> , <http://example.org/backlog/1.123.0> , <http://example.org/backlog/1.122.0> ;
     owl:priorVersion <http://example.org/backlog/1.121.0> , <http://example.org/backlog/1.120.0> , <http://example.org/backlog/1.119.0> , <http://example.org/backlog/1.118.0> , <http://example.org/backlog/1.117.0> ;
     owl:priorVersion <http://example.org/backlog/1.116.0> ;
     owl:priorVersion <http://example.org/backlog/1.115.0> ;
@@ -2709,6 +2709,7 @@ backlog:hasManifestSHA256 a owl:DatatypeProperty ;
     rdfs:domain backlog:RegisterArtifact ; rdfs:range xsd:string ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     owl:deprecated true ;
+    dcterms:isReplacedBy backlog:manifestDigestCarriedBy ;
     rdfs:comment "v1.88.0: no longer required of the manifest artifact, and never satisfiable as intended. The manifest covers the register; a digest of the manifest written into the register changes the register, hence the manifest, hence the digest -- no fixed point exists. A digest of a covered set lives OUTSIDE the set: see manifestDigestCarriedBy. Values already recorded (a historical digest, stated as such) stay as records."@en ;
     rdfs:label "has manifest SHA-256"@en ;
     skos:definition "The digest of the manifest file itself, so the thing that verifies everything else is verifiable in turn."@en .
@@ -4915,9 +4916,10 @@ backlog:CodeTable a owl:Class ;
 backlog:hasTableKind a owl:ObjectProperty , owl:FunctionalProperty ;
     rdfs:domain backlog:CodeTable ; rdfs:range backlog:TableKind ;
     rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "has table kind"@en .
-backlog:tableInModule a owl:DatatypeProperty , owl:FunctionalProperty ;
-    rdfs:domain backlog:CodeTable ; rdfs:range xsd:string ;
-    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "table in module"@en .
+backlog:tableInModule a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:CodeTable ; rdfs:range backlog:ToolScript ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "table in module"@en ;
+    skos:definition "The tool script the table lives in, as a link to it (v1.136.0, G134); before, the file name as text."@en .
 backlog:tableExported a owl:DatatypeProperty , owl:FunctionalProperty ;
     rdfs:domain backlog:CodeTable ; rdfs:range xsd:boolean ;
     rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "table exported"@en .
@@ -5115,6 +5117,7 @@ backlog:artifactResolved a owl:DatatypeProperty , owl:FunctionalProperty ;
 #################################################################
 
 backlog:hasExpectedPolarity a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:AdoptionProfile owl:Ontology ) ] ;
     rdfs:range backlog:FixturePolarity ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "has expected polarity"@en ;
@@ -5817,6 +5820,7 @@ backlog:declaresGapFor a owl:ObjectProperty , owl:FunctionalProperty ;
 
 backlog:outScopes a owl:ObjectProperty ;
     rdfs:domain backlog:PartialScopeDeclaration ;
+    rdfs:range [ a owl:Class ; owl:unionOf ( backlog:WorkItem backlog:WorkItemContainer ) ] ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "out-scopes"@en ;
     skos:definition "An unfinished work item or container of the declaration's own lineage that the owner removes from that lineage's scope before it closes. It keeps belongsToLineage (the lineage it was created during) and stops counting toward that lineage's completion and toward the state of any container it is a member of. The successor takes an out-scoped item in by admission (preLineageItem, admittedByOutput) and places it in packages of its own. A container keeps its finished members and closes; a container left with nothing finished is dissolved (ContainerDissolution), not carried (owner's ruling, 2026-09-24)."@en .
@@ -5946,6 +5950,7 @@ backlog:findingEvidence a owl:ObjectProperty ;
     skos:definition "The observed signal the finding rests on -- a defect from live use, a failed verification, a failed acceptance check. A suspicion is not evidence; it produces a validation task in a live lineage, whose result becomes the evidence."@en .
 
 backlog:addressesFinding a owl:ObjectProperty ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:WorkItem backlog:ChangeRequest backlog:LineageReactivation ) ] ;
     rdfs:range backlog:PostClosureFinding ;
     rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "addresses finding"@en ;
     skos:definition "Links the response to a post-closure finding: a maintenance work item or change request (isolated), or a reactivation (systemic). A bounded finding is resolved by a succession through resolvesGap."@en .
@@ -6493,17 +6498,18 @@ backlog:LineageArchiveEntry a owl:Class ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "Lineage Archive Entry"@en ;
     skos:definition "The live register's record that a lineage existed, was closed and has been retired whole into an archive file. Deliberately NOT a Lineage and not a Mission: no shape targeting either fires on it, which is what makes archiving remove cost rather than merely relabel it. It carries enough for a reader to find the work -- the archived lineage's IRI, ordinal, outcome, archive file, date and trigger -- and nothing a rule could ask a question of."@en .
-backlog:entryForLineage a owl:DatatypeProperty , owl:FunctionalProperty ;
-    rdfs:domain backlog:LineageArchiveEntry ; rdfs:range xsd:string ;
+backlog:entryForLineage a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:LineageArchiveEntry ; rdfs:range backlog:Lineage ;
     rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "entry for lineage"@en ;
-    skos:definition "The archived lineage's IRI, as a STRING. A string and not an IRI reference, because an IRI reference would make the archived lineage a node in the live graph again and shapes would find it -- the mistake this class exists to end."@en .
-backlog:entryForMission a owl:DatatypeProperty , owl:FunctionalProperty ;
-    rdfs:domain backlog:LineageArchiveEntry ; rdfs:range xsd:string ;
-    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "entry for mission"@en .
-backlog:entryOutcome a owl:DatatypeProperty , owl:FunctionalProperty ;
-    rdfs:domain backlog:LineageArchiveEntry ; rdfs:range xsd:string ;
+    skos:definition "The archived lineage, as a LINK (v1.136.0, G134: a connection is a link, never text). It was a string so that the live graph would not hold the archived lineage again; a link does not do that, because the archived lineage is typed only in the archive file and shapes find a lineage by its type, not by being named. The link is what lets a reader and a reasoner follow an entry to the lineage it records."@en .
+backlog:entryForMission a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:LineageArchiveEntry ; rdfs:range backlog:Mission ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "entry for mission"@en ;
+    skos:definition "The mission of the archived lineage, as a link (v1.136.0, G134). Absent where the lineage had none."@en .
+backlog:entryOutcome a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:LineageArchiveEntry ; rdfs:range backlog:MissionOutcome ;
     rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "entry outcome"@en ;
-    skos:definition "How the lineage ended, as recorded at archival: Out_Achieved, Out_Abandoned, or the mission's outcome as it stood."@en .
+    skos:definition "How the lineage ended, as recorded at archival, as a link to the mission outcome (v1.136.0, G134). Absent where the mission had recorded none; before v1.136.0 that case carried the text 'unrecorded'."@en .
 backlog:entryOrdinal a owl:DatatypeProperty , owl:FunctionalProperty ;
     rdfs:domain backlog:LineageArchiveEntry ; rdfs:range xsd:integer ;
     rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "entry ordinal"@en .
@@ -6556,10 +6562,10 @@ backlog:clearedUnderShapes a owl:DatatypeProperty , owl:FunctionalProperty ;
 backlog:clearedAt a owl:DatatypeProperty , owl:FunctionalProperty ;
     rdfs:domain backlog:ArchiveConformanceRecord ; rdfs:range xsd:dateTime ;
     rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "cleared at"@en .
-backlog:includesRetiredLineage a owl:DatatypeProperty ;
-    rdfs:domain backlog:ArchiveConformanceRecord ; rdfs:range xsd:string ;
+backlog:includesRetiredLineage a owl:ObjectProperty ;
+    rdfs:domain backlog:ArchiveConformanceRecord ; rdfs:range backlog:Lineage ;
     rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "includes retired lineage"@en ;
-    skos:definition "The IRI, as a string, of each lineage whose arrival this value covers. A lineage in the archive but not in this list has never been cleared, and the next check validates it."@en .
+    skos:definition "Each lineage, as a link (v1.136.0, G134), whose arrival this value covers. A lineage in the archive but not in this list has never been cleared, and the next check validates it."@en .
 
 backlog:obligationOfConcern a owl:ObjectProperty , owl:FunctionalProperty ;
     rdfs:domain backlog:StageObligation ; rdfs:range backlog:DesignConcern ;
@@ -6760,10 +6766,10 @@ backlog:SeverityPromotion a owl:Class ; rdfs:subClassOf backlog:BacklogConcept ;
 backlog:promotionInRuleSet a owl:ObjectProperty ; rdfs:domain backlog:SeverityPromotion ; rdfs:range backlog:RuleSet ;
     rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "promotion in rule set"@en ;
     skos:definition "The rule set under which this promotion applies."@en .
-backlog:promotesShape a owl:ObjectProperty ; rdfs:domain backlog:SeverityPromotion ;
+backlog:promotesShape a owl:ObjectProperty ; rdfs:domain backlog:SeverityPromotion ; rdfs:range <http://www.w3.org/ns/shacl#NodeShape> ;
     rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "promotes shape"@en ;
     skos:definition "The shape whose severity this promotion sets, a node shape in the package's shapes file."@en .
-backlog:promotedSeverity a owl:ObjectProperty ; rdfs:domain backlog:SeverityPromotion ;
+backlog:promotedSeverity a owl:ObjectProperty ; rdfs:domain backlog:SeverityPromotion ; rdfs:range <http://www.w3.org/ns/shacl#Severity> ;
     rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "promoted severity"@en ;
     skos:definition "The SHACL severity (sh:Violation, sh:Warning or sh:Info) the promoted shape has under the rule set."@en .
 backlog:promotionRationale a owl:DatatypeProperty ; rdfs:domain backlog:SeverityPromotion ; rdfs:range xsd:string ;
@@ -6792,7 +6798,11 @@ backlog:ModuleAudience a owl:Class ; rdfs:subClassOf backlog:BacklogConcept ;
     rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "module audience"@en ;
     skos:definition "Who may read a module of a data file: Aud_Public (it may be published) or Aud_Private (it is correspondence, an adopter's own material or a retired record, and a public copy leaves it out)."@en ;
     owl:oneOf ( backlog:Aud_Public backlog:Aud_Private ) .
+backlog:ModuleRecord a owl:Class ; rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "module record"@en ;
+    skos:definition "The record of one module of a data file: the node that says which ontology it is part of (dcterms:isPartOf) and who may read it (moduleAudience). Declared in v1.136.0 (G134) so that moduleAudience has a domain; the existing records are not retyped by that release."@en .
 backlog:moduleAudience a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:ModuleRecord ;
     rdfs:range backlog:ModuleAudience ;
     rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "module audience"@en ;
     skos:definition "The audience a module record declares for the statements between its banner and its END MODULE line. Required on every module record; the public copy is cut by it, and a derivation that cannot find a module declared private stops with an error."@en .
@@ -7217,6 +7227,7 @@ backlog:assemblesTeam a owl:ObjectProperty , owl:FunctionalProperty ;
 
 backlog:assembledFor a owl:ObjectProperty ;
     rdfs:domain backlog:TeamAssembly ;
+    rdfs:range [ a owl:Class ; owl:unionOf ( backlog:WorkItem backlog:Lineage ) ] ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "assembled for"@en ;
     skos:definition "The work item or lineage the team was built for."@en .
@@ -7329,3 +7340,27 @@ backlog:startEstimateBasis a owl:DatatypeProperty , owl:FunctionalProperty ;
 #################################################################
 # scopeRealizesObjective is marked deprecated and its definition says so (see the property). Nothing else in the vocabulary changes: the order
 # is stated by fillsScope alone, and the scope outcome, the scope shapes and the fit-gap read fillsScope only (shapes v1.174.0).
+
+#################################################################
+#  v1.136.0 (G134) -- relationships the definitions stated in text are links
+#################################################################
+backlog:successMirrorOf a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:SuccessMode ; rdfs:range backlog:FailureMode ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "success mirror of"@en ;
+    skos:definition "The failure mode this success mode is the positive mirror of: the same observable fact seen when it went right instead of wrong. Stated as a link because the definition of each success mode named its failure mode in text only."@en .
+backlog:horizonExpectsState a owl:ObjectProperty ;
+    rdfs:domain backlog:RoadmapHorizon ; rdfs:range backlog:LifecycleState ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "horizon expects state"@en ;
+    skos:definition "A lifecycle state in which an item placed in this horizon is expected to be. An expectation a reader can follow, not a constraint: the horizon's own definition said it in words."@en .
+backlog:initiativeLevelCounterpart a owl:ObjectProperty ;
+    rdfs:domain backlog:TaskType ; rdfs:range backlog:InitiativeKind ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "initiative-level counterpart"@en ;
+    skos:definition "The initiative kind that a task type is the task-level counterpart of: the same kind of work seen at the level of a single task instead of a whole initiative."@en .
+backlog:concernsStage a owl:ObjectProperty ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:RuleSet backlog:RecoveryStrategy backlog:FailureMode ) ] ; rdfs:range backlog:LineageStage ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "concerns stage"@en ;
+    skos:definition "The lineage stage a rule set changes the requirements of, a recovery strategy rebuilds, or a failure mode is detected at. Stated as a link because the definition named the stage in text only."@en .
+backlog:readAgainstRegister a owl:ObjectProperty ;
+    rdfs:domain backlog:RemoteCommit ; rdfs:range backlog:Backlog ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "read against register"@en ;
+    skos:definition "The register whose sovereign path prefix (hasSovereignPathPrefix) the paths this commit touched are read against, to decide whether it needs reconciling. The definition of a remote commit said so in words; the register that carries the prefix is the thing it is read against."@en .

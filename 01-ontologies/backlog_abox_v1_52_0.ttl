@@ -22,9 +22,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (ABox: controlled individuals, reference data and the live register)"@en ;
-    owl:versionIRI <http://example.org/backlog/abox/1.51.0> ;
-    owl:versionInfo "1.51.0" ;
-    owl:priorVersion <http://example.org/backlog/abox/1.50.0> , <http://example.org/backlog/abox/1.49.0> , <http://example.org/backlog/abox/1.48.0> , <http://example.org/backlog/abox/1.47.0> , <http://example.org/backlog/abox/1.46.0> , <http://example.org/backlog/abox/1.45.0> , <http://example.org/backlog/abox/1.40.0> , <http://example.org/backlog/abox/1.39.0> , <http://example.org/backlog/abox/1.38.0> , <http://example.org/backlog/abox/1.37.0> , <http://example.org/backlog/abox/1.36.0> , <http://example.org/backlog/abox/1.35.0> ;
+    owl:versionIRI <http://example.org/backlog/abox/1.52.0> ;
+    owl:versionInfo "1.52.0" ;
+    owl:priorVersion <http://example.org/backlog/abox/1.51.0> , <http://example.org/backlog/abox/1.50.0> , <http://example.org/backlog/abox/1.49.0> , <http://example.org/backlog/abox/1.48.0> , <http://example.org/backlog/abox/1.47.0> , <http://example.org/backlog/abox/1.46.0> , <http://example.org/backlog/abox/1.45.0> , <http://example.org/backlog/abox/1.40.0> , <http://example.org/backlog/abox/1.39.0> , <http://example.org/backlog/abox/1.38.0> , <http://example.org/backlog/abox/1.37.0> , <http://example.org/backlog/abox/1.36.0> , <http://example.org/backlog/abox/1.35.0> ;
     owl:priorVersion <http://example.org/backlog/abox/1.34.0> , <http://example.org/backlog/abox/1.33.0> , <http://example.org/backlog/abox/1.32.0> , <http://example.org/backlog/abox/1.31.0> , <http://example.org/backlog/abox/1.30.0> , <http://example.org/backlog/abox/1.29.0> , <http://example.org/backlog/abox/1.28.0> , <http://example.org/backlog/abox/1.27.0> , <http://example.org/backlog/abox/1.26.0> , <http://example.org/backlog/abox/1.25.0> , <http://example.org/backlog/abox/1.24.0> , <http://example.org/backlog/abox/1.23.0> , <http://example.org/backlog/abox/1.22.0> , <http://example.org/backlog/abox/1.21.0> , <http://example.org/backlog/abox/1.20.0> , <http://example.org/backlog/abox/1.19.0> , <http://example.org/backlog/abox/1.17.0> , <http://example.org/backlog/abox/1.16.0> , <http://example.org/backlog/abox/1.15.0> , <http://example.org/backlog/abox/1.14.0> , <http://example.org/backlog/abox/1.13.0> , <http://example.org/backlog/abox/1.12.0> , <http://example.org/backlog/abox/1.11.0> , <http://example.org/backlog/abox/1.10.0> , <http://example.org/backlog/abox/1.9.0> , <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
         <http://example.org/backlog-abox/1.2.1> ,
                      <http://example.org/backlog-abox/1.2.0> ,
@@ -78,6 +78,7 @@ backlog:Suspended a owl:NamedIndividual , backlog:LifecycleState , backlog:Optio
     skos:definition "Work that had started and was deliberately paused, to be resumed or withdrawn. Distinct from an impediment (something outside the work stands in the way) and from Ready (work that has not started): a suspended item keeps its start point, and the pause and its end are recorded moves like any other."@en .
 
 backlog:Now a owl:NamedIndividual , backlog:RoadmapHorizon ;
+    backlog:horizonExpectsState backlog:Ready , backlog:InProgress ;
     rdfs:label "Now"@en ;
     skos:definition "Committed and actively worked in the current increment; items here are expected to be Ready or InProgress."@en .
 
@@ -345,11 +346,13 @@ backlog:FM_ScopeGap a owl:NamedIndividual , backlog:FailureMode ;
     skos:definition "The scope names a real deliverable or exclusion boundary and no work item in the register traces back to it at all — the declared boundary is wider than the actual backlog, the reverse failure of scope creep." .
 
 backlog:SM_ConfirmedMovement a owl:NamedIndividual , backlog:SuccessMode ;
+    backlog:successMirrorOf backlog:FM_IneffectiveCorrectiveAction ;
     rdfs:label "Confirmed movement"@en ;
     backlog:hasModeScope backlog:Scope_Methodology ;
     skos:definition "The positive mirror of FM_IneffectiveCorrectiveAction: a work item asserted via metricMovableBy reached Done, and the objective's own observation afterward genuinely moved toward target relative to before it started. A real, checkable confirmation that a specific approach worked, worth recording as a pattern rather than only as a passing metric." .
 
 backlog:SM_ExplicitScopeAdmission a owl:NamedIndividual , backlog:SuccessMode ;
+    backlog:successMirrorOf backlog:FM_ScopeCreep ;
     rdfs:label "Explicit scope admission"@en ;
     backlog:hasModeScope backlog:Scope_Methodology ;
     skos:definition "New work that fell outside the mission's own original scope was brought in through a real, recorded ScopeChange rather than silently absorbed — the mirror of FM_ScopeCreep, confirming the boundary was kept honest rather than merely not yet violated." .
@@ -650,6 +653,7 @@ backlog:Task_Operation a owl:NamedIndividual , backlog:TaskType ;
     dcterms:source "ISO/IEC/IEEE 12207:2017, clause 6.4.12 Operation process. Clause number confirmed via web search of secondary sources, not against the primary paywalled standard text; needs final confirmation by a holder of standard's-body access."@en .
 
 backlog:Task_MaintenanceTask a owl:NamedIndividual , backlog:TaskType ;
+    backlog:initiativeLevelCounterpart backlog:Kind_Maintenance ;
     rdfs:label "Maintenance"@en ;
     skos:definition "6.4.13. Sustains the delivered capability. The task-level counterpart of Kind_Maintenance at initiative level."@en ;
     dcterms:source "ISO/IEC/IEEE 12207:2017, clause 6.4.13 Maintenance process. Clause number confirmed via web search of secondary sources, not against the primary paywalled standard text; needs final confirmation by a holder of standard's-body access."@en .
@@ -855,6 +859,7 @@ backlog:Meas_Judged a owl:NamedIndividual , backlog:MeasurementKind ;
     skos:definition "A person decided. Legitimate, and the weakest of the three: it cannot be reproduced, only agreed with or disputed."@en .
 
 backlog:Dir_Hold a owl:NamedIndividual , backlog:MetricDirection ;
+    owl:differentFrom backlog:Dir_Decrease ;
     rdfs:label "Hold"@en ;
     skos:definition "The value must not move from its baseline. Used by an inverse goal, whose objective is a ceiling rather than a trajectory: the count of things that should not happen must stay where it is. Distinct from Dir_Decrease with a target already reached, which claims an improvement that never occurred."@en .
 
@@ -1066,6 +1071,7 @@ backlog:Snapshot_Baseline a owl:NamedIndividual , backlog:ShapeSnapshot ;
     rdfs:label "Baseline"@en ; skos:definition "The last genuinely published shapes file, compared against."@en .
 
 backlog:FM_LineageBypass a owl:NamedIndividual , backlog:FailureMode ;
+    backlog:concernsStage backlog:Stage_Backlog ;
     rdfs:label "Lineage bypass"@en ;
     backlog:hasModeScope backlog:Scope_Methodology ;
     skos:definition "Work items of a lineage first appear in the governed repository before the lineage's own Stage_Backlog output does (or stage outputs appear out of pipeline order), so the chain that claims to have produced the work was written after it. Confirmed by git first-appearance commits, never by the register's own dates, which the author controls. Distinct from the single-commit case, where order is merely unwitnessed."@en .
@@ -1115,6 +1121,7 @@ backlog:Strat_VariableDecrease a owl:NamedIndividual , backlog:RecoveryStrategy 
     skos:definition "Each trial records the fraction it reduced (reductionObserved); the trial after it must reduce by no less. The reduction is the lineage's own measurement, and a shrinking reduction is the stop -- the same rule IneffectiveCorrectiveAttemptAdvisoryShape applies to objectives."@en .
 
 backlog:Strat_DivideAndConquer a owl:NamedIndividual , backlog:RecoveryStrategy ;
+    backlog:concernsStage backlog:Stage_Backlog ;
     rdfs:label "Divide and conquer"@en ;
     skos:definition "The bypassed lineage is partitioned into part lineages (parentLineage), one per scope deliverable its items satisfy; each part is rebuilt and converges on its own, a thrash freezes only its part, and the parent's rebuilt Stage_Backlog output combines (combinesOutput) every part's active Stage_Backlog output. Right for a lineage too large to restart as one."@en .
 
@@ -1185,6 +1192,7 @@ backlog:RS_SeverityAudit_20260909 a owl:NamedIndividual , backlog:RuleSet ;
     skos:definition "The audit recorded in 04-documentation/SEVERITY_AUDIT_2026_09_09_v1_2_0.md (amended 2026-09-24, and 2026-09-28 to grade an unmet advisory obligation apart from a waived required one, under the owner's criterion -- non-compliance is a Violation, a probability is a Warning -- so that its table and the applied overlay agree): the advisories that state a broken lineage rule become sh:Violation, the opportunities sh:Info, and the risks remain sh:Warning. Shipped as the highest 02-shacl-safeguards/backlog_shacl_promoted_v*.ttl, regenerated from the base shapes by 03-tooling/backlog_make_promoted_shapes and refused by the release gate when stale. NOT adopted by this register at v1.248.0: lineage 9 is in progress."@en .
 
 backlog:RS_DigestTable_v2 a owl:NamedIndividual , backlog:RuleSet ;
+    backlog:concernsStage backlog:Stage_Backlog ;
     rdfs:label "Stage digest table v2 (item granularities complete)"@en ;
     skos:definition "Adds Feature, Defect, Enabler, Spike and Task to Stage_Backlog's stageRequiresType. SCAMPS measured the consequence of their absence: a register whose 25 items are all Features had a Backlog-stage digest identical to its Objective-stage digest, so an item added to a closed Backlog stage could not be detected -- the only thing the pipeline verifier exists for. Shipped as a RULE SET and not applied on adoption day, because changing the table changes every recorded digest: a register adopts it and re-records its stage digests as a stated migration, never silently (G91)."@en .
 
@@ -2848,107 +2856,107 @@ fw:QM_InheritanceRichness a backlog:QualityMetric ;
 #  regex over capitalised names.
 #################################################################
 fw:Tbl_SCAN_coverage_gate a backlog:CodeTable ;
-    backlog:tableInModule "backlog_coverage_gate_v1_1_1.py" ;
+    backlog:tableInModule fw:TS_backlog_coverage_gateV1_1_1 ;
     backlog:hasTableKind backlog:Table_Operational ;
     backlog:tableExported false .
 fw:Tbl_PUBLIC_ONLY_distribution_drift_c a backlog:CodeTable ;
-    backlog:tableInModule "backlog_distribution_drift_check_v1_0_0.py" ;
+    backlog:tableInModule fw:TS_backlog_distribution_drift_checkV1_0_0 ;
     backlog:hasTableKind backlog:Table_Operational ;
     backlog:tableExported false .
 fw:Tbl_VOLATILE_distribution_drift_c a backlog:CodeTable ;
-    backlog:tableInModule "backlog_distribution_drift_check_v1_0_0.py" ;
+    backlog:tableInModule fw:TS_backlog_distribution_drift_checkV1_0_0 ;
     backlog:hasTableKind backlog:Table_Operational ;
     backlog:tableExported false .
 fw:Tbl_KINDS_evidence_bridge a backlog:CodeTable ;
-    backlog:tableInModule "backlog_evidence_bridge_v1_1_0.py" ;
+    backlog:tableInModule fw:TS_backlog_evidence_bridgeV1_1_0 ;
     backlog:hasTableKind backlog:Table_Classification ;
     backlog:tableExported true .
 fw:Tbl_BUILD_ARTIFACTS_manifest_coverage a backlog:CodeTable ;
-    backlog:tableInModule "backlog_manifest_coverage_v1_0_0.py" ;
+    backlog:tableInModule fw:TS_backlog_manifest_coverageV1_0_0 ;
     backlog:hasTableKind backlog:Table_Operational ;
     backlog:tableExported false .
 fw:Tbl_67ab5852373912fd841885908f9fc89257e3fba3b71c237463a69142fcd0818aS_package_check a backlog:CodeTable ;
-    backlog:tableInModule "backlog_package_check_v1_0_0.py" ;
+    backlog:tableInModule fw:TS_backlog_package_checkV1_0_0 ;
     backlog:hasTableKind backlog:Table_Operational ;
     backlog:tableExported false .
 fw:Tbl_STAGE_TYPES_pipeline a backlog:CodeTable ;
-    backlog:tableInModule "backlog_pipeline_verify_v1_0_0.py" ;
+    backlog:tableInModule fw:TS_backlog_pipeline_verifyV1_0_0 ;
     backlog:hasTableKind backlog:Table_Classification ;
     backlog:tableExported true .
 fw:Tbl_ORDER_pipeline a backlog:CodeTable ;
-    backlog:tableInModule "backlog_pipeline_verify_v1_0_0.py" ;
+    backlog:tableInModule fw:TS_backlog_pipeline_verifyV1_0_0 ;
     backlog:hasTableKind backlog:Table_Classification ;
     backlog:tableExported true .
 fw:Tbl_FOREIGN_registration_readine a backlog:CodeTable ;
-    backlog:tableInModule "backlog_registration_readiness_v1_2_0.py" ;
+    backlog:tableInModule fw:TS_backlog_registration_readinessV1_2_0 ;
     backlog:hasTableKind backlog:Table_Classification ;
     backlog:tableExported true .
 fw:Tbl_DECLARED_PROPOSALS_registration_readine a backlog:CodeTable ;
-    backlog:tableInModule "backlog_registration_readiness_v1_2_0.py" ;
+    backlog:tableInModule fw:TS_backlog_registration_readinessV1_2_0 ;
     backlog:hasTableKind backlog:Table_Classification ;
     backlog:tableExported true .
 fw:Tbl_SUITES_registration_readine a backlog:CodeTable ;
-    backlog:tableInModule "backlog_registration_readiness_v1_2_0.py" ;
+    backlog:tableInModule fw:TS_backlog_registration_readinessV1_2_0 ;
     backlog:hasTableKind backlog:Table_Classification ;
     backlog:tableExported true .
 fw:Tbl_SPEC_remediate_l4 a backlog:CodeTable ;
-    backlog:tableInModule "backlog_remediate_l4_v1_0_0.py" ;
+    backlog:tableInModule fw:TS_backlog_remediate_l4V1_0_0 ;
     backlog:hasTableKind backlog:Table_Operational ;
     backlog:tableExported false .
 fw:Tbl_GENERATED_repoint a backlog:CodeTable ;
-    backlog:tableInModule "backlog_repoint_v1_1_0.py" ;
+    backlog:tableInModule fw:TS_backlog_repointV1_1_0 ;
     backlog:hasTableKind backlog:Table_Operational ;
     backlog:tableExported false .
 fw:Tbl_HISTORICAL_repoint a backlog:CodeTable ;
-    backlog:tableInModule "backlog_repoint_v1_1_0.py" ;
+    backlog:tableInModule fw:TS_backlog_repointV1_1_0 ;
     backlog:hasTableKind backlog:Table_Operational ;
     backlog:tableExported false .
 fw:Tbl_HISTORICAL_DIRS_repoint a backlog:CodeTable ;
-    backlog:tableInModule "backlog_repoint_v1_1_0.py" ;
+    backlog:tableInModule fw:TS_backlog_repointV1_1_0 ;
     backlog:hasTableKind backlog:Table_Operational ;
     backlog:tableExported false .
 fw:Tbl_HISTORICAL_DIR_GLOBS_repoint a backlog:CodeTable ;
-    backlog:tableInModule "backlog_repoint_v1_1_0.py" ;
+    backlog:tableInModule fw:TS_backlog_repointV1_1_0 ;
     backlog:hasTableKind backlog:Table_Operational ;
     backlog:tableExported false .
 fw:Tbl_SKIP_DIRS_repoint a backlog:CodeTable ;
-    backlog:tableInModule "backlog_repoint_v1_1_0.py" ;
+    backlog:tableInModule fw:TS_backlog_repointV1_1_0 ;
     backlog:hasTableKind backlog:Table_Operational ;
     backlog:tableExported false .
 fw:Tbl_CONTAINER_TYPES_roadmap_report a backlog:CodeTable ;
-    backlog:tableInModule "backlog_roadmap_report_v1_6_0.py" ;
+    backlog:tableInModule fw:TS_backlog_roadmap_reportV1_6_0 ;
     backlog:hasTableKind backlog:Table_Classification ;
     backlog:tableExported true .
 fw:Tbl_SECTIONS_roadmap_report a backlog:CodeTable ;
-    backlog:tableInModule "backlog_roadmap_report_v1_6_0.py" ;
+    backlog:tableInModule fw:TS_backlog_roadmap_reportV1_6_0 ;
     backlog:hasTableKind backlog:Table_Classification ;
     backlog:tableExported true .
 fw:Tbl_PATTERNS_script_decision_audi a backlog:CodeTable ;
-    backlog:tableInModule "backlog_script_decision_audit_v1_0_0.py" ;
+    backlog:tableInModule fw:TS_backlog_script_decision_auditV1_0_0 ;
     backlog:hasTableKind backlog:Table_Operational ;
     backlog:tableExported false .
 fw:Tbl_EXEMPT_build_manifest a backlog:CodeTable ;
-    backlog:tableInModule "build_manifest_v1_4_0.py" ;
+    backlog:tableInModule fw:TS_build_manifestV1_4_0 ;
     backlog:hasTableKind backlog:Table_Operational ;
     backlog:tableExported false .
 fw:Tbl_DROP_DIRS_make_public_distribu a backlog:CodeTable ;
-    backlog:tableInModule "make_public_distribution_v1_2_0.py" ;
+    backlog:tableInModule fw:TS_make_public_distributionV1_2_0 ;
     backlog:hasTableKind backlog:Table_Operational ;
     backlog:tableExported false .
 fw:Tbl_DROP_FILES_make_public_distribu a backlog:CodeTable ;
-    backlog:tableInModule "make_public_distribution_v1_2_0.py" ;
+    backlog:tableInModule fw:TS_make_public_distributionV1_2_0 ;
     backlog:hasTableKind backlog:Table_Operational ;
     backlog:tableExported false .
 fw:Tbl_SUBSTITUTIONS_make_public_distribu a backlog:CodeTable ;
-    backlog:tableInModule "make_public_distribution_v1_2_0.py" ;
+    backlog:tableInModule fw:TS_make_public_distributionV1_2_0 ;
     backlog:hasTableKind backlog:Table_Operational ;
     backlog:tableExported false .
 fw:Tbl_DAMAGE_make_public_distribu a backlog:CodeTable ;
-    backlog:tableInModule "make_public_distribution_v1_2_0.py" ;
+    backlog:tableInModule fw:TS_make_public_distributionV1_2_0 ;
     backlog:hasTableKind backlog:Table_Operational ;
     backlog:tableExported false .
 fw:Tbl_TEXT_EXT_make_public_distribu a backlog:CodeTable ;
-    backlog:tableInModule "make_public_distribution_v1_2_0.py" ;
+    backlog:tableInModule fw:TS_make_public_distributionV1_2_0 ;
     backlog:hasTableKind backlog:Table_Operational ;
     backlog:tableExported false .
 
@@ -4917,20 +4925,20 @@ fw:ArchiveConformance_130 a backlog:ArchiveConformanceRecord ;
     backlog:clearedUnderShapes "seeded from the release record; each lineage was gated under the shapes of its own day" ;
     backlog:clearedAt "2026-09-15T15:18:48Z"^^xsd:dateTime ;
     backlog:hasRationale "Owner's own direct question, 2026-09-15: why are archived lineages subject to current-day shapes? Checked against this tool's own design: backlog_archive_conformance_v1_0_0.py's --seed mode exists exactly for this, grounded in G89/G91 (never apply a ruling retroactively), and had never been run -- every archived lineage, old and new, was being validated as a fresh arrival every gate run, producing 277 false findings, almost entirely artefacts of judging old work under shapes it predates. Seeded once: each of the 14 lineages in the archive (the 13 retired before this session, and L_SDLCObligations, closed this session under the current shapes) is recorded as cleared by the release that closed it, not re-validated against today's rules. Confirmed CONFORMANT after seeding." ;
-    backlog:includesRetiredLineage "http://example.org/backlog-framework-register#L7_Code" ,
-        "http://example.org/backlog-framework-register#L7_Exec" ,
-        "http://example.org/backlog-framework-register#L7_Export" ,
-        "http://example.org/backlog-framework-register#L7_Gov" ,
-        "http://example.org/backlog-framework-register#L7_Prose" ,
-        "http://example.org/backlog-framework-register#L_Build" ,
-        "http://example.org/backlog-framework-register#L_ChangeDiscipline" ,
-        "http://example.org/backlog-framework-register#L_Dev" ,
-        "http://example.org/backlog-framework-register#L_Executable" ,
-        "http://example.org/backlog-framework-register#L_OntologyDriven" ,
-        "http://example.org/backlog-framework-register#L_Ops" ,
-        "http://example.org/backlog-framework-register#L_OrderRepair" ,
-        "http://example.org/backlog-framework-register#L_Plan" ,
-        "http://example.org/backlog-framework-register#L_SDLCObligations" .
+    backlog:includesRetiredLineage fw:L7_Code ,
+        fw:L7_Exec ,
+        fw:L7_Export ,
+        fw:L7_Gov ,
+        fw:L7_Prose ,
+        fw:L_Build ,
+        fw:L_ChangeDiscipline ,
+        fw:L_Dev ,
+        fw:L_Executable ,
+        fw:L_OntologyDriven ,
+        fw:L_Ops ,
+        fw:L_OrderRepair ,
+        fw:L_Plan ,
+        fw:L_SDLCObligations .
 fw:Register a backlog:Backlog ;
     backlog:hasSovereignPathPrefix "backlog-roadmap-framework/" ;
     backlog:hasIdentifier "BRF-REG" ;
@@ -4987,105 +4995,100 @@ fw:Register backlog:isRegisterRoot true .
 #  can reach retired work. The register root is untouched (isRegisterRoot).
 #################################################################
 fw:ArchiveEntry_L7_Code a backlog:LineageArchiveEntry ;
-    backlog:entryForLineage "http://example.org/backlog-framework-register#L7_Code" ;
-    backlog:entryForMission "http://example.org/backlog-framework-register#Mission_OntologyDriven" ;
-    backlog:entryOutcome "Out_Achieved" ;
+    backlog:entryForLineage fw:L7_Code ;
+    backlog:entryForMission fw:Mission_OntologyDriven ;
+    backlog:entryOutcome backlog:Out_Achieved ;
     backlog:entryOrdinal 13 ;
     backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_14_0.ttl" ;
     backlog:archivedAt "2026-09-10T12:00:00Z"^^xsd:dateTime ;
     backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0 (G92): the Lineage and Mission statements this register still carried were moved to the archive with everything else the lineage owns. Previously they stayed live and were validated on every run -- the cost archiving exists to remove." .
 fw:ArchiveEntry_L7_Exec a backlog:LineageArchiveEntry ;
-    backlog:entryForLineage "http://example.org/backlog-framework-register#L7_Exec" ;
-    backlog:entryForMission "http://example.org/backlog-framework-register#Mission_OntologyDriven" ;
-    backlog:entryOutcome "Out_Achieved" ;
+    backlog:entryForLineage fw:L7_Exec ;
+    backlog:entryForMission fw:Mission_OntologyDriven ;
+    backlog:entryOutcome backlog:Out_Achieved ;
     backlog:entryOrdinal 10 ;
     backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_14_0.ttl" ;
     backlog:archivedAt "2026-09-10T12:00:00Z"^^xsd:dateTime ;
     backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0 (G92): the Lineage and Mission statements this register still carried were moved to the archive with everything else the lineage owns. Previously they stayed live and were validated on every run -- the cost archiving exists to remove." .
 fw:ArchiveEntry_L7_Export a backlog:LineageArchiveEntry ;
-    backlog:entryForLineage "http://example.org/backlog-framework-register#L7_Export" ;
-    backlog:entryForMission "http://example.org/backlog-framework-register#Mission_OntologyDriven" ;
-    backlog:entryOutcome "Out_Achieved" ;
+    backlog:entryForLineage fw:L7_Export ;
+    backlog:entryForMission fw:Mission_OntologyDriven ;
+    backlog:entryOutcome backlog:Out_Achieved ;
     backlog:entryOrdinal 11 ;
     backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_14_0.ttl" ;
     backlog:archivedAt "2026-09-10T12:00:00Z"^^xsd:dateTime ;
     backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0 (G92): the Lineage and Mission statements this register still carried were moved to the archive with everything else the lineage owns. Previously they stayed live and were validated on every run -- the cost archiving exists to remove." .
 fw:ArchiveEntry_L7_Gov a backlog:LineageArchiveEntry ;
-    backlog:entryForLineage "http://example.org/backlog-framework-register#L7_Gov" ;
-    backlog:entryForMission "http://example.org/backlog-framework-register#Mission_OntologyDriven" ;
-    backlog:entryOutcome "Out_Achieved" ;
+    backlog:entryForLineage fw:L7_Gov ;
+    backlog:entryForMission fw:Mission_OntologyDriven ;
+    backlog:entryOutcome backlog:Out_Achieved ;
     backlog:entryOrdinal 9 ;
     backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_14_0.ttl" ;
     backlog:archivedAt "2026-09-10T12:00:00Z"^^xsd:dateTime ;
     backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0 (G92): the Lineage and Mission statements this register still carried were moved to the archive with everything else the lineage owns. Previously they stayed live and were validated on every run -- the cost archiving exists to remove." .
 fw:ArchiveEntry_L7_Prose a backlog:LineageArchiveEntry ;
-    backlog:entryForLineage "http://example.org/backlog-framework-register#L7_Prose" ;
-    backlog:entryForMission "http://example.org/backlog-framework-register#Mission_OntologyDriven" ;
-    backlog:entryOutcome "Out_Achieved" ;
+    backlog:entryForLineage fw:L7_Prose ;
+    backlog:entryForMission fw:Mission_OntologyDriven ;
+    backlog:entryOutcome backlog:Out_Achieved ;
     backlog:entryOrdinal 12 ;
     backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_14_0.ttl" ;
     backlog:archivedAt "2026-09-10T12:00:00Z"^^xsd:dateTime ;
     backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0 (G92): the Lineage and Mission statements this register still carried were moved to the archive with everything else the lineage owns. Previously they stayed live and were validated on every run -- the cost archiving exists to remove." .
 fw:ArchiveEntry_L_Build a backlog:LineageArchiveEntry ;
-    backlog:entryForLineage "http://example.org/backlog-framework-register#L_Build" ;
-    backlog:entryForMission "http://example.org/backlog-framework-register#Mission_BuildSoftware_v2" ;
-    backlog:entryOutcome "Out_Achieved" ;
+    backlog:entryForLineage fw:L_Build ;
+    backlog:entryForMission fw:Mission_BuildSoftware_v2 ;
+    backlog:entryOutcome backlog:Out_Achieved ;
     backlog:entryOrdinal 6 ;
     backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_14_0.ttl" ;
     backlog:archivedAt "2026-09-10T12:00:00Z"^^xsd:dateTime ;
     backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0 (G92): the Lineage and Mission statements this register still carried were moved to the archive with everything else the lineage owns. Previously they stayed live and were validated on every run -- the cost archiving exists to remove." .
 fw:ArchiveEntry_L_ChangeDiscipline a backlog:LineageArchiveEntry ;
-    backlog:entryForLineage "http://example.org/backlog-framework-register#L_ChangeDiscipline" ;
-    backlog:entryForMission "http://example.org/backlog-framework-register#Mission_ChangeDiscipline" ;
-    backlog:entryOutcome "Out_Achieved" ;
+    backlog:entryForLineage fw:L_ChangeDiscipline ;
+    backlog:entryForMission fw:Mission_ChangeDiscipline ;
+    backlog:entryOutcome backlog:Out_Achieved ;
     backlog:entryOrdinal 8 ;
     backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_14_0.ttl" ;
     backlog:archivedAt "2026-09-10T12:00:00Z"^^xsd:dateTime ;
     backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0 (G92): the Lineage and Mission statements this register still carried were moved to the archive with everything else the lineage owns. Previously they stayed live and were validated on every run -- the cost archiving exists to remove." .
 fw:ArchiveEntry_L_Dev a backlog:LineageArchiveEntry ;
-    backlog:entryForLineage "http://example.org/backlog-framework-register#L_Dev" ;
-    backlog:entryForMission "http://example.org/backlog-framework-register#Mission_Dev" ;
-    backlog:entryOutcome "unrecorded" ;
+    backlog:entryForLineage fw:L_Dev ;
+    backlog:entryForMission fw:Mission_Dev ;
     backlog:entryOrdinal 5 ;
     backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_14_0.ttl" ;
     backlog:archivedAt "2026-09-10T12:00:00Z"^^xsd:dateTime ;
     backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0 (G92): the Lineage and Mission statements this register still carried were moved to the archive with everything else the lineage owns. Previously they stayed live and were validated on every run -- the cost archiving exists to remove." .
 fw:ArchiveEntry_L_Executable a backlog:LineageArchiveEntry ;
-    backlog:entryForLineage "http://example.org/backlog-framework-register#L_Executable" ;
-    backlog:entryForMission "http://example.org/backlog-framework-register#Mission_Executable" ;
-    backlog:entryOutcome "unrecorded" ;
+    backlog:entryForLineage fw:L_Executable ;
+    backlog:entryForMission fw:Mission_Executable ;
     backlog:entryOrdinal 3 ;
     backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_14_0.ttl" ;
     backlog:archivedAt "2026-09-10T12:00:00Z"^^xsd:dateTime ;
     backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0 (G92): the Lineage and Mission statements this register still carried were moved to the archive with everything else the lineage owns. Previously they stayed live and were validated on every run -- the cost archiving exists to remove." .
 fw:ArchiveEntry_L_OntologyDriven a backlog:LineageArchiveEntry ;
-    backlog:entryForLineage "http://example.org/backlog-framework-register#L_OntologyDriven" ;
-    backlog:entryForMission "http://example.org/backlog-framework-register#Mission_OntologyDriven" ;
-    backlog:entryOutcome "Out_Achieved" ;
+    backlog:entryForLineage fw:L_OntologyDriven ;
+    backlog:entryForMission fw:Mission_OntologyDriven ;
+    backlog:entryOutcome backlog:Out_Achieved ;
     backlog:entryOrdinal 7 ;
     backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_14_0.ttl" ;
     backlog:archivedAt "2026-09-10T12:00:00Z"^^xsd:dateTime ;
     backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0 (G92): the Lineage and Mission statements this register still carried were moved to the archive with everything else the lineage owns. Previously they stayed live and were validated on every run -- the cost archiving exists to remove." .
 fw:ArchiveEntry_L_Ops a backlog:LineageArchiveEntry ;
-    backlog:entryForLineage "http://example.org/backlog-framework-register#L_Ops" ;
-    backlog:entryForMission "http://example.org/backlog-framework-register#Mission_Ops" ;
-    backlog:entryOutcome "unrecorded" ;
+    backlog:entryForLineage fw:L_Ops ;
+    backlog:entryForMission fw:Mission_Ops ;
     backlog:entryOrdinal 4 ;
     backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_14_0.ttl" ;
     backlog:archivedAt "2026-09-10T12:00:00Z"^^xsd:dateTime ;
     backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0 (G92): the Lineage and Mission statements this register still carried were moved to the archive with everything else the lineage owns. Previously they stayed live and were validated on every run -- the cost archiving exists to remove." .
 fw:ArchiveEntry_L_OrderRepair a backlog:LineageArchiveEntry ;
-    backlog:entryForLineage "http://example.org/backlog-framework-register#L_OrderRepair" ;
-    backlog:entryForMission "http://example.org/backlog-framework-register#Mission_OrderRepair" ;
-    backlog:entryOutcome "unrecorded" ;
+    backlog:entryForLineage fw:L_OrderRepair ;
+    backlog:entryForMission fw:Mission_OrderRepair ;
     backlog:entryOrdinal 2 ;
     backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_14_0.ttl" ;
     backlog:archivedAt "2026-09-10T12:00:00Z"^^xsd:dateTime ;
     backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0 (G92): the Lineage and Mission statements this register still carried were moved to the archive with everything else the lineage owns. Previously they stayed live and were validated on every run -- the cost archiving exists to remove." .
 fw:ArchiveEntry_L_Plan a backlog:LineageArchiveEntry ;
-    backlog:entryForLineage "http://example.org/backlog-framework-register#L_Plan" ;
-    backlog:entryForMission "http://example.org/backlog-framework-register#Mission_Plan" ;
-    backlog:entryOutcome "unrecorded" ;
+    backlog:entryForLineage fw:L_Plan ;
+    backlog:entryForMission fw:Mission_Plan ;
     backlog:entryOrdinal 1 ;
     backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_14_0.ttl" ;
     backlog:archivedAt "2026-09-10T12:00:00Z"^^xsd:dateTime ;
@@ -5117,19 +5120,19 @@ fw:ArchiveConformance_120 a backlog:ArchiveConformanceRecord ;
     backlog:hasArchiveDigest "a732a801947be84c4a3e27146e242d60049b7f3b2391fa752ccd346f306583c5" ;
     backlog:clearedUnderShapes "seeded from the release record; each lineage was gated under the shapes of its own day" ;
     backlog:clearedAt "2026-09-10T15:00:00Z"^^xsd:dateTime ;
-    backlog:includesRetiredLineage "http://example.org/backlog-framework-register#L7_Code" ,
-        "http://example.org/backlog-framework-register#L7_Exec" ,
-        "http://example.org/backlog-framework-register#L7_Export" ,
-        "http://example.org/backlog-framework-register#L7_Gov" ,
-        "http://example.org/backlog-framework-register#L7_Prose" ,
-        "http://example.org/backlog-framework-register#L_Build" ,
-        "http://example.org/backlog-framework-register#L_ChangeDiscipline" ,
-        "http://example.org/backlog-framework-register#L_Dev" ,
-        "http://example.org/backlog-framework-register#L_Executable" ,
-        "http://example.org/backlog-framework-register#L_OntologyDriven" ,
-        "http://example.org/backlog-framework-register#L_Ops" ,
-        "http://example.org/backlog-framework-register#L_OrderRepair" ,
-        "http://example.org/backlog-framework-register#L_Plan" .
+    backlog:includesRetiredLineage fw:L7_Code ,
+        fw:L7_Exec ,
+        fw:L7_Export ,
+        fw:L7_Gov ,
+        fw:L7_Prose ,
+        fw:L_Build ,
+        fw:L_ChangeDiscipline ,
+        fw:L_Dev ,
+        fw:L_Executable ,
+        fw:L_OntologyDriven ,
+        fw:L_Ops ,
+        fw:L_OrderRepair ,
+        fw:L_Plan .
 
 #################################################################
 #  v9.79.0 (2026-09-10, brsf-session) -- LINEAGE 9, PLANNING. The
@@ -5322,9 +5325,9 @@ fw:Register backlog:adoptsRuleSet backlog:RS_LineageStatus .
 # The record each retired lineage leaves in the live register: a LineageArchiveEntry, not a
 # Lineage -- no shape targeting Lineage, Mission or any stage element fires on retired work (G92).
 fw:ArchiveEntry_L_SDLCObligations a backlog:LineageArchiveEntry ;
-    backlog:entryForLineage "http://example.org/backlog-framework-register#L_SDLCObligations" ;
-    backlog:entryForMission "http://example.org/backlog-framework-register#Mission_SDLCObligations" ;
-    backlog:entryOutcome "Out_Achieved" ;
+    backlog:entryForLineage fw:L_SDLCObligations ;
+    backlog:entryForMission fw:Mission_SDLCObligations ;
+    backlog:entryOutcome backlog:Out_Achieved ;
     backlog:entryOrdinal 14 ;
     backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_14_0.ttl" ;
     backlog:archivedAt "2026-09-15T10:58:12Z"^^xsd:dateTime ;
@@ -5344,9 +5347,9 @@ fw:ArchiveEntry_L_SDLCObligations a backlog:LineageArchiveEntry ;
 # The record each retired lineage leaves in the live register: a LineageArchiveEntry, not a
 # Lineage -- no shape targeting Lineage, Mission or any stage element fires on retired work (G92).
 fw:ArchiveEntry_L_GovernanceContinuation a backlog:LineageArchiveEntry ;
-    backlog:entryForLineage "http://example.org/backlog-framework-register#L_GovernanceContinuation" ;
-    backlog:entryForMission "http://example.org/backlog-framework-register#Mission_GovernanceContinuation" ;
-    backlog:entryOutcome "Out_Achieved" ;
+    backlog:entryForLineage fw:L_GovernanceContinuation ;
+    backlog:entryForMission fw:Mission_GovernanceContinuation ;
+    backlog:entryOutcome backlog:Out_Achieved ;
     backlog:entryOrdinal 15 ;
     backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_14_0.ttl" ;
     backlog:archivedAt "2026-09-18T10:19:24Z"^^xsd:dateTime ;
@@ -5421,17 +5424,17 @@ fw:Ex_FixtureConsolidation_Reliability a backlog:ScopeExclusion ; rdfs:label "No
 # The record each retired lineage leaves in the live register: a LineageArchiveEntry, not a
 # Lineage -- no shape targeting Lineage, Mission or any stage element fires on retired work (G92).
 fw:ArchiveEntry_L_GateEfficiency a backlog:LineageArchiveEntry ;
-    backlog:entryForLineage "http://example.org/backlog-framework-register#L_GateEfficiency" ;
-    backlog:entryForMission "http://example.org/backlog-framework-register#M_GateEfficiency" ;
-    backlog:entryOutcome "Out_Achieved" ;
+    backlog:entryForLineage fw:L_GateEfficiency ;
+    backlog:entryForMission fw:M_GateEfficiency ;
+    backlog:entryOutcome backlog:Out_Achieved ;
     backlog:entryOrdinal 17 ;
     backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_14_0.ttl" ;
     backlog:archivedAt "2026-09-24T11:05:06Z"^^xsd:dateTime ;
     backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0: mission Out_Achieved, closure report present, every item Done or Cancelled, not frozen. Everything the lineage owned -- its Lineage individual, its Mission, its closure report, its stage outputs, findings and items -- moved to the archive file; this entry is the only thing that remains, and it is a record, not a lineage (G92)." .
 fw:ArchiveEntry_L_FixtureConsolidation a backlog:LineageArchiveEntry ;
-    backlog:entryForLineage "http://example.org/backlog-framework-register#L_FixtureConsolidation" ;
-    backlog:entryForMission "http://example.org/backlog-framework-register#M_FixtureConsolidation" ;
-    backlog:entryOutcome "Out_Achieved" ;
+    backlog:entryForLineage fw:L_FixtureConsolidation ;
+    backlog:entryForMission fw:M_FixtureConsolidation ;
+    backlog:entryOutcome backlog:Out_Achieved ;
     backlog:entryOrdinal 18 ;
     backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_14_0.ttl" ;
     backlog:archivedAt "2026-09-24T11:05:06Z"^^xsd:dateTime ;
@@ -5562,9 +5565,9 @@ fw:L_FixtureConsolidation backlog:lineageArchived true ; backlog:archiveFile "01
 # The record each retired lineage leaves in the live register: a LineageArchiveEntry, not a
 # Lineage -- no shape targeting Lineage, Mission or any stage element fires on retired work (G92).
 fw:ArchiveEntry_L_OEStructureCleanup a backlog:LineageArchiveEntry ;
-    backlog:entryForLineage "http://example.org/backlog-framework-register#L_OEStructureCleanup" ;
-    backlog:entryForMission "http://example.org/backlog-framework-register#Mission_OEStructureCleanup" ;
-    backlog:entryOutcome "Out_Abandoned" ;
+    backlog:entryForLineage fw:L_OEStructureCleanup ;
+    backlog:entryForMission fw:Mission_OEStructureCleanup ;
+    backlog:entryOutcome backlog:Out_Abandoned ;
     backlog:entryOrdinal 17 ;
     backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_14_0.ttl" ;
     backlog:archivedAt "2026-10-06T18:35:07Z"^^xsd:dateTime ;
@@ -5658,17 +5661,17 @@ fw:Find_ObjectiveOnExternalRegister a backlog:RetrospectiveFinding ;
 # The record each retired lineage leaves in the live register: a LineageArchiveEntry, not a
 # Lineage -- no shape targeting Lineage, Mission or any stage element fires on retired work (G92).
 fw:ArchiveEntry_L_OEPackageConsolidation a backlog:LineageArchiveEntry ;
-    backlog:entryForLineage "http://example.org/backlog-framework-register#L_OEPackageConsolidation" ;
-    backlog:entryForMission "http://example.org/backlog-framework-register#Mission_OEPackageConsolidation" ;
-    backlog:entryOutcome "Out_Achieved" ;
+    backlog:entryForLineage fw:L_OEPackageConsolidation ;
+    backlog:entryForMission fw:Mission_OEPackageConsolidation ;
+    backlog:entryOutcome backlog:Out_Achieved ;
     backlog:entryOrdinal 18 ;
     backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_14_0.ttl" ;
     backlog:archivedAt "2026-10-07T12:54:09Z"^^xsd:dateTime ;
     backlog:archivalTrigger "Retired whole by backlog_lineage_archive_v2_0_0: mission Out_Achieved, closure report present, every item Done or Cancelled, not frozen. Everything the lineage owned -- its Lineage individual, its Mission, its closure report, its stage outputs, findings and items -- moved to the archive file; this entry is the only thing that remains, and it is a record, not a lineage (G92)." .
 fw:ArchiveEntry_L_RecordsTellTruth a backlog:LineageArchiveEntry ;
-    backlog:entryForLineage "http://example.org/backlog-framework-register#L_RecordsTellTruth" ;
-    backlog:entryForMission "http://example.org/backlog-framework-register#Mission_RecordsTellTruth" ;
-    backlog:entryOutcome "Out_Achieved" ;
+    backlog:entryForLineage fw:L_RecordsTellTruth ;
+    backlog:entryForMission fw:Mission_RecordsTellTruth ;
+    backlog:entryOutcome backlog:Out_Achieved ;
     backlog:entryOrdinal 19 ;
     backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_14_0.ttl" ;
     backlog:archivedAt "2026-10-07T12:54:09Z"^^xsd:dateTime ;
@@ -5693,9 +5696,9 @@ fw:L_RecordsTellTruth backlog:lineageArchived true ; backlog:archiveFile "01-ont
 # The record each retired lineage leaves in the live register: a LineageArchiveEntry, not a
 # Lineage -- no shape targeting Lineage, Mission or any stage element fires on retired work (G92).
 fw:ArchiveEntry_L_GovernanceMitigations a backlog:LineageArchiveEntry ;
-    backlog:entryForLineage "http://example.org/backlog-framework-register#L_GovernanceMitigations" ;
-    backlog:entryForMission "http://example.org/backlog-framework-register#Mission_GovernanceMitigations" ;
-    backlog:entryOutcome "Out_Achieved" ;
+    backlog:entryForLineage fw:L_GovernanceMitigations ;
+    backlog:entryForMission fw:Mission_GovernanceMitigations ;
+    backlog:entryOutcome backlog:Out_Achieved ;
     backlog:entryOrdinal 16 ;
     backlog:archiveFile "01-ontologies/archive/backlog_framework_archive_abox_v1_14_0.ttl" ;
     backlog:archivedAt "2026-10-07T14:05:07Z"^^xsd:dateTime ;

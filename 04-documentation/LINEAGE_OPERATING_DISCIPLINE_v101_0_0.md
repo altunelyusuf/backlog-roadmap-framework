@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v100.0.0
+# Lineage Operating Discipline — v101.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -3695,3 +3695,22 @@ Related: G89, G131, and the entry of 2026-08-11 (v3.0.0, v3.1.0).
 
 **Not claimed.** The story with fifteen criteria and the second close of the Backlog stage were not run on a planted register here, and no rule of this package names a count of similar items; the choice of one story rests on the digest moving per story and on a satisfaction being kept per criterion. Whether the files must be repaired at all is the owner's decision in your register, not a ruling of this package.
 Related: G89, G125, G127, L-112.
+
+## G134 — A connection is a link, never text; the archive entry names what it records by links
+
+*(Opened by the owner, 2026-10-19: "Connections always links never text. Outward classes should have internal connections as well. Otherwise how do we know if they are useful for the BRSF at all?" Measured first with the missing-links check of the OE discipline: 17 high-trust text references and 7 properties without a domain or a range.)*
+
+**Q1 — what was text and is now a link.** `entryForLineage`, `entryForMission`, `entryOutcome`, `includesRetiredLineage` and `tableInModule` held IRIs or file names as strings. They are object properties now (T-Box v1.136.0) with the class they point at as range, and the data holds links (A-Box v1.52.0: 21 archive entries, 27 covered lineages, 26 code tables). An entry whose mission recorded no outcome has no `entryOutcome` (it carried the word "unrecorded"). The archive tool, the conformance record it prints and the reconcile tool read and write links.
+
+**Q2 — the reason the archive used strings (G92) and why it no longer stands.** A string was chosen so that the live graph would not hold the archived lineage again and shapes would not find it. A link does not do that: the archived lineage is typed only in the archive file, and shapes find a lineage by its type. Measured: the archive integrity check and the reconcile tool pass on the register with links; the release gate validates the register itself.
+
+**Q3 — the seven properties without a domain or a range** declare the class their own definition names (`outScopes` and `assembledFor` take a union, as `scheduledInHorizon` does; `hasExpectedPolarity` takes the adoption profile or the ontology's own node, which its definition says; the severity and the shape of a severity promotion point at the SHACL classes; `moduleAudience` has a new module record class as domain, whose existing records are not retyped).
+
+**Q4 — relationships the definitions stated in words** are links: a success mode to the failure mode it mirrors, a horizon to the states it expects, a task type to its initiative-level counterpart, a rule set, recovery strategy or failure mode to the stage it concerns, two directions that are distinct from each other, a retired property to the one that replaces it, and a remote commit to the register whose sovereign prefix its paths are read against. 8 candidates remain: negations such as "not claimed as part of it", names that resolve to a fixture's individual, and the reference to a ruling, which cannot be a link because the vocabulary must not point into the register (the vocabulary derivation refuses it). They are listed, not linked.
+
+**Q5 — who is bound (G89).** Nothing is refused that was not: three new shapes are Warnings (a text value where a link belongs). A register that wrote the text form is advised, not refused, and keeps the shapes it was opened under until it vendors these.
+
+**Proof.** `backlog_links_not_text_probe` v1.0.0 (the five are links with a range and resolve to their class; the seven declare their domain or range; the stated relationships are links; planted text draws a warning for each of the five and the same values as links draw none).
+
+**Not claimed.** The internal links of `MethodologyRule` and `ReleaseGate` are not made: the data states no relation that settles them (a rule's four individuals describe how container, milestone, ranking and blocker states are derived; a gate's command names a retired script version), so they wait for the owner's decision. `ModuleRecord` has no typed individuals yet. The archive of the other packages in this repository was not touched.
+Related: G89, G92, G132.

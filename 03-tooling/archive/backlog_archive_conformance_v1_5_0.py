@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# v1.5.0 (G134): the retired lineages the value covers are written as links, not as quoted IRIs.
 # v1.4.0 (Lineage 17, OESC-S04): follows the package's new layout -- one vocabulary, one data and one shapes file per subject. The register is in the data file; the rules are in the shapes file.
 """backlog_archive_conformance v1.3.0 -- progressive archive conformance.
 
@@ -156,7 +157,7 @@ def main():
     backlog:hasArchiveDigest "{dig}" ;
     backlog:clearedUnderShapes "{os.path.basename(sh_f) if not seed else 'seeded from the release record; each lineage was gated under the shapes of its own day'}" ;
     backlog:clearedAt "{now}"^^xsd:dateTime ;''')
-        print("    backlog:includesRetiredLineage " + " ,\n        ".join(f'"{x}"' for x in allo) + " .")
+        print("    backlog:includesRetiredLineage " + " ,\n        ".join(f'<{x}>' for x in allo) + " .")
 
     print("VERDICT     : " + ("CONFORMANT — the settled archive is unchanged and every arrival validates"
                               if bad == 0 else f"VIOLATION — {bad} on arriving lineage(s); they do not join the value"))

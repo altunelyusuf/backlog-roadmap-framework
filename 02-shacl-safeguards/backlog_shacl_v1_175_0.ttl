@@ -9,9 +9,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog/shacl/1.174.0> ;
-    owl:versionInfo "1.174.0" ;
-    owl:priorVersion <http://example.org/backlog-shapes/1.173.0> , <http://example.org/backlog-shapes/1.172.0> , <http://example.org/backlog-shapes/1.171.0> , <http://example.org/backlog-shapes/1.170.0> , <http://example.org/backlog-shapes/1.169.0> , <http://example.org/backlog-shapes/1.168.0> , <http://example.org/backlog-shapes/1.167.0> , <http://example.org/backlog-shapes/1.166.0> , <http://example.org/backlog-shapes/1.165.0> , <http://example.org/backlog-shapes/1.164.0> , <http://example.org/backlog-shapes/1.159.0> , <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
+    owl:versionIRI <http://example.org/backlog/shacl/1.175.0> ;
+    owl:versionInfo "1.175.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.174.0> , <http://example.org/backlog-shapes/1.173.0> , <http://example.org/backlog-shapes/1.172.0> , <http://example.org/backlog-shapes/1.171.0> , <http://example.org/backlog-shapes/1.170.0> , <http://example.org/backlog-shapes/1.169.0> , <http://example.org/backlog-shapes/1.168.0> , <http://example.org/backlog-shapes/1.167.0> , <http://example.org/backlog-shapes/1.166.0> , <http://example.org/backlog-shapes/1.165.0> , <http://example.org/backlog-shapes/1.164.0> , <http://example.org/backlog-shapes/1.159.0> , <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.154.0> , <http://example.org/backlog-shapes/1.153.0> , <http://example.org/backlog-shapes/1.152.0> , <http://example.org/backlog-shapes/1.151.0> , <http://example.org/backlog-shapes/1.150.0> , <http://example.org/backlog-shapes/1.149.0> , <http://example.org/backlog-shapes/1.148.0> , <http://example.org/backlog-shapes/1.147.0> , <http://example.org/backlog-shapes/1.146.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.145.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.144.0> ;
@@ -8642,3 +8642,32 @@ backlog:SupersededMissionInFlightShape a sh:NodeShape ;
             ?later backlog:supersedesMission $this .
             $this backlog:hasMissionOutcome backlog:Out_InFlight .
         }""" ] .
+
+#################################################################
+#  v1.175.0 (G134) -- a connection is a link, never text
+#################################################################
+# Warning, not Violation: a register that wrote the text form before this version is advised, not refused (G89). Each value is checked for being an IRI.
+backlog:ArchiveEntryLinksShape a sh:NodeShape ;
+    sh:targetClass backlog:LineageArchiveEntry ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: an archive entry names what it records by links (G134)"@en ;
+    sh:property [ sh:path backlog:entryForLineage ; sh:nodeKind sh:IRI ; sh:severity sh:Warning ;
+        sh:message "Advisory (G134): the lineage an entry records is named by a link, not by text. Write the lineage as an IRI." ] ;
+    sh:property [ sh:path backlog:entryForMission ; sh:nodeKind sh:IRI ; sh:severity sh:Warning ;
+        sh:message "Advisory (G134): the mission an entry records is named by a link, not by text." ] ;
+    sh:property [ sh:path backlog:entryOutcome ; sh:nodeKind sh:IRI ; sh:severity sh:Warning ;
+        sh:message "Advisory (G134): the outcome an entry records is a link to the mission outcome, not text; leave it out where none was recorded." ] .
+
+backlog:ArchiveConformanceLinksShape a sh:NodeShape ;
+    sh:targetClass backlog:ArchiveConformanceRecord ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: an archive conformance record names the lineages it covers by links (G134)"@en ;
+    sh:property [ sh:path backlog:includesRetiredLineage ; sh:nodeKind sh:IRI ; sh:severity sh:Warning ;
+        sh:message "Advisory (G134): each lineage a conformance record covers is named by a link, not by text." ] .
+
+backlog:CodeTableModuleLinkShape a sh:NodeShape ;
+    sh:targetClass backlog:CodeTable ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: a code table names its module by a link (G134)"@en ;
+    sh:property [ sh:path backlog:tableInModule ; sh:nodeKind sh:IRI ; sh:severity sh:Warning ;
+        sh:message "Advisory (G134): the tool script a code table lives in is named by a link to the tool script, not by its file name as text." ] .

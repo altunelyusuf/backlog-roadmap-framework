@@ -18,7 +18,7 @@ register is the highest live data file, the archive is the highest data file in 
 nothing derives a folder by substitution. The live rules never read the archive (G89, G91).
 
 Exit 0 reconcilable or applied, 2 violations keep some lineage pending, 3 the tool could not do its job.
-Usage: backlog_archive_reconcile_v3_0_1.py [--apply]
+Usage: backlog_archive_reconcile_v3_0_2.py [--apply]
 """
 import glob, importlib.util, os, re, sys
 
@@ -76,7 +76,7 @@ def main():
     reg = open(reg_path, encoding="utf-8").read(); arc = open(arc_path, encoding="utf-8").read()
     arc_rel = os.path.relpath(arc_path, PKG)
     print("register: %s\narchive : %s\nshapes  : %s" % (os.path.basename(reg_path), os.path.basename(arc_path), os.path.basename(shapes_path)))
-    entries = re.findall(r'backlog:entryForLineage\s+"[^"]*#(\w+)"\s*;.*?backlog:archiveFile\s+"([^"]+)"', reg, re.DOTALL)
+    entries = re.findall(r'backlog:entryForLineage\s+(?:fw:|<[^>]*#)(\w+)>?\s*;.*?backlog:archiveFile\s+"([^"]+)"', reg, re.DOTALL)
     to_pend, to_confirm, confirmed = [], [], []
     for name, f in entries:
         if os.path.basename(f) != os.path.basename(arc_path):
