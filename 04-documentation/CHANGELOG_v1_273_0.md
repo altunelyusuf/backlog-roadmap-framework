@@ -11260,6 +11260,15 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.411.0 — 2026-10-20 (MINOR: every missing-link candidate is decided; a rule is linked to its methodology and a gate to the release it guards — G135)
+
+- **T-Box v1.137.0:** the class `Methodology`; `ruleOfMethodology` and `guardsRelease` (to `orh:ReleaseEvent`) with restrictions on `MethodologyRule` and `ReleaseGate`; the symmetric `distinguishedFrom`; eighteen further link properties; restrictions on `FailureRecord` and `ImplementationProject`. Standard v1.137.0.
+- **A-Box v1.53.0:** `Method_BRSF`, the four rules linked to it; individual links for the contrast, status-to-stage, phase, facing and thrash relations the definitions stated in words.
+- **Tools:** `backlog_link_control` v1.0.0 and its probe, and the package ledger `link_decisions_v1_0_0.tsv` (15 coded rejections); gate v1.64.0. Candidates of any trust and family: 65, all decided.
+- **Discipline v102.0.0:** G135.
+
+**Unplanned work:** the owner's request of 2026-10-20; no backlog item of this package covers it.
+
 ## v1.410.0 — 2026-10-20 (MINOR: a connection is a link, never text — G134)
 
 - **T-Box v1.136.0:** `entryForLineage`, `entryForMission`, `entryOutcome`, `includesRetiredLineage` and `tableInModule` are object properties with a range; seven properties gain the domain or range their definitions named; new links `successMirrorOf`, `horizonExpectsState`, `initiativeLevelCounterpart`, `concernsStage`, `readAgainstRegister` and the class `ModuleRecord`; the retired manifest digest property is linked to the one that replaces it. Standard v1.136.0.

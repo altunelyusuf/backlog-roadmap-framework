@@ -18,9 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.136.0> ;
-    owl:versionInfo "1.136.0" ;
-    owl:priorVersion <http://example.org/backlog/1.135.0> , <http://example.org/backlog/1.134.0> , <http://example.org/backlog/1.133.0> , <http://example.org/backlog/1.132.0> , <http://example.org/backlog/1.131.0> , <http://example.org/backlog/1.130.0> , <http://example.org/backlog/1.129.0> , <http://example.org/backlog/1.125.0> , <http://example.org/backlog/1.124.0> , <http://example.org/backlog/1.123.0> , <http://example.org/backlog/1.122.0> ;
+    owl:versionIRI <http://example.org/backlog/1.137.0> ;
+    owl:versionInfo "1.137.0" ;
+    owl:priorVersion <http://example.org/backlog/1.136.0> , <http://example.org/backlog/1.135.0> , <http://example.org/backlog/1.134.0> , <http://example.org/backlog/1.133.0> , <http://example.org/backlog/1.132.0> , <http://example.org/backlog/1.131.0> , <http://example.org/backlog/1.130.0> , <http://example.org/backlog/1.129.0> , <http://example.org/backlog/1.125.0> , <http://example.org/backlog/1.124.0> , <http://example.org/backlog/1.123.0> , <http://example.org/backlog/1.122.0> ;
     owl:priorVersion <http://example.org/backlog/1.121.0> , <http://example.org/backlog/1.120.0> , <http://example.org/backlog/1.119.0> , <http://example.org/backlog/1.118.0> , <http://example.org/backlog/1.117.0> ;
     owl:priorVersion <http://example.org/backlog/1.116.0> ;
     owl:priorVersion <http://example.org/backlog/1.115.0> ;
@@ -7364,3 +7364,149 @@ backlog:readAgainstRegister a owl:ObjectProperty ;
     rdfs:domain backlog:RemoteCommit ; rdfs:range backlog:Backlog ;
     rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "read against register"@en ;
     skos:definition "The register whose sovereign path prefix (hasSovereignPathPrefix) the paths this commit touched are read against, to decide whether it needs reconciling. The definition of a remote commit said so in words; the register that carries the prefix is the thing it is read against."@en .
+
+#################################################################
+#  Links (v1.137.0, G135): relations the definitions stated in words
+#################################################################
+backlog:Methodology a owl:Class ;
+    rdfs:subClassOf core:Artifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Methodology"@en ;
+    rdfs:seeAlso <http://example.org/knowledge-base#Methodology> ;
+    skos:definition "The method a set of governing rules belongs to: here, the backlog-and-roadmap method of this framework. A rule is linked to its methodology (ruleOfMethodology) so that the rules of one method can be listed and a rule that belongs to no method is found. Not the knowledge-base notion of an ontology-engineering methodology (kb:Methodology), which this framework does not import."@en .
+
+backlog:ruleOfMethodology a owl:ObjectProperty ;
+    rdfs:domain backlog:MethodologyRule ; rdfs:range backlog:Methodology ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "rule of methodology"@en ;
+    skos:definition "The methodology a governing rule belongs to. A rule that belongs to no method is a convention nobody can place, so every rule names its method."@en .
+
+backlog:guardsRelease a owl:ObjectProperty ;
+    rdfs:domain backlog:ReleaseGate ; rdfs:range orh:ReleaseEvent ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "guards release"@en ;
+    skos:definition "The release (in the release-history subject) a gate must pass before that release is trusted. A gate is a check on a release, so it is linked to the thing it checks rather than only described as one."@en .
+
+backlog:statusOfStage a owl:ObjectProperty ;
+    rdfs:domain backlog:LineageStatus ; rdfs:range backlog:LineageStage ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "status of stage"@en ;
+    skos:definition "The lineage stage whose output is active when a lineage holds this status. Stated as a link because each status definition said so in words."@en .
+
+backlog:phaseRankingModel a owl:ObjectProperty ;
+    rdfs:domain backlog:ProductLifecyclePhase ; rdfs:range backlog:RankingModel ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "phase ranking model"@en ;
+    skos:definition "The ranking model by which a lifecycle phase allocates ongoing capacity."@en .
+
+backlog:phaseGatedCategory a owl:ObjectProperty ;
+    rdfs:domain backlog:ProductLifecyclePhase ; rdfs:range backlog:InvestmentCategory ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "phase gated category"@en ;
+    skos:definition "The investment category a lifecycle phase puts behind an explicit owner decision."@en .
+
+backlog:provesDefinitionOfDone a owl:ObjectProperty ;
+    rdfs:domain backlog:TestHarness ; rdfs:range backlog:DefinitionOfDone ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "proves definition of done"@en ;
+    skos:definition "The Definition of Done whose satisfaction the harness's checks together prove for one work item."@en .
+
+backlog:collapsesTo a owl:ObjectProperty ;
+    rdfs:domain backlog:RankingModel ; rdfs:range backlog:RankingModel ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "collapses to"@en ;
+    skos:definition "The ranking model a scoped ranking falls back to automatically once its scoping condition is over."@en .
+
+backlog:stageOfEntity a owl:ObjectProperty ;
+    rdfs:domain backlog:EntityLifecycleStage ; rdfs:range backlog:DomainEntity ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "stage of entity"@en ;
+    skos:definition "The domain entity whose real life this stage belongs to."@en .
+
+backlog:roleWithinPackage a owl:ObjectProperty ;
+    rdfs:domain backlog:ArtifactRole ; rdfs:range backlog:RegisterPackage ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "role within package"@en ;
+    skos:definition "The register package in which a file plays this role."@en .
+
+backlog:packageIncludesReport a owl:ObjectProperty ;
+    rdfs:domain backlog:RegisterPackage ; rdfs:range backlog:RoadmapReport ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "package includes report"@en ;
+    skos:definition "A retained roadmap report run that the register package ships as evidence of progress."@en .
+
+backlog:competencyDomain a owl:ObjectProperty ;
+    rdfs:domain backlog:Competency ; rdfs:range backlog:LineageArtifactDomain ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "competency domain"@en ;
+    skos:definition "The kind of lineage artifact a competency is exercised on."@en .
+
+backlog:hasCompetencyCategory a owl:ObjectProperty ;
+    rdfs:domain backlog:Competency ; rdfs:range backlog:CompetencyCategory ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "has competency category"@en ;
+    skos:definition "The category a competency sits under in the closed taxonomy; a specialisation of skos:broader for the category level."@en .
+
+backlog:gapForObligation a owl:ObjectProperty ;
+    rdfs:domain backlog:BlueprintGap ; rdfs:range backlog:ComplianceObligation ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "gap for obligation"@en ;
+    skos:definition "The compliance obligation that a recorded gap leaves without backlog coverage."@en .
+
+backlog:subordinateToItem a owl:ObjectProperty ;
+    rdfs:domain backlog:ExecutionTask ; rdfs:range backlog:ProductBacklogItem ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "subordinate to item"@en ;
+    skos:definition "The product backlog item a task was planned from; a task is subordinate by construction and carries no value of its own."@en .
+
+backlog:anchorsReleaseEvidence a owl:ObjectProperty ;
+    rdfs:domain backlog:Increment ; rdfs:range backlog:ReleaseEvidence ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "anchors release evidence"@en ;
+    skos:definition "The release evidence anchored to this increment: the increment is the unit against which release evidence is taken."@en .
+
+backlog:manifestsAsThrashKind a owl:ObjectProperty ;
+    rdfs:domain backlog:FailureMode ; rdfs:range backlog:ThrashKind ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "manifests as thrash kind"@en ;
+    skos:definition "A kind of thrash through which a failure mode shows in the record of trials."@en .
+
+backlog:governedByScopeExclusion a owl:ObjectProperty ;
+    rdfs:domain backlog:HumanInteraction ; rdfs:range backlog:ScopeExclusion ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "governed by scope exclusion"@en ;
+    skos:definition "The scope exclusion that decides a human interaction is an event and not a work item."@en .
+
+backlog:hasCompetencyCategory rdfs:subPropertyOf skos:broader .
+
+backlog:safeguardsAgainst a owl:ObjectProperty ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:Rebaseline backlog:GoalFacing ) ] ; rdfs:range backlog:FailureMode ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "safeguards against"@en ;
+    skos:definition "The failure mode a control or a facing is there to prevent."@en .
+
+backlog:safeguardedBy a owl:ObjectProperty ;
+    owl:inverseOf backlog:safeguardsAgainst ;
+    rdfs:domain backlog:FailureMode ;
+    rdfs:range [ a owl:Class ; owl:unionOf ( backlog:Rebaseline backlog:GoalFacing ) ] ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "safeguarded by"@en ;
+    skos:definition "The control or facing that is there to prevent this failure mode; the inverse of safeguardsAgainst. Stated from the failure mode when the failure mode is a register individual, because the controlled vocabulary may not point into the register."@en .
+
+backlog:maintenanceTriggeredBy a owl:ObjectProperty ;
+    rdfs:domain backlog:InitiativeKind ;
+    rdfs:range [ a owl:Class ; owl:unionOf ( backlog:ModificationRequest backlog:ProblemReport ) ] ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "maintenance triggered by"@en ;
+    skos:definition "What sets off work of this initiative kind when it comes from outside: a modification request or a problem report. Maintenance is scoped by what arrived, not by a scope written in advance."@en .
+
+backlog:distinguishedFrom a owl:ObjectProperty , owl:SymmetricProperty ;
+    rdfs:domain owl:Thing ; rdfs:range owl:Thing ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "distinguished from"@en ;
+    skos:definition "Two things the definitions say must not be confused, stated as a link in place of the words 'distinct from'. Asserted between classes (as a named concept, by punning) and between individuals. Symmetric: the contrast holds both ways."@en .
+
+# Restrictions that link a class to what its definition says it has
+backlog:MethodologyRule rdfs:subClassOf [ a owl:Restriction ; owl:onProperty backlog:ruleOfMethodology ; owl:someValuesFrom backlog:Methodology ] .
+backlog:ReleaseGate rdfs:subClassOf [ a owl:Restriction ; owl:onProperty backlog:guardsRelease ; owl:someValuesFrom orh:ReleaseEvent ] .
+backlog:FailureRecord rdfs:subClassOf [ a owl:Restriction ; owl:onProperty backlog:hasOutcome ; owl:someValuesFrom backlog:Outcome ] .
+backlog:ImplementationProject rdfs:subClassOf [ a owl:Restriction ; owl:onProperty backlog:hasScopeStatement ; owl:someValuesFrom backlog:ScopeStatement ] ,
+    [ a owl:Restriction ; owl:onProperty backlog:appliesDefinitionOfDone ; owl:someValuesFrom backlog:DefinitionOfDone ] .
+
+# Contrast between classes (punned)
+backlog:Specification backlog:distinguishedFrom backlog:AcceptanceCriterion .
+backlog:StageRevision backlog:distinguishedFrom backlog:LineageRestart .
+backlog:StageRevision backlog:distinguishedFrom backlog:ScopeChange .
+backlog:LineageSuccession backlog:distinguishedFrom backlog:LineageRestart .
+backlog:ClosureReport backlog:distinguishedFrom backlog:RoadmapReport .
+backlog:CriterionSatisfaction backlog:distinguishedFrom backlog:TestEvidence .
+backlog:RuleSet backlog:distinguishedFrom backlog:ObligationSet .
+backlog:GoalOrigin backlog:distinguishedFrom backlog:IntentOrigin .
+backlog:EntityLifecycleStage backlog:distinguishedFrom backlog:LifecycleState .
+backlog:ExternalDependencyType backlog:distinguishedFrom backlog:DependencyKind .
+backlog:Executor backlog:distinguishedFrom backlog:ExecutionModality .
+
+# Built on (punned)
+backlog:SprintCeremony prov:wasDerivedFrom backlog:RegisterSession .
+backlog:IntentOrigin prov:wasDerivedFrom backlog:MissionOrigin .
+backlog:AdaptationGate prov:wasDerivedFrom backlog:CrossCuttingInvariant .
+backlog:PlanningEvent prov:wasDerivedFrom backlog:RefinementEvent .

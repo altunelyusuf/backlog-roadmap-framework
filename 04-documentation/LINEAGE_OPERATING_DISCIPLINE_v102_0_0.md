@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v101.0.0
+# Lineage Operating Discipline — v102.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -3714,3 +3714,20 @@ Related: G89, G125, G127, L-112.
 
 **Not claimed.** The internal links of `MethodologyRule` and `ReleaseGate` are not made: the data states no relation that settles them (a rule's four individuals describe how container, milestone, ranking and blocker states are derived; a gate's command names a retired script version), so they wait for the owner's decision. `ModuleRecord` has no typed individuals yet. The archive of the other packages in this repository was not touched.
 Related: G89, G92, G132.
+
+## G135 — A missing link is decided, never left to judgment case by case; a rule is linked to its methodology and a gate to the release it guards
+
+*(Opened by the owner, 2026-10-20, after G134: "MethodologyRule should be linked at least to the methodology it belongs. ReleaseGate should be linked to Release, at minimum. I think your link control algorithm is ad hoc. You need to systematically check the syntactic, semantic, and temporal relations additional to structures." Measured first: 65 candidates of any trust (8 of high trust) remained after G134, all syntactic; none semantic or temporal.)*
+
+**Q1 — the two links asked for.** `MethodologyRule` had no methodology to belong to; a class `Methodology` is minted (T-Box v1.137.0; the knowledge-base `kb:Methodology` was read first and is ontology-engineering only, and importing that subject for one class would bind this framework to it, so it is cited by `rdfs:seeAlso` and not reused), with `ruleOfMethodology` and a restriction on the class, and the four rules name `Method_BRSF`. `ReleaseGate` is linked to the release-history subject's own `orh:ReleaseEvent` (already imported, so reused and not minted) by `guardsRelease` and a restriction on the class. The gate individuals name no single release (a gate guards every release), so no individual link is invented.
+
+**Q2 — what "systematic" means here.** The structural measure (connectedness) says whether a class is joined; it does not say whether a relation the model states, uses or implies is carried. The OE missing-links check finds those in three families (syntactic: a text names a thing, a term is used and declared nowhere; semantic: a property without a domain or range; temporal: a text says one thing supersedes another, a change note names a version the chain lacks) but counts only the high-trust ones, and the medium ones were handled when noticed. The rule now: **every candidate, of any trust and any family, is a link or a rejection with a coded reason in the package ledger** (`link_decisions_v1_0_0.tsv`). The codes are `carried-by-path`, `negation`, `positional`, `rationale-only`, `register-pointer`, `stale-text`, `wrong-sense` and `word-coincidence`. An undecided candidate fails; a ledger row whose candidate is gone is stale and fails, so the ledger cannot rot. The OE baseline and decisions ledger are the OE discipline's and are not edited.
+
+**Q3 — what the 65 became.** 50 are links: 18 new properties each stating in a link what a definition said in words (for example `statusOfStage`, `phaseRankingModel`, `safeguardsAgainst` (and its inverse `safeguardedBy`, used where the failure mode is a register individual), `maintenanceTriggeredBy`, `anchorsReleaseEvidence`), the symmetric `distinguishedFrom` for what a definition says is "distinct from" another (11 class pairs by punning, 7 individual pairs), `prov:wasDerivedFrom` for what is "modelled on" another, and three further restrictions (on `FailureRecord` and `ImplementationProject`). 15 are rejections, each with its code and reason (for example: the text states what a profile does NOT carry; the text means the lineage status, not the work-item state; the relation is carried by `fulfillsRequest` and `hasDisposition`).
+
+**Q4 — who is bound (G89).** Nothing existing is refused that was not: the new properties and restrictions are additive, no shape changes. The check runs where the OE tool sits beside the package and says SKIPPED in a public copy.
+
+**Proof.** `backlog_link_control_probe` v1.0.0 (the shipped files have no undecided or stale candidate; planted candidates of each of the three families fail undecided; a coded rejection passes; a stale row fails; a row with no reason or no code is refused; both links asked for are made in the class and in the data).
+
+**Not claimed.** Fifteen sentences are rejected and stay as text; one of them (the sentence on review evidence naming conformance level L3) is stale against v1.68.0 and is owed a rewrite. A link made by the check means the relation is carried, not that the property chosen is the only right one; the ceremony's judgment stands. The gate commands of the release gates still name retired script versions.
+Related: G89, G134, L-110.

@@ -22,9 +22,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (ABox: controlled individuals, reference data and the live register)"@en ;
-    owl:versionIRI <http://example.org/backlog/abox/1.52.0> ;
-    owl:versionInfo "1.52.0" ;
-    owl:priorVersion <http://example.org/backlog/abox/1.51.0> , <http://example.org/backlog/abox/1.50.0> , <http://example.org/backlog/abox/1.49.0> , <http://example.org/backlog/abox/1.48.0> , <http://example.org/backlog/abox/1.47.0> , <http://example.org/backlog/abox/1.46.0> , <http://example.org/backlog/abox/1.45.0> , <http://example.org/backlog/abox/1.40.0> , <http://example.org/backlog/abox/1.39.0> , <http://example.org/backlog/abox/1.38.0> , <http://example.org/backlog/abox/1.37.0> , <http://example.org/backlog/abox/1.36.0> , <http://example.org/backlog/abox/1.35.0> ;
+    owl:versionIRI <http://example.org/backlog/abox/1.53.0> ;
+    owl:versionInfo "1.53.0" ;
+    owl:priorVersion <http://example.org/backlog/abox/1.52.0> , <http://example.org/backlog/abox/1.51.0> , <http://example.org/backlog/abox/1.50.0> , <http://example.org/backlog/abox/1.49.0> , <http://example.org/backlog/abox/1.48.0> , <http://example.org/backlog/abox/1.47.0> , <http://example.org/backlog/abox/1.46.0> , <http://example.org/backlog/abox/1.45.0> , <http://example.org/backlog/abox/1.40.0> , <http://example.org/backlog/abox/1.39.0> , <http://example.org/backlog/abox/1.38.0> , <http://example.org/backlog/abox/1.37.0> , <http://example.org/backlog/abox/1.36.0> , <http://example.org/backlog/abox/1.35.0> ;
     owl:priorVersion <http://example.org/backlog/abox/1.34.0> , <http://example.org/backlog/abox/1.33.0> , <http://example.org/backlog/abox/1.32.0> , <http://example.org/backlog/abox/1.31.0> , <http://example.org/backlog/abox/1.30.0> , <http://example.org/backlog/abox/1.29.0> , <http://example.org/backlog/abox/1.28.0> , <http://example.org/backlog/abox/1.27.0> , <http://example.org/backlog/abox/1.26.0> , <http://example.org/backlog/abox/1.25.0> , <http://example.org/backlog/abox/1.24.0> , <http://example.org/backlog/abox/1.23.0> , <http://example.org/backlog/abox/1.22.0> , <http://example.org/backlog/abox/1.21.0> , <http://example.org/backlog/abox/1.20.0> , <http://example.org/backlog/abox/1.19.0> , <http://example.org/backlog/abox/1.17.0> , <http://example.org/backlog/abox/1.16.0> , <http://example.org/backlog/abox/1.15.0> , <http://example.org/backlog/abox/1.14.0> , <http://example.org/backlog/abox/1.13.0> , <http://example.org/backlog/abox/1.12.0> , <http://example.org/backlog/abox/1.11.0> , <http://example.org/backlog/abox/1.10.0> , <http://example.org/backlog/abox/1.9.0> , <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
         <http://example.org/backlog-abox/1.2.1> ,
                      <http://example.org/backlog-abox/1.2.0> ,
@@ -6319,3 +6319,34 @@ backlog:AgentRole_Explainer a skos:Concept ; skos:inScheme backlog:AgentRoleSche
     skos:scopeNote "Needs no relation of its own: it is the responsible Executor of a communication work item. Whether small models explain faithfully is recorded in its source as not yet measured."@en ;
     dcterms:source "agentic-systems ontology, explainer agent (records the owner's direction of 2026-09-30)."@en .
 
+#################################################################
+#  Links (v1.53.0, G135)
+#################################################################
+backlog:Method_BRSF a owl:NamedIndividual , backlog:Methodology ;
+    rdfs:label "Backlog & Roadmap Semantic Framework method"@en ;
+    skos:definition "The method of this framework: a backlog and roadmap governed by a closed lifecycle, evidence-bound completion, derived container and milestone state, and a release path with fixed gates. Its governing rules are the four R-rules; its gates are the release gates."@en .
+
+backlog:Rule_R1_ContainerStateDerivation backlog:ruleOfMethodology backlog:Method_BRSF .
+backlog:Rule_R2_MilestoneStateDerivation backlog:ruleOfMethodology backlog:Method_BRSF .
+backlog:Rule_R3_RankingArbitration backlog:ruleOfMethodology backlog:Method_BRSF .
+backlog:Rule_R4_ExternalBlockerDerivation backlog:ruleOfMethodology backlog:Method_BRSF .
+
+backlog:FM_ScopeGap backlog:distinguishedFrom backlog:FM_ScopeCreep .
+backlog:Executor_ClaudeDesktop backlog:distinguishedFrom <http://example.org/fixture-autofix#DefaultExecutor> .
+backlog:Comp_DataDisposition backlog:distinguishedFrom backlog:Comp_DataMigration .
+backlog:Comp_DomainModelling backlog:distinguishedFrom backlog:Comp_ConceptualDataModeling .
+backlog:Task_ArchitectureDefinition backlog:distinguishedFrom backlog:Task_DesignDefinition .
+backlog:Domain_Ontology backlog:distinguishedFrom backlog:Comp_BehaviouralModelling .
+backlog:Executor_AgentTeam backlog:distinguishedFrom backlog:Executor_HumanTeam .
+backlog:LS_Opened backlog:statusOfStage backlog:Stage_Mission .
+backlog:LS_Scoped backlog:statusOfStage backlog:Stage_Scope .
+backlog:LS_Goaled backlog:statusOfStage backlog:Stage_Goal .
+backlog:LS_Objectived backlog:statusOfStage backlog:Stage_Objective .
+backlog:LS_Backlogged backlog:statusOfStage backlog:Stage_Backlog .
+backlog:Phase_Live backlog:phaseRankingModel backlog:ThroughputRanking .
+backlog:Phase_Sunsetting backlog:phaseGatedCategory backlog:Cat_NewCapability .
+backlog:FM_ScopeCreep backlog:safeguardedBy backlog:Facing_Exclusion .
+backlog:LaunchScopedRanking backlog:collapsesTo backlog:ThroughputRanking .
+backlog:Comp_Coding backlog:competencyDomain backlog:Domain_SourceCode .
+backlog:FM_LineageThrash backlog:manifestsAsThrashKind backlog:Thrash_NoNovelty , backlog:Thrash_AdmissionLost , backlog:Thrash_NotDeliberated .
+backlog:Method_WSJF dcterms:requires backlog:Method_CostOfDelay .
