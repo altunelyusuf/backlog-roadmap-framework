@@ -7467,6 +7467,11 @@ backlog:safeguardsAgainst a owl:ObjectProperty ;
     rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "safeguards against"@en ;
     skos:definition "The failure mode a control or a facing is there to prevent."@en .
 
+backlog:followsMethodology a owl:ObjectProperty ;
+    rdfs:domain backlog:Backlog ; rdfs:range backlog:Methodology ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "follows methodology"@en ;
+    skos:definition "The methodology a register is governed by. It joins the rules and gates of a method to the register they govern, so the method is not a pair of classes standing apart from the thing it applies to."@en .
+
 backlog:safeguardedBy a owl:ObjectProperty ;
     owl:inverseOf backlog:safeguardsAgainst ;
     rdfs:domain backlog:FailureMode ;

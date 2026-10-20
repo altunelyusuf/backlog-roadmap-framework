@@ -11262,7 +11262,7 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 
 ## v1.411.0 — 2026-10-20 (MINOR: every missing-link candidate is decided; a rule is linked to its methodology and a gate to the release it guards — G135)
 
-- **T-Box v1.137.0:** the class `Methodology`; `ruleOfMethodology` and `guardsRelease` (to `orh:ReleaseEvent`) with restrictions on `MethodologyRule` and `ReleaseGate`; the symmetric `distinguishedFrom`; eighteen further link properties; restrictions on `FailureRecord` and `ImplementationProject`. Standard v1.137.0.
+- **T-Box v1.137.0:** the class `Methodology`; `ruleOfMethodology` and `guardsRelease` (to `orh:ReleaseEvent`) with restrictions on `MethodologyRule` and `ReleaseGate`; the symmetric `distinguishedFrom`; nineteen further link properties; restrictions on `FailureRecord` and `ImplementationProject`. Standard v1.137.0.
 - **A-Box v1.53.0:** `Method_BRSF`, the four rules linked to it; individual links for the contrast, status-to-stage, phase, facing and thrash relations the definitions stated in words.
 - **Tools:** `backlog_link_control` v1.0.0 and its probe, and the package ledger `link_decisions_v1_0_0.tsv` (15 coded rejections); gate v1.64.0. Candidates of any trust and family: 65, all decided.
 - **Discipline v102.0.0:** G135.
