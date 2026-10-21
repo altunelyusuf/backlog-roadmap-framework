@@ -1,4 +1,5 @@
 @prefix backlog: <http://example.org/backlog#> .
+@prefix kb: <http://example.org/knowledge-base#> .
 @prefix core:    <http://example.org/core#> .
 @prefix risk:    <http://example.org/risk#> .
 @prefix configuration: <http://example.org/configuration#> .
@@ -18,9 +19,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.139.0> ;
-    owl:versionInfo "1.139.0" ;
-    owl:priorVersion <http://example.org/backlog/1.138.0> , <http://example.org/backlog/1.137.0> , <http://example.org/backlog/1.136.0> , <http://example.org/backlog/1.135.0> , <http://example.org/backlog/1.134.0> , <http://example.org/backlog/1.133.0> , <http://example.org/backlog/1.132.0> , <http://example.org/backlog/1.131.0> , <http://example.org/backlog/1.130.0> , <http://example.org/backlog/1.129.0> , <http://example.org/backlog/1.125.0> , <http://example.org/backlog/1.124.0> , <http://example.org/backlog/1.123.0> , <http://example.org/backlog/1.122.0> ;
+    owl:versionIRI <http://example.org/backlog/1.140.0> ;
+    owl:versionInfo "1.140.0" ;
+    owl:priorVersion <http://example.org/backlog/1.139.0> , <http://example.org/backlog/1.138.0> , <http://example.org/backlog/1.137.0> , <http://example.org/backlog/1.136.0> , <http://example.org/backlog/1.135.0> , <http://example.org/backlog/1.134.0> , <http://example.org/backlog/1.133.0> , <http://example.org/backlog/1.132.0> , <http://example.org/backlog/1.131.0> , <http://example.org/backlog/1.130.0> , <http://example.org/backlog/1.129.0> , <http://example.org/backlog/1.125.0> , <http://example.org/backlog/1.124.0> , <http://example.org/backlog/1.123.0> , <http://example.org/backlog/1.122.0> ;
     owl:priorVersion <http://example.org/backlog/1.121.0> , <http://example.org/backlog/1.120.0> , <http://example.org/backlog/1.119.0> , <http://example.org/backlog/1.118.0> , <http://example.org/backlog/1.117.0> ;
     owl:priorVersion <http://example.org/backlog/1.116.0> ;
     owl:priorVersion <http://example.org/backlog/1.115.0> ;
@@ -7573,3 +7574,89 @@ backlog:standsAlone a owl:DatatypeProperty ;
     rdfs:domain backlog:ProductBacklogItem ; rdfs:range xsd:boolean ;
     rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "stands alone"@en ;
     skos:definition "True when the item deliberately belongs to no epic or initiative. A story admitted after an initiative exists either has a parent (partOf) or says that it stands alone."@en .
+
+#################################################################
+#  Kinds of classes and categories of links (v1.140.0, G139; OE discipline v2.30.0, BP-D58 and BP-D59)
+#  Recorded only where the name and the definition agree; the evidence is in 03-tooling/kind_category_recording_v1_0_0.tsv.
+#################################################################
+backlog:ClosureReport kb:hasClassKind kb:ClassKind_InformationArtifact .
+backlog:RoadmapReport kb:hasClassKind kb:ClassKind_InformationArtifact .
+backlog:RegisterArtifact kb:hasClassKind kb:ClassKind_InformationArtifact .
+backlog:RegisterPackage kb:hasClassKind kb:ClassKind_InformationArtifact .
+backlog:ModuleRecord kb:hasClassKind kb:ClassKind_InformationArtifact .
+backlog:LineageArchiveEntry kb:hasClassKind kb:ClassKind_InformationArtifact .
+backlog:ArchiveConformanceRecord kb:hasClassKind kb:ClassKind_InformationArtifact .
+backlog:ToolRunRecord kb:hasClassKind kb:ClassKind_InformationArtifact .
+backlog:ExperienceRecord kb:hasClassKind kb:ClassKind_InformationArtifact .
+backlog:RemoteCommit kb:hasClassKind kb:ClassKind_InformationArtifact .
+backlog:StageOutput kb:hasClassKind kb:ClassKind_InformationArtifact .
+backlog:ModelArtifact kb:hasClassKind kb:ClassKind_InformationArtifact .
+backlog:MethodologyRule kb:hasClassKind kb:ClassKind_InformationArtifact .
+backlog:ImpactAssessment kb:hasClassKind kb:ClassKind_Document .
+backlog:ChangeRequest kb:hasClassKind kb:ClassKind_Document .
+backlog:EnhancementProposal kb:hasClassKind kb:ClassKind_Document .
+backlog:GovernedDocument kb:hasClassKind kb:ClassKind_Document .
+backlog:Specification kb:hasClassKind kb:ClassKind_Specification .
+backlog:TestCase kb:hasClassKind kb:ClassKind_TestCase .
+backlog:MetricObservation kb:hasClassKind kb:ClassKind_Measurement .
+backlog:QualityMetric kb:hasClassKind kb:ClassKind_Metric .
+backlog:CodeTable kb:hasClassKind kb:ClassKind_DataStructure .
+backlog:ToolScript kb:hasClassKind kb:ClassKind_Program .
+backlog:Executor kb:hasClassKind kb:ClassKind_Agent .
+backlog:Executor_IndividualHuman kb:hasClassKind kb:ClassKind_Human .
+backlog:Executor_HumanTeam kb:hasClassKind kb:ClassKind_Organization .
+backlog:Team kb:hasClassKind kb:ClassKind_Organization .
+backlog:Role kb:hasClassKind kb:ClassKind_Role .
+backlog:TeamRole kb:hasClassKind kb:ClassKind_Role .
+backlog:Competency kb:hasClassKind kb:ClassKind_Disposition .
+backlog:ImplementationProject kb:hasClassKind kb:ClassKind_Project .
+backlog:CompetencyCategory kb:hasClassKind kb:ClassKind_Category .
+backlog:InvestmentCategory kb:hasClassKind kb:ClassKind_Category .
+backlog:MaintenanceCategory kb:hasClassKind kb:ClassKind_Category .
+backlog:ComplianceObligation kb:hasClassKind kb:ClassKind_Norm .
+backlog:StageObligation kb:hasClassKind kb:ClassKind_Norm .
+backlog:partOf kb:hasRelationshipCategory kb:RelationshipCategory_Compositional .
+backlog:decomposesInto kb:hasRelationshipCategory kb:RelationshipCategory_Compositional .
+backlog:subordinateToItem kb:hasRelationshipCategory kb:RelationshipCategory_Compositional .
+backlog:hasMember kb:hasRelationshipCategory kb:RelationshipCategory_ContainmentMembership .
+backlog:memberOfContainer kb:hasRelationshipCategory kb:RelationshipCategory_ContainmentMembership .
+backlog:roleWithinPackage kb:hasRelationshipCategory kb:RelationshipCategory_ContainmentMembership .
+backlog:packageIncludesReport kb:hasRelationshipCategory kb:RelationshipCategory_ContainmentMembership .
+backlog:ruleOfMethodology kb:hasRelationshipCategory kb:RelationshipCategory_ContainmentMembership .
+backlog:closureCaveat kb:hasRelationshipCategory kb:RelationshipCategory_ContainmentMembership .
+backlog:supersedesRule kb:hasRelationshipCategory kb:RelationshipCategory_Versioning .
+backlog:supersededBy kb:hasRelationshipCategory kb:RelationshipCategory_Versioning .
+backlog:supersedesMission kb:hasRelationshipCategory kb:RelationshipCategory_Versioning .
+backlog:stagePredecessor kb:hasRelationshipCategory kb:RelationshipCategory_OrderingSequence .
+backlog:succeedsLineage kb:hasRelationshipCategory kb:RelationshipCategory_SuccessionTransformation .
+backlog:successorLineage kb:hasRelationshipCategory kb:RelationshipCategory_SuccessionTransformation .
+backlog:collapsesTo kb:hasRelationshipCategory kb:RelationshipCategory_SuccessionTransformation .
+backlog:attestsCriterion kb:hasRelationshipCategory kb:RelationshipCategory_Assessment .
+backlog:attestsDoDCriterion kb:hasRelationshipCategory kb:RelationshipCategory_Assessment .
+backlog:attestedByTest kb:hasRelationshipCategory kb:RelationshipCategory_Assessment .
+backlog:measuredWithTool kb:hasRelationshipCategory kb:RelationshipCategory_Assessment .
+backlog:provesDefinitionOfDone kb:hasRelationshipCategory kb:RelationshipCategory_Assessment .
+backlog:guardsRelease kb:hasRelationshipCategory kb:RelationshipCategory_Assessment .
+backlog:verifiedBy kb:hasRelationshipCategory kb:RelationshipCategory_Assessment .
+backlog:hasHarnessEvidence kb:hasRelationshipCategory kb:RelationshipCategory_Assessment .
+backlog:findingEvidence kb:hasRelationshipCategory kb:RelationshipCategory_Epistemic .
+backlog:distinguishedFrom kb:hasRelationshipCategory kb:RelationshipCategory_Comparative .
+backlog:hasCompetencyCategory kb:hasRelationshipCategory kb:RelationshipCategory_Taxonomic .
+backlog:safeguardsAgainst kb:hasRelationshipCategory kb:RelationshipCategory_Intentional .
+backlog:safeguardedBy kb:hasRelationshipCategory kb:RelationshipCategory_Intentional .
+backlog:maintenanceTriggeredBy kb:hasRelationshipCategory kb:RelationshipCategory_Causal .
+backlog:triggeredBy kb:hasRelationshipCategory kb:RelationshipCategory_Causal .
+backlog:governedByScopeExclusion kb:hasRelationshipCategory kb:RelationshipCategory_Normative .
+backlog:briefCriterion kb:hasRelationshipCategory kb:RelationshipCategory_Provenance .
+backlog:followsMethodology kb:hasRelationshipCategory kb:RelationshipCategory_Association .
+backlog:statusOfStage kb:hasRelationshipCategory kb:RelationshipCategory_Association .
+backlog:phaseRankingModel kb:hasRelationshipCategory kb:RelationshipCategory_Association .
+backlog:phaseGatedCategory kb:hasRelationshipCategory kb:RelationshipCategory_Association .
+backlog:competencyDomain kb:hasRelationshipCategory kb:RelationshipCategory_Association .
+backlog:gapForObligation kb:hasRelationshipCategory kb:RelationshipCategory_Association .
+backlog:anchorsReleaseEvidence kb:hasRelationshipCategory kb:RelationshipCategory_Association .
+backlog:manifestsAsThrashKind kb:hasRelationshipCategory kb:RelationshipCategory_Association .
+backlog:stageOfEntity kb:hasRelationshipCategory kb:RelationshipCategory_Association .
+backlog:briefFor kb:hasRelationshipCategory kb:RelationshipCategory_Association .
+backlog:briefedExecutorInstance kb:hasRelationshipCategory kb:RelationshipCategory_Association .
+backlog:caveatTrackedBy kb:hasRelationshipCategory kb:RelationshipCategory_Association .

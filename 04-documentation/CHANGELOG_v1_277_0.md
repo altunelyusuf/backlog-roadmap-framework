@@ -11260,6 +11260,15 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.415.0 — 2026-10-21 (MINOR: the OEE kinds of classes and categories of links adapted to the BRSF T-Box — G139)
+
+- **T-Box v1.140.0:** prefix `kb:` declared (no import); `kb:hasClassKind` on 36 classes and `kb:hasRelationshipCategory` on 45 object properties, each only where the name and the definition agree. Work-item classes, event and record classes of unclear nature, and enumerations carry no kind (they are "not measured", never a violation).
+- **Ledger:** `kind_category_recording_v1_0_0.tsv`, 81 rows, one evidence sentence each.
+- **Probe and gate:** `backlog_kind_category_probe` v1.0.0 (ledger equals T-Box; every kind and category exists in the OE governance A-Box; the OE kind-rule check finds 0 violations; a planted misfit is found), registered in gate v1.66.0.
+- **Discipline v106.0.0:** G139.
+
+**Unplanned work:** the owner asked for the adaptation in chat; no backlog item of this package covers it.
+
 ## v1.414.0 — 2026-10-21 (PATCH: two owed items cleared — a stale sentence rewritten, the release path creates both stamps — G138)
 
 - **T-Box v1.139.0:** the sentence in the definition of review evidence that named the retired conformance level L3 says the gating retired in v1.68.0. The ledger row that rejected it as stale text is removed (`link_decisions_v1_1_0.tsv`, 14 rows).

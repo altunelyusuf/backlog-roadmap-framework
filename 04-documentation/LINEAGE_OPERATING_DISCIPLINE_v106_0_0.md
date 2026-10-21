@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v105.0.0
+# Lineage Operating Discipline — v106.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -3770,3 +3770,12 @@ Related: G89, G134, G136.
 
 **Release path.** It created `.fixture-suite-stamp` and not `.clause-proof-stamp`, so every release needed the second touched by hand beforehand. It creates both now, and leaves an existing one as it is; the release tool's probe has the case.
 Related: G135.
+
+## G139 — The OEE kinds and categories are recorded where the name and the definition agree
+
+**Ruling.** OE discipline v2.30.0 (BP-D58, BP-D59) gives every class a kind and every link a category, and checks a link against the kinds of its two ends. This package records a kind only for a class whose first sentence says what it is, and a category only for a link whose name and definition say how the two ends relate. Where the nature is unclear (work items, events and records of mixed nature, enumerations) nothing is recorded; the check counts such an end as not measured, never as a violation. A record needs an evidence sentence in `03-tooling/kind_category_recording_v1_0_0.tsv`, and the ledger equals the T-Box.
+
+**Result.** 36 classes and 45 links recorded; the OE kind-rule check finds 0 violations in 6 measurable ends and leaves 22 ends not measured. `MethodologyRule` is an information artifact, so `supersedesRule` fits Versioning.
+
+**Not claimed.** The OE check scans `*/01-vocabularies/*tbox*.ttl` and this package keeps its T-Box in `01-ontologies`, so the check as shipped does not reach it; the probe runs the check on a copy placed where it looks. A handover to the OE session proposes a wider scan. Most ends stay unmeasured until the work-item classes get kinds, which is not decided here.
+Related: G89, G135.

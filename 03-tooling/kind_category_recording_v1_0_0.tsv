@@ -1,0 +1,82 @@
+subject	kind	iri	assigned	evidence
+class	ClosureReport	http://example.org/backlog#ClosureReport	ClassKind_InformationArtifact	the definition calls it a record, report, file, package or written rule, and the class is a core:Artifact
+class	RoadmapReport	http://example.org/backlog#RoadmapReport	ClassKind_InformationArtifact	the definition calls it a record, report, file, package or written rule, and the class is a core:Artifact
+class	RegisterArtifact	http://example.org/backlog#RegisterArtifact	ClassKind_InformationArtifact	the definition calls it a record, report, file, package or written rule, and the class is a core:Artifact
+class	RegisterPackage	http://example.org/backlog#RegisterPackage	ClassKind_InformationArtifact	the definition calls it a record, report, file, package or written rule, and the class is a core:Artifact
+class	ModuleRecord	http://example.org/backlog#ModuleRecord	ClassKind_InformationArtifact	the definition calls it a record, report, file, package or written rule, and the class is a core:Artifact
+class	LineageArchiveEntry	http://example.org/backlog#LineageArchiveEntry	ClassKind_InformationArtifact	the definition calls it a record, report, file, package or written rule, and the class is a core:Artifact
+class	ArchiveConformanceRecord	http://example.org/backlog#ArchiveConformanceRecord	ClassKind_InformationArtifact	the definition calls it a record, report, file, package or written rule, and the class is a core:Artifact
+class	ToolRunRecord	http://example.org/backlog#ToolRunRecord	ClassKind_InformationArtifact	the definition calls it a record, report, file, package or written rule, and the class is a core:Artifact
+class	ExperienceRecord	http://example.org/backlog#ExperienceRecord	ClassKind_InformationArtifact	the definition calls it a record, report, file, package or written rule, and the class is a core:Artifact
+class	RemoteCommit	http://example.org/backlog#RemoteCommit	ClassKind_InformationArtifact	the definition calls it a record, report, file, package or written rule, and the class is a core:Artifact
+class	StageOutput	http://example.org/backlog#StageOutput	ClassKind_InformationArtifact	the definition calls it a record, report, file, package or written rule, and the class is a core:Artifact
+class	ModelArtifact	http://example.org/backlog#ModelArtifact	ClassKind_InformationArtifact	the definition calls it a record, report, file, package or written rule, and the class is a core:Artifact
+class	MethodologyRule	http://example.org/backlog#MethodologyRule	ClassKind_InformationArtifact	the definition calls it a record, report, file, package or written rule, and the class is a core:Artifact
+class	ImpactAssessment	http://example.org/backlog#ImpactAssessment	ClassKind_Document	the definition calls it an assessment, request, proposal or document
+class	ChangeRequest	http://example.org/backlog#ChangeRequest	ClassKind_Document	the definition calls it an assessment, request, proposal or document
+class	EnhancementProposal	http://example.org/backlog#EnhancementProposal	ClassKind_Document	the definition calls it an assessment, request, proposal or document
+class	GovernedDocument	http://example.org/backlog#GovernedDocument	ClassKind_Document	the definition calls it an assessment, request, proposal or document
+class	Specification	http://example.org/backlog#Specification	ClassKind_Specification	name and first sentence say so
+class	TestCase	http://example.org/backlog#TestCase	ClassKind_TestCase	name and first sentence say so
+class	MetricObservation	http://example.org/backlog#MetricObservation	ClassKind_Measurement	the first sentence calls it a recorded measurement
+class	QualityMetric	http://example.org/backlog#QualityMetric	ClassKind_Metric	name ends in 'Metric' and the first sentence says so
+class	CodeTable	http://example.org/backlog#CodeTable	ClassKind_DataStructure	the first sentence calls it a module-level table
+class	ToolScript	http://example.org/backlog#ToolScript	ClassKind_Program	the first sentence calls it a shipped checker, a program
+class	Executor	http://example.org/backlog#Executor	ClassKind_Agent	the first sentence calls it the concrete party that carries out a work item
+class	Executor_IndividualHuman	http://example.org/backlog#Executor_IndividualHuman	ClassKind_Human	the first sentence says one named person
+class	Executor_HumanTeam	http://example.org/backlog#Executor_HumanTeam	ClassKind_Organization	the first sentence says a named group of people accountable or acting as one
+class	Team	http://example.org/backlog#Team	ClassKind_Organization	the first sentence says a named group of people accountable or acting as one
+class	Role	http://example.org/backlog#Role	ClassKind_Role	the first sentence says who is entitled to decide, or a role within a team
+class	TeamRole	http://example.org/backlog#TeamRole	ClassKind_Role	the first sentence says who is entitled to decide, or a role within a team
+class	Competency	http://example.org/backlog#Competency	ClassKind_Disposition	a competency is what an executor can do: a disposition
+class	ImplementationProject	http://example.org/backlog#ImplementationProject	ClassKind_Project	the first sentence says a funded, bounded delivery effort
+class	CompetencyCategory	http://example.org/backlog#CompetencyCategory	ClassKind_Category	name ends in 'Category' and the first sentence says a top level or kind of grouping
+class	InvestmentCategory	http://example.org/backlog#InvestmentCategory	ClassKind_Category	name ends in 'Category' and the first sentence says a top level or kind of grouping
+class	MaintenanceCategory	http://example.org/backlog#MaintenanceCategory	ClassKind_Category	name ends in 'Category' and the first sentence says a top level or kind of grouping
+class	ComplianceObligation	http://example.org/backlog#ComplianceObligation	ClassKind_Norm	the first sentence says a duty or what a stage owes
+class	StageObligation	http://example.org/backlog#StageObligation	ClassKind_Norm	the first sentence says a duty or what a stage owes
+property	partOf	http://example.org/backlog#partOf	RelationshipCategory_Compositional	part and whole between work items
+property	decomposesInto	http://example.org/backlog#decomposesInto	RelationshipCategory_Compositional	part and whole between work items
+property	subordinateToItem	http://example.org/backlog#subordinateToItem	RelationshipCategory_Compositional	part and whole between work items
+property	hasMember	http://example.org/backlog#hasMember	RelationshipCategory_ContainmentMembership	a thing is a member or part of a container, package or collection
+property	memberOfContainer	http://example.org/backlog#memberOfContainer	RelationshipCategory_ContainmentMembership	a thing is a member or part of a container, package or collection
+property	roleWithinPackage	http://example.org/backlog#roleWithinPackage	RelationshipCategory_ContainmentMembership	a thing is a member or part of a container, package or collection
+property	packageIncludesReport	http://example.org/backlog#packageIncludesReport	RelationshipCategory_ContainmentMembership	a thing is a member or part of a container, package or collection
+property	ruleOfMethodology	http://example.org/backlog#ruleOfMethodology	RelationshipCategory_ContainmentMembership	a thing is a member or part of a container, package or collection
+property	closureCaveat	http://example.org/backlog#closureCaveat	RelationshipCategory_ContainmentMembership	a thing is a member or part of a container, package or collection
+property	supersedesRule	http://example.org/backlog#supersedesRule	RelationshipCategory_Versioning	one item replaces another and the replaced one is kept
+property	supersededBy	http://example.org/backlog#supersededBy	RelationshipCategory_Versioning	one item replaces another and the replaced one is kept
+property	supersedesMission	http://example.org/backlog#supersedesMission	RelationshipCategory_Versioning	one item replaces another and the replaced one is kept
+property	stagePredecessor	http://example.org/backlog#stagePredecessor	RelationshipCategory_OrderingSequence	the stages come in a fixed order carried by a link
+property	succeedsLineage	http://example.org/backlog#succeedsLineage	RelationshipCategory_SuccessionTransformation	one thing follows or becomes another
+property	successorLineage	http://example.org/backlog#successorLineage	RelationshipCategory_SuccessionTransformation	one thing follows or becomes another
+property	collapsesTo	http://example.org/backlog#collapsesTo	RelationshipCategory_SuccessionTransformation	one thing follows or becomes another
+property	attestsCriterion	http://example.org/backlog#attestsCriterion	RelationshipCategory_Assessment	the link measures, verifies or attests
+property	attestsDoDCriterion	http://example.org/backlog#attestsDoDCriterion	RelationshipCategory_Assessment	the link measures, verifies or attests
+property	attestedByTest	http://example.org/backlog#attestedByTest	RelationshipCategory_Assessment	the link measures, verifies or attests
+property	measuredWithTool	http://example.org/backlog#measuredWithTool	RelationshipCategory_Assessment	the link measures, verifies or attests
+property	provesDefinitionOfDone	http://example.org/backlog#provesDefinitionOfDone	RelationshipCategory_Assessment	the link measures, verifies or attests
+property	guardsRelease	http://example.org/backlog#guardsRelease	RelationshipCategory_Assessment	the link measures, verifies or attests
+property	verifiedBy	http://example.org/backlog#verifiedBy	RelationshipCategory_Assessment	the link measures, verifies or attests
+property	hasHarnessEvidence	http://example.org/backlog#hasHarnessEvidence	RelationshipCategory_Assessment	the link measures, verifies or attests
+property	findingEvidence	http://example.org/backlog#findingEvidence	RelationshipCategory_Epistemic	evidence supports a finding
+property	distinguishedFrom	http://example.org/backlog#distinguishedFrom	RelationshipCategory_Comparative	two things the definitions say must not be confused
+property	hasCompetencyCategory	http://example.org/backlog#hasCompetencyCategory	RelationshipCategory_Taxonomic	a specialisation of skos:broader for the category level
+property	safeguardsAgainst	http://example.org/backlog#safeguardsAgainst	RelationshipCategory_Intentional	a control exists for a purpose: to prevent a failure mode
+property	safeguardedBy	http://example.org/backlog#safeguardedBy	RelationshipCategory_Intentional	a control exists for a purpose: to prevent a failure mode
+property	maintenanceTriggeredBy	http://example.org/backlog#maintenanceTriggeredBy	RelationshipCategory_Causal	a request sets off the work
+property	triggeredBy	http://example.org/backlog#triggeredBy	RelationshipCategory_Causal	a request sets off the work
+property	governedByScopeExclusion	http://example.org/backlog#governedByScopeExclusion	RelationshipCategory_Normative	a scope exclusion decides what a human interaction is
+property	briefCriterion	http://example.org/backlog#briefCriterion	RelationshipCategory_Provenance	the brief is generated from the criterion
+property	followsMethodology	http://example.org/backlog#followsMethodology	RelationshipCategory_Association	related, and no more specific category says how; the definition leaves unsaid the finer relation
+property	statusOfStage	http://example.org/backlog#statusOfStage	RelationshipCategory_Association	related, and no more specific category says how; the definition leaves unsaid the finer relation
+property	phaseRankingModel	http://example.org/backlog#phaseRankingModel	RelationshipCategory_Association	related, and no more specific category says how; the definition leaves unsaid the finer relation
+property	phaseGatedCategory	http://example.org/backlog#phaseGatedCategory	RelationshipCategory_Association	related, and no more specific category says how; the definition leaves unsaid the finer relation
+property	competencyDomain	http://example.org/backlog#competencyDomain	RelationshipCategory_Association	related, and no more specific category says how; the definition leaves unsaid the finer relation
+property	gapForObligation	http://example.org/backlog#gapForObligation	RelationshipCategory_Association	related, and no more specific category says how; the definition leaves unsaid the finer relation
+property	anchorsReleaseEvidence	http://example.org/backlog#anchorsReleaseEvidence	RelationshipCategory_Association	related, and no more specific category says how; the definition leaves unsaid the finer relation
+property	manifestsAsThrashKind	http://example.org/backlog#manifestsAsThrashKind	RelationshipCategory_Association	related, and no more specific category says how; the definition leaves unsaid the finer relation
+property	stageOfEntity	http://example.org/backlog#stageOfEntity	RelationshipCategory_Association	related, and no more specific category says how; the definition leaves unsaid the finer relation
+property	briefFor	http://example.org/backlog#briefFor	RelationshipCategory_Association	related, and no more specific category says how; the definition leaves unsaid the finer relation
+property	briefedExecutorInstance	http://example.org/backlog#briefedExecutorInstance	RelationshipCategory_Association	related, and no more specific category says how; the definition leaves unsaid the finer relation
+property	caveatTrackedBy	http://example.org/backlog#caveatTrackedBy	RelationshipCategory_Association	related, and no more specific category says how; the definition leaves unsaid the finer relation
