@@ -15,6 +15,7 @@ Each case is a fact about backlog_release_tool, shown on a throwaway folder, and
   10 (v1.3.4) public_keep: the derived 04-documentation/README.md is not overwritten by the public copy's older one, while the root README, DISTRIBUTION and LICENSE are kept;
      when the derivation did not produce it the public copy's own is kept; a file the public copy does not have is not invented.
   11 (v1.3.4) the release path exports the measured probe inputs beside the proof stamps.
+  12 (v1.3.5) ensure_stamps creates both stamp files when absent and leaves an existing one (and its bytes) alone.
 Exit 0 all hold; 2 a case failed.
 """
 import importlib.util, os, subprocess, sys, tempfile, glob
@@ -97,6 +98,12 @@ def main():
         rem, kept = RT.prune_cache(d2, 14)
         check("7 prune removes the old cache files only", rem == 5 and kept == 1 and sorted(os.listdir(d2)) == ["notes.txt", "shape_" + "d" * 64 + ".ttl"])
     check("8 the release path never removes the fixture-suite stamp", "os.remove(stamp)" not in open(RT.__file__).read())
+
+    with tempfile.TemporaryDirectory() as d12:
+        made = RT.ensure_stamps(d12)
+        open(os.path.join(d12, ".clause-proof-stamp"), "w").write("keep")
+        again = RT.ensure_stamps(d12)
+        check("12 ensure_stamps creates both stamps once and keeps an existing one", sorted(made) == [".clause-proof-stamp", ".fixture-suite-stamp"] and again == [] and open(os.path.join(d12, ".clause-proof-stamp")).read() == "keep")
 
     gf = RT.gate_failures
     check("9 a zero count of failures is not a failure", gf("  declaration verified    : 134\n  declaration FAILED      : 0\n") == [])

@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v104.0.0
+# Lineage Operating Discipline — v105.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -3763,3 +3763,10 @@ Related: G89, G125, G133, G134.
 
 **Not claimed.** Not run on the SEN0401 register. The accepted v1.0.0 handover was edited in place by the sender after its acceptance (the correction is also its own v1.1.0). The edit stays, because a versioned name may not change bytes back either (the name guard compares with the published copy); the manifest records the edited text, and the sender is told not to edit an accepted file.
 Related: G89, G134, G136.
+
+## G138 — Two items disclosed as owed are cleared
+
+**Stale sentence.** The definition of review evidence said it was never sufficient alone at conformance level L3. The levels were retired in v1.68.0 and no shape limits review evidence now, so the sentence is rewritten as history. The link-control ledger row that rejected it as stale text is removed, as the rule requires of a row whose cause is gone. A second sentence of the same kind (the derived proof mark that at that level an item cannot hold Done without it) is not changed here, because what the shapes require of Done today was not checked in this change; it is named, not hidden.
+
+**Release path.** It created `.fixture-suite-stamp` and not `.clause-proof-stamp`, so every release needed the second touched by hand beforehand. It creates both now, and leaves an existing one as it is; the release tool's probe has the case.
+Related: G135.

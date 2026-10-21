@@ -11260,6 +11260,14 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.414.0 — 2026-10-21 (PATCH: two owed items cleared — a stale sentence rewritten, the release path creates both stamps — G138)
+
+- **T-Box v1.139.0:** the sentence in the definition of review evidence that named the retired conformance level L3 says the gating retired in v1.68.0. The ledger row that rejected it as stale text is removed (`link_decisions_v1_1_0.tsv`, 14 rows).
+- **Tools:** `backlog_release_tool` v1.3.5 creates both stamp files when absent (`ensure_stamps`); its probe v1.3.5 has a twelfth case.
+- **Discipline v105.0.0:** G138.
+
+**Unplanned work:** two items disclosed as owed in G135 and the report of v1.411.0; no backlog item of this package covers them.
+
 ## v1.413.0 — 2026-10-21 (MINOR: three gaps the register check of the SEN0401 slides lineage found — G137)
 
 - **Shapes v1.177.0:** three advisories: the ceremony of an observation is a link, work is begun in a started iteration, an iteration with started work has a ceremony record. Standard v1.139.0.

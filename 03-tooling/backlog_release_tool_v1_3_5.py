@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_release_tool v1.3.4 -- the release steps a session used to do by hand, as one tested tool (G99 release A; OE rule R4).
+"""backlog_release_tool v1.3.5 -- the release steps a session used to do by hand, as one tested tool (G99 release A; OE rule R4).
 
 Subcommands (each prints what it did and exits non-zero on any refusal):
   bump-data NEWVER                      rename the package data file to the new version and move its header (versionInfo, versionIRI, priorVersion)
@@ -16,6 +16,7 @@ Subcommands (each prints what it did and exits non-zero on any refusal):
                                         duration; --dry-run prints the plan and the refusals it already knows (missing changelog entry) and runs nothing
   prune-cache [DIR] [--days N] [--legacy]          remove cache files (shape_*.ttl, memo *.json, stamps) older than N days (default 14) from the validation cache; they are rebuilt on demand
   republish VERSION                     only the publisher and the tag check (after a transient failure of the public push)
+v1.3.5 (G138): the release path creates both stamp files (`ensure_stamps`: .fixture-suite-stamp and .clause-proof-stamp) when absent, so a release no longer needs them touched by hand beforehand.
 v1.3.4 (G128): after the proof stamps the measured probe inputs are exported to 06-package-provenance/PROBE_INPUTS.json; `public_keep` (the files the public copy keeps) is a function of its own and has a test.
 v1.3.3 (G126): `release --cold` runs every gate step (BACKLOG_COLD=1); after a passing gate the proof stamps are exported to 06-package-provenance/PROOF_STAMPS.json and the manifest is rebuilt; prune-cache --legacy removes the one-file-per-shape cache and prunes the shape bundles.
 v1.3.2 (G124): the public copy keeps its own README.md, DISTRIBUTION.md and LICENSE, but 04-documentation/README.md is taken from the derivation whenever the derivation has one, so a changed README no longer needs a hand fix in the public copy.
@@ -113,6 +114,16 @@ def public_keep(pd, pubcopy):
         if os.path.exists(os.path.join(pubcopy, f)):
             keep[f] = open(os.path.join(pubcopy, f), "rb").read()
     return keep
+
+
+def ensure_stamps(pkg):
+    """v1.3.5 (G138): both stamp files exist (empty when new); an existing one is left as it is. -> the names created."""
+    made = []
+    for n in (".fixture-suite-stamp", ".clause-proof-stamp"):
+        f = os.path.join(pkg, n)
+        if not os.path.exists(f):
+            open(f, "w").close(); made.append(n)
+    return made
 
 
 def clean_bytecode(root):
@@ -272,9 +283,7 @@ def cmd_release(args, only_publish=False):
             tf.add(P, arcname=PKGNAME)
         open(os.path.join(P, "VERSION.txt"), "w").write(v + "\n")
         clean_bytecode(P)
-        stamp = os.path.join(P, ".fixture-suite-stamp")
-        if not os.path.exists(stamp):
-            open(stamp, "w").close()
+        ensure_stamps(P)
         mf = newest(os.path.join(HERE, "build_manifest_v*.py"))
         p = st.run("manifest", [sys.executable, mf], cwd=P, capture_output=True, text=True)
         print("  " + (p.stdout.strip().splitlines() or [""])[-1])
