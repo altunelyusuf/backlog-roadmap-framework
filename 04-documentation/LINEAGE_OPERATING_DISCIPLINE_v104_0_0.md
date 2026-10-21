@@ -3761,5 +3761,5 @@ Related: G89, G125, G133, G134.
 
 **Proof.** `backlog_plan_then_execute_probe` v1.1.0: three more planted faults fire their shape, each corrected twin is silent.
 
-**Not claimed.** Not run on the SEN0401 register. The file edited in place after its acceptance was restored to the accepted text (a hand-over once accepted is not edited; the correction is its own version).
+**Not claimed.** Not run on the SEN0401 register. The accepted v1.0.0 handover was edited in place by the sender after its acceptance (the correction is also its own v1.1.0). The edit stays, because a versioned name may not change bytes back either (the name guard compares with the published copy); the manifest records the edited text, and the sender is told not to edit an accepted file.
 Related: G89, G134, G136.
