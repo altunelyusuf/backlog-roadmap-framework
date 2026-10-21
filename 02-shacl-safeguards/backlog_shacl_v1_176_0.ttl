@@ -9,9 +9,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog/shacl/1.175.0> ;
-    owl:versionInfo "1.175.0" ;
-    owl:priorVersion <http://example.org/backlog-shapes/1.174.0> , <http://example.org/backlog-shapes/1.173.0> , <http://example.org/backlog-shapes/1.172.0> , <http://example.org/backlog-shapes/1.171.0> , <http://example.org/backlog-shapes/1.170.0> , <http://example.org/backlog-shapes/1.169.0> , <http://example.org/backlog-shapes/1.168.0> , <http://example.org/backlog-shapes/1.167.0> , <http://example.org/backlog-shapes/1.166.0> , <http://example.org/backlog-shapes/1.165.0> , <http://example.org/backlog-shapes/1.164.0> , <http://example.org/backlog-shapes/1.159.0> , <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
+    owl:versionIRI <http://example.org/backlog/shacl/1.176.0> ;
+    owl:versionInfo "1.176.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.175.0> , <http://example.org/backlog-shapes/1.174.0> , <http://example.org/backlog-shapes/1.173.0> , <http://example.org/backlog-shapes/1.172.0> , <http://example.org/backlog-shapes/1.171.0> , <http://example.org/backlog-shapes/1.170.0> , <http://example.org/backlog-shapes/1.169.0> , <http://example.org/backlog-shapes/1.168.0> , <http://example.org/backlog-shapes/1.167.0> , <http://example.org/backlog-shapes/1.166.0> , <http://example.org/backlog-shapes/1.165.0> , <http://example.org/backlog-shapes/1.164.0> , <http://example.org/backlog-shapes/1.159.0> , <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.154.0> , <http://example.org/backlog-shapes/1.153.0> , <http://example.org/backlog-shapes/1.152.0> , <http://example.org/backlog-shapes/1.151.0> , <http://example.org/backlog-shapes/1.150.0> , <http://example.org/backlog-shapes/1.149.0> , <http://example.org/backlog-shapes/1.148.0> , <http://example.org/backlog-shapes/1.147.0> , <http://example.org/backlog-shapes/1.146.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.145.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.144.0> ;
@@ -8671,3 +8671,77 @@ backlog:CodeTableModuleLinkShape a sh:NodeShape ;
     rdfs:label "Advisory: a code table names its module by a link (G134)"@en ;
     sh:property [ sh:path backlog:tableInModule ; sh:nodeKind sh:IRI ; sh:severity sh:Warning ;
         sh:message "Advisory (G134): the tool script a code table lives in is named by a link to the tool script, not by its file name as text." ] .
+
+#################################################################
+#  v1.176.0 (G136) -- plan, then execute: six checks against finding a defect after the fact
+#################################################################
+# Warnings, except the caveat tracking of a class that is new in this version: a register that predates these links is advised, not refused (G89).
+backlog:ClosureCaveatTrackedShape a sh:NodeShape ;
+    sh:targetClass backlog:ClosureCaveat ;
+    rdfs:label "A closure caveat is tracked by a work item or an owner decision (G136)"@en ;
+    sh:property [ sh:path backlog:caveatTrackedBy ; sh:minCount 1 ;
+        sh:message "G136: this closure caveat is tracked by no work item and by no change request recording the owner's decision to leave it. A caveat with neither is a defect list kept outside the backlog; open the item or record the decision before the closure." ] .
+
+backlog:CriterionToolVersionShape a sh:NodeShape ;
+    sh:targetClass backlog:AcceptanceCriterion ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: a criterion measured with a tool names its version (G136)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ; sh:severity sh:Warning ;
+        sh:message "Advisory (G136): this criterion names the tool it is measured with and not the version. Two versions of one gate can disagree; name the version when the criterion is planned." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] , [ sh:prefix "prov" ; sh:namespace "http://www.w3.org/ns/prov#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE { $this backlog:measuredWithTool ?t . FILTER NOT EXISTS { $this backlog:measuredWithVersion ?v } }""" ] .
+
+backlog:CriterionCitesGateShape a sh:NodeShape ;
+    sh:targetClass backlog:AcceptanceCriterion ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: a criterion that cites a gate or check names the tool (G136)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ; sh:severity sh:Warning ;
+        sh:message "Advisory (G136): the text of this criterion cites a gate, validator or check and the criterion names no tool it is measured with (measuredWithTool, measuredWithVersion). Say which tool and version, so a difference between two tools shows at planning." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] , [ sh:prefix "prov" ; sh:namespace "http://www.w3.org/ns/prov#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE { $this backlog:hasGherkinText ?txt . FILTER(REGEX(STR(?txt), \"(gate|validator|checker|order check|pipeline_verify)\", \"i\")) FILTER NOT EXISTS { $this backlog:measuredWithTool ?t } }""" ] .
+
+backlog:PlanningAfterIterationStartShape a sh:NodeShape ;
+    sh:targetClass backlog:PlanningEvent ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: work planned into an iteration after it started needs a rebaseline (G136)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ; sh:severity sh:Warning ;
+        sh:message "Advisory (G136): this planning event puts work into an iteration after the iteration started, and no rebaseline of the iteration was recorded at or before it, and it is not a carry-over. The sprint goal is fixed when the iteration starts: later work goes to a new iteration or to the owner's rebaseline." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] , [ sh:prefix "prov" ; sh:namespace "http://www.w3.org/ns/prov#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE { $this backlog:plannedInto ?it ; backlog:plannedAt ?at . ?it backlog:iterationStart ?st . FILTER(?at > ?st) FILTER NOT EXISTS { $this backlog:carriesOverFrom ?c } FILTER NOT EXISTS { ?rb backlog:rebaselines ?it ; backlog:rebaselinedAt ?rat . FILTER(?rat <= ?at) } }""" ] .
+
+backlog:StoryEpicOrAloneShape a sh:NodeShape ;
+    sh:targetClass backlog:Story ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: a story states its epic or that it stands alone (G136)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ; sh:severity sh:Warning ;
+        sh:message "Advisory (G136): this story has no parent item and does not say it stands alone, while the register holds an epic or an initiative. State the parent (partOf) or standsAlone true." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] , [ sh:prefix "prov" ; sh:namespace "http://www.w3.org/ns/prov#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE { FILTER NOT EXISTS { $this backlog:partOf ?p } FILTER NOT EXISTS { ?q backlog:decomposesInto $this } FILTER NOT EXISTS { $this backlog:standsAlone true } FILTER EXISTS { { ?e a backlog:Epic } UNION { ?e a backlog:Initiative } } }""" ] .
+
+backlog:BriefDerivedShape a sh:NodeShape ;
+    sh:targetClass backlog:ExecutorBrief ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: an executor brief is generated from the task and its criterion and names the session (G136)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ; sh:severity sh:Warning ;
+        sh:message "Advisory (G136): this executor brief names no task, or names no acceptance criterion it was generated from (briefCriterion), or names no executor instance. A brief is generated from the task and its criterion, and the register records which session received it." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] , [ sh:prefix "prov" ; sh:namespace "http://www.w3.org/ns/prov#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE { { FILTER NOT EXISTS { $this backlog:briefFor ?t } } UNION { FILTER NOT EXISTS { $this backlog:briefCriterion ?c } } UNION { FILTER NOT EXISTS { $this backlog:briefedExecutorInstance ?i } } }""" ] .
+
+backlog:StartedWithoutBriefShape a sh:NodeShape ;
+    sh:targetClass backlog:ExecutionTask ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: a started task has an executor brief (G136)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ; sh:severity sh:Warning ;
+        sh:message "Advisory (G136): this task records a start and no executor brief was recorded for it, so what the executor was told is not in the record." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] , [ sh:prefix "prov" ; sh:namespace "http://www.w3.org/ns/prov#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE { $this backlog:startedAt ?s . FILTER NOT EXISTS { ?b backlog:briefFor $this } }""" ] .
+
+backlog:StartBeforeExecutorShape a sh:NodeShape ;
+    sh:targetClass backlog:ExecutorBrief ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: work is recorded as begun when the executor starts, not before (G136)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ; sh:severity sh:Warning ;
+        sh:message "Advisory (G136): the task of this brief records a start earlier than the start of the executor instance that was briefed. Work begun is recorded by the executor, or at the moment of its start." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] , [ sh:prefix "prov" ; sh:namespace "http://www.w3.org/ns/prov#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE { $this backlog:briefFor ?t ; backlog:briefedExecutorInstance ?i . ?t backlog:startedAt ?s . ?i backlog:instantiatedAt ?ia . FILTER(?s < ?ia) }""" ] .
+

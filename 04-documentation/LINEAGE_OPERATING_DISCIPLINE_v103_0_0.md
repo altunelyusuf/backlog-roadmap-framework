@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v102.0.0
+# Lineage Operating Discipline — v103.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -3731,3 +3731,20 @@ Related: G89, G92, G132.
 
 **Not claimed.** Fifteen sentences are rejected and stay as text; one of them (the sentence on review evidence naming conformance level L3) is stale against v1.68.0 and is owed a rewrite. A link made by the check means the relation is carried, not that the property chosen is the only right one; the ceremony's judgment stands. The gate commands of the release gates still name retired script versions.
 Related: G89, G134, L-110.
+
+## G136 — A defect named at closure has an item; a criterion records the tool it is measured with; the sprint goal is fixed at the start; a story has its epic; an executor is briefed from the task and criterion
+
+*(Opened by a handover of the SEN0401 slides session, 2026-10-21, quoting the owner: "It is a drift to find a solution to an issue after the happening. We have a clean discipline first to plan and decide, later execute and control." The six measures asked for were looked for in the shipped files before building: none existed as a check; the register already records who made each move (`transitionedByExecutor`), the executor instance and its start (`instantiatedAt`), and the parent link (`partOf`).)*
+
+**Q(a) — in the discipline or in the coordinator? Both, as the session found.** Items 1, 2 and 3 of its record (a defect listed outside the register, a plan measured with a tool other than the gate's, a sprint used as a bucket) were missing rules; items 4 and 5 (a brief written in free text, a start recorded before the executor started) the rules did not forbid because nothing recorded a brief at all. Both now have a link to check.
+
+**Q(b) — what is built (T-Box v1.138.0, shapes v1.176.0).** (i) `ClosureCaveat`, linked from the report by `closureCaveat`, must be tracked (`caveatTrackedBy`) by a work item or by a change request that records the owner's decision to leave it; a violation, because the class is new and no existing record is refused. (ii) A criterion records `measuredWithTool` and `measuredWithVersion`; a criterion whose text cites a gate, validator or check and names no tool is advised. (iii) A planning event that puts work into an iteration after `iterationStart` is advised unless a rebaseline of the iteration was recorded at or before it or the event is a carry-over: the goal is fixed at the start, later work goes to a new iteration or to the owner's rebaseline. (iv) A story with no parent and no `standsAlone true` is advised while the register holds an epic or an initiative. (v) An `ExecutorBrief` is generated from the task (`briefFor`) and the criterion (`briefCriterion`) and names the executor instance that received it; a started task with no brief is advised. (vi) A start recorded earlier than the start of the briefed executor instance is advised.
+
+**Q(c) — what already existed.** The record of who made each move and of the executor instance; the parent link; the rebaseline of an iteration. None checked any of the six.
+
+**Q(d) — who is bound (G89).** All advisories except the caveat shape, which targets a class that did not exist. A register that predates these links is advised, not refused, and keeps the shapes it was opened under until it vendors these; a register in progress is not made to redo its past. Checked on this package's own data: none of the new shapes fires.
+
+**Proof.** `backlog_plan_then_execute_probe` v1.0.0: eight planted faults fire their shape, each corrected twin is silent.
+
+**Not claimed.** (iii) cannot see a goal edited in place, only work added after the start; a goal edit is a change to a fixed field and is caught by the version control of the register, not by a shape. (vi) compares recorded times; it cannot tell whether a time was recorded honestly. Whether a caveat is "a defect" is the coordinator's judgment; the check only requires that what is named has an item. Nothing here was run on the SEN0401 register.
+Related: G89, G125, G133, G134.

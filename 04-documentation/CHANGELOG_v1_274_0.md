@@ -11260,6 +11260,15 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.412.0 — 2026-10-21 (MINOR: plan, then execute — six checks against finding a defect after the fact — G136)
+
+- **T-Box v1.138.0:** the classes `ClosureCaveat` and `ExecutorBrief`; `closureCaveat`, `caveatTrackedBy`, `briefFor`, `briefCriterion`, `briefedExecutorInstance`, `measuredWithTool`, `measuredWithVersion`, `standsAlone`. Standard v1.138.0.
+- **Shapes v1.176.0:** seven shapes (one violation for the new caveat class, six advisories).
+- **Tools:** `backlog_plan_then_execute_probe` v1.0.0 (eight planted faults, each with a corrected twin); gate v1.65.0.
+- **Discipline v103.0.0:** G136, the answer to the SEN0401 slides handover.
+
+**Unplanned work:** the handover of the SEN0401 slides session of 2026-10-21; no backlog item of this package covers it.
+
 ## v1.411.0 — 2026-10-20 (MINOR: every missing-link candidate is decided; a rule is linked to its methodology and a gate to the release it guards — G135)
 
 - **T-Box v1.137.0:** the class `Methodology`; `ruleOfMethodology` and `guardsRelease` (to `orh:ReleaseEvent`) with restrictions on `MethodologyRule` and `ReleaseGate`; the symmetric `distinguishedFrom`; nineteen further link properties; restrictions on `FailureRecord` and `ImplementationProject`. Standard v1.137.0.

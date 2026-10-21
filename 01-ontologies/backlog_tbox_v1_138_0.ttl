@@ -18,9 +18,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.137.0> ;
-    owl:versionInfo "1.137.0" ;
-    owl:priorVersion <http://example.org/backlog/1.136.0> , <http://example.org/backlog/1.135.0> , <http://example.org/backlog/1.134.0> , <http://example.org/backlog/1.133.0> , <http://example.org/backlog/1.132.0> , <http://example.org/backlog/1.131.0> , <http://example.org/backlog/1.130.0> , <http://example.org/backlog/1.129.0> , <http://example.org/backlog/1.125.0> , <http://example.org/backlog/1.124.0> , <http://example.org/backlog/1.123.0> , <http://example.org/backlog/1.122.0> ;
+    owl:versionIRI <http://example.org/backlog/1.138.0> ;
+    owl:versionInfo "1.138.0" ;
+    owl:priorVersion <http://example.org/backlog/1.137.0> , <http://example.org/backlog/1.136.0> , <http://example.org/backlog/1.135.0> , <http://example.org/backlog/1.134.0> , <http://example.org/backlog/1.133.0> , <http://example.org/backlog/1.132.0> , <http://example.org/backlog/1.131.0> , <http://example.org/backlog/1.130.0> , <http://example.org/backlog/1.129.0> , <http://example.org/backlog/1.125.0> , <http://example.org/backlog/1.124.0> , <http://example.org/backlog/1.123.0> , <http://example.org/backlog/1.122.0> ;
     owl:priorVersion <http://example.org/backlog/1.121.0> , <http://example.org/backlog/1.120.0> , <http://example.org/backlog/1.119.0> , <http://example.org/backlog/1.118.0> , <http://example.org/backlog/1.117.0> ;
     owl:priorVersion <http://example.org/backlog/1.116.0> ;
     owl:priorVersion <http://example.org/backlog/1.115.0> ;
@@ -7515,3 +7515,61 @@ backlog:SprintCeremony prov:wasDerivedFrom backlog:RegisterSession .
 backlog:IntentOrigin prov:wasDerivedFrom backlog:MissionOrigin .
 backlog:AdaptationGate prov:wasDerivedFrom backlog:CrossCuttingInvariant .
 backlog:PlanningEvent prov:wasDerivedFrom backlog:RefinementEvent .
+
+#################################################################
+#  Plan, then execute (v1.138.0, G136): what a closure discloses, what a criterion is measured with,
+#  what an executor was told. Each is a link, so a check can find its absence.
+#################################################################
+
+backlog:ClosureCaveat a owl:Class ;
+    rdfs:subClassOf core:Artifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Closure Caveat"@en ;
+    skos:definition "A defect or limit that a closure report discloses as still standing. Each caveat is tracked by a work item or by an owner decision to leave it (a change request with its disposition); a caveat tracked by neither is a defect list kept outside the backlog."@en .
+
+backlog:closureCaveat a owl:ObjectProperty ;
+    rdfs:domain backlog:ClosureReport ; rdfs:range backlog:ClosureCaveat ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "closure caveat"@en ;
+    skos:definition "A caveat the closure report discloses."@en .
+
+backlog:caveatTrackedBy a owl:ObjectProperty ;
+    rdfs:domain backlog:ClosureCaveat ;
+    rdfs:range [ a owl:Class ; owl:unionOf ( backlog:WorkItem backlog:ChangeRequest ) ] ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "caveat tracked by"@en ;
+    skos:definition "The work item that removes the caveat, or the change request whose disposition records the owner's decision to leave it."@en .
+
+backlog:ExecutorBrief a owl:Class ;
+    rdfs:subClassOf core:Artifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Executor Brief"@en ;
+    skos:definition "What an executor was told to do for one task: generated from the task and its acceptance criterion, not written separately, and kept so that what the executor was told is in the record. It names the executor instance (the session) that received it."@en .
+
+backlog:briefFor a owl:ObjectProperty ;
+    rdfs:domain backlog:ExecutorBrief ; rdfs:range backlog:ExecutionTask ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "brief for"@en ;
+    skos:definition "The task an executor brief was generated for."@en .
+
+backlog:briefCriterion a owl:ObjectProperty ;
+    rdfs:domain backlog:ExecutorBrief ; rdfs:range backlog:AcceptanceCriterion ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "brief criterion"@en ;
+    skos:definition "The acceptance criterion the brief was generated from, so what the executor was told is derived from what will be checked and not written apart from it."@en .
+
+backlog:briefedExecutorInstance a owl:ObjectProperty ;
+    rdfs:domain backlog:ExecutorBrief ; rdfs:range backlog:ExecutorInstance ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "briefed executor instance"@en ;
+    skos:definition "The executor instance (the session) that received the brief and did the work, so the register records which session did it."@en .
+
+backlog:measuredWithTool a owl:ObjectProperty ;
+    rdfs:domain backlog:AcceptanceCriterion ; rdfs:range backlog:ToolScript ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "measured with tool"@en ;
+    skos:definition "The tool script a criterion that cites a gate or a check is measured with. With measuredWithVersion it makes a difference between two tools (or two versions of one) visible when the criterion is planned and not after the work."@en .
+
+backlog:measuredWithVersion a owl:DatatypeProperty ;
+    rdfs:domain backlog:AcceptanceCriterion ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "measured with version"@en ;
+    skos:definition "The version of the tool the criterion is measured with."@en .
+
+backlog:standsAlone a owl:DatatypeProperty ;
+    rdfs:domain backlog:ProductBacklogItem ; rdfs:range xsd:boolean ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "stands alone"@en ;
+    skos:definition "True when the item deliberately belongs to no epic or initiative. A story admitted after an initiative exists either has a parent (partOf) or says that it stands alone."@en .
