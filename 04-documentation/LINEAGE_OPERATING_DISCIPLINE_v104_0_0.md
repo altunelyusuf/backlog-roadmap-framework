@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v103.0.0
+# Lineage Operating Discipline — v104.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -3748,3 +3748,18 @@ Related: G89, G134, L-110.
 
 **Not claimed.** (iii) cannot see a goal edited in place, only work added after the start; a goal edit is a change to a fixed field and is caught by the version control of the register, not by a shape. (vi) compares recorded times; it cannot tell whether a time was recorded honestly. Whether a caveat is "a defect" is the coordinator's judgment; the check only requires that what is named has an item. Nothing here was run on the SEN0401 register.
 Related: G89, G125, G133, G134.
+
+## G137 — The corrected handover: the six measures stand, and three gaps its register check found are advised
+
+*(Opened by the corrected handover of the SEN0401 slides session, 2026-10-21 (v1.1.0, superseding the v1.0.0 answered by G136). Its correction: the closure report did not name the template defect among its caveats; and it adds a sixth finding.)*
+
+**Q1 — does the correction change G136?** The measures stand; one premise falls. The caveat check (G136 (i)) would not have caught the template defect, because that defect was never named in the report: it lived in a status file outside the register. No check of the register can see a file outside it; the check requires only that what a closure names has an item. What the file outside the register shows is a coordinator's practice (the session says so itself) and is not claimed as prevented.
+
+**Q2 — the sixth finding, three gaps.** (a) `observedDuringCeremony` was written as the literal `true` where the property is a link to the sprint review: advised, the same rule as G134 (a connection is a link, never text). (b) The start of work did not check that a sprint had started: a task that records a start is advised unless it is a member of an iteration whose `iterationStart` is at or before it. (c) An iteration with started work and no ceremony record is advised, so a sprint is visible as a sprint. The tool that records "work begun" with no executor session name is the adopter's own and is not in this package; the register now has the brief and the executor instance (G136) for the session to be named by a link.
+
+**Q3 — who is bound (G89).** Advisories only; a register in progress is advised, not refused. Checked on this package's data: none fires.
+
+**Proof.** `backlog_plan_then_execute_probe` v1.1.0: three more planted faults fire their shape, each corrected twin is silent.
+
+**Not claimed.** Not run on the SEN0401 register. The file edited in place after its acceptance was restored to the accepted text (a hand-over once accepted is not edited; the correction is its own version).
+Related: G89, G134, G136.

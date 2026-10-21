@@ -11260,6 +11260,14 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.413.0 — 2026-10-21 (MINOR: three gaps the register check of the SEN0401 slides lineage found — G137)
+
+- **Shapes v1.177.0:** three advisories: the ceremony of an observation is a link, work is begun in a started iteration, an iteration with started work has a ceremony record. Standard v1.139.0.
+- **Tools:** `backlog_plan_then_execute_probe` v1.1.0 (eleven planted faults with corrected twins).
+- **Discipline v104.0.0:** G137, the answer to the corrected handover (v1.1.0), which supersedes the one answered by G136.
+
+**Unplanned work:** the corrected handover of the SEN0401 slides session of 2026-10-21; no backlog item of this package covers it.
+
 ## v1.412.0 — 2026-10-21 (MINOR: plan, then execute — six checks against finding a defect after the fact — G136)
 
 - **T-Box v1.138.0:** the classes `ClosureCaveat` and `ExecutorBrief`; `closureCaveat`, `caveatTrackedBy`, `briefFor`, `briefCriterion`, `briefedExecutorInstance`, `measuredWithTool`, `measuredWithVersion`, `standsAlone`. Standard v1.138.0.

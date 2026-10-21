@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_plan_then_execute_probe v1.0.0 -- six checks against finding a defect after the fact (T-Box v1.138.0, shapes v1.176.0, G136).
+"""backlog_plan_then_execute_probe v1.1.0 -- checks against finding a defect after the fact (T-Box v1.138.0, shapes v1.177.0, G136, G137).
 
 Each check fires on a planted fault and is silent on its corrected twin:
   1 a closure caveat tracked by no work item and no change request (ClosureCaveatTrackedShape; a violation for the new class),
@@ -7,7 +7,8 @@ Each check fires on a planted fault and is silent on its corrected twin:
   3 work planned into an iteration after it started with no rebaseline and no carry-over (the sprint goal is fixed at the start),
   4 a story with no parent and no 'stands alone' while the register holds an epic,
   5 an executor brief not derived from a criterion, naming no task or no executor instance; a started task with no brief,
-  6 a task whose start is recorded before the start of the executor instance that was briefed.
+  6 a task whose start is recorded before the start of the executor instance that was briefed,
+  7 (G137) an observation whose ceremony is a literal and not a link; work begun in no started iteration; an iteration with started work and no ceremony record.
 Also: the new classes and properties are declared with domain and range.
 Exit 0 when every expectation holds, 1 otherwise."""
 import glob, os, re, sys
@@ -32,9 +33,11 @@ def fired(text):
     out = set()
     for r in rg.subjects(RDF.type, SHNS.ValidationResult):
         out.add(str(rg.value(r, SHNS.sourceShape)).split("#")[-1])
-        if str(rg.value(r, SHNS.resultMessage) or "").startswith("G136: this closure caveat"): out.add("ClosureCaveatTrackedShape")
+        m = str(rg.value(r, SHNS.resultMessage) or "")
+        if m.startswith("G136: this closure caveat"): out.add("ClosureCaveatTrackedShape")
+        if m.startswith("Advisory (G137): observedDuringCeremony"): out.add("ObservedDuringCeremonyLinkShape")
     return out & WANT
-WANT = {"ClosureCaveatTrackedShape", "CriterionToolVersionShape", "CriterionCitesGateShape", "PlanningAfterIterationStartShape", "StoryEpicOrAloneShape", "BriefDerivedShape", "StartedWithoutBriefShape", "StartBeforeExecutorShape"}
+WANT = {"ClosureCaveatTrackedShape", "CriterionToolVersionShape", "CriterionCitesGateShape", "PlanningAfterIterationStartShape", "StoryEpicOrAloneShape", "BriefDerivedShape", "StartedWithoutBriefShape", "StartBeforeExecutorShape", "ObservedDuringCeremonyLinkShape", "StartInStartedIterationShape", "IterationCeremonyShape"}
 def fault_and_twin(label, shape, fault, twin):
     f, w = fired(fault), fired(twin)
     expect("%s: the fault fires %s, the twin is silent" % (label, shape), shape in f and shape not in w, "fault %s; twin %s" % (sorted(f), sorted(w)))
@@ -52,6 +55,11 @@ GOOD = TASK + 'ex:B a backlog:ExecutorBrief ; backlog:briefFor ex:T ; backlog:br
 fault_and_twin("5a", "BriefDerivedShape", TASK + 'ex:B a backlog:ExecutorBrief ; backlog:briefFor ex:T .', GOOD)
 fault_and_twin("5b", "StartedWithoutBriefShape", TASK, GOOD)
 fault_and_twin("6", "StartBeforeExecutorShape", TASK.replace("09:00:00", "11:00:00") + 'ex:B a backlog:ExecutorBrief ; backlog:briefFor ex:T ; backlog:briefedExecutorInstance ex:X ; backlog:briefCriterion ex:CR .', GOOD)
+fault_and_twin("7a", "ObservedDuringCeremonyLinkShape", "ex:O a backlog:MetricObservation ; backlog:observedDuringCeremony true .", "ex:O a backlog:MetricObservation ; backlog:observedDuringCeremony ex:Rev .")
+ITR = 'ex:I a backlog:Iteration ; backlog:iterationStart "2026-10-01T00:00:00"^^xsd:dateTime .\n'
+STARTED = 'ex:T a backlog:ExecutionTask ; backlog:startedAt "2026-10-05T10:00:00"^^xsd:dateTime'
+fault_and_twin("7b", "StartInStartedIterationShape", STARTED + " .", ITR + STARTED + " ; backlog:memberOfContainer ex:I .")
+fault_and_twin("7c", "IterationCeremonyShape", ITR + STARTED + " ; backlog:memberOfContainer ex:I .", ITR + STARTED + " ; backlog:memberOfContainer ex:I .\nex:Cer backlog:ceremonyFor ex:I .")
 decl = {"ClosureCaveat": "c", "ExecutorBrief": "c", "closureCaveat": "p", "caveatTrackedBy": "p", "briefFor": "p", "briefedExecutorInstance": "p", "briefCriterion": "p", "measuredWithTool": "p", "measuredWithVersion": "p", "standsAlone": "p"}
 ok = all(((B[n], RDF.type, OWL.Class) in t) if k == "c" else ((B[n], RDFS.domain, None) in t and (B[n], RDFS.range, None) in t) for n, k in decl.items())
 expect("7 the new classes are declared and the new properties carry a domain and a range", ok)

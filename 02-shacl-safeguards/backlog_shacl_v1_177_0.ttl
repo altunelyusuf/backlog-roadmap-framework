@@ -9,9 +9,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog/shacl/1.176.0> ;
-    owl:versionInfo "1.176.0" ;
-    owl:priorVersion <http://example.org/backlog-shapes/1.175.0> , <http://example.org/backlog-shapes/1.174.0> , <http://example.org/backlog-shapes/1.173.0> , <http://example.org/backlog-shapes/1.172.0> , <http://example.org/backlog-shapes/1.171.0> , <http://example.org/backlog-shapes/1.170.0> , <http://example.org/backlog-shapes/1.169.0> , <http://example.org/backlog-shapes/1.168.0> , <http://example.org/backlog-shapes/1.167.0> , <http://example.org/backlog-shapes/1.166.0> , <http://example.org/backlog-shapes/1.165.0> , <http://example.org/backlog-shapes/1.164.0> , <http://example.org/backlog-shapes/1.159.0> , <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
+    owl:versionIRI <http://example.org/backlog/shacl/1.177.0> ;
+    owl:versionInfo "1.177.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.176.0> , <http://example.org/backlog-shapes/1.175.0> , <http://example.org/backlog-shapes/1.174.0> , <http://example.org/backlog-shapes/1.173.0> , <http://example.org/backlog-shapes/1.172.0> , <http://example.org/backlog-shapes/1.171.0> , <http://example.org/backlog-shapes/1.170.0> , <http://example.org/backlog-shapes/1.169.0> , <http://example.org/backlog-shapes/1.168.0> , <http://example.org/backlog-shapes/1.167.0> , <http://example.org/backlog-shapes/1.166.0> , <http://example.org/backlog-shapes/1.165.0> , <http://example.org/backlog-shapes/1.164.0> , <http://example.org/backlog-shapes/1.159.0> , <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.154.0> , <http://example.org/backlog-shapes/1.153.0> , <http://example.org/backlog-shapes/1.152.0> , <http://example.org/backlog-shapes/1.151.0> , <http://example.org/backlog-shapes/1.150.0> , <http://example.org/backlog-shapes/1.149.0> , <http://example.org/backlog-shapes/1.148.0> , <http://example.org/backlog-shapes/1.147.0> , <http://example.org/backlog-shapes/1.146.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.145.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.144.0> ;
@@ -8744,4 +8744,32 @@ backlog:StartBeforeExecutorShape a sh:NodeShape ;
         sh:message "Advisory (G136): the task of this brief records a start earlier than the start of the executor instance that was briefed. Work begun is recorded by the executor, or at the moment of its start." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] , [ sh:prefix "prov" ; sh:namespace "http://www.w3.org/ns/prov#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE { $this backlog:briefFor ?t ; backlog:briefedExecutorInstance ?i . ?t backlog:startedAt ?s . ?i backlog:instantiatedAt ?ia . FILTER(?s < ?ia) }""" ] .
+
+#################################################################
+#  v1.177.0 (G137) -- three gaps the register check of the SEN0401 slides lineage found
+#################################################################
+backlog:ObservedDuringCeremonyLinkShape a sh:NodeShape ;
+    sh:targetClass backlog:MetricObservation ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: the ceremony an observation was taken in is a link (G137)"@en ;
+    sh:property [ sh:path backlog:observedDuringCeremony ; sh:nodeKind sh:IRI ; sh:severity sh:Warning ;
+        sh:message "Advisory (G137): observedDuringCeremony names the sprint review the observation was taken in, as a link. A literal such as true says nothing a check can follow; name the ceremony or leave the property out." ] .
+
+backlog:StartInStartedIterationShape a sh:NodeShape ;
+    sh:targetClass backlog:ExecutionTask ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: work is begun in an iteration that has started (G137)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ; sh:severity sh:Warning ;
+        sh:message "Advisory (G137): this task records a start and is a member of no iteration that had started by then (iterationStart at or before startedAt). Work is begun inside a started sprint; start the iteration, or plan the task into one." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE { $this backlog:startedAt ?s . FILTER NOT EXISTS { $this backlog:memberOfContainer ?it . ?it a backlog:Iteration ; backlog:iterationStart ?st . FILTER(?st <= ?s) } }""" ] .
+
+backlog:IterationCeremonyShape a sh:NodeShape ;
+    sh:targetClass backlog:Iteration ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: an iteration with started work has a ceremony record (G137)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ; sh:severity sh:Warning ;
+        sh:message "Advisory (G137): a member of this iteration records a start and no sprint ceremony (ceremonyFor) is recorded for the iteration. Record the planning, so the sprint is visible as a sprint and not only as a container." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE { ?m backlog:memberOfContainer $this ; backlog:startedAt ?s . FILTER NOT EXISTS { ?c backlog:ceremonyFor $this } }""" ] .
 
