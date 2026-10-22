@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v109.0.0
+# Lineage Operating Discipline — v110.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -3810,3 +3810,12 @@ Related: G89, G139, G140.
 
 **Not claimed.** The seven are not decided by the OEE yet. Document for goals and missions is a reading, stated above; a reader who takes the literature's description as the kind would choose social object and then change the links.
 Related: G89, G139, G141.
+
+## G143 — An umbrella takes the common kind of its members
+
+**Ruling.** G142 left three umbrellas without a kind and asked the OEE for decision rows. The OEE answered that it was wrong to take the container as a record, and changed the rule (discipline v2.36.0): a class that groups members of several kinds takes their common kind, and the kind checks accept it. The container (a register, a period, a project, groupings) and the roadmap element (a view, an event, a value domain) take the concrete entity kind; the discipline root takes the root kind. A decision row is only for a class whose genus has no kind.
+
+**One reading differs from the OEE's.** For the external dependency the OEE names the genus relation. The package holds a dependency as a reified record (the dependency class is typed alike) and the OE rules for its requirement and characterization links reject a relation at those ends, so it is an information artifact. If the OEE prefers relation, those links change category.
+
+**Result.** All but three classes have a kind: benefit (a change of state expected), opportunity (a condition) and increment (a part of a product) have a genus with no kind on the list, and a decision row says only that.
+Related: G141, G142.
