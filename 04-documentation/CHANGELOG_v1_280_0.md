@@ -11260,6 +11260,16 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.418.0 — 2026-10-22 (MINOR: the classes left without a kind are revisited one by one — G142)
+
+- **T-Box v1.143.0:** the 43 classes revisited carry a kind; all but seven classes now have one, each of the seven with a reason. The eleven work-item classes take the kind document (the OEE's ruling on the plan item), as do the scope statement, goal, mission, objective and commitment; the iteration is a period, the lineage a run, the milestone an event, failure and success modes behavioural patterns, the seat a role, state transitions, workflows and rule sets norms.
+- **Categories corrected by the checks:** two membership links between norms are now compositional.
+- **Ledger and held list:** `kind_category_recording_v1_2_0.tsv` (632 rows), `kind_category_held_v1_1_0.tsv` (7 rows, each with its reason). The OE kind-rule check measures 279 ends (was 214) with none that does not fit; the kind-consistency check passes on 834 subclass links.
+- **Handover:** the OEE reply on the plan item is accepted (G142).
+- **Discipline v109.0.0:** G142.
+
+**Unplanned work:** the owner challenged the list of classes left without a kind on 2026-10-22; no backlog item of this package covers it.
+
 ## v1.417.0 — 2026-10-22 (MINOR: every class and relation of the T-Box processed for kind and category — G141)
 
 - **T-Box v1.142.0:** 149 more classes carry a kind (184 of 234 in all) and every object property a category (590 recordings in all, with the earlier 81). 50 classes have no kind yet (the root umbrella among them, as a decision row to the OEE). Corrected on the way: two earlier categories that the OE rules reject for records (succession links, a membership link between norms) and the kinds of two category enumerations (now value domains).

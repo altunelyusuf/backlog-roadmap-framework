@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v108.0.0
+# Lineage Operating Discipline — v109.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -3799,3 +3799,14 @@ Related: G89, G138, G139.
 
 **Not claimed.** The kinds of the 50 are not decided. Some categories are Association where the definition names no finer relation; a finer category needs the definition changed, which is outside this ruling.
 Related: G89, G139, G140.
+
+## G142 — The classes left without a kind are revisited, with the sources
+
+**Ruling.** G141 left 50 classes without a kind and called some of them unsettled. The owner challenged that list. Each was read again against its full definition, the OEE's ruling on the plan item (2026-10-22), and the literature: DOLCE+DnS Ultralite (a goal, a plan and a norm are descriptions, social objects; a project is a plan), the Unified Foundational Ontology (a goal is a proposition, an intention a commitment and a mental moment), the Scrum Guide (backlogs and the increment are artifacts, the goals and the Definition of Done their commitments) and the PMBOK glossary (a milestone is a significant point or event). The kind of a class is read from what an instance is. In a register a goal, a mission or an objective is a recorded declaration with an origin, an outcome and version links, so it is a document; the literature's description is the content such a record carries.
+
+**Result.** All classes but seven carry a kind. The kind-rule and kind-consistency checks pass. The checks found two further things: a class cannot be a social object when its links are versioning or characterization (the OE rules take records), and a membership link between norms is compositional.
+
+**Seven stay without a kind, each for a reason.** Three are umbrellas of mixed members: the discipline root, the roadmap element, and the work item container, whose subclasses are a register, a period, a project and two groupings. The OEE took the container as a record; its own subclass check shows that a project (a process) and an iteration (a period) cannot sit under a record, so the exception for umbrellas applies and a decision row goes to the OE inbox. Four have a first sentence that names no kind the OE list has: the benefit and the opportunity are expected states of affairs, the increment is a part of a product whose kind depends on the product, and the external dependency spans people, systems and rules.
+
+**Not claimed.** The seven are not decided by the OEE yet. Document for goals and missions is a reading, stated above; a reader who takes the literature's description as the kind would choose social object and then change the links.
+Related: G89, G139, G141.
