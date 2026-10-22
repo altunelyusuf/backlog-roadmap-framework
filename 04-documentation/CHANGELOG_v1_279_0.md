@@ -11262,9 +11262,10 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 
 ## v1.417.0 — 2026-10-22 (MINOR: every class and relation of the T-Box processed for kind and category — G141)
 
-- **T-Box v1.142.0:** 149 more classes carry a kind (185 of 234 in all) and every object property a category (590 recordings in all, with the earlier 81). 49 classes have no kind yet (below). Corrected on the way: two earlier categories that the OE rules reject for records (succession links, a membership link between norms) and the kinds of two category enumerations (now value domains).
-- **Ledger:** `kind_category_recording_v1_1_0.tsv` (590 rows with evidence and ruling); `kind_category_held_v1_0_0.tsv` lists the 49 classes without a kind, each with its reason.
+- **T-Box v1.142.0:** 149 more classes carry a kind (184 of 234 in all) and every object property a category (590 recordings in all, with the earlier 81). 50 classes have no kind yet (the root umbrella among them, as a decision row to the OEE). Corrected on the way: two earlier categories that the OE rules reject for records (succession links, a membership link between norms) and the kinds of two category enumerations (now value domains).
+- **Ledger:** `kind_category_recording_v1_1_0.tsv` (590 rows with evidence and ruling); `kind_category_held_v1_0_0.tsv` lists the 50 classes without a kind, each with its reason.
 - **Probe:** `backlog_kind_category_probe` v1.2.0 adds that the held list equals the classes without a kind and that no object property lacks a category. The OE kind-rule check measures 214 ends (it measured 9) and finds none that does not fit.
+- **Handover:** the OE handover "every term carries its kind or category" is accepted (G141). `BacklogConcept` takes no kind (its members are of mixed kinds); the kind-consistency check passes.
 - **Discipline v108.0.0:** G141.
 
 **Unplanned work:** the owner ruled on 2026-10-22 that the requirement covers all content, not only new terms; no backlog item of this package covers it.
