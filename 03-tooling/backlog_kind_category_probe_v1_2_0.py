@@ -1,20 +1,21 @@
 #!/usr/bin/env python3
-"""backlog_kind_category_probe v1.1.0 -- the kinds of classes and categories of links recorded in the T-Box fit the OE kind rules (G139).
+"""backlog_kind_category_probe v1.2.0 -- the kinds of classes and categories of links recorded in the T-Box fit the OE kind rules (G139).
 
 What it shows:
   1 the ledger and the T-Box agree: every kb:hasClassKind / kb:hasRelationshipCategory triple has a ledger row with evidence, and every row is in the T-Box,
   2 every recorded class and property exists in the T-Box, and every kind and category exists in the OE governance A-Box (skipped where the OE tool is not beside the package),
   3 the OE kind-rule check finds no violation in the recorded kinds and categories (skipped likewise),
+  5 the held list equals the classes still without a kind, and no object property is without a category (a new term cannot hide),
   4 planted: a category that the kinds do not fit (supersedesRule recorded as Normative, whose ends must be Agents) is found as a violation.
 Exit 0 when every expectation holds, 1 otherwise."""
 import glob, os, re, shutil, subprocess, sys, tempfile
 HERE = os.path.dirname(os.path.abspath(__file__)); PKG = os.path.dirname(HERE)
 sv = lambda p: [int(x) for x in re.findall(r"_v(\d+)_(\d+)_(\d+)\.", p)[0]]
 latest = lambda pat: sorted(glob.glob(os.path.join(PKG, pat)), key=sv)[-1]
-TB, LED = latest("01-ontologies/backlog_tbox_v*.ttl"), latest("03-tooling/kind_category_recording_v*.tsv")
+TB, LED, HELD = latest("01-ontologies/backlog_tbox_v*.ttl"), latest("03-tooling/kind_category_recording_v*.tsv"), latest("03-tooling/kind_category_held_v*.tsv")
 if sys.argv[1:] == ["--deps"]:
-    print("\n".join([TB, LED, os.path.abspath(__file__)])); sys.exit(0)
-from rdflib import Graph, Namespace, RDF, OWL
+    print("\n".join([TB, LED, HELD, os.path.abspath(__file__)])); sys.exit(0)
+from rdflib import Graph, Namespace, RDF, RDFS, OWL, URIRef
 B = Namespace("http://example.org/backlog#"); KB = Namespace("http://example.org/knowledge-base#")
 bad = []
 def expect(name, ok, detail=""):
@@ -28,6 +29,15 @@ expect("1 the ledger and the T-Box agree", led == tb, "%d row(s); only in ledger
 expect("1 every ledger row has evidence", all(len(r) >= 5 and r[4].strip() for r in rows if r))
 exist = all(((B[u.split("#")[1]], RDF.type, OWL.Class) in g) if k == "class" else ((B[u.split("#")[1]], RDF.type, OWL.ObjectProperty) in g) for k, u, _ in led)
 expect("2 every recorded class and property is declared in the T-Box", exist)
+SK = Namespace("http://www.w3.org/2004/02/skos/core#")
+named = lambda x: isinstance(x, URIRef) and ((x, SK.definition, None) in g or (x, RDFS.label, None) in g)
+def cat(p, seen=()):
+    return (p, KB.hasRelationshipCategory, None) in g or any(cat(q, seen + (p,)) for q in g.objects(p, RDFS.subPropertyOf) if q not in seen)
+nokind = {str(c) for c in g.subjects(RDF.type, OWL.Class) if named(c) and (c, KB.hasClassKind, None) not in g}
+nocat = [str(p) for p in g.subjects(RDF.type, OWL.ObjectProperty) if named(p) and not cat(p)]
+held = {l.split("\t")[1] for l in open(HELD, encoding="utf-8").read().splitlines()[1:] if l}
+expect("5 the held list equals the classes without a kind", held == nokind, "%d held; only held %s; only untyped %s" % (len(held), sorted(held - nokind)[:2], sorted(nokind - held)[:2]))
+expect("5 every object property has a category", not nocat, "%d without: %s" % (len(nocat), nocat[:2]))
 root = os.path.dirname(PKG); tools = sorted([x for x in glob.glob(os.path.join(root, "repo-tooling", "oe_kind_rule_check_v*.py")) if "_test_" not in x], key=sv); tool = tools[-1] if tools else ""; gov = sorted(glob.glob(os.path.join(root, "oe-method", "09-governance", "oegov_abox_v*.ttl")), key=sv)
 if not (tool and gov):
     print("SKIP  2-4 the OE kind-rule check is not beside this package (a public copy)")

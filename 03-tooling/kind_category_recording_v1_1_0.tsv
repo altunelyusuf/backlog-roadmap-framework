@@ -1,0 +1,591 @@
+subject	kind	iri	assigned	evidence	ruling
+class	ClosureReport	http://example.org/backlog#ClosureReport	ClassKind_InformationArtifact	the definition calls it a record, report, file, package or written rule, and the class is a core:Artifact	G139
+class	RoadmapReport	http://example.org/backlog#RoadmapReport	ClassKind_InformationArtifact	the definition calls it a record, report, file, package or written rule, and the class is a core:Artifact	G139
+class	RegisterArtifact	http://example.org/backlog#RegisterArtifact	ClassKind_InformationArtifact	the definition calls it a record, report, file, package or written rule, and the class is a core:Artifact	G139
+class	RegisterPackage	http://example.org/backlog#RegisterPackage	ClassKind_InformationArtifact	the definition calls it a record, report, file, package or written rule, and the class is a core:Artifact	G139
+class	ModuleRecord	http://example.org/backlog#ModuleRecord	ClassKind_InformationArtifact	the definition calls it a record, report, file, package or written rule, and the class is a core:Artifact	G139
+class	LineageArchiveEntry	http://example.org/backlog#LineageArchiveEntry	ClassKind_InformationArtifact	the definition calls it a record, report, file, package or written rule, and the class is a core:Artifact	G139
+class	ArchiveConformanceRecord	http://example.org/backlog#ArchiveConformanceRecord	ClassKind_InformationArtifact	the definition calls it a record, report, file, package or written rule, and the class is a core:Artifact	G139
+class	ToolRunRecord	http://example.org/backlog#ToolRunRecord	ClassKind_InformationArtifact	the definition calls it a record, report, file, package or written rule, and the class is a core:Artifact	G139
+class	ExperienceRecord	http://example.org/backlog#ExperienceRecord	ClassKind_InformationArtifact	the definition calls it a record, report, file, package or written rule, and the class is a core:Artifact	G139
+class	RemoteCommit	http://example.org/backlog#RemoteCommit	ClassKind_InformationArtifact	the definition calls it a record, report, file, package or written rule, and the class is a core:Artifact	G139
+class	StageOutput	http://example.org/backlog#StageOutput	ClassKind_InformationArtifact	the definition calls it a record, report, file, package or written rule, and the class is a core:Artifact	G139
+class	ModelArtifact	http://example.org/backlog#ModelArtifact	ClassKind_InformationArtifact	the definition calls it a record, report, file, package or written rule, and the class is a core:Artifact	G139
+class	MethodologyRule	http://example.org/backlog#MethodologyRule	ClassKind_InformationArtifact	the definition calls it a record, report, file, package or written rule, and the class is a core:Artifact	G139
+class	ImpactAssessment	http://example.org/backlog#ImpactAssessment	ClassKind_Document	the definition calls it an assessment, request, proposal or document	G139
+class	ChangeRequest	http://example.org/backlog#ChangeRequest	ClassKind_Document	the definition calls it an assessment, request, proposal or document	G139
+class	EnhancementProposal	http://example.org/backlog#EnhancementProposal	ClassKind_Document	the definition calls it an assessment, request, proposal or document	G139
+class	GovernedDocument	http://example.org/backlog#GovernedDocument	ClassKind_Document	the definition calls it an assessment, request, proposal or document	G139
+class	Specification	http://example.org/backlog#Specification	ClassKind_Specification	name and first sentence say so	G139
+class	TestCase	http://example.org/backlog#TestCase	ClassKind_TestCase	name and first sentence say so	G139
+class	MetricObservation	http://example.org/backlog#MetricObservation	ClassKind_Measurement	the first sentence calls it a recorded measurement	G139
+class	QualityMetric	http://example.org/backlog#QualityMetric	ClassKind_Metric	name ends in 'Metric' and the first sentence says so	G139
+class	CodeTable	http://example.org/backlog#CodeTable	ClassKind_DataStructure	the first sentence calls it a module-level table	G139
+class	ToolScript	http://example.org/backlog#ToolScript	ClassKind_Program	the first sentence calls it a shipped checker, a program	G139
+class	Executor	http://example.org/backlog#Executor	ClassKind_Agent	the first sentence calls it the concrete party that carries out a work item	G139
+class	Executor_IndividualHuman	http://example.org/backlog#Executor_IndividualHuman	ClassKind_Human	the first sentence says one named person	G139
+class	Executor_HumanTeam	http://example.org/backlog#Executor_HumanTeam	ClassKind_Organization	the first sentence says a named group of people accountable or acting as one	G139
+class	Team	http://example.org/backlog#Team	ClassKind_Organization	the first sentence says a named group of people accountable or acting as one	G139
+class	Role	http://example.org/backlog#Role	ClassKind_Role	the first sentence says who is entitled to decide, or a role within a team	G139
+class	TeamRole	http://example.org/backlog#TeamRole	ClassKind_Role	the first sentence says who is entitled to decide, or a role within a team	G139
+class	Competency	http://example.org/backlog#Competency	ClassKind_Disposition	a competency is what an executor can do: a disposition	G139
+class	ImplementationProject	http://example.org/backlog#ImplementationProject	ClassKind_Project	the first sentence says a funded, bounded delivery effort	G139
+class	CompetencyCategory	http://example.org/backlog#CompetencyCategory	ClassKind_Category	name ends in 'Category' and the first sentence says a top level or kind of grouping	G139
+class	ComplianceObligation	http://example.org/backlog#ComplianceObligation	ClassKind_Norm	the first sentence says a duty or what a stage owes	G139
+class	StageObligation	http://example.org/backlog#StageObligation	ClassKind_Norm	the first sentence says a duty or what a stage owes	G139
+property	partOf	http://example.org/backlog#partOf	RelationshipCategory_Compositional	part and whole between work items	G139
+property	decomposesInto	http://example.org/backlog#decomposesInto	RelationshipCategory_Compositional	part and whole between work items	G139
+property	subordinateToItem	http://example.org/backlog#subordinateToItem	RelationshipCategory_Compositional	part and whole between work items	G139
+property	hasMember	http://example.org/backlog#hasMember	RelationshipCategory_ContainmentMembership	a thing is a member or part of a container, package or collection	G139
+property	memberOfContainer	http://example.org/backlog#memberOfContainer	RelationshipCategory_ContainmentMembership	a thing is a member or part of a container, package or collection	G139
+property	roleWithinPackage	http://example.org/backlog#roleWithinPackage	RelationshipCategory_ContainmentMembership	a thing is a member or part of a container, package or collection	G139
+property	packageIncludesReport	http://example.org/backlog#packageIncludesReport	RelationshipCategory_ContainmentMembership	a thing is a member or part of a container, package or collection	G139
+property	ruleOfMethodology	http://example.org/backlog#ruleOfMethodology	RelationshipCategory_ContainmentMembership	a thing is a member or part of a container, package or collection	G139
+property	closureCaveat	http://example.org/backlog#closureCaveat	RelationshipCategory_ContainmentMembership	a thing is a member or part of a container, package or collection	G139
+property	supersedesRule	http://example.org/backlog#supersedesRule	RelationshipCategory_Versioning	one item replaces another and the replaced one is kept	G139
+property	supersededBy	http://example.org/backlog#supersededBy	RelationshipCategory_Versioning	one item replaces another and the replaced one is kept	G139
+property	supersedesMission	http://example.org/backlog#supersedesMission	RelationshipCategory_Versioning	one item replaces another and the replaced one is kept	G139
+property	stagePredecessor	http://example.org/backlog#stagePredecessor	RelationshipCategory_OrderingSequence	the stages come in a fixed order carried by a link	G139
+property	attestedByTest	http://example.org/backlog#attestedByTest	RelationshipCategory_Assessment	the link measures, verifies or attests	G139
+property	guardsRelease	http://example.org/backlog#guardsRelease	RelationshipCategory_Assessment	the link measures, verifies or attests	G139
+property	verifiedBy	http://example.org/backlog#verifiedBy	RelationshipCategory_Assessment	the link measures, verifies or attests	G139
+property	findingEvidence	http://example.org/backlog#findingEvidence	RelationshipCategory_Epistemic	evidence supports a finding	G139
+property	distinguishedFrom	http://example.org/backlog#distinguishedFrom	RelationshipCategory_Comparative	two things the definitions say must not be confused	G139
+property	hasCompetencyCategory	http://example.org/backlog#hasCompetencyCategory	RelationshipCategory_Taxonomic	a specialisation of skos:broader for the category level	G139
+property	safeguardsAgainst	http://example.org/backlog#safeguardsAgainst	RelationshipCategory_Intentional	a control exists for a purpose: to prevent a failure mode	G139
+property	safeguardedBy	http://example.org/backlog#safeguardedBy	RelationshipCategory_Intentional	a control exists for a purpose: to prevent a failure mode	G139
+property	maintenanceTriggeredBy	http://example.org/backlog#maintenanceTriggeredBy	RelationshipCategory_Causal	a request sets off the work	G139
+property	triggeredBy	http://example.org/backlog#triggeredBy	RelationshipCategory_Causal	a request sets off the work	G139
+property	briefCriterion	http://example.org/backlog#briefCriterion	RelationshipCategory_Provenance	the brief is generated from the criterion	G139
+property	followsMethodology	http://example.org/backlog#followsMethodology	RelationshipCategory_Association	related, and no more specific category says how; the definition leaves unsaid the finer relation	G139
+property	statusOfStage	http://example.org/backlog#statusOfStage	RelationshipCategory_Association	related, and no more specific category says how; the definition leaves unsaid the finer relation	G139
+property	phaseRankingModel	http://example.org/backlog#phaseRankingModel	RelationshipCategory_Association	related, and no more specific category says how; the definition leaves unsaid the finer relation	G139
+property	phaseGatedCategory	http://example.org/backlog#phaseGatedCategory	RelationshipCategory_Association	related, and no more specific category says how; the definition leaves unsaid the finer relation	G139
+property	competencyDomain	http://example.org/backlog#competencyDomain	RelationshipCategory_Association	related, and no more specific category says how; the definition leaves unsaid the finer relation	G139
+property	gapForObligation	http://example.org/backlog#gapForObligation	RelationshipCategory_Association	related, and no more specific category says how; the definition leaves unsaid the finer relation	G139
+property	anchorsReleaseEvidence	http://example.org/backlog#anchorsReleaseEvidence	RelationshipCategory_Association	related, and no more specific category says how; the definition leaves unsaid the finer relation	G139
+property	manifestsAsThrashKind	http://example.org/backlog#manifestsAsThrashKind	RelationshipCategory_Association	related, and no more specific category says how; the definition leaves unsaid the finer relation	G139
+property	stageOfEntity	http://example.org/backlog#stageOfEntity	RelationshipCategory_Association	related, and no more specific category says how; the definition leaves unsaid the finer relation	G139
+property	briefFor	http://example.org/backlog#briefFor	RelationshipCategory_Association	related, and no more specific category says how; the definition leaves unsaid the finer relation	G139
+property	briefedExecutorInstance	http://example.org/backlog#briefedExecutorInstance	RelationshipCategory_Association	related, and no more specific category says how; the definition leaves unsaid the finer relation	G139
+property	caveatTrackedBy	http://example.org/backlog#caveatTrackedBy	RelationshipCategory_Association	related, and no more specific category says how; the definition leaves unsaid the finer relation	G139
+class	AdaptationGate	http://example.org/backlog#AdaptationGate	ClassKind_InformationArtifact	declared subclass of core:Artifact (tangible deliverables: documents, reports, records), which the package uses for its records	G141
+class	BlueprintGap	http://example.org/backlog#BlueprintGap	ClassKind_InformationArtifact	declared subclass of core:Artifact (tangible deliverables: documents, reports, records), which the package uses for its records	G141
+class	Budget	http://example.org/backlog#Budget	ClassKind_InformationArtifact	declared subclass of core:Artifact (tangible deliverables: documents, reports, records), which the package uses for its records	G141
+class	ClosureCaveat	http://example.org/backlog#ClosureCaveat	ClassKind_InformationArtifact	declared subclass of core:Artifact (tangible deliverables: documents, reports, records), which the package uses for its records	G141
+class	ContainerDissolution	http://example.org/backlog#ContainerDissolution	ClassKind_InformationArtifact	declared subclass of core:Artifact (tangible deliverables: documents, reports, records), which the package uses for its records	G141
+class	CriterionSatisfaction	http://example.org/backlog#CriterionSatisfaction	ClassKind_InformationArtifact	declared subclass of core:Artifact (tangible deliverables: documents, reports, records), which the package uses for its records	G141
+class	CrossCuttingInvariant	http://example.org/backlog#CrossCuttingInvariant	ClassKind_InformationArtifact	declared subclass of core:Artifact (tangible deliverables: documents, reports, records), which the package uses for its records	G141
+class	DimensionalCost	http://example.org/backlog#DimensionalCost	ClassKind_InformationArtifact	declared subclass of core:Artifact (tangible deliverables: documents, reports, records), which the package uses for its records	G141
+class	ExecutorBrief	http://example.org/backlog#ExecutorBrief	ClassKind_InformationArtifact	declared subclass of core:Artifact (tangible deliverables: documents, reports, records), which the package uses for its records	G141
+class	FitGapFinding	http://example.org/backlog#FitGapFinding	ClassKind_InformationArtifact	declared subclass of core:Artifact (tangible deliverables: documents, reports, records), which the package uses for its records	G141
+class	Forecast	http://example.org/backlog#Forecast	ClassKind_InformationArtifact	declared subclass of core:Artifact (tangible deliverables: documents, reports, records), which the package uses for its records	G141
+class	HumanInteraction	http://example.org/backlog#HumanInteraction	ClassKind_InformationArtifact	declared subclass of core:Artifact (tangible deliverables: documents, reports, records), which the package uses for its records	G141
+class	Impediment	http://example.org/backlog#Impediment	ClassKind_InformationArtifact	declared subclass of core:Artifact (tangible deliverables: documents, reports, records), which the package uses for its records	G141
+class	InteractionStep	http://example.org/backlog#InteractionStep	ClassKind_InformationArtifact	declared subclass of core:Artifact (tangible deliverables: documents, reports, records), which the package uses for its records	G141
+class	KickOff	http://example.org/backlog#KickOff	ClassKind_InformationArtifact	declared subclass of core:Artifact (tangible deliverables: documents, reports, records), which the package uses for its records	G141
+class	LineageAdaptation	http://example.org/backlog#LineageAdaptation	ClassKind_InformationArtifact	declared subclass of core:Artifact (tangible deliverables: documents, reports, records), which the package uses for its records	G141
+class	LineageGap	http://example.org/backlog#LineageGap	ClassKind_InformationArtifact	declared subclass of core:Artifact (tangible deliverables: documents, reports, records), which the package uses for its records	G141
+class	LineageReactivation	http://example.org/backlog#LineageReactivation	ClassKind_InformationArtifact	declared subclass of core:Artifact (tangible deliverables: documents, reports, records), which the package uses for its records	G141
+class	LineageRestart	http://example.org/backlog#LineageRestart	ClassKind_InformationArtifact	declared subclass of core:Artifact (tangible deliverables: documents, reports, records), which the package uses for its records	G141
+class	LineageSuccession	http://example.org/backlog#LineageSuccession	ClassKind_InformationArtifact	declared subclass of core:Artifact (tangible deliverables: documents, reports, records), which the package uses for its records	G141
+class	Methodology	http://example.org/backlog#Methodology	ClassKind_InformationArtifact	declared subclass of core:Artifact (tangible deliverables: documents, reports, records), which the package uses for its records	G141
+class	ModificationRequest	http://example.org/backlog#ModificationRequest	ClassKind_InformationArtifact	declared subclass of core:Artifact (tangible deliverables: documents, reports, records), which the package uses for its records	G141
+class	ObjectiveCheckpoint	http://example.org/backlog#ObjectiveCheckpoint	ClassKind_InformationArtifact	declared subclass of core:Artifact (tangible deliverables: documents, reports, records), which the package uses for its records	G141
+class	PlanBaseline	http://example.org/backlog#PlanBaseline	ClassKind_InformationArtifact	declared subclass of core:Artifact (tangible deliverables: documents, reports, records), which the package uses for its records	G141
+class	PlanningEvent	http://example.org/backlog#PlanningEvent	ClassKind_InformationArtifact	declared subclass of core:Artifact (tangible deliverables: documents, reports, records), which the package uses for its records	G141
+class	Rebaseline	http://example.org/backlog#Rebaseline	ClassKind_InformationArtifact	declared subclass of core:Artifact (tangible deliverables: documents, reports, records), which the package uses for its records	G141
+class	RefinementEvent	http://example.org/backlog#RefinementEvent	ClassKind_InformationArtifact	declared subclass of core:Artifact (tangible deliverables: documents, reports, records), which the package uses for its records	G141
+class	RegisterSession	http://example.org/backlog#RegisterSession	ClassKind_InformationArtifact	declared subclass of core:Artifact (tangible deliverables: documents, reports, records), which the package uses for its records	G141
+class	ReleaseGate	http://example.org/backlog#ReleaseGate	ClassKind_InformationArtifact	declared subclass of core:Artifact (tangible deliverables: documents, reports, records), which the package uses for its records	G141
+class	ScopeArea	http://example.org/backlog#ScopeArea	ClassKind_InformationArtifact	declared subclass of core:Artifact (tangible deliverables: documents, reports, records), which the package uses for its records	G141
+class	ScopeChange	http://example.org/backlog#ScopeChange	ClassKind_InformationArtifact	declared subclass of core:Artifact (tangible deliverables: documents, reports, records), which the package uses for its records	G141
+class	ScopeDeliverable	http://example.org/backlog#ScopeDeliverable	ClassKind_InformationArtifact	declared subclass of core:Artifact (tangible deliverables: documents, reports, records), which the package uses for its records	G141
+class	SprintCeremony	http://example.org/backlog#SprintCeremony	ClassKind_InformationArtifact	declared subclass of core:Artifact (tangible deliverables: documents, reports, records), which the package uses for its records	G141
+class	StageRevision	http://example.org/backlog#StageRevision	ClassKind_InformationArtifact	declared subclass of core:Artifact (tangible deliverables: documents, reports, records), which the package uses for its records	G141
+class	StateChange	http://example.org/backlog#StateChange	ClassKind_InformationArtifact	declared subclass of core:Artifact (tangible deliverables: documents, reports, records), which the package uses for its records	G141
+class	TeamAssembly	http://example.org/backlog#TeamAssembly	ClassKind_InformationArtifact	declared subclass of core:Artifact (tangible deliverables: documents, reports, records), which the package uses for its records	G141
+class	TestData	http://example.org/backlog#TestData	ClassKind_InformationArtifact	declared subclass of core:Artifact (tangible deliverables: documents, reports, records), which the package uses for its records	G141
+class	TestHarness	http://example.org/backlog#TestHarness	ClassKind_InformationArtifact	declared subclass of core:Artifact (tangible deliverables: documents, reports, records), which the package uses for its records	G141
+class	TestScenario	http://example.org/backlog#TestScenario	ClassKind_InformationArtifact	declared subclass of core:Artifact (tangible deliverables: documents, reports, records), which the package uses for its records	G141
+class	TransitionEvent	http://example.org/backlog#TransitionEvent	ClassKind_InformationArtifact	declared subclass of core:Artifact (tangible deliverables: documents, reports, records), which the package uses for its records	G141
+class	ProblemReport	http://example.org/backlog#ProblemReport	ClassKind_InformationArtifact	subclass of a class that is itself recorded as an information artifact; a subclass cannot have a kind outside its superclass's	G141
+class	PartialScopeDeclaration	http://example.org/backlog#PartialScopeDeclaration	ClassKind_InformationArtifact	subclass of a class that is itself recorded as an information artifact; a subclass cannot have a kind outside its superclass's	G141
+class	PostClosureFinding	http://example.org/backlog#PostClosureFinding	ClassKind_InformationArtifact	subclass of a class that is itself recorded as an information artifact; a subclass cannot have a kind outside its superclass's	G141
+class	SprintPlanningCeremony	http://example.org/backlog#SprintPlanningCeremony	ClassKind_InformationArtifact	subclass of a class that is itself recorded as an information artifact; a subclass cannot have a kind outside its superclass's	G141
+class	SprintRetrospective	http://example.org/backlog#SprintRetrospective	ClassKind_InformationArtifact	subclass of a class that is itself recorded as an information artifact; a subclass cannot have a kind outside its superclass's	G141
+class	SprintReviewCeremony	http://example.org/backlog#SprintReviewCeremony	ClassKind_InformationArtifact	subclass of a class that is itself recorded as an information artifact; a subclass cannot have a kind outside its superclass's	G141
+class	FailureRecord	http://example.org/backlog#FailureRecord	ClassKind_InformationArtifact	subclass of a class that is itself recorded as an information artifact; a subclass cannot have a kind outside its superclass's	G141
+class	Evidence	http://example.org/backlog#Evidence	ClassKind_InformationArtifact	the first sentence says a durable artifact, a delivered file or release, or a recorded judgement: evidence is held as a record	G141
+class	ArtifactEvidence	http://example.org/backlog#ArtifactEvidence	ClassKind_InformationArtifact	the first sentence says a durable artifact, a delivered file or release, or a recorded judgement: evidence is held as a record	G141
+class	ReleaseEvidence	http://example.org/backlog#ReleaseEvidence	ClassKind_InformationArtifact	the first sentence says a durable artifact, a delivered file or release, or a recorded judgement: evidence is held as a record	G141
+class	ReviewEvidence	http://example.org/backlog#ReviewEvidence	ClassKind_InformationArtifact	the first sentence says a durable artifact, a delivered file or release, or a recorded judgement: evidence is held as a record	G141
+class	TestEvidence	http://example.org/backlog#TestEvidence	ClassKind_InformationArtifact	the first sentence says a durable artifact, a delivered file or release, or a recorded judgement: evidence is held as a record	G141
+class	Backlog	http://example.org/backlog#Backlog	ClassKind_InformationArtifact	the first sentence calls it a register, a derived view, a model, a record, a reified dependency or a recorded detection	G141
+class	Roadmap	http://example.org/backlog#Roadmap	ClassKind_InformationArtifact	the first sentence calls it a register, a derived view, a model, a record, a reified dependency or a recorded detection	G141
+class	Blueprint	http://example.org/backlog#Blueprint	ClassKind_InformationArtifact	the first sentence calls it a register, a derived view, a model, a record, a reified dependency or a recorded detection	G141
+class	CompetencyProfile	http://example.org/backlog#CompetencyProfile	ClassKind_InformationArtifact	the first sentence calls it a register, a derived view, a model, a record, a reified dependency or a recorded detection	G141
+class	DependencyDisclosure	http://example.org/backlog#DependencyDisclosure	ClassKind_InformationArtifact	the first sentence calls it a register, a derived view, a model, a record, a reified dependency or a recorded detection	G141
+class	FindingRecord	http://example.org/backlog#FindingRecord	ClassKind_InformationArtifact	the first sentence calls it a register, a derived view, a model, a record, a reified dependency or a recorded detection	G141
+class	LineageBypass	http://example.org/backlog#LineageBypass	ClassKind_InformationArtifact	the first sentence calls it a register, a derived view, a model, a record, a reified dependency or a recorded detection	G141
+class	LineageThrash	http://example.org/backlog#LineageThrash	ClassKind_InformationArtifact	the first sentence calls it a register, a derived view, a model, a record, a reified dependency or a recorded detection	G141
+class	OrdinalSharingDeclaration	http://example.org/backlog#OrdinalSharingDeclaration	ClassKind_InformationArtifact	the first sentence calls it a register, a derived view, a model, a record, a reified dependency or a recorded detection	G141
+class	Dependency	http://example.org/backlog#Dependency	ClassKind_InformationArtifact	the first sentence calls it a register, a derived view, a model, a record, a reified dependency or a recorded detection	G141
+class	BacklogConcept	http://example.org/backlog#BacklogConcept	ClassKind_Concept	the first sentence says it is the discipline-root umbrella for every concept the subject introduces	G141
+class	AcceptanceCriterion	http://example.org/backlog#AcceptanceCriterion	ClassKind_Specification	the first sentence says a condition or criterion that defines the behaviour an item must show	G141
+class	DoDCriterion	http://example.org/backlog#DoDCriterion	ClassKind_Specification	the first sentence says a condition or criterion that defines the behaviour an item must show	G141
+class	DefinitionOfDone	http://example.org/backlog#DefinitionOfDone	ClassKind_Specification	the first sentence says a condition or criterion that defines the behaviour an item must show	G141
+class	WipLimit	http://example.org/backlog#WipLimit	ClassKind_Norm	the first sentence says a policy or a bundle of obligations	G141
+class	PortfolioPolicy	http://example.org/backlog#PortfolioPolicy	ClassKind_Norm	the first sentence says a policy or a bundle of obligations	G141
+class	ObligationSet	http://example.org/backlog#ObligationSet	ClassKind_Norm	the first sentence says a policy or a bundle of obligations	G141
+class	GovernanceRuling	http://example.org/backlog#GovernanceRuling	ClassKind_Decision	the first sentence says a decision or an owner-decided record	G141
+class	ScopeExclusion	http://example.org/backlog#ScopeExclusion	ClassKind_Decision	the first sentence says a decision or an owner-decided record	G141
+class	PrioritizationMethod	http://example.org/backlog#PrioritizationMethod	ClassKind_Method	the first sentence says a named, reproducible procedure	G141
+class	PriorityScore	http://example.org/backlog#PriorityScore	ClassKind_Measurement	the first sentence says a computed value or estimate carrying its method or basis	G141
+class	RICEScore	http://example.org/backlog#RICEScore	ClassKind_Measurement	the first sentence says a computed value or estimate carrying its method or basis	G141
+class	WSJFScore	http://example.org/backlog#WSJFScore	ClassKind_Measurement	the first sentence says a computed value or estimate carrying its method or basis	G141
+class	CostEstimate	http://example.org/backlog#CostEstimate	ClassKind_Measurement	the first sentence says a computed value or estimate carrying its method or basis	G141
+class	CostDimension	http://example.org/backlog#CostDimension	ClassKind_Metric	the first sentence says a named axis carrying its own unit	G141
+class	Executor_AgentFederation	http://example.org/backlog#Executor_AgentFederation	ClassKind_Organization	the first sentence says a named group of executing parties under a controller	G141
+class	Executor_AgentTeam	http://example.org/backlog#Executor_AgentTeam	ClassKind_Organization	the first sentence says a named group of executing parties under a controller	G141
+class	Executor_SingleAgent	http://example.org/backlog#Executor_SingleAgent	ClassKind_SoftwareAgent	the first sentence says one executing party that is not a person, or one run of an agent	G141
+class	ExecutorInstance	http://example.org/backlog#ExecutorInstance	ClassKind_SoftwareAgent	the first sentence says one executing party that is not a person, or one run of an agent	G141
+class	AchievementStatus	http://example.org/backlog#AchievementStatus	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	AdaptationOutcome	http://example.org/backlog#AdaptationOutcome	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	AdaptationStage	http://example.org/backlog#AdaptationStage	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	ArchivalConfirmationStatus	http://example.org/backlog#ArchivalConfirmationStatus	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	ArtifactRole	http://example.org/backlog#ArtifactRole	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	ChangeDirection	http://example.org/backlog#ChangeDirection	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	ChangeDisposition	http://example.org/backlog#ChangeDisposition	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	ConformanceLevel	http://example.org/backlog#ConformanceLevel	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	ContainerScope	http://example.org/backlog#ContainerScope	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	DependencyKind	http://example.org/backlog#DependencyKind	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	DesignConcern	http://example.org/backlog#DesignConcern	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	DocumentStatus	http://example.org/backlog#DocumentStatus	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	EnforcementDomain	http://example.org/backlog#EnforcementDomain	ClassKind_ValueDomain	closed set of values: the first sentence says its values are enumerated, or it narrows an enumerated class	G141
+class	EntityLifecycleStage	http://example.org/backlog#EntityLifecycleStage	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	EstimationBasisKind	http://example.org/backlog#EstimationBasisKind	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	ExecutionModality	http://example.org/backlog#ExecutionModality	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	ExternalDependencyType	http://example.org/backlog#ExternalDependencyType	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	FindingDisposition	http://example.org/backlog#FindingDisposition	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	FindingScale	http://example.org/backlog#FindingScale	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	FindingScope	http://example.org/backlog#FindingScope	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	FixturePolarity	http://example.org/backlog#FixturePolarity	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	FlowPointPrecision	http://example.org/backlog#FlowPointPrecision	ClassKind_ValueDomain	closed set of values: the first sentence says its values are enumerated, or it narrows an enumerated class	G141
+class	FrameworkFacet	http://example.org/backlog#FrameworkFacet	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	GoalFacing	http://example.org/backlog#GoalFacing	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	GoalOrigin	http://example.org/backlog#GoalOrigin	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	InitiativeKind	http://example.org/backlog#InitiativeKind	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	IntentOrigin	http://example.org/backlog#IntentOrigin	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	InteractionKind	http://example.org/backlog#InteractionKind	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	InvariantStatus	http://example.org/backlog#InvariantStatus	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	KickOffMode	http://example.org/backlog#KickOffMode	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	LifecycleState	http://example.org/backlog#LifecycleState	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	LineageArtifactDomain	http://example.org/backlog#LineageArtifactDomain	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	LineageDepthLevel	http://example.org/backlog#LineageDepthLevel	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	LineageStage	http://example.org/backlog#LineageStage	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	LineageStatus	http://example.org/backlog#LineageStatus	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	MaintenanceGoal	http://example.org/backlog#MaintenanceGoal	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	MaintenanceTiming	http://example.org/backlog#MaintenanceTiming	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	MeasurementKind	http://example.org/backlog#MeasurementKind	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	MetricDirection	http://example.org/backlog#MetricDirection	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	MissionOrigin	http://example.org/backlog#MissionOrigin	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	MissionOutcome	http://example.org/backlog#MissionOutcome	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	ModelCategory	http://example.org/backlog#ModelCategory	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	ModelKind	http://example.org/backlog#ModelKind	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	ModelLevel	http://example.org/backlog#ModelLevel	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	ModuleAudience	http://example.org/backlog#ModuleAudience	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	NumberOrigin	http://example.org/backlog#NumberOrigin	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	ObligationSeverity	http://example.org/backlog#ObligationSeverity	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	OptionalLifecycleState	http://example.org/backlog#OptionalLifecycleState	ClassKind_ValueDomain	closed set of values: the first sentence says its values are enumerated, or it narrows an enumerated class	G141
+class	Outcome	http://example.org/backlog#Outcome	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	ProductLifecyclePhase	http://example.org/backlog#ProductLifecyclePhase	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	ProductScopeKind	http://example.org/backlog#ProductScopeKind	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	ProposalStatus	http://example.org/backlog#ProposalStatus	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	RankingModel	http://example.org/backlog#RankingModel	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	ReactivationReason	http://example.org/backlog#ReactivationReason	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	RecoveryStrategy	http://example.org/backlog#RecoveryStrategy	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	ReportSection	http://example.org/backlog#ReportSection	ClassKind_ValueDomain	closed set of values: the first sentence says its values are enumerated, or it narrows an enumerated class	G141
+class	RoadmapHorizon	http://example.org/backlog#RoadmapHorizon	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	ScenarioKind	http://example.org/backlog#ScenarioKind	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	ScopeLayer	http://example.org/backlog#ScopeLayer	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	SeatFunction	http://example.org/backlog#SeatFunction	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	SelectionBasis	http://example.org/backlog#SelectionBasis	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	ShapeSnapshot	http://example.org/backlog#ShapeSnapshot	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	SpecificationDepth	http://example.org/backlog#SpecificationDepth	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	SupervisionMode	http://example.org/backlog#SupervisionMode	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	TableKind	http://example.org/backlog#TableKind	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	TaskType	http://example.org/backlog#TaskType	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	ThrashKind	http://example.org/backlog#ThrashKind	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	VersionIncrement	http://example.org/backlog#VersionIncrement	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G141
+class	InvestmentCategory	http://example.org/backlog#InvestmentCategory	ClassKind_ValueDomain	closed set of values, declared with owl:oneOf in the T-Box (corrects the earlier kind Category)	G141
+class	MaintenanceCategory	http://example.org/backlog#MaintenanceCategory	ClassKind_ValueDomain	closed set of values, declared with owl:oneOf in the T-Box (corrects the earlier kind Category)	G141
+property	responsible	http://example.org/backlog#responsible	RelationshipCategory_Provenance	the property names who or what did, approved, produced or originated the thing	G141
+property	approvedBy	http://example.org/backlog#approvedBy	RelationshipCategory_Provenance	the property names who or what did, approved, produced or originated the thing	G141
+property	reviewedBy	http://example.org/backlog#reviewedBy	RelationshipCategory_Provenance	the property names who or what did, approved, produced or originated the thing	G141
+property	supportedBy	http://example.org/backlog#supportedBy	RelationshipCategory_Provenance	the property names who or what did, approved, produced or originated the thing	G141
+property	overseenBy	http://example.org/backlog#overseenBy	RelationshipCategory_Provenance	the property names who or what did, approved, produced or originated the thing	G141
+property	assembledBy	http://example.org/backlog#assembledBy	RelationshipCategory_Provenance	the property names who or what did, approved, produced or originated the thing	G141
+property	instantiatedBy	http://example.org/backlog#instantiatedBy	RelationshipCategory_Provenance	the property names who or what did, approved, produced or originated the thing	G141
+property	interactedBy	http://example.org/backlog#interactedBy	RelationshipCategory_Provenance	the property names who or what did, approved, produced or originated the thing	G141
+property	plannedBy	http://example.org/backlog#plannedBy	RelationshipCategory_Provenance	the property names who or what did, approved, produced or originated the thing	G141
+property	refinedBy	http://example.org/backlog#refinedBy	RelationshipCategory_Provenance	the property names who or what did, approved, produced or originated the thing	G141
+property	sessionConductedBy	http://example.org/backlog#sessionConductedBy	RelationshipCategory_Provenance	the property names who or what did, approved, produced or originated the thing	G141
+property	transitionedBy	http://example.org/backlog#transitionedBy	RelationshipCategory_Provenance	the property names who or what did, approved, produced or originated the thing	G141
+property	transitionedByExecutor	http://example.org/backlog#transitionedByExecutor	RelationshipCategory_Provenance	the property names who or what did, approved, produced or originated the thing	G141
+property	spawnedBy	http://example.org/backlog#spawnedBy	RelationshipCategory_Provenance	the property names who or what did, approved, produced or originated the thing	G141
+property	instanceOf	http://example.org/backlog#instanceOf	RelationshipCategory_Provenance	the property names who or what did, approved, produced or originated the thing	G141
+property	entryForLineage	http://example.org/backlog#entryForLineage	RelationshipCategory_Provenance	the property names who or what did, approved, produced or originated the thing	G141
+property	entryForMission	http://example.org/backlog#entryForMission	RelationshipCategory_Provenance	the property names who or what did, approved, produced or originated the thing	G141
+property	rewritesScopeAs	http://example.org/backlog#rewritesScopeAs	RelationshipCategory_Provenance	the property names who or what did, approved, produced or originated the thing	G141
+property	producedByStage	http://example.org/backlog#producedByStage	RelationshipCategory_Provenance	the property names who or what did, approved, produced or originated the thing	G141
+property	producesFinding	http://example.org/backlog#producesFinding	RelationshipCategory_Provenance	the property names who or what did, approved, produced or originated the thing	G141
+property	producesModelArtifact	http://example.org/backlog#producesModelArtifact	RelationshipCategory_Provenance	the property names who or what did, approved, produced or originated the thing	G141
+property	producesTask	http://example.org/backlog#producesTask	RelationshipCategory_Provenance	the property names who or what did, approved, produced or originated the thing	G141
+property	producesIncrement	http://example.org/backlog#producesIncrement	RelationshipCategory_Provenance	the property names who or what did, approved, produced or originated the thing	G141
+property	refinementProduces	http://example.org/backlog#refinementProduces	RelationshipCategory_Provenance	the property names who or what did, approved, produced or originated the thing	G141
+property	reportRunRetainedAs	http://example.org/backlog#reportRunRetainedAs	RelationshipCategory_Provenance	the property names who or what did, approved, produced or originated the thing	G141
+property	riskAcceptedBy	http://example.org/backlog#riskAcceptedBy	RelationshipCategory_Provenance	the property names who or what did, approved, produced or originated the thing	G141
+property	hasImpedimentOwner	http://example.org/backlog#hasImpedimentOwner	RelationshipCategory_Provenance	the property names who or what did, approved, produced or originated the thing	G141
+property	decidedBy	http://example.org/backlog#decidedBy	RelationshipCategory_Provenance	the property names who or what did, approved, produced or originated the thing	G141
+property	hasBenefitOwner	http://example.org/backlog#hasBenefitOwner	RelationshipCategory_Provenance	the property names who or what did, approved, produced or originated the thing	G141
+property	hasController	http://example.org/backlog#hasController	RelationshipCategory_Provenance	the property names who or what did, approved, produced or originated the thing	G141
+property	derivedInReport	http://example.org/backlog#derivedInReport	RelationshipCategory_Provenance	the property names who or what did, approved, produced or originated the thing	G141
+property	analogousTo	http://example.org/backlog#analogousTo	RelationshipCategory_Provenance	the property names who or what did, approved, produced or originated the thing	G141
+property	contributesToGoal	http://example.org/backlog#contributesToGoal	RelationshipCategory_Intentional	the definition says the link exists so that one thing advances, serves or answers a goal, mission, objective or gap	G141
+property	contributesToMission	http://example.org/backlog#contributesToMission	RelationshipCategory_Intentional	the definition says the link exists so that one thing advances, serves or answers a goal, mission, objective or gap	G141
+property	contributesToMilestone	http://example.org/backlog#contributesToMilestone	RelationshipCategory_Intentional	the definition says the link exists so that one thing advances, serves or answers a goal, mission, objective or gap	G141
+property	pursuesObjective	http://example.org/backlog#pursuesObjective	RelationshipCategory_Intentional	the definition says the link exists so that one thing advances, serves or answers a goal, mission, objective or gap	G141
+property	benefitFor	http://example.org/backlog#benefitFor	RelationshipCategory_Intentional	the definition says the link exists so that one thing advances, serves or answers a goal, mission, objective or gap	G141
+property	expectsBenefit	http://example.org/backlog#expectsBenefit	RelationshipCategory_Intentional	the definition says the link exists so that one thing advances, serves or answers a goal, mission, objective or gap	G141
+property	commitsToGoal	http://example.org/backlog#commitsToGoal	RelationshipCategory_Intentional	the definition says the link exists so that one thing advances, serves or answers a goal, mission, objective or gap	G141
+property	commitsToObjective	http://example.org/backlog#commitsToObjective	RelationshipCategory_Intentional	the definition says the link exists so that one thing advances, serves or answers a goal, mission, objective or gap	G141
+property	commitsToDefinitionOfDone	http://example.org/backlog#commitsToDefinitionOfDone	RelationshipCategory_Intentional	the definition says the link exists so that one thing advances, serves or answers a goal, mission, objective or gap	G141
+property	fillsScope	http://example.org/backlog#fillsScope	RelationshipCategory_Intentional	the definition says the link exists so that one thing advances, serves or answers a goal, mission, objective or gap	G141
+property	derivesFromScope	http://example.org/backlog#derivesFromScope	RelationshipCategory_Intentional	the definition says the link exists so that one thing advances, serves or answers a goal, mission, objective or gap	G141
+property	goalAnswersGap	http://example.org/backlog#goalAnswersGap	RelationshipCategory_Intentional	the definition says the link exists so that one thing advances, serves or answers a goal, mission, objective or gap	G141
+property	goalCoversArea	http://example.org/backlog#goalCoversArea	RelationshipCategory_Intentional	the definition says the link exists so that one thing advances, serves or answers a goal, mission, objective or gap	G141
+property	guardsExclusion	http://example.org/backlog#guardsExclusion	RelationshipCategory_Intentional	the definition says the link exists so that one thing advances, serves or answers a goal, mission, objective or gap	G141
+property	opportunityFor	http://example.org/backlog#opportunityFor	RelationshipCategory_Intentional	the definition says the link exists so that one thing advances, serves or answers a goal, mission, objective or gap	G141
+property	roadmapRealises	http://example.org/backlog#roadmapRealises	RelationshipCategory_Intentional	the definition says the link exists so that one thing advances, serves or answers a goal, mission, objective or gap	G141
+property	metricMovableBy	http://example.org/backlog#metricMovableBy	RelationshipCategory_Intentional	the definition says the link exists so that one thing advances, serves or answers a goal, mission, objective or gap	G141
+property	convertedToItem	http://example.org/backlog#convertedToItem	RelationshipCategory_Intentional	the definition says the link exists so that one thing advances, serves or answers a goal, mission, objective or gap	G141
+property	deliversDeliverable	http://example.org/backlog#deliversDeliverable	RelationshipCategory_Intentional	the definition says the link exists so that one thing advances, serves or answers a goal, mission, objective or gap	G141
+property	satisfiesDeliverable	http://example.org/backlog#satisfiesDeliverable	RelationshipCategory_Intentional	the definition says the link exists so that one thing advances, serves or answers a goal, mission, objective or gap	G141
+property	scopeForMission	http://example.org/backlog#scopeForMission	RelationshipCategory_Intentional	the definition says the link exists so that one thing advances, serves or answers a goal, mission, objective or gap	G141
+property	lineageForMission	http://example.org/backlog#lineageForMission	RelationshipCategory_Intentional	the definition says the link exists so that one thing advances, serves or answers a goal, mission, objective or gap	G141
+property	missionFor	http://example.org/backlog#missionFor	RelationshipCategory_Intentional	the definition says the link exists so that one thing advances, serves or answers a goal, mission, objective or gap	G141
+property	resolvesGap	http://example.org/backlog#resolvesGap	RelationshipCategory_Intentional	the definition says the link exists so that one thing advances, serves or answers a goal, mission, objective or gap	G141
+property	resolvesPartialScope	http://example.org/backlog#resolvesPartialScope	RelationshipCategory_Intentional	the definition says the link exists so that one thing advances, serves or answers a goal, mission, objective or gap	G141
+property	remediatedBy	http://example.org/backlog#remediatedBy	RelationshipCategory_Intentional	the definition says the link exists so that one thing advances, serves or answers a goal, mission, objective or gap	G141
+property	tracksItem	http://example.org/backlog#tracksItem	RelationshipCategory_Intentional	the definition says the link exists so that one thing advances, serves or answers a goal, mission, objective or gap	G141
+property	requiresCompetency	http://example.org/backlog#requiresCompetency	RelationshipCategory_Association	the item names the competency it needs; the definition names no finer relation	G141
+property	requiresDeliverable	http://example.org/backlog#requiresDeliverable	RelationshipCategory_Requirement	the definition says one thing needs, owes, is a prerequisite of or is blocked by another	G141
+property	requiresExternalEnhancement	http://example.org/backlog#requiresExternalEnhancement	RelationshipCategory_Requirement	the definition says one thing needs, owes, is a prerequisite of or is blocked by another	G141
+property	dependsOnExternal	http://example.org/backlog#dependsOnExternal	RelationshipCategory_Requirement	the definition says one thing needs, owes, is a prerequisite of or is blocked by another	G141
+property	dependsOn	http://example.org/backlog#dependsOn	RelationshipCategory_Requirement	the definition says one thing needs, owes, is a prerequisite of or is blocked by another	G141
+property	blocks	http://example.org/backlog#blocks	RelationshipCategory_Requirement	the definition says one thing needs, owes, is a prerequisite of or is blocked by another	G141
+property	containerDependsOn	http://example.org/backlog#containerDependsOn	RelationshipCategory_Requirement	the definition says one thing needs, owes, is a prerequisite of or is blocked by another	G141
+property	derivedContainerDependency	http://example.org/backlog#derivedContainerDependency	RelationshipCategory_Requirement	the definition says one thing needs, owes, is a prerequisite of or is blocked by another	G141
+property	hasExternalBlocker	http://example.org/backlog#hasExternalBlocker	RelationshipCategory_Requirement	the definition says one thing needs, owes, is a prerequisite of or is blocked by another	G141
+property	stageRequiresType	http://example.org/backlog#stageRequiresType	RelationshipCategory_Requirement	the definition says one thing needs, owes, is a prerequisite of or is blocked by another	G141
+property	stageRequiresTypeV2	http://example.org/backlog#stageRequiresTypeV2	RelationshipCategory_Requirement	the definition says one thing needs, owes, is a prerequisite of or is blocked by another	G141
+property	stageRequiresTypeV3	http://example.org/backlog#stageRequiresTypeV3	RelationshipCategory_Requirement	the definition says one thing needs, owes, is a prerequisite of or is blocked by another	G141
+property	stageRequiresTypeV4	http://example.org/backlog#stageRequiresTypeV4	RelationshipCategory_Requirement	the definition says one thing needs, owes, is a prerequisite of or is blocked by another	G141
+property	owesClass	http://example.org/backlog#owesClass	RelationshipCategory_Association	the obligation names the class owed	G141
+property	owesDepth	http://example.org/backlog#owesDepth	RelationshipCategory_Association	the obligation names the depth owed	G141
+property	owesKind	http://example.org/backlog#owesKind	RelationshipCategory_Association	the obligation names the kind owed	G141
+property	owesLevel	http://example.org/backlog#owesLevel	RelationshipCategory_Association	the obligation names the level owed	G141
+property	owesScenarioKind	http://example.org/backlog#owesScenarioKind	RelationshipCategory_Association	the obligation names the scenario kind owed	G141
+property	obligationOfConcern	http://example.org/backlog#obligationOfConcern	RelationshipCategory_Association	the obligation binds when the concern is declared	G141
+property	obligationOfStage	http://example.org/backlog#obligationOfStage	RelationshipCategory_Association	the obligation binds at the stage	G141
+property	obligationOfTaskType	http://example.org/backlog#obligationOfTaskType	RelationshipCategory_Association	the obligation binds at execution of the task type	G141
+property	unblocksItem	http://example.org/backlog#unblocksItem	RelationshipCategory_Requirement	the definition says one thing needs, owes, is a prerequisite of or is blocked by another	G141
+property	impedes	http://example.org/backlog#impedes	RelationshipCategory_Requirement	the definition says one thing needs, owes, is a prerequisite of or is blocked by another	G141
+property	hasApplicableConcern	http://example.org/backlog#hasApplicableConcern	RelationshipCategory_Requirement	the definition says one thing needs, owes, is a prerequisite of or is blocked by another	G141
+property	hasAcceptanceCriterion	http://example.org/backlog#hasAcceptanceCriterion	RelationshipCategory_Requirement	the definition says one thing needs, owes, is a prerequisite of or is blocked by another	G141
+property	hasSpecification	http://example.org/backlog#hasSpecification	RelationshipCategory_Requirement	the definition says one thing needs, owes, is a prerequisite of or is blocked by another	G141
+property	harnessFor	http://example.org/backlog#harnessFor	RelationshipCategory_Requirement	the harness proves the item satisfies its criteria	G141
+property	satisfiesCriterion	http://example.org/backlog#satisfiesCriterion	RelationshipCategory_Requirement	the record says a criterion was verified	G141
+property	exercisesCriterion	http://example.org/backlog#exercisesCriterion	RelationshipCategory_Assessment	the definition says a test, metric, observation or score evaluates or verifies what it relates to	G141
+property	coveredByCase	http://example.org/backlog#coveredByCase	RelationshipCategory_Assessment	the definition says a test, metric, observation or score evaluates or verifies what it relates to	G141
+property	scenarioOf	http://example.org/backlog#scenarioOf	RelationshipCategory_Requirement	the scenario is a situation the criterion must hold in	G141
+property	coversScenario	http://example.org/backlog#coversScenario	RelationshipCategory_Assessment	the definition says a test, metric, observation or score evaluates or verifies what it relates to	G141
+property	hasSuccessMetric	http://example.org/backlog#hasSuccessMetric	RelationshipCategory_Assessment	the definition says a test, metric, observation or score evaluates or verifies what it relates to	G141
+property	observesMetric	http://example.org/backlog#observesMetric	RelationshipCategory_Assessment	the definition says a test, metric, observation or score evaluates or verifies what it relates to	G141
+property	observationFor	http://example.org/backlog#observationFor	RelationshipCategory_Assessment	the definition says a test, metric, observation or score evaluates or verifies what it relates to	G141
+property	observedDuringCeremony	http://example.org/backlog#observedDuringCeremony	RelationshipCategory_Assessment	the definition says a test, metric, observation or score evaluates or verifies what it relates to	G141
+property	basisObservation	http://example.org/backlog#basisObservation	RelationshipCategory_Assessment	the definition says a test, metric, observation or score evaluates or verifies what it relates to	G141
+property	decisionBackedByScore	http://example.org/backlog#decisionBackedByScore	RelationshipCategory_Assessment	the definition says a test, metric, observation or score evaluates or verifies what it relates to	G141
+property	scoredByMethod	http://example.org/backlog#scoredByMethod	RelationshipCategory_Assessment	the definition says a test, metric, observation or score evaluates or verifies what it relates to	G141
+property	checkedByToolScript	http://example.org/backlog#checkedByToolScript	RelationshipCategory_Association	the definition names the checker and no finer relation	G141
+property	ranTool	http://example.org/backlog#ranTool	RelationshipCategory_Provenance	the run record used the tool	G141
+property	benefitRealizedBy	http://example.org/backlog#benefitRealizedBy	RelationshipCategory_Epistemic	evidence supports a realisation claim	G141
+property	runsOnData	http://example.org/backlog#runsOnData	RelationshipCategory_Assessment	the definition says a test, metric, observation or score evaluates or verifies what it relates to	G141
+property	forecastFor	http://example.org/backlog#forecastFor	RelationshipCategory_Association	the definition gives no finer relation than the link	G141
+property	findingOnNode	http://example.org/backlog#findingOnNode	RelationshipCategory_Association	the definition gives no finer relation than the link	G141
+property	hasPackageArtifact	http://example.org/backlog#hasPackageArtifact	RelationshipCategory_ContainmentMembership	the definition says something is kept in, shipped by or listed in a package, module, section or collection	G141
+property	hasSection	http://example.org/backlog#hasSection	RelationshipCategory_ContainmentMembership	the definition says something is kept in, shipped by or listed in a package, module, section or collection	G141
+property	hasTransition	http://example.org/backlog#hasTransition	RelationshipCategory_ContainmentMembership	the definition says something is kept in, shipped by or listed in a package, module, section or collection	G141
+property	hasSeat	http://example.org/backlog#hasSeat	RelationshipCategory_ContainmentMembership	the definition says something is kept in, shipped by or listed in a package, module, section or collection	G141
+property	hasAllocation	http://example.org/backlog#hasAllocation	RelationshipCategory_ContainmentMembership	the definition says something is kept in, shipped by or listed in a package, module, section or collection	G141
+property	hasDoDCriterion	http://example.org/backlog#hasDoDCriterion	RelationshipCategory_ContainmentMembership	the definition says something is kept in, shipped by or listed in a package, module, section or collection	G141
+property	hasTaskTypeStep	http://example.org/backlog#hasTaskTypeStep	RelationshipCategory_ContainmentMembership	the definition says something is kept in, shipped by or listed in a package, module, section or collection	G141
+property	hasInteractionStep	http://example.org/backlog#hasInteractionStep	RelationshipCategory_ContainmentMembership	the definition says something is kept in, shipped by or listed in a package, module, section or collection	G141
+property	includesPlanningEvent	http://example.org/backlog#includesPlanningEvent	RelationshipCategory_ContainmentMembership	the definition says something is kept in, shipped by or listed in a package, module, section or collection	G141
+property	includesRetiredLineage	http://example.org/backlog#includesRetiredLineage	RelationshipCategory_ContainmentMembership	the definition says something is kept in, shipped by or listed in a package, module, section or collection	G141
+property	inObligationSet	http://example.org/backlog#inObligationSet	RelationshipCategory_Compositional	an obligation is part of an obligation set, both norms	G141
+property	hasScopeExclusion	http://example.org/backlog#hasScopeExclusion	RelationshipCategory_ContainmentMembership	the definition says something is kept in, shipped by or listed in a package, module, section or collection	G141
+property	hasExperienceRecord	http://example.org/backlog#hasExperienceRecord	RelationshipCategory_ContainmentMembership	the definition says something is kept in, shipped by or listed in a package, module, section or collection	G141
+property	hasFailureRecord	http://example.org/backlog#hasFailureRecord	RelationshipCategory_ContainmentMembership	the definition says something is kept in, shipped by or listed in a package, module, section or collection	G141
+property	hasCheckpoint	http://example.org/backlog#hasCheckpoint	RelationshipCategory_ContainmentMembership	the definition says something is kept in, shipped by or listed in a package, module, section or collection	G141
+property	tableInModule	http://example.org/backlog#tableInModule	RelationshipCategory_ContainmentMembership	the definition says something is kept in, shipped by or listed in a package, module, section or collection	G141
+property	deliversPackage	http://example.org/backlog#deliversPackage	RelationshipCategory_ContainmentMembership	the definition says something is kept in, shipped by or listed in a package, module, section or collection	G141
+property	hasStateChange	http://example.org/backlog#hasStateChange	RelationshipCategory_ContainmentMembership	the definition says something is kept in, shipped by or listed in a package, module, section or collection	G141
+property	hasObligation	http://example.org/backlog#hasObligation	RelationshipCategory_ContainmentMembership	the definition says something is kept in, shipped by or listed in a package, module, section or collection	G141
+property	hasDomainEntity	http://example.org/backlog#hasDomainEntity	RelationshipCategory_ContainmentMembership	the definition says something is kept in, shipped by or listed in a package, module, section or collection	G141
+property	hasExecutorMember	http://example.org/backlog#hasExecutorMember	RelationshipCategory_Compositional	part and whole among teams, lineages or outputs	G141
+property	hasTeamRole	http://example.org/backlog#hasTeamRole	RelationshipCategory_Compositional	part and whole among teams, lineages or outputs	G141
+property	parentLineage	http://example.org/backlog#parentLineage	RelationshipCategory_Compositional	part and whole among teams, lineages or outputs	G141
+property	partLineage	http://example.org/backlog#partLineage	RelationshipCategory_Compositional	part and whole among teams, lineages or outputs	G141
+property	combinesOutput	http://example.org/backlog#combinesOutput	RelationshipCategory_Compositional	part and whole among teams, lineages or outputs	G141
+property	consumesOutput	http://example.org/backlog#consumesOutput	RelationshipCategory_OrderingSequence	the definition says one comes after, is built from or follows the previous one	G141
+property	followsReview	http://example.org/backlog#followsReview	RelationshipCategory_OrderingSequence	the definition says one comes after, is built from or follows the previous one	G141
+property	carriesOverFrom	http://example.org/backlog#carriesOverFrom	RelationshipCategory_OrderingSequence	the definition says one comes after, is built from or follows the previous one	G141
+property	costOfItem	http://example.org/backlog#costOfItem	RelationshipCategory_Reification	the property links a reified relationship (a record with its own attributes) to one of its participants	G141
+property	alongDimension	http://example.org/backlog#alongDimension	RelationshipCategory_Reification	the property links a reified relationship (a record with its own attributes) to one of its participants	G141
+property	dependencyOn	http://example.org/backlog#dependencyOn	RelationshipCategory_Reification	the property links a reified relationship (a record with its own attributes) to one of its participants	G141
+property	hasDependencyRecord	http://example.org/backlog#hasDependencyRecord	RelationshipCategory_Reification	the property links a reified relationship (a record with its own attributes) to one of its participants	G141
+property	disclosesDependencyOn	http://example.org/backlog#disclosesDependencyOn	RelationshipCategory_Reification	the property links a reified relationship (a record with its own attributes) to one of its participants	G141
+property	heldBy	http://example.org/backlog#heldBy	RelationshipCategory_Reification	the property links a reified relationship (a record with its own attributes) to one of its participants	G141
+property	fromState	http://example.org/backlog#fromState	RelationshipCategory_Reification	the property links a reified relationship (a record with its own attributes) to one of its participants	G141
+property	toState	http://example.org/backlog#toState	RelationshipCategory_Reification	the property links a reified relationship (a record with its own attributes) to one of its participants	G141
+property	viaTransition	http://example.org/backlog#viaTransition	RelationshipCategory_Reification	the property links a reified relationship (a record with its own attributes) to one of its participants	G141
+property	allocatesToCategory	http://example.org/backlog#allocatesToCategory	RelationshipCategory_Reification	the property links a reified relationship (a record with its own attributes) to one of its participants	G141
+property	promotesShape	http://example.org/backlog#promotesShape	RelationshipCategory_Reification	the property links a reified relationship (a record with its own attributes) to one of its participants	G141
+property	promotionInRuleSet	http://example.org/backlog#promotionInRuleSet	RelationshipCategory_Reification	the property links a reified relationship (a record with its own attributes) to one of its participants	G141
+property	promotedSeverity	http://example.org/backlog#promotedSeverity	RelationshipCategory_Reification	the property links a reified relationship (a record with its own attributes) to one of its participants	G141
+property	splitFrom	http://example.org/backlog#splitFrom	RelationshipCategory_Versioning	a container is split from another, which is replaced as the remainder	G141
+property	abbreviationOf	http://example.org/backlog#abbreviationOf	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	adaptsScope	http://example.org/backlog#adaptsScope	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	addressesConcern	http://example.org/backlog#addressesConcern	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	admitsItem	http://example.org/backlog#admitsItem	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	adoptsFacet	http://example.org/backlog#adoptsFacet	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	adoptsObligationSet	http://example.org/backlog#adoptsObligationSet	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	adoptsRuleSet	http://example.org/backlog#adoptsRuleSet	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	answersBypass	http://example.org/backlog#answersBypass	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	appliesDefinitionOfDone	http://example.org/backlog#appliesDefinitionOfDone	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	assembledFor	http://example.org/backlog#assembledFor	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	assemblesTeam	http://example.org/backlog#assemblesTeam	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	assignedToTeam	http://example.org/backlog#assignedToTeam	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	baselineFor	http://example.org/backlog#baselineFor	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	baselineForTool	http://example.org/backlog#baselineForTool	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	belongsToCapabilityClass	http://example.org/backlog#belongsToCapabilityClass	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	belongsToLineage	http://example.org/backlog#belongsToLineage	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	blueprintFor	http://example.org/backlog#blueprintFor	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	bridgeCoversEvidence	http://example.org/backlog#bridgeCoversEvidence	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	budgetDimension	http://example.org/backlog#budgetDimension	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	budgetFor	http://example.org/backlog#budgetFor	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	bypassedItem	http://example.org/backlog#bypassedItem	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	bypassedLineage	http://example.org/backlog#bypassedLineage	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	bypassedOutput	http://example.org/backlog#bypassedOutput	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	ceremonyFor	http://example.org/backlog#ceremonyFor	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	changedItem	http://example.org/backlog#changedItem	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	changesScope	http://example.org/backlog#changesScope	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	citesFinding	http://example.org/backlog#citesFinding	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	closesForMission	http://example.org/backlog#closesForMission	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	closesIteration	http://example.org/backlog#closesIteration	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	closesStory	http://example.org/backlog#closesStory	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	concernsCompetency	http://example.org/backlog#concernsCompetency	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	concernsStage	http://example.org/backlog#concernsStage	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	concernsWorkItem	http://example.org/backlog#concernsWorkItem	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	conformsToNamingConvention	http://example.org/backlog#conformsToNamingConvention	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	containerClass	http://example.org/backlog#containerClass	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	containerForLineage	http://example.org/backlog#containerForLineage	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	coversArea	http://example.org/backlog#coversArea	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	coversEntity	http://example.org/backlog#coversEntity	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	coversObligation	http://example.org/backlog#coversObligation	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	coversStage	http://example.org/backlog#coversStage	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	coversTaskType	http://example.org/backlog#coversTaskType	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	declaredByArtifact	http://example.org/backlog#declaredByArtifact	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	declaredInSnapshot	http://example.org/backlog#declaredInSnapshot	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	declaresGapFor	http://example.org/backlog#declaresGapFor	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	delegatedLineage	http://example.org/backlog#delegatedLineage	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	deliverableForArea	http://example.org/backlog#deliverableForArea	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	deliveredInRelease	http://example.org/backlog#deliveredInRelease	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	deploysFrom	http://example.org/backlog#deploysFrom	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	deploysItem	http://example.org/backlog#deploysItem	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	dissolvesContainer	http://example.org/backlog#dissolvesContainer	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	effectiveDefinitionOfDone	http://example.org/backlog#effectiveDefinitionOfDone	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	enforcedByShape	http://example.org/backlog#enforcedByShape	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	findingItem	http://example.org/backlog#findingItem	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	findingOf	http://example.org/backlog#findingOf	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	flagsForCarryOver	http://example.org/backlog#flagsForCarryOver	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	forArtifactDomain	http://example.org/backlog#forArtifactDomain	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	forDepthLevel	http://example.org/backlog#forDepthLevel	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	frozenBy	http://example.org/backlog#frozenBy	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	fulfillsRequest	http://example.org/backlog#fulfillsRequest	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	gapForEntity	http://example.org/backlog#gapForEntity	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	gapForStage	http://example.org/backlog#gapForStage	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	gateFor	http://example.org/backlog#gateFor	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	gatesStage	http://example.org/backlog#gatesStage	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	governsBacklog	http://example.org/backlog#governsBacklog	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	groomsForIteration	http://example.org/backlog#groomsForIteration	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	hasCapability	http://example.org/backlog#hasCapability	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	hasCommitment	http://example.org/backlog#hasCommitment	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	hasCompetencyProfile	http://example.org/backlog#hasCompetencyProfile	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	hasCostEstimate	http://example.org/backlog#hasCostEstimate	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	hasEvidence	http://example.org/backlog#hasEvidence	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	hasFailureMode	http://example.org/backlog#hasFailureMode	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	hasMitigation	http://example.org/backlog#hasMitigation	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	hasPriorityScore	http://example.org/backlog#hasPriorityScore	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	hasRisk	http://example.org/backlog#hasRisk	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	hasScopeStatement	http://example.org/backlog#hasScopeStatement	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	hasSuccessMode	http://example.org/backlog#hasSuccessMode	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	holdsRole	http://example.org/backlog#holdsRole	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	identifiesAffectedLineage	http://example.org/backlog#identifiesAffectedLineage	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	initiativeLevelCounterpart	http://example.org/backlog#initiativeLevelCounterpart	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	interactsWith	http://example.org/backlog#interactsWith	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	kickOffFor	http://example.org/backlog#kickOffFor	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	layerClass	http://example.org/backlog#layerClass	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	lostItem	http://example.org/backlog#lostItem	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	occurrenceOf	http://example.org/backlog#occurrenceOf	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	outScopes	http://example.org/backlog#outScopes	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	outputOfStage	http://example.org/backlog#outputOfStage	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	overrideAppliesToWorkItem	http://example.org/backlog#overrideAppliesToWorkItem	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	overridesCompetency	http://example.org/backlog#overridesCompetency	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	packageFor	http://example.org/backlog#packageFor	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	partForDeliverable	http://example.org/backlog#partForDeliverable	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	passedOver	http://example.org/backlog#passedOver	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	performedByActor	http://example.org/backlog#performedByActor	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	plannedInto	http://example.org/backlog#plannedInto	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	plansItem	http://example.org/backlog#plansItem	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	policyFor	http://example.org/backlog#policyFor	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	postRestartItem	http://example.org/backlog#postRestartItem	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	priorRestart	http://example.org/backlog#priorRestart	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	productViewOf	http://example.org/backlog#productViewOf	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	proposalFor	http://example.org/backlog#proposalFor	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	rankedOnRoadmap	http://example.org/backlog#rankedOnRoadmap	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	reactivatesLineage	http://example.org/backlog#reactivatesLineage	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	readAgainstRegister	http://example.org/backlog#readAgainstRegister	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	rebaselines	http://example.org/backlog#rebaselines	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	refines	http://example.org/backlog#refines	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	relatesToWorkItem	http://example.org/backlog#relatesToWorkItem	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	repeatedBypass	http://example.org/backlog#repeatedBypass	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	reportOf	http://example.org/backlog#reportOf	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	reportsCancelledItem	http://example.org/backlog#reportsCancelledItem	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	reportsDeliveredItem	http://example.org/backlog#reportsDeliveredItem	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	reportsOnObjective	http://example.org/backlog#reportsOnObjective	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	requestsChangeTo	http://example.org/backlog#requestsChangeTo	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	restartsLineage	http://example.org/backlog#restartsLineage	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	retractsOutput	http://example.org/backlog#retractsOutput	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	revisesFromStage	http://example.org/backlog#revisesFromStage	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	revisesLineage	http://example.org/backlog#revisesLineage	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	roadmapOf	http://example.org/backlog#roadmapOf	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	sharedByLineage	http://example.org/backlog#sharedByLineage	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	simplifiedBy	http://example.org/backlog#simplifiedBy	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	statusForOutcome	http://example.org/backlog#statusForOutcome	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	successMirrorOf	http://example.org/backlog#successMirrorOf	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	targetsIteration	http://example.org/backlog#targetsIteration	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	teamFor	http://example.org/backlog#teamFor	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	templateLineage	http://example.org/backlog#templateLineage	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	thrashedLineage	http://example.org/backlog#thrashedLineage	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	transitionedItem	http://example.org/backlog#transitionedItem	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	underRankingModel	http://example.org/backlog#underRankingModel	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	wipLimitFor	http://example.org/backlog#wipLimitFor	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	workflowFor	http://example.org/backlog#workflowFor	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	analyzesRequest	http://example.org/backlog#analyzesRequest	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	addressesFinding	http://example.org/backlog#addressesFinding	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G141
+property	admittedByOutput	http://example.org/backlog#admittedByOutput	RelationshipCategory_Association	the definition gives no finer relation than the link	G141
+property	checkpointCondition	http://example.org/backlog#checkpointCondition	RelationshipCategory_Requirement	see the definition: requirement link	G141
+property	describesItem	http://example.org/backlog#describesItem	RelationshipCategory_Association	the definition gives no finer relation than the link	G141
+property	hasDependencyDisclosure	http://example.org/backlog#hasDependencyDisclosure	RelationshipCategory_Reification	see the definition: reification link	G141
+property	hasStepActor	http://example.org/backlog#hasStepActor	RelationshipCategory_Association	the definition gives no finer relation than the link	G141
+property	obligationWaivedBy	http://example.org/backlog#obligationWaivedBy	RelationshipCategory_Association	the definition gives no finer relation than the link	G141
+property	reviewsCeremony	http://example.org/backlog#reviewsCeremony	RelationshipCategory_Association	the review checks against the planning ceremony; the definition names no finer relation	G141
+property	scopeRealizesObjective	http://example.org/backlog#scopeRealizesObjective	RelationshipCategory_Intentional	see the definition: intentional link	G141
+property	sessionFor	http://example.org/backlog#sessionFor	RelationshipCategory_Association	the definition gives no finer relation than the link	G141
+property	containerScope	http://example.org/backlog#containerScope	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	decompositionState	http://example.org/backlog#decompositionState	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	derivedMilestoneState	http://example.org/backlog#derivedMilestoneState	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	derivedState	http://example.org/backlog#derivedState	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	entryOutcome	http://example.org/backlog#entryOutcome	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	flowPointPrecision	http://example.org/backlog#flowPointPrecision	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	forecastOutcome	http://example.org/backlog#forecastOutcome	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	hasAdaptationOutcome	http://example.org/backlog#hasAdaptationOutcome	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	hasAdaptationStage	http://example.org/backlog#hasAdaptationStage	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	hasArchivalConfirmationStatus	http://example.org/backlog#hasArchivalConfirmationStatus	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	hasArtifactRole	http://example.org/backlog#hasArtifactRole	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	hasBasisKind	http://example.org/backlog#hasBasisKind	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	hasChangeDirection	http://example.org/backlog#hasChangeDirection	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	hasConformanceLevel	http://example.org/backlog#hasConformanceLevel	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	hasCriterionStatus	http://example.org/backlog#hasCriterionStatus	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	hasDependencyKind	http://example.org/backlog#hasDependencyKind	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	hasDisposition	http://example.org/backlog#hasDisposition	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	hasDocumentStatus	http://example.org/backlog#hasDocumentStatus	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	hasEnforcementDomain	http://example.org/backlog#hasEnforcementDomain	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	hasExecutionModality	http://example.org/backlog#hasExecutionModality	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	hasExpectedPolarity	http://example.org/backlog#hasExpectedPolarity	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	hasExternalDependencyType	http://example.org/backlog#hasExternalDependencyType	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	hasFindingDisposition	http://example.org/backlog#hasFindingDisposition	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	hasFindingScale	http://example.org/backlog#hasFindingScale	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	hasFindingScope	http://example.org/backlog#hasFindingScope	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	hasGoalFacing	http://example.org/backlog#hasGoalFacing	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	hasGoalOrigin	http://example.org/backlog#hasGoalOrigin	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	hasInitiativeKind	http://example.org/backlog#hasInitiativeKind	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	hasIntentOrigin	http://example.org/backlog#hasIntentOrigin	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	hasInteractionKind	http://example.org/backlog#hasInteractionKind	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	hasInvariantStatus	http://example.org/backlog#hasInvariantStatus	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	hasInvestmentCategory	http://example.org/backlog#hasInvestmentCategory	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	hasKickOffMode	http://example.org/backlog#hasKickOffMode	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	hasLifecyclePhase	http://example.org/backlog#hasLifecyclePhase	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	hasLineageArtifactDomain	http://example.org/backlog#hasLineageArtifactDomain	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	hasLineageDepthLevel	http://example.org/backlog#hasLineageDepthLevel	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	hasLineageStatus	http://example.org/backlog#hasLineageStatus	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	hasMaintenanceCategory	http://example.org/backlog#hasMaintenanceCategory	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	hasMaintenanceGoal	http://example.org/backlog#hasMaintenanceGoal	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	hasMaintenanceTiming	http://example.org/backlog#hasMaintenanceTiming	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	hasMeasurementKind	http://example.org/backlog#hasMeasurementKind	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	hasMissionOrigin	http://example.org/backlog#hasMissionOrigin	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	hasMissionOutcome	http://example.org/backlog#hasMissionOutcome	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	hasModeScope	http://example.org/backlog#hasModeScope	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	hasModelCategory	http://example.org/backlog#hasModelCategory	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	hasModelKind	http://example.org/backlog#hasModelKind	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	hasModelLevel	http://example.org/backlog#hasModelLevel	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	hasOutcome	http://example.org/backlog#hasOutcome	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	hasPriorConformanceLevel	http://example.org/backlog#hasPriorConformanceLevel	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	hasProductScopeKind	http://example.org/backlog#hasProductScopeKind	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	hasProposalStatus	http://example.org/backlog#hasProposalStatus	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	hasRankingForkResolution	http://example.org/backlog#hasRankingForkResolution	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	hasReactivationReason	http://example.org/backlog#hasReactivationReason	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	hasRecoveryStrategy	http://example.org/backlog#hasRecoveryStrategy	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	hasScopeLayer	http://example.org/backlog#hasScopeLayer	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	hasSelectionBasis	http://example.org/backlog#hasSelectionBasis	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	hasSpecificationDepth	http://example.org/backlog#hasSpecificationDepth	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	hasState	http://example.org/backlog#hasState	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	hasSupervisionMode	http://example.org/backlog#hasSupervisionMode	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	hasTableKind	http://example.org/backlog#hasTableKind	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	hasTargetConformanceLevel	http://example.org/backlog#hasTargetConformanceLevel	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	hasTargetDirection	http://example.org/backlog#hasTargetDirection	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	hasTaskType	http://example.org/backlog#hasTaskType	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	hasThrashKind	http://example.org/backlog#hasThrashKind	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	horizonExpectsState	http://example.org/backlog#horizonExpectsState	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	milestoneOutcome	http://example.org/backlog#milestoneOutcome	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	moduleAudience	http://example.org/backlog#moduleAudience	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	numberOrigin	http://example.org/backlog#numberOrigin	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	objectiveOutcome	http://example.org/backlog#objectiveOutcome	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	obligationSeverity	http://example.org/backlog#obligationSeverity	RelationshipCategory_Association	the obligation names its severity; a characterization link needs a record or specification at the domain	G141
+property	scenarioKind	http://example.org/backlog#scenarioKind	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	scheduledInHorizon	http://example.org/backlog#scheduledInHorizon	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	scopeCompletionState	http://example.org/backlog#scopeCompletionState	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	scopeOutcome	http://example.org/backlog#scopeOutcome	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	seatFunction	http://example.org/backlog#seatFunction	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
+property	attestsCriterion	http://example.org/backlog#attestsCriterion	RelationshipCategory_Requirement	evidence verifies a criterion: both ends are records or specifications	G141
+property	attestsDoDCriterion	http://example.org/backlog#attestsDoDCriterion	RelationshipCategory_Requirement	evidence verifies a clause of the Definition of Done	G141
+property	hasHarnessEvidence	http://example.org/backlog#hasHarnessEvidence	RelationshipCategory_Requirement	the harness is verified by the evidence it holds	G141
+property	provesDefinitionOfDone	http://example.org/backlog#provesDefinitionOfDone	RelationshipCategory_Requirement	the harness verifies the Definition of Done	G141
+property	measuredWithTool	http://example.org/backlog#measuredWithTool	RelationshipCategory_Requirement	the criterion is measured by a shipped program: both ends are records or specifications	G141
+property	collapsesTo	http://example.org/backlog#collapsesTo	RelationshipCategory_Association	the definition names no finer relation than the link	G141
+property	governedByScopeExclusion	http://example.org/backlog#governedByScopeExclusion	RelationshipCategory_Association	the exclusion decides what the interaction is; a rule on parties does not apply to records	G141
+property	succeedsLineage	http://example.org/backlog#succeedsLineage	RelationshipCategory_Association	the succession record names the lineage; the definition names no finer relation	G141
+property	successorLineage	http://example.org/backlog#successorLineage	RelationshipCategory_Association	the succession record names the lineage; the definition names no finer relation	G141

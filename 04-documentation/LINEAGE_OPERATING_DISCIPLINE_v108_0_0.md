@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v107.0.0
+# Lineage Operating Discipline — v108.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -3788,3 +3788,14 @@ Related: G89, G135.
 
 **Not done.** `ModuleRecord` still has no typed individuals: the records would have to be invented, and nothing in the package settles them.
 Related: G89, G138, G139.
+
+## G141 — The kind and category requirement covers the whole T-Box, not only new terms
+
+**Ruling (owner, 2026-10-22).** G139 and G140 read the OE requirement as applying from the next new term. The owner corrected this: all content is processed to meet it. G140's sentence that held terms are typed as work reaches them is withdrawn. A class gets a kind and a relation a category from the first sentence of its definition and the shape of its link; where the definition does not settle it, no kind is recorded and the term is listed in `kind_category_held_v1_0_0.tsv` with the reason, never guessed.
+
+**Result.** All object properties carry a category. 149 more classes carry a kind (185 of 234 in all) (closed sets as value domains, records as information artifacts, criteria as specifications, and so on). 49 classes stay without a kind: the plan items and their containers (the OE kinds have no kind for a planned unit of work), and intent and pattern concepts whose first sentence does not say statement, record or process. The OE kind-rule check, which measured 9 ends, now measures 214 and finds none that does not fit.
+
+**What the check taught.** A rule on parties (Normative) does not fit a record about a decision; a succession or an ordered sequence between records is not a succession of occurrents; an obligation is not a member of a collective. Such links are Requirement, Provenance, Compositional or Association by what the definition says, not by the name.
+
+**Not claimed.** The kinds of the 49 are not decided. Some categories are Association where the definition names no finer relation; a finer category needs the definition changed, which is outside this ruling.
+Related: G89, G139, G140.
