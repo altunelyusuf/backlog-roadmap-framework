@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v106.0.0
+# Lineage Operating Discipline — v107.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -3779,3 +3779,12 @@ Related: G135.
 
 **Not claimed.** The OE check scans `*/01-vocabularies/*tbox*.ttl` and this package keeps its T-Box in `01-ontologies`, so the check as shipped does not reach it; the probe runs the check on a copy placed where it looks. A handover to the OE session proposes a wider scan. Most ends stay unmeasured until the work-item classes get kinds, which is not decided here.
 Related: G89, G135.
+
+## G140 — New terms carry a kind or category; two owed items cleared
+
+**Ruling.** The OE governance session now checks, in Gate K, that a new class has a kind and a new object property a category. This package gives each new term its kind or category in the release that mints it, from the first sentence of the definition. A term whose kind would contradict its children takes none, and the reason goes to the OE decisions register. The 558 terms held by the OE register are typed as work reaches them, never at once and never by guess. The plan-item kind is not decided by the OEE; no work-item class is typed until it is.
+
+**Cleared.** The second stale L3 sentence is rewritten. The gate individuals name the tool and the step instead of a script version, because a version in a description is wrong at the next release.
+
+**Not done.** `ModuleRecord` still has no typed individuals: the records would have to be invented, and nothing in the package settles them.
+Related: G89, G138, G139.

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_kind_category_probe v1.0.0 -- the kinds of classes and categories of links recorded in the T-Box fit the OE kind rules (G139).
+"""backlog_kind_category_probe v1.1.0 -- the kinds of classes and categories of links recorded in the T-Box fit the OE kind rules (G139).
 
 What it shows:
   1 the ledger and the T-Box agree: every kb:hasClassKind / kb:hasRelationshipCategory triple has a ledger row with evidence, and every row is in the T-Box,
@@ -28,8 +28,8 @@ expect("1 the ledger and the T-Box agree", led == tb, "%d row(s); only in ledger
 expect("1 every ledger row has evidence", all(len(r) >= 5 and r[4].strip() for r in rows if r))
 exist = all(((B[u.split("#")[1]], RDF.type, OWL.Class) in g) if k == "class" else ((B[u.split("#")[1]], RDF.type, OWL.ObjectProperty) in g) for k, u, _ in led)
 expect("2 every recorded class and property is declared in the T-Box", exist)
-root = os.path.dirname(PKG); tool = os.path.join(root, "repo-tooling", "oe_kind_rule_check_v1_0_0.py"); gov = sorted(glob.glob(os.path.join(root, "oe-method", "09-governance", "oegov_abox_v*.ttl")), key=sv)
-if not (os.path.exists(tool) and gov):
+root = os.path.dirname(PKG); tools = sorted([x for x in glob.glob(os.path.join(root, "repo-tooling", "oe_kind_rule_check_v*.py")) if "_test_" not in x], key=sv); tool = tools[-1] if tools else ""; gov = sorted(glob.glob(os.path.join(root, "oe-method", "09-governance", "oegov_abox_v*.ttl")), key=sv)
+if not (tool and gov):
     print("SKIP  2-4 the OE kind-rule check is not beside this package (a public copy)")
 else:
     og = Graph(); og.parse(gov[-1])
@@ -38,7 +38,7 @@ else:
         td = tempfile.mkdtemp()
         try:
             os.makedirs(os.path.join(td, "oe-method")); os.symlink(os.path.dirname(gov[-1]), os.path.join(td, "oe-method", "09-governance"))
-            d = os.path.join(td, "pk", "01-vocabularies"); os.makedirs(d); open(os.path.join(d, "pk_tbox.ttl"), "w", encoding="utf-8").write(ttl_text)
+            d = os.path.join(td, "pk", "01-ontologies"); os.makedirs(d); open(os.path.join(d, "pk_tbox.ttl"), "w", encoding="utf-8").write(ttl_text)
             r = subprocess.run([sys.executable, "-B", tool, td], capture_output=True, text=True, timeout=300); return r.stdout + r.stderr
         finally: shutil.rmtree(td, ignore_errors=True)
     src = open(TB, encoding="utf-8").read()

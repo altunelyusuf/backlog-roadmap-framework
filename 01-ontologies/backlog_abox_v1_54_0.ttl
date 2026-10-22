@@ -22,9 +22,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (ABox: controlled individuals, reference data and the live register)"@en ;
-    owl:versionIRI <http://example.org/backlog/abox/1.53.0> ;
-    owl:versionInfo "1.53.0" ;
-    owl:priorVersion <http://example.org/backlog/abox/1.52.0> , <http://example.org/backlog/abox/1.51.0> , <http://example.org/backlog/abox/1.50.0> , <http://example.org/backlog/abox/1.49.0> , <http://example.org/backlog/abox/1.48.0> , <http://example.org/backlog/abox/1.47.0> , <http://example.org/backlog/abox/1.46.0> , <http://example.org/backlog/abox/1.45.0> , <http://example.org/backlog/abox/1.40.0> , <http://example.org/backlog/abox/1.39.0> , <http://example.org/backlog/abox/1.38.0> , <http://example.org/backlog/abox/1.37.0> , <http://example.org/backlog/abox/1.36.0> , <http://example.org/backlog/abox/1.35.0> ;
+    owl:versionIRI <http://example.org/backlog/abox/1.54.0> ;
+    owl:versionInfo "1.54.0" ;
+    owl:priorVersion <http://example.org/backlog/abox/1.53.0> , <http://example.org/backlog/abox/1.52.0> , <http://example.org/backlog/abox/1.51.0> , <http://example.org/backlog/abox/1.50.0> , <http://example.org/backlog/abox/1.49.0> , <http://example.org/backlog/abox/1.48.0> , <http://example.org/backlog/abox/1.47.0> , <http://example.org/backlog/abox/1.46.0> , <http://example.org/backlog/abox/1.45.0> , <http://example.org/backlog/abox/1.40.0> , <http://example.org/backlog/abox/1.39.0> , <http://example.org/backlog/abox/1.38.0> , <http://example.org/backlog/abox/1.37.0> , <http://example.org/backlog/abox/1.36.0> , <http://example.org/backlog/abox/1.35.0> ;
     owl:priorVersion <http://example.org/backlog/abox/1.34.0> , <http://example.org/backlog/abox/1.33.0> , <http://example.org/backlog/abox/1.32.0> , <http://example.org/backlog/abox/1.31.0> , <http://example.org/backlog/abox/1.30.0> , <http://example.org/backlog/abox/1.29.0> , <http://example.org/backlog/abox/1.28.0> , <http://example.org/backlog/abox/1.27.0> , <http://example.org/backlog/abox/1.26.0> , <http://example.org/backlog/abox/1.25.0> , <http://example.org/backlog/abox/1.24.0> , <http://example.org/backlog/abox/1.23.0> , <http://example.org/backlog/abox/1.22.0> , <http://example.org/backlog/abox/1.21.0> , <http://example.org/backlog/abox/1.20.0> , <http://example.org/backlog/abox/1.19.0> , <http://example.org/backlog/abox/1.17.0> , <http://example.org/backlog/abox/1.16.0> , <http://example.org/backlog/abox/1.15.0> , <http://example.org/backlog/abox/1.14.0> , <http://example.org/backlog/abox/1.13.0> , <http://example.org/backlog/abox/1.12.0> , <http://example.org/backlog/abox/1.11.0> , <http://example.org/backlog/abox/1.10.0> , <http://example.org/backlog/abox/1.9.0> , <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
         <http://example.org/backlog-abox/1.2.1> ,
                      <http://example.org/backlog-abox/1.2.0> ,
@@ -1543,25 +1543,25 @@ backlog:Section_OrphanCoverageCheck a owl:NamedIndividual , backlog:ReportSectio
 backlog:Gate0_ManifestSelfVerify a owl:NamedIndividual , backlog:ReleaseGate ;
     rdfs:label "Gate 0 — manifest self-verify"@en ;
     skos:definition "Every shipped file hashes as recorded in the manifest. Guards the inputs every later gate assumes."@en ;
-    backlog:hasGateCommand "backlog_gate_v1_1_27.sh (step: manifest self-verify)" ;
+    backlog:hasGateCommand "the gate script (step: manifest self-verify)" ;
     backlog:hasGateOrder 0 .
 
 backlog:GateP_TurtleParse a owl:NamedIndividual , backlog:ReleaseGate ;
     rdfs:label "Gate P — Turtle parse"@en ;
     skos:definition "Every shipped Turtle file parses. A file that does not parse cannot be validated, and a validator that silently skips it reports a pass it did not measure."@en ;
-    backlog:hasGateCommand "backlog_gate_v1_1_27.sh (step: parse)" ;
+    backlog:hasGateCommand "the gate script (step: parse)" ;
     backlog:hasGateOrder 1 .
 
 backlog:GateK_VersionIdentity a owl:NamedIndividual , backlog:ReleaseGate ;
     rdfs:label "Gate K — version identity"@en ;
     skos:definition "For every ontology file, versionInfo equals the versionIRI token equals the filename token. Caught mechanically rather than by inspection, because the mismatch is invisible to a reader who trusts the filename."@en ;
-    backlog:hasGateCommand "backlog_validate_v1_4_0.py --gate-k" ;
+    backlog:hasGateCommand "the validate tool with --gate-k" ;
     backlog:hasGateOrder 2 .
 
 backlog:GateR_ShaclReconcile a owl:NamedIndividual , backlog:ReleaseGate ;
     rdfs:label "Gate R — SHACL reconcile"@en ;
     skos:definition "The register conforms: no item is Done without verified evidence, and no structural constraint is violated. Conformance is zero results at Violation severity, not an empty report."@en ;
-    backlog:hasGateCommand "backlog_validate_v1_4_0.py REGISTER.ttl" ;
+    backlog:hasGateCommand "the validate tool on the register" ;
     backlog:hasGateOrder 3 .
 
 #################################################################

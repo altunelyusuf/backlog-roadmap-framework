@@ -11260,6 +11260,16 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.416.0 — 2026-10-22 (MINOR: two owed items cleared, the OE kind-coverage handover accepted — G140)
+
+- **T-Box v1.141.0:** the second sentence naming the retired conformance level L3 (the harness derivation) is rewritten as history.
+- **A-Box v1.54.0:** the four release-gate descriptions name the tool and the step, not a script version, so they cannot go stale at the next release.
+- **Probe:** `backlog_kind_category_probe` v1.1.0 runs the newest OE kind-rule check (v1.1.0), which now reads this T-Box where it is (9 ends measured, 0 violations); v1.0.0 skipped silently once the OE tool was renamed.
+- **Handover:** the OE kind-coverage handover is accepted (G140).
+- **Discipline v107.0.0:** G140.
+
+**Unplanned work:** two items disclosed as owed in G138; no backlog item of this package covers them.
+
 ## v1.415.0 — 2026-10-21 (MINOR: the OEE kinds of classes and categories of links adapted to the BRSF T-Box — G139)
 
 - **T-Box v1.140.0:** prefix `kb:` declared (no import); `kb:hasClassKind` on 36 classes and `kb:hasRelationshipCategory` on 45 object properties, each only where the name and the definition agree. Work-item classes, event and record classes of unclear nature, and enumerations carry no kind (they are "not measured", never a violation).
