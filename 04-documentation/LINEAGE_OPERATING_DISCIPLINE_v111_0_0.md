@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v110.0.0
+# Lineage Operating Discipline — v111.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -3819,3 +3819,16 @@ Related: G89, G139, G141.
 
 **Result.** All but three classes have a kind: benefit (a change of state expected), opportunity (a condition) and increment (a part of a product) have a genus with no kind on the list, and a decision row says only that.
 Related: G141, G142.
+
+## G144 — The agentic version of a lineage is the adoption of rule sets, not a second package
+
+*(Opened by the owner's question of 2026-10-22: two packages describing agentic lineage work in different ways confuse and risk the discipline being applied twice. Measured on this package's terms and on the agentic-sdlc package's terms before anything was ruled.)*
+
+**Q1 — what the agentic version is here.** A lineage runs the agentic version by adopting `RS_AgentAccountability`, and `RS_HumanOversight` or `RS_ManagerialIndependence` where it wants them (G111, G118). Adoption is declared on the register or on one lineage (G112), and a rule set binds only its adopter (G89, G91). That is the shape of a profile beside a base method: the base is the lineage with nothing adopted, the agentic version adds rules that bind only the lineages that declare them, and the meta rules (stage products, gates, the decisions reserved to a person) bind both. No class is added: a second profile class would be a parallel one, and `LineageProfile` (depth level and artifact domain) is a different axis that stays as it is.
+
+**Q2 — the other package.** Measured: of the seven agent role types in agentic-sdlc, six are the six role concepts of this package under another name (the seventh, Specialist, G111 Q3 rules out as a role); its role class and role-type list define as a layer what this package defines as relations to work (G111 Q1); its federation class has no superclass and no individual. The vocabulary of software development (activity partition, pipeline stage, development activity, contribution, variant decision) has no counterpart here and stays there. A handover to that package proposes becoming the agentic profile of the software-development method and keeping one definition per idea; the decision is its own.
+
+**Q3 — what was not decided here.** Whether the ecosystem's profile blueprint wants this adoption registered as a profile of its own is its decision; nothing was filed there. This package's own register does not adopt the accountability rule set.
+
+**What is not claimed.** The profile-architecture checks of the blueprint (a general rule that rejects a legal variant; a requirement every variant restates) were not run on these rule sets. The base software-development package of agentic-sdlc was not located. The agent vocabulary agentic-sdlc reuses was not readable from here.
+Related: G89, G91, G111, G112, G118, G143.

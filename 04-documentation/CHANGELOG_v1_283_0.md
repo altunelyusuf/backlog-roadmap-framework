@@ -11260,6 +11260,12 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.421.0 — 2026-10-22 (PATCH: ruling G144, the agentic version of a lineage is the adoption of rule sets)
+
+- **Ruling G144:** the agentic version of a lineage is the adoption of the agent rule sets, a profile beside the base lineage, not a second package or class. Measured against agentic-sdlc: six of its seven agent role types equal this package's six role concepts; its role class and federation class are not connected to anything here. A handover to that package proposes the profile direction and one definition per idea. No vocabulary change.
+
+**Unplanned work:** a ruling on the owner's question; no backlog item of this package covers it.
+
 ## v1.420.0 — 2026-10-22 (PATCH: the OEE's last reply on the kind coverage is dispositioned)
 
 - **Handover:** the reply recording the three decision rows (benefit, opportunity, increment) is accepted; the external dependency stays an information artifact. The kind coverage, rule and consistency checks pass on this package; its three untyped classes are held by decision rows. No vocabulary change.
