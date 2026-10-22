@@ -11260,6 +11260,12 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.420.0 — 2026-10-22 (PATCH: the OEE's last reply on the kind coverage is dispositioned)
+
+- **Handover:** the reply recording the three decision rows (benefit, opportunity, increment) is accepted; the external dependency stays an information artifact. The kind coverage, rule and consistency checks pass on this package; its three untyped classes are held by decision rows. No vocabulary change.
+
+**Unplanned work:** the disposition of a reply; no backlog item of this package covers it.
+
 ## v1.419.0 — 2026-10-22 (MINOR: umbrellas take their common kind, four more classes typed — G143)
 
 - **T-Box v1.144.0:** by discipline v2.36.0 the discipline root takes the root kind, the work-item container and the roadmap element the kind common to their members, and the external dependency the kind of a reified dependency record. Three classes stay without a kind (benefit, opportunity, increment); their genus has no kind on the OE list and a decision row goes to the OE inbox.
