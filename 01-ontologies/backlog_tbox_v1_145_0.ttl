@@ -19,8 +19,8 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.144.0> ;
-    owl:versionInfo "1.144.0" ;
+    owl:versionIRI <http://example.org/backlog/1.145.0> ;
+    owl:versionInfo "1.145.0" ;
     owl:priorVersion <http://example.org/backlog/1.143.0> , <http://example.org/backlog/1.142.0> , <http://example.org/backlog/1.141.0> , <http://example.org/backlog/1.140.0> , <http://example.org/backlog/1.139.0> , <http://example.org/backlog/1.138.0> , <http://example.org/backlog/1.137.0> , <http://example.org/backlog/1.136.0> , <http://example.org/backlog/1.135.0> , <http://example.org/backlog/1.134.0> , <http://example.org/backlog/1.133.0> , <http://example.org/backlog/1.132.0> , <http://example.org/backlog/1.131.0> , <http://example.org/backlog/1.130.0> , <http://example.org/backlog/1.129.0> , <http://example.org/backlog/1.125.0> , <http://example.org/backlog/1.124.0> , <http://example.org/backlog/1.123.0> , <http://example.org/backlog/1.122.0> ;
     owl:priorVersion <http://example.org/backlog/1.121.0> , <http://example.org/backlog/1.120.0> , <http://example.org/backlog/1.119.0> , <http://example.org/backlog/1.118.0> , <http://example.org/backlog/1.117.0> ;
     owl:priorVersion <http://example.org/backlog/1.116.0> ;
@@ -8223,3 +8223,17 @@ backlog:BacklogConcept kb:hasClassKind kb:ClassKind_Entity .
 backlog:WorkItemContainer kb:hasClassKind kb:ClassKind_ConcreteEntity .
 backlog:RoadmapElement kb:hasClassKind kb:ClassKind_ConcreteEntity .
 backlog:ExternalDependency kb:hasClassKind kb:ClassKind_InformationArtifact .
+
+#################################################################
+#  v1.145.0 (G147) -- A REPAIR RE-RANKS THE OPEN ITEMS. Owner's standing rule, 2026-10-23: a repair entering the backlog
+#  changes the priority of the items it touches rather than merely being added. Opt-in through RS_RepairReprioritises.
+#################################################################
+backlog:reprioritises a owl:ObjectProperty ;
+    rdfs:domain backlog:Defect ; rdfs:range backlog:WorkItem ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "re-prioritises"@en ;
+    skos:definition "Relates a repair (a defect) to an open work item whose priority the repair changes. Under RS_RepairReprioritises each such item must carry a priority score computed after the repair's own was, because a score is evidence about the moment it was taken and the earlier one no longer reflects the repair."@en .
+backlog:reprioritisesNothingBecause a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:Defect ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "re-prioritises nothing because"@en ;
+    skos:definition "The stated reason an open repair changes the priority of no other item, for example that no open item shares its cause. Silence is not an answer: under RS_RepairReprioritises a repair names the items it re-prioritises or says why none."@en .
+backlog:reprioritises kb:hasRelationshipCategory kb:RelationshipCategory_Association .

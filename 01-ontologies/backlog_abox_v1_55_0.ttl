@@ -22,8 +22,8 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (ABox: controlled individuals, reference data and the live register)"@en ;
-    owl:versionIRI <http://example.org/backlog/abox/1.54.0> ;
-    owl:versionInfo "1.54.0" ;
+    owl:versionIRI <http://example.org/backlog/abox/1.55.0> ;
+    owl:versionInfo "1.55.0" ;
     owl:priorVersion <http://example.org/backlog/abox/1.53.0> , <http://example.org/backlog/abox/1.52.0> , <http://example.org/backlog/abox/1.51.0> , <http://example.org/backlog/abox/1.50.0> , <http://example.org/backlog/abox/1.49.0> , <http://example.org/backlog/abox/1.48.0> , <http://example.org/backlog/abox/1.47.0> , <http://example.org/backlog/abox/1.46.0> , <http://example.org/backlog/abox/1.45.0> , <http://example.org/backlog/abox/1.40.0> , <http://example.org/backlog/abox/1.39.0> , <http://example.org/backlog/abox/1.38.0> , <http://example.org/backlog/abox/1.37.0> , <http://example.org/backlog/abox/1.36.0> , <http://example.org/backlog/abox/1.35.0> ;
     owl:priorVersion <http://example.org/backlog/abox/1.34.0> , <http://example.org/backlog/abox/1.33.0> , <http://example.org/backlog/abox/1.32.0> , <http://example.org/backlog/abox/1.31.0> , <http://example.org/backlog/abox/1.30.0> , <http://example.org/backlog/abox/1.29.0> , <http://example.org/backlog/abox/1.28.0> , <http://example.org/backlog/abox/1.27.0> , <http://example.org/backlog/abox/1.26.0> , <http://example.org/backlog/abox/1.25.0> , <http://example.org/backlog/abox/1.24.0> , <http://example.org/backlog/abox/1.23.0> , <http://example.org/backlog/abox/1.22.0> , <http://example.org/backlog/abox/1.21.0> , <http://example.org/backlog/abox/1.20.0> , <http://example.org/backlog/abox/1.19.0> , <http://example.org/backlog/abox/1.17.0> , <http://example.org/backlog/abox/1.16.0> , <http://example.org/backlog/abox/1.15.0> , <http://example.org/backlog/abox/1.14.0> , <http://example.org/backlog/abox/1.13.0> , <http://example.org/backlog/abox/1.12.0> , <http://example.org/backlog/abox/1.11.0> , <http://example.org/backlog/abox/1.10.0> , <http://example.org/backlog/abox/1.9.0> , <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
         <http://example.org/backlog-abox/1.2.1> ,
@@ -6350,3 +6350,7 @@ backlog:LaunchScopedRanking backlog:collapsesTo backlog:ThroughputRanking .
 backlog:Comp_Coding backlog:competencyDomain backlog:Domain_SourceCode .
 backlog:FM_LineageThrash backlog:manifestsAsThrashKind backlog:Thrash_NoNovelty , backlog:Thrash_AdmissionLost , backlog:Thrash_NotDeliberated .
 backlog:Method_WSJF dcterms:requires backlog:Method_CostOfDelay .
+
+backlog:RS_RepairReprioritises a owl:NamedIndividual , backlog:RuleSet ;
+    rdfs:label "A repair re-prioritises the open items it touches"@en ;
+    skos:definition "Within the adopter's scope: an open defect either names, through reprioritises, the open work items whose priority it changes, or states through reprioritisesNothingBecause why none; and every open item it names carries a priority score computed after the defect's own. A RuleSet because it binds only a register or lineage that declared it (G89, G91); the owner's rule of 2026-10-23 is that a repair entering the backlog re-ranks the open items rather than merely being added."@en .

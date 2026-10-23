@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v113.0.0
+# Lineage Operating Discipline — v114.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -3856,3 +3856,16 @@ Related: G111, G118, G144.
 
 **What is not built.** The repair rule. Two variants are to be driven on scratch copies before one is ruled: a repair that names the items whose priority it changes, each carrying a dated re-score; and a computed re-rank recorded when a repair is added. No vocabulary, shape or tool changed in this release.
 Related: G111, G112, G115, G116, G118, G144, G145.
+
+## G147 — A repair re-prioritises the open items it touches (opt-in rule set)
+
+*(Opened by the Owner's standing rule of 2026-10-23 and the measurement of G146 Q3. The two variants were driven on scratch copies before one was chosen.)*
+
+**Q1 — the choice, by fact.** Declared variant: an open repair names the open items whose priority it changes, each carrying a score dated after the repair's own, or states why it changes none. Computed variant: the roadmap report inherits the priority of what a repair blocks. The declared variant fired on both planted violations and stayed silent on four controls. The computed one is not needed for its purpose: an item that depends on an unfinished repair is already excluded from the next-item choice, so the repair is picked before it whatever its score. It also changes only the repair's own position, which is not what the rule asks. No existing register in the monorepo holds a defect outside archives and fixtures, so the choice costs no consumer anything.
+
+**Q2 — what was built.** The rule set `RS_RepairReprioritises`; two terms on the defect, `reprioritises` (to the open items it touches) and `reprioritisesNothingBecause` (the stated reason none is touched); one shape with two constraints (`RepairReprioritisesShape`: no item and no reason; a named open item not scored since the repair), proven by a planted case in the negative fixture and by `backlog_repair_reprioritises_probe`, which runs eight scenarios, each rule on its case and its control, through the real validator. The re-score uses what exists: priority scores are their own records with the time they were computed, and several coexist on one item. The new link is an association: the definition names no finer relation.
+
+**Q3 — scope.** The rule binds only a register or lineage that adopted it (G89, G91). The package's own lineages adopt it when they open, next to the recording and accountability rule sets (G116 Q2, G146 Q2). The data file adopts nothing, so no consumer is bound. The start gate does not ask for it: like the agent rules, it is opt-in.
+
+**What is not claimed.** The rule asks that a re-score exists and is later; it does not judge whether the new priority is right, nor that every item truly touched was named. A repair that touches nothing says so in words, and nothing checks the words. A defect that is not scored at all is still caught by the existing scoring rule, not by this one.
+Related: G89, G91, G111, G116, G118, G146.
