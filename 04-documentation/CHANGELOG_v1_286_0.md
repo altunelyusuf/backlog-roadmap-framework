@@ -11263,6 +11263,7 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 ## v1.424.0 — 2026-10-23 (MINOR, additions only: RS_RepairReprioritises, ruling G147)
 
 - **Ruling G147 (the Owner's rule of 2026-10-23):** an opt-in rule set under which an open repair names the open items it re-prioritises, each re-scored after it, or states why none. Added: two terms on the defect (`reprioritises`, `reprioritisesNothingBecause`), the rule set, one shape with two constraints, a planted fixture case, a probe of eight scenarios (wired into the gate, v1.67.0), and one ledger row. T-Box 1.145.0, data file 1.55.0, shapes 1.178.0. Nothing is bound until a register or lineage adopts the rule set.
+- **Handover:** the response of the agentic-sdlc session to the Owner's rulings is accepted; nothing is owed from here.
 
 **Unplanned work:** the Owner's rule of 2026-10-23, measured and built in the same step; no backlog item of this package covers it.
 
