@@ -11260,6 +11260,12 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.423.0 — 2026-10-23 (PATCH: ruling G146, the Owner's agentic-profile rulings, own adoption through lineages, the repair rule measured)
+
+- **Ruling G146:** the Owner's five rulings for agentic-sdlc are recorded and were delivered to its inbox; adopting the agent accountability rule set for this package's own work goes through each lineage at its opening, not the shipped data file (measured: clean on a scratch copy, but a register-level adoption binds every consumer, G116); the repair-re-ranks-the-backlog rule is measured and not yet built. No vocabulary, shape or tool change.
+
+**Unplanned work:** a ruling on the Owner's answers and a measurement; no backlog item of this package covers it.
+
 ## v1.422.0 — 2026-10-23 (PATCH: ruling G145, the agentic-sdlc answer is dispositioned)
 
 - **Ruling G145:** the response of the agentic-sdlc session is accepted; two statements of the earlier handover are corrected (its federation class has two links; the shared agent vocabulary already defines a federation). Five proposals wait for the Owner in that package. No vocabulary change.

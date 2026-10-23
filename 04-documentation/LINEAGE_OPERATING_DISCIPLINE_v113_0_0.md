@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v112.0.0
+# Lineage Operating Discipline — v113.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -3843,3 +3843,16 @@ Related: G89, G91, G111, G112, G118, G143.
 
 **What is not claimed.** The framework's claim that the software-development vocabulary has no counterpart here was not re-measured by the other session.
 Related: G111, G118, G144.
+
+## G146 — The Owner's rulings on the agentic profile; own adoption goes through lineages; the repair rule measured, not built
+
+*(Opened by the Owner's answers of 2026-10-23 to the five deferred items of G145, and by his standing rule of the same day: a repair entering the backlog re-ranks the open items rather than merely being added. The adoption was tried on a scratch copy before anything was ruled.)*
+
+**Q1 — the Owner's rulings.** The framework is the base of the agentic profile; the framework's roles replace the role class and list of agentic-sdlc; recording a team's assembly and each run with the framework's records is agreed; the federation class is retired in favour of the shared one; the accountability rule set is adopted. They were delivered to that package's inbox as quoted. Where G144 and G145 read the base as the non-agentic way of developing software, the Owner's answer is that the framework is the base.
+
+**Q2 — adoption by this package, measured, and the mechanism corrected.** The recommendation to adopt `RS_AgentAccountability` on this package's register was tried on a copy of the data file: the shapes report 0 violations, and a planted Done item with an agent named and no overseer, verifier or approver gave the two G118 results, so the rule fires. It is not done at register level: that is the leak G116 removed, because every consumer that loads the shipped data file whole would be bound by it. The package's own commitment goes where it binds only its own work: each lineage of this package adopts `RS_AgentAccountability` itself when it opens, as it does for the recording rule sets (G116 Q2). The data file holds no live lineage today, so nothing is bound yet. The start gate (G115) is not extended to ask every lineage for it: the agent rules stay opt-in (G111, G118).
+
+**Q3 — the repair rule, measured.** An open defect is a work item that must be scored or flagged not yet scoreable, or the validator refuses it. The roadmap report orders items by score, then job size, then identifier; dependencies decide whether an item can start, not where it ranks. No link ties a repair to the items it affects. So a repair entering the backlog changes the order only through its own score; nothing records or requires a change in the priority of the items it touches. That is the gap against the Owner's rule.
+
+**What is not built.** The repair rule. Two variants are to be driven on scratch copies before one is ruled: a repair that names the items whose priority it changes, each carrying a dated re-score; and a computed re-rank recorded when a repair is added. No vocabulary, shape or tool changed in this release.
+Related: G111, G112, G115, G116, G118, G144, G145.
