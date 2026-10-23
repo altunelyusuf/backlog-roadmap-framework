@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v111.0.0
+# Lineage Operating Discipline — v112.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -3832,3 +3832,14 @@ Related: G141, G142.
 
 **What is not claimed.** The profile-architecture checks of the blueprint (a general rule that rejects a legal variant; a requirement every variant restates) were not run on these rule sets. The base software-development package of agentic-sdlc was not located. The agent vocabulary agentic-sdlc reuses was not readable from here.
 Related: G89, G91, G111, G112, G118, G143.
+
+## G145 — The answer of the agentic-sdlc session: two corrections taken, five decisions with its Owner
+
+*(Opened by that session's response of 2026-10-22 to the handover of G144, re-derived there from the files.)*
+
+**Ruling.** Accepted, and nothing is owed from this package. Two statements in the handover were wrong or incomplete and are corrected here: the federation class of agentic-sdlc is not unconnected (it links to its team class and to its organisation-structure class); and the agent vocabulary it reuses already defines a federation, a subclass of this package's `Executor_AgentFederation`, so the idea has two definitions in two vocabularies there and the framework's `TeamAssembly`, which covers "a team or federation", agrees with the shared one. The G144 sentence that its federation class "has no superclass and no individual" stands; "not connected to anything" does not.
+
+**What waits, and with whom.** Direction (becoming the agentic profile, and which package is the base), roles by the framework's relations, assembly records, the federation class and the adoption of the accountability rule sets are deferred to the Owner in that package; its recommendation on the federation is to retire its own class in favour of the shared one. Whether the six role concepts and its seven values are the same ideas was read by label only on both sides.
+
+**What is not claimed.** The framework's claim that the software-development vocabulary has no counterpart here was not re-measured by the other session.
+Related: G111, G118, G144.
