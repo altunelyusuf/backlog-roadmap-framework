@@ -19,7 +19,7 @@ with tempfile.TemporaryDirectory() as t:
     pkg = os.path.join(a, "backlog-roadmap-framework")
     os.makedirs(pkg + "/03-tooling"); os.makedirs(pkg + "/07-handover-inbox/pending"); os.makedirs(pkg + "/04-documentation")
     shutil.copy(tool, pkg + "/03-tooling/" + os.path.basename(tool))
-    open(pkg + "/07-handover-inbox/pending/README.md", "w").write("r\n"); open(pkg + "/VERSION.txt", "w").write("1.0.0\n")
+    open(pkg + "/07-handover-inbox/pending/README.md", "w").write("r\n"); open(pkg + "/VERSION.txt", "w").write("1.0.0\n"); open(pkg + "/03-tooling/thing_v1_0_0.py", "w").write("a\n")
     open(pkg + "/04-documentation/CHANGELOG_v1_1_0.md", "w").write("## v1.0.1 — x\n")
     git(a, "add", "-A"); git(a, "commit", "-q", "-m", "base"); git(a, "push", "-q", "origin", "HEAD:main")
     run = lambda: subprocess.run([sys.executable, "-B", pkg + "/03-tooling/" + os.path.basename(tool), "preflight", "1.0.1"], capture_output=True, text=True, cwd=pkg).stdout
@@ -35,4 +35,6 @@ with tempfile.TemporaryDirectory() as t:
     os.makedirs(a + "/backlog-roadmap-framework/07-handover-inbox/accepted", exist_ok=True)
     git(a, "mv", "backlog-roadmap-framework/07-handover-inbox/pending/HANDOVER_x_to_y_z_v1_0_0.md", "backlog-roadmap-framework/07-handover-inbox/accepted/HANDOVER_x_to_y_z_v1_0_0.md")
     expect("a handover dispositioned here (moved to accepted/, not yet pushed) is not an arrival", "HANDOVER_x_to_y_z" not in run().split("preflight")[0])
+    open(pkg + "/03-tooling/thing_v1_0_0.py", "w").write("changed\n")
+    expect("a published versioned file changed under its own name is refused before the gate (BP-D7)", "thing_v1_0_0.py" in run() and "keeps its versioned name" in run())
 print("VERDICT   :", "PASS" if not bad else "FAIL"); sys.exit(1 if bad else 0)

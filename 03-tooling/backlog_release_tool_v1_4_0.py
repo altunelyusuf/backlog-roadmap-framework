@@ -213,6 +213,11 @@ def preflight(v):
             if old is not None: open(vpath, "w").write(old)
         if r.returncode != 0:
             bad.append("release-item accounting: " + (r.stdout.strip().splitlines() or ["failed"])[-1])
+    # the publisher's name guard (BP-D7), asked first: a published file that keeps its versioned name with changed bytes
+    d = subprocess.run(["git", "diff", "--name-status", "--no-renames", "origin/main", "--", PKG], cwd=REPO, capture_output=True, text=True).stdout.splitlines()
+    kept = [l.split("\t")[1] for l in d if l.startswith("M\t") and re.search(r"_v\d+_\d+_\d+\.", l)]
+    if kept:
+        bad.append("a changed file keeps its versioned name (BP-D7), rename it to its next version: " + ", ".join(os.path.basename(k) for k in kept))
     val = newest(os.path.join(HERE, "backlog_validate_v*.py"))
     if val:
         r = subprocess.run([sys.executable, val, "--gate-k"], capture_output=True, text=True)

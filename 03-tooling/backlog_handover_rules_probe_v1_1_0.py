@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_handover_rules_probe v1.0.0 -- re-runnable proof of the five G148 rulings and the G150 rename case rulings (T-Box v1.146.0, shapes v1.179.0, A-Box v1.56.0).
+"""backlog_handover_rules_probe v1.1.0 -- re-runnable proof of the five G148 rulings and the G150 rename case rulings (T-Box v1.146.0, shapes v1.179.0, A-Box v1.56.0).
 
   A  L4 intent chain and the empty-epic rule do not judge a Cancelled item (an adopting project: a cancelled epic is not work to measure or groom).
   B  RS_DecompositionStateAgrees: a parent whose children are all Done or Cancelled, one at least Done, is not left open.
