@@ -4287,3 +4287,8 @@ clz:TS_some_module a backlog:ToolScript ; backlog:scriptFileName "some_module.py
 # G147: a lineage that adopted RS_RepairReprioritises, and an open repair in it that names no item and states no reason.
 ex:RRP_LIN a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_RepairReprioritises .
 ex:RRP_NONE a backlog:Defect ; backlog:hasState backlog:InProgress ; backlog:belongsToLineage ex:RRP_LIN .
+
+# G148: a lineage that adopted RS_DecompositionStateAgrees, and a parent left InProgress after its only child is Done.
+ex:DSA_LIN a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_DecompositionStateAgrees .
+ex:DSA_BAD a backlog:Story ; backlog:hasState backlog:InProgress ; backlog:belongsToLineage ex:DSA_LIN ; backlog:decomposesInto ex:DSA_KID .
+ex:DSA_KID a backlog:Story ; backlog:hasState backlog:Done ; backlog:belongsToLineage ex:DSA_LIN .

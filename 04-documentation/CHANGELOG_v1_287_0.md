@@ -11260,6 +11260,19 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.425.0 — 2026-10-24 (MINOR: four handovers answered, ruling G148)
+
+Four pending handovers (an adopting project three, another registrant one), each measured on a scratch graph, then built as a shape or tool check:
+- Cancelled items are exempt from the L4 intent chain and the empty-epic rule (shapes v1.179.0).
+- New opt-in `RS_DecompositionStateAgrees` and `DecompositionStateAgreesShape`: a parent whose children are all finished, one at least Done, is not left open (A-Box v1.56.0).
+- `backlog_lineage_order_check` v1.12.0: each adoption of a lineage claiming `adoptionRecordedAtOpen` is witnessed in git against the active Mission output; the rebuilt Mission commit of a restart is the opening.
+- `backlog_execution_ready` v1.3.0: a freeze whose finding is answered no longer blocks the start gate (fixture v1.2.0, case `Lin_FrozenAnswered`); T-Box v1.146.0 states it.
+- `GoalTriangleShape` accepts a goal whose scope belongs to a mission that supersedes its own.
+- `backlog_handover_rules_probe` (gate v1.68.0) proves each on a case and a control. Discipline v115.0.0, G148.
+- **Handovers:** all four are accepted and answered in the inbox; the log is current.
+
+**Unplanned work:** four handovers from adopting sessions, measured and built in the same step; no backlog item of this package covers them.
+
 ## v1.424.0 — 2026-10-23 (MINOR, additions only: RS_RepairReprioritises, ruling G147)
 
 - **Ruling G147 (the Owner's rule of 2026-10-23):** an opt-in rule set under which an open repair names the open items it re-prioritises, each re-scored after it, or states why none. Added: two terms on the defect (`reprioritises`, `reprioritisesNothingBecause`), the rule set, one shape with two constraints, a planted fixture case, a probe of eight scenarios (wired into the gate, v1.67.0), and one ledger row. T-Box 1.145.0, data file 1.55.0, shapes 1.178.0. Nothing is bound until a register or lineage adopts the rule set.

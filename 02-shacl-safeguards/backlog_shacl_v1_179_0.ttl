@@ -9,8 +9,8 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog/shacl/1.178.0> ;
-    owl:versionInfo "1.178.0" ;
+    owl:versionIRI <http://example.org/backlog/shacl/1.179.0> ;
+    owl:versionInfo "1.179.0" ;
     owl:priorVersion <http://example.org/backlog-shapes/1.176.0> , <http://example.org/backlog-shapes/1.175.0> , <http://example.org/backlog-shapes/1.174.0> , <http://example.org/backlog-shapes/1.173.0> , <http://example.org/backlog-shapes/1.172.0> , <http://example.org/backlog-shapes/1.171.0> , <http://example.org/backlog-shapes/1.170.0> , <http://example.org/backlog-shapes/1.169.0> , <http://example.org/backlog-shapes/1.168.0> , <http://example.org/backlog-shapes/1.167.0> , <http://example.org/backlog-shapes/1.166.0> , <http://example.org/backlog-shapes/1.165.0> , <http://example.org/backlog-shapes/1.164.0> , <http://example.org/backlog-shapes/1.159.0> , <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.154.0> , <http://example.org/backlog-shapes/1.153.0> , <http://example.org/backlog-shapes/1.152.0> , <http://example.org/backlog-shapes/1.151.0> , <http://example.org/backlog-shapes/1.150.0> , <http://example.org/backlog-shapes/1.149.0> , <http://example.org/backlog-shapes/1.148.0> , <http://example.org/backlog-shapes/1.147.0> , <http://example.org/backlog-shapes/1.146.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.145.0> ;
@@ -2830,6 +2830,7 @@ backlog:L4IntentChainShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             FILTER NOT EXISTS { $this a backlog:ExecutionTask }
+            FILTER NOT EXISTS { $this backlog:hasState backlog:Cancelled }
             FILTER NOT EXISTS { $this backlog:pursuesObjective ?o }
             FILTER NOT EXISTS { $this backlog:memberOfContainer ?c . ?c backlog:pursuesObjective ?o2 }
             FILTER NOT EXISTS { ?par backlog:decomposesInto $this . ?par backlog:pursuesObjective ?o3 }
@@ -2854,6 +2855,7 @@ backlog:L4GroomingShape a sh:NodeShape ;
         sh:message "L4: this epic decomposes into nothing. An epic is a theme delivered across multiple features or stories; ungroomed it schedules nothing, can be picked up by no one, and its completion can only ever be asserted." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
+            FILTER NOT EXISTS { $this backlog:hasState backlog:Cancelled }
             FILTER NOT EXISTS { $this backlog:decomposesInto ?child }
         }""" ] ;
     sh:sparql [ a sh:SPARQLConstraint ;
@@ -6909,6 +6911,7 @@ backlog:GoalTriangleShape a sh:NodeShape ;
             $this backlog:derivesFromScope ?sc ; backlog:contributesToMission ?m .
             ?sc backlog:scopeForMission ?m2 .
             FILTER (?m != ?m2)
+            FILTER NOT EXISTS { ?m2 backlog:supersedesMission+ ?m }
         }""" ] ;
     sh:sparql [ a sh:SPARQLConstraint ;
         sh:message "L1: this goal covers an area its own scope statement does not name. A goal cannot answer for ground the boundary never admitted." ;
@@ -8804,4 +8807,24 @@ backlog:RepairReprioritisesShape a sh:NodeShape ;
             $this backlog:reprioritises ?i . ?i backlog:hasState ?is . FILTER ( ?is NOT IN ( backlog:Done, backlog:Cancelled ) )
             $this backlog:hasPriorityScore/backlog:scoredAt ?anyd .
             FILTER NOT EXISTS { $this backlog:hasPriorityScore/backlog:scoredAt ?d . ?i backlog:hasPriorityScore/backlog:scoredAt ?t . FILTER ( ?t > ?d ) }
+        }""" ] .
+
+backlog:DecompositionStateAgreesShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItem ;
+    sh:severity sh:Violation ;
+    rdfs:label "A parent whose children are all finished and some Done is not left open (G148)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "DSA_BAD" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G148: every child of this item is Done or Cancelled and at least one is Done, yet the item itself is neither Done nor Cancelled, in the scope of an adoption of RS_DecompositionStateAgrees. The state the children derive and the state asserted disagree; either record the item as Done, or cancel it, or add the child that is still to come." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            { ?reg backlog:adoptsRuleSet backlog:RS_DecompositionStateAgrees . FILTER NOT EXISTS { ?reg a backlog:Lineage } }
+            UNION
+            { ?reg a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_DecompositionStateAgrees .
+              { $this backlog:belongsToLineage ?reg } UNION { $this backlog:admittedByOutput ?o . ?o backlog:belongsToLineage ?reg } }
+            $this backlog:hasState ?st . FILTER ( ?st NOT IN ( backlog:Done, backlog:Cancelled ) )
+            $this backlog:decomposesInto ?dn . ?dn backlog:hasState backlog:Done .
+            FILTER NOT EXISTS { $this backlog:decomposesInto ?c . ?c backlog:hasState ?cs . FILTER ( ?cs NOT IN ( backlog:Done, backlog:Cancelled ) ) }
+            FILTER NOT EXISTS { $this backlog:decomposesInto ?c2 . FILTER NOT EXISTS { ?c2 backlog:hasState ?x } }
         }""" ] .

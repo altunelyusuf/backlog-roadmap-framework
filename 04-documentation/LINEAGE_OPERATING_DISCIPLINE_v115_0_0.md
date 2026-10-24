@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v114.0.0
+# Lineage Operating Discipline — v115.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -3869,3 +3869,24 @@ Related: G111, G112, G115, G116, G118, G144, G145.
 
 **What is not claimed.** The rule asks that a re-score exists and is later; it does not judge whether the new priority is right, nor that every item truly touched was named. A repair that touches nothing says so in words, and nothing checks the words. A defect that is not scored at all is still caught by the existing scoring rule, not by this one.
 Related: G89, G91, G111, G116, G118, G146.
+
+## G148 — Four handovers answered: Cancelled items, a parent left open, adoption timing at a restart, a freeze after the restart, a goal across superseded missions
+
+*(Opened by four handovers, three from an adopting project and one from another registrant. Each question was driven on a scratch graph before it was ruled; every ruling below is built as a shape or a tool check and proven by `backlog_handover_rules_probe`, not kept as prose.)*
+
+**Q1 — a Cancelled item is not judged by the L4 intent chain or the empty-epic rule.** Measured: a Cancelled epic with no objective and no child drew both "advances no recorded objective" and "decomposes into nothing"; the L3 rule already excludes Cancelled, L4 did not. Work that will not be done has no value to measure and no children to groom. `L4IntentChainShape` and the first constraint of `L4GroomingShape` now skip an item whose state is Cancelled. This only removes violations, so no register that passed fails. Other L4 constraints (an epic in an iteration, an epic deployed) are untouched.
+
+**Q2 — a parent left open after its last child is Done is reported, as a violation, for an adopter.** Measured: the existing rules caught a Done parent with an unfinished child, and a container whose state disagrees with its derived state, but not an open item whose children are all finished. The new rule set `RS_DecompositionStateAgrees` and `DecompositionStateAgreesShape`: within the adopter's scope, an item that is neither Done nor Cancelled, whose children are all Done or Cancelled with at least one Done, is a violation. A parent whose children are all Cancelled is not reported: nothing was done, and the parent may still be waiting for new children. Opt-in, because it binds only an adopter (G89, G91); a violation and not a warning, because a register that adopted a state-agreement rule has asked to be refused.
+
+**Q3 — at a restart, the rebuilt Mission commit is the lineage's opening.** The rule that an adoption is "at open" compares it with the lineage's active Mission output (G91). After a restart the active Mission output is the rebuilt one, so a rule set or obligation set adopted in the rebuilt Mission-stage commit is adopted at open, and one adopted later is not. No new flag is needed. **The finding was also real:** the check witnessed the lineage subject, not each adoption, so a later adoption on a lineage that claimed `adoptionRecordedAtOpen` passed. `backlog_lineage_order_check` v1.12.0 (step 3f4) now finds, by binary search over the commits that touched the register, the first commit at which each `adoptsRuleSet` and `adoptsObligationSet` triple of such a lineage is present, and reports one after the active Mission output. The probe builds a temporary repository: another lineage's earlier use of the same set name does not hide the lineage's own later adoption, and an adoption in the Mission commit passes. A fixture map has no history, so the check is not made there.
+
+**Q4 — the start gate reads the answer to a freeze, not the flag alone (another registrant).** Measured: after the restart that answered its bypass, the lineage still printed "frozen by an unanswered finding", because `lineageFrozen` is a record in an append-only register and is not cleared. `backlog_execution_ready` v1.3.0 treats the freeze as lifted when the finding named by `frozenBy` is answered: a bypass by a restart that `answersBypass` it, a thrash by the lineage's `frozenRuling`. The fixture has an answered and an unanswered case. The definition of `lineageFrozen` says so.
+
+**Q5 — the goal triangle holds across a superseded mission (another registrant).** Measured: a restart that supersedes the mission leaves the goals contributing to the replaced one, while the new scope points at the new one; `GoalTriangleShape` called that a violation, although every sibling shape already exempts a superseded mission. Its first constraint now skips a goal whose scope belongs to a mission that supersedes, directly or through a chain, the mission the goal contributes to. An unrelated mission still fails.
+
+**Q6 — two verified gaps in one lineage (another registrant).** Not confirmed as asked. Under the Owner's rule of 2026-10-23 the wording of another registrant's mission is the mission of the whole of another registrant, not of one lineage, and a lineage's mission is set from verified gaps only. The gaps decide the content of the lineage's mission; whether a better statement of it stays in the same lineage (a mission that supersedes the old one, G104 item 4c, decided by the Owner) or starts a queued lineage (4d) is the Owner's call, and another registrant puts that call to the Owner. A rule set for the mission-from-gaps rule is a candidate and needs its own test drive; it is not built here.
+
+**Order of the checks.** Q1, Q2, Q5 are shapes with planted cases and controls; Q3 and Q4 are tool checks with probes. All five run in the gate through `backlog_handover_rules_probe` and the execution-ready probe.
+
+**What is not claimed.** Q2 asks that the states agree, not that the right one is chosen. Q3 trusts that the register's history is the repository's; a rewritten history defeats it (G81). The binary search assumes an adoption, once recorded, stays, which the append-only register requires. Q6 gives no ruling on another registrant's choice.
+Related: G89, G91, G104, G112, G116, G147.

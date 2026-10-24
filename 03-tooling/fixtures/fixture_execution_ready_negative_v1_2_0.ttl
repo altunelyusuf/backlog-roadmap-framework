@@ -2,7 +2,7 @@
 @prefix ex:      <http://example.org/execution-ready-neg#> .
 @prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
 
-# fixture_execution_ready_negative v1.1.0 (backlog_execution_ready v1.2.0, G115: the recording rule sets are part of the start question;
+# fixture_execution_ready_negative v1.2.0 (backlog_execution_ready v1.3.0, G148: Lin_FrozenAnswered is frozen by a bypass a restart has answered; v1.1.0 was backlog_execution_ready v1.2.0, G115: the recording rule sets are part of the start question;
 # v1.0.0 was backlog_execution_ready v1.0.0; an adopting project handover,
 # lineage2-executed-without-backlog-stage). NEGATIVE: a minimal graph, not a SHACL-complete register.
 # The start gate is positive: it passes only when the facts that must exist before work starts do exist.
@@ -93,3 +93,15 @@ ex:O_Lin_Underway_Backlog a backlog:StageOutput ; backlog:outputOfStage backlog:
 ex:S_Lin_Underway a backlog:Story ; backlog:hasIdentifier "S_Lin_Underway" ; backlog:hasState backlog:InProgress ; backlog:belongsToLineage ex:Lin_Underway ; backlog:hasAcceptanceCriterion ex:AC_S_Lin_Underway ; backlog:hasNoApplicableConcern "None applies: fixture." .
 ex:AC_S_Lin_Underway a backlog:AcceptanceCriterion .
 ex:PE_S_Lin_Underway a backlog:PlanningEvent ; backlog:plansItem ex:S_Lin_Underway .
+
+# G148: the same lineage after the restart that answered its bypass; the flag stays true in the register, the gate reads the answer.
+ex:Lin_FrozenAnswered a backlog:Lineage ; rdfs:label "Lin_FrozenAnswered"@en ; backlog:lineageOrdinal 4 ; backlog:lineageArchived false ; backlog:lineageFrozen true ; backlog:frozenBy ex:BP_FA ; backlog:adoptsRuleSet backlog:RS_StatusHistoryRecorded , backlog:RS_FlowPointsRecorded .
+ex:O_Lin_FrozenAnswered_Mission a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Mission ; backlog:belongsToLineage ex:Lin_FrozenAnswered ; backlog:closedAtCommit "c" ; backlog:hasStateDigest "dLin_FrozenAnsweredMission" .
+ex:O_Lin_FrozenAnswered_Scope a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Scope ; backlog:belongsToLineage ex:Lin_FrozenAnswered ; backlog:consumesOutput ex:O_Lin_FrozenAnswered_Mission ; backlog:closedAtCommit "c" ; backlog:hasStateDigest "dLin_FrozenAnsweredScope" .
+ex:O_Lin_FrozenAnswered_Goal a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Goal ; backlog:belongsToLineage ex:Lin_FrozenAnswered ; backlog:consumesOutput ex:O_Lin_FrozenAnswered_Scope ; backlog:closedAtCommit "c" ; backlog:hasStateDigest "dLin_FrozenAnsweredGoal" .
+ex:O_Lin_FrozenAnswered_Objective a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Objective ; backlog:belongsToLineage ex:Lin_FrozenAnswered ; backlog:consumesOutput ex:O_Lin_FrozenAnswered_Goal ; backlog:closedAtCommit "c" ; backlog:hasStateDigest "dLin_FrozenAnsweredObjective" .
+ex:O_Lin_FrozenAnswered_Backlog a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage ex:Lin_FrozenAnswered ; backlog:consumesOutput ex:O_Lin_FrozenAnswered_Objective ; backlog:closedAtCommit "c" ; backlog:hasStateDigest "dLin_FrozenAnsweredBacklog" .
+ex:S_FA a backlog:Story ; backlog:hasIdentifier "S_FA" ; backlog:hasState backlog:Ready ; backlog:belongsToLineage ex:Lin_FrozenAnswered ; backlog:hasAcceptanceCriterion ex:AC_S_FAA ; backlog:hasNoApplicableConcern "None applies: fixture." .
+ex:AC_S_FAA a backlog:AcceptanceCriterion .
+ex:BP_FA a backlog:LineageBypass ; backlog:bypassedLineage ex:Lin_FrozenAnswered .
+ex:RS_FA a backlog:LineageRestart ; backlog:restartsLineage ex:Lin_FrozenAnswered ; backlog:answersBypass ex:BP_FA .

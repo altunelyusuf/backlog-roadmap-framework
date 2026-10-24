@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_execution_ready v1.2.0 -- may work start on this lineage, and on this item?  (the positive question)
+"""backlog_execution_ready v1.3.0 -- may work start on this lineage, and on this item?  (the positive question)
 
 WHY THIS EXISTS. Every gate this package ships is negative: it looks for what went wrong among the items that exist.
 A lineage whose work is executed outside the register has no items, so every negative gate passes over the empty set.
@@ -22,6 +22,9 @@ ITEM (--item NAME), the same facts the after-the-fact shapes demand once work ha
   - a Story, Epic or Initiative states its applicable design concerns, or that none applies
   - a Story has been taken in by a PlanningEvent
 
+v1.3.0 (G148): the freeze is lifted for the start gate once the finding named by frozenBy is answered: a bypass by a LineageRestart
+that answersBypass it, a thrash by the lineage's frozenRuling. lineageFrozen stays true in the append-only register; the gate reads
+the answer, not the flag alone. another registrant's lineage printed "frozen" after the restart that answered its bypass.
 v1.2.0 (G115): a lineage that has not started work either adopts the two recording rule sets (itself or through its register) or
 states why not. It is the start gate, not the validator, that asks: the rule sets bind only what adopted them (G89), so a lineage
 that never adopted them is not wrong afterwards, but it must not BEGIN work without having decided. A lineage with an item already
@@ -68,7 +71,11 @@ def evaluate(g, lineage, item=None, emit=print):
     arch = g.value(L, B.lineageArchived)
     check(not (arch is not None and bool(arch.toPython())), "the lineage is not archived")
     fr = g.value(L, B.lineageFrozen)
-    check(not (fr is not None and bool(fr.toPython())), "the lineage is not frozen by an unanswered finding")
+    flagged = fr is not None and bool(fr.toPython())
+    by = g.value(L, B.frozenBy)
+    answered = g.value(L, B.frozenRuling) is not None or (
+        by is not None and any(True for _ in g.subjects(B.answersBypass, by)))
+    check(not (flagged and not answered), "the lineage is not frozen by an unanswered finding")
     outs = {st: [o for o in g.subjects(B.belongsToLineage, L) if (o, B.outputOfStage, B[st]) in g and active(g, o)] for st in STAGES}
     for st in STAGES:
         check(bool(outs[st]), f"{st} has an active output (examined: {len(outs[st])})")

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_lineage_order_check v1.11.0 — did the chain come before the work, or after?
+"""backlog_lineage_order_check v1.12.0 — did the chain come before the work, or after?
 
 THE ESCAPE THIS CATCHES. A lineage is Mission -> Scope -> Goal -> Objective -> Backlog,
 one commit per stage, and only then work items (LINEAGE_OPERATING_DISCIPLINE, ceremony
@@ -37,6 +37,7 @@ for every non-archived lineage that has stage outputs:
                Strat_DivideAndConquer: the parent is ORDERED only when every part is and
                its combine output is active. --emit also prints, for the NEXT restart, the
                reductionObserved of the last trial (admitted / named), never hand-written.
+  v1.12.0 (G148, an adopting project handover): step 3f4 witnesses each ADOPTION (adoptsRuleSet, adoptsObligationSet) of a lineage that claims adoptionRecordedAtOpen against the active Mission output; the rebuilt Mission commit of a restart is the opening.
   AWAITING_BACKLOG (v1.10.0, an adopting project handover, lineage2-executed-without-backlog-stage) the Objective stage
                output is active, the Backlog stage output is absent and the lineage holds NO work item: there is
                nothing to order, so nothing was examined. v1.9.0 read this state as ORDERED and the run as PASS, and
@@ -194,6 +195,44 @@ class GitWitness:
         self.cache[key] = val
         return val
 
+    def adoption_first(self, lineage, prop, obj):
+        """v1.12.0 (G148): the first commit at which THIS lineage adopts THIS set -- the triple, not the name.
+        git -S on the set's name finds the first adopter of any lineage; the adoption of a later lineage (or a later adoption on the
+        same lineage) would pass unseen. Adoptions are append-only, so presence is monotone along history: binary search the commits
+        that touched the register directory and parse the register at each probe. None if never present."""
+        key = ("adopt", lineage, prop, obj)
+        if key in self.cache:
+            return self.cache[key]
+        files = getattr(self, "reg_files", None) or []
+        hs = subprocess.run(["git", "log", "--reverse", "--format=%h", "--", self.rel], cwd=self.root, capture_output=True, text=True).stdout.split()
+        memo = {}
+
+        def present(h):
+            if h not in memo:
+                ok = False
+                for f in files:
+                    r = subprocess.run(["git", "show", f"{h}:{f}"], cwd=self.root, capture_output=True, text=True)
+                    if r.returncode != 0 or not r.stdout:
+                        continue
+                    try:
+                        gg = Graph(); gg.parse(data=r.stdout, format="turtle")
+                    except Exception:
+                        continue
+                    if (lineage, prop, obj) in gg:
+                        ok = True; break
+                memo[h] = ok
+            return memo[h]
+        res = None
+        if hs and present(hs[-1]):
+            lo, hi = 0, len(hs) - 1
+            while lo < hi:
+                mid = (lo + hi) // 2
+                if present(hs[mid]): hi = mid
+                else: lo = mid + 1
+            res = (hs[lo], self._ordinal_of(hs[lo]))
+        self.cache[key] = res
+        return res
+
     def prefetch(self, local_names, prefix):
         """v1.7.0: one diff walk of the path's history records the first commit each of
         many keys is added on a '+' line -- the same first-appearance answer -S<key> +
@@ -253,6 +292,10 @@ class MapWitness:
         classify()'s single, unconditional witness.prefetch(...) call works for both
         witness types without classify() needing to know which one it has."""
         pass
+
+    def adoption_first(self, lineage, prop, obj):
+        """No git history in a fixture map: the per-adoption timing is not witnessed here (the git probe covers it)."""
+        return None
 
     def is_ancestor(self, commit):
         return commit in self.m.get("__ancestors__", []) if "__ancestors__" in self.m else True
@@ -456,6 +499,17 @@ def classify(g, L, witness, prefix):
         mf = out_first.get("Stage_Mission"); lf = witness.first(local(L), prefix)
         if mf and lf and lf[1] > mf[1]:
             problems.append(f"{local(L)} claims adoptionRecordedAtOpen but first appears at {lf[0]}, after its Mission output ({mf[0]})")
+    # 3f4. v1.12.0 (G148): the claim is witnessed per ADOPTION, not once for the lineage subject. A lineage subject that first
+    # appears at its Mission commit passes 3f3 however late a rule set or obligation set is adopted on it afterwards.
+    # For a restarted lineage the Mission output is the rebuilt, active one (out_first), so an adoption recorded in the
+    # rebuilt Mission-stage commit is "at open" and an adoption recorded later is not.
+    if g.value(L, B.adoptionRecordedAtOpen) is not None and bool(g.value(L, B.adoptionRecordedAtOpen).toPython()):
+        mf = out_first.get("Stage_Mission")
+        for prop in (B.adoptsRuleSet, B.adoptsObligationSet):
+            for obj in sorted(g.objects(L, prop), key=str):
+                af = witness.adoption_first(L, prop, obj)
+                if mf and af and af[1] > mf[1]:
+                    problems.append(f"{local(L)} claims adoptionRecordedAtOpen but adopts {local(obj)} first at {af[0]}, after its Mission output ({mf[0]})")
     # 3g. strategy-specific git checks
     for r in restarts:
         st = local(g.value(r, B.hasRecoveryStrategy) or "")
@@ -694,6 +748,7 @@ def main():
             print(f"ERROR: {reg_dir} is not inside a git repository; no witness is available"); return 1
         rel = os.path.relpath(reg_dir, root)
         witness = GitWitness(root, rel)
+        witness.reg_files = [os.path.relpath(os.path.abspath(a), root) for a in args if os.path.isfile(a)]
         print(f"witness     : git first-appearance under {rel}")
     print(f"register    : {os.path.basename(reg)}")
     touched = touched_lineages(g, args, argv)

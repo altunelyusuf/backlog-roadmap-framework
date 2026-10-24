@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_execution_ready_probe v1.2.0 -- proof that the start gate discriminates (L-95), both halves.
+"""backlog_execution_ready_probe v1.3.0 -- proof that the start gate discriminates (L-95), both halves.
 
 Runs backlog_execution_ready on fixtures/fixture_execution_ready_negative and asserts the exit code and the missing fact
 for every case: the groomed item and its lineage are READY (exit 0); every other case is NOT READY (exit 2) and names
@@ -28,6 +28,7 @@ CASES = [  # (args, exit, text that must appear in the output)
     (["--lineage", "Lin_Waiting"], 2, "FAIL  the lineage holds at least one work item (examined: 0)"),
     (["--lineage", "Lin_Retracted"], 2, "FAIL  Stage_Backlog has an active output (examined: 0)"),
     (["--lineage", "Lin_Frozen"], 2, "FAIL  the lineage is not frozen"),
+    (["--lineage", "Lin_FrozenAnswered"], 0, "ok    the lineage is not frozen by an unanswered finding"),  # G148
     (["--lineage", "Lin_Nowhere"], 2, "FAIL  the lineage exists"),
     # v1.2.0 (G115): the recording rule sets are part of the start question
     (["--lineage", "Lin_Unrecorded"], 2, "FAIL  RS_StatusHistoryRecorded is adopted by the lineage or its register"),
