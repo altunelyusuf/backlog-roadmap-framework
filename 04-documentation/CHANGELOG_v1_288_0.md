@@ -11260,6 +11260,14 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.426.0 — 2026-10-24 (MINOR: rulings G150 and G151, waiting and approval steps removed)
+
+- **G150:** `backlog_lineage_order_check` v1.12.1 follows a versioned rename of the register when witnessing an adoption (an adopting project handover; the probe has both rename cases).
+- **G151:** `backlog_release_tool` v1.4.0 runs a preflight before the gate and stops at once when a handover arrives mid-release; `republish` skips the gate for an inbox-only change. New `backlog_inbox_disposition`: move, reply and log row in one command, notes that ask nothing acknowledged without a reply. Two probes in the gate (v1.69.0). Discipline v116.0.0.
+- **Handover:** an adopting project item is accepted and answered; the inbox is empty.
+
+**Unplanned work:** a defect handover and the Owner's direction of 2026-10-24, measured and built in the same step; no backlog item of this package covers them.
+
 ## v1.425.0 — 2026-10-24 (MINOR: four handovers answered, ruling G148)
 
 Four pending handovers (an adopting project three, another registrant one), each measured on a scratch graph, then built as a shape or tool check:

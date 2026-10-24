@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v115.0.0
+# Lineage Operating Discipline — v116.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -3905,4 +3905,24 @@ Related: G89, G91, G104, G112, G116, G147.
 
 **What is not claimed.** Q2 and Q4 are not rules of the register and are not checked by it. Q1 binds only an adopter. No check decides whether a question is truly unrelated; the rule makes the claim visible, as a named link or its absence.
 Related: G89, G91, G116, G148.
+
+## G150 — The per-adoption witness follows a versioned rename of the register
+
+*(an adopting project handover, a defect in G148 Q3, reproduced before it was fixed.)* The witness read the register at today's file name in older commits, so after a versioned rename (BP-D7, G102) an adoption made at open read as made at the rename. Order check v1.12.1 finds the register in each commit by its name with the version removed. Proven in `backlog_handover_rules_probe` (C2): an adoption at open then a rename reads 0 late; a late adoption after the rename reads 1. Not claimed: a register renamed to a different stem is not followed.
+Related: G102, G148.
+
+## G151 — Reliability without waiting: what was measured, what was removed, what stays
+
+*(The Owner's direction of 2026-10-24: keep reliability, cut wait time and needless confirmation, automate as far as possible, keep an agile lineage strong enough to prevent missed critical activities.)*
+
+**Q1 — what the history shows.** Measured on this package's log and release records: 134 handovers logged, 17 of them CLOSURE and 2 NOTICE notes that ask for nothing; each handover cost four hand-kept steps (move, reply, log row, consistency). A release takes about 6 minutes when the shapes are unchanged and 24 to 43 minutes when they change. Of the last 12 releases, 4 were refused after a full run: three because a handover arrived on origin during the run, one because the changelog lacked the unplanned-work line, a question answerable in seconds. Per-section timing of the gate is not recorded, so which section dominates the long runs is not yet known.
+
+**Q2 — what was removed.** (a) `backlog_release_tool` v1.4.0 runs a preflight in seconds before the gate: changelog entry, handover arrived on origin, release-item accounting, Gate K. It looks at the inbox again before the publisher and, on an arrival, stops at once; `republish` rebuilds the manifest and publishes without the gate for an inbox-only change. (b) `backlog_inbox_disposition` does move, reply and log row in one command, and acknowledges a CLOSURE, NOTICE or NOTE note with a log row and no reply; it refuses to acknowledge anything that asks. Both are proven by probes in the gate (`backlog_release_preflight_probe`, `backlog_inbox_disposition_probe`).
+
+**Q3 — who decides, with no confirmation.** A session decides and acts, and records the reason in the commit and the ruling, when the answer is settled by a rule, a shape, a measurement or a reproduction: a defect with its reproduction, a question the register or the discipline answers, an acknowledgement. It asks the Owner only when rules and facts do not settle it (a mission's content, a scope change, a term that crosses packages), states plainly what is expected of him, and goes on with the work that does not depend on the answer (G149).
+
+**Q4 — what protects the critical activities, unchanged.** Nothing was loosened: the start gate, the order check, the shape suite, Gate K, the release-item accounting and the publisher run as before. The preflight only moves their cheap refusals earlier.
+
+**What is not claimed.** No gate section was shortened; the long run when shapes change is still long. Per-section timing, and whether the full validation can be made incremental, are the next measurement, not a result. Q3 is an operating rule and no register check can verify it.
+Related: G89, G149, G150.
 

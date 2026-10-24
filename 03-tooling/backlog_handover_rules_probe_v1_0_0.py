@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_handover_rules_probe v1.0.0 -- re-runnable proof of the five G148 rulings (T-Box v1.146.0, shapes v1.179.0, A-Box v1.56.0).
+"""backlog_handover_rules_probe v1.0.0 -- re-runnable proof of the five G148 rulings and the G150 rename case rulings (T-Box v1.146.0, shapes v1.179.0, A-Box v1.56.0).
 
   A  L4 intent chain and the empty-epic rule do not judge a Cancelled item (an adopting project: a cancelled epic is not work to measure or groom).
   B  RS_DecompositionStateAgrees: a parent whose children are all Done or Cancelled, one at least Done, is not left open.
@@ -99,6 +99,23 @@ with tempfile.TemporaryDirectory() as d:
             out = subprocess.run([sys.executable, chk, g2], capture_output=True, text=True, timeout=300).stdout
             got = sum(1 for ln in out.splitlines() if "claims adoptionRecordedAtOpen but adopts" in ln)
             expect(f"C  order check: {label}: expected {want}, got {got}", got == want)
+# C2 (G150): a BP-D7 versioned rename after the Mission commit must not make an adoption at open look late, and a late one after it is still caught
+for label, late, want in (("adoption at open, then a versioned rename (control)", 0, 0), ("adoption at open, rename, then a late adoption", 1, 1)):
+    with tempfile.TemporaryDirectory() as e:
+        git(e, "init", "-q"); os.makedirs(os.path.join(e, "reg"))
+        a = os.path.join(e, "reg", "register_v1_0_0.ttl"); b = os.path.join(e, "reg", "register_v1_1_0.ttl")
+        def rg(adopt_late):
+            return (f"@prefix backlog: <{B}> .\n@prefix x: <{NS}> .\n"
+                    "x:L a backlog:Lineage ; backlog:lineageOrdinal 1 ; backlog:adoptionRecordedAtOpen true ; backlog:adoptsRuleSet backlog:RS_A .\n"
+                    "x:O_M a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Mission ; backlog:belongsToLineage x:L ; backlog:closedAtCommit \"c\" ; backlog:hasStateDigest \"d\" .\n"
+                    + ("x:L backlog:adoptsRuleSet backlog:RS_B .\n" if adopt_late else ""))
+        open(a, "w").write(rg(0)); git(e, "add", "-A"); git(e, "commit", "-q", "-m", "mission")
+        git(e, "mv", a, b); open(b, "a").write("x:Z a backlog:Epic .\n"); git(e, "add", "-A"); git(e, "commit", "-q", "-m", "evolve")
+        if late:
+            open(b, "w").write(rg(1) + "x:Z a backlog:Epic .\n"); git(e, "add", "-A"); git(e, "commit", "-q", "-m", "adopt late")
+        out = subprocess.run([sys.executable, chk, b], capture_output=True, text=True, timeout=300).stdout
+        got = sum(1 for ln in out.splitlines() if "claims adoptionRecordedAtOpen but adopts" in ln)
+        expect(f"C2 order check across a versioned rename: {label}: expected {want}, got {got}", got == want)
 # D1: the freeze lift is proved by the start gate's own probe
 r = subprocess.run([sys.executable, latest("03-tooling/backlog_execution_ready_probe_v*.py")], capture_output=True, text=True, timeout=600)
 expect("D1 the start gate lifts a freeze whose bypass a restart answered, and keeps an unanswered one (its own probe)", r.returncode == 0 and "Lin_FrozenAnswered" in r.stdout)

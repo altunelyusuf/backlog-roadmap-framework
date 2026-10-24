@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_release_tool v1.3.5 -- the release steps a session used to do by hand, as one tested tool (G99 release A; OE rule R4).
+"""backlog_release_tool v1.4.0 -- the release steps a session used to do by hand, as one tested tool (G99 release A; OE rule R4).
 
 Subcommands (each prints what it did and exits non-zero on any refusal):
   bump-data NEWVER                      rename the package data file to the new version and move its header (versionInfo, versionIRI, priorVersion)
@@ -16,6 +16,7 @@ Subcommands (each prints what it did and exits non-zero on any refusal):
                                         duration; --dry-run prints the plan and the refusals it already knows (missing changelog entry) and runs nothing
   prune-cache [DIR] [--days N] [--legacy]          remove cache files (shape_*.ttl, memo *.json, stamps) older than N days (default 14) from the validation cache; they are rebuilt on demand
   republish VERSION                     only the publisher and the tag check (after a transient failure of the public push)
+v1.4.0 (G151): `preflight VERSION` and the start of `release` run, in seconds, the refusals that used to come after a 25-minute gate: the changelog entry, an inbox item that arrived on origin and is not in the working tree, the release-item accounting (an item moved, or a changelog "Unplanned work:" line), and Gate K. The inbox is looked at again just before the publisher; on an arrival the release stops there, names the files and says to disposition them and run `republish`, which now rebuilds the manifest first, so the gate is not run again for a change that touches only the inbox.
 v1.3.5 (G138): the release path creates both stamp files (`ensure_stamps`: .fixture-suite-stamp and .clause-proof-stamp) when absent, so a release no longer needs them touched by hand beforehand.
 v1.3.4 (G128): after the proof stamps the measured probe inputs are exported to 06-package-provenance/PROBE_INPUTS.json; `public_keep` (the files the public copy keeps) is a function of its own and has a test.
 v1.3.3 (G126): `release --cold` runs every gate step (BACKLOG_COLD=1); after a passing gate the proof stamps are exported to 06-package-provenance/PROOF_STAMPS.json and the manifest is rebuilt; prune-cache --legacy removes the one-file-per-shape cache and prunes the shape bundles.
@@ -180,6 +181,56 @@ def changelog_entry_ok(version):
     return cl, None
 
 
+def inbox_arrivals():
+    """Pending inbox files that are on origin/main and not in the working tree (G151). A handover that lands during a release makes the publisher refuse it whole."""
+    rel = os.path.relpath(PKG, REPO) + "/07-handover-inbox/pending/"
+    subprocess.run(["git", "fetch", "-q", "origin"], cwd=REPO, capture_output=True)
+    r = subprocess.run(["git", "ls-tree", "-r", "--name-only", "origin/main", rel], cwd=REPO, capture_output=True, text=True)
+    def known(f):  # already here, in pending or dispositioned into accepted/rejected/deferred
+        base = os.path.dirname(os.path.dirname(os.path.join(REPO, f)))
+        return any(os.path.exists(os.path.join(base, d, os.path.basename(f))) for d in ("pending", "accepted", "rejected", "deferred"))
+    return sorted(f for f in r.stdout.split() if not f.endswith("README.md") and not known(f))
+
+
+def preflight(v):
+    """Returns the list of refusals found in seconds (empty = go). Nothing here replaces the gate; it only asks the cheap questions first."""
+    bad = []
+    cl, err = changelog_entry_ok(v)
+    if err:
+        bad.append(err)
+    arr = inbox_arrivals()
+    if arr:
+        bad.append("handover(s) on origin not in the working tree, disposition them first: " + ", ".join(os.path.basename(a) for a in arr))
+    ric = newest(os.path.join(HERE, "backlog_release_item_check_v*.py"))
+    tag = subprocess.run(["git", "tag", "--list", PKGNAME + "-v*"], cwd=REPO, capture_output=True, text=True).stdout.split()
+    tag = sorted(tag, key=lambda t: [int(x) for x in re.findall(r"\d+", t.split("-v")[-1])])[-1:] 
+    if ric and tag:
+        vpath = os.path.join(PKG, "VERSION.txt"); old = open(vpath).read() if os.path.exists(vpath) else None
+        open(vpath, "w").write(v + "\n")
+        try:
+            r = subprocess.run([sys.executable, ric, PKG, tag[0], "--repo-root", REPO, "--package-prefix", os.path.relpath(PKG, REPO) + "/"], capture_output=True, text=True)
+        finally:
+            if old is not None: open(vpath, "w").write(old)
+        if r.returncode != 0:
+            bad.append("release-item accounting: " + (r.stdout.strip().splitlines() or ["failed"])[-1])
+    val = newest(os.path.join(HERE, "backlog_validate_v*.py"))
+    if val:
+        r = subprocess.run([sys.executable, val, "--gate-k"], capture_output=True, text=True)
+        if r.returncode != 0:
+            bad.append("Gate K: " + (r.stdout.strip().splitlines() or ["failed"])[-1])
+    return bad
+
+
+def cmd_preflight(args):
+    if len(args) != 1 or not re.fullmatch(r"\d+\.\d+\.\d+", args[0]):
+        die("usage: preflight VERSION")
+    bad = preflight(args[0])
+    for b in bad:
+        print("  REFUSED: " + b)
+    print("preflight %s: %s" % (args[0], "GO" if not bad else "STOP (%d)" % len(bad)))
+    sys.exit(1 if bad else 0)
+
+
 class Steps:
     def __init__(self, limit):
         self.limit, self.total = limit, time.time()
@@ -277,6 +328,11 @@ def cmd_release(args, only_publish=False):
         die("no oe_publish_v*.sh in %s (set BRSF_PUBLISHER_DIR)" % pubdir)
     os.makedirs(work, exist_ok=True)
     st = Steps(limit or 600)
+    if not only_publish:
+        bad = preflight(v)
+        if bad:
+            die("preflight refuses before the gate: " + " | ".join(bad)[:400], 6)
+        print("  preflight: GO")
     P = PKG
     if not only_publish:
         with tarfile.open(os.path.join(work, "pkg_%s.tgz" % v), "w:gz") as tf:
@@ -334,6 +390,12 @@ def cmd_release(args, only_publish=False):
         if rc:
             die("the public copy could not be pushed (see above); fix the cause, then run: republish %s" % v, 5)
         clean_bytecode(P)
+    arr = inbox_arrivals()
+    if arr:
+        die("handover(s) arrived on origin during the release: %s. Disposition them, then run: republish %s (the gate is not run again for an inbox-only change)" % (", ".join(os.path.basename(a) for a in arr), v), 6)
+    if only_publish:
+        mf = newest(os.path.join(HERE, "build_manifest_v*.py"))
+        st.run("manifest", [sys.executable, mf], cwd=P, capture_output=True, text=True)
     pw = os.path.join(work, "pub"); os.makedirs(pw, exist_ok=True)
     plog = os.path.join(work, "pub_%s.log" % v)
     env = dict(os.environ, OE_SESSION=os.environ.get("OE_SESSION", "brsf-session"))
@@ -368,6 +430,7 @@ def main(argv):
     elif c == "clean-bytecode": print("removed %d __pycache__ folder(s)" % clean_bytecode(a[0] if a else PKG))
     elif c == "push-retry": cmd_push_retry(a)
     elif c == "prune-cache": cmd_prune(a)
+    elif c == "preflight": cmd_preflight(a)
     elif c == "release": cmd_release(a)
     elif c == "republish": cmd_release(a, only_publish=True)
     else: print(__doc__); return 1

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_lineage_order_check v1.12.0 — did the chain come before the work, or after?
+"""backlog_lineage_order_check v1.12.1 — did the chain come before the work, or after?
 
 THE ESCAPE THIS CATCHES. A lineage is Mission -> Scope -> Goal -> Objective -> Backlog,
 one commit per stage, and only then work items (LINEAGE_OPERATING_DISCIPLINE, ceremony
@@ -37,6 +37,7 @@ for every non-archived lineage that has stage outputs:
                Strat_DivideAndConquer: the parent is ORDERED only when every part is and
                its combine output is active. --emit also prints, for the NEXT restart, the
                reductionObserved of the last trial (admitted / named), never hand-written.
+  v1.12.1 (G150, an adopting project handover): the per-adoption witness resolves the register by its versioned-name stem at each probed commit, so a BP-D7 rename (register_v1_0_0 -> register_v1_1_0) no longer makes an adoption at open look late.
   v1.12.0 (G148, an adopting project handover): step 3f4 witnesses each ADOPTION (adoptsRuleSet, adoptsObligationSet) of a lineage that claims adoptionRecordedAtOpen against the active Mission output; the rebuilt Mission commit of a restart is the opening.
   AWAITING_BACKLOG (v1.10.0, an adopting project handover, lineage2-executed-without-backlog-stage) the Objective stage
                output is active, the Backlog stage output is absent and the lineage holds NO work item: there is
@@ -207,10 +208,20 @@ class GitWitness:
         hs = subprocess.run(["git", "log", "--reverse", "--format=%h", "--", self.rel], cwd=self.root, capture_output=True, text=True).stdout.split()
         memo = {}
 
+        stems = {(os.path.dirname(f), re.sub(r"_v\d+_\d+_\d+(?=\.[A-Za-z0-9]+$)", "", os.path.basename(f))) for f in files}
+
+        def paths_at(h):
+            """The register's path in commit h: the files of the same directory whose name, version removed, is the register's (BP-D7, G102)."""
+            out = []
+            for d, stem in stems:
+                names = subprocess.run(["git", "ls-tree", "--name-only", h, (d + "/") if d else ""], cwd=self.root, capture_output=True, text=True).stdout.split()
+                out += [n for n in names if re.sub(r"_v\d+_\d+_\d+(?=\.[A-Za-z0-9]+$)", "", os.path.basename(n)) == stem]
+            return out
+
         def present(h):
             if h not in memo:
                 ok = False
-                for f in files:
+                for f in paths_at(h):
                     r = subprocess.run(["git", "show", f"{h}:{f}"], cwd=self.root, capture_output=True, text=True)
                     if r.returncode != 0 or not r.stdout:
                         continue
