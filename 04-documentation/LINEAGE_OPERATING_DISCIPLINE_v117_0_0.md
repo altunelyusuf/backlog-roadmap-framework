@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v116.0.0
+# Lineage Operating Discipline — v117.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -3925,4 +3925,9 @@ Related: G102, G148.
 
 **What is not claimed.** No gate section was shortened; the long run when shapes change is still long. Per-section timing, and whether the full validation can be made incremental, are the next measurement, not a result. Q3 is an operating rule and no register check can verify it.
 Related: G89, G149, G150.
+
+## G152 — Where the gate's time goes is recorded, not guessed
+
+*(The measurement G151 left open.)* `backlog_release_tool` v1.5.0 runs the gate through `timed_gate`: the gate's log is unchanged, a sidecar `gate_VERSION.log.timing.tsv` holds the seconds of each section, and the five slowest are printed at the end of the step. Proven by `backlog_gate_timing_probe` (three sections timed, slowest first, log byte-identical). The first release run with `--cold` (every step, no replay) is the baseline; what it shows is stated in the changelog of that release and decides whether any section is worth making incremental. Not claimed: no section was shortened here.
+Related: G151.
 

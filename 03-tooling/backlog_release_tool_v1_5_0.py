@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_release_tool v1.4.0 -- the release steps a session used to do by hand, as one tested tool (G99 release A; OE rule R4).
+"""backlog_release_tool v1.5.0 -- the release steps a session used to do by hand, as one tested tool (G99 release A; OE rule R4).
 
 Subcommands (each prints what it did and exits non-zero on any refusal):
   bump-data NEWVER                      rename the package data file to the new version and move its header (versionInfo, versionIRI, priorVersion)
@@ -16,6 +16,7 @@ Subcommands (each prints what it did and exits non-zero on any refusal):
                                         duration; --dry-run prints the plan and the refusals it already knows (missing changelog entry) and runs nothing
   prune-cache [DIR] [--days N] [--legacy]          remove cache files (shape_*.ttl, memo *.json, stamps) older than N days (default 14) from the validation cache; they are rebuilt on demand
   republish VERSION                     only the publisher and the tag check (after a transient failure of the public push)
+v1.5.0 (G152): the gate runs through `timed_gate`, which writes the same log and a sidecar `gate_VERSION.log.timing.tsv` (seconds per "== section ==" header) and prints the five slowest sections, so where a long run goes is recorded, not guessed.
 v1.4.0 (G151): `preflight VERSION` and the start of `release` run, in seconds, the refusals that used to come after a 25-minute gate: the changelog entry, an inbox item that arrived on origin and is not in the working tree, the release-item accounting (an item moved, or a changelog "Unplanned work:" line), and Gate K. The inbox is looked at again just before the publisher; on an arrival the release stops there, names the files and says to disposition them and run `republish`, which now rebuilds the manifest first, so the gate is not run again for a change that touches only the inbox.
 v1.3.5 (G138): the release path creates both stamp files (`ensure_stamps`: .fixture-suite-stamp and .clause-proof-stamp) when absent, so a release no longer needs them touched by hand beforehand.
 v1.3.4 (G128): after the proof stamps the measured probe inputs are exported to 06-package-provenance/PROBE_INPUTS.json; `public_keep` (the files the public copy keeps) is a function of its own and has a test.
@@ -236,6 +237,31 @@ def cmd_preflight(args):
     sys.exit(1 if bad else 0)
 
 
+def timed_gate(cmd, glog, limit, cwd):
+    """Run the gate with its output unchanged in glog, and record the seconds each "== section ==" took (G152). Returns [(seconds, section)], slowest first."""
+    import threading
+    secs, cur, t0 = [], None, time.time()
+    p = subprocess.Popen(cmd, cwd=cwd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, errors="replace")
+    timer = threading.Timer(limit, p.kill); timer.start()
+    try:
+        with open(glog, "w") as fh:
+            for line in p.stdout:
+                fh.write(line); fh.flush()
+                if line.startswith("== "):
+                    now = time.time()
+                    if cur is not None: secs.append((now - cur[0], cur[1]))
+                    cur = (now, line.strip("= \n"))
+        p.wait()
+    finally:
+        timer.cancel()
+    if cur is not None: secs.append((time.time() - cur[0], cur[1]))
+    if not timer.is_alive() and time.time() - t0 >= limit:
+        die("step 'gate' exceeded its %d s limit (a finding to explain, not a command to run again unchanged)" % limit, 4)
+    secs.sort(reverse=True)
+    open(glog + ".timing.tsv", "w").write("".join("%.1f\t%s\n" % x for x in secs))
+    return secs
+
+
 class Steps:
     def __init__(self, limit):
         self.limit, self.total = limit, time.time()
@@ -349,8 +375,9 @@ def cmd_release(args, only_publish=False):
         p = st.run("manifest", [sys.executable, mf], cwd=P, capture_output=True, text=True)
         print("  " + (p.stdout.strip().splitlines() or [""])[-1])
         glog = os.path.join(work, "gate_%s.log" % v)
-        with open(glog, "w") as fh:
-            st.run("gate (the long step)", ["bash", gate], limit=limit or 3600, cwd=P, stdout=fh, stderr=subprocess.STDOUT)
+        print("step: gate (the long step)", flush=True); tg = time.time()
+        secs = timed_gate(["bash", gate], glog, limit or 3600, P)
+        print("  gate (the long step): %.0f s; slowest sections: %s" % (time.time() - tg, "; ".join("%.0fs %s" % (a, b[:40]) for a, b in secs[:5])), flush=True)
         text = open(glog, encoding="utf-8", errors="replace").read()
         bad = gate_failures(text)
         if bad:

@@ -11260,6 +11260,12 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.427.0 — 2026-10-24 (MINOR: ruling G152, gate timing recorded)
+
+- **G152:** `backlog_release_tool` v1.5.0 records the seconds of each gate section (sidecar file) and prints the five slowest; `backlog_gate_timing_probe` in the gate (v1.70.0). This release is run with `--cold` so the first record is the full, unreplayed run. Discipline v117.0.0.
+
+**Unplanned work:** the measurement left open by G151 at the Owner's direction to proceed; no backlog item of this package covers it.
+
 ## v1.426.0 — 2026-10-24 (MINOR: rulings G150 and G151, waiting and approval steps removed)
 
 - **G150:** `backlog_lineage_order_check` v1.12.1 follows a versioned rename of the register when witnessing an adoption (an adopting project handover; the probe has both rename cases).
