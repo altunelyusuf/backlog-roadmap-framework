@@ -4292,3 +4292,8 @@ ex:RRP_NONE a backlog:Defect ; backlog:hasState backlog:InProgress ; backlog:bel
 ex:DSA_LIN a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_DecompositionStateAgrees .
 ex:DSA_BAD a backlog:Story ; backlog:hasState backlog:InProgress ; backlog:belongsToLineage ex:DSA_LIN ; backlog:decomposesInto ex:DSA_KID .
 ex:DSA_KID a backlog:Story ; backlog:hasState backlog:Done ; backlog:belongsToLineage ex:DSA_LIN .
+
+# G149: a lineage that adopted RS_ImpedimentNamesWhatItBlocks, and an unresolved impediment of it that blocks nothing.
+ex:IMP_LIN a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_ImpedimentNamesWhatItBlocks .
+ex:IMP_BAD a backlog:Impediment ; backlog:belongsToLineage ex:IMP_LIN .
+

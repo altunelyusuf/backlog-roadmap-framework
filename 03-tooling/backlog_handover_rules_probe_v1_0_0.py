@@ -27,7 +27,7 @@ def expect(name, ok):
 HEAD = ("@prefix backlog: <http://example.org/backlog#> .\n@prefix x: <http://example.org/g148-probe#> .\n"
         "x:L a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_DecompositionStateAgrees .\n")
 KEYS = {"INTENT": "L4: this item advances no recorded objective", "EMPTY": "decomposes into nothing",
-        "DSA": "yet the item itself is neither Done nor Cancelled", "TRI": "whose mission is not the mission the goal contributes to"}
+        "DSA": "yet the item itself is neither Done nor Cancelled", "IMP": "impedes no work item or container", "TRI": "whose mission is not the mission the goal contributes to"}
 def item(n, cls, state, extra="", lin=True):
     return f"x:{n} a backlog:{cls} ; backlog:hasState backlog:{state}" + (" ; backlog:belongsToLineage x:L" if lin else "") + " " + extra + ".\n"
 SCEN = [
@@ -41,6 +41,11 @@ SCEN = [
  ("B  parent InProgress, every child Cancelled (control: nothing was done)", HEAD + item("P", "Story", "InProgress", "; backlog:decomposesInto x:C ") + item("C", "Story", "Cancelled"), {"DSA": 0}),
  ("B  parent Done (control)", HEAD + item("P", "Story", "Done", "; backlog:decomposesInto x:K ") + item("K", "Story", "Done"), {"DSA": 0}),
  ("B  no adoption anywhere (control: the rule binds only an adopter)", HEAD.replace("backlog:adoptsRuleSet backlog:RS_DecompositionStateAgrees", "") .replace("x:L a backlog:Lineage ; ", "x:L a backlog:Lineage ") + item("P", "Story", "InProgress", "; backlog:decomposesInto x:K ") + item("K", "Story", "Done"), {"DSA": 0}),
+ # G149
+ ("G149 an unresolved impediment that blocks nothing", HEAD + "x:L backlog:adoptsRuleSet backlog:RS_ImpedimentNamesWhatItBlocks .\nx:I a backlog:Impediment ; backlog:belongsToLineage x:L .\n", {"IMP": 1}),
+ ("G149 an unresolved impediment that names its work (control)", HEAD + "x:L backlog:adoptsRuleSet backlog:RS_ImpedimentNamesWhatItBlocks .\nx:S a backlog:Story ; backlog:belongsToLineage x:L .\nx:I a backlog:Impediment ; backlog:belongsToLineage x:L ; backlog:impedes x:S .\n", {"IMP": 0}),
+ ("G149 a resolved impediment that blocks nothing (control)", HEAD + "x:L backlog:adoptsRuleSet backlog:RS_ImpedimentNamesWhatItBlocks .\nx:I a backlog:Impediment ; backlog:belongsToLineage x:L ; backlog:resolvedAt \"2026-10-24T10:00:00Z\"^^<http://www.w3.org/2001/XMLSchema#dateTime> .\n", {"IMP": 0}),
+ ("G149 no adoption (control)", HEAD + "x:I a backlog:Impediment ; backlog:belongsToLineage x:L .\n", {"IMP": 0}),
  # D2
  ("D2 goal contributes to a mission, its scope belongs to an unrelated mission", HEAD + "x:G a backlog:Goal ; backlog:contributesToMission x:M1 ; backlog:derivesFromScope x:S2 .\nx:S2 backlog:scopeForMission x:M2 .\n", {"TRI": 1}),
  ("D2 the scope's mission supersedes the goal's mission (control)", HEAD + "x:G a backlog:Goal ; backlog:contributesToMission x:M1 ; backlog:derivesFromScope x:S2 .\nx:S2 backlog:scopeForMission x:M2 .\nx:M2 backlog:supersedesMission x:M1 .\n", {"TRI": 0}),

@@ -3890,3 +3890,19 @@ Related: G89, G91, G111, G116, G118, G146.
 
 **What is not claimed.** Q2 asks that the states agree, not that the right one is chosen. Q3 trusts that the register's history is the repository's; a rewritten history defeats it (G81). The binary search assumes an adoption, once recorded, stays, which the append-only register requires. Q6 gives no ruling on another registrant's choice.
 Related: G89, G91, G104, G112, G116, G147.
+
+## G149 — A lineage does not wait for a question that is not about its work, and a question with a non-human answerer is decided in the lineage (the Owner's rule of 2026-10-24)
+
+*(The Owner's words: no waiting in a lineage for unrelated questions; for non-human answers the lineage's agentic system decides without a handover; work the lineage enforces but the actual work misses must be dealt with; progress should not cost an expensive switch-over.)*
+
+**Q1 — what can be a rule in the register, and was built.** A wait is a fact only when it names the work it holds. `RS_ImpedimentNamesWhatItBlocks` and `ImpedimentNamesWhatItBlocksShape`: within an adopter's scope, an unresolved impediment impedes at least one work item or container; one that impedes nothing is a violation, because a question not about the work is not a blocker and must be resolved, tied to the work it really holds, or left out. Opt-in (G89, G91). Proven by the planted case `IMP_BAD` in the negative fixture v1.42.0 and by four scenarios (the violation, a named wait, a resolved one, no adoption) in `backlog_handover_rules_probe`. The start gate asks only about the lineage's own facts, so a pending question or handover never blocks work from starting.
+
+**Q2 — the operating rule, which a session follows and the register cannot check.** A question whose answerer is not a person (a rule, a measurement, a tool, another agent of the same lineage) is decided in the lineage from the rules and the provable facts, recorded in the commit and the ruling, with no handover. A handover is written only when the answer needs a person, or a term that belongs to another package. A session never stops at an unrelated question: it records the question, continues with the work that does not depend on it, and a question that depends on a person is put to the Owner once.
+
+**Q3 — work the lineage enforces and the actual work misses.** The existing checks are the answer for what they cover: the start gate (the facts that must exist before work starts), the order check (the chain before the work, now also each adoption), and the shapes on finished work. The gap that remains is work done outside the register, which no register check can see. It is not closed here; closing it needs the executor's own record of what it did, which is the run record asked about by the ecosystem handover of the same day.
+
+**Q4 — switch-overs.** Measured in this release: a handover that arrived on origin during a gate run made the publisher refuse the whole release, and the gate had to be run again (about 25 minutes each time). That refusal is the publisher's, not the package's; this package cannot change it. What this package changed is that no rule of it waits for a handover to start work.
+
+**What is not claimed.** Q2 and Q4 are not rules of the register and are not checked by it. Q1 binds only an adopter. No check decides whether a question is truly unrelated; the rule makes the claim visible, as a named link or its absence.
+Related: G89, G91, G116, G148.
+

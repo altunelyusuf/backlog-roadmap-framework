@@ -8828,3 +8828,21 @@ backlog:DecompositionStateAgreesShape a sh:NodeShape ;
             FILTER NOT EXISTS { $this backlog:decomposesInto ?c . ?c backlog:hasState ?cs . FILTER ( ?cs NOT IN ( backlog:Done, backlog:Cancelled ) ) }
             FILTER NOT EXISTS { $this backlog:decomposesInto ?c2 . FILTER NOT EXISTS { ?c2 backlog:hasState ?x } }
         }""" ] .
+
+backlog:ImpedimentNamesWhatItBlocksShape a sh:NodeShape ;
+    sh:targetClass backlog:Impediment ;
+    sh:severity sh:Violation ;
+    rdfs:label "A standing impediment names the work it blocks (G149)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "IMP_BAD" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G149: this impediment is unresolved and impedes no work item or container, in the scope of an adoption of RS_ImpedimentNamesWhatItBlocks. A wait that blocks nothing named is a question, and a question unrelated to the work does not hold a lineage: name the work it blocks, or resolve it, or leave it out of the register." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            { ?reg backlog:adoptsRuleSet backlog:RS_ImpedimentNamesWhatItBlocks . FILTER NOT EXISTS { ?reg a backlog:Lineage } }
+            UNION
+            { ?reg a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_ImpedimentNamesWhatItBlocks . $this backlog:belongsToLineage ?reg }
+            FILTER NOT EXISTS { $this backlog:resolvedAt ?r }
+            FILTER NOT EXISTS { $this backlog:impedes ?x }
+        }""" ] .
+

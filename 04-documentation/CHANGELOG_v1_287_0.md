@@ -11269,9 +11269,10 @@ Four pending handovers (an adopting project three, another registrant one), each
 - `backlog_execution_ready` v1.3.0: a freeze whose finding is answered no longer blocks the start gate (fixture v1.2.0, case `Lin_FrozenAnswered`); T-Box v1.146.0 states it.
 - `GoalTriangleShape` accepts a goal whose scope belongs to a mission that supersedes its own.
 - `backlog_handover_rules_probe` (gate v1.68.0) proves each on a case and a control. Discipline v115.0.0, G148.
-- **Handovers:** all four are accepted and answered in the inbox; the log is current.
+- **Ruling G149 (the Owner's rule of 2026-10-24):** opt-in `RS_ImpedimentNamesWhatItBlocks` and `ImpedimentNamesWhatItBlocksShape`: an unresolved impediment names the work it blocks, so an unrelated question cannot hold a lineage; the operating rule for non-human answers is in the discipline (v115.0.0).
+- **Handovers:** seven are accepted and answered in the inbox (the four above, the ecosystem session's two, the agentic-sdlc correction); the log is current.
 
-**Unplanned work:** four handovers from adopting sessions, measured and built in the same step; no backlog item of this package covers them.
+**Unplanned work:** handovers and a rule from the Owner, measured and built in the same step; no backlog item of this package covers them.
 
 ## v1.424.0 — 2026-10-23 (MINOR, additions only: RS_RepairReprioritises, ruling G147)
 
