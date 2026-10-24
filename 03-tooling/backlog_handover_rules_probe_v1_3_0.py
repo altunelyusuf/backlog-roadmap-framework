@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_handover_rules_probe v1.1.0 -- re-runnable proof of the five G148 rulings and the G150 rename case rulings (T-Box v1.146.0, shapes v1.179.0, A-Box v1.56.0).
+"""backlog_handover_rules_probe v1.3.0 -- re-runnable proof of the five G148 rulings and the G150 rename case rulings (T-Box v1.146.0, shapes v1.179.0, A-Box v1.56.0).
 
   A  L4 intent chain and the empty-epic rule do not judge a Cancelled item (an adopting project: a cancelled epic is not work to measure or groom).
   B  RS_DecompositionStateAgrees: a parent whose children are all Done or Cancelled, one at least Done, is not left open.
@@ -27,7 +27,7 @@ def expect(name, ok):
 HEAD = ("@prefix backlog: <http://example.org/backlog#> .\n@prefix x: <http://example.org/g148-probe#> .\n"
         "x:L a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_DecompositionStateAgrees .\n")
 KEYS = {"INTENT": "L4: this item advances no recorded objective", "EMPTY": "decomposes into nothing",
-        "DSA": "yet the item itself is neither Done nor Cancelled", "IMP": "impedes no work item or container", "TRI": "whose mission is not the mission the goal contributes to"}
+        "DSA": "yet the item itself is neither Done nor Cancelled", "CMA": "W:Advisory (G154)", "DEP": "is Done and sits in no DeploymentUnit", "IMP": "impedes no work item or container", "TRI": "whose mission is not the mission the goal contributes to"}
 def item(n, cls, state, extra="", lin=True):
     return f"x:{n} a backlog:{cls} ; backlog:hasState backlog:{state}" + (" ; backlog:belongsToLineage x:L" if lin else "") + " " + extra + ".\n"
 SCEN = [
@@ -41,6 +41,12 @@ SCEN = [
  ("B  parent InProgress, every child Cancelled (control: nothing was done)", HEAD + item("P", "Story", "InProgress", "; backlog:decomposesInto x:C ") + item("C", "Story", "Cancelled"), {"DSA": 0}),
  ("B  parent Done (control)", HEAD + item("P", "Story", "Done", "; backlog:decomposesInto x:K ") + item("K", "Story", "Done"), {"DSA": 0}),
  ("B  no adoption anywhere (control: the rule binds only an adopter)", HEAD.replace("backlog:adoptsRuleSet backlog:RS_DecompositionStateAgrees", "") .replace("x:L a backlog:Lineage ; ", "x:L a backlog:Lineage ") + item("P", "Story", "InProgress", "; backlog:decomposesInto x:K ") + item("K", "Story", "Done"), {"DSA": 0}),
+ # G153: a Done epic is delivered through its stories, so the deployment-coverage rule does not ask for a unit
+ ("G153 a Done epic whose Done story is deployed, audit adopter", HEAD + "x:L backlog:adoptsRuleSet backlog:RS_SeverityAudit_20260909 .\nx:E a backlog:Epic ; backlog:hasState backlog:Done ; backlog:belongsToLineage x:L ; backlog:decomposesInto x:S .\nx:S a backlog:Story ; backlog:hasState backlog:Done ; backlog:belongsToLineage x:L .\nx:U a backlog:DeploymentUnit ; backlog:deploysItem x:S .\n", {"DEP": 0}),
+ ("G153 a Done story in no unit, audit adopter (control)", HEAD + "x:L backlog:adoptsRuleSet backlog:RS_SeverityAudit_20260909 .\nx:S a backlog:Story ; backlog:hasState backlog:Done ; backlog:belongsToLineage x:L .\n", {"DEP": 1}),
+ # G154
+ ("G154 frozen by a bypass, the owner's ruling, one bypassed item admitted by no ScopeChange", HEAD + "x:L backlog:lineageFrozen true ; backlog:frozenBy x:BP ; backlog:frozenRuling \"No need to restart.\" .\nx:BP a backlog:LineageBypass ; backlog:bypassedLineage x:L ; backlog:bypassedItem x:I .\nx:I a backlog:Story ; backlog:belongsToLineage x:L .\n", {"CMA": 1}),
+ ("G154 the same, the item admitted (control)", HEAD + "x:L backlog:lineageFrozen true ; backlog:frozenBy x:BP ; backlog:frozenRuling \"No need to restart.\" .\nx:BP a backlog:LineageBypass ; backlog:bypassedLineage x:L ; backlog:bypassedItem x:I .\nx:I a backlog:Story ; backlog:belongsToLineage x:L .\nx:SC a backlog:ScopeChange ; backlog:admitsItem x:I .\n", {"CMA": 0}),
  # G149
  ("G149 an unresolved impediment that blocks nothing", HEAD + "x:L backlog:adoptsRuleSet backlog:RS_ImpedimentNamesWhatItBlocks .\nx:I a backlog:Impediment ; backlog:belongsToLineage x:L .\n", {"IMP": 1}),
  ("G149 an unresolved impediment that names its work (control)", HEAD + "x:L backlog:adoptsRuleSet backlog:RS_ImpedimentNamesWhatItBlocks .\nx:S a backlog:Story ; backlog:belongsToLineage x:L .\nx:I a backlog:Impediment ; backlog:belongsToLineage x:L ; backlog:impedes x:S .\n", {"IMP": 0}),
@@ -56,7 +62,8 @@ with tempfile.TemporaryDirectory() as d:
         f = os.path.join(d, "s.ttl"); open(f, "w").write(body)
         out = subprocess.run([sys.executable, val, f], capture_output=True, text=True, timeout=900).stdout
         for k, n in want.items():
-            got = sum(1 for ln in out.splitlines() if "[Violation]" in ln and KEYS[k] in ln)
+            sev, key = ("[Warning]", KEYS[k][2:]) if KEYS[k].startswith("W:") else ("[Violation]", KEYS[k])
+            got = sum(1 for ln in out.splitlines() if sev in ln and key in ln)
             expect(f"{name} [{k}]: expected {n}, got {got}", got == n)
 
 # C: the per-adoption git witness, on a temporary repository
@@ -116,6 +123,32 @@ for label, late, want in (("adoption at open, then a versioned rename (control)"
         out = subprocess.run([sys.executable, chk, b], capture_output=True, text=True, timeout=300).stdout
         got = sum(1 for ln in out.splitlines() if "claims adoptionRecordedAtOpen but adopts" in ln)
         expect(f"C2 order check across a versioned rename: {label}: expected {want}, got {got}", got == want)
+# G154: the owner's route -- a bypass answered by the owner's frozenRuling and a ScopeChange admitting every bypassed item
+STAGES = ["Mission", "Scope", "Goal", "Objective", "Backlog"]
+def route_register(upto, ruling, admit):
+    t = f"@prefix backlog: <{B}> .\n@prefix x: <{NS}> .\n"
+    t += "x:L a backlog:Lineage ; backlog:lineageOrdinal 1 ; backlog:lineageArchived false" + (" ; backlog:lineageFrozen true ; backlog:frozenBy x:BP" if upto > 5 else "") + (" ; backlog:frozenRuling \"No need to restart, you should use change management.\"" if ruling else "") + " .\n"
+    for n in range(upto if upto <= 5 else 5):
+        st = STAGES[n]; prev = f" ; backlog:consumesOutput x:O_{STAGES[n-1]}" if n else ""
+        t += f"x:O_{st} a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_{st} ; backlog:belongsToLineage x:L{prev} ; backlog:closedAtCommit \"c\" ; backlog:hasStateDigest \"d{st}\" .\n"
+    return t
+with tempfile.TemporaryDirectory() as e:
+    git(e, "init", "-q"); os.makedirs(os.path.join(e, "reg")); rf = os.path.join(e, "reg", "register.ttl")
+    def put(body, msg): open(rf, "w").write(body); git(e, "add", "-A"); git(e, "commit", "-q", "-m", msg)
+    item = "x:I1 a backlog:Story ; backlog:hasState backlog:Done ; backlog:belongsToLineage x:L .\nx:I2 a backlog:Story ; backlog:hasState backlog:Done ; backlog:belongsToLineage x:L .\n"
+    put(route_register(0, 0, 0), "lineage"); put(route_register(0, 0, 0) + item, "work first")
+    for n in range(1, 6): put(route_register(n, 0, 0) + item, "stage %d" % n)
+    finding = "x:BP a backlog:LineageBypass ; backlog:bypassedLineage x:L ; backlog:bypassedItem x:I1 , x:I2 .\n"
+    put(route_register(6, 0, 0) + item + finding, "bypass recorded")
+    def verdict(body):
+        open(rf, "w").write(body)
+        out = subprocess.run([sys.executable, chk, rf], capture_output=True, text=True, timeout=300).stdout
+        m = re.search(r"^\s+L\s+(\w+)", out, re.M); return m.group(1) if m else out[-300:]
+    base = route_register(6, 1, 0) + item + finding
+    expect("G154 a bypass with no ruling and no restart reads FOUND", verdict(route_register(6, 0, 0) + item + finding) == "FOUND")
+    expect("G154 the ruling alone, nothing admitted, does not answer it", verdict(base) != "ANSWERED_BY_CHANGE")
+    expect("G154 the ruling and one of two bypassed items admitted does not answer it", verdict(base + "x:SC a backlog:ScopeChange ; backlog:admitsItem x:I1 .\n") != "ANSWERED_BY_CHANGE")
+    expect("G154 the ruling and every bypassed item admitted reads ANSWERED_BY_CHANGE", verdict(base + "x:SC a backlog:ScopeChange ; backlog:admitsItem x:I1 , x:I2 .\n") == "ANSWERED_BY_CHANGE")
 # D1: the freeze lift is proved by the start gate's own probe
 r = subprocess.run([sys.executable, latest("03-tooling/backlog_execution_ready_probe_v*.py")], capture_output=True, text=True, timeout=600)
 expect("D1 the start gate lifts a freeze whose bypass a restart answered, and keeps an unanswered one (its own probe)", r.returncode == 0 and "Lin_FrozenAnswered" in r.stdout)

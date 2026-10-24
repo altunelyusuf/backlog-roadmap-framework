@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_lineage_order_check v1.12.1 — did the chain come before the work, or after?
+"""backlog_lineage_order_check v1.13.0 — did the chain come before the work, or after?
 
 THE ESCAPE THIS CATCHES. A lineage is Mission -> Scope -> Goal -> Objective -> Backlog,
 one commit per stage, and only then work items (LINEAGE_OPERATING_DISCIPLINE, ceremony
@@ -37,6 +37,9 @@ for every non-archived lineage that has stage outputs:
                Strat_DivideAndConquer: the parent is ORDERED only when every part is and
                its combine output is active. --emit also prints, for the NEXT restart, the
                reductionObserved of the last trial (admitted / named), never hand-written.
+  v1.13.0 (G154, the Owner's sentence "No need to restart, you should use change management", an adopting project handover): a bypass is answered either by a restart or by the
+               owner's frozenRuling together with a ScopeChange that admitsItem every bypassed item. Such a lineage reads ANSWERED_BY_CHANGE (exit 0); with one bypassed
+               item not admitted, or any ordering problem left, it does not.
   v1.12.1 (G150, an adopting project handover): the per-adoption witness resolves the register by its versioned-name stem at each probed commit, so a BP-D7 rename (register_v1_0_0 -> register_v1_1_0) no longer makes an adoption at open look late.
   v1.12.0 (G148, an adopting project handover): step 3f4 witnesses each ADOPTION (adoptsRuleSet, adoptsObligationSet) of a lineage that claims adoptionRecordedAtOpen against the active Mission output; the rebuilt Mission commit of a restart is the opening.
   AWAITING_BACKLOG (v1.10.0, an adopting project handover, lineage2-executed-without-backlog-stage) the Objective stage
@@ -580,6 +583,13 @@ def classify(g, L, witness, prefix):
     thrash_open = any((fb, RDF.type, B.LineageThrash) in g for fb in frozen_bys) and g.value(L, B.frozenRuling) is None
     bypass_open = any((fb, RDF.type, B.LineageBypass) in g and not any((r, B.answersBypass, fb) in g for r in restarts)
                       for fb in frozen_bys)
+    # v1.13.0 (G154): the owner's route. A recorded, unanswered bypass + the owner's frozenRuling + a ScopeChange admitting every bypassed item.
+    by_change = False
+    if bypassed and g.value(L, B.frozenRuling) is not None and not problems and \
+            any((fb, RDF.type, B.LineageBypass) in g and not any((r, B.answersBypass, fb) in g for r in restarts) for fb in frozen_bys):
+        by_node = {local(i): i for i in items}
+        if all(any(True for _ in g.subjects(B.admitsItem, by_node[ln])) for ln, _, _ in bypassed if ln in by_node) and all(ln in by_node for ln, _, _ in bypassed):
+            by_change = True; bypassed = []; bypass_open = False
     if broken:
         verdict = "WITNESS_BROKEN"
     elif frozen and thrash_open:
@@ -613,6 +623,8 @@ def classify(g, L, witness, prefix):
         verdict = "AWAITING_BACKLOG"   # v1.10.0: nothing to order, so nothing examined; never ORDERED
     else:
         verdict = "ORDERED"
+    if by_change and verdict == "ORDERED":
+        verdict = "ANSWERED_BY_CHANGE"
     return verdict, {"outputs": out_first, "items": item_first, "bypassed": bypassed,
                      "problems": problems, "restart": restart_at, "all_outputs": [o for v in outs.values() for o in v],
                      "planned_late": planned_late, "thrash": thrash,

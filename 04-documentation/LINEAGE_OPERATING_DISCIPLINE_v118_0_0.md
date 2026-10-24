@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v117.0.0
+# Lineage Operating Discipline — v118.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -3895,7 +3895,7 @@ Related: G89, G91, G104, G112, G116, G147.
 
 *(The Owner's words: no waiting in a lineage for unrelated questions; for non-human answers the lineage's agentic system decides without a handover; work the lineage enforces but the actual work misses must be dealt with; progress should not cost an expensive switch-over.)*
 
-**Q1 — what can be a rule in the register, and was built.** A wait is a fact only when it names the work it holds. `RS_ImpedimentNamesWhatItBlocks` and `ImpedimentNamesWhatItBlocksShape`: within an adopter's scope, an unresolved impediment impedes at least one work item or container; one that impedes nothing is a violation, because a question not about the work is not a blocker and must be resolved, tied to the work it really holds, or left out. Opt-in (G89, G91). Proven by the planted case `IMP_BAD` in the negative fixture v1.42.0 and by four scenarios (the violation, a named wait, a resolved one, no adoption) in `backlog_handover_rules_probe`. The start gate asks only about the lineage's own facts, so a pending question or handover never blocks work from starting.
+**Q1 — what can be a rule in the register, and was built.** A wait is a fact only when it names the work it holds. `RS_ImpedimentNamesWhatItBlocks` and `ImpedimentNamesWhatItBlocksShape`: within an adopter's scope, an unresolved impediment impedes at least one work item or container; one that impedes nothing is a violation, because a question not about the work is not a blocker and must be resolved, tied to the work it really holds, or left out. Opt-in (G89, G91). Proven by the planted case `IMP_BAD` in the negative fixture and by four scenarios (the violation, a named wait, a resolved one, no adoption) in `backlog_handover_rules_probe`. The start gate asks only about the lineage's own facts, so a pending question or handover never blocks work from starting.
 
 **Q2 — the operating rule, which a session follows and the register cannot check.** A question whose answerer is not a person (a rule, a measurement, a tool, another agent of the same lineage) is decided in the lineage from the rules and the provable facts, recorded in the commit and the ruling, with no handover. A handover is written only when the answer needs a person, or a term that belongs to another package. A session never stops at an unrelated question: it records the question, continues with the work that does not depend on it, and a question that depends on a person is put to the Owner once.
 
@@ -3930,4 +3930,20 @@ Related: G89, G149, G150.
 
 *(The measurement G151 left open.)* `backlog_release_tool` v1.5.0 runs the gate through `timed_gate`: the gate's log is unchanged, a sidecar `gate_VERSION.log.timing.tsv` holds the seconds of each section, and the five slowest are printed at the end of the step. Proven by `backlog_gate_timing_probe` (three sections timed, slowest first, log byte-identical). The first release run with `--cold` (every step, no replay) is the baseline; what it shows is stated in the changelog of that release and decides whether any section is worth making incremental. Not claimed: no section was shortened here.
 Related: G151.
+
+## G153 — A Done epic is delivered through its stories, so it is not asked for a deployment unit
+
+*(an adopting project handover, a conflict between two framework rules, reproduced before it was fixed.)* `DeploymentCoverageShape` is an advisory (a warning) that a Done item sit in a deployment unit, and it reported a Done epic; `L4GroomingShape` forbids an epic carried by one; under the severity audit, which promotes the advisory to a violation, no register could satisfy both. An epic is a theme delivered across stories (L4), and the stories are already checked. The advisory now skips an epic, as it already skips an initiative (shapes v1.180.0). Proven in `backlog_handover_rules_probe` (G153): a Done epic whose Done story is deployed draws nothing; a Done story in no unit still draws the finding; the first case fails when the exclusion is removed. Not claimed: other items with children (a story with tasks) are not excluded, because no conflict was shown for them.
+Related: G136, G148.
+
+## G154 — A bypass is answered by a restart or by the Owner's change-management route; the model-artifact digest finding is deferred with a design
+
+*(an adopting project handover. The Owner's sentence of 2026-10-24 is the rule, as in G104: "No need to restart, you should use change management.")*
+
+**Q1 — the route, by fact.** Until now only a restart answered a bypass (G108 Q1, the definition of the restart, the runbook), and the order check read a lineage with the Owner's ruling, a scope change and a Backlog output as FOUND. A bypass is now answered either by a restart, or by the Owner's `frozenRuling` together with a `ScopeChange` that `admitsItem` every bypassed item. Built: `backlog_lineage_order_check` v1.13.0 reads such a lineage ANSWERED_BY_CHANGE (exit 0) and keeps FOUND when the ruling is missing or one bypassed item is not admitted; `ChangeManagementAnswerShape` (an advisory, because the records arrive in separate commits) reports the unfinished state; the definitions of the lineage-frozen term and of the restart say there are two routes (T-Box v1.147.0); the runbook has Route B (v1.2.0). The start gate already read the ruling as an answer. Proven in `backlog_handover_rules_probe` (G154): a real temporary repository with the bypass recorded reads FOUND, then with the ruling alone and with one of two items admitted does not read answered, and with the ruling and both admitted reads ANSWERED_BY_CHANGE; two shape scenarios, planted case `CMA_LIN` in the negative fixture.
+
+**Q2 — the model artifact in the Objective digest: deferred, with the reason and the design.** The finding is real by the tables: a model artifact is counted in the Objective digest and in every later stage's (tables V3 and V4), so a model recorded after the Objective stage closes moves the Objective digest. It is not changed here because a digest table is the reference closed lineages reproduce against: editing V3 or V4 would break them, so the repair is a new table (V5) in which a model artifact is counted at the stage that owes its kind, selected by an adoption like V3 and V4, with a test drive on scratch variants before it is chosen (the rule for a modelling grouping). Until then the route an adopting project took holds: close the Backlog stage owing the class diagram with `obligationWaivedBy` and its reason. Not built; it is the one open item from this handover.
+
+**What is not claimed.** The admission is checked for existence (a scope change admits the item), not that the change request and impact assessment are sound. Only the lineage's own bypass finding is read; a second bypass needs its own answer.
+Related: G104, G108, G130, G148.
 

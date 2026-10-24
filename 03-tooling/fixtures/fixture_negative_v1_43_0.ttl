@@ -4297,3 +4297,8 @@ ex:DSA_KID a backlog:Story ; backlog:hasState backlog:Done ; backlog:belongsToLi
 ex:IMP_LIN a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_ImpedimentNamesWhatItBlocks .
 ex:IMP_BAD a backlog:Impediment ; backlog:belongsToLineage ex:IMP_LIN .
 
+# G154: a lineage frozen by a bypass, with the owner's ruling, and one bypassed item that no ScopeChange admits.
+ex:CMA_LIN a backlog:Lineage ; backlog:lineageFrozen true ; backlog:frozenBy ex:CMA_BP ; backlog:frozenRuling "No need to restart, you should use change management." .
+ex:CMA_BP a backlog:LineageBypass ; backlog:bypassedLineage ex:CMA_LIN ; backlog:bypassedItem ex:CMA_I .
+ex:CMA_I a backlog:Story ; backlog:belongsToLineage ex:CMA_LIN .
+

@@ -11260,9 +11260,17 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.428.0 — 2026-10-25 (MINOR: rulings G153 and G154)
+
+- **G153:** `DeploymentCoverageShape` skips an Epic (shapes v1.180.0), ending a conflict with the L4 rule that an epic is not carried by a deployment unit, which no register of an audit adopter could satisfy. Probe scenarios in `backlog_handover_rules_probe` v1.2.0, the first shown to fail without the change. Discipline v118.0.0.
+- **G154 (the Owner's sentence "No need to restart, you should use change management."):** a bypass is answered by a restart or by the Owner's ruling with a scope change admitting every bypassed item; order check v1.13.0 reads ANSWERED_BY_CHANGE, `ChangeManagementAnswerShape` (advisory), T-Box v1.147.0, runbook v1.2.0, probe v1.3.0 with a real temporary repository. The model-artifact digest finding is deferred with a design (new table V5, test drive first).
+- **Handovers:** both an adopting project items are accepted and answered; the inbox is empty.
+
+**Unplanned work:** two handovers, reproduced and built in the same step; no backlog item of this package covers it.
+
 ## v1.427.0 — 2026-10-24 (MINOR: ruling G152, gate timing recorded)
 
-- **G152:** `backlog_release_tool` v1.5.0 records the seconds of each gate section (sidecar file) and prints the five slowest; `backlog_gate_timing_probe` in the gate (v1.70.0). This release is run with `--cold` so the first record is the full, unreplayed run. Discipline v117.0.0.
+- **G152:** `backlog_release_tool` v1.5.0 records the seconds of each gate section (sidecar file) and prints the five slowest; `backlog_gate_timing_probe` in the gate (v1.70.0). (Correction in v1.428.0: this release was run in the normal mode, not with `--cold`; the first full-replay attempt failed on the stamps probe, which expects recorded stamps. The record is of a run with the shapes unchanged: about 270 s, 130 s of it in the fault-planting probes.) Discipline v117.0.0.
 
 **Unplanned work:** the measurement left open by G151 at the Owner's direction to proceed; no backlog item of this package covers it.
 

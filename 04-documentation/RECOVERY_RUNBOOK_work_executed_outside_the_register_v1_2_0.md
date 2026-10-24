@@ -1,4 +1,4 @@
-# Recovery runbook — work executed outside the register (v1.1.0)
+# Recovery runbook — work executed outside the register (v1.2.0)
 
 Applies when real work was done on a lineage that had no Backlog stage output or no registered items
 (Lineage_2 at an adopting project is the precedent; ruling G100). Do not decide per instance; follow the steps.
@@ -23,6 +23,13 @@ Before every assignment run `backlog_execution_ready_v1_1_0.py REGISTER.ttl --li
    modality. **Exempt:** concern declaration and planning event (the two act-record shapes).
 9. **Groom** the open rows in the rebuilt Backlog.
 10. **Verify:** order check, pipeline verify, start gate, validator.
+
+## Route B: change management instead of a restart (G154)
+The owner may answer a bypass without a restart ("No need to restart, you should use change management."). Then, each in its own commit:
+1. Record the owner's `frozenRuling` on the lineage, verbatim (the order check's emitted template carries the line).
+2. Record the `ChangeRequest` (Direction_Grow, accepted), its `ImpactAssessment`, and an owner-decided `ScopeChange` that `admitsItem` every bypassed item.
+3. Build the Backlog-stage output as usual.
+The order check reads such a lineage ANSWERED_BY_CHANGE only when the ruling is there and every bypassed item is admitted; with one not admitted it still reads FOUND. The start gate already treats the `frozenRuling` as an answer.
 
 ## Strategy decision table (RecoveryStrategy)
 | Situation | Strategy |
