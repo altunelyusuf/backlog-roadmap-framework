@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
-"""Probe for backlog_pipeline_verify v1.9.0 (digest table v4).
+"""Probe for backlog_pipeline_verify v1.10.0 (digest tables v4 and v5).
 
 Cases: (1) under v4 an ExecutionTask added after the Backlog stage closed leaves the Backlog digest unchanged;
 (2) under v3 the same task moves it; (3) under v4 a Story added to the closed stage still moves it;
 (4) under v4 a pre-lineage item admitted by the lineage's Backlog output is part of the digest and its removal moves it;
 (5) a pre-lineage item NOT admitted by this lineage's output does not enter the digest;
-(6) the v4 table holds no ExecutionTask and every other v3 type."""
+(6) the v4 table holds no ExecutionTask and every other v3 type;
+(7) under v5 a Specification, TestScenario, ModelArtifact or AcceptanceCriterion added after the close leaves the Backlog digest unchanged;
+(8) under v4 the same Specification moves it;
+(9) the v5 table is v4 without those four types and an added Story still moves it."""
 import glob, importlib.util, os, sys
 from rdflib import Graph, RDF, URIRef
 if sys.argv[1:] == ["--deps"]:
@@ -16,7 +19,7 @@ if sys.argv[1:] == ["--deps"]:
     print(os.path.abspath(__file__)); sys.exit(0)
 HERE = os.path.dirname(os.path.abspath(__file__)); PKG = os.path.dirname(HERE)
 B = "http://example.org/backlog#"; X = "http://example.org/x#"
-spec = importlib.util.spec_from_file_location("pv", os.path.join(HERE, "backlog_pipeline_verify_v1_9_0.py"))
+spec = importlib.util.spec_from_file_location("pv", os.path.join(HERE, "backlog_pipeline_verify_v1_10_0.py"))
 pv = importlib.util.module_from_spec(spec); spec.loader.exec_module(pv)
 tb = sorted(glob.glob(os.path.join(PKG, "01-ontologies", "backlog_tbox_v*.ttl")))[-1]
 def u(n, ns=B): return URIRef(ns + n)
@@ -46,4 +49,13 @@ check("4 v4: an item the lineage's output admitted is in the digest", da != pv.s
 check("5 v4: an item admitted by another lineage's output is not", pv.state_digest(g, "Stage_Backlog", L, admitted=True) == pv.state_digest(reg()[0], "Stage_Backlog", L, admitted=True))
 b3, b4 = set(t3["Stage_Backlog"]), set(t4["Stage_Backlog"])
 check("6 the v4 table is v3 without ExecutionTask", b4 == b3 - {"ExecutionTask"})
+t5 = pv._load_stage_types(tb, table="v5")
+g, L = reg(); pv.STAGE_TYPES = t5; d5 = pv.state_digest(g, "Stage_Backlog", L, admitted=True)
+pv.STAGE_TYPES = t4; d4b = pv.state_digest(g, "Stage_Backlog", L, admitted=True)
+for i, c in enumerate(("Specification", "TestScenario", "ModelArtifact", "AcceptanceCriterion")):
+    n = u("Obl%d" % i, X); g.add((n, RDF.type, u(c))); g.add((n, u("belongsToLineage"), L))
+pv.STAGE_TYPES = t5; check("7 v5: obligation artifacts added after the close leave the Backlog digest", pv.state_digest(g, "Stage_Backlog", L, admitted=True) == d5)
+pv.STAGE_TYPES = t4; check("8 v4: the same artifacts move it", pv.state_digest(g, "Stage_Backlog", L, admitted=True) != d4b)
+S5 = u("Story5", X); g.add((S5, RDF.type, u("Story"))); g.add((S5, u("belongsToLineage"), L))
+pv.STAGE_TYPES = t5; check("9 v5: the table is v4 without the four types, and an added story moves it", set(t5["Stage_Backlog"]) == set(t4["Stage_Backlog"]) - {"Specification", "TestScenario", "ModelArtifact", "AcceptanceCriterion"} and pv.state_digest(g, "Stage_Backlog", L, admitted=True) != d5)
 print("VERDICT: %s" % ("PASS" if not fails else "FAIL")); sys.exit(1 if fails else 0)

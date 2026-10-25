@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-"""backlog_pipeline_verify_v1_8_0.py — the lineage order, checked by reconstruction.
+"""backlog_pipeline_verify_v1_10_0.py — the lineage order, checked by reconstruction.
+
+v1.10.0 (G156): digest table v5, selected by a register that declares adoptsRuleSet RS_DigestTable_v5. It is the v4 table without Specification, TestScenario, ModelArtifact and AcceptanceCriterion, which the obligation sets require after the Backlog stage has closed.
 
 v1.8.0 (Lineage 17, OESC-S01): the stage content table is read from the package's data file as well as the vocabulary, because the controlled
 individuals moved there. No verdict logic changed.
@@ -142,7 +144,7 @@ def _load_stage_types(tbox_path, v2=False, table=None):
     # handover, successor-scope-stage-...-owed-artifacts); no register or fixture here declared v2, so nothing
     # had ever exercised it.
     table = table or ("v2" if v2 else "v1")
-    prop = {"v1": B.stageRequiresType, "v2": B.stageRequiresTypeV2, "v3": B.stageRequiresTypeV3, "v4": B.stageRequiresTypeV4}[table]
+    prop = {"v1": B.stageRequiresType, "v2": B.stageRequiresTypeV2, "v3": B.stageRequiresTypeV3, "v4": B.stageRequiresTypeV4, "v5": B.stageRequiresTypeV5}[table]
     for st, _, cls in g.triples((None, prop, None)):
         out.setdefault(str(st).split("#")[-1], []).append(str(cls).split("#")[-1])
     if not out:
@@ -168,12 +170,13 @@ def main():
         lineage_name = argv[idx + 1]
         argv = argv[:idx] + argv[idx + 2:]
     _txt = "".join(open(f, encoding="utf-8", errors="ignore").read() for f in argv if os.path.exists(f))
-    _v4 = "adoptsRuleSet" in _txt and "RS_DigestTable_v4" in _txt
-    _v3 = (not _v4) and "adoptsRuleSet" in _txt and "RS_DigestTable_v3" in _txt
-    _v2 = (not _v4) and (not _v3) and _table_v2_declared(_txt)
-    _table = "v4" if _v4 else ("v3" if _v3 else ("v2" if _v2 else "v1"))
+    _v5 = "adoptsRuleSet" in _txt and "RS_DigestTable_v5" in _txt
+    _v4 = (not _v5) and "adoptsRuleSet" in _txt and "RS_DigestTable_v4" in _txt
+    _v3 = (not _v5) and (not _v4) and "adoptsRuleSet" in _txt and "RS_DigestTable_v3" in _txt
+    _v2 = (not _v5) and (not _v4) and (not _v3) and _table_v2_declared(_txt)
+    _table = "v5" if _v5 else "v4" if _v4 else ("v3" if _v3 else ("v2" if _v2 else "v1"))
     STAGE_TYPES = _load_stage_types(_tb, table=_table)
-    print("digest table: %s" % {"v4": "v4 (RS_DigestTable_v4 declared: planning after the close is not stage content; admitted items are)", "v3": "v3 (RS_DigestTable_v3 declared)", "v2": "v2 (RS_DigestTable_v2 declared)", "v1": "v1"}[_table])
+    print("digest table: %s" % {"v5": "v5 (RS_DigestTable_v5 declared: obligation artifacts are not stage content; admitted items are)", "v4": "v4 (RS_DigestTable_v4 declared: planning after the close is not stage content; admitted items are)", "v3": "v3 (RS_DigestTable_v3 declared)", "v2": "v2 (RS_DigestTable_v2 declared)", "v1": "v1"}[_table])
     if len(argv) < 1:
         print("usage: backlog_pipeline_verify_v1_9_0.py <register.ttl> [tbox.ttl] [--lineage NAME] [--require-complete]")
         return 1
@@ -224,7 +227,7 @@ def main():
             prev = None
             continue
         recorded = str(g.value(o, URIRef(B + "hasStateDigest")) or "")
-        actual = state_digest(g, stage, lineage_uri, admitted=(_table == 'v4'))
+        actual = state_digest(g, stage, lineage_uri, admitted=(_table in ('v4', 'v5')))
         ok = recorded == actual
         print("  %-18s digest %s  %s" % (stage, actual[:16], "reproduces" if ok else "DOES NOT REPRODUCE"))
         if not ok:

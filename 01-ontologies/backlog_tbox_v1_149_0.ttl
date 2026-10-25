@@ -19,9 +19,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.148.0> ;
-    owl:versionInfo "1.148.0" ;
-    owl:priorVersion <http://example.org/backlog/1.143.0> , <http://example.org/backlog/1.142.0> , <http://example.org/backlog/1.141.0> , <http://example.org/backlog/1.140.0> , <http://example.org/backlog/1.139.0> , <http://example.org/backlog/1.138.0> , <http://example.org/backlog/1.137.0> , <http://example.org/backlog/1.136.0> , <http://example.org/backlog/1.135.0> , <http://example.org/backlog/1.134.0> , <http://example.org/backlog/1.133.0> , <http://example.org/backlog/1.132.0> , <http://example.org/backlog/1.131.0> , <http://example.org/backlog/1.130.0> , <http://example.org/backlog/1.129.0> , <http://example.org/backlog/1.125.0> , <http://example.org/backlog/1.124.0> , <http://example.org/backlog/1.123.0> , <http://example.org/backlog/1.122.0> ;
+    owl:versionIRI <http://example.org/backlog/1.149.0> ;
+    owl:versionInfo "1.149.0" ;
+    owl:priorVersion <http://example.org/backlog/1.148.0> , <http://example.org/backlog/1.143.0> , <http://example.org/backlog/1.142.0> , <http://example.org/backlog/1.141.0> , <http://example.org/backlog/1.140.0> , <http://example.org/backlog/1.139.0> , <http://example.org/backlog/1.138.0> , <http://example.org/backlog/1.137.0> , <http://example.org/backlog/1.136.0> , <http://example.org/backlog/1.135.0> , <http://example.org/backlog/1.134.0> , <http://example.org/backlog/1.133.0> , <http://example.org/backlog/1.132.0> , <http://example.org/backlog/1.131.0> , <http://example.org/backlog/1.130.0> , <http://example.org/backlog/1.129.0> , <http://example.org/backlog/1.125.0> , <http://example.org/backlog/1.124.0> , <http://example.org/backlog/1.123.0> , <http://example.org/backlog/1.122.0> ;
     owl:priorVersion <http://example.org/backlog/1.121.0> , <http://example.org/backlog/1.120.0> , <http://example.org/backlog/1.119.0> , <http://example.org/backlog/1.118.0> , <http://example.org/backlog/1.117.0> ;
     owl:priorVersion <http://example.org/backlog/1.116.0> ;
     owl:priorVersion <http://example.org/backlog/1.115.0> ;
@@ -6708,6 +6708,11 @@ backlog:stageRequiresTypeV4 a owl:ObjectProperty ;
     rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "stage requires type (table v4)"@en ;
     skos:definition "The v4 digest table. backlog_pipeline_verify reads it INSTEAD of the earlier tables for a register that declares adoptsRuleSet RS_DigestTable_v4. It is the v3 table without ExecutionTask: a task is produced by planning an item into an iteration, is subordinate by construction, and planning after a Backlog stage closed is therefore not an addition to the closed stage."@en .
 
+backlog:stageRequiresTypeV5 a owl:ObjectProperty ;
+    rdfs:domain backlog:LineageStage ; rdfs:range rdfs:Class ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "stage requires type (table v5)"@en ;
+    skos:definition "The v5 digest table. backlog_pipeline_verify reads it INSTEAD of the earlier tables for a register that declares adoptsRuleSet RS_DigestTable_v5. It is the v4 table without Specification, TestScenario, ModelArtifact and AcceptanceCriterion: those are obligation artifacts that an obligation set (OS_SDLC_v2) requires of a task type and that the stage-owed shapes and the artifact order check witness by git order, so the stage digest does not also freeze them."@en .
+
 #################################################################
 #  v1.114.0 -- a milestone settles only by a recorded decision, never by its own derived outcome (an adopting project
 #  handover, milestone-outcome-exemption-met-by-its-own-derived-outcome). Shapes v1.141.0 exempted any milestone
@@ -7920,6 +7925,7 @@ backlog:stageRequiresType kb:hasRelationshipCategory kb:RelationshipCategory_Req
 backlog:stageRequiresTypeV2 kb:hasRelationshipCategory kb:RelationshipCategory_Requirement .
 backlog:stageRequiresTypeV3 kb:hasRelationshipCategory kb:RelationshipCategory_Requirement .
 backlog:stageRequiresTypeV4 kb:hasRelationshipCategory kb:RelationshipCategory_Requirement .
+backlog:stageRequiresTypeV5 kb:hasRelationshipCategory kb:RelationshipCategory_Requirement .
 backlog:owesClass kb:hasRelationshipCategory kb:RelationshipCategory_Association .
 backlog:owesDepth kb:hasRelationshipCategory kb:RelationshipCategory_Association .
 backlog:owesKind kb:hasRelationshipCategory kb:RelationshipCategory_Association .

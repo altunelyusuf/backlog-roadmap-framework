@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v119.0.0
+# Lineage Operating Discipline — v120.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -3962,3 +3962,15 @@ Related: G104, G108, G130, G148.
 **What is not claimed.** A profile proves rules are adopted, not that agents' runs are recorded: recording a run is still the executor's own act. No consumer has been moved to a profile.
 Related: G89, G91, G116, G118, G146, G148.
 
+## G156 — Obligation artifacts are not stage content; digest table v5
+
+*(Found by the agentic test drive of 2026-10-25, on a lineage opened under the agentic profile with `OS_SDLC_v2` adopted.)*
+
+**Q1 — the finding, by measurement.** Table v4 counts `Specification` and `TestScenario` in the Goal digest, `ModelArtifact` in the Objective digest, and all of them with `AcceptanceCriterion` in the Backlog digest. `OS_SDLC_v2` obliges a specification, a design diagram, a test case or a test scenario of the task types Requirements, Architecture, Design, Verification and Validation, and a task exists only after the Backlog stage closed. Producing what the obligation set requires therefore changed a closed stage's content: `backlog_pipeline_verify` read the Objective and Backlog digests as not reproducing while the validator read the register as conformant.
+
+**Q2 — what was ruled.** `RS_DigestTable_v5` is the v4 table without those four types. A register adopts it and re-records its stage digests as a stated migration (G91); the re-recorded digest witnesses the state at the re-recording. Existence and order of the obligation artifacts stay witnessed by the stage-owed shapes and by `backlog_sdlc_artifact_order_check`, which read git order.
+
+**Q3 — proof.** `backlog_pipeline_verify_probe` v1.1.0, cases 7 to 9: under v5 the four types added after the close leave the Backlog digest unchanged, under v4 the same additions move it, and a story added to the closed stage still moves it under v5.
+
+**What is not claimed.** The deleted types are no longer frozen by the digest, so adding a specification to a closed stage is no longer detected by it; only the order check sees it. Table v4 is not withdrawn.
+Related: G91, G101, G148.

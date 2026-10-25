@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.140.0
+# Backlog & Roadmap Semantic Framework — Standard v1.141.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -2554,6 +2554,7 @@ A human actor is an individual (`Executor_IndividualHuman`), a team (`Executor_H
 ## Digest table v4 and subclasses of the executor kinds (v1.396.0, G117)
 
 - `RS_DigestTable_v4` is the v3 table without `ExecutionTask`. Under it, planning an admitted item into an iteration does not move the Backlog stage digest; an item added to the closed stage does. The Backlog digest also covers the pre-lineage items the lineage's own Backlog output admitted. A register adopts the table and re-records its digests as a stated migration.
+- `RS_DigestTable_v5` is the v4 table without `Specification`, `TestScenario`, `ModelArtifact` and `AcceptanceCriterion` (G156). Those are obligation artifacts that `OS_SDLC_v2` requires of task types that exist after the Backlog stage closed, so the stage digest does not freeze them; their existence and order are witnessed by the stage-owed shapes and `backlog_sdlc_artifact_order_check`. A register adopts v5 and re-records its digests as a stated migration.
 - The collective-responsible rule, the human-overseer rule and `OrganisationIsTeamShape` apply to subclasses of the five executor kinds.
 
 ## Agents under configuration management (v1.397.0, G118)
