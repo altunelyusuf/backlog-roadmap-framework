@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v120.0.0
+# Lineage Operating Discipline — v121.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -3974,3 +3974,16 @@ Related: G89, G91, G116, G118, G146, G148.
 
 **What is not claimed.** The deleted types are no longer frozen by the digest, so adding a specification to a closed stage is no longer detected by it; only the order check sees it. Table v4 is not withdrawn.
 Related: G91, G101, G148.
+
+## G157 — A change-managed item does not move the closed Backlog digest
+
+*(Found by the agentic test drive of 2026-10-25, the step after G156.)*
+
+**Q1 — the finding, by measurement.** The drive needed work its Backlog did not hold (replacing the vendored framework). It followed G154: a change request, an impact assessment and an Owner-decided scope change admitting an enabler. The validator reported zero violations; `backlog_pipeline_verify` then read the Backlog digest as not reproducing, because the enabler is a Backlog-stage type added to a closed stage. The prescribed route to add work after the close therefore ended in a failing check, with no way to re-record.
+
+**Q2 — what was ruled.** Under digest table v5 the Backlog digest leaves out any item a `ScopeChange` admits. The scope change is the visibility: it names the item, the scope, the rationale and the Owner. An item added with no scope change still moves the digest. Tables v1 to v4 are unchanged.
+
+**Q3 — proof.** `backlog_pipeline_verify_probe` v1.2.0, cases 10 to 12.
+
+**What is not claimed.** The tool checks that a scope change names the item, not that the change request or assessment is sound, and not that the Owner decided in person; a scope change written by an agent that names the Owner passes (see the delegation gap in the drive's findings).
+Related: G91, G154, G156.

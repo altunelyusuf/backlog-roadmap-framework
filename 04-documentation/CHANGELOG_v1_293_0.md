@@ -11260,6 +11260,12 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.431.0 — 2026-10-25 (MINOR: ruling G157, change-managed items and the Backlog digest)
+
+- **G157 (found by the agentic test drive, finding F18):** under digest table v5 an item that a `ScopeChange` admits is not part of the Backlog digest. Before, the route the framework prescribes for work added after the close (change request, impact assessment, Owner-decided scope change, G154) left `backlog_pipeline_verify` failing for good, because the admitted item joined a closed stage and there was no way to re-record. `backlog_pipeline_verify` v1.11.0; probe v1.2.0 cases 10 to 12 (an admitted enabler leaves the digest, an unadmitted one moves it, v4 is unchanged); data file v1.59.0 (definition of `RS_DigestTable_v5`). Discipline v121.0.0, Standard v1.142.0.
+
+**Unplanned work:** a framework defect found by the Owner-directed test drive, reproduced on the drive's register and built in the same step; no backlog item of this package covers it.
+
 ## v1.430.0 — 2026-10-25 (MINOR: ruling G156, digest table v5)
 
 - **G156 (found by the agentic test drive, finding F10):** digest table v4 froze `Specification`, `TestScenario`, `ModelArtifact` and `AcceptanceCriterion` in the Goal, Objective and Backlog digests, while `OS_SDLC_v2` obliges those artifacts of task types that exist only after the Backlog stage closed; a lineage that honoured the obligation set broke its own recorded digests, and the validator read it as conformant while `backlog_pipeline_verify` failed. New `RS_DigestTable_v5` and `stageRequiresTypeV5` (T-Box v1.149.0, data file v1.58.0): the v4 table without those four types. `backlog_pipeline_verify` v1.10.0 selects v5 first. Probe v1.1.0 has three new cases, case 8 the one that shows v4 moving. Discipline v120.0.0, Standard v1.141.0.

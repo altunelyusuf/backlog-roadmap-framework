@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-"""backlog_pipeline_verify_v1_10_0.py — the lineage order, checked by reconstruction.
+"""backlog_pipeline_verify_v1_11_0.py — the lineage order, checked by reconstruction.
+
+v1.11.0 (G157): under table v5 an item that a ScopeChange admits (admitsItem) is not part of the Backlog digest, so change management after the close no longer leaves the digest failing.
 
 v1.10.0 (G156): digest table v5, selected by a register that declares adoptsRuleSet RS_DigestTable_v5. It is the v4 table without Specification, TestScenario, ModelArtifact and AcceptanceCriterion, which the obligation sets require after the Backlog stage has closed.
 
@@ -57,7 +59,7 @@ STAGE_TYPES = None  # loaded from the ontology; see _load_stage_types
 ORDER = ["Stage_Mission", "Stage_Scope", "Stage_Goal", "Stage_Objective", "Stage_Backlog"]
 
 
-def state_digest(g, stage, lineage=None, admitted=False):
+def state_digest(g, stage, lineage=None, admitted=False, change_managed=False):
     """v1.9.0 (sen0401 handover, planning-after-the-backlog-stage-closed): under table v4 the Backlog digest
     excludes ExecutionTask (a task is produced by planning an item into an iteration and is subordinate by
     construction, so planning is not an addition to a closed stage) and includes the pre-lineage items the
@@ -85,6 +87,10 @@ def state_digest(g, stage, lineage=None, admitted=False):
     for t in STAGE_TYPES[stage]:
         for s in g.subjects(RDF.type, URIRef(B + t)):
             if lineage is None or s == lineage or (s, URIRef(B + "belongsToLineage"), lineage) in g:
+                # v1.11.0 (G157, table v5): an item a ScopeChange admits was added by change management after the
+                # close; the owner-decided change record is its visibility, so the closed stage's digest does not move.
+                if change_managed and stage == "Stage_Backlog" and (None, URIRef(B + "admitsItem"), s) in g:
+                    continue
                 subs.add(str(s))
             elif admitted and stage == "Stage_Backlog":
                 # v1.9.0 (table v4): an item the lineage's own Backlog output admitted (a pre-lineage item
@@ -227,7 +233,7 @@ def main():
             prev = None
             continue
         recorded = str(g.value(o, URIRef(B + "hasStateDigest")) or "")
-        actual = state_digest(g, stage, lineage_uri, admitted=(_table in ('v4', 'v5')))
+        actual = state_digest(g, stage, lineage_uri, admitted=(_table in ('v4', 'v5')), change_managed=(_table == 'v5'))
         ok = recorded == actual
         print("  %-18s digest %s  %s" % (stage, actual[:16], "reproduces" if ok else "DOES NOT REPRODUCE"))
         if not ok:

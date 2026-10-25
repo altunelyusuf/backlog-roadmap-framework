@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Probe for backlog_pipeline_verify v1.10.0 (digest tables v4 and v5).
+"""Probe for backlog_pipeline_verify v1.11.0 (digest tables v4 and v5).
 
 Cases: (1) under v4 an ExecutionTask added after the Backlog stage closed leaves the Backlog digest unchanged;
 (2) under v3 the same task moves it; (3) under v4 a Story added to the closed stage still moves it;
@@ -8,7 +8,8 @@ Cases: (1) under v4 an ExecutionTask added after the Backlog stage closed leaves
 (6) the v4 table holds no ExecutionTask and every other v3 type;
 (7) under v5 a Specification, TestScenario, ModelArtifact or AcceptanceCriterion added after the close leaves the Backlog digest unchanged;
 (8) under v4 the same Specification moves it;
-(9) the v5 table is v4 without those four types and an added Story still moves it."""
+(9) the v5 table is v4 without those four types and an added Story still moves it;
+(10) under v5 an Enabler admitted by a ScopeChange leaves the Backlog digest unchanged; (11) an Enabler no ScopeChange admits moves it; (12) under v4 the admitted Enabler still moves it."""
 import glob, importlib.util, os, sys
 from rdflib import Graph, RDF, URIRef
 if sys.argv[1:] == ["--deps"]:
@@ -19,7 +20,7 @@ if sys.argv[1:] == ["--deps"]:
     print(os.path.abspath(__file__)); sys.exit(0)
 HERE = os.path.dirname(os.path.abspath(__file__)); PKG = os.path.dirname(HERE)
 B = "http://example.org/backlog#"; X = "http://example.org/x#"
-spec = importlib.util.spec_from_file_location("pv", os.path.join(HERE, "backlog_pipeline_verify_v1_10_0.py"))
+spec = importlib.util.spec_from_file_location("pv", os.path.join(HERE, "backlog_pipeline_verify_v1_11_0.py"))
 pv = importlib.util.module_from_spec(spec); spec.loader.exec_module(pv)
 tb = sorted(glob.glob(os.path.join(PKG, "01-ontologies", "backlog_tbox_v*.ttl")))[-1]
 def u(n, ns=B): return URIRef(ns + n)
@@ -58,4 +59,13 @@ pv.STAGE_TYPES = t5; check("7 v5: obligation artifacts added after the close lea
 pv.STAGE_TYPES = t4; check("8 v4: the same artifacts move it", pv.state_digest(g, "Stage_Backlog", L, admitted=True) != d4b)
 S5 = u("Story5", X); g.add((S5, RDF.type, u("Story"))); g.add((S5, u("belongsToLineage"), L))
 pv.STAGE_TYPES = t5; check("9 v5: the table is v4 without the four types, and an added story moves it", set(t5["Stage_Backlog"]) == set(t4["Stage_Backlog"]) - {"Specification", "TestScenario", "ModelArtifact", "AcceptanceCriterion"} and pv.state_digest(g, "Stage_Backlog", L, admitted=True) != d5)
+g, L = reg(); pv.STAGE_TYPES = t5; d5 = pv.state_digest(g, "Stage_Backlog", L, admitted=True, change_managed=True)
+E1 = u("Enab1", X); g.add((E1, RDF.type, u("Enabler"))); g.add((E1, u("belongsToLineage"), L))
+SCg = u("SC1", X); g.add((SCg, RDF.type, u("ScopeChange"))); g.add((SCg, u("admitsItem"), E1))
+check("10 v5: an enabler admitted by a scope change leaves the Backlog digest", pv.state_digest(g, "Stage_Backlog", L, admitted=True, change_managed=True) == d5)
+E2 = u("Enab2", X); g.add((E2, RDF.type, u("Enabler"))); g.add((E2, u("belongsToLineage"), L))
+check("11 v5: an enabler no scope change admits moves it", pv.state_digest(g, "Stage_Backlog", L, admitted=True, change_managed=True) != d5)
+g, L = reg(); pv.STAGE_TYPES = t4; d4c = pv.state_digest(g, "Stage_Backlog", L, admitted=True)
+E1 = u("Enab1", X); g.add((E1, RDF.type, u("Enabler"))); g.add((E1, u("belongsToLineage"), L)); g.add((u("SC1", X), u("admitsItem"), E1))
+check("12 v4: the admitted enabler still moves it", pv.state_digest(g, "Stage_Backlog", L, admitted=True) != d4c)
 print("VERDICT: %s" % ("PASS" if not fails else "FAIL")); sys.exit(1 if fails else 0)
