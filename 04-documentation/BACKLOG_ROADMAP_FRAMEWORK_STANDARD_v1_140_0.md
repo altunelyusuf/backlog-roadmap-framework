@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.139.0
+# Backlog & Roadmap Semantic Framework — Standard v1.140.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -2586,3 +2586,8 @@ Every relation the model states, uses or implies is carried as a link. The OE mi
 Six checks, each a shape (advisory, G89), against finding a defect after the work: (1) a closure caveat is tracked by a work item or an owner decision (`caveatTrackedBy`; a violation, for the new class only); (2) a criterion that cites a gate or a check names the tool and the version it is measured with (`measuredWithTool`, `measuredWithVersion`); (3) work planned into an iteration after it started needs a rebaseline recorded at or before it, or is a carry-over, because the sprint goal is fixed at the start; (4) a story states its parent (`partOf`) or `standsAlone true` while the register holds an epic or an initiative; (5) an executor brief is generated from the task and its criterion and names the session, and a started task has one; (6) the start of work is recorded at or after the start of the executor instance that was briefed.
 
 Three further advisories (v1.139.0, G137): the sprint review an observation was taken in (`observedDuringCeremony`) is a link and never a literal; a task records its start inside an iteration that had started (`iterationStart` at or before `startedAt`); an iteration with started work has a ceremony record (`ceremonyFor`).
+
+## Opening profile (v1.429.0, G155)
+
+A lineage chooses, when it opens, how it will be judged. An `OpeningProfile` names the rule sets a lineage adopts together (`profileIncludes`): the data file ships a standard profile and an agentic profile (the standard one plus accountability for agent work). The lineage declares `openedWithProfile`, adopts every rule set the profile includes in the commit of its Mission stage output, and a shape reports one it does not adopt. The start gate asks a lineage that has not started work to declare a profile or state `profileDeclinedReason`, so the choice is explicit. `backlog_open_lineage` writes the block.
+

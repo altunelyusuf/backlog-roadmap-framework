@@ -19,8 +19,8 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.147.0> ;
-    owl:versionInfo "1.147.0" ;
+    owl:versionIRI <http://example.org/backlog/1.148.0> ;
+    owl:versionInfo "1.148.0" ;
     owl:priorVersion <http://example.org/backlog/1.143.0> , <http://example.org/backlog/1.142.0> , <http://example.org/backlog/1.141.0> , <http://example.org/backlog/1.140.0> , <http://example.org/backlog/1.139.0> , <http://example.org/backlog/1.138.0> , <http://example.org/backlog/1.137.0> , <http://example.org/backlog/1.136.0> , <http://example.org/backlog/1.135.0> , <http://example.org/backlog/1.134.0> , <http://example.org/backlog/1.133.0> , <http://example.org/backlog/1.132.0> , <http://example.org/backlog/1.131.0> , <http://example.org/backlog/1.130.0> , <http://example.org/backlog/1.129.0> , <http://example.org/backlog/1.125.0> , <http://example.org/backlog/1.124.0> , <http://example.org/backlog/1.123.0> , <http://example.org/backlog/1.122.0> ;
     owl:priorVersion <http://example.org/backlog/1.121.0> , <http://example.org/backlog/1.120.0> , <http://example.org/backlog/1.119.0> , <http://example.org/backlog/1.118.0> , <http://example.org/backlog/1.117.0> ;
     owl:priorVersion <http://example.org/backlog/1.116.0> ;
@@ -8225,7 +8225,7 @@ backlog:RoadmapElement kb:hasClassKind kb:ClassKind_ConcreteEntity .
 backlog:ExternalDependency kb:hasClassKind kb:ClassKind_InformationArtifact .
 
 #################################################################
-#  v1.147.0 (G147) -- A REPAIR RE-RANKS THE OPEN ITEMS. Owner's standing rule, 2026-10-23: a repair entering the backlog
+#  v1.148.0 (G147) -- A REPAIR RE-RANKS THE OPEN ITEMS. Owner's standing rule, 2026-10-23: a repair entering the backlog
 #  changes the priority of the items it touches rather than merely being added. Opt-in through RS_RepairReprioritises.
 #################################################################
 backlog:reprioritises a owl:ObjectProperty ;
@@ -8237,3 +8237,31 @@ backlog:reprioritisesNothingBecause a owl:DatatypeProperty , owl:FunctionalPrope
     rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "re-prioritises nothing because"@en ;
     skos:definition "The stated reason an open repair changes the priority of no other item, for example that no open item shares its cause. Silence is not an answer: under RS_RepairReprioritises a repair names the items it re-prioritises or says why none."@en .
 backlog:reprioritises kb:hasRelationshipCategory kb:RelationshipCategory_Association .
+
+#################################################################
+#  v1.429.0 (G155) -- THE OPENING PROFILE. A lineage chooses, when it opens, the set of rule sets it will be judged under.
+#################################################################
+
+backlog:OpeningProfile a owl:Class ; rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "Opening Profile"@en ;
+    skos:definition "A named set of rule sets that a lineage adopts together when it opens, so that a way of working (for example agentic development, where agent runs are recorded and accounted for) is chosen once, by name, and not rebuilt rule set by rule set in every consumer. A profile adopts nothing itself: the lineage that declares it adopts each rule set it includes, and a rule binds only an adopter (G89, G91, G116)."@en .
+
+backlog:profileIncludes a owl:ObjectProperty ;
+    rdfs:domain backlog:OpeningProfile ; rdfs:range backlog:RuleSet ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "profile includes"@en ;
+    skos:definition "A rule set that a lineage opened with this profile adopts."@en .
+
+backlog:openedWithProfile a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:Lineage ; rdfs:range backlog:OpeningProfile ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "opened with profile"@en ;
+    skos:definition "The opening profile this lineage chose when it opened. The lineage then adopts every rule set the profile includes, in the commit of its Mission stage output (adoptionRecordedAtOpen); a shape reports one it does not adopt."@en .
+
+backlog:profileDeclinedReason a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:Lineage ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "profile declined reason"@en ;
+    skos:definition "Why this lineage, which has not started work, opens with no profile. The start gate asks a lineage to declare openedWithProfile or to state this: the choice is explicit, never silent."@en .
+
+backlog:OpeningProfile kb:hasClassKind kb:ClassKind_Norm .
+backlog:profileIncludes kb:hasRelationshipCategory kb:RelationshipCategory_Compositional .
+backlog:openedWithProfile kb:hasRelationshipCategory kb:RelationshipCategory_Association .
+

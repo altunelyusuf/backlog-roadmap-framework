@@ -637,3 +637,6 @@ class	WorkItemContainer	http://example.org/backlog#WorkItemContainer	ClassKind_C
 class	RoadmapElement	http://example.org/backlog#RoadmapElement	ClassKind_ConcreteEntity	umbrella: takes the common kind of its members, a view and a value domain (continuants) and an event (occurrent) (discipline v2.36.0)	G143
 class	ExternalDependency	http://example.org/backlog#ExternalDependency	ClassKind_InformationArtifact	the genus is a dependency; the package holds a dependency as a reified record (as Dependency, typed alike), and a record is what its own links need: kind Relation fails the OE rules for its requirement and characterization links	G143
 property	reprioritises	http://example.org/backlog#reprioritises	RelationshipCategory_Association	related, and no more specific category says how; the definition leaves unsaid the finer relation	G147
+class	OpeningProfile	http://example.org/backlog#OpeningProfile	ClassKind_Norm	the first sentence says a named set of rule sets, a bundle of rules	G155
+property	profileIncludes	http://example.org/backlog#profileIncludes	RelationshipCategory_Compositional	part and whole: a profile is made of the rule sets it includes	G155
+property	openedWithProfile	http://example.org/backlog#openedWithProfile	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G155

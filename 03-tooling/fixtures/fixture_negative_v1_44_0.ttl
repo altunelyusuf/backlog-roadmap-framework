@@ -4302,3 +4302,8 @@ ex:CMA_LIN a backlog:Lineage ; backlog:lineageFrozen true ; backlog:frozenBy ex:
 ex:CMA_BP a backlog:LineageBypass ; backlog:bypassedLineage ex:CMA_LIN ; backlog:bypassedItem ex:CMA_I .
 ex:CMA_I a backlog:Story ; backlog:belongsToLineage ex:CMA_LIN .
 
+# G155: a lineage that opened with a profile and adopts only one of the two rule sets it includes.
+ex:OPF_P a backlog:OpeningProfile ; backlog:profileIncludes ex:OPF_RS1 , ex:OPF_RS2 .
+ex:OPF_RS1 a backlog:RuleSet . ex:OPF_RS2 a backlog:RuleSet .
+ex:OPF_LIN a backlog:Lineage ; backlog:openedWithProfile ex:OPF_P ; backlog:adoptsRuleSet ex:OPF_RS1 .
+

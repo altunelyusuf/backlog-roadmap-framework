@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_execution_ready v1.3.0 -- may work start on this lineage, and on this item?  (the positive question)
+"""backlog_execution_ready v1.4.0 -- may work start on this lineage, and on this item?  (the positive question)
 
 WHY THIS EXISTS. Every gate this package ships is negative: it looks for what went wrong among the items that exist.
 A lineage whose work is executed outside the register has no items, so every negative gate passes over the empty set.
@@ -22,6 +22,7 @@ ITEM (--item NAME), the same facts the after-the-fact shapes demand once work ha
   - a Story, Epic or Initiative states its applicable design concerns, or that none applies
   - a Story has been taken in by a PlanningEvent
 
+v1.4.0 (G155): a lineage that has not started work declares the opening profile it chose (openedWithProfile) or states profileDeclinedReason. The choice is explicit; the tool backlog_open_lineage writes it.
 v1.3.0 (G148): the freeze is lifted for the start gate once the finding named by frozenBy is answered: a bypass by a LineageRestart
 that answersBypass it, a thrash by the lineage's frozenRuling. lineageFrozen stays true in the append-only register; the gate reads
 the answer, not the flag alone. another registrant's lineage printed "frozen" after the restart that answered its bypass.
@@ -88,6 +89,10 @@ def evaluate(g, lineage, item=None, emit=print):
     if started:
         emit(f"  ok    recording rule sets: not asked, work has already started (examined: {len(started)} started item(s); G89 -- no retroactive block)")
     else:
+        prof = g.value(L, B.openedWithProfile); pwhy = g.value(L, B.profileDeclinedReason)
+        check(prof is not None or pwhy is not None,
+              f"the lineage declares an opening profile or states profileDeclinedReason (profile: {str(prof).rsplit('#', 1)[-1] if prof is not None else 'none'}; "
+              f"declined: {'yes' if pwhy is not None else 'no'}). Choose how the lineage works when it opens: run backlog_open_lineage, or say why not (G155)")
         why = g.value(L, B.recordingRuleSetsDeclinedReason)
         registers = [r for r in set(g.subjects(B.adoptsRuleSet, None)) if (r, RDF.type, B.Lineage) not in g]
         for rs in (B.RS_StatusHistoryRecorded, B.RS_FlowPointsRecorded):

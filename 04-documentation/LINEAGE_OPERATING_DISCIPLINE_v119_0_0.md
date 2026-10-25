@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v118.0.0
+# Lineage Operating Discipline — v119.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -3946,4 +3946,19 @@ Related: G136, G148.
 
 **What is not claimed.** The admission is checked for existence (a scope change admits the item), not that the change request and impact assessment are sound. Only the lineage's own bypass finding is read; a second bypass needs its own answer.
 Related: G104, G108, G130, G148.
+
+## G155 — A lineage opens under a named profile; agentic work is a profile, not a list to remember
+
+*(The Owner's direction of 2026-10-25, after the measurement that eight packages hold lineages and none records agent runs or adopts the accountability rule set: build the opening template.)*
+
+**Q1 — what was built, as terms.** `OpeningProfile`, with `profileIncludes` (the rule sets it names), `openedWithProfile` (the lineage's choice) and `profileDeclinedReason` (T-Box v1.148.0). Two profiles in the data file (v1.57.0): the standard profile (status moves and flow points recorded, a repair re-prioritises, a standing impediment names its work, a finished parent is not left open) and the agentic profile (the standard one plus `RS_AgentAccountability`). A profile adopts nothing itself: the lineage adopts each rule set at its opening, so no consumer is bound by the data file (G116).
+
+**Q2 — what holds it.** `OpeningProfileAdoptedShape` (a violation): a lineage that declares a profile and does not adopt a rule set the profile includes, itself or through its register. The start gate (`backlog_execution_ready` v1.4.0) asks a lineage that has not started work to declare a profile or state why not, so nobody opens a lineage by omission. `backlog_open_lineage` prints the block to put in the commit of the Mission stage output; the order check already witnesses each adoption against that commit (G148).
+
+**Q3 — proof.** `backlog_open_lineage_probe`: the agentic block carries the accountability rule set and the recording pair, the standard block does not carry the accountability rule set, an unknown profile is refused, a block written entire draws no finding and the same block with one rule set left out draws one (through the real validator); the planted case `OPF_LIN` in the negative fixture; the start-gate probe has a lineage with neither profile nor reason.
+
+**Q4 — default, not yet.** The start gate makes the choice explicit; it does not make agentic the default. Which profile a new lineage is offered first changes only when the Owner decides, after one live agentic lineage has completed (G154 discussion of 2026-10-25). Existing lineages are not retroactively asked: the question is put only to a lineage that has not started work (G89).
+
+**What is not claimed.** A profile proves rules are adopted, not that agents' runs are recorded: recording a run is still the executor's own act. No consumer has been moved to a profile.
+Related: G89, G91, G116, G118, G146, G148.
 

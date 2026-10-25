@@ -11260,6 +11260,12 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.429.0 — 2026-10-25 (MINOR: ruling G155, the opening profile)
+
+- **G155 (the Owner's direction to build the opening template):** `OpeningProfile`, `profileIncludes`, `openedWithProfile`, `profileDeclinedReason` (T-Box v1.148.0); the standard and agentic profiles (data file v1.57.0); `OpeningProfileAdoptedShape` (shapes v1.181.0); the start gate asks for a profile or a reason (v1.4.0); `backlog_open_lineage` writes the opening block; probe in the gate (v1.71.0). Discipline v119.0.0, Standard v1.140.0.
+
+**Unplanned work:** the Owner's direction of 2026-10-25, measured and built in the same step; no backlog item of this package covers it.
+
 ## v1.428.0 — 2026-10-25 (MINOR: rulings G153 and G154)
 
 - **G153:** `DeploymentCoverageShape` skips an Epic (shapes v1.180.0), ending a conflict with the L4 rule that an epic is not carried by a deployment unit, which no register of an audit adopter could satisfy. Probe scenarios in `backlog_handover_rules_probe` v1.2.0, the first shown to fail without the change. Discipline v118.0.0.
