@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v123.0.0
+# Lineage Operating Discipline — v124.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -4023,4 +4023,17 @@ Related: G99, G104, G147, G154, G157.
 
 **What is not claimed (G160, G161).** The start gate does not yet print "the guard cannot read the register" as a failed fact; with the rename resolved the case that produced it no longer arises.
 Related: G100, G104, G123, G154, G158.
+
+## G162 — The plan step, the cancelling exit and the adaptation route are required and recorded
+
+*(The Owner's rules of 2026-10-26 after the lineage study: the roadmap/planning step is not skipped between the Backlog and the tasks; cancelling needs an as-is fit-gap and impact analysis and a closure report marked failed or cancelled; every change request supports the mission; "Yes, proceed in this way".)*
+
+**Q1 — what the framework already had, by reading its files.** A computed roadmap report that can be emitted as a record, a kick-off record (required only when planned dates exist), and the Abandoned outcome with a rationale and a closure report (G149). No rule asked for a plan between the Backlog stage and the first start, an Abandoned lineage needed no analysis of what was accomplished, failed, in progress or due, and a change request needed to serve nothing. Abandoned and Cancelled are one exit, not two (one meaning, one term): Abandoned now carries the label Cancelled as well.
+
+**Q2 — what was ruled and built.** Three rule sets, each included in both opening profiles so every new lineage adopts them and none is judged retroactively (G89, G91). `RS_PlanBeforeStart`: an item of the lineage starts only after a kick-off of the lineage (`kicksOffLineage`) recorded at or before its start that activates a roadmap report (`activatesReport`) run no later than the kick-off; urgent items and items a restart or route B admits are not asked. `RS_CancellationAssessed`: an Abandoned lineage has an as-is assessment (`AsIsAssessment`) sorting every item as accomplished, failed, in progress or due consistently with its state and every objective as fitted or gapped, with the fit-gap and impact stated, and its closure report carries a mark (`Cm_Cancelled` or `Cm_Failed`) and cites the assessment. `RS_ChangeSupportsMission`: a change request names the objective it serves (`supportsObjective`). `backlog_lineage_steps` v1.0.0 records each as one step stamped from the clock: `plan` runs the roadmap report and records the kick-off, `assess` computes the sorting from the register, `close` records the marked closure, outcome and status, `adapt` is the single route for change (request, impact computed from the register, Owner-decided scope change), and refuses an objective that is not the lineage's or an empty statement of where the Owner decided. The start gate (v1.6.0) asks for the plan step.
+
+**Q3 — proof.** `backlog_g162_probe` v1.0.0 (17 scenarios) and `backlog_lineage_steps_probe` v1.0.0 (the recorders, the validator and the start gate on a scratch register).
+
+**What is not claimed.** The Owner's decision in `adapt` is recorded as the text the caller gives; the tool cannot tell an Owner from an agent, so the delegation gap found by the drive (F19) stays open. The sorting of an objective as fitted needs every item serving it Done; an objective no item serves is gapped. Preventive enforcement by default (hooks installed at opening) and the five old adaptation routes' retirement are not in this release; the old routes still validate.
+Related: G104, G149, G154, G155, G158, G159.
 

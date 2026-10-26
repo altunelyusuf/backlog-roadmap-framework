@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.144.0
+# Backlog & Roadmap Semantic Framework — Standard v1.145.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -2557,6 +2557,7 @@ A human actor is an individual (`Executor_IndividualHuman`), a team (`Executor_H
 - `RS_DigestTable_v5` is the v4 table without `Specification`, `TestScenario`, `ModelArtifact` and `AcceptanceCriterion` (G156). Those are obligation artifacts that `OS_SDLC_v2` requires of task types that exist after the Backlog stage closed, so the stage digest does not freeze them; their existence and order are witnessed by the stage-owed shapes and `backlog_sdlc_artifact_order_check`. A register adopts v5 and re-records its digests as a stated migration. Under v5 an item that a `ScopeChange` admits is also left out of the Backlog digest (G157): the owner-decided change record is its visibility.
 - `UrgentInterruption` (G158) is the Owner's decision that a running lineage stops for an emergency and later resumes. While it is open the lineage's started items are Suspended and named in `holdsItem`, and the urgent work is named in `urgentItem`; it ends when the urgent work is Done or Cancelled, and the lineage resumes with an impact assessment (`assessesInterruption`) and the held items moved back. It carries a time box the Owner states. It is not change management, which adapts a lineage for its own mission; `UrgentInterruptionShape` holds twelve constraints and `backlog_urgency` records the three steps.
 - `LineageMaintainer` (G159) is the individual, project, program or portfolio that maintains a lineage (`maintainedBy`, `maintainerKind`, one of the four `MaintainerKind` values). One lineage is active at a time; two may be active when they are connected or have different maintainers. Every lineage opened with a profile adopts the one-lineage rule.
+- The plan step, the cancelling exit and the supporting change request (G162): a lineage's work starts after a `KickOff` that `kicksOffLineage` and `activatesReport` a roadmap report run no later than itself; an Abandoned lineage (also called Cancelled) has an `AsIsAssessment` sorting its items as accomplished, failed, in progress or due and its objectives as fitted or gapped, and a closure report with a `ClosureMark` (cancelled or failed) citing it; a change request names the objective it serves (`supportsObjective`). `backlog_lineage_steps` records each.
 - The collective-responsible rule, the human-overseer rule and `OrganisationIsTeamShape` apply to subclasses of the five executor kinds.
 
 ## Agents under configuration management (v1.397.0, G118)

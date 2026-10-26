@@ -9,8 +9,8 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog/shacl/1.183.0> ;
-    owl:versionInfo "1.183.0" ;
+    owl:versionIRI <http://example.org/backlog/shacl/1.184.0> ;
+    owl:versionInfo "1.184.0" ;
     owl:priorVersion <http://example.org/backlog-shapes/1.176.0> , <http://example.org/backlog-shapes/1.175.0> , <http://example.org/backlog-shapes/1.174.0> , <http://example.org/backlog-shapes/1.173.0> , <http://example.org/backlog-shapes/1.172.0> , <http://example.org/backlog-shapes/1.171.0> , <http://example.org/backlog-shapes/1.170.0> , <http://example.org/backlog-shapes/1.169.0> , <http://example.org/backlog-shapes/1.168.0> , <http://example.org/backlog-shapes/1.167.0> , <http://example.org/backlog-shapes/1.166.0> , <http://example.org/backlog-shapes/1.165.0> , <http://example.org/backlog-shapes/1.164.0> , <http://example.org/backlog-shapes/1.159.0> , <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.154.0> , <http://example.org/backlog-shapes/1.153.0> , <http://example.org/backlog-shapes/1.152.0> , <http://example.org/backlog-shapes/1.151.0> , <http://example.org/backlog-shapes/1.150.0> , <http://example.org/backlog-shapes/1.149.0> , <http://example.org/backlog-shapes/1.148.0> , <http://example.org/backlog-shapes/1.147.0> , <http://example.org/backlog-shapes/1.146.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.145.0> ;
@@ -9033,4 +9033,126 @@ backlog:OneLineageRuleAdoptedShape a sh:NodeShape ;
             $this backlog:profileDeclinedReason ?why .
             FILTER NOT EXISTS { $this backlog:adoptsRuleSet backlog:RS_ConcurrentLineages }
             FILTER NOT EXISTS { ?reg backlog:adoptsRuleSet backlog:RS_ConcurrentLineages . FILTER NOT EXISTS { ?reg a backlog:Lineage } }
+        }""" ] .
+
+#################################################################
+#  v1.434.0 (G162) -- the Owner's rules of 2026-10-26: the roadmap/plan step is not skipped between the Backlog and the tasks; a lineage is set
+#  down only after an as-is fit-gap and impact analysis and a closure report marked cancelled or failed; every change request supports the mission.
+#  Each is a rule set the opening profiles include, so new lineages adopt it and none is judged retroactively (G89, G91).
+#################################################################
+backlog:PlanBeforeStartShape a sh:NodeShape ;
+    sh:targetClass backlog:Lineage ;
+    sh:severity sh:Violation ;
+    rdfs:label "A lineage's work starts after its plan step (G162)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "PBS_LIN" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G162: this lineage has an item that started with no kick-off of the lineage recorded at or before its start (RS_PlanBeforeStart). The plan step sits between the Backlog stage and the first start: run backlog_plan_step, which computes the roadmap report and records the kick-off that activates it, then start. Urgent work and items a restart or route B admits are not asked for it." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            { $this backlog:adoptsRuleSet backlog:RS_PlanBeforeStart } UNION { ?reg backlog:adoptsRuleSet backlog:RS_PlanBeforeStart . FILTER NOT EXISTS { ?reg a backlog:Lineage } }
+            { ?i backlog:belongsToLineage $this } UNION { ?i backlog:admittedByOutput ?ao . ?ao backlog:belongsToLineage $this }
+            ?i backlog:startedAt ?s .
+            FILTER NOT EXISTS { ?i backlog:preLineageItem true }
+            FILTER NOT EXISTS { ?u backlog:urgentItem ?i }
+            FILTER NOT EXISTS { ?sc backlog:admitsItem ?i }
+            FILTER NOT EXISTS { ?k backlog:kicksOffLineage $this ; backlog:kickedOffAt ?ka . FILTER ( ?ka <= ?s ) }
+        }""" ] .
+
+backlog:KickOffReportShape a sh:NodeShape ;
+    sh:targetClass backlog:KickOff ;
+    sh:severity sh:Violation ;
+    rdfs:label "A lineage's kick-off activates a report run no later than itself (G162)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "PBS_KICK" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G162: this kick-off of a lineage that adopted RS_PlanBeforeStart activates no roadmap report (activatesReport), or the report was run after the kick-off. A plan that was never computed, or was computed after it was supposedly activated, is a recollection of a plan." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:kicksOffLineage ?l ; backlog:kickedOffAt ?ka .
+            { ?l backlog:adoptsRuleSet backlog:RS_PlanBeforeStart } UNION { ?reg backlog:adoptsRuleSet backlog:RS_PlanBeforeStart . FILTER NOT EXISTS { ?reg a backlog:Lineage } }
+            OPTIONAL { $this backlog:activatesReport ?r . ?r backlog:hasRunTimestamp ?rt }
+            FILTER ( !BOUND(?r) || ?rt > ?ka )
+        }""" ] .
+
+backlog:AsIsAssessmentShape a sh:NodeShape ;
+    sh:targetClass backlog:AsIsAssessment ;
+    sh:severity sh:Violation ;
+    rdfs:label "An as-is assessment names its lineage, its time, the fit-gap and the impact (G162)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "ASIS_BAD" ;
+    sh:property [ sh:path backlog:assessesLineage ; sh:minCount 1 ; sh:maxCount 1 ; sh:class backlog:Lineage ; sh:message "G162: an as-is assessment must name the lineage it assesses." ] ;
+    sh:property [ sh:path backlog:assessedAt ; sh:minCount 1 ; sh:maxCount 1 ; sh:message "G162: an as-is assessment must state when the state was taken." ] ;
+    sh:property [ sh:path backlog:hasFitGapStatement ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ; sh:message "G162: an as-is assessment must state the fit-gap." ] ;
+    sh:property [ sh:path backlog:hasImpactStatement ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ; sh:message "G162: an as-is assessment must state the impact of setting the lineage down." ] .
+
+backlog:CancellationAssessedShape a sh:NodeShape ;
+    sh:targetClass backlog:Lineage ;
+    sh:severity sh:Violation ;
+    rdfs:label "A lineage is set down only after an as-is assessment and a marked closure (G162)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "CAN_LIN" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G162: this lineage is Abandoned (cancelled or failed) and no as-is assessment assesses it. Cancelling needs the fit-gap and impact analysis first: run backlog_cancel assess." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            { $this backlog:adoptsRuleSet backlog:RS_CancellationAssessed } UNION { ?reg backlog:adoptsRuleSet backlog:RS_CancellationAssessed . FILTER NOT EXISTS { ?reg a backlog:Lineage } }
+            $this backlog:hasLineageStatus backlog:LS_Abandoned .
+            FILTER NOT EXISTS { ?a backlog:assessesLineage $this }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G162: this Abandoned lineage has a work item that its as-is assessment does not sort as accomplished, failed, in progress or due." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            { $this backlog:adoptsRuleSet backlog:RS_CancellationAssessed } UNION { ?reg backlog:adoptsRuleSet backlog:RS_CancellationAssessed . FILTER NOT EXISTS { ?reg a backlog:Lineage } }
+            $this backlog:hasLineageStatus backlog:LS_Abandoned .
+            { ?i backlog:belongsToLineage $this } UNION { ?i backlog:admittedByOutput ?ao . ?ao backlog:belongsToLineage $this }
+            ?i backlog:hasState ?st .
+            FILTER NOT EXISTS { ?a backlog:assessesLineage $this . ?a ( backlog:accomplishedItem | backlog:failedItem | backlog:inProgressItem | backlog:dueItem ) ?i }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G162: this Abandoned lineage's as-is assessment sorts an item against its state: accomplished must be Done, failed Cancelled, in progress In Progress or Suspended, due Proposed, Refined or Ready." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            { $this backlog:adoptsRuleSet backlog:RS_CancellationAssessed } UNION { ?reg backlog:adoptsRuleSet backlog:RS_CancellationAssessed . FILTER NOT EXISTS { ?reg a backlog:Lineage } }
+            $this backlog:hasLineageStatus backlog:LS_Abandoned .
+            ?a backlog:assessesLineage $this .
+            { ?a backlog:accomplishedItem ?i . ?i backlog:hasState ?st . FILTER ( ?st != backlog:Done ) }
+            UNION { ?a backlog:failedItem ?i . ?i backlog:hasState ?st . FILTER ( ?st != backlog:Cancelled ) }
+            UNION { ?a backlog:inProgressItem ?i . ?i backlog:hasState ?st . FILTER ( ?st NOT IN ( backlog:InProgress, backlog:Suspended ) ) }
+            UNION { ?a backlog:dueItem ?i . ?i backlog:hasState ?st . FILTER ( ?st NOT IN ( backlog:Proposed, backlog:Refined, backlog:Ready ) ) }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G162: this Abandoned lineage has an objective its as-is assessment does not sort as fitted or gapped." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            { $this backlog:adoptsRuleSet backlog:RS_CancellationAssessed } UNION { ?reg backlog:adoptsRuleSet backlog:RS_CancellationAssessed . FILTER NOT EXISTS { ?reg a backlog:Lineage } }
+            $this backlog:hasLineageStatus backlog:LS_Abandoned .
+            ?o a backlog:Objective ; backlog:belongsToLineage $this .
+            FILTER NOT EXISTS { ?a backlog:assessesLineage $this . ?a ( backlog:fitsObjective | backlog:gapsObjective ) ?o }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G162: the closure report of this Abandoned lineage's mission carries no closure mark (cancelled or failed) or cites no as-is assessment of the lineage." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            { $this backlog:adoptsRuleSet backlog:RS_CancellationAssessed } UNION { ?reg backlog:adoptsRuleSet backlog:RS_CancellationAssessed . FILTER NOT EXISTS { ?reg a backlog:Lineage } }
+            $this backlog:hasLineageStatus backlog:LS_Abandoned .
+            $this backlog:lineageForMission ?m . ?r backlog:closesForMission ?m .
+            FILTER ( NOT EXISTS { ?r backlog:hasClosureMark ?mk } || NOT EXISTS { ?r backlog:citesAssessment ?a . ?a backlog:assessesLineage $this } )
+        }""" ] .
+
+backlog:ChangeSupportsMissionShape a sh:NodeShape ;
+    sh:targetClass backlog:ChangeRequest ;
+    sh:severity sh:Violation ;
+    rdfs:label "A change request supports an objective of the mission (G162)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "CHG_SUP" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G162: this change request names no objective it supports (supportsObjective). Change management adapts the running lineage for missing, incorrect or unmatching items of its mission; a request that serves no objective of it is another mission and waits." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            { ?reg backlog:adoptsRuleSet backlog:RS_ChangeSupportsMission . FILTER NOT EXISTS { ?reg a backlog:Lineage } }
+            UNION { ?l a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_ChangeSupportsMission .
+                    { $this backlog:belongsToLineage ?l } UNION { $this backlog:requestsChangeTo ?sc . ?sc backlog:belongsToLineage ?l } }
+            FILTER NOT EXISTS { $this backlog:supportsObjective ?o }
         }""" ] .

@@ -650,3 +650,17 @@ class	LineageMaintainer	http://example.org/backlog#LineageMaintainer	ClassKind_R
 class	MaintainerKind	http://example.org/backlog#MaintainerKind	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G159
 property	maintainerKind	http://example.org/backlog#maintainerKind	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G159
 property	maintainedBy	http://example.org/backlog#maintainedBy	RelationshipCategory_Association	related, and no more specific category says how; the definition leaves unsaid the finer relation	G159
+class	AsIsAssessment	http://example.org/backlog#AsIsAssessment	ClassKind_Document	the definition calls it an assessment, request, proposal or document	G162
+class	ClosureMark	http://example.org/backlog#ClosureMark	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G162
+property	kicksOffLineage	http://example.org/backlog#kicksOffLineage	RelationshipCategory_Association	related, and no more specific category says how; the definition leaves unsaid the finer relation	G162
+property	activatesReport	http://example.org/backlog#activatesReport	RelationshipCategory_Association	related, and no more specific category says how; the definition leaves unsaid the finer relation	G162
+property	citesAssessment	http://example.org/backlog#citesAssessment	RelationshipCategory_Association	related, and no more specific category says how; the definition leaves unsaid the finer relation	G162
+property	hasClosureMark	http://example.org/backlog#hasClosureMark	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G162
+property	supportsObjective	http://example.org/backlog#supportsObjective	RelationshipCategory_Intentional	the definition says the link exists so that one thing advances, serves or answers a goal, mission, objective or gap	G162
+property	assessesLineage	http://example.org/backlog#assessesLineage	RelationshipCategory_Assessment	the link measures, verifies or attests	G162
+property	accomplishedItem	http://example.org/backlog#accomplishedItem	RelationshipCategory_Assessment	the link measures, verifies or attests	G162
+property	failedItem	http://example.org/backlog#failedItem	RelationshipCategory_Assessment	the link measures, verifies or attests	G162
+property	inProgressItem	http://example.org/backlog#inProgressItem	RelationshipCategory_Assessment	the link measures, verifies or attests	G162
+property	dueItem	http://example.org/backlog#dueItem	RelationshipCategory_Assessment	the link measures, verifies or attests	G162
+property	fitsObjective	http://example.org/backlog#fitsObjective	RelationshipCategory_Assessment	the link measures, verifies or attests	G162
+property	gapsObjective	http://example.org/backlog#gapsObjective	RelationshipCategory_Assessment	the link measures, verifies or attests	G162

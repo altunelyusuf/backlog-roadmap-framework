@@ -11260,6 +11260,12 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.434.0 — 2026-10-26 (MINOR: ruling G162, the plan step, the cancelling exit and the supporting change request)
+
+- **G162 (the Owner's rules of 2026-10-26):** `RS_PlanBeforeStart`, `RS_CancellationAssessed`, `RS_ChangeSupportsMission` in both opening profiles (data v1.61.0); `kicksOffLineage`, `activatesReport`, `AsIsAssessment` with its sorting links, `ClosureMark`, `hasClosureMark`, `citesAssessment`, `supportsObjective` (T-Box v1.152.0); five shapes (shapes v1.184.0); `backlog_lineage_steps` v1.0.0 (plan, assess, close, adapt); the start gate asks for the plan step (v1.6.0). Probes: `backlog_g162_probe` v1.0.0, `backlog_lineage_steps_probe` v1.0.0. Discipline v124.0.0, Standard v1.145.0.
+
+**Unplanned work:** an Owner-directed change after the lineage study; no backlog item of this package covers it.
+
 ## v1.433.0 — 2026-10-26 (MINOR: rulings G159, G160, G161)
 
 - **G159 (the Owner's direction):** one lineage at a time by default. `RS_ConcurrentLineages` is in both opening profiles; `LineageMaintainer`, `MaintainerKind`, `maintainerKind`, `maintainedBy` (T-Box v1.151.0, data v1.60.0); parallel lineages need different maintainers (individual, project, program, portfolio) or a connection; `OneLineageRuleAdoptedShape` (shapes v1.183.0); the start gate refuses a start beside an unconnected lineage (v1.5.0); one open urgency at a time. `backlog_one_lineage_probe` v1.0.0.

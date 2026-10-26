@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""v1.5.0 (G159): one active lineage by default. When the lineage or its register adopts RS_ConcurrentLineages (every lineage opened with a profile does), another active lineage must be connected to it or maintained by a different party, else the start is refused.
+"""v1.6.0 (G162): when the lineage or its register adopts RS_PlanBeforeStart, a kick-off of the lineage that activates a roadmap report must exist before work starts (the plan step).
+v1.5.0 (G159): one active lineage by default. When the lineage or its register adopts RS_ConcurrentLineages (every lineage opened with a profile does), another active lineage must be connected to it or maintained by a different party, else the start is refused.
 backlog_execution_ready v1.4.0 -- may work start on this lineage, and on this item?  (the positive question)
 
 WHY THIS EXISTS. Every gate this package ships is negative: it looks for what went wrong among the items that exist.
@@ -106,6 +107,11 @@ def evaluate(g, lineage, item=None, emit=print):
                  and not (mine is not None and g.value(o, B.maintainedBy) is not None and g.value(o, B.maintainedBy) != mine)]
         check(not clash or not running(L), "no other lineage is active unless it is connected or maintained by a different party "
               f"(active beside it: {', '.join(sorted(str(o).rsplit('#', 1)[-1] for o in clash)) or 'none'}). One lineage runs and the other waits (G159)")
+    plan_rule = (L, B.adoptsRuleSet, B.RS_PlanBeforeStart) in g or any(
+        (r, B.adoptsRuleSet, B.RS_PlanBeforeStart) in g for r in set(g.subjects(B.adoptsRuleSet, None)) if (r, RDF.type, B.Lineage) not in g)
+    if plan_rule:
+        ks = [k for k in g.subjects(B.kicksOffLineage, L) if g.value(k, B.activatesReport) is not None]
+        check(bool(ks), f"the plan step is recorded: a kick-off of the lineage activates a computed roadmap report (kick-offs: {len(ks)}). Run backlog_lineage_steps plan (G162)")
     outs = {st: [o for o in g.subjects(B.belongsToLineage, L) if (o, B.outputOfStage, B[st]) in g and active(g, o)] for st in STAGES}
     for st in STAGES:
         check(bool(outs[st]), f"{st} has an active output (examined: {len(outs[st])})")

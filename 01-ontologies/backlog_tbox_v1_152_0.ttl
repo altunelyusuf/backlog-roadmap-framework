@@ -19,9 +19,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.151.0> ;
-    owl:versionInfo "1.151.0" ;
-    owl:priorVersion <http://example.org/backlog/1.150.0> , <http://example.org/backlog/1.149.0> , <http://example.org/backlog/1.148.0> , <http://example.org/backlog/1.143.0> , <http://example.org/backlog/1.142.0> , <http://example.org/backlog/1.141.0> , <http://example.org/backlog/1.140.0> , <http://example.org/backlog/1.139.0> , <http://example.org/backlog/1.138.0> , <http://example.org/backlog/1.137.0> , <http://example.org/backlog/1.136.0> , <http://example.org/backlog/1.135.0> , <http://example.org/backlog/1.134.0> , <http://example.org/backlog/1.133.0> , <http://example.org/backlog/1.132.0> , <http://example.org/backlog/1.131.0> , <http://example.org/backlog/1.130.0> , <http://example.org/backlog/1.129.0> , <http://example.org/backlog/1.125.0> , <http://example.org/backlog/1.124.0> , <http://example.org/backlog/1.123.0> , <http://example.org/backlog/1.122.0> ;
+    owl:versionIRI <http://example.org/backlog/1.152.0> ;
+    owl:versionInfo "1.152.0" ;
+    owl:priorVersion <http://example.org/backlog/1.151.0> , <http://example.org/backlog/1.150.0> , <http://example.org/backlog/1.149.0> , <http://example.org/backlog/1.148.0> , <http://example.org/backlog/1.143.0> , <http://example.org/backlog/1.142.0> , <http://example.org/backlog/1.141.0> , <http://example.org/backlog/1.140.0> , <http://example.org/backlog/1.139.0> , <http://example.org/backlog/1.138.0> , <http://example.org/backlog/1.137.0> , <http://example.org/backlog/1.136.0> , <http://example.org/backlog/1.135.0> , <http://example.org/backlog/1.134.0> , <http://example.org/backlog/1.133.0> , <http://example.org/backlog/1.132.0> , <http://example.org/backlog/1.131.0> , <http://example.org/backlog/1.130.0> , <http://example.org/backlog/1.129.0> , <http://example.org/backlog/1.125.0> , <http://example.org/backlog/1.124.0> , <http://example.org/backlog/1.123.0> , <http://example.org/backlog/1.122.0> ;
     owl:priorVersion <http://example.org/backlog/1.121.0> , <http://example.org/backlog/1.120.0> , <http://example.org/backlog/1.119.0> , <http://example.org/backlog/1.118.0> , <http://example.org/backlog/1.117.0> ;
     owl:priorVersion <http://example.org/backlog/1.116.0> ;
     owl:priorVersion <http://example.org/backlog/1.115.0> ;
@@ -2412,7 +2412,7 @@ backlog:analyzesRequest a owl:ObjectProperty , owl:FunctionalProperty ;
     skos:definition "The change request this assessment evaluates."@en .
 
 backlog:hasImpactStatement a owl:DatatypeProperty , owl:FunctionalProperty ;
-    rdfs:domain backlog:ImpactAssessment ; rdfs:range xsd:string ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:ImpactAssessment backlog:AsIsAssessment ) ] ; rdfs:range xsd:string ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "has impact statement"@en ;
     skos:definition "What this change would actually affect within the requesting lineage itself: schedule, cost, other in-flight work."@en .
@@ -8364,3 +8364,101 @@ backlog:LineageMaintainer kb:hasClassKind kb:ClassKind_Role .
 backlog:MaintainerKind kb:hasClassKind kb:ClassKind_ValueDomain .
 backlog:maintainerKind kb:hasRelationshipCategory kb:RelationshipCategory_Characterization .
 backlog:maintainedBy kb:hasRelationshipCategory kb:RelationshipCategory_Association .
+
+#################################################################
+#  v1.434.0 (G162) -- the plan step, the cancelling exit and the single adaptation route (the Owner's rules of 2026-10-26).
+#################################################################
+backlog:kicksOffLineage a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:KickOff ; rdfs:range backlog:Lineage ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "kicks off lineage"@en ;
+    skos:definition "The lineage whose planned work this kick-off activates. Work of the lineage may start only after one: the plan step sits between the Backlog stage and the first start."@en .
+
+backlog:activatesReport a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:KickOff ; rdfs:range backlog:RoadmapReport ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "activates report"@en ;
+    skos:definition "The roadmap report, computed from the register, that this kick-off puts into force. The report is run no later than the kick-off, so the plan that is activated is the one that was computed and not a recollection of it."@en .
+
+backlog:AsIsAssessment a owl:Class ;
+    rdfs:subClassOf core:Artifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "As-Is Assessment"@en ;
+    skos:definition "The fit-gap and impact analysis that precedes setting a lineage down: every work item of the lineage sorted as accomplished, failed, in progress or due, every objective sorted as fitted or gapped, the fit-gap and impact stated. Cancelling a lineage without one is not an exit but a disappearance."@en .
+
+backlog:assessesLineage a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:AsIsAssessment ; rdfs:range backlog:Lineage ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "assesses lineage"@en ;
+    skos:definition "The lineage whose as-is state this assessment records."@en .
+
+backlog:accomplishedItem a owl:ObjectProperty ;
+    rdfs:domain backlog:AsIsAssessment ; rdfs:range backlog:WorkItem ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "accomplished item"@en ;
+    skos:definition "An item of the assessed lineage that is Done."@en .
+
+backlog:failedItem a owl:ObjectProperty ;
+    rdfs:domain backlog:AsIsAssessment ; rdfs:range backlog:WorkItem ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "failed item"@en ;
+    skos:definition "An item of the assessed lineage that was set down (Cancelled) without being accomplished."@en .
+
+backlog:inProgressItem a owl:ObjectProperty ;
+    rdfs:domain backlog:AsIsAssessment ; rdfs:range backlog:WorkItem ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "in-progress item"@en ;
+    skos:definition "An item of the assessed lineage that has started and is not finished (In Progress or Suspended)."@en .
+
+backlog:dueItem a owl:ObjectProperty ;
+    rdfs:domain backlog:AsIsAssessment ; rdfs:range backlog:WorkItem ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "due item"@en ;
+    skos:definition "An item of the assessed lineage that has not started (Proposed, Refined or Ready) and was still owed."@en .
+
+backlog:fitsObjective a owl:ObjectProperty ;
+    rdfs:domain backlog:AsIsAssessment ; rdfs:range backlog:Objective ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "fits objective"@en ;
+    skos:definition "An objective of the assessed lineage that the work as it stands satisfies."@en .
+
+backlog:gapsObjective a owl:ObjectProperty ;
+    rdfs:domain backlog:AsIsAssessment ; rdfs:range backlog:Objective ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "gaps objective"@en ;
+    skos:definition "An objective of the assessed lineage that the work as it stands does not satisfy."@en .
+
+backlog:hasFitGapStatement a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:AsIsAssessment ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "has fit-gap statement"@en ;
+    skos:definition "What the lineage delivers against its mission and what it does not, in words."@en .
+
+backlog:assessedAt a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:AsIsAssessment ; rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "assessed at"@en ;
+    skos:definition "The instant the as-is state was taken."@en .
+
+backlog:ClosureMark a owl:Class ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "Closure Mark"@en ;
+    owl:equivalentClass [ a owl:Class ; owl:oneOf ( backlog:Cm_Cancelled backlog:Cm_Failed ) ] ;
+    skos:definition "How a mission that was set down is marked in its closure report: cancelled (stopped by decision) or failed (could not be accomplished)."@en .
+
+backlog:hasClosureMark a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:ClosureReport ; rdfs:range backlog:ClosureMark ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "has closure mark"@en ;
+    skos:definition "Whether the report closes a cancelled or a failed mission."@en .
+
+backlog:citesAssessment a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:ClosureReport ; rdfs:range backlog:AsIsAssessment ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "cites assessment"@en ;
+    skos:definition "The as-is assessment on which a cancelled or failed closure rests."@en .
+
+backlog:supportsObjective a owl:ObjectProperty ;
+    rdfs:domain backlog:ChangeRequest ; rdfs:range backlog:Objective ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "supports objective"@en ;
+    skos:definition "The objective of the running mission that this change request serves. A request that supports none is not an adaptation of the lineage but another mission."@en .
+
+backlog:AsIsAssessment kb:hasClassKind kb:ClassKind_Document .
+backlog:ClosureMark kb:hasClassKind kb:ClassKind_ValueDomain .
+backlog:kicksOffLineage kb:hasRelationshipCategory kb:RelationshipCategory_Association .
+backlog:activatesReport kb:hasRelationshipCategory kb:RelationshipCategory_Association .
+backlog:assessesLineage kb:hasRelationshipCategory kb:RelationshipCategory_Assessment .
+backlog:accomplishedItem kb:hasRelationshipCategory kb:RelationshipCategory_Assessment .
+backlog:failedItem kb:hasRelationshipCategory kb:RelationshipCategory_Assessment .
+backlog:inProgressItem kb:hasRelationshipCategory kb:RelationshipCategory_Assessment .
+backlog:dueItem kb:hasRelationshipCategory kb:RelationshipCategory_Assessment .
+backlog:fitsObjective kb:hasRelationshipCategory kb:RelationshipCategory_Assessment .
+backlog:gapsObjective kb:hasRelationshipCategory kb:RelationshipCategory_Assessment .
+backlog:hasClosureMark kb:hasRelationshipCategory kb:RelationshipCategory_Characterization .
+backlog:citesAssessment kb:hasRelationshipCategory kb:RelationshipCategory_Association .
+backlog:supportsObjective kb:hasRelationshipCategory kb:RelationshipCategory_Intentional .

@@ -4313,3 +4313,13 @@ ex:URG_INCOMPLETE a backlog:UrgentInterruption .
 
 # G159: a lineage that declines its opening profile and adopts no one-lineage rule.
 ex:ONE_DECLINED a backlog:Lineage ; backlog:profileDeclinedReason "scratch study" .
+
+# G162: the plan step, the cancelling exit and the change request that supports no objective.
+ex:PBS_LIN a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_PlanBeforeStart .
+ex:PBS_ITEM a backlog:Story ; backlog:belongsToLineage ex:PBS_LIN ; backlog:hasState backlog:InProgress ; backlog:startedAt "2026-10-26T10:00:00Z"^^xsd:dateTime .
+ex:PBS_KL a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_PlanBeforeStart .
+ex:PBS_KICK a backlog:KickOff ; backlog:kicksOffLineage ex:PBS_KL ; backlog:kickedOffAt "2026-10-26T09:00:00Z"^^xsd:dateTime .
+ex:ASIS_BAD a backlog:AsIsAssessment .
+ex:CAN_LIN a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_CancellationAssessed ; backlog:hasLineageStatus backlog:LS_Abandoned .
+ex:CHG_LIN a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_ChangeSupportsMission .
+ex:CHG_SUP a backlog:ChangeRequest ; backlog:belongsToLineage ex:CHG_LIN .
