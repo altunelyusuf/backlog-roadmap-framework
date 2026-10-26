@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""backlog_execution_ready v1.4.0 -- may work start on this lineage, and on this item?  (the positive question)
+"""v1.5.0 (G159): one active lineage by default. When the lineage or its register adopts RS_ConcurrentLineages (every lineage opened with a profile does), another active lineage must be connected to it or maintained by a different party, else the start is refused.
+backlog_execution_ready v1.4.0 -- may work start on this lineage, and on this item?  (the positive question)
 
 WHY THIS EXISTS. Every gate this package ships is negative: it looks for what went wrong among the items that exist.
 A lineage whose work is executed outside the register has no items, so every negative gate passes over the empty set.
@@ -77,6 +78,34 @@ def evaluate(g, lineage, item=None, emit=print):
     answered = g.value(L, B.frozenRuling) is not None or (
         by is not None and any(True for _ in g.subjects(B.answersBypass, by)))
     check(not (flagged and not answered), "the lineage is not frozen by an unanswered finding")
+    one_rule = (L, B.adoptsRuleSet, B.RS_ConcurrentLineages) in g or any(
+        (r, B.adoptsRuleSet, B.RS_ConcurrentLineages) in g for r in set(g.subjects(B.adoptsRuleSet, None)) if (r, RDF.type, B.Lineage) not in g)
+    if one_rule:
+        rank = {"LS_Scoped": 2, "LS_Goaled": 3, "LS_Objectived": 4, "LS_Backlogged": 5, "LS_InProgress": 6, "LS_Revived": 6}
+        def running(x):
+            return rank.get(str(g.value(x, B.hasLineageStatus)).rsplit("#", 1)[-1], 0) >= 2
+        def near(x):
+            n = set(g.objects(x, B.parentLineage)) | set(g.subjects(B.parentLineage, x))
+            for i in g.subjects(B.belongsToLineage, x):
+                for d in list(g.objects(i, B.dependsOn)) + list(g.subjects(B.dependsOn, i)):
+                    n |= set(g.objects(d, B.belongsToLineage))
+                for u in g.subjects(B.urgentItem, i):
+                    n |= set(g.objects(u, B.interruptsLineage))
+            for u in g.subjects(B.interruptsLineage, x):
+                for i in g.objects(u, B.urgentItem):
+                    n |= set(g.objects(i, B.belongsToLineage))
+            return n
+        def group(x):
+            seen, todo = {x}, [x]
+            while todo:
+                for y in near(todo.pop()):
+                    if y not in seen: seen.add(y); todo.append(y)
+            return seen
+        mine = g.value(L, B.maintainedBy); grp = group(L)
+        clash = [o for o in set(g.subjects(RDF.type, B.Lineage)) if o != L and running(o) and o not in grp
+                 and not (mine is not None and g.value(o, B.maintainedBy) is not None and g.value(o, B.maintainedBy) != mine)]
+        check(not clash or not running(L), "no other lineage is active unless it is connected or maintained by a different party "
+              f"(active beside it: {', '.join(sorted(str(o).rsplit('#', 1)[-1] for o in clash)) or 'none'}). One lineage runs and the other waits (G159)")
     outs = {st: [o for o in g.subjects(B.belongsToLineage, L) if (o, B.outputOfStage, B[st]) in g and active(g, o)] for st in STAGES}
     for st in STAGES:
         check(bool(outs[st]), f"{st} has an active output (examined: {len(outs[st])})")

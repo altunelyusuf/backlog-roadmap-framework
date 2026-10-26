@@ -4310,3 +4310,6 @@ ex:OPF_LIN a backlog:Lineage ; backlog:openedWithProfile ex:OPF_P ; backlog:adop
 
 # G158: an urgent interruption that names nothing (no lineage, no reason, no time box, no urgent item, no Owner).
 ex:URG_INCOMPLETE a backlog:UrgentInterruption .
+
+# G159: a lineage that declines its opening profile and adopts no one-lineage rule.
+ex:ONE_DECLINED a backlog:Lineage ; backlog:profileDeclinedReason "scratch study" .

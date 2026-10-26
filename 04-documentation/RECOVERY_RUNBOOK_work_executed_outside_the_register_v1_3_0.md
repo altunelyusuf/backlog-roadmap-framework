@@ -1,4 +1,4 @@
-# Recovery runbook — work executed outside the register (v1.2.0)
+# Recovery runbook — work executed outside the register (v1.3.0)
 
 Applies when real work was done on a lineage that had no Backlog stage output or no registered items
 (Lineage_2 at an adopting project is the precedent; ruling G100). Do not decide per instance; follow the steps.
@@ -29,6 +29,8 @@ The owner may answer a bypass without a restart ("No need to restart, you should
 1. Record the owner's `frozenRuling` on the lineage, verbatim (the order check's emitted template carries the line).
 2. Record the `ChangeRequest` (Direction_Grow, accepted), its `ImpactAssessment`, and an owner-decided `ScopeChange` that `admitsItem` every bypassed item.
 3. Build the Backlog-stage output as usual.
+4. Check the work guard still reads the register: run its `status`. From guard v1.4.0 (G161) an exact register path that was renamed resolves to the highest version of the same stem, so a rename no longer blinds it; if the configuration still names a pinned path, the owner changes it to the pattern of the same stem in a commit that changes only the configuration and carries `Guard-Install:`, which the guard accepts because it cannot weaken it.
+Items admitted this way are not asked for a planning event or a concern declaration they cannot honestly have (G160); the fact shapes still apply.
 The order check reads such a lineage ANSWERED_BY_CHANGE only when the ruling is there and every bypassed item is admitted; with one not admitted it still reads FOUND. The start gate already treats the `frozenRuling` as an answer.
 
 ## Strategy decision table (RecoveryStrategy)

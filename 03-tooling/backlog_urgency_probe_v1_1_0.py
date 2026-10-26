@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_urgency_probe v1.0.0 -- re-runnable proof of the urgent interruption (T-Box v1.150.0, shapes v1.182.0, G158).
+"""backlog_urgency_probe v1.1.0 -- re-runnable proof of the urgent interruption (T-Box v1.150.0, shapes v1.182.0, G158).
 
   The Owner's rule of 2026-10-26: a lineage under an emergency is paused, not worked around. Each of the twelve constraints of
   UrgentInterruptionShape fires on its planted case and is silent on a control, and two lineages joined by an interruption count as
@@ -20,7 +20,7 @@ def expect(name, ok):
     if not ok: bad.append(name)
 KEYS = {"INC": "is incomplete", "ORD": "out of order", "RUN": "not running", "GO": "still In Progress", "HELD": "is not Suspended",
         "BACK": "still Suspended", "UND": "neither Done nor Cancelled", "ASS": "no impact assessment", "BOX": "after its time box",
-        "TWO": "another open urgent", "SCOPE": "also admitted", "FOREIGN": "does not belong", "L1": "nothing connects them"}
+        "TWO": "another urgent interruption is open", "SCOPE": "also admitted", "FOREIGN": "does not belong", "L1": "nothing connects them"}
 HEAD = ("@prefix backlog: <http://example.org/backlog#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n@prefix x: <http://example.org/urg-probe#> .\n"
         "x:Owner1 a backlog:Owner .\n")
 def lineage(n, status="LS_InProgress", extra=""):

@@ -22,9 +22,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (ABox: controlled individuals, reference data and the live register)"@en ;
-    owl:versionIRI <http://example.org/backlog/abox/1.59.0> ;
-    owl:versionInfo "1.59.0" ;
-    owl:priorVersion <http://example.org/backlog/abox/1.58.0> , <http://example.org/backlog/abox/1.57.0> , <http://example.org/backlog/abox/1.53.0> , <http://example.org/backlog/abox/1.52.0> , <http://example.org/backlog/abox/1.51.0> , <http://example.org/backlog/abox/1.50.0> , <http://example.org/backlog/abox/1.49.0> , <http://example.org/backlog/abox/1.48.0> , <http://example.org/backlog/abox/1.47.0> , <http://example.org/backlog/abox/1.46.0> , <http://example.org/backlog/abox/1.45.0> , <http://example.org/backlog/abox/1.40.0> , <http://example.org/backlog/abox/1.39.0> , <http://example.org/backlog/abox/1.38.0> , <http://example.org/backlog/abox/1.37.0> , <http://example.org/backlog/abox/1.36.0> , <http://example.org/backlog/abox/1.35.0> ;
+    owl:versionIRI <http://example.org/backlog/abox/1.60.0> ;
+    owl:versionInfo "1.60.0" ;
+    owl:priorVersion <http://example.org/backlog/abox/1.59.0> , <http://example.org/backlog/abox/1.58.0> , <http://example.org/backlog/abox/1.57.0> , <http://example.org/backlog/abox/1.53.0> , <http://example.org/backlog/abox/1.52.0> , <http://example.org/backlog/abox/1.51.0> , <http://example.org/backlog/abox/1.50.0> , <http://example.org/backlog/abox/1.49.0> , <http://example.org/backlog/abox/1.48.0> , <http://example.org/backlog/abox/1.47.0> , <http://example.org/backlog/abox/1.46.0> , <http://example.org/backlog/abox/1.45.0> , <http://example.org/backlog/abox/1.40.0> , <http://example.org/backlog/abox/1.39.0> , <http://example.org/backlog/abox/1.38.0> , <http://example.org/backlog/abox/1.37.0> , <http://example.org/backlog/abox/1.36.0> , <http://example.org/backlog/abox/1.35.0> ;
     owl:priorVersion <http://example.org/backlog/abox/1.34.0> , <http://example.org/backlog/abox/1.33.0> , <http://example.org/backlog/abox/1.32.0> , <http://example.org/backlog/abox/1.31.0> , <http://example.org/backlog/abox/1.30.0> , <http://example.org/backlog/abox/1.29.0> , <http://example.org/backlog/abox/1.28.0> , <http://example.org/backlog/abox/1.27.0> , <http://example.org/backlog/abox/1.26.0> , <http://example.org/backlog/abox/1.25.0> , <http://example.org/backlog/abox/1.24.0> , <http://example.org/backlog/abox/1.23.0> , <http://example.org/backlog/abox/1.22.0> , <http://example.org/backlog/abox/1.21.0> , <http://example.org/backlog/abox/1.20.0> , <http://example.org/backlog/abox/1.19.0> , <http://example.org/backlog/abox/1.17.0> , <http://example.org/backlog/abox/1.16.0> , <http://example.org/backlog/abox/1.15.0> , <http://example.org/backlog/abox/1.14.0> , <http://example.org/backlog/abox/1.13.0> , <http://example.org/backlog/abox/1.12.0> , <http://example.org/backlog/abox/1.11.0> , <http://example.org/backlog/abox/1.10.0> , <http://example.org/backlog/abox/1.9.0> , <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
         <http://example.org/backlog-abox/1.2.1> ,
                      <http://example.org/backlog-abox/1.2.0> ,
@@ -1213,9 +1213,14 @@ backlog:RS_LabelConvention a owl:NamedIndividual , backlog:RuleSet ;
     rdfs:label "Label before identifier"@en ;
     skos:definition "Every mission, scope statement, area, deliverable, exclusion, goal, objective and lineage carries a one-sentence human label, and reports and discussion use that sentence rather than the identifier. Owner's instruction of 2026-09-10, after a session's answers became unreadable. A RuleSet because it binds every element a register carries: a register adopts it and labels its elements, rather than every fixture and every closed graph being refused the day the rule ships."@en .
 
+backlog:Mk_Individual a owl:NamedIndividual , backlog:MaintainerKind ; rdfs:label "Individual"@en ; skos:definition "A single person maintains the lineage."@en .
+backlog:Mk_Project a owl:NamedIndividual , backlog:MaintainerKind ; rdfs:label "Project"@en ; skos:definition "A project maintains the lineage."@en .
+backlog:Mk_Program a owl:NamedIndividual , backlog:MaintainerKind ; rdfs:label "Program"@en ; skos:definition "A program of related projects maintains the lineage."@en .
+backlog:Mk_Portfolio a owl:NamedIndividual , backlog:MaintainerKind ; rdfs:label "Portfolio"@en ; skos:definition "A portfolio of programs and projects maintains the lineage."@en .
+
 backlog:RS_ConcurrentLineages a owl:NamedIndividual , backlog:RuleSet ;
     rdfs:label "At most one active lineage unless they are connected"@en ;
-    skos:definition "Two lineages may be active at once (status Scoped to InProgress, or Revived) only when connected: a divide-and-conquer part and its parent (parentLineage), or a work item of one that dependsOn a work item of the other, followed transitively. Otherwise one runs and the other waits as a lineage at LS_Opened, the native queue, and advances only after the running lineage is Achieved. The owner's rule of 2026-10-12 (G104). A RuleSet because it binds every lineage a register carries: the register adopts it when its owner decides the work in progress has completed, and registers, fixtures and closed graphs that never adopted it are untouched (G89, G91)."@en .
+    skos:definition "Two lineages may be active at once (status Scoped to InProgress, or Revived) only when each is maintained by a different party (maintainedBy: an individual, project, program or portfolio, G159) or when connected: a divide-and-conquer part and its parent (parentLineage), or a work item of one that dependsOn a work item of the other, followed transitively. Otherwise one runs and the other waits as a lineage at LS_Opened, the native queue, and advances only after the running lineage is Achieved. The owner's rules of 2026-10-12 (G104) and 2026-10-26 (G159). Every lineage opened with a profile adopts it (both profiles include it), so a new lineage is single by default; registers, fixtures and closed graphs that never adopted it are untouched (G89, G91)."@en .
 
 backlog:RS_StateReflectsEvidence a owl:NamedIndividual , backlog:RuleSet ;
     rdfs:label "A work item's state reflects the evidence it carries"@en ;
@@ -6388,10 +6393,10 @@ backlog:RS_RepairReprioritises a owl:NamedIndividual , backlog:RuleSet ;
 backlog:Profile_Standard a owl:NamedIndividual , backlog:OpeningProfile ;
     rdfs:label "Standard lineage profile"@en ;
     skos:definition "The way of working every lineage can adopt at its opening: status moves and flow points are recorded, a repair re-prioritises the items it touches, a standing impediment names the work it blocks, and a parent whose children are finished is not left open."@en ;
-    backlog:profileIncludes backlog:RS_StatusHistoryRecorded , backlog:RS_FlowPointsRecorded , backlog:RS_RepairReprioritises , backlog:RS_ImpedimentNamesWhatItBlocks , backlog:RS_DecompositionStateAgrees .
+    backlog:profileIncludes backlog:RS_ConcurrentLineages , backlog:RS_StatusHistoryRecorded , backlog:RS_FlowPointsRecorded , backlog:RS_RepairReprioritises , backlog:RS_ImpedimentNamesWhatItBlocks , backlog:RS_DecompositionStateAgrees .
 
 backlog:Profile_Agentic a owl:NamedIndividual , backlog:OpeningProfile ;
     rdfs:label "Agentic lineage profile"@en ;
     skos:definition "The standard profile plus accountability for agent work: an agent named for any function of an item is a run of a definition, every status move names who made it, and the parties that do, oversee, verify and approve an item are different."@en ;
-    backlog:profileIncludes backlog:RS_StatusHistoryRecorded , backlog:RS_FlowPointsRecorded , backlog:RS_RepairReprioritises , backlog:RS_ImpedimentNamesWhatItBlocks , backlog:RS_DecompositionStateAgrees , backlog:RS_AgentAccountability .
+    backlog:profileIncludes backlog:RS_ConcurrentLineages , backlog:RS_StatusHistoryRecorded , backlog:RS_FlowPointsRecorded , backlog:RS_RepairReprioritises , backlog:RS_ImpedimentNamesWhatItBlocks , backlog:RS_DecompositionStateAgrees , backlog:RS_AgentAccountability .
 

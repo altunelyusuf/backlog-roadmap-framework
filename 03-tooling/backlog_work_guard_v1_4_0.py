@@ -31,6 +31,12 @@ CONFIG  (.backlog-guard.json at the repository root, or --config PATH)
   .claude/settings.json, the CI workflow and the vendored tooling directory ("tooling_dir"). Changing the guard needs a
   ready Work-Item like any other work. The installer writes them; a configuration without the key gets the defaults.
 
+v1.4.0 (G161, an adopting project handovers of 2026-10-26):
+  - a register entry that names an exact versioned file the examined revision no longer holds resolves to the highest version of the same
+    stem, as the pattern would. A renamed register no longer blinds the guard; this loosens nothing (the entry named that stem already).
+  - a commit that changes only the configuration, replaces nothing but an exact register path by the pattern of the same stem, and carries
+    `Guard-Install: REASON` is a guard-install commit: the range check lists it. It cannot weaken the guard, so it needs no ready work item.
+
 v1.3.0 (G123):
   - a register entry may name the register by pattern, `dir/name_v*.ttl`: the highest version present at the examined
     revision is the register (G102: a register follows BP-D7 and is cited by pattern, never pinned). An exact path still
@@ -83,6 +89,22 @@ def glob_re(pat):
     return re.compile("^" + out + "$")
 
 
+def pattern_of(rel):
+    """dir/name_v1_2_3.ttl -> dir/name_v*.ttl (the pattern of the same stem); a name with no version is returned unchanged."""
+    return re.sub(r"_v\d+_\d+_\d+\.", "_v*.", rel)
+
+
+def narrowing_only(old, new):
+    """True when NEW differs from OLD only by replacing exact register paths with the pattern of the same stem."""
+    if not isinstance(old, dict) or not isinstance(new, dict):
+        return False
+    a, b = dict(old), dict(new)
+    ra, rb = a.pop("register", []), b.pop("register", [])
+    if a != b or len(ra) != len(rb) or ra == rb:
+        return False
+    return all(x == y or (y == pattern_of(x) and "*" in y and "*" not in x) for x, y in zip(ra, rb))
+
+
 def git(root, *args):
     r = subprocess.run(["git", "-C", root] + list(args), capture_output=True, text=True)
     if r.returncode != 0:
@@ -128,13 +150,32 @@ class Guard:
         """True when every changed file is one of the guard's own files (the configuration is not among them)."""
         return bool(files) and all(any(r.match(re.sub(r"^\./", "", f)) for r in self.install) for f in files)
 
+    def config_narrowing(self, files, old_text, new_text):
+        """True when the only changed file is the configuration and the change only narrows an exact register path to its pattern."""
+        rel_cfg = os.path.relpath(os.path.abspath(self.config_path), self.root)
+        if list(files) != [rel_cfg]:
+            return False
+        try:
+            return narrowing_only(json.loads(old_text), json.loads(new_text))
+        except Exception:
+            return False
+
     def register_files(self, rev=None):
         """The register files at REV: an entry with * in its file name resolves to the highest _vX_Y_Z version present."""
         sv = lambda p: [int(x) for x in re.findall(r"_v(\d+)_(\d+)_(\d+)\.", p)[0]]
         out = []
         for rel in self.cfg.get("register", []):
             if "*" not in rel:
-                out.append(rel); continue
+                # v1.4.0 (G161): an exact versioned path whose file is gone resolves to the highest version of the same stem
+                if pattern_of(rel) == rel:
+                    out.append(rel); continue
+                if rev:
+                    here = subprocess.run(["git", "-C", self.root, "cat-file", "-e", f"{rev}:{rel}"], capture_output=True).returncode == 0
+                else:
+                    here = os.path.exists(os.path.join(self.root, rel))
+                if here:
+                    out.append(rel); continue
+                rel = pattern_of(rel)
             d, pat = os.path.split(rel)
             if rev:
                 try:
@@ -322,6 +363,15 @@ def cmd_commit_msg(gd, msgfile, out=print):
         return 0
     msg = open(msgfile).read()
     items = TRAILER.findall(msg)
+    rel_cfg = os.path.relpath(os.path.abspath(gd.config_path), gd.root)
+    if not items and INSTALL.search(msg) and files == [rel_cfg]:
+        try:
+            old_t, new_t = git(gd.root, "show", f"HEAD:{rel_cfg}"), git(gd.root, "show", f":{rel_cfg}")
+        except RuntimeError:
+            old_t = new_t = ""
+        if gd.config_narrowing(files, old_t, new_t):
+            out("guard: a guard-install commit (the configuration only replaces an exact register path by the pattern of the same stem, `Guard-Install:` stated); it cannot weaken the guard and is listed by the range check")
+            return 0
     if not items and INSTALL.search(msg) and gd.is_install_only(work) and len(work) == len(files):
         out("guard: a guard-install commit (only the guard's own files, `Guard-Install:` stated); it is listed by the range check")
         return 0
@@ -381,6 +431,14 @@ def cmd_range(gd, rng, out=print, strict_base=False):
         if not items and INSTALL.search(msg) and len(work) == len(files) and gd.is_install_only(work):
             installs.append((r[:9], work))
             continue
+        if not items and INSTALL.search(msg) and files == [rel_cfg]:
+            try:
+                o_t, n_t = git(gd.root, "show", f"{r}^:{rel_cfg}"), git(gd.root, "show", f"{r}:{rel_cfg}")
+            except RuntimeError:
+                o_t = n_t = ""
+            if gd.config_narrowing(files, o_t, n_t):
+                installs.append((r[:9], files))
+                continue
         if not items:
             bad.append(f"{r[:9]} changes governed work ({work[0]}{' ...' if len(work) > 1 else ''}) and names no Work-Item")
             continue

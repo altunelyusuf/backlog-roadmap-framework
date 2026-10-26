@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v122.0.0
+# Lineage Operating Discipline — v123.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -4000,4 +4000,27 @@ Related: G91, G154, G156.
 
 **What is not claimed.** The Owner decides that it is an emergency; nothing tests it, only the time box limits it. The tool does not stop edits to the held items made outside it; the shapes find them after. The start gate and the work guard do not yet read an open interruption. The other changes of the study (one active lineage by default, cancellation with an as-is assessment, a generated plan step, preventive enforcement by default, one adaptation route) are not in this release.
 Related: G99, G104, G147, G154, G157.
+
+## G159 — One lineage at a time is the default; parallel lineages need different maintainers; one urgency suspension at a time
+
+*(The Owner's direction of 2026-10-26: "Yes, but with an exception. ... PPM and P3M ... only if parallel lineages can be maintained by an individual or project, program, or portfolio, it should be allowed. Otherwise, one-lineage default is enforced with single urgency suspension possibility.")*
+
+**Q1 — the finding.** The one-lineage rule (G104) existed as `RS_ConcurrentLineages` and no register adopted it (0 of 14), so the default was parallel. A lineage that declined the opening profile escaped any rule the profile carried.
+
+**Q2 — what was ruled and built.** `RS_ConcurrentLineages` is included in both opening profiles, so every lineage opened with a profile adopts it and no existing register is judged retroactively (G89). `OneLineageRuleAdoptedShape`: a lineage that declines its profile must still adopt it. Two active lineages are allowed when connected (G104) or when each names a `maintainedBy` party and the parties differ; a maintainer is a `LineageMaintainer` of kind individual, project, program or portfolio (`MaintainerKind`). The start gate (`backlog_execution_ready` v1.5.0) refuses a start while another active lineage is neither connected nor differently maintained. One urgent interruption is open at a time unless the interrupted lineages have different maintainers (G158 amended).
+
+**Q3 — proof.** `backlog_one_lineage_probe` v1.0.0 (ten scenarios through the validator and the gate) and `backlog_urgency_probe` v1.1.0.
+
+**What is not claimed.** A maintainer is declared, not verified against any organisation. A lineage opened without a profile before this release keeps its old behaviour. Cancelling with an as-is assessment, the generated plan step and one adaptation route are not in this release.
+
+## G160 — Route B owes no act record it cannot honestly have
+
+*(an adopting project handover of 2026-10-26: 796 of 1485 violations on 398 admitted stories.)* An item the bypass names, a `ScopeChange` admits and the Owner's `frozenRuling` answers is exempt from the planning-event and concern-declaration shapes, as a restart's items are (G100), and from nothing else. **The addendum (the iterations).** Of the 32 findings it names: an iteration with no declared capacity (18) is an advisory, not a violation, and a capacity written after the iteration ran would describe a planning act that did not happen, so nothing is owed and nothing is built; a deployment carrying an item the iteration never planned (14) is a violation, and an item a restart admits as pre-lineage or route B admits is now exempt from it, for the same reason as the other two act records. `backlog_route_b_exemption_probe` v1.0.0: six scenarios (the restart exemption is built, not probed), the same story without the scope change, without the ruling or without the bypass is still asked.
+
+## G161 — The guard follows a versioned register and accepts a change that cannot weaken it
+
+*(an adopting project handovers of 2026-10-26: the guard lost the register after a rename on route B, and the Owner's configuration change had no route.)* `backlog_work_guard` v1.4.0: an exact versioned register path whose file is gone resolves to the highest version of the same stem; a commit that changes only the configuration, only by replacing an exact register path with the pattern of the same stem, and carries `Guard-Install:` is a guard-install commit, listed by the range check. Any other configuration change is still governed work. Runbook v1.3.0 gains the guard step on route B. `backlog_work_guard_probe` v1.5.0.
+
+**What is not claimed (G160, G161).** The start gate does not yet print "the guard cannot read the register" as a failed fact; with the rename resolved the case that produced it no longer arises.
+Related: G100, G104, G123, G154, G158.
 

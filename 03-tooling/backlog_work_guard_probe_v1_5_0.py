@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_work_guard_probe v1.4.0 -- proof that the work guard discriminates and cannot pass over nothing (L-95).
+"""backlog_work_guard_probe v1.5.0 -- proof that the work guard discriminates and cannot pass over nothing (L-95).
 
 Builds a real throwaway git repository, installs the guard with backlog_guard_install, and drives REAL git commits and
 the REAL Claude hook script against fixtures/fixture_execution_ready_negative (cite by stem, L-123), where the lineage
@@ -74,7 +74,7 @@ r = commit(d, "docs only, no item needed", path="docs/a.md")
 expect("ACCEPTED: a commit that touches no governed work needs no item", r.returncode == 0)
 r = commit(d, "skipped the hook", noverify=True)
 expect("a --no-verify commit gets in locally (the hook alone can be skipped)", r.returncode == 0)
-g = os.path.join(d, "tools", "backlog_work_guard_v1_3_0.py")
+g = os.path.join(d, "tools", "backlog_work_guard_v1_4_0.py")
 r = sh(d, sys.executable, g, "range", "HEAD~2..HEAD")
 expect("REFUSED by the CI layer: the range check names the skipped commit",
        r.returncode == 2 and "names no Work-Item" in r.stdout and "examined" in r.stdout)
@@ -139,7 +139,7 @@ def committed():
     d, r = fresh()
     sh(d, "git", "add", "-A"); sh(d, "git", "commit", "-q", "--no-verify", "-m", "commit the installed guard files")
     return d
-gv = lambda d: os.path.join(d, "tools", "backlog_work_guard_v1_3_0.py")
+gv = lambda d: os.path.join(d, "tools", "backlog_work_guard_v1_4_0.py")
 head = lambda d: sh(d, "git", "rev-parse", "HEAD").stdout.strip()
 
 d6 = committed(); base = head(d6)
@@ -162,7 +162,7 @@ c["exempt_paths"] = [".githooks/**", ".backlog-guard.json", "tools/**"]; json.du
 sh(d7, "git", "add", "-A"); sh(d7, "git", "commit", "-q", "--no-verify", "-m", "exempt the guard files")
 r = commit(d7, "edit a hook, no item", path=".githooks/commit-msg")
 expect("REFUSED: no exempt path releases the guard's own files", r.returncode != 0 and "names no `Work-Item" in r.stdout + r.stderr)
-r = commit(d7, "edit the vendored guard, no item", path="tools/backlog_work_guard_v1_3_0.py")
+r = commit(d7, "edit the vendored guard, no item", path="tools/backlog_work_guard_v1_4_0.py")
 expect("REFUSED: the vendored tooling directory is governed work", r.returncode != 0 and "names no `Work-Item" in r.stdout + r.stderr)
 
 d8 = committed(); base8 = head(d8)
@@ -195,11 +195,11 @@ for x in (d6, d7, d8, d9): shutil.rmtree(x, ignore_errors=True)
 
 # G122: the session-start status carries the brief, and does not stop speaking when the brief is absent
 dB, _ = fresh()
-r = sh(dB, sys.executable, os.path.join(dB, "tools", "backlog_work_guard_v1_3_0.py"), "--config", ".backlog-guard.json", "status")
+r = sh(dB, sys.executable, os.path.join(dB, "tools", "backlog_work_guard_v1_4_0.py"), "--config", ".backlog-guard.json", "status")
 expect("the status prints the brief (focus, items in progress, checkpoints due, what a close needs)",
        r.returncode == 0 and all(k in r.stdout for k in ("FOCUS", "IN PROGRESS", "DUE", "TO CLOSE")) and "NEXT REQUIRED ACT" in r.stdout)
 os.remove(os.path.join(dB, "tools", "backlog_session_brief_v1_0_0.py"))
-r = sh(dB, sys.executable, os.path.join(dB, "tools", "backlog_work_guard_v1_3_0.py"), "--config", ".backlog-guard.json", "status")
+r = sh(dB, sys.executable, os.path.join(dB, "tools", "backlog_work_guard_v1_4_0.py"), "--config", ".backlog-guard.json", "status")
 expect("without the brief tool the status still speaks and says what is missing",
        r.returncode == 0 and "NEXT REQUIRED ACT" in r.stdout and "BRIEF" in r.stdout and "not shown" in r.stdout)
 shutil.rmtree(dB, ignore_errors=True)
@@ -211,7 +211,7 @@ os.makedirs(os.path.join(dP, "registers"))
 sh(dP, "git", "mv", "register.ttl", "registers/r_v1_0_0.ttl") if False else shutil.move(os.path.join(dP, "register.ttl"), os.path.join(dP, "registers", "r_v1_0_0.ttl"))
 cp_ = os.path.join(dP, ".backlog-guard.json"); c = json.load(open(cp_)); c["register"] = ["registers/r_v*.ttl"]; json.dump(c, open(cp_, "w"), indent=2)
 sh(dP, "git", "add", "-A"); sh(dP, "git", "commit", "-q", "--no-verify", "-m", "setup: the register cited by pattern and the guard committed")
-gP = os.path.join(dP, "tools", "backlog_work_guard_v1_3_0.py")
+gP = os.path.join(dP, "tools", "backlog_work_guard_v1_4_0.py")
 r = sh(dP, sys.executable, gP, "status")
 expect("a register cited by pattern is read (the lineage state is reported)", r.returncode == 0 and "NOT READY" in r.stdout)
 shutil.move(os.path.join(dP, "registers", "r_v1_0_0.ttl"), os.path.join(dP, "registers", "r_v1_1_0.ttl"))
@@ -223,7 +223,7 @@ r = sh(dP, sys.executable, gP, "range", "HEAD~1..HEAD")
 expect("the range check resolves the register at each revision", r.returncode == 0 and "VERDICT: PASS" in r.stdout)
 
 # the guard-install commit
-tf = os.path.join(dP, "tools", "backlog_work_guard_v1_3_0.py")
+tf = os.path.join(dP, "tools", "backlog_work_guard_v1_4_0.py")
 open(tf, "a").write("# re-vendored\n"); sh(dP, "git", "add", "-A")
 r = sh(dP, "git", "commit", "-q", "-m", "re-vendor the guard, no marker")
 expect("REFUSED while NOT READY: guard files changed with neither a Work-Item nor Guard-Install", r.returncode != 0 and "names no `Work-Item" in r.stdout + r.stderr)
@@ -263,6 +263,26 @@ expect("REFUSED: copying INTO a governed path", r.returncode == 2)
 r = bash("sed -i s/1/2/ app/main.py")
 expect("REFUSED: sed -i on a governed file", r.returncode == 2)
 shutil.rmtree(dP, ignore_errors=True)
+
+# v1.4.0 (G161): a renamed register, and the configuration change that narrows an exact register path to its pattern
+dV, r = fresh(lineage="Lin_Waiting")
+shutil.move(os.path.join(dV, "register.ttl"), os.path.join(dV, "register_v1_0_0.ttl"))
+cfgp = os.path.join(dV, ".backlog-guard.json"); cfg = json.load(open(cfgp)); cfg["register"] = ["register_v1_0_0.ttl"]; json.dump(cfg, open(cfgp, "w"))
+sh(dV, "git", "add", "-A"); sh(dV, "git", "commit", "-q", "--no-verify", "-m", "version the register")
+gV = os.path.join(dV, "tools", "backlog_work_guard_v1_4_0.py")
+sh(dV, "git", "mv", "register_v1_0_0.ttl", "register_v1_1_0.ttl"); sh(dV, "git", "commit", "-q", "--no-verify", "-m", "rename the register")
+r = sh(dV, sys.executable, gV, "status")
+expect("a register renamed to a later version is still read through its exact path (G161)", "cannot read the register" not in r.stdout + r.stderr and r.returncode in (0, 2))
+cfg = json.load(open(cfgp)); cfg["register"] = ["register_v*.ttl"]; json.dump(cfg, open(cfgp, "w"))
+sh(dV, "git", "add", ".backlog-guard.json")
+r = sh(dV, "git", "commit", "-q", "-m", "narrow the register path\n\nGuard-Install: pattern of the same stem")
+expect("ACCEPTED while NOT READY: the configuration only replaces the exact register path by its pattern, Guard-Install stated (G161)", r.returncode == 0)
+cfg["exempt_paths"] = ["app/**"]; json.dump(cfg, open(cfgp, "w"))
+sh(dV, "git", "add", ".backlog-guard.json")
+r = sh(dV, "git", "commit", "-q", "-m", "loosen\n\nGuard-Install: sneaked")
+expect("REFUSED: a configuration change that does more than narrow the register path, even with Guard-Install", r.returncode != 0)
+sh(dV, "git", "reset", "-q", "--hard", "HEAD")
+shutil.rmtree(dV, ignore_errors=True)
 
 print("VERDICT   :", "PASS" if not bad else "FAIL"); [print("  ", b) for b in bad]
 sys.exit(1 if bad else 0)

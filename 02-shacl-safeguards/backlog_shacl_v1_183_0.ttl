@@ -9,8 +9,8 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog/shacl/1.182.0> ;
-    owl:versionInfo "1.182.0" ;
+    owl:versionIRI <http://example.org/backlog/shacl/1.183.0> ;
+    owl:versionInfo "1.183.0" ;
     owl:priorVersion <http://example.org/backlog-shapes/1.176.0> , <http://example.org/backlog-shapes/1.175.0> , <http://example.org/backlog-shapes/1.174.0> , <http://example.org/backlog-shapes/1.173.0> , <http://example.org/backlog-shapes/1.172.0> , <http://example.org/backlog-shapes/1.171.0> , <http://example.org/backlog-shapes/1.170.0> , <http://example.org/backlog-shapes/1.169.0> , <http://example.org/backlog-shapes/1.168.0> , <http://example.org/backlog-shapes/1.167.0> , <http://example.org/backlog-shapes/1.166.0> , <http://example.org/backlog-shapes/1.165.0> , <http://example.org/backlog-shapes/1.164.0> , <http://example.org/backlog-shapes/1.159.0> , <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.154.0> , <http://example.org/backlog-shapes/1.153.0> , <http://example.org/backlog-shapes/1.152.0> , <http://example.org/backlog-shapes/1.151.0> , <http://example.org/backlog-shapes/1.150.0> , <http://example.org/backlog-shapes/1.149.0> , <http://example.org/backlog-shapes/1.148.0> , <http://example.org/backlog-shapes/1.147.0> , <http://example.org/backlog-shapes/1.146.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.145.0> ;
@@ -2891,6 +2891,10 @@ backlog:L4StoryGranularityShape a sh:NodeShape ;
             # Backlog-stage output ADMITS as pre-lineage is older than the chain by definition, and is not held to it,
             # the same principle as the task-type obligation and refinement-output shapes. Admission is asserted, never
             # derived (L-124). Flagged-but-not-admitted items stay checked; so do the shapes that need only facts.
+            # v1.433.0 (an adopting project handover, G160): the owner's route B (G154) admits the bypassed items by a ScopeChange instead of a restart; the
+            # acts of planning and of declaring concerns cannot be written honestly afterwards on that route either. An item the bypass names and a ScopeChange
+            # admits, in a lineage the owner's frozenRuling answers, is held to the same facts as a restart's items and to neither of these two acts.
+            FILTER NOT EXISTS { ?sc backlog:admitsItem $this . ?lin backlog:frozenBy ?byp ; backlog:frozenRuling ?fr . ?byp backlog:bypassedItem $this }
             FILTER NOT EXISTS { $this backlog:preLineageItem true ; backlog:admittedByOutput ?ao .
                 ?ao backlog:outputOfStage backlog:Stage_Backlog .
                 FILTER NOT EXISTS { ?ao backlog:outputRetracted true } }
@@ -3586,6 +3590,10 @@ backlog:GroomingShape a sh:NodeShape ;
             # Backlog-stage output ADMITS as pre-lineage is older than the chain by definition, and is not held to it,
             # the same principle as the task-type obligation and refinement-output shapes. Admission is asserted, never
             # derived (L-124). Flagged-but-not-admitted items stay checked; so do the shapes that need only facts.
+            # v1.433.0 (an adopting project handover, G160): the owner's route B (G154) admits the bypassed items by a ScopeChange instead of a restart; the
+            # acts of planning and of declaring concerns cannot be written honestly afterwards on that route either. An item the bypass names and a ScopeChange
+            # admits, in a lineage the owner's frozenRuling answers, is held to the same facts as a restart's items and to neither of these two acts.
+            FILTER NOT EXISTS { ?sc backlog:admitsItem $this . ?lin backlog:frozenBy ?byp ; backlog:frozenRuling ?fr . ?byp backlog:bypassedItem $this }
             FILTER NOT EXISTS { $this backlog:preLineageItem true ; backlog:admittedByOutput ?ao .
                 ?ao backlog:outputOfStage backlog:Stage_Backlog .
                 FILTER NOT EXISTS { ?ao backlog:outputRetracted true } }
@@ -3731,6 +3739,11 @@ backlog:IterationCapacityShape a sh:NodeShape ;
             ?d backlog:deploysFrom $this ; backlog:deploysItem ?i .
             FILTER NOT EXISTS { ?pe backlog:plansItem ?i ; backlog:plannedInto $this }
             FILTER NOT EXISTS { ?i backlog:memberOfContainer $this }
+            # v1.433.0 (an adopting project addendum, G160): a planning act cannot honestly be recorded after the work ran (G100). An item that a restart admits as
+            # pre-lineage, or that the owner's route B admits, is not asked to have been planned into the iteration that shipped it.
+            FILTER NOT EXISTS { ?i backlog:preLineageItem true ; backlog:admittedByOutput ?ao . ?ao backlog:outputOfStage backlog:Stage_Backlog .
+                FILTER NOT EXISTS { ?ao backlog:outputRetracted true } }
+            FILTER NOT EXISTS { ?sc backlog:admitsItem ?i . ?lin backlog:frozenBy ?byp ; backlog:frozenRuling ?fr . ?byp backlog:bypassedItem ?i }
         }""" ] .
 
 backlog:CapacityDeclaredShape a sh:NodeShape ;
@@ -7850,6 +7863,7 @@ backlog:UnconnectedActiveLineagesShape a sh:NodeShape ;
             ?other a backlog:Lineage ; backlog:hasLineageStatus ?os . ?os backlog:statusRank ?or .
             FILTER (?or >= 2 && ?or <= 6)
             FILTER (?other != $this && STR($this) > STR(?other))
+            FILTER NOT EXISTS { $this backlog:maintainedBy ?m1 . ?other backlog:maintainedBy ?m2 . FILTER ( ?m1 != ?m2 ) }
             FILTER NOT EXISTS {
                 $this ( backlog:parentLineage | ^backlog:parentLineage
                       | (^backlog:belongsToLineage / backlog:dependsOn / backlog:belongsToLineage)
@@ -8973,14 +8987,16 @@ backlog:UrgentInterruptionShape a sh:NodeShape ;
             $this backlog:urgencyTimeBoxUntil ?b . FILTER ( NOW() > ?b )
         }""" ] ;
     sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "G158: the interrupted lineage has another open urgent interruption. A lineage has at most one; add the further urgent work to the open one." ;
+        sh:message "G158: another urgent interruption is open beside this one. One lineage at a time is paused (G159): add the further urgent work to the open one. Only lineages maintained by different parties may each be paused." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             $this a backlog:UrgentInterruption .
             $this backlog:interruptsLineage ?l . FILTER NOT EXISTS { $this backlog:urgencyResumedAt ?rs }
-            ?other a backlog:UrgentInterruption ; backlog:interruptsLineage ?l .
+            ?other a backlog:UrgentInterruption .
             FILTER NOT EXISTS { ?other backlog:urgencyResumedAt ?ors }
             FILTER ( ?other != $this && STR($this) > STR(?other) )
+            ?other backlog:interruptsLineage ?ol .
+            FILTER NOT EXISTS { ?l backlog:maintainedBy ?m1 . ?ol backlog:maintainedBy ?m2 . FILTER ( ?m1 != ?m2 ) }
         }""" ] ;
     sh:sparql [ a sh:SPARQLConstraint ;
         sh:message "G158: an urgent item of this interruption is also admitted into the scope by a scope change. Emergency work and scope growth are different routes: an emergency is not change management, and scope growth is not an emergency." ;
@@ -8997,4 +9013,24 @@ backlog:UrgentInterruptionShape a sh:NodeShape ;
             $this backlog:interruptsLineage ?l .
             $this backlog:holdsItem ?i .
             FILTER NOT EXISTS { { ?i backlog:belongsToLineage ?l } UNION { ?i backlog:admittedByOutput ?o . ?o backlog:belongsToLineage ?l } }
+        }""" ] .
+
+#################################################################
+#  v1.433.0 (G159) -- one lineage at a time is the default. A lineage opened with a profile adopts RS_ConcurrentLineages through it (both
+#  profiles include it). A lineage that declines the profile (profileDeclinedReason) must still adopt the one-lineage rule itself or
+#  through its register: declining a way of working is not declining the Owner's rule of 2026-10-26.
+#################################################################
+backlog:OneLineageRuleAdoptedShape a sh:NodeShape ;
+    sh:targetClass backlog:Lineage ;
+    sh:severity sh:Violation ;
+    rdfs:label "A lineage that declines its profile still adopts the one-lineage rule (G159)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "ONE_DECLINED" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G159: this lineage declines an opening profile (profileDeclinedReason) and adopts neither itself nor through its register the one-lineage rule RS_ConcurrentLineages. One lineage is active at a time unless the others are connected or maintained by different parties; declining a profile does not lift that." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:profileDeclinedReason ?why .
+            FILTER NOT EXISTS { $this backlog:adoptsRuleSet backlog:RS_ConcurrentLineages }
+            FILTER NOT EXISTS { ?reg backlog:adoptsRuleSet backlog:RS_ConcurrentLineages . FILTER NOT EXISTS { ?reg a backlog:Lineage } }
         }""" ] .

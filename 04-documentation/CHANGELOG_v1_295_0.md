@@ -11260,6 +11260,14 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.433.0 — 2026-10-26 (MINOR: rulings G159, G160, G161)
+
+- **G159 (the Owner's direction):** one lineage at a time by default. `RS_ConcurrentLineages` is in both opening profiles; `LineageMaintainer`, `MaintainerKind`, `maintainerKind`, `maintainedBy` (T-Box v1.151.0, data v1.60.0); parallel lineages need different maintainers (individual, project, program, portfolio) or a connection; `OneLineageRuleAdoptedShape` (shapes v1.183.0); the start gate refuses a start beside an unconnected lineage (v1.5.0); one open urgency at a time. `backlog_one_lineage_probe` v1.0.0.
+- **G160 (an adopting project):** items of route B are exempt from the planning-event and concern-declaration shapes. `backlog_route_b_exemption_probe` v1.0.0.
+- **G161 (an adopting project):** `backlog_work_guard` v1.4.0 resolves a renamed exact register path and accepts a configuration change that only narrows it to a pattern; runbook v1.3.0; probe v1.5.0. Discipline v123.0.0, Standard v1.144.0.
+
+**Unplanned work:** an Owner-directed change after the lineage study and three accepted handovers; no backlog item of this package covers them.
+
 ## v1.432.0 — 2026-10-26 (MINOR: ruling G158, the urgent interruption)
 
 - **G158 (the Owner's direction after the lineage study):** an emergency pauses the running lineage as one recorded event. `UrgentInterruption` with `interruptsLineage`, `holdsItem`, `urgentItem`, `assessesInterruption` and the instants declared, time box, resolved and resumed (T-Box v1.150.0); `UrgentInterruptionShape`, twelve constraints (started items Suspended while open, urgent work done before the end, an assessment before the resume, a time box, one open interruption per lineage, no urgent item admitted as scope), the concurrency rule counting urgent work and the interrupted lineage as connected, and `ImpactAssessmentShape` accepting an interruption in place of a change request (shapes v1.182.0); `backlog_urgency` v1.0.0 records declare, resolve and resume; `backlog_pipeline_verify` v1.12.0 leaves urgent items out of the v5 Backlog digest. Probes: `backlog_urgency_probe` v1.0.0 (19 scenarios), `backlog_urgency_tool_probe` v1.0.0, `backlog_pipeline_verify_probe` v1.3.0. Discipline v122.0.0, Standard v1.143.0.

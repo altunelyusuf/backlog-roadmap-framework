@@ -646,3 +646,7 @@ property	interruptsLineage	http://example.org/backlog#interruptsLineage	Relation
 property	holdsItem	http://example.org/backlog#holdsItem	RelationshipCategory_Association	related, and no more specific category says how; the definition leaves unsaid the finer relation	G158
 property	urgentItem	http://example.org/backlog#urgentItem	RelationshipCategory_Association	related, and no more specific category says how; the definition leaves unsaid the finer relation	G158
 property	assessesInterruption	http://example.org/backlog#assessesInterruption	RelationshipCategory_Assessment	the link measures, verifies or attests	G158
+class	LineageMaintainer	http://example.org/backlog#LineageMaintainer	ClassKind_Role	the first sentence says who is entitled to decide, or a role within a team	G159
+class	MaintainerKind	http://example.org/backlog#MaintainerKind	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G159
+property	maintainerKind	http://example.org/backlog#maintainerKind	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G159
+property	maintainedBy	http://example.org/backlog#maintainedBy	RelationshipCategory_Association	related, and no more specific category says how; the definition leaves unsaid the finer relation	G159
