@@ -641,3 +641,8 @@ property	reprioritises	http://example.org/backlog#reprioritises	RelationshipCate
 class	OpeningProfile	http://example.org/backlog#OpeningProfile	ClassKind_Norm	the first sentence says a named set of rule sets, a bundle of rules	G155
 property	profileIncludes	http://example.org/backlog#profileIncludes	RelationshipCategory_Compositional	part and whole: a profile is made of the rule sets it includes	G155
 property	openedWithProfile	http://example.org/backlog#openedWithProfile	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G155
+class	UrgentInterruption	http://example.org/backlog#UrgentInterruption	ClassKind_InformationArtifact	the definition calls it a record, report, file, package or written rule, and the class is a core:Artifact	G158
+property	interruptsLineage	http://example.org/backlog#interruptsLineage	RelationshipCategory_Association	related, and no more specific category says how; the definition leaves unsaid the finer relation	G158
+property	holdsItem	http://example.org/backlog#holdsItem	RelationshipCategory_Association	related, and no more specific category says how; the definition leaves unsaid the finer relation	G158
+property	urgentItem	http://example.org/backlog#urgentItem	RelationshipCategory_Association	related, and no more specific category says how; the definition leaves unsaid the finer relation	G158
+property	assessesInterruption	http://example.org/backlog#assessesInterruption	RelationshipCategory_Assessment	the link measures, verifies or attests	G158

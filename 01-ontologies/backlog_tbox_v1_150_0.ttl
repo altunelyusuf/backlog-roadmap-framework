@@ -19,9 +19,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.149.0> ;
-    owl:versionInfo "1.149.0" ;
-    owl:priorVersion <http://example.org/backlog/1.148.0> , <http://example.org/backlog/1.143.0> , <http://example.org/backlog/1.142.0> , <http://example.org/backlog/1.141.0> , <http://example.org/backlog/1.140.0> , <http://example.org/backlog/1.139.0> , <http://example.org/backlog/1.138.0> , <http://example.org/backlog/1.137.0> , <http://example.org/backlog/1.136.0> , <http://example.org/backlog/1.135.0> , <http://example.org/backlog/1.134.0> , <http://example.org/backlog/1.133.0> , <http://example.org/backlog/1.132.0> , <http://example.org/backlog/1.131.0> , <http://example.org/backlog/1.130.0> , <http://example.org/backlog/1.129.0> , <http://example.org/backlog/1.125.0> , <http://example.org/backlog/1.124.0> , <http://example.org/backlog/1.123.0> , <http://example.org/backlog/1.122.0> ;
+    owl:versionIRI <http://example.org/backlog/1.150.0> ;
+    owl:versionInfo "1.150.0" ;
+    owl:priorVersion <http://example.org/backlog/1.149.0> , <http://example.org/backlog/1.148.0> , <http://example.org/backlog/1.143.0> , <http://example.org/backlog/1.142.0> , <http://example.org/backlog/1.141.0> , <http://example.org/backlog/1.140.0> , <http://example.org/backlog/1.139.0> , <http://example.org/backlog/1.138.0> , <http://example.org/backlog/1.137.0> , <http://example.org/backlog/1.136.0> , <http://example.org/backlog/1.135.0> , <http://example.org/backlog/1.134.0> , <http://example.org/backlog/1.133.0> , <http://example.org/backlog/1.132.0> , <http://example.org/backlog/1.131.0> , <http://example.org/backlog/1.130.0> , <http://example.org/backlog/1.129.0> , <http://example.org/backlog/1.125.0> , <http://example.org/backlog/1.124.0> , <http://example.org/backlog/1.123.0> , <http://example.org/backlog/1.122.0> ;
     owl:priorVersion <http://example.org/backlog/1.121.0> , <http://example.org/backlog/1.120.0> , <http://example.org/backlog/1.119.0> , <http://example.org/backlog/1.118.0> , <http://example.org/backlog/1.117.0> ;
     owl:priorVersion <http://example.org/backlog/1.116.0> ;
     owl:priorVersion <http://example.org/backlog/1.115.0> ;
@@ -1146,7 +1146,7 @@ backlog:hasLaunchPriority a owl:DatatypeProperty , owl:FunctionalProperty ;
 
 backlog:decidedBy a owl:ObjectProperty ;
     rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:WorkItem backlog:WorkItemContainer backlog:PriorityScore
-                                              backlog:Goal backlog:Objective backlog:ScopeExclusion backlog:Opportunity ) ] ;
+                                              backlog:Goal backlog:Objective backlog:ScopeExclusion backlog:Opportunity backlog:UrgentInterruption ) ] ;
     rdfs:range backlog:Role ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "decided by"@en ;
@@ -8271,3 +8271,66 @@ backlog:OpeningProfile kb:hasClassKind kb:ClassKind_Norm .
 backlog:profileIncludes kb:hasRelationshipCategory kb:RelationshipCategory_Compositional .
 backlog:openedWithProfile kb:hasRelationshipCategory kb:RelationshipCategory_Association .
 
+
+#################################################################
+#  v1.432.0 (G158) -- the urgent interruption: a lineage paused by an emergency, then resumed, without damage to the work that was running.
+#  Before it, a session facing an emergency either ran it through change management (which is for missing, incorrect or unmatching items of
+#  the mission, not for work outside it), left started items InProgress while it did other work, or opened a second lineage the concurrency
+#  rule then refused. The record below is one event with a start, an end and a way back.
+#################################################################
+backlog:UrgentInterruption a owl:Class ;
+    rdfs:subClassOf core:Artifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "Urgent Interruption"@en ;
+    skos:definition "The Owner's decision that a running lineage stops for an emergency and later resumes: what is paused (the lineage and the started items it holds), the urgent work that takes its place, the time within which the emergency ends, and, at the end, an assessment of what the pause did to the plan. It is not change management, which adapts a lineage for missing, incorrect or unmatching items of its own mission; urgent work need not serve the mission. While it is open the lineage's started work is Suspended, not left InProgress, and the urgent work and the interrupted lineage count as connected, so neither blocks the other. It ends when the urgent work is Done or Cancelled, and the lineage is resumed when the assessment exists and the held work moves back."@en .
+
+backlog:interruptsLineage a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:UrgentInterruption ; rdfs:range backlog:Lineage ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "interrupts lineage"@en ;
+    skos:definition "The running lineage that this urgent interruption pauses. One lineage has at most one open interruption."@en .
+
+backlog:holdsItem a owl:ObjectProperty ;
+    rdfs:domain backlog:UrgentInterruption ; rdfs:range backlog:WorkItem ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "holds item"@en ;
+    skos:definition "A started work item of the interrupted lineage that the interruption paused (moved to Suspended), and that must be moved back when the lineage resumes."@en .
+
+backlog:urgentItem a owl:ObjectProperty ;
+    rdfs:domain backlog:UrgentInterruption ; rdfs:range backlog:WorkItem ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "urgent item"@en ;
+    skos:definition "Work that exists because of the emergency. It may belong to the interrupted lineage or to a lineage of its own; either way it is not scope growth, so the stage digests do not count it as a change to the interrupted lineage's plan."@en .
+
+backlog:assessesInterruption a owl:ObjectProperty ;
+    rdfs:domain backlog:ImpactAssessment ; rdfs:range backlog:UrgentInterruption ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "assesses interruption"@en ;
+    skos:definition "Relates an impact assessment to the urgent interruption whose effect on the interrupted lineage's plan it records: what slipped, what was re-prioritised, what the pause cost. The lineage cannot resume without one."@en .
+
+backlog:urgencyDeclaredAt a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:UrgentInterruption ; rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "urgency declared at"@en ;
+    skos:definition "The instant the Owner declared the emergency; the held items are suspended at or after it."@en .
+
+backlog:urgencyTimeBoxUntil a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:UrgentInterruption ; rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "urgency time box until"@en ;
+    skos:definition "The instant by which the emergency must be over, stated by the Owner when declaring it. An interruption still open after it is a violation, so urgency cannot become the way the lineage normally runs; the Owner may extend it by recording a later instant and the reason."@en .
+
+backlog:urgencyResolvedAt a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:UrgentInterruption ; rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "urgency resolved at"@en ;
+    skos:definition "The instant the emergency ended: all the urgent work is Done or Cancelled."@en .
+
+backlog:urgencyResumedAt a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:UrgentInterruption ; rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "urgency resumed at"@en ;
+    skos:definition "The instant the interrupted lineage resumed: after the emergency ended, with the impact assessment recorded and no held item left Suspended."@en .
+
+backlog:urgencyReason a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:UrgentInterruption ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "urgency reason"@en ;
+    skos:definition "Why the emergency cannot wait: what is failing and for whom."@en .
+
+backlog:UrgentInterruption kb:hasClassKind kb:ClassKind_InformationArtifact .
+backlog:interruptsLineage kb:hasRelationshipCategory kb:RelationshipCategory_Association .
+backlog:holdsItem kb:hasRelationshipCategory kb:RelationshipCategory_Association .
+backlog:urgentItem kb:hasRelationshipCategory kb:RelationshipCategory_Association .
+backlog:assessesInterruption kb:hasRelationshipCategory kb:RelationshipCategory_Assessment .

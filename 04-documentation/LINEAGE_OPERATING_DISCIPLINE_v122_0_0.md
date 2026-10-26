@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v121.0.0
+# Lineage Operating Discipline — v122.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -3987,3 +3987,17 @@ Related: G91, G101, G148.
 
 **What is not claimed.** The tool checks that a scope change names the item, not that the change request or assessment is sound, and not that the Owner decided in person; a scope change written by an agent that names the Owner passes (see the delegation gap in the drive's findings).
 Related: G91, G154, G156.
+
+## G158 — An emergency pauses a lineage; it is not change management and not a worked-around lineage
+
+*(The Owner's direction of 2026-10-26, after the lineage study: "Another important work-around is to pause a current lineage under emergency ... Some of the lineages runs change management to cover the urgency cases. We need to raise urgency ceremony to deal with such cases without any damages on the ongoing work as an additional mechanism." Existing mechanisms were checked first, as he asked.)*
+
+**Q1 — what the framework already had, by reading its files.** Item level: the state `Suspended` with the moves suspend, resume and withdraw (v1.392.0, a pause needs a rationale). Lineage level: a queued lineage at `LS_Opened` (G104), a compressed lineage for a single technical fix (G99), a repair that re-prioritises the items it touches (G147), and the release marker for unplanned work. Not there: a pause of the lineage as a whole, a way to say that the started items stop with it, a bound on how long an emergency may last, an assessment of what the pause did to the plan, or any rule that stopped an emergency being carried as a change request. A session facing an emergency therefore chose one of three routes, all of which damage the running lineage: change management (a mission-scope route, which the study found used for work outside the mission), carrying on with started items left In Progress, or opening a second lineage that G104 then refuses or that runs unconnected.
+
+**Q2 — what was ruled and built.** One record, `UrgentInterruption`, decided by the Owner, with: the interrupted lineage, the reason, the time box the Owner states, the urgent items, the held items, and later the end and the resume. Twelve constraints (`UrgentInterruptionShape`, a base rule: it binds only registers that hold such a record, so no opt-in is needed): the record is complete and its instants are in order; only a running lineage can be interrupted; while open, no started item of the lineage goes on, and every held item is Suspended; at resume none is still Suspended; the emergency ends only when every urgent item is Done or Cancelled; the lineage resumes only with an impact assessment of the pause (`assessesInterruption`; `ImpactAssessmentShape` accepts it in place of a change request); an interruption past its time box is a violation; one open interruption per lineage; an urgent item cannot also be admitted as scope growth; a held item belongs to the lineage. The urgent work and the interrupted lineage count as connected under `RS_ConcurrentLineages`, so neither blocks the other, and under digest table v5 an urgent item does not move the closed Backlog digest. `backlog_urgency` records declare, resolve and resume in one step each, stamped from the clock, and refuses what the shapes would refuse.
+
+**Q3 — proof.** `backlog_urgency_probe` v1.0.0 (every constraint on its planted case and a control, and the connection rule, through the real validator), `backlog_urgency_tool_probe` v1.0.0 (the whole ceremony on a scratch register, the refusals, and no violation after each step), `backlog_pipeline_verify_probe` v1.3.0 cases 13 and 14.
+
+**What is not claimed.** The Owner decides that it is an emergency; nothing tests it, only the time box limits it. The tool does not stop edits to the held items made outside it; the shapes find them after. The start gate and the work guard do not yet read an open interruption. The other changes of the study (one active lineage by default, cancellation with an as-is assessment, a generated plan step, preventive enforcement by default, one adaptation route) are not in this release.
+Related: G99, G104, G147, G154, G157.
+

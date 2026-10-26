@@ -20,7 +20,7 @@ if sys.argv[1:] == ["--deps"]:
     print(os.path.abspath(__file__)); sys.exit(0)
 HERE = os.path.dirname(os.path.abspath(__file__)); PKG = os.path.dirname(HERE)
 B = "http://example.org/backlog#"; X = "http://example.org/x#"
-spec = importlib.util.spec_from_file_location("pv", os.path.join(HERE, "backlog_pipeline_verify_v1_11_0.py"))
+spec = importlib.util.spec_from_file_location("pv", os.path.join(HERE, "backlog_pipeline_verify_v1_12_0.py"))
 pv = importlib.util.module_from_spec(spec); spec.loader.exec_module(pv)
 tb = sorted(glob.glob(os.path.join(PKG, "01-ontologies", "backlog_tbox_v*.ttl")))[-1]
 def u(n, ns=B): return URIRef(ns + n)
@@ -68,4 +68,10 @@ check("11 v5: an enabler no scope change admits moves it", pv.state_digest(g, "S
 g, L = reg(); pv.STAGE_TYPES = t4; d4c = pv.state_digest(g, "Stage_Backlog", L, admitted=True)
 E1 = u("Enab1", X); g.add((E1, RDF.type, u("Enabler"))); g.add((E1, u("belongsToLineage"), L)); g.add((u("SC1", X), u("admitsItem"), E1))
 check("12 v4: the admitted enabler still moves it", pv.state_digest(g, "Stage_Backlog", L, admitted=True) != d4c)
+g, L = reg(); pv.STAGE_TYPES = t5; d5u = pv.state_digest(g, "Stage_Backlog", L, admitted=True, change_managed=True)
+E3 = u("Enab3", X); g.add((E3, RDF.type, u("Enabler"))); g.add((E3, u("belongsToLineage"), L)); g.add((u("Urg1", X), u("urgentItem"), E3))
+check("13 v5: an item an urgent interruption names leaves the Backlog digest", pv.state_digest(g, "Stage_Backlog", L, admitted=True, change_managed=True) == d5u)
+g, L = reg(); pv.STAGE_TYPES = t4; d4u = pv.state_digest(g, "Stage_Backlog", L, admitted=True)
+E3 = u("Enab3", X); g.add((E3, RDF.type, u("Enabler"))); g.add((E3, u("belongsToLineage"), L)); g.add((u("Urg1", X), u("urgentItem"), E3))
+check("14 v4: the urgent item still moves it", pv.state_digest(g, "Stage_Backlog", L, admitted=True) != d4u)
 print("VERDICT: %s" % ("PASS" if not fails else "FAIL")); sys.exit(1 if fails else 0)

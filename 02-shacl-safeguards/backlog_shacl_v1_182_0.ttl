@@ -9,8 +9,8 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog/shacl/1.181.0> ;
-    owl:versionInfo "1.181.0" ;
+    owl:versionIRI <http://example.org/backlog/shacl/1.182.0> ;
+    owl:versionInfo "1.182.0" ;
     owl:priorVersion <http://example.org/backlog-shapes/1.176.0> , <http://example.org/backlog-shapes/1.175.0> , <http://example.org/backlog-shapes/1.174.0> , <http://example.org/backlog-shapes/1.173.0> , <http://example.org/backlog-shapes/1.172.0> , <http://example.org/backlog-shapes/1.171.0> , <http://example.org/backlog-shapes/1.170.0> , <http://example.org/backlog-shapes/1.169.0> , <http://example.org/backlog-shapes/1.168.0> , <http://example.org/backlog-shapes/1.167.0> , <http://example.org/backlog-shapes/1.166.0> , <http://example.org/backlog-shapes/1.165.0> , <http://example.org/backlog-shapes/1.164.0> , <http://example.org/backlog-shapes/1.159.0> , <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.154.0> , <http://example.org/backlog-shapes/1.153.0> , <http://example.org/backlog-shapes/1.152.0> , <http://example.org/backlog-shapes/1.151.0> , <http://example.org/backlog-shapes/1.150.0> , <http://example.org/backlog-shapes/1.149.0> , <http://example.org/backlog-shapes/1.148.0> , <http://example.org/backlog-shapes/1.147.0> , <http://example.org/backlog-shapes/1.146.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.145.0> ;
@@ -1838,8 +1838,11 @@ backlog:ImpactAssessmentShape a sh:NodeShape ;
     sh:targetClass backlog:ImpactAssessment ;
     sh:severity sh:Violation ;
     rdfs:label "An impact assessment names the request it analyzes and states real impact (L1)"@en ;
-    sh:property [ sh:path backlog:analyzesRequest ; sh:minCount 1 ; sh:maxCount 1 ; sh:class backlog:ChangeRequest ;
-                  sh:message "L1: an impact assessment must name the change request it analyzes." ] ;
+    sh:property [ sh:path backlog:analyzesRequest ; sh:maxCount 1 ; sh:class backlog:ChangeRequest ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: an impact assessment must name the change request it analyzes (analyzesRequest) or, for an emergency, the urgent interruption it assesses (assessesInterruption, G158)." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE { FILTER NOT EXISTS { $this backlog:analyzesRequest ?r } FILTER NOT EXISTS { $this backlog:assessesInterruption ?u } }""" ] ;
     sh:property [ sh:path backlog:hasImpactStatement ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ;
                   sh:message "L1: an impact assessment must state what the change would actually affect." ] .
 
@@ -7850,7 +7853,9 @@ backlog:UnconnectedActiveLineagesShape a sh:NodeShape ;
             FILTER NOT EXISTS {
                 $this ( backlog:parentLineage | ^backlog:parentLineage
                       | (^backlog:belongsToLineage / backlog:dependsOn / backlog:belongsToLineage)
-                      | (^backlog:belongsToLineage / ^backlog:dependsOn / backlog:belongsToLineage) )+ ?other
+                      | (^backlog:belongsToLineage / ^backlog:dependsOn / backlog:belongsToLineage)
+                      | (^backlog:belongsToLineage / ^backlog:urgentItem / backlog:interruptsLineage)
+                      | (^backlog:interruptsLineage / backlog:urgentItem / backlog:belongsToLineage) )+ ?other
             }
         }""" ] .
 
@@ -8878,3 +8883,118 @@ backlog:OpeningProfileAdoptedShape a sh:NodeShape ;
             FILTER NOT EXISTS { ?reg backlog:adoptsRuleSet ?rs . FILTER NOT EXISTS { ?reg a backlog:Lineage } }
         }""" ] .
 
+
+#################################################################
+#  v1.432.0 (G158) -- the urgent interruption.
+#  The Owner's rule of 2026-10-26: a lineage under an emergency is paused, not worked around. Change management adapts a lineage for its
+#  own mission's missing, incorrect or unmatching items; it is not the route for work outside the mission, and a session that used it
+#  for emergencies (or left started items InProgress while it did other work) damaged the plan it was meant to protect. The record is a
+#  class, so it binds only registers that hold one; no rule set is needed (a base rule on a new record changes no existing register).
+#  Twelve constraints, one per way the pause can be damaged; probe: backlog_urgency_probe.
+#################################################################
+backlog:UrgentInterruptionShape a sh:NodeShape ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "URG_INCOMPLETE" ;
+    sh:targetClass backlog:UrgentInterruption ;
+    sh:severity sh:Violation ;
+    rdfs:label "An urgent interruption pauses a lineage without damaging it (G158)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G158: this urgent interruption is incomplete. It names the interrupted lineage (interruptsLineage), the instant it was declared (urgencyDeclaredAt), why it cannot wait (urgencyReason), the instant by which it must be over (urgencyTimeBoxUntil), an urgent item (urgentItem) and the Owner who decided it (decidedBy an Owner)." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this a backlog:UrgentInterruption .
+            FILTER ( NOT EXISTS { $this backlog:interruptsLineage ?x } || NOT EXISTS { $this backlog:urgencyDeclaredAt ?x } || NOT EXISTS { $this backlog:urgencyReason ?x } || NOT EXISTS { $this backlog:urgencyTimeBoxUntil ?x } || NOT EXISTS { $this backlog:urgentItem ?x } || NOT EXISTS { $this backlog:decidedBy backlog:Owner } )
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G158: the instants of this urgent interruption are out of order. The time box must end after the declaration, the emergency cannot end before it was declared, the lineage cannot resume before the emergency ended, and it cannot resume while the emergency has no end." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this a backlog:UrgentInterruption .
+            { $this backlog:urgencyDeclaredAt ?d ; backlog:urgencyTimeBoxUntil ?b . FILTER ( ?b <= ?d ) }
+            UNION { $this backlog:urgencyDeclaredAt ?d ; backlog:urgencyResolvedAt ?e . FILTER ( ?e < ?d ) }
+            UNION { $this backlog:urgencyResolvedAt ?e ; backlog:urgencyResumedAt ?r . FILTER ( ?r < ?e ) }
+            UNION { $this backlog:urgencyResumedAt ?r . FILTER NOT EXISTS { $this backlog:urgencyResolvedAt ?e } }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G158: this open urgent interruption interrupts a lineage that is not running (its status is not Scoped, Goaled, Objectived, Backlogged, In progress or Revived). A lineage at Opened is a queue entry and nothing is running in it; a finished lineage has nothing to pause." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this a backlog:UrgentInterruption .
+            $this backlog:interruptsLineage ?l . FILTER NOT EXISTS { $this backlog:urgencyResumedAt ?rs }
+            OPTIONAL { ?l backlog:hasLineageStatus ?s . ?s backlog:statusRank ?r }
+            FILTER ( !BOUND(?r) || ?r < 2 || ?r > 6 )
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G158: this urgent interruption is open and a work item of the interrupted lineage is still In Progress although it is not urgent work. A paused lineage does not carry on: suspend the item (a rationale and a recorded move) and name it in holdsItem, or name it as urgent work." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this a backlog:UrgentInterruption .
+            $this backlog:interruptsLineage ?l . FILTER NOT EXISTS { $this backlog:urgencyResumedAt ?rs }
+            { ?i backlog:belongsToLineage ?l } UNION { ?i backlog:admittedByOutput ?o . ?o backlog:belongsToLineage ?l }
+            ?i backlog:hasState backlog:InProgress .
+            FILTER NOT EXISTS { $this backlog:urgentItem ?i }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G158: this urgent interruption is open and an item it holds is not Suspended. A held item is paused until the lineage resumes; moving it on during the pause is the damage this record exists to prevent." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this a backlog:UrgentInterruption .
+            FILTER NOT EXISTS { $this backlog:urgencyResumedAt ?rs }
+            $this backlog:holdsItem ?i . ?i backlog:hasState ?st . FILTER ( ?st != backlog:Suspended )
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G158: this urgent interruption has resumed the lineage and an item it held is still Suspended. Resuming means the held work moves back (resume) or is withdrawn with a rationale." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this a backlog:UrgentInterruption .
+            $this backlog:urgencyResumedAt ?rs ; backlog:holdsItem ?i . ?i backlog:hasState backlog:Suspended .
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G158: this urgent interruption states that the emergency ended, and some urgent item is neither Done nor Cancelled." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this a backlog:UrgentInterruption .
+            $this backlog:urgencyResolvedAt ?e ; backlog:urgentItem ?u . ?u backlog:hasState ?st . FILTER ( ?st NOT IN ( backlog:Done, backlog:Cancelled ) )
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G158: this urgent interruption has resumed the lineage and no impact assessment records what the pause did to the plan (what slipped, what was re-prioritised, what it cost). Record an ImpactAssessment that assesses this interruption before resuming." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this a backlog:UrgentInterruption .
+            $this backlog:urgencyResumedAt ?rs .
+            FILTER NOT EXISTS { ?a backlog:assessesInterruption $this }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G158: this urgent interruption is still open after its time box. Urgency is an exception with an end: finish the urgent work and resolve it, or have the Owner record a later time box with the reason." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this a backlog:UrgentInterruption .
+            FILTER NOT EXISTS { $this backlog:urgencyResumedAt ?rs }
+            $this backlog:urgencyTimeBoxUntil ?b . FILTER ( NOW() > ?b )
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G158: the interrupted lineage has another open urgent interruption. A lineage has at most one; add the further urgent work to the open one." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this a backlog:UrgentInterruption .
+            $this backlog:interruptsLineage ?l . FILTER NOT EXISTS { $this backlog:urgencyResumedAt ?rs }
+            ?other a backlog:UrgentInterruption ; backlog:interruptsLineage ?l .
+            FILTER NOT EXISTS { ?other backlog:urgencyResumedAt ?ors }
+            FILTER ( ?other != $this && STR($this) > STR(?other) )
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G158: an urgent item of this interruption is also admitted into the scope by a scope change. Emergency work and scope growth are different routes: an emergency is not change management, and scope growth is not an emergency." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this a backlog:UrgentInterruption .
+            $this backlog:urgentItem ?u . ?sc backlog:admitsItem ?u .
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G158: an item this urgent interruption holds does not belong to the interrupted lineage." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this a backlog:UrgentInterruption .
+            $this backlog:interruptsLineage ?l .
+            $this backlog:holdsItem ?i .
+            FILTER NOT EXISTS { { ?i backlog:belongsToLineage ?l } UNION { ?i backlog:admittedByOutput ?o . ?o backlog:belongsToLineage ?l } }
+        }""" ] .

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """backlog_pipeline_verify_v1_11_0.py — the lineage order, checked by reconstruction.
 
+v1.12.0 (G158): under table v5 an item an urgent interruption names (urgentItem) is left out of the Backlog digest as well: an emergency is not scope growth.
 v1.11.0 (G157): under table v5 an item that a ScopeChange admits (admitsItem) is not part of the Backlog digest, so change management after the close no longer leaves the digest failing.
 
 v1.10.0 (G156): digest table v5, selected by a register that declares adoptsRuleSet RS_DigestTable_v5. It is the v4 table without Specification, TestScenario, ModelArtifact and AcceptanceCriterion, which the obligation sets require after the Backlog stage has closed.
@@ -89,7 +90,7 @@ def state_digest(g, stage, lineage=None, admitted=False, change_managed=False):
             if lineage is None or s == lineage or (s, URIRef(B + "belongsToLineage"), lineage) in g:
                 # v1.11.0 (G157, table v5): an item a ScopeChange admits was added by change management after the
                 # close; the owner-decided change record is its visibility, so the closed stage's digest does not move.
-                if change_managed and stage == "Stage_Backlog" and (None, URIRef(B + "admitsItem"), s) in g:
+                if change_managed and stage == "Stage_Backlog" and ((None, URIRef(B + "admitsItem"), s) in g or (None, URIRef(B + "urgentItem"), s) in g):
                     continue
                 subs.add(str(s))
             elif admitted and stage == "Stage_Backlog":

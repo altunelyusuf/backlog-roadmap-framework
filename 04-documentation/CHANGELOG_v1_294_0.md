@@ -11260,6 +11260,12 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.432.0 — 2026-10-26 (MINOR: ruling G158, the urgent interruption)
+
+- **G158 (the Owner's direction after the lineage study):** an emergency pauses the running lineage as one recorded event. `UrgentInterruption` with `interruptsLineage`, `holdsItem`, `urgentItem`, `assessesInterruption` and the instants declared, time box, resolved and resumed (T-Box v1.150.0); `UrgentInterruptionShape`, twelve constraints (started items Suspended while open, urgent work done before the end, an assessment before the resume, a time box, one open interruption per lineage, no urgent item admitted as scope), the concurrency rule counting urgent work and the interrupted lineage as connected, and `ImpactAssessmentShape` accepting an interruption in place of a change request (shapes v1.182.0); `backlog_urgency` v1.0.0 records declare, resolve and resume; `backlog_pipeline_verify` v1.12.0 leaves urgent items out of the v5 Backlog digest. Probes: `backlog_urgency_probe` v1.0.0 (19 scenarios), `backlog_urgency_tool_probe` v1.0.0, `backlog_pipeline_verify_probe` v1.3.0. Discipline v122.0.0, Standard v1.143.0.
+
+**Unplanned work:** an Owner-directed framework change after the lineage study; no backlog item of this package covers it.
+
 ## v1.431.0 — 2026-10-25 (MINOR: ruling G157, change-managed items and the Backlog digest)
 
 - **G157 (found by the agentic test drive, finding F18):** under digest table v5 an item that a `ScopeChange` admits is not part of the Backlog digest. Before, the route the framework prescribes for work added after the close (change request, impact assessment, Owner-decided scope change, G154) left `backlog_pipeline_verify` failing for good, because the admitted item joined a closed stage and there was no way to re-record. `backlog_pipeline_verify` v1.11.0; probe v1.2.0 cases 10 to 12 (an admitted enabler leaves the digest, an unadmitted one moves it, v4 is unchanged); data file v1.59.0 (definition of `RS_DigestTable_v5`). Discipline v121.0.0, Standard v1.142.0.
