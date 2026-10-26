@@ -22,9 +22,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (ABox: controlled individuals, reference data and the live register)"@en ;
-    owl:versionIRI <http://example.org/backlog/abox/1.61.0> ;
-    owl:versionInfo "1.61.0" ;
-    owl:priorVersion <http://example.org/backlog/abox/1.60.0> , <http://example.org/backlog/abox/1.59.0> , <http://example.org/backlog/abox/1.58.0> , <http://example.org/backlog/abox/1.57.0> , <http://example.org/backlog/abox/1.53.0> , <http://example.org/backlog/abox/1.52.0> , <http://example.org/backlog/abox/1.51.0> , <http://example.org/backlog/abox/1.50.0> , <http://example.org/backlog/abox/1.49.0> , <http://example.org/backlog/abox/1.48.0> , <http://example.org/backlog/abox/1.47.0> , <http://example.org/backlog/abox/1.46.0> , <http://example.org/backlog/abox/1.45.0> , <http://example.org/backlog/abox/1.40.0> , <http://example.org/backlog/abox/1.39.0> , <http://example.org/backlog/abox/1.38.0> , <http://example.org/backlog/abox/1.37.0> , <http://example.org/backlog/abox/1.36.0> , <http://example.org/backlog/abox/1.35.0> ;
+    owl:versionIRI <http://example.org/backlog/abox/1.62.0> ;
+    owl:versionInfo "1.62.0" ;
+    owl:priorVersion <http://example.org/backlog/abox/1.61.0> , <http://example.org/backlog/abox/1.60.0> , <http://example.org/backlog/abox/1.59.0> , <http://example.org/backlog/abox/1.58.0> , <http://example.org/backlog/abox/1.57.0> , <http://example.org/backlog/abox/1.53.0> , <http://example.org/backlog/abox/1.52.0> , <http://example.org/backlog/abox/1.51.0> , <http://example.org/backlog/abox/1.50.0> , <http://example.org/backlog/abox/1.49.0> , <http://example.org/backlog/abox/1.48.0> , <http://example.org/backlog/abox/1.47.0> , <http://example.org/backlog/abox/1.46.0> , <http://example.org/backlog/abox/1.45.0> , <http://example.org/backlog/abox/1.40.0> , <http://example.org/backlog/abox/1.39.0> , <http://example.org/backlog/abox/1.38.0> , <http://example.org/backlog/abox/1.37.0> , <http://example.org/backlog/abox/1.36.0> , <http://example.org/backlog/abox/1.35.0> ;
     owl:priorVersion <http://example.org/backlog/abox/1.34.0> , <http://example.org/backlog/abox/1.33.0> , <http://example.org/backlog/abox/1.32.0> , <http://example.org/backlog/abox/1.31.0> , <http://example.org/backlog/abox/1.30.0> , <http://example.org/backlog/abox/1.29.0> , <http://example.org/backlog/abox/1.28.0> , <http://example.org/backlog/abox/1.27.0> , <http://example.org/backlog/abox/1.26.0> , <http://example.org/backlog/abox/1.25.0> , <http://example.org/backlog/abox/1.24.0> , <http://example.org/backlog/abox/1.23.0> , <http://example.org/backlog/abox/1.22.0> , <http://example.org/backlog/abox/1.21.0> , <http://example.org/backlog/abox/1.20.0> , <http://example.org/backlog/abox/1.19.0> , <http://example.org/backlog/abox/1.17.0> , <http://example.org/backlog/abox/1.16.0> , <http://example.org/backlog/abox/1.15.0> , <http://example.org/backlog/abox/1.14.0> , <http://example.org/backlog/abox/1.13.0> , <http://example.org/backlog/abox/1.12.0> , <http://example.org/backlog/abox/1.11.0> , <http://example.org/backlog/abox/1.10.0> , <http://example.org/backlog/abox/1.9.0> , <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
         <http://example.org/backlog-abox/1.2.1> ,
                      <http://example.org/backlog-abox/1.2.0> ,
@@ -1222,18 +1222,22 @@ backlog:Cm_Cancelled a owl:NamedIndividual , backlog:ClosureMark ; rdfs:label "C
 backlog:Cm_Failed a owl:NamedIndividual , backlog:ClosureMark ; rdfs:label "Failed"@en ; skos:definition "The mission could not be accomplished."@en .
 
 backlog:RS_PlanBeforeStart a owl:NamedIndividual , backlog:RuleSet ;
+    backlog:introducedInRevision backlog:Pr_3 ;
     rdfs:label "Work starts only after the plan step"@en ;
     skos:definition "A lineage's work may start only after a kick-off for the lineage that activates a roadmap report computed from the register no later than the kick-off. The plan step sits between the Backlog stage and the first start; urgent work and items a restart or the change-management route admits are not asked for it. The Owner's rule of 2026-10-26 (G162). Every lineage opened with a profile adopts it; lineages that never adopted it are untouched (G89, G91)."@en .
 
 backlog:RS_CancellationAssessed a owl:NamedIndividual , backlog:RuleSet ;
+    backlog:introducedInRevision backlog:Pr_3 ;
     rdfs:label "A lineage is set down only after an as-is assessment"@en ;
     skos:definition "An Abandoned lineage (cancelled or failed) has an as-is assessment that sorts every work item as accomplished, failed, in progress or due and every objective as fitted or gapped, states the fit-gap and the impact, and a closure report marked cancelled or failed that cites it. The Owner's rule of 2026-10-26 (G162); Abandoned is the framework's one exit for it, labelled Cancelled as well."@en .
 
 backlog:RS_ChangeSupportsMission a owl:NamedIndividual , backlog:RuleSet ;
+    backlog:introducedInRevision backlog:Pr_3 ;
     rdfs:label "Every change request supports an objective of the mission"@en ;
     skos:definition "A change request names, by supportsObjective, the objective of the running mission it serves. Change management adapts the running lineage for missing, incorrect or unmatching items; a request that supports no objective is another mission. The Owner's rule of 2026-10-26 (G162)."@en .
 
 backlog:RS_ConcurrentLineages a owl:NamedIndividual , backlog:RuleSet ;
+    backlog:introducedInRevision backlog:Pr_2 ;
     rdfs:label "At most one active lineage unless they are connected"@en ;
     skos:definition "Two lineages may be active at once (status Scoped to InProgress, or Revived) only when each is maintained by a different party (maintainedBy: an individual, project, program or portfolio, G159) or when connected: a divide-and-conquer part and its parent (parentLineage), or a work item of one that dependsOn a work item of the other, followed transitively. Otherwise one runs and the other waits as a lineage at LS_Opened, the native queue, and advances only after the running lineage is Achieved. The owner's rules of 2026-10-12 (G104) and 2026-10-26 (G159). Every lineage opened with a profile adopts it (both profiles include it), so a new lineage is single by default; registers, fixtures and closed graphs that never adopted it are untouched (G89, G91)."@en .
 
@@ -1258,6 +1262,7 @@ backlog:RS_MissionHistory a owl:NamedIndividual , backlog:RuleSet ;
     skos:definition "Within the adopting register: a mission is pursued by a lineage, or is a statement that a mission a lineage pursues replaced, directly or through a chain of replacements (supersedesMission); a mission that was replaced does not state that it is still in flight. A mission amended mid-flight is the same lineage under a better statement (G104), so the earlier statements are that lineage's mission history and need no lineage of their own. A RuleSet because a register whose missions were stated before lineages existed is not judged retroactively (G89, G91). This package's own register does not adopt it."@en .
 
 backlog:RS_AgentAccountability a owl:NamedIndividual , backlog:RuleSet ;
+    backlog:introducedInRevision backlog:Pr_1 ;
     rdfs:label "Agent work is accounted for"@en ;
     skos:definition "Within the adopter's scope: an agent named for any function of a work item is a run (ExecutorInstance) of a definition, not the definition; every status move names who made it (transitionedByExecutor); the parties that do, oversee, verify and approve one item are four different parties, and agent runs of one definition count as one party; a Done item is overseen, verified and approved; an item at or above the adopter's humanApprovalLevel is approved by a person or a human team; an agent team or federation named for an item was assembled by a recorded act with its seats held by runs; a delegated lineage is spawned by the executor responsible for the item that delegated it. A RuleSet because it binds only an adopter (G89, G91). This package's own register does not adopt it."@en .
 
@@ -1278,6 +1283,7 @@ backlog:RS_ManagerialIndependence a owl:NamedIndividual , backlog:RuleSet ;
     dcterms:source "Independent verification and validation as described by NASA: independence is technical, managerial and financial (NASA IV&V Program overview); here only the managerial part, decidable from the controller link."@en .
 
 backlog:RS_FlowPointsRecorded a owl:NamedIndividual , backlog:RuleSet ;
+    backlog:introducedInRevision backlog:Pr_1 ;
     rdfs:label "Done work records when it started and finished, and how exactly"@en ;
     skos:definition "Every Done item in scope carries startedAt and finishedAt, or says through flowPointAbsenceReason why it does not; a flow point written as midnight states flowPointPrecision Date; a Proposed item carries no startedAt and only a Done or Cancelled one carries a finishedAt (G115); startedAt and finishedAt each have one value (a correction replaces, never adds); and a start equal to the finish, or closer than the adopter's shortSpanThreshold, carries a shortSpanExplanation (an equal pair is the signature of an item registered after the work). Adopted by a register or by one lineage (G112); a lineage adoption binds only that lineage's work and the items it admitted, so it can start at a stated moment without judging earlier work. A RuleSet because it binds only what declared it (G89, G91). This package's own lineages adopt it themselves; the shipped data file does not adopt it for a register (G116)."@en ;
     dcterms:source "Kanban flow measures need a well-defined start and finish point (The Kanban Pocket Guide, ch. 6); ISO/IEC/IEEE 12207:2026 measurement process: a measure is to be verifiable, meaningful, actionable, timely and cost-effective. The detail standard ISO/IEC/IEEE 15939 was not read."@en .
@@ -1291,6 +1297,7 @@ backlog:Precision_Date a owl:NamedIndividual , backlog:FlowPointPrecision ;
     skos:definition "The flow point is only a day, written as midnight; a duration computed from it is exact to the day at best."@en .
 
 backlog:RS_StatusHistoryRecorded a owl:NamedIndividual , backlog:RuleSet ;
+    backlog:introducedInRevision backlog:Pr_1 ;
     rdfs:label "Every status change is recorded, with its moment"@en ;
     skos:definition "An item that has left Proposed has a recorded move into its current state, and the earliest recorded move leaves Proposed (G115: a history that begins at Ready or In Progress has skipped the states before it); one that has started has a recorded move into In Progress; the recorded moves of an item chain without a gap (each move leaves the state the previous one entered); every move is stamped with an instant, not a date written as midnight; and startedAt and finishedAt, when the item is In Progress or Done, equal the moment of the first move into In Progress and of the last move into Done. Suspension and resumption are moves like any other. Adopted by a register or by one lineage (G112 scoping); an item that moved before the adoption says so through statusHistoryAbsenceReason, and nothing excuses a move after it. A RuleSet because it binds only what declared it (G89, G91)."@en ;
     dcterms:source "Kanban flow measures need a well-defined start and finish point (The Kanban Pocket Guide, ch. 6); the framework's own TransitionEvent, whose definition says a state with no history cannot be audited."@en .
@@ -6394,14 +6401,17 @@ backlog:FM_LineageThrash backlog:manifestsAsThrashKind backlog:Thrash_NoNovelty 
 backlog:Method_WSJF dcterms:requires backlog:Method_CostOfDelay .
 
 backlog:RS_ImpedimentNamesWhatItBlocks a owl:NamedIndividual , backlog:RuleSet ;
+    backlog:introducedInRevision backlog:Pr_1 ;
     rdfs:label "A standing impediment names the work it blocks"@en ;
     skos:definition "Within the adopter's scope: an unresolved impediment impedes at least one work item or container. A wait that names no work is a question, and an unrelated question does not hold a lineage (the Owner's rule of 2026-10-24). A RuleSet because it binds only a register or lineage that declared it (G89, G91)."@en .
 
 backlog:RS_DecompositionStateAgrees a owl:NamedIndividual , backlog:RuleSet ;
+    backlog:introducedInRevision backlog:Pr_1 ;
     rdfs:label "A parent whose children are all finished is not left open"@en ;
     skos:definition "Within the adopter's scope: a work item whose children are all Done or Cancelled, with at least one Done, is itself Done or Cancelled. The state the children derive and the state asserted must agree; the rule reports the disagreement as a violation. A RuleSet because it binds only a register or lineage that declared it (G89, G91)."@en .
 
 backlog:RS_RepairReprioritises a owl:NamedIndividual , backlog:RuleSet ;
+    backlog:introducedInRevision backlog:Pr_1 ;
     rdfs:label "A repair re-prioritises the open items it touches"@en ;
     skos:definition "Within the adopter's scope: an open defect either names, through reprioritises, the open work items whose priority it changes, or states through reprioritisesNothingBecause why none; and every open item it names carries a priority score computed after the defect's own. A RuleSet because it binds only a register or lineage that declared it (G89, G91); the owner's rule of 2026-10-23 is that a repair entering the backlog re-ranks the open items rather than merely being added."@en .
 
@@ -6415,3 +6425,6 @@ backlog:Profile_Agentic a owl:NamedIndividual , backlog:OpeningProfile ;
     skos:definition "The standard profile plus accountability for agent work: an agent named for any function of an item is a run of a definition, every status move names who made it, and the parties that do, oversee, verify and approve an item are different."@en ;
     backlog:profileIncludes backlog:RS_ConcurrentLineages , backlog:RS_PlanBeforeStart , backlog:RS_CancellationAssessed , backlog:RS_ChangeSupportsMission , backlog:RS_StatusHistoryRecorded , backlog:RS_FlowPointsRecorded , backlog:RS_RepairReprioritises , backlog:RS_ImpedimentNamesWhatItBlocks , backlog:RS_DecompositionStateAgrees , backlog:RS_AgentAccountability .
 
+backlog:Pr_1 a owl:NamedIndividual , backlog:ProfileRevision ; rdfs:label "Profile revision 1"@en ; backlog:revisionNumber 1 ; skos:definition "The profiles up to release 1.432.0: status history, flow points, repair re-prioritising, impediments that name what they block, decomposition state, and agent accountability."@en .
+backlog:Pr_2 a owl:NamedIndividual , backlog:ProfileRevision ; rdfs:label "Profile revision 2"@en ; backlog:revisionNumber 2 ; skos:definition "Release 1.433.0 (G159) adds the one-lineage rule."@en .
+backlog:Pr_3 a owl:NamedIndividual , backlog:ProfileRevision ; rdfs:label "Profile revision 3"@en ; backlog:revisionNumber 3 ; skos:definition "Release 1.434.0 (G162) adds the plan step, the assessed cancellation and the supporting change request."@en .

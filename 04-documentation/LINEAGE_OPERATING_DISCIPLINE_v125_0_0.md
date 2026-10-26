@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v124.0.0
+# Lineage Operating Discipline — v125.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -4036,4 +4036,19 @@ Related: G100, G104, G123, G154, G158.
 
 **What is not claimed.** The Owner's decision in `adapt` is recorded as the text the caller gives; the tool cannot tell an Owner from an agent, so the delegation gap found by the drive (F19) stays open. The sorting of an objective as fitted needs every item serving it Done; an objective no item serves is gapped. Preventive enforcement by default (hooks installed at opening) and the five old adaptation routes' retirement are not in this release; the old routes still validate.
 Related: G104, G149, G154, G155, G158, G159.
+
+## G163 — The opening profile is versioned, so a profile that grows does not judge a lineage opened earlier
+
+*(Found by the OE governance session reading the files of release v1.434.0; confirmed in the shape.)*
+
+**Q1 — the defect.** G89 says a ruling binds only work that had not started when it shipped. The check "a lineage adopts every rule set of the profile it opened with" (G155) read the profile as it is now. When G159 and G162 added rule sets to the profiles, every lineage opened before them began to fail it. The ruling and the shape contradicted each other.
+
+**Q2 — the repair.** A profile revision (`ProfileRevision`, numbered) records each stage of the profiles' growth. A rule set says the revision it entered in (`introducedInRevision`); a lineage says the revision it opened under (`openedUnderRevision`), written by `backlog_open_lineage` v1.1.0 with the adoptions. The check holds a lineage to the rule sets introduced up to its revision and no later; a lineage with no revision recorded is read as revision 1. Revision 1 is the profiles before the one-lineage rule, revision 2 adds it (G159), revision 3 adds the plan step, the assessed cancellation and the supporting change request (G162).
+
+**Q3 — proof.** `backlog_g163_probe` v1.0.0: seven lineages opened under each revision, with and without a missing set, a revision without a number refused, and the opening block naming the latest revision.
+
+**Also repaired (OE finding P7).** The plan step's roadmap report named the framework's own register, not the register it was run on, because the report tool took the first Backlog in the graph it loaded. `backlog_roadmap_report` v1.8.0 names only a Backlog the given register declares; the probe checks it.
+
+**What is not claimed.** A lineage that leaves out `openedUnderRevision` is read as revision 1, the weakest bind; the opening tool is the route that writes it, and a hand-written opening can still omit it. The profiles' growth after a new ruling must add a revision; no shape yet refuses a rule set added to a profile without one.
+Related: G89, G155, G159, G162.
 

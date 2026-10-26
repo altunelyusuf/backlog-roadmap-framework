@@ -9,9 +9,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog/shacl/1.184.0> ;
-    owl:versionInfo "1.184.0" ;
-    owl:priorVersion <http://example.org/backlog-shapes/1.176.0> , <http://example.org/backlog-shapes/1.175.0> , <http://example.org/backlog-shapes/1.174.0> , <http://example.org/backlog-shapes/1.173.0> , <http://example.org/backlog-shapes/1.172.0> , <http://example.org/backlog-shapes/1.171.0> , <http://example.org/backlog-shapes/1.170.0> , <http://example.org/backlog-shapes/1.169.0> , <http://example.org/backlog-shapes/1.168.0> , <http://example.org/backlog-shapes/1.167.0> , <http://example.org/backlog-shapes/1.166.0> , <http://example.org/backlog-shapes/1.165.0> , <http://example.org/backlog-shapes/1.164.0> , <http://example.org/backlog-shapes/1.159.0> , <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
+    owl:versionIRI <http://example.org/backlog/shacl/1.185.0> ;
+    owl:versionInfo "1.185.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.184.0> , <http://example.org/backlog-shapes/1.176.0> , <http://example.org/backlog-shapes/1.175.0> , <http://example.org/backlog-shapes/1.174.0> , <http://example.org/backlog-shapes/1.173.0> , <http://example.org/backlog-shapes/1.172.0> , <http://example.org/backlog-shapes/1.171.0> , <http://example.org/backlog-shapes/1.170.0> , <http://example.org/backlog-shapes/1.169.0> , <http://example.org/backlog-shapes/1.168.0> , <http://example.org/backlog-shapes/1.167.0> , <http://example.org/backlog-shapes/1.166.0> , <http://example.org/backlog-shapes/1.165.0> , <http://example.org/backlog-shapes/1.164.0> , <http://example.org/backlog-shapes/1.159.0> , <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.154.0> , <http://example.org/backlog-shapes/1.153.0> , <http://example.org/backlog-shapes/1.152.0> , <http://example.org/backlog-shapes/1.151.0> , <http://example.org/backlog-shapes/1.150.0> , <http://example.org/backlog-shapes/1.149.0> , <http://example.org/backlog-shapes/1.148.0> , <http://example.org/backlog-shapes/1.147.0> , <http://example.org/backlog-shapes/1.146.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.145.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.144.0> ;
@@ -8889,10 +8889,14 @@ backlog:OpeningProfileAdoptedShape a sh:NodeShape ;
     backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
     backlog:fixtureCaseName "OPF_LIN" ;
     sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "G155: this lineage declares an opening profile and does not adopt a rule set the profile includes (itself or through its register). A profile chosen but not adopted binds nothing: adopt every rule set it includes in the commit of the Mission stage output, or declare no profile." ;
+        sh:message "G155: this lineage declares an opening profile and does not adopt a rule set the profile included when the lineage opened (G163: the revision it opened under; a rule set introduced later is not owed) (itself or through its register). A profile chosen but not adopted binds nothing: adopt every rule set it includes in the commit of the Mission stage output, or declare no profile." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             $this backlog:openedWithProfile ?p . ?p backlog:profileIncludes ?rs .
+            OPTIONAL { ?rs backlog:introducedInRevision ?rr . ?rr backlog:revisionNumber ?rn }
+            OPTIONAL { $this backlog:openedUnderRevision ?lr . ?lr backlog:revisionNumber ?ln }
+            BIND(COALESCE(?rn, 1) AS ?ruleRev) BIND(COALESCE(?ln, 1) AS ?lineageRev)
+            FILTER(?ruleRev <= ?lineageRev)
             FILTER NOT EXISTS { $this backlog:adoptsRuleSet ?rs }
             FILTER NOT EXISTS { ?reg backlog:adoptsRuleSet ?rs . FILTER NOT EXISTS { ?reg a backlog:Lineage } }
         }""" ] .
@@ -9156,3 +9160,17 @@ backlog:ChangeSupportsMissionShape a sh:NodeShape ;
                     { $this backlog:belongsToLineage ?l } UNION { $this backlog:requestsChangeTo ?sc . ?sc backlog:belongsToLineage ?l } }
             FILTER NOT EXISTS { $this backlog:supportsObjective ?o }
         }""" ] .
+
+
+#################################################################
+#  v1.435.0 (G163) -- the opening profile is versioned.
+#################################################################
+
+backlog:ProfileRevisionShape a sh:NodeShape ;
+    sh:targetClass backlog:ProfileRevision ;
+    sh:severity sh:Violation ;
+    rdfs:label "A profile revision carries its number (G163)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "PRV_BAD" ;
+    sh:property [ sh:path backlog:revisionNumber ; sh:minCount 1 ; sh:datatype xsd:integer ; sh:minInclusive 1 ;
+        sh:message "G163: a profile revision must carry its number (an integer from 1), or a lineage cannot be compared with the rule sets introduced after it opened." ] .

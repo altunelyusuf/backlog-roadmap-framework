@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_open_lineage v1.0.0 -- write the opening block of a lineage from a profile (G155).
+"""backlog_open_lineage v1.1.0 -- write the opening block of a lineage from a profile (G155, G163).
 
 A lineage is judged only by the rule sets it adopts (G89, G91), and the adoption is recorded at its opening (adoptionRecordedAtOpen). Doing that by hand,
 rule set by rule set, is why consumers opened lineages that were not agentic: nobody knew the list. A profile (OpeningProfile) in the data file names the
@@ -10,6 +10,7 @@ list; this tool reads it and prints the block, so the choice is made once, by na
         prints Turtle for the lineage subject: openedWithProfile, adoptionRecordedAtOpen true, and one adoptsRuleSet per rule set of the profile.
         Put it in the commit of the lineage's Mission stage output (the order check witnesses each adoption against that commit, G148).
   --abox FILE overrides the data file (default: the newest backlog_abox in this package's 01-ontologies).
+The block also names the profile revision the lineage opens under (openedUnderRevision, the highest in the data file), so a profile that grows later does not judge it (G163).
 Exit 0, 2 on an unknown profile.
 """
 import glob, os, re, sys
@@ -23,9 +24,15 @@ def profiles(g):
     return {str(p).rsplit("#", 1)[-1]: sorted(str(r).rsplit("#", 1)[-1] for r in g.objects(p, B.profileIncludes)) for p in g.subjects(RDF.type, B.OpeningProfile)}
 
 
-def block(profile, lineage, prefix, included):
+def latest_revision(g):
+    rv = {int(n): str(r).rsplit("#", 1)[-1] for r in g.subjects(RDF.type, B.ProfileRevision) for n in g.objects(r, B.revisionNumber)}
+    return rv[max(rv)] if rv else None
+
+
+def block(profile, lineage, prefix, included, revision=None):
     sets = " ,\n        ".join("backlog:" + r for r in included)
-    return (f"{prefix}:{lineage} backlog:openedWithProfile backlog:{profile} ;\n    backlog:adoptionRecordedAtOpen true ;\n"
+    rev = f"    backlog:openedUnderRevision backlog:{revision} ;\n" if revision else ""
+    return (f"{prefix}:{lineage} backlog:openedWithProfile backlog:{profile} ;\n{rev}    backlog:adoptionRecordedAtOpen true ;\n"
             f"    backlog:adoptsRuleSet\n        {sets} .\n")
 
 
@@ -40,7 +47,7 @@ def main(argv):
     prof, lin = opt("--profile"), opt("--lineage")
     if not prof or not lin or prof not in P:
         print("REFUSED: give --profile (one of: %s) and --lineage" % ", ".join(sorted(P))); return 2
-    print(block(prof, lin, opt("--prefix") or "ex", P[prof]), end="")
+    print(block(prof, lin, opt("--prefix") or "ex", P[prof], latest_revision(g)), end="")
     return 0
 
 

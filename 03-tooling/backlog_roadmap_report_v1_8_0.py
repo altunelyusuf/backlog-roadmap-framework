@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_roadmap_report v1.7.0 — the roadmap, computed.
+"""backlog_roadmap_report v1.8.0 — the roadmap, computed.
 
 A roadmap is this script's output, never a maintained document. The moment a
 computed value is copied into prose it starts decaying, and a report that is
@@ -31,7 +31,7 @@ the two answers coincide by construction. The two are never reconciled by
 arithmetic; a disagreement is displayed so a human resolves it knowingly.
 
 Usage:
-  backlog_roadmap_report_v1_7_0.py REGISTER.ttl [--method IRI] [--emit report.ttl]
+  backlog_roadmap_report_v1_8_0.py REGISTER.ttl [--method IRI] [--emit report.ttl]
 """
 
 import argparse
@@ -222,7 +222,7 @@ def main():
     print("roadmap report  : computed %s" % now.isoformat())
     print("register        : %s" % os.path.basename(args.register))
     print("method          : %s" % (args.method or "any"))
-    print("tooling         : rdflib %s, backlog_roadmap_report v1.7.0" % rdflib.__version__)
+    print("tooling         : rdflib %s, backlog_roadmap_report v1.8.0" % rdflib.__version__)
 
     gates = active_gates(g)
     all_rows = ranked(g, method)
@@ -586,7 +586,10 @@ def main():
         report = URIRef("http://example.org/report#Run_%s" % now.strftime("%Y%m%dT%H%M%S"))
         out.add((report, RDF.type, BL.RoadmapReport))
         out.add((report, BL.hasRunTimestamp, Literal(now.isoformat(), datatype=XSD.dateTime)))
-        for b in g.subjects(RDF.type, BL.Backlog):
+        # v1.8.0 (G163, OE finding P7): the report is of the register it was run on, not the first Backlog the loaded graph holds
+        # (the framework's own register comes first). Only a Backlog the given register file declares is named.
+        own = Graph(); own.parse(args.register, format="turtle")
+        for b in own.subjects(RDF.type, BL.Backlog):
             out.add((report, BL.reportOf, b))
             break
         for s in SECTIONS:

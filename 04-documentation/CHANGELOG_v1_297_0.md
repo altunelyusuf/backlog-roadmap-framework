@@ -11260,6 +11260,12 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.435.0 — 2026-10-26 (MINOR: ruling G163, the opening profile is versioned)
+
+- **G163 (found by OE reading v1.434.0):** `ProfileRevision`, `revisionNumber`, `introducedInRevision`, `openedUnderRevision` (T-Box v1.153.0); revisions 1–3 and each profile rule set's revision (data v1.62.0); the opening-profile check holds a lineage to the rule sets up to its revision, and a revision must carry its number (shapes v1.185.0); `backlog_open_lineage` v1.1.0 writes the revision; `backlog_roadmap_report` v1.8.0 names the register it was run on (OE finding P7). Probe: `backlog_g163_probe` v1.0.0. Discipline v125.0.0, Standard v1.146.0.
+
+**Unplanned work:** a defect in the previous release found by the OE governance session (handover of 2026-10-26); no backlog item of this package covers it.
+
 ## v1.434.0 — 2026-10-26 (MINOR: ruling G162, the plan step, the cancelling exit and the supporting change request)
 
 - **G162 (the Owner's rules of 2026-10-26):** `RS_PlanBeforeStart`, `RS_CancellationAssessed`, `RS_ChangeSupportsMission` in both opening profiles (data v1.61.0); `kicksOffLineage`, `activatesReport`, `AsIsAssessment` with its sorting links, `ClosureMark`, `hasClosureMark`, `citesAssessment`, `supportsObjective` (T-Box v1.152.0); five shapes (shapes v1.184.0); `backlog_lineage_steps` v1.0.0 (plan, assess, close, adapt); the start gate asks for the plan step (v1.6.0). Probes: `backlog_g162_probe` v1.0.0, `backlog_lineage_steps_probe` v1.0.0. Discipline v124.0.0, Standard v1.145.0.
