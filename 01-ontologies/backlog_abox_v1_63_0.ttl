@@ -22,9 +22,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (ABox: controlled individuals, reference data and the live register)"@en ;
-    owl:versionIRI <http://example.org/backlog/abox/1.62.0> ;
-    owl:versionInfo "1.62.0" ;
-    owl:priorVersion <http://example.org/backlog/abox/1.61.0> , <http://example.org/backlog/abox/1.60.0> , <http://example.org/backlog/abox/1.59.0> , <http://example.org/backlog/abox/1.58.0> , <http://example.org/backlog/abox/1.57.0> , <http://example.org/backlog/abox/1.53.0> , <http://example.org/backlog/abox/1.52.0> , <http://example.org/backlog/abox/1.51.0> , <http://example.org/backlog/abox/1.50.0> , <http://example.org/backlog/abox/1.49.0> , <http://example.org/backlog/abox/1.48.0> , <http://example.org/backlog/abox/1.47.0> , <http://example.org/backlog/abox/1.46.0> , <http://example.org/backlog/abox/1.45.0> , <http://example.org/backlog/abox/1.40.0> , <http://example.org/backlog/abox/1.39.0> , <http://example.org/backlog/abox/1.38.0> , <http://example.org/backlog/abox/1.37.0> , <http://example.org/backlog/abox/1.36.0> , <http://example.org/backlog/abox/1.35.0> ;
+    owl:versionIRI <http://example.org/backlog/abox/1.63.0> ;
+    owl:versionInfo "1.63.0" ;
+    owl:priorVersion <http://example.org/backlog/abox/1.62.0> , <http://example.org/backlog/abox/1.61.0> , <http://example.org/backlog/abox/1.60.0> , <http://example.org/backlog/abox/1.59.0> , <http://example.org/backlog/abox/1.58.0> , <http://example.org/backlog/abox/1.57.0> , <http://example.org/backlog/abox/1.53.0> , <http://example.org/backlog/abox/1.52.0> , <http://example.org/backlog/abox/1.51.0> , <http://example.org/backlog/abox/1.50.0> , <http://example.org/backlog/abox/1.49.0> , <http://example.org/backlog/abox/1.48.0> , <http://example.org/backlog/abox/1.47.0> , <http://example.org/backlog/abox/1.46.0> , <http://example.org/backlog/abox/1.45.0> , <http://example.org/backlog/abox/1.40.0> , <http://example.org/backlog/abox/1.39.0> , <http://example.org/backlog/abox/1.38.0> , <http://example.org/backlog/abox/1.37.0> , <http://example.org/backlog/abox/1.36.0> , <http://example.org/backlog/abox/1.35.0> ;
     owl:priorVersion <http://example.org/backlog/abox/1.34.0> , <http://example.org/backlog/abox/1.33.0> , <http://example.org/backlog/abox/1.32.0> , <http://example.org/backlog/abox/1.31.0> , <http://example.org/backlog/abox/1.30.0> , <http://example.org/backlog/abox/1.29.0> , <http://example.org/backlog/abox/1.28.0> , <http://example.org/backlog/abox/1.27.0> , <http://example.org/backlog/abox/1.26.0> , <http://example.org/backlog/abox/1.25.0> , <http://example.org/backlog/abox/1.24.0> , <http://example.org/backlog/abox/1.23.0> , <http://example.org/backlog/abox/1.22.0> , <http://example.org/backlog/abox/1.21.0> , <http://example.org/backlog/abox/1.20.0> , <http://example.org/backlog/abox/1.19.0> , <http://example.org/backlog/abox/1.17.0> , <http://example.org/backlog/abox/1.16.0> , <http://example.org/backlog/abox/1.15.0> , <http://example.org/backlog/abox/1.14.0> , <http://example.org/backlog/abox/1.13.0> , <http://example.org/backlog/abox/1.12.0> , <http://example.org/backlog/abox/1.11.0> , <http://example.org/backlog/abox/1.10.0> , <http://example.org/backlog/abox/1.9.0> , <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
         <http://example.org/backlog-abox/1.2.1> ,
                      <http://example.org/backlog-abox/1.2.0> ,
@@ -2606,7 +2606,7 @@ fw:Ruling_G3 a backlog:GovernanceRuling ;
     backlog:hasRulingIdentifier "G3" ;
     rdfs:label "Permitted is not intended"@en ;
     backlog:hasRulingStatement "Epic ⊑ ProductBacklogItem is true, and does not license planning an undecomposed epic into an iteration. A subclass relation answers what may be asserted; a definition answers what the term means. Two sessions made this error from opposite ends within a day. *Enforced by* EpicPlanningShape at L2." ;
-    backlog:enforcedByShape backlog:PermittedNotIntendedShape ;
+    backlog:enforcedByShape backlog:EpicPlanningShape ;
     backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
 fw:Ruling_G4 a backlog:GovernanceRuling ;
     backlog:hasRulingIdentifier "G4" ;
@@ -2618,13 +2618,13 @@ fw:Ruling_G5 a backlog:GovernanceRuling ;
     backlog:hasRulingIdentifier "G5" ;
     rdfs:label "Why, when, and what are three questions"@en ;
     backlog:hasRulingStatement "Epic answers why, Iteration answers when, DeploymentUnit answers what users received. Conflating them is the commonest drift observed here: an epic in a sprint looks like planning and commits nothing anyone can finish; an epic in a release names something that cannot ship. *Enforced by* L4GroomingShape." ;
-    backlog:enforcedByShape backlog:IterationMembershipShape ;
+    backlog:enforcedByShape backlog:L4GroomingShape ;
     backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
 fw:Ruling_G6 a backlog:GovernanceRuling ;
     backlog:hasRulingIdentifier "G6" ;
     rdfs:label "Drift is the default, not the exception"@en ;
     backlog:hasRulingStatement "Corollary from v3.0.0: drift is *detected* identically whichever order the chain was built in — L4DriftShape fires on an item pursuing an unrealised objective either way, verified by construction on both. What the order changes is when a human notices: scope-first surfaces the conflict while the objective is being written, scope-last surfaces it only once work exists to be rejected. Work" ;
-    backlog:enforcedByShape backlog:EvidenceShape ;
+    backlog:enforcedByShape backlog:L4DriftShape ;
     backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
 fw:Ruling_G7 a backlog:GovernanceRuling ;
     backlog:hasRulingIdentifier "G7" ;
@@ -4277,7 +4277,7 @@ fw:Ruling_G62 a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G62" ;
     backlog:enforcedByShape backlog:IneffectiveCorrectiveAttemptAdvisoryShape ;
     backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE, ruled by the owner in session." .
 
-fw:Ruling_G62b a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G62" ;
+fw:Ruling_G62b a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G62b" ;
     rdfs:label "Scope conformance covers the whole lineage lifecycle"@en ;
     backlog:hasRulingStatement "Scope creep and scope gaps are checked structurally across the whole lineage lifecycle, not only at the objective-metric level." ;
     backlog:enforcedByShape backlog:ScopeCreepAdvisoryShape ;
@@ -6428,3 +6428,483 @@ backlog:Profile_Agentic a owl:NamedIndividual , backlog:OpeningProfile ;
 backlog:Pr_1 a owl:NamedIndividual , backlog:ProfileRevision ; rdfs:label "Profile revision 1"@en ; backlog:revisionNumber 1 ; skos:definition "The profiles up to release 1.432.0: status history, flow points, repair re-prioritising, impediments that name what they block, decomposition state, and agent accountability."@en .
 backlog:Pr_2 a owl:NamedIndividual , backlog:ProfileRevision ; rdfs:label "Profile revision 2"@en ; backlog:revisionNumber 2 ; skos:definition "Release 1.433.0 (G159) adds the one-lineage rule."@en .
 backlog:Pr_3 a owl:NamedIndividual , backlog:ProfileRevision ; rdfs:label "Profile revision 3"@en ; backlog:revisionNumber 3 ; skos:definition "Release 1.434.0 (G162) adds the plan step, the assessed cancellation and the supporting change request."@en .
+
+#################################################################
+#  v1.436.0 (G164) -- the rulings that a shape enforces are recorded as rulings, with the shapes that enforce them.
+#  Nothing is invented: the statement is the ruling's own heading in the lineage discipline; each shape is one the ruling's section
+#  names, one that cites the ruling in its own text, or one a reading of the ruling against the shapes found to test it.
+#################################################################
+
+fw:Ruling_G19 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G19" ;
+    rdfs:label "A floor is measured, not argued"@en ;
+    backlog:hasRulingStatement "A floor is measured, not argued" ;
+    backlog:enforcedByShape backlog:ClassReachabilityShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G19; shapes linked in G164." .
+
+fw:Ruling_G21 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G21" ;
+    rdfs:label "Evidence batched across criteria carries the false one"@en ;
+    backlog:hasRulingStatement "Evidence batched across criteria carries the false one" ;
+    backlog:enforcedByShape backlog:ClassReachabilityShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G21; shapes linked in G164." .
+
+fw:Ruling_G22 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G22" ;
+    rdfs:label "A clause nothing fires has never been shown to work"@en ;
+    backlog:hasRulingStatement "A clause nothing fires has never been shown to work" ;
+    backlog:enforcedByShape backlog:NewUnprovenShapeShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G22; shapes linked in G164." .
+
+fw:Ruling_G23 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G23" ;
+    rdfs:label "Verifying closed work is not backfilling it"@en ;
+    backlog:hasRulingStatement "Verifying closed work is not backfilling it" ;
+    backlog:enforcedByShape backlog:EvidenceBoundDoneShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G23; shapes linked in G164." .
+
+fw:Ruling_G24 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G24" ;
+    rdfs:label "A derived number must answer to what it derives from"@en ;
+    backlog:hasRulingStatement "A derived number must answer to what it derives from" ;
+    backlog:enforcedByShape backlog:CommittedEffortShape , backlog:ObservedDurationShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G24; shapes linked in G164." .
+
+fw:Ruling_G29 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G29" ;
+    rdfs:label "Goal generation is complete by construction once GoalFacing is treated as a closure test"@en ;
+    backlog:hasRulingStatement "Goal generation is complete by construction once GoalFacing is treated as a closure test" ;
+    backlog:enforcedByShape backlog:GoalFacingShape , backlog:GoalSufficiencyShape , backlog:InverseGoalShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G29; shapes linked in G164." .
+
+fw:Ruling_G31 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G31" ;
+    rdfs:label "\"When to measure\" is a condition, not a fabricated date, unless the timing is genuinely calendar-bound"@en ;
+    backlog:hasRulingStatement "\"When to measure\" is a condition, not a fabricated date, unless the timing is genuinely calendar-bound" ;
+    backlog:enforcedByShape backlog:CheckpointConditionAnchorShape , backlog:ObjectiveCheckpointTimingShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G31; shapes linked in G164." .
+
+fw:Ruling_G33 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G33" ;
+    rdfs:label "State is grounded in re-checked evidence, never in whether a ceremony happened"@en ;
+    backlog:hasRulingStatement "State is grounded in re-checked evidence, never in whether a ceremony happened" ;
+    backlog:enforcedByShape backlog:EvidenceBoundDoneShape , backlog:EvidencedWorkStillUnstartedShape , backlog:StateHistoryShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G33; shapes linked in G164." .
+
+fw:Ruling_G52 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G52" ;
+    rdfs:label "`ScopeChange` built next by this framework's own real BP-D10 ranking, not preference; a real archive-vs-active scope mistake caught before p"@en ;
+    backlog:hasRulingStatement "`ScopeChange` built next by this framework's own real BP-D10 ranking, not preference; a real archive-vs-active scope mistake caught before publish" ;
+    backlog:enforcedByShape backlog:SessionDecisionScoringShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G52; shapes linked in G164." .
+
+fw:Ruling_G54 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G54" ;
+    rdfs:label "`Enabler` and `TransitionEvent` both re-scored down on confirmed real cost; `Spike` built instead, per `BP-D11`"@en ;
+    backlog:hasRulingStatement "`Enabler` and `TransitionEvent` both re-scored down on confirmed real cost; `Spike` built instead, per `BP-D11`" ;
+    backlog:enforcedByShape backlog:ScopeCreepAdvisoryShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G54; shapes linked in G164." .
+
+fw:Ruling_G67 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G67" ;
+    rdfs:label "The owner's own real decision on `RulingsQueryable`: governance layer in ontology, narratives stay human language, decisions and outcomes qu"@en ;
+    backlog:hasRulingStatement "The owner's own real decision on `RulingsQueryable`: governance layer in ontology, narratives stay human language, decisions and outcomes queryable" ;
+    backlog:enforcedByShape backlog:BlueprintGapShape , backlog:GovernanceRulingShape , backlog:GovernedDoneShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G67; shapes linked in G164." .
+
+fw:Ruling_G68 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G68" ;
+    rdfs:label "Re-verified rather than trusted the prior release's own boundary; the 25 non-shape-backed rulings given real existence too; `Obj_RulingsQuer"@en ;
+    backlog:hasRulingStatement "Re-verified rather than trusted the prior release's own boundary; the 25 non-shape-backed rulings given real existence too; `Obj_RulingsQueryable` genuinely reached target" ;
+    backlog:enforcedByShape backlog:RetrospectiveFindingShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G68; shapes linked in G164." .
+
+fw:Ruling_G74 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G74" ;
+    rdfs:label "Told directly that one generic mechanism was not enough; three built, and a real, session-long tool bug found while building the second"@en ;
+    backlog:hasRulingStatement "Told directly that one generic mechanism was not enough; three built, and a real, session-long tool bug found while building the second" ;
+    backlog:enforcedByShape backlog:CrossLineageRiskAdvisoryShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G74; shapes linked in G164." .
+
+fw:Ruling_G80 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G80" ;
+    rdfs:label "A proposal filed in your own inbox has been sent to no one"@en ;
+    backlog:hasRulingStatement "A proposal filed in your own inbox has been sent to no one" ;
+    backlog:enforcedByShape backlog:RevivalRequiresReactivationShape , backlog:SubmittedToOwnInboxShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G80; shapes linked in G164." .
+
+fw:Ruling_G81 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G81" ;
+    rdfs:label "The chain is witnessed by git, and a bypass is answered by a restart, not a fill"@en ;
+    backlog:hasRulingStatement "The chain is witnessed by git, and a bypass is answered by a restart, not a fill" ;
+    backlog:enforcedByShape backlog:BypassRequiresRestartShape , backlog:LineageBypassShape , backlog:LineageRestartShape , backlog:PreLineageItemShape , backlog:PreLineageItemUnadmittedAdvisoryShape , backlog:RetractedOutputConsumedShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G81; shapes linked in G164." .
+
+fw:Ruling_G82 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G82" ;
+    rdfs:label "A restart loop stops when a trial adds nothing, not when a counter runs out"@en ;
+    backlog:hasRulingStatement "A restart loop stops when a trial adds nothing, not when a counter runs out" ;
+    backlog:enforcedByShape backlog:LineageThrashShape , backlog:NoRestartOnFrozenLineageShape , backlog:RestartKeepsAdmissionsShape , backlog:RestartRequiresNoveltyShape , backlog:ThrashFreezesLineageShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G82; shapes linked in G164." .
+
+fw:Ruling_G83 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G83" ;
+    rdfs:label "Convergence is a family of strategies; decrease-by-one was only the first"@en ;
+    backlog:hasRulingStatement "Convergence is a family of strategies; decrease-by-one was only the first" ;
+    backlog:enforcedByShape backlog:BypassRequiresRestartShape , backlog:CombineOutputShape , backlog:DecreaseByFactorShape , backlog:DivideAndConquerShape , backlog:RestartDeclaresStrategyShape , backlog:TransformStrategyShape , backlog:VariableDecreaseShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G83; shapes linked in G164." .
+
+fw:Ruling_G84 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G84" ;
+    rdfs:label "Divide and conquer, run on a real lineage: it converged in one trial, and it taught two rules"@en ;
+    backlog:hasRulingStatement "Divide and conquer, run on a real lineage: it converged in one trial, and it taught two rules" ;
+    backlog:enforcedByShape backlog:RestartFlagsEveryItemShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G84; shapes linked in G164." .
+
+fw:Ruling_G85 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G85" ;
+    rdfs:label "The strategy family, run on toy lineages with a real witness: what each run taught"@en ;
+    backlog:hasRulingStatement "The strategy family, run on toy lineages with a real witness: what each run taught" ;
+    backlog:enforcedByShape backlog:DecreaseByFactorShape , backlog:EpicPlanningShape , backlog:LineageRestartShape , backlog:RestartFlagsEveryItemShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G85; shapes linked in G164." .
+
+fw:Ruling_G87 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G87" ;
+    rdfs:label "Closed is not archived; only passed steps fire"@en ;
+    backlog:hasRulingStatement "Closed is not archived; only passed steps fire" ;
+    backlog:enforcedByShape backlog:AchievedLineageNotArchivedAdvisoryShape , backlog:ArchiveOnlyWhenAchievedShape , backlog:InProgressNeedsStartedWorkShape , backlog:LineageStatusShape , backlog:LineageStatusSingleShape , backlog:StatusLagsRealWorkShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G87; shapes linked in G164." .
+
+fw:Ruling_G89 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G89" ;
+    rdfs:label "A rule that reaches backwards is the failure this framework exists to refuse, and the session committed it twice"@en ;
+    backlog:hasRulingStatement "A rule that reaches backwards is the failure this framework exists to refuse, and the session committed it twice" ;
+    backlog:enforcedByShape backlog:AdoptionConformanceGoalShape , backlog:CodeTableModuleLinkShape , backlog:DoneWithoutVerifierShape , backlog:EvidencedWorkStillUnstartedShape , backlog:ExperienceOutcomeClosedShape , backlog:FlowPointsMatchHistoryShape , backlog:ManagerialIndependenceShape , backlog:ObligationAdoptionShape , backlog:OccurrenceOfActivityShape , backlog:OneLineageRuleAdoptedShape , backlog:OrganisationIsTeamShape , backlog:StaleDispositionShape , backlog:SupersededMissionInFlightShape , backlog:UnconnectedActiveLineagesShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G89; shapes linked in G164." .
+
+fw:Ruling_G88 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G88" ;
+    rdfs:label "Order is ancestry, not time; and a pin that couples files is a cost paid on every release"@en ;
+    backlog:hasRulingStatement "Order is ancestry, not time; and a pin that couples files is a cost paid on every release" ;
+    backlog:enforcedByShape backlog:ObligationAdoptionShape , backlog:OpeningProfileAdoptedShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G88; shapes linked in G164." .
+
+fw:Ruling_G90 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G90" ;
+    rdfs:label "\"Advisory\" had become the place to put obligations nobody wanted to enforce"@en ;
+    backlog:hasRulingStatement "\"Advisory\" had become the place to put obligations nobody wanted to enforce" ;
+    backlog:enforcedByShape backlog:ClassReachabilityShape , backlog:SuccessorGoalOriginAdvisoryShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G90; shapes linked in G164." .
+
+fw:Ruling_G91 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G91" ;
+    rdfs:label "A change in what a rule refuses is a ruling, and binds only work that declared it"@en ;
+    backlog:hasRulingStatement "A change in what a rule refuses is a ruling, and binds only work that declared it" ;
+    backlog:enforcedByShape backlog:DoneWithoutVerifierShape , backlog:EvidencedWorkStillUnstartedShape , backlog:ExperienceOutcomeClosedShape , backlog:IntentElementLabelShape , backlog:OccurrenceOfActivityShape , backlog:OneLineageRuleAdoptedShape , backlog:OrganisationIsTeamShape , backlog:SuccessorGoalOriginAdvisoryShape , backlog:UnconnectedActiveLineagesShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G91; shapes linked in G164." .
+
+fw:Ruling_G92 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G92" ;
+    rdfs:label "Hand-picked exceptions inside an automatic closure produce the opposite of the rule"@en ;
+    backlog:hasRulingStatement "Hand-picked exceptions inside an automatic closure produce the opposite of the rule" ;
+    backlog:enforcedByShape backlog:ArtifactCommitmentShape , backlog:ContainerShape , backlog:LineageCompletenessShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G92; shapes linked in G164." .
+
+fw:Ruling_G95 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G95" ;
+    rdfs:label "\"Accepted\" without action is a status that does not exist in this package's own protocol; the owner caught it directly"@en ;
+    backlog:hasRulingStatement "\"Accepted\" without action is a status that does not exist in this package's own protocol; the owner caught it directly" ;
+    backlog:enforcedByShape backlog:ClosureReportCommitAnchorShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G95; shapes linked in G164." .
+
+fw:Ruling_G96 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G96" ;
+    rdfs:label "This session built the safeguard against report-before-outcome ordering, and had already violated it in its own real work; found only becaus"@en ;
+    backlog:hasRulingStatement "This session built the safeguard against report-before-outcome ordering, and had already violated it in its own real work; found only because the owner asked a second time" ;
+    backlog:enforcedByShape backlog:ClosureReportCommitAnchorShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G96; shapes linked in G164." .
+
+fw:Ruling_G97 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G97" ;
+    rdfs:label "The guard against a false LS_InProgress checked only one direction; a status could understate real, completed work indefinitely and nothing "@en ;
+    backlog:hasRulingStatement "The guard against a false LS_InProgress checked only one direction; a status could understate real, completed work indefinitely and nothing refused it" ;
+    backlog:enforcedByShape backlog:InProgressNeedsStartedWorkShape , backlog:StatusLagsRealWorkShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G97; shapes linked in G164." .
+
+fw:Ruling_G98 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G98" ;
+    rdfs:label "A real, unresolved bug in the archive-conformance tool's own graph construction, downgraded to advisory rather than left blocking or silentl"@en ;
+    backlog:hasRulingStatement "A real, unresolved bug in the archive-conformance tool's own graph construction, downgraded to advisory rather than left blocking or silently ignored" ;
+    backlog:enforcedByShape backlog:RetiredNameCollisionShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G98; shapes linked in G164." .
+
+fw:Ruling_G99 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G99" ;
+    rdfs:label "Technical-debt and maintenance work may proceed as a planned task set, without opening a Lineage, once a real ceremony gap was found rather "@en ;
+    backlog:hasRulingStatement "Technical-debt and maintenance work may proceed as a planned task set, without opening a Lineage, once a real ceremony gap was found rather than assumed away" ;
+    backlog:enforcedByShape backlog:GoalDerivationShape , backlog:LineageMembershipShape , backlog:ScopeFirstOrderShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G99; shapes linked in G164." .
+
+fw:Ruling_G100 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G100" ;
+    rdfs:label "A gate that examined nothing passed, and the work it was meant to stop ran outside the register; the recovery is a procedure, not a decision"@en ;
+    backlog:hasRulingStatement "A gate that examined nothing passed, and the work it was meant to stop ran outside the register; the recovery is a procedure, not a decision per instance" ;
+    backlog:enforcedByShape backlog:GroomingShape , backlog:IterationCapacityShape , backlog:L4StoryGranularityShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G100; shapes linked in G164." .
+
+fw:Ruling_G103 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G103" ;
+    rdfs:label "A ledger may carry the same owl:Ontology header this package already carries on its own register, and the two halves of that header's alignm"@en ;
+    backlog:hasRulingStatement "A ledger may carry the same owl:Ontology header this package already carries on its own register, and the two halves of that header's alignment split cleanly between a shape and a gate because only one of them can see a filename" ;
+    backlog:enforcedByShape backlog:ClassReachabilityShape , backlog:ModuleAudienceDeclaredShape , backlog:OntologyHeaderVersionConsistencyShape , backlog:UndeclaredIndividualShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G103; shapes linked in G164." .
+
+fw:Ruling_G104 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G104" ;
+    rdfs:label "Active lineages coexist only when connected; a different mission waits as a queued lineage; a new requirement enters through change manageme"@en ;
+    backlog:hasRulingStatement "Active lineages coexist only when connected; a different mission waits as a queued lineage; a new requirement enters through change management — ruled for the consumer package, with one rule set and one shape" ;
+    backlog:enforcedByShape backlog:CrossLineageRiskAdvisoryShape , backlog:ExperienceOutcomeClosedShape , backlog:MissionOutsideLineageShape , backlog:UnconnectedActiveLineagesShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G104; shapes linked in G164." .
+
+fw:Ruling_G105 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G105" ;
+    rdfs:label "Work finished but never planned in the register: the runbook's trigger is absent, and the native route is the out-scoping ceremony ending in"@en ;
+    backlog:hasRulingStatement "Work finished but never planned in the register: the runbook's trigger is absent, and the native route is the out-scoping ceremony ending in a succession" ;
+    backlog:enforcedByShape backlog:LineageClosureCompleteShape , backlog:LineageSuccessionShape , backlog:OutScopedWorkUnownedShape , backlog:PartialScopeDeclarationShape , backlog:PreLineageItemShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G105; shapes linked in G164." .
+
+fw:Ruling_G107 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G107" ;
+    rdfs:label "Work that is done cannot say it has not started, and a finish time cannot precede its evidence: the last of the two deferred plan-versus-exe"@en ;
+    backlog:hasRulingStatement "Work that is done cannot say it has not started, and a finish time cannot precede its evidence: the last of the two deferred plan-versus-execution handovers" ;
+    backlog:enforcedByShape backlog:EvidencedWorkStillUnstartedShape , backlog:UnconnectedActiveLineagesShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G107; shapes linked in G164." .
+
+fw:Ruling_G109 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G109" ;
+    rdfs:label "Who does granular work is decided by a closed skill tree, and nobody verifies their own work"@en ;
+    backlog:hasRulingStatement "Who does granular work is decided by a closed skill tree, and nobody verifies their own work" ;
+    backlog:enforcedByShape backlog:DoneWithoutVerifierShape , backlog:EvidencedWorkStillUnstartedShape , backlog:VerifierIndependenceShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G109; shapes linked in G164." .
+
+fw:Ruling_G111 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G111" ;
+    rdfs:label "Agent roles are relations to work, defined from sources, and two independence rules are opt-in"@en ;
+    backlog:hasRulingStatement "Agent roles are relations to work, defined from sources, and two independence rules are opt-in" ;
+    backlog:enforcedByShape backlog:DoneWithoutVerifierShape , backlog:HumanOverseerShape , backlog:ManagerialIndependenceShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G111; shapes linked in G164." .
+
+fw:Ruling_G112 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G112" ;
+    rdfs:label "An adoption binds the scope it was declared for, verification follows risk, and a flow point says how exact it is"@en ;
+    backlog:hasRulingStatement "An adoption binds the scope it was declared for, verification follows risk, and a flow point says how exact it is" ;
+    backlog:enforcedByShape backlog:DoneWithoutVerifierShape , backlog:EvidencedWorkStillUnstartedShape , backlog:FlowPointPrecisionShape , backlog:FlowPointsMissingShape , backlog:HumanOverseerShape , backlog:ManagerialIndependenceShape , backlog:OrganisationIsTeamShape , backlog:UnclassifiedDoneShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G112; shapes linked in G164." .
+
+fw:Ruling_G113 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G113" ;
+    rdfs:label "Every status change is an obligation, and suspension is a state"@en ;
+    backlog:hasRulingStatement "Every status change is an obligation, and suspension is a state" ;
+    backlog:enforcedByShape backlog:FlowPointPrecisionShape , backlog:FlowPointsMatchHistoryShape , backlog:StartNotRecordedShape , backlog:StateHistoryShape , backlog:StatusGapShape , backlog:StatusMomentShape , backlog:StatusUnrecordedShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G113; shapes linked in G164." .
+
+fw:Ruling_G114 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G114" ;
+    rdfs:label "A shape does not judge order from the text of two commit names"@en ;
+    backlog:hasRulingStatement "A shape does not judge order from the text of two commit names" ;
+    backlog:enforcedByShape backlog:StageOrderWitnessShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G114; shapes linked in G164." .
+
+fw:Ruling_G115 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G115" ;
+    rdfs:label "The routes a typed history can still take are closed, and recording is part of whether work may start"@en ;
+    backlog:hasRulingStatement "The routes a typed history can still take are closed, and recording is part of whether work may start" ;
+    backlog:enforcedByShape backlog:EqualSpanShape , backlog:FirstMoveLeavesProposedShape , backlog:FlowPointsMatchHistoryShape , backlog:FlowPointsOnlyWhenStartedShape , backlog:SingleValuedFlowPointShape , backlog:StateHistoryShape , backlog:StatusUnrecordedShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G115; shapes linked in G164." .
+
+fw:Ruling_G116 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G116" ;
+    rdfs:label "The shipped data file binds nobody who did not adopt; an organisation is a human team; a person holds a role"@en ;
+    backlog:hasRulingStatement "The shipped data file binds nobody who did not adopt; an organisation is a human team; a person holds a role" ;
+    backlog:enforcedByShape backlog:EqualSpanShape , backlog:OrganisationIsTeamShape , backlog:TeamShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G116; shapes linked in G164." .
+
+fw:Ruling_G117 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G117" ;
+    rdfs:label "Planning after a Backlog stage closed is not an addition to it; the executor rules see subclasses"@en ;
+    backlog:hasRulingStatement "Planning after a Backlog stage closed is not an addition to it; the executor rules see subclasses" ;
+    backlog:enforcedByShape backlog:OrganisationIsTeamShape , backlog:TeamShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G117; shapes linked in G164." .
+
+fw:Ruling_G118 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G118" ;
+    rdfs:label "Agents under configuration management: a run is an instance of a definition, a team is assembled, work is accounted for"@en ;
+    backlog:hasRulingStatement "Agents under configuration management: a run is an instance of a definition, a team is assembled, work is accounted for" ;
+    backlog:enforcedByShape backlog:AgentInstanceRecordShape , backlog:AgentRunIsInstanceShape , backlog:AssemblyHasWorkerShape , backlog:AssemblyMembersSeatedShape , backlog:AssemblySeatsIndependentShape , backlog:CollectiveNeedsAssemblyShape , backlog:DelegatedLineageSpawnerShape , backlog:DoneUnaccountedShape , backlog:HumanApprovalAboveLevelShape , backlog:InstanceClockShape , backlog:InstanceKindShape , backlog:OrganisationIsTeamShape , backlog:SeatRecordShape , backlog:SeparateDutiesShape , backlog:TeamAssemblyRecordShape , backlog:TransitionByRunShape , backlog:TransitionNamesWhoShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G118; shapes linked in G164." .
+
+fw:Ruling_G120 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G120" ;
+    rdfs:label "A responsibility that repeats is a definition whose occurrences are items; a start nobody witnessed is stated as an estimate"@en ;
+    backlog:hasRulingStatement "A responsibility that repeats is a definition whose occurrences are items; a start nobody witnessed is stated as an estimate" ;
+    backlog:enforcedByShape backlog:FlowShape , backlog:ObjectiveHasCorrectiveActionShape , backlog:OccurrenceOfActivityShape , backlog:RecurringActivityRecordShape , backlog:SeatRecordShape , backlog:StartEstimateBasisShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G120; shapes linked in G164." .
+
+fw:Ruling_G121 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G121" ;
+    rdfs:label "The statements a mission replaced are its lineage's history; the closure anchor binds those who adopted it; a replaced mission states no out"@en ;
+    backlog:hasRulingStatement "The statements a mission replaced are its lineage's history; the closure anchor binds those who adopted it; a replaced mission states no outcome" ;
+    backlog:enforcedByShape backlog:ClosureReportCommitAnchorShape , backlog:LineageShape , backlog:MissionOutcomeShape , backlog:MissionOutsideLineageShape , backlog:OccurrenceOfActivityShape , backlog:SupersededMissionInFlightShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G121; shapes linked in G164." .
+
+fw:Ruling_G125 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G125" ;
+    rdfs:label "Work on the deliverable of a Done story is a story of its own; in a lineage whose Backlog stage is closed the Backlog is revised, or a succe"@en ;
+    backlog:hasRulingStatement "Work on the deliverable of a Done story is a story of its own; in a lineage whose Backlog stage is closed the Backlog is revised, or a successor takes it" ;
+    backlog:enforcedByShape backlog:ExecutionTaskShape , backlog:StageRevisionShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G125; shapes linked in G164." .
+
+fw:Ruling_G127 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G127" ;
+    rdfs:label "A deliverable added to a closed scope statement is a revision from the Scope stage; a recorded scope change leaves the digests not reproduci"@en ;
+    backlog:hasRulingStatement "A deliverable added to a closed scope statement is a revision from the Scope stage; a recorded scope change leaves the digests not reproducing until the stage is closed again, once for all the changes" ;
+    backlog:enforcedByShape backlog:StageRevisionShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G127; shapes linked in G164." .
+
+fw:Ruling_G129 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G129" ;
+    rdfs:label "A carried item keeps its exemption while a revision is under way, and may be handed on down a chain of successors"@en ;
+    backlog:hasRulingStatement "A carried item keeps its exemption while a revision is under way, and may be handed on down a chain of successors" ;
+    backlog:enforcedByShape backlog:GroomingShape , backlog:L4StoryGranularityShape , backlog:PreLineageItemShape , backlog:SuccessionCarriedItemShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G129; shapes linked in G164." .
+
+fw:Ruling_G131 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G131" ;
+    rdfs:label "The scope outcome is derived for a scope built first as well as for a scope built last"@en ;
+    backlog:hasRulingStatement "The scope outcome is derived for a scope built first as well as for a scope built last" ;
+    backlog:enforcedByShape backlog:ScopeCompletionRule , backlog:ScopeMeasurabilityShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G131; shapes linked in G164." .
+
+fw:Ruling_G132 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G132" ;
+    rdfs:label "The scope-to-objective link is retired; the order is stated by `fillsScope` alone"@en ;
+    backlog:hasRulingStatement "The scope-to-objective link is retired; the order is stated by `fillsScope` alone" ;
+    backlog:enforcedByShape backlog:LegacyOrderAdvisoryShape , backlog:ScopeCompletionRule , backlog:ScopeFirstOrderShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G132; shapes linked in G164." .
+
+fw:Ruling_G133 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G133" ;
+    rdfs:label "A rule the method adds after a story is Done does not reach into that story; repairing its deliverable is new work taken by the change route"@en ;
+    backlog:hasRulingStatement "A rule the method adds after a story is Done does not reach into that story; repairing its deliverable is new work taken by the change route" ;
+    backlog:enforcedByShape backlog:ObligationAdoptionShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G133; shapes linked in G164." .
+
+fw:Ruling_G134 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G134" ;
+    rdfs:label "A connection is a link, never text; the archive entry names what it records by links"@en ;
+    backlog:hasRulingStatement "A connection is a link, never text; the archive entry names what it records by links" ;
+    backlog:enforcedByShape backlog:ArchiveConformanceLinksShape , backlog:ArchiveEntryLinksShape , backlog:CodeTableModuleLinkShape , backlog:SupersededMissionInFlightShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G134; shapes linked in G164." .
+
+fw:Ruling_G136 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G136" ;
+    rdfs:label "A defect named at closure has an item; a criterion records the tool it is measured with; the sprint goal is fixed at the start; a story has "@en ;
+    backlog:hasRulingStatement "A defect named at closure has an item; a criterion records the tool it is measured with; the sprint goal is fixed at the start; a story has its epic; an executor is briefed from the task and criterion" ;
+    backlog:enforcedByShape backlog:BriefDerivedShape , backlog:ClosureCaveatTrackedShape , backlog:CodeTableModuleLinkShape , backlog:CriterionCitesGateShape , backlog:CriterionToolVersionShape , backlog:PlanningAfterIterationStartShape , backlog:StartBeforeExecutorShape , backlog:StartedWithoutBriefShape , backlog:StoryEpicOrAloneShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G136; shapes linked in G164." .
+
+fw:Ruling_G137 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G137" ;
+    rdfs:label "The corrected handover: the six measures stand, and three gaps its register check found are advised"@en ;
+    backlog:hasRulingStatement "The corrected handover: the six measures stand, and three gaps its register check found are advised" ;
+    backlog:enforcedByShape backlog:IterationCeremonyShape , backlog:ObservedDuringCeremonyLinkShape , backlog:StartBeforeExecutorShape , backlog:StartInStartedIterationShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G137; shapes linked in G164." .
+
+fw:Ruling_G147 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G147" ;
+    rdfs:label "A repair re-prioritises the open items it touches (opt-in rule set)"@en ;
+    backlog:hasRulingStatement "A repair re-prioritises the open items it touches (opt-in rule set)" ;
+    backlog:enforcedByShape backlog:RepairReprioritisesShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G147; shapes linked in G164." .
+
+fw:Ruling_G148 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G148" ;
+    rdfs:label "Four handovers answered: Cancelled items, a parent left open, adoption timing at a restart, a freeze after the restart, a goal across supers"@en ;
+    backlog:hasRulingStatement "Four handovers answered: Cancelled items, a parent left open, adoption timing at a restart, a freeze after the restart, a goal across superseded missions" ;
+    backlog:enforcedByShape backlog:DecompositionStateAgreesShape , backlog:GoalTriangleShape , backlog:GroomingShape , backlog:L4GroomingShape , backlog:L4IntentChainShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G148; shapes linked in G164." .
+
+fw:Ruling_G149 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G149" ;
+    rdfs:label "A lineage does not wait for a question that is not about its work, and a question with a non-human answerer is decided in the lineage (the O"@en ;
+    backlog:hasRulingStatement "A lineage does not wait for a question that is not about its work, and a question with a non-human answerer is decided in the lineage (the Owner's rule of 2026-10-24)" ;
+    backlog:enforcedByShape backlog:ImpedimentNamesWhatItBlocksShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G149; shapes linked in G164." .
+
+fw:Ruling_G153 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G153" ;
+    rdfs:label "A Done epic is delivered through its stories, so it is not asked for a deployment unit"@en ;
+    backlog:hasRulingStatement "A Done epic is delivered through its stories, so it is not asked for a deployment unit" ;
+    backlog:enforcedByShape backlog:DeploymentCoverageShape , backlog:GroomingShape , backlog:L4GroomingShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G153; shapes linked in G164." .
+
+fw:Ruling_G154 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G154" ;
+    rdfs:label "A bypass is answered by a restart or by the Owner's change-management route; the model-artifact digest finding is deferred with a design"@en ;
+    backlog:hasRulingStatement "A bypass is answered by a restart or by the Owner's change-management route; the model-artifact digest finding is deferred with a design" ;
+    backlog:enforcedByShape backlog:ChangeManagementAnswerShape , backlog:GroomingShape , backlog:L4StoryGranularityShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G154; shapes linked in G164." .
+
+fw:Ruling_G155 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G155" ;
+    rdfs:label "A lineage opens under a named profile; agentic work is a profile, not a list to remember"@en ;
+    backlog:hasRulingStatement "A lineage opens under a named profile; agentic work is a profile, not a list to remember" ;
+    backlog:enforcedByShape backlog:OpeningProfileAdoptedShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G155; shapes linked in G164." .
+
+fw:Ruling_G158 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G158" ;
+    rdfs:label "An emergency pauses a lineage; it is not change management and not a worked-around lineage"@en ;
+    backlog:hasRulingStatement "An emergency pauses a lineage; it is not change management and not a worked-around lineage" ;
+    backlog:enforcedByShape backlog:ImpactAssessmentShape , backlog:OpeningProfileAdoptedShape , backlog:UrgentInterruptionShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G158; shapes linked in G164." .
+
+fw:Ruling_G159 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G159" ;
+    rdfs:label "One lineage at a time is the default; parallel lineages need different maintainers; one urgency suspension at a time"@en ;
+    backlog:hasRulingStatement "One lineage at a time is the default; parallel lineages need different maintainers; one urgency suspension at a time" ;
+    backlog:enforcedByShape backlog:OneLineageRuleAdoptedShape , backlog:UrgentInterruptionShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G159; shapes linked in G164." .
+
+fw:Ruling_G160 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G160" ;
+    rdfs:label "Route B owes no act record it cannot honestly have"@en ;
+    backlog:hasRulingStatement "Route B owes no act record it cannot honestly have" ;
+    backlog:enforcedByShape backlog:GroomingShape , backlog:IterationCapacityShape , backlog:L4StoryGranularityShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G160; shapes linked in G164." .
+
+fw:Ruling_G162 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G162" ;
+    rdfs:label "The plan step, the cancelling exit and the adaptation route are required and recorded"@en ;
+    backlog:hasRulingStatement "The plan step, the cancelling exit and the adaptation route are required and recorded" ;
+    backlog:enforcedByShape backlog:AsIsAssessmentShape , backlog:CancellationAssessedShape , backlog:ChangeSupportsMissionShape , backlog:KickOffReportShape , backlog:OneLineageRuleAdoptedShape , backlog:PlanBeforeStartShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G162; shapes linked in G164." .
+
+fw:Ruling_G163 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G163" ;
+    rdfs:label "The opening profile is versioned, so a profile that grows does not judge a lineage opened earlier"@en ;
+    backlog:hasRulingStatement "The opening profile is versioned, so a profile that grows does not judge a lineage opened earlier" ;
+    backlog:enforcedByShape backlog:ChangeSupportsMissionShape , backlog:OpeningProfileAdoptedShape , backlog:ProfileRevisionShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G163; shapes linked in G164." .
+
+# G164: the rule set, revision or state each ruling decided, as a link from the ruling.
+fw:Ruling_G89 backlog:rulingDecides backlog:AC_Confirmed , backlog:RS_AgentAccountability , backlog:RS_ClosureCommitAnchor , backlog:RS_ConcurrentLineages , backlog:RS_DecompositionStateAgrees , backlog:RS_FlowPointsRecorded , backlog:RS_HumanOversight , backlog:RS_ImpedimentNamesWhatItBlocks , backlog:RS_IndependentVerification , backlog:RS_ManagerialIndependence , backlog:RS_MissionHistory , backlog:RS_PlanBeforeStart , backlog:RS_RepairReprioritises , backlog:RS_StateReflectsEvidence , backlog:RS_StatusHistoryRecorded .
+fw:Ruling_G91 backlog:rulingDecides backlog:AC_Confirmed , backlog:RS_AgentAccountability , backlog:RS_ClosureCommitAnchor , backlog:RS_ConcurrentLineages , backlog:RS_DecompositionStateAgrees , backlog:RS_DigestTable_v2 , backlog:RS_DigestTable_v4 , backlog:RS_DigestTable_v5 , backlog:RS_FlowPointsRecorded , backlog:RS_HumanOversight , backlog:RS_ImpedimentNamesWhatItBlocks , backlog:RS_IndependentVerification , backlog:RS_ManagerialIndependence , backlog:RS_MissionHistory , backlog:RS_PlanBeforeStart , backlog:RS_RepairReprioritises , backlog:RS_StateReflectsEvidence , backlog:RS_StatusHistoryRecorded .
+fw:Ruling_G95 backlog:rulingDecides backlog:RS_ClosureCommitAnchor .
+fw:Ruling_G96 backlog:rulingDecides backlog:RS_ClosureCommitAnchor .
+fw:Ruling_G104 backlog:rulingDecides backlog:RS_ConcurrentLineages , backlog:RS_MissionHistory .
+fw:Ruling_G112 backlog:rulingDecides backlog:RS_ClosureCommitAnchor , backlog:RS_FlowPointsRecorded , backlog:RS_IndependentVerification , backlog:RS_StatusHistoryRecorded .
+fw:Ruling_G115 backlog:rulingDecides backlog:RS_FlowPointsRecorded , backlog:RS_StatusHistoryRecorded .
+fw:Ruling_G116 backlog:rulingDecides backlog:RS_FlowPointsRecorded .
+fw:Ruling_G159 backlog:rulingDecides backlog:Pr_2 , backlog:RS_ConcurrentLineages .
+fw:Ruling_G162 backlog:rulingDecides backlog:Pr_3 , backlog:RS_CancellationAssessed , backlog:RS_ChangeSupportsMission , backlog:RS_PlanBeforeStart .

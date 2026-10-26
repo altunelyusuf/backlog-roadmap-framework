@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v125.0.0
+# Lineage Operating Discipline — v126.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -4051,4 +4051,17 @@ Related: G104, G149, G154, G155, G158, G159.
 
 **What is not claimed.** A lineage that leaves out `openedUnderRevision` is read as revision 1, the weakest bind; the opening tool is the route that writes it, and a hand-written opening can still omit it. The profiles' growth after a new ruling must add a revision; no shape yet refuses a rule set added to a profile without one.
 Related: G89, G155, G159, G162.
+
+## G164 — A ruling is recorded with the shape that enforces it, and the rulings no shape carries are disclosed
+
+*(The Owner's review of the chain, 2026-10-27: simplification must not lose the lessons learned; the link from a lesson to its check must be readable before anything is folded.)*
+
+**Q1 — what existed.** The ruling record (`GovernanceRuling`, `enforcedByShape`) was built for this and holds 45 of the rulings the discipline carries; 38 of 427 shapes were reachable from a ruling. A new link was not needed; the record was not filled.
+
+**Q2 — what was done.** 66 rulings were added to the record, each with its own heading as the statement and the shapes that enforce it: those the ruling's section names, those that cite the ruling in their own text, and those a reading of the ruling against the shapes found to test it. The record now holds 111 rulings and links 188 of 427 shapes. Three early rulings (G3, G5, G6) pointed at shapes that no longer exist and now point at the shapes that carry them; G62 recorded two rulings under one number and the second is now G62b. `backlog_ruling_record_probe` v1.0.0 holds the record whole. Once the rulings were individuals, the link check found 50 places where a rule set, a profile revision or a state named its ruling by number in text; each is now a link (`rulingDecides`, from the ruling into the vocabulary).
+
+**Q3 — disclosed, owed.** Four early rulings (G2, G7, G10, G11) name a shape that was retired or never existed; their enforcement is the validator's grouping, a fixture, the release gate, and a retired mechanism. Of the rulings read: 30 are enforced by a tool, gate or probe and no shape; 11 are session accounts that decide no standing rule; 11 are standing rules that nothing enforces (G26, G27, G28, G30, G32, G34, G35, G36, G38, G93, G102). The probe pins the four; clearing any of them must change the probe.
+
+**What is not claimed.** The reading is the session's and its readers', not the Owner's; 270 shapes still name no ruling. A shape linked because a ruling's section names it may test less than the ruling states (G125, G127, G133 are partly covered). The tool-only rulings have no link in the ontology yet.
+Related: G49, G63, G89, G135, G162, G163.
 
