@@ -22,8 +22,8 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (ABox: controlled individuals, reference data and the live register)"@en ;
-    owl:versionIRI <http://example.org/backlog/abox/1.65.0> ;
-    owl:versionInfo "1.65.0" ;
+    owl:versionIRI <http://example.org/backlog/abox/1.66.0> ;
+    owl:versionInfo "1.66.0" ;
     owl:priorVersion <http://example.org/backlog/abox/1.62.0> , <http://example.org/backlog/abox/1.61.0> , <http://example.org/backlog/abox/1.60.0> , <http://example.org/backlog/abox/1.59.0> , <http://example.org/backlog/abox/1.58.0> , <http://example.org/backlog/abox/1.57.0> , <http://example.org/backlog/abox/1.53.0> , <http://example.org/backlog/abox/1.52.0> , <http://example.org/backlog/abox/1.51.0> , <http://example.org/backlog/abox/1.50.0> , <http://example.org/backlog/abox/1.49.0> , <http://example.org/backlog/abox/1.48.0> , <http://example.org/backlog/abox/1.47.0> , <http://example.org/backlog/abox/1.46.0> , <http://example.org/backlog/abox/1.45.0> , <http://example.org/backlog/abox/1.40.0> , <http://example.org/backlog/abox/1.39.0> , <http://example.org/backlog/abox/1.38.0> , <http://example.org/backlog/abox/1.37.0> , <http://example.org/backlog/abox/1.36.0> , <http://example.org/backlog/abox/1.35.0> ;
     owl:priorVersion <http://example.org/backlog/abox/1.34.0> , <http://example.org/backlog/abox/1.33.0> , <http://example.org/backlog/abox/1.32.0> , <http://example.org/backlog/abox/1.31.0> , <http://example.org/backlog/abox/1.30.0> , <http://example.org/backlog/abox/1.29.0> , <http://example.org/backlog/abox/1.28.0> , <http://example.org/backlog/abox/1.27.0> , <http://example.org/backlog/abox/1.26.0> , <http://example.org/backlog/abox/1.25.0> , <http://example.org/backlog/abox/1.24.0> , <http://example.org/backlog/abox/1.23.0> , <http://example.org/backlog/abox/1.22.0> , <http://example.org/backlog/abox/1.21.0> , <http://example.org/backlog/abox/1.20.0> , <http://example.org/backlog/abox/1.19.0> , <http://example.org/backlog/abox/1.17.0> , <http://example.org/backlog/abox/1.16.0> , <http://example.org/backlog/abox/1.15.0> , <http://example.org/backlog/abox/1.14.0> , <http://example.org/backlog/abox/1.13.0> , <http://example.org/backlog/abox/1.12.0> , <http://example.org/backlog/abox/1.11.0> , <http://example.org/backlog/abox/1.10.0> , <http://example.org/backlog/abox/1.9.0> , <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
         <http://example.org/backlog-abox/1.2.1> ,
@@ -9143,3 +9143,46 @@ fw:Ruling_G166 a backlog:GovernanceRuling ;
     backlog:enforcedByShape backlog:DeliverableRequiredByScopeShape , backlog:ChainRevisionShape ;
     backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v128.0.0, section G166." .
 fw:Ruling_G166 backlog:rulingDecides backlog:Pr_4 , backlog:RS_ObligationsFollowStatus , backlog:RS_ChainBothWays .
+
+#################################################################
+#  v1.439.0 -- LINEAGE 20, Mission stage: the agile ceremonies of the adaptive profile (increment B).
+#  The first lineage opened under Profile_Adaptive. The mission is immature on purpose; it matures stage by stage and box by box.
+#  Stage 1 of 5, one release.
+#################################################################
+
+fw:L_AdaptiveCeremonies a backlog:Lineage ; rdfs:label "Lineage 20: Agile ceremonies for the adaptive profile"@en ;
+    backlog:lineageOrdinal 20 ;
+    backlog:lineageArchived false ;
+    backlog:lineageForMission fw:Mission_AdaptiveCeremonies ;
+    backlog:hasLineageStatus backlog:LS_Opened ;
+    backlog:hasLineageDepthLevel backlog:Depth_StoryDirect ;
+    backlog:hasLineageArtifactDomain backlog:Domain_Infrastructure ;
+    backlog:memberOfContainer fw:Register .
+fw:L_AdaptiveCeremonies backlog:openedWithProfile backlog:Profile_Adaptive ;
+    backlog:openedUnderRevision backlog:Pr_4 ;
+    backlog:adoptionRecordedAtOpen true ;
+    backlog:adoptsRuleSet
+        backlog:RS_CancellationAssessed ,
+        backlog:RS_ChainBothWays ,
+        backlog:RS_ChangeSupportsMission ,
+        backlog:RS_ConcurrentLineages ,
+        backlog:RS_DecompositionStateAgrees ,
+        backlog:RS_FlowPointsRecorded ,
+        backlog:RS_ImpedimentNamesWhatItBlocks ,
+        backlog:RS_ObligationsFollowStatus ,
+        backlog:RS_PlanBeforeStart ,
+        backlog:RS_RepairReprioritises ,
+        backlog:RS_StatusHistoryRecorded .
+fw:Mission_AdaptiveCeremonies a backlog:Mission ; rdfs:label "Mission: the agile ceremonies of a box are recorded and checked"@en ;
+    backlog:hasMissionStatement "A lineage run under the adaptive profile records and checks the agile ceremonies of each box (planning, grooming against a definition of ready, the daily checkpoint, the demo and the deployment plan), each tied to the kind of work it serves, and a review is blocked when a planned control was not performed." ;
+    backlog:missionFor fw:Register ;
+    backlog:hasMissionOrigin backlog:Origin_OwnerStated ;
+    backlog:missionSource "Owner, 2026-10-27 16:22 and 16:32: the adaptive profile must carry the agile artefacts and ceremonies, each related to the kind of work it serves (the daily to monitoring); 2026-10-28 01:10: increment B as the live proof, 'Proceed'." ;
+    backlog:hasMissionOutcome backlog:Out_InFlight ;
+    backlog:producedByStage fw:Out_Mission_AdaptiveCeremonies ;
+    backlog:decidedBy backlog:Owner .
+fw:Out_Mission_AdaptiveCeremonies a backlog:StageOutput ;
+    backlog:outputOfStage backlog:Stage_Mission ; backlog:belongsToLineage fw:L_AdaptiveCeremonies ;
+    backlog:hasStateDigest "3b8d4ed4319fa6d6edfd85bd76c47ee1f95a63eac7ccd4b8a1b9ada1f5b9d30e" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.439.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Mission stage of Lineage 20, the first lineage opened under the adaptive profile. Stage 1 of 5, one release each." .

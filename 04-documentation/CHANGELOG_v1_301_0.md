@@ -11260,6 +11260,14 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.439.0 — 2026-10-28 (MINOR: Lineage 20 opened, Mission stage — the first lineage under the adaptive profile)
+
+- **Lineage 20, "Agile ceremonies for the adaptive profile" (increment B), Mission stage:** opened under `Profile_Adaptive` (profile revision 4, eleven rule sets adopted at the opening), status Opened. The mission is stated immature on purpose: the agile ceremonies of a box (planning, grooming against a definition of ready, the daily checkpoint, the demo, the deployment plan) are recorded and checked, each tied to the kind of work it serves, and a review is blocked when a planned control was not performed. Owner's go-ahead of 2026-10-28 01:10 for increment B as the live proof of the adaptive profile (data v1.66.0). Stage 1 of 5.
+
+**Live proof:** this lineage is the live proof the Owner asked for before any default changes; findings of running it are recorded as they occur.
+
+**Unplanned work:** a lineage's Mission stage output precedes its Backlog stage, so no work item of this package can exist for it yet; the release accounting has no stage-release category and asks for this statement (finding of the live proof, recorded for Lineage 20).
+
 ## v1.438.0 — 2026-10-27 (MINOR: ruling G166, the adaptive profile, first increment)
 
 - **G166 (the Owner: "Yes, proceed." on the adaptive profile proposal, version 1):** `Profile_Adaptive` beside the standard and agentic profiles, which are unchanged, with `Pr_4`, `RS_ObligationsFollowStatus` and `RS_ChainBothWays` (data v1.65.0); `ChainRevision` with `revisesChainElement`, `revisedFrom`, `revisedTo`, `hasChainRevisionReason`, `revisionServesObjective`, `chainRevisionDecidedBy`, `revisedAtBoundary` (T-Box v1.156.0); seven register-level constraints and two coarse-epic constraints defer for an adopter until the lineage status or epic state that creates the obligation, `DeliverableRequiredByScopeShape` and `ChainRevisionShape`, and objective inheritance through the whole parent chain for every lineage (shapes v1.187.0). Probe: `backlog_g166_probe` v1.0.0. Discipline v128.0.0.
