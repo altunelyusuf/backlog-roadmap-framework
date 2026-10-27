@@ -22,8 +22,8 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (ABox: controlled individuals, reference data and the live register)"@en ;
-    owl:versionIRI <http://example.org/backlog/abox/1.63.0> ;
-    owl:versionInfo "1.63.0" ;
+    owl:versionIRI <http://example.org/backlog/abox/1.64.0> ;
+    owl:versionInfo "1.64.0" ;
     owl:priorVersion <http://example.org/backlog/abox/1.62.0> , <http://example.org/backlog/abox/1.61.0> , <http://example.org/backlog/abox/1.60.0> , <http://example.org/backlog/abox/1.59.0> , <http://example.org/backlog/abox/1.58.0> , <http://example.org/backlog/abox/1.57.0> , <http://example.org/backlog/abox/1.53.0> , <http://example.org/backlog/abox/1.52.0> , <http://example.org/backlog/abox/1.51.0> , <http://example.org/backlog/abox/1.50.0> , <http://example.org/backlog/abox/1.49.0> , <http://example.org/backlog/abox/1.48.0> , <http://example.org/backlog/abox/1.47.0> , <http://example.org/backlog/abox/1.46.0> , <http://example.org/backlog/abox/1.45.0> , <http://example.org/backlog/abox/1.40.0> , <http://example.org/backlog/abox/1.39.0> , <http://example.org/backlog/abox/1.38.0> , <http://example.org/backlog/abox/1.37.0> , <http://example.org/backlog/abox/1.36.0> , <http://example.org/backlog/abox/1.35.0> ;
     owl:priorVersion <http://example.org/backlog/abox/1.34.0> , <http://example.org/backlog/abox/1.33.0> , <http://example.org/backlog/abox/1.32.0> , <http://example.org/backlog/abox/1.31.0> , <http://example.org/backlog/abox/1.30.0> , <http://example.org/backlog/abox/1.29.0> , <http://example.org/backlog/abox/1.28.0> , <http://example.org/backlog/abox/1.27.0> , <http://example.org/backlog/abox/1.26.0> , <http://example.org/backlog/abox/1.25.0> , <http://example.org/backlog/abox/1.24.0> , <http://example.org/backlog/abox/1.23.0> , <http://example.org/backlog/abox/1.22.0> , <http://example.org/backlog/abox/1.21.0> , <http://example.org/backlog/abox/1.20.0> , <http://example.org/backlog/abox/1.19.0> , <http://example.org/backlog/abox/1.17.0> , <http://example.org/backlog/abox/1.16.0> , <http://example.org/backlog/abox/1.15.0> , <http://example.org/backlog/abox/1.14.0> , <http://example.org/backlog/abox/1.13.0> , <http://example.org/backlog/abox/1.12.0> , <http://example.org/backlog/abox/1.11.0> , <http://example.org/backlog/abox/1.10.0> , <http://example.org/backlog/abox/1.9.0> , <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
         <http://example.org/backlog-abox/1.2.1> ,
@@ -6897,6 +6897,13 @@ fw:Ruling_G163 a backlog:GovernanceRuling ;
     backlog:enforcedByShape backlog:ChangeSupportsMissionShape , backlog:OpeningProfileAdoptedShape , backlog:ProfileRevisionShape ;
     backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v125.0.0, section G163; shapes linked in G164." .
 
+fw:Ruling_G165 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G165" ;
+    rdfs:label "A safeguard that no ruling names is recorded by the experience it keeps, read for what it says"@en ;
+    backlog:hasRulingStatement "A safeguard that no ruling names is recorded by the experience it keeps, read for what it says" ;
+    backlog:enforcedByShape backlog:ShapeLessonShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v127.0.0, section G165." .
+
 # G164: the rule set, revision or state each ruling decided, as a link from the ruling.
 fw:Ruling_G89 backlog:rulingDecides backlog:AC_Confirmed , backlog:RS_AgentAccountability , backlog:RS_ClosureCommitAnchor , backlog:RS_ConcurrentLineages , backlog:RS_DecompositionStateAgrees , backlog:RS_FlowPointsRecorded , backlog:RS_HumanOversight , backlog:RS_ImpedimentNamesWhatItBlocks , backlog:RS_IndependentVerification , backlog:RS_ManagerialIndependence , backlog:RS_MissionHistory , backlog:RS_PlanBeforeStart , backlog:RS_RepairReprioritises , backlog:RS_StateReflectsEvidence , backlog:RS_StatusHistoryRecorded .
 fw:Ruling_G91 backlog:rulingDecides backlog:AC_Confirmed , backlog:RS_AgentAccountability , backlog:RS_ClosureCommitAnchor , backlog:RS_ConcurrentLineages , backlog:RS_DecompositionStateAgrees , backlog:RS_DigestTable_v2 , backlog:RS_DigestTable_v4 , backlog:RS_DigestTable_v5 , backlog:RS_FlowPointsRecorded , backlog:RS_HumanOversight , backlog:RS_ImpedimentNamesWhatItBlocks , backlog:RS_IndependentVerification , backlog:RS_ManagerialIndependence , backlog:RS_MissionHistory , backlog:RS_PlanBeforeStart , backlog:RS_RepairReprioritises , backlog:RS_StateReflectsEvidence , backlog:RS_StatusHistoryRecorded .
@@ -6908,3 +6915,2202 @@ fw:Ruling_G115 backlog:rulingDecides backlog:RS_FlowPointsRecorded , backlog:RS_
 fw:Ruling_G116 backlog:rulingDecides backlog:RS_FlowPointsRecorded .
 fw:Ruling_G159 backlog:rulingDecides backlog:Pr_2 , backlog:RS_ConcurrentLineages .
 fw:Ruling_G162 backlog:rulingDecides backlog:Pr_3 , backlog:RS_CancellationAssessed , backlog:RS_ChangeSupportsMission , backlog:RS_PlanBeforeStart .
+
+#################################################################
+#  v1.437.0 (G165) -- the lesson vocabulary and the 245 lessons read from the safeguards.
+#################################################################
+
+backlog:LessonFamily_1 a owl:NamedIndividual , backlog:LessonFamily ; rdfs:label "Proof and measurement are real"@en ; skos:definition "A lesson that a claim of achievement, quality or readiness must rest on a real, checkable measurement or test, not on a form that merely looks complete."@en .
+backlog:LessonFamily_2 a owl:NamedIndividual , backlog:LessonFamily ; rdfs:label "State is derived and agrees with the facts"@en ; skos:definition "A lesson that a recorded state or status must follow from the recorded facts and never contradict them."@en .
+backlog:LessonFamily_3 a owl:NamedIndividual , backlog:LessonFamily ; rdfs:label "One thing has one identity and one value"@en ; skos:definition "A lesson that each thing is named once, carries one value, and is not duplicated or left ambiguous."@en .
+backlog:LessonFamily_4 a owl:NamedIndividual , backlog:LessonFamily ; rdfs:label "Order and time are explicit and witnessed"@en ; skos:definition "A lesson that sequence, dates and ordering are recorded explicitly and attested, not assumed or left to be inferred."@en .
+backlog:LessonFamily_5 a owl:NamedIndividual , backlog:LessonFamily ; rdfs:label "The chain from intent to work stays connected"@en ; skos:definition "A lesson that the chain from mission to work stays linked end to end, so no work or goal stands apart from its intent."@en .
+backlog:LessonFamily_6 a owl:NamedIndividual , backlog:LessonFamily ; rdfs:label "Decisions and accountability are named"@en ; skos:definition "A lesson that every decision, approval and responsibility names who made it and on what basis."@en .
+backlog:LessonFamily_7 a owl:NamedIndividual , backlog:LessonFamily ; rdfs:label "Experience is carried forward"@en ; skos:definition "A lesson that what was learned, changed or retired is kept and handed on rather than lost or silently overwritten."@en .
+backlog:LessonFamily_8 a owl:NamedIndividual , backlog:LessonFamily ; rdfs:label "Capacity, cost and dependencies are accounted"@en ; skos:definition "A lesson that capacity, cost, effort and dependencies are counted so that plans stay feasible."@en .
+backlog:LessonFamily_9 a owl:NamedIndividual , backlog:LessonFamily ; rdfs:label "Closing and cancelling are done on record"@en ; skos:definition "A lesson that closing or cancelling a lineage or item is done on record, with its reason, its assessment and its outcome."@en .
+backlog:Segment_Mission a owl:NamedIndividual , backlog:LineageSegment ; rdfs:label "Mission"@en ; skos:definition "The place in the lineage that is the mission stage."@en .
+backlog:Segment_Scope a owl:NamedIndividual , backlog:LineageSegment ; rdfs:label "Scope"@en ; skos:definition "The place in the lineage that is the scope stage."@en .
+backlog:Segment_Goal a owl:NamedIndividual , backlog:LineageSegment ; rdfs:label "Goal"@en ; skos:definition "The place in the lineage that is the goal stage."@en .
+backlog:Segment_Objective a owl:NamedIndividual , backlog:LineageSegment ; rdfs:label "Objective"@en ; skos:definition "The place in the lineage that is the objective stage."@en .
+backlog:Segment_Backlog a owl:NamedIndividual , backlog:LineageSegment ; rdfs:label "Backlog"@en ; skos:definition "The place in the lineage that is the backlog stage."@en .
+backlog:Segment_Plan a owl:NamedIndividual , backlog:LineageSegment ; rdfs:label "Plan"@en ; skos:definition "The place in the lineage that is the plan (roadmap) step."@en .
+backlog:Segment_Execution a owl:NamedIndividual , backlog:LineageSegment ; rdfs:label "Execution"@en ; skos:definition "The place in the lineage that is the execution of the work."@en .
+backlog:Segment_ControlMonitoring a owl:NamedIndividual , backlog:LineageSegment ; rdfs:label "Control and monitoring"@en ; skos:definition "The place in the lineage that is control and monitoring of the running lineage."@en .
+backlog:Segment_Reporting a owl:NamedIndividual , backlog:LineageSegment ; rdfs:label "Reporting"@en ; skos:definition "The place in the lineage that is reporting on the running lineage."@en .
+backlog:Segment_Closure a owl:NamedIndividual , backlog:LineageSegment ; rdfs:label "Closure"@en ; skos:definition "The place in the lineage that is closing the lineage."@en .
+backlog:Segment_WholeLineage a owl:NamedIndividual , backlog:LineageSegment ; rdfs:label "Whole lineage"@en ; skos:definition "The place in the lineage that is every part of the lineage at once."@en .
+backlog:Scope_Shared a owl:NamedIndividual , backlog:LessonProfileScope ; rdfs:label "Shared by every profile"@en ; skos:definition "The lesson applies under every opening profile."@en .
+backlog:Scope_AgenticOnly a owl:NamedIndividual , backlog:LessonProfileScope ; rdfs:label "Agentic profile only"@en ; skos:definition "The lesson applies only under the agentic opening profile."@en .
+backlog:Scope_LevelSpecific a owl:NamedIndividual , backlog:LessonProfileScope ; rdfs:label "Conformance level specific"@en ; skos:definition "The lesson applies from a given conformance level on, not by profile."@en .
+backlog:Confidence_High a owl:NamedIndividual , backlog:LessonConfidence ; rdfs:label "High"@en ; skos:definition "The safeguard and its own text plainly show the experience."@en .
+backlog:Confidence_Medium a owl:NamedIndividual , backlog:LessonConfidence ; rdfs:label "Medium"@en ; skos:definition "The experience is inferred from what the safeguard checks."@en .
+backlog:Confidence_Low a owl:NamedIndividual , backlog:LessonConfidence ; rdfs:label "Low"@en ; skos:definition "The experience is a guess from the safeguard's form."@en .
+
+backlog:Segment_Mission backlog:segmentIsStage backlog:Stage_Mission .
+backlog:Segment_Scope backlog:segmentIsStage backlog:Stage_Scope .
+backlog:Segment_Goal backlog:segmentIsStage backlog:Stage_Goal .
+backlog:Segment_Objective backlog:segmentIsStage backlog:Stage_Objective .
+backlog:Segment_Backlog backlog:segmentIsStage backlog:Stage_Backlog .
+
+fw:Lesson_AcceptanceCriterionQualityShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of AcceptanceCriterionQualityShape"@en ;
+    backlog:lessonOfShape backlog:AcceptanceCriterionQualityShape ;
+    backlog:hasExperienceStatement "Gherkin criteria were written with empty Given/When/Then, satisfying form while being untestable."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_1 ;
+    backlog:learnedInSegment backlog:Segment_Backlog ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_StoryFormAdvisoryShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of StoryFormAdvisoryShape"@en ;
+    backlog:lessonOfShape backlog:StoryFormAdvisoryShape ;
+    backlog:hasExperienceStatement "Stories were written as bare feature requests with a role but no 'so that' benefit, so the claimed value could not be assessed."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_1 ;
+    backlog:learnedInSegment backlog:Segment_Backlog ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_Medium ;
+    backlog:hasLessonNote "Advisory only; style-level."@en .
+fw:Lesson_UnaddressedRefinementShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of UnaddressedRefinementShape"@en ;
+    backlog:lessonOfShape backlog:UnaddressedRefinementShape ;
+    backlog:hasExperienceStatement "A refinement recorded that a story was looked at but not which concern, so it could not count toward readiness and the story failed the gate with no clue why."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_1 ;
+    backlog:learnedInSegment backlog:Segment_Backlog ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_Medium .
+fw:Lesson_IncrementCommitmentShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of IncrementCommitmentShape"@en ;
+    backlog:lessonOfShape backlog:IncrementCommitmentShape ;
+    backlog:hasExperienceStatement "An increment was called releasable without any Definition of Done to judge it against, making releasability an opinion."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_1 ;
+    backlog:learnedInSegment backlog:Segment_Closure ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_Medium ;
+    backlog:hasLessonNote "Same lesson as the item-level DoD clause, applied to increments."@en .
+fw:Lesson_L4DeploymentVerifiedShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of L4DeploymentVerifiedShape"@en ;
+    backlog:lessonOfShape backlog:L4DeploymentVerifiedShape ;
+    backlog:hasExperienceStatement "A release carried an item that was not Done (or had no releaser), making the claim 'reached users' false for part of it with no accountable person."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_1 ;
+    backlog:learnedInSegment backlog:Segment_Closure ;
+    backlog:hasProfileScope backlog:Scope_LevelSpecific ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_ReleaseGateShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of ReleaseGateShape"@en ;
+    backlog:lessonOfShape backlog:ReleaseGateShape ;
+    backlog:hasExperienceStatement "Release gates existed as intentions with no executable command or position in sequence, so release checks were skipped or run in the wrong order."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_1 ;
+    backlog:learnedInSegment backlog:Segment_Closure ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_AdaptationGateShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of AdaptationGateShape"@en ;
+    backlog:lessonOfShape backlog:AdaptationGateShape ;
+    backlog:hasExperienceStatement "An adaptation gate was marked passed with no executable check, no expected result, or an observed result differing from expectation, so the gate only recorded that someone looked."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_1 ;
+    backlog:learnedInSegment backlog:Segment_ControlMonitoring ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_BatchedEvidenceShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of BatchedEvidenceShape"@en ;
+    backlog:lessonOfShape backlog:BatchedEvidenceShape ;
+    backlog:hasExperienceStatement "One evidence record attested five criteria across three stories and hid an unfinished story; half the register's evidence attested multiple criteria."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_1 ;
+    backlog:learnedInSegment backlog:Segment_ControlMonitoring ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High ;
+    backlog:hasLessonNote "Advisory only; batching is sometimes legitimate."@en .
+fw:Lesson_CeremonyLinkAdvisoryShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of CeremonyLinkAdvisoryShape"@en ;
+    backlog:lessonOfShape backlog:CeremonyLinkAdvisoryShape ;
+    backlog:hasExperienceStatement "Metric readings taken after a review landed at plausible but wrong moments in a real another registrant incident because nothing recorded which ceremony a reading belonged to."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_1 ;
+    backlog:learnedInSegment backlog:Segment_ControlMonitoring ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High ;
+    backlog:hasLessonNote "Real incident cited."@en .
+fw:Lesson_CriterionCoverageShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of CriterionCoverageShape"@en ;
+    backlog:lessonOfShape backlog:CriterionCoverageShape ;
+    backlog:hasExperienceStatement "A criterion tested only on the nominal path looked fully covered though refusal and empty cases were never tried; a broken filter once reported zero everything."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_1 ;
+    backlog:learnedInSegment backlog:Segment_ControlMonitoring ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_DeliverableIntentionShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of DeliverableIntentionShape"@en ;
+    backlog:lessonOfShape backlog:DeliverableIntentionShape ;
+    backlog:hasExperienceStatement "A deliverable counted as satisfied because planned work claims it, though nothing is Done; measured: ten of ten read satisfied while seven were delivered, so coverage moved when epics were planned."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_1 ;
+    backlog:learnedInSegment backlog:Segment_ControlMonitoring ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High ;
+    backlog:hasLessonNote "Real measured incident."@en .
+fw:Lesson_DoDCriterionShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of DoDCriterionShape"@en ;
+    backlog:lessonOfShape backlog:DoDCriterionShape ;
+    backlog:hasExperienceStatement "Definition-of-Done criteria were written as prose with no check or expected result and a vague status, so they could never fail and Done meant nothing."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_1 ;
+    backlog:learnedInSegment backlog:Segment_ControlMonitoring ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_HarnessCoverageAdvisoryShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of HarnessCoverageAdvisoryShape"@en ;
+    backlog:lessonOfShape backlog:HarnessCoverageAdvisoryShape ;
+    backlog:hasExperienceStatement "A test harness was declared but did not attest every acceptance criterion, so the item looked proven while some criteria had never been checked."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_1 ;
+    backlog:learnedInSegment backlog:Segment_ControlMonitoring ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_Medium ;
+    backlog:hasLessonNote "Overlaps loosely with autonomy evidence on the proof theme"@en .
+fw:Lesson_InvariantShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of InvariantShape"@en ;
+    backlog:lessonOfShape backlog:InvariantShape ;
+    backlog:hasExperienceStatement "Cross-cutting invariants were declared as sentences with no runnable check, or marked not-yet-enforceable with no item that would make them enforceable, so they asserted themselves forever."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_1 ;
+    backlog:learnedInSegment backlog:Segment_ControlMonitoring ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_MeasurementDueAfterReviewShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of MeasurementDueAfterReviewShape"@en ;
+    backlog:lessonOfShape backlog:MeasurementDueAfterReviewShape ;
+    backlog:hasExperienceStatement "A review closed work able to move an objective but no reading followed, so a register can reach every epic Done with objectives unmet and flag nothing."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_1 ;
+    backlog:learnedInSegment backlog:Segment_ControlMonitoring ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_MetricObservationShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of MetricObservationShape"@en ;
+    backlog:lessonOfShape backlog:MetricObservationShape ;
+    backlog:hasExperienceStatement "Measurements recorded without metric, value, time or method were numbers someone remembered and could not be reproduced."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_1 ;
+    backlog:learnedInSegment backlog:Segment_ControlMonitoring ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_ScenarioShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of ScenarioShape"@en ;
+    backlog:lessonOfShape backlog:ScenarioShape ;
+    backlog:hasExperienceStatement "A test scenario with no criterion or kind cannot count toward coverage, so breadth of testing cannot be measured."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_1 ;
+    backlog:learnedInSegment backlog:Segment_ControlMonitoring ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_StaleVerificationAdvisoryShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of StaleVerificationAdvisoryShape"@en ;
+    backlog:lessonOfShape backlog:StaleVerificationAdvisoryShape ;
+    backlog:hasExperienceStatement "Evidence was ticked verified with no time or method, so a stale or unexplained tick looked identical to a real check."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_1 ;
+    backlog:learnedInSegment backlog:Segment_ControlMonitoring ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_TestHarnessShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of TestHarnessShape"@en ;
+    backlog:lessonOfShape backlog:TestHarnessShape ;
+    backlog:hasExperienceStatement "A harness was recorded that covered several items or contained no evidence, giving a false sense of coverage."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_1 ;
+    backlog:learnedInSegment backlog:Segment_ControlMonitoring ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_Medium ;
+    backlog:hasLessonNote "Structural minimum; low independent value beyond the item-level shape."@en .
+fw:Lesson_UnresolvedArtifactShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of UnresolvedArtifactShape"@en ;
+    backlog:lessonOfShape backlog:UnresolvedArtifactShape ;
+    backlog:hasExperienceStatement "A criterion on closed work was looked for and its artefact not found, but that finding could not be recorded, so Done stories silently promised nonexistent things."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_1 ;
+    backlog:learnedInSegment backlog:Segment_ControlMonitoring ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_VerificationIntegrityShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of VerificationIntegrityShape"@en ;
+    backlog:lessonOfShape backlog:VerificationIntegrityShape ;
+    backlog:hasExperienceStatement "Evidence was marked verified with a bare assertion such as 'assumed' or 'ok' and no tool, so verification named nothing that could have failed."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_1 ;
+    backlog:learnedInSegment backlog:Segment_ControlMonitoring ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_WipBreachAdvisoryShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of WipBreachAdvisoryShape"@en ;
+    backlog:lessonOfShape backlog:WipBreachAdvisoryShape ;
+    backlog:hasExperienceStatement "Work in progress exceeded the declared limit; the limit merely described the overrun, and overload went unchallenged."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_1 ;
+    backlog:learnedInSegment backlog:Segment_ControlMonitoring ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_AnalysisArtifactShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of AnalysisArtifactShape"@en ;
+    backlog:lessonOfShape backlog:AnalysisArtifactShape ;
+    backlog:hasExperienceStatement "A state machine artefact listing no states can be referenced by state changes without constraining them, so the declared-space check cannot fire; the reference is decorative."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_1 ;
+    backlog:learnedInSegment backlog:Segment_Execution ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_Medium ;
+    backlog:hasLessonNote "Advisory companion to StateProvenanceShape."@en .
+fw:Lesson_ArtifactEvidenceShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of ArtifactEvidenceShape"@en ;
+    backlog:lessonOfShape backlog:ArtifactEvidenceShape ;
+    backlog:hasExperienceStatement "Delivered work was claimed with no file path (or a malformed hash), so nobody could find or verify the artefact later."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_1 ;
+    backlog:learnedInSegment backlog:Segment_Execution ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_AutonomyEvidenceShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of AutonomyEvidenceShape"@en ;
+    backlog:lessonOfShape backlog:AutonomyEvidenceShape ;
+    backlog:hasExperienceStatement "Work produced with no human in or on the loop carried no verified evidence of any acceptance criterion, so nobody had checked it."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_1 ;
+    backlog:learnedInSegment backlog:Segment_Execution ;
+    backlog:hasProfileScope backlog:Scope_AgenticOnly ;
+    backlog:hasLessonConfidence backlog:Confidence_High ;
+    backlog:hasLessonNote "Cites ISO/IEC 42001"@en .
+fw:Lesson_CodeVerificationShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of CodeVerificationShape"@en ;
+    backlog:lessonOfShape backlog:CodeVerificationShape ;
+    backlog:hasExperienceStatement "Items were titled or ticked as verified against running code with no record of what the check found, so the claim could not be audited."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_1 ;
+    backlog:learnedInSegment backlog:Segment_Execution ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_ConcernObligationShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of ConcernObligationShape"@en ;
+    backlog:lessonOfShape backlog:ConcernObligationShape ;
+    backlog:hasExperienceStatement "Work declared a design concern (data, interaction, security) but never produced the model recording that analysis, leaving the analysis unreadable."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_1 ;
+    backlog:learnedInSegment backlog:Segment_Execution ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_CriterionArtifactShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of CriterionArtifactShape"@en ;
+    backlog:lessonOfShape backlog:CriterionArtifactShape ;
+    backlog:hasExperienceStatement "A story was closed as Done though the property its criterion promised was never created, because a criterion could pass without naming any real artefact."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_1 ;
+    backlog:learnedInSegment backlog:Segment_Execution ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_DisclosedBrokenMechanismFixShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of DisclosedBrokenMechanismFixShape"@en ;
+    backlog:lessonOfShape backlog:DisclosedBrokenMechanismFixShape ;
+    backlog:hasExperienceStatement "A fix to a mechanism disclosed as broken was marked Done on internal correctness without proof the invariant now actually holds."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_1 ;
+    backlog:learnedInSegment backlog:Segment_Execution ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_ItemCompletenessLinkageShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of ItemCompletenessLinkageShape"@en ;
+    backlog:lessonOfShape backlog:ItemCompletenessLinkageShape ;
+    backlog:hasExperienceStatement "Items advanced to Ready/In Progress/Done with no acceptance criterion, no governing Definition of Done, no derived-complete test harness, or criteria never touched by verified evidence, so Done was an assertion; green suites that never exercised the criterion closed items."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_1 ;
+    backlog:learnedInSegment backlog:Segment_Execution ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High ;
+    backlog:hasLessonNote "Task-inheritance clause came from a measured test drive."@en .
+fw:Lesson_ModelLevelStatedShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of ModelLevelStatedShape"@en ;
+    backlog:lessonOfShape backlog:ModelLevelStatedShape ;
+    backlog:hasExperienceStatement "A model artifact did not state its level, so level-specific obligations could not be checked against it."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_1 ;
+    backlog:learnedInSegment backlog:Segment_Execution ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High ;
+    backlog:hasLessonNote "Enabler for level checks rather than an independent lesson."@en .
+fw:Lesson_StoryTestAnalysisShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of StoryTestAnalysisShape"@en ;
+    backlog:lessonOfShape backlog:StoryTestAnalysisShape ;
+    backlog:hasExperienceStatement "Most Done stories had no re-runnable test case; testing was asserted to have happened somewhere."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_1 ;
+    backlog:learnedInSegment backlog:Segment_Execution ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High ;
+    backlog:hasLessonNote "46 of 55 Done stories lacked a case."@en .
+fw:Lesson_TaskTypeObligationLevelShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of TaskTypeObligationLevelShape"@en ;
+    backlog:lessonOfShape backlog:TaskTypeObligationLevelShape ;
+    backlog:hasExperienceStatement "A finished task was accepted with a diagram of the right notation but wrong level or depth (domain class diagram for a design class diagram, brief for full text)."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_1 ;
+    backlog:learnedInSegment backlog:Segment_Execution ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_TaskTypeObligationShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of TaskTypeObligationShape"@en ;
+    backlog:lessonOfShape backlog:TaskTypeObligationShape ;
+    backlog:hasExperienceStatement "A task was marked Done (design, test, etc.) though the artifact its task type owes was nowhere in the lineage; Done became a claim, not a completion."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_1 ;
+    backlog:learnedInSegment backlog:Segment_Execution ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_TestCaseShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of TestCaseShape"@en ;
+    backlog:lessonOfShape backlog:TestCaseShape ;
+    backlog:hasExperienceStatement "A test case answering to no acceptance criterion tests what nobody asked and cannot count toward Done; one with no test data cannot be re-run by anyone else so its result is a claim."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_1 ;
+    backlog:learnedInSegment backlog:Segment_Execution ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_TestEvidenceShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of TestEvidenceShape"@en ;
+    backlog:lessonOfShape backlog:TestEvidenceShape ;
+    backlog:hasExperienceStatement "Test evidence was recorded without a spec path or test id, so the bridge could not locate or re-run the test and the claim stayed uncheckable."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_1 ;
+    backlog:learnedInSegment backlog:Segment_Execution ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_IntentEchoShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of IntentEchoShape"@en ;
+    backlog:lessonOfShape backlog:IntentEchoShape ;
+    backlog:hasExperienceStatement "An objective's metric moved only by the work that pursued it, so the measurement could not fail and showed nothing independent."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_1 ;
+    backlog:learnedInSegment backlog:Segment_Objective ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_Medium .
+fw:Lesson_L4MeasuredObjectiveShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of L4MeasuredObjectiveShape"@en ;
+    backlog:lessonOfShape backlog:L4MeasuredObjectiveShape ;
+    backlog:hasExperienceStatement "Objectives were marked Done as intentions with no metric reading, so mission accomplishment could not be shown."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_1 ;
+    backlog:learnedInSegment backlog:Segment_Objective ;
+    backlog:hasProfileScope backlog:Scope_LevelSpecific ;
+    backlog:hasLessonConfidence backlog:Confidence_High ;
+    backlog:hasLessonNote "L4 only"@en .
+fw:Lesson_MeasurementKindShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of MeasurementKindShape"@en ;
+    backlog:lessonOfShape backlog:MeasurementKindShape ;
+    backlog:hasExperienceStatement "An objective not saying whether its value is counted, derived or judged cannot be weighed; a derived figure without its query cannot be re-derived and is a judgement in disguise."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_1 ;
+    backlog:learnedInSegment backlog:Segment_Objective ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_ObjectiveFalsifiabilityShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of ObjectiveFalsifiabilityShape"@en ;
+    backlog:lessonOfShape backlog:ObjectiveFalsifiabilityShape ;
+    backlog:hasExperienceStatement "Objectives had baseline and target but no direction, or target equal to baseline, or a passed deadline with no observation or re-baseline, so they could never be shown missed."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_1 ;
+    backlog:learnedInSegment backlog:Segment_Objective ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High ;
+    backlog:hasLessonNote "Hold direction exception was added for inverse goals."@en .
+fw:Lesson_ObjectiveMetricMirrorShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of ObjectiveMetricMirrorShape"@en ;
+    backlog:lessonOfShape backlog:ObjectiveMetricMirrorShape ;
+    backlog:hasExperienceStatement "An objective's metric reached its target while every item that could move it stayed Proposed; the goal was met on paper with nothing done (real case on automate-python-book-3e)."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_1 ;
+    backlog:learnedInSegment backlog:Segment_Objective ;
+    backlog:hasProfileScope backlog:Scope_LevelSpecific ;
+    backlog:hasLessonConfidence backlog:Confidence_High ;
+    backlog:hasLessonNote "L3."@en .
+fw:Lesson_EstimationBasisShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of EstimationBasisShape"@en ;
+    backlog:lessonOfShape backlog:EstimationBasisShape ;
+    backlog:hasExperienceStatement "An estimate was labelled Measured with no observation behind it, lending judged figures unearned authority."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_1 ;
+    backlog:learnedInSegment backlog:Segment_Plan ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_MeasuredBasisAdvisoryShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of MeasuredBasisAdvisoryShape"@en ;
+    backlog:lessonOfShape backlog:MeasuredBasisAdvisoryShape ;
+    backlog:hasExperienceStatement "Launch-blocking items rested on judged estimates although a spike or trial run could have tested them cheaply."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_1 ;
+    backlog:learnedInSegment backlog:Segment_Plan ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_Medium ;
+    backlog:hasLessonNote "advisory nudge"@en .
+fw:Lesson_RefinementProducesShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of RefinementProducesShape"@en ;
+    backlog:lessonOfShape backlog:RefinementProducesShape ;
+    backlog:hasExperienceStatement "Backlog grooming sessions on stories or epics were held that left no specification, scenario or model, i.e. attendance without refinement."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_1 ;
+    backlog:learnedInSegment backlog:Segment_Plan ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_Medium ;
+    backlog:hasLessonNote "Warning only; legitimate planning of already-specified work exists."@en .
+fw:Lesson_ScoreBasisShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of ScoreBasisShape"@en ;
+    backlog:lessonOfShape backlog:ScoreBasisShape ;
+    backlog:hasExperienceStatement "A priority score was labelled Measured with no observation, so rankings carried unearned authority."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_1 ;
+    backlog:learnedInSegment backlog:Segment_Plan ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_StoryTaskSpreadShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of StoryTaskSpreadShape"@en ;
+    backlog:lessonOfShape backlog:StoryTaskSpreadShape ;
+    backlog:hasExperienceStatement "Every story had exactly one implementation task, so analysis, design and test work happened invisibly or not at all."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_1 ;
+    backlog:learnedInSegment backlog:Segment_Plan ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_Medium ;
+    backlog:hasLessonNote "Measured on one register; may reflect task granularity habits rather than failure."@en .
+fw:Lesson_NextRecommendationShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of NextRecommendationShape"@en ;
+    backlog:lessonOfShape backlog:NextRecommendationShape ;
+    backlog:hasExperienceStatement "Two ranking models gave different next-item answers and a recommendation did not say which model produced it, making the answers indistinguishable."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_1 ;
+    backlog:learnedInSegment backlog:Segment_Reporting ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_Medium ;
+    backlog:hasLessonNote "Real need only while multiple ranking models coexist."@en .
+fw:Lesson_ProgressFreshnessShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of ProgressFreshnessShape"@en ;
+    backlog:lessonOfShape backlog:ProgressFreshnessShape ;
+    backlog:hasExperienceStatement "A retained progress report was shipped after the register had moved on, so readers saw a state the register had already left."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_1 ;
+    backlog:learnedInSegment backlog:Segment_Reporting ;
+    backlog:hasProfileScope backlog:Scope_LevelSpecific ;
+    backlog:hasLessonConfidence backlog:Confidence_High ;
+    backlog:hasLessonNote "L3 only"@en .
+fw:Lesson_RoadmapReportShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of RoadmapReportShape"@en ;
+    backlog:lessonOfShape backlog:RoadmapReportShape ;
+    backlog:hasExperienceStatement "Reports were recalled from memory or produced with sections dropped, with no timestamp or register named, so they could not be reproduced or compared."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_1 ;
+    backlog:learnedInSegment backlog:Segment_Reporting ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_MissionClauseCitationShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of MissionClauseCitationShape"@en ;
+    backlog:lessonOfShape backlog:MissionClauseCitationShape ;
+    backlog:hasExperienceStatement "Scope deliverables quoted an early mission wording that was later superseded; citations went stale unchecked (3 of 5)."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_1 ;
+    backlog:learnedInSegment backlog:Segment_Scope ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_IdenticalTimestampClusterShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of IdenticalTimestampClusterShape"@en ;
+    backlog:lessonOfShape backlog:IdenticalTimestampClusterShape ;
+    backlog:hasExperienceStatement "Governance was authored after the fact: many items shared the identical planned, started and finished instant, the signature of retrofitted records rather than real work."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_1 ;
+    backlog:learnedInSegment backlog:Segment_WholeLineage ;
+    backlog:hasProfileScope backlog:Scope_LevelSpecific ;
+    backlog:hasLessonConfidence backlog:Confidence_Medium ;
+    backlog:hasLessonNote "Heuristic; can false-positive on batch imports."@en .
+fw:Lesson_ReadinessGateShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of ReadinessGateShape"@en ;
+    backlog:lessonOfShape backlog:ReadinessGateShape ;
+    backlog:hasExperienceStatement "Items drifted into Ready with no acceptance criterion or refinement event, so readiness was someone's memory rather than something done."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_2 ;
+    backlog:learnedInSegment backlog:Segment_Backlog ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_IterationNotCleanedShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of IterationNotCleanedShape"@en ;
+    backlog:lessonOfShape backlog:IterationNotCleanedShape ;
+    backlog:hasExperienceStatement "A sprint was closed while stories were left neither Done nor carried over, so work was silently dropped."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_2 ;
+    backlog:learnedInSegment backlog:Segment_Closure ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_BatchCompleteButNotDoneShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of BatchCompleteButNotDoneShape"@en ;
+    backlog:lessonOfShape backlog:BatchCompleteButNotDoneShape ;
+    backlog:hasExperienceStatement "A batch item reached its declared total but its state stayed not Done (found in a real lineage)."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_2 ;
+    backlog:learnedInSegment backlog:Segment_ControlMonitoring ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_BatchConcealmentShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of BatchConcealmentShape"@en ;
+    backlog:lessonOfShape backlog:BatchConcealmentShape ;
+    backlog:hasExperienceStatement "A story batching over five units under one criterion hides a stall: measured on a table migration, a blocked story hides 5 percent at batch 1, 36 percent at batch 8."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_2 ;
+    backlog:learnedInSegment backlog:Segment_ControlMonitoring ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High ;
+    backlog:hasLessonNote "Measured evidence."@en .
+fw:Lesson_BatchShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of BatchShape"@en ;
+    backlog:lessonOfShape backlog:BatchShape ;
+    backlog:hasExperienceStatement "A batched story with no completed count reports zero progress when one unit is blocked, and one marked Done with units unfinished or counts above the batch inflates the objective."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_2 ;
+    backlog:learnedInSegment backlog:Segment_ControlMonitoring ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_BatchStartedStateStaleShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of BatchStartedStateStaleShape"@en ;
+    backlog:lessonOfShape backlog:BatchStartedStateStaleShape ;
+    backlog:hasExperienceStatement "Batch work had progressed but the item stayed Ready or Proposed (found in a real lineage)."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_2 ;
+    backlog:learnedInSegment backlog:Segment_ControlMonitoring ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_ContainerStateRule a backlog:ShapeLesson ;
+    rdfs:label "Lesson of ContainerStateRule"@en ;
+    backlog:lessonOfShape backlog:ContainerStateRule ;
+    backlog:hasExperienceStatement "Container state was asserted by hand and optimistic; it must be derived from member states (Done only when real work is done, cancelled only by dissolution)."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_2 ;
+    backlog:learnedInSegment backlog:Segment_ControlMonitoring ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_Medium ;
+    backlog:hasLessonNote "Derivation rule, not a constraint; lesson inferred from comments."@en .
+fw:Lesson_DecompositionStateRule a backlog:ShapeLesson ;
+    rdfs:label "Lesson of DecompositionStateRule"@en ;
+    backlog:lessonOfShape backlog:DecompositionStateRule ;
+    backlog:hasExperienceStatement "An undecomposed or partly done epic inherited the optimism of one shipped child; parent state must reflect all children."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_2 ;
+    backlog:learnedInSegment backlog:Segment_ControlMonitoring ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_Medium ;
+    backlog:hasLessonNote "Derivation rule."@en .
+fw:Lesson_DeployabilityShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of DeployabilityShape"@en ;
+    backlog:lessonOfShape backlog:DeployabilityShape ;
+    backlog:hasExperienceStatement "A container whose members were all done was reported deployable while an external blocker was unresolved, confusing completeness with readiness to ship."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_2 ;
+    backlog:learnedInSegment backlog:Segment_ControlMonitoring ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_ExternalBlockerRule a backlog:ShapeLesson ;
+    rdfs:label "Lesson of ExternalBlockerRule"@en ;
+    backlog:lessonOfShape backlog:ExternalBlockerRule ;
+    backlog:hasExperienceStatement "A container looked complete while members depended on unfinished work outside it; completion is not deployability."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_2 ;
+    backlog:learnedInSegment backlog:Segment_ControlMonitoring ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_Medium ;
+    backlog:hasLessonNote "Derivation rule."@en .
+fw:Lesson_HarnessCompletenessRule a backlog:ShapeLesson ;
+    rdfs:label "Lesson of HarnessCompletenessRule"@en ;
+    backlog:lessonOfShape backlog:HarnessCompletenessRule ;
+    backlog:hasExperienceStatement "A test harness was called complete while some acceptance criterion had no verified evidence."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_2 ;
+    backlog:learnedInSegment backlog:Segment_ControlMonitoring ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_Medium ;
+    backlog:hasLessonNote "Derivation rule."@en .
+fw:Lesson_IterationEndedIncompleteShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of IterationEndedIncompleteShape"@en ;
+    backlog:lessonOfShape backlog:IterationEndedIncompleteShape ;
+    backlog:hasExperienceStatement "An iteration ended with the story unfinished and nobody carried it forward or recovered it."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_2 ;
+    backlog:learnedInSegment backlog:Segment_ControlMonitoring ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_MilestoneOutcomeRule a backlog:ShapeLesson ;
+    rdfs:label "Lesson of MilestoneOutcomeRule"@en ;
+    backlog:lessonOfShape backlog:MilestoneOutcomeRule ;
+    backlog:hasExperienceStatement "Milestone punctuality was asserted rather than computed from achieved date against target date."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_2 ;
+    backlog:learnedInSegment backlog:Segment_ControlMonitoring ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_Medium ;
+    backlog:hasLessonNote "Derivation rule."@en .
+fw:Lesson_MilestoneStateRule a backlog:ShapeLesson ;
+    rdfs:label "Lesson of MilestoneStateRule"@en ;
+    backlog:lessonOfShape backlog:MilestoneStateRule ;
+    backlog:hasExperienceStatement "Milestones were declared reached without all contributing items being Done."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_2 ;
+    backlog:learnedInSegment backlog:Segment_ControlMonitoring ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_Medium ;
+    backlog:hasLessonNote "Derivation rule."@en .
+fw:Lesson_ObjectiveOutcomeRule a backlog:ShapeLesson ;
+    rdfs:label "Lesson of ObjectiveOutcomeRule"@en ;
+    backlog:lessonOfShape backlog:ObjectiveOutcomeRule ;
+    backlog:hasExperienceStatement "Objective success was asserted rather than computed from observed values against the target in its declared direction."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_2 ;
+    backlog:learnedInSegment backlog:Segment_ControlMonitoring ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_Medium ;
+    backlog:hasLessonNote "Derivation rule."@en .
+fw:Lesson_ReviewsPlanConsistencyShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of ReviewsPlanConsistencyShape"@en ;
+    backlog:lessonOfShape backlog:ReviewsPlanConsistencyShape ;
+    backlog:hasExperienceStatement "A review of one sprint pointed at another sprint's plan, so the wrong sprint was reviewed."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_2 ;
+    backlog:learnedInSegment backlog:Segment_ControlMonitoring ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_SelfComparisonClaimShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of SelfComparisonClaimShape"@en ;
+    backlog:lessonOfShape backlog:SelfComparisonClaimShape ;
+    backlog:hasExperienceStatement "A tool compared a file with itself yet reported a distinct, real comparison."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_2 ;
+    backlog:learnedInSegment backlog:Segment_ControlMonitoring ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High ;
+    backlog:hasLessonNote "Guards recorded claim only, not tool logic."@en .
+fw:Lesson_StaleForecastAdvisoryShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of StaleForecastAdvisoryShape"@en ;
+    backlog:lessonOfShape backlog:StaleForecastAdvisoryShape ;
+    backlog:hasExperienceStatement "A forecast date passed with work still open and nobody revisited the failed assumption."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_2 ;
+    backlog:learnedInSegment backlog:Segment_ControlMonitoring ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_StaleInvariantStatusShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of StaleInvariantStatusShape"@en ;
+    backlog:lessonOfShape backlog:StaleInvariantStatusShape ;
+    backlog:hasExperienceStatement "All work enabling an invariant check shipped but the invariant still reported NotYetEnforceable, so the check was never run and a known gap stayed disclosed forever."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_2 ;
+    backlog:learnedInSegment backlog:Segment_ControlMonitoring ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_StoryReadyToCloseShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of StoryReadyToCloseShape"@en ;
+    backlog:lessonOfShape backlog:StoryReadyToCloseShape ;
+    backlog:hasExperienceStatement "All tasks of a story were Done but the story stayed open because the DoD validator does not act."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_2 ;
+    backlog:learnedInSegment backlog:Segment_ControlMonitoring ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_ToolRunRecordShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of ToolRunRecordShape"@en ;
+    backlog:lessonOfShape backlog:ToolRunRecordShape ;
+    backlog:hasExperienceStatement "Tool runs lacked tool identity or real hashes, so a run's comparison could not be audited."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_2 ;
+    backlog:learnedInSegment backlog:Segment_ControlMonitoring ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_TransitionEventShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of TransitionEventShape"@en ;
+    backlog:lessonOfShape backlog:TransitionEventShape ;
+    backlog:hasExperienceStatement "State changes were logged without item, time or a transition, or used a transition outside any workflow, so history contained moves the process never permitted."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_2 ;
+    backlog:learnedInSegment backlog:Segment_ControlMonitoring ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_EffectiveDoDRule a backlog:ShapeLesson ;
+    rdfs:label "Lesson of EffectiveDoDRule"@en ;
+    backlog:lessonOfShape backlog:EffectiveDoDRule ;
+    backlog:hasExperienceStatement "An item's real Definition of Done was only what it declared, missing what its containers imposed."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_2 ;
+    backlog:learnedInSegment backlog:Segment_Execution ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_Medium ;
+    backlog:hasLessonNote "Derivation rule."@en .
+fw:Lesson_ItemStartedStateStaleShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of ItemStartedStateStaleShape"@en ;
+    backlog:lessonOfShape backlog:ItemStartedStateStaleShape ;
+    backlog:hasExperienceStatement "An item got a start timestamp but its state stayed Proposed/Ready, so every progress view showed it as not begun while work was under way."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_2 ;
+    backlog:learnedInSegment backlog:Segment_Execution ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_PbiCompletionShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of PbiCompletionShape"@en ;
+    backlog:lessonOfShape backlog:PbiCompletionShape ;
+    backlog:hasExperienceStatement "A backlog item was declared Done while its tasks were still open, hiding remaining work."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_2 ;
+    backlog:learnedInSegment backlog:Segment_Execution ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_StateTransitionShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of StateTransitionShape"@en ;
+    backlog:lessonOfShape backlog:StateTransitionShape ;
+    backlog:hasExperienceStatement "Transitions lacked source, target or guard, or looped to the same state; an unguarded move into Done let completion claims escape."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_2 ;
+    backlog:learnedInSegment backlog:Segment_Execution ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_WorkflowShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of WorkflowShape"@en ;
+    backlog:lessonOfShape backlog:WorkflowShape ;
+    backlog:hasExperienceStatement "A workflow had no transitions, or the state enumeration and the process disagreed so a lifecycle state could be neither entered nor left."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_2 ;
+    backlog:learnedInSegment backlog:Segment_Execution ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_Medium .
+fw:Lesson_RetrospectiveObjectiveShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of RetrospectiveObjectiveShape"@en ;
+    backlog:lessonOfShape backlog:RetrospectiveObjectiveShape ;
+    backlog:hasExperienceStatement "Withdrawn and retrospective objectives are opposite statements (measure wrong vs event already past) and readers could not tell which without a rationale."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_2 ;
+    backlog:learnedInSegment backlog:Segment_Objective ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_ContainerDependencyRule a backlog:ShapeLesson ;
+    rdfs:label "Lesson of ContainerDependencyRule"@en ;
+    backlog:lessonOfShape backlog:ContainerDependencyRule ;
+    backlog:hasExperienceStatement "Dependencies between containers lived only as hidden member-level edges, so sequencing between packages was invisible."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_2 ;
+    backlog:learnedInSegment backlog:Segment_Plan ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_Medium ;
+    backlog:hasLessonNote "Derivation rule."@en .
+fw:Lesson_HorizonCoherenceAdvisoryShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of HorizonCoherenceAdvisoryShape"@en ;
+    backlog:lessonOfShape backlog:HorizonCoherenceAdvisoryShape ;
+    backlog:hasExperienceStatement "Items were advertised as Now (or Ready) while not startable, being in wrong state or having unfinished dependencies, so the roadmap overstated what could begin."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_2 ;
+    backlog:learnedInSegment backlog:Segment_Plan ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_Medium ;
+    backlog:hasLessonNote "Advisory only; some overlap with readiness and dependency edges."@en .
+fw:Lesson_InitiativeScaleShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of InitiativeScaleShape"@en ;
+    backlog:lessonOfShape backlog:InitiativeScaleShape ;
+    backlog:hasExperienceStatement "An initiative called Maintenance produced a major version increment, meaning it was really a project (or the version was wrong) so size classification was false."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_2 ;
+    backlog:learnedInSegment backlog:Segment_Scope ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_MaintenanceClassificationShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of MaintenanceClassificationShape"@en ;
+    backlog:lessonOfShape backlog:MaintenanceClassificationShape ;
+    backlog:hasExperienceStatement "An initiative was labelled with a maintenance category (e.g. Corrective) that contradicted its own timing/goal axes, so reports by category were wrong."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_2 ;
+    backlog:learnedInSegment backlog:Segment_Scope ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_DeclaredCategoryShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of DeclaredCategoryShape"@en ;
+    backlog:lessonOfShape backlog:DeclaredCategoryShape ;
+    backlog:hasExperienceStatement "An invented investment category IRI passed silently because owl:oneOf does not reject in SHACL, polluting category reports."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_3 ;
+    backlog:learnedInSegment backlog:Segment_Backlog ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_PbiKindAdvisoryShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of PbiKindAdvisoryShape"@en ;
+    backlog:lessonOfShape backlog:PbiKindAdvisoryShape ;
+    backlog:hasExperienceStatement "A kind was put on an epic instead of its initiative, creating a second place for classification that could disagree with the initiative."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_3 ;
+    backlog:learnedInSegment backlog:Segment_Backlog ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_Medium .
+fw:Lesson_PriorityScoreShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of PriorityScoreShape"@en ;
+    backlog:lessonOfShape backlog:PriorityScoreShape ;
+    backlog:hasExperienceStatement "A score was recorded without saying which prioritisation method produced it, so two numbers from different methods were compared as if equal."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_3 ;
+    backlog:learnedInSegment backlog:Segment_Backlog ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_Medium ;
+    backlog:hasLessonNote "Overlap is partial (method naming vs judged container scores)."@en .
+fw:Lesson_WorkItemShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of WorkItemShape"@en ;
+    backlog:lessonOfShape backlog:WorkItemShape ;
+    backlog:hasExperienceStatement "Items arrived with duplicate or missing identifiers, no or multiple states, dangling dependsOn/container/evidence links, silent dependency cycles, and cancellations with no reason, so the register could not be queried or trusted."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_3 ;
+    backlog:learnedInSegment backlog:Segment_Backlog ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_EstimateAccountabilityShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of EstimateAccountabilityShape"@en ;
+    backlog:lessonOfShape backlog:EstimateAccountabilityShape ;
+    backlog:hasExperienceStatement "Completed items kept their estimate but never recorded actual effort, so estimation error could never be learned from."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_3 ;
+    backlog:learnedInSegment backlog:Segment_Closure ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_Medium ;
+    backlog:hasLessonNote "Learning loop; value depends on teams using estimates."@en .
+fw:Lesson_BaselineReferenceShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of BaselineReferenceShape"@en ;
+    backlog:lessonOfShape backlog:BaselineReferenceShape ;
+    backlog:hasExperienceStatement "A baseline named no tool, location or rationale, so the real comparison state was unknowable."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_3 ;
+    backlog:learnedInSegment backlog:Segment_ControlMonitoring ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_ForecastShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of ForecastShape"@en ;
+    backlog:lessonOfShape backlog:ForecastShape ;
+    backlog:hasExperienceStatement "Forecasts were recorded without scope, assumptions or arithmetic, so a miss could not be explained or re-derived."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_3 ;
+    backlog:learnedInSegment backlog:Segment_ControlMonitoring ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_QualityMetricShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of QualityMetricShape"@en ;
+    backlog:lessonOfShape backlog:QualityMetricShape ;
+    backlog:hasExperienceStatement "A metric not declaring population sensitivity was read once and reported as complete though it understates by design."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_3 ;
+    backlog:learnedInSegment backlog:Segment_ControlMonitoring ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_WipLimitShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of WipLimitShape"@en ;
+    backlog:lessonOfShape backlog:WipLimitShape ;
+    backlog:hasExperienceStatement "A WIP limit was declared with no container or value, so it constrained nothing."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_3 ;
+    backlog:learnedInSegment backlog:Segment_ControlMonitoring ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_Medium ;
+    backlog:hasLessonNote "Pure completeness check."@en .
+fw:Lesson_ArtifactCategoryShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of ArtifactCategoryShape"@en ;
+    backlog:lessonOfShape backlog:ArtifactCategoryShape ;
+    backlog:hasExperienceStatement "A model kind lacks a structure/behaviour category, so queries for all behaviour artefacts need a hand-listed set of kinds and miss a newly added one."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_3 ;
+    backlog:learnedInSegment backlog:Segment_Execution ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_Medium ;
+    backlog:hasLessonNote "Taxonomy hygiene; real but low-stakes."@en .
+fw:Lesson_CodeTableShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of CodeTableShape"@en ;
+    backlog:lessonOfShape backlog:CodeTableShape ;
+    backlog:hasExperienceStatement "Tables to migrate were counted by whichever query reached them because no kind (classification vs operational) or module was recorded; operational ones had to stay in python."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_3 ;
+    backlog:learnedInSegment backlog:Segment_Execution ;
+    backlog:hasProfileScope backlog:Scope_LevelSpecific ;
+    backlog:hasLessonConfidence backlog:Confidence_Medium ;
+    backlog:hasLessonNote "Tied to a specific migration; may be obsolete once it ends."@en .
+fw:Lesson_ModelArtifactShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of ModelArtifactShape"@en ;
+    backlog:lessonOfShape backlog:ModelArtifactShape ;
+    backlog:hasExperienceStatement "A model artefact recorded without its kind or the item it describes says something was produced but not what, and cannot be found by those working the item; binding of the item rule delayed until Backlog stage after a Goal-stage diagram could not be recorded."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_3 ;
+    backlog:learnedInSegment backlog:Segment_Execution ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High ;
+    backlog:hasLessonNote "Item rule deliberately stage-gated."@en .
+fw:Lesson_StateChangeShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of StateChangeShape"@en ;
+    backlog:lessonOfShape backlog:StateChangeShape ;
+    backlog:hasExperienceStatement "A state change missing its start or end state, or starting and ending in the same state, describes no change; the states are wrong or it describes something else."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_3 ;
+    backlog:learnedInSegment backlog:Segment_Execution ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_TaskTypeShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of TaskTypeShape"@en ;
+    backlog:lessonOfShape backlog:TaskTypeShape ;
+    backlog:hasExperienceStatement "Tasks recorded only a name, not the kind of work, so a register could be entirely implementation without anyone seeing it."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_3 ;
+    backlog:learnedInSegment backlog:Segment_Execution ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_TestDataShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of TestDataShape"@en ;
+    backlog:lessonOfShape backlog:TestDataShape ;
+    backlog:hasExperienceStatement "Test data with no stated starting state could not be recreated, so the test was a claim not a check."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_3 ;
+    backlog:learnedInSegment backlog:Segment_Execution ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_ToolScriptShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of ToolScriptShape"@en ;
+    backlog:lessonOfShape backlog:ToolScriptShape ;
+    backlog:hasExperienceStatement "Scripts did not declare filename or whether they take a graph, so three wrong guesses were made about invocation."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_3 ;
+    backlog:learnedInSegment backlog:Segment_Execution ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_GoalOriginShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of GoalOriginShape"@en ;
+    backlog:lessonOfShape backlog:GoalOriginShape ;
+    backlog:hasExperienceStatement "A successor lineage's goal claimed to continue or repair earlier work but pointed at no gap (or the wrong kind or another lineage's gap), or a New goal pretended to be unrelated, so pickups could not be followed back."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_3 ;
+    backlog:learnedInSegment backlog:Segment_Goal ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High ;
+    backlog:hasLessonNote "Applies only where lineage succession exists."@en .
+fw:Lesson_MissionOnceShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of MissionOnceShape"@en ;
+    backlog:lessonOfShape backlog:MissionOnceShape ;
+    backlog:hasExperienceStatement "A mission reporting two outcomes made six archived lineages report themselves as not archived."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_3 ;
+    backlog:learnedInSegment backlog:Segment_Mission ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_MissionProvenanceShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of MissionProvenanceShape"@en ;
+    backlog:lessonOfShape backlog:MissionProvenanceShape ;
+    backlog:hasExperienceStatement "A mission had its accountable decider recorded but not who authored the words, so a session-drafted statement could be passed off as the owner's."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_3 ;
+    backlog:learnedInSegment backlog:Segment_Mission ;
+    backlog:hasProfileScope backlog:Scope_AgenticOnly ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_DimensionalRollUpShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of DimensionalRollUpShape"@en ;
+    backlog:lessonOfShape backlog:DimensionalRollUpShape ;
+    backlog:hasExperienceStatement "Cost recorded on both a parent and its child doubled the total in roll-ups."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_3 ;
+    backlog:learnedInSegment backlog:Segment_Plan ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_PackageContentShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of PackageContentShape"@en ;
+    backlog:lessonOfShape backlog:PackageContentShape ;
+    backlog:hasExperienceStatement "A package targeting no sprint sat unused for 91 releases while every check passed; the version was also applied afterwards as a label."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_3 ;
+    backlog:learnedInSegment backlog:Segment_Plan ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_PlanBaselineShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of PlanBaselineShape"@en ;
+    backlog:lessonOfShape backlog:PlanBaselineShape ;
+    backlog:hasExperienceStatement "Two baselines both claimed to be current, or superseded ones were lost, so performance was measured against whichever the reader picked."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_3 ;
+    backlog:learnedInSegment backlog:Segment_Plan ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_PlanningEventShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of PlanningEventShape"@en ;
+    backlog:lessonOfShape backlog:PlanningEventShape ;
+    backlog:hasExperienceStatement "Planning conversions were recorded without the item they planned, so tasks could not be traced to backlog items."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_3 ;
+    backlog:learnedInSegment backlog:Segment_Plan ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_RiceArithmeticShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of RiceArithmeticShape"@en ;
+    backlog:lessonOfShape backlog:RiceArithmeticShape ;
+    backlog:hasExperienceStatement "A RICE value disagreed with reach x impact x confidence / effort, so the ranking rested on an uncomputed number."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_3 ;
+    backlog:learnedInSegment backlog:Segment_Plan ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High ;
+    backlog:hasLessonNote "Same lesson as WSJF for a different formula."@en .
+fw:Lesson_RoadmapOverrideShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of RoadmapOverrideShape"@en ;
+    backlog:lessonOfShape backlog:RoadmapOverrideShape ;
+    backlog:hasExperienceStatement "A container was ranked above a higher-scoring one with no rationale, making the roadmap order look arbitrary."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_3 ;
+    backlog:learnedInSegment backlog:Segment_Plan ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_ScoreAccountabilityShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of ScoreAccountabilityShape"@en ;
+    backlog:lessonOfShape backlog:ScoreAccountabilityShape ;
+    backlog:hasExperienceStatement "Scores with neither components nor rationale drove an ordering, and old scores were never re-run after later completions changed the picture."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_3 ;
+    backlog:learnedInSegment backlog:Segment_Plan ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High ;
+    backlog:hasLessonNote "Staleness clause is the more distinctive part."@en .
+fw:Lesson_ScoreArithmeticShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of ScoreArithmeticShape"@en ;
+    backlog:lessonOfShape backlog:ScoreArithmeticShape ;
+    backlog:hasExperienceStatement "A WSJF value was typed in unrelated to its components, so the number driving the order could not be checked or challenged."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_3 ;
+    backlog:learnedInSegment backlog:Segment_Plan ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_SprintPlanningCeremonyShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of SprintPlanningCeremonyShape"@en ;
+    backlog:lessonOfShape backlog:SprintPlanningCeremonyShape ;
+    backlog:hasExperienceStatement "A planning record named no sprint or planned nothing, so it was a meeting note and could not show which scope it decided."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_3 ;
+    backlog:learnedInSegment backlog:Segment_Plan ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_ContainerRoleShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of ContainerRoleShape"@en ;
+    backlog:lessonOfShape backlog:ContainerRoleShape ;
+    backlog:hasExperienceStatement "A container role naming no class was counted by no report query and excluded by none."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_3 ;
+    backlog:learnedInSegment backlog:Segment_WholeLineage ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_Medium ;
+    backlog:hasLessonNote "Meta-model housekeeping."@en .
+fw:Lesson_DisjointDomainMisuseShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of DisjointDomainMisuseShape"@en ;
+    backlog:lessonOfShape backlog:DisjointDomainMisuseShape ;
+    backlog:hasExperienceStatement "A work item was given a container-only property; the OWL domain only infers rather than rejects, so the class confusion went unnoticed."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_3 ;
+    backlog:learnedInSegment backlog:Segment_WholeLineage ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_ForeignNamespaceShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of ForeignNamespaceShape"@en ;
+    backlog:lessonOfShape backlog:ForeignNamespaceShape ;
+    backlog:hasExperienceStatement "A recorded foreign namespace without IRI or owner left adopters unable to tell which terms were not theirs to change."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_3 ;
+    backlog:learnedInSegment backlog:Segment_WholeLineage ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_Medium .
+fw:Lesson_FunctionalOnceShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of FunctionalOnceShape"@en ;
+    backlog:lessonOfShape backlog:FunctionalOnceShape ;
+    backlog:hasExperienceStatement "A lineage carried archived true and false at once; first-value queries said not archived while the archive existed; OWL functionality is not enforced by SHACL."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_3 ;
+    backlog:learnedInSegment backlog:Segment_WholeLineage ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_LineageOrdinalUniqueShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of LineageOrdinalUniqueShape"@en ;
+    backlog:lessonOfShape backlog:LineageOrdinalUniqueShape ;
+    backlog:hasExperienceStatement "Two lineages were given the same run number, so the sequence of runs and any reference by ordinal became ambiguous."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_3 ;
+    backlog:learnedInSegment backlog:Segment_WholeLineage ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High ;
+    backlog:hasLessonNote "Duplicated by external ordinal check script but this covers data in graph"@en .
+fw:Lesson_ShapeSuiteShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of ShapeSuiteShape"@en ;
+    backlog:lessonOfShape backlog:ShapeSuiteShape ;
+    backlog:hasExperienceStatement "A suite named in the ontology without a locating glob could not be found by any tool."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_3 ;
+    backlog:learnedInSegment backlog:Segment_WholeLineage ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_Medium .
+fw:Lesson_GroomedAheadShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of GroomedAheadShape"@en ;
+    backlog:lessonOfShape backlog:GroomedAheadShape ;
+    backlog:hasExperienceStatement "A story groomed more than 28 days before its iteration is written against untested assumptions and will be rewritten or wrongly followed."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_4 ;
+    backlog:learnedInSegment backlog:Segment_Backlog ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_Medium ;
+    backlog:hasLessonNote "28-day threshold is a convention; engine quirk with date subtraction noted."@en .
+fw:Lesson_JustInTimeGroomingShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of JustInTimeGroomingShape"@en ;
+    backlog:lessonOfShape backlog:JustInTimeGroomingShape ;
+    backlog:hasExperienceStatement "A refinement naming no target iteration hides whether grooming was just in time or far ahead, and detail written early goes stale."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_4 ;
+    backlog:learnedInSegment backlog:Segment_Backlog ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_Medium ;
+    backlog:hasLessonNote "Advisory."@en .
+fw:Lesson_AdaptationStageOrderShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of AdaptationStageOrderShape"@en ;
+    backlog:lessonOfShape backlog:AdaptationStageOrderShape ;
+    backlog:hasExperienceStatement "An adaptation jumped to fit-gap, ruling or re-link without the earlier gate passed, or edited the old scope in place, erasing the record of what was believed and why it changed."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_4 ;
+    backlog:learnedInSegment backlog:Segment_ControlMonitoring ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_CheckpointBreachShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of CheckpointBreachShape"@en ;
+    backlog:lessonOfShape backlog:CheckpointBreachShape ;
+    backlog:hasExperienceStatement "An objective observed behind its own checkpoint went unreported until the deadline, when information can no longer change the outcome."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_4 ;
+    backlog:learnedInSegment backlog:Segment_ControlMonitoring ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_FailureRecordTemporalShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of FailureRecordTemporalShape"@en ;
+    backlog:lessonOfShape backlog:FailureRecordTemporalShape ;
+    backlog:hasExperienceStatement "A failure record expired at or before it was recorded, so no query could judge whether it was still live."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_4 ;
+    backlog:learnedInSegment backlog:Segment_ControlMonitoring ;
+    backlog:hasProfileScope backlog:Scope_AgenticOnly ;
+    backlog:hasLessonConfidence backlog:Confidence_Medium ;
+    backlog:hasLessonNote "Failure records and decay come from the executor/experience model; profile inferred."@en .
+fw:Lesson_MilestoneOutcomeShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of MilestoneOutcomeShape"@en ;
+    backlog:lessonOfShape backlog:MilestoneOutcomeShape ;
+    backlog:hasExperienceStatement "A milestone date passed silently with no achievement, re-baseline or recorded withdrawal, so the slip disappeared from view."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_4 ;
+    backlog:learnedInSegment backlog:Segment_ControlMonitoring ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High ;
+    backlog:hasLessonNote "Exemption wording was repaired twice after rules masked real slips."@en .
+fw:Lesson_ObjectiveMonitorShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of ObjectiveMonitorShape"@en ;
+    backlog:lessonOfShape backlog:ObjectiveMonitorShape ;
+    backlog:hasExperienceStatement "An objective with no checkpoint can only be judged at its deadline, when it is too late; no observation can be early or late, so the objective is a measure and not a monitor."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_4 ;
+    backlog:learnedInSegment backlog:Segment_ControlMonitoring ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_RebaselineShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of RebaselineShape"@en ;
+    backlog:lessonOfShape backlog:RebaselineShape ;
+    backlog:hasExperienceStatement "Targets were moved without the previous target, new target, reason or owner decision, which is indistinguishable from erasing a failure."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_4 ;
+    backlog:learnedInSegment backlog:Segment_ControlMonitoring ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_InteractionStepShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of InteractionStepShape"@en ;
+    backlog:lessonOfShape backlog:InteractionStepShape ;
+    backlog:hasExperienceStatement "Interaction specification steps lacking ordinal, action, or sharing an ordinal; a set of actions cannot be walked through and a tie leaves the order unresolvable."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_4 ;
+    backlog:learnedInSegment backlog:Segment_Execution ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_KickOffShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of KickOffShape"@en ;
+    backlog:lessonOfShape backlog:KickOffShape ;
+    backlog:hasExperienceStatement "Start dates were asserted with no moment, subject, or declarer/trigger, so slips were measured from nobody's word."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_4 ;
+    backlog:learnedInSegment backlog:Segment_Execution ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_PackageActivationOrderAdvisoryShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of PackageActivationOrderAdvisoryShape"@en ;
+    backlog:lessonOfShape backlog:PackageActivationOrderAdvisoryShape ;
+    backlog:hasExperienceStatement "A dependent package started or finished while its prerequisite package was unresolved; derived state never compared the two."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_4 ;
+    backlog:learnedInSegment backlog:Segment_Execution ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High ;
+    backlog:hasLessonNote "Owner ruling 2026-10-08."@en .
+fw:Lesson_TaskTypeStepCheckShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of TaskTypeStepCheckShape"@en ;
+    backlog:lessonOfShape backlog:TaskTypeStepCheckShape ;
+    backlog:hasExperienceStatement "A step named no checker script, so nothing stopped the chain from moving on without acceptance."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_4 ;
+    backlog:learnedInSegment backlog:Segment_Execution ;
+    backlog:hasProfileScope backlog:Scope_LevelSpecific ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_TaskTypeStepOrdinalShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of TaskTypeStepOrdinalShape"@en ;
+    backlog:lessonOfShape backlog:TaskTypeStepOrdinalShape ;
+    backlog:hasExperienceStatement "Steps of a task type had no position, forming an unordered set of actions instead of the sequence a task passes through."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_4 ;
+    backlog:learnedInSegment backlog:Segment_Execution ;
+    backlog:hasProfileScope backlog:Scope_LevelSpecific ;
+    backlog:hasLessonConfidence backlog:Confidence_High ;
+    backlog:hasLessonNote "L2."@en .
+fw:Lesson_TaskTypeStepOrdinalUniqueShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of TaskTypeStepOrdinalUniqueShape"@en ;
+    backlog:lessonOfShape backlog:TaskTypeStepOrdinalUniqueShape ;
+    backlog:hasExperienceStatement "Two steps claimed the same position so the register could not say which came first."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_4 ;
+    backlog:learnedInSegment backlog:Segment_Execution ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_TaskTypeStepOwnedShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of TaskTypeStepOwnedShape"@en ;
+    backlog:lessonOfShape backlog:TaskTypeStepOwnedShape ;
+    backlog:hasExperienceStatement "A step belonged to no task type or to several, so its position had no sequence to be meaningful in."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_4 ;
+    backlog:learnedInSegment backlog:Segment_Execution ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_IterationPeriodShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of IterationPeriodShape"@en ;
+    backlog:lessonOfShape backlog:IterationPeriodShape ;
+    backlog:hasExperienceStatement "An iteration was recorded ending before it started, a data-entry error that corrupts every date-based check."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_4 ;
+    backlog:learnedInSegment backlog:Segment_Plan ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_PlannedDateShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of PlannedDateShape"@en ;
+    backlog:lessonOfShape backlog:PlannedDateShape ;
+    backlog:hasExperienceStatement "Items were planned to finish before they started, or dates floated unanchored to any kick-off."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_4 ;
+    backlog:learnedInSegment backlog:Segment_Plan ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_WorkItemRoadmapRankShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of WorkItemRoadmapRankShape"@en ;
+    backlog:lessonOfShape backlog:WorkItemRoadmapRankShape ;
+    backlog:hasExperienceStatement "Two entries shared a rank on one roadmap, or ranked items sat on no roadmap, so rank gave no order and sequencing was ambiguous."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_4 ;
+    backlog:learnedInSegment backlog:Segment_Plan ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_LineageLayerShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of LineageLayerShape"@en ;
+    backlog:lessonOfShape backlog:LineageLayerShape ;
+    backlog:hasExperienceStatement "A lineage layer lacking class or integer position, or two layers sharing a position, leaves the chain order to whatever the store returns."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_4 ;
+    backlog:learnedInSegment backlog:Segment_WholeLineage ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_SingleCommitLineageShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of SingleCommitLineageShape"@en ;
+    backlog:lessonOfShape backlog:SingleCommitLineageShape ;
+    backlog:hasExperienceStatement "Several stages were closed in one commit, so git cannot tell which was done first; the claimed stage order is unprovable although the work may have been in order."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_4 ;
+    backlog:learnedInSegment backlog:Segment_WholeLineage ;
+    backlog:hasProfileScope backlog:Scope_AgenticOnly ;
+    backlog:hasLessonConfidence backlog:Confidence_High ;
+    backlog:hasLessonNote "Honest statement of a measured limit, not a defect."@en .
+fw:Lesson_StagedElementShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of StagedElementShape"@en ;
+    backlog:lessonOfShape backlog:StagedElementShape ;
+    backlog:hasExperienceStatement "A goal or objective names no stage output in a lineage that otherwise builds by stages, so nobody can show it was built in order; staged construction gets claimed without evidence."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_4 ;
+    backlog:learnedInSegment backlog:Segment_WholeLineage ;
+    backlog:hasProfileScope backlog:Scope_AgenticOnly ;
+    backlog:hasLessonConfidence backlog:Confidence_Medium ;
+    backlog:hasLessonNote "Advisory; only meaningful where staged construction is used."@en .
+fw:Lesson_ArtifactEnumerationAdvisoryShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of ArtifactEnumerationAdvisoryShape"@en ;
+    backlog:lessonOfShape backlog:ArtifactEnumerationAdvisoryShape ;
+    backlog:hasExperienceStatement "User-facing stories had acceptance criteria that merely listed files, tables or endpoints, so they could be met without anyone getting the promised behaviour."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_5 ;
+    backlog:learnedInSegment backlog:Segment_Backlog ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_Medium ;
+    backlog:hasLessonNote "advisory; heuristic"@en .
+fw:Lesson_EpicSpecifiedShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of EpicSpecifiedShape"@en ;
+    backlog:lessonOfShape backlog:EpicSpecifiedShape ;
+    backlog:hasExperienceStatement "An epic decomposed into stories with no Definition of Done, no test coverage of its criteria, or no covered domain entity gives the stories no target at epic level, so nobody can say whether they finish the epic."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_5 ;
+    backlog:learnedInSegment backlog:Segment_Backlog ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_IntentTraceabilityAdvisoryShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of IntentTraceabilityAdvisoryShape"@en ;
+    backlog:lessonOfShape backlog:IntentTraceabilityAdvisoryShape ;
+    backlog:hasExperienceStatement "Items traced only to a Goal (what matters) rather than a measurable Objective, so their value claim could never be confirmed or refuted; warning flags the weaker trace."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_5 ;
+    backlog:learnedInSegment backlog:Segment_Backlog ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_Medium ;
+    backlog:hasLessonNote "Advisory complement of the violation shape; stricter in that container-via-goal route is rejected. Partly redundant."@en .
+fw:Lesson_IntentTraceabilityShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of IntentTraceabilityShape"@en ;
+    backlog:lessonOfShape backlog:IntentTraceabilityShape ;
+    backlog:hasExperienceStatement "Work items belonged to no objective, directly, via container or parent, so their value claim referred to nothing the product pursued."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_5 ;
+    backlog:learnedInSegment backlog:Segment_Backlog ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_PackageDeliveryIntentShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of PackageDeliveryIntentShape"@en ;
+    backlog:lessonOfShape backlog:PackageDeliveryIntentShape ;
+    backlog:hasExperienceStatement "A package claimed to deliver a scope deliverable that none of its members satisfied, so stated intent and contents disagreed unnoticed."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_5 ;
+    backlog:learnedInSegment backlog:Segment_Backlog ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_StateProvenanceShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of StateProvenanceShape"@en ;
+    backlog:lessonOfShape backlog:StateProvenanceShape ;
+    backlog:hasExperienceStatement "State names with no declaring artefact are floating text, so two stories use one state name with different meanings; also a change using a state the declared space lacks shows analysis and story disagreeing."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_5 ;
+    backlog:learnedInSegment backlog:Segment_Execution ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_AreaWithoutGoalShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of AreaWithoutGoalShape"@en ;
+    backlog:lessonOfShape backlog:AreaWithoutGoalShape ;
+    backlog:hasExperienceStatement "A scope area that no scope-facing goal covers is done last or never, while the goal still reads met because it was never asked about it."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_5 ;
+    backlog:learnedInSegment backlog:Segment_Goal ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_GoalMeasurabilityShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of GoalMeasurabilityShape"@en ;
+    backlog:lessonOfShape backlog:GoalMeasurabilityShape ;
+    backlog:hasExperienceStatement "Goals stated intentions with no objective to measure them, or served no mission; staging relaxations added because a goal cannot owe objectives before that stage."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_5 ;
+    backlog:learnedInSegment backlog:Segment_Goal ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High ;
+    backlog:hasLessonNote "Third instance of the same staging conflict per comments."@en .
+fw:Lesson_ScopeGapAdvisoryShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of ScopeGapAdvisoryShape"@en ;
+    backlog:lessonOfShape backlog:ScopeGapAdvisoryShape ;
+    backlog:hasExperienceStatement "A declared scope boundary no goal derives from is wider than the real backlog, and cannot be tested against the mission; the reverse of scope creep."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_5 ;
+    backlog:learnedInSegment backlog:Segment_Goal ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High ;
+    backlog:hasLessonNote "Stage-gated to Goal stage."@en .
+fw:Lesson_UnguardedExclusionShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of UnguardedExclusionShape"@en ;
+    backlog:lessonOfShape backlog:UnguardedExclusionShape ;
+    backlog:hasExperienceStatement "An exclusion no goal guards is just a sentence; nothing measures whether the refusal held or was quietly abandoned, the classic scope creep route."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_5 ;
+    backlog:learnedInSegment backlog:Segment_Goal ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High ;
+    backlog:hasLessonNote "Stage-gated to Goal stage."@en .
+fw:Lesson_MissionReachShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of MissionReachShape"@en ;
+    backlog:lessonOfShape backlog:MissionReachShape ;
+    backlog:hasExperienceStatement "A mission had no goals beneath it, so it was intent nothing worked toward and no observation could bear on it."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_5 ;
+    backlog:learnedInSegment backlog:Segment_Mission ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_MissionShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of MissionShape"@en ;
+    backlog:lessonOfShape backlog:MissionShape ;
+    backlog:hasExperienceStatement "Missions were unstated, not owner-decided, or served by no goal; later clauses were relaxed for unstarted, archived and superseded missions after the staged ceremony could not be followed."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_5 ;
+    backlog:learnedInSegment backlog:Segment_Mission ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High ;
+    backlog:hasLessonNote "Comments record rules that contradicted each other and were repaired."@en .
+fw:Lesson_AreaUnmeasuredShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of AreaUnmeasuredShape"@en ;
+    backlog:lessonOfShape backlog:AreaUnmeasuredShape ;
+    backlog:hasExperienceStatement "A scope area with no objective measuring it can be declared complete on judgement; established by test drive that areas matched objective baselines exactly."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_5 ;
+    backlog:learnedInSegment backlog:Segment_Objective ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High ;
+    backlog:hasLessonNote "Stage-gated to Objective stage."@en .
+fw:Lesson_BenefitShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of BenefitShape"@en ;
+    backlog:lessonOfShape backlog:BenefitShape ;
+    backlog:hasExperienceStatement "Benefits were claimed with no owner, objective or statement, or marked realised just because work shipped, without verified evidence."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_5 ;
+    backlog:learnedInSegment backlog:Segment_Objective ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High ;
+    backlog:hasLessonNote "Realisation clause also fits evidence must be real."@en .
+fw:Lesson_ObjectiveChainShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of ObjectiveChainShape"@en ;
+    backlog:lessonOfShape backlog:ObjectiveChainShape ;
+    backlog:hasExperienceStatement "An objective advanced no goal, so it measured something with no stated reason to be wanted."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_5 ;
+    backlog:learnedInSegment backlog:Segment_Objective ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_ObjectiveShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of ObjectiveShape"@en ;
+    backlog:lessonOfShape backlog:ObjectiveShape ;
+    backlog:hasExperienceStatement "Objectives were written without a metric, baseline or target or tied to no goal, so success could not be measured or missed."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_5 ;
+    backlog:learnedInSegment backlog:Segment_Objective ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_OpportunityShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of OpportunityShape"@en ;
+    backlog:lessonOfShape backlog:OpportunityShape ;
+    backlog:hasExperienceStatement "Opportunities were noted without a statement of upside and cost or any goal they would advance, becoming unaimed wishes."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_5 ;
+    backlog:learnedInSegment backlog:Segment_Objective ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_Medium .
+fw:Lesson_MilestoneShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of MilestoneShape"@en ;
+    backlog:lessonOfShape backlog:MilestoneShape ;
+    backlog:hasExperienceStatement "Milestones were declared with no date or no work behind them, so the roadmap promised dates nobody was building toward."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_5 ;
+    backlog:learnedInSegment backlog:Segment_Plan ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High ;
+    backlog:hasLessonNote "Identifier part is generic; the contributing-item and date parts carry the lesson."@en .
+fw:Lesson_RoadmapIntentShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of RoadmapIntentShape"@en ;
+    backlog:lessonOfShape backlog:RoadmapIntentShape ;
+    backlog:hasExperienceStatement "A roadmap ranked work without naming any objective, so its ordering could be read but not justified."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_5 ;
+    backlog:learnedInSegment backlog:Segment_Plan ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_RoadmapProjectionShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of RoadmapProjectionShape"@en ;
+    backlog:lessonOfShape backlog:RoadmapProjectionShape ;
+    backlog:hasExperienceStatement "Roadmap horizons and milestones were seen to hold items that were not in any backlog, so the roadmap quietly introduced scope the backlog never approved."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_5 ;
+    backlog:learnedInSegment backlog:Segment_Plan ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_RoadmapShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of RoadmapShape"@en ;
+    backlog:lessonOfShape backlog:RoadmapShape ;
+    backlog:hasExperienceStatement "A roadmap was built over no backlog or over several, so it was unclear which register it was a projection of."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_5 ;
+    backlog:learnedInSegment backlog:Segment_Plan ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_AcceptedRequestNeedsScopeChangeShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of AcceptedRequestNeedsScopeChangeShape"@en ;
+    backlog:lessonOfShape backlog:AcceptedRequestNeedsScopeChangeShape ;
+    backlog:hasExperienceStatement "A request was accepted but no scope change recorded it, so scope grew invisibly; checked per request because per-scope checking missed cases."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_5 ;
+    backlog:learnedInSegment backlog:Segment_Scope ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High ;
+    backlog:hasLessonNote "Fixture-proven."@en .
+fw:Lesson_BothLayersShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of BothLayersShape"@en ;
+    backlog:lessonOfShape backlog:BothLayersShape ;
+    backlog:hasExperienceStatement "A scope stated in only one layer usually means the other was never considered, so the register cannot say whether something is out of scope or merely out of this project's work."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_5 ;
+    backlog:learnedInSegment backlog:Segment_Scope ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_Medium ;
+    backlog:hasLessonNote "Advisory."@en .
+fw:Lesson_ChangeRequestShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of ChangeRequestShape"@en ;
+    backlog:lessonOfShape backlog:ChangeRequestShape ;
+    backlog:hasExperienceStatement "Change requests arrived without the scope, direction, reason or disposition, so they could not be assessed or tracked."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_5 ;
+    backlog:learnedInSegment backlog:Segment_Scope ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_DeliverableCoverageShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of DeliverableCoverageShape"@en ;
+    backlog:lessonOfShape backlog:DeliverableCoverageShape ;
+    backlog:hasExperienceStatement "A scope required a deliverable that no work item satisfied, so the scope's content had a gap the backlog never closed."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_5 ;
+    backlog:learnedInSegment backlog:Segment_Scope ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_DeliverableProvenanceShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of DeliverableProvenanceShape"@en ;
+    backlog:lessonOfShape backlog:DeliverableProvenanceShape ;
+    backlog:hasExperienceStatement "A scope deliverable that quotes no mission clause widens the boundary beyond the mission; work satisfying it traces cleanly upward yet answers to nothing the mission said."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_5 ;
+    backlog:learnedInSegment backlog:Segment_Scope ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_DispositionRequiresAssessmentShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of DispositionRequiresAssessmentShape"@en ;
+    backlog:lessonOfShape backlog:DispositionRequiresAssessmentShape ;
+    backlog:hasExperienceStatement "Requests were accepted, rejected or deferred without any impact assessment, so decisions were judgement calls dressed as analysis."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_5 ;
+    backlog:learnedInSegment backlog:Segment_Scope ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High ;
+    backlog:hasLessonNote "Fixture-proven."@en .
+fw:Lesson_ImplementationProjectShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of ImplementationProjectShape"@en ;
+    backlog:lessonOfShape backlog:ImplementationProjectShape ;
+    backlog:hasExperienceStatement "A project was started with no stated boundary, phase, objective or Definition of Done, so nobody could say later what it was supposed to deliver or when it was finished."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_5 ;
+    backlog:learnedInSegment backlog:Segment_Scope ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_Medium ;
+    backlog:hasLessonNote "Bundles four distinct needs in one shape; each is real."@en .
+fw:Lesson_MirroredScopeShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of MirroredScopeShape"@en ;
+    backlog:lessonOfShape backlog:MirroredScopeShape ;
+    backlog:hasExperienceStatement "Scope and backlog matched each other exactly, which can mean the scope was written from the backlog rather than from intent."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_5 ;
+    backlog:learnedInSegment backlog:Segment_Scope ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_Medium ;
+    backlog:hasLessonNote "Doubtful: message says it is the expected end state of a complete lineage; low-value advisory"@en .
+fw:Lesson_PrematureExclusionShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of PrematureExclusionShape"@en ;
+    backlog:lessonOfShape backlog:PrematureExclusionShape ;
+    backlog:hasExperienceStatement "Exclusions written into a scope that names no area narrow the boundary before coverage was established, and once written they read as settled, dropping unproven-unneeded work."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_5 ;
+    backlog:learnedInSegment backlog:Segment_Scope ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_Medium ;
+    backlog:hasLessonNote "Advisory."@en .
+fw:Lesson_ProductScopeKindShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of ProductScopeKindShape"@en ;
+    backlog:lessonOfShape backlog:ProductScopeKindShape ;
+    backlog:hasExperienceStatement "Product deliverables all of one kind (e.g. all functional) usually means reliability, safety or transparency went unexamined, so they cannot later be called out of scope."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_5 ;
+    backlog:learnedInSegment backlog:Segment_Scope ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_Medium ;
+    backlog:hasLessonNote "Advisory; same reasoning as BothLayersShape."@en .
+fw:Lesson_ScopeAreaCoverageShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of ScopeAreaCoverageShape"@en ;
+    backlog:lessonOfShape backlog:ScopeAreaCoverageShape ;
+    backlog:hasExperienceStatement "A scope area existed in a lineage that no scope statement named, so it could not be traced to the mission and goals covering it answered to nothing; SCAMPS reported it and the suite passed the bad fixture."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_5 ;
+    backlog:learnedInSegment backlog:Segment_Scope ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_ScopeAreaShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of ScopeAreaShape"@en ;
+    backlog:lessonOfShape backlog:ScopeAreaShape ;
+    backlog:hasExperienceStatement "A scope area without a precise location or counted measure is a topic, not a place; work cannot be sized and shrinkage of the area cannot be detected later."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_5 ;
+    backlog:learnedInSegment backlog:Segment_Scope ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_ScopeChangeShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of ScopeChangeShape"@en ;
+    backlog:lessonOfShape backlog:ScopeChangeShape ;
+    backlog:hasExperienceStatement "Scope boundaries moved without naming the scope, admitted item, rationale/trade-off, or owner decision, so growth was invisible."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_5 ;
+    backlog:learnedInSegment backlog:Segment_Scope ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_ScopeLayerShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of ScopeLayerShape"@en ;
+    backlog:lessonOfShape backlog:ScopeLayerShape ;
+    backlog:hasExperienceStatement "A boundary statement not declaring product versus work layer cannot be used to refuse either kind of error: wrong capability shipped or effort spent in the wrong place."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_5 ;
+    backlog:learnedInSegment backlog:Segment_Scope ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_ScopeWhereShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of ScopeWhereShape"@en ;
+    backlog:lessonOfShape backlog:ScopeWhereShape ;
+    backlog:hasExperienceStatement "A scope listing only deliverable conditions restates the mission in other words and names no place to act, so every deliverable is the mission said twice."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_5 ;
+    backlog:learnedInSegment backlog:Segment_Scope ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_SingletonDeliverableShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of SingletonDeliverableShape"@en ;
+    backlog:lessonOfShape backlog:SingletonDeliverableShape ;
+    backlog:hasExperienceStatement "A scope required one deliverable met by one item, i.e. a backlog item restated as a boundary, not a real scope."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_5 ;
+    backlog:learnedInSegment backlog:Segment_Scope ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_UnrequestedWorkShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of UnrequestedWorkShape"@en ;
+    backlog:lessonOfShape backlog:UnrequestedWorkShape ;
+    backlog:hasExperienceStatement "An epic satisfied no scope deliverable, so the backlog quietly became the real definition of scope."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_5 ;
+    backlog:learnedInSegment backlog:Segment_Scope ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_ContainerScoreShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of ContainerScoreShape"@en ;
+    backlog:lessonOfShape backlog:ContainerScoreShape ;
+    backlog:hasExperienceStatement "Container priorities were computed by averaging member scores, reusing numbers made for unrelated items, and carried no rationale."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_6 ;
+    backlog:learnedInSegment backlog:Segment_Backlog ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_RefinementEventShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of RefinementEventShape"@en ;
+    backlog:lessonOfShape backlog:RefinementEventShape ;
+    backlog:hasExperienceStatement "Refinement sessions were logged without item, time or outcome, so they were meetings with nothing to show what changed."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_6 ;
+    backlog:learnedInSegment backlog:Segment_Backlog ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_DeploymentSelectionShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of DeploymentSelectionShape"@en ;
+    backlog:lessonOfShape backlog:DeploymentSelectionShape ;
+    backlog:hasExperienceStatement "A release did not say how its contents were chosen (theme, value, score), so releases chosen by very different logics looked identical and prioritisation could not be audited."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_6 ;
+    backlog:learnedInSegment backlog:Segment_Closure ;
+    backlog:hasProfileScope backlog:Scope_LevelSpecific ;
+    backlog:hasLessonConfidence backlog:Confidence_Medium .
+fw:Lesson_HumanInteractionShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of HumanInteractionShape"@en ;
+    backlog:lessonOfShape backlog:HumanInteractionShape ;
+    backlog:hasExperienceStatement "Human interactions were logged without item, person, time or whether they gated, so oversight could not be audited."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_6 ;
+    backlog:learnedInSegment backlog:Segment_ControlMonitoring ;
+    backlog:hasProfileScope backlog:Scope_AgenticOnly ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_ImpedimentShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of ImpedimentShape"@en ;
+    backlog:lessonOfShape backlog:ImpedimentShape ;
+    backlog:hasExperienceStatement "Blockers were raised as complaints: no blocked work, no statement, no raise time, no accountable role, so they aged unnoticed and nobody cleared them."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_6 ;
+    backlog:learnedInSegment backlog:Segment_ControlMonitoring ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_RetrospectiveNotStartedShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of RetrospectiveNotStartedShape"@en ;
+    backlog:lessonOfShape backlog:RetrospectiveNotStartedShape ;
+    backlog:hasExperienceStatement "A review closed or carried over stories but no retrospective followed, so lessons were never drawn."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_6 ;
+    backlog:learnedInSegment backlog:Segment_ControlMonitoring ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_Medium ;
+    backlog:hasLessonNote "Advisory proposal; cannot force the meeting."@en .
+fw:Lesson_RubberStampAdvisoryShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of RubberStampAdvisoryShape"@en ;
+    backlog:lessonOfShape backlog:RubberStampAdvisoryShape ;
+    backlog:hasExperienceStatement "A gate recorded confirmations but never a rejection, indistinguishable from a formality."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_6 ;
+    backlog:learnedInSegment backlog:Segment_ControlMonitoring ;
+    backlog:hasProfileScope backlog:Scope_AgenticOnly ;
+    backlog:hasLessonConfidence backlog:Confidence_Medium ;
+    backlog:hasLessonNote "advisory"@en .
+fw:Lesson_ScoringIgnoredAdvisoryShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of ScoringIgnoredAdvisoryShape"@en ;
+    backlog:lessonOfShape backlog:ScoringIgnoredAdvisoryShape ;
+    backlog:hasExperienceStatement "Items were scored but every release was chosen on some other basis, so scoring effort was ceremonial and never influenced a decision."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_6 ;
+    backlog:learnedInSegment backlog:Segment_ControlMonitoring ;
+    backlog:hasProfileScope backlog:Scope_LevelSpecific ;
+    backlog:hasLessonConfidence backlog:Confidence_Medium ;
+    backlog:hasLessonNote "Doubtful need; advisory about wasted effort rather than a failure"@en .
+fw:Lesson_SprintRetrospectiveShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of SprintRetrospectiveShape"@en ;
+    backlog:lessonOfShape backlog:SprintRetrospectiveShape ;
+    backlog:hasExperienceStatement "A retrospective with no date or no findings was indistinguishable from one not held."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_6 ;
+    backlog:learnedInSegment backlog:Segment_ControlMonitoring ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_SprintReviewCeremonyShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of SprintReviewCeremonyShape"@en ;
+    backlog:lessonOfShape backlog:SprintReviewCeremonyShape ;
+    backlog:hasExperienceStatement "A review named no sprint, no plan, or decided nothing, so it was indistinguishable from a review that never happened."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_6 ;
+    backlog:learnedInSegment backlog:Segment_ControlMonitoring ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_SupervisionClaimShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of SupervisionClaimShape"@en ;
+    backlog:lessonOfShape backlog:SupervisionClaimShape ;
+    backlog:hasExperienceStatement "An item claimed in-the-loop supervision while no recorded interaction actually gated a transition."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_6 ;
+    backlog:learnedInSegment backlog:Segment_ControlMonitoring ;
+    backlog:hasProfileScope backlog:Scope_AgenticOnly ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_ExecutorResponsibilityShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of ExecutorResponsibilityShape"@en ;
+    backlog:lessonOfShape backlog:ExecutorResponsibilityShape ;
+    backlog:hasExperienceStatement "Open work items had no named executing party, or an atomic leaf was assigned to a collective, so nobody was on the hook."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_6 ;
+    backlog:learnedInSegment backlog:Segment_Execution ;
+    backlog:hasProfileScope backlog:Scope_LevelSpecific ;
+    backlog:hasLessonConfidence backlog:Confidence_High ;
+    backlog:hasLessonNote "L2 and L3 clauses."@en .
+fw:Lesson_RegisterSessionShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of RegisterSessionShape"@en ;
+    backlog:lessonOfShape backlog:RegisterSessionShape ;
+    backlog:hasExperienceStatement "Sessions edited the register without stating scope or verifying its state first, so inherited defects were indistinguishable from introduced ones and a one-item fix grew into a reorganisation."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_6 ;
+    backlog:learnedInSegment backlog:Segment_Execution ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_GoalShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of GoalShape"@en ;
+    backlog:lessonOfShape backlog:GoalShape ;
+    backlog:hasExperienceStatement "Goals existed without a stated label or without the owner as decider, so direction was set by someone with no authority."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_6 ;
+    backlog:learnedInSegment backlog:Segment_Goal ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_SessionDraftedMissionAdvisoryShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of SessionDraftedMissionAdvisoryShape"@en ;
+    backlog:lessonOfShape backlog:SessionDraftedMissionAdvisoryShape ;
+    backlog:hasExperienceStatement "A session wrote the mission for the work it would then execute, grading its own purpose without owner confirmation."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_6 ;
+    backlog:learnedInSegment backlog:Segment_Mission ;
+    backlog:hasProfileScope backlog:Scope_AgenticOnly ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_CompetencyMatchShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of CompetencyMatchShape"@en ;
+    backlog:lessonOfShape backlog:CompetencyMatchShape ;
+    backlog:hasExperienceStatement "Work was assigned to an executor whose profile lacked a competency the item requires, with no recorded owner override for that specific gap."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_6 ;
+    backlog:learnedInSegment backlog:Segment_Plan ;
+    backlog:hasProfileScope backlog:Scope_LevelSpecific ;
+    backlog:hasLessonConfidence backlog:Confidence_High ;
+    backlog:hasLessonNote "L3."@en .
+fw:Lesson_CostEstimateShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of CostEstimateShape"@en ;
+    backlog:lessonOfShape backlog:CostEstimateShape ;
+    backlog:hasExperienceStatement "Estimates carried a number but no unit or derivation, so they could not be challenged or reused."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_6 ;
+    backlog:learnedInSegment backlog:Segment_Plan ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_ExternalDependencyShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of ExternalDependencyShape"@en ;
+    backlog:lessonOfShape backlog:ExternalDependencyShape ;
+    backlog:hasExperienceStatement "External dependencies were noted without type or party; unnamed ones could not be chased and became a permanent excuse."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_6 ;
+    backlog:learnedInSegment backlog:Segment_Plan ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_FederationControllerShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of FederationControllerShape"@en ;
+    backlog:lessonOfShape backlog:FederationControllerShape ;
+    backlog:hasExperienceStatement "An agent federation was given a single controller, contradicting its defining trait of having none."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_6 ;
+    backlog:learnedInSegment backlog:Segment_Plan ;
+    backlog:hasProfileScope backlog:Scope_LevelSpecific ;
+    backlog:hasLessonConfidence backlog:Confidence_Medium ;
+    backlog:hasLessonNote "Agentic-leaning; federations are an agentic concept, so possibly Agentic-only."@en .
+fw:Lesson_LaunchGateShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of LaunchGateShape"@en ;
+    backlog:lessonOfShape backlog:LaunchGateShape ;
+    backlog:hasExperienceStatement "Launch order was derived from scores or set by someone other than the owner, or a launch priority sat on a non-gate; launch is a business decision."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_6 ;
+    backlog:learnedInSegment backlog:Segment_Plan ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_RankingForkResolutionShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of RankingForkResolutionShape"@en ;
+    backlog:lessonOfShape backlog:RankingForkResolutionShape ;
+    backlog:hasExperienceStatement "A ranking tie-break between two legitimate models was resolved by the agent or by computation without the Owner, though it is a business judgement."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_6 ;
+    backlog:learnedInSegment backlog:Segment_Plan ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_ScopeExclusionShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of ScopeExclusionShape"@en ;
+    backlog:lessonOfShape backlog:ScopeExclusionShape ;
+    backlog:hasExperienceStatement "Exclusions were vague, unreasoned or not owner-decided, so later requests could not be tested against them and scope was reopened by whoever argued hardest."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_6 ;
+    backlog:learnedInSegment backlog:Segment_Scope ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_SessionDraftedIntentAdvisoryShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of SessionDraftedIntentAdvisoryShape"@en ;
+    backlog:lessonOfShape backlog:SessionDraftedIntentAdvisoryShape ;
+    backlog:hasExperienceStatement "A session drafted scope/intent for itself without owner statement or external derivation, risking self-graded boundaries."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_6 ;
+    backlog:learnedInSegment backlog:Segment_Scope ;
+    backlog:hasProfileScope backlog:Scope_AgenticOnly ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_GovernedDocumentShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of GovernedDocumentShape"@en ;
+    backlog:lessonOfShape backlog:GovernedDocumentShape ;
+    backlog:hasExperienceStatement "Documents were superseded without pointing to the replacement or reason, or had ambiguous currency, so readers followed retired guidance."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_6 ;
+    backlog:learnedInSegment backlog:Segment_WholeLineage ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_MethodologyRuleShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of MethodologyRuleShape"@en ;
+    backlog:lessonOfShape backlog:MethodologyRuleShape ;
+    backlog:hasExperienceStatement "Rules were added as best practice without logic, the defect closed, or the incident behind them, so no one could judge whether they still applied."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_6 ;
+    backlog:learnedInSegment backlog:Segment_WholeLineage ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High ;
+    backlog:hasLessonNote "Meta-shape: this is the rule that makes shapes record experience."@en .
+fw:Lesson_BlueprintSweepShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of BlueprintSweepShape"@en ;
+    backlog:lessonOfShape backlog:BlueprintSweepShape ;
+    backlog:hasExperienceStatement "An entity's life-cycle stage was silently skipped: neither backlog work nor a recorded gap existed, so missing coverage went unseen."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_7 ;
+    backlog:learnedInSegment backlog:Segment_Backlog ;
+    backlog:hasProfileScope backlog:Scope_LevelSpecific ;
+    backlog:hasLessonConfidence backlog:Confidence_High ;
+    backlog:hasLessonNote "L3 blueprint level only."@en .
+fw:Lesson_DependencyDisclosureShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of DependencyDisclosureShape"@en ;
+    backlog:lessonOfShape backlog:DependencyDisclosureShape ;
+    backlog:hasExperienceStatement "Dependencies mentioned in prose or judgement never became dependsOn or containerDependsOn edges, so the register looked resolved while a real dependency was hidden."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_7 ;
+    backlog:learnedInSegment backlog:Segment_Backlog ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_ProcessCoverageAdvisoryShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of ProcessCoverageAdvisoryShape"@en ;
+    backlog:lessonOfShape backlog:ProcessCoverageAdvisoryShape ;
+    backlog:hasExperienceStatement "A backlog contained only build tasks with no verification or validation, so it looked full while testing and validation were absent."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_7 ;
+    backlog:learnedInSegment backlog:Segment_Backlog ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_ScoreabilityShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of ScoreabilityShape"@en ;
+    backlog:lessonOfShape backlog:ScoreabilityShape ;
+    backlog:hasExperienceStatement "Items were set aside as not-yet-scoreable with no reason, or both scored and unscoreable, hiding gaps in prioritisation behind a label."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_7 ;
+    backlog:learnedInSegment backlog:Segment_Backlog ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_SpecificationAdvisoryShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of SpecificationAdvisoryShape"@en ;
+    backlog:lessonOfShape backlog:SpecificationAdvisoryShape ;
+    backlog:hasExperienceStatement "A story analysed as involving person interaction carries no specification, so the grooming finding is lost and the actions are never recorded."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_7 ;
+    backlog:learnedInSegment backlog:Segment_Backlog ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_Medium ;
+    backlog:hasLessonNote "Advisory."@en .
+fw:Lesson_LineageLocalSuccessModeRecurrenceAdvisoryShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of LineageLocalSuccessModeRecurrenceAdvisoryShape"@en ;
+    backlog:lessonOfShape backlog:LineageLocalSuccessModeRecurrenceAdvisoryShape ;
+    backlog:hasExperienceStatement "A success approach local to one lineage keeps being confirmed by several retrospective findings but is never offered to the shared methodology catalogue, so lessons stay trapped locally."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_7 ;
+    backlog:learnedInSegment backlog:Segment_Closure ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_Medium ;
+    backlog:hasLessonNote "Mirror of the failure-mode recurrence shape; surfaces only."@en .
+fw:Lesson_AdvisoryObligationUnmetShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of AdvisoryObligationUnmetShape"@en ;
+    backlog:lessonOfShape backlog:AdvisoryObligationUnmetShape ;
+    backlog:hasExperienceStatement "An advisory artifact (e.g. a use-case diagram) was silently absent, or a different-kind artifact of the same class masked it; absence is acceptable only if explained by a waiver with reason."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_7 ;
+    backlog:learnedInSegment backlog:Segment_ControlMonitoring ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High ;
+    backlog:hasLessonNote "Split from StageOutputOwesAdvisoryShape after an adopting project handover."@en .
+fw:Lesson_FindingRecordShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of FindingRecordShape"@en ;
+    backlog:lessonOfShape backlog:FindingRecordShape ;
+    backlog:hasExperienceStatement "Validation findings were excused by vague or blanket exceptions, or filed as Nonconformity, or known errors lacked monitoring, prevention and review date; findings were hidden rather than managed."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_7 ;
+    backlog:learnedInSegment backlog:Segment_ControlMonitoring ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High ;
+    backlog:hasLessonNote "Only first part of the shape read in full; other clauses follow same ITIL logic."@en .
+fw:Lesson_FitGapFindingShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of FitGapFindingShape"@en ;
+    backlog:lessonOfShape backlog:FitGapFindingShape ;
+    backlog:hasExperienceStatement "A fit-gap finding gave only a count, not which work item fell outside the scope and why, so the rewritten scope had nothing specific to answer."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_7 ;
+    backlog:learnedInSegment backlog:Segment_ControlMonitoring ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_RiskTreatmentShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of RiskTreatmentShape"@en ;
+    backlog:lessonOfShape backlog:RiskTreatmentShape ;
+    backlog:hasExperienceStatement "Risks were attached to work with neither mitigation nor a named acceptor, so risk was accepted silently."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_7 ;
+    backlog:learnedInSegment backlog:Segment_ControlMonitoring ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_StageOutputOwesAdvisoryShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of StageOutputOwesAdvisoryShape"@en ;
+    backlog:lessonOfShape backlog:StageOutputOwesAdvisoryShape ;
+    backlog:hasExperienceStatement "A stage closed owing a required artifact under a waiver; legitimate but a debt that must stay visible until paid."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_7 ;
+    backlog:learnedInSegment backlog:Segment_ControlMonitoring ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_StageOutputOwesShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of StageOutputOwesShape"@en ;
+    backlog:lessonOfShape backlog:StageOutputOwesShape ;
+    backlog:hasExperienceStatement "A stage was closed on words alone while the artifact its obligation names (e.g. a model, scenarios) was never produced and no waiver existed."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_7 ;
+    backlog:learnedInSegment backlog:Segment_ControlMonitoring ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High ;
+    backlog:hasLessonNote "Binds only lineages that adopted the obligation set."@en .
+fw:Lesson_StageOutputWaiverShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of StageOutputWaiverShape"@en ;
+    backlog:lessonOfShape backlog:StageOutputWaiverShape ;
+    backlog:hasExperienceStatement "A waiver of an obligation was recorded with no reason, making a deliberate debt indistinguishable from an oversight."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_7 ;
+    backlog:learnedInSegment backlog:Segment_ControlMonitoring ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_DesignTaskProducesShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of DesignTaskProducesShape"@en ;
+    backlog:lessonOfShape backlog:DesignTaskProducesShape ;
+    backlog:hasExperienceStatement "A finished design or architecture task recorded no model, and the register cannot tell a task that concluded no model was needed from one nobody recorded."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_7 ;
+    backlog:learnedInSegment backlog:Segment_Execution ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_Medium ;
+    backlog:hasLessonNote "Advisory because no-model is legitimate."@en .
+fw:Lesson_GroomingToExecutionShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of GroomingToExecutionShape"@en ;
+    backlog:lessonOfShape backlog:GroomingToExecutionShape ;
+    backlog:hasExperienceStatement "A story was analysed for a design concern but none of its planned tasks did that kind of work, so the analysis never reached execution."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_7 ;
+    backlog:learnedInSegment backlog:Segment_Plan ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_Medium .
+fw:Lesson_PackageRegularityShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of PackageRegularityShape"@en ;
+    backlog:lessonOfShape backlog:PackageRegularityShape ;
+    backlog:hasExperienceStatement "Releases of wildly uneven size appeared with no recorded reason, hiding unexamined sizing."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_7 ;
+    backlog:learnedInSegment backlog:Segment_Plan ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_Medium ;
+    backlog:hasLessonNote "Counts sprints only; comparison logic is intricate."@en .
+fw:Lesson_PlannedFromEvidenceShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of PlannedFromEvidenceShape"@en ;
+    backlog:lessonOfShape backlog:PlannedFromEvidenceShape ;
+    backlog:hasExperienceStatement "An open sprint was dated ten times longer than any sprint this lineage ever finished, so the dates were a borrowed cadence rather than a forecast."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_7 ;
+    backlog:learnedInSegment backlog:Segment_Plan ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_Medium ;
+    backlog:hasLessonNote "Heuristic factor of 10; vacuous when no observed durations exist."@en .
+fw:Lesson_PracticeGroundingShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of PracticeGroundingShape"@en ;
+    backlog:lessonOfShape backlog:PracticeGroundingShape ;
+    backlog:hasExperienceStatement "A shipped selection-basis term named neither external source nor original-declaration, so an invented practice was required without grounds."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_7 ;
+    backlog:learnedInSegment backlog:Segment_WholeLineage ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_ShippedRoleSourceShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of ShippedRoleSourceShape"@en ;
+    backlog:lessonOfShape backlog:ShippedRoleSourceShape ;
+    backlog:hasExperienceStatement "The framework shipped a team role with no standard or declared original basis, i.e. an invented practice in its own vocabulary."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_7 ;
+    backlog:learnedInSegment backlog:Segment_WholeLineage ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_StageObligationShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of StageObligationShape"@en ;
+    backlog:lessonOfShape backlog:StageObligationShape ;
+    backlog:hasExperienceStatement "An obligation was written that no stage, task type or concern owed, or with no owed class, rationale or severity, so nothing could enforce it and the checklist rotted into unarguable rules."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_7 ;
+    backlog:learnedInSegment backlog:Segment_WholeLineage ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_DependencyRecordShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of DependencyRecordShape"@en ;
+    backlog:lessonOfShape backlog:DependencyRecordShape ;
+    backlog:hasExperienceStatement "Dependencies were noted with no target or kind, so nobody knew what would release them (knowledge, task or resource)."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_8 ;
+    backlog:learnedInSegment backlog:Segment_Backlog ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_Medium .
+fw:Lesson_EnhancementProposalShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of EnhancementProposalShape"@en ;
+    backlog:lessonOfShape backlog:EnhancementProposalShape ;
+    backlog:hasExperienceStatement "Proposals to external owners were vague (no target, no date, no addressee) so nobody could act on or chase them."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_8 ;
+    backlog:learnedInSegment backlog:Segment_Backlog ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_ExternalEnhancementShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of ExternalEnhancementShape"@en ;
+    backlog:lessonOfShape backlog:ExternalEnhancementShape ;
+    backlog:hasExperienceStatement "A work item depended on a change owned by another party and got scheduled as if the lineage could do it, so it stalled or silently absorbed foreign work; without a proposal the dependency has no owner or request."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_8 ;
+    backlog:learnedInSegment backlog:Segment_Backlog ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_InvestmentCategoryShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of InvestmentCategoryShape"@en ;
+    backlog:lessonOfShape backlog:InvestmentCategoryShape ;
+    backlog:hasExperienceStatement "Items were added without saying whether they build new value or maintain/repair, so the register drifted to all-features or all-maintenance with no way to notice a starved category."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_8 ;
+    backlog:learnedInSegment backlog:Segment_Backlog ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_Medium ;
+    backlog:hasLessonNote "Real need for portfolio balance; depends on teams actually using categories."@en .
+fw:Lesson_L4DeploymentShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of L4DeploymentShape"@en ;
+    backlog:lessonOfShape backlog:L4DeploymentShape ;
+    backlog:hasExperienceStatement "An iteration was closed Done with no release linked to it, so cadence and shipping were unrelated events and nobody could tell what an iteration delivered."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_8 ;
+    backlog:learnedInSegment backlog:Segment_Closure ;
+    backlog:hasProfileScope backlog:Scope_LevelSpecific ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_L4DeploymentUnitShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of L4DeploymentUnitShape"@en ;
+    backlog:lessonOfShape backlog:L4DeploymentUnitShape ;
+    backlog:hasExperienceStatement "A deployment record had no ship date or listed no items, so a release could not be placed in time or traced to the work it delivered."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_8 ;
+    backlog:learnedInSegment backlog:Segment_Closure ;
+    backlog:hasProfileScope backlog:Scope_LevelSpecific ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_BudgetShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of BudgetShape"@en ;
+    backlog:lessonOfShape backlog:BudgetShape ;
+    backlog:hasExperienceStatement "Budgets lacked container, dimension or ceiling, so nothing could be checked against them."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_8 ;
+    backlog:learnedInSegment backlog:Segment_Plan ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_CapacityAllocationShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of CapacityAllocationShape"@en ;
+    backlog:lessonOfShape backlog:CapacityAllocationShape ;
+    backlog:hasExperienceStatement "Allocations lacked an investment category or share, so the sum check had nothing meaningful to add up."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_8 ;
+    backlog:learnedInSegment backlog:Segment_Plan ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_CapacityDeclaredShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of CapacityDeclaredShape"@en ;
+    backlog:lessonOfShape backlog:CapacityDeclaredShape ;
+    backlog:hasExperienceStatement "An iteration declared no capacity so over-commitment could not be detected before it began."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_8 ;
+    backlog:learnedInSegment backlog:Segment_Plan ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_ContainerLinkageShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of ContainerLinkageShape"@en ;
+    backlog:lessonOfShape backlog:ContainerLinkageShape ;
+    backlog:hasExperienceStatement "Roadmap containers had dangling or cyclic dependencies, ranks without a roadmap, duplicate ranks, launch-blocking work absent from the plan, or declared dependencies with no basis (phantoms); the plan then ordered work impossibly or hid blockers."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_8 ;
+    backlog:learnedInSegment backlog:Segment_Plan ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_CostDimensionShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of CostDimensionShape"@en ;
+    backlog:lessonOfShape backlog:CostDimensionShape ;
+    backlog:hasExperienceStatement "Cost dimensions had no unit or rate no currency, so quantities in different units were summed or compared."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_8 ;
+    backlog:learnedInSegment backlog:Segment_Plan ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_DimensionalCostShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of DimensionalCostShape"@en ;
+    backlog:lessonOfShape backlog:DimensionalCostShape ;
+    backlog:hasExperienceStatement "Bare numbers were recorded as cost without item or dimension, so they could not be aggregated or attributed."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_8 ;
+    backlog:learnedInSegment backlog:Segment_Plan ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_OversizedStoryAdvisoryShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of OversizedStoryAdvisoryShape"@en ;
+    backlog:lessonOfShape backlog:OversizedStoryAdvisoryShape ;
+    backlog:hasExperienceStatement "A story estimated larger than its whole iteration's capacity was planned in and then quietly overran, because nothing flagged it before the iteration began."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_8 ;
+    backlog:learnedInSegment backlog:Segment_Plan ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_PortfolioPolicyShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of PortfolioPolicyShape"@en ;
+    backlog:lessonOfShape backlog:PortfolioPolicyShape ;
+    backlog:hasExperienceStatement "Capacity policies named no register or shares that did not sum to one, leaving capacity unallocated to whoever pushed."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_8 ;
+    backlog:learnedInSegment backlog:Segment_Plan ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_UndeclaredContainerDependencyAdvisoryShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of UndeclaredContainerDependencyAdvisoryShape"@en ;
+    backlog:lessonOfShape backlog:UndeclaredContainerDependencyAdvisoryShape ;
+    backlog:hasExperienceStatement "An item in one container depended on unfinished work in another but the roadmap showed no edge, so the real constraint was invisible on the plan and sequencing failed."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_8 ;
+    backlog:learnedInSegment backlog:Segment_Plan ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High ;
+    backlog:hasLessonNote "Mirror image of the phantom-dependency clause in ContainerLinkageShape."@en .
+fw:Lesson_RegisterArtifactShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of RegisterArtifactShape"@en ;
+    backlog:lessonOfShape backlog:RegisterArtifactShape ;
+    backlog:hasExperienceStatement "Shipped files had roles guessed from filenames, so a wrong file could be treated as the register or a report with nobody having checked."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_8 ;
+    backlog:learnedInSegment backlog:Segment_Reporting ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_Medium .
+fw:Lesson_RegisterPackageShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of RegisterPackageShape"@en ;
+    backlog:lessonOfShape backlog:RegisterPackageShape ;
+    backlog:hasExperienceStatement "Shipped register packages lacked version, manifest or completeness, so a reader could not tell which register or release a bundle represented or whether files were missing."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_8 ;
+    backlog:learnedInSegment backlog:Segment_Reporting ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_Medium .
+fw:Lesson_CancelledContainerShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of CancelledContainerShape"@en ;
+    backlog:lessonOfShape backlog:CancelledContainerShape ;
+    backlog:hasExperienceStatement "A container was hand-marked Cancelled to make it go away, though container state must come from its members; only the owner's dissolution may end one unfinished."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_9 ;
+    backlog:learnedInSegment backlog:Segment_Closure ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_ContainerCarryRefusedShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of ContainerCarryRefusedShape"@en ;
+    backlog:lessonOfShape backlog:ContainerCarryRefusedShape ;
+    backlog:hasExperienceStatement "Unfinished packages were carried into a successor lineage instead of dissolved, so successors inherited stale groupings rather than building cohesive business-value packages."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_9 ;
+    backlog:learnedInSegment backlog:Segment_Closure ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High ;
+    backlog:hasLessonNote "Owner ruling 2026-09-24."@en .
+fw:Lesson_ContainerDissolutionShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of ContainerDissolutionShape"@en ;
+    backlog:lessonOfShape backlog:ContainerDissolutionShape ;
+    backlog:hasExperienceStatement "A package was ended by someone other than the owner, with no reason, or while open items sat inside it, so work vanished with the container; or a container that had finished work was dissolved and erased that credit."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_9 ;
+    backlog:learnedInSegment backlog:Segment_Closure ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_LineageReactivationShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of LineageReactivationShape"@en ;
+    backlog:lessonOfShape backlog:LineageReactivationShape ;
+    backlog:hasExperienceStatement "Closed work could be reopened on suspicion or for isolated defects, against the wrong lineage, or without an owner decision."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_9 ;
+    backlog:learnedInSegment backlog:Segment_Closure ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_PostClosureFindingOpenAdvisoryShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of PostClosureFindingOpenAdvisoryShape"@en ;
+    backlog:lessonOfShape backlog:PostClosureFindingOpenAdvisoryShape ;
+    backlog:hasExperienceStatement "A finding against closed work could sit unanswered with nothing reporting it."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_9 ;
+    backlog:learnedInSegment backlog:Segment_Closure ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_Medium ;
+    backlog:hasLessonNote "Advisory only."@en .
+fw:Lesson_PostClosureFindingShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of PostClosureFindingShape"@en ;
+    backlog:lessonOfShape backlog:PostClosureFindingShape ;
+    backlog:hasExperienceStatement "Findings against closed work were raised without evidence or scale, against still-open lineages, or answered disproportionately for isolated defects."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_9 ;
+    backlog:learnedInSegment backlog:Segment_Closure ;
+    backlog:hasProfileScope backlog:Scope_Shared ;
+    backlog:hasLessonConfidence backlog:Confidence_High .
+fw:Lesson_ClosureReportNamesCancelledShape a backlog:ShapeLesson ;
+    rdfs:label "Lesson of ClosureReportNamesCancelledShape"@en ;
+    backlog:lessonOfShape backlog:ClosureReportNamesCancelledShape ;
+    backlog:hasExperienceStatement "A lineage ended and its closure report omitted items it cancelled, leaving the cancellation for a reader to find by accident."@en ;
+    backlog:inLessonFamily backlog:LessonFamily_9 ;
+    backlog:learnedInSegment backlog:Segment_Reporting ;
+    backlog:hasProfileScope backlog:Scope_LevelSpecific ;
+    backlog:hasLessonConfidence backlog:Confidence_High ;
+    backlog:hasLessonNote "L3."@en .
+
+fw:Lesson_AcceptedRequestNeedsScopeChangeShape backlog:overlapsLesson fw:Lesson_ScopeChangeShape .
+fw:Lesson_AdaptationGateShape backlog:overlapsLesson fw:Lesson_AdaptationStageOrderShape .
+fw:Lesson_AnalysisArtifactShape backlog:overlapsLesson fw:Lesson_StateProvenanceShape .
+fw:Lesson_AreaUnmeasuredShape backlog:overlapsLesson fw:Lesson_AreaWithoutGoalShape .
+fw:Lesson_ArtifactEvidenceShape backlog:overlapsLesson fw:Lesson_TestEvidenceShape .
+fw:Lesson_AutonomyEvidenceShape backlog:overlapsLesson fw:Lesson_HarnessCoverageAdvisoryShape .
+fw:Lesson_BaselineReferenceShape backlog:overlapsLesson fw:Lesson_SelfComparisonClaimShape .
+fw:Lesson_BaselineReferenceShape backlog:overlapsLesson fw:Lesson_ToolRunRecordShape .
+fw:Lesson_BatchCompleteButNotDoneShape backlog:overlapsLesson fw:Lesson_BatchStartedStateStaleShape .
+fw:Lesson_BatchConcealmentShape backlog:overlapsLesson fw:Lesson_BatchShape .
+fw:Lesson_BatchedEvidenceShape backlog:overlapsLesson fw:Lesson_CriterionArtifactShape .
+fw:Lesson_BatchedEvidenceShape backlog:overlapsLesson fw:Lesson_UnresolvedArtifactShape .
+fw:Lesson_BothLayersShape backlog:overlapsLesson fw:Lesson_ProductScopeKindShape .
+fw:Lesson_BothLayersShape backlog:overlapsLesson fw:Lesson_ScopeLayerShape .
+fw:Lesson_CancelledContainerShape backlog:overlapsLesson fw:Lesson_ContainerDissolutionShape .
+fw:Lesson_CapacityAllocationShape backlog:overlapsLesson fw:Lesson_PortfolioPolicyShape .
+fw:Lesson_CapacityDeclaredShape backlog:overlapsLesson fw:Lesson_OversizedStoryAdvisoryShape .
+fw:Lesson_CeremonyLinkAdvisoryShape backlog:overlapsLesson fw:Lesson_MeasurementDueAfterReviewShape .
+fw:Lesson_CheckpointBreachShape backlog:overlapsLesson fw:Lesson_ObjectiveMonitorShape .
+fw:Lesson_CodeVerificationShape backlog:overlapsLesson fw:Lesson_StaleVerificationAdvisoryShape .
+fw:Lesson_ContainerDependencyRule backlog:overlapsLesson fw:Lesson_ExternalBlockerRule .
+fw:Lesson_ContainerLinkageShape backlog:overlapsLesson fw:Lesson_UndeclaredContainerDependencyAdvisoryShape .
+fw:Lesson_ContainerScoreShape backlog:overlapsLesson fw:Lesson_LaunchGateShape .
+fw:Lesson_ContainerScoreShape backlog:overlapsLesson fw:Lesson_PriorityScoreShape .
+fw:Lesson_CostDimensionShape backlog:overlapsLesson fw:Lesson_DimensionalCostShape .
+fw:Lesson_CriterionArtifactShape backlog:overlapsLesson fw:Lesson_UnresolvedArtifactShape .
+fw:Lesson_CriterionCoverageShape backlog:overlapsLesson fw:Lesson_ScenarioShape .
+fw:Lesson_DeliverableCoverageShape backlog:overlapsLesson fw:Lesson_UnrequestedWorkShape .
+fw:Lesson_DeliverableProvenanceShape backlog:overlapsLesson fw:Lesson_ScopeGapAdvisoryShape .
+fw:Lesson_DependencyDisclosureShape backlog:overlapsLesson fw:Lesson_DeployabilityShape .
+fw:Lesson_DependencyRecordShape backlog:overlapsLesson fw:Lesson_ExternalDependencyShape .
+fw:Lesson_DependencyRecordShape backlog:overlapsLesson fw:Lesson_ImpedimentShape .
+fw:Lesson_DeploymentSelectionShape backlog:overlapsLesson fw:Lesson_ScoringIgnoredAdvisoryShape .
+fw:Lesson_DesignTaskProducesShape backlog:overlapsLesson fw:Lesson_SpecificationAdvisoryShape .
+fw:Lesson_DisclosedBrokenMechanismFixShape backlog:overlapsLesson fw:Lesson_StaleInvariantStatusShape .
+fw:Lesson_DoDCriterionShape backlog:overlapsLesson fw:Lesson_InvariantShape .
+fw:Lesson_DoDCriterionShape backlog:overlapsLesson fw:Lesson_ReleaseGateShape .
+fw:Lesson_EnhancementProposalShape backlog:overlapsLesson fw:Lesson_ExternalEnhancementShape .
+fw:Lesson_EstimationBasisShape backlog:overlapsLesson fw:Lesson_MeasuredBasisAdvisoryShape .
+fw:Lesson_EstimationBasisShape backlog:overlapsLesson fw:Lesson_ScoreBasisShape .
+fw:Lesson_ExternalDependencyShape backlog:overlapsLesson fw:Lesson_ImpedimentShape .
+fw:Lesson_ForecastShape backlog:overlapsLesson fw:Lesson_IterationEndedIncompleteShape .
+fw:Lesson_ForecastShape backlog:overlapsLesson fw:Lesson_StaleForecastAdvisoryShape .
+fw:Lesson_FunctionalOnceShape backlog:overlapsLesson fw:Lesson_MissionOnceShape .
+fw:Lesson_GoalMeasurabilityShape backlog:overlapsLesson fw:Lesson_MilestoneOutcomeShape .
+fw:Lesson_GoalMeasurabilityShape backlog:overlapsLesson fw:Lesson_MissionShape .
+fw:Lesson_GoalMeasurabilityShape backlog:overlapsLesson fw:Lesson_ObjectiveFalsifiabilityShape .
+fw:Lesson_GoalMeasurabilityShape backlog:overlapsLesson fw:Lesson_RebaselineShape .
+fw:Lesson_GoalShape backlog:overlapsLesson fw:Lesson_ScopeExclusionShape .
+fw:Lesson_GroomedAheadShape backlog:overlapsLesson fw:Lesson_JustInTimeGroomingShape .
+fw:Lesson_HorizonCoherenceAdvisoryShape backlog:overlapsLesson fw:Lesson_ReadinessGateShape .
+fw:Lesson_HorizonCoherenceAdvisoryShape backlog:overlapsLesson fw:Lesson_RefinementEventShape .
+fw:Lesson_HumanInteractionShape backlog:overlapsLesson fw:Lesson_RubberStampAdvisoryShape .
+fw:Lesson_HumanInteractionShape backlog:overlapsLesson fw:Lesson_SupervisionClaimShape .
+fw:Lesson_IdenticalTimestampClusterShape backlog:overlapsLesson fw:Lesson_ObjectiveMetricMirrorShape .
+fw:Lesson_IncrementCommitmentShape backlog:overlapsLesson fw:Lesson_ItemCompletenessLinkageShape .
+fw:Lesson_IncrementCommitmentShape backlog:overlapsLesson fw:Lesson_MetricObservationShape .
+fw:Lesson_IncrementCommitmentShape backlog:overlapsLesson fw:Lesson_TestHarnessShape .
+fw:Lesson_IncrementCommitmentShape backlog:overlapsLesson fw:Lesson_VerificationIntegrityShape .
+fw:Lesson_InitiativeScaleShape backlog:overlapsLesson fw:Lesson_MaintenanceClassificationShape .
+fw:Lesson_IntentTraceabilityAdvisoryShape backlog:overlapsLesson fw:Lesson_IntentTraceabilityShape .
+fw:Lesson_InteractionStepShape backlog:overlapsLesson fw:Lesson_LineageLayerShape .
+fw:Lesson_InvariantShape backlog:overlapsLesson fw:Lesson_ReleaseGateShape .
+fw:Lesson_ItemCompletenessLinkageShape backlog:overlapsLesson fw:Lesson_MetricObservationShape .
+fw:Lesson_ItemCompletenessLinkageShape backlog:overlapsLesson fw:Lesson_TestHarnessShape .
+fw:Lesson_ItemCompletenessLinkageShape backlog:overlapsLesson fw:Lesson_VerificationIntegrityShape .
+fw:Lesson_IterationEndedIncompleteShape backlog:overlapsLesson fw:Lesson_StaleForecastAdvisoryShape .
+fw:Lesson_IterationPeriodShape backlog:overlapsLesson fw:Lesson_PlannedDateShape .
+fw:Lesson_L4DeploymentShape backlog:overlapsLesson fw:Lesson_L4DeploymentUnitShape .
+fw:Lesson_LaunchGateShape backlog:overlapsLesson fw:Lesson_PriorityScoreShape .
+fw:Lesson_LineageReactivationShape backlog:overlapsLesson fw:Lesson_PostClosureFindingShape .
+fw:Lesson_MeasuredBasisAdvisoryShape backlog:overlapsLesson fw:Lesson_ScoreBasisShape .
+fw:Lesson_MetricObservationShape backlog:overlapsLesson fw:Lesson_TestHarnessShape .
+fw:Lesson_MetricObservationShape backlog:overlapsLesson fw:Lesson_VerificationIntegrityShape .
+fw:Lesson_MilestoneOutcomeShape backlog:overlapsLesson fw:Lesson_MissionShape .
+fw:Lesson_MilestoneOutcomeShape backlog:overlapsLesson fw:Lesson_ObjectiveFalsifiabilityShape .
+fw:Lesson_MilestoneOutcomeShape backlog:overlapsLesson fw:Lesson_RebaselineShape .
+fw:Lesson_MilestoneShape backlog:overlapsLesson fw:Lesson_RoadmapProjectionShape .
+fw:Lesson_MilestoneShape backlog:overlapsLesson fw:Lesson_RoadmapShape .
+fw:Lesson_MirroredScopeShape backlog:overlapsLesson fw:Lesson_SingletonDeliverableShape .
+fw:Lesson_MissionProvenanceShape backlog:overlapsLesson fw:Lesson_SessionDraftedIntentAdvisoryShape .
+fw:Lesson_MissionProvenanceShape backlog:overlapsLesson fw:Lesson_SessionDraftedMissionAdvisoryShape .
+fw:Lesson_MissionReachShape backlog:overlapsLesson fw:Lesson_ObjectiveChainShape .
+fw:Lesson_MissionReachShape backlog:overlapsLesson fw:Lesson_RoadmapIntentShape .
+fw:Lesson_MissionShape backlog:overlapsLesson fw:Lesson_ObjectiveFalsifiabilityShape .
+fw:Lesson_MissionShape backlog:overlapsLesson fw:Lesson_RebaselineShape .
+fw:Lesson_ModelLevelStatedShape backlog:overlapsLesson fw:Lesson_TaskTypeObligationLevelShape .
+fw:Lesson_NextRecommendationShape backlog:overlapsLesson fw:Lesson_RoadmapReportShape .
+fw:Lesson_ObjectiveChainShape backlog:overlapsLesson fw:Lesson_RoadmapIntentShape .
+fw:Lesson_ObjectiveFalsifiabilityShape backlog:overlapsLesson fw:Lesson_RebaselineShape .
+fw:Lesson_PbiCompletionShape backlog:overlapsLesson fw:Lesson_StoryReadyToCloseShape .
+fw:Lesson_PracticeGroundingShape backlog:overlapsLesson fw:Lesson_ShippedRoleSourceShape .
+fw:Lesson_PrematureExclusionShape backlog:overlapsLesson fw:Lesson_ScopeWhereShape .
+fw:Lesson_ProcessCoverageAdvisoryShape backlog:overlapsLesson fw:Lesson_TaskTypeShape .
+fw:Lesson_ProductScopeKindShape backlog:overlapsLesson fw:Lesson_ScopeLayerShape .
+fw:Lesson_ReadinessGateShape backlog:overlapsLesson fw:Lesson_RefinementEventShape .
+fw:Lesson_RegisterArtifactShape backlog:overlapsLesson fw:Lesson_RegisterPackageShape .
+fw:Lesson_RiceArithmeticShape backlog:overlapsLesson fw:Lesson_ScoreArithmeticShape .
+fw:Lesson_RoadmapProjectionShape backlog:overlapsLesson fw:Lesson_RoadmapShape .
+fw:Lesson_RubberStampAdvisoryShape backlog:overlapsLesson fw:Lesson_SupervisionClaimShape .
+fw:Lesson_SelfComparisonClaimShape backlog:overlapsLesson fw:Lesson_ToolRunRecordShape .
+fw:Lesson_SessionDraftedIntentAdvisoryShape backlog:overlapsLesson fw:Lesson_SessionDraftedMissionAdvisoryShape .
+fw:Lesson_SingleCommitLineageShape backlog:overlapsLesson fw:Lesson_StagedElementShape .
+fw:Lesson_SprintPlanningCeremonyShape backlog:overlapsLesson fw:Lesson_SprintRetrospectiveShape .
+fw:Lesson_SprintPlanningCeremonyShape backlog:overlapsLesson fw:Lesson_SprintReviewCeremonyShape .
+fw:Lesson_SprintRetrospectiveShape backlog:overlapsLesson fw:Lesson_SprintReviewCeremonyShape .
+fw:Lesson_StageOutputOwesShape backlog:overlapsLesson fw:Lesson_TaskTypeObligationShape .
+fw:Lesson_StoryTaskSpreadShape backlog:overlapsLesson fw:Lesson_StoryTestAnalysisShape .
+fw:Lesson_TaskTypeStepOrdinalShape backlog:overlapsLesson fw:Lesson_TaskTypeStepOrdinalUniqueShape .
+fw:Lesson_TestHarnessShape backlog:overlapsLesson fw:Lesson_VerificationIntegrityShape .
+fw:Lesson_WipBreachAdvisoryShape backlog:overlapsLesson fw:Lesson_WipLimitShape .

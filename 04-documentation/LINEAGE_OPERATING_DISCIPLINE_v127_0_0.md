@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v126.0.0
+# Lineage Operating Discipline — v127.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -4065,3 +4065,16 @@ Related: G89, G155, G159, G162.
 **What is not claimed.** The reading is the session's and its readers', not the Owner's; 270 shapes still name no ruling. A shape linked because a ruling's section names it may test less than the ruling states (G125, G127, G133 are partly covered). The tool-only rulings have no link in the ontology yet.
 Related: G49, G63, G89, G135, G162, G163.
 
+
+## G165 — A safeguard that no ruling names is recorded by the experience it keeps, read for what it says
+
+*(The Owner, 2026-10-27: "They should be a record of some experience. You should analyze them semantically not mechanically." — and, once the reading was shown, "Yes, proceed.")*
+
+**Q1 — what was wrong.** G164 linked the rulings to the shapes they enforce, which reaches 182 of the 427 shapes that exist. For the other 245 the first attempt matched names and wording, which found overlaps that did not exist and missed ones that did. A safeguard is the memory of something that went wrong; it is not a string to be matched.
+
+**Q2 — what was done.** Each of the 245 was read for what it checks and the case it answers, and recorded as a `ShapeLesson`: the experience in the words of the experience (`hasExperienceStatement`), its lesson family (`inLessonFamily`, nine, closed), the place in the lineage where it was learned (`learnedInSegment`, eleven, closed — the five stages (each linked to its stage by `segmentIsStage`) and the plan step, execution, control and monitoring, reporting, closure and the whole lineage, which leaves `LineageStage` untouched), the profiles it applies under (`hasProfileScope`: shared, agentic only, or tied to a conformance level), and how sure the reading is (`hasLessonConfidence`). Safeguards that partly guard the same experience are joined by `overlapsLesson` (111 pairs in 65 groups). Every safeguard is now reached one way or the other: by a ruling that names it (182) or by a lesson record (245), and none by both; the new safeguard on the record is itself enforced by this ruling. `backlog_g165_probe` v1.0.0 holds that whole, and a bare lesson is refused by `ShapeLessonShape`.
+
+**Q3 — what the record shows.** The overlap is small: the shapes mostly record different experiences, so folding them down would lose lessons, not duplicates. Ten of the lessons are agentic-only and seventeen are tied to a conformance level.
+
+**What is not claimed.** The reading is the session's, not the Owner's; 60 readings are medium confidence and a reader may judge differently. The lessons of the 182 ruling-linked safeguards are the rulings' statements and were not re-read here. A ruling that names a shape may test less than it states (G164). The 30 tool-only rulings still have no link in the ontology. Four shapes were doubted when read and remain so. The per-profile review (standard, agentic) and the review of execution, control, monitoring, reporting and closure are still to be done from this record before anything is simplified.
+Related: G89, G135, G141, G162, G163, G164.

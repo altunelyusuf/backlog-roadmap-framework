@@ -19,8 +19,8 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.154.0> ;
-    owl:versionInfo "1.154.0" ;
+    owl:versionIRI <http://example.org/backlog/1.155.0> ;
+    owl:versionInfo "1.155.0" ;
     owl:priorVersion <http://example.org/backlog/1.153.0> , <http://example.org/backlog/1.152.0> , <http://example.org/backlog/1.151.0> , <http://example.org/backlog/1.150.0> , <http://example.org/backlog/1.149.0> , <http://example.org/backlog/1.148.0> , <http://example.org/backlog/1.143.0> , <http://example.org/backlog/1.142.0> , <http://example.org/backlog/1.141.0> , <http://example.org/backlog/1.140.0> , <http://example.org/backlog/1.139.0> , <http://example.org/backlog/1.138.0> , <http://example.org/backlog/1.137.0> , <http://example.org/backlog/1.136.0> , <http://example.org/backlog/1.135.0> , <http://example.org/backlog/1.134.0> , <http://example.org/backlog/1.133.0> , <http://example.org/backlog/1.132.0> , <http://example.org/backlog/1.131.0> , <http://example.org/backlog/1.130.0> , <http://example.org/backlog/1.129.0> , <http://example.org/backlog/1.125.0> , <http://example.org/backlog/1.124.0> , <http://example.org/backlog/1.123.0> , <http://example.org/backlog/1.122.0> ;
     owl:priorVersion <http://example.org/backlog/1.121.0> , <http://example.org/backlog/1.120.0> , <http://example.org/backlog/1.119.0> , <http://example.org/backlog/1.118.0> , <http://example.org/backlog/1.117.0> ;
     owl:priorVersion <http://example.org/backlog/1.116.0> ;
@@ -8502,3 +8502,89 @@ backlog:rulingDecides a owl:ObjectProperty ;
     skos:definition "The rule set, profile revision or state this governance ruling decided. The definition of such a thing used to name the ruling by its number in text; the link lets a reader go from a rule to the lesson behind it. It points from the ruling into the controlled vocabulary, so the vocabulary stays free of register content."@en .
 
 backlog:rulingDecides kb:hasRelationshipCategory kb:RelationshipCategory_Association .
+
+#################################################################
+#  v1.437.0 (G165) -- a lesson is recorded as the experience a safeguard keeps, read for what it says, not matched by name.
+#################################################################
+
+backlog:LessonFamily a owl:Class ;
+    owl:oneOf ( backlog:LessonFamily_1 backlog:LessonFamily_2 backlog:LessonFamily_3 backlog:LessonFamily_4 backlog:LessonFamily_5 backlog:LessonFamily_6 backlog:LessonFamily_7 backlog:LessonFamily_8 backlog:LessonFamily_9 ) ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "Lesson Family"@en ;
+    skos:definition "One of the closed set of kinds of experience the safeguards record. A family groups lessons by what went wrong in practice, whichever stage or profile they arose in."@en .
+
+backlog:LineageSegment a owl:Class ;
+    owl:oneOf ( backlog:Segment_Mission backlog:Segment_Scope backlog:Segment_Goal backlog:Segment_Objective backlog:Segment_Backlog backlog:Segment_Plan backlog:Segment_Execution backlog:Segment_ControlMonitoring backlog:Segment_Reporting backlog:Segment_Closure backlog:Segment_WholeLineage ) ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "Lineage Segment"@en ;
+    skos:definition "One of the closed set of places in the lineage where a lesson was learned: a stage, the plan step, execution, control and monitoring, reporting, closure, or the whole lineage. It is wider than the five stages of the pipeline, which it leaves untouched."@en .
+
+backlog:LessonProfileScope a owl:Class ;
+    owl:oneOf ( backlog:Scope_Shared backlog:Scope_AgenticOnly backlog:Scope_LevelSpecific ) ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "Lesson Profile Scope"@en ;
+    skos:definition "One of the closed set of reaches a lesson has: shared by every profile, the agentic profile only, or tied to the level a lineage is held to rather than to a profile."@en .
+
+backlog:LessonConfidence a owl:Class ;
+    owl:oneOf ( backlog:Confidence_High backlog:Confidence_Medium backlog:Confidence_Low ) ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "Lesson Confidence"@en ;
+    skos:definition "How sure the reading is that the safeguard records the experience stated: high when the safeguard and its own text plainly show it, medium when it is inferred, low when it is a guess."@en .
+
+backlog:ShapeLesson a owl:Class ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "Shape Lesson"@en ;
+    skos:definition "A record of the experience one safeguard keeps: what went wrong in practice that made the safeguard necessary. It was read from what the safeguard checks and says, and is stated in the words of the experience, not of the safeguard."@en .
+
+backlog:lessonOfShape a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:ShapeLesson ; rdfs:range rdfs:Resource ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "lesson of shape"@en ;
+    skos:definition "The safeguard whose lesson this record states."@en .
+
+backlog:hasExperienceStatement a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:ShapeLesson ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "has experience statement"@en ;
+    skos:definition "What went wrong in practice, in the words of the experience."@en .
+
+backlog:inLessonFamily a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:ShapeLesson ; rdfs:range backlog:LessonFamily ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "in lesson family"@en ;
+    skos:definition "The kind of experience this lesson is."@en .
+
+backlog:learnedInSegment a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:ShapeLesson ; rdfs:range backlog:LineageSegment ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "learned in segment"@en ;
+    skos:definition "The place in the lineage where the experience arose."@en .
+
+backlog:hasProfileScope a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:ShapeLesson ; rdfs:range backlog:LessonProfileScope ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "has profile scope"@en ;
+    skos:definition "The profiles under which the lesson applies."@en .
+
+backlog:hasLessonConfidence a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:ShapeLesson ; rdfs:range backlog:LessonConfidence ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "has lesson confidence"@en ;
+    skos:definition "How sure the reading is of the experience stated."@en .
+
+backlog:overlapsLesson a owl:ObjectProperty , owl:SymmetricProperty ;
+    rdfs:domain backlog:ShapeLesson ; rdfs:range backlog:ShapeLesson ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "overlaps lesson"@en ;
+    skos:definition "Another lesson that records part of the same experience, so the two safeguards partly guard the same thing."@en .
+
+backlog:hasLessonNote a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:ShapeLesson ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "has lesson note"@en ;
+    skos:definition "A reader's remark on the reading, for example that the safeguard is advisory or holds only at one conformance level."@en .
+
+backlog:segmentIsStage a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:LineageSegment ; rdfs:range backlog:LineageStage ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "segment is stage"@en ;
+    skos:definition "The pipeline stage a lineage segment is, for the five segments that are stages. The other segments are not stages of the pipeline and carry none."@en .
+
+backlog:segmentIsStage kb:hasRelationshipCategory kb:RelationshipCategory_Association .
+backlog:ShapeLesson kb:hasClassKind kb:ClassKind_InformationArtifact .
+backlog:LessonFamily kb:hasClassKind kb:ClassKind_ValueDomain .
+backlog:LineageSegment kb:hasClassKind kb:ClassKind_ValueDomain .
+backlog:LessonProfileScope kb:hasClassKind kb:ClassKind_ValueDomain .
+backlog:LessonConfidence kb:hasClassKind kb:ClassKind_ValueDomain .
+backlog:lessonOfShape kb:hasRelationshipCategory kb:RelationshipCategory_Association .
+backlog:inLessonFamily kb:hasRelationshipCategory kb:RelationshipCategory_Characterization .
+backlog:learnedInSegment kb:hasRelationshipCategory kb:RelationshipCategory_Characterization .
+backlog:hasProfileScope kb:hasRelationshipCategory kb:RelationshipCategory_Characterization .
+backlog:hasLessonConfidence kb:hasRelationshipCategory kb:RelationshipCategory_Characterization .
+backlog:overlapsLesson kb:hasRelationshipCategory kb:RelationshipCategory_Association .

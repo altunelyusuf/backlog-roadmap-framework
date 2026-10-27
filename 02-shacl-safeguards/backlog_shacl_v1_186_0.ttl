@@ -9,8 +9,8 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog/shacl/1.185.0> ;
-    owl:versionInfo "1.185.0" ;
+    owl:versionIRI <http://example.org/backlog/shacl/1.186.0> ;
+    owl:versionInfo "1.186.0" ;
     owl:priorVersion <http://example.org/backlog-shapes/1.184.0> , <http://example.org/backlog-shapes/1.176.0> , <http://example.org/backlog-shapes/1.175.0> , <http://example.org/backlog-shapes/1.174.0> , <http://example.org/backlog-shapes/1.173.0> , <http://example.org/backlog-shapes/1.172.0> , <http://example.org/backlog-shapes/1.171.0> , <http://example.org/backlog-shapes/1.170.0> , <http://example.org/backlog-shapes/1.169.0> , <http://example.org/backlog-shapes/1.168.0> , <http://example.org/backlog-shapes/1.167.0> , <http://example.org/backlog-shapes/1.166.0> , <http://example.org/backlog-shapes/1.165.0> , <http://example.org/backlog-shapes/1.164.0> , <http://example.org/backlog-shapes/1.159.0> , <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.154.0> , <http://example.org/backlog-shapes/1.153.0> , <http://example.org/backlog-shapes/1.152.0> , <http://example.org/backlog-shapes/1.151.0> , <http://example.org/backlog-shapes/1.150.0> , <http://example.org/backlog-shapes/1.149.0> , <http://example.org/backlog-shapes/1.148.0> , <http://example.org/backlog-shapes/1.147.0> , <http://example.org/backlog-shapes/1.146.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.145.0> ;
@@ -9174,3 +9174,26 @@ backlog:ProfileRevisionShape a sh:NodeShape ;
     backlog:fixtureCaseName "PRV_BAD" ;
     sh:property [ sh:path backlog:revisionNumber ; sh:minCount 1 ; sh:datatype xsd:integer ; sh:minInclusive 1 ;
         sh:message "G163: a profile revision must carry its number (an integer from 1), or a lineage cannot be compared with the rule sets introduced after it opened." ] .
+
+#################################################################
+#  v1.437.0 (G165) -- a lesson states the experience a safeguard keeps.
+#################################################################
+
+backlog:ShapeLessonShape a sh:NodeShape ;
+    sh:targetClass backlog:ShapeLesson ;
+    sh:severity sh:Violation ;
+    rdfs:label "A lesson names its safeguard, states its experience and places it (G165)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "LSN_BAD" ;
+    sh:property [ sh:path backlog:lessonOfShape ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "G165: a lesson must name the one safeguard it is the lesson of." ] ;
+    sh:property [ sh:path backlog:hasExperienceStatement ; sh:minCount 1 ; sh:maxCount 1 ; sh:minLength 20 ;
+        sh:message "G165: a lesson must state the experience in words, not leave it empty." ] ;
+    sh:property [ sh:path backlog:inLessonFamily ; sh:minCount 1 ; sh:maxCount 1 ; sh:class backlog:LessonFamily ;
+        sh:message "G165: a lesson must belong to one lesson family." ] ;
+    sh:property [ sh:path backlog:learnedInSegment ; sh:minCount 1 ; sh:maxCount 1 ; sh:class backlog:LineageSegment ;
+        sh:message "G165: a lesson must say where in the lineage it was learned." ] ;
+    sh:property [ sh:path backlog:hasProfileScope ; sh:minCount 1 ; sh:maxCount 1 ; sh:class backlog:LessonProfileScope ;
+        sh:message "G165: a lesson must say which profiles it applies under." ] ;
+    sh:property [ sh:path backlog:hasLessonConfidence ; sh:minCount 1 ; sh:maxCount 1 ; sh:class backlog:LessonConfidence ;
+        sh:message "G165: a lesson must say how sure the reading is." ] .
