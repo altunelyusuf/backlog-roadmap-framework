@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_g166_probe v1.0.0 -- re-runnable proof of the adaptive profile (G166).
+"""backlog_g166_probe v1.1.0 -- re-runnable proof of the adaptive profile (G166).
 
   Checks the shipped files (the profile beside the standard and agentic ones, the two rule sets, the revision, the ruling), then plants small registers
   and expects the validator to defer, ask, refuse and accept exactly as the rule sets say. Exit 0 when every expectation holds."""
@@ -28,7 +28,7 @@ expect("profile revision 4 carries its number", g.value(B.Pr_4, B.revisionNumber
 ruling = [r for r in g.subjects(B.hasRulingIdentifier, None) if str(g.value(r, B.hasRulingIdentifier)) == "G166"]
 expect("ruling G166 exists, decides revision 4 and both rule sets, and names two shapes that exist", len(ruling) == 1 and set(g.objects(ruling[0], B.rulingDecides)) == new | {B.Pr_4} and len(set(g.objects(ruling[0], B.enforcedByShape))) == 2 and all((x, RDF.type, SHN.NodeShape) in s for x in g.objects(ruling[0], B.enforcedByShape)))
 sh_txt = open(SH).read()
-expect("nine constraints defer to the lineage status or the epic state (seven register-level, two coarse-epic)", sh_txt.count("backlog:RS_ObligationsFollowStatus") == 9, "%d" % sh_txt.count("backlog:RS_ObligationsFollowStatus"))
+expect("ten constraints defer to the lineage status or the epic state (seven register-level, the entity life-cycle sweep, two coarse-epic)", sh_txt.count("backlog:RS_ObligationsFollowStatus") == 10, "%d" % sh_txt.count("backlog:RS_ObligationsFollowStatus"))
 H = "@prefix backlog: <http://example.org/backlog#> .\n@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n@prefix owl: <http://www.w3.org/2002/07/owl#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n@prefix x: <http://example.org/g166#> .\n"
 def lineage(status, adopt, revision="Pr_4"):
     rs = ["RS_CancellationAssessed", "RS_ChangeSupportsMission", "RS_ConcurrentLineages", "RS_DecompositionStateAgrees", "RS_FlowPointsRecorded", "RS_ImpedimentNamesWhatItBlocks", "RS_PlanBeforeStart", "RS_RepairReprioritises", "RS_StatusHistoryRecorded"] + (["RS_ObligationsFollowStatus", "RS_ChainBothWays"] if adopt else [])
@@ -53,6 +53,11 @@ expect("an adopter at Goaled is asked for its goal, scope statement and blueprin
 v_bl = run(lineage("LS_Backlogged", True))
 expect("an adopter at Backlogged is asked all seven: nothing is removed, each is asked at the status that creates it", len(hits(v_bl, SEVEN)) == 7, "%d of 7" % len(hits(v_bl, SEVEN)))
 base = lineage("LS_InProgress", True)
+ENT = 'x:E a backlog:DomainEntity ; rdfs:label "Thing"@en ; backlog:belongsToLineage x:L .\n'
+SWEEP = "life-cycle stage with neither backlog coverage"
+expect("an adopter at Scoped is not asked the entity life-cycle sweep", not hits(run(lineage("LS_Scoped", True) + ENT), [SWEEP]))
+expect("an adopter at Backlogged is asked the entity life-cycle sweep", bool(hits(run(lineage("LS_Backlogged", True) + ENT), [SWEEP])))
+expect("a lineage that did not adopt the deferral is asked the sweep at Scoped", bool(hits(run(lineage("LS_Scoped", False, "Pr_3") + ENT), [SWEEP])))
 v_ok = run(base + 'x:D1 a backlog:ScopeDeliverable ; rdfs:label "Weekly sales summary"@en .\nx:S1 a backlog:Story ; rdfs:label "Show the summary"@en ; backlog:belongsToLineage x:L ; backlog:hasState backlog:InProgress ; backlog:satisfiesDeliverable x:D1 .\n')
 expect("a started item on a deliverable no scope requires is refused for an adopter", bool(hits(v_ok, ["satisfies a deliverable that no scope statement of the lineage requires"])))
 v_prop = run(base + 'x:D1 a backlog:ScopeDeliverable ; rdfs:label "Weekly sales summary"@en .\nx:S1 a backlog:Story ; rdfs:label "Show the summary"@en ; backlog:belongsToLineage x:L ; backlog:hasState backlog:Proposed ; backlog:satisfiesDeliverable x:D1 .\n')

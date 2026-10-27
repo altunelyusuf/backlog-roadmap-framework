@@ -11260,6 +11260,13 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.440.0 — 2026-10-28 (MINOR: Lineage 20, Scope stage; the entity life-cycle sweep follows the lineage status)
+
+- **Lineage 20, Scope stage:** seven deliverables over five areas (preparation, planning, monitoring, control, kinds of work) and six exclusions; the Mission stage's digest and the Scope stage's digest both reproduce; status Scoped (data v1.67.0). Stage 2 of 5.
+- **Found by running it (G166 addendum):** the domain entity's life-cycle sweep was asked at the Scope stage, before any backlog item could cover an entity; it is now owed from Backlogged for an adopter of `RS_ObligationsFollowStatus` (shapes v1.188.0). Probe: `backlog_g166_probe` v1.1.0 (three added checks). Discipline v129.0.0.
+
+**Unplanned work:** a lineage's Scope stage precedes its Backlog stage, so no work item of this package can exist for it yet; the same stage-release finding as v1.439.0.
+
 ## v1.439.0 — 2026-10-28 (MINOR: Lineage 20 opened, Mission stage — the first lineage under the adaptive profile)
 
 - **Lineage 20, "Agile ceremonies for the adaptive profile" (increment B), Mission stage:** opened under `Profile_Adaptive` (profile revision 4, eleven rule sets adopted at the opening), status Opened. The mission is stated immature on purpose: the agile ceremonies of a box (planning, grooming against a definition of ready, the daily checkpoint, the demo, the deployment plan) are recorded and checked, each tied to the kind of work it serves, and a review is blocked when a planned control was not performed. Owner's go-ahead of 2026-10-28 01:10 for increment B as the live proof of the adaptive profile (data v1.66.0). Stage 1 of 5.

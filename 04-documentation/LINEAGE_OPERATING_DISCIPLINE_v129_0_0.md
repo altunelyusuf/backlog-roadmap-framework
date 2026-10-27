@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v128.0.0
+# Lineage Operating Discipline — v129.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -4091,3 +4091,14 @@ Related: G89, G135, G141, G162, G163, G164.
 
 **What is not claimed.** Timing is not in a shape: that a chain is re-pointed only after a closing review and never during an open box, and the detection of a re-pointing that was not recorded, both need the earlier state of the register and are carried by the step tool of increment C. The agile ceremony records (planning, grooming, daily checkpoint, demo, deployment plan, kind of work) and the rule that a review is blocked when a planned control was not performed are increment B and are not built. There has been no live proof on a real lineage; the profile is not a default and becomes one only on the Owner's confirmation after the live proof. The evidence is toy registers. Version 2 of the requirements (business requirements, use cases, restrictions, performance) is parked.
 Related: G89, G91, G155, G162, G163, G164, G165.
+
+## G166, addendum — the entity life-cycle sweep follows the status too (found by Lineage 20)
+
+*(Release 1.440.0. Lineage 20 is the first lineage opened under the adaptive profile and is the live proof the Owner asked for before any default changes.)*
+
+**What was found.** At the Scope stage a domain entity is owed (the stage table requires one) and its life-cycle sweep, every life-cycle stage covered by a backlog item or a recorded blueprint gap, was asked at once, before the Backlog stage could create an item. The adaptive profile had deferred seven register-level checks and the coarse epic; this eighth obligation was missed. Writing a gap for every life-cycle stage to quiet it would have recorded a falsehood to be unrecorded later, so it was not done.
+
+**What was done.** `BlueprintSweepShape` (the "Full life-cycle sweep per entity (L3)" constraint) defers for an adopter of `RS_ObligationsFollowStatus` until lineage status rank 5 (Backlogged), like the others; the rule set carries the addendum as a scope note, its definition unchanged. A lineage that did not adopt the rule set is asked at once, as before. The probe checks all three cases.
+
+**What is not claimed.** This was found by running one lineage to its second stage. Other obligations that depend on the Backlog stage may exist; each found in this lineage is added the same way and recorded here.
+Related: G166.
