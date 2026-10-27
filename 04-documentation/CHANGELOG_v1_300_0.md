@@ -11260,6 +11260,14 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.438.0 — 2026-10-27 (MINOR: ruling G166, the adaptive profile, first increment)
+
+- **G166 (the Owner: "Yes, proceed." on the adaptive profile proposal, version 1):** `Profile_Adaptive` beside the standard and agentic profiles, which are unchanged, with `Pr_4`, `RS_ObligationsFollowStatus` and `RS_ChainBothWays` (data v1.65.0); `ChainRevision` with `revisesChainElement`, `revisedFrom`, `revisedTo`, `hasChainRevisionReason`, `revisionServesObjective`, `chainRevisionDecidedBy`, `revisedAtBoundary` (T-Box v1.156.0); seven register-level constraints and two coarse-epic constraints defer for an adopter until the lineage status or epic state that creates the obligation, `DeliverableRequiredByScopeShape` and `ChainRevisionShape`, and objective inheritance through the whole parent chain for every lineage (shapes v1.187.0). Probe: `backlog_g166_probe` v1.0.0. Discipline v128.0.0.
+
+**Not built in this release:** the agile ceremony records and the blocked review (increment B); the step tool, the live proof and the switch of any default (increment C). The timing of a revision and the detection of an unrecorded re-pointing are not in a shape (see G166).
+
+**Unplanned work:** an Owner-directed programme; no backlog item of this package covers it.
+
 ## v1.437.0 — 2026-10-27 (MINOR: ruling G165, the lessons recorded as the experience the safeguards keep)
 
 - **G165 (the Owner: "They should be a record of some experience. You should analyze them semantically not mechanically."):** `ShapeLesson` with `lessonOfShape`, `hasExperienceStatement`, `inLessonFamily`, `learnedInSegment`, `hasProfileScope`, `hasLessonConfidence`, `overlapsLesson`, `hasLessonNote`, `segmentIsStage`, and the closed sets `LessonFamily` (nine), `LineageSegment` (eleven), `LessonProfileScope` (three), `LessonConfidence` (three) (T-Box v1.155.0); 245 lessons read from the safeguards no ruling names, with their vocabulary and 111 overlap pairs (data v1.64.0); `ShapeLessonShape` (shapes v1.186.0). Every one of the 427 safeguards is now reached by a ruling (182) or a lesson record (245), none by both. Probe: `backlog_g165_probe` v1.0.0. Discipline v127.0.0, Standard v1.147.0.

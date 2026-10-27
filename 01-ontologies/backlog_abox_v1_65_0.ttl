@@ -22,8 +22,8 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (ABox: controlled individuals, reference data and the live register)"@en ;
-    owl:versionIRI <http://example.org/backlog/abox/1.64.0> ;
-    owl:versionInfo "1.64.0" ;
+    owl:versionIRI <http://example.org/backlog/abox/1.65.0> ;
+    owl:versionInfo "1.65.0" ;
     owl:priorVersion <http://example.org/backlog/abox/1.62.0> , <http://example.org/backlog/abox/1.61.0> , <http://example.org/backlog/abox/1.60.0> , <http://example.org/backlog/abox/1.59.0> , <http://example.org/backlog/abox/1.58.0> , <http://example.org/backlog/abox/1.57.0> , <http://example.org/backlog/abox/1.53.0> , <http://example.org/backlog/abox/1.52.0> , <http://example.org/backlog/abox/1.51.0> , <http://example.org/backlog/abox/1.50.0> , <http://example.org/backlog/abox/1.49.0> , <http://example.org/backlog/abox/1.48.0> , <http://example.org/backlog/abox/1.47.0> , <http://example.org/backlog/abox/1.46.0> , <http://example.org/backlog/abox/1.45.0> , <http://example.org/backlog/abox/1.40.0> , <http://example.org/backlog/abox/1.39.0> , <http://example.org/backlog/abox/1.38.0> , <http://example.org/backlog/abox/1.37.0> , <http://example.org/backlog/abox/1.36.0> , <http://example.org/backlog/abox/1.35.0> ;
     owl:priorVersion <http://example.org/backlog/abox/1.34.0> , <http://example.org/backlog/abox/1.33.0> , <http://example.org/backlog/abox/1.32.0> , <http://example.org/backlog/abox/1.31.0> , <http://example.org/backlog/abox/1.30.0> , <http://example.org/backlog/abox/1.29.0> , <http://example.org/backlog/abox/1.28.0> , <http://example.org/backlog/abox/1.27.0> , <http://example.org/backlog/abox/1.26.0> , <http://example.org/backlog/abox/1.25.0> , <http://example.org/backlog/abox/1.24.0> , <http://example.org/backlog/abox/1.23.0> , <http://example.org/backlog/abox/1.22.0> , <http://example.org/backlog/abox/1.21.0> , <http://example.org/backlog/abox/1.20.0> , <http://example.org/backlog/abox/1.19.0> , <http://example.org/backlog/abox/1.17.0> , <http://example.org/backlog/abox/1.16.0> , <http://example.org/backlog/abox/1.15.0> , <http://example.org/backlog/abox/1.14.0> , <http://example.org/backlog/abox/1.13.0> , <http://example.org/backlog/abox/1.12.0> , <http://example.org/backlog/abox/1.11.0> , <http://example.org/backlog/abox/1.10.0> , <http://example.org/backlog/abox/1.9.0> , <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
         <http://example.org/backlog-abox/1.2.1> ,
@@ -9114,3 +9114,32 @@ fw:Lesson_StoryTaskSpreadShape backlog:overlapsLesson fw:Lesson_StoryTestAnalysi
 fw:Lesson_TaskTypeStepOrdinalShape backlog:overlapsLesson fw:Lesson_TaskTypeStepOrdinalUniqueShape .
 fw:Lesson_TestHarnessShape backlog:overlapsLesson fw:Lesson_VerificationIntegrityShape .
 fw:Lesson_WipBreachAdvisoryShape backlog:overlapsLesson fw:Lesson_WipLimitShape .
+
+#################################################################
+#  v1.438.0 (G166) -- the adaptive lineage profile, beside the standard and agentic profiles (which stay as they are).
+#################################################################
+
+backlog:RS_ObligationsFollowStatus a owl:NamedIndividual , backlog:RuleSet ;
+    backlog:introducedInRevision backlog:Pr_4 ;
+    rdfs:label "A register-level obligation is owed from the status that creates it"@en ;
+    skos:definition "Within the adopter: the checks that a register holds a goal for the mission, an objective, a scope statement, a blueprint, a definition of done, a commitment of the register and a member item for every container are owed from the lineage status at which that element is made (a goal from Goaled, an objective from Objectived, a scope statement and blueprint from Scoped, the rest from Backlogged), not from the first commit. A lineage that starts from an immature mission matures stage by stage; no obligation is removed, each is asked at the status that creates it and for ever after. The Owner's rule of 2026-10-27 (G166): simplify how a lineage is operated, never the obligations it owes. A coarse epic with no children is likewise owed its decomposition only once it is Ready."@en .
+
+backlog:RS_ChainBothWays a owl:NamedIndividual , backlog:RuleSet ;
+    backlog:introducedInRevision backlog:Pr_4 ;
+    rdfs:label "The chain from mission to backlog reads the same from both ends"@en ;
+    skos:definition "Within the adopter: an item that is started or Done may satisfy only a deliverable that a scope statement of the lineage requires, so a chain element discovered from the bottom (a story found while working) is joined to the top before it counts; and re-pointing a chain element (a mission, goal, objective, scope statement or work item) is recorded as a ChainRevision with its reason, the objective it serves, the role that decided it and the box boundary it follows. Elements may be created in any order; the chain is read from both ends at every box boundary. The Owner's rule of 2026-10-27 (G166): the connection is conserved, the creation order is not one-directional."@en .
+
+backlog:Pr_4 a owl:NamedIndividual , backlog:ProfileRevision ; rdfs:label "Profile revision 4"@en ; backlog:revisionNumber 4 ; skos:definition "Release 1.438.0 (G166) adds the adaptive profile: obligations that follow the lineage status and a chain that is read from both ends."@en .
+
+backlog:Profile_Adaptive a owl:NamedIndividual , backlog:OpeningProfile ;
+    rdfs:label "Adaptive lineage profile"@en ;
+    skos:definition "The standard profile for a lineage that starts from an immature mission and matures it through time-boxed boxes: every obligation of the standard profile is kept, each register-level check is asked from the status that creates the element it checks, a coarse epic is decomposed by the time it is Ready, and the chain from mission to backlog is read from both ends with every re-pointing recorded. Built beside the standard and agentic profiles, which stay as they are; it becomes a default only on the Owner's confirmation after a live proof."@en ;
+    backlog:profileIncludes backlog:RS_ConcurrentLineages , backlog:RS_PlanBeforeStart , backlog:RS_CancellationAssessed , backlog:RS_ChangeSupportsMission , backlog:RS_StatusHistoryRecorded , backlog:RS_FlowPointsRecorded , backlog:RS_RepairReprioritises , backlog:RS_ImpedimentNamesWhatItBlocks , backlog:RS_DecompositionStateAgrees , backlog:RS_ObligationsFollowStatus , backlog:RS_ChainBothWays .
+
+fw:Ruling_G166 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G166" ;
+    rdfs:label "The adaptive profile asks each obligation at the status that creates it and reads the chain from both ends"@en ;
+    backlog:hasRulingStatement "The adaptive profile asks each obligation at the status that creates it and reads the chain from both ends" ;
+    backlog:enforcedByShape backlog:DeliverableRequiredByScopeShape , backlog:ChainRevisionShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v128.0.0, section G166." .
+fw:Ruling_G166 backlog:rulingDecides backlog:Pr_4 , backlog:RS_ObligationsFollowStatus , backlog:RS_ChainBothWays .

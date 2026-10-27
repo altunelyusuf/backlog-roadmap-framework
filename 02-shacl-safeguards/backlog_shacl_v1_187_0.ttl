@@ -9,8 +9,8 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog/shacl/1.186.0> ;
-    owl:versionInfo "1.186.0" ;
+    owl:versionIRI <http://example.org/backlog/shacl/1.187.0> ;
+    owl:versionInfo "1.187.0" ;
     owl:priorVersion <http://example.org/backlog-shapes/1.184.0> , <http://example.org/backlog-shapes/1.176.0> , <http://example.org/backlog-shapes/1.175.0> , <http://example.org/backlog-shapes/1.174.0> , <http://example.org/backlog-shapes/1.173.0> , <http://example.org/backlog-shapes/1.172.0> , <http://example.org/backlog-shapes/1.171.0> , <http://example.org/backlog-shapes/1.170.0> , <http://example.org/backlog-shapes/1.169.0> , <http://example.org/backlog-shapes/1.168.0> , <http://example.org/backlog-shapes/1.167.0> , <http://example.org/backlog-shapes/1.166.0> , <http://example.org/backlog-shapes/1.165.0> , <http://example.org/backlog-shapes/1.164.0> , <http://example.org/backlog-shapes/1.159.0> , <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.154.0> , <http://example.org/backlog-shapes/1.153.0> , <http://example.org/backlog-shapes/1.152.0> , <http://example.org/backlog-shapes/1.151.0> , <http://example.org/backlog-shapes/1.150.0> , <http://example.org/backlog-shapes/1.149.0> , <http://example.org/backlog-shapes/1.148.0> , <http://example.org/backlog-shapes/1.147.0> , <http://example.org/backlog-shapes/1.146.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.145.0> ;
@@ -237,6 +237,8 @@ backlog:ContainerShape a sh:NodeShape ;
         sh:message "L1: a container must have at least one member item, otherwise it reports on nothing. Waived for the register root itself when every lineage that exists is archived (v1.121.0, owner ruling 2026-09-15): a register between missions, with nothing yet live, is a real and acceptable state, not an empty container reporting on nothing -- it correctly reports that nothing is active." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
+            # G166: an adopter of RS_ObligationsFollowStatus owes this from lineage status rank 5 (the status that creates the element), not before.
+            FILTER NOT EXISTS { ?dl a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_ObligationsFollowStatus ; backlog:hasLineageStatus ?dls . ?dls backlog:statusRank ?drk . FILTER (?drk < 5) FILTER NOT EXISTS { ?dl backlog:lineageArchived true } }
             FILTER NOT EXISTS { ?m backlog:memberOfContainer $this }
             FILTER NOT EXISTS { ?dz backlog:dissolvesContainer $this }  # v1.136.0: a dissolved container has ended
             FILTER (
@@ -1368,6 +1370,8 @@ backlog:ArtifactCommitmentShape a sh:NodeShape ;
         sh:message "L2: this register carries no commitment to a goal; a backlog without a goal is a list, and a list cannot be behind — only long." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
+            # G166: an adopter of RS_ObligationsFollowStatus owes this from lineage status rank 5 (the status that creates the element), not before.
+            FILTER NOT EXISTS { ?dl a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_ObligationsFollowStatus ; backlog:hasLineageStatus ?dls . ?dls backlog:statusRank ?drk . FILTER (?drk < 5) FILTER NOT EXISTS { ?dl backlog:lineageArchived true } }
             FILTER NOT EXISTS { $this backlog:hasCommitment ?c . ?c backlog:commitsToGoal ?g }
             # v1.116.0 (G92): the thing this rule asks the register root for may have RETIRED with the
             # lineage that created it -- the root's commitment, its scope statement and its stage
@@ -1697,7 +1701,7 @@ backlog:IntentTraceabilityShape a sh:NodeShape ;
             FILTER (?s != backlog:Cancelled)
             FILTER NOT EXISTS { $this backlog:pursuesObjective ?o }
             FILTER NOT EXISTS { $this backlog:memberOfContainer ?c . ?c backlog:pursuesObjective ?o2 }
-            FILTER NOT EXISTS { ?parent backlog:decomposesInto $this ; backlog:pursuesObjective ?o3 }
+            FILTER NOT EXISTS { ?parent backlog:decomposesInto+ $this . ?parent backlog:pursuesObjective ?o3 }  # G166: the whole parent chain, not one level
             FILTER NOT EXISTS { $this a backlog:ExecutionTask }
         }""" ] .
 
@@ -1734,6 +1738,8 @@ backlog:MissionShape a sh:NodeShape ;
         sh:message "L2: no goal advances this mission, so nothing in the register is accountable to it." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
+            # G166: an adopter of RS_ObligationsFollowStatus owes this from lineage status rank 3 (the status that creates the element), not before.
+            FILTER NOT EXISTS { ?dl a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_ObligationsFollowStatus ; backlog:hasLineageStatus ?dls . ?dls backlog:statusRank ?drk . FILTER (?drk < 3) FILTER NOT EXISTS { ?dl backlog:lineageArchived true } }
             FILTER NOT EXISTS { ?g backlog:contributesToMission $this }
             FILTER NOT EXISTS { $this backlog:belongsToLineage ?l . ?l backlog:lineageArchived true }
             # v1.110.0: the mission of an archived lineage stays live as the pointer; its closure report went with the work
@@ -2455,6 +2461,8 @@ backlog:LineageCompletenessShape a sh:NodeShape ;
         sh:message "L2: this register declares no Objective. Every goal it holds is unmeasurable and no observation can contradict any of it, which is the unfalsifiable-plan failure in its plainest form. Waived when every lineage that exists is archived (v1.121.0, owner ruling 2026-09-15): a register between missions is a real, acceptable state." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
+            # G166: an adopter of RS_ObligationsFollowStatus owes this from lineage status rank 4 (the status that creates the element), not before.
+            FILTER NOT EXISTS { ?dl a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_ObligationsFollowStatus ; backlog:hasLineageStatus ?dls . ?dls backlog:statusRank ?drk . FILTER (?drk < 4) FILTER NOT EXISTS { ?dl backlog:lineageArchived true } }
             FILTER NOT EXISTS { ?o a backlog:Objective }
             FILTER EXISTS { ?anyLineage a backlog:Lineage . FILTER NOT EXISTS { ?anyLineage backlog:lineageArchived true } }
         }""" ] ;
@@ -2463,6 +2471,8 @@ backlog:LineageCompletenessShape a sh:NodeShape ;
         sh:message "L2: this register declares no ScopeStatement anywhere. Nothing states what the development is for or what it will not attempt, so scope completion cannot be derived and scope growth cannot be detected — there is no boundary for a ScopeChange to change. Waived when every lineage that exists is archived (v1.121.0, owner ruling 2026-09-15): a register between missions is a real, acceptable state." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
+            # G166: an adopter of RS_ObligationsFollowStatus owes this from lineage status rank 2 (the status that creates the element), not before.
+            FILTER NOT EXISTS { ?dl a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_ObligationsFollowStatus ; backlog:hasLineageStatus ?dls . ?dls backlog:statusRank ?drk . FILTER (?drk < 2) FILTER NOT EXISTS { ?dl backlog:lineageArchived true } }
             FILTER NOT EXISTS { ?s a backlog:ScopeStatement }
             FILTER EXISTS { ?anyLineage a backlog:Lineage . FILTER NOT EXISTS { ?anyLineage backlog:lineageArchived true } }
         }""" ] ;
@@ -2471,6 +2481,8 @@ backlog:LineageCompletenessShape a sh:NodeShape ;
         sh:message "L2: this register declares no Blueprint. Mission, Objective and ScopeStatement are already register-level required here; a domain model is not, despite being the one intent-chain-adjacent element that establishes what the work is ABOUT rather than what it is FOR. An epic can decompose into fully evidenced, test-harnessed stories with no domain entity ever named, and every other shape in this suite reports clean the whole way. Waived when every lineage that exists is archived (v1.121.0, owner ruling 2026-09-15): a register between missions is a real, acceptable state." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
+            # G166: an adopter of RS_ObligationsFollowStatus owes this from lineage status rank 2 (the status that creates the element), not before.
+            FILTER NOT EXISTS { ?dl a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_ObligationsFollowStatus ; backlog:hasLineageStatus ?dls . ?dls backlog:statusRank ?drk . FILTER (?drk < 2) FILTER NOT EXISTS { ?dl backlog:lineageArchived true } }
             FILTER NOT EXISTS { ?b a backlog:Blueprint ; backlog:blueprintFor $this }
             FILTER EXISTS { ?anyLineage a backlog:Lineage . FILTER NOT EXISTS { ?anyLineage backlog:lineageArchived true } }
         }""" ] ;
@@ -2479,6 +2491,8 @@ backlog:LineageCompletenessShape a sh:NodeShape ;
         sh:message "L2: this register names no Definition of Done. Completion is then whatever each claim says it is, and every Done in the register rests on an unstated bar." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
+            # G166: an adopter of RS_ObligationsFollowStatus owes this from lineage status rank 5 (the status that creates the element), not before.
+            FILTER NOT EXISTS { ?dl a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_ObligationsFollowStatus ; backlog:hasLineageStatus ?dls . ?dls backlog:statusRank ?drk . FILTER (?drk < 5) FILTER NOT EXISTS { ?dl backlog:lineageArchived true } }
             FILTER NOT EXISTS { $this backlog:appliesDefinitionOfDone ?d }
         }""" ] ;
 
@@ -2488,6 +2502,7 @@ backlog:LineageCompletenessShape a sh:NodeShape ;
         sh:select """SELECT $this WHERE {
             ?e a backlog:Epic ; backlog:memberOfContainer $this ; backlog:hasPriorityScore ?sc .
             FILTER NOT EXISTS { ?e backlog:decomposesInto ?child }
+            FILTER NOT EXISTS { ?al a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_ObligationsFollowStatus . FILTER NOT EXISTS { ?al backlog:lineageArchived true } ?e backlog:hasState ?es . FILTER (?es IN (backlog:Proposed, backlog:Refined)) }  # G166: a coarse epic is owed its decomposition once it is Ready
         }""" ] ;
 
     sh:sparql [ a sh:SPARQLConstraint ;
@@ -2836,7 +2851,7 @@ backlog:L4IntentChainShape a sh:NodeShape ;
             FILTER NOT EXISTS { $this backlog:hasState backlog:Cancelled }
             FILTER NOT EXISTS { $this backlog:pursuesObjective ?o }
             FILTER NOT EXISTS { $this backlog:memberOfContainer ?c . ?c backlog:pursuesObjective ?o2 }
-            FILTER NOT EXISTS { ?par backlog:decomposesInto $this . ?par backlog:pursuesObjective ?o3 }
+            FILTER NOT EXISTS { ?par backlog:decomposesInto+ $this . ?par backlog:pursuesObjective ?o3 }  # G166: the whole parent chain, not one level
         }""" ] .
 
 backlog:L4MeasuredObjectiveShape a sh:NodeShape ;
@@ -2860,6 +2875,7 @@ backlog:L4GroomingShape a sh:NodeShape ;
         sh:select """SELECT $this WHERE {
             FILTER NOT EXISTS { $this backlog:hasState backlog:Cancelled }
             FILTER NOT EXISTS { $this backlog:decomposesInto ?child }
+            FILTER NOT EXISTS { ?al a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_ObligationsFollowStatus . FILTER NOT EXISTS { ?al backlog:lineageArchived true } $this backlog:hasState ?es . FILTER (?es IN (backlog:Proposed, backlog:Refined)) }  # G166: a coarse epic is owed its decomposition once it is Ready
         }""" ] ;
     sh:sparql [ a sh:SPARQLConstraint ;
         sh:message "L4: this epic is a member of an Iteration. An iteration is a time box and an epic is defined as work delivered ACROSS multiple stories; putting a theme in a sprint is the commonest drift this framework has observed, because it looks like planning and commits nothing anyone can finish. Plan its stories." ;
@@ -9197,3 +9213,48 @@ backlog:ShapeLessonShape a sh:NodeShape ;
         sh:message "G165: a lesson must say which profiles it applies under." ] ;
     sh:property [ sh:path backlog:hasLessonConfidence ; sh:minCount 1 ; sh:maxCount 1 ; sh:class backlog:LessonConfidence ;
         sh:message "G165: a lesson must say how sure the reading is." ] .
+
+#################################################################
+#  v1.438.0 (G166) -- the adaptive profile: the chain is read from both ends and a re-pointing is a recorded revision.
+#################################################################
+
+backlog:DeliverableRequiredByScopeShape a sh:NodeShape ;
+    sh:targetClass backlog:Lineage ;
+    sh:severity sh:Violation ;
+    rdfs:label "A started item satisfies only a deliverable some scope of the lineage requires (G166)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "CHN_LIN" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G166: this lineage has an item that is started or Done and satisfies a deliverable that no scope statement of the lineage requires (RS_ChainBothWays). An element found from the bottom is joined to the top before it counts: add the deliverable to a scope statement through a recorded revision, or satisfy a deliverable the scope already requires." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            { $this backlog:adoptsRuleSet backlog:RS_ChainBothWays } UNION { ?reg backlog:adoptsRuleSet backlog:RS_ChainBothWays . FILTER NOT EXISTS { ?reg a backlog:Lineage } }
+            ?i backlog:belongsToLineage $this ; backlog:satisfiesDeliverable ?d ; backlog:hasState ?st .
+            FILTER (?st IN (backlog:InProgress, backlog:Done))
+            FILTER NOT EXISTS { ?sc backlog:requiresDeliverable ?d ; backlog:belongsToLineage $this }
+        }""" ] .
+
+backlog:ChainRevisionShape a sh:NodeShape ;
+    sh:targetClass backlog:ChainRevision ;
+    sh:severity sh:Violation ;
+    rdfs:label "A re-pointing of the chain is recorded whole (G166)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "CRV_BAD" ;
+    sh:property [ sh:path backlog:revisesChainElement ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "G166: a chain revision must name the one chain element it re-points." ] ;
+    sh:property [ sh:path backlog:revisedFrom ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "G166: a chain revision must say what the element pointed at before." ] ;
+    sh:property [ sh:path backlog:revisedTo ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "G166: a chain revision must say what the element points at now." ] ;
+    sh:property [ sh:path backlog:hasChainRevisionReason ; sh:minCount 1 ; sh:maxCount 1 ; sh:minLength 8 ;
+        sh:message "G166: a chain revision must state its reason in words (at least eight characters)." ] ;
+    sh:property [ sh:path backlog:revisionServesObjective ; sh:minCount 1 ; sh:maxCount 1 ; sh:class backlog:Objective ;
+        sh:message "G166: a chain revision must name the objective it serves; one that serves none is another mission." ] ;
+    sh:property [ sh:path backlog:chainRevisionDecidedBy ; sh:minCount 1 ; sh:maxCount 1 ; sh:class backlog:Role ;
+        sh:message "G166: a chain revision must name the role that decided it." ] ;
+    sh:property [ sh:path backlog:revisedAtBoundary ; sh:minCount 1 ; sh:maxCount 1 ; sh:class backlog:Iteration ;
+        sh:message "G166: a chain revision must name the box boundary it follows; a chain is re-pointed between boxes." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G166: a chain revision whose before and after are the same element re-points nothing." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE { $this backlog:revisedFrom ?x ; backlog:revisedTo ?x }""" ] .

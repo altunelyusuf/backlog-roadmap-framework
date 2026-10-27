@@ -4329,3 +4329,9 @@ ex:PRV_BAD a backlog:ProfileRevision .
 
 # G165: a lesson that names no safeguard, states no experience and places nothing.
 ex:LSN_BAD a backlog:ShapeLesson .
+
+# G166: an item started on a deliverable no scope requires, and a chain revision with nothing recorded.
+ex:CHN_LIN a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_ChainBothWays .
+ex:CHN_DEL a backlog:ScopeDeliverable .
+ex:CHN_ITEM a backlog:Story ; backlog:belongsToLineage ex:CHN_LIN ; backlog:hasState backlog:InProgress ; backlog:satisfiesDeliverable ex:CHN_DEL .
+ex:CRV_BAD a backlog:ChainRevision .
