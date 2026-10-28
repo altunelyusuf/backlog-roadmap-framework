@@ -28,7 +28,7 @@ expect("profile revision 4 carries its number", g.value(B.Pr_4, B.revisionNumber
 ruling = [r for r in g.subjects(B.hasRulingIdentifier, None) if str(g.value(r, B.hasRulingIdentifier)) == "G166"]
 expect("ruling G166 exists, decides revision 4 and both rule sets, and names two shapes that exist", len(ruling) == 1 and set(g.objects(ruling[0], B.rulingDecides)) == new | {B.Pr_4} and len(set(g.objects(ruling[0], B.enforcedByShape))) == 2 and all((x, RDF.type, SHN.NodeShape) in s for x in g.objects(ruling[0], B.enforcedByShape)))
 sh_txt = open(SH).read()
-expect("ten constraints defer (26 mentions: each of the eight register-level deferrals names the rule set three times, for the deferring adopter, for the lineage that would keep the check on and for the owner of the element judged; the two coarse-epic clauses once each) to the lineage status or the epic state (seven register-level, the entity life-cycle sweep, two coarse-epic)", sh_txt.count("backlog:RS_ObligationsFollowStatus") == 26, "%d" % sh_txt.count("backlog:RS_ObligationsFollowStatus"))
+expect("ten constraints defer (34 mentions: each of the eight register-level deferrals names the rule set four times, for the owner of the element judged and the owner's kind, and for the deferring adopter and a live lineage outside the deferral where the element has no owner; the two coarse-epic clauses once each) to the lineage status or the epic state (seven register-level, the entity life-cycle sweep, two coarse-epic)", sh_txt.count("backlog:RS_ObligationsFollowStatus") == 34, "%d" % sh_txt.count("backlog:RS_ObligationsFollowStatus"))
 H = "@prefix backlog: <http://example.org/backlog#> .\n@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n@prefix owl: <http://www.w3.org/2002/07/owl#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n@prefix x: <http://example.org/g166#> .\n"
 def lineage(status, adopt, revision="Pr_4"):
     rs = ["RS_CancellationAssessed", "RS_ChangeSupportsMission", "RS_ConcurrentLineages", "RS_DecompositionStateAgrees", "RS_FlowPointsRecorded", "RS_ImpedimentNamesWhatItBlocks", "RS_PlanBeforeStart", "RS_RepairReprioritises", "RS_StatusHistoryRecorded"] + (["RS_ObligationsFollowStatus", "RS_ChainBothWays"] if adopt else [])
@@ -76,8 +76,12 @@ STD2 = ('x:M2 a backlog:Mission ; rdfs:label "Second mission"@en ; backlog:hasMi
 v_mix = run(lineage("LS_Opened", True) + STD2)
 v_std_alone = run(lineage("LS_InProgress", False, "Pr_3"))
 expect("a low-status adopter beside a standard lineage does not switch the register-level checks off: the same checks are asked as for the standard lineage alone (corrected after round 2: equality, not a threshold)", set(hits(v_mix, SEVEN)) == set(hits(v_std_alone, SEVEN)) and len(hits(v_std_alone, SEVEN)) >= 6, "%d against %d" % (len(hits(v_mix, SEVEN)), len(hits(v_std_alone, SEVEN))))
+# G174: the deferral judges the lineage that owns the element, so the neighbour decides nothing
 v_mix_sweep = run(lineage("LS_Scoped", True) + ENT + STD2)
-expect("the same beside a standard lineage keeps the entity life-cycle sweep asked", bool(hits(v_mix_sweep, [SWEEP])))
+expect("an entity of the adopter at Scoped is not asked the entity life-cycle sweep beside a standard lineage (G174: the owner decides, not the neighbour)", not hits(v_mix_sweep, [SWEEP]))
+ENT2 = 'x:E2 a backlog:DomainEntity ; rdfs:label "Other thing"@en ; backlog:belongsToLineage x:L2 .\n'
+v_mix_sweep2 = run(lineage("LS_Scoped", True) + ENT2 + STD2)
+expect("an entity of the standard lineage is asked the entity life-cycle sweep beside the adopter at Scoped", bool(hits(v_mix_sweep2, [SWEEP])))
 
 # round 2 correction (G172): the coarse-epic deferrals follow the epic's own lineage
 EPIC = 'x:E a backlog:Epic ; rdfs:label "Big theme"@en ; backlog:belongsToLineage %s ; backlog:memberOfContainer x:Reg ; backlog:hasState backlog:Proposed ; backlog:hasPriorityScore 3.0 .\n'

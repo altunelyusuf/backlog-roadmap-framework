@@ -20,7 +20,7 @@ if sys.argv[1:] == ["--deps"]:
     print(os.path.abspath(__file__)); sys.exit(0)
 HERE = os.path.dirname(os.path.abspath(__file__)); PKG = os.path.dirname(HERE)
 B = "http://example.org/backlog#"; X = "http://example.org/x#"
-spec = importlib.util.spec_from_file_location("pv", os.path.join(HERE, "backlog_pipeline_verify_v1_12_0.py"))
+spec = importlib.util.spec_from_file_location("pv", os.path.join(HERE, "backlog_pipeline_verify_v1_13_0.py"))
 pv = importlib.util.module_from_spec(spec); spec.loader.exec_module(pv)
 tb = sorted(glob.glob(os.path.join(PKG, "01-ontologies", "backlog_tbox_v*.ttl")))[-1]
 def u(n, ns=B): return URIRef(ns + n)

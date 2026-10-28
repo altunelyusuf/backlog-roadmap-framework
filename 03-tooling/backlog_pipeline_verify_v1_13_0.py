@@ -176,11 +176,33 @@ def main():
         idx = argv.index("--lineage")
         lineage_name = argv[idx + 1]
         argv = argv[:idx] + argv[idx + 2:]
-    _txt = "".join(open(f, encoding="utf-8", errors="ignore").read() for f in argv if os.path.exists(f))
-    _v5 = "adoptsRuleSet" in _txt and "RS_DigestTable_v5" in _txt
-    _v4 = (not _v5) and "adoptsRuleSet" in _txt and "RS_DigestTable_v4" in _txt
-    _v3 = (not _v5) and (not _v4) and "adoptsRuleSet" in _txt and "RS_DigestTable_v3" in _txt
-    _v2 = (not _v5) and (not _v4) and (not _v3) and _table_v2_declared(_txt)
+    # v1.13.0 (G174): the digest table is chosen from the rule sets the lineage verified adopted (or, with
+    # no --lineage, that any lineage or a register-level subject adopted), read from the parsed graph. It was chosen by a
+    # word found anywhere in the file, and the register's own vocabulary contains the word, so a file
+    # that merely defines the rule set selected it for every lineage.
+    from rdflib import Graph as _G, URIRef as _U, RDF as _R
+    _g0 = _G()
+    for f in argv:
+        if os.path.exists(f):
+            _g0.parse(f, format="turtle")
+    _B = "http://example.org/backlog#"
+    _adopted = set()
+    _lins = [s0 for s0 in _g0.subjects(_R.type, _U(_B + "Lineage"))]
+    if lineage_name is not None:
+        _sel = [s0 for s0 in _lins if str(s0).rsplit("#", 1)[-1] == lineage_name]
+    else:
+        _sel = list(_lins)
+    for s0 in _sel:
+        for o0 in _g0.objects(s0, _U(_B + "adoptsRuleSet")):
+            _adopted.add(str(o0).rsplit("#", 1)[-1])
+    if not _adopted:
+        for s0, o0 in _g0.subject_objects(_U(_B + "adoptsRuleSet")):
+            if (s0, _R.type, _U(_B + "Lineage")) not in _g0:
+                _adopted.add(str(o0).rsplit("#", 1)[-1])
+    _v5 = "RS_DigestTable_v5" in _adopted
+    _v4 = (not _v5) and "RS_DigestTable_v4" in _adopted
+    _v3 = (not _v5) and (not _v4) and "RS_DigestTable_v3" in _adopted
+    _v2 = (not _v5) and (not _v4) and (not _v3) and "RS_DigestTable_v2" in _adopted
     _table = "v5" if _v5 else "v4" if _v4 else ("v3" if _v3 else ("v2" if _v2 else "v1"))
     STAGE_TYPES = _load_stage_types(_tb, table=_table)
     print("digest table: %s" % {"v5": "v5 (RS_DigestTable_v5 declared: obligation artifacts are not stage content; admitted items are)", "v4": "v4 (RS_DigestTable_v4 declared: planning after the close is not stage content; admitted items are)", "v3": "v3 (RS_DigestTable_v3 declared)", "v2": "v2 (RS_DigestTable_v2 declared)", "v1": "v1"}[_table])
