@@ -11260,6 +11260,12 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.444.0 — 2026-10-28 (MINOR: Lineage 20, box 1 planned; the kick-off is recorded)
+
+- **Lineage 20, kick-off and box 1:** the plan step of the lineage tool recorded the kick-off, activating a roadmap report computed in the same step. Box 1 is an iteration with a sprint goal and a capacity of 8 points; stories AC-S01 (kind of work) and AC-S02 (readiness) were groomed, each with a refinement event that addresses its declared concern and a recorded move to Ready, then planned into the box through a planning ceremony that produced one build task each (data v1.71.0). No work has started; the build comes in the next releases.
+
+**Unplanned work:** this release moves two stories from Proposed to Ready and plans them; it builds nothing, so no item reaches Done and the release moves none of the work the release accounting counts.
+
 ## v1.443.0 — 2026-10-28 (MINOR: Lineage 20, Backlog stage; the chain is closed)
 
 - **Lineage 20, Backlog stage:** seven stories, one per scope deliverable, each with an acceptance criterion in Given/When/Then form, a score, the objectives it pursues and can move, a responsible executor and the entity life-cycle stages it covers; one recorded gap (the end of a ceremony record, deliberately absent); five digests reproduce; status Backlogged (data v1.70.0). Stage 5 of 5: the chain is closed, no work has started.
