@@ -689,3 +689,7 @@ property	chainRevisionDecidedBy	http://example.org/backlog#chainRevisionDecidedB
 property	revisedAtBoundary	http://example.org/backlog#revisedAtBoundary	RelationshipCategory_Association	related, and no more specific category says how; the definition leaves unsaid the finer relation	G166
 class	WorkKind	http://example.org/backlog#WorkKind	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G167
 property	hasWorkKind	http://example.org/backlog#hasWorkKind	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G167
+class	ReadinessCheck	http://example.org/backlog#ReadinessCheck	ClassKind_InformationArtifact	the definition calls it a record, report, file, package or written rule, and the class is a core:Artifact	G168
+class	ReadinessCriterion	http://example.org/backlog#ReadinessCriterion	ClassKind_InformationArtifact	the definition calls it a record, report, file, package or written rule, and the class is a core:Artifact	G168
+property	checksReadinessOf	http://example.org/backlog#checksReadinessOf	RelationshipCategory_Assessment	the definition names the checker and no finer relation	G168
+property	hasReadinessCriterion	http://example.org/backlog#hasReadinessCriterion	RelationshipCategory_Compositional	the check is made of its criteria: a part belongs to one whole	G168

@@ -9,8 +9,8 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog/shacl/1.189.0> ;
-    owl:versionInfo "1.189.0" ;
+    owl:versionIRI <http://example.org/backlog/shacl/1.190.0> ;
+    owl:versionInfo "1.190.0" ;
     owl:priorVersion <http://example.org/backlog-shapes/1.184.0> , <http://example.org/backlog-shapes/1.176.0> , <http://example.org/backlog-shapes/1.175.0> , <http://example.org/backlog-shapes/1.174.0> , <http://example.org/backlog-shapes/1.173.0> , <http://example.org/backlog-shapes/1.172.0> , <http://example.org/backlog-shapes/1.171.0> , <http://example.org/backlog-shapes/1.170.0> , <http://example.org/backlog-shapes/1.169.0> , <http://example.org/backlog-shapes/1.168.0> , <http://example.org/backlog-shapes/1.167.0> , <http://example.org/backlog-shapes/1.166.0> , <http://example.org/backlog-shapes/1.165.0> , <http://example.org/backlog-shapes/1.164.0> , <http://example.org/backlog-shapes/1.159.0> , <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.154.0> , <http://example.org/backlog-shapes/1.153.0> , <http://example.org/backlog-shapes/1.152.0> , <http://example.org/backlog-shapes/1.151.0> , <http://example.org/backlog-shapes/1.150.0> , <http://example.org/backlog-shapes/1.149.0> , <http://example.org/backlog-shapes/1.148.0> , <http://example.org/backlog-shapes/1.147.0> , <http://example.org/backlog-shapes/1.146.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.145.0> ;
@@ -9284,3 +9284,39 @@ backlog:CeremonyKindTwoShape a sh:NodeShape ;
     backlog:fixtureCaseName "CKD_TWO" ;
     sh:property [ sh:path backlog:hasWorkKind ; sh:maxCount 1 ;
         sh:message "G167: this ceremony record names two kinds of work. A record serves one; a record that serves two is two records." ] .
+
+backlog:ReadinessRequiredShape a sh:NodeShape ;
+    sh:targetClass backlog:WorkItem ;
+    sh:severity sh:Violation ;
+    rdfs:label "A ready item has a readiness check (G168)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "RDY_NONE" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G168: this item is Ready in a lineage that adopted RS_ReadinessChecked and no readiness check of it exists. Ready is earned: record the check, with the criteria it was made against." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasState backlog:Ready ; backlog:belongsToLineage ?l .
+            ?l backlog:adoptsRuleSet backlog:RS_ReadinessChecked .
+            FILTER NOT EXISTS { ?c backlog:checksReadinessOf $this }
+        }""" ] .
+
+backlog:ReadinessCheckShape a sh:NodeShape ;
+    sh:targetClass backlog:ReadinessCheck ;
+    sh:severity sh:Violation ;
+    rdfs:label "A readiness check is recorded whole and its item is ready only when every criterion is met (G168)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "RDY_UNMET" ;
+    sh:property [ sh:path backlog:checksReadinessOf ; sh:minCount 1 ;
+        sh:message "G168: a readiness check must name the item it is about." ] ;
+    sh:property [ sh:path backlog:readinessCheckedAt ; sh:minCount 1 ;
+        sh:message "G168: a readiness check must record when it was made." ] ;
+    sh:property [ sh:path backlog:hasReadinessCriterion ; sh:minCount 1 ;
+        sh:message "G168: a readiness check must state at least one criterion; a check against nothing checked nothing." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G168: this readiness check is about an item that is Ready and has a criterion that is not met (or has no answer). An item with an unmet criterion is not ready: record the work that meets it, or move the item back." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:checksReadinessOf ?i . ?i backlog:hasState backlog:Ready .
+            $this backlog:hasReadinessCriterion ?k .
+            FILTER NOT EXISTS { ?k backlog:criterionMet true }
+        }""" ] .

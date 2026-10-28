@@ -11260,10 +11260,16 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.446.0 — 2026-10-28 (MINOR: Lineage 20, box 1 closed; the readiness check, G168)
+
+- **G168, the readiness check:** a recorded check of a work item against stated criteria, each met or unmet; the rule set `RS_ReadinessChecked` (profile revision 6, adaptive profile only) asks an adopting lineage for a check of every Ready item and refuses a Ready item with an unmet criterion, each shape proven by a case of the negative fixture and by `backlog_g168_probe`. The standard and agentic profiles are unchanged (T-Box v1.158.0, shapes v1.190.0, data v1.73.0). The earlier probe `backlog_g166_probe` counts the later rule set (v1.3.0).
+- **Found by running it:** a running lineage cannot adopt a rule set its own box delivers (adoptions are witnessed at the Mission output commit); the adoption made in v1.445.0 is withdrawn, the new rule sets bind lineages opened under later profile revisions, and the finding is recorded in the box's retrospective.
+- **Lineage 20, box 1 closed:** stories AC-S01 and AC-S02 are Done with evidence, review, retrospective (two findings) and the deployment that carries them; the box took 75.8 minutes against the 7 points it carried. Five of seven scope deliverables remain.
+
 ## v1.445.0 — 2026-10-28 (MINOR: Lineage 20, box 1; the kind of work of a ceremony record, G167)
 
 - **G167, the kind of work:** a closed set of eight kinds of work and one link from the refinement event, the planning ceremony, the review ceremony and the retrospective to it; the rule set `RS_CeremonyKinds` (profile revision 5, adaptive profile only) asks an adopting lineage for exactly one kind on each record, with a shape for none and a shape for two, each proven by a case of the negative fixture and by `backlog_g167_probe` (18 checks). The standard and agentic profiles are unchanged (T-Box v1.157.0, shapes v1.189.0, data v1.72.0).
-- **Lineage 20, box 1:** story AC-S01 is Done with its evidence, harness and measurements; the lineage is InProgress and adopted the new rule set while it ran. The earlier probe `backlog_g166_probe` now counts the later rule set in the adaptive profile (v1.2.0).
+- **Lineage 20, box 1:** story AC-S01 is Done with its evidence, harness and measurements; the lineage is InProgress (it adopted the new rule set while it ran; withdrawn in v1.446.0). The earlier probe `backlog_g166_probe` now counts the later rule set in the adaptive profile (v1.2.0).
 
 ## v1.444.0 — 2026-10-28 (MINOR: Lineage 20, box 1 planned; the kick-off is recorded)
 

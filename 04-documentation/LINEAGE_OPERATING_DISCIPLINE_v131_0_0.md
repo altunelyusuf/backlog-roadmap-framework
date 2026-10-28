@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v130.0.0
+# Lineage Operating Discipline — v131.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -4109,9 +4109,23 @@ Related: G166.
 
 **Q1 — what was wrong.** The ceremony records of the framework (the refinement event, the planning ceremony, the review ceremony and the retrospective) said when something happened and what it decided, and never which kind of work it served. A box could not be read by kind: how much of it was preparation, how much control, how much closure.
 
-**Q2 — what was done.** A closed set of eight kinds, `WorkKind` (preparation, planning, execution, monitoring, control, reporting, closure, change management), and one link, `hasWorkKind`, from each of the four ceremony classes to it. The rule set `RS_CeremonyKinds`, introduced in profile revision 5 and included only in the adaptive profile, asks every ceremony record of an adopting lineage for exactly one kind: `CeremonyKindShape` refuses none, `CeremonyKindTwoShape` refuses two. The standard and agentic profiles are unchanged. Lineage 20 adopted the rule set while it ran, and its own records carry their kinds.
+**Q2 — what was done.** A closed set of eight kinds, `WorkKind` (preparation, planning, execution, monitoring, control, reporting, closure, change management), and one link, `hasWorkKind`, from each of the four ceremony classes to it. The rule set `RS_CeremonyKinds`, introduced in profile revision 5 and included only in the adaptive profile, asks every ceremony record of an adopting lineage for exactly one kind: `CeremonyKindShape` refuses none, `CeremonyKindTwoShape` refuses two. The standard and agentic profiles are unchanged. The rule set binds lineages opened under profile revision 5 or later; the lineage that built it carries the kinds on its own records without being bound by it, because a running lineage records its adoptions at the commit of its Mission output and cannot adopt a rule set its own box delivers.
 
 **Q3 — what the record shows.** `backlog_g167_probe` plants small registers: each of the eight kinds is accepted, a record with none and one with two are refused, a lineage that did not adopt the rule set is not judged, and a retrospective is judged through the review it follows. The negative fixture holds one case for each shape.
 
 **What is not claimed.** The daily checkpoint, the readiness check, the planned control, the demo, the deployment plan and the blocked review are the other stories of Lineage 20 and are not built here. The kind is a label the record carries; whether the record really served that kind is the reader's judgement.
 Related: G166.
+
+## G168 — A ready item has a readiness check with every criterion met
+
+*(Lineage 20, story AC-S02, release 1.446.0. The Owner, 2026-10-27: the agile preparation is a recorded check, not a state an item drifts into.)*
+
+**Q1 — what was wrong.** An item became Ready when it carried an acceptance criterion and a refinement event. Whether it was really ready to be planned (sized, free of open dependencies, waiting on no decision) was nowhere recorded, so a Ready item could not be told from one that merely had the two records.
+
+**Q2 — what was done.** A readiness check (`ReadinessCheck`) names the item, the instant and the criteria it was made against (`ReadinessCriterion`, each answered met or unmet). The rule set `RS_ReadinessChecked`, introduced in profile revision 6 and included only in the adaptive profile, asks an adopting lineage for a check of every Ready item (`ReadinessRequiredShape`), and refuses a Ready item whose check has a criterion that is not met, or a check that names no item, no time or no criterion (`ReadinessCheckShape`). An item that is not yet Ready may hold a check with an unmet criterion: that is the check doing its work. Items past Ready are not asked again. The standard and agentic profiles are unchanged.
+
+**Q3 — what the record shows.** `backlog_g168_probe` plants small registers: a Ready item with a fully met check is accepted; one with no check, one with an unmet criterion, one with an unanswered criterion and a bare check are refused; a lineage that did not adopt the rule set is not judged. The negative fixture holds a case for each shape.
+
+**What is not claimed.** The check records that someone answered each criterion; whether the answer is true is the reader's judgement, and the criteria are free text. A check made after the item became Ready is not caught by a shape (the timing needs the earlier register state; the step tool of increment C carries it).
+Related: G166, G167.
+

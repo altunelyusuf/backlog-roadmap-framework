@@ -4341,3 +4341,11 @@ ex:CKD_LIN a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_CeremonyKinds .
 ex:CKD_IT a backlog:Iteration ; backlog:belongsToLineage ex:CKD_LIN .
 ex:CKD_NONE a backlog:SprintPlanningCeremony ; backlog:ceremonyFor ex:CKD_IT .
 ex:CKD_TWO a backlog:SprintPlanningCeremony ; backlog:ceremonyFor ex:CKD_IT ; backlog:hasWorkKind backlog:WorkKind_Planning , backlog:WorkKind_Closure .
+
+# G168: a ready item with no readiness check, a ready item whose check has an unmet criterion, and a bare check.
+ex:RDY_LIN a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_ReadinessChecked .
+ex:RDY_NONE a backlog:Story ; backlog:belongsToLineage ex:RDY_LIN ; backlog:hasState backlog:Ready .
+ex:RDY_UNMET a backlog:Story ; backlog:belongsToLineage ex:RDY_LIN ; backlog:hasState backlog:Ready .
+ex:RDY_UNMET_CHK a backlog:ReadinessCheck ; backlog:checksReadinessOf ex:RDY_UNMET ; backlog:readinessCheckedAt "2026-10-28T00:00:00Z"^^xsd:dateTime ; backlog:hasReadinessCriterion ex:RDY_UNMET_K .
+ex:RDY_UNMET_K a backlog:ReadinessCriterion ; backlog:criterionMet false .
+ex:RDY_BARE a backlog:ReadinessCheck .

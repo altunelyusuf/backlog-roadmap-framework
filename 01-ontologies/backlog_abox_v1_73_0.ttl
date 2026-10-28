@@ -22,8 +22,8 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (ABox: controlled individuals, reference data and the live register)"@en ;
-    owl:versionIRI <http://example.org/backlog/abox/1.72.0> ;
-    owl:versionInfo "1.72.0" ;
+    owl:versionIRI <http://example.org/backlog/abox/1.73.0> ;
+    owl:versionInfo "1.73.0" ;
     owl:priorVersion <http://example.org/backlog/abox/1.62.0> , <http://example.org/backlog/abox/1.61.0> , <http://example.org/backlog/abox/1.60.0> , <http://example.org/backlog/abox/1.59.0> , <http://example.org/backlog/abox/1.58.0> , <http://example.org/backlog/abox/1.57.0> , <http://example.org/backlog/abox/1.53.0> , <http://example.org/backlog/abox/1.52.0> , <http://example.org/backlog/abox/1.51.0> , <http://example.org/backlog/abox/1.50.0> , <http://example.org/backlog/abox/1.49.0> , <http://example.org/backlog/abox/1.48.0> , <http://example.org/backlog/abox/1.47.0> , <http://example.org/backlog/abox/1.46.0> , <http://example.org/backlog/abox/1.45.0> , <http://example.org/backlog/abox/1.40.0> , <http://example.org/backlog/abox/1.39.0> , <http://example.org/backlog/abox/1.38.0> , <http://example.org/backlog/abox/1.37.0> , <http://example.org/backlog/abox/1.36.0> , <http://example.org/backlog/abox/1.35.0> ;
     owl:priorVersion <http://example.org/backlog/abox/1.34.0> , <http://example.org/backlog/abox/1.33.0> , <http://example.org/backlog/abox/1.32.0> , <http://example.org/backlog/abox/1.31.0> , <http://example.org/backlog/abox/1.30.0> , <http://example.org/backlog/abox/1.29.0> , <http://example.org/backlog/abox/1.28.0> , <http://example.org/backlog/abox/1.27.0> , <http://example.org/backlog/abox/1.26.0> , <http://example.org/backlog/abox/1.25.0> , <http://example.org/backlog/abox/1.24.0> , <http://example.org/backlog/abox/1.23.0> , <http://example.org/backlog/abox/1.22.0> , <http://example.org/backlog/abox/1.21.0> , <http://example.org/backlog/abox/1.20.0> , <http://example.org/backlog/abox/1.19.0> , <http://example.org/backlog/abox/1.17.0> , <http://example.org/backlog/abox/1.16.0> , <http://example.org/backlog/abox/1.15.0> , <http://example.org/backlog/abox/1.14.0> , <http://example.org/backlog/abox/1.13.0> , <http://example.org/backlog/abox/1.12.0> , <http://example.org/backlog/abox/1.11.0> , <http://example.org/backlog/abox/1.10.0> , <http://example.org/backlog/abox/1.9.0> , <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
         <http://example.org/backlog-abox/1.2.1> ,
@@ -9513,10 +9513,11 @@ fw:ST_AC_KindOfWork a backlog:Story ; backlog:responsible <http://example.org/fi
     backlog:hasExecutionModality backlog:Mode_Automated ;
     backlog:hasEvidence fw:Ev_AC_KindOfWork .
 fw:AC_AC_Readiness a backlog:AcceptanceCriterion ;
+    backlog:satisfiedByArtifact "03-tooling/backlog_g168_probe_v1_0_0.py" ;
     backlog:hasGherkinText "Given an item made Ready, When it has no readiness check or a check with an unmet criterion, Then the validator refuses it, and an item with a check whose criteria are all met passes." .
 fw:ST_AC_Readiness a backlog:Story ; backlog:responsible <http://example.org/fixture-autofix#DefaultExecutor> ; backlog:coversEntity fw:Entity_AC_CeremonyRecord ; backlog:coversStage backlog:Stage_Creation ; backlog:hasIdentifier "AC-S02" ; backlog:hasTitle "A groomed item has a readiness check that records which criteria of the definition of ready were met" ;
-    backlog:hasState backlog:Ready ;
-    backlog:memberOfContainer fw:Register ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register , fw:It_AC_1 ;
     backlog:belongsToLineage fw:L_AdaptiveCeremonies ;
     backlog:producedByStage fw:Out_Backlog_AdaptiveCeremonies ;
     backlog:pursuesObjective fw:Obj_AC_MissionMet , fw:Obj_AC_Preparation ;
@@ -9526,7 +9527,9 @@ fw:ST_AC_Readiness a backlog:Story ; backlog:responsible <http://example.org/fix
     backlog:hasReach 4.0 ; backlog:hasImpact 3.0 ; backlog:hasConfidence 0.8 ; backlog:hasEffort 3.0 ;
     backlog:hasPriorityScore 3.2 ;
     backlog:hasApplicableConcern backlog:Concern_Data ;
-    backlog:appliesDefinitionOfDone fw:DoD .
+    backlog:appliesDefinitionOfDone fw:DoD ;
+    backlog:startedAt "2026-10-28T02:08:38Z"^^xsd:dateTime ; backlog:finishedAt "2026-10-28T02:15:38Z"^^xsd:dateTime ; backlog:lastAuditedAt "2026-10-28T02:15:38Z"^^xsd:dateTime ;
+    backlog:hasExecutionModality backlog:Mode_Automated ; backlog:hasEvidence fw:Ev_AC_Readiness .
 fw:AC_AC_PlannedControl a backlog:AcceptanceCriterion ;
     backlog:hasGherkinText "Given a box with a planned control activity, When the activity has no kind or its run has no recorded time and result, Then the validator refuses it, and a planned activity with a run passes." .
 fw:ST_AC_PlannedControl a backlog:Story ; backlog:responsible <http://example.org/fixture-autofix#DefaultExecutor> ; backlog:coversEntity fw:Entity_AC_CeremonyRecord ; backlog:coversStage backlog:Stage_Creation ; backlog:hasIdentifier "AC-S03" ; backlog:hasTitle "A planned control, monitoring, reporting or measurement activity is planned work with a kind and a recorded run" ;
@@ -9637,8 +9640,8 @@ fw:Ev_AC_Readiness_Refine a backlog:TransitionEvent ; backlog:transitionedItem f
 
 fw:It_AC_1 a backlog:Iteration ; backlog:hasIdentifier "AC-BOX-1" ; backlog:hasTitle "Box 1 of Lineage 20" ;
     backlog:hasSprintGoal "The two ceremony-record gaps that every later story builds on: a kind of work on each record, and a readiness check on each groomed item." ;
-    backlog:hasState backlog:InProgress ; backlog:iterationStart "2026-10-28T01:03:26Z"^^xsd:dateTime ; backlog:iterationEnd "2026-10-28T23:59:59Z"^^xsd:dateTime ;
-    backlog:hasCapacity 8.0 ; backlog:belongsToLineage fw:L_AdaptiveCeremonies .
+    backlog:hasState backlog:Done ; backlog:iterationStart "2026-10-28T01:03:26Z"^^xsd:dateTime ; backlog:iterationEnd "2026-10-28T02:19:11Z"^^xsd:dateTime ;
+    backlog:hasCapacity 8.0 ; backlog:hasObservedDuration 75.8 ; backlog:hasDurationSource "Wall clock from the start of the box to its review, both taken from the register: 2026-10-28T01:03:26Z to 2026-10-28T02:19:11Z." ; backlog:belongsToLineage fw:L_AdaptiveCeremonies .
 fw:Plan_AC_KindOfWork a backlog:PlanningEvent ; rdfs:label "Story KindOfWork planned into box 1"@en ;
     backlog:plansItem fw:ST_AC_KindOfWork ; backlog:plannedInto fw:It_AC_1 ; backlog:plannedAt "2026-10-28T01:03:27Z"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
     backlog:producesTask fw:T_AC_KindOfWork_Build .
@@ -9649,8 +9652,9 @@ fw:ST_AC_KindOfWork backlog:decomposesInto fw:T_AC_KindOfWork_Build .
 fw:Plan_AC_Readiness a backlog:PlanningEvent ; rdfs:label "Story Readiness planned into box 1"@en ;
     backlog:plansItem fw:ST_AC_Readiness ; backlog:plannedInto fw:It_AC_1 ; backlog:plannedAt "2026-10-28T01:03:27Z"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
     backlog:producesTask fw:T_AC_Readiness_Build .
-fw:T_AC_Readiness_Build a backlog:ExecutionTask ; backlog:hasIdentifier "T-AC-READINESS-BUILD" ; backlog:hasState backlog:Proposed ;
-    backlog:hasTaskType backlog:Task_Implementation ; backlog:responsible <http://example.org/fixture-autofix#DefaultExecutor> ; backlog:memberOfContainer fw:It_AC_1 ; backlog:appliesDefinitionOfDone fw:DoD ; backlog:belongsToLineage fw:L_AdaptiveCeremonies .
+fw:T_AC_Readiness_Build a backlog:ExecutionTask ; backlog:hasIdentifier "T-AC-READINESS-BUILD" ; backlog:hasState backlog:Done ;
+    backlog:hasTaskType backlog:Task_Implementation ; backlog:responsible <http://example.org/fixture-autofix#DefaultExecutor> ; backlog:memberOfContainer fw:It_AC_1 ; backlog:appliesDefinitionOfDone fw:DoD ; backlog:belongsToLineage fw:L_AdaptiveCeremonies ;
+    backlog:startedAt "2026-10-28T02:08:38Z"^^xsd:dateTime ; backlog:finishedAt "2026-10-28T02:15:38Z"^^xsd:dateTime ; backlog:hasEvidence fw:Ev_AC_Readiness ; backlog:hasExecutionModality backlog:Mode_Automated .
 fw:ST_AC_Readiness backlog:decomposesInto fw:T_AC_Readiness_Build .
 fw:Ceremony_AC_Planning1 a backlog:SprintPlanningCeremony ; backlog:hasWorkKind backlog:WorkKind_Planning ; backlog:ceremonyFor fw:It_AC_1 ; backlog:heldAt "2026-10-28T01:03:28Z"^^xsd:dateTime ;
     backlog:includesPlanningEvent fw:Plan_AC_KindOfWork , fw:Plan_AC_Readiness .
@@ -9706,7 +9710,6 @@ fw:Ruling_G167 a backlog:GovernanceRuling ;
     backlog:enforcedByShape backlog:CeremonyKindShape , backlog:CeremonyKindTwoShape ;
     backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v130.0.0, section G167." .
 fw:Ruling_G167 backlog:rulingDecides backlog:Pr_5 , backlog:RS_CeremonyKinds .
-fw:L_AdaptiveCeremonies backlog:adoptsRuleSet backlog:RS_CeremonyKinds .
 
 # ---- Lineage 20, box 1: story AC-S01 done ----
 fw:Ev_AC_KindOfWork a backlog:TestEvidence ; rdfs:label "The kind of work probe: eight kinds accepted, none and two refused"@en ;
@@ -9740,3 +9743,90 @@ fw:Ev_AC_KindOfWork_TaskStart a backlog:TransitionEvent ; backlog:transitionedIt
 fw:Ev_AC_KindOfWork_TaskDone a backlog:TransitionEvent ; backlog:transitionedItem fw:T_AC_KindOfWork_Build ; backlog:viaTransition backlog:T_Complete ; backlog:transitionedAt "2026-10-28T01:38:48Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
 fw:Ev_AC_KindOfWork_TaskDecomposed a backlog:TransitionEvent ; backlog:transitionedItem fw:T_AC_KindOfWork_Build ; backlog:viaTransition backlog:T_Decompose ; backlog:transitionedAt "2026-10-28T01:03:38Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
 fw:Ev_AC_KindOfWork_TaskReady a backlog:TransitionEvent ; backlog:transitionedItem fw:T_AC_KindOfWork_Build ; backlog:viaTransition backlog:T_RefinedToReady ; backlog:transitionedAt "2026-10-28T01:03:39Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+
+#################################################################
+#  v1.446.0 -- G168: the readiness check (story AC-S02 of Lineage 20).
+#################################################################
+
+backlog:Pr_6 a owl:NamedIndividual , backlog:ProfileRevision ; rdfs:label "Profile revision 6"@en ; backlog:revisionNumber 6 ; skos:definition "Release 1.446.0 (G168) adds to the adaptive profile the readiness check of a ready item."@en .
+
+backlog:RS_ReadinessChecked a owl:NamedIndividual , backlog:RuleSet ;
+    backlog:introducedInRevision backlog:Pr_6 ;
+    rdfs:label "A ready item has a readiness check with every criterion met"@en ;
+    skos:definition "Within the adopter: an item that is Ready has a recorded readiness check, and no criterion of that check is unmet."@en .
+
+backlog:Profile_Adaptive backlog:profileIncludes backlog:RS_ReadinessChecked .
+fw:Ruling_G168 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G168" ;
+    rdfs:label "A ready item has a readiness check with every criterion met"@en ;
+    backlog:hasRulingStatement "A ready item has a readiness check with every criterion met" ;
+    backlog:enforcedByShape backlog:ReadinessRequiredShape , backlog:ReadinessCheckShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v131.0.0, section G168." .
+fw:Ruling_G168 backlog:rulingDecides backlog:Pr_6 , backlog:RS_ReadinessChecked .
+
+fw:Chk_AC_Readiness a backlog:ReadinessCheck ; rdfs:label "Readiness of the story for the readiness check"@en ;
+    backlog:checksReadinessOf fw:ST_AC_Readiness ; backlog:readinessCheckedAt "2026-10-28T02:06:38Z"^^xsd:dateTime ;
+    backlog:hasReadinessCriterion fw:K_AC_Readiness_AC , fw:K_AC_Readiness_Size , fw:K_AC_Readiness_Dep , fw:K_AC_Readiness_Input .
+fw:K_AC_Readiness_AC a backlog:ReadinessCriterion ; rdfs:label "The acceptance criterion reads as a test the validator can run"@en ; backlog:criterionMet true .
+fw:K_AC_Readiness_Size a backlog:ReadinessCriterion ; rdfs:label "The effort is estimated and fits the box"@en ; backlog:criterionMet true .
+fw:K_AC_Readiness_Dep a backlog:ReadinessCriterion ; rdfs:label "Nothing it depends on is open"@en ; backlog:criterionMet true .
+fw:K_AC_Readiness_Input a backlog:ReadinessCriterion ; rdfs:label "No decision of the Owner is waited on"@en ; backlog:criterionMet true .
+
+fw:Ev_AC_Readiness a backlog:TestEvidence ; rdfs:label "The readiness probe: ready with a met check accepted, none and unmet refused"@en ;
+    backlog:evidenceVerified true ; backlog:hasTestId "AC-S02" ;
+    backlog:hasTestSpec "03-tooling/backlog_g168_probe_v1_0_0.py" ;
+    backlog:attestsCriterion fw:AC_AC_Readiness ;
+    backlog:hasVerificationMethod "The probe ran against the shipped files and planted registers: a Ready item with a check whose criteria are all met is accepted; one with no check, one with an unmet criterion and one with an unanswered criterion are refused; a bare check is refused; a lineage that did not adopt the rule set is not judged; exit 0." ;
+    backlog:verifiedAt "2026-10-28T02:15:38Z"^^xsd:dateTime ;
+    backlog:verifiedByTool "backlog_g168_probe_v1_0_0.py + backlog_validate_v1_17_0.py" ;
+    backlog:satisfiedByArtifact "03-tooling/backlog_g168_probe_v1_0_0.py" ;
+    backlog:belongsToLineage fw:L_AdaptiveCeremonies .
+fw:H_AC_Readiness a backlog:TestHarness ; rdfs:label "Harness for the readiness check"@en ;
+    backlog:harnessFor fw:ST_AC_Readiness ; backlog:hasHarnessEvidence fw:Ev_AC_Readiness ;
+    backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the probe shows both shapes discriminating both ways, and the negative fixture cases fire." .
+fw:Obs_AC_Preparation_1 a backlog:MetricObservation ; rdfs:label "After the readiness check: missing preparation records"@en ;
+    backlog:observesMetric fw:Metric_AC_Preparation ; backlog:observationFor fw:Obj_AC_Preparation ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-10-28T02:16:38Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Counted: the readiness check is recorded and asked of a ready item of an adopter." .
+fw:Obs_AC_MissionMet_2 a backlog:MetricObservation ; rdfs:label "After the readiness check: scope deliverables not yet carried"@en ;
+    backlog:observesMetric fw:Metric_AC_MissionMet ; backlog:observationFor fw:Obj_AC_MissionMet ;
+    backlog:hasObservedValue 5.0 ; backlog:observedAt "2026-10-28T02:16:38Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Counted: seven deliverables at the baseline, two now satisfied by Done items." .
+fw:Ev_AC_Readiness_TS a backlog:TransitionEvent ; backlog:transitionedItem fw:ST_AC_Readiness ; backlog:viaTransition backlog:T_Start ; backlog:transitionedAt "2026-10-28T02:08:38Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Ev_AC_Readiness_TC a backlog:TransitionEvent ; backlog:transitionedItem fw:ST_AC_Readiness ; backlog:viaTransition backlog:T_Complete ; backlog:transitionedAt "2026-10-28T02:15:38Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Ev_AC_Readiness_TaskDecomposed a backlog:TransitionEvent ; backlog:transitionedItem fw:T_AC_Readiness_Build ; backlog:viaTransition backlog:T_Decompose ; backlog:transitionedAt "2026-10-28T01:03:38Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Ev_AC_Readiness_TaskReady a backlog:TransitionEvent ; backlog:transitionedItem fw:T_AC_Readiness_Build ; backlog:viaTransition backlog:T_RefinedToReady ; backlog:transitionedAt "2026-10-28T01:03:39Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Ev_AC_Readiness_TaskStart a backlog:TransitionEvent ; backlog:transitionedItem fw:T_AC_Readiness_Build ; backlog:viaTransition backlog:T_Start ; backlog:transitionedAt "2026-10-28T02:08:38Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Ev_AC_Readiness_TaskDone a backlog:TransitionEvent ; backlog:transitionedItem fw:T_AC_Readiness_Build ; backlog:viaTransition backlog:T_Complete ; backlog:transitionedAt "2026-10-28T02:15:38Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+
+# ---- Lineage 20, box 1: closed ----
+fw:Review_AC_1 a backlog:SprintReviewCeremony ; backlog:hasWorkKind backlog:WorkKind_Closure ;
+    backlog:ceremonyFor fw:It_AC_1 ; backlog:heldAt "2026-10-28T02:19:11Z"^^xsd:dateTime ; backlog:reviewsCeremony fw:Ceremony_AC_Planning1 ;
+    backlog:closesIteration fw:It_AC_1 ; backlog:closesStory fw:ST_AC_KindOfWork , fw:ST_AC_Readiness .
+fw:Retro_AC_1 a backlog:SprintRetrospective ; backlog:hasWorkKind backlog:WorkKind_Closure ;
+    backlog:followsReview fw:Review_AC_1 ; backlog:heldAt "2026-10-28T02:20:11Z"^^xsd:dateTime ;
+    backlog:producesFinding fw:Find_AC_PlanStepNamespace , fw:Find_AC_CopiedFromArchive , fw:Find_AC_LateAdoption .
+fw:Find_AC_PlanStepNamespace a backlog:RetrospectiveFinding ;
+    backlog:hasFindingScope backlog:Scope_Methodology ;
+    backlog:relatesToWorkItem fw:ST_AC_KindOfWork ;
+    backlog:hasRootCause "The plan step recorded the roadmap report under the report tool's own namespace; the validator treats everything outside the register's namespace as reference data, so the gate's positive fixture inherited the report and was refused. Found by the first release after the plan step, which cost one gate run." ;
+    backlog:hasRemedy "The step tool of increment C mints the report in the register's namespace; until then the report is renamed by hand after the plan step." .
+fw:Find_AC_CopiedFromArchive a backlog:RetrospectiveFinding ;
+    backlog:hasFindingScope backlog:Scope_LineageLocal ;
+    backlog:relatesToWorkItem fw:ST_AC_Readiness ;
+    backlog:hasRootCause "A done-chain written from an archived example used a property the T-Box does not declare, and a label that matched text elsewhere; the link-control probe caught both before the gate, so the cost was one local run." ;
+    backlog:hasRemedy "Run the link-control probe and the validator on the done-chain before the release preflight, not after." .
+fw:Rel_AC_1 a backlog:DeploymentUnit ;
+    backlog:hasIdentifier "AC-REL-1" ; backlog:hasTitle "Shipped from box 1 of Lineage 20" ;
+    backlog:hasState backlog:Done ;
+    backlog:hasDeploymentDate "2026-10-28T02:19:11Z"^^xsd:dateTime ;
+    backlog:deploysFrom fw:It_AC_1 ; backlog:deploysItem fw:ST_AC_KindOfWork , fw:ST_AC_Readiness ;
+    backlog:decidedBy backlog:Builder ; backlog:hasSelectionBasis backlog:Sel_Committed ; backlog:belongsToLineage fw:L_AdaptiveCeremonies .
+fw:ST_AC_KindOfWork backlog:memberOfContainer fw:Rel_AC_1 .
+fw:ST_AC_Readiness backlog:memberOfContainer fw:Rel_AC_1 .
+fw:Find_AC_LateAdoption a backlog:RetrospectiveFinding ;
+    backlog:hasFindingScope backlog:Scope_Methodology ;
+    backlog:relatesToWorkItem fw:ST_AC_KindOfWork ;
+    backlog:hasRootCause "A running lineage cannot adopt a rule set that its own box delivers: the lineage records its adoptions at the commit of its Mission output and the order gate refuses a later one. Lineage 20 adopted the first new rule set one release after it was built and the gate refused the second release; the adoption was withdrawn. The new rule sets therefore bind lineages opened under the later profile revisions, and the lineage that built them is held by their probes and fixture cases instead." ;
+    backlog:hasRemedy "The step tool of increment C records a later adoption as a decided change of the running lineage, witnessed at its own commit, so that a lineage can take up what its boxes deliver." .
