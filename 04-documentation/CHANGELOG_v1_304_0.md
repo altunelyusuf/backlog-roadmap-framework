@@ -11260,6 +11260,12 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.442.0 — 2026-10-28 (MINOR: Lineage 20, Objective stage)
+
+- **Lineage 20, Objective stage:** seven measured objectives, each a counted gap with a baseline reading taken on 2026-10-28 and a checkpoint: the scope deliverables not yet carried (7), ceremony classes with no kind of work (4), the missing preparation (1), planning (3), monitoring (1) and control (2) records, and the rule sets of the standard and agentic profiles, held at 19; the four digests reproduce; status Objectived (data v1.69.0). Stage 4 of 5.
+
+**Unplanned work:** a lineage's Objective stage precedes its Backlog stage, so no work item of this package can exist for it yet; the same stage-release finding as v1.439.0.
+
 ## v1.441.0 — 2026-10-28 (MINOR: Lineage 20, Goal stage)
 
 - **Lineage 20, Goal stage:** seven goals derived from the scope: one facing the mission, one for each of the five areas (kinds of work, preparation, planning, monitoring, control) and one for containment, which the lineage rules ask for before the stage can close; the three digests reproduce; status Goaled (data v1.68.0). Stage 3 of 5.
