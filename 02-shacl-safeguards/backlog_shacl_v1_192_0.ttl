@@ -9,8 +9,8 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog/shacl/1.191.0> ;
-    owl:versionInfo "1.191.0" ;
+    owl:versionIRI <http://example.org/backlog/shacl/1.192.0> ;
+    owl:versionInfo "1.192.0" ;
     owl:priorVersion <http://example.org/backlog-shapes/1.184.0> , <http://example.org/backlog-shapes/1.176.0> , <http://example.org/backlog-shapes/1.175.0> , <http://example.org/backlog-shapes/1.174.0> , <http://example.org/backlog-shapes/1.173.0> , <http://example.org/backlog-shapes/1.172.0> , <http://example.org/backlog-shapes/1.171.0> , <http://example.org/backlog-shapes/1.170.0> , <http://example.org/backlog-shapes/1.169.0> , <http://example.org/backlog-shapes/1.168.0> , <http://example.org/backlog-shapes/1.167.0> , <http://example.org/backlog-shapes/1.166.0> , <http://example.org/backlog-shapes/1.165.0> , <http://example.org/backlog-shapes/1.164.0> , <http://example.org/backlog-shapes/1.159.0> , <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.154.0> , <http://example.org/backlog-shapes/1.153.0> , <http://example.org/backlog-shapes/1.152.0> , <http://example.org/backlog-shapes/1.151.0> , <http://example.org/backlog-shapes/1.150.0> , <http://example.org/backlog-shapes/1.149.0> , <http://example.org/backlog-shapes/1.148.0> , <http://example.org/backlog-shapes/1.147.0> , <http://example.org/backlog-shapes/1.146.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.145.0> ;
@@ -9390,3 +9390,42 @@ backlog:DemoRunShape a sh:NodeShape ;
         sh:message "G169: this demo run shows an item against a criterion that is not one of the item's own acceptance criteria." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE { $this backlog:demonstratesItem ?i ; backlog:demonstratedAgainst ?c . FILTER NOT EXISTS { ?i backlog:hasAcceptanceCriterion ?c } }""" ] .
+
+backlog:DeploymentPlanShape a sh:NodeShape ;
+    sh:targetClass backlog:DeploymentPlan ;
+    sh:severity sh:Violation ;
+    rdfs:label "A deployment plan names its box and unit and is made before the box starts (G170)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "DPL_BAD" ;
+    sh:property [ sh:path backlog:deploymentPlanForBox ; sh:minCount 1 ;
+        sh:message "G170: a deployment plan must name the box it is for." ] ;
+    sh:property [ sh:path backlog:plansDeploymentUnit ; sh:minCount 1 ;
+        sh:message "G170: a deployment plan must name the deployment unit that is to ship." ] ;
+    sh:property [ sh:path backlog:deploymentPlannedAt ; sh:minCount 1 ;
+        sh:message "G170: a deployment plan must record when it was made." ] ;
+    sh:property [ sh:path backlog:hasWorkKind ; sh:minCount 1 ; sh:hasValue backlog:WorkKind_Planning ;
+        sh:message "G170: a deployment plan serves planning." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G170: this deployment plan was made after its box started. A plan made after the start plans nothing: make it before the box starts." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE { $this backlog:deploymentPlanForBox ?b ; backlog:deploymentPlannedAt ?at . ?b backlog:iterationStart ?st . FILTER (?at > ?st) }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G170: this deployment plan names a deployment unit that ships from another box than the plan's own." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE { $this backlog:deploymentPlanForBox ?b ; backlog:plansDeploymentUnit ?u . ?u backlog:deploysFrom ?o . FILTER (?o != ?b) }""" ] .
+
+backlog:ReviewControlsRunShape a sh:NodeShape ;
+    sh:targetClass backlog:SprintReviewCeremony ;
+    sh:severity sh:Violation ;
+    rdfs:label "A review is refused while a planned control of its box has no run (G170)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "REV_NORUN" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G170: this review closes a box in a lineage that adopted RS_ReviewNeedsControlRun while a control activity planned into the box has no recorded run. Run the planned control and record it, then record the review." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:ceremonyFor ?b . ?b backlog:belongsToLineage ?l .
+            ?l backlog:adoptsRuleSet backlog:RS_ReviewNeedsControlRun .
+            ?a backlog:plannedInBox ?b .
+            FILTER NOT EXISTS { ?r backlog:runOfActivity ?a }
+        }""" ] .

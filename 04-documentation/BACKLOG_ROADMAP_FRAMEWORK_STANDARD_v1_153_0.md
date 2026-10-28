@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.152.0
+# Backlog & Roadmap Semantic Framework — Standard v1.153.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -2601,3 +2601,4 @@ A lineage chooses, when it opens, how it will be judged. An `OpeningProfile` nam
 - The kind of work of a ceremony record (G167, release 1.445.0): `WorkKind` is a closed set of eight; the rule set `RS_CeremonyKinds` (profile revision 5, adaptive profile only) asks every refinement event, planning ceremony, review ceremony and retrospective of an adopting lineage for exactly one.
 - The readiness check (G168, release 1.446.0): `ReadinessCheck` and `ReadinessCriterion`; the rule set `RS_ReadinessChecked` (profile revision 6, adaptive profile only) asks an adopting lineage for a check of every Ready item and refuses a Ready item with an unmet criterion.
 - The planned control, the daily checkpoint and the demo run (G169, release 1.447.0): `ControlActivity` with `ControlRun`, `DailyCheckpoint` and `DemoRun`, each recorded whole and each with its kind of work; bound by their own shapes, no rule set.
+- The deployment plan and the blocked review (G170, release 1.448.0): `DeploymentPlan` is made before its box starts and names the one unit that ships from it; the rule set `RS_ReviewNeedsControlRun` (profile revision 7, adaptive profile only) refuses a review while a planned control of the box has no run.

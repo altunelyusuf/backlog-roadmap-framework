@@ -4355,3 +4355,10 @@ ex:CTL_ACT a backlog:ControlActivity ; backlog:hasWorkKind backlog:WorkKind_Exec
 ex:CTL_RUN a backlog:ControlRun .
 ex:CKP_BAD a backlog:DailyCheckpoint .
 ex:DEMO_BAD a backlog:DemoRun .
+
+# G170: a deployment plan with nothing recorded, and a review of a box whose planned control has no run.
+ex:DPL_BAD a backlog:DeploymentPlan .
+ex:REV_LIN a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_ReviewNeedsControlRun .
+ex:REV_BOX a backlog:Iteration ; backlog:belongsToLineage ex:REV_LIN .
+ex:REV_ACT a backlog:ControlActivity ; backlog:hasWorkKind backlog:WorkKind_Control ; backlog:plannedInBox ex:REV_BOX .
+ex:REV_NORUN a backlog:SprintReviewCeremony ; backlog:ceremonyFor ex:REV_BOX .

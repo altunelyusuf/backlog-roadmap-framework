@@ -22,8 +22,8 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (ABox: controlled individuals, reference data and the live register)"@en ;
-    owl:versionIRI <http://example.org/backlog/abox/1.74.0> ;
-    owl:versionInfo "1.74.0" ;
+    owl:versionIRI <http://example.org/backlog/abox/1.75.0> ;
+    owl:versionInfo "1.75.0" ;
     owl:priorVersion <http://example.org/backlog/abox/1.62.0> , <http://example.org/backlog/abox/1.61.0> , <http://example.org/backlog/abox/1.60.0> , <http://example.org/backlog/abox/1.59.0> , <http://example.org/backlog/abox/1.58.0> , <http://example.org/backlog/abox/1.57.0> , <http://example.org/backlog/abox/1.53.0> , <http://example.org/backlog/abox/1.52.0> , <http://example.org/backlog/abox/1.51.0> , <http://example.org/backlog/abox/1.50.0> , <http://example.org/backlog/abox/1.49.0> , <http://example.org/backlog/abox/1.48.0> , <http://example.org/backlog/abox/1.47.0> , <http://example.org/backlog/abox/1.46.0> , <http://example.org/backlog/abox/1.45.0> , <http://example.org/backlog/abox/1.40.0> , <http://example.org/backlog/abox/1.39.0> , <http://example.org/backlog/abox/1.38.0> , <http://example.org/backlog/abox/1.37.0> , <http://example.org/backlog/abox/1.36.0> , <http://example.org/backlog/abox/1.35.0> ;
     owl:priorVersion <http://example.org/backlog/abox/1.34.0> , <http://example.org/backlog/abox/1.33.0> , <http://example.org/backlog/abox/1.32.0> , <http://example.org/backlog/abox/1.31.0> , <http://example.org/backlog/abox/1.30.0> , <http://example.org/backlog/abox/1.29.0> , <http://example.org/backlog/abox/1.28.0> , <http://example.org/backlog/abox/1.27.0> , <http://example.org/backlog/abox/1.26.0> , <http://example.org/backlog/abox/1.25.0> , <http://example.org/backlog/abox/1.24.0> , <http://example.org/backlog/abox/1.23.0> , <http://example.org/backlog/abox/1.22.0> , <http://example.org/backlog/abox/1.21.0> , <http://example.org/backlog/abox/1.20.0> , <http://example.org/backlog/abox/1.19.0> , <http://example.org/backlog/abox/1.17.0> , <http://example.org/backlog/abox/1.16.0> , <http://example.org/backlog/abox/1.15.0> , <http://example.org/backlog/abox/1.14.0> , <http://example.org/backlog/abox/1.13.0> , <http://example.org/backlog/abox/1.12.0> , <http://example.org/backlog/abox/1.11.0> , <http://example.org/backlog/abox/1.10.0> , <http://example.org/backlog/abox/1.9.0> , <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
         <http://example.org/backlog-abox/1.2.1> ,
@@ -9585,10 +9585,11 @@ fw:ST_AC_Demo a backlog:Story ; backlog:responsible <http://example.org/fixture-
     backlog:startedAt "2026-10-28T03:09:17Z"^^xsd:dateTime ; backlog:finishedAt "2026-10-28T03:17:17Z"^^xsd:dateTime ; backlog:lastAuditedAt "2026-10-28T03:17:17Z"^^xsd:dateTime ;
     backlog:hasExecutionModality backlog:Mode_Automated ; backlog:hasEvidence fw:Ev_AC_Demo .
 fw:AC_AC_DeployPlan a backlog:AcceptanceCriterion ;
+    backlog:satisfiedByArtifact "03-tooling/backlog_g170_probe_v1_0_0.py" ;
     backlog:hasGherkinText "Given a box that is planned to ship one deployment unit, When its deployment plan is dated after the box started or names no deployment unit, Then the validator refuses the plan, and a plan made before the start and naming the unit passes." .
 fw:ST_AC_DeployPlan a backlog:Story ; backlog:responsible <http://example.org/fixture-autofix#DefaultExecutor> ; backlog:coversEntity fw:Entity_AC_CeremonyRecord ; backlog:coversStage backlog:Stage_Creation ; backlog:hasIdentifier "AC-S06" ; backlog:hasTitle "A deployment plan names, before the box starts, the deployment unit that is to ship from it" ;
-    backlog:hasState backlog:Proposed ;
-    backlog:memberOfContainer fw:Register ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register , fw:It_AC_3 , fw:Rel_AC_3 ;
     backlog:belongsToLineage fw:L_AdaptiveCeremonies ;
     backlog:producedByStage fw:Out_Backlog_AdaptiveCeremonies ;
     backlog:pursuesObjective fw:Obj_AC_MissionMet , fw:Obj_AC_Planning ;
@@ -9598,12 +9599,15 @@ fw:ST_AC_DeployPlan a backlog:Story ; backlog:responsible <http://example.org/fi
     backlog:hasReach 3.0 ; backlog:hasImpact 3.0 ; backlog:hasConfidence 0.7 ; backlog:hasEffort 3.0 ;
     backlog:hasPriorityScore 2.1 ;
     backlog:hasApplicableConcern backlog:Concern_Data ;
-    backlog:appliesDefinitionOfDone fw:DoD .
+    backlog:appliesDefinitionOfDone fw:DoD ;
+    backlog:startedAt "2026-10-28T03:52:04Z"^^xsd:dateTime ; backlog:finishedAt "2026-10-28T04:06:04Z"^^xsd:dateTime ; backlog:lastAuditedAt "2026-10-28T04:06:04Z"^^xsd:dateTime ;
+    backlog:hasExecutionModality backlog:Mode_Automated ; backlog:hasEvidence fw:Ev_AC_DeployPlan .
 fw:AC_AC_ReviewBlocked a backlog:AcceptanceCriterion ;
+    backlog:satisfiedByArtifact "03-tooling/backlog_g170_probe_v1_0_0.py" ;
     backlog:hasGherkinText "Given a box with a planned control that has no run, When a review of the box is recorded, Then the validator refuses the review, and the same review passes once the run is recorded." .
 fw:ST_AC_ReviewBlocked a backlog:Story ; backlog:responsible <http://example.org/fixture-autofix#DefaultExecutor> ; backlog:coversEntity fw:Entity_AC_CeremonyRecord ; backlog:coversStage backlog:Stage_SuspensionException ; backlog:hasIdentifier "AC-S07" ; backlog:hasTitle "A review is refused while a planned control of the box has no recorded run" ;
-    backlog:hasState backlog:Proposed ;
-    backlog:memberOfContainer fw:Register ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register , fw:It_AC_3 , fw:Rel_AC_3 ;
     backlog:belongsToLineage fw:L_AdaptiveCeremonies ;
     backlog:producedByStage fw:Out_Backlog_AdaptiveCeremonies ;
     backlog:pursuesObjective fw:Obj_AC_MissionMet , fw:Obj_AC_Control ;
@@ -9614,7 +9618,9 @@ fw:ST_AC_ReviewBlocked a backlog:Story ; backlog:responsible <http://example.org
     backlog:hasPriorityScore 3.5 ;
     backlog:hasApplicableConcern backlog:Concern_Architecture ;
     backlog:appliesDefinitionOfDone fw:DoD ;
-    backlog:dependsOn fw:ST_AC_PlannedControl .
+    backlog:dependsOn fw:ST_AC_PlannedControl ;
+    backlog:startedAt "2026-10-28T04:06:04Z"^^xsd:dateTime ; backlog:finishedAt "2026-10-28T04:22:04Z"^^xsd:dateTime ; backlog:lastAuditedAt "2026-10-28T04:22:04Z"^^xsd:dateTime ;
+    backlog:hasExecutionModality backlog:Mode_Automated ; backlog:hasEvidence fw:Ev_AC_ReviewBlocked .
 fw:Gap_AC_Termination a backlog:BlueprintGap ; backlog:gapForEntity fw:Entity_AC_CeremonyRecord ;
     backlog:gapForStage backlog:Stage_Termination ;
     backlog:hasGapReason "Deliberately absent by design: a ceremony record of a box is part of the history of the lineage and is never removed; when the lineage is archived the existing archive step moves the whole record, so no item of this lineage covers the end of a ceremony record." .
@@ -9997,3 +10003,139 @@ fw:Ruling_G169 a backlog:GovernanceRuling ;
     backlog:hasRulingStatement "A box records its planned controls with their runs, its daily checkpoints and its demo runs" ;
     backlog:enforcedByShape backlog:ControlActivityShape , backlog:ControlRunShape , backlog:DailyCheckpointShape , backlog:DemoRunShape ;
     backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v132.0.0, section G169." .
+
+#################################################################
+#  v1.448.0 -- G170: the deployment plan and the review refused while a planned control has no run (stories AC-S06 and AC-S07 of Lineage 20).
+#################################################################
+
+backlog:Pr_7 a owl:NamedIndividual , backlog:ProfileRevision ; rdfs:label "Profile revision 7"@en ; backlog:revisionNumber 7 ; skos:definition "Release 1.448.0 (G170) adds to the adaptive profile the refusal of a review while a planned control of its box has no run."@en .
+
+backlog:RS_ReviewNeedsControlRun a owl:NamedIndividual , backlog:RuleSet ;
+    backlog:introducedInRevision backlog:Pr_7 ;
+    rdfs:label "A review is refused while a planned control of its box has no run"@en ;
+    skos:definition "Within the adopter: a sprint review of a box is refused while a control activity planned into that box has no recorded run."@en .
+
+backlog:Profile_Adaptive backlog:profileIncludes backlog:RS_ReviewNeedsControlRun .
+fw:Ruling_G170 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G170" ;
+    rdfs:label "A box plans its deployment before it starts, and its review waits for its planned controls"@en ;
+    backlog:hasRulingStatement "A box plans its deployment before it starts, and its review waits for its planned controls" ;
+    backlog:enforcedByShape backlog:DeploymentPlanShape , backlog:ReviewControlsRunShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v133.0.0, section G170." .
+fw:Ruling_G170 backlog:rulingDecides backlog:Pr_7 , backlog:RS_ReviewNeedsControlRun .
+
+# ---- Lineage 20, box 3: grooming, planning, build, control, close ----
+fw:Ref_AC_DeployPlan a backlog:RefinementEvent ; backlog:hasWorkKind backlog:WorkKind_Preparation ; backlog:refines fw:ST_AC_DeployPlan ; backlog:refinedAt "2026-10-28T03:44:04Z"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Groomed for box 3: the acceptance criterion reads as a test the validator can run, the effort is 3 points, and the build is new terms or a rule set, a shape, fixture cases and probe checks." ;
+    backlog:refinedBy backlog:Builder ; backlog:addressesConcern backlog:Concern_Data .
+fw:Ev_AC_DeployPlan_Refine a backlog:TransitionEvent ; backlog:transitionedItem fw:ST_AC_DeployPlan ; backlog:viaTransition backlog:T_Refine ; backlog:transitionedAt "2026-10-28T03:44:04Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder ; backlog:hasTransitionNote "Groomed and made ready for box 3." .
+fw:Chk_AC_DeployPlan a backlog:ReadinessCheck ; rdfs:label "Readiness of the story for the deployment plan"@en ;
+    backlog:checksReadinessOf fw:ST_AC_DeployPlan ; backlog:readinessCheckedAt "2026-10-28T03:45:04Z"^^xsd:dateTime ;
+    backlog:hasReadinessCriterion fw:K_AC_DeployPlan_AC , fw:K_AC_DeployPlan_Size , fw:K_AC_DeployPlan_Dep , fw:K_AC_DeployPlan_Input .
+fw:K_AC_DeployPlan_AC a backlog:ReadinessCriterion ; rdfs:label "The acceptance criterion reads as a test the validator can run"@en ; backlog:criterionMet true .
+fw:K_AC_DeployPlan_Size a backlog:ReadinessCriterion ; rdfs:label "The effort is estimated and fits the box"@en ; backlog:criterionMet true .
+fw:K_AC_DeployPlan_Dep a backlog:ReadinessCriterion ; rdfs:label "Nothing it depends on is open"@en ; backlog:criterionMet true .
+fw:K_AC_DeployPlan_Input a backlog:ReadinessCriterion ; rdfs:label "No decision of the Owner is waited on"@en ; backlog:criterionMet true .
+fw:Ref_AC_ReviewBlocked a backlog:RefinementEvent ; backlog:hasWorkKind backlog:WorkKind_Preparation ; backlog:refines fw:ST_AC_ReviewBlocked ; backlog:refinedAt "2026-10-28T03:44:04Z"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Groomed for box 3: the acceptance criterion reads as a test the validator can run, the effort is 3 points, and the build is new terms or a rule set, a shape, fixture cases and probe checks." ;
+    backlog:refinedBy backlog:Builder ; backlog:addressesConcern backlog:Concern_Architecture .
+fw:Ev_AC_ReviewBlocked_Refine a backlog:TransitionEvent ; backlog:transitionedItem fw:ST_AC_ReviewBlocked ; backlog:viaTransition backlog:T_Refine ; backlog:transitionedAt "2026-10-28T03:44:04Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder ; backlog:hasTransitionNote "Groomed and made ready for box 3." .
+fw:Chk_AC_ReviewBlocked a backlog:ReadinessCheck ; rdfs:label "Readiness of the story for the blocked review"@en ;
+    backlog:checksReadinessOf fw:ST_AC_ReviewBlocked ; backlog:readinessCheckedAt "2026-10-28T03:45:04Z"^^xsd:dateTime ;
+    backlog:hasReadinessCriterion fw:K_AC_ReviewBlocked_AC , fw:K_AC_ReviewBlocked_Size , fw:K_AC_ReviewBlocked_Dep , fw:K_AC_ReviewBlocked_Input .
+fw:K_AC_ReviewBlocked_AC a backlog:ReadinessCriterion ; rdfs:label "The acceptance criterion reads as a test the validator can run"@en ; backlog:criterionMet true .
+fw:K_AC_ReviewBlocked_Size a backlog:ReadinessCriterion ; rdfs:label "The effort is estimated and fits the box"@en ; backlog:criterionMet true .
+fw:K_AC_ReviewBlocked_Dep a backlog:ReadinessCriterion ; rdfs:label "Nothing it depends on is open"@en ; backlog:criterionMet true .
+fw:K_AC_ReviewBlocked_Input a backlog:ReadinessCriterion ; rdfs:label "No decision of the Owner is waited on"@en ; backlog:criterionMet true .
+
+fw:Plan_AC_3_Deployment a backlog:DeploymentPlan ; backlog:hasWorkKind backlog:WorkKind_Planning ; backlog:deploymentPlanForBox fw:It_AC_3 ; backlog:plansDeploymentUnit fw:Rel_AC_3 ; backlog:deploymentPlannedAt "2026-10-28T03:49:04Z"^^xsd:dateTime .
+fw:It_AC_3 a backlog:Iteration ; backlog:hasIdentifier "AC-BOX-3" ; backlog:hasTitle "Box 3 of Lineage 20" ;
+    backlog:hasSprintGoal "The last two deliverables: a deployment plan made before the box starts, and a review that waits for the planned controls of its box." ;
+    backlog:hasState backlog:Done ; backlog:iterationStart "2026-10-28T03:51:04Z"^^xsd:dateTime ; backlog:iterationEnd "2026-10-28T04:25:04Z"^^xsd:dateTime ;
+    backlog:hasCapacity 8.0 ; backlog:hasObservedDuration 34.0 ; backlog:hasDurationSource "Wall clock from the start of the box to its review, both taken from the register: 2026-10-28T03:51:04Z to 2026-10-28T04:25:04Z." ; backlog:belongsToLineage fw:L_AdaptiveCeremonies .
+fw:Ceremony_AC_Planning3 a backlog:SprintPlanningCeremony ; backlog:hasWorkKind backlog:WorkKind_Planning ; backlog:ceremonyFor fw:It_AC_3 ; backlog:heldAt "2026-10-28T03:50:04Z"^^xsd:dateTime ;
+    backlog:includesPlanningEvent fw:Plan_AC_DeployPlan , fw:Plan_AC_ReviewBlocked .
+fw:Plan_AC_DeployPlan a backlog:PlanningEvent ; rdfs:label "Story DeployPlan planned into box 3"@en ;
+    backlog:plansItem fw:ST_AC_DeployPlan ; backlog:plannedInto fw:It_AC_3 ; backlog:plannedAt "2026-10-28T03:50:04Z"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ; backlog:producesTask fw:T_AC_DeployPlan_Build .
+fw:T_AC_DeployPlan_Build a backlog:ExecutionTask ; backlog:hasIdentifier "T-AC-DEPLOYPLAN-BUILD" ; backlog:hasState backlog:Done ;
+    backlog:hasTaskType backlog:Task_Implementation ; backlog:responsible <http://example.org/fixture-autofix#DefaultExecutor> ; backlog:memberOfContainer fw:It_AC_3 ; backlog:appliesDefinitionOfDone fw:DoD ; backlog:belongsToLineage fw:L_AdaptiveCeremonies ;
+    backlog:startedAt "2026-10-28T03:52:04Z"^^xsd:dateTime ; backlog:finishedAt "2026-10-28T04:06:04Z"^^xsd:dateTime ; backlog:hasEvidence fw:Ev_AC_DeployPlan ; backlog:hasExecutionModality backlog:Mode_Automated .
+fw:ST_AC_DeployPlan backlog:decomposesInto fw:T_AC_DeployPlan_Build .
+fw:Ev_AC_DeployPlan_TaskDecomposed a backlog:TransitionEvent ; backlog:transitionedItem fw:T_AC_DeployPlan_Build ; backlog:viaTransition backlog:T_Decompose ; backlog:transitionedAt "2026-10-28T03:50:04Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Ev_AC_DeployPlan_TaskReady a backlog:TransitionEvent ; backlog:transitionedItem fw:T_AC_DeployPlan_Build ; backlog:viaTransition backlog:T_RefinedToReady ; backlog:transitionedAt "2026-10-28T03:50:05Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Ev_AC_DeployPlan_TaskStart a backlog:TransitionEvent ; backlog:transitionedItem fw:T_AC_DeployPlan_Build ; backlog:viaTransition backlog:T_Start ; backlog:transitionedAt "2026-10-28T03:52:04Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Ev_AC_DeployPlan_TaskDone a backlog:TransitionEvent ; backlog:transitionedItem fw:T_AC_DeployPlan_Build ; backlog:viaTransition backlog:T_Complete ; backlog:transitionedAt "2026-10-28T04:06:04Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Ev_AC_DeployPlan_TS a backlog:TransitionEvent ; backlog:transitionedItem fw:ST_AC_DeployPlan ; backlog:viaTransition backlog:T_Start ; backlog:transitionedAt "2026-10-28T03:52:04Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Ev_AC_DeployPlan_TC a backlog:TransitionEvent ; backlog:transitionedItem fw:ST_AC_DeployPlan ; backlog:viaTransition backlog:T_Complete ; backlog:transitionedAt "2026-10-28T04:06:04Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Ev_AC_DeployPlan a backlog:TestEvidence ; rdfs:label "The probe for the deployment plan: the complete record accepted, the wrong ones refused"@en ;
+    backlog:evidenceVerified true ; backlog:hasTestId "AC-S06" ;
+    backlog:hasTestSpec "03-tooling/backlog_g170_probe_v1_0_0.py" ;
+    backlog:attestsCriterion fw:AC_AC_DeployPlan ;
+    backlog:hasVerificationMethod "The probe ran against the shipped files and planted registers: the complete record is accepted, the wrongly formed ones are refused, each by name; exit 0." ;
+    backlog:verifiedAt "2026-10-28T04:06:04Z"^^xsd:dateTime ; backlog:verifiedByTool "backlog_g170_probe_v1_0_0.py + backlog_validate_v1_17_0.py" ;
+    backlog:satisfiedByArtifact "03-tooling/backlog_g170_probe_v1_0_0.py" ; backlog:belongsToLineage fw:L_AdaptiveCeremonies .
+fw:H_AC_DeployPlan a backlog:TestHarness ; rdfs:label "Harness for the deployment plan"@en ;
+    backlog:harnessFor fw:ST_AC_DeployPlan ; backlog:hasHarnessEvidence fw:Ev_AC_DeployPlan ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the probe shows the shapes discriminating both ways, and the negative fixture cases fire." .
+fw:Demo_AC_DeployPlan a backlog:DemoRun ; backlog:hasWorkKind backlog:WorkKind_Control ; backlog:demonstratesItem fw:ST_AC_DeployPlan ; backlog:demonstratedAgainst fw:AC_AC_DeployPlan ; backlog:demoAt "2026-10-28T04:06:04Z"^^xsd:dateTime ;
+    backlog:hasDemoShown "The probe's planted registers: the complete record accepted and the wrongly formed ones refused by name." ;
+    backlog:hasDemoResult "The acceptance criterion holds." .
+fw:Plan_AC_ReviewBlocked a backlog:PlanningEvent ; rdfs:label "Story ReviewBlocked planned into box 3"@en ;
+    backlog:plansItem fw:ST_AC_ReviewBlocked ; backlog:plannedInto fw:It_AC_3 ; backlog:plannedAt "2026-10-28T03:50:04Z"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ; backlog:producesTask fw:T_AC_ReviewBlocked_Build .
+fw:T_AC_ReviewBlocked_Build a backlog:ExecutionTask ; backlog:hasIdentifier "T-AC-REVIEWBLOCKED-BUILD" ; backlog:hasState backlog:Done ;
+    backlog:hasTaskType backlog:Task_Implementation ; backlog:responsible <http://example.org/fixture-autofix#DefaultExecutor> ; backlog:memberOfContainer fw:It_AC_3 ; backlog:appliesDefinitionOfDone fw:DoD ; backlog:belongsToLineage fw:L_AdaptiveCeremonies ;
+    backlog:startedAt "2026-10-28T04:06:04Z"^^xsd:dateTime ; backlog:finishedAt "2026-10-28T04:22:04Z"^^xsd:dateTime ; backlog:hasEvidence fw:Ev_AC_ReviewBlocked ; backlog:hasExecutionModality backlog:Mode_Automated .
+fw:ST_AC_ReviewBlocked backlog:decomposesInto fw:T_AC_ReviewBlocked_Build .
+fw:Ev_AC_ReviewBlocked_TaskDecomposed a backlog:TransitionEvent ; backlog:transitionedItem fw:T_AC_ReviewBlocked_Build ; backlog:viaTransition backlog:T_Decompose ; backlog:transitionedAt "2026-10-28T03:50:04Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Ev_AC_ReviewBlocked_TaskReady a backlog:TransitionEvent ; backlog:transitionedItem fw:T_AC_ReviewBlocked_Build ; backlog:viaTransition backlog:T_RefinedToReady ; backlog:transitionedAt "2026-10-28T03:50:05Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Ev_AC_ReviewBlocked_TaskStart a backlog:TransitionEvent ; backlog:transitionedItem fw:T_AC_ReviewBlocked_Build ; backlog:viaTransition backlog:T_Start ; backlog:transitionedAt "2026-10-28T04:06:04Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Ev_AC_ReviewBlocked_TaskDone a backlog:TransitionEvent ; backlog:transitionedItem fw:T_AC_ReviewBlocked_Build ; backlog:viaTransition backlog:T_Complete ; backlog:transitionedAt "2026-10-28T04:22:04Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Ev_AC_ReviewBlocked_TS a backlog:TransitionEvent ; backlog:transitionedItem fw:ST_AC_ReviewBlocked ; backlog:viaTransition backlog:T_Start ; backlog:transitionedAt "2026-10-28T04:06:04Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Ev_AC_ReviewBlocked_TC a backlog:TransitionEvent ; backlog:transitionedItem fw:ST_AC_ReviewBlocked ; backlog:viaTransition backlog:T_Complete ; backlog:transitionedAt "2026-10-28T04:22:04Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Ev_AC_ReviewBlocked a backlog:TestEvidence ; rdfs:label "The probe for the blocked review: the complete record accepted, the wrong ones refused"@en ;
+    backlog:evidenceVerified true ; backlog:hasTestId "AC-S07" ;
+    backlog:hasTestSpec "03-tooling/backlog_g170_probe_v1_0_0.py" ;
+    backlog:attestsCriterion fw:AC_AC_ReviewBlocked ;
+    backlog:hasVerificationMethod "The probe ran against the shipped files and planted registers: the complete record is accepted, the wrongly formed ones are refused, each by name; exit 0." ;
+    backlog:verifiedAt "2026-10-28T04:22:04Z"^^xsd:dateTime ; backlog:verifiedByTool "backlog_g170_probe_v1_0_0.py + backlog_validate_v1_17_0.py" ;
+    backlog:satisfiedByArtifact "03-tooling/backlog_g170_probe_v1_0_0.py" ; backlog:belongsToLineage fw:L_AdaptiveCeremonies .
+fw:H_AC_ReviewBlocked a backlog:TestHarness ; rdfs:label "Harness for the blocked review"@en ;
+    backlog:harnessFor fw:ST_AC_ReviewBlocked ; backlog:hasHarnessEvidence fw:Ev_AC_ReviewBlocked ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the probe shows the shapes discriminating both ways, and the negative fixture cases fire." .
+fw:Demo_AC_ReviewBlocked a backlog:DemoRun ; backlog:hasWorkKind backlog:WorkKind_Control ; backlog:demonstratesItem fw:ST_AC_ReviewBlocked ; backlog:demonstratedAgainst fw:AC_AC_ReviewBlocked ; backlog:demoAt "2026-10-28T04:22:04Z"^^xsd:dateTime ;
+    backlog:hasDemoShown "The probe's planted registers: the complete record accepted and the wrongly formed ones refused by name." ;
+    backlog:hasDemoResult "The acceptance criterion holds." .
+
+fw:Act_AC_3_Validate a backlog:ControlActivity ; rdfs:label "Validate the register and run the probes before the box is reviewed"@en ;
+    backlog:hasWorkKind backlog:WorkKind_Control ; backlog:plannedInBox fw:It_AC_3 .
+fw:Run_AC_3_Validate a backlog:ControlRun ; backlog:runOfActivity fw:Act_AC_3_Validate ; backlog:ranAt "2026-10-28T04:24:04Z"^^xsd:dateTime ;
+    backlog:hasRunResult "The validator reported no violation on the register, the pipeline check reproduced all five stage digests, and the four probes of the lineage passed." .
+fw:Ckp_AC_3_1 a backlog:DailyCheckpoint ; backlog:hasWorkKind backlog:WorkKind_Monitoring ; backlog:checkpointOfBox fw:It_AC_3 ; backlog:checkpointAt "2026-10-28T04:04:04Z"^^xsd:dateTime ;
+    backlog:openItemCount 0 ; backlog:inProgressItemCount 1 ; backlog:doneItemCount 1 .
+fw:Review_AC_3 a backlog:SprintReviewCeremony ; backlog:hasWorkKind backlog:WorkKind_Closure ;
+    backlog:ceremonyFor fw:It_AC_3 ; backlog:heldAt "2026-10-28T04:25:04Z"^^xsd:dateTime ; backlog:reviewsCeremony fw:Ceremony_AC_Planning3 ;
+    backlog:closesIteration fw:It_AC_3 ; backlog:closesStory fw:ST_AC_DeployPlan , fw:ST_AC_ReviewBlocked .
+fw:Retro_AC_3 a backlog:SprintRetrospective ; backlog:hasWorkKind backlog:WorkKind_Closure ;
+    backlog:followsReview fw:Review_AC_3 ; backlog:heldAt "2026-10-28T04:26:04Z"^^xsd:dateTime ; backlog:producesFinding fw:Find_AC_NumberOrigin .
+fw:Find_AC_NumberOrigin a backlog:RetrospectiveFinding ;
+    backlog:hasFindingScope backlog:Scope_LineageLocal ;
+    backlog:relatesToWorkItem fw:ST_AC_Checkpoint ;
+    backlog:hasRootCause "Three counts added for the daily checkpoint did not say where they came from, and the gate refused the box 2 release after its full run; the check that finds this exists as a tool and was not in the set run before the release." ;
+    backlog:hasRemedy "The number-origin check is run before every release with the others." .
+fw:Rel_AC_3 a backlog:DeploymentUnit ;
+    backlog:hasIdentifier "AC-REL-3" ; backlog:hasTitle "Shipped from box 3 of Lineage 20" ;
+    backlog:hasState backlog:Done ; backlog:hasDeploymentDate "2026-10-28T04:25:04Z"^^xsd:dateTime ;
+    backlog:deploysFrom fw:It_AC_3 ; backlog:deploysItem fw:ST_AC_DeployPlan , fw:ST_AC_ReviewBlocked ;
+    backlog:decidedBy backlog:Builder ; backlog:hasSelectionBasis backlog:Sel_Committed ; backlog:belongsToLineage fw:L_AdaptiveCeremonies .
+fw:Obs_AC_Planning_2 a backlog:MetricObservation ; rdfs:label "After box 3: planning records missing"@en ;
+    backlog:observesMetric fw:Metric_AC_Planning ; backlog:observationFor fw:Obj_AC_Planning ; backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-10-28T04:24:04Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Counted: the deployment plan, the planned control activity and its run all exist." .
+fw:Obs_AC_Control_2 a backlog:MetricObservation ; rdfs:label "After box 3: control records and rules missing"@en ;
+    backlog:observesMetric fw:Metric_AC_Control ; backlog:observationFor fw:Obj_AC_Control ; backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-10-28T04:24:04Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Counted: the demo run exists and the review is refused while a planned control has no run." .
+fw:Obs_AC_MissionMet_4 a backlog:MetricObservation ; rdfs:label "After box 3: scope deliverables not yet carried"@en ;
+    backlog:observesMetric fw:Metric_AC_MissionMet ; backlog:observationFor fw:Obj_AC_MissionMet ; backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-10-28T04:24:04Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Counted: seven deliverables at the baseline, all seven satisfied by Done items." .
+fw:Obs_AC_Contained_1 a backlog:MetricObservation ; rdfs:label "After box 3: rule sets included by the standard and agentic profiles"@en ;
+    backlog:observesMetric fw:Metric_AC_Contained ; backlog:observationFor fw:Obj_AC_Contained ; backlog:hasObservedValue 19.0 ; backlog:observedAt "2026-10-28T04:24:04Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Counted in the data: nine in the standard profile and ten in the agentic profile, as at the baseline." .

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_g166_probe v1.3.0 -- re-runnable proof of the adaptive profile (G166).
+"""backlog_g166_probe v1.4.0 -- re-runnable proof of the adaptive profile (G166).
 
   Checks the shipped files (the profile beside the standard and agentic ones, the two rule sets, the revision, the ruling), then plants small registers
   and expects the validator to defer, ask, refuse and accept exactly as the rule sets say. Exit 0 when every expectation holds."""
@@ -22,7 +22,7 @@ std, agt, ada = inc(B.Profile_Standard), inc(B.Profile_Agentic), inc(B.Profile_A
 new = {B.RS_ObligationsFollowStatus, B.RS_ChainBothWays}
 expect("the standard profile is as it was: nine rule sets", len(std) == 9, "%d" % len(std))
 expect("the agentic profile is as it was: ten rule sets, the standard nine and agent accountability", len(agt) == 10 and std < agt)
-expect("the adaptive profile is the standard nine plus the two new rule sets and the later ceremony-kind rule set, and no more", ada == std | new | {B.RS_CeremonyKinds, B.RS_ReadinessChecked}, "%d" % len(ada))
+expect("the adaptive profile is the standard nine plus the two new rule sets and the later ceremony-kind rule set, and no more", ada == std | new | {B.RS_CeremonyKinds, B.RS_ReadinessChecked, B.RS_ReviewNeedsControlRun}, "%d" % len(ada))
 expect("the two new rule sets belong to profile revision 4 and the older ones do not", all(g.value(r, B.introducedInRevision) == B.Pr_4 for r in new) and not any(g.value(r, B.introducedInRevision) == B.Pr_4 for r in std))
 expect("profile revision 4 carries its number", g.value(B.Pr_4, B.revisionNumber) is not None and int(g.value(B.Pr_4, B.revisionNumber)) == 4)
 ruling = [r for r in g.subjects(B.hasRulingIdentifier, None) if str(g.value(r, B.hasRulingIdentifier)) == "G166"]

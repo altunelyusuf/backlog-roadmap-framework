@@ -11260,6 +11260,11 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.448.0 — 2026-10-28 (MINOR: Lineage 20, box 3; the deployment plan and the blocked review, G170)
+
+- **G170:** a deployment plan made before its box starts, naming the one unit that is to ship; and the rule set `RS_ReviewNeedsControlRun` (profile revision 7, adaptive profile only), which refuses a review of a box while a planned control of the box has no run, built as blocked (the Owner has not yet decided blocked or warned). Two shapes, each proven by a case of the negative fixture and by `backlog_g170_probe` (13 checks). The earlier probe `backlog_g166_probe` counts the later rule set (v1.4.0) (T-Box v1.160.0, shapes v1.192.0, data v1.75.0).
+- **Lineage 20, box 3 closed:** stories AC-S06 and AC-S07 are Done with a deployment plan made before the box started, a planned control and its run, a checkpoint, a demo run of each, a review, a retrospective (one finding) and the deployment that carries them. All seven scope deliverables are satisfied and every objective reads at its target.
+
 ## v1.447.0 — 2026-10-28 (MINOR: Lineage 20, box 2; the planned control, the daily checkpoint and the demo run, G169)
 
 - **G169:** a planned control activity with its run, a daily checkpoint and a demo run, each recorded whole and each serving one kind of work; four shapes, each proven by a case of the negative fixture and by `backlog_g169_probe` (18 checks). A checkpoint's blocker reuses the existing impediment rule. No rule set and no profile revision: the classes are new (T-Box v1.159.0, shapes v1.191.0, data v1.74.0).

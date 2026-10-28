@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v132.0.0
+# Lineage Operating Discipline — v133.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -4141,4 +4141,17 @@ Related: G166, G167.
 
 **What is not claimed.** That a planned control has a run before the box is reviewed is the next story (AC-S07) and is not asked here: a planned control may stand without a run. The deployment plan (AC-S06) is also not built here. The counts of a checkpoint are what the recorder wrote; they are not compared with the register.
 Related: G166, G167, G168.
+
+## G170 — A box plans its deployment before it starts, and its review waits for its planned controls
+
+*(Lineage 20, stories AC-S06 and AC-S07, release 1.448.0. The Owner, 2026-10-27: the review waits for the controls the box planned. Whether the review is blocked or only warned was left open; it is built as blocked, which is the recommendation.)*
+
+**Q1 — what was wrong.** A box named what would ship from it only when it closed, and a review could be recorded while a control the box had planned was never carried out, so a box could be closed as reviewed without the check it had promised.
+
+**Q2 — what was done.** A deployment plan (`DeploymentPlan`) names the box, the one deployment unit that is to ship from it and the instant it was made, serves planning, and is refused if it was made after the box started or if its unit ships from another box (`DeploymentPlanShape`). The rule set `RS_ReviewNeedsControlRun`, introduced in profile revision 7 and included only in the adaptive profile, refuses a sprint review of a box while a control activity planned into that box has no recorded run (`ReviewControlsRunShape`, severity violation): the review is accepted once the run is recorded. The standard and agentic profiles are unchanged. The plan binds whoever uses the class; the review rule binds adopting lineages.
+
+**Q3 — what the record shows.** `backlog_g170_probe` plants small registers: a plan made before the start is accepted, one made after, one with nothing recorded and one whose unit ships from another box are refused; a review of a box with an unrun planned control is refused and the same review is accepted once the run is recorded; a lineage that did not adopt the rule set is not judged and a box with no planned control is not refused. The negative fixture holds a case for each shape.
+
+**What is not claimed.** Whether a review is blocked or only warned when a planned control was not performed is the Owner's decision; it is built as blocked and a change to a warning is one severity. Lineage 20 itself is not bound by the review rule, because a running lineage cannot adopt a rule set its own box delivers (G167); its box 3 review carries the run all the same. A plan made on the day of the box start but after the start instant is refused; the plan is not checked against the units that actually shipped.
+Related: G166, G167, G168, G169.
 

@@ -703,3 +703,6 @@ property	checkpointOfBox	http://example.org/backlog#checkpointOfBox	Relationship
 property	namesBlocker	http://example.org/backlog#namesBlocker	RelationshipCategory_Association	related, and no more specific category says how; the definition leaves unsaid the finer relation	G169
 property	demonstratesItem	http://example.org/backlog#demonstratesItem	RelationshipCategory_Assessment	the definition names the checker and no finer relation	G169
 property	demonstratedAgainst	http://example.org/backlog#demonstratedAgainst	RelationshipCategory_Assessment	the definition names the checker and no finer relation	G169
+class	DeploymentPlan	http://example.org/backlog#DeploymentPlan	ClassKind_InformationArtifact	the definition calls it a record, report, file, package or written rule, and the class is a core:Artifact	G170
+property	deploymentPlanForBox	http://example.org/backlog#deploymentPlanForBox	RelationshipCategory_Intentional	the plan is made for a box in order that something ships from it: it states an intent	G170
+property	plansDeploymentUnit	http://example.org/backlog#plansDeploymentUnit	RelationshipCategory_Intentional	the plan states the unit that is intended to ship	G170
