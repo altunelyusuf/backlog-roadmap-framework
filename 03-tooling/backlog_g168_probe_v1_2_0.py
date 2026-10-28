@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_g168_probe v1.1.0 -- re-runnable proof of the readiness check (G168).
+"""backlog_g168_probe v1.2.0 -- re-runnable proof of the readiness check (G168).
 
   Checks the shipped files (the rule set in the adaptive profile only, the revision, the ruling), then plants small registers and expects the validator to
   refuse a Ready item with no check, a Ready item with an unmet criterion and a bare check, and to accept a Ready item whose criteria are all met.
@@ -52,5 +52,10 @@ LATE = 'x:S backlog:startedAt "2026-10-28T00:30:00Z"^^xsd:dateTime .\n'
 LATE_MSG = "made at or before its start"
 expect("a started item whose only check was made after its start is refused", bool(hits(run(reg(True, "InProgress", CHK % "true" + LATE.replace("00:30", "00:00").replace("2026-10-28T00:00:00Z", "2026-10-27T23:00:00Z"))), LATE_MSG)))
 expect("a started item whose check was made before its start is accepted", not hits(run(reg(True, "InProgress", CHK % "true" + LATE)), LATE_MSG) and not hits(run(reg(True, "InProgress", CHK % "true" + LATE)), "no readiness check of it"))
+
+# round 2 corrections (G172)
+expect("an item in progress whose check has an unmet criterion is refused: skipping Ready does not skip the check", bool(hits(run(reg(True, "InProgress", CHK % "false" + LATE)), UNMET)))
+expect("an item in progress with no start time is refused: the timing of its check cannot be judged", bool(hits(run(reg(True, "InProgress", CHK % "true")), "records no start time")))
+expect("an item in progress with a start time is not refused for it", not hits(run(reg(True, "InProgress", CHK % "true" + LATE)), "records no start time"))
 print("VERDICT   :", "PASS" if not bad else "FAIL"); [print("  ", b) for b in bad]
 sys.exit(1 if bad else 0)

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_lineage_steps v1.0.0 -- the plan step, the cancelling exit and the adaptation route as one recorded step each (G162).
+"""backlog_lineage_steps v1.1.0 -- the plan step, the cancelling exit and the adaptation route as one recorded step each (G162).
 
   plan    REGISTER --lineage IRI --container IRI [--by Owner|Builder]
           Computes the roadmap report (backlog_roadmap_report --emit) and records the kick-off of the lineage that activates it, stamped from
@@ -123,7 +123,7 @@ def adapt(a):
         if (x, B.hasState, None) not in g: sys.exit("the item is not in the register (record it first): " + str(x))
     pts = 0.0
     for x in adm:
-        for pr in (B.hasEffortEstimate,):
+        for pr in (B.hasEffortEstimate, B.hasEffort):
             v = g.value(x, pr)
             if v is not None:
                 try: pts += float(v)

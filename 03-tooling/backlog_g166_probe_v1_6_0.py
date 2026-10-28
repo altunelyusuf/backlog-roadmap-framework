@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_g166_probe v1.5.0 -- re-runnable proof of the adaptive profile (G166).
+"""backlog_g166_probe v1.6.0 -- re-runnable proof of the adaptive profile (G166).
 
   Checks the shipped files (the profile beside the standard and agentic ones, the two rule sets, the revision, the ruling), then plants small registers
   and expects the validator to defer, ask, refuse and accept exactly as the rule sets say. Exit 0 when every expectation holds."""
@@ -74,8 +74,16 @@ expect("a revision whose before and after are the same re-points nothing", bool(
 STD2 = ('x:M2 a backlog:Mission ; rdfs:label "Second mission"@en ; backlog:hasMissionStatement "Another thing." ; backlog:missionFor x:Reg ; backlog:hasMissionOrigin backlog:Origin_Stated ; backlog:missionSource "Probe." ; backlog:hasMissionOutcome backlog:Out_InFlight ; backlog:decidedBy backlog:Owner .\n'
         'x:L2 a backlog:Lineage ; rdfs:label "Standard lineage"@en ; backlog:lineageForMission x:M2 ; backlog:lineageOrdinal 2 ; backlog:lineageArchived false ; backlog:hasLineageStatus backlog:LS_InProgress ; backlog:openedUnderRevision backlog:Pr_3 ; backlog:adoptionRecordedAtOpen true ; backlog:adoptsRuleSet backlog:RS_ConcurrentLineages .\n')
 v_mix = run(lineage("LS_Opened", True) + STD2)
-expect("a low-status adopter beside a standard lineage does not switch the register-level checks off: all seven are asked", len(hits(v_mix, SEVEN)) >= 6, "%d of 7" % len(hits(v_mix, SEVEN)))
+v_std_alone = run(lineage("LS_InProgress", False, "Pr_3"))
+expect("a low-status adopter beside a standard lineage does not switch the register-level checks off: the same checks are asked as for the standard lineage alone (corrected after round 2: equality, not a threshold)", set(hits(v_mix, SEVEN)) == set(hits(v_std_alone, SEVEN)) and len(hits(v_std_alone, SEVEN)) >= 6, "%d against %d" % (len(hits(v_mix, SEVEN)), len(hits(v_std_alone, SEVEN))))
 v_mix_sweep = run(lineage("LS_Scoped", True) + ENT + STD2)
 expect("the same beside a standard lineage keeps the entity life-cycle sweep asked", bool(hits(v_mix_sweep, [SWEEP])))
+
+# round 2 correction (G172): the coarse-epic deferrals follow the epic's own lineage
+EPIC = 'x:E a backlog:Epic ; rdfs:label "Big theme"@en ; backlog:belongsToLineage %s ; backlog:memberOfContainer x:Reg ; backlog:hasState backlog:Proposed ; backlog:hasPriorityScore 3.0 .\n'
+EPICM = ["this epic decomposes into nothing", "holds scored Epics that decompose into nothing"]
+expect("a standard lineage's coarse epic is asked for its decomposition when the lineage stands alone", all(hits(run(lineage("LS_InProgress", False, "Pr_3") + EPIC % "x:L"), [m]) for m in EPICM))
+expect("an adopter's own coarse epic is deferred", not hits(run(lineage("LS_InProgress", True) + EPIC % "x:L"), EPICM))
+expect("a standard lineage's coarse epic is still asked when an adopter stands beside it", all(hits(run(lineage("LS_Opened", True) + STD2 + EPIC % "x:L2"), [m]) for m in EPICM))
 print("VERDICT   :", "PASS" if not bad else "FAIL"); [print("  ", b) for b in bad]
 sys.exit(1 if bad else 0)

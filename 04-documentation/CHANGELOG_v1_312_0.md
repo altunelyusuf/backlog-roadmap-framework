@@ -11260,6 +11260,11 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.450.0 — 2026-10-28 (MINOR: Lineage 20, box 5; the second post-mortem, G172)
+
+- **G172:** round 2 of the independent post-mortem (three new reviewers on the files of v1.449.0) found that the two coarse-epic deferrals still followed any adopter in the register, that an item that skipped Ready could run on an unmet readiness check, that timing rules passed silently when the time they judge was missing, a threshold where the profile probe needed a baseline, and a change-request step that counted 0 points for items carrying 8. Corrected: shapes v1.194.0; probes of G166 (a baseline equality and three coarse-epic cases), G168 and G170; `backlog_lineage_steps` v1.1.0. Two statements of G171 are corrected in G172 (the one-lineage rule does not refuse a register holding a standard lineage and an adopter; "unchanged" is qualified).
+- **Lineage 20, box 5:** the stories are Done with each step recorded in its own action, the findings of round 2 are recorded, and the mission is not recorded as accomplished.
+
 ## v1.449.0 — 2026-10-28 (MINOR: Lineage 20, box 4; the corrections found by the independent post-mortem, G171)
 
 - **G171:** the independent post-mortem (three reviewers given only the published files of v1.448.0 and written criteria) found that a deferral of the adaptive profile switched off the standard checks of another lineage in the same register (seven refusals fell to none). Each of the eight deferrals now holds only while no live lineage is outside the deferral. Five ceremony rules were also tightened: the readiness check is asked of every started or Done item and made at or before its start, only the latest check of an item is judged, a demo shows a finished item, a control run follows its box start, and a review follows the run. Probes of G166, G168, G169 and G170 carry the new cases (the G166 cases fail on the v1.448.0 files); four negative fixture cases; the unasserted probe case is asserted.

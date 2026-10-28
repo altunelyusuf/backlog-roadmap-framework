@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_lineage_steps_probe v1.0.0 -- re-runnable proof of the plan, assess, close and adapt recorders (G162).
+"""backlog_lineage_steps_probe v1.1.0 -- re-runnable proof of the plan, assess, close and adapt recorders (G162).
 
   Drives each recorder on a scratch register and the real validator after it: the refusals, the records written, and no G162 violation left.
   The plan recorder runs the real roadmap report on a scratch register. Exit 0 when every expectation holds.
@@ -28,7 +28,7 @@ x:O a backlog:Objective ; backlog:belongsToLineage x:L .
 x:O2 a backlog:Objective .
 x:A a backlog:Story ; backlog:belongsToLineage x:L ; backlog:hasState backlog:Done ; backlog:pursuesObjective x:O ; backlog:memberOfContainer x:It .
 x:B a backlog:Story ; backlog:belongsToLineage x:L ; backlog:hasState backlog:Ready ; backlog:memberOfContainer x:It .
-x:E a backlog:Enabler ; backlog:belongsToLineage x:L ; backlog:hasState backlog:Ready .
+x:E a backlog:Enabler ; backlog:belongsToLineage x:L ; backlog:hasState backlog:Ready ; backlog:hasEffort 3.0 .
 x:It a backlog:Iteration .
 """
 def run(*a):
@@ -44,6 +44,7 @@ with tempfile.TemporaryDirectory() as d:
     expect("adapt refuses an empty Owner decision", c != 0)
     c, o = run("adapt", reg, "--lineage", N + "L", "--scope", N + "Sc", "--objective", N + "O", "--rationale", "gap found", "--owner-decision", "standing rule of 2026-10-25", "--admit", N + "E")
     expect("adapt records the request, the computed impact and the scope change", c == 0 and "supportsObjective" in open(reg).read() and "admitsItem" in open(reg).read())
+    expect("the impact statement counts the effort the admitted item carries (round 2 correction: it read 0 points for an item with an effort)", "3 point(s)" in o)
     expect("no G162 violation after the adaptation", [v for v in viol(reg) if "names no objective" in v] == [])
     c, o = run("close", reg, "--lineage", N + "L", "--mark", "cancelled", "--rationale", "stopped")
     expect("close is refused without an as-is assessment", c != 0)
