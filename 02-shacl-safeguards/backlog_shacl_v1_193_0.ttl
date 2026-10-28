@@ -9,8 +9,8 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog/shacl/1.192.0> ;
-    owl:versionInfo "1.192.0" ;
+    owl:versionIRI <http://example.org/backlog/shacl/1.193.0> ;
+    owl:versionInfo "1.193.0" ;
     owl:priorVersion <http://example.org/backlog-shapes/1.184.0> , <http://example.org/backlog-shapes/1.176.0> , <http://example.org/backlog-shapes/1.175.0> , <http://example.org/backlog-shapes/1.174.0> , <http://example.org/backlog-shapes/1.173.0> , <http://example.org/backlog-shapes/1.172.0> , <http://example.org/backlog-shapes/1.171.0> , <http://example.org/backlog-shapes/1.170.0> , <http://example.org/backlog-shapes/1.169.0> , <http://example.org/backlog-shapes/1.168.0> , <http://example.org/backlog-shapes/1.167.0> , <http://example.org/backlog-shapes/1.166.0> , <http://example.org/backlog-shapes/1.165.0> , <http://example.org/backlog-shapes/1.164.0> , <http://example.org/backlog-shapes/1.159.0> , <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.154.0> , <http://example.org/backlog-shapes/1.153.0> , <http://example.org/backlog-shapes/1.152.0> , <http://example.org/backlog-shapes/1.151.0> , <http://example.org/backlog-shapes/1.150.0> , <http://example.org/backlog-shapes/1.149.0> , <http://example.org/backlog-shapes/1.148.0> , <http://example.org/backlog-shapes/1.147.0> , <http://example.org/backlog-shapes/1.146.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.145.0> ;
@@ -238,7 +238,7 @@ backlog:ContainerShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             # G166: an adopter of RS_ObligationsFollowStatus owes this from lineage status rank 5 (the status that creates the element), not before.
-            FILTER NOT EXISTS { ?dl a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_ObligationsFollowStatus ; backlog:hasLineageStatus ?dls . ?dls backlog:statusRank ?drk . FILTER (?drk < 5) FILTER NOT EXISTS { ?dl backlog:lineageArchived true } }
+            FILTER NOT EXISTS { ?dl a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_ObligationsFollowStatus ; backlog:hasLineageStatus ?dls . ?dls backlog:statusRank ?drk . FILTER (?drk < 5) FILTER NOT EXISTS { ?dl backlog:lineageArchived true } FILTER NOT EXISTS { ?ol a backlog:Lineage . FILTER NOT EXISTS { ?ol backlog:lineageArchived true } FILTER NOT EXISTS { ?ol backlog:adoptsRuleSet backlog:RS_ObligationsFollowStatus ; backlog:hasLineageStatus ?ols . ?ols backlog:statusRank ?ork . FILTER (?ork < 5) } } }
             FILTER NOT EXISTS { ?m backlog:memberOfContainer $this }
             FILTER NOT EXISTS { ?dz backlog:dissolvesContainer $this }  # v1.136.0: a dissolved container has ended
             FILTER (
@@ -866,7 +866,7 @@ backlog:BlueprintSweepShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             # G166: an adopter of RS_ObligationsFollowStatus owes this from lineage status rank 5 (the Backlog stage creates the items that cover an entity), not before.
-            FILTER NOT EXISTS { ?dl a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_ObligationsFollowStatus ; backlog:hasLineageStatus ?dls . ?dls backlog:statusRank ?drk . FILTER (?drk < 5) FILTER NOT EXISTS { ?dl backlog:lineageArchived true } }
+            FILTER NOT EXISTS { ?dl a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_ObligationsFollowStatus ; backlog:hasLineageStatus ?dls . ?dls backlog:statusRank ?drk . FILTER (?drk < 5) FILTER NOT EXISTS { ?dl backlog:lineageArchived true } FILTER NOT EXISTS { ?ol a backlog:Lineage . FILTER NOT EXISTS { ?ol backlog:lineageArchived true } FILTER NOT EXISTS { ?ol backlog:adoptsRuleSet backlog:RS_ObligationsFollowStatus ; backlog:hasLineageStatus ?ols . ?ols backlog:statusRank ?ork . FILTER (?ork < 5) } } }
             ?stage a backlog:EntityLifecycleStage .
             FILTER NOT EXISTS { ?i backlog:coversEntity $this ; backlog:coversStage ?stage }
             FILTER NOT EXISTS { ?g backlog:gapForEntity $this ; backlog:gapForStage ?stage }
@@ -1373,7 +1373,7 @@ backlog:ArtifactCommitmentShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             # G166: an adopter of RS_ObligationsFollowStatus owes this from lineage status rank 5 (the status that creates the element), not before.
-            FILTER NOT EXISTS { ?dl a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_ObligationsFollowStatus ; backlog:hasLineageStatus ?dls . ?dls backlog:statusRank ?drk . FILTER (?drk < 5) FILTER NOT EXISTS { ?dl backlog:lineageArchived true } }
+            FILTER NOT EXISTS { ?dl a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_ObligationsFollowStatus ; backlog:hasLineageStatus ?dls . ?dls backlog:statusRank ?drk . FILTER (?drk < 5) FILTER NOT EXISTS { ?dl backlog:lineageArchived true } FILTER NOT EXISTS { ?ol a backlog:Lineage . FILTER NOT EXISTS { ?ol backlog:lineageArchived true } FILTER NOT EXISTS { ?ol backlog:adoptsRuleSet backlog:RS_ObligationsFollowStatus ; backlog:hasLineageStatus ?ols . ?ols backlog:statusRank ?ork . FILTER (?ork < 5) } } }
             FILTER NOT EXISTS { $this backlog:hasCommitment ?c . ?c backlog:commitsToGoal ?g }
             # v1.116.0 (G92): the thing this rule asks the register root for may have RETIRED with the
             # lineage that created it -- the root's commitment, its scope statement and its stage
@@ -1741,7 +1741,7 @@ backlog:MissionShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             # G166: an adopter of RS_ObligationsFollowStatus owes this from lineage status rank 3 (the status that creates the element), not before.
-            FILTER NOT EXISTS { ?dl a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_ObligationsFollowStatus ; backlog:hasLineageStatus ?dls . ?dls backlog:statusRank ?drk . FILTER (?drk < 3) FILTER NOT EXISTS { ?dl backlog:lineageArchived true } }
+            FILTER NOT EXISTS { ?dl a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_ObligationsFollowStatus ; backlog:hasLineageStatus ?dls . ?dls backlog:statusRank ?drk . FILTER (?drk < 3) FILTER NOT EXISTS { ?dl backlog:lineageArchived true } FILTER NOT EXISTS { ?ol a backlog:Lineage . FILTER NOT EXISTS { ?ol backlog:lineageArchived true } FILTER NOT EXISTS { ?ol backlog:adoptsRuleSet backlog:RS_ObligationsFollowStatus ; backlog:hasLineageStatus ?ols . ?ols backlog:statusRank ?ork . FILTER (?ork < 3) } } }
             FILTER NOT EXISTS { ?g backlog:contributesToMission $this }
             FILTER NOT EXISTS { $this backlog:belongsToLineage ?l . ?l backlog:lineageArchived true }
             # v1.110.0: the mission of an archived lineage stays live as the pointer; its closure report went with the work
@@ -2464,7 +2464,7 @@ backlog:LineageCompletenessShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             # G166: an adopter of RS_ObligationsFollowStatus owes this from lineage status rank 4 (the status that creates the element), not before.
-            FILTER NOT EXISTS { ?dl a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_ObligationsFollowStatus ; backlog:hasLineageStatus ?dls . ?dls backlog:statusRank ?drk . FILTER (?drk < 4) FILTER NOT EXISTS { ?dl backlog:lineageArchived true } }
+            FILTER NOT EXISTS { ?dl a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_ObligationsFollowStatus ; backlog:hasLineageStatus ?dls . ?dls backlog:statusRank ?drk . FILTER (?drk < 4) FILTER NOT EXISTS { ?dl backlog:lineageArchived true } FILTER NOT EXISTS { ?ol a backlog:Lineage . FILTER NOT EXISTS { ?ol backlog:lineageArchived true } FILTER NOT EXISTS { ?ol backlog:adoptsRuleSet backlog:RS_ObligationsFollowStatus ; backlog:hasLineageStatus ?ols . ?ols backlog:statusRank ?ork . FILTER (?ork < 4) } } }
             FILTER NOT EXISTS { ?o a backlog:Objective }
             FILTER EXISTS { ?anyLineage a backlog:Lineage . FILTER NOT EXISTS { ?anyLineage backlog:lineageArchived true } }
         }""" ] ;
@@ -2474,7 +2474,7 @@ backlog:LineageCompletenessShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             # G166: an adopter of RS_ObligationsFollowStatus owes this from lineage status rank 2 (the status that creates the element), not before.
-            FILTER NOT EXISTS { ?dl a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_ObligationsFollowStatus ; backlog:hasLineageStatus ?dls . ?dls backlog:statusRank ?drk . FILTER (?drk < 2) FILTER NOT EXISTS { ?dl backlog:lineageArchived true } }
+            FILTER NOT EXISTS { ?dl a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_ObligationsFollowStatus ; backlog:hasLineageStatus ?dls . ?dls backlog:statusRank ?drk . FILTER (?drk < 2) FILTER NOT EXISTS { ?dl backlog:lineageArchived true } FILTER NOT EXISTS { ?ol a backlog:Lineage . FILTER NOT EXISTS { ?ol backlog:lineageArchived true } FILTER NOT EXISTS { ?ol backlog:adoptsRuleSet backlog:RS_ObligationsFollowStatus ; backlog:hasLineageStatus ?ols . ?ols backlog:statusRank ?ork . FILTER (?ork < 2) } } }
             FILTER NOT EXISTS { ?s a backlog:ScopeStatement }
             FILTER EXISTS { ?anyLineage a backlog:Lineage . FILTER NOT EXISTS { ?anyLineage backlog:lineageArchived true } }
         }""" ] ;
@@ -2484,7 +2484,7 @@ backlog:LineageCompletenessShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             # G166: an adopter of RS_ObligationsFollowStatus owes this from lineage status rank 2 (the status that creates the element), not before.
-            FILTER NOT EXISTS { ?dl a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_ObligationsFollowStatus ; backlog:hasLineageStatus ?dls . ?dls backlog:statusRank ?drk . FILTER (?drk < 2) FILTER NOT EXISTS { ?dl backlog:lineageArchived true } }
+            FILTER NOT EXISTS { ?dl a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_ObligationsFollowStatus ; backlog:hasLineageStatus ?dls . ?dls backlog:statusRank ?drk . FILTER (?drk < 2) FILTER NOT EXISTS { ?dl backlog:lineageArchived true } FILTER NOT EXISTS { ?ol a backlog:Lineage . FILTER NOT EXISTS { ?ol backlog:lineageArchived true } FILTER NOT EXISTS { ?ol backlog:adoptsRuleSet backlog:RS_ObligationsFollowStatus ; backlog:hasLineageStatus ?ols . ?ols backlog:statusRank ?ork . FILTER (?ork < 2) } } }
             FILTER NOT EXISTS { ?b a backlog:Blueprint ; backlog:blueprintFor $this }
             FILTER EXISTS { ?anyLineage a backlog:Lineage . FILTER NOT EXISTS { ?anyLineage backlog:lineageArchived true } }
         }""" ] ;
@@ -2494,7 +2494,7 @@ backlog:LineageCompletenessShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             # G166: an adopter of RS_ObligationsFollowStatus owes this from lineage status rank 5 (the status that creates the element), not before.
-            FILTER NOT EXISTS { ?dl a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_ObligationsFollowStatus ; backlog:hasLineageStatus ?dls . ?dls backlog:statusRank ?drk . FILTER (?drk < 5) FILTER NOT EXISTS { ?dl backlog:lineageArchived true } }
+            FILTER NOT EXISTS { ?dl a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_ObligationsFollowStatus ; backlog:hasLineageStatus ?dls . ?dls backlog:statusRank ?drk . FILTER (?drk < 5) FILTER NOT EXISTS { ?dl backlog:lineageArchived true } FILTER NOT EXISTS { ?ol a backlog:Lineage . FILTER NOT EXISTS { ?ol backlog:lineageArchived true } FILTER NOT EXISTS { ?ol backlog:adoptsRuleSet backlog:RS_ObligationsFollowStatus ; backlog:hasLineageStatus ?ols . ?ols backlog:statusRank ?ork . FILTER (?ork < 5) } } }
             FILTER NOT EXISTS { $this backlog:appliesDefinitionOfDone ?d }
         }""" ] ;
 
@@ -9292,12 +9292,22 @@ backlog:ReadinessRequiredShape a sh:NodeShape ;
     backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
     backlog:fixtureCaseName "RDY_NONE" ;
     sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "G168: this item is Ready in a lineage that adopted RS_ReadinessChecked and no readiness check of it exists. Ready is earned: record the check, with the criteria it was made against." ;
+        sh:message "G168: this item is Ready or already started in a lineage that adopted RS_ReadinessChecked and no readiness check of it exists. Ready is earned: record the check, with the criteria it was made against." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
-            $this backlog:hasState backlog:Ready ; backlog:belongsToLineage ?l .
+            $this backlog:hasState ?st ; backlog:belongsToLineage ?l .
+            FILTER (?st IN (backlog:Ready, backlog:InProgress, backlog:Done))
             ?l backlog:adoptsRuleSet backlog:RS_ReadinessChecked .
             FILTER NOT EXISTS { ?c backlog:checksReadinessOf $this }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G168 (corrected after the post-mortem): this item was started in a lineage that adopted RS_ReadinessChecked and no readiness check of it was made at or before its start. Ready is earned before the work begins, not after." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:startedAt ?s ; backlog:belongsToLineage ?l .
+            ?l backlog:adoptsRuleSet backlog:RS_ReadinessChecked .
+            ?c0 backlog:checksReadinessOf $this .
+            FILTER NOT EXISTS { ?c backlog:checksReadinessOf $this ; backlog:readinessCheckedAt ?t . FILTER (?t <= ?s) }
         }""" ] .
 
 backlog:ReadinessCheckShape a sh:NodeShape ;
@@ -9316,9 +9326,11 @@ backlog:ReadinessCheckShape a sh:NodeShape ;
         sh:message "G168: this readiness check is about an item that is Ready and has a criterion that is not met (or has no answer). An item with an unmet criterion is not ready: record the work that meets it, or move the item back." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
-            $this backlog:checksReadinessOf ?i . ?i backlog:hasState backlog:Ready .
+            $this backlog:checksReadinessOf ?i ; backlog:readinessCheckedAt ?t1 . ?i backlog:hasState backlog:Ready .
             $this backlog:hasReadinessCriterion ?k .
             FILTER NOT EXISTS { ?k backlog:criterionMet true }
+            # corrected after the post-mortem: only the latest check of the item is judged; an earlier unmet check that a later check supersedes does not block it
+            FILTER NOT EXISTS { ?c2 backlog:checksReadinessOf ?i ; backlog:readinessCheckedAt ?t2 . FILTER (?t2 > ?t1) }
         }""" ] .
 
 backlog:ControlActivityShape a sh:NodeShape ;
@@ -9347,7 +9359,11 @@ backlog:ControlRunShape a sh:NodeShape ;
     sh:property [ sh:path backlog:ranAt ; sh:minCount 1 ;
         sh:message "G169: a control run must record when it ran." ] ;
     sh:property [ sh:path backlog:hasRunResult ; sh:minCount 1 ;
-        sh:message "G169: a control run must record its result; a run with no result is a claim that something was checked." ] .
+        sh:message "G169: a control run must record its result; a run with no result is a claim that something was checked." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G169 (corrected after the post-mortem): this control run took place before the box it controls started." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE { $this backlog:runOfActivity ?a ; backlog:ranAt ?at . ?a backlog:plannedInBox ?b . ?b backlog:iterationStart ?st . FILTER (?at < ?st) }""" ] .
 
 backlog:DailyCheckpointShape a sh:NodeShape ;
     sh:targetClass backlog:DailyCheckpoint ;
@@ -9389,7 +9405,11 @@ backlog:DemoRunShape a sh:NodeShape ;
     sh:sparql [ a sh:SPARQLConstraint ;
         sh:message "G169: this demo run shows an item against a criterion that is not one of the item's own acceptance criteria." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
-        sh:select """SELECT $this WHERE { $this backlog:demonstratesItem ?i ; backlog:demonstratedAgainst ?c . FILTER NOT EXISTS { ?i backlog:hasAcceptanceCriterion ?c } }""" ] .
+        sh:select """SELECT $this WHERE { $this backlog:demonstratesItem ?i ; backlog:demonstratedAgainst ?c . FILTER NOT EXISTS { ?i backlog:hasAcceptanceCriterion ?c } }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G169 (corrected after the post-mortem): this demo run shows an item that is not finished. A demo shows a finished item against its criterion." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE { $this backlog:demonstratesItem ?i . FILTER NOT EXISTS { ?i backlog:hasState backlog:Done } }""" ] .
 
 backlog:DeploymentPlanShape a sh:NodeShape ;
     sh:targetClass backlog:DeploymentPlan ;
@@ -9428,4 +9448,13 @@ backlog:ReviewControlsRunShape a sh:NodeShape ;
             ?l backlog:adoptsRuleSet backlog:RS_ReviewNeedsControlRun .
             ?a backlog:plannedInBox ?b .
             FILTER NOT EXISTS { ?r backlog:runOfActivity ?a }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G170 (corrected after the post-mortem): this review was held before the planned control of its box ran. The review waits for the run: a run recorded after the review does not count." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:ceremonyFor ?b ; backlog:heldAt ?h . ?b backlog:belongsToLineage ?l .
+            ?l backlog:adoptsRuleSet backlog:RS_ReviewNeedsControlRun .
+            ?a backlog:plannedInBox ?b . ?r0 backlog:runOfActivity ?a .
+            FILTER NOT EXISTS { ?r backlog:runOfActivity ?a ; backlog:ranAt ?t . FILTER (?t <= ?h) }
         }""" ] .

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_g166_probe v1.4.0 -- re-runnable proof of the adaptive profile (G166).
+"""backlog_g166_probe v1.5.0 -- re-runnable proof of the adaptive profile (G166).
 
   Checks the shipped files (the profile beside the standard and agentic ones, the two rule sets, the revision, the ruling), then plants small registers
   and expects the validator to defer, ask, refuse and accept exactly as the rule sets say. Exit 0 when every expectation holds."""
@@ -28,7 +28,7 @@ expect("profile revision 4 carries its number", g.value(B.Pr_4, B.revisionNumber
 ruling = [r for r in g.subjects(B.hasRulingIdentifier, None) if str(g.value(r, B.hasRulingIdentifier)) == "G166"]
 expect("ruling G166 exists, decides revision 4 and both rule sets, and names two shapes that exist", len(ruling) == 1 and set(g.objects(ruling[0], B.rulingDecides)) == new | {B.Pr_4} and len(set(g.objects(ruling[0], B.enforcedByShape))) == 2 and all((x, RDF.type, SHN.NodeShape) in s for x in g.objects(ruling[0], B.enforcedByShape)))
 sh_txt = open(SH).read()
-expect("ten constraints defer to the lineage status or the epic state (seven register-level, the entity life-cycle sweep, two coarse-epic)", sh_txt.count("backlog:RS_ObligationsFollowStatus") == 10, "%d" % sh_txt.count("backlog:RS_ObligationsFollowStatus"))
+expect("ten constraints defer (eighteen mentions: each of the eight register-level deferrals names the rule set twice, once for the deferring adopter and once for the lineage that would keep the check on) to the lineage status or the epic state (seven register-level, the entity life-cycle sweep, two coarse-epic)", sh_txt.count("backlog:RS_ObligationsFollowStatus") == 18, "%d" % sh_txt.count("backlog:RS_ObligationsFollowStatus"))
 H = "@prefix backlog: <http://example.org/backlog#> .\n@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n@prefix owl: <http://www.w3.org/2002/07/owl#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n@prefix x: <http://example.org/g166#> .\n"
 def lineage(status, adopt, revision="Pr_4"):
     rs = ["RS_CancellationAssessed", "RS_ChangeSupportsMission", "RS_ConcurrentLineages", "RS_DecompositionStateAgrees", "RS_FlowPointsRecorded", "RS_ImpedimentNamesWhatItBlocks", "RS_PlanBeforeStart", "RS_RepairReprioritises", "RS_StatusHistoryRecorded"] + (["RS_ObligationsFollowStatus", "RS_ChainBothWays"] if adopt else [])
@@ -69,5 +69,13 @@ for m in ("name the one chain element", "what the element pointed at before", "w
     expect("a bare chain revision is refused: " + m, bool(hits(v_rev, [m])))
 v_same = run(H + "x:R a backlog:ChainRevision ; backlog:revisedFrom x:A ; backlog:revisedTo x:A .\n")
 expect("a revision whose before and after are the same re-points nothing", bool(hits(v_same, ["re-points nothing"])))
+
+# post-mortem correction (G171): a deferral by one lineage must not switch the checks off for another lineage of the register
+STD2 = ('x:M2 a backlog:Mission ; rdfs:label "Second mission"@en ; backlog:hasMissionStatement "Another thing." ; backlog:missionFor x:Reg ; backlog:hasMissionOrigin backlog:Origin_Stated ; backlog:missionSource "Probe." ; backlog:hasMissionOutcome backlog:Out_InFlight ; backlog:decidedBy backlog:Owner .\n'
+        'x:L2 a backlog:Lineage ; rdfs:label "Standard lineage"@en ; backlog:lineageForMission x:M2 ; backlog:lineageOrdinal 2 ; backlog:lineageArchived false ; backlog:hasLineageStatus backlog:LS_InProgress ; backlog:openedUnderRevision backlog:Pr_3 ; backlog:adoptionRecordedAtOpen true ; backlog:adoptsRuleSet backlog:RS_ConcurrentLineages .\n')
+v_mix = run(lineage("LS_Opened", True) + STD2)
+expect("a low-status adopter beside a standard lineage does not switch the register-level checks off: all seven are asked", len(hits(v_mix, SEVEN)) >= 6, "%d of 7" % len(hits(v_mix, SEVEN)))
+v_mix_sweep = run(lineage("LS_Scoped", True) + ENT + STD2)
+expect("the same beside a standard lineage keeps the entity life-cycle sweep asked", bool(hits(v_mix_sweep, [SWEEP])))
 print("VERDICT   :", "PASS" if not bad else "FAIL"); [print("  ", b) for b in bad]
 sys.exit(1 if bad else 0)

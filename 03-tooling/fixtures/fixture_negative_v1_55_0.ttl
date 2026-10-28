@@ -4362,3 +4362,13 @@ ex:REV_LIN a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_ReviewNeedsContr
 ex:REV_BOX a backlog:Iteration ; backlog:belongsToLineage ex:REV_LIN .
 ex:REV_ACT a backlog:ControlActivity ; backlog:hasWorkKind backlog:WorkKind_Control ; backlog:plannedInBox ex:REV_BOX .
 ex:REV_NORUN a backlog:SprintReviewCeremony ; backlog:ceremonyFor ex:REV_BOX .
+
+# G171 (post-mortem corrections): a started item with no readiness check, a demo of an item that is not finished, a control run before its box started, a review held before the run.
+ex:RDY_SKIP a backlog:Story ; backlog:belongsToLineage ex:RDY_LIN ; backlog:hasState backlog:InProgress .
+ex:DEMO_UNFIN_S a backlog:Story ; backlog:hasState backlog:Proposed ; backlog:hasAcceptanceCriterion ex:DEMO_UNFIN_C .
+ex:DEMO_UNFIN_C a backlog:AcceptanceCriterion .
+ex:DEMO_UNFIN a backlog:DemoRun ; backlog:hasWorkKind backlog:WorkKind_Control ; backlog:demonstratesItem ex:DEMO_UNFIN_S ; backlog:demonstratedAgainst ex:DEMO_UNFIN_C ; backlog:demoAt "2026-10-28T10:00:00Z"^^xsd:dateTime ; backlog:hasDemoShown "x" ; backlog:hasDemoResult "x" .
+ex:EARLY_BOX a backlog:Iteration ; backlog:belongsToLineage ex:REV_LIN ; backlog:iterationStart "2026-10-28T12:00:00Z"^^xsd:dateTime .
+ex:EARLY_ACT a backlog:ControlActivity ; backlog:hasWorkKind backlog:WorkKind_Control ; backlog:plannedInBox ex:EARLY_BOX .
+ex:CTLRUN_EARLY a backlog:ControlRun ; backlog:runOfActivity ex:EARLY_ACT ; backlog:ranAt "2026-10-28T09:00:00Z"^^xsd:dateTime ; backlog:hasRunResult "x" .
+ex:REV_EARLY a backlog:SprintReviewCeremony ; backlog:ceremonyFor ex:EARLY_BOX ; backlog:heldAt "2026-10-28T08:00:00Z"^^xsd:dateTime .

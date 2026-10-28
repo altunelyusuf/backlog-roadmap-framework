@@ -22,8 +22,8 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (ABox: controlled individuals, reference data and the live register)"@en ;
-    owl:versionIRI <http://example.org/backlog/abox/1.75.0> ;
-    owl:versionInfo "1.75.0" ;
+    owl:versionIRI <http://example.org/backlog/abox/1.76.0> ;
+    owl:versionInfo "1.76.0" ;
     owl:priorVersion <http://example.org/backlog/abox/1.62.0> , <http://example.org/backlog/abox/1.61.0> , <http://example.org/backlog/abox/1.60.0> , <http://example.org/backlog/abox/1.59.0> , <http://example.org/backlog/abox/1.58.0> , <http://example.org/backlog/abox/1.57.0> , <http://example.org/backlog/abox/1.53.0> , <http://example.org/backlog/abox/1.52.0> , <http://example.org/backlog/abox/1.51.0> , <http://example.org/backlog/abox/1.50.0> , <http://example.org/backlog/abox/1.49.0> , <http://example.org/backlog/abox/1.48.0> , <http://example.org/backlog/abox/1.47.0> , <http://example.org/backlog/abox/1.46.0> , <http://example.org/backlog/abox/1.45.0> , <http://example.org/backlog/abox/1.40.0> , <http://example.org/backlog/abox/1.39.0> , <http://example.org/backlog/abox/1.38.0> , <http://example.org/backlog/abox/1.37.0> , <http://example.org/backlog/abox/1.36.0> , <http://example.org/backlog/abox/1.35.0> ;
     owl:priorVersion <http://example.org/backlog/abox/1.34.0> , <http://example.org/backlog/abox/1.33.0> , <http://example.org/backlog/abox/1.32.0> , <http://example.org/backlog/abox/1.31.0> , <http://example.org/backlog/abox/1.30.0> , <http://example.org/backlog/abox/1.29.0> , <http://example.org/backlog/abox/1.28.0> , <http://example.org/backlog/abox/1.27.0> , <http://example.org/backlog/abox/1.26.0> , <http://example.org/backlog/abox/1.25.0> , <http://example.org/backlog/abox/1.24.0> , <http://example.org/backlog/abox/1.23.0> , <http://example.org/backlog/abox/1.22.0> , <http://example.org/backlog/abox/1.21.0> , <http://example.org/backlog/abox/1.20.0> , <http://example.org/backlog/abox/1.19.0> , <http://example.org/backlog/abox/1.17.0> , <http://example.org/backlog/abox/1.16.0> , <http://example.org/backlog/abox/1.15.0> , <http://example.org/backlog/abox/1.14.0> , <http://example.org/backlog/abox/1.13.0> , <http://example.org/backlog/abox/1.12.0> , <http://example.org/backlog/abox/1.11.0> , <http://example.org/backlog/abox/1.10.0> , <http://example.org/backlog/abox/1.9.0> , <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
         <http://example.org/backlog-abox/1.2.1> ,
@@ -10021,7 +10021,7 @@ fw:Ruling_G170 a backlog:GovernanceRuling ;
     rdfs:label "A box plans its deployment before it starts, and its review waits for its planned controls"@en ;
     backlog:hasRulingStatement "A box plans its deployment before it starts, and its review waits for its planned controls" ;
     backlog:enforcedByShape backlog:DeploymentPlanShape , backlog:ReviewControlsRunShape ;
-    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v133.0.0, section G170." .
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v134.0.0, section G170." .
 fw:Ruling_G170 backlog:rulingDecides backlog:Pr_7 , backlog:RS_ReviewNeedsControlRun .
 
 # ---- Lineage 20, box 3: grooming, planning, build, control, close ----
@@ -10139,3 +10139,177 @@ fw:Obs_AC_MissionMet_4 a backlog:MetricObservation ; rdfs:label "After box 3: sc
 fw:Obs_AC_Contained_1 a backlog:MetricObservation ; rdfs:label "After box 3: rule sets included by the standard and agentic profiles"@en ;
     backlog:observesMetric fw:Metric_AC_Contained ; backlog:observationFor fw:Obj_AC_Contained ; backlog:hasObservedValue 19.0 ; backlog:observedAt "2026-10-28T04:24:04Z"^^xsd:dateTime ;
     backlog:hasObservationMethod "Counted in the data: nine in the standard profile and ten in the agentic profile, as at the baseline." .
+
+fw:Ruling_G171 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G171" ;
+    rdfs:label "A deferral made for one lineage never switches off the checks of another, and the ceremony records are judged in order and for finished work"@en ;
+    backlog:hasRulingStatement "A deferral made for one lineage never switches off the checks of another, and the ceremony records are judged in order and for finished work" ;
+    backlog:enforcedByShape backlog:ContainerShape , backlog:BlueprintSweepShape , backlog:ArtifactCommitmentShape , backlog:MissionShape , backlog:LineageCompletenessShape , backlog:ReadinessRequiredShape , backlog:ReadinessCheckShape , backlog:DemoRunShape , backlog:ControlRunShape , backlog:ReviewControlsRunShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v134.0.0, section G171." .
+
+# ---- BOX4 BEGIN ----
+fw:AC_AC_Leak a backlog:AcceptanceCriterion ;
+    backlog:satisfiedByArtifact "03-tooling/backlog_g166_probe_v1_5_0.py" ;
+    backlog:hasGherkinText "Given a register that holds a standard lineage and an adopter of the deferral at a low status, When the register is validated, Then the checks the standard lineage owes are still asked, and the adopter alone is deferred." .
+fw:ST_AC_Leak a backlog:Story ; backlog:responsible <http://example.org/fixture-autofix#DefaultExecutor> ; backlog:coversEntity fw:Entity_AC_CeremonyRecord ; backlog:coversStage backlog:Stage_SuspensionException ; backlog:hasIdentifier "AC-S08" ; backlog:hasTitle "A deferral made for one lineage never switches off the checks of another lineage of the register" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register , fw:It_AC_4 , fw:Rel_AC_4 ;
+    backlog:belongsToLineage fw:L_AdaptiveCeremonies ;
+    backlog:pursuesObjective fw:Obj_AC_MissionMet ;
+    backlog:hasInvestmentCategory backlog:Cat_Maintenance ;
+    backlog:hasAcceptanceCriterion fw:AC_AC_Leak ;
+    backlog:hasReach 5.0 ; backlog:hasImpact 3.0 ; backlog:hasConfidence 0.7 ; backlog:hasEffort 3.0 ;
+    backlog:hasPriorityScore 3.5 ;
+    backlog:hasApplicableConcern backlog:Concern_Architecture ;
+    backlog:appliesDefinitionOfDone fw:DoD ;
+    backlog:startedAt "2026-10-28T06:03:04Z"^^xsd:dateTime ; backlog:finishedAt "2026-10-28T06:08:21Z"^^xsd:dateTime ; backlog:lastAuditedAt "2026-10-28T06:08:21Z"^^xsd:dateTime ;
+    backlog:hasExecutionModality backlog:Mode_Automated ; backlog:hasEvidence fw:Ev_AC_Leak .
+fw:AC_AC_Tighten a backlog:AcceptanceCriterion ;
+    backlog:satisfiedByArtifact "03-tooling/backlog_g168_probe_v1_1_0.py" ;
+    backlog:hasGherkinText "Given ceremony records that are out of order or about unfinished work, When the register is validated, Then each is refused by name, and the same records in order pass." .
+fw:ST_AC_Tighten a backlog:Story ; backlog:responsible <http://example.org/fixture-autofix#DefaultExecutor> ; backlog:coversEntity fw:Entity_AC_CeremonyRecord ; backlog:coversStage backlog:Stage_SuspensionException ; backlog:hasIdentifier "AC-S09" ; backlog:hasTitle "The ceremony records are judged in order and for finished work: a superseded check does not block, a started item has a check made before its start, a demo shows a finished item, a control run follows its box start, and a review follows the run" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register , fw:It_AC_4 , fw:Rel_AC_4 ;
+    backlog:belongsToLineage fw:L_AdaptiveCeremonies ;
+    backlog:pursuesObjective fw:Obj_AC_MissionMet , fw:Obj_AC_Control ;
+    backlog:hasInvestmentCategory backlog:Cat_Maintenance ;
+    backlog:hasAcceptanceCriterion fw:AC_AC_Tighten ;
+    backlog:hasReach 3.0 ; backlog:hasImpact 3.0 ; backlog:hasConfidence 0.7 ; backlog:hasEffort 5.0 ;
+    backlog:hasPriorityScore 1.3 ;
+    backlog:hasApplicableConcern backlog:Concern_Data ;
+    backlog:appliesDefinitionOfDone fw:DoD ;
+    backlog:startedAt "2026-10-28T06:03:05Z"^^xsd:dateTime ; backlog:finishedAt "2026-10-28T06:09:00Z"^^xsd:dateTime ; backlog:lastAuditedAt "2026-10-28T06:09:00Z"^^xsd:dateTime ;
+    backlog:hasExecutionModality backlog:Mode_Automated ; backlog:hasEvidence fw:Ev_AC_Tighten .
+fw:Ref_AC_Leak a backlog:RefinementEvent ; backlog:hasWorkKind backlog:WorkKind_Preparation ; backlog:refines fw:ST_AC_Leak ; backlog:refinedAt "2026-10-28T06:02:57Z"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Groomed for box 4: the acceptance criterion reads as a test the validator can run, the effort is 3 points, and the change is to shapes with probe checks and fixture cases." ;
+    backlog:refinedBy backlog:Builder ; backlog:addressesConcern backlog:Concern_Architecture .
+fw:Ev4_ST_AC_Leak_T_Refine a backlog:TransitionEvent ; backlog:transitionedItem fw:ST_AC_Leak ; backlog:viaTransition backlog:T_Refine ; backlog:transitionedAt "2026-10-28T06:02:57Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder ; backlog:hasTransitionNote "Groomed and made ready for box 4." .
+fw:Chk_AC_Leak a backlog:ReadinessCheck ; rdfs:label "Readiness of the story AC-S08"@en ;
+    backlog:checksReadinessOf fw:ST_AC_Leak ; backlog:readinessCheckedAt "2026-10-28T06:02:58Z"^^xsd:dateTime ;
+    backlog:hasReadinessCriterion fw:K_AC_Leak_AC , fw:K_AC_Leak_Size , fw:K_AC_Leak_Dep , fw:K_AC_Leak_Input .
+fw:K_AC_Leak_AC a backlog:ReadinessCriterion ; rdfs:label "The acceptance criterion reads as a test the validator can run"@en ; backlog:criterionMet true .
+fw:K_AC_Leak_Size a backlog:ReadinessCriterion ; rdfs:label "The effort is estimated and fits the box"@en ; backlog:criterionMet true .
+fw:K_AC_Leak_Dep a backlog:ReadinessCriterion ; rdfs:label "Nothing it depends on is open"@en ; backlog:criterionMet true .
+fw:K_AC_Leak_Input a backlog:ReadinessCriterion ; rdfs:label "No decision of the Owner is waited on"@en ; backlog:criterionMet true .
+fw:Ref_AC_Tighten a backlog:RefinementEvent ; backlog:hasWorkKind backlog:WorkKind_Preparation ; backlog:refines fw:ST_AC_Tighten ; backlog:refinedAt "2026-10-28T06:02:57Z"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Groomed for box 4: the acceptance criterion reads as a test the validator can run, the effort is 5 points, and the change is to shapes with probe checks and fixture cases." ;
+    backlog:refinedBy backlog:Builder ; backlog:addressesConcern backlog:Concern_Data .
+fw:Ev4_ST_AC_Tighten_T_Refine a backlog:TransitionEvent ; backlog:transitionedItem fw:ST_AC_Tighten ; backlog:viaTransition backlog:T_Refine ; backlog:transitionedAt "2026-10-28T06:02:57Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder ; backlog:hasTransitionNote "Groomed and made ready for box 4." .
+fw:Chk_AC_Tighten a backlog:ReadinessCheck ; rdfs:label "Readiness of the story AC-S09"@en ;
+    backlog:checksReadinessOf fw:ST_AC_Tighten ; backlog:readinessCheckedAt "2026-10-28T06:02:58Z"^^xsd:dateTime ;
+    backlog:hasReadinessCriterion fw:K_AC_Tighten_AC , fw:K_AC_Tighten_Size , fw:K_AC_Tighten_Dep , fw:K_AC_Tighten_Input .
+fw:K_AC_Tighten_AC a backlog:ReadinessCriterion ; rdfs:label "The acceptance criterion reads as a test the validator can run"@en ; backlog:criterionMet true .
+fw:K_AC_Tighten_Size a backlog:ReadinessCriterion ; rdfs:label "The effort is estimated and fits the box"@en ; backlog:criterionMet true .
+fw:K_AC_Tighten_Dep a backlog:ReadinessCriterion ; rdfs:label "Nothing it depends on is open"@en ; backlog:criterionMet true .
+fw:K_AC_Tighten_Input a backlog:ReadinessCriterion ; rdfs:label "No decision of the Owner is waited on"@en ; backlog:criterionMet true .
+fw:Plan_AC_4_Deployment a backlog:DeploymentPlan ; backlog:hasWorkKind backlog:WorkKind_Planning ; backlog:deploymentPlanForBox fw:It_AC_4 ; backlog:plansDeploymentUnit fw:Rel_AC_4 ; backlog:deploymentPlannedAt "2026-10-28T06:02:59Z"^^xsd:dateTime .
+fw:It_AC_4 a backlog:Iteration ; backlog:hasIdentifier "AC-BOX-4" ; backlog:hasTitle "Box 4 of Lineage 20: the corrections found by the post-mortem" ;
+    backlog:hasSprintGoal "Correct what the independent post-mortem found: no deferral of one lineage switches off the checks of another, and the ceremony records are judged in order and for finished work." ;
+    backlog:hasState backlog:Done ; backlog:iterationStart "2026-10-28T06:03:03Z"^^xsd:dateTime ; backlog:iterationEnd "2026-10-28T06:09:15Z"^^xsd:dateTime ;
+    backlog:hasCapacity 8.0 ; backlog:hasObservedDuration 6.2 ; backlog:hasDurationSource "Wall clock from the start of the box to its review, both taken from the register: 2026-10-28T06:03:03Z to 2026-10-28T06:09:15Z." ; backlog:belongsToLineage fw:L_AdaptiveCeremonies .
+fw:Ceremony_AC_Planning4 a backlog:SprintPlanningCeremony ; backlog:hasWorkKind backlog:WorkKind_Planning ; backlog:ceremonyFor fw:It_AC_4 ; backlog:heldAt "2026-10-28T06:03:00Z"^^xsd:dateTime ;
+    backlog:includesPlanningEvent fw:Plan_AC_Leak , fw:Plan_AC_Tighten .
+fw:Plan_AC_Leak a backlog:PlanningEvent ; rdfs:label "Story AC-S08 planned into box 4"@en ;
+    backlog:plansItem fw:ST_AC_Leak ; backlog:plannedInto fw:It_AC_4 ; backlog:plannedAt "2026-10-28T06:03:00Z"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ; backlog:producesTask fw:T_AC_Leak_Build .
+fw:T_AC_Leak_Build a backlog:ExecutionTask ; backlog:hasIdentifier "T-AC-LEAK-BUILD" ; backlog:hasState backlog:Done ;
+    backlog:hasTaskType backlog:Task_Implementation ; backlog:responsible <http://example.org/fixture-autofix#DefaultExecutor> ; backlog:memberOfContainer fw:It_AC_4 ; backlog:appliesDefinitionOfDone fw:DoD ; backlog:belongsToLineage fw:L_AdaptiveCeremonies ;
+    backlog:startedAt "2026-10-28T06:03:04Z"^^xsd:dateTime ; backlog:finishedAt "2026-10-28T06:08:21Z"^^xsd:dateTime ; backlog:hasEvidence fw:Ev_AC_Leak ; backlog:hasExecutionModality backlog:Mode_Automated .
+fw:ST_AC_Leak backlog:decomposesInto fw:T_AC_Leak_Build .
+fw:Ev4_T_AC_Leak_Build_T_Decompose a backlog:TransitionEvent ; backlog:transitionedItem fw:T_AC_Leak_Build ; backlog:viaTransition backlog:T_Decompose ; backlog:transitionedAt "2026-10-28T06:03:01Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Ev4_T_AC_Leak_Build_T_RefinedToReady a backlog:TransitionEvent ; backlog:transitionedItem fw:T_AC_Leak_Build ; backlog:viaTransition backlog:T_RefinedToReady ; backlog:transitionedAt "2026-10-28T06:03:02Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Ev4_T_AC_Leak_Build_T_Start a backlog:TransitionEvent ; backlog:transitionedItem fw:T_AC_Leak_Build ; backlog:viaTransition backlog:T_Start ; backlog:transitionedAt "2026-10-28T06:03:04Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Ev4_ST_AC_Leak_T_Start a backlog:TransitionEvent ; backlog:transitionedItem fw:ST_AC_Leak ; backlog:viaTransition backlog:T_Start ; backlog:transitionedAt "2026-10-28T06:03:04Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Ev4_T_AC_Leak_Build_T_Complete a backlog:TransitionEvent ; backlog:transitionedItem fw:T_AC_Leak_Build ; backlog:viaTransition backlog:T_Complete ; backlog:transitionedAt "2026-10-28T06:08:21Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Ev4_ST_AC_Leak_T_Complete a backlog:TransitionEvent ; backlog:transitionedItem fw:ST_AC_Leak ; backlog:viaTransition backlog:T_Complete ; backlog:transitionedAt "2026-10-28T06:08:21Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Plan_AC_Tighten a backlog:PlanningEvent ; rdfs:label "Story AC-S09 planned into box 4"@en ;
+    backlog:plansItem fw:ST_AC_Tighten ; backlog:plannedInto fw:It_AC_4 ; backlog:plannedAt "2026-10-28T06:03:00Z"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ; backlog:producesTask fw:T_AC_Tighten_Build .
+fw:T_AC_Tighten_Build a backlog:ExecutionTask ; backlog:hasIdentifier "T-AC-TIGHTEN-BUILD" ; backlog:hasState backlog:Done ;
+    backlog:hasTaskType backlog:Task_Implementation ; backlog:responsible <http://example.org/fixture-autofix#DefaultExecutor> ; backlog:memberOfContainer fw:It_AC_4 ; backlog:appliesDefinitionOfDone fw:DoD ; backlog:belongsToLineage fw:L_AdaptiveCeremonies ;
+    backlog:startedAt "2026-10-28T06:03:05Z"^^xsd:dateTime ; backlog:finishedAt "2026-10-28T06:09:00Z"^^xsd:dateTime ; backlog:hasEvidence fw:Ev_AC_Tighten ; backlog:hasExecutionModality backlog:Mode_Automated .
+fw:ST_AC_Tighten backlog:decomposesInto fw:T_AC_Tighten_Build .
+fw:Ev4_T_AC_Tighten_Build_T_Decompose a backlog:TransitionEvent ; backlog:transitionedItem fw:T_AC_Tighten_Build ; backlog:viaTransition backlog:T_Decompose ; backlog:transitionedAt "2026-10-28T06:03:01Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Ev4_T_AC_Tighten_Build_T_RefinedToReady a backlog:TransitionEvent ; backlog:transitionedItem fw:T_AC_Tighten_Build ; backlog:viaTransition backlog:T_RefinedToReady ; backlog:transitionedAt "2026-10-28T06:03:02Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Ev4_T_AC_Tighten_Build_T_Start a backlog:TransitionEvent ; backlog:transitionedItem fw:T_AC_Tighten_Build ; backlog:viaTransition backlog:T_Start ; backlog:transitionedAt "2026-10-28T06:03:05Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Ev4_ST_AC_Tighten_T_Start a backlog:TransitionEvent ; backlog:transitionedItem fw:ST_AC_Tighten ; backlog:viaTransition backlog:T_Start ; backlog:transitionedAt "2026-10-28T06:03:05Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Ev4_T_AC_Tighten_Build_T_Complete a backlog:TransitionEvent ; backlog:transitionedItem fw:T_AC_Tighten_Build ; backlog:viaTransition backlog:T_Complete ; backlog:transitionedAt "2026-10-28T06:09:00Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Ev4_ST_AC_Tighten_T_Complete a backlog:TransitionEvent ; backlog:transitionedItem fw:ST_AC_Tighten ; backlog:viaTransition backlog:T_Complete ; backlog:transitionedAt "2026-10-28T06:09:00Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Act_AC_4_Validate a backlog:ControlActivity ; rdfs:label "Validate the register and run the probes before the box is reviewed"@en ;
+    backlog:hasWorkKind backlog:WorkKind_Control ; backlog:plannedInBox fw:It_AC_4 .
+fw:Ckp_AC_4_1 a backlog:DailyCheckpoint ; backlog:hasWorkKind backlog:WorkKind_Monitoring ; backlog:checkpointOfBox fw:It_AC_4 ; backlog:checkpointAt "2026-10-28T06:03:06Z"^^xsd:dateTime ;
+    backlog:openItemCount 0 ; backlog:inProgressItemCount 2 ; backlog:doneItemCount 0 .
+fw:Ev_AC_Leak a backlog:TestEvidence ; rdfs:label "The probe for story AC-S08: the complete record accepted, the wrong ones refused"@en ;
+    backlog:evidenceVerified true ; backlog:hasTestId "AC-S08" ;
+    backlog:hasTestSpec "03-tooling/backlog_g166_probe_v1_5_0.py" ;
+    backlog:attestsCriterion fw:AC_AC_Leak ;
+    backlog:hasVerificationMethod "The probe ran against the shipped files and planted registers; its output file was written at the time recorded here; exit 0." ;
+    backlog:verifiedAt "2026-10-28T06:08:21Z"^^xsd:dateTime ; backlog:verifiedByTool "backlog_g166_probe_v1_5_0.py + backlog_validate_v1_17_0.py" ;
+    backlog:satisfiedByArtifact "03-tooling/backlog_g166_probe_v1_5_0.py" ; backlog:belongsToLineage fw:L_AdaptiveCeremonies .
+fw:H_AC_Leak a backlog:TestHarness ; rdfs:label "Harness for story AC-S08"@en ;
+    backlog:harnessFor fw:ST_AC_Leak ; backlog:hasHarnessEvidence fw:Ev_AC_Leak ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the probe shows the shapes discriminating both ways, and its new cases fail on the files of release 1.448.0 where the fault was found." .
+fw:Demo_AC_Leak a backlog:DemoRun ; backlog:hasWorkKind backlog:WorkKind_Control ; backlog:demonstratesItem fw:ST_AC_Leak ; backlog:demonstratedAgainst fw:AC_AC_Leak ; backlog:demoAt "2026-10-28T06:08:21Z"^^xsd:dateTime ;
+    backlog:hasDemoShown "The probe output: the planted registers, the old fault refused or kept in check, and the corrected records accepted." ;
+    backlog:hasDemoResult "The acceptance criterion holds." .
+fw:Ev_AC_Tighten a backlog:TestEvidence ; rdfs:label "The probe for story AC-S09: the complete record accepted, the wrong ones refused"@en ;
+    backlog:evidenceVerified true ; backlog:hasTestId "AC-S09" ;
+    backlog:hasTestSpec "03-tooling/backlog_g168_probe_v1_1_0.py" ;
+    backlog:attestsCriterion fw:AC_AC_Tighten ;
+    backlog:hasVerificationMethod "The probe ran against the shipped files and planted registers; its output file was written at the time recorded here; exit 0." ;
+    backlog:verifiedAt "2026-10-28T06:09:00Z"^^xsd:dateTime ; backlog:verifiedByTool "backlog_g168_probe_v1_1_0.py + backlog_g169_probe_v1_1_0.py + backlog_g170_probe_v1_1_0.py + backlog_validate_v1_17_0.py" ;
+    backlog:satisfiedByArtifact "03-tooling/backlog_g168_probe_v1_1_0.py" ; backlog:belongsToLineage fw:L_AdaptiveCeremonies .
+fw:H_AC_Tighten a backlog:TestHarness ; rdfs:label "Harness for story AC-S09"@en ;
+    backlog:harnessFor fw:ST_AC_Tighten ; backlog:hasHarnessEvidence fw:Ev_AC_Tighten ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the probe shows the shapes discriminating both ways, and its new cases fail on the files of release 1.448.0 where the fault was found." .
+fw:Demo_AC_Tighten a backlog:DemoRun ; backlog:hasWorkKind backlog:WorkKind_Control ; backlog:demonstratesItem fw:ST_AC_Tighten ; backlog:demonstratedAgainst fw:AC_AC_Tighten ; backlog:demoAt "2026-10-28T06:09:00Z"^^xsd:dateTime ;
+    backlog:hasDemoShown "The probe output: the planted registers, the old fault refused or kept in check, and the corrected records accepted." ;
+    backlog:hasDemoResult "The acceptance criterion holds." .
+fw:Run_AC_4_Validate a backlog:ControlRun ; backlog:runOfActivity fw:Act_AC_4_Validate ; backlog:ranAt "2026-10-28T06:09:14Z"^^xsd:dateTime ;
+    backlog:hasRunResult "The validator reported no violation on the register with the box open, the pipeline check reproduced all five stage digests, and the four probes passed (27, 16, 21 and 13 checks, exit 0)." .
+fw:Review_AC_4 a backlog:SprintReviewCeremony ; backlog:hasWorkKind backlog:WorkKind_Closure ;
+    backlog:ceremonyFor fw:It_AC_4 ; backlog:heldAt "2026-10-28T06:09:15Z"^^xsd:dateTime ; backlog:reviewsCeremony fw:Ceremony_AC_Planning4 ;
+    backlog:closesIteration fw:It_AC_4 ; backlog:closesStory fw:ST_AC_Leak , fw:ST_AC_Tighten .
+fw:Retro_AC_4 a backlog:SprintRetrospective ; backlog:hasWorkKind backlog:WorkKind_Closure ;
+    backlog:followsReview fw:Review_AC_4 ; backlog:heldAt "2026-10-28T06:09:16Z"^^xsd:dateTime ; backlog:producesFinding fw:Find_AC_ContainmentLeak , fw:Find_AC_RecordedTimes , fw:Find_AC_ThinProof , fw:Find_AC_DraftBeforeBox .
+fw:Find_AC_ContainmentLeak a backlog:RetrospectiveFinding ;
+    backlog:hasFindingScope backlog:Scope_LineageLocal ;
+    backlog:relatesToWorkItem fw:ST_AC_Leak ;
+    backlog:hasRootCause "The deferral of a register-level check asked only whether some adopter of the deferral existed at a low status, not whether another lineage of the register still owed the check. The probe of the profile planted one lineage, and the containment objective counted the rule sets the two profiles include, so neither could see it; the independent post-mortem planted two lineages and found the standard lineage's seven checks switched off." ;
+    backlog:hasRemedy "Each deferral now holds only while no live lineage of the register is outside the deferral; the profile probe plants a second lineage, and the new cases fail on the files of release 1.448.0." .
+fw:Find_AC_RecordedTimes a backlog:RetrospectiveFinding ;
+    backlog:hasFindingScope backlog:Scope_LineageLocal ;
+    backlog:relatesToWorkItem fw:ST_AC_Checkpoint ;
+    backlog:hasRootCause "The start, finish, evidence and review times of boxes 1 to 3 were written by the recorder when the records were composed, not captured at the moment of the work: each story starts when the previous one ends, durations are whole minutes, and the third box's daily checkpoint states counts that disagree with its own stories' times. No shape compares a checkpoint's counts with the register." ;
+    backlog:hasRemedy "The earlier records are append-only and are not rewritten; this finding is their correction. From box 4 each time is read from the clock at the moment it is recorded, and an evidence time is the time the probe's output was written. A shape that compares a checkpoint's counts with the stories' times is not built here and stays disclosed." .
+fw:Find_AC_ThinProof a backlog:RetrospectiveFinding ;
+    backlog:hasFindingScope backlog:Scope_LineageLocal ;
+    backlog:relatesToWorkItem fw:ST_AC_ReviewBlocked ;
+    backlog:hasRootCause "Lineage 20 adopts none of the three ceremony rule sets, because a running lineage cannot adopt a rule set its own box delivers, so the ceremonies it records are not judged by the rules it built; those rules are proven only on planted registers. The objective that counts stories not done restates that the stories are done." ;
+    backlog:hasRemedy "The mission is not recorded as accomplished by this lineage. The live proof of the three ceremony rule sets is the next lineage opened under profile revision 7, which adopts them at its Mission output; the Owner decides whether that run is the proof." .
+fw:Find_AC_DraftBeforeBox a backlog:RetrospectiveFinding ;
+    backlog:hasFindingScope backlog:Scope_LineageLocal ;
+    backlog:relatesToWorkItem fw:ST_AC_Tighten ;
+    backlog:hasRootCause "The corrections to the shapes were drafted in the working tree after the Owner's go-ahead and before this box was recorded in the register, so the first draft of each story's work precedes the box's planning record; the register's times for the box are the times of recording." ;
+    backlog:hasRemedy "Stated here, not hidden. The probes that attest the stories were run after the box was opened, and their output times are the evidence times." .
+fw:Rel_AC_4 a backlog:DeploymentUnit ;
+    backlog:hasIdentifier "AC-REL-4" ; backlog:hasTitle "Shipped from box 4 of Lineage 20" ;
+    backlog:hasState backlog:Done ; backlog:hasDeploymentDate "2026-10-28T06:09:15Z"^^xsd:dateTime ;
+    backlog:deploysFrom fw:It_AC_4 ; backlog:deploysItem fw:ST_AC_Leak , fw:ST_AC_Tighten ;
+    backlog:decidedBy backlog:Builder ; backlog:hasSelectionBasis backlog:Sel_Committed ; backlog:belongsToLineage fw:L_AdaptiveCeremonies .
+fw:Obs_AC_MissionMet_B4 a backlog:MetricObservation ; rdfs:label "After box 4: MissionMet"@en ;
+    backlog:observesMetric fw:Metric_AC_MissionMet ; backlog:observationFor fw:Obj_AC_MissionMet ; backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-10-28T06:09:14Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Counted: no story of the lineage is open (nine of nine Done), after box 4." .
+fw:Obs_AC_Contained_B4 a backlog:MetricObservation ; rdfs:label "After box 4: Contained"@en ;
+    backlog:observesMetric fw:Metric_AC_Contained ; backlog:observationFor fw:Obj_AC_Contained ; backlog:hasObservedValue 19.0 ; backlog:observedAt "2026-10-28T06:09:14Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Counted in the data: nine in the standard profile and ten in the agentic profile, as at the baseline; and the profile probe of release 1.449.0 plants a second, standard lineage beside a low-status adopter and finds the standard lineage's checks still asked. The earlier readings counted membership only." .
+fw:Obs_AC_Control_B4 a backlog:MetricObservation ; rdfs:label "After box 4: Control"@en ;
+    backlog:observesMetric fw:Metric_AC_Control ; backlog:observationFor fw:Obj_AC_Control ; backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-10-28T06:09:14Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Counted: the blocked review, the demo run and the control run exist, and the ceremony probes of release 1.449.0 also refuse a review held before the run and a demo of an unfinished item." .
+# ---- BOX4 END ----
+
+<http://example.org/backlog-framework-register#CR_1> a backlog:ChangeRequest ; backlog:requestsChangeTo <http://example.org/backlog-framework-register#Scope_AdaptiveCeremonies> ; backlog:hasChangeDirection backlog:Direction_Grow ; backlog:hasChangeRequestRationale "The independent post-mortem of Lineage 20 found that one deferral of the adaptive profile can switch off checks of another lineage and that several ceremony records are judged out of order or for unfinished work; both corrections serve the mission, which is that a lineage run under the adaptive profile records and checks the ceremonies correctly." ;
+    backlog:hasDisposition backlog:Disp_Accepted ; backlog:supportsObjective <http://example.org/backlog-framework-register#Obj_AC_MissionMet> ; backlog:belongsToLineage <http://example.org/backlog-framework-register#L_AdaptiveCeremonies> .
+<http://example.org/backlog-framework-register#IA_1> a backlog:ImpactAssessment ; backlog:analyzesRequest <http://example.org/backlog-framework-register#CR_1> ; backlog:hasImpactStatement "2 item(s) added to L_AdaptiveCeremonies, 0 point(s) of recorded effort; serves objective Obj_AC_MissionMet; computed from the register at 2026-10-28T06:02:57Z." .
+<http://example.org/backlog-framework-register#SC_1> a backlog:ScopeChange ; backlog:fulfillsRequest <http://example.org/backlog-framework-register#CR_1> ; backlog:changesScope <http://example.org/backlog-framework-register#Scope_AdaptiveCeremonies> ; backlog:decidedBy backlog:Owner ; backlog:belongsToLineage <http://example.org/backlog-framework-register#L_AdaptiveCeremonies> ;
+    backlog:hasScopeChangeRationale "The independent post-mortem of Lineage 20 found that one deferral of the adaptive profile can switch off checks of another lineage and that several ceremony records are judged out of order or for unfinished work; both corrections serve the mission, which is that a lineage run under the adaptive profile records and checks the ceremonies correctly. Owner decision: The Owner, 2026-10-28 08:50 Istanbul: 'Yes, proceed autonomously' to the corrective box proposed after the post-mortem." ;
+    backlog:admitsItem <http://example.org/backlog-framework-register#ST_AC_Leak> ;
+    backlog:admitsItem <http://example.org/backlog-framework-register#ST_AC_Tighten> .

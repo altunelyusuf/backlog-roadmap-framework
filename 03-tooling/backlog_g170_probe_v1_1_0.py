@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_g170_probe v1.0.0 -- re-runnable proof of the deployment plan and of the review refused while a planned control has no run (G170).
+"""backlog_g170_probe v1.1.0 -- re-runnable proof of the deployment plan and of the review refused while a planned control has no run (G170).
 
   Checks the shipped files (the rule set in the adaptive profile only, the revision, the ruling), then plants small registers and expects the validator to refuse
   a plan with no box, unit or time, a plan made after its box started and a plan whose unit ships from another box, and to refuse a review of a box whose planned
@@ -44,5 +44,10 @@ RUN = 'x:R a backlog:ControlRun ; backlog:runOfActivity x:A ; backlog:ranAt %s ;
 expect("the same review is accepted once the run is recorded", not hits(run(LIN % ADOPT + RUN), "has no recorded run"))
 expect("a review of a lineage that did not adopt the rule set is not judged", not hits(run(LIN % ""), "has no recorded run"))
 expect("a review of a box with no planned control is not refused", not hits(run('x:L a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_ReviewNeedsControlRun .\nx:B a backlog:Iteration ; backlog:belongsToLineage x:L .\nx:V a backlog:SprintReviewCeremony ; backlog:ceremonyFor x:B .\n'), "has no recorded run"))
+
+# post-mortem correction (G171): the review waits for the run
+LINH = LIN.replace("backlog:ceremonyFor x:B .", "backlog:ceremonyFor x:B ; backlog:heldAt %s .") 
+expect("a review held before the run is refused: a run recorded after the review does not count", bool(hits(run(LINH % (ADOPT, d("10:10")) + RUN), "held before the planned control")))
+expect("a review held after the run is accepted", not hits(run(LINH % (ADOPT, d("10:40")) + RUN), "held before the planned control") and not hits(run(LINH % (ADOPT, d("10:40")) + RUN), "has no recorded run"))
 print("VERDICT   :", "PASS" if not bad else "FAIL"); [print("  ", b) for b in bad]
 sys.exit(1 if bad else 0)

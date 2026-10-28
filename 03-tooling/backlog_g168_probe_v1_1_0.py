@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_g168_probe v1.0.0 -- re-runnable proof of the readiness check (G168).
+"""backlog_g168_probe v1.1.0 -- re-runnable proof of the readiness check (G168).
 
   Checks the shipped files (the rule set in the adaptive profile only, the revision, the ruling), then plants small registers and expects the validator to
   refuse a Ready item with no check, a Ready item with an unmet criterion and a bare check, and to accept a Ready item whose criteria are all met.
@@ -41,5 +41,16 @@ expect("a Ready item whose check has an unmet criterion is refused", bool(hits(r
 expect("an item not yet Ready may hold a check with an unmet criterion", not hits(run(reg(True, "Proposed", CHK % "false")), UNMET))
 expect("a Ready item whose criterion has no answer is refused", bool(hits(run(reg(True, extra=CHK.replace(" ; backlog:criterionMet %s", "").replace("x:K a backlog:ReadinessCriterion .", "x:K a backlog:ReadinessCriterion .") % ())), UNMET)))
 expect("a bare readiness check is refused: it names no item, no time and no criterion", all(hits(run("x:R a backlog:ReadinessCheck .\n"), m) for m in ("name the item", "record when", BARE)))
+
+# post-mortem corrections (G171)
+CHK2 = 'x:C2 a backlog:ReadinessCheck ; backlog:checksReadinessOf x:S ; backlog:readinessCheckedAt "2026-10-28T01:00:00Z"^^xsd:dateTime ; backlog:hasReadinessCriterion x:K2 .\nx:K2 a backlog:ReadinessCriterion ; backlog:criterionMet true .\n'
+expect("an earlier unmet check that a later all-met check supersedes does not block a Ready item", not hits(run(reg(True, extra=CHK % "false" + CHK2)), UNMET))
+expect("a later unmet check still blocks a Ready item whose earlier check was all met", bool(hits(run(reg(True, extra=CHK % "true" + CHK2.replace("criterionMet true", "criterionMet false"))), UNMET)))
+expect("an item that is in progress with no check is refused: Ready cannot be skipped", bool(hits(run(reg(True, "InProgress")), NONE.replace("exists", "exists")) ) or bool(hits(run(reg(True, "InProgress")), "no readiness check of it")))
+expect("a Done item with no check is refused", bool(hits(run(reg(True, "Done")), "no readiness check of it")))
+LATE = 'x:S backlog:startedAt "2026-10-28T00:30:00Z"^^xsd:dateTime .\n'
+LATE_MSG = "made at or before its start"
+expect("a started item whose only check was made after its start is refused", bool(hits(run(reg(True, "InProgress", CHK % "true" + LATE.replace("00:30", "00:00").replace("2026-10-28T00:00:00Z", "2026-10-27T23:00:00Z"))), LATE_MSG)))
+expect("a started item whose check was made before its start is accepted", not hits(run(reg(True, "InProgress", CHK % "true" + LATE)), LATE_MSG) and not hits(run(reg(True, "InProgress", CHK % "true" + LATE)), "no readiness check of it"))
 print("VERDICT   :", "PASS" if not bad else "FAIL"); [print("  ", b) for b in bad]
 sys.exit(1 if bad else 0)
