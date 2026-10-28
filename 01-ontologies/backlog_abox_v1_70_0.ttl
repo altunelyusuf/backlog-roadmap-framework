@@ -22,8 +22,8 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (ABox: controlled individuals, reference data and the live register)"@en ;
-    owl:versionIRI <http://example.org/backlog/abox/1.69.0> ;
-    owl:versionInfo "1.69.0" ;
+    owl:versionIRI <http://example.org/backlog/abox/1.70.0> ;
+    owl:versionInfo "1.70.0" ;
     owl:priorVersion <http://example.org/backlog/abox/1.62.0> , <http://example.org/backlog/abox/1.61.0> , <http://example.org/backlog/abox/1.60.0> , <http://example.org/backlog/abox/1.59.0> , <http://example.org/backlog/abox/1.58.0> , <http://example.org/backlog/abox/1.57.0> , <http://example.org/backlog/abox/1.53.0> , <http://example.org/backlog/abox/1.52.0> , <http://example.org/backlog/abox/1.51.0> , <http://example.org/backlog/abox/1.50.0> , <http://example.org/backlog/abox/1.49.0> , <http://example.org/backlog/abox/1.48.0> , <http://example.org/backlog/abox/1.47.0> , <http://example.org/backlog/abox/1.46.0> , <http://example.org/backlog/abox/1.45.0> , <http://example.org/backlog/abox/1.40.0> , <http://example.org/backlog/abox/1.39.0> , <http://example.org/backlog/abox/1.38.0> , <http://example.org/backlog/abox/1.37.0> , <http://example.org/backlog/abox/1.36.0> , <http://example.org/backlog/abox/1.35.0> ;
     owl:priorVersion <http://example.org/backlog/abox/1.34.0> , <http://example.org/backlog/abox/1.33.0> , <http://example.org/backlog/abox/1.32.0> , <http://example.org/backlog/abox/1.31.0> , <http://example.org/backlog/abox/1.30.0> , <http://example.org/backlog/abox/1.29.0> , <http://example.org/backlog/abox/1.28.0> , <http://example.org/backlog/abox/1.27.0> , <http://example.org/backlog/abox/1.26.0> , <http://example.org/backlog/abox/1.25.0> , <http://example.org/backlog/abox/1.24.0> , <http://example.org/backlog/abox/1.23.0> , <http://example.org/backlog/abox/1.22.0> , <http://example.org/backlog/abox/1.21.0> , <http://example.org/backlog/abox/1.20.0> , <http://example.org/backlog/abox/1.19.0> , <http://example.org/backlog/abox/1.17.0> , <http://example.org/backlog/abox/1.16.0> , <http://example.org/backlog/abox/1.15.0> , <http://example.org/backlog/abox/1.14.0> , <http://example.org/backlog/abox/1.13.0> , <http://example.org/backlog/abox/1.12.0> , <http://example.org/backlog/abox/1.11.0> , <http://example.org/backlog/abox/1.10.0> , <http://example.org/backlog/abox/1.9.0> , <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
         <http://example.org/backlog-abox/1.2.1> ,
@@ -9154,7 +9154,7 @@ fw:L_AdaptiveCeremonies a backlog:Lineage ; rdfs:label "Lineage 20: Agile ceremo
     backlog:lineageOrdinal 20 ;
     backlog:lineageArchived false ;
     backlog:lineageForMission fw:Mission_AdaptiveCeremonies ;
-    backlog:hasLineageStatus backlog:LS_Objectived ;
+    backlog:hasLineageStatus backlog:LS_Backlogged ;
     backlog:hasLineageDepthLevel backlog:Depth_StoryDirect ;
     backlog:hasLineageArtifactDomain backlog:Domain_Infrastructure ;
     backlog:memberOfContainer fw:Register .
@@ -9367,6 +9367,7 @@ fw:Out_Goal_AdaptiveCeremonies a backlog:StageOutput ;
 fw:CP_AC_MissionMet a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-11-04T00:00:00Z"^^xsd:dateTime .
 fw:Metric_AC_MissionMet a core:Metric ; rdfs:label "Scope deliverables the package does not yet carry in its shipped vocabulary and rules"@en ; skos:definition "Counted in units of: deliverable."@en .
 fw:Obj_AC_MissionMet a backlog:Objective ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:metricMovableBy fw:ST_AC_KindOfWork , fw:ST_AC_Readiness , fw:ST_AC_PlannedControl , fw:ST_AC_Checkpoint , fw:ST_AC_Demo , fw:ST_AC_DeployPlan , fw:ST_AC_ReviewBlocked ;
     rdfs:label "Objective: Scope deliverables the package does not yet carry in its shipped vocabulary and rules"@en ;
     backlog:contributesToGoal fw:Goal_AC_MissionMet ; backlog:fillsScope fw:Scope_AdaptiveCeremonies ;
     backlog:hasSuccessMetric fw:Metric_AC_MissionMet ; backlog:hasMeasurementKind backlog:Meas_Counted ;
@@ -9383,6 +9384,7 @@ fw:Obs_AC_MissionMet a backlog:MetricObservation ; rdfs:label "Baseline: Scope d
 fw:CP_AC_Kinds a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-11-04T00:00:00Z"^^xsd:dateTime .
 fw:Metric_AC_Kinds a core:Metric ; rdfs:label "Ceremony record classes that carry no kind of work"@en ; skos:definition "Counted in units of: class."@en .
 fw:Obj_AC_Kinds a backlog:Objective ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:metricMovableBy fw:ST_AC_KindOfWork ;
     rdfs:label "Objective: Ceremony record classes that carry no kind of work"@en ;
     backlog:contributesToGoal fw:Goal_AC_Kinds ; backlog:fillsScope fw:Scope_AdaptiveCeremonies ;
     backlog:hasSuccessMetric fw:Metric_AC_Kinds ; backlog:hasMeasurementKind backlog:Meas_Counted ;
@@ -9399,6 +9401,7 @@ fw:Obs_AC_Kinds a backlog:MetricObservation ; rdfs:label "Baseline: Ceremony rec
 fw:CP_AC_Preparation a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-11-04T00:00:00Z"^^xsd:dateTime .
 fw:Metric_AC_Preparation a core:Metric ; rdfs:label "Preparation records missing: the readiness check"@en ; skos:definition "Counted in units of: record kind."@en .
 fw:Obj_AC_Preparation a backlog:Objective ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:metricMovableBy fw:ST_AC_Readiness ;
     rdfs:label "Objective: Preparation records missing: the readiness check"@en ;
     backlog:contributesToGoal fw:Goal_AC_Preparation ; backlog:fillsScope fw:Scope_AdaptiveCeremonies ;
     backlog:hasSuccessMetric fw:Metric_AC_Preparation ; backlog:hasMeasurementKind backlog:Meas_Counted ;
@@ -9415,6 +9418,7 @@ fw:Obs_AC_Preparation a backlog:MetricObservation ; rdfs:label "Baseline: Prepar
 fw:CP_AC_Planning a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-11-04T00:00:00Z"^^xsd:dateTime .
 fw:Metric_AC_Planning a core:Metric ; rdfs:label "Planning records missing: the deployment plan, the planned control activity and its run"@en ; skos:definition "Counted in units of: record kind."@en .
 fw:Obj_AC_Planning a backlog:Objective ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:metricMovableBy fw:ST_AC_PlannedControl , fw:ST_AC_DeployPlan ;
     rdfs:label "Objective: Planning records missing: the deployment plan, the planned control activity and its run"@en ;
     backlog:contributesToGoal fw:Goal_AC_Planning ; backlog:fillsScope fw:Scope_AdaptiveCeremonies ;
     backlog:hasSuccessMetric fw:Metric_AC_Planning ; backlog:hasMeasurementKind backlog:Meas_Counted ;
@@ -9431,6 +9435,7 @@ fw:Obs_AC_Planning a backlog:MetricObservation ; rdfs:label "Baseline: Planning 
 fw:CP_AC_Monitoring a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-11-04T00:00:00Z"^^xsd:dateTime .
 fw:Metric_AC_Monitoring a core:Metric ; rdfs:label "Monitoring records missing: the daily checkpoint"@en ; skos:definition "Counted in units of: record kind."@en .
 fw:Obj_AC_Monitoring a backlog:Objective ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:metricMovableBy fw:ST_AC_Checkpoint ;
     rdfs:label "Objective: Monitoring records missing: the daily checkpoint"@en ;
     backlog:contributesToGoal fw:Goal_AC_Monitoring ; backlog:fillsScope fw:Scope_AdaptiveCeremonies ;
     backlog:hasSuccessMetric fw:Metric_AC_Monitoring ; backlog:hasMeasurementKind backlog:Meas_Counted ;
@@ -9447,6 +9452,7 @@ fw:Obs_AC_Monitoring a backlog:MetricObservation ; rdfs:label "Baseline: Monitor
 fw:CP_AC_Control a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-11-04T00:00:00Z"^^xsd:dateTime .
 fw:Metric_AC_Control a core:Metric ; rdfs:label "Control records and rules missing: the demo run and the refusal of a review while a planned control has no run"@en ; skos:definition "Counted in units of: record or rule."@en .
 fw:Obj_AC_Control a backlog:Objective ; backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:metricMovableBy fw:ST_AC_Demo , fw:ST_AC_ReviewBlocked ;
     rdfs:label "Objective: Control records and rules missing: the demo run and the refusal of a review while a planned control has no run"@en ;
     backlog:contributesToGoal fw:Goal_AC_Control ; backlog:fillsScope fw:Scope_AdaptiveCeremonies ;
     backlog:hasSuccessMetric fw:Metric_AC_Control ; backlog:hasMeasurementKind backlog:Meas_Counted ;
@@ -9482,3 +9488,123 @@ fw:Out_Objective_AdaptiveCeremonies a backlog:StageOutput ;
     backlog:hasStateDigest "7e035679daffdce74980e25772b8e3f1e7443c7917ba3ce25a64105dd8d4c1f5" ;
     backlog:closedAtCommit "backlog-roadmap-framework-v1.442.0 (tag; witnessed by git, not asserted)" ;
     backlog:hasRationale "Objective stage of Lineage 20: seven measured objectives with counted baselines. Stage 4 of 5." .
+
+#################################################################
+#  v1.443.0 -- LINEAGE 20, Backlog stage: seven stories, one per deliverable, ordered by score. Stage 5 of 5.
+#################################################################
+
+fw:AC_AC_KindOfWork a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a ceremony record of any class the package holds, When the validator runs, Then a record with no kind of work, or with two, is refused and each of the eight kinds is accepted." .
+fw:ST_AC_KindOfWork a backlog:Story ; backlog:responsible <http://example.org/fixture-autofix#DefaultExecutor> ; backlog:coversEntity fw:Entity_AC_CeremonyRecord ; backlog:coversStage backlog:Stage_Creation ; backlog:hasIdentifier "AC-S01" ; backlog:hasTitle "Every ceremony record carries the one kind of work it serves" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:belongsToLineage fw:L_AdaptiveCeremonies ;
+    backlog:producedByStage fw:Out_Backlog_AdaptiveCeremonies ;
+    backlog:pursuesObjective fw:Obj_AC_MissionMet , fw:Obj_AC_Kinds ;
+    backlog:satisfiesDeliverable fw:Del_AC_KindOfWork ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasAcceptanceCriterion fw:AC_AC_KindOfWork ;
+    backlog:hasReach 5.0 ; backlog:hasImpact 3.0 ; backlog:hasConfidence 0.8 ; backlog:hasEffort 3.0 ;
+    backlog:hasPriorityScore 4.0 ;
+    backlog:hasApplicableConcern backlog:Concern_Data ;
+    backlog:appliesDefinitionOfDone fw:DoD .
+fw:AC_AC_Readiness a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given an item made Ready, When it has no readiness check or a check with an unmet criterion, Then the validator refuses it, and an item with a check whose criteria are all met passes." .
+fw:ST_AC_Readiness a backlog:Story ; backlog:responsible <http://example.org/fixture-autofix#DefaultExecutor> ; backlog:coversEntity fw:Entity_AC_CeremonyRecord ; backlog:coversStage backlog:Stage_Creation ; backlog:hasIdentifier "AC-S02" ; backlog:hasTitle "A groomed item has a readiness check that records which criteria of the definition of ready were met" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:belongsToLineage fw:L_AdaptiveCeremonies ;
+    backlog:producedByStage fw:Out_Backlog_AdaptiveCeremonies ;
+    backlog:pursuesObjective fw:Obj_AC_MissionMet , fw:Obj_AC_Preparation ;
+    backlog:satisfiesDeliverable fw:Del_AC_Readiness ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasAcceptanceCriterion fw:AC_AC_Readiness ;
+    backlog:hasReach 4.0 ; backlog:hasImpact 3.0 ; backlog:hasConfidence 0.8 ; backlog:hasEffort 3.0 ;
+    backlog:hasPriorityScore 3.2 ;
+    backlog:hasApplicableConcern backlog:Concern_Data ;
+    backlog:appliesDefinitionOfDone fw:DoD .
+fw:AC_AC_PlannedControl a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a box with a planned control activity, When the activity has no kind or its run has no recorded time and result, Then the validator refuses it, and a planned activity with a run passes." .
+fw:ST_AC_PlannedControl a backlog:Story ; backlog:responsible <http://example.org/fixture-autofix#DefaultExecutor> ; backlog:coversEntity fw:Entity_AC_CeremonyRecord ; backlog:coversStage backlog:Stage_Creation ; backlog:hasIdentifier "AC-S03" ; backlog:hasTitle "A planned control, monitoring, reporting or measurement activity is planned work with a kind and a recorded run" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:belongsToLineage fw:L_AdaptiveCeremonies ;
+    backlog:producedByStage fw:Out_Backlog_AdaptiveCeremonies ;
+    backlog:pursuesObjective fw:Obj_AC_MissionMet , fw:Obj_AC_Planning ;
+    backlog:satisfiesDeliverable fw:Del_AC_PlannedControl ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasAcceptanceCriterion fw:AC_AC_PlannedControl ;
+    backlog:hasReach 4.0 ; backlog:hasImpact 3.0 ; backlog:hasConfidence 0.7 ; backlog:hasEffort 5.0 ;
+    backlog:hasPriorityScore 1.68 ;
+    backlog:hasApplicableConcern backlog:Concern_Data ;
+    backlog:appliesDefinitionOfDone fw:DoD .
+fw:AC_AC_Checkpoint a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a box in progress, When a checkpoint names a blocker with no owner or records no counts, Then the validator refuses it, and a checkpoint with counts and owned blockers passes." .
+fw:ST_AC_Checkpoint a backlog:Story ; backlog:responsible <http://example.org/fixture-autofix#DefaultExecutor> ; backlog:coversEntity fw:Entity_AC_CeremonyRecord ; backlog:coversStage backlog:Stage_Creation , backlog:Stage_ActiveUse ; backlog:hasIdentifier "AC-S04" ; backlog:hasTitle "A daily checkpoint inside a box records the counts of the box and every blocker with an owner" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:belongsToLineage fw:L_AdaptiveCeremonies ;
+    backlog:producedByStage fw:Out_Backlog_AdaptiveCeremonies ;
+    backlog:pursuesObjective fw:Obj_AC_MissionMet , fw:Obj_AC_Monitoring ;
+    backlog:satisfiesDeliverable fw:Del_AC_Checkpoint ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasAcceptanceCriterion fw:AC_AC_Checkpoint ;
+    backlog:hasReach 3.0 ; backlog:hasImpact 2.0 ; backlog:hasConfidence 0.8 ; backlog:hasEffort 2.0 ;
+    backlog:hasPriorityScore 2.4 ;
+    backlog:hasApplicableConcern backlog:Concern_Interaction ;
+    backlog:appliesDefinitionOfDone fw:DoD .
+fw:AC_AC_Demo a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given an item finished in a box, When its demo run names no criterion or no result, Then the validator refuses it, and a demo run of the item against its criterion with a result passes." .
+fw:ST_AC_Demo a backlog:Story ; backlog:responsible <http://example.org/fixture-autofix#DefaultExecutor> ; backlog:coversEntity fw:Entity_AC_CeremonyRecord ; backlog:coversStage backlog:Stage_Creation ; backlog:hasIdentifier "AC-S05" ; backlog:hasTitle "A demo run shows a finished item against its criterion and records what was shown and the result" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:belongsToLineage fw:L_AdaptiveCeremonies ;
+    backlog:producedByStage fw:Out_Backlog_AdaptiveCeremonies ;
+    backlog:pursuesObjective fw:Obj_AC_MissionMet , fw:Obj_AC_Control ;
+    backlog:satisfiesDeliverable fw:Del_AC_Demo ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasAcceptanceCriterion fw:AC_AC_Demo ;
+    backlog:hasReach 3.0 ; backlog:hasImpact 3.0 ; backlog:hasConfidence 0.8 ; backlog:hasEffort 3.0 ;
+    backlog:hasPriorityScore 2.4 ;
+    backlog:hasApplicableConcern backlog:Concern_Interaction ;
+    backlog:appliesDefinitionOfDone fw:DoD .
+fw:AC_AC_DeployPlan a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a box that is planned to ship one deployment unit, When its deployment plan is dated after the box started or names no deployment unit, Then the validator refuses the plan, and a plan made before the start and naming the unit passes." .
+fw:ST_AC_DeployPlan a backlog:Story ; backlog:responsible <http://example.org/fixture-autofix#DefaultExecutor> ; backlog:coversEntity fw:Entity_AC_CeremonyRecord ; backlog:coversStage backlog:Stage_Creation ; backlog:hasIdentifier "AC-S06" ; backlog:hasTitle "A deployment plan names, before the box starts, the deployment unit that is to ship from it" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:belongsToLineage fw:L_AdaptiveCeremonies ;
+    backlog:producedByStage fw:Out_Backlog_AdaptiveCeremonies ;
+    backlog:pursuesObjective fw:Obj_AC_MissionMet , fw:Obj_AC_Planning ;
+    backlog:satisfiesDeliverable fw:Del_AC_DeployPlan ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasAcceptanceCriterion fw:AC_AC_DeployPlan ;
+    backlog:hasReach 3.0 ; backlog:hasImpact 3.0 ; backlog:hasConfidence 0.7 ; backlog:hasEffort 3.0 ;
+    backlog:hasPriorityScore 2.1 ;
+    backlog:hasApplicableConcern backlog:Concern_Data ;
+    backlog:appliesDefinitionOfDone fw:DoD .
+fw:AC_AC_ReviewBlocked a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a box with a planned control that has no run, When a review of the box is recorded, Then the validator refuses the review, and the same review passes once the run is recorded." .
+fw:ST_AC_ReviewBlocked a backlog:Story ; backlog:responsible <http://example.org/fixture-autofix#DefaultExecutor> ; backlog:coversEntity fw:Entity_AC_CeremonyRecord ; backlog:coversStage backlog:Stage_SuspensionException ; backlog:hasIdentifier "AC-S07" ; backlog:hasTitle "A review is refused while a planned control of the box has no recorded run" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ;
+    backlog:belongsToLineage fw:L_AdaptiveCeremonies ;
+    backlog:producedByStage fw:Out_Backlog_AdaptiveCeremonies ;
+    backlog:pursuesObjective fw:Obj_AC_MissionMet , fw:Obj_AC_Control ;
+    backlog:satisfiesDeliverable fw:Del_AC_ReviewBlocked ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasAcceptanceCriterion fw:AC_AC_ReviewBlocked ;
+    backlog:hasReach 5.0 ; backlog:hasImpact 3.0 ; backlog:hasConfidence 0.7 ; backlog:hasEffort 3.0 ;
+    backlog:hasPriorityScore 3.5 ;
+    backlog:hasApplicableConcern backlog:Concern_Architecture ;
+    backlog:appliesDefinitionOfDone fw:DoD ;
+    backlog:dependsOn fw:ST_AC_PlannedControl .
+fw:Gap_AC_Termination a backlog:BlueprintGap ; backlog:gapForEntity fw:Entity_AC_CeremonyRecord ;
+    backlog:gapForStage backlog:Stage_Termination ;
+    backlog:hasGapReason "Deliberately absent by design: a ceremony record of a box is part of the history of the lineage and is never removed; when the lineage is archived the existing archive step moves the whole record, so no item of this lineage covers the end of a ceremony record." .
+fw:Out_Backlog_AdaptiveCeremonies a backlog:StageOutput ;
+    backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage fw:L_AdaptiveCeremonies ;
+    backlog:consumesOutput fw:Out_Objective_AdaptiveCeremonies ;
+    backlog:hasStateDigest "03420829568d6b5e2215a546106d888aa3da5a365133e3a4c07051693dacbbd7" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.443.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Backlog stage of Lineage 20: seven stories, one per deliverable, each with an acceptance criterion, a score and its objectives. Stage 5 of 5." .

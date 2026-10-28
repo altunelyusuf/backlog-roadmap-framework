@@ -11260,6 +11260,12 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.443.0 — 2026-10-28 (MINOR: Lineage 20, Backlog stage; the chain is closed)
+
+- **Lineage 20, Backlog stage:** seven stories, one per scope deliverable, each with an acceptance criterion in Given/When/Then form, a score, the objectives it pursues and can move, a responsible executor and the entity life-cycle stages it covers; one recorded gap (the end of a ceremony record, deliberately absent); five digests reproduce; status Backlogged (data v1.70.0). Stage 5 of 5: the chain is closed, no work has started.
+
+**Unplanned work:** a lineage's Backlog stage output is where its work items first appear, so none can have moved in the release that creates them; the same stage-release finding as v1.439.0.
+
 ## v1.442.0 — 2026-10-28 (MINOR: Lineage 20, Objective stage)
 
 - **Lineage 20, Objective stage:** seven measured objectives, each a counted gap with a baseline reading taken on 2026-10-28 and a checkpoint: the scope deliverables not yet carried (7), ceremony classes with no kind of work (4), the missing preparation (1), planning (3), monitoring (1) and control (2) records, and the rule sets of the standard and agentic profiles, held at 19; the four digests reproduce; status Objectived (data v1.69.0). Stage 4 of 5.
