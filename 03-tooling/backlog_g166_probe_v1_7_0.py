@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_g166_probe v1.6.0 -- re-runnable proof of the adaptive profile (G166).
+"""backlog_g166_probe v1.7.0 -- re-runnable proof of the adaptive profile (G166).
 
   Checks the shipped files (the profile beside the standard and agentic ones, the two rule sets, the revision, the ruling), then plants small registers
   and expects the validator to defer, ask, refuse and accept exactly as the rule sets say. Exit 0 when every expectation holds."""
@@ -28,7 +28,7 @@ expect("profile revision 4 carries its number", g.value(B.Pr_4, B.revisionNumber
 ruling = [r for r in g.subjects(B.hasRulingIdentifier, None) if str(g.value(r, B.hasRulingIdentifier)) == "G166"]
 expect("ruling G166 exists, decides revision 4 and both rule sets, and names two shapes that exist", len(ruling) == 1 and set(g.objects(ruling[0], B.rulingDecides)) == new | {B.Pr_4} and len(set(g.objects(ruling[0], B.enforcedByShape))) == 2 and all((x, RDF.type, SHN.NodeShape) in s for x in g.objects(ruling[0], B.enforcedByShape)))
 sh_txt = open(SH).read()
-expect("ten constraints defer (eighteen mentions: each of the eight register-level deferrals names the rule set twice, once for the deferring adopter and once for the lineage that would keep the check on) to the lineage status or the epic state (seven register-level, the entity life-cycle sweep, two coarse-epic)", sh_txt.count("backlog:RS_ObligationsFollowStatus") == 18, "%d" % sh_txt.count("backlog:RS_ObligationsFollowStatus"))
+expect("ten constraints defer (26 mentions: each of the eight register-level deferrals names the rule set three times, for the deferring adopter, for the lineage that would keep the check on and for the owner of the element judged; the two coarse-epic clauses once each) to the lineage status or the epic state (seven register-level, the entity life-cycle sweep, two coarse-epic)", sh_txt.count("backlog:RS_ObligationsFollowStatus") == 26, "%d" % sh_txt.count("backlog:RS_ObligationsFollowStatus"))
 H = "@prefix backlog: <http://example.org/backlog#> .\n@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n@prefix owl: <http://www.w3.org/2002/07/owl#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n@prefix x: <http://example.org/g166#> .\n"
 def lineage(status, adopt, revision="Pr_4"):
     rs = ["RS_CancellationAssessed", "RS_ChangeSupportsMission", "RS_ConcurrentLineages", "RS_DecompositionStateAgrees", "RS_FlowPointsRecorded", "RS_ImpedimentNamesWhatItBlocks", "RS_PlanBeforeStart", "RS_RepairReprioritises", "RS_StatusHistoryRecorded"] + (["RS_ObligationsFollowStatus", "RS_ChainBothWays"] if adopt else [])

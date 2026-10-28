@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_g170_probe v1.2.0 -- re-runnable proof of the deployment plan and of the review refused while a planned control has no run (G170).
+"""backlog_g170_probe v1.3.0 -- re-runnable proof of the deployment plan and of the review refused while a planned control has no run (G170).
 
   Checks the shipped files (the rule set in the adaptive profile only, the revision, the ruling), then plants small registers and expects the validator to refuse
   a plan with no box, unit or time, a plan made after its box started and a plan whose unit ships from another box, and to refuse a review of a box whose planned
@@ -31,7 +31,7 @@ def run(text):
     return [ln for ln in out.splitlines() if "[Violation]" in ln]
 hits = lambda vs, m: [v for v in vs if m in v]
 d = lambda t: '"2026-10-28T%s:00Z"^^xsd:dateTime' % t
-BOX = 'x:It a backlog:Iteration ; backlog:iterationStart %s .\nx:Other a backlog:Iteration .\nx:U a backlog:DeploymentUnit ; backlog:deploysFrom x:It .\n' % d("10:00")
+BOX = 'x:L a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_ReviewNeedsControlRun .\nx:It a backlog:Iteration ; backlog:belongsToLineage x:L ; backlog:iterationStart %s .\nx:Other a backlog:Iteration .\nx:U a backlog:DeploymentUnit ; backlog:deploysFrom x:It .\n' % d("10:00")
 PL = 'x:P a backlog:DeploymentPlan ; backlog:hasWorkKind backlog:WorkKind_Planning ; backlog:deploymentPlanForBox x:It ; backlog:plansDeploymentUnit x:U ; backlog:deploymentPlannedAt %s .\n'
 v = run('x:P a backlog:DeploymentPlan .\n'); expect("a bare deployment plan is refused: no box, no unit, no time, no kind", all(hits(v, m) for m in ("name the box", "name the deployment unit", "when it was made", "serves planning")))
 v = run(BOX + PL % d("09:00")); expect("a plan made before the box started and naming the unit is accepted", not [x for x in v if "G170" in x])

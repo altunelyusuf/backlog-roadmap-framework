@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_g169_probe v1.1.0 -- re-runnable proof of the planned control, the daily checkpoint and the demo run (G169).
+"""backlog_g169_probe v1.2.0 -- re-runnable proof of the planned control, the daily checkpoint and the demo run (G169).
 
   Plants small registers and expects the validator to refuse a control activity with no box or a kind that is not control, monitoring or reporting, a run with
   no time or result, a checkpoint with no counts or a blocker with no owner, and a demo run with no criterion, no result or a criterion that is not the item's
@@ -50,10 +50,10 @@ v = run(DM % (OK % "x:C1")); expect("a demo run of an item against its own crite
 expect("a demo run against a criterion that is not the item's own is refused", bool(hits(run(DM % (OK % "x:C2")), "not one of the item's own")))
 
 # post-mortem corrections (G171)
-DMD = 'x:S a backlog:Story ; backlog:hasAcceptanceCriterion x:C1 ; backlog:hasState backlog:%s .\nx:C1 a backlog:AcceptanceCriterion .\nx:D a backlog:DemoRun ; backlog:hasWorkKind backlog:WorkKind_Control' + OK % "x:C1" + ' .\n'
+DMD = 'x:L a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_ReviewNeedsControlRun .\nx:S a backlog:Story ; backlog:belongsToLineage x:L ; backlog:hasAcceptanceCriterion x:C1 ; backlog:hasState backlog:%s .\nx:C1 a backlog:AcceptanceCriterion .\nx:D a backlog:DemoRun ; backlog:hasWorkKind backlog:WorkKind_Control' + OK % "x:C1" + ' .\n'
 expect("a demo run of an item that is not finished is refused", bool(hits(run(DMD % "Proposed"), "not finished")))
 expect("a demo run of a Done item is accepted", not hits(run(DMD % "Done"), "not finished"))
-RB = 'x:It a backlog:Iteration ; backlog:iterationStart %s .\nx:A a backlog:ControlActivity ; backlog:hasWorkKind backlog:WorkKind_Control ; backlog:plannedInBox x:It .\nx:R a backlog:ControlRun ; backlog:runOfActivity x:A ; backlog:ranAt %s ; backlog:hasRunResult "ok" .\n'
+RB = 'x:L a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_ReviewNeedsControlRun .\nx:It a backlog:Iteration ; backlog:belongsToLineage x:L ; backlog:iterationStart %s .\nx:A a backlog:ControlActivity ; backlog:hasWorkKind backlog:WorkKind_Control ; backlog:plannedInBox x:It .\nx:R a backlog:ControlRun ; backlog:runOfActivity x:A ; backlog:ranAt %s ; backlog:hasRunResult "ok" .\n'
 expect("a control run that took place before its box started is refused", bool(hits(run(RB % ('"2026-10-28T12:00:00Z"^^xsd:dateTime', T)), "before the box it controls started")))
 expect("a control run after its box started is accepted", not hits(run(RB % ('"2026-10-28T09:00:00Z"^^xsd:dateTime', T)), "before the box it controls started"))
 print("VERDICT   :", "PASS" if not bad else "FAIL"); [print("  ", b) for b in bad]

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_g163_probe v1.0.0 -- re-runnable proof that the opening profile is versioned (G163).
+"""backlog_g163_probe v1.1.0 -- re-runnable proof that the opening profile is versioned (G163).
 
   A profile that grows must not judge a lineage opened earlier (G89); a lineage is held to every rule set up to the revision it opened under.
   Each case runs through the real validator against the real profiles. Exit 0 when every expectation holds.
@@ -48,6 +48,10 @@ with tempfile.TemporaryDirectory() as d:
     ok = os.path.exists(out) and "reportOf x:MyBacklog" in open(out).read().replace("<http://example.org/g163#MyBacklog>", "x:MyBacklog") or (os.path.exists(out) and "g163#MyBacklog" in open(out).read())
     expect("the emitted report names the Backlog of the register it was run on, not the framework's own", ok)
 o = subprocess.run([sys.executable, tool, "--profile", "Profile_Agentic", "--lineage", "L", "--prefix", "x"], capture_output=True, text=True).stdout
-expect("the opening block names the latest revision", "openedUnderRevision backlog:Pr_3" in o)
+from rdflib import Graph, Namespace, RDF
+B = Namespace("http://example.org/backlog#")
+g = Graph(); g.parse(latest("01-ontologies/backlog_abox_v*.ttl"), format="turtle")
+latest_rev = max(int(g.value(r, B.revisionNumber)) for r in g.subjects(RDF.type, B.ProfileRevision))
+expect("the opening block names the latest revision (read from the data file, not pinned)", ("openedUnderRevision backlog:Pr_%d" % latest_rev) in o)
 print("VERDICT   :", "PASS" if not bad else "FAIL"); [print("  ", b) for b in bad]
 sys.exit(1 if bad else 0)
