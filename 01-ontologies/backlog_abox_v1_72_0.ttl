@@ -22,8 +22,8 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (ABox: controlled individuals, reference data and the live register)"@en ;
-    owl:versionIRI <http://example.org/backlog/abox/1.71.0> ;
-    owl:versionInfo "1.71.0" ;
+    owl:versionIRI <http://example.org/backlog/abox/1.72.0> ;
+    owl:versionInfo "1.72.0" ;
     owl:priorVersion <http://example.org/backlog/abox/1.62.0> , <http://example.org/backlog/abox/1.61.0> , <http://example.org/backlog/abox/1.60.0> , <http://example.org/backlog/abox/1.59.0> , <http://example.org/backlog/abox/1.58.0> , <http://example.org/backlog/abox/1.57.0> , <http://example.org/backlog/abox/1.53.0> , <http://example.org/backlog/abox/1.52.0> , <http://example.org/backlog/abox/1.51.0> , <http://example.org/backlog/abox/1.50.0> , <http://example.org/backlog/abox/1.49.0> , <http://example.org/backlog/abox/1.48.0> , <http://example.org/backlog/abox/1.47.0> , <http://example.org/backlog/abox/1.46.0> , <http://example.org/backlog/abox/1.45.0> , <http://example.org/backlog/abox/1.40.0> , <http://example.org/backlog/abox/1.39.0> , <http://example.org/backlog/abox/1.38.0> , <http://example.org/backlog/abox/1.37.0> , <http://example.org/backlog/abox/1.36.0> , <http://example.org/backlog/abox/1.35.0> ;
     owl:priorVersion <http://example.org/backlog/abox/1.34.0> , <http://example.org/backlog/abox/1.33.0> , <http://example.org/backlog/abox/1.32.0> , <http://example.org/backlog/abox/1.31.0> , <http://example.org/backlog/abox/1.30.0> , <http://example.org/backlog/abox/1.29.0> , <http://example.org/backlog/abox/1.28.0> , <http://example.org/backlog/abox/1.27.0> , <http://example.org/backlog/abox/1.26.0> , <http://example.org/backlog/abox/1.25.0> , <http://example.org/backlog/abox/1.24.0> , <http://example.org/backlog/abox/1.23.0> , <http://example.org/backlog/abox/1.22.0> , <http://example.org/backlog/abox/1.21.0> , <http://example.org/backlog/abox/1.20.0> , <http://example.org/backlog/abox/1.19.0> , <http://example.org/backlog/abox/1.17.0> , <http://example.org/backlog/abox/1.16.0> , <http://example.org/backlog/abox/1.15.0> , <http://example.org/backlog/abox/1.14.0> , <http://example.org/backlog/abox/1.13.0> , <http://example.org/backlog/abox/1.12.0> , <http://example.org/backlog/abox/1.11.0> , <http://example.org/backlog/abox/1.10.0> , <http://example.org/backlog/abox/1.9.0> , <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
         <http://example.org/backlog-abox/1.2.1> ,
@@ -9154,7 +9154,7 @@ fw:L_AdaptiveCeremonies a backlog:Lineage ; rdfs:label "Lineage 20: Agile ceremo
     backlog:lineageOrdinal 20 ;
     backlog:lineageArchived false ;
     backlog:lineageForMission fw:Mission_AdaptiveCeremonies ;
-    backlog:hasLineageStatus backlog:LS_Backlogged ;
+    backlog:hasLineageStatus backlog:LS_InProgress ;
     backlog:hasLineageDepthLevel backlog:Depth_StoryDirect ;
     backlog:hasLineageArtifactDomain backlog:Domain_Infrastructure ;
     backlog:memberOfContainer fw:Register .
@@ -9494,10 +9494,11 @@ fw:Out_Objective_AdaptiveCeremonies a backlog:StageOutput ;
 #################################################################
 
 fw:AC_AC_KindOfWork a backlog:AcceptanceCriterion ;
+    backlog:satisfiedByArtifact "03-tooling/backlog_g167_probe_v1_0_0.py" ;
     backlog:hasGherkinText "Given a ceremony record of any class the package holds, When the validator runs, Then a record with no kind of work, or with two, is refused and each of the eight kinds is accepted." .
 fw:ST_AC_KindOfWork a backlog:Story ; backlog:responsible <http://example.org/fixture-autofix#DefaultExecutor> ; backlog:coversEntity fw:Entity_AC_CeremonyRecord ; backlog:coversStage backlog:Stage_Creation ; backlog:hasIdentifier "AC-S01" ; backlog:hasTitle "Every ceremony record carries the one kind of work it serves" ;
-    backlog:hasState backlog:Ready ;
-    backlog:memberOfContainer fw:Register ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register , fw:It_AC_1 ;
     backlog:belongsToLineage fw:L_AdaptiveCeremonies ;
     backlog:producedByStage fw:Out_Backlog_AdaptiveCeremonies ;
     backlog:pursuesObjective fw:Obj_AC_MissionMet , fw:Obj_AC_Kinds ;
@@ -9507,7 +9508,10 @@ fw:ST_AC_KindOfWork a backlog:Story ; backlog:responsible <http://example.org/fi
     backlog:hasReach 5.0 ; backlog:hasImpact 3.0 ; backlog:hasConfidence 0.8 ; backlog:hasEffort 3.0 ;
     backlog:hasPriorityScore 4.0 ;
     backlog:hasApplicableConcern backlog:Concern_Data ;
-    backlog:appliesDefinitionOfDone fw:DoD .
+    backlog:appliesDefinitionOfDone fw:DoD ;
+    backlog:startedAt "2026-10-28T01:24:48Z"^^xsd:dateTime ; backlog:finishedAt "2026-10-28T01:38:48Z"^^xsd:dateTime ; backlog:lastAuditedAt "2026-10-28T01:38:48Z"^^xsd:dateTime ;
+    backlog:hasExecutionModality backlog:Mode_Automated ;
+    backlog:hasEvidence fw:Ev_AC_KindOfWork .
 fw:AC_AC_Readiness a backlog:AcceptanceCriterion ;
     backlog:hasGherkinText "Given an item made Ready, When it has no readiness check or a check with an unmet criterion, Then the validator refuses it, and an item with a check whose criteria are all met passes." .
 fw:ST_AC_Readiness a backlog:Story ; backlog:responsible <http://example.org/fixture-autofix#DefaultExecutor> ; backlog:coversEntity fw:Entity_AC_CeremonyRecord ; backlog:coversStage backlog:Stage_Creation ; backlog:hasIdentifier "AC-S02" ; backlog:hasTitle "A groomed item has a readiness check that records which criteria of the definition of ready were met" ;
@@ -9622,24 +9626,25 @@ fw:Out_Backlog_AdaptiveCeremonies a backlog:StageOutput ;
 <http://example.org/backlog-framework-register#KickOff_1> a backlog:KickOff ; backlog:kicksOffLineage <http://example.org/backlog-framework-register#L_AdaptiveCeremonies> ; backlog:kickOffFor <http://example.org/backlog-framework-register#Register> ; backlog:kickedOffAt "2026-10-28T01:02:19Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ; backlog:hasKickOffMode backlog:KickOff_Declared ; backlog:decidedBy backlog:Builder ; backlog:activatesReport <http://example.org/backlog-framework-register#Report_AC_Kickoff1> .
 
 # ---- Lineage 20, box 1: grooming and planning ----
-fw:Ref_AC_KindOfWork a backlog:RefinementEvent ; backlog:refines fw:ST_AC_KindOfWork ; backlog:refinedAt "2026-10-28T01:03:17Z"^^xsd:dateTime ;
+fw:Ref_AC_KindOfWork a backlog:RefinementEvent ; backlog:hasWorkKind backlog:WorkKind_Preparation ; backlog:refines fw:ST_AC_KindOfWork ; backlog:refinedAt "2026-10-28T01:03:17Z"^^xsd:dateTime ;
     backlog:hasRefinementOutcome "Groomed for box 1: the acceptance criterion reads as a test the validator can run, the effort is 3 points, and the build is one new term set, one shape, one fixture case and one probe check." ;
     backlog:refinedBy backlog:Builder ; backlog:addressesConcern backlog:Concern_Data .
 fw:Ev_AC_KindOfWork_Refine a backlog:TransitionEvent ; backlog:transitionedItem fw:ST_AC_KindOfWork ; backlog:viaTransition backlog:T_Refine ; backlog:transitionedAt "2026-10-28T01:03:17Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder ; backlog:hasTransitionNote "Groomed and made ready for box 1." .
-fw:Ref_AC_Readiness a backlog:RefinementEvent ; backlog:refines fw:ST_AC_Readiness ; backlog:refinedAt "2026-10-28T01:03:18Z"^^xsd:dateTime ;
+fw:Ref_AC_Readiness a backlog:RefinementEvent ; backlog:hasWorkKind backlog:WorkKind_Preparation ; backlog:refines fw:ST_AC_Readiness ; backlog:refinedAt "2026-10-28T01:03:18Z"^^xsd:dateTime ;
     backlog:hasRefinementOutcome "Groomed for box 1: the acceptance criterion reads as a test the validator can run, the effort is 3 points, and the build is one new term set, one shape, one fixture case and one probe check." ;
     backlog:refinedBy backlog:Builder ; backlog:addressesConcern backlog:Concern_Data .
 fw:Ev_AC_Readiness_Refine a backlog:TransitionEvent ; backlog:transitionedItem fw:ST_AC_Readiness ; backlog:viaTransition backlog:T_Refine ; backlog:transitionedAt "2026-10-28T01:03:18Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder ; backlog:hasTransitionNote "Groomed and made ready for box 1." .
 
 fw:It_AC_1 a backlog:Iteration ; backlog:hasIdentifier "AC-BOX-1" ; backlog:hasTitle "Box 1 of Lineage 20" ;
     backlog:hasSprintGoal "The two ceremony-record gaps that every later story builds on: a kind of work on each record, and a readiness check on each groomed item." ;
-    backlog:hasState backlog:Proposed ; backlog:iterationStart "2026-10-28T01:03:26Z"^^xsd:dateTime ; backlog:iterationEnd "2026-10-28T23:59:59Z"^^xsd:dateTime ;
+    backlog:hasState backlog:InProgress ; backlog:iterationStart "2026-10-28T01:03:26Z"^^xsd:dateTime ; backlog:iterationEnd "2026-10-28T23:59:59Z"^^xsd:dateTime ;
     backlog:hasCapacity 8.0 ; backlog:belongsToLineage fw:L_AdaptiveCeremonies .
 fw:Plan_AC_KindOfWork a backlog:PlanningEvent ; rdfs:label "Story KindOfWork planned into box 1"@en ;
     backlog:plansItem fw:ST_AC_KindOfWork ; backlog:plannedInto fw:It_AC_1 ; backlog:plannedAt "2026-10-28T01:03:27Z"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
     backlog:producesTask fw:T_AC_KindOfWork_Build .
-fw:T_AC_KindOfWork_Build a backlog:ExecutionTask ; backlog:hasIdentifier "T-AC-KINDOFWORK-BUILD" ; backlog:hasState backlog:Proposed ;
-    backlog:hasTaskType backlog:Task_Implementation ; backlog:responsible <http://example.org/fixture-autofix#DefaultExecutor> ; backlog:memberOfContainer fw:It_AC_1 ; backlog:appliesDefinitionOfDone fw:DoD ; backlog:belongsToLineage fw:L_AdaptiveCeremonies .
+fw:T_AC_KindOfWork_Build a backlog:ExecutionTask ; backlog:hasIdentifier "T-AC-KINDOFWORK-BUILD" ; backlog:hasState backlog:Done ;
+    backlog:hasTaskType backlog:Task_Implementation ; backlog:responsible <http://example.org/fixture-autofix#DefaultExecutor> ; backlog:memberOfContainer fw:It_AC_1 ; backlog:appliesDefinitionOfDone fw:DoD ; backlog:belongsToLineage fw:L_AdaptiveCeremonies ;
+    backlog:startedAt "2026-10-28T01:24:48Z"^^xsd:dateTime ; backlog:finishedAt "2026-10-28T01:38:48Z"^^xsd:dateTime ; backlog:hasEvidence fw:Ev_AC_KindOfWork ; backlog:hasExecutionModality backlog:Mode_Automated .
 fw:ST_AC_KindOfWork backlog:decomposesInto fw:T_AC_KindOfWork_Build .
 fw:Plan_AC_Readiness a backlog:PlanningEvent ; rdfs:label "Story Readiness planned into box 1"@en ;
     backlog:plansItem fw:ST_AC_Readiness ; backlog:plannedInto fw:It_AC_1 ; backlog:plannedAt "2026-10-28T01:03:27Z"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ;
@@ -9647,5 +9652,91 @@ fw:Plan_AC_Readiness a backlog:PlanningEvent ; rdfs:label "Story Readiness plann
 fw:T_AC_Readiness_Build a backlog:ExecutionTask ; backlog:hasIdentifier "T-AC-READINESS-BUILD" ; backlog:hasState backlog:Proposed ;
     backlog:hasTaskType backlog:Task_Implementation ; backlog:responsible <http://example.org/fixture-autofix#DefaultExecutor> ; backlog:memberOfContainer fw:It_AC_1 ; backlog:appliesDefinitionOfDone fw:DoD ; backlog:belongsToLineage fw:L_AdaptiveCeremonies .
 fw:ST_AC_Readiness backlog:decomposesInto fw:T_AC_Readiness_Build .
-fw:Ceremony_AC_Planning1 a backlog:SprintPlanningCeremony ; backlog:ceremonyFor fw:It_AC_1 ; backlog:heldAt "2026-10-28T01:03:28Z"^^xsd:dateTime ;
+fw:Ceremony_AC_Planning1 a backlog:SprintPlanningCeremony ; backlog:hasWorkKind backlog:WorkKind_Planning ; backlog:ceremonyFor fw:It_AC_1 ; backlog:heldAt "2026-10-28T01:03:28Z"^^xsd:dateTime ;
     backlog:includesPlanningEvent fw:Plan_AC_KindOfWork , fw:Plan_AC_Readiness .
+
+#################################################################
+#  v1.445.0 -- G167: the kind of work of a ceremony record (story AC-S01 of Lineage 20).
+#################################################################
+
+backlog:WorkKind_Preparation a owl:NamedIndividual , backlog:WorkKind ;
+    rdfs:label "Preparation"@en ;
+    skos:definition "Grooming, refining and readying work before it is committed: the work that makes an item ready to be planned."@en .
+
+backlog:WorkKind_Planning a owl:NamedIndividual , backlog:WorkKind ;
+    rdfs:label "Planning"@en ;
+    skos:definition "Committing work to a box and breaking it into tasks: the work that decides what is done next."@en .
+
+backlog:WorkKind_Execution a owl:NamedIndividual , backlog:WorkKind ;
+    rdfs:label "Execution"@en ;
+    skos:definition "Doing the committed work: building, writing, running."@en .
+
+backlog:WorkKind_Monitoring a owl:NamedIndividual , backlog:WorkKind ;
+    rdfs:label "Monitoring"@en ;
+    skos:definition "Watching the work and its measures as it proceeds, without changing it: the daily checkpoint and the reading of measures."@en .
+
+backlog:WorkKind_Control a owl:NamedIndividual , backlog:WorkKind ;
+    rdfs:label "Control"@en ;
+    skos:definition "Checking work against what was planned and acting on a difference: tests, inspections, reviews of results."@en .
+
+backlog:WorkKind_Reporting a owl:NamedIndividual , backlog:WorkKind ;
+    rdfs:label "Reporting"@en ;
+    skos:definition "Telling those who decide what is achieved and what is not."@en .
+
+backlog:WorkKind_Closure a owl:NamedIndividual , backlog:WorkKind ;
+    rdfs:label "Closure"@en ;
+    skos:definition "Closing a box, an item or a lineage: the review, the retrospective and the closing report."@en .
+
+backlog:WorkKind_ChangeManagement a owl:NamedIndividual , backlog:WorkKind ;
+    rdfs:label "Managing change"@en ;
+    skos:definition "Deciding and recording a change to the chain or the plan: a change request, an admitted item, a revision."@en .
+
+backlog:Pr_5 a owl:NamedIndividual , backlog:ProfileRevision ; rdfs:label "Profile revision 5"@en ; backlog:revisionNumber 5 ; skos:definition "Release 1.445.0 (G167) adds to the adaptive profile the kind of work of each refinement, planning, review and retrospective record."@en .
+
+backlog:RS_CeremonyKinds a owl:NamedIndividual , backlog:RuleSet ;
+    backlog:introducedInRevision backlog:Pr_5 ;
+    rdfs:label "A ceremony record names the one kind of work it serves"@en ;
+    skos:definition "Within the adopter: every refinement event, planning ceremony, review ceremony and retrospective names exactly one kind of work, from the closed set of eight."@en .
+
+backlog:Profile_Adaptive backlog:profileIncludes backlog:RS_CeremonyKinds .
+fw:Ruling_G167 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G167" ;
+    rdfs:label "A ceremony record names the one kind of work it serves"@en ;
+    backlog:hasRulingStatement "A ceremony record names the one kind of work it serves" ;
+    backlog:enforcedByShape backlog:CeremonyKindShape , backlog:CeremonyKindTwoShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v130.0.0, section G167." .
+fw:Ruling_G167 backlog:rulingDecides backlog:Pr_5 , backlog:RS_CeremonyKinds .
+fw:L_AdaptiveCeremonies backlog:adoptsRuleSet backlog:RS_CeremonyKinds .
+
+# ---- Lineage 20, box 1: story AC-S01 done ----
+fw:Ev_AC_KindOfWork a backlog:TestEvidence ; rdfs:label "The kind of work probe: eight kinds accepted, none and two refused"@en ;
+    backlog:evidenceVerified true ; backlog:hasTestId "AC-S01" ;
+    backlog:hasTestSpec "03-tooling/backlog_g167_probe_v1_0_0.py" ;
+    backlog:attestsCriterion fw:AC_AC_KindOfWork ;
+    backlog:hasVerificationMethod "The probe ran against the shipped files and eighteen planted registers: each of the eight kinds is accepted, a record with none and one with two are refused, a lineage that did not adopt the rule set is not judged; exit 0." ;
+    backlog:verifiedAt "2026-10-28T01:38:48Z"^^xsd:dateTime ;
+    backlog:verifiedByTool "backlog_g167_probe_v1_0_0.py + backlog_validate_v1_17_0.py" ;
+    backlog:satisfiedByArtifact "03-tooling/backlog_g167_probe_v1_0_0.py" ;
+    backlog:belongsToLineage fw:L_AdaptiveCeremonies .
+fw:H_AC_KindOfWork a backlog:TestHarness ; rdfs:label "Harness for the kind of work"@en ;
+    backlog:harnessFor fw:ST_AC_KindOfWork ; backlog:hasHarnessEvidence fw:Ev_AC_KindOfWork ;
+    backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the probe shows the shape discriminating both ways, and the negative fixture cases fire." .
+fw:Ev_AC_KindOfWork_Fix a backlog:TestEvidence ; backlog:evidenceVerified true ; backlog:hasTestId "AC-S01-FX" ; backlog:hasTestSpec "03-tooling/fixtures/fixture_negative_v1_51_0.ttl" ;
+    backlog:attestsCriterion fw:AC_AC_KindOfWork ; backlog:hasVerificationMethod "The validator run against the negative fixture reports the cases for a record with no kind and a record with two." ;
+    backlog:verifiedAt "2026-10-28T01:38:48Z"^^xsd:dateTime ; backlog:verifiedByTool "backlog_validate_v1_17_0.py" ; backlog:belongsToLineage fw:L_AdaptiveCeremonies .
+fw:Ev_AC_KindOfWork_Obs a backlog:MetricObservation ; rdfs:label "After the kind of work: ceremony record classes with no kind of work"@en ;
+    backlog:observesMetric fw:Metric_AC_Kinds ; backlog:observationFor fw:Obj_AC_Kinds ;
+    backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-10-28T01:39:48Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Query over the T-Box: the four ceremony classes are the domain of the property for the kind of work, and the shape asks it of an adopter." .
+fw:Obs_AC_MissionMet_1 a backlog:MetricObservation ; rdfs:label "After the kind of work: scope deliverables not yet carried"@en ;
+    backlog:observesMetric fw:Metric_AC_MissionMet ; backlog:observationFor fw:Obj_AC_MissionMet ;
+    backlog:hasObservedValue 6.0 ; backlog:observedAt "2026-10-28T01:39:48Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Counted: seven deliverables at the baseline, the deliverable for the kind of work now satisfied by a Done item." .
+fw:ST_AC_KindOfWork backlog:hasEvidence fw:Ev_AC_KindOfWork_Fix .
+fw:Ev_AC_KindOfWork_TS a backlog:TransitionEvent ; backlog:transitionedItem fw:ST_AC_KindOfWork ; backlog:viaTransition backlog:T_Start ; backlog:transitionedAt "2026-10-28T01:24:48Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Ev_AC_KindOfWork_TC a backlog:TransitionEvent ; backlog:transitionedItem fw:ST_AC_KindOfWork ; backlog:viaTransition backlog:T_Complete ; backlog:transitionedAt "2026-10-28T01:38:48Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Ev_AC_KindOfWork_TaskStart a backlog:TransitionEvent ; backlog:transitionedItem fw:T_AC_KindOfWork_Build ; backlog:viaTransition backlog:T_Start ; backlog:transitionedAt "2026-10-28T01:24:48Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Ev_AC_KindOfWork_TaskDone a backlog:TransitionEvent ; backlog:transitionedItem fw:T_AC_KindOfWork_Build ; backlog:viaTransition backlog:T_Complete ; backlog:transitionedAt "2026-10-28T01:38:48Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Ev_AC_KindOfWork_TaskDecomposed a backlog:TransitionEvent ; backlog:transitionedItem fw:T_AC_KindOfWork_Build ; backlog:viaTransition backlog:T_Decompose ; backlog:transitionedAt "2026-10-28T01:03:38Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Ev_AC_KindOfWork_TaskReady a backlog:TransitionEvent ; backlog:transitionedItem fw:T_AC_KindOfWork_Build ; backlog:viaTransition backlog:T_RefinedToReady ; backlog:transitionedAt "2026-10-28T01:03:39Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .

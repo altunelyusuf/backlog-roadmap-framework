@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v129.0.0
+# Lineage Operating Discipline — v130.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -4101,4 +4101,17 @@ Related: G89, G91, G155, G162, G163, G164, G165.
 **What was done.** `BlueprintSweepShape` (the "Full life-cycle sweep per entity (L3)" constraint) defers for an adopter of `RS_ObligationsFollowStatus` until lineage status rank 5 (Backlogged), like the others; the rule set carries the addendum as a scope note, its definition unchanged. A lineage that did not adopt the rule set is asked at once, as before. The probe checks all three cases.
 
 **What is not claimed.** This was found by running one lineage to its second stage. Other obligations that depend on the Backlog stage may exist; each found in this lineage is added the same way and recorded here.
+Related: G166.
+
+## G167 — A ceremony record names the one kind of work it serves
+
+*(Lineage 20, story AC-S01, release 1.445.0. The Owner, 2026-10-27: the agile ceremonies are each tied to the kind of work they serve, so that the daily checkpoint reads as monitoring.)*
+
+**Q1 — what was wrong.** The ceremony records of the framework (the refinement event, the planning ceremony, the review ceremony and the retrospective) said when something happened and what it decided, and never which kind of work it served. A box could not be read by kind: how much of it was preparation, how much control, how much closure.
+
+**Q2 — what was done.** A closed set of eight kinds, `WorkKind` (preparation, planning, execution, monitoring, control, reporting, closure, change management), and one link, `hasWorkKind`, from each of the four ceremony classes to it. The rule set `RS_CeremonyKinds`, introduced in profile revision 5 and included only in the adaptive profile, asks every ceremony record of an adopting lineage for exactly one kind: `CeremonyKindShape` refuses none, `CeremonyKindTwoShape` refuses two. The standard and agentic profiles are unchanged. Lineage 20 adopted the rule set while it ran, and its own records carry their kinds.
+
+**Q3 — what the record shows.** `backlog_g167_probe` plants small registers: each of the eight kinds is accepted, a record with none and one with two are refused, a lineage that did not adopt the rule set is not judged, and a retrospective is judged through the review it follows. The negative fixture holds one case for each shape.
+
+**What is not claimed.** The daily checkpoint, the readiness check, the planned control, the demo, the deployment plan and the blocked review are the other stories of Lineage 20 and are not built here. The kind is a label the record carries; whether the record really served that kind is the reader's judgement.
 Related: G166.

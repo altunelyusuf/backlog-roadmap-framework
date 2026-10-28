@@ -11260,6 +11260,11 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.445.0 — 2026-10-28 (MINOR: Lineage 20, box 1; the kind of work of a ceremony record, G167)
+
+- **G167, the kind of work:** a closed set of eight kinds of work and one link from the refinement event, the planning ceremony, the review ceremony and the retrospective to it; the rule set `RS_CeremonyKinds` (profile revision 5, adaptive profile only) asks an adopting lineage for exactly one kind on each record, with a shape for none and a shape for two, each proven by a case of the negative fixture and by `backlog_g167_probe` (18 checks). The standard and agentic profiles are unchanged (T-Box v1.157.0, shapes v1.189.0, data v1.72.0).
+- **Lineage 20, box 1:** story AC-S01 is Done with its evidence, harness and measurements; the lineage is InProgress and adopted the new rule set while it ran. The earlier probe `backlog_g166_probe` now counts the later rule set in the adaptive profile (v1.2.0).
+
 ## v1.444.0 — 2026-10-28 (MINOR: Lineage 20, box 1 planned; the kick-off is recorded)
 
 - **Lineage 20, kick-off and box 1:** the plan step of the lineage tool recorded the kick-off, activating a roadmap report computed in the same step. Box 1 is an iteration with a sprint goal and a capacity of 8 points; stories AC-S01 (kind of work) and AC-S02 (readiness) were groomed, each with a refinement event that addresses its declared concern and a recorded move to Ready, then planned into the box through a planning ceremony that produced one build task each (data v1.71.0). No work has started; the build comes in the next releases.
