@@ -1,4 +1,4 @@
-# Lineage Operating Discipline — v131.0.0
+# Lineage Operating Discipline — v132.0.0
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -4128,4 +4128,17 @@ Related: G166.
 
 **What is not claimed.** The check records that someone answered each criterion; whether the answer is true is the reader's judgement, and the criteria are free text. A check made after the item became Ready is not caught by a shape (the timing needs the earlier register state; the step tool of increment C carries it).
 Related: G166, G167.
+
+## G169 — A box records its planned controls with their runs, its daily checkpoints and its demo runs
+
+*(Lineage 20, stories AC-S03, AC-S04 and AC-S05, release 1.447.0. The Owner, 2026-10-27: the agile artefacts and ceremonies each serve a kind of work, and the box is controlled and monitored as well as built.)*
+
+**Q1 — what was wrong.** A box could be planned, built and closed, and nothing in the register said that it was controlled while it ran: no planned control, no look at its counts, no showing of a finished item against its criterion. Control, monitoring and reporting were done or not done without a record.
+
+**Q2 — what was done.** Four record classes, each recorded whole. A planned control activity (`ControlActivity`) names the box it is planned into and one kind of work, which is control, monitoring or reporting (a measurement is monitoring); its run (`ControlRun`) records when it ran and what it found. A daily checkpoint (`DailyCheckpoint`) names its box, its instant, the counts of open, in-progress and done items, and serves monitoring; a blocker it names is an impediment, and the existing impediment rule already refuses an unresolved one without an accountable role, so no second rule was written. A demo run (`DemoRun`) names a finished item, one of that item's own acceptance criteria, what was shown and the result, and serves control. The four shapes (`ControlActivityShape`, `ControlRunShape`, `DailyCheckpointShape`, `DemoRunShape`) bind whoever uses the classes; no rule set is needed, because the classes are new and no existing record is judged differently. The standard and agentic profiles are unchanged.
+
+**Q3 — what the record shows.** `backlog_g169_probe` plants small registers: each complete record is accepted, each bare record and each wrongly formed one is refused by name, and a checkpoint that names an unowned blocker is refused through the impediment rule. The negative fixture holds a case for each shape.
+
+**What is not claimed.** That a planned control has a run before the box is reviewed is the next story (AC-S07) and is not asked here: a planned control may stand without a run. The deployment plan (AC-S06) is also not built here. The counts of a checkpoint are what the recorder wrote; they are not compared with the register.
+Related: G166, G167, G168.
 

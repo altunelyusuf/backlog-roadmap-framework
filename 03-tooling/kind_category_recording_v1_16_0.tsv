@@ -693,3 +693,13 @@ class	ReadinessCheck	http://example.org/backlog#ReadinessCheck	ClassKind_Informa
 class	ReadinessCriterion	http://example.org/backlog#ReadinessCriterion	ClassKind_InformationArtifact	the definition calls it a record, report, file, package or written rule, and the class is a core:Artifact	G168
 property	checksReadinessOf	http://example.org/backlog#checksReadinessOf	RelationshipCategory_Assessment	the definition names the checker and no finer relation	G168
 property	hasReadinessCriterion	http://example.org/backlog#hasReadinessCriterion	RelationshipCategory_Compositional	the check is made of its criteria: a part belongs to one whole	G168
+class	ControlActivity	http://example.org/backlog#ControlActivity	ClassKind_InformationArtifact	the definition calls it a record, report, file, package or written rule, and the class is a core:Artifact	G169
+class	ControlRun	http://example.org/backlog#ControlRun	ClassKind_InformationArtifact	the definition calls it a record, report, file, package or written rule, and the class is a core:Artifact	G169
+class	DailyCheckpoint	http://example.org/backlog#DailyCheckpoint	ClassKind_InformationArtifact	the definition calls it a record, report, file, package or written rule, and the class is a core:Artifact	G169
+class	DemoRun	http://example.org/backlog#DemoRun	ClassKind_InformationArtifact	the definition calls it a record, report, file, package or written rule, and the class is a core:Artifact	G169
+property	plannedInBox	http://example.org/backlog#plannedInBox	RelationshipCategory_ContainmentMembership	the activity belongs to the box it is planned into: a member belongs to one container	G169
+property	runOfActivity	http://example.org/backlog#runOfActivity	RelationshipCategory_Reification	the run is a recorded occurrence of the activity it carries out	G169
+property	checkpointOfBox	http://example.org/backlog#checkpointOfBox	RelationshipCategory_Assessment	the definition names the checker and no finer relation	G169
+property	namesBlocker	http://example.org/backlog#namesBlocker	RelationshipCategory_Association	related, and no more specific category says how; the definition leaves unsaid the finer relation	G169
+property	demonstratesItem	http://example.org/backlog#demonstratesItem	RelationshipCategory_Assessment	the definition names the checker and no finer relation	G169
+property	demonstratedAgainst	http://example.org/backlog#demonstratedAgainst	RelationshipCategory_Assessment	the definition names the checker and no finer relation	G169

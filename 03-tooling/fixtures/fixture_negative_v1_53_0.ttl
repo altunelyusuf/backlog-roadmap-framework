@@ -4349,3 +4349,9 @@ ex:RDY_UNMET a backlog:Story ; backlog:belongsToLineage ex:RDY_LIN ; backlog:has
 ex:RDY_UNMET_CHK a backlog:ReadinessCheck ; backlog:checksReadinessOf ex:RDY_UNMET ; backlog:readinessCheckedAt "2026-10-28T00:00:00Z"^^xsd:dateTime ; backlog:hasReadinessCriterion ex:RDY_UNMET_K .
 ex:RDY_UNMET_K a backlog:ReadinessCriterion ; backlog:criterionMet false .
 ex:RDY_BARE a backlog:ReadinessCheck .
+
+# G169: a control activity with no box and a wrong kind, a bare run, a bare checkpoint, a bare demo run.
+ex:CTL_ACT a backlog:ControlActivity ; backlog:hasWorkKind backlog:WorkKind_Execution .
+ex:CTL_RUN a backlog:ControlRun .
+ex:CKP_BAD a backlog:DailyCheckpoint .
+ex:DEMO_BAD a backlog:DemoRun .

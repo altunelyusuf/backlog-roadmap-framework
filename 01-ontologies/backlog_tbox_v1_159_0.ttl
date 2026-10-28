@@ -19,8 +19,8 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.158.0> ;
-    owl:versionInfo "1.158.0" ;
+    owl:versionIRI <http://example.org/backlog/1.159.0> ;
+    owl:versionInfo "1.159.0" ;
     owl:priorVersion <http://example.org/backlog/1.153.0> , <http://example.org/backlog/1.152.0> , <http://example.org/backlog/1.151.0> , <http://example.org/backlog/1.150.0> , <http://example.org/backlog/1.149.0> , <http://example.org/backlog/1.148.0> , <http://example.org/backlog/1.143.0> , <http://example.org/backlog/1.142.0> , <http://example.org/backlog/1.141.0> , <http://example.org/backlog/1.140.0> , <http://example.org/backlog/1.139.0> , <http://example.org/backlog/1.138.0> , <http://example.org/backlog/1.137.0> , <http://example.org/backlog/1.136.0> , <http://example.org/backlog/1.135.0> , <http://example.org/backlog/1.134.0> , <http://example.org/backlog/1.133.0> , <http://example.org/backlog/1.132.0> , <http://example.org/backlog/1.131.0> , <http://example.org/backlog/1.130.0> , <http://example.org/backlog/1.129.0> , <http://example.org/backlog/1.125.0> , <http://example.org/backlog/1.124.0> , <http://example.org/backlog/1.123.0> , <http://example.org/backlog/1.122.0> ;
     owl:priorVersion <http://example.org/backlog/1.121.0> , <http://example.org/backlog/1.120.0> , <http://example.org/backlog/1.119.0> , <http://example.org/backlog/1.118.0> , <http://example.org/backlog/1.117.0> ;
     owl:priorVersion <http://example.org/backlog/1.116.0> ;
@@ -8649,7 +8649,7 @@ backlog:WorkKind a owl:Class ;
     skos:definition "The kind of work a ceremony record serves, from a closed set of eight: preparation, planning, execution, monitoring, control, reporting, closure and change management. A record names exactly one, so that the daily checkpoint is read as monitoring and the review as closure, and a box can be read by kind of work."@en .
 
 backlog:hasWorkKind a owl:ObjectProperty , owl:FunctionalProperty ;
-    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:RefinementEvent backlog:SprintPlanningCeremony backlog:SprintReviewCeremony backlog:SprintRetrospective ) ] ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:RefinementEvent backlog:SprintPlanningCeremony backlog:SprintReviewCeremony backlog:SprintRetrospective backlog:ControlActivity backlog:DailyCheckpoint backlog:DemoRun ) ] ;
     rdfs:range backlog:WorkKind ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "has kind of work"@en ;
@@ -8691,3 +8691,110 @@ backlog:ReadinessCheck kb:hasClassKind kb:ClassKind_InformationArtifact .
 backlog:ReadinessCriterion kb:hasClassKind kb:ClassKind_InformationArtifact .
 backlog:checksReadinessOf kb:hasRelationshipCategory kb:RelationshipCategory_Assessment .
 backlog:hasReadinessCriterion kb:hasRelationshipCategory kb:RelationshipCategory_Compositional .
+
+# ---- G169: the planned control, the daily checkpoint and the demo run ----
+backlog:ControlActivity a owl:Class ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "Control Activity"@en ;
+    skos:definition "An activity planned into a box that is not building: a control, a monitoring, a reporting or a measurement. It is planned work with one kind of work, and it is carried out by one or more runs."@en .
+
+backlog:ControlRun a owl:Class ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "Control Run"@en ;
+    skos:definition "One carrying out of a planned control activity: when it ran and what came of it."@en .
+
+backlog:DailyCheckpoint a owl:Class ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "Daily Checkpoint"@en ;
+    skos:definition "A short look at a box in progress: how many items are open, in progress and done at that moment, and the blockers in the way. It serves monitoring and changes nothing."@en .
+
+backlog:DemoRun a owl:Class ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "Demo Run"@en ;
+    skos:definition "A finished item shown against one of its own acceptance criteria: what was shown and the result. It serves control."@en .
+
+backlog:plannedInBox a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:ControlActivity ; rdfs:range backlog:Iteration ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "planned in box"@en ;
+    skos:definition "The box the activity is planned into."@en .
+
+backlog:runOfActivity a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:ControlRun ; rdfs:range backlog:ControlActivity ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "run of activity"@en ;
+    skos:definition "The planned activity the run carried out."@en .
+
+backlog:ranAt a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:ControlRun ; rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "ran at"@en ;
+    skos:definition "The instant the run took place."@en .
+
+backlog:hasRunResult a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:ControlRun ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "has run result"@en ;
+    skos:definition "What the run found, in words."@en .
+
+backlog:checkpointOfBox a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:DailyCheckpoint ; rdfs:range backlog:Iteration ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "checkpoint of box"@en ;
+    skos:definition "The box the checkpoint looked at."@en .
+
+backlog:checkpointAt a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:DailyCheckpoint ; rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "checkpoint at"@en ;
+    skos:definition "The instant of the checkpoint."@en .
+
+backlog:openItemCount a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:DailyCheckpoint ; rdfs:range xsd:integer ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "open item count"@en ;
+    skos:definition "How many items of the box were not yet started at the checkpoint."@en .
+
+backlog:inProgressItemCount a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:DailyCheckpoint ; rdfs:range xsd:integer ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "in progress item count"@en ;
+    skos:definition "How many items of the box were being worked at the checkpoint."@en .
+
+backlog:doneItemCount a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:DailyCheckpoint ; rdfs:range xsd:integer ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "done item count"@en ;
+    skos:definition "How many items of the box were done at the checkpoint."@en .
+
+backlog:namesBlocker a owl:ObjectProperty ;
+    rdfs:domain backlog:DailyCheckpoint ; rdfs:range backlog:Impediment ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "names blocker"@en ;
+    skos:definition "A blocker the checkpoint found in the way of the box."@en .
+
+backlog:demonstratesItem a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:DemoRun ; rdfs:range backlog:WorkItem ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "demonstrates item"@en ;
+    skos:definition "The finished item the demo showed."@en .
+
+backlog:demonstratedAgainst a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:DemoRun ; rdfs:range backlog:AcceptanceCriterion ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "demonstrated against"@en ;
+    skos:definition "The acceptance criterion of the item that the demo showed it against."@en .
+
+backlog:demoAt a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:DemoRun ; rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "demo at"@en ;
+    skos:definition "The instant of the demo."@en .
+
+backlog:hasDemoShown a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:DemoRun ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "has demo shown"@en ;
+    skos:definition "What was shown, in words."@en .
+
+backlog:hasDemoResult a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:DemoRun ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ; rdfs:label "has demo result"@en ;
+    skos:definition "What came of the demo, in words."@en .
+
+backlog:ControlActivity kb:hasClassKind kb:ClassKind_InformationArtifact .
+backlog:ControlRun kb:hasClassKind kb:ClassKind_InformationArtifact .
+backlog:DailyCheckpoint kb:hasClassKind kb:ClassKind_InformationArtifact .
+backlog:DemoRun kb:hasClassKind kb:ClassKind_InformationArtifact .
+backlog:plannedInBox kb:hasRelationshipCategory kb:RelationshipCategory_ContainmentMembership .
+backlog:runOfActivity kb:hasRelationshipCategory kb:RelationshipCategory_Reification .
+backlog:checkpointOfBox kb:hasRelationshipCategory kb:RelationshipCategory_Assessment .
+backlog:namesBlocker kb:hasRelationshipCategory kb:RelationshipCategory_Association .
+backlog:demonstratesItem kb:hasRelationshipCategory kb:RelationshipCategory_Assessment .
+backlog:demonstratedAgainst kb:hasRelationshipCategory kb:RelationshipCategory_Assessment .
+
+backlog:openItemCount backlog:numberOrigin backlog:Num_Asserted .
+backlog:inProgressItemCount backlog:numberOrigin backlog:Num_Asserted .
+backlog:doneItemCount backlog:numberOrigin backlog:Num_Asserted .

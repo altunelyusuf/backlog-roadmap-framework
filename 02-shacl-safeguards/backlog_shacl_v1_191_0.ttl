@@ -9,8 +9,8 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog/shacl/1.190.0> ;
-    owl:versionInfo "1.190.0" ;
+    owl:versionIRI <http://example.org/backlog/shacl/1.191.0> ;
+    owl:versionInfo "1.191.0" ;
     owl:priorVersion <http://example.org/backlog-shapes/1.184.0> , <http://example.org/backlog-shapes/1.176.0> , <http://example.org/backlog-shapes/1.175.0> , <http://example.org/backlog-shapes/1.174.0> , <http://example.org/backlog-shapes/1.173.0> , <http://example.org/backlog-shapes/1.172.0> , <http://example.org/backlog-shapes/1.171.0> , <http://example.org/backlog-shapes/1.170.0> , <http://example.org/backlog-shapes/1.169.0> , <http://example.org/backlog-shapes/1.168.0> , <http://example.org/backlog-shapes/1.167.0> , <http://example.org/backlog-shapes/1.166.0> , <http://example.org/backlog-shapes/1.165.0> , <http://example.org/backlog-shapes/1.164.0> , <http://example.org/backlog-shapes/1.159.0> , <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.154.0> , <http://example.org/backlog-shapes/1.153.0> , <http://example.org/backlog-shapes/1.152.0> , <http://example.org/backlog-shapes/1.151.0> , <http://example.org/backlog-shapes/1.150.0> , <http://example.org/backlog-shapes/1.149.0> , <http://example.org/backlog-shapes/1.148.0> , <http://example.org/backlog-shapes/1.147.0> , <http://example.org/backlog-shapes/1.146.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.145.0> ;
@@ -9320,3 +9320,73 @@ backlog:ReadinessCheckShape a sh:NodeShape ;
             $this backlog:hasReadinessCriterion ?k .
             FILTER NOT EXISTS { ?k backlog:criterionMet true }
         }""" ] .
+
+backlog:ControlActivityShape a sh:NodeShape ;
+    sh:targetClass backlog:ControlActivity ;
+    sh:severity sh:Violation ;
+    rdfs:label "A planned control is planned into a box and has one kind of work (G169)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "CTL_ACT" ;
+    sh:property [ sh:path backlog:plannedInBox ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "G169: a control activity must name the one box it is planned into." ] ;
+    sh:property [ sh:path backlog:hasWorkKind ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "G169: a control activity must name exactly one kind of work." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G169: a control activity serves control, monitoring or reporting; a measurement is monitoring. Its kind of work is another one." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE { $this backlog:hasWorkKind ?k . FILTER (?k NOT IN (backlog:WorkKind_Control, backlog:WorkKind_Monitoring, backlog:WorkKind_Reporting)) }""" ] .
+
+backlog:ControlRunShape a sh:NodeShape ;
+    sh:targetClass backlog:ControlRun ;
+    sh:severity sh:Violation ;
+    rdfs:label "A run of a planned control records when and with what result (G169)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "CTL_RUN" ;
+    sh:property [ sh:path backlog:runOfActivity ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "G169: a control run must name the planned activity it carried out." ] ;
+    sh:property [ sh:path backlog:ranAt ; sh:minCount 1 ;
+        sh:message "G169: a control run must record when it ran." ] ;
+    sh:property [ sh:path backlog:hasRunResult ; sh:minCount 1 ;
+        sh:message "G169: a control run must record its result; a run with no result is a claim that something was checked." ] .
+
+backlog:DailyCheckpointShape a sh:NodeShape ;
+    sh:targetClass backlog:DailyCheckpoint ;
+    sh:severity sh:Violation ;
+    rdfs:label "A daily checkpoint records its box, its time and the counts of the box (G169)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "CKP_BAD" ;
+    sh:property [ sh:path backlog:checkpointOfBox ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "G169: a daily checkpoint must name the box it looked at." ] ;
+    sh:property [ sh:path backlog:checkpointAt ; sh:minCount 1 ;
+        sh:message "G169: a daily checkpoint must record when it was made." ] ;
+    sh:property [ sh:path backlog:openItemCount ; sh:minCount 1 ;
+        sh:message "G169: a daily checkpoint must record how many items are open." ] ;
+    sh:property [ sh:path backlog:inProgressItemCount ; sh:minCount 1 ;
+        sh:message "G169: a daily checkpoint must record how many items are in progress." ] ;
+    sh:property [ sh:path backlog:doneItemCount ; sh:minCount 1 ;
+        sh:message "G169: a daily checkpoint must record how many items are done." ] ;
+    sh:property [ sh:path backlog:hasWorkKind ; sh:minCount 1 ; sh:hasValue backlog:WorkKind_Monitoring ;
+        sh:message "G169: a daily checkpoint serves monitoring." ] .
+
+backlog:DemoRunShape a sh:NodeShape ;
+    sh:targetClass backlog:DemoRun ;
+    sh:severity sh:Violation ;
+    rdfs:label "A demo run shows an item against one of its own criteria and records the result (G169)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "DEMO_BAD" ;
+    sh:property [ sh:path backlog:demonstratesItem ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "G169: a demo run must name the item it showed." ] ;
+    sh:property [ sh:path backlog:demonstratedAgainst ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "G169: a demo run must name the acceptance criterion it showed the item against." ] ;
+    sh:property [ sh:path backlog:demoAt ; sh:minCount 1 ;
+        sh:message "G169: a demo run must record when it took place." ] ;
+    sh:property [ sh:path backlog:hasDemoShown ; sh:minCount 1 ;
+        sh:message "G169: a demo run must record what was shown." ] ;
+    sh:property [ sh:path backlog:hasDemoResult ; sh:minCount 1 ;
+        sh:message "G169: a demo run must record its result." ] ;
+    sh:property [ sh:path backlog:hasWorkKind ; sh:minCount 1 ; sh:hasValue backlog:WorkKind_Control ;
+        sh:message "G169: a demo run serves control." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G169: this demo run shows an item against a criterion that is not one of the item's own acceptance criteria." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE { $this backlog:demonstratesItem ?i ; backlog:demonstratedAgainst ?c . FILTER NOT EXISTS { ?i backlog:hasAcceptanceCriterion ?c } }""" ] .

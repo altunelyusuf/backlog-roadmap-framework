@@ -11260,6 +11260,11 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.447.0 — 2026-10-28 (MINOR: Lineage 20, box 2; the planned control, the daily checkpoint and the demo run, G169)
+
+- **G169:** a planned control activity with its run, a daily checkpoint and a demo run, each recorded whole and each serving one kind of work; four shapes, each proven by a case of the negative fixture and by `backlog_g169_probe` (18 checks). A checkpoint's blocker reuses the existing impediment rule. No rule set and no profile revision: the classes are new (T-Box v1.159.0, shapes v1.191.0, data v1.74.0).
+- **Lineage 20, box 2 closed:** stories AC-S03, AC-S04 and AC-S05 are Done with evidence, a planned control and its run, a checkpoint, a demo run of each, a review, a retrospective (one finding) and the deployment that carries them. Two of seven scope deliverables remain.
+
 ## v1.446.0 — 2026-10-28 (MINOR: Lineage 20, box 1 closed; the readiness check, G168)
 
 - **G168, the readiness check:** a recorded check of a work item against stated criteria, each met or unmet; the rule set `RS_ReadinessChecked` (profile revision 6, adaptive profile only) asks an adopting lineage for a check of every Ready item and refuses a Ready item with an unmet criterion, each shape proven by a case of the negative fixture and by `backlog_g168_probe`. The standard and agentic profiles are unchanged (T-Box v1.158.0, shapes v1.190.0, data v1.73.0). The earlier probe `backlog_g166_probe` counts the later rule set (v1.3.0).
