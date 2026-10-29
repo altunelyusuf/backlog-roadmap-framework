@@ -22,9 +22,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (ABox: controlled individuals, reference data and the live register)"@en ;
-    owl:versionIRI <http://example.org/backlog/abox/1.85.0> ;
-    owl:versionInfo "1.85.0" ;
-    owl:priorVersion <http://example.org/backlog/abox/1.84.0> , <http://example.org/backlog/abox/1.83.0> , <http://example.org/backlog/abox/1.82.0> , <http://example.org/backlog/abox/1.81.0> , <http://example.org/backlog/abox/1.62.0> , <http://example.org/backlog/abox/1.61.0> , <http://example.org/backlog/abox/1.60.0> , <http://example.org/backlog/abox/1.59.0> , <http://example.org/backlog/abox/1.58.0> , <http://example.org/backlog/abox/1.57.0> , <http://example.org/backlog/abox/1.53.0> , <http://example.org/backlog/abox/1.52.0> , <http://example.org/backlog/abox/1.51.0> , <http://example.org/backlog/abox/1.50.0> , <http://example.org/backlog/abox/1.49.0> , <http://example.org/backlog/abox/1.48.0> , <http://example.org/backlog/abox/1.47.0> , <http://example.org/backlog/abox/1.46.0> , <http://example.org/backlog/abox/1.45.0> , <http://example.org/backlog/abox/1.40.0> , <http://example.org/backlog/abox/1.39.0> , <http://example.org/backlog/abox/1.38.0> , <http://example.org/backlog/abox/1.37.0> , <http://example.org/backlog/abox/1.36.0> , <http://example.org/backlog/abox/1.35.0> ;
+    owl:versionIRI <http://example.org/backlog/abox/1.86.0> ;
+    owl:versionInfo "1.86.0" ;
+    owl:priorVersion <http://example.org/backlog/abox/1.85.0> , <http://example.org/backlog/abox/1.84.0> , <http://example.org/backlog/abox/1.83.0> , <http://example.org/backlog/abox/1.82.0> , <http://example.org/backlog/abox/1.81.0> , <http://example.org/backlog/abox/1.62.0> , <http://example.org/backlog/abox/1.61.0> , <http://example.org/backlog/abox/1.60.0> , <http://example.org/backlog/abox/1.59.0> , <http://example.org/backlog/abox/1.58.0> , <http://example.org/backlog/abox/1.57.0> , <http://example.org/backlog/abox/1.53.0> , <http://example.org/backlog/abox/1.52.0> , <http://example.org/backlog/abox/1.51.0> , <http://example.org/backlog/abox/1.50.0> , <http://example.org/backlog/abox/1.49.0> , <http://example.org/backlog/abox/1.48.0> , <http://example.org/backlog/abox/1.47.0> , <http://example.org/backlog/abox/1.46.0> , <http://example.org/backlog/abox/1.45.0> , <http://example.org/backlog/abox/1.40.0> , <http://example.org/backlog/abox/1.39.0> , <http://example.org/backlog/abox/1.38.0> , <http://example.org/backlog/abox/1.37.0> , <http://example.org/backlog/abox/1.36.0> , <http://example.org/backlog/abox/1.35.0> ;
     owl:priorVersion <http://example.org/backlog/abox/1.34.0> , <http://example.org/backlog/abox/1.33.0> , <http://example.org/backlog/abox/1.32.0> , <http://example.org/backlog/abox/1.31.0> , <http://example.org/backlog/abox/1.30.0> , <http://example.org/backlog/abox/1.29.0> , <http://example.org/backlog/abox/1.28.0> , <http://example.org/backlog/abox/1.27.0> , <http://example.org/backlog/abox/1.26.0> , <http://example.org/backlog/abox/1.25.0> , <http://example.org/backlog/abox/1.24.0> , <http://example.org/backlog/abox/1.23.0> , <http://example.org/backlog/abox/1.22.0> , <http://example.org/backlog/abox/1.21.0> , <http://example.org/backlog/abox/1.20.0> , <http://example.org/backlog/abox/1.19.0> , <http://example.org/backlog/abox/1.17.0> , <http://example.org/backlog/abox/1.16.0> , <http://example.org/backlog/abox/1.15.0> , <http://example.org/backlog/abox/1.14.0> , <http://example.org/backlog/abox/1.13.0> , <http://example.org/backlog/abox/1.12.0> , <http://example.org/backlog/abox/1.11.0> , <http://example.org/backlog/abox/1.10.0> , <http://example.org/backlog/abox/1.9.0> , <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
         <http://example.org/backlog-abox/1.2.1> ,
                      <http://example.org/backlog-abox/1.2.0> ,
@@ -9382,7 +9382,7 @@ fw:L_AdaptiveProof a backlog:Lineage ; rdfs:label "Lineage 21: the adaptive prof
     backlog:lineageOrdinal 21 ;
     backlog:lineageArchived false ;
     backlog:lineageForMission fw:Mission_AdaptiveProof ;
-    backlog:hasLineageStatus backlog:LS_Objectived ;
+    backlog:hasLineageStatus backlog:LS_Backlogged ;
     backlog:hasLineageDepthLevel backlog:Depth_StoryDirect ;
     backlog:hasLineageArtifactDomain backlog:Domain_Infrastructure ;
     backlog:memberOfContainer fw:Register .
@@ -9733,3 +9733,150 @@ fw:Out_Objective_AdaptiveProof a backlog:StageOutput ;
     backlog:hasStateDigest "989173bd35d2a6711e6a1fd02612b6a23c17de558e177e7d919ae03f7faf8192" ;
     backlog:closedAtCommit "backlog-roadmap-framework-v1.458.0 (tag; witnessed by git, not asserted)" ;
     backlog:hasRationale "Objective stage of Lineage 21: eight measured objectives with counted baselines. Stage 4 of 5." .
+
+# ---- Lineage 21: Backlog stage ----
+
+fw:AC_AP_DigestCheck a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given an archived lineage that reproduces under the register's digest table, When the check runs, Then it passes without a baseline entry, and a planted mismatch is still refused." .
+fw:ST_AP_DigestCheck a backlog:Story ; backlog:responsible <http://example.org/fixture-autofix#DefaultExecutor> ;
+    backlog:coversEntity fw:Entity_AP_BoxRecord ; backlog:coversStage backlog:Stage_Termination ;
+    backlog:hasIdentifier "AP-S01" ; backlog:hasTitle "The archived-digest check uses the digest table the live gate uses" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ; backlog:belongsToLineage fw:L_AdaptiveProof ;
+    backlog:pursuesObjective fw:Obj_AP_Digest ; backlog:satisfiesDeliverable fw:Del_AP_D1 ;
+    backlog:hasInvestmentCategory backlog:Cat_TechnicalDebt ;
+    backlog:hasAcceptanceCriterion fw:AC_AP_DigestCheck ;
+    backlog:hasReach 5.0 ; backlog:hasImpact 3.0 ; backlog:hasConfidence 0.8 ; backlog:hasEffort 3.0 ;
+    backlog:hasPriorityScore 4.0 ;
+    backlog:hasExecutionModality backlog:Mode_Automated ;
+    backlog:producedByStage fw:Out_Backlog_AdaptiveProof .
+fw:AC_AP_ArchiveForms a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a lineage with one subject written as a full IRI, When the archive tool applies, Then no statement of that subject is left in the live register." .
+fw:ST_AP_ArchiveForms a backlog:Story ; backlog:responsible <http://example.org/fixture-autofix#DefaultExecutor> ;
+    backlog:coversEntity fw:Entity_AP_BoxRecord ; backlog:coversStage backlog:Stage_Termination ;
+    backlog:hasIdentifier "AP-S02" ; backlog:hasTitle "The archive tool moves a subject written as a full IRI" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ; backlog:belongsToLineage fw:L_AdaptiveProof ;
+    backlog:pursuesObjective fw:Obj_AP_Forms ; backlog:satisfiesDeliverable fw:Del_AP_D2 ;
+    backlog:hasInvestmentCategory backlog:Cat_TechnicalDebt ;
+    backlog:hasAcceptanceCriterion fw:AC_AP_ArchiveForms ;
+    backlog:hasReach 3.0 ; backlog:hasImpact 3.0 ; backlog:hasConfidence 0.9 ; backlog:hasEffort 2.0 ;
+    backlog:hasPriorityScore 4.05 ;
+    backlog:hasExecutionModality backlog:Mode_Automated ;
+    backlog:producedByStage fw:Out_Backlog_AdaptiveProof .
+fw:AC_AP_StepRecord a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a box of several actions, When they are recorded through the step tool, Then each carries the clock time of its run in order, and the effort is read from the property that holds it." .
+fw:ST_AP_StepRecord a backlog:Story ; backlog:responsible <http://example.org/fixture-autofix#DefaultExecutor> ;
+    backlog:coversEntity fw:Entity_AP_BoxRecord ; backlog:coversStage backlog:Stage_Creation ;
+    backlog:hasIdentifier "AP-S03" ; backlog:hasTitle "A step tool records each action of a box in order with its clock time" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ; backlog:belongsToLineage fw:L_AdaptiveProof ;
+    backlog:pursuesObjective fw:Obj_AP_Step ; backlog:satisfiesDeliverable fw:Del_AP_D3 ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasAcceptanceCriterion fw:AC_AP_StepRecord ;
+    backlog:hasReach 5.0 ; backlog:hasImpact 5.0 ; backlog:hasConfidence 0.7 ; backlog:hasEffort 5.0 ;
+    backlog:hasPriorityScore 3.5 ;
+    backlog:hasExecutionModality backlog:Mode_Automated ;
+    backlog:producedByStage fw:Out_Backlog_AdaptiveProof .
+fw:AC_AP_StepGuards a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a box recorded by hand, When the tool closes it, Then it refuses a governed file changed before the box was opened, a committed statement edited or removed, and a close composed in one pass." .
+fw:ST_AP_StepGuards a backlog:Story ; backlog:responsible <http://example.org/fixture-autofix#DefaultExecutor> ;
+    backlog:coversEntity fw:Entity_AP_BoxRecord ; backlog:coversStage backlog:Stage_ActiveUse ;
+    backlog:hasIdentifier "AP-S04" ; backlog:hasTitle "The step tool refuses the faults made by hand" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ; backlog:belongsToLineage fw:L_AdaptiveProof ;
+    backlog:pursuesObjective fw:Obj_AP_Step ; backlog:satisfiesDeliverable fw:Del_AP_D3 ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasAcceptanceCriterion fw:AC_AP_StepGuards ;
+    backlog:hasReach 5.0 ; backlog:hasImpact 5.0 ; backlog:hasConfidence 0.7 ; backlog:hasEffort 4.0 ;
+    backlog:hasPriorityScore 4.38 ;
+    backlog:hasExecutionModality backlog:Mode_Automated ;
+    backlog:producedByStage fw:Out_Backlog_AdaptiveProof .
+fw:AC_AP_BoxesJudged a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given boxes two to four, When the validator runs with the adopted rule sets, Then each box has a close record made by the tool and no violation." .
+fw:ST_AP_BoxesJudged a backlog:Story ; backlog:responsible <http://example.org/fixture-autofix#DefaultExecutor> ;
+    backlog:coversEntity fw:Entity_AP_BoxRecord ; backlog:coversStage backlog:Stage_ActiveUse ;
+    backlog:hasIdentifier "AP-S08" ; backlog:hasTitle "Each box is recorded with the step tool and judged clean by the adopted ceremony rule sets" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ; backlog:belongsToLineage fw:L_AdaptiveProof ;
+    backlog:pursuesObjective fw:Obj_AP_Boxes ; backlog:satisfiesDeliverable fw:Del_AP_D4 ;
+    backlog:hasInvestmentCategory backlog:Cat_Compliance ;
+    backlog:hasAcceptanceCriterion fw:AC_AP_BoxesJudged ;
+    backlog:hasReach 4.0 ; backlog:hasImpact 3.0 ; backlog:hasConfidence 0.8 ; backlog:hasEffort 3.0 ;
+    backlog:hasPriorityScore 3.2 ;
+    backlog:hasExecutionModality backlog:Mode_Automated ;
+    backlog:producedByStage fw:Out_Backlog_AdaptiveProof .
+fw:AC_AP_Decisions a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the eight opt-in rule sets, When the register is queried, Then each has a ruling that names it and states included or left opt-in with a reason." .
+fw:ST_AP_Decisions a backlog:Story ; backlog:responsible <http://example.org/fixture-autofix#DefaultExecutor> ;
+    backlog:coversEntity fw:Entity_AP_BoxRecord ; backlog:coversStage backlog:Stage_Creation ;
+    backlog:hasIdentifier "AP-S05" ; backlog:hasTitle "Each of the eight opt-in rule sets has a recorded decision for the adaptive profile" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ; backlog:belongsToLineage fw:L_AdaptiveProof ;
+    backlog:pursuesObjective fw:Obj_AP_Profile ; backlog:satisfiesDeliverable fw:Del_AP_D5 ;
+    backlog:hasInvestmentCategory backlog:Cat_Compliance ;
+    backlog:hasAcceptanceCriterion fw:AC_AP_Decisions ;
+    backlog:hasReach 4.0 ; backlog:hasImpact 4.0 ; backlog:hasConfidence 0.8 ; backlog:hasEffort 3.0 ;
+    backlog:hasPriorityScore 4.27 ;
+    backlog:hasExecutionModality backlog:Mode_Automated ;
+    backlog:producedByStage fw:Out_Backlog_AdaptiveProof .
+fw:AC_AP_ProfileRevision a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the decisions, When the revision is added, Then the standard and agentic profiles are unchanged and a test register shows the revised profile adopted and judged." .
+fw:ST_AP_ProfileRevision a backlog:Story ; backlog:responsible <http://example.org/fixture-autofix#DefaultExecutor> ;
+    backlog:coversEntity fw:Entity_AP_BoxRecord ; backlog:coversStage backlog:Stage_Creation ;
+    backlog:hasIdentifier "AP-S06" ; backlog:hasTitle "The adaptive profile is revised to hold the included rule sets" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ; backlog:belongsToLineage fw:L_AdaptiveProof ;
+    backlog:pursuesObjective fw:Obj_AP_Profile ; backlog:satisfiesDeliverable fw:Del_AP_D5 ;
+    backlog:hasInvestmentCategory backlog:Cat_NewCapability ;
+    backlog:hasAcceptanceCriterion fw:AC_AP_ProfileRevision ;
+    backlog:hasReach 4.0 ; backlog:hasImpact 4.0 ; backlog:hasConfidence 0.7 ; backlog:hasEffort 3.0 ;
+    backlog:hasPriorityScore 3.73 ;
+    backlog:hasExecutionModality backlog:Mode_Automated ;
+    backlog:producedByStage fw:Out_Backlog_AdaptiveProof .
+fw:AC_AP_GateKeys a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given a release that only adds records, When the gate runs, Then its own timing record shows at most 400 seconds." .
+fw:ST_AP_GateKeys a backlog:Story ; backlog:responsible <http://example.org/fixture-autofix#DefaultExecutor> ;
+    backlog:coversEntity fw:Entity_AP_BoxRecord ; backlog:coversStage backlog:Stage_ActiveUse ;
+    backlog:hasIdentifier "AP-S07" ; backlog:hasTitle "A release that only adds records re-runs no probe that a record cannot change" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ; backlog:belongsToLineage fw:L_AdaptiveProof ;
+    backlog:pursuesObjective fw:Obj_AP_Gate ; backlog:satisfiesDeliverable fw:Del_AP_D6 ;
+    backlog:hasInvestmentCategory backlog:Cat_TechnicalDebt ;
+    backlog:hasAcceptanceCriterion fw:AC_AP_GateKeys ;
+    backlog:hasReach 5.0 ; backlog:hasImpact 4.0 ; backlog:hasConfidence 0.8 ; backlog:hasEffort 3.0 ;
+    backlog:hasPriorityScore 5.33 ;
+    backlog:hasExecutionModality backlog:Mode_Automated ;
+    backlog:producedByStage fw:Out_Backlog_AdaptiveProof .
+fw:AC_AP_PostMortem a backlog:AcceptanceCriterion ;
+    backlog:hasGherkinText "Given the closed boxes, When the post-mortem is written, Then each missed step is a finding and each step identified after completion is recorded." .
+fw:ST_AP_PostMortem a backlog:Story ; backlog:responsible <http://example.org/fixture-autofix#DefaultExecutor> ;
+    backlog:coversEntity fw:Entity_AP_BoxRecord ; backlog:coversStage backlog:Stage_Termination ;
+    backlog:hasIdentifier "AP-S09" ; backlog:hasTitle "The post-mortem of this first application is written before the closure" ;
+    backlog:hasState backlog:Proposed ;
+    backlog:memberOfContainer fw:Register ; backlog:belongsToLineage fw:L_AdaptiveProof ;
+    backlog:pursuesObjective fw:Obj_AP_PostMortem ; backlog:satisfiesDeliverable fw:Del_AP_D7 ;
+    backlog:hasInvestmentCategory backlog:Cat_Maintenance ;
+    backlog:hasAcceptanceCriterion fw:AC_AP_PostMortem ;
+    backlog:hasReach 3.0 ; backlog:hasImpact 4.0 ; backlog:hasConfidence 0.9 ; backlog:hasEffort 2.0 ;
+    backlog:hasPriorityScore 5.4 ;
+    backlog:hasExecutionModality backlog:Mode_Automated ;
+    backlog:producedByStage fw:Out_Backlog_AdaptiveProof .
+fw:Gap_AP_Suspension a backlog:BlueprintGap ; backlog:gapForEntity fw:Entity_AP_BoxRecord ;
+    backlog:gapForStage backlog:Stage_SuspensionException ;
+    backlog:hasGapReason "Not modelled: a box is opened and closed, never suspended; an abandoned box is closed with its reason. No story is written for a state the work does not have." .
+fw:Out_Backlog_AdaptiveProof a backlog:StageOutput ;
+    backlog:outputOfStage backlog:Stage_Backlog ; backlog:belongsToLineage fw:L_AdaptiveProof ;
+    backlog:consumesOutput fw:Out_Objective_AdaptiveProof ;
+    backlog:hasStateDigest "8275082178793aabaf3e4b4714fdeacb87c8f6f46239f5c1cb581a0964b94690" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.459.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Backlog stage of Lineage 21: nine stories, one or two per scope deliverable, Story-direct, all Proposed. Stage 5 of 5." .
+fw:Obj_AP_Digest backlog:metricMovableBy fw:ST_AP_DigestCheck .
+fw:Obj_AP_Forms backlog:metricMovableBy fw:ST_AP_ArchiveForms .
+fw:Obj_AP_Step backlog:metricMovableBy fw:ST_AP_StepRecord , fw:ST_AP_StepGuards .
+fw:Obj_AP_Boxes backlog:metricMovableBy fw:ST_AP_BoxesJudged .
+fw:Obj_AP_Profile backlog:metricMovableBy fw:ST_AP_Decisions , fw:ST_AP_ProfileRevision .
+fw:Obj_AP_Gate backlog:metricMovableBy fw:ST_AP_GateKeys .
+fw:Obj_AP_PostMortem backlog:metricMovableBy fw:ST_AP_PostMortem .
+fw:Obj_AP_MissionMet backlog:metricMovableBy fw:ST_AP_DigestCheck , fw:ST_AP_ArchiveForms , fw:ST_AP_StepRecord , fw:ST_AP_StepGuards , fw:ST_AP_BoxesJudged , fw:ST_AP_Decisions , fw:ST_AP_ProfileRevision , fw:ST_AP_GateKeys , fw:ST_AP_PostMortem .
+fw:Obj_AP_Contained backlog:metricMovableBy fw:ST_AP_Decisions , fw:ST_AP_ProfileRevision .

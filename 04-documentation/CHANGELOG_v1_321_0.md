@@ -11279,6 +11279,12 @@ Objective stage of Lineage 21 (`L_AdaptiveProof`): nine measured objectives with
 
 **Unplanned work:** the stage records a measurement the Owner asked for (gate cost on a records-only release) as part of Lineage 21's own scope, not a separate request.
 
+## v1.459.0 — 2026-10-29 (Lineage 21 Backlog stage)
+
+Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one or two per scope deliverable, all Proposed, with Gherkin criteria and counted scores; a blueprint gap for the suspension stage; the metric-movable links of the objectives now point at the stories. Stage 5 of 5; the chain is complete. Data file moves to 1.86.0. Records only: the gate time of this release is the first measurement of D6 after the reference-key fix.
+
+**Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
+
 ## v1.455.0 — 2026-10-29 (MINOR: Lineage 20 closed and archived; Lineage 21 opened; the discipline cut to ceremony and principles)
 
 - **Discipline:** `LINEAGE_OPERATING_DISCIPLINE` v140.0.0 is 2.8 KB (was 23.6 KB, and 450 KB before v139). It holds the four ceremony steps and ten principles; the boundaries and operating rules it carried are already rulings in the register (G1 to G18 and later) and their narratives stay in the narratives file. The size ceiling in the discipline check is 8 KB. The 219 KB discipline of version 71 is removed from the folder.
