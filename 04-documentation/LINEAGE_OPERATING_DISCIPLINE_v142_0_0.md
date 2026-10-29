@@ -1,8 +1,8 @@
-# Lineage Operating Discipline — v141.0.0
+# Lineage Operating Discipline — v142.0.0
 
 **What this is.** How a lineage is started and run, in one page. SHACL enforces; this file only tells the agent the order of work and the principles behind it. It holds no ruling text.
 
-**Where everything else is.** Every ruling is a `GovernanceRuling` in the register (statement, enforcing shapes, source): query it, do not look for it here. Rule sets and profiles are in the register too. How each ruling came about is in `LINEAGE_RULING_NARRATIVES_v141_0_0.md`: history, read only when working on that ruling.
+**Where everything else is.** Every ruling is a `GovernanceRuling` in the register (statement, enforcing shapes, source): query it, do not look for it here. Rule sets and profiles are in the register too. How each ruling came about is in `LINEAGE_RULING_NARRATIVES_v142_0_0.md`: history, read only when working on that ruling.
 
 **Order of precedence.** The OE ceremony and OE Operating Discipline run first; a lineage grounded on unverified bytes is a lineage about nothing.
 
@@ -24,6 +24,6 @@ If a step cannot be completed from rules and facts, stop and state plainly what 
 - **Append, never edit.** Corrections are added with a note; history is not fabricated; a superseded item stays visible.
 - **Completion is not accomplishment.** Objectives are measured; a scope has deliverables of its own (`L4MeasuredObjectiveShape`, `ClosureReportShape`); a figure that cannot fall measures nothing.
 - **A tool that refuses is not thereby correct.** Check tools with fixtures whose answer is known; run at the level you enforce.
-- **Publish each increment** after its gate passes. The gate is part of the release path and has a cost budget.
+- **Publish each increment** after its gate passes. The gate is part of the release path and has a cost budget; a chain-stage release that only adds records passes the light gate, and the fifth release of a batch runs the full one (G178).
 - **Simplify how a lineage is run, never the obligations it owes.**
 - **Keep this file short.** It is checked against the shapes and held to a size ceiling by `backlog_lineage_discipline_check`.

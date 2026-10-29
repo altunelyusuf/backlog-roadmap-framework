@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_release_tool v1.6.0 -- the release steps a session used to do by hand, as one tested tool (G99 release A; OE rule R4).
+"""backlog_release_tool v1.7.0 -- the release steps a session used to do by hand, as one tested tool (G99 release A; OE rule R4).
 
 Subcommands (each prints what it did and exits non-zero on any refusal):
   bump-data NEWVER                      rename the package data file to the new version and move its header (versionInfo, versionIRI, priorVersion)
@@ -17,6 +17,7 @@ Subcommands (each prints what it did and exits non-zero on any refusal):
                                         duration; --dry-run prints the plan and the refusals it already knows (missing changelog entry) and runs nothing
   prune-cache [DIR] [--days N] [--legacy]          remove cache files (shape_*.ttl, memo *.json, stamps) older than N days (default 14) from the validation cache; they are rebuilt on demand
   republish VERSION                     only the publisher and the tag check (after a transient failure of the public push)
+v1.7.0 (Lineage 22, time; G178): (1) the receipt's head is read with the publisher's own default repository (v1.6.0 read another one, so no receipt was written in v1.462.0 and the publisher ran the gate again). (2) `release VERSION --stage` is a release of a chain stage: it is allowed only when the release changes records alone (the register, the change-log, PROBE_INPUTS.json and the files the tool itself writes) and when fewer than four stage releases came since the last full one; it runs the LIGHT gate (BACKLOG_GATE_LIGHT=1: the chain, order, archive, register, manifest and version checks, not the probes and proofs about tools and shapes) and records the kind of every release in 06-package-provenance/LIGHT_RELEASES.txt. Every stage keeps its own commit, so git still witnesses the order; the fifth release of a batch, and every release that changes anything but records, runs the full gate.
 v1.6.0 (Lineage 22, time): (1) `preflight` also validates the newest register (a violation stops the release), verifies the recorded stage digests of every lineage and the archive integrity, all in seconds; v1.461.0 passed with a register violation because nothing in the release path validated the register as a whole. (2) The gate's pass is recorded as a receipt (oe_gate_receipt) just before the publisher, so the publisher reuses it instead of running the same gate on the same bytes again (262 s of 293 s in v1.461.0). The receipt is valid only for the same package bytes, the same upstream tree, the same head of the target repository and a short age; it is removed after the publisher; when its head cannot be read nothing is written and the publisher runs its gates as before. (3) `roll VERSION --title T --body B --unplanned U` does the hand-work between two releases in one command: the next register version, the next change-log version with the new entry, and the names in PROBE_INPUTS.json.
 v1.5.0 (G152): the gate runs through `timed_gate`, which writes the same log and a sidecar `gate_VERSION.log.timing.tsv` (seconds per "== section ==" header) and prints the five slowest sections, so where a long run goes is recorded, not guessed.
 v1.4.0 (G151): `preflight VERSION` and the start of `release` run, in seconds, the refusals that used to come after a 25-minute gate: the changelog entry, an inbox item that arrived on origin and is not in the working tree, the release-item accounting (an item moved, or a changelog "Unplanned work:" line), and Gate K. The inbox is looked at again just before the publisher; on an arrival the release stops there, names the files and says to disposition them and run `republish`, which now rebuilds the manifest first, so the gate is not run again for a change that touches only the inbox.
@@ -304,9 +305,49 @@ def cmd_preflight(args):
     sys.exit(1 if bad else 0)
 
 
+LIGHT_LOG = os.path.join("06-package-provenance", "LIGHT_RELEASES.txt")
+RECORD_FILES = re.compile(r"(^|/)(backlog_abox_v\d+_\d+_\d+\.ttl|CHANGELOG_v\d+_\d+_\d+\.md|PROBE_INPUTS\.json|VERSION\.txt|MANIFEST_SHA256[^/]*\.txt|PROOF_STAMPS\.json|LIGHT_RELEASES\.txt)$")
+MAX_STAGE_RUN = 4
+
+
+def stage_refusal(changed, log_text):
+    """None when a stage release is allowed, else the reason. CHANGED: package-relative names changed since the published tree. LOG_TEXT: the content of LIGHT_RELEASES.txt."""
+    other = [c for c in changed if not RECORD_FILES.search(c)]
+    if other:
+        return "a stage release changes records alone, and these are not records: " + ", ".join(sorted(other)[:5])
+    kinds = [l.split()[1] for l in log_text.splitlines() if len(l.split()) >= 2 and not l.startswith("#")]
+    run = 0
+    for k in reversed(kinds):
+        if k != "stage":
+            break
+        run += 1
+    if run >= MAX_STAGE_RUN:
+        return "%d stage releases came since the last full one; this release runs the full gate" % run
+    return None
+
+
+def changed_since_published():
+    r = subprocess.run(["git", "diff", "--name-only", "--no-renames", "origin/main", "--", PKG], cwd=REPO, capture_output=True, text=True).stdout.split()
+    u = subprocess.run(["git", "ls-files", "--others", "--exclude-standard", "--", PKG], cwd=REPO, capture_output=True, text=True).stdout.split()
+    pre = os.path.relpath(PKG, REPO) + "/"
+    return sorted({x[len(pre):] if x.startswith(pre) else x for x in r + u})
+
+
+def record_kind(v, kind):
+    f = os.path.join(PKG, LIGHT_LOG)
+    old = open(f, encoding="utf-8").read() if os.path.exists(f) else "# version kind (stage = light gate, full = the whole gate); written by backlog_release_tool\n"
+    if not any(l.split()[:1] == [v] for l in old.splitlines()):
+        open(f, "w", encoding="utf-8").write(old + "%s %s\n" % (v, kind))
+
+
 def origin_head():
     """The head of the target repository, read as the publisher reads it; "" when it cannot be read."""
-    url = os.environ.get("OE_TARGET_URL") or "https://x-access-token:%s@github.com/%s.git" % (os.environ.get("GH_TOKEN", ""), os.environ.get("OE_TARGET_REPO", "your-account/Ontologies"))
+    default = "the maintainer/Ontologies"
+    pub = newest(os.path.join(os.environ.get("BRSF_PUBLISHER_DIR", os.path.join(REPO, "repo-tooling")), "oe_publish_v*.sh"))
+    if pub:
+        m = re.search(r'^REPO="\$\{OE_TARGET_REPO:-([^}]+)\}"', open(pub, encoding="utf-8", errors="replace").read(), re.M)
+        default = m.group(1) if m else default
+    url = os.environ.get("OE_TARGET_URL") or "https://x-access-token:%s@github.com/%s.git" % (os.environ.get("GH_TOKEN", ""), os.environ.get("OE_TARGET_REPO", default))
     try:
         r = subprocess.run(["git", "ls-remote", url, "HEAD"], capture_output=True, text=True, timeout=120)
     except Exception:
@@ -419,12 +460,14 @@ def gate_failures(text):
 
 
 def cmd_release(args, only_publish=False):
-    dry, limit, pos, i, deletes = False, None, [], 0, []
+    dry, limit, pos, i, deletes, stage = False, None, [], 0, [], False
     while i < len(args):
         if args[i] == "--delete":
             deletes.append(args[i + 1]); i += 2
         elif args[i] == "--dry-run":
             dry = True; i += 1
+        elif args[i] == "--stage":
+            stage = True; i += 1
         elif args[i] == "--cold":
             os.environ["BACKLOG_COLD"] = "1"; i += 1
         elif args[i] == "--step-timeout":
@@ -432,7 +475,7 @@ def cmd_release(args, only_publish=False):
         else:
             pos.append(args[i]); i += 1
     if len(pos) != 1 or not re.fullmatch(r"\d+\.\d+\.\d+", pos[0]):
-        die("usage: release VERSION [--dry-run] [--cold] [--step-timeout S]")
+        die("usage: release VERSION [--dry-run] [--cold] [--stage] [--step-timeout S]")
     v = pos[0]
     work = os.environ.get("BRSF_WORK", "/tmp/brsf_release")
     pubcopy = os.environ.get("BRSF_PUBCOPY", "/home/claude/pubcopy")
@@ -459,6 +502,14 @@ def cmd_release(args, only_publish=False):
         if bad:
             die("preflight refuses before the gate: " + " | ".join(bad)[:400], 6)
         print("  preflight: GO")
+        if stage:
+            lf = os.path.join(PKG, LIGHT_LOG)
+            why = stage_refusal(changed_since_published(), open(lf, encoding="utf-8").read() if os.path.exists(lf) else "")
+            if why:
+                die("stage release refused: " + why, 6)
+            os.environ["BACKLOG_GATE_LIGHT"] = "1"
+            print("  stage release: the light gate runs; every stage keeps its own commit", flush=True)
+        record_kind(v, "stage" if stage else "full")
     P = PKG
     if not only_publish:
         with tarfile.open(os.path.join(work, "pkg_%s.tgz" % v), "w:gz") as tf:

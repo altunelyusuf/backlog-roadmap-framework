@@ -1,4 +1,4 @@
-# Lineage Ruling Narratives — through G177 (history; not required reading)
+# Lineage Ruling Narratives — through G178 (history; not required reading)
 
 The narratives of rulings G1 to G175 were the body of `LINEAGE_OPERATING_DISCIPLINE_v138_0_0.md` until release 1.454.0, which moved them here unchanged. The operating discipline is now `LINEAGE_OPERATING_DISCIPLINE_v139_0_0.md`.
 
@@ -4248,3 +4248,15 @@ Related: G164.
 
 **What is not claimed.** (1) The shape applies to lineages that record their adoption at their opening; a lineage that records no adoption reads the register's table and is not covered. (2) Nothing here migrates a lineage already opened without a table. (3) Whether the standard and agentic profiles should include a table is the Owner's decision and is not made here.
 Related: G89, G91, G117, G156.
+
+## G178 — A chain-stage release that only adds records passes a light gate
+
+**Q1 — the finding, by measurement.** A release of the records of one chain stage cost 17 to 20 minutes (the gate about 630 s, the publisher about 300 s), and a lineage needs five of them before any work starts. About 430 s of the gate is fixed work and about 215 s is probes about tools and shapes that a change of records cannot alter. The publisher also ran the gate a second time on the same bytes (262 s of 293 s in 1.461.0). And the register was never validated as a whole: the gate was run without an argument, so its register section did not run, and 1.461.0 was published with a Mission that did not say where it stood.
+
+**Q2 — what was ruled and built.** Release tool 1.7.0: `release VERSION --stage` runs the light gate (`BACKLOG_GATE_LIGHT=1`, gate 1.74.0) when the release changes records alone and fewer than four stage releases came since the last full one; every release records its kind in `06-package-provenance/LIGHT_RELEASES.txt`. The light gate skips and says it skips the sections about tools, shapes, fixtures and probes, and still runs the manifest, version, register, pipeline, lineage-order, archive and accounting checks. Each stage keeps its own commit, so `StageOrderWitnessShape` and `StageOutputShape` hold as before and git still witnesses the order. The fifth release of a batch and every release that changes a tool, a shape or a fixture runs the full gate. The gate pass is also written as a receipt so the publisher does not run it again (the head is read as the publisher reads it). Gate 1.73.0 validates the register by itself, and the preflight validates the register, the stage digests of every lineage and the archive integrity in seconds.
+
+**Q3 — what the record shows.** The Owner approved the change on 2026-10-30 00:25 after the cost was shown. The light gate took 144 s on this package against about 630 s for the full one. The receipt of release tool 1.6.0 was not written in 1.462.0 because it read another default repository than the publisher; 1.7.0 reads the publisher's own.
+
+**What is not claimed.** (1) A stage release is not a full gate: a fault in a tool or a shape is found by the full release that follows, at most four stage releases later. (2) The 11 probes that re-run on every records-only change are not yet keyed more finely. (3) Nothing here shortens the chain: five stages still mean five commits.
+Related: G99, G152, G177.
+

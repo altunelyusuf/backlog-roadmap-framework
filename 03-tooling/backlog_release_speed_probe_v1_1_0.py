@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_release_speed_probe v1.0.0 -- the release tool 1.6.0 does what it says (Lineage 22).
+"""backlog_release_speed_probe v1.1.0 -- the release tool 1.6.0 does what it says (Lineage 22).
 
 Cases: preflight stops on a register that does not validate and on a failed archive integrity check and lets a valid one through; `roll` moves the register and the
 change-log to their next versions, inserts the entry above the newest one and makes PROBE_INPUTS.json follow, and refuses without an account of unplanned work; the gate
@@ -79,6 +79,24 @@ with tempfile.TemporaryDirectory() as t:
         expect("no receipt is written when the head cannot be read", rt.write_receipt(pkg, pubdir, 7) is False and not os.path.exists(rt.receipt_path(pkg)))
     else:
         expect("the receipt tool is present next to the publisher", False)
+spec = importlib.util.spec_from_file_location("rt2", tool); rt2 = importlib.util.module_from_spec(spec); spec.loader.exec_module(rt2)
+rec = ["01-ontologies/backlog_abox_v1_9_0.ttl", "04-documentation/CHANGELOG_v1_9_0.md", "VERSION.txt", "06-package-provenance/PROBE_INPUTS.json", "06-package-provenance/LIGHT_RELEASES.txt", "MANIFEST_SHA256.txt"]
+expect("a stage release of records alone is allowed", rt2.stage_refusal(rec, "") is None)
+expect("a stage release that changes a tool is refused and the file is named", "backlog_gate_v1_74_0.sh" in (rt2.stage_refusal(rec + ["03-tooling/backlog_gate_v1_74_0.sh"], "") or ""))
+expect("a stage release that changes a shape is refused", rt2.stage_refusal(rec + ["02-shacl-safeguards/backlog_shacl_v1_199_0.ttl"], "") is not None)
+expect("three stage releases since the last full one still allow a fourth", rt2.stage_refusal(rec, "# h\n1.1.0 full\n1.1.1 stage\n1.1.2 stage\n1.1.3 stage\n") is None)
+expect("four stage releases since the last full one send the fifth to the full gate", "full gate" in (rt2.stage_refusal(rec, "1.1.0 full\n1.1.1 stage\n1.1.2 stage\n1.1.3 stage\n1.1.4 stage\n") or ""))
+expect("a full release resets the count", rt2.stage_refusal(rec, "1.1.1 stage\n1.1.2 stage\n1.1.3 stage\n1.1.4 stage\n1.1.5 full\n1.1.6 stage\n") is None)
+gate = sorted(glob.glob(os.path.join(HERE, "backlog_gate_v*.sh")), key=sv)[-1]
+gl = open(gate, encoding="utf-8").read().split("\n")
+WRAP = 'if [ "${BACKLOG_GATE_LIGHT:-}" != 1 ]; then'
+def wrapped(title):
+    ix = [i for i, l in enumerate(gl) if l.startswith('echo "== ') and title in l]
+    return bool(ix) and ix[0] > 0 and gl[ix[0] - 1] == WRAP
+KEEP = ["Gate 0", "Gate P", "Gate K", "Pipeline gate", "Lineage-order gate", "Archive integrity", "Lineage ordinals", "Manifest-coverage gate", "Version-freeze gate", "Release-item-accounting gate", "Determinism gate", "Lineage-completeness gate"]
+expect("the light gate still runs the chain, order, archive, manifest, version and accounting checks", all(any(l.startswith('echo "== ') and k in l for l in gl) and not wrapped(k) for k in KEEP))
+expect("the light gate skips the tool and shape sections and says so", all(wrapped(k) for k in ("Gate R", "Lineage 19 probes", "Self-application", "Validation cache proof")) and "SKIPPED (light gate" in "\n".join(gl))
+expect("the gate script is valid shell", subprocess.run(["bash", "-n", gate]).returncode == 0)
 gate = sorted(glob.glob(os.path.join(HERE, "backlog_gate_v*.sh")), key=sv)[-1]
 gt = open(gate, encoding="utf-8").read()
 expect("the gate takes the newest register when it is run without an argument, before its register section", 'set -- "$_DEFREG"' in gt and 0 <= gt.index('set -- "$_DEFREG"') < gt.index("== Register under test =="))

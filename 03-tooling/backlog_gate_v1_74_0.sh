@@ -15,6 +15,7 @@
 #
 # v1.29.0 (Lineage 19, DC-S04): a third probe runs every time: the public copy is cut by each module's declared audience and stops with an error when it cannot be sure (backlog_public_cut_probe).
 # v1.28.0 (Lineage 19, DC-S01 and DC-S02): two probes run every time: the closure-report rules are shown firing on planted faults and silent on corrected twins (backlog_closure_shapes_probe), and the archive tool's refusals are drilled on planted lineages (backlog_archive_drill). A probe that cannot be found stops the gate.
+# v1.74.0 (Lineage 22, G178): BACKLOG_GATE_LIGHT=1 is the gate of a chain-stage release (release tool 1.7.0, --stage): the sections about tools, shapes, fixtures and probes are skipped and SAID to be skipped; Gate 0, P and K, the register under test, the pipeline and lineage-order gates, the archive checks, the ordinals, the manifest and version gates and the item accounting still run. A stage release changes records alone and at most four come before a full one, so the full gate has judged every tool and shape by the fifth release.
 # v1.73.0 (Lineage 22): the gate validates the register by itself. It was run without an argument by the release tool and the publisher, so the section "Register under test" never ran and a register with a violation was published in v1.461.0. With no argument it now takes the newest backlog_abox; the Lineage 19 probes loop also runs backlog_release_speed_probe (release tool 1.6.0: preflight refusals, the roll command, the gate receipt).
 # v1.72.0 (Lineage 21, D3): the Lineage 19 probes loop also runs backlog_box_step_probe (the step tool accepts a box recorded in order and refuses work before the box opened, a story not Proposed, a box opened twice, a close with no checkpoint, a published statement edited in place and an artifact older than the box).
 # v1.44.0 (G110): the Lineage 19 probes loop also runs backlog_competency_tree_probe (the closed competency tree: every skill listed and defined, one parent each, three levels at most, a source on every skill added since v1.125.0; five planted faults each caught).
@@ -239,6 +240,7 @@ echo "$_K" | tail -1
 [ $_KR -eq 0 ] || { echo "Gate K FAILED"; FAILED=1; }
 
 echo
+if [ "${BACKLOG_GATE_LIGHT:-}" != 1 ]; then
 echo "== Validation cache proof — the per-shape cache and the split change no verdict =="
 CACHEPROBE="$(ls "$HERE"/backlog_validate_cache_probe_v*.py 2>/dev/null | sort -V | tail -1 || true)"
 if [ -n "$CACHEPROBE" ]; then
@@ -249,6 +251,8 @@ else
 fi
 
 echo
+else echo "  SKIPPED (light gate for a stage release; the full gate runs on the last release of the batch)"; fi
+if [ "${BACKLOG_GATE_LIGHT:-}" != 1 ]; then
 echo "== Gate R — SHACL reconcile (self-proof first) =="
 _P="$(python3 "$VALIDATE" "$POS" 2>&1)"; _PR=$?
 echo "$_P" | grep -E '^results|^VERDICT'
@@ -268,11 +272,14 @@ echo "  self-proof: the suite passes known-good, fails known-bad, and rejects th
 echo "  random register — it discriminates on form AND on falsifiability."
 
 echo
+else echo "  SKIPPED (light gate for a stage release; the full gate runs on the last release of the batch)"; fi
+if [ "${BACKLOG_GATE_LIGHT:-}" != 1 ]; then
 echo "== Coverage gate — primary-source concepts (BP-D31) =="
 python3 "$COVERAGE" | grep -E '^coverage|^VERDICT'
 python3 "$COVERAGE" >/dev/null 2>&1 || { echo "Coverage gate FAILED"; FAILED=1; }
 
 echo
+else echo "  SKIPPED (light gate for a stage release; the full gate runs on the last release of the batch)"; fi
 echo "== Self-proof of the register path — the plumbing, not the shapes =="
 # The suite self-proof above invokes the validator directly; the register path
 # formats its output. A defect in the formatting layer therefore escaped it once
@@ -333,6 +340,7 @@ for FX in "${ALL_FX[@]}"; do
 done
 
 echo
+if [ "${BACKLOG_GATE_LIGHT:-}" != 1 ]; then
 echo "== Fixture-coverage gate — every shipped fixture is exercised =="
 # A fixture no gate runs drifts silently. The R3 disagreement fixture sat
 # shipped and unvalidated for several releases and accumulated six violations
@@ -388,6 +396,8 @@ fi
 # later — a race between two of this package's own gates, reported as an
 # unexplained file. The check was right and the ordering was wrong.
 echo
+else echo "  SKIPPED (light gate for a stage release; the full gate runs on the last release of the batch)"; fi
+if [ "${BACKLOG_GATE_LIGHT:-}" != 1 ]; then
 echo "== New-shape proof — does every shape authored since last publish cite its fixture? =="
 # #1 of the mitigation plan. A2 proved the mechanism at 6 of 238 shapes.
 # Backfilling the rest would assert 232 links never checked at authoring time.
@@ -405,6 +415,8 @@ else
 fi
 
 echo
+else echo "  SKIPPED (light gate for a stage release; the full gate runs on the last release of the batch)"; fi
+if [ "${BACKLOG_GATE_LIGHT:-}" != 1 ]; then
 echo "== Clause proof — which constraints has a fixture made fire? =="
 # A clause nothing fires has never been shown to work. It may be correct; it
 # may be malformed SPARQL returning nothing, and both look identical from a
@@ -429,6 +441,8 @@ else
 fi
 
 echo
+else echo "  SKIPPED (light gate for a stage release; the full gate runs on the last release of the batch)"; fi
+if [ "${BACKLOG_GATE_LIGHT:-}" != 1 ]; then
 echo "== Criterion artefacts — does the thing each criterion names exist? =="
 # A story was closed with its work undone: it had a specification, a test case,
 # test data, a task, verified evidence and a complete harness, and the property
@@ -446,6 +460,8 @@ else
 fi
 
 echo
+else echo "  SKIPPED (light gate for a stage release; the full gate runs on the last release of the batch)"; fi
+if [ "${BACKLOG_GATE_LIGHT:-}" != 1 ]; then
 echo "== Number origin — does every figure say where it came from? =="
 # A3. hasCommittedEffort was compared against hasCapacity and both were
 # assertions: an iteration held 15 points while declaring 9 and every check
@@ -462,6 +478,8 @@ else
 fi
 
 echo
+else echo "  SKIPPED (light gate for a stage release; the full gate runs on the last release of the batch)"; fi
+if [ "${BACKLOG_GATE_LIGHT:-}" != 1 ]; then
 echo "== Adoption — is any capability shipped and required by nothing? =="
 # A1. Package sat unused for 91 releases; TaskType shipped with 14 values and 44
 # of 51 tasks chose one; TestCase shipped and 46 of 55 stories never used it.
@@ -475,6 +493,8 @@ else
 fi
 
 echo
+else echo "  SKIPPED (light gate for a stage release; the full gate runs on the last release of the batch)"; fi
+if [ "${BACKLOG_GATE_LIGHT:-}" != 1 ]; then
 echo "== Self-application — does any checker report on a graph it never read? =="
 # A4 from the lineage discipline. Several findings came from running a checker
 # against the package that ships it, and every one was noticed by accident. The
@@ -492,6 +512,8 @@ else
 fi
 
 echo
+else echo "  SKIPPED (light gate for a stage release; the full gate runs on the last release of the batch)"; fi
+if [ "${BACKLOG_GATE_LIGHT:-}" != 1 ]; then
 echo "== Reachability gate — no class the vocabulary cannot point at =="
 # Package sat unused for 91 releases because no property had it as a range: it
 # could be declared and never referred to, and the cost was a wrong conclusion
@@ -512,6 +534,7 @@ else
 fi
 
 echo
+else echo "  SKIPPED (light gate for a stage release; the full gate runs on the last release of the batch)"; fi
 echo "== Pipeline gate — stage digests reproduce =="
 # A stage output claims the register was in a particular state when that stage
 # closed. The claim is recomputed rather than believed: restrict the current
@@ -684,6 +707,7 @@ else
 fi
 
 echo
+if [ "${BACKLOG_GATE_LIGHT:-}" != 1 ]; then
 echo "== Archived lineages — recorded stage digests: no unseen failure (ratchet) =="
 ADC="$(ls "$HERE"/backlog_archived_digest_check_v*.py 2>/dev/null | sort -V | tail -1 || true)"
 if [ -n "$ADC" ]; then
@@ -694,6 +718,8 @@ else
 fi
 
 echo
+else echo "  SKIPPED (light gate for a stage release; the full gate runs on the last release of the batch)"; fi
+if [ "${BACKLOG_GATE_LIGHT:-}" != 1 ]; then
 echo "== Lineage 19 probes — each rule fires on a planted fault and each refusal holds =="
 # v1.37.0: each probe prints its own --deps (it alone knows what it reads) and is stamped on exactly that; one that
 # never changed does not re-run just because something ELSEWHERE in the gate did. A run that does happen runs ONCE
@@ -743,6 +769,8 @@ rm -rf "$PTMP"
 echo "  probes: ${#QUEUE[@]} run ($JOBS at a time), the rest skipped on unchanged inputs (measured inputs where a usable record exists, declared inputs otherwise)"
 
 echo
+else echo "  SKIPPED (light gate for a stage release; the full gate runs on the last release of the batch)"; fi
+if [ "${BACKLOG_GATE_LIGHT:-}" != 1 ]; then
 echo "== Flow points against the commits that recorded them (G115) =="
 # A commit time is the latest instant a change can have been made; a finish later than the commit that first recorded the item Done is impossible, and two values for
 # one point are a correction that added instead of replaced. Neither can be seen in the data alone, so the witness is the history (backlog_flow_point_git_trace).
@@ -766,6 +794,8 @@ else
 fi
 
 echo
+else echo "  SKIPPED (light gate for a stage release; the full gate runs on the last release of the batch)"; fi
+if [ "${BACKLOG_GATE_LIGHT:-}" != 1 ]; then
 echo "== Archival finder — achieved lineages are found, and archiving is the next activity =="
 ARCH="$(ls "$HERE"/backlog_lineage_archive_v*.py 2>/dev/null | sort -V | tail -1 || true)"
 REGA="$(ls "$PKG"/01-ontologies/backlog_abox_v*.ttl 2>/dev/null | sort -V | tail -1 || true)"
@@ -776,6 +806,7 @@ else
 fi
 
 echo
+else echo "  SKIPPED (light gate for a stage release; the full gate runs on the last release of the batch)"; fi
 echo "== Manifest-digest carrier — the root of the covered set lives outside it =="
 REGC="$(ls "$PKG"/01-ontologies/backlog_abox_v*.ttl 2>/dev/null | sort -V | tail -1 || true)"
 CARRIER="$(grep -oE 'backlog:manifestDigestCarriedBy "[^"]+"' "$REGC" 2>/dev/null | head -1 | sed -E 's/.*"([^"]+)"/\1/')"
@@ -852,6 +883,7 @@ else
 fi
 
 echo
+if [ "${BACKLOG_GATE_LIGHT:-}" != 1 ]; then
 echo "== Lineage-discipline gate — the document's claims match the suite =="
 # A discipline document naming shapes as enforcing its boundaries makes
 # externally-verifiable claims. They drift silently: a rename, a softened
@@ -867,6 +899,7 @@ else
 fi
 
 echo
+else echo "  SKIPPED (light gate for a stage release; the full gate runs on the last release of the batch)"; fi
 echo "== Determinism gate — same register in, same answer out =="
 # A report that answers the same question differently on identical input is
 # unreproducible in the sense this package refuses everywhere else. Measured
@@ -955,7 +988,9 @@ fi
 echo
 if [ "$FAILED" -eq 0 ]; then
   echo "proof stamps: $STAMPS_REPO honoured from the recorded file, $STAMPS_MEMO from this session, $STEPS_RUN steps run (BACKLOG_COLD=1 runs everything)"
+  if [ "${BACKLOG_GATE_LIGHT:-}" = 1 ]; then echo "RELEASE GATE (LIGHT, stage release): PASS — the chain, order, archive, register, manifest and version checks clear; the sections marked SKIPPED did not run."; else
   echo "RELEASE GATE: PASS — Gate 0, Gate P, Gate K, Gate R and the coverage gate all clear."
+  fi
   exit 0
 fi
 echo "RELEASE GATE: FAIL — see the failing gate above; release blocked."
