@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_ruling_record_probe v1.0.0 -- proof that the rulings recorded in the data are whole and point at shapes that exist (G164).
+"""backlog_ruling_record_probe v1.1.0 -- proof that the rulings recorded in the data are whole and point at shapes that exist (G164).
 
   1 every recorded ruling carries one identifier, no identifier is recorded twice,
   2 every shape a ruling names as its enforcer is declared in the shapes file,
@@ -25,7 +25,9 @@ def expect(name, ok, detail=""):
 g = Graph(); g.parse(latest("01-ontologies/backlog_abox_v*.ttl"), format="turtle")
 s = Graph(); s.parse(latest("02-shacl-safeguards/backlog_shacl_v*.ttl"), format="turtle")
 shapes = {str(x) for x in s.subjects(RDF.type, SH.NodeShape)} | {str(x) for x in s.subjects(RDF.type, SH.PropertyShape)}
-secs = set(re.findall(r"^## (G\d+)\b", open(latest("04-documentation/LINEAGE_OPERATING_DISCIPLINE_v*.md"), encoding="utf-8").read(), re.M))
+# v1.1.0 (G176): a ruling is ruled in the discipline or in the narratives file that holds its history.
+RULED_TEXT = "".join(open(latest(pat), encoding="utf-8").read() for pat in ("04-documentation/LINEAGE_OPERATING_DISCIPLINE_v*.md", "04-documentation/LINEAGE_RULING_NARRATIVES_v*.md"))
+secs = set(re.findall(r"^## (G\d+)\b", RULED_TEXT, re.M))
 R = list(g.subjects(RDF.type, B.GovernanceRuling))
 ids = [str(g.value(r, B.hasRulingIdentifier)) for r in R]
 expect("1 every ruling has one identifier and none is recorded twice", all(len(list(g.objects(r, B.hasRulingIdentifier))) == 1 for r in R) and not [i for i, n in Counter(ids).items() if n > 1], "%d ruling(s)" % len(R))
@@ -33,7 +35,7 @@ OWED = {"G2", "G7", "G10", "G11"}  # disclosed (G164): the shape each names was 
 dangling = {str(g.value(r, B.hasRulingIdentifier)) for r in R for o in g.objects(r, B.enforcedByShape) if str(o) not in shapes}
 expect("2 every enforcing shape named is declared in the shapes file, except the rulings disclosed as owed", dangling == OWED, "dangling %s" % sorted(dangling))
 known = {re.sub(r"b$", "", i) for i in ids}
-expect("3 every recorded ruling's number is ruled in the discipline (a heading of any level)", all(re.search(r"^#+ " + k + r" ", open(latest("04-documentation/LINEAGE_OPERATING_DISCIPLINE_v*.md"), encoding="utf-8").read(), re.M) for k in known))
+expect("3 every recorded ruling's number is ruled in the discipline or its narratives (a heading of any level)", all(re.search(r"^#+ " + k + r" ", RULED_TEXT, re.M) for k in known))
 fake = {"http://example.org/backlog#NoSuchShape"}
 expect("4 planted: a ruling naming a shape that does not exist is caught", bool(fake - shapes))
 print("VERDICT   :", "PASS" if not bad else "FAIL"); [print("  ", b) for b in bad]

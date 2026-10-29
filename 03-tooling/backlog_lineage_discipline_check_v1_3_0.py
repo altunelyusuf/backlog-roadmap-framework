@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_lineage_discipline_check v1.2.0 — the discipline's claims are checked.
+"""backlog_lineage_discipline_check v1.3.0 — the discipline's claims are checked.
 
 A discipline document that names shapes as enforcing its boundaries is making
 externally-verifiable claims. Those claims drift: a shape gets renamed, a
@@ -64,6 +64,9 @@ def shape_blocks(text):
         cut = p.find("\n####")
         out[m.group(1)] = p[:cut] if cut > 0 else p
     return out
+
+
+MAX_DISCIPLINE_BYTES = 40000
 
 
 def main():
@@ -134,6 +137,11 @@ def main():
         # introduced; that is prose, not a claim this checker enforces.
         print("  %-34s sh:%-9s %s%s" % (name, sev, "L4-gated" if l4 else "ungated", note))
 
+    # v1.3.0 (G176): the discipline must stay short enough to be read whole at the start of a session. Its history lives in the narratives file.
+    size = os.path.getsize(disc)
+    if size > MAX_DISCIPLINE_BYTES:
+        failures.append("the discipline is %d bytes, over the %d it may take; move narrative to the narratives file, keep rules here (G176)" % (size, MAX_DISCIPLINE_BYTES))
+    print("\ndiscipline size: %d bytes (ceiling %d)" % (size, MAX_DISCIPLINE_BYTES))
     print("\nVERDICT     : %s" % ("PASS — every enforcement claim in the discipline holds"
                                   if not failures else "FAIL"))
     for f in failures:

@@ -22,8 +22,8 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (ABox: controlled individuals, reference data and the live register)"@en ;
-    owl:versionIRI <http://example.org/backlog/abox/1.80.0> ;
-    owl:versionInfo "1.80.0" ;
+    owl:versionIRI <http://example.org/backlog/abox/1.81.0> ;
+    owl:versionInfo "1.81.0" ;
     owl:priorVersion <http://example.org/backlog/abox/1.62.0> , <http://example.org/backlog/abox/1.61.0> , <http://example.org/backlog/abox/1.60.0> , <http://example.org/backlog/abox/1.59.0> , <http://example.org/backlog/abox/1.58.0> , <http://example.org/backlog/abox/1.57.0> , <http://example.org/backlog/abox/1.53.0> , <http://example.org/backlog/abox/1.52.0> , <http://example.org/backlog/abox/1.51.0> , <http://example.org/backlog/abox/1.50.0> , <http://example.org/backlog/abox/1.49.0> , <http://example.org/backlog/abox/1.48.0> , <http://example.org/backlog/abox/1.47.0> , <http://example.org/backlog/abox/1.46.0> , <http://example.org/backlog/abox/1.45.0> , <http://example.org/backlog/abox/1.40.0> , <http://example.org/backlog/abox/1.39.0> , <http://example.org/backlog/abox/1.38.0> , <http://example.org/backlog/abox/1.37.0> , <http://example.org/backlog/abox/1.36.0> , <http://example.org/backlog/abox/1.35.0> ;
     owl:priorVersion <http://example.org/backlog/abox/1.34.0> , <http://example.org/backlog/abox/1.33.0> , <http://example.org/backlog/abox/1.32.0> , <http://example.org/backlog/abox/1.31.0> , <http://example.org/backlog/abox/1.30.0> , <http://example.org/backlog/abox/1.29.0> , <http://example.org/backlog/abox/1.28.0> , <http://example.org/backlog/abox/1.27.0> , <http://example.org/backlog/abox/1.26.0> , <http://example.org/backlog/abox/1.25.0> , <http://example.org/backlog/abox/1.24.0> , <http://example.org/backlog/abox/1.23.0> , <http://example.org/backlog/abox/1.22.0> , <http://example.org/backlog/abox/1.21.0> , <http://example.org/backlog/abox/1.20.0> , <http://example.org/backlog/abox/1.19.0> , <http://example.org/backlog/abox/1.17.0> , <http://example.org/backlog/abox/1.16.0> , <http://example.org/backlog/abox/1.15.0> , <http://example.org/backlog/abox/1.14.0> , <http://example.org/backlog/abox/1.13.0> , <http://example.org/backlog/abox/1.12.0> , <http://example.org/backlog/abox/1.11.0> , <http://example.org/backlog/abox/1.10.0> , <http://example.org/backlog/abox/1.9.0> , <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
         <http://example.org/backlog-abox/1.2.1> ,
@@ -10173,6 +10173,12 @@ fw:Ruling_G175 a backlog:GovernanceRuling ;
     backlog:hasRulingStatement "A deferral needs every owner, a threshold is pinned by a probe that fails when it moves, and a record is corrected by appending" ;
     backlog:enforcedByShape backlog:ContainerShape , backlog:ArtifactCommitmentShape , backlog:LineageCompletenessShape , backlog:L4GroomingShape ;
     backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v138.0.0, section G175." .
+fw:Ruling_G176 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G176" ;
+    rdfs:label "The discipline is short enough to be read whole, and its history is kept apart"@en ;
+    backlog:hasRulingStatement "The discipline is short enough to be read whole, and its history is kept apart" ;
+    backlog:enforcedByShape backlog:GovernanceRulingShape ;
+    backlog:rulingSource "LINEAGE_RULING_NARRATIVES v139.0.0, section G176." .
 
 # ---- BOX4 BEGIN ----
 fw:AC_AC_Leak a backlog:AcceptanceCriterion ;
@@ -11341,3 +11347,109 @@ fw:Ruling_G172 rdfs:comment "Appended in box 8. Before 1.79.0 the source read: L
 fw:Ruling_G173 rdfs:comment "Appended in box 8. Before 1.79.0 the source read: LINEAGE_OPERATING_DISCIPLINE v136.0.0, section G173. Box 7 replaced it, in place, with v137.0.0, the version that then held the section."@en .
 <http://example.org/backlog-framework-register#SC_4> rdfs:comment "Appended in box 8. The Owner's words recorded for this change are those of 2026-10-28 11:08 and 11:28 Istanbul time (UTC+3): continue the corrections and enhancements until no further progress is possible, and \"Yes, this is fine\". The stop rule written in the discipline for that round (a round that finds no new class ends the rounds) is the Builder's proposal and was not confirmed by the Owner by name; the Owner later (2026-10-29 02:21 Istanbul) asked for one last corrective release and no further review round."@en .
 # ---- BOX8 NOTES END ----
+# ---- BOX9 BEGIN ----
+fw:AC_AC_Narr a backlog:AcceptanceCriterion ;
+    backlog:satisfiedByArtifact "04-documentation/LINEAGE_OPERATING_DISCIPLINE_v139_0_0.md" ;
+    backlog:hasGherkinText "Given the lineage discipline that a fresh session must read in full, When it is read, Then it holds the ceremony, the standing boundaries and the standing rules only, it sends the reader to the register for the rulings, its size is held under a ceiling by a check, and every ruling is still ruled in the discipline or in the narratives file that keeps its history." .
+fw:ST_AC_Narr a backlog:Story ; backlog:responsible <http://example.org/fixture-autofix#DefaultExecutor> ; backlog:coversEntity fw:Entity_AC_CeremonyRecord ; backlog:coversStage backlog:Stage_SuspensionException ; backlog:hasIdentifier "AC-S24" ; backlog:hasTitle "The lineage discipline is short enough to be read whole at the start of a session, and the history of its rulings is kept apart" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register , fw:It_AC_9 , fw:Rel_AC_9 ;
+    backlog:belongsToLineage fw:L_AdaptiveCeremonies ;
+    backlog:pursuesObjective fw:Obj_AC_MissionMet ;
+    backlog:hasInvestmentCategory backlog:Cat_Maintenance ;
+    backlog:hasAcceptanceCriterion fw:AC_AC_Narr ;
+    backlog:hasReach 5.0 ; backlog:hasImpact 5.0 ; backlog:hasConfidence 0.7 ; backlog:hasEffort 3.0 ;
+    backlog:hasPriorityScore 5.8 ;
+    backlog:hasApplicableConcern backlog:Concern_Architecture ;
+    backlog:appliesDefinitionOfDone fw:DoD ;
+    backlog:startedAt "2026-10-29T10:04:42Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-10-29T10:05:21Z"^^xsd:dateTime ; backlog:lastAuditedAt "2026-10-29T10:05:21Z"^^xsd:dateTime ;
+    backlog:hasExecutionModality backlog:Mode_Automated ; backlog:hasEvidence fw:Ev_AC_Narr .
+fw:Ref_AC_Narr a backlog:RefinementEvent ; backlog:hasWorkKind backlog:WorkKind_Preparation ; backlog:refines fw:ST_AC_Narr ; backlog:refinedAt "2026-10-29T10:04:02Z"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Groomed for box 9: the acceptance criterion reads as a test the validator can run, the effort is 3 points, and the change is to shapes, tooling or records with probe checks." ;
+    backlog:refinedBy backlog:Builder ; backlog:addressesConcern backlog:Concern_Architecture .
+fw:Ev9_ST_AC_Narr_T_Refine a backlog:TransitionEvent ; backlog:transitionedItem fw:ST_AC_Narr ; backlog:viaTransition backlog:T_Refine ; backlog:transitionedAt "2026-10-29T10:04:02Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder ; backlog:hasTransitionNote "Groomed and made ready for box 9." .
+fw:Chk_AC_Narr a backlog:ReadinessCheck ; rdfs:label "Readiness of the story AC-S24"@en ;
+    backlog:checksReadinessOf fw:ST_AC_Narr ; backlog:readinessCheckedAt "2026-10-29T10:04:12Z"^^xsd:dateTime ;
+    backlog:hasReadinessCriterion fw:K_AC_Narr_AC , fw:K_AC_Narr_Size , fw:K_AC_Narr_Dep , fw:K_AC_Narr_Input .
+fw:K_AC_Narr_AC a backlog:ReadinessCriterion ; rdfs:label "The acceptance criterion reads as a test the validator can run"@en ; backlog:criterionMet true .
+fw:K_AC_Narr_Size a backlog:ReadinessCriterion ; rdfs:label "The effort is estimated and fits the box"@en ; backlog:criterionMet true .
+fw:K_AC_Narr_Dep a backlog:ReadinessCriterion ; rdfs:label "Nothing it depends on is open"@en ; backlog:criterionMet true .
+fw:K_AC_Narr_Input a backlog:ReadinessCriterion ; rdfs:label "No decision of the Owner is waited on"@en ; backlog:criterionMet true .
+fw:Plan_AC_9_Deployment a backlog:DeploymentPlan ; backlog:hasWorkKind backlog:WorkKind_Planning ; backlog:deploymentPlanForBox fw:It_AC_9 ; backlog:plansDeploymentUnit fw:Rel_AC_9 ; backlog:deploymentPlannedAt "2026-10-29T10:04:15Z"^^xsd:dateTime .
+fw:It_AC_9 a backlog:Iteration ; backlog:hasIdentifier "AC-BOX-9" ; backlog:hasTitle "Box 9 of Lineage 20: the discipline is short enough to be read whole" ;
+    backlog:hasSprintGoal "Make the lineage discipline short enough to be read whole at the start of a session: the operating rules stay, the narratives of the rulings move to a file of their own, and a check holds the size. The times of the records that open this box are the times of recording." ;
+    backlog:hasState backlog:Done ; backlog:iterationStart "2026-10-29T10:04:22Z"^^xsd:dateTime ;
+    backlog:iterationEnd "2026-10-29T10:06:15Z"^^xsd:dateTime ;
+    backlog:hasCapacity 5.0 ; backlog:hasObservedDuration 1.9 ; backlog:hasDurationSource "Wall clock from the start of the box to its review, both taken from the register: 2026-10-29T10:04:22Z to 2026-10-29T10:06:15Z." ; backlog:belongsToLineage fw:L_AdaptiveCeremonies .
+fw:Ceremony_AC_Planning9 a backlog:SprintPlanningCeremony ; backlog:hasWorkKind backlog:WorkKind_Planning ; backlog:ceremonyFor fw:It_AC_9 ; backlog:heldAt "2026-10-29T10:04:23Z"^^xsd:dateTime ;
+    backlog:includesPlanningEvent fw:Plan_AC_Narr .
+fw:Plan_AC_Narr a backlog:PlanningEvent ; rdfs:label "Story AC-S24 planned into box 9"@en ;
+    backlog:plansItem fw:ST_AC_Narr ; backlog:plannedInto fw:It_AC_9 ; backlog:plannedAt "2026-10-29T10:04:23Z"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ; backlog:producesTask fw:T_AC_Narr_Build .
+fw:T_AC_Narr_Build a backlog:ExecutionTask ; backlog:hasIdentifier "T-AC-NARR-BUILD" ; backlog:hasState backlog:Done ;
+    backlog:hasTaskType backlog:Task_Implementation ; backlog:responsible <http://example.org/fixture-autofix#DefaultExecutor> ; backlog:memberOfContainer fw:It_AC_9 ; backlog:appliesDefinitionOfDone fw:DoD ; backlog:belongsToLineage fw:L_AdaptiveCeremonies ;
+    backlog:startedAt "2026-10-29T10:04:42Z"^^xsd:dateTime ; backlog:finishedAt "2026-10-29T10:05:21Z"^^xsd:dateTime ; backlog:hasEvidence fw:Ev_AC_Narr ; backlog:hasExecutionModality backlog:Mode_Automated .
+fw:ST_AC_Narr backlog:decomposesInto fw:T_AC_Narr_Build .
+fw:Ev9_T_AC_Narr_Build_T_Decompose a backlog:TransitionEvent ; backlog:transitionedItem fw:T_AC_Narr_Build ; backlog:viaTransition backlog:T_Decompose ; backlog:transitionedAt "2026-10-29T10:04:24Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Ev9_T_AC_Narr_Build_T_RefinedToReady a backlog:TransitionEvent ; backlog:transitionedItem fw:T_AC_Narr_Build ; backlog:viaTransition backlog:T_RefinedToReady ; backlog:transitionedAt "2026-10-29T10:04:25Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Ev9_T_AC_Narr_Build_T_Start a backlog:TransitionEvent ; backlog:transitionedItem fw:T_AC_Narr_Build ; backlog:viaTransition backlog:T_Start ; backlog:transitionedAt "2026-10-29T10:04:42Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Ev9_ST_AC_Narr_T_Start a backlog:TransitionEvent ; backlog:transitionedItem fw:ST_AC_Narr ; backlog:viaTransition backlog:T_Start ; backlog:transitionedAt "2026-10-29T10:04:42Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Act_AC_9_Validate a backlog:ControlActivity ; rdfs:label "Validate the register and run the probes before the box is reviewed"@en ;
+    backlog:hasWorkKind backlog:WorkKind_Control ; backlog:plannedInBox fw:It_AC_9 .
+fw:Ckp_AC_9_1 a backlog:DailyCheckpoint ; backlog:hasWorkKind backlog:WorkKind_Monitoring ; backlog:checkpointOfBox fw:It_AC_9 ; backlog:checkpointAt "2026-10-29T10:04:57Z"^^xsd:dateTime ;
+    backlog:openItemCount 0 ; backlog:inProgressItemCount 1 ; backlog:doneItemCount 0 .
+fw:Ev9_T_AC_Narr_Build_T_Complete a backlog:TransitionEvent ; backlog:transitionedItem fw:T_AC_Narr_Build ; backlog:viaTransition backlog:T_Complete ; backlog:transitionedAt "2026-10-29T10:05:21Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Ev9_ST_AC_Narr_T_Complete a backlog:TransitionEvent ; backlog:transitionedItem fw:ST_AC_Narr ; backlog:viaTransition backlog:T_Complete ; backlog:transitionedAt "2026-10-29T10:05:21Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Ev_AC_Narr a backlog:TestEvidence ; rdfs:label "The probe for story AC-S24: the complete record accepted, the wrong ones refused"@en ;
+    backlog:evidenceVerified true ; backlog:hasTestId "AC-S24" ;
+    backlog:hasTestSpec "03-tooling/backlog_lineage_discipline_check_v1_3_0.py" ;
+    backlog:attestsCriterion fw:AC_AC_Narr ;
+    backlog:hasVerificationMethod "The discipline check ran against the shipped discipline (v139.0.0, 23629 bytes, ceiling 40000): every shape the discipline names exists with the severity it implies, and the size is under the ceiling; the ruling record probe (v1.1.0) found every recorded ruling, G1 to G176, ruled in the discipline or in the narratives file, and caught a planted ruling naming a shape that does not exist. Both exit 0. The earlier discipline, 450524 bytes, would fail the ceiling by construction; that was not run against it." ;
+    backlog:verifiedAt "2026-10-29T10:05:21Z"^^xsd:dateTime ; backlog:verifiedByTool "backlog_lineage_discipline_check_v1_3_0.py + backlog_ruling_record_probe_v1_1_0.py + backlog_validate_v1_17_0.py" ;
+    backlog:satisfiedByArtifact "03-tooling/backlog_lineage_discipline_check_v1_3_0.py" ; backlog:belongsToLineage fw:L_AdaptiveCeremonies .
+fw:H_AC_Narr a backlog:TestHarness ; rdfs:label "Harness for story AC-S24"@en ;
+    backlog:harnessFor fw:ST_AC_Narr ; backlog:hasHarnessEvidence fw:Ev_AC_Narr ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the probe shows the rule discriminating both ways." .
+fw:Demo_AC_Narr a backlog:DemoRun ; backlog:hasWorkKind backlog:WorkKind_Control ; backlog:demonstratesItem fw:ST_AC_Narr ; backlog:demonstratedAgainst fw:AC_AC_Narr ; backlog:demoAt "2026-10-29T10:05:21Z"^^xsd:dateTime ;
+    backlog:hasDemoShown "The discipline file before and after: 450 KB with 157 narratives, and 23 KB with the ceremony, the boundaries and the standing rules; the narratives file holding the history unchanged." ;
+    backlog:hasDemoResult "The acceptance criterion holds." .
+fw:Rel_AC_9 a backlog:DeploymentUnit ;
+    backlog:hasIdentifier "AC-REL-9" ; backlog:hasTitle "Shipped from box 9 of Lineage 20 (dated when this record was written, at the review; the release run is launched a few minutes later and its commit follows the gate by about thirty minutes, so neither is known here)" ;
+    backlog:hasState backlog:Done ; backlog:hasDeploymentDate "2026-10-29T10:06:16Z"^^xsd:dateTime ;
+    backlog:deploysFrom fw:It_AC_9 ; backlog:deploysItem fw:ST_AC_Narr ;
+    backlog:decidedBy backlog:Builder ; backlog:hasSelectionBasis backlog:Sel_Committed ; backlog:belongsToLineage fw:L_AdaptiveCeremonies .
+fw:Find_AC_DisciplineGrew a backlog:RetrospectiveFinding ;
+    backlog:hasFindingScope backlog:Scope_LineageLocal ;
+    backlog:relatesToWorkItem fw:ST_AC_Narr ;
+    backlog:hasRootCause "The discipline took a narrative for every ruling, in a file the instructions of each session said to read in full, and no check held its size. Each addition was reasonable alone; the file reached 450 KB over about twenty releases of this lineage and became unreadable in one session, so the discipline could not be followed. The rulings were already in the register with their enforcing shapes, so the narratives duplicated the ontology as prose, against the Owner's rule that rulings are not kept as markdown." ;
+    backlog:hasRemedy "The discipline holds only the ceremony, the boundaries and the standing rules, and a check refuses it over 40 KB. The narratives are a separate file of history. Not remedied here: the older discipline file of version 71 (219 KB) still sits in the folder though no session should read it, and the OE Operating Discipline (62 KB) is the OEE's." .
+fw:Find_AC_ExcludedToolNeeded a backlog:RetrospectiveFinding ;
+    backlog:hasFindingScope backlog:Scope_LineageLocal ;
+    backlog:relatesToWorkItem fw:ST_AC_Narr ;
+    backlog:hasRootCause "The scope statement excludes the lineage-step tool as a separate increment, and at least four findings of boxes 4 to 7 name that tool as the remedy for faults made by hand (records composed in one pass, names renamed by hand, records edited in place, no guard against work before its box is open). The need was recorded each time and never put to the Owner as a change of scope, so a tool the adaptive lineage needs stayed outside it. The same holds for the rule sets that sit in no profile. The Owner's position of 2026-10-29: what the lineage needs to work correctly belongs in its scope." ;
+    backlog:hasRemedy "Not remedied in this box. The scope revision that brings the step tool and the adoption of the rule sets into the scope of this lineage is the next box and is recorded as owed." .
+fw:Run_AC_9_Validate a backlog:ControlRun ; backlog:runOfActivity fw:Act_AC_9_Validate ; backlog:ranAt "2026-10-29T10:06:13Z"^^xsd:dateTime ;
+    backlog:hasRunResult "The validator reported no violation on the register except the box's own state, which is Done only with the review that follows this run (0 violations, 223 advisory warnings before the close records); the discipline check (size 23629 of 40000 bytes) and the ruling record probe (G1 to G176) passed, exit 0. The gate runs the other probes and the negative fixture; the shapes are unchanged in this box, so the probes of the earlier boxes were not rerun by this run." .
+fw:Review_AC_9 a backlog:SprintReviewCeremony ; backlog:hasWorkKind backlog:WorkKind_Closure ;
+    backlog:ceremonyFor fw:It_AC_9 ; backlog:heldAt "2026-10-29T10:06:15Z"^^xsd:dateTime ; backlog:reviewsCeremony fw:Ceremony_AC_Planning9 ;
+    backlog:closesIteration fw:It_AC_9 ; backlog:closesStory fw:ST_AC_Narr .
+fw:Retro_AC_9 a backlog:SprintRetrospective ; backlog:hasWorkKind backlog:WorkKind_Closure ;
+    backlog:followsReview fw:Review_AC_9 ; backlog:heldAt "2026-10-29T10:06:16Z"^^xsd:dateTime ; backlog:producesFinding fw:Find_AC_DisciplineGrew , fw:Find_AC_ExcludedToolNeeded .
+fw:Obs_AC_MissionMet_B9 a backlog:MetricObservation ; rdfs:label "After box 9: MissionMet"@en ;
+    backlog:observesMetric fw:Metric_AC_MissionMet ; backlog:observationFor fw:Obj_AC_MissionMet ; backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-10-29T10:06:13Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Counted: no story of the lineage is open (twenty-four of twenty-four Done), after box 9; the count restates that the stories are done and is not evidence that the mission is accomplished." .
+fw:Obs_AC_Control_B9 a backlog:MetricObservation ; rdfs:label "After box 9: Control"@en ;
+    backlog:observesMetric fw:Metric_AC_Control ; backlog:observationFor fw:Obj_AC_Control ; backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-10-29T10:06:13Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Counted: the blocked review, the demo runs and the control runs exist; the discipline is short enough to be read whole and a check holds its size." .
+fw:Obs_AC_Contained_B9 a backlog:MetricObservation ; rdfs:label "After box 9: Contained"@en ;
+    backlog:observesMetric fw:Metric_AC_Contained ; backlog:observationFor fw:Obj_AC_Contained ; backlog:hasObservedValue 19.0 ; backlog:observedAt "2026-10-29T10:06:13Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Counted in the data: nineteen inclusions, nine in the standard profile and ten in the agentic profile (ten distinct rule sets, since the agentic profile includes the standard profile's nine); the evidence that their refusals hold is the profile probe, the G174 probe and the G175 probe of release 1.453.0, unchanged by this box, not this count." .
+
+# ---- BOX9 END ----
+
+<http://example.org/backlog-framework-register#CR_6> a backlog:ChangeRequest ; backlog:requestsChangeTo <http://example.org/backlog-framework-register#Scope_AdaptiveCeremonies> ; backlog:hasChangeDirection backlog:Direction_Grow ; backlog:hasChangeRequestRationale "The lineage discipline had grown to 450 KB, of which 418 KB were narratives of rulings that the register already holds as rulings, so a fresh session could not read it whole and could not follow what it could not read. The discipline is the instrument by which this mission's checks are directed; keeping it readable is part of making the adaptive lineage work." ;
+    backlog:hasDisposition backlog:Disp_Accepted ; backlog:supportsObjective <http://example.org/backlog-framework-register#Obj_AC_MissionMet> ; backlog:belongsToLineage <http://example.org/backlog-framework-register#L_AdaptiveCeremonies> .
+<http://example.org/backlog-framework-register#IA_6> a backlog:ImpactAssessment ; backlog:analyzesRequest <http://example.org/backlog-framework-register#CR_6> ; backlog:hasImpactStatement "1 item(s) added to L_AdaptiveCeremonies, 3 point(s) of recorded effort; serves objective Obj_AC_MissionMet; computed from the register at 2026-10-29T10:03:51Z." .
+<http://example.org/backlog-framework-register#SC_6> a backlog:ScopeChange ; backlog:fulfillsRequest <http://example.org/backlog-framework-register#CR_6> ; backlog:changesScope <http://example.org/backlog-framework-register#Scope_AdaptiveCeremonies> ; backlog:decidedBy backlog:Owner ; backlog:belongsToLineage <http://example.org/backlog-framework-register#L_AdaptiveCeremonies> ;
+    backlog:hasScopeChangeRationale "The lineage discipline had grown to 450 KB, of which 418 KB were narratives of rulings that the register already holds as rulings, so a fresh session could not read it whole and could not follow what it could not read. The discipline is the instrument by which this mission's checks are directed; keeping it readable is part of making the adaptive lineage work. Owner decision: The Owner, 2026-10-29 13:01 Istanbul: the discipline should be rules that tell how the lineage is enforced and direct the agent to the ontology rules, it is blocking the session and is very urgent." ;
+    backlog:admitsItem <http://example.org/backlog-framework-register#ST_AC_Narr> .

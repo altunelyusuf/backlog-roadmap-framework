@@ -1,4 +1,6 @@
-# Lineage Operating Discipline — v138.0.0
+# Lineage Ruling Narratives — through G176 (history; not required reading)
+
+The narratives of rulings G1 to G175 were the body of `LINEAGE_OPERATING_DISCIPLINE_v138_0_0.md` until release 1.454.0, which moved them here unchanged. The operating discipline is now `LINEAGE_OPERATING_DISCIPLINE_v139_0_0.md`.
 
 **Authorship.** Maintained by the session that owns `backlog-roadmap-framework`. v1.0.0 was written
 elsewhere and shipped inside this package; its ceremony, its six boundaries and its self-checking
@@ -4220,3 +4222,16 @@ Related: G89, G91, G112, G155, G163, G166, G167, G168, G169, G170, G171, G172, G
 
 **What is not claimed.** (1) The mutations tested are the movement of the eight thresholds by one rank, the removal of the every-owner condition, and the removal of the adoption gate of nineteen constraints; not every weakening of a check, and not the gates of the eight rule sets that sit in no profile. (2) Box 7's edits in place are not undone; the notes give the old values, and the old values of the evidence texts changed in box 7 are not all restated. (3) The verifier chooses a table from the adoptions it reads; it does not verify that a lineage is the one the caller meant beyond its name. (4) The ceremony rule sets still do not bind Lineage 20, and the live proof of the adaptive profile needs a lineage opened under the current profile revision. (5) The eight rule sets that sit in no profile are not added; that is a profile revision and the Owner's decision. (6) Lineage 20's mission is not recorded as accomplished, and the lineage-step tool of increment C is not built. (7) No round 6 is held; the Owner decides whether any further review is wanted.
 Related: G89, G91, G112, G155, G163, G166, G167, G168, G169, G170, G171, G172, G173, G174.
+
+## G176 — The discipline is short enough to be read whole, and its history is kept apart
+
+*(The Owner, 2026-10-29 13:01 Istanbul: the lineage discipline had grown to 450 KB; a fresh session compacts before it can read it, so the discipline cannot be fully executed; it should be rules that tell how the lineage is enforced and direct the agent to the ontology rules.)*
+
+**Q1 — what was wrong.** The discipline held, besides about 21 KB of operating rules, 157 narratives of 418 KB, one for each ruling. Every ruling was already a `GovernanceRuling` in the register with its statement and enforcing shapes, so the narratives duplicated the ontology as prose. A session that read the discipline "in full", as the standing instruction says, spent about 110 thousand tokens on history before doing any work, and a session that cannot read it whole cannot follow it.
+
+**Q2 — what was done.** The discipline is v139.0.0: the ceremony, the eight standing boundaries, the standing operating rules and what the document can and cannot do (about 21 KB). The narratives moved unchanged to this file, which is not a discipline version and is not required reading. `backlog_ruling_record_probe` reads rulings from both files. A ceiling on the size of the discipline is checked by `backlog_lineage_discipline_check`.
+
+**Q3 — what the record shows.** Twenty-three releases of this lineage added narratives to a file the instructions said to read in full; no check held its size, and each addition was reasonable alone. The cost fell on the reader, not on the writer.
+
+**What is not claimed.** (1) The ceiling is a number chosen here, not derived. (2) The OE Operating Discipline (62 KB) is the OEE's and is not changed by this. (3) The shape named for this ruling, `GovernanceRulingShape`, enforces that every ruling lives in the register with its enforcers, which is what lets the discipline stop carrying them. The size ceiling is held by a check script, not by a shape; the register does not model the discipline file. (4) The standing instruction of each session still says to read the discipline in full; with this change that is now possible.
+Related: G164.
