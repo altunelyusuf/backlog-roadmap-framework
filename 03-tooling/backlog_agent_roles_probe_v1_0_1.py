@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# register-use: reference-only
+# (audited: the probe reads no record of the framework register; the validator keeps only the controlled individuals)
 """backlog_agent_roles_probe v1.0.0 -- re-runnable proof of the agent-role rules (shapes v1.161.0, G111) and of the role vocabulary.
 
 Each scenario is a tiny register judged by the CURRENT validator; the probe reads only the two shapes' own messages.

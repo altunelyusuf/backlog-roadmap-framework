@@ -66,7 +66,7 @@ def shape_blocks(text):
     return out
 
 
-MAX_DISCIPLINE_BYTES = 40000
+MAX_DISCIPLINE_BYTES = 8000
 
 
 def main():

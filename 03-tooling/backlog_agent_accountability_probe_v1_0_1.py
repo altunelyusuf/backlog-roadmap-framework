@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# register-use: reference-only
+# (audited: the probe reads no record of the framework register; the validator keeps only the controlled individuals)
 """backlog_agent_accountability_probe v1.0.0 -- re-runnable proof of RS_AgentAccountability (T-Box v1.133.0, shapes v1.168.0, G118).
 
   Each shape of the rule set fires on its planted case and is silent on its control; the item-level shapes bind only an adopter (a lineage), and an item outside it is not judged.

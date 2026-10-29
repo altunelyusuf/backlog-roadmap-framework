@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# register-use: reference-only
+# (audited: the probe reads no record of the framework register; the validator keeps only the controlled individuals)
 """backlog_human_actor_kinds_probe v1.0.0 -- re-runnable proof of the human-actor ruling (T-Box v1.131.0, G116).
 
   Vocabulary (real files)  isOrganisation is a boolean on Executor_HumanTeam and there is no Executor_Organisation class; the closed set of five Executor kinds is unchanged

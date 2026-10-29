@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# register-use: reference-only
+# (audited: the probe reads no record of the framework register; the validator keeps only the controlled individuals)
 """backlog_close_preview_probe v1.0.0 -- re-runnable proof of backlog_close_preview (G109).
 
 Planted register: an in-progress item whose closing requires several things at once (verified evidence, a finish point, ...).

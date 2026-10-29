@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_probe_inputs v1.1.0 -- what a probe really reads, measured, and a stamp key built on that (G128).
+"""backlog_probe_inputs v1.2.0 -- what a probe really reads, measured, and a stamp key built on that (G128).
 
 A proof stamp (G126) skips a step when the SHA of the files the step DECLARES equals the one recorded at its last pass. A probe declares its inputs by hand through
 its own `--deps`, and the declaration is a hope: it can name more than the probe reads (the probe then reruns for a change it never sees) or fewer (it is then skipped
@@ -18,6 +18,8 @@ directory is not derivable). Otherwise the caller keeps the declared inputs, as 
 
 The key is the SHA over the sorted lines `F:path:sha256`, `D:path:sha256(names)`, `A:path:absent|PRESENT`, `Y:family:sha256(names)`. A record whose probe now reads
 something else is not trusted: the key is built from the OLD list, so a changed input changes the key, the probe reruns, and the rerun writes a new record.
+
+v1.2.0 (gate cost): a probe that carries the line `# register-use: reference-only` reads the register file only through the validator, which keeps the controlled individuals and drops every record of the framework's own register; its key therefore uses the digest of that reference part (and not the file's bytes or its versioned name), so a release that only adds records no longer reruns it. Each such probe was audited: it reads no record of the register.
 
 v1.1.0 (G128): `has` tells the gate whether any record exists, so a probe with none is measured even when its declared stamp holds (otherwise a probe is only ever measured when its declared inputs happen
 to change, and an under-declared one stays unsound); an untraced run's record is never exported.
@@ -180,11 +182,42 @@ def _names(pkg, r, fam=None):
     return ns
 
 
+FW_NS = "http://example.org/backlog-framework-register#"
+ABOX_RE = re.compile(r"^01-ontologies/backlog_abox_v\d+_\d+_\d+\.ttl$")
+REF_MARK = re.compile(r"^# register-use: reference-only\s*$", re.M)
+
+
+def _reference_only(rec, pkg):
+    """True when the probe's own source carries the audited marker (see v1.2.0)."""
+    try:
+        d = os.path.join(pkg, rec.get("script_dir", "03-tooling"))
+        cands = sorted(f for f in os.listdir(d) if re.match(re.escape(rec["probe"]) + r"_v\d+_\d+_\d+\.py$", f))
+        key = lambda f: [int(x) for x in re.findall(r"_v(\d+)_(\d+)_(\d+)\.", f)[0]]
+        return bool(cands) and bool(REF_MARK.search(open(os.path.join(d, sorted(cands, key=key)[-1]), encoding="utf-8").read()))
+    except Exception:
+        return False
+
+
+def _reference_digest(path):
+    """sha256 over the triples of the register file whose subject is not in the framework's own register namespace: exactly what the validator keeps as reference."""
+    import rdflib
+    g = rdflib.Graph().parse(path, format="turtle")
+    lines = sorted(" ".join(t.n3() for t in tr) for tr in g if not (isinstance(tr[0], rdflib.URIRef) and str(tr[0]).startswith(FW_NS)))
+    return _sha("\n".join(lines).encode())
+
+
 def key_of(rec, pkg):
     pkg = os.path.realpath(pkg)
     out = []
+    ref = _reference_only(rec, pkg)
     for f in rec["files"]:
         p = os.path.join(pkg, f)
+        if ref and ABOX_RE.match(f):
+            try:
+                out.append("F:01-ontologies/backlog_abox:REFERENCE:%s" % _reference_digest(p))
+                continue
+            except Exception:
+                pass
         try:
             out.append("F:%s:%s" % (f, _sha(open(p, "rb").read())))
         except OSError:
@@ -193,6 +226,8 @@ def key_of(rec, pkg):
         out.append("P:%s:%s" % (d, "dir" if os.path.isdir(os.path.join(pkg, d)) else "MISSING"))
     for d in rec["dirs"]:
         ns = _names(pkg, d)
+        if ref and ns is not None:
+            ns = [n for n in ns if not re.match(r"^backlog_abox_v\d+_\d+_\d+\.ttl$", n)]   # the versioned name changes every release
         out.append("D:%s:%s" % (d, "MISSING" if ns is None else _sha("\n".join(ns).encode())))
     for a in rec["absent"]:
         out.append("A:%s:%s" % (a, "PRESENT" if os.path.lexists(os.path.join(pkg, a)) else "absent"))

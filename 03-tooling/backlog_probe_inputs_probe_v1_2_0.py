@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_probe_inputs_probe v1.1.0 -- the measured inputs of a probe are measured, and a stamp built on them moves exactly when they do (G128).
+"""backlog_probe_inputs_probe v1.2.0 -- the measured inputs of a probe are measured, and a stamp built on them moves exactly when they do (G128).
 
 Builds a throwaway package, runs small probes in it under backlog_probe_inputs, and shows: what is read is listed; a changed input changes the key and an unread
 file does not; a file added to a listed directory, an absent file appearing, and a new version of a tool the probe read each change it; a run that read outside the
@@ -108,6 +108,23 @@ rc, rec = run("quiet2", "print('x')\n", env={"BACKLOG_NO_TRACE": "1"})
 doc2 = pin.cmd_export(memo, os.path.join(work, "inputs3.json"))
 expect("has: the repo file holds a record after the export, and a probe that was only run untraced is not in it",
        has("reader", nm, repo) == 0 and "quiet2" not in json.load(open(os.path.join(work, "inputs3.json")))["probes"])
+
+# ---- v1.2.0: a probe marked `register-use: reference-only` is keyed on the reference part of the register file, not on its bytes or its versioned name ----
+rp = os.path.join(work, "refpkg"); os.makedirs(os.path.join(rp, "01-ontologies")); os.makedirs(os.path.join(rp, "03-tooling"))
+FWN = "http://example.org/backlog-framework-register#"
+BASE = "<http://example.org/backlog#V1> a <http://example.org/backlog#RuleSet> .\n<%sS1> a <http://example.org/backlog#Story> .\n" % FWN
+open(os.path.join(rp, "01-ontologies", "backlog_abox_v1_1_0.ttl"), "w").write(BASE)
+open(os.path.join(rp, "03-tooling", "marked_probe_v1_0_0.py"), "w").write("#!/usr/bin/env python3\n# register-use: reference-only\n")
+open(os.path.join(rp, "03-tooling", "plain_probe_v1_0_0.py"), "w").write("#!/usr/bin/env python3\n")
+mk = lambda n: {"probe": n, "script_dir": "03-tooling", "files": ["01-ontologies/backlog_abox_v1_1_0.ttl"], "present_dirs": [], "dirs": ["01-ontologies"], "absent": [], "family": []}
+k0m, k0p = pin.key_of(mk("marked_probe"), rp), pin.key_of(mk("plain_probe"), rp)
+os.rename(os.path.join(rp, "01-ontologies", "backlog_abox_v1_1_0.ttl"), os.path.join(rp, "01-ontologies", "backlog_abox_v1_2_0.ttl"))
+r2 = lambda n: dict(mk(n), files=["01-ontologies/backlog_abox_v1_2_0.ttl"])
+open(os.path.join(rp, "01-ontologies", "backlog_abox_v1_2_0.ttl"), "a").write("<%sS2> a <http://example.org/backlog#Story> .\n" % FWN)
+expect("reference-only: a new record in the register and a new versioned file name leave the key unchanged", pin.key_of(r2("marked_probe"), rp) == k0m)
+expect("an unmarked probe is keyed on the bytes: the same two changes move its key", pin.key_of(r2("plain_probe"), rp) != k0p)
+open(os.path.join(rp, "01-ontologies", "backlog_abox_v1_2_0.ttl"), "a").write("<http://example.org/backlog#V2> a <http://example.org/backlog#RuleSet> .\n")
+expect("reference-only: a change to the controlled vocabulary moves the key", pin.key_of(r2("marked_probe"), rp) != k0m)
 
 shutil.rmtree(work, ignore_errors=True)
 print("VERDICT: %s" % ("PASS -- %d expectations hold" % COUNT[0] if not bad else "FAIL -- " + "; ".join(bad)))

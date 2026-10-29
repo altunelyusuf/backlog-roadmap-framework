@@ -10987,7 +10987,7 @@ executed outside the register. Ruling G100 (discipline v71_0_0).
   and admitted by an active Backlog output (probe: carried 8 violations, fresh 10). Gate script v1_21_0 -> v1_22_0 with self-proof.
 - **Not changed:** TBox stays at v1_118_0. Shapes v1_146_0 -> v1_147_0, overlay v1_16_0 -> v1_17_0, standard v1_114_0 -> v1_115_0.
 - **Not done:** the adopting project's own order-check output not re-run; row-level evidence measurement is the adopting project's.
-- **Unplanned work:** processed the pending an adopting project handover before the OE file-structure clean-up (owner's priority).
+**Unplanned work:** processed the pending an adopting project handover before the OE file-structure clean-up (owner's priority).
 
 ## v1.332.0 — The safeguard stands in the path of the act (owner's instruction after the repeat drift)
 
@@ -11005,7 +11005,7 @@ register (and runs the ledger-driven specs), and twenty drift entries were each 
 - **Not changed:** TBox stays at v1_118_0; shapes stay at v1_147_0; overlay stays at v1_17_0. Standard v1_115_0 -> v1_116_0.
 - **Not claimed:** project hooks inside delegated worker sessions are not verified (the commit hook and CI do not depend
   on them); Bash-write detection is a heuristic; the guard cannot judge the quality of grooming.
-- **Unplanned work:** the owner's instruction to analyse the root cause and build preventive mechanisms, taken before the OE file-structure clean-up.
+**Unplanned work:** the owner's instruction to analyse the root cause and build preventive mechanisms, taken before the OE file-structure clean-up.
 
 ## v1.333.0 — Lineage 17 (OE structure clean-up) opened: Mission stage only (BP-D53, G99, G101)
 
@@ -11259,6 +11259,18 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Stories (one per deliverable), each with an acceptance criterion in Given/When/Then form, declared design concerns, a refinement, and a planning event that takes it into the first work window and produces one task:** an abandoned mission needs a closure report; a closure report names what was delivered and cancelled (and writes the two missing reports); the archive's confirmation step is repaired and marks the three archived records; each module declares its audience and the public copy follows and stops when it cannot be sure; the archive gets its own rules and no tool judges it by the live rules; the objective-design lesson is recorded; a before-and-after proof. Order of work: lesson, abandoned report, cancelled reported, audience, archive rules, marker, proof.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
+
+## v1.455.0 — 2026-10-29 (MINOR: Lineage 20 closed and archived; Lineage 21 opened; the discipline cut to ceremony and principles)
+
+- **Discipline:** `LINEAGE_OPERATING_DISCIPLINE` v140.0.0 is 2.8 KB (was 23.6 KB, and 450 KB before v139). It holds the four ceremony steps and ten principles; the boundaries and operating rules it carried are already rulings in the register (G1 to G18 and later) and their narratives stay in the narratives file. The size ceiling in the discipline check is 8 KB. The 219 KB discipline of version 71 is removed from the folder.
+- **Lineage 20 closed:** mission Achieved on the Owner's word of 2026-10-29 14:32, closure report written, lineage archived. The report states what was not proved: no live lineage was judged by the ceremony rules, the step tool was outside the scope, and the eight opt-in rule sets are in no profile.
+- **Lineage 21 opened** under the adaptive profile (revision 7) as the live proof. Mission stage only; scope, goals, objectives and backlog follow in the next releases, one each.
+- **Gate cost:** the gate took 2,195 s and 1,720 s of it were the Lineage 19 probes, because 28 of 52 probes read the register file, which changes with every release. Eight of them (the audited ones: agent accountability, agent roles, carried item, close preview, competency inheritance, executor subclass, handover rules, human actor kinds; the largest take 70 to 250 s each) read no record of the register, only the controlled individuals through the validator. They now carry the line `# register-use: reference-only` and `backlog_probe_inputs` v1.2.0 keys them on the reference part of the register file (and not its bytes or its versioned name), so a release that only adds records does not rerun them. `backlog_probe_inputs_probe` v1.2.0 proves the key stays when a record or the file name changes, and moves when the vocabulary changes. This release runs them once under their new versions; the saving starts with the next one.
+- **Archived digest ratchet:** Lineage 20 joins the baseline (measured cause: the adaptive profile has no digest-table rule set; with one every stage reproduces). Owed: the rule set in the adaptive profile.
+- **Probe G174** (v1.3.0) reads the archive as well as the live register, as Lineage 20 is archived.
+
+**Unplanned work:** the cut of the discipline file, the closure and archival of Lineage 20 and the opening of Lineage 21 were directed by the Owner on 2026-10-29 14:32, and Lineage 21 has no backlog yet to hold them; they are recorded as its first carried items when its Backlog stage closes.
+- **Found while archiving:** the archive tool moves statements written with the short prefix and left the change requests, impact assessments and scope changes written in full-IRI form in the live register; they were moved by hand this time. Owed to Lineage 21 as a defect.
 
 ## v1.454.0 — 2026-10-29 (MINOR: Lineage 20, box 9; the discipline made short, G176)
 

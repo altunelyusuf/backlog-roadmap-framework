@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# register-use: reference-only
+# (audited: the probe reads no record of the framework register; the validator keeps only the controlled individuals)
 """backlog_competency_inheritance_probe v1.0.0 -- re-runnable proof of the finer competency level and CompetencyMatchShape's inherit rule (shapes v1.160.0, T-Box v1.125.0, G109).
 
 Each scenario is a tiny register judged by the CURRENT validator; the probe reads only this shape's own message ("requires a Competency its responsible Executor's own CompetencyProfile").

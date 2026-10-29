@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# register-use: reference-only
+# (audited: the probe reads no record of the framework register; the validator keeps only the controlled individuals)
 """backlog_carried_item_probe v1.0.0 -- a carried item through a revision, and through a chain of successors (shapes v1.172.0, G129).
 
 Built from the shipped succession fixture, one planted register per case, a carried story set InProgress:

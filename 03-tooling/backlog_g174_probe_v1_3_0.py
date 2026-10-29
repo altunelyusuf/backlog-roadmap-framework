@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_g174_probe v1.2.0 -- re-runnable proof for G174: a deferral judges the lineage that owns the element, the verifier chooses its digest table from the
+"""backlog_g174_probe v1.3.0 -- re-runnable proof for G174: a deferral judges the lineage that owns the element, the verifier chooses its digest table from the
 lineage's own rule sets, and every gate of the ceremony shapes is seen by a probe that fails when the gate is removed.
 
   1. Static: all eight deferral clauses carry the owner branch and none keeps the old register-wide form.
@@ -154,6 +154,8 @@ expect("with the gate of every one of the fifteen removed, the non-adopter's rec
 from rdflib import Graph, URIRef, RDF, Literal
 B = "http://example.org/backlog#"; FW = "http://example.org/backlog-framework-register#"
 g = Graph().parse(AB, format="turtle")
+_arc = sorted(glob.glob(os.path.join(PKG, "01-ontologies/archive/backlog_framework_archive_abox_v*.ttl")), key=sv)
+if _arc: g.parse(_arc[-1], format="turtle")  # v1.3.0: Lineage 20 is archived, its observations live in the archive
 inc = lambda p: {str(o) for o in g.objects(URIRef(B + p), URIRef(B + "profileIncludes"))}
 inclusions = len(inc("Profile_Standard")) + len(inc("Profile_Agentic")); distinct = len(inc("Profile_Standard") | inc("Profile_Agentic"))
 vals = {str(s).rsplit("#", 1)[1]: float(g.value(s, URIRef(B + "hasObservedValue"))) for s in g.subjects(URIRef(B + "observesMetric"), URIRef(FW + "Metric_AC_Contained"))}

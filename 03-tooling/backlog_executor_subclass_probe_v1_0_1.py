@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# register-use: reference-only
+# (audited: the probe reads no record of the framework register; the validator keeps only the controlled individuals)
 """backlog_executor_subclass_probe v1.0.0 -- re-runnable proof that the executor rules see subclasses (shapes v1.167.0, G117).
 
   A class declared a subclass of an executor kind is treated as that kind by the collective-on-atomic rule, the overseer rule and OrganisationIsTeamShape.
