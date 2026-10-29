@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_g174_probe v1.1.0 -- re-runnable proof for G174: a deferral judges the lineage that owns the element, the verifier chooses its digest table from the
+"""backlog_g174_probe v1.2.0 -- re-runnable proof for G174: a deferral judges the lineage that owns the element, the verifier chooses its digest table from the
 lineage's own rule sets, and every gate of the ceremony shapes is seen by a probe that fails when the gate is removed.
 
   1. Static: all eight deferral clauses carry the owner branch and none keeps the old register-wide form.
@@ -9,8 +9,9 @@ lineage's own rule sets, and every gate of the ceremony shapes is seen by a prob
   4. Gate coverage: fifteen constraints of the ceremony shapes are each gated by the rule set a lineage must adopt. One register of non-adopter records
      (one violating record per constraint) must draw none of the fifteen messages; the same records in an adopter lineage must draw all fifteen; and a
      copy of the shapes with the gate of every one of the fifteen removed must draw all fifteen for the non-adopter -- so removing any gate is noticed.
-  5. Records: the count of contained rules in the observations equals the distinct rules of the profiles, the retrospective of each box produces only findings
-     that relate to that box's own stories or items, and no deployment unit is dated before the review that closed its box.
+  5. Records: the observations of the contained rules equal the inclusions of the standard and agentic profiles (nineteen, ten of them distinct), each finding of the
+     lineage is produced by exactly one retrospective, and no deployment unit is dated before the review that closed its box. (An earlier text of this line promised
+     more than the code checks; corrected by G175.)
 Exit 0 when every expectation holds."""
 import glob, os, re, subprocess, sys, tempfile
 HERE = os.path.dirname(os.path.abspath(__file__)); PKG = os.path.dirname(HERE)
@@ -33,7 +34,7 @@ OWN = "$this (backlog:belongsToLineage|^backlog:lineageForMission) ?dl"
 carry = [i for i in sites if OWN in lines[i + 1]]
 expect("all eight deferral clauses carry the owner branch", len(sites) == 8 and len(carry) == 8, "%d clauses, %d with the owner branch" % (len(sites), len(carry)))
 expect("no deferral keeps the old register-wide form", "FILTER NOT EXISTS { ?dl a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_ObligationsFollowStatus" not in txt)
-expect("the register-wide branch applies only where the element has no owner", all("FILTER NOT EXISTS { $this (backlog:belongsToLineage|^backlog:lineageForMission) ?xl . ?xl a backlog:Lineage }" in lines[i + 1] for i in sites))
+expect("the register-wide branch applies only where the element has no owner or is itself a register", all("FILTER ( NOT EXISTS { $this (backlog:belongsToLineage|^backlog:lineageForMission) ?xl . ?xl a backlog:Lineage } || EXISTS { $this a backlog:Backlog } || EXISTS { $this backlog:isRegisterRoot true } )" in lines[i + 1] for i in sites))
 
 # ---- helpers -----------------------------------------------------------------------------------------------------------------------------------------
 H = "@prefix backlog: <http://example.org/backlog#> .\n@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n@prefix owl: <http://www.w3.org/2002/07/owl#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n@prefix x: <http://example.org/x#> .\n"

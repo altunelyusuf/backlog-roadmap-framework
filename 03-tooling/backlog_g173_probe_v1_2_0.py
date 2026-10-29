@@ -36,7 +36,7 @@ for b in blocks:
                 ok = re.search(r'\$this backlog:\w+ %s\b' % re.escape(var), b) is not None or re.search(r'belongsToLineage %s\b' % re.escape(var), b) is not None or re.search(r'\{ \$this backlog:belongsToLineage %s' % re.escape(var), b) is not None
             if not ok: loose.append((var, rs))
 expect("no test of the shapes asks whether some lineage adopted a rule set without tying it to the element judged", not loose, str(loose[:5]))
-expect("the shapes file names the rule set of the deferral in every one of its eight deferrals and ten constraints", txt.count("backlog:RS_ObligationsFollowStatus") == 34, str(txt.count("backlog:RS_ObligationsFollowStatus")))
+expect("the shapes file names the rule set of the deferral in every one of its eight deferrals and ten constraints", txt.count("backlog:RS_ObligationsFollowStatus") == 36, str(txt.count("backlog:RS_ObligationsFollowStatus")))
 
 # ---- planted registers --------------------------------------------------------------------------------------------------------------------------
 H = "@prefix backlog: <http://example.org/backlog#> .\n@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n@prefix owl: <http://www.w3.org/2002/07/owl#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n@prefix x: <http://example.org/g173#> .\n"

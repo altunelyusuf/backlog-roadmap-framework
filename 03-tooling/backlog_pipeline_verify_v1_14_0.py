@@ -186,15 +186,29 @@ def main():
         if os.path.exists(f):
             _g0.parse(f, format="turtle")
     _B = "http://example.org/backlog#"
-    _adopted = set()
     _lins = [s0 for s0 in _g0.subjects(_R.type, _U(_B + "Lineage"))]
+    _TABLES = ("v5", "v4", "v3", "v2")
+    def _adopted_of(nodes):
+        out = set()
+        for s0 in nodes:
+            for o0 in _g0.objects(s0, _U(_B + "adoptsRuleSet")):
+                out.add(str(o0).rsplit("#", 1)[-1])
+        return out
     if lineage_name is not None:
         _sel = [s0 for s0 in _lins if str(s0).rsplit("#", 1)[-1] == lineage_name]
+        if not _sel:
+            print("ERROR: no real Lineage named %s found" % lineage_name)
+            return 1
+        _adopted = _adopted_of(_sel)
     else:
-        _sel = list(_lins)
-    for s0 in _sel:
-        for o0 in _g0.objects(s0, _U(_B + "adoptsRuleSet")):
-            _adopted.add(str(o0).rsplit("#", 1)[-1])
+        # v1.14.0 (G175): with no lineage named, every lineage must read the same table; "some lineage adopted" decides nothing
+        _per = [_adopted_of([s0]) for s0 in _lins]
+        _tab = lambda ad: next((t_ for t_ in _TABLES if "RS_DigestTable_" + t_ in ad), "v1")
+        _kinds = sorted({_tab(ad) for ad in _per})
+        if len(_kinds) > 1:
+            print("ERROR: the lineages of this register adopt different digest tables (%s); name the one to verify with --lineage" % ", ".join(_kinds))
+            return 1
+        _adopted = _adopted_of(_lins)
     if not _adopted:
         for s0, o0 in _g0.subject_objects(_U(_B + "adoptsRuleSet")):
             if (s0, _R.type, _U(_B + "Lineage")) not in _g0:

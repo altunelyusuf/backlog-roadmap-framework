@@ -22,8 +22,8 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (ABox: controlled individuals, reference data and the live register)"@en ;
-    owl:versionIRI <http://example.org/backlog/abox/1.79.0> ;
-    owl:versionInfo "1.79.0" ;
+    owl:versionIRI <http://example.org/backlog/abox/1.80.0> ;
+    owl:versionInfo "1.80.0" ;
     owl:priorVersion <http://example.org/backlog/abox/1.62.0> , <http://example.org/backlog/abox/1.61.0> , <http://example.org/backlog/abox/1.60.0> , <http://example.org/backlog/abox/1.59.0> , <http://example.org/backlog/abox/1.58.0> , <http://example.org/backlog/abox/1.57.0> , <http://example.org/backlog/abox/1.53.0> , <http://example.org/backlog/abox/1.52.0> , <http://example.org/backlog/abox/1.51.0> , <http://example.org/backlog/abox/1.50.0> , <http://example.org/backlog/abox/1.49.0> , <http://example.org/backlog/abox/1.48.0> , <http://example.org/backlog/abox/1.47.0> , <http://example.org/backlog/abox/1.46.0> , <http://example.org/backlog/abox/1.45.0> , <http://example.org/backlog/abox/1.40.0> , <http://example.org/backlog/abox/1.39.0> , <http://example.org/backlog/abox/1.38.0> , <http://example.org/backlog/abox/1.37.0> , <http://example.org/backlog/abox/1.36.0> , <http://example.org/backlog/abox/1.35.0> ;
     owl:priorVersion <http://example.org/backlog/abox/1.34.0> , <http://example.org/backlog/abox/1.33.0> , <http://example.org/backlog/abox/1.32.0> , <http://example.org/backlog/abox/1.31.0> , <http://example.org/backlog/abox/1.30.0> , <http://example.org/backlog/abox/1.29.0> , <http://example.org/backlog/abox/1.28.0> , <http://example.org/backlog/abox/1.27.0> , <http://example.org/backlog/abox/1.26.0> , <http://example.org/backlog/abox/1.25.0> , <http://example.org/backlog/abox/1.24.0> , <http://example.org/backlog/abox/1.23.0> , <http://example.org/backlog/abox/1.22.0> , <http://example.org/backlog/abox/1.21.0> , <http://example.org/backlog/abox/1.20.0> , <http://example.org/backlog/abox/1.19.0> , <http://example.org/backlog/abox/1.17.0> , <http://example.org/backlog/abox/1.16.0> , <http://example.org/backlog/abox/1.15.0> , <http://example.org/backlog/abox/1.14.0> , <http://example.org/backlog/abox/1.13.0> , <http://example.org/backlog/abox/1.12.0> , <http://example.org/backlog/abox/1.11.0> , <http://example.org/backlog/abox/1.10.0> , <http://example.org/backlog/abox/1.9.0> , <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
         <http://example.org/backlog-abox/1.2.1> ,
@@ -10167,6 +10167,12 @@ fw:Ruling_G174 a backlog:GovernanceRuling ;
     backlog:hasRulingStatement "A deferral judges the lineage that owns the element, and a check is not counted until a probe fails without it" ;
     backlog:enforcedByShape backlog:ContainerShape , backlog:ArtifactCommitmentShape , backlog:LineageCompletenessShape , backlog:L4GroomingShape , backlog:CeremonyKindShape , backlog:ReadinessRequiredShape , backlog:ControlRunShape , backlog:DemoRunShape , backlog:DeploymentPlanShape , backlog:ReviewControlsRunShape ;
     backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v137.0.0, section G174." .
+fw:Ruling_G175 a backlog:GovernanceRuling ;
+    backlog:hasRulingIdentifier "G175" ;
+    rdfs:label "A deferral needs every owner, a threshold is pinned by a probe that fails when it moves, and a record is corrected by appending"@en ;
+    backlog:hasRulingStatement "A deferral needs every owner, a threshold is pinned by a probe that fails when it moves, and a record is corrected by appending" ;
+    backlog:enforcedByShape backlog:ContainerShape , backlog:ArtifactCommitmentShape , backlog:LineageCompletenessShape , backlog:L4GroomingShape ;
+    backlog:rulingSource "LINEAGE_OPERATING_DISCIPLINE v138.0.0, section G175." .
 
 # ---- BOX4 BEGIN ----
 fw:AC_AC_Leak a backlog:AcceptanceCriterion ;
@@ -10971,6 +10977,322 @@ fw:Obs_AC_Contained_B7 a backlog:MetricObservation ; rdfs:label "After box 7: Co
     backlog:observesMetric fw:Metric_AC_Contained ; backlog:observationFor fw:Obj_AC_Contained ; backlog:hasObservedValue 19.0 ; backlog:observedAt "2026-10-28T11:31:02Z"^^xsd:dateTime ;
     backlog:hasObservationMethod "Counted in the data: nineteen inclusions, nine in the standard profile and ten in the agentic profile (ten distinct rule sets, since the agentic profile includes the standard profile's nine); the evidence that their refusals hold is the profile probe and the G174 probe of release 1.452.0, not this count." .
 # ---- BOX7 END ----
+# ---- BOX8 BEGIN ----
+fw:AC_AC_Owners a backlog:AcceptanceCriterion ;
+    backlog:satisfiedByArtifact "03-tooling/backlog_g175_probe_v1_0_0.py" ;
+    backlog:hasGherkinText "Given an epic owned by an adopter and by a lineage that did not adopt, or a register that carries one creating lineage, When the register is validated, Then the epic is asked for what the non-adopter owes and the register-level obligations are asked as for a register with no owner." .
+fw:ST_AC_Owners a backlog:Story ; backlog:responsible <http://example.org/fixture-autofix#DefaultExecutor> ; backlog:coversEntity fw:Entity_AC_CeremonyRecord ; backlog:coversStage backlog:Stage_SuspensionException ; backlog:hasIdentifier "AC-S19" ; backlog:hasTitle "A deferral of an epic needs every owner to have adopted the rule, and a register-level obligation follows the register whoever created it" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register , fw:It_AC_8 , fw:Rel_AC_8 ;
+    backlog:belongsToLineage fw:L_AdaptiveCeremonies ;
+    backlog:pursuesObjective fw:Obj_AC_MissionMet ;
+    backlog:hasInvestmentCategory backlog:Cat_Maintenance ;
+    backlog:hasAcceptanceCriterion fw:AC_AC_Owners ;
+    backlog:hasReach 4.0 ; backlog:hasImpact 3.0 ; backlog:hasConfidence 0.7 ; backlog:hasEffort 4.0 ;
+    backlog:hasPriorityScore 2.1 ;
+    backlog:hasApplicableConcern backlog:Concern_Architecture ;
+    backlog:appliesDefinitionOfDone fw:DoD ;
+    backlog:startedAt "2026-10-28T23:24:50Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-10-29T00:46:28Z"^^xsd:dateTime ; backlog:lastAuditedAt "2026-10-29T00:46:28Z"^^xsd:dateTime ;
+    backlog:hasExecutionModality backlog:Mode_Automated ; backlog:hasEvidence fw:Ev_AC_Owners .
+fw:AC_AC_Table a backlog:AcceptanceCriterion ;
+    backlog:satisfiedByArtifact "03-tooling/backlog_g175_probe_v1_0_0.py" ;
+    backlog:hasGherkinText "Given a register whose lineages adopt different digest tables, When the verifier runs without a lineage name, Then it refuses and says to name one; and when it runs with a name no lineage has, Then it reports an error and does not fall back to the first table." .
+fw:ST_AC_Table a backlog:Story ; backlog:responsible <http://example.org/fixture-autofix#DefaultExecutor> ; backlog:coversEntity fw:Entity_AC_CeremonyRecord ; backlog:coversStage backlog:Stage_SuspensionException ; backlog:hasIdentifier "AC-S20" ; backlog:hasTitle "The pipeline verifier names the lineage it verified: differing digest tables are refused, and an unknown lineage is an error" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register , fw:It_AC_8 , fw:Rel_AC_8 ;
+    backlog:belongsToLineage fw:L_AdaptiveCeremonies ;
+    backlog:pursuesObjective fw:Obj_AC_MissionMet ;
+    backlog:hasInvestmentCategory backlog:Cat_Maintenance ;
+    backlog:hasAcceptanceCriterion fw:AC_AC_Table ;
+    backlog:hasReach 3.0 ; backlog:hasImpact 3.0 ; backlog:hasConfidence 0.7 ; backlog:hasEffort 3.0 ;
+    backlog:hasPriorityScore 2.1 ;
+    backlog:hasApplicableConcern backlog:Concern_Architecture ;
+    backlog:appliesDefinitionOfDone fw:DoD ;
+    backlog:startedAt "2026-10-28T23:24:53Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-10-29T00:46:28Z"^^xsd:dateTime ; backlog:lastAuditedAt "2026-10-29T00:46:28Z"^^xsd:dateTime ;
+    backlog:hasExecutionModality backlog:Mode_Automated ; backlog:hasEvidence fw:Ev_AC_Table .
+fw:AC_AC_Pins a backlog:AcceptanceCriterion ;
+    backlog:satisfiedByArtifact "03-tooling/backlog_g175_probe_v1_0_0.py" ;
+    backlog:hasGherkinText "Given each of the eight deferrals, When the rank threshold is moved by one or the every-owner condition is removed in a copy of the shapes, Then a probe fails; and a lineage one rank below the threshold is not asked while a lineage at it is." .
+fw:ST_AC_Pins a backlog:Story ; backlog:responsible <http://example.org/fixture-autofix#DefaultExecutor> ; backlog:coversEntity fw:Entity_AC_CeremonyRecord ; backlog:coversStage backlog:Stage_SuspensionException ; backlog:hasIdentifier "AC-S21" ; backlog:hasTitle "The status at which each deferral begins, and the every-owner condition, are pinned by a probe that fails when they move" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register , fw:It_AC_8 , fw:Rel_AC_8 ;
+    backlog:belongsToLineage fw:L_AdaptiveCeremonies ;
+    backlog:pursuesObjective fw:Obj_AC_MissionMet ;
+    backlog:hasInvestmentCategory backlog:Cat_Maintenance ;
+    backlog:hasAcceptanceCriterion fw:AC_AC_Pins ;
+    backlog:hasReach 3.0 ; backlog:hasImpact 3.0 ; backlog:hasConfidence 0.7 ; backlog:hasEffort 4.0 ;
+    backlog:hasPriorityScore 1.6 ;
+    backlog:hasApplicableConcern backlog:Concern_Data ;
+    backlog:appliesDefinitionOfDone fw:DoD ;
+    backlog:startedAt "2026-10-28T23:24:56Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-10-29T00:46:28Z"^^xsd:dateTime ; backlog:lastAuditedAt "2026-10-29T00:46:28Z"^^xsd:dateTime ;
+    backlog:hasExecutionModality backlog:Mode_Automated ; backlog:hasEvidence fw:Ev_AC_Pins .
+fw:AC_AC_Gates2 a backlog:AcceptanceCriterion ;
+    backlog:satisfiedByArtifact "03-tooling/backlog_g175_probe_v1_0_0.py" ;
+    backlog:hasGherkinText "Given each constraint of the four rule sets, When its gate is removed in a copy of the shapes, Then a probe fails, a lineage that did not adopt draws none of the messages and one that adopted draws all of them." .
+fw:ST_AC_Gates2 a backlog:Story ; backlog:responsible <http://example.org/fixture-autofix#DefaultExecutor> ; backlog:coversEntity fw:Entity_AC_CeremonyRecord ; backlog:coversStage backlog:Stage_SuspensionException ; backlog:hasIdentifier "AC-S22" ; backlog:hasTitle "The gate of every constraint of the lineage-status, agent-accountability, cancellation and repair-reprioritising rule sets is covered by a probe that fails when it is removed" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register , fw:It_AC_8 , fw:Rel_AC_8 ;
+    backlog:belongsToLineage fw:L_AdaptiveCeremonies ;
+    backlog:pursuesObjective fw:Obj_AC_MissionMet ;
+    backlog:hasInvestmentCategory backlog:Cat_Maintenance ;
+    backlog:hasAcceptanceCriterion fw:AC_AC_Gates2 ;
+    backlog:hasReach 3.0 ; backlog:hasImpact 3.0 ; backlog:hasConfidence 0.7 ; backlog:hasEffort 5.0 ;
+    backlog:hasPriorityScore 1.3 ;
+    backlog:hasApplicableConcern backlog:Concern_Data ;
+    backlog:appliesDefinitionOfDone fw:DoD ;
+    backlog:startedAt "2026-10-28T23:24:59Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-10-29T00:46:28Z"^^xsd:dateTime ; backlog:lastAuditedAt "2026-10-29T00:46:28Z"^^xsd:dateTime ;
+    backlog:hasExecutionModality backlog:Mode_Automated ; backlog:hasEvidence fw:Ev_AC_Gates2 .
+fw:AC_AC_Append a backlog:AcceptanceCriterion ;
+    backlog:satisfiedByArtifact "03-tooling/backlog_g175_probe_v1_0_0.py" ;
+    backlog:hasGherkinText "Given the records of boxes 1 to 7 that were corrected in box 7 and the text of G174, When they are read, Then each corrected record carries a note that says what it said before and why, the box 7 deployment record says what its date is, and G175 states what G174 got wrong." .
+fw:ST_AC_Append a backlog:Story ; backlog:responsible <http://example.org/fixture-autofix#DefaultExecutor> ; backlog:coversEntity fw:Entity_AC_CeremonyRecord ; backlog:coversStage backlog:Stage_SuspensionException ; backlog:hasIdentifier "AC-S23" ; backlog:hasTitle "Corrections are appended to the record they correct and the text of G174 is corrected by appending G175" ;
+    backlog:hasState backlog:Done ;
+    backlog:memberOfContainer fw:Register , fw:It_AC_8 , fw:Rel_AC_8 ;
+    backlog:belongsToLineage fw:L_AdaptiveCeremonies ;
+    backlog:pursuesObjective fw:Obj_AC_MissionMet ;
+    backlog:hasInvestmentCategory backlog:Cat_Maintenance ;
+    backlog:hasAcceptanceCriterion fw:AC_AC_Append ;
+    backlog:hasReach 3.0 ; backlog:hasImpact 3.0 ; backlog:hasConfidence 0.7 ; backlog:hasEffort 3.0 ;
+    backlog:hasPriorityScore 2.1 ;
+    backlog:hasApplicableConcern backlog:Concern_Data ;
+    backlog:appliesDefinitionOfDone fw:DoD ;
+    backlog:startedAt "2026-10-28T23:25:02Z"^^xsd:dateTime ;
+    backlog:finishedAt "2026-10-29T01:04:44Z"^^xsd:dateTime ; backlog:lastAuditedAt "2026-10-29T01:04:44Z"^^xsd:dateTime ;
+    backlog:hasExecutionModality backlog:Mode_Automated ; backlog:hasEvidence fw:Ev_AC_Append .
+fw:Ref_AC_Owners a backlog:RefinementEvent ; backlog:hasWorkKind backlog:WorkKind_Preparation ; backlog:refines fw:ST_AC_Owners ; backlog:refinedAt "2026-10-28T23:24:10Z"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Groomed for box 8: the acceptance criterion reads as a test the validator can run, the effort is 4 points, and the change is to shapes, tooling or records with probe checks." ;
+    backlog:refinedBy backlog:Builder ; backlog:addressesConcern backlog:Concern_Architecture .
+fw:Ev8_ST_AC_Owners_T_Refine a backlog:TransitionEvent ; backlog:transitionedItem fw:ST_AC_Owners ; backlog:viaTransition backlog:T_Refine ; backlog:transitionedAt "2026-10-28T23:24:10Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder ; backlog:hasTransitionNote "Groomed and made ready for box 8." .
+fw:Chk_AC_Owners a backlog:ReadinessCheck ; rdfs:label "Readiness of the story AC-S19"@en ;
+    backlog:checksReadinessOf fw:ST_AC_Owners ; backlog:readinessCheckedAt "2026-10-28T23:24:20Z"^^xsd:dateTime ;
+    backlog:hasReadinessCriterion fw:K_AC_Owners_AC , fw:K_AC_Owners_Size , fw:K_AC_Owners_Dep , fw:K_AC_Owners_Input .
+fw:K_AC_Owners_AC a backlog:ReadinessCriterion ; rdfs:label "The acceptance criterion reads as a test the validator can run"@en ; backlog:criterionMet true .
+fw:K_AC_Owners_Size a backlog:ReadinessCriterion ; rdfs:label "The effort is estimated and fits the box"@en ; backlog:criterionMet true .
+fw:K_AC_Owners_Dep a backlog:ReadinessCriterion ; rdfs:label "Nothing it depends on is open"@en ; backlog:criterionMet true .
+fw:K_AC_Owners_Input a backlog:ReadinessCriterion ; rdfs:label "No decision of the Owner is waited on"@en ; backlog:criterionMet true .
+fw:Ref_AC_Table a backlog:RefinementEvent ; backlog:hasWorkKind backlog:WorkKind_Preparation ; backlog:refines fw:ST_AC_Table ; backlog:refinedAt "2026-10-28T23:24:10Z"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Groomed for box 8: the acceptance criterion reads as a test the validator can run, the effort is 3 points, and the change is to shapes, tooling or records with probe checks." ;
+    backlog:refinedBy backlog:Builder ; backlog:addressesConcern backlog:Concern_Architecture .
+fw:Ev8_ST_AC_Table_T_Refine a backlog:TransitionEvent ; backlog:transitionedItem fw:ST_AC_Table ; backlog:viaTransition backlog:T_Refine ; backlog:transitionedAt "2026-10-28T23:24:10Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder ; backlog:hasTransitionNote "Groomed and made ready for box 8." .
+fw:Chk_AC_Table a backlog:ReadinessCheck ; rdfs:label "Readiness of the story AC-S20"@en ;
+    backlog:checksReadinessOf fw:ST_AC_Table ; backlog:readinessCheckedAt "2026-10-28T23:24:20Z"^^xsd:dateTime ;
+    backlog:hasReadinessCriterion fw:K_AC_Table_AC , fw:K_AC_Table_Size , fw:K_AC_Table_Dep , fw:K_AC_Table_Input .
+fw:K_AC_Table_AC a backlog:ReadinessCriterion ; rdfs:label "The acceptance criterion reads as a test the validator can run"@en ; backlog:criterionMet true .
+fw:K_AC_Table_Size a backlog:ReadinessCriterion ; rdfs:label "The effort is estimated and fits the box"@en ; backlog:criterionMet true .
+fw:K_AC_Table_Dep a backlog:ReadinessCriterion ; rdfs:label "Nothing it depends on is open"@en ; backlog:criterionMet true .
+fw:K_AC_Table_Input a backlog:ReadinessCriterion ; rdfs:label "No decision of the Owner is waited on"@en ; backlog:criterionMet true .
+fw:Ref_AC_Pins a backlog:RefinementEvent ; backlog:hasWorkKind backlog:WorkKind_Preparation ; backlog:refines fw:ST_AC_Pins ; backlog:refinedAt "2026-10-28T23:24:10Z"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Groomed for box 8: the acceptance criterion reads as a test the validator can run, the effort is 4 points, and the change is to shapes, tooling or records with probe checks." ;
+    backlog:refinedBy backlog:Builder ; backlog:addressesConcern backlog:Concern_Data .
+fw:Ev8_ST_AC_Pins_T_Refine a backlog:TransitionEvent ; backlog:transitionedItem fw:ST_AC_Pins ; backlog:viaTransition backlog:T_Refine ; backlog:transitionedAt "2026-10-28T23:24:10Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder ; backlog:hasTransitionNote "Groomed and made ready for box 8." .
+fw:Chk_AC_Pins a backlog:ReadinessCheck ; rdfs:label "Readiness of the story AC-S21"@en ;
+    backlog:checksReadinessOf fw:ST_AC_Pins ; backlog:readinessCheckedAt "2026-10-28T23:24:20Z"^^xsd:dateTime ;
+    backlog:hasReadinessCriterion fw:K_AC_Pins_AC , fw:K_AC_Pins_Size , fw:K_AC_Pins_Dep , fw:K_AC_Pins_Input .
+fw:K_AC_Pins_AC a backlog:ReadinessCriterion ; rdfs:label "The acceptance criterion reads as a test the validator can run"@en ; backlog:criterionMet true .
+fw:K_AC_Pins_Size a backlog:ReadinessCriterion ; rdfs:label "The effort is estimated and fits the box"@en ; backlog:criterionMet true .
+fw:K_AC_Pins_Dep a backlog:ReadinessCriterion ; rdfs:label "Nothing it depends on is open"@en ; backlog:criterionMet true .
+fw:K_AC_Pins_Input a backlog:ReadinessCriterion ; rdfs:label "No decision of the Owner is waited on"@en ; backlog:criterionMet true .
+fw:Ref_AC_Gates2 a backlog:RefinementEvent ; backlog:hasWorkKind backlog:WorkKind_Preparation ; backlog:refines fw:ST_AC_Gates2 ; backlog:refinedAt "2026-10-28T23:24:10Z"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Groomed for box 8: the acceptance criterion reads as a test the validator can run, the effort is 5 points, and the change is to shapes, tooling or records with probe checks." ;
+    backlog:refinedBy backlog:Builder ; backlog:addressesConcern backlog:Concern_Data .
+fw:Ev8_ST_AC_Gates2_T_Refine a backlog:TransitionEvent ; backlog:transitionedItem fw:ST_AC_Gates2 ; backlog:viaTransition backlog:T_Refine ; backlog:transitionedAt "2026-10-28T23:24:10Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder ; backlog:hasTransitionNote "Groomed and made ready for box 8." .
+fw:Chk_AC_Gates2 a backlog:ReadinessCheck ; rdfs:label "Readiness of the story AC-S22"@en ;
+    backlog:checksReadinessOf fw:ST_AC_Gates2 ; backlog:readinessCheckedAt "2026-10-28T23:24:20Z"^^xsd:dateTime ;
+    backlog:hasReadinessCriterion fw:K_AC_Gates2_AC , fw:K_AC_Gates2_Size , fw:K_AC_Gates2_Dep , fw:K_AC_Gates2_Input .
+fw:K_AC_Gates2_AC a backlog:ReadinessCriterion ; rdfs:label "The acceptance criterion reads as a test the validator can run"@en ; backlog:criterionMet true .
+fw:K_AC_Gates2_Size a backlog:ReadinessCriterion ; rdfs:label "The effort is estimated and fits the box"@en ; backlog:criterionMet true .
+fw:K_AC_Gates2_Dep a backlog:ReadinessCriterion ; rdfs:label "Nothing it depends on is open"@en ; backlog:criterionMet true .
+fw:K_AC_Gates2_Input a backlog:ReadinessCriterion ; rdfs:label "No decision of the Owner is waited on"@en ; backlog:criterionMet true .
+fw:Ref_AC_Append a backlog:RefinementEvent ; backlog:hasWorkKind backlog:WorkKind_Preparation ; backlog:refines fw:ST_AC_Append ; backlog:refinedAt "2026-10-28T23:24:10Z"^^xsd:dateTime ;
+    backlog:hasRefinementOutcome "Groomed for box 8: the acceptance criterion reads as a test the validator can run, the effort is 3 points, and the change is to shapes, tooling or records with probe checks." ;
+    backlog:refinedBy backlog:Builder ; backlog:addressesConcern backlog:Concern_Data .
+fw:Ev8_ST_AC_Append_T_Refine a backlog:TransitionEvent ; backlog:transitionedItem fw:ST_AC_Append ; backlog:viaTransition backlog:T_Refine ; backlog:transitionedAt "2026-10-28T23:24:10Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder ; backlog:hasTransitionNote "Groomed and made ready for box 8." .
+fw:Chk_AC_Append a backlog:ReadinessCheck ; rdfs:label "Readiness of the story AC-S23"@en ;
+    backlog:checksReadinessOf fw:ST_AC_Append ; backlog:readinessCheckedAt "2026-10-28T23:24:20Z"^^xsd:dateTime ;
+    backlog:hasReadinessCriterion fw:K_AC_Append_AC , fw:K_AC_Append_Size , fw:K_AC_Append_Dep , fw:K_AC_Append_Input .
+fw:K_AC_Append_AC a backlog:ReadinessCriterion ; rdfs:label "The acceptance criterion reads as a test the validator can run"@en ; backlog:criterionMet true .
+fw:K_AC_Append_Size a backlog:ReadinessCriterion ; rdfs:label "The effort is estimated and fits the box"@en ; backlog:criterionMet true .
+fw:K_AC_Append_Dep a backlog:ReadinessCriterion ; rdfs:label "Nothing it depends on is open"@en ; backlog:criterionMet true .
+fw:K_AC_Append_Input a backlog:ReadinessCriterion ; rdfs:label "No decision of the Owner is waited on"@en ; backlog:criterionMet true .
+fw:Plan_AC_8_Deployment a backlog:DeploymentPlan ; backlog:hasWorkKind backlog:WorkKind_Planning ; backlog:deploymentPlanForBox fw:It_AC_8 ; backlog:plansDeploymentUnit fw:Rel_AC_8 ; backlog:deploymentPlannedAt "2026-10-28T23:24:23Z"^^xsd:dateTime .
+fw:It_AC_8 a backlog:Iteration ; backlog:hasIdentifier "AC-BOX-8" ; backlog:hasTitle "Box 8 of Lineage 20: the fifth post-mortem" ;
+    backlog:hasSprintGoal "Correct what the fifth independent post-mortem found: a deferral of an epic needs every owner, a register-level obligation follows the register, the verifier names the lineage it verified, the deferral thresholds and the gates of four more rule sets are pinned by probes that fail without them, and corrections are appended to the records they correct. The times of the records that open this box are the times of recording." ;
+    backlog:hasState backlog:Done ; backlog:iterationStart "2026-10-28T23:24:30Z"^^xsd:dateTime ;
+    backlog:iterationEnd "2026-10-29T01:05:29Z"^^xsd:dateTime ;
+    backlog:hasCapacity 19.0 ; backlog:hasObservedDuration 101.0 ; backlog:hasDurationSource "Wall clock from the start of the box to its review, both taken from the register: 2026-10-28T23:24:30Z to 2026-10-29T01:05:29Z." ; backlog:belongsToLineage fw:L_AdaptiveCeremonies .
+fw:Ceremony_AC_Planning8 a backlog:SprintPlanningCeremony ; backlog:hasWorkKind backlog:WorkKind_Planning ; backlog:ceremonyFor fw:It_AC_8 ; backlog:heldAt "2026-10-28T23:24:31Z"^^xsd:dateTime ;
+    backlog:includesPlanningEvent fw:Plan_AC_Owners , fw:Plan_AC_Table , fw:Plan_AC_Pins , fw:Plan_AC_Gates2 , fw:Plan_AC_Append .
+fw:Plan_AC_Owners a backlog:PlanningEvent ; rdfs:label "Story AC-S19 planned into box 8"@en ;
+    backlog:plansItem fw:ST_AC_Owners ; backlog:plannedInto fw:It_AC_8 ; backlog:plannedAt "2026-10-28T23:24:31Z"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ; backlog:producesTask fw:T_AC_Owners_Build .
+fw:T_AC_Owners_Build a backlog:ExecutionTask ; backlog:hasIdentifier "T-AC-OWNERS-BUILD" ; backlog:hasState backlog:Done ;
+    backlog:hasTaskType backlog:Task_Implementation ; backlog:responsible <http://example.org/fixture-autofix#DefaultExecutor> ; backlog:memberOfContainer fw:It_AC_8 ; backlog:appliesDefinitionOfDone fw:DoD ; backlog:belongsToLineage fw:L_AdaptiveCeremonies ;
+    backlog:startedAt "2026-10-28T23:24:50Z"^^xsd:dateTime ; backlog:finishedAt "2026-10-29T00:46:28Z"^^xsd:dateTime ; backlog:hasEvidence fw:Ev_AC_Owners ; backlog:hasExecutionModality backlog:Mode_Automated .
+fw:ST_AC_Owners backlog:decomposesInto fw:T_AC_Owners_Build .
+fw:Ev8_T_AC_Owners_Build_T_Decompose a backlog:TransitionEvent ; backlog:transitionedItem fw:T_AC_Owners_Build ; backlog:viaTransition backlog:T_Decompose ; backlog:transitionedAt "2026-10-28T23:24:32Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Ev8_T_AC_Owners_Build_T_RefinedToReady a backlog:TransitionEvent ; backlog:transitionedItem fw:T_AC_Owners_Build ; backlog:viaTransition backlog:T_RefinedToReady ; backlog:transitionedAt "2026-10-28T23:24:33Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Ev8_T_AC_Owners_Build_T_Start a backlog:TransitionEvent ; backlog:transitionedItem fw:T_AC_Owners_Build ; backlog:viaTransition backlog:T_Start ; backlog:transitionedAt "2026-10-28T23:24:50Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Ev8_ST_AC_Owners_T_Start a backlog:TransitionEvent ; backlog:transitionedItem fw:ST_AC_Owners ; backlog:viaTransition backlog:T_Start ; backlog:transitionedAt "2026-10-28T23:24:50Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Plan_AC_Table a backlog:PlanningEvent ; rdfs:label "Story AC-S20 planned into box 8"@en ;
+    backlog:plansItem fw:ST_AC_Table ; backlog:plannedInto fw:It_AC_8 ; backlog:plannedAt "2026-10-28T23:24:31Z"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ; backlog:producesTask fw:T_AC_Table_Build .
+fw:T_AC_Table_Build a backlog:ExecutionTask ; backlog:hasIdentifier "T-AC-TABLE-BUILD" ; backlog:hasState backlog:Done ;
+    backlog:hasTaskType backlog:Task_Implementation ; backlog:responsible <http://example.org/fixture-autofix#DefaultExecutor> ; backlog:memberOfContainer fw:It_AC_8 ; backlog:appliesDefinitionOfDone fw:DoD ; backlog:belongsToLineage fw:L_AdaptiveCeremonies ;
+    backlog:startedAt "2026-10-28T23:24:53Z"^^xsd:dateTime ; backlog:finishedAt "2026-10-29T00:46:28Z"^^xsd:dateTime ; backlog:hasEvidence fw:Ev_AC_Table ; backlog:hasExecutionModality backlog:Mode_Automated .
+fw:ST_AC_Table backlog:decomposesInto fw:T_AC_Table_Build .
+fw:Ev8_T_AC_Table_Build_T_Decompose a backlog:TransitionEvent ; backlog:transitionedItem fw:T_AC_Table_Build ; backlog:viaTransition backlog:T_Decompose ; backlog:transitionedAt "2026-10-28T23:24:32Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Ev8_T_AC_Table_Build_T_RefinedToReady a backlog:TransitionEvent ; backlog:transitionedItem fw:T_AC_Table_Build ; backlog:viaTransition backlog:T_RefinedToReady ; backlog:transitionedAt "2026-10-28T23:24:33Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Ev8_T_AC_Table_Build_T_Start a backlog:TransitionEvent ; backlog:transitionedItem fw:T_AC_Table_Build ; backlog:viaTransition backlog:T_Start ; backlog:transitionedAt "2026-10-28T23:24:53Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Ev8_ST_AC_Table_T_Start a backlog:TransitionEvent ; backlog:transitionedItem fw:ST_AC_Table ; backlog:viaTransition backlog:T_Start ; backlog:transitionedAt "2026-10-28T23:24:53Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Plan_AC_Pins a backlog:PlanningEvent ; rdfs:label "Story AC-S21 planned into box 8"@en ;
+    backlog:plansItem fw:ST_AC_Pins ; backlog:plannedInto fw:It_AC_8 ; backlog:plannedAt "2026-10-28T23:24:31Z"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ; backlog:producesTask fw:T_AC_Pins_Build .
+fw:T_AC_Pins_Build a backlog:ExecutionTask ; backlog:hasIdentifier "T-AC-PINS-BUILD" ; backlog:hasState backlog:Done ;
+    backlog:hasTaskType backlog:Task_Implementation ; backlog:responsible <http://example.org/fixture-autofix#DefaultExecutor> ; backlog:memberOfContainer fw:It_AC_8 ; backlog:appliesDefinitionOfDone fw:DoD ; backlog:belongsToLineage fw:L_AdaptiveCeremonies ;
+    backlog:startedAt "2026-10-28T23:24:56Z"^^xsd:dateTime ; backlog:finishedAt "2026-10-29T00:46:28Z"^^xsd:dateTime ; backlog:hasEvidence fw:Ev_AC_Pins ; backlog:hasExecutionModality backlog:Mode_Automated .
+fw:ST_AC_Pins backlog:decomposesInto fw:T_AC_Pins_Build .
+fw:Ev8_T_AC_Pins_Build_T_Decompose a backlog:TransitionEvent ; backlog:transitionedItem fw:T_AC_Pins_Build ; backlog:viaTransition backlog:T_Decompose ; backlog:transitionedAt "2026-10-28T23:24:32Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Ev8_T_AC_Pins_Build_T_RefinedToReady a backlog:TransitionEvent ; backlog:transitionedItem fw:T_AC_Pins_Build ; backlog:viaTransition backlog:T_RefinedToReady ; backlog:transitionedAt "2026-10-28T23:24:33Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Ev8_T_AC_Pins_Build_T_Start a backlog:TransitionEvent ; backlog:transitionedItem fw:T_AC_Pins_Build ; backlog:viaTransition backlog:T_Start ; backlog:transitionedAt "2026-10-28T23:24:56Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Ev8_ST_AC_Pins_T_Start a backlog:TransitionEvent ; backlog:transitionedItem fw:ST_AC_Pins ; backlog:viaTransition backlog:T_Start ; backlog:transitionedAt "2026-10-28T23:24:56Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Plan_AC_Gates2 a backlog:PlanningEvent ; rdfs:label "Story AC-S22 planned into box 8"@en ;
+    backlog:plansItem fw:ST_AC_Gates2 ; backlog:plannedInto fw:It_AC_8 ; backlog:plannedAt "2026-10-28T23:24:31Z"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ; backlog:producesTask fw:T_AC_Gates2_Build .
+fw:T_AC_Gates2_Build a backlog:ExecutionTask ; backlog:hasIdentifier "T-AC-GATES2-BUILD" ; backlog:hasState backlog:Done ;
+    backlog:hasTaskType backlog:Task_Implementation ; backlog:responsible <http://example.org/fixture-autofix#DefaultExecutor> ; backlog:memberOfContainer fw:It_AC_8 ; backlog:appliesDefinitionOfDone fw:DoD ; backlog:belongsToLineage fw:L_AdaptiveCeremonies ;
+    backlog:startedAt "2026-10-28T23:24:59Z"^^xsd:dateTime ; backlog:finishedAt "2026-10-29T00:46:28Z"^^xsd:dateTime ; backlog:hasEvidence fw:Ev_AC_Gates2 ; backlog:hasExecutionModality backlog:Mode_Automated .
+fw:ST_AC_Gates2 backlog:decomposesInto fw:T_AC_Gates2_Build .
+fw:Ev8_T_AC_Gates2_Build_T_Decompose a backlog:TransitionEvent ; backlog:transitionedItem fw:T_AC_Gates2_Build ; backlog:viaTransition backlog:T_Decompose ; backlog:transitionedAt "2026-10-28T23:24:32Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Ev8_T_AC_Gates2_Build_T_RefinedToReady a backlog:TransitionEvent ; backlog:transitionedItem fw:T_AC_Gates2_Build ; backlog:viaTransition backlog:T_RefinedToReady ; backlog:transitionedAt "2026-10-28T23:24:33Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Ev8_T_AC_Gates2_Build_T_Start a backlog:TransitionEvent ; backlog:transitionedItem fw:T_AC_Gates2_Build ; backlog:viaTransition backlog:T_Start ; backlog:transitionedAt "2026-10-28T23:24:59Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Ev8_ST_AC_Gates2_T_Start a backlog:TransitionEvent ; backlog:transitionedItem fw:ST_AC_Gates2 ; backlog:viaTransition backlog:T_Start ; backlog:transitionedAt "2026-10-28T23:24:59Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Plan_AC_Append a backlog:PlanningEvent ; rdfs:label "Story AC-S23 planned into box 8"@en ;
+    backlog:plansItem fw:ST_AC_Append ; backlog:plannedInto fw:It_AC_8 ; backlog:plannedAt "2026-10-28T23:24:31Z"^^xsd:dateTime ; backlog:plannedBy backlog:Builder ; backlog:producesTask fw:T_AC_Append_Build .
+fw:T_AC_Append_Build a backlog:ExecutionTask ; backlog:hasIdentifier "T-AC-APPEND-BUILD" ; backlog:hasState backlog:Done ;
+    backlog:hasTaskType backlog:Task_Implementation ; backlog:responsible <http://example.org/fixture-autofix#DefaultExecutor> ; backlog:memberOfContainer fw:It_AC_8 ; backlog:appliesDefinitionOfDone fw:DoD ; backlog:belongsToLineage fw:L_AdaptiveCeremonies ;
+    backlog:startedAt "2026-10-28T23:25:02Z"^^xsd:dateTime ; backlog:finishedAt "2026-10-29T01:04:44Z"^^xsd:dateTime ; backlog:hasEvidence fw:Ev_AC_Append ; backlog:hasExecutionModality backlog:Mode_Automated .
+fw:ST_AC_Append backlog:decomposesInto fw:T_AC_Append_Build .
+fw:Ev8_T_AC_Append_Build_T_Decompose a backlog:TransitionEvent ; backlog:transitionedItem fw:T_AC_Append_Build ; backlog:viaTransition backlog:T_Decompose ; backlog:transitionedAt "2026-10-28T23:24:32Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Ev8_T_AC_Append_Build_T_RefinedToReady a backlog:TransitionEvent ; backlog:transitionedItem fw:T_AC_Append_Build ; backlog:viaTransition backlog:T_RefinedToReady ; backlog:transitionedAt "2026-10-28T23:24:33Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Ev8_T_AC_Append_Build_T_Start a backlog:TransitionEvent ; backlog:transitionedItem fw:T_AC_Append_Build ; backlog:viaTransition backlog:T_Start ; backlog:transitionedAt "2026-10-28T23:25:02Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Ev8_ST_AC_Append_T_Start a backlog:TransitionEvent ; backlog:transitionedItem fw:ST_AC_Append ; backlog:viaTransition backlog:T_Start ; backlog:transitionedAt "2026-10-28T23:25:02Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Act_AC_8_Validate a backlog:ControlActivity ; rdfs:label "Validate the register and run the probes before the box is reviewed"@en ;
+    backlog:hasWorkKind backlog:WorkKind_Control ; backlog:plannedInBox fw:It_AC_8 .
+fw:Ckp_AC_8_1 a backlog:DailyCheckpoint ; backlog:hasWorkKind backlog:WorkKind_Monitoring ; backlog:checkpointOfBox fw:It_AC_8 ; backlog:checkpointAt "2026-10-28T23:25:05Z"^^xsd:dateTime ;
+    backlog:openItemCount 0 ; backlog:inProgressItemCount 5 ; backlog:doneItemCount 0 .
+fw:Ev8_T_AC_Owners_Build_T_Complete a backlog:TransitionEvent ; backlog:transitionedItem fw:T_AC_Owners_Build ; backlog:viaTransition backlog:T_Complete ; backlog:transitionedAt "2026-10-29T00:46:28Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Ev8_ST_AC_Owners_T_Complete a backlog:TransitionEvent ; backlog:transitionedItem fw:ST_AC_Owners ; backlog:viaTransition backlog:T_Complete ; backlog:transitionedAt "2026-10-29T00:46:28Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Ev8_T_AC_Table_Build_T_Complete a backlog:TransitionEvent ; backlog:transitionedItem fw:T_AC_Table_Build ; backlog:viaTransition backlog:T_Complete ; backlog:transitionedAt "2026-10-29T00:46:28Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Ev8_ST_AC_Table_T_Complete a backlog:TransitionEvent ; backlog:transitionedItem fw:ST_AC_Table ; backlog:viaTransition backlog:T_Complete ; backlog:transitionedAt "2026-10-29T00:46:28Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Ev8_T_AC_Pins_Build_T_Complete a backlog:TransitionEvent ; backlog:transitionedItem fw:T_AC_Pins_Build ; backlog:viaTransition backlog:T_Complete ; backlog:transitionedAt "2026-10-29T00:46:28Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Ev8_ST_AC_Pins_T_Complete a backlog:TransitionEvent ; backlog:transitionedItem fw:ST_AC_Pins ; backlog:viaTransition backlog:T_Complete ; backlog:transitionedAt "2026-10-29T00:46:28Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Ev8_T_AC_Gates2_Build_T_Complete a backlog:TransitionEvent ; backlog:transitionedItem fw:T_AC_Gates2_Build ; backlog:viaTransition backlog:T_Complete ; backlog:transitionedAt "2026-10-29T00:46:28Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Ev8_ST_AC_Gates2_T_Complete a backlog:TransitionEvent ; backlog:transitionedItem fw:ST_AC_Gates2 ; backlog:viaTransition backlog:T_Complete ; backlog:transitionedAt "2026-10-29T00:46:28Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Ev8_T_AC_Append_Build_T_Complete a backlog:TransitionEvent ; backlog:transitionedItem fw:T_AC_Append_Build ; backlog:viaTransition backlog:T_Complete ; backlog:transitionedAt "2026-10-29T01:04:44Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Ev8_ST_AC_Append_T_Complete a backlog:TransitionEvent ; backlog:transitionedItem fw:ST_AC_Append ; backlog:viaTransition backlog:T_Complete ; backlog:transitionedAt "2026-10-29T01:04:44Z"^^xsd:dateTime ; backlog:transitionedBy backlog:Builder .
+fw:Ev_AC_Owners a backlog:TestEvidence ; rdfs:label "The probe for story AC-S19: the complete record accepted, the wrong ones refused"@en ;
+    backlog:evidenceVerified true ; backlog:hasTestId "AC-S19" ;
+    backlog:hasTestSpec "03-tooling/backlog_g175_probe_v1_0_0.py" ;
+    backlog:attestsCriterion fw:AC_AC_Owners ;
+    backlog:hasVerificationMethod "The G175 probe ran against the shipped files and planted registers (one full run of 21 checks; the four stories AC-S19 to AC-S22 cite that one probe file and that one run, and the time recorded is its end). For this story: an epic and a container owned by an adopter and by a lineage that did not adopt are asked, one owned by the adopter alone is not, a register that carries one creating lineage is judged as a register with no owner, and removing the every-owner condition from a copy of the shapes is noticed. Run against the shapes and verifier of release 1.452.0 the probe fails 7 of its 21 checks (these among them); exit 0 on the shipped files." ;
+    backlog:verifiedAt "2026-10-29T00:46:28Z"^^xsd:dateTime ; backlog:verifiedByTool "backlog_g175_probe_v1_0_0.py + backlog_validate_v1_17_0.py" ;
+    backlog:satisfiedByArtifact "03-tooling/backlog_g175_probe_v1_0_0.py" ; backlog:belongsToLineage fw:L_AdaptiveCeremonies .
+fw:H_AC_Owners a backlog:TestHarness ; rdfs:label "Harness for story AC-S19"@en ;
+    backlog:harnessFor fw:ST_AC_Owners ; backlog:hasHarnessEvidence fw:Ev_AC_Owners ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the probe shows the rule discriminating both ways." .
+fw:Demo_AC_Owners a backlog:DemoRun ; backlog:hasWorkKind backlog:WorkKind_Control ; backlog:demonstratesItem fw:ST_AC_Owners ; backlog:demonstratedAgainst fw:AC_AC_Owners ; backlog:demoAt "2026-10-29T00:46:28Z"^^xsd:dateTime ;
+    backlog:hasDemoShown "The probe output: an epic and a container owned by an adopter and by a non-adopter are asked; the same owned by the adopter alone are not." ;
+    backlog:hasDemoResult "The acceptance criterion holds." .
+fw:Ev_AC_Table a backlog:TestEvidence ; rdfs:label "The probe for story AC-S20: the complete record accepted, the wrong ones refused"@en ;
+    backlog:evidenceVerified true ; backlog:hasTestId "AC-S20" ;
+    backlog:hasTestSpec "03-tooling/backlog_g175_probe_v1_0_0.py" ;
+    backlog:attestsCriterion fw:AC_AC_Table ;
+    backlog:hasVerificationMethod "The same one run of the G175 probe (see AC-S19). For this story: lineages that adopt different digest tables are refused without a name, a named lineage is verified against its own table, an unknown lineage name is an error, and lineages that adopt the same table are verified against it. The four checks fail against the verifier of release 1.452.0; exit 0 on the shipped files." ;
+    backlog:verifiedAt "2026-10-29T00:46:28Z"^^xsd:dateTime ; backlog:verifiedByTool "backlog_g175_probe_v1_0_0.py + backlog_validate_v1_17_0.py" ;
+    backlog:satisfiedByArtifact "03-tooling/backlog_g175_probe_v1_0_0.py" ; backlog:belongsToLineage fw:L_AdaptiveCeremonies .
+fw:H_AC_Table a backlog:TestHarness ; rdfs:label "Harness for story AC-S20"@en ;
+    backlog:harnessFor fw:ST_AC_Table ; backlog:hasHarnessEvidence fw:Ev_AC_Table ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the probe shows the rule discriminating both ways." .
+fw:Demo_AC_Table a backlog:DemoRun ; backlog:hasWorkKind backlog:WorkKind_Control ; backlog:demonstratesItem fw:ST_AC_Table ; backlog:demonstratedAgainst fw:AC_AC_Table ; backlog:demoAt "2026-10-29T00:46:28Z"^^xsd:dateTime ;
+    backlog:hasDemoShown "The verifier output for a register of two lineages with different tables, with and without a lineage name, and with a name no lineage has." ;
+    backlog:hasDemoResult "The acceptance criterion holds." .
+fw:Ev_AC_Pins a backlog:TestEvidence ; rdfs:label "The probe for story AC-S21: the complete record accepted, the wrong ones refused"@en ;
+    backlog:evidenceVerified true ; backlog:hasTestId "AC-S21" ;
+    backlog:hasTestSpec "03-tooling/backlog_g175_probe_v1_0_0.py" ;
+    backlog:attestsCriterion fw:AC_AC_Pins ;
+    backlog:hasVerificationMethod "The same one run of the G175 probe (see AC-S19). For this story: for each of the eight deferrals a lineage is asked at its status and not one rank below it (five statuses, eight deferrals), and with every threshold moved by one in a copy of the shapes the matrix refuses each of the eight. These two checks pass on the shapes of release 1.452.0 as well, because the thresholds were right; what was missing was a probe that would notice them move, and the mutation shows it now would; exit 0 on the shipped files." ;
+    backlog:verifiedAt "2026-10-29T00:46:28Z"^^xsd:dateTime ; backlog:verifiedByTool "backlog_g175_probe_v1_0_0.py + backlog_validate_v1_17_0.py" ;
+    backlog:satisfiedByArtifact "03-tooling/backlog_g175_probe_v1_0_0.py" ; backlog:belongsToLineage fw:L_AdaptiveCeremonies .
+fw:H_AC_Pins a backlog:TestHarness ; rdfs:label "Harness for story AC-S21"@en ;
+    backlog:harnessFor fw:ST_AC_Pins ; backlog:hasHarnessEvidence fw:Ev_AC_Pins ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the probe shows the rule discriminating both ways." .
+fw:Demo_AC_Pins a backlog:DemoRun ; backlog:hasWorkKind backlog:WorkKind_Control ; backlog:demonstratesItem fw:ST_AC_Pins ; backlog:demonstratedAgainst fw:AC_AC_Pins ; backlog:demoAt "2026-10-29T00:46:28Z"^^xsd:dateTime ;
+    backlog:hasDemoShown "The probe output: the matrix of five statuses by eight deferrals, and the same matrix refused in a copy of the shapes with every threshold moved by one." ;
+    backlog:hasDemoResult "The acceptance criterion holds." .
+fw:Ev_AC_Gates2 a backlog:TestEvidence ; rdfs:label "The probe for story AC-S22: the complete record accepted, the wrong ones refused"@en ;
+    backlog:evidenceVerified true ; backlog:hasTestId "AC-S22" ;
+    backlog:hasTestSpec "03-tooling/backlog_g175_probe_v1_0_0.py" ;
+    backlog:attestsCriterion fw:AC_AC_Gates2 ;
+    backlog:hasVerificationMethod "The same one run of the G175 probe (see AC-S19). For this story: the nineteen gated constraints of four rule sets (lineage status 5, agent accountability 7, cancellation assessed 5, repair reprioritises 2) are counted; the five with no violating case in any fixture are covered by a small planted register (an adopter draws all five, a non-adopter none, a copy of the shapes with the gate removed draws all five for the non-adopter); the other fourteen are covered by the part of the negative fixture that carries them (160 nodes) in the same three ways. The checks pass on the shapes of release 1.452.0, whose gates were right; they did not exist before; exit 0 on the shipped files." ;
+    backlog:verifiedAt "2026-10-29T00:46:28Z"^^xsd:dateTime ; backlog:verifiedByTool "backlog_g175_probe_v1_0_0.py + backlog_validate_v1_17_0.py" ;
+    backlog:satisfiedByArtifact "03-tooling/backlog_g175_probe_v1_0_0.py" ; backlog:belongsToLineage fw:L_AdaptiveCeremonies .
+fw:H_AC_Gates2 a backlog:TestHarness ; rdfs:label "Harness for story AC-S22"@en ;
+    backlog:harnessFor fw:ST_AC_Gates2 ; backlog:hasHarnessEvidence fw:Ev_AC_Gates2 ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the probe shows the rule discriminating both ways." .
+fw:Demo_AC_Gates2 a backlog:DemoRun ; backlog:hasWorkKind backlog:WorkKind_Control ; backlog:demonstratesItem fw:ST_AC_Gates2 ; backlog:demonstratedAgainst fw:AC_AC_Gates2 ; backlog:demoAt "2026-10-29T00:46:28Z"^^xsd:dateTime ;
+    backlog:hasDemoShown "The probe output: nineteen constraints, the non-adopter drawing none, the adopter drawing all, and the copy with the gates removed drawing all for the non-adopter." ;
+    backlog:hasDemoResult "The acceptance criterion holds." .
+fw:Ev_AC_Append a backlog:TestEvidence ; rdfs:label "The probe for story AC-S23: the complete record accepted, the wrong ones refused"@en ;
+    backlog:evidenceVerified true ; backlog:hasTestId "AC-S23" ;
+    backlog:hasTestSpec "03-tooling/backlog_g174_probe_v1_2_0.py" ;
+    backlog:attestsCriterion fw:AC_AC_Append ;
+    backlog:hasVerificationMethod "The register validator reported no violation on the abox with the appended notes, Ruling_G175 and the five stories of this box (0 violations, advisory warnings only), and the G174 probe (17 checks, including the record checks: contained inclusions, findings produced by exactly one retrospective, no unit dated before its review) passed on it; the time recorded is that of the G174 probe run. The notes give the old values of the records box 7 edited; the old values of the evidence method texts that box 7 changed are not restated, only noted as replaced. Exit 0." ;
+    backlog:verifiedAt "2026-10-29T01:04:44Z"^^xsd:dateTime ; backlog:verifiedByTool "backlog_g174_probe_v1_2_0.py + backlog_validate_v1_17_0.py" ;
+    backlog:satisfiedByArtifact "03-tooling/backlog_g174_probe_v1_2_0.py" ; backlog:belongsToLineage fw:L_AdaptiveCeremonies .
+fw:H_AC_Append a backlog:TestHarness ; rdfs:label "Harness for story AC-S23"@en ;
+    backlog:harnessFor fw:ST_AC_Append ; backlog:hasHarnessEvidence fw:Ev_AC_Append ; backlog:harnessComplete true ;
+    backlog:hasRationale "Complete: the probe shows the rule discriminating both ways." .
+fw:Demo_AC_Append a backlog:DemoRun ; backlog:hasWorkKind backlog:WorkKind_Control ; backlog:demonstratesItem fw:ST_AC_Append ; backlog:demonstratedAgainst fw:AC_AC_Append ; backlog:demoAt "2026-10-29T01:04:44Z"^^xsd:dateTime ;
+    backlog:hasDemoShown "The abox with a note on each corrected record, Ruling_G175, and the validator and G174 probe output on it." ;
+    backlog:hasDemoResult "The acceptance criterion holds." .
+fw:Rel_AC_8 a backlog:DeploymentUnit ;
+    backlog:hasIdentifier "AC-REL-8" ; backlog:hasTitle "Shipped from box 8 of Lineage 20 (dated when this record was written, at the review; the release run is launched a few minutes later and its commit follows the gate by about thirty minutes, so neither is known here)" ;
+    backlog:hasState backlog:Done ; backlog:hasDeploymentDate "2026-10-29T01:05:30Z"^^xsd:dateTime ;
+    backlog:deploysFrom fw:It_AC_8 ; backlog:deploysItem fw:ST_AC_Owners , fw:ST_AC_Table , fw:ST_AC_Pins , fw:ST_AC_Gates2 , fw:ST_AC_Append ;
+    backlog:decidedBy backlog:Builder ; backlog:hasSelectionBasis backlog:Sel_Committed ; backlog:belongsToLineage fw:L_AdaptiveCeremonies .
+fw:Find_AC_EditedInPlace a backlog:RetrospectiveFinding ;
+    backlog:hasFindingScope backlog:Scope_LineageLocal ;
+    backlog:relatesToWorkItem fw:ST_AC_Append ;
+    backlog:hasRootCause "Box 7 corrected the records of boxes 1 to 6 by editing them in place (deployment dates, a retrospective link, evidence methods, the metric definition, the source of two rulings), some with no note of the old value, against the standing rule of the discipline that a historical record is corrected by appending. The rule is written and no check reads it: the validator sees the register as it is and not how it came to be, so an edited record looks the same as a recorded one. The deployment unit of box 7 was also dated before its release started, the fault box 7 had corrected in the others." ;
+    backlog:hasRemedy "Box 8 appends to each record box 7 edited a note that gives the old value and says box 7 replaced it, and a note on the box 7 deployment saying what its date is. The edits are not undone. No check yet notices an edit in place; that needs the history of the register, which the validator does not read, and is not built." .
+fw:Find_AC_ThresholdUnpinned a backlog:RetrospectiveFinding ;
+    backlog:hasFindingScope backlog:Scope_LineageLocal ;
+    backlog:relatesToWorkItem fw:ST_AC_Pins ;
+    backlog:hasRootCause "The status at which each of the eight deferrals begins is written in the shapes eight times and was tested at none of them: a threshold could move by one rank and every probe would still pass, the same kind of fault as the gates of box 7 (a missing test) found in a different place. Fixing the owner test in box 7 left the thresholds as they were because nothing asked about them." ;
+    backlog:hasRemedy "The G175 probe asks each deferral one rank below its threshold and at it, and moves every threshold by one in a copy of the shapes. It covers the eight deferrals of G166 and not other rank tests of the shapes, which a sweep of every rank comparison in the shapes would find." .
+fw:Find_AC_FixtureGap a backlog:RetrospectiveFinding ;
+    backlog:hasFindingScope backlog:Scope_LineageLocal ;
+    backlog:relatesToWorkItem fw:ST_AC_Gates2 ;
+    backlog:hasRootCause "Five of the nineteen gated constraints of the lineage-status, agent-accountability, cancellation and repair-reprioritises rule sets had no violating case in any fixture, so no probe could show that their gate holds; for the other fourteen the fixture has a case but no probe took the rule set out of the adoption to see the case disappear. The first run of the probe also showed that the full negative fixture takes more than ten minutes to validate with a gate removed, so the check uses the part of the fixture that carries the cases." ;
+    backlog:hasRemedy "A small planted register covers the five and the part of the negative fixture covers the fourteen, each in three ways (adopter, non-adopter, gate removed). The gates of the eight rule sets that sit in no profile and of the older rule sets not named here are not covered." .
+fw:Run_AC_8_Validate a backlog:ControlRun ; backlog:runOfActivity fw:Act_AC_8_Validate ; backlog:ranAt "2026-10-29T01:05:10Z"^^xsd:dateTime ;
+    backlog:hasRunResult "The validator reported no violation on the register except the box's own state, which is Done only with the review that follows this run; the probes of the deferral, the ceremony shapes, the chain revisions, the pipeline verifier and the step tool passed (G163 10, G165 12, G166 31, G167 18, G168 19, G169 21, G170 15, G173 22, G174 17, G175 21, the pipeline probe 14 and the step probe 13 checks, exit 0). The validator run on the abox with the appended notes reported 0 violations and 210 advisory warnings. The negative fixture and the other probes of the package are run by the release gate, not by this run." .
+fw:Review_AC_8 a backlog:SprintReviewCeremony ; backlog:hasWorkKind backlog:WorkKind_Closure ;
+    backlog:ceremonyFor fw:It_AC_8 ; backlog:heldAt "2026-10-29T01:05:29Z"^^xsd:dateTime ; backlog:reviewsCeremony fw:Ceremony_AC_Planning8 ;
+    backlog:closesIteration fw:It_AC_8 ; backlog:closesStory fw:ST_AC_Owners , fw:ST_AC_Table , fw:ST_AC_Pins , fw:ST_AC_Gates2 , fw:ST_AC_Append .
+fw:Retro_AC_8 a backlog:SprintRetrospective ; backlog:hasWorkKind backlog:WorkKind_Closure ;
+    backlog:followsReview fw:Review_AC_8 ; backlog:heldAt "2026-10-29T01:05:30Z"^^xsd:dateTime ; backlog:producesFinding fw:Find_AC_EditedInPlace , fw:Find_AC_ThresholdUnpinned , fw:Find_AC_FixtureGap .
+fw:Obs_AC_MissionMet_B8 a backlog:MetricObservation ; rdfs:label "After box 8: MissionMet"@en ;
+    backlog:observesMetric fw:Metric_AC_MissionMet ; backlog:observationFor fw:Obj_AC_MissionMet ; backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-10-29T01:05:10Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Counted: no story of the lineage is open (twenty-three of twenty-three Done), after box 8; the count restates that the stories are done and is not evidence that the mission is accomplished." .
+fw:Obs_AC_Control_B8 a backlog:MetricObservation ; rdfs:label "After box 8: Control"@en ;
+    backlog:observesMetric fw:Metric_AC_Control ; backlog:observationFor fw:Obj_AC_Control ; backlog:hasObservedValue 0.0 ; backlog:observedAt "2026-10-29T01:05:10Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Counted: the blocked review, the demo runs and the control runs exist; the G175 probe of release 1.453.0 shows nineteen more gated constraints covered and the eight deferral thresholds pinned." .
+fw:Obs_AC_Contained_B8 a backlog:MetricObservation ; rdfs:label "After box 8: Contained"@en ;
+    backlog:observesMetric fw:Metric_AC_Contained ; backlog:observationFor fw:Obj_AC_Contained ; backlog:hasObservedValue 19.0 ; backlog:observedAt "2026-10-29T01:05:10Z"^^xsd:dateTime ;
+    backlog:hasObservationMethod "Counted in the data: nineteen inclusions, nine in the standard profile and ten in the agentic profile (ten distinct rule sets, since the agentic profile includes the standard profile's nine); the evidence that their refusals hold is the profile probe, the G174 probe and the G175 probe of release 1.453.0, not this count." .
+
+# ---- BOX8 END ----
 
 <http://example.org/backlog-framework-register#CR_3> a backlog:ChangeRequest ; backlog:requestsChangeTo <http://example.org/backlog-framework-register#Scope_AdaptiveCeremonies> ; backlog:hasChangeDirection backlog:Direction_Grow ; backlog:hasChangeRequestRationale "The third independent post-mortem of Lineage 20 found that rules of the adaptive profile and of older shapes still ask whether some lineage adopted a rule set instead of the lineage or element they judge, that the ceremony and readiness records are judged for lineages that did not adopt them, and that start-time, suspended-item, admitted-route, one-check-one-item and wrong-type-time gaps remain; each correction serves the mission, that a lineage run under the adaptive profile records and checks its ceremonies without switching off or adding to the checks another lineage owes." ;
     backlog:hasDisposition backlog:Disp_Accepted ; backlog:supportsObjective <http://example.org/backlog-framework-register#Obj_AC_MissionMet> ; backlog:belongsToLineage <http://example.org/backlog-framework-register#L_AdaptiveCeremonies> .
@@ -10989,3 +11311,33 @@ fw:Obs_AC_Contained_B7 a backlog:MetricObservation ; rdfs:label "After box 7: Co
     backlog:admitsItem <http://example.org/backlog-framework-register#ST_AC_Defer> ;
     backlog:admitsItem <http://example.org/backlog-framework-register#ST_AC_Cover> ;
     backlog:admitsItem <http://example.org/backlog-framework-register#ST_AC_Honest> .
+
+<http://example.org/backlog-framework-register#CR_5> a backlog:ChangeRequest ; backlog:requestsChangeTo <http://example.org/backlog-framework-register#Scope_AdaptiveCeremonies> ; backlog:hasChangeDirection backlog:Direction_Grow ; backlog:hasChangeRequestRationale "The fifth independent post-mortem of Lineage 20 found that the deferrals of epics accept one adopting owner among several, that a register-level obligation is lifted by the lineage that created the register, that the pipeline verifier without a lineage name takes a table that some lineage adopted, that the thresholds of the deferrals and the gates of four rule sets are not pinned by any probe, and that records were corrected by editing without a note on the record; each correction serves the mission, that a lineage run under the adaptive profile records and checks its ceremonies without switching off or adding to the checks another lineage owes." ;
+    backlog:hasDisposition backlog:Disp_Accepted ; backlog:supportsObjective <http://example.org/backlog-framework-register#Obj_AC_MissionMet> ; backlog:belongsToLineage <http://example.org/backlog-framework-register#L_AdaptiveCeremonies> .
+<http://example.org/backlog-framework-register#IA_5> a backlog:ImpactAssessment ; backlog:analyzesRequest <http://example.org/backlog-framework-register#CR_5> ; backlog:hasImpactStatement "5 item(s) added to L_AdaptiveCeremonies, 19 point(s) of recorded effort; serves objective Obj_AC_MissionMet; computed from the register at 2026-10-28T23:23:51Z." .
+<http://example.org/backlog-framework-register#SC_5> a backlog:ScopeChange ; backlog:fulfillsRequest <http://example.org/backlog-framework-register#CR_5> ; backlog:changesScope <http://example.org/backlog-framework-register#Scope_AdaptiveCeremonies> ; backlog:decidedBy backlog:Owner ; backlog:belongsToLineage <http://example.org/backlog-framework-register#L_AdaptiveCeremonies> ;
+    backlog:hasScopeChangeRationale "The fifth independent post-mortem of Lineage 20 found that the deferrals of epics accept one adopting owner among several, that a register-level obligation is lifted by the lineage that created the register, that the pipeline verifier without a lineage name takes a table that some lineage adopted, that the thresholds of the deferrals and the gates of four rule sets are not pinned by any probe, and that records were corrected by editing without a note on the record; each correction serves the mission, that a lineage run under the adaptive profile records and checks its ceremonies without switching off or adding to the checks another lineage owes. Owner decision: The Owner, 2026-10-28 16:44 Istanbul: 'This is natural. We are not in the search of silver bullet ... I think this is fine, not a failure', and 2026-10-29 02:21 Istanbul: 'OK, proceed', to the recommendation to close the cases the fifth review found in one last corrective box with no further review round." ;
+    backlog:admitsItem <http://example.org/backlog-framework-register#ST_AC_Owners> ;
+    backlog:admitsItem <http://example.org/backlog-framework-register#ST_AC_Table> ;
+    backlog:admitsItem <http://example.org/backlog-framework-register#ST_AC_Pins> ;
+    backlog:admitsItem <http://example.org/backlog-framework-register#ST_AC_Gates2> ;
+    backlog:admitsItem <http://example.org/backlog-framework-register#ST_AC_Append> .
+
+# ---- BOX8 NOTES BEGIN (corrections of box 7 are appended here as notes, never by editing the record they correct) ----
+fw:Rel_AC_1 rdfs:comment "Appended in box 8. In versions of this register before 1.79.0 this deployment was dated 2026-10-28T02:19:11Z, a time taken when the release was launched, before its commit. Box 7 replaced it, in place, with the commit time of release 1.446.0; the replacement should have carried this note then."@en .
+fw:Rel_AC_2 rdfs:comment "Appended in box 8. Before 1.79.0 this deployment was dated 2026-10-28T03:20:17Z, a time taken when the release was launched, before its commit. Box 7 replaced it, in place, with the commit time of release 1.447.0."@en .
+fw:Rel_AC_3 rdfs:comment "Appended in box 8. Before 1.79.0 this deployment was dated 2026-10-28T04:25:04Z, a time taken when the release was launched, before its commit. Box 7 replaced it, in place, with the commit time of release 1.448.0."@en .
+fw:Rel_AC_4 rdfs:comment "Appended in box 8. Before 1.79.0 this deployment was dated 2026-10-28T06:09:15Z, a time taken when the release was launched, before its commit. Box 7 replaced it, in place, with the commit time of release 1.449.0."@en .
+fw:Rel_AC_5 rdfs:comment "Appended in box 8. Before 1.79.0 this deployment was dated 2026-10-28T07:12:00Z, a time taken when the release was launched, before its commit. Box 7 replaced it, in place, with the commit time of release 1.450.0."@en .
+fw:Rel_AC_6 rdfs:comment "Appended in box 8. Before 1.79.0 this deployment was dated 2026-10-28T09:15:41Z, a time taken when the release was launched, before its commit. Box 7 replaced it, in place, with the commit time of release 1.451.0."@en .
+fw:Rel_AC_7 rdfs:comment "Appended in box 8. The date of this record, 2026-10-28T11:31:22Z, is not the date of the release: the release run started at 11:32:17Z and its commit was made at 12:04:22Z. Boxes 1 to 6 are dated at their commit; this one is dated before the run started, which is the same fault box 7 corrected in the others. It is left as recorded and corrected here by this note. Box 8 is dated at its commit."@en .
+fw:Retro_AC_6 rdfs:comment "Appended in box 8. Before 1.79.0 this retrospective produced the five findings of box 5 (the leak of the coarse-epic deferral, the checks composed in one pass, the contained metric that could not be wrong, the cost of reviewer rounds, and the effort read from steps) and none of its own. Box 7 replaced that link, in place, with the three findings of box 6, because the five are findings of box 5, produced by its own retrospective, and the link from this one to them was wrong. Each finding is now produced by exactly one retrospective."@en .
+fw:Metric_AC_Contained rdfs:comment "Appended in box 8. Before 1.79.0 the definition read: Counted in units of: rule set. Box 7 replaced it, in place, with the unit 'inclusion of a rule set in a profile', because nineteen is the count of inclusions and ten the count of distinct rule sets."@en .
+fw:Obs_AC_Contained_1 rdfs:comment "Appended in box 8. The method text of this observation was replaced in box 7; the value was not changed."@en .
+fw:Obs_AC_Contained_B4 rdfs:comment "Appended in box 8. Before 1.79.0 the method read: Counted in the data: nine in the standard profile and ten in the agentic profile, as at the baseline; and the profile probe of release 1.449.0 plants a second, standard lineage beside a low-status adopter and finds the standard lineage's checks still asked. The earlier readings counted membership only. Box 7 replaced it, in place; the value was not changed."@en .
+fw:Obs_AC_Contained_B5 rdfs:comment "Appended in box 8. Before 1.79.0 the method read: Counted in the data: nine in the standard profile and ten in the agentic profile; the evidence that their refusals hold is the profile probe of release 1.450.0 (a baseline equality and the coarse-epic cases), not this count. Box 7 replaced it, in place; the value was not changed."@en .
+fw:Obs_AC_Contained_B6 rdfs:comment "Appended in box 8. Before 1.79.0 the method read: Counted in the data: nine in the standard profile and ten in the agentic profile; the evidence that their refusals hold is the profile probe and the sweep probe of release 1.451.0, not this count. Box 7 replaced it, in place; the value was not changed."@en .
+fw:Ruling_G172 rdfs:comment "Appended in box 8. Before 1.79.0 the source read: LINEAGE_OPERATING_DISCIPLINE v136.0.0, section G172. Box 7 replaced it, in place, with v137.0.0, the version that then held the section."@en .
+fw:Ruling_G173 rdfs:comment "Appended in box 8. Before 1.79.0 the source read: LINEAGE_OPERATING_DISCIPLINE v136.0.0, section G173. Box 7 replaced it, in place, with v137.0.0, the version that then held the section."@en .
+<http://example.org/backlog-framework-register#SC_4> rdfs:comment "Appended in box 8. The Owner's words recorded for this change are those of 2026-10-28 11:08 and 11:28 Istanbul time (UTC+3): continue the corrections and enhancements until no further progress is possible, and \"Yes, this is fine\". The stop rule written in the discipline for that round (a round that finds no new class ends the rounds) is the Builder's proposal and was not confirmed by the Owner by name; the Owner later (2026-10-29 02:21 Istanbul) asked for one last corrective release and no further review round."@en .
+# ---- BOX8 NOTES END ----
