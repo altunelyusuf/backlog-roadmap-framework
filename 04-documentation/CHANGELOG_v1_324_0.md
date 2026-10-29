@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v1.462.0 — 2026-10-30 (MINOR: the release path made fast and safe)
+
+Release tool 1.6.0: preflight validates the register, the stage digests of every lineage and the archive integrity; the gate pass is recorded as a receipt so the publisher does not run the gate again (262 s of 293 s in 1.461.0); roll does the rename and entry work in one command. Gate 1.73.0 validates the register by itself: 1.461.0 was published with a register violation (a Mission without an outcome, fixed here) because nothing in the release path validated the register as a whole. The Scope-stage records of Lineage 22 wait for the next release.
+
+**Unplanned work:** this whole release: tooling built at the Owner's order of 2026-10-30 00:25 (urgent token and time risk) before the Scope stage of Lineage 22; the missing Mission outcome of Lineage 22 is repaired by appending it.
+
 ## v1.461.0 — 2026-10-29 (MINOR: Lineage 22 opened; its Mission stage)
 
 Lineage 22 is opened under profile revision 8 (adaptive profile with the digest table v5) as the successor of the failed Lineage 21. Its Mission is set from the gaps verified on that closure report. Records only; stage 1 of 5.

@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""backlog_release_tool v1.5.0 -- the release steps a session used to do by hand, as one tested tool (G99 release A; OE rule R4).
+"""backlog_release_tool v1.6.0 -- the release steps a session used to do by hand, as one tested tool (G99 release A; OE rule R4).
 
 Subcommands (each prints what it did and exits non-zero on any refusal):
   bump-data NEWVER                      rename the package data file to the new version and move its header (versionInfo, versionIRI, priorVersion)
+  roll VERSION --title T --body B --unplanned U   the next register and change-log versions, the new change-log entry, and PROBE_INPUTS.json names, in one step
   bump DIR PREFIX OLD NEW PRIORBASE VERSIONBASE
                                         the same for any versioned Turtle file, e.g. 02-shacl-safeguards backlog_shacl 1.151.0 1.152.0
                                         http://example.org/backlog-shapes http://example.org/backlog/shacl
@@ -16,6 +17,7 @@ Subcommands (each prints what it did and exits non-zero on any refusal):
                                         duration; --dry-run prints the plan and the refusals it already knows (missing changelog entry) and runs nothing
   prune-cache [DIR] [--days N] [--legacy]          remove cache files (shape_*.ttl, memo *.json, stamps) older than N days (default 14) from the validation cache; they are rebuilt on demand
   republish VERSION                     only the publisher and the tag check (after a transient failure of the public push)
+v1.6.0 (Lineage 22, time): (1) `preflight` also validates the newest register (a violation stops the release), verifies the recorded stage digests of every lineage and the archive integrity, all in seconds; v1.461.0 passed with a register violation because nothing in the release path validated the register as a whole. (2) The gate's pass is recorded as a receipt (oe_gate_receipt) just before the publisher, so the publisher reuses it instead of running the same gate on the same bytes again (262 s of 293 s in v1.461.0). The receipt is valid only for the same package bytes, the same upstream tree, the same head of the target repository and a short age; it is removed after the publisher; when its head cannot be read nothing is written and the publisher runs its gates as before. (3) `roll VERSION --title T --body B --unplanned U` does the hand-work between two releases in one command: the next register version, the next change-log version with the new entry, and the names in PROBE_INPUTS.json.
 v1.5.0 (G152): the gate runs through `timed_gate`, which writes the same log and a sidecar `gate_VERSION.log.timing.tsv` (seconds per "== section ==" header) and prints the five slowest sections, so where a long run goes is recorded, not guessed.
 v1.4.0 (G151): `preflight VERSION` and the start of `release` run, in seconds, the refusals that used to come after a 25-minute gate: the changelog entry, an inbox item that arrived on origin and is not in the working tree, the release-item accounting (an item moved, or a changelog "Unplanned work:" line), and Gate K. The inbox is looked at again just before the publisher; on an arrival the release stops there, names the files and says to disposition them and run `republish`, which now rebuilds the manifest first, so the gate is not run again for a change that touches only the inbox.
 v1.3.5 (G138): the release path creates both stamp files (`ensure_stamps`: .fixture-suite-stamp and .clause-proof-stamp) when absent, so a release no longer needs them touched by hand beforehand.
@@ -79,6 +81,53 @@ def bump_file(path, old, new, version_base, prior_base):
     open(path, "w", encoding="utf-8").write(s)
     os.rename(path, target)
     return target
+
+
+def semver_str(path):
+    return ".".join(re.search(r"_v(\d+)_(\d+)_(\d+)\.", os.path.basename(path)).groups())
+
+
+def cmd_roll(args):
+    """roll VERSION --title T --body B --unplanned U: the register and the change-log move to their next versions, the new entry is inserted, and PROBE_INPUTS.json follows the names."""
+    import datetime
+    if not args or not re.fullmatch(r"\d+\.\d+\.\d+", args[0]):
+        die("usage: roll VERSION --title T --body B --unplanned U")
+    v, opt = args[0], {}
+    it = iter(args[1:])
+    for k in it:
+        if k in ("--title", "--body", "--unplanned"):
+            opt[k[2:]] = next(it, "")
+        else:
+            die("unknown argument " + k)
+    if len(opt) != 3 or not all(opt.values()):
+        die("roll needs --title, --body and --unplanned, each non-empty")
+    reg = newest(os.path.join(PKG, "01-ontologies", "backlog_abox_v*.ttl"))
+    cl = newest(os.path.join(PKG, "04-documentation", "CHANGELOG_v*.md"))
+    if not reg or not cl:
+        die("no register or change-log found")
+    ro = semver_str(reg); ma, mi, pa = [int(x) for x in ro.split(".")]
+    rn = "%d.%d.%d" % (ma, mi + 1, 0)
+    r = bump_file(reg, ro, rn, "http://example.org/backlog/abox", "http://example.org/backlog/abox")
+    if not r.endswith(".ttl"):
+        die(r)
+    co = semver_str(cl); a, b, c = [int(x) for x in co.split(".")]
+    cn = "%d.%d.%d" % (a, b + 1, 0)
+    ncl = os.path.join(os.path.dirname(cl), os.path.basename(cl).replace("_v" + co.replace(".", "_") + ".", "_v" + cn.replace(".", "_") + ".", 1))
+    text = open(cl, encoding="utf-8").read()
+    heads = [(tuple(int(x) for x in m.group(1).split(".")), m.start()) for m in re.finditer(r"^## v(\d+\.\d+\.\d+) \u2014 ", text, re.M)]
+    if not heads:
+        die("the change-log has no release entry to insert above")
+    at = max(heads)[1]
+    entry = "## v%s \u2014 %s (%s)\n\n%s\n\n**Unplanned work:** %s\n\n" % (v, datetime.date.today().isoformat(), opt["title"], opt["body"], opt["unplanned"])
+    open(ncl, "w", encoding="utf-8").write(text[:at] + entry + text[at:])
+    os.remove(cl)
+    pi = os.path.join(PKG, "06-package-provenance", "PROBE_INPUTS.json")
+    if os.path.exists(pi):
+        t = open(pi, encoding="utf-8").read()
+        for o, n in ((os.path.basename(reg), os.path.basename(r)), (os.path.basename(cl), os.path.basename(ncl))):
+            t = t.replace(o, n)
+        open(pi, "w", encoding="utf-8").write(t)
+    print("rolled: %s -> %s; %s -> %s; entry v%s inserted; PROBE_INPUTS.json follows" % (os.path.basename(reg), os.path.basename(r), os.path.basename(cl), os.path.basename(ncl), v))
 
 
 def cmd_bump_data(args):
@@ -224,6 +273,24 @@ def preflight(v):
         r = subprocess.run([sys.executable, val, "--gate-k"], capture_output=True, text=True)
         if r.returncode != 0:
             bad.append("Gate K: " + (r.stdout.strip().splitlines() or ["failed"])[-1])
+    reg = newest(os.path.join(PKG, "01-ontologies", "backlog_abox_v*.ttl"))
+    if reg:
+        if val:
+            r = subprocess.run([sys.executable, val, reg], capture_output=True, text=True)
+            if r.returncode != 0:
+                lines = [l.strip() for l in r.stdout.splitlines() if "[Violation]" in l][:3]
+                bad.append("the register does not validate: " + " | ".join(l[:200] for l in lines or ["see the validator"]))
+        pv = newest(os.path.join(HERE, "backlog_pipeline_verify_v*.py"))
+        if pv:
+            for ln in sorted(set(re.findall(r"^fw:(L_[A-Za-z0-9_]+) a backlog:Lineage", open(reg, encoding="utf-8").read(), re.M))):
+                r = subprocess.run([sys.executable, pv, reg, "--lineage", ln], capture_output=True, text=True)
+                if r.returncode != 0:
+                    bad.append("stage digests of %s do not reproduce: %s" % (ln, (r.stdout.strip().splitlines() or ["failed"])[-1][:160]))
+        ai = newest(os.path.join(HERE, "backlog_archive_integrity_v*.py"))
+        if ai:
+            r = subprocess.run([sys.executable, ai], capture_output=True, text=True, cwd=PKG)
+            if r.returncode != 0:
+                bad.append("archive integrity: " + (r.stdout.strip().splitlines() or ["failed"])[-1][:160])
     return bad
 
 
@@ -235,6 +302,33 @@ def cmd_preflight(args):
         print("  REFUSED: " + b)
     print("preflight %s: %s" % (args[0], "GO" if not bad else "STOP (%d)" % len(bad)))
     sys.exit(1 if bad else 0)
+
+
+def origin_head():
+    """The head of the target repository, read as the publisher reads it; "" when it cannot be read."""
+    url = os.environ.get("OE_TARGET_URL") or "https://x-access-token:%s@github.com/%s.git" % (os.environ.get("GH_TOKEN", ""), os.environ.get("OE_TARGET_REPO", "your-account/Ontologies"))
+    try:
+        r = subprocess.run(["git", "ls-remote", url, "HEAD"], capture_output=True, text=True, timeout=120)
+    except Exception:
+        return ""
+    return r.stdout.split()[0] if r.returncode == 0 and r.stdout.split() else ""
+
+
+def receipt_path(pkg):
+    return pkg.rstrip("/") + ".oe_gate_receipt.json"
+
+
+def write_receipt(pkg, pubdir, seconds):
+    """v1.6.0: record that the gate passed on these bytes so the publisher does not run it again. Returns True when written."""
+    tool = newest(os.path.join(pubdir, "oe_gate_receipt_v*.py"))
+    head = origin_head()
+    if not tool or not head:
+        return False
+    cmd = [sys.executable, "-B", tool, "write", pkg, "--origin", head, "--seconds", str(int(seconds))]
+    up = os.path.join(os.path.dirname(pkg), "oe-pack")
+    if os.path.isdir(up):
+        cmd += ["--extra", up]
+    return subprocess.run(cmd, capture_output=True, text=True).returncode == 0
 
 
 def timed_gate(cmd, glog, limit, cwd):
@@ -359,6 +453,7 @@ def cmd_release(args, only_publish=False):
         die("no oe_publish_v*.sh in %s (set BRSF_PUBLISHER_DIR)" % pubdir)
     os.makedirs(work, exist_ok=True)
     st = Steps(limit or 600)
+    gate_secs = None
     if not only_publish:
         bad = preflight(v)
         if bad:
@@ -377,6 +472,7 @@ def cmd_release(args, only_publish=False):
         glog = os.path.join(work, "gate_%s.log" % v)
         print("step: gate (the long step)", flush=True); tg = time.time()
         secs = timed_gate(["bash", gate], glog, limit or 3600, P)
+        gate_secs = time.time() - tg
         print("  gate (the long step): %.0f s; slowest sections: %s" % (time.time() - tg, "; ".join("%.0fs %s" % (a, b[:40]) for a, b in secs[:5])), flush=True)
         text = open(glog, encoding="utf-8", errors="replace").read()
         bad = gate_failures(text)
@@ -429,6 +525,9 @@ def cmd_release(args, only_publish=False):
         mf = newest(os.path.join(HERE, "build_manifest_v*.py"))
         st.run("manifest", [sys.executable, mf], cwd=P, capture_output=True, text=True)
     pw = os.path.join(work, "pub"); os.makedirs(pw, exist_ok=True)
+    if gate_secs is not None:
+        clean_bytecode(P)
+        print("  gate receipt: %s" % ("written, the publisher reuses the gate's pass" if write_receipt(P, pubdir, gate_secs) else "not written, the publisher runs its gates"), flush=True)
     plog = os.path.join(work, "pub_%s.log" % v)
     env = dict(os.environ, OE_SESSION=os.environ.get("OE_SESSION", "brsf-session"))
     clean_bytecode(P)
@@ -439,6 +538,8 @@ def cmd_release(args, only_publish=False):
             st.run("publisher", cmd, limit=limit or 3600, cwd=pw, env=env, stdout=fh, stderr=subprocess.STDOUT)
     finally:
         clean_bytecode(P)
+        try: os.remove(receipt_path(P))
+        except OSError: pass
     ptext = open(plog, encoding="utf-8", errors="replace").read()
     print("  " + " | ".join(ptext.strip().splitlines()[-3:])[:300])
     if not re.search(r"^published:", ptext, re.M):
@@ -459,6 +560,7 @@ def main(argv):
     c, a = argv[0], argv[1:]
     if c == "bump-data": cmd_bump_data(a)
     elif c == "bump": cmd_bump(a)
+    elif c == "roll": cmd_roll(a)
     elif c == "clean-bytecode": print("removed %d __pycache__ folder(s)" % clean_bytecode(a[0] if a else PKG))
     elif c == "push-retry": cmd_push_retry(a)
     elif c == "prune-cache": cmd_prune(a)
