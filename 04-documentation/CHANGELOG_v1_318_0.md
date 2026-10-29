@@ -11260,6 +11260,12 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 - **Definition of Done:** every check a story touches is shown failing on a planted known-bad input and passing on the real files; the live data validates with 0 violations.
 - **Stage 5 of 5.** The chain is closed; the lineage turns to in progress when its first story is done. Data file: `backlog_abox` v1.26.0.
 
+## v1.456.0 — 2026-10-29 (MINOR: Lineage 21, Scope stage)
+
+- **Stage 2 of 5.** Seven deliverables over five areas (archive checks, the step tool, the profile, the gate cost, proof and learning), five exclusions, and a blueprint with one entity. Drawn from the gaps on the closure report of Lineage 20. Data file: `backlog_abox` v1.83.0.
+
+**Unplanned work:** a lineage's Scope stage precedes its work items; no backlog item exists yet to move.
+
 ## v1.455.0 — 2026-10-29 (MINOR: Lineage 20 closed and archived; Lineage 21 opened; the discipline cut to ceremony and principles)
 
 - **Discipline:** `LINEAGE_OPERATING_DISCIPLINE` v140.0.0 is 2.8 KB (was 23.6 KB, and 450 KB before v139). It holds the four ceremony steps and ten principles; the boundaries and operating rules it carried are already rulings in the register (G1 to G18 and later) and their narratives stay in the narratives file. The size ceiling in the discipline check is 8 KB. The 219 KB discipline of version 71 is removed from the folder.

@@ -22,9 +22,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (ABox: controlled individuals, reference data and the live register)"@en ;
-    owl:versionIRI <http://example.org/backlog/abox/1.82.0> ;
-    owl:versionInfo "1.82.0" ;
-    owl:priorVersion <http://example.org/backlog/abox/1.81.0> , <http://example.org/backlog/abox/1.62.0> , <http://example.org/backlog/abox/1.61.0> , <http://example.org/backlog/abox/1.60.0> , <http://example.org/backlog/abox/1.59.0> , <http://example.org/backlog/abox/1.58.0> , <http://example.org/backlog/abox/1.57.0> , <http://example.org/backlog/abox/1.53.0> , <http://example.org/backlog/abox/1.52.0> , <http://example.org/backlog/abox/1.51.0> , <http://example.org/backlog/abox/1.50.0> , <http://example.org/backlog/abox/1.49.0> , <http://example.org/backlog/abox/1.48.0> , <http://example.org/backlog/abox/1.47.0> , <http://example.org/backlog/abox/1.46.0> , <http://example.org/backlog/abox/1.45.0> , <http://example.org/backlog/abox/1.40.0> , <http://example.org/backlog/abox/1.39.0> , <http://example.org/backlog/abox/1.38.0> , <http://example.org/backlog/abox/1.37.0> , <http://example.org/backlog/abox/1.36.0> , <http://example.org/backlog/abox/1.35.0> ;
+    owl:versionIRI <http://example.org/backlog/abox/1.83.0> ;
+    owl:versionInfo "1.83.0" ;
+    owl:priorVersion <http://example.org/backlog/abox/1.82.0> , <http://example.org/backlog/abox/1.81.0> , <http://example.org/backlog/abox/1.62.0> , <http://example.org/backlog/abox/1.61.0> , <http://example.org/backlog/abox/1.60.0> , <http://example.org/backlog/abox/1.59.0> , <http://example.org/backlog/abox/1.58.0> , <http://example.org/backlog/abox/1.57.0> , <http://example.org/backlog/abox/1.53.0> , <http://example.org/backlog/abox/1.52.0> , <http://example.org/backlog/abox/1.51.0> , <http://example.org/backlog/abox/1.50.0> , <http://example.org/backlog/abox/1.49.0> , <http://example.org/backlog/abox/1.48.0> , <http://example.org/backlog/abox/1.47.0> , <http://example.org/backlog/abox/1.46.0> , <http://example.org/backlog/abox/1.45.0> , <http://example.org/backlog/abox/1.40.0> , <http://example.org/backlog/abox/1.39.0> , <http://example.org/backlog/abox/1.38.0> , <http://example.org/backlog/abox/1.37.0> , <http://example.org/backlog/abox/1.36.0> , <http://example.org/backlog/abox/1.35.0> ;
     owl:priorVersion <http://example.org/backlog/abox/1.34.0> , <http://example.org/backlog/abox/1.33.0> , <http://example.org/backlog/abox/1.32.0> , <http://example.org/backlog/abox/1.31.0> , <http://example.org/backlog/abox/1.30.0> , <http://example.org/backlog/abox/1.29.0> , <http://example.org/backlog/abox/1.28.0> , <http://example.org/backlog/abox/1.27.0> , <http://example.org/backlog/abox/1.26.0> , <http://example.org/backlog/abox/1.25.0> , <http://example.org/backlog/abox/1.24.0> , <http://example.org/backlog/abox/1.23.0> , <http://example.org/backlog/abox/1.22.0> , <http://example.org/backlog/abox/1.21.0> , <http://example.org/backlog/abox/1.20.0> , <http://example.org/backlog/abox/1.19.0> , <http://example.org/backlog/abox/1.17.0> , <http://example.org/backlog/abox/1.16.0> , <http://example.org/backlog/abox/1.15.0> , <http://example.org/backlog/abox/1.14.0> , <http://example.org/backlog/abox/1.13.0> , <http://example.org/backlog/abox/1.12.0> , <http://example.org/backlog/abox/1.11.0> , <http://example.org/backlog/abox/1.10.0> , <http://example.org/backlog/abox/1.9.0> , <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
         <http://example.org/backlog-abox/1.2.1> ,
                      <http://example.org/backlog-abox/1.2.0> ,
@@ -9382,7 +9382,7 @@ fw:L_AdaptiveProof a backlog:Lineage ; rdfs:label "Lineage 21: the adaptive prof
     backlog:lineageOrdinal 21 ;
     backlog:lineageArchived false ;
     backlog:lineageForMission fw:Mission_AdaptiveProof ;
-    backlog:hasLineageStatus backlog:LS_Opened ;
+    backlog:hasLineageStatus backlog:LS_Scoped ;
     backlog:hasLineageDepthLevel backlog:Depth_StoryDirect ;
     backlog:hasLineageArtifactDomain backlog:Domain_Infrastructure ;
     backlog:memberOfContainer fw:Register .
@@ -9417,3 +9417,96 @@ fw:Out_Mission_AdaptiveProof a backlog:StageOutput ;
     backlog:hasStateDigest "56ef4d971b2f239ca31ba4b74500cbdd8ef9991f0064054c6500323b386441ff" ;
     backlog:closedAtCommit "backlog-roadmap-framework-v1.455.0 (tag; witnessed by git, not asserted)" ;
     backlog:hasRationale "Mission stage of Lineage 21, opened under the adaptive profile as the live proof that Lineage 20 did not give. Stage 1 of 5, one release each. The mission is stated immature on purpose: scope, goals, objectives and backlog mature in the following stages from the gaps Lineage 20 left on its closure report." .
+
+# ---- Lineage 21: Scope stage ----
+
+fw:Scope_AdaptiveProof a backlog:ScopeStatement ; rdfs:label "Scope: the adaptive profile proved on real work"@en ;
+    backlog:hasScopeStatementText "Prove the adaptive profile on this lineage's own work, with five parts that the closure of Lineage 20 named as missing and nothing else: (1) the archive checks agree with the live gate and the archive tool leaves nothing behind; (2) a step tool that records a box in order with the clock and refuses the by-hand faults found in Lineage 20; (3) a decision for each of the eight opt-in rule sets and the profile revision that follows; (4) a gate that does not re-run what a record cannot change; (5) every box judged by the ceremony rule sets, and a post-mortem of this first application before the closure. Reuse the existing steps tool, probes and rulings; add no profile other than a revision of the adaptive one." ;
+    backlog:scopeForMission fw:Mission_AdaptiveProof ;
+    backlog:producedByStage fw:Out_Scope_AdaptiveProof ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:requiresDeliverable fw:Del_AP_D1 , fw:Del_AP_D2 , fw:Del_AP_D3 , fw:Del_AP_D4 , fw:Del_AP_D5 , fw:Del_AP_D6 , fw:Del_AP_D7 ;
+    backlog:coversArea fw:Area_AP_Archive , fw:Area_AP_Step , fw:Area_AP_Profile , fw:Area_AP_Gate , fw:Area_AP_Proof ;
+    backlog:hasScopeExclusion fw:Ex_AP_Default , fw:Ex_AP_Others , fw:Ex_AP_Validator , fw:Ex_AP_Closed , fw:Ex_AP_Teams ;
+    backlog:belongsToLineage fw:L_AdaptiveProof .
+fw:Area_AP_Archive a backlog:ScopeArea ; rdfs:label "Area: Archive checks: what an archived lineage leaves behind and how it is judged"@en ;
+    backlog:areaMeasure "Counted 2026-10-29: the archived-digest check lists 12 archived lineages as not reproducing, one of them (Lineage 20) only because the check reads the archive alone while the live gate reads the register's digest table; the archive tool left 59 statements of Lineage 20 in the live register because they were written in full-IRI form." ;
+    backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:areaLocation "01-ontologies/, 02-shacl-safeguards/, 03-tooling/, 04-documentation/" ;
+    backlog:belongsToLineage fw:L_AdaptiveProof .
+fw:Area_AP_Step a backlog:ScopeArea ; rdfs:label "Area: Execution: the faults made by hand when a box is recorded"@en ;
+    backlog:areaMeasure "Counted 2026-10-29: four classes of by-hand fault were found in boxes 4 to 9 of Lineage 20 (records composed in one pass, a record edited in place, work done before its box was opened, a name changed by hand); no tool refuses any of them. The step tool of the package has 4 commands (plan, assess, close, adapt) and none records a box." ;
+    backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:areaLocation "01-ontologies/, 02-shacl-safeguards/, 03-tooling/, 04-documentation/" ;
+    backlog:belongsToLineage fw:L_AdaptiveProof .
+fw:Area_AP_Profile a backlog:ScopeArea ; rdfs:label "Area: Profile: the opt-in rule sets that no profile decides"@en ;
+    backlog:areaMeasure "Counted 2026-10-29: 8 rule sets are in no profile; 2 are adopted by the register, 6 by nothing; the adaptive profile has a recorded decision on 0 of the 8." ;
+    backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:areaLocation "01-ontologies/, 02-shacl-safeguards/, 03-tooling/, 04-documentation/" ;
+    backlog:belongsToLineage fw:L_AdaptiveProof .
+fw:Area_AP_Gate a backlog:ScopeArea ; rdfs:label "Area: Cost: what a release gate spends on records"@en ;
+    backlog:areaMeasure "Counted 2026-10-29: the gate of release 1.455.0 spent 2195 s in its first attempt, 1720 s of them on probes that re-ran because the register file changed; 28 of 52 probes read that file and 8 are now keyed on its reference part." ;
+    backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:areaLocation "01-ontologies/, 02-shacl-safeguards/, 03-tooling/, 04-documentation/" ;
+    backlog:belongsToLineage fw:L_AdaptiveProof .
+fw:Area_AP_Proof a backlog:ScopeArea ; rdfs:label "Area: Proof and learning: the profile judged on live work, and what the first run taught"@en ;
+    backlog:areaMeasure "Counted 2026-10-29: 0 lineages opened under the adaptive profile after its last revision have closed a box; Lineage 20 adopted none of the five ceremony rule sets; no post-mortem of a first application exists." ;
+    backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:areaLocation "01-ontologies/, 02-shacl-safeguards/, 03-tooling/, 04-documentation/" ;
+    backlog:belongsToLineage fw:L_AdaptiveProof .
+fw:Del_AP_D1 a backlog:ScopeDeliverable ; rdfs:label "An archived lineage's recorded stage digests are checked against the same digest table the live gate uses, so a lineage that reproduces live is not listed as failing in the archive"@en ;
+    backlog:deliverableForArea fw:Area_AP_Archive ; backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:derivesFromMissionClause "carried on real work from an immature mission" ;
+    backlog:belongsToLineage fw:L_AdaptiveProof .
+fw:Del_AP_D2 a backlog:ScopeDeliverable ; rdfs:label "The archive tool moves every statement of an archived lineage whatever its IRI form, and leaves none in the live register"@en ;
+    backlog:deliverableForArea fw:Area_AP_Archive ; backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:derivesFromMissionClause "carried on real work from an immature mission" ;
+    backlog:belongsToLineage fw:L_AdaptiveProof .
+fw:Del_AP_D3 a backlog:ScopeDeliverable ; rdfs:label "A step tool records each action of a box with the clock time of its run, in order, and refuses to close a box when a governed file was changed before the box was opened or when a record present at the last commit was changed or removed"@en ;
+    backlog:deliverableForArea fw:Area_AP_Step ; backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:derivesFromMissionClause "the faults that were made by hand are removed by a lineage-step tool" ;
+    backlog:belongsToLineage fw:L_AdaptiveProof .
+fw:Del_AP_D4 a backlog:ScopeDeliverable ; rdfs:label "Each box of this lineage is recorded with the step tool and judged by the five ceremony rule sets this lineage adopted, with no violation at its close"@en ;
+    backlog:deliverableForArea fw:Area_AP_Proof ; backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:derivesFromMissionClause "its ceremonies are recorded and judged by the rules it adopted" ;
+    backlog:belongsToLineage fw:L_AdaptiveProof .
+fw:Del_AP_D5 a backlog:ScopeDeliverable ; rdfs:label "Each of the eight opt-in rule sets has a recorded decision for the adaptive profile (included, or left opt-in with its reason), and the revision that includes the chosen ones is shown refusing a planted fault on a test register"@en ;
+    backlog:deliverableForArea fw:Area_AP_Profile ; backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:derivesFromMissionClause "its ceremonies are recorded and judged by the rules it adopted" ;
+    backlog:belongsToLineage fw:L_AdaptiveProof .
+fw:Del_AP_D6 a backlog:ScopeDeliverable ; rdfs:label "The release gate for a release that only adds records stays within a stated time, measured from the gate's own timing record on each release of this lineage"@en ;
+    backlog:deliverableForArea fw:Area_AP_Gate ; backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:derivesFromMissionClause "matured step by step in time-boxed iterations" ;
+    backlog:belongsToLineage fw:L_AdaptiveProof .
+fw:Del_AP_D7 a backlog:ScopeDeliverable ; rdfs:label "A post-mortem of this first application of the adaptive profile is written before the closure, naming the steps missed and the faults found after completion, each as a finding"@en ;
+    backlog:deliverableForArea fw:Area_AP_Proof ; backlog:hasScopeLayer backlog:Layer_Work ;
+    backlog:derivesFromMissionClause "carried on real work from an immature mission" ;
+    backlog:belongsToLineage fw:L_AdaptiveProof .
+fw:Ex_AP_Default a backlog:ScopeExclusion ; rdfs:label "Exclusion: The adaptive profile becomes the default"@en ;
+    backlog:excludesConcern "The adaptive profile becomes the default." ;
+    backlog:hasExclusionRationale "The Owner decides this after a live proof and an effort comparison; this lineage supplies the proof and does not decide." ;
+    backlog:decidedBy backlog:Owner ; backlog:hasScopeLayer backlog:Layer_Work ; backlog:belongsToLineage fw:L_AdaptiveProof .
+fw:Ex_AP_Others a backlog:ScopeExclusion ; rdfs:label "Exclusion: The standard and the agentic profile"@en ;
+    backlog:excludesConcern "The standard and the agentic profile." ;
+    backlog:hasExclusionRationale "They stay as they are; the adaptive profile is built beside them." ;
+    backlog:decidedBy backlog:Owner ; backlog:hasScopeLayer backlog:Layer_Work ; backlog:belongsToLineage fw:L_AdaptiveProof .
+fw:Ex_AP_Validator a backlog:ScopeExclusion ; rdfs:label "Exclusion: The validator's internal speed"@en ;
+    backlog:excludesConcern "The validator's internal speed." ;
+    backlog:hasExclusionRationale "The cost is cut by keying probes on what they read; the validator is not changed here." ;
+    backlog:decidedBy backlog:Owner ; backlog:hasScopeLayer backlog:Layer_Work ; backlog:belongsToLineage fw:L_AdaptiveProof .
+fw:Ex_AP_Closed a backlog:ScopeExclusion ; rdfs:label "Exclusion: Records of closed lineages"@en ;
+    backlog:excludesConcern "Records of closed lineages." ;
+    backlog:hasExclusionRationale "They are corrected only by appended notes; none is rewritten." ;
+    backlog:decidedBy backlog:Owner ; backlog:hasScopeLayer backlog:Layer_Work ; backlog:belongsToLineage fw:L_AdaptiveProof .
+fw:Ex_AP_Teams a backlog:ScopeExclusion ; rdfs:label "Exclusion: Teams, week-long sprints and human calendar pacing"@en ;
+    backlog:excludesConcern "Teams, week-long sprints and human calendar pacing." ;
+    backlog:hasExclusionRationale "The work is done by agents; a box is bounded by its tasks and goals." ;
+    backlog:decidedBy backlog:Owner ; backlog:hasScopeLayer backlog:Layer_Work ; backlog:belongsToLineage fw:L_AdaptiveProof .
+fw:Entity_AP_BoxRecord a backlog:DomainEntity ; rdfs:label "Box record"@en ; backlog:belongsToLineage fw:L_AdaptiveProof .
+fw:Blueprint_AP a backlog:Blueprint ; backlog:blueprintFor fw:Register ; rdfs:label "Blueprint: the records of a box and the checks on how they were made"@en ; backlog:belongsToLineage fw:L_AdaptiveProof .
+fw:Out_Scope_AdaptiveProof a backlog:StageOutput ;
+    backlog:outputOfStage backlog:Stage_Scope ; backlog:belongsToLineage fw:L_AdaptiveProof ;
+    backlog:consumesOutput fw:Out_Mission_AdaptiveProof ;
+    backlog:hasStateDigest "29b7db46b1c8cfff7fc9a3fa8e3938df3e1aa3873a20fa25085d738c89516c7a" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.456.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Scope stage of Lineage 21: seven deliverables over five areas, five exclusions, drawn from the gaps on the closure report of Lineage 20 and the faults met while closing it. Stage 2 of 5." .
