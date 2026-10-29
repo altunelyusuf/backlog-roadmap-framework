@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v1.461.0 — 2026-10-29 (MINOR: Lineage 22 opened; its Mission stage)
+
+Lineage 22 is opened under profile revision 8 (adaptive profile with the digest table v5) as the successor of the failed Lineage 21. Its Mission is set from the gaps verified on that closure report. Records only; stage 1 of 5.
+
+**Unplanned work:** none beyond the Mission stage of the lineage.
+
 ## v1.460.0 — 2026-10-29 (MINOR: Lineage 21 closed as failed; G177; the step tool)
 
 - **G177:** the adaptive profile adopted no digest table, so a lineage opened under it read table v1, which counts an execution task as Backlog-stage content; a planning event must produce a task, so the first box of Lineage 21 could not be committed (the recorded Backlog digest stopped reproducing). Profile revision 8 adds `RS_DigestTable_v5` to the adaptive profile; `LineagePlansUnderDigestTableShape` (shapes 1.198.0) refuses at validation a lineage that records its adoption at its opening, plans a task and adopts neither v4 nor v5, with the negative-fixture case `LDT_NoTable` (fixture 1.57.0); `backlog_open_lineage_probe` 1.1.0 shows a lineage planning after its Backlog stage with and without the table. Narratives and discipline are v141.0.0.
