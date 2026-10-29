@@ -11273,6 +11273,12 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 
 **Unplanned work:** a lineage's Goal stage precedes its work items; the probe-key fix is the Owner's instruction of 2026-10-29 14:59 (no lineage needed for the gate cost), made as unplanned work.
 
+## v1.458.0 — 2026-10-29 (Lineage 21 Objective stage)
+
+Objective stage of Lineage 21 (`L_AdaptiveProof`): nine measured objectives with counted baselines, one per goal and one holding the standard and agentic profiles unchanged. Stage 4 of 5. Data file moves to 1.85.0. The first attempt was refused: the objectives named stories that do not exist until the Backlog stage (the archive-integrity gate), so those links move to the Backlog stage; and the measurement it was meant to give showed 28 marked probes re-running because the register header's version triples entered the reference key. `backlog_probe_inputs` 1.4.0 leaves them out (D6).
+
+**Unplanned work:** the stage records a measurement the Owner asked for (gate cost on a records-only release) as part of Lineage 21's own scope, not a separate request.
+
 ## v1.455.0 — 2026-10-29 (MINOR: Lineage 20 closed and archived; Lineage 21 opened; the discipline cut to ceremony and principles)
 
 - **Discipline:** `LINEAGE_OPERATING_DISCIPLINE` v140.0.0 is 2.8 KB (was 23.6 KB, and 450 KB before v139). It holds the four ceremony steps and ten principles; the boundaries and operating rules it carried are already rulings in the register (G1 to G18 and later) and their narratives stay in the narratives file. The size ceiling in the discipline check is 8 KB. The 219 KB discipline of version 71 is removed from the folder.

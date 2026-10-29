@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_probe_inputs v1.3.0 -- what a probe really reads, measured, and a stamp key built on that (G128).
+"""backlog_probe_inputs v1.4.0 -- what a probe really reads, measured, and a stamp key built on that (G128).
 
 A proof stamp (G126) skips a step when the SHA of the files the step DECLARES equals the one recorded at its last pass. A probe declares its inputs by hand through
 its own `--deps`, and the declaration is a hope: it can name more than the probe reads (the probe then reruns for a change it never sees) or fewer (it is then skipped
@@ -19,6 +19,7 @@ directory is not derivable). Otherwise the caller keeps the declared inputs, as 
 The key is the SHA over the sorted lines `F:path:sha256`, `D:path:sha256(names)`, `A:path:absent|PRESENT`, `Y:family:sha256(names)`. A record whose probe now reads
 something else is not trusted: the key is built from the OLD list, so a changed input changes the key, the probe reruns, and the rerun writes a new record.
 
+v1.4.0: the reference key leaves out the header version triples (versionInfo, versionIRI, priorVersion) of the register file: they move with every release, so every marked probe re-ran every release (measured in the gate of 1.458.0: 28 probes, 1,234 s).
 v1.3.0: a record names the register file of the release it was measured in, and the file is renamed with every release; the reference key now reads the NEWEST register file, not the recorded path (the recorded path was missing one release later, so every audited probe re-ran: measured in release 1.456.0).
 
 v1.2.0 (gate cost): a probe that carries the line `# register-use: reference-only` reads the register file only through the validator, which keeps the controlled individuals and drops every record of the framework's own register; its key therefore uses the digest of that reference part (and not the file's bytes or its versioned name), so a release that only adds records no longer reruns it. Each such probe was audited: it reads no record of the register.
@@ -200,11 +201,14 @@ def _reference_only(rec, pkg):
         return False
 
 
+_VERSION_PREDS = {"http://www.w3.org/2002/07/owl#versionInfo", "http://www.w3.org/2002/07/owl#versionIRI", "http://www.w3.org/2002/07/owl#priorVersion"}   # v1.4.0: the header moves every release
+
+
 def _reference_digest(path):
     """sha256 over the triples of the register file whose subject is not in the framework's own register namespace: exactly what the validator keeps as reference."""
     import rdflib
     g = rdflib.Graph().parse(path, format="turtle")
-    lines = sorted(" ".join(t.n3() for t in tr) for tr in g if not (isinstance(tr[0], rdflib.URIRef) and str(tr[0]).startswith(FW_NS)))
+    lines = sorted(" ".join(t.n3() for t in tr) for tr in g if not (isinstance(tr[0], rdflib.URIRef) and str(tr[0]).startswith(FW_NS)) and str(tr[1]) not in _VERSION_PREDS)
     return _sha("\n".join(lines).encode())
 
 
