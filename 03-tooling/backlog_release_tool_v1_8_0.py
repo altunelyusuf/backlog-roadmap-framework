@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_release_tool v1.7.0 -- the release steps a session used to do by hand, as one tested tool (G99 release A; OE rule R4).
+"""backlog_release_tool v1.8.0 -- the release steps a session used to do by hand, as one tested tool (G99 release A; OE rule R4).
 
 Subcommands (each prints what it did and exits non-zero on any refusal):
   bump-data NEWVER                      rename the package data file to the new version and move its header (versionInfo, versionIRI, priorVersion)
@@ -17,6 +17,7 @@ Subcommands (each prints what it did and exits non-zero on any refusal):
                                         duration; --dry-run prints the plan and the refusals it already knows (missing changelog entry) and runs nothing
   prune-cache [DIR] [--days N] [--legacy]          remove cache files (shape_*.ttl, memo *.json, stamps) older than N days (default 14) from the validation cache; they are rebuilt on demand
   republish VERSION                     only the publisher and the tag check (after a transient failure of the public push)
+v1.8.0 (Lineage 22): the preflight also validates the positive fixture (the gate's Gate R section aborts when it does not validate, 10 minutes into a release; release 1.468.0 was refused there).
 v1.7.0 (Lineage 22, time; G178): (1) the receipt's head is read with the publisher's own default repository (v1.6.0 read another one, so no receipt was written in v1.462.0 and the publisher ran the gate again). (2) `release VERSION --stage` is a release of a chain stage: it is allowed only when the release changes records alone (the register, the change-log, PROBE_INPUTS.json and the files the tool itself writes) and when fewer than four stage releases came since the last full one; it runs the LIGHT gate (BACKLOG_GATE_LIGHT=1: the chain, order, archive, register, manifest and version checks, not the probes and proofs about tools and shapes) and records the kind of every release in 06-package-provenance/LIGHT_RELEASES.txt. Every stage keeps its own commit, so git still witnesses the order; the fifth release of a batch, and every release that changes anything but records, runs the full gate.
 v1.6.0 (Lineage 22, time): (1) `preflight` also validates the newest register (a violation stops the release), verifies the recorded stage digests of every lineage and the archive integrity, all in seconds; v1.461.0 passed with a register violation because nothing in the release path validated the register as a whole. (2) The gate's pass is recorded as a receipt (oe_gate_receipt) just before the publisher, so the publisher reuses it instead of running the same gate on the same bytes again (262 s of 293 s in v1.461.0). The receipt is valid only for the same package bytes, the same upstream tree, the same head of the target repository and a short age; it is removed after the publisher; when its head cannot be read nothing is written and the publisher runs its gates as before. (3) `roll VERSION --title T --body B --unplanned U` does the hand-work between two releases in one command: the next register version, the next change-log version with the new entry, and the names in PROBE_INPUTS.json.
 v1.5.0 (G152): the gate runs through `timed_gate`, which writes the same log and a sidecar `gate_VERSION.log.timing.tsv` (seconds per "== section ==" header) and prints the five slowest sections, so where a long run goes is recorded, not guessed.
@@ -281,6 +282,12 @@ def preflight(v):
             if r.returncode != 0:
                 lines = [l.strip() for l in r.stdout.splitlines() if "[Violation]" in l][:3]
                 bad.append("the register does not validate: " + " | ".join(l[:200] for l in lines or ["see the validator"]))
+        pos = newest(os.path.join(HERE, "fixtures", "fixture_positive_v*.ttl"))
+        if pos and val:
+            r = subprocess.run([sys.executable, val, pos], capture_output=True, text=True)
+            if r.returncode != 0:
+                lines = [l.strip() for l in r.stdout.splitlines() if "[Violation]" in l][:2]
+                bad.append("the positive fixture does not validate: " + " | ".join(l[:200] for l in lines or ["see the validator"]))
         pv = newest(os.path.join(HERE, "backlog_pipeline_verify_v*.py"))
         if pv:
             for ln in sorted(set(re.findall(r"^fw:(L_[A-Za-z0-9_]+) a backlog:Lineage", open(reg, encoding="utf-8").read(), re.M))):

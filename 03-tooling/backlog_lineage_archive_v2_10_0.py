@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
+# v2.10.0 (Lineage 22, D2): a statement whose subject is written as a full IRI moves with its lineage like one written as a prefixed name (split_statements); 59 statements of Lineage 20 stayed in the live register because only the second form was read
 # v2.9.0 (G134): an entry names its lineage, mission and outcome by LINKS (never text); a mission or outcome that is not recorded is left out, not written as a blank or as the word unrecorded
 # v2.8.0 (G121): the earlier statements of an archived lineage's mission (supersedesMission, however long the chain) are its mission history and move with it, up to a statement another lineage pursues; before, they stayed live ownerless and pointed into the archive.
 # v2.7.0 (G106, consumer archival): the archive file is a parameter. --archive-file PATH names it (created at its first version when it does not exist yet); without the flag a register inside this package keeps using the package archive, and a register anywhere else gets its own archive beside it, in <register folder>/archive/<register name>_archive_vX_Y_Z.ttl. v2.6.0 always wrote into this package's archive, so a consumer ledger would have written its subjects into the framework's record.
 # v2.6.0 (G99 release B): the version a new live or archive file supersedes joins the header's owl:priorVersion chain (it was added by hand each time; move_header does it, and refuses a header that has no chain to extend).
 # v2.5.0 (Lineage 19, DC-S01 and DC-S03): an abandoned mission needs a closure report too, and every cancelled item of the lineage must be named by it (reportsCancelledItem); the archived copy of the lineage is marked archived with its confirmation pending, at the moment it is moved, so no later step has to find it. v2.4.0 accepted an abandoned mission with only its stated reason, which the owner has ruled is not enough.
 # v2.4.0 (Lineage 18, OC-S06): an abandoned lineage is archivable (its stated reason is its record), and the existing entries follow the archive file to its new version. v2.3.0 (Lineage 18, OC-S05): follows the archive folder. The archive data file now lives in 01-ontologies/archive/.
-"""backlog_lineage_archive v2.9.0 — set an achieved lineage down, out of every processing path.
+"""backlog_lineage_archive v2.10.0 — set an achieved lineage down, out of every processing path.
 
 WHY. A lineage whose mission is settled keeps costing every run until it is ARCHIVED: the SHACL
 suite validates its every individual, the git witness re-measures its every subject, the roadmap
@@ -240,6 +241,31 @@ def move_header(txt, oldv, newv, first_chain_ok=False):
     return txt, None
 
 
+def split_statements(lines, names, prefixes, full):
+    """v2.10.0 (Lineage 22, D2): the statements whose subject is in the partition move to the archive, whatever the form of the subject: a prefixed name
+    (`fw:Name `) or the full IRI (`<http://...#Name>`). v2.9.0 read only the first form, so 59 statements of Lineage 20, written in full-IRI form, stayed in the
+    live register. FULL is the set of full IRIs of the partition; NAMES the local names. -> (live lines, archive lines, statements moved)."""
+    def subj_of(line):
+        m = re.match(r"([A-Za-z_]\w*):([A-Za-z_][\w\-]*)\s", line)
+        if m:
+            return m.group(2) if prefixes.get(m.group(1)) else None
+        m = re.match(r"<([^>]+)>\s", line)
+        if m and m.group(1) in full:
+            return m.group(1).split("#")[-1]
+        return None
+    out_live, out_arch = [], []; i = 0; moved = 0
+    while i < len(lines):
+        ln = lines[i]
+        sub = subj_of(ln) if ln and not ln.startswith((" ", "\t", "#", "@")) else None
+        if sub is not None and (sub in names or ln.startswith("<")):
+            j = i
+            while j < len(lines) and not lines[j].rstrip().endswith(" ."): j += 1
+            out_arch.extend(lines[i:j + 1]); moved += 1; i = j + 1
+        else:
+            out_live.append(ln); i += 1
+    return out_live, out_arch, moved
+
+
 def main():
     argv = sys.argv[1:]
     apply = "--apply" in argv; aflag = None
@@ -294,21 +320,7 @@ def main():
     for ln in lines:
         m = re.match(r"@prefix\s+(\w+):\s+<([^>]+)>", ln)
         if m: prefixes[m.group(1)] = m.group(2)
-    def subj_of(line):
-        m = re.match(r"([A-Za-z_]\w*):([A-Za-z_][\w\-]*)\s", line)
-        if not m: return None
-        pfx, ln_ = m.groups(); ns = prefixes.get(pfx)
-        return ln_ if ns else None
-    out_live, out_arch = [], []; i = 0; moved = 0
-    while i < len(lines):
-        ln = lines[i]
-        sub = subj_of(ln) if ln and not ln.startswith((" ", "\t", "#", "@")) else None
-        if sub is not None and sub in names:
-            j = i
-            while j < len(lines) and not lines[j].rstrip().endswith(" ."): j += 1
-            out_arch.extend(lines[i:j + 1]); moved += 1; i = j + 1
-        else:
-            out_live.append(ln); i += 1
+    out_live, out_arch, moved = split_statements(lines, names, prefixes, {str(s) for s in part})
     # v2.5.0: the archived copy of each lineage says it is archived, with its confirmation pending (the confirmation step promotes it later). Edited in place on
     # the lineage's own statement; a copy already carrying true is left alone.
     arch_joined = "\n".join(out_arch)

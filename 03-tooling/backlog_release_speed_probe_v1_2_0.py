@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_release_speed_probe v1.1.0 -- the release tool 1.6.0 does what it says (Lineage 22).
+"""backlog_release_speed_probe v1.2.0 -- the release tool 1.6.0 does what it says (Lineage 22).
 
 Cases: preflight stops on a register that does not validate and on a failed archive integrity check and lets a valid one through; `roll` moves the register and the
 change-log to their next versions, inserts the entry above the newest one and makes PROBE_INPUTS.json follow, and refuses without an account of unplanned work; the gate
@@ -48,6 +48,12 @@ with tempfile.TemporaryDirectory() as t:
     open(pkg + "/BROKEN", "w").write("x")
     expect("a failed archive integrity check stops preflight", "archive integrity" in pre())
     os.remove(pkg + "/BROKEN")
+    os.makedirs(pkg + "/03-tooling/fixtures", exist_ok=True)
+    open(pkg + "/03-tooling/fixtures/fixture_positive_v1_0_0.ttl", "w").write("# fine\n")
+    expect("a positive fixture that validates does not stop preflight", "positive fixture" not in pre())
+    open(pkg + "/03-tooling/fixtures/fixture_positive_v1_0_0.ttl", "w").write("# BAD\n")
+    expect("a positive fixture that does not validate stops preflight", "the positive fixture does not validate" in pre())
+    os.remove(pkg + "/03-tooling/fixtures/fixture_positive_v1_0_0.ttl")
 
     # roll
     r = subprocess.run([sys.executable, "-B", T, "roll", "1.0.1", "--title", "MINOR: t", "--body", "the body", "--unplanned", "none beyond the stage"], capture_output=True, text=True, cwd=pkg)

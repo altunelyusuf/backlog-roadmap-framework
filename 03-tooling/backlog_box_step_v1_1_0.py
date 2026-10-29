@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_box_step v1.0.0 -- records the work of one box in order, with the clock of its run, and refuses the faults made by hand.
+"""backlog_box_step v1.1.0 -- records the work of one box in order, with the clock of its run, and refuses the faults made by hand.
 
 Lineage 21, deliverable D3. The faults came from boxes 4 to 9 of Lineage 20, each written down as a finding there:
   * a close composed in one pass          -> `close` refuses a box with no checkpoint recorded between its start and the close
@@ -10,7 +10,12 @@ Lineage 21, deliverable D3. The faults came from boxes 4 to 9 of Lineage 20, eac
   * a name changed by hand                -> every identifier is made here from the box number and the story key, and `close` refuses when one the opening wrote is gone
   * the effort read from the wrong place  -> effort is read from `hasEffort` of the stories, nowhere else
 
-Usage:  backlog_box_step.py REGISTER.ttl open  N "title" "sprint goal" STORY_KEY[,STORY_KEY...] [--capacity C] [--allow PATH ...]
+v1.1.0 (Lineage 22, D3): the obligations of a status are read from the register, not carried as code. `owes` validates a copy of the register with the lineage moved to the named status and
+prints what is violated there that is not violated now; `open` prints the same for the status it enters. `open` and `close` then validate the register they wrote and, when they introduced a
+violation, put the register back as it was and refuse, naming it. With no validator beside the tool nothing is checked and the tool says so.
+
+Usage:  backlog_box_step.py REGISTER.ttl owes STATUS      (e.g. LS_InProgress: what that status owes that the register does not yet hold)
+        backlog_box_step.py REGISTER.ttl open  N "title" "sprint goal" STORY_KEY[,STORY_KEY...] [--capacity C] [--allow PATH ...]
         backlog_box_step.py REGISTER.ttl act   N STORY_KEY "what was done"
         backlog_box_step.py REGISTER.ttl close N SPEC.json
 The lineage and prefix are fixed by --lineage (default L_AdaptiveProof) and --prefix (default AP).
@@ -321,6 +326,68 @@ def cmd_close(reg, root, n, spec):
     print("box %d closed: review %s, %s min, %s points of effort" % (n, trev, mins, sum(efforts.values())))
 
 
+# ---- the obligations, read from the register by validating it (v1.1.0) ----
+
+def validator():
+    c = sorted(glob.glob(os.path.join(os.path.dirname(os.path.abspath(__file__)), "backlog_validate_v*.py")), key=lambda x: [int(y) for y in re.findall(r"_v(\d+)_(\d+)_(\d+)\.", x)[0]])
+    return c[-1] if c else None
+
+
+def parse_violations(out):
+    """The set of (focus, message start) of the Violation results in a validator's output."""
+    res = set()
+    for ln in out.splitlines():
+        if "[Violation]" in ln:
+            rest = ln.split("[Violation]", 1)[1].strip().split(None, 1)
+            res.add((rest[0], (rest[1] if len(rest) > 1 else "")[:110]))
+    return res
+
+
+def violations_of(path):
+    """The violations of the register at PATH, or None when no validator sits beside the tool."""
+    v = validator()
+    if not v:
+        return None
+    r = subprocess.run([sys.executable, "-B", v, path], capture_output=True, text=True)
+    if r.returncode not in (0, 1) or ("VERDICT" not in r.stdout):
+        raise SystemExit("REFUSED: the validator did not run: " + (r.stdout + r.stderr).strip()[-300:])
+    return parse_violations(r.stdout)
+
+
+def owes(path, lineage, status):
+    """What the register would be violated by at STATUS that it is not violated by now (the obligations of that status), as a sorted list; None with no validator."""
+    base = violations_of(path)
+    if base is None:
+        return None
+    import tempfile
+    s = open(path, encoding="utf-8").read()
+    pat = re.compile(r"(^fw:%s a backlog:Lineage .*?backlog:hasLineageStatus )backlog:\w+" % re.escape(lineage), re.M | re.S)
+    if not pat.search(s):
+        raise SystemExit("REFUSED: no lineage %s in the register" % lineage)
+    with tempfile.TemporaryDirectory() as d:
+        t = os.path.join(d, os.path.basename(path))
+        open(t, "w", encoding="utf-8").write(pat.sub(lambda m: m.group(1) + "backlog:" + status, s, count=1))
+        return sorted(violations_of(t) - base)
+
+
+def guarded(path, fn):
+    """Run FN (which writes the register at PATH); when the register then holds a violation it did not hold before, restore it and refuse."""
+    before = violations_of(path)
+    orig = open(path, encoding="utf-8").read()
+    try:
+        fn()
+    except SystemExit:
+        open(path, "w", encoding="utf-8").write(orig)
+        raise
+    if before is None:
+        print("NOT CHECKED: no validator sits beside this tool, so the register was not validated")
+        return
+    new = sorted(violations_of(path) - before)
+    if new:
+        open(path, "w", encoding="utf-8").write(orig)
+        raise SystemExit("REFUSED: the register would hold a violation it did not hold before (it is put back as it was): " + " | ".join("%s: %s" % x for x in new[:4]))
+
+
 def main(argv):
     a = [x for x in argv]
     lineage, prefix, capacity = "L_AdaptiveProof", "AP", 5.0
@@ -337,13 +404,20 @@ def main(argv):
         print(__doc__); return 1
     path, cmd = a[0], a[1]
     root = os.path.realpath(os.path.join(os.path.dirname(os.path.realpath(path)), ".."))
+    if cmd == "owes":
+        o = owes(path, lineage, a[2])
+        print("NOT CHECKED: no validator sits beside this tool" if o is None else ("at %s the register owes:\n  " % a[2] + "\n  ".join("%s: %s" % x for x in o) if o else "at %s the register owes nothing it does not already hold" % a[2]))
+        return 0
     reg = Reg(path, lineage, prefix)
     if cmd == "open":
-        cmd_open(reg, root, int(a[2]), a[3], a[4], a[5].split(","), capacity, allow)
+        o = owes(path, lineage, "LS_InProgress")
+        if o:
+            print("owed at LS_InProgress, before the box is opened:\n  " + "\n  ".join("%s: %s" % x for x in o))
+        guarded(path, lambda: cmd_open(reg, root, int(a[2]), a[3], a[4], a[5].split(","), capacity, allow))
     elif cmd == "act":
         cmd_act(reg, int(a[2]), a[3], a[4])
     elif cmd == "close":
-        cmd_close(reg, root, int(a[2]), json.load(open(a[3])))
+        guarded(path, lambda: cmd_close(reg, root, int(a[2]), json.load(open(a[3]))))
     else:
         print(__doc__); return 1
     return 0

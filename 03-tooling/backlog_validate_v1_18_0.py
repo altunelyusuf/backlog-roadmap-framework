@@ -173,6 +173,11 @@ _REF = {}
 _FW = "http://example.org/backlog-framework-register#"
 
 
+# v1.18.0 (Lineage 22): the roadmap-report runs the plan step records in the register are register statements too. They sit in another namespace than the register's, so they were kept as
+# "controlled individuals" while the register they report on was dropped, and the first one made the positive fixture violate "a report must name the register" (the gate refused release 1.468.0).
+_RUNS = "http://example.org/report#"
+
+
 def reference_abox(data_files):
     """The data file as REFERENCE for validating other data. The package's one data file holds the controlled individuals and, in
     the framework's own namespace, the live register. When something else is being validated (a fixture, a candidate register), only
@@ -182,7 +187,7 @@ def reference_abox(data_files):
         return ABOX
     if "p" not in _REF:
         g = Graph().parse(ABOX, format="turtle")
-        for t in [t for t in g if isinstance(t[0], rdflib.URIRef) and str(t[0]).startswith(_FW)]:
+        for t in [t for t in g if isinstance(t[0], rdflib.URIRef) and (str(t[0]).startswith(_FW) or str(t[0]).startswith(_RUNS))]:
             g.remove(t)
         fd, path = tempfile.mkstemp(suffix=".reference.ttl"); os.close(fd)
         g.serialize(path, format="turtle")

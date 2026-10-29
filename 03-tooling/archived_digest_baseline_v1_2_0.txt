@@ -15,3 +15,6 @@ L_GovernanceContinuation
 L_GovernanceMitigations
 # Added 2026-10-29: L_AdaptiveCeremonies. Cause measured: the adaptive profile includes no digest-table rule set, so a lineage that grew its scope by change requests (six, here) cannot reproduce its closed stage digests under its own adoption; with RS_DigestTable_v5 added to a copy of its adoption every stage reproduces. Owed to the adaptive profile: add the rule set in a profile revision.
 L_AdaptiveCeremonies
+# Correction appended 2026-10-30 (Lineage 22, D1), measured by backlog_archived_digest_check v1.1.0 on the archive file: the cause given above for L_AdaptiveCeremonies is incomplete and its owed item is not the one that was needed.
+# L_AdaptiveCeremonies reproduces every recorded stage digest under digest table v5 and under no other; its recorded adoption holds no digest table, so it is read under v1 and does not reproduce. Profile revision 8 now adds RS_DigestTable_v5 to the adaptive profile, which serves a lineage opened after it; this lineage's recorded adoption is not changed (an adoption is recorded at the opening and a late one is flagged).
+# The other eleven listed lineages reproduce under none of v1 to v5, so no table explains them; their cause stays not established, as the header says.

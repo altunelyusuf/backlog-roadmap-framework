@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
-"""backlog_archived_digest_check v1.0.0 -- every archived lineage's recorded stage digests are measured, and none may start failing unseen (G99).
+"""backlog_archived_digest_check v1.1.0 -- every archived lineage's recorded stage digests are measured, and none may start failing unseen (G99).
 
 The pipeline verifier recomputes each recorded stage digest. The gate ran it only on fixtures, never on the real lineages, and the archive is where all of them are.
 Measured on 2026-10-08: of 21 archived lineages, 11 do not reproduce, 3 do, 7 record no stage outputs. This tool runs the verifier (unchanged) once per lineage,
 in parallel, and keeps a RATCHET: archived_digest_baseline lists the 11; a lineage that fails and is not listed fails this check; a listed lineage that passes is
 reported for removal. It proves itself first on the pipeline fixtures (the passing chain classifies PASS, a copy with one tampered digest classifies FAIL).
+v1.1.0 (Lineage 22, D1): for every lineage that does not reproduce, the check also measures under which of the digest tables v1 to v5 it does, with the verifier's own functions, and prints it;
+the cause of a failure is then a measurement, not a statement (the baseline of v1.0.0 named a wrong cause for Lineage 20). The verdict is unchanged: a table the lineage did not adopt never makes it pass.
 Options: --archive FILE  --baseline FILE (for the probe). Exit 0 within the baseline, 2 a new failing lineage, 3 the classification could not discriminate.
 """
 import concurrent.futures as cf, glob, hashlib, json, os, re, subprocess, sys
@@ -58,6 +60,39 @@ def self_proof():
             if classify(tp) != "FAIL":
                 bad.append("a fixture with one tampered digest did not classify FAIL")
     return bad
+
+
+TABLES = ("v1", "v2", "v3", "v4", "v5")
+
+
+def tables_reproducing(arch, names):
+    """-> {lineage name: [tables under which every recorded stage digest of the lineage reproduces]}, measured with the verifier's functions on the archive file."""
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("pv", VERIFY); pv = importlib.util.module_from_spec(spec); spec.loader.exec_module(pv)
+    tb = newest(os.path.join(PKG, "01-ontologies", "backlog_tbox_v*.ttl"))
+    g = Graph(); g.parse(arch, format="turtle")
+    lins = {str(l).split("#")[-1]: l for l in set(g.subjects(RDF.type, B.Lineage))}
+    outs = {}
+    for n in names:
+        L = lins.get(n); o_ = {}
+        for o in g.subjects(RDF.type, B.StageOutput):
+            if (o, B.belongsToLineage, L) not in g:
+                continue
+            r = g.value(o, B.outputRetracted)
+            if r is not None and bool(r.toPython()):
+                continue
+            st = g.value(o, B.outputOfStage)
+            if st is not None:
+                o_[str(st).split("#")[-1]] = o
+        outs[n] = (L, o_)
+    found = {n: [] for n in names}
+    for t in TABLES:
+        pv.STAGE_TYPES = pv._load_stage_types(tb, table=t)
+        for n in names:
+            L, o_ = outs[n]
+            if o_ and all(str(g.value(o, B.hasStateDigest) or "") == pv.state_digest(g, st, L, admitted=t in ("v4", "v5"), change_managed=(t == "v5")) for st, o in o_.items()):
+                found[n].append(t)
+    return found
 
 
 BASELINE_OVERRIDE = None
@@ -116,6 +151,20 @@ def main():
             json.dump(res, open(cache, "w"))
     names = sorted(res)
     base = baseline()
+    failing = [n for n, v in sorted(res.items()) if v in ("FAIL", "UNKNOWN")]
+    if failing:
+        try:
+            tcache = os.path.join(memo, "archtables_" + _key(arch) + ".json") if memo and os.path.isdir(memo) else None
+            if tcache and os.path.exists(tcache):
+                tr = json.load(open(tcache))
+            else:
+                tr = tables_reproducing(arch, failing)
+                if tcache:
+                    json.dump(tr, open(tcache, "w"))
+            for n in failing:
+                print("TABLES: %s %s" % (n, ("reproduces under " + ", ".join(tr[n]) + " only; its recorded adoption decides which table it is read under") if tr[n] else "reproduces under none of v1 to v5"))
+        except Exception as e:
+            print("TABLES: not measured (%s)" % str(e)[:120])
     count = {k: sum(1 for v in res.values() if v == k) for k in ("PASS", "FAIL", "NOT VERIFIABLE", "UNKNOWN")}
     print("archived lineages: %d  reproduce: %d  do not reproduce: %d (baseline %d)  no stage outputs: %d  unclassified: %d" % (
         len(names), count["PASS"], count["FAIL"], len(base), count["NOT VERIFIABLE"], count["UNKNOWN"]))

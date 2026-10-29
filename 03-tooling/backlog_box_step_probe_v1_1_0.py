@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_box_step_probe v1.0.0 -- the step tool accepts a box recorded in order and refuses each fault made by hand (Lineage 21, D3).
+"""backlog_box_step_probe v1.1.0 -- the step tool accepts a box recorded in order and refuses each fault made by hand (Lineage 21, D3), and reads the obligations of a status from the register (Lineage 22, D3).
 
 A tiny package inside a throwaway git repository (the package sits one folder down, as the real one does). The tool is run as it is run for real; each refusal is planted and the same box then passes once the fault is removed
 (a tool that refuses is not thereby correct). Planted: work before the box opened, a story not Proposed, a box opened twice, a close with no checkpoint, a name changed by hand, a published
@@ -53,6 +53,7 @@ rc, out = run("open", "1", "t", "g", "P", "--capacity", "3")
 expect("open is refused for a story that is not Proposed", rc != 0 and "not Proposed" in out)
 rc, out = run(*OPEN)
 expect("the same box opens once the fault is removed", rc == 0 and "now InProgress" in out)
+expect("with no validator beside the tool, open says the register was not validated", "NOT CHECKED" in out)
 rc2, out2 = run(*OPEN)
 expect("a box already opened is not opened again", rc2 != 0 and "already has records" in out2)
 txt = open(REG).read()
@@ -77,6 +78,17 @@ rc, out = run("close", "1", SP)
 expect("close is refused for an artifact older than the box", rc != 0 and "older than the box" in out)
 os.utime(os.path.join(pk, ART), None)
 _v = open(REG).read().replace('owl:versionInfo "1.1.0"', 'owl:versionInfo "1.2.0"'); open(REG, "w").write(_v)   # the version header moves with every release and is not an edit
+# v1.1.0: a validator beside the tool (a stub that reports a planted violation, and a status that owes one)
+open(os.path.join(pk, "03-tooling", "backlog_validate_v1_0_0.py"), "w").write("import sys\nt = open(sys.argv[1]).read()\nv = []\nif 'VIOLATE' in t: v.append('  [Violation] FocusV   it holds a planted violation')\nif 'hasLineageStatus backlog:LS_Achieved' in t: v.append('  [Violation] L_AdaptiveProof   claims achieved without a closure report')\nprint(chr(10).join(v)); print('VERDICT : ' + ('NON-CONFORMANT' if v else 'CONFORMANT')); sys.exit(1 if v else 0)\n")
+rc, out = run("owes", "LS_Achieved")
+expect("owes lists what a status would violate that the register does not violate now", rc == 0 and "claims achieved without a closure report" in out)
+rc, out = run("owes", "LS_InProgress")
+expect("owes names nothing for a status that adds no violation", rc == 0 and "owes nothing" in out)
+before = open(REG).read()
+bad_spec = json.loads(open(SP).read()); bad_spec["findings"] = [{"key": "F", "root_cause": "VIOLATE", "remedy": "rm"}]
+json.dump(bad_spec, open(os.path.join(work, "spec_bad.json"), "w"))
+rc, out = run("close", "1", os.path.join(work, "spec_bad.json"))
+expect("close that would introduce a violation is refused, names it, and puts the register back as it was", rc != 0 and "FocusV" in out and open(REG).read() == before)
 rc, out = run("close", "1", SP)
 final = open(REG).read()
 expect("the same box closes once the faults are removed", rc == 0 and "closed" in out)

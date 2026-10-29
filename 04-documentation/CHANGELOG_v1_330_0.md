@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v1.468.0 — 2026-10-30 (MINOR: Lineage 22, box 1 -- obligations read from the register, archive checks that agree)
+
+Step tool 1.1.0 reads the obligations of a status from the register (owes) and refuses an open or close that would introduce a violation; the archived-digest check 1.1.0 measures the digest table under which each non-reproducing lineage reproduces (Lineage 20: v5 only) and the baseline 1.2.0 carries the appended correction of its cause; the archive tool 2.10.0 moves a subject written as a full IRI; gate 1.75.0 runs the three new probes; box 1 of Lineage 22 is recorded with the step tool and closed. D1 is satisfied in an adapted form (its premise was not true), disclosed in the box findings.
+
+**Unplanned work:** after the close of box 1, release 1.468.0 was refused by the gate (its Gate R section: the positive fixture violated "a report must name the register", because the roadmap-report run that the plan step records at a box opening was kept as reference while the register it reports on was dropped). Repaired outside the box: validator 1.18.0 treats the report runs as register statements (backlog_validate_reference_probe v1.0.0), and release tool 1.8.0 validates the positive fixture in its preflight (speed probe 1.2.0). The three stories of box 1 are otherwise as planned; the findings of the box name the premise of D1 that did not hold.
+
 ## v1.467.0 — 2026-10-30 (MINOR: Lineage 22, Backlog stage (stage release))
 
 Backlog stage of Lineage 22: eight stories, one or two per scope deliverable, Story-direct, all Proposed; the stories that move each objective's metric are linked; the lineage is Backlogged. Records only; stage 5 of 5.
