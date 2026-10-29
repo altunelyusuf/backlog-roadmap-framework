@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v1.467.0 — 2026-10-30 (MINOR: Lineage 22, Backlog stage (stage release))
+
+Backlog stage of Lineage 22: eight stories, one or two per scope deliverable, Story-direct, all Proposed; the stories that move each objective's metric are linked; the lineage is Backlogged. Records only; stage 5 of 5.
+
+**Unplanned work:** none beyond the Backlog stage of the lineage.
+
 ## v1.466.0 — 2026-10-30 (MINOR: Lineage 22, Objective stage (stage release))
 
 Objective stage of Lineage 22: nine measured objectives with counted baselines; the stories that move them are linked in the Backlog stage. Records only; stage 4 of 5.
