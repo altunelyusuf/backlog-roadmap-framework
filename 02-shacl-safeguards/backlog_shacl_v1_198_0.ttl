@@ -9,8 +9,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog/shacl/1.197.0> ;
-    owl:versionInfo "1.197.0" ;
+    owl:versionIRI <http://example.org/backlog/shacl/1.198.0> ;
+    owl:versionInfo "1.198.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.197.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.184.0> , <http://example.org/backlog-shapes/1.176.0> , <http://example.org/backlog-shapes/1.175.0> , <http://example.org/backlog-shapes/1.174.0> , <http://example.org/backlog-shapes/1.173.0> , <http://example.org/backlog-shapes/1.172.0> , <http://example.org/backlog-shapes/1.171.0> , <http://example.org/backlog-shapes/1.170.0> , <http://example.org/backlog-shapes/1.169.0> , <http://example.org/backlog-shapes/1.168.0> , <http://example.org/backlog-shapes/1.167.0> , <http://example.org/backlog-shapes/1.166.0> , <http://example.org/backlog-shapes/1.165.0> , <http://example.org/backlog-shapes/1.164.0> , <http://example.org/backlog-shapes/1.159.0> , <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.154.0> , <http://example.org/backlog-shapes/1.153.0> , <http://example.org/backlog-shapes/1.152.0> , <http://example.org/backlog-shapes/1.151.0> , <http://example.org/backlog-shapes/1.150.0> , <http://example.org/backlog-shapes/1.149.0> , <http://example.org/backlog-shapes/1.148.0> , <http://example.org/backlog-shapes/1.147.0> , <http://example.org/backlog-shapes/1.146.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.145.0> ;
@@ -9497,4 +9498,21 @@ backlog:ReviewControlsRunShape a sh:NodeShape ;
             ?l backlog:adoptsRuleSet backlog:RS_ReviewNeedsControlRun .
             ?a backlog:plannedInBox ?b . ?r0 backlog:runOfActivity ?a .
             FILTER NOT EXISTS { ?r backlog:runOfActivity ?a ; backlog:ranAt ?t . FILTER (?t <= ?h) }
+        }""" ] .
+
+# ---- v1.198.0 (G177, Lineage 21): a lineage that plans work must read a digest table that does not count its tasks ----
+backlog:LineagePlansUnderDigestTableShape a sh:NodeShape ;
+    sh:targetClass backlog:Lineage ;
+    sh:severity sh:Violation ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "LDT_NoTable" ;
+    rdfs:label "A lineage that plans work reads a digest table that does not count its execution tasks (L2)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L2: this lineage recorded its adoption at its opening, has an execution task, and adopts neither RS_DigestTable_v4 nor RS_DigestTable_v5. Digest table v1 counts an execution task as Backlog-stage content, and a planning event must produce a task, so the Backlog digest stops reproducing at the first planning event and the gate fails. Adopt a digest table at the opening (the adaptive profile includes v5 from revision 8) (G177)." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:adoptionRecordedAtOpen true .
+            ?t a backlog:ExecutionTask ; backlog:belongsToLineage $this .
+            FILTER NOT EXISTS { $this backlog:adoptsRuleSet backlog:RS_DigestTable_v4 }
+            FILTER NOT EXISTS { $this backlog:adoptsRuleSet backlog:RS_DigestTable_v5 }
         }""" ] .

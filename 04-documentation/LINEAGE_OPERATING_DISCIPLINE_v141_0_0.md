@@ -1,8 +1,8 @@
-# Lineage Operating Discipline — v140.0.0
+# Lineage Operating Discipline — v141.0.0
 
 **What this is.** How a lineage is started and run, in one page. SHACL enforces; this file only tells the agent the order of work and the principles behind it. It holds no ruling text.
 
-**Where everything else is.** Every ruling is a `GovernanceRuling` in the register (statement, enforcing shapes, source): query it, do not look for it here. Rule sets and profiles are in the register too. How each ruling came about is in `LINEAGE_RULING_NARRATIVES_v140_0_0.md`: history, read only when working on that ruling.
+**Where everything else is.** Every ruling is a `GovernanceRuling` in the register (statement, enforcing shapes, source): query it, do not look for it here. Rule sets and profiles are in the register too. How each ruling came about is in `LINEAGE_RULING_NARRATIVES_v141_0_0.md`: history, read only when working on that ruling.
 
 **Order of precedence.** The OE ceremony and OE Operating Discipline run first; a lineage grounded on unverified bytes is a lineage about nothing.
 

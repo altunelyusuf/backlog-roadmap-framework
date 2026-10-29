@@ -11285,6 +11285,14 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v1.460.0 — 2026-10-29 (MINOR: Lineage 21 closed as failed; G177; the step tool)
+
+- **G177:** the adaptive profile adopted no digest table, so a lineage opened under it read table v1, which counts an execution task as Backlog-stage content; a planning event must produce a task, so the first box of Lineage 21 could not be committed (the recorded Backlog digest stopped reproducing). Profile revision 8 adds `RS_DigestTable_v5` to the adaptive profile; `LineagePlansUnderDigestTableShape` (shapes 1.198.0) refuses at validation a lineage that records its adoption at its opening, plans a task and adopts neither v4 nor v5, with the negative-fixture case `LDT_NoTable` (fixture 1.57.0); `backlog_open_lineage_probe` 1.1.0 shows a lineage planning after its Backlog stage with and without the table. Narratives and discipline are v141.0.0.
+- **The step tool:** `backlog_box_step` 1.0.0 opens a box, records checkpoints and closes it with the clock of its run, does the four obligations of the opening (kick-off, lineage status, concerns, readiness of the tasks) and refuses a close after work before the box, an edited published statement, a renamed identifier, an artifact older than the box or a close with no checkpoint; `backlog_box_step_probe` 1.0.0 plants each fault (13 expectations) and is wired into the gate (1.72.0).
+- **Lineage 21:** closed as failed on the Owner's decision of 2026-10-29, with an as-is assessment, a closure report and a post-mortem of fourteen findings (the missed steps of the chain and of the opening of the box). Its nine stories, objectives and findings pass to a successor lineage. Data file 1.87.0.
+
+**Unplanned work:** the step tool, its probe and the profile revision were released outside any box of the lineage, as the closure's remedy; three box openings made while the tool was finished were discarded uncommitted (finding: ToolBeforeBox).
+
 ## v1.455.0 — 2026-10-29 (MINOR: Lineage 20 closed and archived; Lineage 21 opened; the discipline cut to ceremony and principles)
 
 - **Discipline:** `LINEAGE_OPERATING_DISCIPLINE` v140.0.0 is 2.8 KB (was 23.6 KB, and 450 KB before v139). It holds the four ceremony steps and ten principles; the boundaries and operating rules it carried are already rulings in the register (G1 to G18 and later) and their narratives stay in the narratives file. The size ceiling in the discipline check is 8 KB. The 219 KB discipline of version 71 is removed from the folder.

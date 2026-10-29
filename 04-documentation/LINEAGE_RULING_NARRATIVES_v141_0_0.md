@@ -1,4 +1,4 @@
-# Lineage Ruling Narratives — through G176 (history; not required reading)
+# Lineage Ruling Narratives — through G177 (history; not required reading)
 
 The narratives of rulings G1 to G175 were the body of `LINEAGE_OPERATING_DISCIPLINE_v138_0_0.md` until release 1.454.0, which moved them here unchanged. The operating discipline is now `LINEAGE_OPERATING_DISCIPLINE_v139_0_0.md`.
 
@@ -4235,3 +4235,16 @@ Related: G89, G91, G112, G155, G163, G166, G167, G168, G169, G170, G171, G172, G
 
 **What is not claimed.** (1) The ceiling is a number chosen here, not derived. (2) The OE Operating Discipline (62 KB) is the OEE's and is not changed by this. (3) The shape named for this ruling, `GovernanceRulingShape`, enforces that every ruling lives in the register with its enforcers, which is what lets the discipline stop carrying them. The size ceiling is held by a check script, not by a shape; the register does not model the discipline file. (4) The standing instruction of each session still says to read the discipline in full; with this change that is now possible.
 Related: G164.
+
+## G177 — A lineage that plans work adopts a digest table that does not count its tasks
+
+*(Found by the first application of the adaptive profile, Lineage 21, 2026-10-29: its first box could not be committed. The Owner's decision was to close that lineage as failed and open a successor.)*
+
+**Q1 — the finding, by measurement.** The adaptive profile adopted no digest table, so its lineages read table v1. Table v1 counts an `ExecutionTask` as Backlog-stage content, and a `PlanningEvent` must produce a task (`PlanningEventShape`), so the first planning event after the Backlog stage closed changed the stage's digest: `backlog_pipeline_verify` read the Backlog digest as not reproducing while the validator read the register as conformant. Adopting a table later is refused by the lineage-order check (an adoption after the Mission output, for a lineage that records its adoption at its opening), and a restart needs a bypass finding. The lineage could therefore not plan anything.
+
+**Q2 — what was ruled and built.** Profile revision 8 adds `RS_DigestTable_v5` to `Profile_Adaptive`. `LineagePlansUnderDigestTableShape` refuses, at validation, a lineage that recorded its adoption at its opening, has an execution task, and adopts neither v4 nor v5; it is proved by the negative-fixture case `LDT_NoTable`. `backlog_open_lineage_probe` v1.1.0 shows a lineage opened with the revised adaptive block planning a task after its Backlog stage without moving the digest, and the same lineage opened without a table failing.
+
+**Q3 — what the record shows.** The standard and agentic profiles carry the same gap and are left as they are (the Owner's rule: existing profiles stay as they are); a lineage opened under them that plans after its Backlog stage meets the same fault, and the shape now says so at validation instead of at the gate. The fault was found at the first box close, about two hours into the lineage, after five stage releases.
+
+**What is not claimed.** (1) The shape applies to lineages that record their adoption at their opening; a lineage that records no adoption reads the register's table and is not covered. (2) Nothing here migrates a lineage already opened without a table. (3) Whether the standard and agentic profiles should include a table is the Owner's decision and is not made here.
+Related: G89, G91, G117, G156.

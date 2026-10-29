@@ -4372,3 +4372,8 @@ ex:EARLY_BOX a backlog:Iteration ; backlog:belongsToLineage ex:REV_LIN ; backlog
 ex:EARLY_ACT a backlog:ControlActivity ; backlog:hasWorkKind backlog:WorkKind_Control ; backlog:plannedInBox ex:EARLY_BOX .
 ex:CTLRUN_EARLY a backlog:ControlRun ; backlog:runOfActivity ex:EARLY_ACT ; backlog:ranAt "2026-10-28T09:00:00Z"^^xsd:dateTime ; backlog:hasRunResult "x" .
 ex:REV_EARLY a backlog:SprintReviewCeremony ; backlog:ceremonyFor ex:EARLY_BOX ; backlog:heldAt "2026-10-28T08:00:00Z"^^xsd:dateTime .
+
+# v1.57.0 (G177, Lineage 21): a lineage that records its adoption at its opening, plans a task, and adopts no digest table.
+# LDT_NoTable -> LineagePlansUnderDigestTableShape fires.
+ex:LDT_NoTable a backlog:Lineage ; backlog:adoptionRecordedAtOpen true ; backlog:adoptsRuleSet backlog:RS_PlanBeforeStart .
+ex:LDT_NoTable_Task a backlog:ExecutionTask ; backlog:belongsToLineage ex:LDT_NoTable .
