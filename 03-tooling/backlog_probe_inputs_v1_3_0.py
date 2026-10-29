@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_probe_inputs v1.2.0 -- what a probe really reads, measured, and a stamp key built on that (G128).
+"""backlog_probe_inputs v1.3.0 -- what a probe really reads, measured, and a stamp key built on that (G128).
 
 A proof stamp (G126) skips a step when the SHA of the files the step DECLARES equals the one recorded at its last pass. A probe declares its inputs by hand through
 its own `--deps`, and the declaration is a hope: it can name more than the probe reads (the probe then reruns for a change it never sees) or fewer (it is then skipped
@@ -18,6 +18,8 @@ directory is not derivable). Otherwise the caller keeps the declared inputs, as 
 
 The key is the SHA over the sorted lines `F:path:sha256`, `D:path:sha256(names)`, `A:path:absent|PRESENT`, `Y:family:sha256(names)`. A record whose probe now reads
 something else is not trusted: the key is built from the OLD list, so a changed input changes the key, the probe reruns, and the rerun writes a new record.
+
+v1.3.0: a record names the register file of the release it was measured in, and the file is renamed with every release; the reference key now reads the NEWEST register file, not the recorded path (the recorded path was missing one release later, so every audited probe re-ran: measured in release 1.456.0).
 
 v1.2.0 (gate cost): a probe that carries the line `# register-use: reference-only` reads the register file only through the validator, which keeps the controlled individuals and drops every record of the framework's own register; its key therefore uses the digest of that reference part (and not the file's bytes or its versioned name), so a release that only adds records no longer reruns it. Each such probe was audited: it reads no record of the register.
 
@@ -214,7 +216,9 @@ def key_of(rec, pkg):
         p = os.path.join(pkg, f)
         if ref and ABOX_RE.match(f):
             try:
-                out.append("F:01-ontologies/backlog_abox:REFERENCE:%s" % _reference_digest(p))
+                d0 = os.path.join(pkg, "01-ontologies")
+                cur = sorted((x for x in os.listdir(d0) if re.match(r"^backlog_abox_v\d+_\d+_\d+\.ttl$", x)), key=lambda x: [int(n) for n in re.findall(r"_v(\d+)_(\d+)_(\d+)", x)[0]])[-1]
+                out.append("F:01-ontologies/backlog_abox:REFERENCE:%s" % _reference_digest(os.path.join(d0, cur)))
                 continue
             except Exception:
                 pass

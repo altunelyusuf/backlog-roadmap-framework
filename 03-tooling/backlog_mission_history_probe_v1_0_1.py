@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# register-use: reference-only
+# (audited: the probe reads no record of the framework register; the validator keeps only the controlled individuals)
 """backlog_mission_history_probe v1.0.0 -- re-runnable proof of the mission-history and closure-anchor rules (shapes v1.170.0, G121).
 
   A mission is inside a lineage when a lineage pursues it or pursues a mission that replaced it, however long the chain; a mission outside both is refused.

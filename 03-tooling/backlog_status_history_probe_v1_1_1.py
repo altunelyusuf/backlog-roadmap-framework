@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# register-use: reference-only
+# (audited: the probe reads no record of the framework register; the validator keeps only the controlled individuals)
 """backlog_status_history_probe v1.1.0 -- re-runnable proof of the status-history obligation (shapes v1.163.0, G113).
 
 Each scenario is a tiny graph judged by the CURRENT validator; the probe reads only the named shape's own message.

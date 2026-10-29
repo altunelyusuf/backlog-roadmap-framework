@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# register-use: reference-only
+# (audited: the probe reads no record of the framework register; the validator keeps only the controlled individuals)
 """backlog_state_evidence_probe v1.0.0 -- re-runnable proof of EvidencedWorkStillUnstartedShape (shapes v1.159.0, G107).
 
 Each scenario is a tiny register judged by the CURRENT validator; the probe reads only this shape's own message ("carries evidence the bridge verified").

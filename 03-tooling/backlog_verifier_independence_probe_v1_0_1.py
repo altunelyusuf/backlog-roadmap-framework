@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# register-use: reference-only
+# (audited: the probe reads no record of the framework register; the validator keeps only the controlled individuals)
 """backlog_verifier_independence_probe v1.0.0 -- re-runnable proof of VerifierIndependenceShape and DoneWithoutVerifierShape (shapes v1.160.0, G109).
 
 Each scenario is a tiny register judged by the CURRENT validator; the probe reads only the two shapes' own messages.

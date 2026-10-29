@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# register-use: reference-only
+# (audited: the probe reads no record of the framework register; the validator keeps only the controlled individuals)
 """backlog_repair_reprioritises_probe v1.0.0 -- re-runnable proof of RS_RepairReprioritises (T-Box v1.145.0, shapes v1.178.0, G147).
 
   The owner's rule of 2026-10-23: a repair entering the backlog changes the priority of the items it touches. The rule binds only an

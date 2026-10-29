@@ -11266,6 +11266,13 @@ dangling live pointers; 17 scripts name the files and must be repointed.
 
 **Unplanned work:** a lineage's Scope stage precedes its work items; no backlog item exists yet to move.
 
+## v1.457.0 — 2026-10-29 (MINOR: Lineage 21, Goal stage; probe keys corrected)
+
+- **Stage 3 of 5.** One goal for the mission, one for each of the five areas and one for containment. Data file: `backlog_abox` v1.84.0.
+- **Gate cost, corrected:** the reference-only key of 1.455.0 looked for the register file under the name recorded in the probe's record, and the file is renamed every release, so in 1.456.0 29 probes ran and the gate took 1682 s. `backlog_probe_inputs` v1.3.0 reads the newest register file; its probe now uses the stale name as a real record does. Eleven more probes were audited and marked reference-only: all nineteen marked probes passed unchanged on a copy of the package whose register held two added records. The 343 s reported for 1.455.0 was a run in which most stamps happened to hold, and is withdrawn as a measure.
+
+**Unplanned work:** a lineage's Goal stage precedes its work items; the probe-key fix is the Owner's instruction of 2026-10-29 14:59 (no lineage needed for the gate cost), made as unplanned work.
+
 ## v1.455.0 — 2026-10-29 (MINOR: Lineage 20 closed and archived; Lineage 21 opened; the discipline cut to ceremony and principles)
 
 - **Discipline:** `LINEAGE_OPERATING_DISCIPLINE` v140.0.0 is 2.8 KB (was 23.6 KB, and 450 KB before v139). It holds the four ceremony steps and ten principles; the boundaries and operating rules it carried are already rulings in the register (G1 to G18 and later) and their narratives stay in the narratives file. The size ceiling in the discipline check is 8 KB. The 219 KB discipline of version 71 is removed from the folder.

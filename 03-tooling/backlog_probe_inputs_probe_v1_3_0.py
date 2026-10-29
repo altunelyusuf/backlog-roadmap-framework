@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_probe_inputs_probe v1.2.0 -- the measured inputs of a probe are measured, and a stamp built on them moves exactly when they do (G128).
+"""backlog_probe_inputs_probe v1.3.0 -- the measured inputs of a probe are measured, and a stamp built on them moves exactly when they do (G128).
 
 Builds a throwaway package, runs small probes in it under backlog_probe_inputs, and shows: what is read is listed; a changed input changes the key and an unread
 file does not; a file added to a listed directory, an absent file appearing, and a new version of a tool the probe read each change it; a run that read outside the
@@ -119,7 +119,7 @@ open(os.path.join(rp, "03-tooling", "plain_probe_v1_0_0.py"), "w").write("#!/usr
 mk = lambda n: {"probe": n, "script_dir": "03-tooling", "files": ["01-ontologies/backlog_abox_v1_1_0.ttl"], "present_dirs": [], "dirs": ["01-ontologies"], "absent": [], "family": []}
 k0m, k0p = pin.key_of(mk("marked_probe"), rp), pin.key_of(mk("plain_probe"), rp)
 os.rename(os.path.join(rp, "01-ontologies", "backlog_abox_v1_1_0.ttl"), os.path.join(rp, "01-ontologies", "backlog_abox_v1_2_0.ttl"))
-r2 = lambda n: dict(mk(n), files=["01-ontologies/backlog_abox_v1_2_0.ttl"])
+r2 = lambda n: mk(n)   # the record still names the OLD file name, as a real record does one release later
 open(os.path.join(rp, "01-ontologies", "backlog_abox_v1_2_0.ttl"), "a").write("<%sS2> a <http://example.org/backlog#Story> .\n" % FWN)
 expect("reference-only: a new record in the register and a new versioned file name leave the key unchanged", pin.key_of(r2("marked_probe"), rp) == k0m)
 expect("an unmarked probe is keyed on the bytes: the same two changes move its key", pin.key_of(r2("plain_probe"), rp) != k0p)

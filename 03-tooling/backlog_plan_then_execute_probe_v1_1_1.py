@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# register-use: reference-only
+# (audited: the probe reads no record of the framework register; the validator keeps only the controlled individuals)
 """backlog_plan_then_execute_probe v1.1.0 -- checks against finding a defect after the fact (T-Box v1.138.0, shapes v1.177.0, G136, G137).
 
 Each check fires on a planted fault and is silent on its corrected twin:

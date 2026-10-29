@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# register-use: reference-only
+# (audited: the probe reads no record of the framework register; the validator keeps only the controlled individuals)
 """backlog_standing_items_probe v1.0.0 -- re-runnable proof of the recurring-activity and estimated-start rules (T-Box v1.134.0, shapes v1.169.0, G120).
 
   A recurring activity needs an interval and has no state; an estimated start names its basis; an occurrence cannot start after its activity ended; a live

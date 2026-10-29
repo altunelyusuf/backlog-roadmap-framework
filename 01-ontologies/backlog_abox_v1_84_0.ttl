@@ -22,9 +22,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (ABox: controlled individuals, reference data and the live register)"@en ;
-    owl:versionIRI <http://example.org/backlog/abox/1.83.0> ;
-    owl:versionInfo "1.83.0" ;
-    owl:priorVersion <http://example.org/backlog/abox/1.82.0> , <http://example.org/backlog/abox/1.81.0> , <http://example.org/backlog/abox/1.62.0> , <http://example.org/backlog/abox/1.61.0> , <http://example.org/backlog/abox/1.60.0> , <http://example.org/backlog/abox/1.59.0> , <http://example.org/backlog/abox/1.58.0> , <http://example.org/backlog/abox/1.57.0> , <http://example.org/backlog/abox/1.53.0> , <http://example.org/backlog/abox/1.52.0> , <http://example.org/backlog/abox/1.51.0> , <http://example.org/backlog/abox/1.50.0> , <http://example.org/backlog/abox/1.49.0> , <http://example.org/backlog/abox/1.48.0> , <http://example.org/backlog/abox/1.47.0> , <http://example.org/backlog/abox/1.46.0> , <http://example.org/backlog/abox/1.45.0> , <http://example.org/backlog/abox/1.40.0> , <http://example.org/backlog/abox/1.39.0> , <http://example.org/backlog/abox/1.38.0> , <http://example.org/backlog/abox/1.37.0> , <http://example.org/backlog/abox/1.36.0> , <http://example.org/backlog/abox/1.35.0> ;
+    owl:versionIRI <http://example.org/backlog/abox/1.84.0> ;
+    owl:versionInfo "1.84.0" ;
+    owl:priorVersion <http://example.org/backlog/abox/1.83.0> , <http://example.org/backlog/abox/1.82.0> , <http://example.org/backlog/abox/1.81.0> , <http://example.org/backlog/abox/1.62.0> , <http://example.org/backlog/abox/1.61.0> , <http://example.org/backlog/abox/1.60.0> , <http://example.org/backlog/abox/1.59.0> , <http://example.org/backlog/abox/1.58.0> , <http://example.org/backlog/abox/1.57.0> , <http://example.org/backlog/abox/1.53.0> , <http://example.org/backlog/abox/1.52.0> , <http://example.org/backlog/abox/1.51.0> , <http://example.org/backlog/abox/1.50.0> , <http://example.org/backlog/abox/1.49.0> , <http://example.org/backlog/abox/1.48.0> , <http://example.org/backlog/abox/1.47.0> , <http://example.org/backlog/abox/1.46.0> , <http://example.org/backlog/abox/1.45.0> , <http://example.org/backlog/abox/1.40.0> , <http://example.org/backlog/abox/1.39.0> , <http://example.org/backlog/abox/1.38.0> , <http://example.org/backlog/abox/1.37.0> , <http://example.org/backlog/abox/1.36.0> , <http://example.org/backlog/abox/1.35.0> ;
     owl:priorVersion <http://example.org/backlog/abox/1.34.0> , <http://example.org/backlog/abox/1.33.0> , <http://example.org/backlog/abox/1.32.0> , <http://example.org/backlog/abox/1.31.0> , <http://example.org/backlog/abox/1.30.0> , <http://example.org/backlog/abox/1.29.0> , <http://example.org/backlog/abox/1.28.0> , <http://example.org/backlog/abox/1.27.0> , <http://example.org/backlog/abox/1.26.0> , <http://example.org/backlog/abox/1.25.0> , <http://example.org/backlog/abox/1.24.0> , <http://example.org/backlog/abox/1.23.0> , <http://example.org/backlog/abox/1.22.0> , <http://example.org/backlog/abox/1.21.0> , <http://example.org/backlog/abox/1.20.0> , <http://example.org/backlog/abox/1.19.0> , <http://example.org/backlog/abox/1.17.0> , <http://example.org/backlog/abox/1.16.0> , <http://example.org/backlog/abox/1.15.0> , <http://example.org/backlog/abox/1.14.0> , <http://example.org/backlog/abox/1.13.0> , <http://example.org/backlog/abox/1.12.0> , <http://example.org/backlog/abox/1.11.0> , <http://example.org/backlog/abox/1.10.0> , <http://example.org/backlog/abox/1.9.0> , <http://example.org/backlog/abox/1.8.0> , <http://example.org/backlog-abox/1.7.0> , <http://example.org/backlog-abox/1.6.0> ,
         <http://example.org/backlog-abox/1.2.1> ,
                      <http://example.org/backlog-abox/1.2.0> ,
@@ -9382,7 +9382,7 @@ fw:L_AdaptiveProof a backlog:Lineage ; rdfs:label "Lineage 21: the adaptive prof
     backlog:lineageOrdinal 21 ;
     backlog:lineageArchived false ;
     backlog:lineageForMission fw:Mission_AdaptiveProof ;
-    backlog:hasLineageStatus backlog:LS_Scoped ;
+    backlog:hasLineageStatus backlog:LS_Goaled ;
     backlog:hasLineageDepthLevel backlog:Depth_StoryDirect ;
     backlog:hasLineageArtifactDomain backlog:Domain_Infrastructure ;
     backlog:memberOfContainer fw:Register .
@@ -9510,3 +9510,73 @@ fw:Out_Scope_AdaptiveProof a backlog:StageOutput ;
     backlog:hasStateDigest "29b7db46b1c8cfff7fc9a3fa8e3938df3e1aa3873a20fa25085d738c89516c7a" ;
     backlog:closedAtCommit "backlog-roadmap-framework-v1.456.0 (tag; witnessed by git, not asserted)" ;
     backlog:hasRationale "Scope stage of Lineage 21: seven deliverables over five areas, five exclusions, drawn from the gaps on the closure report of Lineage 20 and the faults met while closing it. Stage 2 of 5." .
+
+# ---- Lineage 21: Goal stage ----
+
+fw:Goal_AP_MissionMet a backlog:Goal ; rdfs:label "The adaptive profile is proved on this lineage's own work"@en ;
+    backlog:contributesToMission fw:Mission_AdaptiveProof ;
+    backlog:derivesFromScope fw:Scope_AdaptiveProof ;
+    backlog:hasGoalFacing backlog:Facing_Mission ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out_Goal_AdaptiveProof ;
+    backlog:belongsToLineage fw:L_AdaptiveProof ;
+    backlog:decidedBy backlog:Owner .
+fw:Goal_AP_Archive a backlog:Goal ; rdfs:label "An archived lineage is judged as the live gate judges it and leaves nothing behind"@en ;
+    backlog:contributesToMission fw:Mission_AdaptiveProof ;
+    backlog:derivesFromScope fw:Scope_AdaptiveProof ;
+    backlog:hasGoalFacing backlog:Facing_Scope ;
+    backlog:goalCoversArea fw:Area_AP_Archive ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out_Goal_AdaptiveProof ;
+    backlog:belongsToLineage fw:L_AdaptiveProof ;
+    backlog:decidedBy backlog:Owner .
+fw:Goal_AP_Step a backlog:Goal ; rdfs:label "A box is recorded in order by a tool that refuses the faults made by hand"@en ;
+    backlog:contributesToMission fw:Mission_AdaptiveProof ;
+    backlog:derivesFromScope fw:Scope_AdaptiveProof ;
+    backlog:hasGoalFacing backlog:Facing_Scope ;
+    backlog:goalCoversArea fw:Area_AP_Step ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out_Goal_AdaptiveProof ;
+    backlog:belongsToLineage fw:L_AdaptiveProof ;
+    backlog:decidedBy backlog:Owner .
+fw:Goal_AP_Profile a backlog:Goal ; rdfs:label "Every opt-in rule set has a decision for the adaptive profile"@en ;
+    backlog:contributesToMission fw:Mission_AdaptiveProof ;
+    backlog:derivesFromScope fw:Scope_AdaptiveProof ;
+    backlog:hasGoalFacing backlog:Facing_Scope ;
+    backlog:goalCoversArea fw:Area_AP_Profile ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out_Goal_AdaptiveProof ;
+    backlog:belongsToLineage fw:L_AdaptiveProof ;
+    backlog:decidedBy backlog:Owner .
+fw:Goal_AP_Gate a backlog:Goal ; rdfs:label "A release that only adds records does not pay for what a record cannot change"@en ;
+    backlog:contributesToMission fw:Mission_AdaptiveProof ;
+    backlog:derivesFromScope fw:Scope_AdaptiveProof ;
+    backlog:hasGoalFacing backlog:Facing_Scope ;
+    backlog:goalCoversArea fw:Area_AP_Gate ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out_Goal_AdaptiveProof ;
+    backlog:belongsToLineage fw:L_AdaptiveProof ;
+    backlog:decidedBy backlog:Owner .
+fw:Goal_AP_Proof a backlog:Goal ; rdfs:label "The ceremony rules judge every box, and the first run is examined before it closes"@en ;
+    backlog:contributesToMission fw:Mission_AdaptiveProof ;
+    backlog:derivesFromScope fw:Scope_AdaptiveProof ;
+    backlog:hasGoalFacing backlog:Facing_Scope ;
+    backlog:goalCoversArea fw:Area_AP_Proof ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out_Goal_AdaptiveProof ;
+    backlog:belongsToLineage fw:L_AdaptiveProof ;
+    backlog:decidedBy backlog:Owner .
+fw:Goal_AP_Contained a backlog:Goal ; rdfs:label "No work was done outside what this scope named, and the standard and agentic profiles are unchanged"@en ;
+    backlog:contributesToMission fw:Mission_AdaptiveProof ;
+    backlog:derivesFromScope fw:Scope_AdaptiveProof ;
+    backlog:hasGoalFacing backlog:Facing_Containment ;
+    backlog:hasIntentOrigin backlog:IOrigin_Derived ;
+    backlog:producedByStage fw:Out_Goal_AdaptiveProof ;
+    backlog:belongsToLineage fw:L_AdaptiveProof ;
+    backlog:decidedBy backlog:Owner .
+fw:Out_Goal_AdaptiveProof a backlog:StageOutput ;
+    backlog:outputOfStage backlog:Stage_Goal ; backlog:belongsToLineage fw:L_AdaptiveProof ;
+    backlog:consumesOutput fw:Out_Scope_AdaptiveProof ;
+    backlog:hasStateDigest "9d57ede2dbf1952f262ff7d6cb12c3022e6d91d782ce3ac2897cd07b4a1adbbc" ;
+    backlog:closedAtCommit "backlog-roadmap-framework-v1.457.0 (tag; witnessed by git, not asserted)" ;
+    backlog:hasRationale "Goal stage of Lineage 21: one goal for the mission, one for each of the five areas and one for containment. Stage 3 of 5." .

@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# register-use: reference-only
+# (audited: the probe reads no record of the framework register; the validator keeps only the controlled individuals)
 """backlog_recording_integrity_probe v1.0.0 -- re-runnable proof of the four routes G115 closes (shapes v1.165.0).
 
 Each scenario is a tiny graph judged by the CURRENT validator; the probe reads only the named shape's own message.

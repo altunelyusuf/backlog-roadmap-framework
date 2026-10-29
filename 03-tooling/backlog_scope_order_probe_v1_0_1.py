@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# register-use: reference-only
+# (audited: the probe reads no record of the framework register; the validator keeps only the controlled individuals)
 """backlog_scope_order_probe v1.0.0 -- re-runnable proof that no shape judges the ORDER of two stages from the text of two commit names (G114).
 
 A scope output closed at commit 1111111 and a backlog output closed at 2222222, in the correct order (Scope first) and belonging to no common lineage, with two scope

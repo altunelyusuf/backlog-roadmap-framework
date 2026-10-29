@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# register-use: reference-only
+# (audited: the probe reads no record of the framework register; the validator keeps only the controlled individuals)
 """backlog_lineage_concurrency_probe v1.0.0 -- re-runnable proof of UnconnectedActiveLineagesShape (shapes v1.158.0, G104).
 
 Each scenario is a tiny register written to a scratch folder and judged by the CURRENT validator (highest version on disk);
