@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v1.464.0 — 2026-10-30 (MINOR: Lineage 22, Scope stage (stage release))
+
+Scope of Lineage 22: seven deliverables over five areas and five exclusions, drawn from the gaps on the closure report of Lineage 21; a domain entity and a register-level blueprint. Records only; stage 2 of 5; the first stage release under G178.
+
+**Unplanned work:** none beyond the Scope stage of the lineage.
+
 ## v1.463.0 — 2026-10-30 (MINOR: stage releases and the receipt fix; G178)
 
 Release tool 1.7.0 reads the publisher's own default repository for the gate receipt (1.6.0 read another one, so 1.462.0 ran the gate twice), and adds release --stage: a chain-stage release that changes records alone runs the light gate (gate 1.74.0, 144 s against about 630 s) and records its kind in LIGHT_RELEASES.txt; at most four stage releases follow one full release. G178, discipline and narratives v142, and the speed probe 1.1.0 with 24 expectations.
