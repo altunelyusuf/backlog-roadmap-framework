@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v1.472.0 — 2026-10-30 (MINOR: Lineage 23, Scope stage (records only))
+
+Scope stage of Lineage 23: three deliverables over three areas (status, step tool, review), five exclusions, drawn from the gaps on the closure report of Lineage 22. Stage 2 of 5. Records only.
+
+**Unplanned work:** none.
+
 ## v1.471.0 — 2026-10-30 (MINOR: Lineage 23, Mission stage -- the remaining faults of the adaptive profile (records only))
 
 Lineage 23 is opened under the adaptive profile at revision 9 with its Mission, from the three gaps that the closure report of Lineage 22 records as not repaired: a lineage status that lags its chain is not refused; a box cannot be opened in a records-only release and a note may name a modelled thing by identifier; a post-mortem was judged only by its writer. Stage 1 of 5, one release each. Records only.
