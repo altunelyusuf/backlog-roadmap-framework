@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v1.471.0 — 2026-10-30 (MINOR: Lineage 23, Mission stage -- the remaining faults of the adaptive profile (records only))
+
+Lineage 23 is opened under the adaptive profile at revision 9 with its Mission, from the three gaps that the closure report of Lineage 22 records as not repaired: a lineage status that lags its chain is not refused; a box cannot be opened in a records-only release and a note may name a modelled thing by identifier; a post-mortem was judged only by its writer. Stage 1 of 5, one release each. Records only.
+
+**Unplanned work:** none.
+
 ## v1.470.0 — 2026-10-30 (MINOR: Lineage 22, box 3 and the closure -- the boxes judged, the post-mortem written, the mission achieved)
 
 Box 3 of Lineage 22 is recorded with the step tool: backlog_boxes_judged_probe judges every closed box of the lineage as the tool records a box (start, end, duration; planning ceremony and events; a checkpoint inside the box; a review after the last checkpoint closing the box and its Done stories; a retrospective whose findings have a cause and a remedy; a Done deployment unit), names six planted faults, and requires the validator to find no violation. The post-mortem of the first application of the adaptive profile is written as the ten retrospective findings of the box, before the closure; three are marked not repaired and handed on. The closure report of the lineage reports on its nine objectives, all at target, and states what is not claimed; the mission is Achieved with its rationale and the lineage status moves to Achieved. Gate 1.77.0 runs the new probe. Records and one probe; the release tool, the validator and the shapes are unchanged.
