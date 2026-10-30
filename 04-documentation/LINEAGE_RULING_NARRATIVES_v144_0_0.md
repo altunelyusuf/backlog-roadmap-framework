@@ -4270,3 +4270,14 @@ Related: G99, G152, G177.
 
 **What is not claimed.** (1) The measurement is on one register, the one of Lineage 22; another lineage may add other violations. (2) Nothing here makes the adaptive profile the default; that waits for the Owner's confirmation after a live proof.
 Related: G166, G177, G178.
+
+## G180 — A lineage's status that is behind its chain is refused
+
+**Q1 — the finding.** In Lineage 22 the status of the lineage stayed at Opened while its chain had passed Scope, Goal, Objective and Backlog. The shape refused a status ahead of the chain but not one behind it, so nothing signalled the lag (a recorded gap, taken up by Lineage 23).
+
+**Q2 — what was ruled and built.** The status shape now refuses a lineage that states Opened, Scoped, Goaled or Objectived while an active output of a later stage exists. A fixture case (a Scoped lineage with an active Goal output) fires it, and a probe shows it refused, accepted at the matching status, accepted when the later output is retracted, and not applied to lineages already in progress. The box step tool (1.3.0) also writes the deployment unit when it opens a box and completes it at the close, and refuses a checkpoint note that names a modelled thing by identifier.
+
+**Q3 — what the record shows.** The two tool measures are enforced by the tool and its probe, not by a shape: the register cannot tell a note's words from a link. The archive-integrity check already refuses a box with no unit at the close.
+
+**What is not claimed.** The shape does not refuse a status that lags once the chain is complete (InProgress and later are never behind a stage output).
+Related: G162, G178, G179.

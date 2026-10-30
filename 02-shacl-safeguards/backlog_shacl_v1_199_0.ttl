@@ -9,8 +9,8 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog/shacl/1.198.0> ;
-    owl:versionInfo "1.198.0" ;
+    owl:versionIRI <http://example.org/backlog/shacl/1.199.0> ;
+    owl:versionInfo "1.199.0" ;
     owl:priorVersion <http://example.org/backlog-shapes/1.197.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.184.0> , <http://example.org/backlog-shapes/1.176.0> , <http://example.org/backlog-shapes/1.175.0> , <http://example.org/backlog-shapes/1.174.0> , <http://example.org/backlog-shapes/1.173.0> , <http://example.org/backlog-shapes/1.172.0> , <http://example.org/backlog-shapes/1.171.0> , <http://example.org/backlog-shapes/1.170.0> , <http://example.org/backlog-shapes/1.169.0> , <http://example.org/backlog-shapes/1.168.0> , <http://example.org/backlog-shapes/1.167.0> , <http://example.org/backlog-shapes/1.166.0> , <http://example.org/backlog-shapes/1.165.0> , <http://example.org/backlog-shapes/1.164.0> , <http://example.org/backlog-shapes/1.159.0> , <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.154.0> , <http://example.org/backlog-shapes/1.153.0> , <http://example.org/backlog-shapes/1.152.0> , <http://example.org/backlog-shapes/1.151.0> , <http://example.org/backlog-shapes/1.150.0> , <http://example.org/backlog-shapes/1.149.0> , <http://example.org/backlog-shapes/1.148.0> , <http://example.org/backlog-shapes/1.147.0> , <http://example.org/backlog-shapes/1.146.0> ;
@@ -6600,6 +6600,21 @@ backlog:LineageStatusShape a sh:NodeShape ;
             { BIND(backlog:LS_Backlogged AS ?want) BIND(backlog:Stage_Backlog AS ?st) }
             FILTER (?ls = ?want)
             FILTER NOT EXISTS { ?o a backlog:StageOutput ; backlog:outputOfStage ?st ; backlog:belongsToLineage $this . FILTER NOT EXISTS { ?o backlog:outputRetracted true } }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this lineage states a status that is behind its chain: an active output of a later stage exists than the stage the status names. A status is a pointer to the chain and moves with it." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            { ?reg backlog:adoptsRuleSet backlog:RS_LineageStatus . FILTER NOT EXISTS { ?reg a backlog:Lineage } } UNION { $this backlog:adoptsRuleSet backlog:RS_LineageStatus }
+            $this backlog:hasLineageStatus ?ls .
+            { BIND(backlog:LS_Opened AS ?cur) BIND(0 AS ?rank) } UNION { BIND(backlog:LS_Scoped AS ?cur) BIND(1 AS ?rank) } UNION
+            { BIND(backlog:LS_Goaled AS ?cur) BIND(2 AS ?rank) } UNION { BIND(backlog:LS_Objectived AS ?cur) BIND(3 AS ?rank) }
+            FILTER (?ls = ?cur)
+            ?o a backlog:StageOutput ; backlog:belongsToLineage $this ; backlog:outputOfStage ?st .
+            FILTER NOT EXISTS { ?o backlog:outputRetracted true }
+            { BIND(backlog:Stage_Scope AS ?st) BIND(1 AS ?orank) } UNION { BIND(backlog:Stage_Goal AS ?st) BIND(2 AS ?orank) } UNION
+            { BIND(backlog:Stage_Objective AS ?st) BIND(3 AS ?orank) } UNION { BIND(backlog:Stage_Backlog AS ?st) BIND(4 AS ?orank) }
+            FILTER (?orank > ?rank)
         }""" ] ;
     sh:sparql [ a sh:SPARQLConstraint ;
         sh:message "L1: this lineage claims LS_Achieved but its mission is not Out_Achieved, or no closure report closes it. (v1.132.0: exempt when a real LineageSuccession names this lineage as its own succeedsLineage -- its own scope is honestly done even while the shared Mission continues under its successor; the successor, not this lineage, is where the Mission's remaining work is tracked.)" ;

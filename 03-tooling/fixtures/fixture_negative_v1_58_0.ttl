@@ -3169,6 +3169,9 @@ lineagestatusn:O_G a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_G
 lineagestatusn:L_FalseAchieved a backlog:Lineage ; backlog:lineageOrdinal 3 ; backlog:lineageArchived false ; backlog:lineageForMission lineagestatusn:M2 ; backlog:hasLineageStatus backlog:LS_Achieved .
 lineagestatusn:L_ArchNoFile a backlog:Lineage ; backlog:lineageOrdinal 4 ; backlog:lineageArchived false ; backlog:lineageForMission lineagestatusn:M1 ; backlog:hasLineageStatus backlog:LS_Archived .
 lineagestatusn:L_Lagging a backlog:Lineage ; backlog:lineageOrdinal 5 ; backlog:lineageArchived false ; backlog:lineageForMission lineagestatusn:M3 ; backlog:hasLineageStatus backlog:LS_InProgress .
+# L_Behind       claims LS_Scoped while an active Goal output exists (the status lags its chain).
+lineagestatusn:L_Behind a backlog:Lineage ; backlog:lineageOrdinal 9 ; backlog:lineageArchived false ; backlog:lineageForMission lineagestatusn:M1 ; backlog:hasLineageStatus backlog:LS_Scoped .
+lineagestatusn:O_BG a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Goal ; backlog:belongsToLineage lineagestatusn:L_Behind ; backlog:closedAtCommit "c2" ; backlog:hasStateDigest "y" .
 lineagestatusn:L_Found a backlog:Lineage ; backlog:lineageOrdinal 6 ; backlog:lineageArchived false ; backlog:lineageForMission lineagestatusn:M4 ; backlog:hasLineageStatus backlog:LS_Achieved .
 #  LineageStatusSingleShape   L_TwoStatus carries two statuses (the pointer appended, not moved).
 #  RetiredNameCollisionShape  L_Reused has the same IRI as a retired lineage an entry records.

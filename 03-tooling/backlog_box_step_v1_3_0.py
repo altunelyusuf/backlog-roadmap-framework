@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_box_step v1.1.0 -- records the work of one box in order, with the clock of its run, and refuses the faults made by hand.
+"""backlog_box_step v1.3.0 -- records the work of one box in order, with the clock of its run, and refuses the faults made by hand.
 
 Lineage 21, deliverable D3. The faults came from boxes 4 to 9 of Lineage 20, each written down as a finding there:
   * a close composed in one pass          -> `close` refuses a box with no checkpoint recorded between its start and the close
@@ -196,7 +196,7 @@ def cmd_open(reg, root, n, title, goal, keys, capacity, allow=()):
                    "fw:DoD_%s_1 a backlog:DoDCriterion ; rdfs:label \"Evidence attests the acceptance criterion\"@en ;\n    rdfs:comment \"A test or a measured run of a tool attests the acceptance criterion, and the artifact it names exists.\" ;\n    backlog:hasCheckQuery \"ASK { ?e a backlog:TestEvidence . FILTER NOT EXISTS { ?e backlog:attestsCriterion ?c } }\" ; backlog:hasExpectedResult \"false\" ; backlog:hasCriterionStatus backlog:Holds .\n"
                    "fw:DoD_%s_2 a backlog:DoDCriterion ; rdfs:label \"The register validates\"@en ;\n    rdfs:comment \"The register validates with no violation after the box is closed.\" ;\n    backlog:hasCheckQuery \"backlog_validate: 0 sh:Violation.\" ; backlog:hasExpectedResult \"0 violations\" ; backlog:hasCriterionStatus backlog:Holds .\n" % (P, P, P, P, P))
     # the status being entered owes a kick-off recorded before the first start (RS_PlanBeforeStart) and the status itself
-    if not re.search(r"a backlog:KickOff\b", reg.s):
+    if not re.search(r"backlog:kicksOffLineage\s+(?:fw:|<http://example.org/backlog-framework-register#)%s\b" % re.escape(L[3:]), reg.s):  # this lineage's own kick-off, not any lineage's
         reg.save()
         steps = sorted(glob.glob(os.path.join(os.path.dirname(os.path.abspath(__file__)), "backlog_lineage_steps_v*.py")), key=lambda x: [int(y) for y in re.findall(r"_v(\d+)_(\d+)_(\d+)", x)[0]])[-1]
         r = subprocess.run([sys.executable, steps, "plan", reg.path, "--lineage", FW + reg.L[3:], "--container", FW + "Register", "--by", "Builder"], capture_output=True, text=True)
@@ -222,6 +222,7 @@ def cmd_open(reg, root, n, title, goal, keys, capacity, allow=()):
             recs.append("fw:K_%s_%d_%s_%s a backlog:ReadinessCriterion ; rdfs:label \"%s\"@en ; backlog:criterionMet true ." % (P, n, k, suf, lab))
     tp = tick()
     recs.append("fw:%s a backlog:DeploymentPlan ; backlog:hasWorkKind backlog:WorkKind_Planning ; backlog:deploymentPlanForBox fw:%s ; backlog:plansDeploymentUnit fw:%s ; backlog:deploymentPlannedAt %s ." % (ids["dplan"], ids["it"], ids["rel"], dt(tp)))
+    recs.append("fw:%s a backlog:DeploymentUnit ;\n    backlog:hasIdentifier \"%s-REL-%d\" ; backlog:hasTitle \"%s\" ;\n    backlog:hasState backlog:InProgress ;\n    backlog:deploysFrom fw:%s ; backlog:belongsToLineage %s ." % (ids["rel"], P, n, esc(title), ids["it"], L))
     t0 = tick()
     recs.append("fw:%s a backlog:Iteration ; backlog:hasIdentifier \"%s-BOX-%d\" ; backlog:hasTitle \"%s\" ;\n    backlog:hasSprintGoal \"%s\" ;\n"
                 "    backlog:hasState backlog:InProgress ; backlog:iterationStart %s ;\n    backlog:hasCapacity %s ; backlog:belongsToLineage %s%s ." % (ids["it"], P, n, esc(title), esc(goal), dt(t0), float(capacity), L, (" ;\n    rdfs:comment \"Disclosed at the opening: these governed files already differed from the published tree, so work on them began before the box was open: %s.\"@en" % ", ".join(allow)) if allow else ""))
@@ -252,6 +253,9 @@ def cmd_act(reg, n, key, note):
     ids, t0, st = read_box(reg, n)
     if st != "InProgress":
         raise SystemExit("REFUSED: box %d is not in progress" % n)
+    named = re.findall(r"\bG\d{2,4}\b|\b(?:Ruling|RS|Pr|Profile|Out|Obj|Goal|Scope|ST|Gap|Blueprint|Rel|Ckp|Find|Mission|Metric|Plan|Ev)_\w+|\b(?:backlog|fw):\w+", note)
+    if named:
+        raise SystemExit("REFUSED: the note names a modelled thing by identifier (%s). A connection is a link, not text: say it in words and record the link in the register." % ", ".join(sorted(set(named))))
     count = len(re.findall(r"^fw:Ckp_%s_%d_\d+ " % (reg.P, n), reg.s, re.M)) + 1
     t = tick()
     reg.append("fw:Ckp_%s_%d_%d a backlog:DailyCheckpoint ; rdfs:comment \"%s: %s\"@en ; backlog:hasWorkKind backlog:WorkKind_Monitoring ; backlog:checkpointOfBox fw:%s ; backlog:checkpointAt %s ;\n    backlog:openItemCount 0 ; backlog:inProgressItemCount %d ; backlog:doneItemCount 0 ." % (reg.P, n, count, key, esc(note), ids["it"], dt(t), len(re.findall(r"^fw:Plan_%s_%d_\w+ a " % (reg.P, n), reg.s, re.M))))
@@ -309,7 +313,11 @@ def cmd_close(reg, root, n, spec):
     trev = tick()
     recs.append("fw:%s a backlog:SprintReviewCeremony ; backlog:hasWorkKind backlog:WorkKind_Closure ;\n    backlog:ceremonyFor fw:%s ; backlog:heldAt %s ; backlog:reviewsCeremony fw:%s ;\n    backlog:closesIteration fw:%s ; backlog:closesStory %s ." % (ids["review"], ids["it"], dt(trev), ids["plan"], ids["it"], " , ".join("fw:ST_%s_%s" % (P, k) for k in keys)))
     trel = tick()
-    recs.append("fw:%s a backlog:DeploymentUnit ;\n    backlog:hasIdentifier \"%s-REL-%d\" ; backlog:hasTitle \"%s\" ;\n    backlog:hasState backlog:Done ; backlog:hasDeploymentDate %s ;\n    backlog:deploysFrom fw:%s ; backlog:deploysItem %s ;\n    backlog:decidedBy backlog:Builder ; backlog:hasSelectionBasis backlog:Sel_Committed ; backlog:belongsToLineage %s ." % (ids["rel"], P, n, esc(spec["release_title"]), dt(trel), ids["it"], " , ".join("fw:ST_%s_%s" % (P, k) for k in keys), L))
+    unit_re = r"(^fw:%s a backlog:DeploymentUnit ;\n    backlog:hasIdentifier \"[^\"]*\" ; backlog:hasTitle \")[^\"]*(\" ;\n    backlog:hasState backlog:)InProgress ;\n    backlog:deploysFrom (fw:\w+) ; backlog:belongsToLineage (\S+) \." % ids["rel"]
+    if not re.search(unit_re, reg.s, re.M):  # a box opened by an earlier tool has no unit yet: it is written whole here
+        recs.append("fw:%s a backlog:DeploymentUnit ;\n    backlog:hasIdentifier \"%s-REL-%d\" ; backlog:hasTitle \"%s\" ;\n    backlog:hasState backlog:Done ; backlog:hasDeploymentDate %s ;\n    backlog:deploysFrom fw:%s ; backlog:deploysItem %s ;\n    backlog:decidedBy backlog:Builder ; backlog:hasSelectionBasis backlog:Sel_Committed ; backlog:belongsToLineage %s ." % (ids["rel"], P, n, esc(spec["release_title"]), dt(trel), ids["it"], " , ".join("fw:ST_%s_%s" % (P, k) for k in keys), L))
+    else:
+      reg.s = re.sub(unit_re, lambda m: m.group(1) + esc(spec["release_title"]) + m.group(2) + "Done ; backlog:hasDeploymentDate " + dt(trel) + " ;\n    backlog:deploysFrom " + m.group(3) + " ; backlog:deploysItem " + " , ".join("fw:ST_%s_%s" % (P, k) for k in keys) + " ;\n    backlog:decidedBy backlog:Builder ; backlog:hasSelectionBasis backlog:Sel_Committed ; backlog:belongsToLineage " + m.group(4) + " .", reg.s, count=1, flags=re.M)
     fks = []
     for f in spec["findings"]:
         fks.append("fw:Find_%s_%s" % (P, f["key"]))

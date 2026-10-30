@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v1.476.0 — 2026-10-30 (MINOR: Lineage 23, box 1 -- a lagging status refused, the unit made at the opening, notes that hold links)
+
+Box 1 of Lineage 23, three stories done. The status shape (1.199.0) refuses a lineage whose status is behind its chain, with a fixture case (negative fixture 1.58.0) and a probe; the box step tool (1.3.0) writes the deployment unit when it opens a box, completes it at the close, looks for the kick-off of its own lineage and refuses a note that names a modelled thing by identifier. Ruling G180; discipline and narratives v144.0.0.
+
+**Unplanned work:** The step tool took the kick-off of the previous lineage for this lineage's own, so the first opening was refused; found at the opening, repaired in the tool and recorded as a finding.
+
 ## v1.475.0 — 2026-10-30 (MINOR: Lineage 23, Backlog stage (records only, full gate))
 
 Backlog stage of Lineage 23: four stories, Story-direct, all Proposed; the lineage status moves to Backlogged. Stage 5 of 5. Records only; the fifth release of the batch runs the full gate, which gives the real figure of a release that only adds records.
