@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""backlog_lineage_order_check v1.13.0 — did the chain come before the work, or after?
+# v1.14.0 (Lineage 22, box 2, D6): the register at a commit is parsed once per commit however many adoptions ask for it (v1.13.0 parsed it again for every probe of every adoption, about 200 times); the verdict is the same.
+"""backlog_lineage_order_check v1.14.0 — did the chain come before the work, or after?
 
 THE ESCAPE THIS CATCHES. A lineage is Mission -> Scope -> Goal -> Objective -> Backlog,
 one commit per stage, and only then work items (LINEAGE_OPERATING_DISCIPLINE, ceremony
@@ -209,7 +210,8 @@ class GitWitness:
             return self.cache[key]
         files = getattr(self, "reg_files", None) or []
         hs = subprocess.run(["git", "log", "--reverse", "--format=%h", "--", self.rel], cwd=self.root, capture_output=True, text=True).stdout.split()
-        memo = {}
+        memo = self.__dict__.setdefault("_present_memo", {})   # v1.14.0: shared by every call, the commits probed are the same ones
+        gcache = self.__dict__.setdefault("_graphs_at", {})
 
         stems = {(os.path.dirname(f), re.sub(r"_v\d+_\d+_\d+(?=\.[A-Za-z0-9]+$)", "", os.path.basename(f))) for f in files}
 
@@ -221,9 +223,10 @@ class GitWitness:
                 out += [n for n in names if re.sub(r"_v\d+_\d+_\d+(?=\.[A-Za-z0-9]+$)", "", os.path.basename(n)) == stem]
             return out
 
-        def present(h):
-            if h not in memo:
-                ok = False
+        def graphs_at(h):
+            """The register's graphs in commit h, parsed once per commit however many adoptions ask (v1.14.0; v1.13.0 parsed the whole register again for every probe of every adoption, about 200 times, 100 s of the gate)."""
+            if h not in gcache:
+                out = []
                 for f in paths_at(h):
                     r = subprocess.run(["git", "show", f"{h}:{f}"], cwd=self.root, capture_output=True, text=True)
                     if r.returncode != 0 or not r.stdout:
@@ -232,10 +235,15 @@ class GitWitness:
                         gg = Graph(); gg.parse(data=r.stdout, format="turtle")
                     except Exception:
                         continue
-                    if (lineage, prop, obj) in gg:
-                        ok = True; break
-                memo[h] = ok
-            return memo[h]
+                    out.append(gg)
+                gcache[h] = out
+            return gcache[h]
+
+        def present(h):
+            key = (lineage, prop, obj, h)
+            if key not in memo:
+                memo[key] = any((lineage, prop, obj) in gg for gg in graphs_at(h))
+            return memo[key]
         res = None
         if hs and present(hs[-1]):
             lo, hi = 0, len(hs) - 1

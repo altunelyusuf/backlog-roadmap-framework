@@ -15,6 +15,7 @@
 #
 # v1.29.0 (Lineage 19, DC-S04): a third probe runs every time: the public copy is cut by each module's declared audience and stops with an error when it cannot be sure (backlog_public_cut_probe).
 # v1.28.0 (Lineage 19, DC-S01 and DC-S02): two probes run every time: the closure-report rules are shown firing on planted faults and silent on corrected twins (backlog_closure_shapes_probe), and the archive tool's refusals are drilled on planted lineages (backlog_archive_drill). A probe that cannot be found stops the gate.
+# v1.76.0 (Lineage 22, box 2, D6): the checks that read no register are keyed. TOOLKEY is one key over every tool, fixture, gate script, shape file and the vocabulary (not the register); the cache proof, the self-proof of Gate R, the register-path self-proof and the self-proof of the lineage-order gate are not run again while that key is the one under which they last held (a release that adds records only skips them; BACKLOG_COLD=1 runs them). The archived-lineages check runs once, not twice.
 # v1.75.0 (Lineage 22, box 1): the Lineage 19 probes loop also runs backlog_archive_forms_probe (the archive tool moves a subject written as a full IRI) and backlog_archived_digest_tables_probe (the archived-digest check measures the digest table under which a lineage reproduces); and backlog_validate_reference_probe (validator 1.18.0: the register's own records, the report runs among them, are not reference for other data).
 # v1.74.0 (Lineage 22, G178): BACKLOG_GATE_LIGHT=1 is the gate of a chain-stage release (release tool 1.7.0, --stage): the sections about tools, shapes, fixtures and probes are skipped and SAID to be skipped; Gate 0, P and K, the register under test, the pipeline and lineage-order gates, the archive checks, the ordinals, the manifest and version gates and the item accounting still run. A stage release changes records alone and at most four come before a full one, so the full gate has judged every tool and shape by the fifth release.
 # v1.73.0 (Lineage 22): the gate validates the register by itself. It was run without an argument by the release tool and the publisher, so the section "Register under test" never ran and a register with a violation was published in v1.461.0. With no argument it now takes the newest backlog_abox; the Lineage 19 probes loop also runs backlog_release_speed_probe (release tool 1.6.0: preflight refusals, the roll command, the gate receipt).
@@ -165,6 +166,11 @@ STAMPED() {
   return 0
 }
 RECORD() { python3 "$MERKLE" record "$1" "$2" "$BACKLOG_VALIDATE_MEMO_DIR" >/dev/null 2>&1; }
+# v1.76.0 (Lineage 22, box 2): TOOLKEY is one key over everything the register-independent checks read: every tool, fixture and gate script of 03-tooling, the shapes and the vocabulary. A
+# check that reads nothing else and held under this key is not run again; the register is not in it, so a release that adds records only skips them, and any change to a tool, fixture, shape or the vocabulary runs them.
+TOOLKEY() { python3 "$MERKLE" key $(find "$HERE" "$PKG/02-shacl-safeguards" "$PKG/01-ontologies" -maxdepth 2 -type f \( -name "*.py" -o -name "*.sh" -o -name "*.json" -o -name "fixture*" -o -name "backlog_shacl_v*.ttl" -o -name "backlog_tbox_v*.ttl" \) -not -path "*__pycache__*" 2>/dev/null | sort); }
+KEYED_SKIP() { local k; k="$(TOOLKEY)"; [ -n "$k" ] && [ "${BACKLOG_COLD:-}" != 1 ] && STAMPED "section:$1" "$k"; }
+KEYED_RECORD() { local k; k="$(TOOLKEY)"; [ -n "$k" ] && RECORD "section:$1" "$k"; }
 COVERAGE="$(ls "$HERE"/backlog_coverage_gate_v*.py | sort -V | tail -1)"
 DOCGATE="$(ls "$HERE"/backlog_doc_coverage_gate_v*.py | sort -V | tail -1)"
 # fixtures resolved by pattern, not pinned filename: a fixture version bump
@@ -243,6 +249,7 @@ echo "$_K" | tail -1
 echo
 if [ "${BACKLOG_GATE_LIGHT:-}" != 1 ]; then
 echo "== Validation cache proof — the per-shape cache and the split change no verdict =="
+if KEYED_SKIP cache_proof; then echo "  SKIPPED — no tool, fixture, shape or vocabulary changed since this proof held."; else
 CACHEPROBE="$(ls "$HERE"/backlog_validate_cache_probe_v*.py 2>/dev/null | sort -V | tail -1 || true)"
 if [ -n "$CACHEPROBE" ]; then
   python3 "$CACHEPROBE" 2>&1 | sed 's/^/  /'; _SPR=${PIPESTATUS[0]}
@@ -250,11 +257,14 @@ if [ -n "$CACHEPROBE" ]; then
 else
   echo "  ABORT: backlog_validate_cache_probe not found; a cached verdict is not trusted without it."; exit 3
 fi
+KEYED_RECORD cache_proof
+fi
 
 echo
 else echo "  SKIPPED (light gate for a stage release; the full gate runs on the last release of the batch)"; fi
 if [ "${BACKLOG_GATE_LIGHT:-}" != 1 ]; then
 echo "== Gate R — SHACL reconcile (self-proof first) =="
+if KEYED_SKIP gate_r_selfproof; then echo "  SKIPPED — no tool, fixture, shape or vocabulary changed since the self-proof held."; else
 _P="$(python3 "$VALIDATE" "$POS" 2>&1)"; _PR=$?
 echo "$_P" | grep -E '^results|^VERDICT'
 [ $_PR -eq 0 ] || { echo "  ABORT: positive fixture failed — the suite is broken, not the register."; exit 3; }
@@ -270,6 +280,8 @@ if [ $_AR -eq 0 ]; then
   echo "  success cannot be told from its failure, which is the defect this fixture exists to catch."; exit 3
 fi
 echo "  self-proof: the suite passes known-good, fails known-bad, and rejects the adversarial"
+KEYED_RECORD gate_r_selfproof
+fi
 echo "  random register — it discriminates on form AND on falsifiability."
 
 echo
@@ -286,6 +298,7 @@ echo "== Self-proof of the register path — the plumbing, not the shapes =="
 # formats its output. A defect in the formatting layer therefore escaped it once
 # already. This runs the known-bad fixture through the EXACT register path and
 # requires it to fail.
+if KEYED_SKIP register_path; then echo "  SKIPPED — no tool, fixture, shape or vocabulary changed since the register path last returned non-zero on the known-bad fixture."; else
 PROBE_OUT="$(python3 "$VALIDATE" "$NEG")"; PROBE_STATUS=$?
 printf '%s\n' "$PROBE_OUT" | grep -E '^results' | sed 's/^/  /'
 if [ "$PROBE_STATUS" -eq 0 ]; then
@@ -294,6 +307,8 @@ if [ "$PROBE_STATUS" -eq 0 ]; then
   exit 3
 fi
 echo "  register path returns non-zero on known-bad input — the verdict survives formatting."
+KEYED_RECORD register_path
+fi
 
 echo
 echo "== Lineage-completeness gate — absence is reported, not assumed away =="
@@ -563,6 +578,7 @@ echo
 echo "== Lineage-order gate — did the chain come before the work? (git witness) =="
 LOC="$(ls "$HERE"/backlog_lineage_order_check_v*.py 2>/dev/null | sort -V | tail -1 || true)"
 if [ -n "$LOC" ]; then
+  if KEYED_SKIP lineage_order_selfproof; then echo "  SKIPPED — no tool, fixture, shape or vocabulary changed since the self-proof held."; else
   # self-proof first: the check must pass a known-ordered map and fail a known-bypass map
   WPOS="$(ls "$HERE"/fixtures/fixture_lineage_restart_witness_v*.json | sort -V | tail -1)"
   WNEG="$(ls "$HERE"/fixtures/fixture_lineage_bypass_negative_witness_v*.json | sort -V | tail -1)"
@@ -655,6 +671,8 @@ if [ -n "$LOC" ]; then
     echo "  ABORT: a chain with no Backlog stage passed --require-complete -- the verifier passes over the missing stage again."; exit 3; fi
   python3 "$PV" "$PFC" --require-complete >/dev/null 2>&1 || { echo "  ABORT: a complete chain failed --require-complete -- the check is broken, not the register."; exit 3; }
   echo "  self-proof: the pipeline verifier refuses a chain with no Backlog stage under --require-complete and accepts a complete chain"
+  KEYED_RECORD lineage_order_selfproof
+  fi
   # v1.9.0: release tags are the recorded witnesses of this package's outputs; fetch them quietly if a remote exists
   ( cd "$PKG" && git fetch --tags --quiet origin 2>/dev/null || true )
   REG="$(ls "$PKG"/01-ontologies/backlog_abox_v*.ttl 2>/dev/null | sort -V | tail -1 || true)"
@@ -712,8 +730,9 @@ if [ "${BACKLOG_GATE_LIGHT:-}" != 1 ]; then
 echo "== Archived lineages — recorded stage digests: no unseen failure (ratchet) =="
 ADC="$(ls "$HERE"/backlog_archived_digest_check_v*.py 2>/dev/null | sort -V | tail -1 || true)"
 if [ -n "$ADC" ]; then
-  python3 -B "$ADC" 2>&1 | grep -E "SELF-PROOF|archived lineages|NEW FAILURE|NOTE|VERDICT" | sed 's/^/ /'
-  python3 -B "$ADC" >/dev/null 2>&1 || { echo "  archived digest check FAILED"; FAILED=1; }
+  _ADCOUT="$(python3 -B "$ADC" 2>&1)"; _ADCRC=$?
+  printf '%s\n' "$_ADCOUT" | grep -E "SELF-PROOF|archived lineages|NEW FAILURE|NOTE|VERDICT" | sed 's/^/ /'
+  [ "$_ADCRC" -eq 0 ] || { echo "  archived digest check FAILED"; FAILED=1; }
 else
   echo "  NOT RUN — archived digest check not found. Not assumed to pass."; FAILED=1
 fi
@@ -725,7 +744,7 @@ echo "== Lineage 19 probes — each rule fires on a planted fault and each refus
 # v1.37.0: each probe prints its own --deps (it alone knows what it reads) and is stamped on exactly that; one that
 # never changed does not re-run just because something ELSEWHERE in the gate did. A run that does happen runs ONCE
 # (v1.36.0 and earlier ran every probe twice here: once piping to grep, once thrown away for its exit code).
-PROBE_LIST="backlog_closure_shapes_probe backlog_archive_drill backlog_public_cut_probe backlog_governance_mitigations_probe backlog_release_tool_probe backlog_proof_stamps_probe backlog_probe_inputs_probe backlog_carried_item_probe backlog_shape_syntax_probe backlog_stamp_key_probe backlog_sparql_memo_probe backlog_ordinal_check_probe backlog_archived_digest_check_probe backlog_release_item_check_probe backlog_package_activation_drift_classifier_probe backlog_lineage_concurrency_probe backlog_consumer_archive_probe backlog_vocabulary_probe backlog_state_evidence_probe backlog_evidence_bridge_probe backlog_timeline_witness_probe backlog_competency_inheritance_probe backlog_verifier_independence_probe backlog_close_preview_probe backlog_competency_tree_probe backlog_agent_roles_probe backlog_verification_scope_probe backlog_status_history_probe backlog_scope_order_probe backlog_order_revision_probe backlog_recording_integrity_probe backlog_flow_point_git_trace_probe backlog_abox_neutrality_probe backlog_human_actor_kinds_probe backlog_executor_subclass_probe backlog_pipeline_verify_probe backlog_agent_accountability_probe backlog_agent_monitor_probe backlog_standing_items_probe backlog_mission_history_probe backlog_session_brief_probe backlog_archive_mission_history_probe backlog_scope_outcome_probe backlog_links_not_text_probe backlog_link_control_probe backlog_plan_then_execute_probe backlog_kind_category_probe backlog_repair_reprioritises_probe backlog_handover_rules_probe backlog_inbox_disposition_probe backlog_release_preflight_probe backlog_gate_timing_probe backlog_open_lineage_probe backlog_box_step_probe backlog_release_speed_probe backlog_archive_forms_probe backlog_archived_digest_tables_probe backlog_validate_reference_probe"
+PROBE_LIST="backlog_closure_shapes_probe backlog_archive_drill backlog_public_cut_probe backlog_governance_mitigations_probe backlog_release_tool_probe backlog_proof_stamps_probe backlog_probe_inputs_probe backlog_carried_item_probe backlog_shape_syntax_probe backlog_stamp_key_probe backlog_sparql_memo_probe backlog_ordinal_check_probe backlog_archived_digest_check_probe backlog_release_item_check_probe backlog_package_activation_drift_classifier_probe backlog_lineage_concurrency_probe backlog_consumer_archive_probe backlog_vocabulary_probe backlog_state_evidence_probe backlog_evidence_bridge_probe backlog_timeline_witness_probe backlog_competency_inheritance_probe backlog_verifier_independence_probe backlog_close_preview_probe backlog_competency_tree_probe backlog_agent_roles_probe backlog_verification_scope_probe backlog_status_history_probe backlog_scope_order_probe backlog_order_revision_probe backlog_recording_integrity_probe backlog_flow_point_git_trace_probe backlog_abox_neutrality_probe backlog_human_actor_kinds_probe backlog_executor_subclass_probe backlog_pipeline_verify_probe backlog_agent_accountability_probe backlog_agent_monitor_probe backlog_standing_items_probe backlog_mission_history_probe backlog_session_brief_probe backlog_archive_mission_history_probe backlog_scope_outcome_probe backlog_links_not_text_probe backlog_link_control_probe backlog_plan_then_execute_probe backlog_kind_category_probe backlog_repair_reprioritises_probe backlog_handover_rules_probe backlog_inbox_disposition_probe backlog_release_preflight_probe backlog_gate_timing_probe backlog_open_lineage_probe backlog_box_step_probe backlog_release_speed_probe backlog_archive_forms_probe backlog_archived_digest_tables_probe backlog_validate_reference_probe backlog_gate_keys_probe backlog_g179_probe backlog_self_application_probe"
 # v1.56.0: the probes that must run are run TWO (BACKLOG_GATE_JOBS) AT A TIME, each into its own file; the verdicts are then read in the fixed order and each
 # probe is stamped only if it passed. A probe still runs once, with the same inputs, and nothing is skipped that was not skipped before.
 JOBS="${BACKLOG_GATE_JOBS:-$(nproc 2>/dev/null || echo 1)}"; [ "$JOBS" -gt 4 ] && JOBS=4; [ "$JOBS" -lt 1 ] && JOBS=1

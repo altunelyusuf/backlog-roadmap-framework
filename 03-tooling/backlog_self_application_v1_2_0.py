@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# v1.2.0 (Lineage 22, box 2, D6): the ToolScript declarations are read once, not once per script (the section took 100 s of the gate, nearly all of it parsing the same two files about 200 times); the verdict is unchanged.
 # v1.1.0 (Lineage 17, OESC-S04): follows the package's new layout -- one vocabulary, one data and one shapes file per subject. The register is in the data file.
 """backlog_self_application_v1_0_0.py — every checker runs against this package.
 
@@ -47,16 +48,32 @@ def _accepts_graph_path(script_name, tbox_path, register_path):
     same move CodeTable made for classification tables baked into python —
     and VERIFIED once against real observed behaviour rather than trusted.
     """
-    from rdflib import Graph, Namespace, RDF
+    from rdflib import Namespace
     B = Namespace("http://example.org/backlog#")
-    g = Graph()
-    g.parse(tbox_path, format="turtle")
-    g.parse(register_path, format="turtle")
-    for t in g.subjects(RDF.type, B.ToolScript):
-        if str(g.value(t, B.scriptFileName)) == script_name:
-            v = g.value(t, B.acceptsGraphPath)
-            return v is not None and str(v) == "true"
+    declared = _declared_scripts(tbox_path, register_path)
+    if script_name in declared:
+        v = declared[script_name]
+        return v is not None and str(v) == "true"
     return None  # undeclared: reported, not guessed
+
+
+_DECLARED = {}
+def _declared_scripts(tbox_path, register_path):
+    """The ToolScript individuals of the two files, read ONCE (v1.2.0). v1.1.0 parsed both files again for every script in the folder, about 100 s of the gate."""
+    key = (tbox_path, register_path)
+    if key not in _DECLARED:
+        from rdflib import Graph, Namespace, RDF
+        B = Namespace("http://example.org/backlog#")
+        g = Graph()
+        g.parse(tbox_path, format="turtle")
+        g.parse(register_path, format="turtle")
+        d = {}
+        for t in g.subjects(RDF.type, B.ToolScript):
+            n = str(g.value(t, B.scriptFileName))
+            if n not in d:  # the first individual that names the script decides, as before
+                d[n] = g.value(t, B.acceptsGraphPath)
+        _DECLARED[key] = d
+    return _DECLARED[key]
 
 
 def _returns_pass_blind(script_path):

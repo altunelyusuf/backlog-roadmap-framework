@@ -10,6 +10,7 @@ Lineage 21, deliverable D3. The faults came from boxes 4 to 9 of Lineage 20, eac
   * a name changed by hand                -> every identifier is made here from the box number and the story key, and `close` refuses when one the opening wrote is gone
   * the effort read from the wrong place  -> effort is read from `hasEffort` of the stories, nowhere else
 
+v1.2.0 (Lineage 22): the Definition of Done the tool writes states its criterion text with rdfs:comment; v1.1.0 wrote a predicate declared nowhere, which the link-control probe refused.
 v1.1.0 (Lineage 22, D3): the obligations of a status are read from the register, not carried as code. `owes` validates a copy of the register with the lineage moved to the named status and
 prints what is violated there that is not violated now; `open` prints the same for the status it enters. `open` and `close` then validate the register they wrote and, when they introduced a
 violation, put the register back as it was and refuse, naming it. With no validator beside the tool nothing is checked and the tool says so.
@@ -192,8 +193,8 @@ def cmd_open(reg, root, n, title, goal, keys, capacity, allow=()):
             raise SystemExit("REFUSED: story %s is not Proposed" % k)
     if not reg.has("DoD_%s" % P):
         reg.append("fw:DoD_%s a backlog:DefinitionOfDone ; rdfs:label \"Definition of Done for the stories of Lineage 21\"@en ;\n    backlog:hasDoDCriterion fw:DoD_%s_1 , fw:DoD_%s_2 .\n"
-                   "fw:DoD_%s_1 a backlog:DoDCriterion ; rdfs:label \"Evidence attests the acceptance criterion\"@en ;\n    backlog:hasCriterionText \"A test or a measured run of a tool attests the acceptance criterion, and the artifact it names exists.\" ;\n    backlog:hasCheckQuery \"ASK { ?e a backlog:TestEvidence . FILTER NOT EXISTS { ?e backlog:attestsCriterion ?c } }\" ; backlog:hasExpectedResult \"false\" ; backlog:hasCriterionStatus backlog:Holds .\n"
-                   "fw:DoD_%s_2 a backlog:DoDCriterion ; rdfs:label \"The register validates\"@en ;\n    backlog:hasCriterionText \"The register validates with no violation after the box is closed.\" ;\n    backlog:hasCheckQuery \"backlog_validate: 0 sh:Violation.\" ; backlog:hasExpectedResult \"0 violations\" ; backlog:hasCriterionStatus backlog:Holds .\n" % (P, P, P, P, P))
+                   "fw:DoD_%s_1 a backlog:DoDCriterion ; rdfs:label \"Evidence attests the acceptance criterion\"@en ;\n    rdfs:comment \"A test or a measured run of a tool attests the acceptance criterion, and the artifact it names exists.\" ;\n    backlog:hasCheckQuery \"ASK { ?e a backlog:TestEvidence . FILTER NOT EXISTS { ?e backlog:attestsCriterion ?c } }\" ; backlog:hasExpectedResult \"false\" ; backlog:hasCriterionStatus backlog:Holds .\n"
+                   "fw:DoD_%s_2 a backlog:DoDCriterion ; rdfs:label \"The register validates\"@en ;\n    rdfs:comment \"The register validates with no violation after the box is closed.\" ;\n    backlog:hasCheckQuery \"backlog_validate: 0 sh:Violation.\" ; backlog:hasExpectedResult \"0 violations\" ; backlog:hasCriterionStatus backlog:Holds .\n" % (P, P, P, P, P))
     # the status being entered owes a kick-off recorded before the first start (RS_PlanBeforeStart) and the status itself
     if not re.search(r"a backlog:KickOff\b", reg.s):
         reg.save()

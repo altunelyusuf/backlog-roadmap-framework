@@ -4260,3 +4260,13 @@ Related: G89, G91, G117, G156.
 **What is not claimed.** (1) A stage release is not a full gate: a fault in a tool or a shape is found by the full release that follows, at most four stage releases later. (2) The 11 probes that re-run on every records-only change are not yet keyed more finely. (3) Nothing here shortens the chain: five stages still mean five commits.
 Related: G99, G152, G177.
 
+## G179 — The adaptive profile is decided rule set by rule set, from a measurement
+
+**Q1 — the finding.** The adaptive profile had no recorded decision for ten rule sets that no profile includes (the scope of Lineage 22 counted eight; the register holds ten outside the three profiles, besides the digest tables). Whether to include one was a matter of opinion because nobody had adopted each on a lineage and counted what it adds.
+
+**Q2 — what was ruled and built.** Each of the ten was adopted on a copy of the register of Lineage 22 (2026-10-30) and the violations it adds were counted: RS_StateReflectsEvidence 0, RS_MissionHistory 0 (but its shapes bind a register, not a lineage, so the 0 is empty), RS_ClosureCommitAnchor 0, RS_HumanOversight 0 and RS_ManagerialIndependence 0 (both bind only work naming a human party), RS_AgentAccountability 38, RS_IndependentVerification 6, RS_SeverityAudit_20260909 11. Profile revision 9 adds RS_StateReflectsEvidence to the adaptive profile; the other nine stay opt-in, each with its reason in the ruling. The standard and agentic profiles are as they were (nine and ten). `backlog_g179_probe` shows the revision refusing a work item that is still Proposed and carries verified evidence, in a lineage opened with the revised block, and not refusing it in a lineage opened with the earlier block.
+
+**Q3 — what the record shows.** RS_ClosureCommitAnchor is decided again at the closure of Lineage 22, where its closure report exists. RS_AgentAccountability and RS_IndependentVerification are not refused for ever: their violations name what the step tool would have to record (the maker of each move, a verifier other than the executor), and a later lineage can take them up.
+
+**What is not claimed.** (1) The measurement is on one register, the one of Lineage 22; another lineage may add other violations. (2) Nothing here makes the adaptive profile the default; that waits for the Owner's confirmation after a live proof.
+Related: G166, G177, G178.

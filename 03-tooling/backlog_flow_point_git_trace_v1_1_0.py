@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_flow_point_git_trace v1.0.0 -- compare every item's recorded start, finish and state with the commits that recorded them.
+"""backlog_flow_point_git_trace v1.1.0 -- compare every item's recorded start, finish and state with the commits that recorded them.
 
 WHY. A commit time is the latest instant a change can have been made. A finish later than the commit that first recorded the item Done is impossible, and the data
 alone cannot show it: the witness is the history of the register in the repository that holds it (the same kind of witness backlog_lineage_order_check reads).
@@ -13,12 +13,36 @@ state paths seen in commits (how items moved through the states in the commits t
 Usage: backlog_flow_point_git_trace.py REPO REGISTER_PATH_IN_REPO [CURRENT_FILE] [--strict]
 Exit 0 when no future_finish and no two_values (and, with --strict, no finish_not_after_start and no under_2_min); 2 otherwise; 1 on error. Reads only.
 """
-import subprocess, sys, datetime as dt
+import json, os, re, subprocess, sys, datetime as dt
 from collections import Counter
 from rdflib import Graph, Namespace
 B = Namespace("http://example.org/backlog#")
 def utc(x):
     return x if x.tzinfo else x.replace(tzinfo=dt.timezone.utc)
+def states_at(git, h, p):
+    """(item, state) pairs of the register in commit h, or None when it does not parse. v1.1.0: kept on disk by the blob's hash (a blob never changes), so a
+    commit already read is not parsed again; v1.0.0 parsed the whole register at every commit of its history, 30 s of the gate."""
+    d = os.environ.get("BACKLOG_VALIDATE_MEMO_DIR")
+    f = None
+    try:
+        blob = git("rev-parse", f"{h}:{p}").strip()
+        if d and re.fullmatch(r"[0-9a-f]{40,64}", blob):
+            f = os.path.join(d, "flowstates_%s.json" % blob)
+            if os.path.exists(f):
+                return [tuple(x) for x in json.load(open(f))]
+    except Exception:
+        f = None
+    try:
+        g = Graph().parse(data=git("show", f"{h}:{p}"), format="turtle")
+    except Exception:
+        return None
+    pairs = [(str(i).split("#")[-1], str(st).split("#")[-1]) for i, st in g.subject_objects(B.hasState)]
+    if f:
+        try:
+            tmp = f + ".%d.tmp" % os.getpid(); json.dump(pairs, open(tmp, "w")); os.replace(tmp, f)
+        except Exception:
+            pass
+    return pairs
 def trace(repo, reg, current=None):
     git = lambda *a: subprocess.check_output(("git", "-C", repo) + a, stderr=subprocess.DEVNULL).decode()
     rows, h, t = [], None, None
@@ -30,12 +54,10 @@ def trace(repo, reg, current=None):
     rows.reverse()
     seq, firstdone = {}, {}
     for h, t, p in rows:
-        try:
-            g = Graph().parse(data=git("show", f"{h}:{p}"), format="turtle")
-        except Exception:
+        pairs = states_at(git, h, p)
+        if pairs is None:
             continue
-        for i, st in g.subject_objects(B.hasState):
-            n, s = str(i).split("#")[-1], str(st).split("#")[-1]
+        for n, s in pairs:
             q = seq.setdefault(n, [])
             if not q or q[-1][0] != s:
                 q.append((s, t))
