@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# v1.3.0 (Lineage 23): the unit that the plan of an open box names is planned, not dangling; it is written when the box closes.
 # v1.2.0 (Lineage 18, OC-S05): follows the archive folder. The archive data file now lives in 01-ontologies/archive/.
 # v1.1.0 (Lineage 17, OESC-S04): follows the package's new layout. The register is in the data file.
 """backlog_archive_integrity v1.0.0 -- did the retired work arrive whole, and does the archive still
@@ -77,6 +78,8 @@ def main():
     dangling = set()
     for s, p, o in g:
         if isinstance(o, URIRef) and str(o).startswith("http://example.org/backlog-framework-register#") and o not in known:
+            if p == B.plansDeploymentUnit and any((bx, B.hasState, B.InProgress) in g for bx in g.objects(s, B.deploymentPlanForBox)):
+                continue
             dangling.add((loc(s), loc(p), loc(o)))
     if dangling:
         for d in sorted(dangling)[:6]:

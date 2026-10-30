@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_box_step_probe v1.3.0 -- the step tool accepts a box recorded in order and refuses each fault made by hand (Lineage 21, D3), and reads the obligations of a status from the register (Lineage 22, D3).
+"""backlog_box_step_probe v1.4.0 -- the step tool accepts a box recorded in order and refuses each fault made by hand (Lineage 21, D3), and reads the obligations of a status from the register (Lineage 22, D3).
 
 A tiny package inside a throwaway git repository (the package sits one folder down, as the real one does). The tool is run as it is run for real; each refusal is planted and the same box then passes once the fault is removed
 (a tool that refuses is not thereby correct). Planted: work before the box opened, a story not Proposed, a box opened twice, a close with no checkpoint, a name changed by hand, a published
@@ -54,7 +54,7 @@ expect("open is refused for a story that is not Proposed", rc != 0 and "not Prop
 rc, out = run(*OPEN)
 expect("the same box opens once the fault is removed", rc == 0 and "now InProgress" in out)
 expect("with no validator beside the tool, open says the register was not validated", "NOT CHECKED" in out)
-expect("the box opens with its deployment unit, not yet Done (Lineage 23)", re.search(r"fw:Rel_AP_1 a backlog:DeploymentUnit .*?backlog:hasState backlog:InProgress", open(REG).read(), re.S) is not None)
+expect("an open box holds no deployment unit yet (a unit may not carry unfinished work) and its plan names the one that will ship (Lineage 23)", "fw:Rel_AP_1 a backlog:DeploymentUnit" not in open(REG).read() and "plansDeploymentUnit fw:Rel_AP_1" in open(REG).read())
 rc2, out2 = run(*OPEN)
 expect("a box already opened is not opened again", rc2 != 0 and "already has records" in out2)
 txt = open(REG).read()
@@ -63,6 +63,7 @@ open(os.path.join(pk, ART), "w").write("evidence\n")
 rc, out = run("close", "1", SP)
 expect("close is refused when no checkpoint was recorded in the box", rc != 0 and "composed in one pass" in out)
 rc, out = run("act", "1", "A", "kept by Ruling_Something and G162")
+expect("an underscored identifier of any kind is refused too (Lineage 23, review)", run("act", "1", "A", "see DPlan_X_1")[0] != 0 and run("act", "1", "A", "see LS_InProgress")[0] != 0 and run("act", "1", "A", "see fw:Thing")[0] != 0)
 expect("a note that names a modelled thing by identifier is refused (Lineage 23)", rc != 0 and "by identifier" in out)
 time.sleep(1.1)
 rc, out = run("act", "1", "A", "worked")
@@ -99,7 +100,7 @@ expect("the story is Done with one state, the box Done, the deployment unit reco
        len(re.findall(r"fw:ST_AP_A a backlog:Story .*?backlog:hasState backlog:(\w+)", final, re.S)) == 1
        and re.search(r"fw:ST_AP_A a backlog:Story .*?backlog:hasState backlog:Done", final, re.S) is not None
        and re.search(r"fw:It_AP_1 a backlog:Iteration .*?backlog:hasState backlog:Done", final, re.S) is not None and "fw:Rel_AP_1 a backlog:DeploymentUnit" in final and final.count("fw:Rel_AP_1 a backlog:DeploymentUnit") == 1
-       and re.search(r"fw:Rel_AP_1 a backlog:DeploymentUnit .*?backlog:hasState backlog:Done ; backlog:hasDeploymentDate .*?backlog:deploysItem fw:ST_AP_A", final, re.S) is not None)
+       and re.search(r"fw:Rel_AP_1 a backlog:DeploymentUnit .*?backlog:hasState backlog:Done ; backlog:hasDeploymentDate .*?backlog:deploysItem fw:ST_AP_A", final, re.S) is not None and "plansDeploymentUnit fw:Rel_AP_1" in final)
 import importlib.util
 sp = importlib.util.spec_from_file_location("bs", os.path.join(HERE, TOOL)); bs = importlib.util.module_from_spec(sp); sp.loader.exec_module(bs)
 a, b = bs.tick(), bs.tick()
