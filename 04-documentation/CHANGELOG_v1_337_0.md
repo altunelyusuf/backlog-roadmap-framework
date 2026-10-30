@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v1.475.0 — 2026-10-30 (MINOR: Lineage 23, Backlog stage (records only, full gate))
+
+Backlog stage of Lineage 23: four stories, Story-direct, all Proposed; the lineage status moves to Backlogged. Stage 5 of 5. Records only; the fifth release of the batch runs the full gate, which gives the real figure of a release that only adds records.
+
+**Unplanned work:** none.
+
 ## v1.474.0 — 2026-10-30 (MINOR: Lineage 23, Objective stage (records only))
 
 Objective stage of Lineage 23: five objectives, each with a baseline, a target and a checkpoint. Stage 4 of 5. Records only.
