@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v1.486.0 — 2026-11-01 (MINOR: Lineage 25, Scope stage (records only))
+
+Scope stage of Lineage 25: four deliverables over four areas, five exclusions. Stage 2 of 5. Records only.
+
+**Unplanned work:** none.
+
 ## v1.485.0 — 2026-11-01 (MINOR: Lineage 25, Mission stage (records only))
 
 Mission stage of Lineage 25: the agentic adaptive lineage (AAL) proved live and, if clean, made the default. Opened under AAL, profile revision 10. Stage 1 of 5, one release each. Records only.
