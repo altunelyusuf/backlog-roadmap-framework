@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v1.499.0 — 2026-11-01 (MINOR: Lineage 26 -- the AAL verifier recorded to the Agentic-Systems standard, closed Achieved)
+
+Box 3: the two packages that hold the standard are told by a handover delivered to each inbox; the lineage is closed Achieved with its closure report and three kept independent reviews.
+
+**Unplanned work:** none.
+
 ## v1.498.0 — 2026-11-01 (MINOR: Lineage 26, box 2 -- the step tool records the verifier session)
 
 Step tool 1.7.0 (G185): freeze fixes the brief and the governed files; the close records plan digest, grant, start way, session, place unchanged and configuration, stamps the verifier at its start, names the roles of the iteration and unit, and turns each overseer item into a finding. Probe of 25 expectations on the real validator; live: the second box of this lineage is clean under the new rule set.
