@@ -23,7 +23,7 @@ def expect(name, ok):
 work = tempfile.mkdtemp()
 pk = os.path.join(work, "pkg"); os.makedirs(os.path.join(pk, "01-ontologies")); os.makedirs(os.path.join(pk, "03-tooling")); os.makedirs(os.path.join(pk, "06-package-provenance", "reviews"))
 shutil.copy(os.path.join(HERE, TOOL), os.path.join(pk, "03-tooling", TOOL)); shutil.copy(os.path.join(HERE, MON), os.path.join(pk, "03-tooling", MON))
-REG = os.path.join(pk, "01-ontologies", "backlog_abox_v1_1_0.ttl")
+REG = os.path.join(pk, "01-ontologies", "backlog_abox_v1_2_0.ttl")
 open(REG, "w").write("""@prefix fw: <http://example.org/backlog-framework-register#> .
 @prefix backlog: <http://example.org/backlog#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
@@ -131,6 +131,7 @@ expect("an escalation item already recorded as a finding is not recorded again",
 expect("the REAL validator draws no violation on the register after the second box", judged(REG) == [])
 broken = os.path.join(work, "broken.ttl"); open(broken, "w").write(final.replace("backlog:verifiedBy fw:Run_AP_1_Verifier ;", ""))
 expect("the same register without the verifier link is refused by the real validator (the probe can fail)", len(judged(broken)) >= 1)
+expect("the monitor's list does not name the box being closed (its iteration, unit, stories or tasks) as In Progress with no move", all(x not in final2 for x in ("an iteration is In Progress with no move", "a deployment unit is In Progress with no move")) and final2.count("a record is In Progress with no move") == 1)
 shutil.rmtree(work, ignore_errors=True)
 print("VERDICT: %s" % ("PASS -- %d expectations hold" % COUNT[0] if not bad else "FAIL -- " + "; ".join(bad)))
 sys.exit(1 if bad else 0)

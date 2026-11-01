@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_box_step v1.7.0 -- records the work of one box in order, with the clock of its run, and refuses the faults made by hand.
+"""backlog_box_step v1.8.0 -- records the work of one box in order, with the clock of its run, and refuses the faults made by hand.
 
 Lineage 21, deliverable D3. The faults came from boxes 4 to 9 of Lineage 20, each written down as a finding there:
   * a close composed in one pass          -> `close` refuses a box with no checkpoint recorded between its start and the close
@@ -10,6 +10,7 @@ Lineage 21, deliverable D3. The faults came from boxes 4 to 9 of Lineage 20, eac
   * a name changed by hand                -> every identifier is made here from the box number and the story key, and `close` refuses when one the opening wrote is gone
   * the effort read from the wrong place  -> effort is read from `hasEffort` of the stories, nowhere else
 
+v1.8.0 (Lineage 27): the box being closed (its stories, tasks, iteration and deployment unit) is not reported as stalled by the monitor.
 v1.7.0 (Lineage 26, G184): in an agentic lineage the close records the verifier's session as the Agentic-Systems package defines it (v0.78.0): the plan with its digest, the grant of
 access, the way it started, the session, whether the place was unchanged, and a configuration recorded before the run; the verifier run is stamped when the review started, not at the close; the
 iteration and the deployment unit of the box name their overseer, verifier and approver; and each item of the overseer's escalation list becomes a finding. Before the verifier starts the builder runs
@@ -246,7 +247,7 @@ def escalation_items(text):
     clean = lambda s: re.sub(r"\bRel_\w+", "a deployment unit", re.sub(r"\bIt_\w+", "an iteration", re.sub(r"\b(ST|T|Run|Ev|Obj)_\w+", "a record", s)))
     return [clean(x) for x in out]
 
-TOOL_VERSION = "1.7.0"
+TOOL_VERSION = "1.8.0"
 
 def has_own_kickoff(text, L):
     """True when the register holds a kick-off of this lineage itself; the kick-off of another lineage does not count (Lineage 24, held by a probe in Lineage 25)."""
@@ -400,7 +401,7 @@ def cmd_close(reg, root, n, spec):
         mon = sorted(glob.glob(os.path.join(os.path.dirname(os.path.abspath(__file__)), "backlog_agent_monitor_v*.py")), key=lambda x: [int(y) for y in re.findall(r"_v(\d+)_(\d+)_(\d+)", x)[0]])
         esc_n = "the agent monitor was not found beside the tool"; esc_list = []
         if mon:
-            mr = subprocess.run([sys.executable, mon[-1], reg.path, "--lineage", reg.L[3:]], capture_output=True, text=True)
+            mr = subprocess.run([sys.executable, mon[-1], reg.path, "--lineage", reg.L[3:], "--closing", ",".join(["ST_%s_%s" % (P, k) for k in keys] + ["T_%s_%s_Build" % (P, k) for k in keys] + [ids["it"], ids["rel"]])], capture_output=True, text=True)
             esc_list = escalation_items(mr.stdout)
             esc_n = "the agent monitor ran and its escalation list was %s" % ("empty" if mr.returncode == 0 else "not empty (exit %d); each item is a finding of this box" % mr.returncode)
         tov, tapp = tick(), tick()

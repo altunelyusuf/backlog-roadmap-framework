@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_agent_monitor v1.1.0 -- the report that lets people stay on the loop without being assigned to tasks (G118).
+"""backlog_agent_monitor v1.2.0 -- the report that lets people stay on the loop without being assigned to tasks (G118).
 
 Read-only. It reads a register and computes, at the instant it is run (or --now), what a person has to look at:
 
@@ -9,12 +9,12 @@ Read-only. It reads a register and computes, at the instant it is run (or --now)
   4. Accountability  Done items without an overseer, a verifier or an approver; Done items at or above a humanApprovalLevel with no person approving.
   5. Teams       agent team or federation runs named for an item with no recorded assembly.
 
-  6. Recurring   live recurring activities whose latest occurrence began longer ago than their recurrenceInterval, or that have no occurrence (v1.1.0, G120).
+  6. Recurring   live recurring activities whose latest occurrence began longer ago than their recurrenceInterval, or that have no occurrence (v1.2.0, G120).
 
 Sections 3 to 6 are the ESCALATION list: the only things a person is asked to act on. Exit 0 when it is empty, 1 otherwise. A register that does not
 use ExecutorInstance simply reports nothing under 1, 2 and 5 -- the report states what it found, not what it was told to look for.
 
-Usage: backlog_agent_monitor_v1_1_0.py REGISTER.ttl [--now 2026-10-15T09:00:00Z] [--stall-hours 24] [--lineage NAME]
+Usage: backlog_agent_monitor_v1_2_0.py REGISTER.ttl [--now 2026-10-15T09:00:00Z] [--stall-hours 24] [--lineage NAME] [--closing ITEM,ITEM]
 """
 import datetime, sys
 from rdflib import Graph, URIRef, RDF
@@ -37,13 +37,14 @@ def when(v):
     return None
 
 def main(argv):
-    now = datetime.datetime.now(datetime.timezone.utc); stall = 24.0; lineage = None; files = []
+    now = datetime.datetime.now(datetime.timezone.utc); stall = 24.0; lineage = None; files = []; closing = set()
     i = 0
     while i < len(argv):
         a = argv[i]
         if a == "--now": now = datetime.datetime.fromisoformat(argv[i + 1].replace("Z", "+00:00")); i += 2
         elif a == "--stall-hours": stall = float(argv[i + 1]); i += 2
         elif a == "--lineage": lineage = argv[i + 1]; i += 2
+        elif a == "--closing": closing |= set(argv[i + 1].split(",")); i += 2
         else: files.append(a); i += 1
     if not files:
         print(__doc__); return 2
@@ -83,7 +84,7 @@ def main(argv):
     print("\n-- 3. Stalled (In Progress, nothing recorded for %g h) --" % stall)
     n = 0
     for it in sorted(g.subjects(URIRef(B + "hasState"), URIRef(B + "InProgress")), key=str):
-        if not ok(it): continue
+        if not ok(it) or local(it) in closing: continue
         last = None
         for e in g.subjects(URIRef(B + "transitionedItem"), it):
             t = when(g.value(e, URIRef(B + "transitionedAt")))

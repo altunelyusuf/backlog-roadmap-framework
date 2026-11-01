@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""backlog_agent_monitor_probe v1.1.0 -- re-runnable proof of backlog_agent_monitor (G118). Plants a register with one of each finding and one clean item and checks the report."""
+"""backlog_agent_monitor_probe v1.2.0 -- re-runnable proof of backlog_agent_monitor (G118). Plants a register with one of each finding and one clean item and checks the report."""
 import glob, os, re, subprocess, sys, tempfile
 HERE = os.path.dirname(os.path.abspath(__file__)); PKG = os.path.dirname(HERE)
 sv = lambda p: [int(x) for x in re.findall(r"_v(\d+)_(\d+)_(\d+)\.", p)[0]]
 if sys.argv[1:] == ["--deps"]:
-    print(os.path.join(HERE, "backlog_agent_monitor_v1_1_0.py")); print(os.path.abspath(__file__)); sys.exit(0)
-tool = os.path.join(HERE, "backlog_agent_monitor_v1_1_0.py")
+    print(os.path.join(HERE, "backlog_agent_monitor_v1_2_0.py")); print(os.path.abspath(__file__)); sys.exit(0)
+tool = os.path.join(HERE, "backlog_agent_monitor_v1_2_0.py")
 bad = []
 def expect(name, ok):
     print(("PASS  " if ok else "FAIL  ") + name)
@@ -53,6 +53,9 @@ with tempfile.TemporaryDirectory() as d:
     rec = out.split("-- 6.")[1]
     expect("recurring: an activity past its interval and one with no occurrence are named", "Audit" in rec and "Never" in rec and "overdue" in out)
     expect("recurring: an activity inside its interval and an ended one are not named", "Fresh2" not in rec.split("== Escalation")[0] and "Ended" not in rec.split("== Escalation")[0])
+    r3 = subprocess.run([sys.executable, "-I", tool, f, "--now", "2026-10-15T09:00:00Z", "--closing", "Stalled,Anon"], capture_output=True, text=True)
+    st3 = r3.stdout.split("-- 3.")[1].split("-- 4.")[0].split("\n", 1)[1]
+    expect("closing: items named as being closed are not reported as stalled", "Stalled" not in st3 and "Anon" not in st3)
     r2 = subprocess.run([sys.executable, "-I", tool, f, "--now", "2026-10-15T09:00:00Z", "--lineage", "NoSuch"], capture_output=True, text=True)
     expect("an unknown lineage is refused", r2.returncode == 2)
 print("VERDICT   :", "PASS" if not bad else "FAIL"); sys.exit(1 if bad else 0)

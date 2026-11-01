@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v1.505.0 — 2026-11-02 (MINOR: Lineage 27, box 1 -- the monitor does not report the box being closed as stalled)
+
+Agent monitor 1.2.0 takes the items of the box being closed out of its stalled list; step tool 1.8.0 passes them; both probes hold it. Independent review recorded with three findings, none repaired.
+
+**Unplanned work:** none.
+
 ## v1.504.0 — 2026-11-02 (Lineage 27, Backlog stage)
 
 Three stories, all Proposed, with the four agent definitions. Stage 5 of 5.
