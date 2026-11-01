@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v1.478.0 — 2026-11-01 (MINOR: Lineage 24, Mission stage (records only))
+
+Mission stage of Lineage 24: the agentic adaptive lineage (AAL) built beside the non-agentic adaptive lineage (NAAL). Opened under the adaptive profile, revision 9. Stage 1 of 5, one release each. Records only.
+
+**Unplanned work:** none.
+
 ## v1.477.0 — 2026-10-30 (MINOR: Lineage 23, box 2 and closure -- the post-mortem reviewed by an independent agent; the lineage achieved)
 
 Box 2 of Lineage 23 and its closure. An agent that did not write the post-mortem reviewed it; eight review points are recorded as findings, and the corrections they led to are appended. Step tool 1.4.0 refuses an identifier of any kind in a checkpoint note and looks for the kick-off of its own lineage; archive integrity 1.3.0 reads the planned unit of a box in progress as planned (the unit cannot exist at the opening: the shapes refuse a unit that carries unfinished work); status probe widened. Closure report; mission Achieved with one deliverable adapted; lineage status Achieved.
