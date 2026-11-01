@@ -22,7 +22,10 @@ g = Graph(); g.parse(AB, format="turtle")
 inc = lambda p: set(g.objects(p, B.profileIncludes))
 expect("the standard and agentic profiles are as they were (nine and ten)", len(inc(B.Profile_Standard)) == 9 and len(inc(B.Profile_Agentic)) == 10 and B.RS_StateReflectsEvidence not in inc(B.Profile_Standard) | inc(B.Profile_Agentic))
 expect("the adaptive profile includes the rule set, introduced in profile revision 9", B.RS_StateReflectsEvidence in inc(B.Profile_Adaptive) and g.value(B.RS_StateReflectsEvidence, B.introducedInRevision) == B.Pr_9 and int(g.value(B.Pr_9, B.revisionNumber)) == 9)
-rs = {s for s in g.subjects(__import__("rdflib").RDF.type, B.RuleSet) if "DigestTable" not in str(s)}
+def _rev(s):
+    r = g.value(s, B.introducedInRevision)
+    return int(g.value(r, B.revisionNumber)) if r is not None else 0
+rs = {s for s in g.subjects(__import__("rdflib").RDF.type, B.RuleSet) if "DigestTable" not in str(s) and _rev(s) < 10}  # v1.2.0: a rule set introduced after revision 9 is decided by its own ruling
 allin = inc(B.Profile_Standard) | inc(B.Profile_Agentic) | inc(B.Profile_Adaptive)
 rul = [r for r in g.subjects(B.hasRulingIdentifier, None) if str(g.value(r, B.hasRulingIdentifier)) == "G179"]
 dec = set(g.objects(rul[0], B.rulingDecides)) if rul else set()

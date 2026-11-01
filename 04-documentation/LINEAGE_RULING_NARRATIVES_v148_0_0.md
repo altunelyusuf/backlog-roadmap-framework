@@ -4314,3 +4314,14 @@ Related: G166, G181.
 
 **What is not claimed.** That AAL is proved for long lineages or for work above the stated integrity level; that the verifier is independent in organisation; that NAAL is retired (it stays, and a lineage may still be opened under it by naming it).
 Related: G166, G181, G182.
+
+## G184 — The verifier of an agentic adaptive lineage records its session
+
+**Q1 — the finding.** After AAL became the default the Owner asked whether it met the standards of the Agentic-Systems package and of the agent-based BRSF method. A test drive (kept at 06-package-provenance/test-drives/test_drive_agentic_systems_v1_0_0.py, with its output) put a box-2 verifier run beside the Agentic-Systems shapes: the run as AAL records it passed them vacuously, because nothing in it triggered a shape. Eight gaps: no frozen plan, no grant of access, no start way, no session named, no statement that the place was unchanged, a configuration that was the tool version, the verifier run stamped after the review, and the overseer's escalation list recorded but not read.
+
+**Q2 — what was ruled and built.** A rule set, RS_VerifierSession, that AAL includes from profile revision 11, and four shapes that refuse a verifier run lacking the record, a grant given after the start, a missing configuration made before the run, and a grant not given by a person at or above the approval level. The terms are the Agentic-Systems package's, by link, at version 0.78.0. A lineage binds only when it adopts the rule set at its opening, so Lineage 26 itself is not bound; its second box adds the recording to the step tool, and the first lineage opened under revision 11 is the first bound.
+
+**Q3 — what the record shows.** The probe runs the real validator on nineteen runs, each lacking or doubling one thing, after a reviewer found runs that passed: a run with no definition or start time, a verifier not typed as a run, two grants or plans, and a grantor that is both a person and an agent. A person as grantor is required only at or above the approval level; the items of this family carry integrity level 2, below it, so the grantor is an agent and says so.
+
+**What is not claimed.** That the place was in fact unchanged (the record states it; a false statement is accepted as a statement); that the plan was fixed before the verifier started (the digest is recorded; the order is witnessed by the grant only); that the verifier is independent in command; that Agentic-Systems or agentic-sdlc changed (a handover tells each).
+Related: G109, G118, G181, G182, G183.

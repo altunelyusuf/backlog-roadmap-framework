@@ -4385,3 +4385,25 @@ ex:LDT_NoTable_Task a backlog:ExecutionTask ; backlog:belongsToLineage ex:LDT_No
 @prefix defaultprofilen: <http://example.org/default-profile-neg#> .
 defaultprofilen:P1 a backlog:OpeningProfile ; backlog:isDefaultProfile true .
 defaultprofilen:P2 a backlog:OpeningProfile ; backlog:isDefaultProfile true .
+
+# VS_INCOMPLETE  a verifier run in an adopting lineage with no session record (VerifierSessionRecordShape).
+@prefix vsn: <http://example.org/vs-neg#> .
+@prefix agsys: <http://example.org/agentic-systems#> .
+vsn:L a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_VerifierSession ; backlog:humanApprovalLevel 3 .
+vsn:Item a backlog:Story ; backlog:belongsToLineage vsn:L ; backlog:integrityLevel 2 ; backlog:verifiedBy vsn:RunInc , vsn:RunOrd , vsn:RunCfg , vsn:RunGrantor .
+vsn:RunInc a backlog:ExecutorInstance .
+
+# VS_ORDER  a run started before its grant was given (VerifierGrantOrderShape).
+vsn:RunOrd a backlog:ExecutorInstance ; backlog:instantiatedAt "2026-11-01T10:00:00Z"^^xsd:dateTime ; agsys:startedUnderGrant vsn:GrantLate .
+vsn:GrantLate agsys:grantedAt "2026-11-01T11:00:00Z"^^xsd:dateTime .
+
+# VS_NO_CONFIG  a run whose definition has no configuration recorded before it (VerifierConfigurationShape).
+vsn:RunCfg a backlog:ExecutorInstance ; backlog:instanceOf vsn:DefNoConfig ; backlog:instantiatedAt "2026-11-01T10:00:00Z"^^xsd:dateTime .
+vsn:DefNoConfig a backlog:Executor_SingleAgent .
+
+# VS_GRANTOR  work at the approval level whose verifier was granted by an agent run (VerifierGrantorShape).
+vsn:L2 a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_VerifierSession ; backlog:humanApprovalLevel 2 .
+vsn:ItemHigh a backlog:Story ; backlog:belongsToLineage vsn:L2 ; backlog:integrityLevel 2 ; backlog:verifiedBy vsn:RunGrantor .
+vsn:RunGrantor a backlog:ExecutorInstance , backlog:Executor_SingleAgent ; agsys:startedUnderGrant vsn:GrantByAgent .
+vsn:GrantByAgent agsys:grantedBy vsn:RunBuilder .
+vsn:RunBuilder a backlog:ExecutorInstance , backlog:Executor_SingleAgent .

@@ -9,8 +9,8 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog/shacl/1.200.0> ;
-    owl:versionInfo "1.200.0" ;
+    owl:versionIRI <http://example.org/backlog/shacl/1.201.0> ;
+    owl:versionInfo "1.201.0" ;
     owl:priorVersion <http://example.org/backlog-shapes/1.197.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.184.0> , <http://example.org/backlog-shapes/1.176.0> , <http://example.org/backlog-shapes/1.175.0> , <http://example.org/backlog-shapes/1.174.0> , <http://example.org/backlog-shapes/1.173.0> , <http://example.org/backlog-shapes/1.172.0> , <http://example.org/backlog-shapes/1.171.0> , <http://example.org/backlog-shapes/1.170.0> , <http://example.org/backlog-shapes/1.169.0> , <http://example.org/backlog-shapes/1.168.0> , <http://example.org/backlog-shapes/1.167.0> , <http://example.org/backlog-shapes/1.166.0> , <http://example.org/backlog-shapes/1.165.0> , <http://example.org/backlog-shapes/1.164.0> , <http://example.org/backlog-shapes/1.159.0> , <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.154.0> , <http://example.org/backlog-shapes/1.153.0> , <http://example.org/backlog-shapes/1.152.0> , <http://example.org/backlog-shapes/1.151.0> , <http://example.org/backlog-shapes/1.150.0> , <http://example.org/backlog-shapes/1.149.0> , <http://example.org/backlog-shapes/1.148.0> , <http://example.org/backlog-shapes/1.147.0> , <http://example.org/backlog-shapes/1.146.0> ;
@@ -9548,4 +9548,88 @@ backlog:DefaultProfileShape a sh:NodeShape ;
             $this backlog:isDefaultProfile true .
             ?other a backlog:OpeningProfile ; backlog:isDefaultProfile true .
             FILTER (?other != $this)
+        }""" ] .
+
+#################################################################
+#  v1.201.0 (G184, Lineage 26) -- the verifier session record, to the standard of the Agentic-Systems package (v0.78.0).
+#  Binds only a lineage that adopts RS_VerifierSession. The terms are the package's, by link.
+#################################################################
+
+backlog:VerifierSessionRecordShape a sh:NodeShape ;
+    sh:targetObjectsOf backlog:verifiedBy ;
+    sh:severity sh:Violation ;
+    rdfs:label "A verifier run records how it started, its grant, its plan with a digest, its session and whether the place was unchanged (G184)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "VS_INCOMPLETE" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "VS_INCOMPLETE: this verifier run lacks part of the session record: the way it was started, the grant of access (grantor, place, time), the plan it followed with a 64-character digest, the session that carried it out, or whether the place was unchanged; or it names no definition or start time, or states two of any of these. A verifier whose session is not recorded is a name and a file, not a checked party." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] , [ sh:prefix "agsys" ; sh:namespace "http://example.org/agentic-systems#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?item backlog:verifiedBy $this .
+            ?lin a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_VerifierSession .
+            { ?item backlog:belongsToLineage ?lin } UNION { ?item backlog:admittedByOutput ?o . ?o backlog:belongsToLineage ?lin }
+            FILTER ( NOT EXISTS { $this agsys:startedInWay ?w }
+              || NOT EXISTS { $this agsys:startedUnderGrant ?g . ?g agsys:grantedBy ?by ; agsys:grantedPlace ?pl ; agsys:grantedAt ?ga }
+              || NOT EXISTS { $this agsys:followsPlan ?p . ?p agsys:hasPlanDigest ?d . FILTER regex(str(?d), "^[0-9a-f]{64}$") }
+              || NOT EXISTS { $this agsys:executedBy ?s }
+              || NOT EXISTS { $this agsys:placeUnchanged ?u }
+              || NOT EXISTS { $this backlog:instanceOf ?df }
+              || NOT EXISTS { $this backlog:instantiatedAt ?at0 }
+              || EXISTS { $this agsys:startedUnderGrant ?g1 , ?g2 . FILTER (?g1 != ?g2) }
+              || EXISTS { $this agsys:followsPlan ?p1 , ?p2 . FILTER (?p1 != ?p2) }
+              || EXISTS { $this agsys:placeUnchanged ?u1 , ?u2 . FILTER (?u1 != ?u2) }
+              || EXISTS { $this agsys:startedInWay ?w1 , ?w2 . FILTER (?w1 != ?w2) }
+              || EXISTS { $this agsys:executedBy ?s1 , ?s2 . FILTER (?s1 != ?s2) } )
+        }""" ] .
+
+backlog:VerifierGrantOrderShape a sh:NodeShape ;
+    sh:targetObjectsOf backlog:verifiedBy ;
+    sh:severity sh:Violation ;
+    rdfs:label "A verifier run starts after its grant (G184)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "VS_ORDER" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "VS_ORDER: this verifier run was started before its grant of access was given, so the plan and the access were not fixed before the start." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] , [ sh:prefix "agsys" ; sh:namespace "http://example.org/agentic-systems#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?item backlog:verifiedBy $this .
+            ?lin a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_VerifierSession .
+            { ?item backlog:belongsToLineage ?lin } UNION { ?item backlog:admittedByOutput ?o . ?o backlog:belongsToLineage ?lin }
+            $this agsys:startedUnderGrant ?g ; backlog:instantiatedAt ?t . ?g agsys:grantedAt ?ga . FILTER (?ga > ?t)
+        }""" ] .
+
+backlog:VerifierConfigurationShape a sh:NodeShape ;
+    sh:targetObjectsOf backlog:verifiedBy ;
+    sh:severity sh:Violation ;
+    rdfs:label "A verifier run has a configuration of its definition recorded before it (G184)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "VS_NO_CONFIG" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "VS_NO_CONFIG: no configuration of the verifier definition was recorded before this run, so what ran is not known beyond the version of the tool that wrote the record." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] , [ sh:prefix "agsys" ; sh:namespace "http://example.org/agentic-systems#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?item backlog:verifiedBy $this .
+            ?lin a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_VerifierSession .
+            { ?item backlog:belongsToLineage ?lin } UNION { ?item backlog:admittedByOutput ?o . ?o backlog:belongsToLineage ?lin }
+            $this backlog:instanceOf ?def ; backlog:instantiatedAt ?t .
+            FILTER NOT EXISTS { ?c agsys:isConfigurationOf ?def ; agsys:recordedAt ?r . FILTER (?r <= ?t) }
+        }""" ] .
+
+backlog:VerifierGrantorShape a sh:NodeShape ;
+    sh:targetObjectsOf backlog:verifiedBy ;
+    sh:severity sh:Violation ;
+    rdfs:label "At or above the approval level a person grants the verifier its access (G184)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "VS_GRANTOR" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "VS_GRANTOR: this verifier run checked work at or above the humanApprovalLevel of its lineage and its grant was not given by a person or a human team." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] , [ sh:prefix "agsys" ; sh:namespace "http://example.org/agentic-systems#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?item backlog:verifiedBy $this .
+            ?lin a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_VerifierSession .
+            { ?item backlog:belongsToLineage ?lin } UNION { ?item backlog:admittedByOutput ?o . ?o backlog:belongsToLineage ?lin }
+            ?lin backlog:humanApprovalLevel ?lv . ?item backlog:integrityLevel ?il . FILTER (?il >= ?lv)
+            $this agsys:startedUnderGrant ?g . ?g agsys:grantedBy ?by .
+            FILTER ( NOT EXISTS { ?by a ?k . FILTER (?k IN (backlog:Executor_IndividualHuman, backlog:Executor_HumanTeam)) }
+                     || EXISTS { ?by a ?k2 . FILTER (?k2 IN (backlog:Executor_SingleAgent, backlog:Executor_AgentTeam, backlog:Executor_AgentFederation, backlog:ExecutorInstance)) } )
         }""" ] .
