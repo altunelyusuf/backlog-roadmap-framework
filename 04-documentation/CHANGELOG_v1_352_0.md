@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v1.490.0 — 2026-11-01 (MINOR: Lineage 25, box 1 -- the kick-off lookup held by a probe, under the agentic profile)
+
+Box 1 of Lineage 25, the first box opened and closed on the live register under the agentic adaptive profile. The step tool (1.6.0) keeps its kick-off test in one function that its probe holds. The box records the builder run, names it on every move, and was closed with a review by a verifying agent that did not do the work (kept in a file of the package); the register holds no violation. Story generator repaired: the backlog stage names a planning run.
+
+**Unplanned work:** The story generator wrote no responsible party for the stories of an agentic lineage and the preflight refused the Backlog stage; the stage was redone with a planning run.
+
 ## v1.489.0 — 2026-11-01 (MINOR: Lineage 25, Backlog stage (records only, full gate))
 
 Backlog stage of Lineage 25: three stories, Story-direct, all Proposed; the lineage status moves to Backlogged. Stage 5 of 5. The fifth release of the batch runs the full gate.

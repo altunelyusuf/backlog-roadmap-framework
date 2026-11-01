@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_box_step_probe v1.5.0 -- the step tool accepts a box recorded in order and refuses each fault made by hand (Lineage 21, D3), and reads the obligations of a status from the register (Lineage 22, D3).
+"""backlog_box_step_probe v1.6.0 -- the step tool accepts a box recorded in order and refuses each fault made by hand (Lineage 21, D3), and reads the obligations of a status from the register (Lineage 22, D3).
 
 A tiny package inside a throwaway git repository (the package sits one folder down, as the real one does). The tool is run as it is run for real; each refusal is planted and the same box then passes once the fault is removed
 (a tool that refuses is not thereby correct). Planted: work before the box opened, a story not Proposed, a box opened twice, a close with no checkpoint, a name changed by hand, a published
@@ -105,6 +105,11 @@ import importlib.util
 sp = importlib.util.spec_from_file_location("bs", os.path.join(HERE, TOOL)); bs = importlib.util.module_from_spec(sp); sp.loader.exec_module(bs)
 a, b = bs.tick(), bs.tick()
 expect("two records written back to back are at least one second apart", b > a)
+a, b = "fw:L_Mine", "fw:L_Other"
+KO = lambda lin: "fw:K a backlog:KickOff ; backlog:kicksOffLineage %s .\n" % lin
+expect("a kick-off of another lineage does not count as the lineage's own (Lineage 25)", not bs.has_own_kickoff(KO(b), a))
+expect("a kick-off of the lineage itself counts, in either spelling (Lineage 25)", bs.has_own_kickoff(KO(a), a) and bs.has_own_kickoff("fw:K a backlog:KickOff ; backlog:kicksOffLineage <http://example.org/backlog-framework-register#L_Mine> .\n", a))
+expect("a lineage whose name is the start of another's is not mistaken for it (Lineage 25)", not bs.has_own_kickoff(KO("fw:L_MineToo"), a))
 shutil.rmtree(work, ignore_errors=True)
 print("VERDICT: %s" % ("PASS -- %d expectations hold" % COUNT[0] if not bad else "FAIL -- " + "; ".join(bad)))
 sys.exit(1 if bad else 0)

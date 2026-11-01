@@ -201,7 +201,12 @@ def made_by(recs, P, n):
     """Every move the tool records names the run that made it."""
     return [r.replace("backlog:transitionedBy backlog:Builder", "backlog:transitionedBy backlog:Builder ; backlog:transitionedByExecutor %s" % run_id(P, n, "Builder")) for r in recs]
 
-TOOL_VERSION = "1.5.0"
+TOOL_VERSION = "1.6.0"
+
+def has_own_kickoff(text, L):
+    """True when the register holds a kick-off of this lineage itself; the kick-off of another lineage does not count (Lineage 24, held by a probe in Lineage 25)."""
+    return re.search(r"backlog:kicksOffLineage\s+(?:fw:|<http://example.org/backlog-framework-register#)%s\b" % re.escape(L[3:]), text) is not None
+
 
 def cmd_open(reg, root, n, title, goal, keys, capacity, allow=(), integrity=2):
     P, L = reg.P, reg.L
@@ -220,7 +225,7 @@ def cmd_open(reg, root, n, title, goal, keys, capacity, allow=(), integrity=2):
                    "fw:DoD_%s_1 a backlog:DoDCriterion ; rdfs:label \"Evidence attests the acceptance criterion\"@en ;\n    rdfs:comment \"A test or a measured run of a tool attests the acceptance criterion, and the artifact it names exists.\" ;\n    backlog:hasCheckQuery \"ASK { ?e a backlog:TestEvidence . FILTER NOT EXISTS { ?e backlog:attestsCriterion ?c } }\" ; backlog:hasExpectedResult \"false\" ; backlog:hasCriterionStatus backlog:Holds .\n"
                    "fw:DoD_%s_2 a backlog:DoDCriterion ; rdfs:label \"The register validates\"@en ;\n    rdfs:comment \"The register validates with no violation after the box is closed.\" ;\n    backlog:hasCheckQuery \"backlog_validate: 0 sh:Violation.\" ; backlog:hasExpectedResult \"0 violations\" ; backlog:hasCriterionStatus backlog:Holds .\n" % (P, P, P, P, P))
     # the status being entered owes a kick-off recorded before the first start (RS_PlanBeforeStart) and the status itself
-    if not re.search(r"backlog:kicksOffLineage\s+(?:fw:|<http://example.org/backlog-framework-register#)%s\b" % re.escape(L[3:]), reg.s):  # this lineage's own kick-off, not any lineage's
+    if not has_own_kickoff(reg.s, L):  # this lineage's own kick-off, not any lineage's
         reg.save()
         steps = sorted(glob.glob(os.path.join(os.path.dirname(os.path.abspath(__file__)), "backlog_lineage_steps_v*.py")), key=lambda x: [int(y) for y in re.findall(r"_v(\d+)_(\d+)_(\d+)", x)[0]])[-1]
         r = subprocess.run([sys.executable, steps, "plan", reg.path, "--lineage", FW + reg.L[3:], "--container", FW + "Register", "--by", "Builder"], capture_output=True, text=True)
