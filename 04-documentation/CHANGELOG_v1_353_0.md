@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v1.491.0 — 2026-11-01 (MINOR: Lineage 25 -- the agentic adaptive profile proved live and made the default)
+
+Box 2 of Lineage 25: AAL is marked the default profile (ruling G183), proved on the live register; the lineage is closed Achieved with its closure report and two kept independent reviews.
+
+**Unplanned work:** none.
+
 ## v1.490.0 — 2026-11-01 (MINOR: Lineage 25, box 1 -- the kick-off lookup held by a probe, under the agentic profile)
 
 Box 1 of Lineage 25, the first box opened and closed on the live register under the agentic adaptive profile. The step tool (1.6.0) keeps its kick-off test in one function that its probe holds. The box records the builder run, names it on every move, and was closed with a review by a verifying agent that did not do the work (kept in a file of the package); the register holds no violation. Story generator repaired: the backlog stage names a planning run.

@@ -4303,3 +4303,14 @@ Related: G89, G112, G118, G179.
 
 **What is not claimed.** The tool cannot know that a marked profile is a good default; that is the Owner's decision, taken after a live run.
 Related: G166, G181.
+
+## G183 — The agentic adaptive profile is the default, after a live run
+
+**Q1 — the finding.** The Owner directed (2026-11-01) that the agentic adaptive profile (AAL) become the default after it was developed beside the non-agentic one. The standing direction is that a default changes only after a live proof; AAL had been probed on toy registers only.
+
+**Q2 — what was ruled and built.** Lineage 25 was opened under AAL on the live register and run in boxes recorded by the step tool. Each box named the builder run on every move, was closed with a review by a verifying agent that did not do the work (kept in a file of the package) and left the register without a violation. After the first box was clean, AAL was marked the default; the opening tool, run with no profile, opens a lineage with it, shown by a probe on the live register. The standard, agentic and non-agentic profiles keep nine, ten and sixteen rule sets.
+
+**Q3 — what the record shows.** The proof is one lineage of two boxes. The verifying agents were fresh agents briefed by the builder, so their independence is of context, not of command; the tool records a review file and a name. The planning run that the Backlog stage must name is a run of the builder definition, beside the run of each box.
+
+**What is not claimed.** That AAL is proved for long lineages or for work above the stated integrity level; that the verifier is independent in organisation; that NAAL is retired (it stays, and a lineage may still be opened under it by naming it).
+Related: G166, G181, G182.
