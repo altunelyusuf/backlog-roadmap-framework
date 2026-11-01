@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_open_lineage_probe v1.1.0 -- proof that the opening block carries the profile's rule sets and that the shape holds a lineage to them (G155), and (v1.1.0, G177) that a lineage opened under the adaptive profile can plan after its Backlog stage."""
+"""backlog_open_lineage_probe v1.2.0 -- proof that the opening block carries the profile's rule sets and that the shape holds a lineage to them (G155), and (v1.1.0, G177) that a lineage opened under the adaptive profile can plan after its Backlog stage."""
 import glob, hashlib, os, re, subprocess, sys, tempfile
 HERE = os.path.dirname(os.path.abspath(__file__)); PKG = os.path.dirname(HERE)
 sv = lambda p: [int(x) for x in re.findall(r"_v(\d+)_(\d+)_(\d+)\.", p)[0]]
@@ -59,4 +59,9 @@ expect("a lineage opened with the adaptive block reproduces its chain", verifies
 expect("it still reproduces after a task is planned into a box", verifies(AD, TASK))
 expect("the same lineage opened without a digest table reproduces before a task", verifies(NT))
 expect("and stops reproducing once a task is planned (the fault G177 names)", not verifies(NT, TASK))
+run2 = lambda *a: subprocess.run([sys.executable, tool, *a], capture_output=True, text=True).stdout
+aal = run2("--profile", "Profile_AgenticAdaptive", "--lineage", "L", "--prefix", "x"); naal = run2("--profile", "Profile_Adaptive", "--lineage", "L", "--prefix", "x")
+expect("the agentic adaptive profile adopts agent accountability and independent verification and states the level above which a person approves (Lineage 24)", "RS_AgentAccountability" in aal and "RS_IndependentVerification" in aal and "humanApprovalLevel 3" in aal)
+expect("the non-agentic adaptive profile is as it was: neither agentic rule set, no level", "RS_AgentAccountability" not in naal and "RS_IndependentVerification" not in naal and "humanApprovalLevel" not in naal and "RS_StateReflectsEvidence" in naal)
+expect("the agentic profile keeps every rule set of the non-agentic one", set(re.findall(r"backlog:(RS_\w+)", naal)) <= set(re.findall(r"backlog:(RS_\w+)", aal)))
 print("VERDICT   :", "PASS" if not bad else "FAIL"); sys.exit(1 if bad else 0)

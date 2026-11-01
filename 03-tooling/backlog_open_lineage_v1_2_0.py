@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_open_lineage v1.1.0 -- write the opening block of a lineage from a profile (G155, G163).
+"""backlog_open_lineage v1.2.0 -- write the opening block of a lineage from a profile (G155, G163).
 
 A lineage is judged only by the rule sets it adopts (G89, G91), and the adoption is recorded at its opening (adoptionRecordedAtOpen). Doing that by hand,
 rule set by rule set, is why consumers opened lineages that were not agentic: nobody knew the list. A profile (OpeningProfile) in the data file names the
@@ -29,9 +29,11 @@ def latest_revision(g):
     return rv[max(rv)] if rv else None
 
 
-def block(profile, lineage, prefix, included, revision=None):
+def block(profile, lineage, prefix, included, revision=None, level=None):
     sets = " ,\n        ".join("backlog:" + r for r in included)
     rev = f"    backlog:openedUnderRevision backlog:{revision} ;\n" if revision else ""
+    if level is not None:
+        rev += f"    backlog:humanApprovalLevel {level} ;\n"   # v1.2.0: a profile that holds work to accountability states above which integrity level a person approves
     return (f"{prefix}:{lineage} backlog:openedWithProfile backlog:{profile} ;\n{rev}    backlog:adoptionRecordedAtOpen true ;\n"
             f"    backlog:adoptsRuleSet\n        {sets} .\n")
 
@@ -47,7 +49,8 @@ def main(argv):
     prof, lin = opt("--profile"), opt("--lineage")
     if not prof or not lin or prof not in P:
         print("REFUSED: give --profile (one of: %s) and --lineage" % ", ".join(sorted(P))); return 2
-    print(block(prof, lin, opt("--prefix") or "ex", P[prof], latest_revision(g)), end="")
+    lv = g.value(B[prof], B.humanApprovalLevel)
+    print(block(prof, lin, opt("--prefix") or "ex", P[prof], latest_revision(g), int(lv) if lv is not None else None), end="")
     return 0
 
 

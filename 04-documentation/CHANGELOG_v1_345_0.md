@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v1.483.0 — 2026-11-01 (MINOR: Lineage 24, box 1 -- who made, oversaw, verified and approved, and the two profiles)
+
+Box 1 of Lineage 24, three stories done. The adaptive profile is named NAAL and left as it was; the profile AAL (profile revision 10) adds agent accountability and independent verification. Step tool 1.5.0 records the builder run, names it on every move, and at the close records the overseeing, verifying and approving runs and refuses a verifier that is the maker; a probe has the real validator judge the register it writes. Opening tool 1.2.0 states the human approval level of a profile. Ruling G181; discipline and narratives v145.0.0.
+
+**Unplanned work:** The release script left the status at Scoped and the preflight refused it, as the rule of Lineage 23 designed; two stage releases rolled together were discarded and redone.
+
 ## v1.482.0 — 2026-11-01 (MINOR: Lineage 24, Backlog stage (records only))
 
 Backlog stage of Lineage 24: five stories, Story-direct, all Proposed; the lineage status moves to Backlogged. Stage 5 of 5.

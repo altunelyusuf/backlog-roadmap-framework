@@ -4281,3 +4281,14 @@ Related: G166, G177, G178.
 
 **What is not claimed.** The shape does not refuse a status that lags once the chain is complete (InProgress and later are never behind a stage output).
 Related: G162, G178, G179.
+
+## G181 — Two adaptive lineages: the non-agentic and the agentic
+
+**Q1 — the finding.** The adaptive profile held no agentic obligation: adopting agent accountability on the register added 38 violations and independent verification 6, because the step tool recorded neither the maker of a move nor a verifier. The Owner directed (2026-11-01) that the agentic and non-agentic versions be two different lineages, the agentic one built beside the other.
+
+**Q2 — what was ruled and built.** The adaptive profile is named NAAL and is not changed. A new profile, AAL (profile revision 10), includes all its rule sets and the two agentic ones. In a lineage that adopts agent accountability, the step tool records the builder run, names it on every move and as the one responsible, and at the close records the overseeing run (the agent monitor), the verifying run (a reviewing agent whose review is kept in a file and who cannot be the maker), and the approving run (the register validator). A probe runs the tool in a throwaway package and has the real validator judge the register, which draws none of the 44 violations; removing the verifier link makes the validator name the fault.
+
+**Q3 — what the record shows.** The first probe run drew four violations that a stub would have hidden: tasks need the same roles as stories. The tool records that a review file exists and is newer than the box; it cannot prove that an agent other than the maker wrote it. A person approves only work at or above the stated integrity level (3); this lineage family works at 2.
+
+**What is not claimed.** AAL is not yet the default; that follows a live run under it. Human overseers and managerial independence stay opt-in (they bind work that names a person as overseer).
+Related: G89, G112, G118, G179.

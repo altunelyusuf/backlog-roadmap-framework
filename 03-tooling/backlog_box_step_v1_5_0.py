@@ -179,7 +179,31 @@ def read_box(reg, n):
 
 # ---- commands ----
 
-def cmd_open(reg, root, n, title, goal, keys, capacity, allow=()):
+
+# ---- an agentic lineage records who acts (Lineage 24) ----
+AGENTS = (("Builder", "The builder agent: the session that does the work of a box"), ("Overseer", "The overseeing agent: the agent monitor, which reads the register and reports what needs attention"),
+          ("Verifier", "The verifying agent: an agent that did not do the work and judges it against the evidence"), ("Approver", "The approving agent: the register validator, which accepts the box only if the register holds no new violation"))
+
+def is_agentic(reg):
+    m = re.search(r"^%s backlog:openedWithProfile .*?\n(?:\s+[^\n]*\n)*?[^\n]* \.\n" % re.escape(reg.L), reg.s, re.M)
+    blk = m.group(0) if m else ""
+    return "RS_AgentAccountability" in blk
+
+def run_id(P, n, role): return "fw:Run_%s_%d_%s" % (P, n, role)
+
+def agent_defs(reg):
+    return "".join("fw:Exec_%s a backlog:Executor_SingleAgent ; rdfs:label \"%s\"@en .\n" % (r, d) for r, d in AGENTS if not reg.has("Exec_" + r))
+
+def agent_run(P, n, role, t, version):
+    return "%s a backlog:ExecutorInstance , backlog:Executor_SingleAgent ; backlog:instanceOf fw:Exec_%s ; backlog:instantiatedFromVersion \"%s\" ; backlog:instantiatedAt %s ." % (run_id(P, n, role), role, version, dt(t))
+
+def made_by(recs, P, n):
+    """Every move the tool records names the run that made it."""
+    return [r.replace("backlog:transitionedBy backlog:Builder", "backlog:transitionedBy backlog:Builder ; backlog:transitionedByExecutor %s" % run_id(P, n, "Builder")) for r in recs]
+
+TOOL_VERSION = "1.5.0"
+
+def cmd_open(reg, root, n, title, goal, keys, capacity, allow=(), integrity=2):
     P, L = reg.P, reg.L
     ids = box_ids(P, n)
     if reg.has(ids["it"]):
@@ -243,6 +267,14 @@ def cmd_open(reg, root, n, title, goal, keys, capacity, allow=()):
         recs.append("fw:Ev%d_ST_%s_%s_T_Start a backlog:TransitionEvent ; backlog:transitionedItem fw:ST_%s_%s ; backlog:viaTransition backlog:T_Start ; backlog:transitionedAt %s ; backlog:transitionedBy backlog:Builder ." % (n, P, k, P, k, dt(tss)))
         reg.set_state(k, "Proposed", "InProgress")
     recs.append("fw:%s a backlog:ControlActivity ; rdfs:label \"Validate the register and run the probes before the box is reviewed\"@en ;\n    backlog:hasWorkKind backlog:WorkKind_Control ; backlog:plannedInBox fw:%s ." % (ids["act"], ids["it"]))
+    if is_agentic(reg):
+        recs = [r.replace("backlog:responsible " + DEFAULT_EXEC, "backlog:responsible " + run_id(P, n, "Builder")) for r in made_by(recs, P, n)]
+        recs.insert(0, agent_run(P, n, "Builder", t0, TOOL_VERSION))
+        for k in keys:
+            recs.append("fw:ST_%s_%s backlog:responsible %s ; backlog:integrityLevel %d ." % (P, k, run_id(P, n, "Builder"), integrity))
+            recs.append("fw:T_%s_%s_Build backlog:integrityLevel %d ." % (P, k, integrity))
+        defs = agent_defs(reg)
+        if defs: recs.insert(0, defs.rstrip("\n"))
     reg.append("\n# ---- box %d of %s: opened %s by backlog_box_step ----\n" % (n, L, t0) + "\n".join(recs))
     reg.save()
     print("box %d opened at %s; stories %s now InProgress" % (n, t0, ", ".join(keys)))
@@ -292,6 +324,30 @@ def cmd_close(reg, root, n, spec):
         raise SystemExit("REFUSED: governed files changed before the box was opened: " + ", ".join(os.path.relpath(x, root) for x in stale))
     efforts = {k: float(reg.story_value(k, "hasEffort")) for k in keys}
     recs = []
+    agentic = is_agentic(reg)
+    if agentic:
+        v = spec.get("verifier") or {}
+        if not v.get("agent") or not v.get("review"):
+            raise SystemExit("REFUSED: this lineage is agentic: the spec must name the verifying agent and the file that holds its review (verifier: agent, review)")
+        if v["agent"].strip().lower() in ("builder", spec.get("maker", "builder").strip().lower()):
+            raise SystemExit("REFUSED: the verifier is the maker. Work that one party produced and the same party then checked has been checked by nobody else.")
+        rv = os.path.join(root, v["review"])
+        if not os.path.exists(rv) or os.path.getsize(rv) == 0:
+            raise SystemExit("REFUSED: the review file %s of the verifying agent does not exist or is empty" % v["review"])
+        if files_before([rv], t0):
+            raise SystemExit("REFUSED: the review file %s is older than the box: it was not produced inside box %d" % (v["review"], n))
+        mon = sorted(glob.glob(os.path.join(os.path.dirname(os.path.abspath(__file__)), "backlog_agent_monitor_v*.py")), key=lambda x: [int(y) for y in re.findall(r"_v(\d+)_(\d+)_(\d+)", x)[0]])
+        esc_n = "the agent monitor was not found beside the tool"
+        if mon:
+            mr = subprocess.run([sys.executable, mon[-1], reg.path, "--lineage", reg.L[3:]], capture_output=True, text=True)
+            esc_n = "the agent monitor ran and its escalation list was %s" % ("empty" if mr.returncode == 0 else "not empty (exit %d)" % mr.returncode)
+        tov, tver, tapp = tick(), tick(), tick()
+        recs_a = [agent_run(P, n, "Overseer", tov, TOOL_VERSION)[:-2] + "; rdfs:comment \"%s.\"@en ." % esc(esc_n),
+                  agent_run(P, n, "Verifier", tver, TOOL_VERSION)[:-2] + "; rdfs:comment \"Reviewed by %s; the review is kept in a file of the package.\"@en ." % esc(v["agent"]),
+                  agent_run(P, n, "Approver", tapp, TOOL_VERSION)]
+        defs = agent_defs(reg)
+        if defs: recs_a.insert(0, defs.rstrip("\n"))
+    recs = []
     for k in keys:
         s = spec["stories"][k]
         tf = tick()
@@ -327,6 +383,11 @@ def cmd_close(reg, root, n, spec):
     m = re.search(r"(^fw:%s a backlog:Iteration .*?)backlog:hasState backlog:InProgress ; backlog:iterationStart (\"[^\"]+\"\^\^xsd:dateTime) ;\n    backlog:hasCapacity ([\d.]+) ;" % ids["it"], reg.s, re.M | re.S)
     cap = float(m.group(3))
     reg.s = reg.s[:m.start()] + m.group(1) + 'backlog:hasState backlog:Done ; backlog:iterationStart %s ;\n    backlog:iterationEnd %s ;\n    backlog:hasCapacity %s ; backlog:hasObservedDuration %s ; backlog:hasDurationSource "Wall clock from the start of the box to its review, both taken from the register: %s to %s. Effort of the stories read from hasEffort: %s points." ;' % (m.group(2), dt(trev), m.group(3), mins, t0, trev, sum(efforts.values())) + reg.s[m.end():]
+    if agentic:
+        recs = made_by(recs, P, n) + recs_a
+        for k in keys:
+            for it in ("ST_%s_%s" % (P, k), "T_%s_%s_Build" % (P, k)):
+                recs.append("fw:%s backlog:overseenBy %s ; backlog:verifiedBy %s ; backlog:approvedBy %s ." % (it, run_id(P, n, "Overseer"), run_id(P, n, "Verifier"), run_id(P, n, "Approver")))
     reg.append("\n".join(recs))
     reg.save()
     print("box %d closed: review %s, %s min, %s points of effort" % (n, trev, mins, sum(efforts.values())))
@@ -397,6 +458,9 @@ def guarded(path, fn):
 def main(argv):
     a = [x for x in argv]
     lineage, prefix, capacity = "L_AdaptiveProof", "AP", 5.0
+    integrity = 2
+    while "--integrity" in a:
+        i = a.index("--integrity"); integrity = int(a[i + 1]); del a[i:i + 2]
     allow = []
     while "--allow" in a:
         i = a.index("--allow"); allow.append(a[i + 1]); del a[i:i + 2]
@@ -419,7 +483,7 @@ def main(argv):
         o = owes(path, lineage, "LS_InProgress")
         if o:
             print("owed at LS_InProgress, before the box is opened:\n  " + "\n  ".join("%s: %s" % x for x in o))
-        guarded(path, lambda: cmd_open(reg, root, int(a[2]), a[3], a[4], a[5].split(","), capacity, allow))
+        guarded(path, lambda: cmd_open(reg, root, int(a[2]), a[3], a[4], a[5].split(","), capacity, allow, integrity))
     elif cmd == "act":
         cmd_act(reg, int(a[2]), a[3], a[4])
     elif cmd == "close":

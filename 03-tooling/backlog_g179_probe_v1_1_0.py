@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_g179_probe v1.0.0 -- re-runnable proof of the adaptive profile's revision 9 (G179, Lineage 22, box 2).
+"""backlog_g179_probe v1.1.0 -- re-runnable proof of the adaptive profile's revision 9 (G179, Lineage 22, box 2).
 
   Checks the shipped file (revision 9 adds RS_StateReflectsEvidence to the adaptive profile and nothing else; the standard and agentic profiles are as they were; the ruling decides the
   revision and every rule set outside the profile and names an enforcing shape), then opens a lineage with the opening tool under the adaptive profile and shows the block adopts
@@ -30,7 +30,7 @@ expect("ruling G179 exists, decides revision 9 and names an enforcing shape", le
 expect("every rule set no profile included before revision 9 has a recorded decision in the ruling", {x for x in rs if x not in allin - {B.RS_StateReflectsEvidence}} <= dec | {B.RS_StateReflectsEvidence} , "%d rule sets, %d decided" % (len(rs), len(dec)))
 run = lambda *a: subprocess.run([sys.executable, OPEN, *a], capture_output=True, text=True)
 blk = run("--profile", "Profile_Adaptive", "--lineage", "L", "--prefix", "x").stdout
-expect("the opening block of the adaptive profile adopts the rule set and records revision 9", "RS_StateReflectsEvidence" in blk and "Pr_9" in blk)
+expect("the opening block of the adaptive profile adopts the rule set and records revision 9 or a later one", "RS_StateReflectsEvidence" in blk and int((re.search(r"Pr_(\d+)", blk) or [0, 0])[1]) >= 9)  # v1.1.0: the block names the highest revision, which later lineages raise
 old = re.sub(r"\s*,?\s*backlog:RS_StateReflectsEvidence\s*,?", lambda m: " , " if m.group(0).strip().startswith(",") and m.group(0).strip().endswith(",") else " ", blk)
 HEAD = "@prefix backlog: <http://example.org/backlog#> .\n@prefix x: <http://example.org/g179#> .\nx:L a backlog:Lineage .\n"
 PLANT = "x:S a backlog:Task ; backlog:belongsToLineage x:L ; backlog:hasState backlog:Proposed ; backlog:hasEvidence x:E .\nx:E a backlog:ArtifactEvidence ; backlog:evidenceVerified true .\n"
