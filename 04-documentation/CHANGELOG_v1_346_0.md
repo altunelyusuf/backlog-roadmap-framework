@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v1.484.0 — 2026-11-01 (MINOR: Lineage 24, box 2 and closure -- the default profile can be named; the agentic adaptive lineage built beside the non-agentic one)
+
+Box 2 of Lineage 24 and its closure. A profile can carry the default mark (T-Box 1.161.0, which also lets a profile state the human approval level); a shape (1.200.0, fixture case in negative fixture 1.59.0) refuses two marks; the opening tool (1.2.0) opens with the marked profile and refuses when none or several are marked; no profile is marked yet. An agent that did not write the work reviewed it; seven points are recorded and the ruling narrative corrected. Closure report; mission Achieved as worded, with the limits stated; lineage status Achieved. Ruling G182; discipline and narratives v146.0.0.
+
+**Unplanned work:** The probe of the previous profile ruling pinned revision 9 and refused release 1.483.0 at the gate; it now accepts a later revision.
+
 ## v1.483.0 — 2026-11-01 (MINOR: Lineage 24, box 1 -- who made, oversaw, verified and approved, and the two profiles)
 
 Box 1 of Lineage 24, three stories done. The adaptive profile is named NAAL and left as it was; the profile AAL (profile revision 10) adds agent accountability and independent verification. Step tool 1.5.0 records the builder run, names it on every move, and at the close records the overseeing, verifying and approving runs and refuses a verifier that is the maker; a probe has the real validator judge the register it writes. Opening tool 1.2.0 states the human approval level of a profile. Ruling G181; discipline and narratives v145.0.0.

@@ -4380,3 +4380,8 @@ ex:REV_EARLY a backlog:SprintReviewCeremony ; backlog:ceremonyFor ex:EARLY_BOX ;
 # LDT_NoTable -> LineagePlansUnderDigestTableShape fires.
 ex:LDT_NoTable a backlog:Lineage ; backlog:adoptionRecordedAtOpen true ; backlog:adoptsRuleSet backlog:RS_PlanBeforeStart .
 ex:LDT_NoTable_Task a backlog:ExecutionTask ; backlog:belongsToLineage ex:LDT_NoTable .
+
+# DEFAULT_TWO    two profiles both marked as the default (DefaultProfileShape).
+@prefix defaultprofilen: <http://example.org/default-profile-neg#> .
+defaultprofilen:P1 a backlog:OpeningProfile ; backlog:isDefaultProfile true .
+defaultprofilen:P2 a backlog:OpeningProfile ; backlog:isDefaultProfile true .

@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""backlog_open_lineage v1.2.0 -- write the opening block of a lineage from a profile (G155, G163).
+"""backlog_open_lineage v1.3.0 -- write the opening block of a lineage from a profile (G155, G163).
 
 A lineage is judged only by the rule sets it adopts (G89, G91), and the adoption is recorded at its opening (adoptionRecordedAtOpen). Doing that by hand,
 rule set by rule set, is why consumers opened lineages that were not agentic: nobody knew the list. A profile (OpeningProfile) in the data file names the
 list; this tool reads it and prints the block, so the choice is made once, by name.
 
+  backlog_open_lineage.py --lineage Lineage_3 --prefix fzv      (no --profile: the profile marked isDefaultProfile opens it; none or several marked: refused)
   backlog_open_lineage.py --list                                   the profiles in the data file and what each includes
   backlog_open_lineage.py --profile Profile_Agentic --lineage Lineage_3 --prefix fzv
         prints Turtle for the lineage subject: openedWithProfile, adoptionRecordedAtOpen true, and one adoptsRuleSet per rule set of the profile.
@@ -14,7 +15,7 @@ The block also names the profile revision the lineage opens under (openedUnderRe
 Exit 0, 2 on an unknown profile.
 """
 import glob, os, re, sys
-from rdflib import Graph, Namespace, RDF
+from rdflib import Graph, Namespace, RDF, Literal
 HERE = os.path.dirname(os.path.abspath(__file__)); PKG = os.path.dirname(HERE)
 B = Namespace("http://example.org/backlog#")
 sv = lambda p: [int(x) for x in re.findall(r"_v(\d+)_(\d+)_(\d+)\.", p)[0]]
@@ -47,6 +48,11 @@ def main(argv):
             print(n + ": " + ", ".join(rs))
         return 0
     prof, lin = opt("--profile"), opt("--lineage")
+    if not prof and lin:  # v1.2.0 (Lineage 24): the profile marked as the default opens the lineage when none is named; the tool never guesses
+        marked = sorted(str(x).rsplit("#", 1)[-1] for x in g.subjects(B.isDefaultProfile, Literal(True)))
+        if len(marked) != 1:
+            print("REFUSED: no profile is named and %s marked as the default; name one with --profile (one of: %s)" % ("none is" if not marked else "%d are" % len(marked), ", ".join(sorted(P)))); return 2
+        prof = marked[0]
     if not prof or not lin or prof not in P:
         print("REFUSED: give --profile (one of: %s) and --lineage" % ", ".join(sorted(P))); return 2
     lv = g.value(B[prof], B.humanApprovalLevel)

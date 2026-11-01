@@ -4290,5 +4290,16 @@ Related: G162, G178, G179.
 
 **Q3 — what the record shows.** The first probe run drew four violations that a stub would have hidden: tasks need the same roles as stories. The tool records that a review file exists and is newer than the box; it cannot prove that an agent other than the maker wrote it. A person approves only work at or above the stated integrity level (3); this lineage family works at 2.
 
-**What is not claimed.** AAL is not yet the default; that follows a live run under it. Human overseers and managerial independence stay opt-in (they bind work that names a person as overseer).
+**What is not claimed.** AAL is not yet the default; that follows a live run under it. Human overseers and managerial independence stay opt-in, as G179 decided (they bind work that names a person as overseer or a controlling party; agent-run work does not), so verifier independence rests on the review file and the name check. The 44 is the 38 violations of agent accountability and the 6 of independent verification counted for G179. An independent review judged the records as recorded and not proved: the approving run exists only if the validator accepted the close (a refused close is put back), the monitor's list is kept as a comment because it always names the box in progress and cannot gate a close, and the verifier is a name. The probe uses a one-story register; the live proof is the next lineage. Work at integrity level 2 is below the stated level 3, so no person approves it; the level is the Owner's to change.
 Related: G89, G112, G118, G179.
+
+## G182 — At most one profile is the default
+
+**Q1 — the finding.** No profile was marked as the default; the opening tool needed a profile named every time, and "the default" existed only in conversation.
+
+**Q2 — what was ruled and built.** A profile can carry the mark isDefaultProfile. A shape refuses two marks, shown on a fixture case and by a probe; the opening tool opens with the marked profile when none is named and refuses, saying why, when none or several are marked. The vocabulary change (the property, and the profile now a domain of the human approval level) is in the new version of the T-Box.
+
+**Q3 — what the record shows.** No profile is marked yet. Marking the agentic adaptive profile is left to the lineage that proves it live, so that the default follows evidence.
+
+**What is not claimed.** The tool cannot know that a marked profile is a good default; that is the Owner's decision, taken after a live run.
+Related: G166, G181.
