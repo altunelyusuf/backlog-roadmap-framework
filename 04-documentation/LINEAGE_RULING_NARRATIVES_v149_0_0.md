@@ -4325,3 +4325,14 @@ Related: G166, G181, G182.
 
 **What is not claimed.** That the place was in fact unchanged (the record states it; a false statement is accepted as a statement); that the plan was fixed before the verifier started (the digest is recorded; the order is witnessed by the grant only); that the verifier is independent in command; that Agentic-Systems or agentic-sdlc changed (a handover tells each).
 Related: G109, G118, G181, G182, G183.
+
+## G185 — The step tool records the verifier session, and what it cannot prove
+
+**Q1 — the finding.** The shapes of G184 refuse a verifier run with no session record, but the step tool did not write one: a box closed by it would be refused by the rule it was built to serve.
+
+**Q2 — what was ruled and built.** In an agentic lineage the builder fixes the brief of the verifier with `freeze` before the verifier starts; the tool keeps the digest of the brief and of the governed files at that moment. At the close it records the plan with its digest, the grant of access (given by the builder run, read-only, at the time the brief was fixed), the way the verifier started, the session, a configuration made when the brief was fixed, and whether the governed files were unchanged since. The verifier run is stamped with the start the builder stated, which must lie between the fixing of the brief and the writing of the review. The iteration and the deployment unit of the box name their overseer, verifier and approver, and each item of the overseer's escalation list becomes a finding of the box, open unless the spec answers it.
+
+**Q3 — what the record shows.** The overseer had listed the iterations and deployment units of every earlier box as lacking roles, and no rule asked for them; the rule and the monitor now agree for new boxes, and the earlier ones are findings, not backfilled.
+
+**What is not claimed.** That the verifier was in fact started when the builder says: the order is witnessed by the opening time of the box in the register, a time written into the frozen record (which whoever can edit the brief can rewrite), the write time of the review file, and the builder's own statement. The statement that the governed files were unchanged leaves out the register, the record files, the review and brief files, and files git ignores; the grant and the configuration carry the time the brief was fixed, though they are written at the close. That the grant was given by a person: it is given by the builder, which is allowed below the approval level and refused by G184 at or above it. No shape reaches these two; this ruling says so.
+Related: G109, G118, G184.

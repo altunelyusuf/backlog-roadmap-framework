@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v1.498.0 — 2026-11-01 (MINOR: Lineage 26, box 2 -- the step tool records the verifier session)
+
+Step tool 1.7.0 (G185): freeze fixes the brief and the governed files; the close records plan digest, grant, start way, session, place unchanged and configuration, stamps the verifier at its start, names the roles of the iteration and unit, and turns each overseer item into a finding. Probe of 25 expectations on the real validator; live: the second box of this lineage is clean under the new rule set.
+
+**Unplanned work:** none.
+
 ## v1.497.0 — 2026-11-01 (MINOR: Lineage 26, box 1 -- the verifier session record: rule set RS_VerifierSession and four shapes)
 
 AAL includes RS_VerifierSession from profile revision 11 (G184): a verifier run must record how it started, its grant, its plan digest, its session, whether the place was unchanged and a configuration made before it; a person grants at or above the approval level. Terms are the Agentic-Systems package's. Probe on the real validator, four fixture cases, kept test drive.

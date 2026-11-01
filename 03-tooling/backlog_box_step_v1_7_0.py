@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_box_step v1.4.0 -- records the work of one box in order, with the clock of its run, and refuses the faults made by hand.
+"""backlog_box_step v1.7.0 -- records the work of one box in order, with the clock of its run, and refuses the faults made by hand.
 
 Lineage 21, deliverable D3. The faults came from boxes 4 to 9 of Lineage 20, each written down as a finding there:
   * a close composed in one pass          -> `close` refuses a box with no checkpoint recorded between its start and the close
@@ -10,6 +10,10 @@ Lineage 21, deliverable D3. The faults came from boxes 4 to 9 of Lineage 20, eac
   * a name changed by hand                -> every identifier is made here from the box number and the story key, and `close` refuses when one the opening wrote is gone
   * the effort read from the wrong place  -> effort is read from `hasEffort` of the stories, nowhere else
 
+v1.7.0 (Lineage 26, G184): in an agentic lineage the close records the verifier's session as the Agentic-Systems package defines it (v0.78.0): the plan with its digest, the grant of
+access, the way it started, the session, whether the place was unchanged, and a configuration recorded before the run; the verifier run is stamped when the review started, not at the close; the
+iteration and the deployment unit of the box name their overseer, verifier and approver; and each item of the overseer's escalation list becomes a finding. Before the verifier starts the builder runs
+`freeze BRIEF.txt`, which fixes the digest of the brief and of the governed files at that moment (`BRIEF.txt.frozen.json`); the spec names it (verifier: plan, started, model).
 v1.2.0 (Lineage 22): the Definition of Done the tool writes states its criterion text with rdfs:comment; v1.1.0 wrote a predicate declared nowhere, which the link-control probe refused.
 v1.1.0 (Lineage 22, D3): the obligations of a status are read from the register, not carried as code. `owes` validates a copy of the register with the lineage moved to the named status and
 prints what is violated there that is not violated now; `open` prints the same for the status it enters. `open` and `close` then validate the register they wrote and, when they introduced a
@@ -18,6 +22,7 @@ violation, put the register back as it was and refuse, naming it. With no valida
 Usage:  backlog_box_step.py REGISTER.ttl owes STATUS      (e.g. LS_InProgress: what that status owes that the register does not yet hold)
         backlog_box_step.py REGISTER.ttl open  N "title" "sprint goal" STORY_KEY[,STORY_KEY...] [--capacity C] [--allow PATH ...]
         backlog_box_step.py REGISTER.ttl act   N STORY_KEY "what was done"
+        backlog_box_step.py REGISTER.ttl freeze BRIEF.txt        (agentic lineage: fix the verifier's plan and the state of the governed files before the verifier starts)
         backlog_box_step.py REGISTER.ttl close N SPEC.json
 The lineage and prefix are fixed by --lineage (default L_AdaptiveProof) and --prefix (default AP).
 
@@ -201,7 +206,47 @@ def made_by(recs, P, n):
     """Every move the tool records names the run that made it."""
     return [r.replace("backlog:transitionedBy backlog:Builder", "backlog:transitionedBy backlog:Builder ; backlog:transitionedByExecutor %s" % run_id(P, n, "Builder")) for r in recs]
 
-TOOL_VERSION = "1.6.0"
+import hashlib
+
+BRIDGE = """@prefix agsys: <http://example.org/agentic-systems#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+fw:StartWay_Request a agsys:StartWay ; rdfs:label "On the builder's request"@en .
+fw:AccessRoute_FileSystem a agsys:AccessRoute ; rdfs:label "The working tree of the package, on the file system of the session"@en ."""
+
+
+def tree_digest(root, reg_path):
+    """sha256 over the governed files that differ from the published tree (path and content), without the register, the review notes and the briefs."""
+    h = hashlib.sha256()
+    for f in governed_changed(root):
+        if f.startswith("06-package-provenance/reviews/") or os.path.join(root, f) == os.path.realpath(reg_path):
+            continue
+        p = os.path.join(root, f)
+        h.update(f.encode()); h.update(open(p, "rb").read() if os.path.isfile(p) else b"<removed>")
+    return h.hexdigest()
+
+
+def file_digest(p):
+    return hashlib.sha256(open(p, "rb").read()).hexdigest()
+
+
+def cmd_freeze(reg, root, brief):
+    p = os.path.join(root, brief)
+    if not os.path.isfile(p) or os.path.getsize(p) == 0:
+        raise SystemExit("REFUSED: the brief %s does not exist or is empty" % brief)
+    fz = {"frozen_at": now(), "plan_digest": file_digest(p), "tree_digest": tree_digest(root, reg.path)}
+    json.dump(fz, open(p + ".frozen.json", "w"))
+    print("frozen at %s: plan %s..., governed files %s..." % (fz["frozen_at"], fz["plan_digest"][:12], fz["tree_digest"][:12]))
+
+
+def escalation_items(text):
+    out, on = [], False
+    for ln in text.splitlines():
+        if ln.startswith("== Escalation"): on = True
+        elif on and ln.strip().startswith("- "): out.append(ln.strip()[2:])
+    clean = lambda s: re.sub(r"\bRel_\w+", "a deployment unit", re.sub(r"\bIt_\w+", "an iteration", re.sub(r"\b(ST|T|Run|Ev|Obj)_\w+", "a record", s)))
+    return [clean(x) for x in out]
+
+TOOL_VERSION = "1.7.0"
 
 def has_own_kickoff(text, L):
     """True when the register holds a kick-off of this lineage itself; the kick-off of another lineage does not count (Lineage 24, held by a probe in Lineage 25)."""
@@ -341,17 +386,39 @@ def cmd_close(reg, root, n, spec):
             raise SystemExit("REFUSED: the review file %s of the verifying agent does not exist or is empty" % v["review"])
         if files_before([rv], t0):
             raise SystemExit("REFUSED: the review file %s is older than the box: it was not produced inside box %d" % (v["review"], n))
+        if not v.get("plan") or not v.get("started"):
+            raise SystemExit("REFUSED: this lineage is agentic: the spec must name the plan of the verifier (verifier: plan, the brief fixed with `freeze`) and the time it started (verifier: started)")
+        pf = os.path.join(root, v["plan"])
+        if not os.path.isfile(pf) or not os.path.isfile(pf + ".frozen.json"):
+            raise SystemExit("REFUSED: the plan %s or its frozen record is missing: run `freeze` on the brief before the verifier starts" % v["plan"])
+        fz = json.load(open(pf + ".frozen.json"))
+        if file_digest(pf) != fz["plan_digest"]:
+            raise SystemExit("REFUSED: the brief %s changed after it was fixed: it is not the plan the verifier followed" % v["plan"])
+        if not (parse_t(t0) <= parse_t(fz["frozen_at"]) <= parse_t(v["started"]) and parse_t(v["started"]) <= datetime.datetime.fromtimestamp(os.path.getmtime(rv), datetime.timezone.utc) + datetime.timedelta(seconds=2)):
+            raise SystemExit("REFUSED: the order is not box opened <= plan fixed <= verifier started <= review written: %s, %s, %s" % (t0, fz["frozen_at"], v["started"]))
+        unchanged = (fz["tree_digest"] == tree_digest(root, reg.path))
         mon = sorted(glob.glob(os.path.join(os.path.dirname(os.path.abspath(__file__)), "backlog_agent_monitor_v*.py")), key=lambda x: [int(y) for y in re.findall(r"_v(\d+)_(\d+)_(\d+)", x)[0]])
-        esc_n = "the agent monitor was not found beside the tool"
+        esc_n = "the agent monitor was not found beside the tool"; esc_list = []
         if mon:
             mr = subprocess.run([sys.executable, mon[-1], reg.path, "--lineage", reg.L[3:]], capture_output=True, text=True)
-            esc_n = "the agent monitor ran and its escalation list was %s" % ("empty" if mr.returncode == 0 else "not empty (exit %d)" % mr.returncode)
-        tov, tver, tapp = tick(), tick(), tick()
-        recs_a = [agent_run(P, n, "Overseer", tov, TOOL_VERSION)[:-2] + "; rdfs:comment \"%s.\"@en ." % esc(esc_n),
-                  agent_run(P, n, "Verifier", tver, TOOL_VERSION)[:-2] + "; rdfs:comment \"Reviewed by %s; the review is kept in a file of the package.\"@en ." % esc(v["agent"]),
-                  agent_run(P, n, "Approver", tapp, TOOL_VERSION)]
+            esc_list = escalation_items(mr.stdout)
+            esc_n = "the agent monitor ran and its escalation list was %s" % ("empty" if mr.returncode == 0 else "not empty (exit %d); each item is a finding of this box" % mr.returncode)
+        tov, tapp = tick(), tick()
+        cfg = "fw:Config_%s_%d_Verifier" % (P, n)
+        recs_a = [BRIDGE if "agsys:StartWay" not in reg.s else "",
+                  "fw:Session_%s_%d_Verifier a prov:Agent ; rdfs:label \"%s\"@en ." % (P, n, esc(v["agent"])),
+                  "fw:Grant_%s_%d_Verifier a agsys:AccessGrant ; agsys:grantedBy %s ; agsys:viaRoute fw:AccessRoute_FileSystem ; agsys:grantedPlace \"the governed files and the register of the package, as the builder left them when the brief was fixed\" ; agsys:grantMode \"read-only\" ; agsys:grantedAt %s ." % (P, n, run_id(P, n, "Builder"), dt(fz["frozen_at"])),
+                  "fw:Plan_%s_%d_Verifier a agsys:VerificationPlan ; agsys:hasPlanDigest \"%s\" ; rdfs:comment \"The brief given to the verifying agent, fixed by its digest before the agent started.\"@en ." % (P, n, fz["plan_digest"]),
+                  "%s a agsys:AgentConfiguration ; agsys:isConfigurationOf fw:Exec_Verifier ; agsys:recordedAt %s ; agsys:hasConfigurationItem fw:CfgItem_%s_%d_Brief%s ." % (cfg, dt(fz["frozen_at"]), P, n, (" , fw:CfgItem_%s_%d_Model" % (P, n)) if v.get("model") else ""),
+                  "fw:CfgItem_%s_%d_Brief a agsys:ConfigurationItem ; agsys:hasItemKind \"brief\" ; agsys:hasItemValue \"sha256 %s\" ." % (P, n, fz["plan_digest"])]
+        if v.get("model"):
+            recs_a.append("fw:CfgItem_%s_%d_Model a agsys:ConfigurationItem ; agsys:hasItemKind \"model\" ; agsys:hasItemValue \"%s\" ." % (P, n, esc(v["model"])))
+        recs_a += [agent_run(P, n, "Overseer", tov, TOOL_VERSION)[:-2] + "; rdfs:comment \"%s.\"@en ." % esc(esc_n),
+                   (agent_run(P, n, "Verifier", v["started"], "Config_%s_%d_Verifier" % (P, n))[:-2] + "; agsys:startedInWay fw:StartWay_Request ; agsys:startedUnderGrant fw:Grant_%s_%d_Verifier ; agsys:followsPlan fw:Plan_%s_%d_Verifier ; agsys:executedBy fw:Session_%s_%d_Verifier ; agsys:placeUnchanged %s ; rdfs:comment \"Reviewed by %s; the review is kept in a file of the package.\"@en ." % (P, n, P, n, P, n, "true" if unchanged else "false", esc(v["agent"]))),
+                   agent_run(P, n, "Approver", tapp, TOOL_VERSION)]
         defs = agent_defs(reg)
         if defs: recs_a.insert(0, defs.rstrip("\n"))
+        recs_a = [x for x in recs_a if x]
     recs = []
     for k in keys:
         s = spec["stories"][k]
@@ -380,6 +447,13 @@ def cmd_close(reg, root, n, spec):
     for f in spec["findings"]:
         fks.append("fw:Find_%s_%s" % (P, f["key"]))
         recs.append("fw:Find_%s_%s a backlog:RetrospectiveFinding ;\n    backlog:hasFindingScope backlog:Scope_LineageLocal ;\n    backlog:relatesToWorkItem fw:ST_%s_%s ;\n    backlog:hasRootCause \"%s\" ;\n    backlog:hasRemedy \"%s\" ." % (P, f["key"], P, f.get("story", keys[0]), esc(f["root_cause"]), esc(f["remedy"])))
+    if agentic:
+        ans = spec.get("escalation_answer", "Open: raised by the overseer and not answered in this box.")
+        for i, line in enumerate(esc_list, 1):
+            if ('hasRootCause "%s"' % esc(line)) in reg.s:
+                continue
+            fks.append("fw:Find_%s_Esc%d_%d" % (P, n, i))
+            recs.append("fw:Find_%s_Esc%d_%d a backlog:RetrospectiveFinding ;\n    backlog:hasFindingScope backlog:Scope_LineageLocal ;\n    backlog:relatesToWorkItem fw:ST_%s_%s ;\n    backlog:hasRootCause \"%s\" ;\n    backlog:hasRemedy \"%s\" ." % (P, n, i, P, keys[0], esc(line), esc(ans)))
     tret = tick()
     recs.append("fw:%s a backlog:SprintRetrospective ; backlog:hasWorkKind backlog:WorkKind_Closure ;\n    backlog:followsReview fw:%s ; backlog:heldAt %s ; backlog:producesFinding %s ." % (ids["retro"], ids["review"], dt(tret), " , ".join(fks)))
     for o in spec["observations"]:
@@ -390,6 +464,8 @@ def cmd_close(reg, root, n, spec):
     reg.s = reg.s[:m.start()] + m.group(1) + 'backlog:hasState backlog:Done ; backlog:iterationStart %s ;\n    backlog:iterationEnd %s ;\n    backlog:hasCapacity %s ; backlog:hasObservedDuration %s ; backlog:hasDurationSource "Wall clock from the start of the box to its review, both taken from the register: %s to %s. Effort of the stories read from hasEffort: %s points." ;' % (m.group(2), dt(trev), m.group(3), mins, t0, trev, sum(efforts.values())) + reg.s[m.end():]
     if agentic:
         recs = made_by(recs, P, n) + recs_a
+        for cont in (ids["it"], ids["rel"]):
+            recs.append("fw:%s backlog:overseenBy %s ; backlog:verifiedBy %s ; backlog:approvedBy %s ; backlog:integrityLevel %d ." % (cont, run_id(P, n, "Overseer"), run_id(P, n, "Verifier"), run_id(P, n, "Approver"), 2))
         for k in keys:
             for it in ("ST_%s_%s" % (P, k), "T_%s_%s_Build" % (P, k)):
                 recs.append("fw:%s backlog:overseenBy %s ; backlog:verifiedBy %s ; backlog:approvedBy %s ." % (it, run_id(P, n, "Overseer"), run_id(P, n, "Verifier"), run_id(P, n, "Approver")))
@@ -489,6 +565,8 @@ def main(argv):
         if o:
             print("owed at LS_InProgress, before the box is opened:\n  " + "\n  ".join("%s: %s" % x for x in o))
         guarded(path, lambda: cmd_open(reg, root, int(a[2]), a[3], a[4], a[5].split(","), capacity, allow, integrity))
+    elif cmd == "freeze":
+        cmd_freeze(reg, root, a[2])
     elif cmd == "act":
         cmd_act(reg, int(a[2]), a[3], a[4])
     elif cmd == "close":
