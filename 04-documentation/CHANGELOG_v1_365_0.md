@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v1.503.0 — 2026-11-02 (Lineage 27, Objective stage)
+
+Five objectives with baselines, targets and checkpoints. Stage 4 of 5.
+
+**Unplanned work:** none.
+
 ## v1.502.0 — 2026-11-02 (Lineage 27, Goal stage)
 
 Five goals: the mission, three areas, containment. Stage 3 of 5.
