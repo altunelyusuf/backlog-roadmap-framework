@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v1.492.0 — 2026-11-01 (MINOR: Lineage 26 -- Mission stage: the AAL verifier recorded to the Agentic-Systems standard)
+
+Opens Lineage 26 under the default profile (AAL); mission set from the eight gaps of the test drive of 2026-11-01.
+
+**Unplanned work:** none.
+
 ## v1.491.0 — 2026-11-01 (MINOR: Lineage 25 -- the agentic adaptive profile proved live and made the default)
 
 Box 2 of Lineage 25: AAL is marked the default profile (ruling G183), proved on the live register; the lineage is closed Achieved with its closure report and two kept independent reviews.
