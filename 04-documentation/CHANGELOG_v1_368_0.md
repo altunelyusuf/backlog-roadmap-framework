@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v1.506.0 — 2026-11-02 (MINOR: Lineage 27, box 2 -- the place-unchanged statement covers the register, ignored files and renamed paths)
+
+Step tool 1.9.0: the digest behind the place-unchanged statement also covers the register, git-ignored files and the old path of a renamed file; box probe 1.3.0 holds each. Independent review recorded with five findings; this box records the place as changed because the tool was corrected after the plan was fixed.
+
+**Unplanned work:** none.
+
 ## v1.505.0 — 2026-11-02 (MINOR: Lineage 27, box 1 -- the monitor does not report the box being closed as stalled)
 
 Agent monitor 1.2.0 takes the items of the box being closed out of its stalled list; step tool 1.8.0 passes them; both probes hold it. Independent review recorded with three findings, none repaired.

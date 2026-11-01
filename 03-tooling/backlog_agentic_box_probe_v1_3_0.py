@@ -23,7 +23,7 @@ def expect(name, ok):
 work = tempfile.mkdtemp()
 pk = os.path.join(work, "pkg"); os.makedirs(os.path.join(pk, "01-ontologies")); os.makedirs(os.path.join(pk, "03-tooling")); os.makedirs(os.path.join(pk, "06-package-provenance", "reviews"))
 shutil.copy(os.path.join(HERE, TOOL), os.path.join(pk, "03-tooling", TOOL)); shutil.copy(os.path.join(HERE, MON), os.path.join(pk, "03-tooling", MON))
-REG = os.path.join(pk, "01-ontologies", "backlog_abox_v1_2_0.ttl")
+REG = os.path.join(pk, "01-ontologies", "backlog_abox_v1_3_0.ttl")
 open(REG, "w").write("""@prefix fw: <http://example.org/backlog-framework-register#> .
 @prefix backlog: <http://example.org/backlog#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
@@ -132,6 +132,19 @@ expect("the REAL validator draws no violation on the register after the second b
 broken = os.path.join(work, "broken.ttl"); open(broken, "w").write(final.replace("backlog:verifiedBy fw:Run_AP_1_Verifier ;", ""))
 expect("the same register without the verifier link is refused by the real validator (the probe can fail)", len(judged(broken)) >= 1)
 expect("the monitor's list does not name the box being closed (its iteration, unit, stories or tasks) as In Progress with no move", all(x not in final2 for x in ("an iteration is In Progress with no move", "a deployment unit is In Progress with no move")) and final2.count("a record is In Progress with no move") == 1)
+# the place-unchanged digest: a change of the register, of a git-ignored file, or the old path of a renamed file changes it
+import importlib.util
+spec_ = importlib.util.spec_from_file_location("stepmod", os.path.join(pk, "03-tooling", TOOL)); stepmod = importlib.util.module_from_spec(spec_); spec_.loader.exec_module(stepmod)
+d0 = stepmod.tree_digest(pk, REG)
+open(REG, "a").write("# changed after the plan was fixed\n"); d1 = stepmod.tree_digest(pk, REG)
+expect("the digest changes when only the register changes", d0 != d1)
+open(os.path.join(pk, ".gitignore"), "a").write("hidden_note.txt\n"); subprocess.run(["git", "-C", pk, "add", ".gitignore"], capture_output=True); subprocess.run(["git", "-C", pk, "commit", "-qm", "ignore"], capture_output=True)
+d2 = stepmod.tree_digest(pk, REG); open(os.path.join(pk, "hidden_note.txt"), "w").write("x\n"); d3 = stepmod.tree_digest(pk, REG)
+expect("the digest changes when only a git-ignored file is added", d2 != d3)
+tracked = [f for f in subprocess.run(["git", "-C", pk, "ls-files", "03-tooling"], capture_output=True, text=True).stdout.split() if f.endswith(".py") and "other" in f]
+subprocess.run(["git", "-C", pk, "mv", tracked[0], tracked[0].replace("other", "renamed")], capture_output=True)
+d4 = stepmod.tree_digest(pk, REG)
+expect("the digest names the old path of a renamed file as removed", d4 != d3 and "other.py" in "".join(stepmod.governed_changed(pk)))
 shutil.rmtree(work, ignore_errors=True)
 print("VERDICT: %s" % ("PASS -- %d expectations hold" % COUNT[0] if not bad else "FAIL -- " + "; ".join(bad)))
 sys.exit(1 if bad else 0)

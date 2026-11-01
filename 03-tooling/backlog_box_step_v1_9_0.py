@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_box_step v1.8.0 -- records the work of one box in order, with the clock of its run, and refuses the faults made by hand.
+"""backlog_box_step v1.9.0 -- records the work of one box in order, with the clock of its run, and refuses the faults made by hand.
 
 Lineage 21, deliverable D3. The faults came from boxes 4 to 9 of Lineage 20, each written down as a finding there:
   * a close composed in one pass          -> `close` refuses a box with no checkpoint recorded between its start and the close
@@ -10,6 +10,7 @@ Lineage 21, deliverable D3. The faults came from boxes 4 to 9 of Lineage 20, eac
   * a name changed by hand                -> every identifier is made here from the box number and the story key, and `close` refuses when one the opening wrote is gone
   * the effort read from the wrong place  -> effort is read from `hasEffort` of the stories, nowhere else
 
+v1.9.0 (Lineage 27): the place-unchanged digest also covers the register, git-ignored files and the old path of a renamed file.
 v1.8.0 (Lineage 27): the box being closed (its stories, tasks, iteration and deployment unit) is not reported as stalled by the monitor.
 v1.7.0 (Lineage 26, G184): in an agentic lineage the close records the verifier's session as the Agentic-Systems package defines it (v0.78.0): the plan with its digest, the grant of
 access, the way it started, the session, whether the place was unchanged, and a configuration recorded before the run; the verifier run is stamped when the review started, not at the close; the
@@ -92,7 +93,7 @@ def files_before(paths, t0):
 
 def governed_changed(root, ref="origin/main", allow=()):
     """Governed files of the package that differ from the published tree: changed, new or removed, record files excluded."""
-    out = subprocess.run(["git", "-C", root, "diff", "--relative", "--name-status", ref, "--", "."], capture_output=True, text=True).stdout.split("\n")
+    out = subprocess.run(["git", "-C", root, "diff", "--relative", "--no-renames", "--name-status", ref, "--", "."], capture_output=True, text=True).stdout.split("\n")
     new = subprocess.run(["git", "-C", root, "ls-files", "--others", "--exclude-standard", "--", "."], capture_output=True, text=True).stdout.split("\n")
     rel = lambda p: p
     paths = []
@@ -100,6 +101,8 @@ def governed_changed(root, ref="origin/main", allow=()):
         if ln.strip():
             paths.append(ln.split("\t")[-1])
     paths += [p for p in new if p.strip()]
+    ign = subprocess.run(["git", "-C", root, "ls-files", "--others", "--ignored", "--exclude-standard", "--", "."], capture_output=True, text=True).stdout.split("\n")
+    paths += [p for p in ign if p.strip() and not re.match(r"^\.[a-z-]+-stamp$", p)]   # the stamps the release gate leaves in the tree are not work
     pk = subprocess.run(["git", "-C", root, "rev-parse", "--show-prefix"], capture_output=True, text=True).stdout.strip()
     res = []
     for p in paths:
@@ -216,13 +219,14 @@ fw:AccessRoute_FileSystem a agsys:AccessRoute ; rdfs:label "The working tree of 
 
 
 def tree_digest(root, reg_path):
-    """sha256 over the governed files that differ from the published tree (path and content), without the register, the review notes and the briefs."""
+    """sha256 over the governed files that differ from the published tree (path and content: changed, new, removed, the old path of a renamed file, and git-ignored files) and over the register itself; the review notes and briefs, where the verifier writes, stay out."""
     h = hashlib.sha256()
     for f in governed_changed(root):
         if f.startswith("06-package-provenance/reviews/") or os.path.join(root, f) == os.path.realpath(reg_path):
             continue
         p = os.path.join(root, f)
         h.update(f.encode()); h.update(open(p, "rb").read() if os.path.isfile(p) else b"<removed>")
+    h.update(b"<register>"); h.update(open(reg_path, "rb").read())
     return h.hexdigest()
 
 
@@ -247,7 +251,7 @@ def escalation_items(text):
     clean = lambda s: re.sub(r"\bRel_\w+", "a deployment unit", re.sub(r"\bIt_\w+", "an iteration", re.sub(r"\b(ST|T|Run|Ev|Obj)_\w+", "a record", s)))
     return [clean(x) for x in out]
 
-TOOL_VERSION = "1.8.0"
+TOOL_VERSION = "1.9.0"
 
 def has_own_kickoff(text, L):
     """True when the register holds a kick-off of this lineage itself; the kick-off of another lineage does not count (Lineage 24, held by a probe in Lineage 25)."""
