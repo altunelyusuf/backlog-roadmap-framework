@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v1.500.0 — 2026-11-02 (Lineage 27, Mission stage: the record of a box complete and true)
+
+Opens Lineage 27 under the agentic adaptive profile, bound for the first time by the verifier session rule set. Mission: the record of a box in an agentic adaptive lineage is complete and true to what happened. Stage 1 of 5.
+
+**Unplanned work:** none.
+
 ## v1.499.0 — 2026-11-01 (MINOR: Lineage 26 -- the AAL verifier recorded to the Agentic-Systems standard, closed Achieved)
 
 Box 3: the two packages that hold the standard are told by a handover delivered to each inbox; the lineage is closed Achieved with its closure report and three kept independent reviews.
