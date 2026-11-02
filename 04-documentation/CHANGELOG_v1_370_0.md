@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v2.0.0 — 2026-11-02 (MAJOR: Lineage 27 closed -- the record of a box is complete and true to what happened)
+
+Lineage 27 achieved: the monitor does not report the box being closed (monitor 1.2.0, step tool 1.8.0); the place-unchanged digest covers the register, ignored files and renamed paths (step tool 1.9.0); the two returned answers are answered. Major version: the agentic adaptive profile is the default, the verifier is recorded to the Agentic-Systems terms, and the first lineage bound by that rule set is closed.
+
+**Unplanned work:** the checkpoints of the objectives of Lineages 21 to 27 began to fall due on 2026-11-02 with no observation dated after them, which refused every release from that day. The outcome of each of those 44 objectives was recorded (Retrospective for a finished lineage, Withdrawn for the unmet objectives of the abandoned Lineage 21) with the property `hasAchievementStatus`, which the shapes already read and the T-Box (1.162.0) now declares. This was not a story of the lineage; it is disclosed here and in the closure report.
+
 ## v1.507.0 — 2026-11-02 (MINOR: Lineage 27, box 3 -- the two returned answers are answered)
 
 A reply to agentic-sdlc on where the 19th rule set of the agentic adaptive profile is held, and one to Agentic-Systems on the grantor and the level; both delivered to the recipients' inboxes. Independent review recorded with four findings, three repaired.
