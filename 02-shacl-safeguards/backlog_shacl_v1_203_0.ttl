@@ -9,9 +9,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog/shacl/1.202.0> ;
-    owl:versionInfo "1.202.0" ;
-    owl:priorVersion <http://example.org/backlog-shapes/1.201.0> , <http://example.org/backlog-shapes/1.197.0> ;
+    owl:versionIRI <http://example.org/backlog/shacl/1.203.0> ;
+    owl:versionInfo "1.203.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.202.0> , <http://example.org/backlog-shapes/1.201.0> , <http://example.org/backlog-shapes/1.197.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.184.0> , <http://example.org/backlog-shapes/1.176.0> , <http://example.org/backlog-shapes/1.175.0> , <http://example.org/backlog-shapes/1.174.0> , <http://example.org/backlog-shapes/1.173.0> , <http://example.org/backlog-shapes/1.172.0> , <http://example.org/backlog-shapes/1.171.0> , <http://example.org/backlog-shapes/1.170.0> , <http://example.org/backlog-shapes/1.169.0> , <http://example.org/backlog-shapes/1.168.0> , <http://example.org/backlog-shapes/1.167.0> , <http://example.org/backlog-shapes/1.166.0> , <http://example.org/backlog-shapes/1.165.0> , <http://example.org/backlog-shapes/1.164.0> , <http://example.org/backlog-shapes/1.159.0> , <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.154.0> , <http://example.org/backlog-shapes/1.153.0> , <http://example.org/backlog-shapes/1.152.0> , <http://example.org/backlog-shapes/1.151.0> , <http://example.org/backlog-shapes/1.150.0> , <http://example.org/backlog-shapes/1.149.0> , <http://example.org/backlog-shapes/1.148.0> , <http://example.org/backlog-shapes/1.147.0> , <http://example.org/backlog-shapes/1.146.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.145.0> ;
@@ -2665,6 +2665,7 @@ backlog:SilentContainerRebaselineShape a sh:NodeShape ;
                backlog:hasBaselineStart ?bs ; backlog:hasBaselineEnd ?be .
             FILTER (?cs != ?bs || ?ce != ?be)
             FILTER NOT EXISTS { ?rb backlog:rebaselines $this }
+            FILTER NOT EXISTS { $this backlog:hasState backlog:Done }
         }""" ] .
 
 #################################################################
@@ -9644,13 +9645,28 @@ backlog:PlannedDatesShape a sh:NodeShape ;
         sh:message "PD_UNPLANNED: this checkpoint date of a lineage that plans its dates is backed by no complete forecast of its own: it names none or more than one, the forecast is shared with another checkpoint, lacks the time it was made, the date it expects, a non-empty assumption or a velocity above zero, was made after the date it expects, the date is earlier than the forecast expects, or the date is not typed as a dateTime." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] , [ sh:prefix "xsd" ; sh:namespace "http://www.w3.org/2001/XMLSchema#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
-            $this backlog:checkpointDate ?cd .
             ?obj backlog:hasCheckpoint $this ; backlog:belongsToLineage ?lin .
             ?lin backlog:adoptsRuleSet backlog:RS_PlannedDates .
+            OPTIONAL { $this backlog:checkpointDate ?cd }
             OPTIONAL { $this backlog:datePredictedBy ?f }
-            FILTER ( !BOUND(?f) || datatype(?cd) != xsd:dateTime
+            FILTER ( !BOUND(?cd) || !BOUND(?f) || datatype(?cd) != xsd:dateTime
                 || NOT EXISTS { ?f backlog:forecastMadeAt ?fm ; backlog:forecastCompletion ?fc ; backlog:forecastAssumption ?fa ; backlog:forecastObservedVelocity ?fv .
-                                FILTER (?cd >= ?fc && ?fm <= ?fc && STRLEN(STR(?fa)) > 0 && ?fv > 0) }
+                                FILTER (?cd >= ?fc && ?fm <= ?fc && STRLEN(REPLACE(STR(?fa), "\\\\s", "")) > 0 && ?fv > 0) }
                 || EXISTS { ?other backlog:datePredictedBy ?f . FILTER (?other != $this) }
                 || EXISTS { $this backlog:datePredictedBy ?f2 . FILTER (?f2 != ?f) } )
+        }""" ] .
+
+backlog:BoxBasePlanShape a sh:NodeShape ;
+    sh:targetClass backlog:Iteration ;
+    sh:severity sh:Violation ;
+    rdfs:label "A box of a lineage that plans its dates carries a base plan (G187)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "BP_NOBASEPLAN" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "BP_NOBASEPLAN: this box of a lineage that plans its dates has no current base plan with a start and an end. Without one the box cannot be measured against what was planned, and the dates of the objectives it moves have nothing to follow." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:belongsToLineage ?lin .
+            ?lin backlog:adoptsRuleSet backlog:RS_PlannedDates .
+            FILTER NOT EXISTS { ?b backlog:baselineFor $this ; backlog:isCurrentBaseline true ; backlog:hasBaselineStart ?bs ; backlog:hasBaselineEnd ?be }
         }""" ] .

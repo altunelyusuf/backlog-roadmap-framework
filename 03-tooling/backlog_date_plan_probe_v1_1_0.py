@@ -14,13 +14,13 @@ fails = 0
 def expect(label, ok):
     global fails
     print(("PASS  " if ok else "FAIL  ") + label); fails += (not ok)
-def case(name, lin="LinOn", date="2026-11-04T00:00:00Z", forecast="full", fc="2026-11-03T12:00:00Z", dtype="xsd:dateTime", fid=None, vel="3.3", assume="pace of earlier boxes", made="2026-11-02T09:00:00Z", extra=""):
+def case(name, lin="LinOn", date="2026-11-04T00:00:00Z", forecast="full", fc="2026-11-03T12:00:00Z", dtype="xsd:dateTime", fid=None, vel="3.3", assume="pace of earlier boxes", made="2026-11-02T09:00:00Z", extra="", ftype="a backlog:Forecast"):
     fid = fid or f"F_{name}"
-    s = f"ex:O_{name} a backlog:Objective ; backlog:belongsToLineage ex:{lin} ; backlog:hasCheckpoint ex:C_{name} .\nex:C_{name} a backlog:ObjectiveCheckpoint ; backlog:checkpointDate \"{date}\"^^{dtype}"
+    s = f"ex:O_{name} a backlog:Objective ; backlog:belongsToLineage ex:{lin} ; backlog:hasCheckpoint ex:C_{name} .\nex:C_{name} a backlog:ObjectiveCheckpoint ; backlog:checkpointDate \"{date}\"^^{dtype}" if date else f"ex:O_{name} a backlog:Objective ; backlog:belongsToLineage ex:{lin} ; backlog:hasCheckpoint ex:C_{name} .\nex:C_{name} a backlog:ObjectiveCheckpoint"
     if forecast != "none": s += f" ; backlog:datePredictedBy ex:{fid}"
     s += " .\n"
     if forecast != "none":
-        s += f"ex:{fid} a backlog:Forecast ; backlog:forecastFor ex:Reg ; backlog:forecastMadeAt \"{made}\"^^xsd:dateTime ; backlog:forecastCompletion \"{fc}\"^^xsd:dateTime"
+        s += f"ex:{fid} {ftype} ; backlog:forecastFor ex:Reg ; backlog:forecastMadeAt \"{made}\"^^xsd:dateTime ; backlog:forecastCompletion \"{fc}\"^^xsd:dateTime"
         if forecast != "noassumption": s += f" ; backlog:forecastAssumption \"{assume}\""
         if forecast != "novelocity": s += f" ; backlog:forecastObservedVelocity \"{vel}\"^^xsd:decimal"
         s += " .\n"
@@ -28,7 +28,7 @@ def case(name, lin="LinOn", date="2026-11-04T00:00:00Z", forecast="full", fc="20
 CASES = [("Ok", {}, None), ("NoForecast", {"forecast": "none"}, "PD_UNPLANNED"), ("NoVelocity", {"forecast": "novelocity"}, "PD_UNPLANNED"),
          ("NoAssumption", {"forecast": "noassumption"}, "PD_UNPLANNED"), ("EarlierThanForecast", {"date": "2026-11-03T00:00:00Z"}, "PD_UNPLANNED"),
          ("SameAsForecast", {"date": "2026-11-03T12:00:00Z"}, None),
-         ("EmptyAssumption", {"assume": ""}, "PD_UNPLANNED"), ("ZeroVelocity", {"vel": "0"}, "PD_UNPLANNED"), ("MadeAfterCompletion", {"made": "2026-11-05T09:00:00Z"}, "PD_UNPLANNED"),
+         ("EmptyAssumption", {"assume": ""}, "PD_UNPLANNED"), ("SpacesAssumption", {"assume": "   "}, "PD_UNPLANNED"), ("NoDate", {"date": ""}, "PD_UNPLANNED"), ("ZeroVelocity", {"vel": "0"}, "PD_UNPLANNED"), ("MadeAfterCompletion", {"made": "2026-11-05T09:00:00Z"}, "PD_UNPLANNED"),
          ("StringDate", {"dtype": "xsd:string"}, "PD_UNPLANNED"), ("SharedForecastA", {"fid": "F_Shared"}, "PD_UNPLANNED"), ("SharedForecastB", {"fid": "F_Shared"}, "PD_UNPLANNED"),
          ("TwoForecasts", {"extra": "ex:C_NAME backlog:datePredictedBy ex:F_Second .\nex:F_Second a backlog:Forecast ; backlog:forecastFor ex:Reg ; backlog:forecastMadeAt \"2026-11-02T09:00:00Z\"^^xsd:dateTime ; backlog:forecastCompletion \"2026-11-03T12:00:00Z\"^^xsd:dateTime ; backlog:forecastAssumption \"x\" ; backlog:forecastObservedVelocity \"2\"^^xsd:decimal .\n"}, "PD_UNPLANNED"), ("Unbound", {"lin": "LinOff", "forecast": "none"}, None)]
 data = PRE + "".join(case(n, **k) for n, k, _ in CASES)

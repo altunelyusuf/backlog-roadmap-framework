@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_box_step v1.9.0 -- records the work of one box in order, with the clock of its run, and refuses the faults made by hand.
+"""backlog_box_step v1.10.0 -- records the work of one box in order, with the clock of its run, and refuses the faults made by hand.
 
 Lineage 21, deliverable D3. The faults came from boxes 4 to 9 of Lineage 20, each written down as a finding there:
   * a close composed in one pass          -> `close` refuses a box with no checkpoint recorded between its start and the close
@@ -10,6 +10,7 @@ Lineage 21, deliverable D3. The faults came from boxes 4 to 9 of Lineage 20, eac
   * a name changed by hand                -> every identifier is made here from the box number and the story key, and `close` refuses when one the opening wrote is gone
   * the effort read from the wrong place  -> effort is read from `hasEffort` of the stories, nowhere else
 
+v1.10.0 (Lineage 28, G187): `open` records a base plan for the box (a PlanBaseline: the box's start, and an end predicted from the effort of its stories and the pace delivered in earlier boxes, with the buffer written beside it) and checks the objectives the box moves against it; `baseline N` records one for a box opened without. A finished box is measured against its baseline, not refused for differing from it.
 v1.9.0 (Lineage 27): the place-unchanged digest also covers the register, git-ignored files and the old path of a renamed file.
 v1.8.0 (Lineage 27): the box being closed (its stories, tasks, iteration and deployment unit) is not reported as stalled by the monitor.
 v1.7.0 (Lineage 26, G184): in an agentic lineage the close records the verifier's session as the Agentic-Systems package defines it (v0.78.0): the plan with its digest, the grant of
@@ -23,6 +24,7 @@ violation, put the register back as it was and refuse, naming it. With no valida
 
 Usage:  backlog_box_step.py REGISTER.ttl owes STATUS      (e.g. LS_InProgress: what that status owes that the register does not yet hold)
         backlog_box_step.py REGISTER.ttl open  N "title" "sprint goal" STORY_KEY[,STORY_KEY...] [--capacity C] [--allow PATH ...]
+        backlog_box_step.py REGISTER.ttl baseline N               (record the base plan of an open box that has none)
         backlog_box_step.py REGISTER.ttl act   N STORY_KEY "what was done"
         backlog_box_step.py REGISTER.ttl freeze BRIEF.txt        (agentic lineage: fix the verifier's plan and the state of the governed files before the verifier starts)
         backlog_box_step.py REGISTER.ttl close N SPEC.json
@@ -251,11 +253,62 @@ def escalation_items(text):
     clean = lambda s: re.sub(r"\bRel_\w+", "a deployment unit", re.sub(r"\bIt_\w+", "an iteration", re.sub(r"\b(ST|T|Run|Ev|Obj)_\w+", "a record", s)))
     return [clean(x) for x in out]
 
-TOOL_VERSION = "1.9.0"
+TOOL_VERSION = "1.10.0"
 
 def has_own_kickoff(text, L):
     """True when the register holds a kick-off of this lineage itself; the kick-off of another lineage does not count (Lineage 24, held by a probe in Lineage 25)."""
     return re.search(r"backlog:kicksOffLineage\s+(?:fw:|<http://example.org/backlog-framework-register#)%s\b" % re.escape(L[3:]), text) is not None
+
+
+def _date_plan():
+    import importlib.util
+    f = sorted(glob.glob(os.path.join(os.path.dirname(os.path.abspath(__file__)), "backlog_date_plan_v*.py")), key=lambda x: [int(y) for y in re.findall(r"_v(\d+)_(\d+)_(\d+)", x)[0]])
+    if not f: return None
+    sp = importlib.util.spec_from_file_location("backlog_date_plan_mod", f[-1]); m = importlib.util.module_from_spec(sp); sp.loader.exec_module(m)
+    return m
+
+
+def cmd_baseline(reg, n, buffer=1.5):
+    """The base plan of box n: its start, and an end predicted from the effort of its stories and the pace delivered in earlier boxes. Refused when the register holds no pace to predict from."""
+    P = reg.P
+    ids = box_ids(P, n)
+    bid = "PB_%s_%d" % (P, n)
+    if not reg.has(ids["it"]):
+        raise SystemExit("REFUSED: box %d is not open" % n)
+    if reg.has(bid):
+        raise SystemExit("REFUSED: box %d already has a base plan; moving it is a Rebaseline decided by the Owner" % n)
+    dp = _date_plan()
+    if dp is None:
+        raise SystemExit("REFUSED: no backlog_date_plan beside this tool, so no pace to predict from")
+    from rdflib import Graph, URIRef
+    reg.save()
+    g = Graph(); g.parse(reg.path, format="turtle")
+    B = dp.B
+    it = URIRef(FW + ids["it"])
+    vel_s = dp.samples(g)
+    if not vel_s:
+        raise SystemExit("REFUSED: the register holds no pair of consecutive boxes with delivered effort: there is no pace to predict the end of box %d from" % n)
+    import statistics
+    vel = statistics.median(vel_s)
+    stories = [g.value(ev, URIRef(B + "plansItem")) for ev in g.subjects(URIRef(B + "plannedInto"), it)]
+    pts = sum(float(g.value(st, URIRef(B + "hasEffort")) or 0) for st in stories if st is not None)
+    start = g.value(it, URIRef(B + "iterationStart"))
+    t0 = dp.dt(start)
+    end = t0 + datetime.timedelta(hours=(pts / vel) * buffer)
+    tb = tick()
+    reg.append("fw:%s a backlog:PlanBaseline ; rdfs:label \"Base plan of box %d\"@en ;\n    backlog:baselineFor fw:%s ; backlog:baselinedAt %s ; backlog:isCurrentBaseline true ;\n"
+               "    backlog:hasBaselineStart %s ; backlog:hasBaselineEnd %s ;\n"
+               "    rdfs:comment \"Predicted end of the box: %s points of its stories at the median delivered pace of %.2f points per elapsed hour (%d pair(s) of earlier boxes), times a buffer of %s.\"@en ."
+               % (bid, n, ids["it"], dt(tb), dt(t0.strftime("%Y-%m-%dT%H:%M:%SZ")), dt(end.strftime("%Y-%m-%dT%H:%M:%SZ")), pts, vel, len(vel_s), buffer))
+    reg.save()
+    print("base plan of box %d: ends %s (%s points at %.2f points per hour, buffer %s)" % (n, end.strftime("%Y-%m-%d %H:%MZ"), pts, vel, buffer))
+    # the objectives these stories move, against the end of the box
+    for st in stories:
+        for obj in g.subjects(URIRef(B + "metricMovableBy"), st):
+            for cp in g.objects(obj, URIRef(B + "hasCheckpoint")):
+                d = dp.dt(g.value(cp, URIRef(B + "checkpointDate")))
+                if d and d < end:
+                    print("WARNING: the checkpoint %s of %s is dated %s, before this box is planned to end (%s)" % (str(cp).rsplit("#", 1)[-1], str(obj).rsplit("#", 1)[-1], d.strftime("%Y-%m-%d %H:%MZ"), end.strftime("%Y-%m-%d %H:%MZ")))
 
 
 def cmd_open(reg, root, n, title, goal, keys, capacity, allow=(), integrity=2):
@@ -333,6 +386,10 @@ def cmd_open(reg, root, n, title, goal, keys, capacity, allow=(), integrity=2):
     reg.append("\n# ---- box %d of %s: opened %s by backlog_box_step ----\n" % (n, L, t0) + "\n".join(recs))
     reg.save()
     print("box %d opened at %s; stories %s now InProgress" % (n, t0, ", ".join(keys)))
+    try:
+        cmd_baseline(reg, n)
+    except SystemExit as e:
+        print("NO BASE PLAN: " + str(e))
 
 
 def cmd_act(reg, n, key, note):
@@ -572,6 +629,8 @@ def main(argv):
         guarded(path, lambda: cmd_open(reg, root, int(a[2]), a[3], a[4], a[5].split(","), capacity, allow, integrity))
     elif cmd == "freeze":
         cmd_freeze(reg, root, a[2])
+    elif cmd == "baseline":
+        guarded(path, lambda: cmd_baseline(reg, int(a[2])))
     elif cmd == "act":
         cmd_act(reg, int(a[2]), a[3], a[4])
     elif cmd == "close":

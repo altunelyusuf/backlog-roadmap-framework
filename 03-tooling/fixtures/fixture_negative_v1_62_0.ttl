@@ -4412,3 +4412,6 @@ vsn:RunBuilder a backlog:ExecutorInstance , backlog:Executor_SingleAgent .
 vsn:LPlan a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_PlannedDates ; backlog:humanApprovalLevel 3 .
 vsn:ObjPlan a backlog:Objective ; backlog:belongsToLineage vsn:LPlan ; backlog:hasCheckpoint vsn:CpPlan .
 vsn:CpPlan a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-11-04T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+
+# BP_NOBASEPLAN  a box of a lineage that plans its dates, with no current base plan (BoxBasePlanShape).
+vsn:ItNoPlan a backlog:Iteration ; backlog:belongsToLineage vsn:LPlan ; backlog:iterationStart "2026-11-02T11:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
