@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v3.0.0 — 2026-11-02 (MAJOR: Lineage 28 closed -- every measure date of a lineage comes from its plan; box 3, the dates report)
+
+Box 3 of Lineage 28: backlog_date_report prints the base, updated and finished dates of each objective and the base plan against the actual end of each box (ruling G188); discipline and narratives v152. Closure of Lineage 28: mission Out_Achieved with its rationale, closure report, lineage status LS_Achieved, outcome of its five objectives recorded. Major version as for the closure of Lineage 27. Open limits are in the closure report.
+
+**Unplanned work:** The outcome of the five objectives of Lineage 28 is recorded at its close, because their checkpoints of 2026-11-04 would fall due with no later observation and refuse releases.
+
 ## v2.7.0 — 2026-11-02 (MINOR: Lineage 28, box 2 -- a box carries a base plan and the objective dates are checked against it)
 
 Lineage 28 box 2: the box step tool 1.10.0 records a base plan for every box it opens (start, predicted end) and a baseline command for an open box; BoxBasePlanShape refuses a box without one in a lineage that plans its dates; a Done box is no longer refused by the silent-move shape; PlannedDatesShape also refuses a checkpoint with no date and a blank assumption; ruling G187. Reviewed by an independent agent; the open findings are recorded in the box.

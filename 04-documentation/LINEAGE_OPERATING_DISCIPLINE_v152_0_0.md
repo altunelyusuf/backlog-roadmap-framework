@@ -1,8 +1,8 @@
-# Lineage Operating Discipline — v151.0.0
+# Lineage Operating Discipline — v152.0.0
 
 **What this is.** How a lineage is started and run, in one page. SHACL enforces; this file only tells the agent the order of work and the principles behind it. It holds no ruling text.
 
-**Where everything else is.** Every ruling is a `GovernanceRuling` in the register (statement, enforcing shapes, source): query it, do not look for it here. Rule sets and profiles are in the register too. How each ruling came about is in `LINEAGE_RULING_NARRATIVES_v151_0_0.md`: history, read only when working on that ruling.
+**Where everything else is.** Every ruling is a `GovernanceRuling` in the register (statement, enforcing shapes, source): query it, do not look for it here. Rule sets and profiles are in the register too. How each ruling came about is in `LINEAGE_RULING_NARRATIVES_v152_0_0.md`: history, read only when working on that ruling.
 
 **Order of precedence.** The OE ceremony and OE Operating Discipline run first; a lineage grounded on unverified bytes is a lineage about nothing.
 
@@ -10,7 +10,7 @@
 
 1. **Declare the profile and level** as an owner decision with rationale, target and review date. Work done by agents opens under the agentic adaptive profile (AAL); otherwise under the non-agentic one (NAAL); AAL is the default profile and opens a lineage that names none. A clean result at a low level is a narrower claim, not a better one.
 2. **Build the chain as a pipeline, one commit per stage:** Mission → ScopeStatement (text, exclusions, deliverables) → Goal → Objective → Backlog. Each stage closes in its own commit and records a `StageOutput` naming the commit; the next stage consumes it. Git is the only witness of order, and it orders between commits, not within one.
-3. **Date the objectives from a forecast, not from a wish (G186).** Run `backlog_date_plan predict` on the lineage: it shows the expected completion from the work still to do and the pace delivered in earlier boxes (Done points per elapsed hour, with a buffer of 1.5 written in each forecast); discuss it before the dates are final; keep the base dates; every box opened gets a base plan of its own (`backlog_box_step open` records its predicted end, G187), and the boxes show the updated and the finished dates against it.
+3. **Date the objectives from a forecast, not from a wish (G186).** Run `backlog_date_plan predict` on the lineage: it shows the expected completion from the work still to do and the pace delivered in earlier boxes (Done points per elapsed hour, with a buffer of 1.5 written in each forecast); discuss it before the dates are final; keep the base dates; every box opened gets a base plan of its own (`backlog_box_step open` records its predicted end, G187), and run `backlog_date_report` for the base, updated and finished date of each objective and each box against its base plan (G188).
 4. **State the granularity** you chose and why (`LineageDepthAdvisoryShape` shows the symptom as an advisory).
 5. **Decide how work reaches users:** planning event, iteration, deployment unit.
 
