@@ -1,8 +1,8 @@
-# Lineage Operating Discipline — v153.0.0
+# Lineage Operating Discipline — v154.0.0
 
 **What this is.** How a lineage is started and run, in one page. SHACL enforces; this file only tells the agent the order of work and the principles behind it. It holds no ruling text.
 
-**Where everything else is.** Every ruling is a `GovernanceRuling` in the register (statement, enforcing shapes, source): query it, do not look for it here. Rule sets and profiles are in the register too. How each ruling came about is in `LINEAGE_RULING_NARRATIVES_v153_0_0.md`: history, read only when working on that ruling.
+**Where everything else is.** Every ruling is a `GovernanceRuling` in the register (statement, enforcing shapes, source): query it, do not look for it here. Rule sets and profiles are in the register too. How each ruling came about is in `LINEAGE_RULING_NARRATIVES_v154_0_0.md`: history, read only when working on that ruling.
 
 **Order of precedence.** The OE ceremony and OE Operating Discipline run first; a lineage grounded on unverified bytes is a lineage about nothing.
 
@@ -12,6 +12,7 @@
 2. **Build the chain as a pipeline, one commit per stage:** Mission → ScopeStatement (text, exclusions, deliverables) → Goal → Objective → Backlog. Each stage closes in its own commit and records a `StageOutput` naming the commit; the next stage consumes it. Git is the only witness of order, and it orders between commits, not within one.
 3. **Date the objectives from a forecast, not from a wish (G186).** Run `backlog_date_plan predict` on the lineage: it shows the expected completion from the work still to do and the pace delivered in earlier boxes (Done points per elapsed hour, with a buffer of 1.5 written in each forecast); discuss it before the dates are final; keep the base dates; every box opened gets a base plan of its own (`backlog_box_step open` records its predicted end, G187), and run `backlog_date_report` for the base, updated and finished date of each objective and each box against its base plan (G188).
 3a. **Name the kind of every obstacle (G189).** An impediment names one of seven kinds (rule refusing, evidence missing, tool at fault, wrong order, access limited, decision waited on, outside service failing); a lineage that adopts `RS_ImpedimentsKnown` is refused an impediment with none.
+3b. **Clear an obstacle by a known way that keeps the rules (G190).** Each kind lists the ways known to clear it (a command to advise on them comes in the next box); a cleared impediment names the way used, and one that fits its kind. The ways are written to satisfy or change an obligation, not to waive, skip or defer it; that is a review point, not a check.
 4. **State the granularity** you chose and why (`LineageDepthAdvisoryShape` shows the symptom as an advisory).
 5. **Decide how work reaches users:** planning event, iteration, deployment unit.
 

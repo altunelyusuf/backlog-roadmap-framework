@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v3.7.0 — 2026-11-02 (Lineage 29, box 2: the ways to clear each kind of obstacle (G190))
+
+Fourteen clearing methods (ClearingMethod), clearableBy per kind and clearedBy per impediment, ClearedImpedimentNamesMethodShape (IC_NOMETHOD, IC_BADMETHOD, IC_WRONGMETHOD, IC_NOTCLEARED), KindHasMethodShape (IC_KINDNOMETHOD), ruling G190. Documents v154, standard 1.155.
+
+**Unplanned work:** none
+
 ## v3.6.0 — 2026-11-02 (Lineage 29, box 1: the kinds of obstacle (G189))
 
 Seven kinds of obstacle (ImpedimentKind, hasImpedimentKind), ImpedimentKindShape (IK_NOKIND, IK_BADKIND), rule set RS_ImpedimentsKnown (profile revision 13, the Adaptive-agentic profile now 21 rule sets), ruling G189, 29 findings classified of 105. Profile probes updated to twenty-one.

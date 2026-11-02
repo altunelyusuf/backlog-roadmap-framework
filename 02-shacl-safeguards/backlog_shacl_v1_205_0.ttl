@@ -9,9 +9,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog/shacl/1.204.0> ;
-    owl:versionInfo "1.204.0" ;
-    owl:priorVersion <http://example.org/backlog-shapes/1.203.0> , <http://example.org/backlog-shapes/1.202.0> , <http://example.org/backlog-shapes/1.201.0> , <http://example.org/backlog-shapes/1.197.0> ;
+    owl:versionIRI <http://example.org/backlog/shacl/1.205.0> ;
+    owl:versionInfo "1.205.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.204.0> , <http://example.org/backlog-shapes/1.203.0> , <http://example.org/backlog-shapes/1.202.0> , <http://example.org/backlog-shapes/1.201.0> , <http://example.org/backlog-shapes/1.197.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.184.0> , <http://example.org/backlog-shapes/1.176.0> , <http://example.org/backlog-shapes/1.175.0> , <http://example.org/backlog-shapes/1.174.0> , <http://example.org/backlog-shapes/1.173.0> , <http://example.org/backlog-shapes/1.172.0> , <http://example.org/backlog-shapes/1.171.0> , <http://example.org/backlog-shapes/1.170.0> , <http://example.org/backlog-shapes/1.169.0> , <http://example.org/backlog-shapes/1.168.0> , <http://example.org/backlog-shapes/1.167.0> , <http://example.org/backlog-shapes/1.166.0> , <http://example.org/backlog-shapes/1.165.0> , <http://example.org/backlog-shapes/1.164.0> , <http://example.org/backlog-shapes/1.159.0> , <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.154.0> , <http://example.org/backlog-shapes/1.153.0> , <http://example.org/backlog-shapes/1.152.0> , <http://example.org/backlog-shapes/1.151.0> , <http://example.org/backlog-shapes/1.150.0> , <http://example.org/backlog-shapes/1.149.0> , <http://example.org/backlog-shapes/1.148.0> , <http://example.org/backlog-shapes/1.147.0> , <http://example.org/backlog-shapes/1.146.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.145.0> ;
@@ -9689,3 +9689,44 @@ backlog:ImpedimentKindShape a sh:NodeShape ;
             FILTER NOT EXISTS { $this backlog:hasImpedimentKind ?k }
         }""" ] .
 
+
+backlog:ClearedImpedimentNamesMethodShape a sh:NodeShape ;
+    sh:targetClass backlog:Impediment ;
+    sh:severity sh:Violation ;
+    rdfs:label "A cleared impediment names the way it was cleared, and a way that fits its kind (G190)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "IC_NOMETHOD" ;
+    sh:property [ sh:path backlog:clearedBy ; sh:maxCount 1 ; sh:class backlog:ClearingMethod ;
+        sh:message "IC_BADMETHOD: an impediment is cleared by at most one way, and it is a clearing method of the catalogue." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "IC_NOMETHOD: this impediment, in the scope of an adoption of RS_ImpedimentsKnown, has a time it was resolved but names no way it was cleared. Say which way cleared it, so the next obstacle of its kind starts from what worked." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            { ?reg backlog:adoptsRuleSet backlog:RS_ImpedimentsKnown . FILTER NOT EXISTS { ?reg a backlog:Lineage } }
+            UNION
+            { ?reg a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_ImpedimentsKnown . $this backlog:belongsToLineage ?reg }
+            $this backlog:resolvedAt ?t .
+            FILTER NOT EXISTS { $this backlog:clearedBy ?m }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "IC_WRONGMETHOD: this impediment was cleared by a way that is not known to clear obstacles of its kind. Name a way the kind lists, or add the way to the kind through change management first." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:clearedBy ?m ; backlog:hasImpedimentKind ?k .
+            FILTER NOT EXISTS { ?k backlog:clearableBy ?m }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "IC_NOTCLEARED: this impediment names a way it was cleared but has no time it was resolved. Record when it was resolved, or leave the way out until it is." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE { $this backlog:clearedBy ?m . FILTER NOT EXISTS { $this backlog:resolvedAt ?t } }""" ] .
+
+backlog:KindHasMethodShape a sh:NodeShape ;
+    sh:targetClass backlog:ImpedimentKind ;
+    sh:severity sh:Violation ;
+    rdfs:label "Every kind of obstacle lists at least one way to clear it (G190)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "IC_KINDNOMETHOD" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "IC_KINDNOMETHOD: this kind of obstacle lists no way to clear it. A kind with no known way leaves the agent to improvise, which is how a rule gets bypassed; list at least one clearing method." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE { FILTER NOT EXISTS { $this backlog:clearableBy ?m } }""" ] .

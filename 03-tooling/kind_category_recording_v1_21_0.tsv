@@ -710,3 +710,6 @@ property	hasAchievementStatus	http://example.org/backlog#hasAchievementStatus	Re
 property	datePredictedBy	http://example.org/backlog#datePredictedBy	RelationshipCategory_Provenance	the checkpoint date is derived from the forecast it names	G186
 class	ImpedimentKind	http://example.org/backlog#ImpedimentKind	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G189
 property	hasImpedimentKind	http://example.org/backlog#hasImpedimentKind	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G189
+class	ClearingMethod	http://example.org/backlog#ClearingMethod	ClassKind_Method	the first sentence says a named way of clearing an obstacle: the steps to take and what shows it gone	G190
+property	clearableBy	http://example.org/backlog#clearableBy	RelationshipCategory_Association	a kind of obstacle and a way known to clear it are associated, neither is part of the other	G190
+property	clearedBy	http://example.org/backlog#clearedBy	RelationshipCategory_Provenance	the way used is the origin of the impediment having been cleared, recorded when it was	G190
