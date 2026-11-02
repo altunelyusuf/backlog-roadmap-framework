@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.153.0
+# Backlog & Roadmap Semantic Framework — Standard v1.154.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -2081,6 +2081,7 @@ shape name, on code that does not match it, is also caught. The check reads the 
 | `Commitment` + `commitsToGoal` / `commitsToObjective` / `commitsToDefinitionOfDone` | What an artifact commits to: a backlog to a goal, an iteration to an objective, an increment to a Definition of Done |
 | `Dependency` + `DependencyKind` | Reified dependency over a closed set — knowledge, task, resource — because the kind determines what would release it |
 | `Impediment` | An obstacle that is not a dependency: cleared by someone acting outside the register, not by finishing work. Unresolved ones must be owned |
+| `ImpedimentKind` — `hasImpedimentKind` | The kind of an obstacle, one of seven (a rule refused, evidence missing, a tool at fault, work in the wrong order, a resource out of reach, a decision waited on, an outside service failing). Where two fit, the cause decides, not the way the obstacle was found. A lineage that adopts the rule set of known impediments is refused an impediment with no kind |
 | `startedAt` / `finishedAt`, `WipLimit` | The well-defined points every flow measure is defined against, and work-in-progress as a *policy* distinct from the measure |
 | `Team`, `TeamRole` (open), `hasCapacity` | Who delivers. `Role` stays closed at Owner/Builder because it governs who may *decide*; team organisation is the adopting method's business |
 | `asRole` / `wantsCapability` / `soThat` | The canonical user-story clauses, with an advisory when the "so that" is missing |

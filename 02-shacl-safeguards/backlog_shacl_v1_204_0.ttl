@@ -9,9 +9,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog/shacl/1.203.0> ;
-    owl:versionInfo "1.203.0" ;
-    owl:priorVersion <http://example.org/backlog-shapes/1.202.0> , <http://example.org/backlog-shapes/1.201.0> , <http://example.org/backlog-shapes/1.197.0> ;
+    owl:versionIRI <http://example.org/backlog/shacl/1.204.0> ;
+    owl:versionInfo "1.204.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.203.0> , <http://example.org/backlog-shapes/1.202.0> , <http://example.org/backlog-shapes/1.201.0> , <http://example.org/backlog-shapes/1.197.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.184.0> , <http://example.org/backlog-shapes/1.176.0> , <http://example.org/backlog-shapes/1.175.0> , <http://example.org/backlog-shapes/1.174.0> , <http://example.org/backlog-shapes/1.173.0> , <http://example.org/backlog-shapes/1.172.0> , <http://example.org/backlog-shapes/1.171.0> , <http://example.org/backlog-shapes/1.170.0> , <http://example.org/backlog-shapes/1.169.0> , <http://example.org/backlog-shapes/1.168.0> , <http://example.org/backlog-shapes/1.167.0> , <http://example.org/backlog-shapes/1.166.0> , <http://example.org/backlog-shapes/1.165.0> , <http://example.org/backlog-shapes/1.164.0> , <http://example.org/backlog-shapes/1.159.0> , <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.154.0> , <http://example.org/backlog-shapes/1.153.0> , <http://example.org/backlog-shapes/1.152.0> , <http://example.org/backlog-shapes/1.151.0> , <http://example.org/backlog-shapes/1.150.0> , <http://example.org/backlog-shapes/1.149.0> , <http://example.org/backlog-shapes/1.148.0> , <http://example.org/backlog-shapes/1.147.0> , <http://example.org/backlog-shapes/1.146.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.145.0> ;
@@ -9670,3 +9670,22 @@ backlog:BoxBasePlanShape a sh:NodeShape ;
             ?lin backlog:adoptsRuleSet backlog:RS_PlannedDates .
             FILTER NOT EXISTS { ?b backlog:baselineFor $this ; backlog:isCurrentBaseline true ; backlog:hasBaselineStart ?bs ; backlog:hasBaselineEnd ?be }
         }""" ] .
+
+backlog:ImpedimentKindShape a sh:NodeShape ;
+    sh:targetClass backlog:Impediment ;
+    sh:severity sh:Violation ;
+    rdfs:label "An impediment of a lineage that names its obstacles has a kind (G189)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "IK_NOKIND" ;
+    sh:property [ sh:path backlog:hasImpedimentKind ; sh:maxCount 1 ; sh:class backlog:ImpedimentKind ;
+        sh:message "IK_BADKIND: an impediment names at most one kind, and it is one of the seven kinds of obstacle; the kind decides what is known about clearing it." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "IK_NOKIND: this impediment, in the scope of an adoption of RS_ImpedimentsKnown, names no kind of obstacle. Without a kind nothing is known about how it is cleared; name one of the seven kinds." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            { ?reg backlog:adoptsRuleSet backlog:RS_ImpedimentsKnown . FILTER NOT EXISTS { ?reg a backlog:Lineage } }
+            UNION
+            { ?reg a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_ImpedimentsKnown . $this backlog:belongsToLineage ?reg }
+            FILTER NOT EXISTS { $this backlog:hasImpedimentKind ?k }
+        }""" ] .
+

@@ -57,6 +57,13 @@ with tempfile.TemporaryDirectory() as d:
     expect("the expected completion is now + points / velocity", "expected 2026-11-02 02:00Z" in r.stdout and "earliest checkpoint 2026-11-03" in r.stdout)
     expect("a stated date earlier than the forecast is named and the tool exits 1", "STATED DATE IS EARLIER THAN FORECAST" in r.stdout and r.returncode == 1)
     expect("the emitted forecast carries the time made, the expected date, the assumption and the velocity", all(x in open(em).read() for x in ("forecastMadeAt", "forecastCompletion", "forecastAssumption", "forecastObservedVelocity", "datePredictedBy")))
+    # an objective with no mover is planned from --effort: 3.5 points at 1.75 per hour, buffer 1.0 -> 2 hours
+    open(rp, "a").write("fw:O9 a backlog:Objective ; backlog:belongsToLineage fw:L ; backlog:hasCheckpoint fw:C9 .\nfw:C9 a backlog:ObjectiveCheckpoint ; backlog:checkpointDate \"2026-11-09T00:00:00Z\"^^xsd:dateTime .\n")
+    r9 = subprocess.run([sys.executable, "-I", TOOL, rp, "predict", "--lineage", "L", "--prefix", "T", "--now", "2026-11-02T00:00:00Z", "--buffer", "1.0", "--effort", "O9=3.5"], capture_output=True, text=True)
+    expect("an objective with no mover is planned from the effort given (3.5 points: expected 02:00, earliest checkpoint the 3rd)", any(l.strip().startswith("O9") and "3.5 points" in l and "expected 2026-11-02 02:00Z" in l for l in r9.stdout.splitlines()))
+    for label, arg in (("an effort for an objective that does not exist", "O7=2"), ("an effort for an objective that already has movers", "O1=2"), ("an effort with no points", "O9"), ("an effort of zero", "O9=0")):
+        rb = subprocess.run([sys.executable, "-I", TOOL, rp, "predict", "--lineage", "L", "--prefix", "T", "--now", "2026-11-02T00:00:00Z", "--effort", arg], capture_output=True, text=True)
+        expect(label + " is refused with a message, not a traceback", rb.returncode != 0 and "ERROR" in (rb.stderr + rb.stdout) and "Traceback" not in rb.stderr)
     r2 = subprocess.run([sys.executable, "-I", TOOL, rp, "predict", "--lineage", "Nope"], capture_output=True, text=True)
     expect("an unknown lineage is refused", r2.returncode != 0)
 print("VERDICT   :", "PASS" if not fails else "FAIL"); sys.exit(1 if fails else 0)

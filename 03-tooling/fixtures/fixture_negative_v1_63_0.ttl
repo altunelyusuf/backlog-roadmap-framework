@@ -4415,3 +4415,10 @@ vsn:CpPlan a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-11-04T00
 
 # BP_NOBASEPLAN  a box of a lineage that plans its dates, with no current base plan (BoxBasePlanShape).
 vsn:ItNoPlan a backlog:Iteration ; backlog:belongsToLineage vsn:LPlan ; backlog:iterationStart "2026-11-02T11:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+
+# IK_NOKIND  an impediment of a lineage that names its obstacles, with no kind (ImpedimentKindShape).
+vsn:LKinds a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_ImpedimentsKnown ; backlog:humanApprovalLevel 3 .
+vsn:ImpNoKind a backlog:Impediment ; backlog:belongsToLineage vsn:LKinds ; backlog:impedes vsn:ItNoPlan ; backlog:hasImpedimentStatement "Blocked." ; backlog:raisedAt "2026-11-02T11:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ; backlog:hasImpedimentOwner backlog:Builder .
+
+# IK_BADKIND  an impediment that names two kinds (ImpedimentKindShape).
+vsn:ImpTwoKinds a backlog:Impediment ; backlog:belongsToLineage vsn:LKinds ; backlog:impedes vsn:ItNoPlan ; backlog:hasImpedimentStatement "Blocked." ; backlog:raisedAt "2026-11-02T11:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ; backlog:hasImpedimentKind backlog:Imp_ToolFault , backlog:Imp_WrongOrder .

@@ -19,9 +19,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.163.0> ;
-    owl:versionInfo "1.163.0" ;
-    owl:priorVersion <http://example.org/backlog/1.162.0> , <http://example.org/backlog/1.161.0> , <http://example.org/backlog/1.153.0> , <http://example.org/backlog/1.152.0> , <http://example.org/backlog/1.151.0> , <http://example.org/backlog/1.150.0> , <http://example.org/backlog/1.149.0> , <http://example.org/backlog/1.148.0> , <http://example.org/backlog/1.143.0> , <http://example.org/backlog/1.142.0> , <http://example.org/backlog/1.141.0> , <http://example.org/backlog/1.140.0> , <http://example.org/backlog/1.139.0> , <http://example.org/backlog/1.138.0> , <http://example.org/backlog/1.137.0> , <http://example.org/backlog/1.136.0> , <http://example.org/backlog/1.135.0> , <http://example.org/backlog/1.134.0> , <http://example.org/backlog/1.133.0> , <http://example.org/backlog/1.132.0> , <http://example.org/backlog/1.131.0> , <http://example.org/backlog/1.130.0> , <http://example.org/backlog/1.129.0> , <http://example.org/backlog/1.125.0> , <http://example.org/backlog/1.124.0> , <http://example.org/backlog/1.123.0> , <http://example.org/backlog/1.122.0> ;
+    owl:versionIRI <http://example.org/backlog/1.164.0> ;
+    owl:versionInfo "1.164.0" ;
+    owl:priorVersion <http://example.org/backlog/1.163.0> , <http://example.org/backlog/1.162.0> , <http://example.org/backlog/1.161.0> , <http://example.org/backlog/1.153.0> , <http://example.org/backlog/1.152.0> , <http://example.org/backlog/1.151.0> , <http://example.org/backlog/1.150.0> , <http://example.org/backlog/1.149.0> , <http://example.org/backlog/1.148.0> , <http://example.org/backlog/1.143.0> , <http://example.org/backlog/1.142.0> , <http://example.org/backlog/1.141.0> , <http://example.org/backlog/1.140.0> , <http://example.org/backlog/1.139.0> , <http://example.org/backlog/1.138.0> , <http://example.org/backlog/1.137.0> , <http://example.org/backlog/1.136.0> , <http://example.org/backlog/1.135.0> , <http://example.org/backlog/1.134.0> , <http://example.org/backlog/1.133.0> , <http://example.org/backlog/1.132.0> , <http://example.org/backlog/1.131.0> , <http://example.org/backlog/1.130.0> , <http://example.org/backlog/1.129.0> , <http://example.org/backlog/1.125.0> , <http://example.org/backlog/1.124.0> , <http://example.org/backlog/1.123.0> , <http://example.org/backlog/1.122.0> ;
     owl:priorVersion <http://example.org/backlog/1.121.0> , <http://example.org/backlog/1.120.0> , <http://example.org/backlog/1.119.0> , <http://example.org/backlog/1.118.0> , <http://example.org/backlog/1.117.0> ;
     owl:priorVersion <http://example.org/backlog/1.116.0> ;
     owl:priorVersion <http://example.org/backlog/1.115.0> ;
@@ -8842,3 +8842,28 @@ backlog:deploymentPlannedAt a owl:DatatypeProperty , owl:FunctionalProperty ;
 backlog:DeploymentPlan kb:hasClassKind kb:ClassKind_InformationArtifact .
 backlog:deploymentPlanForBox kb:hasRelationshipCategory kb:RelationshipCategory_Intentional .
 backlog:plansDeploymentUnit kb:hasRelationshipCategory kb:RelationshipCategory_Intentional .
+
+#################################################################
+#  Kinds of obstacle (Lineage 29, G189)
+#################################################################
+
+backlog:ImpedimentKind a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:Imp_RuleRefusal backlog:Imp_EvidenceGap backlog:Imp_ToolFault backlog:Imp_WrongOrder backlog:Imp_AccessLimit backlog:Imp_DecisionWaiting backlog:Imp_ServiceFailure ) ;
+    backlog:isFrameworkOriginal true ;
+    rdfs:label "Impediment Kind"@en ;
+    skos:definition "What kind of obstacle stopped or slowed the work, as a closed set of seven drawn from the obstacles actually met in Lineages 21 to 28 and in the sessions of this package: a rule refused, evidence was missing, a tool was at fault, the work was in the wrong order, a resource was out of reach, a decision was waited on, an outside service failed. The kind decides which ways of clearing it are known."@en .
+
+[] a owl:AllDifferent ; owl:distinctMembers ( backlog:Imp_RuleRefusal backlog:Imp_EvidenceGap backlog:Imp_ToolFault backlog:Imp_WrongOrder backlog:Imp_AccessLimit backlog:Imp_DecisionWaiting backlog:Imp_ServiceFailure ) .
+
+backlog:hasImpedimentKind a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:Impediment backlog:RetrospectiveFinding ) ] ; rdfs:range backlog:ImpedimentKind ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    backlog:isFrameworkOriginal true ;
+    rdfs:label "has impediment kind"@en ;
+    skos:definition "Which kind of obstacle this impediment is, or which kind of obstacle a retrospective finding names as its root cause. One value: the kind decides what is known about clearing it."@en .
+
+backlog:ImpedimentKind kb:hasClassKind kb:ClassKind_ValueDomain .
+backlog:hasImpedimentKind kb:hasRelationshipCategory kb:RelationshipCategory_Characterization .
+

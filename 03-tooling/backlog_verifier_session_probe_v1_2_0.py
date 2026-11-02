@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Probe of RS_VerifierSession (G184): the real validator on one scratch register in which each verifier run lacks exactly one thing.
 A control run with the full record must raise none of the VS_ messages; a lineage that does not adopt the rule set is not bound.
-Also: AAL includes the rule set (20), the other profiles are as they were (9, 10, 16)."""
+Also: AAL includes the rule set (21), the other profiles are as they were (9, 10, 16)."""
 import glob, re, subprocess, sys, tempfile, os
 PKG = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sv = lambda p: [int(x) for x in re.findall(r"_v(\d+)_(\d+)_(\d+)", p)[0]]
@@ -60,6 +60,6 @@ inc = lambda p: len(re.findall(r"backlog:RS_\w+", (re.search(r"backlog:" + p + r
 txt = open(ABOX).read()
 def count(profile):
     return len({m for m in re.findall(r"backlog:" + profile + r" backlog:profileIncludes (backlog:RS_\w+)", txt)} | {x for blk in re.findall(r"^backlog:" + profile + r" a [^\n]*\n(?:    [^\n]*\n)+", txt, re.M) for x in re.findall(r"backlog:(RS_\w+)", blk.split("profileIncludes",1)[1] if "profileIncludes" in blk else "")} )
-for p, n in (("Profile_Standard", 9), ("Profile_Agentic", 10), ("Profile_Adaptive", 16), ("Profile_AgenticAdaptive", 20)):
+for p, n in (("Profile_Standard", 9), ("Profile_Agentic", 10), ("Profile_Adaptive", 16), ("Profile_AgenticAdaptive", 21)):
     expect(f"{p} includes {n} rule sets", count(p) == n)
 print("VERDICT   :", "PASS" if not fails else "FAIL"); sys.exit(1 if fails else 0)

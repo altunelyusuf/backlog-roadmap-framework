@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v3.6.0 — 2026-11-02 (Lineage 29, box 1: the kinds of obstacle (G189))
+
+Seven kinds of obstacle (ImpedimentKind, hasImpedimentKind), ImpedimentKindShape (IK_NOKIND, IK_BADKIND), rule set RS_ImpedimentsKnown (profile revision 13, the Adaptive-agentic profile now 21 rule sets), ruling G189, 29 findings classified of 105. Profile probes updated to twenty-one.
+
+**Unplanned work:** backlog_date_plan 1.1.0 (the --effort option, refusing an unknown objective, one with movers, a missing or zero value) with its probe, built in the Objective stage and brought in at the opening of this box; documentation v153.
+
 ## v3.5.0 — 2026-11-02 (MINOR: Lineage 29, Backlog stage -- three stories)
 
 Backlog stage of Lineage 29: three stories, Story-direct, all Proposed, with the agents that run the boxes. Stage 5 of 5, the full gate.

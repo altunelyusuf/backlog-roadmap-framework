@@ -708,3 +708,5 @@ property	deploymentPlanForBox	http://example.org/backlog#deploymentPlanForBox	Re
 property	plansDeploymentUnit	http://example.org/backlog#plansDeploymentUnit	RelationshipCategory_Intentional	the plan states the unit that is intended to ship	G170
 property	hasAchievementStatus	http://example.org/backlog#hasAchievementStatus	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G141
 property	datePredictedBy	http://example.org/backlog#datePredictedBy	RelationshipCategory_Provenance	the checkpoint date is derived from the forecast it names	G186
+class	ImpedimentKind	http://example.org/backlog#ImpedimentKind	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G189
+property	hasImpedimentKind	http://example.org/backlog#hasImpedimentKind	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G189
