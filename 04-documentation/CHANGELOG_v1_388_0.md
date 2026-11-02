@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v4.0.2 — 2026-11-03 (PATCH: Lineage 29 reactivated by the Owner)
+
+Records only. The Owner decided on 2026-11-03 to revive Lineage 29 and finish its unfinished work in it, with no second lineage. A reactivation (reason: non-conformant result) rests on the systemic finding that no obstacle was ever raised live. The lineage's status pointer moved from Achieved to Revived, as the pointer rule requires, and the revival time is recorded. The register stays conformant.
+
+**Unplanned work:** None.
+
 ## v4.0.1 — 2026-11-03 (PATCH: correction of Lineage 29 -- closed Achieved, partly achieved)
 
 Appended, never edited. Lineage 29 was published and closed as Achieved on its own proxy counts. The mission and closure report carry an appended note that the verdict was overstated and the mission is partly achieved. Twelve post-closure findings with their evidence record the gaps verified against the register: ten against Lineage 29 (the purpose not shown in live use; the one real obstacle record entered after the fact; findings in the wrong kind; 76 of 105 findings never read; no way that supplies missing evidence; a failed outside service with only a retry; the three ways for wrong order disagree; the obstacle shapes never fired because the lineage was opened under revision 12; the preflight lacks the vocabulary probe; the agent as grantor to reconcile) and two carried over from Lineage 28 (forecast discussion not recorded; dates report crashes on malformed input, reproduced). No vocabulary, shape or tool changed. The register stays conformant (0 violations).
