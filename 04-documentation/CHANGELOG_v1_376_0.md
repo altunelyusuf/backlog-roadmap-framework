@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v2.6.0 — 2026-11-02 (MINOR: Lineage 28, box 1 -- a measure date is predicted at planning and backed by a forecast)
+
+Lineage 28 box 1: new link datePredictedBy, the shape PlannedDatesShape and rule set RS_PlannedDates (AAL profile revision 12, 20 rule sets), the tool backlog_date_plan with its probe, and the ruling G186; five forecasts for the checkpoints of Lineage 28. Reviewed twice by an independent agent; remaining gaps are findings of the box.
+
+**Unplanned work:** none.
+
 ## v2.5.0 — 2026-11-02 (Lineage 28, Backlog stage)
 
 Three stories, all Proposed, with the four agent definitions. Stage 5 of 5.

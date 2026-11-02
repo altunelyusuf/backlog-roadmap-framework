@@ -4407,3 +4407,8 @@ vsn:ItemHigh a backlog:Story ; backlog:belongsToLineage vsn:L2 ; backlog:integri
 vsn:RunGrantor a backlog:ExecutorInstance , backlog:Executor_SingleAgent ; agsys:startedUnderGrant vsn:GrantByAgent .
 vsn:GrantByAgent agsys:grantedBy vsn:RunBuilder .
 vsn:RunBuilder a backlog:ExecutorInstance , backlog:Executor_SingleAgent .
+
+# PD_UNPLANNED  a checkpoint date of a lineage that plans its dates, backed by no forecast (PlannedDatesShape).
+vsn:LPlan a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_PlannedDates ; backlog:humanApprovalLevel 3 .
+vsn:ObjPlan a backlog:Objective ; backlog:belongsToLineage vsn:LPlan ; backlog:hasCheckpoint vsn:CpPlan .
+vsn:CpPlan a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-11-04T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .

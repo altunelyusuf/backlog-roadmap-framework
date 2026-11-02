@@ -45,7 +45,7 @@ AB = latest("01-ontologies/backlog_abox_v*.ttl"); g = Graph().parse(AB)
 marked = [str(x).rsplit("#", 1)[-1] for x in g.subjects(B.isDefaultProfile, Literal(True))]
 expect("on the live register exactly one profile is marked as the default, the agentic adaptive profile", marked == ["Profile_AgenticAdaptive"])
 inc = lambda p: len(set(g.objects(B[p], B.profileIncludes)))
-expect("the standard, agentic and non-agentic adaptive profiles keep nine, ten and sixteen rule sets, and AAL nineteen", (inc("Profile_Standard"), inc("Profile_Agentic"), inc("Profile_Adaptive"), inc("Profile_AgenticAdaptive")) == (9, 10, 16, 19))
+expect("the standard, agentic and non-agentic adaptive profiles keep nine, ten and sixteen rule sets, and AAL twenty", (inc("Profile_Standard"), inc("Profile_Agentic"), inc("Profile_Adaptive"), inc("Profile_AgenticAdaptive")) == (9, 10, 16, 20))
 r = subprocess.run([sys.executable, OPEN, "--abox", AB, "--lineage", "L", "--prefix", "x"], capture_output=True, text=True)
 expect("the opening tool run with no profile opens a lineage with the default, adopting the agent-accountability rule set", r.returncode == 0 and "openedWithProfile backlog:Profile_AgenticAdaptive" in r.stdout and "RS_AgentAccountability" in r.stdout)
 print("VERDICT   :", "PASS" if not bad else "FAIL"); [print("  ", b) for b in bad]
