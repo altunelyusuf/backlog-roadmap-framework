@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v2.1.0 — 2026-11-02 (Lineage 28, Mission stage: every measure date comes from the plan)
+
+Opens Lineage 28 under the agentic adaptive profile. Mission: every measure date of a lineage comes from its plan, predicted at planning, updated with the work and reported as base, updated and finished. Stage 1 of 5.
+
+**Unplanned work:** none.
+
 ## v2.0.0 — 2026-11-02 (MAJOR: Lineage 27 closed -- the record of a box is complete and true to what happened)
 
 Lineage 27 achieved: the monitor does not report the box being closed (monitor 1.2.0, step tool 1.8.0); the place-unchanged digest covers the register, ignored files and renamed paths (step tool 1.9.0); the two returned answers are answered. Major version: the agentic adaptive profile is the default, the verifier is recorded to the Agentic-Systems terms, and the first lineage bound by that rule set is closed.
