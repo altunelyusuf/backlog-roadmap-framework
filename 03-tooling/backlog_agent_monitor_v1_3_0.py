@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_agent_monitor v1.2.0 -- the report that lets people stay on the loop without being assigned to tasks (G118).
+"""backlog_agent_monitor v1.3.0 -- the report that lets people stay on the loop without being assigned to tasks (G118).
 
 Read-only. It reads a register and computes, at the instant it is run (or --now), what a person has to look at:
 
@@ -11,10 +11,13 @@ Read-only. It reads a register and computes, at the instant it is run (or --now)
 
   6. Recurring   live recurring activities whose latest occurrence began longer ago than their recurrenceInterval, or that have no occurrence (v1.2.0, G120).
 
-Sections 3 to 6 are the ESCALATION list: the only things a person is asked to act on. Exit 0 when it is empty, 1 otherwise. A register that does not
+  7. Obstacles   every impediment not yet resolved: how many hours it has stood, its kind, and the ways known to clear that kind (v1.3.0, G191).
+                 Obstacles are counted in hours, not in the 24 hours an item may stand In Progress: an obstacle stops work, so each open one is asked about at once.
+
+Sections 3 to 7 are the ESCALATION list: the only things a person is asked to act on. Exit 0 when it is empty, 1 otherwise. A register that does not
 use ExecutorInstance simply reports nothing under 1, 2 and 5 -- the report states what it found, not what it was told to look for.
 
-Usage: backlog_agent_monitor_v1_2_0.py REGISTER.ttl [--now 2026-10-15T09:00:00Z] [--stall-hours 24] [--lineage NAME] [--closing ITEM,ITEM]
+Usage: backlog_agent_monitor_v1_3_0.py REGISTER.ttl [--now 2026-10-15T09:00:00Z] [--stall-hours 24] [--lineage NAME] [--closing ITEM,ITEM]
 """
 import datetime, sys
 from rdflib import Graph, URIRef, RDF
@@ -150,6 +153,20 @@ def main(argv):
             print("  %-34s no occurrence started yet (accepted interval %s)" % (label(g, ra), iv)); esc.append("%s has had no occurrence" % label(g, ra)); n += 1
         elif now - last > limit:
             print("  %-34s last occurrence began %.1f d ago (accepted interval %s)" % (label(g, ra), (now - last).total_seconds() / 86400.0, iv)); esc.append("%s is overdue: its last occurrence began %.1f days ago" % (label(g, ra), (now - last).total_seconds() / 86400.0)); n += 1
+    if not n: print("  none")
+
+    print("\n-- 7. Obstacles (impediments not yet resolved) --")
+    n = 0
+    for im in sorted(g.subjects(RDF.type, URIRef(B + "Impediment")), key=str):
+        if g.value(im, URIRef(B + "resolvedAt")) is not None or not ok(im): continue
+        t = when(g.value(im, URIRef(B + "raisedAt")))
+        age = "age unknown (no raise time)" if t is None else ("raised after now (check the clock)" if t > now else "open %.1f h" % ((now - t).total_seconds() / 3600.0))
+        k = g.value(im, URIRef(B + "hasImpedimentKind"))
+        ways = sorted(label(g, m) for m in g.objects(k, URIRef(B + "clearableBy"))) if k is not None else []
+        own = g.value(im, URIRef(B + "hasImpedimentOwner"))
+        print("  %-34s %s; %s; owner %s" % (label(g, im), age, label(g, k) if k is not None else "no kind", label(g, own) if own is not None else "none"))
+        for w in ways: print("      can be cleared by: " + w)
+        esc.append("obstacle %s: %s%s" % (label(g, im), age, "" if k is None else ", " + label(g, k))); n += 1
     if not n: print("  none")
 
     print("\n== Escalation: %d thing(s) for a person ==" % len(esc))

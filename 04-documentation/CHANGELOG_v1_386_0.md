@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v4.0.0 — 2026-11-02 (MAJOR: Lineage 29 achieved -- an obstacle is named, advised on and cleared (box 3, G191))
+
+backlog_impediment 1.0.0 (raise, advise, clear, list), backlog_agent_monitor 1.3.0 (open obstacles in hours with the ways that fit), backlog_date_report 1.1.0 (obstacles that stood in a late box), ruling G191, the real obstacle of the lineage entered with the tool, the closure report of Lineage 29, the mission achieved, the outcome of its five objectives recorded. Documents v155.
+
+**Unplanned work:** The closure records and the outcome of the objectives are written in this release because the checkpoints of 2026-11-03 would otherwise fall due with no observation after them.
+
 ## v3.7.0 — 2026-11-02 (Lineage 29, box 2: the ways to clear each kind of obstacle (G190))
 
 Fourteen clearing methods (ClearingMethod), clearableBy per kind and clearedBy per impediment, ClearedImpedimentNamesMethodShape (IC_NOMETHOD, IC_BADMETHOD, IC_WRONGMETHOD, IC_NOTCLEARED), KindHasMethodShape (IC_KINDNOMETHOD), ruling G190. Documents v154, standard 1.155.

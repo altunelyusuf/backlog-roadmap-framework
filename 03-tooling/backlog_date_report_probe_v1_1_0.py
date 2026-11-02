@@ -33,6 +33,10 @@ fw:Oe backlog:observationFor fw:O5 ; backlog:hasObservedValue 0 ; backlog:observ
 fw:O6 a backlog:Objective ; backlog:belongsToLineage fw:L ; backlog:hasCheckpoint fw:C6 ; backlog:hasTargetValue 0 ; backlog:hasTargetDirection backlog:Dir_Decrease .
 fw:C6 a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-11-02"^^xsd:date .
 fw:Og backlog:observationFor fw:O6 ; backlog:hasObservedValue 0 ; backlog:observedAt {T('01')} . fw:Oh backlog:observationFor fw:O6 ; backlog:hasObservedValue 3 ; backlog:observedAt {T('02')} . fw:Oi backlog:observationFor fw:O6 ; backlog:hasObservedValue 0 ; backlog:observedAt {T('03')} .
+fw:ImpIn a backlog:Impediment ; backlog:belongsToLineage fw:L ; backlog:hasImpedimentKind backlog:Imp_ToolFault ; backlog:raisedAt {T('01')} ; backlog:resolvedAt {T('03')} .
+fw:ImpBefore a backlog:Impediment ; backlog:belongsToLineage fw:L ; backlog:raisedAt "2026-11-01T20:00:00Z"^^xsd:dateTime ; backlog:resolvedAt "2026-11-01T23:00:00Z"^^xsd:dateTime .
+fw:ImpOpen a backlog:Impediment ; backlog:belongsToLineage fw:L ; backlog:hasImpedimentKind backlog:Imp_AccessLimit ; backlog:raisedAt {T('03')} .
+fw:ImpAfterBox1 a backlog:Impediment ; backlog:belongsToLineage fw:L ; backlog:raisedAt {T('02')} ; backlog:resolvedAt {T('03')} .
 """
 fails = 0
 def expect(label, ok):
@@ -61,4 +65,17 @@ with tempfile.TemporaryDirectory() as d:
     o2 = subprocess.run([sys.executable, "-I", TOOL, rp, "--lineage", "L"], capture_output=True, text=True).stdout
     expect("a box with no base plan is named, not hidden", "[no base plan]" in o2)
     expect("a mover in a box with no end and no base plan is counted, not dropped", "mover(s) in a box with no end" in o2)
+    open(rp, "w").write(REG)
+    ob = subprocess.run([sys.executable, "-I", TOOL, rp, "--lineage", "L", "--now", "2026-11-02T06:00:00Z"], capture_output=True, text=True).stdout.split("== Obstacles")[1]
+    expect("an impediment open from 01:00 to 03:00 is named under late box 1 (00:00-02:00) with its kind and 2.0 h", "It1" in ob and "ImpIn: Imp_ToolFault, 2.0 h" in ob)
+    expect("one that ended before the box began is not named under any box", "ImpBefore" not in ob)
+    expect("an impediment still open is named under the box that is PAST PLAN (box 2, 02:00-06:00) with its hours open (3.0 h)", "It2" in ob and "ImpOpen: Imp_AccessLimit, open 3.0 h" in ob)
+    expect("one raised at box 1's end and resolved in box 2 is named under box 2 and not under box 1", [l for l in ob.splitlines() if "ImpAfterBox1" in l and l.strip().startswith("It2")] and not [l for l in ob.splitlines() if "ImpAfterBox1" in l and l.strip().startswith("It1")])
+    open(rp, "w").write(REG.replace("backlog:hasBaselineEnd " + T('01'), "backlog:hasBaselineEnd " + T('02')))
+    nl = subprocess.run([sys.executable, "-I", TOOL, rp, "--lineage", "L", "--now", "2026-11-02T04:00:00Z"], capture_output=True, text=True).stdout.split("== Obstacles")[1]
+    expect("when no box is late the section says so and names no impediment", "no late box" in nl and "Imp" not in nl.replace("Obstacles", ""))
+    ns = REG.replace("backlog:iterationStart " + T('00') + " ;", "").replace("backlog:hasBaselineStart " + T('00') + " ;", "")
+    open(rp, "w").write(ns)
+    o3 = subprocess.run([sys.executable, "-I", TOOL, rp, "--lineage", "L", "--now", "2026-11-02T06:00:00Z"], capture_output=True, text=True).stdout.split("== Obstacles")[1]
+    expect("a late box with no start is named as having none, and no impediment is placed in it", "no start" in o3 and "It1" in o3)
 print("VERDICT   :", "PASS" if not fails else "FAIL"); sys.exit(1 if fails else 0)

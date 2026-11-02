@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_date_report v1.0.0 -- the base, updated and finished dates of a lineage's objectives, and the plan of each box against what happened (G188).
+"""backlog_date_report v1.1.0 -- the base, updated and finished dates of a lineage's objectives, and the plan of each box against what happened (G188).
 
 Usage:  backlog_date_report.py REGISTER.ttl --lineage L_NAME [--strict] [--now 2026-11-02T12:00:00Z]
 
@@ -10,6 +10,7 @@ For each objective with a checkpoint it prints
   finished  the first reading of the unbroken run, ending at the latest reading, in which the objective stood at its target (a decrease reaches it or less, an increase reaches it or more); a hold is dated by its latest reading when that equals the target; 'open' when the latest reading does not stand at the target;
   and the variances, in hours, of updated and finished against the base.
 For each box of the lineage it prints the base plan (start, end), the actual end of a finished box and the variance in hours. The base of an objective with several checkpoints is the earliest. A date later than its base is marked LATE; an open box whose planned end has passed is marked PAST PLAN; a mover in a box with no end and no base plan is counted and undated. All times are UTC.
+v1.1.0 (G191): after the boxes it names, for each box that is LATE or PAST PLAN, the impediments of the lineage that stood open while the box ran (raised before its actual end or now, resolved after its actual start, or the planned start when no actual one is recorded; only impediments that name the lineage are counted), with their kind and hours open.
 With --strict the exit code is 1 when anything is LATE. Nothing is written."""
 import sys, datetime
 from rdflib import Graph, URIRef, RDF
@@ -86,13 +87,29 @@ def main(a):
         notes = (("  [%d mover(s) in no box]" % unplanned) if unplanned else "") + (("  [%d mover(s) in a box with no end]" % noend) if noend else "")
         print("  %-28s base %s (forecast %s)  updated %s %s  finished %s %s%s%s" % (local(obj), fmt(base), fmt(min(fcs) if fcs else None), fmt(upd), var(upd, base), fmt(fin) if fin else "open", var(fin, base) if fin else "", notes, flag))
     print("== Boxes ==")
+    late_boxes = []
     for it in sorted(g.subjects(U("belongsToLineage"), lin[0]), key=str):
         if (it, RDF.type, U("Iteration")) not in g: continue
         s, e = baseline(g, it)
         act = dt(g.value(it, U("iterationEnd"))) if g.value(it, U("hasState")) == U("Done") else None
         flag = " LATE" if (e and act and act > e) else (" PAST PLAN" if (e and not act and e < now) else "")
         late += bool(flag)
+        if flag:
+            st = dt(g.value(it, U("iterationStart"))) if g.value(it, U("iterationStart")) is not None else s
+            late_boxes.append((local(it), st, act or now))
         print("  %-14s plan %s -> %s   actual end %s %s%s%s" % (local(it), fmt(s), fmt(e), fmt(act) if act else "open", var(act, e) if act else "", "" if e else "  [no base plan]", flag))
+    print("== Obstacles that stood in a late box ==")
+    found = 0
+    for name, st, en in late_boxes:
+        if st is None: print("  %-14s [the box has no start, so no impediment can be placed in it]" % name); found += 1; continue
+        for im in sorted(g.subjects(U("belongsToLineage"), lin[0]), key=str):
+            if (im, RDF.type, U("Impediment")) not in g or g.value(im, U("raisedAt")) is None: continue
+            r, res = dt(g.value(im, U("raisedAt"))), (dt(g.value(im, U("resolvedAt"))) if g.value(im, U("resolvedAt")) is not None else None)
+            if r < en and (res is None or res > st):
+                k = g.value(im, U("hasImpedimentKind"))
+                print("  %-14s %s: %s, %s" % (name, local(im), local(k) if k is not None else "no kind", ("open %.1f h" % ((now - r).total_seconds() / 3600.0)) if res is None else ("%.1f h, resolved %s" % ((res - r).total_seconds() / 3600.0, fmt(res)))))
+                found += 1
+    if not found: print("  none" if late_boxes else "  no late box")
     print("late: %d" % late)
     return 1 if (late and "--strict" in a) else 0
 
