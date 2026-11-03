@@ -87,6 +87,8 @@ import json
 import os
 import re
 import shutil
+import warnings
+warnings.filterwarnings("ignore", message=".*UTF-8 encoding.*")   # v1.19.0: the N-Triples intermediate files draw rdflib's encoding notice on every read; it says nothing about the data
 import glob
 import subprocess
 import sys
@@ -163,7 +165,7 @@ def sha256(path):
 def load(paths):
     g = Graph()
     for p in paths:
-        g.parse(p, format="turtle")
+        g.parse(p, format="nt" if str(p).endswith(".nt") else "turtle")
     for triple in list(g.triples((None, rdflib.OWL.imports, None))):
         g.remove(triple)
     return g
@@ -173,6 +175,9 @@ _REF = {}
 _FW = "http://example.org/backlog-framework-register#"
 
 
+# v1.19.0 (Lineage 31, story Probes; speed only): BACKLOG_VALIDATE_ONLY_MESSAGE=TEXT judges only the top-level shapes whose own definition (with the shapes it reaches) carries TEXT, so a probe that
+# counts the results of one named shape does not wait for the other ~776. The rules still all run first and the data is the same, so the shape judged gives the result the full run gives it (backlog_validate_only_probe proves
+# this on planted faults, and that a text matching no shape is REFUSED, never read as silence). The report says it is restricted and its verdict line reads RESTRICTED, so a partial run cannot be mistaken for conformance.
 # v1.18.0 (Lineage 22): the roadmap-report runs the plan step records in the register are register statements too. They sit in another namespace than the register's, so they were kept as
 # "controlled individuals" while the register they report on was dropped, and the first one made the positive fixture violate "a report must name the register" (the gate refused release 1.468.0).
 _RUNS = "http://example.org/report#"
@@ -186,11 +191,21 @@ def reference_abox(data_files):
     if any(os.path.abspath(f) == os.path.abspath(ABOX) for f in data_files):
         return ABOX
     if "p" not in _REF:
+        # v1.19.0: the reference is a pure function of the data file's bytes, so it is kept beside the memo under that digest and read back (parsing the live register to strip it took 3 s of every validation)
+        _cd = os.environ.get("BACKLOG_VALIDATE_MEMO_DIR") or tempfile.gettempdir()
+        _cp = os.path.join(_cd, "aux_reference_%s.nt" % hashlib.sha256((sha256(ABOX) + _FW + _RUNS + sha256(os.path.abspath(__file__))).encode()).hexdigest()[:32])
+        if os.path.isfile(_cp) and os.path.getsize(_cp) > 0:
+            _REF["p"] = _cp
+            return _cp
         g = Graph().parse(ABOX, format="turtle")
         for t in [t for t in g if isinstance(t[0], rdflib.URIRef) and (str(t[0]).startswith(_FW) or str(t[0]).startswith(_RUNS))]:
             g.remove(t)
-        fd, path = tempfile.mkstemp(suffix=".reference.ttl"); os.close(fd)
-        g.serialize(path, format="turtle")
+        fd, path = tempfile.mkstemp(suffix=".reference.nt"); os.close(fd)
+        g.serialize(path, format="nt")
+        try:
+            _tmp = _cp + ".%d.tmp" % os.getpid(); shutil.copyfile(path, _tmp); os.replace(_tmp, _cp)
+        except OSError:
+            pass
         _REF["p"] = path
     return _REF["p"]
 
@@ -198,7 +213,21 @@ def reference_abox(data_files):
 def serialize(graph, suffix):
     fd, path = tempfile.mkstemp(suffix=suffix)
     os.close(fd)
-    graph.serialize(path, format="turtle")
+    graph.serialize(path, format="nt" if suffix.endswith(".nt") else "turtle")     # v1.19.0: the files the run itself reads again are N-Triples, which rdflib parses several times faster than Turtle
+    return path
+
+
+def _serialized_shapes(shapes):
+    """v1.19.0: the shapes as the run reads them (parsed, owl:imports dropped, serialised) are a pure function of the file's bytes, so they are kept beside the memo under that digest."""
+    cd = os.environ.get("BACKLOG_VALIDATE_MEMO_DIR") or tempfile.gettempdir()
+    cp = os.path.join(cd, "aux_shapes_%s.nt" % hashlib.sha256((sha256(shapes) + sha256(os.path.abspath(__file__))).encode()).hexdigest()[:32])
+    if os.path.isfile(cp) and os.path.getsize(cp) > 0:
+        return cp
+    path = serialize(load([shapes]), ".shapes.nt")
+    try:
+        tmp = cp + ".%d.tmp" % os.getpid(); shutil.copyfile(path, tmp); os.replace(tmp, cp)
+    except OSError:
+        pass
     return path
 
 
@@ -270,6 +299,7 @@ def _memo_key(data_files):
     _ov = promoted_overlay(data_files)
     for p in [os.path.abspath(__file__), TBOX, ABOX, SHAPES] + ([SPARQL_MEMO] if SPARQL_MEMO else []) + sorted(data_files):
         h.update(os.path.basename(p).encode()); h.update(open(p, "rb").read())
+    h.update(("|only|" + (os.environ.get("BACKLOG_VALIDATE_ONLY_MESSAGE") or "")).encode())     # v1.19.0: a restricted run's output is never replayed for a whole run, nor a whole run's for a restricted one
     return h.hexdigest()
 
 
@@ -579,11 +609,25 @@ def shape_digests(g, nodes):
 def _list_shapes(shapes_path):
     import pyshacl
     from pyshacl.shapes_graph import ShapesGraph
-    g = Graph().parse(shapes_path, format="turtle")
+    g = Graph().parse(shapes_path, format="nt" if shapes_path.endswith(".nt") else "turtle")
     sg = ShapesGraph(g)
     nodes = [s.node for s in sg.shapes]
     d, rules = shape_digests(g, nodes)
-    sys.stdout.write(json.dumps({"digests": [x[1] for x in d], "rules": rules}))
+    total = len(d)
+    unmatched = []
+    only = os.environ.get("BACKLOG_VALIDATE_ONLY_MESSAGE")
+    if only:
+        texts = [t for t in only.split("\x1e") if t]
+        _hit = {t: False for t in texts}
+        _keep = []
+        for x, n in zip(d, nodes):
+            _fl = [_flat(g, r) for r in _reach(g, n)]
+            _m = [t for t in texts if any(t in f for f in _fl)]
+            for t in _m: _hit[t] = True
+            if _m: _keep.append(x)
+        d = _keep
+        unmatched = [t for t, h in _hit.items() if not h]
+    sys.stdout.write(json.dumps({"digests": [x[1] for x in d], "rules": rules, "total": total, "only": only, "unmatched": unmatched if only else []}))
 
 
 def shard_worker(k, n, shapes_path, data_path, want_path, data_digest, outdir):
@@ -622,7 +666,7 @@ def shard_worker(k, n, shapes_path, data_path, want_path, data_digest, outdir):
             caps[id(self)] = (r[0], r[1], self.sg)
         return r
     Shape.validate = val
-    pyshacl.validate(data_path, shacl_graph=shapes_path, data_graph_format="turtle", shacl_graph_format="turtle", advanced=True)
+    pyshacl.validate(data_path, shacl_graph=shapes_path, data_graph_format="nt" if data_path.endswith(".nt") else "turtle", shacl_graph_format="nt" if shapes_path.endswith(".nt") else "turtle", advanced=True)
     done = 0
     for sid, (conf, reps, sg) in caps.items():
         key = seen["keys"][sid]
@@ -668,11 +712,27 @@ def _run_shapes(shapes_path, data_path, input_files):
     """Per-shape cached run. Returns (list of turtle reports, list of notes) or (None, notes) when it must be refused."""
     cache = os.environ.get("BACKLOG_VALIDATE_SHAPE_DIR") or os.environ.get("BACKLOG_VALIDATE_MEMO_DIR") or tempfile.mkdtemp(prefix="shapecache_")
     os.makedirs(cache, exist_ok=True)
-    lp = subprocess.run([sys.executable, os.path.abspath(__file__), "--list-shapes", shapes_path], capture_output=True, text=True)
-    try:
-        info = json.loads(lp.stdout)
-    except Exception:
-        return None, [lp.stderr[-400:]]
+    # v1.19.0: the listing is a pure function of the shapes' bytes, this tool's bytes and the restriction, so it is kept under that digest and read back (it took 0.7 s of every validation)
+    _lk = hashlib.sha256((_bytes_digest([shapes_path, os.path.abspath(__file__)]) + "|" + (os.environ.get("BACKLOG_VALIDATE_ONLY_MESSAGE") or "") + pyshacl_version()).encode()).hexdigest()[:32]
+    _lf = os.path.join(cache, "aux_list_%s.json" % _lk)
+    info = None
+    if os.path.isfile(_lf):
+        try:
+            info = json.load(open(_lf))
+        except Exception:
+            info = None
+    if info is None:
+        lp = subprocess.run([sys.executable, os.path.abspath(__file__), "--list-shapes", shapes_path], capture_output=True, text=True)
+        try:
+            info = json.loads(lp.stdout)
+        except Exception:
+            return None, [lp.stderr[-400:]]
+        try:
+            _t = _lf + ".%d.tmp" % os.getpid(); json.dump(info, open(_t, "w")); os.replace(_t, _lf)
+        except OSError:
+            pass
+    if info.get("only") and (not info["digests"] or info.get("unmatched")):
+        return None, ["RESTRICTED REFUSED: no shape carries the text %r, so a run restricted to it would say nothing" % (info.get("unmatched") or [info["only"]])[0]]
     data_digest = hashlib.sha256((info["rules"] + _bytes_digest(input_files + [os.path.abspath(__file__)] + ([SPARQL_MEMO] if SPARQL_MEMO else [])) + pyshacl_version()).encode()).hexdigest()
     keys = {hashlib.sha256((d + data_digest).encode()).hexdigest() for d in info["digests"]}
     bundle_path = os.path.join(cache, "shapes_" + data_digest + ".json")
@@ -724,12 +784,13 @@ def _validate(data_files):
     _ov = promoted_overlay(data_files)
     if _ov:
         SHAPES = _ov
-    data_path = serialize(load([TBOX, reference_abox(data_files)] + data_files), ".data.ttl")
-    shapes_path = serialize(load([SHAPES]), ".shapes.ttl")
+    data_path = serialize(load([TBOX, reference_abox(data_files)] + data_files), ".data.nt")
+    shapes_path = _serialized_shapes(SHAPES)
 
     outs, errs = _run_pyshacl(shapes_path, data_path, [TBOX, ABOX] + list(data_files))
     if outs is None:
         return 2, {}
+    only = os.environ.get("BACKLOG_VALIDATE_ONLY_MESSAGE")
     report = Graph()
     try:
         for o in outs:
@@ -798,6 +859,10 @@ def _validate(data_files):
             for sev, focus, msg in sorted(advisories):
                 print("  [%-9s] %-48s %s" % (sev, focus.rsplit("#", 1)[-1], msg))
 
+    if only:
+        print("restricted  : only the shapes carrying %r were judged; this is not a conformance verdict" % only)
+        print("VERDICT     : RESTRICTED (%d violations of the shapes judged)" % counts["Violation"])
+        return (1 if counts["Violation"] else 0), counts
     if counts["Violation"] == 0:
         print("VERDICT     : CONFORMANT (0 violations at sh:Violation severity; "
               "advisory results above are not conformance failures)")

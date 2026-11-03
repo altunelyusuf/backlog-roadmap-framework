@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v4.4.0 — 2026-11-03 (Probes wait only for the shape they test (Lineage 31, story Probes))
+
+The validator can judge only the shapes a probe names (BACKLOG_VALIDATE_ONLY_MESSAGE), keeps its repeated inputs under a digest of their inputs and reads N-Triples; sixteen slow probes use it; a probe proves the restricted run equals the whole one. The gate unsets the variable at its start; the stage-release record list accepts the gate-times file; prune-cache removes the kept inputs. Measured: the probe loop of the gate, run cold as the gate runs it, took 508 s against 1,196 s, every probe passing (the serial key phase before it, about 47 s, is outside that figure). Stated plainly: the validator's kept inputs in the memo directory are trusted by name, as the shape bundle already is; a check of their content on reading is an open item. Box 2 closed after two independent reviews; the work was begun before the box was opened and the opening disclosed the changed files.
+
+**Unplanned work:** None.
+
 ## v4.3.0 — 2026-11-03 (Gate and probe seconds kept in the package (Lineage 31, story Know))
 
 The gate prints the seconds of each probe and the release tool writes the seconds of every gate section and every probe into the package per release (GATE_TIMES). Story Know of Lineage 31 is done; box 1 closed with an independent review whose three findings are recorded.

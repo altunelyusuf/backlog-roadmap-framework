@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_open_lineage_probe v1.2.0 -- proof that the opening block carries the profile's rule sets and that the shape holds a lineage to them (G155), and (v1.1.0, G177) that a lineage opened under the adaptive profile can plan after its Backlog stage."""
+"""backlog_open_lineage_probe v1.2.1 -- proof that the opening block carries the profile's rule sets and that the shape holds a lineage to them (G155), and (v1.1.0, G177) that a lineage opened under the adaptive profile can plan after its Backlog stage."""
 import glob, hashlib, os, re, subprocess, sys, tempfile
 HERE = os.path.dirname(os.path.abspath(__file__)); PKG = os.path.dirname(HERE)
 sv = lambda p: [int(x) for x in re.findall(r"_v(\d+)_(\d+)_(\d+)\.", p)[0]]
@@ -25,7 +25,7 @@ PROF = "backlog:Profile_Agentic a backlog:OpeningProfile ; backlog:profileInclud
 def count(body):
     with tempfile.TemporaryDirectory() as d:
         f = os.path.join(d, "s.ttl"); open(f, "w").write(HEAD + PROF + body)
-        out = subprocess.run([sys.executable, val, f], capture_output=True, text=True, timeout=900).stdout
+        out = subprocess.run([sys.executable, val, f], capture_output=True, text=True, timeout=900, env={**os.environ, "BACKLOG_VALIDATE_ONLY_MESSAGE": "G155:"}).stdout
     return sum(1 for ln in out.splitlines() if "[Violation]" in ln and "G155:" in ln)
 expect("a lineage that wrote the tool's block entire draws no profile finding", count(ag) == 0)
 expect("the same block with one rule set left out draws the finding", count(ag.replace("RS_AgentAccountability", "RS_StatusHistoryRecorded", 1)) == 1)

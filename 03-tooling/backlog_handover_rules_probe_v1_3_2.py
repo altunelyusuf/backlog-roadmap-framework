@@ -62,7 +62,7 @@ SCEN = [
 with tempfile.TemporaryDirectory() as d:
     for name, body, want in SCEN:
         f = os.path.join(d, "s.ttl"); open(f, "w").write(body)
-        out = subprocess.run([sys.executable, val, f], capture_output=True, text=True, timeout=900).stdout
+        out = subprocess.run([sys.executable, val, f], capture_output=True, text=True, timeout=900, env={**os.environ, "BACKLOG_VALIDATE_ONLY_MESSAGE": "\x1e".join((KEYS[k][2:] if KEYS[k].startswith('W:') else KEYS[k]) for k in want)}).stdout
         for k, n in want.items():
             sev, key = ("[Warning]", KEYS[k][2:]) if KEYS[k].startswith("W:") else ("[Violation]", KEYS[k])
             got = sum(1 for ln in out.splitlines() if sev in ln and key in ln)

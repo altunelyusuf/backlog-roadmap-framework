@@ -17,6 +17,8 @@ Subcommands (each prints what it did and exits non-zero on any refusal):
                                         duration; --dry-run prints the plan and the refusals it already knows (missing changelog entry) and runs nothing
   prune-cache [DIR] [--days N] [--legacy]          remove cache files (shape_*.ttl, memo *.json, stamps) older than N days (default 14) from the validation cache; they are rebuilt on demand
   republish VERSION                     only the publisher and the tag check (after a transient failure of the public push)
+v1.12.0 (Lineage 31, story Probes): prune-cache also removes the validator's kept inputs (aux_reference, aux_shapes, aux_list files) older than N days (the review of box 2 found they would grow without bound).
+v1.11.0 (Lineage 31, story Probes): the gate-times file is a record file, so a stage release that writes it is not refused as changing more than records (the independent review of box 1 found this).
 v1.10.0 (Lineage 31, story Know): after a passing gate the seconds of every gate section and every probe are written into the package, 06-package-provenance/GATE_TIMES/gate_times_vVERSION.tsv, before the manifest is rebuilt, so where the release time goes is kept per release and not lost with the work folder.
 v1.9.0 (Lineage 22, box 2): the preflight also runs the link-control probe (release 1.468.0 was refused a second time, 30 minutes into the gate, for a predicate declared nowhere; the probe takes seconds).
 v1.8.0 (Lineage 22): the preflight also validates the positive fixture (the gate's Gate R section aborts when it does not validate, 10 minutes into a release; release 1.468.0 was refused there).
@@ -320,7 +322,7 @@ def cmd_preflight(args):
 
 
 LIGHT_LOG = os.path.join("06-package-provenance", "LIGHT_RELEASES.txt")
-RECORD_FILES = re.compile(r"(^|/)(backlog_abox_v\d+_\d+_\d+\.ttl|CHANGELOG_v\d+_\d+_\d+\.md|PROBE_INPUTS\.json|VERSION\.txt|MANIFEST_SHA256[^/]*\.txt|PROOF_STAMPS\.json|LIGHT_RELEASES\.txt)$")
+RECORD_FILES = re.compile(r"(^|/)(backlog_abox_v\d+_\d+_\d+\.ttl|CHANGELOG_v\d+_\d+_\d+\.md|PROBE_INPUTS\.json|VERSION\.txt|MANIFEST_SHA256[^/]*\.txt|PROOF_STAMPS\.json|LIGHT_RELEASES\.txt|GATE_TIMES/gate_times_v\d+_\d+_\d+\.tsv)$")
 MAX_STAGE_RUN = 4
 
 
@@ -461,7 +463,7 @@ def prune_cache(cache_dir, days=14.0, now=None, legacy=False):
     """Remove validation cache files not written for DAYS days; returns (removed, kept). Only the cache's own file kinds are touched."""
     now = now or time.time(); removed = kept = 0
     for f in os.listdir(cache_dir):
-        if not re.fullmatch(r"(shape_[0-9a-f]+\.ttl|shapes_[0-9a-f]+\.json|[0-9a-f]{64}\.json|(shardproof|cacheproof)_[0-9a-f]+\.ok|archdigest_[0-9a-f]+\.json|stamp_[A-Za-z0-9_.-]+\.key)", f):
+        if not re.fullmatch(r"(shape_[0-9a-f]+\.ttl|shapes_[0-9a-f]+\.json|[0-9a-f]{64}\.json|(shardproof|cacheproof)_[0-9a-f]+\.ok|archdigest_[0-9a-f]+\.json|stamp_[A-Za-z0-9_.-]+\.key|aux_(reference|shapes|list)_[0-9a-f]+\.(nt|json))", f):
             continue
         p = os.path.join(cache_dir, f)
         if (legacy and f.startswith("shape_") and f.endswith(".ttl")) or now - os.path.getmtime(p) > days * 86400:

@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 # register-use: reference-only
 # (audited: the probe reads no record of the framework register; it builds its own temporary package and log)
-"""backlog_gate_times_probe v1.0.0 -- proves that the seconds of every gate section and every probe are kept in the package (Lineage 31, story Know).
+"""backlog_gate_times_probe v1.0.1 -- proves that the seconds of every gate section and every probe are kept in the package (Lineage 31, story Know).
 
   1  the gate prints a "probe time:" line for a probe that ran and for one it skipped          -> both forms in the gate text
   2  the release tool writes GATE_TIMES/gate_times_vVERSION.tsv from a log and its timing sidecar -> file exists
   3  every section of the sidecar is a row of kind section, with its seconds                   -> all present
   4  every probe time line of the log is a row of kind probe; a skipped probe is marked        -> all present, mark kept
   5  a log without probe lines and without a sidecar still writes the file (header only)        -> file exists, no rows
+  6  a stage release whose changes are records and the gate-times file                          -> not refused for the file
 Exit 0 when every expectation holds, 1 otherwise."""
 import glob, importlib.util, os, re, sys, tempfile
 HERE = os.path.dirname(os.path.abspath(__file__)); PKG = os.path.dirname(HERE)
@@ -36,5 +37,7 @@ with tempfile.TemporaryDirectory() as d:
     log2 = os.path.join(d, "gate_9.9.8.log"); open(log2, "w").write("== Alpha ==\n")
     out2, n2 = rt.write_gate_times(d, "9.9.8", log2)
     expect("5 a log without probe lines or sidecar writes a header-only file", os.path.exists(out2) and n2 == 0)
+ok = rt.stage_refusal(["06-package-provenance/GATE_TIMES/gate_times_v9_9_9.tsv", "01-ontologies/backlog_abox_v9_9_9.ttl"], "") is None
+expect("6 a stage release that writes the gate-times file is not refused for it", ok)
 print("VERDICT   :", "PASS" if not bad else "FAIL"); [print("  ", b) for b in bad]
 sys.exit(1 if bad else 0)

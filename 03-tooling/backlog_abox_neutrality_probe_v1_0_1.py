@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_abox_neutrality_probe v1.0.0 -- the shipped data file binds nobody who did not adopt (G116).
+"""backlog_abox_neutrality_probe v1.0.1 -- the shipped data file binds nobody who did not adopt (G116).
 
 A consumer measured (2026-10-14) that validating its lineage together with this package's data file gave 131 results of the history rules and 129 of the flow-point
 rules on items that were never this package's register's: the file held a register-level adoption of both rule sets, and a register-level adoption is read from any
@@ -46,7 +46,7 @@ x:E1 a backlog:TransitionEvent ; backlog:transitionedItem x:W4 ; backlog:viaTran
 REGALL = "x:Reg a backlog:Backlog ; backlog:isRegisterRoot true ; backlog:adoptsRuleSet backlog:RS_StatusHistoryRecorded , backlog:RS_FlowPointsRecorded , backlog:RS_IndependentVerification .\n"
 RULES = re.compile(r"\] W\d\s+(G112|G113|G115):")
 def count(*files):
-    out = subprocess.run([sys.executable, val, *files], capture_output=True, text=True, timeout=900).stdout
+    out = subprocess.run([sys.executable, val, *files], capture_output=True, text=True, timeout=900, env={**os.environ, "BACKLOG_VALIDATE_ONLY_MESSAGE": "G112:\x1eG113:\x1eG115:"}).stdout
     return sum(1 for ln in out.splitlines() if "[Violation]" in ln and RULES.search(ln))
 with tempfile.TemporaryDirectory() as d:
     c1 = os.path.join(d, "consumer.ttl"); open(c1, "w").write(HEAD + BODY)

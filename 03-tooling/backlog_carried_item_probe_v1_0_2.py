@@ -38,7 +38,7 @@ MSG = {"planning": "no PlanningEvent ever took it", "concern": "declares neither
 def verdicts(text):
     with tempfile.NamedTemporaryFile("w", suffix=".ttl", delete=False) as f:
         f.write(text)
-    out = subprocess.run([sys.executable, VAL, f.name], capture_output=True, text=True).stdout
+    out = subprocess.run([sys.executable, VAL, f.name], capture_output=True, text=True, env={**os.environ, "BACKLOG_VALIDATE_ONLY_MESSAGE": "\x1e".join(MSG.values())}).stdout
     os.unlink(f.name)
     lines = [l for l in out.splitlines() if "S_Carried" in l]
     return {k: any(m in l for l in lines) for k, m in MSG.items()}
