@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_release_item_check_probe v1.1.0 -- GOV-S01/GOV-S02 shown to fire on real known-bad trees and stay silent on known-good
+"""backlog_release_item_check_probe v1.3.0 -- GOV-S01/GOV-S02 shown to fire on real known-bad trees and stay silent on known-good
 ones, on a real throwaway git repository (this tool had no self-proof before v1.5.0 -- G100/G101's own lesson: "a gate shown
 only on good input proves nothing" applied to this gate itself, found while writing the G99 root-cause analysis).
 
@@ -11,6 +11,18 @@ fix) a change and checks the verdict:
   4 same as 3, but a real item moved Proposed -> InProgress -> PASS
   5 same as 3, but the changelog carries a real "**Unplanned work:**" marker for the current version -> PASS
   6 same as 3, but the changelog mentions "unplanned" in prose with no marker                          -> still FAIL
+  v1.2.0 (G194): the marker alone no longer passes; it must cite a record this release introduces:
+  5  marker "None."                                        -> FAIL
+  5b marker citing an Owner ruling G7 the register lacks   -> FAIL
+  5c marker citing G7 that the baseline register already had -> FAIL
+  5d marker citing G7 new in the register, source names the Owner -> PASS
+  5e marker citing G7 new, source names no Owner            -> FAIL
+  5f marker citing Urg_X, a new urgent interruption         -> PASS
+  v1.3.0 (G195): authority must come before the work:
+  5g a ruling dated after the oldest changed file           -> FAIL
+  5h a ruling dated before it                               -> PASS
+  5i an urgent interruption declared after the oldest changed file -> FAIL
+  5j one declared before it                                 -> PASS
 Exit 0 all hold; 1 a case did not.
 """
 import glob, os, re, shutil, subprocess, sys, tempfile
@@ -90,12 +102,56 @@ with tempfile.TemporaryDirectory() as d:
     open(os.path.join(pkg, "01-ontologies", "backlog_abox_v1_0_0.ttl"), "w").write(
         "fw:S_One a backlog:Story ; backlog:hasState backlog:Proposed .\n")  # revert
 
-    # 5: no item movement, but a real "**Unplanned work:**" marker for the CURRENT version
-    open(os.path.join(pkg, "VERSION.txt"), "w").write("1.1.0\n")
-    open(os.path.join(pkg, "04-documentation", "CHANGELOG_v1_0_0.md"), "a").write(
-        "\n## v1.1.0\n**Unplanned work:** a real, deliberate reason.\n")
+    # 5 (v1.2.0): the marker must cite a record this release introduces
+    reg = os.path.join(pkg, "01-ontologies", "backlog_abox_v1_0_0.ttl")
+    base_reg = "fw:S_One a backlog:Story ; backlog:hasState backlog:Proposed .\n"
+    def declare(text):
+        open(os.path.join(pkg, "VERSION.txt"), "w").write("1.1.0\n")
+        open(os.path.join(pkg, "04-documentation", "CHANGELOG_v1_0_0.md"), "w").write(
+            "## v1.0.0\nbaseline\ndoc tweak\n\n## v1.1.0\n**Unplanned work:** " + text + "\n")
+    RULING = ('\nfw:Ruling_G7 a backlog:GovernanceRuling ;\n    backlog:hasRulingIdentifier "G7" ;\n'
+              '    backlog:rulingSource "%s" .\n')
+    declare("None.")
     code, out = run_check(pkg, "pkg-v1.0.0", repo)
-    check("5 a real unplanned-work marker for this version overrides the FAIL", code == 0 and "declares unplanned work" in out)
+    check("5 a bare declaration 'None.' FAILs", code == 1 and "cited       : none" in out)
+    declare("an ad hoc fix, see G7")
+    code, out = run_check(pkg, "pkg-v1.0.0", repo)
+    check("5b a citation of a ruling the register lacks FAILs", code == 1)
+    open(reg, "w").write(base_reg + RULING % "Owner decision of today.")
+    declare("see G7"); code, out = run_check(pkg, "pkg-v1.0.0", repo)
+    check("5d a ruling new in the register whose source names the Owner PASSes", code == 0 and "cited       : G7" in out)
+    open(reg, "w").write(base_reg + RULING % "a session's own opinion.")
+    code, out = run_check(pkg, "pkg-v1.0.0", repo)
+    check("5e a ruling whose source names no Owner FAILs", code == 1)
+    open(reg, "w").write(base_reg + "\nfw:Urg_X a backlog:UrgentInterruption .\n")
+    declare("emergency, see Urg_X"); code, out = run_check(pkg, "pkg-v1.0.0", repo)
+    check("5f a new urgent interruption PASSes", code == 0 and "cited       : Urg_X" in out)
+    open(reg, "w").write(base_reg)
+    # 5g to 5j (v1.3.0): authority before the work
+    declare("see G7")
+    open(reg, "w").write(base_reg + RULING % "Owner decision of 2099-01-01.")
+    code, out = run_check(pkg, "pkg-v1.0.0", repo)
+    check("5g a ruling dated after the changed files FAILs", code == 1 and "authority comes first" in out)
+    open(reg, "w").write(base_reg + RULING % "Owner decision of 2000-01-01.")
+    code, out = run_check(pkg, "pkg-v1.0.0", repo)
+    check("5h a ruling dated before the changed files PASSes", code == 0 and "cited       : G7" in out)
+    URG = '\nfw:Urg_X a backlog:UrgentInterruption ;\n    backlog:urgencyDeclaredAt "%s"^^xsd:dateTime .\n'
+    declare("emergency, see Urg_X")
+    open(reg, "w").write(base_reg + URG % "2099-01-01T00:00:00Z")
+    code, out = run_check(pkg, "pkg-v1.0.0", repo)
+    check("5i an urgency declared after the changed files FAILs", code == 1 and "authority comes first" in out)
+    open(reg, "w").write(base_reg + URG % "2000-01-01T00:00:00Z")
+    code, out = run_check(pkg, "pkg-v1.0.0", repo)
+    check("5j an urgency declared before the changed files PASSes", code == 0 and "cited       : Urg_X" in out)
+    open(reg, "w").write(base_reg)
+    # 5c: the ruling already existed at the baseline
+    open(reg, "w").write(base_reg + RULING % "Owner decision of earlier.")
+    git(["add", "-A"], repo); git(["commit", "-q", "-m", "ruling G7 before the release"], repo); git(["tag", "pkg-v1.0.1"], repo)
+    declare("see G7"); open(os.path.join(pkg, "03-tooling", "brand_new.py"), "w").write("# new again\n")
+    code, out = run_check(pkg, "pkg-v1.0.1", repo)
+    check("5c a ruling the baseline already had FAILs", code == 1 and "cited       : none" in out)
+    open(reg, "w").write(base_reg)
+    git(["checkout", "--", "pkg/01-ontologies/backlog_abox_v1_0_0.ttl"], repo)
 
     # 6: prose MENTIONING "unplanned" with no real marker still FAILs
     open(os.path.join(pkg, "04-documentation", "CHANGELOG_v1_0_0.md"), "w").write(

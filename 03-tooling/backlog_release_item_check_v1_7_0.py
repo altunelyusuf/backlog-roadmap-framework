@@ -1,6 +1,12 @@
 #!/usr/bin/env python3
+# v1.7.0 (G195, the lesson of 2026-11-03): authority must come BEFORE the work. A cited urgent interruption must have been declared before the earliest changed governed file
+# was written (file times), and a cited Owner ruling must be dated no later than that day. Work built first and authorised afterwards fails.
+# v1.6.0 (G194, Owner instruction of 2026-11-03): an unplanned-work declaration is no longer enough by itself. A change to a governed file that no item
+# accounts for is development outside the backlog; it passes only when the declaration cites a record in the register that this release introduces: an
+# Owner ruling (G followed by digits, rulingSource naming the Owner) or an urgent interruption. "None", an empty reason, a citation of a record the register
+# lacked at the baseline or does not have, all FAIL. Before, the words "Unplanned work: None." passed.
 # v1.5.0 (G99 RCA): the release-time comparison examined a span that could never contain the release being gated -- fixed to the working tree, and to include files never git-added.
-"""backlog_release_item_check v1.5.0 -- GOV-S01, GOV-S02.
+"""backlog_release_item_check v1.7.0 -- GOV-S01, GOV-S02.
 
 The real, agreed gap: a package can publish a release whose governed files genuinely changed, while
 not one real backlog item moved -- checked and confirmed on automate-python-book-3e (fourteen real
@@ -44,7 +50,7 @@ Usage: backlog_release_item_check_v1_5_0.py <package_root> <baseline_tag>
        [--repo-root <path>] [--package-prefix <rel_path>]
 
 Exit 0 and PASS if nothing governed changed, a real item moved, or the changelog carries a real
-unplanned-work marker for the current version. Exit 1 and FAIL, naming the span checked, otherwise.
+unplanned-work marker for the current version that cites an Owner ruling or urgent interruption new in this release (v1.6.0). Exit 1 and FAIL, naming the span checked, otherwise.
 """
 import subprocess
 import sys
@@ -152,6 +158,60 @@ def declared_unplanned_reason(package_root, package_prefix, repo_root):
     return marker.group(1).strip() if marker else None
 
 
+def _block(text, ident_pattern):
+    m = re.search(ident_pattern, text)
+    if not m:
+        return None
+    start = text.rfind("\n", 0, m.start()) + 1
+    s0 = text.rfind("\n\n", 0, m.start()) + 1
+    end = text.find(" .\n", m.end())
+    return text[s0:end if end != -1 else len(text)]
+
+
+def cited_new_records(reason, old_text, new_text):
+    """Records the declaration names that this release introduces: an Owner ruling by its identifier, or an urgent interruption by its name."""
+    out = []
+    for g in sorted(set(re.findall(r"\bG\d+\b", reason))):
+        pat = rf'hasRulingIdentifier\s+"{g}"'
+        nb, ob = _block(new_text, pat), _block(old_text, pat)
+        if nb and ob is None and re.search(r"rulingSource[^\n]*Owner", nb):
+            out.append(g)
+    for u in sorted(set(re.findall(r"\b(?:fw:)?(Urg_\w+)\b", reason))):
+        npat = rf"fw:{u}\s+a\s+backlog:UrgentInterruption"
+        if re.search(npat, new_text) and not re.search(npat, old_text):
+            out.append(u)
+    return out
+
+
+def earliest_change(repo_root, package_prefix, changed):
+    """UTC time of the oldest write among the changed governed files that exist."""
+    import datetime
+    ts = []
+    for rel in changed:
+        p = os.path.join(repo_root, package_prefix, rel)
+        if os.path.exists(p):
+            ts.append(os.path.getmtime(p))
+    return datetime.datetime.fromtimestamp(min(ts), datetime.timezone.utc) if ts else None
+
+
+def authority_time(cited, new_text):
+    """The instant each cited record's authority begins: an urgent interruption's urgencyDeclaredAt, an Owner ruling's date (start of that day, UTC)."""
+    import datetime
+    out = {}
+    for c in cited:
+        if c.startswith("Urg_"):
+            blk = _block(new_text, rf"fw:{c}\s+a\s+backlog:UrgentInterruption")
+            m = re.search(r'urgencyDeclaredAt\s+"([^"]+)"', blk or "")
+            if m:
+                out[c] = datetime.datetime.fromisoformat(m.group(1).replace("Z", "+00:00"))
+        else:
+            blk = _block(new_text, rf'hasRulingIdentifier\s+"{c}"')
+            m = re.search(r"rulingSource[^\n]*?(\d{4}-\d{2}-\d{2})", blk or "")
+            if m:
+                out[c] = datetime.datetime.fromisoformat(m.group(1)).replace(tzinfo=datetime.timezone.utc)
+    return out
+
+
 def main():
     args = sys.argv[1:]
     if len(args) < 2:
@@ -208,8 +268,21 @@ def main():
     reason = declared_unplanned_reason(package_root, package_prefix, repo_root)
     if reason:
         print(f"declared    : unplanned work -- \"{reason}\"")
-        print("VERDICT     : PASS -- release's own changelog declares unplanned work")
-        sys.exit(0)
+        cited = cited_new_records(reason, old_text, new_text)
+        if cited:
+            print(f"cited       : {', '.join(cited)} (introduced by this release)")
+            first = earliest_change(repo_root, package_prefix, changed)
+            auth = authority_time(cited, new_text)
+            late = [c for c in cited if first is not None and c in auth and first < auth[c]]
+            if late:
+                print(f"timing      : the oldest changed governed file was written {first.isoformat()}, before the authority of {', '.join(late)} began ({', '.join(auth[c].isoformat() for c in late)})")
+                print("VERDICT     : FAIL -- the work was built before it was authorised; authority comes first (G195). Set the work aside and enter it through the ceremony.")
+                sys.exit(1)
+            print("VERDICT     : PASS -- the unplanned work cites an Owner ruling or an urgent interruption this release records")
+            sys.exit(0)
+        print("cited       : none -- no Owner ruling (G and digits) or urgent interruption in the declaration is new in the register of this release")
+        print("VERDICT     : FAIL -- unplanned work must cite the Owner ruling or urgent interruption that authorises it; a bare declaration is development outside the backlog (G194)")
+        sys.exit(1)
 
     print("declared    : no unplanned-work marker found in the changelog entry for this version")
     print("VERDICT     : FAIL -- governed files changed, no item moved, no unplanned-work declared")

@@ -4423,3 +4423,26 @@ Related: G148, G91, G155, G163.
 
 **What is not claimed.** That the 19 finishes are wrong: only that they are later than the commit that recorded the item Done. That releases made from a shallow clone are therefore invalid: the check was blind there, and that is now stated. That the ledger covers the live register: it holds none of its rows.
 Related: G115, G192.
+
+## G194 — The chain is derived from the scope taxonomy, and no development happens outside the backlog
+
+**Q1 — the finding.** The Owner challenged a draft of the rebuilt objectives (2026-11-03): they had been taken from a list of gaps, not derived from the scope, and the scope taxonomy specified in the ontology files (areas, deliverables and exclusions in a product or work layer; goals by facing; objectives with their metrics) had not been read in full. Reading it showed Lineage 29 departs from it: its five exclusions have no guarding goal, its kept area has no scope-facing goal, nothing sits in the product layer, and the taxonomy has no parent-child link. Separately, four releases (4.0.1, 4.0.2, 4.1.0, 4.1.1) changed governed files and passed the gate on a changelog line reading "Unplanned work: None.", which the check accepted as a declaration.
+
+**Q2 — what was ruled and built.** The Owner instructed that the missing parent-child link be added to the revived lineage as a gap, and that the discipline enforce this way of work and prevent ad hoc development. Release item check 1.6.0: unplanned work passes only when its declaration cites an Owner ruling (G and digits, source naming the Owner) or an urgent interruption that the release itself introduces to the register; "None", an unknown citation or a ruling the baseline already had fails. `OwnerRulingDatedShape` makes the citation checkable: a ruling from G194 on whose source names the Owner gives the date. Probe 1.2.0 has eleven cases. The discipline gains steps 3d to 3f. The gaps are findings of the revived lineage and one pending change request to its scope.
+
+**Q3 — what the record shows.** This release changes governed files and cites this ruling, which it introduces; it is the first to pass under the stricter rule, and the earlier four would have failed it. The release is itself outside the lineage's backlog, because the backlog is being rebuilt; it rests on the Owner's instruction and says so.
+
+**What is not claimed.** That derivation from the scope taxonomy is enforced: it is stated in step 3d and is the work of the lineage. That a moved item proves the item is the right one: the check still accepts any movement. That the four earlier releases are invalid: they passed the gate as it was.
+Related: G192, G193, G148.
+
+
+## G195 — Work is routed before it is built (a lesson learned)
+
+**Q1 — what happened.** On 2026-11-03 the Owner called the saving of time and tokens urgent and asked for it to be built first. Three tools and a probe were written at once and covered by an Owner ruling, with no route recorded. When the urgent case was then to be recorded, the urgency ceremony showed that urgent work must be a work item of a lineage, with its intent chain, planning, readiness and independent verification, and that a chain written after the work is the backfill the discipline forbids. The Owner chose to set the tools aside and enter them through the ceremony.
+
+**Q2 — what was ruled and built.** The route is chosen and recorded before the first file changes (discipline step 3g): the mission's own change request, an urgency declared first with its own lineage, a queued lineage, or the Owner's dated ruling for a change to the discipline itself. Two enforcements: shape `UrgentItemStartsAfterDeclarationShape` refuses an urgent item that started before the urgency was declared (fixture case URG_EARLY and its control); release item check 1.7.0 refuses unplanned work whose cited authority is dated after the oldest changed governed file (urgency to the instant, ruling to the day), with four timing cases in probe 1.3.0. Two lessons are recorded, one for this shape and one for the dated-ruling shape.
+
+**Q3 — what the record shows.** The tools exist in a holding place outside the governed tree and re-enter only through the urgent lineage. The ruling G194 and the changes built on the Owner's instruction of 12:40 are not set aside: they are changes to the discipline and its release path, which route (d) covers, and each carried its ruling.
+
+**What is not claimed.** That a session cannot write a file first: the checks see the change at release, not at the keystroke. That file times are tamper-proof: they are the working tree's, and a checkout resets them. That every instruction is routed correctly: the choice between the routes is the session's judgement, put in the record for the Owner to challenge.
+Related: G194, G158, G104, G127.

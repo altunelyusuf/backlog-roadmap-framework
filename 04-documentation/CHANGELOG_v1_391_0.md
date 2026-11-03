@@ -11285,6 +11285,14 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v4.2.0 — 2026-11-03 (MINOR: no development outside the backlog -- the unplanned-work declaration must cite a dated Owner ruling (G194))
+
+Owner instruction of 2026-11-03 12:40. The release item check 1.6.0 no longer passes a governed-file change on a bare unplanned-work line: it must cite an Owner ruling, with its date, or an urgent interruption that the release itself records. The probe 1.2.0 holds eleven cases. OwnerRulingDatedShape (shapes 1.207.0, fixture case OWN_UNDATED with its control) makes the citation checkable. The lineage discipline is v157.0.0 with steps 3d (derive the chain from the scope taxonomy), 3e (work reaches the register before a file) and 3f (mature in small steps); the narratives are v157.0.0 with section G194. Ruling G194, three post-closure findings against Lineage 29 (the parent-child link missing from the scope taxonomy; four releases passed on a bare declaration; the chain derived from a gap list) and a pending change request to its scope are recorded.
+
+**Unplanned work:** Owner rulings G194 (instruction of 2026-11-03 12:40 Istanbul) and G195 (decision of 2026-11-03 14:07 Istanbul, the lesson of building before routing): the stricter rule is itself introduced here, on the Owner's instruction, while the Backlog stage of the revived Lineage 29 is being rebuilt.
+
+Also in this release (G195, Owner decision of 2026-11-03 14:07): the lesson of building before routing. Discipline step 3g: every instruction that creates work is routed, and the route recorded, before the first file changes. `UrgentItemStartsAfterDeclarationShape` (fixture case URG_EARLY with its control) refuses an urgent item that started before its declaration; release item check 1.7.0 refuses unplanned work whose cited authority is dated after the oldest changed governed file (probe 1.3.0, four timing cases). Two lessons recorded. The cost-saving tools are not in this release: they are set aside and re-enter through the urgency ceremony.
+
 ## v4.1.1 — 2026-11-03 (PATCH: Lineage 29 chain rebuilt from the Objective stage -- revision and retraction)
 
 Records only. A stage revision (Owner decision of 2026-11-03) rebuilds the chain of the revived Lineage 29 from the Objective stage; the Mission and Scope stand. The Objective and Backlog outputs are retracted and kept. In this commit the lineage adopts the rule set of known obstacles that profile revision 13 introduced, which is its opening again under G192. The rebuilt Objective and Backlog stages follow, one commit each.

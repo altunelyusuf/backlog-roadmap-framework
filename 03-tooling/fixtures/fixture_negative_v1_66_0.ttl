@@ -4446,3 +4446,13 @@ vsn:RS_RevNew backlog:introducedInRevision vsn:PrRevNew .
 vsn:L_RevivedNoRev a backlog:Lineage ; backlog:lineageOrdinal 9001 ; backlog:lineageRevivedAt "2026-11-03T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ; backlog:openedUnderRevision vsn:PrRevOld ; backlog:adoptsRuleSet vsn:RS_RevNew .
 vsn:L_RV_Rebuilt a backlog:Lineage ; backlog:lineageOrdinal 9002 ; backlog:lineageRevivedAt "2026-11-03T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ; backlog:openedUnderRevision vsn:PrRevOld ; backlog:adoptsRuleSet vsn:RS_RevNew .
 vsn:Rev_Rebuilt a backlog:StageRevision ; backlog:revisesLineage vsn:L_RV_Rebuilt .
+
+# OWN_UNDATED  a ruling from G194 on whose source names the Owner and gives no date (OwnerRulingDatedShape). Its control, Rul_Dated, carries a date and is silent.
+vsn:Rul_Undated a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G9001" ; backlog:rulingSource "Owner decision, no date." .
+vsn:Rul_Dated a backlog:GovernanceRuling ; backlog:hasRulingIdentifier "G9002" ; backlog:rulingSource "Owner decision of 2026-11-03." .
+
+# URG_EARLY  an urgent item that started before the urgency was declared (UrgentItemStartsAfterDeclarationShape). Its control, Urg_Ok, starts after the declaration and is silent.
+vsn:Urg_Early a backlog:UrgentInterruption ; backlog:urgencyDeclaredAt "2026-11-03T12:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ; backlog:urgentItem vsn:Item_UrgEarly .
+vsn:Item_UrgEarly a backlog:Story ; backlog:startedAt "2026-11-03T11:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+vsn:Urg_Ok a backlog:UrgentInterruption ; backlog:urgencyDeclaredAt "2026-11-03T12:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ; backlog:urgentItem vsn:Item_UrgOk .
+vsn:Item_UrgOk a backlog:Story ; backlog:startedAt "2026-11-03T12:30:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .

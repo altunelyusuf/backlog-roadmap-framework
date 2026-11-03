@@ -9,9 +9,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog/shacl/1.206.0> ;
-    owl:versionInfo "1.206.0" ;
-    owl:priorVersion <http://example.org/backlog-shapes/1.205.0> , <http://example.org/backlog-shapes/1.204.0> , <http://example.org/backlog-shapes/1.203.0> , <http://example.org/backlog-shapes/1.202.0> , <http://example.org/backlog-shapes/1.201.0> , <http://example.org/backlog-shapes/1.197.0> ;
+    owl:versionIRI <http://example.org/backlog/shacl/1.207.0> ;
+    owl:versionInfo "1.207.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.206.0> , <http://example.org/backlog-shapes/1.205.0> , <http://example.org/backlog-shapes/1.204.0> , <http://example.org/backlog-shapes/1.203.0> , <http://example.org/backlog-shapes/1.202.0> , <http://example.org/backlog-shapes/1.201.0> , <http://example.org/backlog-shapes/1.197.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.184.0> , <http://example.org/backlog-shapes/1.176.0> , <http://example.org/backlog-shapes/1.175.0> , <http://example.org/backlog-shapes/1.174.0> , <http://example.org/backlog-shapes/1.173.0> , <http://example.org/backlog-shapes/1.172.0> , <http://example.org/backlog-shapes/1.171.0> , <http://example.org/backlog-shapes/1.170.0> , <http://example.org/backlog-shapes/1.169.0> , <http://example.org/backlog-shapes/1.168.0> , <http://example.org/backlog-shapes/1.167.0> , <http://example.org/backlog-shapes/1.166.0> , <http://example.org/backlog-shapes/1.165.0> , <http://example.org/backlog-shapes/1.164.0> , <http://example.org/backlog-shapes/1.159.0> , <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.154.0> , <http://example.org/backlog-shapes/1.153.0> , <http://example.org/backlog-shapes/1.152.0> , <http://example.org/backlog-shapes/1.151.0> , <http://example.org/backlog-shapes/1.150.0> , <http://example.org/backlog-shapes/1.149.0> , <http://example.org/backlog-shapes/1.148.0> , <http://example.org/backlog-shapes/1.147.0> , <http://example.org/backlog-shapes/1.146.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.145.0> ;
@@ -9745,4 +9745,35 @@ backlog:RevivalAdoptionNeedsRevisionShape a sh:NodeShape ;
             ?rs backlog:introducedInRevision ?r1 .
             ?r0 backlog:revisionNumber ?n0 . ?r1 backlog:revisionNumber ?n1 . FILTER (?n1 > ?n0)
             FILTER NOT EXISTS { ?rv backlog:revisesLineage $this }
+        }""" ] .
+
+backlog:OwnerRulingDatedShape a sh:NodeShape ;
+    sh:targetClass backlog:GovernanceRuling ;
+    sh:severity sh:Violation ;
+    rdfs:label "A ruling from G194 on whose source names the Owner states the date of the decision (G194)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "OWN_UNDATED" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "OWN_UNDATED: this ruling names the Owner as its source and gives no date. The release gate accepts unplanned work only when it cites an Owner ruling the release introduces, so the ruling has to say when the Owner decided it; an undated authority cannot be told from one written afterwards." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasRulingIdentifier ?id ; backlog:rulingSource ?src .
+            FILTER (REGEX(STR(?id), "^G[0-9]+$") && xsd:integer(SUBSTR(STR(?id), 2)) >= 194)
+            FILTER (CONTAINS(STR(?src), "Owner"))
+            FILTER (!REGEX(STR(?src), "[0-9]{4}-[0-9]{2}-[0-9]{2}"))
+        }""" ] .
+
+backlog:UrgentItemStartsAfterDeclarationShape a sh:NodeShape ;
+    sh:targetClass backlog:UrgentInterruption ;
+    sh:severity sh:Violation ;
+    rdfs:label "Urgent work starts after the urgency is declared (G195)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "URG_EARLY" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "URG_EARLY: an urgent item of this interruption started before the urgency was declared. Urgent work is declared first and built afterwards; work built first and recorded as urgent afterwards is the backfill the lineage discipline forbids, and it cannot be told from ordinary unplanned work." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:urgencyDeclaredAt ?d ; backlog:urgentItem ?i .
+            ?i backlog:startedAt ?s .
+            FILTER (?s < ?d)
         }""" ] .
