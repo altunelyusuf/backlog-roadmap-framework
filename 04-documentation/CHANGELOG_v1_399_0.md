@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v4.7.0 — 2026-11-04 (Three cost-saving commands, each proven by a probe in the gate (Lineage 30))
+
+Session start (with an acknowledged reading, a strict ceremony reading and the disciplines taken from origin), a short reading of a gate log, and a first look that runs only the probes whose inputs changed enter the package from the set-aside copy as 1.1.0 after three independent reviews. A probe runs 52 scenarios and 38 mutants, each of which must fail it; gate 1.83.0 lists it. Measured: session start with nothing changed prints 5 lines (plus 2 of the ceremony), a gate log reads in 9 lines, the first look names an edited probe after 27 s. Stated plainly: changes made after the last review (drift exception removed, more mutants) were run but not independently reviewed; the commands do not prove the disciplines were understood. Found and left open: backlog_box_step_probe prints no --deps, so every gate runs it twice and prints a Traceback.
+
+**Unplanned work:** None.
+
 ## v4.6.0 — 2026-11-03 (The checks kept: the 4.2.3 gate recorded and held (Lineage 31, story Kept))
 
 The checks of the 4.2.3 gate are recorded (33 section headers, 63 probes with digests) and a probe holds that each is still there and no recorded probe's assertions changed apart from the restriction argument; gate 1.82.0 lists it. The claim is limited: it does not cover the fixture self-proofs, order check, Gate R, abort logic or the validator itself. All four stories of Lineage 31 are done; measured in the 4.5.0 gate: probe section 206 s (503 s when a validator change reruns every probe, 1,233 s before), fixed checks about 200 s (424 s before), release 726 s (1,752 s before).
