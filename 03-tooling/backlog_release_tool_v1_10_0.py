@@ -17,6 +17,7 @@ Subcommands (each prints what it did and exits non-zero on any refusal):
                                         duration; --dry-run prints the plan and the refusals it already knows (missing changelog entry) and runs nothing
   prune-cache [DIR] [--days N] [--legacy]          remove cache files (shape_*.ttl, memo *.json, stamps) older than N days (default 14) from the validation cache; they are rebuilt on demand
   republish VERSION                     only the publisher and the tag check (after a transient failure of the public push)
+v1.10.0 (Lineage 31, story Know): after a passing gate the seconds of every gate section and every probe are written into the package, 06-package-provenance/GATE_TIMES/gate_times_vVERSION.tsv, before the manifest is rebuilt, so where the release time goes is kept per release and not lost with the work folder.
 v1.9.0 (Lineage 22, box 2): the preflight also runs the link-control probe (release 1.468.0 was refused a second time, 30 minutes into the gate, for a predicate declared nowhere; the probe takes seconds).
 v1.8.0 (Lineage 22): the preflight also validates the positive fixture (the gate's Gate R section aborts when it does not validate, 10 minutes into a release; release 1.468.0 was refused there).
 v1.7.0 (Lineage 22, time; G178): (1) the receipt's head is read with the publisher's own default repository (v1.6.0 read another one, so no receipt was written in v1.462.0 and the publisher ran the gate again). (2) `release VERSION --stage` is a release of a chain stage: it is allowed only when the release changes records alone (the register, the change-log, PROBE_INPUTS.json and the files the tool itself writes) and when fewer than four stage releases came since the last full one; it runs the LIGHT gate (BACKLOG_GATE_LIGHT=1: the chain, order, archive, register, manifest and version checks, not the probes and proofs about tools and shapes) and records the kind of every release in 06-package-provenance/LIGHT_RELEASES.txt. Every stage keeps its own commit, so git still witnesses the order; the fifth release of a batch, and every release that changes anything but records, runs the full gate.
@@ -385,6 +386,28 @@ def write_receipt(pkg, pubdir, seconds):
     return subprocess.run(cmd, capture_output=True, text=True).returncode == 0
 
 
+def write_gate_times(pkg, version, glog):
+    """The seconds of every gate section (from the timing sidecar) and of every probe (the 'probe time:' lines of the gate log), kept in the package for the release."""
+    rows = []
+    side = glog + ".timing.tsv"
+    if os.path.exists(side):
+        for l in open(side, encoding="utf-8"):
+            c = l.rstrip("\n").split("\t")
+            if len(c) >= 2:
+                rows.append(("section", c[1], c[0], ""))
+    text = open(glog, encoding="utf-8", errors="replace").read()
+    for m in re.finditer(r"^\s+probe time: (\S+) ([0-9.]+)( skipped)?\s*$", text, re.M):
+        rows.append(("probe", m.group(1), m.group(2), "skipped" if m.group(3) else ""))
+    d = os.path.join(pkg, "06-package-provenance", "GATE_TIMES")
+    os.makedirs(d, exist_ok=True)
+    out = os.path.join(d, "gate_times_v%s.tsv" % version.replace(".", "_"))
+    with open(out, "w", encoding="utf-8") as f:
+        f.write("# gate times of release %s: kind, name, seconds, note\n" % version)
+        for r in rows:
+            f.write("\t".join(r) + "\n")
+    return out, len(rows)
+
+
 def timed_gate(cmd, glog, limit, cwd):
     """Run the gate with its output unchanged in glog, and record the seconds each "== section ==" took (G152). Returns [(seconds, section)], slowest first."""
     import threading
@@ -546,6 +569,8 @@ def cmd_release(args, only_publish=False):
         # honours them (backlog_merkle_cache check). The manifest is rebuilt because the package now holds the file.
         merkle = newest(os.path.join(HERE, "backlog_merkle_cache_v*.py"))
         memo = os.environ.get("BACKLOG_VALIDATE_MEMO_DIR") or os.path.join(os.environ.get("HOME", "/tmp"), ".backlog_validate_memo")
+        gt, gn = write_gate_times(P, v, glog)
+        print("  gate times: %d rows kept in %s" % (gn, os.path.relpath(gt, P)), flush=True)
         ps = os.path.join(P, "06-package-provenance", "PROOF_STAMPS.json")
         if True:
             p = st.run("proof stamps", [sys.executable, merkle, "export", memo, ps, "package=" + v, "gate=" + os.path.basename(gate)], capture_output=True, text=True)

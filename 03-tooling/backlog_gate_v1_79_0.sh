@@ -15,6 +15,7 @@
 #
 # v1.29.0 (Lineage 19, DC-S04): a third probe runs every time: the public copy is cut by each module's declared audience and stops with an error when it cannot be sure (backlog_public_cut_probe).
 # v1.28.0 (Lineage 19, DC-S01 and DC-S02): two probes run every time: the closure-report rules are shown firing on planted faults and silent on corrected twins (backlog_closure_shapes_probe), and the archive tool's refusals are drilled on planted lineages (backlog_archive_drill). A probe that cannot be found stops the gate.
+# v1.79.0 (Lineage 31, story Know): the seconds of every probe that runs are printed as "probe time: NAME SECONDS" (a skipped probe as 0.0 skipped), so the release tool can keep them in the package beside the seconds of every section; backlog_gate_times_probe holds it.
 # v1.78.0 (G193): the flow-point comparison reads the ledger flow_point_decisions (flow_point_git_trace 1.2.0): 19 finishes of the archive register later than the commit that recorded them Done are explained row by row, a stale row or a new unlisted item fails; the check showed them only once the clone held the history, a shallow clone had hidden them.
 # v1.78.0 (Lineage 29, revival; G192): the probes loop also runs backlog_revival_opening_probe (a revived lineage opens again at the commit of its latest stage revision, so it may adopt the current rule sets there and not later; order check 1.15.0).
 # v1.77.0 (Lineage 22, box 3): the Lineage 19 probes loop also runs backlog_boxes_judged_probe (every closed box of Lineage 22 is recorded as the step tool records a box, the judgement names a planted fault, and the register is clean).
@@ -747,7 +748,7 @@ echo "== Lineage 19 probes — each rule fires on a planted fault and each refus
 # v1.37.0: each probe prints its own --deps (it alone knows what it reads) and is stamped on exactly that; one that
 # never changed does not re-run just because something ELSEWHERE in the gate did. A run that does happen runs ONCE
 # (v1.36.0 and earlier ran every probe twice here: once piping to grep, once thrown away for its exit code).
-PROBE_LIST="backlog_closure_shapes_probe backlog_archive_drill backlog_public_cut_probe backlog_governance_mitigations_probe backlog_release_tool_probe backlog_proof_stamps_probe backlog_probe_inputs_probe backlog_carried_item_probe backlog_shape_syntax_probe backlog_stamp_key_probe backlog_sparql_memo_probe backlog_ordinal_check_probe backlog_archived_digest_check_probe backlog_release_item_check_probe backlog_package_activation_drift_classifier_probe backlog_lineage_concurrency_probe backlog_consumer_archive_probe backlog_vocabulary_probe backlog_state_evidence_probe backlog_evidence_bridge_probe backlog_timeline_witness_probe backlog_competency_inheritance_probe backlog_verifier_independence_probe backlog_close_preview_probe backlog_competency_tree_probe backlog_agent_roles_probe backlog_verification_scope_probe backlog_status_history_probe backlog_scope_order_probe backlog_order_revision_probe backlog_recording_integrity_probe backlog_flow_point_git_trace_probe backlog_abox_neutrality_probe backlog_human_actor_kinds_probe backlog_executor_subclass_probe backlog_pipeline_verify_probe backlog_agent_accountability_probe backlog_agent_monitor_probe backlog_standing_items_probe backlog_mission_history_probe backlog_session_brief_probe backlog_archive_mission_history_probe backlog_scope_outcome_probe backlog_links_not_text_probe backlog_link_control_probe backlog_plan_then_execute_probe backlog_kind_category_probe backlog_repair_reprioritises_probe backlog_handover_rules_probe backlog_inbox_disposition_probe backlog_release_preflight_probe backlog_gate_timing_probe backlog_open_lineage_probe backlog_box_step_probe backlog_release_speed_probe backlog_archive_forms_probe backlog_archived_digest_tables_probe backlog_validate_reference_probe backlog_gate_keys_probe backlog_g179_probe backlog_self_application_probe backlog_boxes_judged_probe backlog_revival_opening_probe"
+PROBE_LIST="backlog_closure_shapes_probe backlog_archive_drill backlog_public_cut_probe backlog_governance_mitigations_probe backlog_release_tool_probe backlog_proof_stamps_probe backlog_probe_inputs_probe backlog_carried_item_probe backlog_shape_syntax_probe backlog_stamp_key_probe backlog_sparql_memo_probe backlog_ordinal_check_probe backlog_archived_digest_check_probe backlog_release_item_check_probe backlog_package_activation_drift_classifier_probe backlog_lineage_concurrency_probe backlog_consumer_archive_probe backlog_vocabulary_probe backlog_state_evidence_probe backlog_evidence_bridge_probe backlog_timeline_witness_probe backlog_competency_inheritance_probe backlog_verifier_independence_probe backlog_close_preview_probe backlog_competency_tree_probe backlog_agent_roles_probe backlog_verification_scope_probe backlog_status_history_probe backlog_scope_order_probe backlog_order_revision_probe backlog_recording_integrity_probe backlog_flow_point_git_trace_probe backlog_abox_neutrality_probe backlog_human_actor_kinds_probe backlog_executor_subclass_probe backlog_pipeline_verify_probe backlog_agent_accountability_probe backlog_agent_monitor_probe backlog_standing_items_probe backlog_mission_history_probe backlog_session_brief_probe backlog_archive_mission_history_probe backlog_scope_outcome_probe backlog_links_not_text_probe backlog_link_control_probe backlog_plan_then_execute_probe backlog_kind_category_probe backlog_repair_reprioritises_probe backlog_handover_rules_probe backlog_inbox_disposition_probe backlog_release_preflight_probe backlog_gate_timing_probe backlog_open_lineage_probe backlog_box_step_probe backlog_release_speed_probe backlog_archive_forms_probe backlog_archived_digest_tables_probe backlog_validate_reference_probe backlog_gate_keys_probe backlog_g179_probe backlog_self_application_probe backlog_boxes_judged_probe backlog_revival_opening_probe backlog_gate_times_probe"
 # v1.56.0: the probes that must run are run TWO (BACKLOG_GATE_JOBS) AT A TIME, each into its own file; the verdicts are then read in the fixed order and each
 # probe is stamped only if it passed. A probe still runs once, with the same inputs, and nothing is skipped that was not skipped before.
 JOBS="${BACKLOG_GATE_JOBS:-$(nproc 2>/dev/null || echo 1)}"; [ "$JOBS" -gt 4 ] && JOBS=4; [ "$JOBS" -lt 1 ] && JOBS=1
@@ -763,6 +764,7 @@ for PROBE in $PROBE_LIST; do
   [ "$UNMEASURED" -eq 1 ] && STEPS_RUN=$((STEPS_RUN + 1))
   if [ "$UNMEASURED" -eq 0 ] && STAMPED "probe:$PROBE" "$PKEY"; then
     echo "  $PROBE SKIPPED — its inputs are unchanged since it last held."
+    echo "  probe time: $PROBE 0.0 skipped"
     continue
   fi
   PFILE[$PROBE]="$PF"; PKEYS[$PROBE]="$PKEY"; QUEUE+=("$PROBE")
@@ -771,15 +773,16 @@ for PROBE in "${QUEUE[@]}"; do
   while [ "$(jobs -rp | wc -l)" -ge "$JOBS" ]; do wait -n; done
   # the probe of the tracer traces by itself, and a traced process cannot be traced again: it runs plain and keeps its declared inputs
   if [ -n "$PIN" ] && [ "$PROBE" != "backlog_probe_inputs_probe" ]; then
-    ( python3 "$PIN" run "${PFILE[$PROBE]}" "$PKG" "$BACKLOG_VALIDATE_MEMO_DIR" "$PTMP/$PROBE.out"; echo $? > "$PTMP/$PROBE.rc" ) &
+    ( T0=$(date +%s.%N); python3 "$PIN" run "${PFILE[$PROBE]}" "$PKG" "$BACKLOG_VALIDATE_MEMO_DIR" "$PTMP/$PROBE.out"; echo $? > "$PTMP/$PROBE.rc"; awk -v a="$(date +%s.%N)" -v b="$T0" 'BEGIN{printf "%.1f\n", a-b}' > "$PTMP/$PROBE.sec" ) &
   else
-    ( python3 "${PFILE[$PROBE]}" > "$PTMP/$PROBE.out" 2>&1; echo $? > "$PTMP/$PROBE.rc" ) &
+    ( T0=$(date +%s.%N); python3 "${PFILE[$PROBE]}" > "$PTMP/$PROBE.out" 2>&1; echo $? > "$PTMP/$PROBE.rc"; awk -v a="$(date +%s.%N)" -v b="$T0" 'BEGIN{printf "%.1f\n", a-b}' > "$PTMP/$PROBE.sec" ) &
   fi
 done
 wait
 for PROBE in "${QUEUE[@]}"; do
   RC="$(cat "$PTMP/$PROBE.rc" 2>/dev/null || echo 1)"
   grep -E "VERDICT" "$PTMP/$PROBE.out" | sed "s/^/  $PROBE /"
+  echo "  probe time: $PROBE $(cat "$PTMP/$PROBE.sec" 2>/dev/null || echo 0.0)"
   if [ "$RC" -eq 0 ]; then
     NK=""; [ -n "$PIN" ] && NK="$(python3 "$PIN" key "$PROBE" "$PKG" "$BACKLOG_VALIDATE_MEMO_DIR" 2>/dev/null)"
     [ -n "$NK" ] || NK="$(python3 "$MERKLE" key $(python3 "${PFILE[$PROBE]}" --deps))"
