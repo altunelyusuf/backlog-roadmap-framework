@@ -4437,3 +4437,12 @@ vsn:ImpTwoMethods a backlog:Impediment ; backlog:belongsToLineage vsn:LKinds ; b
 
 # IC_NOTCLEARED  a way named with no time of resolution (ClearedImpedimentNamesMethodShape).
 vsn:ImpNoResolvedTime a backlog:Impediment ; backlog:belongsToLineage vsn:LKinds ; backlog:impedes vsn:ItNoPlan ; backlog:hasImpedimentStatement "Blocked." ; backlog:raisedAt "2026-11-02T11:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ; backlog:hasImpedimentKind backlog:Imp_ToolFault ; backlog:clearedBy backlog:Mth_ReproduceAndRepairTool .
+
+# RV_ADOPTNOREV  a revived lineage that adopts a rule set newer than its opening and has no stage revision (RevivalAdoptionNeedsRevisionShape).
+# Its control, RV_Rebuilt, has the stage revision and is silent.
+vsn:PrRevOld a backlog:ProfileRevision ; backlog:revisionNumber 1 .
+vsn:PrRevNew a backlog:ProfileRevision ; backlog:revisionNumber 2 .
+vsn:RS_RevNew backlog:introducedInRevision vsn:PrRevNew .
+vsn:L_RevivedNoRev a backlog:Lineage ; backlog:lineageOrdinal 9001 ; backlog:lineageRevivedAt "2026-11-03T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ; backlog:openedUnderRevision vsn:PrRevOld ; backlog:adoptsRuleSet vsn:RS_RevNew .
+vsn:L_RV_Rebuilt a backlog:Lineage ; backlog:lineageOrdinal 9002 ; backlog:lineageRevivedAt "2026-11-03T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ; backlog:openedUnderRevision vsn:PrRevOld ; backlog:adoptsRuleSet vsn:RS_RevNew .
+vsn:Rev_Rebuilt a backlog:StageRevision ; backlog:revisesLineage vsn:L_RV_Rebuilt .

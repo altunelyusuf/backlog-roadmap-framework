@@ -11285,6 +11285,14 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v4.1.0 — 2026-11-03 (MINOR: a revived lineage opens again where its chain is rebuilt (G192))
+
+Owner ruling of 2026-11-03: the revival of a lineage is treated as its opening when its chain is rebuilt by a stage revision. Order check 1.15.0 takes the commit of the latest stage revision as the opening of a revived lineage, so a rule set adopted there is at open and one adopted later is refused. A new shape refuses a revived lineage that adopts a rule set newer than its opening with no stage revision (shapes 1.206.0, fixture case RV_ADOPTNOREV, with its control). The probe backlog_revival_opening_probe holds five cases in temporary repositories; the opening case fails against order check 1.14.0, which was run. The gate is 1.78.0. The discipline and the narratives are v156.0.0 (narrative G192 added); the ruling is in the register. The change precedes the rebuilt chain because the stage revision that re-adopts the rule sets has to pass the gate this change alters; it is recorded as the Owner's ruling and not as a story of the lineage.
+
+**Unplanned work:** None.
+
+Also in this release (G193, Owner decision of 2026-11-03 09:45): the first gate run on full git history refused at the comparison of recorded finishes with the commits that recorded the items Done: 19 items of the archive register carry a later finish, which a shallow clone had hidden. The check stays strict; each item is explained by a row of the new ledger `flow_point_decisions` (flow-point trace 1.2.0, `--ledger`; probe 1.1.0 with six ledger cases); a row that explains nothing fails and a new item is never excused. Gate 1.78.0 passes the ledger. Ruling G193 and its narrative are recorded.
+
 ## v4.0.2 — 2026-11-03 (PATCH: Lineage 29 reactivated by the Owner)
 
 Records only. The Owner decided on 2026-11-03 to revive Lineage 29 and finish its unfinished work in it, with no second lineage. A reactivation (reason: non-conformant result) rests on the systemic finding that no obstacle was ever raised live. The lineage's status pointer moved from Achieved to Revived, as the pointer rule requires, and the revival time is recorded. The register stays conformant.

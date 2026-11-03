@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_flow_point_git_trace_probe v1.0.0 -- proof that the git comparison discriminates (G115). Builds a throw-away git repository with a register
+"""backlog_flow_point_git_trace_probe v1.1.0 -- proof that the git comparison discriminates (G115). Builds a throw-away git repository with a register
 committed at known author dates, and asserts what backlog_flow_point_git_trace reports for it.
 
   FUTURE   finished (naive 2026-12-01T18:00:00, read as UTC) after the commit that first recorded it Done (2026-10-14T10:00Z)   -> future_finish, exit 2
@@ -9,6 +9,9 @@ committed at known author dates, and asserts what backlog_flow_point_git_trace r
   MIDNIGHT start at exactly 00:00:00                                                                                           -> midnight (a signal)
   SAME     one instant written in two zones                                                                                    -> NOT two_values
   CLEAN    started and finished before the commit that recorded it Done, a path Proposed -> InProgress -> Done                 -> in no class; exit 0 on a register that holds only this
+  LEDGER (v1.1.0, G193): a ledger row explains a future finish only while item, first-Done time and finish all equal the measurement:
+           right row -> exit 0; no ledger -> exit 2; a wrong finish in the row -> exit 2; a row for an item with no fault (stale) -> exit 2;
+           a second, unlisted future finish beside an explained one -> exit 2.
 Exit 0 when every expectation holds, 1 otherwise.
 """
 import glob, os, re, subprocess, sys, tempfile
@@ -68,5 +71,24 @@ with tempfile.TemporaryDirectory() as d:
 with tempfile.TemporaryDirectory() as d:
     build(d, item("CLEAN", "Proposed"), item("CLEAN", "Done", ["2026-10-13T09:30:00Z"], ["2026-10-13T11:00:00Z"]))
     rc, out = run(d, "--strict"); expect("exit 0, strict, on a clean register", rc == 0)
+
+# LEDGER cases (v1.1.0)
+FIRST = "2026-10-14T10:00:00Z"; FIN = "2026-12-01T18:00:00Z"
+def ledger(d, rows):
+    f = os.path.join(d, "ledger.tsv")
+    open(f, "w").write("# probe ledger\n" + "".join("\t".join(r) + "\n" for r in rows)); return f
+ROW = ["reg.ttl", "FUTURE", FIRST, FIN, "1", "c", "probe reason"]
+with tempfile.TemporaryDirectory() as d:
+    build(d, item("FUTURE", "InProgress", ["2026-10-13T09:30:00Z"]) + item("CLEAN", "Proposed"),
+             item("FUTURE", "Done", ["2026-10-13T09:30:00Z"], ["2026-12-01T18:00:00"]) + item("CLEAN", "Done", ["2026-10-13T09:30:00Z"], ["2026-10-13T11:00:00Z"]))
+    rc, out = run(d); expect("LEDGER no ledger: the future finish fails (exit 2)", rc == 2)
+    rc, out = run(d, "--ledger", ledger(d, [ROW])); expect("LEDGER the right row explains it (exit 0, explained 1)", rc == 0 and count(out, "explained_by_ledger") == 1 and count(out, "future_finish") == 0)
+    rc, out = run(d, "--ledger", ledger(d, [ROW[:3] + ["2026-12-01T19:00:00Z"] + ROW[4:]])); expect("LEDGER a row with a different finish explains nothing (exit 2)", rc == 2 and count(out, "future_finish") == 1)
+    rc, out = run(d, "--ledger", ledger(d, [ROW, ["reg.ttl", "CLEAN", FIRST, FIN, "1", "c", "probe reason"]])); expect("LEDGER a stale row for an item with no fault fails (exit 2)", rc == 2 and count(out, "stale_ledger_rows") == 1)
+    rc, out = run(d, "--ledger", ledger(d, [ROW[:6] + [""]])); expect("LEDGER a row with no reason explains nothing (exit 2)", rc == 2)
+with tempfile.TemporaryDirectory() as d:
+    build(d, item("FUTURE", "InProgress", ["2026-10-13T09:30:00Z"]) + item("NEWONE", "InProgress", ["2026-10-13T09:30:00Z"]),
+             item("FUTURE", "Done", ["2026-10-13T09:30:00Z"], ["2026-12-01T18:00:00"]) + item("NEWONE", "Done", ["2026-10-13T09:30:00Z"], ["2026-12-02T18:00:00"]))
+    rc, out = run(d, "--ledger", ledger(d, [ROW])); expect("LEDGER a new future finish beside an explained one still fails (exit 2, one left)", rc == 2 and count(out, "future_finish") == 1 and count(out, "explained_by_ledger") == 1)
 print("VERDICT   :", "PASS" if not bad else "FAIL"); [print("  ", b) for b in bad]
 sys.exit(1 if bad else 0)

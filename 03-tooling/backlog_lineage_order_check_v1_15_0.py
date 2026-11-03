@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
+# v1.15.0 (Lineage 29, revival): a revived lineage opens again at the commit of its latest stage revision, so it can adopt the current rule sets there; one adopted later is still refused.
 # v1.14.0 (Lineage 22, box 2, D6): the register at a commit is parsed once per commit however many adoptions ask for it (v1.13.0 parsed it again for every probe of every adoption, about 200 times); the verdict is the same.
-"""backlog_lineage_order_check v1.14.0 — did the chain come before the work, or after?
+"""backlog_lineage_order_check v1.15.0 — did the chain come before the work, or after?
 
 THE ESCAPE THIS CATCHES. A lineage is Mission -> Scope -> Goal -> Objective -> Backlog,
 one commit per stage, and only then work items (LINEAGE_OPERATING_DISCIPLINE, ceremony
@@ -527,6 +528,16 @@ def classify(g, L, witness, prefix):
     # rebuilt Mission-stage commit is "at open" and an adoption recorded later is not.
     if g.value(L, B.adoptionRecordedAtOpen) is not None and bool(g.value(L, B.adoptionRecordedAtOpen).toPython()):
         mf = out_first.get("Stage_Mission")
+        # v1.15.0 (Lineage 29, revival): a revived lineage (lineageRevivedAt, a reactivation naming it) that rebuilds its chain by a
+        # StageRevision opens again at the commit where its latest StageRevision first appears, as a restart's rebuilt Mission commit
+        # is the opening of a restarted lineage (G148 Q3). An adoption recorded in that commit is "at open"; one recorded later is not.
+        if g.value(L, B.lineageRevivedAt) is not None and any(True for _ in g.subjects(B.reactivatesLineage, L)):
+            rvs = [witness.first(local(rv), prefix) for rv in g.subjects(B.revisesLineage, L)]
+            rvs = [x for x in rvs if x]
+            if rvs and mf:
+                last = max(rvs, key=lambda x: x[1])
+                if last[1] > mf[1]:
+                    mf = last
         for prop in (B.adoptsRuleSet, B.adoptsObligationSet):
             for obj in sorted(g.objects(L, prop), key=str):
                 af = witness.adoption_first(L, prop, obj)

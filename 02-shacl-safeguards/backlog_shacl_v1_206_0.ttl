@@ -9,9 +9,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog/shacl/1.205.0> ;
-    owl:versionInfo "1.205.0" ;
-    owl:priorVersion <http://example.org/backlog-shapes/1.204.0> , <http://example.org/backlog-shapes/1.203.0> , <http://example.org/backlog-shapes/1.202.0> , <http://example.org/backlog-shapes/1.201.0> , <http://example.org/backlog-shapes/1.197.0> ;
+    owl:versionIRI <http://example.org/backlog/shacl/1.206.0> ;
+    owl:versionInfo "1.206.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.205.0> , <http://example.org/backlog-shapes/1.204.0> , <http://example.org/backlog-shapes/1.203.0> , <http://example.org/backlog-shapes/1.202.0> , <http://example.org/backlog-shapes/1.201.0> , <http://example.org/backlog-shapes/1.197.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.184.0> , <http://example.org/backlog-shapes/1.176.0> , <http://example.org/backlog-shapes/1.175.0> , <http://example.org/backlog-shapes/1.174.0> , <http://example.org/backlog-shapes/1.173.0> , <http://example.org/backlog-shapes/1.172.0> , <http://example.org/backlog-shapes/1.171.0> , <http://example.org/backlog-shapes/1.170.0> , <http://example.org/backlog-shapes/1.169.0> , <http://example.org/backlog-shapes/1.168.0> , <http://example.org/backlog-shapes/1.167.0> , <http://example.org/backlog-shapes/1.166.0> , <http://example.org/backlog-shapes/1.165.0> , <http://example.org/backlog-shapes/1.164.0> , <http://example.org/backlog-shapes/1.159.0> , <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.154.0> , <http://example.org/backlog-shapes/1.153.0> , <http://example.org/backlog-shapes/1.152.0> , <http://example.org/backlog-shapes/1.151.0> , <http://example.org/backlog-shapes/1.150.0> , <http://example.org/backlog-shapes/1.149.0> , <http://example.org/backlog-shapes/1.148.0> , <http://example.org/backlog-shapes/1.147.0> , <http://example.org/backlog-shapes/1.146.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.145.0> ;
@@ -9730,3 +9730,19 @@ backlog:KindHasMethodShape a sh:NodeShape ;
         sh:message "IC_KINDNOMETHOD: this kind of obstacle lists no way to clear it. A kind with no known way leaves the agent to improvise, which is how a rule gets bypassed; list at least one clearing method." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE { FILTER NOT EXISTS { $this backlog:clearableBy ?m } }""" ] .
+
+backlog:RevivalAdoptionNeedsRevisionShape a sh:NodeShape ;
+    sh:targetClass backlog:Lineage ;
+    sh:severity sh:Violation ;
+    rdfs:label "A revived lineage that adopts a rule set newer than its opening has rebuilt its chain by a stage revision (G192)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "RV_ADOPTNOREV" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "RV_ADOPTNOREV: this revived lineage adopts a rule set that a later profile revision introduced than the one it opened under, and no stage revision rebuilds its chain. A revived lineage opens again where its chain is rebuilt (G192); without a rebuild it keeps its old opening, and a ruling binds only work not yet started." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:lineageRevivedAt ?at ; backlog:openedUnderRevision ?r0 ; backlog:adoptsRuleSet ?rs .
+            ?rs backlog:introducedInRevision ?r1 .
+            ?r0 backlog:revisionNumber ?n0 . ?r1 backlog:revisionNumber ?n1 . FILTER (?n1 > ?n0)
+            FILTER NOT EXISTS { ?rv backlog:revisesLineage $this }
+        }""" ] .
