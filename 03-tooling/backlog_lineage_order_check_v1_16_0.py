@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
+# v1.16.0 (Lineage 31, story Fixed; speed only): the adoptions of the register in a commit are kept in the memo directory under the commit's name (a commit never changes), and the diff walk of the register's history is read once per run, not once per lineage; the verdicts are the same (backlog_lineage_order_cache_probe).
 # v1.15.0 (Lineage 29, revival): a revived lineage opens again at the commit of its latest stage revision, so it can adopt the current rule sets there; one adopted later is still refused.
 # v1.14.0 (Lineage 22, box 2, D6): the register at a commit is parsed once per commit however many adoptions ask for it (v1.13.0 parsed it again for every probe of every adoption, about 200 times); the verdict is the same.
-"""backlog_lineage_order_check v1.15.0 — did the chain come before the work, or after?
+"""backlog_lineage_order_check v1.16.0 — did the chain come before the work, or after?
 
 THE ESCAPE THIS CATCHES. A lineage is Mission -> Scope -> Goal -> Objective -> Backlog,
 one commit per stage, and only then work items (LINEAGE_OPERATING_DISCIPLINE, ceremony
@@ -125,7 +126,7 @@ fully global, unaffected -- every existing caller, the self-proof fixtures inclu
 Exit: 0 ORDERED/UNWITNESSED/RESTARTED/FROZEN/AWAITING_BACKLOG (2 for AWAITING_BACKLOG under --no-empty-pass); 2 BYPASS unanswered, THRASH unrecorded, WITNESS_BROKEN,
 or NOT VERIFIABLE (outputs exist, none witnessed), or --expect not met; 1 on error.
 """
-import glob, json, os, re, subprocess, sys, time
+import glob, hashlib, json, os, re, subprocess, sys, tempfile, time
 from rdflib import Graph, Namespace, RDF, URIRef
 
 B = Namespace("http://example.org/backlog#")
@@ -134,6 +135,15 @@ ITEM_TYPES = ["Story", "Epic", "ExecutionTask", "Initiative", "Spike", "Task", "
 HERE = os.path.dirname(os.path.abspath(__file__))
 PKG = os.path.dirname(HERE)
 TOOL = os.path.basename(__file__).replace(".py", "")
+
+
+def _aux_dir():
+    d = os.environ.get("BACKLOG_VALIDATE_MEMO_DIR") or tempfile.gettempdir()
+    try:
+        os.makedirs(d, exist_ok=True)
+    except OSError:
+        pass
+    return d
 
 
 def local(x):
@@ -240,10 +250,39 @@ class GitWitness:
                 gcache[h] = out
             return gcache[h]
 
+        ADOPT_PROPS = (B.adoptsRuleSet, B.adoptsObligationSet)
+        stems_key = [d + "/" + st for d, st in stems]
+        fh = {}
+
+        def full_hash(h):
+            if h not in fh:
+                fh[h] = subprocess.run(["git", "rev-parse", h], cwd=self.root, capture_output=True, text=True).stdout.strip() or h
+            return fh[h]
+
+        def adoption_set(h):
+            """v1.16.0 (Lineage 31, story Fixed): the adoptions (lineage, property, set) the register holds in commit h, kept in the memo directory under the commit's name: a commit never changes,
+            so it is parsed once ever, not once per gate (the parse of the register at the probed commits took 70 of the 98 seconds of this check). Only the two adoption properties are kept."""
+            ck = os.path.join(_aux_dir(), "aux_order_%s_%s.json" % (hashlib.sha256((self.root + "|" + str(self.rel) + "|" + "|".join(sorted(stems_key))).encode()).hexdigest()[:16], full_hash(h)))
+            if os.path.isfile(ck):
+                try:
+                    return {tuple(x) for x in json.load(open(ck))}
+                except Exception:
+                    pass
+            got = {(str(s_), str(p_), str(o_)) for gg in graphs_at(h) for p_ in ADOPT_PROPS for s_, o_ in gg.subject_objects(p_)}
+            if graphs_at(h) and len(graphs_at(h)) == len(paths_at(h)):     # kept only when every register file of the commit parsed
+                try:
+                    tmp = ck + ".%d.tmp" % os.getpid(); json.dump(sorted(got), open(tmp, "w")); os.replace(tmp, ck)
+                except OSError:
+                    pass
+            return got
+
         def present(h):
             key = (lineage, prop, obj, h)
             if key not in memo:
-                memo[key] = any((lineage, prop, obj) in gg for gg in graphs_at(h))
+                if prop in ADOPT_PROPS:
+                    memo[key] = (str(lineage), str(prop), str(obj)) in adoption_set(h)
+                else:
+                    memo[key] = any((lineage, prop, obj) in gg for gg in graphs_at(h))
             return memo[key]
         res = None
         if hs and present(hs[-1]):
@@ -264,14 +303,17 @@ class GitWitness:
         if not keys:
             return
         ordinal = self._ordinal_index()
-        r = subprocess.run(
-            ["git", "log", "--reverse", "-U0", "--format=COMMIT %h", "--", self.rel],
-            cwd=self.root, capture_output=True, text=True,
-        )
+        stdout = self.__dict__.get("_diff_walk")
+        if stdout is None:       # v1.16.0: the diff walk of the register's history is the same for every lineage, so it is read once per run, not once per lineage (16 walks of 4 seconds)
+            r = subprocess.run(
+                ["git", "log", "--reverse", "-U0", "--format=COMMIT %h", "--", self.rel],
+                cwd=self.root, capture_output=True, text=True,
+            )
+            stdout = self.__dict__["_diff_walk"] = r.stdout
         remaining = set(keys)
         found = {}
         current = None
-        for line in r.stdout.split("\n"):
+        for line in stdout.split("\n"):
             if not remaining:
                 break
             if line.startswith("COMMIT "):

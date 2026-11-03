@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v4.5.0 — 2026-11-03 (Fixed checks keep their repeated inputs (Lineage 31, story Fixed))
+
+The order check keeps the adoptions of each commit and reads the diff walk once per run (live register 98 s to 49 s cold, 21 s warm); the flow-point trace keeps its walk by head and appends new commits (37 s to 1 s warm); a probe proves both change no verdict; gate 1.81.0 lists it. Estimate, not a gate reading: the five fixed checks come to about 150 s warm; the gate-times file of this release gives the sections' own seconds. Stated plainly: the kept files are trusted by name in the memo directory. Box 3 closed after two independent reviews; one cache fix was made after the second review.
+
+**Unplanned work:** None.
+
 ## v4.4.0 — 2026-11-03 (Probes wait only for the shape they test (Lineage 31, story Probes))
 
 The validator can judge only the shapes a probe names (BACKLOG_VALIDATE_ONLY_MESSAGE), keeps its repeated inputs under a digest of their inputs and reads N-Triples; sixteen slow probes use it; a probe proves the restricted run equals the whole one. The gate unsets the variable at its start; the stage-release record list accepts the gate-times file; prune-cache removes the kept inputs. Measured: the probe loop of the gate, run cold as the gate runs it, took 508 s against 1,196 s, every probe passing (the serial key phase before it, about 47 s, is outside that figure). Stated plainly: the validator's kept inputs in the memo directory are trusted by name, as the shape bundle already is; a check of their content on reading is an open item. Box 2 closed after two independent reviews; the work was begun before the box was opened and the opening disclosed the changed files.
