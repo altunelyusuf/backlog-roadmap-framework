@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v4.6.0 — 2026-11-03 (The checks kept: the 4.2.3 gate recorded and held (Lineage 31, story Kept))
+
+The checks of the 4.2.3 gate are recorded (33 section headers, 63 probes with digests) and a probe holds that each is still there and no recorded probe's assertions changed apart from the restriction argument; gate 1.82.0 lists it. The claim is limited: it does not cover the fixture self-proofs, order check, Gate R, abort logic or the validator itself. All four stories of Lineage 31 are done; measured in the 4.5.0 gate: probe section 206 s (503 s when a validator change reruns every probe, 1,233 s before), fixed checks about 200 s (424 s before), release 726 s (1,752 s before).
+
+**Unplanned work:** None.
+
 ## v4.5.0 — 2026-11-03 (Fixed checks keep their repeated inputs (Lineage 31, story Fixed))
 
 The order check keeps the adoptions of each commit and reads the diff walk once per run (live register 98 s to 49 s cold, 21 s warm); the flow-point trace keeps its walk by head and appends new commits (37 s to 1 s warm); a probe proves both change no verdict; gate 1.81.0 lists it. Estimate, not a gate reading: the five fixed checks come to about 150 s warm; the gate-times file of this release gives the sections' own seconds. Stated plainly: the kept files are trusted by name in the memo directory. Box 3 closed after two independent reviews; one cache fix was made after the second review.

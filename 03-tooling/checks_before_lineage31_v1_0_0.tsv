@@ -1,0 +1,97 @@
+# checks of the gate at 4.2.3, before Lineage 31 (gate backlog_gate_v1_78_0.sh): kind, name, digest of the probe with the restriction argument and version numbers removed
+section	== Gate 0 — MANIFEST self-verify ==
+section	== Gate P — Turtle parse ==
+section	== Gate K — version identity ==
+section	== Validation cache proof — the per-shape cache and the split change no verdict ==
+section	== Gate R — SHACL reconcile (self-proof first) ==
+section	== Coverage gate — primary-source concepts (BP-D31) ==
+section	== Self-proof of the register path — the plumbing, not the shapes ==
+section	== Lineage-completeness gate — absence is reported, not assumed away ==
+section	== Fixture-coverage gate — every shipped fixture is exercised ==
+section	== New-shape proof — does every shape authored since last publish cite its fixture? ==
+section	== Clause proof — which constraints has a fixture made fire? ==
+section	== Criterion artefacts — does the thing each criterion names exist? ==
+section	== Number origin — does every figure say where it came from? ==
+section	== Adoption — is any capability shipped and required by nothing? ==
+section	== Self-application — does any checker report on a graph it never read? ==
+section	== Reachability gate — no class the vocabulary cannot point at ==
+section	== Pipeline gate — stage digests reproduce ==
+section	== Lineage-order gate — did the chain come before the work? (git witness) ==
+section	== Archive integrity and archive shapes — retirement lost nothing, and the archive holds what a retired record must hold ==
+section	== Lineage ordinals — every lineage holds its own place in the sequence, live register and archive together ==
+section	== Archived lineages — recorded stage digests: no unseen failure (ratchet) ==
+section	== Lineage 19 probes — each rule fires on a planted fault and each refusal holds ==
+section	== Flow points against the commits that recorded them (G115) ==
+section	== Archival finder — achieved lineages are found, and archiving is the next activity ==
+section	== Manifest-digest carrier — the root of the covered set lives outside it ==
+section	== Manifest-coverage gate — nothing on disk is unexplained ==
+section	== Version-freeze gate — did any versioned file's content change under its own frozen name? (G94) ==
+section	== Release-item-accounting gate — does this release own the items it moved, or say it didn't? (GOV-S01) ==
+section	== Lineage-discipline gate — the document's claims match the suite ==
+section	== Determinism gate — same register in, same answer out ==
+section	== Distribution-drift gate — is the public copy current? ==
+section	== Doc-coverage gate — does the standard still describe the subject? ==
+section	== Promoted-overlay gate — does the severity audit derive an overlay from the shapes? ==
+probe	backlog_closure_shapes_probe	16affdfc9132506f
+probe	backlog_archive_drill	133e0cdc73d4d35a
+probe	backlog_public_cut_probe	6c5bbd592729a9f9
+probe	backlog_governance_mitigations_probe	ae64c8ca8cc7701c
+probe	backlog_release_tool_probe	f20a4805f9155c73
+probe	backlog_proof_stamps_probe	5dc5bc3d25958948
+probe	backlog_probe_inputs_probe	c094bcc5add0157d
+probe	backlog_carried_item_probe	49fbae870ab5dd89
+probe	backlog_shape_syntax_probe	3ca776faa0134117
+probe	backlog_stamp_key_probe	ef3e73807d8226d9
+probe	backlog_sparql_memo_probe	ab5e50c5cff7d2b7
+probe	backlog_ordinal_check_probe	330644ba519f380a
+probe	backlog_archived_digest_check_probe	282a3eac3888e8be
+probe	backlog_release_item_check_probe	dd8b535e074506d2
+probe	backlog_package_activation_drift_classifier_probe	be48f03186914f8e
+probe	backlog_lineage_concurrency_probe	f22f3ae5cdd98094
+probe	backlog_consumer_archive_probe	753d883e89896faa
+probe	backlog_vocabulary_probe	a36249428753fb67
+probe	backlog_state_evidence_probe	ae1137ddc00a0fe4
+probe	backlog_evidence_bridge_probe	d3aa63d8bb1dbf5d
+probe	backlog_timeline_witness_probe	cc56283d8a268927
+probe	backlog_competency_inheritance_probe	e1a8f3883b674c5f
+probe	backlog_verifier_independence_probe	b57e0f4ce11db285
+probe	backlog_close_preview_probe	069f57acc562003b
+probe	backlog_competency_tree_probe	c2458ab7a28297c0
+probe	backlog_agent_roles_probe	9bbde60eb585e275
+probe	backlog_verification_scope_probe	b7608a2b2f835626
+probe	backlog_status_history_probe	4aa7407d97f3a40b
+probe	backlog_scope_order_probe	8732cdbb3514f7bb
+probe	backlog_order_revision_probe	1f958a85b8b0b95d
+probe	backlog_recording_integrity_probe	6d24a4b9eb8cb237
+probe	backlog_flow_point_git_trace_probe	cb7438c9b0aa1941
+probe	backlog_abox_neutrality_probe	84bf33bfa9539ed8
+probe	backlog_human_actor_kinds_probe	6b17d5ed799423ae
+probe	backlog_executor_subclass_probe	2f6ef3eafb12f3d2
+probe	backlog_pipeline_verify_probe	2b376c862db2b37e
+probe	backlog_agent_accountability_probe	c81d7c55ef4adeb4
+probe	backlog_agent_monitor_probe	198bdcfdaaa7819c
+probe	backlog_standing_items_probe	7dd3c001680adf95
+probe	backlog_mission_history_probe	192af9323a7f252a
+probe	backlog_session_brief_probe	2c6169841ac12816
+probe	backlog_archive_mission_history_probe	1da8027144d00d3d
+probe	backlog_scope_outcome_probe	e183d8410b1d93a6
+probe	backlog_links_not_text_probe	bce248c8abceecec
+probe	backlog_link_control_probe	ca10d2f3facfe0b2
+probe	backlog_plan_then_execute_probe	a57ec6ebc89ec9b1
+probe	backlog_kind_category_probe	53a71d3191823a75
+probe	backlog_repair_reprioritises_probe	d9c95f2929818257
+probe	backlog_handover_rules_probe	8d089514f4b489b6
+probe	backlog_inbox_disposition_probe	026701e96cc82610
+probe	backlog_release_preflight_probe	5ac1f528d7b9a332
+probe	backlog_gate_timing_probe	8c3c06bec5d73dcd
+probe	backlog_open_lineage_probe	88e845e8605f1438
+probe	backlog_box_step_probe	b94c5e10121c7116
+probe	backlog_release_speed_probe	2cfe96e51a07fe4d
+probe	backlog_archive_forms_probe	ba76bbe62164a768
+probe	backlog_archived_digest_tables_probe	6a0bb2173e88e0ed
+probe	backlog_validate_reference_probe	e558aaf2cdbe6b17
+probe	backlog_gate_keys_probe	29c744adbcb2bd7d
+probe	backlog_g179_probe	6b9a385c172b961f
+probe	backlog_self_application_probe	524098c9cd1c108e
+probe	backlog_boxes_judged_probe	6b842f245b3b80da
+probe	backlog_revival_opening_probe	60876ce7afd58eff
