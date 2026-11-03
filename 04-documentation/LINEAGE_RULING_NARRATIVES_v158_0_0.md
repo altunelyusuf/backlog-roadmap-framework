@@ -4446,3 +4446,14 @@ Related: G192, G193, G148.
 
 **What is not claimed.** That a session cannot write a file first: the checks see the change at release, not at the keystroke. That file times are tamper-proof: they are the working tree's, and a checkout resets them. That every instruction is routed correctly: the choice between the routes is the session's judgement, put in the record for the Owner to challenge.
 Related: G194, G158, G104, G127.
+
+## G196 — Closing a stage of a lineage's chain is planned work
+
+**Q1 — the finding.** After G194 a release that changes the register with no item moved had to cite an Owner ruling. The release that only closes a stage of a lineage's chain (a Mission, Scope, Goal, Objective or Backlog stage, one commit each) moves no item until the Backlog stage, and had always passed by declaring "Unplanned work: None.", the bare declaration G194 refuses. A chain stage is the lineage's own planned work, so the declaration was false and the check could not tell the two apart.
+
+**Q2 — what was ruled and built.** Release item check 1.8.0 passes a release as a chain stage when the only governed file changed is the register and the register introduces a stage output the baseline lacked. A release that changes any other governed file, or that introduces no stage output, is judged as before. Probe 1.4.0 has the three cases (passes; fails with a tool file changed too; fails with no stage output). The Owner decided on 2026-11-03 14:47 to proceed with the urgent lineages, whose chains this serves.
+
+**Q3 — what the record shows.** The change had to ship in the same full release as the first stage of the urgent lineage, because that stage was the first to need it; the cost of one full gate was paid once. The L29 stage releases that declared "None." were chain stages in the same sense.
+
+**What is not claimed.** That a stage output is a proof the stage was built in order: the order check and the digest still judge that. That a register-only release with a stage output cannot hide other register changes: the register rules and the order check still run on it.
+Related: G194, G195, G148.

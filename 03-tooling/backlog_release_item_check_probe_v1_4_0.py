@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_release_item_check_probe v1.3.0 -- GOV-S01/GOV-S02 shown to fire on real known-bad trees and stay silent on known-good
+"""backlog_release_item_check_probe v1.4.0 -- GOV-S01/GOV-S02 shown to fire on real known-bad trees and stay silent on known-good
 ones, on a real throwaway git repository (this tool had no self-proof before v1.5.0 -- G100/G101's own lesson: "a gate shown
 only on good input proves nothing" applied to this gate itself, found while writing the G99 root-cause analysis).
 
@@ -23,6 +23,10 @@ fix) a change and checks the verdict:
   5h a ruling dated before it                               -> PASS
   5i an urgent interruption declared after the oldest changed file -> FAIL
   5j one declared before it                                 -> PASS
+  v1.4.0 (G196): a chain stage is planned work:
+  7 only the register changed and it introduces a StageOutput          -> PASS (chain stage)
+  8 the same, and a tool file changed too                              -> FAIL
+  9 only the register changed, and it introduces no StageOutput        -> FAIL
 Exit 0 all hold; 1 a case did not.
 """
 import glob, os, re, shutil, subprocess, sys, tempfile
@@ -158,6 +162,21 @@ with tempfile.TemporaryDirectory() as d:
         "## v1.0.0\nbaseline\ndoc tweak\n\n## v1.1.0\nSome unplanned-sounding prose, no real marker.\n")
     code, out = run_check(pkg, "pkg-v1.0.0", repo)
     check("6 prose mentioning 'unplanned' without the real marker still FAILs", code == 1 and "no unplanned-work marker found" in out)
+
+with tempfile.TemporaryDirectory() as d:
+    repo, pkg = build_repo(d)
+    reg = os.path.join(pkg, "01-ontologies", "backlog_abox_v1_0_0.ttl")
+    base_reg = open(reg).read()
+    open(reg, "w").write(base_reg + "fw:Out_X a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Mission .\n")
+    code, out = run_check(pkg, "pkg-v1.0.0", repo)
+    check("7 only the register changed and it introduces a StageOutput: PASS as a chain stage", code == 0 and "chain stage : fw:Out_X" in out)
+    open(os.path.join(pkg, "03-tooling", "brand_new.py"), "w").write("# a tool changed too\n")
+    code, out = run_check(pkg, "pkg-v1.0.0", repo)
+    check("8 the same with a tool file changed too FAILs", code == 1)
+    os.remove(os.path.join(pkg, "03-tooling", "brand_new.py"))
+    open(reg, "w").write(base_reg + "fw:S_Two a backlog:Story ; backlog:hasState backlog:Proposed .\n")
+    code, out = run_check(pkg, "pkg-v1.0.0", repo)
+    check("9 only the register changed and no StageOutput is introduced FAILs", code == 1 and "chain stage" not in out)
 
 print("VERDICT : " + ("ALL HOLD" if not bad else "FAILED -- " + "; ".join(bad)))
 sys.exit(0 if not bad else 1)

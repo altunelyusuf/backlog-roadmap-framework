@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+# v1.8.0 (G196): a release that only closes a stage of a lineage's chain is planned work, not unplanned: when the only governed file changed is the register and the
+# register introduces a StageOutput the baseline lacked, the release passes as a chain stage. Before, such a release had to declare "Unplanned work: None.", which is the
+# bare declaration G194 refuses.
 # v1.7.0 (G195, the lesson of 2026-11-03): authority must come BEFORE the work. A cited urgent interruption must have been declared before the earliest changed governed file
 # was written (file times), and a cited Owner ruling must be dated no later than that day. Work built first and authorised afterwards fails.
 # v1.6.0 (G194, Owner instruction of 2026-11-03): an unplanned-work declaration is no longer enough by itself. A change to a governed file that no item
@@ -6,7 +9,7 @@
 # Owner ruling (G followed by digits, rulingSource naming the Owner) or an urgent interruption. "None", an empty reason, a citation of a record the register
 # lacked at the baseline or does not have, all FAIL. Before, the words "Unplanned work: None." passed.
 # v1.5.0 (G99 RCA): the release-time comparison examined a span that could never contain the release being gated -- fixed to the working tree, and to include files never git-added.
-"""backlog_release_item_check v1.7.0 -- GOV-S01, GOV-S02.
+"""backlog_release_item_check v1.8.0 -- GOV-S01, GOV-S02.
 
 The real, agreed gap: a package can publish a release whose governed files genuinely changed, while
 not one real backlog item moved -- checked and confirmed on automate-python-book-3e (fourteen real
@@ -212,6 +215,11 @@ def authority_time(cited, new_text):
     return out
 
 
+def new_stage_outputs(old_text, new_text):
+    pat = r"(fw:\S+)\s+a\s+backlog:StageOutput"
+    return sorted(set(re.findall(pat, new_text)) - set(re.findall(pat, old_text)))
+
+
 def main():
     args = sys.argv[1:]
     if len(args) < 2:
@@ -265,6 +273,12 @@ def main():
         sys.exit(0)
 
     print("items moved : 0")
+    only_register = all(re.fullmatch(r"01-ontologies/backlog_abox_v\d+_\d+_\d+\.ttl", c) for c in changed)
+    stages = new_stage_outputs(old_text, new_text)
+    if only_register and stages:
+        print(f"chain stage : {', '.join(stages)} (only the register changed)")
+        print("VERDICT     : PASS -- the release closes a stage of a lineage's chain, which is planned work (G196)")
+        sys.exit(0)
     reason = declared_unplanned_reason(package_root, package_prefix, repo_root)
     if reason:
         print(f"declared    : unplanned work -- \"{reason}\"")

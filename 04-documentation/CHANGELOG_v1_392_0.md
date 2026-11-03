@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v4.2.1 — 2026-11-03 (MINOR: Lineage 30 (urgent) opened with its Mission stage; a chain stage is planned work (G196))
+
+Lineage 30, an urgent lineage of its own, is opened under the agentic adaptive profile at revision 13 and its Mission stage is closed: neither time nor tokens are spent twice. Its urgency is declared when its Backlog stage has closed, because the urgency tool needs the urgent item to exist. Release item check 1.8.0 passes a release that only closes a stage of a lineage's chain as planned work (probe 1.4.0, three cases); until now such a release had to declare Unplanned work: None. The lineage discipline is v158.0.0 and the narratives v158.0.0 (section G196). Ruling G196 is recorded.
+
+**Unplanned work:** Owner ruling G196 (decision of 2026-11-03 14:47 Istanbul, proceed with the urgent lineages): the release check is changed here so that a chain stage is planned work; the Mission stage of Lineage 30 is the first release to need it.
+
 ## v4.2.0 — 2026-11-03 (MINOR: no development outside the backlog -- the unplanned-work declaration must cite a dated Owner ruling (G194))
 
 Owner instruction of 2026-11-03 12:40. The release item check 1.6.0 no longer passes a governed-file change on a bare unplanned-work line: it must cite an Owner ruling, with its date, or an urgent interruption that the release itself records. The probe 1.2.0 holds eleven cases. OwnerRulingDatedShape (shapes 1.207.0, fixture case OWN_UNDATED with its control) makes the citation checkable. The lineage discipline is v157.0.0 with steps 3d (derive the chain from the scope taxonomy), 3e (work reaches the register before a file) and 3f (mature in small steps); the narratives are v157.0.0 with section G194. Ruling G194, three post-closure findings against Lineage 29 (the parent-child link missing from the scope taxonomy; four releases passed on a bare declaration; the chain derived from a gap list) and a pending change request to its scope are recorded.
