@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v4.8.0 — 2026-11-04 (The gate, release path and disciplines shown unchanged by the cost-saving lineage (Lineage 30))
+
+A probe compares the newest gate, the release tool, eight files the release path calls and the two disciplines with the published tree at the start of the lineage (tag 4.6.0): the gate may differ only in version notes and in a probe list that keeps the baseline's probes first and gains only the two named probes. It is shown on 17 throw-away cases and 11 mutants of itself; gate 1.84.0 lists it. All three stories of Lineage 30 are done. Stated plainly: the publisher repository is not compared; the strengthening after the one independent review was run but not independently reviewed.
+
+**Unplanned work:** None.
+
 ## v4.7.0 — 2026-11-04 (Three cost-saving commands, each proven by a probe in the gate (Lineage 30))
 
 Session start (with an acknowledged reading, a strict ceremony reading and the disciplines taken from origin), a short reading of a gate log, and a first look that runs only the probes whose inputs changed enter the package from the set-aside copy as 1.1.0 after three independent reviews. A probe runs 52 scenarios and 38 mutants, each of which must fail it; gate 1.83.0 lists it. Measured: session start with nothing changed prints 5 lines (plus 2 of the ceremony), a gate log reads in 9 lines, the first look names an edited probe after 27 s. Stated plainly: changes made after the last review (drift exception removed, more mutants) were run but not independently reviewed; the commands do not prove the disciplines were understood. Found and left open: backlog_box_step_probe prints no --deps, so every gate runs it twice and prints a Traceback.
