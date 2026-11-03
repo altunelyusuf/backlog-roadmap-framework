@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v4.1.1 — 2026-11-03 (PATCH: Lineage 29 chain rebuilt from the Objective stage -- revision and retraction)
+
+Records only. A stage revision (Owner decision of 2026-11-03) rebuilds the chain of the revived Lineage 29 from the Objective stage; the Mission and Scope stand. The Objective and Backlog outputs are retracted and kept. In this commit the lineage adopts the rule set of known obstacles that profile revision 13 introduced, which is its opening again under G192. The rebuilt Objective and Backlog stages follow, one commit each.
+
+**Unplanned work:** None.
+
 ## v4.1.0 — 2026-11-03 (MINOR: a revived lineage opens again where its chain is rebuilt (G192))
 
 Owner ruling of 2026-11-03: the revival of a lineage is treated as its opening when its chain is rebuilt by a stage revision. Order check 1.15.0 takes the commit of the latest stage revision as the opening of a revived lineage, so a rule set adopted there is at open and one adopted later is refused. A new shape refuses a revived lineage that adopts a rule set newer than its opening with no stage revision (shapes 1.206.0, fixture case RV_ADOPTNOREV, with its control). The probe backlog_revival_opening_probe holds five cases in temporary repositories; the opening case fails against order check 1.14.0, which was run. The gate is 1.78.0. The discipline and the narratives are v156.0.0 (narrative G192 added); the ruling is in the register. The change precedes the rebuilt chain because the stage revision that re-adopts the rule sets has to pass the gate this change alters; it is recorded as the Owner's ruling and not as a story of the lineage.
