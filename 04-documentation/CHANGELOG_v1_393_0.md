@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v4.2.2 — 2026-11-03 (PATCH: Lineage 30 chain closed -- Scope, Goal, Objective and Backlog stages, urgency declared)
+
+Records only. The urgent Lineage 30 (neither time nor tokens are spent twice) closes its Scope, Goal, Objective and Backlog stages, each in its own commit, and the urgent interruption of Lineage 29 is declared with the urgency tool once the urgent items exist and before any of them starts. Scope: 3 areas of work and a kept area, 6 deliverables in two layers, 4 exclusions. Goals: one for each scope item and for the mission. Objectives: nine, measured with baselines, dated from a forecast the Owner accepted on 2026-11-03 15:23. Backlog: three stories, Proposed. A first attempt that declared the urgency by hand before the items existed made the order check read the story as appearing before its Backlog stage; the unpublished local commits were rebuilt without it and the tool did the declaration.
+
+**Unplanned work:** None: the release closes stages of a lineage's chain (G196).
+
 ## v4.2.1 — 2026-11-03 (MINOR: Lineage 30 (urgent) opened with its Mission stage; a chain stage is planned work (G196))
 
 Lineage 30, an urgent lineage of its own, is opened under the agentic adaptive profile at revision 13 and its Mission stage is closed: neither time nor tokens are spent twice. Its urgency is declared when its Backlog stage has closed, because the urgency tool needs the urgent item to exist. Release item check 1.8.0 passes a release that only closes a stage of a lineage's chain as planned work (probe 1.4.0, three cases); until now such a release had to declare Unplanned work: None. The lineage discipline is v158.0.0 and the narratives v158.0.0 (section G196). Ruling G196 is recorded.
