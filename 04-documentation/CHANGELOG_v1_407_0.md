@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v4.15.0 — 2026-11-04 (The grants of reviewers' access name the person the granting agent acted for)
+
+Minor release; adds one probe, one recorded link and a small change to the box tool. Impact: every grant of a reviewer's access given by an agent is recorded as given for the Owner (22 earlier grants appended, the box tool records it from now on); the gate stops if a grant has no giver or its agent acts for anyone but the Owner. Not covered: nothing verifies that the agent really acted for him; the earlier 21 were recorded afterwards; no shape requires it yet and the Agentic-Systems package has not yet changed its own shape.
+
+**Unplanned work:** Owner ruling to concentrate on Lineage 29; story Grantor closed in box 9
+
 ## v4.14.0 — 2026-11-04 (The other profiles and the lineages closed earlier are shown unchanged by this lineage)
 
 Minor release; adds one probe and its baseline, nothing in the vocabulary, shapes or rule sets changes. Impact: the gate now stops if a rule set of another profile or of a lineage closed before release 4.9.0 is changed, or one of those lineages is reopened. Not covered: shapes, tools, stage outputs and findings of those lineages, and lineages that closed later.

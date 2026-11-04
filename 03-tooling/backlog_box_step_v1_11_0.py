@@ -10,6 +10,7 @@ Lineage 21, deliverable D3. The faults came from boxes 4 to 9 of Lineage 20, eac
   * a name changed by hand                -> every identifier is made here from the box number and the story key, and `close` refuses when one the opening wrote is gone
   * the effort read from the wrong place  -> effort is read from `hasEffort` of the stories, nowhere else
 
+v1.11.0 (Lineage 29, story Grantor): the builder run that grants the verifier its access is recorded as acting for a person (prov:actedOnBehalfOf the owner), as the Owner ruled on 2026-11-04 (option 2: an agent may be the giver when it acts for a named person). The record states it; nothing verifies it.
 v1.10.0 (Lineage 28, G187): `open` records a base plan for the box (a PlanBaseline: the box's start, and an end predicted from the effort of its stories and the pace delivered in earlier boxes, with the buffer written beside it) and checks the objectives the box moves against it; `baseline N` records one for a box opened without. A finished box is measured against its baseline, not refused for differing from it.
 v1.9.0 (Lineage 27): the place-unchanged digest also covers the register, git-ignored files and the old path of a renamed file.
 v1.8.0 (Lineage 27): the box being closed (its stories, tasks, iteration and deployment unit) is not reported as stalled by the monitor.
@@ -253,7 +254,7 @@ def escalation_items(text):
     clean = lambda s: re.sub(r"\bRel_\w+", "a deployment unit", re.sub(r"\bIt_\w+", "an iteration", re.sub(r"\b(ST|T|Run|Ev|Obj)_\w+", "a record", s)))
     return [clean(x) for x in out]
 
-TOOL_VERSION = "1.10.0"
+TOOL_VERSION = "1.11.0"
 
 def has_own_kickoff(text, L):
     """True when the register holds a kick-off of this lineage itself; the kick-off of another lineage does not count (Lineage 24, held by a probe in Lineage 25)."""
@@ -470,6 +471,7 @@ def cmd_close(reg, root, n, spec):
         recs_a = [BRIDGE if "agsys:StartWay" not in reg.s else "",
                   "fw:Session_%s_%d_Verifier a prov:Agent ; rdfs:label \"%s\"@en ." % (P, n, esc(v["agent"])),
                   "fw:Grant_%s_%d_Verifier a agsys:AccessGrant ; agsys:grantedBy %s ; agsys:viaRoute fw:AccessRoute_FileSystem ; agsys:grantedPlace \"the governed files and the register of the package, as the builder left them when the brief was fixed\" ; agsys:grantMode \"read-only\" ; agsys:grantedAt %s ." % (P, n, run_id(P, n, "Builder"), dt(fz["frozen_at"])),
+                  "%s prov:actedOnBehalfOf backlog:%s ." % (run_id(P, n, "Builder"), "Executor_YusufAltunel"),
                   "fw:Plan_%s_%d_Verifier a agsys:VerificationPlan ; agsys:hasPlanDigest \"%s\" ; rdfs:comment \"The brief given to the verifying agent, fixed by its digest before the agent started.\"@en ." % (P, n, fz["plan_digest"]),
                   "%s a agsys:AgentConfiguration ; agsys:isConfigurationOf fw:Exec_Verifier ; agsys:recordedAt %s ; agsys:hasConfigurationItem fw:CfgItem_%s_%d_Brief%s ." % (cfg, dt(fz["frozen_at"]), P, n, (" , fw:CfgItem_%s_%d_Model" % (P, n)) if v.get("model") else ""),
                   "fw:CfgItem_%s_%d_Brief a agsys:ConfigurationItem ; agsys:hasItemKind \"brief\" ; agsys:hasItemValue \"sha256 %s\" ." % (P, n, fz["plan_digest"])]
